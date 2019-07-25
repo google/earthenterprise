@@ -375,9 +375,7 @@ now serving</div>
         self.write("Setup from localhost only.")
         return
 
-      if cmd == "quit":
-        tornado.ioloop.IOLoop.instance().stop()
-      elif cmd == "pre-quit":
+      if cmd == "pre-quit":
         self.set_header("Content-Type", "text/html")
         self.WriteLocalFile("quit.html")
       elif cmd == "share":
@@ -453,7 +451,9 @@ now serving</div>
     cmd = self.request.arguments["cmd"][0]
     self.set_header("Content-Type", "text/html")
     print "cmd (post) : \"%s\"" % cmd
-    if cmd == "local_only":
+    if cmd == "quit":
+      tornado.ioloop.IOLoop.instance().stop()
+    elif cmd == "local_only":
       if self.verifyConfirmationId(self.request.arguments):
         tornado.web.globe_.config_.accept_all_requests_ = False
     elif cmd == "accept_all_requests":

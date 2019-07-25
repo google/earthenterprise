@@ -256,8 +256,24 @@ The cache sizes are controlled by the file <code>misc.xml</code> which can be fo
 The asset cache size is controlled by <code>AssetCacheSize</code> and the asset version cache size is controlled by <code>VersionCacheSize</code>.
 Note that the asset version cache is generally larger than the asset cache because it may contain multiple versions of the same asset.</p>
 
-Also included within <code>misc.xml</code> is an experimental option, which allows for the user to disable cache purging while projects build. This is controlled by <code>DisablePacketLevelVersionCachePurge</code> and its default value is <code>false</code>.
-
+Another feature included within <code>misc.xml</code> is an experimental option, which allows for the user to disable cache purging while projects build. This is controlled by <code>DisablePacketLevelVersionCachePurge</code> and its default value is <code>false</code>.
+<br><br>
+In some instances, memory utilization may become problematic. An experimental feature is included which will allow for modifying aspects of the the allocated memory size.  This is controlled through <code>/etc/opt/google/XMLparams</code>. It takes the form of a standard configuration file, and it is in the following format.
+<br><br>
+<code>
+# comments are preceded by '#'
+<br>
+# options are case-insensitive, and all need not be present
+<br>
+# the initial size of the heap<br>
+INIT_HEAP_SIZE=&lt;value&gt;
+<br><br>
+# the max size of the heap<br>
+MAX_HEAP_SIZE=&lt;value&gt;
+<br><br>
+# the size of the allocation blocks<br>
+BLOCK_SIZE=&lt;value&gt;
+</code>
 <h2>Learn more</h2>
 <ul>
 <li><a href="../answer/6033487.html">Benchmarking outcomes for applying task rules</a></li>

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright 2017 Google Inc.
+# Copyright 2019 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,6 +31,7 @@ import shutil
 import sys
 import time
 import urllib
+from lxml import etree
 
 from common import form_wrap
 from common import postgres_manager_wrap
@@ -91,6 +93,7 @@ DBROOT_FILE2_TEMPLATE = "%s/%%s/dbroot/dbroot_%%s_%%s" % GLOBE_ENV_DIR_TEMPLATE
 POLYGON_FILE_TEMPLATE = "%s/%%s/earth/polygon.kml" % GLOBE_ENV_DIR_TEMPLATE
 PACKET_INFO_TEMPLATE = "%s/packet_info.txt" % GLOBE_ENV_DIR_TEMPLATE
 QTNODES_FILE_TEMPLATE = "%s/qt_nodes.txt" % GLOBE_ENV_DIR_TEMPLATE
+METADATA_FILE_TEMPLATE = "%s/%%s/earth/metadata.json" % GLOBE_ENV_DIR_TEMPLATE
 
 # Disk space minimum in MB before we start sending warnings.
 DISK_SPACE_WARNING_THRESHOLD = 1000.0
@@ -193,7 +196,9 @@ class GlobeBuilder(object):
     """Save polygon kml to a file."""
     with open(self.polygon_file, "w") as fp:
       if polygon:
-        fp.write(polygon)
+        # Check XML validity and standardize representation
+        xml = etree.ElementTree(etree.fromstring(polygon))
+        xml.write(fp, xml_declaration=True, encoding='UTF-8')
         self.Status("Saved polygon to %s" % self.polygon_file)
       else:
         self.Status("Created empty polygon file %s" % self.polygon_file)
@@ -247,14 +252,22 @@ class GlobeBuilder(object):
     postgis_polygon = "POLYGON((%s))" % postgis_polygon
     return postgis_polygon
 
-  def RewriteDbRoot(self, source):
+  def RewriteDbRoot(self, source, include_historical):
     """Executes command to rewrite the dbroot and extract the icons it uses."""
     self.Status("Rewrite dbroot ...")
+
+    historical_flag = '--disable_historical'
+    if include_historical:
+      historical_flag = ''
+
     os_cmd = ("%s/gerewritedbroot --source=\"%s\" --icon_directory=\"%s\" "
               "--dbroot_file=\"%s\" --search_service=\"%s\" "
-              "--kml_map_file=\"%s\""
+              "--kml_map_file=\"%s\" "
+              "%s"
               % (COMMAND_DIR, source, self.icons_dir, self.dbroot_file,
-                 self.search_service, self.kml_map_file))
+                 self.search_service, self.kml_map_file,
+                 historical_flag))
+
     common.utils.ExecuteCmd(os_cmd, self.logger)
     self.Status("%d icons" % len(os.listdir(self.icons_dir)))
 
@@ -277,9 +290,10 @@ class GlobeBuilder(object):
     # Run this task as a background task.
     os_cmd = ("%s/geportableglobebuilder --source=\"%s\" --default_level=%d "
               "--max_level=%d --hires_qt_nodes_file=\"%s\" "
-              "--globe_directory=\"%s\" --dbroot_file=\"%s\" >\"%s\""
+              "--globe_directory=\"%s\" --dbroot_file=\"%s\" --metadata_file=\"%s\" >\"%s\""
               % (COMMAND_DIR, source, default_level, max_level,
                  self.qtnodes_file, self.globe_dir, self.dbroot_file,
+                 self.metadata_file,
                  self.packet_info_file))
     common.utils.ExecuteCmdInBackground(os_cmd, self.logger)
 
@@ -296,9 +310,10 @@ class GlobeBuilder(object):
               "--source=\"%s\" "
               "--hires_qt_nodes_file=\"%s\" "
               "--map_directory=\"%s\"  --default_level=%d --max_level=%d "
+              "--metadata_file=\"%s\" "
               % (COMMAND_DIR, ignore_imagery_depth_str, source,
-                 self.qtnodes_file, self.globe_dir, default_level, 
-                 max_level))
+                 self.qtnodes_file, self.globe_dir, default_level,
+                 max_level, self.metadata_file))
 
     common.utils.ExecuteCmdInBackground(os_cmd, self.logger)
 
@@ -756,6 +771,7 @@ class GlobeBuilder(object):
         self.search_dir = SEARCH_DIR_TEMPLATE % (value, uid, value)
         self.globe_file = GLOBE_FILE_TEMPLATE % value
         self.map_file = MAP_FILE_TEMPLATE % value
+        self.metadata_file = METADATA_FILE_TEMPLATE % (value, uid, value)
         self.logger = common.utils.Log(LOG_FILE % (value, uid))
 
         form_keys = form_.keys()
@@ -834,7 +850,8 @@ if __name__ == "__main__":
 
     elif cgi_cmd == "REWRITE_DB_ROOT":
       globe_builder.CheckArgs(["globe_name", "source"], FORM)
-      globe_builder.RewriteDbRoot(FORM.getvalue_url("source"))
+      include_historic = FORM.getvalue("include_historical_imagery") is not None
+      globe_builder.RewriteDbRoot(FORM.getvalue_url("source"), include_historic)
 
     elif cgi_cmd == "GRAB_KML":
       globe_builder.CheckArgs(["globe_name", "source"], FORM)

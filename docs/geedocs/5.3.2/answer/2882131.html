@@ -1,0 +1,84 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Vector data handling</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 2882131.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/6153619.html">Supported file formats in GEE</a></p>
+<p class="sidebar-toc"><a href="../answer/6053241.html">Apply alpha masking to imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/172810.html">Import pre-processed data</a></p>
+<p class="sidebar-toc"><a href="../answer/1090589.html">Import a subset of imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/173054.html">Add .kip imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/2882131.html" class="current-file">Vector data handling</a></p>
+<p class="sidebar-toc"><a href="../answer/2760298.html">Google Maps raster background</a></p>
+<p class="sidebar-toc"><a href="../answer/4525555.html">Create custom masks</a></p>
+<p class="sidebar-toc"><a href="../answer/6062318.html">Manage mosaics with virtual rasters</a></p>
+<p class="sidebar-toc"><a href="../answer/6081009.html">Map projection types in GEE 5.1.0</a></p>
+<p class="sidebar-toc"><a href="../answer/6081069.html">Add flat imagery to Mercator map databases in GEE 5.1.0</a></p>
+<p class="sidebar-toc"><a href="../answer/2760457.html">Add KML layers</a></p>
+<p class="sidebar-toc"><a href="../answer/2760534.html">Non-clickable icons</a></p>
+<p class="sidebar-toc"><a href="../answer/173053.html">Map projections</a></p>
+<p class="sidebar-toc"><a href="../answer/1089795.html">Map buttons</a></p>
+<p class="sidebar-toc"><a href="../answer/4492623.html">Create terrain overlays</a></p>
+<p class="sidebar-toc"><a href="../answer/2760655.html">Monitor builds with Twitter</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion resources and projects</h1>
+<h2>Vector data handling</h2>
+<p>In the Fusion <strong>Vector Resource</strong> dialog, you can select options for processing your source files:</p>
+<ul>
+<li><strong>Ignore bad features.</strong> By default, Fusion reports any issues related to reading features and their attributes from source files and fails to ingest the data. A reported "bad feature" typically means that something is wrong with the vector data file, such as, "Empty feature," "Invalid extents," "Can't read feature," "Unable to get feature," or "Unable to get attributes." If you select "Ignore," Fusion skips the bad features and processes the file.</li>
+<li><strong>Don't fix invalid geometries.</strong> By default, Fusion handles invalid geometry in polygon vector data files as described in the table below. If you select "Don't fix," Fusion ingests the vector data as is, but it might skip the invalid geometry, process it (either correctly or incorrectly), or fuse it incorrectly or fail to fuse it at all. The result might be incorrect.</li>
+</ul>
+<h2>How Fusion handles geometry</h2>
+<table class="nice-table">
+<tbody>
+<tr>
+<th class="narrow">Example</th>
+<th class="wide">Description</th>
+<th class="narrowest">Fusion handling</th>
+</tr>
+<tr>
+<td><img alt="Self-intersecting polygons" src="../art/fusion/resources/2913100_polygons.png"/></td>
+<td>Self-intersecting polygon cycles. For example, “bow tie” figures.</td>
+<td>
+<p>Fusion might skip or might not process correctly.</p>
+</td>
+</tr>
+<tr>
+<td><img alt="Crossing cycles" src="../art/fusion/resources/2907882_cycles.png"/></td>
+<td>Polygon cycles that are not properly nested. For example, an inner cycle that is partly outside the outer cycle, or cycles that cross each other within a single polygon.</td>
+<td>Fusion might skip or might not process correctly.</td>
+</tr>
+<tr>
+<td><img alt="Touching vertices" src="../art/fusion/resources/2907976_vertices.png"/></td>
+<td>Fusion allows polygon cycles with touching vertices. For example, outer cycle or inner cycle vertices that touch each other.</td>
+<td>This geometry is valid. Fusion processes correctly.</td>
+</tr>
+<tr>
+<td><img alt="Identical coordinates" src="../art/fusion/resources/2907978_coordinates.png"/></td>
+<td>Polygon cycle linestrings that have consecutive points within an XY tolerance that is equal to or less than 0.0003m.</td>
+<td>Fusion removes the duplicate vertices.</td>
+</tr>
+<tr>
+<td><img alt="Spike" src="../art/fusion/resources/2907886_spike.png"/></td>
+<td>Polygon cycles with “spikes.“ A spike is defined as an angle that is equal to or less than 3.15e-3 radians.</td>
+<td>Fusion removes the spike and merges the edges.</td>
+</tr>
+<tr>
+<td><img alt="Gore" src="../art/fusion/resources/2907980_gore.png"/></td>
+<td>Polygon cycles with “gores.” A gore is defined as an angle that is equal to or less than 3.15e-3 radians.</td>
+<td>Fusion removes the gore and merges the edges.</td>
+</tr>
+<tr>
+<td><img alt="Zero area" src="../art/fusion/resources/2907982_zero_area.png"/></td>
+<td>Polygon cycles with zero area. If the polygon is a triangle with an angle that is less than 3.15e-3 radians, Fusion treats it as a spike and removes it. After the spike is removed, the result is a polygon with zero area.</td>
+<td>Fusion removes the polygon with zero area.</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>

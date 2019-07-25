@@ -23,6 +23,58 @@
 #include <autoingest/khAssetManagerProxy.h>
 #include <autoingest/plugins/RasterProjectAsset.h>
 
+const char * NEW_TERRAIN_USAGE = "\nusage: %s [options] -o <projectname> {[--maxlevel <level>] "
+            "<insetresource>}...\n"
+            "   Supported options are:\n"
+            "      --help | -?:      Display this usage message\n"
+            "      --mercator : use mercator projection\n"
+            "      --flat : use flat(Plate Carre) projection (default)\n"
+            "      --terrain_overlay : make this terrain project an overlay project\n"
+            "      --start_level : the level from which to start building the\n"
+            "                      terrain overlay project\n"
+            "      --resource_min_level : the threshold level that separates\n"
+            "                             fill terrain from overlay terrain\n"
+            "      --maxleveloverride <level> : Set the max level for a resource.\n"
+            "   By default, new terrain projects are NOT overlay projects"
+            " unless --terrain_overlay is specified.\n";
+
+const char * MODIFY_TERRAIN_USAGE = "\nusage: %s [options] -o <projectname> {[--maxlevel <level>] "
+            "<insetresource>}...\n"
+            "   Supported options are:\n"
+            "      --help | -?:      Display this usage message\n"
+            "      --mercator : use mercator projection\n"
+            "      --flat : use flat(Plate Carre) projection (default)\n"
+            "      --terrain_overlay : make this terrain project an overlay project\n"
+            "      --no_terrain_overlay : make this terrain project a normal project\n"
+            "      --start_level : the level from which to start building the\n"
+            "                      terrain overlay project\n"
+            "      --resource_min_level : the threshold level that separates\n"
+            "                             fill terrain from overlay terrain\n"
+            "      --maxleveloverride <level> : Set the max level for a resource.\n";
+
+const char * NEW_IMAGERY_USAGE = "\nusage: %s [options] -o <projectname> {[--maxlevel <level>] "
+            "<insetresource>}...\n"
+            "   Supported options are:\n"
+            "      --help | -?:      Display this usage message\n"
+            "      --mercator : use mercator projection\n"
+            "      --flat : use flat(Plate Carre) projection (default)\n"
+            "      --historical_imagery : change this project to be a historical\n"
+            "                             imagery project\n"
+            "      --maxleveloverride <level> : Set the max level for a resource.\n"            
+            "   By default, new projects are NOT time machine projects"
+            " unless --historical_imagery is specified.\n";
+
+const char * MODIFY_IMAGERY_USAGE = "\nusage: %s [options] -o <projectname> {[--maxlevel <level>] "
+            "<insetresource>}...\n"
+            "   Supported options are:\n"
+            "      --help | -?:      Display this usage message\n"
+            "      --mercator : use mercator projection\n"
+            "      --flat : use flat(Plate Carre) projection (default)\n"
+            "      --historical_imagery : change this project to be a historical\n"
+            "                             imagery project\n"
+            "      --no_historical_imagery : make this a normal project\n"
+            "                         (i.e., not a historical imagery project)\n"
+            "      --maxleveloverride <level> : Set the max level for a resource.\n";            
 
 AssetDefs::Type AssetType = AssetDefs::Invalid;
 
@@ -37,21 +89,17 @@ usage(const std::string &progn, const char *msg = 0, ...)
     fprintf(stderr, "\n");
   }
 
-  fprintf(stderr,
-          "\nusage: %s [options] -o <projectname> {[--maxleveloverride <level>] "
-          "<insetresource>}...\n"
-          "   Supported options are:\n"
-          "      --help | -?:      Display this usage message\n"
-          "      --mercator : use mercator projection\n"
-          "      --flat : use flat(Plate Carre) projection (default)\n"
-          "      --historical_imagery : change this project to be a historical\n"
-          "                             imagery project\n"
-          "      --no_historical_imagery : make this a normal project\n"
-          "                         (i.e., not a historical imagery project)\n"
-          "   By default, new projects are NOT time machine projects"
-          " unless --historical_imagery is specified.\n"
-          "      --maxleveloverride <level> : Set the max level for a resource.\n",
-          progn.c_str());
+  bool is_new_project_command = progn.find("new") != std::string::npos;
+  if (AssetDefs::Terrain == AssetType){
+    fprintf(stderr,
+            is_new_project_command ? NEW_TERRAIN_USAGE : MODIFY_TERRAIN_USAGE,
+            progn.c_str());
+  }
+  else {
+    fprintf(stderr,
+            is_new_project_command ? NEW_IMAGERY_USAGE : MODIFY_IMAGERY_USAGE,
+            progn.c_str());
+  }
   exit(1);
 }
 
@@ -66,6 +114,10 @@ main(int argc, char *argv[]) {
       AssetType = AssetDefs::Terrain;
     else
       AssetType = AssetDefs::Imagery;
+    
+    // constants
+    const uint MINIMUM_LEVEL = 4;
+    const uint MAXIMUM_LEVEL = 24;
 
     // process commandline options
     bool help = false;
@@ -74,9 +126,14 @@ main(int argc, char *argv[]) {
     bool mercator = false;
     bool enable_historical_imagery = false;
     bool disable_historical_imagery = false;
+    bool enable_terrain_overlay = false;
+    bool disable_terrain_overlay = false;
+    
     uint peergroup = 0;
     uint overridemax_deprecated = 0;
     uint overridemax = 0;
+    uint start_level = 0;          
+    uint resource_min_level = 0;  
 
     RasterProjectModifyRequest req(AssetType);
 
@@ -93,6 +150,13 @@ main(int argc, char *argv[]) {
     options.opt("maxleveloverride", overridemax);
     options.opt("historical_imagery", enable_historical_imagery);
     options.opt("no_historical_imagery", disable_historical_imagery);
+    options.opt("terrain_overlay", enable_terrain_overlay);
+    options.opt("no_terrain_overlay", disable_terrain_overlay);
+    options.opt("start_level", start_level, 
+      &khGetopt::IsEvenNumberInRange<uint, MINIMUM_LEVEL, MAXIMUM_LEVEL>); 
+    options.opt("resource_min_level", resource_min_level, 
+      &khGetopt::RangeValidator<uint, MINIMUM_LEVEL, MAXIMUM_LEVEL>);
+
 
     // While processing the command line args, we must record the request items
     // which are a variable length list of strings.
@@ -177,9 +241,17 @@ main(int argc, char *argv[]) {
         (mercator? kMercatorProjectSubtype : kProjectSubtype));
 
     // TimeMachine only applies to non-mercator
-     if (!mercator) {
+    if (!mercator) {
       req.enable_timemachine = enable_historical_imagery;
       req.disable_timemachine = disable_historical_imagery;
+    }
+
+    // Only pass along the overlay-related options if it's a terrain project
+    if (AssetDefs::Terrain == AssetType){
+      req.enable_terrain_overlay = enable_terrain_overlay;
+      req.disable_terrain_overlay = disable_terrain_overlay;
+      req.overlay_terrain_start_level = start_level;
+      req.overlay_terrain_resources_min_level = resource_min_level;
     }
 
     if (req.items.empty()) {
@@ -188,10 +260,16 @@ main(int argc, char *argv[]) {
         notify(NFY_WARN,
                "No insets specified. Project will be empty.");
       } else if (mercator ||
-            !(enable_historical_imagery || disable_historical_imagery)) {
-        // For adding/modifying, we always need insets except:
-        // non-mercator when historical_imagery/no_historical_imagery is
-        // specified.
+        !( (AssetDefs::Imagery == AssetType && (enable_historical_imagery || disable_historical_imagery)) ||
+           (AssetDefs::Terrain == AssetType && 
+              (enable_terrain_overlay || disable_terrain_overlay || 
+              start_level != 0 || resource_min_level != 0))
+        )){
+        // For adding/modifying, we always need insets when:
+        // - It's a mercator project
+        // - OR it's a non-mercator project and the historical imagery flag is NOT being modified
+        // - OR it's a terrain project and no overlay-related options are being modified
+        // In those cases, show the usage text and exit.
         usage(progname, "No insets specified");
       }
     }

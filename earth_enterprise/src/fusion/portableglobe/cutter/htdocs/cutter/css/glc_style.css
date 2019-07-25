@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Google Inc.
+ * Copyright 2017 Google Inc., 2019 the Open GEE Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +43,7 @@ body {
   left: 0px;
   right: 0;
   bottom: 0;
+  overflow-y: scroll;
 }
 
 #right_bar h2 {

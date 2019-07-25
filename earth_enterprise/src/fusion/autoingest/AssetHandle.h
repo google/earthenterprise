@@ -53,7 +53,7 @@ class AssetHandle_ : public AssetHandleInterface<Impl_> {
   inline void DoBind(
       bool checkFileExistenceFirst,
       bool addToCache) const {
-    handle = storageManager().Get(this, checkFileExistenceFirst, addToCache, isMutable());
+    handle = storageManager().Get(this, ref, checkFileExistenceFirst, addToCache, isMutable());
   }
 
   virtual bool isMutable() const { return false; }
@@ -62,15 +62,12 @@ class AssetHandle_ : public AssetHandleInterface<Impl_> {
   static inline uint32 CacheSize(void) { return storageManager().CacheSize(); }
   static inline uint32 CacheCapacity(void) { return storageManager().CacheCapacity(); }
   static inline uint32 DirtySize(void) { return storageManager().DirtySize(); }
+  static uint64 CacheMemoryUse(void) { return storageManager().CacheMemoryUse(); }
 
   virtual HandleType Load(const std::string &boundref) const {
     return HandleType(Impl::Load(boundref));
   }
   virtual bool Valid(const HandleType &) const { return true; }
-
-  // These two functions are implemented separately by Assets and AssetVersions
-  inline virtual std::string Filename() const;
-  inline const SharedString Key() const;
 
   inline void NoLongerNeeded() {
     storageManager().NoLongerNeeded(Ref());
@@ -149,11 +146,9 @@ class DerivedAssetHandle_ : public virtual Base_ {
 
  public:
   virtual HandleType Load(const std::string &boundref) const {
-    // Impl::Load will succeed or throw.
-    // The derived khRefGuard will be automatically converted
-    // the the base khRefGuard
     return HandleType(Impl::Load(boundref));
   }
+
   virtual bool Valid(const HandleType & entry) const { 
     // we have to check if it maps to Impl* since somebody
     // else may have loaded it into the storage manager

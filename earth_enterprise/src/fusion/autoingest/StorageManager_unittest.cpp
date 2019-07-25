@@ -15,17 +15,19 @@
  */
 
 #include "StorageManager.h"
+#include "CacheSizeCalculations.h"
 
 #include <algorithm>
 #include <gtest/gtest.h>
 #include <sstream>
-
+#include <memory>
 using namespace std;
 
 const size_t CACHE_SIZE = 5;
 
 class TestItem : public khRefCounter, public StorageManaged {
  public:
+  static string fileName;
   TestItem() : val(nextValue++), saveSucceeds(true) {}
   const int val;
   string savename;
@@ -39,10 +41,24 @@ class TestItem : public khRefCounter, public StorageManaged {
     savename = filename;
     return saveSucceeds;
   }
+  static string Filename(const std::string ref) {
+    return fileName;
+  }
+  static SharedString Key(const SharedString & ref) {
+    return ref;
+  }
+  // determine amount of memory used by TestItem
+  uint64 GetSize() {
+    return (GetObjectSize(val)
+    + GetObjectSize(savename)
+    + GetObjectSize(saveSucceeds)
+    + GetObjectSize(nextValue));
+  }
  private:
   static int nextValue;
 };
 int TestItem::nextValue = 1;
+string TestItem::fileName;
 template<> const bool StorageManager<TestItem>::check_timestamps = false;
 
 using HandleType = typename StorageManager<TestItem>::HandleType;
@@ -50,10 +66,8 @@ using AssetKey = typename StorageManager<TestItem>::AssetKey;
 
 class TestHandle : public AssetHandleInterface<TestItem> {
   public:
-    virtual const AssetKey Key() const { return name; }
-    virtual string Filename() const { return "/dev/null"; }
     virtual HandleType Load(const string &) const {
-      return khRefGuardFromNew<TestItem>(new TestItem());
+      return HandleType(std::make_shared<TestItem>());
     }
     virtual bool Valid(const HandleType &) const { return true; }
     TestHandle(const AssetKey & name) : name(name) {}
@@ -69,7 +83,7 @@ HandleClass Get(StorageManager<TestItem> & storageManager,
                 bool addToCache,
                 bool makeMutable) {
   HandleClass handle(name);
-  handle.handle = storageManager.Get(&handle, checkFileExistenceFirst, addToCache, makeMutable);
+  handle.handle = storageManager.Get(&handle, name, checkFileExistenceFirst, addToCache, makeMutable);
   return handle;
 }
 
@@ -77,7 +91,10 @@ class StorageManagerTest : public testing::Test {
  protected:
   StorageManager<TestItem> storageManager;
  public:
-  StorageManagerTest() : storageManager(CACHE_SIZE, "test") {}
+  StorageManagerTest() : storageManager(CACHE_SIZE, false, 0, "test") {
+    // Reset the static variables in TestItem
+    TestItem::fileName = "/dev/null"; // A file that exists
+  }
 };
 
 TEST_F(StorageManagerTest, AddAndRetrieve) {
@@ -116,7 +133,7 @@ TEST_F(StorageManagerTest, LoadWithoutCache) {
 }
 
 TEST_F(StorageManagerTest, AddNew) {
-  HandleType newItem(khRefGuardFromNew(new TestItem()));
+  HandleType newItem(new TestItem());
   ASSERT_EQ(storageManager.CacheSize(), 0) << "Storage manager has unexpected item in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
   
@@ -132,18 +149,13 @@ TEST_F(StorageManagerTest, AddNew) {
   ASSERT_EQ(newItem->val, retrieved.handle->val) << "Could not retrieve new item from storage manager.";
 }
 
-class TestHandleBadFile : public TestHandle {
-  public:
-    virtual string Filename() const { return "notafile"; }
-    TestHandleBadFile(const AssetKey & name) : TestHandle(name) {}
-};
-
 TEST_F(StorageManagerTest, CheckFileExistence) {
   TestHandle goodFile = Get<TestHandle>(storageManager, "good", true, true, false);
   ASSERT_EQ(storageManager.CacheSize(), 1) << "Storage manager has wrong number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
   
-  TestHandleBadFile badFile = Get<TestHandleBadFile>(storageManager, "bad", true, true, false);
+  TestItem::fileName = "notafile"; // Try to read an invalid file
+  TestHandle badFile = Get<TestHandle>(storageManager, "bad", true, true, false);
   ASSERT_EQ(storageManager.CacheSize(), 1) << "Storage manager has wrong number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
   ASSERT_FALSE(badFile.handle) << "Should get empty handle from non-existant file";
@@ -159,7 +171,7 @@ TEST_F(StorageManagerTest, Mutable) {
   ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has wrong number of items in dirty map";
 }
 
-TEST_F(StorageManagerTest, PurgeCache) {
+TEST_F(StorageManagerTest, PurgeCacheBasedOnNumberOfObjects) {
   // Put items in the cache but don't hold handles so they will be purged
   for(size_t i = 0; i < CACHE_SIZE + 2; ++i) {
     stringstream s;
@@ -168,6 +180,28 @@ TEST_F(StorageManagerTest, PurgeCache) {
     ASSERT_EQ(storageManager.CacheSize(), min(i+1, CACHE_SIZE)) << "Unexpected number of items in cache";
     ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
   }
+}
+
+TEST_F(StorageManagerTest, PurgeCacheBasedOnMemoryUtilization) {
+  // Purges items from cache when the memory utilization exceeds
+  // the limit and determines if the cache memory usage reflects the size
+  // of the items in cache.
+  size_t i;
+  uint64 cacheItemSize = 0;
+  uint64 memoryLimit = 0;
+  for(i = 0; i < CACHE_SIZE + 2; ++i) {
+    stringstream s;
+    s << "asset" << i;
+    Get<TestHandle>(storageManager, s.str(), false, true, false);
+    if (cacheItemSize == 0) {
+      cacheItemSize = storageManager.GetCacheItemSize(s.str());
+      memoryLimit = cacheItemSize * (CACHE_SIZE - 1);
+      storageManager.SetCacheMemoryLimit(true, memoryLimit);
+    }
+    ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
+  }
+  ASSERT_EQ(storageManager.CacheSize(), (CACHE_SIZE - 1)) << "Unexpected number of items in cache";
+  ASSERT_EQ(storageManager.CacheMemoryUse(), memoryLimit) << "Unexpected memory usage";
 }
 
 TEST_F(StorageManagerTest, PurgeCacheWithHandles) {
@@ -257,7 +291,8 @@ TEST_F(StorageManagerTest, SaveDirty) {
   getAssetsForDirtyTest(storageManager, handles);
   
   khFilesTransaction trans;
-  storageManager.SaveDirtyToDotNew(trans, nullptr);
+  bool result = storageManager.SaveDirtyToDotNew(trans, nullptr);
+  ASSERT_TRUE(result) << "SaveDirtyToDotNew should return true when there are no issues";
   ASSERT_EQ(storageManager.CacheSize(), 5) << "Unexpected number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has wrong number of items in dirty map";
   ASSERT_EQ(trans.NumNew(), 2) << "Wrong number of new items in file transaction";
@@ -274,7 +309,7 @@ TEST_F(StorageManagerTest, SaveDirtyToVector) {
   getAssetsForDirtyTest(storageManager, handles);
   
   khFilesTransaction trans;
-  vector<string> saved;
+  vector<SharedString> saved;
   storageManager.SaveDirtyToDotNew(trans, &saved);
   ASSERT_EQ(saved.size(), 2) << "Wrong number of items in saved vector";
   ASSERT_TRUE(find(saved.begin(), saved.end(), "mutable2") != saved.end()) << "Dirty item missing from saved vector";
@@ -285,7 +320,8 @@ TEST_F(StorageManagerTest, FailedSave) {
   TestHandle item = Get<TestHandle>(storageManager, "item", false, true, true);
   item.handle->saveSucceeds = false;
   khFilesTransaction trans;
-  storageManager.SaveDirtyToDotNew(trans, nullptr);
+  bool result = storageManager.SaveDirtyToDotNew(trans, nullptr);
+  ASSERT_FALSE(result) << "SaveDirtyToDotNew should return false when a save fails";
   ASSERT_EQ(storageManager.CacheSize(), 1) << "Unexpected number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has wrong number of items in dirty map";
   ASSERT_EQ(trans.NumNew(), 0) << "Transaction should be empty after failed save";

@@ -22,6 +22,7 @@ Description:
 #include "khAssetManager.h"
 
 #include "common/khnet/SocketException.h"
+#include "fusion/autoingest/sysman/AssetOperation.h"
 #include "fusion/autoingest/sysman/khSystemManager.h"
 #include "fusion/autoingest/sysman/khResourceManager.h"
 #include "fusion/autoingest/sysman/plugins/RasterProductAssetD.h"
@@ -101,7 +102,7 @@ khAssetManager::ApplyPending(void)
   // The actual list saved may be smaller than what's
   // in the dirty set. Some things can be in the dirty set
   // even if it really didn't change
-  std::vector<std::string> savedAssets;
+  std::vector<SharedString> savedAssets;
 
 
   QTime timer;
@@ -109,6 +110,8 @@ khAssetManager::ApplyPending(void)
 
   notify(NFY_INFO, "Asset cache size = %d", Asset::CacheSize());
   notify(NFY_INFO, "Version cache size = %d", AssetVersion::CacheSize());
+  notify(NFY_INFO, "Total memory used by asset cache = %lu B", Asset::CacheMemoryUse());
+  notify(NFY_INFO, "Total memory used by version cache = %lu B", AssetVersion::CacheMemoryUse());
 
 #ifndef SKIP_SAVE
 
@@ -149,9 +152,8 @@ khAssetManager::ApplyPending(void)
 
   // build a list of AssetChanges
   AssetChanges changes;
-  for (std::vector<std::string>::const_iterator i = savedAssets.begin();
-       i != savedAssets.end(); ++i) {
-    changes.items.push_back(AssetChanges::Item(*i, "Modified"));
+  for (const auto & ref : savedAssets) {
+    changes.items.push_back(AssetChanges::Item(ref, "Modified"));
   }
   for (std::map<SharedString, AssetDefs::State>::const_iterator i
          = pendingStateChanges.begin();
@@ -753,7 +755,7 @@ khAssetManager::RebuildVersion(const std::string &verref)
 {
   assert(!mutex.TryLock());
   notify(NFY_INFO, "RebuildVersion %s", verref.c_str());
-  MutableAssetVersionD(verref)->Rebuild();
+  ::RebuildVersion(verref);
 }
 
 void
