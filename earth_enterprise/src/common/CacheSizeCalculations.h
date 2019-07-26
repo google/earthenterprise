@@ -17,7 +17,8 @@
 #ifndef _CACHE_SIZE_CALCULATIONS_H
 #define _CACHE_SIZE_CALCULATIONS_H
 #include "khTypes.h"
-#include "khRefCounter.h"
+#include <memory>
+#include <vector>
 
 // determine amount of memory used by generic objects
 template<class T>
@@ -38,9 +39,9 @@ inline uint64 GetObjectSize(const std::vector<T> &vec) {
 inline uint64 GetObjectSize(const std::string &str) {
     return sizeof(str) + (str.capacity() * sizeof(char));
 }
-// determine amount of memory used by a khRefGuard and the object it points to
+// determine amount of memory used by a shared_ptr and the object it points to
 template<class T>
-inline uint64 GetObjectSize(const khRefGuard<T> &guard) {
-    return guard.getSize();
+inline uint64 GetObjectSize(const std::shared_ptr<T> &guard) {
+    return sizeof(guard) + (guard ? guard->GetSize() : 0);
 }
 #endif

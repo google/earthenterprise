@@ -30,7 +30,7 @@ Description: Support for terrain "overlay" projects.
 #include "common/khExtents.h"
 #include "common/khInsetCoverage.h"
 #include "autoingest/plugins/CombinedRPAsset.h"
-
+#include <memory>
 
 // TerrainInsetType enum defines types of terrain-inset in terrain
 // project.
@@ -168,6 +168,60 @@ void CalcPacketGenInfo(const khTilespace            &tilespace,
                        const bool   is_overlay_terrain_proj,
                        const uint32 overlay_terrain_resources_min_level);
 
+// helper struct to make more generic calls from multiple locations possible
+// can be modified to allow for easier usage in possible new algorithms
+// for calculating overlap
+template <typename ProductAssetVersion>
+struct overlapEnvelope
+{
+    AssetDefs::Type type;
+    std::vector<const InsetInfo<ProductAssetVersion> *> insets;
+    uint numInsets;
+    uint beginMinifyLevel;
+    uint endMinifyLevel;
+    uint level;
+    overlapEnvelope() = default;
+    overlapEnvelope(const AssetDefs::Type& _type,
+                    const std::vector<const InsetInfo<ProductAssetVersion> *>& _insets,
+                    uint _numInsets,
+                    uint _beginMinifyLevel, uint _endMinifyLevel, uint _level)
+
+   :                type(_type),
+                    insets(_insets),
+                    numInsets(_numInsets),
+                    beginMinifyLevel(_beginMinifyLevel),
+                    endMinifyLevel(_endMinifyLevel),
+                    level(_level) {}
+};
+
+template <typename ProductAssetVersion>
+class OverlapCalculator
+{
+private:
+    void CalculateOverlap(std::vector<uint>&, const khInsetCoverage&);
+    overlapEnvelope<ProductAssetVersion> env;
+
+public:
+    OverlapCalculator(const overlapEnvelope<ProductAssetVersion>& _env) :
+        env(_env) {}
+
+    void setBeginMinifyLevel(uint _begin) { env.beginMinifyLevel = _begin; }
+    void setEndMinifyLevel(uint _end) { env.endMinifyLevel = _end; }
+    void setEnvelope(const overlapEnvelope<ProductAssetVersion>& _env) { env = _env; }
+    std::vector<uint> PreprocessForInset(const khInsetCoverage& gencov)
+    {
+        std::vector<uint> neededIndexes;
+        CalculateOverlap(neededIndexes, gencov);
+        return neededIndexes;
+    }
+
+    std::vector<uint> GetOverlapForLevel(const khInsetCoverage& gencov)
+    {
+        std::vector<uint> neededIndexes;
+        CalculateOverlap(neededIndexes, gencov);
+        return neededIndexes;
+    }
+};
 
 template <typename ProductAssetVersion>
 extern void
