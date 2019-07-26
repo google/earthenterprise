@@ -39,16 +39,16 @@ class AssetVersionRef;
  ***  typedef AssetHandle_<AssetImpl> Asset;
  ***  typedef AssetHandle_<AssetVersionImpl> AssetVersion;
  ******************************************************************************/
-template <class Impl_>
-class AssetHandle_ : public AssetHandleInterface<Impl_> {
+template <class Impl_, class Storage_>
+class AssetHandle_ : public AssetHandleInterface<Impl_, Storage_> {
   friend class Impl;
  public:
   typedef Impl_ Impl;
-  using HandleType = typename StorageManager<Impl>::HandleType;
+  using HandleType = typename StorageManager<Impl, Storage_>::HandleType;
   struct undefined_type; // never defined.  Just used for bool operations
 
  protected:
-  static inline StorageManager<Impl> & storageManager();
+  static inline StorageManager<Impl, Storage_> & storageManager();
 
   inline void DoBind(
       bool checkFileExistenceFirst,

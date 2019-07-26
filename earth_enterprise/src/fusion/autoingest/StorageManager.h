@@ -21,12 +21,26 @@
 #include <string>
 #include <time.h>
 #include <vector>
+#include <memory>
 
 #include "common/khCache.h"
 #include "common/khFileUtils.h"
 #include "common/khRefCounter.h"
 #include "common/notify.h"
 #include "common/SharedString.h"
+#include "common/khxml/khxml.h"
+#include "common/khxml/khdom.h"
+
+using namespace khxml;
+
+//template<class AssetType>
+//class AssetSerializer
+//{
+//  public:
+    //virtual khRefGuard<AssetType> Load(const std::string &boundref) = 0;
+//};
+
+
 
 // Items stored in the storage manager must inherit from the StorageManaged class
 class StorageManaged {
@@ -36,9 +50,55 @@ class StorageManaged {
     StorageManaged() : timestamp(0), filesize(0) {}
 };
 
-template<class AssetType> class AssetHandleInterface;
+template<class AssetType, class AssetStorageType> class AssetHandleInterface;
 
-template<class AssetType>
+//extern void ToElement(DOMElement *elem, const AssetStorage &self);
+
+template<class AssetType, class AssetStorageType>
+class AssetSerializerLocalXML//: public AssetSerializer<AssetType>
+{
+  public:
+    AssetSerializerLocalXML() {}
+    khRefGuard<AssetType> Load(const std::string &boundref)
+    {
+      return AssetType::Load(boundref);
+    }
+
+    bool Save(khRefGuard<AssetType> asset, std::string filename){
+      extern void ToElement(DOMElement *elem, const AssetStorageType &self);
+
+      std::unique_ptr<GEDocument> doc = CreateEmptyDocument(asset->GetName()/*"${name}AssetVersion"*/);
+      if (!doc) {
+          notify(NFY_WARN,
+                "Unable to create empty document: ${name}AssetVersion");
+          return false;
+      }
+      bool status = false;
+      try {
+          DOMElement *top = doc->getDocumentElement();
+          if (top) {
+              const AssetStorageType &storage = *asset;
+              ToElement(top, storage);
+              asset->SerializeConfig(top);
+              status = WriteDocument(doc.get(), filename);
+
+              if (!status && khExists(filename)) {
+                  khUnlink(filename);
+              }
+          } else {
+              notify(NFY_WARN, "Unable to create document element %s",
+                    filename.c_str());
+          }
+      } catch (const std::exception &e) {
+          notify(NFY_WARN, "%s while saving %s", e.what(), filename.c_str());
+      } catch (...) {
+          notify(NFY_WARN, "Unable to save %s", filename.c_str());
+      }
+      return status;
+    }
+};
+
+template<class AssetType, class AssetStorageType>
 class StorageManager
 {
   public:
@@ -58,7 +118,7 @@ class StorageManager
     inline void NoLongerNeeded(const AssetKey &, bool = true);
     void Abort();
     bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<SharedString> *);
-    HandleType Get(const AssetHandleInterface<AssetType> *, bool, bool, bool);
+    HandleType Get(const AssetHandleInterface<AssetType, AssetStorageType> *, bool, bool, bool);
   private:
     using CacheType = khCache<AssetKey, HandleType>;
 
@@ -73,39 +133,39 @@ class StorageManager
 };
 
 // Handles to items stored in the storage manager must implement the asset handle interface
-template<class AssetType>
+template<class AssetType, class AssetStorageType>
 class AssetHandleInterface {
   public:
-    virtual const typename StorageManager<AssetType>::AssetKey Key() const = 0;
+    virtual const typename StorageManager<AssetType, AssetStorageType>::AssetKey Key() const = 0;
     virtual std::string Filename() const = 0;
-    virtual typename StorageManager<AssetType>::HandleType Load(const std::string &) const = 0;
-    virtual bool Valid(const typename StorageManager<AssetType>::HandleType &) const = 0;
+    virtual typename StorageManager<AssetType, AssetStorageType>::HandleType Load(const std::string &) const = 0;
+    virtual bool Valid(const typename StorageManager<AssetType, AssetStorageType>::HandleType &) const = 0;
 };
 
-template<class AssetType>
+template<class AssetType, class AssetStorageType>
 inline void
-StorageManager<AssetType>::AddNew(const AssetKey & key, const HandleType & value) {
+StorageManager<AssetType, AssetStorageType>::AddNew(const AssetKey & key, const HandleType & value) {
   cache.Add(key, value);
   // New assets are automatically dirty
   dirtyMap.emplace(key, value);
 }
 
-template<class AssetType>
+template<class AssetType, class AssetStorageType>
 inline void
-StorageManager<AssetType>::AddExisting(const AssetKey & key, const HandleType & value) {
+StorageManager<AssetType, AssetStorageType>::AddExisting(const AssetKey & key, const HandleType & value) {
   cache.Add(key, value);
 }
 
-template<class AssetType>
+template<class AssetType, class AssetStorageType>
 inline void
-StorageManager<AssetType>::NoLongerNeeded(const AssetKey & key, bool prune) {
+StorageManager<AssetType, AssetStorageType>::NoLongerNeeded(const AssetKey & key, bool prune) {
   cache.Remove(key, prune);
 }
 
-template<class AssetType>
-typename StorageManager<AssetType>::HandleType
-StorageManager<AssetType>::Get(
-    const AssetHandleInterface<AssetType> * handle,
+template<class AssetType, class AssetStorageType>
+typename StorageManager<AssetType, AssetStorageType>::HandleType
+StorageManager<AssetType, AssetStorageType>::Get(
+    const AssetHandleInterface<AssetType, AssetStorageType> * handle,
     bool checkFileExistenceFirst,
     bool addToCache,
     bool makeMutable) {
@@ -129,7 +189,8 @@ StorageManager<AssetType>::Get(
     }
 
     // Will succeed, generate stub, or throw exception.
-    entry = AssetType::Load(key);
+    AssetSerializerLocalXML<AssetType, AssetStorageType> serializer;
+    entry = serializer.Load(key);
     updated = true;
   } else if (check_timestamps) {
     uint64 filesize = 0;
@@ -143,7 +204,8 @@ StorageManager<AssetType>::Get(
       cache.Remove(key, false);  // Don't prune, the Add() will.
 
       // Will succeed, generate stub, or throw exception.
-      entry = AssetType::Load(key);
+      AssetSerializerLocalXML<AssetType, AssetStorageType> serializer;
+      entry = serializer.Load(key);
       updated = true;
     }
   }
@@ -162,8 +224,8 @@ StorageManager<AssetType>::Get(
   return entry;
 }
 
-template<class AssetType>
-void StorageManager<AssetType>::Abort() {
+template<class AssetType, class AssetStorageType>
+void StorageManager<AssetType, AssetStorageType>::Abort() {
   // remove all the dirty Impls from the cache
   for (const std::pair<AssetKey, HandleType> & entry : dirtyMap) {
     cache.Remove(entry.first, false); // false -> don't prune
@@ -174,15 +236,17 @@ void StorageManager<AssetType>::Abort() {
   dirtyMap.clear();
 }
 
-template<class AssetType>
-bool StorageManager<AssetType>::SaveDirtyToDotNew(
+template<class AssetType, class AssetStorageType>
+bool StorageManager<AssetType, AssetStorageType>::SaveDirtyToDotNew(
     khFilesTransaction &savetrans,
     std::vector<SharedString> *saved) {
   notify(NFY_INFO, "Writing %lu %s records", dirtyMap.size(), assetType.c_str());
   typename std::map<AssetKey, HandleType>::iterator entry = dirtyMap.begin();
   while (entry != dirtyMap.end()) {
     std::string filename = entry->second->XMLFilename() + ".new";
-    if (entry->second->Save(filename)) {
+    AssetSerializerLocalXML<AssetType, AssetStorageType> serializer;
+ 
+    if (serializer.Save(entry->second, filename) /*entry->second->Save(filename)*/) {
       savetrans.AddNewPath(filename);
       if (saved) {
         saved->push_back(entry->first);

@@ -37,7 +37,7 @@
  ***
  ******************************************************************************/
 class AssetImpl : public khRefCounter, public AssetStorage, public StorageManaged {
-  friend class AssetHandle_<AssetImpl>;
+  friend class AssetHandle_<AssetImpl, AssetStorage>;
 
   // Illegal to copy an AssetImpl
   AssetImpl(const AssetImpl&) = delete;
@@ -56,10 +56,19 @@ class AssetImpl : public khRefCounter, public AssetStorage, public StorageManage
   // implemented in LoadAny.cpp
   static khRefGuard<AssetImpl> Load(const std::string &boundref);
 
-  virtual bool Save(const std::string &filename) const {
+  /*virtual bool Save(const std::string &filename) const {
     assert(false); // Can only save from sub-classes
     return false;
-  };
+  };*/
+
+  virtual std::string GetName() const { // Returns the name of the asset, e.g., "CombinedRPAsset"
+    assert(false);
+    return "";
+  }
+
+  virtual void SerializeConfig(DOMElement*) const {
+    assert(false);
+  }
 
   std::string WorkingDir(void) const { return WorkingDir(GetRef()); }
   std::string XMLFilename() const { return XMLFilename(GetRef()); }
@@ -81,13 +90,13 @@ class AssetImpl : public khRefCounter, public AssetStorage, public StorageManage
 // ****************************************************************************
 // ***  Asset & its specializations
 // ****************************************************************************
-typedef AssetHandle_<AssetImpl> Asset;
+typedef AssetHandle_<AssetImpl, AssetStorage> Asset;
 
 template <>
-inline StorageManager<AssetImpl>&
+inline StorageManager<AssetImpl, AssetStorage>&
 Asset::storageManager(void)
 {
-  static StorageManager<AssetImpl> storageManager(
+  static StorageManager<AssetImpl, AssetStorage> storageManager(
       MiscConfig::Instance().AssetCacheSize, "asset");
   return storageManager;
 }

@@ -41,7 +41,7 @@
  ******************************************************************************/
 class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public StorageManaged {
   friend class AssetImpl;
-  friend class AssetHandle_<AssetVersionImpl>;
+  friend class AssetHandle_<AssetVersionImpl, AssetVersionStorage>;
 
   // Illegal to copy an AssetVersionImpl
   AssetVersionImpl(const AssetVersionImpl&) = delete;
@@ -59,10 +59,19 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
   // implemented in LoadAny.cpp
   static khRefGuard<AssetVersionImpl> Load(const std::string &boundref);
 
-  virtual bool Save(const std::string &filename) const {
+  /*virtual bool Save(const std::string &filename) const {
     assert(false); // Can only save from sub-classes
     return false;
-  };
+  };*/
+
+  virtual std::string GetName() const {   // Returns the name of the asset version, e.g., "CombinedRPAssetVersion"
+    assert(false);
+    return "";
+  }
+
+  virtual void SerializeConfig(DOMElement*) const {
+    assert(false);
+  }
 
   std::string WorkingFilename(const std::string &fname) const {
     return AssetDefs::AssetPathToFilename(WorkingFileRef(fname));
@@ -188,13 +197,13 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
 // ****************************************************************************
 // ***  AssetVersion & its specializations
 // ****************************************************************************
-typedef AssetHandle_<AssetVersionImpl> AssetVersion;
+typedef AssetHandle_<AssetVersionImpl, AssetVersionStorage> AssetVersion;
 
 template <>
-inline StorageManager<AssetVersionImpl>&
+inline StorageManager<AssetVersionImpl, AssetVersionStorage>&
 AssetVersion::storageManager(void)
 {
-  static StorageManager<AssetVersionImpl> storageManager(
+  static StorageManager<AssetVersionImpl, AssetVersionStorage> storageManager(
       MiscConfig::Instance().VersionCacheSize, "version");
   return storageManager;
 }

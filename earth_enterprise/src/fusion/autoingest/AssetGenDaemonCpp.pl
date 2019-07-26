@@ -414,7 +414,7 @@ namespace {
     void AddConfig(DOMElement *parent, const $config &config);
 }
 
-khRefGuard<${name}AssetImplD>
+/*khRefGuard<${name}AssetImplD>
 ${name}AssetImplD::Load(const std::string &boundref)
 {
     khRefGuard<${name}AssetImplD> result;
@@ -429,11 +429,21 @@ ${name}AssetImplD::Load(const std::string &boundref)
     }
 
     return result;
+}*/
+
+std::string ${name}AssetImplD::GetName() const
+{
+    return "${name}Asset";
+}
+
+void ${name}AssetImplD::SerializeConfig(DOMElement *top) const
+{
+    AddConfig(top, config);
 }
 
 extern void ToElement(DOMElement *elem, const AssetStorage &self);
 
-bool
+/*bool
 ${name}AssetImplD::Save(const std::string &filename) const
 {
     std::unique_ptr<GEDocument> doc = CreateEmptyDocument("${name}Asset");
@@ -470,7 +480,7 @@ ${name}AssetImplD::Save(const std::string &filename) const
         notify(NFY_WARN, "Unable to save %s", filename.c_str());
     }
     return status;
-}
+}*/
 
 
 
@@ -781,7 +791,7 @@ print $fh <<EOF;
 // ****************************************************************************
 // ***  ${name}AssetVersionImplD - Auto generated
 // ****************************************************************************
-khRefGuard<${name}AssetVersionImplD>
+/*khRefGuard<${name}AssetVersionImplD>
 ${name}AssetVersionImplD::Load(const std::string &boundref)
 {
     khRefGuard<${name}AssetVersionImplD> result;
@@ -796,11 +806,20 @@ ${name}AssetVersionImplD::Load(const std::string &boundref)
     }
 
     return result;
+}*/
+
+std::string ${name}AssetVersionImplD::GetName() const
+{
+    return "${name}AssetVersion";
 }
 
+void ${name}AssetVersionImplD::SerializeConfig(DOMElement *top) const
+{
+    AddConfig(top, config);
+}
 
 extern void ToElement(DOMElement *elem, const AssetVersionStorage &self);
-bool
+/*bool
 ${name}AssetVersionImplD::Save(const std::string &filename) const
 {
     std::unique_ptr<GEDocument> doc = CreateEmptyDocument("${name}AssetVersion");
@@ -830,7 +849,7 @@ ${name}AssetVersionImplD::Save(const std::string &filename) const
         notify(NFY_WARN, "Unable to save %s", filename.c_str());
     }
     return status;
-}
+}*/
 
 
 EOF

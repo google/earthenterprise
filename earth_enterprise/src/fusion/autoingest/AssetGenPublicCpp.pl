@@ -109,7 +109,7 @@ ${name}AssetImpl::NewInvalid(const std::string &ref)
 
 
 
-khRefGuard<${name}AssetImpl>
+/*khRefGuard<${name}AssetImpl>
 ${name}AssetImpl::Load(const std::string &ref)
 {
     std::string filename = XMLFilename(ref);
@@ -161,7 +161,7 @@ ${name}AssetImpl::Load(const std::string &ref)
     result->filesize  = filesize;
 
     return result;
-}
+}*/
 
 // ****************************************************************************
 // ***  ${name}AssetVersionImpl - Auto generated
@@ -192,7 +192,7 @@ std::string ${name}AssetVersionImpl::PluginName(void) const {
   return "${name}";
 }
 
-khRefGuard<${name}AssetVersionImpl>
+/*khRefGuard<${name}AssetVersionImpl>
 ${name}AssetVersionImpl::Load(const std::string &boundref)
 {
     std::string filename = XMLFilename(boundref);
@@ -243,7 +243,7 @@ ${name}AssetVersionImpl::Load(const std::string &boundref)
     result->filesize  = filesize;
 
     return result;
-}
+}*/
 
 EOF
 
