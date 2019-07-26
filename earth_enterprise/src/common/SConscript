@@ -130,6 +130,7 @@ utilsources = [
 # TODO: consider to remove dependency from qt
 geutil = env.sharedLib('geutil', utilsources,
                        LIBS = ['gecommon', 'qt-mt'])
+
 env.test('quadtreepath_unittest',
          'quadtreepath_unittest.cpp',
          LIBS=['geutil', 'gecommon', 'qt-mt'])
@@ -192,6 +193,10 @@ env.test('khThread_unittest',
 
 env.test('khconfigparser_unittest',
          'khconfigparser_unittest.cpp',
+          LIBS=['geutil', 'gtest'])
+
+env.test('assetrefkey_unittest',
+         'assetrefkey_unittest.cpp',
           LIBS=['geutil', 'gtest'])
 
 env.install('common_lib', [gecommon])
