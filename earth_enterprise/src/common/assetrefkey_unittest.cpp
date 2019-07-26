@@ -60,6 +60,24 @@ TEST(AssetRefKeyTest, Moves)
     EXPECT_TRUE(ref4 == std::string("Moves2") && ref4 == "Moves2");
 }
 
+TEST(AssetRefKeyTest, Logic)
+{
+    string str1 { "str1" }, str2 { "str2" };
+    AssetRefKey ref1(str1), ref2(str2);
+    //comparing like
+    EXPECT_FALSE(ref1 == ref2);
+    EXPECT_TRUE(ref1 < ref2);
+    EXPECT_TRUE(ref2 > ref1);
+    //compare to string
+    EXPECT_FALSE(ref1 == str2);
+    EXPECT_TRUE(ref1 < str2);
+    EXPECT_TRUE(ref2 > str1);
+    //compare to const char*
+    EXPECT_FALSE(ref1 == str2.c_str());
+    EXPECT_TRUE(ref1 < str2.c_str());
+    EXPECT_TRUE(ref2 > str1.c_str());
+}
+
 int main(int argc, char** argv)
 {
     testing::InitGoogleTest(&argc, argv);
