@@ -70,7 +70,7 @@ StateUpdater::BuildDependentTreeForStateCalculation(const SharedString & ref) {
   // which allows us to keep memory usage (relatively) low by not forcing
   // assets to stay in the cache and limiting the size of the toFillIn and
   // toFillInNext lists.
-  auto myVertex = AddEmptyVertex(ref, vertices, index, true, toFillIn);
+  auto myVertex = AddEmptyVertex(ref, vertices, index, true, true, toFillIn);
   while (toFillIn.size() > 0) {
     for (auto vertex : toFillIn) {
       FillInVertex(vertex, vertices, index, toFillInNext);
@@ -90,6 +90,7 @@ StateUpdater::AddEmptyVertex(
     const SharedString & ref,
     VertexMap & vertices,
     size_t & index,
+    bool inDepTree,
     bool recalcState,
     list<TreeType::vertex_descriptor> & toFillIn) {
   auto myVertexIter = vertices.find(ref);
@@ -97,7 +98,7 @@ StateUpdater::AddEmptyVertex(
     // I'm not in the graph yet, so make a new empty vertex and let the caller
     // know we need to load it with the correct information
     auto myVertex = add_vertex(tree);
-    tree[myVertex] = {ref, AssetDefs::New, recalcState, index};
+    tree[myVertex] = {ref, AssetDefs::New, inDepTree, recalcState, index};
     ++index;
     vertices[ref] = myVertex;
     toFillIn.push_back(myVertex);
@@ -106,9 +107,10 @@ StateUpdater::AddEmptyVertex(
   else {
     // I'm already in the graph. Make sure recalcState is set correctly and
     // return my existing vertex descriptor.
-    auto myVertex = myVertexIter->second;
-    tree[myVertex].recalcState = tree[myVertex].recalcState || recalcState;
-    return myVertex;
+    auto myVertex = tree[myVertexIter->second];
+    myVertex.inDepTree = myVertex.inDepTree || inDepTree;
+    myVertex.recalcState = myVertex.recalcState || recalcState;
+    return myVertexIter->second;
   }
 }
 
@@ -138,33 +140,36 @@ void StateUpdater::FillInVertex(
     tree[myVertex].name = name;
     vertices[name] = myVertex;
   }
-  // If I need to recalculate my state, I need to have my children and inputs
-  // in the tree because my state is based on them. In addition, I need my
-  // dependent children, parents, and listeners, because they may also have to
-  // recalculate their state. If I don't need to recalculate my state, I don't
-  // need to add any of my connections. I'm only used to calculate someone
-  // else's state.
-  if (tree[myVertex].recalcState) {
+  // If I'm in the dependency tree I need to add my dependents because they are
+  // also in the dependency tree.
+  if (tree[myVertex].inDepTree) {
     vector<SharedString> dependents;
     version->DependentChildren(dependents);
     for (const auto & dep : dependents) {
-      auto depVertex = AddEmptyVertex(dep, vertices, index, true, toFillIn);
+      auto depVertex = AddEmptyVertex(dep, vertices, index, true, true, toFillIn);
       AddEdge(myVertex, depVertex, {DEPENDENT});
     }
+  }
+  // If I need to recalculate my state, I need to have my children and inputs
+  // in the tree because my state is based on them. In addition, I need my
+  // parents and listeners, because they may also have to recalculate their
+  // state. If I don't need to recalculate my state, I don't need to add any of
+  // my connections. I'm only used to calculate someone else's state.
+  if (tree[myVertex].recalcState) {
     for (const auto & child : version->children) {
-      auto childVertex = AddEmptyVertex(child, vertices, index, false, toFillIn);
+      auto childVertex = AddEmptyVertex(child, vertices, index, false, false, toFillIn);
       AddEdge(myVertex, childVertex, {CHILD});
     }
     for (const auto & input : version->inputs) {
-      auto inputVertex = AddEmptyVertex(input, vertices, index, false, toFillIn);
+      auto inputVertex = AddEmptyVertex(input, vertices, index, false, false, toFillIn);
       AddEdge(myVertex, inputVertex, {INPUT});
     }
     for (const auto & parent : version->parents) {
-      auto parentVertex = AddEmptyVertex(parent, vertices, index, true, toFillIn);
+      auto parentVertex = AddEmptyVertex(parent, vertices, index, false, true, toFillIn);
       AddEdge(parentVertex, myVertex, {CHILD});
     }
     for (const auto & listener : version->listeners) {
-      auto listenerVertex = AddEmptyVertex(listener, vertices, index, true, toFillIn);
+      auto listenerVertex = AddEmptyVertex(listener, vertices, index, false, true, toFillIn);
       AddEdge(listenerVertex, myVertex, {INPUT});
     }
   }

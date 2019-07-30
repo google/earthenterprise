@@ -40,6 +40,7 @@ class StateUpdater
     struct AssetVertex {
       SharedString name;
       AssetDefs::State state;
+      bool inDepTree;
       bool recalcState;
       size_t index; // Used by the dfs function
     };
@@ -72,6 +73,7 @@ class StateUpdater
         const SharedString & ref,
         VertexMap & vertices,
         size_t & index,
+        bool inDepTree,
         bool recalcState,
         std::list<TreeType::vertex_descriptor> & toFillIn);
     void FillInVertex(
