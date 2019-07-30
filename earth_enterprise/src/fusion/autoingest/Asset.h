@@ -56,11 +56,6 @@ class AssetImpl : public khRefCounter, public AssetStorage, public StorageManage
   // implemented in LoadAny.cpp
   static khRefGuard<AssetImpl> Load(const std::string &boundref);
 
-  /*virtual bool Save(const std::string &filename) const {
-    assert(false); // Can only save from sub-classes
-    return false;
-  };*/
-
   virtual std::string GetName() const { // Returns the name of the asset, e.g., "CombinedRPAsset"
     assert(false);
     return "";

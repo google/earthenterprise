@@ -88,8 +88,6 @@ public:
     Config config;
 
 protected:
-    //static khRefGuard<${name}AssetImpl> Load(const std::string &ref);
-
     // used only by ${name}AssetImplD, it has to pass
     // the storage directly to the virtual base classes
     ${name}AssetImpl(const Config& config_)
@@ -127,8 +125,6 @@ public:
 
     virtual std::string PluginName(void) const;
 protected:
-    //static khRefGuard<${name}AssetVersionImpl> Load(const std::string &ref);
-
     // used only by ${name}AssetVersionImplD, it has to pass
     // the storage directly to the virtual base classes
     ${name}AssetVersionImpl(const Config& config_)

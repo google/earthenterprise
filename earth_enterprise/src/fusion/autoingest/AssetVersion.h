@@ -59,11 +59,6 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
   // implemented in LoadAny.cpp
   static khRefGuard<AssetVersionImpl> Load(const std::string &boundref);
 
-  /*virtual bool Save(const std::string &filename) const {
-    assert(false); // Can only save from sub-classes
-    return false;
-  };*/
-
   virtual std::string GetName() const {   // Returns the name of the asset version, e.g., "CombinedRPAssetVersion"
     assert(false);
     return "";

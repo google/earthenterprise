@@ -33,15 +33,6 @@
 
 using namespace khxml;
 
-//template<class AssetType>
-//class AssetSerializer
-//{
-//  public:
-    //virtual khRefGuard<AssetType> Load(const std::string &boundref) = 0;
-//};
-
-
-
 // Items stored in the storage manager must inherit from the StorageManaged class
 class StorageManaged {
   public:
@@ -52,10 +43,8 @@ class StorageManaged {
 
 template<class AssetType, class AssetStorageType> class AssetHandleInterface;
 
-//extern void ToElement(DOMElement *elem, const AssetStorage &self);
-
 template<class AssetType, class AssetStorageType>
-class AssetSerializerLocalXML//: public AssetSerializer<AssetType>
+class AssetSerializerLocalXML
 {
   public:
     AssetSerializerLocalXML() {}
@@ -67,7 +56,7 @@ class AssetSerializerLocalXML//: public AssetSerializer<AssetType>
     bool Save(khRefGuard<AssetType> asset, std::string filename){
       extern void ToElement(DOMElement *elem, const AssetStorageType &self);
 
-      std::unique_ptr<GEDocument> doc = CreateEmptyDocument(asset->GetName()/*"${name}AssetVersion"*/);
+      std::unique_ptr<GEDocument> doc = CreateEmptyDocument(asset->GetName());
       if (!doc) {
           notify(NFY_WARN,
                 "Unable to create empty document: ${name}AssetVersion");
@@ -246,7 +235,7 @@ bool StorageManager<AssetType, AssetStorageType>::SaveDirtyToDotNew(
     std::string filename = entry->second->XMLFilename() + ".new";
     AssetSerializerLocalXML<AssetType, AssetStorageType> serializer;
  
-    if (serializer.Save(entry->second, filename) /*entry->second->Save(filename)*/) {
+    if (serializer.Save(entry->second, filename)) {
       savetrans.AddNewPath(filename);
       if (saved) {
         saved->push_back(entry->first);

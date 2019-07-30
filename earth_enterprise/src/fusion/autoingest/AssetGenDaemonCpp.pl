@@ -414,23 +414,6 @@ namespace {
     void AddConfig(DOMElement *parent, const $config &config);
 }
 
-/*khRefGuard<${name}AssetImplD>
-${name}AssetImplD::Load(const std::string &boundref)
-{
-    khRefGuard<${name}AssetImplD> result;
-
-    // make sure the base class loader actually instantiated one of me
-    // this should always happen, but there are no compile time guarantees
-    result.dyncastassign(${name}AssetImpl::Load(boundref));
-    if (!result) {
-        AssetThrowPolicy::FatalOrThrow(
-            "Internal error: ${name}AssetImplD loaded wrong type for " +
-            boundref);
-    }
-
-    return result;
-}*/
-
 std::string ${name}AssetImplD::GetName() const
 {
     return "${name}Asset";
@@ -442,47 +425,6 @@ void ${name}AssetImplD::SerializeConfig(DOMElement *top) const
 }
 
 extern void ToElement(DOMElement *elem, const AssetStorage &self);
-
-/*bool
-${name}AssetImplD::Save(const std::string &filename) const
-{
-    std::unique_ptr<GEDocument> doc = CreateEmptyDocument("${name}Asset");
-    if (!doc) {
-        notify(NFY_WARN, "Unable to create empty document: ${name}Asset");
-        return false;
-    }
-    bool status = false;
-    try {
-        DOMElement *top = doc->getDocumentElement();
-        if (top) {
-            // use a temporary else templated ToElement doesn't
-            // know which type to use
-            const AssetStorage &storage = *this;
-            ToElement(top, storage);
-            AddConfig(top, config);
-            status = WriteDocument(doc.get(), filename);
-            if (!status && khExists(filename)) {
-                khUnlink(filename);
-            }
-        } else {
-            notify(NFY_WARN, "Unable to create document element %s",
-                   filename.c_str());
-        }
-    } catch (const XMLException& toCatch) {
-        notify(NFY_WARN, "Error saving %s: %s",
-               filename.c_str(), XMLString::transcode(toCatch.getMessage()));
-    } catch (const DOMException& toCatch) {
-        notify(NFY_WARN, "Error saving %s: %s",
-               filename.c_str(), XMLString::transcode(toCatch.msg));
-    } catch (const std::exception &e) {
-        notify(NFY_WARN, "Error saving %s: %s", filename.c_str(), e.what());
-    } catch (...) {
-        notify(NFY_WARN, "Unable to save %s", filename.c_str());
-    }
-    return status;
-}*/
-
-
 
 EOF
 
@@ -791,23 +733,6 @@ print $fh <<EOF;
 // ****************************************************************************
 // ***  ${name}AssetVersionImplD - Auto generated
 // ****************************************************************************
-/*khRefGuard<${name}AssetVersionImplD>
-${name}AssetVersionImplD::Load(const std::string &boundref)
-{
-    khRefGuard<${name}AssetVersionImplD> result;
-
-    // make sure the base class loader actually instantiated one of me
-    // this should always happen, but there are no compile time guarantees
-    result.dyncastassign(${name}AssetVersionImpl::Load(boundref));
-    if (!result) {
-        AssetThrowPolicy::FatalOrThrow(
-            "Internal error: ${name}AssetVersionImplD loaded wrong type for " +
-            boundref);
-    }
-
-    return result;
-}*/
-
 std::string ${name}AssetVersionImplD::GetName() const
 {
     return "${name}AssetVersion";
@@ -819,38 +744,6 @@ void ${name}AssetVersionImplD::SerializeConfig(DOMElement *top) const
 }
 
 extern void ToElement(DOMElement *elem, const AssetVersionStorage &self);
-/*bool
-${name}AssetVersionImplD::Save(const std::string &filename) const
-{
-    std::unique_ptr<GEDocument> doc = CreateEmptyDocument("${name}AssetVersion");
-    if (!doc) {
-        notify(NFY_WARN,
-               "Unable to create empty document: ${name}AssetVersion");
-        return false;
-    }
-    bool status = false;
-    try {
-        DOMElement *top = doc->getDocumentElement();
-        if (top) {
-            const AssetVersionStorage &storage = *this;
-            ToElement(top, storage);
-            AddConfig(top, config);
-            status = WriteDocument(doc.get(), filename);
-            if (!status && khExists(filename)) {
-                khUnlink(filename);
-            }
-        } else {
-            notify(NFY_WARN, "Unable to create document element %s",
-                   filename.c_str());
-        }
-    } catch (const std::exception &e) {
-        notify(NFY_WARN, "%s while saving %s", e.what(), filename.c_str());
-    } catch (...) {
-        notify(NFY_WARN, "Unable to save %s", filename.c_str());
-    }
-    return status;
-}*/
-
 
 EOF
 

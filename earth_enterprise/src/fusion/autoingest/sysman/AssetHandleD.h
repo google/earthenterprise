@@ -49,7 +49,7 @@ class DerivedAssetHandleD_ : public virtual BaseD_, public ROBase_
     // Impl::Load will succeed or throw.
     // The derived khRefGuard will be automatically converted
     // the the base khRefGuard
-    return HandleType(/*Impl*/BBase::Load(boundref));
+    return HandleType(BBase::Load(boundref));
   }
   virtual bool Valid(const HandleType & entry) const {
     // we have to check if it maps to Impl* since somebody
