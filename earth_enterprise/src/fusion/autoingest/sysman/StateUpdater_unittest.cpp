@@ -326,7 +326,7 @@ TEST_F(StateUpdaterTest, RecalculateState_StateDoesAndDoesntChange) {
   SetVersions(sm, {MockVersion("a"), MockVersion("b")});
   GetMutableVersion(sm, "a")->state = CALCULATED_STATE;
   GetMutableVersion(sm, "b")->state = STARTING_STATE;
-  SetListenerInput(sm, "a", "b");
+  SetDependent(sm, "a", "b");
   GetMutableVersion(sm, "a")->loadedMutable = false;
   updater.SetStateForRefAndDependents(fix("a"), CALCULATED_STATE, [](AssetDefs::State) { return false; });
 
@@ -546,20 +546,23 @@ TEST_F(StateUpdaterTest, ChildrenAndInputs) {
 
 TEST_F(StateUpdaterTest, RecalculateMultipleStates) {
   GetBigTree(sm);
-  updater.SetStateForRefAndDependents(fix("gp"), AssetDefs::New, [](AssetDefs::State) { return false; });
+  updater.SetStateForRefAndDependents(fix("p1"), AssetDefs::New, [](AssetDefs::State) { return false; });
   updater.RecalculateAndSaveStates();
+  // States should be changed for parents and dependents
   ASSERT_TRUE(GetVersion(sm, "gp")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "gpi")->stateSet);
   ASSERT_TRUE(GetVersion(sm, "p1")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "pi1")->stateSet);
   ASSERT_TRUE(GetVersion(sm, "c1")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "p2")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "c2")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "c3")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "c4")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "ci1")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "ci2")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "ci3")->stateSet);
+
+  // All other states shouldn't change (including dependents of parents)
+  ASSERT_FALSE(GetVersion(sm, "c2")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "p2")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "pi1")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "gpi")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "c3")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "c4")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "ci1")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "ci2")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "ci3")->stateSet);
 }
 
 int main(int argc, char **argv) {

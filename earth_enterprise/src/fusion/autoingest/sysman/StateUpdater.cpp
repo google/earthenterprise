@@ -59,7 +59,7 @@ namespace boost {
 
 // Builds the asset version tree containing the specified asset version.
 StateUpdater::TreeType::vertex_descriptor
-StateUpdater::BuildTree(const SharedString & ref) {
+StateUpdater::BuildDependentTreeForStateCalculation(const SharedString & ref) {
   VertexMap vertices;
   size_t index = 0;
   list<TreeType::vertex_descriptor> toFillIn, toFillInNext;
@@ -70,7 +70,7 @@ StateUpdater::BuildTree(const SharedString & ref) {
   // which allows us to keep memory usage (relatively) low by not forcing
   // assets to stay in the cache and limiting the size of the toFillIn and
   // toFillInNext lists.
-  auto myVertex = AddEmptyVertex(ref, vertices, index, toFillIn);
+  auto myVertex = AddEmptyVertex(ref, vertices, index, true, toFillIn);
   while (toFillIn.size() > 0) {
     for (auto vertex : toFillIn) {
       FillInVertex(vertex, vertices, index, toFillInNext);
@@ -90,21 +90,25 @@ StateUpdater::AddEmptyVertex(
     const SharedString & ref,
     VertexMap & vertices,
     size_t & index,
+    bool recalcState,
     list<TreeType::vertex_descriptor> & toFillIn) {
   auto myVertexIter = vertices.find(ref);
   if (myVertexIter == vertices.end()) {
     // I'm not in the graph yet, so make a new empty vertex and let the caller
     // know we need to load it with the correct information
     auto myVertex = add_vertex(tree);
-    tree[myVertex] = {ref, AssetDefs::New, index};
+    tree[myVertex] = {ref, AssetDefs::New, recalcState, index};
     ++index;
     vertices[ref] = myVertex;
     toFillIn.push_back(myVertex);
     return myVertex;
   }
   else {
-    // I'm already in the graph, so just return my vertex descriptor.
-    return myVertexIter->second;
+    // I'm already in the graph. Make sure recalcState is set correctly and
+    // return my existing vertex descriptor.
+    auto myVertex = myVertexIter->second;
+    tree[myVertex].recalcState = tree[myVertex].recalcState || recalcState;
+    return myVertex;
   }
 }
 
@@ -134,27 +138,35 @@ void StateUpdater::FillInVertex(
     tree[myVertex].name = name;
     vertices[name] = myVertex;
   }
-  vector<SharedString> dependents;
-  version->DependentChildren(dependents);
-  for (const auto & dep : dependents) {
-    auto depVertex = AddEmptyVertex(dep, vertices, index, toFillIn);
-    AddEdge(myVertex, depVertex, {DEPENDENT});
-  }
-  for (const auto & child : version->children) {
-    auto childVertex = AddEmptyVertex(child, vertices, index, toFillIn);
-    AddEdge(myVertex, childVertex, {CHILD});
-  }
-  for (const auto & input : version->inputs) {
-    auto inputVertex = AddEmptyVertex(input, vertices, index, toFillIn);
-    AddEdge(myVertex, inputVertex, {INPUT});
-  }
-  for (const auto & parent : version->parents) {
-    auto parentVertex = AddEmptyVertex(parent, vertices, index, toFillIn);
-    AddEdge(parentVertex, myVertex, {CHILD});
-  }
-  for (const auto & listener : version->listeners) {
-    auto listenerVertex = AddEmptyVertex(listener, vertices, index, toFillIn);
-    AddEdge(listenerVertex, myVertex, {INPUT});
+  // If I need to recalculate my state, I need to have my children and inputs
+  // in the tree because my state is based on them. In addition, I need my
+  // dependent children, parents, and listeners, because they may also have to
+  // recalculate their state. If I don't need to recalculate my state, I don't
+  // need to add any of my connections. I'm only used to calculate someone
+  // else's state.
+  if (tree[myVertex].recalcState) {
+    vector<SharedString> dependents;
+    version->DependentChildren(dependents);
+    for (const auto & dep : dependents) {
+      auto depVertex = AddEmptyVertex(dep, vertices, index, true, toFillIn);
+      AddEdge(myVertex, depVertex, {DEPENDENT});
+    }
+    for (const auto & child : version->children) {
+      auto childVertex = AddEmptyVertex(child, vertices, index, false, toFillIn);
+      AddEdge(myVertex, childVertex, {CHILD});
+    }
+    for (const auto & input : version->inputs) {
+      auto inputVertex = AddEmptyVertex(input, vertices, index, false, toFillIn);
+      AddEdge(myVertex, inputVertex, {INPUT});
+    }
+    for (const auto & parent : version->parents) {
+      auto parentVertex = AddEmptyVertex(parent, vertices, index, true, toFillIn);
+      AddEdge(parentVertex, myVertex, {CHILD});
+    }
+    for (const auto & listener : version->listeners) {
+      auto listenerVertex = AddEmptyVertex(listener, vertices, index, true, toFillIn);
+      AddEdge(listenerVertex, myVertex, {INPUT});
+    }
   }
 }
 
@@ -183,7 +195,7 @@ void StateUpdater::SetStateForRefAndDependents(
     AssetDefs::State newState,
     function<bool(AssetDefs::State)> updateStatePredicate) {
   SharedString verref = AssetVersionRef::Bind(ref);
-  auto refVertex = BuildTree(verref);
+  auto refVertex = BuildDependentTreeForStateCalculation(verref);
   SetStateForVertexAndDependents(refVertex, newState, updateStatePredicate);
 }
 
@@ -373,6 +385,7 @@ class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
         StateUpdater::TreeType::vertex_descriptor vertex,
         const StateUpdater::TreeType & tree) const {
       SharedString name = tree[vertex].name;
+      if (!tree[vertex].recalcState) return;
       notify(NFY_PROGRESS, "Calculating state for '%s'", name.toString().c_str());
       auto version = updater->storageManager->Get(name);
       if (!version) {

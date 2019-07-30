@@ -40,6 +40,7 @@ class StateUpdater
     struct AssetVertex {
       SharedString name;
       AssetDefs::State state;
+      bool recalcState;
       size_t index; // Used by the dfs function
     };
 
@@ -66,20 +67,22 @@ class StateUpdater
 
     inline bool IsDependent(DependencyType type) { return type == DEPENDENT || type == DEPENDENT_AND_CHILD; }
 
-    TreeType::vertex_descriptor BuildTree(const SharedString & ref);
+    TreeType::vertex_descriptor BuildDependentTreeForStateCalculation(const SharedString & ref);
     TreeType::vertex_descriptor AddEmptyVertex(
         const SharedString & ref,
         VertexMap & vertices,
         size_t & index,
+        bool recalcState,
         std::list<TreeType::vertex_descriptor> & toFillIn);
     void FillInVertex(
         TreeType::vertex_descriptor vertex,
         VertexMap & vertices,
         size_t & index,
         std::list<TreeType::vertex_descriptor> & toFillIn);
-    void AddEdge(TreeType::vertex_descriptor from,
-                 TreeType::vertex_descriptor to,
-                 AssetEdge data);
+    void AddEdge(
+        TreeType::vertex_descriptor from,
+        TreeType::vertex_descriptor to,
+        AssetEdge data);
     void SetStateForVertexAndDependents(
         TreeType::vertex_descriptor vertex,
         AssetDefs::State newState,
