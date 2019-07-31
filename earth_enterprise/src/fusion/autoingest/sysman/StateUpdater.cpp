@@ -74,7 +74,7 @@ StateUpdater::BuildDependentTreeForStateCalculation(const SharedString & ref) {
   // which allows us to keep memory usage (relatively) low by not forcing
   // assets to stay in the cache and limiting the size of the toFillIn and
   // toFillInNext lists.
-  auto myVertex = AddEmptyVertex(ref, buildData, true, true, toFillIn);
+  auto myVertex = AddOrUpdateVertex(ref, buildData, true, true, toFillIn);
   while (toFillIn.size() > 0) {
     for (auto vertex : toFillIn) {
       FillInVertex(vertex, buildData, toFillInNext);
@@ -90,7 +90,7 @@ StateUpdater::BuildDependentTreeForStateCalculation(const SharedString & ref) {
 // inputs/children/etc. The vertex must be "filled in" by calling FillInVertex
 // before it can be used.
 StateUpdater::TreeType::vertex_descriptor
-StateUpdater::AddEmptyVertex(
+StateUpdater::AddOrUpdateVertex(
     const SharedString & ref,
     TreeBuildData & buildData,
     bool inDepTree,
@@ -142,13 +142,21 @@ void StateUpdater::FillInVertex(
     tree[myVertex].name = name;
     buildData.vertices[name] = myVertex;
   }
+  AddConnections(version, myVertex, buildData, toFillIn);
+}
+
+void StateUpdater::AddConnections(
+    AssetHandle<const AssetVersionImpl> version,
+    TreeType::vertex_descriptor myVertex,
+    TreeBuildData & buildData,
+    std::set<TreeType::vertex_descriptor> & toFillIn) {
   // If I'm in the dependency tree I need to add my dependents because they are
   // also in the dependency tree.
   if (tree[myVertex].inDepTree) {
     vector<SharedString> dependents;
     version->DependentChildren(dependents);
     for (const auto & dep : dependents) {
-      auto depVertex = AddEmptyVertex(dep, buildData, true, true, toFillIn);
+      auto depVertex = AddOrUpdateVertex(dep, buildData, true, true, toFillIn);
       AddEdge(myVertex, depVertex, {DEPENDENT});
     }
   }
@@ -159,19 +167,19 @@ void StateUpdater::FillInVertex(
   // my connections. I'm only used to calculate someone else's state.
   if (tree[myVertex].recalcState) {
     for (const auto & child : version->children) {
-      auto childVertex = AddEmptyVertex(child, buildData, false, false, toFillIn);
+      auto childVertex = AddOrUpdateVertex(child, buildData, false, false, toFillIn);
       AddEdge(myVertex, childVertex, {CHILD});
     }
     for (const auto & input : version->inputs) {
-      auto inputVertex = AddEmptyVertex(input, buildData, false, false, toFillIn);
+      auto inputVertex = AddOrUpdateVertex(input, buildData, false, false, toFillIn);
       AddEdge(myVertex, inputVertex, {INPUT});
     }
     for (const auto & parent : version->parents) {
-      auto parentVertex = AddEmptyVertex(parent, buildData, false, true, toFillIn);
+      auto parentVertex = AddOrUpdateVertex(parent, buildData, false, true, toFillIn);
       AddEdge(parentVertex, myVertex, {CHILD});
     }
     for (const auto & listener : version->listeners) {
-      auto listenerVertex = AddEmptyVertex(listener, buildData, false, true, toFillIn);
+      auto listenerVertex = AddOrUpdateVertex(listener, buildData, false, true, toFillIn);
       AddEdge(listenerVertex, myVertex, {INPUT});
     }
   }

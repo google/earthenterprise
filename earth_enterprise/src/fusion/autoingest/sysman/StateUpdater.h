@@ -72,14 +72,19 @@ class StateUpdater
     inline bool IsDependent(DependencyType type) { return type == DEPENDENT || type == DEPENDENT_AND_CHILD; }
 
     TreeType::vertex_descriptor BuildDependentTreeForStateCalculation(const SharedString & ref);
-    TreeType::vertex_descriptor AddEmptyVertex(
+    TreeType::vertex_descriptor AddOrUpdateVertex(
         const SharedString & ref,
         TreeBuildData & buildData,
         bool inDepTree,
         bool recalcState,
         std::set<TreeType::vertex_descriptor> & toFillIn);
     void FillInVertex(
-        TreeType::vertex_descriptor vertex,
+        TreeType::vertex_descriptor myVertex,
+        TreeBuildData & buildData,
+        std::set<TreeType::vertex_descriptor> & toFillIn);
+    void AddConnections(
+        AssetHandle<const AssetVersionImpl> version,
+        TreeType::vertex_descriptor myVertex,
         TreeBuildData & buildData,
         std::set<TreeType::vertex_descriptor> & toFillIn);
     void AddEdge(
