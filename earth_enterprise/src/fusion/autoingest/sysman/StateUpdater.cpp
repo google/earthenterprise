@@ -62,7 +62,7 @@ StateUpdater::TreeType::vertex_descriptor
 StateUpdater::BuildDependentTreeForStateCalculation(const SharedString & ref) {
   VertexMap vertices;
   size_t index = 0;
-  list<TreeType::vertex_descriptor> toFillIn, toFillInNext;
+  set<TreeType::vertex_descriptor> toFillIn, toFillInNext;
   // First create an empty vertex for the provided asset. Then fill it in,
   // which includes adding its connections to other assets. Every time we fill
   // in a node we will get new assets to add to the tree until all assets have
@@ -92,7 +92,7 @@ StateUpdater::AddEmptyVertex(
     size_t & index,
     bool inDepTree,
     bool recalcState,
-    list<TreeType::vertex_descriptor> & toFillIn) {
+    set<TreeType::vertex_descriptor> & toFillIn) {
   auto myVertexIter = vertices.find(ref);
   if (myVertexIter == vertices.end()) {
     // I'm not in the graph yet, so make a new empty vertex and let the caller
@@ -101,7 +101,7 @@ StateUpdater::AddEmptyVertex(
     tree[myVertex] = {ref, AssetDefs::New, inDepTree, recalcState, index};
     ++index;
     vertices[ref] = myVertex;
-    toFillIn.push_back(myVertex);
+    toFillIn.emplace(myVertex);
     return myVertex;
   }
   else {
@@ -120,7 +120,7 @@ void StateUpdater::FillInVertex(
     TreeType::vertex_descriptor myVertex,
     VertexMap & vertices,
     size_t & index,
-    list<TreeType::vertex_descriptor> & toFillIn) {
+    set<TreeType::vertex_descriptor> & toFillIn) {
   SharedString name = tree[myVertex].name;
   notify(NFY_PROGRESS, "Loading '%s' for state update", name.toString().c_str());
   auto version = storageManager->Get(name);

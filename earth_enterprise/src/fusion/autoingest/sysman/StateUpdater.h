@@ -19,7 +19,7 @@
 
 #include <boost/graph/adjacency_list.hpp>
 #include <functional>
-#include <list>
+#include <set>
 #include <map>
 
 #include "AssetVersion.h"
@@ -75,12 +75,12 @@ class StateUpdater
         size_t & index,
         bool inDepTree,
         bool recalcState,
-        std::list<TreeType::vertex_descriptor> & toFillIn);
+        std::set<TreeType::vertex_descriptor> & toFillIn);
     void FillInVertex(
         TreeType::vertex_descriptor vertex,
         VertexMap & vertices,
         size_t & index,
-        std::list<TreeType::vertex_descriptor> & toFillIn);
+        std::set<TreeType::vertex_descriptor> & toFillIn);
     void AddEdge(
         TreeType::vertex_descriptor from,
         TreeType::vertex_descriptor to,
