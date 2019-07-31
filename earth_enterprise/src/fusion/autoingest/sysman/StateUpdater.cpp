@@ -108,11 +108,23 @@ StateUpdater::AddOrUpdateVertex(
     return myVertex;
   }
   else {
-    // I'm already in the graph. Make sure recalcState is set correctly and
-    // return my existing vertex descriptor.
-    auto myVertex = tree[myVertexIter->second];
-    myVertex.inDepTree = myVertex.inDepTree || inDepTree;
-    myVertex.recalcState = myVertex.recalcState || recalcState;
+    // I'm already in the graph. First make sure my connections are in the tree
+    // if I need them and they haven't been added yet, and then return the
+    // existing vertex descriptor.
+    auto & myVertexData = tree[myVertexIter->second];
+    bool needConnections = false;
+    if (inDepTree && !myVertexData.inDepTree) {
+      myVertexData.inDepTree = true;
+      needConnections = true;
+    }
+    if (recalcState && !myVertexData.recalcState) {
+      myVertexData.recalcState = true;
+      needConnections = true;
+    }
+    if (needConnections) {
+      auto version = storageManager->Get(ref);
+      AddConnections(version, myVertexIter->second, buildData, toFillIn);
+    }
     return myVertexIter->second;
   }
 }
