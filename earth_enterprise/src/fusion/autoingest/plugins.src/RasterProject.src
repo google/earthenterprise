@@ -440,7 +440,7 @@ void RasterProjectAssetImplD::HandleEditRequest(
 
   // Custom FindMake - modified to set/preserve indexVersion & fuid_channel_.
   MutableRasterProjectAssetD project =
-      RasterProjectFactory::Find(projname, req.type);
+      Find(projname, req.type, kProjectSubtype);
   if (project) {
     // It is a regular (editing the same asset) or "SaveAs" re-writing edit
     // request.
@@ -520,7 +520,7 @@ void RasterProjectAssetImplD::HandleNewRequest(
     AssetDefs::NormalizeAssetName(req.assetname, req.type, kProjectSubtype);
 
 
-  if (RasterProjectFactory::Find(projname, req.type)) {
+  if (Find(projname, req.type, kProjectSubtype)) {
     throw khException(kh::tr("%1 project %2 already exists")
                       .arg(ToQString(req.type), ToQString(projname)));
   } else {

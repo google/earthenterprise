@@ -57,6 +57,9 @@ class AssetImplD : public virtual AssetImpl
 
 typedef DerivedAssetHandle_<Asset, AssetImplD> AssetD;
 typedef MutableAssetHandleD_<AssetD> MutableAssetD;
+typedef MutableDerivedAssetHandleD_<AssetD, MutableAssetD> MutableDerivedAssetD;
+
+MutableDerivedAssetD Find(const std::string &, const AssetDefs::Type &, const std::string &);
 
 
 #endif /* __AssetD_h */

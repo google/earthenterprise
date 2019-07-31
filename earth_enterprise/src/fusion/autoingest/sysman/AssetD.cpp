@@ -93,3 +93,19 @@ AssetImplD::UpdateInputs(std::vector<AssetVersion> &inputvers) const
   }
   notify(NFY_PROGRESS, "Updating asset inputs complete.");
 }
+
+MutableDerivedAssetD Find(const std::string &ref, const AssetDefs::Type &type, const std::string &subtype) {
+  try {
+    Asset asset(ref);
+    notify(NFY_WARN, "New: %s %s %s", ref.c_str(), ToString(asset->type).c_str(), asset->subtype.c_str());
+    if (asset &&
+        (asset->type == type) &&
+        (asset->subtype == subtype)) {
+        notify(NFY_WARN, "New: FOUND");
+        return MutableDerivedAssetD(SharedString(ref));
+    }
+  } catch (...) {
+      // do nothing - don't even generate any warnings
+  }
+  return MutableDerivedAssetD();
+}
