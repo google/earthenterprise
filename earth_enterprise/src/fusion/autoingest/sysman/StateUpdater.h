@@ -59,6 +59,9 @@ class StateUpdater
         AssetEdge> TreeType;
     typedef std::map<SharedString, TreeType::vertex_descriptor> VertexMap;
 
+    // Helper structs for building the tree
+    struct TreeBuildData;
+
     // Used by dfs function to update states of assets in the tree
     friend struct boost::property_map<TreeType, boost::vertex_index_t>;
     class UpdateStateVisitor;
@@ -71,15 +74,13 @@ class StateUpdater
     TreeType::vertex_descriptor BuildDependentTreeForStateCalculation(const SharedString & ref);
     TreeType::vertex_descriptor AddEmptyVertex(
         const SharedString & ref,
-        VertexMap & vertices,
-        size_t & index,
+        TreeBuildData & buildData,
         bool inDepTree,
         bool recalcState,
         std::set<TreeType::vertex_descriptor> & toFillIn);
     void FillInVertex(
         TreeType::vertex_descriptor vertex,
-        VertexMap & vertices,
-        size_t & index,
+        TreeBuildData & buildData,
         std::set<TreeType::vertex_descriptor> & toFillIn);
     void AddEdge(
         TreeType::vertex_descriptor from,
