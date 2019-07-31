@@ -560,6 +560,21 @@ TEST_F(StateUpdaterTest, ChildDepIsInput) {
   ASSERT_TRUE(GetVersion(sm, "c")->stateSet);
 }
 
+// This tests another corner case where a's input is the parent of another
+// asset version in the dependency tree. Again, c needs to be updated but it
+// doesn't look that way from a's perspective.
+TEST_F(StateUpdaterTest, InputIsParent) {
+  SetVersions(sm, {MockVersion("a"), MockVersion("b"), MockVersion("c")});
+  SetDependent(sm, "a", "b");
+  SetListenerInput(sm, "a", "c");
+  SetParentChild(sm, "c", "b");
+  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return false; });
+  updater.RecalculateAndSaveStates();
+  ASSERT_TRUE(GetVersion(sm, "a")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "b")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "c")->stateSet);
+}
+
 TEST_F(StateUpdaterTest, RecalculateMultipleStates) {
   GetBigTree(sm);
   updater.SetStateForRefAndDependents(fix("p1"), AssetDefs::New, [](AssetDefs::State) { return false; });
