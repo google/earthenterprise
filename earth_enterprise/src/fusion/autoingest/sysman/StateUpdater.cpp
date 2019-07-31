@@ -15,6 +15,7 @@
  */
 
 #include "StateUpdater.h"
+#include "AssetVersion.h"
 #include "common/notify.h"
 
 using namespace boost;
@@ -147,13 +148,6 @@ void StateUpdater::FillInVertex(
     return;
   }
   tree[myVertex].state = version->state;
-  // The ref passed in may be slightly different than the ref used in the storage
-  // manager, so fix that here.
-  if (name != version->GetRef()) {
-    name = version->GetRef();
-    tree[myVertex].name = name;
-    buildData.vertices[name] = myVertex;
-  }
   AddConnections(version, myVertex, buildData, toFillIn);
 }
 
@@ -221,7 +215,7 @@ void StateUpdater::SetStateForRefAndDependents(
     const SharedString & ref,
     AssetDefs::State newState,
     function<bool(AssetDefs::State)> updateStatePredicate) {
-  SharedString verref = AssetVersionRef::Bind(ref);
+  SharedString verref = AssetVersionImpl::Key(ref);
   auto refVertex = BuildDependentTreeForStateCalculation(verref);
   SetStateForVertexAndDependents(refVertex, newState, updateStatePredicate);
 }
