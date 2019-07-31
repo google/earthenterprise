@@ -105,28 +105,25 @@ StateUpdater::AddOrUpdateVertex(
     tree[myVertex] = {ref, AssetDefs::New, inDepTree, recalcState, buildData.index};
     ++buildData.index;
     buildData.vertices[ref] = myVertex;
-    toFillIn.emplace(myVertex);
+    toFillIn.insert(myVertex);
     return myVertex;
   }
   else {
-    // I'm already in the graph. First make sure my connections are in the tree
-    // if I need them and they haven't been added yet, and then return the
-    // existing vertex descriptor.
-    auto & myVertexData = tree[myVertexIter->second];
-    bool needConnections = false;
+    // I'm already in the graph. If we learned new information that we didn't
+    // know when I was added to the tree (e.g., I'm in the dependent tree),
+    // add this to the list of vertexes to fill in so that we can add its
+    // connections. Then return the existing descriptor.
+    auto myVertex = myVertexIter->second;
+    auto & myVertexData = tree[myVertex];
     if (inDepTree && !myVertexData.inDepTree) {
       myVertexData.inDepTree = true;
-      needConnections = true;
+      toFillIn.insert(myVertex);
     }
     if (recalcState && !myVertexData.recalcState) {
       myVertexData.recalcState = true;
-      needConnections = true;
+      toFillIn.insert(myVertex);
     }
-    if (needConnections) {
-      auto version = storageManager->Get(ref);
-      AddConnections(version, myVertexIter->second, buildData, toFillIn);
-    }
-    return myVertexIter->second;
+    return myVertex;
   }
 }
 
@@ -148,14 +145,6 @@ void StateUpdater::FillInVertex(
     return;
   }
   tree[myVertex].state = version->state;
-  AddConnections(version, myVertex, buildData, toFillIn);
-}
-
-void StateUpdater::AddConnections(
-    AssetHandle<const AssetVersionImpl> version,
-    TreeType::vertex_descriptor myVertex,
-    TreeBuildData & buildData,
-    std::set<TreeType::vertex_descriptor> & toFillIn) {
   // If I'm in the dependency tree I need to add my dependents because they are
   // also in the dependency tree.
   if (tree[myVertex].inDepTree) {
@@ -405,8 +394,8 @@ class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
     virtual void finish_vertex(
         StateUpdater::TreeType::vertex_descriptor vertex,
         const StateUpdater::TreeType & tree) const {
-      SharedString name = tree[vertex].name;
       if (!tree[vertex].recalcState) return;
+      SharedString name = tree[vertex].name;
       notify(NFY_PROGRESS, "Calculating state for '%s'", name.toString().c_str());
       auto version = updater->storageManager->Get(name);
       if (!version) {

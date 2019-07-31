@@ -82,11 +82,6 @@ class StateUpdater
         TreeType::vertex_descriptor myVertex,
         TreeBuildData & buildData,
         std::set<TreeType::vertex_descriptor> & toFillIn);
-    void AddConnections(
-        AssetHandle<const AssetVersionImpl> version,
-        TreeType::vertex_descriptor myVertex,
-        TreeBuildData & buildData,
-        std::set<TreeType::vertex_descriptor> & toFillIn);
     void AddEdge(
         TreeType::vertex_descriptor from,
         TreeType::vertex_descriptor to,
