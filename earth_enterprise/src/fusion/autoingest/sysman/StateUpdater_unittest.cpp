@@ -544,6 +544,22 @@ TEST_F(StateUpdaterTest, ChildrenAndInputs) {
   ASSERT_EQ(GetMutableVersion(sm, "a")->numWaitingForVal, 2);
 }
 
+// This tests a tricky corner case. c is the input to a, but it is also the
+// dependent of a's dependent. Thus, c doesn't seem to be in the dependent tree
+// from a's perspective, even though it actually is. This test ensures that the
+// code handles that case.
+TEST_F(StateUpdaterTest, ChildDepIsInput) {
+  SetVersions(sm, {MockVersion("a"), MockVersion("b"), MockVersion("c")});
+  SetDependent(sm, "a", "b");
+  SetDependent(sm, "b", "c");
+  SetListenerInput(sm, "a", "c");
+  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return false; });
+  updater.RecalculateAndSaveStates();
+  ASSERT_TRUE(GetVersion(sm, "a")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "b")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "c")->stateSet);
+}
+
 TEST_F(StateUpdaterTest, RecalculateMultipleStates) {
   GetBigTree(sm);
   updater.SetStateForRefAndDependents(fix("p1"), AssetDefs::New, [](AssetDefs::State) { return false; });
