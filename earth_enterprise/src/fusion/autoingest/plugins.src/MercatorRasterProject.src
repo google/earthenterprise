@@ -368,8 +368,9 @@ void MercatorRasterProjectAssetImplD::HandleEditRequest(
   std::vector<SharedString> inputs;
 
   // Custom FindMake - modified to set/preserve indexVersion & fuid_channel_.
+  notify(NFY_WARN, "HandleEditRequest: %s %s %s", projname.c_str(), ToString(req.type).c_str(), kMercatorProjectSubtype.c_str());
   MutableMercatorRasterProjectAssetD project =
-      MercatorRasterProjectFactory::Find(projname);
+      Find<MutableMercatorRasterProjectAssetD>(projname, req.type, kMercatorProjectSubtype);
   if (project) {
     // It is a regular (editing the same asset) or "SaveAs" re-writing edit
     // request.
@@ -427,7 +428,8 @@ void MercatorRasterProjectAssetImplD::HandleNewRequest(
                                   kMercatorProjectSubtype);
 
 
-  if (MercatorRasterProjectFactory::Find(projname)) {
+  notify(NFY_WARN, "HandleNewRequest: %s %s %s", projname.c_str(), ToString(req.type).c_str(), kMercatorProjectSubtype.c_str());
+  if (Find<MutableMercatorRasterProjectAssetD>(projname, req.type, kMercatorProjectSubtype)) {
     throw khException(kh::tr("%1 project %2 already exists")
                       .arg(ToQString(req.type), ToQString(projname)));
   } else {
@@ -455,7 +457,8 @@ void MercatorRasterProjectAssetImplD::HandleModifyRequest(
 
   // find it and make the change
   MutableMercatorRasterProjectAssetD project;
-  if ((project = MercatorRasterProjectFactory::Find(req.assetname))) {
+  notify(NFY_WARN, "HandleModifyRequest: %s %s %s", req.assetname.c_str(), ToString(req.type).c_str(), kMercatorProjectSubtype.c_str());
+  if ((project = Find<MutableMercatorRasterProjectAssetD>(req.assetname, req.type, kMercatorProjectSubtype))) {
     // blow away old insets
     project->config.insets.clear();
     // define new ones
@@ -478,7 +481,8 @@ void MercatorRasterProjectAssetImplD::HandleAddToRequest(
 
   // find it and make the change
   MutableMercatorRasterProjectAssetD project;
-  if ((project = MercatorRasterProjectFactory::Find(req.assetname))) {
+  notify(NFY_WARN, "HandleAddToRequest: %s %s %s", req.assetname.c_str(), ToString(req.type).c_str(), kMercatorProjectSubtype.c_str());
+  if ((project = Find<MutableMercatorRasterProjectAssetD>(req.assetname, req.type, kMercatorProjectSubtype))) {
     // make sure my existing insets are still in order before adding more
     // a new version of a product asset could invalidate
     // my stacking order
@@ -497,7 +501,8 @@ void MercatorRasterProjectAssetImplD::HandleDropFromRequest(
     const RasterProjectDropFromRequest &req) {
   // find the project
   MutableMercatorRasterProjectAssetD project;
-  if (!(project = MercatorRasterProjectFactory::Find(req.assetname))) {
+  notify(NFY_WARN, "HandleDropFromRequest: %s %s %s", req.assetname.c_str(), ToString(req.type).c_str(), kMercatorProjectSubtype.c_str());
+  if (!(project = Find<MutableMercatorRasterProjectAssetD>(req.assetname, req.type, kMercatorProjectSubtype))) {
     throw khException(kh::tr("No %1 project named %2")
                       .arg(ToQString(req.type), ToQString(req.assetname)));
   }

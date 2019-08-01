@@ -247,8 +247,9 @@ MercatorRasterProductAssetImplD::HandleImportRequest(
 
   // Modified FindMake to preserve fuid_resource_.
   // The inputs are empty for now. We'll fill them in below.
+  notify(NFY_WARN, "HandleImportRequest: %s %s %s", assetname.c_str(), ToString(req.type).c_str(), kMercatorProductSubtype.c_str());
   MutableMercatorRasterProductAssetD asset =
-    MercatorRasterProductFactory::Find(assetname);
+    Find<MutableMercatorRasterProductAssetD>(assetname, req.type, kMercatorProductSubtype);
   if (asset) {
     // It is a regular (editing the same asset) or "SaveAs" re-writing request.
     // If this request is going to set the fuid_resource to 0, restore from

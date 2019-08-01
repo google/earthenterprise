@@ -110,14 +110,17 @@ ${name}Factory::Find(const std::string &ref_ $formaltypearg)
 {
     try {
         Asset asset(ref_);
+        notify(NFY_WARN, "Ori: %s %s %s", ref_.c_str(), ToString(asset->type).c_str(), asset->subtype.c_str());
         if (asset &&
             (asset->type == $typeref) &&
             (asset->subtype == "$subtype")) {
+            notify(NFY_WARN, "Ori: FOUND");
             return ${name}AssetD(ref_);
         }
     } catch (...) {
         // do nothing - don't even generate any warnings
     }
+    notify(NFY_WARN, "Ori: EMPTY");
     return ${name}AssetD();
 }
 

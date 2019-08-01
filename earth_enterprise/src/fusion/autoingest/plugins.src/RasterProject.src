@@ -439,8 +439,9 @@ void RasterProjectAssetImplD::HandleEditRequest(
 
 
   // Custom FindMake - modified to set/preserve indexVersion & fuid_channel_.
+  notify(NFY_WARN, "HandleEditRequest: %s %s %s", projname.c_str(), ToString(req.type).c_str(), kProjectSubtype.c_str());
   MutableRasterProjectAssetD project =
-      Find(projname, req.type, kProjectSubtype);
+      Find<MutableRasterProjectAssetD>(projname, req.type, kProjectSubtype);
   if (project) {
     // It is a regular (editing the same asset) or "SaveAs" re-writing edit
     // request.
@@ -520,7 +521,8 @@ void RasterProjectAssetImplD::HandleNewRequest(
     AssetDefs::NormalizeAssetName(req.assetname, req.type, kProjectSubtype);
 
 
-  if (Find(projname, req.type, kProjectSubtype)) {
+  notify(NFY_WARN, "HandleNewRequest: %s %s %s", projname.c_str(), ToString(req.type).c_str(), kProjectSubtype.c_str());
+  if (Find<MutableRasterProjectAssetD>(projname, req.type, kProjectSubtype)) {
     throw khException(kh::tr("%1 project %2 already exists")
                       .arg(ToQString(req.type), ToQString(projname)));
   } else {
@@ -567,7 +569,8 @@ void RasterProjectAssetImplD::HandleModifyRequest(
 
   // find it and make the change
   MutableRasterProjectAssetD project;
-  if ((project = RasterProjectFactory::Find(req.assetname, req.type))) {
+  notify(NFY_WARN, "HandleModifyRequest: %s %s %s", req.assetname.c_str(), ToString(req.type).c_str(), kProjectSubtype.c_str());
+  if ((project = Find<MutableRasterProjectAssetD>(req.assetname, req.type, kProjectSubtype))) {
     // blow away old insets
     project->config.insets.clear();
     // define new ones
@@ -621,7 +624,8 @@ void RasterProjectAssetImplD::HandleAddToRequest(
 
   // find it and make the change
   MutableRasterProjectAssetD project;
-  if ((project = RasterProjectFactory::Find(req.assetname, req.type))) {
+  notify(NFY_WARN, "HandleAddToRequest: %s %s %s", req.assetname.c_str(), ToString(req.type).c_str(), kProjectSubtype.c_str());
+  if ((project = Find<MutableRasterProjectAssetD>(req.assetname, req.type, kProjectSubtype))) {
     // make sure my existing insets are still in order before adding more
     // a new version of a product asset could invalidate
     // my stacking order
@@ -671,7 +675,8 @@ void RasterProjectAssetImplD::HandleDropFromRequest(
     const RasterProjectDropFromRequest &req) {
   // find the project
   MutableRasterProjectAssetD project;
-  if (!(project = RasterProjectFactory::Find(req.assetname, req.type))) {
+  notify(NFY_WARN, "HandleDropFromRequest: %s %s %s", req.assetname.c_str(), ToString(req.type).c_str(), kProjectSubtype.c_str());
+  if (!(project = Find<MutableRasterProjectAssetD>(req.assetname, req.type, kProjectSubtype))) {
     throw khException(kh::tr("No %1 project named %2")
                       .arg(ToQString(req.type), ToQString(req.assetname)));
   }

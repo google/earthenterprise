@@ -87,7 +87,8 @@ MapLayerAssetImplD::HandleEditRequest(const MapLayerEditRequest &req)
 
   // Custom FindMake:
   // We need to make sure we don't clobber an existing fuid_channel.
-  MutableMapLayerAssetD maplayer = MapLayerFactory::Find(assetname);
+  notify(NFY_WARN, "HandleEditRequest: %s %s %s", assetname.c_str(), ToString(AssetDefs::Map).c_str(), kLayer.c_str());
+  MutableMapLayerAssetD maplayer = Find<MutableMapLayerAssetD>(assetname, AssetDefs::Map, kLayer);
 
   if (maplayer) {
     // It is a regular (editing the same asset) or "SaveAs" re-writing edit

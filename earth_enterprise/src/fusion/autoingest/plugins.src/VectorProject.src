@@ -206,7 +206,8 @@ VectorProjectAssetImplD::HandleEditRequest(const VectorProjectEditRequest &req)
 
   // Custom FindMake - modified to set/preserve indexVersion and IDs.
 
-  MutableVectorProjectAssetD project = VectorProjectFactory::Find(projname);
+  notify(NFY_WARN, "HandleEditRequest: %s %s %s", projname.c_str(), ToString(AssetDefs::Vector).c_str(), kProjectSubtype.c_str());
+  MutableVectorProjectAssetD project = Find<MutableVectorProjectAssetD>(projname, AssetDefs::Vector, kProjectSubtype);
   if (project) {
     // We must preserve the indexVersion since the GUI doesn't/can't.
     // TODO: We really should split this VectorProjectConfig into two pieces.
@@ -270,7 +271,8 @@ VectorProjectAssetImplD::HandleNewRequest(const VectorProjectNewRequest &req)
     AssetDefs::NormalizeAssetName(req.assetname,
                                   AssetDefs::Vector, kProjectSubtype);
 
-  if (VectorProjectFactory::Find(projname)) {
+  notify(NFY_WARN, "HandleNewRequest: %s %s %s", projname.c_str(), ToString(AssetDefs::Vector).c_str(), kProjectSubtype.c_str());
+  if (Find<MutableVectorProjectAssetD>(projname, AssetDefs::Vector, kProjectSubtype)) {
     throw khException(kh::tr("Vector project %1 already exists")
                       .arg(ToQString(projname)));
   } else {
@@ -305,7 +307,8 @@ VectorProjectAssetImplD::HandleModifyRequest(const VectorProjectModifyRequest &r
 
   // find it and make the change
   MutableVectorProjectAssetD project;
-  if ((project = VectorProjectFactory::Find(req.assetname))) {
+  notify(NFY_WARN, "HandleModifyRequest: %s %s %s", req.assetname.c_str(), ToString(AssetDefs::Vector).c_str(), kProjectSubtype.c_str());
+  if ((project = Find<MutableVectorProjectAssetD>(req.assetname, AssetDefs::Vector, kProjectSubtype))) {
     // blow away old layers
     project->config.layers.clear();
     // define new ones
@@ -333,7 +336,8 @@ VectorProjectAssetImplD::HandleAddToRequest(const VectorProjectModifyRequest &re
 
   // find it and make the change
   MutableVectorProjectAssetD project;
-  if ((project = VectorProjectFactory::Find(req.assetname))) {
+  notify(NFY_WARN, "HandleAddToRequest: %s %s %s", req.assetname.c_str(), ToString(AssetDefs::Vector).c_str(), kProjectSubtype.c_str());
+  if ((project = Find<MutableVectorProjectAssetD>(req.assetname, AssetDefs::Vector, kProjectSubtype))) {
     // add the new ones
     project->AddLayers(req.items);
   } else {
@@ -351,7 +355,8 @@ VectorProjectAssetImplD::HandleDropFromRequest(const VectorProjectDropFromReques
 {
   // find the project
   MutableVectorProjectAssetD project;
-  if (!(project = VectorProjectFactory::Find(req.assetname))) {
+  notify(NFY_WARN, "HandleDropFromRequest: %s %s %s", req.assetname.c_str(), ToString(AssetDefs::Vector).c_str(), kProjectSubtype.c_str());
+  if (!(project = Find<MutableVectorProjectAssetD>(req.assetname, AssetDefs::Vector, kProjectSubtype))) {
     throw khException(kh::tr("No Vector project named %1")
                       .arg(ToQString(req.assetname)));
   }

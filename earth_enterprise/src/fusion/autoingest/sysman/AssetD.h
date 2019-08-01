@@ -57,9 +57,24 @@ class AssetImplD : public virtual AssetImpl
 
 typedef DerivedAssetHandle_<Asset, AssetImplD> AssetD;
 typedef MutableAssetHandleD_<AssetD> MutableAssetD;
-typedef MutableDerivedAssetHandleD_<AssetD, MutableAssetD> MutableDerivedAssetD;
 
-MutableDerivedAssetD Find(const std::string &, const AssetDefs::Type &, const std::string &);
+template<class T>
+T Find(const std::string & ref, const AssetDefs::Type & type, const std::string & subtype){
+  try {
+    Asset asset(ref);
+    notify(NFY_WARN, "New: %s %s %s", ref.c_str(), ToString(asset->type).c_str(), asset->subtype.c_str());
+    if (asset &&
+        (asset->type == type) &&
+        (asset->subtype == subtype)) {
+        notify(NFY_WARN, "New: FOUND");
+        return T(SharedString(ref));
+    }
+  } catch (...) {
+      // do nothing - don't even generate any warnings
+  }
+  notify(NFY_WARN, "New: EMPTY");
+  return T();
+}
 
 
 #endif /* __AssetD_h */
