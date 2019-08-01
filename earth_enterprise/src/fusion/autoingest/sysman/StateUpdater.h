@@ -64,14 +64,14 @@ class StateUpdater
 
     // Used by dfs function to update states of assets in the tree
     friend struct boost::property_map<TreeType, boost::vertex_index_t>;
-    class UpdateStateVisitor;
+    class SetStateVisitor;
 
     StorageManagerInterface<AssetVersionImpl> * const storageManager;
     TreeType tree;
 
     inline bool IsDependent(DependencyType type) { return type == DEPENDENT || type == DEPENDENT_AND_CHILD; }
 
-    TreeType::vertex_descriptor BuildDependentTreeForStateCalculation(const SharedString & ref);
+    void BuildDependentTree(const SharedString & ref);
     TreeType::vertex_descriptor AddOrUpdateVertex(
         const SharedString & ref,
         TreeBuildData & buildData,
@@ -86,15 +86,10 @@ class StateUpdater
         TreeType::vertex_descriptor from,
         TreeType::vertex_descriptor to,
         AssetEdge data);
-    void SetStateForVertexAndDependents(
-        TreeType::vertex_descriptor vertex,
-        AssetDefs::State newState,
-        std::function<bool(AssetDefs::State)> updateStatePredicate);
     void SetState(
         TreeType::vertex_descriptor vertex,
         AssetDefs::State newState,
         bool sendNotifications);
-    void RecalculateAndSaveStates();
   public:
     StateUpdater(StorageManagerInterface<AssetVersionImpl> * sm = &AssetVersion::storageManager()) : storageManager(sm) {}
     void SetStateForRefAndDependents(
