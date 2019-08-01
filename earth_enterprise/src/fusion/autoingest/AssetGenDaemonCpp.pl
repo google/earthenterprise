@@ -25,6 +25,7 @@ use AssetGen;
 my $help = 0;
 our $thiscommand = "@ARGV";
 
+
 sub usage() {
     die "usage: $FindBin::Script <.srcfile> <outputfile>\n";
 }
@@ -54,13 +55,14 @@ my $haspostupdate = $config{"${name}AssetImplD"} =~ /PostUpdate\(void\)/;
 
 my ($template);
 $template = "";
+my $templateName="ProductAssetVersion";
 if ($base eq 'Composite') {
     if ($singleFormalExtraUpdateArg) {
-      $template = "template <typename ProductAssetVersion>";
+      $template = "template <typename $templateName>";
       $singleFormalExtraUpdateArg =~
-        s/ExtraUpdateArg/ExtraUpdateArg\<ProductAssetVersion\>/;
+        s/ExtraUpdateArg/ExtraUpdateArg\<$templateName\>/;
       $formalExtraUpdateArg =~
-        s/ExtraUpdateArg/ExtraUpdateArg\<ProductAssetVersion\>/;
+        s/ExtraUpdateArg/ExtraUpdateArg\<$templateName\>/;
     }
 }
 
@@ -82,6 +84,7 @@ print $fh <<EOF;
 #include <khGuard.h>
 #include <khxml/khdom.h>
 #include <AssetThrowPolicy.h>
+#include "AssetOperation.h"
 using namespace khxml;
 EOF
 
@@ -172,14 +175,11 @@ ${name}Factory::Make(const std::string &ref_ $formaltypearg,
 {
     typedef ${name}AssetImplD Impl;
 
-    // all of this wrapping is required and makes it nearly impossible
-    // to misuse the Handle and khRefGuard class
-    return Mutable${name}AssetD
-             (khRefGuardFromNew(new Impl
-                (AssetStorage::MakeStorage(ref_, $actualtypearg,
-                                           "$subtype",$actualinputarg,
-                                           meta_),
-                 config_)));
+    return Mutable${name}AssetD(std::make_shared<Impl>
+                               (AssetStorage::MakeStorage(
+                                   ref_, $actualtypearg, "$subtype",
+                                   $actualinputarg, meta_),
+                                config_));
 }
 
 Mutable${name}AssetD
@@ -275,7 +275,9 @@ ${name}Factory::FindMakeAndUpdateSubAsset(
 }
 EOF
 
+
 if ($withreuse) {
+
     print $fh <<EOF;
 
 $template
@@ -299,16 +301,15 @@ ${name}Factory::ReuseOrMakeAndUpdate(
 
     Mutable${name}AssetD asset = Find(ref_ $forwardtypearg);
     if (asset) {
-	for (AssetStorage::VersionList::const_iterator v
-                = asset->versions.begin();
-             v != asset->versions.end(); ++v) {
-            ${name}AssetVersionD version(*v);
-            // Load an asset version without caching since we may not need it
-            // (offline, obsolete and so on).
-            version.LoadAsTemporary();
-            if ((version->state != AssetDefs::Offline) &&
-                (version->inputs == boundInputs) &&
-                ::IsUpToDate(config_, version->config)) {
+        for (const auto& v : asset->versions) {
+            try {
+              ${name}AssetVersionD version(v);
+              // Load an asset version without caching since we may not need it
+              // (offline, obsolete and so on).
+              version.LoadAsTemporary();
+              if ((version->state != AssetDefs::Offline) &&
+                  (version->inputs == boundInputs) &&
+                  ::IsUpToDate(config_, version->config)) {
 
 #if 0
                 notify(NFY_NOTICE,
@@ -330,10 +331,15 @@ ${name}Factory::ReuseOrMakeAndUpdate(
                 version.MakePermanent();
 
                 return version;
-            } else {
-              // Tell the storage manager we don't need this one any more.
-              version.NoLongerNeeded();
-            }
+              } else {
+                // Tell the storage manager we don't need this one any more.
+                version.NoLongerNeeded();
+              }
+           }
+           catch (...) {
+             notify(NFY_WARN,
+                    "${name}: ReuseOrMakeAndUpdate could not reuse a version." );
+           }
         }
         asset->Modify($forwardinputarg meta_, config_);
     } else {
@@ -436,8 +442,8 @@ ${name}AssetImplD::MakeNewVersion(const ${name}AssetImplD::Config &bound_config)
 {
     typedef ${name}AssetVersionImplD VerImpl;
 
-    Mutable${name}AssetVersionD newver
-        (khRefGuardFromNew(new VerImpl(this, bound_config)));
+    Mutable${name}AssetVersionD newver(std::make_shared<VerImpl>
+                                      (this, bound_config));
 
     AddVersionRef(newver->GetRef());
     return newver;
@@ -451,10 +457,9 @@ Mutable${name}AssetVersionD
 ${name}AssetImplD::MakeNewVersion(void)
 {
     typedef ${name}AssetVersionImplD VerImpl;
+    Mutable${name}AssetVersionD newver(std::make_shared<VerImpl>(this));
 
-    Mutable${name}AssetVersionD newver(khRefGuardFromNew(new VerImpl(this)));
-
-    AddVersionRef(newver->GetRef());
+    AddVersionRef(newver->GetRef().toString());
     return newver;
 }
 EOF
@@ -657,7 +662,7 @@ print $fh <<EOF;
                                                *inputvers);
     if (curr_ver->state == AssetDefs::Canceled) {
       needed = true;
-      curr_ver->Rebuild();
+      RebuildVersion(curr_ver->GetRef());
     }
 
     return CurrVersionRef();
@@ -716,7 +721,7 @@ print $fh <<EOF;
     Mutable${name}AssetVersionD curr_ver(CurrVersionRef());
     if (curr_ver->state == AssetDefs::Canceled) {
       needed = true;
-      curr_ver->Rebuild();
+      RebuildVersion(curr_ver->GetRef());
     }
 
     return CurrVersionRef();

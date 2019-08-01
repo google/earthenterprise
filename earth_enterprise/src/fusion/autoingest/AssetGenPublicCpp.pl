@@ -68,6 +68,7 @@ print $fh <<EOF;
 #include <khFileUtils.h>
 #include <khGuard.h>
 #include <khxml/khdom.h>
+#include <memory>
 using namespace khxml;
 
 
@@ -86,7 +87,7 @@ namespace {
 
 extern void FromElement(DOMElement *elem, AssetStorage &self);
 
-khRefGuard<${name}AssetImpl>
+std::shared_ptr<${name}AssetImpl>
 ${name}AssetImpl::NewFromDOM(void *e)
 {
     DOMElement *elem = (DOMElement*)e;
@@ -97,8 +98,7 @@ ${name}AssetImpl::NewFromDOM(void *e)
     return NewFromStorage(storage, config);
 }
 
-
-khRefGuard<${name}AssetImpl>
+std::shared_ptr<${name}AssetImpl>
 ${name}AssetImpl::NewInvalid(const std::string &ref)
 {
     AssetStorage storage;
@@ -113,7 +113,7 @@ ${name}AssetImpl::NewInvalid(const std::string &ref)
 // ****************************************************************************
 extern void FromElement(DOMElement *elem, AssetVersionStorage &self);
 
-khRefGuard<${name}AssetVersionImpl>
+std::shared_ptr<${name}AssetVersionImpl>
 ${name}AssetVersionImpl::NewFromDOM(void *e)
 {
     DOMElement *elem = (DOMElement*)e;
@@ -124,7 +124,7 @@ ${name}AssetVersionImpl::NewFromDOM(void *e)
     return NewFromStorage(storage, config);
 }
 
-khRefGuard<${name}AssetVersionImpl>
+std::shared_ptr<${name}AssetVersionImpl>
 ${name}AssetVersionImpl::NewInvalid(const std::string &ref)
 {
     AssetVersionStorage storage;

@@ -22,6 +22,7 @@
 #include <khFileUtils.h>
 #include "MiscConfig.h"
 #include "StorageManager.h"
+#include "CacheSizeCalculations.h"
 
 /******************************************************************************
  ***  AssetImpl
@@ -36,7 +37,7 @@
  ***  ... = asset->config.layers.size();
  ***
  ******************************************************************************/
-class AssetImpl : public khRefCounter, public AssetStorage, public StorageManaged {
+class AssetImpl : public AssetStorage, public StorageManaged {
   friend class AssetHandle_<AssetImpl, AssetStorage>;
 
   // Illegal to copy an AssetImpl
@@ -54,7 +55,7 @@ class AssetImpl : public khRefCounter, public AssetStorage, public StorageManage
 
  public:
   // implemented in LoadAny.cpp
-  static khRefGuard<AssetImpl> Load(const std::string &boundref);
+  static std::shared_ptr<AssetImpl> Load(const std::string &boundref);
 
   virtual std::string GetName() const { // Returns the name of the asset, e.g., "CombinedRPAsset"
     assert(false);
@@ -72,6 +73,17 @@ class AssetImpl : public khRefCounter, public AssetStorage, public StorageManage
   virtual ~AssetImpl(void) { }
   const SharedString & GetRef(void) const { return name; }
 
+  // determine amount of memory used by an AssetImpl
+  uint64 GetSize() {
+    return(GetObjectSize(name)
+    + GetObjectSize(type)
+    + GetObjectSize(subtype)
+    + GetObjectSize(inputs)
+    + meta.GetSize()
+    + GetObjectSize(versions)
+    + GetObjectSize(timestamp)
+    + GetObjectSize(filesize));
+  }
 
   std::string  GetLastGoodVersionRef(void) const;
   void GetInputFilenames(std::vector<std::string> &out) const;
@@ -80,6 +92,15 @@ class AssetImpl : public khRefCounter, public AssetStorage, public StorageManage
   // static helpers
   static std::string WorkingDir(const std::string &ref);
   static std::string XMLFilename(const std::string &ref);
+  static std::string Filename(const std::string &ref) {
+    return XMLFilename(ref);
+  }
+  static SharedString Key(const SharedString & ref) {
+    return ref;
+  }
+  static bool ValidRef(const SharedString & ref) {
+    return !ref.empty();
+  }
 };
 
 // ****************************************************************************
@@ -92,7 +113,7 @@ inline StorageManager<AssetImpl, AssetStorage>&
 Asset::storageManager(void)
 {
   static StorageManager<AssetImpl, AssetStorage> storageManager(
-      MiscConfig::Instance().AssetCacheSize, "asset");
+      MiscConfig::Instance().AssetCacheSize, MiscConfig::Instance().LimitMemoryUtilization, MiscConfig::Instance().MaxAssetCacheMemorySize, "asset");
   return storageManager;
 }
 
@@ -103,8 +124,8 @@ Asset::Valid(void) const
   if (handle) {
     return handle->type != AssetDefs::Invalid;
   } else {
-    // deal quickly with an empty ref
-    if (ref.empty())
+
+    if (!AssetImpl::ValidRef(ref))
       return false;
 
     try {
@@ -115,13 +136,5 @@ Asset::Valid(void) const
     return handle && (handle->type != AssetDefs::Invalid);
   }
 }
-
-template <>
-inline std::string Asset::Filename() const {
-  return AssetImpl::XMLFilename(ref);
-}
-
-template <> inline const SharedString Asset::Key() const { return ref; }
-
 
 #endif /* __Asset_h */

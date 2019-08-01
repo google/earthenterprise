@@ -58,7 +58,7 @@ gdal_env = third_party_env.DeepCopy()
 
 optdir = gdal_env['optdir']
 root_dir = Dir(gdal_env.exportdirs['root']).abspath
-gdal_patches = ['gdal-jp2-V2.3.0.patch']
+gdal_patches = ['gdal-jp2-V2.3.1.patch']
 
 if GetOption('clean'):
   gdal_env.Execute('rm -rf %s' % current_dir)

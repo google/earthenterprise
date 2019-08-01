@@ -166,9 +166,10 @@ class RasterProjectAssetImplD {
 };
 
 class RasterProjectAssetVersionImplD {
- protected:
-  virtual void ChildrenToCancel(std::vector<AssetVersion> &out);
+ public:
+  virtual void DependentChildren(std::vector<SharedString> &out) const;
 
+ protected:
   // This will make my children after my inputs have succeeded
   virtual void DelayedBuildChildren(void);
 
@@ -241,7 +242,6 @@ class RasterProjectAssetVersionImplD {
 #include "common/khTileAddr.h"
 #include "common/khConstants.h"
 #include <third_party/rfc_uuid/uuid.h>
-#include <chrono>
 
 
 // Throw and exception about invalid dates in time machine projects if the
@@ -540,9 +540,18 @@ void RasterProjectAssetImplD::HandleNewRequest(
       project->ThrowIfAnyInvalidDates();
       is_timemachine_project = true;
     }
+
     project->config.is_timemachine_project_ = is_timemachine_project;
     notify(NFY_DEBUG, "TimeMachine: %s for %s\n", req.assetname.c_str(),
            is_timemachine_project ? "on" : "off");
+
+    project->config.is_overlay_terrain_project_ = req.enable_terrain_overlay;
+    if (req.enable_terrain_overlay){
+      if (req.overlay_terrain_start_level != 0)
+        project->config.overlay_terrain_start_level_ = req.overlay_terrain_start_level;
+      if (req.overlay_terrain_resources_min_level != 0)
+        project->config.overlay_terrain_resources_min_level_ = req.overlay_terrain_resources_min_level;
+    }
   }
 }
 
@@ -576,6 +585,24 @@ void RasterProjectAssetImplD::HandleModifyRequest(
     project->config.is_timemachine_project_ = is_timemachine_project;
     notify(NFY_DEBUG, "TimeMachine: %s for %s\n", req.assetname.c_str(),
            is_timemachine_project ? "on" : "off");
+
+    // By default keep is_overlay_terrain_project_ the same unless directed
+    // otherwise.
+    bool is_overlay_terrain_project = project->config.is_overlay_terrain_project_;
+    if (req.enable_terrain_overlay){
+      is_overlay_terrain_project = true;
+    }
+    else if (req.disable_terrain_overlay){
+      is_overlay_terrain_project = false;
+    }
+    if (is_overlay_terrain_project) {
+      // Set start level and/or resources min level if specified
+      if (req.overlay_terrain_start_level != 0)
+        project->config.overlay_terrain_start_level_ = req.overlay_terrain_start_level;
+      if (req.overlay_terrain_resources_min_level != 0)
+        project->config.overlay_terrain_resources_min_level_ = req.overlay_terrain_resources_min_level;
+    }
+    project->config.is_overlay_terrain_project_ = is_overlay_terrain_project;
   } else {
     throw khException(kh::tr("No %1 project named %2")
                       .arg(ToQString(req.type), ToQString(req.assetname)));
@@ -615,6 +642,24 @@ void RasterProjectAssetImplD::HandleAddToRequest(
     project->config.is_timemachine_project_ = is_timemachine_project;
     notify(NFY_DEBUG, "TimeMachine: %s for %s\n", req.assetname.c_str(),
            is_timemachine_project ? "on" : "off");
+
+    // By default keep is_overlay_terrain_project_ the same unless directed
+    // otherwise.
+    bool is_overlay_terrain_project = project->config.is_overlay_terrain_project_;
+    if (req.enable_terrain_overlay){
+      is_overlay_terrain_project = true;
+    }
+    else if (req.disable_terrain_overlay){
+      is_overlay_terrain_project = false;
+    }
+    if (is_overlay_terrain_project) {
+      // Set start level and/or resources min level if specified
+      if (req.overlay_terrain_start_level != 0)
+        project->config.overlay_terrain_start_level_ = req.overlay_terrain_start_level;
+      if (req.overlay_terrain_resources_min_level != 0)
+        project->config.overlay_terrain_resources_min_level_ = req.overlay_terrain_resources_min_level;
+    }
+    project->config.is_overlay_terrain_project_ = is_overlay_terrain_project;
   } else {
     throw khException(kh::tr("No %1 project named %2")
                       .arg(ToQString(req.type), ToQString(req.assetname)));
@@ -666,8 +711,8 @@ void RasterProjectAssetImplD::HandleDropFromRequest(
 
 
 
-void RasterProjectAssetVersionImplD::ChildrenToCancel(
-    std::vector<AssetVersion> &out) {
+void RasterProjectAssetVersionImplD::DependentChildren(
+    std::vector<SharedString> &out) const {
   if (children.size()) {
     // my direct children are my index and optionally a copyright
     std::copy(children.begin(), children.end(), back_inserter(out));
@@ -980,13 +1025,8 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
                              "Cannot build").arg(GetRef().toString()));
   }
 
-  std::vector<InsetInfo<
-    RasterProductAssetVersion> >::const_reverse_iterator last_iter =
-      inset_infos.rbegin();
-  notify(NFY_INFO2, "Building GERasterIndex: %zu insets, level %d for %s\n", inset_infos.size(), last_iter->effectiveMaxLevel, date.c_str());
-  std::chrono::high_resolution_clock::time_point prevTime = std::chrono::high_resolution_clock::now();
-  std::chrono::high_resolution_clock::time_point curTime;
-  std::chrono::duration<double> timeDiff; 
+  const auto last_iter = inset_infos.rbegin();
+  notify(NFY_PROGRESS, "Building GERasterIndex: %zu insets, level %d for %s\n", inset_infos.size(), last_iter->effectiveMaxLevel, date.c_str());
 
   // get the range of levels that we're going to generate
   const uint beginProjectLevel =
@@ -1001,6 +1041,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
   // increases low res image quality.
   const uint beginMinifyLevel  = beginProjectLevel;
   const uint endMinifyLevel    = inset_infos[0].effectiveMaxLevel;
+
   // Calc the info about what work to do.
   std::vector<PacketGenInfo> genInfo;
   CalcPacketGenInfo(tilespace, type, inset_infos,
@@ -1009,26 +1050,14 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
                     0 /* maxLevelDelta - always 0 here, only differs for SS*/,
                     config.is_overlay_terrain_project_,
                     config.overlay_terrain_resources_min_level_);
-#if 1
   // Calculate levels where transparent tiles may be skipped.
-  curTime = std::chrono::high_resolution_clock::now();
-  timeDiff = std::chrono::duration<double>(curTime - prevTime);
-  notify(NFY_INFO2, "BuildIndex finished calculation of packet gen info - %f seconds elapsed",
-         timeDiff.count());
-  prevTime = curTime;
   CalcLevelsToSkipTransparentTiles(&genInfo, beginProjectLevel, endMinifyLevel);
-#endif
-  curTime = std::chrono::high_resolution_clock::now();
-  timeDiff = std::chrono::duration<double>(curTime - prevTime);
-  notify(NFY_INFO2, "BuildIndex finished calcLevelsToSkipTransparentTiles - %f seconds elapsed",
-         timeDiff.count());
-  prevTime = curTime;
   // make a copy of the inset_infos w/ pointers. The FindNeeded*
   // routines want pointers.
   std::vector<const InsetInfo<RasterProductAssetVersion> *> insetInfoPtrs;
   insetInfoPtrs.reserve(inset_infos.size());
-  for (uint i = 0; i < inset_infos.size(); ++i) {
-    insetInfoPtrs.push_back(&inset_infos[i]);
+  for(const auto& i : inset_infos) {
+      insetInfoPtrs.push_back(&i);
   }
 
   // create my children giving them each a bigger piece of the stack
@@ -1051,32 +1080,17 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     std::vector<uint> neededIndexes;
     neededIndexes.reserve(i);
 
-    curTime = std::chrono::high_resolution_clock::now();
-    timeDiff = std::chrono::duration<double>(curTime - prevTime);
-    notify(NFY_PROGRESS, "BuildIndex finding intersections for inset %d of %lu - %f seconds elapsed",
-           i+1, genInfo.size(), timeDiff.count());
-    prevTime = curTime;
+    notify(NFY_PROGRESS, "BuildIndex finding intersections for inset %d of %lu",
+           i+1, genInfo.size());
 
-    if (type == AssetDefs::Imagery) {
-      FindNeededImageryInsets(genInfo[i].coverage,
-                              insetInfoPtrs, i,
-                              neededIndexes,
-                              beginMinifyLevel,
-                              endMinifyLevel);
-    } else {
-      FindNeededTerrainInsets(genInfo[i].coverage,
-                              insetInfoPtrs, i,
-                              neededIndexes,
-                              beginMinifyLevel,
-                              endMinifyLevel);
-    }
+    overlapEnvelope<RasterProductAssetVersion> env (
+        type, insetInfoPtrs, i,
+        beginMinifyLevel, endMinifyLevel, i);
+
+    std::shared_ptr<OverlapCalculator<RasterProductAssetVersion>> calc =
+        std::make_shared<OverlapCalculator<RasterProductAssetVersion>>(env);
+    neededIndexes = std::move(calc->PreprocessForInset(genInfo[i].coverage));
     neededIndexes.push_back(i); // each inset always intersects itself
-
-    curTime = std::chrono::high_resolution_clock::now();
-    timeDiff = std::chrono::duration<double>(curTime - prevTime);
-    notify(NFY_INFO2, "BuildIndex finished compiling %lu needed indices for inset %d - %f seconds elapsed",
-           neededIndexes.size(), i, timeDiff.count());
-    prevTime = curTime;
 
     // calculate the level range that will be minified
     uint effectiveBeginMinifyLevel =
@@ -1096,10 +1110,9 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
 
     packetGenConfig.useOpaqueTopInsetInsteadOfMerge = true;
     packetGenConfig.insets.reserve(neededIndexes.size());
-    for (std::vector<uint>::const_iterator idx = neededIndexes.begin();
-         idx != neededIndexes.end(); ++idx) {
 
-      const PacketGenInfo &otherGenInfo(genInfo[*idx]);
+    for (const auto& idx : neededIndexes) {
+      const PacketGenInfo &otherGenInfo(genInfo[idx]);
 
       // +1 below since we minify from the next level
       bool otherWillContribToMinify =
@@ -1118,34 +1131,29 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
 
       packetGenConfig.insets.push_back
         (PacketGenConfig::Inset
-         (inset_infos[*idx].combinedrp_.Ref(),
+         (inset_infos[idx].combinedrp_.Ref(),
           packgenVerRef));
     }
-
-    curTime = std::chrono::high_resolution_clock::now();
-    timeDiff = std::chrono::duration<double>(curTime - prevTime);
-    notify(NFY_INFO2, "BuildIndex finished nested loop for inset %d - %f seconds elapsed",
-           i, timeDiff.count());
-    prevTime = curTime;
 
     // Build a PacketGenExtraUpdateArg
     PacketGenExtraUpdateArg<RasterProductAssetVersion> extraArg;
     extraArg.insetInfo.reserve(neededIndexes.size());
     extraArg.genInfo.reserve(neededIndexes.size());
-    for (std::vector<uint>::const_iterator idx = neededIndexes.begin();
-         idx != neededIndexes.end(); ++idx) {
-      extraArg.insetInfo.push_back(&inset_infos[*idx]);
-      extraArg.genInfo.push_back(&genInfo[*idx]);
+    extraArg.calc = calc;
+
+    for(const auto& idx : neededIndexes) {
+      extraArg.insetInfo.push_back(&inset_infos[idx]);
+      extraArg.genInfo.push_back(&genInfo[idx]);
     }
 
-    // reuse or make a new PacketGenAssetVersion
-    MutableAssetVersionD packgen =
-      PacketGenFactory::ReuseOrMakeAndUpdate(genInfo[i].assetname,
-                                             type,
-                                             khMetaData(),
-                                             packetGenConfig,
-                                             extraArg);
+      MutableAssetVersionD packgen =
+        PacketGenFactory::ReuseOrMakeAndUpdate(genInfo[i].assetname,
+                                               type,
+                                               khMetaData(),
+                                               packetGenConfig, // new vector?
+                                               extraArg);
 
+    
     if (packetGenConfig.cacheRaster) {
       // Extract the PacketLevel children from the new version and store
       // them in my genInfo. My later children will use these to help
@@ -1158,11 +1166,6 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     packgenassets.push_back(packgen->GetAssetRef());
     packgenvers.push_back(packgen);
   }
-
-  curTime = std::chrono::high_resolution_clock::now();
-  timeDiff = std::chrono::duration<double>(curTime - prevTime);
-  notify(NFY_INFO2, "BuildIndex finished looping through insets - %f seconds elapsed",
-         timeDiff.count());
 
   // Make index subasset (RasterGEIndex).
   return MakeIndexSubAsset(packgenkids, packgenassets, packgenvers, genInfo, date);

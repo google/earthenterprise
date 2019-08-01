@@ -1,0 +1,23 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Server hostname</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 172794.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/173056.html">Ports</a></p>
+<p class="sidebar-toc"><a href="../answer/172794.html" class="current-file">Server hostname</a></p>
+<p class="sidebar-toc"><a href="../answer/6080928.html">Configure GEE Server 5.1.0 for SSL/HTTPS</a></p>
+<p class="sidebar-toc"><a href="../answer/2848305.html">PostgreSQL authentication</a></p>
+<p class="sidebar-toc"><a href="../answer/2760544.html">Configure a GEE virtual host for LDAP authentication</a></p>
+<p class="sidebar-toc"><a href="../answer/172814.html">Set up HTTPS</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | GEE Server configuration and security</h1>
+<h2>Server hostname</h2>
+<p>When you install GEE on a server, it queries for the name of the local host by issuing a <code>hostname -f</code> command. Each time you build a resource, project, or database on the server, the host name is added to all the files in each asset’s subdirectory. If you change the hostname or if you move assets to another server, you must also update the <code>assetroot host</code> entry to match the new host name.</p>
+<p>To change the asset root host entry, use the <code>geconfigureassetroot</code> command:</p>
+<code>sudo /opt/google/bin/geconfigureassetroot --fixmasterhost</code>
+<div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>

@@ -25,6 +25,7 @@ use AssetGen;
 my $help = 0;
 our $thiscommand = "@ARGV";
 
+
 sub usage() {
     die "usage: $FindBin::Script <.srcfile> <outputfile>\n";
 }
@@ -56,17 +57,22 @@ ReadSrcFile($srcfile, \%config);
 my %extra;
 my ($template);
 $template = "";
+my $templateName="ProductAssetVersion";
+
+
 if ($base eq 'Composite') {
     if ($singleFormalExtraUpdateArg) {
-      $template = "    template <typename ProductAssetVersion>";
+      $template = "    template <typename $templateName>";
       $singleFormalExtraUpdateArg =~
-	s/ExtraUpdateArg/ExtraUpdateArg\<ProductAssetVersion\>/;
+        s/ExtraUpdateArg/ExtraUpdateArg\<$templateName\>/;
       $formalExtraUpdateArg =~
-	s/ExtraUpdateArg/ExtraUpdateArg\<ProductAssetVersion\>/;
+        s/ExtraUpdateArg/ExtraUpdateArg\<$templateName\>/;
     }
+
     $extra{"${name}AssetVersionImplD"} =
-        $template .
-	"    void UpdateChildren($singleFormalExtraUpdateArg);\n";
+        $template 
+        . "    void UpdateChildren($singleFormalExtraUpdateArg);\n";
+
 } else {
     $extra{"${name}AssetVersionImplD"} =
 	"    virtual void DoSubmitTask(void);\n";
@@ -98,7 +104,7 @@ print $fh <<EOF;
 
 #include <$header>
 #include <sysman/AssetD.h>
-
+#include <memory>
 
 // ****************************************************************************
 // ***  Supplied from ${name}.src
@@ -121,7 +127,6 @@ public:
     virtual std::string GetName() const;
     virtual void SerializeConfig(DOMElement*) const;
 
-protected:
     // Only used when constructing a new version from an asset.
     // The decision to use the raw ImplD* here was a tough one.
     // Originally it had an asset handle, but the call point is a member
@@ -197,12 +202,12 @@ print $fh <<EOF;
     virtual AssetVersionD Update(bool &needed) const;
 
 protected:
-    static khRefGuard<${name}AssetImplD> Load(const std::string &ref);
+    static std::shared_ptr<${name}AssetImplD> Load(const std::string &ref);
 
     $template
     ${name}AssetVersionD MyUpdate(bool &needed
                                   $formalcachedinputarg
-				  $formalExtraUpdateArg) const;
+                                  $formalExtraUpdateArg) const;
 
     ${name}AssetImplD(const std::string &ref_ $formaltypearg,
 		$formalinputarg
@@ -211,12 +216,14 @@ protected:
         : AssetImpl(AssetStorage::MakeStorage(ref_, $actualtypearg, "$subtype", $actualinputarg, meta_)),
           ${name}AssetImpl(config_), AssetImplD() { }
 
+public:
 
     ${name}AssetImplD(const AssetStorage &storage,
 			 const Config& config_)
         : AssetImpl(storage),
           ${name}AssetImpl(config_), AssetImplD() { }
 
+protected:
 EOF
 
 if ($haveBindConfig) {
@@ -325,7 +332,7 @@ public:
 		      const khMetaData &meta_,
 		      const $config& config_
 		      $formalcachedinputarg
-		      $formalExtraUpdateArg);
+                      $formalExtraUpdateArg);
 
     $template
     static Mutable${name}AssetVersionD
@@ -339,7 +346,10 @@ public:
 			      $formalExtraUpdateArg);
 EOF
 
+
+
 if ($withreuse) {
+
     print $fh <<EOF;
     $template
     static Mutable${name}AssetVersionD
@@ -348,7 +358,7 @@ if ($withreuse) {
 			 const khMetaData &meta_,
 			 const $config& config_
 			 $formalcachedinputarg
-			 $formalExtraUpdateArg);
+                         $formalExtraUpdateArg);
 
     $template
     static Mutable${name}AssetVersionD
