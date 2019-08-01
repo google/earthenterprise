@@ -1022,9 +1022,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
                              "Cannot build").arg(GetRef().toString()));
   }
 
-  std::vector<InsetInfo<
-    RasterProductAssetVersion> >::const_reverse_iterator last_iter =
-      inset_infos.rbegin();
+  const auto last_iter = inset_infos.rbegin();
   notify(NFY_PROGRESS, "Building GERasterIndex: %zu insets, level %d for %s\n", inset_infos.size(), last_iter->effectiveMaxLevel, date.c_str());
 
   // get the range of levels that we're going to generate
@@ -1049,16 +1047,14 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
                     0 /* maxLevelDelta - always 0 here, only differs for SS*/,
                     config.is_overlay_terrain_project_,
                     config.overlay_terrain_resources_min_level_);
-#if 1
   // Calculate levels where transparent tiles may be skipped.
   CalcLevelsToSkipTransparentTiles(&genInfo, beginProjectLevel, endMinifyLevel);
-#endif
   // make a copy of the inset_infos w/ pointers. The FindNeeded*
   // routines want pointers.
   std::vector<const InsetInfo<RasterProductAssetVersion> *> insetInfoPtrs;
   insetInfoPtrs.reserve(inset_infos.size());
-  for (uint i = 0; i < inset_infos.size(); ++i) {
-    insetInfoPtrs.push_back(&inset_infos[i]);
+  for(const auto& i : inset_infos) {
+      insetInfoPtrs.push_back(&i);
   }
 
   // create my children giving them each a bigger piece of the stack
@@ -1084,19 +1080,13 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     notify(NFY_PROGRESS, "BuildIndex finding intersections for inset %d of %lu",
            i+1, genInfo.size());
 
-    if (type == AssetDefs::Imagery) {
-      FindNeededImageryInsets(genInfo[i].coverage,
-                              insetInfoPtrs, i,
-                              neededIndexes,
-                              beginMinifyLevel,
-                              endMinifyLevel);
-    } else {
-      FindNeededTerrainInsets(genInfo[i].coverage,
-                              insetInfoPtrs, i,
-                              neededIndexes,
-                              beginMinifyLevel,
-                              endMinifyLevel);
-    }
+    overlapEnvelope<RasterProductAssetVersion> env (
+        type, insetInfoPtrs, i,
+        beginMinifyLevel, endMinifyLevel, i);
+
+    std::shared_ptr<OverlapCalculator<RasterProductAssetVersion>> calc =
+        std::make_shared<OverlapCalculator<RasterProductAssetVersion>>(env);
+    neededIndexes = std::move(calc->PreprocessForInset(genInfo[i].coverage));
     neededIndexes.push_back(i); // each inset always intersects itself
 
     // calculate the level range that will be minified
@@ -1117,10 +1107,9 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
 
     packetGenConfig.useOpaqueTopInsetInsteadOfMerge = true;
     packetGenConfig.insets.reserve(neededIndexes.size());
-    for (std::vector<uint>::const_iterator idx = neededIndexes.begin();
-         idx != neededIndexes.end(); ++idx) {
 
-      const PacketGenInfo &otherGenInfo(genInfo[*idx]);
+    for (const auto& idx : neededIndexes) {
+      const PacketGenInfo &otherGenInfo(genInfo[idx]);
 
       // +1 below since we minify from the next level
       bool otherWillContribToMinify =
@@ -1139,7 +1128,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
 
       packetGenConfig.insets.push_back
         (PacketGenConfig::Inset
-         (inset_infos[*idx].combinedrp_.Ref(),
+         (inset_infos[idx].combinedrp_.Ref(),
           packgenVerRef));
     }
 
@@ -1147,20 +1136,21 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     PacketGenExtraUpdateArg<RasterProductAssetVersion> extraArg;
     extraArg.insetInfo.reserve(neededIndexes.size());
     extraArg.genInfo.reserve(neededIndexes.size());
-    for (std::vector<uint>::const_iterator idx = neededIndexes.begin();
-         idx != neededIndexes.end(); ++idx) {
-      extraArg.insetInfo.push_back(&inset_infos[*idx]);
-      extraArg.genInfo.push_back(&genInfo[*idx]);
+    extraArg.calc = calc;
+
+    for(const auto& idx : neededIndexes) {
+      extraArg.insetInfo.push_back(&inset_infos[idx]);
+      extraArg.genInfo.push_back(&genInfo[idx]);
     }
 
-    // reuse or make a new PacketGenAssetVersion
-    MutableAssetVersionD packgen =
-      PacketGenFactory::ReuseOrMakeAndUpdate(genInfo[i].assetname,
-                                             type,
-                                             khMetaData(),
-                                             packetGenConfig,
-                                             extraArg);
+      MutableAssetVersionD packgen =
+        PacketGenFactory::ReuseOrMakeAndUpdate(genInfo[i].assetname,
+                                               type,
+                                               khMetaData(),
+                                               packetGenConfig, // new vector?
+                                               extraArg);
 
+    
     if (packetGenConfig.cacheRaster) {
       // Extract the PacketLevel children from the new version and store
       // them in my genInfo. My later children will use these to help
