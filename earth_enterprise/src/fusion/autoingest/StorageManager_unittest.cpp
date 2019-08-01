@@ -20,13 +20,14 @@
 #include <algorithm>
 #include <gtest/gtest.h>
 #include <sstream>
-
+#include <memory>
 using namespace std;
 
 const size_t CACHE_SIZE = 5;
 
 class TestItem : public khRefCounter, public StorageManaged {
  public:
+  static string fileName;
   TestItem() : val(nextValue++), saveSucceeds(true) {}
   const int val;
   string savename;
@@ -40,6 +41,12 @@ class TestItem : public khRefCounter, public StorageManaged {
     savename = filename;
     return saveSucceeds;
   }
+  static string Filename(const std::string ref) {
+    return fileName;
+  }
+  static SharedString Key(const SharedString & ref) {
+    return ref;
+  }
   // determine amount of memory used by TestItem
   uint64 GetSize() {
     return (GetObjectSize(val)
@@ -51,6 +58,7 @@ class TestItem : public khRefCounter, public StorageManaged {
   static int nextValue;
 };
 int TestItem::nextValue = 1;
+string TestItem::fileName;
 template<> const bool StorageManager<TestItem>::check_timestamps = false;
 
 using HandleType = typename StorageManager<TestItem>::HandleType;
@@ -58,10 +66,8 @@ using AssetKey = typename StorageManager<TestItem>::AssetKey;
 
 class TestHandle : public AssetHandleInterface<TestItem> {
   public:
-    virtual const AssetKey Key() const { return name; }
-    virtual string Filename() const { return "/dev/null"; }
     virtual HandleType Load(const string &) const {
-      return khRefGuardFromNew<TestItem>(new TestItem());
+      return HandleType(std::make_shared<TestItem>());
     }
     virtual bool Valid(const HandleType &) const { return true; }
     TestHandle(const AssetKey & name) : name(name) {}
@@ -77,7 +83,7 @@ HandleClass Get(StorageManager<TestItem> & storageManager,
                 bool addToCache,
                 bool makeMutable) {
   HandleClass handle(name);
-  handle.handle = storageManager.Get(&handle, checkFileExistenceFirst, addToCache, makeMutable);
+  handle.handle = storageManager.Get(&handle, name, checkFileExistenceFirst, addToCache, makeMutable);
   return handle;
 }
 
@@ -85,7 +91,10 @@ class StorageManagerTest : public testing::Test {
  protected:
   StorageManager<TestItem> storageManager;
  public:
-  StorageManagerTest() : storageManager(CACHE_SIZE, false, 0, "test") {}
+  StorageManagerTest() : storageManager(CACHE_SIZE, false, 0, "test") {
+    // Reset the static variables in TestItem
+    TestItem::fileName = "/dev/null"; // A file that exists
+  }
 };
 
 TEST_F(StorageManagerTest, AddAndRetrieve) {
@@ -124,7 +133,7 @@ TEST_F(StorageManagerTest, LoadWithoutCache) {
 }
 
 TEST_F(StorageManagerTest, AddNew) {
-  HandleType newItem(khRefGuardFromNew(new TestItem()));
+  HandleType newItem(new TestItem());
   ASSERT_EQ(storageManager.CacheSize(), 0) << "Storage manager has unexpected item in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
   
@@ -140,18 +149,13 @@ TEST_F(StorageManagerTest, AddNew) {
   ASSERT_EQ(newItem->val, retrieved.handle->val) << "Could not retrieve new item from storage manager.";
 }
 
-class TestHandleBadFile : public TestHandle {
-  public:
-    virtual string Filename() const { return "notafile"; }
-    TestHandleBadFile(const AssetKey & name) : TestHandle(name) {}
-};
-
 TEST_F(StorageManagerTest, CheckFileExistence) {
   TestHandle goodFile = Get<TestHandle>(storageManager, "good", true, true, false);
   ASSERT_EQ(storageManager.CacheSize(), 1) << "Storage manager has wrong number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
   
-  TestHandleBadFile badFile = Get<TestHandleBadFile>(storageManager, "bad", true, true, false);
+  TestItem::fileName = "notafile"; // Try to read an invalid file
+  TestHandle badFile = Get<TestHandle>(storageManager, "bad", true, true, false);
   ASSERT_EQ(storageManager.CacheSize(), 1) << "Storage manager has wrong number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
   ASSERT_FALSE(badFile.handle) << "Should get empty handle from non-existant file";

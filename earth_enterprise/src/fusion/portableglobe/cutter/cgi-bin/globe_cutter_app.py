@@ -31,6 +31,7 @@ import shutil
 import sys
 import time
 import urllib
+from lxml import etree
 
 from common import form_wrap
 from common import postgres_manager_wrap
@@ -195,7 +196,9 @@ class GlobeBuilder(object):
     """Save polygon kml to a file."""
     with open(self.polygon_file, "w") as fp:
       if polygon:
-        fp.write(polygon)
+        # Check XML validity and standardize representation
+        xml = etree.ElementTree(etree.fromstring(polygon))
+        xml.write(fp, xml_declaration=True, encoding='UTF-8')
         self.Status("Saved polygon to %s" % self.polygon_file)
       else:
         self.Status("Created empty polygon file %s" % self.polygon_file)
@@ -309,7 +312,7 @@ class GlobeBuilder(object):
               "--map_directory=\"%s\"  --default_level=%d --max_level=%d "
               "--metadata_file=\"%s\" "
               % (COMMAND_DIR, ignore_imagery_depth_str, source,
-                 self.qtnodes_file, self.globe_dir, default_level, 
+                 self.qtnodes_file, self.globe_dir, default_level,
                  max_level, self.metadata_file))
 
     common.utils.ExecuteCmdInBackground(os_cmd, self.logger)
