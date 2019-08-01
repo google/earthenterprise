@@ -207,6 +207,7 @@ void StateUpdater::SetStateForRefAndDependents(
   SharedString verref = AssetVersionImpl::Key(ref);
   auto refVertex = BuildDependentTreeForStateCalculation(verref);
   SetStateForVertexAndDependents(refVertex, newState, updateStatePredicate);
+  RecalculateAndSaveStates();
 }
 
 // Sets the state for the specified ref and recursively sets the state for

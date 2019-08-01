@@ -94,13 +94,13 @@ class StateUpdater
         TreeType::vertex_descriptor vertex,
         AssetDefs::State newState,
         bool sendNotifications);
+    void RecalculateAndSaveStates();
   public:
     StateUpdater(StorageManagerInterface<AssetVersionImpl> * sm = &AssetVersion::storageManager()) : storageManager(sm) {}
     void SetStateForRefAndDependents(
         const SharedString & ref,
         AssetDefs::State newState,
         std::function<bool(AssetDefs::State)> updateStatePredicate);
-    void RecalculateAndSaveStates();
 };
 
 #endif // ASSETTREE_H
