@@ -59,7 +59,7 @@ class StateUpdater
         AssetEdge> TreeType;
     typedef std::map<SharedString, TreeType::vertex_descriptor> VertexMap;
 
-    // Helper structs for building the tree
+    // Helper struct for building the tree
     struct TreeBuildData;
 
     // Used by dfs function to update states of assets in the tree
