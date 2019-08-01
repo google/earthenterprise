@@ -76,5 +76,40 @@ T Find(const std::string & ref, const AssetDefs::Type & type, const std::string 
   return T();
 }
 
+template<class T>
+T FindVersion(const std::string & ref, const AssetDefs::Type & type, const std::string & subtype)
+{
+    try {
+        AssetVersion version(ref);
+        if (version &&
+            (version->type == type) &&
+            (version->subtype == subtype)) {
+            return T(ref);
+        }
+    } catch (...) {
+        // do nothing - don't even generate any warnings
+    }
+    return T();
+}
+
+template<class T>
+void ValidateRefForInput(const std::string & ref, const AssetDefs::Type & type, const std::string & subtype)
+{
+    if (AssetVersionRef(ref).Version() == "current") {
+        Asset asset = Find<Asset>(ref, type, subtype);
+        if (!asset) {
+            throw std::invalid_argument(
+                "No such " + ToString(type) + " " + subtype + " asset: " + ref);
+        }
+    } else {
+        T version = FindVersion<T>(ref, type, subtype);
+        if (!version) {
+            throw std::invalid_argument(
+                "No such " + ToString(type) + " " + subtype + " asset version: " +
+                ref);
+        }
+    }
+}
+
 
 #endif /* __AssetD_h */
