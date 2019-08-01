@@ -61,6 +61,7 @@ namespace boost {
 struct StateUpdater::TreeBuildData {
   VertexMap vertices;
   size_t index = 0;
+  function<bool(AssetDefs::State)> includePredicate;
 };
 
 // Builds a tree containing the specified asset, its depedent children, their
@@ -68,8 +69,11 @@ struct StateUpdater::TreeBuildData {
 // to update the state of these assets. That includes their inputs and children,
 // their parents and listeners all the way up the tree, and the inputs and
 // children for their parents and listeners.
-void StateUpdater::BuildDependentTree(const SharedString & ref) {
+void StateUpdater::BuildDependentTree(
+    const SharedString & ref,
+    function<bool(AssetDefs::State)> includePredicate) {
   TreeBuildData buildData;
+  buildData.includePredicate = includePredicate;
   set<TreeType::vertex_descriptor> toFillIn, toFillInNext;
   // First create an empty vertex for the provided asset. Then fill it in,
   // which includes adding its connections to other assets. Every time we fill
@@ -147,6 +151,14 @@ void StateUpdater::FillInVertex(
     return;
   }
   tree[myVertex].state = version->state;
+  // If this vertex is in the dependent tree but doesn't need to be included,
+  // act as though it's not in the dependency tree. We'll leave it in the tree
+  // to avoid messing up the index numbering and in case it is needed as an
+  // input, but we won't bring in any of its dependents.
+  if (tree[myVertex].inDepTree && !buildData.includePredicate(tree[myVertex].state)) {
+    tree[myVertex].inDepTree = false;
+    tree[myVertex].recalcState = false;
+  }
   // If I'm in the dependency tree I need to add my dependents because they are
   // also in the dependency tree.
   if (tree[myVertex].inDepTree) {
@@ -206,7 +218,6 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
   private:
     StateUpdater * const updater;
     const AssetDefs::State newState;
-    const function<bool(AssetDefs::State)> updateStatePredicate;
 
     bool NeedComputeState(AssetDefs::State state) const {
       // these states are explicitly set and must be explicitly cleared
@@ -331,11 +342,8 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
     }
 
   public:
-    SetStateVisitor(
-        StateUpdater * updater,
-        AssetDefs::State newState,
-        function<bool(AssetDefs::State)> updateStatePredicate) :
-      updater(updater), newState(newState), updateStatePredicate(updateStatePredicate) {}
+    SetStateVisitor(StateUpdater * updater, AssetDefs::State newState) :
+        updater(updater), newState(newState) {}
 
     // This function is called after the DFS has completed for every vertex
     // below this one in the tree. Thus, we don't calculate the state for an
@@ -350,7 +358,7 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
 
       // Set the state for assets in the dependent tree. Don't send
       // notifications because we'll set the state again below.
-      if (tree[vertex].inDepTree && updateStatePredicate(tree[vertex].state)) {
+      if (tree[vertex].inDepTree) {
         updater->SetState(vertex, newState, false);
       }
 
@@ -388,8 +396,8 @@ void StateUpdater::SetStateForRefAndDependents(
     AssetDefs::State newState,
     function<bool(AssetDefs::State)> updateStatePredicate) {
   SharedString verref = AssetVersionImpl::Key(ref);
-  BuildDependentTree(verref);
-  depth_first_search(tree, visitor(SetStateVisitor(this, newState, updateStatePredicate)));
+  BuildDependentTree(verref, updateStatePredicate);
+  depth_first_search(tree, visitor(SetStateVisitor(this, newState)));
 }
 
 void StateUpdater::SetState(

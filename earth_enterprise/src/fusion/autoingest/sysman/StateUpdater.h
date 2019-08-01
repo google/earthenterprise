@@ -71,7 +71,9 @@ class StateUpdater
 
     inline bool IsDependent(DependencyType type) { return type == DEPENDENT || type == DEPENDENT_AND_CHILD; }
 
-    void BuildDependentTree(const SharedString & ref);
+    void BuildDependentTree(
+        const SharedString & ref,
+        std::function<bool(AssetDefs::State)> includePredicate);
     TreeType::vertex_descriptor AddOrUpdateVertex(
         const SharedString & ref,
         TreeBuildData & buildData,
