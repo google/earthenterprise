@@ -258,17 +258,12 @@ Note that the asset version cache is generally larger than the asset cache becau
 
 <p>Within <code>misc.xml</code>, the following options are deprecated and are treated as if they are permanently enabled: <code>DisablePacketLevelVersionCachePurge</code> and <code>ConsolidateListenerNotifications</code>.</p>
 
-Also included within <code>misc.xml</code> is an experimental option, which allows the user to limit the caches by memory usage instead of number of objects.
-<br>
-This option is controlled by <code>LimitMemoryUtilization</code> and its default value is false.
-<br>
+<p>Also included within <code>misc.xml</code> is an experimental option, which allows the user to limit the caches by memory usage instead of number of objects.
+This option is controlled by <code>LimitMemoryUtilization</code> and its default value is 0 (false).
 The maximum memory usage for each cache can be set with <code>MaxAssetCacheMemorySize</code> and <code>MaxVersionCacheMemorySize</code>. 
-<br>
 This size is measured in bytes and the default setting is 1GB.
-<br>
 While this option is enabled, the caches will not be limited by the number of objects in the cache.
-<br>
-It should be noted that as of now the reported memory usage is very low and that this option is not recommended for production environments.
+It should be noted that as of now the reported memory usage is very low and that this option is not recommended for production environments.</p>
 
 <p>The Xerces library maintains a separate cache for dealing with XML files. Users can modify aspects of this cache through a configuration file at
 <code>/etc/opt/google/XMLparams</code>. This file is not created automatically as part of the Open GEE Fusion install,
@@ -292,16 +287,12 @@ MAX_HEAP_SIZE=&lt;value&gt;
 BLOCK_SIZE=&lt;value&gt;
 <br><br>
 # whether or not to purge the XML cache; valid values are 0 or 1<br>
-# default is 0<br>
-PURGE=0
+# default is 1<br>
+PURGE=&lt;value&gt;
 <br><br>
 # the level at which to purge the XML cache; can be 1 (most often) to 5 (least often)<br>
 # default is 3<br>
-PURGE_LEVEL=3
-<br><br>
-# deallocate all memory allocated by Xerces when the Xerces cache is purged; valid values are 0 or 1<br>
-# default is 0<br>
-DEALLOCATE_ALL=0
+PURGE_LEVEL=&lt;value&gt;
 </code>
 <h2 id="status_request_timeout">Status request timeout</h2>
 <p>Status requests to the system manager from clients like <code>getop</code> must wait to be fulfilled if the system manager
@@ -309,6 +300,10 @@ DEALLOCATE_ALL=0
    spend waiting to fulfill a status request before it times out. This timeout can be configured manually by setting
    <code>MutexTimedWaitSec</code> in <code>/gevol/assets/.config/misc.xml</code></p>
 <code>&lt;MutexTimedWaitSec&gt;60&lt;/MutexTimedWaitSec&gt;</code>
+<br><br>
+
+<h2 id="improving_optimization_performance">Improving Performance</h2>
+<p>Included in <code>/gevol/assets/.config/misc.xml</code> is a <code>GraphOperations</code> option, and it may be set to <code>1</code> (true) or <code>0</code> (false). This enables optimized versions of certain operations. These options are experimental and may contain bugs. 
 <h2>Learn more</h2>
 <ul>
 <li><a href="../answer/6033487.html">Benchmarking outcomes for applying task rules</a></li>
