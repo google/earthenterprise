@@ -43,9 +43,9 @@ class StorageManaged {
     StorageManaged() : timestamp(0), filesize(0) {}
 };
 
-template<class AssetType, class AssetStorageType> class AssetHandleInterface;
+template<class AssetType> class AssetHandleInterface;
 
-template<class AssetType, class AssetStorageType>
+template<class AssetType>
 class AssetSerializerLocalXML
 {
   public:
@@ -56,6 +56,7 @@ class AssetSerializerLocalXML
     }
 
     bool Save(std::shared_ptr<AssetType> asset, std::string filename){
+      using AssetStorageType = typename AssetType::Base;
       extern void ToElement(DOMElement *elem, const AssetStorageType &self);
 
       std::unique_ptr<GEDocument> doc = CreateEmptyDocument(asset->GetName());
@@ -91,7 +92,7 @@ class AssetSerializerLocalXML
 
 // Handles to items stored in the storage manager must implement the asset
 // handle interface. This is only used for the legacy Get function.
-template<class AssetType, class AssetStorageType>
+template<class AssetType>
 class AssetHandleInterface {
   public:
     virtual AssetPointerType<AssetType> Load(const std::string &) const = 0;
@@ -108,7 +109,7 @@ class StorageManagerInterface {
     virtual ~StorageManagerInterface() {}
 };
 
-template<class AssetType, class AssetStorageType>
+template<class AssetType>
 class StorageManager : public StorageManagerInterface<AssetType> {
   public:
     using Base = StorageManagerInterface<AssetType>;
@@ -131,7 +132,7 @@ class StorageManager : public StorageManagerInterface<AssetType> {
     inline void NoLongerNeeded(const AssetKey &, bool = true);
     void Abort();
     bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<AssetKey> *);
-    PointerType Get(const AssetHandleInterface<AssetType, AssetStorageType> *, const AssetKey &, bool, bool, bool);
+    PointerType Get(const AssetHandleInterface<AssetType> *, const AssetKey &, bool, bool, bool);
     
     // Pass a handle to a const to prevent callers from modifying it.
     AssetHandle<const AssetType> Get(const AssetKey &);
@@ -153,23 +154,23 @@ class StorageManager : public StorageManagerInterface<AssetType> {
     PointerType GetEntryFromCacheOrDisk(const AssetKey &);
 };
 
-template<class AssetType, class AssetStorageType>
+template<class AssetType>
 inline void
-StorageManager<AssetType, AssetStorageType>::AddNew(const AssetKey & key, const PointerType & value) {
+StorageManager<AssetType>::AddNew(const AssetKey & key, const PointerType & value) {
   cache.Add(key, value);
   // New assets are automatically dirty
   dirtyMap.emplace(key, value);
 }
 
-template<class AssetType, class AssetStorageType>
+template<class AssetType>
 inline void
-StorageManager<AssetType, AssetStorageType>::AddExisting(const AssetKey & key, const PointerType & value) {
+StorageManager<AssetType>::AddExisting(const AssetKey & key, const PointerType & value) {
   cache.Add(key, value);
 }
 
-template<class AssetType, class AssetStorageType>
+template<class AssetType>
 inline void
-StorageManager<AssetType, AssetStorageType>::NoLongerNeeded(const AssetKey & key, bool prune) {
+StorageManager<AssetType>::NoLongerNeeded(const AssetKey & key, bool prune) {
   cache.Remove(key, prune);
 }
 
@@ -178,10 +179,10 @@ StorageManager<AssetType, AssetStorageType>::NoLongerNeeded(const AssetKey & key
 // GetMutable function as appropriate, which return AssetHandle objects,
 // which are defined in StorageManagerAssetHandle.h. Evetually this function
 // should go away.
-template<class AssetType, class AssetStorageType>
-typename StorageManager<AssetType, AssetStorageType>::PointerType
-StorageManager<AssetType, AssetStorageType>::Get(
-    const AssetHandleInterface<AssetType, AssetStorageType> * handle,
+template<class AssetType>
+typename StorageManager<AssetType>::PointerType
+StorageManager<AssetType>::Get(
+    const AssetHandleInterface<AssetType> * handle,
     const AssetKey & ref,
     bool checkFileExistenceFirst,
     bool addToCache,
@@ -206,7 +207,7 @@ StorageManager<AssetType, AssetStorageType>::Get(
     }
 
     // Will succeed, generate stub, or throw exception.
-    AssetSerializerLocalXML<AssetType, AssetStorageType> serializer;
+    AssetSerializerLocalXML<AssetType> serializer;
     entry = serializer.Load(key);
     updated = true;
   } else if (check_timestamps) {
@@ -221,7 +222,7 @@ StorageManager<AssetType, AssetStorageType>::Get(
       cache.Remove(key, false);  // Don't prune, the Add() will.
 
       // Will succeed, generate stub, or throw exception.
-      AssetSerializerLocalXML<AssetType, AssetStorageType> serializer;
+      AssetSerializerLocalXML<AssetType> serializer;
       entry = serializer.Load(key);
       updated = true;
     }
@@ -241,9 +242,9 @@ StorageManager<AssetType, AssetStorageType>::Get(
   return entry;
 }
 
-template<class AssetType, class AssetStorageType>
-typename StorageManager<AssetType, AssetStorageType>::PointerType
-StorageManager<AssetType, AssetStorageType>::GetEntryFromCacheOrDisk(const AssetKey & ref) {
+template<class AssetType>
+typename StorageManager<AssetType>::PointerType
+StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & ref) {
   AssetKey key = AssetType::Key(ref);
 
   // Deal quickly with an invalid key
@@ -288,14 +289,14 @@ StorageManager<AssetType, AssetStorageType>::GetEntryFromCacheOrDisk(const Asset
   return entry;
 }
 
-template<class AssetType, class AssetStorageType>
-AssetHandle<const AssetType> StorageManager<AssetType, AssetStorageType>::Get(const AssetKey & ref) {
+template<class AssetType>
+AssetHandle<const AssetType> StorageManager<AssetType>::Get(const AssetKey & ref) {
   PointerType entry = GetEntryFromCacheOrDisk(ref);
   return AssetHandle<const AssetType>(std::shared_ptr<const AssetType>(entry), nullptr);
 }
 
-template<class AssetType, class AssetStorageType>
-AssetHandle<AssetType> StorageManager<AssetType, AssetStorageType>::GetMutable(const AssetKey & ref) {
+template<class AssetType>
+AssetHandle<AssetType> StorageManager<AssetType>::GetMutable(const AssetKey & ref) {
   PointerType entry = GetEntryFromCacheOrDisk(ref);
   // Add it to the dirty map. If it's already in the dirty map the existing
   // one will win; that's OK.
@@ -305,8 +306,8 @@ AssetHandle<AssetType> StorageManager<AssetType, AssetStorageType>::GetMutable(c
   });
 }
 
-template<class AssetType, class AssetStorageType>
-void StorageManager<AssetType, AssetStorageType>::Abort() {
+template<class AssetType>
+void StorageManager<AssetType>::Abort() {
   // remove all the dirty Impls from the cache
   for (const std::pair<AssetKey, PointerType> & entry : dirtyMap) {
     cache.Remove(entry.first, false); // false -> don't prune
@@ -317,15 +318,15 @@ void StorageManager<AssetType, AssetStorageType>::Abort() {
   dirtyMap.clear();
 }
 
-template<class AssetType, class AssetStorageType>
-bool StorageManager<AssetType, AssetStorageType>::SaveDirtyToDotNew(
+template<class AssetType>
+bool StorageManager<AssetType>::SaveDirtyToDotNew(
     khFilesTransaction &savetrans,
     std::vector<AssetKey> *saved) {
   notify(NFY_INFO, "Writing %lu %s records", dirtyMap.size(), assetType.c_str());
   typename std::map<AssetKey, PointerType>::iterator entry = dirtyMap.begin();
   while (entry != dirtyMap.end()) {
     std::string filename = entry->second->XMLFilename() + ".new";
-    AssetSerializerLocalXML<AssetType, AssetStorageType> serializer;
+    AssetSerializerLocalXML<AssetType> serializer;
  
     if (serializer.Save(entry->second, filename)) {
       savetrans.AddNewPath(filename);

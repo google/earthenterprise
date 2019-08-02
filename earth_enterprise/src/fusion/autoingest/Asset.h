@@ -38,15 +38,17 @@
  ***
  ******************************************************************************/
 class AssetImpl : public AssetStorage, public StorageManaged {
-  friend class AssetHandle_<AssetImpl, AssetStorage>;
+  friend class AssetHandle_<AssetImpl>;
 
   // Illegal to copy an AssetImpl
   AssetImpl(const AssetImpl&) = delete;
   AssetImpl& operator=(const AssetImpl&) = delete;
   AssetImpl(const AssetImpl&&) = delete;
   AssetImpl& operator=(const AssetImpl&&) = delete;
+  public:
+    using Base = AssetStorage;
 
- protected:
+  protected:
   // used by my intermediate derived classes since their calls to
   // my constructor will never actualy be used
   AssetImpl(void) = default;
@@ -106,13 +108,13 @@ class AssetImpl : public AssetStorage, public StorageManaged {
 // ****************************************************************************
 // ***  Asset & its specializations
 // ****************************************************************************
-typedef AssetHandle_<AssetImpl, AssetStorage> Asset;
+typedef AssetHandle_<AssetImpl> Asset;
 
 template <>
-inline StorageManager<AssetImpl, AssetStorage>&
+inline StorageManager<AssetImpl>&
 Asset::storageManager(void)
 {
-  static StorageManager<AssetImpl, AssetStorage> storageManager(
+  static StorageManager<AssetImpl> storageManager(
       MiscConfig::Instance().AssetCacheSize, MiscConfig::Instance().LimitMemoryUtilization, MiscConfig::Instance().MaxAssetCacheMemorySize, "asset");
   return storageManager;
 }

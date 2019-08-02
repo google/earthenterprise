@@ -42,7 +42,7 @@
  ******************************************************************************/
 class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   friend class AssetImpl;
-  friend class AssetHandle_<AssetVersionImpl, AssetVersionStorage>;
+  friend class AssetHandle_<AssetVersionImpl>;
 
   // Illegal to copy an AssetVersionImpl
   AssetVersionImpl(const AssetVersionImpl&) = delete;
@@ -51,6 +51,7 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   AssetVersionImpl& operator=(const AssetVersionImpl&&) = delete;
 
  public:
+  using Base = AssetVersionStorage;
   std::string XMLFilename() const { return XMLFilename(GetRef()); }
   std::string WorkingDir(void) const { return WorkingDir(GetRef()); }
   std::string WorkingFileRef(const std::string &fname) const {
@@ -251,13 +252,13 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
 // ****************************************************************************
 // ***  AssetVersion & its specializations
 // ****************************************************************************
-typedef AssetHandle_<AssetVersionImpl, AssetVersionStorage> AssetVersion;
+typedef AssetHandle_<AssetVersionImpl> AssetVersion;
 
 template <>
-inline StorageManager<AssetVersionImpl, AssetVersionStorage>&
+inline StorageManager<AssetVersionImpl>&
 AssetVersion::storageManager(void)
 {
-  static StorageManager<AssetVersionImpl, AssetVersionStorage> storageManager(
+  static StorageManager<AssetVersionImpl> storageManager(
       MiscConfig::Instance().VersionCacheSize, MiscConfig::Instance().LimitMemoryUtilization, MiscConfig::Instance().MaxVersionCacheMemorySize, "version");
   return storageManager;
 }

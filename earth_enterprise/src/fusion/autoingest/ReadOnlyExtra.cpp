@@ -30,8 +30,8 @@
 // ***
 // ***  see sysman/SysManExtra.cpp for the system manager definitions
 // ****************************************************************************
-template<> const bool StorageManager<AssetImpl, AssetStorage>::check_timestamps(true);
-template<> const bool StorageManager<AssetVersionImpl, AssetVersionStorage>::check_timestamps(true);
+template<> const bool StorageManager<AssetImpl>::check_timestamps(true);
+template<> const bool StorageManager<AssetVersionImpl>::check_timestamps(true);
 
 bool AssetThrowPolicy::allow_throw(false);
 

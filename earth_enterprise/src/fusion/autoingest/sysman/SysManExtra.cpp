@@ -19,7 +19,7 @@
 #include "StorageManager.h"
 
 
-template<> const bool StorageManager<AssetImpl, AssetStorage>::check_timestamps(false);
-template<> const bool StorageManager<AssetVersionImpl, AssetVersionStorage>::check_timestamps(false);
+template<> const bool StorageManager<AssetImpl>::check_timestamps(false);
+template<> const bool StorageManager<AssetVersionImpl>::check_timestamps(false);
 
 bool AssetThrowPolicy::allow_throw(true);

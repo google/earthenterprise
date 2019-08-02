@@ -33,6 +33,8 @@ class TestItemStorage {
 
 class TestItem : public StorageManaged, public TestItemStorage {
  public:
+  using Base = TestItemStorage;
+
   static int nextValue;
   static string fileName;
   static bool isValidRef;
@@ -79,7 +81,7 @@ class TestItem : public StorageManaged, public TestItemStorage {
   static bool ValidRef(const SharedString & ref) {
     return isValidRef;
   }
-  static typename StorageManager<TestItem, TestItemStorage>::PointerType Load(const string &) {
+  static typename StorageManager<TestItem>::PointerType Load(const string &) {
     return std::make_shared<TestItem>();
   }
 };
@@ -91,11 +93,11 @@ void ToElement(xercesc_3_1::DOMElement*, TestItemStorage const&){
 int TestItem::nextValue;
 string TestItem::fileName;
 bool TestItem::isValidRef;
-template<> const bool StorageManager<TestItem, TestItemStorage>::check_timestamps = false;
+template<> const bool StorageManager<TestItem>::check_timestamps = false;
 
 using PointerType = AssetPointerType<TestItem>;
 
-class TestHandle : public AssetHandleInterface<TestItem, TestItemStorage> {
+class TestHandle : public AssetHandleInterface<TestItem> {
   public:
     virtual PointerType Load(const string &) const {
       return PointerType(std::make_shared<TestItem>());
@@ -108,7 +110,7 @@ class TestHandle : public AssetHandleInterface<TestItem, TestItemStorage> {
 };
 
 template<class HandleClass>
-HandleClass Get(StorageManager<TestItem, TestItemStorage> & storageManager,
+HandleClass Get(StorageManager<TestItem> & storageManager,
                 const AssetKey & name,
                 bool checkFileExistenceFirst,
                 bool addToCache,
@@ -120,7 +122,7 @@ HandleClass Get(StorageManager<TestItem, TestItemStorage> & storageManager,
 
 class StorageManagerTest : public testing::Test {
  protected:
-  StorageManager<TestItem, TestItemStorage> storageManager;
+  StorageManager<TestItem> storageManager;
  public:
   StorageManagerTest() : storageManager(CACHE_SIZE, false, 0, "test") {
     // Reset the static variables in TestItem
@@ -311,7 +313,7 @@ TEST_F(StorageManagerTest, AbortLegacy) {
   ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has wrong number of items in dirty map";
 }
 
-void getAssetsForDirtyTestLegacy(StorageManager<TestItem, TestItemStorage> & storageManager, TestHandle handles[5]) {
+void getAssetsForDirtyTestLegacy(StorageManager<TestItem> & storageManager, TestHandle handles[5]) {
   handles[0] = Get<TestHandle>(storageManager, "asset0", false, true, false);
   handles[1] = Get<TestHandle>(storageManager, "asset1", false, true, false);
   handles[2] = Get<TestHandle>(storageManager, "mutable2", false, true, true);
@@ -519,7 +521,7 @@ TEST_F(StorageManagerTest, Abort) {
 }
 
 void getAssetsForDirtyTest(
-    StorageManager<TestItem, TestItemStorage> & storageManager,
+    StorageManager<TestItem> & storageManager,
     AssetHandle<const TestItem> handles[3],
     AssetHandle<TestItem> mutHandles[2]) {
   handles[0] = storageManager.Get("asset0");

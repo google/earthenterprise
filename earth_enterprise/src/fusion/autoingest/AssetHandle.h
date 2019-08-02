@@ -43,14 +43,14 @@ class AssetVersionRef;
  ***  which will return a new AssetHandle object. This class will eventually
  ***  go away.
  ******************************************************************************/
-template <class Impl_, class Storage_>
-class AssetHandle_ : public AssetHandleInterface<Impl_, Storage_> {
+template <class Impl_>
+class AssetHandle_ : public AssetHandleInterface<Impl_> {
   friend class Impl;
  public:
   typedef Impl_ Impl;
-  using HandleType = typename StorageManager<Impl, Storage_>::PointerType;
+  using HandleType = typename StorageManager<Impl>::PointerType;
 
-  static inline StorageManager<Impl, Storage_> & storageManager();
+  static inline StorageManager<Impl> & storageManager();
 
  protected:
   inline void DoBind(
