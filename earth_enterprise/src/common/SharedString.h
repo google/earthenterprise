@@ -71,7 +71,6 @@ protected:
     };
 
     static StringStorage strStore;
-    std::string val;
     uint32_t key;
 
     friend std::ostream & operator<<(std::ostream &out, const SharedString & ref);
@@ -83,17 +82,14 @@ protected:
     SharedString(): key(0) {}
 
     SharedString(const SharedString& str): key(str.key) {
-      val = strStore.RefFromKey(key);
     }
 
     SharedString(const std::string& str) {
         key = strStore.KeyFromRef(str);
-        val = strStore.RefFromKey(key);
     } 
 
     SharedString(const char* s) {
         key = strStore.KeyFromRef(s);
-        val = strStore.RefFromKey(key);
     }
 
     bool empty() const {
@@ -102,7 +98,6 @@ protected:
 
     SharedString & operator=(const std::string &str) {
         key = strStore.KeyFromRef(str);
-        val = strStore.RefFromKey(key);
         return *this;
     }
 
