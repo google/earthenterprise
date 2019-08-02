@@ -108,7 +108,7 @@ StateUpdater::AddOrUpdateVertex(
     // I'm not in the graph yet, so make a new empty vertex and let the caller
     // know we need to load it with the correct information
     auto myVertex = add_vertex(tree);
-    tree[myVertex] = {ref, AssetDefs::New, inDepTree, recalcState, buildData.index};
+    tree[myVertex] = {ref, AssetDefs::New, inDepTree, recalcState, false, buildData.index};
     ++buildData.index;
     buildData.vertices[ref] = myVertex;
     toFillIn.insert(myVertex);
@@ -311,10 +311,12 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
         AssetDefs::State &stateByInputs,
         AssetDefs::State &stateByChildren,
         bool & blockersAreOffline,
-        uint32 & numWaitingFor) const {
+        uint32 & numWaitingFor,
+        bool & childOrInputStateChanged) const {
       InputStates inputStates;
       ChildStates childStates;
 
+      childOrInputStateChanged = false;
       auto edgeIters = out_edges(vertex, tree);
       auto edgeBegin = edgeIters.first;
       auto edgeEnd = edgeIters.second;
@@ -325,10 +327,12 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
         switch(type) {
           case StateUpdater::INPUT:
             inputStates.Add(depState);
+            childOrInputStateChanged = childOrInputStateChanged || tree[dep].stateChanged;
             break;
           case StateUpdater::CHILD:
           case StateUpdater::DEPENDENT_AND_CHILD:
             childStates.Add(depState);
+            childOrInputStateChanged = childOrInputStateChanged || tree[dep].stateChanged;
             break;
           case StateUpdater::DEPENDENT:
             // Dependents that are not also children are not considered when
@@ -365,28 +369,33 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
       // For all assets (including parents and listeners) update the state
       // based on the state of inputs and children.
       if (NeedComputeState(tree[vertex].state)) {
-        AssetDefs::State calculatedState;
-        // Run this in a separate block so that the asset version is released
-        // before we try to update it.
-        {
-          auto version = updater->storageManager->Get(name);
-          if (!version) {
-            // This shoud never happen - we had to successfully load the asset
-            // previously to get it into the tree.
-            notify(NFY_WARN, "Could not load asset '%s' to recalculate state.",
-                   name.toString().c_str());
-            return;
+        AssetDefs::State stateByInputs;
+        AssetDefs::State stateByChildren;
+        bool blockersAreOffline;
+        uint32 numWaitingFor;
+        bool childOrInputStateChanged;
+        CalculateStateParameters(
+              vertex, tree, stateByInputs, stateByChildren,
+              blockersAreOffline, numWaitingFor, childOrInputStateChanged);
+        if (tree[vertex].stateChanged || childOrInputStateChanged) {
+          AssetDefs::State calculatedState;
+          // Run this in a separate block so that the asset version is released
+          // before we try to update it.
+          {
+            auto version = updater->storageManager->Get(name);
+            if (!version) {
+              // This shoud never happen - we had to successfully load the asset
+              // previously to get it into the tree.
+              notify(NFY_WARN, "Could not load asset '%s' to recalculate state.",
+                     name.toString().c_str());
+              return;
+            }
+            calculatedState = version->CalcStateByInputsAndChildren(
+                  stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
           }
-          AssetDefs::State stateByInputs;
-          AssetDefs::State stateByChildren;
-          bool blockersAreOffline;
-          uint32 numWaitingFor;
-          CalculateStateParameters(vertex, tree, stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
-          calculatedState = version->CalcStateByInputsAndChildren(
-                stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
+          // Set the state and send notifications.
+          updater->SetState(vertex, calculatedState, true);
         }
-        // Set the state and send notifications.
-        updater->SetState(vertex, calculatedState, true);
       }
     }
 };
@@ -418,6 +427,7 @@ void StateUpdater::SetState(
       // Setting the state can trigger additional state changes, so get the new
       // state directly from the asset version.
       tree[vertex].state = version->state;
+      tree[vertex].stateChanged = true;
     }
     else {
       // This shoud never happen - we had to successfully load the asset

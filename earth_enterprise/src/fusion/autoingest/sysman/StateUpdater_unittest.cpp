@@ -208,12 +208,10 @@ void GetBigTree(MockStorageManager & sm) {
 TEST_F(StateUpdaterTest, SetStateSingleVersion) {
   AssetKey ref1 = "test1";
   AssetKey ref2 = "test2";
-  AssetKey ref3 = "test3";
-  SetVersions(sm, {MockVersion(ref1), MockVersion(ref2), MockVersion(ref3)});
+  SetVersions(sm, {MockVersion(ref1), MockVersion(ref2)});
   updater.SetStateForRefAndDependents(fix(ref1), AssetDefs::Bad, [](AssetDefs::State) { return true; });
   ASSERT_TRUE(GetVersion(sm, ref1)->stateSet);
   ASSERT_FALSE(GetVersion(sm, ref2)->stateSet);
-  ASSERT_FALSE(GetVersion(sm, ref3)->stateSet);
 }
 
 TEST_F(StateUpdaterTest, SetStateMultipleVersions) {
@@ -242,8 +240,8 @@ TEST_F(StateUpdaterTest, SetStateMultipleVersionsFromChild) {
   
   ASSERT_TRUE(GetVersion(sm, "p1")->stateSet);
   ASSERT_TRUE(GetVersion(sm, "c1")->stateSet);
-  
   ASSERT_TRUE(GetVersion(sm, "gp")->stateSet);
+
   ASSERT_FALSE(GetVersion(sm, "gpi")->stateSet);
   ASSERT_FALSE(GetVersion(sm, "pi1")->stateSet);
   ASSERT_FALSE(GetVersion(sm, "p2")->stateSet);
@@ -255,7 +253,7 @@ TEST_F(StateUpdaterTest, SetStateMultipleVersionsFromChild) {
   ASSERT_FALSE(GetVersion(sm, "ci3")->stateSet);
 }
 
-TEST_F(StateUpdaterTest, SetState_StateDoesAndDoesntChange) {
+TEST_F(StateUpdaterTest, StateDoesAndDoesntChange) {
   SetVersions(sm, {MockVersion("a"), MockVersion("b")});
   GetMutableVersion(sm, "a")->state = CALCULATED_STATE;
   GetMutableVersion(sm, "b")->state = STARTING_STATE;
@@ -279,23 +277,6 @@ TEST_F(StateUpdaterTest, NeedComputeStateFalse) {
   updater.SetStateForRefAndDependents(fix("a"), AssetDefs::Canceled, [](AssetDefs::State) { return true; });
   ASSERT_TRUE(GetVersion(sm, "a")->stateSet);
   ASSERT_TRUE(GetVersion(sm, "a")->notificationsSent);
-}
-
-TEST_F(StateUpdaterTest, RecalculateState_StateDoesAndDoesntChange) {
-  SetVersions(sm, {MockVersion("a"), MockVersion("b")});
-  GetMutableVersion(sm, "a")->state = CALCULATED_STATE;
-  GetMutableVersion(sm, "b")->state = STARTING_STATE;
-  SetDependent(sm, "a", "b");
-  GetMutableVersion(sm, "a")->loadedMutable = false;
-
-  // Verify that the setup is correct
-  ASSERT_FALSE(GetVersion(sm, "a")->stateSet);
-  ASSERT_FALSE(GetVersion(sm, "b")->stateSet);
-
-  updater.SetStateForRefAndDependents(fix("a"), CALCULATED_STATE, [](AssetDefs::State) { return true; });
-  ASSERT_FALSE(GetVersion(sm, "a")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "b")->stateSet);
-  ASSERT_FALSE(GetVersion(sm, "a")->loadedMutable);
 }
 
 TEST_F(StateUpdaterTest, NoInputsNoChildren) {
@@ -529,6 +510,37 @@ TEST_F(StateUpdaterTest, InputIsParent) {
   ASSERT_TRUE(GetVersion(sm, "c")->stateSet);
   ASSERT_TRUE(GetVersion(sm, "d")->stateSet);
   ASSERT_TRUE(GetVersion(sm, "e")->stateSet);
+}
+
+// This test creates a long chain of parents and dependents and makes sure
+// state propagation stops at appropriate points.
+TEST_F(StateUpdaterTest, MultipleLevelsParentsDependents) {
+  const AssetDefs::State NO_CHANGE_STATE = AssetDefs::Canceled;
+  SetVersions(sm, {MockVersion("a"), MockVersion("b"), MockVersion("c"),
+                   MockVersion("d"), MockVersion("e"), MockVersion("f"),
+                   MockVersion("g"), MockVersion("h"), MockVersion("i")});
+  SetParentChild(sm, "a", "b");
+  SetParentChild(sm, "b", "c");
+  SetParentChild(sm, "c", "d");
+  SetParentChild(sm, "d", "e");
+  SetDependent(sm, "e", "f");
+  SetDependent(sm, "f", "g");
+  SetDependent(sm, "g", "h");
+  SetDependent(sm, "h", "i");
+  GetMutableVersion(sm, "b")->state = CALCULATED_STATE;
+  GetMutableVersion(sm, "h")->state = NO_CHANGE_STATE;
+  updater.SetStateForRefAndDependents(fix("e"), AssetDefs::New, [](AssetDefs::State state) {
+    return state != NO_CHANGE_STATE;
+  });
+  ASSERT_FALSE(GetVersion(sm, "a")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "b")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "c")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "d")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "e")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "f")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "g")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "h")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "i")->stateSet);
 }
 
 int main(int argc, char **argv) {
