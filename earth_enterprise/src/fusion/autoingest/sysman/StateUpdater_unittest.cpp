@@ -42,8 +42,7 @@ class MockVersion : public AssetVersionImpl {
   public:
     bool stateSet;
     bool loadedMutable;
-    bool notificationsSent;
-    bool needComputeState;
+    int notificationsSent;
     mutable AssetDefs::State stateByInputsVal;
     mutable AssetDefs::State stateByChildrenVal;
     mutable bool blockersAreOfflineVal;
@@ -53,8 +52,7 @@ class MockVersion : public AssetVersionImpl {
     MockVersion()
         : stateSet(false),
           loadedMutable(false),
-          notificationsSent(false),
-          needComputeState(true),
+          notificationsSent(0),
           stateByInputsVal(AssetDefs::Bad),
           stateByChildrenVal(AssetDefs::Bad),
           blockersAreOfflineVal(false),
@@ -74,7 +72,6 @@ class MockVersion : public AssetVersionImpl {
         d.push_back(dependent);
       }
     }
-    bool NeedComputeState() const { return needComputeState; }
     AssetDefs::State CalcStateByInputsAndChildren(
         AssetDefs::State stateByInputs,
         AssetDefs::State stateByChildren,
@@ -88,7 +85,7 @@ class MockVersion : public AssetVersionImpl {
     }
     void SetMyStateOnly(AssetDefs::State newState, bool sendNotifications) {
       stateSet = true;
-      notificationsSent = sendNotifications;
+      if (sendNotifications) ++notificationsSent;
     }
     
     // Not used - only included to make MockVersion non-virtual
@@ -124,11 +121,6 @@ class MockStorageManager : public StorageManagerInterface<AssetVersionImpl> {
       dynamic_pointer_cast<MockVersion>(ptr)->loadedMutable = true;
       return AssetHandle<AssetVersionImpl>(ptr, nullptr);
     }
-    void ResetLoadedMutable() {
-      for (auto & v : versions) {
-        v.second->loadedMutable = false;
-      }
-    }
 };
 
 class StateUpdaterTest : public testing::Test {
@@ -156,7 +148,11 @@ const MockVersion * GetVersion(MockStorageManager & sm, const AssetKey & key) {
 }
 MockVersion * GetMutableVersion(MockStorageManager & sm, const AssetKey & key) {
   AssetHandle<AssetVersionImpl> handle = sm.GetMutable(fix(key));
-  return dynamic_cast<MockVersion *>(handle.operator->());
+  auto ptr = dynamic_cast<MockVersion *>(handle.operator->());
+  // This doesn't count as loading the asset mutable. We only care if the
+  // state udpater loads it mutable.
+  ptr->loadedMutable = false;
+  return ptr;
 }
 
 void SetParentChild(MockStorageManager & sm, AssetKey parent, AssetKey child) {
@@ -205,78 +201,116 @@ void GetBigTree(MockStorageManager & sm) {
   SetDependent(sm, "p1", "c1");
 }
 
+void assertStateSet(MockStorageManager & sm, const SharedString & ref) {
+  ASSERT_TRUE(GetVersion(sm, ref)->stateSet);
+  ASSERT_TRUE(GetVersion(sm, ref)->loadedMutable);
+  ASSERT_EQ(GetVersion(sm, ref)->notificationsSent, 1);
+}
+
+void assertStateNotSet(MockStorageManager & sm, const SharedString & ref) {
+  ASSERT_FALSE(GetVersion(sm, ref)->stateSet);
+  ASSERT_FALSE(GetVersion(sm, ref)->loadedMutable);
+  ASSERT_EQ(GetVersion(sm, ref)->notificationsSent, 0);
+}
+
 TEST_F(StateUpdaterTest, SetStateSingleVersion) {
   AssetKey ref1 = "test1";
   AssetKey ref2 = "test2";
   SetVersions(sm, {MockVersion(ref1), MockVersion(ref2)});
   updater.SetStateForRefAndDependents(fix(ref1), AssetDefs::Bad, [](AssetDefs::State) { return true; });
-  ASSERT_TRUE(GetVersion(sm, ref1)->stateSet);
-  ASSERT_FALSE(GetVersion(sm, ref2)->stateSet);
+  assertStateSet(sm, ref1);
+  assertStateNotSet(sm, ref2);
 }
 
 TEST_F(StateUpdaterTest, SetStateMultipleVersions) {
   GetBigTree(sm);
   updater.SetStateForRefAndDependents(fix("gp"), AssetDefs::Canceled, [](AssetDefs::State) {return true; });
   
-  ASSERT_TRUE(GetVersion(sm, "gp")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "p1")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "c1")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "c2")->stateSet);
+  assertStateSet(sm, "gp");
+  assertStateSet(sm, "p1");
+  assertStateSet(sm, "c1");
+  assertStateSet(sm, "c2");
   
-  ASSERT_FALSE(GetVersion(sm, "gpi")->stateSet);
-  ASSERT_FALSE(GetVersion(sm, "pi1")->stateSet);
-  ASSERT_FALSE(GetVersion(sm, "p2")->stateSet);
-  ASSERT_FALSE(GetVersion(sm, "c3")->stateSet);
-  ASSERT_FALSE(GetVersion(sm, "c4")->stateSet);
-  ASSERT_FALSE(GetVersion(sm, "ci1")->stateSet);
-  ASSERT_FALSE(GetVersion(sm, "ci2")->stateSet);
-  ASSERT_FALSE(GetVersion(sm, "ci3")->stateSet);
+  assertStateNotSet(sm, "gpi");
+  assertStateNotSet(sm, "pi1");
+  assertStateNotSet(sm, "p2");
+  assertStateNotSet(sm, "c3");
+  assertStateNotSet(sm, "c4");
+  assertStateNotSet(sm, "ci1");
+  assertStateNotSet(sm, "ci2");
+  assertStateNotSet(sm, "ci3");
 }
 
 TEST_F(StateUpdaterTest, SetStateMultipleVersionsFromChild) {
   GetBigTree(sm);
-  sm.ResetLoadedMutable();
   updater.SetStateForRefAndDependents(fix("p1"), AssetDefs::Canceled, [](AssetDefs::State) { return true; });
   
-  ASSERT_TRUE(GetVersion(sm, "p1")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "c1")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "gp")->stateSet);
+  assertStateSet(sm, "p1");
+  assertStateSet(sm, "c1");
+  assertStateSet(sm, "gp");
 
-  ASSERT_FALSE(GetVersion(sm, "gpi")->stateSet);
-  ASSERT_FALSE(GetVersion(sm, "pi1")->stateSet);
-  ASSERT_FALSE(GetVersion(sm, "p2")->stateSet);
-  ASSERT_FALSE(GetVersion(sm, "c2")->stateSet);
-  ASSERT_FALSE(GetVersion(sm, "c3")->stateSet);
-  ASSERT_FALSE(GetVersion(sm, "c4")->stateSet);
-  ASSERT_FALSE(GetVersion(sm, "ci1")->stateSet);
-  ASSERT_FALSE(GetVersion(sm, "ci2")->stateSet);
-  ASSERT_FALSE(GetVersion(sm, "ci3")->stateSet);
+  assertStateNotSet(sm, "gpi");
+  assertStateNotSet(sm, "pi1");
+  assertStateNotSet(sm, "p2");
+  assertStateNotSet(sm, "c2");
+  assertStateNotSet(sm, "c3");
+  assertStateNotSet(sm, "c4");
+  assertStateNotSet(sm, "ci1");
+  assertStateNotSet(sm, "ci2");
+  assertStateNotSet(sm, "ci3");
 }
 
-TEST_F(StateUpdaterTest, StateDoesAndDoesntChange) {
+TEST_F(StateUpdaterTest, StateChanges) {
   SetVersions(sm, {MockVersion("a"), MockVersion("b")});
   GetMutableVersion(sm, "a")->state = CALCULATED_STATE;
   GetMutableVersion(sm, "b")->state = STARTING_STATE;
-  
   updater.SetStateForRefAndDependents(fix("a"), CALCULATED_STATE, [](AssetDefs::State) { return true; });
-  ASSERT_FALSE(GetVersion(sm, "a")->stateSet);
-  ASSERT_FALSE(GetVersion(sm, "b")->stateSet);
-
-  updater.SetStateForRefAndDependents(fix("b"), CALCULATED_STATE, [](AssetDefs::State) { return true; });
-  ASSERT_FALSE(GetVersion(sm, "a")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "b")->stateSet);
+  assertStateNotSet(sm, "a");
+  assertStateNotSet(sm, "b");
 }
 
-TEST_F(StateUpdaterTest, NeedComputeStateFalse) {
-  SetVersions(sm, {MockVersion("a")});
-  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::Canceled, [](AssetDefs::State) { return true; });
-  GetMutableVersion(sm, "a")->needComputeState = false;
-  GetMutableVersion(sm, "a")->stateSet = false;
-  ASSERT_FALSE(GetVersion(sm, "a")->stateSet);
-  GetMutableVersion(sm, "a")->needComputeState = true;
-  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::Canceled, [](AssetDefs::State) { return true; });
-  ASSERT_TRUE(GetVersion(sm, "a")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "a")->notificationsSent);
+TEST_F(StateUpdaterTest, StateDoesntChange) {
+  SetVersions(sm, {MockVersion("a"), MockVersion("b")});
+  GetMutableVersion(sm, "a")->state = CALCULATED_STATE;
+  GetMutableVersion(sm, "b")->state = STARTING_STATE;
+  updater.SetStateForRefAndDependents(fix("b"), CALCULATED_STATE, [](AssetDefs::State) { return true; });
+  assertStateNotSet(sm, "a");
+  assertStateSet(sm, "b");
+}
+
+// These tests are set up to make it through all the if statements to verify
+// that we don't recompute state for the states tested. We make a's state the
+// same as the passed in state so it skips over the first state setting, but b
+// (the dependent) has its state changed. Thus, a's state would normally be
+// recalculated (because its dependent's state changed) except in cases where
+// a's state is one that has to be cleared manually. We also include one case
+// where we do compute the state to verify that the tests are set up correctly.
+void testNeedComputeState(MockStorageManager & sm, StateUpdater & updater, AssetDefs::State state) {
+  SetVersions(sm, {MockVersion("a"), MockVersion("b")});
+  SetParentChild(sm, "a", "b");
+  SetDependent(sm, "a", "b");
+  GetMutableVersion(sm, "a")->state = state;
+  updater.SetStateForRefAndDependents(fix("a"), state, [](AssetDefs::State) { return true; });
+}
+
+TEST_F(StateUpdaterTest, DontComputeStateBad) {
+  testNeedComputeState(sm, updater, AssetDefs::Bad);
+  assertStateNotSet(sm, "a");
+}
+
+TEST_F(StateUpdaterTest, DontComputeStateOffline) {
+  testNeedComputeState(sm, updater, AssetDefs::Offline);
+  assertStateNotSet(sm, "a");
+}
+
+TEST_F(StateUpdaterTest, DontComputeStateCanceled) {
+  testNeedComputeState(sm, updater, AssetDefs::Canceled);
+  assertStateNotSet(sm, "a");
+}
+
+TEST_F(StateUpdaterTest, ComputeState) {
+  testNeedComputeState(sm, updater, AssetDefs::Queued);
+  assertStateSet(sm, "a");
 }
 
 TEST_F(StateUpdaterTest, NoInputsNoChildren) {
@@ -485,11 +519,11 @@ TEST_F(StateUpdaterTest, ChildDepIsInput) {
   SetListenerInput(sm, "a", "d");
   SetParentChild(sm, "a", "e");
   updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
-  ASSERT_TRUE(GetVersion(sm, "a")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "b")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "c")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "d")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "e")->stateSet);
+  assertStateSet(sm, "a");
+  assertStateSet(sm, "b");
+  assertStateSet(sm, "c");
+  assertStateSet(sm, "d");
+  assertStateSet(sm, "e");
 }
 
 // This tests another corner case where a's input/child is the parent/listener
@@ -505,11 +539,11 @@ TEST_F(StateUpdaterTest, InputIsParent) {
   SetParentChild(sm, "d", "c");
   SetListenerInput(sm, "e", "c");
   updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
-  ASSERT_TRUE(GetVersion(sm, "a")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "b")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "c")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "d")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "e")->stateSet);
+  assertStateSet(sm, "a");
+  assertStateSet(sm, "b");
+  assertStateSet(sm, "c");
+  assertStateSet(sm, "d");
+  assertStateSet(sm, "e");
 }
 
 // This test creates a long chain of parents and dependents and makes sure
@@ -532,15 +566,27 @@ TEST_F(StateUpdaterTest, MultipleLevelsParentsDependents) {
   updater.SetStateForRefAndDependents(fix("e"), AssetDefs::New, [](AssetDefs::State state) {
     return state != NO_CHANGE_STATE;
   });
-  ASSERT_FALSE(GetVersion(sm, "a")->stateSet);
-  ASSERT_FALSE(GetVersion(sm, "b")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "c")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "d")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "e")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "f")->stateSet);
-  ASSERT_TRUE(GetVersion(sm, "g")->stateSet);
-  ASSERT_FALSE(GetVersion(sm, "h")->stateSet);
-  ASSERT_FALSE(GetVersion(sm, "i")->stateSet);
+  assertStateNotSet(sm, "a");
+  assertStateNotSet(sm, "b");
+  assertStateSet(sm, "c");
+  assertStateSet(sm, "d");
+  assertStateSet(sm, "e");
+  assertStateSet(sm, "f");
+  assertStateSet(sm, "g");
+  assertStateNotSet(sm, "h");
+  assertStateNotSet(sm, "i");
+}
+
+// Verify that an assets state doesn't change if its non-child dependent's
+// state changes.
+TEST_F(StateUpdaterTest, NonChildDependent) {
+  const AssetDefs::State NO_CHANGE_STATE = AssetDefs::InProgress;
+  SetVersions(sm, {MockVersion("a"), MockVersion("b")});
+  SetDependent(sm, "a", "b");
+  GetMutableVersion(sm, "a")->state = NO_CHANGE_STATE;
+  updater.SetStateForRefAndDependents(fix("a"), NO_CHANGE_STATE, [](AssetDefs::State) { return true; });
+  assertStateNotSet(sm, "a");
+  assertStateSet(sm, "b");
 }
 
 int main(int argc, char **argv) {
