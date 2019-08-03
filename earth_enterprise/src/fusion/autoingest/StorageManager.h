@@ -95,7 +95,6 @@ class AssetSerializerLocalXML
 template<class AssetType>
 class AssetHandleInterface {
   public:
-    virtual AssetPointerType<AssetType> Load(const std::string &) const = 0;
     virtual bool Valid(const AssetPointerType<AssetType> &) const = 0;
 };
 
