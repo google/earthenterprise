@@ -40,9 +40,6 @@ class StorageManaged {
     StorageManaged() : timestamp(0), filesize(0) {}
 };
 
-template<class AssetType> class AssetHandleInterface;
-
-
 // Handles to items stored in the storage manager must implement the asset
 // handle interface. This is only used for the legacy Get function.
 template<class AssetType>
@@ -278,9 +275,9 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
     std::vector<AssetKey> *saved) {
   notify(NFY_INFO, "Writing %lu %s records", dirtyMap.size(), assetType.c_str());
   typename std::map<AssetKey, PointerType>::iterator entry = dirtyMap.begin();
+  AssetSerializerLocalXML<AssetType> serializer;
   while (entry != dirtyMap.end()) {
     std::string filename = entry->second->XMLFilename() + ".new";
-    AssetSerializerLocalXML<AssetType> serializer;
  
     if (serializer.Save(entry->second, filename)) {
       savetrans.AddNewPath(filename);

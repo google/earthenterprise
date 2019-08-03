@@ -11,19 +11,19 @@ class AssetSerializerLocalXML
 {
   public:
     AssetSerializerLocalXML() {}
-    std::shared_ptr<AssetType> Load(const std::string &boundref)
+    AssetPointerType<AssetType> Load(const std::string &boundref)
     {
       return AssetType::Load(boundref);
     }
 
-    bool Save(std::shared_ptr<AssetType> asset, std::string filename){
+    bool Save(AssetPointerType<AssetType> asset, std::string filename){
       using AssetStorageType = typename AssetType::Base;
       extern void ToElement(DOMElement *elem, const AssetStorageType &self);
 
       std::unique_ptr<GEDocument> doc = CreateEmptyDocument(asset->GetName());
       if (!doc) {
           notify(NFY_WARN,
-                "Unable to create empty document: ${name}AssetVersion");
+                "Unable to create empty document: %s", asset->GetName().c_str());
           return false;
       }
       bool status = false;
