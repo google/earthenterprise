@@ -148,6 +148,8 @@ StorageManager<AssetType>::Get(
   if (entry && !handle->Valid(entry)) entry = PointerType();
   bool updated = false;
 
+  AssetSerializerLocalXML<AssetType> serializer;
+
   // Try to load from XML.
   if (!entry) {
     if (checkFileExistenceFirst) {
@@ -159,7 +161,6 @@ StorageManager<AssetType>::Get(
     }
 
     // Will succeed, generate stub, or throw exception.
-    AssetSerializerLocalXML<AssetType> serializer;
     entry = serializer.Load(key);
     updated = true;
   } else if (check_timestamps) {
@@ -174,7 +175,6 @@ StorageManager<AssetType>::Get(
       cache.Remove(key, false);  // Don't prune, the Add() will.
 
       // Will succeed, generate stub, or throw exception.
-      AssetSerializerLocalXML<AssetType> serializer;
       entry = serializer.Load(key);
       updated = true;
     }
@@ -209,12 +209,14 @@ StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & ref) {
   cache.Find(key, entry);
   bool updated = false;
 
+  AssetSerializerLocalXML<AssetType> serializer;
+
   // Try to load from XML.
   if (!entry) {
     // Avoid throwing exceptions when the file doesn't exist
     if (!khExists(filename)) return PointerType();
     // Will succeed, generate stub, or throw exception.
-    entry = AssetType::Load(key);
+    entry = serializer.Load(key);
     updated = true;
   } else if (check_timestamps) {
     uint64 filesize = 0;
@@ -228,7 +230,7 @@ StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & ref) {
       cache.Remove(key, false);  // Don't prune, the Add() will.
 
       // Will succeed, generate stub, or throw exception.
-      entry = AssetType::Load(key);
+      entry = serializer.Load(key);
       updated = true;
     }
   }
