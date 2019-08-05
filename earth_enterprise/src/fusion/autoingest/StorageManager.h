@@ -30,8 +30,6 @@
 #include "StorageManagerAssetHandle.h"
 #include "AssetSerializer.h"
 
-using AssetKey = SharedString;
-
 // Items stored in the storage manager must inherit from the StorageManaged class
 class StorageManaged {
   public:

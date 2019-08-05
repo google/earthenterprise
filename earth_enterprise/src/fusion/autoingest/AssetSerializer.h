@@ -3,6 +3,7 @@
 
 #include "common/khxml/khxml.h"
 #include "common/khxml/khdom.h"
+#include "autoingest/.idl/storage/AssetDefs.h"
 
 using namespace khxml;
 
