@@ -68,7 +68,7 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
 
   // Note for future development: It would be good to change SerializeConfig to something like
   // GetConfig that would fill out a list of key/value pairs instead of dealing with XML directly
-  virtual void SerializeConfig(DOMElement*) const {
+  virtual void SerializeConfig(khxml::DOMElement*) const {
     assert(false);
   }
 

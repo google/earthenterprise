@@ -5,8 +5,6 @@
 #include "common/khxml/khdom.h"
 #include "autoingest/.idl/storage/AssetDefs.h"
 
-using namespace khxml;
-
 template<class AssetType>
 class AssetSerializerLocalXML
 {
@@ -19,7 +17,7 @@ class AssetSerializerLocalXML
 
     bool Save(AssetPointerType<AssetType> asset, std::string filename){
       using AssetStorageType = typename AssetType::Base;
-      extern void ToElement(DOMElement *elem, const AssetStorageType &self);
+      extern void ToElement(khxml::DOMElement *elem, const AssetStorageType &self);
 
       std::unique_ptr<GEDocument> doc = CreateEmptyDocument(asset->GetName());
       if (!doc) {
@@ -29,7 +27,7 @@ class AssetSerializerLocalXML
       }
       bool status = false;
       try {
-          DOMElement *top = doc->getDocumentElement();
+          khxml::DOMElement *top = doc->getDocumentElement();
           if (top) {
               const AssetStorageType &storage = *asset;
               ToElement(top, storage);
