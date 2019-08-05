@@ -427,7 +427,6 @@ void MercatorRasterProjectAssetImplD::HandleNewRequest(
                                   kMercatorProjectSubtype);
 
 
-  notify(NFY_WARN, "HandleNewRequest: %s %s %s", projname.c_str(), ToString(req.type).c_str(), kMercatorProjectSubtype.c_str());
   if (Find<MutableMercatorRasterProjectAssetD>(projname, req.type, kMercatorProjectSubtype)) {
     throw khException(kh::tr("%1 project %2 already exists")
                       .arg(ToQString(req.type), ToQString(projname)));
@@ -456,7 +455,6 @@ void MercatorRasterProjectAssetImplD::HandleModifyRequest(
 
   // find it and make the change
   MutableMercatorRasterProjectAssetD project;
-  notify(NFY_WARN, "HandleModifyRequest: %s %s %s", req.assetname.c_str(), ToString(req.type).c_str(), kMercatorProjectSubtype.c_str());
   if ((project = Find<MutableMercatorRasterProjectAssetD>(req.assetname, req.type, kMercatorProjectSubtype))) {
     // blow away old insets
     project->config.insets.clear();

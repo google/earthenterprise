@@ -62,7 +62,6 @@ VectorLayerXAssetImplD::HandleEditRequest(const VectorLayerXEditRequest &req)
 
   // Custom FindMake
   // We need to make sure we don't clobber an existing fuid_channel
-  notify(NFY_WARN, "HandleEditRequest: %s %s %s", assetname.c_str(), ToString(AssetDefs::Vector).c_str(), kLayer.c_str());
   MutableVectorLayerXAssetD vectorlayer = Find<MutableVectorLayerXAssetD>(assetname, AssetDefs::Vector, kLayer);
 
   if (vectorlayer) {

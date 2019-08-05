@@ -133,5 +133,4 @@ Asset::Valid(void) const
   }
 }
 
-
 #endif /* __Asset_h */

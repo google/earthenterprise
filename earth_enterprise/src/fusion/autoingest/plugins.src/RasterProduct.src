@@ -247,7 +247,6 @@ RasterProductAssetImplD::HandleImportRequest(
 
   // Modified FindMake to preserve fuid_resource_
   // inputs are empty for now. We'll fill them in below.
-  notify(NFY_WARN, "HandleImportRequest: %s %s %s", assetname.c_str(), ToString(req.type).c_str(), kProductSubtype.c_str());
   MutableRasterProductAssetD asset =
     Find<MutableRasterProductAssetD>(assetname, req.type, kProductSubtype);
 

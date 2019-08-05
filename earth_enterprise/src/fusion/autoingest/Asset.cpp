@@ -44,4 +44,3 @@ void AssetImpl::GetInputFilenames(std::vector<std::string> &out) const {
     AssetVersion(i)->GetOutputFilenames(out);
   }
 }
-

@@ -83,7 +83,6 @@ KMLProjectAssetImplD::HandleEditRequest(const KMLProjectEditRequest &req)
 
   // custom FindMake - modified to set/preserve indexVersion
   KMLProjectConfig projConfig = req.config;
-  notify(NFY_WARN, "HandleEditRequest: %s %s %s", projname.c_str(), ToString(AssetDefs::KML).c_str(), kProjectSubtype.c_str());
   MutableKMLProjectAssetD project = Find<MutableKMLProjectAssetD>(projname, AssetDefs::KML, kProjectSubtype);
   if (project) {
     // We must preserve the indexVersion since the GUI doesn't/can't.
