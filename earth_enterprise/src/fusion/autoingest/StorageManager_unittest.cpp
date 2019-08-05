@@ -23,6 +23,7 @@
 #include <type_traits>
 
 using namespace std;
+using namespace khxml;
 
 const size_t CACHE_SIZE = 5;
 
@@ -86,7 +87,7 @@ class TestItem : public StorageManaged, public TestItemStorage {
   }
 };
 
-void ToElement(xercesc_3_1::DOMElement*, TestItemStorage const&){
+void ToElement(DOMElement*, TestItemStorage const&){
   return;
 }
 
