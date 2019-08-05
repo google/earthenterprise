@@ -61,10 +61,19 @@ class StorageManager : public StorageManagerInterface<AssetType> {
   public:
     using Base = StorageManagerInterface<AssetType>;
     using PointerType = typename Base::PointerType;
+    using SerializerPtr = std::unique_ptr<AssetSerializerInterface<AssetType>>;
 
-    StorageManager(uint cacheSize, bool limitByMemory, uint64 maxMemory, const std::string & type) :
-        cache(cacheSize),
-        assetType(type) { SetCacheMemoryLimit(limitByMemory, maxMemory); }
+    StorageManager(uint cacheSize,
+                   bool limitByMemory,
+                   uint64 maxMemory,
+                   const std::string & type,
+                   SerializerPtr serializer = SerializerPtr(new AssetSerializerLocalXML<AssetType>())) :
+        assetType(type),
+        serializer(std::move(serializer)),
+        cache(cacheSize)
+    {
+      SetCacheMemoryLimit(limitByMemory, maxMemory);
+    }
     ~StorageManager() = default;
 
     inline uint32 CacheSize() const { return cache.size(); }
@@ -91,9 +100,10 @@ class StorageManager : public StorageManagerInterface<AssetType> {
 
     static const bool check_timestamps;
 
+    const std::string assetType;
+    const SerializerPtr serializer;
     CacheType cache;
     std::map<AssetKey, PointerType> dirtyMap;
-    std::string assetType;
 
     StorageManager(const StorageManager &) = delete;
     StorageManager& operator=(const StorageManager &) = delete;
@@ -143,8 +153,6 @@ StorageManager<AssetType>::Get(
   if (entry && !handle->Valid(entry)) entry = PointerType();
   bool updated = false;
 
-  AssetSerializerLocalXML<AssetType> serializer;
-
   // Try to load from XML.
   if (!entry) {
     if (checkFileExistenceFirst) {
@@ -156,7 +164,7 @@ StorageManager<AssetType>::Get(
     }
 
     // Will succeed, generate stub, or throw exception.
-    entry = serializer.Load(key);
+    entry = serializer->Load(key);
     updated = true;
   } else if (check_timestamps) {
     uint64 filesize = 0;
@@ -170,7 +178,7 @@ StorageManager<AssetType>::Get(
       cache.Remove(key, false);  // Don't prune, the Add() will.
 
       // Will succeed, generate stub, or throw exception.
-      entry = serializer.Load(key);
+      entry = serializer->Load(key);
       updated = true;
     }
   }
@@ -204,14 +212,12 @@ StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & ref) {
   cache.Find(key, entry);
   bool updated = false;
 
-  AssetSerializerLocalXML<AssetType> serializer;
-
   // Try to load from XML.
   if (!entry) {
     // Avoid throwing exceptions when the file doesn't exist
     if (!khExists(filename)) return PointerType();
     // Will succeed, generate stub, or throw exception.
-    entry = serializer.Load(key);
+    entry = serializer->Load(key);
     updated = true;
   } else if (check_timestamps) {
     uint64 filesize = 0;
@@ -225,7 +231,7 @@ StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & ref) {
       cache.Remove(key, false);  // Don't prune, the Add() will.
 
       // Will succeed, generate stub, or throw exception.
-      entry = serializer.Load(key);
+      entry = serializer->Load(key);
       updated = true;
     }
   }
@@ -273,11 +279,10 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
     std::vector<AssetKey> *saved) {
   notify(NFY_INFO, "Writing %lu %s records", dirtyMap.size(), assetType.c_str());
   typename std::map<AssetKey, PointerType>::iterator entry = dirtyMap.begin();
-  AssetSerializerLocalXML<AssetType> serializer;
   while (entry != dirtyMap.end()) {
     std::string filename = entry->second->XMLFilename() + ".new";
  
-    if (serializer.Save(entry->second, filename)) {
+    if (serializer->Save(entry->second, filename)) {
       savetrans.AddNewPath(filename);
       if (saved) {
         saved->push_back(entry->first);

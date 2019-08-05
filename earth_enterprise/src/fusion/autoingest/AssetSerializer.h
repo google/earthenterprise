@@ -10,6 +10,7 @@ class AssetSerializerInterface {
   public:
     virtual AssetPointerType<AssetType> Load(const std::string &) = 0;
     virtual bool Save(AssetPointerType<AssetType>, std::string) = 0;
+    virtual ~AssetSerializerInterface() = default;
 };
 
 template<class AssetType>
