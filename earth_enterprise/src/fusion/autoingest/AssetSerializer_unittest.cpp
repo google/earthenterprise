@@ -17,6 +17,51 @@
 #include "AssetSerializer.h"
 
 #include <gtest/gtest.h>
+#include <string>
+
+using namespace std;
+
+class TestItemStorage {};
+
+class TestItem : public TestItemStorage {
+ public:
+  using Base = TestItemStorage;
+  static int nextValue;
+  static string loadFile;
+  int val;
+  TestItem() : val(nextValue++) {}
+  static AssetPointerType<TestItem> Load(const string & filename) {
+    loadFile = filename;
+    return make_shared<TestItem>();
+  }
+  string GetName() const {
+    return "TestItem";
+  }
+  void SerializeConfig(khxml::DOMElement*) const {
+  }
+};
+
+int TestItem::nextValue;
+string TestItem::loadFile;
+
+class AssetSerializerTest : public testing::Test {
+ protected:
+  AssetSerializerLocalXML<TestItem> serializer;
+ public:
+  AssetSerializerTest() {
+    // Reset the static variables in TestItem
+    TestItem::nextValue = 1;
+    TestItem::loadFile = "";
+  }
+};
+
+void ToElement(khxml::DOMElement *, const TestItemStorage &) {}
+
+TEST_F(AssetSerializerTest, Load) {
+  auto item = serializer.Load("myfile");
+  ASSERT_EQ(TestItem::loadFile, "myfile");
+  ASSERT_EQ(item->val, 1);
+}
 
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc,argv);
