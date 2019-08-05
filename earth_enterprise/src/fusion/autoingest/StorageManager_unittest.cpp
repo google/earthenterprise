@@ -23,7 +23,6 @@
 #include <type_traits>
 
 using namespace std;
-using namespace khxml;
 
 const size_t CACHE_SIZE = 5;
 
@@ -48,23 +47,11 @@ class TestItem : public StorageManaged, public TestItemStorage {
   const string XMLFilename() {
     return TestItem::Filename(SharedString());
   }
-  virtual bool Save(const string &filename) {
-    savename = filename;
-    return saveSucceeds;
-  }
 
   std::string GetName() const {
     return "TestItem";
   }
-  
-  // static std::shared_ptr<TestItem> Load(const std::string &boundref){
-  //   return khRefGuardFromNew<TestItem>(new TestItem());
-  // }
-  
-  virtual void SerializeConfig(DOMElement*) const {
-    return;
-  }
-  
+
   // determine amount of memory used by TestItem
   uint64 GetSize() {
     return (GetObjectSize(val)
@@ -82,14 +69,18 @@ class TestItem : public StorageManaged, public TestItemStorage {
   static bool ValidRef(const SharedString & ref) {
     return isValidRef;
   }
-  static typename StorageManager<TestItem>::PointerType Load(const string &) {
-    return std::make_shared<TestItem>();
-  }
 };
 
-void ToElement(DOMElement*, TestItemStorage const&){
-  return;
-}
+class TestSerializer : public AssetSerializerInterface<TestItem> {
+  public:
+    virtual AssetPointerType<TestItem> Load(const std::string &) {
+      return std::make_shared<TestItem>();
+    }
+    virtual bool Save(AssetPointerType<TestItem> asset, std::string filename) {
+      asset->savename = filename;
+      return asset->saveSucceeds;
+    }
+};
 
 int TestItem::nextValue;
 string TestItem::fileName;
@@ -100,9 +91,6 @@ using PointerType = AssetPointerType<TestItem>;
 
 class TestHandle : public AssetHandleInterface<TestItem> {
   public:
-    virtual PointerType Load(const string &) const {
-      return PointerType(std::make_shared<TestItem>());
-    }
     virtual bool Valid(const PointerType &) const { return true; }
     TestHandle(const AssetKey & name) : name(name) {}
     TestHandle() = default;
@@ -125,7 +113,7 @@ class StorageManagerTest : public testing::Test {
  protected:
   StorageManager<TestItem> storageManager;
  public:
-  StorageManagerTest() : storageManager(CACHE_SIZE, false, 0, "test") {
+  StorageManagerTest() : storageManager(CACHE_SIZE, false, 0, "test", unique_ptr<TestSerializer>(new TestSerializer())) {
     // Reset the static variables in TestItem
     TestItem::nextValue = 1;
     TestItem::fileName = "/dev/null"; // A file that exists
