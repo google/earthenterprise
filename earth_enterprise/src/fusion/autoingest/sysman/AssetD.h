@@ -62,17 +62,14 @@ template<class T>
 T Find(const std::string & ref, const AssetDefs::Type & type, const std::string & subtype){
   try {
     Asset asset(ref);
-    notify(NFY_WARN, "New: %s %s %s", ref.c_str(), ToString(asset->type).c_str(), asset->subtype.c_str());
     if (asset &&
         (asset->type == type) &&
         (asset->subtype == subtype)) {
-        notify(NFY_WARN, "New: FOUND");
         return T(SharedString(ref));
     }
   } catch (...) {
       // do nothing - don't even generate any warnings
   }
-  notify(NFY_WARN, "New: EMPTY");
   return T();
 }
 
@@ -84,7 +81,7 @@ T FindVersion(const std::string & ref, const AssetDefs::Type & type, const std::
         if (version &&
             (version->type == type) &&
             (version->subtype == subtype)) {
-            return T(ref);
+            return T(SharedString(ref));
         }
     } catch (...) {
         // do nothing - don't even generate any warnings

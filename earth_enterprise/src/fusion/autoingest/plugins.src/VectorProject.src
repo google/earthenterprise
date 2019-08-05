@@ -193,7 +193,7 @@ VectorProjectAssetImplD::HandleEditRequest(const VectorProjectEditRequest &req)
     if (!layerConfig->IsStreamedLayer())
       continue;
 
-    VectorProductFactory::ValidateRefForInput(layerConfig->assetRef);
+    ValidateRefForInput<MutableVectorProductAssetD>(layerConfig->assetRef, AssetDefs::Vector, kProductSubtype);
   }
 
   // Find/make our target project.
@@ -263,7 +263,7 @@ VectorProjectAssetImplD::HandleNewRequest(const VectorProjectNewRequest &req)
         req.items.begin();
       item != req.items.end(); ++item) {
 
-    VectorProductFactory::ValidateRefForInput(item->productRef);
+    ValidateRefForInput<MutableVectorProductAssetD>(item->productRef, AssetDefs::Vector, kProductSubtype);
   }
 
   // normalize the supplied asset name
@@ -302,7 +302,7 @@ VectorProjectAssetImplD::HandleModifyRequest(const VectorProjectModifyRequest &r
         req.items.begin();
       item != req.items.end(); ++item) {
 
-    VectorProductFactory::ValidateRefForInput(item->productRef);
+    ValidateRefForInput<MutableVectorProductAssetD>(item->productRef, AssetDefs::Vector, kProductSubtype);
   }
 
   // find it and make the change
@@ -331,7 +331,7 @@ VectorProjectAssetImplD::HandleAddToRequest(const VectorProjectModifyRequest &re
         req.items.begin();
       item != req.items.end(); ++item) {
 
-    VectorProductFactory::ValidateRefForInput(item->productRef);
+    ValidateRefForInput<MutableVectorProductAssetD>(item->productRef, AssetDefs::Vector, kProductSubtype);
   }
 
   // find it and make the change
