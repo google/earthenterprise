@@ -22,7 +22,7 @@ Import('env')
 # ***  apps that are NOT installed
 # ****************************************************************************
 env.executable('gefindsrconvol', ['gefindsrconvol.cpp'],
-               LIBS=['geautoingest', 'gecommon', 'gemiscconfig', 'geutil'])
+               LIBS=['geautoingest', 'gecommon', 'gemiscconfig', 'geutil', 'qt-mt'])
 env.executable('gefindfilesonvol', ['gefindfilesonvol.cpp'],
                LIBS=['geautoingest', 'gemiscconfig', 'geutil', 'gecommon', 'qt-mt'])
 

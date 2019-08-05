@@ -45,6 +45,7 @@ protobuf_copy = local_env.Command(
          'rsync -pvr --exclude=SConscript* --exclude=README-HOWTO-upgrade.txt %s/ %s/%s' % (
              protobuf_source, current_dir, protobuf_version),
          'touch %s' % protobuf_target]))])
+NoCache(protobuf_target)
 
 # [2] Build protobuf-py.
 python_cmd = local_env['python_bin']
@@ -56,6 +57,7 @@ protobuf_build = local_env.Command(
         'cd %s\n'
         '%s setup.py compiler "%s"\n'
         'touch %s' % (build_root, python_cmd, gee_protoc, protobuf_target))])
+NoCache(protobuf_target)
 
 # TODO: use setup.py for creating master installer (install
 # into local directory)?
@@ -78,6 +80,7 @@ protobuf_install = local_env.Command(
         'rsync -pvr --exclude=*.proto --exclude=google/__init__.py google %s' % install_root_lib,
         'touch %s/google/__init__.py' % install_root_lib,
         'touch %s' % protobuf_target]))])
+NoCache(protobuf_target)
 
 # [4] Install for build.
 protobuf_target = '%s/.install_for_build' % current_dir
@@ -87,6 +90,7 @@ protobuf_install_build = local_env.Command(
         '%s' % install_root_lib,
         '%s/lib/python%s' % (root_dir, local_env['python_major_version'])),
      Touch('$TARGET')])
+NoCache('$TARGET')
 
 
 Default(protobuf_install_build)
