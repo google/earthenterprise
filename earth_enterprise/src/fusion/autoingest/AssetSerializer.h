@@ -1,6 +1,7 @@
 #ifndef ASSET_SERIALIZER_H
 #define ASSET_SERIALIZER_H
 
+#include "common/khFileUtils.h"
 #include "common/khxml/khxml.h"
 #include "common/khxml/khdom.h"
 #include "autoingest/.idl/storage/AssetDefs.h"

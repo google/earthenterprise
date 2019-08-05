@@ -206,6 +206,10 @@ env.test('AssetDefsExtra_unittest',
          'AssetDefsExtra_unittest.cpp',
          LIBS=['geautoingest', 'gemiscconfig', 'gtest'])
 
+env.test('AssetSerializer_unittest',
+         'AssetSerializer_unittest.cpp',
+          LIBS=['gecommon', 'gexml', 'qt-mt', 'xerces-c', 'gtest'])
+
 env.test('JsUtils_unittest',
          'JsUtils_unittest.cpp',
          LIBS=['geautoingest', 'gemiscconfig', 'gtest'])
