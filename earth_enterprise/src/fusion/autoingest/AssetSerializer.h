@@ -6,7 +6,14 @@
 #include "autoingest/.idl/storage/AssetDefs.h"
 
 template<class AssetType>
-class AssetSerializerLocalXML
+class AssetSerializerInterface {
+  public:
+    virtual AssetPointerType<AssetType> Load(const std::string &) = 0;
+    virtual bool Save(AssetPointerType<AssetType>, std::string) = 0;
+};
+
+template<class AssetType>
+class AssetSerializerLocalXML : public AssetSerializerInterface<AssetType>
 {
   public:
     AssetSerializerLocalXML() {}
