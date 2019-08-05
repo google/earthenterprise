@@ -16,13 +16,12 @@ template<class AssetType>
 class AssetSerializerLocalXML : public AssetSerializerInterface<AssetType>
 {
   public:
-    AssetSerializerLocalXML() {}
-    AssetPointerType<AssetType> Load(const std::string &boundref)
+    virtual AssetPointerType<AssetType> Load(const std::string &boundref)
     {
       return AssetType::Load(boundref);
     }
 
-    bool Save(AssetPointerType<AssetType> asset, std::string filename){
+    virtual bool Save(AssetPointerType<AssetType> asset, std::string filename){
       using AssetStorageType = typename AssetType::Base;
       extern void ToElement(khxml::DOMElement *elem, const AssetStorageType &self);
 
