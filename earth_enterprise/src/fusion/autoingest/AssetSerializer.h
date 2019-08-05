@@ -48,6 +48,12 @@ class AssetSerializerLocalXML : public AssetSerializerInterface<AssetType>
               notify(NFY_WARN, "Unable to create document element %s",
                     filename.c_str());
           }
+      } catch (const khxml::XMLException& toCatch) {
+          notify(NFY_WARN, "Error saving %s: %s",
+                 filename.c_str(), khxml::XMLString::transcode(toCatch.getMessage()));
+      } catch (const khxml::DOMException& toCatch) {
+          notify(NFY_WARN, "Error saving %s: %s",
+                 filename.c_str(), khxml::XMLString::transcode(toCatch.msg));
       } catch (const std::exception &e) {
           notify(NFY_WARN, "%s while saving %s", e.what(), filename.c_str());
       } catch (...) {
