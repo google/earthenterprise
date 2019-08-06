@@ -22,24 +22,29 @@
 using namespace std;
 using namespace khxml;
 
+// This test covers the error conditions in AssetSerializerLocalXML. It does
+// not include test cases for the "happy path" because that involves creating
+// a file, and we don't want to do that in unit tests. We'll cover the happy
+// path plenty of times in integration and other tests.
+
 class TestItemStorage {};
 
 class TestItem : public TestItemStorage {
- public:
-  using Base = TestItemStorage;
-  static int nextValue;
-  static string loadFile;
-  int val;
-  TestItem() : val(nextValue++) {}
-  static AssetPointerType<TestItem> Load(const string & filename) {
-    loadFile = filename;
-    return make_shared<TestItem>();
-  }
-  string GetName() const {
-    return "TestItem";
-  }
-  void SerializeConfig(khxml::DOMElement*) const {
-  }
+  public:
+    using Base = TestItemStorage;
+    static int nextValue;
+    static string loadFile;
+    int val;
+    string name;
+    TestItem() : val(nextValue++), name("TestItem") {}
+    static AssetPointerType<TestItem> Load(const string & filename) {
+      loadFile = filename;
+      return make_shared<TestItem>();
+    }
+    string GetName() const {
+      return name;
+    }
+    void SerializeConfig(khxml::DOMElement*) const {}
 };
 
 int TestItem::nextValue;
@@ -52,8 +57,7 @@ class TestXMLException : public XMLException {
     }
 };
 
-// This function throws various exceptions. Normally the exceptions are not
-// thrown from this function but it tests that the exceptions are handled.
+// We throw various exceptions from this function to test exception handling.
 enum ExceptionType {XML, DOM, STD, OTHER, NONE};
 static ExceptionType exceptionToThrow;
 void ToElement(khxml::DOMElement *, const TestItemStorage &) {
@@ -83,7 +87,6 @@ class AssetSerializerTest : public testing::Test {
   }
 };
 
-
 TEST_F(AssetSerializerTest, Load) {
   auto item = serializer.Load("myfile");
   ASSERT_EQ(TestItem::loadFile, "myfile");
@@ -93,7 +96,7 @@ TEST_F(AssetSerializerTest, Load) {
 void ExceptionTest(AssetSerializerLocalXML<TestItem> & serializer, ExceptionType type) {
   exceptionToThrow = type;
   AssetPointerType<TestItem> item = make_shared<TestItem>();
-  bool status = serializer.Save(item, "filename");
+  bool status = serializer.Save(item, "myitem");
   ASSERT_FALSE(status);
 }
 
@@ -111,6 +114,13 @@ TEST_F(AssetSerializerTest, STDException) {
 
 TEST_F(AssetSerializerTest, OtherException) {
   ExceptionTest(serializer, OTHER);
+}
+
+TEST_F(AssetSerializerTest, BadName) {
+  AssetPointerType<TestItem> item = make_shared<TestItem>();
+  item->name = "<";
+  bool status = serializer.Save(item, "myitem");
+  ASSERT_FALSE(status);
 }
 
 int main(int argc, char **argv) {
