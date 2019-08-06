@@ -20,6 +20,7 @@
 #include <string>
 
 using namespace std;
+using namespace khxml;
 
 class TestItemStorage {};
 
@@ -44,6 +45,32 @@ class TestItem : public TestItemStorage {
 int TestItem::nextValue;
 string TestItem::loadFile;
 
+class TestXMLException : public XMLException {
+  public:
+    virtual const XMLCh * getType () const {
+      return ToXMLStr("");
+    }
+};
+
+// This function throws various exceptions. Normally the exceptions are not
+// thrown from this function but it tests that the exceptions are handled.
+enum ExceptionType {XML, DOM, STD, OTHER, NONE};
+static ExceptionType exceptionToThrow;
+void ToElement(khxml::DOMElement *, const TestItemStorage &) {
+  switch (exceptionToThrow) {
+    case XML:
+      throw TestXMLException();
+    case DOM:
+      throw DOMException();
+    case STD:
+      throw exception();
+    case OTHER:
+      throw "This is a string, not an exception object";
+    case NONE:
+      break;
+  }
+}
+
 class AssetSerializerTest : public testing::Test {
  protected:
   AssetSerializerLocalXML<TestItem> serializer;
@@ -52,15 +79,38 @@ class AssetSerializerTest : public testing::Test {
     // Reset the static variables in TestItem
     TestItem::nextValue = 1;
     TestItem::loadFile = "";
+    exceptionToThrow = NONE;
   }
 };
 
-void ToElement(khxml::DOMElement *, const TestItemStorage &) {}
 
 TEST_F(AssetSerializerTest, Load) {
   auto item = serializer.Load("myfile");
   ASSERT_EQ(TestItem::loadFile, "myfile");
   ASSERT_EQ(item->val, 1);
+}
+
+void ExceptionTest(AssetSerializerLocalXML<TestItem> & serializer, ExceptionType type) {
+  exceptionToThrow = type;
+  AssetPointerType<TestItem> item = make_shared<TestItem>();
+  bool status = serializer.Save(item, "filename");
+  ASSERT_FALSE(status);
+}
+
+TEST_F(AssetSerializerTest, XMLException) {
+  ExceptionTest(serializer, XML);
+}
+
+TEST_F(AssetSerializerTest, DOMException) {
+  ExceptionTest(serializer, DOM);
+}
+
+TEST_F(AssetSerializerTest, STDException) {
+  ExceptionTest(serializer, STD);
+}
+
+TEST_F(AssetSerializerTest, OtherException) {
+  ExceptionTest(serializer, OTHER);
 }
 
 int main(int argc, char **argv) {
