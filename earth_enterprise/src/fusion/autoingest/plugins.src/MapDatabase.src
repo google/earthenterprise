@@ -104,12 +104,12 @@ void MapDatabaseAssetImplD::PopulateInputs(const MapDatabaseConfig &config,
                                            std::vector<SharedString> &inputs)
 {
   if (!config.imageryProject.empty()) {
-    ValidateRefForInput<MutableProjectedMapProjectAssetD>(config.imageryProject, AssetDefs::Imagery, kMapDatabaseSubtype);
+    ValidateRefForInput<MutableProjectedMapProjectAssetD, MutableProjectedMapProjectAssetVersionD>(config.imageryProject, AssetDefs::Imagery, kMapDatabaseSubtype);
 
     inputs.push_back(config.imageryProject);
   }
   if (!config.mapProject.empty()) {
-    ValidateRefForInput<MutableProjectedMapProjectAssetD>(config.mapProject, AssetDefs::Map, kMapDatabaseSubtype);
+    ValidateRefForInput<MutableProjectedMapProjectAssetD, MutableProjectedMapProjectAssetVersionD>(config.mapProject, AssetDefs::Map, kMapDatabaseSubtype);
 
     // make a projected map project for my input
     ProjectedMapProjectConfig proj_config(AssetDefs::FlatProjection);

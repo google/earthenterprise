@@ -87,6 +87,9 @@ class StorageManager : public StorageManagerInterface<AssetType> {
     
     // Pass a handle to a non-const so callers can modify it.
     AssetHandle<AssetType> GetMutable(const AssetKey &);
+
+    //template<class Asset>
+    //static Asset Find(const std::string &, const AssetDefs::Type &, const std::string &);
   private:
     using CacheType = khCache<AssetKey, PointerType>;
 
@@ -284,6 +287,62 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
     }
   }
   return true;
+}
+
+template<class Asset>
+Asset Find(const std::string & ref, const AssetDefs::Type & type, const std::string & subtype)
+{
+  notify(NFY_WARN, "Find: %s\t%s\t%s", ref.c_str(), ToString(type).c_str(), subtype.c_str());
+  try {
+    Asset asset(ref);
+    notify(NFY_WARN, "Find: %s\t%s", ToString(asset->type).c_str(), asset->subtype.c_str());
+    if (asset &&
+        (asset->type == type) &&
+        (asset->subtype == subtype)) {
+        return Asset(SharedString(ref));
+    }
+  } catch (...) {
+      // do nothing - don't even generate any warnings
+  }
+  return Asset();
+}
+
+template<class Version>
+Version FindVersion(const std::string & ref, const AssetDefs::Type & type, const std::string & subtype)
+{
+    notify(NFY_WARN, "Version: %s\t%s\t%s", ref.c_str(), ToString(type).c_str(), subtype.c_str());
+    try {
+        Version version(ref);
+        notify(NFY_WARN, "Version: %s\t%s", ToString(version->type).c_str(), version->subtype.c_str());
+        if (version &&
+            (version->type == type) &&
+            (version->subtype == subtype)) {
+            return Version(SharedString(ref));
+        }
+    } catch (...) {
+        // do nothing - don't even generate any warnings
+    }
+    return Version();
+}
+
+template<class Asset, class Version>
+void ValidateRefForInput(const std::string & ref, const AssetDefs::Type & type, const std::string & subtype)
+{
+    notify(NFY_WARN, "Validate: %s\t%s\t%s", ref.c_str(), ToString(type).c_str(), subtype.c_str());
+    if (AssetVersionRef(ref).Version() == "current") {
+        Asset asset = Find<Asset>(ref, type, subtype);
+        if (!asset) {
+            throw std::invalid_argument(
+                "No such " + ToString(type) + " " + subtype + " asset: " + ref);
+        }
+    } else {
+        Version version = FindVersion<Version>(ref, type, subtype);
+        if (!version) {
+            throw std::invalid_argument(
+                "No such " + ToString(type) + " " + subtype + " asset version: " +
+                ref);
+        }
+    }
 }
 
 #endif // STORAGEMANAGER_H
