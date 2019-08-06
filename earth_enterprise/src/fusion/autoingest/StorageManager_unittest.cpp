@@ -43,6 +43,7 @@ class TestItem : public StorageManaged, public TestItemStorage {
   const int val;
   AssetDefs::Type type;
   string savename;
+  string loadname;
   bool saveSucceeds;
   TestItem() : val(nextValue++), type(AssetDefs::Imagery), saveSucceeds(true) {}
   const string XMLFilename() {
@@ -74,8 +75,10 @@ class TestItem : public StorageManaged, public TestItemStorage {
 
 class TestSerializer : public AssetSerializerInterface<TestItem> {
   public:
-    virtual AssetPointerType<TestItem> Load(const std::string &) {
-      return std::make_shared<TestItem>();
+    virtual AssetPointerType<TestItem> Load(const std::string & filename) {
+      auto asset = std::make_shared<TestItem>();
+      asset->loadname = filename;
+      return asset;
     }
     virtual bool Save(AssetPointerType<TestItem> asset, std::string filename) {
       asset->savename = filename;
@@ -138,6 +141,7 @@ TEST_F(StorageManagerTest, AddAndRetrieveLegacy) {
   ASSERT_EQ(first.handle->val, startValue) << "First item has unexpected value";
   ASSERT_EQ(second.handle->val, startValue + 1) << "Second item has unexpected value";
   ASSERT_EQ(third.handle->val, startValue + 2) << "Third item has unexpected value";
+  ASSERT_EQ(first.handle->loadname, "first") << "Asset loaded from wrong file";
   
   // Retrieve one of the items
   TestHandle second2 = Get<TestHandle>(storageManager, "second", false, true, false);
@@ -325,10 +329,7 @@ TEST_F(StorageManagerTest, SaveDirtyLegacy) {
   ASSERT_EQ(trans.NumNew(), 2) << "Wrong number of new items in file transaction";
   ASSERT_EQ(trans.NumDeleted(), 0) << "Wrong number of deleted items in file transaction";
   ASSERT_EQ(handles[0].handle->savename, string()) << "Non-dirty files should not be saved";
-  ASSERT_NE(handles[4].handle->savename, string()) << "Dirty files should be saved";
-  string savename = handles[4].handle->savename;
-  string ext = ".new";
-  ASSERT_TRUE(equal(ext.rbegin(), ext.rend(), savename.rbegin())) << "Saved file name must end in .new";
+  ASSERT_EQ(handles[4].handle->savename, "/dev/null.new") << "Asset saved to wrong file";
 }
 
 TEST_F(StorageManagerTest, SaveDirtyToVectorLegacy) {
@@ -371,7 +372,8 @@ TEST_F(StorageManagerTest, AddAndRetrieve) {
   ASSERT_EQ(first->val, startValue) << "First item has unexpected value";
   ASSERT_EQ(second->val, startValue + 1) << "Second item has unexpected value";
   ASSERT_EQ(third->val, startValue + 2) << "Third item has unexpected value";
-  
+  ASSERT_EQ(first->loadname, "first") << "Asset loaded from wrong file";
+
   // Retrieve one of the items
   auto second2 = storageManager.Get("second");
   ASSERT_EQ(storageManager.CacheSize(), 3) << "Storage manager has wrong number of items in cache";
@@ -536,10 +538,7 @@ TEST_F(StorageManagerTest, SaveDirty) {
   ASSERT_EQ(trans.NumNew(), 2) << "Wrong number of new items in file transaction";
   ASSERT_EQ(trans.NumDeleted(), 0) << "Wrong number of deleted items in file transaction";
   ASSERT_EQ(handles[0]->savename, string()) << "Non-dirty files should not be saved";
-  ASSERT_NE(mutHandles[1]->savename, string()) << "Dirty files should be saved";
-  string savename = mutHandles[1]->savename;
-  string ext = ".new";
-  ASSERT_TRUE(equal(ext.rbegin(), ext.rend(), savename.rbegin())) << "Saved file name must end in .new";
+  ASSERT_EQ(mutHandles[1]->savename, "/dev/null.new") << "Asset saved to wrong file";
 }
 
 TEST_F(StorageManagerTest, SaveDirtyToVector) {
