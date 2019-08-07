@@ -291,12 +291,6 @@ print $fh <<EOF;
 class ${name}Factory
 {
 public:
-    static ${name}AssetD Find(const std::string &ref_ $formaltypearg);
-
-    static ${name}AssetVersionD FindVersion(const std::string &ref_ $formaltypearg);
-
-    static void ValidateRefForInput(const std::string &ref $formaltypearg);
-
     static std::string
     SubAssetName(const std::string &parentAssetRef
                  $formaltypearg,

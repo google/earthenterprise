@@ -450,7 +450,7 @@ void MercatorRasterProjectAssetImplD::HandleModifyRequest(
   for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
          req.items.begin();
        item != req.items.end(); ++item) {
-    ValidateRefForInput<MutableMercatorRasterProductAssetD, MutableMercatorRasterProductAssetD>(item->dataAsset, req.type, kMercatorProductSubtype);
+    ValidateRefForInput<MutableMercatorRasterProductAssetD, MutableMercatorRasterProductAssetVersionD>(item->dataAsset, req.type, kMercatorProductSubtype);
   }
 
   // find it and make the change

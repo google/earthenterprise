@@ -50,8 +50,7 @@ VectorLayerXAssetImplD::HandleEditRequest(const VectorLayerXEditRequest &req)
 {
   // Validate our input (Make sure it's a VectorProduct)
   // make sure the vprod asset_ref is valid
-  //VectorProductFactory::ValidateRefForInput(req.config.vectorResource);
-  ValidateRefForInput<MutableVectorLayerXAssetD, MutableVectorLayerXAssetVersionD>(req.config.vectorResource, AssetDefs::Vector, kLayer);
+  ValidateRefForInput<MutableVectorProductAssetD, MutableVectorProductAssetVersionD>(req.config.vectorResource, AssetDefs::Vector, kProductSubtype);
   std::vector<SharedString> productrefs;
   productrefs.push_back(req.config.vectorResource);
 

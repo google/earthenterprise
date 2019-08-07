@@ -87,9 +87,6 @@ class StorageManager : public StorageManagerInterface<AssetType> {
     
     // Pass a handle to a non-const so callers can modify it.
     AssetHandle<AssetType> GetMutable(const AssetKey &);
-
-    //template<class Asset>
-    //static Asset Find(const std::string &, const AssetDefs::Type &, const std::string &);
   private:
     using CacheType = khCache<AssetKey, PointerType>;
 
@@ -299,7 +296,7 @@ Asset Find(const std::string & ref, const AssetDefs::Type & type, const std::str
     if (asset &&
         (asset->type == type) &&
         (asset->subtype == subtype)) {
-        return Asset(SharedString(ref));
+        return Asset(ref);
     }
   } catch (...) {
       // do nothing - don't even generate any warnings
@@ -317,7 +314,7 @@ Version FindVersion(const std::string & ref, const AssetDefs::Type & type, const
         if (version &&
             (version->type == type) &&
             (version->subtype == subtype)) {
-            return Version(SharedString(ref));
+            return Version(ref);
         }
     } catch (...) {
         // do nothing - don't even generate any warnings

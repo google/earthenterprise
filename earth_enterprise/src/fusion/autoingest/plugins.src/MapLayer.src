@@ -73,9 +73,7 @@ MapLayerAssetImplD::HandleEditRequest(const MapLayerEditRequest &req)
   std::vector<SharedString> productrefs;
   productrefs.reserve(req.config.subLayers.size());
   for (uint s = 0; s < req.config.subLayers.size(); ++s) {
-    //VectorProductFactory::ValidateRefForInput
-    //  (req.config.subLayers[s].asset_ref);
-    ValidateRefForInput<MutableMapLayerAssetD, MutableMapLayerAssetVersionD>(req.config.subLayers[s].asset_ref, AssetDefs::Map, kLayer);
+    ValidateRefForInput<MutableVectorProductAssetD, MutableVectorProductAssetVersionD>(req.config.subLayers[s].asset_ref, AssetDefs::Vector, kProductSubtype);
     productrefs.push_back(req.config.subLayers[s].asset_ref);
   }
 
