@@ -9,6 +9,6 @@ diff -uNr httpd-2.2.27.orig/docs/conf/extra/httpd-ssl.conf.in httpd-2.2.27/docs/
 +Include conf.d/virtual_servers/fdb.location
 +
 +# Include all SSL location-based virtual servers.
-+Include conf.d/virtual_servers/*.location_ssl
++#Include conf.d/virtual_servers/*.location_ssl
 +
  </VirtualHost>                                  
