@@ -18,6 +18,7 @@
 #define GEO_EARTH_ENTERPRISE_SRC_FUSION_AUTOINGEST_ASSETHANDLE_H_
 
 #include <string>
+#include "common/khRefCounter.h"
 #include "common/khTypes.h"
 #include "common/SharedString.h"
 #include "StorageManager.h"
@@ -37,22 +38,18 @@ class AssetVersionRef;
  ***
  ***  typedef AssetHandle_<AssetImpl> Asset;
  ***  typedef AssetHandle_<AssetVersionImpl> AssetVersion;
- *** 
- ***  IMPORTANT NOTE: The AssetHandle_ class is now considered legacy code.
- ***  New code should call Get or GetMutable on the storage manager directly,
- ***  which will return a new AssetHandle object. This class will eventually
- ***  go away.
  ******************************************************************************/
 template <class Impl_>
 class AssetHandle_ : public AssetHandleInterface<Impl_> {
   friend class Impl;
  public:
   typedef Impl_ Impl;
-  using HandleType = typename StorageManager<Impl>::PointerType;
-
-  static inline StorageManager<Impl> & storageManager();
+  using HandleType = typename StorageManager<Impl>::HandleType;
+  struct undefined_type; // never defined.  Just used for bool operations
 
  protected:
+  static inline StorageManager<Impl> & storageManager();
+
   inline void DoBind(
       bool checkFileExistenceFirst,
       bool addToCache) const {
@@ -113,7 +110,13 @@ class AssetHandle_ : public AssetHandleInterface<Impl_> {
   virtual ~AssetHandle_(void) { }
   const SharedString & Ref(void) const { return ref; }
   bool Valid(void) const;
-  explicit operator bool(void) const { return Valid(); }
+  // This is better than overloading the bool operator as it
+  // more closely emulates what a pointer's boolean operations does.
+  // For example you can't pass the class as a bool parameter but you
+  // can still do other things like use it in an if statement.
+  // NOTE: in C++11 we can use explicit to get same benefit without this trick
+  // see: http://en.cppreference.com/w/cpp/language/explicit
+  operator undefined_type *(void) const { return Valid()?reinterpret_cast<undefined_type *>(1):nullptr; }
   const Impl* operator->(void) const {
     Bind();
     return handle.operator->();

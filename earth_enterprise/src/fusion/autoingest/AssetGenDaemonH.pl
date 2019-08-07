@@ -57,22 +57,17 @@ ReadSrcFile($srcfile, \%config);
 my %extra;
 my ($template);
 $template = "";
-my $templateName="ProductAssetVersion";
-
-
 if ($base eq 'Composite') {
     if ($singleFormalExtraUpdateArg) {
-      $template = "    template <typename $templateName>";
+      $template = "    template <typename ProductAssetVersion>";
       $singleFormalExtraUpdateArg =~
-        s/ExtraUpdateArg/ExtraUpdateArg\<$templateName\>/;
+	s/ExtraUpdateArg/ExtraUpdateArg\<ProductAssetVersion\>/;
       $formalExtraUpdateArg =~
-        s/ExtraUpdateArg/ExtraUpdateArg\<$templateName\>/;
+	s/ExtraUpdateArg/ExtraUpdateArg\<ProductAssetVersion\>/;
     }
-
     $extra{"${name}AssetVersionImplD"} =
-        $template 
-        . "    void UpdateChildren($singleFormalExtraUpdateArg);\n";
-
+        $template .
+	"    void UpdateChildren($singleFormalExtraUpdateArg);\n";
 } else {
     $extra{"${name}AssetVersionImplD"} =
 	"    virtual void DoSubmitTask(void);\n";
@@ -104,7 +99,7 @@ print $fh <<EOF;
 
 #include <$header>
 #include <sysman/AssetD.h>
-#include <memory>
+
 
 // ****************************************************************************
 // ***  Supplied from ${name}.src
@@ -207,7 +202,7 @@ protected:
     $template
     ${name}AssetVersionD MyUpdate(bool &needed
                                   $formalcachedinputarg
-                                  $formalExtraUpdateArg) const;
+				  $formalExtraUpdateArg) const;
 
     ${name}AssetImplD(const std::string &ref_ $formaltypearg,
 		$formalinputarg
@@ -332,7 +327,7 @@ public:
 		      const khMetaData &meta_,
 		      const $config& config_
 		      $formalcachedinputarg
-                      $formalExtraUpdateArg);
+		      $formalExtraUpdateArg);
 
     $template
     static Mutable${name}AssetVersionD
@@ -346,10 +341,7 @@ public:
 			      $formalExtraUpdateArg);
 EOF
 
-
-
 if ($withreuse) {
-
     print $fh <<EOF;
     $template
     static Mutable${name}AssetVersionD
@@ -358,7 +350,7 @@ if ($withreuse) {
 			 const khMetaData &meta_,
 			 const $config& config_
 			 $formalcachedinputarg
-                         $formalExtraUpdateArg);
+			 $formalExtraUpdateArg);
 
     $template
     static Mutable${name}AssetVersionD

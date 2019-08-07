@@ -55,14 +55,13 @@ my $haspostupdate = $config{"${name}AssetImplD"} =~ /PostUpdate\(void\)/;
 
 my ($template);
 $template = "";
-my $templateName="ProductAssetVersion";
 if ($base eq 'Composite') {
     if ($singleFormalExtraUpdateArg) {
-      $template = "template <typename $templateName>";
+      $template = "template <typename ProductAssetVersion>";
       $singleFormalExtraUpdateArg =~
-        s/ExtraUpdateArg/ExtraUpdateArg\<$templateName\>/;
+        s/ExtraUpdateArg/ExtraUpdateArg\<ProductAssetVersion\>/;
       $formalExtraUpdateArg =~
-        s/ExtraUpdateArg/ExtraUpdateArg\<$templateName\>/;
+        s/ExtraUpdateArg/ExtraUpdateArg\<ProductAssetVersion\>/;
     }
 }
 
@@ -275,9 +274,7 @@ ${name}Factory::FindMakeAndUpdateSubAsset(
 }
 EOF
 
-
 if ($withreuse) {
-
     print $fh <<EOF;
 
 $template
@@ -301,9 +298,11 @@ ${name}Factory::ReuseOrMakeAndUpdate(
 
     Mutable${name}AssetD asset = Find(ref_ $forwardtypearg);
     if (asset) {
-        for (const auto& v : asset->versions) {
+	for (AssetStorage::VersionList::const_iterator v
+                = asset->versions.begin();
+             v != asset->versions.end(); ++v) {
             try {
-              ${name}AssetVersionD version(v);
+              ${name}AssetVersionD version(*v);
               // Load an asset version without caching since we may not need it
               // (offline, obsolete and so on).
               version.LoadAsTemporary();

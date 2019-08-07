@@ -22,14 +22,12 @@
 #include <string>
 #include <time.h>
 #include <vector>
-
+#include <memory>
 #include "common/khCache.h"
 #include "common/khFileUtils.h"
+#include "common/khRefCounter.h"
 #include "common/notify.h"
 #include "common/SharedString.h"
-#include "StorageManagerAssetHandle.h"
-
-using AssetKey = SharedString;
 
 // Items stored in the storage manager must inherit from the StorageManaged class
 class StorageManaged {
@@ -39,69 +37,53 @@ class StorageManaged {
     StorageManaged() : timestamp(0), filesize(0) {}
 };
 
-// Handles to items stored in the storage manager must implement the asset
-// handle interface. This is only used for the legacy Get function.
-template<class AssetType>
-class AssetHandleInterface {
-  public:
-    virtual AssetPointerType<AssetType> Load(const std::string &) const = 0;
-    virtual bool Valid(const AssetPointerType<AssetType> &) const = 0;
-};
-
+template<class AssetType> class AssetHandleInterface;
 
 template<class AssetType>
-class StorageManagerInterface {
+class StorageManager
+{
   public:
-    using PointerType = AssetPointerType<AssetType>;
-    virtual AssetHandle<const AssetType> Get(const AssetKey &) = 0;
-    virtual AssetHandle<AssetType> GetMutable(const AssetKey &) = 0;
-    virtual ~StorageManagerInterface() {}
-};
-
-template<class AssetType>
-class StorageManager : public StorageManagerInterface<AssetType> {
-  public:
-    using Base = StorageManagerInterface<AssetType>;
-    using PointerType = typename Base::PointerType;
+    using HandleType = std::shared_ptr<AssetType>;
+    using AssetKey = SharedString;
 
     StorageManager(uint cacheSize, bool limitByMemory, uint64 maxMemory, const std::string & type) :
         cache(cacheSize),
         assetType(type) { SetCacheMemoryLimit(limitByMemory, maxMemory); }
     ~StorageManager() = default;
 
-    inline uint32 CacheSize() const { return cache.size(); }
-    inline uint32 CacheCapacity() const { return cache.capacity(); }
-    inline uint32 DirtySize() const { return dirtyMap.size(); }
-    inline uint64 CacheMemoryUse() const { return cache.getMemoryUse(); }
-    inline void SetCacheMemoryLimit(bool limitByMemory, uint64 maxMemory) { cache.setCacheMemoryLimit(limitByMemory, maxMemory); }
-    inline void UpdateCacheItemSize(const AssetKey & key) { cache.updateCacheItemSize(key); }
-    inline uint64 GetCacheItemSize(const AssetKey & key) { return cache.getCacheItemSize(key); }
-    inline void AddNew(const AssetKey &, const PointerType &);
-    inline void AddExisting(const AssetKey &, const PointerType &);
+    inline uint32 CacheSize() const;
+    inline uint32 CacheCapacity() const;
+    inline uint32 DirtySize() const;
+    inline uint64 CacheMemoryUse() const;
+    inline void SetCacheMemoryLimit(const bool & limitByMemory, const uint64 & maxMemory);
+    inline void UpdateCacheItemSize(const AssetKey & key);
+    inline uint64 GetCacheItemSize(const AssetKey & key);
+    inline void AddNew(const AssetKey &, const HandleType &);
+    inline void AddExisting(const AssetKey &, const HandleType &);
     inline void NoLongerNeeded(const AssetKey &, bool = true);
     void Abort();
-    bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<AssetKey> *);
-    PointerType Get(const AssetHandleInterface<AssetType> *, const AssetKey &, bool, bool, bool);
-    
-    // Pass a handle to a const to prevent callers from modifying it.
-    AssetHandle<const AssetType> Get(const AssetKey &);
-    
-    // Pass a handle to a non-const so callers can modify it.
-    AssetHandle<AssetType> GetMutable(const AssetKey &);
+    bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<SharedString> *);
+    HandleType Get(const AssetHandleInterface<AssetType> *, const SharedString &, bool, bool, bool);
   private:
-    using CacheType = khCache<AssetKey, PointerType>;
+    using CacheType = khCache<AssetKey, HandleType>;
 
     static const bool check_timestamps;
 
     mutable std::recursive_mutex storageMutex;
     CacheType cache;
-    std::map<AssetKey, PointerType> dirtyMap;
+    std::map<AssetKey, HandleType> dirtyMap;
     std::string assetType;
 
     StorageManager(const StorageManager &) = delete;
     StorageManager& operator=(const StorageManager &) = delete;
-    
-    PointerType GetEntryFromCacheOrDisk(const AssetKey &);
+};
+
+// Handles to items stored in the storage manager must implement the asset handle interface
+template<class AssetType>
+class AssetHandleInterface {
+  public:
+    virtual typename StorageManager<AssetType>::HandleType Load(const std::string &) const = 0;
+    virtual bool Valid(const typename StorageManager<AssetType>::HandleType &) const = 0;
 };
 
 template<class AssetType>
@@ -169,16 +151,11 @@ StorageManager<AssetType>::NoLongerNeeded(const AssetKey & key, bool prune) {
   cache.Remove(key, prune);
 }
 
-// This is the "legacy" Get function used by the AssetHandle_ class (see
-// AssetHandle.h). New code should use the other Get function or the
-// GetMutable function as appropriate, which return AssetHandle objects,
-// which are defined in StorageManagerAssetHandle.h. Evetually this function
-// should go away.
 template<class AssetType>
-typename StorageManager<AssetType>::PointerType
+typename StorageManager<AssetType>::HandleType
 StorageManager<AssetType>::Get(
     const AssetHandleInterface<AssetType> * handle,
-    const AssetKey & ref,
+    const SharedString & ref,
     bool checkFileExistenceFirst,
     bool addToCache,
     bool makeMutable) {
@@ -188,9 +165,9 @@ StorageManager<AssetType>::Get(
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
 
   // Check in cache.
-  PointerType entry;
+  HandleType entry;
   cache.Find(key, entry);
-  if (entry && !handle->Valid(entry)) entry = PointerType();
+  if (entry && !handle->Valid(entry)) entry = HandleType();
   bool updated = false;
 
   // Try to load from XML.
@@ -199,7 +176,7 @@ StorageManager<AssetType>::Get(
       if (!khExists(filename)) {
         // In this case DoBind is allowed not to throw even if
         // we configured to normally throw.
-        return PointerType();
+        return HandleType();
       }
     }
 
@@ -238,74 +215,10 @@ StorageManager<AssetType>::Get(
 }
 
 template<class AssetType>
-typename StorageManager<AssetType>::PointerType
-StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & ref) {
-  AssetKey key = AssetType::Key(ref);
-
-  // Deal quickly with an invalid key
-  if (!AssetType::ValidRef(key)) return PointerType();
-
-  const std::string filename = AssetType::Filename(key);
-
-  // Check in cache.
-  PointerType entry;
-  cache.Find(key, entry);
-  bool updated = false;
-
-  // Try to load from XML.
-  if (!entry) {
-    // Avoid throwing exceptions when the file doesn't exist
-    if (!khExists(filename)) return PointerType();
-    // Will succeed, generate stub, or throw exception.
-    entry = AssetType::Load(key);
-    updated = true;
-  } else if (check_timestamps) {
-    uint64 filesize = 0;
-    time_t timestamp = 0;
-    if (khGetFileInfo(filename, filesize, timestamp) &&
-        ((timestamp != entry->timestamp) ||
-         (filesize != entry->filesize))) {
-      // The file has changed on disk.
-
-      // Drop the current entry from the cache.
-      cache.Remove(key, false);  // Don't prune, the Add() will.
-
-      // Will succeed, generate stub, or throw exception.
-      entry = AssetType::Load(key);
-      updated = true;
-    }
-  }
-
-  if (entry && updated) {
-    // Add it to the cache.
-    cache.Add(key, entry);
-  }
-
-  return entry;
-}
-
-template<class AssetType>
-AssetHandle<const AssetType> StorageManager<AssetType>::Get(const AssetKey & ref) {
-  PointerType entry = GetEntryFromCacheOrDisk(ref);
-  return AssetHandle<const AssetType>(std::shared_ptr<const AssetType>(entry), nullptr);
-}
-
-template<class AssetType>
-AssetHandle<AssetType> StorageManager<AssetType>::GetMutable(const AssetKey & ref) {
-  PointerType entry = GetEntryFromCacheOrDisk(ref);
-  // Add it to the dirty map. If it's already in the dirty map the existing
-  // one will win; that's OK.
-  dirtyMap.emplace(ref, entry);
-  return AssetHandle<AssetType>(entry, [=]() {
-    UpdateCacheItemSize(AssetType::Key(ref));
-  });
-}
-
-template<class AssetType>
 void StorageManager<AssetType>::Abort() {
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
   // remove all the dirty Impls from the cache
-  for (const std::pair<AssetKey, PointerType> & entry : dirtyMap) {
+  for (const std::pair<AssetKey, HandleType> & entry : dirtyMap) {
     cache.Remove(entry.first, false); // false -> don't prune
   }
   cache.Prune();  // prune at the end to avoid possible prune thrashing
@@ -317,7 +230,7 @@ void StorageManager<AssetType>::Abort() {
 template<class AssetType>
 bool StorageManager<AssetType>::SaveDirtyToDotNew(
     khFilesTransaction &savetrans,
-    std::vector<AssetKey> *saved) {
+    std::vector<SharedString> *saved) {
   notify(NFY_INFO, "Writing %lu %s records", dirtyMap.size(), assetType.c_str());
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
   typename std::map<AssetKey, HandleType>::iterator entry = dirtyMap.begin();
