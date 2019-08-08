@@ -39,6 +39,7 @@ class khInsetCoverage {
   inline uint beginLevel(void) const { return beginLevel_; }
   inline uint endLevel(void)   const { return endLevel_; }
   inline uint numLevels(void)  const { return endLevel() - beginLevel(); }
+  inline uint numVLvls(void)  const { return vec0Level; }
   inline bool hasLevel(uint lev) const {
     return ((lev >= beginLevel()) && (lev < endLevel()));
   }
