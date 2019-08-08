@@ -36,7 +36,6 @@ class MiscConfigStorage {
   bool        GenerateProductPreviews = true;
   uint        MutexTimedWaitSec = uint(30);
   uint        PackGenThreads = uint(1);
-  
   bool        GraphOperations = false;
 
 #pragma LoadAndSave

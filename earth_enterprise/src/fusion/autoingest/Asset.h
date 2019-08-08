@@ -22,7 +22,6 @@
 #include <khFileUtils.h>
 #include "MiscConfig.h"
 #include "StorageManager.h"
-#include "khMTTypes.h"
 #include "CacheSizeCalculations.h"
 
 /******************************************************************************
@@ -38,7 +37,7 @@
  ***  ... = asset->config.layers.size();
  ***
  ******************************************************************************/
-class AssetImpl : public khMTRefCounter, public AssetStorage, public StorageManaged {
+class AssetImpl : public AssetStorage, public StorageManaged {
   friend class AssetHandle_<AssetImpl>;
 
   // Illegal to copy an AssetImpl
@@ -95,6 +94,9 @@ class AssetImpl : public khMTRefCounter, public AssetStorage, public StorageMana
   static SharedString Key(const SharedString & ref) {
     return ref;
   }
+  static bool ValidRef(const SharedString & ref) {
+    return !ref.empty();
+  }
 };
 
 // ****************************************************************************
@@ -118,8 +120,8 @@ Asset::Valid(void) const
   if (handle) {
     return handle->type != AssetDefs::Invalid;
   } else {
-    // deal quickly with an empty ref
-    if (ref.empty())
+
+    if (!AssetImpl::ValidRef(ref))
       return false;
 
     try {

@@ -24,7 +24,6 @@
 #include "fusion/autoingest/MiscConfig.h"
 #include "common/khFileUtils.h"
 #include "StorageManager.h"
-#include "khMTTypes.h"
 #include "CacheSizeCalculations.h"
 
 /******************************************************************************
@@ -41,7 +40,7 @@
  ***     ... = ver->config.layers.size();
  ***  }
  ******************************************************************************/
-class AssetVersionImpl : public khMTRefCounter, public AssetVersionStorage, public StorageManaged {
+class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   friend class AssetImpl;
   friend class AssetHandle_<AssetVersionImpl>;
 
@@ -181,6 +180,18 @@ class AssetVersionImpl : public khMTRefCounter, public AssetVersionStorage, publ
   static std::string Key(const SharedString & ref) {
     return AssetVersionRef::Bind(ref);
   }
+  static bool ValidRef(const SharedString & ref) {
+    if (ref.empty())
+      return false;
+
+    // bind the ref
+    SharedString boundRef = AssetVersionRef::Bind(ref);
+    AssetVersionRef boundVerRef(boundRef);
+
+    if (boundVerRef.Version() == "0")
+      return false;
+    return true;
+  }
 
   // Gets the database path, type and ref string for the given dbname.
   // This is useful for distinguishing specific types of databases and
@@ -252,16 +263,8 @@ inline bool AssetVersion::Valid(void) const {
   if (handle) {
     return handle->type != AssetDefs::Invalid;
   } else {
-    // deal quickly with an empty ref
-    if (ref.empty())
-      return false;
 
-    // bind the ref
-    SharedString boundRef = AssetVersionRef::Bind(ref);
-    AssetVersionRef boundVerRef(boundRef);
-
-    // deal quickly with an invalid version
-    if (boundVerRef.Version() == "0")
+    if (!AssetVersionImpl::ValidRef(ref))
       return false;
 
     try {

@@ -22,8 +22,10 @@
 #include <list>
 #include <map>
 
+#include "AssetVersion.h"
 #include "autoingest/.idl/storage/AssetDefs.h"
 #include "common/SharedString.h"
+#include "StorageManager.h"
 
 // This class efficiently updates the states of lots of asset versions at
 // the same time. The idea is that you create a state updater, use it to
@@ -59,6 +61,7 @@ class StateUpdater
     friend struct boost::property_map<TreeType, boost::vertex_index_t>;
     class UpdateStateVisitor;
 
+    StorageManagerInterface<AssetVersionImpl> * const storageManager;
     TreeType tree;
 
     inline bool IsDependent(DependencyType type) { return type == DEPENDENT || type == DEPENDENT_AND_CHILD; }
@@ -86,7 +89,7 @@ class StateUpdater
         AssetDefs::State newState,
         bool sendNotifications);
   public:
-    StateUpdater() = default;
+    StateUpdater(StorageManagerInterface<AssetVersionImpl> * sm = &AssetVersion::storageManager()) : storageManager(sm) {}
     void SetStateForRefAndDependents(
         const SharedString & ref,
         AssetDefs::State newState,

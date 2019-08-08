@@ -941,19 +941,14 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
     // Determine which insets (0 .. i) intersect this coverage area.
     std::vector<uint> neededIndexes;
     neededIndexes.reserve(i);
-    if (type == AssetDefs::Imagery) {
-      FindNeededImageryInsets(genInfo[i].coverage,
-                              insetInfoPtrs, i,
-                              neededIndexes,
-                              beginMinifyLevel,
-                              endMinifyLevel);
-    } else {
-      FindNeededTerrainInsets(genInfo[i].coverage,
-                              insetInfoPtrs, i,
-                              neededIndexes,
-                              beginMinifyLevel,
-                              endMinifyLevel);
-    }
+
+    overlapEnvelope<MercatorRasterProductAssetVersion> env (
+        type, insetInfoPtrs, i,
+        beginMinifyLevel, endMinifyLevel, i);
+
+    std::shared_ptr<OverlapCalculator<MercatorRasterProductAssetVersion>> calc =
+        std::make_shared<OverlapCalculator<MercatorRasterProductAssetVersion>>(env);
+    neededIndexes = std::move(calc->PreprocessForInset(genInfo[i].coverage));
     neededIndexes.push_back(i); // each inset always intersects itself
 
 
@@ -973,10 +968,9 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
       genInfo[i].beginSkipTransparentLevel;
     packetGenConfig.useOpaqueTopInsetInsteadOfMerge = true;
     packetGenConfig.insets.reserve(neededIndexes.size());
-    for (std::vector<uint>::const_iterator idx = neededIndexes.begin();
-         idx != neededIndexes.end(); ++idx) {
 
-      const PacketGenInfo &otherGenInfo(genInfo[*idx]);
+    for (const auto& idx : neededIndexes) {
+      const PacketGenInfo &otherGenInfo(genInfo[idx]);
 
       // +1 below since we minify from the next level
       bool otherWillContribToMinify =
@@ -995,7 +989,7 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
 
       packetGenConfig.insets.push_back
         (PacketGenConfig::Inset
-         (inset_infos[*idx].combinedrp_.Ref(),
+         (inset_infos[idx].combinedrp_.Ref(),
           packgenVerRef));
     }
 
@@ -1003,19 +997,19 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
     PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion> extraArg;
     extraArg.insetInfo.reserve(neededIndexes.size());
     extraArg.genInfo.reserve(neededIndexes.size());
-    for (std::vector<uint>::const_iterator idx = neededIndexes.begin();
-         idx != neededIndexes.end(); ++idx) {
-      extraArg.insetInfo.push_back(&inset_infos[*idx]);
-      extraArg.genInfo.push_back(&genInfo[*idx]);
+    extraArg.calc = calc;
+    for (const auto& idx : neededIndexes) {
+      extraArg.insetInfo.push_back(&inset_infos[idx]);
+      extraArg.genInfo.push_back(&genInfo[idx]);
     }
 
-    // reuse or make a new PacketGenAssetVersion
-    MutableAssetVersionD packgen =
-      PacketGenFactory::ReuseOrMakeAndUpdate(genInfo[i].assetname,
-                                             type,
-                                             khMetaData(),
-                                             packetGenConfig,
-                                             extraArg);
+      // reuse or make a new PacketGenAssetVersion
+      MutableAssetVersionD packgen =
+        PacketGenFactory::ReuseOrMakeAndUpdate(genInfo[i].assetname,
+                                               type,
+                                               khMetaData(),
+                                               packetGenConfig,
+                                               extraArg);
 
     if (packetGenConfig.cacheRaster) {
       // Extract the PacketLevel children from the new version and store
@@ -1079,9 +1073,8 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
   uint asset_idx = 0;
   assert(packgenvers.size() == packgenassets.size());
   geindexConfig.packet_insets_.reserve(packgenvers.size());
-  for (std::vector<AssetVersion>::const_iterator packgenver =
-           packgenvers.begin(); packgenver != packgenvers.end();
-       ++packgenver, ++asset_idx) {
+
+  for (const auto& packgenver : packgenvers) {
     // Check if terrain inset has type "Filling" then do not add it into
     // GEIndex-build.
     if (AssetDefs::Terrain == type && config.is_overlay_terrain_project_) {
@@ -1099,15 +1092,16 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
       }
     }
 
-    if ((*packgenver)->children.size()) {
+    if (packgenver->children.size()) {
       geindexConfig.packet_insets_.push_back(RasterPacketInset());
       geindexConfig.packet_insets_.back().levels_.reserve(
-          (*packgenver)->children.size());
-      for (const auto &packlevelref : (*packgenver)->children) {
+          packgenver->children.size());
+      for (const auto &packlevelref : packgenver->children) {
         geindexConfig.packet_insets_.back().levels_.push_back(
             RasterPacketLevelVersion(packlevelref, indexVer));
       }
     }
+    ++asset_idx;
   }
   if (tryReuse) {
     RasterGEIndexAssetD asset(geindexAssetName);

@@ -334,7 +334,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       }
 
       levInputs.erase(std::remove(levInputs.begin(), levInputs.end(), ""), levInputs.end());
-      levInputVers.erase(std::remove(levInputVers.begin(), levInputVers.end(), nullptr), levInputVers.end());
+      levInputVers.erase(std::remove(levInputVers.begin(), levInputVers.end(), AssetVersion()), levInputVers.end());
     }
 
     // get child asset ver
