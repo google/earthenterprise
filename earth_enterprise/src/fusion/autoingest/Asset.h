@@ -48,7 +48,7 @@ class AssetImpl : public AssetStorage, public StorageManaged {
   public:
     using Base = AssetStorage;
 
-  protected:
+ protected:
   // used by my intermediate derived classes since their calls to
   // my constructor will never actualy be used
   AssetImpl(void) = default;
