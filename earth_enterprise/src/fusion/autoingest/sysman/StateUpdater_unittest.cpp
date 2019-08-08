@@ -26,6 +26,8 @@
 
 using namespace std;
 
+// These tests cover both StateUpdater.cpp/.h and DependentStateTree.cpp/.h.
+
 // All refs must end with "?version=X" or the calls to AssetVersionRef::Bind
 // will try to load assets from disk. For simplicity, we force everything to
 // be version 1. When you write additional tests you have to remember to call
