@@ -228,15 +228,15 @@ void DatabaseAssetImplD::ConstructInputsFromRequest(
                             std::vector<SharedString>* inputs) {
   // make sure the project asset_ref_string's are valid
   if (!req.config.imageryProject.empty()) {
-    ValidateRefForInput<MutableRasterProjectAssetD, MutableRasterProjectAssetVersionD>(req.config.imageryProject, AssetDefs::Imagery, kProjectSubtype);
+    ValidateRefForInput<MutableRasterProjectAssetD>(req.config.imageryProject, AssetDefs::Imagery, kProjectSubtype);
     inputs->push_back(req.config.imageryProject);
   }
   if (!req.config.vectorProject.empty()) {
-    ValidateRefForInput<MutableRasterProjectAssetD, MutableRasterProjectAssetVersionD>(req.config.vectorProject, AssetDefs::Vector, kProjectSubtype);
+    ValidateRefForInput<MutableRasterProjectAssetD>(req.config.vectorProject, AssetDefs::Vector, kProjectSubtype);
     inputs->push_back(req.config.vectorProject);
   }
   if (!req.config.terrainProject.empty()) {
-    ValidateRefForInput<MutableRasterProjectAssetD, MutableRasterProjectAssetVersionD>(req.config.terrainProject, AssetDefs::Terrain, kProjectSubtype);
+    ValidateRefForInput<MutableRasterProjectAssetD>(req.config.terrainProject, AssetDefs::Terrain, kProjectSubtype);
     inputs->push_back(req.config.terrainProject);
   }
 }

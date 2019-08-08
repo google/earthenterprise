@@ -322,9 +322,10 @@ Version FindVersion(const std::string & ref, const AssetDefs::Type & type, const
     return Version();
 }
 
-template<class Asset, class Version>
+template<class Asset>
 void ValidateRefForInput(const std::string & ref, const AssetDefs::Type & type, const std::string & subtype)
 {
+    typedef typename Asset::Version Version;
     notify(NFY_WARN, "Validate: %s\t%s\t%s", ref.c_str(), ToString(type).c_str(), subtype.c_str());
     if (AssetVersionRef(ref).Version() == "current") {
         Asset asset = Find<Asset>(ref, type, subtype);
