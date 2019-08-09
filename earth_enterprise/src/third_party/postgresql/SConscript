@@ -18,7 +18,7 @@
 
 Import('third_party_env')
 
-postgresql_version = 'postgresql-9.6.5'
+postgresql_version = 'postgresql-9.6.15'
 postgresql_source = File('#/../../earth_enterprise/third_party/postgresql/%s.tar.bz2'
                          % postgresql_version).abspath
 
