@@ -102,7 +102,7 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   virtual bool OfflineInputsBreakMe(void) const { return false; }
  public:
 
-  bool NeedComputeState(void) const {
+  virtual bool NeedComputeState(void) const {
     if (state & (AssetDefs::Bad |
                  AssetDefs::Offline |
                  AssetDefs::Canceled)) {

@@ -51,7 +51,6 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   AssetVersionImpl& operator=(const AssetVersionImpl&&) = delete;
 
  public:
-  using Base = AssetVersionStorage;
   std::string XMLFilename() const { return XMLFilename(GetRef()); }
   std::string WorkingDir(void) const { return WorkingDir(GetRef()); }
   std::string WorkingFileRef(const std::string &fname) const {
@@ -61,16 +60,10 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   // implemented in LoadAny.cpp
   static std::shared_ptr<AssetVersionImpl> Load(const std::string &boundref);
 
-  virtual std::string GetName() const {   // Returns the name of the asset version, e.g., "CombinedRPAssetVersion"
-    assert(false);
-    return "";
-  }
-
-  // Note for future development: It would be good to change SerializeConfig to something like
-  // GetConfig that would fill out a list of key/value pairs instead of dealing with XML directly
-  virtual void SerializeConfig(khxml::DOMElement*) const {
-    assert(false);
-  }
+  virtual bool Save(const std::string &filename) const {
+    assert(false); // Can only call from sub-classes
+    return false;
+  };
 
   std::string WorkingFilename(const std::string &fname) const {
     return AssetDefs::AssetPathToFilename(WorkingFileRef(fname));
@@ -167,6 +160,10 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   }
   virtual void SetMyStateOnly(AssetDefs::State newstate, bool sendNotifications = true) {
     assert(false);  // Can only call from sub-classes
+  }
+  virtual bool NeedComputeState() const {
+    assert(false);  // Can only call from sub-classes
+    return false;
   }
 
   // static helpers

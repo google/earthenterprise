@@ -22,7 +22,7 @@ class FriendlyRasterProjectAssetVersionImplD : public RasterProjectAssetVersionI
 
     static std::shared_ptr<FriendlyRasterProjectAssetVersionImplD> Load(std::string boundref)
     {
-        std::shared_ptr<AssetVersionImplD> unfriendly_result =
+        std::shared_ptr<RasterProjectAssetVersionImplD> unfriendly_result =
             RasterProjectAssetVersionImplD::Load(boundref);
         std::shared_ptr<FriendlyRasterProjectAssetVersionImplD> result = 
             *reinterpret_cast<std::shared_ptr<FriendlyRasterProjectAssetVersionImplD>*>(&unfriendly_result);
