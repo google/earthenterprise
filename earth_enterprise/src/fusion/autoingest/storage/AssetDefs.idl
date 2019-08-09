@@ -13,10 +13,8 @@
 // limitations under the License.
 
 
-#include <memory>
 #include <string>
 #include <autoingest/AssetVersionRef.h>
-#include "common/SharedString.h"
 #include <khConstants.h>
 
 class AssetDefs {
@@ -85,10 +83,3 @@ class AssetDefs {
 
 #/hquote
 };
-
-#hquote
-template<class AssetType>
-using AssetPointerType = std::shared_ptr<AssetType>;
-
-using AssetKey = SharedString;
-#/hquote

@@ -22,6 +22,9 @@
 
 #include "autoingest/.idl/storage/AssetDefs.h"
 
+template<class AssetType>
+using AssetPointerType = std::shared_ptr<AssetType>;
+
 // Objects outside the storage manager will access assets through AssetHandles.
 // This allows the storage manager to properly clean up when the other object
 // is done using the asset (release locks, update cache size, etc).
