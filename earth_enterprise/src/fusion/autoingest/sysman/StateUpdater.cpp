@@ -15,7 +15,6 @@
  */
 
 #include "StateUpdater.h"
-#include "AssetVersion.h"
 #include "common/notify.h"
 
 using namespace boost;
@@ -58,23 +57,12 @@ namespace boost {
 
 #include <boost/graph/depth_first_search.hpp>
 
-struct StateUpdater::TreeBuildData {
+// Builds the asset version tree containing the specified asset version.
+StateUpdater::TreeType::vertex_descriptor
+StateUpdater::BuildTree(const SharedString & ref) {
   VertexMap vertices;
   size_t index = 0;
-  function<bool(AssetDefs::State)> includePredicate;
-};
-
-// Builds a tree containing the specified asset, its depedent children, their
-// dependent children, and so on, along with any other assets that are needed
-// to update the state of these assets. That includes their inputs and children,
-// their parents and listeners all the way up the tree, and the inputs and
-// children for their parents and listeners.
-void StateUpdater::BuildDependentTree(
-    const SharedString & ref,
-    function<bool(AssetDefs::State)> includePredicate) {
-  TreeBuildData buildData;
-  buildData.includePredicate = includePredicate;
-  set<TreeType::vertex_descriptor> toFillIn, toFillInNext;
+  list<TreeType::vertex_descriptor> toFillIn, toFillInNext;
   // First create an empty vertex for the provided asset. Then fill it in,
   // which includes adding its connections to other assets. Every time we fill
   // in a node we will get new assets to add to the tree until all assets have
@@ -82,14 +70,15 @@ void StateUpdater::BuildDependentTree(
   // which allows us to keep memory usage (relatively) low by not forcing
   // assets to stay in the cache and limiting the size of the toFillIn and
   // toFillInNext lists.
-  AddOrUpdateVertex(ref, buildData, true, true, toFillIn);
+  auto myVertex = AddEmptyVertex(ref, vertices, index, toFillIn);
   while (toFillIn.size() > 0) {
     for (auto vertex : toFillIn) {
-      FillInVertex(vertex, buildData, toFillInNext);
+      FillInVertex(vertex, vertices, index, toFillInNext);
     }
     toFillIn = std::move(toFillInNext);
     toFillInNext.clear();
   }
+  return myVertex;
 }
 
 // Creates an "empty" node for this asset if it has not already been added to
@@ -97,39 +86,25 @@ void StateUpdater::BuildDependentTree(
 // inputs/children/etc. The vertex must be "filled in" by calling FillInVertex
 // before it can be used.
 StateUpdater::TreeType::vertex_descriptor
-StateUpdater::AddOrUpdateVertex(
+StateUpdater::AddEmptyVertex(
     const SharedString & ref,
-    TreeBuildData & buildData,
-    bool inDepTree,
-    bool recalcState,
-    set<TreeType::vertex_descriptor> & toFillIn) {
-  auto myVertexIter = buildData.vertices.find(ref);
-  if (myVertexIter == buildData.vertices.end()) {
+    VertexMap & vertices,
+    size_t & index,
+    list<TreeType::vertex_descriptor> & toFillIn) {
+  auto myVertexIter = vertices.find(ref);
+  if (myVertexIter == vertices.end()) {
     // I'm not in the graph yet, so make a new empty vertex and let the caller
     // know we need to load it with the correct information
     auto myVertex = add_vertex(tree);
-    tree[myVertex] = {ref, AssetDefs::New, inDepTree, recalcState, false, buildData.index};
-    ++buildData.index;
-    buildData.vertices[ref] = myVertex;
-    toFillIn.insert(myVertex);
+    tree[myVertex] = {ref, AssetDefs::New, index};
+    ++index;
+    vertices[ref] = myVertex;
+    toFillIn.push_back(myVertex);
     return myVertex;
   }
   else {
-    // I'm already in the graph. If we learned new information that we didn't
-    // know when I was added to the tree (e.g., I'm in the dependent tree),
-    // add this to the list of vertexes to fill in so that we can add its
-    // connections. Then return the existing descriptor.
-    auto myVertex = myVertexIter->second;
-    auto & myVertexData = tree[myVertex];
-    if (inDepTree && !myVertexData.inDepTree) {
-      myVertexData.inDepTree = true;
-      toFillIn.insert(myVertex);
-    }
-    if (recalcState && !myVertexData.recalcState) {
-      myVertexData.recalcState = true;
-      toFillIn.insert(myVertex);
-    }
-    return myVertex;
+    // I'm already in the graph, so just return my vertex descriptor.
+    return myVertexIter->second;
   }
 }
 
@@ -137,8 +112,9 @@ StateUpdater::AddOrUpdateVertex(
 // to other assets. Adds any new nodes that need to be filled in to toFillIn.
 void StateUpdater::FillInVertex(
     TreeType::vertex_descriptor myVertex,
-    TreeBuildData & buildData,
-    set<TreeType::vertex_descriptor> & toFillIn) {
+    VertexMap & vertices,
+    size_t & index,
+    list<TreeType::vertex_descriptor> & toFillIn) {
   SharedString name = tree[myVertex].name;
   notify(NFY_PROGRESS, "Loading '%s' for state update", name.toString().c_str());
   auto version = storageManager->Get(name);
@@ -151,46 +127,34 @@ void StateUpdater::FillInVertex(
     return;
   }
   tree[myVertex].state = version->state;
-  // If this vertex is in the dependent tree but doesn't need to be included,
-  // act as though it's not in the dependency tree. We'll leave it in the tree
-  // to avoid messing up the index numbering and in case it is needed as an
-  // input, but we won't bring in any of its dependents.
-  if (tree[myVertex].inDepTree && !buildData.includePredicate(tree[myVertex].state)) {
-    tree[myVertex].inDepTree = false;
-    tree[myVertex].recalcState = false;
+  // The ref passed in may be slightly different than the ref used in the storage
+  // manager, so fix that here.
+  if (name != version->GetRef()) {
+    name = version->GetRef();
+    tree[myVertex].name = name;
+    vertices[name] = myVertex;
   }
-  // If I'm in the dependency tree I need to add my dependents because they are
-  // also in the dependency tree.
-  if (tree[myVertex].inDepTree) {
-    vector<SharedString> dependents;
-    version->DependentChildren(dependents);
-    for (const auto & dep : dependents) {
-      auto depVertex = AddOrUpdateVertex(dep, buildData, true, true, toFillIn);
-      AddEdge(myVertex, depVertex, {DEPENDENT});
-    }
+  vector<SharedString> dependents;
+  version->DependentChildren(dependents);
+  for (const auto & dep : dependents) {
+    auto depVertex = AddEmptyVertex(dep, vertices, index, toFillIn);
+    AddEdge(myVertex, depVertex, {DEPENDENT});
   }
-  // If I need to recalculate my state, I need to have my children and inputs
-  // in the tree because my state is based on them. In addition, I need my
-  // parents and listeners, because they may also have to recalculate their
-  // state. If I don't need to recalculate my state, I don't need to add any of
-  // my connections. I'm only used to calculate someone else's state.
-  if (tree[myVertex].recalcState) {
-    for (const auto & child : version->children) {
-      auto childVertex = AddOrUpdateVertex(child, buildData, false, false, toFillIn);
-      AddEdge(myVertex, childVertex, {CHILD});
-    }
-    for (const auto & input : version->inputs) {
-      auto inputVertex = AddOrUpdateVertex(input, buildData, false, false, toFillIn);
-      AddEdge(myVertex, inputVertex, {INPUT});
-    }
-    for (const auto & parent : version->parents) {
-      auto parentVertex = AddOrUpdateVertex(parent, buildData, false, true, toFillIn);
-      AddEdge(parentVertex, myVertex, {CHILD});
-    }
-    for (const auto & listener : version->listeners) {
-      auto listenerVertex = AddOrUpdateVertex(listener, buildData, false, true, toFillIn);
-      AddEdge(listenerVertex, myVertex, {INPUT});
-    }
+  for (const auto & child : version->children) {
+    auto childVertex = AddEmptyVertex(child, vertices, index, toFillIn);
+    AddEdge(myVertex, childVertex, {CHILD});
+  }
+  for (const auto & input : version->inputs) {
+    auto inputVertex = AddEmptyVertex(input, vertices, index, toFillIn);
+    AddEdge(myVertex, inputVertex, {INPUT});
+  }
+  for (const auto & parent : version->parents) {
+    auto parentVertex = AddEmptyVertex(parent, vertices, index, toFillIn);
+    AddEdge(parentVertex, myVertex, {CHILD});
+  }
+  for (const auto & listener : version->listeners) {
+    auto listenerVertex = AddEmptyVertex(listener, vertices, index, toFillIn);
+    AddEdge(listenerVertex, myVertex, {INPUT});
   }
 }
 
@@ -214,18 +178,78 @@ void StateUpdater::AddEdge(
   }
 }
 
-class StateUpdater::SetStateVisitor : public default_dfs_visitor {
-  private:
-    StateUpdater * const updater;
-    const AssetDefs::State newState;
+void StateUpdater::SetStateForRefAndDependents(
+    const SharedString & ref,
+    AssetDefs::State newState,
+    function<bool(AssetDefs::State)> updateStatePredicate) {
+  SharedString verref = AssetVersionRef::Bind(ref);
+  auto refVertex = BuildTree(verref);
+  SetStateForVertexAndDependents(refVertex, newState, updateStatePredicate);
+}
 
-    bool NeedComputeState(AssetDefs::State state) const {
-      // these states are explicitly set and must be explicitly cleared
-      return !(state & (AssetDefs::Bad |
-                        AssetDefs::Offline |
-                        AssetDefs::Canceled));
+// Sets the state for the specified ref and recursively sets the state for
+// the ref's dependent children.
+void StateUpdater::SetStateForVertexAndDependents(
+    TreeType::vertex_descriptor vertex,
+    AssetDefs::State newState,
+    function<bool(AssetDefs::State)> updateStatePredicate) {
+  if (updateStatePredicate(tree[vertex].state)) {
+    // Set the state. The OnStateChange handler will take care
+    // of stopping any running tasks, etc
+    // false -> don't send notifications about the new state because we
+    // will change it soon.
+    SetState(vertex, newState, false);
+    
+    // Now update the dependent children
+    auto edgeIters = out_edges(vertex, tree);
+    auto edgeBegin = edgeIters.first;
+    auto edgeEnd = edgeIters.second;
+    for (auto i = edgeBegin; i != edgeEnd; ++i) {
+      if (IsDependent(tree[*i].type)) {
+        SetStateForVertexAndDependents(target(*i, tree), newState, updateStatePredicate);
+      }
     }
+  }
+}
 
+void StateUpdater::SetState(
+    TreeType::vertex_descriptor vertex,
+    AssetDefs::State newState,
+    bool sendNotifications) {
+  SharedString name = tree[vertex].name;
+  if (newState != tree[vertex].state) {
+    auto version = storageManager->GetMutable(name);
+    notify(NFY_PROGRESS, "Setting state of '%s' to '%s'",
+           name.toString().c_str(), ToString(newState).c_str());
+    if (version) {
+      // Set the state. The OnStateChange handler will take care
+      // of stopping any running tasks, etc.
+      // This call does not propagate the state change to other assets. We will
+      // take care of that inside the state updater.
+      version->SetMyStateOnly(newState, sendNotifications);
+      // Setting the state can trigger additional state changes, so get the new
+      // state directly from the asset version.
+      tree[vertex].state = version->state;
+    }
+    else {
+      // This shoud never happen - we had to successfully load the asset
+      // previously to get it into the tree.
+      notify(NFY_WARN, "Could not load asset '%s' to set state.",
+             name.toString().c_str());
+    }
+  }
+}
+
+// Helper class to calculate the state of asset versions based on the states
+// of their inputs and children. It calculates states in depth-first order;
+// we use the finish_vertex function to ensure that we calculate the state
+// of an asset version after we've calculated the states of its inputs
+// and children.
+class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
+  private:
+    // Keep a pointer to the state updater
+    StateUpdater * const updater;
+    
     // Helper class for calculating state from inputs
     class InputStates {
       private:
@@ -311,12 +335,10 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
         AssetDefs::State &stateByInputs,
         AssetDefs::State &stateByChildren,
         bool & blockersAreOffline,
-        uint32 & numWaitingFor,
-        bool & childOrInputStateChanged) const {
+        uint32 & numWaitingFor) const {
       InputStates inputStates;
       ChildStates childStates;
 
-      childOrInputStateChanged = false;
       auto edgeIters = out_edges(vertex, tree);
       auto edgeBegin = edgeIters.first;
       auto edgeEnd = edgeIters.second;
@@ -327,12 +349,10 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
         switch(type) {
           case StateUpdater::INPUT:
             inputStates.Add(depState);
-            childOrInputStateChanged = childOrInputStateChanged || tree[dep].stateChanged;
             break;
           case StateUpdater::CHILD:
           case StateUpdater::DEPENDENT_AND_CHILD:
             childStates.Add(depState);
-            childOrInputStateChanged = childOrInputStateChanged || tree[dep].stateChanged;
             break;
           case StateUpdater::DEPENDENT:
             // Dependents that are not also children are not considered when
@@ -344,96 +364,43 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
       inputStates.GetOutputs(stateByInputs, blockersAreOffline, numWaitingFor);
       childStates.GetOutputs(stateByChildren);
     }
-
   public:
-    SetStateVisitor(StateUpdater * updater, AssetDefs::State newState) :
-        updater(updater), newState(newState) {}
+    UpdateStateVisitor(StateUpdater * updater) : updater(updater) {};
 
-    // This function is called after the DFS has completed for every vertex
-    // below this one in the tree. Thus, we don't calculate the state for an
-    // asset until we've calculated the state for all of its inputs and
-    // children.
+    // Update the state of an asset after we've updated the state of its
+    // inputs and children.
     virtual void finish_vertex(
-        TreeType::vertex_descriptor vertex,
+        StateUpdater::TreeType::vertex_descriptor vertex,
         const StateUpdater::TreeType & tree) const {
-      if (!tree[vertex].recalcState) return;
       SharedString name = tree[vertex].name;
       notify(NFY_PROGRESS, "Calculating state for '%s'", name.toString().c_str());
-
-      // Set the state for assets in the dependent tree. Don't send
-      // notifications because we'll set the state again below.
-      if (tree[vertex].inDepTree) {
-        updater->SetState(vertex, newState, false);
+      auto version = updater->storageManager->Get(name);
+      if (!version) {
+        // This shoud never happen - we had to successfully load the asset
+        // previously to get it into the tree.
+        notify(NFY_WARN, "Could not load asset '%s' to recalculate state.",
+               name.toString().c_str());
+        return;
       }
-
-      // For all assets (including parents and listeners) update the state
-      // based on the state of inputs and children.
-      if (NeedComputeState(tree[vertex].state)) {
-        AssetDefs::State stateByInputs;
-        AssetDefs::State stateByChildren;
-        bool blockersAreOffline;
-        uint32 numWaitingFor;
-        bool childOrInputStateChanged;
-        CalculateStateParameters(
-              vertex, tree, stateByInputs, stateByChildren,
-              blockersAreOffline, numWaitingFor, childOrInputStateChanged);
-        if (tree[vertex].stateChanged || childOrInputStateChanged) {
-          AssetDefs::State calculatedState;
-          // Run this in a separate block so that the asset version is released
-          // before we try to update it.
-          {
-            auto version = updater->storageManager->Get(name);
-            if (!version) {
-              // This shoud never happen - we had to successfully load the asset
-              // previously to get it into the tree.
-              notify(NFY_WARN, "Could not load asset '%s' to recalculate state.",
-                     name.toString().c_str());
-              return;
-            }
-            calculatedState = version->CalcStateByInputsAndChildren(
-                  stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
-          }
-          // Set the state and send notifications.
-          updater->SetState(vertex, calculatedState, true);
-        }
-      }
+      if (!version->NeedComputeState()) return;
+      AssetDefs::State stateByInputs;
+      AssetDefs::State stateByChildren;
+      bool blockersAreOffline;
+      uint32 numWaitingFor;
+      CalculateStateParameters(vertex, tree, stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
+      AssetDefs::State newState = 
+          version->CalcStateByInputsAndChildren(stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
+      // Set the state and send notifications.
+      updater->SetState(vertex, newState, true);
     }
 };
 
-void StateUpdater::SetStateForRefAndDependents(
-    const SharedString & ref,
-    AssetDefs::State newState,
-    function<bool(AssetDefs::State)> updateStatePredicate) {
-  SharedString verref = AssetVersionImpl::Key(ref);
-  BuildDependentTree(verref, updateStatePredicate);
-  depth_first_search(tree, visitor(SetStateVisitor(this, newState)));
-}
-
-void StateUpdater::SetState(
-    TreeType::vertex_descriptor vertex,
-    AssetDefs::State newState,
-    bool sendNotifications) {
-  SharedString name = tree[vertex].name;
-  if (newState != tree[vertex].state) {
-    auto version = storageManager->GetMutable(name);
-    notify(NFY_PROGRESS, "Setting state of '%s' to '%s'",
-           name.toString().c_str(), ToString(newState).c_str());
-    if (version) {
-      // Set the state. The OnStateChange handler will take care
-      // of stopping any running tasks, etc.
-      // This call does not propagate the state change to other assets. We will
-      // take care of that inside the state updater.
-      version->SetMyStateOnly(newState, sendNotifications);
-      // Setting the state can trigger additional state changes, so get the new
-      // state directly from the asset version.
-      tree[vertex].state = version->state;
-      tree[vertex].stateChanged = true;
-    }
-    else {
-      // This shoud never happen - we had to successfully load the asset
-      // previously to get it into the tree.
-      notify(NFY_WARN, "Could not load asset '%s' to set state.",
-             name.toString().c_str());
-    }
-  }
+void StateUpdater::RecalculateAndSaveStates() {
+  // Traverse the state tree, recalculate states, and update states as needed.
+  // State is calculated for each vertex in the tree after state is calculated
+  // for all of its child and input vertices.
+  // Possible optimization: Many assets have significant overlap in their
+  // inputs. It might save time if we could calculate the overlapping state
+  // only once.
+  depth_first_search(tree, visitor(UpdateStateVisitor(this)));
 }

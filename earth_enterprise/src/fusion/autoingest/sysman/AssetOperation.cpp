@@ -44,6 +44,7 @@ void RebuildVersion(const SharedString & ref) {
 
     StateUpdater updater;
     updater.SetStateForRefAndDependents(ref, AssetDefs::New, AssetDefs::CanRebuild);
+    updater.RecalculateAndSaveStates();
   }
   else {
     MutableAssetVersionD version(ref);

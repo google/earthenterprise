@@ -161,6 +161,10 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   virtual void SetMyStateOnly(AssetDefs::State newstate, bool sendNotifications = true) {
     assert(false);  // Can only call from sub-classes
   }
+  virtual bool NeedComputeState() const {
+    assert(false);  // Can only call from sub-classes
+    return false;
+  }
 
   // static helpers
   static std::string WorkingDir(const AssetVersionRef &ref);
