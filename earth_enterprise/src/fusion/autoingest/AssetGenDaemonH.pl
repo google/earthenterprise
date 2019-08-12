@@ -161,6 +161,7 @@ print $fh <<EOF;
           ${name}AssetVersionImpl(config_),
           ${base}AssetVersionImplD() { }
 
+    static const AssetDefs::Type EXPECTED_TYPE;
     static const std::string EXPECTED_SUBTYPE;
 
 $extra{"${name}AssetVersionImplD"}
@@ -227,6 +228,7 @@ public:
         : AssetImpl(storage),
           ${name}AssetImpl(config_), AssetImplD() { }
 
+    static const AssetDefs::Type EXPECTED_TYPE;
     static const std::string EXPECTED_SUBTYPE;
 
 protected:

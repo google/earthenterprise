@@ -101,6 +101,8 @@ print $fh <<EOF;
 // ****************************************************************************
 $config{"AssetD.cpp"}
 
+const AssetDefs::Type ${name}AssetImplD::EXPECTED_TYPE = $typeorinvalid;
+const AssetDefs::Type ${name}AssetVersionImplD::EXPECTED_TYPE = $typeorinvalid;
 const std::string ${name}AssetImplD::EXPECTED_SUBTYPE = "$subtype";
 const std::string ${name}AssetVersionImplD::EXPECTED_SUBTYPE = "$subtype";
 

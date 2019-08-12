@@ -355,7 +355,7 @@ void MercatorRasterProjectAssetImplD::HandleEditRequest(
   for (std::vector<InsetStackItem>::const_iterator inset
          = req.config.insets.begin();
        inset != req.config.insets.end(); ++inset) {
-    ValidateRefForInput<MercatorRasterProductAssetVersionD>(inset->dataAsset, req.type);
+    ValidateRefForInput<MercatorRasterProductAssetVersionD>(inset->dataAsset);
   }
 
   // Find/make our target project.
@@ -369,7 +369,7 @@ void MercatorRasterProjectAssetImplD::HandleEditRequest(
 
   // Custom FindMake - modified to set/preserve indexVersion & fuid_channel_.
   MutableMercatorRasterProjectAssetD project =
-      Find<MercatorRasterProjectAssetD>(projname, req.type);
+      Find<MercatorRasterProjectAssetD>(projname);
   if (project) {
     // It is a regular (editing the same asset) or "SaveAs" re-writing edit
     // request.
@@ -418,7 +418,7 @@ void MercatorRasterProjectAssetImplD::HandleNewRequest(
   for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
          req.items.begin();
        item != req.items.end(); ++item) {
-    ValidateRefForInput<MercatorRasterProductAssetVersionD>(item->dataAsset, req.type);
+    ValidateRefForInput<MercatorRasterProductAssetVersionD>(item->dataAsset);
   }
 
   // normalize the supplied asset name
@@ -427,7 +427,7 @@ void MercatorRasterProjectAssetImplD::HandleNewRequest(
                                   kMercatorProjectSubtype);
 
 
-  if (Find<MercatorRasterProjectAssetD>(projname, req.type)) {
+  if (Find<MercatorRasterProjectAssetD>(projname)) {
     throw khException(kh::tr("%1 project %2 already exists")
                       .arg(ToQString(req.type), ToQString(projname)));
   } else {
@@ -450,12 +450,12 @@ void MercatorRasterProjectAssetImplD::HandleModifyRequest(
   for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
          req.items.begin();
        item != req.items.end(); ++item) {
-    ValidateRefForInput<MercatorRasterProductAssetVersionD>(item->dataAsset, req.type);
+    ValidateRefForInput<MercatorRasterProductAssetVersionD>(item->dataAsset);
   }
 
   // find it and make the change
   MutableMercatorRasterProjectAssetD project;
-  if ((project = Find<MercatorRasterProjectAssetD>(req.assetname, req.type))) {
+  if ((project = Find<MercatorRasterProjectAssetD>(req.assetname))) {
     // blow away old insets
     project->config.insets.clear();
     // define new ones
@@ -473,12 +473,12 @@ void MercatorRasterProjectAssetImplD::HandleAddToRequest(
   for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
          req.items.begin();
        item != req.items.end(); ++item) {
-    ValidateRefForInput<MercatorRasterProductAssetVersionD>(item->dataAsset, req.type);
+    ValidateRefForInput<MercatorRasterProductAssetVersionD>(item->dataAsset);
   }
 
   // find it and make the change
   MutableMercatorRasterProjectAssetD project;
-  if ((project = Find<MercatorRasterProjectAssetD>(req.assetname, req.type))) {
+  if ((project = Find<MercatorRasterProjectAssetD>(req.assetname))) {
     // make sure my existing insets are still in order before adding more
     // a new version of a product asset could invalidate
     // my stacking order
@@ -497,7 +497,7 @@ void MercatorRasterProjectAssetImplD::HandleDropFromRequest(
     const RasterProjectDropFromRequest &req) {
   // find the project
   MutableMercatorRasterProjectAssetD project;
-  if (!(project = Find<MercatorRasterProjectAssetD>(req.assetname, req.type))) {
+  if (!(project = Find<MercatorRasterProjectAssetD>(req.assetname))) {
     throw khException(kh::tr("No %1 project named %2")
                       .arg(ToQString(req.type), ToQString(req.assetname)));
   }

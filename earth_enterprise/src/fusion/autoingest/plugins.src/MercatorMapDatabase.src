@@ -117,7 +117,7 @@ void MercatorMapDatabaseAssetImplD::PopulateInputs(
         khHasExtension(config.imageryProject, kMercatorImageryProjectSuffix);
 
     if (is_mercator_imagery_project) {
-      ValidateRefForInput<MercatorRasterProjectAssetVersionD>(config.imageryProject, AssetDefs::Imagery);
+      ValidateRefForInput<MercatorRasterProjectAssetVersionD>(config.imageryProject);
     } else {
       ValidateRefForInput<RasterProjectAssetVersionD>(config.imageryProject, AssetDefs::Imagery);
     }
@@ -125,7 +125,7 @@ void MercatorMapDatabaseAssetImplD::PopulateInputs(
   }
 
   if (!config.mapProject.empty()) {
-    ValidateRefForInput<MapProjectAssetVersionD>(config.mapProject, AssetDefs::Map);
+    ValidateRefForInput<MapProjectAssetVersionD>(config.mapProject);
 
     // make a projected map project for my input
     ProjectedMapProjectConfig proj_config(AssetDefs::MercatorProjection);

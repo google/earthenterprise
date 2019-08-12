@@ -109,7 +109,7 @@ void MapDatabaseAssetImplD::PopulateInputs(const MapDatabaseConfig &config,
     inputs.push_back(config.imageryProject);
   }
   if (!config.mapProject.empty()) {
-    ValidateRefForInput<MapProjectAssetVersionD>(config.mapProject, AssetDefs::Map);
+    ValidateRefForInput<MapProjectAssetVersionD>(config.mapProject);
 
     // make a projected map project for my input
     ProjectedMapProjectConfig proj_config(AssetDefs::FlatProjection);

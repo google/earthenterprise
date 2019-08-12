@@ -287,8 +287,14 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
 }
 
 template<class AssetType>
+AssetType Find(const std::string & ref) {
+  return Find<AssetType>(ref, AssetType::Impl::EXPECTED_TYPE);
+}
+
+template<class AssetType>
 AssetType Find(const std::string & ref, const AssetDefs::Type & type)
 {
+  assert(type != AssetDefs::Invalid);
   const std::string subtype = AssetType::Impl::EXPECTED_SUBTYPE;
   try {
     AssetType asset(ref);
@@ -304,24 +310,30 @@ AssetType Find(const std::string & ref, const AssetDefs::Type & type)
 }
 
 template<class VersionType>
+void ValidateRefForInput(const std::string & ref) {
+  return ValidateRefForInput<VersionType>(ref, VersionType::Impl::EXPECTED_TYPE);
+}
+
+template<class VersionType>
 void ValidateRefForInput(const std::string & ref, const AssetDefs::Type & type)
 {
-    using AssetType = typename VersionType::Impl::AssetType;
-    const std::string subtype = VersionType::Impl::EXPECTED_SUBTYPE;
-    if (AssetVersionRef(ref).Version() == "current") {
-        AssetType asset = Find<AssetType>(ref, type);
-        if (!asset) {
-            throw std::invalid_argument(
-                "No such " + ToString(type) + " " + subtype + " asset: " + ref);
-        }
-    } else {
-        VersionType version = Find<VersionType>(ref, type);
-        if (!version) {
-            throw std::invalid_argument(
-                "No such " + ToString(type) + " " + subtype + " asset version: " +
-                ref);
-        }
+  assert(type != AssetDefs::Invalid);
+  using AssetType = typename VersionType::Impl::AssetType;
+  const std::string subtype = VersionType::Impl::EXPECTED_SUBTYPE;
+  if (AssetVersionRef(ref).Version() == "current") {
+    AssetType asset = Find<AssetType>(ref, type);
+    if (!asset) {
+      throw std::invalid_argument(
+          "No such " + ToString(type) + " " + subtype + " asset: " + ref);
     }
+  } else {
+    VersionType version = Find<VersionType>(ref, type);
+    if (!version) {
+      throw std::invalid_argument(
+          "No such " + ToString(type) + " " + subtype + " asset version: " +
+          ref);
+    }
+  }
 }
 
 #endif // STORAGEMANAGER_H

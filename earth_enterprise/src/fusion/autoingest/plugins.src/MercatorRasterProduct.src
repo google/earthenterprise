@@ -248,7 +248,7 @@ MercatorRasterProductAssetImplD::HandleImportRequest(
   // Modified FindMake to preserve fuid_resource_.
   // The inputs are empty for now. We'll fill them in below.
   MutableMercatorRasterProductAssetD asset =
-    Find<MercatorRasterProductAssetD>(assetname, req.type);
+    Find<MercatorRasterProductAssetD>(assetname);
   if (asset) {
     // It is a regular (editing the same asset) or "SaveAs" re-writing request.
     // If this request is going to set the fuid_resource to 0, restore from
