@@ -103,10 +103,6 @@ class DerivedAssetHandleD_ : public virtual BaseD_, public ROBase_
     return dynamic_cast<const Impl*>(this->handle.operator->());
   }
 
-  static std::string GetSubtype() {
-    return Impl::GetSubtype();
-  }
-
   ~DerivedAssetHandleD_()
   {
 #ifdef GEE_HAS_STATIC_ASSERT
@@ -327,10 +323,6 @@ class MutableDerivedAssetHandleD_ : public DerivedBase_, public MutableBase_
   using DerivedBase::operator->;
   Impl* operator->(void) {
     return const_cast<Impl*>(DerivedBase::operator->());
-  }
-  
-  static std::string GetSubtype() {
-    return Impl::GetSubtype();
   }
 
   ~MutableDerivedAssetHandleD_()

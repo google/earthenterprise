@@ -289,12 +289,13 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
 template<class AssetType>
 AssetType Find(const std::string & ref, const AssetDefs::Type & type)
 {
+  const std::string subtype = AssetType::Impl::EXPECTED_SUBTYPE;
   try {
     AssetType asset(ref);
     notify(NFY_WARN, "Find: %s\t%s", ToString(asset->type).c_str(), asset->subtype.c_str());
     if (asset &&
         (asset->type == type) &&
-        (asset->subtype == AssetType::GetSubtype())) {
+        (asset->subtype == subtype)) {
         return AssetType(ref);
     }
   } catch (...) {
@@ -306,13 +307,14 @@ AssetType Find(const std::string & ref, const AssetDefs::Type & type)
 template<class VersionType>
 VersionType FindVersion(const std::string & ref, const AssetDefs::Type & type)
 {
-    notify(NFY_WARN, "Version: %s\t%s\t%s", ref.c_str(), ToString(type).c_str(), VersionType::GetSubtype().c_str());
+    const std::string subtype = VersionType::Impl::EXPECTED_SUBTYPE;
+    notify(NFY_WARN, "Version: %s\t%s\t%s", ref.c_str(), ToString(type).c_str(), subtype.c_str());
     try {
         VersionType version(ref);
         notify(NFY_WARN, "Version: %s\t%s", ToString(version->type).c_str(), version->subtype.c_str());
         if (version &&
             (version->type == type) &&
-            (version->subtype == VersionType::GetSubtype())) {
+            (version->subtype == subtype)) {
             return VersionType(ref);
         }
     } catch (...) {
@@ -325,18 +327,19 @@ template<class VersionType>
 void ValidateRefForInput(const std::string & ref, const AssetDefs::Type & type)
 {
     using AssetType = typename VersionType::Impl::AssetType;
-    notify(NFY_WARN, "Validate: %s\t%s\t%s", ref.c_str(), ToString(type).c_str(), VersionType::GetSubtype().c_str());
+    const std::string subtype = VersionType::Impl::EXPECTED_SUBTYPE;
+    notify(NFY_WARN, "Validate: %s\t%s\t%s", ref.c_str(), ToString(type).c_str(), subtype.c_str());
     if (AssetVersionRef(ref).Version() == "current") {
         AssetType asset = Find<AssetType>(ref, type);
         if (!asset) {
             throw std::invalid_argument(
-                "No such " + ToString(type) + " " + VersionType::GetSubtype() + " asset: " + ref);
+                "No such " + ToString(type) + " " + subtype + " asset: " + ref);
         }
     } else {
         VersionType version = FindVersion<VersionType>(ref, type);
         if (!version) {
             throw std::invalid_argument(
-                "No such " + ToString(type) + " " + VersionType::GetSubtype() + " asset version: " +
+                "No such " + ToString(type) + " " + subtype + " asset version: " +
                 ref);
         }
     }

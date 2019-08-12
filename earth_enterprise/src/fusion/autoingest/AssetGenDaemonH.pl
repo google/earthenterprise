@@ -161,7 +161,7 @@ print $fh <<EOF;
           ${name}AssetVersionImpl(config_),
           ${base}AssetVersionImplD() { }
 
-    static std::string GetSubtype() { return "$subtype"; }
+    static const std::string EXPECTED_SUBTYPE;
 
 $extra{"${name}AssetVersionImplD"}
 
@@ -227,7 +227,7 @@ public:
         : AssetImpl(storage),
           ${name}AssetImpl(config_), AssetImplD() { }
 
-    static std::string GetSubtype() { return "$subtype"; }
+    static const std::string EXPECTED_SUBTYPE;
 
 protected:
 EOF

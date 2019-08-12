@@ -101,6 +101,8 @@ print $fh <<EOF;
 // ****************************************************************************
 $config{"AssetD.cpp"}
 
+const std::string ${name}AssetImplD::EXPECTED_SUBTYPE = "$subtype";
+const std::string ${name}AssetVersionImplD::EXPECTED_SUBTYPE = "$subtype";
 
 // ****************************************************************************
 // ***  ${name}Factory - Auto generated
