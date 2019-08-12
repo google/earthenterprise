@@ -355,7 +355,7 @@ void MercatorRasterProjectAssetImplD::HandleEditRequest(
   for (std::vector<InsetStackItem>::const_iterator inset
          = req.config.insets.begin();
        inset != req.config.insets.end(); ++inset) {
-    ValidateRefForInput<MutableMercatorRasterProductAssetD>(inset->dataAsset, req.type, kMercatorProductSubtype);
+    ValidateRefForInput<MercatorRasterProductAssetVersionD>(inset->dataAsset, req.type, kMercatorProductSubtype);
   }
 
   // Find/make our target project.
@@ -418,7 +418,7 @@ void MercatorRasterProjectAssetImplD::HandleNewRequest(
   for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
          req.items.begin();
        item != req.items.end(); ++item) {
-    ValidateRefForInput<MutableMercatorRasterProductAssetD>(item->dataAsset, req.type, kMercatorProductSubtype);
+    ValidateRefForInput<MercatorRasterProductAssetVersionD>(item->dataAsset, req.type, kMercatorProductSubtype);
   }
 
   // normalize the supplied asset name
@@ -450,7 +450,7 @@ void MercatorRasterProjectAssetImplD::HandleModifyRequest(
   for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
          req.items.begin();
        item != req.items.end(); ++item) {
-    ValidateRefForInput<MutableMercatorRasterProductAssetD>(item->dataAsset, req.type, kMercatorProductSubtype);
+    ValidateRefForInput<MercatorRasterProductAssetVersionD>(item->dataAsset, req.type, kMercatorProductSubtype);
   }
 
   // find it and make the change
@@ -473,7 +473,7 @@ void MercatorRasterProjectAssetImplD::HandleAddToRequest(
   for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
          req.items.begin();
        item != req.items.end(); ++item) {
-    ValidateRefForInput<MutableMercatorRasterProductAssetD>(item->dataAsset, req.type, kMercatorProductSubtype);
+    ValidateRefForInput<MercatorRasterProductAssetVersionD>(item->dataAsset, req.type, kMercatorProductSubtype);
   }
 
   // find it and make the change

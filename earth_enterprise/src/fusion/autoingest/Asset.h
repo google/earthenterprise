@@ -133,4 +133,61 @@ Asset::Valid(void) const
   }
 }
 
+
+template<class AssetType>
+AssetType Find(const std::string & ref, const AssetDefs::Type & type, const std::string & subtype)
+{
+  notify(NFY_WARN, "Find: %s\t%s\t%s", ref.c_str(), ToString(type).c_str(), subtype.c_str());
+  try {
+    AssetType asset(ref);
+    notify(NFY_WARN, "Find: %s\t%s", ToString(asset->type).c_str(), asset->subtype.c_str());
+    if (asset &&
+        (asset->type == type) &&
+        (asset->subtype == subtype)) {
+        return AssetType(ref);
+    }
+  } catch (...) {
+      // do nothing - don't even generate any warnings
+  }
+  return AssetType();
+}
+
+template<class VersionType>
+VersionType FindVersion(const std::string & ref, const AssetDefs::Type & type, const std::string & subtype)
+{
+    notify(NFY_WARN, "Version: %s\t%s\t%s", ref.c_str(), ToString(type).c_str(), subtype.c_str());
+    try {
+        VersionType version(ref);
+        notify(NFY_WARN, "Version: %s\t%s", ToString(version->type).c_str(), version->subtype.c_str());
+        if (version &&
+            (version->type == type) &&
+            (version->subtype == subtype)) {
+            return VersionType(ref);
+        }
+    } catch (...) {
+        // do nothing - don't even generate any warnings
+    }
+    return VersionType();
+}
+
+template<class VersionType>
+void ValidateRefForInput(const std::string & ref, const AssetDefs::Type & type, const std::string & subtype)
+{
+    notify(NFY_WARN, "Validate: %s\t%s\t%s", ref.c_str(), ToString(type).c_str(), subtype.c_str());
+    if (AssetVersionRef(ref).Version() == "current") {
+        Asset asset = Find<Asset>(ref, type, subtype);
+        if (!asset) {
+            throw std::invalid_argument(
+                "No such " + ToString(type) + " " + subtype + " asset: " + ref);
+        }
+    } else {
+        VersionType version = FindVersion<VersionType>(ref, type, subtype);
+        if (!version) {
+            throw std::invalid_argument(
+                "No such " + ToString(type) + " " + subtype + " asset version: " +
+                ref);
+        }
+    }
+}
+
 #endif /* __Asset_h */
