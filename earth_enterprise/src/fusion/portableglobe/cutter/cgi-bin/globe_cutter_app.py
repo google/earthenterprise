@@ -36,7 +36,10 @@ from common import form_wrap
 from common import postgres_manager_wrap
 import common.utils
 from core import globe_cutter
+import common.configs
 
+CONFIG_FILE = "/opt/google/gehttpd/cgi-bin/advanced_cutter.cfg"
+CONFIGS = common.configs.Configs(CONFIG_FILE)
 
 COMMAND_DIR = "/opt/google/bin"
 WEB_URL_BASE = "/cutter/globes"
@@ -474,8 +477,8 @@ class GlobeBuilder(object):
     if source:
       server, target = common.utils.GetServerAndPathFromUrl(source)
 
-    if not server:
-      server = "http://localhost/"
+    # Replace the server with advanced configuration host
+    server = CONFIGS.GetStr("DATABASE_HOST")
 
     target = common.utils.NormalizeTargetPath(target)
     base_url = "%s/cgi-bin/globe_cutter_app.py" % server
@@ -895,7 +898,7 @@ if __name__ == "__main__":
     elif cgi_cmd == "ADD_PLUGIN_FILES":
       is_2d = FORM.getvalue("is_2d")
       globe_builder.CheckArgs(["globe_name", "source"], FORM)
-      globe_builder.AddPluginFiles(FORM.getvalue_url("source"), is_2d)
+      globe_builder.AddPluginFiles(CONFIGS.GetStr("DATABASE_HOST"), is_2d)
 
     elif cgi_cmd == "PACKAGE_GLOBE":
       globe_builder.CheckArgs(["globe_name"], FORM)
