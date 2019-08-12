@@ -248,7 +248,7 @@ RasterProductAssetImplD::HandleImportRequest(
   // Modified FindMake to preserve fuid_resource_
   // inputs are empty for now. We'll fill them in below.
   MutableRasterProductAssetD asset =
-    Find<MutableRasterProductAssetD>(assetname, req.type);
+    Find<RasterProductAssetD>(assetname, req.type);
 
   if (asset) {
     // It is a regular (editing the same asset) or "SaveAs" re-writing request.

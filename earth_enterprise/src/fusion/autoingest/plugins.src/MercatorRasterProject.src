@@ -369,7 +369,7 @@ void MercatorRasterProjectAssetImplD::HandleEditRequest(
 
   // Custom FindMake - modified to set/preserve indexVersion & fuid_channel_.
   MutableMercatorRasterProjectAssetD project =
-      Find<MutableMercatorRasterProjectAssetD>(projname, req.type);
+      Find<MercatorRasterProjectAssetD>(projname, req.type);
   if (project) {
     // It is a regular (editing the same asset) or "SaveAs" re-writing edit
     // request.
@@ -427,7 +427,7 @@ void MercatorRasterProjectAssetImplD::HandleNewRequest(
                                   kMercatorProjectSubtype);
 
 
-  if (Find<MutableMercatorRasterProjectAssetD>(projname, req.type)) {
+  if (Find<MercatorRasterProjectAssetD>(projname, req.type)) {
     throw khException(kh::tr("%1 project %2 already exists")
                       .arg(ToQString(req.type), ToQString(projname)));
   } else {
@@ -455,7 +455,7 @@ void MercatorRasterProjectAssetImplD::HandleModifyRequest(
 
   // find it and make the change
   MutableMercatorRasterProjectAssetD project;
-  if ((project = Find<MutableMercatorRasterProjectAssetD>(req.assetname, req.type))) {
+  if ((project = Find<MercatorRasterProjectAssetD>(req.assetname, req.type))) {
     // blow away old insets
     project->config.insets.clear();
     // define new ones
@@ -478,7 +478,7 @@ void MercatorRasterProjectAssetImplD::HandleAddToRequest(
 
   // find it and make the change
   MutableMercatorRasterProjectAssetD project;
-  if ((project = Find<MutableMercatorRasterProjectAssetD>(req.assetname, req.type))) {
+  if ((project = Find<MercatorRasterProjectAssetD>(req.assetname, req.type))) {
     // make sure my existing insets are still in order before adding more
     // a new version of a product asset could invalidate
     // my stacking order
@@ -497,7 +497,7 @@ void MercatorRasterProjectAssetImplD::HandleDropFromRequest(
     const RasterProjectDropFromRequest &req) {
   // find the project
   MutableMercatorRasterProjectAssetD project;
-  if (!(project = Find<MutableMercatorRasterProjectAssetD>(req.assetname, req.type))) {
+  if (!(project = Find<MercatorRasterProjectAssetD>(req.assetname, req.type))) {
     throw khException(kh::tr("No %1 project named %2")
                       .arg(ToQString(req.type), ToQString(req.assetname)));
   }

@@ -292,7 +292,6 @@ AssetType Find(const std::string & ref, const AssetDefs::Type & type)
   const std::string subtype = AssetType::Impl::EXPECTED_SUBTYPE;
   try {
     AssetType asset(ref);
-    notify(NFY_WARN, "Find: %s\t%s", ToString(asset->type).c_str(), asset->subtype.c_str());
     if (asset &&
         (asset->type == type) &&
         (asset->subtype == subtype)) {
@@ -308,10 +307,8 @@ template<class VersionType>
 VersionType FindVersion(const std::string & ref, const AssetDefs::Type & type)
 {
     const std::string subtype = VersionType::Impl::EXPECTED_SUBTYPE;
-    notify(NFY_WARN, "Version: %s\t%s\t%s", ref.c_str(), ToString(type).c_str(), subtype.c_str());
     try {
         VersionType version(ref);
-        notify(NFY_WARN, "Version: %s\t%s", ToString(version->type).c_str(), version->subtype.c_str());
         if (version &&
             (version->type == type) &&
             (version->subtype == subtype)) {
@@ -328,7 +325,6 @@ void ValidateRefForInput(const std::string & ref, const AssetDefs::Type & type)
 {
     using AssetType = typename VersionType::Impl::AssetType;
     const std::string subtype = VersionType::Impl::EXPECTED_SUBTYPE;
-    notify(NFY_WARN, "Validate: %s\t%s\t%s", ref.c_str(), ToString(type).c_str(), subtype.c_str());
     if (AssetVersionRef(ref).Version() == "current") {
         AssetType asset = Find<AssetType>(ref, type);
         if (!asset) {

@@ -440,7 +440,7 @@ void RasterProjectAssetImplD::HandleEditRequest(
 
   // Custom FindMake - modified to set/preserve indexVersion & fuid_channel_.
   MutableRasterProjectAssetD project =
-      Find<MutableRasterProjectAssetD>(projname, req.type);
+      Find<RasterProjectAssetD>(projname, req.type);
   if (project) {
     // It is a regular (editing the same asset) or "SaveAs" re-writing edit
     // request.
@@ -520,7 +520,7 @@ void RasterProjectAssetImplD::HandleNewRequest(
     AssetDefs::NormalizeAssetName(req.assetname, req.type, kProjectSubtype);
 
 
-  if (Find<MutableRasterProjectAssetD>(projname, req.type)) {
+  if (Find<RasterProjectAssetD>(projname, req.type)) {
     throw khException(kh::tr("%1 project %2 already exists")
                       .arg(ToQString(req.type), ToQString(projname)));
   } else {
@@ -567,7 +567,7 @@ void RasterProjectAssetImplD::HandleModifyRequest(
 
   // find it and make the change
   MutableRasterProjectAssetD project;
-  if ((project = Find<MutableRasterProjectAssetD>(req.assetname, req.type))) {
+  if ((project = Find<RasterProjectAssetD>(req.assetname, req.type))) {
     // blow away old insets
     project->config.insets.clear();
     // define new ones
@@ -621,7 +621,7 @@ void RasterProjectAssetImplD::HandleAddToRequest(
 
   // find it and make the change
   MutableRasterProjectAssetD project;
-  if ((project = Find<MutableRasterProjectAssetD>(req.assetname, req.type))) {
+  if ((project = Find<RasterProjectAssetD>(req.assetname, req.type))) {
     // make sure my existing insets are still in order before adding more
     // a new version of a product asset could invalidate
     // my stacking order
@@ -671,7 +671,7 @@ void RasterProjectAssetImplD::HandleDropFromRequest(
     const RasterProjectDropFromRequest &req) {
   // find the project
   MutableRasterProjectAssetD project;
-  if (!(project = Find<MutableRasterProjectAssetD>(req.assetname, req.type))) {
+  if (!(project = Find<RasterProjectAssetD>(req.assetname, req.type))) {
     throw khException(kh::tr("No %1 project named %2")
                       .arg(ToQString(req.type), ToQString(req.assetname)));
   }
