@@ -286,5 +286,61 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
   return true;
 }
 
+template<class AssetType>
+AssetType Find(const std::string & ref, const AssetDefs::Type & type)
+{
+  try {
+    AssetType asset(ref);
+    notify(NFY_WARN, "Find: %s\t%s", ToString(asset->type).c_str(), asset->subtype.c_str());
+    if (asset &&
+        (asset->type == type) &&
+        (asset->subtype == AssetType::GetSubtype())) {
+        return AssetType(ref);
+    }
+  } catch (...) {
+      // do nothing - don't even generate any warnings
+  }
+  return AssetType();
+}
+
+template<class VersionType>
+VersionType FindVersion(const std::string & ref, const AssetDefs::Type & type)
+{
+    notify(NFY_WARN, "Version: %s\t%s\t%s", ref.c_str(), ToString(type).c_str(), VersionType::GetSubtype().c_str());
+    try {
+        VersionType version(ref);
+        notify(NFY_WARN, "Version: %s\t%s", ToString(version->type).c_str(), version->subtype.c_str());
+        if (version &&
+            (version->type == type) &&
+            (version->subtype == VersionType::GetSubtype())) {
+            return VersionType(ref);
+        }
+    } catch (...) {
+        // do nothing - don't even generate any warnings
+    }
+    return VersionType();
+}
+
+template<class VersionType>
+void ValidateRefForInput(const std::string & ref, const AssetDefs::Type & type)
+{
+    using AssetType = typename VersionType::Impl::AssetType;
+    notify(NFY_WARN, "Validate: %s\t%s\t%s", ref.c_str(), ToString(type).c_str(), VersionType::GetSubtype().c_str());
+    if (AssetVersionRef(ref).Version() == "current") {
+        AssetType asset = Find<AssetType>(ref, type);
+        if (!asset) {
+            throw std::invalid_argument(
+                "No such " + ToString(type) + " " + VersionType::GetSubtype() + " asset: " + ref);
+        }
+    } else {
+        VersionType version = FindVersion<VersionType>(ref, type);
+        if (!version) {
+            throw std::invalid_argument(
+                "No such " + ToString(type) + " " + VersionType::GetSubtype() + " asset version: " +
+                ref);
+        }
+    }
+}
+
 #endif // STORAGEMANAGER_H
 
