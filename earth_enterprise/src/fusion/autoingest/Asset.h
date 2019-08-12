@@ -169,21 +169,21 @@ VersionType FindVersion(const std::string & ref, const AssetDefs::Type & type)
 }
 
 template<class VersionType>
-void ValidateRefForInput(const std::string & ref, const AssetDefs::Type & type, const std::string & subtype)
+void ValidateRefForInput(const std::string & ref, const AssetDefs::Type & type)
 {
     using AssetType = typename VersionType::Impl::AssetType;
-    notify(NFY_WARN, "Validate: %s\t%s\t%s", ref.c_str(), ToString(type).c_str(), subtype.c_str());
+    notify(NFY_WARN, "Validate: %s\t%s\t%s", ref.c_str(), ToString(type).c_str(), VersionType::GetSubtype().c_str());
     if (AssetVersionRef(ref).Version() == "current") {
         AssetType asset = Find<AssetType>(ref, type);
         if (!asset) {
             throw std::invalid_argument(
-                "No such " + ToString(type) + " " + subtype + " asset: " + ref);
+                "No such " + ToString(type) + " " + VersionType::GetSubtype() + " asset: " + ref);
         }
     } else {
         VersionType version = FindVersion<VersionType>(ref, type);
         if (!version) {
             throw std::invalid_argument(
-                "No such " + ToString(type) + " " + subtype + " asset version: " +
+                "No such " + ToString(type) + " " + VersionType::GetSubtype() + " asset version: " +
                 ref);
         }
     }

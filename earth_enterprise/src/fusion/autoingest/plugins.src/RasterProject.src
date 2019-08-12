@@ -426,7 +426,7 @@ void RasterProjectAssetImplD::HandleEditRequest(
   for (std::vector<InsetStackItem>::const_iterator inset =
            req.config.insets.begin();
        inset != req.config.insets.end(); ++inset) {
-    ValidateRefForInput<RasterProductAssetVersionD>(inset->dataAsset, req.type, kProductSubtype);
+    ValidateRefForInput<RasterProductAssetVersionD>(inset->dataAsset, req.type);
   }
 
   // Find/make our target project.
@@ -512,7 +512,7 @@ void RasterProjectAssetImplD::HandleNewRequest(
   for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
          req.items.begin();
        item != req.items.end(); ++item) {
-    ValidateRefForInput<RasterProductAssetVersionD>(item->dataAsset, req.type, kProductSubtype);
+    ValidateRefForInput<RasterProductAssetVersionD>(item->dataAsset, req.type);
   }
 
   // normalize the supplied asset name
@@ -562,7 +562,7 @@ void RasterProjectAssetImplD::HandleModifyRequest(
   for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
          req.items.begin();
        item != req.items.end(); ++item) {
-    ValidateRefForInput<RasterProductAssetVersionD>(item->dataAsset, req.type, kProductSubtype);
+    ValidateRefForInput<RasterProductAssetVersionD>(item->dataAsset, req.type);
   }
 
   // find it and make the change
@@ -616,7 +616,7 @@ void RasterProjectAssetImplD::HandleAddToRequest(
   for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
          req.items.begin();
        item != req.items.end(); ++item) {
-    ValidateRefForInput<RasterProductAssetVersionD>(item->dataAsset, req.type, kProductSubtype);
+    ValidateRefForInput<RasterProductAssetVersionD>(item->dataAsset, req.type);
   }
 
   // find it and make the change
