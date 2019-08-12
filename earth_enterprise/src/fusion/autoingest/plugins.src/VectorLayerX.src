@@ -62,7 +62,7 @@ VectorLayerXAssetImplD::HandleEditRequest(const VectorLayerXEditRequest &req)
 
   // Custom FindMake
   // We need to make sure we don't clobber an existing fuid_channel
-  MutableVectorLayerXAssetD vectorlayer = Find<MutableVectorLayerXAssetD>(assetname, AssetDefs::Vector, kLayer);
+  MutableVectorLayerXAssetD vectorlayer = Find<MutableVectorLayerXAssetD>(assetname, AssetDefs::Vector);
 
   if (vectorlayer) {
     // It is a regular (editing the same asset) or "SaveAs" re-writing edit

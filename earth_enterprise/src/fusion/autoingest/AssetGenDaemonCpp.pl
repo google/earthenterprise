@@ -139,7 +139,7 @@ ${name}Factory::FindMake(const std::string &ref_ $formaltypearg,
 {
     // keep hold of it as a mutable so we can change/create it and
     // have the changes automatically saved
-    Mutable${name}AssetD asset = ::Find<Mutable${name}AssetD>(ref_, $typeref, ToString("$subtype"));
+    Mutable${name}AssetD asset = ::Find<Mutable${name}AssetD>(ref_, $typeref);
     if (asset) {
         asset->Modify($forwardinputarg meta_, config_);
         return asset;
@@ -157,7 +157,7 @@ ${name}Factory::FindAndModify(const std::string &ref_ $formaltypearg,
                               const khMetaData &meta_,
                               const $config& config_)
 {
-    Mutable${name}AssetD asset = ::Find<Mutable${name}AssetD>(ref_, $typeref, ToString("$subtype"));
+    Mutable${name}AssetD asset = ::Find<Mutable${name}AssetD>(ref_, $typeref);
     if (asset) {
         asset->Modify($forwardinputarg meta_, config_);
         return asset;
@@ -174,7 +174,7 @@ ${name}Factory::MakeNew(const std::string &ref_ $formaltypearg,
                         const khMetaData &meta_,
                         const $config& config_)
 {
-    Mutable${name}AssetD asset = ::Find<Mutable${name}AssetD>(ref_, $typeref, ToString("$subtype"));
+    Mutable${name}AssetD asset = ::Find<Mutable${name}AssetD>(ref_, $typeref);
     if (asset) {
         throw khException(kh::tr("$subtype '%2' already exists")
                           .arg(ref_));
@@ -248,7 +248,7 @@ ${name}Factory::ReuseOrMakeAndUpdate(
     std::transform(inputarg.begin(), inputarg.end(), back_inserter(boundInputs),
                    ptr_fun(&AssetVersionRef::Bind));
 
-    Mutable${name}AssetD asset = ::Find<Mutable${name}AssetD>(ref_, $typeref, ToString("$subtype"));
+    Mutable${name}AssetD asset = ::Find<Mutable${name}AssetD>(ref_, $typeref);
     if (asset) {
         for (const auto& v : asset->versions) {
             try {

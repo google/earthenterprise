@@ -128,6 +128,8 @@ protected:
     static std::shared_ptr<${name}AssetVersionImplD> Load(const std::string &ref);
 
 public:
+    using AssetType = DerivedAssetHandleD_<${name}Asset, AssetD, ${name}AssetImplD>;
+
     // Only used when constructing a new version from an asset.
     // The decision to use the raw ImplD* here was a tough one.
     // Originally it had an asset handle, but the call point is a member
@@ -158,6 +160,8 @@ print $fh <<EOF;
           ${base}AssetVersionImpl(),
           ${name}AssetVersionImpl(config_),
           ${base}AssetVersionImplD() { }
+
+    static std::string GetSubtype() { return "$subtype"; }
 
 $extra{"${name}AssetVersionImplD"}
 
@@ -222,6 +226,8 @@ public:
 			 const Config& config_)
         : AssetImpl(storage),
           ${name}AssetImpl(config_), AssetImplD() { }
+
+    static std::string GetSubtype() { return "$subtype"; }
 
 protected:
 EOF

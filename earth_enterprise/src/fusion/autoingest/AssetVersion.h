@@ -63,7 +63,7 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   virtual bool Save(const std::string &filename) const {
     assert(false); // Can only call from sub-classes
     return false;
-  };
+  }
 
   std::string WorkingFilename(const std::string &fname) const {
     return AssetDefs::AssetPathToFilename(WorkingFileRef(fname));

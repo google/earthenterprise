@@ -18,6 +18,7 @@
 #define __AssetHandleD_h
 
 #include <map>
+#include <memory>
 #include <string>
 #include <vector>
 #include <khException.h>
@@ -100,6 +101,10 @@ class DerivedAssetHandleD_ : public virtual BaseD_, public ROBase_
     // type so this dynamic cast should never fail.  but it needs to be
     // dynamic instead of static since we're casting from a virtual base
     return dynamic_cast<const Impl*>(this->handle.operator->());
+  }
+
+  static std::string GetSubtype() {
+    return Impl::GetSubtype();
   }
 
   ~DerivedAssetHandleD_()
@@ -322,6 +327,10 @@ class MutableDerivedAssetHandleD_ : public DerivedBase_, public MutableBase_
   using DerivedBase::operator->;
   Impl* operator->(void) {
     return const_cast<Impl*>(DerivedBase::operator->());
+  }
+  
+  static std::string GetSubtype() {
+    return Impl::GetSubtype();
   }
 
   ~MutableDerivedAssetHandleD_()

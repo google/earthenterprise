@@ -60,7 +60,7 @@ class AssetImpl : public AssetStorage, public StorageManaged {
   virtual bool Save(const std::string &filename) const {
     assert(false); // Can only save from sub-classes
     return false;
-  };
+  }
 
   std::string WorkingDir(void) const { return WorkingDir(GetRef()); }
   std::string XMLFilename() const { return XMLFilename(GetRef()); }
@@ -133,17 +133,15 @@ Asset::Valid(void) const
   }
 }
 
-
 template<class AssetType>
-AssetType Find(const std::string & ref, const AssetDefs::Type & type, const std::string & subtype)
+AssetType Find(const std::string & ref, const AssetDefs::Type & type)
 {
-  notify(NFY_WARN, "Find: %s\t%s\t%s", ref.c_str(), ToString(type).c_str(), subtype.c_str());
   try {
     AssetType asset(ref);
     notify(NFY_WARN, "Find: %s\t%s", ToString(asset->type).c_str(), asset->subtype.c_str());
     if (asset &&
         (asset->type == type) &&
-        (asset->subtype == subtype)) {
+        (asset->subtype == AssetType::GetSubtype())) {
         return AssetType(ref);
     }
   } catch (...) {
@@ -173,9 +171,10 @@ VersionType FindVersion(const std::string & ref, const AssetDefs::Type & type, c
 template<class VersionType>
 void ValidateRefForInput(const std::string & ref, const AssetDefs::Type & type, const std::string & subtype)
 {
+    using AssetType = typename VersionType::Impl::AssetType;
     notify(NFY_WARN, "Validate: %s\t%s\t%s", ref.c_str(), ToString(type).c_str(), subtype.c_str());
     if (AssetVersionRef(ref).Version() == "current") {
-        Asset asset = Find<Asset>(ref, type, subtype);
+        AssetType asset = Find<AssetType>(ref, type);
         if (!asset) {
             throw std::invalid_argument(
                 "No such " + ToString(type) + " " + subtype + " asset: " + ref);

@@ -255,7 +255,7 @@ DatabaseAssetImplD::HandleEditRequest(const DatabaseEditRequest &req)
 
   // custom FindMake - modified to set/preserve indexVersion
   DatabaseConfig dbConfig = req.config;
-  MutableDatabaseAssetD db = Find<MutableDatabaseAssetD>(dbname, AssetDefs::Database, kDatabaseSubtype);
+  MutableDatabaseAssetD db = Find<MutableDatabaseAssetD>(dbname, AssetDefs::Database);
   if (db) {
     // we must preserve the indexVersion sine the GUI doesn't/can't
     // we really should split this VectrProjectConfig into two pieces
@@ -285,7 +285,7 @@ DatabaseAssetImplD::HandleNewRequest(const DatabaseEditRequest &req)
     AssetDefs::NormalizeAssetName(req.assetname,
                                   AssetDefs::Database, kDatabaseSubtype);
 
-  if (Find<MutableDatabaseAssetD>(dbname, AssetDefs::Database, kDatabaseSubtype)) {
+  if (Find<MutableDatabaseAssetD>(dbname, AssetDefs::Database)) {
     throw khException(kh::tr("Database '%1' already exists")
                       .arg(ToQString(dbname)));
   } else {
@@ -314,7 +314,7 @@ DatabaseAssetImplD::HandleModifyRequest(const DatabaseEditRequest &req)
 
   // find and modify the DB
   MutableDatabaseAssetD db;
-  if (db = Find<MutableDatabaseAssetD>(dbname, AssetDefs::Database, kDatabaseSubtype)) {
+  if (db = Find<MutableDatabaseAssetD>(dbname, AssetDefs::Database)) {
     // we must preserve the indexVersion
     DatabaseConfig dbConfig = req.config;
     dbConfig.indexVersion = db->config.indexVersion;
