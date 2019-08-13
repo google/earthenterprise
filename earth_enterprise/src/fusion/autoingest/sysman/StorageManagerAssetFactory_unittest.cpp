@@ -156,10 +156,14 @@ TEST_F(AssetFactoryTest, ValidateCurrentVersionFail) {
   ASSERT_THROW(ValidateRefForInput<MockVersion>("blank?version=current"), std::invalid_argument);
 }
 
-// TODO: new tests
-// ValidateRefForInput version not current, find passes
-// ValidateRefForInput version not current, find fails
-// Test that catches the load error we got from the bad cast
+TEST_F(AssetFactoryTest, ValidateNonCurrentVersionPass) {
+  ValidateRefForInput<MockVersion>("blank?version=1");
+}
+
+TEST_F(AssetFactoryTest, ValidateNonCurrentVersionFail) {
+  MockAsset::BOOL_VALUE = false;
+  ASSERT_THROW(ValidateRefForInput<MockVersion>("blank?version=1"), std::invalid_argument);
+}
 
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc,argv);
