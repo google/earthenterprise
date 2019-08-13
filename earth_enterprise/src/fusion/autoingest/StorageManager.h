@@ -301,7 +301,7 @@ AssetType Find(const std::string & ref, const AssetDefs::Type & type)
     if (asset &&
         (asset->type == type) &&
         (asset->subtype == subtype)) {
-        return AssetType(ref);
+        return asset;
     }
   } catch (...) {
       // do nothing - don't even generate any warnings
