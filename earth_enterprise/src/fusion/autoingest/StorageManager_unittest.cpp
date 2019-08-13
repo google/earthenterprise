@@ -559,6 +559,19 @@ TEST_F(StorageManagerTest, InvalidRef) {
   ASSERT_FALSE(asset) << "Invalid refs should return empty handles";
 }
 
+// TODO: new tests
+// Find no type pass
+// Find with type invalid
+// Find with type, Asset returns false
+// Find with type, type doesn't match
+// Find with type, subtype doesn't match
+// ValdiateRefForInput no type
+// ValidateRefForInput type invalid
+// ValidateRefForInput version current, find passes
+// ValidateRefForInput version current, find fails
+// ValidateRefForInput version not current, find passes
+// ValidateRefForInput version not current, find fails
+
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc,argv);
   return RUN_ALL_TESTS();
