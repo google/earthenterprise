@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-#ifndef ASSETTREE_H
-#define ASSETTREE_H
+#ifndef STATEUPDATER_H
+#define STATEUPDATER_H
 
-#include <boost/graph/adjacency_list.hpp>
-#include <functional>
-#include <list>
+#include <set>
 #include <map>
 
+#include "DependentStateTree.h"
 #include "AssetVersion.h"
-#include "autoingest/.idl/storage/AssetDefs.h"
-#include "common/SharedString.h"
 #include "StorageManager.h"
 
 // This class efficiently updates the states of lots of asset versions at
@@ -37,55 +34,13 @@
 class StateUpdater
 {
   private:
-    struct AssetVertex {
-      SharedString name;
-      AssetDefs::State state;
-      size_t index; // Used by the dfs function
-    };
-
-    enum DependencyType { INPUT, CHILD, DEPENDENT, DEPENDENT_AND_CHILD };
-
-    struct AssetEdge {
-      DependencyType type;
-    };
-
-    typedef boost::adjacency_list<
-        boost::setS,
-        boost::setS,
-        boost::directedS,
-        AssetVertex,
-        AssetEdge> TreeType;
-    typedef std::map<SharedString, TreeType::vertex_descriptor> VertexMap;
-
-    // Used by dfs function to update states of assets in the tree
-    friend struct boost::property_map<TreeType, boost::vertex_index_t>;
-    class UpdateStateVisitor;
+    class SetStateVisitor;
 
     StorageManagerInterface<AssetVersionImpl> * const storageManager;
-    TreeType tree;
+    DependentStateTree tree;
 
-    inline bool IsDependent(DependencyType type) { return type == DEPENDENT || type == DEPENDENT_AND_CHILD; }
-
-    TreeType::vertex_descriptor BuildTree(const SharedString & ref);
-    TreeType::vertex_descriptor AddEmptyVertex(
-        const SharedString & ref,
-        VertexMap & vertices,
-        size_t & index,
-        std::list<TreeType::vertex_descriptor> & toFillIn);
-    void FillInVertex(
-        TreeType::vertex_descriptor vertex,
-        VertexMap & vertices,
-        size_t & index,
-        std::list<TreeType::vertex_descriptor> & toFillIn);
-    void AddEdge(TreeType::vertex_descriptor from,
-                 TreeType::vertex_descriptor to,
-                 AssetEdge data);
-    void SetStateForVertexAndDependents(
-        TreeType::vertex_descriptor vertex,
-        AssetDefs::State newState,
-        std::function<bool(AssetDefs::State)> updateStatePredicate);
     void SetState(
-        TreeType::vertex_descriptor vertex,
+        DependentStateTreeVertexDescriptor vertex,
         AssetDefs::State newState,
         bool sendNotifications);
   public:
@@ -94,7 +49,6 @@ class StateUpdater
         const SharedString & ref,
         AssetDefs::State newState,
         std::function<bool(AssetDefs::State)> updateStatePredicate);
-    void RecalculateAndSaveStates();
 };
 
-#endif // ASSETTREE_H
+#endif
