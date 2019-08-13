@@ -425,7 +425,7 @@ ${name}AssetImplD::Load(const std::string &boundref)
 {
     // make sure the base class loader actually instantiated one of me
     // this should always happen, but there are no compile time guarantees
-    auto loaded = ${name}AssetVersionImpl::Load(boundref);
+    auto loaded = ${name}AssetImpl::Load(boundref);
     std::shared_ptr<${name}AssetImplD> result =
         std::dynamic_pointer_cast<${name}AssetImplD>(loaded);
 
