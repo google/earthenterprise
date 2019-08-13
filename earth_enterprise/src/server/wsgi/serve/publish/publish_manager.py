@@ -42,6 +42,7 @@ from serve.snippets.util import dbroot_writer
 
 
 logger = logging.getLogger("ge_stream_publisher")
+logger.setLevel("DEBUG")
 
 RESERVED_WORD_SET = ["fdb", "htdocs", "admin", "cutter", "earth", "icons",
                      "js", "maps", "portable", "shared_assets"]
@@ -113,7 +114,7 @@ class PublishManager(object):
     if not server_url:
       raise exceptions.PublishServeException(
           "Couldn't get self-referential server URL.")
-    logger.debug("PublishManager init: server URL %s", server_url)
+    logger.info("PublishManager init: server URL %s", server_url)
     self._server_url = server_url
     self.__ResetPublishManager(server_url)
 
@@ -154,7 +155,7 @@ class PublishManager(object):
       request: request object.
       response: response object.
     """
-    logger.debug("HandleResetRequest...")
+    logger.info("HandleResetRequest...")
     self.__ResetPublishManager(self._server_url)
     http_io.ResponseWriter.AddBodyElement(
         response, constants.HDR_STATUS_CODE, constants.STATUS_SUCCESS)
@@ -166,7 +167,7 @@ class PublishManager(object):
       request: request object.
       response: response object.
     """
-    logger.debug("HandleQueryRequest...")
+    logger.info("HandleQueryRequest...")
     self._publish_helper.HandleQueryRequest(request, response)
 
   def HandlePublishRequest(self, request, response):
@@ -178,7 +179,7 @@ class PublishManager(object):
     Raises:
       PublishServeException, psycopg2.Error/Warning.
     """
-    logger.debug("HandlePublishRequest...")
+    logger.info("HandlePublishRequest...")
     publish_def = self.__GetPublishParameters(request)
 
     db_id = 0
@@ -196,7 +197,7 @@ class PublishManager(object):
 
       gedb_path = self._publish_helper.BuildDbPublishPath(
           publish_def.client_host_name, publish_def.db_name)
-      logger.debug("GEDB path: %s, db type: %s", gedb_path, publish_def.db_type)
+      logger.info("GEDB path: %s, db type: %s", gedb_path, publish_def.db_type)
 
       target_gedb_path = self._publish_helper.BuildTargetPublishPath(
           gedb_path, publish_def.target_path)
@@ -427,7 +428,7 @@ class PublishManager(object):
           target_path)
 
     self.__VerifyTargetPath(publish_def.target_path)
-    logger.debug("target path: %s", publish_def.target_path)
+    logger.info("target path: %s", publish_def.target_path)
 
     # Check whether target path is already in use.
     if self._publish_helper.IsTargetPathUsed(publish_def.target_path):
@@ -441,7 +442,7 @@ class PublishManager(object):
     if not publish_def.db_name:
       raise exceptions.PublishServeException(
           "Missing database name.")
-    logger.debug("db_name: %s", publish_def.db_name)
+    logger.info("db_name: %s", publish_def.db_name)
     assert isinstance(publish_def.db_name, str)
 
     (publish_def.db_name,
@@ -466,25 +467,25 @@ class PublishManager(object):
     # Get snippets set name parameter.
     publish_def.snippets_set_name = request.GetParameter(
         constants.SNIPPET_SET_NAME)
-    logger.debug("Snippets set name: %s ", publish_def.snippets_set_name if
+    logger.info("Snippets set name: %s ", publish_def.snippets_set_name if
                  publish_def.snippets_set_name else "not specified.")
 
     # Get search definition name parameter.
     publish_def.search_tabs = request.GetMultiPartParameter(
         constants.SEARCH_DEF_NAME)
     if publish_def.search_tabs:
-      logger.debug("Search tabs: %s", publish_def.search_tabs)
+      logger.info("Search tabs: %s", publish_def.search_tabs)
     else:
-      logger.debug("Search tabs are not specified.")
+      logger.info("Search tabs are not specified.")
 
     # Get supplemental search definition name parameter.
     publish_def.sup_search_tabs = request.GetMultiPartParameter(
         constants.SUPPLEMENTAL_SEARCH_DEF_NAME)
     if publish_def.sup_search_tabs:
-      logger.debug("Supplemental search tabs: %s",
+      logger.info("Supplemental search tabs: %s",
                    publish_def.sup_search_tabs)
     else:
-      logger.debug("Supplemental search tabs are not specified.")
+      logger.info("Supplemental search tabs are not specified.")
 
     publish_def.need_search_tab_id = request.GetBoolParameter(
         constants.NEED_SEARCH_TAB_ID)
@@ -523,7 +524,7 @@ class PublishManager(object):
     vh_base_url = self._publish_helper.GetVhBaseUrl(vh_url, vh_ssl)
     stream_url = urlparse.urljoin(vh_base_url, publish_def.target_path)
 
-    logger.debug("Stream URL: %s", stream_url)
+    logger.info("Stream URL: %s", stream_url)
 
     # Get database ID from gesearch database.
     search_db_id = self._publish_helper.GetSearchDbId(
@@ -536,7 +537,7 @@ class PublishManager(object):
     if publish_def.snippets_set_name:
       snippets_set = self._snippets_manager.GetSnippetSetDetails(
           publish_def.snippets_set_name)
-      logger.debug("Snippets set: %s", snippets_set)
+      logger.info("Snippets set: %s", snippets_set)
 
     # Get list of search definitions.
     search_def_list = self.__GetSearchDefs(
@@ -584,8 +585,8 @@ class PublishManager(object):
           logger)
 
       # Note: useful for debugging.
-    #      if __debug__:
-    #        logger.debug("Proto end_snippet: %s", end_snippet_proto)
+    
+      logger.info("Proto end_snippet: %s", end_snippet_proto)
 
     try:
       # Get publish manifest.
@@ -603,7 +604,7 @@ class PublishManager(object):
 
       publish_helper.GetPublishManifest(publish_config, publish_manifest)
 
-      logger.debug("PublishDatabase: publish manifest size %s.",
+      logger.info("PublishDatabase: publish manifest size %s.",
                    len(publish_manifest))
 
       if not publish_manifest:
@@ -678,7 +679,7 @@ class PublishManager(object):
       return search_def_list
 
     assert isinstance(search_def_name_list, list)
-    logger.debug("Search def name list: %s", search_def_name_list)
+    logger.info("Search def name list: %s", search_def_name_list)
 
     if constants.POI_SEARCH_SERVICE_NAME in search_def_name_list:
       if search_db_id == 0:
@@ -689,7 +690,7 @@ class PublishManager(object):
     for search_def_name in search_def_name_list:
       search_def_json = self._publish_helper.GetSearchDefDetails(
           search_def_name)
-      logger.debug("Search def: %s", search_def_json)
+      logger.info("Search def: %s", search_def_json)
       if search_def_json:
         search_def = basic_types.SearchDef.Deserialize(search_def_json)
         if not search_def.service_url:
@@ -721,7 +722,7 @@ class PublishManager(object):
           raise exceptions.PublishServeException(
               "Internal Error - search tab with multiple search fields.")
 
-        logger.debug("SearchDef: %s", search_def.DumpJson())
+        logger.info("SearchDef: %s", search_def.DumpJson())
         search_def_list.append(search_def)
       else:
         raise exceptions.PublishServeException(
@@ -778,7 +779,7 @@ class PublishManager(object):
     for item in publish_manifest:
       src_path = item.current_path
       dest_path = "%s/%s" % (db_path_prefix, item.orig_path)
-      logger.debug("TransferPublishManifest - src_path: %s, dest_path: %s.",
+      logger.info("TransferPublishManifest - src_path: %s, dest_path: %s.",
                    src_path, dest_path)
 
       # Transfer manifest file to published database directory.
@@ -792,7 +793,7 @@ class PublishManager(object):
           raise exceptions.PublishServeException(
               "Could not transfer publish manifest file %s to %s." %
               (src_path, dest_path))
-        logger.debug("Retrying Local Transfer.")
+        logger.info("Retrying Local Transfer.")
         time.sleep(sleep_secs)
         sleep_secs *= 2      # Double the sleep time after each retry.
 
@@ -903,7 +904,7 @@ class PublishManager(object):
       PublishServeException.
     """
 
-    logger.debug("HandleRepublishRequest...")
+    logger.info("HandleRepublishRequest...")
 
     # Extract parameters
     db_name = request.GetParameter(constants.DB_NAME)
@@ -974,7 +975,7 @@ class PublishManager(object):
       response_p = http_io.Response()
       self.HandlePublishRequest(request_p, response_p)
 
-      logger.debug("Database %s has been successfully republished to "
+      logger.info("Database %s has been successfully republished to "
                    "target %s.", db_name, target_path)
 
       http_io.ResponseWriter.AddBodyElement(response, constants.HDR_STATUS_CODE,
@@ -993,7 +994,7 @@ class PublishManager(object):
     Raises:
       PublishServeException.
     """
-    logger.debug("HandleSwapTargetsRequest...")
+    logger.info("HandleSwapTargetsRequest...")
 
     # Extract parameters.
     target_path_in_a = request.GetParameter(constants.TARGET_PATH_A)
@@ -1038,7 +1039,7 @@ class PublishManager(object):
     response_b = http_io.Response()
     self.HandlePublishRequest(request_b, response_b)
 
-    logger.debug("Targets %s and %s have been successfully swapped.",
+    logger.info("Targets %s and %s have been successfully swapped.",
                  target_path_a, target_path_b)
     http_io.ResponseWriter.AddBodyElement(response, constants.HDR_STATUS_CODE,
                                           constants.STATUS_SUCCESS)

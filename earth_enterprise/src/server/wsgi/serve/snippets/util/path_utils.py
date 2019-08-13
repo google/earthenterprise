@@ -236,11 +236,11 @@ class PathElement(object):
 
   def __repr__(self):
     text = self.name
-    if self.IsPrepared():
-      if self.index < 0:
-        text += "[]"
-      else:
-        text += "[%d]" % self.index
+    # if self.IsPrepared():
+    if self.index < 0:
+      text += "[]"
+    else:
+      text += "[%d]" % self.index
     return text
 
 

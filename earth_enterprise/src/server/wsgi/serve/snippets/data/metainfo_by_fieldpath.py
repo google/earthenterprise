@@ -638,6 +638,53 @@ META_INFO = r"""
     "presence": "optional",
     "short_label": "google_maps_url",
     "typ": "string"
+  },
+
+
+  "end_snippet.autopia_options.metadata_server_url": {
+    "abstract_fieldpath": "end_snippet.autopia_options.metadata_server_url",
+    "default_value": "",
+    "description": "StreetView URL for metadata_server.",
+    "empty_concrete_fieldpath": "end_snippet.autopia_options.metadata_server_url",
+    "enum_vals": null,
+    "js_validation_rule": {
+      "required": true
+    },
+    "name": "metadata_server_url",
+    "presence": "optional",
+    "short_label": "metadata_server_url",
+    "typ": "string"
+  },
+  "end_snippet.autopia_options.depthmap_server_url": {
+    "abstract_fieldpath": "end_snippet.autopia_options.depthmap_server_url",
+    "default_value": "",
+    "description": "StreetView URL for metadata_server.",
+    "empty_concrete_fieldpath": "end_snippet.autopia_options.depthmap_server_url",
+    "enum_vals": null,
+    "js_validation_rule": {
+      "required": true
+    },
+    "name": "depthmap_server_url",
+    "presence": "optional",
+    "short_label": "depthmap_server_url",
+    "typ": "string"
+  },
+  "end_snippet.autopia_options.coverage_overlay_url": {
+    "abstract_fieldpath": "end_snippet.autopia_options.coverage_overlay_url",
+    "default_value": "",
+    "description": "StreetView URL for metadata_server.",
+    "empty_concrete_fieldpath": "end_snippet.autopia_options.coverage_overlay_url",
+    "enum_vals": null,
+    "js_validation_rule": {
+      "required": true
+    },
+    "name": "coverage_overlay_url",
+    "presence": "optional",
+    "short_label": "coverage_overlay_url",
+    "typ": "string"
   }
 }
+
+
+
 """

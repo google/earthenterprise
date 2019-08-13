@@ -22,6 +22,11 @@ from serve.snippets.util import path_converters
 from serve.snippets.util import path_utils
 
 import google.protobuf.descriptor
+from google.protobuf import text_format
+
+
+
+from pprint import pformat
 
 # TODO: clean up, refactoring: switch to new style path.
 
@@ -116,28 +121,31 @@ def _NavigateToField(protobuf, field_path, log=None):
     content of the field.
   """
   if log:
-    log.debug("_NavigateToField: . . .")
+    log.info("_NavigateToField: . . .   path: %s "  % (field_path))
   field_elt, rest_of_field_path = (
       path_utils.PathElement.ElementAndRestFromOldStylePath(field_path))
+  if log: 
+    log.info("field_elt: . . . %s  REST of path: %s "  % (field_elt, rest_of_field_path))
   if not rest_of_field_path:
     if log:
-      log.debug("_navigate - reached primitive")
+      log.info("_navigate - reached primitive")
     # caller has to get / set the value at the field path_toks[0]
     return protobuf
   else:
     fielddesc = protobuf.DESCRIPTOR.fields_by_name[field_elt.name]
     assert fielddesc
     assert fielddesc.type == fielddesc.TYPE_MESSAGE, (
-        "an internal node must be a proto")
+        "an internal node must be a proto. %s " %  field_elt.name )
+    #if  fielddesc.type == fielddesc.TYPE_MESSAGE : 
+    #     log.warn ( "an internal node must be a proto. %s   Protobuf type: %d " %  (field_elt.name, fielddesc.type))
     is_repeated = fielddesc.label == fielddesc.LABEL_REPEATED
     if log:
-      log.debug("_navigate: is repeated? %s %s" % (
+      log.info("_navigate: is repeated? %s %s" % (
           str(is_repeated), fielddesc.name))
     if is_repeated:
       if log:
-        log.debug("_navigate: repeated; index: %d" % field_elt.index)
-        log.debug("_navigate: repeated; of len: %d" %
-                  len(getattr(protobuf, field_elt.name)))
+        log.info("_navigate: repeated; of len: %d" %
+                  (len(getattr(protobuf, field_elt.name))))
       repeated = getattr(protobuf, field_elt.name)
       # TODO: This is a bit rough and will get us
       # into trouble someday.
@@ -155,12 +163,13 @@ def _NavigateToField(protobuf, field_path, log=None):
     subbuf = None
     if is_repeated:
       if log:
-        log.debug("_navigate: getting %dth field" % field_elt.index)
+        log.info("_navigate: getting %dth field" % (field_elt.index) )
       subbuf = getattr(protobuf, field_elt.name)[field_elt.index]
     else:
       if log:
-        log.debug("_navigate: getting plain field")
+        log.info("_navigate: getting plain field")
       subbuf = getattr(protobuf, field_elt.name)
+    log.info ( "RECURSING: _NavigateToField")
     return _NavigateToField(subbuf, rest_of_field_path, log)
 
 
@@ -251,7 +260,7 @@ def FieldDescriptorAtFieldPath(protobuf, fieldpath, log=None):
   owner = _NavigateToField(protobuf, fieldpath, log)
   fdesc = owner.DESCRIPTOR.fields_by_name.get(fieldname, None)
   if log:
-    log.debug(fieldname + ": got fdesc")
+    log.info(fieldname + ": got fdesc")
   return fdesc
 
 
@@ -437,13 +446,13 @@ def WritePathValsToDbroot(dbroot, fieldpath_vals, log=None):
   if fieldpath_vals:
     for concrete_fieldpath, val in fieldpath_vals:
       if log:
-        log.debug("writing path:>%s<, >%s<" % (concrete_fieldpath, str(val)))
+        log.info("writing path:>%s<, >%s<" % (concrete_fieldpath, str(val)))
       SetValueAtFieldPath(dbroot, concrete_fieldpath, val, log)
       if log:
-        log.debug("done writing path")
+        log.info("done writing path")
 
   if log:
-    log.debug("done writing path vals")
+    log.info("done writing path vals")
 
 
 def main():

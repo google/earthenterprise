@@ -27,6 +27,7 @@ from serve.snippets.util import proto_reflection
 from serve.snippets.util import snippet_masker
 from serve.snippets.util import sparse_tree
 from serve.snippets.util import tree_utils
+from pprint import pformat
 
 # TODO: clean up, re-factoring.
 
@@ -63,10 +64,10 @@ def CreateEndSnippetProto(snippets_json,
   Returns:
     serialized to string proto dbroot content.
   """
-  log.debug("CreateEndSnippetProto...")
+  log.info("CreateEndSnippetProto...")
 
   dbroot = dbroot_utils.MakeEmptyDbroot()
-  log.debug("made empty")
+  log.info("made empty")
 
   # TODO a bit inelegant - should write straight to
   # protobuf the 'default-disarming', 'nerfing' values.
@@ -74,23 +75,25 @@ def CreateEndSnippetProto(snippets_json,
 
   # Overwrite defaults now; the /user's/ values will be written & take
   # precedence, later.
-  snippet_masker.NerfUnwantedExposedDefaults(
-      defaults_plugged_tree, log)
-  log.debug("masked unfriendly...")
-  log.debug("defaults plugged:" + str(defaults_plugged_tree))
+  
+  #TODO _ testing what happens if we don't NERF the dbroot objects. 
+  #snippet_masker.NerfUnwantedExposedDefaults(
+  #    defaults_plugged_tree, log)
+  log.info("masked unfriendly...")
+  log.info("defaults plugged:" + str(defaults_plugged_tree))
   _WriteTreeToDbroot(defaults_plugged_tree, dbroot, log)
 
   # The user's values
   if snippets_json:
-    log.debug("writing users snippets")
+    log.info("writing users snippets")
     users_snippets_tree = tree_utils.CompactTree(snippets_json, log)
     _WriteTreeToDbroot(users_snippets_tree, dbroot, log)
 
   # Finally, overwrite with any forced values we have.
   forced = {}
-  log.debug("writing forced snippets")
+  log.info("writing forced snippets")
   snippet_masker.ForceFields(forced, log)
-  log.debug("forced fields")
+  log.info("forced fields")
   _WriteTreeToDbroot(forced, dbroot, log)
 
   # Add search servers to proto end_snippet.
@@ -103,7 +106,7 @@ def CreateEndSnippetProto(snippets_json,
 
   # Note: useful for debugging.
   #  if __debug__:
-  #    log.debug("CreateEndSnippetProto - PROTO DBROOT: %s", dbroot)
+  #    log.info("CreateEndSnippetProto - PROTO DBROOT: %s", dbroot)
 
   content = dbroot.SerializeToString()
 
@@ -111,7 +114,7 @@ def CreateEndSnippetProto(snippets_json,
   #  dbroot_restored = dbroot_utils.MakeEmptyDbroot()
   #  dbroot_restored.ParseFromString(content)
   #  dbroot_restored.ParseFromString(content)
-  #  log.debug("CreateEndSnippetProto - PROTO DBROOT RESTORED: %s",
+  #  log.info("CreateEndSnippetProto - PROTO DBROOT RESTORED: %s",
   #            dbroot_restored)
 
   return content
@@ -125,19 +128,21 @@ def _WriteTreeToDbroot(tree, proto, log):
     proto: protobuf to store tree in.
     log: logger obj
   """
-  log.debug("writing tree...")
+  log.info("writing tree...")
   path_vals = sparse_tree.SortedFlattenedSparseTree("", tree)
   # TODO: it's a shame that we resort to breaking into
   # paths to write to the dbroot - should write tree directly.
   demangled_path_vals = [(path_converters.Demangled(path), val)
                          for path, val in path_vals]
 
+  log.info( "demangled paths : %s " %  (pformat( demangled_path_vals ) ))
+   
   _SetSnippets(proto, demangled_path_vals, log)
-  log.debug("wrote tree")
+  log.info("wrote tree")
   if not proto.IsInitialized():
     log.error("bad write, or bad values!")
   else:
-    log.debug("wrote path_vals ok")
+    log.info("wrote path_vals ok")
 
 
 def _SetSnippets(dbroot_proto, almost_snippet_values, log):
@@ -153,25 +158,25 @@ def _SetSnippets(dbroot_proto, almost_snippet_values, log):
       start at 0 and are contiguous.
     log: logger object.
   """
-  log.debug(">_SetSnippets")
+  log.info(">_SetSnippets")
   true_snippet_values = _MassageSpecialCases(almost_snippet_values, log)
   true_snippet_values.sort()
 
-  log.debug("aiming to set in dbroot:")
+  log.info("aiming to set in dbroot:")
   for k, v in true_snippet_values:
     assert isinstance(true_snippet_values, list)
     assert isinstance(true_snippet_values[0], tuple)
-    log.debug("snippet name:[%s], val:[%s]" % (k, str(v)))
-  log.debug("debugged em all")
+    log.info("snippet name:[%s], val:[%s]" % (k, str(v)))
+  log.info("debugged em all")
 
   for path, value in true_snippet_values:
-    log.debug("path: %s value: %s" % (path, value))
-  log.debug("setting in binary...")
+    log.info("path: %s value: %s" % (path, value))
+  log.info("setting in binary...")
 
   proto_reflection.WritePathValsToDbroot(
       dbroot_proto, true_snippet_values, log)
-  log.debug("...wrote")
-  log.debug("<_SetSnippets")
+  log.info("...wrote")
+  log.info("<_SetSnippets")
 
 
 def _ExtractWidgetEnumTextValues(enums_text, log):
@@ -185,11 +190,11 @@ def _ExtractWidgetEnumTextValues(enums_text, log):
     log: logger obj
   Returns:
   """
-  log.debug("converting enums:" + enums_text)
-  log.debug("enum separator:>" +
+  log.info("converting enums:" + enums_text)
+  log.info("enum separator:>" +
             configuration.WIDGET_ENUM_VALUE_SEPARATOR + "<")
   vals = enums_text.split(configuration.WIDGET_ENUM_VALUE_SEPARATOR)
-  log.debug("converting enums ->" + str(vals))
+  log.info("converting enums ->" + str(vals))
   return vals
 
 
@@ -203,11 +208,11 @@ def _EnumValFromText(fdesc, enum_text_val, log):
   Returns:
     integer value of enum text.
   """
-  log.debug("converting enum val:" + enum_text_val)
-  log.debug("possible enum vals:" + str(fdesc.enum_type.values_by_name.keys()))
+  log.info("converting enum val:" + enum_text_val)
+  log.info("possible enum vals:" + str(fdesc.enum_type.values_by_name.keys()))
 
   enum_val = fdesc.enum_type.values_by_name[enum_text_val.upper()].number
-  log.debug("done enum vals")
+  log.info("done enum vals")
   return enum_val
 
 
@@ -222,64 +227,64 @@ def _MassageSpecialCases(almost_snippet_values, log):
   Returns:
     All the snippet values, ready to write to a dbroot.
   """
-  log.debug(">massaging...")
+  log.info(">massaging...")
   true_snippet_values = []
   assert isinstance(almost_snippet_values, list)
-  log.debug("survived assertion")
+  log.info("survived assertion")
   dbroot_proto_for_structure = dbroot_utils.MakeEmptyDbroot()
   for concrete_fieldpath, snippet_value in almost_snippet_values:
-    log.debug("concrete for no good reason " + concrete_fieldpath)
+    log.info("concrete for no good reason " + concrete_fieldpath)
     abstract_fieldpath = path_utils.AsAbstract(concrete_fieldpath)
-    log.debug("abs field:" + abstract_fieldpath)
+    log.info("abs field:" + abstract_fieldpath)
 
     fdesc = proto_reflection.FieldDescriptorAtFieldPath(
-        dbroot_proto_for_structure, abstract_fieldpath)
-    log.debug("got field desc")
+        dbroot_proto_for_structure, abstract_fieldpath, log)
+    log.info("got field desc")
 
     is_enum = fdesc.enum_type is not None
-    log.debug("enum? " + str(is_enum))
+    log.info("enum? " + str(is_enum))
     # Special case - on the client we represent /repeated enums/ as a choice of
     # fixed checkboxes. Here, we convert that back.
     if not is_enum:
       # plain
-      log.debug("massaging, but plain: " + concrete_fieldpath +
+      log.info("massaging, but plain: " + concrete_fieldpath +
                 " " + str(snippet_value))
       true_snippet_values.append((concrete_fieldpath, snippet_value))
-      log.debug("did not massage non-enum")
+      log.info("did not massage non-enum")
     else:
       is_repeated = fdesc.label == fdesc.LABEL_REPEATED
       if not is_repeated:
-        log.debug("massaging singular enum:" +
+        log.info("massaging singular enum:" +
                   concrete_fieldpath + snippet_value)
         enum_val = _EnumValFromText(fdesc, snippet_value, log)
-        log.debug("massaged singular; " +
+        log.info("massaged singular; " +
                   concrete_fieldpath + " " + str(enum_val))
         true_snippet_values.append((concrete_fieldpath, enum_val))
       else:
         # repeated enum
-        log.debug("supposedly repeated enum...name: %s %s" % (
+        log.info("supposedly repeated enum...name: %s %s" % (
             concrete_fieldpath, str(snippet_value)))
 
         enum_text_vals = _ExtractWidgetEnumTextValues(snippet_value, log)
 
         for i, enum_text in enumerate(enum_text_vals):
-          log.debug("enum text: " + enum_text)
-          log.debug("all enum vals: " + fdesc.name)
-          log.debug("all enum vals: " +
+          log.info("enum text: " + enum_text)
+          log.info("all enum vals: " + fdesc.name)
+          log.info("all enum vals: " +
                     str(fdesc.enum_type.values_by_name.keys()))
           enum_val = _EnumValFromText(fdesc, enum_text, log)
-          log.debug("whew, found enum val!")
+          log.info("whew, found enum val!")
           # need to concretize, now! No way around it.
-          log.debug("special enum snippetval: " + snippet_value + "->" +
+          log.info("special enum snippetval: " + snippet_value + "->" +
                     str(enum_val))
           # thank heaven these can only be primitives! (& thus easy to get at)
           added_concrete_fieldpath = concrete_fieldpath + "[%d]" % i
-          log.debug("enummed: " + added_concrete_fieldpath)
+          log.info("enummed: " + added_concrete_fieldpath)
 
           true_snippet_values.append((added_concrete_fieldpath, enum_val))
-      log.debug("massaged enum")
+      log.info("massaged enum")
 
-  log.debug("done massaging")
+  log.info("done massaging")
   return true_snippet_values
 
 
@@ -314,9 +319,9 @@ def _AddSearchServers(dbroot,
     search_server.suggest_server.value = "about:blank"
     return
 
-  log.debug("_AddSearchServers()...")
+  log.info("_AddSearchServers()...")
   for search_def in search_def_list:
-    log.debug("Configure search server: %s", search_def.label)
+    log.info("Configure search server: %s", search_def.label)
     search_server = dbroot.end_snippet.search_config.search_server.add()
     search_server.name.value = (
         "%s [%s]" % (
@@ -362,7 +367,7 @@ def _AddSearchServers(dbroot,
       search_server.supplemental_ui.url.value = supplemental_search_url
       search_server.supplemental_ui.label.value = supplemental_search_label
 
-  log.debug("_AddSearchServers() done.")
+  log.info("_AddSearchServers() done.")
 
 
 def main():

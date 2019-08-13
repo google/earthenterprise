@@ -151,11 +151,13 @@ hard_masked_snippets = {
     # Note: Candidate for moving to masked_snippets, but only if we can verify
     # support in GEE. (See http://b/4364808).
     # active.
-    "end_snippet.autopia_options.metadata_server_url":
-        "",
-    # active.
-    "end_snippet.autopia_options.depthmap_server_url":
-        "",
+    
+    # TODO  - testing if unmasking these autopia fields is viable... so that EC can be directed 
+    # to alternate StreetView servers using these options. 
+
+    # "end_snippet.autopia_options.metadata_server_url":   "",
+    
+    # "end_snippet.autopia_options.depthmap_server_url": "",
 
     # TODO: if we add the coverage_overlay_url snippet,
     # EC 7.0.3.8542(linux), EC 7.1.1888(OS X) crash while opening database.

@@ -31,6 +31,7 @@ from serve.publish import publish_manager
 
 
 logger = logging.getLogger("ge_stream_publisher")
+logger.setLevel( logging.DEBUG )
 
 
 class PublishServlet(object):

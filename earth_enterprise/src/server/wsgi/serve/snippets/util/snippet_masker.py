@@ -142,8 +142,11 @@ def _LoadPathValuesFromDict(snippets, log):
 
     # Assure the end_snippet prefix
     path = path_utils.EnsureFull(path)
+    
+    log.warn( "DEBUGGING!!!! \n\n\n" )
+    log.info( "Adding snippet path entry: " + path )
     field_type = proto_reflection.TypeAtFieldPath(
-        dbroot_utils.MakeEmptyDbroot(), path)
+        dbroot_utils.MakeEmptyDbroot(), path, log)
 
     log.debug("field:[%s], value:[%s]", path, str(value))
     if field_type == google.protobuf.descriptor.FieldDescriptor.TYPE_BOOL:
@@ -228,19 +231,19 @@ def NerfUnwantedExposedDefaults(store, log):
 
 
 def main():
-  pass
-  #  log = logging_setup.init_logger("snippet-vetting.log", logging.DEBUG)
-  #  snippets = _LoadPathValuesFromDict(
-  #      hard_masked_snippets.hard_masked_snippets, log)
-  #  print snippets
-  #
+  # pass
+  log = logging_setup.init_logger("snippet-vetting.log", logging.DEBUG)
+  snippets = _LoadPathValuesFromDict(
+      hard_masked_snippets.hard_masked_snippets, log)
+  print snippets
+
   # just sanity checking. Probably is out-of-date.
-  # log = logging_setup.init_logger("snippet-vetting.log", logging.DEBUG)
-  # _LoadPathValues(configuration.SNIPPET_NERF_FILEPATH, log)
-  # _LoadPathValues(configuration.SNIPPET_HARDMASK_FILEPATH, log)
-  # nerf_unwanted_exposed_defaults({}, log)
-  # force_fields({}, log)
-  # remove_suppressed_fields({}, log)
+  log = logging_setup.init_logger("snippet-vetting.log", logging.DEBUG)
+  _LoadPathValues(configuration.SNIPPET_NERF_FILEPATH, log)
+  _LoadPathValues(configuration.SNIPPET_HARDMASK_FILEPATH, log)
+  nerf_unwanted_exposed_defaults({}, log)
+  force_fields({}, log)
+  remove_suppressed_fields({}, log)
 
 
 if __name__ == "__main__":
