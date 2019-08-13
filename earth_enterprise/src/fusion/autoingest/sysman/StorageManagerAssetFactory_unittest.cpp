@@ -15,20 +15,29 @@
  */
 
 #include "StorageManager.h"
+#include "gee_version.h"
 
 #include <gtest/gtest.h>
 #include <string>
 
 using namespace std;
 
+// This file tests the template functions in StorageManager.h that are not
+// directly a part of the storage manager class. These tests are separate from
+// the other storage manager tests to keep the test size manageable and for
+// easier compliation.
+
+class MockAsset;
+
 class MockAssetImpl {
   public:
-    static const AssetDefs::Type EXPECTED_TYPE;
-    static const string EXPECTED_SUBTYPE;
+    using AssetType = MockAsset;
+    static AssetDefs::Type EXPECTED_TYPE;
+    static string EXPECTED_SUBTYPE;
 };
 
-const AssetDefs::Type MockAssetImpl::EXPECTED_TYPE = AssetDefs::Terrain;
-const string MockAssetImpl::EXPECTED_SUBTYPE = "Product";
+AssetDefs::Type MockAssetImpl::EXPECTED_TYPE;
+string MockAssetImpl::EXPECTED_SUBTYPE;
 
 class MockAsset {
   public:
@@ -40,6 +49,8 @@ class MockAsset {
     MockAsset() = default;
     MockAsset(const std::string & ref) : ref(ref), type(Impl::EXPECTED_TYPE), subtype(Impl::EXPECTED_SUBTYPE) {}
     explicit operator bool() { return true; }
+    // The functions we are testing expect an object that acts like a pointer,
+    // so we provide a pointer to ourselves.
     MockAsset * operator->() { return this; }
 };
 
@@ -47,6 +58,8 @@ class AssetFactoryTest : public testing::Test {
   public:
     AssetFactoryTest() {
       // Reset the static variables
+      MockAssetImpl::EXPECTED_TYPE = AssetDefs::Terrain;
+      MockAssetImpl::EXPECTED_SUBTYPE = "Product";
     }
 };
 
@@ -56,13 +69,25 @@ TEST_F(AssetFactoryTest, FindNoTypePass) {
   ASSERT_EQ(asset.ref, testRef);
 }
 
+TEST_F(AssetFactoryTest, FindNoTypeInvalid) {
+  MockAssetImpl::EXPECTED_TYPE = AssetDefs::Invalid;
+  ASSERT_DEATH(Find<MockAsset>("blank"), ".*");
+}
 
-// This file tests the template functions in StorageManager.h that are not
-// directly a part of the storage manager class. These tests are separate from
-// the other storage manager tests to keep the test size manageable.
+TEST_F(AssetFactoryTest, FindInvalidType) {
+  ASSERT_DEATH(Find<MockAsset>("blank", AssetDefs::Invalid), ".*");
+}
+
+TEST_F(AssetFactoryTest, ValidateNoTypeInvalid) {
+  MockAssetImpl::EXPECTED_TYPE = AssetDefs::Invalid;
+  ASSERT_DEATH(ValidateRefForInput<MockAsset>("blank"), ".*");
+}
+
+TEST_F(AssetFactoryTest, ValidateInvalidType) {
+  ASSERT_DEATH(ValidateRefForInput<MockAsset>("blank", AssetDefs::Invalid), ".*");
+}
 
 // TODO: new tests
-// Find with type invalid
 // Find with type, Asset returns false
 // Find with type, type doesn't match
 // Find with type, subtype doesn't match

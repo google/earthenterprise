@@ -218,10 +218,6 @@ env.test('StorageManagerAssetHandle_unittest',
          'StorageManagerAssetHandle_unittest.cpp',
          LIBS=['gecommon', 'gtest'])
 
-env.test('StorageManagerAssetFactory_unittest',
-         'StorageManagerAssetFactory_unittest.cpp',
-         LIBS=['gecommon', 'gemiscconfig', 'gtest'])
-
 SConscript('sysman/SConscript', exports=['env', 'commonobj', 'plugins'])
 SConscript('tools/SConscript', exports='env')
 SConscript('memory-tests/SConscript', exports=['env'])
