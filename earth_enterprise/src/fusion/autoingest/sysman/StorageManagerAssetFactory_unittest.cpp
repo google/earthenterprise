@@ -27,11 +27,8 @@ using namespace std;
 // the other storage manager tests to keep the test size manageable and for
 // easier compliation.
 
-class MockAsset;
-
 class MockAssetImpl {
   public:
-    using AssetType = MockAsset;
     static AssetDefs::Type EXPECTED_TYPE;
     static string EXPECTED_SUBTYPE;
 };
@@ -57,6 +54,18 @@ class MockAsset {
     // The functions we are testing expect an object that acts like a pointer,
     // so we provide a pointer to ourselves.
     MockAsset * operator->() { return this; }
+};
+
+class MockVersionImpl : public MockAssetImpl {
+  public:
+    using AssetType = MockAsset;
+};
+
+class MockVersion : public MockAsset {
+  public:
+    using Impl = MockVersionImpl;
+    MockVersion() = default;
+    MockVersion(const std::string & ref) : MockAsset(ref) {}
 };
 
 bool MockAsset::BOOL_VALUE;
@@ -109,18 +118,26 @@ TEST_F(AssetFactoryTest, FindWrongType) {
   testFindFailure();
 }
 
+TEST_F(AssetFactoryTest, FindWrongTypePassedIn) {
+  auto asset = Find<MockAsset>("test_ref", AssetDefs::Map);
+  ASSERT_EQ(asset.ref, "");
+}
+
 TEST_F(AssetFactoryTest, FindWrongSubtype) {
   MockAsset::USE_SUBTYPE = "Map";
   testFindFailure();
 }
 
+// For the version tests the ref must include a version string to prevent
+// AssetVersionRef from trying to load assets from disk.
+
 TEST_F(AssetFactoryTest, ValidateNoTypeInvalid) {
   MockAssetImpl::EXPECTED_TYPE = AssetDefs::Invalid;
-  ASSERT_DEATH(ValidateRefForInput<MockAsset>("blank"), ".*");
+  ASSERT_DEATH(ValidateRefForInput<MockVersion>("blank?version=1"), ".*");
 }
 
 TEST_F(AssetFactoryTest, ValidateInvalidType) {
-  ASSERT_DEATH(ValidateRefForInput<MockAsset>("blank", AssetDefs::Invalid), ".*");
+  ASSERT_DEATH(ValidateRefForInput<MockVersion>("blank?version=1", AssetDefs::Invalid), ".*");
 }
 
 // TODO: new tests
