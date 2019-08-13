@@ -56,10 +56,15 @@ class MockAsset {
     MockAsset * operator->() { return this; }
 };
 
-class MockVersionImpl : public MockAssetImpl {
+class MockVersionImpl {
   public:
     using AssetType = MockAsset;
+    static AssetDefs::Type EXPECTED_TYPE;
+    static string EXPECTED_SUBTYPE;
 };
+
+AssetDefs::Type MockVersionImpl::EXPECTED_TYPE;
+string MockVersionImpl::EXPECTED_SUBTYPE;
 
 class MockVersion : public MockAsset {
   public:
@@ -78,6 +83,8 @@ class AssetFactoryTest : public testing::Test {
       // Reset the static variables
       MockAssetImpl::EXPECTED_TYPE = AssetDefs::Terrain;
       MockAssetImpl::EXPECTED_SUBTYPE = "Product";
+      MockVersionImpl::EXPECTED_TYPE = MockAssetImpl::EXPECTED_TYPE;
+      MockVersionImpl::EXPECTED_SUBTYPE = MockAssetImpl::EXPECTED_SUBTYPE;
       MockAsset::BOOL_VALUE = true;
       MockAsset::USE_TYPE = MockAssetImpl::EXPECTED_TYPE;
       MockAsset::USE_SUBTYPE = MockAssetImpl::EXPECTED_SUBTYPE;
@@ -132,7 +139,7 @@ TEST_F(AssetFactoryTest, FindWrongSubtype) {
 // AssetVersionRef from trying to load assets from disk.
 
 TEST_F(AssetFactoryTest, ValidateNoTypeInvalid) {
-  MockAssetImpl::EXPECTED_TYPE = AssetDefs::Invalid;
+  MockVersionImpl::EXPECTED_TYPE = AssetDefs::Invalid;
   ASSERT_DEATH(ValidateRefForInput<MockVersion>("blank?version=1"), ".*");
 }
 
@@ -140,10 +147,16 @@ TEST_F(AssetFactoryTest, ValidateInvalidType) {
   ASSERT_DEATH(ValidateRefForInput<MockVersion>("blank?version=1", AssetDefs::Invalid), ".*");
 }
 
+TEST_F(AssetFactoryTest, ValidateCurrentVersionPass) {
+  ValidateRefForInput<MockVersion>("blank?version=current");
+}
+
+TEST_F(AssetFactoryTest, ValidateCurrentVersionFail) {
+  MockAsset::BOOL_VALUE = false;
+  ASSERT_THROW(ValidateRefForInput<MockVersion>("blank?version=current"), std::invalid_argument);
+}
+
 // TODO: new tests
-// ValdiateRefForInput no type
-// ValidateRefForInput version current, find passes
-// ValidateRefForInput version current, find fails
 // ValidateRefForInput version not current, find passes
 // ValidateRefForInput version not current, find fails
 // Test that catches the load error we got from the bad cast
