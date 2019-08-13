@@ -106,19 +106,25 @@ TEST_F(AssetFactoryTest, FindNoTypePass) {
   testFindSuccess();
 }
 
+// Invalid types are only checked in asserts, so these tests will fail to die
+// in release builds.
+#ifndef NDEBUG
 TEST_F(AssetFactoryTest, FindNoTypeInvalid) {
   MockAssetImpl::EXPECTED_TYPE = AssetDefs::Invalid;
   ASSERT_DEATH(Find<MockAsset>("blank"), ".*");
 }
+#endif
 
 TEST_F(AssetFactoryTest, FindAssetFalse) {
   MockAsset::BOOL_VALUE = false;
   testFindFailure();
 }
 
+#ifndef NDEBUG
 TEST_F(AssetFactoryTest, FindInvalidType) {
   ASSERT_DEATH(Find<MockAsset>("blank", AssetDefs::Invalid), ".*");
 }
+#endif
 
 TEST_F(AssetFactoryTest, FindWrongType) {
   MockAsset::USE_TYPE = AssetDefs::Map;
@@ -138,14 +144,18 @@ TEST_F(AssetFactoryTest, FindWrongSubtype) {
 // For the version tests the ref must include a version string to prevent
 // AssetVersionRef from trying to load assets from disk.
 
+#ifndef NDEBUG
 TEST_F(AssetFactoryTest, ValidateNoTypeInvalid) {
   MockVersionImpl::EXPECTED_TYPE = AssetDefs::Invalid;
   ASSERT_DEATH(ValidateRefForInput<MockVersion>("blank?version=1"), ".*");
 }
+#endif
 
+#ifndef NDEBUG
 TEST_F(AssetFactoryTest, ValidateInvalidType) {
   ASSERT_DEATH(ValidateRefForInput<MockVersion>("blank?version=1", AssetDefs::Invalid), ".*");
 }
+#endif
 
 TEST_F(AssetFactoryTest, ValidateCurrentVersionPass) {
   ValidateRefForInput<MockVersion>("blank?version=current");
