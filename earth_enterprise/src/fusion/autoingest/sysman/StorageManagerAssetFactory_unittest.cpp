@@ -42,13 +42,17 @@ string MockAssetImpl::EXPECTED_SUBTYPE;
 class MockAsset {
   public:
     using Impl = MockAssetImpl;
+
     static bool BOOL_VALUE;
+    static AssetDefs::Type USE_TYPE;
+    static string USE_SUBTYPE;
+    
     string ref;
     AssetDefs::Type type;
     string subtype;
 
     MockAsset() = default;
-    MockAsset(const std::string & ref) : ref(ref), type(Impl::EXPECTED_TYPE), subtype(Impl::EXPECTED_SUBTYPE) {}
+    MockAsset(const std::string & ref) : ref(ref), type(USE_TYPE), subtype(USE_SUBTYPE) {}
     explicit operator bool() { return BOOL_VALUE; }
     // The functions we are testing expect an object that acts like a pointer,
     // so we provide a pointer to ourselves.
@@ -56,6 +60,8 @@ class MockAsset {
 };
 
 bool MockAsset::BOOL_VALUE;
+AssetDefs::Type MockAsset::USE_TYPE;
+string MockAsset::USE_SUBTYPE;
 
 class AssetFactoryTest : public testing::Test {
   public:
@@ -64,13 +70,24 @@ class AssetFactoryTest : public testing::Test {
       MockAssetImpl::EXPECTED_TYPE = AssetDefs::Terrain;
       MockAssetImpl::EXPECTED_SUBTYPE = "Product";
       MockAsset::BOOL_VALUE = true;
+      MockAsset::USE_TYPE = MockAssetImpl::EXPECTED_TYPE;
+      MockAsset::USE_SUBTYPE = MockAssetImpl::EXPECTED_SUBTYPE;
     }
 };
 
-TEST_F(AssetFactoryTest, FindNoTypePass) {
+void testFindFailure() {
+  auto asset = Find<MockAsset>("test_ref");
+  ASSERT_EQ(asset.ref, "");
+}
+
+void testFindSuccess() {
   string testRef = "test_ref";
   auto asset = Find<MockAsset>(testRef);
   ASSERT_EQ(asset.ref, testRef);
+}
+
+TEST_F(AssetFactoryTest, FindNoTypePass) {
+  testFindSuccess();
 }
 
 TEST_F(AssetFactoryTest, FindNoTypeInvalid) {
@@ -80,12 +97,21 @@ TEST_F(AssetFactoryTest, FindNoTypeInvalid) {
 
 TEST_F(AssetFactoryTest, FindAssetFalse) {
   MockAsset::BOOL_VALUE = false;
-  auto asset = Find<MockAsset>("test_ref");
-  ASSERT_EQ(asset.ref, "");
+  testFindFailure();
 }
 
 TEST_F(AssetFactoryTest, FindInvalidType) {
   ASSERT_DEATH(Find<MockAsset>("blank", AssetDefs::Invalid), ".*");
+}
+
+TEST_F(AssetFactoryTest, FindWrongType) {
+  MockAsset::USE_TYPE = AssetDefs::Map;
+  testFindFailure();
+}
+
+TEST_F(AssetFactoryTest, FindWrongSubtype) {
+  MockAsset::USE_SUBTYPE = "Map";
+  testFindFailure();
 }
 
 TEST_F(AssetFactoryTest, ValidateNoTypeInvalid) {
@@ -98,10 +124,7 @@ TEST_F(AssetFactoryTest, ValidateInvalidType) {
 }
 
 // TODO: new tests
-// Find with type, type doesn't match
-// Find with type, subtype doesn't match
 // ValdiateRefForInput no type
-// ValidateRefForInput type invalid
 // ValidateRefForInput version current, find passes
 // ValidateRefForInput version current, find fails
 // ValidateRefForInput version not current, find passes
