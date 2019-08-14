@@ -294,8 +294,10 @@ PURGE=&lt;value&gt;
 # default is 3<br>
 PURGE_LEVEL=&lt;value&gt;
 </code>
-<h2 id="packgen_thread_configuration"> PackGen thread configuration</h2>
-Within <code>misc.xml</code>, there is an experimental feature for setting the number of threads to use during the packgen process. The number of threads is controlled by <code>PackGenThreads</code>. 
+<h2 id="packgen_thread_configuration"> PackGen analysis thread configuration</h2>
+Within <code>misc.xml</code>, there is an experimental feature for setting the number of threads to use while analyzing
+and creating packgen tasks. The number of threads is controlled by <code>PackGenAnalysisThreads</code>. This option is experimental
+and may contain bugs.
 <h2 id="status_request_timeout">Status request timeout</h2>
 <p>Status requests to the system manager from clients like <code>getop</code> must wait to be fulfilled if the system manager
    is already engaged in another task. The system manager has a timeout that specifies the maximum amount of time it should

@@ -242,7 +242,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       // populate inputs and inputVers & config.insets
       packetLevelConfig.insets.reserve(mergeIndexes.size() + 1);
       packetLevelConfig.insets.resize(mergeIndexes.size());
-      int threadsToUse = MiscConfig::Instance().PackGenThreads;
+      int threadsToUse = MiscConfig::Instance().PackGenAnalysisThreads;
       levInputs.resize(mergeIndexes.size() * 2 + 1);
       levInputVers.resize(mergeIndexes.size() * 2 + 1);
 
