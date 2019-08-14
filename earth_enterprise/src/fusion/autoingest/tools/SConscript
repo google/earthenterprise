@@ -22,9 +22,9 @@ Import('env')
 # ***  apps that are NOT installed
 # ****************************************************************************
 env.executable('gefindsrconvol', ['gefindsrconvol.cpp'],
-               LIBS=['geautoingest', 'gecommon', 'gemiscconfig', 'geutil', 'qt-mt', 'gexml', 'xerces-c'])
+               LIBS=['geautoingest', 'gecommon', 'gemiscconfig', 'geutil', 'qt-mt'])
 env.executable('gefindfilesonvol', ['gefindfilesonvol.cpp'],
-               LIBS=['geautoingest', 'gemiscconfig', 'geutil', 'gecommon', 'qt-mt', 'gexml', 'xerces-c'])
+               LIBS=['geautoingest', 'gemiscconfig', 'geutil', 'gecommon', 'qt-mt'])
 
 
 # ****************************************************************************
@@ -55,7 +55,7 @@ env_tmp.install('fusion_bin',
             LIBS=['geautoingest', 'gefconfigutil', 'geutil', 'gecommon', 'qt-mt']))
 env.install('fusion_bin', map(lambda app: env.executable(app, [app+'.cpp'],
                                                   LIBS=['geautoingest',
-                                                  'gefconfigutil', 'gesearchtabs', 'gemiscconfig', 'geutil', 'gecommon', 'qt-mt', 'gexml', 'xerces-c']),
+                                                  'gefconfigutil', 'gesearchtabs', 'gemiscconfig', 'geutil', 'gecommon', 'qt-mt']),
                        appbase))
 
 # ****************************************************************************
@@ -71,7 +71,7 @@ genewimageryresource = env.executable('genewimageryresource',
 
 gedisconnectedsend = env.executable('gedisconnectedsend',
                                    ['gedisconnectedsend.cpp'],
-                                   LIBS=['geautoingest', 'dbmanifest', 'gemiscconfig', 'geutil', 'gecommon', 'qt-mt', 'gexml', 'xerces-c'])
+                                   LIBS=['geautoingest', 'dbmanifest', 'gemiscconfig', 'geutil', 'gecommon', 'qt-mt'])
 # deprecated
 # gedisconnectedreceive = env.executable('gedisconnectedreceive',
 #                                   ['gedisconnectedreceive.cpp'],
