@@ -1,7 +1,7 @@
 diff -uNr httpd-2.2.29.orig/docs/conf/httpd.conf.in httpd-2.2.29/docs/conf/httpd.conf.in
 --- httpd-2.2.29.orig/docs/conf/httpd.conf.in	2015-07-30 17:09:30.644259782 -0700
-+++ httpd-2.2.29/docs/conf/httpd.conf.in	2015-07-30 17:09:52.219686038 -0700
-@@ -178,6 +178,26 @@
++++ httpd-2.4.39/docs/conf/httpd.conf.in	2015-07-30 17:09:52.219686038 -0700
+@@ -176,6 +176,26 @@
      </Limit>
  </Directory>
  

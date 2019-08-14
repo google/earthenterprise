@@ -19,6 +19,10 @@
 #include <http_log.h>
 #include "common/serverdb/serverdbReader.h"
 
+#ifdef APLOG_USE_MODULE
+APLOG_USE_MODULE(fdb);
+#endif
+
 FdbReaderManager::FdbReaderManager() :
     is_cutting_enabled_(false),
     file_pool_(-50) {
