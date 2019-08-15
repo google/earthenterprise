@@ -493,7 +493,7 @@ bool gstEarthStream::GetImage(const gstQuadAddress& addr, char* buffer) {
 ImageVersion gstEarthStream::GetImageVersion(const gstQuadAddress& addr) {
   std::string blist = addr.BlistAsString();
   static khCache<std::string, ImageExistanceHandle>
-    image_existance_cache(kImageExistanceCacheSize);
+    image_existance_cache(kImageExistanceCacheSize, "image existence cache");
   ImageExistanceHandle image_existance;
   if (!image_existance_cache.Find(ImageExistanceImpl::PacketName(blist),
                                    image_existance)) {

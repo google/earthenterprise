@@ -33,7 +33,7 @@ PreviewController::PreviewController(const khTilespace &tilespace_,
     oversizeFactor(oversizeFactor_),
     addrShift(tilespace.tileSizeLog2 - tilespace.pixelsAtLevel0Log2),
     config(config_),
-    cache(5 /* only cache a small number of these */),
+    cache(5 /* only cache a small number of these */, "preview controller"),
     debug(debug_)
 {
   SelectorVector dummy;

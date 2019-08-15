@@ -36,9 +36,9 @@ void gstSourceManager::init(int sz) {
 }
 
 gstSourceManager::gstSourceManager(int cacheSize)
-    : geode_cache_(gstSourceManager::kGeodesCacheSize),
-      geometry_cache_(cacheSize),
-      record_cache_(gstSourceManager::kRecordCacheSize) {
+    : geode_cache_(gstSourceManager::kGeodesCacheSize, "GST geode"),
+      geometry_cache_(cacheSize, "GST geometry"),
+      record_cache_(gstSourceManager::kRecordCacheSize, "GST record") {
 }
 
 gstSourceManager::~gstSourceManager() {

@@ -64,7 +64,7 @@ class StorageManager : public StorageManagerInterface<AssetType> {
     using PointerType = typename Base::PointerType;
 
     StorageManager(uint cacheSize, bool limitByMemory, uint64 maxMemory, const std::string & type) :
-        cache(cacheSize),
+        cache(cacheSize, type),
         assetType(type) { SetCacheMemoryLimit(limitByMemory, maxMemory); }
     ~StorageManager() = default;
 

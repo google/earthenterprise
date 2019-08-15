@@ -69,7 +69,7 @@ class FFIORasterReaderCache
   mutable khCache<const RawReader*, CachedReader> cache;
 
  public:
-  inline FFIORasterReaderCache(uint cacheSize) : cache(cacheSize) { }
+  inline FFIORasterReaderCache(uint cacheSize) : cache(cacheSize, "reader") { }
 
   inline void
   ReadTile(const RawReader *reader, const khTileAddr &addr,

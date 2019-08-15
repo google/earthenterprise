@@ -18,6 +18,7 @@
 #ifndef __khCache_h
 #define __khCache_h
 
+#include <cctype>
 #include <chrono>
 #include <map>
 #include <vector>
@@ -80,6 +81,7 @@ class khCache {
   Item *head;
   Item *tail;
   const uint targetMax;
+  const std::string name;
 #ifdef SUPPORT_VERBOSE
   bool verbose;
 #endif
@@ -175,11 +177,12 @@ class khCache {
   size_type capacity(void) const { return targetMax; }
   uint64 getMemoryUse(void) const { return cacheMemoryUse; }
 
-  khCache(uint targetMax_
+  khCache(uint targetMax_, std::string name_
 #ifdef SUPPORT_VERBOSE
           , bool verbose_ = false
 #endif
           ) : head(0), tail(0), targetMax(targetMax_),
+              name(name_.replace(0, 1, 1, std::toupper(name_[0]))), // Make the first letter upper case for pretty notify statements
 #ifdef SUPPORT_VERBOSE
               verbose(verbose_),
 #endif
@@ -344,8 +347,8 @@ class khCache {
       actualSize = map.size();
       units = "items";
     }
-    notify(NFY_INFO, "Cache size exceeded. Configured size: %lu %s, Actual size: %lu %s, Prune time: %f seconds",
-           configuredSize, units.c_str(), actualSize, units.c_str(), elapsedTime.count());
+    notify(NFY_INFO, "%s cache size exceeded. Configured size: %lu %s, Actual size: %lu %s, Prune time: %f seconds",
+           name.c_str(), configuredSize, units.c_str(), actualSize, units.c_str(), elapsedTime.count());
   }
 
 };
