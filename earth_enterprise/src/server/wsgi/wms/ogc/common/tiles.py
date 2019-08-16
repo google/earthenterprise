@@ -21,7 +21,7 @@ import logging
 import os
 import StringIO
 import tempfile
-import urllib
+import wms_connection
 
 import geom
 import images
@@ -286,6 +286,8 @@ def _SetTransPixelToBgcolor(tile, bgcolor):
 
   return tile
 
+key_file = '/opt/google/gehttpd/conf/privkey.pem'
+cert_file = '/opt/google/gehttpd/conf/fullchain.pem'
 
 def _FetchMapTile(url):
   """Fetches and returns a tile, given an url.
@@ -297,16 +299,12 @@ def _FetchMapTile(url):
       The tile bitmap.
   """
   try:
-    fp = urllib.urlopen(url)
-    f = StringIO.StringIO(fp.read())
+    f = StringIO.StringIO(wms_connection.HandleConnection(url))
     im_tile = Image.open(f)
     im_tile.load()
   except IOError, e:
     im_tile = None
     logger.error("Failed to fetch tile:%s", e)
-  finally:
-    if fp:
-      fp.close()
 
   return im_tile
 

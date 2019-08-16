@@ -19,10 +19,11 @@
 import json
 import logging
 import re
+import ssl
 from socket import gethostname
-import urllib2
 import urlparse
 
+import wms.ogc.common.wms_connection as wms_connection
 import wms.ogc.common.projections as projections
 
 # Example 'serverDefs' from Maps/Portable. The parts we use are the same
@@ -193,6 +194,8 @@ class WmsLayer(object):
 
     return tile_args
 
+key_file = '/opt/google/gehttpd/conf/privkey.pem'
+cert_file = '/opt/google/gehttpd/conf/fullchain.pem'
 
 def _GetServerVars(target_url):
   """Fetches the server definitions from the Maps server.
@@ -210,16 +213,7 @@ def _GetServerVars(target_url):
 
   target_url = urlparse.urljoin(target_url, _SERVER_DEF_URL)
 
-  logger.debug("Opening url: [%s]", target_url)
-
-  try:
-    fp = urllib2.urlopen(target_url)
-    result = fp.read()
-  except urllib2.HTTPError, e:
-    logger.warning("Server definitions didn't return any results %s.", e)
-    return {}
-
-  fp.close()
+  result = wms_connection.HandleConnection(target_url)
 
   logger.debug("Server definitions data read, start regex")
   logger.debug("JSON vars: %s", result)
