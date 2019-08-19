@@ -1,6 +1,7 @@
 #!/usr/bin/python
 #
 # Copyright 2017 Google Inc.
+# Copyright 2019 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -194,8 +195,6 @@ class WmsLayer(object):
 
     return tile_args
 
-key_file = '/opt/google/gehttpd/conf/privkey.pem'
-cert_file = '/opt/google/gehttpd/conf/fullchain.pem'
 
 def _GetServerVars(target_url):
   """Fetches the server definitions from the Maps server.
