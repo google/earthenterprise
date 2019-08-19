@@ -33,6 +33,7 @@ def HandleConnection(url):
   if CONFIGS.GetStr("DATABASE_HOST") != "":
     url = CONFIGS.GetStr("DATABASE_HOST") + urlparse.urlsplit(url)[2:]
 
+  fp = None
   try:
     # Set the context based on cert requirements
     if CONFIGS.GetBool("VALIDATE_CERTIFICATE"):
