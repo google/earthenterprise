@@ -286,8 +286,6 @@ def _SetTransPixelToBgcolor(tile, bgcolor):
 
   return tile
 
-key_file = '/opt/google/gehttpd/conf/privkey.pem'
-cert_file = '/opt/google/gehttpd/conf/fullchain.pem'
 
 def _FetchMapTile(url):
   """Fetches and returns a tile, given an url.
