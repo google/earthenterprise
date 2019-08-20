@@ -20,26 +20,6 @@
 // ***  AssetImplD
 // ****************************************************************************
 
-std::shared_ptr<AssetImplD>
-AssetImplD::Load(const std::string &boundref)
-{
-  // make sure the base class loader actually instantiated one of me
-  // this should always happen, but there are no compile time guarantees
-  auto loaded = AssetImpl::Load(boundref);
-
-  std::shared_ptr<AssetImplD> result =
-      std::dynamic_pointer_cast<AssetImplD>(loaded);
-
-  if (!result) {
-    std::string error {"Internal error: "};
-    if (loaded == nullptr)
-        error += "base did not load and ";
-    error += "AssetImplD loaded wrong type for ";
-    AssetThrowPolicy::FatalOrThrow(kh::tr(error.c_str()) + boundref);
-  }
-  return result;
-}
-
 void
 AssetImplD::AddVersionRef(const std::string &verref)
 {

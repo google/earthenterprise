@@ -22,8 +22,9 @@ class FriendlyRasterProjectAssetVersionImplD : public RasterProjectAssetVersionI
 
     static std::shared_ptr<FriendlyRasterProjectAssetVersionImplD> Load(std::string boundref)
     {
+        AssetSerializerLocalXML<AssetVersionImpl> serializer;
         std::shared_ptr<AssetVersionImplD> unfriendly_result =
-            RasterProjectAssetVersionImplD::Load(boundref);
+            std::dynamic_pointer_cast<AssetVersionImplD>(serializer.Load(boundref));
         std::shared_ptr<FriendlyRasterProjectAssetVersionImplD> result = 
             *reinterpret_cast<std::shared_ptr<FriendlyRasterProjectAssetVersionImplD>*>(&unfriendly_result);
 

@@ -412,7 +412,7 @@ ${name}AssetImplD::MakeNewVersion(void)
     typedef ${name}AssetVersionImplD VerImpl;
     Mutable${name}AssetVersionD newver(std::make_shared<VerImpl>(this));
 
-    AddVersionRef(newver->GetRef().toString());
+    AddVersionRef(newver->GetRef());
     return newver;
 }
 EOF

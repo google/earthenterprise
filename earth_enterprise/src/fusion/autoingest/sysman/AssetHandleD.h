@@ -207,7 +207,6 @@ class MutableAssetHandleD_ : public virtual Base_ {
   }
 #endif // GEE_HAS_MOVE
 
-  using Base::operator->;
   Impl* operator->(void) {
     return const_cast<Impl*>(Base::operator->());
   }
@@ -314,7 +313,6 @@ class MutableDerivedAssetHandleD_ : public DerivedBase_, public MutableBase_
     return *this;
   }
 
-  using DerivedBase::operator->;
   Impl* operator->(void) {
     return const_cast<Impl*>(DerivedBase::operator->());
   }
