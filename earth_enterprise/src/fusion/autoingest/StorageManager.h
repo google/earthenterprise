@@ -24,6 +24,7 @@
 #include <memory>
 
 #include "common/khCache.h"
+#include "common/khFileUtils.h"
 #include "common/notify.h"
 #include "common/SharedString.h"
 #include "StorageManagerAssetHandle.h"
@@ -66,13 +67,19 @@ class StorageManager : public StorageManagerInterface<AssetType> {
                    bool limitByMemory,
                    uint64 maxMemory,
                    const std::string & type,
-                   SerializerPtr serializer = SerializerPtr(new AssetSerializerLocalXML<AssetType>())) :
+                   SerializerPtr serializer) :
         assetType(type),
         serializer(std::move(serializer)),
         cache(cacheSize)
     {
       SetCacheMemoryLimit(limitByMemory, maxMemory);
     }
+    StorageManager(uint cacheSize,
+                   bool limitByMemory,
+                   uint64 maxMemory,
+                   const std::string & type) :
+        StorageManager(cacheSize, limitByMemory, maxMemory, type,
+                       SerializerPtr(new AssetSerializerLocalXML<AssetType>())) {}
     ~StorageManager() = default;
 
     inline uint32 CacheSize() const { return cache.size(); }
