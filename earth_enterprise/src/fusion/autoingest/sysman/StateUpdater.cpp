@@ -147,7 +147,12 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
           }
         }
         bool Decided() {
-          return false;
+          // If either of the below conditions is true we already know what
+          // the output from GetOutputs will be and there is no need to check
+          // the state of more children.
+          bool isBlocked = numblocking;
+          bool isInProgress = numkids != numgood && (numgood || numinprog);
+          return isBlocked || isInProgress;
         }
     };
 
