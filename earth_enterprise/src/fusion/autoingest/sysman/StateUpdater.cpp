@@ -116,11 +116,14 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
     // Helper class for calculating state from children
     class ChildStates {
       private:
-        uint numkids = 0;
-        uint numgood = 0;
-        uint numblocking = 0;
-        uint numinprog = 0;
+        bool hasKids;
+        uint numkids;
+        uint numgood;
+        uint numblocking;
+        uint numinprog;
       public:
+        ChildStates(bool hasKids) :
+          hasKids(hasKids), numkids(0), numgood(0), numblocking(0), numinprog(0) {}
         void Add(AssetDefs::State childState) {
           ++numkids;
           if (childState == AssetDefs::Succeeded) {
@@ -147,12 +150,10 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
           }
         }
         bool Decided() {
-          // If either of the below conditions is true we already know what
-          // the output from GetOutputs will be and there is no need to check
-          // the state of more children.
-          bool isBlocked = numblocking;
-          bool isInProgress = numkids != numgood && (numgood || numinprog);
-          return isBlocked || isInProgress;
+          // If any of the below conditions is true we already know what the
+          // output from GetOutputs will be and there is no need to check the
+          // state of more children.
+          return !hasKids || numblocking > 0;
         }
     };
 
@@ -169,7 +170,7 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
         uint32 & numWaitingFor,
         bool & childOrInputStateChanged) const {
       InputStates inputStates;
-      ChildStates childStates;
+      ChildStates childStates(tree[vertex].hasChildren);
 
       childOrInputStateChanged = false;
       auto edgeIters = out_edges(vertex, tree);
