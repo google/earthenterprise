@@ -60,7 +60,7 @@ class AssetImpl : public AssetStorage, public StorageManaged {
   virtual bool Save(const std::string &filename) const {
     assert(false); // Can only save from sub-classes
     return false;
-  };
+  }
 
   std::string WorkingDir(void) const { return WorkingDir(GetRef()); }
   std::string XMLFilename() const { return XMLFilename(GetRef()); }

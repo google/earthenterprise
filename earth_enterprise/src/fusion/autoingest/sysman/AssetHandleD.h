@@ -18,6 +18,7 @@
 #define __AssetHandleD_h
 
 #include <map>
+#include <memory>
 #include <string>
 #include <vector>
 #include <khException.h>
