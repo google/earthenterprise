@@ -109,6 +109,9 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
             numWaitingFor = 0;
           }
         }
+        bool Decided() {
+          return false;
+        }
     };
     // Helper class for calculating state from children
     class ChildStates {
@@ -142,6 +145,9 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
           } else {
             stateByChildren = AssetDefs::Queued;
           }
+        }
+        bool Decided() {
+          return false;
         }
     };
 
@@ -182,6 +188,11 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
             // Dependents that are not also children are not considered when
             // calculating state.
             break;
+        }
+        // If we already know what the value of all of the parameters will be
+        // we can exit the loop early.
+        if (inputStates.Decided() && childStates.Decided() && childOrInputStateChanged) {
+          break;
         }
       }
 
