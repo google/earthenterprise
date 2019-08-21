@@ -1,7 +1,7 @@
 --- httpd-2.2.27.orig/docs/conf/httpd.conf.in	2012-02-06 08:54:24.000000000 -0800
 +++ httpd-2.2.27/docs/conf/httpd.conf.in	2014-06-16 17:05:54.913499965 -0700
 @@ -143,14 +143,16 @@
-     # http://httpd.apache.org/docs/2.2/mod/core.html#options
+     # http://httpd.apache.org/docs/2.4/mod/core.html#options
      # for more information.
      #
 -    Options Indexes FollowSymLinks
@@ -12,7 +12,7 @@
      #
      # AllowOverride controls what directives may be placed in .htaccess files.
      # It can be "All", "None", or any combination of the keywords:
-     #   Options FileInfo AuthConfig Limit
+     #   AllowOverride FileInfo AuthConfig Limit
      #
 -    AllowOverride None
 +    AllowOverride AuthConfig FileInfo Options

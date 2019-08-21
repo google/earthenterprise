@@ -58,5 +58,4 @@ class AssetImplD : public virtual AssetImpl
 typedef DerivedAssetHandle_<Asset, AssetImplD> AssetD;
 typedef MutableAssetHandleD_<AssetD> MutableAssetD;
 
-
 #endif /* __AssetD_h */
