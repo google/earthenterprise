@@ -202,6 +202,10 @@ gemiscconfig = env.sharedLib('gemiscconfig',
 
 env.install('common_lib', [geautoingest, gemiscconfig])
 
+env.test('InsetTilespaceIndex_test',
+         'InsetTilespaceIndex_test.cpp',
+         LIBS=['geautoingest', 'gemiscconfig','geutil', 'gecommon','gtest'])
+
 env.test('AssetDefsExtra_unittest',
          'AssetDefsExtra_unittest.cpp',
          LIBS=['geautoingest', 'gemiscconfig', 'gtest'])
@@ -217,6 +221,8 @@ env.test('StorageManager_unittest',
 env.test('StorageManagerAssetHandle_unittest',
          'StorageManagerAssetHandle_unittest.cpp',
          LIBS=['gecommon', 'gtest'])
+
+
 
 SConscript('sysman/SConscript', exports=['env', 'commonobj', 'plugins'])
 SConscript('tools/SConscript', exports='env')

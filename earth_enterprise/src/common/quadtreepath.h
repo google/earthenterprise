@@ -227,6 +227,12 @@ class QuadtreePath {
   inline uint32 LevelBitsAtPos(uint32 position) const {
     return (path_ >> (kTotalBits - (position+1)*kLevelBits)) & kLevelBitMask;
   }
+  // inline uint64 levelQuadOrderedPathBits() const {  
+  //     return ( (path_ & kPathMask) >> (kTotalBits - kMaxLevel * kLevelBits) )
+  //             ^ ( (path_ & kLevelBitMask) << (kMaxLevel * kLevelBits) )  }
+  // inline QuadTreePath QTPFromLevelQuadOrderedPathBits( uint64  lqpb ) const {
+  //     const return new QuadTreePath(( lqpb & (~(~uint64(0) >> (kLevelBits)) &   )) ;
+  // }
 
   friend class QuadtreePathUnitTest;
   // This is the only data which should be stored in an instance of

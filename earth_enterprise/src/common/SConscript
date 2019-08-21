@@ -136,6 +136,7 @@ env.test('quadtreepath_unittest',
          'quadtreepath_unittest.cpp',
          LIBS=['geutil', 'gecommon', 'qt-mt'])
 
+
 env.test('crc_unittest',
          '../third_party/rsa_md5/crc_unittest.cpp',
          LIBS=['gecommon'])
