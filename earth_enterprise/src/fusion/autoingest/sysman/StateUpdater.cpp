@@ -73,14 +73,12 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
     // Helper class for calculating state from inputs
     class InputStates {
       private:
-        bool decided;
-        uint numinputs;
-        uint numgood;
-        uint numblocking;
-        uint numoffline;
+        bool decided = false;
+        uint numinputs = 0;
+        uint numgood = 0;
+        uint numblocking = 0;
+        uint numoffline = 0;
       public:
-        InputStates(bool hasInputs) :
-          decided(!hasInputs), numinputs(0), numgood(0), numblocking(0), numoffline(0) {}
         void Add(AssetDefs::State inputState) {
           ++numinputs;
           if (inputState == AssetDefs::Succeeded) {
@@ -122,14 +120,12 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
     // Helper class for calculating state from children
     class ChildStates {
       private:
-        bool decided;
-        uint numkids;
-        uint numgood;
-        uint numblocking;
-        uint numinprog;
+        bool decided = false;
+        uint numkids = 0;
+        uint numgood = 0;
+        uint numblocking = 0;
+        uint numinprog = 0;
       public:
-        ChildStates(bool hasKids) :
-          decided(!hasKids), numkids(0), numgood(0), numblocking(0), numinprog(0) {}
         void Add(AssetDefs::State childState) {
           ++numkids;
           if (childState == AssetDefs::Succeeded) {
@@ -175,8 +171,8 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
         bool & blockersAreOffline,
         uint32 & numWaitingFor,
         bool & needRecalcState) const {
-      InputStates inputStates(tree[vertex].hasInputs);
-      ChildStates childStates(tree[vertex].hasChildren);
+      InputStates inputStates;
+      ChildStates childStates;
 
       needRecalcState = tree[vertex].stateChanged;
       auto edgeIters = out_edges(vertex, tree);

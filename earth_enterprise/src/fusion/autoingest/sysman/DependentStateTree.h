@@ -31,8 +31,6 @@ struct AssetVertex {
   bool inDepTree;
   bool recalcState;
   bool stateChanged;
-  bool hasInputs;
-  bool hasChildren;
   size_t index; // Used by the dfs function
 };
 
