@@ -73,14 +73,14 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
     // Helper class for calculating state from inputs
     class InputStates {
       private:
-        bool hasInputs;
+        bool decided;
         uint numinputs;
         uint numgood;
         uint numblocking;
         uint numoffline;
       public:
         InputStates(bool hasInputs) :
-          hasInputs(hasInputs), numinputs(0), numgood(0), numblocking(0), numoffline(0) {}
+          decided(!hasInputs), numinputs(0), numgood(0), numblocking(0), numoffline(0) {}
         void Add(AssetDefs::State inputState) {
           ++numinputs;
           if (inputState == AssetDefs::Succeeded) {
@@ -93,6 +93,9 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
                                    AssetDefs::Canceled |
                                    AssetDefs::Bad)) {
             ++numblocking;
+            // If we enter this case we know what the outputs will be, so we
+            // don't need to check any more states.
+            decided = true;
           }
         }
         void GetOutputs(AssetDefs::State & stateByInputs, bool & blockersAreOffline, uint32 & numWaitingFor) {
@@ -113,23 +116,20 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
           }
         }
         bool Decided() {
-          // If this function returns true then we alreay know what all the
-          // outputs from GetOutputs will be and we don't need to check the
-          // state of any more inputs.
-          return !hasInputs || (numblocking > 0 && numblocking != numoffline);
+          return decided;
         }
     };
     // Helper class for calculating state from children
     class ChildStates {
       private:
-        bool hasKids;
+        bool decided;
         uint numkids;
         uint numgood;
         uint numblocking;
         uint numinprog;
       public:
         ChildStates(bool hasKids) :
-          hasKids(hasKids), numkids(0), numgood(0), numblocking(0), numinprog(0) {}
+          decided(!hasKids), numkids(0), numgood(0), numblocking(0), numinprog(0) {}
         void Add(AssetDefs::State childState) {
           ++numkids;
           if (childState == AssetDefs::Succeeded) {
@@ -142,6 +142,9 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
                                    AssetDefs::Offline  |
                                    AssetDefs::Bad)) {
             ++numblocking;
+            // If we enter this case we know what the outputs will be, so we
+            // don't need to check any more states.
+            decided = true;
           }
         }
         void GetOutputs(AssetDefs::State & stateByChildren) {
@@ -156,10 +159,7 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
           }
         }
         bool Decided() {
-          // If this function returns true we already know what the output from
-          // GetOutputs will be and there is no need to check the state of more
-          // children.
-          return !hasKids || numblocking > 0;
+          return decided;
         }
     };
 
