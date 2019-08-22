@@ -174,11 +174,11 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
         AssetDefs::State &stateByChildren,
         bool & blockersAreOffline,
         uint32 & numWaitingFor,
-        bool & childOrInputStateChanged) const {
+        bool & needRecalcState) const {
       InputStates inputStates(tree[vertex].hasInputs);
       ChildStates childStates(tree[vertex].hasChildren);
 
-      childOrInputStateChanged = false;
+      needRecalcState = tree[vertex].stateChanged;
       auto edgeIters = out_edges(vertex, tree);
       auto edgeBegin = edgeIters.first;
       auto edgeEnd = edgeIters.second;
@@ -189,12 +189,12 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
         switch(type) {
           case INPUT:
             inputStates.Add(depState);
-            childOrInputStateChanged = childOrInputStateChanged || tree[dep].stateChanged;
+            needRecalcState = needRecalcState || tree[dep].stateChanged;
             break;
           case CHILD:
           case DEPENDENT_AND_CHILD:
             childStates.Add(depState);
-            childOrInputStateChanged = childOrInputStateChanged || tree[dep].stateChanged;
+            needRecalcState = needRecalcState || tree[dep].stateChanged;
             break;
           case DEPENDENT:
             // Dependents that are not also children are not considered when
@@ -203,7 +203,7 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
         }
         // If we already know what the value of all of the parameters will be
         // we can exit the loop early.
-        if (inputStates.Decided() && childStates.Decided() && childOrInputStateChanged) {
+        if (inputStates.Decided() && childStates.Decided() && needRecalcState) {
           break;
         }
       }
@@ -240,11 +240,11 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
         AssetDefs::State stateByChildren;
         bool blockersAreOffline;
         uint32 numWaitingFor;
-        bool childOrInputStateChanged;
+        bool needRecalcState;
         CalculateStateParameters(
               vertex, tree, stateByInputs, stateByChildren,
-              blockersAreOffline, numWaitingFor, childOrInputStateChanged);
-        if (tree[vertex].stateChanged || childOrInputStateChanged) {
+              blockersAreOffline, numWaitingFor, needRecalcState);
+        if (needRecalcState) {
           AssetDefs::State calculatedState;
           // Run this in a separate block so that the asset version is released
           // before we try to update it.
