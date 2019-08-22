@@ -219,7 +219,6 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
     virtual void finish_vertex(
         DependentStateTreeVertexDescriptor vertex,
         const DependentStateTree & tree) const {
-      if (!tree[vertex].recalcState) return;
       SharedString name = tree[vertex].name;
       notify(NFY_PROGRESS, "Calculating state for '%s'", name.toString().c_str());
 
