@@ -36,6 +36,10 @@ const string SUFFIX = "?version=1";
 AssetKey fix(AssetKey ref) {
   return ref.toString() + SUFFIX;
 }
+AssetKey unfix(AssetKey ref) {
+  string str = ref.toString();
+  return str.erase(ref.toString().size() - SUFFIX.size());
+}
 
 const AssetDefs::State STARTING_STATE = AssetDefs::Blocked;
 const AssetDefs::State CALCULATED_STATE = AssetDefs::InProgress;
@@ -44,6 +48,7 @@ class MockVersion : public AssetVersionImpl {
   public:
     bool stateSet;
     bool loadedMutable;
+    bool onStateChangeCalled;
     int notificationsSent;
     mutable AssetDefs::State stateByInputsVal;
     mutable AssetDefs::State stateByChildrenVal;
@@ -54,6 +59,7 @@ class MockVersion : public AssetVersionImpl {
     MockVersion()
         : stateSet(false),
           loadedMutable(false),
+          onStateChangeCalled(false),
           notificationsSent(0),
           stateByInputsVal(AssetDefs::Bad),
           stateByChildrenVal(AssetDefs::Bad),
@@ -85,11 +91,12 @@ class MockVersion : public AssetVersionImpl {
       numWaitingForVal = numWaitingFor;
       return CALCULATED_STATE;
     }
-    void SetMyStateOnly(AssetDefs::State newState, bool sendNotifications) {
-      stateSet = true;
-      if (sendNotifications) ++notificationsSent;
+    AssetDefs::State GetState() const { return state; }
+    void SetState(AssetDefs::State) { stateSet = true; }
+    virtual void OnStateChange(AssetDefs::State, AssetDefs::State) {
+      onStateChangeCalled = true;
     }
-    
+
     // Not used - only included to make MockVersion non-virtual
     string PluginName(void) const { return string(); }
     void GetOutputFilenames(vector<string> &) const {}
@@ -108,6 +115,7 @@ class MockStorageManager : public StorageManagerInterface<AssetVersionImpl> {
         assert(version);
         return version;
       }
+      cout << "Could not find asset version " << ref << endl;
       assert(false);
       return nullptr;
     }
@@ -125,20 +133,6 @@ class MockStorageManager : public StorageManagerInterface<AssetVersionImpl> {
     }
 };
 
-class StateUpdaterTest : public testing::Test {
-  protected:
-   MockStorageManager sm;
-   StateUpdater updater;
-  public:
-   StateUpdaterTest() : sm(), updater(&sm) {}
-};
-
-void SetVersions(MockStorageManager & sm, vector<MockVersion> versions) {
-  for (auto & version: versions) {
-    sm.AddVersion(version.name, version);
-  }
-}
-
 // The two functions below pull the pointer out of the AssetHandle and use it
 // directly, which is really bad. We can get away with it in test code, but we
 // should never do this in production code. Hopefully the production code will
@@ -149,12 +143,40 @@ const MockVersion * GetVersion(MockStorageManager & sm, const AssetKey & key) {
   return dynamic_cast<const MockVersion *>(handle.operator->());
 }
 MockVersion * GetMutableVersion(MockStorageManager & sm, const AssetKey & key) {
+  // This doesn't count as loading the asset mutable. We only care if the
+  // state udpater loads it mutable. Thus, we first get it non-mutable so we
+  // can record whether it's been loaded mutable and then set it back to
+  // whatever it was at the end of this function.
+  bool wasLoadedMutable = GetVersion(sm, key)->loadedMutable;
   AssetHandle<AssetVersionImpl> handle = sm.GetMutable(fix(key));
   auto ptr = dynamic_cast<MockVersion *>(handle.operator->());
-  // This doesn't count as loading the asset mutable. We only care if the
-  // state udpater loads it mutable.
-  ptr->loadedMutable = false;
+  ptr->loadedMutable = wasLoadedMutable;
   return ptr;
+}
+
+class MockAssetManager : public khAssetManagerInterface {
+  MockStorageManager * const sm;
+  public:
+    MockAssetManager(MockStorageManager * sm) : sm(sm) {}
+    virtual void NotifyVersionStateChange(const SharedString &ref,
+                                          AssetDefs::State state) {
+      ++GetMutableVersion(*sm, unfix(ref))->notificationsSent;
+    }
+};
+
+class StateUpdaterTest : public testing::Test {
+  protected:
+   MockStorageManager sm;
+   MockAssetManager am;
+   StateUpdater updater;
+  public:
+   StateUpdaterTest() : sm(), am(&sm), updater(&sm, &am) {}
+};
+
+void SetVersions(MockStorageManager & sm, vector<MockVersion> versions) {
+  for (auto & version: versions) {
+    sm.AddVersion(version.name, version);
+  }
 }
 
 void SetParentChild(MockStorageManager & sm, AssetKey parent, AssetKey child) {
@@ -206,12 +228,14 @@ void GetBigTree(MockStorageManager & sm) {
 void assertStateSet(MockStorageManager & sm, const SharedString & ref) {
   ASSERT_TRUE(GetVersion(sm, ref)->stateSet);
   ASSERT_TRUE(GetVersion(sm, ref)->loadedMutable);
+  ASSERT_TRUE(GetVersion(sm, ref)->onStateChangeCalled);
   ASSERT_EQ(GetVersion(sm, ref)->notificationsSent, 1);
 }
 
 void assertStateNotSet(MockStorageManager & sm, const SharedString & ref) {
   ASSERT_FALSE(GetVersion(sm, ref)->stateSet);
   ASSERT_FALSE(GetVersion(sm, ref)->loadedMutable);
+  ASSERT_FALSE(GetVersion(sm, ref)->onStateChangeCalled);
   ASSERT_EQ(GetVersion(sm, ref)->notificationsSent, 0);
 }
 
