@@ -93,7 +93,7 @@ DependentStateTreeFactory::AddOrUpdateVertex(
     // I'm not in the graph yet, so make a new empty vertex and let the caller
     // know we need to load it with the correct information
     auto myVertex = add_vertex(tree);
-    tree[myVertex] = {ref, AssetDefs::New, inDepTree, recalcState, false, false, index};
+    tree[myVertex] = {ref, AssetDefs::New, inDepTree, recalcState, false, false, false, index};
     ++index;
     vertices[ref] = myVertex;
     toFillInNext.insert(myVertex);
@@ -134,6 +134,7 @@ void DependentStateTreeFactory::FillInVertex(
     return;
   }
   tree[myVertex].state = version->state;
+  tree[myVertex].hasInputs = !version->inputs.empty();
   tree[myVertex].hasChildren = !version->children.empty();
   // If this vertex is in the dependent tree but doesn't need to be included,
   // act as though it's not in the dependency tree. We'll leave it in the tree

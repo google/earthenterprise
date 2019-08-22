@@ -73,11 +73,14 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
     // Helper class for calculating state from inputs
     class InputStates {
       private:
-        uint numinputs = 0;
-        uint numgood = 0;
-        uint numblocking = 0;
-        uint numoffline = 0;
+        bool hasInputs;
+        uint numinputs;
+        uint numgood;
+        uint numblocking;
+        uint numoffline;
       public:
+        InputStates(bool hasInputs) :
+          hasInputs(hasInputs), numinputs(0), numgood(0), numblocking(0), numoffline(0) {}
         void Add(AssetDefs::State inputState) {
           ++numinputs;
           if (inputState == AssetDefs::Succeeded) {
@@ -113,7 +116,7 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
           // If this function returns true then we alreay know what all the
           // outputs from GetOutputs will be and we don't need to check the
           // state of any more inputs.
-          return numblocking > 0 && numblocking != numoffline;
+          return !hasInputs || (numblocking > 0 && numblocking != numoffline);
         }
     };
     // Helper class for calculating state from children
@@ -172,7 +175,7 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
         bool & blockersAreOffline,
         uint32 & numWaitingFor,
         bool & childOrInputStateChanged) const {
-      InputStates inputStates;
+      InputStates inputStates(tree[vertex].hasInputs);
       ChildStates childStates(tree[vertex].hasChildren);
 
       childOrInputStateChanged = false;
