@@ -20,8 +20,9 @@
 #include <set>
 #include <map>
 
-#include "DependentStateTree.h"
 #include "AssetVersion.h"
+#include "DependentStateTree.h"
+#include "khAssetManager.h"
 #include "StorageManager.h"
 
 // This class efficiently updates the states of lots of asset versions at
@@ -37,6 +38,7 @@ class StateUpdater
     class SetStateVisitor;
 
     StorageManagerInterface<AssetVersionImpl> * const storageManager;
+    khAssetManagerInterface * const assetManager;
     DependentStateTree tree;
 
     void SetState(
@@ -44,7 +46,9 @@ class StateUpdater
         AssetDefs::State newState,
         bool sendNotifications);
   public:
-    StateUpdater(StorageManagerInterface<AssetVersionImpl> * sm = &AssetVersion::storageManager()) : storageManager(sm) {}
+    StateUpdater(StorageManagerInterface<AssetVersionImpl> * sm, khAssetManagerInterface * am) :
+        storageManager(sm), assetManager(am) {}
+    StateUpdater() : StateUpdater(&AssetVersion::storageManager(), &theAssetManager) {}
     void SetStateForRefAndDependents(
         const SharedString & ref,
         AssetDefs::State newState,

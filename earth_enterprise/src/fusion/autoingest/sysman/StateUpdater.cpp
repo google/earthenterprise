@@ -258,20 +258,34 @@ void StateUpdater::SetState(
     AssetDefs::State newState,
     bool sendNotifications) {
   SharedString name = tree[vertex].name;
-  if (newState != tree[vertex].state) {
+  AssetDefs::State oldState = tree[vertex].state;
+  if (newState != oldState) {
+    notify(NFY_PROGRESS, "Setting state of '%s' from '%s' to '%s'",
+           name.toString().c_str(), ToString(oldState).c_str(), ToString(newState).c_str());
     auto version = storageManager->GetMutable(name);
-    notify(NFY_PROGRESS, "Setting state of '%s' to '%s'",
-           name.toString().c_str(), ToString(newState).c_str());
     if (version) {
-      // Set the state. The OnStateChange handler will take care
-      // of stopping any running tasks, etc.
-      // This call does not propagate the state change to other assets. We will
-      // take care of that inside the state updater.
-      version->SetMyStateOnly(newState, sendNotifications);
-      // Setting the state can trigger additional state changes, so get the new
-      // state directly from the asset version.
-      tree[vertex].state = version->state;
+      version->SetState(newState);
+      if (sendNotifications) {
+        try {
+          // This will take care of stopping any running tasks, etc. It can also
+          // end up switching us to another state (usually Failed or Succeded).
+          version->OnStateChange(newState, oldState);
+        } catch (const std::exception &e) {
+          notify(NFY_WARN, "Exception during OnStateChange: %s", 
+                 e.what());
+        } catch (...) {
+          notify(NFY_WARN, "Unknown exception during OnStateChange");
+        }
+      }
+      // Get the new state directly from the asset version in case it changed.
+      tree[vertex].state = version->GetState();
       tree[vertex].stateChanged = true;
+      if (sendNotifications) {
+        notify(NFY_VERBOSE, "Calling theAssetManager.NotifyVersionStateChange(%s, %s)", 
+               name.toString().c_str(), 
+               ToString(tree[vertex].state).c_str());
+        assetManager->NotifyVersionStateChange(name, tree[vertex].state);
+      }
     }
     else {
       // This shoud never happen - we had to successfully load the asset
