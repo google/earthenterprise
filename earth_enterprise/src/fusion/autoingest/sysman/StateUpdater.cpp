@@ -110,7 +110,10 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
           }
         }
         bool Decided() {
-          return false;
+          // If this function returns true then we alreay know what all the
+          // outputs from GetOutputs will be and we don't need to check the
+          // state of any more inputs.
+          return numblocking > 0 && numblocking != numoffline;
         }
     };
     // Helper class for calculating state from children
@@ -150,9 +153,9 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
           }
         }
         bool Decided() {
-          // If any of the below conditions is true we already know what the
-          // output from GetOutputs will be and there is no need to check the
-          // state of more children.
+          // If this function returns true we already know what the output from
+          // GetOutputs will be and there is no need to check the state of more
+          // children.
           return !hasKids || numblocking > 0;
         }
     };
