@@ -133,7 +133,7 @@ void DependentStateTreeFactory::FillInVertex(
     tree[myVertex].state = AssetDefs::Blocked;
     return;
   }
-  tree[myVertex].state = version->GetState();
+  tree[myVertex].state = version->state;
   // If this vertex is in the dependent tree but doesn't need to be included,
   // act as though it's not in the dependency tree. We'll leave it in the tree
   // to avoid messing up the index numbering and in case it is needed as an

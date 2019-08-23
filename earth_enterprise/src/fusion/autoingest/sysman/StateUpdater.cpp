@@ -264,7 +264,7 @@ void StateUpdater::SetState(
            name.toString().c_str(), ToString(oldState).c_str(), ToString(newState).c_str());
     auto version = storageManager->GetMutable(name);
     if (version) {
-      version->SetState(newState);
+      version->state = newState;
       if (sendNotifications) {
         try {
           // This will take care of stopping any running tasks, etc. It can also
@@ -278,7 +278,7 @@ void StateUpdater::SetState(
         }
       }
       // Get the new state directly from the asset version in case it changed.
-      tree[vertex].state = version->GetState();
+      tree[vertex].state = version->state;
       tree[vertex].stateChanged = true;
       if (sendNotifications) {
         notify(NFY_VERBOSE, "Calling theAssetManager.NotifyVersionStateChange(%s, %s)", 
