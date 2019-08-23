@@ -1217,16 +1217,9 @@ CompositeAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
     try {
       DelayedBuildChildren();
     } catch (const std::exception &e) {
-      notify(NFY_WARN, "Exception during OnStateChange: %s", e.what());
-      WriteFatalLogfile(GetRef(), "DelayedBuildChildren", e.what());
-      SetState(AssetDefs::Failed);
-      return;
+      throw StateChangeException(e.what(), "DelayedBuildChildren");
     } catch (...) {
-      notify(NFY_WARN, "Unknown exception during OnStateChange");
-      WriteFatalLogfile(GetRef(), "DelayedBuildChildren",
-                        "Unknown error");
-      SetState(AssetDefs::Failed);
-      return;
+      throw StateChangeException("Unknown error", "DelayedBuildChildren");
     }
 
     if (!children.empty()) {
