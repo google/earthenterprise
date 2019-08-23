@@ -522,6 +522,39 @@ Wait for success
 * Verify that the state of mercator imagery project "StatePropagationTest_Mercator" is "Succeeded"
 * Verify that the state of mercator imagery resource "BlueMarble_Mercator" is "Succeeded"
 
+## Cancel, modify, and resume
+Tags: cancel, modify, resume
+
+Build
+* Create and build default project "StatePropagationTest_CancelModify"
+
+Cancel
+* Cancel imagery project "StatePropagationTest_CancelModify"
+* Verify that the state of imagery project "StatePropagationTest_CancelModify" is "Canceled"
+
+Remove and cancel resource
+* Drop imagery resource "i3SF15meter_CancelModify" from project "StatePropagationTest_CancelModify"
+* Cancel imagery resource "i3SF15meter_CancelModify"
+* Verify that the state of imagery resource "i3SF15meter_CancelModify" is "Canceled"
+
+Rebuild (resume won't work because we need to create a new version)
+* Build imagery project "StatePropagationTest_CancelModify"
+* Verify that the state of imagery project "StatePropagationTest_CancelModify" is "Waiting"
+* Verify that the state of imagery resource "i3SF15meter_CancelModify" is "Canceled"
+
+Cancel
+* Cancel imagery project "StatePropagationTest_CancelModify"
+* Verify that the state of imagery project "StatePropagationTest_CancelModify" is "Canceled"
+
+Add resource
+* Add imagery resource "i3SF15meter_CancelModify" to project "StatePropagationTest_CancelModify"
+
+Rebuild
+* Build imagery project "StatePropagationTest_CancelModify"
+* Verify that the state of imagery project "StatePropagationTest_CancelModify" is "Waiting"
+* Wait for imagery project "StatePropagationTest_CancelModify" to reach state "Succeeded"
+* Verify that the state of images for default project "StatePropagationTest_CancelModify" is "Succeeded"
+
 ## Database, Terrain, and Vector Tests
 Tags: terrain, vector, build
 We do not test terrain and vector assets as thoroughly as imagery assets since much of the
