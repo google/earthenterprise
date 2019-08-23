@@ -522,8 +522,8 @@ Wait for success
 * Verify that the state of mercator imagery project "StatePropagationTest_Mercator" is "Succeeded"
 * Verify that the state of mercator imagery resource "BlueMarble_Mercator" is "Succeeded"
 
-## Cancel, modify, and resume
-Tags: cancel, modify, resume
+## Cancel and Modify
+Tags: cancel, modify, rebuild
 
 Build
 * Create and build default project "StatePropagationTest_CancelModify"
@@ -539,7 +539,12 @@ Remove and cancel resource
 
 Rebuild (resume won't work because we need to create a new version)
 * Build imagery project "StatePropagationTest_CancelModify"
-* Verify that the state of imagery project "StatePropagationTest_CancelModify" is "Waiting"
+* Verify that the state of imagery project "StatePropagationTest_CancelModify" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | Queued     |
+  | InProgress |
 * Verify that the state of imagery resource "i3SF15meter_CancelModify" is "Canceled"
 
 Cancel
@@ -551,9 +556,52 @@ Add resource
 
 Rebuild
 * Build imagery project "StatePropagationTest_CancelModify"
-* Verify that the state of imagery project "StatePropagationTest_CancelModify" is "Waiting"
+* Verify that the state of imagery project "StatePropagationTest_CancelModify" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | Queued     |
+  | InProgress |
 * Wait for imagery project "StatePropagationTest_CancelModify" to reach state "Succeeded"
 * Verify that the state of images for default project "StatePropagationTest_CancelModify" is "Succeeded"
+
+## Build and modify
+Tags: build, modify, rebuild
+
+Build
+* Create and build default project "StatePropagationTest_BuildModify"
+* Wait for imagery project "StatePropagationTest_BuildModify" to reach state "Succeeded"
+* Verify that the state of images for default project "StatePropagationTest_BuildModify" is "Succeeded"
+
+Remove and clean resource
+* Drop imagery resource "i3SF15meter_BuildModify" from project "StatePropagationTest_BuildModify"
+* Clean imagery resource "i3SF15meter_BuildModify"
+* Verify that the state of imagery resource "i3SF15meter_BuildModify" is "Cleaned"
+
+Rebuild
+* Build imagery project "StatePropagationTest_BuildModify"
+* Verify that the state of imagery project "StatePropagationTest_BuildModify" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | Queued     |
+  | InProgress |
+* Verify that the state of imagery resource "i3SF15meter_BuildModify" is "Cleaned"
+* Wait for imagery project "StatePropagationTest_BuildModify" to reach state "Succeeded"
+
+Add resource
+* Add imagery resource "i3SF15meter_BuildModify" to project "StatePropagationTest_BuildModify"
+
+Rebuild
+* Build imagery project "StatePropagationTest_BuildModify"
+* Verify that the state of imagery project "StatePropagationTest_BuildModify" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | Queued     |
+  | InProgress |
+* Wait for imagery project "StatePropagationTest_BuildModify" to reach state "Succeeded"
+* Verify that the state of images for default project "StatePropagationTest_BuildModify" is "Succeeded"
 
 ## Database, Terrain, and Vector Tests
 Tags: terrain, vector, build
