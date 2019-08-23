@@ -277,20 +277,16 @@ void AssetVersionImplD::SetState(
   if (newstate != state) {
     AssetDefs::State oldstate = state;
     state = newstate;
-    bool doPropagate = propagate;
     try {
       // NOTE: This can end up calling back here to switch us to
       // another state (usually Failed or Succeded)
-      OnStateChange(newstate, oldstate);
-      // only propagate changes if the state is still what we
-      // set it to above. OnStateChange can call SetState recursively. We
-      // don't want to propagate an old state.
-      if (state != newstate) doPropagate = false;
+      AssetDefs::State returnedstate = OnStateChange(newstate, oldstate);
+      if (returnedstate != newstate) SetState(returnedstate);
     } catch (const StateChangeException &e) {
       notify(NFY_WARN, "Exception during %s: %s : %s",
              e.location.c_str(), GetRef().toString().c_str(), e.what());
       WriteFatalLogfile(GetRef(), e.location, e.what());
-      state = AssetDefs::Failed;
+      SetState(AssetDefs::Failed);
     } catch (const std::exception &e) {
       notify(NFY_WARN, "Exception during OnStateChange: %s", 
              e.what());
@@ -298,7 +294,9 @@ void AssetVersionImplD::SetState(
       notify(NFY_WARN, "Unknown exception during OnStateChange");
     }
 
-    if (doPropagate) {
+    // only propagate changes if the state is still what we
+    // set it to above. We don't want to propagate an old state.
+    if (propagate && (state == newstate)) {
       notify(NFY_VERBOSE, "Calling theAssetManager.NotifyVersionStateChange(%s, %s)", 
              GetRef().toString().c_str(), 
              ToString(newstate).c_str());

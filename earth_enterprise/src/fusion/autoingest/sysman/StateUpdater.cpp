@@ -264,10 +264,26 @@ void StateUpdater::SetState(
            name.toString().c_str(), ToString(oldState).c_str(), ToString(newState).c_str());
     auto version = storageManager->GetMutable(name);
     if (version) {
-      version->state = newState;
-      if (sendNotifications) {
-        RunStateChangeHandlers(name, version, oldState, newState);
-      }
+      do {
+        version->state = newState;
+        if (sendNotifications) {
+          AssetDefs::State nextState = AssetDefs::Failed;
+          try {
+            // This will take care of stopping any running tasks, etc.
+            nextState = version->OnStateChange(newState, oldState);
+          } catch (const StateChangeException &e) {
+            notify(NFY_WARN, "Exception during %s: %s : %s",
+                   e.location.c_str(), name.toString().c_str(), e.what());
+            AssetVersionImplD::WriteFatalLogfile(name, e.location, e.what());
+          } catch (const std::exception &e) {
+            notify(NFY_WARN, "Exception during OnStateChange: %s", e.what());
+          } catch (...) {
+            notify(NFY_WARN, "Unknown exception during OnStateChange");
+          }
+          oldState = newState;
+          newState = nextState;
+        }
+      } while(version->state != newState);
       // Get the new state directly from the asset version in case it changed.
       tree[vertex].state = version->state;
       tree[vertex].stateChanged = true;
@@ -285,32 +301,4 @@ void StateUpdater::SetState(
              name.toString().c_str());
     }
   }
-}
-
-void StateUpdater::RunStateChangeHandlers(
-    const SharedString & name,
-    AssetHandle<AssetVersionImpl> & version,
-    AssetDefs::State oldState,
-    AssetDefs::State newState) {
-  do {
-    AssetDefs::State returnedState;
-    try {
-      // This will take care of stopping any running tasks, etc. It can also
-      // end up switching us to another state (usually Failed or Succeded).
-      returnedState = version->OnStateChange(newState, oldState);
-    } catch (const StateChangeException &e) {
-      notify(NFY_WARN, "Exception during %s: %s : %s",
-             e.location.c_str(), name.toString().c_str(), e.what());
-      AssetVersionImplD::WriteFatalLogfile(name, e.location, e.what());
-      returnedState = AssetDefs::Failed;
-    } catch (const std::exception &e) {
-      notify(NFY_WARN, "Exception during OnStateChange: %s", 
-             e.what());
-    } catch (...) {
-      notify(NFY_WARN, "Unknown exception during OnStateChange");
-    }
-    if (newState == returnedState) break;
-    oldState = newState;
-    newState = returnedState;
-  } while(true);
 }
