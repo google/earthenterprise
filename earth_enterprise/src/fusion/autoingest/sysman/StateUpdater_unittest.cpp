@@ -89,8 +89,9 @@ class MockVersion : public AssetVersionImpl {
       numWaitingForVal = numWaitingFor;
       return CALCULATED_STATE;
     }
-    virtual void OnStateChange(AssetDefs::State, AssetDefs::State) {
+    virtual AssetDefs::State OnStateChange(AssetDefs::State, AssetDefs::State) {
       onStateChangeCalled = true;
+      return state;
     }
 
     // Not used - only included to make MockVersion non-virtual

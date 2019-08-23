@@ -45,6 +45,11 @@ class StateUpdater
         DependentStateTreeVertexDescriptor vertex,
         AssetDefs::State newState,
         bool sendNotifications);
+    void RunStateChangeHandlers(
+        const SharedString & name,
+        AssetHandle<AssetVersionImpl> & version,
+        AssetDefs::State oldState,
+        AssetDefs::State newState);
   public:
     StateUpdater(StorageManagerInterface<AssetVersionImpl> * sm, khAssetManagerInterface * am) :
         storageManager(sm), assetManager(am) {}

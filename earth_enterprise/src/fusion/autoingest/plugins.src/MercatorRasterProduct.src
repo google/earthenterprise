@@ -150,9 +150,9 @@ class MercatorRasterProductAssetImplD {
 };
 
 class MercatorRasterProductAssetVersionImplD {
- protected:
-  virtual void OnStateChange(AssetDefs::State newstate,
-                             AssetDefs::State oldstate);
+ public:
+  virtual AssetDefs::State OnStateChange(AssetDefs::State newstate,
+                                         AssetDefs::State oldstate) override;
 };
 
 
@@ -338,7 +338,7 @@ MercatorRasterProductAssetImplD::HandleImportRequest(
   }
 }
 
-void
+AssetDefs::State
 MercatorRasterProductAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
                                               AssetDefs::State oldstate)
 {
@@ -361,6 +361,7 @@ MercatorRasterProductAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
       meta.SetValue("minlevel", tmp);
     }
   }
+  return state;
 }
 
 

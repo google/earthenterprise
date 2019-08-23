@@ -266,21 +266,7 @@ void StateUpdater::SetState(
     if (version) {
       version->state = newState;
       if (sendNotifications) {
-        try {
-          // This will take care of stopping any running tasks, etc. It can also
-          // end up switching us to another state (usually Failed or Succeded).
-          version->OnStateChange(newState, oldState);
-        } catch (const StateChangeException &e) {
-          notify(NFY_WARN, "Exception during %s: %s : %s",
-                 e.location.c_str(), name.toString().c_str(), e.what());
-          AssetVersionImplD::WriteFatalLogfile(name, e.location, e.what());
-          version->state = AssetDefs::Failed;
-        } catch (const std::exception &e) {
-          notify(NFY_WARN, "Exception during OnStateChange: %s", 
-                 e.what());
-        } catch (...) {
-          notify(NFY_WARN, "Unknown exception during OnStateChange");
-        }
+        RunStateChangeHandlers(name, version, oldState, newState);
       }
       // Get the new state directly from the asset version in case it changed.
       tree[vertex].state = version->state;
@@ -299,4 +285,32 @@ void StateUpdater::SetState(
              name.toString().c_str());
     }
   }
+}
+
+void StateUpdater::RunStateChangeHandlers(
+    const SharedString & name,
+    AssetHandle<AssetVersionImpl> & version,
+    AssetDefs::State oldState,
+    AssetDefs::State newState) {
+  do {
+    AssetDefs::State returnedState;
+    try {
+      // This will take care of stopping any running tasks, etc. It can also
+      // end up switching us to another state (usually Failed or Succeded).
+      returnedState = version->OnStateChange(newState, oldState);
+    } catch (const StateChangeException &e) {
+      notify(NFY_WARN, "Exception during %s: %s : %s",
+             e.location.c_str(), name.toString().c_str(), e.what());
+      AssetVersionImplD::WriteFatalLogfile(name, e.location, e.what());
+      returnedState = AssetDefs::Failed;
+    } catch (const std::exception &e) {
+      notify(NFY_WARN, "Exception during OnStateChange: %s", 
+             e.what());
+    } catch (...) {
+      notify(NFY_WARN, "Unknown exception during OnStateChange");
+    }
+    if (newState == returnedState) break;
+    oldState = newState;
+    newState = returnedState;
+  } while(true);
 }
