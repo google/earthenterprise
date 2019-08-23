@@ -237,14 +237,14 @@ TEST_F(StateUpdaterTest, SetStateSingleVersion) {
   AssetKey ref1 = "test1";
   AssetKey ref2 = "test2";
   SetVersions(sm, {MockVersion(ref1), MockVersion(ref2)});
-  updater.SetStateForRefAndDependents(fix(ref1), AssetDefs::Bad, [](AssetDefs::State) { return true; });
+  updater.SetStateForRefAndDependents(fix(ref1), AssetDefs::New, [](AssetDefs::State) { return true; });
   assertStateSet(sm, ref1);
   assertStateNotSet(sm, ref2);
 }
 
 TEST_F(StateUpdaterTest, SetStateMultipleVersions) {
   GetBigTree(sm);
-  updater.SetStateForRefAndDependents(fix("gp"), AssetDefs::Canceled, [](AssetDefs::State) {return true; });
+  updater.SetStateForRefAndDependents(fix("gp"), AssetDefs::New, [](AssetDefs::State) {return true; });
   
   assertStateSet(sm, "gp");
   assertStateSet(sm, "p1");
@@ -263,7 +263,7 @@ TEST_F(StateUpdaterTest, SetStateMultipleVersions) {
 
 TEST_F(StateUpdaterTest, SetStateMultipleVersionsFromChild) {
   GetBigTree(sm);
-  updater.SetStateForRefAndDependents(fix("p1"), AssetDefs::Canceled, [](AssetDefs::State) { return true; });
+  updater.SetStateForRefAndDependents(fix("p1"), AssetDefs::New, [](AssetDefs::State) { return true; });
   
   assertStateSet(sm, "p1");
   assertStateSet(sm, "c1");
@@ -280,22 +280,11 @@ TEST_F(StateUpdaterTest, SetStateMultipleVersionsFromChild) {
   assertStateNotSet(sm, "ci3");
 }
 
-TEST_F(StateUpdaterTest, StateChanges) {
-  SetVersions(sm, {MockVersion("a"), MockVersion("b")});
+TEST_F(StateUpdaterTest, StateDoesntChanges) {
+  SetVersions(sm, {MockVersion("a")});
   GetMutableVersion(sm, "a")->state = CALCULATED_STATE;
-  GetMutableVersion(sm, "b")->state = STARTING_STATE;
   updater.SetStateForRefAndDependents(fix("a"), CALCULATED_STATE, [](AssetDefs::State) { return true; });
   assertStateNotSet(sm, "a");
-  assertStateNotSet(sm, "b");
-}
-
-TEST_F(StateUpdaterTest, StateDoesntChange) {
-  SetVersions(sm, {MockVersion("a"), MockVersion("b")});
-  GetMutableVersion(sm, "a")->state = CALCULATED_STATE;
-  GetMutableVersion(sm, "b")->state = STARTING_STATE;
-  updater.SetStateForRefAndDependents(fix("b"), CALCULATED_STATE, [](AssetDefs::State) { return true; });
-  assertStateNotSet(sm, "a");
-  assertStateSet(sm, "b");
 }
 
 // These tests are set up to make it through all the if statements to verify
@@ -600,7 +589,7 @@ TEST_F(StateUpdaterTest, MultipleLevelsParentsDependents) {
 // Verify that an assets state doesn't change if its non-child dependent's
 // state changes.
 TEST_F(StateUpdaterTest, NonChildDependent) {
-  const AssetDefs::State NO_CHANGE_STATE = AssetDefs::InProgress;
+  const AssetDefs::State NO_CHANGE_STATE = AssetDefs::Waiting;
   SetVersions(sm, {MockVersion("a"), MockVersion("b")});
   SetDependent(sm, "a", "b");
   GetMutableVersion(sm, "a")->state = NO_CHANGE_STATE;
