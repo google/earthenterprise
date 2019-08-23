@@ -58,6 +58,11 @@ namespace boost {
 
 #include <boost/graph/depth_first_search.hpp>
 
+class StateUpdater::UnsupportedException : public std::runtime_error {
+  public: 
+    UnsupportedException() : std::runtime_error("Unsupported operation") {}
+};
+
 class StateUpdater::SetStateVisitor : public default_dfs_visitor {
   private:
     StateUpdater * const updater;
@@ -248,9 +253,18 @@ void StateUpdater::SetStateForRefAndDependents(
     const SharedString & ref,
     AssetDefs::State newState,
     function<bool(AssetDefs::State)> updateStatePredicate) {
-  SharedString verref = AssetVersionImpl::Key(ref);
-  tree = BuildDependentStateTree(verref, updateStatePredicate, storageManager);
-  depth_first_search(tree, visitor(SetStateVisitor(this, newState)));
+  try {
+    SharedString verref = AssetVersionImpl::Key(ref);
+    tree = BuildDependentStateTree(verref, updateStatePredicate, storageManager);
+    depth_first_search(tree, visitor(SetStateVisitor(this, newState)));
+  }
+  catch (UnsupportedException) {
+    // This is intended as a temporary condition that will no longer be needed
+    // when all operations have been converted to use the state updater for
+    // propagating state changes.
+    notify(NFY_INFO, "Unsupported condition encountered in state updater. "
+           "Reverting to legacy state propagation.");
+  }
 }
 
 void StateUpdater::SetState(
@@ -299,7 +313,16 @@ void StateUpdater::SetVersionStateAndRunHandlers(
       AssetDefs::State nextState = AssetDefs::Failed;
       try {
         // This will take care of stopping any running tasks, etc.
+        bool hasChildrenBefore = !version->children.empty();
         nextState = version->OnStateChange(newState, oldState);
+        bool hasChildrenAfter = !version->children.empty();
+        if (!hasChildrenBefore && hasChildrenAfter) {
+          // OnStateChange can call DelayedBuildChildren, which creates new
+          // children for this asset. This code is not yet able to handle that
+          // case, so we let OnStateChange perform the legacy state propagation
+          // and abandon this operation.
+          throw UnsupportedException();
+        }
       } catch (const StateChangeException &e) {
         notify(NFY_WARN, "Exception during %s: %s : %s",
                e.location.c_str(), name.toString().c_str(), e.what());
