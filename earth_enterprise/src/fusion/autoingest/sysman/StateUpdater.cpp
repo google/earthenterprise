@@ -15,7 +15,7 @@
  */
 
 #include "StateUpdater.h"
-#include "AssetVersion.h"
+#include "AssetVersionD.h"
 #include "common/notify.h"
 
 using namespace boost;
@@ -270,6 +270,11 @@ void StateUpdater::SetState(
           // This will take care of stopping any running tasks, etc. It can also
           // end up switching us to another state (usually Failed or Succeded).
           version->OnStateChange(newState, oldState);
+        } catch (const StateChangeException &e) {
+          notify(NFY_WARN, "Exception during %s: %s : %s",
+                 e.location.c_str(), name.toString().c_str(), e.what());
+          AssetVersionImplD::WriteFatalLogfile(name, e.location, e.what());
+          version->state = AssetDefs::Failed;
         } catch (const std::exception &e) {
           notify(NFY_WARN, "Exception during OnStateChange: %s", 
                  e.what());
