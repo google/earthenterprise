@@ -280,8 +280,8 @@ void AssetVersionImplD::SetState(
     try {
       // NOTE: This can end up calling back here to switch us to
       // another state (usually Failed or Succeded)
-      AssetDefs::State returnedstate = OnStateChange(newstate, oldstate);
-      if (returnedstate != newstate) SetState(returnedstate);
+      AssetDefs::State nextstate = OnStateChange(newstate, oldstate);
+      if (nextstate != newstate) SetState(nextstate);
     } catch (const StateChangeException &e) {
       notify(NFY_WARN, "Exception during %s: %s : %s",
              e.location.c_str(), GetRef().toString().c_str(), e.what());

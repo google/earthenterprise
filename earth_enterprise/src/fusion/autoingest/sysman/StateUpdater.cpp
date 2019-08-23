@@ -256,7 +256,7 @@ void StateUpdater::SetStateForRefAndDependents(
 void StateUpdater::SetState(
     DependentStateTreeVertexDescriptor vertex,
     AssetDefs::State newState,
-    bool sendNotifications) {
+    bool finalStateChange) {
   SharedString name = tree[vertex].name;
   AssetDefs::State oldState = tree[vertex].state;
   if (newState != oldState) {
@@ -264,34 +264,15 @@ void StateUpdater::SetState(
            name.toString().c_str(), ToString(oldState).c_str(), ToString(newState).c_str());
     auto version = storageManager->GetMutable(name);
     if (version) {
-      do {
-        version->state = newState;
-        if (sendNotifications) {
-          AssetDefs::State nextState = AssetDefs::Failed;
-          try {
-            // This will take care of stopping any running tasks, etc.
-            nextState = version->OnStateChange(newState, oldState);
-          } catch (const StateChangeException &e) {
-            notify(NFY_WARN, "Exception during %s: %s : %s",
-                   e.location.c_str(), name.toString().c_str(), e.what());
-            AssetVersionImplD::WriteFatalLogfile(name, e.location, e.what());
-          } catch (const std::exception &e) {
-            notify(NFY_WARN, "Exception during OnStateChange: %s", e.what());
-          } catch (...) {
-            notify(NFY_WARN, "Unknown exception during OnStateChange");
-          }
-          oldState = newState;
-          newState = nextState;
-        }
-      } while(version->state != newState);
-      // Get the new state directly from the asset version in case it changed.
+      SetVersionStateAndRunHandlers(name, version, oldState, newState, finalStateChange);
+
+      // Get the new state directly from the asset version since it may be
+      // different from the passed-in state
       tree[vertex].state = version->state;
       tree[vertex].stateChanged = true;
-      if (sendNotifications) {
-        notify(NFY_VERBOSE, "Calling theAssetManager.NotifyVersionStateChange(%s, %s)", 
-               name.toString().c_str(), 
-               ToString(tree[vertex].state).c_str());
-        assetManager->NotifyVersionStateChange(name, tree[vertex].state);
+
+      if (finalStateChange) {
+        SendStateChangeNotification(name, version->state);
       }
     }
     else {
@@ -301,4 +282,44 @@ void StateUpdater::SetState(
              name.toString().c_str());
     }
   }
+}
+
+void StateUpdater::SetVersionStateAndRunHandlers(
+    const SharedString & name,
+    AssetHandle<AssetVersionImpl> & version,
+    AssetDefs::State oldState,
+    AssetDefs::State newState,
+    bool finalStateChange) {
+  // OnStateChange can return a new state that we need to transition to, so we
+  // may have to change the state repeatedly.
+  do {
+    version->state = newState;
+    // Don't run handlers if this is a temporary state change.
+    if (finalStateChange) {
+      AssetDefs::State nextState = AssetDefs::Failed;
+      try {
+        // This will take care of stopping any running tasks, etc.
+        nextState = version->OnStateChange(newState, oldState);
+      } catch (const StateChangeException &e) {
+        notify(NFY_WARN, "Exception during %s: %s : %s",
+               e.location.c_str(), name.toString().c_str(), e.what());
+        AssetVersionImplD::WriteFatalLogfile(name, e.location, e.what());
+      } catch (const std::exception &e) {
+        notify(NFY_WARN, "Exception during OnStateChange: %s", e.what());
+      } catch (...) {
+        notify(NFY_WARN, "Unknown exception during OnStateChange");
+      }
+      oldState = newState;
+      newState = nextState;
+    }
+  } while(version->state != newState);
+}
+
+void StateUpdater::SendStateChangeNotification(
+    const SharedString & name,
+    AssetDefs::State state) {
+  notify(NFY_VERBOSE, "Calling theAssetManager.NotifyVersionStateChange(%s, %s)", 
+         name.toString().c_str(), 
+         ToString(state).c_str());
+  assetManager->NotifyVersionStateChange(name, state);
 }
