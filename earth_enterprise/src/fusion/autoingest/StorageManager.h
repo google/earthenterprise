@@ -18,6 +18,7 @@
 #define STORAGEMANAGER_H
 
 #include <map>
+#include <mutex>
 #include <string>
 #include <time.h>
 #include <vector>
@@ -47,7 +48,6 @@ class AssetHandleInterface {
     virtual bool Valid(const AssetPointerType<AssetType> &) const = 0;
 };
 
-
 template<class AssetType>
 class StorageManagerInterface {
   public:
@@ -68,13 +68,13 @@ class StorageManager : public StorageManagerInterface<AssetType> {
         assetType(type) { SetCacheMemoryLimit(limitByMemory, maxMemory); }
     ~StorageManager() = default;
 
-    inline uint32 CacheSize() const { return cache.size(); }
-    inline uint32 CacheCapacity() const { return cache.capacity(); }
-    inline uint32 DirtySize() const { return dirtyMap.size(); }
-    inline uint64 CacheMemoryUse() const { return cache.getMemoryUse(); }
-    inline void SetCacheMemoryLimit(bool limitByMemory, uint64 maxMemory) { cache.setCacheMemoryLimit(limitByMemory, maxMemory); }
-    inline void UpdateCacheItemSize(const AssetKey & key) { cache.updateCacheItemSize(key); }
-    inline uint64 GetCacheItemSize(const AssetKey & key) { return cache.getCacheItemSize(key); }
+    inline uint32 CacheSize() const;
+    inline uint32 CacheCapacity() const;
+    inline uint32 DirtySize() const;
+    inline uint64 CacheMemoryUse() const;
+    inline void SetCacheMemoryLimit(const bool & limitByMemory, const uint64 & maxMemory);
+    inline void UpdateCacheItemSize(const AssetKey & key);
+    inline uint64 GetCacheItemSize(const AssetKey & key);
     inline void AddNew(const AssetKey &, const PointerType &);
     inline void AddExisting(const AssetKey &, const PointerType &);
     inline void NoLongerNeeded(const AssetKey &, bool = true);
@@ -92,6 +92,7 @@ class StorageManager : public StorageManagerInterface<AssetType> {
 
     static const bool check_timestamps;
 
+    mutable std::recursive_mutex storageMutex;
     CacheType cache;
     std::map<AssetKey, PointerType> dirtyMap;
     std::string assetType;
@@ -103,8 +104,51 @@ class StorageManager : public StorageManagerInterface<AssetType> {
 };
 
 template<class AssetType>
+inline uint32 StorageManager<AssetType>::CacheSize() const {
+  std::lock_guard<std::recursive_mutex> lock(storageMutex);
+  return cache.size();
+}
+
+template<class AssetType>
+inline uint32 StorageManager<AssetType>::CacheCapacity() const {
+  std::lock_guard<std::recursive_mutex> lock(storageMutex);
+  return cache.capacity();
+}
+
+template<class AssetType>
+inline uint32 StorageManager<AssetType>::DirtySize() const {
+  std::lock_guard<std::recursive_mutex> lock(storageMutex);
+  return dirtyMap.size();
+}
+
+template<class AssetType>
+inline uint64 StorageManager<AssetType>::CacheMemoryUse() const {
+  std::lock_guard<std::recursive_mutex> lock(storageMutex);
+  return cache.getMemoryUse();
+}
+
+template<class AssetType>
+inline void StorageManager<AssetType>::SetCacheMemoryLimit(const bool & limitByMemory, const uint64 & maxMemory) {
+  std::lock_guard<std::recursive_mutex> lock(storageMutex);
+  cache.setCacheMemoryLimit(limitByMemory, maxMemory);
+}
+
+template<class AssetType>
+inline void StorageManager<AssetType>::UpdateCacheItemSize(const AssetKey & key) {
+  std::lock_guard<std::recursive_mutex> lock(storageMutex);
+  cache.updateCacheItemSize(key);
+}
+
+template<class AssetType>
+inline uint64 StorageManager<AssetType>::GetCacheItemSize(const AssetKey & key) {
+  std::lock_guard<std::recursive_mutex> lock(storageMutex);
+  return cache.getCacheItemSize(key);
+}
+
+template<class AssetType>
 inline void
 StorageManager<AssetType>::AddNew(const AssetKey & key, const PointerType & value) {
+  std::lock_guard<std::recursive_mutex> lock(storageMutex);
   cache.Add(key, value);
   // New assets are automatically dirty
   dirtyMap.emplace(key, value);
@@ -113,12 +157,14 @@ StorageManager<AssetType>::AddNew(const AssetKey & key, const PointerType & valu
 template<class AssetType>
 inline void
 StorageManager<AssetType>::AddExisting(const AssetKey & key, const PointerType & value) {
+  std::lock_guard<std::recursive_mutex> lock(storageMutex);
   cache.Add(key, value);
 }
 
 template<class AssetType>
 inline void
 StorageManager<AssetType>::NoLongerNeeded(const AssetKey & key, bool prune) {
+  std::lock_guard<std::recursive_mutex> lock(storageMutex);
   cache.Remove(key, prune);
 }
 
@@ -137,6 +183,8 @@ StorageManager<AssetType>::Get(
     bool makeMutable) {
   const AssetKey key = AssetType::Key(ref);
   const std::string filename = AssetType::Filename(key);
+
+  std::lock_guard<std::recursive_mutex> lock(storageMutex);
 
   // Check in cache.
   PointerType entry;
@@ -237,12 +285,14 @@ StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & ref) {
 
 template<class AssetType>
 AssetHandle<const AssetType> StorageManager<AssetType>::Get(const AssetKey & ref) {
+  std::lock_guard<std::recursive_mutex> lock(storageMutex);
   PointerType entry = GetEntryFromCacheOrDisk(ref);
   return AssetHandle<const AssetType>(std::shared_ptr<const AssetType>(entry), nullptr);
 }
 
 template<class AssetType>
 AssetHandle<AssetType> StorageManager<AssetType>::GetMutable(const AssetKey & ref) {
+  std::lock_guard<std::recursive_mutex> lock(storageMutex);
   PointerType entry = GetEntryFromCacheOrDisk(ref);
   // Add it to the dirty map. If it's already in the dirty map the existing
   // one will win; that's OK.
@@ -254,6 +304,7 @@ AssetHandle<AssetType> StorageManager<AssetType>::GetMutable(const AssetKey & re
 
 template<class AssetType>
 void StorageManager<AssetType>::Abort() {
+  std::lock_guard<std::recursive_mutex> lock(storageMutex);
   // remove all the dirty Impls from the cache
   for (const std::pair<AssetKey, PointerType> & entry : dirtyMap) {
     cache.Remove(entry.first, false); // false -> don't prune
@@ -269,6 +320,7 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
     khFilesTransaction &savetrans,
     std::vector<AssetKey> *saved) {
   notify(NFY_INFO, "Writing %lu %s records", dirtyMap.size(), assetType.c_str());
+  std::lock_guard<std::recursive_mutex> lock(storageMutex);
   typename std::map<AssetKey, PointerType>::iterator entry = dirtyMap.begin();
   while (entry != dirtyMap.end()) {
     std::string filename = entry->second->XMLFilename() + ".new";
