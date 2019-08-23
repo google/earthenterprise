@@ -209,8 +209,8 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
       SharedString name = tree[vertex].name;
       notify(NFY_PROGRESS, "Calculating state for '%s'", name.toString().c_str());
 
-      // Set the state for assets in the dependent tree. Don't send
-      // notifications because we'll set the state again below.
+      // Set the state for assets in the dependent tree. "false" means we'll
+      // set the state again below.
       if (tree[vertex].inDepTree) {
         updater->SetState(vertex, newState, false);
       }
@@ -242,7 +242,7 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
             calculatedState = version->CalcStateByInputsAndChildren(
                   stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
           }
-          // Set the state and send notifications.
+          // Set the state. "true" means we're done changing this asset's state.
           updater->SetState(vertex, calculatedState, true);
         }
       }
