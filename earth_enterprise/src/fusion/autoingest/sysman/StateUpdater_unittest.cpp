@@ -280,7 +280,7 @@ TEST_F(StateUpdaterTest, SetStateMultipleVersionsFromChild) {
   assertStateNotSet(sm, "ci3");
 }
 
-TEST_F(StateUpdaterTest, StateDoesntChanges) {
+TEST_F(StateUpdaterTest, StateDoesntChange) {
   SetVersions(sm, {MockVersion("a")});
   GetMutableVersion(sm, "a")->state = CALCULATED_STATE;
   updater.SetStateForRefAndDependents(fix("a"), CALCULATED_STATE, [](AssetDefs::State) { return true; });
@@ -408,7 +408,7 @@ TEST_F(StateUpdaterTest, SucceededInputs) {
   ASSERT_EQ(GetMutableVersion(sm, "a")->numWaitingForVal, 0);
 }
 
-void OnlineChildBlockerTest(MockStorageManager & sm, StateUpdater & updater, AssetDefs::State inputState) {
+void ChildBlockerTest(MockStorageManager & sm, StateUpdater & updater, AssetDefs::State inputState) {
   SetVersions(sm, {MockVersion("a"), MockVersion("b"), MockVersion("c"), MockVersion("d")});
   SetParentChild(sm, "a", "b");
   SetParentChild(sm, "a", "c");
@@ -421,23 +421,23 @@ void OnlineChildBlockerTest(MockStorageManager & sm, StateUpdater & updater, Ass
 }
 
 TEST_F(StateUpdaterTest, FailedChildBlocker) {
-  OnlineChildBlockerTest(sm, updater, AssetDefs::Failed);
+  ChildBlockerTest(sm, updater, AssetDefs::Failed);
 }
 
 TEST_F(StateUpdaterTest, BlockedChildBlocker) {
-  OnlineChildBlockerTest(sm, updater, AssetDefs::Blocked);
+  ChildBlockerTest(sm, updater, AssetDefs::Blocked);
 }
 
 TEST_F(StateUpdaterTest, CanceledChildBlocker) {
-  OnlineChildBlockerTest(sm, updater, AssetDefs::Canceled);
+  ChildBlockerTest(sm, updater, AssetDefs::Canceled);
 }
 
 TEST_F(StateUpdaterTest, OfflineChildBlocker) {
-  OnlineChildBlockerTest(sm, updater, AssetDefs::Offline);
+  ChildBlockerTest(sm, updater, AssetDefs::Offline);
 }
 
 TEST_F(StateUpdaterTest, BadChildBlocker) {
-  OnlineChildBlockerTest(sm, updater, AssetDefs::Bad);
+  ChildBlockerTest(sm, updater, AssetDefs::Bad);
 }
 
 TEST_F(StateUpdaterTest, ChildInProgress) {
@@ -586,7 +586,7 @@ TEST_F(StateUpdaterTest, MultipleLevelsParentsDependents) {
   assertStateNotSet(sm, "i");
 }
 
-// Verify that an assets state doesn't change if its non-child dependent's
+// Verify that an asset's state doesn't change if its non-child dependent's
 // state changes.
 TEST_F(StateUpdaterTest, NonChildDependent) {
   const AssetDefs::State NO_CHANGE_STATE = AssetDefs::Waiting;
