@@ -27,13 +27,6 @@
 #include "common/SharedString.h"
 #include "common/khConstants.h"
 
-class StateChangeException : khException {
- public:
-  const std::string location;
-  StateChangeException(const std::string & msg, const std::string & loc) :
-    khException(msg), location(loc) {}
-};
-
 /******************************************************************************
  ***  Derived ReadOnly Handles (Daemon Version)
  ***

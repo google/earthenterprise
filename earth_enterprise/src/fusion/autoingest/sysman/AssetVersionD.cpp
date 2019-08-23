@@ -277,10 +277,20 @@ void AssetVersionImplD::SetState(
   if (newstate != state) {
     AssetDefs::State oldstate = state;
     state = newstate;
+    bool doPropagate = propagate;
     try {
       // NOTE: This can end up calling back here to switch us to
       // another state (usually Failed or Succeded)
       OnStateChange(newstate, oldstate);
+      // only propagate changes if the state is still what we
+      // set it to above. OnStateChange can call SetState recursively. We
+      // don't want to propagate an old state.
+      if (state != newstate) doPropagate = false;
+    } catch (const StateChangeException &e) {
+      notify(NFY_WARN, "Exception during %s: %s : %s",
+             e.location.c_str(), GetRef().toString().c_str(), e.what());
+      WriteFatalLogfile(GetRef(), e.location, e.what());
+      state = AssetDefs::Failed;
     } catch (const std::exception &e) {
       notify(NFY_WARN, "Exception during OnStateChange: %s", 
              e.what());
@@ -288,10 +298,7 @@ void AssetVersionImplD::SetState(
       notify(NFY_WARN, "Unknown exception during OnStateChange");
     }
 
-    // only propagate changes if the state is still what we
-    // set it to above. OnStateChange can call SetState recursively. We
-    // don't want to propagate an old state.
-    if (propagate && (state == newstate)) {
+    if (doPropagate) {
       notify(NFY_VERBOSE, "Calling theAssetManager.NotifyVersionStateChange(%s, %s)", 
              GetRef().toString().c_str(), 
              ToString(newstate).c_str());
@@ -847,15 +854,9 @@ LeafAssetVersionImplD::SubmitTask(void)
   try {
     DoSubmitTask();
   } catch (const std::exception &e) {
-    notify(NFY_WARN, "Exception during SubmitTask: %s : %s",
-           GetRef().toString().c_str(), e.what());
-    WriteFatalLogfile(GetRef(), "SubmitTask", e.what());
-    SetState(AssetDefs::Failed);
+    throw StateChangeException(e.what(), "SubmitTask");
   } catch (...) {
-    notify(NFY_WARN, "Unknown exception during SubmitTask: %s",
-           GetRef().toString().c_str());
-    WriteFatalLogfile(GetRef(), "SubmitTask", "Unknown error");
-    SetState(AssetDefs::Failed);
+    throw StateChangeException("Unknown error", "SubmitTask");
   }
 }
 
