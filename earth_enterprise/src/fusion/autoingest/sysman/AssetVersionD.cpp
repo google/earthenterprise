@@ -400,7 +400,7 @@ AssetVersionImplD::HandleChildProgress(const SharedString &) const
   // NoOp in base since leaves don't do anything
 }
 
-void
+AssetDefs::State
 AssetVersionImplD::OnStateChange(AssetDefs::State newstate,
                                  AssetDefs::State oldstate)
 {
@@ -422,6 +422,7 @@ AssetVersionImplD::OnStateChange(AssetDefs::State newstate,
     }
 #endif
   }
+  return state;
 }
 
 
@@ -891,7 +892,7 @@ LeafAssetVersionImplD::ClearOutfiles(void)
 }
 
 
-void
+AssetDefs::State
 LeafAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
                                      AssetDefs::State oldstate)
 {
@@ -954,6 +955,8 @@ LeafAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
       // to Succeeded. So don't muck with anything.
       break;
   }
+
+  return state;
 }
 
 
@@ -1196,7 +1199,7 @@ CompositeAssetVersionImplD::DelayedBuildChildren(void)
   // and will set my state to Succeeded
 }
 
-void
+AssetDefs::State
 CompositeAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
                                           AssetDefs::State oldstate)
 {
@@ -1225,9 +1228,10 @@ CompositeAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
     if (!children.empty()) {
       SyncState();
     } else {
-      SetState(AssetDefs::Succeeded);
+      return AssetDefs::Succeeded;
     }
   }
+  return state;
 }
 
 void
