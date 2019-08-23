@@ -46,7 +46,6 @@ const AssetDefs::State CALCULATED_STATE = AssetDefs::InProgress;
 
 class MockVersion : public AssetVersionImpl {
   public:
-    bool stateSet;
     bool loadedMutable;
     bool onStateChangeCalled;
     int notificationsSent;
@@ -57,8 +56,7 @@ class MockVersion : public AssetVersionImpl {
     vector<AssetKey> dependents;
 
     MockVersion()
-        : stateSet(false),
-          loadedMutable(false),
+        : loadedMutable(false),
           onStateChangeCalled(false),
           notificationsSent(0),
           stateByInputsVal(AssetDefs::Bad),
@@ -91,8 +89,6 @@ class MockVersion : public AssetVersionImpl {
       numWaitingForVal = numWaitingFor;
       return CALCULATED_STATE;
     }
-    AssetDefs::State GetState() const { return state; }
-    void SetState(AssetDefs::State) { stateSet = true; }
     virtual void OnStateChange(AssetDefs::State, AssetDefs::State) {
       onStateChangeCalled = true;
     }
@@ -226,14 +222,12 @@ void GetBigTree(MockStorageManager & sm) {
 }
 
 void assertStateSet(MockStorageManager & sm, const SharedString & ref) {
-  ASSERT_TRUE(GetVersion(sm, ref)->stateSet);
   ASSERT_TRUE(GetVersion(sm, ref)->loadedMutable);
   ASSERT_TRUE(GetVersion(sm, ref)->onStateChangeCalled);
   ASSERT_EQ(GetVersion(sm, ref)->notificationsSent, 1);
 }
 
 void assertStateNotSet(MockStorageManager & sm, const SharedString & ref) {
-  ASSERT_FALSE(GetVersion(sm, ref)->stateSet);
   ASSERT_FALSE(GetVersion(sm, ref)->loadedMutable);
   ASSERT_FALSE(GetVersion(sm, ref)->onStateChangeCalled);
   ASSERT_EQ(GetVersion(sm, ref)->notificationsSent, 0);
