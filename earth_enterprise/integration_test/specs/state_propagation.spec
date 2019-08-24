@@ -603,6 +603,52 @@ Rebuild
 * Wait for imagery project "StatePropagationTest_BuildModify" to reach state "Succeeded"
 * Verify that the state of images for default project "StatePropagationTest_BuildModify" is "Succeeded"
 
+## Clean and modify
+Tags: build, clean modify, rebuild
+
+Build
+* Create and build default project "StatePropagationTest_CleanModify"
+* Wait for imagery project "StatePropagationTest_CleanModify" to reach state "Succeeded"
+* Verify that the state of images for default project "StatePropagationTest_CleanModify" is "Succeeded"
+
+Clean
+* Clean imagery project "StatePropagationTest_CleanModify"
+* Verify that the state of imagery project "StatePropagationTest_CleanModify" is "Cleaned"
+
+Remove and clean resource
+* Drop imagery resource "i3SF15meter_CleanModify" from project "StatePropagationTest_CleanModify"
+* Clean imagery resource "i3SF15meter_CleanModify"
+* Verify that the state of imagery resource "i3SF15meter_CleanModify" is "Cleaned"
+
+Rebuild
+* Build imagery project "StatePropagationTest_CleanModify"
+* Verify that the state of imagery project "StatePropagationTest_CleanModify" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | Queued     |
+  | InProgress |
+* Verify that the state of imagery resource "i3SF15meter_CleanModify" is "Cleaned"
+* Wait for imagery project "StatePropagationTest_CleanModify" to reach state "Succeeded"
+
+Clean
+* Clean imagery project "StatePropagationTest_CleanModify"
+* Verify that the state of imagery project "StatePropagationTest_CleanModify" is "Cleaned"
+
+Add resource
+* Add imagery resource "i3SF15meter_CleanModify" to project "StatePropagationTest_CleanModify"
+
+Rebuild
+* Build imagery project "StatePropagationTest_CleanModify"
+* Verify that the state of imagery project "StatePropagationTest_CleanModify" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | Queued     |
+  | InProgress |
+* Wait for imagery project "StatePropagationTest_CleanModify" to reach state "Succeeded"
+* Verify that the state of images for default project "StatePropagationTest_CleanModify" is "Succeeded"
+
 ## Database, Terrain, and Vector Tests
 Tags: terrain, vector, build
 We do not test terrain and vector assets as thoroughly as imagery assets since much of the
