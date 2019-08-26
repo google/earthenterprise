@@ -47,7 +47,8 @@ const AssetDefs::State CALCULATED_STATE = AssetDefs::InProgress;
 enum OnStateChangeBehavior {
   NO_ERRORS,
   STATE_CHANGE_EXCEPTION,
-  STD_EXCEPTION
+  STD_EXCEPTION,
+  UNKNOWN_EXCEPTION
 };
 
 class MockVersion : public AssetVersionImpl {
@@ -104,6 +105,8 @@ class MockVersion : public AssetVersionImpl {
           throw StateChangeException("Custom state chagne error", "test code");
         case STD_EXCEPTION:
           throw std::exception();
+        case UNKNOWN_EXCEPTION:
+          throw "Unknown exception";
         case NO_ERRORS:
           break;
       }
@@ -629,6 +632,10 @@ TEST_F(StateUpdaterTest, StateChangeExceptionTest) {
 
 TEST_F(StateUpdaterTest, StdExceptionTest) {
   StateChangeErrorTest(sm, updater, STD_EXCEPTION);
+}
+
+TEST_F(StateUpdaterTest, UnknownExceptionTest) {
+  StateChangeErrorTest(sm, updater, UNKNOWN_EXCEPTION);
 }
 
 int main(int argc, char **argv) {
