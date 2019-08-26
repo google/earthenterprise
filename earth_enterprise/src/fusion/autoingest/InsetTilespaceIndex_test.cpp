@@ -193,7 +193,7 @@ class InsetTilespaceIndex : public UnitTest<InsetTilespaceIndex> {
         
       uint beginMinifyLevel = 1;
       uint endMinifyLevel = 19;
-      
+
       
       std::vector<uint>   neededIndexes; //This is our return value... 
       FindNeededImageryInsets( coverage,
