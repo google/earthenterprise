@@ -159,7 +159,7 @@ class InsetTilespaceIndex : public UnitTest<InsetTilespaceIndex> {
     //                 uint beginCoverageLevel,
     //                 uint endCoverageLevel);
     
-    std::vector<khExtents<uint32>>  findInsetsProductionAlgo(const khInsetCoverage &coverage, const std::vector<const khExtents<uint32>*> &inputExtents)
+    std::vector<uint32>  findInsetsProductionAlgo(const khInsetCoverage &coverage, const std::vector<const khExtents<uint32>*> &inputExtents)
     {
       //uint32 lat = 45; //TODO
       //uint32 lon = 45; //TODO
@@ -173,20 +173,6 @@ class InsetTilespaceIndex : public UnitTest<InsetTilespaceIndex> {
       uint beginMinifyLevel = 1;
       uint endMinifyLevel = 19;
       
-      //const std::vector<const khExtents<uint32> * > constInsetsList = CONST_CAST<std::vector<const khExtents<uint32> * > > (inputExtents);
-      //   for (auto& element : inputExtents)
-      //   {
-      //       constInsetsList.push_back(element);
-      //   }
-      //   const std::vector<const khExtents<uint32> * > constInsetsList2 = constInsetsList;
-  
-      // for (uint i = 0; i < inputExtents.size(); i++) {
-      //   // un-const   
-      //   const khExtents<uint32> covExtent = const_cast<khExtents<uint32>> (inputExtents[i]);
-      //   constInsetsList.push_back(covExtent);
-      // }
-
-      
       
       std::vector<uint>   neededIndexes; //This is our return value... 
       FindNeededImageryInsets( coverage,
@@ -197,18 +183,14 @@ class InsetTilespaceIndex : public UnitTest<InsetTilespaceIndex> {
                               neededIndexes,
                               (uint)beginMinifyLevel,
                               (uint)endMinifyLevel );
-
-      std::vector<const khExtents<uint32> *> requiredExtents;                        
-      auto  collectExtent [] (auto extent) {
-          requiredExtents.push_back( extent);
-      };
-      neededIndexes.for_each( collectExtent );                           
-      return requiredExtents;                                 
+        return neededIndexes;                                 
     }
 
-    const std::vector<khExtents<uint32>> findInsetsExperimentalAlgo(std::vector<const khExtents<uint32>*> &inputExtents)
+    std::vector<uint32> findInsetsExperimentalAlgo(std::vector<const khExtents<uint32>*> &inputExtents)
     {
-      std::vector<const InsetInfo<RasterProductAssetVersion>*> requiredExtents;
+      
+      std::vector<uint>   requiredExtents; //This is our return value... 
+      // TODO 
       return requiredExtents;
     }
     
@@ -218,6 +200,11 @@ class InsetTilespaceIndex : public UnitTest<InsetTilespaceIndex> {
     khInsetCoverage coverage( 4, 18, khExtent( XLOrder,0,0,0,0) );
     std::vector<const khExtents<uint32>*> inputExtents = getTestInsetsGroup1(numExtents);
     std::vector<const khExtents<uint32>*> requiredExtentsProd = findInsetsProductionAlgo( coverage, inputExtents );
+    
+
+    //TODO 
+    
+
     std::vector<const khExtents<uint32>*> requiredExtentsExp = findInsetsExperimentalAlgo( coverage, inputExtents );
    // TODO Determine if we need to sort the vectors first
     bool listsMatch = (requiredExtents1 == requiredExtents2);

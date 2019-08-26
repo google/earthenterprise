@@ -381,7 +381,7 @@ void FindNeededImageryInsets(
 }
 
 
-template <typename ProductAssetVersion>
+
 void FindNeededImageryInsets(
     const khInsetCoverage        &gencov,
     const std::vector<const khExtents> &extents,
