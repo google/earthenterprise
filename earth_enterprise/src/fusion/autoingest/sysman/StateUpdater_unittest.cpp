@@ -46,7 +46,8 @@ const AssetDefs::State CALCULATED_STATE = AssetDefs::InProgress;
 
 enum OnStateChangeBehavior {
   NO_ERRORS,
-  STATE_CHANGE_EXCEPTION
+  STATE_CHANGE_EXCEPTION,
+  STD_EXCEPTION
 };
 
 class MockVersion : public AssetVersionImpl {
@@ -100,7 +101,9 @@ class MockVersion : public AssetVersionImpl {
       onStateChangeCalled = true;
       switch (stateChangeBehavior) {
         case STATE_CHANGE_EXCEPTION:
-          throw StateChangeException("Some error", "test code");
+          throw StateChangeException("Custom state chagne error", "test code");
+        case STD_EXCEPTION:
+          throw std::exception();
         case NO_ERRORS:
           break;
       }
@@ -622,6 +625,10 @@ void StateChangeErrorTest(MockStorageManager & sm, StateUpdater & updater, OnSta
 
 TEST_F(StateUpdaterTest, StateChangeExceptionTest) {
   StateChangeErrorTest(sm, updater, STATE_CHANGE_EXCEPTION);
+}
+
+TEST_F(StateUpdaterTest, StdExceptionTest) {
+  StateChangeErrorTest(sm, updater, STD_EXCEPTION);
 }
 
 int main(int argc, char **argv) {
