@@ -102,7 +102,7 @@
 //     neededIndexes.push_back(i);
 //   }
 
-//
+//  Bread crumb trail of production algorithm code path.
 //  RasterProject.src -> RasterProjectAssetVersionImplD::BuildIndex(
 
       // INSETINFOS
@@ -114,6 +114,27 @@
 //                        (insets[i]->coverage.levelExtents(level));
 //
 
+
+// CLUE - TODO - possibly use this to compute the QuatTree space from raw TIFF files?
+// void
+// khGDALDatasetImpl::ComputeReprojectSnapupExtents(GDALDataset *srcDS,
+//                                                  const std::string &srcSRS,
+//                                                  const std::string &dstSRS,
+//                                                  khSize<uint32> &rasterSize,
+//                                                  khGeoExtents   &geoExtents,
+//                                                  uint           &level,
+//                                                  const bool is_mercator)
+
+
+
+// CLUE - TODO - 
+//
+// std::vector<InsetInfo<RasterProductAssetVersion> *> insets;
+// project->LoadInsetInfo(ClientTmeshTilespaceFlat,
+//                               beginSSLevel, endSSLevel,
+//                               insets);
+// const uint beginMinifyLevel  = StartTmeshLevel;
+// const uint endMinifyLevel    = terrainInsets[0].effectiveMaxLevel;
 
 class InsetTilespaceIndex : public UnitTest<InsetTilespaceIndex> {
   public:
@@ -186,7 +207,7 @@ class InsetTilespaceIndex : public UnitTest<InsetTilespaceIndex> {
         return neededIndexes;                                 
     }
 
-    std::vector<uint32> findInsetsExperimentalAlgo(std::vector<const khExtents<uint32>*> &inputExtents)
+    std::vector<uint32> findInsetsExperimentalAlgo(const khInsetCoverage &coverage, std::vector<const khExtents<uint32>*> &inputExtents)
     {
       
       std::vector<uint>   requiredExtents; //This is our return value... 
@@ -197,17 +218,20 @@ class InsetTilespaceIndex : public UnitTest<InsetTilespaceIndex> {
 
   const bool TestAlgo1Algo2OutputMatch( )  {
     const uint numExtents = 400;
-    khInsetCoverage coverage( 4, 18, khExtent( XLOrder,0,0,0,0) );
+    //TODO - populate this coverage object with test data
+    std::vector<khExtents<uint > > testExtents;
+
+    for ( uint i = 0; i < numExtents; i++ ) {
+        auto newInset = khExtents<uint>( XYOrder,0,0,0,0);
+        testExtents.push_back( newInset );
+    }
+
+    khInsetCoverage coverage( 4, 18, testExtents );
     std::vector<const khExtents<uint32>*> inputExtents = getTestInsetsGroup1(numExtents);
-    std::vector<const khExtents<uint32>*> requiredExtentsProd = findInsetsProductionAlgo( coverage, inputExtents );
-    
-
-    //TODO 
-    
-
-    std::vector<const khExtents<uint32>*> requiredExtentsExp = findInsetsExperimentalAlgo( coverage, inputExtents );
+    std::vector<uint32> requiredExtentsProd = findInsetsProductionAlgo( coverage, inputExtents );
+    std::vector<uint32> requiredExtentsExp = findInsetsExperimentalAlgo( coverage, inputExtents );
    // TODO Determine if we need to sort the vectors first
-    bool listsMatch = (requiredExtents1 == requiredExtents2);
+    bool listsMatch = (requiredExtentsProd == requiredExtentsExp);
     return listsMatch;
   }
 
@@ -215,26 +239,6 @@ class InsetTilespaceIndex : public UnitTest<InsetTilespaceIndex> {
 
 
 
-// CLUE - TODO - possibly use this to compute the QuatTree space from raw TIFF files?
-// void
-// khGDALDatasetImpl::ComputeReprojectSnapupExtents(GDALDataset *srcDS,
-//                                                  const std::string &srcSRS,
-//                                                  const std::string &dstSRS,
-//                                                  khSize<uint32> &rasterSize,
-//                                                  khGeoExtents   &geoExtents,
-//                                                  uint           &level,
-//                                                  const bool is_mercator)
-
-
-
-// CLUE - TODO - 
-//
-// std::vector<InsetInfo<RasterProductAssetVersion> *> insets;
-// project->LoadInsetInfo(ClientTmeshTilespaceFlat,
-//                               beginSSLevel, endSSLevel,
-//                               insets);
-// const uint beginMinifyLevel  = StartTmeshLevel;
-// const uint endMinifyLevel    = terrainInsets[0].effectiveMaxLevel;
 
 };
 
