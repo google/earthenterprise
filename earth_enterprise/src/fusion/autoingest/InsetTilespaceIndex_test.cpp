@@ -192,9 +192,9 @@ class InsetTilespaceIndex : public UnitTest<InsetTilespaceIndex> {
       //   khOffset<uint32>(XYOrder, x,y),  rastersize );
         
       uint beginMinifyLevel = 1;
-      uint endMinifyLevel = 19
+      uint endMinifyLevel = 19;
     
-      std::vector<uint>   neededIndexes; //This is our return value... 
+      std::vector<uint> neededIndexes; //This is our return value... 
       FindNeededImageryInsets( coverage,
                               //constInsetsList,
                               //(uint)constInsetsList.size(),
