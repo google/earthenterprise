@@ -33,8 +33,6 @@ class AssetImplD : public virtual AssetImpl
   AssetImplD(const AssetImplD&);
   AssetImplD& operator=(const AssetImplD&);
  protected:
-  static std::shared_ptr<AssetImplD> Load(const std::string &boundref);
-
   AssetImplD(void) : AssetImpl() { }
   AssetImplD(const AssetStorage &storage)
       : AssetImpl(storage) { }

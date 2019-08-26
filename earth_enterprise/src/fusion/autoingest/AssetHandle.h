@@ -67,9 +67,6 @@ class AssetHandle_ : public AssetHandleInterface<Impl_> {
   static inline uint32 DirtySize(void) { return storageManager().DirtySize(); }
   static uint64 CacheMemoryUse(void) { return storageManager().CacheMemoryUse(); }
 
-  virtual HandleType Load(const std::string &boundref) const {
-    return HandleType(Impl::Load(boundref));
-  }
   virtual bool Valid(const HandleType &) const { return true; }
 
   inline void NoLongerNeeded() {
