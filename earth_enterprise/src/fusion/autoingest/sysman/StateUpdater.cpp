@@ -312,8 +312,8 @@ void StateUpdater::SetVersionStateAndRunHandlers(
     if (finalStateChange) {
       AssetDefs::State nextState = AssetDefs::Failed;
       try {
-        // This will take care of stopping any running tasks, etc.
         bool hasChildrenBefore = !version->children.empty();
+        // This will take care of stopping any running tasks, etc.
         nextState = version->OnStateChange(newState, oldState);
         bool hasChildrenAfter = !version->children.empty();
         if (!hasChildrenBefore && hasChildrenAfter) {

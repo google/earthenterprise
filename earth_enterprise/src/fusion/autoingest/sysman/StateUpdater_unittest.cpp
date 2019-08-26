@@ -49,13 +49,14 @@ enum OnStateChangeBehavior {
   STATE_CHANGE_EXCEPTION,
   STD_EXCEPTION,
   UNKNOWN_EXCEPTION,
-  CHANGE_NUM_CHILDREN
+  CHANGE_NUM_CHILDREN,
+  RETURN_NEW_STATE
 };
 
 class MockVersion : public AssetVersionImpl {
   public:
     bool loadedMutable;
-    bool onStateChangeCalled;
+    int onStateChangeCalled;
     int notificationsSent;
     mutable AssetDefs::State stateByInputsVal;
     mutable AssetDefs::State stateByChildrenVal;
@@ -66,7 +67,7 @@ class MockVersion : public AssetVersionImpl {
 
     MockVersion()
         : loadedMutable(false),
-          onStateChangeCalled(false),
+          onStateChangeCalled(0),
           notificationsSent(0),
           stateByInputsVal(AssetDefs::Bad),
           stateByChildrenVal(AssetDefs::Bad),
@@ -100,7 +101,7 @@ class MockVersion : public AssetVersionImpl {
       return CALCULATED_STATE;
     }
     virtual AssetDefs::State OnStateChange(AssetDefs::State, AssetDefs::State) {
-      onStateChangeCalled = true;
+      ++onStateChangeCalled;
       switch (stateChangeBehavior) {
         case STATE_CHANGE_EXCEPTION:
           throw StateChangeException("Custom state change error", "test code");
@@ -111,6 +112,10 @@ class MockVersion : public AssetVersionImpl {
         case CHANGE_NUM_CHILDREN:
           children.push_back(fix("b"));
           break;
+        case RETURN_NEW_STATE:
+          // Return different states on two iterations
+          if (state == CALCULATED_STATE) return AssetDefs::Waiting;
+          else if (state == AssetDefs::Waiting) return AssetDefs::Queued;
         case NO_ERRORS:
           break;
       }
@@ -245,15 +250,15 @@ void GetBigTree(MockStorageManager & sm) {
   SetDependent(sm, "p1", "c1");
 }
 
-void assertStateSet(MockStorageManager & sm, const SharedString & ref) {
+void assertStateSet(MockStorageManager & sm, const SharedString & ref, int stateChanges = 1) {
   ASSERT_TRUE(GetVersion(sm, ref)->loadedMutable);
-  ASSERT_TRUE(GetVersion(sm, ref)->onStateChangeCalled);
+  ASSERT_EQ(GetVersion(sm, ref)->onStateChangeCalled, stateChanges);
   ASSERT_EQ(GetVersion(sm, ref)->notificationsSent, 1);
 }
 
 void assertStateNotSet(MockStorageManager & sm, const SharedString & ref) {
   ASSERT_FALSE(GetVersion(sm, ref)->loadedMutable);
-  ASSERT_FALSE(GetVersion(sm, ref)->onStateChangeCalled);
+  ASSERT_EQ(GetVersion(sm, ref)->onStateChangeCalled, 0);
   ASSERT_EQ(GetVersion(sm, ref)->notificationsSent, 0);
 }
 
@@ -626,7 +631,9 @@ void StateChangeErrorTest(MockStorageManager & sm, StateUpdater & updater, OnSta
   SetVersions(sm, {MockVersion("a")});
   GetMutableVersion(sm, "a")->stateChangeBehavior = behavior;
   updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State state) { return true; });
-  assertStateSet(sm, "a");
+  // We will call OnStateChange twice - once after setting it to the requested
+  // state and again after setting it to Failed.
+  assertStateSet(sm, "a", 2);
   ASSERT_EQ(GetVersion(sm, "a")->state, AssetDefs::Failed);
 }
 
@@ -655,9 +662,16 @@ TEST_F(StateUpdaterTest, DelayedBuildChildrenTest) {
   // We should get partway through setting the state of "a" (load it mutable
   // and call OnStateChange but not send notifications).
   ASSERT_TRUE(GetVersion(sm, "a")->loadedMutable);
-  ASSERT_TRUE(GetVersion(sm, "a")->onStateChangeCalled);
+  ASSERT_EQ(GetVersion(sm, "a")->onStateChangeCalled, 1);
   ASSERT_EQ(GetVersion(sm, "a")->notificationsSent, 0);
   assertStateNotSet(sm, "b");
+}
+
+TEST_F(StateUpdaterTest, OnStateChangeReturnsNewState) {
+  SetVersions(sm, {MockVersion("a")});
+  GetMutableVersion(sm, "a")->stateChangeBehavior = RETURN_NEW_STATE;
+  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State state) { return true; });
+  assertStateSet(sm, "a", 3);
 }
 
 int main(int argc, char **argv) {
