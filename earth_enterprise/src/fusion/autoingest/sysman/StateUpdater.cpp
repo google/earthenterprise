@@ -323,6 +323,9 @@ void StateUpdater::SetVersionStateAndRunHandlers(
           // and abandon this operation.
           throw UnsupportedException();
         }
+      } catch (const UnsupportedException &) {
+        // Rethrow this exception - we will catch it farther up the stack
+        throw;
       } catch (const StateChangeException &e) {
         notify(NFY_WARN, "Exception during %s: %s : %s",
                e.location.c_str(), name.toString().c_str(), e.what());
