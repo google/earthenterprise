@@ -33,6 +33,10 @@ Rebuild
 * Wait for imagery project "StatePropagationTest_BasicBuild" to reach state "Succeeded"
 * Verify that the state of images for default project "StatePropagationTest_BasicBuild" is "Succeeded"
 
+Build after build finished
+* Build imagery project "StatePropagationTest_BasicBuild"
+* Verify that the state of images for default project "StatePropagationTest_BasicBuild" is "Succeeded"
+
 ## Cancel and Resume Project Before Packgen
 Tags: basic, build, clean, rebuild
 
@@ -407,6 +411,10 @@ Mark resource bad
 * Verify that the state of imagery resource "USGSLanSat_BadAndGood" is "Succeeded"
 * Verify that the state of imagery resource "SFHiRes_BadAndGood" is "Succeeded"
 
+Try to build the bad resource
+* Build imagery resource "BlueMarble_BadAndGood"
+* Verify that the state of imagery resource "BlueMarble_BadAndGood" is "Bad"
+
 Mark resource good
 * Mark imagery resource "BlueMarble_BadAndGood" good
 * Verify that the state of database "Database_BadAndGood" is "Succeeded"
@@ -467,11 +475,20 @@ Build the database
 
 ## Build Database with Failed Resources
 Tags: failed, build, rebuild
+Try to build failed resource
+* Build imagery resource "StatePropagationTest_FailedImageryResource"
+* Verify that the state of imagery resource "StatePropagationTest_FailedImageryResource" is "Failed"
+
+Create project with failed resource
 * Create imagery project "StatePropagationTest_FailedResources"
 * Add imagery resource "StatePropagationTest_FailedImageryResource" to project "StatePropagationTest_FailedResources"
 * Create imagery resource "BlueMarble_FailedResources" from "Imagery/bluemarble_4km.tif" and add to project "StatePropagationTest_FailedResources"
 * Build imagery project "StatePropagationTest_FailedResources"
 * Wait for imagery project "StatePropagationTest_FailedResources" to reach state "Blocked"
+
+Try to build blocked project
+* Build imagery project "StatePropagationTest_FailedResources"
+* Verify that the state of imagery project "StatePropagationTest_FailedResources" is "Blocked"
 
 Build database with failed imagery resource project
 * Create database "StatePropagationTest_Database_FailedResources" from imagery project "StatePropagationTest_FailedResources"
