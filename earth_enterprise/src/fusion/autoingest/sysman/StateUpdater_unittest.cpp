@@ -48,7 +48,8 @@ enum OnStateChangeBehavior {
   NO_ERRORS,
   STATE_CHANGE_EXCEPTION,
   STD_EXCEPTION,
-  UNKNOWN_EXCEPTION
+  UNKNOWN_EXCEPTION,
+  CHANGE_NUM_CHILDREN
 };
 
 class MockVersion : public AssetVersionImpl {
@@ -102,11 +103,14 @@ class MockVersion : public AssetVersionImpl {
       onStateChangeCalled = true;
       switch (stateChangeBehavior) {
         case STATE_CHANGE_EXCEPTION:
-          throw StateChangeException("Custom state chagne error", "test code");
+          throw StateChangeException("Custom state change error", "test code");
         case STD_EXCEPTION:
           throw std::exception();
         case UNKNOWN_EXCEPTION:
           throw "Unknown exception";
+        case CHANGE_NUM_CHILDREN:
+          children.push_back(fix("b"));
+          break;
         case NO_ERRORS:
           break;
       }
@@ -636,6 +640,24 @@ TEST_F(StateUpdaterTest, StdExceptionTest) {
 
 TEST_F(StateUpdaterTest, UnknownExceptionTest) {
   StateChangeErrorTest(sm, updater, UNKNOWN_EXCEPTION);
+}
+
+// If an asset calls DelayedBuildChildren as part of a state change the code
+// should detect that and revert to legacy state propagation. This will change
+// in the future as we handle more cases in the state updater.
+TEST_F(StateUpdaterTest, DelayedBuildChildrenTest) {
+  SetVersions(sm, {MockVersion("a"), MockVersion("b")});
+  GetMutableVersion(sm, "a")->stateChangeBehavior = CHANGE_NUM_CHILDREN;
+  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State state) { return true; });
+  auto * version = GetMutableVersion(sm, "a");
+  // Make sure OnStateChange behaved as expected
+  ASSERT_NE(find(version->children.begin(), version->children.end(), fix("b")), version->children.end());
+  // We should get partway through setting the state of "a" (load it mutable
+  // and call OnStateChange but not send notifications).
+  ASSERT_TRUE(GetVersion(sm, "a")->loadedMutable);
+  ASSERT_TRUE(GetVersion(sm, "a")->onStateChangeCalled);
+  ASSERT_EQ(GetVersion(sm, "a")->notificationsSent, 0);
+  assertStateNotSet(sm, "b");
 }
 
 int main(int argc, char **argv) {
