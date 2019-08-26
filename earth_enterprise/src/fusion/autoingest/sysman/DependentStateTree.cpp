@@ -26,8 +26,13 @@ using namespace std;
 class DependentStateTreeFactory
 {
   private:
+    struct VertexData {
+      DependentStateTreeVertexDescriptor vertex;
+      bool includeConnections;
+    };
+    
     StorageManagerInterface<AssetVersionImpl> * const storageManager;
-    map<SharedString, DependentStateTreeVertexDescriptor> vertices;
+    map<SharedString, VertexData> vertices;
     size_t index;
     function<bool(AssetDefs::State)> includePredicate;
     set<DependentStateTreeVertexDescriptor> toFillInNext;
@@ -38,7 +43,7 @@ class DependentStateTreeFactory
     DependentStateTreeVertexDescriptor AddOrUpdateVertex(
         const SharedString & ref,
         bool inDepTree,
-        bool recalcState);
+        bool includeConnections);
     void FillInVertex(DependentStateTreeVertexDescriptor myVertex);
     void AddEdge(
         DependentStateTreeVertexDescriptor from,
@@ -87,31 +92,31 @@ DependentStateTreeVertexDescriptor
 DependentStateTreeFactory::AddOrUpdateVertex(
     const SharedString & ref,
     bool inDepTree,
-    bool recalcState) {
+    bool includeConnections) {
   auto myVertexIter = vertices.find(ref);
   if (myVertexIter == vertices.end()) {
     // I'm not in the graph yet, so make a new empty vertex and let the caller
     // know we need to load it with the correct information
     auto myVertex = add_vertex(tree);
-    tree[myVertex] = {ref, AssetDefs::New, inDepTree, recalcState, false, index};
+    tree[myVertex] = {ref, AssetDefs::New, inDepTree, false, index};
     ++index;
-    vertices[ref] = myVertex;
+    vertices[ref] = {myVertex, includeConnections};
     toFillInNext.insert(myVertex);
     return myVertex;
   }
   else {
     // I'm already in the graph. If we learned new information that we didn't
     // know when I was added to the tree (e.g., I'm in the dependent tree),
-    // add this to the list of vertexes to fill in so that we can add its
+    // add this to the list of vertices to fill in so that we can add its
     // connections. Then return the existing descriptor.
-    auto myVertex = myVertexIter->second;
+    auto myVertex = myVertexIter->second.vertex;
     auto & myVertexData = tree[myVertex];
     if (inDepTree && !myVertexData.inDepTree) {
       myVertexData.inDepTree = true;
       toFillInNext.insert(myVertex);
     }
-    if (recalcState && !myVertexData.recalcState) {
-      myVertexData.recalcState = true;
+    if (includeConnections && !myVertexIter->second.includeConnections) {
+      myVertexIter->second.includeConnections = true;
       toFillInNext.insert(myVertex);
     }
     return myVertex;
@@ -140,7 +145,7 @@ void DependentStateTreeFactory::FillInVertex(
   // input, but we won't bring in any of its dependents.
   if (tree[myVertex].inDepTree && !includePredicate(tree[myVertex].state)) {
     tree[myVertex].inDepTree = false;
-    tree[myVertex].recalcState = false;
+    vertices[name].includeConnections = false;
   }
   // If I'm in the dependency tree I need to add my dependents because they are
   // also in the dependency tree.
@@ -157,7 +162,7 @@ void DependentStateTreeFactory::FillInVertex(
   // parents and listeners, because they may also have to recalculate their
   // state. If I don't need to recalculate my state, I don't need to add any of
   // my connections. I'm only used to calculate someone else's state.
-  if (tree[myVertex].recalcState) {
+  if (vertices[name].includeConnections) {
     for (const auto & child : version->children) {
       auto childVertex = AddOrUpdateVertex(child, false, false);
       AddEdge(myVertex, childVertex, {CHILD});
