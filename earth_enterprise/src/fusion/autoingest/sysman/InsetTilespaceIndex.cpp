@@ -72,6 +72,7 @@ for (size_t i = 0; i < num_insets; ++i) {
     double degX = (input_tile.rastersize.width) * dX;
     double degY = (input_tile.rastersize.height) * dY;
     // Here khExtents expects lower left origin:
+    // This snippet lifted from RasterClusterAnalyzer
     const khExtents<double> deg_extent(XYOrder,
                                        std::min(offset.x(), offset.x() + degX),
                                        std::max(offset.x(), offset.x() + degX),

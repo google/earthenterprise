@@ -223,6 +223,17 @@ public:
     }
 };
 
+
+extern void
+FindNeededImageryInsets(
+    const khInsetCoverage        &gencov,
+    const std::vector<const khExtents<uint32> *> &extents,
+    uint                          numExtents,
+    std::vector<uint>            &neededIndexes,
+    uint beginMinifyLevel,
+    uint endMinifyLevel);
+
+
 template <typename ProductAssetVersion>
 extern void
 FindNeededImageryInsets(

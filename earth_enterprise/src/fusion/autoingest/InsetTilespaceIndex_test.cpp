@@ -34,9 +34,19 @@
 #include <string>
 
 // TODO _ HIGH LEVEL TODOS:
+// TODO - 1) refactor InsetInfos:: FindNeededImageryInsets(
+      // const khInsetCoverage        &gencov,
+      // const std::vector<const InsetInfo<RasterProductAssetVersion> *> &insets,
+      // uint                          numInsets,
+      // std::vector<uint>            &neededIndexes,
+      // uint beginMinifyLevel,
+      // uint endMinifyLevel);
+    // with an overload to accept khExtents instead of insets ^^^  
+// 
+//
 // TODO : Look at src/common/tests/qtpathgen.cpp to see if we don't already have
 // what we need for the QT MBR datatype.
-//
+// 
 // Pseudocode for Test:
 //
 // Generate a bunch of InsetInfos (resources)
@@ -44,8 +54,30 @@
 //
 // for each inset_info i:
 //   call FindNeededImageryInsets
-//   call new code
+//   call ExperimentalFunc
 //   compare results
+
+// ExperimentalFunc( coverage, all insets,  &neededInsets)
+// ......returns &neededInsets
+//  1) Prep:
+//      a)build QuadTreeMBR for each coverageInset, 
+//        add to index
+//        Sort by Level then by QTP
+//      b) build QuadTreeMBR for each coverageInset
+//        add to index
+//        Sort by Level then by QTP
+//
+//  2) Loop through Coverage extents' MBRs 
+//      start with bottom coverage inset (i.e., highest level )
+//      a) Find overlapping Children  (i.e., higher level)
+//             -- compare QT path bits - any child with the first bits that binary 'ands' with the coverage inset is a match. 
+//            add matching children to output list. 
+//      b) Find overlapping parents  (i.e., lower level)
+//             -- compare QT path bits - any coverage with the first bits that binary 'ands' with the parent's inset MBR bits at it's level is a match. 
+//            add matching PARENTS to output list. 
+
+
+
 
 //   convert neededIndexes to vector of InsetInfos
 //   for each level
@@ -70,6 +102,19 @@
 //     neededIndexes.push_back(i);
 //   }
 
+//
+//  RasterProject.src -> RasterProjectAssetVersionImplD::BuildIndex(
+
+      // INSETINFOS
+//          -> PreprocessForInset->
+//           ->CalculateOverlap(neededIndexes, gencov);
+//             -> FindNeededImageryInsets
+//                -> **extracts khInset
+//                const khExtents<uint32> &iExtents
+//                        (insets[i]->coverage.levelExtents(level));
+//
+
+
 class InsetTilespaceIndex : public UnitTest<InsetTilespaceIndex> {
   public:
     static const uchar blist[QuadtreePath::kMaxLevel];
@@ -78,48 +123,28 @@ class InsetTilespaceIndex : public UnitTest<InsetTilespaceIndex> {
     static const uint64 expected_binary = 0x60D793F16AC10018LL;
     static const uint64 mask48 = 0xFFFFFFFFFFFF0000LL;
 
-    std::vector<InsetInfo<RasterProductAssetVersion>*> getTestInsetsGroup1 ()  {
-      std::vector<InsetInfo<RasterProductAssetVersion>> insets;
-      int numInsets = 10;
-      // std::vector<SimpleInsetInfo<RasterProductAssetVersion> > imageryInsets;
+    std::vector<const khExtents<uint32>*>  getTestInsetsGroup1 ( uint numExtents) const  {
+      std::vector<const khExtents<uint32>*>  newExtents;
+      // std::vector<SimpleInsetInfo<RasterProductAssetVersion> *> imageryInsets;
       //     imagery_project->LoadSimpleInsetInfo(ClientTmeshTilespaceFlat,
       //                                         imageryInsets,
       //                                         maxClientImageryLevel);
-
-      auto newRPInset =
-          [](double x1, double y1, double x2, double y2, uint beginCovLev=0, uint endCovLev=19) {
-        // TODO - Establish proper Config parameters
-        // const uint effectiveMaxProdLev = 24;
-
-        RasterProductConfig config();
-        //RasterProductAssetVersion assetVersion =
-        //   RasterProductAssetVersion(input);
-
-        std::vector<InsetInfo<RasterProductAssetVersion>> rpAssetVersions();
-        //   for (uint i = 0; i < proj->inputs.size(); ++i) {
-        //       RasterProductAssetVersion resource(proj->inputs[i]);
-
-        //       InsetInfo<RasterProductAssetVersion> newInst =
-        //         InsetInfo(RasterProductTilespace,  &resource, &assetVersion, effectiveMaxProdLev,
-        //                 beginCovLev, endCovLev);
-        //         rpAssetVersions.push_back( newInset) ;
-        //   }
-        // }
-        return rpAssetVersions;
-      }; // end Lambda
-
-      while (numInsets) {
+      // TODO - 
+      double x1 = 0, x2 =1, y1 = 0, y2 = 0;
+      
+      while (numExtents) {
         //   inset = newRPInset(
         //       0, 0, 0, 0, 0); // TODO - populate with values from test data structs
-        //   insets.push_back(inset);
-        numInsets--;
-      }
         
-
-    return insets;
+        const khExtents<uint32> newExtent(XYOrder, x1,y1,x2,y2);
+        newExtents.push_back( &newExtent );
+        numExtents--;
+      }
+    return newExtents;
   }
 
-  const QuadtreePath getInsetMBR( InsetInfo<RasterProductAssetVersion> inset ) {
+
+  const QuadtreePath getExtentMBR( khExtents<uint32> &extent) {
     // TODO 
     return  QuadtreePath();
   }
@@ -129,45 +154,78 @@ class InsetTilespaceIndex : public UnitTest<InsetTilespaceIndex> {
     // IMPORTANT: (Note the different c'tor's paramter order between DEGREES and NORM )
     //
     // khInsetCoverage(const khTilespace &tilespace,
-    //                 const khExtents<double> &Extents,
+    //                 const khExtents<uint32> &Extents,
     //                 uint fullresTileLevel,
     //                 uint beginCoverageLevel,
     //                 uint endCoverageLevel);
     
-    std::vector<InsetInfo<RasterProductAssetVersion>*> findInsetsAlgo1(std::vector<InsetInfo<RasterProductAssetVersion>> inputInsets)
+    std::vector<khExtents<uint32>>  findInsetsProductionAlgo(const khInsetCoverage &coverage, const std::vector<const khExtents<uint32>*> &inputExtents)
     {
-      std::vector<InsetInfo<RasterProductAssetVersion>> neededInsets;
       //uint32 lat = 45; //TODO
       //uint32 lon = 45; //TODO
-      uint rastersize=28000;
-      khExtents<uint32> extents; 
-      // TODO 
+      //uint rastersize=28000;
+     
+      // TODO two ways to make an extent - either from row/col 
+      //    (pixels?Grid coords) or from degrees. 
       // extents = (
-      //   khOffset<uint32>(XYOrder, lat,lon),  rastersize );
-      khInsetCoverage gencov();
+      //   khOffset<uint32>(XYOrder, x,y),  rastersize );
+        
       uint beginMinifyLevel = 1;
-      uint endMinifyLevel = 18;
-      std::vector<uint>   neededIndexes(); //This is our return value... 
-      FindNeededImageryInsets(gencov,
-                                  inputInsets,
-                                  inputInsets.size(),
-                                  neededIndexes,
-                                  beginMinifyLevel,
-                                  endMinifyLevel);
-      return neededInsets;                                 
+      uint endMinifyLevel = 19;
+      
+      //const std::vector<const khExtents<uint32> * > constInsetsList = CONST_CAST<std::vector<const khExtents<uint32> * > > (inputExtents);
+      //   for (auto& element : inputExtents)
+      //   {
+      //       constInsetsList.push_back(element);
+      //   }
+      //   const std::vector<const khExtents<uint32> * > constInsetsList2 = constInsetsList;
+  
+      // for (uint i = 0; i < inputExtents.size(); i++) {
+      //   // un-const   
+      //   const khExtents<uint32> covExtent = const_cast<khExtents<uint32>> (inputExtents[i]);
+      //   constInsetsList.push_back(covExtent);
+      // }
+
+      
+      
+      std::vector<uint>   neededIndexes; //This is our return value... 
+      FindNeededImageryInsets( coverage,
+                              //constInsetsList,
+                              //(uint)constInsetsList.size(),
+                              inputExtents,
+                              (uint)inputExtents.size(),
+                              neededIndexes,
+                              (uint)beginMinifyLevel,
+                              (uint)endMinifyLevel );
+
+      std::vector<const khExtents<uint32> *> requiredExtents;                        
+      auto  collectExtent [] (auto extent) {
+          requiredExtents.push_back( extent);
+      };
+      neededIndexes.for_each( collectExtent );                           
+      return requiredExtents;                                 
     }
 
+    const std::vector<khExtents<uint32>> findInsetsExperimentalAlgo(std::vector<const khExtents<uint32>*> &inputExtents)
+    {
+      std::vector<const InsetInfo<RasterProductAssetVersion>*> requiredExtents;
+      return requiredExtents;
+    }
+    
 
   const bool TestAlgo1Algo2OutputMatch( )  {
-    std::vector<const InsetInfo<RasterProductAssetVersion>*> inputInsets = getTestInsetsGroup1();
-    std::vector<const InsetInfo<RasterProductAssetVersion>*> neededInsets1 = findInsetsAlgo1( inputInsets );
-    std::vector<const InsetInfo<RasterProductAssetVersion>*> neededInsets2 = findInsetsAlgo2( inputInsets );
-   
+    const uint numExtents = 400;
+    khInsetCoverage coverage( 4, 18, khExtent( XLOrder,0,0,0,0) );
+    std::vector<const khExtents<uint32>*> inputExtents = getTestInsetsGroup1(numExtents);
+    std::vector<const khExtents<uint32>*> requiredExtentsProd = findInsetsProductionAlgo( coverage, inputExtents );
+    std::vector<const khExtents<uint32>*> requiredExtentsExp = findInsetsExperimentalAlgo( coverage, inputExtents );
    // TODO Determine if we need to sort the vectors first
-    bool listsMatch = (neededInsets1 == neededInsets2);
-     
+    bool listsMatch = (requiredExtents1 == requiredExtents2);
     return listsMatch;
   }
+
+
+
 
 
 // CLUE - TODO - possibly use this to compute the QuatTree space from raw TIFF files?
@@ -184,7 +242,7 @@ class InsetTilespaceIndex : public UnitTest<InsetTilespaceIndex> {
 
 // CLUE - TODO - 
 //
-// std::vector<InsetInfo<RasterProductAssetVersion> > insets;
+// std::vector<InsetInfo<RasterProductAssetVersion> *> insets;
 // project->LoadInsetInfo(ClientTmeshTilespaceFlat,
 //                               beginSSLevel, endSSLevel,
 //                               insets);

@@ -370,6 +370,25 @@ void FindNeededImageryInsets(
     std::vector<uint>            &neededIndexes,
     uint beginMinifyLevel,
     uint endMinifyLevel) {
+  std::vector<khExtents<uint32>> extents;
+  for (uint i = 0; i < numInsets; ++i) {
+    const khExtents<uint32> &iExtents
+      (insets[i]->coverage.levelExtents(level));
+      extents.push_back(iExtents);
+  }
+  FindNeededImageryInsets( gencov, extents, numInsets, neededIndexes, beginMinifyLevel, endMinifyLevel );
+  return;
+}
+
+
+template <typename ProductAssetVersion>
+void FindNeededImageryInsets(
+    const khInsetCoverage        &gencov,
+    const std::vector<const khExtents> &extents,
+    uint                          numInsets,
+    std::vector<uint>            &neededIndexes,
+    uint beginMinifyLevel,
+    uint endMinifyLevel) {
   // For now we know that gencov's levelExtents are simple minifications
   // of the maxres one. That means that we can do the intersection only at
   // the lowest res and know that we will get all the insets needed for
@@ -387,7 +406,7 @@ void FindNeededImageryInsets(
   // Packgen will be caching the results - the cached results are
   // in product tilespace, so we need to do our intersection tests
   // snapped out to product tile boundaries
-  // If gencov has more than one level, we're finding insets for a PacketGen
+  // If gencov has more than one level, we're finding insets for a PacketGen  
   // asset. Always do the align for PacketGen, so we make sure we have a
   // superset of the insets that each PacketLevelGen will need. PacketGen
   // doesn't really depend on the list returned from here. He just
@@ -405,9 +424,7 @@ void FindNeededImageryInsets(
 
   for (uint i = 0; i < numInsets; ++i) {
     // Aligning here would be redundant, so we save ourselves the effort.
-    const khExtents<uint32> &iExtents
-      (insets[i]->coverage.levelExtents(level));
-
+    const khExtents<uint32> &iExtents = extents[i];
     if (iExtents.intersects(genExtents)) {
       neededIndexes.push_back(i);
     }
