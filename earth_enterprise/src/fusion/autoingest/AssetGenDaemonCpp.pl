@@ -101,61 +101,14 @@ print $fh <<EOF;
 // ****************************************************************************
 $config{"AssetD.cpp"}
 
+const AssetDefs::Type ${name}AssetImplD::EXPECTED_TYPE = $typeorinvalid;
+const AssetDefs::Type ${name}AssetVersionImplD::EXPECTED_TYPE = $typeorinvalid;
+const std::string ${name}AssetImplD::EXPECTED_SUBTYPE = "$subtype";
+const std::string ${name}AssetVersionImplD::EXPECTED_SUBTYPE = "$subtype";
 
 // ****************************************************************************
 // ***  ${name}Factory - Auto generated
 // ****************************************************************************
-${name}AssetD
-${name}Factory::Find(const std::string &ref_ $formaltypearg)
-{
-    try {
-        Asset asset(ref_);
-        if (asset &&
-            (asset->type == $typeref) &&
-            (asset->subtype == "$subtype")) {
-            return ${name}AssetD(ref_);
-        }
-    } catch (...) {
-        // do nothing - don't even generate any warnings
-    }
-    return ${name}AssetD();
-}
-
-${name}AssetVersionD
-${name}Factory::FindVersion(const std::string &ref_ $formaltypearg)
-{
-    try {
-        AssetVersion version(ref_);
-        if (version &&
-            (version->type == $typeref) &&
-            (version->subtype == "$subtype")) {
-            return ${name}AssetVersionD(ref_);
-        }
-    } catch (...) {
-        // do nothing - don't even generate any warnings
-    }
-    return ${name}AssetVersionD();
-}
-
-void
-${name}Factory::ValidateRefForInput(const std::string &ref $formaltypearg)
-{
-    if (AssetVersionRef(ref).Version() == "current") {
-        Asset asset = Find(ref $forwardtypearg);
-        if (!asset) {
-            throw std::invalid_argument(
-                "No such " + ToString($typeref) + " $subtype asset: " + ref);
-        }
-    } else {
-        ${name}AssetVersionD version = FindVersion(ref $forwardtypearg);
-        if (!version) {
-            throw std::invalid_argument(
-                "No such " + ToString($typeref) + " $subtype asset version: " +
-                ref);
-        }
-    }
-}
-
 std::string
 ${name}Factory::SubAssetName(
         const std::string &parentAssetRef
@@ -190,7 +143,7 @@ ${name}Factory::FindMake(const std::string &ref_ $formaltypearg,
 {
     // keep hold of it as a mutable so we can change/create it and
     // have the changes automatically saved
-    Mutable${name}AssetD asset = Find(ref_ $forwardtypearg);
+    Mutable${name}AssetD asset = Find<${name}AssetD>(ref_, $typeref);
     if (asset) {
         asset->Modify($forwardinputarg meta_, config_);
         return asset;
@@ -208,7 +161,7 @@ ${name}Factory::FindAndModify(const std::string &ref_ $formaltypearg,
                               const khMetaData &meta_,
                               const $config& config_)
 {
-    Mutable${name}AssetD asset = Find(ref_ $forwardtypearg);
+    Mutable${name}AssetD asset = Find<${name}AssetD>(ref_, $typeref);
     if (asset) {
         asset->Modify($forwardinputarg meta_, config_);
         return asset;
@@ -225,7 +178,7 @@ ${name}Factory::MakeNew(const std::string &ref_ $formaltypearg,
                         const khMetaData &meta_,
                         const $config& config_)
 {
-    Mutable${name}AssetD asset = Find(ref_ $forwardtypearg);
+    Mutable${name}AssetD asset = Find<${name}AssetD>(ref_, $typeref);
     if (asset) {
         throw khException(kh::tr("$subtype '%2' already exists")
                           .arg(ref_));
@@ -299,7 +252,7 @@ ${name}Factory::ReuseOrMakeAndUpdate(
     std::transform(inputarg.begin(), inputarg.end(), back_inserter(boundInputs),
                    ptr_fun(&AssetVersionRef::Bind));
 
-    Mutable${name}AssetD asset = Find(ref_ $forwardtypearg);
+    Mutable${name}AssetD asset = Find<${name}AssetD>(ref_, $typeref);
     if (asset) {
         for (const auto& v : asset->versions) {
             try {
@@ -420,68 +373,17 @@ namespace {
     void AddConfig(DOMElement *parent, const $config &config);
 }
 
-std::shared_ptr<${name}AssetImplD>
-${name}AssetImplD::Load(const std::string &boundref)
+std::string ${name}AssetImplD::GetName() const
 {
-    // make sure the base class loader actually instantiated one of me
-    // this should always happen, but there are no compile time guarantees
-    auto loaded = ${name}AssetImpl::Load(boundref);
-    std::shared_ptr<${name}AssetImplD> result =
-        std::dynamic_pointer_cast<${name}AssetImplD>(loaded);
+    return "${name}Asset";
+}
 
-    if (result == nullptr) {
-        std::string error {"Internal error: "};
-        if (loaded == nullptr)
-           error += "base did not load and ";
-        error += "${name}AssetImplD loaded wrong type for ";
-        AssetThrowPolicy::FatalOrThrow(error + boundref);
-    }
-
-    return result;
+void ${name}AssetImplD::SerializeConfig(DOMElement *top) const
+{
+    AddConfig(top, config);
 }
 
 extern void ToElement(DOMElement *elem, const AssetStorage &self);
-
-bool
-${name}AssetImplD::Save(const std::string &filename) const
-{
-    std::unique_ptr<GEDocument> doc = CreateEmptyDocument("${name}Asset");
-    if (!doc) {
-        notify(NFY_WARN, "Unable to create empty document: ${name}Asset");
-        return false;
-    }
-    bool status = false;
-    try {
-        DOMElement *top = doc->getDocumentElement();
-        if (top) {
-            // use a temporary else templated ToElement doesn't
-            // know which type to use
-            const AssetStorage &storage = *this;
-            ToElement(top, storage);
-            AddConfig(top, config);
-            status = WriteDocument(doc.get(), filename);
-            if (!status && khExists(filename)) {
-                khUnlink(filename);
-            }
-        } else {
-            notify(NFY_WARN, "Unable to create document element %s",
-                   filename.c_str());
-        }
-    } catch (const XMLException& toCatch) {
-        notify(NFY_WARN, "Error saving %s: %s",
-               filename.c_str(), XMLString::transcode(toCatch.getMessage()));
-    } catch (const DOMException& toCatch) {
-        notify(NFY_WARN, "Error saving %s: %s",
-               filename.c_str(), XMLString::transcode(toCatch.msg));
-    } catch (const std::exception &e) {
-        notify(NFY_WARN, "Error saving %s: %s", filename.c_str(), e.what());
-    } catch (...) {
-        notify(NFY_WARN, "Unable to save %s", filename.c_str());
-    }
-    return status;
-}
-
-
 
 EOF
 
@@ -510,7 +412,7 @@ ${name}AssetImplD::MakeNewVersion(void)
     typedef ${name}AssetVersionImplD VerImpl;
     Mutable${name}AssetVersionD newver(std::make_shared<VerImpl>(this));
 
-    AddVersionRef(newver->GetRef().toString());
+    AddVersionRef(newver->GetRef());
     return newver;
 }
 EOF
@@ -789,60 +691,17 @@ print $fh <<EOF;
 // ****************************************************************************
 // ***  ${name}AssetVersionImplD - Auto generated
 // ****************************************************************************
-std::shared_ptr<${name}AssetVersionImplD>
-${name}AssetVersionImplD::Load(const std::string &boundref)
+std::string ${name}AssetVersionImplD::GetName() const
 {
-    // make sure the base class loader actually instantiated one of me
-    // this should always happen, but there are no compile time guarantees
-    auto loaded = ${name}AssetVersionImpl::Load(boundref);
-
-    std::shared_ptr<${name}AssetVersionImplD> result =
-        std::dynamic_pointer_cast<${name}AssetVersionImplD>(loaded);
-
-    if (result == nullptr) {
-      std::string error {"Internal error: "};
-      if (loaded == nullptr)
-        error += "base did not load and ";
-      error += "${name}AssetVersionImplD loaded wrong type for ";
-      AssetThrowPolicy::FatalOrThrow(error + boundref);
-    }
-    return result;
+    return "${name}AssetVersion";
 }
 
+void ${name}AssetVersionImplD::SerializeConfig(DOMElement *top) const
+{
+    AddConfig(top, config);
+}
 
 extern void ToElement(DOMElement *elem, const AssetVersionStorage &self);
-bool
-${name}AssetVersionImplD::Save(const std::string &filename) const
-{
-    std::unique_ptr<GEDocument> doc = CreateEmptyDocument("${name}AssetVersion");
-    if (!doc) {
-        notify(NFY_WARN,
-               "Unable to create empty document: ${name}AssetVersion");
-        return false;
-    }
-    bool status = false;
-    try {
-        DOMElement *top = doc->getDocumentElement();
-        if (top) {
-            const AssetVersionStorage &storage = *this;
-            ToElement(top, storage);
-            AddConfig(top, config);
-            status = WriteDocument(doc.get(), filename);
-            if (!status && khExists(filename)) {
-                khUnlink(filename);
-            }
-        } else {
-            notify(NFY_WARN, "Unable to create document element %s",
-                   filename.c_str());
-        }
-    } catch (const std::exception &e) {
-        notify(NFY_WARN, "%s while saving %s", e.what(), filename.c_str());
-    } catch (...) {
-        notify(NFY_WARN, "Unable to save %s", filename.c_str());
-    }
-    return status;
-}
-
 
 EOF
 

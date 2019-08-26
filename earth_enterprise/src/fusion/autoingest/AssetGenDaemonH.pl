@@ -123,11 +123,12 @@ class ${name}AssetVersionImplD :
     friend class ${name}AssetVersionImpl;
     friend class ${name}AssetImplD;
     friend class DerivedAssetHandleD_<${name}AssetVersion, AssetVersionD, ${name}AssetVersionImplD>;
-    virtual bool Save(const std::string &filename) const;
-protected:
-    static std::shared_ptr<${name}AssetVersionImplD> Load(const std::string &ref);
-
 public:
+    using AssetType = DerivedAssetHandleD_<${name}Asset, AssetD, ${name}AssetImplD>;
+
+    virtual std::string GetName() const;
+    virtual void SerializeConfig(khxml::DOMElement*) const;
+
     // Only used when constructing a new version from an asset.
     // The decision to use the raw ImplD* here was a tough one.
     // Originally it had an asset handle, but the call point is a member
@@ -159,6 +160,9 @@ print $fh <<EOF;
           ${name}AssetVersionImpl(config_),
           ${base}AssetVersionImplD() { }
 
+    static const AssetDefs::Type EXPECTED_TYPE;
+    static const std::string EXPECTED_SUBTYPE;
+
 $extra{"${name}AssetVersionImplD"}
 
     // supplied from ${name}.src ---v
@@ -181,11 +185,12 @@ class ${name}AssetImplD : public ${name}AssetImpl, public AssetImplD
     friend class ${name}AssetImpl;
     friend class ${name}Factory;
     friend class DerivedAssetHandleD_<${name}Asset, AssetD, ${name}AssetImplD>;
-    virtual bool Save(const std::string &filename) const;
 public:
+    virtual std::string GetName() const override;
+    virtual void SerializeConfig(khxml::DOMElement*) const override;
     void Modify($formalinputarg
-		const khMetaData & meta_,
-		const Config &config_);
+                const khMetaData & meta_,
+                const Config &config_);
 EOF
     
 if ($haveBindConfig) {
@@ -222,6 +227,9 @@ public:
 			 const Config& config_)
         : AssetImpl(storage),
           ${name}AssetImpl(config_), AssetImplD() { }
+
+    static const AssetDefs::Type EXPECTED_TYPE;
+    static const std::string EXPECTED_SUBTYPE;
 
 protected:
 EOF
@@ -291,12 +299,6 @@ print $fh <<EOF;
 class ${name}Factory
 {
 public:
-    static ${name}AssetD Find(const std::string &ref_ $formaltypearg);
-
-    static ${name}AssetVersionD FindVersion(const std::string &ref_ $formaltypearg);
-
-    static void ValidateRefForInput(const std::string &ref $formaltypearg);
-
     static std::string
     SubAssetName(const std::string &parentAssetRef
                  $formaltypearg,

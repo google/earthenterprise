@@ -24,6 +24,7 @@
 #include <stdint.h>
 #include <assert.h>
 #include <common/notify.h>
+#include <pthread.h>
 
 // The goal of this class is to keep in memory only one copy of the name of
 // a cached asset or asset version. Previously, each asset stored the full names
@@ -37,35 +38,77 @@
 // much faster as we only need to compare the identifiers.
 class SharedString {
 protected:
-   class StringStorage {
+    class stringStorageRWLock
+    {
+      private:
+        pthread_rwlock_t rwlock;
+      public:
+        stringStorageRWLock() { pthread_rwlock_init(&rwlock,NULL); }
+        virtual ~stringStorageRWLock() {}
+        void lockRead(void) { pthread_rwlock_rdlock(&rwlock); }
+        void lockWrite(void) { pthread_rwlock_wrlock(&rwlock); }
+        void unlock(void) { pthread_rwlock_unlock(&rwlock); }
+    };
+
+    class stringStorageReadGuard
+    {
+      private:
+        stringStorageReadGuard() = delete;
+        stringStorageRWLock& theLock;
+      public:
+        stringStorageReadGuard(stringStorageRWLock& lock) : theLock(lock) {
+          theLock.lockRead();
+        }
+        virtual ~stringStorageReadGuard(void) { theLock.unlock(); }
+    };
+
+
+    class stringStorageWriteGuard
+    {
+      private:
+        stringStorageWriteGuard() = delete;
+        stringStorageRWLock& theLock;
+      public:
+        stringStorageWriteGuard(stringStorageRWLock& lock) : theLock(lock) {
+          theLock.lockWrite();
+        }
+        virtual ~stringStorageWriteGuard(void) { theLock.unlock(); }
+    };
+
+    class StringStorage {
       private:
         std::unordered_map<uint32_t, std::string> refFromKeyTable;
         std::unordered_map<std::string, uint32_t> keyFromRefTable;
         static uint32_t nextID;
+        mutable stringStorageRWLock mtx;
       public:
         const std::string & RefFromKey(const uint32_t &key) {
+          stringStorageReadGuard lock(mtx);
           auto refIter = refFromKeyTable.find(key);
           assert(refIter != refFromKeyTable.end());
           return refIter->second;
         }
         uint32_t KeyFromRef(const std::string &ref) {
+          stringStorageWriteGuard lock(mtx);
           auto keyIter = keyFromRefTable.find(ref);
           if (keyIter != keyFromRefTable.end()) {
             return keyIter->second;
           }
           else {
             // We've never seen this ref before, so make a new key
-            uint32_t key = nextID++; 
+            uint32_t key = nextID++;
             refFromKeyTable.insert(std::pair<uint32_t, std::string>(key, ref));
             keyFromRefTable.insert(std::pair<std::string, uint32_t>(ref, key));
             return key;
           }
         }
         StringStorage(){
+          stringStorageWriteGuard lock(mtx);
           refFromKeyTable.insert(std::pair<uint32_t, std::string>(0, ""));
           keyFromRefTable.insert(std::pair<std::string, uint32_t>("", 0));
         }
         size_t size() const {
+          stringStorageReadGuard lock(mtx);
           return refFromKeyTable.size();
         }
     };

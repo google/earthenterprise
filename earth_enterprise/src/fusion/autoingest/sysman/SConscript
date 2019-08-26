@@ -23,6 +23,9 @@ env = env.Clone();
 env.Append(CPPPATH = ['#fusion/autoingest/sysman', # static headers
                       ])
 
+env.Append( CPPFLAGS=['-fopenmp'] )
+env.Append( LINKFLAGS=['-fopenmp'] )
+
 idlfiles = [ 'NextTaskId', 'JobStorage', 'TaskStorage', 'TaskRule',
              'FusionUniqueId' ]
 
@@ -157,7 +160,7 @@ env.test('LeafAssetVersion_unittest',
     env.ObjFromOtherDir(extraObjs),
     LIBS=['gegdal', 'geraster', 'gesearchtabs', 'genet', 'gepublish', 'gefconfigutil',
       'geindex_r', 'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'qt-mt', 'xerces-c', 'geos',
-      'gtest'])
+      'gtest', 'gomp'])
 
 env.test('StateUpdater_unittest',
     commonobj +
@@ -176,4 +179,23 @@ env.test('StateUpdater_unittest',
     env.ObjFromOtherDir(extraObjs),
     LIBS=['gegdal', 'geraster', 'gesearchtabs', 'genet', 'gepublish', 'gefconfigutil',
       'geindex_r', 'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'qt-mt', 'xerces-c', 'geos',
-      'gtest'])
+      'gtest', 'gomp'])
+
+env.test('StorageManagerAssetFactory_unittest',
+    commonobj +
+    map(lambda p: 'plugins/'+p+'AssetD.o', plugins) +
+    [ 'StorageManagerAssetFactory_unittest.cpp',
+      'AssetD.o', 'AssetVersionD.o',
+      'AssetOperation.o', 'StateUpdater.o', 'DependentStateTree.o',
+      'khSystemManager.o',
+      'khAssetManager.o', 'khAssetManagerDispatch.o',
+      'khResourceManager.o', 'khTask.o', 'TaskRequirements.o',
+      'khResourceProviderProxy.o', 'khResourceProviderProxyDispatch.o',
+      'ResourceProviderProxy.o', 'Reservation.o',
+      'SysManExtra.o', 'SysManFromStorage.o', 'InsetInfo.o',
+      TaskStorageObj, JobStorageObj, NextTaskIdObj, TaskRuleObj,
+      FusionUniqueIdObj] +
+    env.ObjFromOtherDir(extraObjs),
+    LIBS=['gegdal', 'geraster', 'gesearchtabs', 'genet', 'gepublish', 'gefconfigutil',
+      'geindex_r', 'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'qt-mt', 'xerces-c', 'geos',
+      'gtest', 'gomp'])
