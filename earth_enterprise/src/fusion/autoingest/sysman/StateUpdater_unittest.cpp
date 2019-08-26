@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "AssetVersion.h"
+#include "AssetVersionD.h"
 #include "gee_version.h"
 #include "StateUpdater.h"
 
@@ -44,6 +44,11 @@ AssetKey unfix(AssetKey ref) {
 const AssetDefs::State STARTING_STATE = AssetDefs::Blocked;
 const AssetDefs::State CALCULATED_STATE = AssetDefs::InProgress;
 
+enum OnStateChangeBehavior {
+  NO_ERRORS,
+  STATE_CHANGE_EXCEPTION
+};
+
 class MockVersion : public AssetVersionImpl {
   public:
     bool loadedMutable;
@@ -53,6 +58,7 @@ class MockVersion : public AssetVersionImpl {
     mutable AssetDefs::State stateByChildrenVal;
     mutable bool blockersAreOfflineVal;
     mutable uint32 numWaitingForVal;
+    OnStateChangeBehavior stateChangeBehavior;
     vector<AssetKey> dependents;
 
     MockVersion()
@@ -62,7 +68,8 @@ class MockVersion : public AssetVersionImpl {
           stateByInputsVal(AssetDefs::Bad),
           stateByChildrenVal(AssetDefs::Bad),
           blockersAreOfflineVal(false),
-          numWaitingForVal(-1) {
+          numWaitingForVal(-1),
+          stateChangeBehavior(NO_ERRORS) {
       type = AssetDefs::Imagery;
       state = STARTING_STATE;
     }
@@ -91,6 +98,12 @@ class MockVersion : public AssetVersionImpl {
     }
     virtual AssetDefs::State OnStateChange(AssetDefs::State, AssetDefs::State) {
       onStateChangeCalled = true;
+      switch (stateChangeBehavior) {
+        case STATE_CHANGE_EXCEPTION:
+          throw StateChangeException("Some error", "test code");
+        case NO_ERRORS:
+          break;
+      }
       return state;
     }
 
@@ -597,6 +610,18 @@ TEST_F(StateUpdaterTest, NonChildDependent) {
   updater.SetStateForRefAndDependents(fix("a"), NO_CHANGE_STATE, [](AssetDefs::State) { return true; });
   assertStateNotSet(sm, "a");
   assertStateSet(sm, "b");
+}
+
+void StateChangeErrorTest(MockStorageManager & sm, StateUpdater & updater, OnStateChangeBehavior behavior) {
+  SetVersions(sm, {MockVersion("a")});
+  GetMutableVersion(sm, "a")->stateChangeBehavior = behavior;
+  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State state) { return true; });
+  assertStateSet(sm, "a");
+  ASSERT_EQ(GetVersion(sm, "a")->state, AssetDefs::Failed);
+}
+
+TEST_F(StateUpdaterTest, StateChangeExceptionTest) {
+  StateChangeErrorTest(sm, updater, STATE_CHANGE_EXCEPTION);
 }
 
 int main(int argc, char **argv) {
