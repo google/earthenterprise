@@ -78,6 +78,7 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
     // Helper class for calculating state from inputs
     class InputStates {
       private:
+        bool decided = false;
         uint numinputs = 0;
         uint numgood = 0;
         uint numblocking = 0;
@@ -95,6 +96,9 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
                                    AssetDefs::Canceled |
                                    AssetDefs::Bad)) {
             ++numblocking;
+            // If we enter this case we know what the outputs will be, so we
+            // don't need to check any more states.
+            decided = true;
           }
         }
         void GetOutputs(AssetDefs::State & stateByInputs, bool & blockersAreOffline, uint32 & numWaitingFor) {
@@ -114,10 +118,14 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
             numWaitingFor = 0;
           }
         }
+        bool Decided() {
+          return decided;
+        }
     };
     // Helper class for calculating state from children
     class ChildStates {
       private:
+        bool decided = false;
         uint numkids = 0;
         uint numgood = 0;
         uint numblocking = 0;
@@ -135,6 +143,9 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
                                    AssetDefs::Offline  |
                                    AssetDefs::Bad)) {
             ++numblocking;
+            // If we enter this case we know what the outputs will be, so we
+            // don't need to check any more states.
+            decided = true;
           }
         }
         void GetOutputs(AssetDefs::State & stateByChildren) {
@@ -147,6 +158,9 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
           } else {
             stateByChildren = AssetDefs::Queued;
           }
+        }
+        bool Decided() {
+          return decided;
         }
     };
 
@@ -161,11 +175,11 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
         AssetDefs::State &stateByChildren,
         bool & blockersAreOffline,
         uint32 & numWaitingFor,
-        bool & childOrInputStateChanged) const {
+        bool & needRecalcState) const {
       InputStates inputStates;
       ChildStates childStates;
 
-      childOrInputStateChanged = false;
+      needRecalcState = tree[vertex].stateChanged;
       auto edgeIters = out_edges(vertex, tree);
       auto edgeBegin = edgeIters.first;
       auto edgeEnd = edgeIters.second;
@@ -176,17 +190,22 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
         switch(type) {
           case INPUT:
             inputStates.Add(depState);
-            childOrInputStateChanged = childOrInputStateChanged || tree[dep].stateChanged;
+            needRecalcState = needRecalcState || tree[dep].stateChanged;
             break;
           case CHILD:
           case DEPENDENT_AND_CHILD:
             childStates.Add(depState);
-            childOrInputStateChanged = childOrInputStateChanged || tree[dep].stateChanged;
+            needRecalcState = needRecalcState || tree[dep].stateChanged;
             break;
           case DEPENDENT:
             // Dependents that are not also children are not considered when
             // calculating state.
             break;
+        }
+        // If we already know what the value of all of the parameters will be
+        // we can exit the loop early.
+        if (inputStates.Decided() && childStates.Decided() && needRecalcState) {
+          break;
         }
       }
 
@@ -205,7 +224,6 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
     virtual void finish_vertex(
         DependentStateTreeVertexDescriptor vertex,
         const DependentStateTree & tree) const {
-      if (!tree[vertex].recalcState) return;
       SharedString name = tree[vertex].name;
       notify(NFY_PROGRESS, "Calculating state for '%s'", name.toString().c_str());
 
@@ -222,11 +240,11 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
         AssetDefs::State stateByChildren;
         bool blockersAreOffline;
         uint32 numWaitingFor;
-        bool childOrInputStateChanged;
+        bool needRecalcState;
         CalculateStateParameters(
               vertex, tree, stateByInputs, stateByChildren,
-              blockersAreOffline, numWaitingFor, childOrInputStateChanged);
-        if (tree[vertex].stateChanged || childOrInputStateChanged) {
+              blockersAreOffline, numWaitingFor, needRecalcState);
+        if (needRecalcState) {
           AssetDefs::State calculatedState;
           // Run this in a separate block so that the asset version is released
           // before we try to update it.
