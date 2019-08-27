@@ -58,6 +58,7 @@ class MockVersion : public AssetVersionImpl {
     bool loadedMutable;
     int onStateChangeCalled;
     int notificationsSent;
+    mutable bool fatalLogFileWritten;
     mutable AssetDefs::State stateByInputsVal;
     mutable AssetDefs::State stateByChildrenVal;
     mutable bool blockersAreOfflineVal;
@@ -69,6 +70,7 @@ class MockVersion : public AssetVersionImpl {
         : loadedMutable(false),
           onStateChangeCalled(0),
           notificationsSent(0),
+          fatalLogFileWritten(false),
           stateByInputsVal(AssetDefs::Bad),
           stateByChildrenVal(AssetDefs::Bad),
           blockersAreOfflineVal(false),
@@ -122,7 +124,7 @@ class MockVersion : public AssetVersionImpl {
       return state;
     }
     virtual void WriteFatalLogfile(const std::string &, const std::string &) const throw() override {
-      
+      fatalLogFileWritten = true;
     }
 
     // Not used - only included to make MockVersion non-virtual
@@ -263,6 +265,7 @@ void assertStateNotSet(MockStorageManager & sm, const SharedString & ref) {
   ASSERT_FALSE(GetVersion(sm, ref)->loadedMutable) << ref << " was unexpectedly loaded mutable";
   ASSERT_EQ(GetVersion(sm, ref)->onStateChangeCalled, 0) << "OnStateChange was unexpectedly called for " << ref;
   ASSERT_EQ(GetVersion(sm, ref)->notificationsSent, 0) << "Notifications unexpectedly sent for " << ref;
+  ASSERT_FALSE(GetVersion(sm, ref)->fatalLogFileWritten) << "Fatal log file unexpectedly written for " << ref;
 }
 
 TEST_F(StateUpdaterTest, SetStateSingleVersion) {
@@ -642,6 +645,7 @@ void StateChangeErrorTest(MockStorageManager & sm, StateUpdater & updater, OnSta
 
 TEST_F(StateUpdaterTest, StateChangeExceptionTest) {
   StateChangeErrorTest(sm, updater, STATE_CHANGE_EXCEPTION);
+  ASSERT_TRUE(GetVersion(sm, "a")->fatalLogFileWritten);
 }
 
 TEST_F(StateUpdaterTest, StdExceptionTest) {
