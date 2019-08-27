@@ -347,7 +347,7 @@ void StateUpdater::SetVersionStateAndRunHandlers(
       } catch (const StateChangeException &e) {
         notify(NFY_WARN, "Exception during %s: %s : %s",
                e.location.c_str(), name.toString().c_str(), e.what());
-        AssetVersionImplD::WriteFatalLogfile(name, e.location, e.what());
+        version->WriteFatalLogfile(e.location, e.what());
       } catch (const std::exception &e) {
         notify(NFY_WARN, "Exception during OnStateChange: %s", e.what());
       } catch (...) {
