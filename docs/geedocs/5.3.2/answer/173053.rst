@@ -1,0 +1,76 @@
+===============
+Map projections
+===============
+
+.. container::
+
+   .. container:: sidebar1
+
+      :doc:`6153619`
+
+      :doc:`6053241`
+
+      :doc:`172810`
+
+      :doc:`1090589`
+
+      :doc:`173054`
+
+      :doc:`2882131`
+
+      :doc:`2760298`
+
+      :doc:`4525555`
+
+      :doc:`6062318`
+
+      :doc:`6081009`
+
+      :doc:`6081069`
+
+      :doc:`2760457`
+
+      :doc:`2760534`
+
+      :doc:`173053`
+
+      :doc:`1089795`
+
+      :doc:`4492623`
+
+      :doc:`2760655`
+
+   .. container:: content
+
+      |Google logo|
+
+      .. rubric:: `Google Earth Enterprise Documentation
+         Home <../index.html>`__ \| Fusion resources and projects
+
+      .. rubric:: Map projections
+
+      Google Maps use Mercator projection for browser-based maps. When
+      Fusion creates a map that uses **maps.google.com** imagery as the
+      source, it uses Google Maps projection for the rasterized vectors
+      so that they match the underlying Google Map tiles. This EPSG code
+      is **EPSG:900913** or **EPSG:3785**.
+
+      However, GEE builds 3D data using the
+      `WGS84 <http://en.wikipedia.org/wiki/World_Geodetic_System>`_
+      datum (**EPSG:4326**). If you want to reuse 3D database
+      resources, you can create a flat map using the Fusion Flat (Plate
+      Carrée) projection.
+
+      If you build a Mercator-based database, you must build resources
+      specifically for use with Mercator-based projection.
+
+      .. container:: footer
+
+         `Back to top <#top_of_file>`__
+
+         --------------
+
+
+.. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
+   :width: 130px
+   :height: 44px

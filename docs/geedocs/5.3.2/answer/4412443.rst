@@ -46,10 +46,8 @@ Defining and Building Resources
 
       .. rubric:: `Google Earth Enterprise Documentation
          Home <../index.html>`__ \| Fusion tutorial
-         :name: google-earth-enterprise-documentation-home-fusion-tutorial
 
       .. rubric:: Defining and Building Resources
-         :name: defining-and-building-resources
 
       The first step in preparing data is to define resources by
       importing the source data into Google Earth Enterprise Fusion. You
@@ -58,33 +56,33 @@ Defining and Building Resources
       This lesson guides you through defining and building imagery,
       terrain, and vector resources.
 
-      -  `Define Imagery Resources <#DefineImgRes>`__
+      -  :ref:`Define Imagery Resources <Define_Imagery_Resources>`
 
-         -  `Explore Imagery Source Files <#ExpImgRes>`__
-         -  `Define Imagery Resources <#DefImgRes>`__
-         -  `Build an Imagery Resource <#BuildImgRes>`__
-         -  `Define and Build the Remaining Imagery
-            Resources <#DefBuildRemImgRes>`__
-         -  `Preview the Imagery Resources <#PreImgRes>`__
+         -  :ref:`Explore Imagery Source Files <Explore_Imagery_Source_Files>`
+         -  :ref:`Define Imagery Resources <Define_Imagery_resources_2>`
+         -  :ref:`Build an Imagery Resource <Build_Imagery_Resource>`
+         -  :ref:`Define and Build the Remaining Imagery
+            Resources <Define_Build_Remaining_Imagery_Resources>`
+         -  :ref:`Preview the Imagery Resources <Preview_Imagery_Resources>`
 
-      -  `Define Terrain Resources <#DefTerrRes>`__
+      -  :ref:`Define Terrain Resources <Define_Terrain_Resources>`
 
-         -  `Explore Terrain Source Files <#ExpTerrSrc>`__
-         -  `Define Terrain Resources <#DefTerrRes1>`__
-         -  `Build and Modify Terrain Resources <#BuildModTerrRes>`__
+         -  :ref:`Explore Terrain Source Files <Explore_Terrain_Source_Files>`
+         -  :ref:`Define Terrain Resources <Define_Terrain_Resources_2>`
+         -  :ref:`Build and Modify Terrain Resources <Build_Modify_Terrain_Resources>`
 
-      -  `Define Vector Resources <#44758>`__
+      -  :ref:`Define Vector Resources <Define_Vector_Resources>`
 
-         -  `Explore Vector Source Files <#ExpVecSrc>`__
-         -  `Define a Vector Resource <#16927>`__
-         -  `Build a Vector Resource <#BuildVecRes>`__
-         -  `Define and Build the Remaining Vector
-            Resources <#DefBuildRemVecRes>`__
+         -  :ref:`Explore Vector Source Files <Explore_Vector_Source_Files>`
+         -  :ref:`Define a Vector Resource <Define_a_Vector_Resource>`
+         -  :ref:`Build a Vector Resource <Build_Vector_Resource>`
+         -  :ref:`Define and Build the Remaining Vector
+            Resources <Define_Build_Remaining_Imagery_Resources>`
 
       --------------
 
+      .. _Define_Imagery_Resources:
       .. rubric:: Define Imagery Resources
-         :name: define-imagery-resources
 
       The following exercises guide you through exploring your source
       data and defining and building imagery resources. Resources
@@ -93,8 +91,8 @@ Defining and Building Resources
 
       --------------
 
+      .. _Explore_Imagery_Source_Files:
       .. rubric:: Explore Imagery Source Files
-         :name: explore-imagery-source-files
 
       In this exercise, you learn to use the Preview panes in the Google
       Earth Enterprise Fusion GUI to investigate imagery source files to
@@ -172,8 +170,8 @@ Defining and Building Resources
 
       --------------
 
+      .. _Define_Imagery_resources_2:
       .. rubric:: Define Imagery Resources
-         :name: define-imagery-resources-1
 
       In this exercise, you create imagery resources from the imagery
       data provided for this tutorial.
@@ -270,8 +268,8 @@ Defining and Building Resources
 
       --------------
 
+      .. _Build_Imagery_Resource:
       .. rubric:: Build an Imagery Resource
-         :name: build-an-imagery-resource
 
       Before you can view the imagery resource in the Preview pane or
       include it in a project, you must build it. You do not have to
@@ -322,8 +320,8 @@ Defining and Building Resources
 
       --------------
 
+      .. _Define_Build_Remaining_Imagery_Resources:
       .. rubric:: Define and Build the Remaining Imagery Resources
-         :name: define-and-build-the-remaining-imagery-resources
 
       Now that you have defined and built one imagery resource, you can
       define and build the remaining imagery resources provided for this
@@ -367,8 +365,8 @@ Defining and Building Resources
 
       --------------
 
+      .. _Preview_Imagery_Resources:
       .. rubric:: Preview the Imagery Resources
-         :name: preview-the-imagery-resources
 
       After you successfully build the imagery resources, you can view
       some of them in the Preview pane of the Google Earth Enterprise
@@ -428,8 +426,8 @@ Defining and Building Resources
 
       --------------
 
-      .. rubric:: Define Terrain Resources
-         :name: define-terrain-resources
+      .. _Define_Terrain_Resources_2:
+      .. _Define_Terrain_Resources:
 
       Defining terrain resources is very similar to defining imagery
       resources. The following exercises guide you through defining and
@@ -437,8 +435,8 @@ Defining and Building Resources
 
       --------------
 
+      .. _Explore_Terrain_Source_Files:
       .. rubric:: Explore Terrain Source Files
-         :name: explore-terrain-source-files
 
       As with imagery files, you can preview terrain source files to be
       sure they cover the correct area before you convert them to
@@ -612,8 +610,8 @@ Defining and Building Resources
 
       --------------
 
+      .. _Build_Modify_Terrain_Resources:
       .. rubric:: Build and Modify Terrain Resources
-         :name: build-and-modify-terrain-resources
 
       As with imagery resources, in this exercise, you will build the terrain
       resources right away.
@@ -773,16 +771,16 @@ Defining and Building Resources
 
       --------------
 
+      .. _Define_Vector_Resources:
       .. rubric:: Define Vector Resources
-         :name: define-vector-resources
 
       The following exercises guide you through the process of defining
       and building a vector resource for California highway data.
 
       --------------
 
+      .. _Explore_Vector_Source_Files:
       .. rubric:: Explore Vector Source Files
-         :name: explore-vector-source-files
 
       As with imagery and terrain files, you can preview vector source
       files to be sure they provide the data you want before you convert
@@ -849,7 +847,6 @@ Defining and Building Resources
 
       .. _Define_a_Vector_Resource:
       .. rubric:: Define a Vector Resource
-         :name: define-a-vector-resource
 
       In this exercise, you define vector resources from the vector data
       provided for this tutorial.
@@ -901,8 +898,8 @@ Defining and Building Resources
 
       --------------
 
+      .. _Build_Vector_Resource:
       .. rubric:: Build a Vector Resource
-         :name: build-a-vector-resource
 
       As with the imagery and terrain resources, in this exercise, you
       will build the vector resource right away. In fact, you must build
