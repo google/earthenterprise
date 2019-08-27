@@ -84,7 +84,7 @@ class MockVersion : public AssetVersionImpl {
     MockVersion(const MockVersion & that) : MockVersion() {
       name = that.name; // Don't add the suffix - the other MockVersion already did
     }
-    void DependentChildren(vector<SharedString> & d) const {
+    void DependentChildren(vector<SharedString> & d) const override {
       for(auto dependent : dependents) {
         d.push_back(dependent);
       }
@@ -93,14 +93,14 @@ class MockVersion : public AssetVersionImpl {
         AssetDefs::State stateByInputs,
         AssetDefs::State stateByChildren,
         bool blockersAreOffline,
-        uint32 numWaitingFor) const {
+        uint32 numWaitingFor) const override {
       stateByInputsVal = stateByInputs;
       stateByChildrenVal = stateByChildren;
       blockersAreOfflineVal = blockersAreOffline;
       numWaitingForVal = numWaitingFor;
       return CALCULATED_STATE;
     }
-    virtual AssetDefs::State OnStateChange(AssetDefs::State, AssetDefs::State) {
+    virtual AssetDefs::State OnStateChange(AssetDefs::State, AssetDefs::State) override {
       ++onStateChangeCalled;
       switch (stateChangeBehavior) {
         case STATE_CHANGE_EXCEPTION:
@@ -121,11 +121,14 @@ class MockVersion : public AssetVersionImpl {
       }
       return state;
     }
+    virtual void WriteFatalLogfile(const std::string &, const std::string &) const throw() override {
+      
+    }
 
     // Not used - only included to make MockVersion non-virtual
-    string PluginName(void) const { return string(); }
-    void GetOutputFilenames(vector<string> &) const {}
-    string GetOutputFilename(uint) const { return string(); }
+    string PluginName(void) const override { return string(); }
+    void GetOutputFilenames(vector<string> &) const override {}
+    string GetOutputFilename(uint) const override { return string(); }
 };
 
 using VersionMap = map<AssetKey, shared_ptr<MockVersion>>;
