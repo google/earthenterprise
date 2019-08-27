@@ -92,17 +92,20 @@ version_file = File('gee_version.txt').abspath
 built_version_file = env.Command(version_file, [ ],
                       [env.EmitVersion(version_file)])
 env.AlwaysBuild(built_version_file)
+NoCache(version_file)
 
 long_version_file = File('gee_long_version.txt').abspath
 built_long_version_file = env.Command(long_version_file, [ ],
                       [env.EmitLongVersion(long_version_file)])
 env.AlwaysBuild(built_long_version_file)
 env.install('root', long_version_file)
+NoCache(long_version_file)
 
 version_header = File('gee_version.h').abspath
 built_version_header = env.Command(version_header, [ ],
             [env.EmitVersionHeader(version_header)])
 env.AlwaysBuild(built_version_header)
+NoCache(version_header)
 
 env.Alias('version_files', [version_header, long_version_file, version_file])
 
