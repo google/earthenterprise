@@ -108,61 +108,6 @@ ${name}AssetImpl::NewInvalid(const std::string &ref)
 }
 
 
-std::shared_ptr<${name}AssetImpl>
-${name}AssetImpl::Load(const std::string &ref)
-{
-    std::string filename = XMLFilename(ref);
-
-    std::shared_ptr<${name}AssetImpl> result;
-    time_t timestamp = 0;
-    uint64 filesize = 0;
-
-    if (khGetFileInfo(filename, filesize, timestamp) && (filesize > 0)) {
-        std::unique_ptr<GEDocument> doc = ReadDocument(filename);
-        if (doc) {
-            try {
-                DOMElement *top = doc->getDocumentElement();
-                if (!top) {
-                    throw khException(kh::tr("No document element"));
-                }
-                std::string tagname = FromXMLStr(top->getTagName());
-                if (tagname != "${name}Asset") {
-                    throw khException(kh::tr("Expected '%1', found '%2'")
-                        .arg(ToQString("${name}Asset"),
-                        ToQString(tagname)));
-                }
-                result = NewFromDOM(top);
-            } catch (const std::exception &e) {
-                AssetThrowPolicy::WarnOrThrow
-                    (kh::tr("Error loading %1: %2")
-                    .arg(ToQString(filename), QString::fromUtf8(e.what())));
-            } catch (...) {
-                AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to load ")
-                    + filename);
-            }
-        } else {
-            AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to read ")
-                + filename);
-        }
-    } else {
-        AssetThrowPolicy::WarnOrThrow(kh::tr("No such file: ") + filename);
-    }
-
-
-    if (!result) {
-        result = NewInvalid(ref);
-        // leave timestamp alone
-        // if it failed but there was a vlid timestamp we want
-        // to remember the timestamp of the one that failed
-    }
-
-    // store the timestamp so the cache can check it later
-    result->timestamp = timestamp;
-    result->filesize  = filesize;
-
-    return result;
-}
-
 // ****************************************************************************
 // ***  ${name}AssetVersionImpl - Auto generated
 // ****************************************************************************
@@ -192,59 +137,6 @@ std::string ${name}AssetVersionImpl::PluginName(void) const {
   return "${name}";
 }
 
-std::shared_ptr<${name}AssetVersionImpl>
-${name}AssetVersionImpl::Load(const std::string &boundref)
-{
-    std::string filename = XMLFilename(boundref);
-
-    std::shared_ptr<${name}AssetVersionImpl> result;
-    time_t timestamp = 0;
-    uint64 filesize = 0;
-
-    if (khGetFileInfo(filename, filesize, timestamp) && (filesize > 0)) {
-        std::unique_ptr<GEDocument> doc = ReadDocument(filename);
-        if (doc) {
-            try {
-                DOMElement *top = doc->getDocumentElement();
-                if (!top) {
-                    throw khException(kh::tr("No document element"));
-                }
-                std::string tagname = FromXMLStr(top->getTagName());
-                if (tagname != "${name}AssetVersion") {
-                    throw khException(kh::tr("Expected '%1', found '%2'")
-                        .arg(ToQString("${name}AssetVersion"),
-                        ToQString(tagname)));
-                }
-                result = NewFromDOM(top);
-            } catch (const std::exception &e) {
-                AssetThrowPolicy::WarnOrThrow
-                    (kh::tr("Error loading %1: %2")
-                    .arg(ToQString(filename), QString::fromUtf8(e.what())));
-            } catch (...) {
-                AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to load ")
-                    + filename);
-            }
-        } else {
-            AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to read ")
-                + filename);
-        }
-    } else {
-        AssetThrowPolicy::WarnOrThrow(kh::tr("No such file: ") + filename);
-    }
-
-    if (!result) {
-        result = NewInvalid(boundref);
-        // leave timestamp alone
-        // if it failed but there was a vlid timestamp we want
-        // to remember the timestamp of the one that failed
-    }
-
-    // store the timestamp so the cache can check it later
-    result->timestamp = timestamp;
-    result->filesize  = filesize;
-
-    return result;
-}
 
 EOF
 

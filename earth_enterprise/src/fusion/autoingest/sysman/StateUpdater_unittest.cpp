@@ -251,15 +251,15 @@ void GetBigTree(MockStorageManager & sm) {
 }
 
 void assertStateSet(MockStorageManager & sm, const SharedString & ref, int stateChanges = 1) {
-  ASSERT_TRUE(GetVersion(sm, ref)->loadedMutable);
-  ASSERT_EQ(GetVersion(sm, ref)->onStateChangeCalled, stateChanges);
-  ASSERT_EQ(GetVersion(sm, ref)->notificationsSent, 1);
+  ASSERT_TRUE(GetVersion(sm, ref)->loadedMutable) << ref << " was not loaded mutable";
+  ASSERT_EQ(GetVersion(sm, ref)->onStateChangeCalled, stateChanges) << "OnStateChange was not called enough times for " << ref;
+  ASSERT_EQ(GetVersion(sm, ref)->notificationsSent, 1) << "Wrong number of notifications sent for " << ref;
 }
 
 void assertStateNotSet(MockStorageManager & sm, const SharedString & ref) {
-  ASSERT_FALSE(GetVersion(sm, ref)->loadedMutable);
-  ASSERT_EQ(GetVersion(sm, ref)->onStateChangeCalled, 0);
-  ASSERT_EQ(GetVersion(sm, ref)->notificationsSent, 0);
+  ASSERT_FALSE(GetVersion(sm, ref)->loadedMutable) << ref << " was unexpectedly loaded mutable";
+  ASSERT_EQ(GetVersion(sm, ref)->onStateChangeCalled, 0) << "OnStateChange was unexpectedly called for " << ref;
+  ASSERT_EQ(GetVersion(sm, ref)->notificationsSent, 0) << "Notifications unexpectedly sent for " << ref;
 }
 
 TEST_F(StateUpdaterTest, SetStateSingleVersion) {

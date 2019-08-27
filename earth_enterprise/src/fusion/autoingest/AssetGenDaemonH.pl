@@ -123,12 +123,11 @@ class ${name}AssetVersionImplD :
     friend class ${name}AssetVersionImpl;
     friend class ${name}AssetImplD;
     friend class DerivedAssetHandleD_<${name}AssetVersion, AssetVersionD, ${name}AssetVersionImplD>;
-    virtual bool Save(const std::string &filename) const;
-protected:
-    static std::shared_ptr<${name}AssetVersionImplD> Load(const std::string &ref);
-
 public:
     using AssetType = DerivedAssetHandleD_<${name}Asset, AssetD, ${name}AssetImplD>;
+
+    virtual std::string GetName() const;
+    virtual void SerializeConfig(khxml::DOMElement*) const;
 
     // Only used when constructing a new version from an asset.
     // The decision to use the raw ImplD* here was a tough one.
@@ -186,11 +185,12 @@ class ${name}AssetImplD : public ${name}AssetImpl, public AssetImplD
     friend class ${name}AssetImpl;
     friend class ${name}Factory;
     friend class DerivedAssetHandleD_<${name}Asset, AssetD, ${name}AssetImplD>;
-    virtual bool Save(const std::string &filename) const;
 public:
+    virtual std::string GetName() const override;
+    virtual void SerializeConfig(khxml::DOMElement*) const override;
     void Modify($formalinputarg
-		const khMetaData & meta_,
-		const Config &config_);
+                const khMetaData & meta_,
+                const Config &config_);
 EOF
     
 if ($haveBindConfig) {
