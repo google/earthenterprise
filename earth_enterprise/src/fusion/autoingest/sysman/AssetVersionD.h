@@ -148,6 +148,9 @@ class AssetVersionImplD : public virtual AssetVersionImpl
 
   void GetInputFilenames(std::vector<std::string> &out) const;
 
+  // This class includes static and non-static versions of this function so
+  // you can call it with or without an asset version.
+  virtual void WriteFatalLogfile(const std::string &prefix, const std::string &error) const throw() override;
   static void WriteFatalLogfile(const AssetVersionRef &verref,
                                 const std::string &prefix,
                                 const std::string &error) throw();

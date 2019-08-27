@@ -169,6 +169,9 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
     assert(false);
     return AssetDefs::Bad;
   }
+  virtual void WriteFatalLogfile(const std::string &, const std::string &) const throw() {
+    assert(false);
+  }
 
   // static helpers
   static std::string WorkingDir(const AssetVersionRef &ref);

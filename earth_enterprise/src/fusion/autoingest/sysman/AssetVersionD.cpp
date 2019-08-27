@@ -614,6 +614,15 @@ AssetVersionImplD::GetInputFilenames(std::vector<std::string> &out) const
   }
 }
 
+// Non-static version of the function. Can be called polymorphically from
+// an asset version.
+void
+AssetVersionImplD::WriteFatalLogfile(const std::string &prefix, const std::string &error) const throw() {
+  WriteFatalLogfile(GetRef(), prefix, error);
+}
+
+// Static version of the function - can be called without loading an asset
+// version.
 void
 AssetVersionImplD::WriteFatalLogfile(const AssetVersionRef &verref,
                                      const std::string &prefix,
