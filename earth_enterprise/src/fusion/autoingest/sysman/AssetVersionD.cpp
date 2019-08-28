@@ -59,8 +59,8 @@ AssetVersionImplD::StateChangeNotifier::AddToNotify(
     AssetDefs::State state,
     NotifyMap & map) {
   for (const auto & n : toNotify) {
-    // This ensures that the listener is in the list of listeners to notify
-    NotifyStates & elem = listenersToNotify[n];
+    // This ensures that n is in the list of assets to notify
+    NotifyStates & elem = map[n];
     if (state == AssetDefs::Succeeded) {
       ++elem.numSucceeded;
     }
@@ -121,8 +121,10 @@ AssetVersionImplD::StateChangeNotifier::DoNotify(
       switch(type) {
         case LISTENER:
           assetVersion->HandleInputStateChange(states, notifier);
+          break;
         case PARENT:
           assetVersion->HandleChildStateChange(states, notifier);
+          break;
       }
     } else {
       notify(NFY_WARN, "'%s' has broken %s '%s'",

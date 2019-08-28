@@ -55,13 +55,13 @@ class AssetVersionImplD : public virtual AssetVersionImpl
     bool allWorkingOrSucceeded;
     NotifyStates() : numSucceeded(0), allWorkingOrSucceeded(true) {}
   };
-  enum NotifyType {LISTENER, PARENT};
 
   // Helper class to efficently send updates of state changes to other asset
   // versions.
   class StateChangeNotifier {
     private:
       using NotifyMap = std::map<SharedString, NotifyStates>;
+      enum NotifyType {LISTENER, PARENT};
       NotifyMap parentsToNotify;
       NotifyMap listenersToNotify;
       void AddToNotify(const std::vector<SharedString> &, AssetDefs::State, NotifyMap &);
