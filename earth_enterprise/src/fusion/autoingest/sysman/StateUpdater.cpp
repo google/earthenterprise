@@ -101,7 +101,7 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
             decided = true;
           }
         }
-        void GetOutputs(AssetDefs::State & stateByInputs, bool & blockersAreOffline, uint32 & numWaitingFor) {
+        void GetOutputs(AssetDefs::State & stateByInputs, bool & blockersAreOffline, uint32 & numInputsWaitingFor) {
           if (numinputs == numgood) {
             stateByInputs = AssetDefs::Queued;
           } else if (numblocking) {
@@ -113,9 +113,9 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
           blockersAreOffline = (numblocking == numoffline);
 
           if (stateByInputs == AssetDefs::Waiting) {
-            numWaitingFor = (numinputs - numgood);
+            numInputsWaitingFor = (numinputs - numgood);
           } else {
-            numWaitingFor = 0;
+            numInputsWaitingFor = 0;
           }
         }
         bool Decided() {
@@ -148,7 +148,7 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
             decided = true;
           }
         }
-        void GetOutputs(AssetDefs::State & stateByChildren) {
+        void GetOutputs(AssetDefs::State & stateByChildren, uint32 & numChildrenWaitingFor) {
           if (numkids == numgood) {
             stateByChildren = AssetDefs::Succeeded;
           } else if (numblocking) {
@@ -157,6 +157,13 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
             stateByChildren = AssetDefs::InProgress;
           } else {
             stateByChildren = AssetDefs::Queued;
+          }
+          
+          if (stateByChildren == AssetDefs::Queued || stateByChildren == AssetDefs::InProgress) {
+            numChildrenWaitingFor = numkids - numgood;
+          }
+          else {
+            numChildrenWaitingFor = 0;
           }
         }
         bool Decided() {
@@ -174,7 +181,8 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
         AssetDefs::State &stateByInputs,
         AssetDefs::State &stateByChildren,
         bool & blockersAreOffline,
-        uint32 & numWaitingFor,
+        uint32 & numInputsWaitingFor,
+        uint32 & numChildrenWaitingFor,
         bool & needRecalcState) const {
       InputStates inputStates;
       ChildStates childStates;
@@ -209,8 +217,8 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
         }
       }
 
-      inputStates.GetOutputs(stateByInputs, blockersAreOffline, numWaitingFor);
-      childStates.GetOutputs(stateByChildren);
+      inputStates.GetOutputs(stateByInputs, blockersAreOffline, numInputsWaitingFor);
+      childStates.GetOutputs(stateByChildren, numChildrenWaitingFor);
     }
 
   public:
@@ -239,11 +247,12 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
         AssetDefs::State stateByInputs;
         AssetDefs::State stateByChildren;
         bool blockersAreOffline;
-        uint32 numWaitingFor;
+        uint32 numInputsWaitingFor;
+        uint32 numChildrenWaitingFor;
         bool needRecalcState;
         CalculateStateParameters(
-              vertex, tree, stateByInputs, stateByChildren,
-              blockersAreOffline, numWaitingFor, needRecalcState);
+              vertex, tree, stateByInputs, stateByChildren, blockersAreOffline,
+              numInputsWaitingFor, numChildrenWaitingFor, needRecalcState);
         if (needRecalcState) {
           AssetDefs::State calculatedState;
           // Run this in a separate block so that the asset version is released
@@ -258,7 +267,7 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
               return;
             }
             calculatedState = version->CalcStateByInputsAndChildren(
-                  stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
+                  stateByInputs, stateByChildren, blockersAreOffline, numInputsWaitingFor, numChildrenWaitingFor);
           }
           // Set the state. "true" means we're done changing this asset's state.
           updater->SetState(vertex, calculatedState, true);

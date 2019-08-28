@@ -660,12 +660,12 @@ LeafAssetVersionImplD::HandleInputStateChange(InputStates newStates,
   // to the error encountered by my input.
   if (state == AssetDefs::Waiting &&
       newStates.allWorkingOrSucceeded &&
-      numWaitingFor > newStates.numSucceeded) {
+      numInputsWaitingFor > newStates.numSucceeded) {
     // In this case it is safe to ignore inputs that are working because I'm
     // already waiting and even if another child regresses to become Working,
-    // I'll still stay Waiting. My numWaitingFor will be too low, but that
+    // I'll still stay Waiting. My numInputsWaitingFor will be too low, but that
     // won't hurt, I'll just call SyncState when I don't have to.
-    numWaitingFor -= newStates.numSucceeded;
+    numInputsWaitingFor -= newStates.numSucceeded;
   }
   else {
     SyncState(notifier);
@@ -688,7 +688,7 @@ LeafAssetVersionImplD::ComputeState(void) const
   // will be !Ready() until all my inputs are good
   bool blockersAreOffline = false;
   AssetDefs::State statebyinputs =
-    StateByInputs(&blockersAreOffline, &numWaitingFor);
+    StateByInputs(&blockersAreOffline, &numInputsWaitingFor);
 
   AssetDefs::State newstate = state;
   if (!AssetDefs::Ready(state)) {
@@ -737,9 +737,10 @@ LeafAssetVersionImplD::CalcStateByInputsAndChildren(
     AssetDefs::State stateByInputs,
     AssetDefs::State stateByChildren,
     bool blockersAreOffline,
-    uint32 numWaitingFor) const
+    uint32 numInputsWaitingFor,
+    uint32 numChildrenWaitingFor) const
 {
-  this->numWaitingFor = numWaitingFor;
+  this->numInputsWaitingFor = numInputsWaitingFor;
   AssetDefs::State newstate = state;
   if (!AssetDefs::Ready(state)) {
     // I'm currently not ready, so take whatever my inputs say
@@ -1078,6 +1079,7 @@ CompositeAssetVersionImplD::ComputeState(void) const
   if (!NeedComputeState()) {
     return state;
   }
+  numChildrenWaitingFor = 0;
 
   // Undecided composites take their state from their inputs
   if (children.empty()) {
@@ -1140,15 +1142,25 @@ CompositeAssetVersionImplD::ComputeState(void) const
 
 
   // determine my state based on my children
+  AssetDefs::State stateByChildren;
   if (numkids == numgood) {
-    return AssetDefs::Succeeded;
+    stateByChildren = AssetDefs::Succeeded;
   } else if (numblocking || numfailed) {
-    return AssetDefs::Blocked;
+    stateByChildren = AssetDefs::Blocked;
   } else if (numgood || numinprog) {
-    return AssetDefs::InProgress;
+    stateByChildren = AssetDefs::InProgress;
   } else {
-    return AssetDefs::Queued;
+    stateByChildren = AssetDefs::Queued;
   }
+  
+  if (stateByChildren == AssetDefs::Queued || stateByChildren == AssetDefs::InProgress) {
+    numChildrenWaitingFor = numkids - numgood;
+  }
+  else {
+    numChildrenWaitingFor = 0;
+  }
+
+  return stateByChildren;
 }
 
 AssetDefs::State
@@ -1156,8 +1168,11 @@ CompositeAssetVersionImplD:: CalcStateByInputsAndChildren(
     AssetDefs::State stateByInputs,
     AssetDefs::State stateByChildren,
     bool blockersAreOffline,
-    uint32 numWaitingFor) const
+    uint32 numInputsWaitingFor,
+    uint32 numChildrenWaitingFor) const
 {
+  this->numChildrenWaitingFor = numChildrenWaitingFor;
+
   // Undecided composites take their state from their inputs
   if (children.empty()) {
     return stateByInputs;

@@ -169,19 +169,19 @@ class LeafAssetVersionImplD : public virtual LeafAssetVersionImpl,
                               public AssetVersionImplD
 {
  protected:
-  mutable uint32 numWaitingFor;
+  mutable uint32 numInputsWaitingFor;
 
   // since AssetVersionImpl and LeafAssetVersionImpl are virtual base
   // classes my derived classes will initialize it directly
   // therefore I don't need a contructor from storage
   LeafAssetVersionImplD(void)
       : AssetVersionImpl(), LeafAssetVersionImpl(),
-        AssetVersionImplD(), numWaitingFor(0) { }
+        AssetVersionImplD(), numInputsWaitingFor(0) { }
   // used when being contructed from an asset
   // these are the inputs I need to bind and attach to
   LeafAssetVersionImplD(const std::vector<SharedString> &inputs)
       : AssetVersionImpl(), LeafAssetVersionImpl(),
-        AssetVersionImplD(inputs), numWaitingFor(0) { }
+        AssetVersionImplD(inputs), numInputsWaitingFor(0) { }
 
   void SubmitTask(void);
   void ClearOutfiles(void);
@@ -205,7 +205,8 @@ class LeafAssetVersionImplD : public virtual LeafAssetVersionImpl,
       AssetDefs::State stateByInputs,
       AssetDefs::State stateByChildren,
       bool blockersAreOffline,
-      uint32 numWaitingFor) const;
+      uint32 numInputsWaitingFor,
+      uint32 numChildrenWaitingFor) const;
 };
 
 
@@ -213,17 +214,19 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
                                    public AssetVersionImplD
 {
  protected:
+  mutable uint32 numChildrenWaitingFor;
+    
   // since AssetVersionImpl and CompositeAssetVersionImpl are virtual base
   // classes my derived classes will initialize it directly
   // therefore I don't need a contructor from storage
   CompositeAssetVersionImplD(void)
       : AssetVersionImpl(), CompositeAssetVersionImpl(),
-        AssetVersionImplD() { }
+        AssetVersionImplD(), numChildrenWaitingFor(0) { }
   // used when being contructed from an asset
   // these are the inputs I need to bind and attach to
   CompositeAssetVersionImplD(const std::vector<SharedString> &inputs)
       : AssetVersionImpl(), CompositeAssetVersionImpl(),
-        AssetVersionImplD(inputs) { }
+        AssetVersionImplD(inputs), numChildrenWaitingFor(0) { }
 
   virtual AssetDefs::State ComputeState(void) const;
   virtual bool CacheInputVersions(void) const;
@@ -244,10 +247,10 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
       AssetDefs::State stateByInputs,
       AssetDefs::State stateByChildren,
       bool blockersAreOffline,
-      uint32 numWaitingFor) const;
+      uint32 numInputsWaitingFor,
+      uint32 numChildrenWaitingFor) const;
   virtual void DependentChildren(std::vector<SharedString> &out) const override;
   virtual AssetDefs::State OnStateChange(AssetDefs::State newstate,
-                                         AssetDefs::State oldstate) override;
 };
 
 #endif /* __AssetVersionD_h */
