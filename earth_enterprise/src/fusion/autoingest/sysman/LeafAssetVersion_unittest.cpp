@@ -30,7 +30,7 @@ class LeafAssetVersionImplDTest : public LeafAssetVersionImplD, public testing::
   void HandleInputStateChanges(AssetDefs::State myState, uint32 waiting, std::vector<AssetDefs::State> states) {
     state = myState;
     numInputsWaitingFor = waiting;
-    InputStates inputStates;
+    NotifyStates inputStates;
     inputStates.numSucceeded = std::count_if(states.begin(), states.end(), [](AssetDefs::State s) {
       return s == AssetDefs::Succeeded;
     });

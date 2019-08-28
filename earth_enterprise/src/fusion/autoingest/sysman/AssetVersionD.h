@@ -21,7 +21,6 @@
 #include "AssetHandleD.h"
 #include <autoingest/sysman/.idl/TaskStorage.h>
 #include "common/khRefCounter.h"
-#include <set>
 #include <map>
 #include <memory>
 
@@ -51,25 +50,32 @@ class AssetVersionImplD : public virtual AssetVersionImpl
  protected:
   // Tracks the state of inputs to a given asset version that have changed. Each
   // entry maps a state to the number of inputs that have changed to that state.
-  struct InputStates {
+  struct NotifyStates {
     size_t numSucceeded;
     bool allWorkingOrSucceeded;
-    InputStates() : numSucceeded(0), allWorkingOrSucceeded(true) {}
+    NotifyStates() : numSucceeded(0), allWorkingOrSucceeded(true) {}
   };
+  enum NotifyType {LISTENER, PARENT};
 
   // Helper class to efficently send updates of state changes to other asset
   // versions.
   class StateChangeNotifier {
     private:
-      std::set<SharedString> parentsToNotify;
-      std::map<SharedString, InputStates> listenersToNotify;
+      using NotifyMap = std::map<SharedString, NotifyStates>;
+      NotifyMap parentsToNotify;
+      NotifyMap listenersToNotify;
+      void AddToNotify(const std::vector<SharedString> &, AssetDefs::State, NotifyMap &);
       void NotifyParents(std::shared_ptr<StateChangeNotifier>);
       void NotifyListeners(std::shared_ptr<StateChangeNotifier>);
+      void DoNotify(
+          NotifyMap &,
+          std::shared_ptr<StateChangeNotifier>,
+          NotifyType);
     public:
       static std::shared_ptr<StateChangeNotifier> GetNotifier(std::shared_ptr<StateChangeNotifier>);
       StateChangeNotifier() = default;
       ~StateChangeNotifier();
-      void AddParentsToNotify(const std::vector<SharedString> &);
+      void AddParentsToNotify(const std::vector<SharedString> &, AssetDefs::State);
       void AddListenersToNotify(const std::vector<SharedString> &, AssetDefs::State);
   };
 
@@ -99,8 +105,8 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   virtual void HandleTaskLost(const TaskLostMsg &msg);
   virtual void HandleTaskProgress(const TaskProgressMsg &msg);
   virtual void HandleTaskDone(const TaskDoneMsg &msg);
-  virtual void HandleChildStateChange(const std::shared_ptr<StateChangeNotifier>) const;
-  virtual void HandleInputStateChange(InputStates, const std::shared_ptr<StateChangeNotifier>) const = 0;
+  virtual void HandleChildStateChange(NotifyStates, const std::shared_ptr<StateChangeNotifier>) const;
+  virtual void HandleInputStateChange(NotifyStates, const std::shared_ptr<StateChangeNotifier>) const = 0;
   virtual void HandleChildProgress(const SharedString &) const;
   virtual bool OfflineInputsBreakMe(void) const { return false; }
  public:
@@ -191,7 +197,7 @@ class LeafAssetVersionImplD : public virtual LeafAssetVersionImpl,
   virtual void HandleTaskLost(const TaskLostMsg &msg);
   virtual void HandleTaskProgress(const TaskProgressMsg &msg);
   virtual void HandleTaskDone(const TaskDoneMsg &msg);
-  virtual void HandleInputStateChange(InputStates, const std::shared_ptr<StateChangeNotifier>) const;
+  virtual void HandleInputStateChange(NotifyStates, const std::shared_ptr<StateChangeNotifier>) const;
   virtual void DoSubmitTask(void) = 0;
   virtual bool OfflineInputsBreakMe(void) const { return false; }
 
@@ -230,8 +236,8 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
 
   virtual AssetDefs::State ComputeState(void) const;
   virtual bool CacheInputVersions(void) const;
-  virtual void HandleChildStateChange(const std::shared_ptr<StateChangeNotifier>) const;
-  virtual void HandleInputStateChange(InputStates, const std::shared_ptr<StateChangeNotifier>) const;
+  virtual void HandleChildStateChange(NotifyStates, const std::shared_ptr<StateChangeNotifier>) const;
+  virtual void HandleInputStateChange(NotifyStates, const std::shared_ptr<StateChangeNotifier>) const;
   virtual void HandleChildProgress(const SharedString &) const;
   virtual void DelayedBuildChildren(void);
   virtual bool CompositeStateCaresAboutInputsToo(void) const { return false; }
