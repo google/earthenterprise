@@ -184,13 +184,6 @@ PostgreSQL authentication
          After you verify the configuration with your test user, you can
          add your users to the database.
 
-      .. container:: footer
-
-         `Back to top <#top_of_file>`__
-
-         --------------
-
-         ©2015 Google
 
 .. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
    :width: 130px

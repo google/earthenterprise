@@ -42,13 +42,6 @@ Clearing the Google Earth EC cache
       #. Select **Google Earth EC > Preferences > Cache**.
       #. Select **Delete cache file** (only when logged out).
 
-      .. container:: footer
-
-         `Back to top <#top_of_file>`__
-
-         --------------
-
-
 .. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
    :width: 130px
    :height: 44px

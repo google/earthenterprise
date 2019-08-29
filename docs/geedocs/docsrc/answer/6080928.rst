@@ -209,7 +209,7 @@ Configure GEE Server 5.1.0 for SSL/HTTPS
          All commands must be executed as the root user unless otherwise
          specified.
 
-   
+
       .. rubric:: To set your virtual host as a SSL server:
 
       #. Edit the Apache HTTP server configuration file,
@@ -256,14 +256,6 @@ Configure GEE Server 5.1.0 for SSL/HTTPS
          HTTP and HTTPS-based virtual servers.
 
       --------------
-
-      .. container:: footer
-
-         `Back to top <#top_of_file>`__
-
-         --------------
-
-         ©2015 Google
 
 .. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
    :width: 130px

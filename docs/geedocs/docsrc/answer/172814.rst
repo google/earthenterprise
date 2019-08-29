@@ -125,13 +125,6 @@ Set up HTTPS
       the Publisher tool maintain the GEE Server software while you
       disallow external unencrypted data communications.
 
-      .. container:: footer
-
-         `Back to top <#top_of_file>`__
-
-         --------------
-
-
 .. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
    :width: 130px
    :height: 44px
