@@ -42,13 +42,6 @@ Google Earth Enterprise Client (EC)
       downloaded separately from
       `here. <https://github.com/google/earthenterprise/wiki/Google-Earth-Enterprise-Client-(EC)>`_
 
-      .. container:: footer
-
-         `Back to top <#top_of_file>`__
-
-         --------------
-
-
 .. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
    :width: 130px
    :height: 44px

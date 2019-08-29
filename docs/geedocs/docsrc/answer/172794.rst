@@ -41,12 +41,6 @@ Server hostname
 
       ``sudo /opt/google/bin/geconfigureassetroot --fixmasterhost``
 
-      .. container:: footer
-
-         `Back to top <#top_of_file>`__
-
-         --------------
-
 
 .. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
    :width: 130px

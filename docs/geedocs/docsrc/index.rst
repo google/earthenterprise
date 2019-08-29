@@ -1,38 +1,38 @@
-Welcome to Google Earth Enterprise Documentation
-================================================
+Google Earth Enterprise Documentation Version 5.3.2
+===================================================
 
-.. toctree::
-   :maxdepth: 2
-#   :caption: Contents:
    This documentation contains legacy information that may not apply
    to the Google Earth Enterprise Open Source version. This bundle is
    also available in the GEE Server 5.3.2 installation package.
 
-       :doc:`./answer/2995465`
+.. toctree::
+   :maxdepth: 2
 
-       :doc:`./answer/4412440`
+   ./answer/getStarted
 
-       :doc:`./answer/3468016`
+   ./answer/fusionTutorial
 
-       :doc:`./answer/3481464`
+   ./answer/3468016
 
-       :doc:`./answer/6153619`
+   ./answer/fusionAdministration
 
-       :doc:`./answer/3468004`
+   ./answer/fusionResAndProj
 
-       :doc:`./answer/173056`
+   ./answer/3468004
 
-       :doc:`./answer/6006981`
+   ./answer/173056
 
-       :doc:`./answer/4580164`
+   ./answer/6006981
 
-       :doc:`./answer/6014171`
+   ./answer/4580164
 
-       :doc:`./answer/6121524`
+   ./answer/6014171
 
-       :doc:`./answer/7160009`
+   ./answer/6121524
 
-       :doc:`./answer/2987876`
+   ./answer/7160009
+
+   ./answer/2987876
 
    .. rubric:: Google Earth Enterprise Documentation Version 5.3.2
    :name: google-earth-enterprise-documentation-version-5.3.2

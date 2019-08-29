@@ -36,12 +36,6 @@ Ports
       -  Ports 13031, 13032, and 13033 are used by Fusion when
          performing its processes.
 
-      .. container:: footer
-
-         `Back to top <#top_of_file>`__
-
-         --------------
-
 
 .. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
    :width: 130px
