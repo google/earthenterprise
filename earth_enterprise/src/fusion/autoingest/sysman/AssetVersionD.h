@@ -66,8 +66,6 @@ class AssetVersionImplD : public virtual AssetVersionImpl
       void AddListenersToNotify(const std::vector<SharedString> &, AssetDefs::State);
   };
 
-  static std::shared_ptr<AssetVersionImplD> Load(const std::string &boundref);
-
   virtual AssetDefs::State ComputeState(void) const = 0;
   virtual bool CacheInputVersions(void) const = 0;
 

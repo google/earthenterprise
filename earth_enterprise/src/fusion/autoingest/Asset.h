@@ -45,6 +45,8 @@ class AssetImpl : public AssetStorage, public StorageManaged {
   AssetImpl& operator=(const AssetImpl&) = delete;
   AssetImpl(const AssetImpl&&) = delete;
   AssetImpl& operator=(const AssetImpl&&) = delete;
+  public:
+    using Base = AssetStorage;
 
  protected:
   // used by my intermediate derived classes since their calls to
@@ -57,9 +59,15 @@ class AssetImpl : public AssetStorage, public StorageManaged {
   // implemented in LoadAny.cpp
   static std::shared_ptr<AssetImpl> Load(const std::string &boundref);
 
-  virtual bool Save(const std::string &filename) const {
-    assert(false); // Can only save from sub-classes
-    return false;
+  virtual std::string GetName() const { // Returns the name of the asset, e.g., "CombinedRPAsset"
+    assert(false);
+    return "";
+  }
+
+  // Note for future development: It would be good to change SerializeConfig to something like
+  // GetConfig that would fill out a list of key/value pairs instead of dealing with XML directly
+  virtual void SerializeConfig(khxml::DOMElement*) const {
+    assert(false);
   }
 
   std::string WorkingDir(void) const { return WorkingDir(GetRef()); }

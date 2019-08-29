@@ -206,13 +206,17 @@ env.test('AssetDefsExtra_unittest',
          'AssetDefsExtra_unittest.cpp',
          LIBS=['geautoingest', 'gemiscconfig', 'gtest'])
 
+env.test('AssetSerializer_unittest',
+         'AssetSerializer_unittest.cpp',
+          LIBS=['gecommon', 'gexml', 'qt-mt', 'xerces-c', 'gtest'])
+
 env.test('JsUtils_unittest',
          'JsUtils_unittest.cpp',
          LIBS=['geautoingest', 'gemiscconfig', 'gtest'])
 
 env.test('StorageManager_unittest',
          'StorageManager_unittest.cpp',
-         LIBS=['gecommon', 'gemiscconfig', 'gtest'])
+         LIBS=['gecommon', 'gemiscconfig', 'gtest', 'qt-mt', 'xerces-c', 'gexml'])
 
 env.test('StorageManagerAssetHandle_unittest',
          'StorageManagerAssetHandle_unittest.cpp',

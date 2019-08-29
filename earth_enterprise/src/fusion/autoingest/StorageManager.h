@@ -22,14 +22,14 @@
 #include <string>
 #include <time.h>
 #include <vector>
+#include <memory>
 
 #include "common/khCache.h"
 #include "common/khFileUtils.h"
 #include "common/notify.h"
 #include "common/SharedString.h"
 #include "StorageManagerAssetHandle.h"
-
-using AssetKey = SharedString;
+#include "AssetSerializer.h"
 
 // Items stored in the storage manager must inherit from the StorageManaged class
 class StorageManaged {
@@ -44,7 +44,6 @@ class StorageManaged {
 template<class AssetType>
 class AssetHandleInterface {
   public:
-    virtual AssetPointerType<AssetType> Load(const std::string &) const = 0;
     virtual bool Valid(const AssetPointerType<AssetType> &) const = 0;
 };
 
@@ -62,10 +61,25 @@ class StorageManager : public StorageManagerInterface<AssetType> {
   public:
     using Base = StorageManagerInterface<AssetType>;
     using PointerType = typename Base::PointerType;
+    using SerializerPtr = std::unique_ptr<AssetSerializerInterface<AssetType>>;
 
-    StorageManager(uint cacheSize, bool limitByMemory, uint64 maxMemory, const std::string & type) :
-        cache(cacheSize),
-        assetType(type) { SetCacheMemoryLimit(limitByMemory, maxMemory); }
+    StorageManager(uint cacheSize,
+                   bool limitByMemory,
+                   uint64 maxMemory,
+                   const std::string & type,
+                   SerializerPtr serializer) :
+        assetType(type),
+        serializer(std::move(serializer)),
+        cache(cacheSize, type)
+    {
+      SetCacheMemoryLimit(limitByMemory, maxMemory);
+    }
+    StorageManager(uint cacheSize,
+                   bool limitByMemory,
+                   uint64 maxMemory,
+                   const std::string & type) :
+        StorageManager(cacheSize, limitByMemory, maxMemory, type,
+                       SerializerPtr(new AssetSerializerLocalXML<AssetType>())) {}
     ~StorageManager() = default;
 
     inline uint32 CacheSize() const;
@@ -93,9 +107,10 @@ class StorageManager : public StorageManagerInterface<AssetType> {
     static const bool check_timestamps;
 
     mutable std::recursive_mutex storageMutex;
+    const std::string assetType;
+    const SerializerPtr serializer;
     CacheType cache;
     std::map<AssetKey, PointerType> dirtyMap;
-    std::string assetType;
 
     StorageManager(const StorageManager &) = delete;
     StorageManager& operator=(const StorageManager &) = delete;
@@ -203,7 +218,7 @@ StorageManager<AssetType>::Get(
     }
 
     // Will succeed, generate stub, or throw exception.
-    entry = handle->Load(key);
+    entry = serializer->Load(key);
     updated = true;
   } else if (check_timestamps) {
     uint64 filesize = 0;
@@ -217,7 +232,7 @@ StorageManager<AssetType>::Get(
       cache.Remove(key, false);  // Don't prune, the Add() will.
 
       // Will succeed, generate stub, or throw exception.
-      entry = handle->Load(key);
+      entry = serializer->Load(key);
       updated = true;
     }
   }
@@ -256,7 +271,7 @@ StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & ref) {
     // Avoid throwing exceptions when the file doesn't exist
     if (!khExists(filename)) return PointerType();
     // Will succeed, generate stub, or throw exception.
-    entry = AssetType::Load(key);
+    entry = serializer->Load(key);
     updated = true;
   } else if (check_timestamps) {
     uint64 filesize = 0;
@@ -270,7 +285,7 @@ StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & ref) {
       cache.Remove(key, false);  // Don't prune, the Add() will.
 
       // Will succeed, generate stub, or throw exception.
-      entry = AssetType::Load(key);
+      entry = serializer->Load(key);
       updated = true;
     }
   }
@@ -324,7 +339,8 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
   typename std::map<AssetKey, PointerType>::iterator entry = dirtyMap.begin();
   while (entry != dirtyMap.end()) {
     std::string filename = entry->second->XMLFilename() + ".new";
-    if (entry->second->Save(filename)) {
+
+    if (serializer->Save(entry->second, filename)) {
       savetrans.AddNewPath(filename);
       if (saved) {
         saved->push_back(entry->first);
