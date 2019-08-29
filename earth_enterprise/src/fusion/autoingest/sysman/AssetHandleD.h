@@ -46,9 +46,6 @@ class DerivedAssetHandleD_ : public virtual BaseD_, public ROBase_
   typedef typename ROBase::Base BROBase; // this is assumed to be the same type as BBase
   typedef typename BBase::HandleType HandleType;
  public:
-  virtual HandleType Load(const std::string &boundref) const {
-    return HandleType(Impl::Load(boundref));
-  }
   virtual bool Valid(const HandleType & entry) const {
     // we have to check if it maps to Impl* since somebody
     // else may have loaded it into the storage manager
@@ -210,7 +207,6 @@ class MutableAssetHandleD_ : public virtual Base_ {
   }
 #endif // GEE_HAS_MOVE
 
-  using Base::operator->;
   Impl* operator->(void) {
     return const_cast<Impl*>(Base::operator->());
   }
@@ -244,9 +240,6 @@ class MutableDerivedAssetHandleD_ : public DerivedBase_, public MutableBase_
   // must overide these to resolve ambiguities
   virtual bool Valid(const HandleType & entry) const {
     return DerivedBase::Valid(entry);
-  }
-  virtual HandleType Load(const std::string &boundref) const {
-    return DerivedBase::Load(boundref);
   }
 
   //    Only this leaf-most daemon handle can be constructed from
@@ -320,7 +313,6 @@ class MutableDerivedAssetHandleD_ : public DerivedBase_, public MutableBase_
     return *this;
   }
 
-  using DerivedBase::operator->;
   Impl* operator->(void) {
     return const_cast<Impl*>(DerivedBase::operator->());
   }
