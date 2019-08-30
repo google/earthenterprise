@@ -1059,7 +1059,7 @@ CompositeAssetVersionImplD::HandleChildStateChange(NotifyStates newStates, const
   // I just reduce the number that I'm waiting for by the number that have
   // succeeded. However, if any of my assets have fallen out of a working state
   // without succeeding I still need to sync my state so that I can respond
-  // to the error encountered by my input.
+  // to the error encountered by my child.
   if (!children.empty() &&
       !CompositeStateCaresAboutInputsToo() &&
       state == AssetDefs::InProgress &&
