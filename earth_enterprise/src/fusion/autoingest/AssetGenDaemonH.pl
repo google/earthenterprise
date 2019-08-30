@@ -125,6 +125,8 @@ class ${name}AssetVersionImplD :
     friend class DerivedAssetHandleD_<${name}AssetVersion, AssetVersionD, ${name}AssetVersionImplD>;
 public:
     using AssetType = DerivedAssetHandleD_<${name}Asset, AssetD, ${name}AssetImplD>;
+    using ConfigType = $config;
+
 
     virtual std::string GetName() const;
     virtual void SerializeConfig(khxml::DOMElement*) const;
@@ -186,6 +188,7 @@ class ${name}AssetImplD : public ${name}AssetImpl, public AssetImplD
     friend class ${name}Factory;
     friend class DerivedAssetHandleD_<${name}Asset, AssetD, ${name}AssetImplD>;
 public:
+    using ConfigType = $config;
     virtual std::string GetName() const override;
     virtual void SerializeConfig(khxml::DOMElement*) const override;
     void Modify($formalinputarg
@@ -303,12 +306,6 @@ public:
     SubAssetName(const std::string &parentAssetRef
                  $formaltypearg,
                  const std::string &basename);
-
-    static Mutable${name}AssetD
-    Make(const std::string &ref_ $formaltypearg,
-	 $formalinputarg
-	 const khMetaData &meta_,
-	 const $config& config_);
 
 
     static Mutable${name}AssetD

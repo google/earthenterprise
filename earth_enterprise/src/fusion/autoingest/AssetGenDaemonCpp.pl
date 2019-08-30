@@ -85,6 +85,7 @@ print $fh <<EOF;
 #include <khxml/khdom.h>
 #include <AssetThrowPolicy.h>
 #include "AssetOperation.h"
+#include <fusion/autoingest/AssetFactory.h>
 using namespace khxml;
 EOF
 
@@ -120,20 +121,6 @@ ${name}Factory::SubAssetName(
 }
 
 
-Mutable${name}AssetD
-${name}Factory::Make(const std::string &ref_ $formaltypearg,
-                     $formalinputarg
-                     const khMetaData &meta_,
-                     const $config& config_)
-{
-    typedef ${name}AssetImplD Impl;
-
-    return Mutable${name}AssetD(std::make_shared<Impl>
-                               (AssetStorage::MakeStorage(
-                                   ref_, $actualtypearg, "$subtype",
-                                   $actualinputarg, meta_),
-                                config_));
-}
 
 Mutable${name}AssetD
 ${name}Factory::FindMake(const std::string &ref_ $formaltypearg,
@@ -148,7 +135,7 @@ ${name}Factory::FindMake(const std::string &ref_ $formaltypearg,
         asset->Modify($forwardinputarg meta_, config_);
         return asset;
     } else {
-        return Make(ref_ $forwardtypearg,
+        return AssetFactory<Mutable${name}AssetD>::Make(ref_ $forwardtypearg,
                     $forwardinputarg
                     meta_, config_);
     }
@@ -183,7 +170,7 @@ ${name}Factory::MakeNew(const std::string &ref_ $formaltypearg,
         throw khException(kh::tr("$subtype '%2' already exists")
                           .arg(ref_));
     } else {
-        return Make(ref_ $forwardtypearg,
+        return AssetFactory<Mutable${name}AssetD>::Make(ref_ $forwardtypearg,
                     $forwardinputarg
                     meta_, config_);
     }
@@ -296,9 +283,9 @@ ${name}Factory::ReuseOrMakeAndUpdate(
         }
         asset->Modify($forwardinputarg meta_, config_);
     } else {
-        asset = Make(ref_ $forwardtypearg,
-                     $forwardinputarg
-                     meta_, config_);
+        asset = AssetFactory<Mutable${name}AssetD>::Make(ref_ $forwardtypearg,
+                    $forwardinputarg
+                    meta_, config_);
     }
     bool needed = false;
     return asset->MyUpdate(needed $forwardcachedinputarg
