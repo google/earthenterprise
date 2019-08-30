@@ -101,7 +101,7 @@ MapLayerAssetImplD::HandleEditRequest(const MapLayerEditRequest &req)
     maplayer->Modify(productrefs, req.meta, layer_config);
   } else {
     // It is a "Save" or "SaveAs" edit request when creating a new asset.
-    maplayer = MapLayerFactory::Make(assetname,
+    maplayer = AssetFactory<MutableMapLayerAssetD>::Make(assetname,
                                      productrefs,
                                      req.meta,
                                      req.config);

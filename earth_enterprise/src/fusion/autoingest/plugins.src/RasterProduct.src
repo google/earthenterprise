@@ -262,7 +262,7 @@ RasterProductAssetImplD::HandleImportRequest(
     asset->Modify(std::vector<SharedString>(), req.meta, product_config);
   } else {
     // It is a "Save" or "SaveAs" request when creating a new asset.
-    asset = RasterProductFactory::Make(assetname, req.type,
+    asset = AssetFactory<MutableRasterProductAssetD>::Make(assetname, req.type,
                                        std::vector<SharedString>(),
                                        req.meta, req.config);
   }

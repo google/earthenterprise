@@ -473,7 +473,7 @@ void RasterProjectAssetImplD::HandleEditRequest(
   } else {
     // It is a "Save" or "SaveAs" edit request when creating a new asset.
     assert(req.config.indexVersion == 1);
-    project = RasterProjectFactory::Make(projname, req.type, inputs,
+    project = AssetFactory<MutableRasterProjectAssetD>::Make(projname, req.type, inputs,
                                          req.meta, req.config);
   }
 
@@ -527,7 +527,7 @@ void RasterProjectAssetImplD::HandleNewRequest(
     // make it
     RasterProjectConfig projConfig(req.type);
     MutableRasterProjectAssetD project =
-      RasterProjectFactory::Make(projname,
+      AssetFactory<MutableRasterProjectAssetD>::Make(projname,
                                  req.type,
                                  std::vector<SharedString>(),
                                  khMetaData(),
