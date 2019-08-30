@@ -509,7 +509,7 @@ TEST_F(StateUpdaterTest, ChildQueued) {
   GetMutableVersion(sm, "d")->state = AssetDefs::Queued;
   updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateByChildrenVal, AssetDefs::Queued);
-  ASSERT_EQ(GetMutableVersion(sm, "a")->numChildrenWaitingForVal, 3);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->numChildrenWaitingForVal, 0);
 }
 
 TEST_F(StateUpdaterTest, SucceededChildren) {
@@ -538,7 +538,10 @@ TEST_F(StateUpdaterTest, ChildrenAndDependents) {
   GetMutableVersion(sm, "b")->state = AssetDefs::Succeeded;
   GetMutableVersion(sm, "c")->state = AssetDefs::Queued;
   GetMutableVersion(sm, "d")->state = AssetDefs::Failed;
-  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
+  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State state) {
+    // Don't change the state of any children, just recalculate the parent's state
+    return !(state == AssetDefs::Succeeded || state == AssetDefs::Queued || state == AssetDefs::Failed);
+  });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateByChildrenVal, AssetDefs::InProgress);
   ASSERT_EQ(GetMutableVersion(sm, "a")->numChildrenWaitingForVal, 1);
 }
