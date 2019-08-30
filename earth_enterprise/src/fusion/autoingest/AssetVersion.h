@@ -165,8 +165,12 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
     assert(false); // Can only call from sub-classes
     return AssetDefs::Bad;
   }
-  virtual void SetMyStateOnly(AssetDefs::State newstate, bool sendNotifications = true) {
-    assert(false);  // Can only call from sub-classes
+  virtual AssetDefs::State OnStateChange(AssetDefs::State, AssetDefs::State) {
+    assert(false);
+    return AssetDefs::Bad;
+  }
+  virtual void WriteFatalLogfile(const std::string &, const std::string &) const throw() {
+    assert(false);
   }
 
   // static helpers
