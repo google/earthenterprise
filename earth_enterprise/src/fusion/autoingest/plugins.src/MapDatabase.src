@@ -163,7 +163,7 @@ MapDatabaseAssetImplD::HandleNewRequest(const MapDatabaseEditRequest &req)
     AssetDefs::NormalizeAssetName(req.assetname, AssetDefs::Database,
                                   kMapDatabaseSubtype);
 
-  (void) MapDatabaseFactory::MakeNew(dbname,
+  (void) AssetFactory<MutableMapDatabaseAssetD>::MakeNew(dbname,
                                      inputs,
                                      req.meta,
                                      req.config);

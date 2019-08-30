@@ -30,21 +30,26 @@ private:
     using ConfigType = typename MutableDerivedAssetHandleType::Impl::ConfigType;
 
 public:
-    static MutableDerivedAssetHandleType Make(  const std::string &ref_,
-                                                AssetDefs::Type type_,
-                                                const khMetaData &meta,
-                                                const ConfigType &config);
+  static MutableDerivedAssetHandleType Make(  const std::string &ref_,
+                                              AssetDefs::Type type_,
+                                              const khMetaData &meta,
+                                              const ConfigType &config);
 
-    static MutableDerivedAssetHandleType Make(  const std::string &ref_,
-                                                AssetDefs::Type type_,
-                                                const std::vector<SharedString>& inputs_,
-                                                const khMetaData &meta,
-                                                const ConfigType &config);
+  static MutableDerivedAssetHandleType Make(  const std::string &ref_,
+                                              AssetDefs::Type type_,
+                                              const std::vector<SharedString>& inputs_,
+                                              const khMetaData &meta,
+                                              const ConfigType &config);
 
-    static MutableDerivedAssetHandleType Make(  const std::string &ref_,
-                                                const std::vector<SharedString>& inputs_,
-                                                const khMetaData &meta,
-                                                const ConfigType &config);
+  static MutableDerivedAssetHandleType Make(  const std::string &ref_,
+                                              const std::vector<SharedString>& inputs_,
+                                              const khMetaData &meta,
+                                              const ConfigType &config);
+
+  static void MakeNew(const std::string &ref_,
+                                              const std::vector<SharedString>& inputs_,
+                                              const khMetaData &meta,
+                                              const ConfigType &config);
 };
 
 template<class MutableDerivedAssetHandleType>
@@ -92,4 +97,19 @@ MutableDerivedAssetHandleType AssetFactory<MutableDerivedAssetHandleType>::Make(
     
 }
 
+template<class MutableDerivedAssetHandleType>
+void AssetFactory<MutableDerivedAssetHandleType>::MakeNew(
+                                      const std::string &ref_,
+                                      const std::vector<SharedString>& inputs_,
+                                      const khMetaData &meta,
+                                      const ConfigType &config)
+{
+    MutableDerivedAssetHandleType asset = Find<MutableDerivedAssetHandleType>(ref_);
+    if (asset) {
+        throw khException(kh::tr("%1 '%2' already exists")
+                          .arg(Impl::EXPECTED_SUBTYPE).arg(ref_));
+    } else {
+        Make(ref_, inputs_, meta, config);
+    }
+}
 #endif
