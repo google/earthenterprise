@@ -25,6 +25,13 @@
 #include <map>
 #include <memory>
 
+class StateChangeException : public khException {
+ public:
+  const std::string location;
+  StateChangeException(const std::string & msg, const std::string & loc) :
+    khException(msg), location(loc) {}
+};
+
 // ****************************************************************************
 // ***  AssetVersionImplD
 // ****************************************************************************
@@ -95,8 +102,6 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   virtual void HandleChildStateChange(const std::shared_ptr<StateChangeNotifier>) const;
   virtual void HandleInputStateChange(InputStates, const std::shared_ptr<StateChangeNotifier>) const = 0;
   virtual void HandleChildProgress(const SharedString &) const;
-  virtual void OnStateChange(AssetDefs::State newstate,
-                             AssetDefs::State oldstate);
   virtual bool OfflineInputsBreakMe(void) const { return false; }
  public:
 
@@ -110,7 +115,6 @@ class AssetVersionImplD : public virtual AssetVersionImpl
       return true;
     }
   }
-  virtual void SetMyStateOnly(AssetDefs::State newstate, bool sendNotifications);
   bool OkToClean(std::vector<std::string> *wouldbreak = 0) const;
   bool OkToCleanAsInput(void) const;
   void SetBad(void);
@@ -120,6 +124,8 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   virtual void Rebuild(const std::shared_ptr<StateChangeNotifier> = nullptr) = 0;
   virtual void DoClean(const std::shared_ptr<StateChangeNotifier> = nullptr) = 0;
   virtual bool MustForceUpdate(void) const { return false; }
+  virtual AssetDefs::State OnStateChange(AssetDefs::State newstate,
+                                         AssetDefs::State oldstate) override;
 
   class InputVersionHolder : public khRefCounter {
    public:
@@ -142,6 +148,9 @@ class AssetVersionImplD : public virtual AssetVersionImpl
 
   void GetInputFilenames(std::vector<std::string> &out) const;
 
+  // This class includes static and non-static versions of this function so
+  // you can call it with or without an asset version.
+  virtual void WriteFatalLogfile(const std::string &prefix, const std::string &error) const throw() override;
   static void WriteFatalLogfile(const AssetVersionRef &verref,
                                 const std::string &prefix,
                                 const std::string &error) throw();
@@ -183,8 +192,6 @@ class LeafAssetVersionImplD : public virtual LeafAssetVersionImpl,
   virtual void HandleTaskProgress(const TaskProgressMsg &msg);
   virtual void HandleTaskDone(const TaskDoneMsg &msg);
   virtual void HandleInputStateChange(InputStates, const std::shared_ptr<StateChangeNotifier>) const;
-  virtual void OnStateChange(AssetDefs::State newstate,
-                             AssetDefs::State oldstate);
   virtual void DoSubmitTask(void) = 0;
   virtual bool OfflineInputsBreakMe(void) const { return false; }
 
@@ -192,6 +199,8 @@ class LeafAssetVersionImplD : public virtual LeafAssetVersionImpl,
   virtual void Cancel(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual void Rebuild(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual void DoClean(const std::shared_ptr<StateChangeNotifier> = nullptr);
+  virtual AssetDefs::State OnStateChange(AssetDefs::State newstate,
+                                         AssetDefs::State oldstate) override;
   virtual AssetDefs::State CalcStateByInputsAndChildren(
       AssetDefs::State stateByInputs,
       AssetDefs::State stateByChildren,
@@ -222,8 +231,6 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
   virtual void HandleInputStateChange(InputStates, const std::shared_ptr<StateChangeNotifier>) const;
   virtual void HandleChildProgress(const SharedString &) const;
   virtual void DelayedBuildChildren(void);
-  virtual void OnStateChange(AssetDefs::State newstate,
-                             AssetDefs::State oldstate);
   virtual bool CompositeStateCaresAboutInputsToo(void) const { return false; }
 
   void AddChild(MutableAssetVersionD &child);
@@ -238,7 +245,9 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
       AssetDefs::State stateByChildren,
       bool blockersAreOffline,
       uint32 numWaitingFor) const;
-  virtual void DependentChildren(std::vector<SharedString> &out) const;
+  virtual void DependentChildren(std::vector<SharedString> &out) const override;
+  virtual AssetDefs::State OnStateChange(AssetDefs::State newstate,
+                                         AssetDefs::State oldstate) override;
 };
 
 #endif /* __AssetVersionD_h */
