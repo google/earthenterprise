@@ -159,7 +159,7 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
             stateByChildren = AssetDefs::Queued;
           }
           
-          if (stateByChildren == AssetDefs::Queued || stateByChildren == AssetDefs::InProgress) {
+          if (stateByChildren == AssetDefs::InProgress) {
             numChildrenWaitingFor = numkids - numgood;
           }
           else {
