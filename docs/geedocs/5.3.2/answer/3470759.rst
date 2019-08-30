@@ -1,0 +1,93 @@
+===================================
+Sign in to GEE Server Admin console
+===================================
+
+.. container::
+
+   .. container:: sidebar1
+
+      :doc:`3468004`
+
+      :doc:`3470759`
+
+      :doc:`3479919`
+
+      :doc:`3480095`
+
+      :doc:`3479921`
+
+      :doc:`3480097`
+
+      :doc:`3479922`
+
+      :doc:`3497763`
+
+      :doc:`6004748`
+
+      :doc:`176770`
+
+      :doc:`6013604`
+
+      :doc:`4441137`
+
+      :doc:`6062970`
+
+      :doc:`6063101`
+
+      :doc:`3497832`
+
+      :doc:`6066597`
+
+      :doc:`6082250`
+
+      :doc:`6091774`
+
+      :doc:`6091810`
+
+      :doc:`3230777`
+
+      :doc:`4643041`
+
+      :doc:`6051534`
+
+      :doc:`6051659`
+
+      :doc:`6051568`
+
+      :doc:`(Deprecated) Provide Google Earth Plugin for your users to
+      install <6051584>`
+
+   .. container:: content
+
+      |Google logo|
+
+      .. rubric:: `Google Earth Enterprise Documentation
+         Home <../index.html>`__ \| GEE Server administration
+
+      .. rubric:: Sign in to GEE Server Admin console
+
+      To access the GEE Server Admin console for managing and publishing
+      maps and globes:
+
+      #. Go to *myserver.mydomainname*.com/admin, replacing *myserver*
+         and *mydomainname* with your server and domain.
+      #. Sign in with the default credentials:
+
+         -  Username: geapacheuser
+         -  Password: geeadmin
+
+            .. tip::
+
+               **Tip**: To reset the username and password:
+               ``sudo /opt/google/gehttpd/bin/htpasswd -c /opt/google/gehttpd/conf.d/.htpasswd geapacheuser``
+
+      .. container:: footer
+
+         `Back to top <#top_of_file>`__
+
+         --------------
+
+
+.. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
+   :width: 130px
+   :height: 44px

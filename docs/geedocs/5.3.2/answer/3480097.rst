@@ -1,0 +1,92 @@
+==============
+Dashboard page
+==============
+
+.. container::
+
+   .. container:: sidebar1
+
+      :doc:`3468004`
+
+      :doc:`3470759`
+
+      :doc:`3479919`
+
+      :doc:`3480095`
+
+      :doc:`3479921`
+
+      :doc:`3480097`
+
+      :doc:`3479922`
+
+      :doc:`3497763`
+
+      :doc:`6004748`
+
+      :doc:`176770`
+
+      :doc:`6013604`
+
+      :doc:`4441137`
+
+      :doc:`6062970`
+
+      :doc:`6063101`
+
+      :doc:`3497832`
+
+      :doc:`6066597`
+
+      :doc:`6082250`
+
+      :doc:`6091774`
+
+      :doc:`6091810`
+
+      :doc:`3230777`
+
+      :doc:`4643041`
+
+      :doc:`6051534`
+
+      :doc:`6051659`
+
+      :doc:`6051568`
+
+      :doc:`(Deprecated) Provide Google Earth Plugin for your users to
+      install <6051584>`
+
+   .. container:: content
+
+      |Google logo|
+
+      .. rubric:: `Google Earth Enterprise Documentation
+         Home <../index.html>`__ \| GEE Server administration
+
+      .. rubric:: Dashboard page
+
+      The **Dashboard** page of the :doc:`GEE Server Admin
+      console <3470759>` provides an overview of GEE
+      details, including:
+
+      -  Number of Fusion databases
+      -  Number of published Fusion databases
+      -  Number of Portable databases
+      -  Number of published Portable databases
+      -  Number of search tabs
+      -  Cutter status (on or off)
+      -  Size of total Fusion data
+      -  Size of Portable data
+      -  Number of snippet profiles
+
+      .. container:: footer
+
+         `Back to top <#top_of_file>`__
+
+         --------------
+
+
+.. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
+   :width: 130px
+   :height: 44px

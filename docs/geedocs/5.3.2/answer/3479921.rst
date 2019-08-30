@@ -1,0 +1,161 @@
+=============
+Settings page
+=============
+
+.. container::
+
+   .. container:: sidebar1
+
+      :doc:`3468004`
+
+      :doc:`3470759`
+
+      :doc:`3479919`
+
+      :doc:`3480095`
+
+      :doc:`3479921`
+
+      :doc:`3480097`
+
+      :doc:`3479922`
+
+      :doc:`3497763`
+
+      :doc:`6004748`
+
+      :doc:`176770`
+
+      :doc:`6013604`
+
+      :doc:`4441137`
+
+      :doc:`6062970`
+
+      :doc:`6063101`
+
+      :doc:`3497832`
+
+      :doc:`6066597`
+
+      :doc:`6082250`
+
+      :doc:`6091774`
+
+      :doc:`6091810`
+
+      :doc:`3230777`
+
+      :doc:`4643041`
+
+      :doc:`6051534`
+
+      :doc:`6051659`
+
+      :doc:`6051568`
+
+      :doc:`(Deprecated) Provide Google Earth Plugin for your users to
+      install <6051584>`
+
+   .. container:: content
+
+      |Google logo|
+
+      .. rubric:: `Google Earth Enterprise Documentation
+         Home <../index.html>`__ \| GEE Server administration
+
+      .. rubric:: Settings page
+
+      Click the |gear icon| **Settings** icon in the :doc:`GEE Server Admin
+      console <3470759>` to:
+
+      .. container::
+
+         .. rubric:: Perform .glc assembly
+
+         .. container::
+
+            Create new .glc globes from existing globes (.glm/.glb):
+
+            #. Enter a name and description for the new .glc.
+            #. Paste **Polygon** KML for use with the new globe.
+            #. Select either **2D** layers to build a .glc using selected
+               layers of existing .glm files, or **3D** layers to build a
+               .glc using .glb files at the layers.
+            #. Click **Assemble .glc**.
+
+            .glc files are added to the default globes directory when
+            they are created.
+
+            See :doc:`4643041`.
+
+      .. container::
+
+         .. rubric::  Perform .glc disassembly
+
+         .. container::
+
+            Extract .glm/.glb files:
+
+            #. Select a .glc to disassemble.
+            #. Enter a **New output directory** where the files will be
+               placed.
+            #. Click **Disassemble glc**.
+
+            See :doc:`4643041`.
+
+      .. container::
+
+         .. rubric:: Launch Cutter
+
+         .. container::
+
+            Create a new .glm/.glb from published Fusion databases or
+            Portable globes (.glm/.glb, not .glc):
+
+            #. Select a source map.
+            #. Enter a name and description for the offline map.
+            #. Choose to **Overwrite** existing globes with the same
+               name.
+            #. Choose a **Region Selection** method:
+
+               #. **Manual**: Manually draw the boundaries of your
+                  region using the polygon button in the upper-right of
+                  the map.
+               #. **Paste KML**: Define your region by pasting a KML
+                  file.
+
+            #. Specify a **World level**; this represents the highest
+               resolution at which the entire world will be available.
+            #. Optionally use the zoom buttons in the lower-right of the
+               map to change your zoom level. This represents the
+               highest resolution at which the data within the region of
+               interest will be available.
+            #. Click **Cut map**.
+
+            The cut progress will be displayed at the bottom of the
+            screen. Upon successful completion, the globe is saved to
+            the default globes directory.
+
+            See :doc:`3230777`.
+
+      .. container::
+
+         .. rubric:: View Apache logs
+
+         .. container::
+
+            View Apache logs for troubleshooting errors or unexpected
+            behavior with GEE Server.
+
+      .. container:: footer
+
+         `Back to top <#top_of_file>`__
+
+         --------------
+
+
+.. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
+   :width: 130px
+   :height: 44px
+.. |gear icon| image:: ../art/server/admin/accounts_icon_gear_padded.gif

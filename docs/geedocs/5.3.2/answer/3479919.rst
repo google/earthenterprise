@@ -1,0 +1,99 @@
+=====================
+Snippet profiles page
+=====================
+
+.. container::
+
+   .. container:: sidebar1
+
+      :doc:`3468004`
+
+      :doc:`3470759`
+
+      :doc:`3479919`
+
+      :doc:`3480095`
+
+      :doc:`3479921`
+
+      :doc:`3480097`
+
+      :doc:`3479922`
+
+      :doc:`3497763`
+
+      :doc:`6004748`
+
+      :doc:`176770`
+
+      :doc:`6013604`
+
+      :doc:`4441137`
+
+      :doc:`6062970`
+
+      :doc:`6063101`
+
+      :doc:`3497832`
+
+      :doc:`6066597`
+
+      :doc:`6082250`
+
+      :doc:`6091774`
+
+      :doc:`6091810`
+
+      :doc:`3230777`
+
+      :doc:`4643041`
+
+      :doc:`6051534`
+
+      :doc:`6051659`
+
+      :doc:`6051568`
+
+      :doc:`(Deprecated) Provide Google Earth Plugin for your users to
+      install <6051584>`
+
+   .. container:: content
+
+      |Google logo|
+
+      .. rubric:: `Google Earth Enterprise Documentation
+         Home <../index.html>`__ \| GEE Server administration
+
+      .. rubric:: Snippet profiles page
+
+      The **Snippet profiles** page of the :doc:`GEE Server Admin
+      console <3470759>` is where you manage Snippet
+      profiles for use with 3D Fusion databases. Snippet profiles allow
+      specific snippet needs to be managed and uniformly applied to all
+      databases that require them. From this page, you can:
+
+      -  Create new snippets:
+
+         -  Click **Create new**, add a name, and click **Create**.
+         -  Select one or more snippets.
+         -  Click **Save changes**.
+
+      -  Edit snippet profiles: Click a snippet name and edit it, then
+         click **Save changes.**
+
+      -  Delete a snippet by clicking **Delete** next to a snippet name.
+
+      .. rubric:: Learn more
+
+      -  :doc:`6004748`_
+
+      .. container:: footer
+
+         `Back to top <#top_of_file>`__
+
+         --------------
+
+
+.. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
+   :width: 130px
+   :height: 44px
