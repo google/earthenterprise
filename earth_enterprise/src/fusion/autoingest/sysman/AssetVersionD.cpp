@@ -1179,9 +1179,6 @@ CompositeAssetVersionImplD::ComputeState(void) const
   if (stateByChildren == AssetDefs::InProgress) {
     numChildrenWaitingFor = numkids - numgood;
   }
-  else {
-    numChildrenWaitingFor = 0;
-  }
 
   return stateByChildren;
 }

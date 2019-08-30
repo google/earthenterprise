@@ -257,6 +257,7 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
       uint32 numChildrenWaitingFor) const;
   virtual void DependentChildren(std::vector<SharedString> &out) const override;
   virtual AssetDefs::State OnStateChange(AssetDefs::State newstate,
+                                         AssetDefs::State oldstate) override;
 };
 
 #endif /* __AssetVersionD_h */
