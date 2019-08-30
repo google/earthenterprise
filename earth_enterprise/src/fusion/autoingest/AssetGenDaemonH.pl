@@ -318,11 +318,6 @@ public:
 	     $formalinputarg
 	     const khMetaData &meta_,
 	     const $config& config_);
-    static Mutable${name}AssetD
-    MakeNew(const std::string &ref_ $formaltypearg,
-	     $formalinputarg
-	     const khMetaData &meta_,
-	     const $config& config_);
 
     $template
     static Mutable${name}AssetVersionD

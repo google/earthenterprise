@@ -159,24 +159,6 @@ ${name}Factory::FindAndModify(const std::string &ref_ $formaltypearg,
 }
 
 
-Mutable${name}AssetD
-${name}Factory::MakeNew(const std::string &ref_ $formaltypearg,
-                        $formalinputarg
-                        const khMetaData &meta_,
-                        const $config& config_)
-{
-    Mutable${name}AssetD asset = Find<${name}AssetD>(ref_, $typeref);
-    if (asset) {
-        throw khException(kh::tr("$subtype '%2' already exists")
-                          .arg(ref_));
-    } else {
-        return AssetFactory<Mutable${name}AssetD>::Make(ref_ $forwardtypearg,
-                    $forwardinputarg
-                    meta_, config_);
-    }
-}
-
-
 $template
 Mutable${name}AssetVersionD
 ${name}Factory::FindMakeAndUpdate(
