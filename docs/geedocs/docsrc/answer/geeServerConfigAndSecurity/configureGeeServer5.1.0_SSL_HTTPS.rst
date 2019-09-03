@@ -1,32 +1,12 @@
-======================================
+|Google logo|
+
+========================================
 Configure GEE Server 5.1.0 for SSL/HTTPS
-======================================
+========================================
 
 .. container::
 
-   .. container:: sidebar1
-
-      :doc:`173056`
-
-      :doc:`172794`
-
-      :doc:`6080928`
-
-      :doc:`2848305`
-
-      :doc:`2760544`
-
-      :doc:`172814`
-
    .. container:: content
-
-      |Google logo|
-
-      .. rubric:: `Google Earth Enterprise Documentation
-         Home <../index.html>`__ \| GEE Server configuration and
-         security
-
-      .. rubric:: Configure GEE Server 5.1.0 for SSL/HTTPS
 
       Data transmission between Google Earth EC and GEE Server occurs on
       unencrypted HTTP by default. However, you may have strict
@@ -114,7 +94,6 @@ Configure GEE Server 5.1.0 for SSL/HTTPS
 
          ``openssl x509 -noout -text -in server.crt``
 
-      --------------
 
       .. _Apply_Certificates_Keys:
       .. rubric:: Apply third-party/CA-verified certificates and keys
@@ -199,7 +178,6 @@ Configure GEE Server 5.1.0 for SSL/HTTPS
             Documentation <http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslverifyclient>`_
             for more information.
 
-      --------------
 
       .. _Set_Host_SSL_Server:
       .. rubric:: Set your virtual host as a SSL server
@@ -255,8 +233,7 @@ Configure GEE Server 5.1.0 for SSL/HTTPS
       #. Test the connections with Google Earth Enterprise Client for
          HTTP and HTTPS-based virtual servers.
 
-      --------------
 
-.. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
+.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
    :height: 44px

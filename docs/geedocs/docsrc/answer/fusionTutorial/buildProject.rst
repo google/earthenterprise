@@ -40,8 +40,6 @@ Defining and Building Projects
 
          -  `Build a Vector Project <#BuildVecProj>`__
 
-      --------------
-
       .. _Define_Imagery_Project:
       .. rubric:: Define an Imagery Project
 
@@ -51,8 +49,6 @@ Defining and Building Projects
       the Preview pane in Google Earth Enterprise Fusion when you
       develop your vector project, making it easier to visualize how
       your vector data will appear over your actual imagery.
-
-      --------------
 
       .. rubric:: Add Resources to an Imagery Project
          :name: add-resources-to-an-imagery-project
@@ -111,8 +107,6 @@ Defining and Building Projects
       select **ASSET_ROOT/Projects/Imagery** in the asset navigation
       tree.
 
-      --------------
-
       .. rubric:: Build an Imagery Project
          :name: build-an-imagery-project
 
@@ -147,8 +141,6 @@ Defining and Building Projects
 
       When the status of the imagery project build is **Succeeded**, go
       on to the next exercise.
-
-      --------------
 
       .. rubric:: Preview an Imagery Project
          :name: preview-an-imagery-project
@@ -185,8 +177,6 @@ Defining and Building Projects
 
          |Project Preview|
 
-      --------------
-
       .. rubric:: Specify an Imagery Project as Your Base Map
          :name: specify-an-imagery-project-as-your-base-map
 
@@ -215,15 +205,11 @@ Defining and Building Projects
          you change it to another image or return it to the default
          imagery in the Preferences dialog.
 
-      --------------
-
       .. rubric:: Define a Terrain Project
          :name: define-a-terrain-project
 
       The terrain project for this tutorial is very simple. It includes
       one of the resources you built in the previous lesson.
-
-      --------------
 
       .. rubric:: Add a Resource to a Terrain Project
          :name: add-a-resource-to-a-terrain-project
@@ -265,8 +251,6 @@ Defining and Building Projects
       The new project appears in the Asset Manager when you select
       **ASSET_ROOT/Projects/Terrain** in the asset navigation tree.
 
-      --------------
-
       .. rubric:: Build a Terrain Project
          :name: build-a-terrain-project
 
@@ -287,8 +271,6 @@ Defining and Building Projects
       When the status of the terrain project build is **Succeeded**, go
       on to the next exercise.
 
-      --------------
-
       .. rubric:: Define a Vector Project
          :name: define-a-vector-project
 
@@ -305,8 +287,6 @@ Defining and Building Projects
       For example:
 
       |Road Display Example|
-
-      --------------
 
       .. rubric:: Add Resources to a Vector Project
          :name: add-resources-to-a-vector-project
@@ -339,7 +319,7 @@ Defining and Building Projects
          The roads in the CAHighways resource appear in the Preview
          pane.
 
-         |Vector Project Preview|
+         |Vector Project Preview1|
 
       #. Check the box next to **USPopulation**, switch to the Preview
          pane, and zoom out a bit.
@@ -348,7 +328,7 @@ Defining and Building Projects
          outlines of counties across the US appear in the Preview pane
          as well as the roads in California.
 
-         |Vector Project Preview|
+         |Vector Project Preview2|
 
          .. note::
 
@@ -379,8 +359,6 @@ Defining and Building Projects
          tree.
 
       Now you are ready to begin configuring the vector layer.
-
-      --------------
 
       .. rubric:: Configuring Layer Properties for a Vector Project
          :name: configuring-layer-properties-for-a-vector-project
@@ -423,8 +401,6 @@ Defining and Building Projects
       #. Click the **OK** button. You return to the Vector Project Editor.
       #. Select **File > Save**. Google Earth Enterprise Fusion saves
          the vector project with the same name.
-
-      --------------
 
       .. _Configure_Display_Rules_for_a_Vector_Project:
       .. rubric:: Configure Display Rules for a Vector Project
@@ -549,7 +525,7 @@ Defining and Building Projects
             These settings result in Google Earth EC displaying the
             value of the NAME column for each road in your source data.
 
-            |Display Rules|
+            |Display Rules Start|
 
          e. Click the **OK** button to save your display rule.
 
@@ -644,7 +620,7 @@ Defining and Building Projects
          rule must appear before the *catch-all* rule (**default select
          all**), which covers all data not covered by other rules.
 
-         |Display Rules|
+         |New2 Display Rules|
 
       #. On the Feature tab, specify the geometry characteristics for
          the Major Freeways rule:
@@ -722,8 +698,6 @@ Defining and Building Projects
 
          This saves the project with the same name.
 
-      --------------
-
       .. rubric:: Build a Vector Project
          :name: build-a-vector-project
 
@@ -759,16 +733,15 @@ Defining and Building Projects
 .. |Road Display Example| image:: ../../art/fusion/tutorial/tutRoadDisplay.png
 .. |Vector Project Icon| image:: ../../art/fusion/tutorial/iconProjVector.png
 .. |Vector Project Editor| image:: ../../art/fusion/tutorial/vectorProjEditor.png
-.. |Vector Project Preview| image:: ../../art/fusion/tutorial/previewVectorProject1.png
-.. |Vector Project Preview| image:: ../../art/fusion/tutorial/previewVectorProject2.png
+.. |Vector Project Preview1| image:: ../../art/fusion/tutorial/previewVectorProject1.png
+.. |Vector Project Preview2| image:: ../../art/fusion/tutorial/previewVectorProject2.png
 .. |Delete Icon| image:: ../../art/fusion/tutorial/iconDelete.png
 .. |Vector Layer Properties dialog| image:: ../../art/fusion/tutorial/vectorLayerProp.png
 .. |Vector Layer Properties dialog with settings| image:: ../../art/fusion/tutorial/vectorLayerProp-full.png
-.. |Display Rules| image:: ../../art/fusion/tutorial/displayRuleStart.png
+.. |Display Rules Start| image:: ../../art/fusion/tutorial/displayRuleStart.png
 .. |New Display Rule| image:: ../../art/fusion/tutorial/displayRulesNew.png
 .. |Up Arrow| image:: ../../art/fusion/tutorial/arrowUp.gif
-.. |Display Rules| image:: ../../art/fusion/tutorial/displayRulesNew2.png
+.. |New2 Display Rules| image:: ../../art/fusion/tutorial/displayRulesNew2.png
 .. |Icons Dialog| image:: ../../art/fusion/tutorial/iconsDialogShield.png
 .. |Display Rules Filter Tab| image:: ../../art/fusion/tutorial/displayRuleFilter.png
-   :name: displayRuleFilter
 .. |Filtered Data Preview| image:: ../../art/fusion/tutorial/previewFilteredData.png

@@ -1,31 +1,12 @@
+|Google logo|
+
 =======================================
 Select, add, or change Earth EC servers
 =======================================
 
 .. container::
 
-   .. container:: sidebar1
-
-      :doc:`6006981`
-
-      :doc:`6010060`
-
-      :doc:`173203`
-
-      :doc:`6357797`
-
-      :doc:`6357802`
-
    .. container:: content
-
-      |Google logo|
-
-      .. rubric:: `Google Earth Enterprise Documentation
-         Home <../index.html>`__ \| Google Earth Enterprise client
-         :name: google-earth-enterprise-documentation-home-google-earth-enterprise-client
-
-      .. rubric:: Select, add, or change Earth EC servers
-         :name: select-add-or-change-earth-ec-servers
 
       You can use Google Earth EC to view globes and maps from your own
       database servers.
@@ -62,7 +43,7 @@ Select, add, or change Earth EC servers
       | Server                            | Select or enter the address for   |
       |                                   | the database server that hosts    |
       |                                   | the globes or maps you want to    |
-      |                                   | view. If you do not know the       |
+      |                                   | view. If you do not know the      |
       |                                   | server address, ask your          |
       |                                   | administrator.                    |
       +-----------------------------------+-----------------------------------+
@@ -71,22 +52,21 @@ Select, add, or change Earth EC servers
       |                                   | port number, ask your             |
       |                                   | administrator.                    |
       +-----------------------------------+-----------------------------------+
-      | Always sign in to this server     | | Select to skip the **Select     |
-      |                                   |   Server** window and             |
-      |                                   |   automatically sign in to this   |
-      |                                   |   server whenever you start Earth |
-      |                                   |   EC.                             |
-      |                                   | | To display **Select Server**    |
-      |                                   |   again, go to **File** >         |
-      |                                   |   **Disable Automatic Sign In**.  |
+      | Always sign in to this server     | Select to skip the **Select       |
+      |                                   | Server** window and automatically |
+      |                                   | sign in to this server whenever   |
+      |                                   | you start Earth  EC. To display   |
+      |                                   | **Select Server** again, go to    |
+      |                                   | **File** >  **Disable Automatic   |
+      |                                   | Sign In**.                        |
       +-----------------------------------+-----------------------------------+
-      | Disable caching                   | | Select this if you want to make |
-      |                                   |   sure that you are viewing the    |
-      |                                   |   latest content from the server  |
-      |                                   |   or if your cached files become  |
-      |                                   |   corrupted.                      |
-      |                                   | | **Note**: Disabling the cache   |
-      |                                   |   slows down performance.         |
+      | Disable caching                   | Select this if you want to make   |
+      |                                   | sure that you are viewing the     |
+      |                                   | latest content from the server    |
+      |                                   | or if your cached files become    |
+      |                                   | corrupted.                        |
+      |                                   | **Note**: Disabling the cache     |
+      |                                   | slows down performance.           |
       +-----------------------------------+-----------------------------------+
 
       .. rubric:: Sign out of an Earth EC server
@@ -126,6 +106,6 @@ Select, add, or change Earth EC servers
       -  :ref:`What is Google Earth EC? <What_Is_GEEC>`
       -  :doc:`6357802`
 
-.. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
+.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
    :height: 44px

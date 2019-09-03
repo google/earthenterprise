@@ -1,32 +1,12 @@
+|Google logo|
+
 ====================================================
 Configure a GEE virtual host for LDAP authentication
 ====================================================
 
 .. container::
 
-   .. container:: sidebar1
-
-      :doc:`173056`
-
-      :doc:`172794`
-
-      :doc:`6080928`
-
-      :doc:`2848305`
-
-      :doc:`2760544`
-
-      :doc:`172814`
-
    .. container:: content
-
-      |Google logo|
-
-      .. rubric:: `Google Earth Enterprise Documentation
-         Home <../index.html>`__ \| GEE Server configuration and
-         security
-
-      .. rubric:: Configure a GEE virtual host for LDAP authentication
 
       You can use LDAP authentication, which is based on Microsoft
       Active Directory, to authenticate users to access your GEE virtual
@@ -136,6 +116,6 @@ Configure a GEE virtual host for LDAP authentication
          logs on the LDAP server to make sure GEE server is correctly
          making authentication requests.
 
-.. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
+.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
    :height: 44px

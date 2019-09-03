@@ -1,29 +1,12 @@
+|Google logo|
+
 ==================================
 Clearing the Google Earth EC cache
 ==================================
 
 .. container::
 
-   .. container:: sidebar1
-
-      :doc:`6006981`
-
-      :doc:`6010060`
-
-      :doc:`173203`
-
-      :doc:`6357797`
-
-      :doc:`6357802`
-
    .. container:: content
-
-      |Google logo|
-
-      .. rubric:: `Google Earth Enterprise Documentation
-         Home <../index.html>`__ \| Google Earth Enterprise client
-
-      .. rubric:: Clearing the Google Earth EC cache
 
       If you have signed in to a database on GEE Server with Google
       Earth EC previously, you may be unable to sign in again to the
@@ -42,6 +25,6 @@ Clearing the Google Earth EC cache
       #. Select **Google Earth EC > Preferences > Cache**.
       #. Select **Delete cache file** (only when logged out).
 
-.. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
+.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
    :height: 44px

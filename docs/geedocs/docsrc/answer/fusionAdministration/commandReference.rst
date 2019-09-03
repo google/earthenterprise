@@ -20,7 +20,7 @@ Command reference
       This article uses the following typographic conventions:
 
       =========================================================================================== ==============================================================
-      *Italic*\ ````                                                                              Information that the user must supply
+      *Italic*                                                                                    Information that the user must supply
       **Bold**                                                                                    Text that the user must type exactly as shown
       Ellipsis **...**                                                                            Argument that can be repeated several times in a command
       Square brackets **[ ]**                                                                     Optional commands or arguments
@@ -83,8 +83,7 @@ Command reference
 
            --maxlevel level
 
-      .. container:: alert
-
+      .. NOTE::
          Deprecated in release GEE 5.2.5 and higher. Use
          ``--maxleveloverride`` instead.
 
@@ -1280,7 +1279,7 @@ Command reference
       | ::                    | Required              | Specifies the target  |
       |                       |                       | path on which to      |
       |    --targetpath targe |                       | publish.              |
-      | t_path                |                       |                       |
+      |:: t_path              |                       |                       |
       +-----------------------+-----------------------+-----------------------+
       | ::                    | Optional              | Specify the name of   |
       |                       |                       | the virtual host. If  |

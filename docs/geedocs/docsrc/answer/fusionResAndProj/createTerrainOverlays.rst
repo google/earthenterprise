@@ -17,8 +17,6 @@ Create terrain overlays
       -  `Publish a Database for the Terrain Overlay <Publish_Database_Terrain_overlay>`
       -  `View the Database <View_Database>`
 
-      --------------
-
       .. _Introduction:
       .. rubric:: Introduction
 
@@ -65,8 +63,6 @@ Create terrain overlays
 
          Using the base terrain as the fill for the secondary terrain
          ensures smooth viewing transitions at the overlay borders.
-
-      --------------
 
       .. _Creating_Terrain_Overlays:
       .. rubric:: Creating Terrain Overlays
@@ -165,8 +161,6 @@ Create terrain overlays
          When the status of the build changes to **Succeeded**, go on to
          add the project to a new database.
 
-      --------------
-
       .. _Define_Database_Terrain_Overlay:
       .. rubric:: Define, Build, and Push a Database for the Terrain
          Overlay
@@ -199,8 +193,6 @@ Create terrain overlays
       #. Click **Push**. Google Earth Enterprise Fusion runs the process
          of pushing the database to the Google Earth Enterprise Server,
          and displays a success message when it is done.
-
-      --------------
 
       .. _Publish_Database_Terrain_overlay:
       .. rubric:: Publish a Database for the Terrain Overlay
@@ -245,8 +237,6 @@ Create terrain overlays
 
          Now you are ready to add your terrain overlay as a secondary
          database in Google Earth EC.
-
-      --------------
 
       .. _View_Database:
       .. rubric:: View the Database

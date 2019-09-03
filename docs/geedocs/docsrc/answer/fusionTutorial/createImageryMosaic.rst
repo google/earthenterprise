@@ -25,8 +25,6 @@ Creating Imagery Mosaics
       -  :ref:`Apply a Custom Mask to the Virtual
          Mosaic <Apply_Custom_Mask_Mosaic>`
 
-      --------------
-
       .. _Create_Imagery_Resource:
       .. rubric:: Create an Imagery Resource
 
@@ -130,8 +128,6 @@ Creating Imagery Mosaics
       single source file created from multiple source files. The
       following exercises walk you through the process of creating a
       virtual mosaic and applying a custom mask to it.
-
-      --------------
 
       .. _Create_Virtual_Mosaic:
       .. rubric:: Create a Virtual Mosaic
@@ -240,8 +236,6 @@ Creating Imagery Mosaics
       Imagery Resource Editor in the next exercise, Google Earth
       Enterprise Fusion automatically applies the mask file by reference
       to the source file.
-
-      --------------
 
       .. _Apply_Custom_Mask_Mosaic:
       .. rubric:: Apply a Custom Mask to the Virtual Mosaic

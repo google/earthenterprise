@@ -1,30 +1,12 @@
-===================================
-Google Earth Enterprise Client (EC)
-===================================
+|Google logo|
+
+===========================================
+What is Google Earth Enterprise Client (EC)
+===========================================
 
 .. container::
 
-   .. container:: sidebar1
-
-      :doc:`6006981`
-
-      :doc:`6010060`
-
-      :doc:`173203`
-
-      :doc:`6357797`
-
-      :doc:`6357802`
-
    .. container:: content
-
-      |Google logo|
-
-      .. rubric:: `Google Earth Enterprise Documentation
-         Home <../index.html>`__ \| Google Earth Enterprise client
-
-      .. _What_Is_GEEC:
-      .. rubric:: What is Google Earth Enterprise Client (EC)?
 
       Open Google Earth Enterprise (OpenGEE) lets organizations build
       and host private globes created from their own geospatial data.
@@ -42,6 +24,6 @@ Google Earth Enterprise Client (EC)
       downloaded separately from
       `here. <https://github.com/google/earthenterprise/wiki/Google-Earth-Enterprise-Client-(EC)>`_
 
-.. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
+.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
    :height: 44px

@@ -8,8 +8,6 @@ Create custom masks
 
    .. container:: content
 
-      --------------
-
       .. rubric:: Table of Contents
 
       -  :ref:`Getting started <Getting_Started>`
@@ -109,8 +107,6 @@ Create custom masks
          imagery <Building_Custom_Masks_Large_Source_Imagery>`
       -  :ref:`Appendix G: Gepolymaskgen help menu <gepolymaskgen_Help_Menu>`
 
-      --------------
-
       .. _Getting_Started:
       .. rubric:: Getting started
 
@@ -122,8 +118,6 @@ Create custom masks
       and can be integrated into source file preparation or creating
       updated masks for existing imagery resources.
 
-      --------------
-
       .. _How_Use_Guide:
       .. rubric:: How to use this guide
 
@@ -134,8 +128,6 @@ Create custom masks
       the cases section to build your custom masks and then read the
       informational sections later, or read the entire guide from start
       to finish.
-
-      --------------
 
       .. _What_gepolymaskgen:
       .. rubric:: What is gepolymaskgen?
@@ -154,8 +146,6 @@ Create custom masks
       ``gepolymaskgen`` may only be invoked by the command line,
       separately from the normal automated GEE resource import
       sequences.
-
-      --------------
 
       .. _What_gemaskgen:
       .. rubric:: What is gemaskgen?
@@ -188,8 +178,6 @@ Create custom masks
       file as demonstrated in the graphic below.
 
       |Masked imagery diagram|
-
-      --------------
 
       .. _Useful_Info_gepolymaskgen:
       .. rubric:: Useful information about gepolymaskgen
@@ -242,8 +230,6 @@ Create custom masks
          see :ref:`Appendix C <Determining_Source_File_Raster_Size_geinfo>` for further information
          on calculating the overall size of a mask file.
 
-      --------------
-
       .. _Useful_info_gemaskgen:
       .. rubric:: Useful information about gemaskgen
 
@@ -273,8 +259,6 @@ Create custom masks
          -  Please see :ref:`Appendix D <Building_High_Resolution_Mask_Files_gemaskgen>` for additional
             details.
 
-      --------------
-
       .. rubric:: Comparison of the gemaskgen and gepolymaskgen
          :name: comparison-of-the-gemaskgen-and-gepolymaskgen
 
@@ -291,8 +275,6 @@ Create custom masks
       Can mask out arbitrary polygonal shapes within the image resource                                             No                                                            Yes
       ============================================================================================================= ============================================================= =======================================================
 
-      --------------
-
       .. _When_Use_gepolymaskgen:
       .. rubric:: When to use gepolymaskgen
 
@@ -301,8 +283,6 @@ Create custom masks
       boundaries, or a building - or to mask image at a fixed feathering
       from the image edge regardless of whether usable imagery or fill data
       are at the edge.
-
-      --------------
 
       .. _When_Use_gemaskgen:
       .. rubric:: When to use gemaskgen
@@ -317,8 +297,6 @@ Create custom masks
       Please see :ref:`Appendix F <Building_Custom_Masks_Large_Source_Imagery>` for further
       instructions on how ``gemaskgen`` may be utilized with creating
       masks for large image resources.
-
-      --------------
 
       .. _Recommended_Tools_Mask_Filters:
       .. rubric:: Recommended tools for creating custom mask files
@@ -340,8 +318,6 @@ Create custom masks
          builds, or to make modifications to the mask file such as
          unmasking water bodies or exposing more visible water from a
          coastline.
-
-      --------------
 
       .. _gepolymaskgen_Command_Usage:
       .. rubric:: gepolymaskgen command usage
@@ -483,8 +459,6 @@ Create custom masks
          masking islands to only show land imagery; and masking sections
          within an image.
 
-      --------------
-
       .. _Example_Use_Cases_Commands:
       .. rubric:: Example use cases and commands to build custom masks
 
@@ -514,8 +488,6 @@ Create custom masks
       **Case 5**: Creating a custom mask utilizing ``gemaskgen`` for
       automatic fill detection and ``gepolymaskgen`` for coastline
       masking
-
-      --------------
 
       .. _Imagery_No_Fill_Pixels:
       .. rubric:: Case 1: Create custom masks for imagery which has no
@@ -739,8 +711,6 @@ Create custom masks
       Please see :ref:`Appendix A <Importing_Custom_Masks_Imagery_Terrain_GEE_Fusion>` for further
       information about enabling the ``havemask`` mask mode for an image
       resource.
-
-      --------------
 
       .. _Custom_Mask_Islands:
       .. rubric:: Case 2: Create custom masks for islands
@@ -974,8 +944,6 @@ Create custom masks
       Please see :ref:`Appendix A <Importing_Custom_Masks_Imagery_Terrain_GEE_Fusion>` for further
       information about enabling the ``havemask`` mask mode for an image
       resource.
-
-      --------------
 
       .. _Masks_Coastline_Shared_Edges:
       .. rubric:: Case 3: Create custom masks with coastlines and shared
@@ -1431,8 +1399,6 @@ Create custom masks
       information about enabling the ``havemask`` mask mode for an image
       resource.
 
-      --------------
-
       .. _Masking_Out_Sections_Large_Image:
       .. rubric:: Case 4: Masking out sections within an image resource
 
@@ -1790,8 +1756,6 @@ Create custom masks
          information about enabling the ``havemask`` mask mode for an
          image resource.
 
-      --------------
-
       .. _Custom_Masks_gemaskgen_gepolymaskgen:
       .. rubric:: Case 5: Building custom masks with both gemaskgen and
          gepolymaskgen
@@ -2033,8 +1997,6 @@ Create custom masks
 
       Please see :ref:`Appendix D <Building_High_Resolution_Mask_Files_gemaskgen>` for further details.
 
-      --------------
-
       .. _Importing_Custom_Masks_Imagery_Terrain_GEE_Fusion:
       .. rubric:: Appendix A: Importing custom masks with imagery and
          terrain resources in Google Earth Enterprise Fusion Pro
@@ -2061,8 +2023,6 @@ Create custom masks
       enabling ``havemask`` mode within the Fusion GUI for new or
       existing image resources, and two for enabling ``havemask`` mode
       on the command line.
-
-      --------------
 
       .. _Enable_havemask_New_Image_Resource:
       .. rubric:: Example 1: Enable havemask mode in the Fusion GUI for
@@ -2098,8 +2058,6 @@ Create custom masks
          satisfactory, or continue working on the custom mask and repeat
          the import process until satisfied with the custom mask.
 
-      --------------
-
       .. _Enable_havemask_Command_Line_New_Image_Resource:
       .. rubric:: Example 2: Enable havemask mode by command line for a
          new image resource
@@ -2134,8 +2092,6 @@ Create custom masks
          project if the custom mask is satisfactory, or continue working
          on the custom mask and repeat the import process until
          satisfied with the custom mask.
-
-      --------------
 
       .. _Enable_havemask_Existing_Image_Resource:
       .. rubric:: Example 3: Enable havemask mode in the Fusion GUI for
@@ -2174,8 +2130,6 @@ Create custom masks
          on the custom mask and repeat the import process until
          satisfied with the custom mask.
 
-      --------------
-
       .. _Enable_havemask_Command_Line_Existing_Image_Resource:
       .. rubric:: Example 4: Enable havemask mode by command line for an
          existing image resource
@@ -2209,8 +2163,6 @@ Create custom masks
          on the custom mask and repeat the import process until
          satisfied with the custom mask.
 
-      --------------
-
       .. _Locating_Mask_Files_Format_Data_Asset_Root:
       .. rubric:: Appendix B: Locating mask files and Fusion format data
          in an Asset Root
@@ -2233,8 +2185,6 @@ Create custom masks
       templates for locating the Fusion-format versions of imagery and
       terrain within the GEE Fusion Asset Root, and locating a mask file
       built by ``gemaskgen`` during resource import.
-
-      --------------
 
       .. _Locate_Fusion_Format_Imagery_Mask_Files_Image_Resource:
       .. rubric:: Example 1: Locate the Fusion format imagery (.kip) and
@@ -2269,8 +2219,6 @@ Create custom masks
       version of the image resource. Further information about the
       gequery command may be found in the ``gequery --help`` menu.
 
-      --------------
-
       .. _Locate_Mask_File_Built_Automask_Fusion_Build:
       .. rubric:: Example 2: Locate a mask.tif file automatically built
          by the automask feature of a Fusion resource build
@@ -2301,8 +2249,6 @@ Create custom masks
 
       Please see the :ref:`Case 5 Example <Custom_Masks_gemaskgen_gepolymaskgen>` for further
       details.
-
-      --------------
 
       .. _Locate_Mask_File_Fusion_Format_File_Building_Mask_Product:
       .. rubric:: Example 3: Locate the mask.tif file and Fusion-format
@@ -2341,8 +2287,6 @@ Create custom masks
       - which could then be used in conjunction with There :ref:`Case 5
       Example <Custom_Masks_gemaskgen_gepolymaskgen>`, or as a base mask for very large
       image resources as described in :ref:`Appendix F <Building_Custom_Masks_Large_Source_Imagery>`.
-
-      --------------
 
       .. _Determining_Source_File_Raster_Size_geinfo:
       .. rubric:: Appendix C: Determining source file raster size with
@@ -2453,8 +2397,6 @@ Create custom masks
       would be created if the ``khvr`` was specified as a
       ``gepolymaskgen --base_image``.
 
-      --------------
-
       .. _Maximum_Suggested_Raster_Dimensions_Source_Files_gepolymaskgen:
       .. rubric:: Maximum suggested raster dimensions for source files
          used as gepolymaskgen --base_image files
@@ -2467,8 +2409,6 @@ Create custom masks
       should be created as described in :ref:`Appendix
       D <Building_High_Resolution_Mask_Files_gemaskgen>`.
 
-      --------------
-
       .. _Square_Shaped_Rasters:
       .. rubric:: Square-shaped rasters
 
@@ -2478,8 +2418,6 @@ Create custom masks
       should be created for square-shaped source images that are larger
       than 44,000 pixels on both sides, as described in :ref:`Appendix
       D <Building_High_Resolution_Mask_Files_gemaskgen>`.
-
-      --------------
 
       .. _Rectangular_Sharped_Rasters:
       .. rubric:: Rectangular-shaped rasters
@@ -2499,8 +2437,6 @@ Create custom masks
       2,000,000,000 pixels. Instructions for creating a substitute base
       image, with ``gemaskgen``, may be found in :ref:`Appendix
       D <Building_High_Resolution_Mask_Files_gemaskgen>`.
-
-      --------------
 
       .. _Building_High_Resolution_Mask_Files_gemaskgen:
       .. rubric:: Appendix D: Building high resolution mask files with
@@ -2568,8 +2504,6 @@ Create custom masks
 
       Further information about available ``gemaskgen`` options may be
       found in the ``gemaskgen --help`` menu.
-
-      --------------
 
       .. _Using_Photo_Editing_App_Augment_Custom_App:
       .. rubric:: Appendix E: Using a Photo Editing application to
@@ -2645,8 +2579,6 @@ Create custom masks
 
          |usgsLanSat before mask|
 
-      --------------
-
       .. _Building_Custom_Masks_Large_Source_Imagery:
       .. rubric:: Appendix F: Building custom masks for large source
          imagery
@@ -2698,8 +2630,6 @@ Create custom masks
       #. Build the image resource to commit the change and import the
          new custom mask, then view the image resource in the Fusion
          Preview window.
-
-      --------------
 
       .. _gepolymaskgen_Help_Menu:
       .. rubric:: Appendix G: gepolymaskgen help menu

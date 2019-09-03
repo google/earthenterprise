@@ -42,8 +42,6 @@ Pushing, Publishing, and Viewing a Database
       -  :ref:`Publish Your Database <Publish_Your_Database>`
       -  :ref:`View Your Database <View_Your_Database>`
 
-      --------------
-
       .. _Push_Your_Database:
       .. rubric:: Push Your Database to Google Earth Enterprise Server
          :name: push-your-database-to-google-earth-enterprise-server
@@ -78,8 +76,6 @@ Pushing, Publishing, and Viewing a Database
          Earth Enterprise Server administrator for help, or check the
          documentation on :doc:`3481464` for more
          information.
-
-      --------------
 
       .. _Publish_Your_Database:
       .. rubric:: Publish Your Database in Google Earth Enterprise
@@ -149,8 +145,6 @@ Pushing, Publishing, and Viewing a Database
 
          |GEE Server Database Published List|
 
-      --------------
-
       .. _View_Your_Database:
       .. rubric:: View Your Database
          :name: view-your-database
@@ -160,7 +154,7 @@ Pushing, Publishing, and Viewing a Database
       `here <https://github.com/google/earthenterprise/wiki/Google-Earth-Enterprise-Client-(EC)>`_.
 
       .. rubric:: To view your database:
-         :name: to-view-your-database
+         :name: to-view-your-database-2
 
       #. Launch Google Earth EC.
 
@@ -185,7 +179,6 @@ Pushing, Publishing, and Viewing a Database
    :width: 130px
    :height: 44px
 .. |Push Database Dialog| image:: ../../art/fusion/tutorial/dbasePush-full.png
-   :name: publishDatabase
 .. |GEE Server Database Page| image:: ../../art/fusion/tutorial/databaseServerList.png
 .. |GEE Server Database Publish| image:: ../../art/fusion/tutorial/databaseServerPublish.png
 .. |GEE Server Database Publish dialog| image:: ../../art/fusion/tutorial/databaseServerPublishDialog.png

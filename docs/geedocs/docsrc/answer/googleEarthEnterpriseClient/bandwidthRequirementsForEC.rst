@@ -1,29 +1,12 @@
+|Google logo|
+
 =========================
 EC bandwidth requirements
 =========================
 
 .. container::
 
-   .. container:: sidebar1
-
-      :doc:`6006981`
-
-      :doc:`6010060`
-
-      :doc:`173203`
-
-      :doc:`6357797`
-
-      :doc:`6357802`
-
    .. container:: content
-
-      |Google logo|
-
-      .. rubric:: `Google Earth Enterprise Documentation
-         Home <../index.html>`__ \| Google Earth Enterprise client
-
-      .. rubric:: EC bandwidth requirements
 
       User behavior dramatically influences bandwidth requirements.
       However, even with a good set of log files, bandwidth usage for
@@ -45,6 +28,6 @@ EC bandwidth requirements
          bandwidth requirements high enough to accommodate spikes in
          usage.
 
-.. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
+.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
    :height: 44px

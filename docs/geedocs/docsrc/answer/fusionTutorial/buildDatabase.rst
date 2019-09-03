@@ -14,8 +14,6 @@ Defining and Building Databases
       -  `Define a Database <#DefineDB>`__
       -  `Build a Database <#BuildDB>`__
 
-      --------------
-
       .. rubric:: Define a Database
          :name: define-a-database
 
@@ -65,7 +63,7 @@ Defining and Building Databases
          All three projects are now listed in the Database Editor
          window:
 
-         |Database Editor With All Projects Listed|
+         |All Projects Listed Database Editor|
 
       #. Select **File > Save** and navigate to the
          ``ASSET_ROOT/Databases`` folder.
@@ -74,8 +72,6 @@ Defining and Building Databases
 
          The name of the database is displayed when you select the
          ``/ASSET_ROOT/Databases``\ folder in the asset navigation tree.
-
-      --------------
 
       .. rubric:: Build a Database
          :name: build-a-database
@@ -129,5 +125,4 @@ Defining and Building Databases
 .. |Database Icon| image:: ../../art/fusion/tutorial/iconDatabase.png
 .. |Database Editor With No Projects Selected| image:: ../../art/fusion/tutorial/databaseEditor.png
 .. |New Icon| image:: ../../art/fusion/tutorial/icon_new.gif
-.. |Database Editor With All Projects Listed| image:: ../../art/fusion/tutorial/databaseEditor-full.png
-   :name: databaseEditorfull
+.. |All Projects Listed Database Editor| image:: ../../art/fusion/tutorial/databaseEditor-full.png

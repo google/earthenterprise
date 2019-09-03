@@ -57,8 +57,6 @@ Creating a Map Database
       -  :ref:`View Your Map Database <View_Map_Database>`
       -  :ref:`Using the Google Base Map <Using_Google_Base_Map>`
 
-      --------------
-
       .. _Define_Map_Layer:
       .. rubric:: Define a Map Layer
 
@@ -177,8 +175,6 @@ Creating a Map Database
          The new map layer name appears in the Asset Manager’s asset
          list.
 
-      --------------
-
       .. _Define_Map_Project:
       .. rubric:: Define a Map Project
 
@@ -235,8 +231,6 @@ Creating a Map Database
       #. In the **Name** field, enter **SFMapProject**, and click **Save**.
          The new map project name appears in the Asset Manager’s asset
          list.
-
-      --------------
 
       :: _Define_Flat_Imagery_Project:
       .. rubric:: Define a Flat Imagery Project
@@ -306,8 +300,6 @@ Creating a Map Database
          ``/ASSET_ROOT/Projects/Imagery`` folder.
       #. Enter the name **SFBayAreaMercator**, and click **Save**.
 
-      --------------
-
       .. _Define_Push_Publish_Map_Database:
       .. rubric:: Define, Push, and Publish a Map Database
 
@@ -361,8 +353,6 @@ Creating a Map Database
          to **Succeeded**, and its **Current Version** column changes to the
          date and time the most recent build was started.
 
-      --------------
-
       .. rubric:: Push a Map Database to Google Earth Enterprise Server
 
       .. rubric:: To push a map database:
@@ -386,8 +376,6 @@ Creating a Map Database
             Earth Enterprise Server administrator for help, or check the
             *Google Earth Enterprise Administration Guide* for more
             information.
-
-      --------------
 
       .. rubric:: Publish a Map Database on Google Earth Enterprise
          Server
@@ -424,8 +412,6 @@ Creating a Map Database
 
       #. Click **Publish**. The Databases page updates to indicate the
          published status of your database.
-
-      --------------
 
       .. _View_Map_Database:
       .. rubric:: View Your Map Database
@@ -465,8 +451,6 @@ Creating a Map Database
       Google Earth Enterprise Server administrator for help.
 
          Google Maps displays your database.
-
-      --------------
 
       .. _Using_Google_Base_Map:
       .. rubric:: Using the Google Base Map
@@ -523,7 +507,6 @@ Creating a Map Database
    :height: 44px
 .. |image1| image:: ../../art/fusion/tutorial/iconLayerMaps.png
 .. |image2| image:: ../../art/fusion/tutorial/mapLayerDialog.png
-   :name: mapLayerDia
 .. |Label Format Open| image:: ../../art/fusion/tutorial/iconEllipsis.png
    :width: 18px
    :height: 18px

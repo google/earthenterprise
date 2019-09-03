@@ -1,24 +1,12 @@
+|Google logo|
+
 ==========================
 Google Maps API v3 for GEE
 ==========================
 
 .. container::
 
-   .. container:: sidebar1
-
-      :doc:`6014171`
-
-      :doc:`6078457`
-
    .. container:: content
-
-      |Google logo|
-
-      .. rubric:: `Google Earth Enterprise Documentation
-         Home <../index.html>`__ \| Developers
-         :name: google-earth-enterprise-documentation-home-developers
-
-      .. rubric:: Google Maps API v3 for GEE 5.x
 
       -  :ref:`Overview <Overview>`
       -  :ref:`Using the Fusion Maps API <Using_Fusion_Maps_API>`
@@ -200,6 +188,6 @@ Google Maps API v3 for GEE
          -  Performance may degrade with large KML files.
          -  GeoXml is an open-source package, not supported by Google.
 
-.. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
+.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
    :height: 44px

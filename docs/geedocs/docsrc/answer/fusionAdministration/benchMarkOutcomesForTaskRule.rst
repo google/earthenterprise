@@ -141,7 +141,7 @@ Benchmarking outcomes for applying task rules
       Select a machine with more memory if processing vector data as
       fusing vector data (``gevectorfuse``) can consume a lot of memory.
       .. rubric:: Learn more
-         :name: learn-more
+      :name: learn-more
 
       -  `Configure Fusion performance <../answer/176738.html>`__
       -  `Running Fusion on a Machine with Multiple

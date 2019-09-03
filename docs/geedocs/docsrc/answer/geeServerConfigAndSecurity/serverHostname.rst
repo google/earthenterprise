@@ -1,32 +1,12 @@
+|Google logo|
+
 ===============
 Server hostname
 ===============
 
 .. container::
 
-   .. container:: sidebar1
-
-      :doc:`173056`
-
-      :doc:`172794`
-
-      :doc:`6080928`
-
-      :doc:`2848305`
-
-      :doc:`2760544`
-
-      :doc:`172814`
-
    .. container:: content
-
-      |Google logo|
-
-      .. rubric:: `Google Earth Enterprise Documentation
-         Home <../index.html>`__ \| GEE Server configuration and
-         security
-
-      .. rubric:: Server hostname
 
       When you install GEE on a server, it queries for the name of the
       local host by issuing a ``hostname -f`` command. Each time you
@@ -42,6 +22,6 @@ Server hostname
       ``sudo /opt/google/bin/geconfigureassetroot --fixmasterhost``
 
 
-.. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
+.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
    :height: 44px

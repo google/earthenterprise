@@ -1,34 +1,12 @@
+|Google logo|
+
 =========================
 PostgreSQL authentication
 =========================
 
 .. container::
 
-   .. container:: sidebar1
-
-      :doc:`173056`
-
-      :doc:`172794`
-
-      :doc:`6080928`
-
-      :doc:`2848305`
-
-      :doc:`2760544`
-
-      :doc:`172814`
-
    .. container:: content
-
-      |Google logo|
-
-      .. rubric:: `Google Earth Enterprise Documentation
-         Home <../index.html>`__ \| GEE Server configuration and
-         security
-         :name: google-earth-enterprise-documentation-home-gee-server-configuration-and-security
-
-      .. rubric:: PostgreSQL authentication
-         :name: postgresql-authentication
 
       Client authentication determines which users are allowed to view
       published databases. By default, the GEE Server does not require
@@ -185,6 +163,6 @@ PostgreSQL authentication
          add your users to the database.
 
 
-.. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
+.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
    :height: 44px
