@@ -396,7 +396,7 @@ void MercatorRasterProjectAssetImplD::HandleEditRequest(
   } else {
     // It is a "Save" or "SaveAs" edit request when creating a new asset.
     assert(req.config.indexVersion == 1);
-    project = AssetFactory<MutableMercatorRasterProjectAssetD>::Make(projname, inputs,
+    project = AssetFactory::Make<MutableMercatorRasterProjectAssetD, RasterProjectConfig>(projname, inputs,
                                                  req.meta, req.config);
   }
 
@@ -434,7 +434,7 @@ void MercatorRasterProjectAssetImplD::HandleNewRequest(
     // make it
     RasterProjectConfig projConfig(req.type);
     MutableMercatorRasterProjectAssetD project =
-      AssetFactory<MutableMercatorRasterProjectAssetD>::Make(projname,
+      AssetFactory::Make<MutableMercatorRasterProjectAssetD, RasterProjectConfig>(projname,
                                  std::vector<SharedString>(),
                                  khMetaData(),
                                  projConfig);

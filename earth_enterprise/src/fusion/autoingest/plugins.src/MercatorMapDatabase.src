@@ -180,7 +180,7 @@ MercatorMapDatabaseAssetImplD::HandleNewRequest(const MapDatabaseEditRequest &re
                                   kMercatorMapDatabaseSubtype);
 
 
-  (void) AssetFactory<MutableMercatorMapDatabaseAssetD>::MakeNew(dbname,
+  (void) AssetFactory::MakeNew<MutableMercatorMapDatabaseAssetD, MapDatabaseConfig>(dbname,
                                      inputs,
                                      req.meta,
                                      req.config);

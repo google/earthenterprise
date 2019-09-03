@@ -91,7 +91,7 @@ KMLProjectAssetImplD::HandleEditRequest(const KMLProjectEditRequest &req)
     project->Modify(inputs, req.meta, projConfig);
   } else {
     assert(projConfig.indexVersion == 1);
-    project = AssetFactory<MutableKMLProjectAssetD>::Make(projname, inputs,
+    project = AssetFactory::Make<MutableKMLProjectAssetD, KMLProjectConfig>(projname, inputs,
                                                           req.meta, projConfig);
   }
 

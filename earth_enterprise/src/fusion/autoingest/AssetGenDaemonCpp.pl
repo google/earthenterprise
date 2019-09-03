@@ -135,7 +135,7 @@ ${name}Factory::FindMake(const std::string &ref_ $formaltypearg,
         asset->Modify($forwardinputarg meta_, config_);
         return asset;
     } else {
-        return AssetFactory<Mutable${name}AssetD>::Make(ref_ $forwardtypearg,
+        return AssetFactory::Make<Mutable${name}AssetD, $config>(ref_ $forwardtypearg,
                     $forwardinputarg
                     meta_, config_);
     }
@@ -265,7 +265,7 @@ ${name}Factory::ReuseOrMakeAndUpdate(
         }
         asset->Modify($forwardinputarg meta_, config_);
     } else {
-        asset = AssetFactory<Mutable${name}AssetD>::Make(ref_ $forwardtypearg,
+        asset = AssetFactory::Make<Mutable${name}AssetD, $config>(ref_ $forwardtypearg,
                     $forwardinputarg
                     meta_, config_);
     }
