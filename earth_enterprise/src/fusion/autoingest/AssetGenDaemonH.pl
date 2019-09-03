@@ -125,7 +125,6 @@ class ${name}AssetVersionImplD :
     friend class DerivedAssetHandleD_<${name}AssetVersion, AssetVersionD, ${name}AssetVersionImplD>;
 public:
     using AssetType = DerivedAssetHandleD_<${name}Asset, AssetD, ${name}AssetImplD>;
-    using ConfigType = $config;
 
 
     virtual std::string GetName() const;
@@ -188,7 +187,6 @@ class ${name}AssetImplD : public ${name}AssetImpl, public AssetImplD
     friend class ${name}Factory;
     friend class DerivedAssetHandleD_<${name}Asset, AssetD, ${name}AssetImplD>;
 public:
-    using ConfigType = $config;
     virtual std::string GetName() const override;
     virtual void SerializeConfig(khxml::DOMElement*) const override;
     void Modify($formalinputarg
@@ -236,16 +234,6 @@ public:
 
 protected:
 EOF
-
-if ($haveBindConfig) {
-print $fh <<EOF;
-    Mutable${name}AssetVersionD MakeNewVersion(const Config &bound_config);
-EOF
-} else {
-print $fh <<EOF;
-    Mutable${name}AssetVersionD MakeNewVersion(void);
-EOF
-}
 
 
 print $fh <<EOF;
