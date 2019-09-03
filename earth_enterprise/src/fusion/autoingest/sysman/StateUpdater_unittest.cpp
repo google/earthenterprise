@@ -122,10 +122,9 @@ class MockVersion : public AssetVersionImpl {
     string GetOutputFilename(uint) const override { return string(); }
 };
 
-using VersionMap = map<AssetKey, shared_ptr<MockVersion>>;
-
 class MockStorageManager : public StorageManagerInterface<AssetVersionImpl> {
   private:
+    using VersionMap = map<AssetKey, shared_ptr<MockVersion>>;
     VersionMap versions;
     PointerType GetFromMap(const AssetKey & ref) {
       auto versionIter = versions.find(ref);

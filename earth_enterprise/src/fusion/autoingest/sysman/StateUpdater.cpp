@@ -18,50 +18,13 @@
 #include "AssetVersion.h"
 #include "common/notify.h"
 
-using namespace boost;
-using namespace std;
-
-// The depth_first_search function needs a way to map vertices to indexes. We
-// store a unique index inside each vertex; the code below provides a way for
-// boost to access them. These must be defined before including
-// depth_first_search.hpp.
-template <class Graph>
-class InNodeVertexIndexMap {
-  public:
-    typedef readable_property_map_tag category;
-    typedef size_t value_type;
-    typedef value_type reference;
-    typedef typename Graph::vertex_descriptor key_type;
-
-    InNodeVertexIndexMap(const Graph & graph) : graph(graph) {};
-    const Graph & graph;
-};
-
-namespace boost {
-  template<>
-  struct property_map<DependentStateTree, vertex_index_t> {
-    typedef InNodeVertexIndexMap<DependentStateTree> const_type;
-  };
-
-  template<class Graph>
-  InNodeVertexIndexMap<Graph> get(vertex_index_t, const Graph & graph) {
-    return InNodeVertexIndexMap<Graph>(graph);
-  }
-
-  template<class Graph>
-  typename InNodeVertexIndexMap<Graph>::value_type get(
-      const InNodeVertexIndexMap<Graph> & map,
-      typename InNodeVertexIndexMap<Graph>::key_type vertex) {
-    return map.graph[vertex].index;
-  }
-}
+// Must be included before depth_first_search.hpp
+#include "InNodeVertexIndexMap.h"
 
 #include <boost/graph/depth_first_search.hpp>
 
-class StateUpdater::UnsupportedException : public std::runtime_error {
-  public: 
-    UnsupportedException() : std::runtime_error("Unsupported operation") {}
-};
+using namespace boost;
+using namespace std;
 
 class StateUpdater::SetStateVisitor : public default_dfs_visitor {
   private:
@@ -232,7 +195,7 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
     // below this one in the tree. Thus, we don't calculate the state for an
     // asset until we've calculated the state for all of its inputs and
     // children.
-    virtual void finish_vertex(
+    void finish_vertex(
         DependentStateTreeVertexDescriptor vertex,
         const DependentStateTree & tree) const {
       SharedString name = tree[vertex].name;
