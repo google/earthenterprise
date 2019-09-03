@@ -303,7 +303,6 @@ AssetVersionImplD::SetProgress(double newprogress)
   progress = newprogress;
   if (!AssetDefs::Finished(state)) {
     theAssetManager.NotifyVersionProgress(GetRef(), progress);
-    PropagateProgress();
   }
 }
 
@@ -342,23 +341,6 @@ AssetVersionImplD::PropagateStateChange(const std::shared_ptr<StateChangeNotifie
 }
 
 void
-AssetVersionImplD::PropagateProgress(void)
-{
-  notify(NFY_VERBOSE, "PropagateProgress(%s): %s",
-         ToString(progress).c_str(), GetRef().toString().c_str());
-  for (auto p = parents.begin();
-       p != parents.end(); ++p) {
-    AssetVersionD parent(*p);
-    if (parent) {
-      parent->HandleChildProgress(GetRef());
-    } else {
-      notify(NFY_WARN, "'%s' has broken parent '%s'",
-             GetRef().toString().c_str(), p->toString().c_str());
-    }
-  }
-}
-
-void
 AssetVersionImplD::HandleTaskLost(const TaskLostMsg &)
 {
   // NoOp in base since composites don't need to do anything
@@ -381,12 +363,6 @@ AssetVersionImplD::HandleChildStateChange(NotifyStates, const std::shared_ptr<St
 {
   // NoOp in base since leaves don't need to do anything
   notify(NFY_VERBOSE, "AssetVersionImplD::HandleChildStateChange: %s", GetRef().toString().c_str());
-}
-
-void
-AssetVersionImplD::HandleChildProgress(const SharedString &) const
-{
-  // NoOp in base since leaves don't do anything
 }
 
 AssetDefs::State
@@ -1081,13 +1057,6 @@ CompositeAssetVersionImplD::HandleInputStateChange(NotifyStates, const std::shar
     SyncState(notifier);
   }
 }
-
-void
-CompositeAssetVersionImplD::HandleChildProgress(const SharedString &) const
-{
-  // TODO: - implement me some day
-}
-
 
 bool
 CompositeAssetVersionImplD::CacheInputVersions(void) const

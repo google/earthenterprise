@@ -101,13 +101,11 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   // will create a mutable handle itself if it
   // needs to call SetState
   void PropagateStateChange(const std::shared_ptr<StateChangeNotifier> = nullptr);
-  void PropagateProgress(void);
   virtual void HandleTaskLost(const TaskLostMsg &msg);
   virtual void HandleTaskProgress(const TaskProgressMsg &msg);
   virtual void HandleTaskDone(const TaskDoneMsg &msg);
   virtual void HandleChildStateChange(NotifyStates, const std::shared_ptr<StateChangeNotifier>) const;
   virtual void HandleInputStateChange(NotifyStates, const std::shared_ptr<StateChangeNotifier>) const = 0;
-  virtual void HandleChildProgress(const SharedString &) const;
   virtual bool OfflineInputsBreakMe(void) const { return false; }
  public:
 
@@ -238,7 +236,6 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
   virtual bool CacheInputVersions(void) const;
   virtual void HandleChildStateChange(NotifyStates, const std::shared_ptr<StateChangeNotifier>) const;
   virtual void HandleInputStateChange(NotifyStates, const std::shared_ptr<StateChangeNotifier>) const;
-  virtual void HandleChildProgress(const SharedString &) const;
   virtual void DelayedBuildChildren(void);
   virtual bool CompositeStateCaresAboutInputsToo(void) const { return false; }
 
