@@ -42,8 +42,6 @@ About this Tutorial
       come back to the tutorial and work through the lessons of your
       choice.
 
-      --------------
-
       .. rubric:: Audience
          :name: audience
 
@@ -56,8 +54,6 @@ About this Tutorial
       accessible to you or on your local workstation. If any of those
       three applications are not installed, contact your system
       administrator or refer to :doc:`4492598`.
-
-      --------------
 
       .. rubric:: In This Guide
          :name: in-this-guide

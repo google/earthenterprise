@@ -20,8 +20,6 @@ Sample Data Files
       -  :ref:`Vector <Vector>`
       -  :ref:`KML <KML>`
 
-      --------------
-
       .. _Imagery:
       .. rubric:: Imagery
 
@@ -73,8 +71,6 @@ Sample Data Files
          o37122f4sw_1.txt
          o37122f4sw_1.tfw
 
-      --------------
-
       .. _Terrain:
       .. rubric:: Terrain
 
@@ -84,8 +80,6 @@ Sample Data Files
          gtopo30_4km.tif
          gtopo30_4km-mask.tif
          SF_terrain.tif
-
-      --------------
 
       .. _Vector:
       .. rubric:: Vector
@@ -135,8 +129,6 @@ Sample Data Files
          realtor_neighborhoods.shp.xml
          realtor_neighborhoods.shx
 
-      --------------
-
       .. _KML:
       .. rubric:: KML
 
@@ -144,8 +136,6 @@ Sample Data Files
 
          BayAreaView.kmz
          SanFranciscoViewOblique.kmz
-
-      --------------
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

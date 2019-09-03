@@ -1,32 +1,12 @@
+|Google logo|
+
 ============
 Set up HTTPS
 ============
 
 .. container::
 
-   .. container:: sidebar1
-
-      :doc:`173056`
-
-      :doc:`172794`
-
-      :doc:`6080928`
-
-      :doc:`2848305`
-
-      :doc:`2760544`
-
-      :doc:`172814`
-
    .. container:: content
-
-      |Google logo|
-
-      .. rubric:: `Google Earth Enterprise Documentation
-         Home <../index.html>`__ \| GEE Server configuration and
-         security
-
-      .. rubric:: Set up HTTPS
 
       If you have set up SSL/HTTPS configurations on your GEE server, you
       can also set up a secure Fusion server for your browser-based
@@ -125,6 +105,6 @@ Set up HTTPS
       the Publisher tool maintain the GEE Server software while you
       disallow external unencrypted data communications.
 
-.. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
+.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
    :height: 44px

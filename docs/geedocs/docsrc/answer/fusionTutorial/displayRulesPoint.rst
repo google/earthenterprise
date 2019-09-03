@@ -17,12 +17,10 @@ Configuring Display Rules for Point Data
       rules.
 
       -  :ref:`Define, Configure, and Build a Vector Project <Define_Vector_Product>`
-      -  :ref:`Define and Build an Imagery Project <Define_Imagery_Project>`
+      -  :ref:`Define and Build an Imagery Project <Define_And_Build_Imagery_Project>`
       -  :ref:`Define, Build, Push, and Publish a Database for the Point
          Data <Define_Point_Database>`
-      -  :ref:`View Your Database in Google Earth EC <View_Database_GEEC>`
-
-      --------------
+      -  :ref:`View Your Database in Google Earth EC <View_Database_GEEC_1>`
 
       .. _Define_Vector_Product:
       .. rubric:: Define, Configure, and Build a Vector Project
@@ -148,9 +146,7 @@ Configuring Display Rules for Point Data
       menu.
       Google Earth Enterprise Fusion builds the project.
 
-      --------------
-
-      .. _Define_Imagery_Project:
+      .. _Define_And_Build_Imagery_Project:
       .. rubric:: Define and Build an Imagery Project
          :name: define-and-build-an-imagery-project
 
@@ -211,8 +207,6 @@ Configuring Display Rules for Point Data
 
          Google Earth Enterprise Fusion builds the project.
 
-      --------------
-
       .. _Define_Point_Database:
       .. rubric:: Define, Build, Push, and Publish a Database for the
          Point Data
@@ -257,7 +251,7 @@ Configuring Display Rules for Point Data
          and displays a success message when it is done.
 
       .. rubric:: To publish a database:
-         :name: to-publish-a-database
+         :name: publish-a-database
 
       #. Access the Google Earth Enterprise Server Admin console in a
          browser window by going to *myserver.mydomainname*.com/admin,
@@ -290,9 +284,7 @@ Configuring Display Rules for Point Data
 
          |GEE Server Database Published List|
 
-      --------------
-
-      .. _View_Database_GEEC:
+      .. _View_Database_GEEC_1:
       .. rubric:: View Your Database in Google Earth EC
          :name: view-your-database-in-google-earth-ec
 

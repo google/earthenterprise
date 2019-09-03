@@ -26,8 +26,6 @@ Configuring a Searchable Database
       -  :ref:`Define Search Tab <Define_Search_Tab>`
       -  :ref:`Add Search Tab To Your Database <Add_Search_Tab>`
 
-      --------------
-
       .. _Define_Search_Tab:
       .. rubric:: Define Search Tab
 
@@ -87,8 +85,6 @@ Configuring a Searchable Database
       #. Click the **Save** button. Now the search tab is ready for you to add to
          your databases.
 
-      --------------
-
       .. _Add_Search_Tab:
       .. rubric:: Add Search Tab To Your Database
 
@@ -112,7 +108,7 @@ Configuring a Searchable Database
 
       #. Click the **Publish** button. The Publish dialog appears.
 
-         |Create Search Definition dialog|
+         |Publish Search Definition dialog|
 
       #. Accept the default **Publish point** of the database name,
          **SFHighways** and the version number.
@@ -143,6 +139,6 @@ Configuring a Searchable Database
    :height: 44px
 .. |Create Search Definition dialog| image:: ../../art/fusion/tutorial/serverCreateSearchDefinition.png
 .. |GEE Server Database Publish| image:: ../../art/fusion/tutorial/serverUnpublishSearchTab.png
-.. |Create Search Definition dialog| image:: ../../art/fusion/tutorial/serverDatabasePublish-searchtab.png
+.. |Publish Search Definition dialog| image:: ../../art/fusion/tutorial/serverDatabasePublish-searchtab.png
 .. |EC Search Tab| image:: ../../art/fusion/tutorial/ECSearchTab1.png
 .. |EC With Search Tab and Search Results| image:: ../../art/fusion/tutorial/ECSearchTab2.png

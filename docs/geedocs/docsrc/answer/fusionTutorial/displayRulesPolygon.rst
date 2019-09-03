@@ -21,8 +21,6 @@ Configuring Display Rules for Polygon Data
          Data <Define_Polygon_Database>`
       -  :ref:`View Your Database in Google Earth EC <View_Database_GEEC>`
 
-      --------------
-
       .. _Define_Vector_Polygon:
       .. rubric:: Define and Build a Vector Resource Using Polygon Data
 
@@ -74,8 +72,6 @@ Configuring Display Rules for Polygon Data
          the context menu.
 
          Google Earth Enterprise Fusion builds the resource.
-
-      --------------
 
       .. _Define_Vector_Project:
       .. rubric:: Define, Configure, and Build a Vector Project
@@ -207,8 +203,6 @@ Configuring Display Rules for Polygon Data
 
          Google Earth Enterprise Fusion builds the project.
 
-      --------------
-
       .. _Define_Imagery_Project:
       .. rubric:: Define and Build an Imagery Project
 
@@ -270,8 +264,6 @@ Configuring Display Rules for Polygon Data
 
          Google Earth Enterprise Fusion builds the project.
 
-      --------------
-
       .. _Define_Polygon_Database:
       .. rubric:: Define, Build, and Publish a Database for the Polygon
          Data
@@ -282,7 +274,7 @@ Configuring Display Rules for Polygon Data
       previous exercise.
 
       .. rubric:: To define, build, and push a database:
-         :name: to-define-build-and-push-a-database
+         :name: to-define-build-and-push-a-database-1
 
       #. Click |Database Editor Icon| on the toolbar.
 
@@ -370,17 +362,15 @@ Configuring Display Rules for Polygon Data
 
          |GEE Server Database Published List|
 
-      --------------
-
       .. _View_Database_GEEC:
       .. rubric:: View Your Database in Google Earth EC
-         :name: view-your-database-in-google-earth-ec
+         :name: view-your-database-in-google-earth-ec-1
 
       This exercise walks you through the process of viewing your
       database in Google Earth EC.
 
       .. rubric:: To view your database:
-         :name: to-view-your-database
+         :name: to-view-your-database-1
 
       #. Launch Google Earth EC. The Select Server dialog appears.
       #. Enter or select the host name or IP address of your server in

@@ -38,8 +38,6 @@ Defining and Building Resources
          -  :ref:`Define and Build the Remaining Vector
             Resources <Define_Build_Remaining_Imagery_Resources>`
 
-      --------------
-
       .. _Define_Imagery_Resources:
       .. rubric:: Define Imagery Resources
 
@@ -47,8 +45,6 @@ Defining and Building Resources
       data and defining and building imagery resources. Resources
       comprise the most basic components of a Google Earth Enterprise
       Fusion database.
-
-      --------------
 
       .. _Explore_Imagery_Source_Files:
       .. rubric:: Explore Imagery Source Files
@@ -127,8 +123,6 @@ Defining and Building Resources
       #. Click the **OK** button.
       #. Press **Ctrl+R** to reset the view to the whole Earth.
 
-      --------------
-
       .. _Define_Imagery_resources_2:
       .. rubric:: Define Imagery Resources
 
@@ -184,7 +178,7 @@ Defining and Building Resources
          The Open Source dialog opens to the
          ``/opt/google/share/tutorials/fusion/Imagery`` folder.
 
-         |Open Source Dialog|
+         |Imagery Open Source Dialog|
 
       #. Select the ``bluemarble_4km.tif`` file, and click **Open**.
       #. Select **File > Save** and navigate to the
@@ -224,8 +218,6 @@ Defining and Building Resources
       tree.
 
       |Resource Name in the Asset Manager|
-
-      --------------
 
       .. _Build_Imagery_Resource:
       .. rubric:: Build an Imagery Resource
@@ -277,8 +269,6 @@ Defining and Building Resources
       its **Current Version** column changes to the date and time the
       most recent build was started.
 
-      --------------
-
       .. _Define_Build_Remaining_Imagery_Resources:
       .. rubric:: Define and Build the Remaining Imagery Resources
 
@@ -321,8 +311,6 @@ Defining and Building Resources
       resources. When the builds are all complete, it looks like this:
 
       |Asset Manager When Builds are Complete|
-
-      --------------
 
       .. _Preview_Imagery_Resources:
       .. rubric:: Preview the Imagery Resources
@@ -383,8 +371,6 @@ Defining and Building Resources
 
          |Zoom Out|
 
-      --------------
-
       .. _Define_Terrain_Resources_2:
       .. _Define_Terrain_Resources:
       .. rubric:: Define Terrain Resources
@@ -392,8 +378,6 @@ Defining and Building Resources
       Defining terrain resources is very similar to defining imagery
       resources. The following exercises guide you through defining and
       building terrain resources.
-
-      --------------
 
       .. _Explore_Terrain_Source_Files:
       .. rubric:: Explore Terrain Source Files
@@ -459,8 +443,6 @@ Defining and Building Resources
          leave the preview pane zoomed in to prepare for an upcoming
          exercise, even though the imagery is too close to make out any
          details at this point.
-
-      --------------
 
       .. rubric:: Define Terrain Resources
          :name: define-terrain-resources-1
@@ -567,8 +549,6 @@ Defining and Building Resources
          The name of the resource appears on the right when you select
          the ``/ASSET_ROOT/Resources/Terrain``\ folder in the asset
          navigation tree in **Asset Manager**.
-
-      --------------
 
       .. _Build_Modify_Terrain_Resources:
       .. rubric:: Build and Modify Terrain Resources
@@ -729,15 +709,11 @@ Defining and Building Resources
 
       #. Press **Ctrl+R** to reset the view to the whole Earth.
 
-      --------------
-
       .. _Define_Vector_Resources:
       .. rubric:: Define Vector Resources
 
       The following exercises guide you through the process of defining
       and building a vector resource for California highway data.
-
-      --------------
 
       .. _Explore_Vector_Source_Files:
       .. rubric:: Explore Vector Source Files
@@ -803,8 +779,6 @@ Defining and Building Resources
 
       #. Press **Ctrl+R** to reset the view to the whole Earth.
 
-      --------------
-
       .. _Define_a_Vector_Resource:
       .. rubric:: Define a Vector Resource
 
@@ -833,7 +807,7 @@ Defining and Building Resources
          The Open Source dialog opens to the
          ``/opt/google/share/tutorials/fusion/Vector`` folder.
 
-         |Open Source Dialog|
+         |Vector Open Source Dialog|
 
       #. Select the ``california_roads_line.shp`` file, and click
          **Open**.
@@ -855,8 +829,6 @@ Defining and Building Resources
          The name of the resource appears on the right when you select
          the ``/ASSET_ROOT/Resources/Vector``\ folder in the asset
          navigation tree in **Asset Manager**.
-
-      --------------
 
       .. _Build_Vector_Resource:
       .. rubric:: Build a Vector Resource
@@ -883,8 +855,6 @@ Defining and Building Resources
          building, its **Current State** column in the Asset Manager changes
          to **Succeeded**, and its **Current Version** column changes to the
          date and time the most recent build was started.
-
-      --------------
 
       .. rubric:: Define and Build the Remaining Vector Resources
          :name: define-and-build-the-remaining-vector-resources
@@ -929,7 +899,7 @@ Defining and Building Resources
 .. |Second Bounding Box in the Preview pane| image:: ../../art/fusion/tutorial/previewZoom2Layer2.png
 .. |Imagery Resource Icon| image:: ../../art/fusion/tutorial/iconResImagery.png
 .. |Imagery Resource Window| image:: ../../art/fusion/tutorial/imageryResEditor.png
-.. |Open Source Dialog| image:: ../../art/fusion/tutorial/imageryOpen-BM.png
+.. |Imagery Open Source Dialog| image:: ../../art/fusion/tutorial/imageryOpen-BM.png
 .. |Resource Name in the Asset Manager| image:: ../../art/fusion/tutorial/assetManagerResImagery.png
 .. |Asset Manager While Resources are Building| image:: ../../art/fusion/tutorial/assetManagerBuildProgress.png
 .. |Asset Manager When Builds are Complete| image:: ../../art/fusion/tutorial/assetManagerResImagery-full.png
@@ -945,9 +915,6 @@ Defining and Building Resources
 .. |Zoom In To Terrain| image:: ../../art/fusion/tutorial/previewTerrain_ZoomIn.png
 .. |Terrain Resource Icon| image:: ../../art/fusion/tutorial/iconResTerrain.png
 .. |Open Terrain Resource| image:: ../../art/fusion/tutorial/terrainResOpen1.png
-.. |Terrain Resource Icon| image:: ../../art/fusion/tutorial/iconResTerrain.png
-   :width: 22px
-   :height: 20px
 .. |image25| image:: ../../art/fusion/tutorial/previewTerrainRes.png
 .. |image26| image:: ../../art/fusion/tutorial/previewTerrainAndImagery2.png
 .. |Open File Dialog| image:: ../../art/fusion/tutorial/vectorFileOpenDia.png
@@ -956,5 +923,5 @@ Defining and Building Resources
 .. |Select Mode Icon| image:: ../../art/fusion/tutorial/iconSelectMode.png
 .. |Vector Resource Icon| image:: ../../art/fusion/tutorial/iconResVector.png
 .. |Vector Resource Editor| image:: ../../art/fusion/tutorial/vectorResEditor.png
-.. |Open Source Dialog| image:: ../../art/fusion/tutorial/vectorFileOpenDia2.png
+.. |Vector Open Source Dialog| image:: ../../art/fusion/tutorial/vectorFileOpenDia2.png
 .. |Vector Resource Editor| image:: ../../art/fusion/tutorial/vectorResEditor-full.png

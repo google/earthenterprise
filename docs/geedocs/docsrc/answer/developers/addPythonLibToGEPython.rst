@@ -1,24 +1,12 @@
+|Google logo|
+
 ==================================
 Add Python Libraries to GEE Python
 ==================================
 
 .. container::
 
-   .. container:: sidebar1
-
-      :doc:`6014171`
-
-      :doc:`6078457`
-
    .. container:: content
-
-      |Google logo|
-
-      .. rubric:: `Google Earth Enterprise Documentation
-         Home <../index.html>`__ \| Developers
-         :name: google-earth-enterprise-documentation-home-developers
-
-      .. rubric:: Add Python Libraries to GEE Python
 
       GEE uses system Python with some extra libraries to support
       functionality such as publishing and custom search plug-ins.
@@ -43,6 +31,6 @@ Add Python Libraries to GEE Python
       need to consider any other dependencies for your newly installed
       library.
 
-.. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
+.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
    :height: 44px

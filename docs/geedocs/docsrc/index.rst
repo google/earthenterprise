@@ -20,13 +20,13 @@ Google Earth Enterprise Documentation Version 5.3.2
 
    ./answer/3468004
 
-   ./answer/173056
+   ./answer/geeServerConfigAndSecurity
 
-   ./answer/6006981
+   ./answer/googleEarthEnterpriseClient
 
    ./answer/4580164
 
-   ./answer/6014171
+   ./answer/developers
 
    ./answer/6121524
 
@@ -78,12 +78,3 @@ Google Earth Enterprise Documentation Version 5.3.2
    .. rubric:: `Legal notices <answer/2987876>`__
    :name: legal-notices
 
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

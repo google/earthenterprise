@@ -48,8 +48,6 @@ Importing and Exporting Style Templates
          Data <Define_Build_Push_Publish_Database>`
       -  :ref:`View Your Data in Google Earth EC <View_Data_GEEC>`
 
-      --------------
-
       .. _Export_Display_Rules:
       .. rubric:: Export the Display Rules
 
@@ -75,8 +73,6 @@ Importing and Exporting Style Templates
          You return to the Vector Project Editor.
 
       #. Close the Vector Project Editor.
-
-      --------------
 
       .. _Import_Template:
       .. rubric:: Import the Template
@@ -155,8 +151,6 @@ Importing and Exporting Style Templates
          The new project appears in the Asset Manager when you select
          **ASSET_ROOT/Projects/Vector** in the asset navigation tree.
 
-      --------------
-
       .. _Define_Build_Push_Publish_Database:
       .. rubric:: Define, Build, Push, and Publish a Database for Your
          Data
@@ -166,7 +160,7 @@ Importing and Exporting Style Templates
       in the previous exercise.
 
       .. rubric:: To define, build, and push a database:
-         :name: to-define-build-and-push-a-database
+         :name: to-define-build-and-push-a-database-2
 
       #. Click |Database Editor Icon| on the toolbar. The Database
          Editor appears with no projects selected.
@@ -240,8 +234,6 @@ Importing and Exporting Style Templates
 
       #. Click **Publish**. The Databases page updates to indicate the
          published status of your database.
-
-      --------------
 
       .. _View_Data_GEEC:
       .. rubric:: View Your Data in Google Earth EC
