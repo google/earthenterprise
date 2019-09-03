@@ -27,7 +27,7 @@ class AssetFactory
 private:
     AssetFactory();
     using Impl = typename MutableDerivedAssetHandleType::Impl;
-    using ConfigType = typename MutableDerivedAssetHandleType::Impl::ConfigType;
+    using ConfigType = typename MutableDerivedAssetHandleType::Impl::Config;
 
 public:
   static MutableDerivedAssetHandleType Make(  const std::string &ref_,
