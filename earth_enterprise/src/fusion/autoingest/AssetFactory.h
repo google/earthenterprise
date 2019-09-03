@@ -19,97 +19,70 @@
 #include <common/SharedString.h>
 #include <common/khMetaData.h>
 
-// The goal of this class is to have a single place in the code where all
+// The goal of this namspace is to have a single place in the code where all
 // asset creation is handled.
-template<class MutableDerivedAssetHandleType>
-class AssetFactory
+namespace AssetFactory
 {
-private:
-    AssetFactory();
+  template<class MutableDerivedAssetHandleType, class ConfigType>
+  MutableDerivedAssetHandleType Make( const std::string &ref_,
+                                      AssetDefs::Type type_,
+                                      const khMetaData &meta,
+                                      const ConfigType &config)
+  {
     using Impl = typename MutableDerivedAssetHandleType::Impl;
-    using ConfigType = typename MutableDerivedAssetHandleType::Impl::Config;
-
-public:
-  static MutableDerivedAssetHandleType Make(  const std::string &ref_,
-                                              AssetDefs::Type type_,
-                                              const khMetaData &meta,
-                                              const ConfigType &config);
-
-  static MutableDerivedAssetHandleType Make(  const std::string &ref_,
-                                              AssetDefs::Type type_,
-                                              const std::vector<SharedString>& inputs_,
-                                              const khMetaData &meta,
-                                              const ConfigType &config);
-
-  static MutableDerivedAssetHandleType Make(  const std::string &ref_,
-                                              const std::vector<SharedString>& inputs_,
-                                              const khMetaData &meta,
-                                              const ConfigType &config);
-
-  static void MakeNew(const std::string &ref_,
-                                              const std::vector<SharedString>& inputs_,
-                                              const khMetaData &meta,
-                                              const ConfigType &config);
-};
-
-template<class MutableDerivedAssetHandleType>
-MutableDerivedAssetHandleType AssetFactory<MutableDerivedAssetHandleType>::Make(  const std::string &ref_,
-                                            AssetDefs::Type type_,
-                                            const khMetaData &meta,
-                                            const ConfigType &config)
-{
     return MutableDerivedAssetHandleType(std::make_shared<Impl>
                                             (AssetStorage::MakeStorage(
-                                         ref_, type_, 
-                                         Impl::EXPECTED_SUBTYPE,
-                                         std::vector<SharedString>(), meta),
-                                         config));
-}
+                                        ref_, type_, 
+                                        Impl::EXPECTED_SUBTYPE,
+                                        std::vector<SharedString>(), meta),
+                                        config));
+  }
 
-template<class MutableDerivedAssetHandleType>
-MutableDerivedAssetHandleType AssetFactory<MutableDerivedAssetHandleType>::Make(  const std::string &ref_,
-                                                AssetDefs::Type type_,
-                                                const std::vector<SharedString>& inputs_,
-                                                const khMetaData &meta,
-                                                const ConfigType &config)
-{
-    return MutableDerivedAssetHandleType(std::make_shared<Impl>
-                                            (AssetStorage::MakeStorage(
-                                         ref_, type_, 
-                                         Impl::EXPECTED_SUBTYPE,
-                                         inputs_, meta),
-                                         config));
-    
-}
-
-template<class MutableDerivedAssetHandleType>
-MutableDerivedAssetHandleType AssetFactory<MutableDerivedAssetHandleType>::Make(  const std::string &ref_,
-                                                const std::vector<SharedString>& inputs_,
-                                                const khMetaData &meta,
-                                                const ConfigType &config)
-{
-    return MutableDerivedAssetHandleType(std::make_shared<Impl>
-                                            (AssetStorage::MakeStorage(
-                                         ref_, Impl::EXPECTED_TYPE, 
-                                         Impl::EXPECTED_SUBTYPE,
-                                         inputs_, meta),
-                                         config));
-    
-}
-
-template<class MutableDerivedAssetHandleType>
-void AssetFactory<MutableDerivedAssetHandleType>::MakeNew(
-                                      const std::string &ref_,
+  template<class MutableDerivedAssetHandleType, class ConfigType>
+  MutableDerivedAssetHandleType Make( const std::string &ref_,
+                                      AssetDefs::Type type_,
                                       const std::vector<SharedString>& inputs_,
                                       const khMetaData &meta,
                                       const ConfigType &config)
-{
+  {
+    using Impl = typename MutableDerivedAssetHandleType::Impl;
+    return MutableDerivedAssetHandleType(std::make_shared<Impl>
+                                            (AssetStorage::MakeStorage(
+                                        ref_, type_, 
+                                        Impl::EXPECTED_SUBTYPE,
+                                        inputs_, meta),
+                                        config));
+  }
+
+  template<class MutableDerivedAssetHandleType, class ConfigType>
+  MutableDerivedAssetHandleType Make( const std::string &ref_,
+                                      const std::vector<SharedString>& inputs_,
+                                      const khMetaData &meta,
+                                      const ConfigType &config)
+  {
+    using Impl = typename MutableDerivedAssetHandleType::Impl;
+    return MutableDerivedAssetHandleType(std::make_shared<Impl>
+                                            (AssetStorage::MakeStorage(
+                                        ref_, Impl::EXPECTED_TYPE, 
+                                        Impl::EXPECTED_SUBTYPE,
+                                        inputs_, meta),
+                                        config));
+  }
+
+  template<class MutableDerivedAssetHandleType, class ConfigType>
+  void MakeNew( const std::string &ref_,
+                const std::vector<SharedString>& inputs_,
+                const khMetaData &meta,
+                const ConfigType &config)
+  {
+    using Impl = typename MutableDerivedAssetHandleType::Impl;
     MutableDerivedAssetHandleType asset = Find<MutableDerivedAssetHandleType>(ref_);
     if (asset) {
         throw khException(kh::tr("%1 '%2' already exists")
                           .arg(Impl::EXPECTED_SUBTYPE).arg(ref_));
     } else {
-        Make(ref_, inputs_, meta, config);
+        Make<MutableDerivedAssetHandleType, ConfigType>(ref_, inputs_, meta, config);
     }
+  }
 }
 #endif
