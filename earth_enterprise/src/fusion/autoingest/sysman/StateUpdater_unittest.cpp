@@ -68,7 +68,9 @@ class MockVersion : public AssetVersionImpl {
           onStateChangeCalled(0),
           notificationsSent(0),
           fatalLogFileWritten(false),
-          stateData({AssetDefs::New, AssetDefs::New, false, 0, 0}),
+          // Default the num*WaitingFor values to 999 instead of 0 to catch bugs where
+          // they are never set.
+          stateData({AssetDefs::New, AssetDefs::New, false, 999, 999}),
           stateChangeBehavior(NO_ERRORS) {
       type = AssetDefs::Imagery;
       state = STARTING_STATE;
