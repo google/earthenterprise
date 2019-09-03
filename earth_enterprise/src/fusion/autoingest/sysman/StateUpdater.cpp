@@ -15,7 +15,7 @@
  */
 
 #include "StateUpdater.h"
-#include "AssetVersionD.h"
+#include "AssetVersion.h"
 #include "common/notify.h"
 
 using namespace boost;
@@ -171,23 +171,23 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
         }
     };
 
+    // Helper struct for passing data back to callers of the below function.
+    struct UpdateStateData {
+      InputAndChildStateData stateData;
+      bool needRecalcState;
+    };
+
     // Loops through the inputs and children of an asset and calculates
     // everything the asset verion needs to know to figure out its state. This
     // data will be passed to the asset version so it can calculate its own
     // state.
-    void CalculateStateParameters(
+    UpdateStateData CalculateStateParameters(
         DependentStateTreeVertexDescriptor vertex,
-        const DependentStateTree & tree,
-        AssetDefs::State &stateByInputs,
-        AssetDefs::State &stateByChildren,
-        bool & blockersAreOffline,
-        uint32 & numInputsWaitingFor,
-        uint32 & numChildrenWaitingFor,
-        bool & needRecalcState) const {
+        const DependentStateTree & tree) const {
       InputStates inputStates;
       ChildStates childStates;
 
-      needRecalcState = tree[vertex].stateChanged;
+      bool needRecalcState = tree[vertex].stateChanged;
       auto edgeIters = out_edges(vertex, tree);
       auto edgeBegin = edgeIters.first;
       auto edgeEnd = edgeIters.second;
@@ -217,8 +217,11 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
         }
       }
 
-      inputStates.GetOutputs(stateByInputs, blockersAreOffline, numInputsWaitingFor);
-      childStates.GetOutputs(stateByChildren, numChildrenWaitingFor);
+      UpdateStateData data;
+      data.needRecalcState = needRecalcState;
+      inputStates.GetOutputs(data.stateData.stateByInputs, data.stateData.blockersAreOffline, data.stateData.numInputsWaitingFor);
+      childStates.GetOutputs(data.stateData.stateByChildren, data.stateData.numChildrenWaitingFor);
+      return data;
     }
 
   public:
@@ -244,16 +247,8 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
       // For all assets (including parents and listeners) update the state
       // based on the state of inputs and children.
       if (NeedComputeState(tree[vertex].state)) {
-        AssetDefs::State stateByInputs;
-        AssetDefs::State stateByChildren;
-        bool blockersAreOffline;
-        uint32 numInputsWaitingFor;
-        uint32 numChildrenWaitingFor;
-        bool needRecalcState;
-        CalculateStateParameters(
-              vertex, tree, stateByInputs, stateByChildren, blockersAreOffline,
-              numInputsWaitingFor, numChildrenWaitingFor, needRecalcState);
-        if (needRecalcState) {
+        const UpdateStateData data = CalculateStateParameters(vertex, tree);
+        if (data.needRecalcState) {
           AssetDefs::State calculatedState;
           // Run this in a separate block so that the asset version is released
           // before we try to update it.
@@ -266,8 +261,7 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
                      name.toString().c_str());
               return;
             }
-            calculatedState = version->CalcStateByInputsAndChildren(
-                  stateByInputs, stateByChildren, blockersAreOffline, numInputsWaitingFor, numChildrenWaitingFor);
+            calculatedState = version->CalcStateByInputsAndChildren(data.stateData);
           }
           // Set the state. "true" means we're done changing this asset's state.
           updater->SetState(vertex, calculatedState, true);

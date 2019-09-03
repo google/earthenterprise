@@ -24,13 +24,6 @@
 #include <map>
 #include <memory>
 
-class StateChangeException : public khException {
- public:
-  const std::string location;
-  StateChangeException(const std::string & msg, const std::string & loc) :
-    khException(msg), location(loc) {}
-};
-
 // ****************************************************************************
 // ***  AssetVersionImplD
 // ****************************************************************************
@@ -205,12 +198,7 @@ class LeafAssetVersionImplD : public virtual LeafAssetVersionImpl,
   virtual void DoClean(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual AssetDefs::State OnStateChange(AssetDefs::State newstate,
                                          AssetDefs::State oldstate) override;
-  virtual AssetDefs::State CalcStateByInputsAndChildren(
-      AssetDefs::State stateByInputs,
-      AssetDefs::State stateByChildren,
-      bool blockersAreOffline,
-      uint32 numInputsWaitingFor,
-      uint32 numChildrenWaitingFor) const;
+  virtual AssetDefs::State CalcStateByInputsAndChildren(const InputAndChildStateData &) const override;
 };
 
 
@@ -246,12 +234,7 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
   virtual void Cancel(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual void Rebuild(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual void DoClean(const std::shared_ptr<StateChangeNotifier> = nullptr);
-  virtual AssetDefs::State CalcStateByInputsAndChildren(
-      AssetDefs::State stateByInputs,
-      AssetDefs::State stateByChildren,
-      bool blockersAreOffline,
-      uint32 numInputsWaitingFor,
-      uint32 numChildrenWaitingFor) const;
+  virtual AssetDefs::State CalcStateByInputsAndChildren(const InputAndChildStateData &) const override;
   virtual void DependentChildren(std::vector<SharedString> &out) const override;
   virtual AssetDefs::State OnStateChange(AssetDefs::State newstate,
                                          AssetDefs::State oldstate) override;
