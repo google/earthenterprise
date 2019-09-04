@@ -17,17 +17,21 @@
 
 Import('third_party_env')
 
-apache_version = 'apache-2.2.32'
+apache_version = 'apache-2.4.39'
+apache_apr_version = 'apr-1.7.0'
+apache_apr_util_version = 'apr-util-1.6.1'
 mm_version = 'mm-1.4.2'
 apache_ge_version = apache_version.replace('apache', 'apache-ge')
 httpd_version = apache_version.replace('apache', 'httpd')
 
-apache_patches = ['apache-ge-enablemanual.patch',
-                  'apache-ge-htdocsallowoverride.patch',
-                  'apache-ge-httpd.conf.in-cgi-bin_admin.patch',
-                  'apache-ge-httpd.conf.in-handle_http_errors.patch',
-                  'apache-ge-httpd-ssl.conf.in-include_location_ssl.patch',
-                  'apache-ge-httpd-ssl.conf.in.patch'
+apache_patches = [
+                 'apache-ge-enablemanual.patch',
+                 'apache-ge-htdocsallowoverride.patch',
+                 'apache-ge-httpd.conf.in-cgi-bin_admin.patch',
+                 'apache-ge-httpd.conf.in-handle_http_errors.patch',
+                 'apache-ge-httpd-ssl.conf.in-include_location_ssl.patch',
+                 'apache-ge-httpd-ssl.conf.in.patch',
+                 'apache-ge-configure.patch'
                  ]
 
 num_cpu = GetOption('num_jobs')
@@ -38,6 +42,10 @@ build_root = '%s/%s' % (current_dir, apache_ge_version)
 apache_dir = Dir('#/third_party/apache2').abspath
 apache_source = File('#/../../earth_enterprise/third_party/apache2/%s.ta'
                      'r.gz' % apache_version.replace('apache', 'httpd')).abspath
+apache_apr_source = File('#/../../earth_enterprise/third_party/apache2/%s.ta'
+                     'r.gz' % apache_apr_version).abspath
+apache_apr_util_source = File('#/../../earth_enterprise/third_party/apache2/%s.ta'
+                     'r.gz' % apache_apr_util_version).abspath
 mm_source = File('#/../../earth_enterprise/third_party/mm/%s.tar.gz' %
                  mm_version).abspath
 patch_source = Dir('#/../../../geo/earth_enterprise/src/third_party/apache2'
@@ -54,13 +62,21 @@ root_dir = Dir(apache_env.exportdirs['root']).abspath
 # [1] Extract apache
 apache_target = '%s/.extract' % current_dir
 apache_extract = apache_env.Command(
-    apache_target, [apache_source, mm_source],
+    apache_target, [apache_source, apache_apr_source, apache_apr_util_source, mm_source],
     [apache_env.MultiCommand(
         'mkdir -p %s\n'
         'cd %s\n'
         'tar xzf %s\n'
         'tar xzf %s\n'
+        'cd %s/srclib\n'
+        'tar xzf %s\n'
+        'mv %s apr\n'
+        'tar xzf %s\n'
+        'mv %s apr-util\n'
         'touch %s' % (build_root, build_root, apache_source, mm_source,
+                      apache_version.replace('apache', 'httpd'),
+                      apache_apr_source, apache_apr_version,
+                      apache_apr_util_source, apache_apr_util_version,
                       apache_target))])
 
 # [2] Patch apache
@@ -72,7 +88,7 @@ apache_patch = apache_env.Command(
         'cd %s/%s\n'
         '%s\n'
         'touch %s' % (build_root, httpd_version,
-                      '\n'.join(map(lambda i: 'patch -g0 -p1 -s < %s' % (
+                      '\n'.join(map(lambda i: 'patch -g0 -p1 --verbose < %s' % (
                           apache_env.GetBuildPath(i)), apache_patches)),
                       apache_target))])
 
@@ -82,6 +98,8 @@ if apache_env['release'] or apache_env['optimize']:
   config_opt = '--disable-debug'
 else:
   config_opt = '--enable-debug'
+
+config_opt += ' --enable-socache-shmcb'
 
 # [4] Configure mm
 apache_target = '%s/.configure_mm' % current_dir

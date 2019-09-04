@@ -65,6 +65,5 @@ LoadModule wsgi_module modules/mod_wsgi.so
 
 
 <Directory "/opt/google/gehttpd/wsgi-bin">
-    Order deny,allow
-    Allow from all
+    Require all granted
 </Directory>
