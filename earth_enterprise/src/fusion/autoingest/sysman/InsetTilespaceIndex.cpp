@@ -18,120 +18,81 @@ File:        InsetTilespaceIndex.cpp
 Description:
 
 Changes:
-Description: Support for terrain "overlay" projects.
+
 
 ******************************************************************************/
 #include "fusion/autoingest/sysman/InsetTilespaceIndex.h"
 #include "common/khException.h"
 #include <boost/range/sub_range.hpp>
 #include <boost/range/as_literal.hpp>
+#include <boost/range/algorithm.hpp>
+#include <boost/range.hpp>
+#include <boost/range/adaptor/map.hpp>
+#include <boost/range/any_range.hpp>
 #include <map>
 #include <vector>
 #include <iostream>
 #include <stdint.h>
 #include <assert.h>
 
-const defautTilespace = khTilespaceMercator;
+QuadtreePath InsetTilespaceIndex::add(const khExtents <uint32> &extents) {
+    QuadtreePath quadtreeMbr = getQuadtreeMBR(extents);
 
-    private std::map<uint64, khExtents<uint64> _mbrExtentsMap;
-    
-    public uint64 InsetTilespaceIndex::add(  khExtents<T> extents& ) {
-        std::map index;
-        _mbrExtentsMap.get( space );
-        if ( !tilespacemap ) {
-            tilespacemap = std::map<space><map>;
-            _mbrExtentsMap.put( extents);
-        }
-        tsIndex = getTilespaceMBR( extents );
-        tilespacemap.put( tsIndex, extents );
-        return tsIndex;
+    //std::vector<const khExtents<uint32>*> mbrExtentsVec = _mbrExtentsVecMap.find( mbrHash );
+    std::vector<const khExtents <uint32> *> *mbrExtentsVec;
+    std::map<QuadtreePath, std::vector<const khExtents <uint32> *>>::iterator it;
+    it = _mbrExtentsVecMap.find(quadtreeMbr);
+
+    if (it == _mbrExtentsVecMap.end()) {
+        mbrExtentsVec = new std::vector<const khExtents <uint32> *>();
+        // _mbrExtentsVecMap.insert(  <uint64, std::vector<const khExtents <uint32>*>>::value_type(  mbrHash, *mbrExtentsVec );
+        _mbrExtentsVecMap.insert({quadtreeMbr, *mbrExtentsVec});
+    } else {
+        mbrExtentsVec = &(it->second);
     }
-
-    public uint64 InsetTilespaceIndex::getQuadTreeMBR(  khExtents<uint32> extents ) {
-        return qtHash( khTileAddr.getQuadtreeMBR( extents ) );
-    }
-
-    //     for (size_t i = 0; i < num_insets; ++i) {
-    //         const khVirtualRaster::InputTile& input_tile = virtraster.inputTiles[i];
-    //         khOffset<double> offset = input_tile.origin;
-    //         double degX = (input_tile.rastersize.width) * dX;
-    //         double degY = (input_tile.rastersize.height) * dY;
-    //         // Here khExtents expects lower left origin:
-    //         // This snippet lifted from RasterClusterAnalyzer
-    //         const khExtents<double> deg_extent(XYOrder,
-    //                                         std::min(offset.x(), offset.x() + degX),
-    //                                         std::max(offset.x(), offset.x() + degX),
-    //                                         std::min(offset.y(), offset.y() + degY),
-    //                                         std::max(offset.y(), offset.y() + degY));
-    //         const khLevelCoverage
-    //             cov_toplevel(tilespace,
-    //                         is_mercator ?
-    //                         khCutExtent::ConvertFromFlatToMercator(deg_extent) :
-    //                         deg_extent,
-    //                         toplevel, toplevel);
-    //         const khExtents<uint32>& extent = cov_toplevel.extents;
-    //         mosaic_extent.grow(extent);
-    //         sum_inset_area += extent.width() * extent.height();
-    //     }
-
-
-    //     return qtp;
-    // }
-
-
-
-    public std::vector<uint64> InsetTilespaceIndex::intersectingExtentsHashes( const QuadtreePath tilespaceMBR, uint32 minLevel, uint32 maxLevel) {
-        uint64 tilespaceMBR = qtHash(tilespaceMBR);
-        vector<uint64> qtHashKeys = _mbrExtentsMap.getKeys();
-        minIndex = 0;
-        maxQH = qtHash( tilespaceMBR );
-        maxIndex = std::find(qtHashKeys.begin(), qtHashKeys.end(), maxQH);
-        // TODO - use a range
-        // TODO sort them!
-        // TODO - deal with sort order, where QuadtreePath has the MSBits as
-
-        std::vector<int>  intersectingQtHashes = sub(&qtHashKeys[minIndex],&data[maxIndex]);
-        return intersectingHashes;
-    }
-
-    public std::vector<khExtents<uint32*>> InsetTilespaceIndex::intersectingExtents( const  QuadtreePath tilespaceMBR, uint32 minLevel, uint32 maxLevel) {
-        std::vector<int>  intersectingQtHashes = this.intersectingExtentHashes( tilespace, tilespaceMBR);
-        std::vector<khExtents<uint32>> intersectingExtents;
-        for ( auto qthash : intersectingQtHashes ) {
-            std::vector<khExtents<uint32>  extentsVec = _mbrExtentsMap[qthash];
-            intersectingExtents.insert(intersectingExtents.end(), extentsVec.begin(), extentsVec.end());
-        };
-        return    intersectingExtents();
-    }
-
-
-
-
-    protected QuadTreePath InsetTilespaceIndex::getQuadTreeMBR( const khExtents<uint32> extents) {
-        // TODO
-        return new QuadTreePath();
-    }
-
-    public InsetTilespaceIndex::InsetTileSpaceIndex() {};
-
-    protected uint64 InsetTilespaceIndex::findParentQTIndex( QuadtreePath tilespaceMBR ) {
-        // TODO
-        return 0;
-    }
-
-    protected uint64 InsetTilespaceIndex::findFirstChildQTIndex( QuadtreePath tilespaceMBR ) {
-        // TODO
-        return 0;
-    }
-
-    protected uint64 InsetTilespaceIndex::findLastQTIndex( QuadtreePath tilespaceMBR ) {
-        // TODO
-        return 0;
-    }
-
-    protected std::vector<uint64> InsetTilespaceIndex::getQtMBRRange( uint64 minQtMBR, uint64 maxQtMBR) {
-        std::vector<uint64> range;
-        return range;
-    }
-
+    mbrExtentsVec->push_back(&extents);
+    return quadtreeMbr;
 }
+
+QuadtreePath InsetTilespaceIndex::getQuadtreeMBR(khExtents <uint32> extents) {
+    //TODO
+    QuadtreePath result(0);
+    return result;
+}
+
+std::vector <QuadtreePath>
+InsetTilespaceIndex::intersectingExtentsQuadtreePaths(QuadtreePath quadtreeMbr, uint32 minLevel, uint32 maxLevel) {
+    //uint64 mbrHash = qtpath.internalPath();
+    //std::vector <QuadtreePath>  mbrHashVec = _mbrExtentsVecMap.getKeys();
+    std::vector <QuadtreePath> mbrHashVec;
+    boost::copy(_mbrExtentsVecMap | boost::adaptors::map_keys,
+                std::back_inserter(mbrHashVec));
+    std::vector <QuadtreePath> intersectingMbrHashes;
+    for (QuadtreePath &otherMbr : mbrHashVec) {
+        if (QuadtreePath(otherMbr).Level() >= minLevel && QuadtreePath(otherMbr).Level() <= maxLevel) {
+            if (QuadtreePath(otherMbr).IsAncestorOf(quadtreeMbr) || quadtreeMbr.IsAncestorOf(QuadtreePath(otherMbr))) {
+                intersectingMbrHashes.push_back(otherMbr);
+            }
+        }
+    }
+    return intersectingMbrHashes;
+}
+
+
+std::vector<const khExtents < uint32>*>
+
+InsetTilespaceIndex::intersectingExtents(const QuadtreePath quadtreeMbr, uint32 minLevel, uint32 maxLevel) {
+    std::vector <QuadtreePath> intersectingQuadtreeMbrs = intersectingExtentsQuadtreePaths(quadtreeMbr, minLevel,
+                                                                                           maxLevel);
+    std::vector < const khExtents < uint32 > * > intersectingExtentsVec;
+    for (auto otherMbr : intersectingQuadtreeMbrs) {
+        std::vector<const khExtents <uint32> *> extentsVec = _mbrExtentsVecMap[otherMbr];
+        intersectingExtentsVec.insert(intersectingExtentsVec.end(), extentsVec.begin(), extentsVec.end());
+    };
+    return intersectingExtentsVec;
+}
+
+
+
+
+

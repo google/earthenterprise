@@ -165,10 +165,6 @@ public:
     }
 
 
-    const QuadtreePath getExtentQuadTreeMBR(const khExtents <uint32> *&extents) {
-        return QuadtreePath();
-    }
-
     // TODO - set gencov
     // Build an inset coverage from NORM extents 
     // IMPORTANT: (Note the different c'tor's paramter order between DEGREES and NORM )
@@ -185,7 +181,7 @@ public:
         uint beginMinifyLevel = 1;
         uint endMinifyLevel = 19;
         std::vector <uint32> neededIndexes; //This is our return value...
-        std::vector  <const khExtents<uint32>*> matchingExtents;
+        std::vector<const khExtents <uint32> *> matchingExtents;
 
         FindNeededImageryInsets(coverage,
                                 inputExtents,
@@ -193,16 +189,16 @@ public:
                                 neededIndexes,
                                 (uint) beginMinifyLevel,
                                 (uint) endMinifyLevel);
-        for ( uint index : neededIndexes ) {
-            const khExtents<uint32>* ex = inputExtents[index];
+        for (uint index : neededIndexes) {
+            const khExtents <uint32> *ex = inputExtents[index];
             matchingExtents.push_back(ex);
         };
         return matchingExtents;
     }
 
-    std::vector <const khExtents<uint32>*>
+    std::vector<const khExtents <uint32> *>
     findInsetsExperimentalAlgo(const khInsetCoverage &coverage, std::vector<const khExtents <uint32> *> &inputExtents) {
-        std::vector <const khExtents<uint32>*> matchingExtentsVec;
+        std::vector<const khExtents <uint32> *> matchingExtentsVec;
         std::vector <khExtents<uint32>> requiredExtents = coverage.RawExtentsVec();
         InsetTilespaceIndex qtIndex;
 
@@ -212,9 +208,9 @@ public:
 
 
         for (const khExtents <uint32> *extents : inputExtents) {
-            auto extentsMBR = getExtentQuadTreeMBR(extents);
-            std::vector < khExtents < uint32 > * > foundExtentsVec = qtIndex.intersectingExtents(
-                    extentsMBR.internalPath(),
+            auto extentsMBR = qtIndex.getQuadtreeMBR(*extents);
+            std::vector<const khExtents <uint32> *> foundExtentsVec = qtIndex.intersectingExtents(
+                    extentsMBR,
                     coverage.beginLevel(),
                     coverage.endLevel());
             foundExtentsVec.insert(foundExtentsVec.end(), foundExtentsVec.begin(), foundExtentsVec.end());
