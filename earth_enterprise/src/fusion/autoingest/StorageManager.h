@@ -30,6 +30,9 @@
 #include "common/SharedString.h"
 #include "StorageManagerAssetHandle.h"
 #include "AssetSerializer.h"
+#include "AssetFactory.h"
+
+using namespace AssetFactory;
 
 // Items stored in the storage manager must inherit from the StorageManaged class
 class StorageManaged {
@@ -352,56 +355,6 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
     }
   }
   return true;
-}
-
-template<class AssetType>
-AssetType Find(const std::string & ref) {
-  return Find<AssetType>(ref, AssetType::Impl::EXPECTED_TYPE);
-}
-
-template<class AssetType>
-AssetType Find(const std::string & ref, const AssetDefs::Type & type)
-{
-  assert(type != AssetDefs::Invalid);
-  const std::string subtype = AssetType::Impl::EXPECTED_SUBTYPE;
-  try {
-    AssetType asset(ref);
-    if (asset &&
-        (asset->type == type) &&
-        (asset->subtype == subtype)) {
-        return asset;
-    }
-  } catch (...) {
-      // do nothing - don't even generate any warnings
-  }
-  return AssetType();
-}
-
-template<class VersionType>
-void ValidateRefForInput(const std::string & ref) {
-  return ValidateRefForInput<VersionType>(ref, VersionType::Impl::EXPECTED_TYPE);
-}
-
-template<class VersionType>
-void ValidateRefForInput(const std::string & ref, const AssetDefs::Type & type)
-{
-  assert(type != AssetDefs::Invalid);
-  using AssetType = typename VersionType::Impl::AssetType;
-  const std::string subtype = VersionType::Impl::EXPECTED_SUBTYPE;
-  if (AssetVersionRef(ref).Version() == "current") {
-    AssetType asset = Find<AssetType>(ref, type);
-    if (!asset) {
-      throw std::invalid_argument(
-          "No such " + ToString(type) + " " + subtype + " asset: " + ref);
-    }
-  } else {
-    VersionType version = Find<VersionType>(ref, type);
-    if (!version) {
-      throw std::invalid_argument(
-          "No such " + ToString(type) + " " + subtype + " asset version: " +
-          ref);
-    }
-  }
 }
 
 #endif // STORAGEMANAGER_H
