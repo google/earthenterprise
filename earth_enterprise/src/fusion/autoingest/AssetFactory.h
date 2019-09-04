@@ -23,6 +23,56 @@
 // asset creation is handled.
 namespace AssetFactory
 {
+  template<class AssetType>
+  AssetType Find(const std::string & ref, const AssetDefs::Type & type)
+  {
+    assert(type != AssetDefs::Invalid);
+    const std::string subtype = AssetType::Impl::EXPECTED_SUBTYPE;
+    try {
+      AssetType asset(ref);
+      if (asset &&
+          (asset->type == type) &&
+          (asset->subtype == subtype)) {
+          return asset;
+      }
+    } catch (...) {
+        // do nothing - don't even generate any warnings
+    }
+    return AssetType();
+  }
+
+  template<class AssetType>
+  AssetType Find(const std::string & ref) {
+    return Find<AssetType>(ref, AssetType::Impl::EXPECTED_TYPE);
+  }
+
+  template<class VersionType>
+  void ValidateRefForInput(const std::string & ref, const AssetDefs::Type & type)
+  {
+    assert(type != AssetDefs::Invalid);
+    using AssetType = typename VersionType::Impl::AssetType;
+    const std::string subtype = VersionType::Impl::EXPECTED_SUBTYPE;
+    if (AssetVersionRef(ref).Version() == "current") {
+      AssetType asset = Find<AssetType>(ref, type);
+      if (!asset) {
+        throw std::invalid_argument(
+            "No such " + ToString(type) + " " + subtype + " asset: " + ref);
+      }
+    } else {
+      VersionType version = Find<VersionType>(ref, type);
+      if (!version) {
+        throw std::invalid_argument(
+            "No such " + ToString(type) + " " + subtype + " asset version: " +
+            ref);
+      }
+    }
+  }  
+  
+  template<class VersionType>
+  void ValidateRefForInput(const std::string & ref) {
+    return ValidateRefForInput<VersionType>(ref, VersionType::Impl::EXPECTED_TYPE);
+  }
+ 
   template<class MutableDerivedAssetHandleType, class ConfigType>
   MutableDerivedAssetHandleType Make( const std::string &ref_,
                                       AssetDefs::Type type_,
@@ -30,8 +80,9 @@ namespace AssetFactory
                                       const ConfigType &config)
   {
     using Impl = typename MutableDerivedAssetHandleType::Impl;
+    using AssetStorageType = typename Impl::Base;
     return MutableDerivedAssetHandleType(std::make_shared<Impl>
-                                            (AssetStorage::MakeStorage(
+                                            (AssetStorageType::MakeStorage(
                                         ref_, type_, 
                                         Impl::EXPECTED_SUBTYPE,
                                         std::vector<SharedString>(), meta),
@@ -46,8 +97,9 @@ namespace AssetFactory
                                       const ConfigType &config)
   {
     using Impl = typename MutableDerivedAssetHandleType::Impl;
+    using AssetStorageType = typename Impl::Base;
     return MutableDerivedAssetHandleType(std::make_shared<Impl>
-                                            (AssetStorage::MakeStorage(
+                                            (AssetStorageType::MakeStorage(
                                         ref_, type_, 
                                         Impl::EXPECTED_SUBTYPE,
                                         inputs_, meta),
@@ -61,8 +113,9 @@ namespace AssetFactory
                                       const ConfigType &config)
   {
     using Impl = typename MutableDerivedAssetHandleType::Impl;
+    using AssetStorageType = typename Impl::Base;
     return MutableDerivedAssetHandleType(std::make_shared<Impl>
-                                            (AssetStorage::MakeStorage(
+                                            (AssetStorageType::MakeStorage(
                                         ref_, Impl::EXPECTED_TYPE, 
                                         Impl::EXPECTED_SUBTYPE,
                                         inputs_, meta),
