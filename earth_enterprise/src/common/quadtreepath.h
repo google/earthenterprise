@@ -48,17 +48,12 @@ class QuadtreePath {
   static const uint32 kStoreSize = QuadtreePathConstants::kStoreSize;  // bytes required to store
   static const uint32 kChildCount = QuadtreePathConstants::kChildCount;  // number of children at each level
 
-  // TODO - this is evil, accessing the internal path bits.  Used for this spike only to validate the concept.
-  QuadtreePath(uint64 path) : path_(path) { assert(IsValid()); }
   QuadtreePath() : path_(0) {}
   QuadtreePath(uint32 level, uint32 row, uint32 col);
   QuadtreePath(uint32 level, const uchar blist[kMaxLevel]);
   QuadtreePath(const std::string &blist);
   // copy other path, but prune at given level
   QuadtreePath(const QuadtreePath &other, uint32 level);
-
-  // TODO - this is evil, accessing the internal path bits.  Used for this spike only to validate the concept.
-  inline uint64 internalPath() { return path_;}
 
   inline bool IsValid() const {         // level in range, no stray bits
     return Level() <= kMaxLevel
@@ -217,8 +212,7 @@ class QuadtreePath {
 
  private:
   void FromBranchlist(uint32 level, const uchar blist[]);
-  // TODO _ undo the evil of making this public
-  //  QuadtreePath(uint64 path) : path_(path) { assert(IsValid()); }
+  QuadtreePath(uint64 path) : path_(path) { assert(IsValid()); }
   static const uint32 kLevelBits = 2;       // bits per level in packed path_
   static const uint64 kLevelBitMask = 0x03;
   static const uint32 kTotalBits = 64;      // total storage bits
@@ -233,19 +227,11 @@ class QuadtreePath {
   inline uint32 LevelBitsAtPos(uint32 position) const {
     return (path_ >> (kTotalBits - (position+1)*kLevelBits)) & kLevelBitMask;
   }
-  // inline uint64 levelQuadOrderedPathBits() const {  
-  //     return ( (path_ & kPathMask) >> (kTotalBits - kMaxLevel * kLevelBits) )
-  //             ^ ( (path_ & kLevelBitMask) << (kMaxLevel * kLevelBits) )  }
-  // inline QuadTreePath QTPFromLevelQuadOrderedPathBits( uint64  lqpb ) const {
-  //     const return new QuadTreePath(( lqpb & (~(~uint64(0) >> (kLevelBits)) &   )) ;
-  // }
 
   friend class QuadtreePathUnitTest;
-  friend class InsetTilespaceIndex;
   // This is the only data which should be stored in an instance of
   // this class
   uint64 path_;
-
 };
 
 #endif  // QUADTREEPATH_H__
