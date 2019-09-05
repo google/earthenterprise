@@ -56,8 +56,7 @@ QuadtreePath InsetTilespaceIndex::add(const khExtents <uint32> &extents) {
 
 QuadtreePath InsetTilespaceIndex::getQuadtreeMBR(khExtents <uint32> extents) {
     //TODO
-    QuadtreePath result(0);
-    return result;
+    return QuadtreePath();
 }
 
 std::vector <QuadtreePath>
