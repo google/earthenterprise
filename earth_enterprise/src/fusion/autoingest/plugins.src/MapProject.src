@@ -80,8 +80,8 @@ MapProjectAssetImplD::HandleEditRequest(const MapProjectEditRequest &req)
   std::vector<SharedString> inputs;
 
   MutableMapProjectAssetD project =
-    MapProjectFactory::FindMake(projname, inputs,
-                                req.meta, req.config);
+    AssetFactory::FindMake<MutableMapProjectAssetD, MapProjectAssetD, MapProjectConfig>
+        (projname, inputs, req.meta, req.config);
 
   project->SyncInputRefs();
 }

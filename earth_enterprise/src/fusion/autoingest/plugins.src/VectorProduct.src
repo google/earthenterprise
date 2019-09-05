@@ -90,10 +90,11 @@ VectorProductAssetImplD::HandleImportRequest(const VectorProductImportRequest &r
 
   // find/make our target asset
   MutableVectorProductAssetD asset =
-    VectorProductFactory::FindMake(assetname,
-                                   std::vector<SharedString>(),
-                                   req.meta,
-                                   req.config);
+    AssetFactory::FindMake<MutableVectorProductAssetD, VectorProductAssetD, VectorProductConfig>
+        (assetname,
+         std::vector<SharedString>(),
+         req.meta,
+         req.config);
   if (!asset) {
     throw khException(kh::tr("Unable to create vector asset ") + assetname);
   }

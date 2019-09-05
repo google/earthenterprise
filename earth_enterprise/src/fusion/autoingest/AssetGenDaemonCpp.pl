@@ -120,28 +120,6 @@ ${name}Factory::SubAssetName(
                                    $actualtypearg, "$subtype");
 }
 
-
-
-Mutable${name}AssetD
-${name}Factory::FindMake(const std::string &ref_ $formaltypearg,
-                         $formalinputarg
-                         const khMetaData &meta_,
-                         const $config& config_)
-{
-    // keep hold of it as a mutable so we can change/create it and
-    // have the changes automatically saved
-    Mutable${name}AssetD asset = Find<${name}AssetD>(ref_, $typeref);
-    if (asset) {
-        asset->Modify($forwardinputarg meta_, config_);
-        return asset;
-    } else {
-        return AssetFactory::Make<Mutable${name}AssetD, $config>(ref_ $forwardtypearg,
-                    $forwardinputarg
-                    meta_, config_);
-    }
-}
-
-
 Mutable${name}AssetD
 ${name}Factory::FindAndModify(const std::string &ref_ $formaltypearg,
                               $formalinputarg
@@ -170,24 +148,11 @@ ${name}Factory::FindMakeAndUpdate(
         $formalExtraUpdateArg)
 {
 EOF
-my $len_;
-my $type;
-$type = $forwardtypearg;
-$len_ = length $forwardtypearg;
-if ($len_ <= 1)
-{
-
-$type= ",".$typeref;
-print $fh <<EOF;
-    // forwardtypearg is empty => $type
-EOF
-}
 
 print $fh <<EOF;
 
-    Mutable${name}AssetD asset = /*FindMake*/
-                                 AssetFactory::FindMake_<Mutable${name}AssetD,${name}AssetD,$config>
-                                 (ref_ $type,
+    Mutable${name}AssetD asset = AssetFactory::FindMake<Mutable${name}AssetD,${name}AssetD,$config>
+                                 (ref_ $forwardtypearg,
                                           $forwardinputarg meta_, config_);
     bool needed = false;
     return asset->MyUpdate(needed $forwardcachedinputarg

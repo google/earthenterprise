@@ -89,14 +89,41 @@ namespace AssetFactory
                                         config));
   }
 
+  template<class MutableDerivedAssetHandleType, class ConfigType>
+  MutableDerivedAssetHandleType Make( const std::string &ref_,
+                                      AssetDefs::Type type_,
+                                      const std::vector<SharedString>& inputs_,
+                                      const khMetaData &meta,
+                                      const ConfigType &config)
+  {
+    using Impl = typename MutableDerivedAssetHandleType::Impl;
+    using AssetStorageType = typename Impl::Base;
+    return MutableDerivedAssetHandleType(std::make_shared<Impl>
+                                            (AssetStorageType::MakeStorage(
+                                        ref_, type_,
+                                        Impl::EXPECTED_SUBTYPE,
+                                        inputs_, meta),
+                                        config));
+  }
 
+  template<class MutableDerivedAssetHandleType, class ConfigType>
+  MutableDerivedAssetHandleType Make( const std::string &ref_,
+                                      const std::vector<SharedString>& inputs_,
+                                      const khMetaData &meta,
+                                      const ConfigType &config)
+  {
+    using Impl = typename MutableDerivedAssetHandleType::Impl;
+    using AssetStorageType = typename Impl::Base;
+    return MutableDerivedAssetHandleType(std::make_shared<Impl>
+                                            (AssetStorageType::MakeStorage(
+                                        ref_, Impl::EXPECTED_TYPE,
+                                        Impl::EXPECTED_SUBTYPE,
+                                        inputs_, meta),
+                                        config));
+  }
 
-
-
-
-  ////////////////////////////////////////////////////////////////
   template<class MutableDerivedAssetHandleType, class AssetType, class ConfigType>
-  MutableDerivedAssetHandleType FindMake_(const std::string& ref_,
+  MutableDerivedAssetHandleType FindMake(const std::string& ref_,
                                           AssetDefs::Type type_,
                                           const khMetaData& meta,
                                           const ConfigType& config)
@@ -111,7 +138,7 @@ namespace AssetFactory
   }
 
   template<class MutableDerivedAssetHandleType, class AssetType, class ConfigType>
-  MutableDerivedAssetHandleType FindMake_(const std::string& ref_,
+  MutableDerivedAssetHandleType FindMake(const std::string& ref_,
                                           AssetDefs::Type type_,
                                           const std::vector<SharedString>& inputs_,
                                           const khMetaData& meta,
@@ -125,46 +152,20 @@ namespace AssetFactory
       }
       return Make<MutableDerivedAssetHandleType, ConfigType>(ref_, type_, inputs_, meta, config);
   }
-  ///////////////////////////////////////////////////////////////
 
-
-
-
-
-
-
-
-  template<class MutableDerivedAssetHandleType, class ConfigType>
-  MutableDerivedAssetHandleType Make( const std::string &ref_,
-                                      AssetDefs::Type type_,
-                                      const std::vector<SharedString>& inputs_,
-                                      const khMetaData &meta,
-                                      const ConfigType &config)
+  template <class MutableDerivedAssetHandleType, class AssetType, class ConfigType>
+  MutableDerivedAssetHandleType FindMake(const std::string& ref_,
+                                          const std::vector<SharedString>& inputs_,
+                                          const khMetaData& meta,
+                                          const ConfigType& configs)
   {
-    using Impl = typename MutableDerivedAssetHandleType::Impl;
-    using AssetStorageType = typename Impl::Base;
-    return MutableDerivedAssetHandleType(std::make_shared<Impl>
-                                            (AssetStorageType::MakeStorage(
-                                        ref_, type_, 
-                                        Impl::EXPECTED_SUBTYPE,
-                                        inputs_, meta),
-                                        config));
-  }
-
-  template<class MutableDerivedAssetHandleType, class ConfigType>
-  MutableDerivedAssetHandleType Make( const std::string &ref_,
-                                      const std::vector<SharedString>& inputs_,
-                                      const khMetaData &meta,
-                                      const ConfigType &config)
-  {
-    using Impl = typename MutableDerivedAssetHandleType::Impl;
-    using AssetStorageType = typename Impl::Base;
-    return MutableDerivedAssetHandleType(std::make_shared<Impl>
-                                            (AssetStorageType::MakeStorage(
-                                        ref_, Impl::EXPECTED_TYPE, 
-                                        Impl::EXPECTED_SUBTYPE,
-                                        inputs_, meta),
-                                        config));
+     MutableDerivedAssetHandleType asset = Find<AssetType>(ref_);
+     if (asset)
+     {
+         asset->Modify(inputs_, meta, configs);
+         return asset;
+     }
+     return Make<MutableDerivedAssetHandleType, ConfigType> (ref_, inputs_, meta, configs);
   }
 
   template<class MutableDerivedAssetHandleType, class ConfigType>
