@@ -169,7 +169,25 @@ ${name}Factory::FindMakeAndUpdate(
         $formalcachedinputarg
         $formalExtraUpdateArg)
 {
-    Mutable${name}AssetD asset = FindMake(ref_ $forwardtypearg,
+EOF
+my $len_;
+my $type;
+$type = $forwardtypearg;
+$len_ = length $forwardtypearg;
+if ($len_ <= 1)
+{
+
+$type= ",".$typeref;
+print $fh <<EOF;
+    // forwardtypearg is empty => $type
+EOF
+}
+
+print $fh <<EOF;
+
+    Mutable${name}AssetD asset = /*FindMake*/
+                                 AssetFactory::FindMake_<Mutable${name}AssetD,${name}AssetD,$config>
+                                 (ref_ $type,
                                           $forwardinputarg meta_, config_);
     bool needed = false;
     return asset->MyUpdate(needed $forwardcachedinputarg
