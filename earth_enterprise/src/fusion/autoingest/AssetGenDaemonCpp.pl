@@ -578,14 +578,14 @@ if ($haveBindConfig) {
     if (!IsUpToDate(bound_cofig)) {
         Mutable${name}AssetD self(GetRef());
         Mutable${name}AssetVersionD newver =
-            MakeNewVersion<Mutable${name}AssetD, ${name}AssetImplD::Config, Mutable${name}AssetVersionD>(self, bound_config); //self->MakeNewVersion(bound_config);
+            MakeNewVersion<Mutable${name}AssetD, ${name}AssetImplD::Config, Mutable${name}AssetVersionD>(self, bound_config);
 EOF
 }else {
     print $fh <<EOF;
     // now see if I'm up to date
     if (!IsUpToDate()) {
         Mutable${name}AssetD self(GetRef());
-        Mutable${name}AssetVersionD newver = MakeNewVersion<Mutable${name}AssetD, Mutable${name}AssetVersionD>(self);//self->MakeNewVersion();
+        Mutable${name}AssetVersionD newver = MakeNewVersion<Mutable${name}AssetD, Mutable${name}AssetVersionD>(self);
 EOF
 }
 
