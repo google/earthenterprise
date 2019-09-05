@@ -168,7 +168,7 @@ namespace AssetFactory
   }
 
   template<class MutableDerivedAssetHandleType, class ConfigType>
-  void MakeNew( const std::string &ref_,
+  MutableDerivedAssetHandleType MakeNew( const std::string &ref_,
                 const std::vector<SharedString>& inputs_,
                 const khMetaData &meta,
                 const ConfigType &config)
@@ -179,7 +179,7 @@ namespace AssetFactory
         throw khException(kh::tr("%1 '%2' already exists")
                           .arg(Impl::EXPECTED_SUBTYPE).arg(ref_));
     } else {
-        Make<MutableDerivedAssetHandleType, ConfigType>(ref_, inputs_, meta, config);
+        return Make<MutableDerivedAssetHandleType, ConfigType>(ref_, inputs_, meta, config);
     }
   }
 }
