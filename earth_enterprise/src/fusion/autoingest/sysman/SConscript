@@ -178,3 +178,8 @@ env.test('StateUpdater_unittest',
     LIBS=['gegdal', 'geraster', 'gesearchtabs', 'genet', 'gepublish', 'gefconfigutil',
       'geindex_r', 'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'qt-mt', 'xerces-c', 'geos',
       'gtest'])
+
+env.test('InsetTilespaceIndex_test',
+          [ 'InsetTilespaceIndex_test.cpp',
+            'InsetTilespaceIndex.o'],
+          LIBS=['geautoingest', 'gemiscconfig','geutil', 'gecommon','gtest'])

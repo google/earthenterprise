@@ -202,9 +202,6 @@ gemiscconfig = env.sharedLib('gemiscconfig',
 
 env.install('common_lib', [geautoingest, gemiscconfig])
 
-env.test('InsetTilespaceIndex_test',
-         'InsetTilespaceIndex_test.cpp',
-         LIBS=['geautoingest', 'gemiscconfig','geutil', 'gecommon','gtest'])
 
 env.test('AssetDefsExtra_unittest',
          'AssetDefsExtra_unittest.cpp',
