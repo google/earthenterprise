@@ -84,11 +84,10 @@ CombinedRPAssetVersionImpl::PreviewRef(void) const
 
 // ===== CombinedRPAssetD.h =====
 class CombinedRPAssetVersionImplD {
- protected:
-  virtual void OnStateChange(AssetDefs::State newstate,
-                             AssetDefs::State oldstate);
- public:
-  virtual void DependentChildren(std::vector<SharedString> &out) const;
+public:
+  virtual AssetDefs::State OnStateChange(AssetDefs::State newstate,
+                                         AssetDefs::State oldstate) override;
+  virtual void DependentChildren(std::vector<SharedString> &out) const override;
 };
 
 
@@ -102,7 +101,7 @@ class CombinedRPAssetVersionImplD {
 #include <khException.h>
 
 
-void
+AssetDefs::State
 CombinedRPAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
                                               AssetDefs::State oldstate)
 {
@@ -121,6 +120,7 @@ CombinedRPAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
       meta.SetValue("minlevel", rptr->minLevel());
     }
   }
+  return state;
 }
 
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "AssetVersion.h"
+#include "AssetVersionD.h"
 #include "gee_version.h"
 #include "StateUpdater.h"
 
@@ -36,29 +36,46 @@ const string SUFFIX = "?version=1";
 AssetKey fix(AssetKey ref) {
   return ref.toString() + SUFFIX;
 }
+AssetKey unfix(AssetKey ref) {
+  string str = ref.toString();
+  return str.erase(ref.toString().size() - SUFFIX.size());
+}
 
 const AssetDefs::State STARTING_STATE = AssetDefs::Blocked;
 const AssetDefs::State CALCULATED_STATE = AssetDefs::InProgress;
 
+enum OnStateChangeBehavior {
+  NO_ERRORS,
+  STATE_CHANGE_EXCEPTION,
+  STD_EXCEPTION,
+  UNKNOWN_EXCEPTION,
+  CHANGE_NUM_CHILDREN,
+  RETURN_NEW_STATE
+};
+
 class MockVersion : public AssetVersionImpl {
   public:
-    bool stateSet;
     bool loadedMutable;
+    int onStateChangeCalled;
     int notificationsSent;
+    mutable bool fatalLogFileWritten;
     mutable AssetDefs::State stateByInputsVal;
     mutable AssetDefs::State stateByChildrenVal;
     mutable bool blockersAreOfflineVal;
     mutable uint32 numWaitingForVal;
+    OnStateChangeBehavior stateChangeBehavior;
     vector<AssetKey> dependents;
 
     MockVersion()
-        : stateSet(false),
-          loadedMutable(false),
+        : loadedMutable(false),
+          onStateChangeCalled(0),
           notificationsSent(0),
+          fatalLogFileWritten(false),
           stateByInputsVal(AssetDefs::Bad),
           stateByChildrenVal(AssetDefs::Bad),
           blockersAreOfflineVal(false),
-          numWaitingForVal(-1) {
+          numWaitingForVal(-1),
+          stateChangeBehavior(NO_ERRORS) {
       type = AssetDefs::Imagery;
       state = STARTING_STATE;
     }
@@ -69,7 +86,7 @@ class MockVersion : public AssetVersionImpl {
     MockVersion(const MockVersion & that) : MockVersion() {
       name = that.name; // Don't add the suffix - the other MockVersion already did
     }
-    void DependentChildren(vector<SharedString> & d) const {
+    void DependentChildren(vector<SharedString> & d) const override {
       for(auto dependent : dependents) {
         d.push_back(dependent);
       }
@@ -78,22 +95,42 @@ class MockVersion : public AssetVersionImpl {
         AssetDefs::State stateByInputs,
         AssetDefs::State stateByChildren,
         bool blockersAreOffline,
-        uint32 numWaitingFor) const {
+        uint32 numWaitingFor) const override {
       stateByInputsVal = stateByInputs;
       stateByChildrenVal = stateByChildren;
       blockersAreOfflineVal = blockersAreOffline;
       numWaitingForVal = numWaitingFor;
       return CALCULATED_STATE;
     }
-    void SetMyStateOnly(AssetDefs::State newState, bool sendNotifications) {
-      stateSet = true;
-      if (sendNotifications) ++notificationsSent;
+    virtual AssetDefs::State OnStateChange(AssetDefs::State, AssetDefs::State) override {
+      ++onStateChangeCalled;
+      switch (stateChangeBehavior) {
+        case STATE_CHANGE_EXCEPTION:
+          throw StateChangeException("Custom state change error", "test code");
+        case STD_EXCEPTION:
+          throw std::exception();
+        case UNKNOWN_EXCEPTION:
+          throw "Unknown exception";
+        case CHANGE_NUM_CHILDREN:
+          children.push_back(fix("b"));
+          break;
+        case RETURN_NEW_STATE:
+          // Return different states on two iterations
+          if (state == CALCULATED_STATE) return AssetDefs::Waiting;
+          else if (state == AssetDefs::Waiting) return AssetDefs::Queued;
+        case NO_ERRORS:
+          break;
+      }
+      return state;
     }
-    
+    virtual void WriteFatalLogfile(const std::string &, const std::string &) const throw() override {
+      fatalLogFileWritten = true;
+    }
+
     // Not used - only included to make MockVersion non-virtual
-    string PluginName(void) const { return string(); }
-    void GetOutputFilenames(vector<string> &) const {}
-    string GetOutputFilename(uint) const { return string(); }
+    string PluginName(void) const override { return string(); }
+    void GetOutputFilenames(vector<string> &) const override {}
+    string GetOutputFilename(uint) const override { return string(); }
 };
 
 using VersionMap = map<AssetKey, shared_ptr<MockVersion>>;
@@ -108,6 +145,7 @@ class MockStorageManager : public StorageManagerInterface<AssetVersionImpl> {
         assert(version);
         return version;
       }
+      cout << "Could not find asset version " << ref << endl;
       assert(false);
       return nullptr;
     }
@@ -125,20 +163,6 @@ class MockStorageManager : public StorageManagerInterface<AssetVersionImpl> {
     }
 };
 
-class StateUpdaterTest : public testing::Test {
-  protected:
-   MockStorageManager sm;
-   StateUpdater updater;
-  public:
-   StateUpdaterTest() : sm(), updater(&sm) {}
-};
-
-void SetVersions(MockStorageManager & sm, vector<MockVersion> versions) {
-  for (auto & version: versions) {
-    sm.AddVersion(version.name, version);
-  }
-}
-
 // The two functions below pull the pointer out of the AssetHandle and use it
 // directly, which is really bad. We can get away with it in test code, but we
 // should never do this in production code. Hopefully the production code will
@@ -149,12 +173,40 @@ const MockVersion * GetVersion(MockStorageManager & sm, const AssetKey & key) {
   return dynamic_cast<const MockVersion *>(handle.operator->());
 }
 MockVersion * GetMutableVersion(MockStorageManager & sm, const AssetKey & key) {
+  // This doesn't count as loading the asset mutable. We only care if the
+  // state udpater loads it mutable. Thus, we first get it non-mutable so we
+  // can record whether it's been loaded mutable and then set it back to
+  // whatever it was at the end of this function.
+  bool wasLoadedMutable = GetVersion(sm, key)->loadedMutable;
   AssetHandle<AssetVersionImpl> handle = sm.GetMutable(fix(key));
   auto ptr = dynamic_cast<MockVersion *>(handle.operator->());
-  // This doesn't count as loading the asset mutable. We only care if the
-  // state udpater loads it mutable.
-  ptr->loadedMutable = false;
+  ptr->loadedMutable = wasLoadedMutable;
   return ptr;
+}
+
+class MockAssetManager : public khAssetManagerInterface {
+  MockStorageManager * const sm;
+  public:
+    MockAssetManager(MockStorageManager * sm) : sm(sm) {}
+    virtual void NotifyVersionStateChange(const SharedString &ref,
+                                          AssetDefs::State state) {
+      ++GetMutableVersion(*sm, unfix(ref))->notificationsSent;
+    }
+};
+
+class StateUpdaterTest : public testing::Test {
+  protected:
+   MockStorageManager sm;
+   MockAssetManager am;
+   StateUpdater updater;
+  public:
+   StateUpdaterTest() : sm(), am(&sm), updater(&sm, &am) {}
+};
+
+void SetVersions(MockStorageManager & sm, vector<MockVersion> versions) {
+  for (auto & version: versions) {
+    sm.AddVersion(version.name, version);
+  }
 }
 
 void SetParentChild(MockStorageManager & sm, AssetKey parent, AssetKey child) {
@@ -203,30 +255,31 @@ void GetBigTree(MockStorageManager & sm) {
   SetDependent(sm, "p1", "c1");
 }
 
-void assertStateSet(MockStorageManager & sm, const SharedString & ref) {
-  ASSERT_TRUE(GetVersion(sm, ref)->stateSet) << "State not set for " << ref;
+void assertStateSet(MockStorageManager & sm, const SharedString & ref, int stateChanges = 1) {
   ASSERT_TRUE(GetVersion(sm, ref)->loadedMutable) << ref << " was not loaded mutable";
+  ASSERT_EQ(GetVersion(sm, ref)->onStateChangeCalled, stateChanges) << "OnStateChange was not called enough times for " << ref;
   ASSERT_EQ(GetVersion(sm, ref)->notificationsSent, 1) << "Wrong number of notifications sent for " << ref;
 }
 
 void assertStateNotSet(MockStorageManager & sm, const SharedString & ref) {
-  ASSERT_FALSE(GetVersion(sm, ref)->stateSet) << "State set for " << ref;
-  ASSERT_FALSE(GetVersion(sm, ref)->loadedMutable) << ref << " was loaded mutable";
-  ASSERT_EQ(GetVersion(sm, ref)->notificationsSent, 0) << "Notifications sent for " << ref;
+  ASSERT_FALSE(GetVersion(sm, ref)->loadedMutable) << ref << " was unexpectedly loaded mutable";
+  ASSERT_EQ(GetVersion(sm, ref)->onStateChangeCalled, 0) << "OnStateChange was unexpectedly called for " << ref;
+  ASSERT_EQ(GetVersion(sm, ref)->notificationsSent, 0) << "Notifications unexpectedly sent for " << ref;
+  ASSERT_FALSE(GetVersion(sm, ref)->fatalLogFileWritten) << "Fatal log file unexpectedly written for " << ref;
 }
 
 TEST_F(StateUpdaterTest, SetStateSingleVersion) {
   AssetKey ref1 = "test1";
   AssetKey ref2 = "test2";
   SetVersions(sm, {MockVersion(ref1), MockVersion(ref2)});
-  updater.SetStateForRefAndDependents(fix(ref1), AssetDefs::Bad, [](AssetDefs::State) { return true; });
+  updater.SetStateForRefAndDependents(fix(ref1), AssetDefs::New, [](AssetDefs::State) { return true; });
   assertStateSet(sm, ref1);
   assertStateNotSet(sm, ref2);
 }
 
 TEST_F(StateUpdaterTest, SetStateMultipleVersions) {
   GetBigTree(sm);
-  updater.SetStateForRefAndDependents(fix("gp"), AssetDefs::Canceled, [](AssetDefs::State) {return true; });
+  updater.SetStateForRefAndDependents(fix("gp"), AssetDefs::New, [](AssetDefs::State) {return true; });
   
   assertStateSet(sm, "gp");
   assertStateSet(sm, "p1");
@@ -245,7 +298,7 @@ TEST_F(StateUpdaterTest, SetStateMultipleVersions) {
 
 TEST_F(StateUpdaterTest, SetStateMultipleVersionsFromChild) {
   GetBigTree(sm);
-  updater.SetStateForRefAndDependents(fix("p1"), AssetDefs::Canceled, [](AssetDefs::State) { return true; });
+  updater.SetStateForRefAndDependents(fix("p1"), AssetDefs::New, [](AssetDefs::State) { return true; });
   
   assertStateSet(sm, "p1");
   assertStateSet(sm, "c1");
@@ -262,22 +315,11 @@ TEST_F(StateUpdaterTest, SetStateMultipleVersionsFromChild) {
   assertStateNotSet(sm, "ci3");
 }
 
-TEST_F(StateUpdaterTest, StateChanges) {
-  SetVersions(sm, {MockVersion("a"), MockVersion("b")});
+TEST_F(StateUpdaterTest, StateDoesntChange) {
+  SetVersions(sm, {MockVersion("a")});
   GetMutableVersion(sm, "a")->state = CALCULATED_STATE;
-  GetMutableVersion(sm, "b")->state = STARTING_STATE;
   updater.SetStateForRefAndDependents(fix("a"), CALCULATED_STATE, [](AssetDefs::State) { return true; });
   assertStateNotSet(sm, "a");
-  assertStateNotSet(sm, "b");
-}
-
-TEST_F(StateUpdaterTest, StateDoesntChange) {
-  SetVersions(sm, {MockVersion("a"), MockVersion("b")});
-  GetMutableVersion(sm, "a")->state = CALCULATED_STATE;
-  GetMutableVersion(sm, "b")->state = STARTING_STATE;
-  updater.SetStateForRefAndDependents(fix("b"), CALCULATED_STATE, [](AssetDefs::State) { return true; });
-  assertStateNotSet(sm, "a");
-  assertStateSet(sm, "b");
 }
 
 // These tests are set up to make it through all the if statements to verify
@@ -401,7 +443,7 @@ TEST_F(StateUpdaterTest, SucceededInputs) {
   ASSERT_EQ(GetMutableVersion(sm, "a")->numWaitingForVal, 0);
 }
 
-void OnlineChildBlockerTest(MockStorageManager & sm, StateUpdater & updater, AssetDefs::State inputState) {
+void ChildBlockerTest(MockStorageManager & sm, StateUpdater & updater, AssetDefs::State inputState) {
   SetVersions(sm, {MockVersion("a"), MockVersion("b"), MockVersion("c"), MockVersion("d")});
   SetParentChild(sm, "a", "b");
   SetParentChild(sm, "a", "c");
@@ -414,23 +456,23 @@ void OnlineChildBlockerTest(MockStorageManager & sm, StateUpdater & updater, Ass
 }
 
 TEST_F(StateUpdaterTest, FailedChildBlocker) {
-  OnlineChildBlockerTest(sm, updater, AssetDefs::Failed);
+  ChildBlockerTest(sm, updater, AssetDefs::Failed);
 }
 
 TEST_F(StateUpdaterTest, BlockedChildBlocker) {
-  OnlineChildBlockerTest(sm, updater, AssetDefs::Blocked);
+  ChildBlockerTest(sm, updater, AssetDefs::Blocked);
 }
 
 TEST_F(StateUpdaterTest, CanceledChildBlocker) {
-  OnlineChildBlockerTest(sm, updater, AssetDefs::Canceled);
+  ChildBlockerTest(sm, updater, AssetDefs::Canceled);
 }
 
 TEST_F(StateUpdaterTest, OfflineChildBlocker) {
-  OnlineChildBlockerTest(sm, updater, AssetDefs::Offline);
+  ChildBlockerTest(sm, updater, AssetDefs::Offline);
 }
 
 TEST_F(StateUpdaterTest, BadChildBlocker) {
-  OnlineChildBlockerTest(sm, updater, AssetDefs::Bad);
+  ChildBlockerTest(sm, updater, AssetDefs::Bad);
 }
 
 TEST_F(StateUpdaterTest, ChildInProgress) {
@@ -579,16 +621,64 @@ TEST_F(StateUpdaterTest, MultipleLevelsParentsDependents) {
   assertStateNotSet(sm, "i");
 }
 
-// Verify that an assets state doesn't change if its non-child dependent's
+// Verify that an asset's state doesn't change if its non-child dependent's
 // state changes.
 TEST_F(StateUpdaterTest, NonChildDependent) {
-  const AssetDefs::State NO_CHANGE_STATE = AssetDefs::InProgress;
+  const AssetDefs::State NO_CHANGE_STATE = AssetDefs::Waiting;
   SetVersions(sm, {MockVersion("a"), MockVersion("b")});
   SetDependent(sm, "a", "b");
   GetMutableVersion(sm, "a")->state = NO_CHANGE_STATE;
   updater.SetStateForRefAndDependents(fix("a"), NO_CHANGE_STATE, [](AssetDefs::State) { return true; });
   assertStateNotSet(sm, "a");
   assertStateSet(sm, "b");
+}
+
+void StateChangeErrorTest(MockStorageManager & sm, StateUpdater & updater, OnStateChangeBehavior behavior) {
+  SetVersions(sm, {MockVersion("a")});
+  GetMutableVersion(sm, "a")->stateChangeBehavior = behavior;
+  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State state) { return true; });
+  // We will call OnStateChange twice - once after setting it to the requested
+  // state and again after setting it to Failed.
+  assertStateSet(sm, "a", 2);
+  ASSERT_EQ(GetVersion(sm, "a")->state, AssetDefs::Failed);
+}
+
+TEST_F(StateUpdaterTest, StateChangeExceptionTest) {
+  StateChangeErrorTest(sm, updater, STATE_CHANGE_EXCEPTION);
+  ASSERT_TRUE(GetVersion(sm, "a")->fatalLogFileWritten);
+}
+
+TEST_F(StateUpdaterTest, StdExceptionTest) {
+  StateChangeErrorTest(sm, updater, STD_EXCEPTION);
+}
+
+TEST_F(StateUpdaterTest, UnknownExceptionTest) {
+  StateChangeErrorTest(sm, updater, UNKNOWN_EXCEPTION);
+}
+
+// If an asset calls DelayedBuildChildren as part of a state change the code
+// should detect that and revert to legacy state propagation. This will change
+// in the future as we handle more cases in the state updater.
+TEST_F(StateUpdaterTest, DelayedBuildChildrenTest) {
+  SetVersions(sm, {MockVersion("a"), MockVersion("b")});
+  GetMutableVersion(sm, "a")->stateChangeBehavior = CHANGE_NUM_CHILDREN;
+  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State state) { return true; });
+  auto * version = GetMutableVersion(sm, "a");
+  // Make sure OnStateChange behaved as expected
+  ASSERT_NE(find(version->children.begin(), version->children.end(), fix("b")), version->children.end());
+  // We should get partway through setting the state of "a" (load it mutable
+  // and call OnStateChange but not send notifications).
+  ASSERT_TRUE(GetVersion(sm, "a")->loadedMutable);
+  ASSERT_EQ(GetVersion(sm, "a")->onStateChangeCalled, 1);
+  ASSERT_EQ(GetVersion(sm, "a")->notificationsSent, 0);
+  assertStateNotSet(sm, "b");
+}
+
+TEST_F(StateUpdaterTest, OnStateChangeReturnsNewState) {
+  SetVersions(sm, {MockVersion("a")});
+  GetMutableVersion(sm, "a")->stateChangeBehavior = RETURN_NEW_STATE;
+  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State state) { return true; });
+  assertStateSet(sm, "a", 3);
 }
 
 int main(int argc, char **argv) {
