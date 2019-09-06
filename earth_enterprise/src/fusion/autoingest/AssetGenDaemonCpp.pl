@@ -87,6 +87,7 @@ print $fh <<EOF;
 #include "AssetOperation.h"
 #include <fusion/autoingest/AssetFactory.h>
 using namespace khxml;
+using namespace AssetFactory;
 EOF
 
 if ($base eq 'Leaf') {
@@ -135,7 +136,7 @@ ${name}Factory::FindMake(const std::string &ref_ $formaltypearg,
         asset->Modify($forwardinputarg meta_, config_);
         return asset;
     } else {
-        return AssetFactory::Make<Mutable${name}AssetD, $config>(ref_ $forwardtypearg,
+        return Make<Mutable${name}AssetD, $config>(ref_ $forwardtypearg,
                     $forwardinputarg
                     meta_, config_);
     }
@@ -265,7 +266,7 @@ ${name}Factory::ReuseOrMakeAndUpdate(
         }
         asset->Modify($forwardinputarg meta_, config_);
     } else {
-        asset = AssetFactory::Make<Mutable${name}AssetD, $config>(ref_ $forwardtypearg,
+        asset = Make<Mutable${name}AssetD, $config>(ref_ $forwardtypearg,
                     $forwardinputarg
                     meta_, config_);
     }

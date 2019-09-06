@@ -30,9 +30,6 @@
 #include "common/SharedString.h"
 #include "StorageManagerAssetHandle.h"
 #include "AssetSerializer.h"
-#include "AssetFactory.h"
-
-using namespace AssetFactory;
 
 // Items stored in the storage manager must inherit from the StorageManaged class
 class StorageManaged {
