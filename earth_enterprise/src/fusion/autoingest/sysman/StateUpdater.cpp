@@ -15,7 +15,7 @@
  */
 
 #include "StateUpdater.h"
-#include "AssetVersion.h"
+#include "AssetVersionD.h"
 #include "common/notify.h"
 
 using namespace boost;
@@ -57,6 +57,11 @@ namespace boost {
 }
 
 #include <boost/graph/depth_first_search.hpp>
+
+class StateUpdater::UnsupportedException : public std::runtime_error {
+  public: 
+    UnsupportedException() : std::runtime_error("Unsupported operation") {}
+};
 
 class StateUpdater::SetStateVisitor : public default_dfs_visitor {
   private:
@@ -222,8 +227,8 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
       SharedString name = tree[vertex].name;
       notify(NFY_PROGRESS, "Calculating state for '%s'", name.toString().c_str());
 
-      // Set the state for assets in the dependent tree. Don't send
-      // notifications because we'll set the state again below.
+      // Set the state for assets in the dependent tree. "false" means we'll
+      // set the state again below.
       if (tree[vertex].inDepTree) {
         updater->SetState(vertex, newState, false);
       }
@@ -255,7 +260,7 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
             calculatedState = version->CalcStateByInputsAndChildren(
                   stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
           }
-          // Set the state and send notifications.
+          // Set the state. "true" means we're done changing this asset's state.
           updater->SetState(vertex, calculatedState, true);
         }
       }
@@ -266,30 +271,41 @@ void StateUpdater::SetStateForRefAndDependents(
     const SharedString & ref,
     AssetDefs::State newState,
     function<bool(AssetDefs::State)> updateStatePredicate) {
-  SharedString verref = AssetVersionImpl::Key(ref);
-  tree = BuildDependentStateTree(verref, updateStatePredicate, storageManager);
-  depth_first_search(tree, visitor(SetStateVisitor(this, newState)));
+  try {
+    SharedString verref = AssetVersionImpl::Key(ref);
+    tree = BuildDependentStateTree(verref, updateStatePredicate, storageManager);
+    depth_first_search(tree, visitor(SetStateVisitor(this, newState)));
+  }
+  catch (UnsupportedException) {
+    // This is intended as a temporary condition that will no longer be needed
+    // when all operations have been converted to use the state updater for
+    // propagating state changes.
+    notify(NFY_INFO, "Unsupported condition encountered in state updater. "
+           "Reverting to legacy state propagation.");
+  }
 }
 
 void StateUpdater::SetState(
     DependentStateTreeVertexDescriptor vertex,
     AssetDefs::State newState,
-    bool sendNotifications) {
+    bool finalStateChange) {
   SharedString name = tree[vertex].name;
-  if (newState != tree[vertex].state) {
+  AssetDefs::State oldState = tree[vertex].state;
+  if (newState != oldState) {
+    notify(NFY_PROGRESS, "Setting state of '%s' from '%s' to '%s'",
+           name.toString().c_str(), ToString(oldState).c_str(), ToString(newState).c_str());
     auto version = storageManager->GetMutable(name);
-    notify(NFY_PROGRESS, "Setting state of '%s' to '%s'",
-           name.toString().c_str(), ToString(newState).c_str());
     if (version) {
-      // Set the state. The OnStateChange handler will take care
-      // of stopping any running tasks, etc.
-      // This call does not propagate the state change to other assets. We will
-      // take care of that inside the state updater.
-      version->SetMyStateOnly(newState, sendNotifications);
-      // Setting the state can trigger additional state changes, so get the new
-      // state directly from the asset version.
+      SetVersionStateAndRunHandlers(name, version, oldState, newState, finalStateChange);
+
+      // Get the new state directly from the asset version since it may be
+      // different from the passed-in state
       tree[vertex].state = version->state;
       tree[vertex].stateChanged = true;
+
+      if (finalStateChange) {
+        SendStateChangeNotification(name, version->state);
+      }
     }
     else {
       // This shoud never happen - we had to successfully load the asset
@@ -298,4 +314,56 @@ void StateUpdater::SetState(
              name.toString().c_str());
     }
   }
+}
+
+void StateUpdater::SetVersionStateAndRunHandlers(
+    const SharedString & name,
+    AssetHandle<AssetVersionImpl> & version,
+    AssetDefs::State oldState,
+    AssetDefs::State newState,
+    bool finalStateChange) {
+  // OnStateChange can return a new state that we need to transition to, so we
+  // may have to change the state repeatedly.
+  do {
+    version->state = newState;
+    // Don't run handlers if this is a temporary state change.
+    if (finalStateChange) {
+      AssetDefs::State nextState = AssetDefs::Failed;
+      try {
+        bool hasChildrenBefore = !version->children.empty();
+        // This will take care of stopping any running tasks, etc.
+        nextState = version->OnStateChange(newState, oldState);
+        bool hasChildrenAfter = !version->children.empty();
+        if (!hasChildrenBefore && hasChildrenAfter) {
+          // OnStateChange can call DelayedBuildChildren, which creates new
+          // children for this asset. This code is not yet able to handle that
+          // case, so we let OnStateChange perform the legacy state propagation
+          // and abandon this operation.
+          throw UnsupportedException();
+        }
+      } catch (const UnsupportedException &) {
+        // Rethrow this exception - we will catch it farther up the stack
+        throw;
+      } catch (const StateChangeException &e) {
+        notify(NFY_WARN, "Exception during %s: %s : %s",
+               e.location.c_str(), name.toString().c_str(), e.what());
+        version->WriteFatalLogfile(e.location, e.what());
+      } catch (const std::exception &e) {
+        notify(NFY_WARN, "Exception during OnStateChange: %s", e.what());
+      } catch (...) {
+        notify(NFY_WARN, "Unknown exception during OnStateChange");
+      }
+      oldState = newState;
+      newState = nextState;
+    }
+  } while(version->state != newState);
+}
+
+void StateUpdater::SendStateChangeNotification(
+    const SharedString & name,
+    AssetDefs::State state) {
+  notify(NFY_VERBOSE, "Calling theAssetManager.NotifyVersionStateChange(%s, %s)", 
+         name.toString().c_str(), 
+         ToString(state).c_str());
+  assetManager->NotifyVersionStateChange(name, state);
 }

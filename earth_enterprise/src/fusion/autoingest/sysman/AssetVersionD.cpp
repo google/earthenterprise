@@ -262,7 +262,13 @@ void AssetVersionImplD::SetState(
     try {
       // NOTE: This can end up calling back here to switch us to
       // another state (usually Failed or Succeded)
-      OnStateChange(newstate, oldstate);
+      AssetDefs::State nextstate = OnStateChange(newstate, oldstate);
+      if (nextstate != newstate) SetState(nextstate);
+    } catch (const StateChangeException &e) {
+      notify(NFY_WARN, "Exception during %s: %s : %s",
+             e.location.c_str(), GetRef().toString().c_str(), e.what());
+      WriteFatalLogfile(GetRef(), e.location, e.what());
+      SetState(AssetDefs::Failed);
     } catch (const std::exception &e) {
       notify(NFY_WARN, "Exception during OnStateChange: %s", 
              e.what());
@@ -271,8 +277,7 @@ void AssetVersionImplD::SetState(
     }
 
     // only propagate changes if the state is still what we
-    // set it to above. OnStateChange can call SetState recursively. We
-    // don't want to propagate an old state.
+    // set it to above. We don't want to propagate an old state.
     if (propagate && (state == newstate)) {
       notify(NFY_VERBOSE, "Calling theAssetManager.NotifyVersionStateChange(%s, %s)", 
              GetRef().toString().c_str(), 
@@ -280,41 +285,6 @@ void AssetVersionImplD::SetState(
       theAssetManager.NotifyVersionStateChange(GetRef(), newstate);
       PropagateStateChange(notifier);
     }
-  }
-}
-
-// This is a duplicate of the function above without the call to PropagateStateChange.
-// This version is used with the new, graph-based version of state updates.
-// Ultimately it should replace the one above.
-void AssetVersionImplD::SetMyStateOnly(AssetDefs::State newstate, bool sendNotifications)
-{
-  // We don't check if the new state is different from the old state here
-  // because by the time this function is called we've already done that.
-  notify(NFY_DEBUG, "SetState: current state: %s | newstate: %s | asset: %s",
-         ToString(state).c_str(),
-         ToString(newstate).c_str(),
-         GetRef().toString().c_str());
-  AssetDefs::State oldstate = state;
-  state = newstate;
-
-  // only run callbacks and notify if the state is still what we
-  // set it to above. OnStateChange can call SetState recursively. We
-  // don't want to notify an old state.
-  if (sendNotifications && (state == newstate)) {
-    try {
-      // NOTE: This can end up calling back here to switch us to
-      // another state (usually Failed or Succeded)
-      OnStateChange(newstate, oldstate);
-    } catch (const std::exception &e) {
-      notify(NFY_WARN, "Exception during OnStateChange: %s", 
-             e.what());
-    } catch (...) {
-      notify(NFY_WARN, "Unknown exception during OnStateChange");
-    }
-    notify(NFY_VERBOSE, "Calling theAssetManager.NotifyVersionStateChange(%s, %s)", 
-           GetRef().toString().c_str(), 
-           ToString(newstate).c_str());
-    theAssetManager.NotifyVersionStateChange(GetRef(), newstate);
   }
 }
 
@@ -410,7 +380,7 @@ AssetVersionImplD::HandleChildProgress(const SharedString &) const
   // NoOp in base since leaves don't do anything
 }
 
-void
+AssetDefs::State
 AssetVersionImplD::OnStateChange(AssetDefs::State newstate,
                                  AssetDefs::State oldstate)
 {
@@ -432,6 +402,7 @@ AssetVersionImplD::OnStateChange(AssetDefs::State newstate,
     }
 #endif
   }
+  return state;
 }
 
 
@@ -643,6 +614,15 @@ AssetVersionImplD::GetInputFilenames(std::vector<std::string> &out) const
   }
 }
 
+// Non-static version of the function. Can be called polymorphically from
+// an asset version.
+void
+AssetVersionImplD::WriteFatalLogfile(const std::string &prefix, const std::string &error) const throw() {
+  WriteFatalLogfile(GetRef(), prefix, error);
+}
+
+// Static version of the function - can be called without loading an asset
+// version.
 void
 AssetVersionImplD::WriteFatalLogfile(const AssetVersionRef &verref,
                                      const std::string &prefix,
@@ -864,15 +844,9 @@ LeafAssetVersionImplD::SubmitTask(void)
   try {
     DoSubmitTask();
   } catch (const std::exception &e) {
-    notify(NFY_WARN, "Exception during SubmitTask: %s : %s",
-           GetRef().toString().c_str(), e.what());
-    WriteFatalLogfile(GetRef(), "SubmitTask", e.what());
-    SetState(AssetDefs::Failed);
+    throw StateChangeException(e.what(), "SubmitTask");
   } catch (...) {
-    notify(NFY_WARN, "Unknown exception during SubmitTask: %s",
-           GetRef().toString().c_str());
-    WriteFatalLogfile(GetRef(), "SubmitTask", "Unknown error");
-    SetState(AssetDefs::Failed);
+    throw StateChangeException("Unknown error", "SubmitTask");
   }
 }
 
@@ -907,7 +881,7 @@ LeafAssetVersionImplD::ClearOutfiles(void)
 }
 
 
-void
+AssetDefs::State
 LeafAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
                                      AssetDefs::State oldstate)
 {
@@ -970,6 +944,8 @@ LeafAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
       // to Succeeded. So don't muck with anything.
       break;
   }
+
+  return state;
 }
 
 
@@ -1212,7 +1188,7 @@ CompositeAssetVersionImplD::DelayedBuildChildren(void)
   // and will set my state to Succeeded
 }
 
-void
+AssetDefs::State
 CompositeAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
                                           AssetDefs::State oldstate)
 {
@@ -1233,24 +1209,18 @@ CompositeAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
     try {
       DelayedBuildChildren();
     } catch (const std::exception &e) {
-      notify(NFY_WARN, "Exception during OnStateChange: %s", e.what());
-      WriteFatalLogfile(GetRef(), "DelayedBuildChildren", e.what());
-      SetState(AssetDefs::Failed);
-      return;
+      throw StateChangeException(e.what(), "DelayedBuildChildren");
     } catch (...) {
-      notify(NFY_WARN, "Unknown exception during OnStateChange");
-      WriteFatalLogfile(GetRef(), "DelayedBuildChildren",
-                        "Unknown error");
-      SetState(AssetDefs::Failed);
-      return;
+      throw StateChangeException("Unknown error", "DelayedBuildChildren");
     }
 
     if (!children.empty()) {
       SyncState();
     } else {
-      SetState(AssetDefs::Succeeded);
+      return AssetDefs::Succeeded;
     }
   }
+  return state;
 }
 
 void
