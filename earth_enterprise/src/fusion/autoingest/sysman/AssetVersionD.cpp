@@ -680,7 +680,7 @@ LeafAssetVersionImplD::ComputeState(void) const
     // I'm currently not ready, so take whatever my inputs say
     newstate = statebyinputs;
   } else if (statebyinputs != AssetDefs::Queued) {
-    // My imputs have regressed
+    // My inputs have regressed
     // Let's see if I should regress too
 
     if (AssetDefs::Working(state)) {
@@ -725,7 +725,7 @@ LeafAssetVersionImplD::CalcStateByInputsAndChildren(const InputAndChildStateData
     // I'm currently not ready, so take whatever my inputs say
     newstate = stateData.stateByInputs;
   } else if (stateData.stateByInputs != AssetDefs::Queued) {
-    // My imputs have regressed
+    // My inputs have regressed
     // Let's see if I should regress too
 
     if (AssetDefs::Working(state)) {

@@ -41,8 +41,9 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   AssetVersionImplD& operator=(const AssetVersionImplD&);
 
  protected:
-  // Tracks the state of inputs to a given asset version that have changed. Each
-  // entry maps a state to the number of inputs that have changed to that state.
+  // Tracks the state of inputs and children to a given asset version that have
+  // changed. Each entry contains enough information for the asset to determine
+  // if it needs to change its state.
   struct NotifyStates {
     size_t numSucceeded;
     bool allWorkingOrSucceeded;
