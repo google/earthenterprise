@@ -8,7 +8,9 @@ SPHINXPROJ    = GoogleEarthEnterpriseDocumentation
 SOURCEDIR     = .
 BUILDDIR      = build
 SPHINX2GITHUB = ./sphinxtogithub.py
+GETOPENGEEVER = ../../../earth_enterprise/src/scons/getversion.py
 
+OPENGEEVER := $(shell $(GETOPENGEEVER))
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -21,3 +23,6 @@ help:
 %: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 	@$(SPHINX2GITHUB) "$(BUILDDIR)/html"
+	rm -rf ../$(OPENGEEVER)/*
+	cp -r ./$(BUILDDIR)/html/* ../$(OPENGEEVER)
+	rm -rf ../$(OPENGEEVER)/sources

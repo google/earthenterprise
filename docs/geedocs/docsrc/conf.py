@@ -16,6 +16,17 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
+import sys
+import os
+
+sys.path = sys.path + ['../../.././earth_enterprise/src/scons']
+import getversion
+
+# Check version of git -- may not be able to reliably generate correct opengee version string.
+gee_version_number = getversion.open_gee_version.get_short()
+if getversion.open_gee_version.get_warning_message():
+    print getversion.open_gee_version.get_warning_message()
+print gee_version_number
 
 # -- Project information -----------------------------------------------------
 
@@ -26,7 +37,8 @@ author = u'Open GEE Contributors'
 # The short X.Y version
 version = u''
 # The full version, including alpha/beta/rc tags
-release = u'5.3.2'
+#release = u'5.3.2'
+release = gee_version_number
 
 
 # -- General configuration ---------------------------------------------------
