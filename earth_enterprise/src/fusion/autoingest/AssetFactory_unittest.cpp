@@ -52,6 +52,7 @@ public:
 };
 
 class MockAssetConfig {};
+class MockAssetType{};
 
 class MockAssetImpl: public MockAssetStorage
 {
@@ -123,7 +124,9 @@ class AssetFactoryTest : public testing::Test {
 };
 
 // TEST DATA
-string testAssetRef = "/gevol/assets/AssetRef";
+string testAssetRef = "/gevol/assets/AssetRef",
+       testAssetRef1 = "/gevol/assets/AssetRef1",
+       testAssetRef2 = "/gevol/assets/AssetRef2";
 std::vector<SharedString> testInputs { "Input1", "Input2"};
 khMetaData testMeta;
 MockAssetConfig testConfig;
@@ -150,6 +153,15 @@ TEST_F(AssetFactoryTest, MakeNewAlreadyExists) {
   MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
   ASSERT_THROW(pMakeNew(testAssetRef, testInputs, testMeta, testConfig), khException);
 }
+
+TEST_F(AssetFactoryTest, FindMake_Exists)
+{
+    MockMutableAsset handle = FindMake<MockMutableAsset, AssetDefs, MockAssetConfig>
+            (testAssetRef, AssetDefs::Imagery, testInputs, testMeta, testConfig);
+}
+
+TEST_F(AssetFactoryTest, FindMake_New)
+{}
 
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc,argv);
