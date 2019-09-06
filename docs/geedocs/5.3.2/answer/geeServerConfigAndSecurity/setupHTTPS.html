@@ -1,0 +1,196 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Set up HTTPS &#8212; Google Earth Enterprise 5.3.2 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Google Earth Enterprise client" href="../googleEarthEnterpriseClient.html" />
+    <link rel="prev" title="Configure a GEE virtual host for LDAP authentication" href="configureGeeVirtualHostForLDAP.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../googleEarthEnterpriseClient.html" title="Google Earth Enterprise client"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="configureGeeVirtualHostForLDAP.html" title="Configure a GEE virtual host for LDAP authentication"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerConfigAndSecurity.html" accesskey="U">GEE Server Configuration And Security</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="configureGeeVirtualHostForLDAP.html"
+                        title="previous chapter">Configure a GEE virtual host for LDAP authentication</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../googleEarthEnterpriseClient.html"
+                        title="next chapter">Google Earth Enterprise client</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp4.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp4.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="set-up-https">
+<h1>Set up HTTPS<a class="headerlink" href="#set-up-https" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>If you have set up SSL/HTTPS configurations on your GEE server, you
+can also set up a secure Fusion server for your browser-based
+maps.</p>
+<div class="alert docutils container">
+The following procedure is applicable only to release 4.x and
+previous versions of GEE. For <strong>GEE release 5.x</strong>, see
+<span class="xref std std-doc">6080928</span>.</div>
+<p class="rubric" id="to-set-up-an-https-virtual-server-for-fusion">To set up an HTTPS virtual server for Fusion:</p>
+<ol class="arabic">
+<li><p class="first">Verify that you have already set up SSL/HTTPS configurations on
+your GEE server.</p>
+</li>
+<li><p class="first">Create an HTTPS-compatible virtual server:</p>
+<p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--stream_server_url</span> <span class="pre">http://myserver.org</span> <span class="pre">--server_type</span> <span class="pre">stream</span> <span class="pre">--addvs</span> <span class="pre">https_2d</span> <span class="pre">--vstype</span> <span class="pre">map</span> <span class="pre">--vscachelevel</span> <span class="pre">1</span> <span class="pre">--vsurl</span> <span class="pre">https://myserver.org/mymap</span></code></p>
+</li>
+<li><p class="first">Copy and save the <code class="docutils literal notranslate"><span class="pre">Include</span></code> statement from <code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code>.
+Later, you will add that to the configuration file. It will look
+something like:</p>
+<p><code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">conf.d/virtual_servers/runtime/mymap_runtime</span></code></p>
+</li>
+<li><div class="first line-block">
+<div class="line">Copy a configuration file from the <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder:</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">cp</span> <span class="pre">/opt/google/share/gehttpd/examples/</span>&#160; <span class="pre">/opt/google/gehttpd/conf.d/virtual_servers/https_mymap.location</span></code></p>
+</li>
+<li><div class="first line-block">
+<div class="line">Edit the <code class="docutils literal notranslate"><span class="pre">https_mymap.location</span></code> file, insert the
+<code class="docutils literal notranslate"><span class="pre">Include</span></code> statement you copied and saved, and update the
+LOCATION tags to the real virtual server:</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">r...&#64;fusion.localhost.org:/opt/google/gehttpd/conf.d/virtual_servers</span> <span class="pre">#</span> <span class="pre">cat</span> <span class="pre">https_2d.location</span> <span class="pre">#</span> <span class="pre">This</span> <span class="pre">is</span> <span class="pre">an</span> <span class="pre">example</span> <span class="pre">of</span> <span class="pre">a</span> <span class="pre">location-based</span> <span class="pre">map</span> <span class="pre">virtual</span> <span class="pre">server</span> <span class="pre">#</span> <span class="pre">Substitute</span> <span class="pre">appropriate</span> <span class="pre">values</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">following</span> <span class="pre">variables</span> <span class="pre">#</span> <span class="pre">1.</span> <span class="pre">&lt;LOCATION&gt;</span> <span class="pre">:</span> <span class="pre">The</span> <span class="pre">new</span> <span class="pre">location</span> <span class="pre">name.</span> <span class="pre">#</span> <span class="pre">2.</span> <span class="pre">&lt;VS_NAME&gt;</span> <span class="pre">:</span> <span class="pre">The</span> <span class="pre">virtual</span> <span class="pre">server</span> <span class="pre">name</span> <span class="pre">used</span> <span class="pre">to</span> <span class="pre">create</span> <span class="pre">the</span> <span class="pre">virtual</span> <span class="pre">#</span> <span class="pre">server</span> <span class="pre">with</span> <span class="pre">geserveradmin</span>&#160; <span class="pre">RewriteRule</span> <span class="pre">^/mymap$</span> <span class="pre">/mymap/</span> <span class="pre">[R]</span> <span class="pre">RewriteRule</span> <span class="pre">^/mymap/$</span> <span class="pre">/maps/fusionmaps_local.html</span> <span class="pre">[PT]</span> <span class="pre">RewriteRule</span> <span class="pre">^/mymap/mapfiles/(.*)$</span> <span class="pre">/maps/mapfiles/$1</span> <span class="pre">[PT]</span>&#160; <span class="pre">&lt;Location</span> <span class="pre">&quot;/mymap/*&quot;&gt;</span> <span class="pre">SetHandler</span> <span class="pre">gedb-handler</span> <span class="pre">Include</span> <span class="pre">conf.d/virtual_servers/runtime/https_2d_runtime</span> <span class="pre">SSLRequireSSL</span> <span class="pre">SSLVerifyClient</span> <span class="pre">none</span> <span class="pre">&lt;/Location&gt;</span></code></p>
+</li>
+<li><div class="first line-block">
+<div class="line">Modify the <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/extra/httpd-ssl.conf</span></code>
+file so that the
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf.d/virtual_server/https_2d.location</span></code>
+file and the virtual server are loaded by the HTTPS/443
+virtual host and not the HTTP/80 virtual host:</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">(vi</span> <span class="pre">/opt/google/gehttpd/conf/extra/httpd-ssl.conf...)</span> <span class="pre">&lt;snip&gt;</span> <span class="pre">...</span> <span class="pre">&lt;VirtualHost</span> <span class="pre">_default_:443&gt;</span> <span class="pre">#</span> <span class="pre">General</span> <span class="pre">setup</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">virtual</span> <span class="pre">host</span> <span class="pre">DocumentRoot</span> <span class="pre">&quot;/opt/google/gehttpd/htdocs&quot;</span> <span class="pre">ServerName</span> <span class="pre">myserver.org:443</span>&#160; <span class="pre">ServerAdmin</span> <span class="pre">administra...&#64;myserver.org</span> <span class="pre">ErrorLog</span> <span class="pre">&quot;/opt/google/gehttpd/logs/error_log&quot;</span> <span class="pre">TransferLog</span> <span class="pre">&quot;/opt/google/gehttpd/logs/access_log&quot;</span> <span class="pre">Include</span> <span class="pre">conf.d/virtual_servers/https_2d.location</span> <span class="pre">...</span> <span class="pre">&lt;snip&gt;</span></code></p>
+</li>
+<li><div class="first line-block">
+<div class="line">Edit the HTTP/port 80 virtual host to load only the
+HTTP-available virtual servers:</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">(vi</span> <span class="pre">/opt/google/gehttpd/conf.d/gemodules.conf)</span></code></p>
+</li>
+<li><div class="first line-block">
+<div class="line">Comment out the <code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">..</span> <span class="pre">*.location</span></code> line and manually
+list the included location files so that the
+<code class="docutils literal notranslate"><span class="pre">https2d.location</span></code> file is excluded:</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">LoadModule</span> <span class="pre">gedb_module</span> <span class="pre">/opt/google/gehttpd/modules/mod_gedb.so</span>&#160; <span class="pre">NameVirtualHost</span> <span class="pre">*:80</span> <span class="pre">&lt;VirtualHost</span> <span class="pre">*:80&gt;</span> <span class="pre">#</span> <span class="pre">You</span> <span class="pre">should</span> <span class="pre">specify</span> <span class="pre">a</span> <span class="pre">ServerName</span> <span class="pre">in</span> <span class="pre">each</span> <span class="pre">VirtualHost</span> <span class="pre">declaration</span> <span class="pre">#</span> <span class="pre">to</span> <span class="pre">avoid</span> <span class="pre">unnecessary</span> <span class="pre">DNS</span> <span class="pre">lookups.</span> <span class="pre">#</span> <span class="pre">For</span> <span class="pre">example,</span> <span class="pre">ServerName</span> <span class="pre">www.mycompany.com</span>&#160; <span class="pre">#</span> <span class="pre">Redirect</span> <span class="pre">the</span> <span class="pre">home</span> <span class="pre">page</span> <span class="pre">to</span> <span class="pre">display</span> <span class="pre">the</span> <span class="pre">GE</span> <span class="pre">logo</span> <span class="pre">Include</span> <span class="pre">conf.d/index_rewrite</span> <span class="pre">Include</span> <span class="pre">conf.d/jkmount</span>&#160; <span class="pre">#</span> <span class="pre">Include</span> <span class="pre">all</span> <span class="pre">location-based</span> <span class="pre">virtual</span> <span class="pre">servers</span> <span class="pre">#</span> <span class="pre">Include</span> <span class="pre">conf.d/virtual_servers/*.location</span> <span class="pre">(Comment</span> <span class="pre">out</span> <span class="pre">this</span> <span class="pre">line.)</span> <span class="pre">Include</span> <span class="pre">conf.d/virtual_servers/default_ge.location</span> <span class="pre">(Add</span> <span class="pre">this</span> <span class="pre">line.)</span> <span class="pre">Include</span> <span class="pre">conf.d/virtual_servers/default_map.location</span> <span class="pre">(Add</span> <span class="pre">this</span> <span class="pre">line.)</span> <span class="pre">Include</span> <span class="pre">conf.d/virtual_servers/default_search.location</span> <span class="pre">(Add</span> <span class="pre">this</span> <span class="pre">line.)</span> <span class="pre">&lt;/VirtualHost&gt;</span></code></p>
+</li>
+<li><div class="first line-block">
+<div class="line">Save the file and restart the GEE Server software:</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/</span> <span class="pre">geserver</span> <span class="pre">restart</span></code></p>
+<p>This separates the HTTP and HTTPS virtual servers from the
+Apache software so that unencrypted and encrypted data can be
+hosted from both.</p>
+<p><strong>Note</strong>: The firewall blocks external port 80 / HTTP
+connections, but the Publisher tool must use the HTTP port to
+upload information, even if your system only allows this
+internally.</p>
+</li>
+<li><p class="first">Create a Fusion server association for the new <strong>https2d</strong>
+virtual server. Use <code class="docutils literal notranslate"><span class="pre">http://myserver.org</span></code> for the URL for
+both Stream and Search URLs, then press the <strong>Query</strong> button
+and select the correct https2d virtual server from the
+drop-down list.</p>
+</li>
+<li><p class="first">Save the new server association, then publish a 2D database to
+the virtual server.</p>
+</li>
+</ol>
+<p class="rubric" id="listing-registered-virtual-stream-servers">Listing registered virtual stream servers</p>
+<p>To avoid confusion or conflict between <a class="reference external" href="http://">http://</a> and <a class="reference external" href="https://">https://</a>
+addresses, you can use <code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> parameters like the
+<code class="docutils literal notranslate"><span class="pre">--</span> <span class="pre">stream_server_url</span> <span class="pre">http://myserver.org</span></code> option that lists
+registered virtual stream servers. For example, instead of using
+the <code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--listvss</span></code> command alone, you can use
+<code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--stream_server_url</span> <span class="pre">http://myserver.org</span> <span class="pre">--listvss</span></code>.</p>
+<p class="rubric" id="binding-apache-to-port-80">Binding Apache to port 80</p>
+<p>You need HTTP to facilitate all <code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> work, including
+publishes, so make sure that your <code class="docutils literal notranslate"><span class="pre">gehttpd.conf</span></code> configuration
+file lets Apache bind to port 80. You can allow internal access to
+HTTP even if you block external access to HTTP ports. This lets
+the Publisher tool maintain the GEE Server software while you
+disallow external unencrypted data communications.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../googleEarthEnterpriseClient.html" title="Google Earth Enterprise client"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="configureGeeVirtualHostForLDAP.html" title="Configure a GEE virtual host for LDAP authentication"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerConfigAndSecurity.html" >GEE Server Configuration And Security</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

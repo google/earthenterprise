@@ -1,0 +1,145 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Import a subset of imagery &#8212; Google Earth Enterprise 5.3.2 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Add .kip imagery" href="addKipImagery.html" />
+    <link rel="prev" title="Import pre-processed data" href="importPreProcessedData.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="addKipImagery.html" title="Add .kip imagery"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="importPreProcessedData.html" title="Import pre-processed data"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" accesskey="U">Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="importPreProcessedData.html"
+                        title="previous chapter">Import pre-processed data</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="addKipImagery.html"
+                        title="next chapter">Add .kip imagery</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp2.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp2.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="import-a-subset-of-imagery">
+<h1>Import a subset of imagery<a class="headerlink" href="#import-a-subset-of-imagery" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>You can import a single area of a source image to Fusion as a new,
+smaller image file. For example, shown below is a compressed,
+high-resolution MrSID source image of Santa Clara County,
+California. On a standard server machine, it would take several
+hours to import this entire image to Fusion.</p>
+<p>If you do not need the entire image, you can select an area of the
+image to import, then use <code class="docutils literal notranslate"><span class="pre">getranslate</span> <span class="pre">-projwin</span></code> to extract the
+area and create a new image from it. The <code class="docutils literal notranslate"><span class="pre">-projwin</span></code> parameter
+reads the coordinates of the bounding box you specify and writes
+out your selection as a new image. The coordinates are based on
+the native projection in the source image. You can use Google
+Earth to easily find corner coordinates for the area you want to
+copy. (To learn how, see <a class="reference external" href="https://support.google.com/earth/answer/148068">Find &amp; use location
+coordinates</a> in
+the <em>Google Earth Help</em>.) The <code class="docutils literal notranslate"><span class="pre">getranslate</span></code> tool, extended from
+the GDAL <code class="docutils literal notranslate"><span class="pre">gdal_translate</span></code> tool, includes support for JPEG2000
+format source imagery.</p>
+<p><img alt="getranslate imagery" src="../../images/2656013_getranslate_4.jpg" /></p>
+<p class="rubric">Example of importing a subset of imagery</p>
+<p>The source file shown below is in a UTM projection (UTM Zone 10N,
+NAD83 Datum) and references coordinates in meters. You can use
+Google Earth to locate coordinates for the upper-left (580907.14 E
+&amp; 4142271.64 N) and lower-right (581788.04 E &amp; 4141453.58 N)
+corners of the area you want to import. Then you can specify the
+coordinate values, the output format (for example, a file type
+like GeoTIFF, MrSID, or JPEG2000), and the projection (using the
+<code class="docutils literal notranslate"><span class="pre">-a_srs</span></code> option) for the new image. The command looks something
+like this:</p>
+<p><code class="docutils literal notranslate"><span class="pre">/opt/google/bin/getranslate</span> <span class="pre">-of</span> <span class="pre">HFA</span> <span class="pre">-projwin</span> <span class="pre">580907.14</span> <span class="pre">4142271.64</span> <span class="pre">581788.04</span> <span class="pre">4141453.58</span> <span class="pre">/path/to/input.sid</span> <span class="pre">/path/to/output.img</span></code>
+<img alt="getranslate imagery" src="../../images/2656013_getranslate_4.jpg" /></p>
+<p>The resulting output.img file contains imagery for the area you
+specified with <code class="docutils literal notranslate"><span class="pre">-projwin</span></code>:</p>
+<p><img alt="getranslate imagery" src="../../images/2656013_getranslate_4.jpg" /></p>
+<p>You can compare the size of the original image with the extracted
+area, as shown below:
+<img alt="getranslate imagery" src="../../images/2656013_getranslate_4.jpg" /></p>
+<p class="rubric" id="getranslate-command-options">getranslate command options</p>
+<p><code class="docutils literal notranslate"><span class="pre">usage:</span> <span class="pre">getranslate</span> <span class="pre">[options]</span> <span class="pre">&lt;input&gt;</span> <span class="pre">&lt;output&gt;</span> <span class="pre">Supported</span> <span class="pre">options</span> <span class="pre">are:</span>&#160; <span class="pre">--help|-?</span>&#160;&#160;&#160;&#160; <span class="pre">:</span> <span class="pre">Show</span> <span class="pre">this</span> <span class="pre">usage</span> <span class="pre">message</span>&#160; <span class="pre">--formats</span>&#160;&#160;&#160;&#160; <span class="pre">:</span> <span class="pre">Show</span> <span class="pre">supported</span> <span class="pre">formats</span> <span class="pre">and</span> <span class="pre">exit</span>&#160; <span class="pre">-ot</span> <span class="pre">&lt;Byte|Int16|UInt16|UInt32|Int32|Float32|Float64</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">|CInt16|CInt32|CFloat32|CFloat64&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">:</span> <span class="pre">Pixel</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">output</span> <span class="pre">(default:</span> <span class="pre">match</span> <span class="pre">input)</span>&#160; <span class="pre">-not_strict</span>&#160; <span class="pre">-of</span> <span class="pre">&lt;format&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">:</span> <span class="pre">File</span> <span class="pre">format</span> <span class="pre">of</span> <span class="pre">output</span> <span class="pre">(default:</span> <span class="pre">GTiff)</span>&#160; <span class="pre">-b</span> <span class="pre">&lt;band&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">:</span> <span class="pre">Specifies</span> <span class="pre">band</span> <span class="pre">to</span> <span class="pre">copy</span> <span class="pre">(1</span> <span class="pre">based</span> <span class="pre">indexing).</span> <span class="pre">Can</span> <span class="pre">be:</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">specified</span> <span class="pre">multiple</span> <span class="pre">times.</span> <span class="pre">(e.g.</span> <span class="pre">&quot;-b</span> <span class="pre">3</span> <span class="pre">-b</span> <span class="pre">2</span> <span class="pre">-b</span> <span class="pre">1&quot;)</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">will</span> <span class="pre">reverse</span> <span class="pre">the</span> <span class="pre">bands.</span>&#160; <span class="pre">-outsize</span> <span class="pre">&lt;xsize[%]&gt;</span> <span class="pre">&lt;ysize[%]&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">:</span> <span class="pre">Size</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">output</span> <span class="pre">image</span> <span class="pre">(pixels</span> <span class="pre">or</span> <span class="pre">%</span> <span class="pre">of</span> <span class="pre">original).</span>&#160; <span class="pre">-scale</span> <span class="pre">[&lt;src_min&gt;</span> <span class="pre">&lt;src_max&gt;</span> <span class="pre">[&lt;dst_min&gt;</span> <span class="pre">&lt;dst_max&gt;]]</span>&#160;&#160;&#160;&#160; <span class="pre">:</span> <span class="pre">Scale</span> <span class="pre">the</span> <span class="pre">input</span> <span class="pre">pixels</span> <span class="pre">values</span>&#160; <span class="pre">-srcwin</span> <span class="pre">&lt;xoff&gt;</span> <span class="pre">&lt;yoff&gt;</span> <span class="pre">&lt;xsize&gt;</span> <span class="pre">&lt;ysize&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">:</span> <span class="pre">Select</span> <span class="pre">sub</span> <span class="pre">window</span> <span class="pre">from</span> <span class="pre">input</span>&#160; <span class="pre">-a_srs</span> <span class="pre">&lt;projection&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">:</span> <span class="pre">Assign</span> <span class="pre">specified</span> <span class="pre">projection</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">output</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;projection&gt;</span> <span class="pre">can</span> <span class="pre">be:</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">NAD27|NAD83|WGS84|WGS72</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">EPSG:&lt;num&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;PROJ.4</span> <span class="pre">definition&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;OpenGIS</span> <span class="pre">Well</span> <span class="pre">Known</span> <span class="pre">Text&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;filename</span> <span class="pre">of</span> <span class="pre">file</span> <span class="pre">with</span> <span class="pre">OpenGIS</span> <span class="pre">Well</span> <span class="pre">Known</span> <span class="pre">Text&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">ESRI::&lt;ESRI</span> <span class="pre">Well</span> <span class="pre">Known</span> <span class="pre">Text</span> <span class="pre">File(.prj)&gt;</span>&#160; <span class="pre">-projwin</span> <span class="pre">&lt;ulx&gt;</span> <span class="pre">&lt;uly&gt;</span> <span class="pre">&lt;lrx&gt;</span> <span class="pre">&lt;lry&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">:</span> <span class="pre">Select</span> <span class="pre">sub</span> <span class="pre">window</span> <span class="pre">from</span> <span class="pre">input.</span> <span class="pre">Like</span> <span class="pre">-srcwin</span> <span class="pre">but</span> <span class="pre">uses</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">georeferenced</span> <span class="pre">coordinates</span>&#160; <span class="pre">-co</span> <span class="pre">&quot;NAME=VALUE&quot;*</span>&#160;&#160;&#160;&#160; <span class="pre">:</span> <span class="pre">Pass</span> <span class="pre">construction</span> <span class="pre">arguments</span> <span class="pre">to</span> <span class="pre">output</span> <span class="pre">GDAL</span> <span class="pre">dataset</span>&#160; <span class="pre">-mo</span> <span class="pre">&quot;META-TAG=VALUE&quot;*</span>&#160;&#160;&#160;&#160; <span class="pre">:</span> <span class="pre">Meta</span> <span class="pre">information</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">included</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">output</span>&#160; <span class="pre">-quiet</span></code>
+Utilizes GDAL 2.1.2, released October 2016</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="addKipImagery.html" title="Add .kip imagery"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="importPreProcessedData.html" title="Import pre-processed data"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" >Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
