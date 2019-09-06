@@ -41,16 +41,18 @@ Description: Support for terrain "overlay" projects.
 //     uint32 quadTreeBits
 // };
 
+const int MAX_LEVEL = 24;
 
 class InsetTilespaceIndex {
 
 protected:
     std::map <QuadtreePath, std::vector<const khExtents <uint32> *>> _mbrExtentsVecMap;
 public:
+    InsetTilespaceIndex() = default;
 
     QuadtreePath add(const khExtents <uint32> &extents);
 
-    QuadtreePath getQuadtreeMBR(const khExtents <uint32> extents);
+    QuadtreePath getQuadtreeMBR(const khExtents<uint32>& extents, int& level, const int max_level);
 
     std::vector<const khExtents < uint32>* >
 

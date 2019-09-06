@@ -36,7 +36,8 @@ Changes:
 #include <assert.h>
 
 QuadtreePath InsetTilespaceIndex::add(const khExtents <uint32> &extents) {
-    QuadtreePath quadtreeMbr = getQuadtreeMBR(extents);
+    int level;
+    QuadtreePath quadtreeMbr = getQuadtreeMBR(extents, level, MAX_LEVEL);
 
     //std::vector<const khExtents<uint32>*> mbrExtentsVec = _mbrExtentsVecMap.find( mbrHash );
     std::vector<const khExtents <uint32> *> *mbrExtentsVec;
@@ -54,9 +55,63 @@ QuadtreePath InsetTilespaceIndex::add(const khExtents <uint32> &extents) {
     return quadtreeMbr;
 }
 
-QuadtreePath InsetTilespaceIndex::getQuadtreeMBR(khExtents <uint32> extents) {
-    //TODO
-    return QuadtreePath();
+QuadtreePath InsetTilespaceIndex::getQuadtreeMBR(const khExtents<uint32>& extents, int& level, const int max_level) {
+    double north = 180;
+    double south = -180;
+    double west = -180;
+    std::string base_path = "";
+    char next_qt_node;
+    for (level = 0; level < max_level; level += 1) {
+      double level_dim_size = pow(2, level);
+      double qt_node_size = 180.0 / level_dim_size;
+      double north_south_midpoint = (south + north) / 2.0;
+      // Get which sub-node the SW vertex is in.
+      if (extents.south() <= north_south_midpoint) {
+        if (extents.west() <= west + qt_node_size) {
+          next_qt_node = '0';
+        } else {
+          next_qt_node = '1';
+        }
+      } else {
+        if (extents.west() <= west + qt_node_size) {
+          next_qt_node = '3';
+        } else {
+          next_qt_node = '2';
+        }
+      }
+      // Check if NE vertex is in the same sub-node. If
+      // not, then break at the node we are at.
+      if (extents.north() <= north_south_midpoint) {
+        if (extents.east() <= west + qt_node_size) {
+          if (next_qt_node != '0') {
+            break;
+          }
+        } else {
+          if (next_qt_node != '1') {
+            break;
+          }
+          west += qt_node_size;
+        }
+        north = north_south_midpoint;
+      } else {
+        if (extents.east() <= west + qt_node_size) {
+          if (next_qt_node != '3') {
+            break;
+          }
+        } else {
+          if (next_qt_node != '2') {
+            break;
+          }
+          west += qt_node_size;
+        }
+        south = north_south_midpoint;
+      }
+      // If still contained, descend to the next level of the tree.
+      (base_path) += next_qt_node;
+    }
+
+    return QuadtreePath(base_path);
+
 }
 
 std::vector <QuadtreePath>
