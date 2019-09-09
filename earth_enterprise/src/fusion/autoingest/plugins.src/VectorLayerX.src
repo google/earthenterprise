@@ -79,7 +79,7 @@ VectorLayerXAssetImplD::HandleEditRequest(const VectorLayerXEditRequest &req)
     vectorlayer->Modify(productrefs, req.meta, layer_config);
   } else {
     // It is a "Save" or "SaveAs" edit request when creating a new asset.
-    vectorlayer = VectorLayerXFactory::Make(assetname,
+    vectorlayer = AssetFactory::Make<MutableVectorLayerXAssetD, VectorLayerXConfig>(assetname,
                                             productrefs,
                                             req.meta,
                                             req.config);
