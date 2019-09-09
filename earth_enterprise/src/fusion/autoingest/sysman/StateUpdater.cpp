@@ -15,53 +15,16 @@
  */
 
 #include "StateUpdater.h"
-#include "AssetVersionD.h"
+#include "AssetVersion.h"
 #include "common/notify.h"
 
-using namespace boost;
-using namespace std;
-
-// The depth_first_search function needs a way to map vertices to indexes. We
-// store a unique index inside each vertex; the code below provides a way for
-// boost to access them. These must be defined before including
-// depth_first_search.hpp.
-template <class Graph>
-class InNodeVertexIndexMap {
-  public:
-    typedef readable_property_map_tag category;
-    typedef size_t value_type;
-    typedef value_type reference;
-    typedef typename Graph::vertex_descriptor key_type;
-
-    InNodeVertexIndexMap(const Graph & graph) : graph(graph) {};
-    const Graph & graph;
-};
-
-namespace boost {
-  template<>
-  struct property_map<DependentStateTree, vertex_index_t> {
-    typedef InNodeVertexIndexMap<DependentStateTree> const_type;
-  };
-
-  template<class Graph>
-  InNodeVertexIndexMap<Graph> get(vertex_index_t, const Graph & graph) {
-    return InNodeVertexIndexMap<Graph>(graph);
-  }
-
-  template<class Graph>
-  typename InNodeVertexIndexMap<Graph>::value_type get(
-      const InNodeVertexIndexMap<Graph> & map,
-      typename InNodeVertexIndexMap<Graph>::key_type vertex) {
-    return map.graph[vertex].index;
-  }
-}
+// Must be included before depth_first_search.hpp
+#include "InNodeVertexIndexMap.h"
 
 #include <boost/graph/depth_first_search.hpp>
 
-class StateUpdater::UnsupportedException : public std::runtime_error {
-  public: 
-    UnsupportedException() : std::runtime_error("Unsupported operation") {}
-};
+using namespace boost;
+using namespace std;
 
 class StateUpdater::SetStateVisitor : public default_dfs_visitor {
   private:
@@ -101,7 +64,7 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
             decided = true;
           }
         }
-        void GetOutputs(AssetDefs::State & stateByInputs, bool & blockersAreOffline, uint32 & numWaitingFor) {
+        void GetOutputs(AssetDefs::State & stateByInputs, bool & blockersAreOffline, uint32 & numInputsWaitingFor) {
           if (numinputs == numgood) {
             stateByInputs = AssetDefs::Queued;
           } else if (numblocking) {
@@ -113,9 +76,9 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
           blockersAreOffline = (numblocking == numoffline);
 
           if (stateByInputs == AssetDefs::Waiting) {
-            numWaitingFor = (numinputs - numgood);
+            numInputsWaitingFor = (numinputs - numgood);
           } else {
-            numWaitingFor = 0;
+            numInputsWaitingFor = 0;
           }
         }
         bool Decided() {
@@ -148,7 +111,7 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
             decided = true;
           }
         }
-        void GetOutputs(AssetDefs::State & stateByChildren) {
+        void GetOutputs(AssetDefs::State & stateByChildren, uint32 & numChildrenWaitingFor) {
           if (numkids == numgood) {
             stateByChildren = AssetDefs::Succeeded;
           } else if (numblocking) {
@@ -158,28 +121,36 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
           } else {
             stateByChildren = AssetDefs::Queued;
           }
+          
+          if (stateByChildren == AssetDefs::InProgress) {
+            numChildrenWaitingFor = numkids - numgood;
+          }
+          else {
+            numChildrenWaitingFor = 0;
+          }
         }
         bool Decided() {
           return decided;
         }
     };
 
+    // Helper struct for passing data back to callers of the below function.
+    struct UpdateStateData {
+      InputAndChildStateData stateData;
+      bool needRecalcState;
+    };
+
     // Loops through the inputs and children of an asset and calculates
     // everything the asset verion needs to know to figure out its state. This
     // data will be passed to the asset version so it can calculate its own
     // state.
-    void CalculateStateParameters(
+    UpdateStateData CalculateStateParameters(
         DependentStateTreeVertexDescriptor vertex,
-        const DependentStateTree & tree,
-        AssetDefs::State &stateByInputs,
-        AssetDefs::State &stateByChildren,
-        bool & blockersAreOffline,
-        uint32 & numWaitingFor,
-        bool & needRecalcState) const {
+        const DependentStateTree & tree) const {
       InputStates inputStates;
       ChildStates childStates;
 
-      needRecalcState = tree[vertex].stateChanged;
+      bool needRecalcState = tree[vertex].stateChanged;
       auto edgeIters = out_edges(vertex, tree);
       auto edgeBegin = edgeIters.first;
       auto edgeEnd = edgeIters.second;
@@ -209,8 +180,11 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
         }
       }
 
-      inputStates.GetOutputs(stateByInputs, blockersAreOffline, numWaitingFor);
-      childStates.GetOutputs(stateByChildren);
+      UpdateStateData data;
+      data.needRecalcState = needRecalcState;
+      inputStates.GetOutputs(data.stateData.stateByInputs, data.stateData.blockersAreOffline, data.stateData.numInputsWaitingFor);
+      childStates.GetOutputs(data.stateData.stateByChildren, data.stateData.numChildrenWaitingFor);
+      return data;
     }
 
   public:
@@ -221,7 +195,7 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
     // below this one in the tree. Thus, we don't calculate the state for an
     // asset until we've calculated the state for all of its inputs and
     // children.
-    virtual void finish_vertex(
+    void finish_vertex(
         DependentStateTreeVertexDescriptor vertex,
         const DependentStateTree & tree) const {
       SharedString name = tree[vertex].name;
@@ -236,15 +210,8 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
       // For all assets (including parents and listeners) update the state
       // based on the state of inputs and children.
       if (NeedComputeState(tree[vertex].state)) {
-        AssetDefs::State stateByInputs;
-        AssetDefs::State stateByChildren;
-        bool blockersAreOffline;
-        uint32 numWaitingFor;
-        bool needRecalcState;
-        CalculateStateParameters(
-              vertex, tree, stateByInputs, stateByChildren,
-              blockersAreOffline, numWaitingFor, needRecalcState);
-        if (needRecalcState) {
+        const UpdateStateData data = CalculateStateParameters(vertex, tree);
+        if (data.needRecalcState) {
           AssetDefs::State calculatedState;
           // Run this in a separate block so that the asset version is released
           // before we try to update it.
@@ -257,8 +224,7 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
                      name.toString().c_str());
               return;
             }
-            calculatedState = version->CalcStateByInputsAndChildren(
-                  stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
+            calculatedState = version->CalcStateByInputsAndChildren(data.stateData);
           }
           // Set the state. "true" means we're done changing this asset's state.
           updater->SetState(vertex, calculatedState, true);
