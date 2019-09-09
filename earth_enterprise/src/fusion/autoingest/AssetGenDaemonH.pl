@@ -126,6 +126,7 @@ class ${name}AssetVersionImplD :
 public:
     using AssetType = DerivedAssetHandleD_<${name}Asset, AssetD, ${name}AssetImplD>;
 
+
     virtual std::string GetName() const;
     virtual void SerializeConfig(khxml::DOMElement*) const;
 
@@ -234,16 +235,6 @@ public:
 protected:
 EOF
 
-if ($haveBindConfig) {
-print $fh <<EOF;
-    Mutable${name}AssetVersionD MakeNewVersion(const Config &bound_config);
-EOF
-} else {
-print $fh <<EOF;
-    Mutable${name}AssetVersionD MakeNewVersion(void);
-EOF
-}
-
 
 print $fh <<EOF;
 
@@ -305,24 +296,13 @@ public:
                  const std::string &basename);
 
     static Mutable${name}AssetD
-    Make(const std::string &ref_ $formaltypearg,
-	 $formalinputarg
-	 const khMetaData &meta_,
-	 const $config& config_);
-
-
-    static Mutable${name}AssetD
     FindMake(const std::string &ref_ $formaltypearg,
 	     $formalinputarg
 	     const khMetaData &meta_,
 	     const $config& config_);
+         
     static Mutable${name}AssetD
     FindAndModify(const std::string &ref_ $formaltypearg,
-	     $formalinputarg
-	     const khMetaData &meta_,
-	     const $config& config_);
-    static Mutable${name}AssetD
-    MakeNew(const std::string &ref_ $formaltypearg,
 	     $formalinputarg
 	     const khMetaData &meta_,
 	     const $config& config_);
