@@ -263,7 +263,7 @@ DatabaseAssetImplD::HandleEditRequest(const DatabaseEditRequest &req)
     db->Modify(inputs, req.meta, dbConfig);
   } else {
     dbConfig.indexVersion = 1;
-    db = DatabaseFactory::Make(dbname, inputs, req.meta, dbConfig);
+    db = AssetFactory::Make<MutableDatabaseAssetD, DatabaseConfig>(dbname, inputs, req.meta, dbConfig);
   }
 
   if (!db) {

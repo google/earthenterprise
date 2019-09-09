@@ -262,7 +262,7 @@ MercatorRasterProductAssetImplD::HandleImportRequest(
     asset->Modify(std::vector<SharedString>(), req.meta, product_config);
   } else {
     // It is a "Save" or "SaveAs" request when creating a new asset.
-    asset = MercatorRasterProductFactory::Make(assetname,
+    asset = AssetFactory::Make<MutableMercatorRasterProductAssetD, RasterProductConfig>(assetname,
                                                std::vector<SharedString>(),
                                                req.meta, req.config);
   }

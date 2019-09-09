@@ -43,6 +43,12 @@ class AssetImplD : public virtual AssetImpl
                       const std::vector<AssetVersion> &cachedInputs) const;
   void UpdateInputs(std::vector<AssetVersion> &inputvers) const;
 
+  template<typename MutableVersionHandleType, typename MutableAssetHandleType>
+  static MutableVersionHandleType MakeNewVersion(MutableAssetHandleType &asset);
+
+  template<typename MutableVersionHandleType, typename MutableAssetHandleType, typename ConfigType>
+  static MutableVersionHandleType MakeNewVersion(MutableAssetHandleType &asset, const ConfigType &config);
+
  public:
 
   // const so can be called w/o a MutableHandle (it could already be
@@ -55,5 +61,27 @@ class AssetImplD : public virtual AssetImpl
 
 typedef DerivedAssetHandle_<Asset, AssetImplD> AssetD;
 typedef MutableAssetHandleD_<AssetD> MutableAssetD;
+
+template<typename MutableVersionHandleType, typename MutableAssetHandleType, typename ConfigType>
+MutableVersionHandleType AssetImplD::MakeNewVersion(MutableAssetHandleType &asset, const ConfigType &config)
+{
+    typedef typename MutableVersionHandleType::Impl VerImplType;
+    MutableVersionHandleType newver(std::make_shared<VerImplType>
+                                      (asset.operator->(), config));
+
+    asset->AddVersionRef(newver->GetRef());
+    return newver;
+}
+
+template<typename MutableVersionHandleType, typename MutableAssetHandleType>
+MutableVersionHandleType AssetImplD::MakeNewVersion(MutableAssetHandleType &asset)
+{
+    typedef typename MutableVersionHandleType::Impl VerImplType;
+    MutableVersionHandleType newver(std::make_shared<VerImplType>
+                                      (asset.operator->()));
+
+    asset->AddVersionRef(newver->GetRef());
+    return newver;
+}
 
 #endif /* __AssetD_h */
