@@ -122,13 +122,13 @@ namespace AssetFactory
                                         config));
   }
 
-  template<class MutableDerivedAssetHandleType, class AssetType, class ConfigType>
+  template<class MutableDerivedAssetHandleType, class ConfigType>
   MutableDerivedAssetHandleType FindMake(const std::string& ref_,
                                           AssetDefs::Type type_,
                                           const khMetaData& meta,
                                           const ConfigType& config)
   {
-      MutableDerivedAssetHandleType asset = Find<AssetType>(ref_, type_);
+      MutableDerivedAssetHandleType asset = Find<MutableDerivedAssetHandleType>(ref_, type_);
       if (asset)
       {
           asset->Modify(meta, config);
@@ -137,14 +137,14 @@ namespace AssetFactory
       return Make<MutableDerivedAssetHandleType, ConfigType>(ref_, type_, meta, config);
   }
 
-  template<class MutableDerivedAssetHandleType, class AssetType, class ConfigType>
+  template<class MutableDerivedAssetHandleType, class ConfigType>
   MutableDerivedAssetHandleType FindMake(const std::string& ref_,
                                           AssetDefs::Type type_,
                                           const std::vector<SharedString>& inputs_,
                                           const khMetaData& meta,
                                           const ConfigType& config)
   {
-      MutableDerivedAssetHandleType asset = Find<AssetType>(ref_, type_);
+      MutableDerivedAssetHandleType asset = Find<MutableDerivedAssetHandleType>(ref_, type_);
       if (asset)
       {
           asset->Modify(inputs_, meta, config);
@@ -153,13 +153,13 @@ namespace AssetFactory
       return Make<MutableDerivedAssetHandleType, ConfigType>(ref_, type_, inputs_, meta, config);
   }
 
-  template <class MutableDerivedAssetHandleType, class AssetType, class ConfigType>
+  template <class MutableDerivedAssetHandleType, class ConfigType>
   MutableDerivedAssetHandleType FindMake(const std::string& ref_,
                                           const std::vector<SharedString>& inputs_,
                                           const khMetaData& meta,
                                           const ConfigType& configs)
   {
-     MutableDerivedAssetHandleType asset = Find<AssetType>(ref_);
+     MutableDerivedAssetHandleType asset = Find<MutableDerivedAssetHandleType>(ref_);
      if (asset)
      {
          asset->Modify(inputs_, meta, configs);

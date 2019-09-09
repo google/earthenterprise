@@ -151,7 +151,7 @@ EOF
 
 print $fh <<EOF;
 
-    Mutable${name}AssetD asset = AssetFactory::FindMake<Mutable${name}AssetD,${name}AssetD,$config>
+    Mutable${name}AssetD asset = AssetFactory::FindMake<Mutable${name}AssetD,$config>
                                  (ref_ $forwardtypearg,
                                           $forwardinputarg meta_, config_);
     bool needed = false;
