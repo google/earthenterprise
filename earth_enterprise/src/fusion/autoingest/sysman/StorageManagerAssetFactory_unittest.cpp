@@ -16,11 +16,13 @@
 
 #include "StorageManager.h"
 #include "gee_version.h"
+#include "AssetFactory.h"
 
 #include <gtest/gtest.h>
 #include <string>
 
 using namespace std;
+using namespace AssetFactory;
 
 // This file tests the template functions in StorageManager.h that are not
 // directly a part of the storage manager class. These tests are separate from

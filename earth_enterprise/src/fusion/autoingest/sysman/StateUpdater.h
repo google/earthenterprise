@@ -35,7 +35,7 @@
 class StateUpdater
 {
   private:
-    class UnsupportedException;
+    class UnsupportedException {};
     class SetStateVisitor;
 
     StorageManagerInterface<AssetVersionImpl> * const storageManager;
