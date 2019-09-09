@@ -43,10 +43,10 @@ class AssetImplD : public virtual AssetImpl
                       const std::vector<AssetVersion> &cachedInputs) const;
   void UpdateInputs(std::vector<AssetVersion> &inputvers) const;
 
-  template<typename MutableAssetHandleType, typename MutableVersionHandleType>
+  template<typename MutableVersionHandleType, typename MutableAssetHandleType>
   static MutableVersionHandleType MakeNewVersion(MutableAssetHandleType &asset);
 
-  template<typename MutableAssetHandleType, typename ConfigType, typename MutableVersionHandleType>
+  template<typename MutableVersionHandleType, typename MutableAssetHandleType, typename ConfigType>
   static MutableVersionHandleType MakeNewVersion(MutableAssetHandleType &asset, const ConfigType &config);
 
  public:
@@ -62,7 +62,7 @@ class AssetImplD : public virtual AssetImpl
 typedef DerivedAssetHandle_<Asset, AssetImplD> AssetD;
 typedef MutableAssetHandleD_<AssetD> MutableAssetD;
 
-template<typename MutableAssetHandleType, typename ConfigType, typename MutableVersionHandleType>
+template<typename MutableVersionHandleType, typename MutableAssetHandleType, typename ConfigType>
 MutableVersionHandleType AssetImplD::MakeNewVersion(MutableAssetHandleType &asset, const ConfigType &config)
 {
     typedef typename MutableVersionHandleType::Impl VerImplType;
@@ -73,7 +73,7 @@ MutableVersionHandleType AssetImplD::MakeNewVersion(MutableAssetHandleType &asse
     return newver;
 }
 
-template<typename MutableAssetHandleType, typename MutableVersionHandleType>
+template<typename MutableVersionHandleType, typename MutableAssetHandleType>
 MutableVersionHandleType AssetImplD::MakeNewVersion(MutableAssetHandleType &asset)
 {
     typedef typename MutableVersionHandleType::Impl VerImplType;
