@@ -111,6 +111,7 @@ QuadtreePath InsetTilespaceIndex::getQuadtreeMBR(const khExtents<double>& extent
     }
 
     return QuadtreePath(base_path);
+
 }
 
 std::vector <QuadtreePath>
@@ -121,9 +122,11 @@ InsetTilespaceIndex::intersectingExtentsQuadtreePaths(QuadtreePath quadtreeMbr, 
     boost::copy(_mbrExtentsVecMap | boost::adaptors::map_keys,
                 std::back_inserter(mbrHashVec));
     std::vector <QuadtreePath> intersectingMbrHashes;
+    // TODO - redo this section to use bitwise filtering and partitioning using the QuadtreePath's internal path_
+    // bits, as this will be most expeditions.  However, this requires  access to private constructors and data.
     for (QuadtreePath &otherMbr : mbrHashVec) {
-        if (QuadtreePath(otherMbr).Level() >= minLevel && QuadtreePath(otherMbr).Level() <= maxLevel) {
-            if (QuadtreePath(otherMbr).IsAncestorOf(quadtreeMbr) || quadtreeMbr.IsAncestorOf(QuadtreePath(otherMbr))) {
+        if (otherMbr.Level() >= minLevel && otherMbr.Level() <= maxLevel) {
+            if (otherMbr.IsAncestorOf(quadtreeMbr) || quadtreeMbr.IsAncestorOf(otherMbr)) {
                 intersectingMbrHashes.push_back(otherMbr);
             }
         }
