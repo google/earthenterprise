@@ -26,6 +26,23 @@
 #include "StorageManager.h"
 #include "CacheSizeCalculations.h"
 
+// Used by child classes of AssetVersionImpl
+class StateChangeException : public khException {
+ public:
+  const std::string location;
+  StateChangeException(const std::string & msg, const std::string & loc) :
+    khException(msg), location(loc) {}
+};
+
+// Helper struct for passing data about input and child states.
+struct InputAndChildStateData {
+  AssetDefs::State stateByInputs;
+  AssetDefs::State stateByChildren;
+  bool blockersAreOffline;
+  uint32 numInputsWaitingFor;
+  uint32 numChildrenWaitingFor;
+};
+
 /******************************************************************************
  ***  AssetVersionImpl
  ***
@@ -161,7 +178,7 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
     // parent asset (ex: parent is canceled, so these children
     // must also be canceled.
   }
-  virtual AssetDefs::State CalcStateByInputsAndChildren(AssetDefs::State, AssetDefs::State, bool, uint32) const {
+  virtual AssetDefs::State CalcStateByInputsAndChildren(const InputAndChildStateData &) const {
     assert(false); // Can only call from sub-classes
     return AssetDefs::Bad;
   }
