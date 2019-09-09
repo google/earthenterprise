@@ -34,7 +34,7 @@ Changes:
 #include <iostream>
 #include <stdint.h>
 #include <assert.h>
-
+/*
 QuadtreePath InsetTilespaceIndex::add(const khExtents <uint32> &extents) {
     int level;
     QuadtreePath quadtreeMbr = getQuadtreeMBR(extents, level, MAX_LEVEL);
@@ -54,8 +54,8 @@ QuadtreePath InsetTilespaceIndex::add(const khExtents <uint32> &extents) {
     mbrExtentsVec->push_back(&extents);
     return quadtreeMbr;
 }
-
-QuadtreePath InsetTilespaceIndex::getQuadtreeMBR(const khExtents<uint32>& extents, int& level, const int max_level) {
+*/
+QuadtreePath InsetTilespaceIndex::getQuadtreeMBR(const khExtents<double>& extents, int& level, const int max_level) {
     double north = 180;
     double south = -180;
     double west = -180;
