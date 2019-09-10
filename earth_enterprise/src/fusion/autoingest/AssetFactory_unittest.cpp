@@ -62,8 +62,6 @@ public:
     void operator=(uint8_t _ID) { ID = _ID; }
  };
 
-class MockAssetConfig {};
-
 class MockAssetImpl: public MockAssetStorage
 {
 public:
@@ -149,7 +147,8 @@ class AssetFactoryTest : public testing::Test {
 // TEST DATA
 string testAssetRef = "/gevol/assets/AssetRef",
        testAssetRef1 = "/gevol/assets/AssetRef1";
-std::vector<SharedString> testInputs { "Input1", "Input2"};
+std::vector<SharedString> testInputs { "Input1", "Input2"},
+                          testInputs1 { "Input3", "Input4"};
 khMetaData testMeta;
 MockAssetConfig testConfig0(0);
 

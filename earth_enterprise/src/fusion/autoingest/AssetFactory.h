@@ -114,7 +114,7 @@ namespace AssetFactory
   {
     using Impl = typename MutableDerivedAssetHandleType::Impl;
     using AssetStorageType = typename Impl::Base;
-    return MutableDerivedAssetHandleType(std::make_shared<Impl
+    return MutableDerivedAssetHandleType(std::make_shared<Impl>
                                         (AssetStorageType::MakeStorage(
                                         ref_, Impl::EXPECTED_TYPE,
                                         Impl::EXPECTED_SUBTYPE,
