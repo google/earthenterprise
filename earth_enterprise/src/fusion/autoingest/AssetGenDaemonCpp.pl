@@ -147,13 +147,10 @@ ${name}Factory::FindMakeAndUpdate(
         $formalcachedinputarg
         $formalExtraUpdateArg)
 {
-EOF
 
-print $fh <<EOF;
-
-    Mutable${name}AssetD asset = AssetFactory::FindMake<Mutable${name}AssetD,$config>
+    Mutable${name}AssetD asset = AssetFactory::FindMake<Mutable${name}AssetD>
                                  (ref_ $forwardtypearg,
-                                          $forwardinputarg meta_, config_);
+                                  $forwardinputarg meta_, config_);
     bool needed = false;
     return asset->MyUpdate(needed $forwardcachedinputarg
                            $forwardExtraUpdateArg);

@@ -51,7 +51,19 @@ public:
               }
 };
 
-class MockAssetConfig {};
+// used for comparison of config
+static uint8 configID = 0;
+class MockAssetConfig
+{
+private:
+    uint8 ID;
+public:
+    MockAssetConfig() { ID = configID++; }
+    bool operator==(const MockAssetConfig& other) const
+    {
+        return ID == other.ID;
+    }
+};
 
 class MockAssetImpl: public MockAssetStorage
 {
@@ -143,14 +155,15 @@ string testAssetRef = "/gevol/assets/AssetRef",
 std::vector<SharedString> testInputs { "Input1", "Input2"},
                           testInputs1 { "Inputs3", "Inputs4", "Inputs5" };
 khMetaData testMeta;
-MockAssetConfig testConfig;
+MockAssetConfig testConfig0, testConfig1, testConfig2;
 
 TEST_F(AssetFactoryTest, MakeNew) {
   MockMutableAsset handle = MakeNew<MockMutableAsset, MockAssetConfig>(
-      testAssetRef, testInputs, testMeta, testConfig);
+      testAssetRef, testInputs, testMeta, testConfig0);
   ASSERT_EQ(handle.impl->name, testAssetRef);
   ASSERT_EQ(handle.impl->inputs, testInputs);
   ASSERT_EQ(handle.impl->meta, testMeta);
+  ASSERT_EQ(handle.impl->config, testConfig0);
   ASSERT_EQ(handle.impl->type, AssetDefs::Imagery);
 }
 
@@ -166,31 +179,34 @@ TEST_F(AssetFactoryTest, MakeNewAlreadyExists) {
   // subtype as the one we're trying to create in order to induce an exception.
 
   MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
-  ASSERT_THROW(pMakeNew(testAssetRef, testInputs, testMeta, testConfig), khException);
+  ASSERT_THROW(pMakeNew(testAssetRef, testInputs, testMeta, testConfig0), khException);
 }
 
 TEST_F(AssetFactoryTest, FindMake_New)
 {
     MockMutableAsset handle = FindMake<MockMutableAsset, MockAssetConfig>
-            (testAssetRef1, AssetDefs::Imagery, testInputs1, testMeta, testConfig);
+            (testAssetRef1, AssetDefs::Imagery, testInputs1, testMeta, testConfig1);
     ASSERT_EQ(handle.impl->name, testAssetRef1);
     ASSERT_EQ(handle.impl->inputs, testInputs1);
     ASSERT_EQ(handle.impl->meta, testMeta);
+    ASSERT_EQ(handle.impl->config, testConfig1);
     ASSERT_EQ(handle.impl->type, AssetDefs::Imagery);
 }
 
 TEST_F(AssetFactoryTest, FindMake_Exists)
 {
     MockMutableAsset handle = FindMake<MockMutableAsset, MockAssetConfig>
-            (testAssetRef, testInputs, testMeta, testConfig);
+            (testAssetRef, testInputs, testMeta, testConfig2);
     ASSERT_EQ(handle.impl->name, testAssetRef);
     ASSERT_EQ(handle.impl->inputs, testInputs);
     ASSERT_EQ(handle.impl->meta, testMeta);
+    ASSERT_EQ(handle.impl->config, testConfig2);
     ASSERT_EQ(handle.impl->type, AssetDefs::Imagery);
     MockMutableAsset handle1 = FindMake<MockMutableAsset, MockAssetConfig>
-            (testAssetRef1, AssetDefs::Imagery, testMeta, testConfig);
+            (testAssetRef1, AssetDefs::Imagery, testMeta, testConfig2);
     ASSERT_EQ(handle1.impl->name, testAssetRef1);
     ASSERT_EQ(handle1.impl->meta, testMeta);
+    ASSERT_EQ(handle.impl->config, testConfig2);
     ASSERT_EQ(handle1.impl->type, AssetDefs::Imagery);
 }
 

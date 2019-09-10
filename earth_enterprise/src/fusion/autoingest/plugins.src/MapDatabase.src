@@ -124,7 +124,7 @@ void MapDatabaseAssetImplD::PopulateInputs(const MapDatabaseConfig &config,
                                     "ProjectedProject");
 
     MutableProjectedMapProjectAssetD proj_asset =
-      AssetFactory::FindMake<MutableProjectedMapProjectAssetD, ProjectedMapProjectConfig>
+      AssetFactory::FindMake<MutableProjectedMapProjectAssetD>
           (projected_proj_name,
            makevec<SharedString>(config.mapProject),
            khMetaData(),
@@ -146,8 +146,7 @@ MapDatabaseAssetImplD::HandleEditRequest(const MapDatabaseEditRequest &req)
                                   kMapDatabaseSubtype);
 
 
-  (void) AssetFactory::FindMake<MutableMapDatabaseAssetD, MapDatabaseConfig>
-            (dbname, inputs, req.meta, req.config);
+  (void) AssetFactory::FindMake<MutableMapDatabaseAssetD>(dbname, inputs, req.meta, req.config);
 }
 
 void
