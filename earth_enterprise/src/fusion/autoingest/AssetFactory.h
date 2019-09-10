@@ -99,7 +99,7 @@ namespace AssetFactory
     using Impl = typename MutableDerivedAssetHandleType::Impl;
     using AssetStorageType = typename Impl::Base;
     return MutableDerivedAssetHandleType(std::make_shared<Impl>
-                                            (AssetStorageType::MakeStorage(
+                                        (AssetStorageType::MakeStorage(
                                         ref_, type_,
                                         Impl::EXPECTED_SUBTYPE,
                                         inputs_, meta),
@@ -114,8 +114,8 @@ namespace AssetFactory
   {
     using Impl = typename MutableDerivedAssetHandleType::Impl;
     using AssetStorageType = typename Impl::Base;
-    return MutableDerivedAssetHandleType(std::make_shared<Impl>
-                                            (AssetStorageType::MakeStorage(
+    return MutableDerivedAssetHandleType(std::make_shared<Impl
+                                        (AssetStorageType::MakeStorage(
                                         ref_, Impl::EXPECTED_TYPE,
                                         Impl::EXPECTED_SUBTYPE,
                                         inputs_, meta),
@@ -169,6 +169,7 @@ namespace AssetFactory
   }
 
   template<class MutableDerivedAssetHandleType, class ConfigType>
+
   MutableDerivedAssetHandleType MakeNew( const std::string &ref_,
                 const std::vector<SharedString>& inputs_,
                 const khMetaData &meta,
@@ -184,4 +185,5 @@ namespace AssetFactory
     }
   }
 }
+
 #endif

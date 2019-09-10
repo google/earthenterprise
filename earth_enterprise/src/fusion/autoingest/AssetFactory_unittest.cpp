@@ -51,8 +51,6 @@ public:
               }
 };
 
-// added ID field to aid in comparison
-
 class MockAssetConfig
 {
 public:
@@ -63,6 +61,8 @@ public:
     void operator=(const MockAssetConfig& other) { ID = other.ID; }
     void operator=(uint8_t _ID) { ID = _ID; }
  };
+
+class MockAssetConfig {};
 
 class MockAssetImpl: public MockAssetStorage
 {
@@ -87,8 +87,7 @@ public:
       Modify(_meta, _config);
   }
 
-  MockAssetImpl(MockAssetStorage storage,
-                const MockAssetConfig &config_)
+  MockAssetImpl(MockAssetStorage storage, const MockAssetConfig &config_)
                 : MockAssetStorage(storage), config(config_) {
   }
 };
@@ -119,7 +118,6 @@ class MockMutableAsset
       storage.name = ref_;
       storage.type = MockAssetImpl::EXPECTED_TYPE;
       storage.subtype = testSubTypeToUseForStringConstructor;
-
       MockAssetConfig config;
       impl = std::make_shared<MockAssetImpl>(storage, config);
     }
@@ -139,7 +137,8 @@ string MockMutableAsset::testSubTypeToUseForStringConstructor;
 
 class AssetFactoryTest : public testing::Test {
  public:
-  AssetFactoryTest()
+
+  AssetFactoryTest() 
   {
     MockAssetImpl::EXPECTED_TYPE = AssetDefs::Imagery;
     MockAssetImpl::EXPECTED_SUBTYPE = "mockSubtype";
@@ -149,10 +148,8 @@ class AssetFactoryTest : public testing::Test {
 
 // TEST DATA
 string testAssetRef = "/gevol/assets/AssetRef",
-       testAssetRef1 = "/gevol/assets/AssetRef1",
-       testAssetRef2 = "/gevol/assets/AssetRef2";
-std::vector<SharedString> testInputs { "Input1", "Input2"},
-                          testInputs1 { "Inputs3", "Inputs4", "Inputs5" };
+       testAssetRef1 = "/gevol/assets/AssetRef1";
+std::vector<SharedString> testInputs { "Input1", "Input2"};
 khMetaData testMeta;
 MockAssetConfig testConfig0(0);
 
@@ -167,7 +164,7 @@ TEST_F(AssetFactoryTest, MakeNew) {
 
 // ASSERT_THROW seems to trip up on function templates with more than one
 // template parameter. Making a function pointer helps it get past that.
-MockMutableAsset (*pMakeNew)( const std::string &ref_,
+MockMutableAsset (*pMakeNew)( const std::string &ref_, 
                                     const std::vector<SharedString>& inputs_,
                                     const khMetaData &meta,
                                     const MockAssetConfig &config) =
@@ -175,7 +172,6 @@ MockMutableAsset (*pMakeNew)( const std::string &ref_,
 TEST_F(AssetFactoryTest, MakeNewAlreadyExists) {
   // Make sure the std::string constructor for MockMutableAsset will have the same
   // subtype as the one we're trying to create in order to induce an exception.
-
   MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
   ASSERT_THROW(pMakeNew(testAssetRef, testInputs, testMeta, testConfig0), khException);
 }

@@ -150,9 +150,9 @@ class RasterProductAssetImplD {
 };
 
 class RasterProductAssetVersionImplD {
- protected:
-  virtual void OnStateChange(AssetDefs::State newstate,
-                             AssetDefs::State oldstate);
+ public:
+  virtual AssetDefs::State OnStateChange(AssetDefs::State newstate,
+                                         AssetDefs::State oldstate) override;
 };
 
 
@@ -337,7 +337,7 @@ RasterProductAssetImplD::HandleImportRequest(
   }
 }
 
-void
+AssetDefs::State
 RasterProductAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
                                               AssetDefs::State oldstate)
 {
@@ -360,6 +360,7 @@ RasterProductAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
       meta.SetValue("minlevel", tmp);
     }
   }
+  return state;
 }
 
 

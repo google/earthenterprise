@@ -87,6 +87,7 @@ print $fh <<EOF;
 #include "AssetOperation.h"
 #include <fusion/autoingest/AssetFactory.h>
 using namespace khxml;
+using namespace AssetFactory;
 EOF
 
 if ($base eq 'Leaf') {
@@ -246,8 +247,8 @@ ${name}Factory::ReuseOrMakeAndUpdate(
         asset->Modify($forwardinputarg meta_, config_);
     } else {
         asset = AssetFactory::Make<Mutable${name}AssetD, $config>(ref_ $forwardtypearg,
-                    $forwardinputarg
-                    meta_, config_);
+                                                                  $forwardinputarg
+                                                                  meta_, config_);
     }
     bool needed = false;
     return asset->MyUpdate(needed $forwardcachedinputarg
@@ -492,7 +493,7 @@ if ($haveBindConfig) {
     if (!IsUpToDate(bound_config, *inputvers)) {
         Mutable${name}AssetD self(GetRef());
         Mutable${name}AssetVersionD newver =
-            MakeNewVersion<Mutable${name}AssetD, ${name}AssetImplD::Config, Mutable${name}AssetVersionD>(self, bound_config); 
+        MakeNewVersion<Mutable${name}AssetVersionD>(self, bound_config);
         AssetVersionImplD::InputVersionGuard guard(newver.operator->(),
                                                    *inputvers);
 EOF
@@ -501,7 +502,7 @@ EOF
     // now see if I'm up to date
     if (!IsUpToDate(*inputvers)) {
         Mutable${name}AssetD self(GetRef());
-        Mutable${name}AssetVersionD newver = MakeNewVersion<Mutable${name}AssetD, Mutable${name}AssetVersionD>(self);
+        Mutable${name}AssetVersionD newver = MakeNewVersion<Mutable${name}AssetVersionD>(self);
         AssetVersionImplD::InputVersionGuard guard(newver.operator->(),
                                                    *inputvers);
 EOF
@@ -558,14 +559,16 @@ if ($haveBindConfig) {
     if (!IsUpToDate(bound_cofig)) {
         Mutable${name}AssetD self(GetRef());
         Mutable${name}AssetVersionD newver =
-            MakeNewVersion<Mutable${name}AssetD, ${name}AssetImplD::Config, Mutable${name}AssetVersionD>(self, bound_config); //self->MakeNewVersion(bound_config);
+        MakeNewVersion<Mutable${name}AssetVersionD>(self, bound_config);
+
 EOF
 }else {
     print $fh <<EOF;
     // now see if I'm up to date
     if (!IsUpToDate()) {
         Mutable${name}AssetD self(GetRef());
-        Mutable${name}AssetVersionD newver = MakeNewVersion<Mutable${name}AssetD, Mutable${name}AssetVersionD>(self);//self->MakeNewVersion();
+        Mutable${name}AssetVersionD newver = MakeNewVersion<Mutable${name}AssetVersionD>(self);
+
 EOF
 }
 
