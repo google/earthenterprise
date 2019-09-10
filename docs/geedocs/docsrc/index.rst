@@ -12,7 +12,7 @@ Google Earth Enterprise Documentation Version 5.3.2
 
    ./answer/fusionTutorial
 
-   ./answer/buildInstallGEE
+   ./answer/installOverviewGEE
 
    ./answer/fusionAdministration
 
