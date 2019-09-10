@@ -188,6 +188,7 @@ TEST_F(AssetFactoryTest, FindMake_New)
 
 TEST_F(AssetFactoryTest, FindMake_Exists)
 {
+    MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
     MockMutableAsset handle = FindMake<MockMutableAsset, MockAssetConfig>
             (testAssetRef, testInputs, testMeta, testConfig0);
     ASSERT_EQ(handle.impl->name, testAssetRef);
