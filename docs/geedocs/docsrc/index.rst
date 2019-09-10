@@ -12,27 +12,27 @@ Google Earth Enterprise Documentation Version 5.3.2
 
    ./answer/fusionTutorial
 
-   ./answer/3468016
+   ./answer/buildInstallGEE
 
    ./answer/fusionAdministration
 
    ./answer/fusionResAndProj
 
-   ./answer/3468004
+   ./answer/geeServerAdmin
 
    ./answer/geeServerConfigAndSecurity
 
    ./answer/googleEarthEnterpriseClient
 
-   ./answer/4580164
+   ./answer/welcomePortable5_0
 
    ./answer/developers
 
-   ./answer/6121524
+   ./answer/geecheckTestServerStatus
 
    ./answer/7160009
 
-   ./answer/2987876
+   ./answer/legal
 
    .. rubric:: Google Earth Enterprise Documentation Version 5.3.2
    :name: google-earth-enterprise-documentation-version-5.3.2
