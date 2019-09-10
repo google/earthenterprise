@@ -31,7 +31,9 @@
 #include <stdint.h>
 #include <assert.h>
 #include <khTypes.h>
+#include <sstream>
 #include <string>
+
 
 // TODO _ HIGH LEVEL TODOS:
 // TODO - 1) refactor InsetInfos:: FindNeededImageryInsets(
@@ -136,97 +138,130 @@
 // const uint beginMinifyLevel  = StartTmeshLevel;
 // const uint endMinifyLevel    = terrainInsets[0].effectiveMaxLevel;
 
+class TestData {
+    // TODO - doc structure.
+    std:map < khExtents < double >, QuadtreePath
+    >
+    extentQtMBRMap;
+
+public:
+    TestData(std::string fname) {
+        ifstream input;
+        input.open(fname, ios_base::in);
+
+        // First line and all even lines have 4 floats, for decimal degree representations of the input insets.
+        // Every odd line is a QtMBR.  Let's just read them in pairs.
+        for (std::string line; std::getline(input, line);)   //read stream line by line
+        {
+            std::istringstream in(line);
+            double x1, x2, y1, y2;
+            in >> x1 >> x2 >> y1 >> y2;
+            khExtents<double> extents(x1, x2, y1, y2);
+
+            std::getline(input, line);
+            std::string qtp_txt, qtp_level;
+            in >> qtp_txt >> qtp_level;
+            QuadtreePath qtp(qtp_txt);
+            extentQtMBRMap.insert({extents, mbr});
+        }
+    }
+
+    std:map < khExtents < double >, QuadtreePath > getData() { return extentQtMBRMap; }
+
+};
+
+
 class InsetTilespaceIndexTest : public testing::Test {
-  protected:
+protected:
     InsetTilespaceIndex insetTilespaceIndex;
-  public:
+public:
     static const uchar blist[QuadtreePath::kMaxLevel];
     static const uchar ascii_blist[QuadtreePath::kMaxLevel];
     static const bool is_mercator = true;
     static const uint64 expected_binary = 0x60D793F16AC10018LL;
     static const uint64 mask48 = 0xFFFFFFFFFFFF0000LL;
 
-    std::vector<const khExtents<uint32>*>  getTestInsetsGroup1 ( uint numExtents) const  {
-      std::vector<const khExtents<uint32>*>  newExtents;
-      // std::vector<SimpleInsetInfo<RasterProductAssetVersion> *> imageryInsets;
-      //     imagery_project->LoadSimpleInsetInfo(ClientTmeshTilespaceFlat,
-      //                                         imageryInsets,
-      //                                         maxClientImageryLevel);
-      // TODO - 
-      double x1 = 0, x2 =1, y1 = 0, y2 = 0;
-      
-      while (numExtents) {
-        //   inset = newRPInset(
-        //       0, 0, 0, 0, 0); // TODO - populate with values from test data structs
-        
-        const khExtents<uint32> newExtent(XYOrder, x1,y1,x2,y2);
-        newExtents.push_back( &newExtent );
-        numExtents--;
-      }
-    return newExtents;
-  }
+    std::vector<const khExtents <uint32> *> getTestInsetsGroup1( numExtents) const {
+        std::vector<const khExtents <uint32> *> newExtents;
+        // std::vector<SimpleInsetInfo<RasterProductAssetVersion> *> imageryInsets;
+        //     imagery_project->LoadSimpleInsetInfo(ClientTmeshTilespaceFlat,
+        //                                         imageryInsets,
+        //                                         maxClientImageryLevel);
+        // TODO -
+        double x1 = 0, x2 = 1, y1 = 0, y2 = 0;
 
+        while (numExtents) {
+            //   inset = newRPInset(
+            //       0, 0, 0, 0, 0); // TODO - populate with values from test data structs
 
-  const QuadtreePath getExtentMBR(const khExtents<uint32>& extent, int& level, const int max_level) {
-
-    double north = 180;
-    double south = -180;
-    double west = -180;
-    std::string base_path = "";
-    char next_qt_node;
-    for (level = 0; level < max_level; level += 1) {
-      double level_dim_size = pow(2, level);
-      double qt_node_size = 180.0 / level_dim_size;
-      double north_south_midpoint = (south + north) / 2.0;
-      // Get which sub-node the SW vertex is in.
-      if (extent.south() <= north_south_midpoint) {
-        if (extent.west() <= west + qt_node_size) {
-          next_qt_node = '0';
-        } else {
-          next_qt_node = '1';
+            const khExtents <uint32> newExtent(XYOrder, x1, y1, x2, y2);
+            newExtents.push_back(&newExtent);
+            numExtents--;
         }
-      } else {
-        if (extent.west() <= west + qt_node_size) {
-          next_qt_node = '3';
-        } else {
-          next_qt_node = '2';
-        }
-      }
-      // Check if NE vertex is in the same sub-node. If
-      // not, then break at the node we are at.
-      if (extent.north() <= north_south_midpoint) {
-        if (extent.east() <= west + qt_node_size) {
-          if (next_qt_node != '0') {
-            break;
-          }
-        } else {
-          if (next_qt_node != '1') {
-            break;
-          }
-          west += qt_node_size;
-        }
-        north = north_south_midpoint;
-      } else {
-        if (extent.east() <= west + qt_node_size) {
-          if (next_qt_node != '3') {
-            break;
-          }
-        } else {
-          if (next_qt_node != '2') {
-            break;
-          }
-          west += qt_node_size;
-        }
-        south = north_south_midpoint;
-      }
-      // If still contained, descend to the next level of the tree.
-      (base_path) += next_qt_node;
+        return newExtents;
     }
 
-    return QuadtreePath(base_path);
-  }
-  
-   // TODO - set gencov
+
+    const QuadtreePath getExtentMBR(const khExtents <uint32> &extent, int &level, const int max_level) {
+
+        double north = 180;
+        double south = -180;
+        double west = -180;
+        std::string base_path = "";
+        char next_qt_node;
+        for (level = 0; level < max_level; level += 1) {
+            double level_dim_size = pow(2, level);
+            double qt_node_size = 180.0 / level_dim_size;
+            double north_south_midpoint = (south + north) / 2.0;
+            // Get which sub-node the SW vertex is in.
+            if (extent.south() <= north_south_midpoint) {
+                if (extent.west() <= west + qt_node_size) {
+                    next_qt_node = '0';
+                } else {
+                    next_qt_node = '1';
+                }
+            } else {
+                if (extent.west() <= west + qt_node_size) {
+                    next_qt_node = '3';
+                } else {
+                    next_qt_node = '2';
+                }
+            }
+            // Check if NE vertex is in the same sub-node. If
+            // not, then break at the node we are at.
+            if (extent.north() <= north_south_midpoint) {
+                if (extent.east() <= west + qt_node_size) {
+                    if (next_qt_node != '0') {
+                        break;
+                    }
+                } else {
+                    if (next_qt_node != '1') {
+                        break;
+                    }
+                    west += qt_node_size;
+                }
+                north = north_south_midpoint;
+            } else {
+                if (extent.east() <= west + qt_node_size) {
+                    if (next_qt_node != '3') {
+                        break;
+                    }
+                } else {
+                    if (next_qt_node != '2') {
+                        break;
+                    }
+                    west += qt_node_size;
+                }
+                south = north_south_midpoint;
+            }
+            // If still contained, descend to the next level of the tree.
+            (base_path) += next_qt_node;
+        }
+
+        return QuadtreePath(base_path);
+    }
+
+    // TODO - set gencov
     // Build an inset coverage from NORM extents 
     // IMPORTANT: (Note the different c'tor's paramter order between DEGREES and NORM )
     //
@@ -307,27 +342,39 @@ class InsetTilespaceIndexTest : public testing::Test {
 };
 
 //This test should result in the getExtentMBR method breaking after level 0.
-TEST_F(InsetTilespaceIndexTest, BreakBeforeMaxLevelReached) {
-  const khExtents<uint32> extent = khExtents<uint32>(XYOrder,180,180,90,180);
-  int level;
-  insetTilespaceIndex.getQuadtreeMBR(extent, level, MAX_LEVEL);
-  EXPECT_EQ(1, level);
+TEST_F(InsetTilespaceIndexTest, BreakBeforeMaxLevelReached
+) {
+const khExtents <uint32> extent = khExtents<uint32>(XYOrder, 180, 180, 90, 180);
+int level;
+insetTilespaceIndex.
+getQuadtreeMBR(extent, level, MAX_LEVEL
+);
+EXPECT_EQ(1, level);
 }
 
 //This test should result in the getExtentMBR method looping until the max_level is reached.
-TEST_F(InsetTilespaceIndexTest, DecendToMaxLevel) {
-  const khExtents<uint32> extent = khExtents<uint32>(XYOrder,90,90,90,90);
-  int level;
-  insetTilespaceIndex.getQuadtreeMBR(extent, level, MAX_LEVEL);
-  EXPECT_EQ(MAX_LEVEL, level);
+TEST_F(InsetTilespaceIndexTest, DecendToMaxLevel
+) {
+const khExtents <uint32> extent = khExtents<uint32>(XYOrder, 90, 90, 90, 90);
+int level;
+insetTilespaceIndex.
+getQuadtreeMBR(extent, level, MAX_LEVEL
+);
+EXPECT_EQ(MAX_LEVEL, level
+);
 }
 
 //This test should result in the quadtree path 202 being returned.
-TEST_F(InsetTilespaceIndexTest, ReturnSpecificQTP) {
-  const khExtents<uint32> extent = khExtents<uint32>(XYOrder,90,90,90,90);
-  int level;
-  QuadtreePath qtp = insetTilespaceIndex.getQuadtreeMBR(extent, level, 3);
-  EXPECT_EQ("202", qtp.AsString());
+TEST_F(InsetTilespaceIndexTest, ReturnSpecificQTP
+) {
+const khExtents <uint32> extent = khExtents<uint32>(XYOrder, 90, 90, 90, 90);
+int level;
+QuadtreePath qtp = insetTilespaceIndex.getQuadtreeMBR(extent, level, 3);
+EXPECT_EQ("202", qtp.
+
+AsString()
+
+);
 }
 
 int main(int argc, char *argv[]) {

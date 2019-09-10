@@ -28,6 +28,7 @@ Changes:
 #include <boost/range/algorithm.hpp>
 #include <boost/range.hpp>
 #include <boost/range/adaptor/map.hpp>
+#include <boost/range/irange.hpp>
 #include <boost/range/any_range.hpp>
 #include <map>
 #include <vector>
@@ -124,10 +125,18 @@ InsetTilespaceIndex::intersectingExtentsQuadtreePaths(QuadtreePath quadtreeMbr, 
     std::vector <QuadtreePath> intersectingMbrHashes;
     // TODO - redo this section to use bitwise filtering and partitioning using the QuadtreePath's internal path_
     // bits, as this will be most expeditions.  However, this requires  access to private constructors and data.
-    for (QuadtreePath &otherMbr : mbrHashVec) {
+    //    for (QuadtreePath &otherMbr : mbrHashVec) {
+    //        if (otherMbr.Level() >= minLevel && otherMbr.Level() <= maxLevel) {
+    //            if (otherMbr.IsAncestorOf(quadtreeMbr) || quadtreeMbr.IsAncestorOf(otherMbr)) {
+    //                intersectingMbrHashes.push_back(otherMbr);
+    //            }
+    //        }
+    //    }
+    for ( uint32 level boost::irange(minlevel,maxlevel) {
         if (otherMbr.Level() >= minLevel && otherMbr.Level() <= maxLevel) {
-            if (otherMbr.IsAncestorOf(quadtreeMbr) || quadtreeMbr.IsAncestorOf(otherMbr)) {
+            if ( quadTreeMbr.OverlapsAtLevel(level) {
                 intersectingMbrHashes.push_back(otherMbr);
+                break;
             }
         }
     }
