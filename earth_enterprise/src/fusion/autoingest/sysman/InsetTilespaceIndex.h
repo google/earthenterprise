@@ -52,7 +52,7 @@ public:
 
     QuadtreePath add(const khExtents <uint32> &extents);
 
-    QuadtreePath getQuadtreeMBR(const khExtents<uint32>& extents, int& level, const int max_level);
+    QuadtreePath getQuadtreeMBR(const khExtents<double>& extents, int& level, const int max_level);
 
     std::vector<const khExtents < uint32>* >
 

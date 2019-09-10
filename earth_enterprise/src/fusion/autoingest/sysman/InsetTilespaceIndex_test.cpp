@@ -33,6 +33,8 @@
 #include <khTypes.h>
 #include <sstream>
 #include <string>
+#include <fstream>
+#include <sstream>
 
 
 // TODO _ HIGH LEVEL TODOS:
@@ -291,7 +293,7 @@ public:
         };
         return matchingExtents;
     }
-
+/*
     std::vector<const khExtents <uint32> *>
     findInsetsExperimentalAlgo(const khInsetCoverage &coverage, std::vector<const khExtents <uint32> *> &inputExtents) {
         std::vector<const khExtents <uint32> *> matchingExtentsVec;
@@ -339,44 +341,60 @@ public:
     }
 
     InsetTilespaceIndexTest() : insetTilespaceIndex() {}
+*/
 };
 
 //This test should result in the getExtentMBR method breaking after level 0.
-TEST_F(InsetTilespaceIndexTest, BreakBeforeMaxLevelReached
-) {
-const khExtents <uint32> extent = khExtents<uint32>(XYOrder, 180, 180, 90, 180);
-int level;
-insetTilespaceIndex.
-getQuadtreeMBR(extent, level, MAX_LEVEL
-);
-EXPECT_EQ(1, level);
+
+TEST_F(InsetTilespaceIndexTest, BreakBeforeMaxLevelReached) {
+  const khExtents<double> extent = khExtents<double>(XYOrder,180,180,90,180);
+  int level;
+  insetTilespaceIndex.getQuadtreeMBR(extent, level, MAX_LEVEL);
+  EXPECT_EQ(1, level);
 }
 
 //This test should result in the getExtentMBR method looping until the max_level is reached.
-TEST_F(InsetTilespaceIndexTest, DecendToMaxLevel
-) {
-const khExtents <uint32> extent = khExtents<uint32>(XYOrder, 90, 90, 90, 90);
-int level;
-insetTilespaceIndex.
-getQuadtreeMBR(extent, level, MAX_LEVEL
-);
-EXPECT_EQ(MAX_LEVEL, level
-);
+TEST_F(InsetTilespaceIndexTest, DecendToMaxLevel) {
+  const khExtents<double> extent = khExtents<double>(XYOrder,90,90,90,90);
+  int level;
+  insetTilespaceIndex.getQuadtreeMBR(extent, level, MAX_LEVEL);
+  EXPECT_EQ(MAX_LEVEL, level);
 }
 
 //This test should result in the quadtree path 202 being returned.
-TEST_F(InsetTilespaceIndexTest, ReturnSpecificQTP
-) {
-const khExtents <uint32> extent = khExtents<uint32>(XYOrder, 90, 90, 90, 90);
-int level;
-QuadtreePath qtp = insetTilespaceIndex.getQuadtreeMBR(extent, level, 3);
-EXPECT_EQ("202", qtp.
+TEST_F(InsetTilespaceIndexTest, ReturnSpecificQTP) {
+  const khExtents<double> extent = khExtents<double>(XYOrder,90,90,90,90);
+  int level;
+  QuadtreePath qtp = insetTilespaceIndex.getQuadtreeMBR(extent, level, 3);
+  EXPECT_EQ("202", qtp.AsString());
 
-AsString()
-
-);
 }
 
+TEST_F(InsetTilespaceIndexTest, SampleDataTest) {
+  std::ifstream in("/home/jkent/coveragefile.txt", std::ifstream::in);
+  //std::ofstream out("/home/jkent/test.txt", std::ifstream::out);
+  std::string line;
+  while(getline(in, line)) {
+    //out << line;
+    //out << "\n";
+    std::istringstream iss(line);
+    std::vector<double> coords;
+    std::string coord;
+    while(getline(iss, coord, ' ')) {
+      coords.push_back(std::stod(coord));
+    }
+    const khExtents<double> extent = khExtents<double>(XYOrder,coords.at(0),coords.at(1),coords.at(2),coords.at(3));
+    int level;
+    QuadtreePath qtp = insetTilespaceIndex.getQuadtreeMBR(extent, level, 24);
+    //out << "\t";
+    //out << qtp.AsString();
+    //out << "\t";
+    //out << level;
+    //out << "\n";
+  }
+  //out.close();
+  in.close();
+}
 int main(int argc, char *argv[]) {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
