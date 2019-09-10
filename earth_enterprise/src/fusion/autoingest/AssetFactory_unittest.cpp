@@ -26,7 +26,7 @@
 using namespace std;
 using namespace AssetFactory;
 
-class MockAssetStorage 
+class MockAssetStorage
 {
 public:
   SharedString name;
@@ -51,19 +51,18 @@ public:
               }
 };
 
-// used for comparison of config
-static uint8 configID = 0;
+// added ID field to aid in comparison
+
 class MockAssetConfig
 {
-private:
-    uint8 ID;
 public:
-    MockAssetConfig() { ID = configID++; }
-    bool operator==(const MockAssetConfig& other) const
-    {
-        return ID == other.ID;
-    }
-};
+    int8_t ID;
+    MockAssetConfig(int8 _ID = -1) : ID(_ID){}
+    bool operator==(const MockAssetConfig& other) const { return ID == other.ID; }
+    bool operator==(uint8_t _ID) { return ID == _ID; }
+    void operator=(const MockAssetConfig& other) { ID = other.ID; }
+    void operator=(uint8_t _ID) { ID = _ID; }
+ };
 
 class MockAssetImpl: public MockAssetStorage
 {
@@ -88,7 +87,7 @@ public:
       Modify(_meta, _config);
   }
 
-  MockAssetImpl(MockAssetStorage storage, 
+  MockAssetImpl(MockAssetStorage storage,
                 const MockAssetConfig &config_)
                 : MockAssetStorage(storage), config(config_) {
   }
@@ -120,7 +119,7 @@ class MockMutableAsset
       storage.name = ref_;
       storage.type = MockAssetImpl::EXPECTED_TYPE;
       storage.subtype = testSubTypeToUseForStringConstructor;
-      
+
       MockAssetConfig config;
       impl = std::make_shared<MockAssetImpl>(storage, config);
     }
@@ -140,7 +139,7 @@ string MockMutableAsset::testSubTypeToUseForStringConstructor;
 
 class AssetFactoryTest : public testing::Test {
  public:
-  AssetFactoryTest() 
+  AssetFactoryTest()
   {
     MockAssetImpl::EXPECTED_TYPE = AssetDefs::Imagery;
     MockAssetImpl::EXPECTED_SUBTYPE = "mockSubtype";
@@ -155,7 +154,7 @@ string testAssetRef = "/gevol/assets/AssetRef",
 std::vector<SharedString> testInputs { "Input1", "Input2"},
                           testInputs1 { "Inputs3", "Inputs4", "Inputs5" };
 khMetaData testMeta;
-MockAssetConfig testConfig0, testConfig1, testConfig2;
+MockAssetConfig testConfig0(0);
 
 TEST_F(AssetFactoryTest, MakeNew) {
   MockMutableAsset handle = MakeNew<MockMutableAsset, MockAssetConfig>(
@@ -163,15 +162,14 @@ TEST_F(AssetFactoryTest, MakeNew) {
   ASSERT_EQ(handle.impl->name, testAssetRef);
   ASSERT_EQ(handle.impl->inputs, testInputs);
   ASSERT_EQ(handle.impl->meta, testMeta);
-  ASSERT_EQ(handle.impl->config, testConfig0);
   ASSERT_EQ(handle.impl->type, AssetDefs::Imagery);
 }
 
 // ASSERT_THROW seems to trip up on function templates with more than one
 // template parameter. Making a function pointer helps it get past that.
-MockMutableAsset (*pMakeNew)( const std::string &ref_, 
+MockMutableAsset (*pMakeNew)( const std::string &ref_,
                                     const std::vector<SharedString>& inputs_,
-                                    const khMetaData &meta, 
+                                    const khMetaData &meta,
                                     const MockAssetConfig &config) =
   MakeNew<MockMutableAsset, MockAssetConfig>;
 TEST_F(AssetFactoryTest, MakeNewAlreadyExists) {
@@ -185,29 +183,36 @@ TEST_F(AssetFactoryTest, MakeNewAlreadyExists) {
 TEST_F(AssetFactoryTest, FindMake_New)
 {
     MockMutableAsset handle = FindMake<MockMutableAsset, MockAssetConfig>
-            (testAssetRef1, AssetDefs::Imagery, testInputs1, testMeta, testConfig1);
+            (testAssetRef1, AssetDefs::Imagery, testInputs1, testMeta, MockAssetConfig(1));
     ASSERT_EQ(handle.impl->name, testAssetRef1);
     ASSERT_EQ(handle.impl->inputs, testInputs1);
     ASSERT_EQ(handle.impl->meta, testMeta);
-    ASSERT_EQ(handle.impl->config, testConfig1);
     ASSERT_EQ(handle.impl->type, AssetDefs::Imagery);
+    ASSERT_EQ(handle.impl->config, 1);
 }
 
 TEST_F(AssetFactoryTest, FindMake_Exists)
 {
     MockMutableAsset handle = FindMake<MockMutableAsset, MockAssetConfig>
-            (testAssetRef, testInputs, testMeta, testConfig2);
+            (testAssetRef, testInputs, testMeta, testConfig0);
     ASSERT_EQ(handle.impl->name, testAssetRef);
     ASSERT_EQ(handle.impl->inputs, testInputs);
     ASSERT_EQ(handle.impl->meta, testMeta);
-    ASSERT_EQ(handle.impl->config, testConfig2);
     ASSERT_EQ(handle.impl->type, AssetDefs::Imagery);
+    ASSERT_EQ(handle.impl->config, 0);
     MockMutableAsset handle1 = FindMake<MockMutableAsset, MockAssetConfig>
-            (testAssetRef1, AssetDefs::Imagery, testMeta, testConfig2);
+            (testAssetRef1, AssetDefs::Imagery, testMeta, testConfig0);
     ASSERT_EQ(handle1.impl->name, testAssetRef1);
     ASSERT_EQ(handle1.impl->meta, testMeta);
-    ASSERT_EQ(handle.impl->config, testConfig2);
     ASSERT_EQ(handle1.impl->type, AssetDefs::Imagery);
+    ASSERT_EQ(handle.impl->config, 0);
+    MockMutableAsset handle2 = FindMake<MockMutableAsset, MockAssetConfig>
+            (testAssetRef, AssetDefs::Imagery, testInputs, testMeta, testConfig0);
+    ASSERT_EQ(handle.impl->name, testAssetRef);
+    ASSERT_EQ(handle.impl->inputs, testInputs);
+    ASSERT_EQ(handle.impl->meta, testMeta);
+    ASSERT_EQ(handle.impl->type, AssetDefs::Imagery);
+    ASSERT_EQ(handle.impl->config, 0);
 }
 
 int main(int argc, char **argv) {
