@@ -225,6 +225,10 @@ bool QuadtreePath::IsAncestorOf(const QuadtreePath &other) const {
   }
 }
 
+bool QuadtreePath::OverlapsAtLevel(const QuadtreePath &other, uint level) const {
+    return PathBits(level) == other.PathBits(level);
+}
+
 
 QuadtreePath QuadtreePath::RelativePath(const QuadtreePath &parent,
                                         const QuadtreePath &child)
