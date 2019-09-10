@@ -1,0 +1,148 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Non-clickable icons &#8212; Google Earth Enterprise 5.3.2 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Map projections" href="mapProjections.html" />
+    <link rel="prev" title="Add KML layers" href="addKMLLayers.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="mapProjections.html" title="Map projections"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="addKMLLayers.html" title="Add KML layers"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" accesskey="U">Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="addKMLLayers.html"
+                        title="previous chapter">Add KML layers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="mapProjections.html"
+                        title="next chapter">Map projections</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp2.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp2.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="non-clickable-icons">
+<h1>Non-clickable icons<a class="headerlink" href="#non-clickable-icons" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>By default, any point icon that you configure in Fusion displays a
+pop-up balloon whenever EC users click it. You can configure the
+pop-up balloons to display information about the point. An example
+is shown below.</p>
+<p>However, if you do not want an icon to display a pop-up balloon,
+you can use one of Fusion’s <strong>Advanced</strong> options to make it a
+non-clickable icon. (Non-clickable icons are point icons that
+do not change when clicked.)</p>
+<p><img alt="Clickable icon example" src="../../images/2964717_clickable_icon.jpg" /></p>
+<p class="rubric">To create a non-clickable icon:</p>
+<ol class="arabic">
+<li><p class="first">Add a new point vector resource to a vector project. In the
+example below, the point vector resource is called
+<strong>USA_Cities</strong>.</p>
+<p><img alt="Point layer resource example" src="../../images/2966059_point_layer.jpg" /></p>
+</li>
+<li><p class="first">Assign filters, icon types, and minimum and maximum visibility
+display rule settings to the point layer.</p>
+<p><img alt="Vector Display Rules window" src="../../images/2966091_vector_display_rules.jpg" /></p>
+</li>
+<li><p class="first">In the <strong>Balloon</strong> section, change the <strong>Style</strong> from
+<strong>Default</strong> to <strong>Advanced</strong>.</p>
+<p><img alt="Balloon style options" src="../../images/2966060_balloon_style_options.jpg" /></p>
+</li>
+<li><p class="first">Leave the <strong>Text</strong> field and the <strong>Advanced</strong> field empty.</p>
+<p><img alt="Balloon style - Advanced" src="../../images/2966075_balloon_style_advanced.jpg" /></p>
+</li>
+<li><p class="first">Click <strong>Advanced</strong>. The <strong>Balloon Style Text</strong> window appears.</p>
+<p><img alt="Balloon Style Text window" src="../../images/2966062_balloon_style_text.jpg" /></p>
+</li>
+<li><p class="first">Click <strong>Insert Default Text</strong>.</p>
+</li>
+<li><p class="first">Remove all text except: $[description].</p>
+</li>
+<li><p class="first">Click <strong>OK</strong> twice to exit all windows.</p>
+</li>
+<li><p class="first"><strong>Save</strong> and <strong>Build</strong> the vector project.</p>
+</li>
+<li><p class="first">Build the 3D database, then publish to Fusion.</p>
+<p>You can now view the non-clickable icon in EC.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="mapProjections.html" title="Map projections"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="addKMLLayers.html" title="Add KML layers"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" >Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
