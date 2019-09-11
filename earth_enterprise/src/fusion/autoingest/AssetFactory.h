@@ -168,6 +168,58 @@ namespace AssetFactory
      return Make<MutableDerivedAssetHandleType, ConfigType> (ref_, inputs_, meta_, config_);
   }
 
+  template <class MutableDerivedAssetHandleType, class ConfigType>
+  MutableDerivedAssetHandleType FindAndModify(const std::string& ref_,
+                                              const std::vector<SharedString>& inputs_,
+                                              const khMetaData& meta_,
+                                              const ConfigType& config_)
+  {
+      using Impl = typename MutableDerivedAssetHandleType::Impl;
+      MutableDerivedAssetHandleType asset = Find<MutableDerivedAssetHandleType>(ref_);
+      if (asset)
+      {
+          asset->Modify(inputs_, meta_, config_);
+          return asset;
+      }
+      throw khException(kh::tr("%1 '%2' already exists")
+                        .arg(Impl::EXPECTED_SUBTYPE).arg(ref_));
+  }
+
+  template <class MutableDerivedAssetHandleType, class ConfigType>
+  MutableDerivedAssetHandleType FindAndModify(const std::string& ref_,
+                                              AssetDefs::Type type_,
+                                              const std::vector<SharedString>& inputs_,
+                                              const khMetaData& meta_,
+                                              const ConfigType& config_)
+  {
+      using Impl = typename MutableDerivedAssetHandleType::Impl;
+      MutableDerivedAssetHandleType asset = Find<MutableDerivedAssetHandleType>(ref_, type_);
+      if (asset)
+      {
+          asset->Modify(inputs_, meta_, config_);
+          return asset;
+      }
+      throw khException(kh::tr("%1 '%2' already exists")
+                        .arg(Impl::EXPECTED_SUBTYPE).arg(ref_));
+  }
+
+  template <class MutableDerivedAssetHandleType, class ConfigType>
+  MutableDerivedAssetHandleType FindAndModify(const std::string& ref_,
+                                              AssetDefs::Type type_,
+                                              const khMetaData& meta_,
+                                              const ConfigType& config_)
+  {
+      using Impl = typename MutableDerivedAssetHandleType::Impl;
+      MutableDerivedAssetHandleType asset = Find<MutableDerivedAssetHandleType>(ref_, type_);
+      if (asset)
+      {
+          asset->Modify(meta_, config_);
+          return asset;
+      }
+      throw khException(kh::tr("%1 '%2' already exists")
+                        .arg(Impl::EXPECTED_SUBTYPE).arg(ref_));
+  }
+
   template<class MutableDerivedAssetHandleType, class ConfigType>
   MutableDerivedAssetHandleType MakeNew( const std::string &ref_,
                 const std::vector<SharedString>& inputs_,

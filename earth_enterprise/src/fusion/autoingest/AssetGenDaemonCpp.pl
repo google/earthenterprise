@@ -120,23 +120,6 @@ ${name}Factory::SubAssetName(
                                    $actualtypearg, "$subtype");
 }
 
-Mutable${name}AssetD
-${name}Factory::FindAndModify(const std::string &ref_ $formaltypearg,
-                              $formalinputarg
-                              const khMetaData &meta_,
-                              const $config& config_)
-{
-    Mutable${name}AssetD asset = Find<${name}AssetD>(ref_, $typeref);
-    if (asset) {
-        asset->Modify($forwardinputarg meta_, config_);
-        return asset;
-    } else {
-        throw khException(kh::tr("$subtype '%2' doesn't exist")
-                          .arg(ref_));
-    }
-}
-
-
 $template
 Mutable${name}AssetVersionD
 ${name}Factory::FindMakeAndUpdate(

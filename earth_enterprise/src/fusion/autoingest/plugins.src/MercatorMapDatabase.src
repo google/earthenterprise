@@ -200,7 +200,8 @@ MercatorMapDatabaseAssetImplD::HandleModifyRequest(const MapDatabaseEditRequest 
 
 
   // find and modify the DB
-  (void) MercatorMapDatabaseFactory::FindAndModify(dbname,
+  (void) AssetFactory::FindAndModify<MutableMercatorMapDatabaseAssetD>
+                                          (dbname,
                                            inputs,
                                            req.meta,
                                            req.config);
