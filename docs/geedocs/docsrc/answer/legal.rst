@@ -63,6 +63,6 @@ Legal notices
 
       ©2008-2017 Google; ©2017-2018 Open GEE Contributors
 
-.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
+.. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
    :width: 130px
    :height: 44px

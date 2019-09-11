@@ -1,3 +1,6 @@
+GEE Server administration
+=========================
+
 .. toctree::
    :maxdepth: 3
    :glob:
