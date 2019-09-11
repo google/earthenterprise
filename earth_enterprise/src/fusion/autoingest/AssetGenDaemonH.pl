@@ -296,12 +296,6 @@ public:
                  const std::string &basename);
 
     static Mutable${name}AssetD
-    FindMake(const std::string &ref_ $formaltypearg,
-	     $formalinputarg
-	     const khMetaData &meta_,
-	     const $config& config_);
-         
-    static Mutable${name}AssetD
     FindAndModify(const std::string &ref_ $formaltypearg,
 	     $formalinputarg
 	     const khMetaData &meta_,

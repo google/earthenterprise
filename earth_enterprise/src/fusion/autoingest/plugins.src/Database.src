@@ -291,10 +291,7 @@ DatabaseAssetImplD::HandleNewRequest(const DatabaseEditRequest &req)
   } else {
     DatabaseConfig dbConfig = req.config;
     dbConfig.indexVersion = 1;
-    DatabaseFactory::FindMake(dbname,
-                              inputs,
-                              req.meta,
-                              dbConfig);
+    AssetFactory::FindMake<MutableDatabaseAssetD>(dbname, inputs, req.meta, dbConfig);
   }
 }
 

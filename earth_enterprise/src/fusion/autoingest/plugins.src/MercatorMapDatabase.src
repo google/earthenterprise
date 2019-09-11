@@ -140,10 +140,11 @@ void MercatorMapDatabaseAssetImplD::PopulateInputs(
                                     "ProjectedProject");
 
     MutableProjectedMapProjectAssetD proj_asset =
-      ProjectedMapProjectFactory::FindMake(projected_proj_name,
-                                           makevec<SharedString>(config.mapProject),
-                                           khMetaData(),
-                                           proj_config);
+      AssetFactory::FindMake<MutableProjectedMapProjectAssetD>
+         (projected_proj_name,
+          makevec<SharedString>(config.mapProject),
+          khMetaData(),
+          proj_config);
     inputs.push_back(proj_asset->GetRef());
   }
 }
@@ -161,10 +162,8 @@ MercatorMapDatabaseAssetImplD::HandleEditRequest(const MapDatabaseEditRequest &r
                                   kMercatorMapDatabaseSubtype);
 
 
-  (void) MercatorMapDatabaseFactory::FindMake(dbname,
-                                      inputs,
-                                      req.meta,
-                                      req.config);
+  (void) AssetFactory::FindMake<MutableMercatorMapDatabaseAssetD>
+         (dbname, inputs, req.meta, req.config);
 }
 
 void
