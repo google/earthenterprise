@@ -30,7 +30,7 @@ Google Earth Enterprise Documentation Version 5.3.2
 
    ./answer/geecheckTestServerStatus
 
-   ./answer/7160009
+   ./answer/releaseNotes
 
    ./answer/legal
 
