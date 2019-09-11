@@ -1,3 +1,6 @@
+Release notes
+=============
+
 .. toctree::
    :maxdepth: 3
    :glob:

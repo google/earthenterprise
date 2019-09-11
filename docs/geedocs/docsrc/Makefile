@@ -23,6 +23,7 @@ help:
 %: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 	@$(SPHINX2GITHUB) "$(BUILDDIR)/html"
-	rm -rf ../$(OPENGEEVER)/*
+	rm -rf ../$(OPENGEEVER)
+	mkdir ../$(OPENGEEVER)
 	cp -r ./$(BUILDDIR)/html/* ../$(OPENGEEVER)
 	rm -rf ../$(OPENGEEVER)/sources
