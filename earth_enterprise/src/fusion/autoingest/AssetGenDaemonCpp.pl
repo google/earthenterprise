@@ -121,28 +121,6 @@ ${name}Factory::SubAssetName(
                                    $actualtypearg, "$subtype");
 }
 
-
-
-Mutable${name}AssetD
-${name}Factory::FindMake(const std::string &ref_ $formaltypearg,
-                         $formalinputarg
-                         const khMetaData &meta_,
-                         const $config& config_)
-{
-    // keep hold of it as a mutable so we can change/create it and
-    // have the changes automatically saved
-    Mutable${name}AssetD asset = Find<${name}AssetD>(ref_, $typeref);
-    if (asset) {
-        asset->Modify($forwardinputarg meta_, config_);
-        return asset;
-    } else {
-        return Make<Mutable${name}AssetD>(ref_ $forwardtypearg,
-                    $forwardinputarg
-                    meta_, config_);
-    }
-}
-
-
 Mutable${name}AssetD
 ${name}Factory::FindAndModify(const std::string &ref_ $formaltypearg,
                               $formalinputarg
@@ -170,8 +148,10 @@ ${name}Factory::FindMakeAndUpdate(
         $formalcachedinputarg
         $formalExtraUpdateArg)
 {
-    Mutable${name}AssetD asset = FindMake(ref_ $forwardtypearg,
-                                          $forwardinputarg meta_, config_);
+
+    Mutable${name}AssetD asset = AssetFactory::FindMake<Mutable${name}AssetD>
+                                 (ref_ $forwardtypearg,
+                                  $forwardinputarg meta_, config_);
     bool needed = false;
     return asset->MyUpdate(needed $forwardcachedinputarg
                            $forwardExtraUpdateArg);
@@ -266,9 +246,9 @@ ${name}Factory::ReuseOrMakeAndUpdate(
         }
         asset->Modify($forwardinputarg meta_, config_);
     } else {
-        asset = Make<Mutable${name}AssetD>(ref_ $forwardtypearg,
-                    $forwardinputarg
-                    meta_, config_);
+        asset = AssetFactory::Make<Mutable${name}AssetD, $config>(ref_ $forwardtypearg,
+                                                                  $forwardinputarg
+                                                                  meta_, config_);
     }
     bool needed = false;
     return asset->MyUpdate(needed $forwardcachedinputarg
@@ -513,7 +493,7 @@ if ($haveBindConfig) {
     if (!IsUpToDate(bound_config, *inputvers)) {
         Mutable${name}AssetD self(GetRef());
         Mutable${name}AssetVersionD newver =
-            MakeNewVersion<Mutable${name}AssetVersionD>(self, bound_config); 
+        MakeNewVersion<Mutable${name}AssetVersionD>(self, bound_config);
         AssetVersionImplD::InputVersionGuard guard(newver.operator->(),
                                                    *inputvers);
 EOF
@@ -579,7 +559,8 @@ if ($haveBindConfig) {
     if (!IsUpToDate(bound_cofig)) {
         Mutable${name}AssetD self(GetRef());
         Mutable${name}AssetVersionD newver =
-            MakeNewVersion<Mutable${name}AssetVersionD>(self, bound_config);
+        MakeNewVersion<Mutable${name}AssetVersionD>(self, bound_config);
+
 EOF
 }else {
     print $fh <<EOF;
@@ -587,6 +568,7 @@ EOF
     if (!IsUpToDate()) {
         Mutable${name}AssetD self(GetRef());
         Mutable${name}AssetVersionD newver = MakeNewVersion<Mutable${name}AssetVersionD>(self);
+
 EOF
 }
 
