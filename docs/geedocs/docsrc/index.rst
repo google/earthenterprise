@@ -12,7 +12,7 @@ Google Earth Enterprise Documentation Version 5.3.2
 
    ./answer/fusionTutorial
 
-   ./answer/installOverviewGEE
+   ./answer/installGEE
 
    ./answer/fusionAdministration
 
@@ -24,11 +24,11 @@ Google Earth Enterprise Documentation Version 5.3.2
 
    ./answer/googleEarthEnterpriseClient
 
-   ./answer/welcomePortable5_0
+   ./answer/portable
 
    ./answer/developers
 
-   ./answer/geecheckTestServerStatus
+   ./answer/troubleshooting
 
    ./answer/releaseNotes
 
