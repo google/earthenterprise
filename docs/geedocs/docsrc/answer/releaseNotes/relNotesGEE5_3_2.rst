@@ -14,9 +14,9 @@ Release notes: Open GEE 5.3.2
 
       **KML validation in cutter**. Basic validation is now performed on KML that is pasted into the cutter tool.
       **Memory and performance improvements**. This version of Open GEE includes several optimizations for performance and memory utilization.
-      **Multithreaded builds**. Parts of imagery project builds can now run on <a href="../answer/176738.html#packgen_thread_configuration">multiple threads</a>.</p>
-      **Improved resume operation**. The resume operation has been <a href="../answer/176738.html#improving_optimization_performance">rewritten to improve performance</a>.</p>
-      **Specify cache sizes in bytes**. The sizes of the asset and asset version caches can now be <a href="../answer/176738.html#cache_configuration">specified in bytes</a>.</p>
+      **Multithreaded builds**. Parts of imagery project builds can now run on :doc:`multiple threads <confTaskRulesForFusionPerf>`.
+      **Improved resume operation**. The resume operation has been :doc:`rewritten to improve performance <confTaskRulesForFusionPerf>`.
+      **Specify cache sizes in bytes**. The sizes of the asset and asset version caches can now be :doc:`specified in bytes <confTaskRulesForFusionPerf>`.
 
       .. rubric:: Supported Platforms
 
@@ -34,13 +34,18 @@ Release notes: Open GEE 5.3.2
       .. rubric:: Updated Libraries
 
       Open GEE 5.3.2 includes some library updates:
-      ========== =======
-      Library    Version
-      ========== =======
-      Apache     2.4
-      PostgreSQL 9.6.15
-      PostGIS    2.3.9
-      ========== =======
+
+      .. list-table:: 
+      :widths: 25 25
+      :header-rows: 1
+      * - Library
+      - Version
+      * - Apache
+      - 2.4 
+      * - PostgreSQL
+      - 9.6.15
+      * - PostGIS
+      - 2.3.9
 
       To upgrade from Open GEE 5.2.0, do NOT uninstall it. We recommend
       that you upgrade Open GEE 5.2.0 by simply installing Open GEE
@@ -48,32 +53,28 @@ Release notes: Open GEE 5.3.2
       ensure that your PostgreSQL databases are backed up and upgraded
       correctly to the new PostgreSQL version used by Open GEE 5.3.2.
 
-      .. rubric:: Resolved Issues
-
-      .. list-table:: Title
-      :widths: 25 25 50
-      :header-rows: 1
-      * - Number
-      - Description
-      - Resolution
-      * - 1132
-      - GEE Server doesn't always determine the correct hostname 
-      - Updated the virtual hosts URL to use ``hostname`` if ``getfqdn()`` doesn't return a good hostname. Also added documentation for setting up the system to aid in avoiding this problem.
-      * - 1281
-      - Quitting 32-bit Windows portable server in Windows 7 via Internet Explorer does not work
-      - IE appears to perform aggressive caching, which was preventing the GET request to cmd=quit from making it to the server. Changing the command to be a POST request prevents this.
-      * - 1394
-      - Upgrade PostgreSQL and PostGIS to latest patch releases
-      - The current patch releases have been incorporated.
-      
-      .. rubric:: Known Issues
-
-      .. list-table:: Title
+      .. list-table:: Resolved Issues
       :widths: 25 25 50
       :header-rows: 1
       * - Number
         - Description
         - Resolution
+      * - 1132
+        - GEE Server doesn't always determine the correct hostname 
+        - Updated the virtual hosts URL to use ``hostname`` if ``getfqdn()`` doesn't return a good hostname. Also added documentation for setting up the system to aid in avoiding this problem.
+      * - 1281
+        - Quitting 32-bit Windows portable server in Windows 7 via Internet Explorer does not work
+        - IE appears to perform aggressive caching, which was preventing the GET request to cmd=quit from making it to the server. Changing the command to be a POST request prevents this.
+      * - 1394
+        - Upgrade PostgreSQL and PostGIS to latest patch releases
+        - The current patch releases have been incorporated.
+
+      .. list-table:: Known Issues
+      :widths: 25 25 50
+      :header-rows: 1
+      * - Number
+        - Description
+        - Workaround
       * - 4
         - Google basemap fails to load in 2D Mercator Maps
         - Obtain a valid Google Maps API key and include it in ``/opt/google/gehttpd/htdocs/maps/maps_google.html``.
@@ -138,7 +139,7 @@ Release notes: Open GEE 5.3.2
         - Fusion crashes when opening an unsupported file type
         - Re-open Fusion and avoid opening unsupported file types.
       * - 343 
-        - gefusion: File ->open->*.kiasset*,*.ktasset*,*.kip does not work 
+        - gefusion: File ->open->*.kiasset*,*.ktasset*,*.kip* does not work 
         - kip is not a supported format. Void opening files with .kip extension.
       * - 380
         - Provider field in resource-view is blank
@@ -151,7 +152,7 @@ Release notes: Open GEE 5.3.2
         - No current work around.
       * - 403
         - Missing Close button on system manager window in RHEL 7 
-        - Right-click the title bar and select Close.
+        - Right-click the title bar and select **Close**.
       * - 404
         - Opaque polygons in preview.
         - No current work around.
@@ -213,7 +214,7 @@ Release notes: Open GEE 5.3.2
         - geserver service installation and uninstallation issues
         - Before uninstalling geserver verify if it's running or not.
       * - 590
-        - Maps API Javascript Files Not Found   
+        - Maps API JavaScript Files Not Found   
         - No current work around.
       * - 594
         - Save errors only reported for the first image

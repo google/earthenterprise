@@ -109,9 +109,9 @@ Release notes: GEE 5.0
          or .glms files.
       -  Enable cutter using ``gecutter enable``
 
-      **New Directory Structure for Google Maps Javascript Maps API:**
+      **New Directory Structure for Google Maps JavaScript Maps API:**
 
-      -  The current Google Maps Javascript Maps API V3 is 3.12.17. Maps
+      -  The current Google Maps JavaScript Maps API V3 is 3.12.17. Maps
          API 3.9.x and later uses a simplified directory structure. In
          the new structure, the latest version of Maps API is always in
          /maps/api. To upgrade to 3.12.17, change your code to upload
@@ -130,7 +130,7 @@ Release notes: GEE 5.0
       and GetMap requests for WMS versions 1.1.1 and 1.3.0. To enable
       WMS for a database you want to publish:
 
-      #. In the :doc:`GEE Server Admin console <3470759>`_,
+      #. In the :doc:`GEE Server Admin console <3470759>`,
          click **Databases.**
       #. Check the box next to the database you want to publish.
       #. Click **Publish**.
@@ -173,109 +173,57 @@ Release notes: GEE 5.0
          and Server. You still need a valid JRE (any version) to run the
          installers.
 
-      .. rubric:: Known Issues
-
-      +-----------------------+-----------------------+-----------------------+
-      | Number                | Description           | Workaround            |
-      +=======================+=======================+=======================+
-      | 7239735               | If libc.so.6 is       | Ignore the message    |
-      |                       | located in a          | and continue to       |
-      |                       | directory other than  | install or uninstall. |
-      |                       | /lib, the installer   |                       |
-      |                       | and uninstaller       |                       |
-      |                       | display a message     |                       |
-      |                       | that /lib/libc.so.6   |                       |
-      |                       | is missing. No known  |                       |
-      |                       | problems are          |                       |
-      |                       | associated.           |                       |
-      +-----------------------+-----------------------+-----------------------+
-      | 7531358               | Each terrain project  | Include a             |
-      |                       | (even terrain insets) | low-resolution global |
-      |                       | must have worldwide   | terrain resource such |
-      |                       | resource. If not, the | as Gtopo (land only)  |
-      |                       | build fails with a    | or Etopo (bathymetry  |
-      |                       | "Fusion Fatal: Empty  | and land) with the    |
-      |                       | inset stack" error.   | terrain project, and  |
-      |                       | This error is         | then rebuild the      |
-      |                       | typically caused by   | database.             |
-      |                       | the terrain project   |                       |
-      |                       | not having a base     |                       |
-      |                       | terrain resource with |                       |
-      |                       | complete global       |                       |
-      |                       | coverage.             |                       |
-      +-----------------------+-----------------------+-----------------------+
-      | 11715339              | The Preview option in | #. Make a backup of   |
-      |                       | the GEE Server Admin  |    ``/opt/google/geht |
-      |                       | console Databases     | tp/htdocs/earth       |
-      |                       | window fails to       |          /earth_local |
-      |                       | display any preview   | .html``.              |
-      |                       | for Fusion 3D         | #. Change line 84 in  |
-      |                       | databases.            |    that file from:    |
-      |                       |                       |    ``earthArgs = {dat |
-      |                       |                       | abase: GEE_BASE_URL + |
-      |                       |                       |  window.location.href |
-      |                       |                       | };``                  |
-      |                       |                       |    to                 |
-      |                       |                       |    ``earthArgs = {dat |
-      |                       |                       | abase: window.locatio |
-      |                       |                       | n.href};``            |
-      +-----------------------+-----------------------+-----------------------+
-
-      .. rubric:: Resolved Issues
-
-      +-----------------------+-----------------------+-----------------------+
-      | Number                | Description           | Resolution            |
-      +=======================+=======================+=======================+
-      | 7443814               | Certain polygon       | Fixed in Fusion       |
-      |                       | datasets with invalid | vector processing     |
-      |                       | geometries cause      | pipeline.             |
-      |                       | Fusion processing to  |                       |
-      |                       | hang.                 |                       |
-      +-----------------------+-----------------------+-----------------------+
-      | 7442639               | GEE supports only one | The 5.0 release       |
-      |                       | field per custom      | supports EC 7.0 and   |
-      |                       | Search tab in EC 6.2  | later. To include     |
-      |                       | and later. If you     | multiple Search tab   |
-      |                       | want to include       | fields for EC 7.0 or  |
-      |                       | multiple fields in    | later:                |
-      |                       | your Search tabs, use |                       |
-      |                       | EC 6.1.               | #. Go to GEE Server   |
-      |                       |                       |    admin console at   |
-      |                       |                       |    http://localhost/a |
-      |                       |                       | dmin.                 |
-      |                       |                       | #. Click **Search     |
-      |                       |                       |    tabs**.            |
-      |                       |                       | #. Click **Create     |
-      |                       |                       |    new**.             |
-      |                       |                       | #. Enter your first   |
-      |                       |                       |    field definition,  |
-      |                       |                       |    then click **Add   |
-      |                       |                       |    field.** You can   |
-      |                       |                       |    add as many fields |
-      |                       |                       |    as you want.       |
-      +-----------------------+-----------------------+-----------------------+
-      | 6888196               | Publish fails with    | Fixed in POI-file     |
-      |                       | "Unable to parse POI  | parsing scheme and    |
-      |                       | file" in log.         | POI data managing.    |
-      +-----------------------+-----------------------+-----------------------+
-      | 5570955               | Postgres service      | Fixed in installer.   |
-      |                       | running after GEE     |                       |
-      |                       | Server installer      |                       |
-      |                       | exits.                |                       |
-      +-----------------------+-----------------------+-----------------------+
-      | 7521159               | A double slash in the | Fixed in asset        |
-      |                       | -o option breaks      | managing scheme.      |
-      |                       | genewterrainproject.  |                       |
-      +-----------------------+-----------------------+-----------------------+
-      | 885079                | Ability to assign     | Fixed with new        |
-      |                       | dbroot snippets at    | publisher.            |
-      |                       | database and virtual  |                       |
-      |                       | server level.         |                       |
-      +-----------------------+-----------------------+-----------------------+
-      | 6611496               | geserveradmin reports | Fixed in publisher    |
-      |                       | successful delete for | back end.             |
-      |                       | nonexistent entities. |                       |
-      +-----------------------+-----------------------+-----------------------+
+      .. list-table:: Known Issues
+      :widths: 25 25 50
+      :header-rows: 1
+      * - Number
+        - Description
+        - Workaround
+      * - 7239735
+        - If libc.so.6 is located in a directory other than /lib, the installer and uninstaller display a message that /lib/libc.so.6 is missing. No known problems are associated.
+        - Ignore the message and continue to install or uninstall.
+      * - 7531358
+        - Each terrain project (even terrain insets) must have worldwide resource. If not, the build fails with a "Fusion Fatal: Empty inset stack" error. This error is typically caused by the terrain project not having a base terrain resource with complete global coverage.
+        - Include a low-resolution global terrain resource such as Gtopo (land only) or Etopo (bathymetry and land) with the terrain project, and then rebuild the database.
+      * - 11715339
+        - The Preview option in the GEE Server Admin console Databases window fails to display any preview for Fusion 3D databases.
+        - Make a backup of ``/opt/google/gehttp/htdocs/earth/earth_local.html``
+          Change line 84 in that file from:
+            ``earthArgs = {database: GEE_BASE_URL + window.location.href};``
+            to
+            ``earthArgs = {database: window.location.href};``
+ 
+      .. list-table:: Resolved Issues
+      :widths: 25 25 50
+      :header-rows: 1
+      * - Number
+        - Description
+        - Resolution
+      * - 7443814
+        - Certain polygon datasets with invalid geometries cause Fusion processing to hang.
+        - Fixed in Fusion vector processing pipeline.
+      * - 7442639
+        - GEE supports only one field per custom Search tab in EC 6.2 and later. If you want to include multiple fields in your Search tabs, use EC 6.1. 
+        - The 5.0 release supports EC 7.0 and later. To include multiple Search tab fields for EC 7.0 or later:
+            #. Go to GEE Server admin console at http://localhost/admin.
+            #. Click **Search tabs**.
+            #. Click **Create new**.
+            #. Enter your first field definition, then click **Add field.** You can add as many fields as you want.
+      * - 6888196
+        - Publish fails with "Unable to parse POI file" in log.
+        - Fixed in POI-file parsing scheme and POI data managing.
+      * - 5570955
+        - Postgres service running after GEE Server installer exits.
+        - Fixed in installer.
+      * - 7521159
+        - A double slash in the -o option breaks genewterrainproject.
+        - Fixed in asset managing scheme.
+      * - 885079
+        - Ability to assign dbroot snippets at database and virtual server level.
+        - Fixed with new publisher.
+      * - 6611496
+        - geserveradmin reports successful delete for nonexistent entities.
+        - Fixed in publisher back end.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
