@@ -384,6 +384,27 @@ void FindNeededImageryInsets(
 
 
 
+//void FindNeededImageryInsets(
+//        const khInsetCoverage        &gencov,
+//        const std::vector<const khExtents<double>*> &extents,
+//        uint                          numInsets,
+//        std::vector<uint>            &neededIndexes,
+//        uint beginMinifyLevel,
+//        uint endMinifyLevel) {
+//
+//
+//    if (gencov.numLevels() == 0) {
+//        // catch degenerate case
+//        return;
+//    }
+//
+//    uint level = gencov.beginLevel();
+//
+//
+//
+//}
+
+
 void FindNeededImageryInsets(
     const khInsetCoverage        &gencov,
     const std::vector<const khExtents<uint32>*> &extents,

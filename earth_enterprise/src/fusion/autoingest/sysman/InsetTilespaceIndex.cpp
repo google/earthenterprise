@@ -35,18 +35,19 @@ Changes:
 #include <iostream>
 #include <stdint.h>
 #include <assert.h>
-/*
-QuadtreePath InsetTilespaceIndex::add(const khExtents <uint32> &extents) {
+
+
+QuadtreePath InsetTilespaceIndex::add(const khExtents <double> &extents) {
     int level;
     QuadtreePath quadtreeMbr = getQuadtreeMBR(extents, level, MAX_LEVEL);
 
     //std::vector<const khExtents<uint32>*> mbrExtentsVec = _mbrExtentsVecMap.find( mbrHash );
-    std::vector<const khExtents <uint32> *> *mbrExtentsVec;
-    std::map<QuadtreePath, std::vector<const khExtents <uint32> *>>::iterator it;
+    std::vector<const khExtents <double> *> *mbrExtentsVec;
+    std::map<QuadtreePath, std::vector<const khExtents <double> *>>::iterator it;
     it = _mbrExtentsVecMap.find(quadtreeMbr);
 
     if (it == _mbrExtentsVecMap.end()) {
-        mbrExtentsVec = new std::vector<const khExtents <uint32> *>();
+        mbrExtentsVec = new std::vector<const khExtents <double> *>();
         // _mbrExtentsVecMap.insert(  <uint64, std::vector<const khExtents <uint32>*>>::value_type(  mbrHash, *mbrExtentsVec );
         _mbrExtentsVecMap.insert({quadtreeMbr, *mbrExtentsVec});
     } else {
@@ -55,60 +56,60 @@ QuadtreePath InsetTilespaceIndex::add(const khExtents <uint32> &extents) {
     mbrExtentsVec->push_back(&extents);
     return quadtreeMbr;
 }
-*/
-QuadtreePath InsetTilespaceIndex::getQuadtreeMBR(const khExtents<double>& extents, int& level, const int max_level) {
+
+QuadtreePath InsetTilespaceIndex::getQuadtreeMBR(const khExtents<double> &extents, int &level, const int max_level) {
     double north = 180;
     double south = -180;
     double west = -180;
     std::string base_path = "";
     char next_qt_node;
     for (level = 0; level < max_level; level += 1) {
-      double level_dim_size = pow(2, level);
-      double qt_node_size = 180.0 / level_dim_size;
-      double north_south_midpoint = (south + north) / 2.0;
-      // Get which sub-node the SW vertex is in.
-      if (extents.south() <= north_south_midpoint) {
-        if (extents.west() <= west + qt_node_size) {
-          next_qt_node = '0';
+        double level_dim_size = pow(2, level);
+        double qt_node_size = 180.0 / level_dim_size;
+        double north_south_midpoint = (south + north) / 2.0;
+        // Get which sub-node the SW vertex is in.
+        if (extents.south() <= north_south_midpoint) {
+            if (extents.west() <= west + qt_node_size) {
+                next_qt_node = '0';
+            } else {
+                next_qt_node = '1';
+            }
         } else {
-          next_qt_node = '1';
+            if (extents.west() <= west + qt_node_size) {
+                next_qt_node = '3';
+            } else {
+                next_qt_node = '2';
+            }
         }
-      } else {
-        if (extents.west() <= west + qt_node_size) {
-          next_qt_node = '3';
+        // Check if NE vertex is in the same sub-node. If
+        // not, then break at the node we are at.
+        if (extents.north() <= north_south_midpoint) {
+            if (extents.east() <= west + qt_node_size) {
+                if (next_qt_node != '0') {
+                    break;
+                }
+            } else {
+                if (next_qt_node != '1') {
+                    break;
+                }
+                west += qt_node_size;
+            }
+            north = north_south_midpoint;
         } else {
-          next_qt_node = '2';
+            if (extents.east() <= west + qt_node_size) {
+                if (next_qt_node != '3') {
+                    break;
+                }
+            } else {
+                if (next_qt_node != '2') {
+                    break;
+                }
+                west += qt_node_size;
+            }
+            south = north_south_midpoint;
         }
-      }
-      // Check if NE vertex is in the same sub-node. If
-      // not, then break at the node we are at.
-      if (extents.north() <= north_south_midpoint) {
-        if (extents.east() <= west + qt_node_size) {
-          if (next_qt_node != '0') {
-            break;
-          }
-        } else {
-          if (next_qt_node != '1') {
-            break;
-          }
-          west += qt_node_size;
-        }
-        north = north_south_midpoint;
-      } else {
-        if (extents.east() <= west + qt_node_size) {
-          if (next_qt_node != '3') {
-            break;
-          }
-        } else {
-          if (next_qt_node != '2') {
-            break;
-          }
-          west += qt_node_size;
-        }
-        south = north_south_midpoint;
-      }
-      // If still contained, descend to the next level of the tree.
-      (base_path) += next_qt_node;
+        // If still contained, descend to the next level of the tree.
+        (base_path) += next_qt_node;
     }
 
     return QuadtreePath(base_path);
@@ -125,18 +126,14 @@ InsetTilespaceIndex::intersectingExtentsQuadtreePaths(QuadtreePath quadtreeMbr, 
     std::vector <QuadtreePath> intersectingMbrHashes;
     // TODO - redo this section to use bitwise filtering and partitioning using the QuadtreePath's internal path_
     // bits, as this will be most expeditions.  However, this requires  access to private constructors and data.
-    //    for (QuadtreePath &otherMbr : mbrHashVec) {
-    //        if (otherMbr.Level() >= minLevel && otherMbr.Level() <= maxLevel) {
-    //            if (otherMbr.IsAncestorOf(quadtreeMbr) || quadtreeMbr.IsAncestorOf(otherMbr)) {
-    //                intersectingMbrHashes.push_back(otherMbr);
-    //            }
-    //        }
-    //    }
-    for ( uint32 level boost::irange(minlevel,maxlevel) {
-        if (otherMbr.Level() >= minLevel && otherMbr.Level() <= maxLevel) {
-            if ( quadTreeMbr.OverlapsAtLevel(level) {
-                intersectingMbrHashes.push_back(otherMbr);
-                break;
+    // BTree lookups in the mbrHashVec could also bring the time complexity to O(log n)
+    for (uint32 level = minLevel; minLevel <= maxLevel; level++) {
+        for (QuadtreePath &otherMbr : mbrHashVec) {
+            if (otherMbr.Level() >= minLevel && otherMbr.Level() <= maxLevel) {
+                if (QuadtreePath::OverlapsAtLevel(quadtreeMbr, otherMbr, level)) {
+                    intersectingMbrHashes.push_back(otherMbr);
+                    break;
+                }
             }
         }
     }
@@ -144,14 +141,14 @@ InsetTilespaceIndex::intersectingExtentsQuadtreePaths(QuadtreePath quadtreeMbr, 
 }
 
 
-std::vector<const khExtents < uint32>*>
+std::vector<const khExtents <double> *>
 
 InsetTilespaceIndex::intersectingExtents(const QuadtreePath quadtreeMbr, uint32 minLevel, uint32 maxLevel) {
     std::vector <QuadtreePath> intersectingQuadtreeMbrs = intersectingExtentsQuadtreePaths(quadtreeMbr, minLevel,
                                                                                            maxLevel);
-    std::vector < const khExtents < uint32 > * > intersectingExtentsVec;
+    std::vector<const khExtents <double> *> intersectingExtentsVec;
     for (auto otherMbr : intersectingQuadtreeMbrs) {
-        std::vector<const khExtents <uint32> *> extentsVec = _mbrExtentsVecMap[otherMbr];
+        std::vector<const khExtents <double> *> extentsVec = _mbrExtentsVecMap[otherMbr];
         intersectingExtentsVec.insert(intersectingExtentsVec.end(), extentsVec.begin(), extentsVec.end());
     };
     return intersectingExtentsVec;
