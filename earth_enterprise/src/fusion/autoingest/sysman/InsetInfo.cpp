@@ -371,13 +371,13 @@ void FindNeededImageryInsets(
     uint beginMinifyLevel,
     uint endMinifyLevel) {
 
-  std::vector<const khExtents<uint32>> extents;
+  std::vector<const khExtents<uint32>> extentsVec;
   const uint level = gencov.beginLevel();
   for ( auto &i: insets ) {
       const khExtents<uint32> & extents = i.coverage.levelExtents(level);
-      extents.push_back(extents);
+      extentsVec.push_back(extents);
   }
-  FindNeededImageryInsets( gencov, extents, numInsets, neededIndexes, beginMinifyLevel, endMinifyLevel );
+  FindNeededImageryInsets( gencov, extentsVec, numInsets, neededIndexes, beginMinifyLevel, endMinifyLevel );
   return;
 }
 
