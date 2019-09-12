@@ -177,10 +177,10 @@ if bundle_3rd_libs:
   python_bin = os.path.join(exportdirs['bin'], 'python')
   python_include = os.path.join(exportdirs['root'], 'include/python%s' % python_major_version)
 else:
-  python_version = sys.version[:5]        # '2.7.6'
-  python_major_version = sys.version[:3]  # '2.7'
-  python_bin = '/usr/bin/python'
-  python_include = '/usr/include/python%s' % python_major_version
+  python_version = '2.7.1' # sys.version[:5] # '2.7.6'
+  python_major_version = '2.7' # sys.version[:3] # '2.7'
+  python_bin = '/opt/rh/python27/root/usr/bin/python' # '/usr/bin/python'
+  python_include = '/opt/rh/python27/root/usr/include/python%s' % python_major_version # '/usr/include/python%s' % python_major_version
 
 # setup platform specific operations
 is_min_ubuntu = True
