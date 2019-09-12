@@ -227,7 +227,7 @@ public:
 extern void
 FindNeededImageryInsets(
     const khInsetCoverage        &gencov,
-    const std::vector<const khExtents<uint32> *> &extents,
+    const std::vector<const khExtents<uint32>> &extents,
     uint                          numExtents,
     std::vector<uint>            &neededIndexes,
     uint beginMinifyLevel,

@@ -42,14 +42,14 @@ QuadtreePath InsetTilespaceIndex::add(const khExtents <double> &extents) {
     QuadtreePath quadtreeMbr = getQuadtreeMBR(extents, level, MAX_LEVEL);
 
     //std::vector<const khExtents<uint32>*> mbrExtentsVec = _mbrExtentsVecMap.find( mbrHash );
-    std::vector<const khExtents <double> *> *mbrExtentsVec;
-    std::map<QuadtreePath, std::vector<const khExtents <double> *>>::iterator it;
+    std::vector<const khExtents <double> > *mbrExtentsVec;
+    std::map<QuadtreePath, std::vector<const khExtents <double> >>::iterator it;
     it = _mbrExtentsVecMap.find(quadtreeMbr);
 
     if (it == _mbrExtentsVecMap.end()) {
-        mbrExtentsVec = new std::vector<const khExtents <double> *>();
+        mbrExtentsVec = new std::vector<const khExtents <double> >();
         // _mbrExtentsVecMap.insert(  <uint64, std::vector<const khExtents <uint32>*>>::value_type(  mbrHash, *mbrExtentsVec );
-        _mbrExtentsVecMap.insert({quadtreeMbr, *mbrExtentsVec});
+        _mbrExtentsVecMap.insert({quadtreeMbr, mbrExtentsVec});
     } else {
         mbrExtentsVec = &(it->second);
     }
@@ -123,7 +123,7 @@ InsetTilespaceIndex::intersectingExtentsQuadtreePaths(QuadtreePath quadtreeMbr, 
     std::vector <QuadtreePath> mbrHashVec;
     boost::copy(_mbrExtentsVecMap | boost::adaptors::map_keys,
                 std::back_inserter(mbrHashVec));
-    std::vector <QuadtreePath> intersectingMbrHashes;
+    std::vector <QuadtreePath> intersectingQuadtrees;
     // TODO - redo this section to use bitwise filtering and partitioning using the QuadtreePath's internal path_
     // bits, as this will be most expeditions.  However, this requires  access to private constructors and data.
     // BTree lookups in the mbrHashVec could also bring the time complexity to O(log n)
@@ -131,24 +131,24 @@ InsetTilespaceIndex::intersectingExtentsQuadtreePaths(QuadtreePath quadtreeMbr, 
         for (QuadtreePath &otherMbr : mbrHashVec) {
             if (otherMbr.Level() >= minLevel && otherMbr.Level() <= maxLevel) {
                 if (QuadtreePath::OverlapsAtLevel(quadtreeMbr, otherMbr, level)) {
-                    intersectingMbrHashes.push_back(otherMbr);
+                    intersectingQuadtrees.push_back(otherMbr);
                     break;
                 }
             }
         }
     }
-    return intersectingMbrHashes;
+    return intersectingQuadtrees;
 }
 
 
-std::vector<const khExtents <double> *>
+std::vector<const khExtents <double> >
 
 InsetTilespaceIndex::intersectingExtents(const QuadtreePath quadtreeMbr, uint32 minLevel, uint32 maxLevel) {
     std::vector <QuadtreePath> intersectingQuadtreeMbrs = intersectingExtentsQuadtreePaths(quadtreeMbr, minLevel,
                                                                                            maxLevel);
-    std::vector<const khExtents <double> *> intersectingExtentsVec;
+    std::vector<const khExtents <double> > intersectingExtentsVec;
     for (auto otherMbr : intersectingQuadtreeMbrs) {
-        std::vector<const khExtents <double> *> extentsVec = _mbrExtentsVecMap[otherMbr];
+        std::vector<const khExtents <double> > extentsVec = _mbrExtentsVecMap[otherMbr];
         intersectingExtentsVec.insert(intersectingExtentsVec.end(), extentsVec.begin(), extentsVec.end());
     };
     return intersectingExtentsVec;
