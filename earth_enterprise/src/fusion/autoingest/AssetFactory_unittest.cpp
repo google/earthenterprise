@@ -156,6 +156,9 @@ std::vector<SharedString> testInputs { "Input1", "Input2"},
 khMetaData testMeta;
 MockAssetConfig testConfig0(0);
 
+TEST_F(AssetFactoryTest, FindAndModifyNotPresent)
+{}
+
 TEST_F(AssetFactoryTest, MakeNew) {
   MockMutableAsset handle = MakeNew<MockMutableAsset, MockAssetConfig>(
       testAssetRef, testInputs, testMeta, testConfig0);
@@ -179,6 +182,7 @@ TEST_F(AssetFactoryTest, MakeNewAlreadyExists) {
   MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
   ASSERT_THROW(pMakeNew(testAssetRef, testInputs, testMeta, testConfig0), khException);
 }
+
 
 TEST_F(AssetFactoryTest, FindMake_New)
 {
@@ -213,6 +217,36 @@ TEST_F(AssetFactoryTest, FindMake_Exists)
     ASSERT_EQ(handle.impl->meta, testMeta);
     ASSERT_EQ(handle.impl->type, AssetDefs::Imagery);
     ASSERT_EQ(handle.impl->config, 0);
+}
+
+TEST_F(AssetFactoryTest, FindAndModifyPresent)
+{
+    MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
+    MockMutableAsset handle = FindAndModify<MockMutableAsset, MockAssetConfig>(
+                testAssetRef, testInputs, testMeta, testConfig0);
+    ASSERT_EQ(handle.impl->name, testAssetRef);
+    handle = FindAndModify<MockMutableAsset, MockAssetConfig>
+            (testAssetRef, AssetDefs::Imagery, testInputs, testMeta, testConfig0);
+    ASSERT_EQ(handle.impl->config, testConfig0);
+    handle = FindAndModify<MockMutableAsset, MockAssetConfig>
+            (testAssetRef, AssetDefs::Imagery, testMeta, testConfig0);
+    ASSERT_EQ(handle.impl->meta, testMeta);
+    ASSERT_EQ(handle.impl->type, AssetDefs::Imagery);
+}
+
+MockMutableAsset (*pFAMAbsent)( const std::string &ref_,
+                                const std::vector<SharedString>& inputs_,
+                                const khMetaData &meta,
+                                const MockAssetConfig &config) =
+  FindAndModify<MockMutableAsset, MockAssetConfig>;
+
+TEST_F(AssetFactoryTest, FindAndModifyAbsent)
+{
+    try {
+        MockMutableAsset handle = FindAndModify<MockMutableAsset, MockAssetConfig>(
+                    string("not present"), testInputs, testMeta, testConfig0);
+        FAIL() << "FindAndModify should have thrown an exception";
+    } catch (...) {/* should throw an exception because ref isn't present*/}
 }
 
 int main(int argc, char **argv) {

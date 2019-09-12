@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #ifndef ASSET_FACTORY_H
 #define ASSET_FACTORY_H
 
@@ -46,6 +47,8 @@ namespace AssetFactory
     return Find<AssetType>(ref, AssetType::Impl::EXPECTED_TYPE);
   }
 
+
+  // see where/how called
   template<class VersionType>
   void ValidateRefForInput(const std::string & ref, const AssetDefs::Type & type)
   {
@@ -181,7 +184,7 @@ namespace AssetFactory
           asset->Modify(inputs_, meta_, config_);
           return asset;
       }
-      throw khException(kh::tr("%1 '%2' already exists")
+      throw khException(kh::tr("%1 '%2' does not exist")
                         .arg(Impl::EXPECTED_SUBTYPE).arg(ref_));
   }
 
@@ -199,7 +202,7 @@ namespace AssetFactory
           asset->Modify(inputs_, meta_, config_);
           return asset;
       }
-      throw khException(kh::tr("%1 '%2' already exists")
+      throw khException(kh::tr("%1 '%2' does not exist")
                         .arg(Impl::EXPECTED_SUBTYPE).arg(ref_));
   }
 
@@ -216,9 +219,10 @@ namespace AssetFactory
           asset->Modify(meta_, config_);
           return asset;
       }
-      throw khException(kh::tr("%1 '%2' already exists")
+      throw khException(kh::tr("%1 '%2' does not exist")
                         .arg(Impl::EXPECTED_SUBTYPE).arg(ref_));
   }
+
 
   template<class MutableDerivedAssetHandleType, class ConfigType>
   MutableDerivedAssetHandleType MakeNew( const std::string &ref_,
