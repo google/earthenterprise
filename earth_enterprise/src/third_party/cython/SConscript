@@ -49,7 +49,7 @@ cython_extract = cython_env.Command(
 
 # [2] Build cython.
 
-python_cmd = '%s/bin/python' % root_dir
+python_cmd = cython_env['python_bin'] # '%s/bin/python' % root_dir
 cython_target = '%s/.build' % current_dir
 cython_build = cython_env.Command(
     cython_target, cython_extract,
