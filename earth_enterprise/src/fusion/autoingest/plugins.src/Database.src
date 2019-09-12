@@ -146,13 +146,14 @@ private:
 
 
 class DatabaseAssetVersionImplD {
+ public:
+  virtual void DependentChildren(std::vector<SharedString> &out) const;
+
  protected:
   // Before fusion 3.0 a Database had 0 or 1 chidren (depending on whether
   // or not it needed to do super sampling). We can use that information to
   // know if this version was one of the old ones or one of the new ones.
   bool IsBeforeGEDB(void) const { return (children.size() <= 1); }
-
-  virtual void ChildrenToCancel(std::vector<AssetVersion> &out);
 
   // Old Databases needed to be marked as broken if their inputs wen
   // offline. The new ones don't beed to bother because their GEDB child
@@ -227,17 +228,15 @@ void DatabaseAssetImplD::ConstructInputsFromRequest(
                             std::vector<SharedString>* inputs) {
   // make sure the project asset_ref_string's are valid
   if (!req.config.imageryProject.empty()) {
-    RasterProjectFactory::ValidateRefForInput(req.config.imageryProject,
-                                              AssetDefs::Imagery);
+    ValidateRefForInput<RasterProjectAssetVersionD>(req.config.imageryProject, AssetDefs::Imagery);
     inputs->push_back(req.config.imageryProject);
   }
   if (!req.config.vectorProject.empty()) {
-    VectorProjectFactory::ValidateRefForInput(req.config.vectorProject);
+    ValidateRefForInput<VectorProjectAssetVersionD>(req.config.vectorProject);
     inputs->push_back(req.config.vectorProject);
   }
   if (!req.config.terrainProject.empty()) {
-    RasterProjectFactory::ValidateRefForInput(req.config.terrainProject,
-                                              AssetDefs::Terrain);
+    ValidateRefForInput<RasterProjectAssetVersionD>(req.config.terrainProject, AssetDefs::Terrain);
     inputs->push_back(req.config.terrainProject);
   }
 }
@@ -256,7 +255,7 @@ DatabaseAssetImplD::HandleEditRequest(const DatabaseEditRequest &req)
 
   // custom FindMake - modified to set/preserve indexVersion
   DatabaseConfig dbConfig = req.config;
-  MutableDatabaseAssetD db = DatabaseFactory::Find(dbname);
+  MutableDatabaseAssetD db = Find<DatabaseAssetD>(dbname);
   if (db) {
     // we must preserve the indexVersion sine the GUI doesn't/can't
     // we really should split this VectrProjectConfig into two pieces
@@ -264,7 +263,7 @@ DatabaseAssetImplD::HandleEditRequest(const DatabaseEditRequest &req)
     db->Modify(inputs, req.meta, dbConfig);
   } else {
     dbConfig.indexVersion = 1;
-    db = DatabaseFactory::Make(dbname, inputs, req.meta, dbConfig);
+    db = AssetFactory::Make<MutableDatabaseAssetD, DatabaseConfig>(dbname, inputs, req.meta, dbConfig);
   }
 
   if (!db) {
@@ -286,16 +285,13 @@ DatabaseAssetImplD::HandleNewRequest(const DatabaseEditRequest &req)
     AssetDefs::NormalizeAssetName(req.assetname,
                                   AssetDefs::Database, kDatabaseSubtype);
 
-  if (DatabaseFactory::Find(dbname)) {
+  if (Find<DatabaseAssetD>(dbname)) {
     throw khException(kh::tr("Database '%1' already exists")
                       .arg(ToQString(dbname)));
   } else {
     DatabaseConfig dbConfig = req.config;
     dbConfig.indexVersion = 1;
-    DatabaseFactory::FindMake(dbname,
-                              inputs,
-                              req.meta,
-                              dbConfig);
+    AssetFactory::FindMake<MutableDatabaseAssetD>(dbname, inputs, req.meta, dbConfig);
   }
 }
 
@@ -315,7 +311,7 @@ DatabaseAssetImplD::HandleModifyRequest(const DatabaseEditRequest &req)
 
   // find and modify the DB
   MutableDatabaseAssetD db;
-  if (db = DatabaseFactory::Find(dbname)) {
+  if (db = Find<DatabaseAssetD>(dbname)) {
     // we must preserve the indexVersion
     DatabaseConfig dbConfig = req.config;
     dbConfig.indexVersion = db->config.indexVersion;
@@ -328,7 +324,7 @@ DatabaseAssetImplD::HandleModifyRequest(const DatabaseEditRequest &req)
 
 
 void
-DatabaseAssetVersionImplD::ChildrenToCancel(std::vector<AssetVersion> &out)
+DatabaseAssetVersionImplD::DependentChildren(std::vector<SharedString> &out) const
 {
   if (children.size()) {
     if (children.size() >= 2) {
@@ -351,7 +347,7 @@ DatabaseAssetVersionImplD::ChildrenToCancel(std::vector<AssetVersion> &out)
 
       // my direct child is the tmesh index, it should be cancelled
       AssetVersion index = children[0];
-      out.push_back(index);
+      out.push_back(index->GetRef());
 
       // its inputs are also my sub assets and should be canceled
       copy(index->inputs.begin(), index->inputs.end(), back_inserter(out));

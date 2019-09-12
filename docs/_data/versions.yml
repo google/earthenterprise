@@ -11,8 +11,8 @@
 - version: 5.2.5
   stability: stable
 - version: 5.3.0
-  stability: latest stable
+  stability: stable
 - version: 5.3.1
-  stability: unstable
+  stability: latest stable
 - version: 5.3.2
   stability: unstable

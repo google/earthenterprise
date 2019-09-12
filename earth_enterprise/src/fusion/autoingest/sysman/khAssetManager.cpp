@@ -22,6 +22,7 @@ Description:
 #include "khAssetManager.h"
 
 #include "common/khnet/SocketException.h"
+#include "fusion/autoingest/sysman/AssetOperation.h"
 #include "fusion/autoingest/sysman/khSystemManager.h"
 #include "fusion/autoingest/sysman/khResourceManager.h"
 #include "fusion/autoingest/sysman/plugins/RasterProductAssetD.h"
@@ -754,7 +755,7 @@ khAssetManager::RebuildVersion(const std::string &verref)
 {
   assert(!mutex.TryLock());
   notify(NFY_INFO, "RebuildVersion %s", verref.c_str());
-  MutableAssetVersionD(verref)->Rebuild();
+  ::RebuildVersion(verref);
 }
 
 void

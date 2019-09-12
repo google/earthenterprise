@@ -38,7 +38,7 @@ class ParseAssetXml_Tester : public opengee::mem_usage::RasterProjectFunctionTes
             return true;
         }
 
-        khRefGuard<RasterProjectAssetImpl> asset =
+        std::shared_ptr<AssetImpl> asset =
             FriendlyRasterProjectAssetImpl::Load(asset_name);
 
         // Use the asset in an operation before throwing it away:

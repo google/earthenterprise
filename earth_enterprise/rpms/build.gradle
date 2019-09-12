@@ -251,7 +251,7 @@ task openGeePostGisRpm(type: GeeRpm) {
 
     packageName = 'opengee-postgis'
     release = ospackage.release
-    version = '2.3.4'
+    version = '2.3.9'
     user = 'root'
     permissionGroup = 'root'
     packageGroup = 'Application/Productivity'
@@ -517,7 +517,7 @@ task openGeeServerRpm(type: GeeRpm, dependsOn: openGeeServerInitScripts) {
 
     requires('opengee-common', ospackage.version, GREATER | EQUAL)
     requiresPre('opengee-common', ospackage.version, GREATER | EQUAL)
-    requires('opengee-postgis', '2.3.4', GREATER | EQUAL)
+    requires('opengee-postgis', '2.3.9', GREATER | EQUAL)
     conflicts('opengee-postgis', '2.0', LESS )
     conflicts('opengee-postgis', '2.4', GREATER | EQUAL)
     // `opengee-server` bundles Apache, and Apache requires utilities from the
@@ -616,7 +616,7 @@ task openGeeServerDeb (type: GeeDeb, dependsOn: openGeeServerInitScripts) {
     url = openGeeServerRpm.url
 
     requires('opengee-common', ospackage.version, GREATER | EQUAL)
-    requires('opengee-postgis', '2.3.4', GREATER | EQUAL)
+    requires('opengee-postgis', '2.3.9', GREATER | EQUAL)
     conflicts('opengee-postgis', '2.0', LESS )
     conflicts('opengee-postgis', '2.4', GREATER | EQUAL)
 

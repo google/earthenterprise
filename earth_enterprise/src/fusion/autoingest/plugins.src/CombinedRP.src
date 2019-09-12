@@ -84,10 +84,10 @@ CombinedRPAssetVersionImpl::PreviewRef(void) const
 
 // ===== CombinedRPAssetD.h =====
 class CombinedRPAssetVersionImplD {
- protected:
-  virtual void OnStateChange(AssetDefs::State newstate,
-                             AssetDefs::State oldstate);
-  virtual void ChildrenToCancel(std::vector<AssetVersion> &out);
+public:
+  virtual AssetDefs::State OnStateChange(AssetDefs::State newstate,
+                                         AssetDefs::State oldstate) override;
+  virtual void DependentChildren(std::vector<SharedString> &out) const override;
 };
 
 
@@ -101,7 +101,7 @@ class CombinedRPAssetVersionImplD {
 #include <khException.h>
 
 
-void
+AssetDefs::State
 CombinedRPAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
                                               AssetDefs::State oldstate)
 {
@@ -120,11 +120,12 @@ CombinedRPAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
       meta.SetValue("minlevel", rptr->minLevel());
     }
   }
+  return state;
 }
 
 
 void
-CombinedRPAssetVersionImplD::ChildrenToCancel(std::vector<AssetVersion> &out)
+CombinedRPAssetVersionImplD::DependentChildren(std::vector<SharedString> &out) const
 {
   if (config.source_is_product_) {
     // nothing to cancel in this case
@@ -139,7 +140,7 @@ CombinedRPAssetVersionImplD::ChildrenToCancel(std::vector<AssetVersion> &out)
   AssetVersion krp(children[0]);
   AssetVersion source(krp->inputs[0]);
   while (source->subtype != "Source") {
-    out.push_back(source);
+    out.push_back(source->GetRef());
     source = source->inputs[0];
   }
 
@@ -149,7 +150,7 @@ CombinedRPAssetVersionImplD::ChildrenToCancel(std::vector<AssetVersion> &out)
     AssetVersion krmp(children[1]);
     AssetVersion maskgen(krmp->inputs[1]);
     if (maskgen->subtype != "Source") {
-      out.push_back(maskgen);
+      out.push_back(maskgen->GetRef());
     }
   }
 }

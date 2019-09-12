@@ -18,7 +18,6 @@
 #define GEO_EARTH_ENTERPRISE_SRC_FUSION_AUTOINGEST_ASSETHANDLE_H_
 
 #include <string>
-#include "common/khRefCounter.h"
 #include "common/khTypes.h"
 #include "common/SharedString.h"
 #include "StorageManager.h"
@@ -38,22 +37,26 @@ class AssetVersionRef;
  ***
  ***  typedef AssetHandle_<AssetImpl> Asset;
  ***  typedef AssetHandle_<AssetVersionImpl> AssetVersion;
+ *** 
+ ***  IMPORTANT NOTE: The AssetHandle_ class is now considered legacy code.
+ ***  New code should call Get or GetMutable on the storage manager directly,
+ ***  which will return a new AssetHandle object. This class will eventually
+ ***  go away.
  ******************************************************************************/
 template <class Impl_>
 class AssetHandle_ : public AssetHandleInterface<Impl_> {
   friend class Impl;
  public:
   typedef Impl_ Impl;
-  using HandleType = typename StorageManager<Impl>::HandleType;
-  struct undefined_type; // never defined.  Just used for bool operations
+  using HandleType = typename StorageManager<Impl>::PointerType;
 
- protected:
   static inline StorageManager<Impl> & storageManager();
 
+ protected:
   inline void DoBind(
       bool checkFileExistenceFirst,
       bool addToCache) const {
-    handle = storageManager().Get(this, checkFileExistenceFirst, addToCache, isMutable());
+    handle = storageManager().Get(this, ref, checkFileExistenceFirst, addToCache, isMutable());
   }
 
   virtual bool isMutable() const { return false; }
@@ -64,14 +67,7 @@ class AssetHandle_ : public AssetHandleInterface<Impl_> {
   static inline uint32 DirtySize(void) { return storageManager().DirtySize(); }
   static uint64 CacheMemoryUse(void) { return storageManager().CacheMemoryUse(); }
 
-  virtual HandleType Load(const std::string &boundref) const {
-    return HandleType(Impl::Load(boundref));
-  }
   virtual bool Valid(const HandleType &) const { return true; }
-
-  // These two functions are implemented separately by Assets and AssetVersions
-  inline virtual std::string Filename() const;
-  inline const SharedString Key() const;
 
   inline void NoLongerNeeded() {
     storageManager().NoLongerNeeded(Ref());
@@ -114,13 +110,7 @@ class AssetHandle_ : public AssetHandleInterface<Impl_> {
   virtual ~AssetHandle_(void) { }
   const SharedString & Ref(void) const { return ref; }
   bool Valid(void) const;
-  // This is better than overloading the bool operator as it
-  // more closely emulates what a pointer's boolean operations does.
-  // For example you can't pass the class as a bool parameter but you
-  // can still do other things like use it in an if statement.
-  // NOTE: in C++11 we can use explicit to get same benefit without this trick
-  // see: http://en.cppreference.com/w/cpp/language/explicit
-  operator undefined_type *(void) const { return Valid()?reinterpret_cast<undefined_type *>(1):nullptr; }
+  explicit operator bool(void) const { return Valid(); }
   const Impl* operator->(void) const {
     Bind();
     return handle.operator->();
@@ -150,11 +140,9 @@ class DerivedAssetHandle_ : public virtual Base_ {
 
  public:
   virtual HandleType Load(const std::string &boundref) const {
-    // Impl::Load will succeed or throw.
-    // The derived khRefGuard will be automatically converted
-    // the the base khRefGuard
     return HandleType(Impl::Load(boundref));
   }
+
   virtual bool Valid(const HandleType & entry) const { 
     // we have to check if it maps to Impl* since somebody
     // else may have loaded it into the storage manager

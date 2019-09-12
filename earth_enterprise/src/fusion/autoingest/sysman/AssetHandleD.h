@@ -18,13 +18,14 @@
 #define __AssetHandleD_h
 
 #include <map>
+#include <memory>
 #include <string>
 #include <vector>
 #include <khException.h>
 #include <khFileUtils.h>
 #include "common/khCppStd.h"
-#include "common/khRefCounter.h"
 #include "common/SharedString.h"
+#include "common/khConstants.h"
 
 
 /******************************************************************************
@@ -45,19 +46,10 @@ class DerivedAssetHandleD_ : public virtual BaseD_, public ROBase_
   typedef typename ROBase::Base BROBase; // this is assumed to be the same type as BBase
   typedef typename BBase::HandleType HandleType;
  public:
-  virtual HandleType Load(const std::string &boundref) const {
-    // Impl::Load will succeed or throw.
-    // The derived khRefGuard will be automatically converted
-    // the the base khRefGuard
-    return HandleType(Impl::Load(boundref));
-  }
   virtual bool Valid(const HandleType & entry) const {
     // we have to check if it maps to Impl* since somebody
     // else may have loaded it into the storage manager
     return dynamic_cast<Impl*>(&*entry);
-  }
-  virtual std::string Filename() const {
-    return BaseD::Filename();
   }
 
   DerivedAssetHandleD_(void) : BBase(), BaseD(), ROBase() { }
@@ -215,7 +207,6 @@ class MutableAssetHandleD_ : public virtual Base_ {
   }
 #endif // GEE_HAS_MOVE
 
-  using Base::operator->;
   Impl* operator->(void) {
     return const_cast<Impl*>(Base::operator->());
   }
@@ -250,9 +241,6 @@ class MutableDerivedAssetHandleD_ : public DerivedBase_, public MutableBase_
   virtual bool Valid(const HandleType & entry) const {
     return DerivedBase::Valid(entry);
   }
-  virtual HandleType Load(const std::string &boundref) const {
-    return DerivedBase::Load(boundref);
-  }
 
   //    Only this leaf-most daemon handle can be constructed from
   // the raw Impl. Rather than give all the base classes constructors
@@ -261,10 +249,10 @@ class MutableDerivedAssetHandleD_ : public DerivedBase_, public MutableBase_
   //    This is public because the various {name}Factory classes must
   // invoke this constructor and there is no way to declare it a friend
   // here since we can't list the name
-  explicit MutableDerivedAssetHandleD_(const khRefGuard<Impl> &handle_) :
+  explicit MutableDerivedAssetHandleD_(const std::shared_ptr<Impl>& handle_) :
       BBase(), BaseD(), DerivedBase(), MutableBase() {
     this->handle = handle_;
-    if (this->handle) {
+    if (this->handle != nullptr) {
       // we have a good handle
 
       // record the ref - since it comes from GetRef() we don't have to
@@ -325,7 +313,6 @@ class MutableDerivedAssetHandleD_ : public DerivedBase_, public MutableBase_
     return *this;
   }
 
-  using DerivedBase::operator->;
   Impl* operator->(void) {
     return const_cast<Impl*>(DerivedBase::operator->());
   }

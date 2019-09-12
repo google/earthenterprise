@@ -244,6 +244,12 @@ else:
   Bdynamicflags = []
   dynamiclibs = {}
 
+
+# CentOS 6 uses Boost 1.41, which uses hash_set.h, which is deprecated.
+# This has been fixed in later versions of Boost, so we simply disable the
+# warning so we can continue to build on ancient operating systems.
+warnflags += ['-Wno-error=cpp']
+
 # TODO: remove this and fix all places where we see this warnings.
 if native_cc:
   warnflags += ['-Wno-error=unused-result',

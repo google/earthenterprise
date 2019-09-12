@@ -206,13 +206,25 @@ env.test('AssetDefsExtra_unittest',
          'AssetDefsExtra_unittest.cpp',
          LIBS=['geautoingest', 'gemiscconfig', 'gtest'])
 
+env.test('AssetSerializer_unittest',
+         'AssetSerializer_unittest.cpp',
+          LIBS=['gecommon', 'gexml', 'qt-mt', 'xerces-c', 'gtest'])
+
+env.test('AssetFactory_unittest',
+         'AssetFactory_unittest.cpp',
+         LIBS=['gecommon', 'gtest', 'geautoingest', 'qt-mt'])
+
 env.test('JsUtils_unittest',
          'JsUtils_unittest.cpp',
          LIBS=['geautoingest', 'gemiscconfig', 'gtest'])
 
 env.test('StorageManager_unittest',
          'StorageManager_unittest.cpp',
-         LIBS=['gecommon', 'gemiscconfig', 'gtest'])
+         LIBS=['gecommon', 'gemiscconfig', 'gtest', 'qt-mt', 'xerces-c', 'gexml'])
+
+env.test('StorageManagerAssetHandle_unittest',
+         'StorageManagerAssetHandle_unittest.cpp',
+         LIBS=['gecommon', 'gtest'])
 
 SConscript('sysman/SConscript', exports=['env', 'commonobj', 'plugins'])
 SConscript('tools/SConscript', exports='env')

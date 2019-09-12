@@ -166,9 +166,10 @@ class RasterProjectAssetImplD {
 };
 
 class RasterProjectAssetVersionImplD {
- protected:
-  virtual void ChildrenToCancel(std::vector<AssetVersion> &out);
+ public:
+  virtual void DependentChildren(std::vector<SharedString> &out) const;
 
+ protected:
   // This will make my children after my inputs have succeeded
   virtual void DelayedBuildChildren(void);
 
@@ -425,7 +426,7 @@ void RasterProjectAssetImplD::HandleEditRequest(
   for (std::vector<InsetStackItem>::const_iterator inset =
            req.config.insets.begin();
        inset != req.config.insets.end(); ++inset) {
-    RasterProductFactory::ValidateRefForInput(inset->dataAsset, req.type);
+    ValidateRefForInput<RasterProductAssetVersionD>(inset->dataAsset, req.type);
   }
 
   // Find/make our target project.
@@ -439,7 +440,7 @@ void RasterProjectAssetImplD::HandleEditRequest(
 
   // Custom FindMake - modified to set/preserve indexVersion & fuid_channel_.
   MutableRasterProjectAssetD project =
-      RasterProjectFactory::Find(projname, req.type);
+      Find<RasterProjectAssetD>(projname, req.type);
   if (project) {
     // It is a regular (editing the same asset) or "SaveAs" re-writing edit
     // request.
@@ -472,7 +473,7 @@ void RasterProjectAssetImplD::HandleEditRequest(
   } else {
     // It is a "Save" or "SaveAs" edit request when creating a new asset.
     assert(req.config.indexVersion == 1);
-    project = RasterProjectFactory::Make(projname, req.type, inputs,
+    project = AssetFactory::Make<MutableRasterProjectAssetD, RasterProjectConfig>(projname, req.type, inputs,
                                          req.meta, req.config);
   }
 
@@ -511,7 +512,7 @@ void RasterProjectAssetImplD::HandleNewRequest(
   for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
          req.items.begin();
        item != req.items.end(); ++item) {
-    RasterProductFactory::ValidateRefForInput(item->dataAsset, req.type);
+    ValidateRefForInput<RasterProductAssetVersionD>(item->dataAsset, req.type);
   }
 
   // normalize the supplied asset name
@@ -519,14 +520,14 @@ void RasterProjectAssetImplD::HandleNewRequest(
     AssetDefs::NormalizeAssetName(req.assetname, req.type, kProjectSubtype);
 
 
-  if (RasterProjectFactory::Find(projname, req.type)) {
+  if (Find<RasterProjectAssetD>(projname, req.type)) {
     throw khException(kh::tr("%1 project %2 already exists")
                       .arg(ToQString(req.type), ToQString(projname)));
   } else {
     // make it
     RasterProjectConfig projConfig(req.type);
     MutableRasterProjectAssetD project =
-      RasterProjectFactory::Make(projname,
+      AssetFactory::Make<MutableRasterProjectAssetD, RasterProjectConfig>(projname,
                                  req.type,
                                  std::vector<SharedString>(),
                                  khMetaData(),
@@ -561,12 +562,12 @@ void RasterProjectAssetImplD::HandleModifyRequest(
   for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
          req.items.begin();
        item != req.items.end(); ++item) {
-    RasterProductFactory::ValidateRefForInput(item->dataAsset, req.type);
+    ValidateRefForInput<RasterProductAssetVersionD>(item->dataAsset, req.type);
   }
 
   // find it and make the change
   MutableRasterProjectAssetD project;
-  if ((project = RasterProjectFactory::Find(req.assetname, req.type))) {
+  if ((project = Find<RasterProjectAssetD>(req.assetname, req.type))) {
     // blow away old insets
     project->config.insets.clear();
     // define new ones
@@ -615,12 +616,12 @@ void RasterProjectAssetImplD::HandleAddToRequest(
   for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
          req.items.begin();
        item != req.items.end(); ++item) {
-    RasterProductFactory::ValidateRefForInput(item->dataAsset, req.type);
+    ValidateRefForInput<RasterProductAssetVersionD>(item->dataAsset, req.type);
   }
 
   // find it and make the change
   MutableRasterProjectAssetD project;
-  if ((project = RasterProjectFactory::Find(req.assetname, req.type))) {
+  if ((project = Find<RasterProjectAssetD>(req.assetname, req.type))) {
     // make sure my existing insets are still in order before adding more
     // a new version of a product asset could invalidate
     // my stacking order
@@ -670,7 +671,7 @@ void RasterProjectAssetImplD::HandleDropFromRequest(
     const RasterProjectDropFromRequest &req) {
   // find the project
   MutableRasterProjectAssetD project;
-  if (!(project = RasterProjectFactory::Find(req.assetname, req.type))) {
+  if (!(project = Find<RasterProjectAssetD>(req.assetname, req.type))) {
     throw khException(kh::tr("No %1 project named %2")
                       .arg(ToQString(req.type), ToQString(req.assetname)));
   }
@@ -710,8 +711,8 @@ void RasterProjectAssetImplD::HandleDropFromRequest(
 
 
 
-void RasterProjectAssetVersionImplD::ChildrenToCancel(
-    std::vector<AssetVersion> &out) {
+void RasterProjectAssetVersionImplD::DependentChildren(
+    std::vector<SharedString> &out) const {
   if (children.size()) {
     // my direct children are my index and optionally a copyright
     std::copy(children.begin(), children.end(), back_inserter(out));
@@ -1024,9 +1025,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
                              "Cannot build").arg(GetRef().toString()));
   }
 
-  std::vector<InsetInfo<
-    RasterProductAssetVersion> >::const_reverse_iterator last_iter =
-      inset_infos.rbegin();
+  const auto last_iter = inset_infos.rbegin();
   notify(NFY_PROGRESS, "Building GERasterIndex: %zu insets, level %d for %s\n", inset_infos.size(), last_iter->effectiveMaxLevel, date.c_str());
 
   // get the range of levels that we're going to generate
@@ -1051,16 +1050,14 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
                     0 /* maxLevelDelta - always 0 here, only differs for SS*/,
                     config.is_overlay_terrain_project_,
                     config.overlay_terrain_resources_min_level_);
-#if 1
   // Calculate levels where transparent tiles may be skipped.
   CalcLevelsToSkipTransparentTiles(&genInfo, beginProjectLevel, endMinifyLevel);
-#endif
   // make a copy of the inset_infos w/ pointers. The FindNeeded*
   // routines want pointers.
   std::vector<const InsetInfo<RasterProductAssetVersion> *> insetInfoPtrs;
   insetInfoPtrs.reserve(inset_infos.size());
-  for (uint i = 0; i < inset_infos.size(); ++i) {
-    insetInfoPtrs.push_back(&inset_infos[i]);
+  for(const auto& i : inset_infos) {
+      insetInfoPtrs.push_back(&i);
   }
 
   // create my children giving them each a bigger piece of the stack
@@ -1086,19 +1083,13 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     notify(NFY_PROGRESS, "BuildIndex finding intersections for inset %d of %lu",
            i+1, genInfo.size());
 
-    if (type == AssetDefs::Imagery) {
-      FindNeededImageryInsets(genInfo[i].coverage,
-                              insetInfoPtrs, i,
-                              neededIndexes,
-                              beginMinifyLevel,
-                              endMinifyLevel);
-    } else {
-      FindNeededTerrainInsets(genInfo[i].coverage,
-                              insetInfoPtrs, i,
-                              neededIndexes,
-                              beginMinifyLevel,
-                              endMinifyLevel);
-    }
+    overlapEnvelope<RasterProductAssetVersion> env (
+        type, insetInfoPtrs, i,
+        beginMinifyLevel, endMinifyLevel, i);
+
+    std::shared_ptr<OverlapCalculator<RasterProductAssetVersion>> calc =
+        std::make_shared<OverlapCalculator<RasterProductAssetVersion>>(env);
+    neededIndexes = std::move(calc->PreprocessForInset(genInfo[i].coverage));
     neededIndexes.push_back(i); // each inset always intersects itself
 
     // calculate the level range that will be minified
@@ -1119,10 +1110,9 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
 
     packetGenConfig.useOpaqueTopInsetInsteadOfMerge = true;
     packetGenConfig.insets.reserve(neededIndexes.size());
-    for (std::vector<uint>::const_iterator idx = neededIndexes.begin();
-         idx != neededIndexes.end(); ++idx) {
 
-      const PacketGenInfo &otherGenInfo(genInfo[*idx]);
+    for (const auto& idx : neededIndexes) {
+      const PacketGenInfo &otherGenInfo(genInfo[idx]);
 
       // +1 below since we minify from the next level
       bool otherWillContribToMinify =
@@ -1141,7 +1131,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
 
       packetGenConfig.insets.push_back
         (PacketGenConfig::Inset
-         (inset_infos[*idx].combinedrp_.Ref(),
+         (inset_infos[idx].combinedrp_.Ref(),
           packgenVerRef));
     }
 
@@ -1149,20 +1139,21 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     PacketGenExtraUpdateArg<RasterProductAssetVersion> extraArg;
     extraArg.insetInfo.reserve(neededIndexes.size());
     extraArg.genInfo.reserve(neededIndexes.size());
-    for (std::vector<uint>::const_iterator idx = neededIndexes.begin();
-         idx != neededIndexes.end(); ++idx) {
-      extraArg.insetInfo.push_back(&inset_infos[*idx]);
-      extraArg.genInfo.push_back(&genInfo[*idx]);
+    extraArg.calc = calc;
+
+    for(const auto& idx : neededIndexes) {
+      extraArg.insetInfo.push_back(&inset_infos[idx]);
+      extraArg.genInfo.push_back(&genInfo[idx]);
     }
 
-    // reuse or make a new PacketGenAssetVersion
-    MutableAssetVersionD packgen =
-      PacketGenFactory::ReuseOrMakeAndUpdate(genInfo[i].assetname,
-                                             type,
-                                             khMetaData(),
-                                             packetGenConfig,
-                                             extraArg);
+      MutableAssetVersionD packgen =
+        PacketGenFactory::ReuseOrMakeAndUpdate(genInfo[i].assetname,
+                                               type,
+                                               khMetaData(),
+                                               packetGenConfig, // new vector?
+                                               extraArg);
 
+    
     if (packetGenConfig.cacheRaster) {
       // Extract the PacketLevel children from the new version and store
       // them in my genInfo. My later children will use these to help

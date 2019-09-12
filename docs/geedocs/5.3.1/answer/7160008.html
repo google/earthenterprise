@@ -15,7 +15,7 @@ gtag('config', 'UA-108632131-2');
 </script>
 </head>
 <body>
-<!-- 7160002.html -->
+<!-- 7160008.html -->
 <div class="container">
 <div class="sidebar1">
   <p class="sidebar-toc"><a href="../answer/7160008.html" class="current-file">Open GEE 5.3.1</a></p>
@@ -40,19 +40,14 @@ gtag('config', 'UA-108632131-2');
 <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Release notes</h1>
 <h2>Release notes: Open GEE 5.3.1</h2>
 
-<p>Open GEE 5.3.1 is currently in development</p>
+  <h3 id="overview_5.3.1">New Features</h3>
+  <p><strong>Uninstallation scripts are now copied to <code>/opt/google/install</code>. </strong>This will allow the user to uninstall without having to have a copy of the source code on hand.</p>
+  <p><strong>Memory and performance improvements for large builds.</strong> Memory utilization and performance have been improved, especially for large builds.</p>
+  <p><strong>Increased logging during long Fusion operations.</strong> Fusion can now be configured to log progress while calculating overlaps between resources.</p>
+  <p><strong>Overlay option is now supported in terrain project command-line interfaces.</strong> <code>genewterrainproject</code>, <code>geaddterrainproject</code> and <code>gemodifyterrainproject</code> have a new option for overlay support.</p>
+  <p><strong>Cutter embeds extra metadata into portable files.</strong>  The bounding box metadata can be used to improve loading performance in some applications.</p>
+  <h3 id="supported_5.3.1">Supported Platforms</h3>
 
-  <h5>
-    <p id="overview_5.3.1">New Features</p>
-  </h5>
-    <p><strong>Uninstallation scripts are now copied to <code>/opt/google/install</code>. </strong>This will allow the user to uninstall without having to have a copy of the source code on hand.</p>
-    <p><strong>Memory and performance improvements for large builds.</strong> Memory utilization and performance have been improved, especially for large builds.</p>
-    <p><strong>Increased logging during long Fusion operations.</strong> Fusion can now be configured to log progress while calculating overlaps between resources.</p>
-    <p><strong>Overlay option is now supported in terrain project command-line interfaces.</strong> <code>genewterrainproject</code>, <code>geaddterrainproject</code> and <code>gemodifyterrainproject</code> has new option for overlay support.</p>
-    <p><strong>Cutter embeds extra metadata into portable files.</strong>  The bounding box metadata can be used to improve loading performance in some applications.</p>
-  <h5>
-    <p id="supported_5.3.1">Supported Platforms</p>
-  </h5>
   <p>The Open GEE 5.3.1 release is supported on 64-bit versions of the following operating systems:</p>
     <ul>
       <li>Red Hat Enterprise Linux version 6.x and 7.x, including the most recent security patches</li>
@@ -61,31 +56,57 @@ gtag('config', 'UA-108632131-2');
     </ul>
     <p>Google Earth Enterprise 5.3.1 is compatible with Google Earth Enterprise Client (EC) version 7.1.5 and above.</p>
     <p><p>To upgrade from Open GEE 5.2.0, do NOT uninstall it. We recommend that you upgrade Open GEE 5.2.0 by simply installing Open GEE 5.3.1. Installing Open GEE 5.3.1 on top of Open GEE 5.2.0 will ensure that your PostgreSQL databases are backed up and upgraded correctly to the new PostgreSQL version used by Open GEE 5.3.1.</p></p>
-  <h5>
-    <h5>
-      <p id="resolved_issues_5.3.1">Resolved Issues</p>
-    </h5>
+
+    <h3 id="resolved_issues_5.3.1">Resolved Issues</h3>
     <div>
-      <table class="nice-table">
-        <tbody>
-          <tr>
-            <th>Number</th>
-            <th class="narrow">Description</th>
-            <th>Resolution</th>
-          </tr>
-          <tr>
-            <td>1339</td>
-            <td>Building with incomplete assets can result in Blocked databases</td>
-            <td>
-              Added error handling to certain asset caching to prevent incomplete assets from being cached. This prevents a version of the DelayedBuildChildren class of errors, and rectifies the <code>run_historical.sh</code> script problem.
-            </td>
-          </tr>
-        </tbody>
-      </table>
-  <h5>
-  <h5>
-    <p id="known_issues_5.3.1">Known Issues</p>
-  </h5>
+     <table class="nice-table">
+       <tbody>
+         <tr>
+           <th>Number</th>
+           <th class="narrow">Description</th>
+           <th>Resolution</th>
+         </tr>
+         <tr>
+           <td>1255</td>
+           <td>Version errors with GEE patch releases</td>
+           <td>
+             Limited internal version string to 3 parts to fix patch releases.
+           </td>
+         </tr>
+         <tr>
+           <td>1292</td>
+           <td>Invalid qtpacket status with SharedString fixes.</td>
+           <td>
+             If one builds a project the status of the qtpacket will show as Bad even though it actually built successfully.
+             This fixes the issue.
+           </td>
+         </tr>
+        <tr>
+          <td>1304</td>
+          <td>Creating issues tickets in OpenGEE repo does not provide guidelines</td>
+          <td>
+            Added template to create new issues in Open GEE repo.
+          </td>
+        </tr>
+        <tr>
+          <td>1317</td>
+          <td>Lacking Test cases for genewimageryresource</td>
+          <td>
+            Added automated tests for Imagery resource creation.
+          </td>
+        </tr>
+         <tr>
+           <td>1339</td>
+           <td>Building with incomplete assets can result in Blocked databases</td>
+           <td>
+             Added error handling to certain asset caching to prevent incomplete assets from being cached. This prevents a
+             version of the DelayedBuildChildren class of errors, and rectifies the <code>run_historical.sh</code> script
+             problem.
+           </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="known_issues_5.3.1">Known Issues</h3>
     <table class="nice-table">
       <tbody>
         <tr>
@@ -368,11 +389,20 @@ gtag('config', 'UA-108632131-2');
           <td>Geserver fails to startup fully due to conflicting protobuf library</td>
           <td>Run <code>pip uninstall protobuf</code> to uninstall the protobuf library installed by pip. </td>
         </tr>
+        <tr>
+          <td>1376</td>
+          <td>Portable Globe Cutter fails in the last step when using HTTPS</td>
+          <td>Switch to <code>http</code>. </td>
+        </tr>
+        <tr>
+          <td>1381</td>
+          <td>Stopping Fusion results in double free or corruption error in system manager</td>
+          <td>No current work around but this issue does not seem to cause any other problem.</td>
+        </tr>        
       </tbody>
     </table>
   <div class="footer">
     <p class="BackToTop"><a href="#top_of_file">Back to top</a>
-
     <hr />
     </p>
     <p class="copyright">&copy;2019 Open GEE Contributors</p>

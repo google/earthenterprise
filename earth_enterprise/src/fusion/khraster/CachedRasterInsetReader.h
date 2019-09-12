@@ -83,7 +83,7 @@ class CachingProductTileReader_ImageryAlpha
 
   CachingProductTileReader_ImageryAlpha(uint tileCacheSize,
                                         uint readerCacheSize) :
-      tileCache(tileCacheSize),
+      tileCache(tileCacheSize, "imagery alpha tile reader"),
       readerCache(readerCacheSize)
   { }
 };
@@ -128,7 +128,7 @@ class CachingProductTileReader_Heightmap
 
   CachingProductTileReader_Heightmap(uint tileCacheSize,
                                      uint readerCacheSize) :
-      tileCache(tileCacheSize),
+      tileCache(tileCacheSize, "height map tile reader"),
       readerCache(readerCacheSize)
   { }
 };

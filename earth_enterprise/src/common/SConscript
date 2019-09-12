@@ -132,7 +132,6 @@ utilsources = [
 geutil = env.sharedLib('geutil', utilsources,
                        LIBS = ['gecommon', 'qt-mt'])
 
-# Unit test executables
 env.test('quadtreepath_unittest',
          'quadtreepath_unittest.cpp',
          LIBS=['geutil', 'gecommon', 'qt-mt'])
@@ -150,11 +149,11 @@ env.test('cachedreadaccessor_unittest',
          LIBS=['gecommon', 'geutil'])
 
 env.test('merge_unittest',
-         'merge/merge_unittest.cpp',
-         LIBS=['gecommon', 'geutil'])
+        'merge/merge_unittest.cpp',
+       LIBS=['gecommon', 'geutil'])
 
 env.test('packetfile_unittest',
-         ['packetfile/packetfile_unittest.cpp'],
+        ['packetfile/packetfile_unittest.cpp'],
          LIBS=['geutil', 'gecommon', 'getests'])
 
 env.test('packetcompress_unittest',
