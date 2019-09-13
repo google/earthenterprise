@@ -42,18 +42,18 @@ QuadtreePath InsetTilespaceIndex::add(const khExtents <double> &extents) {
     QuadtreePath quadtreeMbr = getQuadtreeMBR(extents, level, MAX_LEVEL);
 
     //std::vector<const khExtents<uint32>*> mbrExtentsVec = _mbrExtentsVecMap.find( mbrHash );
-    std::vector<const khExtents <double> > *mbrExtentsVec;
-    std::map<QuadtreePath, std::vector<const khExtents <double> >>::iterator it;
+    std::vector<khExtents <double> > *mbrExtentsVec;
+    std::map<QuadtreePath, std::vector<khExtents <double>>>::iterator it;
     it = _mbrExtentsVecMap.find(quadtreeMbr);
 
     if (it == _mbrExtentsVecMap.end()) {
-        mbrExtentsVec = new std::vector<const khExtents <double> >();
+        mbrExtentsVec = new std::vector<khExtents <double> >();
         // _mbrExtentsVecMap.insert(  <uint64, std::vector<const khExtents <uint32>*>>::value_type(  mbrHash, *mbrExtentsVec );
-        _mbrExtentsVecMap.insert({quadtreeMbr, mbrExtentsVec});
+        _mbrExtentsVecMap.insert({quadtreeMbr, *mbrExtentsVec});
     } else {
         mbrExtentsVec = &(it->second);
     }
-    mbrExtentsVec->push_back(&extents);
+    mbrExtentsVec->push_back(extents);
     return quadtreeMbr;
 }
 
@@ -141,14 +141,14 @@ InsetTilespaceIndex::intersectingExtentsQuadtreePaths(QuadtreePath quadtreeMbr, 
 }
 
 
-std::vector<const khExtents <double> >
+std::vector<khExtents <double> >
 
 InsetTilespaceIndex::intersectingExtents(const QuadtreePath quadtreeMbr, uint32 minLevel, uint32 maxLevel) {
     std::vector <QuadtreePath> intersectingQuadtreeMbrs = intersectingExtentsQuadtreePaths(quadtreeMbr, minLevel,
                                                                                            maxLevel);
-    std::vector<const khExtents <double> > intersectingExtentsVec;
+    std::vector<khExtents <double> > intersectingExtentsVec;
     for (auto otherMbr : intersectingQuadtreeMbrs) {
-        std::vector<const khExtents <double> > extentsVec = _mbrExtentsVecMap[otherMbr];
+        std::vector<khExtents <double> > extentsVec = _mbrExtentsVecMap[otherMbr];
         intersectingExtentsVec.insert(intersectingExtentsVec.end(), extentsVec.begin(), extentsVec.end());
     };
     return intersectingExtentsVec;

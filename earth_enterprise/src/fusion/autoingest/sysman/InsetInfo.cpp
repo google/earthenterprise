@@ -371,10 +371,10 @@ void FindNeededImageryInsets(
     uint beginMinifyLevel,
     uint endMinifyLevel) {
 
-  std::vector<const khExtents<uint32>> extentsVec;
+  std::vector<khExtents<uint32> > extentsVec;
   const uint level = gencov.beginLevel();
   for ( auto i: insets ) {
-      const khExtents<uint32> extents = i->coverage.levelExtents(level);
+      khExtents<uint32> extents = i->coverage.levelExtents(level);
       extentsVec.push_back(extents);
   }
   FindNeededImageryInsets( gencov, extentsVec, numInsets, neededIndexes, beginMinifyLevel, endMinifyLevel );
@@ -384,7 +384,7 @@ void FindNeededImageryInsets(
 
 void FindNeededImageryInsets(
     const khInsetCoverage        &gencov,
-    const std::vector<const khExtents<uint32>> &extents,
+    const std::vector<khExtents<uint32> > &extents,
     uint                          numInsets,
     std::vector<uint>            &neededIndexes,
     uint beginMinifyLevel,
@@ -424,8 +424,8 @@ void FindNeededImageryInsets(
 
   for (uint i = 0; i < numInsets; ++i) {
     // Aligning here would be redundant, so we save ourselves the effort.
-    const khExtents<uint32> *iExtents = &extents[i];
-    if (iExtents->intersects(genExtents)) {
+    //const khExtents<uint32> *iExtents = extents[i];
+    if (extents[i].intersects(genExtents)) {
       neededIndexes.push_back(i);
     }
   }
