@@ -112,11 +112,6 @@ mod_wsgi_target = '%s/.install' % current_dir
 mod_wsgi_conf_dir = Dir('#third_party/mod_wsgi/conf.d').abspath
 mod_wsgi_conf = 'mod_wsgi-ge.conf'
 
-if (platform.release().split('.')[-2] == 'el6'):
-    python_home_
-else:
-    replacement_vars = {'\$PythonHomeDir': '/usr'}
-
 source_conf = '%s/%s.in' % (mod_wsgi_conf_dir, mod_wsgi_conf)
 target_conf = '%s/gehttpd/conf.d/%s' % (install_root_opt, mod_wsgi_conf)
 mod_wsgi_install = mod_wsgi_env.Command(
