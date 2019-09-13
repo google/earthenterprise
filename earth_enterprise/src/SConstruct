@@ -181,6 +181,7 @@ else:
   python_major_version = '2.7' # sys.version[:3] # '2.7'
   python_bin = '/opt/rh/python27/root/usr/bin/python' # '/usr/bin/python'
   python_include = '/opt/rh/python27/root/usr/include/python%s' % python_major_version # '/usr/include/python%s' % python_major_version
+  python_home = '/opt/rh/python27/root/usr' # '/usr'
 
 # setup platform specific operations
 is_min_ubuntu = True
@@ -487,7 +488,8 @@ env = khEnvironment(
     python_bin=python_bin,
     python_include=python_include,
     python_version=python_version,
-    python_major_version=python_major_version
+    python_major_version=python_major_version,
+    python_home=python_home
 )
 
 env.get_open_gee_version().backup_file = "version.txt"
