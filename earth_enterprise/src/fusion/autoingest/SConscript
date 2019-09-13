@@ -184,8 +184,8 @@ commoncpp = [
 commonh = map(lambda n: '.idl/'+n+'.h', idlfiles)
 
 for idlfile in idlfiles:
-    sofile = idlfile + '.os'
-    env.Depends(sofile, commonh)
+    osfile = idlfile + '.os'
+    env.Depends(osfile, commonh)
 
 commonobj = map(lambda src: env.SharedObject(src), commoncpp)
 
