@@ -16,11 +16,12 @@
 #include <string>
 #include <vector>
 #include <sys/types.h>
+#include "common/SharedString.h"
 
 class AssetChanges
 {
   class Item {
-    std::string ref;
+    SharedString ref;
     std::string desc;
   };
   typedef std::vector<Item> Items;

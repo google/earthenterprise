@@ -108,7 +108,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
     --level;
 
     // Determine which insets intersect us at this level
-    khLevelCoverage levCov(config.coverage.levelCoverage(level));
+    const khLevelCoverage levCov(config.coverage.levelCoverage(level));
     std::vector<uint> neededIndexes;
 
     neededIndexes.reserve(numInsets);
@@ -214,7 +214,6 @@ void PacketGenAssetVersionImplD::UpdateChildren(
          (level <= config.endMinifyLevel));
 
       const uint minifySrcLevel = level + 1;
-      bool highestResMinify = (level+1 == config.endMinifyLevel);
 
       // for attribution we care about everybody
       packetLevelConfig.attributions.reserve(neededIndexes.size() + 1);
@@ -241,90 +240,67 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       }
 
       // populate inputs and inputVers & config.insets
-      levInputs.reserve(mergeIndexes.size() * 2 + 1);
-      levInputVers.reserve(mergeIndexes.size() * 2 + 1);
       packetLevelConfig.insets.reserve(mergeIndexes.size() + 1);
+      packetLevelConfig.insets.resize(mergeIndexes.size());
+      int threadsToUse = MiscConfig::Instance().PackGenAnalysisThreads;
+      levInputs.resize(mergeIndexes.size() * 2 + 1);
+      levInputVers.resize(mergeIndexes.size() * 2 + 1);
 
-      for (const auto& idx : mergeIndexes) {
-        const InsetInfo<ProductAssetVersion> &inset(*extra.insetInfo[idx]);
-        const PacketGenInfo &genInfo(*extra.genInfo[idx]);
+      // Run the following loop in parallel using the amount of threads set in misc.xml.
+      #pragma omp parallel for schedule(static) num_threads(threadsToUse)
+      for (size_t merge_idx = 0; merge_idx < mergeIndexes.size(); ++merge_idx) {
+        const InsetInfo<ProductAssetVersion> &inset(*extra.insetInfo[mergeIndexes[merge_idx]]);
+        const PacketGenInfo &genInfo(*extra.genInfo[mergeIndexes[merge_idx]]);
+        int inputs_idx = merge_idx*2;
+        levInputs[inputs_idx] = (inset.combinedrp_).Ref();
+        levInputVers[inputs_idx] = inset.combinedrp_;
         AssetVersion blendVer;
+
         if (!inset.alphaRPFile.empty() &&
             (genInfo.packetLevels.size() > minifySrcLevel)) {
           blendVer = genInfo.packetLevels[minifySrcLevel];
         }
 
-        if (!blendVer) {
-          // This inset doesn't have a cached blend file. This
+        SharedString cached_blend;
+        SharedString cached_blend_alpha;
+        if (blendVer) {
+          // This covers two cases:
+          // 1) If level+1 == config.endMinifyLevel:
+          //   This is the first merge (from cached blends)
+          //   It is possible that some of the cached blends are only
+          //   partially populated. So we pull from both the cached
+          //   blend and the product.
+          // 2) Otherwise:
+          //   This is a subsequent merge (from cached merges) It's
+          //   possible that earlier merges also short circuited the
+          //   merge with opaque top tiles. So we may need to pull
+          //   from the product too.
+          // If we do not enter this if statment, then
+          // this inset doesn't have a cached blend file. This
           // will only happen for things that have no alpha mask.
           // In these cases we pull directly from the product. It
           // will also happen for the last thing on the stack who
           // hasn't had his blendvers filled in yet.
-          levInputs.push_back(inset.combinedrp_->GetRef());
-          levInputVers.push_back(inset.combinedrp_);
-
-          packetLevelConfig.insets.push_back
-            (PacketLevelConfig::Inset(
-                inset.dataRPFile,
-                inset.alphaRPFile,
-                SharedString(), /* cached blend */
-                SharedString()  /* cached blend alpha */));
-        } else if (highestResMinify) {
-          // This is the first merge (from cached blends)
-          // It is possible that some of the cached blends are only
-          // partially populated. So we pull from both the cached
-          // blend and the product
-          levInputs.push_back(inset.combinedrp_->GetRef());
-          levInputVers.push_back(inset.combinedrp_);
-          levInputs.push_back(blendVer.Ref());
-          levInputVers.push_back(blendVer);
 
           // Note: Before creating a merge inset, we check if the cached alpha
           // blend directory exists for the asset since in GEE-5.x we need to
           // pick up the GEE-4.x Imagery/Terrain Projects (the PacketLevel
           // assets) that have no alpha blend cached.
+          levInputs[inputs_idx+1] = blendVer.Ref();
+          levInputVers[inputs_idx+1] = blendVer;
           const std::string cache_alpha_path =
               blendVer->GetOutputFilename(0) + "/cache_alpha.pack";
-          const bool cache_alpha_exist = khExists(cache_alpha_path);
-
-          packetLevelConfig.insets.push_back
-            (PacketLevelConfig::Inset(
-                inset.dataRPFile,
-                inset.alphaRPFile,
-                blendVer.Ref(), /* cached blend */
-                cache_alpha_exist ?
-                    blendVer.Ref() : SharedString() /* cached blend alpha */));
-        } else {
-          // This is a subsequent merge (from cached merges) It's
-          // possible that earlier merges also short circuited the
-          // merge with opaque top tiles. So we may need to pull
-          // from the product too.
-
-          // NOTE: For now this case should be identical to the
-          // one above. Maybe later we can put some more smarts
-          // here to limit dependencies on the products?
-
-          levInputs.push_back(inset.combinedrp_->GetRef());
-          levInputVers.push_back(inset.combinedrp_);
-          levInputs.push_back(blendVer.Ref());
-          levInputVers.push_back(blendVer);
-
-          // Note: Before creating a merge inset, we check if the cached alpha
-          // blend directory exists for the asset since in GEE-5.x we need to
-          // pick up the GEE-4.x Imagery/Terrain Projects (the PacketLevel
-          // assets) that have no alpha blend cached.
-          const std::string cache_alpha_path =
-              blendVer->GetOutputFilename(0) + "/cache_alpha.pack";
-          const bool cache_alpha_exist = khExists(cache_alpha_path);
-
-          packetLevelConfig.insets.push_back
-            (PacketLevelConfig::Inset(
-                inset.dataRPFile,
-                inset.alphaRPFile,
-                blendVer.Ref(), /* cached blend */
-                cache_alpha_exist ?
-                    blendVer.Ref() : SharedString()  /* cached blend alpha */));
+          if (khExists(cache_alpha_path)) {
+            cached_blend_alpha = blendVer.Ref();
+          }
+          cached_blend = blendVer.Ref();
         }
+        packetLevelConfig.insets[merge_idx] =
+            PacketLevelConfig::Inset(
+                inset.dataRPFile,
+                inset.alphaRPFile,
+                cached_blend,
+                cached_blend_alpha);
       }
 
       if (config.cacheRaster) {
@@ -336,8 +312,9 @@ void PacketGenAssetVersionImplD::UpdateChildren(
         }
         AssetVersion prevLevelVer(kids.back());
 
-        levInputs.push_back(prevLevelVer.Ref());
-        levInputVers.push_back(prevLevelVer);
+        levInputs.back() = prevLevelVer.Ref();
+        levInputVers.back() = prevLevelVer;
+
 
         // Note: Before creating a merge inset, we check if the cached alpha
         // blend directory exists for the asset since in GEE-5.x we need to
@@ -356,12 +333,13 @@ void PacketGenAssetVersionImplD::UpdateChildren(
                   prevLevelVer.Ref() : SharedString() /* cached blend alpha */));
       }
 
+      levInputs.erase(std::remove(levInputs.begin(), levInputs.end(), ""), levInputs.end());
+      levInputVers.erase(std::remove(levInputVers.begin(), levInputVers.end(), AssetVersion()), levInputVers.end());
     }
 
     // get child asset ver
     char subname[32];
     snprintf(subname, sizeof(subname), "packlevel%02d", level);
-
     MutableAssetVersionD packLevelVer =
       PacketLevelFactory::ReuseOrMakeAndUpdateSubAsset
       (assetRef, type,
