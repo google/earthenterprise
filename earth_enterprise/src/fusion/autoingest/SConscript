@@ -187,8 +187,6 @@ for idlfile in idlfiles:
     sofile = idlfile + '.os'
     env.Depends(sofile, commonh)
 
-# env.Depends(Object('SearchTabReferenceImpl.cpp'), 'xyz.h')
-
 commonobj = map(lambda src: env.SharedObject(src), commoncpp)
 
 
@@ -200,6 +198,7 @@ geautoingest = env.sharedLib('geautoingest',
                              LIBS=['gesearchtabs', 'gemiscconfig', 'genet',
                                    'geindex_r', 'geutil', 'qt-mt']
                              )
+
 
 env.idl(['MiscConfigStorage.idl', 'Systemrc.idl']);
 gemiscconfig = env.sharedLib('gemiscconfig',
