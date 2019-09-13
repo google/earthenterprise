@@ -550,7 +550,7 @@
 #ShowSelectedSearchTabs {
   display: block;
   margin-left: 202px;
-  margin-top: 8px;
+  margin-top: 0px;
   color: #777;
   font-style: italic;
   font-size: 11px;
@@ -1771,17 +1771,24 @@ Kennedy Elements
  pointer-events: none;
 }
 
+.frontPageCheck {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius:1px;
+  cursor:pointer;
+  position: absolute;
+  margin-top: 8px;
+  border: 0;
+  display: block;
+ }
+
+.publishDialogCheck {
+  margin: 6px 0px;
+}
+
 input[type=checkbox] {
- -webkit-appearance: none;
- appearance: none;
- width: 14px;
- height: 14px;
- border-radius:1px;
- cursor:pointer;
- position: absolute;
- margin-top: 8px;
- border: 0;
- display: block;
  content: url('../images/unchecked.png');
 }
 input[type=checkbox]:checked {

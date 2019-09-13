@@ -206,6 +206,7 @@ gees.admin.databaseView = {
         var checkbox = gees.dom.create('input');
         checkbox.id = 'masterCheckBox';
         checkbox.type = 'checkbox';
+        checkbox.className = 'frontPageCheck';
         var onclick = 'gees.admin.checkboxes.toggleAll()';
         checkbox.setAttribute('onclick', onclick);
         innerMenu.appendChild(checkbox);
@@ -303,7 +304,7 @@ gees.admin.databaseView = {
         var clickFunction = 'gees.admin.databaseView.toggleDatabaseItem' +
             '(\'' + index + '\');';
         var checkbox = gees.dom.create('input');
-        checkbox.className = 'dbCheck';
+        checkbox.className = 'dbCheck frontPageCheck';
         checkbox.name = 'dbCheck';
         checkbox.type = 'checkbox';
         checkbox.id = 'cb' + index + name;
@@ -431,6 +432,7 @@ gees.admin.databaseView = {
       // Use the name of the item as a suggested name for the target path.
       var targetPath = this.suggestTargetPath(item.target_path, displayName);
       gees.dom.get('NewGlobePublishPoint').value = targetPath;
+      gees.dom.setCheckbox('default_database_checkbox', false);
       gees.dom.setCheckbox('wms_radio_off', true);
       gees.dom.hide('NoPublishName');
       gees.dom.get('NewGlobePublishPoint').focus();
@@ -597,6 +599,10 @@ gees.admin.databaseView = {
         return gees.dom.isChecked('wms_radio') ? '&ServeWms=1' : '';
       },
 
+      default_database: function() {
+        return gees.dom.isChecked('default_database_checkbox') ? '&EcDefaultDb=1' : '';
+      },
+
       searchDefs: function(name) {
         var array =
             gees.admin.databaseView.publish.ui.updateSearchSelect(name, true);
@@ -661,7 +667,8 @@ gees.admin.databaseView = {
         return '/geserve/Publish?Cmd=PublishDb&DbName=' +
             this.filePath(item) + '&TargetPath=' + target +
             this.virtualHost() + this.hostName(item) +
-            this.wms() + this.fusionOnlyOptions(item);
+            this.wms() + this.default_database() + 
+            this.fusionOnlyOptions(item);
       }
     },
 
@@ -865,6 +872,7 @@ gees.admin.databaseView = {
           this.toggleFusionOnlyElements('block');
 
           if (gees.tools.is2dDatabase(item)) {
+            gees.dom.hide('DefaultDatabase');
             gees.dom.hide('SnippetPublishOptions');
             gees.dom.hide('SupplementalSearchOptions');
             gees.dom.hide('SupplementalSearchLabel');
