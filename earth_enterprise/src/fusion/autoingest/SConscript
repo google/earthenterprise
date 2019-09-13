@@ -181,6 +181,12 @@ commoncpp = [
     map(lambda n: '.idl/'+n+'.cpp', idlfiles) + \
     map(lambda p: 'plugins/'+p+'Asset.cpp', plugins)
 
+commonh = map(lambda n: '.idl/'+n+'.h', idlfiles)
+
+for idlfile in idlfiles:
+    osfile = idlfile + '.os'
+    env.Depends(osfile, commonh)
+
 commonobj = map(lambda src: env.SharedObject(src), commoncpp)
 
 
