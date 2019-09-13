@@ -66,5 +66,5 @@ env.test('parse-raster-project-xml-no-content_unittest',
         'dbmanifest', 'geautoingest', 'gegdal', 'geraster',
         'gesearchtabs', 'genet', 'gepublish', 'gefconfigutil', 'geindex_r',
         'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'gtest', 'qt-mt',
-        'xerces-c', 'yaml-cpp'
+        'gexml', 'xerces-c', 'yaml-cpp', 'gomp'
     ])
