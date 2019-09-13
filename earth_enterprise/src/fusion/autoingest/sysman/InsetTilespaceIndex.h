@@ -41,6 +41,7 @@ Description: Support for terrain "overlay" projects.
 //     uint32 quadTreeBits
 // };
 
+
 const int MAX_LEVEL = 24;
 
 class InsetTilespaceIndex {

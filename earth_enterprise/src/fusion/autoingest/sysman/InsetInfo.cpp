@@ -359,6 +359,7 @@ void OverlapCalculator<ProductAssetVersion>::
 template class OverlapCalculator<MercatorRasterProductAssetVersion>;
 template class OverlapCalculator<RasterProductAssetVersion>;
 
+
 // ****************************************************************************
 // ***  FindNeededImageryInsets
 // ****************************************************************************
