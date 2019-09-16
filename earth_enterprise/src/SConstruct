@@ -190,7 +190,7 @@ else:
   else:
     python_version = sys.version[:5] # '2.7.6'
     python_major_version = sys.version[:3] # '2.7'
-    python_bin = /usr/bin/python'
+    python_bin = '/usr/bin/python'
     python_include = '/usr/include/python%s' % python_major_version
     python_home = '/usr'
 
