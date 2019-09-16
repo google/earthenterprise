@@ -124,6 +124,7 @@ InsetTilespaceIndex::intersectingExtentsQuadtreePaths(QuadtreePath quadtreeMbr, 
     boost::copy(_mbrExtentsVecMap | boost::adaptors::map_keys,
                 std::back_inserter(mbrHashVec));
     std::vector <QuadtreePath> intersectingQuadtrees;
+
     // TODO - redo this section to use bitwise filtering and partitioning using the QuadtreePath's internal path_
     // bits, as this will be most expeditions.  However, this requires  access to private constructors and data.
     // BTree lookups in the mbrHashVec could also bring the time complexity to O(log n)

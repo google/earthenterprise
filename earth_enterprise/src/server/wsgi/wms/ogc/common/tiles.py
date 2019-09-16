@@ -1,6 +1,7 @@
 #!/usr/bin/python
 #
 # Copyright 2017 Google Inc.
+# Copyright 2019 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,7 +22,7 @@ import logging
 import os
 import StringIO
 import tempfile
-import urllib
+import wms_connection
 
 import geom
 import images
@@ -297,16 +298,12 @@ def _FetchMapTile(url):
       The tile bitmap.
   """
   try:
-    fp = urllib.urlopen(url)
-    f = StringIO.StringIO(fp.read())
+    f = StringIO.StringIO(wms_connection.HandleConnection(url))
     im_tile = Image.open(f)
     im_tile.load()
   except IOError, e:
     im_tile = None
     logger.error("Failed to fetch tile:%s", e)
-  finally:
-    if fp:
-      fp.close()
 
   return im_tile
 

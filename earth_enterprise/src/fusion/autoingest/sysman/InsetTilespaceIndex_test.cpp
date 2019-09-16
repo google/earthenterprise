@@ -46,9 +46,7 @@
 
 class TestData {
     // TODO - doc structure.
-    //std::map<khExtents < double>, QuadtreePath> extentQtMBRMap;
-    std::vector<khExtents<double>> extentsVec;
-
+    std::vector <khExtents<double>> extentsVec;
 
 public:
     TestData(std::string fname) {
@@ -62,13 +60,11 @@ public:
             double x1, x2, y1, y2;
             in >> x1 >> x2 >> y1 >> y2;
             khExtents<double> extents(XYOrder, x1, x2, y1, y2);
-            /*
             std::getline(input, line);
+            // Note -  discarding the MBR for now, we'll recalculate it.
             std::string qtp_txt, qtp_level;
             in >> qtp_txt >> qtp_level;
-            QuadtreePath qtpMbr(qtp_txt);
-            */
-            //extentQtMBRMap.insert({extents, qtpMbr});
+            // QuadtreePath qtpMbr(qtp_txt);
             extentsVec.push_back(extents);
         }
     }
@@ -84,7 +80,7 @@ protected:
 public:
 
     // TODO - set gencov
-    // Build an inset coverage from NORM extents 
+    // Build an inset coverage from NORM extents
     // IMPORTANT: (Note the different c'tor's paramter order between DEGREES and NORM )
     //
     // khInsetCoverage(const khTilespace &tilespace,
@@ -93,25 +89,24 @@ public:
     //                 uint beginCoverageLevel,
     //                 uint endCoverageLevel);
 
-    std::vector<khExtents<double> >
-        findInsetsControlAlgo(const khInsetCoverage &coverage,
-                          const std::vector<khExtents<double> > &inputExtents) {
+    std::vector <khExtents<double>>
+    findInsetsControlAlgo(const khInsetCoverage &coverage,
+                          const std::vector <khExtents<double>> &inputExtents) {
         uint beginMinifyLevel = 1;
         uint endMinifyLevel = 19;
-        std::vector<uint32> neededIndexes; //This is our return value...
-        std::vector<khExtents<double>> matchingExtents;
+        std::vector <uint32> neededIndexes; //This is our return value...
+        std::vector <khExtents<double>> matchingExtents;
+        std::vector <khExtents<uint32>> tileExtentsVec;
 
 
-        
-        std::vector<khExtents <uint32>> normExtentsVec;
         for (auto degExtents : inputExtents) {
-            khExtents <uint32> normExtents = DegExtentsToTileExtents(degExtents, coverage.beginLevel());
-            normExtentsVec.push_back(normExtents);
+            khExtents <uint32> tileExtents = DegExtentsToTileExtents(degExtents, coverage.beginLevel());
+            tileExtentsVec.push_back(tileExtents);
         }
-        uint vecsize = (uint) normExtentsVec.size();
+        uint vecsize = (uint) tileExtentsVec.size();
         FindNeededImageryInsets(coverage,
-                                normExtentsVec,
-                                vecsize,
+                                tileExtentsVec,
+                                (uint) tileExtentsVec.size(),
                                 neededIndexes,
                                 beginMinifyLevel,
                                 endMinifyLevel);
@@ -123,10 +118,10 @@ public:
         return matchingExtents;
     }
 
-    std::vector<khExtents<double> >
+    std::vector <khExtents<double>>
     findInsetsExperimentalAlgo(const khInsetCoverage &queryCoverage,
-                               const std::vector<khExtents<double>> &inputExtents) {
-        std::vector<khExtents<double>> matchingExtentsVec;
+                               const std::vector <khExtents<double>> &inputExtents) {
+        std::vector <khExtents<double>> matchingExtentsVec;
         InsetTilespaceIndex qtIndex;
 
         for (auto extents : inputExtents) {
@@ -145,7 +140,7 @@ public:
     }
 
 
-    const bool TestAlgo1Algo2OutputMatch() {
+    const bool compareAlgorithmOutputs() {
 
         TestData dataset("TestQTPs2.txt");
         //std::vector<khExtents<double>> testExtents;
@@ -170,31 +165,46 @@ public:
 
 //This test should result in the getExtentMBR method breaking after level 0.
 
-TEST_F(InsetTilespaceIndexTest, BreakBeforeMaxLevelReached) {
-    khExtents<double> extent = khExtents<double>(XYOrder, 180, 180, 90, 180);
-    int level;
-    insetTilespaceIndex.getQuadtreeMBR(extent, level, MAX_LEVEL);
-    EXPECT_EQ(1, level);
+TEST_F(InsetTilespaceIndexTest, BreakBeforeMaxLevelReached
+) {
+khExtents<double> extent = khExtents<double>(XYOrder, 180, 180, 90, 180);
+int level;
+insetTilespaceIndex.
+getQuadtreeMBR(extent, level, MAX_LEVEL
+);
+EXPECT_EQ(1, level);
 }
 
 //This test should result in the getExtentMBR method looping until the max_level is reached.
-TEST_F(InsetTilespaceIndexTest, DecendToMaxLevel) {
-    khExtents<double> extent = khExtents<double>(XYOrder, 90, 90, 90, 90);
-    int level;
-    insetTilespaceIndex.getQuadtreeMBR(extent, level, MAX_LEVEL);
-    EXPECT_EQ(MAX_LEVEL, level);
+TEST_F(InsetTilespaceIndexTest, DecendToMaxLevel
+) {
+khExtents<double> extent = khExtents<double>(XYOrder, 90, 90, 90, 90);
+int level;
+insetTilespaceIndex.
+getQuadtreeMBR(extent, level, MAX_LEVEL
+);
+EXPECT_EQ(MAX_LEVEL, level
+);
 }
 
-TEST_F(InsetTilespaceIndexTest, testAlgorithmOutputMatch) {
-    EXPECT_EQ(TestAlgo1Algo2OutputMatch(), true);
+TEST_F(InsetTilespaceIndexTest, compareAlgorithmOutputs
+) {
+EXPECT_EQ(compareAlgorithmOutputs(),
+
+true);
 }
 
 //This test should result in the quadtree path 202 being returned.
-TEST_F(InsetTilespaceIndexTest, ReturnSpecificQTP) {
-    khExtents<double> extent = khExtents<double>(XYOrder, 90, 90, 90, 90);
-    int level;
-    QuadtreePath qtp = insetTilespaceIndex.getQuadtreeMBR(extent, level, 3);
-    EXPECT_EQ("202", qtp.AsString());
+TEST_F(InsetTilespaceIndexTest, ReturnSpecificQTP
+) {
+khExtents<double> extent = khExtents<double>(XYOrder, 90, 90, 90, 90);
+int level;
+QuadtreePath qtp = insetTilespaceIndex.getQuadtreeMBR(extent, level, 3);
+EXPECT_EQ("202", qtp.
+
+AsString()
+
+);
 }
 
 int main(int argc, char *argv[]) {

@@ -99,6 +99,7 @@ class InsetInfo : public SimpleInsetInfo<ProductAssetVersion> {
 };
 
 
+
 class PacketGenInfo {
  public:
   SharedString              assetname;

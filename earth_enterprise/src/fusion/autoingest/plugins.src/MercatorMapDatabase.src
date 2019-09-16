@@ -117,16 +117,15 @@ void MercatorMapDatabaseAssetImplD::PopulateInputs(
         khHasExtension(config.imageryProject, kMercatorImageryProjectSuffix);
 
     if (is_mercator_imagery_project) {
-      MercatorRasterProjectFactory::ValidateRefForInput(config.imageryProject);
+      ValidateRefForInput<MercatorRasterProjectAssetVersionD>(config.imageryProject);
     } else {
-      RasterProjectFactory::ValidateRefForInput(config.imageryProject,
-                                                AssetDefs::Imagery);
+      ValidateRefForInput<RasterProjectAssetVersionD>(config.imageryProject, AssetDefs::Imagery);
     }
     inputs.push_back(config.imageryProject);
   }
 
   if (!config.mapProject.empty()) {
-    MapProjectFactory::ValidateRefForInput(config.mapProject);
+    ValidateRefForInput<MapProjectAssetVersionD>(config.mapProject);
 
     // make a projected map project for my input
     ProjectedMapProjectConfig proj_config(AssetDefs::MercatorProjection);
@@ -141,10 +140,11 @@ void MercatorMapDatabaseAssetImplD::PopulateInputs(
                                     "ProjectedProject");
 
     MutableProjectedMapProjectAssetD proj_asset =
-      ProjectedMapProjectFactory::FindMake(projected_proj_name,
-                                           makevec<SharedString>(config.mapProject),
-                                           khMetaData(),
-                                           proj_config);
+      AssetFactory::FindMake<MutableProjectedMapProjectAssetD>
+         (projected_proj_name,
+          makevec<SharedString>(config.mapProject),
+          khMetaData(),
+          proj_config);
     inputs.push_back(proj_asset->GetRef());
   }
 }
@@ -162,10 +162,8 @@ MercatorMapDatabaseAssetImplD::HandleEditRequest(const MapDatabaseEditRequest &r
                                   kMercatorMapDatabaseSubtype);
 
 
-  (void) MercatorMapDatabaseFactory::FindMake(dbname,
-                                      inputs,
-                                      req.meta,
-                                      req.config);
+  (void) AssetFactory::FindMake<MutableMercatorMapDatabaseAssetD>
+         (dbname, inputs, req.meta, req.config);
 }
 
 void
@@ -181,7 +179,7 @@ MercatorMapDatabaseAssetImplD::HandleNewRequest(const MapDatabaseEditRequest &re
                                   kMercatorMapDatabaseSubtype);
 
 
-  (void) MercatorMapDatabaseFactory::MakeNew(dbname,
+  (void) AssetFactory::MakeNew<MutableMercatorMapDatabaseAssetD, MapDatabaseConfig>(dbname,
                                      inputs,
                                      req.meta,
                                      req.config);
