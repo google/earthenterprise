@@ -118,8 +118,8 @@ Add flat imagery to Mercator map databases in GEE 5.1.0
       .. rubric:: Learn more
          :name: learn-more
 
-      -  :doc:`6034724`
-      -  :doc:`4441137`
+      -  :doc:`../fusionAdministration/pushAndPublishDB`
+      -  :doc:`../geeServerAdmin/makeWMSRequests`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

@@ -29,8 +29,8 @@ Download documentation for GEE 5.1.x
          :name: learn-more-d
 
       -  :doc:`installTips`
-      -  :doc:`Install Google Earth Enterprise <4492598>`
-      -  :doc:`Install GEE Server <3499934>`
+      -  :doc:`Install Google Earth Enterprise <../installGEE/installOverviewGEE>`
+      -  :doc:`Install GEE Server <../installGEE/introGEEServer>`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

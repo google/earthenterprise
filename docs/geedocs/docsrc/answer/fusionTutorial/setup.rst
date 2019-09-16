@@ -9,7 +9,7 @@ Setting Up the Tutorial
    .. container:: content
 
       In Google Earth Enterprise Open Source, the fusion tutorial data
-      is not included in the installation packages. Refer to :doc:`6028272` for download and
+      is not included in the installation packages. Refer to :doc:`../fusionTutorial/confTutorialWS` for download and
       installation instructions.
 
       In older versions, the Google Earth Enterprise Fusion tutorial
@@ -24,7 +24,7 @@ Setting Up the Tutorial
       If Google Earth Enterprise Fusion or the tutorial files are not
       installed or you encounter an error message that tells you that a
       tutorial source file is not readable or you cannot save a
-      resource, contact your system administrator or refer to :doc:`6028272` to install the
+      resource, contact your system administrator or refer to :doc:`../fusionTutorial/confTutorialWS` to install the
       files and configure the tutorial environment before saving any
       practice data.
 
@@ -51,7 +51,7 @@ Setting Up the Tutorial
       -  When you switch from the tutorial data to real production data,
          you must select the appropriate asset root.
 
-      To configure asset roots for multiple users, see :doc:`6028272`.
+      To configure asset roots for multiple users, see :doc:`../fusionTutorial/confTutorialWS`.
 
       This section explains how to select a different asset root.
 

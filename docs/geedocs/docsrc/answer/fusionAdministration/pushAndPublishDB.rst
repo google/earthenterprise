@@ -203,11 +203,11 @@ Push and publish databases
 
       .. rubric:: Learn more
 
-      -  :doc:`3497832`
-      -  :doc:`6004748`
-      -  :doc:`6013604`
-      -  :doc:`4441137`
-      -  :doc:`6006981`
+      -  :doc:`../geeServerAdmin/createSearchTabs`
+      -  :doc:`../geeServerAdmin/manageSnippetProfiles`
+      -  :doc:`../geeServerAdmin/manageVirtualHosts`
+      -  :doc:`../geeServerAdmin/makeWMSRequests`
+      -  :doc:`../googleEarthEnterpriseClient/whatisEC`
 
       .. _Using_Command_Line:
       .. rubric:: Publish using the command line
@@ -266,7 +266,7 @@ Push and publish databases
 
          ``geserveradmin --publishdb /gevol/assets/Databases/SFMapDatabase.kmmdatabase/mapdb.kda/ver001/mapdb/ --targetpath http://myserver.org --setecdefault``
 
-         For more information about the geserveradmin command options, see the :doc:`3481558`.
+         For more information about the geserveradmin command options, see the :doc:`../fusionAdministration/commandReference`.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

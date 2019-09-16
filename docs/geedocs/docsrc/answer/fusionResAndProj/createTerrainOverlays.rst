@@ -261,7 +261,7 @@ Create terrain overlays
 
             **Caution:** If you have logged in to this server with
             Google Earth EC previously, log out, clear your cache, and
-            log back in. See :doc:`6010060`.
+            log back in. See :doc:`../googleEarthEnterpriseClient/clearGoogleEarthEC`.
 
       #. Google Earth EC displays your database. The Layers panel shows
          any terrain, imagery, and vector layers in the database.
@@ -281,7 +281,7 @@ Create terrain overlays
 
       .. rubric:: Learn more
 
-      -  `Defining and Building Projects :doc:`4412421`
+      -  `Defining and Building Projects :doc:`../fusionTutorial/buildProject`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

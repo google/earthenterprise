@@ -12,7 +12,7 @@ Build and install GEE 5.x
       before it can be installed. Refer to the `EarthEnterprise
       Wiki <https://github.com/google/earthenterprise/wiki/Build-Instructions>`__
       for instructions. Once you have built Google Earth Enterprise you
-      can proceed to the :doc:`install instructions <4492598>`.
+      can proceed to the :doc:`install instructions <../installGEE/installOverviewGEE>`.
 
       The **GEE Server** software package contains:
 

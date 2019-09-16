@@ -29,11 +29,11 @@ Manage virtual hosts
       .. tip::
 
          See `Configure GEE Server 5.1.0 for
-         SSL/HTTPS <../answer/6080928.html>`__ to add virtual hosts for
+         SSL/HTTPS <../answer/../geeServerConfigAndSecurity/configureGeeServer5.1.0_SSL_HTTPS.html>`__ to add virtual hosts for
          HTTPS servers.
 
          See :ref:`geserveradmin <geserveradmin>` in
-         the :doc:`3481558` for
+         the :doc:`../fusionAdministration/commandReference` for
          information about all the virtual host commands.
 
       .. note::
@@ -135,7 +135,7 @@ Manage virtual hosts
       .. tip::
 
          A virtual host can also be configured for SSL/HTTPS. See
-         :doc:`6080928`.
+         :doc:`../geeServerConfigAndSecurity/configureGeeServer5.1.0_SSL_HTTPS`.
 
       .. rubric:: Configure virtual hosts with a custom port number
 
@@ -208,8 +208,8 @@ Manage virtual hosts
 
       .. rubric:: Learn more
 
-      -  :doc:`Configure GEE Server for SSL/HTTPS <6080928>`
-      -  :doc:`LDAP authentication <2760544>`
+      -  :doc:`Configure GEE Server for SSL/HTTPS <../geeServerConfigAndSecurity/configureGeeServer5.1.0_SSL_HTTPS>`
+      -  :doc:`LDAP authentication <../geeServerConfigAndSecurity/configureGeeVirtualHostForLDAP>`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

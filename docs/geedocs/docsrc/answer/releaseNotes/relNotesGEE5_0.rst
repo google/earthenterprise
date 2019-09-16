@@ -130,7 +130,7 @@ Release notes: GEE 5.0
       and GetMap requests for WMS versions 1.1.1 and 1.3.0. To enable
       WMS for a database you want to publish:
 
-      #. In the :doc:`GEE Server Admin console <3470759>`_,
+      #. In the :doc:`GEE Server Admin console <../geeServerAdmin/signInAdminConsole>`_,
          click **Databases.**
       #. Check the box next to the database you want to publish.
       #. Click **Publish**.

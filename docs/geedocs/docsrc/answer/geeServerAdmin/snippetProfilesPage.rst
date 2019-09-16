@@ -27,7 +27,7 @@ Snippet profiles page
 
       .. rubric:: Learn more
 
-      -  :doc:`6004748`_
+      -  :doc:`../geeServerAdmin/manageSnippetProfiles`_
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

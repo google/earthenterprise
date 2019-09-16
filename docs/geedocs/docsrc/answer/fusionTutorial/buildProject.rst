@@ -713,7 +713,7 @@ Defining and Building Projects
 
       When the status of the vector project build is **Succeeded**,
       close the Asset Manager by clicking the close box (**X**), and go
-      on to the :doc:`next lesson <4412422>`.
+      on to the :doc:`next lesson <../fusionTutorial/buildDatabase>`.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

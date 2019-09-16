@@ -12,7 +12,7 @@ Release notes: GEE 5.0.2
       Earth Enterprise (GEE) 5.0.2 release:
 
       GEE 5.0.2 is an incremental release of :doc:`GEE
-      5.0 <3424202>` and :doc:`GEE
+      5.0 <../releaseNotes/relNotesGEE5_0>` and :doc:`GEE
       5.0.1 <4556704>`. It addresses a
       vulnerability reported by the `OpenSSL
       Project <http://www.openssl.org/>`_, as well as fixes to

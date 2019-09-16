@@ -61,7 +61,7 @@ Manage mosaics with virtual rasters
          **Note:** ``Gevirtualraster`` is necessary if you are creating
          a custom mask file for the imagery or terrain resource as there
          is a software requirement of one source file for one custom
-         mask file. See :doc:`4525555`.
+         mask file. See :doc:`../fusionResAndProj/createCustomMasks`.
 
       .. rubric:: Example Usage
 
@@ -106,7 +106,7 @@ Manage mosaics with virtual rasters
       .. tip::
 
          For more information about using virtual mosaics, see :doc:`Create
-         virtual mosaics <4412688>`.
+         virtual mosaics <../fusionTutorial/createImageryMosaic>`.
 
       .. rubric:: Creating a virtual raster from a file list
 
@@ -183,11 +183,11 @@ Manage mosaics with virtual rasters
       .. rubric:: Learn more
 
 
-      :doc:`Create virtual mosaics <4412688>`
+      :doc:`Create virtual mosaics <../fusionTutorial/createImageryMosaic>`
 
-      :doc:`4412689`
+      :doc:`../fusionTutorial/segmentLargeImageryFiles`
 
-      :doc:`4525555`
+      :doc:`../fusionResAndProj/createCustomMasks`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

@@ -104,7 +104,7 @@ Select, add, or change Earth EC servers
       .. rubric:: Useful resources
 
       -  :ref:`What is Google Earth EC? <What_Is_GEEC>`
-      -  :doc:`6357802`
+      -  :doc:`../googleEarthEnterpriseClient/fixEarthECIssues`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

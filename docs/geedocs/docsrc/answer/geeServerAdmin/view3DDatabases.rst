@@ -38,7 +38,7 @@ View 3D databases
 
             If you have logged in to this server with Google Earth EC
             previously, log out, clear your cache, and log back in. For
-            help with clearing your cache, see :doc:`6010060`.
+            help with clearing your cache, see :doc:`../googleEarthEnterpriseClient/clearGoogleEarthEC`.
 
       #. Google Earth EC displays your database. The Layers panel shows
          the terrain, imagery, and vector layers in the published
@@ -46,8 +46,8 @@ View 3D databases
 
       .. rubric:: Learn more
 
-      -  :doc:`What is Google Earth EC? <6006981>`
-      -  :doc:`6010060`
+      -  :doc:`What is Google Earth EC? <../googleEarthEnterpriseClient/whatisEC>`
+      -  :doc:`../googleEarthEnterpriseClient/clearGoogleEarthEC`
 
       .. _View_Globe_Browser:
       .. rubric:: Viewing 3D databases in a browser
@@ -68,8 +68,8 @@ View 3D databases
 
       .. rubric:: Learn more
 
-      -  :doc:`6051568`
-      -  :doc:`6051584`
+      -  :doc:`../geeServerAdmin/implementEarthPlugin`
+      -  :doc:`../geeServerAdmin/provideEarthPlugin`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

@@ -42,7 +42,7 @@ Configure Fusion performance
       ``geselectassetroot --assetroot /gevol/assets --numcpus 7``
 
       For information about assigning CPUs to Fusion processing, see
-      :doc:`6008655`.
+      :doc:`../fusionAdministration/multipleCPUConfig`.
 
       Task rules impact Fusion processing in two different ways: by
       enabling/disabling multithreading, and by specifying output
@@ -295,6 +295,14 @@ Configure Fusion performance
       following format:
 
       ``# comments are preceded by '#'  # options are case-insensitive, and all need not be present  # the initial size of the XML heap in bytes # default is 16384 INIT_HEAP_SIZE=<value>  # the max size of the XML heap in bytes # default is 131072 MAX_HEAP_SIZE=<value>  # the size of XML heap allocation blocks in bytes # default is 4096 BLOCK_SIZE=<value>  # whether or not to purge the XML cache; valid values are 0 or 1 # default is 1 PURGE=<value>  # the level at which to purge the XML cache; can be 1 (most often) to 5 (least often) # default is 3 PURGE_LEVEL=<value>``
+
+      .. rubric:: PackGen analysis thread configuration
+
+      Within ``misc.xml``, there is an experimental feature for setting
+      the number of threads to use while analyzing and creating packgen
+      tasks. The number of threads is controlled by ``PackGenAnalysisThreads``.
+      This option is experimental and may contain bugs.
+
       .. rubric:: Status request timeout
 
       Status requests to the system manager from clients like ``getop``
@@ -315,7 +323,7 @@ Configure Fusion performance
 
       .. rubric:: Learn more
 
-      -  :doc:`6033487`
+      -  :doc:`../fusionAdministration/benchMarkOutcomesForTaskRule`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

@@ -34,7 +34,7 @@ Cutter tool system information
       -  Globe cutting operations can sometimes be interrupted,
          resulting in "runaway" globe cutting processes that an
          administrator must manually halt at the operating system level.
-         See :doc:`3003337`.
+         See :doc:`../portable/manuallyHaltCutter`.
       -  The Cutter web tool is incompatible with load-balanced
          configurations, and should only be operated on a machine that
          end users can access directly. This can be a production machine

@@ -77,8 +77,8 @@ Overview
       .. rubric:: Learn More
          :name: learn-more-1
 
-      -  :doc:`4492616`
-      -  :doc:`Fusion Administration Guide <3481464>`
+      -  :doc:`../installGEE/verifyTroubleshootGEE`
+      -  :doc:`Fusion Administration Guide <../fusionAdministration/beforeYouConfigure>`
 
       .. rubric:: 3. Push Databases to GEE Server
          :name: push-databases-to-gee-server
@@ -102,8 +102,8 @@ Overview
       .. rubric:: Learn More
          :name: learn-more-2
 
-      -  :doc:`6034724`
-      -  :doc:`6051700`
+      -  :doc:`../fusionAdministration/pushAndPublishDB`
+      -  :doc:`../fusionAdministration/publishDBWithDisconnectedPublishing`
 
       .. rubric:: 4. Publish databases securely with GEE Server
          :name: publish-databases-securely-with-gee-server
@@ -130,9 +130,9 @@ Overview
       .. rubric:: Learn More
          :name: learn-more-3
 
-      -  :doc:`6013604`
-      -  :doc:`2760544`
-      -  :doc:`6080928`
+      -  :doc:`../geeServerAdmin/manageVirtualHosts`
+      -  :doc:`../geeServerConfigAndSecurity/configureGeeVirtualHostForLDAP`
+      -  :doc:`../geeServerConfigAndSecurity/configureGeeServer5.1.0_SSL_HTTPS`
 
       .. rubric:: 5. Make Web Map Service (WMS) requests
          :name: make-web-map-service-wms-requests
@@ -145,14 +145,14 @@ Overview
       mapping images into a single view. Because the WMS standard is
       used to fetch the images, they can easily be overlaid on one
       another. Supported clients include
-      :doc:`QGIS <4441137>`, ArcGIS/ArcGIS
+      :doc:`QGIS <../geeServerAdmin/makeWMSRequests>`, ArcGIS/ArcGIS
       Explorer Desktop, and `Google Earth
       Pro/EC <https://github.com/google/earthenterprise/wiki/Google-Earth-Enterprise-Client-(EC)>`.
 
       .. rubric:: Learn More
          :name: learn-more-4
 
-      -  :doc:`4441137`
+      -  :doc:`../geeServerAdmin/makeWMSRequests`
 
       .. rubric:: 6. View databases
          :name: view-databases
@@ -171,7 +171,7 @@ Overview
       .. rubric:: Learn More
          :name: learn-more-5
 
-      -  :doc:`4412446`
+      -  :doc:`../fusionTutorial/pushPublishView`
 
       .. rubric:: 7. Google Maps JavaScript API
          :name: google-maps-javascript-api
@@ -187,7 +187,7 @@ Overview
       .. rubric:: Learn More
          :name: learn-more-6
 
-      -  :doc:`6078457`
+      -  :doc:`../developers/googleMapsAPIV3ForGEE`
 
       .. rubric:: 8. Search Services
          :name: search-services
@@ -207,10 +207,10 @@ Overview
       .. rubric:: Learn More
          :name: learn-more-7
 
-      -  :doc:`6062970`
-      -  :doc:`6063101`
-      -  :doc:`3497832`
-      -  :doc:`6066597`
+      -  :doc:`../geeServerAdmin/publishDatabasesWithSearch`
+      -  :doc:`../geeServerAdmin/searchPOIVectorMapLayerData`
+      -  :doc:`../geeServerAdmin/createSearchTabs`
+      -  :doc:`../geeServerAdmin/addCustomSearchServices`
 
       .. rubric:: 9. Portable
          :name: portable
@@ -238,9 +238,9 @@ Overview
       .. rubric:: Learn More
          :name: learn-more-8
 
-      -  :doc:`3230746`
-      -  :doc:`3230807`
-      -  :doc:`3230777`
+      -  :doc:`../portable/portableUserGuideWinLinux`
+      -  :doc:`../portable/portableDeveloperGuide`
+      -  :doc:`../geeServerAdmin/createPortableGlobesMaps`
 
       .. rubric:: 10. Manage your GEE system
          :name: manage-your-gee-system
@@ -258,8 +258,8 @@ Overview
       .. rubric:: Learn More
          :name: learn-more-9
 
-      -  :doc:`Fusion Administration Guide <3481464>`
-      -  :doc:`176676`
+      -  :doc:`Fusion Administration Guide <../fusionAdministration/beforeYouConfigure>`
+      -  :doc:`../fusionAdministration/manageFusionDiskSpace`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

@@ -38,12 +38,12 @@ Release notes: GEE 5.1.0
 
       **Configure SSL/HTTPS with command line option**. You can now
       create and register a location-based virtual host using the
-      command line tool ``geserveradmin --addvh --ssl``. See :doc:`6080928`.
+      command line tool ``geserveradmin --addvh --ssl``. See :doc:`../geeServerConfigAndSecurity/configureGeeServer5.1.0_SSL_HTTPS`.
 
       **Set TRANSPARENT and BGCOLOR parameters when making WMS
       requests**. You can now determine if your map should be
       transparent, allowing other map layers beneath to be visible, and
-      you can also set the background color of the map. See :doc:`4441137`.
+      you can also set the background color of the map. See :doc:`../geeServerAdmin/makeWMSRequests`.
 
       **Display All option for center labels for polygon settings in the
       Map Layer dialog**. By default, GEE will display center labels of
@@ -141,7 +141,7 @@ Number             Description                                                  
 16618751           When attempting to specify the ``--lut`` option for the ``gevirtualraster`` tool, no file is specified.                                                                                          The ``--lut`` option has been removed from the ``gevirtualraster`` command and supporting documentation as the LUT file type is not being used.
 16135553           When the ``gemaskgen`` tool terminates in error, there is insufficient error logging.                                                                                                            A check for size of source/output raster and logging support for gemaskgen has been improved, providing more information about processes and when they are terminated in error.
 17300345           When adding a new imagery resource to an existing imagery project that was originally built with GEE 4.4.1, adding a new imagery resource and rebuilding the imagery project with GEE 5.x fails. Fixed. Existing imagery projects with older imagery resources now rebuild successfully.
-16683365           The option to serve 3D databases using WMS has been deprecated.                                                                                                                                  Fixed. WMS now serves 2D flat projection map databases in addition to Mercator projection map databases. See `Make Web Map Service (WMS) requests <../answer/4441137.html>`__.
+16683365           The option to serve 3D databases using WMS has been deprecated.                                                                                                                                  Fixed. WMS now serves 2D flat projection map databases in addition to Mercator projection map databases. See `Make Web Map Service (WMS) requests <../answer/../geeServerAdmin/makeWMSRequests.html>`__.
 16701881           When attempting to set the maximum number of CPUs used for Fusion processing tasks, **geselectassetroot --numcpus** fails to update the value specified.                                         Fixed. The **geselectassetroot --numcpus** tool specifies the `maximum number of CPUs <../answer/6008655.html>`__ for Fusion processing.
 ================== ================================================================================================================================================================================================ ===============================================================================================================================================================================
 
