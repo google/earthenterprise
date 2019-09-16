@@ -181,5 +181,6 @@ env.test('StateUpdater_unittest',
 
 env.test('InsetTilespaceIndex_test',
           [ 'InsetTilespaceIndex_test.cpp',
-            'InsetTilespaceIndex.o'],
-          LIBS=['geautoingest', 'gemiscconfig','geutil', 'gecommon','gtest'])
+            'InsetTilespaceIndex.o',
+            'InsetInfo.o'],
+          LIBS=['geautoingest', 'gemiscconfig','geutil', 'gecommon','gtest', 'qt-mt'])

@@ -46,8 +46,9 @@
 
 class TestData {
     // TODO - doc structure.
-    std::map<khExtents < double>, QuadtreePath>
-    extentQtMBRMap;
+    //std::map<khExtents < double>, QuadtreePath> extentQtMBRMap;
+    std::vector<khExtents<double>> extentsVec;
+
 
 public:
     TestData(std::string fname) {
@@ -61,18 +62,20 @@ public:
             double x1, x2, y1, y2;
             in >> x1 >> x2 >> y1 >> y2;
             khExtents<double> extents(XYOrder, x1, x2, y1, y2);
-
+            /*
             std::getline(input, line);
             std::string qtp_txt, qtp_level;
             in >> qtp_txt >> qtp_level;
             QuadtreePath qtpMbr(qtp_txt);
-            extentQtMBRMap.insert({extents, qtpMbr});
+            */
+            //extentQtMBRMap.insert({extents, qtpMbr});
+            extentsVec.push_back(extents);
         }
     }
 
-    std::map<khExtents < double>, QuadtreePath>
-
-    getData() { return extentQtMBRMap; }
+    //std::map<khExtents < double>, QuadtreePath>
+    std::vector<khExtents<double>>
+    getData() { return extentsVec; }
 };
 
 class InsetTilespaceIndexTest : public testing::Test {
@@ -95,7 +98,7 @@ public:
                           const std::vector<khExtents<double> > &inputExtents) {
         uint beginMinifyLevel = 1;
         uint endMinifyLevel = 19;
-        std::vector <uint32> neededIndexes; //This is our return value...
+        std::vector<uint32> neededIndexes; //This is our return value...
         std::vector<khExtents<double>> matchingExtents;
 
 
@@ -105,13 +108,14 @@ public:
             khExtents <uint32> normExtents = DegExtentsToTileExtents(degExtents, coverage.beginLevel());
             normExtentsVec.push_back(normExtents);
         }
-
+        uint vecsize = (uint) normExtentsVec.size();
         FindNeededImageryInsets(coverage,
                                 normExtentsVec,
-                                (uint) normExtentsVec.size(),
+                                vecsize,
                                 neededIndexes,
-                                (uint) beginMinifyLevel,
-                                (uint) endMinifyLevel);
+                                beginMinifyLevel,
+                                endMinifyLevel);
+        notify(NFY_WARN, "%lu", neededIndexes.size());
         for (uint index : neededIndexes) {
             khExtents<double> ex = inputExtents[index];
             matchingExtents.push_back(ex);
@@ -135,7 +139,7 @@ public:
                 queryMBR,
                 queryCoverage.beginLevel(),
                 queryCoverage.endLevel());
-
+        notify(NFY_WARN, "Got Here");
 
         return matchingExtentsVec;
     }
@@ -143,17 +147,20 @@ public:
 
     const bool TestAlgo1Algo2OutputMatch() {
 
-        TestData dataset("TestDataQTPs.txt");
-        std::vector<khExtents<double>> testExtents;
+        TestData dataset("TestQTPs2.txt");
+        //std::vector<khExtents<double>> testExtents;
+        /*
         std::vector <QuadtreePath> mbrHashVec;
         boost::copy(dataset.getData() | boost::adaptors::map_keys,
                     std::back_inserter(testExtents));
-
+        */
         khExtents<double> insetExtents(XYOrder, 114.032, 114.167, 19.1851, 19.3137);
         khInsetCoverage coverage(RasterProductTilespace(false), insetExtents, 19, 7, 21);
 
-        std::vector<khExtents<double> > requiredExtentsProd = findInsetsControlAlgo(coverage, testExtents);
-        std::vector<khExtents<double> > requiredExtentsExp = findInsetsExperimentalAlgo(coverage, testExtents);
+        std::vector<khExtents<double> > requiredExtentsProd = findInsetsControlAlgo(coverage, dataset.getData());
+        notify(NFY_WARN, "Old Algo Done, %lu", requiredExtentsProd.size());
+        std::vector<khExtents<double> > requiredExtentsExp = findInsetsExperimentalAlgo(coverage, dataset.getData());
+        notify(NFY_WARN, "New Algo Done");
         bool listsMatch = (requiredExtentsProd == requiredExtentsExp);
         return listsMatch;
     }
@@ -188,31 +195,6 @@ TEST_F(InsetTilespaceIndexTest, ReturnSpecificQTP) {
     int level;
     QuadtreePath qtp = insetTilespaceIndex.getQuadtreeMBR(extent, level, 3);
     EXPECT_EQ("202", qtp.AsString());
-}
-
-TEST_F(InsetTilespaceIndexTest, SampleDataTest) {
-    std::ifstream in("/home/jkent/coveragefile.txt", std::ifstream::in);
-    //std::ofstream out("/home/jkent/test.txt", std::ifstream::out);
-    std::string line;
-    while(getline(in, line)) {
-        //out << line;
-        //out << "\n";
-        std::istringstream iss(line);
-        std::vector<double> coords;
-        std::string coord;
-        while( getline(iss, coord,' ')) { coords.push_back(std::stod(coord));  }
-        //    const khExtents<double> extent = khExtents<double>(XYOrder, coords.at(0), coords.at(1), coords.at(2), coords.at(3));
-        //    int level;
-        //QuadtreePath qtp = insetTilespaceIndex.getQuadtreeMBR(extent, level, 24);
-        //out << "\t";
-        //out << qtp.AsString();
-        //out << "\t";
-        //out << level;
-        //out << "\n";
-    }
-    //out.close();
-    in.close();
-
 }
 
 int main(int argc, char *argv[]) {

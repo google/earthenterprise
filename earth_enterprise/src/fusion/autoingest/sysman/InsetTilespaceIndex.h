@@ -32,7 +32,7 @@ Description: Support for terrain "overlay" projects.
 #include "common/khExtents.h"
 #include "common/khInsetCoverage.h"
 #include "fusion/autoingest/sysman/InsetInfo.h"
-#include "fusion/autoingest/sysman/InsetTilespaceIndex.h"
+//#include "fusion/autoingest/sysman/InsetTilespaceIndex.h"
 
 // // TODO - pack this struct to fit in a tidy 64 bit "size_t" for optimal performance
 // struct  TilespaceMBR { 
