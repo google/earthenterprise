@@ -1,0 +1,116 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Implement Google Earth Plugin &#8212; Google Earth Enterprise 5.3.2 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="(Deprecated) Provide Google Earth Plug-in for your users to install" href="provideEarthPlugin.html" />
+    <link rel="prev" title="View 2D databases" href="view2DDatabases.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="provideEarthPlugin.html" title="(Deprecated) Provide Google Earth Plug-in for your users to install"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="view2DDatabases.html" title="View 2D databases"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" accesskey="U">GEE Server administration</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="view2DDatabases.html"
+                        title="previous chapter">View 2D databases</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="provideEarthPlugin.html"
+                        title="next chapter">(Deprecated) Provide Google Earth Plug-in for your users to install</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp4.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp4.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="implement-google-earth-plugin">
+<h1>Implement Google Earth Plugin<a class="headerlink" href="#implement-google-earth-plugin" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>Included with Google Earth Enterprise is an example of how to
+implement the Google Earth Plugin in
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/earth/earth_local.html</span></code>. By default,
+the virtual servers point to <code class="docutils literal notranslate"><span class="pre">earth_local.html</span></code> when accessing
+globes through a web browser. Please note, however, that the
+Google Earth Plugin is deprecated and is not supported by modern
+browsers.</p>
+<p>The following HTML is the content of the <code class="docutils literal notranslate"><span class="pre">earth_local.html</span></code>
+file.</p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;html&gt;</span> <span class="pre">&lt;head&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">&lt;title&gt;Google</span> <span class="pre">Earth</span> <span class="pre">Enterprise</span> <span class="pre">Earth</span> <span class="pre">Plug-in:</span> <span class="pre">Local</span> <span class="pre">Example&lt;/title&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">&lt;link</span> <span class="pre">rel='stylesheet'</span> <span class="pre">type='text/css'</span> <span class="pre">href='/earth/earth.css'</span> <span class="pre">/&gt;</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;script</span> <span class="pre">type='text/javascript'&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">//</span> <span class="pre">To</span> <span class="pre">serve</span> <span class="pre">your</span> <span class="pre">static</span> <span class="pre">content</span> <span class="pre">from</span> <span class="pre">a</span> <span class="pre">different</span> <span class="pre">server,</span> <span class="pre">simply</span> <span class="pre">override</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">//</span> <span class="pre">GEE_SERVER_URL</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">URL</span> <span class="pre">of</span> <span class="pre">your</span> <span class="pre">GEE</span> <span class="pre">Server,</span> <span class="pre">e.g.:</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">//</span> <span class="pre">&quot;http://yourhost.com/default_ge/&quot;</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">var</span> <span class="pre">GEE_SERVER_URL</span> <span class="pre">=</span> <span class="pre">&quot;&quot;;</span>&#160;&#160;&#160;&#160; <span class="pre">&lt;/script&gt;</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;!--</span> <span class="pre">Load</span> <span class="pre">the</span> <span class="pre">required</span> <span class="pre">Javascript</span> <span class="pre">files.</span>&#160;&#160; <span class="pre">The</span> <span class="pre">loader</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Earth</span> <span class="pre">Plug-in</span> <span class="pre">API:</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">earth_plugin_loader.js.</span> <span class="pre">Utilities</span> <span class="pre">for</span> <span class="pre">this</span> <span class="pre">example</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">UI:</span> <span class="pre">fusion_utils.js</span> <span class="pre">and</span> <span class="pre">search_tabs.js</span> <span class="pre">The</span> <span class="pre">main</span> <span class="pre">routine:</span> <span class="pre">geeInit()</span> <span class="pre">is</span> <span class="pre">found</span> <span class="pre">in</span>&#160; <span class="pre">fusion_earthplugin.js</span> <span class="pre">which</span> <span class="pre">defines</span> <span class="pre">the</span> <span class="pre">example</span> <span class="pre">UI</span> <span class="pre">and</span> <span class="pre">behaviors.</span> <span class="pre">--&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;script</span> <span class="pre">type='text/javascript'</span> <span class="pre">src='/js/earth_plugin_loader.js'&gt;&lt;/script&gt;</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;script</span> <span class="pre">type='text/javascript'</span> <span class="pre">src='/js/fusion_utils.js'&gt;&lt;/script&gt;</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;script</span> <span class="pre">type='text/javascript'</span> <span class="pre">src='/js/search_tabs.js'&gt;&lt;/script&gt;</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;script</span> <span class="pre">type='text/javascript'</span> <span class="pre">src='/js/fusion_earthplugin.js'&gt;&lt;/script&gt;</span> <span class="pre">&lt;/head&gt;</span>&#160; <span class="pre">&lt;body</span> <span class="pre">onload='geeInit()'</span> <span class="pre">onresize='geeResizeDivs();'&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">&lt;div</span> <span class="pre">id='header'&gt;</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;div</span> <span class="pre">id='logo'&gt;</span> <span class="pre">&lt;img</span> <span class="pre">src=&quot;/earth/images/gee.gif&quot;</span> <span class="pre">align=&quot;left&quot;</span> <span class="pre">/&gt;</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;/div&gt;</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;div</span> <span class="pre">id='search_tabs'&gt;</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;/div&gt;</span>&#160;&#160; <span class="pre">&lt;/div&gt;</span>&#160;&#160; <span class="pre">&lt;div</span> <span class="pre">style=&quot;clear:</span> <span class="pre">both;&quot;&gt;&lt;/div&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">&lt;table</span> <span class="pre">cellspacing=&quot;0&quot;</span> <span class="pre">cellpadding=&quot;0&quot;</span> <span class="pre">width=&quot;100%&quot;&gt;</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;tr</span> <span class="pre">valign=&quot;top&quot;&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;td</span> <span class="pre">id='left_panel_cell'&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;div</span> <span class="pre">id='left_panel'&gt;&lt;/div&gt;</span> <span class="pre">&lt;/td&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;td&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;div</span> <span class="pre">id='map'&gt;&lt;/div&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;/td&gt;</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;/tr&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;/table&gt;</span>&#160;&#160; <span class="pre">&lt;/body&gt;</span> <span class="pre">&lt;/html&gt;</span></code></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="provideEarthPlugin.html" title="(Deprecated) Provide Google Earth Plug-in for your users to install"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="view2DDatabases.html" title="View 2D databases"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" >GEE Server administration</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
