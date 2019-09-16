@@ -61,6 +61,7 @@ if mod_wsgi_env['bundle_3rd_libs']:
   configure_cmd = (
    'cd %s\n'
     '%s%s ./configure %s --with-apxs=%s/bin/apxs '
+
     '--with-python=%s '
     'LD_RUN_PATH=/opt/google/gepython/Python-%s/lib '
     'CFLAGS="-I%s"\n'
@@ -73,20 +74,29 @@ if mod_wsgi_env['bundle_3rd_libs']:
                   root_dir, mod_wsgi_env['python_major_version'], mod_wsgi_env['python_version'],
                   mod_wsgi_target))
 else:
-  configure_cmd = (
-   'cd %s\n'
-    '%s%s ./configure %s --with-apxs=%s/bin/apxs '
-    '--with-python=%s '
-    'LD_RUN_PATH=/opt/google/gepython/Python-%s/lib '
-    'CFLAGS="-I%s"\n'
-    'LDFLAGS="-L/opt/rh/python27/root/usr/lib64 -Wl,-rpath,/opt/google/gepython/Python-%s/lib"\n'
-    'touch %s' % (build_root,
-                  mod_wsgi_env['ENV']['mod_env'], env_opt, config_opt, root_dir,
-                  mod_wsgi_env['python_bin'],
-                  mod_wsgi_env['python_version'],
-                  mod_wsgi_env['python_include'],
-                  mod_wsgi_env['python_version'],
-                  mod_wsgi_target))
+  if mod_wsgi_env['el_ver'] == 'el6':
+    configure_cmd = (
+      'cd %s\n'
+      '%s%s ./configure %s --with-apxs=%s/bin/apxs '
+      '--with-python=%s '
+      'LD_RUN_PATH=/opt/google/gepython/Python-%s/lib '
+      'CFLAGS="-I%s"\n'
+      'LDFLAGS="-L/opt/rh/python27/root/usr/lib64 -Wl,-rpath,/opt/google/gepython/Python-%s/lib"\n'
+      'touch %s' % (build_root,
+                    mod_wsgi_env['ENV']['mod_env'], env_opt, config_opt, root_dir,
+                    mod_wsgi_env['python_bin'],
+                    mod_wsgi_env['python_version'],
+                    mod_wsgi_env['python_include'],
+                    mod_wsgi_env['python_version'],
+                    mod_wsgi_target))
+  else:
+    configure_cmd = (
+      'cd %s\n'
+      '%s%s ./configure %s --with-apxs=%s/bin/apxs '
+      'touch %s' % (build_root,
+                    mod_wsgi_env['ENV']['mod_env'], env_opt, config_opt, root_dir,
+                    mod_wsgi_target))
+
 
 
 mod_wsgi_configure = mod_wsgi_env.Command(
