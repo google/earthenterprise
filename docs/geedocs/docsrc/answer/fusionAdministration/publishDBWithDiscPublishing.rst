@@ -140,12 +140,11 @@ Publish databases using disconnected publishing
          ``/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/``
 
       #. Publish the database on the Server either using the :doc:`GEE Server
-         Admin console <3497763>` or on the command
+         Admin console <../geeServerAdmin/publishDatabasesPortables>` or on the command
          line. The GEE Server Admin console Publish dialog includes
-         options to add :doc:`search <3497832>`, :doc:`snippet
-         profiles <6004748>`, :doc:'specify a virtual
-         host <6013604>`, and :doc:`turn on
-         WMS <4441137>`.
+         options to add :doc:`search <../geeServerAdmin/createSearchTabs>`, :doc:`snippet
+         profiles <../geeServerAdmin/manageSnippetProfiles>`, :doc:`specify a virtual host
+         <../geeServerAdmin/manageVirtualHosts>`, and :doc:`turn on WMS <../geeServerAdmin/makeWMSRequests>`.
 
          **To publish on the command line:**
 
@@ -211,7 +210,7 @@ Publish databases using disconnected publishing
 
       If the disconnected database contains KML layers, the KML layers's
       URLs may require adjustments in order to resolve the KML content
-      in a disconnected environment. (See :doc:`2760457`). Use the ``gerewritedbroot``
+      in a disconnected environment. (See :doc:`../fusionResAndProj/addKMLLayers`). Use the ``gerewritedbroot``
       command to update the disconnected database KML links with new
       hostname, ports, paths, or filenames.
 

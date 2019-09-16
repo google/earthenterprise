@@ -29,7 +29,7 @@ Running Fusion on a Machine with Multiple CPUs
 
       These tasks may be multithreaded by enabling *task rules* within
       Fusion. Implementation of task rules is described in more detail
-      in :doc:`176738`.
+      in :doc:`../fusionAdministration/confTaskRulesForFusionPerf`.
 
       The **ImageryPacketLevel.taskrule**,
       **TerrainPacketLevel.taskrule**, **MapLayerLevel.taskrule**, and

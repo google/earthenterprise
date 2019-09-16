@@ -26,9 +26,9 @@ Troubleshoot push/publishing issues
       be output to portable media, which can then be pushed and
       published to GEE Server.
 
-      -  :doc:`6034724`
-      -  :doc:`3497763`
-      -  :doc:`6051700`
+      -  :doc:`../fusionAdministration/pushAndPublishDB`
+      -  :doc:`../geeServerAdmin/publishDatabasesPortables`
+      -  :doc:`../fusionAdministration/publishDBWithDisconnectedPublishing`
 
       .. rubric:: Troubleshoot Push Issues
 
@@ -50,7 +50,7 @@ Troubleshoot push/publishing issues
          Server.
       -  **Disconnected push**. Data is transferred from the Fusion host
          to the GEE Server by hard disk instead of a network. For
-         information about pushing disconnected databases, see :doc:`6051700`.
+         information about pushing disconnected databases, see :doc:`../fusionAdministration/publishDBWithDisconnectedPublishing`.
 
       .. rubric:: Check your server is running correctly
 
@@ -261,7 +261,7 @@ Troubleshoot push/publishing issues
 
          .. tip::
 
-            Instead of using <code>geserveradmin --adddb/pushdb</code> commands, you can push the database directly from Fusion. See :doc:`6034724`.
+            Instead of using <code>geserveradmin --adddb/pushdb</code> commands, you can push the database directly from Fusion. See :doc:`../fusionAdministration/pushAndPublishDB`.
 
       .. rubric:: Disconnected publishing issues
 
@@ -275,7 +275,7 @@ Troubleshoot push/publishing issues
       Try resetting the permissions on the folders created by
       ``gedisconnectedsend --sendpath`` and try the ``--pushdb`` again.
 
-      -  See "doc"`6051700`.
+      -  See "doc"`../fusionAdministration/publishDBWithDisconnectedPublishing`.
 
       .. rubric:: Check your log files
 

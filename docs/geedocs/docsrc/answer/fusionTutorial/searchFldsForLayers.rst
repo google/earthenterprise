@@ -12,7 +12,7 @@ Specifying Search Fields for Individual Layers
       in your source data on which users of Google Earth EC can search.
       This lesson guides you through the process of specifying one field
       on one layer as searchable, using the vector project you created
-      in :doc:`4412681`. If you have not yet completed
+      in :doc:`../fusionTutorial/displayRulesPolygon`. If you have not yet completed
       that lesson, complete at least the first two sections, :ref:`Define and Build a Vector Resource Using Polygon
          Data <Define_Vector_Polygon>` and :ref:`Define, Configure, and Build a Vector Project <Define_Vector_Project>`, before
       continuing with this lesson.
@@ -194,9 +194,9 @@ Specifying Search Fields for Individual Layers
          |GEE Server Database Publish POI Search dialog|
 
          To learn more about the options available in the Publish
-         dialog, see :doc:`3497832`,
+         dialog, see :doc:`../geeServerAdmin/createSearchTabs`,
          :doc:`Snippet profiles <6004748`, and
-         :doc:`WMS <4441137>`.
+         :doc:`WMS <../geeServerAdmin/makeWMSRequests>`.
 
       #. Click **Publish**. The Databases page updates to indicate the
          published status of your database.

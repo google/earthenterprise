@@ -29,7 +29,7 @@ Creating a Map Database
       existing flat imagery resources for all your database types,
       including Mercator map databases, thereby saving you the task of
       creating and storing Mercator imagery resources. For more
-      information, see :doc:`6081069`.
+      information, see :doc:`../fusionResAndProj/addFlatImageryToMercatorMapDBInGEE5.1.0`.
 
       .. note::
 
@@ -39,7 +39,7 @@ Creating a Map Database
 
       The first step in preparing any data for publication is to import
       the source data as Google Earth Enterprise Fusion resources. You
-      can use one of the vector resources you defined in :doc:`4412443` for Google Maps.
+      can use one of the vector resources you defined in :doc:`../fusionTutorial/buildResource` for Google Maps.
 
       After you define your vector resources, you must define and build
       at least one map layer for each map project. The first exercise in
@@ -241,7 +241,7 @@ Creating a Map Database
       require corresponding imagery resource types. In this lesson you
       add a flat imagery project from a previous tutorial lesson to a
       Mercator map database, which can then be projected as *Mercator on
-      the Fly*. For more information, see :doc:`6081069`.
+      the Fly*. For more information, see :doc:`../fusionResAndProj/addFlatImageryToMercatorMapDBInGEE5.1.0`.
 
       .. tip::
 
@@ -406,9 +406,9 @@ Creating a Map Database
          be accessible from *myserver.mydomainname*/MySFMap.
 
          To learn more about the options available in the Publish
-         dialog, see :doc:`3497832`,
-         :doc:`Snippet profiles <6004748>`, and
-         :doc:`WMS <4441137>`.
+         dialog, see :doc:`../geeServerAdmin/createSearchTabs`,
+         :doc:`Snippet profiles <../geeServerAdmin/manageSnippetProfiles>`, and
+         :doc:`WMS <../geeServerAdmin/makeWMSRequests>`.
 
       #. Click **Publish**. The Databases page updates to indicate the
          published status of your database.

@@ -33,10 +33,10 @@ Databases page
                are not differentiated. Make sure each publish point path
                name you specify is unique.
 
-         -  Choose a :doc:`virtual host <6013604>`, and,
+         -  Choose a :doc:`virtual host <../geeServerAdmin/manageVirtualHosts>`, and,
             depending on the type of item, the following options may
-            also be available: :doc:`Search Tabs <3497832>`,
-            :doc:`Snippet profiles <6004748>`, and :doc:`Serve
+            also be available: :doc:`Search Tabs <../geeServerAdmin/createSearchTabs>`,
+            :doc:`Snippet profiles <../geeServerAdmin/manageSnippetProfiles>`, and :doc:`Serve
             WMS <4441137>`.
          -  **Unpublish**: To unpublish a database from its publish
             points.

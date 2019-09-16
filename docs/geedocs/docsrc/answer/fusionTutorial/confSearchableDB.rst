@@ -80,7 +80,7 @@ Configuring a Searchable Database
 
          This is one of the plug-in examples supplied with Google Earth
          Enterprise Server. For more information about plug-ins for
-         search tabs and the other fields in this dialog, see :doc:`3497832`.
+         search tabs and the other fields in this dialog, see :doc:`../geeServerAdmin/createSearchTabs`.
 
       #. Click the **Save** button. Now the search tab is ready for you to add to
          your databases.
@@ -98,7 +98,7 @@ Configuring a Searchable Database
          |GEE Server Database Publish|
 
       #. Check the box next to the **SFHighways** database that you
-         built in :doc:`4412422` and click **Unpublish**.
+         built in :doc:`../fusionTutorial/buildDatabase` and click **Unpublish**.
 
          The **Publish point** and **Virtual host** fields update to
          **unpublished**.
@@ -125,7 +125,7 @@ Configuring a Searchable Database
 
          **Caution:** If you have logged in to this server with Google
          Earth EC previously, log out, clear your cache, and log back
-         in. See :doc:`6010060`.
+         in. See :doc:`../googleEarthEnterpriseClient/clearGoogleEarthEC`.
 
       Google Earth EC displays your database with the **SF
       Neighborhoods** search tab you specified.

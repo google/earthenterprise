@@ -36,7 +36,7 @@ Pushing, Publishing, and Viewing a Database
          Fusion database. The same workflow is used to push a 2D
          Mercator database, but note that snippet profiles do not apply
          and that the published map can be viewed in a web browser, not
-         Google Earth EC. See :doc:`4412455` for more information.
+         Google Earth EC. See :doc:`../fusionTutorial/createMapDB` for more information.
 
       -  :ref:`Push Your Database <Push_Your_Database>`
       -  :ref:`Publish Your Database <Publish_Your_Database>`
@@ -56,7 +56,7 @@ Pushing, Publishing, and Viewing a Database
 
       #. Select **Asset Manager** from the **Tools** menu. The Asset Manager
          appears.
-      #. Navigate to the **SFHighways** database you built in :doc:`4412422`.
+      #. Navigate to the **SFHighways** database you built in :doc:`../fusionTutorial/buildDatabase`.
       #. Right-click the name of the database, and select **Push** from
          the context menu.
 
@@ -74,7 +74,7 @@ Pushing, Publishing, and Viewing a Database
 
          **Note:** If you get an error message, contact your Google
          Earth Enterprise Server administrator for help, or check the
-         documentation on :doc:`3481464` for more
+         documentation on :doc:`../fusionAdministration/beforeYouConfigure` for more
          information.
 
       .. _Publish_Your_Database:
@@ -136,9 +136,9 @@ Pushing, Publishing, and Viewing a Database
             specify is unique.
 
          To learn more about the options available in the Publish
-         dialog, see :doc:`3497832`,
-         :doc:`Snippet profiles <6004748>`, and
-         :doc:`WMS <4441137>`.
+         dialog, see :doc:`../geeServerAdmin/createSearchTabs`,
+         :doc:`Snippet profiles <../geeServerAdmin/manageSnippetProfiles>`, and
+         :doc:`WMS <../geeServerAdmin/makeWMSRequests>`.
 
       #. Click the **Publish**  button. The Databases page updates to indicate the
          published status of your database.

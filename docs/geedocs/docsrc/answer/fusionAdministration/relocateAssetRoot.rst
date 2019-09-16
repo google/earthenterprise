@@ -142,9 +142,9 @@ Relocate your asset root
       .. rubric:: Learn more
          :name: learn-more
 
-      -  :doc:`6034724`
-      -  :doc:`6028272`
-      -  :doc:`2760661`
+      -  :doc:`../fusionAdministration/pushAndPublishDB`
+      -  :doc:`../fusionTutorial/confTutorialWS`
+      -  :doc:`../fusionAdministration/backupFusionServers`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

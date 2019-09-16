@@ -59,7 +59,7 @@ Supported file formats in GEE
          **Importing large imagery files?** Although Fusion does not
          allow you to import raw imagery source files larger than 80 GB,
          you can split large resource files into smaller ones using the
-         ``gesplitkhvr`` tool. See the tutorial :doc:`4412689`.
+         ``gesplitkhvr`` tool. See the tutorial :doc:`../fusionTutorial/segmentLargeImageryFiles`.
 
       .. rubric:: Supported vector data formats
 

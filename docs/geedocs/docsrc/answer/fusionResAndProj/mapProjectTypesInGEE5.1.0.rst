@@ -46,7 +46,7 @@ Map projection types in GEE 5.1.0
       map databases, you can save on both storage space and database
       building time by eliminating the need for Mercator-based imagery.
 
-      For more information, see :doc:`6081069`.
+      For more information, see :doc:`../fusionResAndProj/addFlatImageryToMercatorMapDBInGEE5.1.0`.
 
       .. rubric:: Access map tools
 
@@ -66,7 +66,7 @@ Map projection types in GEE 5.1.0
          |Asset Manager Flat Map Tools selection|
 
       For information about creating map projects and databases, read
-      the tutorial lesson, :doc:`4412455`.
+      the tutorial lesson, :doc:`../fusionTutorial/createMapDB`.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

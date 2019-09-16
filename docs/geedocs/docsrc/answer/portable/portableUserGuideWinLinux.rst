@@ -68,7 +68,7 @@ Portable User Guide for Windows and Linux
 
       .. rubric:: Creating portable globes and maps
 
-      You can :doc:`3230777` with the cutter tool feature of
+      You can :doc:`../geeServerAdmin/createPortableGlobesMaps` with the cutter tool feature of
       the Google Earth Enterprise (GEE) Server, or you can obtain them
       from third-party vendors. Depending on your area of coverage, it
       can take only a few minutes to specify and generate a globe or map
@@ -77,7 +77,7 @@ Portable User Guide for Windows and Linux
       .. _Useful_Resources:
       .. rubric:: Useful resources
 
-      -  :doc:`Creating portable globes and maps <../answer/3230777.html>`.
+      -  :doc:`Creating portable globes and maps <../answer/../geeServerAdmin/createPortableGlobesMaps.html>`.
          Google Earth Enterprise users can learn how to cut globes or
          maps to serve from Portable.
       -  :doc:`Portable Developer Guide <../answer/3230807.html>`. Software

@@ -36,7 +36,7 @@ Importing and Exporting Style Templates
 
       .. note::
 
-         **Note:** If you have not completed :doc:`4412681`, you must complete
+         **Note:** If you have not completed :doc:`../fusionTutorial/displayRulesPolygon`, you must complete
          at least the first three exercises in that lesson (:ref:`Define and Build a Vector Resource Using Polygon
          Data <Define_Vector_Polygon>`, :ref:`Define, Configure, and Build a Vector Project <Define_Vector_Project>`, and
          :ref:`Define and Build an Imagery Project <Define_Imagery_Project>`) before continuing
@@ -56,7 +56,7 @@ Importing and Exporting Style Templates
          The Asset Manager appears.
 
       #. Navigate to the ``/ASSET_ROOT/Projects/Vector`` folder you
-         created in :doc:`4412681`.
+         created in :doc:`../fusionTutorial/displayRulesPolygon`.
       #. Double-click **CACountyPopulation** to open it in the Vector
          Project Editor.
       #. Right-click **CACountyPopulation**, and select **Export
@@ -228,9 +228,9 @@ Importing and Exporting Style Templates
          accessible from *myserver.mydomainname*.com/USPopulation-v001.
 
          To learn more about the options available in the Publish
-         dialog, see :doc:`3497832`,
-         :doc:`Snippet profiles <6004748>`, and
-         :doc:`WMS <4441137>`.
+         dialog, see :doc:`../geeServerAdmin/createSearchTabs`,
+         :doc:`Snippet profiles <../geeServerAdmin/manageSnippetProfiles>`, and
+         :doc:`WMS <../geeServerAdmin/makeWMSRequests>`.
 
       #. Click **Publish**. The Databases page updates to indicate the
          published status of your database.
@@ -259,7 +259,7 @@ Importing and Exporting Style Templates
 
          **Caution:** If you have logged in to this server with Google
          Earth EC previously, log out, clear your cache, and log back
-         in. See :doc:`6010060`.
+         in. See :doc:`../googleEarthEnterpriseClient/clearGoogleEarthEC`.
 
       #. Zoom in until you can see part of the US.
       #. Turn and tilt the Earth so you can see the *heights* of the
@@ -268,7 +268,7 @@ Importing and Exporting Style Templates
          Google Earth EC displays all of the counties in the US labeled
          with the names of the counties. The closer you zoom in, the
          more spread out the counties look and the more county names you
-         can see. As with the database you created in :doc:`4412681`,
+         can see. As with the database you created in :doc:`../fusionTutorial/displayRulesPolygon`,
          each county’s height indicates its relative population.
          Counties with higher populations are *taller*, and counties
          with lower populations are *shorter*.

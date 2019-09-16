@@ -132,7 +132,7 @@ Configure GEE Server 5.1.0 for SSL/HTTPS
          :name: to-add-a-virtual-host-for-https-serving
 
       #. Register your new virtual host using the ``geserveradmin``
-         command. See :doc:`6013604`.
+         command. See :doc:`../geeServerAdmin/manageVirtualHosts`.
 
          ``geserveradmin –-addvh --ssl``
 

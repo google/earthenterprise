@@ -60,7 +60,7 @@ Configuring Display Rules for Polygon Data
          The Save dialog appears.
 
       #. Navigate to the ``/ASSET_ROOT/Resources/Vector`` folder you
-         created in :doc:`4412441`.
+         created in :doc:`../fusionTutorial/setup`.
       #. Enter the name **CACountyPopulation** for the resource, and
          click **Save**.
 
@@ -217,7 +217,7 @@ Configuring Display Rules for Polygon Data
 
       This exercise walks you through the process of defining and
       building an imagery project using a resource you created in
-      :doc:`4412443`.
+      :doc:`../fusionTutorial/buildResource`.
       Since the focus of this lesson is on polygon display rules, it is
       not desirable to spend a lot of time building a large imagery
       project. So this exercise walks you through creating a small and
@@ -226,7 +226,7 @@ Configuring Display Rules for Polygon Data
       .. note::
 
          **Note:** If you have already completed this exercise in
-         :doc:`4412447`, skip this exercise and move
+         :doc:`../fusionTutorial/displayRulesPoint`, skip this exercise and move
          on to :ref:`Define, Build, Push, and Publish a Database for the
          Polygon Data <Define_Polygon_Database>`.
 
@@ -353,9 +353,9 @@ Configuring Display Rules for Polygon Data
          *myserver.mydomainname*.com/CACountyPopulation-v001.
 
          To learn more about the options available in the Publish
-         dialog, see :doc:`3497832`,
+         dialog, see :doc:`../geeServerAdmin/createSearchTabs`,
          :doc:`Snippet profiles <6004748`, and
-         :doc:`WMS <4441137>`.
+         :doc:`WMS <../geeServerAdmin/makeWMSRequests>`.
 
       #. Click the **Publish** button. The Databases page updates to indicate the
          published status of your database.
@@ -384,7 +384,7 @@ Configuring Display Rules for Polygon Data
 
             **Caution:** If you have logged in to this server with
             Google Earth EC previously, log out, clear your cache, and
-            log back in. See :doc:`6010060`.
+            log back in. See :doc:`../googleEarthEnterpriseClient/clearGoogleEarthEC`.
 
       #. Zoom in to the west coast of the US.
 

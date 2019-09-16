@@ -8,13 +8,13 @@ Welcome to Portable 5.0
 
    .. container:: content
 
-      For information about new features and known issues, see :doc:`4594620`.
+      For information about new features and known issues, see :doc:`../portable/portableReleaseNotes5_0`.
 
       .. rubric:: How to install, use, and customize Portable:
 
-      -  :doc:`3230746`. Information about viewing
+      -  :doc:`../portable/portableUserGuideWinLinux`. Information about viewing
          portable globes and maps on your laptop or desktop computer.
-      -  :doc:`3230807`. For
+      -  :doc:`../portable/portableDeveloperGuide`. For
          software developers who want to customize or create
          applications for Portable.
 

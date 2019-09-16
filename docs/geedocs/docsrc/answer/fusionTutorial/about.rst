@@ -53,7 +53,7 @@ About this Tutorial
       Google Earth EC have been installed either on a network drive
       accessible to you or on your local workstation. If any of those
       three applications are not installed, contact your system
-      administrator or refer to :doc:`4492598`.
+      administrator or refer to :doc:`../installGEE/installOverviewGEE`.
 
       .. rubric:: In This Guide
          :name: in-this-guide
@@ -62,25 +62,25 @@ About this Tutorial
 
       The **Basic Tasks** section includes:
 
-      #. :doc:`4412441.html`
-      #. :doc:`4412443.html`
-      #. :doc:`4412421.html`
-      #. :doc:`4412422.html`
-      #. :doc:`4412446.html`
+      #. :doc:`../fusionTutorial/setup`
+      #. :doc:`../fusionTutorial/buildResource`
+      #. :doc:`../fusionTutorial/buildProject`
+      #. :doc:`../fusionTutorial/buildDatabase`
+      #. :doc:`../fusionTutorial/pushPublishView`
 
       .. _Advanced_Fusion_Tutorial:
          The **Advanced Tasks** section includes:
 
-      #. :doc:`4412447.html`
-      #. :doc:`4412681.html`
-      #. :doc:`4412449.html`
-      #. :doc:`4412684.html`
-      #. :doc:`4412455.html`
-      #. :doc:`4412688.html`
-      #. :doc:`4412689.html`
-      #. :doc:`4412458.html`
+      #. :doc:`../fusionTutorial/displayRulesPoint`
+      #. :doc:`../fusionTutorial/displayRulesPolygon`
+      #. :doc:`../fusionTutorial/impExpStyleTemplates`
+      #. :doc:`../fusionTutorial/searchFldsForLayers`
+      #. :doc:`../fusionTutorial/createMapDB`
+      #. :doc:`../fusionTutorial/createImageryMosaic`
+      #. :doc:`../fusionTutorial/segmentLargeImageryFiles`
+      #. :doc:`../fusionTutorial/buildHistImageryProj`
 
-      **Appendix A:** :doc:`4412690`
+      **Appendix A:** :doc:`../fusionTutorial/sampleDataFiles`
       provides a list of all of the sample data files included when you
       install the tutorial data.
 

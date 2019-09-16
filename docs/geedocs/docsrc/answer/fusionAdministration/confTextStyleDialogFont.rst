@@ -10,7 +10,7 @@ Configure fonts for the Text Style dialog
 
       When you are specifying a map layer in Google Earth Enterprise
       Fusion, the Text Style dialog allows users to select the text
-      style for vector labels. (See :doc:`4412684`.) Google Earth
+      style for vector labels. (See :doc:`../fusionTutorial/searchFldsForLayers`.) Google Earth
       Enterprise Fusion supplies only one font and style, *Sans
       regular*. However, if you want to provide a choice of fonts for
       your users to select in the Text Style dialog, you can create a

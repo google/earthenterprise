@@ -10,7 +10,7 @@ Building a Historical Imagery Project
 
       To build a historical imagery project:
 
-      #. Follow the steps in :doc:`4412443` to define and build the
+      #. Follow the steps in :doc:`../fusionTutorial/buildResource` to define and build the
          following:
 
          +-------------+-------------+-------------+-------------+-------------+

@@ -28,7 +28,7 @@ Configuring Display Rules for Point Data
 
       This exercise walks you through the process of defining,
       configuring, and building a vector project using a resource you
-      created in :doc:`4412443`.
+      created in :doc:`../fusionTutorial/buildResource`.
 
       .. rubric:: To define and build a vector project and configure
          display rules for points:
@@ -42,7 +42,7 @@ Configuring Display Rules for Point Data
          Editor appears.
       #. Click |New Icon|. The Open dialog appears.
       #. Navigate to the ``ASSET_ROOT/Resources/Vector`` folder.
-      #. Select **CA_POIs** (a resource that you built in :doc:`4412443`), and click
+      #. Select **CA_POIs** (a resource that you built in :doc:`../fusionTutorial/buildResource`), and click
          **Open**. The CA_POIs resource appears in the Vector Project
          Editor.
 
@@ -161,7 +161,7 @@ Configuring Display Rules for Point Data
 
       This exercise walks you through the process of defining and
       building an imagery project using a resource you created in
-      :doc:`4412443`.
+      :doc:`../fusionTutorial/buildResource`.
       Since the focus of this lesson is on polygon display rules, it is
       not desirable to spend a lot of time building a large imagery
       project. So this exercise walks you through creating a small and
@@ -170,7 +170,7 @@ Configuring Display Rules for Point Data
       .. note::
 
          **Note:** If you have already completed this exercise in
-         :doc:`4412681`, skip this exercise and move
+         :doc:`../fusionTutorial/displayRulesPolygon`, skip this exercise and move
          on to :ref:`Define, Build, Push, and Publish a Database for the
          Point Data <Define_Point_Database>`.
 
@@ -275,9 +275,9 @@ Configuring Display Rules for Point Data
          accessible from *myserver.mydomainname*.com/CA_POIs-v001.
 
          To learn more about the options available in the Publish
-         dialog, see :doc:`3497832`,
-         :doc:`Snippet profiles <6004748>`, and
-         :doc:`WMS <4441137>`.
+         dialog, see :doc:`../geeServerAdmin/createSearchTabs`,
+         :doc:`Snippet profiles <../geeServerAdmin/manageSnippetProfiles>`, and
+         :doc:`WMS <../geeServerAdmin/makeWMSRequests>`.
 
       #. Click the **Publish** button. The Databases page updates to indicate the
          published status of your database.
