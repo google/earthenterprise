@@ -186,7 +186,7 @@ env.test('InsetTilespaceIndex_test',
           [ 'InsetTilespaceIndex_test.cpp',
             'InsetTilespaceIndex.o',
             'InsetInfo.o'],
-          LIBS=['geautoingest', 'gemiscconfig','geutil', 'gecommon','gtest', 'qt-mt', 'gomp'])
+          LIBS=['geautoingest', 'gemiscconfig','geutil', 'gexml', 'gecommon','gtest', 'qt-mt', 'xerces-c', 'geos', 'gomp'])
 
 env.test('StorageManagerAssetFactory_unittest',
     commonobj +

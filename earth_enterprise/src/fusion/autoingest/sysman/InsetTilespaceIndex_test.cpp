@@ -16,7 +16,7 @@
 #include "common/khStringUtils.h"
 #include "common/quadtreepath.h"
 #include "fusion/autoingest/sysman/InsetTilespaceIndex.h"
-#include "fusion/autoingest/sysman/InsetInfo.h"
+//#include "fusion/autoingest/sysman/InsetInfo.h"
 #include "common/khException.h"
 #include "common/khExtents.h"
 #include "common/khInsetCoverage.h"
@@ -51,21 +51,26 @@ class TestData {
 public:
     TestData(std::string fname) {
         std::ifstream input(fname);
-
-        // First line and all even lines have 4 floats, for decimal degree representations of the input insets.
-        // Every odd line is a QtMBR.  Let's just read them in pairs.
-        for (std::string line; std::getline(input, line);)   //read stream line by line
-        {
-            std::istringstream in(line);
-            double x1, x2, y1, y2;
-            in >> x1 >> x2 >> y1 >> y2;
-            khExtents<double> extents(XYOrder, x1, x2, y1, y2);
-            std::getline(input, line);
-            // Note -  discarding the MBR for now, we'll recalculate it.
-            std::string qtp_txt, qtp_level;
-            in >> qtp_txt >> qtp_level;
-            // QuadtreePath qtpMbr(qtp_txt);
-            extentsVec.push_back(extents);
+        if (input) {
+            // First line and all even lines have 4 floats, for decimal degree representations of the input insets.
+            // Every odd line is a QtMBR.  Let's just read them in pairs.
+            for (std::string line; std::getline(input, line);)   //read stream line by line
+            {
+                std::istringstream in(line);
+                double x1, x2, y1, y2;
+                in >> x1 >> x2 >> y1 >> y2;
+                notify(NFY_WARN, "Test Data: %f\t%f\t%f\t%f", x1,x2,y1,y2);
+                khExtents<double> extents(XYOrder, x1, x2, y1, y2);
+                std::getline(input, line);
+                // Note -  discarding the MBR for now, we'll recalculate it.
+                std::string qtp_txt, qtp_level;
+                in >> qtp_txt >> qtp_level;
+                // QuadtreePath qtpMbr(qtp_txt);
+                extentsVec.push_back(extents);
+            }
+        }
+        else {
+            notify(NFY_WARN, "Not a file");
         }
     }
 
@@ -106,7 +111,7 @@ public:
         uint vecsize = (uint) tileExtentsVec.size();
         FindNeededImageryInsets(coverage,
                                 tileExtentsVec,
-                                (uint) tileExtentsVec.size(),
+                                vecsize,
                                 neededIndexes,
                                 beginMinifyLevel,
                                 endMinifyLevel);
@@ -141,8 +146,7 @@ public:
 
 
     const bool compareAlgorithmOutputs() {
-
-        TestData dataset("TestQTPs2.txt");
+        //TestData dataset("/TestQTPs2.txt");
         //std::vector<khExtents<double>> testExtents;
         /*
         std::vector <QuadtreePath> mbrHashVec;
@@ -151,10 +155,14 @@ public:
         */
         khExtents<double> insetExtents(XYOrder, 114.032, 114.167, 19.1851, 19.3137);
         khInsetCoverage coverage(RasterProductTilespace(false), insetExtents, 19, 7, 21);
-
-        std::vector<khExtents<double> > requiredExtentsProd = findInsetsControlAlgo(coverage, dataset.getData());
+        std::vector<khExtents<double>> test;
+        khExtents<double> testExtents(XYOrder, -123.531, -120.713, 36.4544, 38.4647);
+        khExtents<double> testExtents2(XYOrder, 114.032, 114.167, 19.1851, 19.3137);
+        test.push_back(testExtents);
+        test.push_back(testExtents2);
+        std::vector<khExtents<double> > requiredExtentsProd = findInsetsControlAlgo(coverage, test);
         notify(NFY_WARN, "Old Algo Done, %lu", requiredExtentsProd.size());
-        std::vector<khExtents<double> > requiredExtentsExp = findInsetsExperimentalAlgo(coverage, dataset.getData());
+        std::vector<khExtents<double> > requiredExtentsExp = findInsetsExperimentalAlgo(coverage, test);
         notify(NFY_WARN, "New Algo Done");
         bool listsMatch = (requiredExtentsProd == requiredExtentsExp);
         return listsMatch;
@@ -187,11 +195,8 @@ EXPECT_EQ(MAX_LEVEL, level
 );
 }
 
-TEST_F(InsetTilespaceIndexTest, compareAlgorithmOutputs
-) {
-EXPECT_EQ(compareAlgorithmOutputs(),
-
-true);
+TEST_F(InsetTilespaceIndexTest, compareAlgorithmOutputs) {
+    EXPECT_EQ(compareAlgorithmOutputs(), true);
 }
 
 //This test should result in the quadtree path 202 being returned.
