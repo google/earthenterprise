@@ -18,11 +18,14 @@
 #ifndef __khCache_h
 #define __khCache_h
 
+#include <cctype>
+#include <chrono>
 #include <map>
 #include <vector>
 
 #include "khTypes.h"
 #include "CacheSizeCalculations.h"
+#include "notify.h"
 
 #ifdef SUPPORT_VERBOSE
 #include <notify.h>
@@ -34,13 +37,13 @@
  ***  Key can be anything that supports less<T> and has value semantics
  ***  Value must act like a refcounting handle(like khRefGuard & khSharedHandle)
  ***     - must have value semantics
- ***     - must supply refcount() member function
+ ***     - must supply use_count() member function
  ***
  ***  You can Add, Remove & Find in the cache.
  ***  The targetMax is the max size it tries to maintain. But it can be bigger
- ***      if all the values have a refcount > 1
+ ***      if all the values have a use_count > 1
  ***  The refcounting handle semantics makes the pinning & unpinning automatic
- ***  A value with a refcount > 1 (because other handles to the same object
+ ***  A value with a use_count > 1 (because other handles to the same object
  ***      exist somewhere) will never be removed from the cache.
  ***  Oldest items (Added or Found the longest ago) will be removed first.
  ***
@@ -73,14 +76,15 @@ template <class Key, class Value>
 class khCache {
   typedef khCacheItem<Key, Value> Item;
   typedef std::map<Key, Item*> MapType;
+  using TimePoint = std::chrono::time_point<std::chrono::high_resolution_clock>;
   MapType map;
   Item *head;
   Item *tail;
   const uint targetMax;
+  const std::string name;
 #ifdef SUPPORT_VERBOSE
   bool verbose;
 #endif
-  uint numItems;
   uint64 cacheMemoryUse;
   bool limitCacheMemory;
   uint64 maxCacheMemory;
@@ -139,7 +143,6 @@ class khCache {
       item->next->prev = item;
     else
       tail = item;
-    ++numItems;
   }
   void Unlink(Item *item) {
     if (item->prev)
@@ -152,7 +155,6 @@ class khCache {
       tail = item->prev;
     item->next = 0;
     item->prev = 0;
-    --numItems;
   }
   Item* FindItem(const Key& key) {
     typename MapType::const_iterator found = map.find(key);
@@ -175,15 +177,16 @@ class khCache {
   size_type capacity(void) const { return targetMax; }
   uint64 getMemoryUse(void) const { return cacheMemoryUse; }
 
-  khCache(uint targetMax_
+  khCache(uint targetMax_, std::string name_
 #ifdef SUPPORT_VERBOSE
           , bool verbose_ = false
 #endif
           ) : head(0), tail(0), targetMax(targetMax_),
+              name(name_.replace(0, 1, 1, std::toupper(name_[0]))), // Make the first letter upper case for pretty notify statements
 #ifdef SUPPORT_VERBOSE
               verbose(verbose_),
 #endif
-              numItems(0), cacheMemoryUse(0),
+              cacheMemoryUse(0),
               limitCacheMemory(false)
 
   {
@@ -300,10 +303,11 @@ class khCache {
   }
 
   void Prune(void) {
+    TimePoint startTime = std::chrono::high_resolution_clock::now();
     CheckListInvariant();
     Item *item = tail;
     while (item && ( TooMuchMemory() || TooManyObjects() )) {
-      // Note: this refcount() > 1 check is safe even with
+      // Note: this use_count() > 1 check is safe even with
       // khMTRefCounter based guards. See explanaition with the
       // definition of khMTRefCounter in khMTTypes.h.
       while (item && (item->val.use_count() > 1)) {
@@ -322,6 +326,29 @@ class khCache {
       }
     }
     CheckListInvariant();
+    TimePoint finishTime = std::chrono::high_resolution_clock::now();
+    // Log when the cache size is exceeded
+    if (TooMuchMemory() || TooManyObjects()) {
+      LogPruneTime(startTime, finishTime);
+    }
+  }
+ private:
+  void LogPruneTime(TimePoint startTime, TimePoint finishTime) {
+    std::chrono::duration<double> elapsedTime = finishTime - startTime;
+    uint64 configuredSize, actualSize;
+    std::string units;
+    if (limitCacheMemory) {
+      configuredSize = maxCacheMemory;
+      actualSize = cacheMemoryUse;
+      units = "bytes";
+    }
+    else {
+      configuredSize = targetMax;
+      actualSize = map.size();
+      units = "items";
+    }
+    notify(NFY_INFO, "%s cache size exceeded. Configured size: %lu %s, Actual size: %lu %s, Prune time: %f seconds",
+           name.c_str(), configuredSize, units.c_str(), actualSize, units.c_str(), elapsedTime.count());
   }
 
 };
