@@ -21,7 +21,7 @@ sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.
 
 ```bash
 sudo wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
-sudo yum install -y epel-release
+sudo yum install -y epel-release centos-release-scl
 ```
 
 ### RHEL 6
@@ -38,6 +38,7 @@ sudo subscription-manager repos --enable=rhel-server-dts2-6-rpms
 
 # For all RHEL 6 Editions:
 sudo subscription-manager repos --enable=rhel-6-server-optional-rpms
+sudo yum-config-manager --enable rhel-server-rhscl-6-rpms
 sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
 ```
 
@@ -136,10 +137,10 @@ sudo yum install -y \
   bison-devel boost-devel cmake daemonize freeglut-devel \
   gdbm-devel geos-devel gettext giflib-devel GitPython \
   libcap-devel libmng-devel libpng-devel libX11-devel libXcursor-devel \
-    libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
+  libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel pcre pcre-devel \
   perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-devel python-unittest2 \
-  rpm-build rpmrebuild rsync scons shunit2 \
+  python27 rpm-build rpmrebuild rsync scons shunit2 \
   xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
 ```
 
