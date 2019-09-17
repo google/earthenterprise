@@ -47,7 +47,7 @@
 class TestData {
     std::vector <khExtents<double>> extentsVec;
 
-public:
+public:/*
     TestData(std::string fname) {
         char path[354];
         getcwd(path,352) ;
@@ -80,7 +80,7 @@ public:
             notify(NFY_WARN, "Not a file");
 
         }
-    }
+    }*/
 
     //std::map<khExtents < double>, QuadtreePath>
     std::vector<khExtents<double>>
