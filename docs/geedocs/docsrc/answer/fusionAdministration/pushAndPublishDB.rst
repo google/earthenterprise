@@ -272,7 +272,6 @@ Push and publish databases
    :width: 130px
    :height: 44px
 .. |Push Database Dialog| image:: ../../art/fusion/tutorial/dbasePush-full.png
-   :name: publishDatabase
 .. |GEE Server Database Page| image:: ../../art/server/publish_databases/databasesListOrder.png
 .. |Database list sort arrows| image:: ../../art/fusion/tutorial/databaseServerList.png
 .. |GEE Server Publish dialog| image:: ../../art/server/publish_databases/Publishdialog.png

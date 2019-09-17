@@ -2577,7 +2577,7 @@ Create custom masks
 
       .. rubric:: usgsLanSat mask before mask edits:
 
-         |usgsLanSat before mask|
+      |usgsLanSat before mask|
 
       .. _Building_Custom_Masks_Large_Source_Imagery:
       .. rubric:: Appendix F: Building custom masks for large source
@@ -2801,7 +2801,6 @@ Create custom masks
 .. |Finished image after custom mask import| image:: ../../art/custom_masks/image05.jpg
 .. |picture frame border mask| image:: ../../art/custom_masks/image30.jpg
 .. |finished mask of coastline and border feather| image:: ../../art/custom_masks/image07.jpg
-.. |Finished image after custom mask import| image:: ../../art/custom_masks/image42.jpg
 .. |finished mask in GIMP| image:: ../../art/custom_masks/image32.jpg
 .. |Fusion preview window with custom mark import| image:: ../../art/custom_masks/image43.jpg
 .. |image in Fusion with automask| image:: ../../art/custom_masks/image16.jpg

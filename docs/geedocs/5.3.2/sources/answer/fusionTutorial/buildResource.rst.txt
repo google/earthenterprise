@@ -36,7 +36,7 @@ Defining and Building Resources
          -  :ref:`Define a Vector Resource <Define_a_Vector_Resource>`
          -  :ref:`Build a Vector Resource <Build_Vector_Resource>`
          -  :ref:`Define and Build the Remaining Vector
-            Resources <Define_Build_Remaining_Imagery_Resources>`
+            Resources <define-and-build-the-remaining-vector-resources>`
 
       .. _Define_Imagery_Resources:
       .. rubric:: Define Imagery Resources
