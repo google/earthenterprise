@@ -864,15 +864,8 @@ DegExtentsToPixelLevelRasterSize(const khExtents<double> &degExtents,
 
 inline khExtents<uint32>
 DegExtentsToTileExtents( const khExtents<double> &degExtents,
-                                                    uint lev) {
-    // TODO _ figure out tileResolution
-    khExtents<int64> pixelExtents(
-            RowColOrder,
-            static_cast<int64>(degExtents.beginRow()) * RasterProductTileResolution,
-            static_cast<int64>(degExtents.endRow()) * RasterProductTileResolution,
-            static_cast<int64>(degExtents.beginCol()) * RasterProductTileResolution,
-            static_cast<int64>(degExtents.endCol()) * RasterProductTileResolution);
-    return PixelExtentsToTileExtents(pixelExtents, RasterProductTileResolution);
+                                                    uint level) {
+    return  RasterProductTilespaceBase.levelCoverage( degExtents, level, level).extents;
 }
 
 // Translate Degree extents to a pixel raster size (number of _pixels_ in
