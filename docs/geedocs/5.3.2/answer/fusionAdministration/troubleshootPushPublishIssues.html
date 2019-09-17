@@ -86,9 +86,9 @@ performed on Google Earth Enterprise Server.</p>
 be output to portable media, which can then be pushed and
 published to GEE Server.</p>
 <ul class="simple">
-<li><span class="xref std std-doc">6034724</span></li>
-<li><span class="xref std std-doc">3497763</span></li>
-<li><span class="xref std std-doc">6051700</span></li>
+<li><a class="reference internal" href="pushAndPublishDB.html"><span class="doc">Push and publish databases</span></a></li>
+<li><a class="reference internal" href="../geeServerAdmin/publishDatabasesPortables.html"><span class="doc">Publish databases and portables</span></a></li>
+<li><span class="xref std std-doc">../fusionAdministration/publishDBWithDisconnectedPublishing</span></li>
 </ul>
 <p class="rubric">Troubleshoot Push Issues</p>
 <p>Errors in the push operation may occur when Fusion fails to copy
@@ -107,7 +107,7 @@ Fusion host and GEE Server.</p>
 Server.</li>
 <li><strong>Disconnected push</strong>. Data is transferred from the Fusion host
 to the GEE Server by hard disk instead of a network. For
-information about pushing disconnected databases, see <span class="xref std std-doc">6051700</span>.</li>
+information about pushing disconnected databases, see <span class="xref std std-doc">../fusionAdministration/publishDBWithDisconnectedPublishing</span>.</li>
 </ul>
 <p class="rubric">Check your server is running correctly</p>
 <p>If your attempts to push a database result in an error message:
@@ -274,7 +274,7 @@ re-try pushing version 4 of the database:</p>
 <blockquote>
 <div><div class="admonition tip">
 <p class="first admonition-title">Tip</p>
-<p class="last">Instead of using &lt;code&gt;geserveradmin –adddb/pushdb&lt;/code&gt; commands, you can push the database directly from Fusion. See <span class="xref std std-doc">6034724</span>.</p>
+<p class="last">Instead of using &lt;code&gt;geserveradmin –adddb/pushdb&lt;/code&gt; commands, you can push the database directly from Fusion. See <a class="reference internal" href="pushAndPublishDB.html"><span class="doc">Push and publish databases</span></a>.</p>
 </div>
 </div></blockquote>
 <p class="rubric">Disconnected publishing issues</p>
@@ -287,7 +287,7 @@ permissions only, preventing the file from being read by
 <p>Try resetting the permissions on the folders created by
 <code class="docutils literal notranslate"><span class="pre">gedisconnectedsend</span> <span class="pre">--sendpath</span></code> and try the <code class="docutils literal notranslate"><span class="pre">--pushdb</span></code> again.</p>
 <ul class="simple">
-<li>See “doc”<cite>6051700</cite>.</li>
+<li>See “doc”<cite>../fusionAdministration/publishDBWithDisconnectedPublishing</cite>.</li>
 </ul>
 <p class="rubric">Check your log files</p>
 <p>If you are having push or publishing issues, there are several log

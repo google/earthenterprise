@@ -1,0 +1,49 @@
+|Google logo|
+
+====================
+Backing up your data
+====================
+
+.. container::
+
+   .. container:: content
+
+      Generally, the most important Google Earth Enterprise Server data is
+      all within the ``/var`` directory. If you perform regular backups
+      of ``/var``, that covers most of the server data. Google
+      recommends that you also back up the following directories:
+
+      ::
+
+         /etc
+         /opt/google/gehttpd/conf
+         /opt/google/gehttpd/conf.d
+         /opt/google/getomcat/conf
+         /opt/google/gehttpd/htdocs
+
+      With regard to Google Earth Enterprise Fusion data, Google
+      strongly recommends that you back up all of your original source
+      data (vector and raster). In addition, Google encourages you to
+      back up all of the ``.xml`` files within your asset root(s). In
+      theory, if you have the source data and the asset root ``.xml``
+      files, everything else can be reconstructed. Google Earth
+      Enterprise does not include any tools for doing such a
+      reconstruction, but the data is there and it could be done, if
+      necessary.
+
+      You do not need to back up your publish root(s), since there is
+      nothing there that cannot be recreated. If you have the space and
+      want to back them up, however, recovery will be faster, but it is
+      not necessary.
+
+      Many Google Earth Enterprise users also back up their product
+      files. These are the low-level files that result from building
+      resources (for example, ``.kip``, ``.ktp``, ``.kmp``, ``.kvp``).
+      That way, if you do need to reconstruct, you can import the
+      product files (rather than raw source files) to recreate the
+      resources. This will save you some build time.
+
+
+.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
+   :width: 130px
+   :height: 44px
