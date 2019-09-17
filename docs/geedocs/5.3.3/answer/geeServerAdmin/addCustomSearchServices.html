@@ -142,7 +142,7 @@ follows:</p>
 <p>The plug-in end points are for Google Earth Enterprise search
 plug-ins are defined in
 <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf.d/mod_wsgi-ge.conf</span></code>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="c1"># Handles Places search requests.</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Handles Places search requests.</span>
   <span class="n">WSGIScriptAlias</span> <span class="o">/</span><span class="n">gesearch</span><span class="o">/</span><span class="n">PlacesSearch</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">google</span><span class="o">/</span><span class="n">gehttpd</span><span class="o">/</span><span class="n">wsgi</span><span class="o">-</span><span class="nb">bin</span><span class="o">/</span><span class="n">search</span><span class="o">/</span><span class="n">plugin</span><span class="o">/</span><span class="n">geplaces_search_app</span><span class="o">.</span><span class="n">py</span>
   <span class="c1"># Handles Coordinate search requests.</span>
   <span class="n">WSGIScriptAlias</span> <span class="o">/</span><span class="n">gesearch</span><span class="o">/</span><span class="n">CoordinateSearch</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">google</span><span class="o">/</span><span class="n">gehttpd</span><span class="o">/</span><span class="n">wsgi</span><span class="o">-</span><span class="nb">bin</span><span class="o">/</span><span class="n">search</span><span class="o">/</span><span class="n">plugin</span><span class="o">/</span><span class="n">coordinate_search_app</span><span class="o">.</span><span class="n">py</span>
@@ -161,7 +161,7 @@ search plug-in so that it can be added as you publish databases.</p>
 <p class="rubric">To implement your custom search plug-in:</p>
 <ol class="arabic">
 <li><p class="first">Create your search application, using the WSGI framework. See
-the <span class="xref std std-doc">ExampleSearch Python module</span>
+the <a class="reference internal" href="exampleSearchPluginSample.html"><span class="doc">ExampleSearch Python module</span></a>
 for example code.</p>
 </li>
 <li><p class="first">Locate your search plug-in, for example <code class="docutils literal notranslate"><span class="pre">custom_search.py</span></code>,
