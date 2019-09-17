@@ -54,7 +54,7 @@ gerasterextract = env.executable('gerasterextract',
 geraster2kml = env.executable('geraster2kml',
                               ['geraster2kml.cpp'],
                               LIBS=['geautoingest', 'geraster', 'gemiscconfig',
-                                    'geutil', 'gecommon', 'qt-mt'])
+                                    'geutil', 'gecommon', 'qt-mt', 'gexml', 'xerces-c'])
 
 geraster2gigapxl = env.executable('geraster2gigapxl',
                                   ['geraster2gigapxl.cpp'])

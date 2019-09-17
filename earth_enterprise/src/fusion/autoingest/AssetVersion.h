@@ -26,6 +26,23 @@
 #include "StorageManager.h"
 #include "CacheSizeCalculations.h"
 
+// Used by child classes of AssetVersionImpl
+class StateChangeException : public khException {
+ public:
+  const std::string location;
+  StateChangeException(const std::string & msg, const std::string & loc) :
+    khException(msg), location(loc) {}
+};
+
+// Helper struct for passing data about input and child states.
+struct InputAndChildStateData {
+  AssetDefs::State stateByInputs;
+  AssetDefs::State stateByChildren;
+  bool blockersAreOffline;
+  uint32 numInputsWaitingFor;
+  uint32 numChildrenWaitingFor;
+};
+
 /******************************************************************************
  ***  AssetVersionImpl
  ***
@@ -51,6 +68,7 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   AssetVersionImpl& operator=(const AssetVersionImpl&&) = delete;
 
  public:
+  using Base = AssetVersionStorage;
   std::string XMLFilename() const { return XMLFilename(GetRef()); }
   std::string WorkingDir(void) const { return WorkingDir(GetRef()); }
   std::string WorkingFileRef(const std::string &fname) const {
@@ -60,10 +78,16 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   // implemented in LoadAny.cpp
   static std::shared_ptr<AssetVersionImpl> Load(const std::string &boundref);
 
-  virtual bool Save(const std::string &filename) const {
-    assert(false); // Can only call from sub-classes
-    return false;
-  };
+  virtual std::string GetName() const {   // Returns the name of the asset version, e.g., "CombinedRPAssetVersion"
+    assert(false);
+    return "";
+  }
+
+  // Note for future development: It would be good to change SerializeConfig to something like
+  // GetConfig that would fill out a list of key/value pairs instead of dealing with XML directly
+  virtual void SerializeConfig(khxml::DOMElement*) const {
+    assert(false);
+  }
 
   std::string WorkingFilename(const std::string &fname) const {
     return AssetDefs::AssetPathToFilename(WorkingFileRef(fname));
@@ -154,12 +178,16 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
     // parent asset (ex: parent is canceled, so these children
     // must also be canceled.
   }
-  virtual AssetDefs::State CalcStateByInputsAndChildren(AssetDefs::State, AssetDefs::State, bool, uint32) const {
+  virtual AssetDefs::State CalcStateByInputsAndChildren(const InputAndChildStateData &) const {
     assert(false); // Can only call from sub-classes
     return AssetDefs::Bad;
   }
-  virtual void SetMyStateOnly(AssetDefs::State newstate, bool sendNotifications = true) {
-    assert(false);  // Can only call from sub-classes
+  virtual AssetDefs::State OnStateChange(AssetDefs::State, AssetDefs::State) {
+    assert(false);
+    return AssetDefs::Bad;
+  }
+  virtual void WriteFatalLogfile(const std::string &, const std::string &) const throw() {
+    assert(false);
   }
 
   // static helpers
