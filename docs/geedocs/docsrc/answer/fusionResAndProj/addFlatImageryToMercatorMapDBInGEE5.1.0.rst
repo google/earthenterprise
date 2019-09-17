@@ -65,28 +65,27 @@ Add flat imagery to Mercator map databases in GEE 5.1.0
       #. Navigate to the ``ASSET_ROOT/Projects/Map``\ folder.
       #. Select the map project that you want to add to the map database
       and click **Open**.
-         The map project appears in the Map Database
+      The map project appears in the Map Database
       Editor next to Map Project.
       #. Click |image10| next to **Imagery Project**.
-         The Open Asset dialog
-      appears.
+      The Open Asset dialog appears.
       #. Navigate to the ``ASSET_ROOT/Projects/Imagery`` folder.
       #. Select **Flat Imagery Project** from the **Type** drop-down list,
       then select the imagery project to add and click **Open**.
-         The imagery project appears in the Map Database Editor next to Imagery
+      The imagery project appears in the Map Database Editor next to Imagery
       Project.
       #. Select **File > Save**.
       #. Navigate to the ``ASSET_ROOT/Databases`` folder.
       #. In the **Name** field, enter a name, and click **Save**.
-         In the Asset Manager, the new map database appears, along with the
+      In the Asset Manager, the new map database appears, along with the
       other databases you have created. Notice that the **Category**
       column distinguishes between the Google Earth databases and the
       Google Maps database.
       #. Right-click the name of your map database, and select **Build**
       from the context menu.
-         The status of the database immediately
+      The status of the database immediately
       changes to **Waiting** or **Queued** and then to **In Progress**.
-         When Google Earth Enterprise Fusion finishes building the
+      When Google Earth Enterprise Fusion finishes building the
       database, its **Current State** column in the Asset Manager
       changes to **Succeeded**, and its **Current Version** column
       changes to the date and time the most recent build was started.
@@ -116,7 +115,6 @@ Add flat imagery to Mercator map databases in GEE 5.1.0
       =================================== ================== ========================= ==================================================
 
       .. rubric:: Learn more
-         :name: learn-more
 
       -  :doc:`../fusionAdministration/pushAndPublishDB`
       -  :doc:`../geeServerAdmin/makeWMSRequests`
