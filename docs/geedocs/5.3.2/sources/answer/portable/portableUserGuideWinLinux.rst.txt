@@ -237,19 +237,19 @@ Portable User Guide for Windows and Linux
       .. _Connect_GEE_Portable:
       .. rubric:: Connect using GEE Portable
 
-         Start Portable Server by executing ``python portable_server.py``
-         from the folder you unpacked the Portable Server archive in.
-         After it launches, open a browser and navigate to
-         ``http://localhost:9335`` (using any
-         custom port or hostname you may have configured). Click the
-         |Portable folder icon| **Folder** (outlined in red), then select the
-         globe or map you want to view. You can view only one globe or
-         map at a time.
+      Start Portable Server by executing ``python portable_server.py``
+      from the folder you unpacked the Portable Server archive in.
+      After it launches, open a browser and navigate to
+      ``http://localhost:9335`` (using any
+      custom port or hostname you may have configured). Click the
+      |Portable folder icon| **Folder** (outlined in red), then select the
+      globe or map you want to view. You can view only one globe or
+      map at a time.
 
-         Globes and maps that are broadcast on your local network might
-         require an access key. If prompted, enter the key to view the
-         globe or map. You can obtain the key from the person who is
-         broadcasting the globe or map.
+      Globes and maps that are broadcast on your local network might
+      require an access key. If prompted, enter the key to view the
+      globe or map. You can obtain the key from the person who is
+      broadcasting the globe or map.
 
       .. _Connect_Using_GEEC:
       .. rubric:: Connect using the Google Earth Enterprise Client
@@ -288,17 +288,16 @@ Portable User Guide for Windows and Linux
       .. _Get_Info_About_Globe_Map:
       .. rubric:: Get info about your globe or map
 
-         Click the |Portable folder icon| **Folder** (outlined in red) to view a
-         list of the globes and maps you can access. Each globe or map is
-         listed with its file name, description, creation date, and size.
+      Click the |Portable folder icon| **Folder** (outlined in red) to view a
+      list of the globes and maps you can access. Each globe or map is
+      listed with its file name, description, creation date, and size.
 
-         Select a globe or map, then click the |Portable menu icon| **Menu** 
-         (outlined in red) then select **Show layer list** to see
-         all the layers for that globe or map. You can use the list to
-         select the layers you want the globe or map to display. To hide
-         the layer list, click the **Menu**, then select **Hide layer
-         list**.
-      | 
+      Select a globe or map, then click the |Portable menu icon| **Menu**
+      (outlined in red) then select **Show layer list** to see
+      all the layers for that globe or map. You can use the list to
+      select the layers you want the globe or map to display. To hide
+      the layer list, click the **Menu**, then select **Hide layer
+      list**.
 
       .. _Change_Configuration_Options:
       .. rubric:: Change your configuration options
