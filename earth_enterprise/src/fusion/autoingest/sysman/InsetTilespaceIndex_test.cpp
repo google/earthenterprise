@@ -42,14 +42,20 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-
+#include <iostream>
 
 class TestData {
-    // TODO - doc structure.
     std::vector <khExtents<double>> extentsVec;
 
 public:
     TestData(std::string fname) {
+        char path[354];
+        getcwd(path,352) ;
+        std::cout << "Current path is " << path << '\n';
+        std::cout << "Reading date from file: " << fname;
+
+        std::ifstream input(fname);
+        notify(NFY_WARN, "Trying to open %s , pwd is %s",fname );
         std::ifstream input(fname);
         if (input) {
             // First line and all even lines have 4 floats, for decimal degree representations of the input insets.
@@ -67,10 +73,12 @@ public:
                 in >> qtp_txt >> qtp_level;
                 // QuadtreePath qtpMbr(qtp_txt);
                 extentsVec.push_back(extents);
+                notify(NFY_WARN, "Added a new Extents object sizee is now %lu", extentsVec.size() );
             }
         }
         else {
             notify(NFY_WARN, "Not a file");
+
         }
     }
 
@@ -107,8 +115,7 @@ public:
         for (auto degExtents : inputExtents) {
             khExtents <uint32> tileExtents = DegExtentsToTileExtents(degExtents, 21);
             tileExtentsVec.push_back(tileExtents);
-
-            notify(NFY_WARN, "Converted extents from decimal degrees \n\t%f,%f,%f,%f ... \nto tilespace: \n\t%d,%d,%d,%d",
+            notify(NFY_WARN, "Converted extents from decimal degrees \n\t%f, %f, %f, %f ... \nto tilespace: %d, %d, %d, %d \n\t",
                     degExtents.beginX(), degExtents.endX(), degExtents.beginY(), degExtents.endY(),
                     tileExtents.beginX(), tileExtents.endX(), tileExtents.beginY(), tileExtents.endY());
         }
