@@ -425,8 +425,9 @@ void FindNeededImageryInsets(
 
   for (uint i = 0; i < numInsets; ++i) {
     // Aligning here would be redundant, so we save ourselves the effort.
-    //const khExtents<uint32> *iExtents = extents[i];
-    if (extents[i].intersects(genExtents)) {
+    notify(NFY_WARN, "%d\t%d\t%d\t%d", genExtents.north(), genExtents.south(), genExtents.west(), genExtents.east());
+    const khExtents<uint32> *iExtents = &extents[i];
+    if (iExtents->intersects(genExtents)) {
       neededIndexes.push_back(i);
     }
   }

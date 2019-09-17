@@ -105,8 +105,12 @@ public:
 
 
         for (auto degExtents : inputExtents) {
-            khExtents <uint32> tileExtents = DegExtentsToTileExtents(degExtents, coverage.beginLevel());
+            khExtents <uint32> tileExtents = DegExtentsToTileExtents(degExtents, 21);
             tileExtentsVec.push_back(tileExtents);
+
+            notify(NFY_WARN, "Converted extents from decimal degrees \n\t%f,%f,%f,%f ... \nto tilespace: \n\t%d,%d,%d,%d",
+                    degExtents.beginX(), degExtents.endX(), degExtents.beginY(), degExtents.endY(),
+                    tileExtents.beginX(), tileExtents.endX(), tileExtents.beginY(), tileExtents.endY());
         }
         uint vecsize = (uint) tileExtentsVec.size();
         FindNeededImageryInsets(coverage,
