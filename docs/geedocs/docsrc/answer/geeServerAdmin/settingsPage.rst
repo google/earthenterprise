@@ -25,7 +25,7 @@ Settings page
       .glc files are added to the default globes directory when
       they are created.
 
-      See :doc:`../geeServerAdmin/createCompositeGlobesMaps`.
+      See :doc:`4643041`.
 
       .. rubric::  Perform .glc disassembly
 
@@ -36,7 +36,7 @@ Settings page
          placed.
       #. Click **Disassemble glc**.
 
-      See :doc:`../geeServerAdmin/createCompositeGlobesMaps`.
+      See :doc:`4643041`.
 
       .. rubric:: Launch Cutter
 
@@ -67,7 +67,7 @@ Settings page
       screen. Upon successful completion, the globe is saved to
       the default globes directory.
 
-      See :doc:`../geeServerAdmin/createPortableGlobesMaps`.
+      See :doc:`3230777`.
 
       .. rubric:: View Apache logs
 

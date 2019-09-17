@@ -16,7 +16,7 @@ Set up HTTPS
 
          The following procedure is applicable only to release 4.x and
          previous versions of GEE. For **GEE release 5.x**, see
-         :doc:`../geeServerConfigAndSecurity/configureGeeServer5.1.0_SSL_HTTPS`.
+         :doc:`6080928`.
 
       .. rubric:: To set up an HTTPS virtual server for Fusion:
          :name: to-set-up-an-https-virtual-server-for-fusion

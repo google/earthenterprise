@@ -359,10 +359,10 @@ admin console. You can also launch the Cutter directly from
 Cutter, so although it provides security if you try to launch
 the Cutter from the Admin console Settings menu, it does not
 block direct access to the Cutter via the URL. If you need
-Cutter security, you must add it separately. See
-<a class="reference internal" href="../geeServerConfigAndSecurity/ports.html"><span class="doc">Ports</span></a>.</p>
+Cutter security, you must add it separately. See <span class="xref std std-doc">GEE
+Server security</span>.</p>
 </div>
-<p>See <a class="reference internal" href="../geeServerAdmin/createPortableGlobesMaps.html"><span class="doc">Create Portable Globes and Maps</span></a>.</p>
+<p>See <span class="xref std std-doc">3230777</span>.</p>
 <p class="rubric">Example</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gecutter</span> <span class="n">enable</span>
 </pre></div>
@@ -1096,12 +1096,11 @@ host.</p>
 <p>Registers a new virtual host with the specified name. Spaces are
 not allowed in the virtual host name. For example:</p>
 <p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--addvh</span> <span class="pre">public_vh</span> <span class="pre">--vhurl</span> <span class="pre">http://mysite.com/public_vh</span></code></p>
-<table border="1" class="colwidths-given docutils" id="id3">
-<caption><span class="caption-text">addvh options</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
+<table border="1" class="docutils">
 <colgroup>
-<col width="30%" />
-<col width="15%" />
-<col width="55%" />
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">–addvh option</th>
@@ -1110,72 +1109,188 @@ not allowed in the virtual host name. For example:</p>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>–vhurl url</td>
+<tr class="row-even"><td><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">vhurl</span> <span class="n">url</span>
+</pre></div>
+</div>
+</td>
 <td>Optional</td>
-<td><p class="first">The <code class="docutils literal notranslate"><span class="pre">vhurl``specifies</span> <span class="pre">the</span> <span class="pre">location</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">virtual</span> <span class="pre">host.</span> <span class="pre">It</span> <span class="pre">must</span>
-<span class="pre">match</span> <span class="pre">the</span> <span class="pre">corresponding</span> <span class="pre">server-side</span> <span class="pre">virtual</span> <span class="pre">host</span> <span class="pre">configuration.</span>
-<span class="pre">If</span> <span class="pre">``vhurl</span></code> is omitted, it will be set to
-<code class="docutils literal notranslate"><span class="pre">http://yourserver.domain/vh_name</span></code>.
-There are three ways to specify the <code class="docutils literal notranslate"><span class="pre">vhurl</span></code>:</p>
-<blockquote>
-<div><ul class="simple">
-<li>Location-based URL, such as <code class="docutils literal notranslate"><span class="pre">/private_ge</span></code>.
-For example, if the entire URL is
-<code class="docutils literal notranslate"><span class="pre">http://www.company.com/private_ge</span></code>,
-you enter <code class="docutils literal notranslate"><span class="pre">/private_ge</span></code>.
-<strong>Note:</strong> Google recommends that you use the
-<code class="docutils literal notranslate"><span class="pre">_ge</span></code> and <code class="docutils literal notranslate"><span class="pre">_map</span></code> naming convention to make
-it easier to distinguish between virtual host types.</li>
-<li>Port-based URL, such as:
-:: <a class="reference external" href="http://www.company.com:1234">http://www.company.com:1234</a>
-The entire URL, including protocol, servername,
-path (if applicable), and port are required.</li>
-<li>Name-based URL, such as:
-:: <a class="reference external" href="http://corp.company.com">http://corp.company.com</a></li>
+<td><p class="first">The <code class="docutils literal notranslate"><span class="pre">vhurl</span></code>
+specifies the
+location of the
+virtual host. It must
+match the
+corresponding
+server-side virtual
+host configuration.
+If <code class="docutils literal notranslate"><span class="pre">vhurl</span></code> is
+omitted, it will be
+set to
+<code class="docutils literal notranslate"><span class="pre">http://yourserver.d</span>
+<span class="pre">omain/vh_name</span></code>.
+There are three ways
+to specify the
+<code class="docutils literal notranslate"><span class="pre">vhurl</span></code>:</p>
+<ul class="simple">
+<li>Location-based
+URL, such as
+<code class="docutils literal notranslate"><span class="pre">/private_ge</span></code>.
+For example, if
+the entire URL is
+<a href="#id1"><span class="problematic" id="id2">``</span></a><a class="reference external" href="http://www.compa">http://www.compa</a></li>
 </ul>
-</div></blockquote>
-<p class="last">For this type of <a href="#id1"><span class="problematic" id="id2">`</span></a>specification, you must modify
-your DNS appropriately for the virtual host.
-After you use this command, you must create a              |
-configuration file for the new virtual host.</p>
+<dl class="docutils">
+<dt>ny.com/private_ge``,</dt>
+<dd><p class="first">you enter
+<code class="docutils literal notranslate"><span class="pre">/private_ge</span></code>.</p>
+<p class="last"><strong>Note:</strong> Google
+recommends that
+you use the
+<code class="docutils literal notranslate"><span class="pre">_ge</span></code> and
+<code class="docutils literal notranslate"><span class="pre">_map</span></code> naming
+convention to make
+it easier to
+distinguish
+between virtual
+host types.</p>
+</dd>
+</dl>
+<ul>
+<li><p class="first">Port-based URL,
+such as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">comp</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>any.com:1234</p>
+<blockquote>
+<div>The entire URL,
+including
+protocol, server
+name, path (if
+applicable), and
+port are required.</div></blockquote>
+<ul>
+<li><p class="first">Name-based URL,
+such as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">corp</span><span class="o">.</span><span class="n">com</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>pany.com</p>
+<p>For this type of
+specification, you
+must modify your DNS
+appropriately for the
+virtual host.</p>
+<p class="last">After you use this
+command, you must
+create a
+configuration file
+for the new virtual
+host.</p>
 </td>
 </tr>
-<tr class="row-odd"><td>–vhcachelevel num</td>
+<tr class="row-odd"><td><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">vhcachelevel</span> <span class="n">num</span>
+</pre></div>
+</div>
+</td>
 <td>Optional</td>
-<td><p class="first">Specify a cache level (<code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span></code>, or <code class="docutils literal notranslate"><span class="pre">3</span></code>)
-for the virtual host. The default is <code class="docutils literal notranslate"><span class="pre">2</span></code>. This cache
-is different than the client cache. This option caches
-only the index nodes at display levels 4, 8, and 12
-(not data packets). If you increase this setting,
-Google Earth Enterprise Fusion caches more of the
-index in RAM, thereby decreasing server latency
-at the cost of server RAM. Level 3 uses approximately
-1 GB of RAM. Level 2 uses approximately 4 MB of RAM.
-Level 1 uses approximately 16 KB of RAM. Each
-additional cache level consumes 256 times the RAM
-as the previous level and saves one disk read per packet served.</p>
-<p>The server makes no checks that the RAM needed for caching
-does not exceed the total RAM on the machine. For example,i
-if you have three virtual hosts set to cache at level 3 on
-a machine that has only 2 GB of RAM, the machine will thrash
-memory. The default is Level 2, so you should be able to create
-as many virtual hosts as you want at the default cache level
-without worrying about running out of RAM.</p>
-<p class="last">Typically, users increase only a small number of virtual hosts
-to cache level 3 on production servers and leave the rest of themi
-at level 2. On servers that share a machine with Google Earth
-Enterprise Fusion, do not increase the level to 3.
-Google Earth Enterprise Fusion needs more RAM than the server does.</p>
+<td><p class="first">Specify a cache level
+(<code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span></code>, or
+<code class="docutils literal notranslate"><span class="pre">3</span></code>) for the
+virtual host. The
+default is <code class="docutils literal notranslate"><span class="pre">2</span></code>.
+This cache is
+different than the
+client cache. This
+option caches only
+the index nodes at
+display levels 4, 8,
+and 12 (not data
+packets). If you
+increase this
+setting, Google Earth
+Enterprise Fusion
+caches more of the
+index in RAM, thereby
+decreasing server
+latency at the cost
+of server RAM. Level
+3 uses approximately
+1 GB of RAM. Level 2
+uses approximately 4
+MB of RAM. Level 1
+uses approximately 16
+KB of RAM. Each
+additional cache
+level consumes 256
+times the RAM as the
+previous level and
+saves one disk read
+per packet served.</p>
+<p>The server makes no
+checks that the RAM
+needed for caching
+does not exceed the
+total RAM on the
+machine. For example,
+if you have three
+virtual hosts set to
+cache at level 3 on a
+machine that has only
+2 GB of RAM, the
+machine will thrash
+memory. The default
+is Level 2, so you
+should be able to
+create as many
+virtual hosts as you
+want at the default
+cache level without
+worrying about
+running out of RAM.</p>
+<p class="last">Typically, users
+increase only a small
+number of virtual
+hosts to cache level
+3 on production
+servers and leave the
+rest of them at level
+2. On servers that
+share a machine with
+Google Earth
+Enterprise Fusion, do
+not increase the
+level to 3. Google
+Earth Enterprise
+Fusion needs more RAM
+than the server does.</p>
 </td>
 </tr>
-<tr class="row-even"><td>–ssl</td>
+<tr class="row-even"><td><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">ssl</span>
+</pre></div>
+</div>
+</td>
 <td>Optional</td>
-<td>Create a location-based virtual host with SSL configuration
-with the naming convention <code class="docutils literal notranslate"><span class="pre">_host.location_ssl</span></code> located in
-the path <code class="docutils literal notranslate"><span class="pre">/conf.d/virtual_servers/</span></code> . For detailed information
-about ensuring your Apache HTTP server configuration files are
-set up correctly, see
-<a class="reference internal" href="../geeServerConfigAndSecurity/configureGeeServer5.1.0_SSL_HTTPS.html"><span class="doc">Configure GEE Server 5.1.0 for SSL/HTTPS</span></a></td>
+<td>Create a
+location-based
+virtual host with SSL
+configuration with
+the naming convention
+<code class="docutils literal notranslate"><span class="pre">_host.location_ssl`</span>
+<span class="pre">`</span>
+<span class="pre">located</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">path</span>
+<span class="pre">``/conf.d/virtual_ser</span>
+<span class="pre">vers/</span></code>.
+For detailed
+information about
+ensuring your Apache
+HTTP server
+configuration files
+are set up correctly,
+see <span class="xref std std-doc">6080928</span>.</td>
 </tr>
 </tbody>
 </table>

@@ -308,7 +308,7 @@ Display custom logos
 
       .. rubric:: Learn more
 
-      -  :doc:`../geeServerAdmin/manageSnippetProfiles`
+      -  :doc:`6004748`
 
 .. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
    :width: 130px

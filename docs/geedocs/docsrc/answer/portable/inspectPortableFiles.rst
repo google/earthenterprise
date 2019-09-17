@@ -46,7 +46,7 @@ Inspecting portable files
          map. This information can be useful if you use the new feature
          in GEE 5.x that lets you cut globes and maps from existing
          portable files that have been built using GEE 5.x only. See
-         :doc:`../geeServerAdmin/createPortableGlobesMaps`.
+         :doc:`3230777`.
 
          If you attempt to cut a portable file that was created using
          GEE 4.x, the cutting process will fail. However, you can serve

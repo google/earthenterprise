@@ -409,20 +409,20 @@ fails to display any preview for Fusion 3D databases.
 12671863
 
 Support **flyToFirstElement** as additional query parameter for the
-search services. See :doc:`../geeServerAdmin/createSearchTabs`.
+search services. See :doc:`3497832`.
 
 Fixed.
 
 8115171
 
-Document :doc:`../troubleshooting/unableMakeReservation` error
+Document :doc:`2981878` error
 msg.
 
 Fixed.
 
 8114492
 
-Document :doc:`../troubleshooting/unableSuitableResProv` error msg.
+Document :doc:`2981872` error msg.
 
 Fixed.
 

@@ -38,7 +38,7 @@ Create Search tabs
       database. You define all of the search tabs using the
       **Search tabs** page, and then you select one or more search tabs
       for a specific database when you publish it using the **Databases**
-      page. See :doc:`../geeServerAdmin/publishDatabasesPortables` for details.
+      page. See :doc:`3497763` for details.
 
       .. rubric:: Define a new search tab
 
@@ -94,7 +94,7 @@ Create Search tabs
       |Create Search Definition dialog|
 
       The search tab is ready for you to add to your database. See
-      :doc:`../geeServerAdmin/publishDatabasesPortables` for details.
+      :doc:`3497763` for details.
 
       .. rubric:: Customize search tab style in Google Earth EC
 

@@ -74,7 +74,7 @@ Creating Imagery Mosaics
       #. Select **File > Save**.
       #. Navigate to the ``/ASSET_ROOT/Resources/Imagery`` folder you
          created in `Setting Up the
-         Tutorial <../answer/../fusionTutorial/setup.html>`__.
+         Tutorial <../answer/4412441.html>`__.
       #. Enter the name **ImageryMosaic** for the resource, and click
          **Save**.
 
@@ -265,7 +265,7 @@ Creating Imagery Mosaics
          file appears on the Source File(s) list.
       #. Select **File > Save**.
       #. Navigate to the ``/ASSET_ROOT/Resources/Imagery`` folder you
-         created in :doc:`../fusionTutorial/setup`.
+         created in :doc:`4412441`.
       #. Enter the name **VirtualMosaic** for the resource, and click
          **Save**. The name of the resource appears on the right when
          you select the ``/ASSET_ROOT/Resources/Imagery``\ folder in the

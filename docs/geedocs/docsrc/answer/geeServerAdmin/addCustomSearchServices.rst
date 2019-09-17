@@ -112,7 +112,7 @@ Add custom search services
       .. rubric:: To implement your custom search plug-in:
 
       #. Create your search application, using the WSGI framework. See
-         the :doc:`ExampleSearch Python module <../geeServerAdmin/exampleSearchPluginSample>`
+         the :doc:`ExampleSearch Python module <6091774>`
          for example code.
       #. Locate your search plug-in, for example ``custom_search.py``,
          in the ``/opt/google/gehttpd/wsgi-bin/search/plugin/``

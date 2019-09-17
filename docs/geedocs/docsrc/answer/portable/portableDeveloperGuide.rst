@@ -75,7 +75,7 @@ Portable Developer Guide
 
       Alternatively, click the link below:
 
-      :doc:`../portable/helloMapsSample`
+      :doc:`3253275`
 
       .. _Hello_Earth:
       .. rubric:: Hello Earth!
@@ -96,7 +96,7 @@ Portable Developer Guide
 
       Alternatively, click the link below:
 
-      :doc:`../portable/helloEarthSample`
+      :doc:`3253752`
 
       .. _JSON_Documents:
       .. rubric:: JSON documents
