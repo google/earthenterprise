@@ -142,7 +142,7 @@ compatibility with GEE Portable.</p>
 </tbody>
 </table>
 <p class="rubric">Creating portable globes and maps</p>
-<p>You can <span class="xref std std-doc">3230777</span> with the cutter tool feature of
+<p>You can <a class="reference internal" href="../geeServerAdmin/createPortableGlobesMaps.html"><span class="doc">Create Portable Globes and Maps</span></a> with the cutter tool feature of
 the Google Earth Enterprise (GEE) Server, or you can obtain them
 from third-party vendors. Depending on your area of coverage, it
 can take only a few minutes to specify and generate a globe or map
@@ -297,6 +297,19 @@ the <code class="docutils literal notranslate"><span class="pre">disable_broadca
 to <code class="docutils literal notranslate"><span class="pre">True</span></code> in <code class="docutils literal notranslate"><span class="pre">portable.cfg</span></code>, then broadcasting is enabled,
 regardless of the <code class="docutils literal notranslate"><span class="pre">disable_broadcasting</span></code> state.</p>
 </div>
+<p class="rubric" id="connect-gee-portable">Connect using GEE Portable</p>
+<p>Start Portable Server by executing <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">portable_server.py</span></code>
+from the folder you unpacked the Portable Server archive in.
+After it launches, open a browser and navigate to
+<code class="docutils literal notranslate"><span class="pre">http://localhost:9335</span></code> (using any
+custom port or hostname you may have configured). Click the
+<img alt="Portable folder icon" src="../../images/portable_folder_icon.png" /> <strong>Folder</strong> (outlined in red), then select the
+globe or map you want to view. You can view only one globe or
+map at a time.</p>
+<p>Globes and maps that are broadcast on your local network might
+require an access key. If prompted, enter the key to view the
+globe or map. You can obtain the key from the person who is
+broadcasting the globe or map.</p>
 <p class="rubric" id="connect-using-geec">Connect using the Google Earth Enterprise Client</p>
 <p>Launch the Google Earth Enterprise Client (Google Earth EC). When
 prompted for a server address, enter <code class="docutils literal notranslate"><span class="pre">http://localhost:9335</span></code>. If
@@ -324,9 +337,16 @@ you to build the globe or map to reference a specific port
 number, which means you would have to rebuild it if you wanted
 to re-use it for any other ports.</p>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
+<p class="rubric" id="get-info-about-globe-map">Get info about your globe or map</p>
+<p>Click the <img alt="Portable folder icon" src="../../images/portable_folder_icon.png" /> <strong>Folder</strong> (outlined in red) to view a
+list of the globes and maps you can access. Each globe or map is
+listed with its file name, description, creation date, and size.</p>
+<p>Select a globe or map, then click the <img alt="Portable menu icon" src="../../images/portable_menu_icon.png" /> <strong>Menu</strong>
+(outlined in red) then select <strong>Show layer list</strong> to see
+all the layers for that globe or map. You can use the list to
+select the layers you want the globe or map to display. To hide
+the layer list, click the <strong>Menu</strong>, then select <strong>Hide layer
+list</strong>.</p>
 <p class="rubric" id="change-configuration-options">Change your configuration options</p>
 <p>The Google Earth Portable directory contains the
 <code class="docutils literal notranslate"><span class="pre">server/portable.cfg</span></code> configuration file. This is the directory
