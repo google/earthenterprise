@@ -1,9 +1,9 @@
-Google Earth Enterprise Documentation Version 5.3.2
+Google Earth Enterprise Documentation Version 5.3.3
 ===================================================
 
    This documentation contains legacy information that may not apply
    to the Google Earth Enterprise Open Source version. This bundle is
-   also available in the GEE Server 5.3.2 installation package.
+   also available in the GEE Server 5.3.3 installation package.
 
 .. toctree::
    :maxdepth: 2
@@ -34,8 +34,8 @@ Google Earth Enterprise Documentation Version 5.3.2
 
    ./answer/legal
 
-   .. rubric:: Google Earth Enterprise Documentation Version 5.3.2
-   :name: google-earth-enterprise-documentation-version-5.3.2
+   .. rubric:: Google Earth Enterprise Documentation Version 5.3.3
+   :name: google-earth-enterprise-documentation-version-5.3.3
 
    .. rubric:: `Get started <answer/2995465>`__
    :name: get-started
