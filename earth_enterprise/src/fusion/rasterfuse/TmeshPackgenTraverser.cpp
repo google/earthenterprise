@@ -155,7 +155,7 @@ TmeshPackgenTraverser::TmeshPackgenTraverser(
                         StartLowerLeft,
                         false /* isvector */),
       writer_(file_pool_, output, true /* overwrite */),
-      extra_cache_(20000 /* apx 160M */),
+      extra_cache_(20000 /* apx 160M */, "tmesh traverser"),
       not_covered_tiles_exist_(false) {
 
   if((decimation_threshold <= 0.0) || (config.decimate == false)) {

@@ -76,7 +76,7 @@ class ProductLevelReaderCache
   mutable khCache<const khRasterProductLevel*, CachedReader> cache;
 
  public:
-  inline ProductLevelReaderCache(uint cacheSize) : cache(cacheSize) { }
+  inline ProductLevelReaderCache(uint cacheSize) : cache(cacheSize, "product level reader") { }
 
   template <class DestTile>
   inline void
