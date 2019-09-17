@@ -26,3 +26,4 @@ help:
 	rm -rf ../$(OPENGEEVER)
 	mkdir ../$(OPENGEEVER)
 	cp -r ./$(BUILDDIR)/html/* ../$(OPENGEEVER)
+	rm -rf ../$(OPENGEEVER)/sources

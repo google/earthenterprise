@@ -12,7 +12,7 @@ Publish databases and portables
       want to publish, specify a *publish point*, then apply *publishing
       options* in the **Publish** dialog. Before you publish a Fusion
       database, you must register it by
-      :doc:`pushing <../fusionAdministration/pushAndPublishDB>` it to :doc:`GEE
+      :doc:`pushing <6034724>` it to :doc:`GEE
       Server <3468004>`.
 
       With portable files, the process is a little different. Instead,
@@ -29,7 +29,7 @@ Publish databases and portables
 
       .. rubric:: To publish a Fusion database:
 
-      #. In the :doc:`GEE Server Admin console <../geeServerAdmin/signInAdminConsole>`,
+      #. In the :doc:`GEE Server Admin console <3470759>`,
          click **Databases**.
       #. Check the box next to the database or portable to publish.
       #. Click the **Publish** button to open the Publish dialog.
@@ -62,7 +62,7 @@ Publish databases and portables
       .. _Register_Publish_Portable_Map_Globe:
       .. rubric:: To register a portable globe or map:
 
-      #. In the :doc:`GEE Server Admin console <../geeServerAdmin/signInAdminConsole>`,
+      #. In the :doc:`GEE Server Admin console <3470759>`,
          click **Databases**.
       #. Click **Manage Portables** to open the Manage portable globes
          dialog.
@@ -104,10 +104,10 @@ Publish databases and portables
 
       .. rubric:: Learn more
 
-      -  :doc:`../geeServerAdmin/manageSnippetProfiles`
-      -  :doc:`../geeServerAdmin/manageVirtualHosts`
-      -  :doc:`../geeServerAdmin/makeWMSRequests`
-      -  :doc:`../geeServerAdmin/createPortableGlobesMaps`
+      -  :doc:`6004748`
+      -  :doc:`6013604`
+      -  :doc:`4441137`
+      -  :doc:`3230777`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

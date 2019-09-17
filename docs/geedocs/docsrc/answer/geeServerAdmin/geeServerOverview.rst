@@ -20,7 +20,7 @@ GEE Server Overview 5.x
       globes and maps. This change decouples the task of setting up
       security protocols from publishing maps and globes.
 
-      Associating :doc:`search sets <../geeServerAdmin/createSearchTabs>` and :doc:`snippet
+      Associating :doc:`search sets <3497832>` and :doc:`snippet
       profiles <6004748>` at the time of publishing
       allows you to present different versions of the same underlying
       Fusion database, which can then be made available at different
@@ -39,14 +39,14 @@ GEE Server Overview 5.x
       single view. Because the WMS standard is used to get all the
       images, they can easily be overlaid on one another.
 
-      :doc:`Publishing <../geeServerAdmin/publishDatabasesPortables>` can now be done in a
+      :doc:`Publishing <3497763>` can now be done in a
       matter of seconds from the GEE Server admin console, and no longer
       requires interaction with Fusion. We hope that this new publishing
       approach makes your life easier and maybe even a little more fun!
 
       GEE Server also provides tools for :doc:`cutting portable
       globes <3230777>` (``.glb``) and maps (``.glc``).
-      :doc:`Composite globes and maps <../geeServerAdmin/createCompositeGlobesMaps>` can be
+      :doc:`Composite globes and maps <4643041>` can be
       assembled from 2D or 3D portable files. The resulting offline globe
       or map is packed as a ``.glc`` file that may be downloaded for use
       with Portable Server.
