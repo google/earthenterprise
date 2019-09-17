@@ -171,6 +171,92 @@ namespace AssetFactory
      return Make<MutableDerivedAssetHandleType, ConfigType> (ref_, inputs_, meta_, config_);
   }
 
+  /*
+
+    flavors of asset =:
+
+    1. ref_, inputs_, meta_, config
+          TmeshAssetD*: FMAUS, manual type, manual ref, AssetGenDaemon/Tmesh.src
+          CopyrightAssetD*: FMAUS, manual type, manual ref,
+          ImeshKHDBAssetD*
+          VectorKHDBAssetD*
+          VectorProductAssetD
+          VectorLayerXAssetD
+          VectorLayerAssetD
+          VectorProjectAssetD,
+          VectorQueryAssetD
+          VectorFuseAssetD
+          VectorDBRootAssetD
+          PacketGenAssetD
+          MapProjectAssetD,
+          ProjectedMapProjectAssetD
+          MapLayerAssetD
+          ProjectedMapLayerAssetD
+          MapLayerLevelAssetD,
+          KMLProjectAssetD
+          UnifiedIndexAssetD
+          VectirGEIndexAssetD
+          CombinedTerrainAssetD
+          MapLayerJSAssetD,
+          GEDBAssetD
+          MapDatabaseAssetD
+          MercatorMapDatabaseAssetD
+          MapGEIndexAssetD
+          VectorPOIAssetD,
+          SourceAssetD
+          MapDBAssetD
+          QTPacketAssetD
+          MapPOIAssetD
+
+    2. ref_, type_, inputs_, meta_, config_
+        - ReprojectAssetD*, RasterKHDBAssetD*, MosaidAssetD, MaskGenAssetD, KRPAssetD, KRMPAssetD,
+          RasterProjectAssetD, RasterProductAssetD, DatabaseAssetD, PacketLevelAssetD, RasterDBRootAssetD,
+          BlendAssetD*, RasterGEIndexAssetD, CombinedRPAssetD
+
+    * - deprecated
+    FMAUS = FindMakeAndUpdateSubasset
+
+ */
+
+  // there are 2 variations. in one instance the reference is being created in FindMakeAndUpdateSubasset
+  // with a hard coded type, and the other, the type is being passed in. this effects how the asset is created
+  // with FindMake
+  template <class MutableDerivedAssetHandleType, class Version, class ConfigType>
+  MutableDerivedAssetHandleType FindMakeAndUpdate(const std::string& ref_,
+                                                  const AssetDefs::Type type_,
+                                                  const std::vector<SharedString>& inputs_,
+                                                  const khMetaData& meta_,
+                                                  const ConfigType& config_,
+                                                  const std::vector<Version>& cachedinputs_)
+  {
+      MutableDerivedAssetHandleType asset = FindMake<MutableDerivedAssetHandleType>
+              (ref_, type_, inputs_, meta_, config_);
+      return asset->MyUpdate(false, cachedinputs_);
+  }
+
+  template <class MutableDerivedAssetHandleType, class Version, class ConfigType>
+  MutableDerivedAssetHandleType FindMakeAndUpdate(const std::string& ref_,
+                                                  const std::vector<SharedString>& inputs_,
+                                                  const khMetaData& meta_,
+                                                  const ConfigType& config_,
+                                                  const std::vector<Version>& cachedinputs_ )
+  {
+      MutableDerivedAssetHandleType asset = FindMake<MutableDerivedAssetHandleType>
+              (ref_, inputs_, meta_, config_);
+      return asset->MyUpdate(false, cachedinputs_);
+  }
+
+  template <class MutableDerivedAssetHandleType, class Version, class ConfigType>
+  MutableDerivedAssetHandleType FindMakeAndUpdate(const std::string& ref_,
+                                                  AssetDefs::Type type_,
+                                                  const khMetaData& meta_,
+                                                  const ConfigType& config_)
+  {
+      MutableDerivedAssetHandleType asset = FindMake<MutableDerivedAssetHandleType>
+              (ref_, type_, meta_, config_);
+      return asset->MyUpdate(false);
+  }
+
   template <class MutableDerivedAssetHandleType, class ConfigType>
   MutableDerivedAssetHandleType FindAndModify(const std::string& ref_,
                                               const std::vector<SharedString>& inputs_,
@@ -222,7 +308,6 @@ namespace AssetFactory
       throw khException(kh::tr("%1 '%2' does not exist")
                         .arg(Impl::EXPECTED_SUBTYPE).arg(ref_));
   }
-
 
   template<class MutableDerivedAssetHandleType, class ConfigType>
   MutableDerivedAssetHandleType MakeNew( const std::string &ref_,

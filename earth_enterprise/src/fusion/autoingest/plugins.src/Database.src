@@ -500,7 +500,7 @@ DatabaseAssetVersionImplD::CreateCombinedTerrain(
 #ifdef CREATE_SUBSAMPLED_TERRAIN
     if (ssindex) {
       combined_terrain =
-        CombinedTerrainFactory::FindMakeAndUpdate(
+        AssetFactory::FindMakeAndUpdate<MutableCombinedTerrainAssetVersionD, AssetVersion>(
             combinedTerrainAssetName,
             makevec2<SharedString>(terrainIndex->GetRef(), ssindex->GetRef()),
             khMetaData(),
@@ -509,7 +509,7 @@ DatabaseAssetVersionImplD::CreateCombinedTerrain(
     } else {
 #endif
       combined_terrain =
-        CombinedTerrainFactory::FindMakeAndUpdate(
+        AssetFactory::FindMakeAndUpdate<MutableCombinedTerrainAssetVersionD, AssetVersion>(
             combinedTerrainAssetName,
             makevec1<SharedString>(terrainIndex->GetRef()),
             khMetaData(),
@@ -573,7 +573,7 @@ DatabaseAssetVersionImplD::CreateQTPacket(
     }
   }
 
-  return QTPacketFactory::FindMakeAndUpdate(
+  return AssetFactory::FindMakeAndUpdate<MutableQTPacketAssetVersionD, AssetVersion>(
         qtpacket_asset_name,
         input_verrefs,
         khMetaData(),
@@ -670,7 +670,7 @@ DatabaseAssetVersionImplD::CreateUnifiedIndex(
                         0 /* unused channel id */,
                         "" /* unused date_string */));
 
-  return UnifiedIndexFactory::FindMakeAndUpdate(
+  return AssetFactory::FindMakeAndUpdate<MutableUnifiedIndexAssetVersionD, AssetVersion>(
         unified_index_asset_name,
         index_input_verrefs,
         khMetaData(),
@@ -710,7 +710,7 @@ DatabaseAssetVersionImplD::CreateGedbAsset(
                               config.indexVersion);
 
   // update the gedb asset
-  return GEDBFactory::FindMakeAndUpdate(
+  return AssetFactory::FindMakeAndUpdate<MutableGEDBAssetVersionD, AssetVersion>(
         gedb_asset_name,
         input_verrefs,
         khMetaData(),
@@ -1000,7 +1000,7 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
       }
 
       ssindex =
-        RasterGEIndexFactory::FindMakeAndUpdate(geindexAssetName,
+        Asset::FindMakeAndUpdate<MutableRasterGEIndexAssetVersionD, AssetVersion>(geindexAssetName,
                                                 AssetDefs::Database,
                                                 packgenkids,
                                                 khMetaData(),

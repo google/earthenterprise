@@ -928,11 +928,12 @@ void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
             geindex_version,
             config.legend));
     MutableAssetVersionD layerjs =
-      MapLayerJSFactory::FindMakeAndUpdate(layerJSAssetName,
-                                           std::vector<SharedString>(),
-                                           khMetaData(),
-                                           layerJSConfig,
-                                           std::vector<AssetVersion>());
+      AssetFactory::FindMakeAndUpdate<MutableAssetVersionD, AssetVersion>
+          (layerJSAssetName,
+           std::vector<SharedString>(),
+           khMetaData(),
+           layerJSConfig,
+           std::vector<AssetVersion>());
     AddChild(layerjs);
   }
 
@@ -1333,11 +1334,12 @@ uint32 RasterProjectAssetVersionImplD::MakeIndexSubAsset(
     }
   }
   MutableRasterGEIndexAssetVersionD geindex =
-    RasterGEIndexFactory::FindMakeAndUpdate(geindexAssetName, type,
-                                            packgenkids,
-                                            khMetaData(),
-                                            geindexConfig,
-                                            packgenvers);
+    AssetFactory::FindMakeAndUpdate<MutableRasterGEIndexAssetVersionD, AssetVersion>
+         (geindexAssetName, type,
+          packgenkids,
+          khMetaData(),
+          geindexConfig,
+          packgenvers);
   AddChild(geindex);
   return geindex->config.index_version_;
 }

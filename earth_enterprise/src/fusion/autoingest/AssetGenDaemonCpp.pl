@@ -120,6 +120,8 @@ ${name}Factory::SubAssetName(
                                    $actualtypearg, "$subtype");
 }
 
+// $formalcachedinputarg
+
 $template
 Mutable${name}AssetVersionD
 ${name}Factory::FindMakeAndUpdate(
@@ -151,7 +153,7 @@ ${name}Factory::FindMakeAndUpdateSubAsset(
         $formalcachedinputarg
         $formalExtraUpdateArg)
 {
-    return FindMakeAndUpdate
+    return AssetFactory::FindMakeAndUpdate<Mutable${name}AssetVersionD, AssetVersion, $config>
              (AssetDefs::SubAssetName(parentAssetRef, basename,
                                       $actualtypearg, "$subtype")
               $forwardtypearg, $forwardinputarg
@@ -475,7 +477,7 @@ if ($haveBindConfig) {
     if (!IsUpToDate(bound_config, *inputvers)) {
         Mutable${name}AssetD self(GetRef());
         Mutable${name}AssetVersionD newver =
-            MakeNewVersion<Mutable${name}AssetD, ${name}AssetImplD::Config, Mutable${name}AssetVersionD>(self, bound_config); 
+            MakeNewVersion<Mutable${name}AssetD, ${name}AssetImplD::Config, Mutable${name}AssetVersionD>(self, bound_config);
         AssetVersionImplD::InputVersionGuard guard(newver.operator->(),
                                                    *inputvers);
 EOF

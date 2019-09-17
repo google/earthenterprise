@@ -269,7 +269,7 @@ MapDatabaseAssetVersionImplD::DelayedBuildChildren(void)
     }
 
     unified_index =
-      UnifiedIndexFactory::FindMakeAndUpdate(
+      AssetFactory::FindMakeAndUpdate<MutableUnifiedIndexAssetVersionD, AssetVersion>(
           unified_index_asset_name,
           index_input_verrefs,
           khMetaData(),
@@ -305,7 +305,7 @@ MapDatabaseAssetVersionImplD::DelayedBuildChildren(void)
                                   GEE_VERSION);
     // update the mapdb asset
     mapdb =
-      MapDBFactory::FindMakeAndUpdate(
+      AssetFactory::FindMakeAndUpdate<MutableMapDBAssetVersionD, AssetVersion>(
           mapdb_asset_name,
           mapdb_input_verrefs,
           khMetaData(),
