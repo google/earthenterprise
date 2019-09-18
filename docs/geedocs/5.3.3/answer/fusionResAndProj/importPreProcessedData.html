@@ -144,11 +144,12 @@ directory.
 You can specify source file names on the command line or in a
 file list. To view supported command options, enter
 <code class="docutils literal notranslate"><span class="pre">[commandname]</span> <span class="pre">--help</span> <span class="pre">|</span> <span class="pre">-?</span></code></p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id1">
+<caption><span class="caption-text">genew Commands</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="33%" />
-<col width="33%" />
-<col width="33%" />
+<col width="10%" />
+<col width="40%" />
+<col width="50%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">File Type</th>
@@ -158,92 +159,30 @@ file list. To view supported command options, enter
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>.kip (Imagery)</td>
-<td><p class="first"><a href="#id1"><span class="problematic" id="id2">``</span></a>genewimageryresourc
-e –provider &lt;PROVIDE
-R_KEY&gt; –havemask -o
-path/to/resource/dir
-ectory/resourcename </p>
-<blockquote>
-<div>/path/to/imagery.kip</div></blockquote>
-<p class="last"><a href="#id3"><span class="problematic" id="id4">``</span></a></p>
-</td>
-<td><dl class="first docutils">
-<dt>To add files named</dt>
-<dd><a href="#id5"><span class="problematic" id="id6">``</span></a>SanFrancisco.kip`</dd>
-</dl>
-<dl class="docutils">
-<dt><a href="#id7"><span class="problematic" id="id8">`</span></a></dt>
-<dd>and
-<a href="#id9"><span class="problematic" id="id10">``</span></a>SanFrancisco.kmp`</dd>
-</dl>
-<dl class="docutils">
-<dt><a href="#id11"><span class="problematic" id="id12">`</span></a></dt>
-<dd>to the
-<a href="#id13"><span class="problematic" id="id14">``</span></a>/gevol/assets/ima</dd>
-</dl>
-<p>gery/noam/usa/ca/SanF
-rancisco``</p>
-<blockquote>
-<div>directory:</div></blockquote>
-<p class="last"><code class="docutils literal notranslate"><span class="pre">genewimageryresou</span>
-<span class="pre">rce</span> <span class="pre">--havemask</span> <span class="pre">-o</span> <span class="pre">\</span> <span class="pre">i</span>
-<span class="pre">magery/noam/usa/ca/Sa</span>
-<span class="pre">nFrancisco</span> <span class="pre">\</span> <span class="pre">/gevol/s</span>
-<span class="pre">rc/imagery/noam/usa/c</span>
-<span class="pre">a/SanFrancisco.kip</span></code></p>
-</td>
+<td><code class="docutils literal notranslate"><span class="pre">genewimageryresource</span> <span class="pre">--provider</span> <span class="pre">&lt;PROVIDER_KEY&gt;</span> <span class="pre">--havemask</span> <span class="pre">-o</span>
+<span class="pre">path/to/resource/directory/resourcename</span>
+<span class="pre">/path/to/imagery.kip</span></code></td>
+<td>To add files named <code class="docutils literal notranslate"><span class="pre">SanFrancisco.kip</span></code> and <code class="docutils literal notranslate"><span class="pre">SanFrancisco.kmp</span></code> to the
+<code class="docutils literal notranslate"><span class="pre">/gevol/assets/imagery/noam/usa/ca/SanFrancisco</span></code> directory:
+<code class="docutils literal notranslate"><span class="pre">genewimageryresource</span> <span class="pre">--havemask</span> <span class="pre">-o</span> <span class="pre">imagery/noam/usa/ca/SanFrancisco</span>
+<span class="pre">/gevol/src/imagery/noam/usa/ca/SanFrancisco.kip</span></code></td>
 </tr>
 <tr class="row-odd"><td>.ktp (Terrain)</td>
-<td><code class="docutils literal notranslate"><span class="pre">genewterrainresourc</span>
-<span class="pre">e</span> <span class="pre">--provider</span> <span class="pre">&lt;PROVIDE</span>
-<span class="pre">R_KEY&gt;</span> <span class="pre">--havemask</span> <span class="pre">-o</span>
-<span class="pre">\</span> <span class="pre">path/to/resource/di</span>
-<span class="pre">rectory/resourcename</span>
-<span class="pre">\</span> <span class="pre">/path/to/terrain.kt</span>
-<span class="pre">p</span></code></td>
-<td>To add files named
-<code class="docutils literal notranslate"><span class="pre">GTOPO30.ktp</span></code> and
-<code class="docutils literal notranslate"><span class="pre">GTOPO30.kmp</span></code> to
-the
-<code class="docutils literal notranslate"><span class="pre">/gevol/assets/terra</span>
-<span class="pre">in/world/</span></code>
-directory:
-<code class="docutils literal notranslate"><span class="pre">genewterrainresourc</span>
-<span class="pre">e</span> <span class="pre">--havemask</span> <span class="pre">-o</span> <span class="pre">\</span> <span class="pre">ter</span>
-<span class="pre">rain/world/GTOPO30</span> <span class="pre">\</span>
-<span class="pre">/gevol/src/terrain/wo</span>
-<span class="pre">rld/GTOPO30.ktp</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">genewterrainresource</span> <span class="pre">--provider</span> <span class="pre">&lt;PROVIDER_KEY&gt;</span> <span class="pre">--havemask</span> <span class="pre">-o</span>
+<span class="pre">path/to/resource/directory/resourcename</span>
+<span class="pre">/path/to/terrain.ktp</span></code></td>
+<td>To add files named <code class="docutils literal notranslate"><span class="pre">GTOPO30.ktp</span></code> and <code class="docutils literal notranslate"><span class="pre">GTOPO30.kmp</span></code> to the
+<code class="docutils literal notranslate"><span class="pre">/gevol/assets/terrain/world/</span></code> directory:
+<code class="docutils literal notranslate"><span class="pre">genewterrainresource</span> <span class="pre">--havemask</span> <span class="pre">-o</span> <span class="pre">terrain/world/GTOPO30</span>
+<span class="pre">/gevol/src/terrain/world/GTOPO30.ktp</span></code></td>
 </tr>
 <tr class="row-even"><td>.kvp (Vector)</td>
-<td><dl class="first docutils">
-<dt><a href="#id15"><span class="problematic" id="id16">``</span></a>genewvectorresource</dt>
-<dd>–provider &lt;PROVIDER</dd>
-</dl>
-<p class="last">_KEY&gt; –encoding &lt;ENC
-ODING_SCHEME&gt; -o pa
-th/to/resource/direct
-ory/resourcename /p
-ath/to/vector.kvp``</p>
-</td>
-<td><dl class="first docutils">
-<dt>To add a file named</dt>
-<dd><code class="docutils literal notranslate"><span class="pre">income.kvp</span></code> to
-the
-<a href="#id17"><span class="problematic" id="id18">``</span></a>/gevol/assets/vec</dd>
-</dl>
-<p>tor/noam/usa/demograp
-hic/``</p>
-<blockquote>
-<div>directory:</div></blockquote>
-<p><a href="#id19"><span class="problematic" id="id20">``</span></a>genewvectorresour
-ce -o vector/noam/u
-sa/demographic/income</p>
-<blockquote>
-<div>/gevol/src/vector/</div></blockquote>
-<p class="last">processed/noncommerci
-al/nationalatlas/inco
-me.kvp``</p>
-</td>
+<td><code class="docutils literal notranslate"><span class="pre">genewvectorresource</span> <span class="pre">--provider</span> <span class="pre">&lt;PROVIDER_KEY&gt;</span> <span class="pre">--encoding</span> <span class="pre">&lt;ENCODING_SCHEME&gt;</span> <span class="pre">-o</span>
+<span class="pre">path/to/resource/directory/resourcename</span> <span class="pre">/path/to/vector.kvp</span></code></td>
+<td>To add a file named <code class="docutils literal notranslate"><span class="pre">income.kvp</span></code> to the
+<code class="docutils literal notranslate"><span class="pre">/gevol/assets/vector/noam/usa/demographic/</span></code> directory:
+<code class="docutils literal notranslate"><span class="pre">genewvectorresource</span> <span class="pre">-o</span> <span class="pre">vector/noam/usa/demographic/income</span>
+<span class="pre">/gevol/src/vector/processed/noncommercial/nationalatlas/income.kvp</span></code></td>
 </tr>
 </tbody>
 </table>

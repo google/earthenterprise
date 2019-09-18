@@ -130,8 +130,8 @@ query. The search query is standard SQL available at
 example, the following snippet shows the SQL query used to return
 the polygon perimeters of the neighborhoods listed in the
 “san_francisco_neighborhoods” SQL table:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="bp">self</span><span class="o">.</span><span class="n">example_query</span> <span class="o">=</span> <span class="p">(</span>
-  <span class="s2">&quot;SELECT ${FUNC}(ST_Force_3DZ(the_geom)) AS the_geom,Area(the_geom),&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">example_query</span> <span class="o">=</span> <span class="p">(</span>
+  <span class="s2">&quot;SELECT $</span><span class="si">{FUNC}</span><span class="s2">(ST_Force_3DZ(the_geom)) AS the_geom,Area(the_geom),&quot;</span>
   <span class="s2">&quot;Perimeter(the_geom),sfar_distr,nbrhood, &quot;</span>
   <span class="s2">&quot;GeometryType(the_geom) AS geom_type &quot;</span>
   <span class="s2">&quot;FROM san_francisco_neighborhoods &quot;</span>
