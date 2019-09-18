@@ -11,7 +11,7 @@ View 2D databases
       Once you publish a 2D database, you can view it from Google Earth
       Enterprise Server or in any browser. You can also interact with
       map layers you created in a 2D database using the
-      ``geeCreateFusionMap`` class of :doc:`../developers/googleMapsAPIV3ForGEE`.
+      ``geeCreateFusionMap`` class of :doc:`6078457`.
 
       .. rubric:: To view your map database from Google Earth Enterprise
          Server:
@@ -55,7 +55,7 @@ View 2D databases
 
       .. rubric:: Learn more
 
-      -  :doc:`../developers/googleMapsAPIV3ForGEE`
+      -  :doc:`6078457`
       -  `Google Maps Javascript API V3
          Reference <https://developers.google.com/maps/documentation/javascript/reference>`_
 

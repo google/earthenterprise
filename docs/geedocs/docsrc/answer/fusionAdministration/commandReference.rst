@@ -375,10 +375,10 @@ Command reference
          Cutter, so although it provides security if you try to launch
          the Cutter from the Admin console Settings menu, it does not
          block direct access to the Cutter via the URL. If you need
-         Cutter security, you must add it separately. See
-         :doc:`../geeServerConfigAndSecurity/ports`.
+         Cutter security, you must add it separately. See :doc:`GEE
+         Server security <173056>`.
 
-      See :doc:`../geeServerAdmin/createPortableGlobesMaps`.
+      See :doc:`3230777`.
 
       .. rubric:: Example
 
@@ -1370,74 +1370,174 @@ Command reference
 
       ``geserveradmin --addvh public_vh --vhurl http://mysite.com/public_vh``
 
-      .. list-table:: addvh options
-         :widths: 30 15 55
-         :header-rows: 1
-
-         * - --addvh option
-           - Required/Optional
-           - Description
-         * - --vhurl url
-           - Optional
-           - The ``vhurl``specifies the location of the virtual host. It must
-             match the corresponding server-side virtual host configuration.
-             If ``vhurl`` is omitted, it will be set to
-             ``http://yourserver.domain/vh_name``.
-             There are three ways to specify the ``vhurl``:
-               -  Location-based URL, such as ``/private_ge``.
-                  For example, if the entire URL is
-                  ``http://www.company.com/private_ge``,
-                  you enter ``/private_ge``.
-                  **Note:** Google recommends that you use the
-                  ``_ge`` and ``_map`` naming convention to make
-                  it easier to distinguish between virtual host types.
-               -  Port-based URL, such as:
-                  :: http://www.company.com:1234
-                  The entire URL, including protocol, servername,
-                  path (if applicable), and port are required.
-               -  Name-based URL, such as:
-                  :: http://corp.company.com
-             For this type of `specification, you must modify
-             your DNS appropriately for the virtual host.
-             After you use this command, you must create a              |
-             configuration file for the new virtual host.
-         * - --vhcachelevel num
-           - Optional
-           - Specify a cache level (``1``, ``2``, or ``3``)
-             for the virtual host. The default is ``2``. This cache
-             is different than the client cache. This option caches
-             only the index nodes at display levels 4, 8, and 12
-             (not data packets). If you increase this setting,
-             Google Earth Enterprise Fusion caches more of the
-             index in RAM, thereby decreasing server latency
-             at the cost of server RAM. Level 3 uses approximately
-             1 GB of RAM. Level 2 uses approximately 4 MB of RAM.
-             Level 1 uses approximately 16 KB of RAM. Each
-             additional cache level consumes 256 times the RAM
-             as the previous level and saves one disk read per packet served.
-
-             The server makes no checks that the RAM needed for caching
-             does not exceed the total RAM on the machine. For example,i
-             if you have three virtual hosts set to cache at level 3 on
-             a machine that has only 2 GB of RAM, the machine will thrash
-             memory. The default is Level 2, so you should be able to create
-             as many virtual hosts as you want at the default cache level
-             without worrying about running out of RAM.
-
-             Typically, users increase only a small number of virtual hosts
-             to cache level 3 on production servers and leave the rest of themi
-             at level 2. On servers that share a machine with Google Earth
-             Enterprise Fusion, do not increase the level to 3.
-             Google Earth Enterprise Fusion needs more RAM than the server does.
-
-         * - --ssl
-           - Optional
-           - Create a location-based virtual host with SSL configuration
-             with the naming convention ``_host.location_ssl`` located in
-             the path ``/conf.d/virtual_servers/`` . For detailed information
-             about ensuring your Apache HTTP server configuration files are
-             set up correctly, see
-             :doc:`../geeServerConfigAndSecurity/configureGeeServer5.1.0_SSL_HTTPS`
+      +-----------------------+-----------------------+-----------------------+
+      | --addvh option        | Required/Optional     | Description           |
+      +=======================+=======================+=======================+
+      | ::                    | Optional              | The ``vhurl``         |
+      |                       |                       | specifies the         |
+      |    --vhurl url        |                       | location of the       |
+      |                       |                       | virtual host. It must |
+      |                       |                       | match the             |
+      |                       |                       | corresponding         |
+      |                       |                       | server-side virtual   |
+      |                       |                       | host configuration.   |
+      |                       |                       | If ``vhurl`` is       |
+      |                       |                       | omitted, it will be   |
+      |                       |                       | set to                |
+      |                       |                       | ``http://yourserver.d |
+      |                       |                       | omain/vh_name``.      |
+      |                       |                       | There are three ways  |
+      |                       |                       | to specify the        |
+      |                       |                       | ``vhurl``:            |
+      |                       |                       |                       |
+      |                       |                       | -  Location-based     |
+      |                       |                       |    URL, such as       |
+      |                       |                       |    ``/private_ge``.   |
+      |                       |                       |    For example, if    |
+      |                       |                       |    the entire URL is  |
+      |                       |                       |    ``http://www.compa |
+      |                       |                       | ny.com/private_ge``,  |
+      |                       |                       |    you enter          |
+      |                       |                       |    ``/private_ge``.   |
+      |                       |                       |                       |
+      |                       |                       |    **Note:** Google   |
+      |                       |                       |    recommends that    |
+      |                       |                       |    you use the        |
+      |                       |                       |    ``_ge`` and        |
+      |                       |                       |    ``_map`` naming    |
+      |                       |                       |    convention to make |
+      |                       |                       |    it easier to       |
+      |                       |                       |    distinguish        |
+      |                       |                       |    between virtual    |
+      |                       |                       |    host types.        |
+      |                       |                       |                       |
+      |                       |                       | -  Port-based URL,    |
+      |                       |                       |    such as:           |
+      |                       |                       |                       |
+      |                       |                       |    ::                 |
+      |                       |                       |                       |
+      |                       |                       |       http://www.comp |
+      |                       |                       | any.com:1234          |
+      |                       |                       |                       |
+      |                       |                       |    The entire URL,    |
+      |                       |                       |    including          |
+      |                       |                       |    protocol, server   |
+      |                       |                       |    name, path (if     |
+      |                       |                       |    applicable), and   |
+      |                       |                       |    port are required. |
+      |                       |                       |                       |
+      |                       |                       | -  Name-based URL,    |
+      |                       |                       |    such as:           |
+      |                       |                       |                       |
+      |                       |                       |    ::                 |
+      |                       |                       |                       |
+      |                       |                       |       http://corp.com |
+      |                       |                       | pany.com              |
+      |                       |                       |                       |
+      |                       |                       | For this type of      |
+      |                       |                       | specification, you    |
+      |                       |                       | must modify your DNS  |
+      |                       |                       | appropriately for the |
+      |                       |                       | virtual host.         |
+      |                       |                       |                       |
+      |                       |                       | After you use this    |
+      |                       |                       | command, you must     |
+      |                       |                       | create a              |
+      |                       |                       | configuration file    |
+      |                       |                       | for the new virtual   |
+      |                       |                       | host.                 |
+      +-----------------------+-----------------------+-----------------------+
+      | ::                    | Optional              | Specify a cache level |
+      |                       |                       | (``1``, ``2``, or     |
+      |    --vhcachelevel num |                       | ``3``) for the        |
+      |                       |                       | virtual host. The     |
+      |                       |                       | default is ``2``.     |
+      |                       |                       | This cache is         |
+      |                       |                       | different than the    |
+      |                       |                       | client cache. This    |
+      |                       |                       | option caches only    |
+      |                       |                       | the index nodes at    |
+      |                       |                       | display levels 4, 8,  |
+      |                       |                       | and 12 (not data      |
+      |                       |                       | packets). If you      |
+      |                       |                       | increase this         |
+      |                       |                       | setting, Google Earth |
+      |                       |                       | Enterprise Fusion     |
+      |                       |                       | caches more of the    |
+      |                       |                       | index in RAM, thereby |
+      |                       |                       | decreasing server     |
+      |                       |                       | latency at the cost   |
+      |                       |                       | of server RAM. Level  |
+      |                       |                       | 3 uses approximately  |
+      |                       |                       | 1 GB of RAM. Level 2  |
+      |                       |                       | uses approximately 4  |
+      |                       |                       | MB of RAM. Level 1    |
+      |                       |                       | uses approximately 16 |
+      |                       |                       | KB of RAM. Each       |
+      |                       |                       | additional cache      |
+      |                       |                       | level consumes 256    |
+      |                       |                       | times the RAM as the  |
+      |                       |                       | previous level and    |
+      |                       |                       | saves one disk read   |
+      |                       |                       | per packet served.    |
+      |                       |                       |                       |
+      |                       |                       | The server makes no   |
+      |                       |                       | checks that the RAM   |
+      |                       |                       | needed for caching    |
+      |                       |                       | does not exceed the   |
+      |                       |                       | total RAM on the      |
+      |                       |                       | machine. For example, |
+      |                       |                       | if you have three     |
+      |                       |                       | virtual hosts set to  |
+      |                       |                       | cache at level 3 on a |
+      |                       |                       | machine that has only |
+      |                       |                       | 2 GB of RAM, the      |
+      |                       |                       | machine will thrash   |
+      |                       |                       | memory. The default   |
+      |                       |                       | is Level 2, so you    |
+      |                       |                       | should be able to     |
+      |                       |                       | create as many        |
+      |                       |                       | virtual hosts as you  |
+      |                       |                       | want at the default   |
+      |                       |                       | cache level without   |
+      |                       |                       | worrying about        |
+      |                       |                       | running out of RAM.   |
+      |                       |                       |                       |
+      |                       |                       | Typically, users      |
+      |                       |                       | increase only a small |
+      |                       |                       | number of virtual     |
+      |                       |                       | hosts to cache level  |
+      |                       |                       | 3 on production       |
+      |                       |                       | servers and leave the |
+      |                       |                       | rest of them at level |
+      |                       |                       | 2. On servers that    |
+      |                       |                       | share a machine with  |
+      |                       |                       | Google Earth          |
+      |                       |                       | Enterprise Fusion, do |
+      |                       |                       | not increase the      |
+      |                       |                       | level to 3. Google    |
+      |                       |                       | Earth Enterprise      |
+      |                       |                       | Fusion needs more RAM |
+      |                       |                       | than the server does. |
+      +-----------------------+-----------------------+-----------------------+
+      | ::                    | Optional              | Create a              |
+      |                       |                       | location-based        |
+      |    --ssl              |                       | virtual host with SSL |
+      |                       |                       | configuration with    |
+      |                       |                       | the naming convention |
+      |                       |                       | ``_host.location_ssl` |
+      |                       |                       | `                     |
+      |                       |                       | located in the path   |
+      |                       |                       | ``/conf.d/virtual_ser |
+      |                       |                       | vers/``.              |
+      |                       |                       | For detailed          |
+      |                       |                       | information about     |
+      |                       |                       | ensuring your Apache  |
+      |                       |                       | HTTP server           |
+      |                       |                       | configuration files   |
+      |                       |                       | are set up correctly, |
+      |                       |                       | see :doc:`6080928`.   |
+      +-----------------------+-----------------------+-----------------------+
 
       .. rubric:: Delete virtual hosts
 

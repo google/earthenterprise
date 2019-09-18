@@ -36,7 +36,7 @@ Defining and Building Resources
          -  :ref:`Define a Vector Resource <Define_a_Vector_Resource>`
          -  :ref:`Build a Vector Resource <Build_Vector_Resource>`
          -  :ref:`Define and Build the Remaining Vector
-            Resources <define-and-build-the-remaining-vector-resources>`
+            Resources <Define_Build_Remaining_Imagery_Resources>`
 
       .. _Define_Imagery_Resources:
       .. rubric:: Define Imagery Resources
@@ -195,7 +195,7 @@ Defining and Building Resources
            data. If you encounter an error message that tells you that a
            tutorial source file is not readable or you cannot save a
            resource, contact your system administrator or refer to the
-           :doc:`Google Earth Enterprise Administration Guide <../fusionTutorial/confTutorialWS>` and
+           :doc:`Google Earth Enterprise Administration Guide <6028272>` and
            configure the tutorial environment yourself before saving any
            practice data.
          | When you finish using any of the asset editors (such as the
@@ -495,7 +495,7 @@ Defining and Building Resources
          The Save dialog appears.
 
       #. Navigate to the ``/ASSET_ROOT/Resources/Terrain`` folder you
-         created in :doc:`../fusionTutorial/setup`.
+         created in :doc:`4412441`.
       #. Enter the name **WorldTopography** for the resource, and click
          **Save**.
       #. Close the Terrain Resource Editor dialog.
@@ -541,7 +541,7 @@ Defining and Building Resources
          The Save dialog appears.
 
       #. Navigate to the ``/ASSET_ROOT/Resources/Terrain`` folder you
-         created in :doc:`../fusionTutorial/setup`.
+         created in :doc:`4412441`.
       #. Enter the name **SFTerrain** for the resource, and click
          **Save**.
       #. Close the Terrain Resource Editor dialog.
@@ -821,7 +821,7 @@ Defining and Building Resources
          The Save dialog appears.
 
       #. Navigate to the ``/ASSET_ROOT/Resources/Vector`` folder you
-         created in :doc:`../fusionTutorial/setup`.
+         created in :doc:`4412441`.
       #. Enter the name **CAHighways** for the resource, and click
          **Save**.
       #. Close the Vector Resource Editor dialog.

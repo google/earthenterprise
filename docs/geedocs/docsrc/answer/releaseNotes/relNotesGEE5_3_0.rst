@@ -14,13 +14,13 @@ Release notes: Open GEE 5.3.0
       be modified by configuring the ``INIT_HEAP_SIZE``,
       ``MAX_HEAP_SIZE``, and ``BLOCK_SIZE`` settings in
       ``/etc/opt/google/XMLparams``. This file must be created manually.
-      View the :doc:`../fusionAdministration/confTaskRulesForFusionPerf`
+      View the :doc:`176738`
       document for more details.
 
       **Users can now force the XML cache to purge periodically.** This
       can be done by configuring the ``PURGE`` and ``PURGE_LEVEL``
       settings in ``/etc/opt/google/XMLparams``. This file must be
-      created manually. View the :doc:`../fusionAdministration/confTaskRulesForFusionPerf` document for more details.
+      created manually. View the :doc:`176738` document for more details.
 
       **Added a ``long_version`` parameter to the SCons build.** This
       will allow the user to override the long version string.

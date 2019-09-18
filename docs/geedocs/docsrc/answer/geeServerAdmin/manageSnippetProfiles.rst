@@ -111,7 +111,7 @@ Manage snippet profiles
          for your snippet profile, click the **Save changes** button.
 
          Now you can apply your snippet profile to any 3D database you
-         :doc:`publish <../geeServerAdmin/publishDatabasesPortables>`.
+         :doc:`publish <3497763>`.
 
       .. _Edit_Snippet_Settings:
       .. rubric:: Snippet Settings
@@ -428,7 +428,7 @@ Manage snippet profiles
 
       .. rubric:: Learn more
          :name: learn-more
-         :doc:`Google Earth Enterprise Client (EC) <../googleEarthEnterpriseClient/whatisEC>`
+         :doc:`Google Earth Enterprise Client (EC) <6006981>`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

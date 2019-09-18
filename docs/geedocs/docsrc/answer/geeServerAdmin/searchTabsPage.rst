@@ -41,10 +41,10 @@ Search tabs page
 
       .. rubric:: Learn more
 
-      -  :doc:`../geeServerAdmin/createSearchTabs`
+      -  :doc:`3497832`
       -  :doc:`Specifying search fields for individual
          layers <4412684>`
-      -  :doc:`Configuring a searchable database <../fusionTutorial/confSearchableDB>`
+      -  :doc:`Configuring a searchable database <4412683>`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

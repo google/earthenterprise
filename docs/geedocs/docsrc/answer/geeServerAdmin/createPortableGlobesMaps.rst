@@ -21,7 +21,7 @@ Create Portable Globes and Maps
       map.
 
       You can :doc:`create portable globes and
-      maps (3230777>` with the :doc:`cutter tool <../geeServerAdmin/settingsPage>` feature of the :doc:`Google Earth
+      maps (3230777>` with the :doc:`cutter tool <3479921>` feature of the :doc:`Google Earth
       Enterprise (GEE) Server <3470759>`, from existing
       GEE portable files, or you can obtain them from third-party
       vendors. Depending on your area of coverage, it can take only a
@@ -80,7 +80,7 @@ Create Portable Globes and Maps
       contains all the geospatial data for assembled layers. To assemble
       a composite file, you supply a KML polygon to cut your area of
       interest, then specify the layers and the order in which they display.
-      See :doc:`../geeServerAdmin/createCompositeGlobesMaps`.
+      See :doc:`4643041`.
 
       .. rubric:: Create a portable globe or map
 
@@ -118,7 +118,7 @@ Create Portable Globes and Maps
       -  In GEE 5.x: ``gecutter enable``
       -  In earlier versions: ``geserveradmin --enable_cutter``
 
-      For more information about ``geserveradmin``, see the :doc:`../fusionAdministration/commandReference`.
+      For more information about ``geserveradmin``, see the :doc:`3481558`.
 
       **Note about authentication and SSL**: Cutting is not currently
       supported on globes or maps that require end-user authentication,
@@ -397,7 +397,7 @@ Create Portable Globes and Maps
          Portable <Connect_GEE_Portable>` for
          different ways you can connect to GEE Portable to view your
          offline maps and globes.
-      -  :doc:`../portable/portableDeveloperGuide` for ways
+      -  :doc:`3230807` for ways
          to customize or extend GEE Portable, or create applications
          that work with it.
 

@@ -65,7 +65,7 @@ Hostname and Fully Qualified Domain Name Configuration
       In this example hosts refers to the ``/etc/hosts`` file and is
       checked first, and bind refers to the DNS.
 
-      Here is :doc:`another note <../geeServerConfigAndSecurity/serverHostname>` on the server
+      Here is :doc:`another note <172794>` on the server
       hostname.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png

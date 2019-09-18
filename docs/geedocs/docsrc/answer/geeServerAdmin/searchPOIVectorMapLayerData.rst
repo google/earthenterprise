@@ -64,7 +64,7 @@ Search your POI vector data or map layer data
          project describes the use of US Census Bureau data and setting
          up fields to query the County name and display the population
          per county in the results shown in the client. See the tutorial
-         lesson :doc:`../fusionTutorial/searchFldsForLayers`.
+         lesson :doc:`4412684`.
 
       #. Repeat the steps above for each additional field you want to
          add to the search. Your selections appear on the list of search
@@ -137,7 +137,7 @@ Search your POI vector data or map layer data
 
       .. rubric:: To specify the settings of the POI Search tab:
 
-      #. In the :doc:`GEE Server Admin console <../geeServerAdmin/signInAdminConsole>`,
+      #. In the :doc:`GEE Server Admin console <3470759>`,
          click **Search tabs**.
       #. Check the box next to **POISearch**, then click **Edit**.
 
