@@ -24,6 +24,7 @@ import re
 import socket
 import urllib2
 import xml.sax.saxutils as saxutils
+from geAbstractionFetcher import GetHostName
 
 GEHTTPD_CONF_PATH = "/opt/google/gehttpd/conf/gehttpd.conf"
 POSTGRES_PROPERTIES_PATH = (
@@ -112,7 +113,7 @@ def GetSchemeHostPort(environ):
 
 def GetServerHost():
   """Gets fully quailified domain name."""
-  return socket.getfqdn()
+  return GetHostName(True)
 
 
 def GetApacheServerUrl():

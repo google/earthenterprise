@@ -1,0 +1,158 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Map projection types in GEE 5.1.0 &#8212; Google Earth Enterprise 5.3.2 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Add flat imagery to Mercator map databases in GEE 5.1.0" href="addFlatImageryToMercatorMapDBInGEE5.1.0.html" />
+    <link rel="prev" title="Manage mosaics with virtual rasters" href="manageMosaicsWithVirtualRasters.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="addFlatImageryToMercatorMapDBInGEE5.1.0.html" title="Add flat imagery to Mercator map databases in GEE 5.1.0"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="manageMosaicsWithVirtualRasters.html" title="Manage mosaics with virtual rasters"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" accesskey="U">Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="manageMosaicsWithVirtualRasters.html"
+                        title="previous chapter">Manage mosaics with virtual rasters</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="addFlatImageryToMercatorMapDBInGEE5.1.0.html"
+                        title="next chapter">Add flat imagery to Mercator map databases in GEE 5.1.0</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp2.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp2.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="map-projection-types-in-gee-5-1-0">
+<h1>Map projection types in GEE 5.1.0<a class="headerlink" href="#map-projection-types-in-gee-5-1-0" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>In addition to using Google Earth Enterprise Fusion to prepare and
+publish data in Google Earth EC, you can use it to prepare and
+publish map data in Google Maps.</p>
+<p>Google Earth Enterprise 5.1.0 supports the following projection
+types for map databases:</p>
+<ul class="simple">
+<li><strong>Mercator map</strong>—The Mercator map database includes the Google
+Maps layer and optionally uses the Google Base Map from
+google.com. It also uses a local copy of the Google Maps API
+that requires no communication with google.com.</li>
+<li><strong>Flat Projection map</strong>—The Flat Projection map database uses
+the local copy of the Google Maps API that requires no
+communication with google.com.</li>
+</ul>
+<p class="rubric">Preparing map data</p>
+<p>When you prepare map data, there are four components:</p>
+<ul class="simple">
+<li>Resources (vector and imagery)</li>
+<li>Map Layers (Flat projection and Mercator maps supported)</li>
+<li>Map Projects (map and imagery)</li>
+<li>Map Database</li>
+</ul>
+<p class="rubric">Vector and imagery resources</p>
+<p>For <strong>Flat Projection</strong> maps, you can share the same vector and
+imagery resources for both Google Earth EC and Google Maps
+databases.</p>
+<p>For <strong>Mercator</strong> maps, you can create Mercator-based imagery
+projects or your Mercator maps can share the same imagery
+resources as a Flat Projection map database by projecting the flat
+imagery as <em>Mercator on the Fly</em>. Now that your Mercator map
+databases can share the same imagery projects as a Flat Projection
+map databases, you can save on both storage space and database
+building time by eliminating the need for Mercator-based imagery.</p>
+<p>For more information, see <a class="reference internal" href="addFlatImageryToMercatorMapDBInGEE5.1.0.html"><span class="doc">Add flat imagery to Mercator map databases in GEE 5.1.0</span></a>.</p>
+<p class="rubric">Access map tools</p>
+<p>With map databases, in addition to vector and imagery projects,
+you have the extra step of creating <em>map layers</em>.
+Defining a map layer includes adding resources and defining the
+display rules and filters for the layer.</p>
+<p>You access the map tools from the toolbar of the <strong>Asset Manager</strong>
+dialog:</p>
+<ul>
+<li><p class="first">Open Fusion and click <strong>Tools &gt; Asset Manager</strong> to open the
+Asset Manager dialog.</p>
+</li>
+<li><p class="first">Select either <strong>Mercator Map Tools (2D)</strong> or <strong>Flat Projection
+Map Tools (2D)</strong> from the Asset Manager toolbar.</p>
+<p><img alt="Asset Manager Flat Map Tools selection" src="../../images/asset_mgr_flat_maps_select.png" /></p>
+</li>
+</ul>
+<p>For information about creating map projects and databases, read
+the tutorial lesson, <a class="reference internal" href="../fusionTutorial/createMapDB.html"><span class="doc">Creating a Map Database</span></a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="addFlatImageryToMercatorMapDBInGEE5.1.0.html" title="Add flat imagery to Mercator map databases in GEE 5.1.0"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="manageMosaicsWithVirtualRasters.html" title="Manage mosaics with virtual rasters"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" >Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

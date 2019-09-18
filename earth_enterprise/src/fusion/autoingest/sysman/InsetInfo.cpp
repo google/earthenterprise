@@ -207,6 +207,7 @@ void CalcPacketGenInfo(const khTilespace            &tilespace,
 
   // populate list - inital coverage estimate from inset degExtents
   genInfos.reserve(insetInfos.size());
+
   for (size_t i = 0; i < insetInfos.size(); ++i) {
     const InsetInfo &insetInfo = insetInfos[i];
     AssetVersionRef verref =
@@ -330,6 +331,33 @@ void CalcPacketGenInfo<InsetInfo<MercatorRasterProductAssetVersion> > (
     const bool             is_overlay_terrain_proj,
     const uint32           overlay_terrain_resources_min_level);
 
+template <typename ProductAssetVersion>
+void OverlapCalculator<ProductAssetVersion>::
+    CalculateOverlap(std::vector<uint>& neededIndexes,
+                     const khInsetCoverage& gencov)
+{
+    if (env.type == AssetDefs::Imagery)
+    {
+        FindNeededImageryInsets(gencov,
+                                env.insets,
+                                env.numInsets,
+                                neededIndexes,
+                                env.beginMinifyLevel,
+                                env.endMinifyLevel);
+    }
+    else
+    {
+        FindNeededTerrainInsets(gencov,
+                                env.insets,
+                                env.numInsets,
+                                neededIndexes,
+                                env.beginMinifyLevel,
+                                env.endMinifyLevel);
+    }
+}
+
+template class OverlapCalculator<MercatorRasterProductAssetVersion>;
+template class OverlapCalculator<RasterProductAssetVersion>;
 
 // ****************************************************************************
 // ***  FindNeededImageryInsets

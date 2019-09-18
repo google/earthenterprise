@@ -43,7 +43,6 @@ if (!$public_h) {
     usage();
 }
 
-
 # ****************************************************************************
 # ***  Read .src file
 # ****************************************************************************
@@ -68,7 +67,7 @@ print $fh <<EOF;
 
 #include <autoingest/Asset.h>
 #include <autoingest/AssetVersion.h>
-
+#include <memory>
 
 // ****************************************************************************
 // ***  Supplied from ${name}.src
@@ -82,28 +81,28 @@ $config{"Asset.h"}
 class ${name}AssetImpl : public virtual AssetImpl
 {
     friend class DerivedAssetHandle_<Asset, ${name}AssetImpl>;
-    friend khRefGuard<AssetImpl> AssetImpl::Load(const std::string &);
+    friend std::shared_ptr<AssetImpl> AssetImpl::Load(const std::string &);
 public:
     typedef $config Config;
     Config config;
 
 protected:
-    static khRefGuard<${name}AssetImpl> Load(const std::string &ref);
-
     // used only by ${name}AssetImplD, it has to pass
     // the storage directly to the virtual base classes
     ${name}AssetImpl(const Config& config_)
         : AssetImpl(), config(config_) { }
 
+public:
     ${name}AssetImpl(const AssetStorage &storage, const Config& config_)
         : AssetImpl(storage), config(config_) { }
 
-    static khRefGuard<${name}AssetImpl> NewFromDOM(void *e);
-    static khRefGuard<${name}AssetImpl> NewInvalid(const std::string &ref);
+protected:
+    static std::shared_ptr<${name}AssetImpl> NewFromDOM(void *e);
+    static std::shared_ptr<${name}AssetImpl> NewInvalid(const std::string &ref);
 
     // implemented in ReadOnlyFromStorage.cpp and
     // sysman/SysManFromStorage.cpp
-    static khRefGuard<${name}AssetImpl>
+    static std::shared_ptr<${name}AssetImpl>
     NewFromStorage(const AssetStorage &storage, const Config &config);
 
     // supplied from ${name}.src ---v
@@ -119,7 +118,7 @@ $config{"${name}AssetImpl"}
 class ${name}AssetVersionImpl : public virtual ${base}AssetVersionImpl
 {
     friend class DerivedAssetHandle_<AssetVersion, ${name}AssetVersionImpl>;
-    friend khRefGuard<AssetVersionImpl> AssetVersionImpl::Load(const std::string &);
+    friend std::shared_ptr<AssetVersionImpl> AssetVersionImpl::Load(const std::string &);
 
 public:
     typedef $config Config;
@@ -127,26 +126,27 @@ public:
 
     virtual std::string PluginName(void) const;
 protected:
-    static khRefGuard<${name}AssetVersionImpl> Load(const std::string &ref);
-
     // used only by ${name}AssetVersionImplD, it has to pass
     // the storage directly to the virtual base classes
     ${name}AssetVersionImpl(const Config& config_)
         : AssetVersionImpl(),
           ${base}AssetVersionImpl(),
           config(config_) { }
+public:
     ${name}AssetVersionImpl(const AssetVersionStorage &storage,
 			    const Config& config_)
         : AssetVersionImpl(storage),
           ${base}AssetVersionImpl(),
           config(config_) { }
 
-    static khRefGuard<${name}AssetVersionImpl> NewFromDOM(void *e);
-    static khRefGuard<${name}AssetVersionImpl> NewInvalid(const std::string &ref);
+protected:
+
+    static std::shared_ptr<${name}AssetVersionImpl> NewFromDOM(void *e);
+    static std::shared_ptr<${name}AssetVersionImpl> NewInvalid(const std::string &ref);
 
     // implemented in ReadOnlyFromStorage.cpp and
     // sysman/SysManFromStorage.cpp
-    static khRefGuard<${name}AssetVersionImpl>
+    static std::shared_ptr<${name}AssetVersionImpl>
     NewFromStorage(const AssetVersionStorage &storage, const Config &config);
 
 

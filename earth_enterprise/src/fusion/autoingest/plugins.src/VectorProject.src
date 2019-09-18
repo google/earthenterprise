@@ -193,7 +193,7 @@ VectorProjectAssetImplD::HandleEditRequest(const VectorProjectEditRequest &req)
     if (!layerConfig->IsStreamedLayer())
       continue;
 
-    VectorProductFactory::ValidateRefForInput(layerConfig->assetRef);
+    ValidateRefForInput<VectorProductAssetVersionD>(layerConfig->assetRef);
   }
 
   // Find/make our target project.
@@ -206,7 +206,7 @@ VectorProjectAssetImplD::HandleEditRequest(const VectorProjectEditRequest &req)
 
   // Custom FindMake - modified to set/preserve indexVersion and IDs.
 
-  MutableVectorProjectAssetD project = VectorProjectFactory::Find(projname);
+  MutableVectorProjectAssetD project = Find<VectorProjectAssetD>(projname);
   if (project) {
     // We must preserve the indexVersion since the GUI doesn't/can't.
     // TODO: We really should split this VectorProjectConfig into two pieces.
@@ -229,7 +229,7 @@ VectorProjectAssetImplD::HandleEditRequest(const VectorProjectEditRequest &req)
   } else {
     // It is a "Save" or "SaveAs" edit request when creating a new asset.
     assert(req.config.indexVersion == 1);
-    project = VectorProjectFactory::Make(projname, inputs,
+    project = AssetFactory::Make<MutableVectorProjectAssetD, VectorProjectConfig>(projname, inputs,
                                          req.meta, req.config);
   }
 
@@ -262,7 +262,7 @@ VectorProjectAssetImplD::HandleNewRequest(const VectorProjectNewRequest &req)
         req.items.begin();
       item != req.items.end(); ++item) {
 
-    VectorProductFactory::ValidateRefForInput(item->productRef);
+    ValidateRefForInput<VectorProductAssetVersionD>(item->productRef);
   }
 
   // normalize the supplied asset name
@@ -270,7 +270,7 @@ VectorProjectAssetImplD::HandleNewRequest(const VectorProjectNewRequest &req)
     AssetDefs::NormalizeAssetName(req.assetname,
                                   AssetDefs::Vector, kProjectSubtype);
 
-  if (VectorProjectFactory::Find(projname)) {
+  if (Find<VectorProjectAssetD>(projname)) {
     throw khException(kh::tr("Vector project %1 already exists")
                       .arg(ToQString(projname)));
   } else {
@@ -279,7 +279,7 @@ VectorProjectAssetImplD::HandleNewRequest(const VectorProjectNewRequest &req)
                                    1,   // indexVersion
                                    std::vector<LayerConfig>());
     MutableVectorProjectAssetD project =
-      VectorProjectFactory::Make(projname,
+      AssetFactory::Make<MutableVectorProjectAssetD, VectorProjectConfig>(projname,
                                  std::vector<SharedString>(),
                                  khMetaData(),
                                  projConfig);
@@ -300,12 +300,12 @@ VectorProjectAssetImplD::HandleModifyRequest(const VectorProjectModifyRequest &r
         req.items.begin();
       item != req.items.end(); ++item) {
 
-    VectorProductFactory::ValidateRefForInput(item->productRef);
+    ValidateRefForInput<VectorProductAssetVersionD>(item->productRef);
   }
 
   // find it and make the change
   MutableVectorProjectAssetD project;
-  if ((project = VectorProjectFactory::Find(req.assetname))) {
+  if ((project = Find<VectorProjectAssetD>(req.assetname))) {
     // blow away old layers
     project->config.layers.clear();
     // define new ones
@@ -328,12 +328,12 @@ VectorProjectAssetImplD::HandleAddToRequest(const VectorProjectModifyRequest &re
         req.items.begin();
       item != req.items.end(); ++item) {
 
-    VectorProductFactory::ValidateRefForInput(item->productRef);
+    ValidateRefForInput<VectorProductAssetVersionD>(item->productRef);
   }
 
   // find it and make the change
   MutableVectorProjectAssetD project;
-  if ((project = VectorProjectFactory::Find(req.assetname))) {
+  if ((project = Find<VectorProjectAssetD>(req.assetname))) {
     // add the new ones
     project->AddLayers(req.items);
   } else {
@@ -351,7 +351,7 @@ VectorProjectAssetImplD::HandleDropFromRequest(const VectorProjectDropFromReques
 {
   // find the project
   MutableVectorProjectAssetD project;
-  if (!(project = VectorProjectFactory::Find(req.assetname))) {
+  if (!(project = Find<VectorProjectAssetD>(req.assetname))) {
     throw khException(kh::tr("No Vector project named %1")
                       .arg(ToQString(req.assetname)));
   }

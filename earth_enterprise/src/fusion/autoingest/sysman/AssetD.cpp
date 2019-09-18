@@ -15,25 +15,10 @@
 
 #include "AssetD.h"
 #include <AssetThrowPolicy.h>
-
+#include <memory>
 // ****************************************************************************
 // ***  AssetImplD
 // ****************************************************************************
-
-khRefGuard<AssetImplD>
-AssetImplD::Load(const std::string &boundref)
-{
-  khRefGuard<AssetImplD> result;
-
-  // make sure the base class loader actually instantiated one of me
-  // this should always happen, but there are no compile time guarantees
-  result.dyncastassign(AssetImpl::Load(boundref));
-  if (!result) {
-    AssetThrowPolicy::FatalOrThrow(kh::tr("Internal error: AssetImplD loaded wrong type for ") + boundref);
-  }
-
-  return result;
-}
 
 void
 AssetImplD::AddVersionRef(const std::string &verref)

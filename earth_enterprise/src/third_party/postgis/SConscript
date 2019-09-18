@@ -19,7 +19,7 @@
 Import('third_party_env')
 
 postgis_major_version = 'postgis-2.3'
-postgis_version = 'postgis-2.3.4'
+postgis_version = 'postgis-2.3.9'
 postgis_source = File('#/../../earth_enterprise/third_party/postgis/'
                       '%s.tar.gz' % postgis_version).abspath
 

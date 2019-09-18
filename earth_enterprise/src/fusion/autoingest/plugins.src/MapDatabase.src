@@ -104,12 +104,12 @@ void MapDatabaseAssetImplD::PopulateInputs(const MapDatabaseConfig &config,
                                            std::vector<SharedString> &inputs)
 {
   if (!config.imageryProject.empty()) {
-    RasterProjectFactory::ValidateRefForInput(config.imageryProject,
-                                              AssetDefs::Imagery);
+    ValidateRefForInput<RasterProjectAssetVersionD>(config.imageryProject, AssetDefs::Imagery);
+
     inputs.push_back(config.imageryProject);
   }
   if (!config.mapProject.empty()) {
-    MapProjectFactory::ValidateRefForInput(config.mapProject);
+    ValidateRefForInput<MapProjectAssetVersionD>(config.mapProject);
 
     // make a projected map project for my input
     ProjectedMapProjectConfig proj_config(AssetDefs::FlatProjection);
@@ -124,10 +124,11 @@ void MapDatabaseAssetImplD::PopulateInputs(const MapDatabaseConfig &config,
                                     "ProjectedProject");
 
     MutableProjectedMapProjectAssetD proj_asset =
-      ProjectedMapProjectFactory::FindMake(projected_proj_name,
-                                           makevec<SharedString>(config.mapProject),
-                                           khMetaData(),
-                                           proj_config);
+      AssetFactory::FindMake<MutableProjectedMapProjectAssetD>
+          (projected_proj_name,
+           makevec<SharedString>(config.mapProject),
+           khMetaData(),
+           proj_config);
     inputs.push_back(proj_asset->GetRef());
   }
 }
@@ -145,10 +146,7 @@ MapDatabaseAssetImplD::HandleEditRequest(const MapDatabaseEditRequest &req)
                                   kMapDatabaseSubtype);
 
 
-  (void) MapDatabaseFactory::FindMake(dbname,
-                                      inputs,
-                                      req.meta,
-                                      req.config);
+  (void) AssetFactory::FindMake<MutableMapDatabaseAssetD>(dbname, inputs, req.meta, req.config);
 }
 
 void
@@ -163,7 +161,7 @@ MapDatabaseAssetImplD::HandleNewRequest(const MapDatabaseEditRequest &req)
     AssetDefs::NormalizeAssetName(req.assetname, AssetDefs::Database,
                                   kMapDatabaseSubtype);
 
-  (void) MapDatabaseFactory::MakeNew(dbname,
+  (void) AssetFactory::MakeNew<MutableMapDatabaseAssetD, MapDatabaseConfig>(dbname,
                                      inputs,
                                      req.meta,
                                      req.config);

@@ -163,9 +163,10 @@ class MercatorRasterProjectAssetImplD {
 };
 
 class MercatorRasterProjectAssetVersionImplD {
- protected:
-  virtual void ChildrenToCancel(std::vector<AssetVersion> &out);
+ public:
+  virtual void DependentChildren(std::vector<SharedString> &out) const;
 
+ protected:
   // This will make my children after my inputs have succeeded
   virtual void DelayedBuildChildren(void);
  private:
@@ -354,7 +355,7 @@ void MercatorRasterProjectAssetImplD::HandleEditRequest(
   for (std::vector<InsetStackItem>::const_iterator inset
          = req.config.insets.begin();
        inset != req.config.insets.end(); ++inset) {
-    MercatorRasterProductFactory::ValidateRefForInput(inset->dataAsset);
+    ValidateRefForInput<MercatorRasterProductAssetVersionD>(inset->dataAsset);
   }
 
   // Find/make our target project.
@@ -368,7 +369,7 @@ void MercatorRasterProjectAssetImplD::HandleEditRequest(
 
   // Custom FindMake - modified to set/preserve indexVersion & fuid_channel_.
   MutableMercatorRasterProjectAssetD project =
-      MercatorRasterProjectFactory::Find(projname);
+      Find<MercatorRasterProjectAssetD>(projname);
   if (project) {
     // It is a regular (editing the same asset) or "SaveAs" re-writing edit
     // request.
@@ -395,7 +396,7 @@ void MercatorRasterProjectAssetImplD::HandleEditRequest(
   } else {
     // It is a "Save" or "SaveAs" edit request when creating a new asset.
     assert(req.config.indexVersion == 1);
-    project = MercatorRasterProjectFactory::Make(projname, inputs,
+    project = AssetFactory::Make<MutableMercatorRasterProjectAssetD, RasterProjectConfig>(projname, inputs,
                                                  req.meta, req.config);
   }
 
@@ -417,7 +418,7 @@ void MercatorRasterProjectAssetImplD::HandleNewRequest(
   for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
          req.items.begin();
        item != req.items.end(); ++item) {
-    MercatorRasterProductFactory::ValidateRefForInput(item->dataAsset);
+    ValidateRefForInput<MercatorRasterProductAssetVersionD>(item->dataAsset);
   }
 
   // normalize the supplied asset name
@@ -426,14 +427,14 @@ void MercatorRasterProjectAssetImplD::HandleNewRequest(
                                   kMercatorProjectSubtype);
 
 
-  if (MercatorRasterProjectFactory::Find(projname)) {
+  if (Find<MercatorRasterProjectAssetD>(projname)) {
     throw khException(kh::tr("%1 project %2 already exists")
                       .arg(ToQString(req.type), ToQString(projname)));
   } else {
     // make it
     RasterProjectConfig projConfig(req.type);
     MutableMercatorRasterProjectAssetD project =
-      MercatorRasterProjectFactory::Make(projname,
+      AssetFactory::Make<MutableMercatorRasterProjectAssetD, RasterProjectConfig>(projname,
                                  std::vector<SharedString>(),
                                  khMetaData(),
                                  projConfig);
@@ -449,12 +450,12 @@ void MercatorRasterProjectAssetImplD::HandleModifyRequest(
   for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
          req.items.begin();
        item != req.items.end(); ++item) {
-    MercatorRasterProductFactory::ValidateRefForInput(item->dataAsset);
+    ValidateRefForInput<MercatorRasterProductAssetVersionD>(item->dataAsset);
   }
 
   // find it and make the change
   MutableMercatorRasterProjectAssetD project;
-  if ((project = MercatorRasterProjectFactory::Find(req.assetname))) {
+  if ((project = Find<MercatorRasterProjectAssetD>(req.assetname))) {
     // blow away old insets
     project->config.insets.clear();
     // define new ones
@@ -472,12 +473,12 @@ void MercatorRasterProjectAssetImplD::HandleAddToRequest(
   for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
          req.items.begin();
        item != req.items.end(); ++item) {
-    MercatorRasterProductFactory::ValidateRefForInput(item->dataAsset);
+    ValidateRefForInput<MercatorRasterProductAssetVersionD>(item->dataAsset);
   }
 
   // find it and make the change
   MutableMercatorRasterProjectAssetD project;
-  if ((project = MercatorRasterProjectFactory::Find(req.assetname))) {
+  if ((project = Find<MercatorRasterProjectAssetD>(req.assetname))) {
     // make sure my existing insets are still in order before adding more
     // a new version of a product asset could invalidate
     // my stacking order
@@ -496,7 +497,7 @@ void MercatorRasterProjectAssetImplD::HandleDropFromRequest(
     const RasterProjectDropFromRequest &req) {
   // find the project
   MutableMercatorRasterProjectAssetD project;
-  if (!(project = MercatorRasterProjectFactory::Find(req.assetname))) {
+  if (!(project = Find<MercatorRasterProjectAssetD>(req.assetname))) {
     throw khException(kh::tr("No %1 project named %2")
                       .arg(ToQString(req.type), ToQString(req.assetname)));
   }
@@ -536,8 +537,8 @@ void MercatorRasterProjectAssetImplD::HandleDropFromRequest(
 
 
 
-void MercatorRasterProjectAssetVersionImplD::ChildrenToCancel(
-    std::vector<AssetVersion> &out) {
+void MercatorRasterProjectAssetVersionImplD::DependentChildren(
+    std::vector<SharedString> &out) const {
   if (children.size()) {
     // my direct children are my index and optionally a copyright
     std::copy(children.begin(), children.end(), back_inserter(out));
@@ -819,9 +820,7 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
                              "Cannot build").arg(GetRef().toString()));
   }
 
-  std::vector<InsetInfo<
-    MercatorRasterProductAssetVersion> >::const_reverse_iterator last_iter =
-      inset_infos.rbegin();
+  const auto last_iter = inset_infos.rbegin();
   const std::string& date = last_iter->date_string_;
   notify(NFY_DEBUG, "Building GERasterIndex: %llu insets, level %d for %s\n",
     static_cast<unsigned long long>(inset_infos.size()),
@@ -850,7 +849,6 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
                     config.is_overlay_terrain_project_,
                     config.overlay_terrain_resources_min_level_);
 
-#if 1
   // ----------
   // Skipping transparent tiles _could_ cause problems with the way the
   // client currently required full resolution coverage for levels of
@@ -868,9 +866,10 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
   if (type == AssetDefs::Imagery) {
     // first we know that we don't want skip tiles during minification
     // so set each inset to start after that
-    for (uint i = 0; i < genInfo.size(); ++i) {
-      genInfo[i].beginSkipTransparentLevel =
-        std::max(endMinifyLevel, genInfo[i].coverage.beginLevel());
+
+    for (auto& i : genInfo) {
+        i.beginSkipTransparentLevel =
+        std::max(endMinifyLevel, i.coverage.beginLevel());
     }
 
     // Now let's go see which insets had their work coverage narrowed
@@ -912,16 +911,15 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
       }
     }
   }
-#endif
-
 
   // make a copy of the inset_infos w/ pointers. The FindNeeded*
   // routines want pointers.
   std::vector<const InsetInfo<
     MercatorRasterProductAssetVersion> *> insetInfoPtrs;
   insetInfoPtrs.reserve(inset_infos.size());
-  for (uint i = 0; i < inset_infos.size(); ++i) {
-    insetInfoPtrs.push_back(&inset_infos[i]);
+
+  for (const auto& i : inset_infos) {
+      insetInfoPtrs.push_back(&i);
   }
 
   // create my children giving them each a bigger piece of the stack
@@ -931,6 +929,7 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
   packgenkids.reserve(numInsets);
   packgenassets.reserve(numInsets);
   packgenvers.reserve(numInsets);
+
   for (uint i = 0; i < genInfo.size(); ++i) {
     // Check if I even need to do any packet generation at all
     // Maybe the other insets will completely replace everything
@@ -942,19 +941,14 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
     // Determine which insets (0 .. i) intersect this coverage area.
     std::vector<uint> neededIndexes;
     neededIndexes.reserve(i);
-    if (type == AssetDefs::Imagery) {
-      FindNeededImageryInsets(genInfo[i].coverage,
-                              insetInfoPtrs, i,
-                              neededIndexes,
-                              beginMinifyLevel,
-                              endMinifyLevel);
-    } else {
-      FindNeededTerrainInsets(genInfo[i].coverage,
-                              insetInfoPtrs, i,
-                              neededIndexes,
-                              beginMinifyLevel,
-                              endMinifyLevel);
-    }
+
+    overlapEnvelope<MercatorRasterProductAssetVersion> env (
+        type, insetInfoPtrs, i,
+        beginMinifyLevel, endMinifyLevel, i);
+
+    std::shared_ptr<OverlapCalculator<MercatorRasterProductAssetVersion>> calc =
+        std::make_shared<OverlapCalculator<MercatorRasterProductAssetVersion>>(env);
+    neededIndexes = std::move(calc->PreprocessForInset(genInfo[i].coverage));
     neededIndexes.push_back(i); // each inset always intersects itself
 
 
@@ -974,10 +968,9 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
       genInfo[i].beginSkipTransparentLevel;
     packetGenConfig.useOpaqueTopInsetInsteadOfMerge = true;
     packetGenConfig.insets.reserve(neededIndexes.size());
-    for (std::vector<uint>::const_iterator idx = neededIndexes.begin();
-         idx != neededIndexes.end(); ++idx) {
 
-      const PacketGenInfo &otherGenInfo(genInfo[*idx]);
+    for (const auto& idx : neededIndexes) {
+      const PacketGenInfo &otherGenInfo(genInfo[idx]);
 
       // +1 below since we minify from the next level
       bool otherWillContribToMinify =
@@ -996,7 +989,7 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
 
       packetGenConfig.insets.push_back
         (PacketGenConfig::Inset
-         (inset_infos[*idx].combinedrp_.Ref(),
+         (inset_infos[idx].combinedrp_.Ref(),
           packgenVerRef));
     }
 
@@ -1004,19 +997,19 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
     PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion> extraArg;
     extraArg.insetInfo.reserve(neededIndexes.size());
     extraArg.genInfo.reserve(neededIndexes.size());
-    for (std::vector<uint>::const_iterator idx = neededIndexes.begin();
-         idx != neededIndexes.end(); ++idx) {
-      extraArg.insetInfo.push_back(&inset_infos[*idx]);
-      extraArg.genInfo.push_back(&genInfo[*idx]);
+    extraArg.calc = calc;
+    for (const auto& idx : neededIndexes) {
+      extraArg.insetInfo.push_back(&inset_infos[idx]);
+      extraArg.genInfo.push_back(&genInfo[idx]);
     }
 
-    // reuse or make a new PacketGenAssetVersion
-    MutableAssetVersionD packgen =
-      PacketGenFactory::ReuseOrMakeAndUpdate(genInfo[i].assetname,
-                                             type,
-                                             khMetaData(),
-                                             packetGenConfig,
-                                             extraArg);
+      // reuse or make a new PacketGenAssetVersion
+      MutableAssetVersionD packgen =
+        PacketGenFactory::ReuseOrMakeAndUpdate(genInfo[i].assetname,
+                                               type,
+                                               khMetaData(),
+                                               packetGenConfig,
+                                               extraArg);
 
     if (packetGenConfig.cacheRaster) {
       // Extract the PacketLevel children from the new version and store
@@ -1080,9 +1073,8 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
   uint asset_idx = 0;
   assert(packgenvers.size() == packgenassets.size());
   geindexConfig.packet_insets_.reserve(packgenvers.size());
-  for (std::vector<AssetVersion>::const_iterator packgenver =
-           packgenvers.begin(); packgenver != packgenvers.end();
-       ++packgenver, ++asset_idx) {
+
+  for (const auto& packgenver : packgenvers) {
     // Check if terrain inset has type "Filling" then do not add it into
     // GEIndex-build.
     if (AssetDefs::Terrain == type && config.is_overlay_terrain_project_) {
@@ -1100,15 +1092,16 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
       }
     }
 
-    if ((*packgenver)->children.size()) {
+    if (packgenver->children.size()) {
       geindexConfig.packet_insets_.push_back(RasterPacketInset());
       geindexConfig.packet_insets_.back().levels_.reserve(
-          (*packgenver)->children.size());
-      for (const auto &packlevelref : (*packgenver)->children) {
+          packgenver->children.size());
+      for (const auto &packlevelref : packgenver->children) {
         geindexConfig.packet_insets_.back().levels_.push_back(
             RasterPacketLevelVersion(packlevelref, indexVer));
       }
     }
+    ++asset_idx;
   }
   if (tryReuse) {
     RasterGEIndexAssetD asset(geindexAssetName);

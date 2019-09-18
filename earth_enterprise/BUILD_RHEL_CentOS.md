@@ -8,13 +8,13 @@ install the required development tools.
 ### CentOS 7
 
 ```bash
-sudo yum install epel-release
+sudo yum install -y epel-release
 ```
 
 ### RHEL 7
 
 ```bash
-sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 ```
 
 ### CentOS 6
@@ -38,7 +38,7 @@ sudo subscription-manager repos --enable=rhel-server-dts2-6-rpms
 
 # For all RHEL 6 Editions:
 sudo subscription-manager repos --enable=rhel-6-server-optional-rpms
-sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
+sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
 ```
 
 ## Install Git
@@ -70,7 +70,7 @@ Execute the following commands:
 ```bash
 curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh \
   | sudo bash
-sudo yum install git-lfs
+sudo yum install -y git-lfs
 ```
 
 ## GCC 4.8
@@ -78,7 +78,7 @@ sudo yum install git-lfs
 For all versions of CentOS and RHEL, install the standard development/build tools:
 
 ```bash
-yum install ant bzip2 doxygen gcc-c++ patch python-argparse python-setuptools \
+sudo yum install -y ant bzip2 doxygen gcc-c++ patch python-argparse python-setuptools \
   swig tar
 ```
 
@@ -87,7 +87,7 @@ For CentOS 6 and RHEL 6, also install the devtoolset toolchain.
 ### CentOS 6
 
 ```bash
-yum install -y devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-toolchain devtoolset-2-gcc-gfortran
+sudo yum install -y devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-toolchain devtoolset-2-gcc-gfortran
 ```
 
 ### RHEL 6
@@ -118,7 +118,7 @@ Execute:
 
 ```bash
 sudo yum install -y \
-  bison-devel cmake daemonize freeglut-devel \
+  bison-devel boost-devel cmake daemonize freeglut-devel \
   gdbm-devel geos-devel giflib-devel GitPython \
   libcap-devel libmng-devel libpng12-devel libX11-devel libXcursor-devel \
     libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
@@ -133,11 +133,11 @@ Execute:
 
 ```bash
 sudo yum install -y \
-  bison-devel  cmake daemonize freeglut-devel \
+  bison-devel boost-devel cmake daemonize freeglut-devel \
   gdbm-devel geos-devel gettext giflib-devel GitPython \
   libcap-devel libmng-devel libpng-devel libX11-devel libXcursor-devel \
     libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
-  ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel \
+  ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel pcre pcre-devel \
   perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-devel python-unittest2 \
   rpm-build rpmrebuild rsync scons shunit2 \
   xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
@@ -153,7 +153,7 @@ experimenting with the `--skip-broken` parameter.
 GTest is included in the EPEL and RHEL Extra Repositories. Install the RPM with:
 
 ```bash
-yum install -y gtest-devel
+sudo yum install -y gtest-devel
 ```
 
 ### CentOS 6 and RHEL 6
