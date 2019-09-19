@@ -60,9 +60,10 @@ Portable Release Notes 5.0
 
       .. rubric:: System Requirements
 
-         **Note:** If you plan to serve large globes from Portable
-         Server, you may also need to provide more storage, depending
-         on their size.
+         .. note::
+            If you plan to serve large globes from Portable
+            Server, you may also need to provide more storage, depending
+            on their size.
 
          **Windows 7 or later**
 
@@ -74,9 +75,10 @@ Portable Release Notes 5.0
             (discrete GPU recommended).
          -  Screen: 1280x1024, "32-bit True Color."
 
-         **Note:** We recommend using NTFS for attached storage
-         devices hosting the portable globes, especially if the
-         ``.glx`` files are > 4 GB
+         .. note::
+            We recommend using NTFS for attached storage
+            devices hosting the portable globes, especially if the
+            ``.glx`` files are > 4 GB
 
          **Mac OS X 10.7 or later**
 
@@ -125,19 +127,25 @@ Portable Release Notes 5.0
 
       .. rubric:: Known Issues
 
-         ====== ================================================================================================================== =========================================================================================================================================================================================
-         Number Description                                                                                                        Workaround
-         ====== ================================================================================================================== =========================================================================================================================================================================================
-         \      The new Preview options for 2D maps in GEE Server and Portable do not support the display of Plate Carrée 2D maps. With Portable, you can still view existing .glm Plate Carrée 2D map files via the old preview interface, which you can access by pointing GEE Portable at ``http://localhost:9335/list``.
-         ====== ================================================================================================================== =========================================================================================================================================================================================
+      .. list-table:: Known Issues
+         :widths: 10 50
+         :header-rows: 1
+
+            * - Number
+              - Description
+            * - \
+              - The new Preview options for 2D maps in GEE Server and Portable do not support the display of Plate Carrée 2D maps. With Portable, you can still view existing .glm Plate Carrée 2D map files via the old preview interface, which you can access by pointing GEE Portable at ``http://localhost:9335/list``.
 
       .. rubric:: Resolved Issues
 
-         ======= ====================================================================================== ==========
-         Number  Description                                                                            Resolution
-         ======= ====================================================================================== ==========
-         8627202 Portable for Windows 4.4.1 fails to read map or globe files greater than 2 GB in size. Fixed.
-         ======= ====================================================================================== ==========
+      .. list-table:: Resolved Issues
+         :widths: 10 50
+         :header-rows: 1
+
+            * - Number
+              - Description
+            * - 8627202
+              - Portable for Windows 4.4.1 fails to read map or globe files greater than 2 GB in size. Fixed.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

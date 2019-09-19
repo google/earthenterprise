@@ -42,7 +42,7 @@ Maps display grey tiles
 
       To further diagnose the issue, review the
       ``/opt/google/gehttpd/logs/error_log`` or run the
-      :ref:```geecheck`` <../answer/2760674.html>`_ script.
+      :ref:`geecheck <../troubleshooting/fusionDiagnostics>` script.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

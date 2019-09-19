@@ -46,7 +46,7 @@ Inspecting portable files
          map. This information can be useful if you use the new feature
          in GEE 5.x that lets you cut globes and maps from existing
          portable files that have been built using GEE 5.x only. See
-         :doc:`3230777`.
+         :doc:`../geeServerAdmin/createPortableGlobesMaps`.
 
          If you attempt to cut a portable file that was created using
          GEE 4.x, the cutting process will fail. However, you can serve
@@ -211,7 +211,7 @@ Inspecting portable files
       *Optional*. Destination file path where extracted file(s) should
       be written.
 
-      See :doc:`Settings <3479921` to learn about globe
+      See :doc:`Settings <../geeServerAdmin/settingsPage>` to learn about globe
       assembly and disassembly tools in the GEE Server Admin console.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
