@@ -15,8 +15,8 @@ Configuring Display Rules for Polygon Data
 
       -  :ref:`Define and Build a Vector Resource Using Polygon
          Data <Define_Vector_Polygon>`
-      -  :ref:`Define, Configure, and Build a Vector Project <Define_Vector_Project>`
-      -  :ref:`Define and Build an Imagery Project <Define_Imagery_Project>`
+      -  :ref:`Define, Configure, and Build a Vector Project <Define_Vector_Project1>`
+      -  :ref:`Define and Build an Imagery Project <Define_Imagery_Project1>`
       -  :ref:`Define, Build, and Publish a Database for the Polygon
          Data <Define_Polygon_Database>`
       -  :ref:`View Your Database in Google Earth EC <View_Database_GEEC>`
@@ -73,7 +73,7 @@ Configuring Display Rules for Polygon Data
 
          Google Earth Enterprise Fusion builds the resource.
 
-      .. _Define_Vector_Project:
+      .. _Define_Vector_Project1:
       .. rubric:: Define, Configure, and Build a Vector Project
 
       This exercise walks you through the process of defining,
@@ -203,7 +203,7 @@ Configuring Display Rules for Polygon Data
 
          Google Earth Enterprise Fusion builds the project.
 
-      .. _Define_Imagery_Project:
+      .. _Define_Imagery_Project1:
       .. rubric:: Define and Build an Imagery Project
 
       Although you can build, push, and publish a database that includes
@@ -354,8 +354,8 @@ Configuring Display Rules for Polygon Data
 
          To learn more about the options available in the Publish
          dialog, see :doc:`../geeServerAdmin/createSearchTabs`,
-         :doc:`Snippet profiles <6004748`, and
-         :doc:`WMS <../geeServerAdmin/makeWMSRequests>`.
+         :doc:`Snippet profiles <../geeServerAdmin/manageSnippetProfiles>` , and
+         :doc:`WMS <../geeServerAdmin/makeWMSRequests>` .
 
       #. Click the **Publish** button. The Databases page updates to indicate the
          published status of your database.

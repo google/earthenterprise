@@ -311,75 +311,45 @@ most recent build was started.</p>
 <p>Now that you have defined and built one imagery resource, you can
 define and build the remaining imagery resources provided for this
 tutorial:</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id1">
+<caption><span class="caption-text">Resources</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="20%" />
-<col width="20%" />
-<col width="20%" />
-<col width="20%" />
-<col width="20%" />
+<col width="31%" />
+<col width="19%" />
+<col width="19%" />
+<col width="13%" />
+<col width="19%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head">Name
-(Resources/
-Imagery/…
-)</th>
-<th class="head">Acquisition
-Date</th>
+<tr class="row-odd"><th class="head">Name (Resources/Imagery/…)</th>
+<th class="head">Acquisition Date</th>
 <th class="head">Provider</th>
 <th class="head">Mask</th>
-<th class="head">Source file</th>
+<th class="head">Source File</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><strong>SFBayArea
-LanSat_2002
-1010</strong></td>
-<td>Today’s
-date</td>
-<td>USGS
-Imagery</td>
-<td><strong>Auto
-Mask</strong>
-<a href="#id1"><span class="problematic" id="id2">**</span></a>Tolerance
-<a href="#id3"><span class="problematic" id="id4">**</span></a>:
-2
-Default for
-all other
-mask
-values</td>
-<td><code class="docutils literal notranslate"><span class="pre">usgsLanSa</span>
-<span class="pre">t.tif</span></code></td>
-</tr>
-<tr class="row-odd"><td><a href="#id5"><span class="problematic" id="id6">**</span></a>i3_15Mete
-r_20041010*
-*</td>
-<td>Today’s
-date</td>
-<td>i3</td>
-<td><div class="first last line-block">
-<div class="line"><strong>Auto
-Mask</strong></div>
-<div class="line">Default
-values</div>
-</div>
+<tr class="row-even"><td><strong>SFBayAreaLanSat_20021010</strong></td>
+<td>Today’s date</td>
+<td>USGS Imagery</td>
+<td><dl class="first last docutils">
+<dt><strong>Auto Mask Tolerance: 2</strong></dt>
+<dd>Default for all other mask values.</dd>
+</dl>
 </td>
-<td><code class="docutils literal notranslate"><span class="pre">i3SF15-me</span>
-<span class="pre">ter.tif</span></code></td>
+<td><strong>usgsLanSat.tif</strong></td>
 </tr>
-<tr class="row-even"><td><strong>SFHighRes
-Inset_20061
-010</strong></td>
-<td>Today’s
-date</td>
-<td>USGS
-Imagery</td>
-<td><strong>Auto
-Mask</strong>
-Default
-values</td>
-<td><code class="docutils literal notranslate"><span class="pre">usgsSFHiR</span>
-<span class="pre">es.tif</span></code></td>
+<tr class="row-odd"><td><strong>i3_15Meter_20041010</strong></td>
+<td>Today’s date</td>
+<td>i3</td>
+<td><strong>Auto Mask</strong> Default values.</td>
+<td><strong>i3SF15-meter.tif</strong></td>
+</tr>
+<tr class="row-even"><td><strong>SFHighResInset_20061010</strong></td>
+<td>Today’s date</td>
+<td>USGS Imagery</td>
+<td><strong>Auto Mask</strong> Default values.</td>
+<td><strong>usgsSFHiRes.tif</strong></td>
 </tr>
 </tbody>
 </table>
@@ -776,7 +746,8 @@ that correspond to the selected area appear in the Data List
 pane.</p>
 <p>You can scroll through this data and sort it by columns to
 explore the values of each field to determine the potential
-attributes to use in the filters you set up in <a class="reference internal" href="buildProject.html#configure-display-rules-for-a-vector-project"><span class="std std-ref">Configuring Display Rules</span></a>.</p>
+attributes to use in the filters you set up in
+<a class="reference internal" href="buildProject.html#conf-display-rules-for-vector-project"><span class="std std-ref">Configuring Display Rules</span></a>.</p>
 </li>
 <li><p class="first">When you finish exploring the data, right-click the
 <strong>california_roads_line</strong>, and select <strong>Remove Layer</strong> to clear
@@ -800,7 +771,7 @@ provided for this tutorial.</p>
 </li>
 <li><p class="first">Click <img alt="Vector Resource Icon" src="../../images/iconResVector.png" /> on the toolbar.</p>
 <p>The Vector Resource Editor appears.</p>
-<p><img alt="Vector Resource Editor" src="../../images/vectorResEditor-full.png" /></p>
+<p><img alt="Vector Resource Editor" src="../../images/vectorResEditor.png" /></p>
 </li>
 <li><p class="first">Set the acquisition date to today’s date in year-month-day
 format by clicking each section of the date and enter the
@@ -816,7 +787,7 @@ values.</p>
 <li><p class="first">Select the <code class="docutils literal notranslate"><span class="pre">california_roads_line.shp</span></code> file, and click
 <strong>Open</strong>.</p>
 <p>The selected file appears in the Source File(s) list.</p>
-<p><img alt="Vector Resource Editor" src="../../images/vectorResEditor-full.png" /></p>
+<p><img alt="Vector Resource Editor Full" src="../../images/vectorResEditor-full.png" /></p>
 </li>
 <li><p class="first">Select <strong>Save</strong> from the <strong>File</strong> menu.</p>
 <p>The Save dialog appears.</p>
@@ -881,8 +852,8 @@ from the context menu. By the time you finish defining the last
 resource, the other builds should all be complete.</p>
 <p>When Google Earth Enterprise Fusion finishes building the last
 resource, close the Asset Manager by clicking the close box
-(<strong>X</strong>) in the top right corner, and go on to the <span class="xref std std-doc">next
-lesson</span>.</p>
+(<strong>X</strong>) in the top right corner, and go on to the
+<a class="reference internal" href="buildProject.html"><span class="doc">next lesson</span></a>.</p>
 </div>
 </div>
 </div>
