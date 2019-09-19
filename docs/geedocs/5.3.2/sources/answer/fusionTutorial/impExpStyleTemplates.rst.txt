@@ -38,8 +38,8 @@ Importing and Exporting Style Templates
 
          **Note:** If you have not completed :doc:`../fusionTutorial/displayRulesPolygon`, you must complete
          at least the first three exercises in that lesson (:ref:`Define and Build a Vector Resource Using Polygon
-         Data <Define_Vector_Polygon>`, :ref:`Define, Configure, and Build a Vector Project <Define_Vector_Project>`, and
-         :ref:`Define and Build an Imagery Project <Define_Imagery_Project>`) before continuing
+         Data <Define_Vector_Polygon>`, :ref:`Define, Configure, and Build a Vector Project <Define_Vector_Project1>`, and
+         :ref:`Define and Build an Imagery Project <Define_Imagery_Project1>`) before continuing
          with this lesson.
 
       -  :ref:`Export the Display Rules <Export_Display_Rules>`
@@ -207,7 +207,6 @@ Importing and Exporting Style Templates
          success message when it is done.
 
       .. rubric:: To publish a database:
-         :name: to-publish-a-database
 
       #. Access the Google Earth Enterprise Server Admin console in a
          browser window by going to *myserver.mydomainname*.com/admin,

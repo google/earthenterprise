@@ -53,7 +53,7 @@ Creating a Map Database
       -  :ref:`Define a Map Layer <Define_Map_Layer>`
       -  :ref:`Define a Map Project <Define_Map_Project>`
       -  :ref:`Define a Flat Imagery Project <Define_Flat_Imagery_Project>`
-      -  :ref:`Define, Push, and Publish a Map Database <_Define_Push_Publish_Map_Database>`
+      -  :ref:`Define, Push, and Publish a Map Database <Define_Push_Publish_Map_Database>`
       -  :ref:`View Your Map Database <View_Map_Database>`
       -  :ref:`Using the Google Base Map <Using_Google_Base_Map>`
 
@@ -65,8 +65,7 @@ Creating a Map Database
       similar to the process of defining display rules and filters for a
       vector project destined for Google Earth EC.
 
-      .. rubric:: To define a map layer:
-         :name: to-define-a-map-layer
+      .. rubric:: To define a map layer
 
       #. Select **Asset Manager** from the **Tools** menu. The Asset Manager
          appears.
@@ -183,8 +182,7 @@ Creating a Map Database
       map project, however, add a subfolder to the asset navigation tree
       in the Asset Manager in which you can store your map projects.
 
-      .. rubric:: To add a subfolder for map projects:
-         :name: to-add-a-subfolder-for-map-projects
+      .. rubric:: To add a subfolder for map projects
 
       #. Select **Asset Manager** from the **Tools** menu. The Asset Manager
          appears.
@@ -194,8 +192,7 @@ Creating a Map Database
          new Map subfolder appears under Projects in the asset
          navigation tree.
 
-      .. rubric:: To create a map project:
-         :name: to-create-a-map-project
+      .. rubric:: To create a map project
 
       #. In the Asset Manager, click |image5|. The Map Project Editor
          appears.
@@ -232,7 +229,7 @@ Creating a Map Database
          The new map project name appears in the Asset Manager’s asset
          list.
 
-      :: _Define_Flat_Imagery_Project:
+      .. _Define_Flat_Imagery_Project:
       .. rubric:: Define a Flat Imagery Project
 
       The maps layer includes Google Maps layers and uses the Google
@@ -240,14 +237,14 @@ Creating a Map Database
       (EPSG: 4326) or Mercator (EPSG: 3857) projections and normally
       require corresponding imagery resource types. In this lesson you
       add a flat imagery project from a previous tutorial lesson to a
-      Mercator map database, which can then be projected as *Mercator on
-      the Fly*. For more information, see :doc:`../fusionResAndProj/addFlatImageryToMercatorMapDBInGEE5.1.0`.
+      Mercator map database, which can then be
+      projected as *Mercator on the Fly*. For more information,
+      see :doc:`../fusionResAndProj/addFlatImageryToMercatorMapDBInGEE5.1.0`
 
       .. tip::
 
          If you did not complete the tutorial lesson to create an
-         imagery project, see :ref:`Define an Imagery
-         Project <Define_Imagery_Project>`.
+         imagery project, see :ref:`Define an Imagery Project <Define_Imagery_Project>`
 
       #. Select **Asset Manager** from the **Tools** menu. The Asset Manager
          appears.
@@ -356,7 +353,6 @@ Creating a Map Database
       .. rubric:: Push a Map Database to Google Earth Enterprise Server
 
       .. rubric:: To push a map database:
-         :name: to-push-a-map-database
 
       #. Right-click the name of the map database you built in the
          previous exercise, and select **Push** from the context menu.
@@ -377,8 +373,7 @@ Creating a Map Database
             *Google Earth Enterprise Administration Guide* for more
             information.
 
-      .. rubric:: Publish a Map Database on Google Earth Enterprise
-         Server
+      .. rubric:: Publish a Map Database on Google Earth Enterprise Server
 
       .. rubric:: To publish a database:
 
@@ -419,9 +414,7 @@ Creating a Map Database
       After you publish your map database, you can view it from Google
       Earth Enterprise Server or in any browser.
 
-      .. rubric:: To view your map database from Google Earth Enterprise
-         Server:
-         :name: to-view-your-map-database-from-google-earth-enterprise-server
+      .. rubric:: To view your map database from Google Earth Enterprise Server
 
       #. Log in to the Admin console of Google Earth Enterprise Server.
 
@@ -432,25 +425,24 @@ Creating a Map Database
 
          A new browser tab opens displaying your map database.
 
-      .. rubric:: To view your map database in any browser:
-         :name: to-view-your-map-database-in-any-browser
+      .. rubric:: To view your map database in any browser
 
       #. Launch any web browser.
       #. Point your browser to:
 
          ``http://myserver.mydomainname/publish_point``
 
-         where *myserver.mydomainname* is the host name or IP address of
+      where *myserver.mydomainname* is the host name or IP address of
       your server to which you published the map database, and
       *publish_point* is the publish point that you specified when the
       published the map database. For example:
 
          ``http://my_host_name/MySFMap``
 
-           If you are not sure which server you published to, contact your
+      If you are not sure which server you published to, contact your
       Google Earth Enterprise Server administrator for help.
 
-         Google Maps displays your database.
+      Google Maps displays your database.
 
       .. _Using_Google_Base_Map:
       .. rubric:: Using the Google Base Map
@@ -469,8 +461,7 @@ Creating a Map Database
       Deploying the Google Base Map involves adding it when you build
       your map database.
 
-      .. rubric:: To build your map database to include the Google Base
-         Map:
+      .. rubric:: To build your map database to include the Google Base Map
 
       #. Select **Asset Manager** from the **Tools** menu. The Asset Manager
          appears.
@@ -479,7 +470,7 @@ Creating a Map Database
       #. Click |image19|. The Map Database Editor appears with no
          projects selected.
 
-         |Mercator Maps Database Editor|
+         |Mercator Maps Database Editor Geo|
 
       #. Select the **Use Google Base Map (google.com)** checkbox.
       #. Add your map project.
@@ -495,8 +486,9 @@ Creating a Map Database
 
          Your map database is saved to the location you specified.
 
-      **Build**, **Push**, and **Publish** your map database as
-      described in :ref:`Define, Push, and Publish a Map Database <_Define_Push_Publish_Map_Database>.
+      **Build**, **Push**, and **Publish** your map database as described in
+      :ref:`Define, Push, and Publish a Map Database <Define_Push_Publish_Map_Database>`.
+
       .. rubric:: Learn more
 
       -  `Google Maps Javascript API V3
@@ -532,4 +524,4 @@ Creating a Map Database
 .. |image19| image:: ../../art/fusion/tutorial/iconDatabaseMap.png
    :width: 20px
    :height: 20px
-.. |Mercator Maps Database Editor| image:: ../../art/fusion/tutorial/mapsMercDatabaseEditor-geo.png
+.. |Mercator Maps Database Editor Geo| image:: ../../art/fusion/tutorial/mapsMercDatabaseEditor-geo.png
