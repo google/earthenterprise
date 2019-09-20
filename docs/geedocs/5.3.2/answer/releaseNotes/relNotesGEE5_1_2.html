@@ -73,9 +73,10 @@
 <div class="docutils container">
 <div class="content docutils container">
 <p class="rubric">Overview</p>
-<p>GEE 5.1.2 is an incremental release of <a class="reference external" href="../answer/6078762.html">GEE
-5.1</a>. It contains several bug fixes in
-Fusion and GEE Server, and updates to third-party libraries.</p>
+<p>GEE 5.1.2 is an incremental release of
+<a class="reference internal" href="relNotesGEE5_1_0.html"><span class="doc">GEE 5.1</span></a>.
+It contains several bug fixes in Fusion and GEE Server,
+and updates to third-party libraries.</p>
 <p class="rubric">Supported Platforms</p>
 <p>The Google Earth Enterprise 5.1.2 release is supported on 64-bit
 versions of the following operating systems:</p>
@@ -88,15 +89,16 @@ most recent security patches</li>
 <p>Google Earth Enterprise 5.1.2 is compatible with Google Earth
 Enterprise Client (EC) version 7.1.5 and Google Earth Plug-in
 versions 7.0.1 - 7.1.5.1557 for Windows and Mac.</p>
-<p class="rubric">Library updates</p>
-<table border="1" class="docutils">
+<p class="rubric">Library Updates</p>
+<table border="1" class="colwidths-given docutils" id="id1">
+<caption><span class="caption-text">Library Updates</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="58%" />
-<col width="42%" />
+<col width="50%" />
+<col width="50%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Library</th>
-<th class="head">Updated version</th>
+<th class="head">Updated Version</th>
 </tr>
 </thead>
 <tbody valign="top">
@@ -115,11 +117,12 @@ versions 7.0.1 - 7.1.5.1557 for Windows and Mac.</p>
 </tbody>
 </table>
 <p class="rubric">Resolved Issues</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id2">
+<caption><span class="caption-text">Resolved Issues</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="7%" />
-<col width="26%" />
-<col width="67%" />
+<col width="25%" />
+<col width="25%" />
+<col width="50%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Number</th>
@@ -130,11 +133,13 @@ versions 7.0.1 - 7.1.5.1557 for Windows and Mac.</p>
 <tbody valign="top">
 <tr class="row-even"><td>19946027</td>
 <td>Support additional search option.</td>
-<td>A new <strong>SearchGoogle</strong> search tab is available for use with 3D databases which queries Google’s location database. Search sugestions are also offered as you type.</td>
+<td>A new <strong>SearchGoogle</strong> search tab is available for use with 3D databases which
+queries Google’s location database. Search sugestions are also offered as you type.</td>
 </tr>
 <tr class="row-odd"><td>20225923, 19871110, 11179114</td>
 <td>gesystemmanager crashes when processing very large projects</td>
-<td>Fixed in Fusion: Optimized management of listeners of CombinedRPAsset versions in asset root. Also reduced the size of asset configuration files.</td>
+<td>Fixed in Fusion: Optimized management of listeners of CombinedRPAsset versions in asset root.
+Also reduced the size of asset configuration files.</td>
 </tr>
 <tr class="row-even"><td>4431033</td>
 <td>Extra data added in imagery projects for imagery that is not visible</td>
@@ -166,7 +171,9 @@ versions 7.0.1 - 7.1.5.1557 for Windows and Mac.</p>
 </tr>
 <tr class="row-odd"><td>19499802</td>
 <td><code class="docutils literal notranslate"><span class="pre">gebuild</span></code> does not check whether source file has changed.</td>
-<td>Fixed in Fusion: ‘Refresh’ functionality added to <code class="docutils literal notranslate"><span class="pre">gemodifyvectorresource</span></code>, <code class="docutils literal notranslate"><span class="pre">gemodifyimageryresource</span></code>, and <code class="docutils literal notranslate"><span class="pre">gemodifyterrainresource</span></code> to detect changes to source files, and update assets if necessary.</td>
+<td>Fixed in Fusion: ‘Refresh’ functionality added to <code class="docutils literal notranslate"><span class="pre">gemodifyvectorresource</span></code>,
+<code class="docutils literal notranslate"><span class="pre">gemodifyimageryresource</span></code>, and <code class="docutils literal notranslate"><span class="pre">gemodifyterrainresource</span></code> to detect changes
+to source files, and update assets if necessary.</td>
 </tr>
 <tr class="row-even"><td>4171577</td>
 <td>Disconnected delta publishes not possible if previous database versions are cleaned.</td>
@@ -214,7 +221,8 @@ versions 7.0.1 - 7.1.5.1557 for Windows and Mac.</p>
 </tr>
 <tr class="row-odd"><td>22318180</td>
 <td>Security vulnerabilities in Cutter.</td>
-<td>Fixed in GEE Server/Cutter: patched <code class="docutils literal notranslate"><span class="pre">gecutter</span></code> and validated inputs to minimize risk of remote-code execution and SQL-injection when Cutter is enabled.</td>
+<td>Fixed in GEE Server/Cutter: patched <code class="docutils literal notranslate"><span class="pre">gecutter</span></code> and validated inputs
+to minimize risk of remote-code execution and SQL-injection when Cutter is enabled.</td>
 </tr>
 <tr class="row-even"><td>24132440</td>
 <td>Uncaught exception when serving 3D glbs: GET /query?request=Json&amp;var;=geeServerDefs&amp;is2d;=t</td>
@@ -246,11 +254,13 @@ versions 7.0.1 - 7.1.5.1557 for Windows and Mac.</p>
 </tr>
 <tr class="row-odd"><td>20068112</td>
 <td><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--addvh</span> <span class="pre">--ssl</span></code> creates a virtual host with an invalid port number</td>
-<td>Fixed in GEE Server: use the ‘–vhurl’ option for non-default SSL ports. See <code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> help for usage &amp; syntax.</td>
+<td>Fixed in GEE Server: use the ‘–vhurl’ option for non-default SSL ports.
+See <code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> help for usage &amp; syntax.</td>
 </tr>
 <tr class="row-even"><td>22958187</td>
 <td>Include Google Geocoder in default search services</td>
-<td>Fixed in GEE Server: ‘SearchGoogle’ tab is available as a default search service for both 2D and 3D databases; queries Google’s geocoders and requires Internet access (client-side)</td>
+<td>Fixed in GEE Server: ‘SearchGoogle’ tab is available as a default search
+service for both 2D and 3D databases; queries Google’s geocoders and requires Internet access (client-side)</td>
 </tr>
 <tr class="row-odd"><td>23399349</td>
 <td>Incorrect handling of POI search queries like “Paris, France”</td>
@@ -258,11 +268,14 @@ versions 7.0.1 - 7.1.5.1557 for Windows and Mac.</p>
 </tr>
 <tr class="row-even"><td>1826725</td>
 <td><code class="docutils literal notranslate"><span class="pre">gepackgen</span></code> fails with ‘Specified data products have different coverage’.</td>
-<td>Fixed in Fusion: implement Cluster Analyzer for virtual rasters (<a href="#id1"><span class="problematic" id="id2">*</span></a>.khvr files). It analyzes inset clustering and area ratios to suggest optimal splits of a virtual raster. Check <code class="docutils literal notranslate"><span class="pre">gerasterimport</span></code> log, and see <code class="docutils literal notranslate"><span class="pre">gevirtualraster</span></code> for usage and syntax.</td>
+<td>Fixed in Fusion: implement Cluster Analyzer for virtual rasters <code class="docutils literal notranslate"><span class="pre">*.khvr</span> <span class="pre">files</span></code>.
+It analyzes inset clustering and area ratios to suggest optimal splits of a virtual raster.
+Check <code class="docutils literal notranslate"><span class="pre">gerasterimport</span></code> log, and see <code class="docutils literal notranslate"><span class="pre">gevirtualraster</span></code> for usage and syntax.</td>
 </tr>
 <tr class="row-odd"><td>22414308</td>
 <td>Support snippet for ‘View in Google Maps’ in EC</td>
-<td>Fixed in GEE Server: enable ‘View in Google Maps’ in EC, publishing 3D database with ‘google_maps_url’ snippet set to ‘<a class="reference external" href="http://maps.google.com/">http://maps.google.com/</a>’.</td>
+<td>Fixed in GEE Server: enable ‘View in Google Maps’ in EC, publishing 3D database i
+with ‘google_maps_url’ snippet set to ‘<a class="reference external" href="http://maps.google.com/">http://maps.google.com/</a>’.</td>
 </tr>
 <tr class="row-even"><td>22958590</td>
 <td>Places queries can makes server unresponsive for large number of search results</td>
@@ -282,11 +295,13 @@ versions 7.0.1 - 7.1.5.1557 for Windows and Mac.</p>
 </tr>
 <tr class="row-even"><td>25422176</td>
 <td>Fusion fails to push databases with very large POI files</td>
-<td>Fixed in Fusion: updated internal data structures to support POI files &gt; 4 GB; improved logging in POI parser to report exceptions when ingesting POI data into postgres.</td>
+<td>Fixed in Fusion: updated internal data structures to support POI files &gt; 4 GB; i
+improved logging in POI parser to report exceptions when ingesting POI data into postgres.</td>
 </tr>
 <tr class="row-odd"><td>11254639</td>
 <td>EC makes calls to google.com when rendering search results</td>
-<td>Fixed in GEE Server: localized all KML rendering; expose dbroot snippets in ‘search_config’ group: <code class="docutils literal notranslate"><span class="pre">kml_render_url,</span> <span class="pre">kml_search_url,</span> <span class="pre">error_page_url</span></code>.</td>
+<td>Fixed in GEE Server: localized all KML rendering; expose dbroot snippets in
+‘search_config’ group: <code class="docutils literal notranslate"><span class="pre">kml_render_url,</span> <span class="pre">kml_search_url,</span> <span class="pre">error_page_url</span></code>.</td>
 </tr>
 <tr class="row-even"><td>25430798</td>
 <td><code class="docutils literal notranslate"><span class="pre">SearchGoogle</span></code> search tab returns Server Error</td>
@@ -294,7 +309,8 @@ versions 7.0.1 - 7.1.5.1557 for Windows and Mac.</p>
 </tr>
 <tr class="row-odd"><td>24407861</td>
 <td>Support database pushes over HTTPS/SSL</td>
-<td>Fixed in Fusion: Server Association Manager includes ‘CA certificate’ path and ‘Insecure SSL connection’ checkbox for self-signed certificates.</td>
+<td>Fixed in Fusion: Server Association Manager includes ‘CA certificate’ path and
+‘Insecure SSL connection’ checkbox for self-signed certificates.</td>
 </tr>
 </tbody>
 </table>

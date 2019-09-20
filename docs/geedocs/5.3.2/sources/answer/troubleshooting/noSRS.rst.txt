@@ -31,6 +31,7 @@ No SRS
       bands, and the imagery resolution:
 
       ``geinfo {image file}``
+      
       To work with the Fusion server, imagery must be of type ``Byte``,
       have no more than three bands, and must have a projection.
 

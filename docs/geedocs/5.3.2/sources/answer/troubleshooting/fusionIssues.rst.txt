@@ -6,11 +6,11 @@ Fusion issues
 
 .. container::
 
-      .. container:: content
+   .. container:: content
 
       When you install GEE on a server, the software does a query for
       ``hostname -f``. Each time you build a resource, project, or
-      database on the Fusion server, the initial ``hostname -f``
+      dgeecheckTestServerStatus.rstatabase on the Fusion server, the initial ``hostname -f``
       response is added to all the files in each asset’s subdirectory.
       Changing the hostname or moving assets from one server to another
       without updating the hostname in all places will make your Fusion
@@ -36,7 +36,10 @@ Fusion issues
       GEE Server):
 
       #. Shut down both the ``gefusion`` and ``geserver`` daemons:
-         ``/etc/init.d/gefusion stop /etc/init.d/geserver stop``
+
+         ``/etc/init.d/gefusion stop``
+         ``/etc/init.d/geserver stop``
+
       #. Update the hostname and IP address to the correct entries for
          the machines.
       #. If needed, edit the ``/etc/hosts`` file to update the IP
@@ -45,9 +48,13 @@ Fusion issues
          ``/opt/google/bin/geconfigureassetroot --fixmasterhost``.
       #. Back up the following files to ``/tmp`` or another archive
          folder:
-         ``/gevol/assets/.config/volumes.xml /gevol/assets/.config/PacketLevel.taskrule /gevol/assets/.userdata/serverAssociations.xml /gevol/assets/.userdata/snippets.xml``
-         Replace ``assets`` with the name of your asset root. For
-         example, ``/gevol/tutorial``.
+
+         ``/gevol/assets/.config/volumes.xml``
+         ``/gevol/assets/.config/PacketLevel.taskrule``
+         ``/gevol/assets/.userdata/serverAssociations.xml``
+         ``/gevol/assets/.userdata/snippets.xml``
+         Replace ``assets`` with the name of your asset root. For example, ``/gevol/tutorial``.
+
       #. Edit the ``/gevol/assets/.userdata/snippets.xml`` file and
          update the hardcoded URLs to match the new hostname URL of the
          production machine.
@@ -56,10 +63,13 @@ Fusion issues
       #. Remove the contents of ``/gevol/published_dbs/stream_space``
          and ``/gevol/published_dbs/search_space``.
       #. Change directory to ``/tmp`` and execute
-         ``sudo -u gepguser /opt/google/bin/geresetpgdb``.
-      #. | Start the geserver and gefusion services:
-         | ``/etc/init.d/geserver start /etc/init.d/gefusion start``
 
+         ``sudo -u gepguser /opt/google/bin/geresetpgdb``.
+
+      #. Start the geserver and gefusion services:
+
+         ``/etc/init.d/geserver start``
+         ``/etc/init.d/gefusion start``
          You can now change the server associations and publish the
          databases.
 
@@ -91,9 +101,10 @@ Fusion issues
       #. Connect GE Enterprise Client to ``http://production``.
       #. Connect GE Enterprise Client to ``http://development``.
 
-      **Note**: During testing, you can check
-      ``/opt/google/gehttpd/logs/access_log`` and ``error_log`` to
-      determine if any errors are reported by Apache.
+      .. note::
+         During testing, you can check
+         ``/opt/google/gehttpd/logs/access_log`` and ``error_log`` to
+         determine if any errors are reported by Apache.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

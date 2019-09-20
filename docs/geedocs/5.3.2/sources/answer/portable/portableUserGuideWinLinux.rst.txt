@@ -38,7 +38,7 @@ Portable User Guide for Windows and Linux
 
       .. note::
 
-         **Note:** You can also connect to a portable globe or map with
+         You can also connect to a portable globe or map with
          the Google Earth Enterprise Client (Google Earth EC). The
          Google Earth Plug-in for viewing a globe in the browser is now
          obsolete, but if you still have a copy of the plug-in and a browser that
@@ -58,13 +58,23 @@ Portable User Guide for Windows and Linux
       The following table describes the portable file types and their
       compatibility with GEE Portable.
 
-      ================== ===================================================================================== ===================================================================================
-      Portable File Type Description                                                                           Compatibility with Portable
-      ================== ===================================================================================== ===================================================================================
-      .glb               Portable 3D globe.                                                                    All versions.
-      .glm               Portable 2D map.                                                                      All versions.
-      .glc               Composite map or globe file *assembled* from 2D or 3D layers of other portable files. All versions of GEE Open Source Portable, discontinued GEE versions 4.4 and higher.
-      ================== ===================================================================================== ===================================================================================
+
+      .. list-table::
+         :widths: 20 50 50
+         :header-rows: 1
+
+         * - Portable File Type
+           - Description
+           - Compatibility with Portable
+         * - .glb
+           - Portable 3D globe.
+           - All versions.
+         * - .glm
+           - Portable 2D map.
+           - All versions.
+         * - .glc
+           - Composite map or globe file *assembled* from 2D or 3D layers of other portable files.
+           - All versions of GEE Open Source Portable, discontinued GEE versions 4.4 and higher.
 
       .. rubric:: Creating portable globes and maps
 
@@ -77,10 +87,10 @@ Portable User Guide for Windows and Linux
       .. _Useful_Resources:
       .. rubric:: Useful resources
 
-      -  :doc:`Creating portable globes and maps <../answer/../geeServerAdmin/createPortableGlobesMaps.html>`.
+      -  :doc:`Creating portable globes and maps <../geeServerAdmin/createPortableGlobesMaps>`.
          Google Earth Enterprise users can learn how to cut globes or
          maps to serve from Portable.
-      -  :doc:`Portable Developer Guide <../answer/3230807.html>`. Software
+      -  :doc:`Portable Developer Guide <../portable/portableDeveloperGuide>`. Software
          developers can create or customize applications for Portable.
 
       .. _Install_GEE_Portable:
@@ -102,7 +112,7 @@ Portable User Guide for Windows and Linux
 
       .. note::
 
-         **Note:** Before you install an upgrade, back up the contents
+         Before you install an upgrade, back up the contents
          of your ``data`` directory.
 
       Ther are currently no OS packages or installers and uninstallers
@@ -113,7 +123,7 @@ Portable User Guide for Windows and Linux
 
       .. note::
 
-         **Note:** The Google Earth Plug-in is not supported any longer,
+         The Google Earth Plug-in is not supported any longer,
          so you cannot view globes (``.glb`` or ``.glc`` files) in your
          browser (unless you happen to have a copy of the old plug-in
          and a browser that can run it on Windows or Mac OS). You can,
@@ -169,7 +179,7 @@ Portable User Guide for Windows and Linux
 
          .. note::
 
-            **Note:** If you do not know your username and password,
+            If you do not know your username and password,
             contact your Google Earth Enterprise Server System
             Administrator.
 
@@ -227,7 +237,7 @@ Portable User Guide for Windows and Linux
 
       .. note::
 
-         **Note:** By default, broadcasting is off and cannot be turned
+         By default, broadcasting is off and cannot be turned
          on via an http call to the API. This feature is controlled by
          the ``disable_broadcasting`` flag, which is set to ``True`` in
          ``portable.cfg``. However, if you set ``accept_all_requests``
@@ -278,7 +288,7 @@ Portable User Guide for Windows and Linux
 
       .. note::
 
-         **Note:** Although it is possible to configure GEE Portable to
+         Although it is possible to configure GEE Portable to
          display multiple globes or maps at the same time, this is not
          recommended or supported. The additional configuration requires
          you to build the globe or map to reference a specific port
@@ -298,6 +308,7 @@ Portable User Guide for Windows and Linux
       select the layers you want the globe or map to display. To hide
       the layer list, click the **Menu**, then select **Hide layer
       list**.
+      |
 
       .. _Change_Configuration_Options:
       .. rubric:: Change your configuration options
