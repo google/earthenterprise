@@ -104,7 +104,7 @@ System Requirements for GEE Server
          ``hostname`` at a shell prompt, and you can verify the
          network connection by using the ``ping`` command to reach
          other hosts in the same network. The requests should resolve
-          using both an IP address and the FQDN.
+         using both an IP address and the FQDN.
 
          -  Hostname registered in DNS
          -  Hosts file is acceptable for small-scale systems

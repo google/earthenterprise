@@ -24,7 +24,7 @@ Configure Tutorial Workspace
       -  :ref:`Download the Tutorial Source
          Files <Download_Tutorial_Source>`
       -  :ref:`Configure the tutorial asset root and source
-         volume <Configuring_Tutorial_Asset_Root>
+         volume <Configuring_Tutorial_Asset_Root>`
       -  :ref:`Select the tutorial asset
          root <Select_Tutorial_Asset_Root>`
       -  :ref:`Clean up the tutorial
