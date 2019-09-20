@@ -85,8 +85,7 @@ earlier versions, geecheck runs from the command line only.</p>
 </div>
 <ul class="simple">
 <li><a class="reference internal" href="#how-geecheck-works"><span class="std std-ref">How geecheck works</span></a></li>
-<li><a class="reference internal" href="#access-test-results-gee-server-admin-console"><span class="std std-ref">Access test results from GEE Server Admin
-console</span></a></li>
+<li><a class="reference internal" href="#access-test-results-gee-server-admin-console"><span class="std std-ref">Access test results from GEE Server Admin console</span></a></li>
 <li><a class="reference internal" href="#run-tests-again"><span class="std std-ref">Run the tests again</span></a></li>
 <li><a class="reference internal" href="#create-your-own-tests"><span class="std std-ref">Create your own tests</span></a></li>
 <li><a class="reference internal" href="#run-geecheck-command-line"><span class="std std-ref">Run geecheck on the command line</span></a></li>
@@ -96,11 +95,21 @@ console</span></a></li>
 <p class="rubric" id="how-geecheck-works">How geecheck works</p>
 <p>Geecheck is a Python application, <code class="docutils literal notranslate"><span class="pre">geecheck.py</span></code>, and is
 installed in the following location:</p>
-<p><code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/cgi-bin</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">geecheck.py</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">geecheck_tests/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">user_tests/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">fusion_tests/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">server_tests/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">run_geecheck.py</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">set_geecheck_config.py</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/cgi-bin</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">geecheck.py</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">geecheck_tests/</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">user_tests/</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">fusion_tests/</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">server_tests/</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">run_geecheck.py</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">set_geecheck_config.py</span></code></p>
 <ul>
 <li><p class="first"><code class="docutils literal notranslate"><span class="pre">geecheck.py</span></code> runs and displays the results from any tests
 located in the subfolders:</p>
-<p><code class="docutils literal notranslate"><span class="pre">geecheck_tests/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">user_tests/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">fusion_tests/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">server_tests/</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">geecheck_tests/</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">user_tests/</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">fusion_tests/</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">server_tests/</span></code></p>
 </li>
 <li><p class="first">Tests must follow the naming convention <code class="docutils literal notranslate"><span class="pre">*_test.py</span></code>, for
 example, <code class="docutils literal notranslate"><span class="pre">dns_test.py</span></code>. Test results are organized by the
@@ -152,7 +161,12 @@ a framework that lets you easily plug in your own tests and view
 the results in a browser or on the command line. Tests should be
 Python unit tests and must be copied to one of the three test
 subfolders to be run from geecheck:</p>
-<p><code class="docutils literal notranslate"><span class="pre">geecheck_tests/</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">user_tests/</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">fusion_tests/</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">server_tests/</span></code></p>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">geecheck_tests/</span></code></dt>
+<dd><code class="docutils literal notranslate"><span class="pre">user_tests/</span></code>
+<code class="docutils literal notranslate"><span class="pre">fusion_tests/</span></code>
+<code class="docutils literal notranslate"><span class="pre">server_tests/</span></code></dd>
+</dl>
 <p>To get some idea of how you can write your own test, you can study
 the structure of the sample test, <code class="docutils literal notranslate"><span class="pre">sample_test.py</span></code>, provided in
 the <code class="docutils literal notranslate"><span class="pre">user_tests</span></code> subfolder. Use the code as a guide or simply
@@ -192,19 +206,25 @@ different location with a few simple rules:</p>
 <ol class="arabic">
 <li><p class="first">You can move <code class="docutils literal notranslate"><span class="pre">geecheck_tests</span></code> but you need to maintain the
 subfolder structure for geecheck to run:</p>
-<p><code class="docutils literal notranslate"><span class="pre">geecheck_tests/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">user_tests/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">fusion_tests/</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">server_tests/</span></code></p>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">geecheck_tests/</span></code></dt>
+<dd><p class="first last"><code class="docutils literal notranslate"><span class="pre">user_tests/</span></code>
+<code class="docutils literal notranslate"><span class="pre">fusion_tests/</span></code>
+<code class="docutils literal notranslate"><span class="pre">server_tests/</span></code></p>
+</dd>
+</dl>
 </li>
 <li><p class="first"><code class="docutils literal notranslate"><span class="pre">geecheck.py</span></code> and <code class="docutils literal notranslate"><span class="pre">set_geecheck_config.py</span></code> must be moved
 with <code class="docutils literal notranslate"><span class="pre">geecheck_tests/</span></code>:</p>
-<p><code class="docutils literal notranslate"><span class="pre">geecheck.py</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">set_geecheck_config.py</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">geecheck_tests/</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">geecheck.py</span></code>
+<code class="docutils literal notranslate"><span class="pre">set_geecheck_config.py</span></code>
+<code class="docutils literal notranslate"><span class="pre">geecheck_tests/</span></code></p>
 </li>
 </ol>
-<p><code class="docutils literal notranslate"><span class="pre">run_geecheck.py</span></code> looks for test scripts to run. It should not
-be moved. Once test scripts have been moved,
-<code class="docutils literal notranslate"><span class="pre">set_geecheck_config.py</span></code> should be run:
-<code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">./set_geecheck_config.py</span></code></p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">run_geecheck.py</span></code> looks for test scripts to run. It should not be moved. Once test scripts have been moved, <code class="docutils literal notranslate"><span class="pre">set_geecheck_config.py</span></code> should be run:</li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">./set_geecheck_config.py</span></code></p>
 <p>This action updates the configuration found at
 <code class="docutils literal notranslate"><span class="pre">/opt/google/geecheck/conf</span></code>, which tells <code class="docutils literal notranslate"><span class="pre">run_geecheck.py</span></code>
 where to look for tests.</p>

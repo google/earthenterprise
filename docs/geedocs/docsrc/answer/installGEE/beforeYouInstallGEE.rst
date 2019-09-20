@@ -79,7 +79,7 @@ Before you install Google Earth Enterprise
 
       .. note::
 
-         **Note:** On a single workstation that does not mount
+         On a single workstation that does not mount
          ``/gevol`` on a network, ``/gevol`` is also required as a local
          volume definition.
 
@@ -171,7 +171,7 @@ Before you install Google Earth Enterprise
 
       .. note::
 
-         **Note:** we recommend that you dedicate a network-attached
+         we recommend that you dedicate a network-attached
          storage device (NAS) for your asset root.
 
       .. _Planning_Location_Publish_Root_GEE:

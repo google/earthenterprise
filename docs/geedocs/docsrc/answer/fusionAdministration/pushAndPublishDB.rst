@@ -82,7 +82,6 @@ Push and publish databases
       API for 2D databases.
 
       .. rubric:: To publish a database:
-         :name: to-publish-a-database
 
       #. Access the Google Earth Enterprise Server Admin console in a
          browser window by going to *myserver.mydomainname*.com/admin,

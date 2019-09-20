@@ -28,7 +28,7 @@ Troubleshoot push/publishing issues
 
       -  :doc:`../fusionAdministration/pushAndPublishDB`
       -  :doc:`../geeServerAdmin/publishDatabasesPortables`
-      -  :doc:`../fusionAdministration/publishDBWithDisconnectedPublishing`
+      -  :doc:`../fusionAdministration/publishDBWithDiscPublishing`
 
       .. rubric:: Troubleshoot Push Issues
 
@@ -50,7 +50,8 @@ Troubleshoot push/publishing issues
          Server.
       -  **Disconnected push**. Data is transferred from the Fusion host
          to the GEE Server by hard disk instead of a network. For
-         information about pushing disconnected databases, see :doc:`../fusionAdministration/publishDBWithDisconnectedPublishing`.
+         information about pushing disconnected databases, see
+         :doc:`../fusionAdministration/publishDBWithDiscPublishing`.
 
       .. rubric:: Check your server is running correctly
 

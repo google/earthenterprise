@@ -111,11 +111,12 @@ that you upgrade Open GEE 5.2.0 by simply installing Open GEE
 ensure that your PostgreSQL databases are backed up and upgraded
 correctly to the new PostgreSQL version used by Open GEE 5.3.0.</p>
 <p class="rubric">Resolved Issues</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id1">
+<caption><span class="caption-text">Resolved Issues</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="1%" />
-<col width="44%" />
-<col width="55%" />
+<col width="25%" />
+<col width="25%" />
+<col width="50%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Number</th>
@@ -134,14 +135,18 @@ correctly to the new PostgreSQL version used by Open GEE 5.3.0.</p>
 </tr>
 <tr class="row-even"><td>279</td>
 <td>Server upgrade resets the Admin Console password.</td>
-<td>When the GEE server is upgraded, either through the <code class="docutils literal notranslate"><span class="pre">install_server.sh</span></code> script or the RPMs, the Admin Console password will be preserved if the password file is found at the expected location.</td>
+<td>When the GEE server is upgraded, either through the <code class="docutils literal notranslate"><span class="pre">install_server.sh</span></code>
+script or the RPMs, the Admin Console password will be preserved if the
+password file is found at the expected location.</td>
 </tr>
 <tr class="row-odd"><td>799</td>
 <td>The GEE Portable Server does not return valid JSON when queried with <code class="docutils literal notranslate"><span class="pre">http://&lt;server&gt;/&lt;map&gt;/query?request=Json</span></code>.</td>
-<td>Added a <code class="docutils literal notranslate"><span class="pre">v</span></code> parameter to the query; when its value is 2, the GEE Portable Server will return proper JSON. Currently, it defaults to 1 if not specified.</td>
+<td>Added a <code class="docutils literal notranslate"><span class="pre">v</span></code> parameter to the query; when its value is 2, the GEE Portable Server will
+return proper JSON. Currently, it defaults to 1 if not specified.</td>
 </tr>
 <tr class="row-even"><td>1093</td>
-<td>The <code class="docutils literal notranslate"><span class="pre">geselectpublishroot</span></code> server command line tool offers no help, and appears to take some action when the <code class="docutils literal notranslate"><span class="pre">--help</span></code> flag is specified.</td>
+<td>The <code class="docutils literal notranslate"><span class="pre">geselectpublishroot</span></code> server command line tool offers no help, and appears to take
+some action when the <code class="docutils literal notranslate"><span class="pre">--help</span></code> flag is specified.</td>
 <td>Help has been added through the <code class="docutils literal notranslate"><span class="pre">--help</span></code> option, or if any invalid parameter is given.</td>
 </tr>
 <tr class="row-odd"><td>1098</td>
@@ -149,7 +154,8 @@ correctly to the new PostgreSQL version used by Open GEE 5.3.0.</p>
 <td>Add logic to cause compilation failures to be detected and reported.</td>
 </tr>
 <tr class="row-even"><td>1104</td>
-<td>CentOS 7 (and maybe others) fails to build OpenGEE. Build seems to fail when building third party parts of Qt. This appears to be an issue with libpng.</td>
+<td>CentOS 7 (and maybe others) fails to build OpenGEE. Build seems to fail when
+building third party parts of Qt. This appears to be an issue with libpng.</td>
 <td>Fixed by including <code class="docutils literal notranslate"><span class="pre">libpng12</span></code> in the build script.</td>
 </tr>
 <tr class="row-odd"><td>1122</td>
@@ -157,16 +163,23 @@ correctly to the new PostgreSQL version used by Open GEE 5.3.0.</p>
 <td>Change how PIL is included.</td>
 </tr>
 <tr class="row-even"><td>1158</td>
-<td><code class="docutils literal notranslate"><span class="pre">geeServerDefs</span></code> are not returned by Portable Server after being requested, once the globe has been viewed by a client. It is not possible to request <code class="docutils literal notranslate"><span class="pre">geeServerDefs</span></code> for globes other than the current <code class="docutils literal notranslate"><span class="pre">selectedGlobe</span></code>.</td>
+<td><code class="docutils literal notranslate"><span class="pre">geeServerDefs</span></code> are not returned by Portable Server after being requested,
+once the globe has been viewed by a client. It is not possible to request
+<code class="docutils literal notranslate"><span class="pre">geeServerDefs</span></code> for globes other than the current <code class="docutils literal notranslate"><span class="pre">selectedGlobe</span></code>.</td>
 <td><code class="docutils literal notranslate"><span class="pre">geeServerDefs</span></code> are returned correctly and can be requested for any valid globe at any time.</td>
 </tr>
 <tr class="row-odd"><td>1166</td>
 <td>Imagery resources can be created with invalid dates.</td>
-<td>Added a validity check that ensures a valid date is entered. A date of 0000-00-00 can also be entered as a default value. The user will not be allowed to save with an invalid date entered. This applies only to the GUI.</td>
+<td>Added a validity check that ensures a valid date is entered.
+A date of 0000-00-00 can also be entered as a default value. The user will not
+be allowed to save with an invalid date entered. This applies only to the GUI.</td>
 </tr>
 <tr class="row-even"><td>1169</td>
-<td>Cutting a globe with historical imagery embeds a link to the original Google Earth Server that served the historical imagery.</td>
-<td>There is an advanced option to include historical imagery links or not. The default option will be to NOT include links to historical imagery, and the links will be stripped from the cut globe. When the historical imagery links are enabled, the existing behavior will be preserved.</td>
+<td>Cutting a globe with historical imagery embeds a link to the original
+Google Earth Server that served the historical imagery.</td>
+<td>There is an advanced option to include historical imagery links or not. The default
+option will be to NOT include links to historical imagery, and the links will be stripped from the
+cut globe. When the historical imagery links are enabled, the existing behavior will be preserved.</td>
 </tr>
 <tr class="row-odd"><td>1187</td>
 <td>RPM upgrades change owner and permissions on symlinked portable globe directories.</td>
@@ -177,12 +190,15 @@ correctly to the new PostgreSQL version used by Open GEE 5.3.0.</p>
 <td>Use POSIX file API to support large files on some 32-bit platforms.</td>
 </tr>
 <tr class="row-odd"><td>1192</td>
-<td>There appears to be a regression issue in OpenJPEG 2000 lib version 2.3.0 (that Fusion uses), causing an error when fusing jp2 files.</td>
+<td>There appears to be a regression issue in OpenJPEG 2000 lib version 2.3.0
+(that Fusion uses), causing an error when fusing jp2 files.</td>
 <td>We have upgraded to OpenJPEG 2.3.1 fixing this issue.</td>
 </tr>
 <tr class="row-even"><td>1194</td>
 <td>Sockets build up during large project builds.</td>
-<td>gesystemmanager now has a timeout when trying to respond to a request for status. This prevents a backlog of requests that could build up while it is busy handling a long-running request. The timeout is configurable.</td>
+<td>gesystemmanager now has a timeout when trying to respond to a request for status.
+This prevents a backlog of requests that could build up while it is busy handling
+a long-running request. The timeout is configurable.</td>
 </tr>
 <tr class="row-odd"><td>1201</td>
 <td>Fusion uses incorrect or no date if using .kip files as source.</td>
@@ -198,14 +214,17 @@ correctly to the new PostgreSQL version used by Open GEE 5.3.0.</p>
 </tr>
 <tr class="row-even"><td>1251</td>
 <td>Build number was incorrectly being appended to the version in RPM packaging.</td>
-<td>RPM packaging should put the build number in the <code class="docutils literal notranslate"><span class="pre">release</span></code> field of the RPM properties and not append it to the version number in the <code class="docutils literal notranslate"><span class="pre">version</span></code> field. This was preventing point releases from properly upgrading.</td>
+<td>RPM packaging should put the build number in the <code class="docutils literal notranslate"><span class="pre">release</span></code> field of the
+RPM properties and not append it to the version number in the <code class="docutils literal notranslate"><span class="pre">version</span></code> field.
+This was preventing point releases from properly upgrading.</td>
 </tr>
 <tr class="row-odd"><td>1275</td>
 <td>Search results from KML layers do not display properly in Earth Client.</td>
 <td>Updated KML rendering libraries with new versions provided by Google.</td>
 </tr>
 <tr class="row-even"><td>1276</td>
-<td>System manager purges the asset and asset version caches unnecessarily during builds. For large builds this can evict most of the items from the cache.</td>
+<td>System manager purges the asset and asset version caches unnecessarily during builds.
+For large builds this can evict most of the items from the cache.</td>
 <td>Remove the calls to these purge functions.</td>
 </tr>
 <tr class="row-odd"><td>1270</td>
@@ -215,11 +234,12 @@ correctly to the new PostgreSQL version used by Open GEE 5.3.0.</p>
 </tbody>
 </table>
 <p class="rubric">Known Issues</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id2">
+<caption><span class="caption-text">Known Issues</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="2%" />
-<col width="38%" />
-<col width="60%" />
+<col width="25%" />
+<col width="25%" />
+<col width="50%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Number</th>
@@ -298,11 +318,13 @@ correctly to the new PostgreSQL version used by Open GEE 5.3.0.</p>
 </tr>
 <tr class="row-odd"><td>320</td>
 <td>The Portable Server web page uses obsolete REST calls</td>
-<td>Do not use the buttons on the Portable Server web interface for adding remote servers or broadcasting to remote servers as these features are no longer supported.</td>
+<td>Do not use the buttons on the Portable Server web interface for adding
+remote servers or broadcasting to remote servers as these features are no longer supported.</td>
 </tr>
 <tr class="row-even"><td>326</td>
 <td>Libraries may be loaded from the wrong directory</td>
-<td>Delete any library versions that should not be loaded or use LD_LIBRARY_PATH to load libraries from <code class="docutils literal notranslate"><span class="pre">/opt/google/lib</span></code>.</td>
+<td>Delete any library versions that should not be loaded or use LD_LIBRARY_PATH to
+load libraries from <code class="docutils literal notranslate"><span class="pre">/opt/google/lib</span></code>.</td>
 </tr>
 <tr class="row-odd"><td>340</td>
 <td>GE Fusion Terrain is black</td>
@@ -318,7 +340,8 @@ correctly to the new PostgreSQL version used by Open GEE 5.3.0.</p>
 </tr>
 <tr class="row-even"><td>401</td>
 <td>GEE commands are not in the path for sudo.</td>
-<td>Specify the full path when running commands or add <code class="docutils literal notranslate"><span class="pre">/opt/google/bin</span></code> to the path for all users, including the super user.</td>
+<td>Specify the full path when running commands or add <code class="docutils literal notranslate"><span class="pre">/opt/google/bin</span></code>
+to the path for all users, including the super user.</td>
 </tr>
 <tr class="row-odd"><td>402</td>
 <td>Provider manager window locked to main window.</td>
@@ -326,7 +349,7 @@ correctly to the new PostgreSQL version used by Open GEE 5.3.0.</p>
 </tr>
 <tr class="row-even"><td>403</td>
 <td>Missing Close button on system manager window in RHEL 7</td>
-<td>Right-click the title bar and select Close.</td>
+<td>Right-click the title bar and select <strong>Close</strong>.</td>
 </tr>
 <tr class="row-odd"><td>404</td>
 <td>Opaque polygons in preview.</td>
@@ -386,7 +409,8 @@ correctly to the new PostgreSQL version used by Open GEE 5.3.0.</p>
 </tr>
 <tr class="row-odd"><td>474</td>
 <td>Running gee_check on some supported platforms reports that the platform is not supported</td>
-<td>You can ignore the failed test if using a supported platform (Ubuntu 14.04, Ubuntu 16.04, RHEL 6 and 7, and CentOS 6 and 7).</td>
+<td>You can ignore the failed test if using a supported platform
+(Ubuntu 14.04, Ubuntu 16.04, RHEL 6 and 7, and CentOS 6 and 7).</td>
 </tr>
 <tr class="row-even"><td>477</td>
 <td>‘service geserver stop/start/restart’ doesn’t work on Ubuntu 16.04 without a reboot</td>
@@ -409,7 +433,7 @@ correctly to the new PostgreSQL version used by Open GEE 5.3.0.</p>
 <td>Before uninstalling geserver verify if it’s running or not.</td>
 </tr>
 <tr class="row-odd"><td>590</td>
-<td>Maps API Javascript Files Not Found</td>
+<td>Maps API JavaScript Files Not Found</td>
 <td>No current work around.</td>
 </tr>
 <tr class="row-even"><td>594</td>
