@@ -98,7 +98,7 @@ display one of the portable globes or maps that has been saved to
 the GEE Portable <code class="docutils literal notranslate"><span class="pre">data</span></code> directory.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> You can also connect to a portable globe or map with
+<p class="last">You can also connect to a portable globe or map with
 the Google Earth Enterprise Client (Google Earth EC). The
 Google Earth Plug-in for viewing a globe in the browser is now
 obsolete, but if you still have a copy of the plug-in and a browser that
@@ -114,11 +114,11 @@ only low-resolution imagery and terrain. You specify the levels of
 resolution when you cut the globe or map.</p>
 <p>The following table describes the portable file types and their
 compatibility with GEE Portable.</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils">
 <colgroup>
-<col width="10%" />
-<col width="46%" />
-<col width="45%" />
+<col width="17%" />
+<col width="42%" />
+<col width="42%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Portable File Type</th>
@@ -149,10 +149,10 @@ can take only a few minutes to specify and generate a globe or map
 and then save it to the GEE Portable <code class="docutils literal notranslate"><span class="pre">data</span></code> directory.</p>
 <p class="rubric" id="useful-resources">Useful resources</p>
 <ul class="simple">
-<li><span class="xref std std-doc">Creating portable globes and maps</span>.
+<li><a class="reference internal" href="../geeServerAdmin/createPortableGlobesMaps.html"><span class="doc">Creating portable globes and maps</span></a>.
 Google Earth Enterprise users can learn how to cut globes or
 maps to serve from Portable.</li>
-<li><span class="xref std std-doc">Portable Developer Guide</span>. Software
+<li><a class="reference internal" href="portableDeveloperGuide.html"><span class="doc">Portable Developer Guide</span></a>. Software
 developers can create or customize applications for Portable.</li>
 </ul>
 <p class="rubric" id="install-gee-portable">Install GEE Portable</p>
@@ -171,7 +171,7 @@ for build, install, and run instructions.</li>
 </ol>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> Before you install an upgrade, back up the contents
+<p class="last">Before you install an upgrade, back up the contents
 of your <code class="docutils literal notranslate"><span class="pre">data</span></code> directory.</p>
 </div>
 <p>Ther are currently no OS packages or installers and uninstallers
@@ -181,7 +181,7 @@ can extract the contents of the archive in whatever location you
 like, then execute the server from that location.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> The Google Earth Plug-in is not supported any longer,
+<p class="last">The Google Earth Plug-in is not supported any longer,
 so you cannot view globes (<code class="docutils literal notranslate"><span class="pre">.glb</span></code> or <code class="docutils literal notranslate"><span class="pre">.glc</span></code> files) in your
 browser (unless you happen to have a copy of the old plug-in
 and a browser that can run it on Windows or Mac OS). You can,
@@ -231,7 +231,7 @@ password assigned to you:</p>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> If you do not know your username and password,
+<p class="last">If you do not know your username and password,
 contact your Google Earth Enterprise Server System
 Administrator.</p>
 </div>
@@ -290,7 +290,7 @@ or map, and click on the broadcast icon (<img alt="Broadcast globe icon" class="
 </ol>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> By default, broadcasting is off and cannot be turned
+<p class="last">By default, broadcasting is off and cannot be turned
 on via an http call to the API. This feature is controlled by
 the <code class="docutils literal notranslate"><span class="pre">disable_broadcasting</span></code> flag, which is set to <code class="docutils literal notranslate"><span class="pre">True</span></code> in
 <code class="docutils literal notranslate"><span class="pre">portable.cfg</span></code>. However, if you set <code class="docutils literal notranslate"><span class="pre">accept_all_requests</span></code>
@@ -330,7 +330,7 @@ a copy of either of these files and then add your own edits.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> Although it is possible to configure GEE Portable to
+<p class="last">Although it is possible to configure GEE Portable to
 display multiple globes or maps at the same time, this is not
 recommended or supported. The additional configuration requires
 you to build the globe or map to reference a specific port
@@ -346,7 +346,8 @@ listed with its file name, description, creation date, and size.</p>
 all the layers for that globe or map. You can use the list to
 select the layers you want the globe or map to display. To hide
 the layer list, click the <strong>Menu</strong>, then select <strong>Hide layer
-list</strong>.</p>
+list</strong>.
+|</p>
 <p class="rubric" id="change-configuration-options">Change your configuration options</p>
 <p>The Google Earth Portable directory contains the
 <code class="docutils literal notranslate"><span class="pre">server/portable.cfg</span></code> configuration file. This is the directory

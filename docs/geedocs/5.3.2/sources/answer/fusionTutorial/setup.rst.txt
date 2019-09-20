@@ -38,7 +38,6 @@ Setting Up the Tutorial
       -  `Define Source Providers <#DefineSrcProv>`__
       -  `Define Resource Paths <#DefineResPath>`__
 
-      --------------
 
       .. rubric:: Select the Tutorial Asset Root
          :name: select-the-tutorial-asset-root
@@ -73,7 +72,6 @@ Setting Up the Tutorial
       database to make it available to Google Earth EC again.
 
       .. rubric:: To select the tutorial asset root:
-         :name: to-select-the-tutorial-asset-root
 
       #. On the command line, log in as root.
       #. Stop the system manager by entering:
@@ -100,7 +98,6 @@ Setting Up the Tutorial
 
             /etc/init.d/gefusion start
 
-      --------------
 
       .. rubric:: Launch Google Earth Enterprise Fusion
          :name: launch-google-earth-enterprise-fusion
@@ -115,7 +112,6 @@ Setting Up the Tutorial
       When the application starts, the Google Earth Enterprise Fusion
       graphical user interface (GUI) appears.
 
-      --------------
 
       .. rubric:: Build the Asset Navigation Tree
          :name: build-the-asset-navigation-tree
@@ -173,7 +169,6 @@ Setting Up the Tutorial
       #. Close the Asset Manager by clicking the close box (**X**) in
          the top right corner.
 
-      --------------
 
       .. rubric:: Define Source Providers
          :name: define-source-providers
@@ -219,7 +214,7 @@ Setting Up the Tutorial
 
          The new providers appear in the Provider Manager dialog in the
          order in which you added them:
-         |Provider Manager|
+         |Provider Manager Full|
       #. Click **OK** to close the Provider Manager.
 
       .. rubric:: Define Resource Paths
@@ -244,8 +239,7 @@ Setting Up the Tutorial
       #. Repeat steps **2** through **4** for **Imagery** and
          **Terrain**.
       #. Click the **OK** button to close the Asset Manager Resource Editor Default
-         Source Paths, and go on to the :doc:`next
-         lesson <4412443>`.
+         Source Paths, and go on to the :doc:`next lesson <../fusionTutorial/buildResource>`.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
@@ -254,7 +248,7 @@ Setting Up the Tutorial
 .. |Provider Manager| image:: ../../art/fusion/tutorial/providerManager.png
 .. |Page Icon| image:: ../../art/fusion/tutorial/icon_new.gif
 .. |Edit Provider Dialog| image:: ../../art/fusion/tutorial/newProvider.png
-.. |Provider Manager| image:: ../../art/fusion/tutorial/providerManager-full.png
+.. |Provider Manager Full| image:: ../../art/fusion/tutorial/providerManager-full.png
 .. |Asset Manager Config| image:: ../../art/fusion/tutorial/assetManagerConfig.png
 .. |Folder Icon| image:: ../../art/fusion/tutorial/iconProjBrowser.png
 .. |Select Folder Dialog| image:: ../../art/fusion/tutorial/assetFolderSelection.png

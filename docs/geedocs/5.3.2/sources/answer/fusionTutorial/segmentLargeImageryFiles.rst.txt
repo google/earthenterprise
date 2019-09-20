@@ -26,9 +26,7 @@ Segmenting Large Imagery Files
       a single resource, which would look like this in the Preview pane:
 
       |Split Images Reconnected Into a Single Resource|
-      .. rubric:: To split a large source file into multiple smaller
-         files:
-         :name: to-split-a-large-source-file-into-multiple-smaller-files
+      .. rubric:: To split a large source file into multiple smaller files:
 
       #. At the command prompt, change to the folder that contains the
          tutorial imagery source files by entering:

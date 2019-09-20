@@ -11,6 +11,7 @@ HandleAddDbRequest
       .. rubric:: Error message
 
       ``HandleAddDbRequest: Error adding files to publisher database``
+      
       .. rubric:: Description
 
       There is a special character in the name of a resource, project, or
