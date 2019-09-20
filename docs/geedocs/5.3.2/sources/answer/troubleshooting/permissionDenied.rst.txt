@@ -37,6 +37,7 @@ Permission denied
       Enter this command:
 
       ``chmod -R 755 /src``
+      
       Replace ``src`` with the top-level folder that contains your
       resources.
 

@@ -112,25 +112,52 @@ security patches</li>
 Enterprise Client (EC) version 7.1.5 and above.</p>
 <p class="rubric">New and Updated Libraries</p>
 <p>Open GEE 5.2.0 includes extensive library changes. This list may
-be incomplete.
-================== =========== ==============
-Library            Version     New or Updated
-================== =========== ==============
-Google Maps API V3 3.29        Updated
-mod_wsgi           4.5.14      Updated
-OpenJPEG           2.1.2       New
-QT                 3.3.8b-free Updated
-GDAL               2.1.2       Updated
-================== =========== ==============</p>
+be incomplete.</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="25%" />
+<col width="25%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Library</th>
+<th class="head">Version</th>
+<th class="head">New or Updated</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Google Maps</td>
+<td>API V3 3.29</td>
+<td>Updated</td>
+</tr>
+<tr class="row-odd"><td>mod_wsgi</td>
+<td>4.5.14</td>
+<td>Updated</td>
+</tr>
+<tr class="row-even"><td>OpenJPEG</td>
+<td>2.1.2</td>
+<td>New</td>
+</tr>
+<tr class="row-odd"><td>QT</td>
+<td>3.3.8b-free</td>
+<td>Updated</td>
+</tr>
+<tr class="row-even"><td>GDAL</td>
+<td>2.1.2</td>
+<td>Updated</td>
+</tr>
+</tbody>
+</table>
 <p>If you are upgrading from GEE 5.1.3, you may have to reinstall the
 prerequisite libraries after uninstalling 5.1.3 but before
 installing 5.2.0.</p>
 <p class="rubric">Known Issues</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id1">
+<caption><span class="caption-text">Known Issues</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="3%" />
-<col width="39%" />
-<col width="58%" />
+<col width="25%" />
+<col width="25%" />
+<col width="50%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Number</th>
@@ -141,7 +168,8 @@ installing 5.2.0.</p>
 <tbody valign="top">
 <tr class="row-even"><td>2</td>
 <td>MrSID imagery is not supported</td>
-<td>MrSID support can be added by purchasing a proprietary GDAL plugin that supports MrSID and modifying the build process to include the plugin.</td>
+<td>MrSID support can be added by purchasing a proprietary GDAL plugin that
+supports MrSID and modifying the build process to include the plugin.</td>
 </tr>
 <tr class="row-odd"><td>4</td>
 <td>Google basemap fails to load in 2D Mercator Maps</td>
@@ -153,7 +181,8 @@ installing 5.2.0.</p>
 </tr>
 <tr class="row-odd"><td>200</td>
 <td>stage_install fails on the tutorial files when <code class="docutils literal notranslate"><span class="pre">/home</span></code> and <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> are on different file systems</td>
-<td>Ensure that <code class="docutils literal notranslate"><span class="pre">/home</span></code> and <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> are on the same file system or download the tutorial files to <code class="docutils literal notranslate"><span class="pre">/opt/google/share/tutorials/fusion/</span></code> after installing Fusion.</td>
+<td>Ensure that <code class="docutils literal notranslate"><span class="pre">/home</span></code> and <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> are on the same file system or download the
+tutorial files to <code class="docutils literal notranslate"><span class="pre">/opt/google/share/tutorials/fusion/</span></code> after installing Fusion.</td>
 </tr>
 <tr class="row-even"><td>202</td>
 <td>Icons are not displayed on vector layers in the Enterprise Client</td>
@@ -169,11 +198,13 @@ installing 5.2.0.</p>
 </tr>
 <tr class="row-odd"><td>320</td>
 <td>The Portable Server web page uses obsolete REST calls</td>
-<td>Do not use the buttons on the Portable Server web interface for adding remote servers or broadcasting to remote servers as these features are no longer supported.</td>
+<td>Do not use the buttons on the Portable Server web interface for adding
+remote servers or broadcasting to remote servers as these features are no longer supported.</td>
 </tr>
 <tr class="row-even"><td>326</td>
 <td>Libraries may be loaded from the wrong directory</td>
-<td>Delete any library versions that should not be loaded or use LD_LIBRARY_PATH to load libraries from <code class="docutils literal notranslate"><span class="pre">/opt/google/lib</span></code>.</td>
+<td>Delete any library versions that should not be loaded or use
+<cite>LD_LIBRARY_PATH to load libraries from `</cite>/opt/google/lib``.</td>
 </tr>
 <tr class="row-odd"><td>333</td>
 <td>Portable Server is not supported on MacOS</td>
@@ -200,7 +231,7 @@ installing 5.2.0.</p>
 <td>Open the individual resource to see the provider</td>
 </tr>
 <tr class="row-odd"><td>401</td>
-<td>GEE commands are not in the path for sudo.</td>
+<td>GEE commands are not in the path for sudo</td>
 <td>Specify the full path when running commands or add /opt/google/bin to the path for all users, including the super user</td>
 </tr>
 <tr class="row-even"><td>402</td>
@@ -262,10 +293,11 @@ installing 5.2.0.</p>
 </tbody>
 </table>
 <p class="rubric">Resolved Issues</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id2">
+<caption><span class="caption-text">Resolved Issues</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="3%" />
-<col width="47%" />
+<col width="25%" />
+<col width="25%" />
 <col width="50%" />
 </colgroup>
 <thead valign="bottom">
