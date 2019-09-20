@@ -16,13 +16,13 @@ Configuring Display Rules for Point Data
       distinguishing the popular places in California using display
       rules.
 
-      -  :ref:`Define, Configure, and Build a Vector Project <Define_Vector_Product>`
+      -  :ref:`Define, Configure, and Build a Vector Project <Define_Vector_Product3>`
       -  :ref:`Define and Build an Imagery Project <Define_And_Build_Imagery_Project>`
       -  :ref:`Define, Build, Push, and Publish a Database for the Point
          Data <Define_Point_Database>`
       -  :ref:`View Your Database in Google Earth EC <View_Database_GEEC_1>`
 
-      .. _Define_Vector_Product:
+      .. _Define_Vector_Product3:
       .. rubric:: Define, Configure, and Build a Vector Project
          :name: define-configure-and-build-a-vector-project
 

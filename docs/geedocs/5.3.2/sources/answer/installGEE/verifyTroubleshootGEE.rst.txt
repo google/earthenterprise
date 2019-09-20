@@ -13,7 +13,6 @@ Verifying and troubleshooting
          Manager <Troubleshooting_Failed_System_Manager>`
       -  :ref:`Restarting the Server <Restarting_System_Manager>`
 
-      --------------
 
       .. _Verifying_System_Manager_Running:
       .. rubric:: Verifying That the System Manager Is Running
@@ -53,7 +52,6 @@ Verifying and troubleshooting
          If you see a ``connection refused`` message, see the
          :ref:`Troubleshooting <Troubleshooting_Failed_System_Manager>` section.
 
-      --------------
 
       .. _Troubleshooting_Failed_System_Manager:
       .. rubric:: Troubleshooting a Failed System Manager
@@ -82,7 +80,7 @@ Verifying and troubleshooting
 
       .. note::
 
-         **Note:** If you see a ``Connection Refused`` message when
+         If you see a ``Connection Refused`` message when
          running the ``getop`` command, but do not see any error
          messages in the log file, ensure that the log directory is
          writable by Google Earth Enterprise Fusion users.
@@ -90,13 +88,12 @@ Verifying and troubleshooting
       Likewise, if Google Earth Enterprise Server fails to run, you can
       try stopping and restarting it, which resolves most problems.
 
-      --------------
 
       .. rubric:: Restarting the Server
 
       #. Log in as root.
       #. Stop and restart the server.
-      \ ``/etc/init.d/geserver restart``
+         ``/etc/init.d/geserver restart``
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
