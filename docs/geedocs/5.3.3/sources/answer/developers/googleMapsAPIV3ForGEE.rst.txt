@@ -10,9 +10,9 @@ Google Maps API v3 for GEE
 
       -  :ref:`Overview <Overview>`
       -  :ref:`Using the Fusion Maps API <Using_Fusion_Maps_API>`
-      -  :ref:`How ``geeCreateFusionMap`` works <Factory_geeCreateFusionMap>`
-      -  :ref:```geeCreateFusionMap`` Factory <Factory>`
-      -  :ref:```google.maps.Map`` Method extensions <MethodExtensions>`
+      -  :ref:`How geeCreateFusionMap works <Factory_geeCreateFusionMap>`
+      -  :ref:`geeCreateFusionMap Factory <Factory>`
+      -  :ref:`google.maps.Map Method extensions <MethodExtensions>`
       -  :ref:`Examples <Examples>`
       -  :ref:`KML Support <KMLSupport>`
 
@@ -49,7 +49,7 @@ Google Maps API v3 for GEE
          -  Places API, Distance Matrix, Wikipedia, Panaramio, Weather
             layer, etc.
 
-      .._Using_Fusion_Maps_API:
+      .. _Using_Fusion_Maps_API:
       .. rubric:: Using the Fusion Maps API
 
       The Fusion Maps API is used to create and interact with map layers
