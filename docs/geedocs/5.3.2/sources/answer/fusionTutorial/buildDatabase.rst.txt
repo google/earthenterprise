@@ -11,11 +11,11 @@ Defining and Building Databases
       The following exercises guide you through defining and building a
       database, using the projects you created in the previous lesson.
 
-      -  `Define a Database <#DefineDB>`__
-      -  `Build a Database <#BuildDB>`__
+      -  :ref:`Define a Database <Define_Database>`
+      -  :ref:`Build a Database <Build_Database>`
 
+      .. _Define_Database:
       .. rubric:: Define a Database
-         :name: define-a-database
 
       When you define a database, you specify one or more Google Earth
       Enterprise Fusion projects that Google Earth Enterprise Fusion
@@ -34,7 +34,6 @@ Defining and Building Databases
       and give it a name.
 
       .. rubric:: To define a database:
-         :name: to-define-a-database
 
       #. Select **Asset Manager** from the **Tools** menu. The Asset Manager
          appears.
@@ -73,8 +72,8 @@ Defining and Building Databases
          The name of the database is displayed when you select the
          ``/ASSET_ROOT/Databases``\ folder in the asset navigation tree.
 
+      .. _Build_Database:
       .. rubric:: Build a Database
-         :name: build-a-database
 
       Once the database has been defined, it is ready to be built.
 
@@ -116,8 +115,7 @@ Defining and Building Databases
       and time the most recent build was started.
 
       Close the Asset Manager by clicking the close box (**X**) in the
-      top right corner, and go on to the `next
-      lesson <../answer/4412446.html>`__.
+      top right corner, and go on to the :doc:`next lesson <../fusionTutorial/pushPublishView>`.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

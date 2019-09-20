@@ -20,7 +20,7 @@ Welcome to Portable 5.0
 
       .. rubric:: How to create portable offline globes and maps:
 
-      -  The :doc:`Google Earth Enterprise <3230777` cutter
+      -  The :doc:`Google Earth Enterprise <../geeServerAdmin/createPortableGlobesMaps>` cutter
          tool for Earth Enterprise.
 
       .. rubric:: Getting support

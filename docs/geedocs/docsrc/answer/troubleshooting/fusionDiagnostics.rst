@@ -15,11 +15,12 @@ Fusion diagnostics
 
       #. Go to ``/opt/google/share/support/geecheck`` on your Fusion system.
 
-      #. | Run the script ``geecheck.pl``.
+      #. Run the script ``geecheck.pl``.
 
-         **Note**: You might be prompted to enter a username and
-         password. If you are not using authentication for the Fusion
-         server, you can ignore the prompts.
+         .. note::
+            You might be prompted to enter a username and
+            password. If you are not using authentication for the Fusion
+            server, you can ignore the prompts.
 
       #. Examine the output for potential errors and problems. If you
          need additional help, you can create a new issue on `the GitHub

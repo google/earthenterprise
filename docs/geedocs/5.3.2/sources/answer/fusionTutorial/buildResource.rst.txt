@@ -276,32 +276,31 @@ Defining and Building Resources
       define and build the remaining imagery resources provided for this
       tutorial:
 
-      +-------------+-------------+-------------+-------------+-------------+
-      | Name        | Acquisition | Provider    | Mask        | Source file |
-      | (Resources/ | Date        |             |             |             |
-      | Imagery/... |             |             |             |             |
-      | )           |             |             |             |             |
-      +=============+=============+=============+=============+=============+
-      | **SFBayArea | Today's     | USGS        | **Auto      | ``usgsLanSa |
-      | LanSat_2002 | date        | Imagery     | Mask**      | t.tif``     |
-      | 1010**      |             |             | **Tolerance |             |
-      |             |             |             | **:         |             |
-      |             |             |             | 2           |             |
-      |             |             |             | Default for |             |
-      |             |             |             | all other   |             |
-      |             |             |             | mask        |             |
-      |             |             |             | values      |             |
-      +-------------+-------------+-------------+-------------+-------------+
-      | **i3_15Mete | Today's     | i3          | | **Auto    | ``i3SF15-me |
-      | r_20041010* | date        |             |   Mask**    | ter.tif``   |
-      | *           |             |             | | Default   |             |
-      |             |             |             |   values    |             |
-      +-------------+-------------+-------------+-------------+-------------+
-      | **SFHighRes | Today's     | USGS        | **Auto      | ``usgsSFHiR |
-      | Inset_20061 | date        | Imagery     | Mask**      | es.tif``    |
-      | 010**       |             |             | Default     |             |
-      |             |             |             | values      |             |
-      +-------------+-------------+-------------+-------------+-------------+
+      .. list-table:: Resources
+         :widths: 25 15 15 10 15
+         :header-rows: 1
+
+         * - Name (Resources/Imagery/...)
+           - Acquisition Date
+           - Provider
+           - Mask
+           - Source File
+         * - **SFBayAreaLanSat_20021010**
+           - Today's date
+           - USGS Imagery
+           - **Auto Mask Tolerance: 2**
+                Default for all other mask values.
+           - **usgsLanSat.tif**
+         * - **i3_15Meter_20041010**
+           - Today's date
+           - i3
+           - **Auto Mask** Default values.
+           - **i3SF15-meter.tif**
+         * - **SFHighResInset_20061010**
+           - Today's date
+           - USGS Imagery
+           -  **Auto Mask** Default values.
+           - **usgsSFHiRes.tif**
 
       While the resources are building, the Asset Manager list looks
       something like this:
@@ -764,7 +763,8 @@ Defining and Building Resources
 
          You can scroll through this data and sort it by columns to
          explore the values of each field to determine the potential
-         attributes to use in the filters you set up in :ref:`Configuring Display Rules <Configure_Display_Rules_for_a_Vector_Project>`.
+         attributes to use in the filters you set up in
+         :ref:`Configuring Display Rules <Conf_Display_Rules_for_Vector_Project>`.
 
       #. When you finish exploring the data, right-click the
          **california_roads_line**, and select **Remove Layer** to clear
@@ -814,7 +814,7 @@ Defining and Building Resources
 
          The selected file appears in the Source File(s) list.
 
-         |Vector Resource Editor|
+         |Vector Resource Editor Full|
 
       #. Select **Save** from the **File** menu.
 
@@ -886,8 +886,8 @@ Defining and Building Resources
 
       When Google Earth Enterprise Fusion finishes building the last
       resource, close the Asset Manager by clicking the close box
-      (**X**) in the top right corner, and go on to the :doc:`next
-      lesson <4412421>`.
+      (**X**) in the top right corner, and go on to the
+      :doc:`next lesson <../fusionTutorial/buildProject>`.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
@@ -924,4 +924,4 @@ Defining and Building Resources
 .. |Vector Resource Icon| image:: ../../art/fusion/tutorial/iconResVector.png
 .. |Vector Resource Editor| image:: ../../art/fusion/tutorial/vectorResEditor.png
 .. |Vector Open Source Dialog| image:: ../../art/fusion/tutorial/vectorFileOpenDia2.png
-.. |Vector Resource Editor| image:: ../../art/fusion/tutorial/vectorResEditor-full.png
+.. |Vector Resource Editor Full| image:: ../../art/fusion/tutorial/vectorResEditor-full.png

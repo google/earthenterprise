@@ -71,6 +71,7 @@
 <div class="section" id="fusion-issues">
 <h1>Fusion issues<a class="headerlink" href="#fusion-issues" title="Permalink to this headline">¶</a></h1>
 <div class="docutils container">
+<div class="content docutils container">
 <p>When you install GEE on a server, the software does a query for
 <code class="docutils literal notranslate"><span class="pre">hostname</span> <span class="pre">-f</span></code>. Each time you build a resource, project, or
 database on the Fusion server, the initial <code class="docutils literal notranslate"><span class="pre">hostname</span> <span class="pre">-f</span></code>
@@ -97,8 +98,9 @@ and <code class="docutils literal notranslate"><span class="pre">/gevol/publishe
 <p>To change the hostname for a development system (both Fusion and
 GEE Server):</p>
 <ol class="arabic">
-<li><p class="first">Shut down both the <code class="docutils literal notranslate"><span class="pre">gefusion</span></code> and <code class="docutils literal notranslate"><span class="pre">geserver</span></code> daemons:
-<code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span> <span class="pre">stop</span> <span class="pre">/etc/init.d/geserver</span> <span class="pre">stop</span></code></p>
+<li><p class="first">Shut down both the <code class="docutils literal notranslate"><span class="pre">gefusion</span></code> and <code class="docutils literal notranslate"><span class="pre">geserver</span></code> daemons:</p>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span> <span class="pre">stop</span></code>
+<code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">stop</span></code></p>
 </li>
 <li><p class="first">Update the hostname and IP address to the correct entries for
 the machines.</p>
@@ -110,10 +112,12 @@ address and hostname entries for the production machine.</p>
 <code class="docutils literal notranslate"><span class="pre">/opt/google/bin/geconfigureassetroot</span> <span class="pre">--fixmasterhost</span></code>.</p>
 </li>
 <li><p class="first">Back up the following files to <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> or another archive
-folder:
-<code class="docutils literal notranslate"><span class="pre">/gevol/assets/.config/volumes.xml</span> <span class="pre">/gevol/assets/.config/PacketLevel.taskrule</span> <span class="pre">/gevol/assets/.userdata/serverAssociations.xml</span> <span class="pre">/gevol/assets/.userdata/snippets.xml</span></code>
-Replace <code class="docutils literal notranslate"><span class="pre">assets</span></code> with the name of your asset root. For
-example, <code class="docutils literal notranslate"><span class="pre">/gevol/tutorial</span></code>.</p>
+folder:</p>
+<p><code class="docutils literal notranslate"><span class="pre">/gevol/assets/.config/volumes.xml</span></code>
+<code class="docutils literal notranslate"><span class="pre">/gevol/assets/.config/PacketLevel.taskrule</span></code>
+<code class="docutils literal notranslate"><span class="pre">/gevol/assets/.userdata/serverAssociations.xml</span></code>
+<code class="docutils literal notranslate"><span class="pre">/gevol/assets/.userdata/snippets.xml</span></code>
+Replace <code class="docutils literal notranslate"><span class="pre">assets</span></code> with the name of your asset root. For example, <code class="docutils literal notranslate"><span class="pre">/gevol/tutorial</span></code>.</p>
 </li>
 <li><p class="first">Edit the <code class="docutils literal notranslate"><span class="pre">/gevol/assets/.userdata/snippets.xml</span></code> file and
 update the hardcoded URLs to match the new hostname URL of the
@@ -125,14 +129,13 @@ update any hardcoded URLs to the new machine URL.</p>
 <li><p class="first">Remove the contents of <code class="docutils literal notranslate"><span class="pre">/gevol/published_dbs/stream_space</span></code>
 and <code class="docutils literal notranslate"><span class="pre">/gevol/published_dbs/search_space</span></code>.</p>
 </li>
-<li><p class="first">Change directory to <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> and execute
-<code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">gepguser</span> <span class="pre">/opt/google/bin/geresetpgdb</span></code>.</p>
+<li><p class="first">Change directory to <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> and execute</p>
+<p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">gepguser</span> <span class="pre">/opt/google/bin/geresetpgdb</span></code>.</p>
 </li>
-<li><div class="first line-block">
-<div class="line">Start the geserver and gefusion services:</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">start</span> <span class="pre">/etc/init.d/gefusion</span> <span class="pre">start</span></code></div>
-</div>
-<p>You can now change the server associations and publish the
+<li><p class="first">Start the geserver and gefusion services:</p>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">start</span></code>
+<code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span> <span class="pre">start</span></code>
+You can now change the server associations and publish the
 databases.</p>
 </li>
 </ol>
@@ -164,9 +167,13 @@ machine.</li>
 <li>Connect GE Enterprise Client to <code class="docutils literal notranslate"><span class="pre">http://production</span></code>.</li>
 <li>Connect GE Enterprise Client to <code class="docutils literal notranslate"><span class="pre">http://development</span></code>.</li>
 </ol>
-<p><strong>Note</strong>: During testing, you can check
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">During testing, you can check
 <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/logs/access_log</span></code> and <code class="docutils literal notranslate"><span class="pre">error_log</span></code> to
 determine if any errors are reported by Apache.</p>
+</div>
+</div>
 </div>
 </div>
 

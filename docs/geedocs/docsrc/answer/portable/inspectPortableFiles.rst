@@ -178,14 +178,14 @@ Inspecting portable files
 
       ::
 
-         --extract_packet quadtree_address 
+         --extract_packet quadtree_address
 
       *Optional*. Extracts a packet at a given quadtree address, for
       example, 310.
 
       ::
 
-         --extract_packets 
+         --extract_packets
 
       *Optional*. Extract all packets from a portable file. Can be used
       with start_idx and end_idx parameters, and the layer_idx parameter
@@ -193,25 +193,25 @@ Inspecting portable files
 
       ::
 
-         --packet_type type_string 
+         --packet_type type_string
 
       *Optional*. Type of packet to extract:
       ``dbroot, qtp, img, ter, or vec``.
 
       ::
 
-         --packet_channel channel_int 
+         --packet_channel channel_int
 
       *Optional*. Channel of packet to extract.
 
       ::
 
-         --output dest_file_path 
+         --output dest_file_path
 
       *Optional*. Destination file path where extracted file(s) should
       be written.
 
-      See :doc:`Settings <3479921` to learn about globe
+      See :doc:`Settings <../geeServerAdmin/settingsPage>` to learn about globe
       assembly and disassembly tools in the GEE Server Admin console.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png

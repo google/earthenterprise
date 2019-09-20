@@ -105,7 +105,7 @@ accepts a custom label argument which is appended to the version
 in RPM file names.</p>
 <p><strong>Rewrite KML URLs</strong>. Users can rewrite the URLs for KML resources
 included in databases at publish time.</p>
-<p><strong>Maps API Javascript Files</strong>. Maps API Javascript files are now
+<p><strong>Maps API JavaScript Files</strong>. Maps API Javascript files are now
 available and installed at
 <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/maps/mapfiles</span></code>.</p>
 <p class="rubric">Supported Platforms</p>
@@ -125,11 +125,12 @@ that you upgrade Open GEE 5.2.0 by simply installing Open GEE
 ensure that your PostgreSQL databases are backed up and upgraded
 correctly to the new PostgreSQL version used by Open GEE 5.2.3.</p>
 <p class="rubric">Resolved Issues</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id1">
+<caption><span class="caption-text">Resolved Issues</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="2%" />
-<col width="31%" />
-<col width="67%" />
+<col width="25%" />
+<col width="25%" />
+<col width="50%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Number</th>
@@ -172,7 +173,8 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.3.</p>
 </tr>
 <tr class="row-even"><td>806</td>
 <td>gecombineterrain defaulted to only 1 cpu to process data and ignored arguments</td>
-<td>Added –numCompressThreads option to accept the number of threads to use. Default value is the number of CPUs available. Deprecated –numcpus option</td>
+<td>Added –numCompressThreads option to accept the number of threads to use.
+Default value is the number of CPUs available. Deprecated –numcpus option</td>
 </tr>
 <tr class="row-odd"><td>821</td>
 <td>Calling geeInitMap results in an infinite recursive loop</td>
@@ -180,7 +182,8 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.3.</p>
 </tr>
 <tr class="row-even"><td>835</td>
 <td>GE Server gets its URL from the client instead of itself</td>
-<td>Fixed code so that when you publish DB, GEServer’s URL will be used and not the URL which we get from the Publish request message.</td>
+<td>Fixed code so that when you publish DB, GEServer’s URL will be used and not the
+URL which we get from the Publish request message.</td>
 </tr>
 <tr class="row-odd"><td>861</td>
 <td>Running diagnostics on a server only installation will result in a failure for testAdqeuateDiskSpace</td>
@@ -188,7 +191,9 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.3.</p>
 </tr>
 <tr class="row-even"><td>877</td>
 <td>Fusion RPM install scripts to only <code class="docutils literal notranslate"><span class="pre">chown</span></code> the asset root when necessary</td>
-<td>Recursively <code class="docutils literal notranslate"><span class="pre">chown</span></code> only when the asset root directory has incorrect ownership on a Fusion master host. This allows upgrading Fusion on machines where changing asset root ownership recursively would be very expensive.</td>
+<td>Recursively <code class="docutils literal notranslate"><span class="pre">chown</span></code> only when the asset root directory has incorrect ownership on a
+Fusion master host. This allows upgrading Fusion on machines where changing asset root
+ownership recursively would be very expensive.</td>
 </tr>
 <tr class="row-odd"><td>912</td>
 <td>TestDiskSpace diagnostics test fails on CentOS7</td>
@@ -197,11 +202,12 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.3.</p>
 </tbody>
 </table>
 <p class="rubric">Known Issues</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id2">
+<caption><span class="caption-text">Known Issues</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="2%" />
-<col width="38%" />
-<col width="60%" />
+<col width="25%" />
+<col width="25%" />
+<col width="50%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Number</th>
@@ -248,7 +254,8 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.3.</p>
 </tr>
 <tr class="row-odd"><td>200</td>
 <td>stage_install fails on the tutorial files when <code class="docutils literal notranslate"><span class="pre">/home</span></code> and <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> are on different file systems</td>
-<td>Ensure that <code class="docutils literal notranslate"><span class="pre">/home</span></code> and <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> are on the same file system or download the tutorial files to <code class="docutils literal notranslate"><span class="pre">/opt/google/share/tutorials/fusion/</span></code> after installing Fusion.</td>
+<td>Ensure that <code class="docutils literal notranslate"><span class="pre">/home</span></code> and <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> are on the same file system or download the
+tutorial files to <code class="docutils literal notranslate"><span class="pre">/opt/google/share/tutorials/fusion/</span></code> after installing Fusion.</td>
 </tr>
 <tr class="row-even"><td>201</td>
 <td>Some tiles are displayed incorrectly in the Enterprise Client when terrain is enabled</td>
@@ -288,11 +295,13 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.3.</p>
 </tr>
 <tr class="row-odd"><td>320</td>
 <td>The Portable Server web page uses obsolete REST calls</td>
-<td>Do not use the buttons on the Portable Server web interface for adding remote servers or broadcasting to remote servers as these features are no longer supported.</td>
+<td>Do not use the buttons on the Portable Server web interface for adding
+remote servers or broadcasting to remote servers as these features are no longer supported.</td>
 </tr>
 <tr class="row-even"><td>326</td>
 <td>Libraries may be loaded from the wrong directory</td>
-<td>Delete any library versions that should not be loaded or use LD_LIBRARY_PATH to load libraries from <code class="docutils literal notranslate"><span class="pre">/opt/google/lib</span></code>.</td>
+<td>Delete any library versions that should not be loaded or use LD_LIBRARY_PATH to
+load libraries from <code class="docutils literal notranslate"><span class="pre">/opt/google/lib</span></code>.</td>
 </tr>
 <tr class="row-odd"><td>340</td>
 <td>GE Fusion Terrain is black</td>
@@ -312,7 +321,8 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.3.</p>
 </tr>
 <tr class="row-odd"><td>401</td>
 <td>GEE commands are not in the path for sudo.</td>
-<td>Specify the full path when running commands or add <code class="docutils literal notranslate"><span class="pre">/opt/google/bin</span></code> to the path for all users, including the super user.</td>
+<td>Specify the full path when running commands or add <code class="docutils literal notranslate"><span class="pre">/opt/google/bin</span></code>
+to the path for all users, including the super user.</td>
 </tr>
 <tr class="row-even"><td>402</td>
 <td>Provider manager window locked to main window.</td>
@@ -403,7 +413,7 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.3.</p>
 <td>Before uninstalling geserver verify if it’s running or not.</td>
 </tr>
 <tr class="row-even"><td>590</td>
-<td>Maps API Javascript Files Not Found</td>
+<td>Maps API JavaScript Files Not Found</td>
 <td>No current work around.</td>
 </tr>
 <tr class="row-odd"><td>594</td>
