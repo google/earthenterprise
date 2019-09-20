@@ -11,6 +11,7 @@ Pyramid data
       .. rubric:: Error message
 
       ``Unable to decompress pyramid data Fusion Fatal: PrepLoop: Unable to read tile (lrc)``
+      
       .. rubric:: Description
 
       This error occurs when you try to build an imagery project with a
