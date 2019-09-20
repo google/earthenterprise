@@ -60,7 +60,9 @@ About this Tutorial
 
       This guide provides five basic lessons and nine advanced lessons.
 
-      The **Basic Tasks** section includes:
+      .. rubric:: Basic Tasks
+
+      The Basic Tasks section includes:
 
       #. :doc:`../fusionTutorial/setup`
       #. :doc:`../fusionTutorial/buildResource`
@@ -69,7 +71,9 @@ About this Tutorial
       #. :doc:`../fusionTutorial/pushPublishView`
 
       .. _Advanced_Fusion_Tutorial:
-         The **Advanced Tasks** section includes:
+      .. rubric:: Advanced Tasks
+
+      The Advanced Tasks section includes:
 
       #. :doc:`../fusionTutorial/displayRulesPoint`
       #. :doc:`../fusionTutorial/displayRulesPolygon`

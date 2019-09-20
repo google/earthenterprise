@@ -1,8 +1,8 @@
 |Google logo|
 
-===========================================
-What is Google Earth Enterprise Client (EC)
-===========================================
+============================================
+What is Google Earth Enterprise Client (EC)?
+============================================
 
 .. container::
 

@@ -111,11 +111,12 @@ that you upgrade Open GEE 5.2.0 by simply installing Open GEE
 ensure that your PostgreSQL databases are backed up and upgraded
 correctly to the new PostgreSQL version used by Open GEE 5.2.4.</p>
 <p class="rubric">Resolved Issues</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id1">
+<caption><span class="caption-text">Resolved Issues</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="2%" />
-<col width="22%" />
-<col width="77%" />
+<col width="25%" />
+<col width="25%" />
+<col width="50%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Number</th>
@@ -134,7 +135,9 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.4.</p>
 </tr>
 <tr class="row-even"><td>934</td>
 <td>Polygon displayed at the wrong location when viewing GLC assemly</td>
-<td>The Cutter WSGI script now looks at the projection of the GLM files going into the assembly, rather than using a hardcoded Mercator projection for the assembly. Also, if a user tries to assemble GLMs with differing projections, a warning will be issued.</td>
+<td>The Cutter WSGI script now looks at the projection of the GLM files going into the assembly,
+rather than using a hardcoded Mercator projection for the assembly. Also, if a user tries
+to assemble GLMs with differing projections, a warning will be issued.</td>
 </tr>
 <tr class="row-odd"><td>946</td>
 <td>Panoramic Streetview JavaScript error</td>
@@ -147,11 +150,12 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.4.</p>
 </tbody>
 </table>
 <p class="rubric">Known Issues</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id2">
+<caption><span class="caption-text">Known Issues</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="2%" />
-<col width="38%" />
-<col width="60%" />
+<col width="25%" />
+<col width="25%" />
+<col width="50%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Number</th>
@@ -198,7 +202,8 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.4.</p>
 </tr>
 <tr class="row-odd"><td>200</td>
 <td>stage_install fails on the tutorial files when <code class="docutils literal notranslate"><span class="pre">/home</span></code> and <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> are on different file systems</td>
-<td>Ensure that <code class="docutils literal notranslate"><span class="pre">/home</span></code> and <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> are on the same file system or download the tutorial files to <code class="docutils literal notranslate"><span class="pre">/opt/google/share/tutorials/fusion/</span></code> after installing Fusion.</td>
+<td>Ensure that <code class="docutils literal notranslate"><span class="pre">/home</span></code> and <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> are on the same file system or download the tutorial
+files to <code class="docutils literal notranslate"><span class="pre">/opt/google/share/tutorials/fusion/</span></code> after installing Fusion.</td>
 </tr>
 <tr class="row-even"><td>201</td>
 <td>Some tiles are displayed incorrectly in the Enterprise Client when terrain is enabled</td>
@@ -234,11 +239,13 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.4.</p>
 </tr>
 <tr class="row-even"><td>320</td>
 <td>The Portable Server web page uses obsolete REST calls</td>
-<td>Do not use the buttons on the Portable Server web interface for adding remote servers or broadcasting to remote servers as these features are no longer supported.</td>
+<td>Do not use the buttons on the Portable Server web interface for adding remote servers
+or broadcasting to remote servers as these features are no longer supported.</td>
 </tr>
 <tr class="row-odd"><td>326</td>
 <td>Libraries may be loaded from the wrong directory</td>
-<td>Delete any library versions that should not be loaded or use LD_LIBRARY_PATH to load libraries from <code class="docutils literal notranslate"><span class="pre">/opt/google/lib</span></code>.</td>
+<td>Delete any library versions that should not be loaded or use LD_LIBRARY_PATH to load
+libraries from <code class="docutils literal notranslate"><span class="pre">/opt/google/lib</span></code>.</td>
 </tr>
 <tr class="row-even"><td>340</td>
 <td>GE Fusion Terrain is black</td>
@@ -258,7 +265,8 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.4.</p>
 </tr>
 <tr class="row-even"><td>401</td>
 <td>GEE commands are not in the path for sudo.</td>
-<td>Specify the full path when running commands or add <code class="docutils literal notranslate"><span class="pre">/opt/google/bin</span></code> to the path for all users, including the super user.</td>
+<td>Specify the full path when running commands or add <code class="docutils literal notranslate"><span class="pre">/opt/google/bin</span></code>
+to the path for all users, including the super user.</td>
 </tr>
 <tr class="row-odd"><td>402</td>
 <td>Provider manager window locked to main window.</td>
@@ -349,7 +357,7 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.4.</p>
 <td>Before uninstalling geserver verify if it’s running or not.</td>
 </tr>
 <tr class="row-odd"><td>590</td>
-<td>Maps API Javascript Files Not Found</td>
+<td>Maps API JavaScript Files Not Found</td>
 <td>No known workaround.</td>
 </tr>
 <tr class="row-even"><td>594</td>
@@ -389,7 +397,7 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.4.</p>
 <td>No known workaround.</td>
 </tr>
 <tr class="row-odd"><td>1032</td>
-<td>Cannot build on Centos7 (‘error: unknown option `first-parent’)</td>
+<td>Cannot build on CentOS7 (‘error: unknown option first-parent’)</td>
 <td>Upgrade git to 1.84+.</td>
 </tr>
 <tr class="row-even"><td>1037</td>
@@ -402,7 +410,8 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.4.</p>
 </tr>
 <tr class="row-even"><td>1041</td>
 <td>In-place upgrade from previous release fails on Ubuntu 14</td>
-<td>Edit earth_enterprise/src/installer/common.sh. In the xml_file_get_xpath() function, change the tail command to from “+2” to “+3”</td>
+<td>Edit <code class="docutils literal notranslate"><span class="pre">earth_enterprise/src/installer/common.sh</span></code>. In the xml_file_get_xpath() function,
+change the tail command to from “+2” to “+3”</td>
 </tr>
 </tbody>
 </table>

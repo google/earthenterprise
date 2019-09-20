@@ -65,13 +65,13 @@ System requirements for Fusion and GEE Server
 
       .. note::
 
-      **Note:** Although older versions of Google Earth EC,
-      i.e., 6.0 and earlier, *may* still connect to Google
-      Earth Enterprise or Portable 3D databases, not all
-      features will be available. Also, as Google Earth
-      Enterprise has not been tested or certified against older
-      versions of Google Earth EC, there may be unknown
-      operational problems.
+         Although older versions of Google Earth EC,
+         i.e., 6.0 and earlier, *may* still connect to Google
+         Earth Enterprise or Portable 3D databases, not all
+         features will be available. Also, as Google Earth
+         Enterprise has not been tested or certified against older
+         versions of Google Earth EC, there may be unknown
+         operational problems.
 
       Google Earth Enterprise Client (EC) is supported on the
       following platforms:
@@ -101,7 +101,7 @@ System requirements for Fusion and GEE Server
       settings after deploying GEE. The hostname must be the FQDN
       (Fully Qualified Domain Name) of your destination server, e.g.,
       ``myserver.mydomainname.com``. Refer to :doc:`Hostname FQDN
-      Configuration <HostnameFqdnConfiguration>`
+      Configuration <../installGEE/hostnameFQDNConfig>`
       for additional details.
 
       You can verify the hostname of your workstation by entering
