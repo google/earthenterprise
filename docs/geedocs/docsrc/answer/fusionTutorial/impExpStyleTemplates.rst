@@ -227,9 +227,13 @@ Importing and Exporting Style Templates
          accessible from *myserver.mydomainname*.com/USPopulation-v001.
 
          To learn more about the options available in the Publish
-         dialog, see :doc:`../geeServerAdmin/createSearchTabs`,
-         :doc:`Snippet profiles <../geeServerAdmin/manageSnippetProfiles>`, and
-         :doc:`WMS <../geeServerAdmin/makeWMSRequests>`.
+         dialog, see
+
+         - :doc:`Default database <../geeServerAdmin/publishDefaultDatabase>`
+         - :doc:`../geeServerAdmin/createSearchTabs`
+         - :doc:`Snippet profiles <../geeServerAdmin/manageSnippetProfiles>`
+         - :doc:`WMS <../geeServerAdmin/makeWMSRequests>`
+
 
       #. Click **Publish**. The Databases page updates to indicate the
          published status of your database.
