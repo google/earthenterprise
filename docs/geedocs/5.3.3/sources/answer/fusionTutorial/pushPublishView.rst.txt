@@ -52,7 +52,6 @@ Pushing, Publishing, and Viewing a Database
       console, from which you can then publish them.
 
       .. rubric:: To push a database:
-         :name: to-push-a-database
 
       #. Select **Asset Manager** from the **Tools** menu. The Asset Manager
          appears.
@@ -86,7 +85,6 @@ Pushing, Publishing, and Viewing a Database
       you can publish it for viewing with Google Earth EC.
 
       .. rubric:: To publish a database:
-         :name: to-publish-a-database
 
       #. Access the Google Earth Enterprise Server Admin console in a
          browser window by going to *myserver.mydomainname*.com/admin,

@@ -74,33 +74,42 @@
 <div class="content docutils container">
 <p class="rubric">Error message</p>
 <p><code class="docutils literal notranslate"><span class="pre">Any</span> <span class="pre">of</span> <span class="pre">these</span> <span class="pre">conditions</span> <span class="pre">occur:</span></code></p>
-<ul class="simple">
-<li>The project Asset log lists this error:
-<code class="docutils literal notranslate"><span class="pre">Fusion</span> <span class="pre">Fatal</span> <span class="pre">:</span> <span class="pre">Unable</span> <span class="pre">to</span> <span class="pre">write</span> <span class="pre">record</span> <span class="pre">to</span> <span class="pre">index</span></code></li>
-<li>Current state / Version Properties reads “In Progress”.</li>
-<li>Canceling the project build in the GUI or on the command line
-causes the program to hang.</li>
-<li>Running the command <code class="docutils literal notranslate"><span class="pre">getop</span></code> causes the program to hang.</li>
+<ul>
+<li><p class="first">The project Asset log lists this error:</p>
+<p><code class="docutils literal notranslate"><span class="pre">Fusion</span> <span class="pre">Fatal</span> <span class="pre">:</span> <span class="pre">Unable</span> <span class="pre">to</span> <span class="pre">write</span> <span class="pre">record</span> <span class="pre">to</span> <span class="pre">index</span></code></p>
+</li>
+<li><p class="first">Current state / Version Properties reads “In Progress”.</p>
+</li>
+<li><p class="first">Canceling the project build in the GUI or on the command line
+causes the program to hang.</p>
+</li>
+<li><p class="first">Running the command <code class="docutils literal notranslate"><span class="pre">getop</span></code> causes the program to hang.</p>
+</li>
 </ul>
 <p class="rubric">Description</p>
 <p>Your hard disk might be full, or a network drive might be
 disconnected.</p>
 <p class="rubric">Resolution</p>
-<ol class="arabic simple">
-<li>Switch to root and enter:
-<code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span> <span class="pre">stop</span></code>
+<ol class="arabic">
+<li><p class="first">Switch to root and enter:</p>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span> <span class="pre">stop</span></code>
 <code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">stop</span></code>
 <code class="docutils literal notranslate"><span class="pre">sleep</span> <span class="pre">5</span></code>
 <code class="docutils literal notranslate"><span class="pre">killall</span> <span class="pre">-9</span> <span class="pre">gesystemmanager</span></code>
-<code class="docutils literal notranslate"><span class="pre">killall</span> <span class="pre">-9</span> <span class="pre">geresourceprovider</span></code></li>
-<li>Enter:
-<code class="docutils literal notranslate"><span class="pre">ps</span> <span class="pre">aux</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">ge</span></code></li>
-<li>Look for and stop any Fusion processes in the output.</li>
-<li>Make sure that you have enough free disk space, and then enter:
-<code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span> <span class="pre">start</span></code>
-<code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">start</span></code></li>
-<li>Cancel the build, and then resume it using the <code class="docutils literal notranslate"><span class="pre">gecancel</span></code> and
-<code class="docutils literal notranslate"><span class="pre">geresume</span></code> commands.</li>
+<code class="docutils literal notranslate"><span class="pre">killall</span> <span class="pre">-9</span> <span class="pre">geresourceprovider</span></code></p>
+</li>
+<li><p class="first">Enter:</p>
+<p><code class="docutils literal notranslate"><span class="pre">ps</span> <span class="pre">aux</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">ge</span></code></p>
+</li>
+<li><p class="first">Look for and stop any Fusion processes in the output.</p>
+</li>
+<li><p class="first">Make sure that you have enough free disk space, and then enter:</p>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span> <span class="pre">start</span></code>
+<code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">start</span></code></p>
+</li>
+<li><p class="first">Cancel the build, and then resume it using the <code class="docutils literal notranslate"><span class="pre">gecancel</span></code> and
+<code class="docutils literal notranslate"><span class="pre">geresume</span></code> commands.</p>
+</li>
 </ol>
 </div>
 </div>

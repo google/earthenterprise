@@ -16,7 +16,7 @@ Portable Developer Guide
       :ref:`Hello Earth! <Hello_Earth>`
       :ref:`JSON documents <JSON_Documents>`
       :ref:`Polygon KML document <Polygon_KML_Document>`
-      
+
       .. _Introduction_Portable_Developer:
       .. rubric:: Introduction
 
@@ -133,11 +133,11 @@ Portable Developer Guide
 
       .. rubric:: Imagery layer example
 
-         ``[   ...{    icon : "icons/1.png",    id : 1001,    initialState : true,    isPng : false,    label : "Imagery",    lookAt : "none",    opacity : 1,    requestType : "ImageryMaps", // A layer of imagery. version : 8   }...   ]``
+      ``[   ...{    icon : "icons/1.png",    id : 1001,    initialState : true,    isPng : false,    label : "Imagery",    lookAt : "none",    opacity : 1,    requestType : "ImageryMaps", // A layer of imagery. version : 8   }...   ]``
 
       .. rubric:: Vector data example
 
-         ``[   ...{    icon : "icons/2.png",    id : 1002,    initialState : true,    isPng : true,    label : "Tokyo",    lookAt : "none",    opacity : 1,    requestType : "VectorMapsRaster", // Vector data, such as roads, points, and borders. version : 4   }...   ]``
+      ``[   ...{    icon : "icons/2.png",    id : 1002,    initialState : true,    isPng : true,    label : "Tokyo",    lookAt : "none",    opacity : 1,    requestType : "VectorMapsRaster", // Vector data, such as roads, points, and borders. version : 4   }...   ]``
 
       .. _Polygon_KML_Document:
       .. rubric:: Polygon KML document
