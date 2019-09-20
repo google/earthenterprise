@@ -10,7 +10,7 @@ Fusion issues
 
       When you install GEE on a server, the software does a query for
       ``hostname -f``. Each time you build a resource, project, or
-      dgeecheckTestServerStatus.rstatabase on the Fusion server, the initial ``hostname -f``
+      database on the Fusion server, the initial ``hostname -f``
       response is added to all the files in each asset’s subdirectory.
       Changing the hostname or moving assets from one server to another
       without updating the hostname in all places will make your Fusion
