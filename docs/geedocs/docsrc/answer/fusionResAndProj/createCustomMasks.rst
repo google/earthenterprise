@@ -1847,6 +1847,7 @@ Create custom masks
 
       #. **Create a custom mask with gepolymaskgen using the gemaskgen base
       mask and mask to the coastlines (three steps)**
+
          a. Invert the mask file built during the Fusion Pro import:
 
          ``jcain@machine123:/gevol-local/gepolymaskgen$ sudo``\ **``/opt/google/bin/gepolymaskgen --base_mask /gevol-local/gepolymaskgen/Resources/Imagery/SFBayAreaLanSat.kiasset/maskgen.kia/ver002/mask.tif --invert --output_mask /opt/google/share/tutorials/fusion/Imagery/usgsLanSat-invertbasemask.tif``**
