@@ -1,28 +1,17 @@
-|Google logo|
 
-==================
 Segmentation fault
-==================
 
-.. container::
+-[ Error message ]-
 
-   .. container:: content
+"Segmentation fault"
 
-      .. rubric:: Error message
+-[ Description ]-
 
-      ``Segmentation fault``
+The Segmentation fault error message typically indicates an issue with
+the operating environment, such as a software or hardware
+incompatibility.
 
-      .. rubric:: Description
+-[ Resolution ]-
 
-      The Segmentation fault error message typically indicates an issue
-      with the operating environment, such as a software or hardware
-      incompatibility.
-
-      .. rubric:: Resolution
-
-      Confirm that your hardware and software meet the requirements
-      listed in the GEE documentation.
-
-.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
-   :width: 130px
-   :height: 44px
+Confirm that your hardware and software meet the requirements listed
+in the GEE documentation.
