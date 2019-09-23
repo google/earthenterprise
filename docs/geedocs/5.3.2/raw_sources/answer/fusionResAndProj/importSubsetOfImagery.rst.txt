@@ -62,7 +62,4 @@ Import a subset of imagery
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
    :height: 44px
-.. |getranslate imagery| image:: ../../art/fusion/resources/2656008_getranslate_1.jpg
-.. |getranslate imagery| image:: ../../art/fusion/resources/2656074_getranslate_2.jpg
-.. |getranslate imagery| image:: ../../art/fusion/resources/2656011_getranslate_3.jpg
 .. |getranslate imagery| image:: ../../art/fusion/resources/2656013_getranslate_4.jpg

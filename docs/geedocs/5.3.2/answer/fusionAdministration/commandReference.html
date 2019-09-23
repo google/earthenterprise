@@ -163,11 +163,11 @@ imagery scale in Fusion. Matches the levels in the Fusion UI.</p>
  <span class="n">insetresource</span><span class="p">}</span> <span class="o">...</span>
 </pre></div>
 </div>
-<p class="rubric" id="purpose-1">Purpose</p>
+<p class="rubric">Purpose</p>
 <p>Adds additional resources to an existing terrain project. This
 tool is capable of building Mercator terrain projects for 2D
 databases or Flat (Plate Carrée) terrain projects.</p>
-<p class="rubric" id="commands-1">Commands</p>
+<p class="rubric">Commands</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">mercator</span>
 </pre></div>
 </div>
@@ -211,16 +211,6 @@ overlay terrain. resource_min_level is any integer between 4 and
 <p class="rubric" id="geconfigassetroot">geconfigureassetroot</p>
 <p><code class="docutils literal notranslate"><span class="pre">geconfigureassetroot</span> <span class="pre">{--new</span> <span class="pre">--assetroot</span> <span class="pre">path</span>&#160; <span class="pre">[--srcvol</span> <span class="pre">path]</span> <span class="pre">|</span> <span class="pre">--repair</span> <span class="pre">|</span> <span class="pre">--editvolumes</span> <span class="pre">|</span> <span class="pre">--listvolumes</span> <span class="pre">|</span> <span class="pre">--addvolume</span> <span class="pre">|</span> <span class="pre">--fixmasterhost</span> <span class="pre">|</span> <span class="pre">--noprompt}</span>&#160; <span class="pre">[--nochown]</span></code>
 .. rubric:: Purpose</p>
-<blockquote>
-<div><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body">purpose-2</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
 <p>To add volume definitions or edit existing volume definitions.</p>
 <div class="admonition tip">
 <p class="first admonition-title">Tip</p>
@@ -229,14 +219,14 @@ overlay terrain. resource_min_level is any integer between 4 and
 before using this command and then start it again after you are
 done.</p>
 </div>
-<p class="rubric" id="example">Example</p>
+<p class="rubric">Example</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">geconfigureassetroot</span> <span class="o">--</span><span class="n">new</span> <span class="o">--</span><span class="n">assetroot</span> <span class="o">/</span><span class="n">gevol</span><span class="o">/</span><span class="n">assets</span>
 <span class="n">geconfigureassetroot</span> <span class="o">--</span><span class="n">new</span> <span class="o">--</span><span class="n">assetroot</span> <span class="o">/</span><span class="n">gevol</span><span class="o">/</span><span class="n">assets</span> <span class="o">--</span><span class="n">srcvol</span> <span class="o">/</span><span class="n">data1</span><span class="o">/</span><span class="n">src</span>
 <span class="n">geconfigureassetroot</span> <span class="o">--</span><span class="n">repair</span>
 <span class="n">geconfigureassetroot</span> <span class="o">--</span><span class="n">editvolumes</span>
 </pre></div>
 </div>
-<p class="rubric" id="options-1">Options</p>
+<p class="rubric">Options</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">assetroot</span> <span class="n">path</span>
 </pre></div>
 </div>
@@ -256,7 +246,7 @@ specified on the command line.</p>
 file/directory privileges. You may consider setting this option
 when you do not want any prvilege settings to change as a result
 of reconfiguring your asset root.</p>
-<p class="rubric" id="commands-2">Commands</p>
+<p class="rubric">Commands</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">new</span> <span class="o">--</span><span class="n">assetroot</span> <span class="n">path</span>
 </pre></div>
 </div>
@@ -309,16 +299,16 @@ Fusion.)</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">geconfigurepublishroot</span> <span class="p">[</span><span class="o">--</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">allow_symlinks</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">noprompt</span><span class="p">]</span>
 </pre></div>
 </div>
-<p class="rubric" id="purpose-3">Purpose</p>
+<p class="rubric">Purpose</p>
 <p>To specify the path where you want to push databases for
 publishing and serving with the current Google Earth Enterprise
 Server. Follow the prompts.</p>
 <p><strong>Note:</strong> You must run this command as root.</p>
-<p class="rubric" id="example-1">Example</p>
+<p class="rubric">Example</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">geconfigurepublishroot</span> <span class="o">--</span><span class="n">path</span> <span class="o">/</span><span class="n">gevol</span><span class="o">/</span><span class="n">published_dbs</span> <span class="o">--</span><span class="n">allow_symlinks</span>
 </pre></div>
 </div>
-<p class="rubric" id="commands-3">Commands</p>
+<p class="rubric">Commands</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">path</span><span class="o">=</span><span class="n">path</span>
 </pre></div>
 </div>
@@ -376,14 +366,14 @@ Deprecated in release GEE 4.4 and higher.</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gedisconnectedclean</span> <span class="p">[</span><span class="o">--</span><span class="n">dbpath</span> <span class="n">dbpath</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">list</span> <span class="n">assetroot</span><span class="p">]</span>
 </pre></div>
 </div>
-<p class="rubric" id="purpose-5">Purpose</p>
+<p class="rubric">Purpose</p>
 <p>To clean a disconnected database from a disconnected mock asset
 root.</p>
-<p class="rubric" id="example-3">Example</p>
+<p class="rubric">Example</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gedisconnectedclean</span> <span class="o">--</span><span class="n">dbpath</span> <span class="o">/</span><span class="n">gevol</span><span class="o">/</span><span class="n">assets</span><span class="o">/</span><span class="n">Databases</span><span class="o">/</span><span class="n">MyPOIs</span><span class="o">.</span><span class="n">kdatabase</span>
 </pre></div>
 </div>
-<p class="rubric" id="commands-4">Commands</p>
+<p class="rubric">Commands</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">dbpath</span> <span class="n">dbpath</span>
 </pre></div>
 </div>
@@ -403,13 +393,13 @@ Deprecated in release GEE 4.4 and higher. Use
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gedisconnectedpublish</span> <span class="p">[</span><span class="n">db_alias</span><span class="p">]</span> <span class="n">db_name</span>
 </pre></div>
 </div>
-<p class="rubric" id="purpose-6">Purpose</p>
+<p class="rubric">Purpose</p>
 <p>To publish a database on a disconnected server.</p>
-<p class="rubric" id="example-4">Example</p>
+<p class="rubric">Example</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gedisconnectedpublish</span> <span class="n">MyPOIs</span>
 </pre></div>
 </div>
-<p class="rubric" id="commands-5">Commands</p>
+<p class="rubric">Commands</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">db_alias</span>
 </pre></div>
 </div>
@@ -429,10 +419,10 @@ older (pre 4.0) version of Fusion.</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gedisconnectedreceive</span> <span class="o">--</span><span class="nb">input</span> <span class="n">dirname</span>
 </pre></div>
 </div>
-<p class="rubric" id="purpose-7">Purpose</p>
+<p class="rubric">Purpose</p>
 <p>To copy a disconnected database from either detachable media or
 local storage into the mock asset root.</p>
-<p class="rubric" id="example-5">Example</p>
+<p class="rubric">Example</p>
 <p>For detachable media:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gedisconnectedreceive</span> <span class="o">--</span><span class="nb">input</span> <span class="o">/</span><span class="n">mnt</span><span class="o">/</span><span class="n">usbdrive</span><span class="o">/</span><span class="n">SFHighways_3dDatabase_v20</span>
 </pre></div>
@@ -442,7 +432,7 @@ local storage into the mock asset root.</p>
 <span class="o">/</span><span class="n">gevol</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">disconnected_databases</span><span class="o">/</span><span class="n">SFHighways_3dDatabase_v20</span>
 </pre></div>
 </div>
-<p class="rubric" id="commands-6">Commands</p>
+<p class="rubric">Commands</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="nb">input</span> <span class="n">dirname</span>
 </pre></div>
 </div>
@@ -464,16 +454,16 @@ folders on the same volume.</div>
 <span class="o">--</span><span class="n">output</span> <span class="n">dirname</span> <span class="p">[</span><span class="o">--</span><span class="n">sendpath</span> <span class="n">dbpath</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">sendver</span> <span class="n">dbver</span><span class="p">]</span>
 </pre></div>
 </div>
-<p class="rubric" id="purpose-8">Purpose</p>
+<p class="rubric">Purpose</p>
 <p>To gather all the files from a Fusion asset root necessary for a
 disconnected push/publish, for either publishing new databases or
 publishing “delta” updates.</p>
-<p class="rubric" id="example-6">Example</p>
+<p class="rubric">Example</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>gedisconnectedsend --sendver Databases/SFHighways.kdatabase?version=2
 --output /gevol/src/disconnected_databases/SFHighways_3dDatabase_v2
 </pre></div>
 </div>
-<p class="rubric" id="commands-7">Commands</p>
+<p class="rubric">Commands</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">extra</span> <span class="n">filename</span>
 </pre></div>
 </div>
@@ -514,14 +504,14 @@ with the <code class="docutils literal notranslate"><span class="pre">gequery</s
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">genewmapdatabase</span> <span class="p">[</span><span class="o">--</span><span class="n">mercator</span> <span class="o">|</span> <span class="o">--</span><span class="n">flat</span><span class="p">]</span> <span class="p">]</span> <span class="o">-</span><span class="n">o</span> <span class="n">databasename</span> <span class="p">[</span><span class="o">--</span><span class="n">imagery</span> <span class="n">imagery</span> <span class="n">project</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">map</span> <span class="n">imap</span> <span class="n">project</span><span class="p">]</span><span class="o">...</span>
 </pre></div>
 </div>
-<p class="rubric" id="purpose-9">Purpose</p>
+<p class="rubric">Purpose</p>
 <p>Creates a new 2D map database. If an imagery or map project is
 specified, it is added to the database. Flat or mercator databases
 can be created. Mercator databases can use either mercator or flat
 imagery projects, with mercator projects given priority if there
 is a naming collision. Flat databases can only use flat imagery
 projects.</p>
-<p class="rubric" id="commands-8">Commands</p>
+<p class="rubric">Commands</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">mercator</span>
 </pre></div>
 </div>
@@ -547,9 +537,9 @@ flat.</p>
   <span class="o">-</span><span class="n">o</span> <span class="n">projectname</span> <span class="p">{[</span><span class="o">--</span><span class="n">maxlevel</span> <span class="n">level</span> <span class="o">|</span> <span class="o">--</span><span class="n">maxleveloverride</span> <span class="n">level</span><span class="p">]</span> <span class="n">insetresource</span><span class="p">}</span><span class="o">...</span>
 </pre></div>
 </div>
-<p class="rubric" id="purpose-10">Purpose</p>
+<p class="rubric">Purpose</p>
 <p>Modifies an existing imagery project.</p>
-<p class="rubric" id="commands-9">Commands</p>
+<p class="rubric">Commands</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">mercator</span>
 </pre></div>
 </div>
@@ -566,7 +556,7 @@ flat.</p>
 </pre></div>
 </div>
 <p><em>Default</em>. Uses normal imagery for the project.</p>
-<p class="rubric" id="options-2">Options</p>
+<p class="rubric">Options</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">maxlevel</span> <span class="n">level</span>
 </pre></div>
 </div>
@@ -588,9 +578,9 @@ imagery scale in Fusion. Matches the levels in the Fusion UI.</p>
  <span class="n">insetresource</span><span class="p">}</span> <span class="o">...</span>
 </pre></div>
 </div>
-<p class="rubric" id="purpose-11">Purpose</p>
+<p class="rubric">Purpose</p>
 <p>Modifies an existing terrain project.</p>
-<p class="rubric" id="commands-10">Commands</p>
+<p class="rubric">Commands</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">mercator</span>
 </pre></div>
 </div>
@@ -637,9 +627,9 @@ overlay terrain. resource_min_level is any integer between 4 and
  <span class="o">-</span><span class="n">o</span> <span class="n">projectname</span> <span class="p">{[</span><span class="o">--</span><span class="n">maxlevel</span> <span class="n">level</span> <span class="o">|</span> <span class="o">--</span><span class="n">maxleveloverride</span> <span class="n">level</span><span class="p">]</span> <span class="n">insetresource</span><span class="p">}</span><span class="o">...</span>
 </pre></div>
 </div>
-<p class="rubric" id="purpose-12">Purpose</p>
+<p class="rubric">Purpose</p>
 <p>Creates a new imagery project.</p>
-<p class="rubric" id="commands-11">Commands</p>
+<p class="rubric">Commands</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">mercator</span>
 </pre></div>
 </div>
@@ -656,7 +646,7 @@ overlay terrain. resource_min_level is any integer between 4 and
 </pre></div>
 </div>
 <p><em>Default</em>. Uses normal imagery for the project.</p>
-<p class="rubric" id="options-3">Options</p>
+<p class="rubric">Options</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">maxlevel</span> <span class="n">level</span>
 </pre></div>
 </div>
@@ -678,9 +668,9 @@ imagery scale in Fusion. Matches the levels in the Fusion UI.</p>
  <span class="n">insetresource</span><span class="p">}</span> <span class="o">...</span>
 </pre></div>
 </div>
-<p class="rubric" id="purpose-13">Purpose</p>
+<p class="rubric">Purpose</p>
 <p>Creates a new terrain project.</p>
-<p class="rubric" id="commands-12">Commands</p>
+<p class="rubric">Commands</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">mercator</span>
 </pre></div>
 </div>
@@ -732,7 +722,7 @@ Fusion GUI and <a class="reference external" href="../answer/3497763.html">GEE S
 <span class="p">(</span> <span class="p">[</span><span class="o">--</span><span class="n">assetroot</span> <span class="n">path</span> <span class="p">[</span><span class="o">--</span><span class="n">role</span> <span class="p">{</span><span class="n">master</span> <span class="o">|</span> <span class="n">slave</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">numcpus</span> <span class="n">num</span><span class="p">]]</span> <span class="p">)</span>
 </pre></div>
 </div>
-<p class="rubric" id="purpose-14">Purpose</p>
+<p class="rubric">Purpose</p>
 <p>To perform a variety of operations related to existing asset roots
 on the current machine.</p>
 <div class="admonition tip">
@@ -741,7 +731,7 @@ on the current machine.</p>
 then start it again after you are done. You must also run this
 command as root.</p>
 </div>
-<p class="rubric" id="example-7">Example</p>
+<p class="rubric">Example</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">geselectassetroot</span> <span class="o">--</span><span class="nb">list</span>
 <span class="n">geselectassetroot</span> <span class="o">--</span><span class="n">lock</span>
 <span class="n">geselectassetroot</span> <span class="o">--</span><span class="n">unlock</span>
@@ -749,7 +739,7 @@ command as root.</p>
 <span class="n">geselectassetroot</span> <span class="o">--</span><span class="n">assetroot</span> <span class="o">/</span><span class="n">gevol</span><span class="o">/</span><span class="n">assets</span> <span class="o">--</span><span class="n">role</span> <span class="n">slave</span> <span class="o">--</span><span class="n">numcpus</span> <span class="mi">3</span>
 </pre></div>
 </div>
-<p class="rubric" id="options-4">Options</p>
+<p class="rubric">Options</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">assetroot</span> <span class="o">&lt;</span><span class="nb">dir</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -761,7 +751,7 @@ asset root is used if it is not specified.</p>
 </div>
 <p>Do not prompt for more information, returns -1 to indicate an error
 if command fails or has insufficient arguments.</p>
-<p class="rubric" id="commands-13">Commands</p>
+<p class="rubric">Commands</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="nb">list</span>
 </pre></div>
 </div>
@@ -804,11 +794,11 @@ available only in combination with –<code class="docutils literal notranslate"
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">geselectpublishroot</span> <span class="n">path</span>
 </pre></div>
 </div>
-<p class="rubric" id="purpose-15">Purpose</p>
+<p class="rubric">Purpose</p>
 <p>To specify a different publish root. The specified path must
 exist. If you want to create a publish root, see
 <code class="docutils literal notranslate"><span class="pre">`geconfigurepublishroot</span></code> &lt;#geconfigurepublishroot&gt;`__.</p>
-<p class="rubric" id="example-8">Example</p>
+<p class="rubric">Example</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">geselectpublishroot</span> <span class="o">/</span><span class="n">gevol</span><span class="o">/</span><span class="n">published_dbs</span>
 </pre></div>
 </div>
@@ -819,7 +809,7 @@ exist. If you want to create a publish root, see
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">geserveradmin</span> <span class="p">[</span><span class="n">options</span><span class="p">]</span> <span class="n">commands</span>
 </pre></div>
 </div>
-<p class="rubric" id="purpose-16">Purpose</p>
+<p class="rubric">Purpose</p>
 <p>To configure your Google Earth Enterprise Server. This section
 breaks down the <code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> commands into the following
 categories:</p>
@@ -899,7 +889,8 @@ server.</p>
 </pre></div>
 </div>
 <p>Registers a new database with the specified name.</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id1">
+<caption><span class="caption-text">adddb option</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="33%" />
 <col width="33%" />
@@ -914,9 +905,7 @@ server.</p>
 <tbody valign="top">
 <tr class="row-even"><td>–dbalias alias</td>
 <td>Optional</td>
-<td>Specifies a
-user-friendly name
-for the database.</td>
+<td>Specifies a user-friendly name for the database.</td>
 </tr>
 </tbody>
 </table>
@@ -938,11 +927,12 @@ option. (See also <code class="docutils literal notranslate"><span class="pre">-
 </div>
 <p>Pushes one or more databases to the server. For example,
 <code class="docutils literal notranslate"><span class="pre">--pushdb</span> <span class="pre">db1</span> <span class="pre">--pushdb</span> <span class="pre">db2</span></code></p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id2">
+<caption><span class="caption-text">pushdb option</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="33%" />
-<col width="33%" />
-<col width="33%" />
+<col width="30%" />
+<col width="15%" />
+<col width="55%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">–pushdb option</th>
@@ -951,27 +941,13 @@ option. (See also <code class="docutils literal notranslate"><span class="pre">-
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">force_copy</span>
-</pre></div>
-</div>
-</td>
+<tr class="row-even"><td>–force_copy</td>
 <td>Optional</td>
-<td>Copies database files
-while
-pushing/publishing;
-otherwise creates a
-hard/symbolic link
-when server settings
-allow. To allow
-symbolic links,
-specify using
-<code class="docutils literal notranslate"><span class="pre">geconfigurepublishr</span>
-<span class="pre">oot</span></code>:
-<code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">/opt/google/bi</span>
-<span class="pre">n/geconfigurepublishr</span>
-<span class="pre">oot</span> <span class="pre">-path=/gevol/publ</span>
-<span class="pre">ished_dbs</span> <span class="pre">-allow_syml</span>
-<span class="pre">inks.</span></code></td>
+<td>Copies database files while pushing/publishing;
+otherwise creates a hard/symbolic link when server
+settings allow. To allow symbolic links, specify
+using <code class="docutils literal notranslate"><span class="pre">geconfigurepublishroot</span></code>: <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">/opt/google/bin/geconfigurepublishroot</span>
+<span class="pre">-path=/gevol/published_dbs</span> <span class="pre">-allow_symlinks</span></code>.</td>
 </tr>
 </tbody>
 </table>
@@ -982,77 +958,41 @@ specify using
 <p>Publish the specified database on the specified target path. If
 the virtual host name is omitted, it publishes to the default
 virtual host: “public”.</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id3">
+<caption><span class="caption-text">publishdb option</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="33%" />
-<col width="33%" />
-<col width="33%" />
+<col width="30%" />
+<col width="15%" />
+<col width="55%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head">–publishdb Option</th>
+<tr class="row-odd"><th class="head">–publishdb option</th>
 <th class="head">Required/Optional</th>
 <th class="head">Description</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><blockquote class="first">
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">targetpath</span> <span class="n">targe</span>
-</pre></div>
-</div>
-</div></blockquote>
-<p class="last">:: t_path</p>
-</td>
+<tr class="row-even"><td>–targetpath target_path</td>
 <td>Required</td>
-<td>Specifies the target
-path on which to
-publish.</td>
+<td>Specifies the target path on which to publish.</td>
 </tr>
-<tr class="row-odd"><td><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">vhname</span> <span class="n">vh_name</span>
-</pre></div>
-</div>
-</td>
+<tr class="row-odd"><td>–vhname vh_name</td>
 <td>Optional</td>
-<td>Specify the name of
-the virtual host. If
-the virtual host name
-is omitted, it
-publishes to the
-default virtual host,
-“public”.</td>
+<td>Specify the name of the virtual host. If the virtual host name is omitted,
+it publishes to the default virtual host, “public”.</td>
 </tr>
-<tr class="row-even"><td><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">setecdefault</span>
-</pre></div>
-</div>
-</td>
+<tr class="row-even"><td>–setecdefault</td>
 <td>Optional</td>
-<td>Publish this database
-as the default
-for the Earth Client
-to connect to if no
-database or virtual
-host is specified
-upon initial
-connection.</td>
+<td>Publish this database as the default for the Earth Client to connect
+to if no database or virtual host is specified upon initial connection.</td>
 </tr>
-<tr class="row-odd"><td><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">enable_poisearch</span>
-</pre></div>
-</div>
-</td>
+<tr class="row-odd"><td>–enable_poisearch</td>
 <td>Optional</td>
-<td>Enable Point of
-Interest search if
-database contains POI
-data.</td>
+<td>Enable Point of Interest search if database contains POI data.</td>
 </tr>
-<tr class="row-even"><td><div class="first highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">enable_enhanceds</span>
-</pre></div>
-</div>
-<p class="last">earch</p>
-</td>
+<tr class="row-even"><td>–enable_enhancedsearch</td>
 <td>Optional</td>
-<td>If POI search is
-enabled, enable
-enhanced search.</td>
+<td>If POI search is enabled, enable enhanced search.</td>
 </tr>
 </tbody>
 </table>
@@ -1096,8 +1036,8 @@ host.</p>
 <p>Registers a new virtual host with the specified name. Spaces are
 not allowed in the virtual host name. For example:</p>
 <p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--addvh</span> <span class="pre">public_vh</span> <span class="pre">--vhurl</span> <span class="pre">http://mysite.com/public_vh</span></code></p>
-<table border="1" class="colwidths-given docutils" id="id3">
-<caption><span class="caption-text">addvh options</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
+<table border="1" class="colwidths-given docutils" id="id4">
+<caption><span class="caption-text">addvh options</span><a class="headerlink" href="#id4" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="30%" />
 <col width="15%" />
@@ -1117,8 +1057,7 @@ not allowed in the virtual host name. For example:</p>
 <span class="pre">If</span> <span class="pre">``vhurl</span></code> is omitted, it will be set to
 <code class="docutils literal notranslate"><span class="pre">http://yourserver.domain/vh_name</span></code>.
 There are three ways to specify the <code class="docutils literal notranslate"><span class="pre">vhurl</span></code>:</p>
-<blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li>Location-based URL, such as <code class="docutils literal notranslate"><span class="pre">/private_ge</span></code>.
 For example, if the entire URL is
 <code class="docutils literal notranslate"><span class="pre">http://www.company.com/private_ge</span></code>,
@@ -1126,15 +1065,12 @@ you enter <code class="docutils literal notranslate"><span class="pre">/private_
 <strong>Note:</strong> Google recommends that you use the
 <code class="docutils literal notranslate"><span class="pre">_ge</span></code> and <code class="docutils literal notranslate"><span class="pre">_map</span></code> naming convention to make
 it easier to distinguish between virtual host types.</li>
-<li>Port-based URL, such as:
-:: <a class="reference external" href="http://www.company.com:1234">http://www.company.com:1234</a>
+<li>Port-based URL, such as: :: <a class="reference external" href="http://www.company.com:1234">http://www.company.com:1234</a>
 The entire URL, including protocol, servername,
 path (if applicable), and port are required.</li>
-<li>Name-based URL, such as:
-:: <a class="reference external" href="http://corp.company.com">http://corp.company.com</a></li>
+<li>Name-based URL, such as: :: <a class="reference external" href="http://corp.company.com">http://corp.company.com</a></li>
 </ul>
-</div></blockquote>
-<p class="last">For this type of <a href="#id1"><span class="problematic" id="id2">`</span></a>specification, you must modify
+<p class="last">For this type of specification, you must modify
 your DNS appropriately for the virtual host.
 After you use this command, you must create a              |
 configuration file for the new virtual host.</p>
