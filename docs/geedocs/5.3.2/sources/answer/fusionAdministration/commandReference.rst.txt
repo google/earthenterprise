@@ -157,9 +157,6 @@ terrain. resource_min_level is any integer between 4 and 24 inclusive.
 --repair | --editvolumes | --listvolumes | --addvolume |
 --fixmasterhost | --noprompt}  [--nochown]" .. rubric:: Purpose
 
-   name:
-      purpose-2
-
 To add volume definitions or edit existing volume definitions.
 
 Tip: You must run this command as root. Except for the
@@ -1061,8 +1058,9 @@ Lists all the target paths currently serving databases on the server.
 
 Registers a new database with the specified name.
 
-      --adddb option  Required/Optional  Description  --dbalias alias
-Optional  Specifies a user-friendly name for the database.
+adddb option        --adddb option  Required/Optional  Description
+--dbalias alias  Optional  Specifies a user-friendly name for the
+database.
 
 -[ Delete database ]-
 
@@ -1086,12 +1084,12 @@ deletevh".)
 Pushes one or more databases to the server. For example, "--pushdb db1
 --pushdb db2"
 
-      --pushdb option  Required/Optional  Description  --force_copy
-Optional  Copies database files while pushing/publishing; otherwise
-creates a hard/symbolic link when server settings allow. To allow
-symbolic links, specify using geconfigurepublishr oot: sudo
-/opt/google/bi n/geconfigurepublishr oot -path=/gevol/publ ished_dbs
--allow_syml inks.
+pushdb option        --pushdb option  Required/Optional  Description
+--force_copy  Optional  Copies database files while
+pushing/publishing; otherwise creates a hard/symbolic link when server
+settings allow. To allow symbolic links, specify using
+geconfigurepublishroot: sudo /opt/google/bin/geconfigurepublishroot
+-path=/gevol/published_dbs -allow_symlinks.
 
 -[ Publish database ]-
 
@@ -1101,16 +1099,16 @@ Publish the specified database on the specified target path. If the
 virtual host name is omitted, it publishes to the default virtual
 host: "public".
 
-      --publishdb Option  Required/Optional  Description  --targetpath
-targe  :: t_path  Required  Specifies the target path on which to
-publish.  --vhname vh_name  Optional  Specify the name of the virtual
-host. If the virtual host name is omitted, it publishes to the default
-virtual host, "public".  --setecdefault  Optional  Publish this
-database as the default for the Earth Client to connect to if no
-database or virtual host is specified upon initial connection.
---enable_poisearch  Optional  Enable Point of Interest search if
-database contains POI data.  --enable_enhanceds  earch  Optional  If
-POI search is enabled, enable enhanced search.
+publishdb option        --publishdb option  Required/Optional
+Description  --targetpath target_path  Required  Specifies the target
+path on which to publish.  --vhname vh_name  Optional  Specify the
+name of the virtual host. If the virtual host name is omitted, it
+publishes to the default virtual host, “public”.  --setecdefault
+Optional  Publish this database as the default for the Earth Client to
+connect to if no database or virtual host is specified upon initial
+connection.  --enable_poisearch  Optional  Enable Point of Interest
+search if database contains POI data.  --enable_enhancedsearch
+Optional  If POI search is enabled, enable enhanced search.
 
 -[ Unpublish database ]-
 
@@ -1169,7 +1167,7 @@ naming convention to make it easier to distinguish between virtual
 host types.  Port-based URL, such as: :: http://www.company.com:1234
 The entire URL, including protocol, servername, path (if applicable),
 and port are required.  Name-based URL, such as: ::
-http://corp.company.com  For this type of `specification, you must
+http://corp.company.com  For this type of specification, you must
 modify your DNS appropriately for the virtual host. After you use this
 command, you must create a              | configuration file for the
 new virtual host.  --vhcachelevel num  Optional  Specify a cache level

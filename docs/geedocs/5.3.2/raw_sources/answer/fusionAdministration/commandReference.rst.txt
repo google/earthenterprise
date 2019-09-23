@@ -109,14 +109,12 @@ Command reference
           insetresource} ...
 
       .. rubric:: Purpose
-         :name: purpose-1
 
       Adds additional resources to an existing terrain project. This
       tool is capable of building Mercator terrain projects for 2D
       databases or Flat (Plate Carrée) terrain projects.
 
       .. rubric:: Commands
-         :name: commands-1
 
       ::
 
@@ -181,7 +179,6 @@ Command reference
 
       ``geconfigureassetroot {--new --assetroot path  [--srcvol path] | --repair | --editvolumes | --listvolumes | --addvolume | --fixmasterhost | --noprompt}  [--nochown]``
       .. rubric:: Purpose
-         :name: purpose-2
 
       To add volume definitions or edit existing volume definitions.
 
@@ -193,7 +190,6 @@ Command reference
          done.
 
       .. rubric:: Example
-         :name: example
 
       ::
 
@@ -203,7 +199,6 @@ Command reference
          geconfigureassetroot --editvolumes
 
       .. rubric:: Options
-         :name: options-1
 
       ::
 
@@ -231,7 +226,6 @@ Command reference
       of reconfiguring your asset root.
 
       .. rubric:: Commands
-         :name: commands-2
 
       ::
 
@@ -304,7 +298,6 @@ Command reference
          geconfigurepublishroot [--path=path] [--allow_symlinks] [--noprompt]
 
       .. rubric:: Purpose
-         :name: purpose-3
 
       To specify the path where you want to push databases for
       publishing and serving with the current Google Earth Enterprise
@@ -313,14 +306,12 @@ Command reference
       **Note:** You must run this command as root.
 
       .. rubric:: Example
-         :name: example-1
 
       ::
 
          geconfigurepublishroot --path /gevol/published_dbs --allow_symlinks
 
       .. rubric:: Commands
-         :name: commands-3
 
       ::
 
@@ -402,20 +393,17 @@ Command reference
          gedisconnectedclean [--dbpath dbpath] [--list assetroot]
 
       .. rubric:: Purpose
-         :name: purpose-5
 
       To clean a disconnected database from a disconnected mock asset
       root.
 
       .. rubric:: Example
-         :name: example-3
 
       ::
 
          gedisconnectedclean --dbpath /gevol/assets/Databases/MyPOIs.kdatabase
 
       .. rubric:: Commands
-         :name: commands-4
 
       ::
 
@@ -446,19 +434,16 @@ Command reference
          gedisconnectedpublish [db_alias] db_name
 
       .. rubric:: Purpose
-         :name: purpose-6
 
       To publish a database on a disconnected server.
 
       .. rubric:: Example
-         :name: example-4
 
       ::
 
          gedisconnectedpublish MyPOIs
 
       .. rubric:: Commands
-         :name: commands-5
 
       ::
 
@@ -489,13 +474,11 @@ Command reference
          gedisconnectedreceive --input dirname
 
       .. rubric:: Purpose
-         :name: purpose-7
 
       To copy a disconnected database from either detachable media or
       local storage into the mock asset root.
 
       .. rubric:: Example
-         :name: example-5
 
       For detachable media:
 
@@ -511,7 +494,6 @@ Command reference
          /gevol/src/disconnected_databases/SFHighways_3dDatabase_v20
 
       .. rubric:: Commands
-         :name: commands-6
 
       ::
 
@@ -539,14 +521,12 @@ Command reference
          --output dirname [--sendpath dbpath] [--sendver dbver]
 
       .. rubric:: Purpose
-         :name: purpose-8
 
       To gather all the files from a Fusion asset root necessary for a
       disconnected push/publish, for either publishing new databases or
       publishing "delta" updates.
 
       .. rubric:: Example
-         :name: example-6
 
       ::
 
@@ -554,7 +534,6 @@ Command reference
          --output /gevol/src/disconnected_databases/SFHighways_3dDatabase_v2
 
       .. rubric:: Commands
-         :name: commands-7
 
       ::
 
@@ -611,7 +590,6 @@ Command reference
          genewmapdatabase [--mercator | --flat] ] -o databasename [--imagery imagery project] [--map imap project]...
 
       .. rubric:: Purpose
-         :name: purpose-9
 
       Creates a new 2D map database. If an imagery or map project is
       specified, it is added to the database. Flat or mercator databases
@@ -621,7 +599,6 @@ Command reference
       projects.
 
       .. rubric:: Commands
-         :name: commands-8
 
       ::
 
@@ -660,12 +637,10 @@ Command reference
             -o projectname {[--maxlevel level | --maxleveloverride level] insetresource}...
 
       .. rubric:: Purpose
-         :name: purpose-10
 
       Modifies an existing imagery project.
 
       .. rubric:: Commands
-         :name: commands-9
 
       ::
 
@@ -692,7 +667,6 @@ Command reference
       *Default*. Uses normal imagery for the project.
 
       .. rubric:: Options
-         :name: options-2
 
       ::
 
@@ -725,12 +699,10 @@ Command reference
            insetresource} ...
 
       .. rubric:: Purpose
-         :name: purpose-11
 
       Modifies an existing terrain project.
 
       .. rubric:: Commands
-         :name: commands-10
 
       ::
 
@@ -801,12 +773,10 @@ Command reference
            -o projectname {[--maxlevel level | --maxleveloverride level] insetresource}...
 
       .. rubric:: Purpose
-         :name: purpose-12
 
       Creates a new imagery project.
 
       .. rubric:: Commands
-         :name: commands-11
 
       ::
 
@@ -833,7 +803,6 @@ Command reference
       *Default*. Uses normal imagery for the project.
 
       .. rubric:: Options
-         :name: options-3
 
       ::
 
@@ -866,12 +835,10 @@ Command reference
            insetresource} ...
 
       .. rubric:: Purpose
-         :name: purpose-13
 
       Creates a new terrain project.
 
       .. rubric:: Commands
-         :name: commands-12
 
       ::
 
@@ -951,7 +918,6 @@ Command reference
          ( [--assetroot path [--role {master | slave}] [--numcpus num]] )
 
       .. rubric:: Purpose
-         :name: purpose-14
 
       To perform a variety of operations related to existing asset roots
       on the current machine.
@@ -963,7 +929,6 @@ Command reference
          command as root.
 
       .. rubric:: Example
-         :name: example-7
 
       ::
 
@@ -974,7 +939,6 @@ Command reference
          geselectassetroot --assetroot /gevol/assets --role slave --numcpus 3
 
       .. rubric:: Options
-         :name: options-4
 
       ::
 
@@ -992,7 +956,6 @@ Command reference
       if command fails or has insufficient arguments.
 
       .. rubric:: Commands
-         :name: commands-13
 
       ::
 
@@ -1054,14 +1017,12 @@ Command reference
          geselectpublishroot path
 
       .. rubric:: Purpose
-         :name: purpose-15
 
       To specify a different publish root. The specified path must
       exist. If you want to create a publish root, see
       ```geconfigurepublishroot`` <#geconfigurepublishroot>`__.
 
       .. rubric:: Example
-         :name: example-8
 
       ::
 
@@ -1082,7 +1043,6 @@ Command reference
          geserveradmin [options] commands
 
       .. rubric:: Purpose
-         :name: purpose-16
 
       To configure your Google Earth Enterprise Server. This section
       breaks down the ``geserveradmin`` commands into the following
@@ -1207,13 +1167,16 @@ Command reference
 
       Registers a new database with the specified name.
 
-      +-----------------------+-----------------------+-----------------------+
-      | --adddb option        | Required/Optional     | Description           |
-      +=======================+=======================+=======================+
-      | --dbalias alias       | Optional              | Specifies a           |
-      |                       |                       | user-friendly name    |
-      |                       |                       | for the database.     |
-      +-----------------------+-----------------------+-----------------------+
+      .. list-table:: adddb option
+         :widths: 30 30 30
+         :header-rows: 1
+
+         * - --adddb option
+           - Required/Optional
+           - Description
+         * - --dbalias alias
+           - Optional
+           - Specifies a user-friendly name for the database.
 
       .. rubric:: Delete database
 
@@ -1241,26 +1204,20 @@ Command reference
       Pushes one or more databases to the server. For example,
       ``--pushdb db1 --pushdb db2``
 
-      +-----------------------+-----------------------+-----------------------+
-      | --pushdb option       | Required/Optional     | Description           |
-      +=======================+=======================+=======================+
-      | ::                    | Optional              | Copies database files |
-      |                       |                       | while                 |
-      |    --force_copy       |                       | pushing/publishing;   |
-      |                       |                       | otherwise creates a   |
-      |                       |                       | hard/symbolic link    |
-      |                       |                       | when server settings  |
-      |                       |                       | allow. To allow       |
-      |                       |                       | symbolic links,       |
-      |                       |                       | specify using         |
-      |                       |                       | ``geconfigurepublishr |
-      |                       |                       | oot``:                |
-      |                       |                       | ``sudo /opt/google/bi |
-      |                       |                       | n/geconfigurepublishr |
-      |                       |                       | oot -path=/gevol/publ |
-      |                       |                       | ished_dbs -allow_syml |
-      |                       |                       | inks.``               |
-      +-----------------------+-----------------------+-----------------------+
+      .. list-table:: pushdb option
+         :widths: 30 15 55
+         :header-rows: 1
+
+         * - --pushdb option
+           - Required/Optional
+           - Description
+         * - --force_copy
+           - Optional
+           - Copies database files while pushing/publishing;
+             otherwise creates a hard/symbolic link when server
+             settings allow. To allow symbolic links, specify
+             using ``geconfigurepublishroot``: ``sudo /opt/google/bin/geconfigurepublishroot
+             -path=/gevol/published_dbs -allow_symlinks``.
 
       .. rubric:: Publish database
          :name: publish-database
@@ -1273,41 +1230,30 @@ Command reference
       the virtual host name is omitted, it publishes to the default
       virtual host: "public".
 
-      +-----------------------+-----------------------+-----------------------+
-      | --publishdb Option    | Required/Optional     | Description           |
-      +=======================+=======================+=======================+
-      | ::                    | Required              | Specifies the target  |
-      |                       |                       | path on which to      |
-      |    --targetpath targe |                       | publish.              |
-      |:: t_path              |                       |                       |
-      +-----------------------+-----------------------+-----------------------+
-      | ::                    | Optional              | Specify the name of   |
-      |                       |                       | the virtual host. If  |
-      |    --vhname vh_name   |                       | the virtual host name |
-      |                       |                       | is omitted, it        |
-      |                       |                       | publishes to the      |
-      |                       |                       | default virtual host, |
-      |                       |                       | "public".             |
-      +-----------------------+-----------------------+-----------------------+
-      | ::                    | Optional              | Publish this database |
-      |                       |                       | as the default        |
-      |    --setecdefault     |                       | for the Earth Client  |
-      |                       |                       | to connect to if no   |
-      |                       |                       | database or virtual   |
-      |                       |                       | host is specified     |
-      |                       |                       | upon initial          |
-      |                       |                       | connection.           |
-      +-----------------------+-----------------------+-----------------------+
-      | ::                    | Optional              | Enable Point of       |
-      |                       |                       | Interest search if    |
-      |    --enable_poisearch |                       | database contains POI |
-      |                       |                       | data.                 |
-      +-----------------------+-----------------------+-----------------------+
-      | ::                    | Optional              | If POI search is      |
-      |                       |                       | enabled, enable       |
-      |    --enable_enhanceds |                       | enhanced search.      |
-      | earch                 |                       |                       |
-      +-----------------------+-----------------------+-----------------------+
+      .. list-table:: publishdb option
+         :widths: 30 15 55
+         :header-rows: 1
+
+         * - --publishdb option
+           - Required/Optional
+           - Description
+         * - --targetpath target_path
+           - Required
+           - Specifies the target path on which to publish.
+         * - --vhname vh_name
+           - Optional
+           - Specify the name of the virtual host. If the virtual host name is omitted,
+             it publishes to the default virtual host, “public”.
+         * - --setecdefault
+           - Optional
+           - Publish this database as the default for the Earth Client to connect
+             to if no database or virtual host is specified upon initial connection.
+         * - --enable_poisearch
+           - Optional
+           - Enable Point of Interest search if database contains POI data.
+         * - --enable_enhancedsearch
+           - Optional
+           - If POI search is enabled, enable enhanced search.
 
       .. rubric:: Unpublish database
          :name: unpublish-database
@@ -1384,20 +1330,20 @@ Command reference
              If ``vhurl`` is omitted, it will be set to
              ``http://yourserver.domain/vh_name``.
              There are three ways to specify the ``vhurl``:
-               -  Location-based URL, such as ``/private_ge``.
-                  For example, if the entire URL is
-                  ``http://www.company.com/private_ge``,
-                  you enter ``/private_ge``.
-                  **Note:** Google recommends that you use the
-                  ``_ge`` and ``_map`` naming convention to make
-                  it easier to distinguish between virtual host types.
-               -  Port-based URL, such as:
-                  :: http://www.company.com:1234
-                  The entire URL, including protocol, servername,
-                  path (if applicable), and port are required.
-               -  Name-based URL, such as:
-                  :: http://corp.company.com
-             For this type of `specification, you must modify
+
+             -  Location-based URL, such as ``/private_ge``.
+                For example, if the entire URL is
+                ``http://www.company.com/private_ge``,
+                you enter ``/private_ge``.
+                **Note:** Google recommends that you use the
+                ``_ge`` and ``_map`` naming convention to make
+                it easier to distinguish between virtual host types.
+             -  Port-based URL, such as: :: http://www.company.com:1234
+                The entire URL, including protocol, servername,
+                path (if applicable), and port are required.
+             - Name-based URL, such as: :: http://corp.company.com
+
+             For this type of specification, you must modify
              your DNS appropriately for the virtual host.
              After you use this command, you must create a              |
              configuration file for the new virtual host.
