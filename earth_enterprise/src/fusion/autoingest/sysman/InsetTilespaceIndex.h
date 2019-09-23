@@ -47,7 +47,7 @@ const int MAX_LEVEL = 24;
 class InsetTilespaceIndex {
 
 protected:
-    std::map <QuadtreePath, std::vector<khExtents <double> >> _mbrExtentsVecMap;
+    std::map <QuadtreePath, khExtents <double> > _mbrExtentsVecMap;
 public:
     InsetTilespaceIndex() = default;
 

@@ -861,21 +861,14 @@ DegExtentsToPixelLevelRasterSize(const khExtents<double> &degExtents,
       static_cast<uint64>(degExtents.width()/pixelsize + 0.5),
       static_cast<uint64>(degExtents.height()/pixelsize + 0.5));
 }
-
+/*
 inline khExtents<uint32>
 DegExtentsToTileExtents( const khExtents<double> &degExtents,
                                                     uint level) {
-    // TODO _ figure out tileResolution
-    /*khExtents<int64> pixelExtents(
-            RowColOrder,
-            static_cast<int64>(degExtents.beginRow()) * RasterProductTileResolution,
-            static_cast<int64>(degExtents.endRow()) * RasterProductTileResolution,
-            static_cast<int64>(degExtents.beginCol()) * RasterProductTileResolution,
-            static_cast<int64>(degExtents.endCol()) * RasterProductTileResolution);
-    return PixelExtentsToTileExtents(pixelExtents, RasterProductTileResolution);*/
-    return RasterProductTilespaceFlat.FromNormExtents(degExtents, level, level).extents;
-    
-}
+    //return RasterProductTilespaceFlat.FromNormExtents(degExtents, level, level).extents;
+    khInsetCoverage kh = khInsetCoverage(RasterProductTilespaceFlat, degExtents, level, level, level);
+    return kh.levelExtents(kh.beginLevel());
+}*/
 
 // Translate Degree extents to a pixel raster size (number of _pixels_ in
 // width and height). This is NOT the same as making a khLevelCoverage from
