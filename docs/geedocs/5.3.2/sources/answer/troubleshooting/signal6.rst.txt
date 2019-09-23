@@ -1,27 +1,16 @@
-|Google logo|
 
-========
 Signal 6
-========
 
-.. container::
+-[ Error message ]-
 
-   .. container:: content
+"Process terminated with signal 6"
 
-      .. rubric:: Error message
+-[ Description ]-
 
-      ``Process terminated with signal 6``
-      
-      .. rubric:: Description
+This error indicates an issue with the operating environment, e.g., a
+software or hardware incompatibility.
 
-      This error indicates an issue with the operating environment, e.g.,
-      a software or hardware incompatibility.
+-[ Resolution ]-
 
-      .. rubric:: Resolution
-
-      Confirm that your hardware and software meet the requirements
-      listed in the technical documentation.
-
-.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
-   :width: 130px
-   :height: 44px
+Confirm that your hardware and software meet the requirements listed
+in the technical documentation.

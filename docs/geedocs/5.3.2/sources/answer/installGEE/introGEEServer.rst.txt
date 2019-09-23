@@ -1,17 +1,9 @@
-|Google logo|
 
-==========================
 Introduction to GEE Server
-==========================
 
-.. container::
+This documentation includes instruction for installing GEE Server. For
+additional information, see the GEE wiki at
 
-   .. container:: content
+https://github.com/google/earthenterprise/wiki
 
-      This documentation includes instruction for installing GEE Server.
-      For additional information, see the GEE wiki at
-      `https://github.com/google/earthenterprise/wiki <https://github.com/google/earthenterprise/wiki>`_.
-
-.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
-   :width: 130px
-   :height: 44px
+.
