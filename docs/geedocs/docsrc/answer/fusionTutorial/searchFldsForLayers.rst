@@ -194,7 +194,7 @@ Specifying Search Fields for Individual Layers
          dialog, see
 
          - :doc:`Default database <../geeServerAdmin/publishDefaultDatabase>`
-         - :doc:`../geeServerAdmin/createSearchTabs`
+         - :doc:`Search Tabs <../geeServerAdmin/createSearchTabs>`
          - :doc:`Snippet profiles <../geeServerAdmin/manageSnippetProfiles>`
          - :doc:`WMS <../geeServerAdmin/makeWMSRequests>`
 
