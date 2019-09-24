@@ -8,7 +8,8 @@ Introduction
 
 Creating composite maps and globes
 
- *Extracting layers from a composite map or globe*
+
+Extracting layers from a composite map or globe
 
 -[ Introduction ]-
 
@@ -72,8 +73,8 @@ and mydomainname with your server and domain.
 
 Sign in with the default credentials or the username and password
 assigned to you:  Default username: geapacheuser  Default password:
-geeadmin  Note: If you do not know your username and password, contact
-your Google Earth Enterprise Server System Administrator.
+geeadmin  If you do not know your username and password, contact your
+Google Earth Enterprise Server System Administrator.
 
 Click Dashboard to view information about the portable files
 registered on and published to the Server.
@@ -110,15 +111,9 @@ you need to remove a layer, click delete.  GEE Assembly tool  When you
 have no more layers available, the Layers drop-down list indicates
 that all available layers are in use.
 
-To select a base globe option, click the
-
-Base globe options
-
- drop-down list and choose a portable globe, then click
-
-Yes
-
- to use the imagery and terrain data for the selected base globe.
+To select a base globe option, click the Base globe options drop-down
+list and choose a portable globe, then click Yes to use the imagery
+and terrain data for the selected base globe.
 
 
 If your base globe is a portable file created using Portable Server
@@ -156,8 +151,8 @@ and mydomainname with your server and domain.
 
 Sign in with the default credentials or the username and password
 assigned to you:  Default username: geapacheuser  Default password:
-geeadmin  Note: If you do not know your username and password, contact
-your Google Earth Enterprise Server System Administrator.
+geeadmin  If you do not know your username and password, contact your
+Google Earth Enterprise Server System Administrator.
 
 Click Dashboard to view information about the portable files
 registered on and published to the Server.

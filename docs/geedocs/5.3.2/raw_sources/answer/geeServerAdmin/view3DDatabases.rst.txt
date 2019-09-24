@@ -26,15 +26,15 @@ View 3D databases
       #. Launch Google Earth EC. The Select Server dialog appears.
       #. Specify the **Publish point** by entering or selecting the URL
          or IP address of your server and database in the **Server** field.
-         
+
          For example, a Publish point of **BayAreaHighways** would be
-         hosted at http://\ *myserver.mydomainname.com*/BayAreaHighways,
+         hosted at *http://myserver.mydomainname.com*/BayAreaHighways,
          where *myserver* and *mydomainname* are specific to your
          server.
-      
+
       #. Click the **Sign In** button.
 
-         .. container:: alert
+         .. warning::
 
             If you have logged in to this server with Google Earth EC
             previously, log out, clear your cache, and log back in. For

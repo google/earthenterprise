@@ -73,4 +73,4 @@ the command prompt. If there is an error, contact GEE Support.
 
 Install Google Earth Enterprise
 
-Install GEE Server
+Refer OpenGEE Wiki

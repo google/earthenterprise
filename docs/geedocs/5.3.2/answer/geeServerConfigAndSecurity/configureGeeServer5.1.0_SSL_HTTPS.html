@@ -174,7 +174,7 @@ over HTTPS.</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> The virtual host name “secure” is reserved for GEE
+<p class="last">The virtual host name “secure” is reserved for GEE
 Server use.</p>
 </div>
 <p class="rubric" id="to-add-a-virtual-host-for-https-serving">To add a virtual host for HTTPS serving:</p>
@@ -202,22 +202,26 @@ example,
 <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf.d/virtual_servers/test_ssl_host.location_ssl</span></code>,
 includes the <code class="docutils literal notranslate"><span class="pre">&lt;Location&gt;</span></code> directives for SSL, in this case,
 <code class="docutils literal notranslate"><span class="pre">test_ssl</span></code>.</p>
-<p><code class="docutils literal notranslate"><span class="pre">&lt;Location</span> <span class="pre">“/test_ssl_host/*”&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">SetHandler</span> <span class="pre">fdb-handler</span>&#160;&#160;&#160;&#160; <span class="pre">SSLRequireSSL</span>&#160;&#160;&#160;&#160; <span class="pre">SSLVerifyClient</span> <span class="pre">none</span> <span class="pre">&lt;/Location&gt;</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>``&lt;Location “/test_ssl_host/*”&gt;``
+   ``SetHandler fdb-handler``
+   ``SSLRequireSSL``
+   ``SSLVerifyClient none``
+``&lt;/Location&gt;``
+</pre></div>
+</div>
 <div class="admonition tip">
 <p class="first admonition-title">Tip</p>
 <p class="last">Use of the <code class="docutils literal notranslate"><span class="pre">SSLRequireSSL</span></code> directive prevents all HTTP
 requests that do not use SSL, thereby protecting your data
-from all but HTTPS requests. See <a class="reference external" href="http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslrequiressl">Apache HTTP Server Version
-2.2
-Documentation</a>
+from all but HTTPS requests.
+See <a class="reference external" href="http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslrequiressl">Apache HTTP Server Version 2.2 Documentation</a>
 for more information.</p>
 </div>
 <div class="admonition tip">
 <p class="first admonition-title">Tip</p>
 <p class="last">Use of the <code class="docutils literal notranslate"><span class="pre">SSLVerifyClient</span></code> directive specifies the level
-of certificate verification required for the client. See
-<a class="reference external" href="http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslverifyclient">Apache HTTP Server Version 2.2
-Documentation</a>
+of certificate verification required for the client.
+See <a class="reference external" href="http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslverifyclient">Apache HTTP Server Version 2.2 Documentation for SSLVerifyClient</a>
 for more information.</p>
 </div>
 </li>
@@ -250,8 +254,7 @@ file.</li>
 provides SSL support. It contains the configuration directives
 to instruct the server how to serve pages over an HTTPS
 connection. For detailed information about these directives see
-<a class="reference external" href="http://httpd.apache.org/docs/2.2/mod/mod_ssl.html">Apache 2.2
-documentation</a>.</p>
+<a class="reference external" href="http://httpd.apache.org/docs/2.2/mod/mod_ssl.html">Apache 2.2 documentation</a>.</p>
 <ol class="arabic">
 <li><p class="first">Ensure the <code class="docutils literal notranslate"><span class="pre">ServerName</span> <span class="pre">www.example.com</span></code> is uncommented and
 matches the name defined in the
@@ -263,7 +266,11 @@ alias or real address users would enter in the network.</p>
 location is already included in the</div>
 <div class="line"><code class="docutils literal notranslate"><span class="pre">&lt;VirtualHost</span> <span class="pre">_default_:443&gt;</span></code> list of directives:</div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">&lt;VirtualHost_default_:443&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">Include</span> <span class="pre">conf.d/virtual_servers/*.location_ssl</span></code></p>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;VirtualHost_default_:443&gt;</span></code></dt>
+<dd><p class="first last"><code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">conf.d/virtual_servers/*.location_ssl</span></code></p>
+</dd>
+</dl>
 </li>
 <li><p class="first">Save and close the
 <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/extra/httpd-ssl.conf</span></code> file.</p>

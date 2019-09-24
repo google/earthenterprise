@@ -1,9 +1,0 @@
-
-Introduction to GEE Server
-
-This documentation includes instruction for installing GEE Server. For
-additional information, see the GEE wiki at
-
-https://github.com/google/earthenterprise/wiki
-
-.
