@@ -112,8 +112,8 @@ distinguished name (DN), and the attribute to use in the search
 organizational unit). You can also customize these filters for
 additional security constraints.</p>
 </li>
-<li><p class="first">Restart the GEE server to load the modules into the system:
-<code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">/etc/init.d/geserver</span> <span class="pre">restart</span></code></p>
+<li><p class="first">Restart the GEE server to load the modules into the system:</p>
+<p><code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">/etc/init.d/geserver</span> <span class="pre">restart</span></code></p>
 </li>
 <li><p class="first">Create a user account in Active Directory <code class="docutils literal notranslate"><span class="pre">geserver</span></code>.
 This can be any user account that has limited access. The user
@@ -122,21 +122,35 @@ your user has the full organizational unit name.</p>
 </li>
 </ol>
 <p class="rubric">To bind to Active Directory GUI:</p>
-<ol class="arabic simple">
-<li>If you do not know your LDAP domain name, ask your system
+<ol class="arabic">
+<li><p class="first">If you do not know your LDAP domain name, ask your system
 administrator. You can also find your domain name by searching
-for it in the format
-<code class="docutils literal notranslate"><span class="pre">Dn:</span> <span class="pre">CN=geserver,CN=Users,DC=location,DC=company,DC=com</span></code>. In
-this example, the domain name is <code class="docutils literal notranslate"><span class="pre">location.company.com</span></code>.</li>
-<li>Use your domain name to configure the Apache module.
-Alternatively, you can use the command prompt:
-<code class="docutils literal notranslate"><span class="pre">dsadd</span> <span class="pre">user</span> <span class="pre">UserDN</span> <span class="pre">[-samid</span> <span class="pre">SAMName]</span> <span class="pre">-pwd</span> <span class="pre">{Password|*}</span></code></li>
-<li>Add the directives to your virtual server file at
-<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttp/conf.d/virtual_servers</span></code>.</li>
-<li>For testing purposes, add the lines below to the
-<code class="docutils literal notranslate"><span class="pre">private_host.location</span></code> file:
-<code class="docutils literal notranslate"><span class="pre">&lt;Location</span> <span class="pre">/private/*&gt;</span>&#160;&#160; <span class="pre">AuthType</span> <span class="pre">Basic</span>&#160;&#160; <span class="pre">AuthName</span> <span class="pre">&quot;LDAP</span> <span class="pre">LOGIN&quot;</span>&#160;&#160; <span class="pre">AuthBasicProvider</span> <span class="pre">ldap</span>&#160;&#160; <span class="pre">AuthLDAPURL</span> <span class="pre">&quot;ldap://server.name.local:389/cn=Users,dc=domain,dc=google,dc=com?uid&quot;\</span>&#160;&#160; <span class="pre">AuthLDAPBindDN</span> <span class="pre">CN=geserver,OU=Users,OU=Yourorg,DC=DcNAME,DC=local</span>&#160;&#160; <span class="pre">AuthLDAPBindPassword</span> <span class="pre">localuserpassword</span>&#160;&#160; <span class="pre">AuthzLDAPAuthoritative</span> <span class="pre">Off</span>&#160;&#160; <span class="pre">Require</span> <span class="pre">valid-user</span> <span class="pre">&lt;/Location&gt;</span></code></li>
-<li>Restart your server and try to access the virtual server via
+for it in the format <code class="docutils literal notranslate"><span class="pre">Dn:</span> <span class="pre">CN=geserver,CN=Users,DC=location,DC=company,DC=com</span></code>. In
+this example, the domain name is <code class="docutils literal notranslate"><span class="pre">location.company.com</span></code>.</p>
+</li>
+<li><p class="first">Use your domain name to configure the Apache module.
+Alternatively, you can use the command prompt:</p>
+<p><code class="docutils literal notranslate"><span class="pre">dsadd</span> <span class="pre">user</span> <span class="pre">UserDN</span> <span class="pre">[-samid</span> <span class="pre">SAMName]</span> <span class="pre">-pwd</span> <span class="pre">{Password|*}</span></code></p>
+</li>
+<li><p class="first">Add the directives to your virtual server file at
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttp/conf.d/virtual_servers</span></code>.</p>
+</li>
+<li><p class="first">For testing purposes, add the lines below to the
+<code class="docutils literal notranslate"><span class="pre">private_host.location</span></code> file:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>``&lt;Location /private/*&gt;``
+   ``AuthType Basic``
+   ``AuthName &quot;LDAP LOGIN&quot;``
+   ``AuthBasicProvider ldap``
+   ``AuthLDAPURL &quot;ldap://server.name.local:389/cn=Users,dc=domain,dc=google,dc=com?uid&quot;\``
+   ``AuthLDAPBindDN CN=geserver,OU=Users,OU=Yourorg,DC=DcNAME,DC=local``
+   ``AuthLDAPBindPassword localuserpassword``
+   ``AuthzLDAPAuthoritative Off``
+   ``Require valid-user``
+``&lt;/Location&gt;``
+</pre></div>
+</div>
+</li>
+<li><p class="first">Restart your server and try to access the virtual server via
 the client.
 A login screen appears. If you cannot access Apache, open the
 file error log at
@@ -145,7 +159,8 @@ If <code class="docutils literal notranslate"><span class="pre">AuthzLDAPAuthori
 continually prompt for the username and password even though
 you entered a valid username and password and the client is
 functioning. To correct this, turn <code class="docutils literal notranslate"><span class="pre">AuthzLDAPAuthoritative</span></code>
-off.</li>
+off.</p>
+</li>
 </ol>
 <p class="rubric">Directives</p>
 <ul class="simple">

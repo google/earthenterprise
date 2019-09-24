@@ -89,16 +89,15 @@ plug-ins</strong> that incorporate more complex queries and data, such
 as search results based on geometries.</li>
 </ul>
 <p class="rubric">Add POI Search</p>
-<div class="image-highlight-right docutils container">
-If you have one or more text fields that you would like to
-query from vector resources in a project, you can simply <span class="xref std std-doc">add
+<p>If you have one or more text fields that you would like to
+query from vector resources in a project, you can simply <a class="reference internal" href="../fusionTutorial/searchFldsForLayers.html"><span class="doc">add
 those search fields to a vector
-project</span> in a 3D database; for 2D
+project</span></a> in a 3D database; for 2D
 maps, you include a map layer in a map project. Once you have
 added your POI vector project or map layer to the database you
-want to publish, you <span class="xref std std-doc">push it to GEE
-Server</span>, then turn on POI Search
-when you publish.</div>
+want to publish, you <a class="reference internal" href="../fusionAdministration/pushAndPublishDB.html"><span class="doc">push it to GEE
+Server</span></a>, then turn on POI Search
+when you publish.</p>
 <p>For example, you may be interested in displaying the US Census
 Bureau population statistics on your map or globe, based on county
 name. You can easily add the search fields to the individual
@@ -106,9 +105,8 @@ population data layer in your vector project. You can also choose
 how you want the labels for your search results to appear on the
 globe, such as search and display a field, or simply display it.</p>
 <p>You can also modify the appearance of the POI search tab in Google
-Earth EC by <span class="xref std std-doc">editing the system search
-tab</span>, <strong>POI Search</strong>, which sets the
-query parameters for the search fields you added to the vector
+Earth EC by <a class="reference internal" href="createSearchTabs.html"><span class="doc">editing the system search tab</span></a>,
+<strong>POI Search</strong>, which sets the query parameters for the search fields you added to the vector
 layer, as well as specifying the labels for the tab, query field
 and suggestion box.</p>
 <p class="rubric">Use GEE-provided Search Data</p>
@@ -143,16 +141,15 @@ Documentation</a>.</p>
 <p>You can examine the Python code of the search plug-ins on which
 the search tabs are built, using it as a template for your own
 plug-in development. To customize your own search plug-ins, see
-<span class="xref std std-doc">6066597&gt;</span>.</p>
+<a class="reference internal" href="addCustomSearchServices.html"><span class="doc">Add custom search services</span></a>.</p>
 <p class="rubric">About system search tabs</p>
-<div class="image-highlight-right docutils container">
-System search tabs are provided with GEE Server. They provide
+<p>System search tabs are provided with GEE Server. They provide
 hard-coded queries for various search data types available in
 the Places database provided with GEE. You can use them to
 access this database, a subset of the publicly available
 geonames database, or you can edit them for your own purposes.
 The search tabs cannot be deleted, but can be edited and saved
-with a different name.</div>
+with a different name.</p>
 <p>The following default search tabs are available:</p>
 <ul class="simple">
 <li><strong>POISearch</strong>: Search for POIs.</li>
@@ -174,8 +171,7 @@ E)</li>
 neighborhoods to demonstrate the search plug-in functionality.</li>
 </ul>
 <p class="rubric">About search tabs definitions</p>
-<div class="image-highlight-right docutils container">
-Search data is accessed via a query interface in Google Earth
+<p>Search data is accessed via a query interface in Google Earth
 EC or a browser in the form of search tabs. A search tab
 definition, which you specify in GEE Server, includes the
 <strong>label</strong> you want to apply to the search tab that your users
@@ -184,7 +180,7 @@ searchable database, supported query parameters, and <strong>fields</strong>
 that you specify for your search queries. You can customize the
 labels and fields in a search tab and use <strong>query parameter
 settings</strong> to control how the results of a query will be
-displayed.</div>
+displayed.</p>
 <p>The database to which you point your search tab definition is
 identified in the query parameters when the globe or map is
 served. The search tab identifies the database by including the
@@ -196,8 +192,8 @@ Server or an external server.</p>
 <p>Example query string when serving an external database:</p>
 <p><code class="docutils literal notranslate"><span class="pre">http://mysearch_host.com/search_serviceA?db_id=5&amp;flyToFirstElement;=true&amp;displayKeys;=location&amp;q;=San</span> <span class="pre">Francisco</span></code></p>
 <p class="rubric">Create custom searches</p>
-<p>If you want to access a custom data source, you can <span class="xref std std-doc">create your
-own search plug-in</span> and access it as a
+<p>If you want to access a custom data source, you can <a class="reference internal" href="addCustomSearchServices.html"><span class="doc">create your
+own search plug-in</span></a> and access it as a
 search tab definition in Google Earth Enterprise Server. A custom
 search plug-in will create requests and responses using the common
 Python-based search framework, letting you adapt your search to
@@ -209,11 +205,12 @@ Places API to leverage the power of their data sets. You can also
 use a proprietary database, e.g., power conversion sites,
 then search for the sites using internal IDs or city names.</p>
 <p class="rubric">Summary table of search options</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id1">
+<caption><span class="caption-text">Search options</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="16%" />
-<col width="33%" />
-<col width="51%" />
+<col width="25%" />
+<col width="38%" />
+<col width="38%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Search options</th>
@@ -223,20 +220,28 @@ then search for the sites using internal IDs or city names.</p>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>Query vector data layer using a simple text-based search.</td>
-<td>Add a search field to a vector resource in a vector project or map layer. Turn on <strong>POI Search</strong> in the Publish dialog when you publish your database in GEE Server.</td>
-<td>The <strong>POI Search</strong> appears in the main <strong>Search</strong> tab, labeled Point of interest, including the field label you specified in the vector data layer.</td>
+<td>Add a search field to a vector resource in a vector project or map layer. Turn on <strong>POI Search</strong>
+in the Publish dialog when you publish your database in GEE Server.</td>
+<td>The <strong>POI Search</strong> appears in the main <strong>Search</strong> tab, labeled Point of interest, including the
+field label you specified in the vector data layer.</td>
 </tr>
 <tr class="row-odd"><td>Query external database using a default search plugin, for example <strong>POI Search</strong>.</td>
-<td>Edit the <strong>POI Search tab URL</strong> field to point to your own search database and edit or add query parameters. Add the <strong>POI Search tab</strong> in the <strong>Publish</strong> dialog.</td>
-<td>When you click <strong>Query</strong>, the <strong>POI Search</strong> appears as a new additional tab in Search, displaying the custom label and any query field labels and suggestions you added.</td>
+<td>Edit the <strong>POI Search tab URL</strong> field to point to your own search database and edit or add query parameters.
+Add the <strong>POI Search tab</strong> in the <strong>Publish</strong> dialog.</td>
+<td>When you click <strong>Query</strong>, the <strong>POI Search</strong> appears as a new additional tab in Search, displaying the custom
+label and any query field labels and suggestions you added.</td>
 </tr>
 <tr class="row-even"><td>Query the Places database provided by GEE.</td>
 <td>Add the <strong>Places search tab</strong> in the Publish dialog to add location search to your globe or map.</td>
-<td>The Places Search appears as a new additional tab in Search, displaying the custom label and any query field label and suggestion you added.</td>
+<td>The Places Search appears as a new additional tab in Search, displaying the custom label and any query field
+label and suggestion you added.</td>
 </tr>
 <tr class="row-odd"><td>Query an external Postgres database and return polygons, lines, or geometries.</td>
-<td>Write a custom search plug-in using the Python-based framework for search tabs. The <strong>ExampleSearch</strong> search plug-in is a useful demonstration for this purpose.</td>
-<td>Your custom search plug-in appears as a new additional tab in Search, displaying the custom label and any query field labels and suggestions you added. Alternatively, you can send HTTP requests and receive a response within your own custom web application.</td>
+<td>Write a custom search plug-in using the Python-based framework for search tabs. The <strong>ExampleSearch</strong> search
+plug-in is a useful demonstration for this purpose.</td>
+<td>Your custom search plug-in appears as a new additional tab in Search, displaying the custom label and any query
+field labels and suggestions you added. Alternatively, you can send HTTP requests and receive a response within your
+own custom web application.</td>
 </tr>
 </tbody>
 </table>
