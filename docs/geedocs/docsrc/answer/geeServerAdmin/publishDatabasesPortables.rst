@@ -13,7 +13,7 @@ Publish databases and portables
       options* in the **Publish** dialog. Before you publish a Fusion
       database, you must register it by
       :doc:`pushing <../fusionAdministration/pushAndPublishDB>` it to :doc:`GEE
-      Server <3468004>`.
+      Server <../geeServerAdmin/geeServerOverview>`.
 
       With portable files, the process is a little different. Instead,
       first you *register* your portable globes and maps in the **Manage
@@ -43,7 +43,7 @@ Publish databases and portables
 
          .. note::
 
-            **Note:** When publishing a database, the publish point you
+            When publishing a database, the publish point you
             specify is case-*insensitive*. Upper and lower case are not
             differentiated. Make sure each publish point path name you
             specify is unique.
@@ -60,6 +60,8 @@ Publish databases and portables
          the published status of your database.
 
       .. _Register_Publish_Portable_Map_Globe:
+      .. rubric::Register and publish a portable globe or map
+
       .. rubric:: To register a portable globe or map:
 
       #. In the :doc:`GEE Server Admin console <../geeServerAdmin/signInAdminConsole>`,
@@ -93,7 +95,7 @@ Publish databases and portables
 
          .. note::
 
-            **Note:** When publishing a database, the publish point you
+            When publishing a database, the publish point you
             specify is case-*insensitive*. Upper and lower case are not
             differentiated. Make sure each publish point path name you
             specify is unique.

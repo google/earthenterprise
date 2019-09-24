@@ -70,7 +70,7 @@ Search your POI vector data or map layer data
          add to the search. Your selections appear on the list of search
          fields on the Search tab in the order in which you added them:
 
-         |Layer Properties Add Search|
+         |Layer Properties Add Search Full|
 
          The order in which the fields appear on this list is the order
          in which they appear in the description balloon in the client.
@@ -88,7 +88,7 @@ Search your POI vector data or map layer data
 
          .. note::
 
-            **Note:** This search performs an exact match, which means
+            This search performs an exact match, which means
             that the Google Earth EC user must enter the value exactly
             as it appears in the database. It can also perform a
             wildcard search, so users can enter part of the text they
@@ -114,7 +114,7 @@ Search your POI vector data or map layer data
 
       .. note::
 
-         **Note:** The POI Search option in the Publish dialog is only
+         The POI Search option in the Publish dialog is only
          available if you build your database with POI data as a vector
          resource layer. If you want to perform a POI search on a
          database external to your globe or map, e.g., on a
@@ -169,7 +169,7 @@ Search your POI vector data or map layer data
          |POI Search Tab in Publish Dialog|
 
       #. Click the **Publish** button. A message appears to confirm the successful
-      publishing process.
+         publishing process.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
@@ -177,7 +177,7 @@ Search your POI vector data or map layer data
 .. |Layer Properties Search Tab| image:: ../../art/server/search/layer_prop_search_tab.png
 .. |New Icon| image:: ../../art/fusion/tutorial/icon_new.gif
 .. |Layer Properties Add Search| image:: ../../art/server/search/layer_prop_add_search.png
-.. |Layer Properties Add Search| image:: ../../art/server/search/layer_prop_add_search-full.png
+.. |Layer Properties Add Search Full| image:: ../../art/server/search/layer_prop_add_search-full.png
 .. |Layer Properties Add Search Up Arrow Icon| image:: ../../art/server/search/layer_prop_search_tab_up_arrow.png
 .. |Layer Properties Add Search Down Arrow Icon| image:: ../../art/server/search/layer_prop_search_tab_down_arrow.png
 .. |Layer Properties Add Search Delete Icon| image:: ../../art/server/search/layer_prop_search_tab_delete_icon.png
