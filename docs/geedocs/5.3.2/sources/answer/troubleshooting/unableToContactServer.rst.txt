@@ -1,29 +1,19 @@
-|Google logo|
 
-========================
 Unable to contact server
-========================
 
-.. container::
+-[ Error message ]-
 
-   .. container:: content
+""Unable to contact search server" or "Unable to contact stream
+server""
 
-      .. rubric:: Error message
+-[ Description ]-
 
-      ``"Unable to contact search server" or "Unable to contact stream server"``
-      
-      .. rubric:: Description
+When you try to publish a database, the specified service is not
+running, cannot be reached, or a service that it requires is not
+running.
 
-      When you try to publish a database, the specified service is not
-      running, cannot be reached, or a service that it requires is not
-      running.
+-[ Resolution ]-
 
-      .. rubric:: Resolution
+Enter this command to restart the server:
 
-      Enter this command to restart the server:
-
-      ``sudo /etc/init.d/geserver restart``
-
-.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
-   :width: 130px
-   :height: 44px
+"sudo /etc/init.d/geserver restart"
