@@ -21,8 +21,8 @@ Create Portable Globes and Maps
       map.
 
       You can :doc:`create portable globes and
-      maps (3230777>` with the :doc:`cutter tool <../geeServerAdmin/settingsPage>` feature of the :doc:`Google Earth
-      Enterprise (GEE) Server <3470759>`, from existing
+      maps <../geeServerAdmin/createPortableGlobesMaps>` with the :doc:`cutter tool <../geeServerAdmin/settingsPage>` feature of the :doc:`Google Earth
+      Enterprise (GEE) Server <../geeServerAdmin/signInAdminConsole>`, from existing
       GEE portable files, or you can obtain them from third-party
       vendors. Depending on your area of coverage, it can take only a
       few minutes to specify and generate a globe or map and then save
@@ -40,7 +40,7 @@ Create Portable Globes and Maps
       To cut a globe or map from an existing portable file, first you
       must :ref:`register and
       publish <Register_Publish_Portable_Map_Globe>` it on :doc:`GEE
-      Server <3470759>`.
+      Server <../geeServerAdmin/signInAdminConsole>`.
 
       .. tip::
 
@@ -71,7 +71,16 @@ Create Portable Globes and Maps
       ``earth/info.txt`` file, as in the following example use of the
       command:
 
-      ``$ geglxinfo --glx tutorial_3d.glc --extract_file earth/info.txt --output /tmp/info.txt $ cat /tmp/info.txt Portable Globe Copyright 2013 Google Inc. All Rights Reserved. 2014-01-15 16:03:15 GMT  2014-01-15 08:03:15 Globe description: Simple container for tutorial glb with gray marble backdrop. 2014-01-15 08:03:15 Executing: /opt/google/bin/gecreatemetadbroot --output="/tmp/cutter/glc_20598_1389801795.111116/metadbroot" --layers="/tmp/cutter/glc_20598_1389801795.111116/earth/dbroot_layer_info.txt"  --has_base_imagery  2014-01-15 08:03:15 SUCCESS 2014-01-15 08:03:15 Executing: /opt/google/bin/geportableglcpacker --layer_info="/tmp/cutter/glc_20598_1389801795.111116/earth/layer_info.txt" --output="/tmp/cutter/glc_20598_1389801795.111116/temp.glc" --make_copy``
+      ``$ geglxinfo --glx tutorial_3d.glc --extract_file earth/info.txt --output /tmp/info.txt``
+      ``$ cat /tmp/info.txt``
+      ``Portable Globe``
+      ``Copyright 2013 Google Inc. All Rights Reserved.``
+      ``2014-01-15 16:03:15 GMT``
+
+      ``2014-01-15 08:03:15``
+      ``Globe description: Simple container for tutorial glb with gray marble backdrop.``
+      ``2014-01-15 08:03:15``
+      ``Executing: /opt/google/bin/gecreatemetadbroot --output="/tmp/cutter/glc_20598_1389801795.111116/metadbroot" --layers="/tmp/cutter/glc_20598_1389801795.111116/earth/dbroot_layer_info.txt"  --has_base_imagery  2014-01-15 08:03:15 SUCCESS 2014-01-15 08:03:15 Executing: /opt/google/bin/geportableglcpacker --layer_info="/tmp/cutter/glc_20598_1389801795.111116/earth/layer_info.txt" --output="/tmp/cutter/glc_20598_1389801795.111116/temp.glc" --make_copy``
 
       .. rubric:: Composite globes and maps
 
@@ -92,7 +101,7 @@ Create Portable Globes and Maps
 
       .. note::
 
-         **Note**: The cutting processes are CPU- and disk-intensive, as
+         The cutting processes are CPU- and disk-intensive, as
          they are retrieving all data within the specified polygon from
          the Earth Enterprise Server. This can affect the overall
          performance of the Server, including slowing end-user access.
@@ -144,7 +153,7 @@ Create Portable Globes and Maps
 
          .. note::
 
-            **Note:** If you do not know your username and password,
+            If you do not know your username and password,
             contact your Google Earth Enterprise Server System
             Administrator.
 
@@ -158,7 +167,6 @@ Create Portable Globes and Maps
 
          |GEE Cutter create offline map window|
 
-      --------------
 
       .. rubric:: Map or globe name
 
@@ -173,7 +181,7 @@ Create Portable Globes and Maps
          Spaces, slashes, and double dots (..) will be converted to
          underscores in the saved globe name.
 
-         .. container:: alert
+         .. warning::
 
             Building an offline map or globe will overwrite any existing
             offline maps or globes with the same name. If multiple users
@@ -190,7 +198,6 @@ Create Portable Globes and Maps
 
       #. If you are overwriting an existing cut, select **Yes** for **Overwrite?**.
 
-      --------------
 
       .. rubric:: Drawing the polygon
 
@@ -200,7 +207,7 @@ Create Portable Globes and Maps
 
       .. rubric:: Hand drawing the polygon
 
-      .. container:: alert
+      .. warning::
 
          When cutting a 3D globe this method is only available if you
          are running the discontinued Google Earth Plug-in in your
@@ -222,7 +229,7 @@ Create Portable Globes and Maps
       .. rubric:: Defining the polygon with KML
 
       You can also use KML to define the polygon(s). The KML should be
-      complete, and may contain single or multiple elements. 
+      complete, and may contain single or multiple elements.
 
       **To insert your KML:**
 
@@ -235,7 +242,6 @@ Create Portable Globes and Maps
          globe (the latter only if you have the discontinued Google
          Earth plug-in running in your browser).
 
-      --------------
 
       .. rubric:: Globe resolution
 
@@ -247,7 +253,7 @@ Create Portable Globes and Maps
       Fusion server. Setting a resolution of 24 results in a cut of the
       entire globe.
 
-      .. container:: alert
+      .. container:: warning
 
          **Caution:** Setting a resolution of 24 to cut an entire globe
          may result in a very large file.
@@ -297,7 +303,6 @@ Create Portable Globes and Maps
       You may enter a lower number to reduce the size of your map or
       globe by not including the highest resolution imagery.
 
-      --------------
 
       .. rubric:: Advanced Settings
 
@@ -323,11 +328,9 @@ Create Portable Globes and Maps
 
       .. note::
 
-         **Note:** Additional advanced settings may be offered in future
+         Additional advanced settings may be offered in future
          versions. Use caution when changing them as they may
          dramatically increase build times and globe sizes.
-
-      --------------
 
       .. rubric:: Building the map or globe
 
@@ -408,4 +411,3 @@ Create Portable Globes and Maps
 .. |GEE Cutter create offline map window| image:: ../../art/fusion/portable/cutterTools.png
 .. |Pan tool| image:: ../../art/fusion/portable/cutterHandTool2.png
 .. |Polygon icon| image:: ../../art/fusion/portable/cutterPolygonTool.png
-   :name: polygon_icon

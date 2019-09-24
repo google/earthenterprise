@@ -65,30 +65,44 @@ Hello World
 
  example of using "geeCreateFusionMap" to load a map:
 
-"<html>   <head>     <meta name="viewport" content="initial-scale=1.0,
-user-scalable=no" />     <style type="text/css">       html { height:
-100% }       body { height: 100%; margin: 0px; padding: 0px }
-#map_canvas { height: 100% }     </style>     <title>Hello World - GEE
-2D Map Example</title>      <!-- Start by defining GEE_BASE_URL. -->
-<script type="text/javascript">       var GEE_BASE_URL =
-window.location.protocol + '//' + window.location.host;     </script>
-<!-- Include the provided Maps API v3 files.  Located in
-/opt/google/gehttpd/htdocs/maps/api/ -->     <script
-type="text/javascript" src="/maps/api/bootstrap.js"></script>
-<script type="text/javascript"
-src="/maps/api/fusion_extended_map.js"></script>      <!--
-geeServerDefs must be defined with the following script; insert name
-of your published 2D database -->     <script type="text/javascript" 
-src="/YourPublishedDatabase/query?request=Json&var=geeServerDefs"></s
-cript>      <script type="text/javascript">       function
-initialize() {         var myOptions = {           center: new
-google.maps.LatLng(-34.397, 150.644),           zoom: 8         };
-var geemap = new geeCreateFusionMap("map_canvas", geeServerDefs,
-myOptions);       }     </script>    </head>   <body
-onload="initialize()">     <!-- Be sure there is an element on the
-page with the id you specified above (map_canvas in this case). -->
-<div id="map_canvas" style="width:100%; height:100%"></div>   </body>
-</html>"
+   <html>
+      <head>
+         <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+         <style type="text/css">
+            html { height: 100% }
+            body { height: 100%; margin: 0px; padding: 0px }
+            #map_canvas { height: 100% }
+         </style>
+         <title>Hello World - GEE 2D Map Example</title>
+
+         <!-- Start by defining GEE_BASE_URL. -->
+         <script type="text/javascript">
+            var GEE_BASE_URL = window.location.protocol + '//' + window.location.host;
+         </script>
+
+         <!-- Include the provided Maps API v3 files.  Located in /opt/google/gehttpd/htdocs/maps/api/ -->
+            <script type="text/javascript" src="/maps/api/bootstrap.js"></script>
+            <script type="text/javascript"
+            src="/maps/api/fusion_extended_map.js"></script>
+
+            <!-- geeServerDefs must be defined with the following script; insert name of your published 2D database -->
+            <script type="text/javascript" src="/YourPublishedDatabase/query?request=Json&var=geeServerDefs"></script>
+
+            <script type="text/javascript">
+               function initialize() {
+                  var myOptions = {
+                     center: new google.maps.LatLng(-34.397, 150.644), zoom: 8
+                     };
+               var geemap = new geeCreateFusionMap("map_canvas", geeServerDefs, myOptions);
+               }
+            </script>
+
+         </head>
+         <body onload="initialize()">
+            <!-- Be sure there is an element on the page with the id you specified above (map_canvas in this case). -->
+            <div id="map_canvas" style="width:100%; height:100%"></div>
+         </body>
+      </html>
 
 -[ Factory geeCreateFusionMap ]-
 
@@ -150,7 +164,7 @@ String  Returns the name of the specified layer.
 getFusionLayerIcon(index)  String  Returns the URL of the icon
 associated with the specified layer.
 
-.._ Examples: .. rubric:: Examples
+-[ Examples ]-
 
 Several examples that illustrate how to use the Fusion Maps API are
 installed by default. You can find these examples in:
@@ -208,7 +222,7 @@ samples
 
 .
 
-Note: Note:
+Note:
 
   Performance may degrade with large KML files.
 

@@ -9,7 +9,7 @@ Search tabs page
    .. container:: content
 
       The **Search tabs** page of the :doc:`GEE Server Admin
-      console <3470759>` is where you can customize
+      console <../geeServerAdmin/signInAdminConsole>` is where you can customize
       search services. From this page you can:
 
       -  **View the default search tabs**:
@@ -43,7 +43,7 @@ Search tabs page
 
       -  :doc:`../geeServerAdmin/createSearchTabs`
       -  :doc:`Specifying search fields for individual
-         layers <4412684>`
+         layers <../fusionTutorial/searchFldsForLayers>`
       -  :doc:`Configuring a searchable database <../fusionTutorial/confSearchableDB>`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png

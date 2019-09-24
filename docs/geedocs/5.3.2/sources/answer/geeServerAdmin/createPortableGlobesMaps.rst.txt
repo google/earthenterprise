@@ -15,15 +15,22 @@ interest (POI) locations. Outside the specified area of interest, the
 globe or map stores only low-resolution imagery and terrain. You
 specify the levels of resolution when you cut the globe or map.
 
-You can *create portable globes and maps (3230777>* with the
+You can
+
+create portable globes and maps
+
+ with the
 
 cutter tool
 
- feature of the *Google Earth Enterprise (GEE) Server*, from existing
-GEE portable files, or you can obtain them from third-party vendors.
-Depending on your area of coverage, it can take only a few minutes to
-specify and generate a globe or map and then save it to the GEE
-Portable maps directory.
+ feature of the
+
+Google Earth Enterprise (GEE) Server
+
+, from existing GEE portable files, or you can obtain them from third-
+party vendors. Depending on your area of coverage, it can take only a
+few minutes to specify and generate a globe or map and then save it to
+the GEE Portable maps directory.
 
 -[ Cut globes and maps from existing portable files ]-
 
@@ -38,7 +45,11 @@ To cut a globe or map from an existing portable file, first you must
 
 register and publish
 
- it on *GEE Server*.
+ it on
+
+GEE Server
+
+.
 
 Tip: Cutting globes and maps from existing portable files is a new
   feature in GEE 5.x and is available with portable files that have
@@ -63,11 +74,13 @@ used to create the file. Extract and output the "earth/info.txt" file,
 as in the following example use of the command:
 
 "$ geglxinfo --glx tutorial_3d.glc --extract_file earth/info.txt
---output /tmp/info.txt $ cat /tmp/info.txt Portable Globe Copyright
-2013 Google Inc. All Rights Reserved. 2014-01-15 16:03:15 GMT
-2014-01-15 08:03:15 Globe description: Simple container for tutorial
-glb with gray marble backdrop. 2014-01-15 08:03:15 Executing:
-/opt/google/bin/gecreatemetadbroot
+--output /tmp/info.txt" "$ cat /tmp/info.txt" "Portable Globe"
+"Copyright 2013 Google Inc. All Rights Reserved." "2014-01-15 16:03:15
+GMT"
+
+"2014-01-15 08:03:15" "Globe description: Simple container for
+tutorial glb with gray marble backdrop." "2014-01-15 08:03:15"
+"Executing: /opt/google/bin/gecreatemetadbroot
 --output="/tmp/cutter/glc_20598_1389801795.111116/metadbroot" --layer
 s="/tmp/cutter/glc_20598_1389801795.111116/earth/dbroot_layer_info.tx
 t"  --has_base_imagery  2014-01-15 08:03:15 SUCCESS 2014-01-15
@@ -96,9 +109,7 @@ defines your "area of interest." This polygon not only defines the
 area that displays high-resolution imagery, but is also used by Fusion
 to create a localized search database.
 
-Note: Note
-
-  : The cutting processes are CPU- and disk-intensive, as they are
+Note: The cutting processes are CPU- and disk-intensive, as they are
   retrieving all data within the specified polygon from the Earth
   Enterprise Server. This can affect the overall performance of the
   Server, including slowing end-user access.To mitigate performance
@@ -151,8 +162,8 @@ and mydomainname with your server and domain.
 
 Sign in with the default credentials or the username and password
 assigned to you:  Default username: geapacheuser  Default password:
-geeadmin  Note: If you do not know your username and password, contact
-your Google Earth Enterprise Server System Administrator.
+geeadmin  If you do not know your username and password, contact your
+Google Earth Enterprise Server System Administrator.
 
 Click Databases to display the list of databases and portables pushed
 to the Server.
@@ -193,9 +204,9 @@ are two ways to draw the polygon.
 
 -[ Hand drawing the polygon ]-
 
-When cutting a 3D globe this method is only available if you are
-running the discontinued Google Earth Plug-in in your browser. This
-method works for cutting 2D maps from your browser.
+Warning: When cutting a 3D globe this method is only available if
+  you are running the discontinued Google Earth Plug-in in your
+  browser. This method works for cutting 2D maps from your browser.
 
 By default, you draw a polygon by hand so the Select Region drop-down
 list is set to Manual.
@@ -203,7 +214,7 @@ list is set to Manual.
 Use the Pan tool Hand tool to pan, then, using the navigation controls
 in the plug-in, zoom in to the region of interest.
 
-To use your mouse to define the polygon, click the |Polygon icon|
+To use your mouse to define the polygon, click the Polygon icon
 polygon icon in the globe window.
 
 Click on the map or globe to define each point. You can use the
@@ -335,11 +346,9 @@ Yes
 . This option will likely increase the build time, possibly
 significantly.
 
-Note: Note:
-
-   Additional advanced settings may be offered in future versions. Use
-  caution when changing them as they may dramatically increase build
-  times and globe sizes.
+Note: Additional advanced settings may be offered in future
+  versions. Use caution when changing them as they may dramatically
+  increase build times and globe sizes.
 
 -[ Building the map or globe ]-
 
