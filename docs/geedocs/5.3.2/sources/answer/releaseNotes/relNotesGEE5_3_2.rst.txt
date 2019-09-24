@@ -5,6 +5,13 @@ Open GEE 5.3.2 is currently in development
 
 -[ New Features ]-
 
+Documentation overhaul
+
+. All documentation were migrated to be Sphinx format making it easier
+for editing and maintenance. User documentation file names were also
+migrated from number based naming convention to self explanatory
+titles.
+
 KML validation in cutter
 
 . Basic validation is now performed on KML that is pasted into the
@@ -50,7 +57,7 @@ recent security patches
 
 CentOS 6.x and 7.x
 
-Ubuntu 14.04 LTS and 16.04 LTS
+Ubuntu 16.04 LTS
 
 Google Earth Enterprise 5.3.2 is compatible with Google Earth
 Enterprise Client (EC) version 7.1.5 and above.
@@ -78,9 +85,19 @@ avoiding this problem.  1281  Quitting 32-bit Windows portable server
 in Windows 7 via Internet Explorer does not work  IE appears to
 perform aggressive caching, which was preventing the GET request to
 cmd=quit from making it to the server. Changing the command to be a
-POST request prevents this.  1394  Upgrade PostgreSQL and PostGIS to
-latest patch releases  The current patch releases have been
-incorporated.
+POST request prevents this.  1376  Portable Globe Cutter fails the
+last step when using HTTPS  Used the advanced configuration to set a
+URL that will be used when cutter tries to make an openurl call.  1398
+System manager crashed because of casting asset version to asset
+Fixed the invalid cast.  1401  No notification when cache size is
+exceeded causing performance issues  Added Loging record when cache
+size is exceeded.  1404  WMS fails using HTTPS  Skipped the internal
+Certificate Verification.  1414  Version files should not be included
+in scons cache  Removed version files from scons cache.  1420  Build
+should honor JAVA_HOME when creating rpm packages  Honored JAVA_HOME
+1447  Compiler error: "FieldGenerator.h not found" when compiling
+using scons cache  Called Depends() for generated header files used by
+geautoingest
 
 -[ Known Issues ]-
 
