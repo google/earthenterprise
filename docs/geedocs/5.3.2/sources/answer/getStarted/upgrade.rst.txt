@@ -4,7 +4,7 @@ Upgrade to GEE 5.x
 You can upgrade to Google Earth Enterprise 5.x from versions 4.0.0
 through 4.4.1.
 
-Before you upgrade
+-[ Before you upgrade ]-
 
 -[ We recommend you do the following before upgrading to GEE 5.x: ]-
 
@@ -44,7 +44,7 @@ Note: Note:
   will not be able to perform any delete, build, push, or publish
   actions on them.
 
-Upgrading
+-[ Upgrading ]-
 
 -[ To upgrade to GEE 5.x: ]-
 
@@ -73,7 +73,7 @@ Optionally enable cutter: /opt/google/bin/gecutter enable
 
 Start gefusion and geserver.
 
-After you upgrade
+-[ After you upgrade ]-
 
 -[ After upgrading: ]-
 

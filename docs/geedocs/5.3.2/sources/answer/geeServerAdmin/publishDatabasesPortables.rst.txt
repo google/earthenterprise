@@ -22,7 +22,11 @@ Publish
 
 pushing
 
- it to *GEE Server*.
+ it to
+
+GEE Server
+
+.
 
 With portable files, the process is a little different. Instead, first
 you
@@ -57,7 +61,7 @@ example
 
 Specify a Publish point, which is where you access the database or
 portable. For example, if you specify sanfrancisco, it will be
-accessible from myserver.mydomainname.com/sanfrancisco.  Note: When
+accessible from myserver.mydomainname.com/sanfrancisco.  When
 publishing a database, the publish point you specify is case-
 insensitive. Upper and lower case are not differentiated. Make sure
 each publish point path name you specify is unique.
@@ -96,10 +100,10 @@ Click Publish to open the Publish dialog.
 
 Specify a Publish point, where the portable will be accessible from.
 For example, if you specify grandcanyon, it will be accessible from
-myserver.mydomainname.com/grandcanyon.  Note: When publishing a
-database, the publish point you specify is case-insensitive. Upper and
-lower case are not differentiated. Make sure each publish point path
-name you specify is unique.
+myserver.mydomainname.com/grandcanyon.  When publishing a database,
+the publish point you specify is case-insensitive. Upper and lower
+case are not differentiated. Make sure each publish point path name
+you specify is unique.
 
 Select a Virtual host.
 

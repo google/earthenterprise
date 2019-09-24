@@ -4,16 +4,16 @@ Set up HTTPS
 If you have set up SSL/HTTPS configurations on your GEE server, you
 can also set up a secure Fusion server for your browser-based maps.
 
-The following procedure is applicable only to release 4.x and previous
-versions of GEE. For
+Warning: The following procedure is applicable only to release 4.x
+  and previous versions of GEE. For
 
-GEE release 5.x
+  GEE release 5.x
 
-, see
+  , see
 
-Configure GEE Server 5.1.0 for SSL/HTTPS
+  Configure GEE Server 5.1.0 for SSL/HTTPS
 
-.
+  .
 
 -[ To set up an HTTPS virtual server for Fusion: ]-
 

@@ -45,4 +45,4 @@ Enterprise.
 
 Google Maps API v3 for GEE
 
-Google Maps Javascript API V3 Reference
+Google Maps JavaScript API V3 Reference

@@ -56,7 +56,6 @@ Overview
       databases.
 
       .. rubric:: Learn More
-         :name: learn-more
 
       -  `Defining and Building Databases <../answer/4412422.html>`__
       -  `Creating a Map Database <../answer/4412455.html>`__

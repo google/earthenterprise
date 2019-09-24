@@ -36,4 +36,4 @@ Google Earth Enterprise documentation
 
 -[ Learn more ]-
 
-Introduction to GEE Server
+OpenGEE Wiki

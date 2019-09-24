@@ -5,8 +5,11 @@ The
 
 Search tabs
 
- page of the *GEE Server Admin console* is where you can customize
-search services. From this page you can:
+ page of the
+
+GEE Server Admin console
+
+ is where you can customize search services. From this page you can:
 
 View the default search tabs:  POISearch: Search from select vector
 and map layer fields.  GeocodingFederated: Search for places or

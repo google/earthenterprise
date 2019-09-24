@@ -28,4 +28,4 @@ Installation tips
 
 Install Google Earth Enterprise
 
-Install GEE Server
+Refer OpenGEE Wiki

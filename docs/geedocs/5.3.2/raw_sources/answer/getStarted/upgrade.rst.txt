@@ -11,10 +11,7 @@ Upgrade to GEE 5.x
       You can upgrade to Google Earth Enterprise 5.x from versions 4.0.0
       through 4.4.1.
 
-      .. rubric::
-         :name: section
-
-      Before you upgrade
+      .. rubric:: Before you upgrade
 
       .. container::
 
@@ -65,10 +62,7 @@ Upgrade to GEE 5.x
             be marked as invalid, and you will not be able to perform
             any delete, build, push, or publish actions on them.
 
-      .. rubric::
-         :name: section-1
-
-      Upgrading
+      .. rubric:: Upgrading
 
       .. container::
 
@@ -109,13 +103,9 @@ Upgrade to GEE 5.x
             ``/opt/google/bin/gecutter enable``
          #. Start ``gefusion`` and ``geserver``.
 
-      .. rubric::
-         :name: section-2
-
-      After you upgrade
+      .. rubric:: After you upgrade
 
       .. rubric:: After upgrading:
-         :name: after-upgrading
 
       #. Restore backups of data stored in the ``/opt/google/gehttpd/``
          folders, either from your own backup copies or from the backup

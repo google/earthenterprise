@@ -1,14 +1,13 @@
 |Google logo|
 
-==========================
-Introduction to GEE Server
-==========================
+============
+OpenGEE Wiki
+============
 
 .. container::
 
    .. container:: content
 
-      This documentation includes instruction for installing GEE Server.
       For additional information, see the GEE wiki at
       `https://github.com/google/earthenterprise/wiki <https://github.com/google/earthenterprise/wiki>`_.
 

@@ -5,7 +5,11 @@ Click the
 
 Settings
 
- icon in the *GEE Server Admin console* to:
+ icon in the
+
+GEE Server Admin console
+
+ to:
 
 -[ Perform .glc assembly ]-
 
