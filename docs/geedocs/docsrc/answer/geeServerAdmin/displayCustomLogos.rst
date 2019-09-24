@@ -101,12 +101,12 @@ Display custom logos
            - The EC horizontal (X axis) coordinate for ``tiePoint``. ``x_coord.value`` specifies a distance
              from the left edge of the Earth window for logo tiePoint placement.
 
-             ``x_coord.value`` is used in conjunction with ``x_coord.is_relative``, which specifies whether 
+             ``x_coord.value`` is used in conjunction with ``x_coord.is_relative``, which specifies whether
              the distance is measured in pixel or relative values.
 
-               - If ``x_coord.is_relative`` is False (default), ``x_coord.is``_relative is a pixel value.
+               - If ``x_coord.is_relative`` is False (default), ``x_coord.is_relative`` is a pixel value.
                  You can use negative values to specify a distance from the right edge.
-               - If ``x_coord.is_relative`` is True, allowed values for ``x_coord.is_relative`` are 
+               - If ``x_coord.is_relative`` is True, allowed values for ``x_coord.is_relative`` are
                  between 0.0 (left edge of window) and 1.0 (right edge).
 
          * - ``y_coord.is_relative``
@@ -123,7 +123,7 @@ Display custom logos
              is measured in pixel or relative values.
 
                - If ``y_coord.is_relative`` is False, this is a pixel value. You can use negative values to specify a
-               distance from the top edge.
+                 distance from the top edge.
                - If ``y_coord.is_relative`` is True, allowed values are between 0.0 (bottom edge of window) and 1.0 (top edge).
 
       .. rubric:: Add a custom logo
@@ -263,7 +263,7 @@ Display custom logos
 
       -  :doc:`../geeServerAdmin/manageSnippetProfiles`
 
-.. |Google logo| image:: ../art/common/googlelogo_color_260x88dp.png
+.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
    :height: 44px
 .. |GEE Server cobrand_info snippet example| image:: ../../art/server/custom_logos/Snippet_cobrand-full.png

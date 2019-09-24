@@ -56,7 +56,7 @@ Add custom search services
       -  Must return valid KML to Google Earth EC.
       -  Must return valid JSONP in the specified structure.
 
-      .. alert:: 
+      .. warning::
 
          Because search tabs are returned as JSONP, they must
          originate from the same server as the HTML page containing
@@ -100,7 +100,7 @@ Add custom search services
            # Handles Example search requests.
            WSGIScriptAlias /gesearch/ExampleSearch /opt/google/gehttpd/wsgi-bin/search/plugin/example_search_app.py
            # Handles POI search requests.
-           WSGIScriptAlias /POISearch /opt/google/gehttpd/wsgi-bin/search/plugin/poi_search_app.py 
+           WSGIScriptAlias /POISearch /opt/google/gehttpd/wsgi-bin/search/plugin/poi_search_app.py
 
       .. _Implement_Custom_Search_Plugin:
       .. rubric:: Implement a custom search plug-in
@@ -144,7 +144,7 @@ Add custom search services
          Earth EC, such as the way the results will be sorted or the
          number of results displayed at a time, enter them in the
          **Additional Query Parameters** field. The syntax is
-         **key1=value1&key2;=value2**. 
+         **key1=value1&key2;=value2**.
          For example, **sortby=name&numresults;=10** sorts by the name field and
          displays 10 results at a time. The search application must be
          able to understand and respond to these key/value pairs, so you

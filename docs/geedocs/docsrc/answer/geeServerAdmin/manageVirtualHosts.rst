@@ -120,17 +120,19 @@ Manage virtual hosts
 
       #. Add the following content to the ``digest_host.location`` file:
 
-      ``# The digest virtual host.``
-      ``RewriteEngine on``
+         .. code-block:: none
 
-      ``<Location /digest_host/>``
-         ``SetHandler fdb-handler``
-         ``AuthType Digest``
-         ``AuthName "Private"``
-         ``AuthDigestProvider file``
-         ``AuthUserFile /opt/google/gehttpd/conf.d/virtual_servers/.htdigest
-         ``Require valid-user``
-      ``</Location>``
+            ``# The digest virtual host.``
+            ``RewriteEngine on``
+
+            ``<Location /digest_host/>``
+            ``SetHandler fdb-handler``
+            ``AuthType Digest``
+            ``AuthName "Private"``
+            ``AuthDigestProvider file``
+            ``AuthUserFile /opt/google/gehttpd/conf.d/virtual_servers/.htdigest
+            ``Require valid-user``
+            ``</Location>``
 
       #. Create the password with a given user name using the password path
       that you specified in the ``digest_host.location`` file:
@@ -188,10 +190,12 @@ Manage virtual hosts
          virtual host to the SSL configuration file for Apache server,
          ``/opt/google/gehttpd/conf/extra/httpd-ssl.conf``:
 
-         ``<VirtualHost  _non_default_:4343>``
-            ``# Include all SSL location-based virtual servers with custom port 4343.``
-            ``Include conf.d/virtual_servers/*.location_ssl_custom``
-         ``</VirtualHost>``
+         .. code-block:: none
+
+            ``<VirtualHost  _non_default_:4343>``
+                 ``# Include all SSL location-based virtual servers with custom port 4343.``
+                 ``Include conf.d/virtual_servers/*.location_ssl_custom``
+            ``</VirtualHost>``
 
       #. Restart GEE Server:
 

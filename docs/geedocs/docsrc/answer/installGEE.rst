@@ -14,6 +14,6 @@ Install Google Earth Enterprise
    installGEE/installGEEServer
    installGEE/sysReqGEEServer
    installGEE/beforeYouInstallGEEServer
-   installGEE/installGEEServer
    installGEE/uninstallGEEServer
    installGEE/hostnameFQDNConfig
+   installGEE/wikiGEE
