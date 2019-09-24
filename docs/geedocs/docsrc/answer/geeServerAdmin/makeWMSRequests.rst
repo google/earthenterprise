@@ -93,7 +93,7 @@ Make Web Map Service (WMS) requests
 
       To enable WMS for a database that you want to publish:
 
-      #. In the `GEE Server Admin <../answer/3470759.html>`_ console,
+      #. In the :doc:`GEE Server Admin <../geeServerAdmin/signInAdminConsole>` console,
          click **Databases**.
       #. Check the box next to the database you want to publish.
       #. Next to **Serve WMS**, select **On**.
@@ -144,21 +144,27 @@ Make Web Map Service (WMS) requests
       The URL the GIS client should use to make the **GetCapabilities**
       request is as follows:
 
-      ::
-
-         http://<hostname>/<target_path>/wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=x.y.z
+      ``http://<hostname>/<target_path>/wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=x.y.z``
 
       The parameters for this operation are as follows:
 
-      .. table:: **GetCapabilities** parameters
+      .. list-table:: **GetCapabilities** parameters
+         :widths: 15 15 50
+         :header-rows: 1
 
-         ========= ========== ============================================================================================================================================
-         Parameter Mandatory? Description
-         ========= ========== ============================================================================================================================================
-         SERVICE   Yes        Service name. Value is WMS
-         REQUEST   Yes        Operation name. Value is **GetCapabilities**
-         VERSION   No         Service version is 1.1.1 or 1.3.0. If no version is submitted, the WMS request defaults to the highest serving version; in this case 1.3.0.
-         ========= ========== ============================================================================================================================================
+          * - Parameter
+            - Mandatory?
+            - Description
+          * - SERVICE
+            - Yes
+            - Service name. Value is WMS
+          * - REQUEST
+            - Yes
+            - Operation name. Value is **GetCapabilities**
+          * - VERSION
+            - No
+            - Service version is 1.1.1 or 1.3.0. If no version is submitted, the WMS request defaults to the 
+              highest serving version; in this case 1.3.0.
 
       An example **GetCapabilities** request is:
 
@@ -183,7 +189,55 @@ Make Web Map Service (WMS) requests
 
       An example **GetCapabilities** request output is as follows:
 
-      ``<WMT_MS_Capabilities updateSequence="0" version="1.1.1">   <Service>     <Name>OGC:WMS</Name>     <Title>Google Earth WMS service.</Title>     <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"     xlink:type="simple" xlink:href="http://108.59.84.128/Earth/wms"/>   </Service>   <Capability>     <Request>       <GetCapabilities>         <Format>text/xml</Format>         <DCPType>           <HTTP>             <Get>               <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"               xlink:type="simple" xlink:href="http://108.59.84.128/Earth/wms"/>             </Get>           </HTTP>         </DCPType>       </GetCapabilities>       <GetMap>         <Format>image/png</Format>         <Format>image/jpeg</Format>         <DCPType>           <HTTP>             <Get>               <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"               xlink:type="simple" xlink:href="http://108.59.84.128/Earth/wms"/>             </Get>           </HTTP>         </DCPType>       </GetMap>     </Request>     <Exception>       <Format>application/vnd.ogc.se_xml</Format>     </Exception>     <Layer opaque="0" noSubsets="0" queryable="0">       <Title>Google Earth WMS service.</Title>       <Layer opaque="1" cascaded="0" noSubsets="0" queryable="0">         <Name>Earth</Name>         <Title>Imagery</Title>         <SRS>EPSG:4326</SRS>         <LatLonBoundingBox minx="-180.0" miny="-90.0" maxx="180.0" maxy="90.0"/>         <BoundingBox maxx="180.0" maxy="90.0" miny="-90.0" minx="-180.0"         SRS="EPSG:4326"/>       </Layer>     </Layer>   </Capability> </WMT_MS_Capabilities>``
+      ``<WMT_MS_Capabilities updateSequence="0" version="1.1.1">``
+         ``<Service>``
+            ``<Name>OGC:WMS</Name>``
+            ``<Title>Google Earth WMS service.</Title>``
+            ``<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"``
+            ``xlink:type="simple" xlink:href="http://108.59.84.128/Earth/wms"/>``
+         ``</Service>``
+         ``<Capability>``
+            ``<Request>``
+               ``<GetCapabilities>``
+                     ``<Format>text/xml</Format>``
+                     ``<DCPType>``
+                        ``<HTTP>``
+                           ``<Get>``
+                              ``<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"``
+                              ``xlink:type="simple" xlink:href="http://108.59.84.128/Earth/wms"/>``
+                           ``</Get>``
+                        ``</HTTP>``
+                     ``</DCPType>``
+                  ``</GetCapabilities>``
+                  ``<GetMap>``
+                     ``<Format>image/png</Format>``
+                     ``<Format>image/jpeg</Format>``
+                     ``<DCPType>``
+                        ``<HTTP>``
+                           ``<Get>``
+                              ``<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"``
+                              ````xlink:type="simple" xlink:href="http://108.59.84.128/Earth/wms"/>``
+                           ``</Get>``
+                        ``</HTTP>``
+                     ``</DCPType>``
+                  ``</GetMap>``
+               ``</Request>``
+               ``<Exception>``
+                  ``<Format>application/vnd.ogc.se_xml</Format>``
+               ``</Exception>``
+               ``<Layer opaque="0" noSubsets="0" queryable="0">``
+                  ``<Title>Google Earth WMS service.</Title>``
+                  ``<Layer opaque="1" cascaded="0" noSubsets="0" queryable="0">``
+                     ``<Name>Earth</Name>``
+                     ``<Title>Imagery</Title>``
+                     ``<SRS>EPSG:4326</SRS>``
+                     ``<LatLonBoundingBox minx="-180.0" miny="-90.0" maxx="180.0" maxy="90.0"/>``
+                     ``<BoundingBox maxx="180.0" maxy="90.0" miny="-90.0" minx="-180.0"``
+                     ``SRS="EPSG:4326"/>``
+                  ``</Layer>``
+               ``</Layer>``
+            ``</Capability>``
+         ``</WMT_MS_Capabilities>``
       Once you have retrieved services and data information from Google
       Earth Enterprise Server 5.x using **GetCapabilities**, you can
       then get the map image that you want using **GetMap**.
@@ -207,25 +261,52 @@ Make Web Map Service (WMS) requests
 
       The parameters for this operation are as follows:
 
-      .. table:: **GetMap** Parameters
+      .. list-table:: **GetMap** parameters
+         :widths: 15 15 50
+         :header-rows: 1
 
-         =========== ========== ===================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================
-         Parameter   Mandatory? Description
-         =========== ========== ===================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================
-         SERVICE     No         Service name. Default value is WMS.
-         REQUEST     Yes        Operation name. Value is **GetMap**.
-         VERSION     No         Service version is 1.1.1 or 1.3.0. If no version is submitted, the WMS request defaults to the highest serving version, in this case 1.3.0.
-         LAYERS      Yes        Layer name for the requested map/image.
-         BBOX        Yes        Bounding box for map extent. Value is minx, miny, maxx, maxy in units of the SRS or CRS, depending on the version. Use SRS for version 1.1.1; use CRS for version 1.3.0.
-         SRS or CRS  Yes        Spatial Reference System (SRS) of map output. Value is in form EPSG:nnn. Use SRS for version 1.1.1; use CRS as the parameter key for version 1.3.0.
-         WIDTH       Yes        Width of map output in pixels.
-         HEIGHT      Yes        Height of map output in pixels.
-         FORMAT      Yes        Format for the map output. PNG or JPEG are currently supported.
-         STYLE       No         Styles in which layers are to be rendered. Value is a list of required style names or empty if default styling is required.
-         DPI         No         Dots per inch. Value is client-dependent. For example, the QGIS client defaults to 96dpi.
-         TRANSPARENT No         Determines if the map should be transparent. Values are TRUE and FALSE; default is FALSE. This parameter only applies when requesting PNG images.
-         BGCOLOR     No         Specifies the color to be used as the background (non-data) pixels of the map. The parameter is a hexadecimal encoding of an RGB value where two hexadecimal characters are used for each of red, green, and blue color values. The values can range between 00 and FF (0 and 255, base 10) for each. The format is 0xRRGGBB; either upper or lower case characters are allowed for RR, GG, and BB values. The “0x” prefix must have a lower case “x”. The default value is 0xFFFFFF, corresponding to the color white, which is used if this parameter is not included in the request. When FORMAT is a picture format, WMS should set the background pixels to the color specified by BGCOLOR. When FORMAT is a graphic element format (which does not have an explicit background), or a picture format, a WMS should avoid use of the BGCOLOR value for foreground elements because they would not be visible against a background picture of the same color.
-         =========== ========== ===================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+          * - Parameter
+            - Mandatory?
+            - Description
+          * - SERVICE
+            - No
+              Service name. Default value is WMS.
+          * - REQUEST
+            - Yes
+            - Operation name. Value is **GetMap**.
+          * - VERSION
+            - No
+            - Service version is 1.1.1 or 1.3.0. If no version is submitted, the WMS request defaults to the highest serving version, in this case 1.3.0.
+          * - LAYERS
+            - Yes
+            - Layer name for the requested map/image.
+          * - BBOX
+            - Yes
+            - Bounding box for map extent. Value is minx, miny, maxx, maxy in units of the SRS or CRS, depending on the version. Use SRS for version 1.1.1; use CRS for version 1.3.0.
+          * - SRS or CRS
+            - Yes
+            - Spatial Reference System (SRS) of map output. Value is in form EPSG:nnn. Use SRS for version 1.1.1; use CRS as the parameter key for version 1.3.0.
+          * - WIDTH
+            - Yes
+            - Width of map output in pixels.
+          * - HEIGHT
+            - Yes
+            - Height of map output in pixels.
+          * - FORMAT
+            - Yes
+            - Format for the map output. PNG or JPEG are currently supported.
+          * - STYLE
+            - No
+            - Styles in which layers are to be rendered. Value is a list of required style names or empty if default styling is required.
+          * - DPI
+            - No
+            - Dots per inch. Value is client-dependent. For example, the QGIS client defaults to 96dpi.
+          * - TRANSPARENT
+            - No
+            - Determines if the map should be transparent. Values are TRUE and FALSE; default is FALSE. This parameter only applies when requesting PNG images.
+          * - BGCOLOR
+            - No
+            - Specifies the color to be used as the background (non-data) pixels of the map. The parameter is a hexadecimal encoding of an RGB value where two hexadecimal characters are used for each of red, green, and blue color values. The values can range between 00 and FF (0 and 255, base 10) for each. The format is 0xRRGGBB; either upper or lower case characters are allowed for RR, GG, and BB values. The “0x” prefix must have a lower case “x”. The default value is 0xFFFFFF, corresponding to the color white, which is used if this parameter is not included in the request. When FORMAT is a picture format, WMS should set the background pixels to the color specified by BGCOLOR. When FORMAT is a graphic element format (which does not have an explicit background), or a picture format, a WMS should avoid use of the BGCOLOR value for foreground elements because they would not be visible against a background picture of the same color.
 
       An example **GetMap** request is:
 

@@ -54,7 +54,9 @@ Configure a GEE virtual host for LDAP authentication
          additional security constraints.
 
       #. Restart the GEE server to load the modules into the system:
+
          ``# /etc/init.d/geserver restart``
+
       #. Create a user account in Active Directory ``geserver``.
          This can be any user account that has limited access. The user
          account only needs access to the global catalog. Make sure that
@@ -64,17 +66,29 @@ Configure a GEE virtual host for LDAP authentication
 
       #. If you do not know your LDAP domain name, ask your system
          administrator. You can also find your domain name by searching
-         for it in the format
-         ``Dn: CN=geserver,CN=Users,DC=location,DC=company,DC=com``. In
+         for it in the format ``Dn: CN=geserver,CN=Users,DC=location,DC=company,DC=com``. In
          this example, the domain name is ``location.company.com``.
       #. Use your domain name to configure the Apache module.
          Alternatively, you can use the command prompt:
+
          ``dsadd user UserDN [-samid SAMName] -pwd {Password|*}``
+
       #. Add the directives to your virtual server file at
          ``/opt/google/gehttp/conf.d/virtual_servers``.
       #. For testing purposes, add the lines below to the
          ``private_host.location`` file:
-         ``<Location /private/*>   AuthType Basic   AuthName "LDAP LOGIN"   AuthBasicProvider ldap   AuthLDAPURL "ldap://server.name.local:389/cn=Users,dc=domain,dc=google,dc=com?uid"\   AuthLDAPBindDN CN=geserver,OU=Users,OU=Yourorg,DC=DcNAME,DC=local   AuthLDAPBindPassword localuserpassword   AuthzLDAPAuthoritative Off   Require valid-user </Location>``
+
+         ``<Location /private/*>``
+            ``AuthType Basic``
+            ``AuthName "LDAP LOGIN"``
+            ``AuthBasicProvider ldap``
+            ``AuthLDAPURL "ldap://server.name.local:389/cn=Users,dc=domain,dc=google,dc=com?uid"\``
+            ``AuthLDAPBindDN CN=geserver,OU=Users,OU=Yourorg,DC=DcNAME,DC=local``
+            ``AuthLDAPBindPassword localuserpassword``
+            ``AuthzLDAPAuthoritative Off``
+            ``Require valid-user``
+         ``</Location>``
+         
       #. Restart your server and try to access the virtual server via
          the client.
          A login screen appears. If you cannot access Apache, open the

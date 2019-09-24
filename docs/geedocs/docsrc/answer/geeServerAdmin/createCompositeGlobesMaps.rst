@@ -10,11 +10,11 @@ Create composite globes and maps
 
       .. rubric:: Contents
 
-      :ref:`Introduction <Introduction>`
+      :ref:`Introduction <Introduction_Composite_Globes_Maps>`
       :ref:`Creating composite maps and globes <Creating_Composite_Maps_Globes>`
       :ref:`Extracting layers from a composite map or globe <Extracting_Layers_Composite_Map_Globe>`
 
-      .. _Introduction:
+      .. _Introduction_Composite_Globes_Maps:
       .. rubric:: Introduction
 
       A composite globe (``.glc``) is an assembly of layers from
@@ -81,7 +81,7 @@ Create composite globes and maps
 
          .. note::
 
-            **Note:** If you do not know your username and password,
+            If you do not know your username and password,
             contact your Google Earth Enterprise Server System
             Administrator. 
             
@@ -124,9 +124,9 @@ Create composite globes and maps
          When you have no more layers available, the **Layers**
          drop-down list indicates that all available layers are in use.
 
-      To select a base globe option, click the **Base globe options**
-      drop-down list and choose a portable globe, then click **Yes** to use
-      the imagery and terrain data for the selected base globe.
+      #. To select a base globe option, click the **Base globe options**
+         drop-down list and choose a portable globe, then click **Yes** to use
+         the imagery and terrain data for the selected base globe.
 
       |GEE Assembly tool base globe options|
 
@@ -158,7 +158,7 @@ Create composite globes and maps
 
          .. note::
 
-            **Note:** If you do not know your username and password,
+            If you do not know your username and password,
             contact your Google Earth Enterprise Server System
             Administrator. 
             

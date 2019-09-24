@@ -125,7 +125,7 @@ Configure GEE Server 5.1.0 for SSL/HTTPS
 
       .. note::
 
-         **Note:** The virtual host name “secure” is reserved for GEE
+         The virtual host name “secure” is reserved for GEE
          Server use.
 
       .. rubric:: To add a virtual host for HTTPS serving:
@@ -159,7 +159,11 @@ Configure GEE Server 5.1.0 for SSL/HTTPS
          includes the ``<Location>`` directives for SSL, in this case,
          ``test_ssl``.
 
-         ``<Location “/test_ssl_host/*”>     SetHandler fdb-handler     SSLRequireSSL     SSLVerifyClient none </Location>``
+         ``<Location “/test_ssl_host/*”>``
+            ``SetHandler fdb-handler``
+            ``SSLRequireSSL``
+            ``SSLVerifyClient none`` 
+         ``</Location>``
 
          .. tip::
 
@@ -220,7 +224,8 @@ Configure GEE Server 5.1.0 for SSL/HTTPS
               location is already included in the
             | ``<VirtualHost _default_:443>`` list of directives:
 
-            ``<VirtualHost_default_:443>     Include conf.d/virtual_servers/*.location_ssl``
+            ``<VirtualHost_default_:443>``
+               ``Include conf.d/virtual_servers/*.location_ssl``
 
          #. Save and close the
             ``/opt/google/gehttpd/conf/extra/httpd-ssl.conf`` file.
@@ -232,7 +237,6 @@ Configure GEE Server 5.1.0 for SSL/HTTPS
       #. Publish a database to the SSL/HTTPS virtual host.
       #. Test the connections with Google Earth Enterprise Client for
          HTTP and HTTPS-based virtual servers.
-
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

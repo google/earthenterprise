@@ -28,13 +28,13 @@ View 3D databases
          or IP address of your server and database in the **Server** field.
          
          For example, a Publish point of **BayAreaHighways** would be
-         hosted at http://\ *myserver.mydomainname.com*/BayAreaHighways,
+         hosted at *http://myserver.mydomainname.com*/BayAreaHighways,
          where *myserver* and *mydomainname* are specific to your
          server.
       
       #. Click the **Sign In** button.
 
-         .. container:: alert
+         .. alert:: 
 
             If you have logged in to this server with Google Earth EC
             previously, log out, clear your cache, and log back in. For

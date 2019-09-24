@@ -9,7 +9,7 @@ Snippet profiles page
    .. container:: content
 
       The **Snippet profiles** page of the :doc:`GEE Server Admin
-      console <3470759>` is where you manage Snippet
+      console <../geeServerAdmin/signInAdminConsole>` is where you manage Snippet
       profiles for use with 3D Fusion databases. Snippet profiles allow
       specific snippet needs to be managed and uniformly applied to all
       databases that require them. From this page, you can:
@@ -27,7 +27,7 @@ Snippet profiles page
 
       .. rubric:: Learn more
 
-      -  :doc:`../geeServerAdmin/manageSnippetProfiles`_
+      -  :doc:`../geeServerAdmin/manageSnippetProfiles`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

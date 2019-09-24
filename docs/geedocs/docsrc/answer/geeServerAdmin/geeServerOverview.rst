@@ -21,7 +21,7 @@ GEE Server Overview 5.x
       security protocols from publishing maps and globes.
 
       Associating :doc:`search sets <../geeServerAdmin/createSearchTabs>` and :doc:`snippet
-      profiles <6004748>` at the time of publishing
+      profiles <../geeServerAdmin/manageSnippetProfiles>` at the time of publishing
       allows you to present different versions of the same underlying
       Fusion database, which can then be made available at different
       URLs and under different security protocols. For example,you can
@@ -33,7 +33,7 @@ GEE Server Overview 5.x
       virtual host at a different URL.
 
       GEE Server now supports :doc:`Web Map Service
-      (WMS) <4441137>`. One of the benefits of using
+      (WMS) <../geeServerAdmin/makeWMSRequests>`. One of the benefits of using
       the WMS standard is that supported clients can request images from
       multiple WMS servers and then combine those mapping images into a
       single view. Because the WMS standard is used to get all the
@@ -45,7 +45,7 @@ GEE Server Overview 5.x
       approach makes your life easier and maybe even a little more fun!
 
       GEE Server also provides tools for :doc:`cutting portable
-      globes <3230777>` (``.glb``) and maps (``.glc``).
+      globes <../geeServerAdmin/createPortableGlobesMaps>` (``.glb``) and maps (``.glc``).
       :doc:`Composite globes and maps <../geeServerAdmin/createCompositeGlobesMaps>` can be
       assembled from 2D or 3D portable files. The resulting offline globe
       or map is packed as a ``.glc`` file that may be downloaded for use

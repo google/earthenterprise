@@ -120,273 +120,132 @@ Manage snippet profiles
       dbRoot snippets.
 
       .. _Table_Snippet_Settings:
-      .. container::
+      .. rubric:: Snippet Settings
 
-         +-----------------+-----------------+-----------------+-----------------+
-         | Snippet Name    | Purpose         | Syntax          | Notes           |
-         +=================+=================+=================+=================+
-         | ``bbs_server_in | Specify BBS     | ``base_url``—UR |                 |
-         | fo``            | Server info.    | L               |                 |
-         |                 |                 | of the server,  |                 |
-         |                 |                 | including       |                 |
-         |                 |                 | protocol,       |                 |
-         |                 |                 | domain name,    |                 |
-         |                 |                 | and port.       |                 |
-         |                 |                 | ``file_submit_p |                 |
-         |                 |                 | ath``—Path      |                 |
-         |                 |                 | on server where |                 |
-         |                 |                 | files can be    |                 |
-         |                 |                 | submitted.      |                 |
-         |                 |                 | ``name``—Name   |                 |
-         |                 |                 | that will be    |                 |
-         |                 |                 | displayed in    |                 |
-         |                 |                 | context menu to |                 |
-         |                 |                 | user. Must be   |                 |
-         |                 |                 | translated.     |                 |
-         |                 |                 | ``post_wizard_p |                 |
-         |                 |                 | ath``—Path      |                 |
-         |                 |                 | on server where |                 |
-         |                 |                 | wizard can be   |                 |
-         |                 |                 | found           |                 |
-         +-----------------+-----------------+-----------------+-----------------+
-         | ``client_option | Disable disk    | ``disable_disk_ | Default value   |
-         | s``             | caching in      | cache``         | is False        |
-         |                 | Google Earth    |                 |                 |
-         |                 | EC.             |                 |                 |
-         +-----------------+-----------------+-----------------+-----------------+
-         | ``cobrand_info` | Add custom logo | ``logo_url``—UR | ``logo_url``    |
-         | `               | to Google Earth | L               | can be remote   |
-         |                 | EC display      | of image to use | or local.       |
-         |                 | window.         | as logo         | ``screen_size`` |
-         |                 |                 | ``screen_size`` | makes logo      |
-         |                 |                 | —Positive       | scalable with   |
-         |                 |                 | value <=1       | screen by       |
-         |                 |                 | specifies scale | forcing its     |
-         |                 |                 | with screen.    | width to occupy |
-         |                 |                 | ``tie_point``—C | a fraction of   |
-         |                 |                 | ontrols         | the screen. For |
-         |                 |                 | the reference   | example, a      |
-         |                 |                 | point in the    | value of 0.25   |
-         |                 |                 | overlay         | sets the given  |
-         |                 |                 | ``x_coord.is_re | logo to occupy  |
-         |                 |                 | lative``—If     | 25% of the      |
-         |                 |                 | True, the       | screen.         |
-         |                 |                 | coordinate is   |                 |
-         |                 |                 | relative to the |                 |
-         |                 |                 | screen          |                 |
-         |                 |                 | ``x_coord.value |                 |
-         |                 |                 | ``—Coordinate   |                 |
-         |                 |                 | value           |                 |
-         |                 |                 | Interpretation  |                 |
-         |                 |                 | depends on      |                 |
-         |                 |                 | value set in    |                 |
-         |                 |                 | ``x_coord.is_re |                 |
-         |                 |                 | lative``.       |                 |
-         |                 |                 | ``y_coord.is_re |                 |
-         |                 |                 | lative``—If     |                 |
-         |                 |                 | True, the       |                 |
-         |                 |                 | coordinate is   |                 |
-         |                 |                 | relative to the |                 |
-         |                 |                 | screen          |                 |
-         |                 |                 | ``y_coord.value |                 |
-         |                 |                 | ``—Coordinate   |                 |
-         |                 |                 | value           |                 |
-         |                 |                 | Interpretation  |                 |
-         |                 |                 | depends on      |                 |
-         |                 |                 | value set in    |                 |
-         |                 |                 | ``y_coord.is_re |                 |
-         |                 |                 | lative``.       |                 |
-         +-----------------+-----------------+-----------------+-----------------+
-         | ``default_web_p | Default         | ``https://www.g | Can be set to   |
-         | age_intl_url``  | location of web | oogle.com/?hl=% | an internal IP  |
-         |                 | page in Google  | 251``           | or host name    |
-         |                 | Earth EC.       |                 | address.        |
-         |                 |                 |                 | Default web     |
-         |                 |                 |                 | page value in   |
-         |                 |                 |                 | GEE is an empty |
-         |                 |                 |                 | string.         |
-         +-----------------+-----------------+-----------------+-----------------+
-         | ``disable_authe | Disable session | ``boolean``     | Indicates that  |
-         | ntication``     | cookie-based    |                 | this database   |
-         |                 | authentication. |                 | does not        |
-         |                 |                 |                 | require session |
-         |                 |                 |                 | cookie-based    |
-         |                 |                 |                 | authentication. |
-         +-----------------+-----------------+-----------------+-----------------+
-         | ``earth_intl_ur | Location of     | ``http://earth. |                 |
-         | l``             | international   | google.com``    |                 |
-         |                 | page for Google |                 |                 |
-         |                 | Earth.          |                 |                 |
-         +-----------------+-----------------+-----------------+-----------------+
-         | ``elevation_ser | Terrain         | ````            | If field is     |
-         | vice _base_url` | elevation       |                 | empty, service  |
-         | `               | service URL.    |                 | is unavailable. |
-         +-----------------+-----------------+-----------------+-----------------+
-         | ``hide_user_dat | ``True`` =      | ``boolean``     | Default is      |
-         | a``             | Suppress user   |                 | False.          |
-         |                 | name in the     |                 |                 |
-         |                 | Help -> About   |                 |                 |
-         |                 | window.         |                 |                 |
-         |                 | ``False`` =     |                 |                 |
-         |                 | Display user    |                 |                 |
-         |                 | name.           |                 |                 |
-         +-----------------+-----------------+-----------------+-----------------+
-         | ``keyboard_shor | URL for         | ````            | Can be set to   |
-         | tcuts_url``     | keyboard        |                 | an internal IP  |
-         |                 | shortcuts page. |                 | or host name    |
-         |                 | If not          |                 | address.        |
-         |                 | specified, this |                 |                 |
-         |                 | URL is built    |                 |                 |
-         |                 | from            |                 |                 |
-         |                 | user_guide_intl |                 |                 |
-         |                 | _url            |                 |                 |
-         |                 | as              |                 |                 |
-         |                 | user_guide_intl |                 |                 |
-         |                 | _url"ug_keyboar |                 |                 |
-         |                 | d.html"         |                 |                 |
-         +-----------------+-----------------+-----------------+-----------------+
-         | ``model``       |                 | ``compressed_ne |                 |
-         |                 |                 | gative_altitude |                 |
-         |                 |                 | _threshold``—Th |                 |
-         |                 |                 | reshold         |                 |
-         |                 |                 | below which     |                 |
-         |                 |                 | negative        |                 |
-         |                 |                 | altitudes are   |                 |
-         |                 |                 | compressed      |                 |
-         |                 |                 | ``elevation_bia |                 |
-         |                 |                 | s``—Elevation   |                 |
-         |                 |                 | bias            |                 |
-         |                 |                 | ``flattening``— |                 |
-         |                 |                 | Planet          |                 |
-         |                 |                 | flattening.     |                 |
-         |                 |                 | Default value   |                 |
-         |                 |                 | is              |                 |
-         |                 |                 | 1.0/298.2572235 |                 |
-         |                 |                 | 63              |                 |
-         |                 |                 | (from WGS84)    |                 |
-         |                 |                 | ``negative_alti |                 |
-         |                 |                 | tude_exponent_b |                 |
-         |                 |                 | ias``—Bias      |                 |
-         |                 |                 | for negative    |                 |
-         |                 |                 | altitude so     |                 |
-         |                 |                 | that ocean      |                 |
-         |                 |                 | tiles can be    |                 |
-         |                 |                 | streamed to     |                 |
-         |                 |                 | older clients   |                 |
-         |                 |                 | ``radius``—Mean |                 |
-         |                 |                 | planet radius.  |                 |
-         |                 |                 | Default value   |                 |
-         |                 |                 | is the WGS84    |                 |
-         |                 |                 | model for earth |                 |
-         +-----------------+-----------------+-----------------+-----------------+
-         | ``privacy_polic | URL for privacy | ``IP address or | Can be set to   |
-         | y_url``         | policy.         |  host name``    | an internal IP  |
-         |                 |                 |                 | or host name    |
-         |                 |                 |                 | address.        |
-         +-----------------+-----------------+-----------------+-----------------+
-         | ``release_notes | URL for release | ``IP address or | Can be set to   |
-         | _url``          | notes.          |  host name``    | an internal IP  |
-         |                 |                 |                 | or host name    |
-         |                 |                 |                 | address.        |
-         +-----------------+-----------------+-----------------+-----------------+
-         | ``reverse_geoco | Reverse         | ``numeric value | Default is 3    |
-         | der _protocol_v | geocoder        | ``              | which is the    |
-         | ersion``        | protocol        |                 | protocol        |
-         |                 | version.        |                 | supported by    |
-         |                 |                 |                 | newer clients.  |
-         +-----------------+-----------------+-----------------+-----------------+
-         | ``reverse_geoco | Reverse         | ````            |                 |
-         | der_url``       | geocoder server |                 |                 |
-         |                 | URL.            |                 |                 |
-         +-----------------+-----------------+-----------------+-----------------+
-         | ``show_signin_b | If True, shows  | ``boolean``     |                 |
-         | utton``         | the signin      |                 |                 |
-         |                 | button in the   |                 |                 |
-         |                 | top-right       |                 |                 |
-         |                 | corner of the   |                 |                 |
-         |                 | display window. |                 |                 |
-         +-----------------+-----------------+-----------------+-----------------+
-         | ``startup_tips_ | Localize        | ````            |                 |
-         | intl_url``      | international   |                 |                 |
-         |                 | URL from which  |                 |                 |
-         |                 | to load startup |                 |                 |
-         |                 | tips for Earth  |                 |                 |
-         |                 | 7.0 or higher.  |                 |                 |
-         +-----------------+-----------------+-----------------+-----------------+
-         | ``support_answe | Localize        | ``https://suppo |                 |
-         | r_intl_url``    | international   | rt.google.com/e |                 |
-         |                 | URL for support | arth/#topic=436 |                 |
-         |                 | answers.        | 3013``          |                 |
-         +-----------------+-----------------+-----------------+-----------------+
-         | ``support_cente | Localize        | ``http://suppor |                 |
-         | r_intl_url``    | international   | t.google.com/ea |                 |
-         |                 | URL for the     | rth/``          |                 |
-         |                 | support center. |                 |                 |
-         +-----------------+-----------------+-----------------+-----------------+
-         | ``support_reque | Localize        | ``https://suppo |                 |
-         | st_intl_url``   | international   | rt.google.com/e |                 |
-         |                 | URL for support | arth/#topic=236 |                 |
-         |                 | requests.       | 4258``          |                 |
-         +-----------------+-----------------+-----------------+-----------------+
-         | ``support_topic | Localize        | ``http://www.go |                 |
-         | _intl_url``     | international   | ogle.com/earth/ |                 |
-         |                 | URL for support | learn/``        |                 |
-         |                 | topics.         |                 |                 |
-         +-----------------+-----------------+-----------------+-----------------+
-         | ``swoop_paramet | Controls how    | ``start_dist_in |                 |
-         | ers``           | far from a      | _meters``       |                 |
-         |                 | target swooping |                 |                 |
-         |                 | should start.   |                 |                 |
-         +-----------------+-----------------+-----------------+-----------------+
-         | ``tutorial_url` | URL for         | ``http://www.go |                 |
-         | `               | tutorial page.  | ogle.com/earth/ |                 |
-         |                 | If URL is not   | learn/``        |                 |
-         |                 | specified, this |                 |                 |
-         |                 | URL is built    |                 |                 |
-         |                 | from            |                 |                 |
-         |                 | ``user_guide_in |                 |                 |
-         |                 | tl_url``        |                 |                 |
-         |                 | as              |                 |                 |
-         |                 | ``user_guide_in |                 |                 |
-         |                 | tl_url + "tutor |                 |                 |
-         |                 | ials/index.html |                 |                 |
-         |                 | "``.            |                 |                 |
-         +-----------------+-----------------+-----------------+-----------------+
-         | ``use_ge_logo`` | Shows/hides     | ``boolean``     | Default is      |
-         |                 | Google Earth    |                 | True.           |
-         |                 | logo in lower   |                 |                 |
-         |                 | right corner of |                 |                 |
-         |                 | display.        |                 |                 |
-         +-----------------+-----------------+-----------------+-----------------+
-         | ``user_guide_in | Localize        | ``http://www.go | Defaults to     |
-         | tl_url``        | international   | ogle.com/earth/ | local PDF file  |
-         |                 | URL for         | learn/``        | for Google      |
-         |                 | documentation.  |                 | Earth EC. Can   |
-         |                 |                 |                 | be set to an    |
-         |                 |                 |                 | internal IP or  |
-         |                 |                 |                 | hostname        |
-         |                 |                 |                 | address.        |
-         +-----------------+-----------------+-----------------+-----------------+
-         | ``valid_databas | Validates the   | ``database_name |                 |
-         | e``             | database name   | ``—Human-readab |                 |
-         |                 | and URL.        | le              |                 |
-         |                 |                 | name of         |                 |
-         |                 |                 | database, for   |                 |
-         |                 |                 | example,        |                 |
-         |                 |                 | "Primary        |                 |
-         |                 |                 | Database" or    |                 |
-         |                 |                 | "Digital Globe  |                 |
-         |                 |                 | Database"       |                 |
-         |                 |                 | ``database_url` |                 |
-         |                 |                 | `—URL           |                 |
-         |                 |                 | of server. This |                 |
-         |                 |                 | can include a   |                 |
-         |                 |                 | path and a      |                 |
-         |                 |                 | query, and must |                 |
-         |                 |                 | be a            |                 |
-         |                 |                 | well-formed,    |                 |
-         |                 |                 | absolute URL    |                 |
-         +-----------------+-----------------+-----------------+-----------------+
+      .. list-table:: Snippet Settings
+         :widths: 35 25 25 25
+         :header-rows: 1
+
+          * - Snippet Name
+            - Purpose
+            - Syntax
+            - Notes
+          * - ``bbs_server_info``
+            - Specify BBS Server info.
+            - ``base_url`` — URL of the server, including protocol, domain name, and port.
+               ``file_submit_path`` — Path on server where files can be submitted.
+               ``name`` — Name that will be displayed in context menu to user. Must be translated.
+               ``post_wizard_path`` — Path on server where wizard can be found
+            - 
+          * - ``client_options``
+            - Disable disk caching in Google Earth EC.
+            -``disable_disk_cache``
+            - Default value is False
+          * - ``cobrand_info``
+            - Add custom logo to Google Earth EC display window.
+            - ``logo_url`` — URL of image to use as logo
+              ``screen_size`` — Positive value <=1 specifies scale with screen.
+              ``tie_point`` — Controls the reference point in the overlay
+              ``x_coord.is_relative`` — If True, the coordinate is relative to the screen
+              ``x_coord.value`` — Coordinate value Interpretation depends on value set in ``x_coord.is_relative``.
+              ``y_coord.is_relative — If True, the coordinate is relative to the screen
+              ``y_coord.value`` — Coordinate value. Interpretation depends on value set in ``y_coord.is_relative``.
+            - ``logo_url`` can be remote or local.
+              ``screen_size`` makes logo scalable with screen by forcing its width to occupy a fraction of the screen. 
+              For example, a value of 0.25 sets the given logo to occupy 25% of the screen.
+          * - ``default_web_page_intl_url``
+            - Default location of web page in Google Earth EC.
+            ``- ``https://www.google.com/?hl=%251``
+            - Can be set to an internal IP or host name address. Default web page value in GEE is an empty string.
+          * - ``disable_authentication``
+            - Disable session cookie-based authentication.
+            - ``boolean``
+            - Indicates that this database does not require session cookie-based authentication.
+          * - ``earth_intl_url``
+            - Location of international page for Google Earth.
+            - ``http://earth.google.com``
+          * - ``elevation_service _base_url``
+            - Terrain elevation service URL.
+            - 
+            - If field is empty, service is unavailable.
+          * - ``hide_user_data``
+            - ``True`` = Suppress user name in the Help -> About window. ``False`` = Display user name.
+            - ``boolean``
+            - Default is False.
+          * - ``keyboard_shortcuts_url``
+            - URL for keyboard shortcuts page. 
+              If not specified, this URL is built from ``user_guide_intl _url`` as ``user_guide_intl _url`` + ``keyboard.html”
+            - 
+            - Can be set to an internal IP or host name address.
+          * - ``model``
+            - 
+            - 	``compressed_negative_altitude_threshold`` — Threshold below which negative altitudes are compressed
+            - ``elevation_bias`` — Elevation bias
+            - ``flattening`` — Planet flattening. Default value is 1.0/298.257223563 (from WGS84)
+            - ``negative_altitude_exponent_bias`` — Bias for negative altitude so that ocean tiles can be streamed to older clients
+            - ``radius`` — Mean planet radius. Default value is the WGS84 model for earth
+            - 
+          * - ``privacy_policy_url``
+            - URL for privacy policy.
+            - ``IP address or host name``
+            - Can be set to an internal IP or host name address.
+          * - ``release_notes_url``
+            - URL for release notes.
+            - ``IP address or host name``
+            - Can be set to an internal IP or host name address.
+          * - ``reverse_geocoder_protocol_version``
+            - Reverse geocoder protocol version.
+            - ``numeric value``
+            - Default is 3 which is the protocol supported by newer clients.
+          * - ``reverse_geocoder_url``
+            - Reverse geocoder server URL.
+            - 
+            - 
+          * - ``show_signin_button``
+            - If True, shows the signin button in the top-right corner of the display window.
+            - ``boolean``
+            - 
+          * - ``startup_tips_intl_url``
+            - Localize international URL from which to load startup tips for Earth 7.0 or higher.
+            - 
+            - 
+          * - ``support_answer_intl_url``
+            - Localize international URL for support answers.
+            - ``https://support.google.com/earth/#topic=4363013``
+            - 
+          * - ``support_center_intl_url``
+            - Localize international URL for the support center.
+            - ``http://support.google.com/earth/``
+            - 
+          * - ``support_request_intl_url``
+            - Localize international URL for support requests.
+            - ``https://support.google.com/earth/#topic=2364258``
+            - 
+          * - ``support_topic_intl_url``
+            - Localize international URL for support topics.
+            - ``http://www.google.com/earth/learn/``
+            - 
+          * - ``swoop_parameters``
+            - Controls how far from a target swooping should start.
+            - ``start_dist_in_meters``
+            - 
+          * - ``tutorial_url``
+            - URL for tutorial page.
+              If URL is not specified, this URL is built from ``user_guide_intl_url`` as ``user_guide_intl_url`` +``tutorials/index.html``.
+            - ``http://www.google.com/earth/learn/``
+          * - ``use_ge_logo``
+            - Shows/hides Google Earth logo in lower-right corner of display.
+            - ``boolean``
+            - Default is True.
+          * - ``user_guide_intl_url``
+            - Localize international URL for documentation.
+            - ``http://www.google.com/earth/learn/``
+            - Defaults to local PDF file for Google Earth EC. Can be set to an internal IP or hostname address.
+          * - ``valid_database``
+            - Validates the database name and URL.
+            - ``database_name ``— Human-readable name of database, for example, “Primary Database” or “Digital Globe Database”
+              ``database_url` `— URL of server. This can include a path and a query, and must be a well-formed, absolute URL
+            - 
 
       .. _Modify_Snippet_Profile:
       .. rubric:: To modify a snippet profile:
@@ -427,7 +286,7 @@ Manage snippet profiles
          profiles** list.
 
       .. rubric:: Learn more
-         :name: learn-more
+
          :doc:`Google Earth Enterprise Client (EC) <../googleEarthEnterpriseClient/whatisEC>`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
