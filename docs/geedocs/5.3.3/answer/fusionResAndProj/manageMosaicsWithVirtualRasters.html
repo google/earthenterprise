@@ -135,23 +135,19 @@ mosaic:</p>
 used for the mosaic (<code class="docutils literal notranslate"><span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0</span> <span class="pre">=</span> <span class="pre">black</span></code>), the name of the file to
 be generated (<code class="docutils literal notranslate"><span class="pre">my_virtualmosaic_20140624_1.khvr</span></code>), and include
 all of the <code class="docutils literal notranslate"><span class="pre">.tif</span></code> files in the current folder as input.</p>
-<blockquote>
-<div><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">gevirtualraster</span> <span class="pre">--fill</span> <span class="pre">0,0,0</span> <span class="pre">--tolerance</span> <span class="pre">3</span> <span class="pre">-o</span> <span class="pre">my_virtualmosaic_20140624_1.khvr</span> <span class="pre">*.tif</span></code></div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">gevirtualraster</span> <span class="pre">--fill</span> <span class="pre">0,0,0</span> <span class="pre">--tolerance</span> <span class="pre">3</span> <span class="pre">-o</span> <span class="pre">my_virtualmosaic_20140624_1.khvr</span> <span class="pre">*.tif</span></code></p>
 <p>#. Import the virtual raster imagery file into Fusion, specifying the
 resource type, the virtual raster file to import and the output
 resource file, <code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">my_virtualmosaic_20140624.kip</span></code>.</p>
-<blockquote>
-<div><code class="docutils literal notranslate"><span class="pre">gerasterimport</span> <span class="pre">--imagery</span> <span class="pre">my_virtualmosaic_20140624_1.khvr</span> <span class="pre">-o</span> <span class="pre">my_virtualmosaic_20140624.kip</span></code></div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">gerasterimport</span> <span class="pre">--imagery</span> <span class="pre">my_virtualmosaic_20140624_1.khvr</span> <span class="pre">-o</span> <span class="pre">my_virtualmosaic_20140624.kip</span></code></p>
 <p>#. Create a mask for the imagery resource, specifying band, fill,
 tolerance and feather values, the imagery resource file and
 the name of the mask created.</p>
-<blockquote>
-<div><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">gemaskgen</span> <span class="pre">--mask</span> <span class="pre">--band</span> <span class="pre">1</span> <span class="pre">--fill</span> <span class="pre">0</span> <span class="pre">--tolerance</span> <span class="pre">3</span> <span class="pre">--feather</span> <span class="pre">100</span> <span class="pre">my_virtualmosaic_20140624_1.kip</span> <span class="pre">my_virtualmosaic_20140624_1-mask.tif</span></code></div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">gemaskgen</span> <span class="pre">--mask</span> <span class="pre">--band</span> <span class="pre">1</span> <span class="pre">--fill</span> <span class="pre">0</span> <span class="pre">--tolerance</span> <span class="pre">3</span> <span class="pre">--feather</span> <span class="pre">100</span> <span class="pre">my_virtualmosaic_20140624_1.kip</span> <span class="pre">my_virtualmosaic_20140624_1-mask.tif</span></code></p>
 <p>#. Import the generated alpha mask, creating a <code class="docutils literal notranslate"><span class="pre">.kmp</span></code> folder.
 Corresponding <code class="docutils literal notranslate"><span class="pre">.kip</span></code> and <code class="docutils literal notranslate"><span class="pre">.kmp</span></code> folders should be stored in
 the same directory.</p>
-<blockquote>
-<div><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">gerasterimport</span> <span class="pre">--alphamask</span> <span class="pre">my_virtualmosaic_20140624_1-mask.tif</span> <span class="pre">--imagery</span> <span class="pre">my_virtualmosaic_20140624_1.kip</span> <span class="pre">--output</span> <span class="pre">my_virtualmosaic_20140624_1.kmp</span></code></div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">gerasterimport</span> <span class="pre">--alphamask</span> <span class="pre">my_virtualmosaic_20140624_1-mask.tif</span> <span class="pre">--imagery</span> <span class="pre">my_virtualmosaic_20140624_1.kip</span> <span class="pre">--output</span> <span class="pre">my_virtualmosaic_20140624_1.kmp</span></code></p>
 <ol class="arabic simple">
 <li>Define a new imagery resource.
 <code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">genewimageryresource</span> <span class="pre">-o</span> <span class="pre">Resources/Imagery/candid_my_virtualmosaic_20140624_1</span> <span class="pre">/gevol/src/candid/my_virtualmosaic_20140624_1/my_virtualmosaic_20140624_1.kip</span></code></li>

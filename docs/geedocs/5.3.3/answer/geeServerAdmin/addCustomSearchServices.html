@@ -94,12 +94,12 @@ forward your request to both the <strong>POI Search</strong> plug-in and the
 <strong>Places</strong> plug-in and return a merged set.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> Google Maps API and Places API access services over
+<p class="last">Google Maps API and Places API access services over
 the internet, and require licenses to use.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> You will need some familiarity with Python to work
+<p class="last">You will need some familiarity with Python to work
 with custom search plug-ins.</p>
 </div>
 <ul class="simple">
@@ -112,17 +112,16 @@ Maps</span></a></li>
 Google Maps</p>
 <p>Any web service, servlet, or web application you configure the
 search tabs to query:</p>
-<ul>
-<li><p class="first">Must return valid KML to Google Earth EC.</p>
-</li>
-<li><p class="first">Must return valid JSONP in the specified structure.</p>
-<div class="alert docutils container">
-<p>Because search tabs are returned as JSONP, they must
+<ul class="simple">
+<li>Must return valid KML to Google Earth EC.</li>
+<li>Must return valid JSONP in the specified structure.</li>
+</ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Because search tabs are returned as JSONP, they must
 originate from the same server as the HTML page containing
 the 2D map.</p>
 </div>
-</li>
-</ul>
 <p class="rubric" id="access-search-plugins">Access Search Plug-ins</p>
 <p>The Google Earth Enterprise search plug-ins are stored in a
 default directory that you can use to add or delete your custom
@@ -158,10 +157,10 @@ plug-ins are defined in
 <p>You implement a custom search plug-in by creating your own
 Python search application using WSGI, then registering the new
 search plug-in so that it can be added as you publish databases.</p>
-<p class="rubric">To implement your custom search plug-in:</p>
+<p class="rubric">To implement a custom search plug-in:</p>
 <ol class="arabic">
 <li><p class="first">Create your search application, using the WSGI framework. See
-the <a class="reference internal" href="exampleSearchPluginSample.html"><span class="doc">ExampleSearch Python module</span></a>
+the <a class="reference internal" href="exampleSearchPluginSample.html"><span class="doc">Example Search Python module</span></a>
 for example code.</p>
 </li>
 <li><p class="first">Locate your search plug-in, for example <code class="docutils literal notranslate"><span class="pre">custom_search.py</span></code>,
@@ -173,7 +172,9 @@ module configuration file:
 <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf.d/mod_wsgi-ge.conf</span></code>. Your
 registration in the configuration file should look something
 like the following:</p>
-<p><code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">Handles</span> <span class="pre">My</span> <span class="pre">Custom</span> <span class="pre">search</span> <span class="pre">requests.</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">WSGIScriptAlias</span> <span class="pre">/gesearch/CustomSearch</span> <span class="pre">/opt/google/gehttpd/wsgi-bin/search/plugin/mycustom_search_app.py</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">Handles</span> <span class="pre">My</span> <span class="pre">Custom</span> <span class="pre">search</span> <span class="pre">requests.</span></code>
+<code class="docutils literal notranslate"><span class="pre">WSGIScriptAlias</span> <span class="pre">/gesearch/CustomSearch</span></code>
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/wsgi-bin/search/plugin/mycustom_search_app.py</span></code></p>
 </li>
 <li><p class="first">Restart Google Earth Enterprise Server:</p>
 <p><code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">sudo</span> <span class="pre">/etc/init.d/geserver</span> <span class="pre">restart</span></code></p>
