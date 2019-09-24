@@ -76,7 +76,7 @@ Installation tips
          :name: learn-more-i
 
       -  :doc:`Install Google Earth Enterprise <../installGEE/installOverviewGEE>`
-      -  :doc:`Install GEE Server <../installGEE/introGEEServer>`
+      -  :doc:`Refer OpenGEE Wiki <../installGEE/wikiGEE>`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

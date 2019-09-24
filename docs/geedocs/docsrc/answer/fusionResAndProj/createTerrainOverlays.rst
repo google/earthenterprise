@@ -11,11 +11,11 @@ Create terrain overlays
       .. rubric:: Create terrain overlays
 
       -  :ref:`Introduction <Introduction>`
-      -  :ref:`Creating Terrain Overlays <_Create_Terrain_Overlays>`
-      -  `Define, Build, and Push a Database for the Terrain
+      -  :ref:`Creating Terrain Overlays <Creating_Terrain_Overlays>`
+      -  :ref:`Define, Build, and Push a Database for the Terrain
          Overlay <Define_Database_Terrain_Overlay>`
-      -  `Publish a Database for the Terrain Overlay <Publish_Database_Terrain_overlay>`
-      -  `View the Database <View_Database>`
+      -  :ref:`Publish a Database for the Terrain Overlay <Publish_Database_Terrain_overlay>`
+      -  :ref:`View the Database <View_Database>`
 
       .. _Introduction:
       .. rubric:: Introduction

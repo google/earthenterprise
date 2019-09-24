@@ -56,7 +56,7 @@ View 2D databases
       .. rubric:: Learn more
 
       -  :doc:`../developers/googleMapsAPIV3ForGEE`
-      -  `Google Maps Javascript API V3
+      -  `Google Maps JavaScript API V3
          Reference <https://developers.google.com/maps/documentation/javascript/reference>`_
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png

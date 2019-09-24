@@ -27,7 +27,7 @@ mechanism other than LDAP for your GEE Server and other systems.
 
 -[ Before you begin ]-
 
-Don't use the PostgreSQL database that ships with GEE. Instead,
+Do not use the PostgreSQL database that ships with GEE. Instead,
 install PostgreSQL on a separate port or a different host.
 
 You must set up client authentication for each virtual server you want
@@ -70,13 +70,14 @@ Create the database and user:  CREATE USER geeuser WITH PASSWORD
 'geeuserpasswd'; CREATE DATABASE geeauthdb; GRANT ALL PRIVILEGES ON
 DATABASE geeauthdb to mypguser; \q
 
-Create a table to store the passwords: psql --port=5433
+Create a table to store the passwords:  psql --port=5433
 --username=geeuser geauthdb CREATE TABLE geepasswd (username
 varchar(32) NOT NULL, realm varchar(255) NOT NULL, passwd varchar(255)
-NOT NULL,     realname varchar(255), PRIMARY KEY (username, realm));
-\q  username.  realm.  password.  realname. Optional. The realname
-field doesn't require a value, but is included in case you want to use
-it. You can also add other optional fields if needed.
+NOT NULL,    realname varchar(255), PRIMARY KEY (username, realm)); \q
+The table includes these fields:  username.  realm.  password.
+realname. Optional. The realname field does not require a value, but
+is included in case you want to use it. You can also add other
+optional fields if needed.
 
 Create the encrypted password by inserting encyption functions into
 the database with the pgcrypto contributed module:  psql --port=5433
@@ -96,15 +97,16 @@ Note: The password is hashed with MD5 because the Apache mod_authn_dbd
 module requires it. This also prevents the password from appearing in
 plaintext.
 
-Create a file named pgsql-auth.confat /opt/google/gehttpd/conf/extra
+Create a file named pgsql-auth.confat  /opt/google/gehttpd/conf/extra
 /pgsql-auth.conf.
 
-Add these lines to the pgsql-auth.conf file:  DBDriver pgsql DBDParams
-"hostaddr=yourpgserver port=yourport user=geuser password=yourpassword
-dbname=gee_auth" DBDMin 4 DBDKeep 8 DBDMax 20 DBDExptime 300  Replace
-yourpgserver and yourport with the address or hostname of your
-PostgreSQL database. Replace geuser and yourpassword with the username
-and password of your test user.
+Add these lines to the pgsql-auth.conf file:  ``DBDriver pgsql``
+``DBDParams "hostaddr=yourpgserver port=yourport user=geuser
+password=yourpassword dbname=gee_auth"`` ``DBDMin 4`` ``DBDKeep 8``
+``DBDMax 20`` ``DBDExptime 300``  Replace yourpgserver and yourport
+with the address or hostname of your PostgreSQL database. Replace
+geuser and yourpassword with the username and password of your test
+user.
 
 Open the /opt/google/gehttpd/conf/gehttpd.conf file and insert the
 line:  Include /opt/google/gehttpd/conf/extra/pgsql-auth.conf  above
@@ -113,25 +115,26 @@ Earth Server-specific files Include /opt/google/gehttpd/conf/extra
 /pgsql-auth.conf Include conf.d/*.conf
 
 Add the following lines at the beginning of the <Location> directive
-of your virtual server:  AuthType Digest  AuthName "realm"
-AuthDigestDomain '/default_map/'  AuthDigestProvider dbd
-AuthDBDUserRealmQuery "SELECT passwd FROM geeauth WHERE username = %s
-and realm = %s"  BrowserMatch "MSIE"
-AuthDigestEnableQueryStringHack=On  If this is a _ge_ virtual server,
-add:  BrowserMatch "GoogleEarth" AuthDigestEnableQueryStringHack=On
-If this is a _map_ virtual server, add:  BrowserMatch "MSIE"
-AuthDigestEnableQueryStringHack=On  For more information about
-AuthDigestEnableQueryStringHack, see the mod_auth_digest section in
-the Apache documentation.  The final <Location> directive looks like:
-<Location "/default_map/*"> AuthType Digest AuthName "realm"
-AuthDigestDomain '/default_map/'  AuthDigestProvider dbd
-AuthDBDUserRealmQuery "SELECT passwd FROM geeauth WHERE username = %s
-and realm = %s" BrowserMatch "MSIE" AuthDigestEnableQueryStringHack=On
-Require valid-user SetHandler gedb-handler Include
+of your virtual server:  ``AuthType Digest`` ``AuthName "realm"``
+``AuthDigestDomain '/default_map/'`` ``AuthDigestProvider dbd``
+``AuthDBDUserRealmQuery "SELECT passwd FROM geeauth WHERE username =
+%s and realm = %s"`` ``BrowserMatch "MSIE"
+AuthDigestEnableQueryStringHack=On``  If this is a _ge_ virtual
+server, add: BrowserMatch "GoogleEarth"
+AuthDigestEnableQueryStringHack=On  If this is a _map_ virtual server,
+add: BrowserMatch "MSIE" AuthDigestEnableQueryStringHack=On  For more
+information about AuthDigestEnableQueryStringHack, see the
+mod_auth_digest section in the Apache documentation.  The final
+<Location> directive looks like: <Location "/default_map/*"> AuthType
+Digest AuthName "realm" AuthDigestDomain '/default_map/'
+AuthDigestProvider dbd AuthDBDUserRealmQuery "SELECT passwd FROM
+geeauth WHERE username = %s and realm = %s" BrowserMatch "MSIE"
+AuthDigestEnableQueryStringHack=On  Require valid-user SetHandler
+gedb-handler Include
 conf.d/virtual_servers/runtime/default_map_runtime </Location>
 
 Save and close the virtual server configuration file.
 
-Restart the server:  /etc/init.d/geserver restart  After you verify
-the configuration with your test user, you can add your users to the
+Restart the server: /etc/init.d/geserver restart  After you verify the
+configuration with your test user, you can add your users to the
 database.

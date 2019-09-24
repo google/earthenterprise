@@ -5,8 +5,11 @@ The
 
 Dashboard
 
- page of the *GEE Server Admin console* provides an overview of GEE
-details, including:
+ page of the
+
+GEE Server Admin console
+
+ provides an overview of GEE details, including:
 
 Number of Fusion databases
 

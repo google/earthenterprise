@@ -87,31 +87,30 @@ for the mosaic ("0, 0, 0 = black"), the name of the file to be
 generated ("my_virtualmosaic_20140624_1.khvr"), and include all of the
 ".tif" files in the current folder as input.
 
-   "$ gevirtualraster --fill 0,0,0 --tolerance 3 -o
-   my_virtualmosaic_20140624_1.khvr *.tif"
+"$ gevirtualraster --fill 0,0,0 --tolerance 3 -o
+my_virtualmosaic_20140624_1.khvr *.tif"
 
 #. Import the virtual raster imagery file into Fusion, specifying the
 resource type, the virtual raster file to import and the output
 resource file, "$ my_virtualmosaic_20140624.kip".
 
-   "gerasterimport --imagery my_virtualmosaic_20140624_1.khvr -o
-   my_virtualmosaic_20140624.kip"
+"gerasterimport --imagery my_virtualmosaic_20140624_1.khvr -o
+my_virtualmosaic_20140624.kip"
 
 #. Create a mask for the imagery resource, specifying band, fill,
 tolerance and feather values, the imagery resource file and the name
 of the mask created.
 
-   "$ gemaskgen --mask --band 1 --fill 0 --tolerance 3 --feather 100
-   my_virtualmosaic_20140624_1.kip
-   my_virtualmosaic_20140624_1-mask.tif"
+"$ gemaskgen --mask --band 1 --fill 0 --tolerance 3 --feather 100
+my_virtualmosaic_20140624_1.kip my_virtualmosaic_20140624_1-mask.tif"
 
 #. Import the generated alpha mask, creating a ".kmp" folder.
 Corresponding ".kip" and ".kmp" folders should be stored in the same
 directory.
 
-   "$ gerasterimport --alphamask my_virtualmosaic_20140624_1-mask.tif
-   --imagery my_virtualmosaic_20140624_1.kip --output
-   my_virtualmosaic_20140624_1.kmp"
+"$ gerasterimport --alphamask my_virtualmosaic_20140624_1-mask.tif
+--imagery my_virtualmosaic_20140624_1.kip --output
+my_virtualmosaic_20140624_1.kmp"
 
 Define a new imagery resource. $ genewimageryresource -o
 Resources/Imagery/candid_my_virtualmosaic_20140624_1 /gevol/src/candi

@@ -25,11 +25,17 @@ based on geometries.
 -[ Add POI Search ]-
 
 If you have one or more text fields that you would like to query from
-vector resources in a project, you can simply *add those search fields
-to a vector project* in a 3D database; for 2D maps, you include a map
-layer in a map project. Once you have added your POI vector project or
-map layer to the database you want to publish, you *push it to GEE
-Server*, then turn on POI Search when you publish.
+vector resources in a project, you can simply
+
+add those search fields to a vector project
+
+ in a 3D database; for 2D maps, you include a map layer in a map
+project. Once you have added your POI vector project or map layer to
+the database you want to publish, you
+
+push it to GEE Server
+
+, then turn on POI Search when you publish.
 
 For example, you may be interested in displaying the US Census Bureau
 population statistics on your map or globe, based on county name. You
@@ -39,7 +45,11 @@ labels for your search results to appear on the globe, such as search
 and display a field, or simply display it.
 
 You can also modify the appearance of the POI search tab in Google
-Earth EC by *editing the system search tab*,
+Earth EC by
+
+editing the system search tab
+
+,
 
 POI Search
 
@@ -121,7 +131,11 @@ Tip: Places and ExampleSearch are both PostgreSQL databases so you
 
 You can examine the Python code of the search plug-ins on which the
 search tabs are built, using it as a template for your own plug-in
-development. To customize your own search plug-ins, see *6066597>*.
+development. To customize your own search plug-ins, see
+
+Add custom search services
+
+.
 
 -[ About system search tabs ]-
 
@@ -192,13 +206,16 @@ true&displayKeys;=location&q;=San Francisco"
 
 -[ Create custom searches ]-
 
-If you want to access a custom data source, you can *create your own
-search plug-in* and access it as a search tab definition in Google
-Earth Enterprise Server. A custom search plug-in will create requests
-and responses using the common Python-based search framework, letting
-you adapt your search to any data source. Your custom search plug-in
-will receive search requests directly from Google Earth Enterprise
-Client (EC), or any other clients in the form of URL parameters.
+If you want to access a custom data source, you can
+
+create your own search plug-in
+
+ and access it as a search tab definition in Google Earth Enterprise
+Server. A custom search plug-in will create requests and responses
+using the common Python-based search framework, letting you adapt your
+search to any data source. Your custom search plug-in will receive
+search requests directly from Google Earth Enterprise Client (EC), or
+any other clients in the form of URL parameters.
 
 For example, with custom search plug-ins you can use Maps API and
 Places API to leverage the power of their data sets. You can also use
@@ -207,27 +224,27 @@ the sites using internal IDs or city names.
 
 -[ Summary table of search options ]-
 
-      Search options  Steps summary  Search appearance in Google Earth
-EC or in a browser  Query vector data layer using a simple text-based
-search.  Add a search field to a vector resource in a vector project
-or map layer. Turn on POI Search in the Publish dialog when you
-publish your database in GEE Server.  The POI Search appears in the
-main Search tab, labeled Point of interest, including the field label
-you specified in the vector data layer.  Query external database using
-a default search plugin, for example POI Search.  Edit the POI Search
-tab URL field to point to your own search database and edit or add
-query parameters. Add the POI Search tab in the Publish dialog.  When
-you click Query, the POI Search appears as a new additional tab in
-Search, displaying the custom label and any query field labels and
-suggestions you added.  Query the Places database provided by GEE.
-Add the Places search tab in the Publish dialog to add location search
-to your globe or map.  The Places Search appears as a new additional
-tab in Search, displaying the custom label and any query field label
-and suggestion you added.  Query an external Postgres database and
-return polygons, lines, or geometries.  Write a custom search plug-in
-using the Python-based framework for search tabs. The ExampleSearch
-search plug-in is a useful demonstration for this purpose.  Your
-custom search plug-in appears as a new additional tab in Search,
-displaying the custom label and any query field labels and suggestions
-you added. Alternatively, you can send HTTP requests and receive a
-response within your own custom web application.
+Search options        Search options  Steps summary  Search appearance
+in Google Earth EC or in a browser  Query vector data layer using a
+simple text-based search.  Add a search field to a vector resource in
+a vector project or map layer. Turn on POI Search in the Publish
+dialog when you publish your database in GEE Server.  The POI Search
+appears in the main Search tab, labeled Point of interest, including
+the field label you specified in the vector data layer.  Query
+external database using a default search plugin, for example POI
+Search.  Edit the POI Search tab URL field to point to your own search
+database and edit or add query parameters. Add the POI Search tab in
+the Publish dialog.  When you click Query, the POI Search appears as a
+new additional tab in Search, displaying the custom label and any
+query field labels and suggestions you added.  Query the Places
+database provided by GEE.  Add the Places search tab in the Publish
+dialog to add location search to your globe or map.  The Places Search
+appears as a new additional tab in Search, displaying the custom label
+and any query field label and suggestion you added.  Query an external
+Postgres database and return polygons, lines, or geometries.  Write a
+custom search plug-in using the Python-based framework for search
+tabs. The ExampleSearch search plug-in is a useful demonstration for
+this purpose.  Your custom search plug-in appears as a new additional
+tab in Search, displaying the custom label and any query field labels
+and suggestions you added. Alternatively, you can send HTTP requests
+and receive a response within your own custom web application.

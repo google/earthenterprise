@@ -20,7 +20,7 @@ Sign in to GEE Server Admin console
 
             .. tip::
 
-               **Tip**: To reset the username and password:
+               To reset the username and password:
                ``sudo /opt/google/gehttpd/bin/htpasswd -c /opt/google/gehttpd/conf.d/.htpasswd geapacheuser``
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png

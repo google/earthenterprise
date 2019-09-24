@@ -9,7 +9,7 @@ Settings page
    .. container:: content
 
       Click the |gear icon| **Settings** icon in the :doc:`GEE Server Admin
-      console <3470759>` to:
+      console <../geeServerAdmin/signInAdminConsole>` to:
 
       .. rubric:: Perform .glc assembly
 

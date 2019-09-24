@@ -29,14 +29,10 @@ Places
 
  plug-in and return a merged set.
 
-Note: Note:
+Note: Google Maps API and Places API access services over the
+  internet, and require licenses to use.
 
-   Google Maps API and Places API access services over the internet,
-  and require licenses to use.
-
-Note: Note:
-
-   You will need some familiarity with Python to work with custom
+Note: You will need some familiarity with Python to work with custom
   search plug-ins.
 
 Configure search queries for Google Earth EC and Google Maps
@@ -52,9 +48,11 @@ tabs to query:
 
 Must return valid KML to Google Earth EC.
 
-Must return valid JSONP in the specified structure.  Because search
-tabs are returned as JSONP, they must originate from the same server
-as the HTML page containing the 2D map.
+Must return valid JSONP in the specified structure.
+
+Warning: Because search tabs are returned as JSONP, they must
+  originate from the same server as the HTML page containing the 2D
+  map.
 
 -[ Access Search Plug-ins ]-
 
@@ -98,10 +96,10 @@ You implement a custom search plug-in by creating your own Python
 search application using WSGI, then registering the new search plug-in
 so that it can be added as you publish databases.
 
--[ To implement your custom search plug-in: ]-
+-[ To implement a custom search plug-in: ]-
 
 Create your search application, using the WSGI framework. See the
-ExampleSearch Python module for example code.
+Example Search Python module for example code.
 
 Locate your search plug-in, for example custom_search.py, in the
 /opt/google/gehttpd/wsgi-bin/search/plugin/ directory.
@@ -109,8 +107,8 @@ Locate your search plug-in, for example custom_search.py, in the
 Register your plug-in by adding its definition in the Python module
 configuration file: /opt/google/gehttpd/conf.d/mod_wsgi-ge.conf. Your
 registration in the configuration file should look something like the
-following:  # Handles My Custom search requests.
-WSGIScriptAlias /gesearch/CustomSearch /opt/google/gehttpd/wsgi-
+following:  # Handles My Custom search requests. WSGIScriptAlias
+/gesearch/CustomSearch /opt/google/gehttpd/wsgi-
 bin/search/plugin/mycustom_search_app.py
 
 Restart Google Earth Enterprise Server:  # sudo /etc/init.d/geserver

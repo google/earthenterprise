@@ -41,8 +41,8 @@ GetCapabilities
 
 GetMap
 
-Making WMS Requests in GIS Clients -  :ref:`Connecting to Google Earth
-Server 5.x WMS using  QGIS <Connecting_GE_Server_WMS_Using_QGIS>`
+Making WMS Requests in GIS Clients  Connecting to Google Earth Server
+5.x WMS using QGIS
 
 -[ Supported Database Types ]-
 
@@ -158,7 +158,8 @@ GetCapabilities
 
  request is as follows:
 
-   http://<hostname>/<target_path>/wms?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=x.y.z
+"http://<hostname>/<target_path>/wms?SERVICE=WMS&REQUEST=GetCapabilit
+ies&VERSION=x.y.z"
 
 The parameters for this operation are as follows:
 
@@ -202,34 +203,58 @@ GetCapabilities
 
  request output is as follows:
 
-"<WMT_MS_Capabilities updateSequence="0" version="1.1.1">   <Service>
-<Name>OGC:WMS</Name>     <Title>Google Earth WMS service.</Title>
-<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
-xlink:type="simple" xlink:href="http://108.59.84.128/Earth/wms"/>
-</Service>   <Capability>     <Request>       <GetCapabilities>
-<Format>text/xml</Format>         <DCPType>           <HTTP>
-<Get>               <OnlineResource
-xmlns:xlink="http://www.w3.org/1999/xlink"
-xlink:type="simple" xlink:href="http://108.59.84.128/Earth/wms"/>
-</Get>           </HTTP>         </DCPType>       </GetCapabilities>
-<GetMap>         <Format>image/png</Format>
-<Format>image/jpeg</Format>         <DCPType>           <HTTP>
-<Get>               <OnlineResource
-xmlns:xlink="http://www.w3.org/1999/xlink"
-xlink:type="simple" xlink:href="http://108.59.84.128/Earth/wms"/>
-</Get>           </HTTP>         </DCPType>       </GetMap>
-</Request>     <Exception>
-<Format>application/vnd.ogc.se_xml</Format>     </Exception>
-<Layer opaque="0" noSubsets="0" queryable="0">       <Title>Google
-Earth WMS service.</Title>       <Layer opaque="1" cascaded="0"
-noSubsets="0" queryable="0">         <Name>Earth</Name>
-<Title>Imagery</Title>         <SRS>EPSG:4326</SRS>
-<LatLonBoundingBox minx="-180.0" miny="-90.0" maxx="180.0"
-maxy="90.0"/>         <BoundingBox maxx="180.0" maxy="90.0"
-miny="-90.0" minx="-180.0"         SRS="EPSG:4326"/>       </Layer>
-</Layer>   </Capability> </WMT_MS_Capabilities>" Once you have
-retrieved services and data information from Google Earth Enterprise
-Server 5.x using
+   <WMT_MS_Capabilities updateSequence="0" version="1.1.1">
+      <Service>
+         <Name>OGC:WMS</Name>
+         <Title>Google Earth WMS service.</Title>
+         <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+         xlink:type="simple" xlink:href="http://108.59.84.128/Earth/wms"/>
+      </Service>
+      <Capability>
+         <Request>
+            <GetCapabilities>
+                  <Format>text/xml</Format>
+                  <DCPType>
+                     <HTTP>
+                        <Get>
+                           <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                           xlink:type="simple" xlink:href="http://108.59.84.128/Earth/wms"/>
+                        </Get>
+                     </HTTP>
+                  </DCPType>
+               </GetCapabilities>
+               <GetMap>
+                  <Format>image/png</Format>
+                  <Format>image/jpeg</Format>
+                  <DCPType>
+                     <HTTP>
+                        <Get>
+                           <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+                           xlink:type="simple" xlink:href="http://108.59.84.128/Earth/wms"/>
+                        </Get>
+                     </HTTP>
+                  </DCPType>
+               </GetMap>
+            </Request>
+            <Exception>
+               <Format>application/vnd.ogc.se_xml</Format>
+            </Exception>
+            <Layer opaque="0" noSubsets="0" queryable="0">
+               <Title>Google Earth WMS service.</Title>
+               <Layer opaque="1" cascaded="0" noSubsets="0" queryable="0">
+                  <Name>Earth</Name>
+                  <Title>Imagery</Title>
+                  <SRS>EPSG:4326</SRS>
+                  <LatLonBoundingBox minx="-180.0" miny="-90.0" maxx="180.0" maxy="90.0"/>
+                  <BoundingBox maxx="180.0" maxy="90.0" miny="-90.0" minx="-180.0"
+                  SRS="EPSG:4326"/>
+               </Layer>
+            </Layer>
+         </Capability>
+      </WMT_MS_Capabilities>
+
+Once you have retrieved services and data information from Google
+Earth Enterprise Server 5.x using
 
 GetCapabilities
 
@@ -263,7 +288,7 @@ GetMap
 
 The parameters for this operation are as follows:
 
-GetMap Parameters        Parameter  Mandatory?  Description  SERVICE
+GetMap parameters        Parameter  Mandatory?  Description  SERVICE
 No  Service name. Default value is WMS.  REQUEST  Yes  Operation name.
 Value is GetMap.  VERSION  No  Service version is 1.1.1 or 1.3.0. If
 no version is submitted, the WMS request defaults to the highest

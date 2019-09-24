@@ -1,9 +1,10 @@
 
 (Deprecated) Provide Google Earth Plug-in for your users to install
 
-The Google Earth Plug-in is deprecated and is no longer available for
-download. This page is only applicable if you have a copy of the
-Google Earth Plug-in from a previous relationship with Google.
+Warning: The Google Earth Plug-in is deprecated and is no longer
+  available for download. This page is only applicable if you have a
+  copy of the Google Earth Plug-in from a previous relationship with
+  Google.
 
 If your users want to connect to GEE Server and view databases in a
 browser, they must install the Google Earth Plug-in. They must also
