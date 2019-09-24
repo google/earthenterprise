@@ -83,8 +83,8 @@ Create composite globes and maps
 
             If you do not know your username and password,
             contact your Google Earth Enterprise Server System
-            Administrator. 
-            
+            Administrator.
+
       #. Click **Dashboard** to view information about the
          portable files registered on and published to the Server.
       #. Click the **Settings** button in the top right of the window
@@ -137,7 +137,7 @@ Create composite globes and maps
 
       Click **Assemble Glc**.
 
-      .. :Extracting_Layers_Composite_Map_Globe:
+      .. _Extracting_Layers_Composite_Map_Globe:
       .. rubric:: Extracting layers from a composite map or globe
 
       If you want to extract the 2D or 3D layers from a composite
@@ -160,8 +160,8 @@ Create composite globes and maps
 
             If you do not know your username and password,
             contact your Google Earth Enterprise Server System
-            Administrator. 
-            
+            Administrator.
+
       #. Click **Dashboard** to view information about the
          portable files registered on and published to the Server.
       #. Click the **Settings** button in the top right of the window

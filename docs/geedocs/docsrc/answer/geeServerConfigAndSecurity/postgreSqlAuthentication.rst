@@ -33,7 +33,6 @@ PostgreSQL authentication
       mechanism other than LDAP for your GEE Server and other systems.
 
       .. rubric:: Before you begin
-         :name: before-you-begin
 
       -  Do not use the PostgreSQL database that ships with GEE. Instead,
          install PostgreSQL on a separate port or a different host.
@@ -73,47 +72,59 @@ PostgreSQL authentication
          :name: to-configure-client-authentication-for-postgresql
 
       #. Connect to the PostgreSQL server:
-         
-         ``sudo su - postgres``
-         ``psql --port=5433``
+
+         .. code-block:: none
+
+            sudo su - postgres
+            psql --port=5433
 
       #. Create the database and user:
-         ``CREATE USER geeuser WITH PASSWORD 'geeuserpasswd';``
-         ``CREATE DATABASE geeauthdb;``
-         ``GRANT ALL PRIVILEGES ON DATABASE geeauthdb to mypguser;``
-         ``\q``
+
+         .. code-block:: none
+
+            CREATE USER geeuser WITH PASSWORD 'geeuserpasswd';
+            CREATE DATABASE geeauthdb;
+            GRANT ALL PRIVILEGES ON DATABASE geeauthdb to mypguser;
+            \q
 
       #. Create a table to store the passwords:
-         ``psql --port=5433 --username=geeuser geauthdb``
-         ``CREATE TABLE geepasswd (username varchar(32) NOT NULL, realm varchar(255)``
-         ``NOT NULL,`` passwd varchar(255) NOT NULL,``
-            ``realname varchar(255), PRIMARY KEY (username, realm));``
-         ``\q``
 
-         -  ``username``.
-         -  ``realm``.
-         -  ``password``.
-         -  ``realname``. *Optional*. The realname field does not require
-            a value, but is included in case you want to use it. You can
-            also add other optional fields if needed.
+         .. code-block:: none
+
+            psql --port=5433 --username=geeuser geauthdb
+            CREATE TABLE geepasswd (username varchar(32) NOT NULL, realm varchar(255)
+            NOT NULL, passwd varchar(255) NOT NULL,
+               realname varchar(255), PRIMARY KEY (username, realm));
+            \q
+
+         The table includes these fields:
+
+            -  ``username``.
+            -  ``realm``.
+            -  ``password``.
+            -  ``realname``. *Optional*. The realname field does not require
+               a value, but is included in case you want to use it. You can
+               also add other optional fields if needed.
 
       #. Create the encrypted password by inserting encyption
          functions into the database with the ``pgcrypto`` contributed
          module:
+
          ``psql --port=5433 --username=geeuser geauthdb < /usr/share/postgresql/8.4/contrib/pgcrypto.sql``
 
-         Note: You can substitute a different method for this step. The
-         `Password
-         Formats <http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmisc%2Fpassword_encryptions.html&sa=D&sntz=1&usg=AFrqEzdBJJpsOLV3eL6UCAatZv_IhxEZdg>`__
+         Note: You can substitute a different method for this step. The `Password Formats
+         <http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmisc%2Fpassword_encryptions.html&sa=D&sntz=1&usg=AFrqEzdBJJpsOLV3eL6UCAatZv_IhxEZdg>`__
          section in the Apache documentation gives examples in multiple
          programming languages for encrypting the password so that it is
          readable by Apache.
 
       #. Make sure the database works by inserting a test user:
-         
-         ``psql --port=5433 --username=geeuser geauthdb``
-         ``INSERT INTO geepasswd VALUES ('jsmith', 'realm', encode(digest( 'jsmith' || ':' || 'realm' || ':' ||'password', 'md5'), 'hex'), 'Jane Smith');``
-         ``\q``
+
+         .. code-block:: none
+
+            psql --port=5433 --username=geeuser geauthdb
+            INSERT INTO geepasswd VALUES ('jsmith', 'realm', encode(digest( 'jsmith' || ':' || 'realm' || ':' ||'password', 'md5'), 'hex'), 'Jane Smith');
+            \q
 
          Replace "jsmith", "realm", "password" and "Jane Smith" with the
          values you want to use.
@@ -123,15 +134,19 @@ PostgreSQL authentication
          password from appearing in plaintext.
 
       #. Create a file named ``pgsql-auth.conf``\ at
+
          ``/opt/google/gehttpd/conf/extra/pgsql-auth.conf``.
 
       #. Add these lines to the ``pgsql-auth.conf`` file:
-         ``DBDriver pgsql``
-         ``DBDParams "hostaddr=yourpgserver port=yourport user=geuser password=yourpassword dbname=gee_auth"``
-         ``DBDMin 4``
-         ``DBDKeep 8``
-         ``DBDMax 20``
-         ``DBDExptime 300``
+
+         .. code-block:: none
+
+            ``DBDriver pgsql``
+            ``DBDParams "hostaddr=yourpgserver port=yourport user=geuser password=yourpassword dbname=gee_auth"``
+            ``DBDMin 4``
+            ``DBDKeep 8``
+            ``DBDMax 20``
+            ``DBDExptime 300``
 
          Replace ``yourpgserver`` and ``yourport`` with the address or
          hostname of your PostgreSQL database. Replace ``geuser`` and
@@ -140,24 +155,30 @@ PostgreSQL authentication
 
       #. Open the ``/opt/google/gehttpd/conf/gehttpd.conf`` file and
          insert the line:
+
          ``Include /opt/google/gehttpd/conf/extra/pgsql-auth.conf``
 
          above the line:
+
          ``Include conf.d/*.conf``
 
          The result is:
+
          ``# Include Google Earth Server-specific files``
          ``Include /opt/google/gehttpd/conf/extra/pgsql-auth.conf``
          ``Include conf.d/*.conf``
 
       #. Add the following lines at the beginning of the
          ``<Location>`` directive of your virtual server:
-         ``AuthType Digest``
-         ``AuthName "realm"``
-         ``AuthDigestDomain '/default_map/'``
-         ``AuthDigestProvider dbd``
-         ``AuthDBDUserRealmQuery "SELECT passwd FROM geeauth WHERE username = %s and realm = %s"``
-         ``BrowserMatch "MSIE" AuthDigestEnableQueryStringHack=On``
+
+         .. code-block:: none
+
+            ``AuthType Digest``
+            ``AuthName "realm"``
+            ``AuthDigestDomain '/default_map/'``
+            ``AuthDigestProvider dbd``
+            ``AuthDBDUserRealmQuery "SELECT passwd FROM geeauth WHERE username = %s and realm = %s"``
+            ``BrowserMatch "MSIE" AuthDigestEnableQueryStringHack=On``
 
          If this is a ``_ge_ virtual`` server, add:
          ``BrowserMatch "GoogleEarth" AuthDigestEnableQueryStringHack=On``
@@ -166,8 +187,8 @@ PostgreSQL authentication
          ``BrowserMatch "MSIE" AuthDigestEnableQueryStringHack=On``
 
          For more information about ``AuthDigestEnableQueryStringHack``,
-         see the
-         `mod_auth_digest <http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmod%2Fmod_auth_digest.html%23msie&sa=D&sntz=1&usg=AFrqEze9uh13hmi22IsT3-GMw3t8j7VHcA>`__
+         see the `mod_auth_digest
+         <http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmod%2Fmod_auth_digest.html%23msie&sa=D&sntz=1&usg=AFrqEze9uh13hmi22IsT3-GMw3t8j7VHcA>`__
          section in the Apache documentation.
 
          The final ``<Location>`` directive looks like:
@@ -179,7 +200,7 @@ PostgreSQL authentication
          ``AuthDigestProvider dbd``
          ``AuthDBDUserRealmQuery "SELECT passwd FROM geeauth WHERE username = %s and realm = %s"``
          ``BrowserMatch "MSIE" AuthDigestEnableQueryStringHack=On``
-         
+
          ``Require valid-user``
          ``SetHandler gedb-handler``
          ``Include``

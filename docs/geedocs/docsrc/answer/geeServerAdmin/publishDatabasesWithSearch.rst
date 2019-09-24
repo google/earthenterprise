@@ -27,19 +27,15 @@ Publish databases with search
 
       .. rubric:: Add POI Search
 
-      .. container:: image-highlight--right
-
-         .. container:: ghelp-hidden
-
-         If you have one or more text fields that you would like to
-         query from vector resources in a project, you can simply :doc:`add
-         those search fields to a vector
-         project <../fusionTutorial/searchFldsForLayers>` in a 3D database; for 2D
-         maps, you include a map layer in a map project. Once you have
-         added your POI vector project or map layer to the database you
-         want to publish, you :doc:`push it to GEE
-         Server <../fusionAdministration/pushAndPublishDB>`, then turn on POI Search
-         when you publish.
+      If you have one or more text fields that you would like to
+      query from vector resources in a project, you can simply :doc:`add
+      those search fields to a vector
+      project <../fusionTutorial/searchFldsForLayers>` in a 3D database; for 2D
+      maps, you include a map layer in a map project. Once you have
+      added your POI vector project or map layer to the database you
+      want to publish, you :doc:`push it to GEE
+      Server <../fusionAdministration/pushAndPublishDB>`, then turn on POI Search
+      when you publish.
 
       For example, you may be interested in displaying the US Census
       Bureau population statistics on your map or globe, based on county
@@ -49,9 +45,8 @@ Publish databases with search
       globe, such as search and display a field, or simply display it.
 
       You can also modify the appearance of the POI search tab in Google
-      Earth EC by :doc:`editing the system search
-      tab <../geeServerAdmin/createSearchTabs>`, **POI Search**, which sets the
-      query parameters for the search fields you added to the vector
+      Earth EC by :doc:`editing the system search tab <../geeServerAdmin/createSearchTabs>`,
+      **POI Search**, which sets the query parameters for the search fields you added to the vector
       layer, as well as specifying the labels for the tab, query field
       and suggestion box.
 
@@ -125,20 +120,17 @@ Publish databases with search
 
       .. rubric:: About search tabs definitions
 
-      .. container:: image-highlight--right
 
-         .. container:: ghelp-hidden
-
-         Search data is accessed via a query interface in Google Earth
-         EC or a browser in the form of search tabs. A search tab
-         definition, which you specify in GEE Server, includes the
-         **label** you want to apply to the search tab that your users
-         will see, the **URL** that points to a local or non-local
-         searchable database, supported query parameters, and **fields**
-         that you specify for your search queries. You can customize the
-         labels and fields in a search tab and use **query parameter
-         settings** to control how the results of a query will be
-         displayed.
+      Search data is accessed via a query interface in Google Earth
+      EC or a browser in the form of search tabs. A search tab
+      definition, which you specify in GEE Server, includes the
+      **label** you want to apply to the search tab that your users
+      will see, the **URL** that points to a local or non-local
+      searchable database, supported query parameters, and **fields**
+      that you specify for your search queries. You can customize the
+      labels and fields in a search tab and use **query parameter
+      settings** to control how the results of a query will be
+      displayed.
 
       The database to which you point your search tab definition is
       identified in the query parameters when the globe or map is
@@ -195,12 +187,11 @@ Publish databases with search
            - The Places Search appears as a new additional tab in Search, displaying the custom label and any query field
              label and suggestion you added.
          * - Query an external Postgres database and return polygons, lines, or geometries.
-           - Write a custom search plug-in using the Python-based framework for search tabs. The **ExampleSearch** search 
+           - Write a custom search plug-in using the Python-based framework for search tabs. The **ExampleSearch** search
              plug-in is a useful demonstration for this purpose.
-           - Your custom search plug-in appears as a new additional tab in Search, displaying the custom label and any query 
+           - Your custom search plug-in appears as a new additional tab in Search, displaying the custom label and any query
              field labels and suggestions you added. Alternatively, you can send HTTP requests and receive a response within your
              own custom web application.
-      ================================================================================== ==================================================================================================================================================================== ==============================================================================================================================================================================================================================================================
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

@@ -13,7 +13,7 @@ Google Maps API v3 for GEE
       -  :ref:`How geeCreateFusionMap works <Factory_geeCreateFusionMap>`
       -  :ref:`geeCreateFusionMap Factory <Factory>`
       -  :ref:`google.maps.Map Method extensions <MethodExtensions>`
-      -  :ref:`Examples <Examples>`
+      -  :ref:`Examples <APIExamples>`
       -  :ref:`KML Support <KMLSupport>`
 
       .. _Overview:
@@ -189,7 +189,7 @@ Google Maps API v3 for GEE
            - String
            - Returns the URL of the icon associated with the specified layer.
 
-      .. _Examples:
+      .. _APIExamples:
       .. rubric:: Examples
 
       Several examples that illustrate how to use the Fusion Maps API

@@ -76,7 +76,7 @@ Create Portable Globes and Maps
       ``Portable Globe``
       ``Copyright 2013 Google Inc. All Rights Reserved.``
       ``2014-01-15 16:03:15 GMT``
-      
+
       ``2014-01-15 08:03:15``
       ``Globe description: Simple container for tutorial glb with gray marble backdrop.``
       ``2014-01-15 08:03:15``
@@ -167,7 +167,6 @@ Create Portable Globes and Maps
 
          |GEE Cutter create offline map window|
 
-      --------------
 
       .. rubric:: Map or globe name
 
@@ -182,7 +181,7 @@ Create Portable Globes and Maps
          Spaces, slashes, and double dots (..) will be converted to
          underscores in the saved globe name.
 
-         .. alert:: 
+         .. warning::
 
             Building an offline map or globe will overwrite any existing
             offline maps or globes with the same name. If multiple users
@@ -199,7 +198,6 @@ Create Portable Globes and Maps
 
       #. If you are overwriting an existing cut, select **Yes** for **Overwrite?**.
 
-      --------------
 
       .. rubric:: Drawing the polygon
 
@@ -209,7 +207,7 @@ Create Portable Globes and Maps
 
       .. rubric:: Hand drawing the polygon
 
-      .. alert:: 
+      .. warning::
 
          When cutting a 3D globe this method is only available if you
          are running the discontinued Google Earth Plug-in in your
@@ -231,7 +229,7 @@ Create Portable Globes and Maps
       .. rubric:: Defining the polygon with KML
 
       You can also use KML to define the polygon(s). The KML should be
-      complete, and may contain single or multiple elements. 
+      complete, and may contain single or multiple elements.
 
       **To insert your KML:**
 
@@ -244,7 +242,6 @@ Create Portable Globes and Maps
          globe (the latter only if you have the discontinued Google
          Earth plug-in running in your browser).
 
-      --------------
 
       .. rubric:: Globe resolution
 
@@ -256,7 +253,7 @@ Create Portable Globes and Maps
       Fusion server. Setting a resolution of 24 results in a cut of the
       entire globe.
 
-      .. container:: alert
+      .. container:: warning
 
          **Caution:** Setting a resolution of 24 to cut an entire globe
          may result in a very large file.
@@ -306,7 +303,6 @@ Create Portable Globes and Maps
       You may enter a lower number to reduce the size of your map or
       globe by not including the highest resolution imagery.
 
-      --------------
 
       .. rubric:: Advanced Settings
 

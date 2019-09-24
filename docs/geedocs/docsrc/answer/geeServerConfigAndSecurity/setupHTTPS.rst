@@ -12,7 +12,7 @@ Set up HTTPS
       can also set up a secure Fusion server for your browser-based
       maps.
 
-      .. alert:: 
+      .. warning::
 
          The following procedure is applicable only to release 4.x and
          previous versions of GEE. For **GEE release 5.x**, see
@@ -45,11 +45,11 @@ Set up HTTPS
          ``r...@fusion.localhost.org:/opt/google/gehttpd/conf.d/virtual_servers # cat https_2d.location # This is an example of a location-based map virtual server #``
          ``Substitute appropriate values in the following variables``
          ``# 1. <LOCATION> : The new location name.``
-         ``# 2. <VS_NAME> : The virtual server name used to create the virtual`` 
+         ``# 2. <VS_NAME> : The virtual server name used to create the virtual``
          ``# server with geserveradmin``
-         
+
          ``RewriteRule ^/mymap$ /mymap/ [R] RewriteRule ^/mymap/$ /maps/fusionmaps_local.html [PT] RewriteRule ^/mymap/mapfiles/(.*)$ /maps/mapfiles/$1 [PT]``
-         
+
          ``<Location "/mymap/*">``
          ``SetHandler gedb-handler``
          ``Include conf.d/virtual_servers/runtime/https_2d_runtime``
@@ -69,7 +69,7 @@ Set up HTTPS
          ``# General setup for the virtual host``
          ``DocumentRoot "/opt/google/gehttpd/htdocs"``
          ``ServerName myserver.org:443``
-         
+
          ``ServerAdmin administra...@myserver.org``
          ``ErrorLog "/opt/google/gehttpd/logs/error_log"``
          ``TransferLog "/opt/google/gehttpd/logs/access_log"``
@@ -87,7 +87,7 @@ Set up HTTPS
            ``https2d.location`` file is excluded:
 
          ``LoadModule gedb_module /opt/google/gehttpd/modules/mod_gedb.so``
-         
+
          ``NameVirtualHost *:80``
          ``<VirtualHost *:80>``
          ``# You should specify a ServerName in each VirtualHost declaration``
@@ -97,7 +97,7 @@ Set up HTTPS
          ``# Redirect the home page to display the GE logo``
          ``Include conf.d/index_rewrite``
          ``Include conf.d/jkmount``
-         
+
          ``# Include all location-based virtual servers``
          ``# Include conf.d/virtual_servers/*.location (Comment out this line.)``
          ``Include conf.d/virtual_servers/default_ge.location (Add this line.)``
