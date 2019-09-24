@@ -1,151 +1,108 @@
-|Google logo|
 
-========================
 Relocate your asset root
-========================
 
-.. container::
+When you install Google Earth Enterprise, you configure a source
+volume and asset root for your production data. If you accepted the
+default values, they are "/gevol/src" and "/gevol/assets",
+respectively.
 
-   .. container:: content
+You may need to relocate your asset root to a different volume for a
+variety of reasons. You may be migrating from a single- to a multiple-
+workstation configuration or modifying the local path of a network-
+mounted source volume (for example, when adding a larger drive for
+source data).
 
-      When you install Google Earth Enterprise, you configure a source
-      volume and asset root for your production data. If you accepted
-      the default values, they are ``/gevol/src`` and ``/gevol/assets``,
-      respectively.
+Note: Note:
 
-      You may need to relocate your asset root to a different volume for
-      a variety of reasons. You may be migrating from a single- to a
-      multiple-workstation configuration or modifying the local
-      path of a network-mounted source volume (for example, when adding
-      a larger drive for source data).
+   Your asset root and publish root, "/published_dbs/", should be
+  located on the same volume, enabling Fusion to use symbolic links.
+  Keeping your asset root and publish root on separate volumes causes
+  Fusion to make copies of your databases, obviously leading to
+  greater use of disk space.
 
-      .. note::
+Relocate your asset root and publish root
 
-         **Note:** Your asset root and publish root,
-         ``/published_dbs/``, should be located on the same volume,
-         enabling Fusion to use symbolic links. Keeping your asset root
-         and publish root on separate volumes causes Fusion to make
-         copies of your databases, obviously leading to greater use of
-         disk space.
+Relocate your asset root only
 
-      -  :ref:`Relocate your asset root and publish
-         root <Relocate_Asset_Publish_Roots>`
-      -  :ref:`Relocate your asset root only <Relocate_Asset_Root>`
+-[ Relocate your asset root and publish root ]-
 
-      .. _Relocate_Asset_Publish_Roots:
-      .. rubric:: Relocate your asset root and publish root
+-[ To relocate your asset root and publish root: ]-
 
-      .. rubric:: To relocate your asset root and publish root:
-         :name: to-relocate-your-asset-root-and-publish-root
+Copy your asset root to the new location.
 
-      #. Copy your asset root to the new location.
-      #. Select your new asset root:
+Select your new asset root:  sudo /opt/google/geselectassetroot
+--assetroot new_path
 
-         ``sudo /opt/google/geselectassetroot --assetroot new_path``
+You may need to repair the relocated asset root, fixing various
+inconsistencies in the asset root (such as permissions, ownership,
+missing ID files, etc.). When you run this command, the tool auto-
+detects the problems that need to be repaired and fixes them.  sudo
+/opt/google/bin/geconfigureassetroot --repair new_path  You may
+relocate/change other volume settings by editing volumes. You can add
+a volume to the selected asset root, modify the localpath definition
+for an existing volume, or add a volume definition: sudo
+/opt/google/bin/geconfigureassetroot --editvolume  Make sure that the
+update to the asset root is successful before attempting further
+changes to volume settings.
 
-      #. You may need to repair the relocated asset root, fixing various
-         inconsistencies in the asset root (such as permissions,
-         ownership, missing ID files, etc.). When you run this
-         command, the tool auto-detects the problems that need to be
-         repaired and fixes them.
+Run Fusion and verify that you see all your databases.
 
-         ``sudo /opt/google/bin/geconfigureassetroot --repair new_path``
+Create your new publish root:  sudo
+/opt/google/bin/geconfigurepublishroot
 
-         .. tip::
+Once you have configured the new publish root, you must republish all
+of the databases, by pushing and then publishing them. You can use the
+Fusion GUI to push and the GEE Server Admin console to publish your
+databases or you can perform these steps on the command line:
+geserveradmin -adddb  geserveradmin -pushdb  geserveradmin -publishdb
 
-            You may relocate/change other volume settings by editing
-            volumes. You can add a volume to the selected asset root,
-            modify the localpath definition for an existing volume, or
-            add a volume definition:
-            ``sudo /opt/google/bin/geconfigureassetroot --editvolume``
+Optionally, you can delete your old asset root and your publish root.
 
-         .. tip::
+-[ Relocate your asset root only ]-
 
-            Make sure that the update to the asset root is successful
-            before attempting further changes to volume settings.
+Your asset root and publish root, "/published_dbs/", should be located
+on the same volume, enabling Fusion to use symbolic links. If you
+maintain your asset root and publish root on separate volumes, Fusion
+makes copies of your databases, obviously leading to greater use of
+disk space.
 
-      #. Run Fusion and verify that you see all your databases.
-      #. Create your new publish root:
+-[ To relocate your asset root if your publish root will not be on the
+same volume: ]-
 
-         ``sudo /opt/google/bin/geconfigurepublishroot``
+Unpublish all databases on the Databases page of the GEE Server Admin
+console or on the command line:  geserveradmin --unpublish target_path
 
-      #. Once you have configured the new publish root, you must
-         republish all of the databases, by pushing and then publishing
-         them. You can use the **Fusion GUI** to push and the **GEE
-         Server Admin console** to publish your databases or you can
-         perform these steps on the command line:
+Delete all pushed databases:  geserveradmin --deletedb db_name
 
-         ``geserveradmin -adddb``
+Clean up deleted databases using garbagecollect. This is equivalent to
+emptying the Trash on some operating systems.  geserveradmin
+--garbagecollect
 
-         ``geserveradmin -pushdb``
+Copy the asset root to the new location.
 
-         ``geserveradmin -publishdb``
+Select the new asset root:  sudo /opt/google/geselectassetroot
+--assetroot new_path
 
-      #. Optionally, you can delete your old asset root and your publish
-         root.
+You may need to repair the relocated asset root, fixing various
+inconsistencies in the asset root (such as permissions, ownership,
+missing ID files, etc.). When you run this command, the tool auto-
+detects the problems that need to be repaired and fixes them.  sudo
+/opt/google/bin/geconfigureassetroot --repair new_path
 
-      .. _Relocate_Asset_Root:
-      .. rubric:: Relocate your asset root only
+Run Fusion and verify that you see all of the databases.
 
-      Your asset root and publish root, ``/published_dbs/``, should be
-      located on the same volume, enabling Fusion to use symbolic links.
-      If you maintain your asset root and publish root on separate
-      volumes, Fusion makes copies of your databases, obviously leading
-      to greater use of disk space.
+Once you have configured the new publish root, you must republish all
+your databases, by pushing and then publishing them. You can use the
+Fusion GUI to push and the GEE Server Admin console to publish your
+databases or you can perform these steps on the command line:
+geserveradmin -adddb  geserveradmin -pushdb  geserveradmin -publishdb
 
-      .. rubric:: To relocate your asset root if your publish root will
-         not be on the same volume:
-         :name: to-relocate-your-asset-root-if-your-publish-root-will-not-be-on-the-same-volume
+Optionally, you can delete your old asset root.
 
-      #. Unpublish all databases on the **Databases** page of the **GEE
-         Server Admin console** or on the command line:
+-[ Learn more ]-
 
-         ``geserveradmin --unpublish target_path``
+Push and publish databases
 
-      #. Delete all pushed databases:
+Configure Tutorial Workspace
 
-         ``geserveradmin --deletedb db_name``
-
-      #. Clean up deleted databases using ``garbagecollect``. This is
-         equivalent to emptying the *Trash* on some operating systems.
-
-         ``geserveradmin --garbagecollect``
-
-      #. Copy the asset root to the new location.
-      #. Select the new asset root:
-
-         ``sudo /opt/google/geselectassetroot --assetroot new_path``
-
-      #. You may need to repair the relocated asset root, fixing various
-         inconsistencies in the asset root (such as permissions,
-         ownership, missing ID files, etc.). When you run this
-         command, the tool auto-detects the problems that need to be
-         repaired and fixes them.
-
-         ``sudo /opt/google/bin/geconfigureassetroot --repair new_path``
-
-      #. Run Fusion and verify that you see all of the databases.
-      #. Once you have configured the new publish root, you must
-         republish all your databases, by pushing and then publishing
-         them. You can use the **Fusion GUI** to push and the **GEE
-         Server Admin console** to publish your databases or you can
-         perform these steps on the command line:
-
-         ``geserveradmin -adddb``
-
-         ``geserveradmin -pushdb``
-
-         ``geserveradmin -publishdb``
-
-      #. Optionally, you can delete your old asset root.
-
-      .. rubric:: Learn more
-         :name: learn-more
-
-      -  :doc:`../fusionAdministration/pushAndPublishDB`
-      -  :doc:`../fusionTutorial/confTutorialWS`
-      -  :doc:`../fusionAdministration/backupFusionServers`
-
-.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
-   :width: 130px
-   :height: 44px
+Back up Fusion servers

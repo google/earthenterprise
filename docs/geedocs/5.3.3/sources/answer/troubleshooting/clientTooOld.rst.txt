@@ -1,29 +1,17 @@
-|Google logo|
 
-==============
 Client too old
-==============
 
-.. container::
+-[ Error message ]-
 
-   .. container:: content
+"Invalid protocol version (client too old)"
 
-      .. rubric:: Error message
+-[ Description ]-
 
-      ``Invalid protocol version (client too old)``
-      
-      .. rubric:: Description
+During the initial transition from tools that do not check for
+matching versions to the versions that do check (e.g., from 2.4.x to
+3.x), you tried to use an old version of the Fusion GUI or command
+line to connect to a new version of the system manager.
 
-      During the initial transition from tools that do not check for
-      matching versions to the versions that do check (e.g., from
-      2.4.x to 3.x), you tried to use an old version of the Fusion GUI
-      or command line to connect to a new version of the system manager.
+-[ Resolution ]-
 
-      .. rubric:: Resolution
-
-      Ensure that you are using the same version of Fusion and GEE
-      Server.
-
-.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
-   :width: 130px
-   :height: 44px
+Ensure that you are using the same version of Fusion and GEE Server.
