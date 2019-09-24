@@ -1,54 +1,37 @@
-|Google logo|
 
-==============
 Write to index
-==============
 
-.. container::
+-[ Error message ]-
 
-   .. container:: content
+"Any of these conditions occur:"
 
-      .. rubric:: Error message
+The project Asset log lists this error:  Fusion Fatal : Unable to
+write record to index
 
-      ``Any of these conditions occur:``
+Current state / Version Properties reads "In Progress".
 
-      -  The project Asset log lists this error:
+Canceling the project build in the GUI or on the command line causes
+the program to hang.
 
-         ``Fusion Fatal : Unable to write record to index``
+Running the command getop causes the program to hang.
 
-      -  Current state / Version Properties reads "In Progress".
-      -  Canceling the project build in the GUI or on the command line
-         causes the program to hang.
-      -  Running the command ``getop`` causes the program to hang.
+-[ Description ]-
 
-      .. rubric:: Description
+Your hard disk might be full, or a network drive might be
+disconnected.
 
-      Your hard disk might be full, or a network drive might be
-      disconnected.
+-[ Resolution ]-
 
-      .. rubric:: Resolution
+Switch to root and enter:  /etc/init.d/gefusion stop
+/etc/init.d/geserver stop sleep 5 killall -9 gesystemmanager killall
+-9 geresourceprovider
 
-      #. Switch to root and enter:
+Enter:  ps aux | grep ge
 
-         ``/etc/init.d/gefusion stop``
-         ``/etc/init.d/geserver stop``
-         ``sleep 5``
-         ``killall -9 gesystemmanager``
-         ``killall -9 geresourceprovider``
+Look for and stop any Fusion processes in the output.
 
-      #. Enter:
+Make sure that you have enough free disk space, and then enter:
+/etc/init.d/gefusion start /etc/init.d/geserver start
 
-         ``ps aux | grep ge``
-
-      #. Look for and stop any Fusion processes in the output.
-      #. Make sure that you have enough free disk space, and then enter:
-
-         ``/etc/init.d/gefusion start``
-         ``/etc/init.d/geserver start``
-
-      #. Cancel the build, and then resume it using the ``gecancel`` and
-         ``geresume`` commands.
-
-.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
-   :width: 130px
-   :height: 44px
+Cancel the build, and then resume it using the gecancel and geresume
+commands.
