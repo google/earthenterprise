@@ -73,8 +73,8 @@
 <div class="docutils container">
 <div class="content docutils container">
 <p class="rubric">Overview</p>
-<p>GEE 5.1.3 is an incremental release of <span class="xref std std-doc">GEE
-5.1</span>. It contains several bug fixes in
+<p>GEE 5.1.3 is an incremental release of
+<a class="reference internal" href="relNotesGEE5_1_0.html"><span class="doc">GEE 5.1</span></a>. It contains several bug fixes in
 Fusion and GEE Server, and updates to third-party libraries.</p>
 <p class="rubric">Supported Platforms</p>
 <p>The Google Earth Enterprise 5.1.3 release is supported on 64-bit
@@ -88,15 +88,16 @@ most recent security patches</li>
 <p>Google Earth Enterprise 5.1.3 is compatible with Google Earth
 Enterprise Client (EC) version 7.1.8 and Google Earth Plug-in
 versions 7.0.1 - 7.1.5.1557 for Windows and Mac.</p>
-<p class="rubric">Library updates</p>
-<table border="1" class="docutils">
+<p class="rubric">Library Updates</p>
+<table border="1" class="colwidths-given docutils" id="id1">
+<caption><span class="caption-text">Library Updates</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="58%" />
-<col width="42%" />
+<col width="50%" />
+<col width="50%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Library</th>
-<th class="head">Updated version</th>
+<th class="head">Updated Version</th>
 </tr>
 </thead>
 <tbody valign="top">
@@ -118,11 +119,12 @@ versions 7.0.1 - 7.1.5.1557 for Windows and Mac.</p>
 </tbody>
 </table>
 <p class="rubric">Known Issues</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id2">
+<caption><span class="caption-text">Known Issues</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="3%" />
-<col width="29%" />
-<col width="69%" />
+<col width="25%" />
+<col width="25%" />
+<col width="50%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Number</th>
@@ -133,20 +135,24 @@ versions 7.0.1 - 7.1.5.1557 for Windows and Mac.</p>
 <tbody valign="top">
 <tr class="row-even"><td>31619151</td>
 <td>Missing historical imagery dates in EC timeslider</td>
-<td>Ensure all assets in the project have valid timestamps and they are unique (in case some of the resources have the same date &amp; time).</td>
+<td>Ensure all assets in the project have valid timestamps and
+they are unique (in case some of the resources have the same date &amp; time).</td>
 </tr>
 <tr class="row-odd"><td>35093485</td>
 <td>Google basemap fails to load in 2D Mercator databases built with “Use Google Basemap” option</td>
-<td>Edit /opt/google/gehttpd/htdocs/maps/maps_google.html to include a valid API Key (or client id) to the Maps API Javascript call. See <a class="reference external" href="https://developers.google.com/maps/documentation/javascript/error-messages#no-api-keys">https://developers.google.com/maps/documentation/javascript/error-messages#no-api-keys</a></td>
+<td>Edit <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/maps/maps_google.html</span></code>
+to include a valid API Key (or client id) to the Maps API JavaScript call.
+See <a class="reference external" href="https://developers.google.com/maps/documentation/javascript/error-messages#no-api-keys">https://developers.google.com/maps/documentation/javascript/error-messages#no-api-keys</a></td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Resolved Issues</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id3">
+<caption><span class="caption-text">Resolved Issues</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="3%" />
-<col width="15%" />
-<col width="83%" />
+<col width="25%" />
+<col width="25%" />
+<col width="50%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Number</th>
@@ -157,7 +163,10 @@ versions 7.0.1 - 7.1.5.1557 for Windows and Mac.</p>
 <tbody valign="top">
 <tr class="row-even"><td>1644180</td>
 <td>Improve granularity of image acquisition date</td>
-<td>Fixed in Fusion: imagery acquisition date now supports hours, minutes and seconds with the (ISO-8601) format <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span> <span class="pre">hh:mm:ss</span></code>. This new extended timestamp is backward compatible and enabled in the Fusion UI as well as command-line tools. Client support is being added to EC’s timeslider; updated version coming soon.</td>
+<td>Fixed in Fusion: imagery acquisition date now supports hours, minutes and
+seconds with the (ISO-8601) format <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span> <span class="pre">hh:mm:ss</span></code>. This new extended
+timestamp is backward compatible and enabled in the Fusion UI as well as i
+command-line tools. Client support is being added to EC’s timeslider; updated version coming soon.</td>
 </tr>
 <tr class="row-odd"><td>11271105</td>
 <td><code class="docutils literal notranslate"><span class="pre">gekmlgrabber</span></code> fails to grab KML files referenced with relative URLs</td>
@@ -165,7 +174,8 @@ versions 7.0.1 - 7.1.5.1557 for Windows and Mac.</p>
 </tr>
 <tr class="row-even"><td>17300345, 18021264</td>
 <td>Missing cache_alpha files reported when building projects with pre-processed source data (KIP)</td>
-<td>Fixed in Fusion: after upgrading, clean the latest blocked version of the database, clean the latest blocked version of the imagery/terrain project, and then rebuild.</td>
+<td>Fixed in Fusion: after upgrading, clean the latest blocked version of the database,
+clean the latest blocked version of the imagery/terrain project, and then rebuild.</td>
 </tr>
 <tr class="row-odd"><td>21760202</td>
 <td>gesystemmanager consumes large amount of of resources (cpu &amp; memory) when cancelling large projects</td>
@@ -181,11 +191,18 @@ versions 7.0.1 - 7.1.5.1557 for Windows and Mac.</p>
 </tr>
 <tr class="row-even"><td>25954774</td>
 <td>Implement swap and replace functions when publishing databases</td>
-<td>Fixed in GEE Server: to facilitate updates to existing published databases, <code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> supports <code class="docutils literal notranslate"><span class="pre">--republish</span></code> of databases which involves unpublishing an existing target, and publishing a new database on that same target while retaining its publish context i.e. virtual host, snippets, search services, WMS-serving. The <code class="docutils literal notranslate"><span class="pre">--swaptargets</span></code> option swaps the target path of two published databases along with their publish context. This makes it easy to test or revert databases in production environments. For more information, see <code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> usage.</td>
+<td>Fixed in GEE Server: to facilitate updates to existing published databases,
+<code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> supports <code class="docutils literal notranslate"><span class="pre">--republish</span></code> of databases which involves unpublishing
+an existing target, and publishing a new database on that same target while retaining
+its publish context i.e. virtual host, snippets, search services, WMS-serving.
+The <code class="docutils literal notranslate"><span class="pre">--swaptargets</span></code> option swaps the target path of two published databases
+along with their publish context. This makes it easy to test or revert databases
+in production environments. For more information, see <code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> usage.</td>
 </tr>
 <tr class="row-odd"><td>26964919, 27346002</td>
 <td>POI searches fail when servers deployed behind load-balancer</td>
-<td>Fixed in GEE Server: deprecate database ID (db_id), and modify POI search service to query poi_id based on target_path instead.</td>
+<td>Fixed in GEE Server: deprecate database ID (db_id), and modify POI search service to
+query poi_id based on target_path instead.</td>
 </tr>
 <tr class="row-even"><td>27689103</td>
 <td>Large POI files break database push</td>
@@ -209,11 +226,14 @@ versions 7.0.1 - 7.1.5.1557 for Windows and Mac.</p>
 </tr>
 <tr class="row-odd"><td>31713095</td>
 <td>Check for duplicate images in Asset Manager</td>
-<td>Fixed in Fusion: Imagery Resource file dialog checks for duplicates such that the same image cannot be added more than once.</td>
+<td>Fixed in Fusion: Imagery Resource file dialog checks for duplicates such that the
+same image cannot be added more than once.</td>
 </tr>
 <tr class="row-even"><td>32120563</td>
 <td>Get postgreSQL port number from configuration file</td>
-<td>Fixed in GEE Server: custom port numbers for GEE’s postgres service should be specified in the files: /var/opt/google/pgsql/data/postgresql.conf and /opt/google/gehttpd/wsgi-bin/conf/postgres.properties. (The default port is 5432.)</td>
+<td>Fixed in GEE Server: custom port numbers for GEE’s postgres service should be specified in
+the files: <code class="docutils literal notranslate"><span class="pre">/var/opt/google/pgsql/data/postgresql.conf</span></code> and
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/wsgi-bin/conf/postgres.properties</span></code>. (The default port is 5432.)</td>
 </tr>
 <tr class="row-odd"><td>32547956</td>
 <td>Cutter fails if ‘rsync’ not present on system</td>

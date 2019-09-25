@@ -129,7 +129,7 @@ little as a few minutes — depending on the area of coverage — to
 support rapid preparation for first responders. Larger globes
 may be built in advanced preparation for responders to have ready
 on the shelf.</p>
-<p><a href="#id1"><span class="problematic" id="id2">|GEE portable diagram|</span></a></p>
+<p><img alt="GEE portable diagram" src="../../images/gee_portable_diagram.gif" /></p>
 <p>The Portable Server solution is made up of two applications:</p>
 <ul class="simple">
 <li>The <a class="reference internal" href="#globe-cutter-installation"><span class="std std-ref">globe cutter</span></a> tool, which is installed
@@ -146,7 +146,7 @@ phones, can view the same globe.</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> The Portable Server solution can also create portable
+<p class="last">The Portable Server solution can also create portable
 maps from a 2D map source. This document uses the term
 <em>portable globe</em> only, but instructions apply to both globes
 and maps.</p>
@@ -183,7 +183,7 @@ area that will display high-resolution imagery, but is also used
 by Fusion to create a localized search database.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p><strong>Note:</strong> The globe cutting processes are CPU and disk
+<p>The globe cutting processes are CPU and disk
 intensive, as they are retrieving all data within the specified
 polygon from the Earth Enterprise Server. This can affect the
 overall performance of the Server, including slowing end-user
@@ -202,25 +202,27 @@ on-demand globe cutting needs.</li>
 <p>Before cutting a globe, you must enable the cutter from the
 command line:</p>
 <p><code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">geserveradmin</span> <span class="pre">--enable_cutter</span></code></p>
-<div class="alert docutils container">
-<strong>Note about authentication and SSL:</strong> Cutting is not currently
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><strong>About authentication and SSL:</strong> Cutting is not currently
 supported on globes that require end-user authentication, e.g.,
 LDAP. One workaround is to allow unauthenticated access from
 localhost on your Earth Enterprise Server. Refer to Apache
 documentation to enable such a configuration. Cutting a
 globe over HTTPS is supported; however the SSL certificate of
-the target server will not be verified during cuting.</div>
+the target server will not be verified during cuting.</p>
+</div>
 <p class="rubric" id="globe-cutter-interface">The globe cutter interface</p>
 <p>To create a portable globe, point your browser to
 <code class="docutils literal notranslate"><span class="pre">http://yourserver/cutter</span></code>, where <code class="docutils literal notranslate"><span class="pre">yourserver</span></code> is the server
 on which Earth Enterprise Server is running. The <strong>Globe Creator</strong>
 page appears.</p>
-<p><a href="#id3"><span class="problematic" id="id4">|Cutter|</span></a>
+<p><img alt="Cutter" src="../../images/cutter_interface.png" />
 Select the globe you wish to cut your portable version from in
 the drop-down menu.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> Additional options can be shown by clicking on the
+<p class="last">Additional options can be shown by clicking on the
 <strong>Advanced</strong> button after a cut region has been selected. These
 options are, namely, <em>Polygon level</em>. This setting is useful
 when cutting with large polygons, e.g., use 12 for a
@@ -238,12 +240,14 @@ globe name.</p>
 <p>We recommend using a descriptive name for each globe, so that
 others will know what geographic area, or what mission, the globe
 was created for.</p>
-<div class="alert docutils container">
-<strong>Note</strong>: Building a globe will overwrite any existing globes
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Building a globe will overwrite any existing globes
 with the same name. If multiple users are cutting globes, we
 recommend assigning unique prefixes to each user for their
 globe names to ensure that files are not accidentally
-overwritten.</div>
+overwritten.</p>
+</div>
 <p class="rubric" id="drawing-polygon">Drawing the polygon</p>
 <p>Once the globe name has been specified, you can define the
 geographic region to be cut by drawing a polygon on the globe.
@@ -264,7 +268,7 @@ map, if you are running the deprecated Google Earth plug-in.</li>
 Google Earth plug-in running in your browser.</em></p>
 <p>First, using the navigation controls in the plugin, zoom in to
 the region of interest. To use your mouse to define the polygon,
-click the <a href="#id5"><span class="problematic" id="id6">|Polygon icon|</span></a> polygon icon in the globe window.</p>
+click the <img alt="Polygon icon" src="../../images/polygon_icon.png" /> polygon icon in the globe window.</p>
 <p>Then, click the globe to define each point. You can use the
 navigation controls on the right to move the globe or change zoom
 levels while drawing.</p>
@@ -407,9 +411,8 @@ page. Click the <img alt="Portable folder icon" class="inline" src="../../images
 will see a screen where you can select what globe or map
 should be served by Portable Server.</p>
 <p>You can shut down Portable Server from the administrative page, as
-well. Click the <img alt="Portable menu icon" class="inline" src="../../images/portable_menu_icon.png" /> menu button,</p>
-<blockquote>
-<div>then select <strong>Quit</strong>.</div></blockquote>
+well. Click the <img alt="Portable menu icon" class="inline" src="../../images/portable_menu_icon.png" /> menu button,
+then select <strong>Quit</strong>.</p>
 <p class="rubric" id="broadcasting-globe">Broadcasting a globe</p>
 <p>To share a globe with others on your network:</p>
 <ol class="arabic simple">
@@ -431,7 +434,7 @@ icon.</li>
 Client, log out of the client and log back in to
 <code class="docutils literal notranslate"><span class="pre">http://localhost:9335</span></code>.</p>
 <p class="rubric" id="connecting-portable-globe">Connecting to a portable globe</p>
-<p>It’s possible to connect to a portable globe from a variety of
+<p>It is possible to connect to a portable globe from a variety of
 platforms.</p>
 <p class="rubric" id="geec-portable-globe-server">Google Earth EC</p>
 <p>Launch the Google Earth EC client. When prompted for a server
@@ -489,13 +492,13 @@ give a sense of what these command line tools accomplish and in
 what order they are run:</p>
 <p><code class="docutils literal notranslate"><span class="pre">Building</span> <span class="pre">LevelFive</span> <span class="pre">...</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">No</span> <span class="pre">description</span> <span class="pre">given.</span> <span class="pre">Added</span> <span class="pre">globe</span> <span class="pre">directory:</span>&#160;&#160; <span class="pre">/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive</span> <span class="pre">Ok</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">Saved</span> <span class="pre">polygon</span> <span class="pre">to</span>&#160;&#160; <span class="pre">/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/earth/polygon.kml</span>&#160;&#160; <span class="pre">Convert</span> <span class="pre">polygon</span> <span class="pre">to</span> <span class="pre">quadtree</span> <span class="pre">nodes</span> <span class="pre">...</span>&#160;&#160; <span class="pre">Executing:</span> <span class="pre">/opt/google/bin/gepolygontoqtnodes</span> <span class="pre">--qt_nodes_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/qt_nodes.txt</span>&#160;&#160; <span class="pre">--kml_polygon_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/earth/polygon.kml</span>&#160;&#160; <span class="pre">--max_level=18</span>&#160;&#160; <span class="pre">0</span> <span class="pre">qtnodes</span> <span class="pre">Ok</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">Rewrite</span> <span class="pre">dbroot</span> <span class="pre">...</span>&#160;&#160; <span class="pre">Executing:</span> <span class="pre">/opt/google/bin/gerewritedbroot</span>&#160;&#160; <span class="pre">--source=http://earth.localdomain/default_ge/</span>&#160;&#160; <span class="pre">--icon_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/icons</span>&#160;&#160; <span class="pre">--dbroot_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/dbroot.v5</span>&#160;&#160; <span class="pre">--search_server=localhost</span>&#160;&#160; <span class="pre">--search_port=9335</span>&#160;&#160; <span class="pre">--kml_server=localhost</span>&#160;&#160; <span class="pre">--kml_port=9335</span>&#160;&#160; <span class="pre">--kml_map_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/kml_map.txt</span>&#160;&#160; <span class="pre">8</span> <span class="pre">icons</span>&#160;&#160; <span class="pre">Executing:</span> <span class="pre">cp</span>&#160;&#160; <span class="pre">/tmp/globe_builder/LevelFive_4282_1287494655.545115/dbroot.v5</span>&#160;&#160; <span class="pre">/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/dbroot/dbroot_localhost_9335</span>&#160;&#160; <span class="pre">Ok</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">Grab</span> <span class="pre">kml</span> <span class="pre">files</span> <span class="pre">...</span>&#160;&#160; <span class="pre">Executing:</span> <span class="pre">/opt/google/bin/gekmlgrabber</span>&#160;&#160; <span class="pre">--kml_map_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/kml_map.txt</span>&#160;&#160; <span class="pre">--output_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/kml</span>&#160;&#160; <span class="pre">--source=http://earth.localdomain/default_ge/</span>&#160;&#160; <span class="pre">--kml_server=localhost</span>&#160;&#160; <span class="pre">--kml_port=9335</span>&#160;&#160; <span class="pre">0</span> <span class="pre">kml</span> <span class="pre">files</span> <span class="pre">Ok</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">Build</span> <span class="pre">globe</span> <span class="pre">...</span>&#160;&#160; <span class="pre">Executing:</span> <span class="pre">/opt/google/bin/geportableglobebuilder</span>&#160;&#160; <span class="pre">--source=http://earth.localdomain/default_ge/</span>&#160;&#160; <span class="pre">--default_level=5</span>&#160;&#160; <span class="pre">--max_level=5</span>&#160;&#160; <span class="pre">--hires_qt_nodes_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/qt_nodes.txt</span>&#160;&#160; <span class="pre">--metadata_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/earth/metadata.json</span>&#160;&#160; <span class="pre">--globe_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive</span>&#160;&#160; <span class="pre">--dbroot_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/dbroot.v5</span> <span class="pre">&gt;</span>&#160;&#160; <span class="pre">/tmp/globe_builder/LevelFive_4282_1287494655.545115/packet_info.txt</span> <span class="pre">&amp;</span> <span class="pre">Ok</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">685</span> <span class="pre">image</span> <span class="pre">packets</span>&#160;&#160; <span class="pre">128</span> <span class="pre">terrain</span> <span class="pre">packets</span>&#160;&#160; <span class="pre">515</span> <span class="pre">vectors</span> <span class="pre">packets</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">Extract</span> <span class="pre">search</span> <span class="pre">data</span> <span class="pre">...</span>&#160;&#160; <span class="pre">Getting</span> <span class="pre">search</span> <span class="pre">poi</span> <span class="pre">ids:</span>&#160;&#160; <span class="pre">http://earth.localdomain/cgi-bin/globe_cutter.py?</span>&#160;&#160; <span class="pre">cmd=POI_IDS&amp;db=default_ge</span>&#160;&#160; <span class="pre">Getting</span> <span class="pre">search</span> <span class="pre">poi</span> <span class="pre">data:</span>&#160;&#160; <span class="pre">http://earth.localdomain/cgi-bin/globe_cutter.py?</span>&#160;&#160; <span class="pre">cmd=SEARCH_FILE&amp;poi_id=&amp;</span>&#160;&#160; <span class="pre">polygon=Paste%20in%20KML%20containing%20polygon.%20If%20KML%20contains%20more</span>&#160;&#160; <span class="pre">%20than%20one%20polygon%2C%20the%20first%20polygon%20will%20be%20used.</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">Saving</span> <span class="pre">search</span> <span class="pre">poi</span> <span class="pre">data:</span>&#160;&#160; <span class="pre">/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/search_db/gepoi_</span> <span class="pre">Ok</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">Add</span> <span class="pre">plugin</span> <span class="pre">files</span> <span class="pre">...</span>&#160;&#160; <span class="pre">Executing:</span> <span class="pre">cp</span> <span class="pre">-r</span> <span class="pre">/opt/google/gehttpd/htdocs/cutter/template/earth/*</span>&#160;&#160; <span class="pre">/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/earth</span> <span class="pre">Executing:</span> <span class="pre">cp</span> <span class="pre">-r</span> <span class="pre">/opt/google/gehttpd/htdocs/cutter/template/maps/*</span>&#160;&#160; <span class="pre">/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/maps</span> <span class="pre">Executing:</span> <span class="pre">cp</span> <span class="pre">-r</span> <span class="pre">/opt/google/gehttpd/htdocs/cutter/template/js/*</span>&#160;&#160; <span class="pre">/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/js</span> <span class="pre">Rewrite</span> <span class="pre">JSON</span> <span class="pre">from:</span> <span class="pre">http://earth.localdomain/default_ge//query?request=Json&amp;var=geeServerDefs</span> <span class="pre">Ok</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">Packaging</span> <span class="pre">globe</span> <span class="pre">for</span> <span class="pre">download</span> <span class="pre">...</span>&#160;&#160; <span class="pre">Executing:</span> <span class="pre">/opt/google/bin/geportableglobepacker</span>&#160;&#160; <span class="pre">--globe_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive</span>&#160;&#160; <span class="pre">--output=/opt/google/gehttpd/htdocs/cutter/globes/LevelFive.glb</span>&#160;&#160; <span class="pre">Executing:</span> <span class="pre">chmod</span> <span class="pre">a+r</span> <span class="pre">/opt/google/gehttpd/htdocs/cutter/globes/LevelFive.glb</span>&#160;&#160; <span class="pre">/opt/google/gehttpd/htdocs/cutter/globes/LevelFive.glb</span> <span class="pre">9.62MB</span> <span class="pre">Ok</span>&#160;&#160; <span class="pre">Deleting</span> <span class="pre">tmp</span> <span class="pre">directory</span> <span class="pre">as:</span> <span class="pre">/tmp/globe_builder/LevelFive_4282_1287494655.545115</span> <span class="pre">Ok</span></code>
 This section uses the following typographic conventions:</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils">
 <colgroup>
-<col width="38%" />
-<col width="62%" />
+<col width="33%" />
+<col width="67%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">Italic</span></code></td>
+<tr class="row-odd"><td><em>Italic</em></td>
 <td>Information that the user must supply</td>
 </tr>
 <tr class="row-even"><td>Square brackets <strong>[ ]</strong></td>
@@ -505,33 +508,34 @@ This section uses the following typographic conventions:</p>
 </table>
 <p class="rubric" id="gepolygontoqtnodes">gepolygontoqtnodes</p>
 <p class="rubric">Usage</p>
-<p><code class="docutils literal notranslate"><span class="pre">gepolygontoqtnodes</span> <span class="pre">--kml_polygon_file=filename</span>&#160;&#160;&#160;&#160; <span class="pre">--qt_nodes_file=filename</span> <span class="pre">--max_level=int</span></code>
-.. rubric:: Description</p>
+<p><strong>gepolygontoqtnodes</strong> –kml_polygon_file=*filename*     –qt_nodes_file=*filename* –max_level=*int*</p>
+<p class="rubric">Description</p>
 <p>Creates a list of the quadtree nodes that encompass a polygon at
 the given <code class="docutils literal notranslate"><span class="pre">max_level</span></code>.</p>
 <p class="rubric">Required</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id1">
+<caption><span class="caption-text">Required</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="31%" />
-<col width="69%" />
+<col width="41%" />
+<col width="59%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--kml_polygon_file=filename</span></code></td>
+<tr class="row-odd"><td>–kml_polygon_file=*filename*</td>
 <td>KML file containing a polygon that defines the region of interest.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">--qt_nodes_file=filename</span></code></td>
+<tr class="row-even"><td>–qt_nodes_file=*filename*</td>
 <td>File where quadtree addresses are stored.</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--max_level=int</span></code></td>
+<tr class="row-odd"><td>–max_level=*int*</td>
 <td>Level of resolution of quadtree that is used to encompass the polygon.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric" id="gerewritedbroot">gerewritedbroot</p>
 <p class="rubric">Usage</p>
-<p><code class="docutils literal notranslate"><span class="pre">gerewritedbroot</span></code>
-<code class="docutils literal notranslate"><span class="pre">--source=server_name</span> <span class="pre">--icon_directory=directory</span>&#160;&#160;&#160;&#160; <span class="pre">--dbroot_file=filename</span>&#160; <span class="pre">--kml_map_file=filename</span>&#160;&#160;&#160;&#160; <span class="pre">[--search_service=search_service_url]</span> <span class="pre">[--preserve_search_service]</span> <span class="pre">[--kml_server=server_name]</span>&#160;&#160;&#160;&#160; <span class="pre">[--kml_port=num]</span> <span class="pre">[--kml_url_path=prefix]</span> <span class="pre">[--use_ssl_for_kml=bool]</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">[--preserve_kml_filenames]</span> <span class="pre">[--disable_historical]</span></code>
-.. rubric:: Description</p>
+<p><strong>gerewritedbroot</strong>
+–source=*server_name* –icon_directory=*directory*     –dbroot_file=*filename*  –kml_map_file=*filename*     [–search_service=*search_service_url*] [–preserve_search_service] [–kml_server=*server_name*]     [–kml_port=*num*] [–kml_url_path=*prefix*] [–use_ssl_for_kml=*bool*]      [–preserve_kml_filenames] [–disable_historical]</p>
+<p class="rubric">Description</p>
 <ul class="simple">
 <li>Reads dbRoot and rewrites the search tabs so that they point to
 the given search server, port, and path.</li>
@@ -545,189 +549,200 @@ original KML Layer URLs to their updated file names.</li>
 imagery data.</li>
 </ul>
 <p class="rubric">Required</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id2">
+<caption><span class="caption-text">Required</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="38%" />
-<col width="62%" />
+<col width="63%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--source=server_name</span></code></td>
+<tr class="row-odd"><td>–source=*server_name*</td>
 <td>Server whose dbRoot should be rewritten.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">--dbroot_file=filename</span></code></td>
+<tr class="row-even"><td>–dbroot_file=*filename*</td>
 <td>File where the new dbRoot should be stored.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Options</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id3">
+<caption><span class="caption-text">Options</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="29%" />
-<col width="71%" />
+<col width="44%" />
+<col width="56%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--icon_directory=directory</span></code></td>
+<tr class="row-odd"><td>–icon_directory=*directory*</td>
 <td>Directory where the icons should be stored.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">--kml_map_file=filename</span></code></td>
+<tr class="row-even"><td>–kml_map_file=*filename*</td>
 <td>File where the KML map of source URLs to local files should be stored.</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--search_service=search_service_url</span></code></td>
+<tr class="row-odd"><td>–search_service=*search_service_url*</td>
 <td>URL to search service. If none is provided then uses relative URL for standard Portable search.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">--preserve_search_service</span></code></td>
+<tr class="row-even"><td>–preserve_search_service</td>
 <td>Preserve the existing search service URL.</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--kml_server=server_name</span></code></td>
+<tr class="row-odd"><td>–kml_server=*server_name*</td>
 <td>Server to be used for KML files in the dbRoot. Default is <code class="docutils literal notranslate"><span class="pre">localhost</span></code>.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">--kml_port=num</span></code></td>
+<tr class="row-even"><td>–kml_port=*num*</td>
 <td>Port to be used for KML files in the dbRoot. Default is <code class="docutils literal notranslate"><span class="pre">8888</span></code>.</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--kml_url_path=prefix</span></code></td>
+<tr class="row-odd"><td>–kml_url_path=*prefix*</td>
 <td>Path in new URL to prefix KML file name. Default is <code class="docutils literal notranslate"><span class="pre">kml</span></code>.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">--use_ssl_for_kml=bool</span></code></td>
+<tr class="row-even"><td>–use_ssl_for_kml=*bool*</td>
 <td>Use <code class="docutils literal notranslate"><span class="pre">https</span></code> instead of <code class="docutils literal notranslate"><span class="pre">http</span></code> for accessing KML files. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--preserve_kml_filenames</span></code></td>
+<tr class="row-odd"><td>–preserve_kml_filenames</td>
 <td>Preserve the existing file names of any KML files. Not used when creating portable globes.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">--disable_historical</span></code></td>
+<tr class="row-even"><td>–disable_historical</td>
 <td>Remove the reference to the server to obtain historical data.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric" id="gekmlgrabber">gekmlgrabber</p>
-<p><code class="docutils literal notranslate"><span class="pre">gekmlgrabber</span> <span class="pre">--kml_map_file=/tmp/kml_map</span></code>
-.. rubric:: Usage</p>
-<p><code class="docutils literal notranslate"><span class="pre">gekmlgrabber</span> <span class="pre">--kml_map_file=filename</span> <span class="pre">--output_directory=path</span>&#160;&#160;&#160;&#160; <span class="pre">[--source=server_name]</span> <span class="pre">[--kml_server=server_name]</span> <span class="pre">[--kml_port=num]</span>&#160;&#160;&#160;&#160; <span class="pre">[--kml_url_path=prefix]</span> <span class="pre">[--use_ssl_for_kml=bool]</span>&#160;&#160;&#160;&#160; <span class="pre">[--no_recurse=bool]</span> <span class="pre">[--ignore_absolute_urls=bool]</span></code>
-.. rubric:: Description</p>
+<p><code class="docutils literal notranslate"><span class="pre">gekmlgrabber</span> <span class="pre">--kml_map_file=/tmp/kml_map</span></code></p>
+<p class="rubric">Usage</p>
+<p><strong>gekmlgrabber</strong> –kml_map_file=*filename* –output_directory=*path*     [–source=*server_name*] [–kml_server=*server_name*] [–kml_port=*num*]     [–kml_url_path=*prefix*] [–use_ssl_for_kml=*bool*]     [–no_recurse=*bool*] [–ignore_absolute_urls=*bool*]</p>
+<p class="rubric">Description</p>
 <p>Reads KML references, retrieves them from network, and copies them
 into local files. If the <code class="docutils literal notranslate"><span class="pre">--no_recurse</span></code> flag is not set, it does
 the same for any additional KML files referenced within the given
 KML files.</p>
 <p class="rubric">Required</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id4">
+<caption><span class="caption-text">Required</span><a class="headerlink" href="#id4" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="31%" />
-<col width="69%" />
+<col width="38%" />
+<col width="63%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--kml_map_file=filename</span></code></td>
+<tr class="row-odd"><td>–kml_map_file=*filename*</td>
 <td>File where map of KML source URLs to local files are stored.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">--output_directory=path</span></code></td>
+<tr class="row-even"><td>–output_directory=*path*</td>
 <td>Directory where local KML files are to be stored.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Options</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id5">
+<caption><span class="caption-text">Options</span><a class="headerlink" href="#id5" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="23%" />
-<col width="77%" />
+<col width="41%" />
+<col width="59%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--source=server_name</span></code></td>
+<tr class="row-odd"><td>–source=*server_name*</td>
 <td>Source for KML files. Default is <code class="docutils literal notranslate"><span class="pre">localhost</span></code>.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">--kml_server=server_name</span></code></td>
+<tr class="row-even"><td>–kml_server=*server_name*</td>
 <td>Server to be referenced in the dbroot for KML files. Default is <code class="docutils literal notranslate"><span class="pre">localhost</span></code>.</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--kml_port=num</span></code></td>
+<tr class="row-odd"><td>–kml_port=*num*</td>
 <td>Port to be referenced in the dbroot for KML files. Default is <code class="docutils literal notranslate"><span class="pre">9335</span></code>.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">--kml_url_path=prefix</span></code></td>
+<tr class="row-even"><td>–kml_url_path=*prefix*</td>
 <td>Path in new URL to prefix KML file name. Default is <code class="docutils literal notranslate"><span class="pre">kml</span></code>.</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--use_ssl_for_kml=bool</span></code></td>
+<tr class="row-odd"><td>–use_ssl_for_kml=*bool*</td>
 <td>Require <a class="reference external" href="https://">https://</a> instead of <a class="reference external" href="http://">http://</a> for accessing KML files. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">--no_recurse=bool</span></code></td>
+<tr class="row-even"><td>–no_recurse=*bool*</td>
 <td>Do NOT make all KML files linked within the KML files local files as well. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--ignore_absolute_urls=bool</span></code></td>
+<tr class="row-odd"><td>–ignore_absolute_urls=*bool*</td>
 <td>If KML is linked with a full URL address <code class="docutils literal notranslate"><span class="pre">(http://server/...)</span></code>, leave it as it is. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric" id="geportableglobebuilder">geportableglobebuilder</p>
-<p><code class="docutils literal notranslate"><span class="pre">geportableglobebuilder</span> <span class="pre">--source=http://myserver</span> <span class="pre">--max_level=18</span> <span class="pre">--default_level=8</span> <span class="pre">--hires_qt_nodes_file=qt_nodes.txt</span> <span class="pre">\</span>&#160;&#160; <span class="pre">--globe_directory</span> <span class="pre">/tmp/my_portable_globe</span> <span class="pre">\</span></code>
-.. rubric:: Usage</p>
-<p><code class="docutils literal notranslate"><span class="pre">geportableglobebuilder</span></code><code class="docutils literal notranslate"><span class="pre">--source=server_name</span> <span class="pre">--globe_directory=path</span>&#160;&#160;&#160;&#160; <span class="pre">[--max_level=num]</span> <span class="pre">[--default_level=num]</span> <span class="pre">[--hires_qt_nodes_file=filename]</span>&#160;&#160;&#160;&#160; <span class="pre">[--dbroot_file=filename]</span> <span class="pre">[--nowrite]</span></code>
-.. rubric:: Description</p>
+<p><code class="docutils literal notranslate"><span class="pre">geportableglobebuilder</span> <span class="pre">--source=http://myserver</span> <span class="pre">--max_level=18</span> <span class="pre">--default_level=8</span> <span class="pre">--hires_qt_nodes_file=qt_nodes.txt</span> <span class="pre">\</span>&#160;&#160; <span class="pre">--globe_directory</span> <span class="pre">/tmp/my_portable_globe</span> <span class="pre">\</span></code></p>
+<p class="rubric">Usage</p>
+<p><strong>geportableglobebuilder</strong>–source=*server_name* –globe_directory=*path*     [–max_level=*num*] [–default_level=*num*] [–hires_qt_nodes_file=*filename*]     [–dbroot_file=*filename*] [–nowrite]</p>
+<p class="rubric">Description</p>
 <p>Creates a set of packet bundles and other associated files. These
 files can be combined into a globe file with
 <code class="docutils literal notranslate"><span class="pre">geportableglobepacker</span></code>.</p>
 <p class="rubric">Required</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id6">
+<caption><span class="caption-text">Required</span><a class="headerlink" href="#id6" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="31%" />
-<col width="69%" />
+<col width="38%" />
+<col width="63%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--source=server_name</span></code></td>
+<tr class="row-odd"><td>–source=*server_name*</td>
 <td>The source globe from which the sub-globe is to be derived.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">--globe_directory=path</span></code></td>
+<tr class="row-even"><td>–globe_directory=*path*</td>
 <td>Directory where the portable globe should be built.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Options</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id7">
+<caption><span class="caption-text">Options</span><a class="headerlink" href="#id7" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="19%" />
-<col width="81%" />
+<col width="41%" />
+<col width="59%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--max_level=num</span></code></td>
+<tr class="row-odd"><td>–max_level=*num*</td>
 <td>Level of resolution of the quadtree above which no packets should be saved. Default is <code class="docutils literal notranslate"><span class="pre">24</span></code>.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">--default_level=num</span></code></td>
-<td>Level of resolution of the quadtree for which all packets are kept independent of the region of interest. Default is <code class="docutils literal notranslate"><span class="pre">7</span></code>.</td>
+<tr class="row-even"><td>–default_level=*num*</td>
+<td>Level of resolution of the quadtree for which all packets are kept independent of the
+region of interest. Default is <code class="docutils literal notranslate"><span class="pre">7</span></code>.</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--hires_qt_nodes_file=filename</span></code></td>
+<tr class="row-odd"><td>–hires_qt_nodes_file=*filename*</td>
 <td>Name of file containing the quadtree nodes that define the high-resolution area of the globe. Default is no file.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">--dbroot_file=filename</span></code></td>
-<td>Name of file containing the dbRoot that should be saved with the globe. Default is no file, in which case the dbRoot is read from the source.</td>
+<tr class="row-even"><td>–dbroot_file=*filename*</td>
+<td>Name of file containing the dbRoot that should be saved with the globe. Default is no file,
+in which case the dbRoot is read from the source.</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--metadata_file=filename</span></code></td>
-<td>Name of file containing boundary metadata that should be saved with the globe. Default is no file, in which case no metadata file is included.</td>
+<tr class="row-odd"><td>–metadata_file=*filename*</td>
+<td>Name of file containing boundary metadata that should be saved with the globe.
+Default is no file, in which case no metadata file is included.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">--no_write</span></code></td>
+<tr class="row-even"><td>–no_write</td>
 <td>Do not write packets; print out the total size of the globe.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric" id="geportableglobepacker">geportableglobepacker</p>
 <p class="rubric">Usage</p>
-<p><code class="docutils literal notranslate"><span class="pre">geportableglobepacker</span> <span class="pre">--globe_directory=path</span> <span class="pre">--output=filename</span> <span class="pre">[--make_copy=bool]</span> <span class="pre">[--is_2d=bool]</span></code>
-.. rubric:: Description</p>
+<p><strong>geportableglobepacker</strong> –globe_directory=*path* –output=*filename* [–make_copy=*bool*] [–is_2d=*bool*]</p>
+<p class="rubric">Description</p>
 <p>Packs up all globe files into a single file. If <code class="docutils literal notranslate"><span class="pre">--make_copy</span></code> is
 set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, the globe directory is undisturbed. If not, then
 the globe directory is rendered unusable, but the command can run
 considerably faster.</p>
 <p class="rubric">Options</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id8">
+<caption><span class="caption-text">Options</span><a class="headerlink" href="#id8" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="17%" />
-<col width="83%" />
+<col width="38%" />
+<col width="63%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--globe_directory=path</span></code></td>
+<tr class="row-odd"><td>–globe_directory=*path*</td>
 <td>The directory containing the globes to be packed.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">--output=filename</span></code></td>
-<td>The file to which to save the packed globe, including a file path if desired. The file name should use a <code class="docutils literal notranslate"><span class="pre">.glb</span></code> file extension.</td>
+<tr class="row-even"><td>–output=*filename*</td>
+<td>The file to which to save the packed globe, including a file path if desired.
+The file name should use a <code class="docutils literal notranslate"><span class="pre">.glb</span></code> file extension.</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--make_copy=bool</span></code></td>
+<tr class="row-odd"><td>–make_copy=*bool*</td>
 <td>Make a copy of all files so that the globe directory is not disturbed. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">--is_2d=bool</span></code></td>
-<td>Are we packaging a Dd map. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</td>
+<tr class="row-even"><td>–is_2d=*bool*</td>
+<td>Are we packaging a 2D map. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</td>
 </tr>
 </tbody>
 </table>

@@ -73,8 +73,8 @@
 <div class="docutils container">
 <div class="content docutils container">
 <p class="rubric">Overview</p>
-<p>Open GEE 5.2.1 is a comprehensive update of <span class="xref std std-doc">Open GEE
-5.2.0</span>. It contains new features,
+<p>Open GEE 5.2.1 is a comprehensive update of <a class="reference internal" href="relNotesGEE5_2_0.html"><span class="doc">Open GEE
+5.2.0</span></a>. It contains new features,
 several bug fixes in Fusion and GEE Server, and updates to
 third-party libraries.</p>
 <p class="rubric">New Features</p>
@@ -112,25 +112,46 @@ most recent security patches</li>
 Enterprise Client (EC) version 7.1.5 and above.</p>
 <p class="rubric">New and Updated Libraries</p>
 <p>Open GEE 5.2.1 includes many library updates. Major updates
-include:
-========== ======= ==============
-Library    Version New or Updated
-========== ======= ==============
-OpenJPEG   2.3.0   Updated
-PostgreSQL 9.6.5   Updated
-PostGIS    2.3.4   Updated
-========== ======= ==============</p>
+include:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Library</th>
+<th class="head">Version</th>
+<th class="head">New or Updated</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>OpenJPEG</td>
+<td>2.3.0</td>
+<td>Updated</td>
+</tr>
+<tr class="row-odd"><td>PostgreSQL</td>
+<td>9.6.5</td>
+<td>Updated</td>
+</tr>
+<tr class="row-even"><td>PostGIS</td>
+<td>2.3.4</td>
+<td>Updated</td>
+</tr>
+</tbody>
+</table>
 <p>To upgrade from Open GEE 5.2.0, do NOT uninstall it. We recommend
 that you upgrade Open GEE 5.2.0 by simply installing Open GEE
 5.2.1. Installing Open GEE 5.2.1 on top of Open GEE 5.2.0 will
 ensure that your PostgreSQL databases are backed-up and upgraded
 correctly to the new PostgreSQL version used by Open GEE 5.2.1.</p>
 <p class="rubric">Known Issues</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id1">
+<caption><span class="caption-text">Known Issues</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="2%" />
-<col width="38%" />
-<col width="60%" />
+<col width="25%" />
+<col width="25%" />
+<col width="50%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Number</th>
@@ -177,7 +198,8 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.1.</p>
 </tr>
 <tr class="row-odd"><td>200</td>
 <td>stage_install fails on the tutorial files when <code class="docutils literal notranslate"><span class="pre">/home</span></code> and <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> are on different file systems</td>
-<td>Ensure that <code class="docutils literal notranslate"><span class="pre">/home</span></code> and <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> are on the same file system or download the tutorial files to <code class="docutils literal notranslate"><span class="pre">/opt/google/share/tutorials/fusion/</span></code> after installing Fusion.</td>
+<td>Ensure that <code class="docutils literal notranslate"><span class="pre">/home</span></code> and <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> are on the same file system or download
+the tutorial files to <code class="docutils literal notranslate"><span class="pre">/opt/google/share/tutorials/fusion/</span></code> after installing Fusion.</td>
 </tr>
 <tr class="row-even"><td>201</td>
 <td>Some tiles are displayed incorrectly in the Enterprise Client when terrain is enabled</td>
@@ -221,11 +243,13 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.1.</p>
 </tr>
 <tr class="row-even"><td>320</td>
 <td>The Portable Server web page uses obsolete REST calls</td>
-<td>Do not use the buttons on the Portable Server web interface for adding remote servers or broadcasting to remote servers as these features are no longer supported.</td>
+<td>Do not use the buttons on the Portable Server web interface for adding remote
+servers or broadcasting to remote servers as these features are no longer supported.</td>
 </tr>
 <tr class="row-odd"><td>326</td>
 <td>Libraries may be loaded from the wrong directory</td>
-<td>Delete any library versions that should not be loaded or use LD_LIBRARY_PATH to load libraries from <code class="docutils literal notranslate"><span class="pre">/opt/google/lib</span></code>.</td>
+<td>Delete any library versions that should not be loaded or use LD_LIBRARY_PATH to load
+libraries from <code class="docutils literal notranslate"><span class="pre">/opt/google/lib</span></code>.</td>
 </tr>
 <tr class="row-even"><td>340</td>
 <td>GE Fusion Terrain is black</td>
@@ -245,7 +269,8 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.1.</p>
 </tr>
 <tr class="row-even"><td>401</td>
 <td>GEE commands are not in the path for sudo.</td>
-<td>Specify the full path when running commands or add <code class="docutils literal notranslate"><span class="pre">/opt/google/bin</span></code> to the path for all users, including the super user.</td>
+<td>Specify the full path when running commands or add <code class="docutils literal notranslate"><span class="pre">/opt/google/bin</span></code>
+to the path for all users, including the super user.</td>
 </tr>
 <tr class="row-odd"><td>402</td>
 <td>Provider manager window locked to main window.</td>
@@ -337,10 +362,10 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.1.</p>
 </tr>
 <tr class="row-odd"><td>569</td>
 <td>geserver service installation and uninstallation issues</td>
-<td>Before uninstalling geserver verify if its running or not.</td>
+<td>Before uninstalling geserver verify if it is running or not.</td>
 </tr>
 <tr class="row-even"><td>590</td>
-<td>Maps API Javascript Files Not Found</td>
+<td>Maps API JavaScript Files Not Found</td>
 <td>No current work around.</td>
 </tr>
 <tr class="row-odd"><td>594</td>
@@ -378,11 +403,12 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.1.</p>
 </tbody>
 </table>
 <p class="rubric">Resolved Issues</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="id2">
+<caption><span class="caption-text">Resolved Issues</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="5%" />
-<col width="43%" />
-<col width="52%" />
+<col width="25%" />
+<col width="25%" />
+<col width="50%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Number</th>
@@ -393,7 +419,7 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.1.</p>
 <tbody valign="top">
 <tr class="row-even"><td>2</td>
 <td>MrSID imagery is not supported</td>
-<td>Build script now check for MrSID libraries and if found, Fusion will be built with MrSID format support</td>
+<td>Build script now checks for MrSID libraries and if found, Fusion will be built with MrSID format support</td>
 </tr>
 <tr class="row-odd"><td>6</td>
 <td>The Portable UI reports an error any time a cut is canceled, even if the cancel was successful</td>
@@ -409,7 +435,8 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.1.</p>
 </tr>
 <tr class="row-even"><td>355</td>
 <td>Package gtest under CentOS/RHEL 6</td>
-<td>instructions for building OpenGEE under CentOS 6 were updated and build scripts modified to detect and use “devtoolset-2-toolchain”</td>
+<td>instructions for building OpenGEE under CentOS 6 were updated and build scripts
+modified to detect and use “devtoolset-2-toolchain”</td>
 </tr>
 <tr class="row-odd"><td>375</td>
 <td>Invalid version of psycopg2 on Ubuntu 16.04</td>
@@ -432,7 +459,7 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.1.</p>
 <td>Fixed spelling mistake</td>
 </tr>
 <tr class="row-even"><td>624</td>
-<td>File permissions incorrect in /opt/google if root has a restrictive umask</td>
+<td>File permissions incorrect in <code class="docutils literal notranslate"><span class="pre">/opt/google</span></code> if root has a restrictive umask</td>
 <td>Fixed permissions</td>
 </tr>
 <tr class="row-odd"><td>634</td>
@@ -441,7 +468,8 @@ correctly to the new PostgreSQL version used by Open GEE 5.2.1.</p>
 </tr>
 <tr class="row-even"><td>658</td>
 <td>Fix Perl Interpreter Paths in Built Scripts</td>
-<td>Added initscripts as a dependency for opengee-server and updated find-requires and requiresCommands capabilities of RPM</td>
+<td>Added initscripts as a dependency for opengee-server and
+updated find-requires and requiresCommands capabilities of RPM</td>
 </tr>
 <tr class="row-odd"><td>666</td>
 <td>Running gerewritedbroot with the proper parameters results in a usage message</td>

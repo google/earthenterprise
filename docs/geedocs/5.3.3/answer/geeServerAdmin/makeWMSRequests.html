@@ -88,30 +88,18 @@ overlaid on one another. Supported clients include <a class="reference internal"
 2.0.1</span></a>, ArcGIS/ArcGIS Explorer Desktop, and
 <a class="reference external" href="https://github.com/google/earthenterprise/wiki/Google-Earth-Enterprise-Client-(EC)">Google Earth
 Pro/EC</a>.</p>
-<ul>
-<li><p class="first"><a class="reference internal" href="#supported-database-types"><span class="std std-ref">Supported Database Types</span></a></p>
-</li>
-<li><p class="first"><a class="reference internal" href="#supported-projections"><span class="std std-ref">Supported Projections</span></a></p>
-</li>
-<li><p class="first"><a class="reference internal" href="#working-other-projection-types"><span class="std std-ref">Working with Other Projection Types</span></a></p>
-</li>
-<li><p class="first"><a class="reference internal" href="#supported-image-formats"><span class="std std-ref">Supported Image Formats</span></a></p>
-</li>
-<li><p class="first"><a class="reference internal" href="#setting-up-gee-server-support-wms"><span class="std std-ref">Setting up Google Earth Enterprise Server 5.x Support for
-WMS</span></a></p>
-</li>
-<li><p class="first"><a class="reference internal" href="#making-wms-requests-gee-server"><span class="std std-ref">Making WMS Requests to Google Earth Enterprise Server
-5.x</span></a></p>
-</li>
-<li><p class="first"><a class="reference internal" href="#get-capabilities"><span class="std std-ref">GetCapabilities</span></a></p>
-</li>
-<li><p class="first"><a class="reference internal" href="#get-map"><span class="std std-ref">GetMap</span></a></p>
-</li>
-<li><p class="first"><a class="reference internal" href="#making-wms-requests-gis-clients"><span class="std std-ref">Making WMS Requests in GIS Clients</span></a>
--  :ref:<a href="#id1"><span class="problematic" id="id2">`</span></a>Connecting to Google Earth Server 5.x WMS using</p>
-<blockquote>
-<div><p>QGIS &lt;Connecting_GE_Server_WMS_Using_QGIS&gt;`</p>
-</div></blockquote>
+<ul class="simple">
+<li><a class="reference internal" href="#supported-database-types"><span class="std std-ref">Supported Database Types</span></a></li>
+<li><a class="reference internal" href="#supported-projections"><span class="std std-ref">Supported Projections</span></a></li>
+<li><a class="reference internal" href="#working-other-projection-types"><span class="std std-ref">Working with Other Projection Types</span></a></li>
+<li><a class="reference internal" href="#supported-image-formats"><span class="std std-ref">Supported Image Formats</span></a></li>
+<li><a class="reference internal" href="#setting-up-gee-server-support-wms"><span class="std std-ref">Setting up Google Earth Enterprise Server 5.x Support for WMS</span></a></li>
+<li><a class="reference internal" href="#making-wms-requests-gee-server"><span class="std std-ref">Making WMS Requests to Google Earth Enterprise Server 5.x</span></a></li>
+<li><a class="reference internal" href="#get-capabilities"><span class="std std-ref">GetCapabilities</span></a></li>
+<li><a class="reference internal" href="#get-map"><span class="std std-ref">GetMap</span></a></li>
+<li><a class="reference internal" href="#making-wms-requests-gis-clients"><span class="std std-ref">Making WMS Requests in GIS Clients</span></a><ul>
+<li><a class="reference internal" href="#connecting-ge-server-wms-using-qgis"><span class="std std-ref">Connecting to Google Earth Server 5.x WMS using QGIS</span></a></li>
+</ul>
 </li>
 </ul>
 <p class="rubric" id="supported-database-types">Supported Database Types</p>
@@ -143,7 +131,7 @@ Mercator to UTM zone 35.</p>
 for WMS</p>
 <p>To enable WMS for a database that you want to publish:</p>
 <ol class="arabic">
-<li><p class="first">In the <a class="reference external" href="../answer/3470759.html">GEE Server Admin</a> console,
+<li><p class="first">In the <a class="reference internal" href="signInAdminConsole.html"><span class="doc">GEE Server Admin</span></a> console,
 click <strong>Databases</strong>.</p>
 </li>
 <li><p class="first">Check the box next to the database you want to publish.</p>
@@ -183,16 +171,14 @@ type of services and data (“capabilities”) that are provided by
 Google Earth Enterprise Server 5.x.</p>
 <p>The URL the GIS client should use to make the <strong>GetCapabilities</strong>
 request is as follows:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://&lt;hostname&gt;/&lt;target_path&gt;/wms?SERVICE=WMS&amp;REQUEST=GetCapabilities&amp;VERSION=x.y.z
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">http://&lt;hostname&gt;/&lt;target_path&gt;/wms?SERVICE=WMS&amp;REQUEST=GetCapabilities&amp;VERSION=x.y.z</span></code></p>
 <p>The parameters for this operation are as follows:</p>
-<table border="1" class="docutils" id="id3">
-<caption><span class="caption-text"><strong>GetCapabilities</strong> parameters</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
+<table border="1" class="colwidths-given docutils" id="id1">
+<caption><span class="caption-text"><strong>GetCapabilities</strong> parameters</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="6%" />
-<col width="6%" />
-<col width="88%" />
+<col width="19%" />
+<col width="19%" />
+<col width="63%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Parameter</th>
@@ -211,7 +197,8 @@ request is as follows:</p>
 </tr>
 <tr class="row-even"><td>VERSION</td>
 <td>No</td>
-<td>Service version is 1.1.1 or 1.3.0. If no version is submitted, the WMS request defaults to the highest serving version; in this case 1.3.0.</td>
+<td>Service version is 1.1.1 or 1.3.0. If no version is submitted, the WMS request defaults to the
+highest serving version; in this case 1.3.0.</td>
 </tr>
 </tbody>
 </table>
@@ -235,8 +222,58 @@ database. Each layer provides the following information:<ul>
 supported, etc.</li>
 </ul>
 <p>An example <strong>GetCapabilities</strong> request output is as follows:</p>
-<p><code class="docutils literal notranslate"><span class="pre">&lt;WMT_MS_Capabilities</span> <span class="pre">updateSequence=&quot;0&quot;</span> <span class="pre">version=&quot;1.1.1&quot;&gt;</span>&#160;&#160; <span class="pre">&lt;Service&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">&lt;Name&gt;OGC:WMS&lt;/Name&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">&lt;Title&gt;Google</span> <span class="pre">Earth</span> <span class="pre">WMS</span> <span class="pre">service.&lt;/Title&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">&lt;OnlineResource</span> <span class="pre">xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;</span>&#160;&#160;&#160;&#160; <span class="pre">xlink:type=&quot;simple&quot;</span> <span class="pre">xlink:href=&quot;http://108.59.84.128/Earth/wms&quot;/&gt;</span>&#160;&#160; <span class="pre">&lt;/Service&gt;</span>&#160;&#160; <span class="pre">&lt;Capability&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">&lt;Request&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;GetCapabilities&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;Format&gt;text/xml&lt;/Format&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;DCPType&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;HTTP&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;Get&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;OnlineResource</span> <span class="pre">xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">xlink:type=&quot;simple&quot;</span> <span class="pre">xlink:href=&quot;http://108.59.84.128/Earth/wms&quot;/&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;/Get&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;/HTTP&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;/DCPType&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;/GetCapabilities&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;GetMap&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;Format&gt;image/png&lt;/Format&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;Format&gt;image/jpeg&lt;/Format&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;DCPType&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;HTTP&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;Get&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;OnlineResource</span> <span class="pre">xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">xlink:type=&quot;simple&quot;</span> <span class="pre">xlink:href=&quot;http://108.59.84.128/Earth/wms&quot;/&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;/Get&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;/HTTP&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;/DCPType&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;/GetMap&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">&lt;/Request&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">&lt;Exception&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;Format&gt;application/vnd.ogc.se_xml&lt;/Format&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">&lt;/Exception&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">&lt;Layer</span> <span class="pre">opaque=&quot;0&quot;</span> <span class="pre">noSubsets=&quot;0&quot;</span> <span class="pre">queryable=&quot;0&quot;&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;Title&gt;Google</span> <span class="pre">Earth</span> <span class="pre">WMS</span> <span class="pre">service.&lt;/Title&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;Layer</span> <span class="pre">opaque=&quot;1&quot;</span> <span class="pre">cascaded=&quot;0&quot;</span> <span class="pre">noSubsets=&quot;0&quot;</span> <span class="pre">queryable=&quot;0&quot;&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;Name&gt;Earth&lt;/Name&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;Title&gt;Imagery&lt;/Title&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;SRS&gt;EPSG:4326&lt;/SRS&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;LatLonBoundingBox</span> <span class="pre">minx=&quot;-180.0&quot;</span> <span class="pre">miny=&quot;-90.0&quot;</span> <span class="pre">maxx=&quot;180.0&quot;</span> <span class="pre">maxy=&quot;90.0&quot;/&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;BoundingBox</span> <span class="pre">maxx=&quot;180.0&quot;</span> <span class="pre">maxy=&quot;90.0&quot;</span> <span class="pre">miny=&quot;-90.0&quot;</span> <span class="pre">minx=&quot;-180.0&quot;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">SRS=&quot;EPSG:4326&quot;/&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;/Layer&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">&lt;/Layer&gt;</span>&#160;&#160; <span class="pre">&lt;/Capability&gt;</span> <span class="pre">&lt;/WMT_MS_Capabilities&gt;</span></code>
-Once you have retrieved services and data information from Google
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;WMT_MS_Capabilities updateSequence=&quot;0&quot; version=&quot;1.1.1&quot;&gt;
+   &lt;Service&gt;
+      &lt;Name&gt;OGC:WMS&lt;/Name&gt;
+      &lt;Title&gt;Google Earth WMS service.&lt;/Title&gt;
+      &lt;OnlineResource xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;
+      xlink:type=&quot;simple&quot; xlink:href=&quot;http://108.59.84.128/Earth/wms&quot;/&gt;
+   &lt;/Service&gt;
+   &lt;Capability&gt;
+      &lt;Request&gt;
+         &lt;GetCapabilities&gt;
+               &lt;Format&gt;text/xml&lt;/Format&gt;
+               &lt;DCPType&gt;
+                  &lt;HTTP&gt;
+                     &lt;Get&gt;
+                        &lt;OnlineResource xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;
+                        xlink:type=&quot;simple&quot; xlink:href=&quot;http://108.59.84.128/Earth/wms&quot;/&gt;
+                     &lt;/Get&gt;
+                  &lt;/HTTP&gt;
+               &lt;/DCPType&gt;
+            &lt;/GetCapabilities&gt;
+            &lt;GetMap&gt;
+               &lt;Format&gt;image/png&lt;/Format&gt;
+               &lt;Format&gt;image/jpeg&lt;/Format&gt;
+               &lt;DCPType&gt;
+                  &lt;HTTP&gt;
+                     &lt;Get&gt;
+                        &lt;OnlineResource xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;
+                        xlink:type=&quot;simple&quot; xlink:href=&quot;http://108.59.84.128/Earth/wms&quot;/&gt;
+                     &lt;/Get&gt;
+                  &lt;/HTTP&gt;
+               &lt;/DCPType&gt;
+            &lt;/GetMap&gt;
+         &lt;/Request&gt;
+         &lt;Exception&gt;
+            &lt;Format&gt;application/vnd.ogc.se_xml&lt;/Format&gt;
+         &lt;/Exception&gt;
+         &lt;Layer opaque=&quot;0&quot; noSubsets=&quot;0&quot; queryable=&quot;0&quot;&gt;
+            &lt;Title&gt;Google Earth WMS service.&lt;/Title&gt;
+            &lt;Layer opaque=&quot;1&quot; cascaded=&quot;0&quot; noSubsets=&quot;0&quot; queryable=&quot;0&quot;&gt;
+               &lt;Name&gt;Earth&lt;/Name&gt;
+               &lt;Title&gt;Imagery&lt;/Title&gt;
+               &lt;SRS&gt;EPSG:4326&lt;/SRS&gt;
+               &lt;LatLonBoundingBox minx=&quot;-180.0&quot; miny=&quot;-90.0&quot; maxx=&quot;180.0&quot; maxy=&quot;90.0&quot;/&gt;
+               &lt;BoundingBox maxx=&quot;180.0&quot; maxy=&quot;90.0&quot; miny=&quot;-90.0&quot; minx=&quot;-180.0&quot;
+               SRS=&quot;EPSG:4326&quot;/&gt;
+            &lt;/Layer&gt;
+         &lt;/Layer&gt;
+      &lt;/Capability&gt;
+   &lt;/WMT_MS_Capabilities&gt;
+</pre></div>
+</div>
+<p>Once you have retrieved services and data information from Google
 Earth Enterprise Server 5.x using <strong>GetCapabilities</strong>, you can
 then get the map image that you want using <strong>GetMap</strong>.</p>
 <p class="rubric" id="get-map">GetMap</p>
@@ -250,12 +287,12 @@ GetMap&amp;BBOX=&lt;bounding_box_limits_of_the_requested_map&gt;&amp;SRS=&lt;pro
 </pre></div>
 </div>
 <p>The parameters for this operation are as follows:</p>
-<table border="1" class="docutils" id="id4">
-<caption><span class="caption-text"><strong>GetMap</strong> Parameters</span><a class="headerlink" href="#id4" title="Permalink to this table">¶</a></caption>
+<table border="1" class="colwidths-given docutils" id="id2">
+<caption><span class="caption-text"><strong>GetMap</strong> parameters</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="1%" />
-<col width="1%" />
-<col width="98%" />
+<col width="19%" />
+<col width="19%" />
+<col width="63%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Parameter</th>
@@ -274,7 +311,8 @@ GetMap&amp;BBOX=&lt;bounding_box_limits_of_the_requested_map&gt;&amp;SRS=&lt;pro
 </tr>
 <tr class="row-even"><td>VERSION</td>
 <td>No</td>
-<td>Service version is 1.1.1 or 1.3.0. If no version is submitted, the WMS request defaults to the highest serving version, in this case 1.3.0.</td>
+<td>Service version is 1.1.1 or 1.3.0. If no version is submitted, the WMS request
+defaults to the highest serving version, in this case 1.3.0.</td>
 </tr>
 <tr class="row-odd"><td>LAYERS</td>
 <td>Yes</td>
@@ -282,11 +320,13 @@ GetMap&amp;BBOX=&lt;bounding_box_limits_of_the_requested_map&gt;&amp;SRS=&lt;pro
 </tr>
 <tr class="row-even"><td>BBOX</td>
 <td>Yes</td>
-<td>Bounding box for map extent. Value is minx, miny, maxx, maxy in units of the SRS or CRS, depending on the version. Use SRS for version 1.1.1; use CRS for version 1.3.0.</td>
+<td>Bounding box for map extent. Value is minx, miny, maxx, maxy in units of the SRS or
+CRS, depending on the version. Use SRS for version 1.1.1; use CRS for version 1.3.0.</td>
 </tr>
 <tr class="row-odd"><td>SRS or CRS</td>
 <td>Yes</td>
-<td>Spatial Reference System (SRS) of map output. Value is in form EPSG:nnn. Use SRS for version 1.1.1; use CRS as the parameter key for version 1.3.0.</td>
+<td>Spatial Reference System (SRS) of map output. Value is in form EPSG:nnn.
+Use SRS for version 1.1.1; use CRS as the parameter key for version 1.3.0.</td>
 </tr>
 <tr class="row-even"><td>WIDTH</td>
 <td>Yes</td>
@@ -302,7 +342,8 @@ GetMap&amp;BBOX=&lt;bounding_box_limits_of_the_requested_map&gt;&amp;SRS=&lt;pro
 </tr>
 <tr class="row-odd"><td>STYLE</td>
 <td>No</td>
-<td>Styles in which layers are to be rendered. Value is a list of required style names or empty if default styling is required.</td>
+<td>Styles in which layers are to be rendered. Value is a list of required style
+names or empty if default styling is required.</td>
 </tr>
 <tr class="row-even"><td>DPI</td>
 <td>No</td>
@@ -310,11 +351,24 @@ GetMap&amp;BBOX=&lt;bounding_box_limits_of_the_requested_map&gt;&amp;SRS=&lt;pro
 </tr>
 <tr class="row-odd"><td>TRANSPARENT</td>
 <td>No</td>
-<td>Determines if the map should be transparent. Values are TRUE and FALSE; default is FALSE. This parameter only applies when requesting PNG images.</td>
+<td>Determines if the map should be transparent. Values are TRUE and FALSE;
+default is FALSE. This parameter only applies when requesting PNG images.</td>
 </tr>
 <tr class="row-even"><td>BGCOLOR</td>
 <td>No</td>
-<td>Specifies the color to be used as the background (non-data) pixels of the map. The parameter is a hexadecimal encoding of an RGB value where two hexadecimal characters are used for each of red, green, and blue color values. The values can range between 00 and FF (0 and 255, base 10) for each. The format is 0xRRGGBB; either upper or lower case characters are allowed for RR, GG, and BB values. The “0x” prefix must have a lower case “x”. The default value is 0xFFFFFF, corresponding to the color white, which is used if this parameter is not included in the request. When FORMAT is a picture format, WMS should set the background pixels to the color specified by BGCOLOR. When FORMAT is a graphic element format (which does not have an explicit background), or a picture format, a WMS should avoid use of the BGCOLOR value for foreground elements because they would not be visible against a background picture of the same color.</td>
+<td>Specifies the color to be used as the background (non-data) pixels of the map.
+The parameter is a hexadecimal encoding of an RGB value where two hexadecimal
+characters are used for each of red, green, and blue color values.
+The values can range between 00 and FF (0 and 255, base 10) for each.
+The format is 0xRRGGBB; either upper or lower case characters are allowed
+for RR, GG, and BB values. The “0x” prefix must have a lower case “x”.
+The default value is 0xFFFFFF, corresponding to the color white, which
+is used if this parameter is not included in the request. When FORMAT
+is a picture format, WMS should set the background pixels to the color
+specified by BGCOLOR. When FORMAT is a graphic element format (which does
+not have an explicit background), or a picture format, a WMS should avoid
+use of the BGCOLOR value for foreground elements because they would not
+be visible against a background picture of the same color.</td>
 </tr>
 </tbody>
 </table>

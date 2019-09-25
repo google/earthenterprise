@@ -76,7 +76,7 @@
 data or map layer data. If you have one or more text fields that
 you would like to query from vector or map layer data in a
 project, you can simply add those search fields to that vector
-data’s layer. You include the layer as part of the <a class="reference internal" href="../fusionTutorial/displayRulesPolygon.html#define-vector-project"><span class="std std-ref">vector
+data’s layer. You include the layer as part of the <a class="reference internal" href="../fusionTutorial/buildProject.html#define-vector-project"><span class="std std-ref">vector
 project</span></a> that you want to include
 in the 2D or 3D database.</p>
 <p>For example, you may be interested in displaying the US Census
@@ -107,7 +107,7 @@ selecting <strong>Layer Properties</strong> from the context menu.</p>
 <p><img alt="Layer Properties Search Tab" src="../../images/layer_prop_search_tab.png" /></p>
 </li>
 <li><p class="first">Click <img alt="New Icon" src="../../images/icon_new2.gif" />. The Add Search Field dialog appears.</p>
-<p><img alt="Layer Properties Add Search" src="../../images/layer_prop_add_search-full.png" /></p>
+<p><img alt="Layer Properties Add Search" src="../../images/layer_prop_add_search.png" /></p>
 </li>
 <li><p class="first">Select the desired field from the <strong>Column Name</strong> drop-down
 list. Select an option from the <strong>Use</strong> drop-down list:</p>
@@ -129,7 +129,7 @@ lesson <a class="reference internal" href="../fusionTutorial/searchFldsForLayers
 <li><p class="first">Repeat the steps above for each additional field you want to
 add to the search. Your selections appear on the list of search
 fields on the Search tab in the order in which you added them:</p>
-<p><img alt="Layer Properties Add Search" src="../../images/layer_prop_add_search-full.png" /></p>
+<p><img alt="Layer Properties Add Search Full" src="../../images/layer_prop_add_search-full.png" /></p>
 <p>The order in which the fields appear on this list is the order
 in which they appear in the description balloon in the client.
 (The fields designated as <strong>Search Only</strong> do not affect the
@@ -145,7 +145,7 @@ order in which the fields to be displayed appear.)</p>
 changes to the layer.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> This search performs an exact match, which means
+<p class="last">This search performs an exact match, which means
 that the Google Earth EC user must enter the value exactly
 as it appears in the database. It can also perform a
 wildcard search, so users can enter part of the text they
@@ -170,7 +170,7 @@ returned no results via the POI search plug-in, the GeoFederated
 search plugin would automatically search for that city name.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> The POI Search option in the Publish dialog is only
+<p class="last">The POI Search option in the Publish dialog is only
 available if you build your database with POI data as a vector
 resource layer. If you want to perform a POI search on a
 database external to your globe or map, e.g., on a
@@ -221,9 +221,10 @@ searching your database for queried places or coordinates.</p>
 tab.</p>
 <p><img alt="POI Search Tab in Publish Dialog" src="../../images/publish_poi_search_tab.png" /></p>
 </li>
-</ol>
-<p>#. Click the <strong>Publish</strong> button. A message appears to confirm the successful
+<li><p class="first">Click the <strong>Publish</strong> button. A message appears to confirm the successful
 publishing process.</p>
+</li>
+</ol>
 </div>
 </div>
 </div>

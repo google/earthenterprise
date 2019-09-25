@@ -1,33 +1,31 @@
-|Google logo|
 
-==================================
 Welcome to Google Earth Enterprise
-==================================
-.. container::
 
-   .. container:: content
+Be sure to read
 
-      Be sure to read :doc:`../installGEE/sysReqFusionGEEServer` before you begin.
+System requirements for Fusion and GEE Server
 
-      -  If you need to install or access the documentation offline, see
-         :doc:`download`.
-      -  Read :doc:`installTips` before beginning the installation process for Fusion and GEE Server.
-      -  Read :doc:`../portable/portableUserGuideWinLinux` for instructions on installing
-         and using the Portable Server.
+ before you begin.
 
-      After installing GEE, you should complete the :doc:`../fusionTutorial/about`, which helps you learn Fusion
-      quickly and allows you to create a sample project that you can use
-      whenever you need to test the push/publishing process.
+If you need to install or access the documentation offline, see
+Download documentation for GEE 5.1.x.
 
-      .. rubric:: Google Earth Enterprise Fusion Training Videos
-         :name: google-earth-enterprise-fusion-training-videos
+Read Installation tips before beginning the installation process for
+Fusion and GEE Server.
 
-      `Google Earth Enterprise Essentials
-      Playlist <https://www.youtube.com/watch?v=_9RbsZAfBcI&list=PLOU2XLYxmsIJ7AvVzfskSrHEWVQDmf5JZ>`__
+Read Portable User Guide for Windows and Linux for instructions on
+installing and using the Portable Server.
 
-      `Google Earth Enterprise Advanced
-      Topics <https://www.youtube.com/watch?v=Q4xn3Gg2hoE&index=10&list=PLOU2XLYxmsIIVmVmQe1Pvku-9OVteG2Il>`__
+After installing GEE, you should complete the
 
-.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
-   :width: 130px
-   :height: 44px
+About this Tutorial
+
+, which helps you learn Fusion quickly and allows you to create a
+sample project that you can use whenever you need to test the
+push/publishing process.
+
+-[ Google Earth Enterprise Fusion Training Videos ]-
+
+Google Earth Enterprise Essentials Playlist
+
+Google Earth Enterprise Advanced Topics

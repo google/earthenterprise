@@ -1,36 +1,27 @@
-|Google logo|
 
-==================================
 Add Python Libraries to GEE Python
-==================================
 
-.. container::
+GEE uses system Python with some extra libraries to support
+functionality such as publishing and custom search plug-ins.
 
-   .. container:: content
+Additional modules specific to GEE are installed in:
 
-      GEE uses system Python with some extra libraries to support
-      functionality such as publishing and custom search plug-ins.
+"/opt/google/gepython/Python-2.7.x/lib/python2.7/site-packages" ,
+where x is determined by the system Python version.
 
-      Additional modules specific to GEE are installed in:
+psycopg2 is a PostgreSQL database adapter
 
-      ``/opt/google/gepython/Python-2.7.x/lib/python2.7/site-packages``
-      , where x is determined by the system Python version.
+google/protobuf is Google's serialization mechanism for structured
+data.
 
-      -  ``psycopg2`` is a PostgreSQL database adapter
-      -  ``google/protobuf`` is Google's serialization mechanism for
-         structured data.
-      -  ``mgrs`` provides conversion to and from MGRS
-      -  ``GDAL`` (Geospatial Data Abstraction Library) Python library
+mgrs provides conversion to and from MGRS
 
-      .. rubric:: Add a Python library
+GDAL (Geospatial Data Abstraction Library) Python library
 
-      You can add a Python library to either the system Python path, or
-      to the ``/opt/google/gepython/Python-2.7.x`` path for it to be
-      enabled with GEE. One of the easiest ways to install a Python
-      library is to use the Python package tool, ``pip``. You may also
-      need to consider any other dependencies for your newly installed
-      library.
+-[ Add a Python library ]-
 
-.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
-   :width: 130px
-   :height: 44px
+You can add a Python library to either the system Python path, or to
+the "/opt/google/gepython/Python-2.7.x" path for it to be enabled with
+GEE. One of the easiest ways to install a Python library is to use the
+Python package tool, "pip". You may also need to consider any other
+dependencies for your newly installed library.
