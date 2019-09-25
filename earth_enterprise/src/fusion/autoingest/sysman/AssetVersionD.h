@@ -72,15 +72,15 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   // since AssetVersionImpl is a virtual base class
   // my derived classes will initialize it directly
   // therefore I don't need a contructor from storage
-  AssetVersionImplD(void) : AssetVersionImpl(), verholder(0) { }
+  AssetVersionImplD(void) : AssetVersionImpl(), verholder(nullptr) { }
 
   // used when being contructed from an asset
   // these are the inputs I need to bind and attach to
   AssetVersionImplD(const std::vector<SharedString> &inputs);
 
   void AddInputAssetRefs(const std::vector<SharedString> &inputs_);
-  AssetDefs::State StateByInputs(bool *blockersAreOffline = 0,
-                                 uint32 *numWaiting = 0) const;
+  AssetDefs::State StateByInputs(bool *blockersAreOffline = nullptr,
+                                 uint32 *numWaiting = nullptr) const;
   template<bool propagate = true>
   void SetState(AssetDefs::State newstate, const std::shared_ptr<StateChangeNotifier> = nullptr);
   void SetProgress(double newprogress);
@@ -111,7 +111,7 @@ class AssetVersionImplD : public virtual AssetVersionImpl
     }
   }
   virtual void SetMyStateOnly(AssetDefs::State newstate, bool sendNotifications);
-  bool OkToClean(std::vector<std::string> *wouldbreak = 0) const;
+  bool OkToClean(std::vector<std::string> *wouldbreak = nullptr) const;
   bool OkToCleanAsInput(void) const;
   void SetBad(void);
   void ClearBad(void);

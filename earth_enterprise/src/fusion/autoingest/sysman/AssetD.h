@@ -29,9 +29,6 @@ class AssetImplD : public virtual AssetImpl
   friend class DerivedAssetHandle_<Asset, AssetImplD>;
   friend class MutableAssetHandleD_<DerivedAssetHandle_<Asset, AssetImplD> >;
 
-  // private and unimplemented -- illegal to copy an AssetImplD
-  AssetImplD(const AssetImplD&);
-  AssetImplD& operator=(const AssetImplD&);
  protected:
   AssetImplD(void) : AssetImpl() { }
   AssetImplD(const AssetStorage &storage)
@@ -50,6 +47,12 @@ class AssetImplD : public virtual AssetImpl
   static MutableVersionHandleType MakeNewVersion(MutableAssetHandleType &asset, const ConfigType &config);
 
  public:
+
+  // don't allow copying/moving, better error messaging
+  AssetImplD(const AssetImplD&) = delete;
+  AssetImplD& operator=(const AssetImplD&) = delete;
+  AssetImplD(AssetImplD&&) = delete;
+  AssetImplD& operator=(AssetImplD&&) = delete;
 
   // const so can be called w/o a MutableHandle (it could already be
   // uptodate).  needed is set to true iff everything was not up to date

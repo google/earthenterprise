@@ -125,6 +125,7 @@ class ${name}AssetVersionImplD :
     friend class DerivedAssetHandleD_<${name}AssetVersion, AssetVersionD, ${name}AssetVersionImplD>;
 public:
     using AssetType = DerivedAssetHandleD_<${name}Asset, AssetD, ${name}AssetImplD>;
+    using MutableAssetType = MutableDerivedAssetHandleD_<AssetType, MutableAssetD>;
 
 
     virtual std::string GetName() const;
@@ -210,11 +211,13 @@ print $fh <<EOF;
 protected:
     static std::shared_ptr<${name}AssetImplD> Load(const std::string &ref);
 
+public: // this will nee to be looked at or MyUpdate moved to AssetFactory
     $template
     ${name}AssetVersionD MyUpdate(bool &needed
                                   $formalcachedinputarg
                                   $formalExtraUpdateArg) const;
 
+protected:
     ${name}AssetImplD(const std::string &ref_ $formaltypearg,
 		$formalinputarg
                 const khMetaData &meta_,
