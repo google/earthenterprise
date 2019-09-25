@@ -227,7 +227,8 @@ ProjectedMapProjectAssetVersionImplD::UpdateChildren(void)
       }
     }
     MutableAssetVersionD geindex =
-      AssetFactory::FindMakeAndUpdate<MutableAssetVersionD, AssetVersion>
+      //AssetFactory::FindMakeAndUpdate<MutableAssetVersionD, AssetVersion>
+      AssetFactory::FindMakeAndUpdate<MutableMapGEIndexAssetVersionD, AssetVersion>
                                           (geindexAssetName,
                                            index_input_refs,
                                            khMetaData(),
@@ -256,7 +257,8 @@ ProjectedMapProjectAssetVersionImplD::UpdateChildren(void)
               used_legends[i]));
     }
     MutableAssetVersionD layerjs =
-      AssetFactory::FindMakeAndUpdate<MutableAssetVersionD, AssetVersion>
+      //AssetFactory::FindMakeAndUpdate<MutableAssetVersionD, AssetVersion>
+      AssetFactory::FindMakeAndUpdate<MutableMapLayerJSAssetVersionD, AssetVersion>
                                           (layerJSAssetName,
                                            std::vector<SharedString>(),
                                            khMetaData(),

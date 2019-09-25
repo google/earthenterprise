@@ -213,6 +213,9 @@ namespace AssetFactory
       return asset->MyUpdate(needed);
   }
 
+ // template <class MutableVersionHandleType,class Version, class ConfigType>
+
+
   template <class MutableDerivedAssetHandleType, class ConfigType>
   MutableDerivedAssetHandleType FindAndModify(const std::string& ref_,
                                               const std::vector<SharedString>& inputs_,

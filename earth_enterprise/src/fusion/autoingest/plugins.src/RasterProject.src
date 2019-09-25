@@ -928,7 +928,7 @@ void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
             geindex_version,
             config.legend));
     MutableAssetVersionD layerjs =
-      AssetFactory::FindMakeAndUpdate<MutableAssetVersionD, AssetVersion>
+      AssetFactory::FindMakeAndUpdate<MutableMapLayerJSAssetVersionD, AssetVersion>
           (layerJSAssetName,
            std::vector<SharedString>(),
            khMetaData(),
