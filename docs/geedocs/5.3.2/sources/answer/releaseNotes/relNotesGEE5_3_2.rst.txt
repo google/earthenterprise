@@ -7,9 +7,9 @@ Open GEE 5.3.2 is currently in development
 
 Documentation overhaul
 
-. All documentation were migrated to be Sphinx format making it easier
-for editing and maintenance. User documentation file names were also
-migrated from number based naming convention to self explanatory
+. All documentation was migrated to Sphinx format, making it easier to
+edit and maintain. User documentation file names were also migrated
+from number-based naming convention to self-explanatory descriptive
 titles.
 
 KML validation in cutter
@@ -90,7 +90,7 @@ last step when using HTTPS  Used the advanced configuration to set a
 URL that will be used when cutter tries to make an openurl call.  1398
 System manager crashed because of casting asset version to asset
 Fixed the invalid cast.  1401  No notification when cache size is
-exceeded causing performance issues  Added Loging record when cache
+exceeded causing performance issues  Added a logging record when cache
 size is exceeded.  1404  WMS fails using HTTPS  Skipped the internal
 Certificate Verification.  1414  Version files should not be included
 in scons cache  Removed version files from scons cache.  1420  Build

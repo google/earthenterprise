@@ -12,10 +12,10 @@ Release notes: Open GEE 5.3.2
 
       .. rubric:: New Features
 
-      **Documentation overhaul**. All documentation were migrated to be
-      Sphinx format making it easier for editing and maintenance. User 
-      documentation file names were also migrated from number based naming 
-      convention to self explanatory titles.
+      **Documentation overhaul**. All documentation was migrated to
+      Sphinx format, making it easier to edit and maintain. User 
+      documentation file names were also migrated from number-based naming 
+      convention to self-explanatory descriptive titles.
 
       **KML validation in cutter**. Basic validation is now performed
       on KML that is pasted into the cutter tool.
@@ -93,7 +93,7 @@ Release notes: Open GEE 5.3.2
            - Fixed the invalid cast.
          * - 1401
            - No notification when cache size is exceeded causing performance issues
-           - Added Loging record when cache size is exceeded.           
+           - Added a logging record when cache size is exceeded.           
          * - 1404
            - WMS fails using HTTPS
            - Skipped the internal Certificate Verification. 
