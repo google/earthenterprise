@@ -127,13 +127,13 @@ Ubuntu.</li>
 <p class="rubric" id="to-configure-client-authentication-for-postgresql">To configure client authentication for PostgreSQL:</p>
 <ol class="arabic">
 <li><p class="first">Connect to the PostgreSQL server:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sudo su - postgres
+<div class="highlight-none notranslate"><div class="highlight"><pre>sudo su - postgres
 psql --port=5433
 </pre></div>
 </div>
 </li>
 <li><p class="first">Create the database and user:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>CREATE USER geeuser WITH PASSWORD &#39;geeuserpasswd&#39;;
+<div class="highlight-none notranslate"><div class="highlight"><pre>CREATE USER geeuser WITH PASSWORD &#39;geeuserpasswd&#39;;
 CREATE DATABASE geeauthdb;
 GRANT ALL PRIVILEGES ON DATABASE geeauthdb to mypguser;
 \q
@@ -141,7 +141,7 @@ GRANT ALL PRIVILEGES ON DATABASE geeauthdb to mypguser;
 </div>
 </li>
 <li><p class="first">Create a table to store the passwords:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>psql --port=5433 --username=geeuser geauthdb
+<div class="highlight-none notranslate"><div class="highlight"><pre>psql --port=5433 --username=geeuser geauthdb
 CREATE TABLE geepasswd (username varchar(32) NOT NULL, realm varchar(255)
 NOT NULL, passwd varchar(255) NOT NULL,
    realname varchar(255), PRIMARY KEY (username, realm));
@@ -170,7 +170,7 @@ programming languages for encrypting the password so that it is
 readable by Apache.</p>
 </li>
 <li><p class="first">Make sure the database works by inserting a test user:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>psql --port=5433 --username=geeuser geauthdb
+<div class="highlight-none notranslate"><div class="highlight"><pre>psql --port=5433 --username=geeuser geauthdb
 INSERT INTO geepasswd VALUES (&#39;jsmith&#39;, &#39;realm&#39;, encode(digest( &#39;jsmith&#39; || &#39;:&#39; || &#39;realm&#39; || &#39;:&#39; ||&#39;password&#39;, &#39;md5&#39;), &#39;hex&#39;), &#39;Jane Smith&#39;);
 \q
 </pre></div>
@@ -185,7 +185,7 @@ password from appearing in plaintext.</p>
 <p><code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/extra/pgsql-auth.conf</span></code>.</p>
 </li>
 <li><p class="first">Add these lines to the <code class="docutils literal notranslate"><span class="pre">pgsql-auth.conf</span></code> file:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>``DBDriver pgsql``
+<div class="highlight-none notranslate"><div class="highlight"><pre>``DBDriver pgsql``
 ``DBDParams &quot;hostaddr=yourpgserver port=yourport user=geuser password=yourpassword dbname=gee_auth&quot;``
 ``DBDMin 4``
 ``DBDKeep 8``
@@ -210,7 +210,7 @@ insert the line:</p>
 </li>
 <li><p class="first">Add the following lines at the beginning of the
 <code class="docutils literal notranslate"><span class="pre">&lt;Location&gt;</span></code> directive of your virtual server:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>``AuthType Digest``
+<div class="highlight-none notranslate"><div class="highlight"><pre>``AuthType Digest``
 ``AuthName &quot;realm&quot;``
 ``AuthDigestDomain &#39;/default_map/&#39;``
 ``AuthDigestProvider dbd``

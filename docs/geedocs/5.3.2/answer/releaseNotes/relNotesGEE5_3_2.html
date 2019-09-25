@@ -74,6 +74,10 @@
 <div class="content docutils container">
 <p>Open GEE 5.3.2 is currently in development</p>
 <p class="rubric">New Features</p>
+<p><strong>Documentation overhaul</strong>. All documentation was migrated to
+Sphinx format, making it easier to edit and maintain. User
+documentation file names were also migrated from number-based naming
+convention to self-explanatory descriptive titles.</p>
 <p><strong>KML validation in cutter</strong>. Basic validation is now performed
 on KML that is pasted into the cutter tool.</p>
 <p><strong>Memory and performance improvements</strong>. This version of Open GEE
@@ -91,7 +95,7 @@ following operating systems:</p>
 <li>Red Hat Enterprise Linux version 6.x and 7.x, including the
 most recent security patches</li>
 <li>CentOS 6.x and 7.x</li>
-<li>Ubuntu 14.04 LTS and 16.04 LTS</li>
+<li>Ubuntu 16.04 LTS</li>
 </ul>
 <p>Google Earth Enterprise 5.3.2 is compatible with Google Earth
 Enterprise Client (EC) version 7.1.5 and above.</p>
@@ -150,9 +154,33 @@ Also added documentation for setting up the system to aid in avoiding this probl
 <td>IE appears to perform aggressive caching, which was preventing the GET request to cmd=quit
 from making it to the server. Changing the command to be a POST request prevents this.</td>
 </tr>
-<tr class="row-even"><td>1394</td>
-<td>Upgrade PostgreSQL and PostGIS to latest patch releases</td>
-<td>The current patch releases have been incorporated.</td>
+<tr class="row-even"><td>1376</td>
+<td>Portable Globe Cutter fails the last step when using HTTPS</td>
+<td>Used the advanced configuration to set a URL that will be used when cutter tries to make an openurl call.</td>
+</tr>
+<tr class="row-odd"><td>1398</td>
+<td>System manager crashed because of casting asset version to asset</td>
+<td>Fixed the invalid cast.</td>
+</tr>
+<tr class="row-even"><td>1401</td>
+<td>No notification when cache size is exceeded causing performance issues</td>
+<td>Added a logging record when cache size is exceeded.</td>
+</tr>
+<tr class="row-odd"><td>1404</td>
+<td>WMS fails using HTTPS</td>
+<td>Skipped the internal Certificate Verification.</td>
+</tr>
+<tr class="row-even"><td>1414</td>
+<td>Version files should not be included in scons cache</td>
+<td>Removed version files from scons cache.</td>
+</tr>
+<tr class="row-odd"><td>1420</td>
+<td>Build should honor JAVA_HOME when creating rpm packages</td>
+<td>Honored JAVA_HOME</td>
+</tr>
+<tr class="row-even"><td>1447</td>
+<td>Compiler error: “FieldGenerator.h not found” when compiling using scons cache</td>
+<td>Called Depends() for generated header files used by geautoingest</td>
 </tr>
 </tbody>
 </table>
