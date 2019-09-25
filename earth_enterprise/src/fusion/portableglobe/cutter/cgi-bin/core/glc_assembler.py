@@ -29,6 +29,7 @@ import urllib
 import yaml
 from common import utils
 import common.configs
+from lxml import etree
 
 
 CONFIG_FILE = "/opt/google/gehttpd/cgi-bin/advanced_cutter.cfg"
@@ -601,8 +602,14 @@ class GlcAssembler(object):
       utils.PrintAndLog("SUCCESS", logger, None)
 
       utils.PrintAndLog("Create polygon file: %s" % self.polygon_file, logger)
-      utils.CreateFile(self.polygon_file, spec["polygon"])
-      utils.PrintAndLog("SUCCESS", logger, None)
+
+      with open(self.polygon_file, "w") as fp:
+        # Check XML validity and standardize representation
+        utils.PrintAndLog("Checking polygon")
+        xml = etree.ElementTree(etree.fromstring(str(spec["polygon"])))
+        utils.PrintAndLog("Writing polygon")
+        xml.write(fp, xml_declaration=True, encoding='UTF-8')
+        utils.PrintAndLog("SUCCESS", logger, None)
 
       if spec["is_2d"]:
         utils.PrintAndLog("Building 2d glc at %s ..." % path, logger)
