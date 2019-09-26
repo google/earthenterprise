@@ -748,10 +748,10 @@ gees.admin.databaseView = {
         }
 
         for (var i = 0; i < searchDrops.length; i++) {
-          var defaultMsg = '-- add a search tab --';
+          var defaultMsg = 'add a search tab';
           var select = searchDrops[i];
           var searchValue = select.options[select.selectedIndex].value;
-          if (searchValue != defaultMsg) {
+          if (searchValue.indexOf(defaultMsg) == -1) {
             var alreadySelected = tabsInUse.indexOf(searchValue) != -1;
             if (!alreadySelected) {
               count += 1;
