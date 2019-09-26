@@ -49,9 +49,9 @@ class TaskLists {
   uint32 num_assets_cached = uint32(0);
   // Number of asset versions cached.
   uint32 num_assetversions_cached = uint32(0);
-  // Total memory used by cached assets
+  // Approx. memory used by cached assets
   uint64 asset_cache_memory = uint64(0);
-  // Total memory used by cached asset versions
+  // Approx. memory used by cached asset versions
   uint64 version_cache_memory = uint64(0);
   // Number of strings in SharedString string store
   size_t str_store_size = size_t(0);

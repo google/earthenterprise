@@ -17,6 +17,7 @@
 #include <vector>
 #include <khTypes.h>
 #include <geindex/Entries.h>
+#include "CacheSizeCalculations.h"
 
 // ****************************************************************************
 // ***  MapGEIndex
@@ -39,6 +40,13 @@ class MapGEIndexConfig {
   std::string db_name_;
   IsUpToDateIgnore uint32 index_version_;
   std::vector<Layer> layers_;
+#hquote
+  uint64 GetSize() {
+    return GetObjectSize(db_name_)
+            + (uint64)sizeof(uint32)
+            + GetObjectSize(layers_);
+  }
+#/hquote
 
 #pragma GenerateIsUpToDate
 };

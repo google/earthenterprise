@@ -19,6 +19,7 @@
 #include <khMetaData.h>
 #include <searchtabs/.idl/SearchTabs.h>
 #include <autoingest/.idl/storage/SearchTabReference.h>
+#include "CacheSizeCalculations.h"
 
 #cppquote
 #include <searchtabs/.idl/SearchTabs_impl.h>
@@ -52,7 +53,16 @@ class MapDatabaseConfig {
   void ResetIds(void) {
     indexVersion = 1;
   }
-
+  uint64 GetSize() {
+    return GetObjectSize(imageryProject)
+            + GetObjectSize(mapProject)
+            + (uint64)sizeof(uint)
+            + (uint64)sizeof(bool)
+            + GetObjectSize(search_tabs_)
+            + GetObjectSize(search_tab_refs_)
+            + GetObjectSize(useGoogleImagery)
+            + GetObjectSize(is_mercator);
+  }
 #/hquote
 };
 

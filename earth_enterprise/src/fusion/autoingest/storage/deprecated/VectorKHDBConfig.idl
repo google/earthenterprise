@@ -15,6 +15,7 @@
 #include <string>
 #include <vector>
 #include <khTypes.h>
+#include "CacheSizeCalculations.h"
 
 
 class VectorPackVersion {
@@ -28,6 +29,14 @@ class VectorKHDBConfig {
   IsUpToDateIgnore std::vector<VectorPackVersion> packvers;
   std::vector<std::string> customIcons;
   std::vector<std::string> layerIcons = std::vector<std::string>(0, std::string());
-
+#hquote
+  uint64 GetSize() {
+    return GetObjectSize(dbname)
+            + (uint64)sizeof(uint)
+            //+ GetObjectSize(layerIcons)
+            + GetObjectSize(customIcons)
+            + GetObjectSize(layerIcons);
+  }
+#/hquote
 #pragma GenerateIsUpToDate
 };

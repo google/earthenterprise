@@ -19,6 +19,7 @@
 #include <khMetaData.h>
 #include <searchtabs/.idl/SearchTabs.h>
 #include <autoingest/.idl/storage/SearchTabReference.h>
+#include "CacheSizeCalculations.h"
 
 #cppquote
 #include <searchtabs/.idl/SearchTabs_impl.h>
@@ -68,6 +69,16 @@ class DatabaseConfig {
     indexVersion = 1;
   }
 
+  uint64 GetSize() {
+    return GetObjectSize(imageryProject)
+            + GetObjectSize(vectorProject)
+            + GetObjectSize(terrainProject)
+            + (uint64)sizeof(std::string)
+            + (uint64)sizeof(uint)
+            + (uint64)sizeof(bool)
+            + GetObjectSize(search_tabs_)
+            + GetObjectSize(search_tab_refs_);
+  }
 #/hquote
 };
 

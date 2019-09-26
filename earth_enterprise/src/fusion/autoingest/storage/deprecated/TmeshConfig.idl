@@ -15,12 +15,20 @@
 
 #include <string>
 #include <khTypes.h>
+#include "CacheSizeCalculations.h"
 
 class TmeshConfig {
   std::string extentsAsset;
   uint startLevel;
   uint endLevel = uint(0);  // 0 -> as deep as necessary
   uint simplifyStartLevel = uint(32);
-
+#hquote
+  uint64 GetSize() {
+    return GetObjectSize(extentsAsset)
+            + GetObjectSize(startLevel)
+            + GetObjectSize(endLevel)
+            + GetObjectSize(simplifyStartLevel);
+  }
+#/hquote
 #pragma GenerateIsUpToDate
 };

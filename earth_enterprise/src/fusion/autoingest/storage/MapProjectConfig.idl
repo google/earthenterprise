@@ -16,6 +16,7 @@
 #include <autoingest/.idl/storage/MapLayerConfig.h>
 #include <autoingest/.idl/storage/LayerLegend.h>
 #include <searchtabs/.idl/SearchTabs.h>
+#include "CacheSizeCalculations.h"
 
 #cppquote
 #include <autoingest/.idl/storage/MapLayerConfig_impl.h>
@@ -42,6 +43,10 @@ class MapProjectConfig {
   void AddLayer(const LayerItem& layer_item);
   void DeleteLayer(const LayerItem& layer_item);
   bool HasSearchFields(void) const;
+  uint64 GetSize() {
+    return GetObjectSize(layers)
+            + GetObjectSize(poi_search_tab_overrides);
+  }
 #/hquote
 
 #cppquote

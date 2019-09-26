@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #include <autoingest/.idl/storage/AssetDefs.h>
+#include "CacheSizeCalculations.h"
 
 #cppquote
 #include <autoingest/.idl/storage/AssetDefs_impl.h>
@@ -21,6 +22,11 @@
 
 class ProjectedMapLayerConfig {
   AssetDefs::Projection   projection_
+#hquote
+  uint64 GetSize() {
+    return GetObjectSize(projection_);
+  }
+#/hquote
 
 #pragma GenerateIsUpToDate
 };

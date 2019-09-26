@@ -16,6 +16,7 @@
 #include <vector>
 #include <autoingest/.idl/storage/LayerConfig.h>
 #include <autoingest/.idl/storage/VectorProjectConfig.h>
+#include "CacheSizeCalculations.h"
 
 #cppquote
 #include <autoingest/.idl/storage/LayerConfig_impl.h>
@@ -33,6 +34,15 @@ class VectorDBRootConfig {
   std::vector<uint32> providers = std::vector<uint32>();
 
   deprecated xmlattr int config_version_ = 0;
+
+#hquote
+  uint64 GetSize() {
+    return (uint64)sizeof(VectorProjectConfig::Standard)
+            + GetObjectSize(layers)
+            + GetObjectSize(providers)
+            + (uint64)sizeof(int);
+  }
+#/hquote
 
   // To force rebuilds, increment this version.
   // When incrementing this version, you should also increment the
@@ -64,6 +74,14 @@ class DBRootGenConfig {
   { }
                                           
   void AfterLoad(const DBRootGenConfig::DeprecatedMembers &deps);
+
+  uint64 GetSize() {
+    return (uint64)sizeof(VectorProjectConfig::Standard)
+            + GetObjectSize(layers)
+            //+ (uint64)sizeof(std::vector<std::string>())
+            + GetObjectSize(layerLODFiles)
+            + GetObjectSize(layerProviderIds);
+  }
 #/hquote
 
 #cppquote

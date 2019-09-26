@@ -19,6 +19,7 @@
 #include <autoingest/.idl/storage/AssetDefs.h>
 #include <autoingest/.idl/storage/MaskgenConfig.h>
 #include <autoingest/.idl/storage/SourceConfig.h>
+#include "CacheSizeCalculations.h"
 
 #cppquote
 #include <autoingest/.idl/storage/AssetDefs_impl.h>
@@ -97,6 +98,28 @@ class RasterProductConfig {
     fuid_resource_ = 0;
   }
 
+  uint64 GetSize() {
+    return GetObjectSize(fill)
+          + GetObjectSize(srs)
+          + GetObjectSize(scale)
+          + GetObjectSize(clampNonnegative)
+          + (uint64)sizeof(uint)
+          + (uint64)sizeof(MaskgenConfig::Mask)
+          + GetObjectSize(nomask)
+          + GetObjectSize(havemask)
+          + GetObjectSize(sourceIsProduct)
+          + (uint64)sizeof(bool)
+          + GetObjectSize(lutfile)
+          + maskgenConfig.GetSize()
+          + GetObjectSize(mosaicFillTolerance)
+          + GetObjectSize(fuid_resource_)
+          + GetObjectSize(provider_id_)
+          + GetObjectSize(useMercatorProjection)
+          + GetObjectSize(north_boundary)
+          + GetObjectSize(south_boundary)
+          + GetObjectSize(east_boundary)
+          + GetObjectSize(west_boundary);
+  }
 #/hquote
 };
 

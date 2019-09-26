@@ -18,6 +18,7 @@
 #include <khTypes.h>
 #include <autoingest/.idl/storage/DatedImageryIndexInfo.h>
 #include "common/SharedString.h"
+#include "CacheSizeCalculations.h"
 
 #cppquote
 #include <autoingest/.idl/storage/DatedImageryIndexInfo_impl.h>
@@ -43,6 +44,18 @@ class QTPacketConfig {
   // Store the dated imagery indexes for timemachine imagery.
   // Only useful for QTPacket2 generator, ignored by QTPacket generator.
   std::vector<DatedImageryIndexInfo> dated_imagery_indexes_ = std::vector<DatedImageryIndexInfo>();
+#hquote
+  uint64 GetSize() {
+    return (uint64)sizeof(uint)
+            + GetObjectSize(imagery_verref_)
+            + GetObjectSize(terrain_verref_)
+            + GetObjectSize(vector_verref_)
+            + GetObjectSize(imageryproj_verref_)
+            + GetObjectSize(terrainproj_verref_)
+            + GetObjectSize(imagery_date_string_)
+            + GetObjectSize(dated_imagery_indexes_);
+  }
+#/hquote
 
   // Note: Basic rule for #version: "If the low level tool ever
   // changes to produce different output from the same config record, then

@@ -15,6 +15,7 @@
 #include <string>
 #include <vector>
 #include <khTypes.h>
+#include "CacheSizeCalculations.h"
 
 class FuseVersion {
   std::string fuseAsset;
@@ -27,6 +28,12 @@ class RasterKHDBConfig {
   std::string dbname;
   IsUpToDateIgnore uint indexVersion;
   std::vector<FuseVersion> fusevers;
-
+#hquote
+  uint64 GetSize() {
+    return GetObjectSize(dbname)
+            + (uint64)sizeof(uint)
+            + GetObjectSize(fusevers);
+  }
+#/hquote
 #pragma GenerateIsUpToDate
 };

@@ -140,7 +140,7 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   }
 
   // determine amount of memory used by an AssetVersionImpl
-  uint64 GetSize() {
+  virtual uint64 GetSize() {
     return (GetObjectSize(name)
     + GetObjectSize(type)
     + GetObjectSize(subtype)

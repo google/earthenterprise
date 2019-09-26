@@ -16,6 +16,7 @@
 #include <string>
 #include <vector>
 #include <khTypes.h>
+#include "CacheSizeCalculations.h"
 
 
 // ****************************************************************************
@@ -34,6 +35,15 @@ class VectorGEIndexConfig {
   IsUpToDateIgnore std::vector<VectorPacketVersion> packet_vers_;
   deprecated std::vector<std::string> custom_icons_ = std::vector<std::string>();
   deprecated std::vector<std::string> layer_icons_ = std::vector<std::string>();
+
+#hquote
+  uint64 GetSize() {
+    return GetObjectSize(db_name_)
+            + (uint64)sizeof(uint32);
+            //+ (uint64)sizeof(std::vector<std::string>())
+            //+ (uint64)sizeof(std::vector<std::string>());
+  }
+#/hquote
 
 #pragma GenerateIsUpToDate
 };

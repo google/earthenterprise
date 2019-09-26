@@ -14,6 +14,7 @@
 
 
 #include <autoingest/.idl/storage/LayerLegend.h>
+#include "CacheSizeCalculations.h"
 
 #cppquote
 #include <autoingest/.idl/storage/LayerLegend_impl.h>
@@ -48,6 +49,11 @@ class MapLayerJSConfig {
 #/hquote
 
   };
+#hquote
+  uint64 GetSize() {
+    return GetObjectSize(layers_);
+  }
+#/hquote
 
   std::vector<Layer> layers_;
 

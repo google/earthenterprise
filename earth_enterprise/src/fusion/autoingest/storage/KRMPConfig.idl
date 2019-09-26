@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #include <string>
+#include "CacheSizeCalculations.h"
 
 // ****************************************************************************
 // ***  KRMP - Keyhole Raster Mask Product (low level)
@@ -20,6 +21,12 @@
 class KRMPConfig {
   std::string overridesrs = std::string();
   bool useMercatorProjection = false;
+#hquote
+  uint64 GetSize() {
+    return GetObjectSize(overridesrs)
+            + GetObjectSize(useMercatorProjection);
+  }
+#/hquote
 
 #pragma GenerateIsUpToDate
 };

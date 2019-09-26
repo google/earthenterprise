@@ -14,6 +14,7 @@
 
 
 #include <string>
+#include "CacheSizeCalculations.h"
 
 // ****************************************************************************
 // ***  KRP - Keyhole Raster Product (low level, Imagery & Terrain)
@@ -28,6 +29,20 @@ class KRPConfig {
   double south_boundary = new:-90.0, load:-90.0;
   double east_boundary = new:180.0, load:180.0;
   double west_boundary = new:-180.0, load:-180.0;
+
+#hquote
+  uint64 GetSize() {
+    return GetObjectSize(scale)
+            + GetObjectSize(clampNonnegative)
+            + (uint64)sizeof(bool)
+            + GetObjectSize(overridesrs)
+            + GetObjectSize(useMercatorProjection)
+            + GetObjectSize(north_boundary)
+            + GetObjectSize(south_boundary)
+            + GetObjectSize(east_boundary)
+            + GetObjectSize(west_boundary);
+  }
+#/hquote
 
 #pragma GenerateIsUpToDate
 };

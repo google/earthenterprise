@@ -13,10 +13,16 @@
 // limitations under the License.
 
 #include <string>
+#include "CacheSizeCalculations.h"
 
 class ReprojectConfig {
   std::string srs;
   bool ispalette;
-
+#hquote
+  uint64 GetSize() {
+    return GetObjectSize(srs)
+            + GetObjectSize(ispalette);
+  }
+#/hquote
 #pragma GenerateIsUpToDate
 };

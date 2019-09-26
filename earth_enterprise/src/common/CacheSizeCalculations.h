@@ -19,6 +19,7 @@
 #include "khTypes.h"
 #include <memory>
 #include <vector>
+#include "notify.h"
 
 // determine amount of memory used by generic objects
 template<class T>

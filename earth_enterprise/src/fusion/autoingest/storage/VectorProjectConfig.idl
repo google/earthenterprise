@@ -19,6 +19,7 @@
 #include <khMetaData.h>
 #include <autoingest/.idl/storage/LayerConfig.h>
 #include <searchtabs/.idl/SearchTabs.h>
+#include "CacheSizeCalculations.h"
 
 #cppquote
 #include <autoingest/.idl/storage/LayerConfig_impl.h>
@@ -78,6 +79,13 @@ class VectorProjectConfig {
   void CheckIds(void) const;
   void AfterLoad(const VectorProjectConfig::DeprecatedMembers &depmembers);
   bool HasSearchFields(void) const;
+  uint64 GetSize() {
+    return GetObjectSize(serverType)
+            + (uint64)sizeof(uint)
+            + GetObjectSize(layers)
+            + (uint64)sizeof(QString(""))
+            + GetObjectSize(poi_search_tab_overrides);
+  }
 #/hquote
 
 #cppquote

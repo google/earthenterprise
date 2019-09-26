@@ -17,6 +17,7 @@
 #include <vector>
 #include <khTypes.h>
 #include <khMetaData.h>
+#include "CacheSizeCalculations.h"
 
 class KMLProjectConfig {
   class LayerItem {
@@ -49,6 +50,12 @@ class KMLProjectConfig {
     indexVersion = 1;
   }
 
+  uint64 GetSize() {
+    return (uint64)sizeof(uint)
+            + GetObjectSize(layers)
+            + (uint64)sizeof(uint)
+            + (uint64)sizeof(uint);
+  }
 #/hquote
 
 #cppquote

@@ -17,6 +17,7 @@
 #include <vector>
 #include <khTypes.h>
 #include <searchtabs/.idl/SearchTabs.h>
+#include "CacheSizeCalculations.h"
 
 #cppquote
 #include <searchtabs/.idl/SearchTabs_impl.h>
@@ -32,6 +33,18 @@ class GEDBAssetConfig {
   uint database_version_;
   deprecated bool search_tabs_enabled_ = true;
   deprecated std::string fusion_version_ = std::string();
+#hquote
+  uint64 GetSize() {
+    return GetObjectSize(index_verref_)
+            + GetObjectSize(vector_project_)
+            + GetObjectSize(imagery_project_)
+            + GetObjectSize(terrain_project_)
+            + GetObjectSize(search_tabs_)
+            + GetObjectSize(database_version_)
+            + (uint64)sizeof(bool)
+            + (uint64)sizeof(std::string);
+  }
+#/hquote
 
 // To force rebuilds, increment this version.
 // When incrementing this version, you should also increment the

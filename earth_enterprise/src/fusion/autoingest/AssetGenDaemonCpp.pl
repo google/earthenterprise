@@ -86,6 +86,8 @@ print $fh <<EOF;
 #include <AssetThrowPolicy.h>
 #include "AssetOperation.h"
 #include <fusion/autoingest/AssetFactory.h>
+#include <typeinfo>
+#include <type_traits>
 using namespace khxml;
 using namespace AssetFactory;
 EOF
@@ -331,6 +333,12 @@ std::string ${name}AssetImplD::GetName() const
 void ${name}AssetImplD::SerializeConfig(DOMElement *top) const
 {
     AddConfig(top, config);
+}
+
+uint64 ${name}AssetImplD::GetSize() {
+    uint64 size = sizeof(config);
+    notify(NFY_WARN, "AssetImplD: %lu, %s, %lu", size, typeid(config).name(), config.GetSize());
+    return ${name}AssetImpl::GetSize() + size;
 }
 
 extern void ToElement(DOMElement *elem, const AssetStorage &self);
@@ -617,6 +625,12 @@ std::string ${name}AssetVersionImplD::GetName() const
 void ${name}AssetVersionImplD::SerializeConfig(DOMElement *top) const
 {
     AddConfig(top, config);
+}
+
+uint64 ${name}AssetVersionImplD::GetSize() {
+    uint64 size = sizeof(config);
+    notify(NFY_WARN,"AssetVersionImplD: %lu, %s, %lu", size, typeid(config).name(), config.GetSize());
+    return ${name}AssetVersionImpl::GetSize() + config.GetSize();
 }
 
 extern void ToElement(DOMElement *elem, const AssetVersionStorage &self);

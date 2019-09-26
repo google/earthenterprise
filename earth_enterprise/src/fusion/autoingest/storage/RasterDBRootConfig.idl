@@ -19,6 +19,7 @@
 #include <set>
 #include <khTypes.h>
 #include "LayerLegend.h"
+#include "CacheSizeCalculations.h"
 
 #cppquote
 #include "LayerLegend_impl.h"
@@ -38,6 +39,12 @@ class RasterDBRootAssetConfig {
 
   std::vector<RasterDBRootAssetConfig::Layer> layers_;
   std::set<uint32> used_provider_ids_;
+#hquote
+  uint64 GetSize() {
+    return GetObjectSize(layers_)
+            + GetObjectSize(used_provider_ids_);
+  }
+#/hquote
 
   // To force rebuilds, increment this version.
   // When incrementing this version, you should also increment the
@@ -60,6 +67,12 @@ class RasterDBRootGenConfig {
   };
   std::vector<RasterDBRootGenConfig::Layer> layers_;
   std::set<uint32>                          used_provider_ids_;
+#hquote
+  uint64 GetSize() {
+    return GetObjectSize(layers_)
+            + GetObjectSize(used_provider_ids_);
+  }
+#/hquote
 
 #pragma LoadAndSave
 };
