@@ -1,159 +1,141 @@
-|Google logo|
 
-==========================
 Add custom search services
-==========================
 
-.. container::
+If you want to access a custom data source, you can create your own
+search plug-in and access it as a search tab definition in Google
+Earth Enterprise Server. A custom search plug-in will create requests
+and responses using the common Python-based search framework, letting
+you adapt your search to any data source. Your custom search plug-in
+will receive search requests directly from Google Earth Enterprise
+Client (EC), or any other clients in the form of URL parameters.
 
-   .. container:: content
+For example, with custom search plug-ins you can use Maps API and
+Places API to leverage the power of their data sets. You can also use
+a proprietary database, e.g., power conversion sites, then search for
+the sites using internal IDs or city names.
 
-      If you want to access a custom data source, you can create your
-      own search plug-in and access it as a search tab definition in
-      Google Earth Enterprise Server. A custom search plug-in will
-      create requests and responses using the common Python-based search
-      framework, letting you adapt your search to any data source. Your
-      custom search plug-in will receive search requests directly from
-      Google Earth Enterprise Client (EC), or any other clients in the
-      form of URL parameters.
+A custom search plug-in may also provide a solution if you want to
+search data that is not on your Google Earth Enterprise Server or you
+want to combine Google Earth Enterprise databases in new ways. For
+example, you may want to combine a Places search with your own vector
+point data set, enabling your users to search by city name or facility
+name. The custom search plug-in would forward your request to both the
 
-      For example, with custom search plug-ins you can use Maps API and
-      Places API to leverage the power of their data sets. You can also
-      use a proprietary database, e.g., power conversion sites,
-      then search for the sites using internal IDs or city names.
+POI Search
 
-      A custom search plug-in may also provide a solution if you want to
-      search data that is not on your Google Earth Enterprise Server or
-      you want to combine Google Earth Enterprise databases in new ways.
-      For example, you may want to combine a Places search with your own
-      vector point data set, enabling your users to search by city name
-      or facility name. The custom search plug-in would
-      forward your request to both the **POI Search** plug-in and the
-      **Places** plug-in and return a merged set.
+ plug-in and the
 
-      .. note::
+Places
 
-         **Note:** Google Maps API and Places API access services over
-         the internet, and require licenses to use.
+ plug-in and return a merged set.
 
-      .. note::
+Note: Google Maps API and Places API access services over the
+  internet, and require licenses to use.
 
-         **Note:** You will need some familiarity with Python to work
-         with custom search plug-ins.
+Note: You will need some familiarity with Python to work with custom
+  search plug-ins.
 
-      -  :ref:`Configure search queries for Google Earth EC and Google
-         Maps <Configure_Search_Queries_GEEC_Maps>`
-      -  :ref:`Access Search Plug-ins <Access_Search_Plugins>`
-      -  :ref:`Implement your custom search plug-in <Implement_Custom_Search_Plugin>`
+Configure search queries for Google Earth EC and Google Maps
 
-      .. _Configure_Search_Queries_GEEC_Maps:
-      .. rubric:: Configure search queries for Google Earth EC and
-         Google Maps
+Access Search Plug-ins
 
-      Any web service, servlet, or web application you configure the
-      search tabs to query:
+Implement your custom search plug-in
 
-      -  Must return valid KML to Google Earth EC.
-      -  Must return valid JSONP in the specified structure.
+-[ Configure search queries for Google Earth EC and Google Maps ]-
 
-         .. container:: alert
+Any web service, servlet, or web application you configure the search
+tabs to query:
 
-            Because search tabs are returned as JSONP, they must
-            originate from the same server as the HTML page containing
-            the 2D map.
+Must return valid KML to Google Earth EC.
 
-      .. _Access_Search_Plugins:
-      .. rubric:: Access Search Plug-ins
+Must return valid JSONP in the specified structure.
 
-      The Google Earth Enterprise search plug-ins are stored in a
-      default directory that you can use to add or delete your custom
-      plug-ins as required. You can also modify the configuration
-      file \ ``/opt/google/gehttpd/conf.d/mod_wsgi-ge.conf`` to
-      register new search plug-ins with Google Earth Enterprise Server
-      instead of creating search tabs. The configuration file provides a
-      convenient method for managing search plug-ins with scripts, for
-      example, to register newly created plug-in endpoints so that they
-      can be accessible when you view your database in Google Earth EC.
+Warning: Because search tabs are returned as JSONP, they must
+  originate from the same server as the HTML page containing the 2D
+  map.
 
-      You can access the plug-ins that are installed with Google Earth
-      Enterprise Server at:
+-[ Access Search Plug-ins ]-
 
-      ``/opt/google/gehttpd/wsgi-bin/search/plugin``
+The Google Earth Enterprise search plug-ins are stored in a default
+directory that you can use to add or delete your custom plug-ins as
+required. You can also modify the configuration file
+"/opt/google/gehttpd/conf.d/mod_wsgi-ge.conf" to register new search
+plug-ins with Google Earth Enterprise Server instead of creating
+search tabs. The configuration file provides a convenient method for
+managing search plug-ins with scripts, for example, to register newly
+created plug-in endpoints so that they can be accessible when you view
+your database in Google Earth EC.
 
-      For example, access ``/gesearch/ExampleSearch`` in your browser as
-      follows:
+You can access the plug-ins that are installed with Google Earth
+Enterprise Server at:
 
-      ``http://your.gee.server/gesearch/ExampleSearch``
+"/opt/google/gehttpd/wsgi-bin/search/plugin"
 
-      The plug-in end points are for Google Earth Enterprise search
-      plug-ins are defined in
-      ``/opt/google/gehttpd/conf.d/mod_wsgi-ge.conf``.
+For example, access "/gesearch/ExampleSearch" in your browser as
+follows:
 
-      ::
+"http://your.gee.server/gesearch/ExampleSearch"
 
-         # Handles Places search requests.
-           WSGIScriptAlias /gesearch/PlacesSearch /opt/google/gehttpd/wsgi-bin/search/plugin/geplaces_search_app.py
-           # Handles Coordinate search requests.
-           WSGIScriptAlias /gesearch/CoordinateSearch /opt/google/gehttpd/wsgi-bin/search/plugin/coordinate_search_app.py
-           # Handles Federated search requests.
-           WSGIScriptAlias /gesearch/FederatedSearch /opt/google/gehttpd/wsgi-bin/search/plugin/federated_search_app.py
-           # Handles Example search requests.
-           WSGIScriptAlias /gesearch/ExampleSearch /opt/google/gehttpd/wsgi-bin/search/plugin/example_search_app.py
-           # Handles POI search requests.
-           WSGIScriptAlias /POISearch /opt/google/gehttpd/wsgi-bin/search/plugin/poi_search_app.py 
+The plug-in end points are for Google Earth Enterprise search plug-ins
+are defined in "/opt/google/gehttpd/conf.d/mod_wsgi-ge.conf".
 
-      .. _Implement_Custom_Search_Plugin:
-      .. rubric:: Implement a custom search plug-in
+   # Handles Places search requests.
+     WSGIScriptAlias /gesearch/PlacesSearch /opt/google/gehttpd/wsgi-bin/search/plugin/geplaces_search_app.py
+     # Handles Coordinate search requests.
+     WSGIScriptAlias /gesearch/CoordinateSearch /opt/google/gehttpd/wsgi-bin/search/plugin/coordinate_search_app.py
+     # Handles Federated search requests.
+     WSGIScriptAlias /gesearch/FederatedSearch /opt/google/gehttpd/wsgi-bin/search/plugin/federated_search_app.py
+     # Handles Example search requests.
+     WSGIScriptAlias /gesearch/ExampleSearch /opt/google/gehttpd/wsgi-bin/search/plugin/example_search_app.py
+     # Handles POI search requests.
+     WSGIScriptAlias /POISearch /opt/google/gehttpd/wsgi-bin/search/plugin/poi_search_app.py
 
-      You implement a custom search plug-in by creating your own
-      Python search application using WSGI, then registering the new
-      search plug-in so that it can be added as you publish databases.
+-[ Implement a custom search plug-in ]-
 
-      .. rubric:: To implement your custom search plug-in:
+You implement a custom search plug-in by creating your own Python
+search application using WSGI, then registering the new search plug-in
+so that it can be added as you publish databases.
 
-      #. Create your search application, using the WSGI framework. See
-         the :doc:`ExampleSearch Python module <../geeServerAdmin/exampleSearchPluginSample>`
-         for example code.
-      #. Locate your search plug-in, for example ``custom_search.py``,
-         in the ``/opt/google/gehttpd/wsgi-bin/search/plugin/``
-         directory.
-      #. Register your plug-in by adding its definition in the Python
-         module configuration file:
-         ``/opt/google/gehttpd/conf.d/mod_wsgi-ge.conf``. Your
-         registration in the configuration file should look something
-         like the following:
+-[ To implement a custom search plug-in: ]-
 
-         ``# Handles My Custom search requests.         WSGIScriptAlias /gesearch/CustomSearch /opt/google/gehttpd/wsgi-bin/search/plugin/mycustom_search_app.py``
+Create your search application, using the WSGI framework. See the
+Example Search Python module for example code.
 
-      #. Restart Google Earth Enterprise Server:
+Locate your search plug-in, for example custom_search.py, in the
+/opt/google/gehttpd/wsgi-bin/search/plugin/ directory.
 
-         ``# sudo /etc/init.d/geserver restart``
+Register your plug-in by adding its definition in the Python module
+configuration file: /opt/google/gehttpd/conf.d/mod_wsgi-ge.conf. Your
+registration in the configuration file should look something like the
+following:  # Handles My Custom search requests. WSGIScriptAlias
+/gesearch/CustomSearch /opt/google/gehttpd/wsgi-
+bin/search/plugin/mycustom_search_app.py
 
-      #. Open the Google Earth Enterprise Server Admin console and click
-         **Search tabs**. The list of Search tabs definitions appears.
-      #. Click **Create New** to create a new search definition.
-      #. Add a name and label.
-      #. In the URL field, add the ``WSGIScriptAlias`` that you
-         specified in the
-         ``/opt/google/gehttpd/conf.d/mod_wsgi-ge.conf`` file. In this
-         example, you would enter ``gesearch/CustomSearch``.
+Restart Google Earth Enterprise Server:  # sudo /etc/init.d/geserver
+restart
 
-      #. If you want to add query parameters that are hidden from Google
-         Earth EC, such as the way the results will be sorted or the
-         number of results displayed at a time, enter them in the
-         **Additional Query Parameters** field. The syntax is
-         **key1=value1&key2;=value2**. 
-         For example, **sortby=name&numresults;=10** sorts by the name field and
-         displays 10 results at a time. The search application must be
-         able to understand and respond to these key/value pairs, so you
-         must be very familiar with the search application to use this
-         field.
-      #. Set the fields and other options as needed and click **Save**.
-         Your new custom search definition is added to the list on the
-         **Search tabs** page.
-      #. When you publish a database, add your search definition from
-         the **Search tabs** drop-down list in the Publish dialog.
+Open the Google Earth Enterprise Server Admin console and click Search
+tabs. The list of Search tabs definitions appears.
 
-.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
-   :width: 130px
-   :height: 44px
+Click Create New to create a new search definition.
+
+Add a name and label.
+
+In the URL field, add the WSGIScriptAlias that you specified in the
+/opt/google/gehttpd/conf.d/mod_wsgi-ge.conf file. In this example, you
+would enter gesearch/CustomSearch.
+
+If you want to add query parameters that are hidden from Google Earth
+EC, such as the way the results will be sorted or the number of
+results displayed at a time, enter them in the Additional Query
+Parameters field. The syntax is key1=value1&key2;=value2. For example,
+sortby=name&numresults;=10 sorts by the name field and displays 10
+results at a time. The search application must be able to understand
+and respond to these key/value pairs, so you must be very familiar
+with the search application to use this field.
+
+Set the fields and other options as needed and click Save. Your new
+custom search definition is added to the list on the Search tabs page.
+
+When you publish a database, add your search definition from the
+Search tabs drop-down list in the Publish dialog.

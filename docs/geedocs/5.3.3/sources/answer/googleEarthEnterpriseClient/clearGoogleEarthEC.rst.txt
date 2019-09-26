@@ -1,30 +1,23 @@
-|Google logo|
 
-==================================
 Clearing the Google Earth EC cache
-==================================
 
-.. container::
+If you have signed in to a database on GEE Server with Google Earth EC
+previously, you may be unable to sign in again to the same database.
+An effective way of resolving this issue is to sign out of your
+server, clear your cache, and log back in.
 
-   .. container:: content
+-[ To clear your cache (On Windows and Linux): ]-
 
-      If you have signed in to a database on GEE Server with Google
-      Earth EC previously, you may be unable to sign in again to the
-      same database. An effective way of resolving this issue is to sign
-      out of your server, clear your cache, and log back in.
+Select File > Server Sign Out.
 
-      .. rubric:: To clear your cache (On Windows and Linux):
+Select Tools > Options > Cache.
 
-      #. Select **File > Server Sign Out**.
-      #. Select **Tools > Options > Cache**.
-      #. Select **Delete cache file** (only when logged out).
+Select Delete cache file (only when logged out).
 
-      .. rubric:: To clear your cache (On Mac OS X):
+-[ To clear your cache (On Mac OS X): ]-
 
-      #. Select **File > Server Sign Out**.
-      #. Select **Google Earth EC > Preferences > Cache**.
-      #. Select **Delete cache file** (only when logged out).
+Select File > Server Sign Out.
 
-.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
-   :width: 130px
-   :height: 44px
+Select Google Earth EC > Preferences > Cache.
+
+Select Delete cache file (only when logged out).

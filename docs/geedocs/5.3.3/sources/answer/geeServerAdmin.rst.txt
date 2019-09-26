@@ -1,5 +1,3 @@
-GEE Server administration
-=========================
 
 .. toctree::
    :maxdepth: 3
@@ -31,3 +29,6 @@ GEE Server administration
    geeServerAdmin/view2DDatabases
    geeServerAdmin/implementEarthPlugin
    geeServerAdmin/provideEarthPlugin
+=======
+GEE Server administration
+
