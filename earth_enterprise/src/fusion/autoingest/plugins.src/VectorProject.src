@@ -492,7 +492,8 @@ VectorProjectAssetVersionImplD::UpdateChildren(void)
 
     MutableAssetVersionD layer
       = VectorLayerFactory::FindMakeAndUpdateSubAsset
-      (assetRef, layername,
+      (assetRef,
+       layername,
        makevec1<SharedString>(kvp->GetRef()),
        khMetaData(),
        *layerConfig,

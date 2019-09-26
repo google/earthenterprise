@@ -714,7 +714,9 @@ void MercatorRasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
 
   MutableAssetVersionD dbroot =
     RasterDBRootFactory::FindMakeAndUpdateSubAsset(
-        assetRef, type, "dbroot",
+        assetRef,
+        type,
+        "dbroot",
         std::vector<SharedString>(),
         khMetaData(),
         dbrootConfig,

@@ -904,7 +904,9 @@ void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
 
   MutableAssetVersionD dbroot =
     RasterDBRootFactory::FindMakeAndUpdateSubAsset(
-        assetRef, type, "dbroot",
+        assetRef,
+        type,
+        "dbroot",
         std::vector<SharedString>(),
         khMetaData(),
         dbrootConfig,

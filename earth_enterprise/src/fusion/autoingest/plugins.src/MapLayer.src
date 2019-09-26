@@ -160,7 +160,8 @@ MapLayerAssetVersionImplD::UpdateChildren(void)
     snprintf(queryname, sizeof(queryname), "query%02u", sl);
     MutableAssetVersionD query_version =
       VectorQueryFactory::FindMakeAndUpdateSubAsset
-      (assetRef, queryname,
+      (assetRef,
+       queryname,
        makevec1<SharedString>(guard->inputvers[sl]->GetRef()),
        khMetaData(),
        queryconfig,
@@ -186,7 +187,8 @@ MapLayerAssetVersionImplD::UpdateChildren(void)
     MapPOIAssetConfig poiconfig(all_search_fields);
     MutableAssetVersionD poi =
       MapPOIFactory::FindMakeAndUpdateSubAsset
-    (assetRef, "poi",
+    (assetRef,
+     "poi",
      queryRefs,
      khMetaData(),
      poiconfig,

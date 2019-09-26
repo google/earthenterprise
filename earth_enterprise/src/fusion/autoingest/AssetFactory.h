@@ -213,7 +213,136 @@ namespace AssetFactory
       return asset->MyUpdate(needed);
   }
 
- // template <class MutableVersionHandleType,class Version, class ConfigType>
+  // function defn1
+  // e.g. NATIVE/DatabaseAssetD.cpp/fusion/autoingest/sysman/plugins
+  //    - PacketLevelAssetD.cpp
+  //    - CombinedRPAssetD.cpp          XXX
+  //    - RasterDBRootAssetD.cpp        XXX
+  //    - RasterGEIndexAssetD.cpp
+  //    - PacketGenAssetD.cpp
+  //    - RasterProductAssetD.cpp
+  //    - KRMPAssetD.cpp
+  //    - KRPAssetD.cpp
+  //    - MaskgenAssetD.cpp
+  //    - MosaicAssetD.cpp
+  //    - SourceAssetD.cpp
+  //    - RasterKHDBAssetD.cpp
+  //    - BlendAssetD.cpp
+  //    - ReprojectAssetD.cpp
+  //
+  //    Call Locations:
+  //        - MercatorRastorProject.src
+  //            => RasterDBRoot
+  //        - MercatorRasterProduct.src
+  //            => CombinedRPAsset
+  //        - RasterProduct.src
+  //            => CombinedRPAsset
+  //
+  // SEVEM PARAMS
+  //
+  // assetRef = GetAssetRef() = parentRef?
+  // type
+  // k* [string]
+  // inputs
+  // khMetaData()
+  // Config()
+  // vector<AssetVersion>
+  //
+  template <class MutableDerivedVersionHandleType, class Version, class ConfigType>
+  MutableDerivedVersionHandleType FindMakeAndUpdateSubAsset(const std::string& parentAssetRef,
+                                                            AssetDefs::Type type_,
+                                                            const std::string& basename,
+                                                            const std::vector<SharedString>& inputs_,
+                                                            const khMetaData &meta_,
+                                                            const ConfigType& config_,
+                                                            const std::vector<Version>& cachedinputs_)
+  {
+      using Impl = typename MutableDerivedVersionHandleType::Impl;
+      auto ref_ = AssetDefs::SubAssetName(parentAssetRef,
+                                          basename,
+                                          type_,
+                                          Impl::EXPECTED_SUBTYPE);
+      return FindMakeAndUpdate<MutableDerivedVersionHandleType, Version, ConfigType>
+              (ref_,
+               type_,
+               inputs_,
+               meta_,
+               config_,
+               cachedinputs_);
+  }
+
+  // function defn2
+  // e.g. NATIVE/DatabaseAssetD.cpp/fusion/autoingest/sysman/plugins:
+  //    - DatabaseAssetD.cpp
+  //    - TmeshAssetD.cpp
+  //    - copyrightAssetD.cpp
+  //    - ImeshKHDBAssetD.cpp
+  //    - ProjectedMapLayerAssetD.cpp       XXX     ???
+  //    - VectorKHDBAssetD.cpp
+  //    - MapGEIndexAssetD.cpp
+  //    - MapPOIAssetD.cpp                  XXX
+  //    - VectorPOIAssetD                   XXX
+  //    - MapLayerJSAssetD.cpp
+  //    - MercatorMapDatabaseAssetD.cpp
+  //    - GEDBAssetD.cpp
+  //    - UnifiedIndexAssetD.cpp
+  //    - CombinedTerrainAssetD.cpp
+  //    - VectorGEIndexAssetD.cpp
+  //    - KMLProjectAssetD.cpp
+  //    - MapDatabaseAssetD.cpp
+  //    - MapLayerLevel.cpp                 XXX     ???
+  //    - MapDBAssetD.cpp
+  //    - MapLayerAssetVersionD.cpp
+  //    - ProjectedMapProject.cpp
+  //    - MapProjectAssetD.cpp
+  //    - DatabaseAssetD.cpp
+  //    - QTPacketAssetD.cpp
+  //    - VectorDBRootAssetD.cpp
+  //    - VectorFuseAssetD.cpp              XXX
+  //    - VectorQueryAssetD.cpp             XXX
+  //    - VectorLayerAssetD.cpp             XXX
+  //    - VectorProjectAssetD.cpp
+  //    - VectorLayerXAssetD.cpp            XXX     ???
+  //    - VectorProductAssetD.cpp
+  //    - MercatorRasterProductAssetD.cpp
+  //
+  //    Call locations:
+  //      - ProjectedMapLayer.src
+  //        => ProjectedMapLayer
+  //        => MapLayerLevel
+  //        => VectorLayerXAssetD
+  //      - VectorLayer.src
+  //        => VectorQueryAsset
+  //        => VectorFuseAsset
+  //        => VectorPOI
+  //      - MapLayer.src
+  //        => MapPOIAssetAsset
+  //        => ??? line 161 ??? Also VectorQueryAsset
+  //      - VectorProject.src
+  //        => VectorLayer
+  //        =>
+  //  SIX params
+  template <class MutableDerivedVersionHandleType, class Version, class ConfigType>
+  MutableDerivedVersionHandleType FindMakeAndUpdateSubAsset(const std::string& parentAssetRef,
+                                                            const std::string& basename,
+                                                            const std::vector<Version>& inputs_,
+                                                            const khMetaData& meta_,
+                                                            const ConfigType& config,
+                                                            const std::vector<Version>& cachedinputs_)
+  {
+      using Impl = typename MutableDerivedVersionHandleType::Impl;
+      auto ref_ = AssetDefs::SubAssetName(parentAssetRef,
+                                          basename,
+                                          Impl::EXPECTED_TYPE,
+                                          Impl::EXPECTED_SUBTYPE);
+
+      return FindMakeAndUpdate<MutableDerivedVersionHandleType, Version, ConfigType>
+              (ref_,
+               inputs_,
+               meta_,
+               config,
+               cachedinputs_);
+  }
 
 
   template <class MutableDerivedAssetHandleType, class ConfigType>

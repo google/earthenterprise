@@ -157,7 +157,9 @@ ${name}Factory::FindMakeAndUpdateSubAsset(
              (AssetDefs::SubAssetName(parentAssetRef, basename,
                                       $actualtypearg, "$subtype")
               $forwardtypearg, $forwardinputarg
-              meta_, config_ $forwardcachedinputarg
+              meta_,
+              config_
+              $forwardcachedinputarg
               $forwardExtraUpdateArg);
 }
 EOF
