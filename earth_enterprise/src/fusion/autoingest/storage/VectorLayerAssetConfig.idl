@@ -17,6 +17,7 @@
 #include <autoingest/.idl/storage/VectorFuseAssetConfig.h>
 #include <autoingest/.idl/storage/VectorPOIAssetConfig.h>
 #include <khxml/geVersionedEnum.h>
+#include "CacheSizeCalculations.h"
 
 
 #cppquote
@@ -36,6 +37,11 @@ class VectorLayerAssetConfig {
 #hquote
   VectorLayerAssetConfig(const LayerConfig &layerConfig);
   VectorLayerAssetConfig(const LayerConfig &layer_config, geVersionedEnum);
+  uint64 GetSize() {
+    return GetObjectSize(query_config_)
+            + GetObjectSize(fuse_config_)
+            + GetObjectSize(poi_config_);
+  }
 #/hquote
 
 #cppquote

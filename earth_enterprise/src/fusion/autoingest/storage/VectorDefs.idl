@@ -16,6 +16,7 @@
 #include <khTypes.h>
 #include <qstring.h>
 #include <gst/gstTypes.h>
+#include "CacheSizeCalculations.h"
 
 class VectorDefs {
   enum EightSides { TopRight = 0, Top = 1, TopLeft = 2, Left = 3, BottomLeft = 4, Bottom = 5, BottomRight = 6, Right = 7};
@@ -30,6 +31,9 @@ class VectorDefs {
 #hquote
   static FeatureDisplayType SuggestedFeatureType(gstPrimType gstPrimType_);
   static QString PrettyFeatureDisplayType(FeatureDisplayType type);
+  uint64 GetSize() {
+    return 0;
+  }
 #/hquote
 
 #cppquote

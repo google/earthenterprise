@@ -18,6 +18,7 @@
 #include <vector>
 #include <map>
 #include <khTypes.h>
+#include "CacheSizeCalculations.h"
 
 // ****************************************************************************
 // ***  RasterGEIndex
@@ -38,5 +39,13 @@ class RasterGEIndexConfig {
   IsUpToDateIgnore uint index_version_;
   std::vector<RasterPacketInset> packet_insets_;
   std::string date_string_ = std::string("");
+#hquote
+  uint64 GetSize() {
+    return GetObjectSize(db_name_)
+            + (uint64)sizeof(uint)
+            + GetObjectSize(packet_insets_)
+            + GetObjectSize(date_string_);
+  }
+#/hquote
 #pragma GenerateIsUpToDate
 };

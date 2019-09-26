@@ -18,6 +18,7 @@
 #include <khTypes.h>
 #include <khFileUtils.h>
 #include <khException.h>
+#include "CacheSizeCalculations.h"
 
 
 class SourceConfig {
@@ -64,6 +65,9 @@ class SourceConfig {
         }
       }
     }
+  }
+  uint64 GetSize() {
+    return GetObjectSize(sources);
   }
 #/hquote
 

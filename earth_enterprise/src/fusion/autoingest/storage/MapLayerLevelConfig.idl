@@ -15,6 +15,7 @@
 
 #include <autoingest/.idl/storage/MapSubLayerConfig.h>
 #include <autoingest/.idl/storage/AssetDefs.h>
+#include "CacheSizeCalculations.h"
 
 #cppquote
 #include <autoingest/.idl/storage/MapSubLayerConfig_impl.h>
@@ -33,6 +34,13 @@ class MapLayerLevelConfig {
   uint level_;
   AssetDefs::Projection   projection_;
   std::vector<SubLayer> sub_layers_ = std::vector<MapLayerLevelConfig::SubLayer>();
+#hquote
+  uint64 GetSize() {
+    return GetObjectSize(level_)
+            + GetObjectSize(projection_)
+            + GetObjectSize(sub_layers_);
+  }
+#/hquote
 
 #pragma LoadAndSave
 #pragma GenerateIsUpToDate

@@ -13,9 +13,14 @@
 // limitations under the License.
 
 #include <khTypes.h>
+#include "CacheSizeCalculations.h"
 
 class CopyrightConfig {
   uint providerStart = uint(1);
-
+#hquote
+  uint64 GetSize() {
+    return GetObjectSize(providerStart);
+  }
+#/hquote
 #pragma GenerateIsUpToDate
 };

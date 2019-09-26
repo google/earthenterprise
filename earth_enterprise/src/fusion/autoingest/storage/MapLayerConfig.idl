@@ -15,6 +15,7 @@
 
 #include <autoingest/.idl/storage/LayerLegend.h>
 #include <autoingest/.idl/storage/MapSubLayerConfig.h>
+#include "CacheSizeCalculations.h"
 
 #cppquote
 #include <autoingest/.idl/storage/LayerLegend_impl.h>
@@ -37,7 +38,10 @@ class MapLayerConfig {
   void ResetIds(void) {
     fuid_channel_ = 0;
   }
-
+  uint64 GetSize() {
+    return GetObjectSize(subLayers)
+            + GetObjectSize(fuid_channel_);
+  }
 #/hquote
 
 #cppquote

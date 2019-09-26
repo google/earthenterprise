@@ -15,6 +15,7 @@
 
 #include <string>
 #include <khTypes.h>
+#include "CacheSizeCalculations.h"
 
 
 class MosaicConfig {
@@ -34,6 +35,12 @@ class MosaicConfig {
       fill.replace(found, 2, ",");
       found = fill.find(", ");
     }
+  }
+  uint64 GetSize() {
+    return GetObjectSize(fill)
+            + GetObjectSize(lutfile)
+            + GetObjectSize(fillTolerance)
+            + GetObjectSize(overridesrs);
   }
 #/hquote
 };

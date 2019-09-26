@@ -17,6 +17,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <autoingest/.idl/storage/FilterConfig.h>
+#include "CacheSizeCalculations.h"
 
 #cppquote
 #include <autoingest/.idl/storage/FilterConfig_impl.h>
@@ -45,5 +46,11 @@ class QueryConfig {
               const QStringList &contextScripts);
   QueryConfig(const MapSubLayerConfig &mapSubLayerConfig,
               const QStringList &contextScripts);
+  uint64 GetSize() {
+    return GetObjectSize(filters)
+            + GetObjectSize(allowFeatureDuplication)
+            + GetObjectSize(contextScript)
+            + GetObjectSize(allowEmptyLayer);
+  }
 #/hquote
 };

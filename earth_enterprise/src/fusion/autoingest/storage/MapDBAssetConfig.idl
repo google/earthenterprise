@@ -17,6 +17,7 @@
 #include <vector>
 #include <khTypes.h>
 #include <searchtabs/.idl/SearchTabs.h>
+#include "CacheSizeCalculations.h"
 
 #cppquote
 #include <searchtabs/.idl/SearchTabs_impl.h>
@@ -33,6 +34,19 @@ class MapDBAssetConfig {
   bool useGoogleImagery = false;
   bool is_mercator_ = false;
   std::string fusion_version_ = std::string("");  // Keep track of the originating Fusion version number.
+#hquote
+  uint64 GetSize() {
+    return GetObjectSize(index_verref_)
+            + GetObjectSize(map_project_)
+            + GetObjectSize(imagery_project_)
+            + GetObjectSize(search_tabs_)
+            + GetObjectSize(database_version_)
+            + (uint64)sizeof(bool)
+            + GetObjectSize(useGoogleImagery)
+            + GetObjectSize(is_mercator_)
+            + GetObjectSize(fusion_version_);
+  }
+#/hquote
 
 #pragma GenerateIsUpToDate
 };

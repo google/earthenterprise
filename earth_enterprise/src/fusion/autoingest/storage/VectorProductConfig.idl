@@ -17,6 +17,7 @@
 #include <khTypes.h>
 #include <khMetaData.h>
 #include <autoingest/.idl/storage/SourceConfig.h>
+#include "CacheSizeCalculations.h"
 
 #cppquote
 #include <autoingest/.idl/storage/SourceConfig_impl.h>
@@ -42,6 +43,23 @@ class VectorProductConfig {
 
   // Do not fix invalid geometries.
   bool do_not_fix_invalid_geometries_ = false;
+#hquote
+  uint64 GetSize() {
+    return GetObjectSize(encoding)
+            + GetObjectSize(layer)
+            + GetObjectSize(scale)
+            + GetObjectSize(force3D)
+            + GetObjectSize(force2D)
+            + GetObjectSize(ignore_bad_features_)
+            + GetObjectSize(provider_id_)
+            + GetObjectSize(north_boundary)
+            + GetObjectSize(south_boundary)
+            + GetObjectSize(east_boundary)
+            + GetObjectSize(west_boundary)
+            + GetObjectSize(force25D)
+            + GetObjectSize(do_not_fix_invalid_geometries_);
+  }
+#/hquote
 #pragma GenerateIsUpToDate
 };
 

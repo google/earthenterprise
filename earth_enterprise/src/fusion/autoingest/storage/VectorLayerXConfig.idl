@@ -16,6 +16,7 @@
 #include <autoingest/.idl/storage/LayerLegend.h>
 #include <string>
 #include <khMetaData.h>
+#include "CacheSizeCalculations.h"
 
 #cppquote
 #include <autoingest/.idl/storage/LayerLegend_impl.h>
@@ -38,6 +39,11 @@ class VectorLayerXConfig {
     fuid_channel_ = 0;
   }
 
+  uint64 GetSize() {
+    return GetObjectSize(vectorResource)
+            + GetObjectSize(legend)
+            + GetObjectSize(fuid_channel_);
+  }
 #/hquote
 };
 

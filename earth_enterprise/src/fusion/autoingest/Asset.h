@@ -78,7 +78,7 @@ class AssetImpl : public AssetStorage, public StorageManaged {
   const SharedString & GetRef(void) const { return name; }
 
   // determine amount of memory used by an AssetImpl
-  uint64 GetSize() {
+  virtual uint64 GetSize() {
     return(GetObjectSize(name)
     + GetObjectSize(type)
     + GetObjectSize(subtype)

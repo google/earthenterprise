@@ -16,6 +16,7 @@
 #include <string>
 #include <khTypes.h>
 #include <autoingest/.idl/storage/AssetDefs.h>
+#include "CacheSizeCalculations.h"
 
 #cppquote
 #include <autoingest/.idl/storage/AssetDefs_impl.h>
@@ -48,6 +49,16 @@ class MaskgenConfig {
   }
   MaskgenConfig(void) {
     SetFromOldValues(Unset, 100);
+  }
+  uint64 GetSize() {
+    return GetObjectSize(feather)
+          + GetObjectSize(mode)
+          + GetObjectSize(band)
+          + GetObjectSize(fillvalue)
+          + GetObjectSize(threshold)
+          + GetObjectSize(holesize)
+          + GetObjectSize(whitefill)
+          + GetObjectSize(nodata);
   }
 #/hquote
 

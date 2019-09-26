@@ -17,6 +17,7 @@
 #include <autoingest/.idl/storage/MapProjectConfig.h>
 #include <autoingest/.idl/storage/SearchField.h>
 #include <khxml/geVersionedEnum.h>
+#include "CacheSizeCalculations.h"
 
 class MapProjectConfig;
 
@@ -38,6 +39,11 @@ class MapPOIConfig {
 
 #hquote
   bool empty(void) const { return search_fields_.empty(); }
+  uint64 GetSize() {
+    return GetObjectSize(search_fields_)
+            + GetObjectSize(search_style_)
+            + GetObjectSize(query_files_);
+  }
 #/hquote
 
 #pragma GenerateIsUpToDate
@@ -61,6 +67,9 @@ class MapPOIAssetConfig {
 
 #hquote
   bool empty(void) const { return all_search_fields_.empty(); }
+  uint64 GetSize() {
+    return GetObjectSize(all_search_fields_);
+  }
 #/hquote
 
 #pragma GenerateIsUpToDate
