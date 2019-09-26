@@ -394,6 +394,7 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
     // chkconfig fails, so this dependency is explicit.
     requires('chkconfig')
     requires('shadow-utils')
+    requires('python27')
 
     requiresCommands(packageSharedCommands +
         ['cat', 'cut', 'getent', 'grep'])
@@ -403,6 +404,7 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
     // Don't specify install scripts as single files.  It doesn't work for
     // RPMs:
     preInstall = file("${buildDir}/opengee-common/pre-install.sh")
+    postInstall = file("${buildDir}/opengee-common/post-install.sh")
     postUninstall = file("${buildDir}/opengee-common/post-uninstall.sh")
 
     from (file('build/shared/gevars.sh')) {

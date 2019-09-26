@@ -140,7 +140,7 @@ sudo yum install -y \
   libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel pcre pcre-devel \
   perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-devel python-unittest2 \
-  python27 rpm-build rpmrebuild rsync scons shunit2 \
+  rpm-build rpmrebuild rsync scons shunit2 \
   xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
 ```
 
@@ -202,3 +202,17 @@ sudo yum install -y http://download-ib01.fedoraproject.org/pub/epel/6/x86_64/Pac
 ### CentOS 6 and RHEL 6
 
 shunit2 was installed in a previous step.
+
+## Install Python 2.7
+
+### CentOS 7 and RHEL 7
+
+Python 2.7 is installed as a system default.
+
+### CentOS 6 and RHEL 6
+
+```bash
+sudo yum install -y python27
+sudo bash -c 'echo "/opt/rh/python27/root/usr/lib64" >> /etc/ld.so.conf.d/opengee.conf'
+sudo ldconfig
+```
