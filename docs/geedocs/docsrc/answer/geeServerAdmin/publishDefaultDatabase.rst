@@ -25,6 +25,9 @@ Publish default database
       
       e.g., ``geserveradmin --publishdb SFDb_3d --targetpath SFDb_3d --setecdefault``
 
+      Note that only one database can be the default, and the "last one wins" if
+      multiple databases are published with the "Default Database" box checked.
+
       .. rubric:: Viewing the Default Database
 
       To view the default database in Earth Client, simply sign into the base
