@@ -95,6 +95,7 @@ gees.admin.databaseView = {
       var display = {};
       display.size = gees.tools.getDisplaySize(db.size);
       display.wms =  db.serve_wms ? this.wmsHoverText(db.target_path) : '';
+      display.def_db = db.default_database ? '<em>Default</em>' : '';
       // Print string 'unpublished' in place of target path and virtual host
       // if the portable/databse in question is not published.
       var unpublished = '<text class=\'unpublished\'>unpublished</text>';
@@ -277,7 +278,7 @@ gees.admin.databaseView = {
         this.createInnerSpan('gName', db.name, parentDiv, db.name);
         var pathHover = display.target_path_hover;
         var typeClass = gees.tools.isRemoteFusion(db) ? 'remote-host' : '';
-        var desc = display.wms + db.description;
+        var desc = display.def_db + display.wms + db.description;
         this.createInnerSpan(
             'gPublishPoint', display.target_path, parentDiv, pathHover);
         this.createInnerSpan(
@@ -529,6 +530,11 @@ gees.admin.databaseView = {
 
       // Attach a listener to a published item's wms icon, if it exists.
       gees.admin.databaseView.addWmsHoverListeners();
+
+      // Refresh the database list if this database was published as the default
+      if( newItem.default_database ){
+        gees.admin.databaseView.onRefresh();
+      }
     },
 
     // Get the details of a published database, based on its target path.
@@ -1157,6 +1163,7 @@ gees.admin.databaseView = {
         item.status = 'available';
         item.virtual_host_name = '';
         item.serve_wms = false;
+        item.default_database = false;
         // Make sortable name of undefined paths '~', so they will sort
         // last in a list.  A blank path sorts first, which is not helpful.
         item.sortPath = '~';
