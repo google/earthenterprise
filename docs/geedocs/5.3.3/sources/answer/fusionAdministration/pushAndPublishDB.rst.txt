@@ -162,6 +162,8 @@ database, push it again from Fusion. See Push databases.
 
 -[ Learn more ]-
 
+Publish default database
+
 Create Search tabs
 
 Manage snippet profiles

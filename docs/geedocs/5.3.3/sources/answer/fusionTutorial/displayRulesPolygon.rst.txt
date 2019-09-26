@@ -260,7 +260,7 @@ Specify a Publish point, where the database will be accessible from.
 For example, if you specify CACountyPopulation-v001, it will be
 accessible from myserver.mydomainname.com/CACountyPopulation-v001.  To
 learn more about the options available in the Publish dialog, see
-Create Search tabs, Snippet profiles , and WMS .
+Default database  Search Tabs  Snippet profiles  WMS
 
 Click the Publish button. The Databases page updates to indicate the
 published status of your database.  GEE Server Database Published List

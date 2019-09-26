@@ -142,7 +142,7 @@ the GeocodingFederated database is automatically searched.
 Change the default Publish point from CACountyPopulation-v001 to
 CACountySearch.  GEE Server Database Publish POI Search dialog  To
 learn more about the options available in the Publish dialog, see
-Create Search tabs, Snippet profiles, and WMS.
+Default database  Search Tabs  Snippet profiles  WMS
 
 Click Publish. The Databases page updates to indicate the published
 status of your database.

@@ -112,12 +112,12 @@ http://your_stream_server \  --pushdb \  /media/ddb/test_ver001/gevol
 
 Publish the database on the Server either using the GEE Server Admin
 console or on the command line. The GEE Server Admin console Publish
-dialog includes options to add search, snippet profiles, specify a
-virtual host, and turn on WMS.  To publish on the command line:
-geserveradmin --fusion_host fusion_host.company.com \
---stream_server_url http://your_stream_server \  --publishdb \  /medi
-a/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver0
-01/gedb/
+dialog includes options to  set the default database  add search  add
+snippet profiles  specify a virtual host  turn on WMS.  To publish on
+the command line:  geserveradmin --fusion_host fusion_host.company.com
+\  --stream_server_url http://your_stream_server \  --publishdb \  /m
+edia/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/v
+er001/gedb/
 
 Verify that the database manifests:  geserveradmin --stream_server_url
 http://your_stream_server \  --listdbs  geserveradmin
