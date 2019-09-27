@@ -365,10 +365,9 @@ class GlobeBuilder(object):
         context.check_hostname = False
         context.verify_mode = ssl.CERT_NONE
 
-      fp = urllib2.urlopen(url, context=context)
-      http_status_code = fp.getcode()
-      response_data = fp.read()
-      fp.close()
+      with urllib2.urlopen(url, context=context) as fp:
+        http_status_code = fp.getcode()
+        response_data = fp.read()
 
     except:
       GlobeBuilder.StatusWarning("FAILED: Caught exception reading {0}".format(url))
@@ -473,9 +472,8 @@ class GlobeBuilder(object):
       try:
         data, code = self.HttpGet(url)
         if code == 200:
-          fpw = open("%s/%s" % (self.icons_dir, icon), "w")
-          fpw.write(data)
-          fpw.close()
+          with open("%s/%s" % (self.icons_dir, icon), "w") as fpw:
+            fpw.write(data)
         else:
           raise Exception("Cannot fetch {0}".format(url))
       except:
@@ -548,10 +546,10 @@ class GlobeBuilder(object):
           data, http_status_code = self.HttpGet(url)
           if http_status_code == 200:
             self.Status("Copying search poi data: gepoi_%s to globe" % poi_id)
-            fpw = open(search_file, "w")
-            fpw.write(data.strip())
-            fpw.write("\n")
-            fpw.close()
+
+            with open(search_file, "w") as fpw:
+              fpw.write(data.strip())
+              fpw.write("\n")
           else:
             self.StatusWarning(fp.read())
 
