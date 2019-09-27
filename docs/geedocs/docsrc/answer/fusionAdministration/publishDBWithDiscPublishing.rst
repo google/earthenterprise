@@ -142,9 +142,13 @@ Publish databases using disconnected publishing
       #. Publish the database on the Server either using the :doc:`GEE Server
          Admin console <../geeServerAdmin/publishDatabasesPortables>` or on the command
          line. The GEE Server Admin console Publish dialog includes
-         options to add :doc:`search <../geeServerAdmin/createSearchTabs>`, :doc:`snippet
-         profiles <../geeServerAdmin/manageSnippetProfiles>`, :doc:`specify a virtual host
-         <../geeServerAdmin/manageVirtualHosts>`, and :doc:`turn on WMS <../geeServerAdmin/makeWMSRequests>`.
+         options to 
+         
+         -  :doc:`set the default database <../geeServerAdmin/publishDefaultDatabase>`
+         -  :doc:`add search <../geeServerAdmin/createSearchTabs>`
+         -  :doc:`add snippet profiles <../geeServerAdmin/manageSnippetProfiles>`
+         -  :doc:`specify a virtual host <../geeServerAdmin/manageVirtualHosts>`
+         -  :doc:`turn on WMS <../geeServerAdmin/makeWMSRequests>`.
 
          **To publish on the command line:**
 

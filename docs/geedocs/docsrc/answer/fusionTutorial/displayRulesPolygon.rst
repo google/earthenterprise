@@ -353,9 +353,12 @@ Configuring Display Rules for Polygon Data
          *myserver.mydomainname*.com/CACountyPopulation-v001.
 
          To learn more about the options available in the Publish
-         dialog, see :doc:`../geeServerAdmin/createSearchTabs`,
-         :doc:`Snippet profiles <../geeServerAdmin/manageSnippetProfiles>` , and
-         :doc:`WMS <../geeServerAdmin/makeWMSRequests>` .
+         dialog, see 
+
+         - :doc:`Default database <../geeServerAdmin/publishDefaultDatabase>`
+         - :doc:`Search Tabs <../geeServerAdmin/createSearchTabs>`
+         - :doc:`Snippet profiles <../geeServerAdmin/manageSnippetProfiles>`
+         - :doc:`WMS <../geeServerAdmin/makeWMSRequests>`
 
       #. Click the **Publish** button. The Databases page updates to indicate the
          published status of your database.

@@ -403,8 +403,8 @@ Click the Publish button. The Publish dialog appears.
 Specify a Publish point where the database will be accessible from.
 For example, if you specify MySFMap, it will be accessible from
 myserver.mydomainname/MySFMap.  To learn more about the options
-available in the Publish dialog, see Create Search tabs, Snippet
-profiles, and WMS.
+available in the Publish dialog, see Search Tabs, Snippet profiles,
+and WMS.
 
 Click Publish. The Databases page updates to indicate the published
 status of your database.

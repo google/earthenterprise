@@ -107,8 +107,8 @@ settings for different viewing needs.  Note: When publishing a
 database, the publish point you specify is case-insensitive. Upper and
 lower case are not differentiated. Make sure each publish point path
 name you specify is unique.  To learn more about the options available
-in the Publish dialog, see Create Search tabs, Snippet profiles, and
-WMS.
+in the Publish dialog, see  Default database  Search Tabs  Snippet
+profiles  WMS
 
 Click the Publish  button. The Databases page updates to indicate the
 published status of your database.  GEE Server Database Published List
