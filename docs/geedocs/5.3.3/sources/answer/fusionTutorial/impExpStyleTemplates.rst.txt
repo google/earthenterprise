@@ -201,8 +201,8 @@ Click the Publish button. The Publish dialog appears.
 Specify a Publish point, where the database will be accessible from.
 For example, if you specify USPopulation-v001, it will be accessible
 from myserver.mydomainname.com/USPopulation-v001.  To learn more about
-the options available in the Publish dialog, see Create Search tabs,
-Snippet profiles, and WMS.
+the options available in the Publish dialog, see  Default database
+Search Tabs  Snippet profiles  WMS
 
 Click Publish. The Databases page updates to indicate the published
 status of your database.

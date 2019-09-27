@@ -202,6 +202,7 @@ Push and publish databases
 
       .. rubric:: Learn more
 
+      -  :doc:`../geeServerAdmin/publishDefaultDatabase`
       -  :doc:`../geeServerAdmin/createSearchTabs`
       -  :doc:`../geeServerAdmin/manageSnippetProfiles`
       -  :doc:`../geeServerAdmin/manageVirtualHosts`

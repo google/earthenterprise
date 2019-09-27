@@ -16,6 +16,7 @@ GEE Server administration
    geeServerAdmin/manageSnippetProfiles
    geeServerAdmin/displayCustomLogos
    geeServerAdmin/manageVirtualHosts
+   geeServerAdmin/publishDefaultDatabase
    geeServerAdmin/makeWMSRequests
    geeServerAdmin/publishDatabasesWithSearch
    geeServerAdmin/searchPOIVectorMapLayerData

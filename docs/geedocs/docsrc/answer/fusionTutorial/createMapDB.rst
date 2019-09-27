@@ -401,7 +401,7 @@ Creating a Map Database
          be accessible from *myserver.mydomainname*/MySFMap.
 
          To learn more about the options available in the Publish
-         dialog, see :doc:`../geeServerAdmin/createSearchTabs`,
+         dialog, see :doc:`Search Tabs <../geeServerAdmin/createSearchTabs>`,
          :doc:`Snippet profiles <../geeServerAdmin/manageSnippetProfiles>`, and
          :doc:`WMS <../geeServerAdmin/makeWMSRequests>`.
 
