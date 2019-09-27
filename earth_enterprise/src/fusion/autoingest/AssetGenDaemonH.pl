@@ -297,29 +297,7 @@ public:
     SubAssetName(const std::string &parentAssetRef
                  $formaltypearg,
                  const std::string &basename);
-
-    $template
-    static Mutable${name}AssetVersionD
-    FindMakeAndUpdate(const std::string &ref_ $formaltypearg,
-		      $formalinputarg
-		      const khMetaData &meta_,
-		      const $config& config_
-		      $formalcachedinputarg
-                      $formalExtraUpdateArg);
-
-    $template
-    static Mutable${name}AssetVersionD
-    FindMakeAndUpdateSubAsset(const std::string &parentAssetRef
-			      $formaltypearg,
-			      const std::string &basename,
-			      $formalinputarg
-			      const khMetaData &meta_,
-			      const $config& config_
-			      $formalcachedinputarg
-			      $formalExtraUpdateArg);
 EOF
-
-
 
 if ($withreuse) {
 

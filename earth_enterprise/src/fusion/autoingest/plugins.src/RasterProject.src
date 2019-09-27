@@ -903,14 +903,14 @@ void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
   dbrootConfig.used_provider_ids_ = used_provider_ids;
 
   MutableAssetVersionD dbroot =
-    RasterDBRootFactory::FindMakeAndUpdateSubAsset(
-        assetRef,
-        type,
-        "dbroot",
-        std::vector<SharedString>(),
-        khMetaData(),
-        dbrootConfig,
-        std::vector<AssetVersion>());
+    AssetFactory::FindMakeAndUpdateSubAsset<MutableRasterDBRootAssetVersionD, AssetVersion>
+                  (assetRef,
+                   type,
+                   "dbroot",
+                   std::vector<SharedString>(),
+                   khMetaData(),
+                   dbrootConfig,
+                   std::vector<AssetVersion>());
   AddChild(dbroot);
 
 

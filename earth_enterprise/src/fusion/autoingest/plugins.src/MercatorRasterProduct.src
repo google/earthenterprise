@@ -384,14 +384,14 @@ MercatorRasterProductAssetVersionImplD::UpdateChildren(void)
   uint32 num_sources = srcfiles.size();
 
   MutableCombinedRPAssetVersionD crp =
-    CombinedRPFactory::FindMakeAndUpdateSubAsset
-      (assetRef,
-       type,
-       kCombinedRPSubtype,
-       inputs,
-       khMetaData(),
-       CombinedRPConfig(num_sources, config),
-       guard->inputvers);
+    AssetFactory::FindMakeAndUpdateSubAsset<MutableCombinedRPAssetVersionD, AssetVersion>
+                 (assetRef,
+                  type,
+                  kCombinedRPSubtype,
+                  inputs,
+                  khMetaData(),
+                  CombinedRPConfig(num_sources, config),
+                  guard->inputvers);
 
   // save the location of the preview file
   meta.SetValue("preview", crp->PreviewRef());

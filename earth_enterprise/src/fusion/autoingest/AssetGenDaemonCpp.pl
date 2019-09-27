@@ -120,48 +120,7 @@ ${name}Factory::SubAssetName(
                                    $actualtypearg, "$subtype");
 }
 
-// $formalcachedinputarg
 
-$template
-Mutable${name}AssetVersionD
-${name}Factory::FindMakeAndUpdate(
-        const std::string &ref_ $formaltypearg,
-        $formalinputarg
-        const khMetaData &meta_,
-        const $config& config_
-        $formalcachedinputarg
-        $formalExtraUpdateArg)
-{
-
-    Mutable${name}AssetD asset = AssetFactory::FindMake<Mutable${name}AssetD>
-                                 (ref_ $forwardtypearg,
-                                  $forwardinputarg meta_, config_);
-    bool needed = false;
-    return asset->MyUpdate(needed $forwardcachedinputarg
-                           $forwardExtraUpdateArg);
-}
-
-$template
-Mutable${name}AssetVersionD
-${name}Factory::FindMakeAndUpdateSubAsset(
-        const std::string &parentAssetRef
-        $formaltypearg,
-        const std::string &basename,
-        $formalinputarg
-        const khMetaData &meta_,
-        const $config& config_
-        $formalcachedinputarg
-        $formalExtraUpdateArg)
-{
-    return AssetFactory::FindMakeAndUpdate<Mutable${name}AssetVersionD, AssetVersion, $config>
-             (AssetDefs::SubAssetName(parentAssetRef, basename,
-                                      $actualtypearg, "$subtype")
-              $forwardtypearg, $forwardinputarg
-              meta_,
-              config_
-              $forwardcachedinputarg
-              $forwardExtraUpdateArg);
-}
 EOF
 
 
