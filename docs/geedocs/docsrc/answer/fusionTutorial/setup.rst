@@ -32,13 +32,13 @@ Setting Up the Tutorial
       how to create 2D and 3D databases, as well as become familiar
       with the Google Earth Enterprise Fusion user interface.
 
-      -  `Select the Tutorial Asset Root <#SelectAssetRoot>`__
-      -  `Launch Google Earth Enterprise Fusion <#LaunchFusion>`__
-      -  `Build the Asset Navigation Tree <#AssetNavTree>`__
-      -  `Define Source Providers <#DefineSrcProv>`__
-      -  `Define Resource Paths <#DefineResPath>`__
+      -  `Select the Tutorial Asset Root <#SelectAssetRoot>`_
+      -  `Launch Google Earth Enterprise Fusion <#LaunchFusion>`_
+      -  `Build the Asset Navigation Tree <#AssetNavTree>`_
+      -  `Define Source Providers <#DefineSrcProv>`_
+      -  `Define Resource Paths <#DefineResPath>`_
 
-
+      .. index:: Select the Tutorial Asset Root
       .. rubric:: Select the Tutorial Asset Root
          :name: select-the-tutorial-asset-root
 
@@ -54,7 +54,7 @@ Setting Up the Tutorial
 
       This section explains how to select a different asset root.
 
-      .. container:: alert
+      .. container:: warning
 
          **Caution:** Even though your source volumes and asset roots
          are separate for each user or for the tutorial and production
@@ -99,6 +99,7 @@ Setting Up the Tutorial
             /etc/init.d/gefusion start
 
 
+      .. index:: Launch Google Earth Enterprise Fusion
       .. rubric:: Launch Google Earth Enterprise Fusion
          :name: launch-google-earth-enterprise-fusion
 
@@ -113,6 +114,7 @@ Setting Up the Tutorial
       graphical user interface (GUI) appears.
 
 
+      .. index:: Build the Asset Navigation Tree
       .. rubric:: Build the Asset Navigation Tree
          :name: build-the-asset-navigation-tree
 
@@ -127,7 +129,7 @@ Setting Up the Tutorial
       In this exercise, you add subfolders to the tutorial asset root,
       so you can store your assets in an organized way.
 
-      .. container:: alert
+      .. container:: warning
 
          **Caution:** Once you create subfolders in your asset root, you
          cannot delete them. This makes it especially important for you
@@ -170,6 +172,7 @@ Setting Up the Tutorial
          the top right corner.
 
 
+      .. index:: Define Source Providers
       .. rubric:: Define Source Providers
          :name: define-source-providers
 
@@ -201,22 +204,39 @@ Setting Up the Tutorial
       #. Click **OK**.
       #. Repeat steps **2** through **4** to add the following source
          providers:
-         ===================== ====== =========================================
-         Name                  Key    Copyright Text
-         ===================== ====== =========================================
-         i3                    i3     Imagery © 2005 i3
-         USGS Maps             USGS-M Roads © 2005 USGS
-         GNIS/US Census Bureau GNIS   Population © 2005 GNIS
-         USGS POIs             USGS-P POIs © 2004 USGS
-         USGS Terrain          USGS-T Terrain © USGS 2003
-         NASA Imagery          NASA   Imagery courtesy NASA’s Earth Observatory
-         ===================== ====== =========================================
+
+         .. list-table::
+            :widths: 25 10 45
+            :header-rows: 1
+
+            * - Name
+              - Key
+              - Copyright Text
+            * - i3
+              - i3
+              - Imagery © 2005 i3
+            * - USGS Maps
+              - USGS-M
+              - Roads © 2005 USGS
+            * - GNIS/US Census Bureau
+              - GNIS
+              - Population © 2005 GNIS
+            * - USGS POIs
+              - USGS-P
+              - POIs © 2004 USGS
+            * - USGS Terrain
+              - USGS-T
+              - Terrain © USGS 2003
+            * - NASA Imagery
+              - NASA
+              - Imagery courtesy NASA’s Earth Observatory
 
          The new providers appear in the Provider Manager dialog in the
          order in which you added them:
          |Provider Manager Full|
       #. Click **OK** to close the Provider Manager.
 
+      .. index:: Setting up the fusion tutorial - Define resource paths
       .. rubric:: Define Resource Paths
          :name: define-resource-paths
 
