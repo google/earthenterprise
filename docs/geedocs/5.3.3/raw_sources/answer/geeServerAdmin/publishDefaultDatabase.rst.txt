@@ -25,8 +25,8 @@ Publish default database
       
       e.g., ``geserveradmin --publishdb SFDb_3d --targetpath SFDb_3d --setecdefault``
 
-      Note that only one database can be the default, and the "last one wins" if
-      multiple databases are published with the "Default Database" box checked.
+      Note that only one database can be the default at any given time. If you
+      publish a database as the default, the previous default will be cleared.
 
       .. rubric:: Viewing the Default Database
 

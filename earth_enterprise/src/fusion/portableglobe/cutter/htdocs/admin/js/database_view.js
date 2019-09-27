@@ -95,7 +95,7 @@ gees.admin.databaseView = {
       var display = {};
       display.size = gees.tools.getDisplaySize(db.size);
       display.wms =  db.serve_wms ? this.wmsHoverText(db.target_path) : '';
-      display.def_db = db.default_database ? '<em>Default</em>' : '';
+      display.def_db = db.default_database ? '<em class="default_db_label">Default</em>' : '';
       // Print string 'unpublished' in place of target path and virtual host
       // if the portable/databse in question is not published.
       var unpublished = '<text class=\'unpublished\'>unpublished</text>';

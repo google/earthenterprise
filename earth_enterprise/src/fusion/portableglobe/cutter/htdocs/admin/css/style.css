@@ -984,10 +984,17 @@
   border: 1px solid #666;
   box-shadow: 0 1px 2px #DCDCDC;
 }
-#gDescription em {
+#gDescription .wms_label {
   font-style: normal;
   color: #fff;
-  background-color: rgb(216, 85, 85);
+  background-color: rgb(216,3,28);
+  padding: 4px;
+  margin-right: 4px;
+}
+#gDescription .default_db_label {
+  font-style: normal;
+  color: #fff;
+  background-color: rgb(15,56,96);
   padding: 4px;
   margin-right: 4px;
 }
