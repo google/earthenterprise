@@ -8,8 +8,8 @@ database name.
 
 -[ Publishing as Default ]-
 
-To make a 3D database the default database, simply check the "Default
-Database" checkbox when publishing the database.
+To make a 3D database the default database, simply select "On" for
+"Default Database" when publishing the database.
 
 
 This can also be done from the command line by including the "--

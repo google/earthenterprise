@@ -433,7 +433,7 @@ gees.admin.databaseView = {
       // Use the name of the item as a suggested name for the target path.
       var targetPath = this.suggestTargetPath(item.target_path, displayName);
       gees.dom.get('NewGlobePublishPoint').value = targetPath;
-      gees.dom.setCheckbox('default_database_checkbox', false);
+      gees.dom.setCheckbox('default_db_radio_off', true);
       gees.dom.setCheckbox('wms_radio_off', true);
       gees.dom.hide('NoPublishName');
       gees.dom.get('NewGlobePublishPoint').focus();
@@ -606,7 +606,7 @@ gees.admin.databaseView = {
       },
 
       default_database: function() {
-        return gees.dom.isChecked('default_database_checkbox') ? '&EcDefaultDb=1' : '';
+        return gees.dom.isChecked('default_db_radio') ? '&EcDefaultDb=1' : '';
       },
 
       searchDefs: function(name) {

@@ -15,8 +15,8 @@ Publish default database
 
       .. rubric:: Publishing as Default
 
-      To make a 3D database the default database, simply check the "Default
-      Database" checkbox when publishing the database.
+      To make a 3D database the default database, simply select "On" for "Default
+      Database" when publishing the database.
 
       |Publish as default|
 

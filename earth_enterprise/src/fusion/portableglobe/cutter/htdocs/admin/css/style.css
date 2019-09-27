@@ -1791,10 +1791,6 @@ Kennedy Elements
   display: block;
  }
 
-.publishDialogCheck {
-  margin: 6px 0px;
-}
-
 input[type=checkbox] {
  content: url('../images/unchecked.png');
 }
