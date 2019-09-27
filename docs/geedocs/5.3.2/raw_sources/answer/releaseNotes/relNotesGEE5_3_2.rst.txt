@@ -8,14 +8,13 @@ Release notes: Open GEE 5.3.2
 
    .. container:: content
 
-      Open GEE 5.3.2 is currently in development
-
       .. rubric:: New Features
 
       **Documentation overhaul**. All documentation was migrated to
       Sphinx format, making it easier to edit and maintain. User 
       documentation file names were also migrated from number-based naming 
-      convention to self-explanatory descriptive titles.
+      convention to self-explanatory descriptive titles. New documentation
+      format also offers a search capability that was not possible before.
 
       **KML validation in cutter**. Basic validation is now performed
       on KML that is pasted into the cutter tool.
@@ -41,6 +40,8 @@ Release notes: Open GEE 5.3.2
          most recent security patches
       -  CentOS 6.x and 7.x
       -  Ubuntu 16.04 LTS
+
+      Ubuntu 14.04 is no longer be supported due to its recent end of life.
 
       Google Earth Enterprise 5.3.2 is compatible with Google Earth
       Enterprise Client (EC) version 7.1.5 and above.
@@ -89,23 +90,20 @@ Release notes: Open GEE 5.3.2
            - Portable Globe Cutter fails the last step when using HTTPS
            - Used the advanced configuration to set a URL that will be used when cutter tries to make an openurl call.            
          * - 1398
-           - System manager crashed because of casting asset version to asset
-           - Fixed the invalid cast.
+           - System Manager crash
+           - Fixed the crash underlying cause.
          * - 1401
-           - No notification when cache size is exceeded causing performance issues
-           - Added a logging record when cache size is exceeded.           
+           - No notification when System Manager Asset Cache size is exceeded causing performance issues
+           - Added a logging record when System Manager Asset Cache size is exceeded.           
          * - 1404
-           - WMS fails using HTTPS
+           - WMS fails when using HTTPS
            - Skipped the internal Certificate Verification. 
-         * - 1414
-           - Version files should not be included in scons cache
-           - Removed version files from scons cache. 
          * - 1420
            - Build should honor JAVA_HOME when creating rpm packages
            - Honored JAVA_HOME
          * - 1447
-           - Compiler error: "FieldGenerator.h not found" when compiling using scons cache
-           - Called Depends() for generated header files used by geautoingest                       
+           - Compiling error when using scons cache
+           - Fixed compiling error when using scons cache                       
 
       .. rubric:: Known Issues
 
