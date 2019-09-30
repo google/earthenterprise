@@ -51,13 +51,7 @@ class MaskgenConfig {
     SetFromOldValues(Unset, 100);
   }
   uint64 GetSize() {
-    return GetObjectSize(feather)
-          + GetObjectSize(mode)
-          + GetObjectSize(band)
-          + GetObjectSize(fillvalue)
-          + GetObjectSize(threshold)
-          + GetObjectSize(holesize)
-          + GetObjectSize(whitefill)
+    return sizeof(*this)
           + GetObjectSize(nodata);
   }
 #/hquote

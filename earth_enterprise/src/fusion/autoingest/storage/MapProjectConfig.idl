@@ -31,6 +31,14 @@ class MapProjectConfig {
     Defaultable<LayerLegend> legend = Defaultable<LayerLegend>();
     bool skipLayer = false;
 #pragma GenerateIsUpToDate
+  #hquote
+  public:
+    uint64 GetSize() {
+      return sizeof(*this)
+              + GetObjectSize(assetRef);
+              //+ GetObjectSize(legend);
+    }
+  #/hquote
   };
 
   std::vector<LayerItem> layers = std::vector<MapProjectConfig::LayerItem>();
@@ -44,8 +52,13 @@ class MapProjectConfig {
   void DeleteLayer(const LayerItem& layer_item);
   bool HasSearchFields(void) const;
   uint64 GetSize() {
-    return GetObjectSize(layers)
-            + GetObjectSize(poi_search_tab_overrides);
+    uint64 layersSize = 0;
+    for (auto layer : layers) {
+      layersSize += layer.GetSize();
+    }
+    return sizeof(*this)
+            + layersSize;
+            //+ GetObjectSize(poi_search_tab_overrides);
   }
 #/hquote
 

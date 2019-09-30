@@ -47,10 +47,9 @@ class QueryConfig {
   QueryConfig(const MapSubLayerConfig &mapSubLayerConfig,
               const QStringList &contextScripts);
   uint64 GetSize() {
-    return GetObjectSize(filters)
-            + GetObjectSize(allowFeatureDuplication)
-            + GetObjectSize(contextScript)
-            + GetObjectSize(allowEmptyLayer);
+    return sizeof(*this)
+            //+ GetObjectSize(filters)
+            + GetObjectSize(contextScript);
   }
 #/hquote
 };

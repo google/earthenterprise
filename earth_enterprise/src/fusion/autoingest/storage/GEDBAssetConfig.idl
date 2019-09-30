@@ -35,14 +35,17 @@ class GEDBAssetConfig {
   deprecated std::string fusion_version_ = std::string();
 #hquote
   uint64 GetSize() {
-    return GetObjectSize(index_verref_)
+    uint64 search_tabs_Size = 0;
+    for (auto searchTab : search_tabs_) {
+      search_tabs_Size += sizeof(searchTab);
+    }
+    return sizeof(*this)
+            + GetObjectSize(index_verref_)
             + GetObjectSize(vector_project_)
             + GetObjectSize(imagery_project_)
             + GetObjectSize(terrain_project_)
-            + GetObjectSize(search_tabs_)
-            + GetObjectSize(database_version_)
-            + (uint64)sizeof(bool)
-            + (uint64)sizeof(std::string);
+            + GetObjectSize(search_tabs_);
+            //+ GetObjectSize(fusion_version_);
   }
 #/hquote
 

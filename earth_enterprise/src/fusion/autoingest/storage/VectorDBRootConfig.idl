@@ -37,10 +37,15 @@ class VectorDBRootConfig {
 
 #hquote
   uint64 GetSize() {
-    return (uint64)sizeof(VectorProjectConfig::Standard)
-            + GetObjectSize(layers)
-            + GetObjectSize(providers)
-            + (uint64)sizeof(int);
+    /*
+    uint64 layersSize = 0;
+    for (auto layer : layers) {
+      layersSize += layer.GetSize();
+    }*/
+    return sizeof(*this)
+            //+ (uint64)sizeof(VectorProjectConfig::Standard)
+            //+ layersSize
+            + GetObjectSize(providers);
   }
 #/hquote
 
@@ -76,9 +81,15 @@ class DBRootGenConfig {
   void AfterLoad(const DBRootGenConfig::DeprecatedMembers &deps);
 
   uint64 GetSize() {
-    return (uint64)sizeof(VectorProjectConfig::Standard)
-            + GetObjectSize(layers)
-            //+ (uint64)sizeof(std::vector<std::string>())
+    /*
+    uint64 layersSize = 0;
+    for (auto layer : layers) {
+      layersSize += layer.GetSize();
+    }*/
+    return sizeof(*this)
+            //+ (uint64)sizeof(VectorProjectConfig::Standard)
+            //+ layersSize
+            //+ GetObjectSize(layerProviders)
             + GetObjectSize(layerLODFiles)
             + GetObjectSize(layerProviderIds);
   }

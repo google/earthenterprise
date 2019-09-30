@@ -39,8 +39,8 @@ class MapLayerConfig {
     fuid_channel_ = 0;
   }
   uint64 GetSize() {
-    return GetObjectSize(subLayers)
-            + GetObjectSize(fuid_channel_);
+    return sizeof(*this)
+            + GetObjectSize(subLayers);
   }
 #/hquote
 

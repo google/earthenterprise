@@ -35,14 +35,27 @@ class RasterDBRootAssetConfig {
     uint32      channel_id_;
     std::string asset_uuid_ = std::string();
 #pragma GenerateIsUpToDate
+  #hquote
+  public:
+    uint64 GetSize() {
+      return sizeof(*this)
+              //+ GetObjectSize(legend_);
+              + GetObjectSize(asset_uuid_);
+    }
+  #/hquote
   };
 
   std::vector<RasterDBRootAssetConfig::Layer> layers_;
   std::set<uint32> used_provider_ids_;
 #hquote
   uint64 GetSize() {
-    return GetObjectSize(layers_)
-            + GetObjectSize(used_provider_ids_);
+    uint64 layers_Size = 0;
+    for (auto layer : layers_) {
+      layers_Size += layer.GetSize();
+    }
+    return sizeof(*this)
+            + layers_Size;
+            //+ GetObjectSize(used_provider_ids_);
   }
 #/hquote
 
@@ -64,13 +77,26 @@ class RasterDBRootGenConfig {
     LayerLegend legend_;
     uint32      channel_id_;
     std::string asset_uuid_ = std::string();
+  #hquote
+  public:
+    uint64 GetSize() {
+      return sizeof(*this)
+              //+ GetObjectSize(legend_);
+              + GetObjectSize(asset_uuid_);
+    }
+  #/hquote
   };
   std::vector<RasterDBRootGenConfig::Layer> layers_;
   std::set<uint32>                          used_provider_ids_;
 #hquote
   uint64 GetSize() {
-    return GetObjectSize(layers_)
-            + GetObjectSize(used_provider_ids_);
+    uint64 layers_Size = 0;
+    for (auto layer : layers_) {
+      layers_Size += layer.GetSize();
+    }
+    return sizeof(*this)
+            + layers_Size;
+            //+ GetObjectSize(used_provider_ids_);
   }
 #/hquote
 

@@ -70,12 +70,11 @@ class DatabaseConfig {
   }
 
   uint64 GetSize() {
-    return GetObjectSize(imageryProject)
+    return sizeof(*this)
+            + GetObjectSize(imageryProject)
             + GetObjectSize(vectorProject)
             + GetObjectSize(terrainProject)
-            + (uint64)sizeof(std::string)
-            + (uint64)sizeof(uint)
-            + (uint64)sizeof(bool)
+            //+ GetObjectSize(magratheanCoverage)
             + GetObjectSize(search_tabs_)
             + GetObjectSize(search_tab_refs_);
   }

@@ -45,19 +45,8 @@ class VectorProductConfig {
   bool do_not_fix_invalid_geometries_ = false;
 #hquote
   uint64 GetSize() {
-    return GetObjectSize(encoding)
-            + GetObjectSize(layer)
-            + GetObjectSize(scale)
-            + GetObjectSize(force3D)
-            + GetObjectSize(force2D)
-            + GetObjectSize(ignore_bad_features_)
-            + GetObjectSize(provider_id_)
-            + GetObjectSize(north_boundary)
-            + GetObjectSize(south_boundary)
-            + GetObjectSize(east_boundary)
-            + GetObjectSize(west_boundary)
-            + GetObjectSize(force25D)
-            + GetObjectSize(do_not_fix_invalid_geometries_);
+    return sizeof(*this)
+            + GetObjectSize(encoding);
   }
 #/hquote
 #pragma GenerateIsUpToDate

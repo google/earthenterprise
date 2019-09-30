@@ -20,8 +20,8 @@ class ReprojectConfig {
   bool ispalette;
 #hquote
   uint64 GetSize() {
-    return GetObjectSize(srs)
-            + GetObjectSize(ispalette);
+    return sizeof(*this)
+            + GetObjectSize(srs);
   }
 #/hquote
 #pragma GenerateIsUpToDate

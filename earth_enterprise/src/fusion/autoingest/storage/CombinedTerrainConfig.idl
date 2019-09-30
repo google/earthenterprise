@@ -24,7 +24,7 @@ class CombinedTerrainConfig {
   IsUpToDateIgnore uint index_version_;
 #hquote
   uint64 GetSize() {
-    return (uint64)sizeof(uint);
+    return sizeof(*this);
   }
 #/hquote
 

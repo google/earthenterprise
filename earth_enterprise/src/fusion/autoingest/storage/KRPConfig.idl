@@ -32,15 +32,8 @@ class KRPConfig {
 
 #hquote
   uint64 GetSize() {
-    return GetObjectSize(scale)
-            + GetObjectSize(clampNonnegative)
-            + (uint64)sizeof(bool)
-            + GetObjectSize(overridesrs)
-            + GetObjectSize(useMercatorProjection)
-            + GetObjectSize(north_boundary)
-            + GetObjectSize(south_boundary)
-            + GetObjectSize(east_boundary)
-            + GetObjectSize(west_boundary);
+    return sizeof(*this)
+            + GetObjectSize(overridesrs);
   }
 #/hquote
 

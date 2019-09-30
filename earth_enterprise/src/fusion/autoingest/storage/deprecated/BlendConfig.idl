@@ -25,7 +25,8 @@ class BlendConfig {
   std::vector<InsetStackItem> insets;
 #hquote
   uint64 GetSize() {
-    return GetObjectSize(insets);
+    return sizeof(*this) 
+            + GetObjectSize(insets);
   }
 #/hquote
 #pragma GenerateIsUpToDate

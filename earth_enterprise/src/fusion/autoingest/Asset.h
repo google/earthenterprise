@@ -79,14 +79,13 @@ class AssetImpl : public AssetStorage, public StorageManaged {
 
   // determine amount of memory used by an AssetImpl
   virtual uint64 GetSize() {
-    return(GetObjectSize(name)
-    + GetObjectSize(type)
+    return sizeof(*this)
+    + GetObjectSize(name)
     + GetObjectSize(subtype)
     + GetObjectSize(inputs)
     + meta.GetSize()
     + GetObjectSize(versions)
-    + GetObjectSize(timestamp)
-    + GetObjectSize(filesize));
+    + GetObjectSize(timestamp);
   }
 
   std::string  GetLastGoodVersionRef(void) const;

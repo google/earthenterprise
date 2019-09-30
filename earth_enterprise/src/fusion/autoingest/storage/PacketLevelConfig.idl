@@ -45,12 +45,30 @@ class PacketLevelConfig {
     SharedString packetAlphaLevel = SharedString();
 
 #pragma GenerateIsUpToDate
+  #hquote
+  public:
+    uint64 GetSize() {
+      return sizeof(*this)
+              + GetObjectSize(dataRP)
+              + GetObjectSize(alphaRP)
+              + GetObjectSize(packetLevel)
+              + GetObjectSize(packetAlphaLevel);
+    }
+  #/hquote
   };
 
   class Attribution {
     std::string dataRP;
     std::string acquisitionDate;
     uint32      fuid_resource_;
+  #hquote
+  public:
+    uint64 GetSize() {
+      return sizeof(*this)
+              + GetObjectSize(dataRP)
+              + GetObjectSize(acquisitionDate);
+    }
+  #/hquote
   };
 
   std::vector<Inset> insets;
@@ -85,17 +103,20 @@ class PacketLevelConfig {
 
 #hquote
   uint64 GetSize() {
-    return GetObjectSize(insets)
-            + GetObjectSize(coverage)
-            + GetObjectSize(minify)
-            + (uint64)sizeof(bool)
-            + GetObjectSize(skipTransparent)
-            + GetObjectSize(decimate)
-            + GetObjectSize(sampleSize)
+    uint64 insetsSize = 0;
+    uint64 attributionsSize = 0;
+    for (auto inset : insets) {
+      insetsSize += inset.GetSize();
+    }
+    for (auto attr : attributions) {
+      attributionsSize += attr.GetSize();
+    }
+    return sizeof(*this)
+            + insetsSize
+            //+ GetObjectSize(coverage)
             + GetObjectSize(mergeTopDataRP)
             + GetObjectSize(mergeTopAlphaRP)
-            //+ (uint64)sizeof(attributions)
-            + (uint64)sizeof(bool);
+            + attributionsSize;
   }
 #/hquote
 

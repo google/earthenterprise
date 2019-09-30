@@ -57,6 +57,12 @@ class VectorFuseAssetItem {
   inline bool HasJS(void) const {
     return (feature.HasJS() || site.HasJS());
   }
+public:
+  uint64 GetSize() {
+    return sizeof(*this);
+            //+ feature.GetSize()
+            //+ site.GetSize();
+  }
 #/hquote
   
 #pragma GenerateIsUpToDate
@@ -81,13 +87,15 @@ class VectorFuseAssetConfig {
   bool HasJS(void) const;
   VectorFuseAssetConfig(const LayerConfig &layerConfig);
   uint64 GetSize() {
-    return (uint64)sizeof(uint)
-            + (uint64)sizeof(uint)
-            + GetObjectSize(items)
-            + GetObjectSize(QString(""))
+    uint64 itemsSize = 0;
+    for (auto item : items) {
+      itemsSize += item.GetSize();
+    }
+    return sizeof(*this)
+            + itemsSize;
+            //+ GetObjectSize(contextScript)
             //+ (uint64)sizeof(std::vector<SearchField>())
-            + (uint64)sizeof(std::string)
-            + (uint64)sizeof(int);
+            //+ GetObjectSize(searchStyle);
   }
 #/hquote
 

@@ -20,6 +20,7 @@
 
 #include <map>
 #include "khstrconv.h"
+#include "CacheSizeCalculations.h"
 
 class khMetaData
 {
@@ -45,14 +46,9 @@ class khMetaData
   uint64 GetSize() {
     uint64 total = 0;
     for (const auto &i : map) {
-      total += GetQStringSize(i.first) + GetQStringSize(i.second);
+      total += GetObjectSize(i.first) + GetObjectSize(i.second);
     }
-    return sizeof(this) + total;
-  }
-
-  // determine amount of memory used by qstring
-  uint64 GetQStringSize(QString qstr) {
-      return sizeof(qstr) + (qstr.capacity() * sizeof(char16_t));
+    return sizeof(*this) + total;
   }
 
   bool operator==(const khMetaData &o) const { return map == o.map; }

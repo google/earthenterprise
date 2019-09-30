@@ -141,12 +141,9 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
 
   // determine amount of memory used by an AssetVersionImpl
   virtual uint64 GetSize() {
-    return (GetObjectSize(name)
-    + GetObjectSize(type)
+    return sizeof(*this)
+    + GetObjectSize(name)
     + GetObjectSize(subtype)
-    + GetObjectSize(state)
-    + GetObjectSize(progress)
-    + GetObjectSize(locked)
     + GetObjectSize(inputs)
     + GetObjectSize(children)
     + GetObjectSize(parents)
@@ -156,9 +153,7 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
     + GetObjectSize(beginTime)
     + GetObjectSize(progressTime)
     + GetObjectSize(endTime)
-    + GetObjectSize(taskid)
-    + GetObjectSize(timestamp)
-    + GetObjectSize(filesize));
+    + GetObjectSize(timestamp);
   }
   template <class outIter>
   outIter GetInputs(outIter oi) const {

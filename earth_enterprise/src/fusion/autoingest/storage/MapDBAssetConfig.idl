@@ -36,14 +36,11 @@ class MapDBAssetConfig {
   std::string fusion_version_ = std::string("");  // Keep track of the originating Fusion version number.
 #hquote
   uint64 GetSize() {
-    return GetObjectSize(index_verref_)
+    return sizeof(*this)
+            + GetObjectSize(index_verref_)
             + GetObjectSize(map_project_)
             + GetObjectSize(imagery_project_)
             + GetObjectSize(search_tabs_)
-            + GetObjectSize(database_version_)
-            + (uint64)sizeof(bool)
-            + GetObjectSize(useGoogleImagery)
-            + GetObjectSize(is_mercator_)
             + GetObjectSize(fusion_version_);
   }
 #/hquote

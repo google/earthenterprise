@@ -40,7 +40,8 @@ class MapPOIConfig {
 #hquote
   bool empty(void) const { return search_fields_.empty(); }
   uint64 GetSize() {
-    return GetObjectSize(search_fields_)
+    return sizeof(*this)
+            + GetObjectSize(search_fields_)
             + GetObjectSize(search_style_)
             + GetObjectSize(query_files_);
   }
@@ -61,6 +62,14 @@ class MapPOIAssetConfig {
     std::vector<SearchField> search_fields_;
     std::string assetref_;
 #pragma GenerateIsUpToDate
+  #hquote
+  public:
+    uint64 GetSize() {
+      return sizeof(*this)
+              + GetObjectSize(search_fields_)
+              + GetObjectSize(assetref_);
+    }
+  #/hquote
   }
   
   std::vector< SearchFields > all_search_fields_;
@@ -68,7 +77,12 @@ class MapPOIAssetConfig {
 #hquote
   bool empty(void) const { return all_search_fields_.empty(); }
   uint64 GetSize() {
-    return GetObjectSize(all_search_fields_);
+    uint64 all_search_fields_Size = 0;
+    for (auto searchfields : all_search_fields_) {
+      all_search_fields_Size += searchfields.GetSize();
+    }
+    return sizeof(*this)
+            + all_search_fields_Size;
   }
 #/hquote
 

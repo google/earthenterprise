@@ -37,9 +37,9 @@ class MosaicConfig {
     }
   }
   uint64 GetSize() {
-    return GetObjectSize(fill)
+    return sizeof(*this)
+            + GetObjectSize(fill)
             + GetObjectSize(lutfile)
-            + GetObjectSize(fillTolerance)
             + GetObjectSize(overridesrs);
   }
 #/hquote

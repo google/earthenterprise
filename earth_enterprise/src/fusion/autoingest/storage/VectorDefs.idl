@@ -32,7 +32,7 @@ class VectorDefs {
   static FeatureDisplayType SuggestedFeatureType(gstPrimType gstPrimType_);
   static QString PrettyFeatureDisplayType(FeatureDisplayType type);
   uint64 GetSize() {
-    return 0;
+    return sizeof(*this);
   }
 #/hquote
 

@@ -34,12 +34,26 @@ class UnifiedIndexEntry {
   uint32 channel_id_ = load:uint32(0);
   std::string date_string_ = std::string();  // Format expected: "YYYY-MM-DD"
 #pragma GenerateIsUpToDate
+#hquote
+public:
+  uint64 GetSize() {
+    return sizeof(*this)
+            + GetObjectSize(type_)
+            //+ GetObjectSize(verref_)
+            + GetObjectSize(date_string_);
+  }
+#/hquote
 }
 class UnifiedIndexConfig {
   std::vector<UnifiedIndexEntry> indexes_;
 #hquote
   uint64 GetSize() {
-    return GetObjectSize(indexes_);
+    uint64 indexes_Size = 0;
+    for (auto index : indexes_) {
+      indexes_Size += index.GetSize();
+    }
+    return sizeof(*this)
+            + indexes_Size;
   }
 #/hquote
 

@@ -28,6 +28,13 @@ class VectorPacketVersion {
   std::string packet_verref_;
   uint32 channel_id_;
   uint32 version_;
+#hquote
+public:
+  uint64 GetSize() {
+    return sizeof(*this)
+            + GetObjectSize(packet_verref_);
+  }
+#/hquote
 };
 class VectorGEIndexConfig {
   std::string db_name_;
@@ -38,10 +45,16 @@ class VectorGEIndexConfig {
 
 #hquote
   uint64 GetSize() {
-    return GetObjectSize(db_name_)
-            + (uint64)sizeof(uint32);
-            //+ (uint64)sizeof(std::vector<std::string>())
-            //+ (uint64)sizeof(std::vector<std::string>());
+    /*
+    uint64 packet_vers_Size = 0;
+    for (auto packetver : packet_vers_) {
+      packet_vers_Size += packerver.GetSize();
+    }*/
+    return sizeof(*this)
+            + GetObjectSize(db_name_);
+            //+ packet_vers_Size
+            //+ GetObjectSize(custom_icons_)
+            //+ GetObjectSize(layer_icons_);
   }
 #/hquote
 
