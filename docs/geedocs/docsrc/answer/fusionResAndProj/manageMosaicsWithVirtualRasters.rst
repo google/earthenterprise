@@ -58,7 +58,7 @@ Manage mosaics with virtual rasters
 
       .. note::
 
-         **Note:** ``Gevirtualraster`` is necessary if you are creating
+         ``Gevirtualraster`` is necessary if you are creating
          a custom mask file for the imagery or terrain resource as there
          is a software requirement of one source file for one custom
          mask file. See :doc:`../fusionResAndProj/createCustomMasks`.
