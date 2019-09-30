@@ -40,7 +40,7 @@ sudo apt-get install \
     libxml2-dev libxml2-utils libxmu-dev libxrandr-dev libyaml-cpp-dev \
     openssl \
     python-dev python-imaging python-psycopg2 python-setuptools python2.7 \
-    python2.7-dev python-git \
+    python2.7-dev python-lxml python-git \
     scons shunit2 swig xorg-dev zlib1g-dev
 ```
 For Ubuntu 14, in addition of the above command, run this extra one:
