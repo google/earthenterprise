@@ -353,21 +353,26 @@ class GlobeBuilder(object):
     http_status_code = 0
 
     try:
-      # Set the context based on cert requirements
-
-      if CONFIGS.GetBool("VALIDATE_CERTIFICATE"):
-        cert_file = CONFIGS.GetStr("CERTIFICATE_CHAIN_PATH")
-        key_file = CONFIGS.GetStr("CERTIFICATE_KEY_PATH")
-        context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-        context.load_cert_chain(cert_file, keyfile=key_file)
+      # TODO: When Python 2.7 is used on Centos6, this if version<=2.6 block can be removed
+      # and the 'else' ssl.SSLContext based block can be used instead.
+      if sys.version_info[0] == 2 and sys.version_info[1] <= 6:
+        with urllib2.urlopen(url) as fp:
+          http_status_code = fp.getcode()
+          response_data = fp.read()
       else:
-        context = ssl.create_default_context()
-        context.check_hostname = False
-        context.verify_mode = ssl.CERT_NONE
-
-      with urllib2.urlopen(url, context=context) as fp:
-        http_status_code = fp.getcode()
-        response_data = fp.read()
+        # Set the context based on cert requirements
+        if CONFIGS.GetBool("VALIDATE_CERTIFICATE"):
+          cert_file = CONFIGS.GetStr("CERTIFICATE_CHAIN_PATH")
+          key_file = CONFIGS.GetStr("CERTIFICATE_KEY_PATH")
+          context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+          context.load_cert_chain(cert_file, keyfile=key_file)
+        else:
+          context = ssl.create_default_context()
+          context.check_hostname = False
+          context.verify_mode = ssl.CERT_NONE
+        with urllib2.urlopen(url) as fp:
+          http_status_code = fp.getcode()
+          response_data = fp.read()
 
     except:
       GlobeBuilder.StatusWarning("FAILED: Caught exception reading {0}".format(url))
