@@ -68,8 +68,7 @@ Enterprise Client (EC) version 7.1.5 and above.
 
 Open GEE 5.3.2 includes some library updates:
 
-Library updates      Library  Version  Apache  2.4  PostgreSQL  9.6.15
-PostGIS  2.3.9
+    Library  Version  Apache  2.4  PostgreSQL  9.6.15  PostGIS  2.3.9
 
 To upgrade from Open GEE 5.2.0, do NOT uninstall it. We recommend that
 you upgrade Open GEE 5.2.0 by simply installing Open GEE 5.3.2.

@@ -50,7 +50,7 @@ Release notes: Open GEE 5.3.2
 
       Open GEE 5.3.2 includes some library updates:
 
-      .. list-table:: Library updates
+      .. list-table::
          :widths: 15 15
          :header-rows: 1
 
