@@ -90,7 +90,7 @@ published to GEE Server.</p>
 <li><a class="reference internal" href="../geeServerAdmin/publishDatabasesPortables.html"><span class="doc">Publish databases and portables</span></a></li>
 <li><a class="reference internal" href="publishDBWithDiscPublishing.html"><span class="doc">Publish databases using disconnected publishing</span></a></li>
 </ul>
-<p class="rubric">Troubleshoot Push Issues</p>
+<p class="rubric" id="index-0">Troubleshoot Push Issues</p>
 <p>Errors in the push operation may occur when Fusion fails to copy
 and register the database files to GEE Server. Use the following
 debugging steps, presented in a logical order, to uncover and
@@ -137,40 +137,65 @@ Google Earth Enterprise Server splash screen.</p>
 <p class="first admonition-title">Tip</p>
 <p>To reset the username and password, run the following
 command, which prompts you to enter a new username and
-password:
-<code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">/opt/google/gehttpd/bin/htpasswd</span> <span class="pre">-c</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">/opt/google/gehttpd/conf.d/.htpasswd</span> <span class="pre">new_user_name</span></code></p>
+password:</p>
+<p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">/opt/google/gehttpd/bin/htpasswd</span> <span class="pre">-c</span></code>
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf.d/.htpasswd</span> <span class="pre">new_user_name</span></code></p>
 <p class="last">If you do not know your username and password, contact your
 system administrator.</p>
 </div>
 </li>
 <li><p class="first">Review the HTTP and Postgres processes. They should look
 something like this:</p>
-<p><code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">ps</span> <span class="pre">-ef</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">http</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">root</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">9220</span>&#160;&#160;&#160; <span class="pre">1</span>&#160; <span class="pre">0</span> <span class="pre">Mar13</span> <span class="pre">?</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">00:00:00</span> <span class="pre">/opt/google/gehttpd/bin/gehttpd</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">505</span>&#160;&#160; <span class="pre">14608</span>&#160; <span class="pre">9220</span>&#160; <span class="pre">0</span> <span class="pre">Mar15</span> <span class="pre">?</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">00:00:00</span> <span class="pre">/opt/google/gehttpd/bin/gehttpd</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">505</span>&#160;&#160; <span class="pre">14609</span>&#160; <span class="pre">9220</span>&#160; <span class="pre">0</span> <span class="pre">Mar15</span> <span class="pre">?</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">00:00:00</span> <span class="pre">/opt/google/gehttpd/bin/gehttpd</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">#</span> <span class="pre">ps</span> <span class="pre">-ef</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">post</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">gepguser</span>&#160; <span class="pre">9206</span>&#160; <span class="pre">9195</span>&#160; <span class="pre">0</span> <span class="pre">Mar13</span> <span class="pre">?</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">00:00:00</span> <span class="pre">postgres:</span> <span class="pre">writer</span> <span class="pre">process</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">gepguser</span>&#160; <span class="pre">9207</span>&#160; <span class="pre">9195</span>&#160; <span class="pre">0</span> <span class="pre">Mar13</span> <span class="pre">?</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">00:00:00</span> <span class="pre">postgres:</span> <span class="pre">stats</span> <span class="pre">buffer</span> <span class="pre">process</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">gepguser</span>&#160; <span class="pre">9208</span>&#160; <span class="pre">9207</span>&#160; <span class="pre">0</span> <span class="pre">Mar13</span> <span class="pre">?</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">00:00:00</span> <span class="pre">postgres:</span> <span class="pre">stats</span> <span class="pre">collector</span> <span class="pre">process</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">gepguser</span> <span class="pre">10639</span>&#160; <span class="pre">9195</span>&#160; <span class="pre">0</span> <span class="pre">Mar13</span> <span class="pre">?</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">00:00:00</span> <span class="pre">postgres:</span> <span class="pre">geuser</span> <span class="pre">gesearch</span> <span class="pre">127.0.0.1(32772)</span> <span class="pre">idle</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">gepguser</span> <span class="pre">10640</span>&#160; <span class="pre">9195</span>&#160; <span class="pre">0</span> <span class="pre">Mar13</span> <span class="pre">?</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">00:00:00</span> <span class="pre">postgres:</span> <span class="pre">geuser</span> <span class="pre">gesearch</span> <span class="pre">127.0.0.1(32773)</span> <span class="pre">idle</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">gepguser</span> <span class="pre">10641</span>&#160; <span class="pre">9195</span>&#160; <span class="pre">0</span> <span class="pre">Mar13</span> <span class="pre">?</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">00:00:00</span> <span class="pre">postgres:</span> <span class="pre">geuser</span> <span class="pre">gepoi</span> <span class="pre">127.0.0.1(32774)</span> <span class="pre">idle</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">gepguser</span> <span class="pre">10642</span>&#160; <span class="pre">9195</span>&#160; <span class="pre">0</span> <span class="pre">Mar13</span> <span class="pre">?</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">00:00:00</span> <span class="pre">postgres:</span> <span class="pre">geuser</span> <span class="pre">geplaces</span> <span class="pre">127.0.0.1(32775)</span> <span class="pre">idle</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>``# ps -ef | grep http``
+``root 9220 1 0 Mar13 ? 00:00:00 /opt/google/gehttpd/bin/gehttpd``
+``505 14608 9220 0 Mar15 ? 00:00:00 /opt/google/gehttpd/bin/gehttpd``
+``505 14609 9220 0 Mar15 ? 00:00:00 /opt/google/gehttpd/bin/gehttpd``
+
+``# ps -ef | grep post``
+``gepguser 9206 9195 0 Mar13 ? 00:00:00 postgres: writer process``
+``gepguser 9207 9195 0 Mar13 ? 00:00:00 postgres: stats buffer process``
+``gepguser 9208 9207 0 Mar13 ? 00:00:00 postgres: stats collector process``
+``gepguser 10639 9195 0 Mar13 ? 00:00:00 postgres: geuser gesearch 127.0.0.1(32772) idle``
+``gepguser 10640 9195 0 Mar13 ? 00:00:00 postgres: geuser gesearch 127.0.0.1(32773) idle``
+``gepguser 10641 9195 0 Mar13 ? 00:00:00 postgres: geuser gepoi 127.0.0.1(32774) idle``
+``gepguser 10642 9195 0 Mar13 ? 00:00:00 postgres: geuser geplaces 127.0.0.1(32775) idle``
+</pre></div>
+</div>
 <p>If you have any defunct processes or other unusual entries,
 stop them or try to find out why they are running. Run
 <code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">restart</span></code> to make sure that the server
 shuts down and starts up quickly with no error messages. If you
 still get error messages, take the following steps:</p>
-<ul class="simple">
-<li>Shut down the server: <code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">stop</span></code>.</li>
-<li>Delete the <code class="docutils literal notranslate"><span class="pre">postmaster.pid</span></code> file:
-<code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">/var/opt/google/pgsql/data/postmaster.pid</span></code>. (The
-<code class="docutils literal notranslate"><span class="pre">postmaster.pid</span></code> file may not have been deleted if
+<ul>
+<li><p class="first">Shut down the server:</p>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">stop</span></code>.</p>
+</li>
+<li><p class="first">Delete the <code class="docutils literal notranslate"><span class="pre">postmaster.pid</span></code> file:</p>
+<p><code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">/var/opt/google/pgsql/data/postmaster.pid</span></code>.</p>
+<p>(The <code class="docutils literal notranslate"><span class="pre">postmaster.pid</span></code> file may not have been deleted if
 PostgreSQL services have not been stopped correctly, thereby
-preventing another instance of GEE Server from starting.)</li>
-<li>Reboot the GEE server.</li>
-<li>Re-run the two <code class="docutils literal notranslate"><span class="pre">ps</span></code> commands and the <code class="docutils literal notranslate"><span class="pre">geserver</span> <span class="pre">restart</span></code>
-command to make sure that everything is running properly.</li>
+preventing another instance of GEE Server from starting.)</p>
+</li>
+<li><p class="first">Reboot the GEE server.</p>
+</li>
+<li><p class="first">Re-run the two <code class="docutils literal notranslate"><span class="pre">ps</span></code> commands and the <code class="docutils literal notranslate"><span class="pre">geserver</span> <span class="pre">restart</span></code>
+command to make sure that everything is running properly.</p>
+</li>
 </ul>
 </li>
 <li><p class="first">Review the <code class="docutils literal notranslate"><span class="pre">wsgi:ge</span></code> processes, which are GEE Server services
 that support pushing and publishing. They should look something
 like this:</p>
-<p><code class="docutils literal notranslate"><span class="pre">ps</span> <span class="pre">-ef</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">'wsgi:ge'</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">65609</span> <span class="pre">7272</span> <span class="pre">3445</span> <span class="pre">0</span> <span class="pre">Aug10</span> <span class="pre">?</span> <span class="pre">00:00:11</span> <span class="pre">(wsgi:ge_push_serve)</span> <span class="pre">-k</span> <span class="pre">start</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">65609</span> <span class="pre">7273</span> <span class="pre">3445</span> <span class="pre">0</span> <span class="pre">Aug10</span> <span class="pre">?</span> <span class="pre">00:00:12</span> <span class="pre">(wsgi:ge_publish_serve)</span> <span class="pre">-k</span> <span class="pre">start</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">65609</span> <span class="pre">7274</span> <span class="pre">3445</span> <span class="pre">0</span> <span class="pre">Aug10</span> <span class="pre">?</span> <span class="pre">00:00:11</span> <span class="pre">(wsgi:ge_publish_aux_serve)</span> <span class="pre">-k</span> <span class="pre">start</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>``ps -ef | grep &#39;wsgi:ge&#39;``
+``65609 7272 3445 0 Aug10 ? 00:00:11 (wsgi:ge_push_serve) -k start``
+``65609 7273 3445 0 Aug10 ? 00:00:12 (wsgi:ge_publish_serve) -k start``
+``65609 7274 3445 0 Aug10 ? 00:00:11 (wsgi:ge_publish_aux_serve) -k start``
+</pre></div>
+</div>
 </li>
 </ol>
 <p class="rubric" id="check-your-hostnames">Check your hostnames</p>
-<p>Check sure that <code class="docutils literal notranslate"><span class="pre">hostname</span> <span class="pre">-f</span></code> returns the hostname you think it
+<p>Check to be sure that <code class="docutils literal notranslate"><span class="pre">hostname</span> <span class="pre">-f</span></code> returns the hostname you think it
 should. Make sure that the <code class="docutils literal notranslate"><span class="pre">hostname</span> <span class="pre">-f</span></code> is consistent between
 the GEE server, the DNS entry for the GEE server, and any local
 hosts files. When you install Fusion and GEE Server on your
@@ -251,7 +276,7 @@ specify portable databases only:</p>
 <code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--stream_server_url</span> <span class="pre">http://earth.int</span> <span class="pre">--garbagecollect</span></code></p>
 </li>
 </ol>
-<p class="rubric" id="troubleshoot-publishing-issues">Troubleshoot Publishing Issues</p>
+<p class="rubric" id="troubleshoot-publishing-issues"><span id="index-1"></span>Troubleshoot Publishing Issues</p>
 <p>Errors in the publish operation may occur when GEE Server cannot
 publish to the specified publish point.</p>
 <p class="rubric">Delete your broken publish and try again</p>
@@ -278,7 +303,7 @@ re-try pushing version 4 of the database:</p>
 <p class="last">Instead of using &lt;code&gt;geserveradmin –adddb/pushdb&lt;/code&gt; commands, you can push the database directly from Fusion. See <a class="reference internal" href="pushAndPublishDB.html"><span class="doc">Push and publish databases</span></a>.</p>
 </div>
 </div></blockquote>
-<p class="rubric">Disconnected publishing issues</p>
+<p class="rubric" id="index-2">Disconnected publishing issues</p>
 <p>If you publish a disconnected database and it fails when you
 attempt to push the database, it may be that
 <code class="docutils literal notranslate"><span class="pre">gedisconnectedsend</span> <span class="pre">--sendpath</span></code> created folders with user/group
@@ -288,15 +313,15 @@ permissions only, preventing the file from being read by
 <p>Try resetting the permissions on the folders created by
 <code class="docutils literal notranslate"><span class="pre">gedisconnectedsend</span> <span class="pre">--sendpath</span></code> and try the <code class="docutils literal notranslate"><span class="pre">--pushdb</span></code> again.</p>
 <ul class="simple">
-<li>See “doc”<cite>../fusionAdministration/publishDBWithDisconnectedPublishing</cite>.</li>
+<li>See <a class="reference internal" href="publishDBWithDiscPublishing.html"><span class="doc">Publish databases using disconnected publishing</span></a>.</li>
 </ul>
 <p class="rubric">Check your log files</p>
 <p>If you are having push or publishing issues, there are several log
 files you can review for errors.</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils" id="index-3">
 <colgroup>
-<col width="42%" />
-<col width="58%" />
+<col width="50%" />
+<col width="50%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Log file</th>

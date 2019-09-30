@@ -177,9 +177,11 @@ databases or Flat (Plate Carrée) terrain projects.</p>
 </div>
 <p><em>Default</em>. Uses Flat map (Plate Carrée) projection.</p>
 <p><code class="docutils literal notranslate"><span class="pre">--maxlevel</span> <span class="pre">level</span></code></p>
-<div class="alert docutils container">
-Deprecated in release GEE 5.2.5 and higher. Use
-<code class="docutils literal notranslate"><span class="pre">--maxleveloverride</span></code> instead.</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Deprecated in release GEE 5.2.5 and higher. Use
+<code class="docutils literal notranslate"><span class="pre">--maxleveloverride</span></code> instead.</p>
+</div>
 <p><em>Optional</em>. Sets the maximum level for the terrain. Uses internal
 Fusion scale. Deprecated because it does not match the levels specified
 in the Fusion UI.</p>
@@ -254,7 +256,7 @@ of reconfiguring your asset root.</p>
 asset root.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> If you omit the path, the system creates a new asset
+<p class="last">If you omit the path, the system creates a new asset
 root in <code class="docutils literal notranslate"><span class="pre">/gevol/assets</span></code>.</p>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">srcvol</span> <span class="n">path</span>
@@ -268,7 +270,7 @@ root in <code class="docutils literal notranslate"><span class="pre">/gevol/asse
 (such as permissions, ownership, missing ID files, etc.).
 When you run this command, the tool auto-detects the problems that
 need to be repaired and fixes them.</p>
-<p><strong>Note:</strong> Do not use this command unless you see a system message
+<p>Do not use this command unless you see a system message
 instructing you to do so.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">editvolumes</span> <span class="p">[</span><span class="o">--</span><span class="n">assetroot</span> <span class="n">path</span><span class="p">]</span>
 </pre></div>
@@ -303,7 +305,7 @@ Fusion.)</p>
 <p>To specify the path where you want to push databases for
 publishing and serving with the current Google Earth Enterprise
 Server. Follow the prompts.</p>
-<p><strong>Note:</strong> You must run this command as root.</p>
+<p>You must run this command as root.</p>
 <p class="rubric">Example</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">geconfigurepublishroot</span> <span class="o">--</span><span class="n">path</span> <span class="o">/</span><span class="n">gevol</span><span class="o">/</span><span class="n">published_dbs</span> <span class="o">--</span><span class="n">allow_symlinks</span>
 </pre></div>
@@ -328,12 +330,14 @@ input. This option requires that some commands have arguments
 specified on the command line. If the arguments are insufficient
 or the configuration fails, the program will return -1 (0 is
 returned on success).</p>
-<div class="alert docutils container">
-Do not create more than one publish root for a single asset
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Do not create more than one publish root for a single asset
 root. That configuration produces unpredictable or undesirable
 results, including the inability to push at all from that asset
 root. You cannot push the same database multiple times to
-different publish roots on the same server.</div>
+different publish roots on the same server.</p>
+</div>
 <p class="rubric" id="gecutter">gecutter</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gecutter</span> <span class="p">{</span><span class="n">enable</span> <span class="o">|</span> <span class="n">disable</span><span class="p">}</span>
 </pre></div>
@@ -345,12 +349,12 @@ admin console. You can also launch the Cutter directly from
 <code class="docutils literal notranslate"><span class="pre">http://myserver.com/cutter</span></code>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> The default admin security does not apply to the
+<p class="last">The default admin security does not apply to the
 Cutter, so although it provides security if you try to launch
 the Cutter from the Admin console Settings menu, it does not
 block direct access to the Cutter via the URL. If you need
-Cutter security, you must add it separately. See
-<a class="reference internal" href="../geeServerConfigAndSecurity/ports.html"><span class="doc">Ports</span></a>.</p>
+Cutter security, you must add it separately. See <a class="reference internal" href="../geeServerConfigAndSecurity/ports.html"><span class="doc">GEE
+Server security</span></a>.</p>
 </div>
 <p>See <a class="reference internal" href="../geeServerAdmin/createPortableGlobesMaps.html"><span class="doc">Create Portable Globes and Maps</span></a>.</p>
 <p class="rubric">Example</p>
@@ -361,8 +365,10 @@ Cutter security, you must add it separately. See
 </pre></div>
 </div>
 <p class="rubric" id="gedisconnectedclean">gedisconnectedclean</p>
-<div class="alert docutils container">
-Deprecated in release GEE 4.4 and higher.</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Deprecated in release GEE 4.4 and higher.</p>
+</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gedisconnectedclean</span> <span class="p">[</span><span class="o">--</span><span class="n">dbpath</span> <span class="n">dbpath</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">list</span> <span class="n">assetroot</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -386,9 +392,11 @@ find databases stored within the mock asset root.</p>
 </div>
 <p><em>Optional</em>. List all dbpaths currently in disconnected asset root</p>
 <p class="rubric" id="gedisconnectedpublish">gedisconnectedpublish</p>
-<div class="alert docutils container">
-Deprecated in release GEE 4.4 and higher. Use
-<code class="docutils literal notranslate"><span class="pre">`geserveradmin</span> <span class="pre">--publishdb</span></code> &lt;#geserveradmin_pdb&gt;`__</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Deprecated in release GEE 4.4 and higher. Use
+<code class="docutils literal notranslate"><span class="pre">`geserveradmin</span> <span class="pre">--publishdb</span></code> &lt;#geserveradmin_pdb&gt;`__</p>
+</div>
 <p>instead.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gedisconnectedpublish</span> <span class="p">[</span><span class="n">db_alias</span><span class="p">]</span> <span class="n">db_name</span>
 </pre></div>
@@ -412,10 +420,12 @@ remember, for example, <code class="docutils literal notranslate"><span class="p
 <p><em>Required</em>. The full, “low-level” name of the database you want to
 publish.</p>
 <p class="rubric" id="gedisconnectedreceive">gedisconnectedreceive</p>
-<div class="alert docutils container">
-Deprecated in version 4.0. <code class="docutils literal notranslate"><span class="pre">gedisconnectedreceive</span></code> is
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Deprecated in version 4.0. <code class="docutils literal notranslate"><span class="pre">gedisconnectedreceive</span></code> is
 required only when the disconnected database was sent with an
-older (pre 4.0) version of Fusion.</div>
+older (pre 4.0) version of Fusion.</p>
+</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gedisconnectedreceive</span> <span class="o">--</span><span class="nb">input</span> <span class="n">dirname</span>
 </pre></div>
 </div>
@@ -438,16 +448,16 @@ local storage into the mock asset root.</p>
 </div>
 <p><em>Required</em>. Specify the directory that contains the files to be
 copied. This is typically the mount point of a hard drive.</p>
-<div class="line-block">
-<div class="line"><strong>Notes:</strong></div>
-<div class="line">The <code class="docutils literal notranslate"><span class="pre">gedisconnectedreceive</span></code> command will create an asset tree
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <code class="docutils literal notranslate"><span class="pre">gedisconnectedreceive</span></code> command will create an asset tree
 that mirrors the asset tree of the Fusion system that built the
-database.</div>
-<div class="line">The <code class="docutils literal notranslate"><span class="pre">gedisconnectedreceive</span></code> command will copy data to the mock
+database.
+The <code class="docutils literal notranslate"><span class="pre">gedisconnectedreceive</span></code> command will copy data to the mock
 asset root if the input folder is on a separate volume than the
 mock asset root. Links to the input folder to the mock asset
 root will be created if both the input and mock asset root
-folders on the same volume.</div>
+folders on the same volume.</p>
 </div>
 <p class="rubric" id="gedisconnectedsend">gedisconnectedsend</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gedisconnectedsend</span> <span class="p">[</span><span class="o">--</span><span class="n">extra</span> <span class="n">filename</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">havepath</span> <span class="n">dbpath</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">havepathfile</span> <span class="n">file</span><span class="p">]</span>
@@ -560,9 +570,11 @@ flat.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">maxlevel</span> <span class="n">level</span>
 </pre></div>
 </div>
-<div class="alert docutils container">
-Deprecated in release GEE 5.2.5 and higher. Use
-<code class="docutils literal notranslate"><span class="pre">--maxleveloverride</span></code> instead.</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Deprecated in release GEE 5.2.5 and higher. Use
+<code class="docutils literal notranslate"><span class="pre">--maxleveloverride</span></code> instead.</p>
+</div>
 <p><em>Optional</em>. Sets the maximum level for the imagery. Uses internal
 Fusion scale. Deprecated because it does not match the levels specified
 in the Fusion UI.</p>
@@ -590,9 +602,11 @@ imagery scale in Fusion. Matches the levels in the Fusion UI.</p>
 </div>
 <p><em>Default</em>. Uses Flat map (Plate Carrée) projection.</p>
 <p><code class="docutils literal notranslate"><span class="pre">--maxlevel</span> <span class="pre">level</span></code></p>
-<div class="alert docutils container">
-Deprecated in release GEE 5.2.5 and higher. Use
-<code class="docutils literal notranslate"><span class="pre">--maxleveloverride</span></code> instead.</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Deprecated in release GEE 5.2.5 and higher. Use
+<code class="docutils literal notranslate"><span class="pre">--maxleveloverride</span></code> instead.</p>
+</div>
 <p><em>Optional</em>. Sets the maximum level for the terrain. Uses internal
 Fusion scale. Deprecated because it does not match the levels specified
 in the Fusion UI.</p>
@@ -650,9 +664,11 @@ overlay terrain. resource_min_level is any integer between 4 and
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">maxlevel</span> <span class="n">level</span>
 </pre></div>
 </div>
-<div class="alert docutils container">
-Deprecated in release GEE 5.2.5 and higher. Use
-<code class="docutils literal notranslate"><span class="pre">--maxleveloverride</span></code> instead.</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Deprecated in release GEE 5.2.5 and higher. Use
+<code class="docutils literal notranslate"><span class="pre">--maxleveloverride</span></code> instead.</p>
+</div>
 <p><em>Optional</em>. Sets the maximum level for the imagery. Uses internal
 Fusion scale. Deprecated because it not match the levels specified
 in the Fusion UI.</p>
@@ -680,9 +696,11 @@ imagery scale in Fusion. Matches the levels in the Fusion UI.</p>
 </div>
 <p><em>Default</em>. Uses Flat map (Plate Carrée) projection.</p>
 <p><code class="docutils literal notranslate"><span class="pre">--maxlevel</span> <span class="pre">level</span></code></p>
-<div class="alert docutils container">
-Deprecated in release GEE 5.2.5 and higher. Use
-<code class="docutils literal notranslate"><span class="pre">--maxleveloverride</span></code> instead.</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Deprecated in release GEE 5.2.5 and higher. Use
+<code class="docutils literal notranslate"><span class="pre">--maxleveloverride</span></code> instead.</p>
+</div>
 <p><em>Optional</em>. Sets the maximum level for the terrain. Uses internal
 Fusion scale. Deprecated because it does not match the levels specified
 in the Fusion UI.</p>
@@ -713,8 +731,10 @@ inclusive.</p>
 overlay terrain. resource_min_level is any integer between 4 and
 24 inclusive.</p>
 <p class="rubric" id="gepublishdatabase">gepublishdatabase</p>
-<div class="alert docutils container">
-Deprecated in GEE 4.0.</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Deprecated in GEE 4.0.</p>
+</div>
 <p>Use <code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> to push and publish databases or use the
 Fusion GUI and <a class="reference external" href="../answer/3497763.html">GEE Server</a>.</p>
 <p class="rubric">geselectassetroot</p>
@@ -845,8 +865,10 @@ Defaults to the current server.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">search_server_url</span> <span class="n">url</span>
 </pre></div>
 </div>
-<div class="alert docutils container">
-Deprecated. Always specify a stream server.</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Deprecated. Always specify a stream server.</p>
+</div>
 <p class="rubric" id="server-type">Server type</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">server_type</span> <span class="p">{</span><span class="n">stream</span> <span class="o">|</span> <span class="n">search</span><span class="p">}</span>
 </pre></div>
@@ -917,10 +939,13 @@ server.</p>
 delete the actual files. (This command is similar to putting files
 in the trash on a Windows or Mac desktop. See also
 <code class="docutils literal notranslate"><span class="pre">--garbagecollect</span></code>.)</p>
-<p><strong>Note:</strong> If you want to delete a currently published database,
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you want to delete a currently published database,
 you first need to unpublish. (See also <code class="docutils literal notranslate"><span class="pre">--unpublish</span></code>.) To list
 the currently published databases, use the <code class="docutils literal notranslate"><span class="pre">--publisheddbs</span></code>
 option. (See also <code class="docutils literal notranslate"><span class="pre">--deletevh</span></code>.)</p>
+</div>
 <p class="rubric" id="push-databases">Push databases</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">pushdb</span> <span class="n">db_name</span><span class="o">...</span> <span class="p">[</span><span class="o">--</span><span class="n">force_copy</span><span class="p">]</span>
 </pre></div>
@@ -1057,18 +1082,24 @@ not allowed in the virtual host name. For example:</p>
 <span class="pre">If</span> <span class="pre">``vhurl</span></code> is omitted, it will be set to
 <code class="docutils literal notranslate"><span class="pre">http://yourserver.domain/vh_name</span></code>.
 There are three ways to specify the <code class="docutils literal notranslate"><span class="pre">vhurl</span></code>:</p>
-<ul class="simple">
-<li>Location-based URL, such as <code class="docutils literal notranslate"><span class="pre">/private_ge</span></code>.
+<ul>
+<li><p class="first">Location-based URL, such as <code class="docutils literal notranslate"><span class="pre">/private_ge</span></code>.
 For example, if the entire URL is
 <code class="docutils literal notranslate"><span class="pre">http://www.company.com/private_ge</span></code>,
-you enter <code class="docutils literal notranslate"><span class="pre">/private_ge</span></code>.
-<strong>Note:</strong> Google recommends that you use the
-<code class="docutils literal notranslate"><span class="pre">_ge</span></code> and <code class="docutils literal notranslate"><span class="pre">_map</span></code> naming convention to make
-it easier to distinguish between virtual host types.</li>
-<li>Port-based URL, such as: :: <a class="reference external" href="http://www.company.com:1234">http://www.company.com:1234</a>
+you enter <code class="docutils literal notranslate"><span class="pre">/private_ge</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><cite>Google recommends that you use the
+``_ge`</cite> and <code class="docutils literal notranslate"><span class="pre">_map</span></code> naming convention to make
+it easier to distinguish between virtual host types.</p>
+</div>
+</li>
+<li><p class="first">Port-based URL, such as: :: <a class="reference external" href="http://www.company.com:1234">http://www.company.com:1234</a>
 The entire URL, including protocol, servername,
-path (if applicable), and port are required.</li>
-<li>Name-based URL, such as: :: <a class="reference external" href="http://corp.company.com">http://corp.company.com</a></li>
+path (if applicable), and port are required.</p>
+</li>
+<li><p class="first">Name-based URL, such as: :: <a class="reference external" href="http://corp.company.com">http://corp.company.com</a></p>
+</li>
 </ul>
 <p class="last">For this type of specification, you must modify
 your DNS appropriately for the virtual host.
@@ -1122,7 +1153,7 @@ set up correctly, see
 <p>Permanently deletes the specified virtual host.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> If you want to delete a virtual host, you must first
+<p class="last">If you want to delete a virtual host, you must first
 unpublish all currently published databases associated with it.
 To list the currently published databases for the virtual host
 you want to delete, use the <code class="docutils literal notranslate"><span class="pre">--publisheddbs</span></code> option. (See
@@ -1141,8 +1172,11 @@ remove the files for databases that users have deleted to free up
 space on the storage device. (This command is similar to emptying
 the trash on a Windows or Mac operating system. See also
 <code class="docutils literal notranslate"><span class="pre">--deletedb</span></code>.)</p>
-<p><strong>Note:</strong> Deletes only those files that are not used by other
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Deletes only those files that are not used by other
 databases on that server.</p>
+</div>
 <p class="rubric" id="clean-up-portable-globes-and-maps-registration">Clean up portable globes and maps registration</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">portable_cleanup</span>
 </pre></div>
@@ -1153,9 +1187,12 @@ removed from your <code class="docutils literal notranslate"><span class="pre">/
 <code class="docutils literal notranslate"><span class="pre">--portable_cleanup</span></code> to clean portable registration information
 when portable files, which are currently published/registered,
 have been removed from your <code class="docutils literal notranslate"><span class="pre">/globes</span></code> directory.</p>
-<p><strong>Note:</strong> The cleanup is not implemented when there are no
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The cleanup is not implemented when there are no
 portable globes or maps in the globes directory:
 <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/cutter/globes</span></code>.</p>
+</div>
 <p class="rubric" id="getop">getop</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">getop</span> <span class="p">[</span><span class="o">--</span><span class="n">delay</span> <span class="n">seconds</span><span class="p">]</span>
 </pre></div>
@@ -1184,9 +1221,12 @@ every five seconds.</p>
 <p class="rubric" id="purpose-18">Purpose</p>
 <p>To upgrade an existing asset root after installing a later version
 of the software.</p>
-<p><strong>Note:</strong> You must run this command as root.</p>
-<p><strong>Note:</strong> You must stop the system manager before using this
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You must run this command as root.
+You must stop the system manager before using this
 command and then start it again after you are done.</p>
+</div>
 <p class="rubric" id="example-10">Example</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">geupgradeassetroot</span> <span class="o">--</span><span class="n">assetroot</span> <span class="o">/</span><span class="n">data1</span><span class="o">/</span><span class="n">assets</span>
 </pre></div>
