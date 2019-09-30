@@ -8,9 +8,13 @@ Release notes: Open GEE 5.3.2
 
    .. container:: content
 
-      Open GEE 5.3.2 is currently in development
-
       .. rubric:: New Features
+
+      **Documentation overhaul**. All documentation was migrated to
+      Sphinx format, making it easier to edit and maintain. User 
+      documentation file names were also migrated from number-based naming 
+      convention to self-explanatory descriptive titles. New documentation
+      format also offers a search capability that was not possible before.
 
       **KML validation in cutter**. Basic validation is now performed
       on KML that is pasted into the cutter tool.
@@ -35,7 +39,9 @@ Release notes: Open GEE 5.3.2
       -  Red Hat Enterprise Linux version 6.x and 7.x, including the
          most recent security patches
       -  CentOS 6.x and 7.x
-      -  Ubuntu 14.04 LTS and 16.04 LTS
+      -  Ubuntu 16.04 LTS
+
+      Ubuntu 14.04 will no longer be supported due to its recent end of life.
 
       Google Earth Enterprise 5.3.2 is compatible with Google Earth
       Enterprise Client (EC) version 7.1.5 and above.
@@ -44,7 +50,7 @@ Release notes: Open GEE 5.3.2
 
       Open GEE 5.3.2 includes some library updates:
 
-      .. list-table:: Library updates
+      .. list-table::
          :widths: 15 15
          :header-rows: 1
 
@@ -65,7 +71,7 @@ Release notes: Open GEE 5.3.2
 
       .. rubric:: Resolved Issues
 
-      .. list-table:: Resolved Issues
+      .. list-table::
          :widths: 10 30 55
          :header-rows: 1
 
@@ -80,13 +86,28 @@ Release notes: Open GEE 5.3.2
            - Quitting 32-bit Windows portable server in Windows 7 via Internet Explorer does not work
            - IE appears to perform aggressive caching, which was preventing the GET request to cmd=quit
              from making it to the server. Changing the command to be a POST request prevents this.
-         * - 1394
-           - Upgrade PostgreSQL and PostGIS to latest patch releases
-           - The current patch releases have been incorporated.
+         * - 1376
+           - Portable Globe Cutter fails the last step when using HTTPS
+           - Used the advanced configuration to set a URL that will be used when cutter tries to make an openurl call.            
+         * - 1398
+           - System Manager crash
+           - Fixed the crash's underlying cause.
+         * - 1401
+           - No notification when System Manager Asset Cache size is exceeded causing performance issues
+           - Added a logging record when System Manager Asset Cache size is exceeded.           
+         * - 1404
+           - WMS fails when using HTTPS
+           - Skipped the internal Certificate Verification. 
+         * - 1420
+           - Build should honor JAVA_HOME when creating rpm packages
+           - Honored JAVA_HOME
+         * - 1447
+           - Compiling error when using scons cache
+           - Fixed compiling error when using scons cache                       
 
       .. rubric:: Known Issues
 
-      .. list-table:: Known Issues
+      .. list-table::
          :widths: 10 30 55
          :header-rows: 1
 
