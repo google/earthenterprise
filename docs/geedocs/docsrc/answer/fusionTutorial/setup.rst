@@ -38,7 +38,7 @@ Setting Up the Tutorial
       -  `Define Source Providers <#DefineSrcProv>`_
       -  `Define Resource Paths <#DefineResPath>`_
 
-      .. index:: Select the Tutorial Asset Root
+      .. index:: Tutorial Asset Root
       .. rubric:: Select the Tutorial Asset Root
          :name: select-the-tutorial-asset-root
 
@@ -54,7 +54,7 @@ Setting Up the Tutorial
 
       This section explains how to select a different asset root.
 
-      .. container:: warning
+      .. warning::
 
          **Caution:** Even though your source volumes and asset roots
          are separate for each user or for the tutorial and production
@@ -76,15 +76,11 @@ Setting Up the Tutorial
       #. On the command line, log in as root.
       #. Stop the system manager by entering:
 
-         ::
-
-            /etc/init.d/gefusion stop
+         ``/etc/init.d/gefusion stop``
 
       #. Enter:
 
-         ::
-
-            geselectassetroot --assetroot /username/assets
+         ``geselectassetroot --assetroot /username/assets``
 
          where *username* is the name you or your system administrator
          used when configuring the tutorial asset root. (If you do not
@@ -94,9 +90,7 @@ Setting Up the Tutorial
       #. When you return to the prompt, log out as root.
       #. Start the system manager by entering:
 
-         ::
-
-            /etc/init.d/gefusion start
+         ``/etc/init.d/gefusion start``
 
 
       .. index:: Launch Google Earth Enterprise Fusion
@@ -114,7 +108,7 @@ Setting Up the Tutorial
       graphical user interface (GUI) appears.
 
 
-      .. index:: Build the Asset Navigation Tree
+      .. index:: Asset Navigation Tree
       .. rubric:: Build the Asset Navigation Tree
          :name: build-the-asset-navigation-tree
 
@@ -129,7 +123,7 @@ Setting Up the Tutorial
       In this exercise, you add subfolders to the tutorial asset root,
       so you can store your assets in an organized way.
 
-      .. container:: warning
+      .. warning::
 
          **Caution:** Once you create subfolders in your asset root, you
          cannot delete them. This makes it especially important for you
@@ -172,7 +166,7 @@ Setting Up the Tutorial
          the top right corner.
 
 
-      .. index:: Define Source Providers
+      .. index:: Source Providers
       .. rubric:: Define Source Providers
          :name: define-source-providers
 
@@ -195,12 +189,14 @@ Setting Up the Tutorial
          The **Edit Provider** dialog appears.
          |Edit Provider Dialog|
       #. Enter the following information:
+
          **Name:** USGS Imagery
          **Key:** USGS-I
          **Copyright Text:** Imagery © 2005 USGS
          To enter the copyright symbol, open a text editor, press
          CTRL-SHIFT-U, then enter the Unicode 00A9. Copy and paste the
          displayed symbol into the dialog.
+
       #. Click **OK**.
       #. Repeat steps **2** through **4** to add the following source
          providers:
@@ -236,7 +232,7 @@ Setting Up the Tutorial
          |Provider Manager Full|
       #. Click **OK** to close the Provider Manager.
 
-      .. index:: Setting up the fusion tutorial - Define resource paths
+      .. index:: Resource Paths
       .. rubric:: Define Resource Paths
          :name: define-resource-paths
 
@@ -254,7 +250,7 @@ Setting Up the Tutorial
 
          The **Select Folder** dialog appears.
          |Select Folder Dialog|
-      #. Navigate to */opt/google/share/tutorials/fusion*.
+      #. Navigate to ``/opt/google/share/tutorials/fusion``.
       #. Select **Vector**, then click **OK**.
       #. Repeat steps **2** through **4** for **Imagery** and
          **Terrain**.

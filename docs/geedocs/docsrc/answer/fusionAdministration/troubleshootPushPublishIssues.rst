@@ -41,7 +41,6 @@ Troubleshoot push/publishing issues
       because of a shortage of disk space. A remote push may fail
       because of an incorrect server association setting.
 
-      .. index:: Push Methods
       .. rubric:: Push methods
 
       The push method depends on how data is transferred between the GEE
@@ -100,7 +99,7 @@ Troubleshoot push/publishing issues
             ``root 9220 1 0 Mar13 ? 00:00:00 /opt/google/gehttpd/bin/gehttpd``
             ``505 14608 9220 0 Mar15 ? 00:00:00 /opt/google/gehttpd/bin/gehttpd``
             ``505 14609 9220 0 Mar15 ? 00:00:00 /opt/google/gehttpd/bin/gehttpd``
-
+            
             ``# ps -ef | grep post``
             ``gepguser 9206 9195 0 Mar13 ? 00:00:00 postgres: writer process``
             ``gepguser 9207 9195 0 Mar13 ? 00:00:00 postgres: stats buffer process``
@@ -117,13 +116,13 @@ Troubleshoot push/publishing issues
          still get error messages, take the following steps:
 
          -  Shut down the server:
-
+         
             ``/etc/init.d/geserver stop``.
 
          -  Delete the ``postmaster.pid`` file:
 
-            ``rm /var/opt/google/pgsql/data/postmaster.pid``.
-
+            ``rm /var/opt/google/pgsql/data/postmaster.pid``. 
+            
             (The ``postmaster.pid`` file may not have been deleted if
             PostgreSQL services have not been stopped correctly, thereby
             preventing another instance of GEE Server from starting.)
@@ -294,7 +293,7 @@ Troubleshoot push/publishing issues
 
             Instead of using <code>geserveradmin --adddb/pushdb</code> commands, you can push the database directly from Fusion. See :doc:`../fusionAdministration/pushAndPublishDB`.
 
-      .. index:: Disconnected Publishing Issues
+      .. index:: Troubleshoot Disconnected Publishing Issues
       .. rubric:: Disconnected publishing issues
 
       If you publish a disconnected database and it fails when you
@@ -307,15 +306,15 @@ Troubleshoot push/publishing issues
       Try resetting the permissions on the folders created by
       ``gedisconnectedsend --sendpath`` and try the ``--pushdb`` again.
 
-      -  See "doc"`../fusionAdministration/publishDBWithDiscPublishing`.
+      -  See :doc:`../fusionAdministration/publishDBWithDiscPublishing`.
 
       .. rubric:: Check your log files
 
       If you are having push or publishing issues, there are several log
       files you can review for errors.
 
-      .. Troubleshoot Push and Publish issues - log files
-      .. list-table::
+      .. index:: Troubleshoot Push and Publish issues - log files
+      .. list-table:: 
          :widths: 50 50
          :header-rows: 1
 
@@ -331,7 +330,7 @@ Troubleshoot push/publishing issues
            - Log file containing postgres processing information for GEE Server. Note that “root” privileges are required to open this log file: use sudo su.
          * - ``/home_dir_of_user/.fusion/gepublishdatabase.date.time``
            - Log file containing information about push attempts from Fusion.
-
+ 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
    :height: 44px

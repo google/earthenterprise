@@ -83,7 +83,8 @@ Command reference
 
            --maxlevel level
 
-      .. NOTE::
+      .. note::
+
          Deprecated in release GEE 5.2.5 and higher. Use
          ``--maxleveloverride`` instead.
 
@@ -130,7 +131,7 @@ Command reference
 
       ``--maxlevel level``
 
-      .. container:: alert
+      .. warning::
 
          Deprecated in release GEE 5.2.5 and higher. Use
          ``--maxleveloverride`` instead.
@@ -236,7 +237,7 @@ Command reference
 
       .. note::
 
-         **Note:** If you omit the path, the system creates a new asset
+         If you omit the path, the system creates a new asset
          root in ``/gevol/assets``.
 
       ::
@@ -254,7 +255,7 @@ Command reference
       When you run this command, the tool auto-detects the problems that
       need to be repaired and fixes them.
 
-      **Note:** Do not use this command unless you see a system message
+      Do not use this command unless you see a system message
       instructing you to do so.
 
       ::
@@ -303,7 +304,7 @@ Command reference
       publishing and serving with the current Google Earth Enterprise
       Server. Follow the prompts.
 
-      **Note:** You must run this command as root.
+      You must run this command as root.
 
       .. rubric:: Example
 
@@ -338,7 +339,7 @@ Command reference
       or the configuration fails, the program will return -1 (0 is
       returned on success).
 
-      .. container:: alert
+      .. warning::
 
          Do not create more than one publish root for a single asset
          root. That configuration produces unpredictable or undesirable
@@ -362,12 +363,12 @@ Command reference
 
       .. note::
 
-         **Note:** The default admin security does not apply to the
+         The default admin security does not apply to the
          Cutter, so although it provides security if you try to launch
          the Cutter from the Admin console Settings menu, it does not
          block direct access to the Cutter via the URL. If you need
-         Cutter security, you must add it separately. See
-         :doc:`../geeServerConfigAndSecurity/ports`.
+         Cutter security, you must add it separately. See :doc:`GEE
+         Server security <../geeServerConfigAndSecurity/ports>`.
 
       See :doc:`../geeServerAdmin/createPortableGlobesMaps`.
 
@@ -384,7 +385,7 @@ Command reference
       .. rubric:: gedisconnectedclean
          :name: gedisconnectedclean
 
-      .. container:: alert
+      .. warning::
 
          Deprecated in release GEE 4.4 and higher.
 
@@ -423,7 +424,7 @@ Command reference
       .. rubric:: gedisconnectedpublish
          :name: gedisconnectedpublish
 
-      .. container:: alert
+      .. warning::
 
          Deprecated in release GEE 4.4 and higher. Use
          ```geserveradmin --publishdb`` <#geserveradmin_pdb>`__
@@ -463,7 +464,7 @@ Command reference
       .. rubric:: gedisconnectedreceive
          :name: gedisconnectedreceive
 
-      .. container:: alert
+      .. warning::
 
          Deprecated in version 4.0. ``gedisconnectedreceive`` is
          required only when the disconnected database was sent with an
@@ -502,15 +503,16 @@ Command reference
       *Required*. Specify the directory that contains the files to be
       copied. This is typically the mount point of a hard drive.
 
-      | **Notes:**
-      | The ``gedisconnectedreceive`` command will create an asset tree
-        that mirrors the asset tree of the Fusion system that built the
-        database.
-      | The ``gedisconnectedreceive`` command will copy data to the mock
-        asset root if the input folder is on a separate volume than the
-        mock asset root. Links to the input folder to the mock asset
-        root will be created if both the input and mock asset root
-        folders on the same volume.
+      .. note::
+
+         The ``gedisconnectedreceive`` command will create an asset tree
+         that mirrors the asset tree of the Fusion system that built the
+         database.
+         The ``gedisconnectedreceive`` command will copy data to the mock
+         asset root if the input folder is on a separate volume than the
+         mock asset root. Links to the input folder to the mock asset
+         root will be created if both the input and mock asset root
+         folders on the same volume.
 
       .. rubric:: gedisconnectedsend
          :name: gedisconnectedsend
@@ -672,7 +674,7 @@ Command reference
 
            --maxlevel level
 
-      .. container:: alert
+      .. warning::
 
          Deprecated in release GEE 5.2.5 and higher. Use
          ``--maxleveloverride`` instead.
@@ -718,7 +720,7 @@ Command reference
 
       ``--maxlevel level``
 
-      .. container:: alert
+      .. warning::
 
          Deprecated in release GEE 5.2.5 and higher. Use
          ``--maxleveloverride`` instead.
@@ -808,7 +810,7 @@ Command reference
 
            --maxlevel level
 
-      .. container:: alert
+      .. warning::
 
          Deprecated in release GEE 5.2.5 and higher. Use
          ``--maxleveloverride`` instead.
@@ -854,7 +856,7 @@ Command reference
 
       ``--maxlevel level``
 
-      .. container:: alert
+      .. warning::
 
          Deprecated in release GEE 5.2.5 and higher. Use
          ``--maxleveloverride`` instead.
@@ -903,7 +905,7 @@ Command reference
       .. rubric:: gepublishdatabase
          :name: gepublishdatabase
 
-      .. container:: alert
+      .. warning::
 
          Deprecated in GEE 4.0.
 
@@ -1035,8 +1037,8 @@ Command reference
 
       *Required*. Specify the path to the desired publish root.
 
+      .. _geserveradmin:
       .. rubric:: geserveradmin
-         :name: geserveradmin
 
       ::
 
@@ -1094,7 +1096,7 @@ Command reference
 
          --search_server_url url
 
-      .. container:: alert
+      .. warning::
 
          Deprecated. Always specify a stream server.
 
@@ -1189,10 +1191,12 @@ Command reference
       in the trash on a Windows or Mac desktop. See also
       ``--garbagecollect``.)
 
-      **Note:** If you want to delete a currently published database,
-      you first need to unpublish. (See also ``--unpublish``.) To list
-      the currently published databases, use the ``--publisheddbs``
-      option. (See also ``--deletevh``.)
+      .. note::
+
+         If you want to delete a currently published database,
+         you first need to unpublish. (See also ``--unpublish``.) To list
+         the currently published databases, use the ``--publisheddbs``
+         option. (See also ``--deletevh``.)
 
       .. rubric:: Push databases
          :name: push-databases
@@ -1335,9 +1339,13 @@ Command reference
                 For example, if the entire URL is
                 ``http://www.company.com/private_ge``,
                 you enter ``/private_ge``.
-                **Note:** Google recommends that you use the
-                ``_ge`` and ``_map`` naming convention to make
-                it easier to distinguish between virtual host types.
+
+                .. note::
+
+                   `Google recommends that you use the
+                   ``_ge`` and ``_map`` naming convention to make
+                   it easier to distinguish between virtual host types.
+
              -  Port-based URL, such as: :: http://www.company.com:1234
                 The entire URL, including protocol, servername,
                 path (if applicable), and port are required.
@@ -1395,7 +1403,7 @@ Command reference
 
       .. note::
 
-         **Note:** If you want to delete a virtual host, you must first
+         If you want to delete a virtual host, you must first
          unpublish all currently published databases associated with it.
          To list the currently published databases for the virtual host
          you want to delete, use the ``--publisheddbs`` option. (See
@@ -1421,8 +1429,10 @@ Command reference
       the trash on a Windows or Mac operating system. See also
       ``--deletedb``.)
 
-      **Note:** Deletes only those files that are not used by other
-      databases on that server.
+      .. note::
+
+        Deletes only those files that are not used by other
+        databases on that server.
 
       .. rubric:: Clean up portable globes and maps registration
          :name: clean-up-portable-globes-and-maps-registration
@@ -1438,9 +1448,11 @@ Command reference
       when portable files, which are currently published/registered,
       have been removed from your ``/globes`` directory.
 
-      **Note:** The cleanup is not implemented when there are no
-      portable globes or maps in the globes directory:
-      ``/opt/google/gehttpd/htdocs/cutter/globes``.
+      .. note::
+
+         The cleanup is not implemented when there are no
+         portable globes or maps in the globes directory:
+         ``/opt/google/gehttpd/htdocs/cutter/globes``.
 
       .. _getop:
       .. rubric:: getop
@@ -1490,10 +1502,11 @@ Command reference
       To upgrade an existing asset root after installing a later version
       of the software.
 
-      **Note:** You must run this command as root.
+      .. note::
 
-      **Note:** You must stop the system manager before using this
-      command and then start it again after you are done.
+         You must run this command as root.
+         You must stop the system manager before using this
+         command and then start it again after you are done.
 
       .. rubric:: Example
          :name: example-10

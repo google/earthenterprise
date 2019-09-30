@@ -57,7 +57,7 @@ Creating a Map Database
       -  :ref:`View Your Map Database <View_Map_Database>`
       -  :ref:`Using the Google Base Map <Using_Google_Base_Map>`
 
-      .. index:: Define a Map Layer
+      .. index:: Map Layers
       .. _Define_Map_Layer:
       .. rubric:: Define a Map Layer
 
@@ -175,7 +175,7 @@ Creating a Map Database
          The new map layer name appears in the Asset Manager’s asset
          list.
 
-      .. index:: Define a Map Project
+      .. index:: Map Projects
       .. _Define_Map_Project:
       .. rubric:: Define a Map Project
 
@@ -231,7 +231,7 @@ Creating a Map Database
          The new map project name appears in the Asset Manager’s asset
          list.
 
-      .. index:: Define a Dlat Imagery Project
+      .. index:: Flat Imagery Projects
       .. _Define_Flat_Imagery_Project:
       .. rubric:: Define a Flat Imagery Project
 
@@ -440,7 +440,7 @@ Creating a Map Database
 
          A new browser tab opens displaying your map database.
 
-      .. rubric:: To view your map database in any browser
+      .. rubric:: To view your map database in any browser:
 
       #. Launch any web browser.
       #. Point your browser to:
@@ -477,7 +477,7 @@ Creating a Map Database
       Deploying the Google Base Map involves adding it when you build
       your map database.
 
-      .. rubric:: To build your map database to include the Google Base Map
+      .. rubric:: To build your map database to include the Google Base Map:
 
       #. Select **Asset Manager** from the **Tools** menu. The Asset Manager
          appears.
