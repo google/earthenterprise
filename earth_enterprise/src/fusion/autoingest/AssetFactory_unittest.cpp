@@ -26,6 +26,8 @@
 using namespace std;
 using namespace AssetFactory;
 
+using AssetVersion = uint8_t;
+
 class MockAssetStorage
 {
 public:
@@ -72,11 +74,13 @@ public:
 
   using Base = MockAssetStorage;
   MockAssetConfig config;
+  bool needed;
 
   void Modify(const khMetaData& _meta, const MockAssetConfig& _config)
   {
       meta = _meta;
       config = _config;
+      needed = false;
   }
 
   void Modify(const vector<SharedString>& _inputs,
@@ -85,11 +89,23 @@ public:
   {
       inputs = _inputs;
       Modify(_meta, _config);
+      needed = false;
   }
 
   MockAssetImpl(MockAssetStorage storage,
                 const MockAssetConfig &config_)
                 : MockAssetStorage(storage), config(config_) {
+  }
+
+  MockAssetImpl MyUpdate(bool& _needed, const vector<AssetVersion>& v = {})
+  {
+      needed = _needed = true;
+      return *this;
+  }
+
+  MockAssetImpl Update(bool& _needed, const vector<AssetVersion>& v = {})
+  {
+      return MyUpdate(needed, v);
   }
 };
 
