@@ -78,7 +78,7 @@ sudo yum install git-lfs
 For all versions of CentOS and RHEL, install the standard development/build tools:
 
 ```bash
-yum install ant bzip2 doxygen gcc-c++ patch python-argparse python-setuptools \
+yum install ant bzip2 doxygen gcc-c++ patch python-argparse python-lxml python-setuptools \
   swig tar
 ```
 
