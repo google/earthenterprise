@@ -166,7 +166,7 @@ authentication configuration:</p>
 <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">vi</span> <span class="pre">digest_host.location</span></code></p>
 <ol class="arabic">
 <li><p class="first">Add the following content to the <code class="docutils literal notranslate"><span class="pre">digest_host.location</span></code> file:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>``# The digest virtual host.``
+<div class="highlight-none notranslate"><div class="highlight"><pre>``# The digest virtual host.``
 ``RewriteEngine on``
 
 ``&lt;Location /digest_host/&gt;``
@@ -224,7 +224,7 @@ may have configured:</p>
 <li><p class="first">Then manually add the Include directives for your custom port
 virtual host to the SSL configuration file for Apache server,
 <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/extra/httpd-ssl.conf</span></code>:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>``&lt;VirtualHost  _non_default_:4343&gt;``
+<div class="highlight-none notranslate"><div class="highlight"><pre>``&lt;VirtualHost  _non_default_:4343&gt;``
      ``# Include all SSL location-based virtual servers with custom port 4343.``
      ``Include conf.d/virtual_servers/*.location_ssl_custom``
 ``&lt;/VirtualHost&gt;``
