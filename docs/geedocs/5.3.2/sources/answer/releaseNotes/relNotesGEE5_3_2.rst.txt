@@ -58,7 +58,8 @@ CentOS 6.x and 7.x
 
 Ubuntu 16.04 LTS
 
-Ubuntu 14.04 is no longer be supported due to its recent end of life.
+Ubuntu 14.04 will no longer be supported due to its recent end of
+life.
 
 Google Earth Enterprise 5.3.2 is compatible with Google Earth
 Enterprise Client (EC) version 7.1.5 and above.
@@ -78,40 +79,40 @@ new PostgreSQL version used by Open GEE 5.3.2.
 
 -[ Resolved Issues ]-
 
-Resolved Issues        Number  Description  Resolution  1132  GEE
-Server doesn't always determine the correct hostname  Updated the
-virtual hosts URL to use hostname if getfqdn() doesn't return a good
-hostname. Also added documentation for setting up the system to aid in
-avoiding this problem.  1281  Quitting 32-bit Windows portable server
-in Windows 7 via Internet Explorer does not work  IE appears to
-perform aggressive caching, which was preventing the GET request to
-cmd=quit from making it to the server. Changing the command to be a
-POST request prevents this.  1376  Portable Globe Cutter fails the
-last step when using HTTPS  Used the advanced configuration to set a
-URL that will be used when cutter tries to make an openurl call.  1398
-System Manager crash  Fixed the crash underlying cause.  1401  No
-notification when System Manager Asset Cache size is exceeded causing
-performance issues  Added a logging record when System Manager Asset
-Cache size is exceeded.  1404  WMS fails when using HTTPS  Skipped the
-internal Certificate Verification.  1420  Build should honor JAVA_HOME
-when creating rpm packages  Honored JAVA_HOME  1447  Compiling error
-when using scons cache  Fixed compiling error when using scons cache
+      Number  Description  Resolution  1132  GEE Server doesn't always
+determine the correct hostname  Updated the virtual hosts URL to use
+hostname if getfqdn() doesn't return a good hostname. Also added
+documentation for setting up the system to aid in avoiding this
+problem.  1281  Quitting 32-bit Windows portable server in Windows 7
+via Internet Explorer does not work  IE appears to perform aggressive
+caching, which was preventing the GET request to cmd=quit from making
+it to the server. Changing the command to be a POST request prevents
+this.  1376  Portable Globe Cutter fails the last step when using
+HTTPS  Used the advanced configuration to set a URL that will be used
+when cutter tries to make an openurl call.  1398  System Manager crash
+Fixed the crash's underlying cause.  1401  No notification when System
+Manager Asset Cache size is exceeded causing performance issues  Added
+a logging record when System Manager Asset Cache size is exceeded.
+1404  WMS fails when using HTTPS  Skipped the internal Certificate
+Verification.  1420  Build should honor JAVA_HOME when creating rpm
+packages  Honored JAVA_HOME  1447  Compiling error when using scons
+cache  Fixed compiling error when using scons cache
 
 -[ Known Issues ]-
 
-Known Issues        Number  Description  Resolution  4  Google basemap
-fails to load in 2D Mercator Maps  Obtain a valid Google Maps API key
-and include it in /opt/google/gehttpd/htdocs/maps/maps_google.html.  8
-Ensure GEE Portable Cutter Job Completes  No current work around.  9
-Improve FileUnpacker Handling of Invalid Files  No current work
-around.  20  Simplify build process for portable builds on MacOS
-Building and running Portable Server on MacOS should be possible with
-minimal changes.  34  Scons build creates temporary directories named
-“0”  No current work around.  126  The Fusion installer creates a
-backup on the first run  No current work around. The created backup
-can be deleted.  190  Hostname mismatch check in installers doesn't
-work as expected  No current work around.  193  Updated docs are not
-copied if the /tmp/fusion_os_install directory already exists  Delete
+      Number  Description  Resolution  4  Google basemap fails to load
+in 2D Mercator Maps  Obtain a valid Google Maps API key and include it
+in /opt/google/gehttpd/htdocs/maps/maps_google.html.  8  Ensure GEE
+Portable Cutter Job Completes  No current work around.  9  Improve
+FileUnpacker Handling of Invalid Files  No current work around.  20
+Simplify build process for portable builds on MacOS  Building and
+running Portable Server on MacOS should be possible with minimal
+changes.  34  Scons build creates temporary directories named “0”  No
+current work around.  126  The Fusion installer creates a backup on
+the first run  No current work around. The created backup can be
+deleted.  190  Hostname mismatch check in installers doesn't work as
+expected  No current work around.  193  Updated docs are not copied if
+the /tmp/fusion_os_install directory already exists  Delete
 /tmp/fusion_os_install at the beginning of the stage_install build
 process.  201  Some tiles are displayed incorrectly in the Enterprise
 Client when terrain is enabled  No current work around.  202  Icons

@@ -41,7 +41,7 @@ Release notes: Open GEE 5.3.2
       -  CentOS 6.x and 7.x
       -  Ubuntu 16.04 LTS
 
-      Ubuntu 14.04 is no longer be supported due to its recent end of life.
+      Ubuntu 14.04 will no longer be supported due to its recent end of life.
 
       Google Earth Enterprise 5.3.2 is compatible with Google Earth
       Enterprise Client (EC) version 7.1.5 and above.
@@ -71,7 +71,7 @@ Release notes: Open GEE 5.3.2
 
       .. rubric:: Resolved Issues
 
-      .. list-table:: Resolved Issues
+      .. list-table::
          :widths: 10 30 55
          :header-rows: 1
 
@@ -91,7 +91,7 @@ Release notes: Open GEE 5.3.2
            - Used the advanced configuration to set a URL that will be used when cutter tries to make an openurl call.            
          * - 1398
            - System Manager crash
-           - Fixed the crash underlying cause.
+           - Fixed the crash's underlying cause.
          * - 1401
            - No notification when System Manager Asset Cache size is exceeded causing performance issues
            - Added a logging record when System Manager Asset Cache size is exceeded.           
@@ -107,7 +107,7 @@ Release notes: Open GEE 5.3.2
 
       .. rubric:: Known Issues
 
-      .. list-table:: Known Issues
+      .. list-table::
          :widths: 10 30 55
          :header-rows: 1
 
