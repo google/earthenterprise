@@ -526,6 +526,7 @@ task openGeeServerRpm(type: GeeRpm, dependsOn: openGeeServerInitScripts) {
     requires('python-unittest2')
     // The WMS Service requires PIL, which is not automatically detected:
     requires('python-imaging')
+    requires('python-lxml')
 
     requiresCommands(
         packageSharedCommands +
