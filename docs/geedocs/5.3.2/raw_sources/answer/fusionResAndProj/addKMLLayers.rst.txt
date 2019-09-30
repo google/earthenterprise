@@ -19,7 +19,7 @@ Add KML layers
       many KML layers that stream data from Google servers to the
       client.
 
-      .. container:: alert
+      .. warning::
 
          Each vector project must include at least one resource that is
          not a KML layer. If you try to build a project consisting only

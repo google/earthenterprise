@@ -63,10 +63,8 @@ Preview
 
 Fusion can also use the virtual raster file as source.
 
-Note: Note:
-
-   "Gevirtualraster" is necessary if you are creating a custom mask
-  file for the imagery or terrain resource as there is a software
+Note: "Gevirtualraster" is necessary if you are creating a custom
+  mask file for the imagery or terrain resource as there is a software
   requirement of one source file for one custom mask file. See
 
   Create custom masks

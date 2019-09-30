@@ -18,7 +18,7 @@ installing and using the Portable Server.
 
 After installing GEE, you should complete the
 
-About this Tutorial
+Fusion tutorial
 
 , which helps you learn Fusion quickly and allows you to create a
 sample project that you can use whenever you need to test the

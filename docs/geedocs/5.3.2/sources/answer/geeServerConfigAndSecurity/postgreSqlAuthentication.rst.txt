@@ -82,18 +82,17 @@ optional fields if needed.
 Create the encrypted password by inserting encyption functions into
 the database with the pgcrypto contributed module:  psql --port=5433
 --username=geeuser geauthdb <
-/usr/share/postgresql/8.4/contrib/pgcrypto.sql  Note: You can
-substitute a different method for this step. The Password Formats
-section in the Apache documentation gives examples in multiple
-programming languages for encrypting the password so that it is
-readable by Apache.
+/usr/share/postgresql/8.4/contrib/pgcrypto.sql  You can substitute a
+different method for this step. The Password Formats section in the
+Apache documentation gives examples in multiple programming languages
+for encrypting the password so that it is readable by Apache.
 
 Make sure the database works by inserting a test user:  psql
 --port=5433 --username=geeuser geauthdb INSERT INTO geepasswd VALUES
 ('jsmith', 'realm', encode(digest( 'jsmith' || ':' || 'realm' || ':'
 ||'password', 'md5'), 'hex'), 'Jane Smith'); \q  Replace "jsmith",
 "realm", "password" and "Jane Smith" with the values you want to use.
-Note: The password is hashed with MD5 because the Apache mod_authn_dbd
+The password is hashed with MD5 because the Apache mod_authn_dbd
 module requires it. This also prevents the password from appearing in
 plaintext.
 
