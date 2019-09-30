@@ -452,6 +452,7 @@ task openGeeCommonDeb (type: GeeDeb, dependsOn: openGeeCommonInitScripts) {
     requires('libxml2-utils')
     requires('openssl')
     requires('python-imaging')
+    requires('python-lxml')
     requires('python-psycopg2')
     requires('python-setuptools')
     requires('python2.7')
