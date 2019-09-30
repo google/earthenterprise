@@ -31,6 +31,14 @@ class PacketGenConfig {
     std::string rasterProductVersion;
     std::string packgenVersion = std::string();
 #pragma GenerateIsUpToDate
+  #hquote
+  public:
+    uint64 GetSize() {
+      return sizeof(*this)
+              + GetObjectSize(rasterProductVersion)
+              + GetObjectSize(packgenVersion);
+    }
+  #/hquote
   };
 
   std::vector<Inset> insets;
@@ -52,15 +60,13 @@ class PacketGenConfig {
 
 #hquote
   uint64 GetSize() {
-    return GetObjectSize(insets)
-            + GetObjectSize(coverage)
-            + GetObjectSize(beginMinifyLevel)
-            + GetObjectSize(endMinifyLevel)
-            + GetObjectSize(cacheRaster)
-            + GetObjectSize(beginSimplifyLevel)
-            + GetObjectSize(beginSkipTransparentLevel)
-            + GetObjectSize(useOpaqueTopInsetInsteadOfMerge)
-            + (uint64)sizeof(bool);
+    uint64 insetsSize = 0;
+    for (auto inset : insets) {
+      insetsSize += inset.GetSize();
+    }
+    return sizeof(*this)
+            + insetsSize;
+            //+ GetObjectSize(coverage);
   }
 #/hquote
 

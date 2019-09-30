@@ -20,6 +20,7 @@
 #include <memory>
 #include <vector>
 #include "notify.h"
+#include <qstring.h>
 
 // determine amount of memory used by generic objects
 template<class T>
@@ -34,15 +35,19 @@ inline uint64 GetObjectSize(const std::vector<T> &vec) {
       total += GetObjectSize(t);
     }
 
-    return sizeof(vec) + total;
+    return total;
 }
 // determine amount of memory used by a string
 inline uint64 GetObjectSize(const std::string &str) {
-    return sizeof(str) + (str.capacity() * sizeof(char));
+    return (str.capacity() * sizeof(char));
 }
 // determine amount of memory used by a shared_ptr and the object it points to
 template<class T>
 inline uint64 GetObjectSize(const std::shared_ptr<T> &guard) {
     return sizeof(guard) + (guard ? guard->GetSize() : 0);
+}
+// determine amount of memory used by a qstring
+inline uint64 GetObjectSize(const QString &qstr) {
+    return sizeof(qstr) + (qstr.capacity() * sizeof(char16_t));
 }
 #endif

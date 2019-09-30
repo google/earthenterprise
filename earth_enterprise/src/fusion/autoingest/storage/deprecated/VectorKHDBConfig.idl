@@ -22,6 +22,14 @@ class VectorPackVersion {
   std::string packAsset;
   uint channelId;
   uint version;
+
+#hquote
+public:
+  uint64 GetSize() {
+    return sizeof(*this) 
+            + GetObjectSize(packAsset);
+  }
+#/hquote
 };
 class VectorKHDBConfig {
   std::string dbname;
@@ -31,9 +39,9 @@ class VectorKHDBConfig {
   std::vector<std::string> layerIcons = std::vector<std::string>(0, std::string());
 #hquote
   uint64 GetSize() {
-    return GetObjectSize(dbname)
-            + (uint64)sizeof(uint)
-            //+ GetObjectSize(layerIcons)
+    return sizeof(*this)
+            + GetObjectSize(dbname)
+            + GetObjectSize(packvers)
             + GetObjectSize(customIcons)
             + GetObjectSize(layerIcons);
   }

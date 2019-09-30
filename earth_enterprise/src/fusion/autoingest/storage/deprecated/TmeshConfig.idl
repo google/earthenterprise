@@ -24,10 +24,8 @@ class TmeshConfig {
   uint simplifyStartLevel = uint(32);
 #hquote
   uint64 GetSize() {
-    return GetObjectSize(extentsAsset)
-            + GetObjectSize(startLevel)
-            + GetObjectSize(endLevel)
-            + GetObjectSize(simplifyStartLevel);
+    return sizeof(*this)
+            + GetObjectSize(extentsAsset);
   }
 #/hquote
 #pragma GenerateIsUpToDate

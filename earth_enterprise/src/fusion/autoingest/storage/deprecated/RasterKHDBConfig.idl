@@ -20,6 +20,13 @@
 class FuseVersion {
   std::string fuseAsset;
   uint version;
+#hquote
+public:
+  uint64 GetSize() {
+    return sizeof(*this) 
+            + GetObjectSize(fuseAsset);
+  }
+#/hquote
 
 #pragma GenerateOperatorLessThan
 #pragma GenerateIsUpToDate
@@ -30,8 +37,8 @@ class RasterKHDBConfig {
   std::vector<FuseVersion> fusevers;
 #hquote
   uint64 GetSize() {
-    return GetObjectSize(dbname)
-            + (uint64)sizeof(uint)
+    return sizeof(*this)
+            + GetObjectSize(dbname)
             + GetObjectSize(fusevers);
   }
 #/hquote

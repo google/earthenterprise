@@ -38,9 +38,10 @@ class VectorLayerAssetConfig {
   VectorLayerAssetConfig(const LayerConfig &layerConfig);
   VectorLayerAssetConfig(const LayerConfig &layer_config, geVersionedEnum);
   uint64 GetSize() {
-    return GetObjectSize(query_config_)
-            + GetObjectSize(fuse_config_)
-            + GetObjectSize(poi_config_);
+    return sizeof(*this)
+            + query_config_.GetSize()
+            + fuse_config_.GetSize()
+            + poi_config_.GetSize();
   }
 #/hquote
 

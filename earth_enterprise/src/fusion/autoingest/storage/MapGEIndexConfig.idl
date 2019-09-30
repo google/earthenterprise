@@ -27,6 +27,13 @@ class MapGEIndexConfig {
     // cannot pre-bind this to a packetfile output name, since this config
     // gets built before all the packetlevels are completed
     std::string verref_;
+  #hquote
+  public:
+    uint64 GetSize() {
+      return sizeof(*this)
+              + GetObjectSize(verref_);
+    }
+  #/hquote
 #pragma GenerateIsUpToDate
   };
   class Layer {
@@ -34,7 +41,19 @@ class MapGEIndexConfig {
     uint32 index_version_;
     geindex::TypedEntry::TypeEnum type_ = geindex::TypedEntry::VectorMapsRaster;
     std::vector<Level> levels_ = std::vector<MapGEIndexConfig::Level>();
-	std::string date_string_ = std::string();  // Format expected: "YYYY-MM-DD"
+	  std::string date_string_ = std::string();  // Format expected: "YYYY-MM-DD"
+  #hquote
+  public:
+    uint64 GetSize() {
+      uint64 levels_Size = 0;
+      for (auto level : levels_) {
+        levels_Size += level.GetSize();
+      }
+      return sizeof(*this)
+              + levels_Size
+              + GetObjectSize(date_string_);
+    }
+  #/hquote
 #pragma GenerateIsUpToDate
   };
   std::string db_name_;
@@ -42,9 +61,13 @@ class MapGEIndexConfig {
   std::vector<Layer> layers_;
 #hquote
   uint64 GetSize() {
-    return GetObjectSize(db_name_)
-            + (uint64)sizeof(uint32)
-            + GetObjectSize(layers_);
+    uint64 layers_Size = 0;
+    for (auto layer : layers_) {
+      layers_Size += layer.GetSize();
+    }
+    return sizeof(*this)
+            + GetObjectSize(db_name_)
+            + layers_Size;
   }
 #/hquote
 

@@ -51,26 +51,13 @@ class CombinedRPConfig {
 
 #hquote
   CombinedRPConfig(uint32 num_sources, const RasterProductConfig &rpconfig);
+  
   uint64 GetSize() {
-    uint64 mosaicConfigSize = 0;
-    uint64 krpConfigSize = 0;
-    uint64 maskgenConfigSize = 0;
-    if (!need_khvr_) {
-      mosaicConfigSize = MosaicConfig().GetSize();
-    }
-    if (source_is_product_) {
-      krpConfigSize = KRPConfig().GetSize();
-    }
-    if (mask_mode_ != CombinedRPConfig::AutoMask) {
-      maskgenConfigSize = MaskgenConfig().GetSize();
-    }
-    return GetObjectSize(fuid_resource_)
-            + GetObjectSize(mask_mode_)
-            + GetObjectSize(source_is_product_)
-            + GetObjectSize(need_khvr_)
-            + mosaicConfigSize
-            + krpConfigSize
-            + maskgenConfigSize;
+    return + GetObjectSize(*this)
+            //+ GetObjectSize(mask_mode_)
+            + khvr_config_.GetSize()
+            + krp_config_.GetSize()
+            + maskgen_config_.GetSize();
   }
 #/hquote
 

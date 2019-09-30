@@ -24,7 +24,7 @@ class ProjectedMapLayerConfig {
   AssetDefs::Projection   projection_
 #hquote
   uint64 GetSize() {
-    return GetObjectSize(projection_);
+    return sizeof(*this);
   }
 #/hquote
 

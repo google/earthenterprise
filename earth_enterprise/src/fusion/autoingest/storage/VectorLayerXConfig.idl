@@ -40,9 +40,9 @@ class VectorLayerXConfig {
   }
 
   uint64 GetSize() {
-    return GetObjectSize(vectorResource)
-            + GetObjectSize(legend)
-            + GetObjectSize(fuid_channel_);
+    return sizeof(*this)
+            + GetObjectSize(vectorResource);
+            //+ GetObjectSize(legend);
   }
 #/hquote
 };

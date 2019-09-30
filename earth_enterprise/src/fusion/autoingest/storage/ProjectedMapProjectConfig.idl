@@ -25,8 +25,7 @@ class ProjectedMapProjectConfig {
   IsUpToDateIgnore uint32 index_version_ = uint(1);
 #hquote
   uint64 GetSize() {
-    return GetObjectSize(projection_)
-            + (uint64)sizeof(uint32);
+    return sizeof(*this);
   }
 #/hquote
 

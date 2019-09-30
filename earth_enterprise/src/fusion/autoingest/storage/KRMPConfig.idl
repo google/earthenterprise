@@ -23,8 +23,8 @@ class KRMPConfig {
   bool useMercatorProjection = false;
 #hquote
   uint64 GetSize() {
-    return GetObjectSize(overridesrs)
-            + GetObjectSize(useMercatorProjection);
+    return sizeof(*this)
+            + GetObjectSize(overridesrs);
   }
 #/hquote
 

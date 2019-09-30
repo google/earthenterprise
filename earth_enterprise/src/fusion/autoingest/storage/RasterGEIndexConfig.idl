@@ -29,10 +29,28 @@ class RasterPacketLevelVersion {
   std::string packet_level_verref_;
   uint index_version_;
 #pragma GenerateIsUpToDate
+#hquote
+public:
+  uint64 GetSize() {
+    return sizeof(*this)
+            + GetObjectSize(packet_level_verref_);
+  }
+#/hquote
 };
 class RasterPacketInset {
   std::vector<RasterPacketLevelVersion> levels_;
 #pragma GenerateIsUpToDate
+#hquote
+  public:
+    uint64 GetSize() {
+      uint64 levels_Size = 0;
+      for (auto level : levels_) {
+        levels_Size += level.GetSize();
+      }
+      return sizeof(*this)
+              + levels_Size;
+    }
+  #/hquote
 }
 class RasterGEIndexConfig {
   std::string db_name_;
@@ -41,9 +59,13 @@ class RasterGEIndexConfig {
   std::string date_string_ = std::string("");
 #hquote
   uint64 GetSize() {
-    return GetObjectSize(db_name_)
-            + (uint64)sizeof(uint)
-            + GetObjectSize(packet_insets_)
+    uint64 packet_insets_Size = 0;
+    for (auto packetinset : packet_insets_) {
+      packet_insets_Size += packetinset.GetSize();
+    }
+    return sizeof(*this)
+            + GetObjectSize(db_name_)
+            + packet_insets_Size
             + GetObjectSize(date_string_);
   }
 #/hquote

@@ -115,16 +115,10 @@ class RasterProjectConfig {
   // Resets all IDs as it is in a config for a just created asset.
   void ResetIds(void);
   uint64 GetSize() {
-    return (uint64)sizeof(uint)
-            + GetObjectSize(insets)
-            + GetObjectSize(legend)
-            + GetObjectSize(fuid_channel_)
-            + GetObjectSize(asset_uuid_)
-            + GetObjectSize(is_timemachine_project_)
-            + (uint64)sizeof(bool)
-            + GetObjectSize(is_overlay_terrain_project_)
-            + GetObjectSize(overlay_terrain_resources_min_level_)
-            + GetObjectSize(overlay_terrain_start_level_);
+    return sizeof(*this)
+            //+ GetObjectSize(insets)
+            //+ GetObjectSize(legend)
+            + GetObjectSize(asset_uuid_);
   }
 #/hquote
 
