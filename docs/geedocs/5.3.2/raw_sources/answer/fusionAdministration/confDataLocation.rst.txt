@@ -40,7 +40,7 @@ Configure your data locations
       For more information on these commands, see
       :ref:`geconfigureassetroot <geconfigassetroot>`.
 
-      .. container:: alert
+      .. warning::
 
          Do not modify the volume definition after you save data to that
          volume. Because the local name and the network path definitions

@@ -93,13 +93,13 @@ practice data.</p>
 how to create 2D and 3D databases, as well as become familiar
 with the Google Earth Enterprise Fusion user interface.</p>
 <ul class="simple">
-<li><a class="reference external" href="#SelectAssetRoot">Select the Tutorial Asset Root</a></li>
-<li><a class="reference external" href="#LaunchFusion">Launch Google Earth Enterprise Fusion</a></li>
-<li><a class="reference external" href="#AssetNavTree">Build the Asset Navigation Tree</a></li>
-<li><a class="reference external" href="#DefineSrcProv">Define Source Providers</a></li>
-<li><a class="reference external" href="#DefineResPath">Define Resource Paths</a></li>
+<li><a class="reference internal" href="#selectassetroot"><span class="std std-ref">Select the Tutorial Asset Root</span></a></li>
+<li><a class="reference internal" href="#launchfusion"><span class="std std-ref">Launch Google Earth Enterprise Fusion</span></a></li>
+<li><a class="reference internal" href="#assetnavtree"><span class="std std-ref">Build the Asset Navigation Tree</span></a></li>
+<li><a class="reference internal" href="#definesrcprov"><span class="std std-ref">Define Source Providers</span></a></li>
+<li><a class="reference internal" href="#definerespath"><span class="std std-ref">Define Resource Paths</span></a></li>
 </ul>
-<p class="rubric" id="select-the-tutorial-asset-root">Select the Tutorial Asset Root</p>
+<p class="rubric" id="selectassetroot"><span id="index-0"></span>Select the Tutorial Asset Root</p>
 <p>There are two occasions when you must select a different asset
 root:</p>
 <ul class="simple">
@@ -110,11 +110,13 @@ you must select the appropriate asset root.</li>
 </ul>
 <p>To configure asset roots for multiple users, see <a class="reference internal" href="confTutorialWS.html"><span class="doc">Configure Tutorial Workspace</span></a>.</p>
 <p>This section explains how to select a different asset root.</p>
-<div class="alert docutils container">
-<strong>Caution:</strong> Even though your source volumes and asset roots
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><strong>Caution:</strong> Even though your source volumes and asset roots
 are separate for each user or for the tutorial and production
 data, there is only one publish root on each virtual server for
-Earth databases and one for Map databases.</div>
+Earth databases and one for Map databases.</p>
+</div>
 <p>When two users are sharing a single workstation, both users are
 publishing to the same publish root. When one user publishes a
 database on that workstation, it overwrites any database that
@@ -129,14 +131,10 @@ database to make it available to Google Earth EC again.</p>
 <li><p class="first">On the command line, log in as root.</p>
 </li>
 <li><p class="first">Stop the system manager by entering:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">gefusion</span> <span class="n">stop</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span> <span class="pre">stop</span></code></p>
 </li>
 <li><p class="first">Enter:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="n">geselectassetroot</span> <span class="o">--</span><span class="n">assetroot</span> <span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">assets</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">geselectassetroot</span> <span class="pre">--assetroot</span> <span class="pre">/username/assets</span></code></p>
 <p>where <em>username</em> is the name you or your system administrator
 used when configuring the tutorial asset root. (If you do not
 know the path of your tutorial asset root, contact your system
@@ -145,13 +143,10 @@ administrator.)</p>
 <li><p class="first">When you return to the prompt, log out as root.</p>
 </li>
 <li><p class="first">Start the system manager by entering:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">gefusion</span> <span class="n">start</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span> <span class="pre">start</span></code></p>
 </li>
 </ol>
-<p class="rubric" id="launch-google-earth-enterprise-fusion">Launch Google Earth Enterprise Fusion</p>
-<p class="rubric" id="to-launch-google-earth-enterprise-fusion">To launch Google Earth Enterprise Fusion:</p>
+<p class="rubric" id="launchfusion"><span id="index-1"></span>Launch Google Earth Enterprise Fusion</p>
 <ol class="arabic simple">
 <li>Open a Linux terminal window.</li>
 <li>Enter <code class="docutils literal notranslate"><span class="pre">fusion</span></code> (or <code class="docutils literal notranslate"><span class="pre">fusion</span> <span class="pre">&amp;</span></code> to return to the Linux
@@ -159,7 +154,7 @@ prompt).</li>
 </ol>
 <p>When the application starts, the Google Earth Enterprise Fusion
 graphical user interface (GUI) appears.</p>
-<p class="rubric" id="build-the-asset-navigation-tree">Build the Asset Navigation Tree</p>
+<p class="rubric" id="assetnavtree"><span id="index-2"></span>Build the Asset Navigation Tree</p>
 <p>The components of a Google Earth Enterprise Fusion database are
 called <em>assets</em>. The main location where you store all of your
 Google Earth Enterprise Fusion assets is called the <em>asset root</em>.
@@ -169,12 +164,14 @@ lessons, this guide refers to the <em>tutorial asset root</em> to
 differentiate it from the asset root that contains your live data.</p>
 <p>In this exercise, you add subfolders to the tutorial asset root,
 so you can store your assets in an organized way.</p>
-<div class="alert docutils container">
-<strong>Caution:</strong> Once you create subfolders in your asset root, you
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><strong>Caution:</strong> Once you create subfolders in your asset root, you
 cannot delete them. This makes it especially important for you
 to plan out and organize your subfolders before you or anyone
 else begins working with real data in Google Earth Enterprise
-Fusion.</div>
+Fusion.</p>
+</div>
 <p class="rubric" id="to-add-a-subfolder">To add a subfolder:</p>
 <ol class="arabic">
 <li><p class="first">Open the Asset Manager by selecting <strong>Tools &gt; Asset Manager</strong>.
@@ -214,7 +211,7 @@ subfolders for the MapLayers or Databases folders.</p>
 the top right corner.</p>
 </li>
 </ol>
-<p class="rubric" id="define-source-providers">Define Source Providers</p>
+<p class="rubric" id="definesrcprov"><span id="index-3"></span>Define Source Providers</p>
 <p>The <strong>Provider Manager</strong> allows you to create a list of
 organizations that provide the source data you use in Google
 Earth. For each provider, you specify a unique lookup key (any
@@ -232,8 +229,8 @@ Manager</strong>.
 <p>The <strong>Edit Provider</strong> dialog appears.
 <img alt="Edit Provider Dialog" src="../../images/newProvider.png" /></p>
 </li>
-<li><p class="first">Enter the following information:
-<strong>Name:</strong> USGS Imagery
+<li><p class="first">Enter the following information:</p>
+<p><strong>Name:</strong> USGS Imagery
 <strong>Key:</strong> USGS-I
 <strong>Copyright Text:</strong> Imagery © 2005 USGS
 To enter the copyright symbol, open a text editor, press
@@ -243,17 +240,46 @@ displayed symbol into the dialog.</p>
 <li><p class="first">Click <strong>OK</strong>.</p>
 </li>
 <li><p class="first">Repeat steps <strong>2</strong> through <strong>4</strong> to add the following source
-providers:
-===================== ====== =========================================
-Name                  Key    Copyright Text
-===================== ====== =========================================
-i3                    i3     Imagery © 2005 i3
-USGS Maps             USGS-M Roads © 2005 USGS
-GNIS/US Census Bureau GNIS   Population © 2005 GNIS
-USGS POIs             USGS-P POIs © 2004 USGS
-USGS Terrain          USGS-T Terrain © USGS 2003
-NASA Imagery          NASA   Imagery courtesy NASA’s Earth Observatory
-===================== ====== =========================================</p>
+providers:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="31%" />
+<col width="13%" />
+<col width="56%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Key</th>
+<th class="head">Copyright Text</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>i3</td>
+<td>i3</td>
+<td>Imagery © 2005 i3</td>
+</tr>
+<tr class="row-odd"><td>USGS Maps</td>
+<td>USGS-M</td>
+<td>Roads © 2005 USGS</td>
+</tr>
+<tr class="row-even"><td>GNIS/US Census Bureau</td>
+<td>GNIS</td>
+<td>Population © 2005 GNIS</td>
+</tr>
+<tr class="row-odd"><td>USGS POIs</td>
+<td>USGS-P</td>
+<td>POIs © 2004 USGS</td>
+</tr>
+<tr class="row-even"><td>USGS Terrain</td>
+<td>USGS-T</td>
+<td>Terrain © USGS 2003</td>
+</tr>
+<tr class="row-odd"><td>NASA Imagery</td>
+<td>NASA</td>
+<td>Imagery courtesy NASA’s Earth Observatory</td>
+</tr>
+</tbody>
+</table>
 <p>The new providers appear in the Provider Manager dialog in the
 order in which you added them:
 <img alt="Provider Manager Full" src="../../images/providerManager-full.png" /></p>
@@ -261,7 +287,7 @@ order in which you added them:
 <li><p class="first">Click <strong>OK</strong> to close the Provider Manager.</p>
 </li>
 </ol>
-<p class="rubric" id="define-resource-paths">Define Resource Paths</p>
+<p class="rubric" id="definerespath"><span id="index-4"></span>Define Resource Paths</p>
 <p>The <strong>Asset Manager Resource Editor Default Source Paths</strong> screen
 allows you to specify default paths for Vector, Imagery, and
 Terrain resource types.</p>
@@ -275,7 +301,7 @@ selecting <strong>Edit &gt; Preferences &gt; Asset Manager</strong>.
 <p>The <strong>Select Folder</strong> dialog appears.
 <img alt="Select Folder Dialog" src="../../images/assetFolderSelection.png" /></p>
 </li>
-<li><p class="first">Navigate to <em>/opt/google/share/tutorials/fusion</em>.</p>
+<li><p class="first">Navigate to <code class="docutils literal notranslate"><span class="pre">/opt/google/share/tutorials/fusion</span></code>.</p>
 </li>
 <li><p class="first">Select <strong>Vector</strong>, then click <strong>OK</strong>.</p>
 </li>

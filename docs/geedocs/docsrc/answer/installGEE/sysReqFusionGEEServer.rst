@@ -20,16 +20,20 @@ System requirements for Fusion and GEE Server
          install this graphics card in a separate workstation that
          accesses Fusion.
 
-      **Note:** If you plan on cutting globes, this processing can
-      be CPU-intensive and you may also need to plan on providing
-      more storage depending on the size of the globes.
+      .. note::
 
-      **Note on virtual machines**: Fusion can be both CPU and I/O
-      intensive. For optimal, stable performance, you should
-      install it only on physical (non-virtual) machines. You can
-      run GEE Server on a virtualized platform, provided the guest
-      OS is one of our supported 64-bit distributions and you
-      allocate sufficient resources to the VM.
+         If you plan on cutting globes, this processing can
+         be CPU-intensive and you may also need to plan on providing
+         more storage depending on the size of the globes.
+
+      .. note::
+
+         **On virtual machines**: Fusion can be both CPU and I/O
+         intensive. For optimal, stable performance, you should
+         install it only on physical (non-virtual) machines. You can
+         run GEE Server on a virtualized platform, provided the guest
+         OS is one of our supported 64-bit distributions and you
+         allocate sufficient resources to the VM.
 
       .. rubric:: Software Requirements
 

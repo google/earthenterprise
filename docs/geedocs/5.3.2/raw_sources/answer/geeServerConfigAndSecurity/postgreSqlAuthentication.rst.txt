@@ -112,11 +112,13 @@ PostgreSQL authentication
 
          ``psql --port=5433 --username=geeuser geauthdb < /usr/share/postgresql/8.4/contrib/pgcrypto.sql``
 
-         Note: You can substitute a different method for this step. The `Password Formats
-         <http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmisc%2Fpassword_encryptions.html&sa=D&sntz=1&usg=AFrqEzdBJJpsOLV3eL6UCAatZv_IhxEZdg>`__
-         section in the Apache documentation gives examples in multiple
-         programming languages for encrypting the password so that it is
-         readable by Apache.
+         .. note::
+
+            You can substitute a different method for this step. The `Password Formats
+            <http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmisc%2Fpassword_encryptions.html&
+            sa=D&sntz=1&usg=AFrqEzdBJJpsOLV3eL6UCAatZv_IhxEZdg>`__ section in the Apache documentation
+            gives examples in multiple programming languages for encrypting the password so that it is
+            readable by Apache.
 
       #. Make sure the database works by inserting a test user:
 
@@ -129,9 +131,11 @@ PostgreSQL authentication
          Replace "jsmith", "realm", "password" and "Jane Smith" with the
          values you want to use.
 
-         Note: The password is hashed with MD5 because the Apache
-         ``mod_authn_dbd`` module requires it. This also prevents the
-         password from appearing in plaintext.
+         .. note::
+
+            The password is hashed with MD5 because the Apache
+            ``mod_authn_dbd`` module requires it. This also prevents the
+            password from appearing in plaintext.
 
       #. Create a file named ``pgsql-auth.conf``\ at
 

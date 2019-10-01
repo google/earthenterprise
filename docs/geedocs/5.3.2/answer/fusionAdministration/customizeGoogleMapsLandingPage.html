@@ -106,15 +106,18 @@ supported by some browsers on certain operating systems.</p>
 key for the Google Maps API, there is no problem (regardless of
 your platform), since your server contacts Google’s servers for
 functions that are not supported in the browser.</p>
-<p><strong>Note:</strong> The following procedure assumes that you have received
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The following procedure assumes that you have received
 an email from Google that contains your license key for the Google
 Maps API.</p>
+</div>
 <p class="rubric" id="to-configure-your-google-maps-api-license-key">To configure your Google Maps API license key:</p>
 <ol class="arabic">
 <li><p class="first">Open <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/maps/maps_google.html</span></code>.</p>
 </li>
 <li><p class="first">Locate the following line in the script:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="o">&lt;</span><span class="n">script</span> <span class="n">src</span><span class="o">=</span><span class="s2">&quot;http://maps.google.com/maps?file=api&amp;v=2&amp;key=abcdefg&quot;</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span><span class="o">&gt;&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">script</span> <span class="n">src</span><span class="o">=</span><span class="s2">&quot;http://maps.google.com/maps?file=api&amp;v=2&amp;key=abcdefg&quot;</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span><span class="o">&gt;&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 </li>
@@ -125,7 +128,7 @@ sent from Google.</p>
 <li><p class="first">Save the <code class="docutils literal notranslate"><span class="pre">maps_google.html</span></code> file.</p>
 </li>
 <li><p class="first">Restart the Google Earth Enterprise Server (as root):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="n">sudo</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">geserver</span> <span class="n">restart</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">geserver</span> <span class="n">restart</span>
 </pre></div>
 </div>
 </li>

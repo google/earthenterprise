@@ -47,7 +47,7 @@ Defining and Building Databases
 
          .. note::
 
-            **Note:** The selection in the **Type** drop-down list near
+            The selection in the **Type** drop-down list near
             the bottom of this dialog determines the type of projects
             that appear on the list. Vector Project is automatically
             selected, so only vector resources appear on the list.
@@ -79,7 +79,7 @@ Defining and Building Databases
 
       .. note::
 
-         **Note:** If you had not built the projects included in this
+         If you had not built the projects included in this
          database previously, the following process would build them in
          the course of building the database. As you might expect, the
          database build process takes much longer if it is building all

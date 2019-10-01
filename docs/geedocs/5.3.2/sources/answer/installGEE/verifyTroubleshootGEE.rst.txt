@@ -18,8 +18,9 @@ Fusion and whenever you encounter problems building assets.
 To verify that the system manager is running, enter the following
 command at a shell prompt:
 
-"getop" A list of running processes appears. Two processes appear on
-the list:
+"getop"
+
+A list of running processes appears. Two processes appear on the list:
 
 gesystemmanager  This process is necessary to configure or build
 resources, projects, and databases with Google Earth Enterprise
@@ -43,17 +44,18 @@ problems.
 
 Log in as root.
 
-Stop the system manager: /etc/init.d/gefusion stop
+Stop the system manager:  /etc/init.d/gefusion stop
 
-Start the system manager: /etc/init.d/gefusion start
+Start the system manager:  /etc/init.d/gefusion start
 
 If you are still having problems starting the system manager after
 stopping and restarting the system manager, you can view the log file
 for the system manager to see what errors have been reported. The log
 file is located in:
 
-"/var/opt/google/log/gesystemmanager.log" Any errors are listed after
-the
+"/var/opt/google/log/gesystemmanager.log"
+
+Any errors are listed after the
 
 Started
 
@@ -72,4 +74,4 @@ stopping and restarting it, which resolves most problems.
 
 Log in as root.
 
-Stop and restart the server. /etc/init.d/geserver restart
+Stop and restart the server.  /etc/init.d/geserver restart
