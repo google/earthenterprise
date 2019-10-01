@@ -253,7 +253,7 @@ Create Portable Globes and Maps
       Fusion server. Setting a resolution of 24 results in a cut of the
       entire globe.
 
-      .. container:: warning
+      .. warning::
 
          **Caution:** Setting a resolution of 24 to cut an entire globe
          may result in a very large file.

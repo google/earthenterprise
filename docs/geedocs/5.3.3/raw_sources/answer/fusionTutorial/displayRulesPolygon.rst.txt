@@ -13,12 +13,10 @@ Configuring Display Rules for Polygon Data
       you through the process of graphically distinguishing the
       population in each county in California using display rules.
 
-      -  :ref:`Define and Build a Vector Resource Using Polygon
-         Data <Define_Vector_Polygon>`
+      -  :ref:`Define and Build a Vector Resource Using Polygon Data <Define_Vector_Polygon>`
       -  :ref:`Define, Configure, and Build a Vector Project <Define_Vector_Project1>`
       -  :ref:`Define and Build an Imagery Project <Define_Imagery_Project1>`
-      -  :ref:`Define, Build, and Publish a Database for the Polygon
-         Data <Define_Polygon_Database>`
+      -  :ref:`Define, Build, and Publish a Database for the Polygon Data <Define_Polygon_Database>`
       -  :ref:`View Your Database in Google Earth EC <View_Database_GEEC>`
 
       .. _Define_Vector_Polygon:
@@ -117,7 +115,7 @@ Configuring Display Rules for Polygon Data
 
                .. tip::
 
-                  **Tip:** When you set fill color, specify a value of
+                  When you set fill color, specify a value of
                   125 for the alpha channel instead of 255. This makes
                   the fill color semi-transparent instead of opaque.
 
@@ -189,7 +187,7 @@ Configuring Display Rules for Polygon Data
 
          .. note::
 
-            **Note:** Although this is the same name as the resource,
+            Although this is the same name as the resource,
             Google Earth Enterprise Fusion allows it, because they are
             different asset types and, therefore, have different file
             name extensions. In addition, they are being stored in
@@ -225,7 +223,7 @@ Configuring Display Rules for Polygon Data
 
       .. note::
 
-         **Note:** If you have already completed this exercise in
+         If you have already completed this exercise in
          :doc:`../fusionTutorial/displayRulesPoint`, skip this exercise and move
          on to :ref:`Define, Build, Push, and Publish a Database for the
          Polygon Data <Define_Polygon_Database>`.
@@ -252,7 +250,7 @@ Configuring Display Rules for Polygon Data
 
          The Save dialog appears.
 
-      #. Navigate to the ``ASSET_ROOT/Projects/Imagery``\ folder.
+      #. Navigate to the ``ASSET_ROOT/Projects/Imagery`` folder.
       #. Enter **BlueMarble** as the name of your project and click
          **Save**.
 
@@ -290,7 +288,7 @@ Configuring Display Rules for Polygon Data
          The CACountyPopulation project appears in the Database Editor
          next to Vector Project.
 
-      #. Repeat steps 2 through 4 to add **BlueMarble** as the imagery
+      #. Repeat steps **2** through **4** to add **BlueMarble** as the imagery
          project.
 
          You do not need to add a terrain project for this exercise.
@@ -383,9 +381,9 @@ Configuring Display Rules for Polygon Data
          *myserver.mydomainname*.com/CACountyPopulation-v001.
       #. Click the **Sign In** button.
 
-         .. container:: alert
+         .. warning::
 
-            **Caution:** If you have logged in to this server with
+            If you have logged in to this server with
             Google Earth EC previously, log out, clear your cache, and
             log back in. See :doc:`../googleEarthEnterpriseClient/clearGoogleEarthEC`.
 
@@ -398,7 +396,7 @@ Configuring Display Rules for Polygon Data
 
          .. note::
 
-            **Note:** If you cannot see the vector data, make sure the
+            If you cannot see the vector data, make sure the
             checkbox next to **CACountyPopulation** in the Layers panel
             is checked.
 

@@ -1,5 +1,5 @@
 
-Download documentation for GEE 5.1.x
+Download documentation for GEE 5.x
 
 The majority of Google Earth Enterprise help content is now maintained
 in our
@@ -28,4 +28,4 @@ Installation tips
 
 Install Google Earth Enterprise
 
-Refer OpenGEE Wiki
+OpenGEE Wiki
