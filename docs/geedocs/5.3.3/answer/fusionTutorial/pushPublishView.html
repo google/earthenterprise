@@ -85,7 +85,7 @@ available for serving at a specified publish point. Publishing is
 performed on Google Earth Enterprise Server.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> This lesson assumes that Google Earth Enterprise
+<p class="last">This lesson assumes that Google Earth Enterprise
 Fusion, the Google Earth Enterprise Server, and Google Earth EC
 are all installed on your local workstation. If any of these
 applications are installed elsewhere on your network, adjust
@@ -93,7 +93,7 @@ the instructions in this lesson accordingly.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> This lesson describes the steps for pushing a 3D
+<p class="last">This lesson describes the steps for pushing a 3D
 Fusion database. The same workflow is used to push a 2D
 Mercator database, but note that snippet profiles do not apply
 and that the published map can be viewed in a web browser, not
@@ -128,10 +128,13 @@ list.</p>
 <li><p class="first">Click the <strong>Push</strong> button. Google Earth Enterprise Fusion pushes the
 database to Google Earth Enterprise Server, and displays a
 success message when it is done.</p>
-<p><strong>Note:</strong> If you get an error message, contact your Google
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you get an error message, contact your Google
 Earth Enterprise Server administrator for help, or check the
 documentation on <a class="reference internal" href="../fusionAdministration/beforeYouConfigure.html"><span class="doc">Before you Configure Google Earth Enterprise Fusion</span></a> for more
 information.</p>
+</div>
 </li>
 </ol>
 <p class="rubric" id="publish-your-database-in-google-earth-enterprise-server"><span id="publish-your-database"></span>Publish Your Database in Google Earth Enterprise
@@ -151,9 +154,14 @@ password assigned to you:</p>
 <li>Default username: geapacheuser</li>
 <li>Default password:geeadmin</li>
 </ul>
-<p><strong>Note:</strong> If you do not know your username and password,
+<blockquote>
+<div><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you do not know your username and password,
 contact your Google Earth Enterprise Server System
 Administrator.</p>
+</div>
+</div></blockquote>
 </li>
 <li><p class="first">Click <strong>Databases</strong> to display the list of databases pushed to
 the Server.</p>
@@ -172,14 +180,14 @@ on the Databases page appears.</p>
 <p><img alt="GEE Server Database Publish dialog" src="../../images/databaseServerPublishDialog.png" /></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> You can publish a database to <em>multiple publish
+<p class="last">You can publish a database to <em>multiple publish
 points</em>, useful when you want to apply different search
 tabs, snippet profiles, and virtual host settings for
 different viewing needs.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> When publishing a database, the publish point you
+<p class="last">When publishing a database, the publish point you
 specify is case-<em>insensitive</em>. Upper and lower case are not
 differentiated. Make sure each publish point path name you
 specify is unique.</p>

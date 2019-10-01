@@ -138,8 +138,8 @@ and mydomainname with your server and domain.
 
 Sign in with the default credentials or the username and password
 assigned to you:  Default username: geapacheuser  Default password:
-geeadmin  Note: If you do not know your username and password, contact
-your Google Earth Enterprise Server System Administrator.
+geeadmin  If you do not know your username and password, contact your
+Google Earth Enterprise Server System Administrator.
 
 Click Snippet profiles to display your snippet profiles.
 

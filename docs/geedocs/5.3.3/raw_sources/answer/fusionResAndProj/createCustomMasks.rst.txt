@@ -221,7 +221,7 @@ Create custom masks
 
       .. note::
 
-         **Note:** It is easy to create very high resolution masks with
+         It is easy to create very high resolution masks with
          ``gepolymaskgen``, to the point of pixel-by-pixel matching for
          the source imagery. Please check the overall raster size of
          your source imagery before creating a custom mask with
@@ -1461,7 +1461,7 @@ Create custom masks
 
       .. note::
 
-         **Note:** Additional information about creating polygons within
+         Additional information about creating polygons within
          Google Earth is also freely available with the Google Earth
          Outreach tutorials, directly accessible at
          `http://earth.google.com/outreach/tutorial_annotate.html#addpolygons <http://earth.google.com/outreach/tutorial_annotate.html#addpolygons>`_.
@@ -1590,7 +1590,7 @@ Create custom masks
 
       .. note::
 
-         **Note:** This mask file could also be created in two steps as
+         This mask file could also be created in two steps as
          well - the first step to create the base mask file (**picture
          frame**) that provides a feathered edge for the overall image,
          and the second step to apply the internal mask with the
