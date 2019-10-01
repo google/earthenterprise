@@ -94,12 +94,12 @@ Defining and Building Projects
 
          |Imagery Project Editor: list of resources|
 
-      Select **File > Save**.
-      Navigate to the ``ASSET_ROOT/Projects/Imagery``\ folder.
-      Enter **SFBayArea** as the name of your project, and click
-      **Save**. The new project appears in the Asset Manager when you
-      select **ASSET_ROOT/Projects/Imagery** in the asset navigation
-      tree.
+      #. Select **File > Save**.
+      #. Navigate to the ``ASSET_ROOT/Projects/Imagery``\ folder.
+      #. Enter **SFBayArea** as the name of your project, and click
+         **Save**. The new project appears in the Asset Manager when you
+         select **ASSET_ROOT/Projects/Imagery** in the asset navigation
+         tree.
 
       .. _Build_an_Imagery_Project:
       .. rubric:: Build an Imagery Project
@@ -113,7 +113,7 @@ Defining and Building Projects
 
       .. note::
 
-         **Note:** It could take up to 10 minutes for the project to
+         It could take up to 10 minutes for the project to
          build. Do this exercise when you can spend some time away from
          your computer while the project builds.
 
@@ -143,7 +143,7 @@ Defining and Building Projects
 
       .. note::
 
-         **Note:** Only bounding boxes appear in the Preview pane, not
+         Only bounding boxes appear in the Preview pane, not
          the actual imagery.
 
       .. rubric:: To preview an imagery project:
@@ -163,7 +163,7 @@ Defining and Building Projects
 
          .. note::
 
-            **Note:** The name of the project does not appear in the
+            The name of the project does not appear in the
             Preview List pane. When you close the Imagery Project Editor
             or uncheck the box next to **Preview**, the bounding boxes
             disappear. You can reset the view by pressing **Ctrl+R**.
@@ -256,7 +256,7 @@ Defining and Building Projects
 
          .. note::
 
-            **Note:** It could take a while for this project to build,
+            It could take a while for this project to build,
             depending on the speed of your workstation.
 
       When the status of the terrain project build is **Succeeded**, go
@@ -322,7 +322,7 @@ Defining and Building Projects
 
          .. note::
 
-            **Note:** The name of the project does not appear in the
+            The name of the project does not appear in the
             Preview List pane. When you close the Vector Project Editor
             or uncheck the boxes next to the resources, the vector data
             disappears. You can reset the view, if desired, by pressing
@@ -336,7 +336,7 @@ Defining and Building Projects
 
          .. note::
 
-            **Note:** Removing the resource from the project does not
+            Removing the resource from the project does not
             delete the resource. The resource remains intact and
             available for use by other projects. It is simply not part of
             this particular project any longer.
@@ -441,7 +441,7 @@ Defining and Building Projects
 
       .. tip::
 
-         **Tip:** Google Earth Enterprise Fusion executes the display
+         Google Earth Enterprise Fusion executes the display
          rules sequentially, based on the order in which they are listed
          on the Rules list. So you should always make the **default
          select all** rule the last one on the list.
@@ -515,7 +515,7 @@ Defining and Building Projects
 
          e. Click the **OK** button to save your display rule.
 
-      #. Verify that your display rule does what you intend:
+      #. Verify that the display rule does what you intend:
 
          a. Ensure that nothing is listed in the Preview List pane. If
             one or more assets are listed, right-click any asset, and
@@ -535,7 +535,7 @@ Defining and Building Projects
 
             .. note::
 
-               **Note:** Labels for vector projects do not appear in the
+               Labels for vector projects do not appear in the
                Preview pane.
 
          e. Zoom out to a display level less than **9**. The roads
@@ -552,7 +552,7 @@ Defining and Building Projects
 
          .. note::
 
-            **Note:** Whenever you modify display rules or filters for
+            Whenever you modify display rules or filters for
             your data, it is a good idea to save the project.
 
       .. _Disp_Rules_For_Major_Freeways:
@@ -591,7 +591,7 @@ Defining and Building Projects
 
       #. Click |New Icon| at the bottom-left of the dialog. The New Rule
          dialog appears.
-      #. Enter **Major Freeways** in the New Rule Name field, and click
+      #. Enter **Major Freeways** in the **New Rule Name** field, and click
          **OK**. The new rule name appears on the Rules list below the
          **default select all** rule.
 

@@ -59,9 +59,9 @@ Select Tools > Asset Manager. The Asset Manager appears.
 Click Terrain project icon. The Terrain Project Editor opens. New
 Terrain project editor window
 
-Click Open file icon. The Open dialog appears.  Note: The selection in
-the Type drop-down list near the bottom of this dialog determines the
-type of resources that appear on the list. Terrain Resource is
+Click Open file icon. The Open dialog appears.  The selection in the
+Type drop-down list near the bottom of this dialog determines the type
+of resources that appear on the list. Terrain Resource is
 automatically selected when you open this dialog from the Terrain
 Project Editor, so only terrain resources appear on the list.
 
@@ -100,13 +100,13 @@ resource with a resolution level of 9 and setting the Resources Min
 Level to 14 specifies WorldTopography as fill in the terrain overlay.
 Likewise in this example, the SFTerrain resource with a resolution
 level of 17, higher than the Resources Min Level of 14, is used as the
-actual overlay terrain.  Note: It is the overlay resources and not the
-fill resources that determine the extent of the overlay.  Note: If
-every resource is at or above the Resources Min Level, then 0 (sea
-level) is used for the fill terrain. Equally, if you set the Start
-Level to a resolution beyond the extent of the base terrain resource
-resolution, then 0 (sea level) is used for fill terrain.  Terrain
-project editor window with resources
+actual overlay terrain.  It is the overlay resources and not the fill
+resources that determine the extent of the overlay.  If every resource
+is at or above the Resources Min Level, then 0 (sea level) is used for
+the fill terrain. Equally, if you set the Start Level to a resolution
+beyond the extent of the base terrain resource resolution, then 0 (sea
+level) is used for fill terrain.  Terrain project editor window with
+resources
 
 When you have finished setting the terrain overlay options, click File
 > Save.
@@ -172,8 +172,8 @@ and mydomainname with your server and domain.
 
 Sign in with the default credentials or the username and password
 assigned to you:  Default username: geapacheuser  Default password:
-geeadmin  Note: If you do not know your username and password, contact
-your Google Earth Enterprise Server System Administrator.
+geeadmin  If you do not know your username and password, contact your
+Google Earth Enterprise Server System Administrator.
 
 Click Databases to display the list of databases pushed to the server.
 The name of your terrain overlay database is listed but not yet
