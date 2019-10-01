@@ -255,10 +255,10 @@ resolutions are specified as integers between 1 and 24. These
 correspond to the zoom levels that are used in the Fusion server.
 Setting a resolution of 24 results in a cut of the entire globe.
 
-Caution:
+Warning: Caution:
 
- Setting a resolution of 24 to cut an entire globe may result in a
-very large file.
+   Setting a resolution of 24 to cut an entire globe may result in a
+  very large file.
 
 -[ World level resolution ]-
 

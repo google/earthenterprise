@@ -22,10 +22,12 @@ Segmenting Large Imagery Files
       like this in the Preview pane:
 
       |Split Image|
+
       However, you can reconnect the split images by adding them all to
       a single resource, which would look like this in the Preview pane:
 
       |Split Images Reconnected Into a Single Resource|
+
       .. rubric:: To split a large source file into multiple smaller files:
 
       #. At the command prompt, change to the folder that contains the
@@ -38,14 +40,14 @@ Segmenting Large Imagery Files
          ``gevirtualraster -o path/virtual_raster.khvr usgsSFHiRes.tif``
 
          where *path* is the path to the folder where you want to save
-         the resulting ``.khvr`` file. (See :doc:`../fusionTutorial/createImageryMosaic` for more information about
-         the ``gevirtualraster`` tool.)
+         the resulting ``.khvr`` file. (See :doc:`../fusionTutorial/createImageryMosaic` for more information
+         about the ``gevirtualraster`` tool.)
 
          .. note::
 
-            **Note:** The path where you save the resulting ``.khvr``
-            file must be on a known volume. (See
-            “\ ``geconfigureassetroot --editvolumes``\ ” in the :doc:`../fusionAdministration/commandReference`.)
+            The path where you save the resulting ``.khvr`` file must be on
+            a known volume. (See “\ ``geconfigureassetroot --editvolumes``\ ”
+            in the :doc:`../fusionAdministration/commandReference`.)
 
       #. Change to the folder where you stored the virtual_raster.khvr
          (the value of *path* in step 2) by entering:

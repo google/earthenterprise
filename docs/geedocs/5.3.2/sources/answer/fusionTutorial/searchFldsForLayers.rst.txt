@@ -63,13 +63,13 @@ displayed in the description label for each county that matches the
 user’s search criteria. The first field selected for display becomes
 the placemark name. The second field selected for display becomes the
 snippet. Any additional fields selected for display become the
-description.  Note: This search performs an exact match, which means
-that the Google Earth EC user must enter the value exactly as it
-appears in the database. It can also perform a wildcard search, so
-users can enter part of the text they want to match. For example, if a
-user enters “dakota” in a state search, the search results match
-“North Dakota” and “South Dakota”.  Your selections appear on the list
-of search fields on the Search panel in the order in which you added
+description.  This search performs an exact match, which means that
+the Google Earth EC user must enter the value exactly as it appears in
+the database. It can also perform a wildcard search, so users can
+enter part of the text they want to match. For example, if a user
+enters “dakota” in a state search, the search results match “North
+Dakota” and “South Dakota”.  Your selections appear on the list of
+search fields on the Search panel in the order in which you added
 them. Use the Up or Down arrows to reorder the list.  Layer Properties
 Search Tab Full  The order in which the fields appear on this list
 dictates the order in which they appear in the description label in
@@ -104,7 +104,7 @@ the Version drop-down list.
 
 Click Push. Google Earth Enterprise Fusion pushes the database to
 Google Earth Enterprise Server, and displays a success message when it
-is done.  Note: If you get an error message, contact your Google Earth
+is done.  If you get an error message, contact your Google Earth
 Enterprise Server administrator for help, or check the Google Earth
 Enterprise Administration Guide for more information.
 
@@ -122,8 +122,8 @@ and mydomainname with your server and domain.
 
 Sign in with the default credentials or the username and password
 assigned to you:  Default username: geapacheuser  Default password:
-geeadmin  Note: If you do not know your username and password, contact
-your Google Earth Enterprise Server System Administrator.
+geeadmin  If you do not know your username and password, contact your
+Google Earth Enterprise Server System Administrator.
 
 Click Databases to display the list of databases pushed to the server.
 CACountyPopulation-v001 is listed. The Description, Type, Date, and
@@ -164,14 +164,12 @@ http://myhostname/CACountySearch.
 
 Click the Sign In button.
 
-Caution:
+Warning: If you have logged in to this server with Google Earth EC
+  previously, log out, clear your cache, and log back in. See
 
- If you have logged in to this server with Google Earth EC previously,
-log out, clear your cache, and log back in. See
+  clearing your cache
 
-clearing your cache
-
-.
+  .
 
 Google Earth EC displays your database with the search field you
 specified. When you enter a search string, such as “San”, all of the
