@@ -153,7 +153,7 @@ label in the description.</p>
 Enterprise Server 5.x is to create a connection.</p>
 <p>To connect to Google Earth Enterprise Server 5.x, use the
 following URL:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="n">http</span><span class="p">:</span><span class="o">//&lt;</span><span class="n">gee_server_name</span> <span class="ow">or</span> <span class="n">ip</span> <span class="n">address</span><span class="o">&gt;/&lt;</span><span class="n">target_path_of_published_db</span><span class="o">&gt;/</span><span class="n">wms</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">http</span><span class="p">:</span><span class="o">//&lt;</span><span class="n">gee_server_name</span> <span class="ow">or</span> <span class="n">ip</span> <span class="n">address</span><span class="o">&gt;/&lt;</span><span class="n">target_path_of_published_db</span><span class="o">&gt;/</span><span class="n">wms</span>
 </pre></div>
 </div>
 <div class="line-block">
@@ -222,7 +222,7 @@ database. Each layer provides the following information:<ul>
 supported, etc.</li>
 </ul>
 <p>An example <strong>GetCapabilities</strong> request output is as follows:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>&lt;WMT_MS_Capabilities updateSequence=&quot;0&quot; version=&quot;1.1.1&quot;&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;WMT_MS_Capabilities updateSequence=&quot;0&quot; version=&quot;1.1.1&quot;&gt;
    &lt;Service&gt;
       &lt;Name&gt;OGC:WMS&lt;/Name&gt;
       &lt;Title&gt;Google Earth WMS service.&lt;/Title&gt;
@@ -282,7 +282,7 @@ Enterprise Server 5.x, based on the layer data that was discovered
 in the <strong>GetCapabilities</strong> step.</p>
 <p>The URL the GIS client should use to make the <strong>GetMap</strong> request
 is as follows:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre>http://&lt;hostname&gt;/&lt;target_path&gt;/wms?SERVICE=WMS&amp;REQUEST=
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://&lt;hostname&gt;/&lt;target_path&gt;/wms?SERVICE=WMS&amp;REQUEST=
 GetMap&amp;BBOX=&lt;bounding_box_limits_of_the_requested_map&gt;&amp;SRS=&lt;projection_type&gt;&amp;WIDTH=&lt;width_of_requested_map&gt;&amp;HEIGHT=&lt;height_of_requested_map&gt;&amp;LAYERS=&lt;layer_name&gt;&amp;STYLES=&lt;style_info&gt;&amp;FORMAT=&lt;format_of_requested_map&gt;&amp;DPI=96&amp;TRANSPARENT=TRUE
 </pre></div>
 </div>

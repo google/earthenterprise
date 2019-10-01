@@ -59,9 +59,10 @@ Manage snippet profiles
          -  Default username: *geapacheuser*
          -  Default password: *geeadmin*
 
-         **Note:** If you do not know your username and password,
-         contact your Google Earth Enterprise Server System
-         Administrator.
+         .. note::
+            If you do not know your username and password,
+            contact your Google Earth Enterprise Server System
+            Administrator.
 
       #. Click **Snippet profiles** to display your snippet profiles.
       #. Click **Create New**. The **Create new snippet profile** dialog

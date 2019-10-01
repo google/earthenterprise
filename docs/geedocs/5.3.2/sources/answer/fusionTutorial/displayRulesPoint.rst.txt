@@ -72,35 +72,17 @@ Check the box next to Suppress Duplicate Points.
 
 Under Elevation/Height, set Mode to Clamp to Ground.
 
-On the right side of the dialog, check the box next to
+On the right side of the dialog, check the box next to Draw Label.
 
-Draw Label
+For Visibility, accept the default range, 5 through 24.
 
-. For
+Do not make any changes under Label Properties.
 
-Visibility
-
-, accept the default range,
-
-5
-
- through
-
-24
-
-. Do not make any changes under
-
-Label Properties
-
-, This area allows you to specify the content and appearance of a text
+This area allows you to specify the content and appearance of a text
 label for each POI. However, there are so many POIs in California that
 the view in Google Earth EC would be too crowded.
 
-Check the box next to
-
-Draw Icon
-
- and then:
+Check the box next to Draw Icon and then:
 
 Click the icon pair. The Icons dialog appears.  Icons Dialog
 
@@ -130,62 +112,29 @@ Text
 appears.
 
 Select COUNTY from the Insert Field drop-down list.  «COUNTY» appears
-in the text box under Popup Text.  Note: You can use some basic HTML
-tags to format the Label text, if desired.
+in the text box under Popup Text.  You can use some basic HTML tags to
+format the Label text, if desired.
 
-To the left of «
+To the left of «COUNTY» enter <b>.
 
-COUNTY
+To the right of «COUNTY» enter </b><br/><br/>.
 
-» enter
+Press Enter. Adding this HTML code formats the name of the county as
+bold, followed by two line breaks to separate it from the text that
+follows (next step).
 
-<b>
+Select NAME from the Insert Field drop-down list. «NAME» appears on
+the next line of the text box.
 
-. To the right of «
+To the right of «NAME» enter <br/><br/>.
 
-COUNTY
+Press Enter.
 
-» enter
-
-</b><br/><br/>
-
-, and press
-
-Enter
-
-. Adding this HTML code formats the name of the county as bold,
-followed by two line breaks to separate it from the text that follows
-(next step).
-
-Select
-
-NAME
-
- from the
-
-Insert Field
-
- drop-down list. «
-
-NAME
-
-» appears on the next line of the text box. To the right of «
-
-NAME
-
-» enter
-
-<br/><br/>
-
-, and press
-
-Enter
-
-. On the next line, enter
+#. On the next line, enter
 
 Latitude:
 
- , and then select
+, and then select
 
 LATITUDE
 
@@ -193,19 +142,13 @@ LATITUDE
 
 Insert Field
 
- drop-down menu. To the right of «
+ drop-down menu.
 
-LATITUDE
+To the right of «LATITUDE» enter <br/><br/>.
 
-» enter
+Press Enter.
 
-<br/><br/>
-
-, and press
-
-Enter
-
-. On the next line, enter
+#. On the next line, enter
 
 Longitude:
 
@@ -219,67 +162,30 @@ Insert Field
 
  drop-down menu.
 
-Click
 
-OK
+Click the OK button.
 
- For
+For Style, select Default from the drop-down list.
 
-Style
+Check the box next to Directions to include “To here” and “From here”
+links in the description balloon in Google Earth EC.
 
-, select
+Click the Text Color button, and select a medium blue.
 
-Default
+Click the Background Color button, and select a light yellow.
 
- from the drop-down list. Check the box next to
+Click the OK button. You return to the Vector Project Editor.
 
-Directions
+Select File > Save. The Save dialog appears.
 
- to include “To here” and “From here” links in the description balloon
-in Google Earth EC. Click the
+Navigate to the ASSET_ROOT/Projects/Vectorfolder.
 
-Text Color
+Enter CA_POIs as the name of your project, and click Save.  The new
+project appears in the Asset Manager when you select
+ASSET_ROOT/Projects/Vector in the asset navigation tree.
 
- button, and select a medium blue. Click the
-
-Background Color
-
- button, and select a light yellow. Click the
-
-OK
-
- button. You return to the Vector Project Editor.
-
-Select
-
-File > Save
-
-. The Save dialog appears.
-
-Navigate to the "ASSET_ROOT/Projects/Vector"folder. Enter
-
-CA_POIs
-
- as the name of your project, and click
-
-Save
-
-. The new project appears in the Asset Manager when you select
-
-ASSET_ROOT/Projects/Vector
-
- in the asset navigation tree.
-
-Right-click
-
-CA_POIs
-
-, and select
-
-Build
-
- from the context menu. Google Earth Enterprise Fusion builds the
-project.
+Right-click CA_POIs, and select Build from the context menu. Google
+Earth Enterprise Fusion builds the project.
 
 -[ Define and Build an Imagery Project ]-
 
@@ -309,9 +215,7 @@ not desirable to spend a lot of time building a large imagery project.
 So this exercise walks you through creating a small and simple imagery
 project.
 
-Note: Note:
-
-   If you have already completed this exercise in
+Note: If you have already completed this exercise in
 
   Configuring Display Rules for Polygon Data
 
@@ -335,7 +239,7 @@ the Imagery Project Editor.
 
 Select File > Save.  The Save dialog appears.
 
-Navigate to the ASSET_ROOT/Projects/Imageryfolder.
+Navigate to the ASSET_ROOT/Projects/Imagery folder.
 
 Enter BlueMarble as the name of your project, and click Save.  The new
 project appears in the Asset Manager when you select
@@ -368,11 +272,11 @@ projects appear on the list.
 
 Select File > Save.
 
-Navigate to the ASSET_ROOT/Databasesfolder.
+Navigate to the ASSET_ROOT/Databases folder.
 
 Enter CA_POIs for the name of your database, and click Save. The name
 of the database appears on the right when you select the
-/ASSET_ROOT/Databasesfolder in the asset navigation tree.
+/ASSET_ROOT/Databases folder in the asset navigation tree.
 
 Right-click CA_POIs, and select Build from the context menu. Google
 Earth Enterprise Fusion builds the database.
@@ -434,6 +338,6 @@ Earth EC displays blue stars all over California. The closer you zoom
 in, the more spread out the stars are and the more stars you can see.
 When you mouse over a star, it turns yellow. When you click a star, a
 description balloon displays the information you specified in the
-format you defined in the Display Rules dialog.  Note: If you cannot
-see the vector data, make sure the check box next to CA_POIs in the
-Layers panel is checked.
+format you defined in the Display Rules dialog.  If you cannot see the
+vector data, make sure the check box next to CA_POIs in the Layers
+panel is checked.
