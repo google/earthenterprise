@@ -8,7 +8,7 @@ System requirements for Fusion and GEE Server
  before you begin.
 
 If you need to install or access the documentation offline, see
-Download documentation for GEE 5.1.x.
+Download documentation for GEE 5.x.
 
 Read Installation tips before beginning the installation process for
 Fusion and GEE Server.

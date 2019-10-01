@@ -92,8 +92,6 @@ Start the system manager by entering:  /etc/init.d/gefusion start
 
 -[ Launch Google Earth Enterprise Fusion ]-
 
--[ To launch Google Earth Enterprise Fusion: ]-
-
 Open a Linux terminal window.
 
 Enter fusion (or fusion & to return to the Linux prompt).

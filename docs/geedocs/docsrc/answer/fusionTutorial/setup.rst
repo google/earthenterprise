@@ -32,15 +32,15 @@ Setting Up the Tutorial
       how to create 2D and 3D databases, as well as become familiar
       with the Google Earth Enterprise Fusion user interface.
 
-      -  `Select the Tutorial Asset Root <#SelectAssetRoot>`_
-      -  `Launch Google Earth Enterprise Fusion <#LaunchFusion>`_
-      -  `Build the Asset Navigation Tree <#AssetNavTree>`_
-      -  `Define Source Providers <#DefineSrcProv>`_
-      -  `Define Resource Paths <#DefineResPath>`_
+      -  :ref:`Select the Tutorial Asset Root <SelectAssetRoot>`
+      -  :ref:`Launch Google Earth Enterprise Fusion <LaunchFusion>`
+      -  :ref:`Build the Asset Navigation Tree <AssetNavTree>`
+      -  :ref:`Define Source Providers <DefineSrcProv>`
+      -  :ref:`Define Resource Paths <DefineResPath>`
 
       .. index:: Tutorial Asset Root
+      .. _SelectAssetRoot:
       .. rubric:: Select the Tutorial Asset Root
-         :name: select-the-tutorial-asset-root
 
       There are two occasions when you must select a different asset
       root:
@@ -94,11 +94,8 @@ Setting Up the Tutorial
 
 
       .. index:: Launch Google Earth Enterprise Fusion
+      .. _LaunchFusion:
       .. rubric:: Launch Google Earth Enterprise Fusion
-         :name: launch-google-earth-enterprise-fusion
-
-      .. rubric:: To launch Google Earth Enterprise Fusion:
-         :name: to-launch-google-earth-enterprise-fusion
 
       #. Open a Linux terminal window.
       #. Enter ``fusion`` (or ``fusion &`` to return to the Linux
@@ -109,8 +106,8 @@ Setting Up the Tutorial
 
 
       .. index:: Asset Navigation Tree
+      .. _AssetNavTree:
       .. rubric:: Build the Asset Navigation Tree
-         :name: build-the-asset-navigation-tree
 
       The components of a Google Earth Enterprise Fusion database are
       called *assets*. The main location where you store all of your
@@ -167,8 +164,8 @@ Setting Up the Tutorial
 
 
       .. index:: Source Providers
+      .. _DefineSrcProv:
       .. rubric:: Define Source Providers
-         :name: define-source-providers
 
       The **Provider Manager** allows you to create a list of
       organizations that provide the source data you use in Google
@@ -233,8 +230,8 @@ Setting Up the Tutorial
       #. Click **OK** to close the Provider Manager.
 
       .. index:: Resource Paths
+      .. _DefineResPath:
       .. rubric:: Define Resource Paths
-         :name: define-resource-paths
 
       The **Asset Manager Resource Editor Default Source Paths** screen
       allows you to specify default paths for Vector, Imagery, and

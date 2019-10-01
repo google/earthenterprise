@@ -83,7 +83,7 @@ Command reference
 
            --maxlevel level
 
-      .. note::
+      .. warning::
 
          Deprecated in release GEE 5.2.5 and higher. Use
          ``--maxleveloverride`` instead.
