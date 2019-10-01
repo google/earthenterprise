@@ -75,10 +75,11 @@
 <p>If the Google Earth EC is unable to connect to your GEE Server, you will
 see the error, “Google Earth failed to connect to database”:</p>
 <p>To resolve this issue, try these troubleshooting steps:</p>
-<ol class="arabic simple">
-<li>Make sure the <strong>Server URL</strong> (<code class="docutils literal notranslate"><span class="pre">http://hostname/path</span></code>) is
+<ol class="arabic">
+<li><p class="first">Make sure the <strong>Server URL</strong> (<code class="docutils literal notranslate"><span class="pre">http://hostname/path</span></code>) is
 correct in the “Google Earth - Select Server” dialog box, which
-appears when you start EC:<ul>
+appears when you start EC:</p>
+<ul class="simple">
 <li>The hostname should match the fully qualified domain name of
 your GEE Server.</li>
 <li>The path in the URL should match the <strong>Publish Point</strong> shown
@@ -86,24 +87,29 @@ in the GEE Server UI. This path indicates the location where
 the database was published.</li>
 </ul>
 </li>
-<li>Look for client EC requests in the GEE Server logs:<ol class="arabic">
-<li>Open a terminal window on the GEE Server.</li>
-<li>Type the command
-<code class="docutils literal notranslate"><span class="pre">tail</span> <span class="pre">-f</span> <span class="pre">/opt/google/gehttpd/logs/access_log</span></code></li>
-<li>Start EC and try connecting to your GEE Server.
+<li><p class="first">Look for client EC requests in the GEE Server logs:</p>
+<ol class="arabic">
+<li><p class="first">Open a terminal window on the GEE Server.</p>
+</li>
+<li><p class="first">Type the command
+<code class="docutils literal notranslate"><span class="pre">tail</span> <span class="pre">-f</span> <span class="pre">/opt/google/gehttpd/logs/access_log</span></code></p>
+</li>
+<li><p class="first">Start EC and try connecting to your GEE Server.
 In the terminal window, you should see time-stamped access
 requests in the logs from the client, starting with a GET
 request for the <code class="docutils literal notranslate"><span class="pre">dbRoot</span></code> file, followed by <code class="docutils literal notranslate"><span class="pre">flatfile</span></code>
-requests—for example:
-<code class="docutils literal notranslate"><span class="pre">192.168.1.199</span> <span class="pre">-</span> <span class="pre">-</span> <span class="pre">[08/Feb/2016:09:10:25</span> <span class="pre">-0800]</span> <span class="pre">&quot;GET</span> <span class="pre">/3d/dbRoot.v5?hl=en&amp;gl=us&amp;output=proto&amp;cv=7.1.5.1557&amp;ct=ec</span> <span class="pre">HTTP/1.1&quot;</span> <span class="pre">200</span> <span class="pre">4512</span> <span class="pre">&quot;-&quot;</span> <span class="pre">&quot;GoogleEarth/7.1.5.1557(Windows;Microsoft</span> <span class="pre">Windows</span> <span class="pre">(6.2.9200.0);en;kml:2.2;client:EC;type:default)&quot;</span> <span class="pre">192.168.1.199</span> <span class="pre">-</span> <span class="pre">-</span> <span class="pre">[08/Feb/2016:09:10:27</span> <span class="pre">-0800]</span> <span class="pre">&quot;GET</span> <span class="pre">/3d/dbRoot.v5?db=tm&amp;hl=en&amp;gl=us&amp;output=proto&amp;cv=7.1.5.1557&amp;ct=ec</span> <span class="pre">HTTP/1.1&quot;</span> <span class="pre">200</span> <span class="pre">1161</span> <span class="pre">&quot;-&quot;</span> <span class="pre">&quot;GoogleEarth/7.1.5.1557(Windows;Microsoft</span> <span class="pre">Windows</span> <span class="pre">(6.2.9200.0);en;kml:2.2;client:EC;type:default)&quot;</span></code>
-<code class="docutils literal notranslate"><span class="pre">192.168.1.199</span> <span class="pre">-</span> <span class="pre">-</span> <span class="pre">[08/Feb/2016:09:10:27</span> <span class="pre">-0800]</span> <span class="pre">&quot;GET</span> <span class="pre">/3d/flatfile?lf-0-icons/help_l.png&amp;h=32</span> <span class="pre">HTTP/1.1&quot;</span> <span class="pre">200</span> <span class="pre">426</span> <span class="pre">&quot;-&quot;</span> <span class="pre">&quot;GoogleEarth/7.1.5.1557(Windows;Microsoft</span> <span class="pre">Windows</span> <span class="pre">(6.2.9200.0);en;kml:2.2;client:EC;type:default)&quot;</span></code>
-​If no new entries appear in the logs, then EC was unable to
+requests—for example:</p>
+<p><code class="docutils literal notranslate"><span class="pre">192.168.1.199</span> <span class="pre">-</span> <span class="pre">-</span> <span class="pre">[08/Feb/2016:09:10:25</span> <span class="pre">-0800]</span> <span class="pre">&quot;GET</span> <span class="pre">/3d/dbRoot.v5?hl=en&amp;gl=us&amp;output=proto&amp;cv=7.1.5.1557&amp;ct=ec</span> <span class="pre">HTTP/1.1&quot;</span> <span class="pre">200</span> <span class="pre">4512</span> <span class="pre">&quot;-&quot;</span> <span class="pre">&quot;GoogleEarth/7.1.5.1557(Windows;Microsoft</span> <span class="pre">Windows</span> <span class="pre">(6.2.9200.0);en;kml:2.2;client:EC;type:default)&quot;</span> <span class="pre">192.168.1.199</span> <span class="pre">-</span> <span class="pre">-</span> <span class="pre">[08/Feb/2016:09:10:27</span> <span class="pre">-0800]</span> <span class="pre">&quot;GET</span> <span class="pre">/3d/dbRoot.v5?db=tm&amp;hl=en&amp;gl=us&amp;output=proto&amp;cv=7.1.5.1557&amp;ct=ec</span> <span class="pre">HTTP/1.1&quot;</span> <span class="pre">200</span> <span class="pre">1161</span> <span class="pre">&quot;-&quot;</span> <span class="pre">&quot;GoogleEarth/7.1.5.1557(Windows;Microsoft</span> <span class="pre">Windows</span> <span class="pre">(6.2.9200.0);en;kml:2.2;client:EC;type:default)&quot;</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">192.168.1.199</span> <span class="pre">-</span> <span class="pre">-</span> <span class="pre">[08/Feb/2016:09:10:27</span> <span class="pre">-0800]</span> <span class="pre">&quot;GET</span> <span class="pre">/3d/flatfile?lf-0-icons/help_l.png&amp;h=32</span> <span class="pre">HTTP/1.1&quot;</span> <span class="pre">200</span> <span class="pre">426</span> <span class="pre">&quot;-&quot;</span> <span class="pre">&quot;GoogleEarth/7.1.5.1557(Windows;Microsoft</span> <span class="pre">Windows</span> <span class="pre">(6.2.9200.0);en;kml:2.2;client:EC;type:default)&quot;</span></code></p>
+<p>​If no new entries appear in the logs, then EC was unable to
 establish a connection to the GEE Server. This may be due to
 a network or firewall problem, as described in the next
-step.</li>
+step.</p>
+</li>
 </ol>
 </li>
-<li>Verify network connectivity from EC to the GEE Server:<ul>
+<li><p class="first">Verify network connectivity from EC to the GEE Server:</p>
+<ul class="simple">
 <li>The firewall on the host might be blocking outbound
 connections - check your firewall. Also, you can use
 tools such as Wireshark or

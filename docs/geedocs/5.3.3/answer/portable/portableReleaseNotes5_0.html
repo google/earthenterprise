@@ -111,6 +111,144 @@ is no longer fixed.</p>
 </div></blockquote>
 </li>
 </ul>
+<p class="rubric">Supported Platforms</p>
+<p>GEE Portable 5.0 is supported on the following operating
+systems:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Windows 7 or later</li>
+<li>Mac OS X 10.7 and later</li>
+<li>Red Hat Enterprise Linux versions 6.0 to 6.4, including
+the most recent security patches</li>
+<li>CentOS 6.4</li>
+<li>Ubuntu 10.04 LTS and 12.04 LTS</li>
+</ul>
+</div></blockquote>
+<p>GEE Portable 5.0 is compatible with Google Earth Enterprise
+Client (EC) and Plugin versions 7.0.1 - 7.1.1.1888 for
+Windows, Mac, and Linux.</p>
+<p class="rubric">System Requirements</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you plan to serve large globes from Portable
+Server, you may also need to provide more storage, depending
+on their size.</p>
+</div>
+<p><strong>Windows 7 or later</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Minimum dual-core Intel or AMD CPUs; 2.0 GHz or higher
+recommended.</li>
+<li>Minimum 2 GB RAM.</li>
+<li>Minimum 2 GB of free space.</li>
+<li>Graphics card: DirectX9 and 3D capable with 256 MB of VRAM
+(discrete GPU recommended).</li>
+<li>Screen: 1280x1024, “32-bit True Color.”</li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We recommend using NTFS for attached storage
+devices hosting the portable globes, especially if the
+<code class="docutils literal notranslate"><span class="pre">.glx</span></code> files are &gt; 4 GB</p>
+</div>
+<p><strong>Mac OS X 10.7 or later</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Minimum dual-core Intel Mac</li>
+<li>Minimum 2 GB RAM.</li>
+<li>Minimum 2 GB of free space.</li>
+<li>Graphics card: DirectX9 and 3D capable with 256 MB of VRAM
+(discrete GPU recommended).</li>
+<li>Screen: 1280x1024, “Millions of Colors.”</li>
+</ul>
+</div></blockquote>
+<p><strong>Linux</strong></p>
+<p>Operating systems supported:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Red Hat Enterprise Linux versions 6.0 to 6.4, including
+the most recent security patches.</li>
+<li>CentOS 6.4</li>
+<li>Ubuntu 10.04 and 12.04 LTS</li>
+</ul>
+</div></blockquote>
+<p>Hardware requirements:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Minimum dual-core Intel or AMD CPUs; 2.0 GHz or higher
+recommended.</li>
+<li>Minimum 4 GB RAM.</li>
+<li>Minimum 2 GB of free space.</li>
+<li>Graphics card: at least 64 MB video RAM (NVIDIA GeForce4
+or higher preferred).</li>
+</ul>
+</div></blockquote>
+<p class="rubric">New features</p>
+<p><strong>Broadcasting set by portable.cfg file</strong>
+Broadcasting no longer can be set from the default user
+interface; instead you can set it using either of the
+following methods:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">http://localhost:9335/?cmd=set_key&amp;accept;_all_requests=t</span></code></li>
+<li>Add <code class="docutils literal notranslate"><span class="pre">accept_all_requests</span> <span class="pre">True</span></code> to your <code class="docutils literal notranslate"><span class="pre">portable.cfg</span></code>
+file</li>
+</ul>
+</div></blockquote>
+<p>You can also disable broadcasting via the <code class="docutils literal notranslate"><span class="pre">portable.cfg</span></code>
+file. This prevents a rogue page from turning on
+broadcasting via a localhost reference.</p>
+<blockquote>
+<div><ul class="simple">
+<li>Add <code class="docutils literal notranslate"><span class="pre">disable_broadcasting</span> <span class="pre">True</span></code> to your
+<code class="docutils literal notranslate"><span class="pre">portable.cfg</span></code> file</li>
+</ul>
+</div></blockquote>
+<p class="rubric">Known Issues</p>
+<table border="1" class="colwidths-given docutils" id="id1">
+<caption><span class="caption-text">Known Issues</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="11%" />
+<col width="44%" />
+<col width="44%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Number</th>
+<th class="head">Description</th>
+<th class="head">Work Around</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>&#160;</td>
+<td>The new Preview options for 2D maps in GEE Server and Portable do not support the display of
+Plate Carrée 2D maps.</td>
+<td>With Portable, you can still view existing .glm Plate Carrée 2D map files via the old preview
+interface, which you can access by pointing GEE Portable at <a class="reference external" href="http://localhost:9335/list">http://localhost:9335/list</a>.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Resolved Issues</p>
+<table border="1" class="colwidths-given docutils" id="id2">
+<caption><span class="caption-text">Resolved Issues</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="17%" />
+<col width="67%" />
+<col width="17%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Number</th>
+<th class="head">Description</th>
+<th class="head">Resolution</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>8627202</td>
+<td>Portable for Windows 4.4.1 fails to read map or globe files greater than 2 GB in size.</td>
+<td>Fixed</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>

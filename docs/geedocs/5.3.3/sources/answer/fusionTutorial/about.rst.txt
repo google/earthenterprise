@@ -1,89 +1,97 @@
-|Google logo|
 
-===================
 About this Tutorial
-===================
 
-.. container::
+Google Earth Enterprise Fusion is designed for organizations that want
+to display their own geospatial data in Google Earth and Google Maps.
+You can use it to create graphically rich geographic information
+system (GIS) databases for distribution to your customers or in-house
+end users. With Google Earth Enterprise Fusion, you can integrate your
+own geospatial data, publish it to the Google Earth Enterprise Server,
+and view it using Google Earth Enterprise Client (EC), the Google Maps
+API, or the Google Earth API.
 
-   .. container:: content
+Before you begin working with real data in Google Earth Enterprise
+Fusion, it is important for you to familiarize yourself with the
+process of defining and building different types of data. This
+tutorial provides a series of exercises that you can perform in an
+environment where it is all right to make mistakes. Once you start
+working with real data, it will be more difficult to correct mistakes,
+so please take your time working through the tutorial until you feel
+comfortable with Google Earth Enterprise Fusion.
 
-      Google Earth Enterprise Fusion is designed for organizations that
-      want to display their own geospatial data in Google Earth and
-      Google Maps. You can use it to create graphically rich geographic
-      information system (GIS) databases for distribution to your
-      customers or in-house end users. With Google Earth Enterprise
-      Fusion, you can integrate your own geospatial data, publish it to
-      the Google Earth Enterprise Server, and view it using Google Earth
-      Enterprise Client (EC), the Google Maps API, or the Google Earth
-      API.
+The Basic Tasks section of this tutorial guides you through building a
+Google Earth Enterprise Fusion database from raw source material and
+publishing it using the Google Earth Enterprise Server, using the
+tutorial files provided on the Google Earth Enterprise Fusion
+installation DVD.
 
-      Before you begin working with real data in Google Earth Enterprise
-      Fusion, it is important for you to familiarize yourself with the
-      process of defining and building different types of data. This
-      tutorial provides a series of exercises that you can perform in an
-      environment where it is all right to make mistakes. Once you start
-      working with real data, it will be more difficult to correct
-      mistakes, so please take your time working through the tutorial
-      until you feel comfortable with Google Earth Enterprise Fusion.
+Note:
 
-      The Basic Tasks section of this tutorial guides you through
-      building a Google Earth Enterprise Fusion database from raw source
-      material and publishing it using the Google Earth Enterprise
-      Server, using the tutorial files provided on the Google Earth
-      Enterprise Fusion installation DVD.
+ Work through the first five lessons in order.
 
-      **Note:** Work through the first five lessons in order.
+The Advanced Tasks section of this tutorial guides you through more
+advanced topics. You can work through the advanced lessons in any
+order you wish. Alternatively, you can skip the Advanced Tasks section
+until you want to learn about something new. Then, you can come back
+to the tutorial and work through the lessons of your choice.
 
-      The Advanced Tasks section of this tutorial guides you through
-      more advanced topics. You can work through the advanced lessons in
-      any order you wish. Alternatively, you can skip the Advanced Tasks
-      section until you want to learn about something new. Then, you can
-      come back to the tutorial and work through the lessons of your
-      choice.
+-[ Audience ]-
 
-      .. rubric:: Audience
-         :name: audience
+This guide is intended for individuals who are new to Google Earth
+Enterprise Fusion. It assumes that you have some familiarity with GIS
+data and have used a Google Earth client, but have no familiarity with
+this application. It also assumes that Google Earth Enterprise Fusion,
+the Google Earth Enterprise Server, and Google Earth EC have been
+installed either on a network drive accessible to you or on your local
+workstation. If any of those three applications are not installed,
+contact your system administrator or refer to
 
-      This guide is intended for individuals who are new to Google Earth
-      Enterprise Fusion. It assumes that you have some familiarity with
-      GIS data and have used a Google Earth client, but have no
-      familiarity with this application. It also assumes that Google
-      Earth Enterprise Fusion, the Google Earth Enterprise Server, and
-      Google Earth EC have been installed either on a network drive
-      accessible to you or on your local workstation. If any of those
-      three applications are not installed, contact your system
-      administrator or refer to :doc:`../installGEE/installOverviewGEE`.
+Installation overview for GEE
 
-      .. rubric:: In This Guide
-         :name: in-this-guide
+.
 
-      This guide provides five basic lessons and nine advanced lessons.
+-[ In This Guide ]-
 
-      The **Basic Tasks** section includes:
+This guide provides five basic lessons and nine advanced lessons.
 
-      #. :doc:`../fusionTutorial/setup`
-      #. :doc:`../fusionTutorial/buildResource`
-      #. :doc:`../fusionTutorial/buildProject`
-      #. :doc:`../fusionTutorial/buildDatabase`
-      #. :doc:`../fusionTutorial/pushPublishView`
+-[ Basic Tasks ]-
 
-      .. _Advanced_Fusion_Tutorial:
-         The **Advanced Tasks** section includes:
+The Basic Tasks section includes:
 
-      #. :doc:`../fusionTutorial/displayRulesPoint`
-      #. :doc:`../fusionTutorial/displayRulesPolygon`
-      #. :doc:`../fusionTutorial/impExpStyleTemplates`
-      #. :doc:`../fusionTutorial/searchFldsForLayers`
-      #. :doc:`../fusionTutorial/createMapDB`
-      #. :doc:`../fusionTutorial/createImageryMosaic`
-      #. :doc:`../fusionTutorial/segmentLargeImageryFiles`
-      #. :doc:`../fusionTutorial/buildHistImageryProj`
+Setting Up the Tutorial
 
-      **Appendix A:** :doc:`../fusionTutorial/sampleDataFiles`
-      provides a list of all of the sample data files included when you
-      install the tutorial data.
+Defining and Building Resources
 
-.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
-   :width: 130px
-   :height: 44px
+Defining and Building Projects
+
+Defining and Building Databases
+
+Pushing, Publishing, and Viewing a Database
+
+-[ Advanced Tasks ]-
+
+The Advanced Tasks section includes:
+
+Configuring Display Rules for Point Data
+
+Configuring Display Rules for Polygon Data
+
+Importing and Exporting Style Templates
+
+Specifying Search Fields for Individual Layers
+
+Creating a Map Database
+
+Creating Imagery Mosaics
+
+Segmenting Large Imagery Files
+
+Building a Historical Imagery Project
+
+Appendix A:
+
+
+Sample Data Files
+
+ provides a list of all of the sample data files included when you
+install the tutorial data.

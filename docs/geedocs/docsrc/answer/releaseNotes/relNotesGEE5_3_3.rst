@@ -12,6 +12,10 @@ Release notes: Open GEE 5.3.3
 
       .. rubric:: New Features
 
+      **Ability to set default database from admin page**. For 3D databases, there
+      is an additional option in the publish dialog that allows the user to
+      specify a database as the "default". The "default" database will be served
+      to the client if the server URL is specified without a database name.
 
       .. rubric:: Supported Platforms
 
@@ -42,6 +46,9 @@ Release notes: Open GEE 5.3.3
          * - Number
            - Description
            - Resolution
+         * - Issue Number
+           - Issue Description
+           - Issue Resolution
 
       .. rubric:: Known Issues
 

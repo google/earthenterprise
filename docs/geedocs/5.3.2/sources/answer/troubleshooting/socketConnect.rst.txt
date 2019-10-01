@@ -1,31 +1,25 @@
-|Google logo|
 
-==============
 Socket connect
-==============
 
-.. container::
+-[ Error message ]-
 
-   .. container:: content
+"Socket connect"
 
-      .. rubric:: Error message
+xxx.xx.xxx.xx
 
-      ``Socket connect``\ *xxx.xx.xxx.xx*\ \_13031
+_13031
 
-      (where ``xxx.xx.xxx.xx`` is your IP address)
-      
-      .. rubric:: Description
+(where "xxx.xx.xxx.xx" is your IP address)
 
-      This appears in the vector Asset Log or when starting Fusion from the
-      command line when the system daemons are not running.
+-[ Description ]-
 
-      .. rubric:: Resolution
+This appears in the vector Asset Log or when starting Fusion from the
+command line when the system daemons are not running.
 
-      From the command line, enter:
+-[ Resolution ]-
 
-      ``sudo /etc/init.d/geserver stop``
-      ``sudo /etc/init.d/geserver start``
+From the command line, enter:
 
-.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
-   :width: 130px
-   :height: 44px
+"sudo /etc/init.d/geserver stop"
+
+"sudo /etc/init.d/geserver start"

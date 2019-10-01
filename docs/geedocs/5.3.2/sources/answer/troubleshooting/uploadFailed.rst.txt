@@ -1,28 +1,18 @@
-|Google logo|
 
-=============
 Upload failed
-=============
 
-.. container::
+-[ Error message ]-
 
-   .. container:: content
+"Upload failed"
 
-      .. rubric:: Error message
+-[ Description ]-
 
-      ``Upload failed``
-      .. rubric:: Description
+When you try to publish a database, the network connection to the
+server is down or permissions are set incorrectly on the target
+server.
 
-      When you try to publish a database, the network connection to the
-      server is down or permissions are set incorrectly on the target
-      server.
+-[ Resolution ]-
 
-      .. rubric:: Resolution
-
-      Check your network connections and make sure that the targeted
-      server is running and accessible. Check the access permissions in
-      the publishing root directory. Check the GEE Server logs.
-
-.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
-   :width: 130px
-   :height: 44px
+Check your network connections and make sure that the targeted server
+is running and accessible. Check the access permissions in the
+publishing root directory. Check the GEE Server logs.

@@ -145,7 +145,7 @@ gees.admin.searchView = {
       createCheckbox: function(parent, index) {
         var checkbox = gees.dom.create('input');
         checkbox.name = 'dbCheck';
-        checkbox.className = 'dbCheck';
+        checkbox.className = 'dbCheck frontPageCheck';
         checkbox.type = 'checkbox';
         checkbox.id = 'checkbox_' + index;
         var onclick =
@@ -194,6 +194,7 @@ gees.admin.searchView = {
         var checkbox = gees.dom.create('input');
         checkbox.id = 'masterCheckBox';
         checkbox.type = 'checkbox';
+        checkbox.className = 'frontPageCheck';
         var onclick = 'gees.admin.checkboxes.toggleAll()';
         checkbox.setAttribute('onclick', onclick);
         parent.appendChild(checkbox);

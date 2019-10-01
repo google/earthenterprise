@@ -1,30 +1,32 @@
-|Google logo|
 
-===========
 Empty layer
-===========
 
-.. container::
+-[ Error message ]-
 
-   .. container:: content
+"No features selected by any of the filters. Layer would be empty."
 
-      .. rubric:: Error message
+-[ Description ]-
 
-      ``No features selected by any of the filters. Layer would be empty.``
-      
-      .. rubric:: Description
+This error appears in the index of the project Asset log when one of
+your layers is set to not display any data.
 
-      This error appears in the index of the project Asset log when one
-      of your layers is set to not display any data.
+-[ Resolution ]-
 
-      .. rubric:: Resolution
+Check and correct for a mistake in a filter, e.g., using a comma in a
+filter value (such as 2,000 instead of 2000), selecting
 
-      Check and correct for a mistake in a filter, e.g., using a
-      comma in a filter value (such as 2,000 instead of 2000), selecting
-      **Match all of the following** when you mean to select **Match any
-      of the following**, selecting **equals** instead of **does not
-      equal**, etc.
+Match all of the following
 
-.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
-   :width: 130px
-   :height: 44px
+ when you mean to select
+
+Match any of the following
+
+, selecting
+
+equals
+
+ instead of
+
+does not equal
+
+, etc.
