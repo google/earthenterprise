@@ -13,11 +13,12 @@ the image is split into four smaller files. If you create a separate
 resource for each resulting source file, it would look like this in
 the Preview pane:
 
-  However, you can reconnect the split images by adding them all to a
+
+However, you can reconnect the split images by adding them all to a
 single resource, which would look like this in the Preview pane:
 
-  .. rubric:: To split a large source file into multiple smaller
-files:
+
+-[ To split a large source file into multiple smaller files: ]-
 
 At the command prompt, change to the folder that contains the tutorial
 imagery source files by entering:  cd

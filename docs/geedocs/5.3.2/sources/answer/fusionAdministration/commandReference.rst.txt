@@ -64,7 +64,7 @@ Default
 
    --maxlevel level
 
-Note: Deprecated in release GEE 5.2.5 and higher. Use "--
+Warning: Deprecated in release GEE 5.2.5 and higher. Use "--
   maxleveloverride" instead.
 
 Optional

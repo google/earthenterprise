@@ -22,10 +22,12 @@ Segmenting Large Imagery Files
       like this in the Preview pane:
 
       |Split Image|
+
       However, you can reconnect the split images by adding them all to
       a single resource, which would look like this in the Preview pane:
 
       |Split Images Reconnected Into a Single Resource|
+
       .. rubric:: To split a large source file into multiple smaller files:
 
       #. At the command prompt, change to the folder that contains the

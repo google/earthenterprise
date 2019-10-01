@@ -35,7 +35,7 @@ Manage mosaics with virtual rasters
       The most efficient method of grouping tiles into virtual mosaics
       is to use ``gevirtualraster``, a command line tool that lets you
       access the tile groups directly, making your mosaic management
-      very flexible. ``Gevirtualraster`` validates that each source file
+      very flexible. ``gevirtualraster`` validates that each source file
       has geographic coordinates and that all files are consistent
       projections, number of bands, and band formats.
 
@@ -58,7 +58,7 @@ Manage mosaics with virtual rasters
 
       .. note::
 
-         ``Gevirtualraster`` is necessary if you are creating
+         ``gevirtualraster`` is necessary if you are creating
          a custom mask file for the imagery or terrain resource as there
          is a software requirement of one source file for one custom
          mask file. See :doc:`../fusionResAndProj/createCustomMasks`.

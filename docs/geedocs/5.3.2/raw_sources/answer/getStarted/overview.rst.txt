@@ -147,7 +147,8 @@ Overview
       used to fetch the images, they can easily be overlaid on one
       another. Supported clients include
       :doc:`QGIS <../geeServerAdmin/makeWMSRequests>`, ArcGIS/ArcGIS
-      Explorer Desktop, and `Google Earth Pro/EC <https://github.com/google/earthenterprise/wiki/Google-Earth-Enterprise-Client-(EC)>`.
+      Explorer Desktop, and `Google Earth Enterprise Client(EC)
+      <https://github.com/google/earthenterprise/wiki/Google-Earth-Enterprise-Client-(EC)>`_.
 
       .. rubric:: Learn More
          :name: learn-more-4
@@ -258,7 +259,7 @@ Overview
       .. rubric:: Learn More
          :name: learn-more-9
 
-      -  :doc:`Fusion Administration Guide <../fusionAdministration/beforeYouConfigure>`
+      -  :doc:`Fusion Administration Guide <../fusionAdministration>`
       -  :doc:`../fusionAdministration/manageFusionDiskSpace`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png

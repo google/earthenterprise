@@ -95,19 +95,19 @@ Troubleshoot push/publishing issues
 
          .. code-block:: none
 
-            ``# ps -ef | grep http``
-            ``root 9220 1 0 Mar13 ? 00:00:00 /opt/google/gehttpd/bin/gehttpd``
-            ``505 14608 9220 0 Mar15 ? 00:00:00 /opt/google/gehttpd/bin/gehttpd``
-            ``505 14609 9220 0 Mar15 ? 00:00:00 /opt/google/gehttpd/bin/gehttpd``
-            
-            ``# ps -ef | grep post``
-            ``gepguser 9206 9195 0 Mar13 ? 00:00:00 postgres: writer process``
-            ``gepguser 9207 9195 0 Mar13 ? 00:00:00 postgres: stats buffer process``
-            ``gepguser 9208 9207 0 Mar13 ? 00:00:00 postgres: stats collector process``
-            ``gepguser 10639 9195 0 Mar13 ? 00:00:00 postgres: geuser gesearch 127.0.0.1(32772) idle``
-            ``gepguser 10640 9195 0 Mar13 ? 00:00:00 postgres: geuser gesearch 127.0.0.1(32773) idle``
-            ``gepguser 10641 9195 0 Mar13 ? 00:00:00 postgres: geuser gepoi 127.0.0.1(32774) idle``
-            ``gepguser 10642 9195 0 Mar13 ? 00:00:00 postgres: geuser geplaces 127.0.0.1(32775) idle``
+            # ps -ef | grep http
+            root 9220 1 0 Mar13 ? 00:00:00 /opt/google/gehttpd/bin/gehttpd
+            505 14608 9220 0 Mar15 ? 00:00:00 /opt/google/gehttpd/bin/gehttpd
+            505 14609 9220 0 Mar15 ? 00:00:00 /opt/google/gehttpd/bin/gehttpd
+
+            # ps -ef | grep post
+            gepguser 9206 9195 0 Mar13 ? 00:00:00 postgres: writer process
+            gepguser 9207 9195 0 Mar13 ? 00:00:00 postgres: stats buffer process
+            gepguser 9208 9207 0 Mar13 ? 00:00:00 postgres: stats collector process
+            gepguser 10639 9195 0 Mar13 ? 00:00:00 postgres: geuser gesearch 127.0.0.1(32772) idle
+            gepguser 10640 9195 0 Mar13 ? 00:00:00 postgres: geuser gesearch 127.0.0.1(32773) idle
+            gepguser 10641 9195 0 Mar13 ? 00:00:00 postgres: geuser gepoi 127.0.0.1(32774) idle
+            gepguser 10642 9195 0 Mar13 ? 00:00:00 postgres: geuser geplaces 127.0.0.1(32775) idle
 
          If you have any defunct processes or other unusual entries,
          stop them or try to find out why they are running. Run
@@ -116,13 +116,13 @@ Troubleshoot push/publishing issues
          still get error messages, take the following steps:
 
          -  Shut down the server:
-         
+
             ``/etc/init.d/geserver stop``.
 
          -  Delete the ``postmaster.pid`` file:
 
-            ``rm /var/opt/google/pgsql/data/postmaster.pid``. 
-            
+            ``rm /var/opt/google/pgsql/data/postmaster.pid``.
+
             (The ``postmaster.pid`` file may not have been deleted if
             PostgreSQL services have not been stopped correctly, thereby
             preventing another instance of GEE Server from starting.)
@@ -137,10 +137,10 @@ Troubleshoot push/publishing issues
 
          .. code-block:: none
 
-            ``ps -ef | grep 'wsgi:ge'``
-            ``65609 7272 3445 0 Aug10 ? 00:00:11 (wsgi:ge_push_serve) -k start``
-            ``65609 7273 3445 0 Aug10 ? 00:00:12 (wsgi:ge_publish_serve) -k start``
-            ``65609 7274 3445 0 Aug10 ? 00:00:11 (wsgi:ge_publish_aux_serve) -k start``
+            ps -ef | grep 'wsgi:ge'
+            65609 7272 3445 0 Aug10 ? 00:00:11 (wsgi:ge_push_serve) -k start
+            65609 7273 3445 0 Aug10 ? 00:00:12 (wsgi:ge_publish_serve) -k start
+            65609 7274 3445 0 Aug10 ? 00:00:11 (wsgi:ge_publish_aux_serve) -k start
 
       .. rubric:: Check your hostnames
          :name: check-your-hostnames
@@ -314,7 +314,7 @@ Troubleshoot push/publishing issues
       files you can review for errors.
 
       .. index:: Troubleshoot Push and Publish issues - log files
-      .. list-table:: 
+      .. list-table::
          :widths: 50 50
          :header-rows: 1
 
@@ -330,7 +330,7 @@ Troubleshoot push/publishing issues
            - Log file containing postgres processing information for GEE Server. Note that “root” privileges are required to open this log file: use sudo su.
          * - ``/home_dir_of_user/.fusion/gepublishdatabase.date.time``
            - Log file containing information about push attempts from Fusion.
- 
+
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
    :height: 44px
