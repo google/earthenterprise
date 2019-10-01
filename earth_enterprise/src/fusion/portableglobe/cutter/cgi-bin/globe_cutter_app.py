@@ -372,7 +372,7 @@ class GlobeBuilder(object):
           context = ssl.create_default_context()
           context.check_hostname = False
           context.verify_mode = ssl.CERT_NONE
-        with urllib2.urlopen(url) as fp:
+        with closing(urllib2.urlopen(url)) as fp:
           http_status_code = fp.getcode()
           response_data = fp.read()
 
