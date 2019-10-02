@@ -27,6 +27,7 @@
 #include <autoingest/.idl/storage/FilterConfig.h>
 #include <autoingest/.idl/storage/IconReference.h>
 #include <autoingest/.idl/storage/SearchField.h>
+#include "CacheSizeCalculations.h"
 
 #hquote
 class FieldBinderDef;
@@ -53,6 +54,15 @@ class MapTextStyleConfig {
   IsUpToDateIgnoreIf(!drawOutline) QColor outlineColor = Qt::white;
 
 #pragma GenerateIsUpToDate
+#hquote
+public:
+  uint64 GetSize() {
+    return sizeof(*this)
+            + GetObjectSize(font)
+            + GetObjectSize(color)
+            + GetObjectSize(outlineColor);
+  }
+#/hquote
 };
 
 class MapLabelConfig {
@@ -82,6 +92,14 @@ class MapLabelConfig {
   inline bool DontEmitFunc(void) const { return !enabled; }
   bool EnabledForLevel(uint level) const;
   void PinToLevel(uint level);
+public:
+  uint64 GetSize() {
+    return sizeof(*this)
+            + levelRange.GetSize()
+            + text.GetSize()
+            + outlineText.GetSize()
+            + textStyle.GetSize();
+  }
 #/hquote
 #cppquote
   void MapLabelConfig::MaybeAddFieldBinderDef
@@ -149,6 +167,12 @@ public:
 
    // update the version number now that we've handled the old ones
    config_version = curr_config_version;
+ }
+ uint64 GetSize() {
+   return sizeof(*this)
+            + GetObjectSize(box_color_)
+            + GetObjectSize(fill_color_)
+            + GetObjectSize(icon_href_);
  }
 #/hquote
 };
@@ -223,6 +247,13 @@ class MapFeatureConfig {
 
   void PopulateFieldBinderDefs(std::vector<FieldBinderDef> *defs) const;
   void PinToLevel(uint level);
+public:
+  uint64 GetSize() {
+    return sizeof(*this)
+            + GetObjectSize(fill_color)
+            + GetObjectSize(stroke_color)
+            + levelRange.GetSize();
+  }
 #/hquote
 
 #cppquote
@@ -275,6 +306,11 @@ class MapSiteConfig {
   inline void PinToLevel(uint level) {
     label.PinToLevel(level);
   }
+public:
+  uint64 GetSize() {
+    return sizeof(*this)
+            + label.GetSize();
+  }
 #/hquote
 #cppquote
   void MapSiteConfig::PopulateFieldBinderDefs
@@ -316,6 +352,14 @@ class MapDisplayRuleConfig {
   inline bool IsValid(std::string& error) const {
     return feature.IsValid(error);
   }
+public:
+  uint64 GetSize() {
+    return sizeof(*this)
+            + GetObjectSize(name)
+            + feature.GetSize()
+            + site.GetSize()
+            + filter.GetSize();
+  }
 #/hquote
 
 
@@ -341,7 +385,22 @@ class MapSubLayerConfig {
   bool HasFilterJS(void) const;
   bool HasJS(void) const;
   bool HasSearchFields() const;
-
+public:
+  uint64 GetSize() {
+    uint64 display_rules_Size = 0;
+    uint64 searchFieldsSize = 0;
+    for (auto displayrule : display_rules) {
+      display_rules_Size += displayrule.GetSize();
+    }
+    for (auto searchfield : searchFields) {
+      searchFieldsSize += searchfield.GetSize();
+    }
+    return sizeof(*this)
+            + GetObjectSize(asset_ref)
+            + display_rules_Size
+            + GetObjectSize(contextScript)
+            + searchFieldsSize;
+  }
 #/hquote
 #cppquote
 void

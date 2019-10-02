@@ -39,7 +39,7 @@ class RasterDBRootAssetConfig {
   public:
     uint64 GetSize() {
       return sizeof(*this)
-              //+ GetObjectSize(legend_);
+              + legend_.GetSize()
               + GetObjectSize(asset_uuid_);
     }
   #/hquote
@@ -54,8 +54,8 @@ class RasterDBRootAssetConfig {
       layers_Size += layer.GetSize();
     }
     return sizeof(*this)
-            + layers_Size;
-            //+ GetObjectSize(used_provider_ids_);
+            + layers_Size
+            + GetObjectSize(used_provider_ids_);
   }
 #/hquote
 
@@ -81,7 +81,7 @@ class RasterDBRootGenConfig {
   public:
     uint64 GetSize() {
       return sizeof(*this)
-              //+ GetObjectSize(legend_);
+              + legend_.GetSize();
               + GetObjectSize(asset_uuid_);
     }
   #/hquote
@@ -95,8 +95,8 @@ class RasterDBRootGenConfig {
       layers_Size += layer.GetSize();
     }
     return sizeof(*this)
-            + layers_Size;
-            //+ GetObjectSize(used_provider_ids_);
+            + layers_Size
+            + GetObjectSize(used_provider_ids_);
   }
 #/hquote
 

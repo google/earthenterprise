@@ -34,9 +34,10 @@ class MapProjectConfig {
   #hquote
   public:
     uint64 GetSize() {
+      LayerLegend leg(legend.GetValue());
       return sizeof(*this)
-              + GetObjectSize(assetRef);
-              //+ GetObjectSize(legend);
+              + GetObjectSize(assetRef)
+              + (legend.GetSize() + leg.GetSize());
     }
   #/hquote
   };
@@ -57,8 +58,8 @@ class MapProjectConfig {
       layersSize += layer.GetSize();
     }
     return sizeof(*this)
-            + layersSize;
-            //+ GetObjectSize(poi_search_tab_overrides);
+            + layersSize
+            + poi_search_tab_overrides.GetSize();
   }
 #/hquote
 

@@ -37,9 +37,13 @@ class RasterKHDBConfig {
   std::vector<FuseVersion> fusevers;
 #hquote
   uint64 GetSize() {
+    uint64 fuseversSize = 0;
+    for (auto fusever : fusevers) {
+      fuseversSize += fusever.GetSize();
+    }
     return sizeof(*this)
             + GetObjectSize(dbname)
-            + GetObjectSize(fusevers);
+            + fuseversSize;
   }
 #/hquote
 #pragma GenerateIsUpToDate

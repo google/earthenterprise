@@ -39,9 +39,13 @@ class VectorKHDBConfig {
   std::vector<std::string> layerIcons = std::vector<std::string>(0, std::string());
 #hquote
   uint64 GetSize() {
+    uint64 packversSize = 0;
+    for (auto packver : packvers) {
+      packversSize += packver.GetSize();
+    }
     return sizeof(*this)
             + GetObjectSize(dbname)
-            + GetObjectSize(packvers)
+            + packversSize
             + GetObjectSize(customIcons)
             + GetObjectSize(layerIcons);
   }

@@ -65,8 +65,12 @@ class MapPOIAssetConfig {
   #hquote
   public:
     uint64 GetSize() {
+      uint64 search_fields_Size = 0;
+      for (auto searchField : search_fields_) {
+        search_fields_Size += searchField.GetSize();
+      }
       return sizeof(*this)
-              + GetObjectSize(search_fields_)
+              + search_fields_Size
               + GetObjectSize(assetref_);
     }
   #/hquote

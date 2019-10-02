@@ -45,8 +45,7 @@ class VectorGEIndexConfig {
 
 #hquote
   uint64 GetSize() {
-    /*
-    uint64 packet_vers_Size = 0;
+    /*uint64 packet_vers_Size = 0;
     for (auto packetver : packet_vers_) {
       packet_vers_Size += packerver.GetSize();
     }*/

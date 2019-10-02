@@ -88,7 +88,13 @@ class IconConfig {
       normalScale(1.0),
       highlightScale(1.0)
   { }
-
+  uint64 GetSize() {
+    return sizeof(*this)
+            //+ GetObjectSize(name)
+            + GetObjectSize(href)
+            + GetObjectSize(normalColor)
+            + GetObjectSize(highlightColor);
+  }
 #/hquote
 };
 
@@ -112,6 +118,13 @@ class LabelConfig {
   inline bool HasJS(void) const {
     return ((labelMode == JSExpression) && !label.isEmpty());
   }
+public:
+  uint64 GetSize() {
+    return sizeof(*this)
+            + GetObjectSize(label)
+            + GetObjectSize(normalColor)
+            + GetObjectSize(highlightColor);
+  }
 #/hquote
 
 
@@ -128,6 +141,11 @@ class FuseLabelConfig {
 #hquote
   inline bool HasJS(void) const {
     return ((labelMode == LabelConfig::JSExpression) && !label.isEmpty());
+  }
+public:
+  uint64 GetSize() {
+    return sizeof(*this)
+            + GetObjectSize(label);
   }
 #/hquote
 
@@ -170,6 +188,16 @@ class StyleConfig {
   inline bool HasJS(void) const {
     return HasLabelJS();
   }
+public:
+  uint64 GetSize() {
+    return sizeof(*this)
+            //+ GetObjectSize(rgba)
+            + GetObjectSize(polyColor)
+            + GetObjectSize(lineColor)
+            + GetObjectSize(customHeightVariableName)
+            + icon.GetSize()
+            + label.GetSize();
+  }
 #/hquote
 
 #pragma GenerateIsUpToDate
@@ -197,6 +225,12 @@ class FuseStyleConfig {
   }
   inline bool HasJS(void) const {
     return HasLabelJS();
+  }
+public:
+  uint64 GetSize() {
+    return sizeof(*this)
+            + GetObjectSize(customHeightVariableName)
+            + label.GetSize();
   }
 #/hquote
 
@@ -296,7 +330,13 @@ class FeatureConfig {
     }
   }
 
-
+  uint64 GetSize() {
+    return sizeof(*this)
+            + style.GetSize();
+            //+ GetObjectSize(label)
+            //+ GetObjectSize(shield)
+            //+ GetObjectSize(suppressWords);
+  }
 #/hquote
 };
 
@@ -352,6 +392,10 @@ class FuseFeatureConfig {
   }
   inline bool HasJS(void) const {
     return HasRoadLabelJS();
+  }
+  uint64 GetSize() {
+    return sizeof(*this)
+            + style.GetSize();
   }
 #/hquote
 };
@@ -474,7 +518,19 @@ class SiteConfig {
       balloonStyleMode = SiteConfig::Basic;
     }
   }
-
+  uint64 GetSize() {
+    return sizeof(*this)
+            + style.GetSize()
+            //+ icon.GetSize()
+            //+ GetObjectSize(label)
+            //+ GetObjectSize(addr)
+            //+ GetObjectSize(phone)
+            //+ GetObjectSize(url)
+            + GetObjectSize(popupText)
+            + GetObjectSize(balloonText)
+            + GetObjectSize(balloonBgColor)
+            + GetObjectSize(balloonFgColor);
+  }
 #/hquote
 };
 
@@ -535,6 +591,11 @@ class FuseSiteConfig {
   inline bool HasJS(void) const {
     return HasLabelJS() || HasPopupTextJS();
   }
+  uint64 GetSize() {
+    return sizeof(*this)
+            + style.GetSize()
+            + GetObjectSize(popupText);
+  }
 #/hquote
 
 };
@@ -555,6 +616,14 @@ class DisplayRuleConfig {
     return (feature.HasJS() ||
             site.HasJS() ||
             filter.HasJS());
+  }
+public:
+  uint64 GetSize() {
+    return sizeof(*this)
+            + GetObjectSize(name)
+            + feature.GetSize()
+            + site.GetSize()
+            + filter.GetSize();
   }
 #/hquote
 
@@ -623,6 +692,33 @@ class LocaleConfig {
   void BindDefaults(const LocaleConfig &defaults);
   static LocaleConfig FromLegendLocale(const LegendLocale &);
   LegendLocale ToLegendLocale(void) const;
+  uint64 GetSize() {
+    IconReference iRef(icon_.GetValue());
+    return sizeof(*this)
+            //+ GetObjectSize(layerName)
+            //+ GetObjectSize(iconName)
+            //+ GetObjectSize(labels)
+            //+ GetObjectSize(desc)
+            //+ GetObjectSize(lookat)
+            //+ GetObjectSize(kmlUrl)
+            //+ GetObjectSize(required_client_version)
+            + (name_.GetSize() + GetObjectSize(name_.GetValue()))
+            + (icon_.GetSize() + iRef.GetSize())
+            //+ (labels_.GetSize() + GetObjectSize(labels_.GetValue()))
+            + (is_checked_.GetSize() + GetObjectSize(is_checked_.GetValue()))
+            + (desc_.GetSize() + GetObjectSize(desc_.GetValue()))
+            + (look_at_.GetSize() + GetObjectSize(look_at_.GetValue()))
+            + (kml_layer_url_.GetSize() + GetObjectSize(kml_layer_url_.GetValue()))
+            + (required_client_version_.GetSize() + GetObjectSize(required_client_version_.GetValue()))
+            + (required_client_vram_.GetSize() + GetObjectSize(required_client_vram_.GetValue()))
+            + (probability_.GetSize() + GetObjectSize(probability_.GetValue()))
+            + (save_locked_.GetSize() + GetObjectSize(save_locked_.GetValue()))
+            + (required_user_agent_.GetSize() + GetObjectSize(required_user_agent_.GetValue()))
+            + (required_client_capabilities_.GetSize() + GetObjectSize(required_client_capabilities_.GetValue()))
+            + (client_config_script_name_.GetSize() + GetObjectSize(client_config_script_name_.GetValue()))
+            + (diorama_data_channel_base_.GetSize() + GetObjectSize(diorama_data_channel_base_.GetValue()))
+            + (diorama_replica_data_channel_base_.GetSize() + GetObjectSize(diorama_replica_data_channel_base_.GetValue()));
+  }
 #/hquote
 
 #cppquote
@@ -746,6 +842,22 @@ class LayerConfig {
   typedef std::map<QString, LocaleConfig> LocaleMap;
   typedef std::map<QString, LocaleConfig>::iterator LocaleMapIterator;
   typedef std::map<QString, LocaleConfig>::const_iterator LocaleMapConstIterator;
+public:
+  uint64 GetSize() {
+    uint64 displayRulesSize = 0;
+    for (auto displayRule : displayRules) {
+      displayRulesSize += displayRule.GetSize();
+    }
+    return sizeof(*this)
+            + GetObjectSize(assetRef)
+            //+ GetObjectSize(name)
+            //+ GetObjectSize(icon)
+            + GetObjectSize(legend)
+            + GetObjectSize(lodForce)
+            + displayRulesSize
+            + GetObjectSize(asset_uuid_)
+            + defaultLocale.GetSize();
+  }
 #/hquote
 
   std::map<QString, LocaleConfig> locales = LayerConfig::LocaleMap(); // dbRoot

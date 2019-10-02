@@ -37,14 +37,14 @@ class GEDBAssetConfig {
   uint64 GetSize() {
     uint64 search_tabs_Size = 0;
     for (auto searchTab : search_tabs_) {
-      search_tabs_Size += sizeof(searchTab);
+      search_tabs_Size += searchTab.GetSize();
     }
     return sizeof(*this)
             + GetObjectSize(index_verref_)
             + GetObjectSize(vector_project_)
             + GetObjectSize(imagery_project_)
             + GetObjectSize(terrain_project_)
-            + GetObjectSize(search_tabs_);
+            + search_tabs_Size;
             //+ GetObjectSize(fusion_version_);
   }
 #/hquote

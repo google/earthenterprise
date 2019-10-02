@@ -16,6 +16,7 @@
 #include <string>
 #include <khTypes.h>
 #include <searchtabs/.idl/SearchTabs.h>
+#include "CacheSizeCalculations.h"
 
 #cppquote
 #include <searchtabs/.idl/SearchTabs_impl.h>
@@ -29,6 +30,11 @@ class SearchTabReference
 #hquote
   // defined in autoingest/SearchTabReferenceImpl.cpp
   SearchTabDefinition Bind(void) const;
+public:
+  uint64 GetSize() {
+    return sizeof(*this)
+            + GetObjectSize(project_ref_);
+  }
 #/hquote
 
 #pragma GenerateIsUpToDate

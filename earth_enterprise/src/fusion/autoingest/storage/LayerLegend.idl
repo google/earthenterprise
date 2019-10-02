@@ -17,6 +17,7 @@
 #include <map>
 #include <Defaultable.h>
 #include <autoingest/.idl/storage/IconReference.h>
+#include "CacheSizeCalculations.h"
 
 #cppquote
 #include <autoingest/.idl/storage/IconReference_impl.h>
@@ -43,6 +44,15 @@ class LegendLocale {
   { }
   void BindDefaults(const LegendLocale &defaults);
   void ClearDefaultFlags(void);
+  uint64 GetSize() {
+    IconReference iref(icon.GetValue());
+    return sizeof(*this)
+            + (name.GetSize() + GetObjectSize(name.GetValue()))
+            + (isChecked.GetSize())
+            + (desc.GetSize() + GetObjectSize(desc.GetValue()))
+            + (lookAt.GetSize() + GetObjectSize(lookAt.GetValue()))
+            + (icon.GetSize() + iref.GetSize());
+  }
 #/hquote
 
 #cppquote
@@ -89,6 +99,15 @@ class LayerLegend {
     defaultLocale.ClearDefaultFlags();
   }
   LegendLocale GetLegendLocale(const QString &locale) const;
+  uint64 GetSize() {
+    uint64 localesSize = 0;
+    for (auto locale : locales) {
+      localesSize += GetObjectSize(locale.first) + GetObjectSize(locale.second);
+    }
+    return sizeof(*this)
+            + defaultLocale.GetSize()
+            + localesSize;
+  }
 #/hquote
 
 #cppquote

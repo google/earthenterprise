@@ -15,6 +15,7 @@
 
 #include <qstring.h>
 #include <qobject.h>
+#include "CacheSizeCalculations.h"
 
 class SearchField {
   enum UseType { SEARCH_DISPLAY = 0, SEARCH_ONLY = 1, DISPLAY_ONLY = 2 };
@@ -57,6 +58,10 @@ class SearchField {
     else
       return DISPLAY_ONLY;
   }
-  
+public:
+  uint64 GetSize() {
+    return sizeof(*this)
+            + GetObjectSize(name);
+  }
 #/hquote
 };

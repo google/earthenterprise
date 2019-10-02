@@ -39,8 +39,13 @@ class MapLayerConfig {
     fuid_channel_ = 0;
   }
   uint64 GetSize() {
+    uint64 subLayersSize = 0;
+    for (auto subLayer : subLayers) {
+      subLayersSize += subLayer.GetSize();
+    }
     return sizeof(*this)
-            + GetObjectSize(subLayers);
+            + legend.GetSize()
+            + subLayersSize;
   }
 #/hquote
 

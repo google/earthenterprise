@@ -70,13 +70,21 @@ class DatabaseConfig {
   }
 
   uint64 GetSize() {
+    uint64 search_tabs_Size = 0;
+    uint64 search_tab_refs_Size = 0;
+    for (auto searchtab : search_tabs_) {
+      search_tabs_Size += searchtab.GetSize();
+    }
+    for (auto searchtabref : search_tab_refs_) {
+      search_tab_refs_Size += searchtabref.GetSize();
+    }
     return sizeof(*this)
             + GetObjectSize(imageryProject)
             + GetObjectSize(vectorProject)
             + GetObjectSize(terrainProject)
             //+ GetObjectSize(magratheanCoverage)
-            + GetObjectSize(search_tabs_)
-            + GetObjectSize(search_tab_refs_);
+            + search_tabs_Size
+            + search_tab_refs_Size;
   }
 #/hquote
 };

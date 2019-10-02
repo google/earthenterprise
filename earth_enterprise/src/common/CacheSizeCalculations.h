@@ -19,6 +19,7 @@
 #include "khTypes.h"
 #include <memory>
 #include <vector>
+#include <set>
 #include "notify.h"
 #include <qstring.h>
 
@@ -27,27 +28,35 @@ template<class T>
 inline uint64 GetObjectSize(const T &obj) {
     return sizeof(obj);
 }
-// determine amount of memory used by a vector and all of it's contents
+// determine amount of memory used by a vector's contents
 template<class T>
 inline uint64 GetObjectSize(const std::vector<T> &vec) {
     uint64 total = 0;
     for(const auto &t : vec) {
       total += GetObjectSize(t);
     }
-
     return total;
 }
 // determine amount of memory used by a string
 inline uint64 GetObjectSize(const std::string &str) {
     return (str.capacity() * sizeof(char));
 }
-// determine amount of memory used by a shared_ptr and the object it points to
+// determine amount of memory used by an object pointed to by a shared_ptr
 template<class T>
 inline uint64 GetObjectSize(const std::shared_ptr<T> &guard) {
-    return sizeof(guard) + (guard ? guard->GetSize() : 0);
+    return (guard ? guard->GetSize() : 0);
 }
 // determine amount of memory used by a qstring
 inline uint64 GetObjectSize(const QString &qstr) {
-    return sizeof(qstr) + (qstr.capacity() * sizeof(char16_t));
+    return (qstr.capacity() * sizeof(char16_t));
+}
+//determine amount of memory used by a set's contents
+template<class T>
+inline uint64 GetObjectSize(const std::set<T> &set) {
+    uint64 total = 0;
+    for (const auto &t : set) {
+        total += GetObjectSize(t);
+    }
+    return total;
 }
 #endif

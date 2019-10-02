@@ -19,6 +19,7 @@
 #define __khInsetCoverage_h
 
 #include "khTileAddr.h"
+#include "CacheSizeCalculations.h"
 
 // ****************************************************************************
 // ***  khInsetCoverage
@@ -177,6 +178,15 @@ class khInsetCoverage {
                   uint stepOutSize,
                   uint paddingSize);
 
+  uint64 GetSize() {
+    uint64 extentsVecSize = 0;
+    for (auto extents : extentsVec) {
+      extentsVecSize += extents.GetSize();
+    }
+    return sizeof(*this)
+            + degree_extents_.GetSize()
+            + extentsVecSize;
+  }
 };
 
 

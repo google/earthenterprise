@@ -39,7 +39,7 @@ public:
   uint64 GetSize() {
     return sizeof(*this)
             + GetObjectSize(type_)
-            //+ GetObjectSize(verref_)
+            + GetObjectSize(verref_)
             + GetObjectSize(date_string_);
   }
 #/hquote

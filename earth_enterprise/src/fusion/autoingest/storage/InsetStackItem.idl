@@ -14,6 +14,7 @@
 
 #include <string>
 #include <khTypes.h>
+#include "CacheSizeCalculations.h"
 
 class InsetStackItem {
   std::string dataAsset;
@@ -22,5 +23,12 @@ class InsetStackItem {
   uint overridemax = uint(0);   // 0 -> no override
   deprecated uint peergroup = uint(0);     // no longer used
 #pragma GenerateIsUpToDate
+#hquote
+public:
+  uint64 GetSize() {
+    return sizeof(*this)
+            + GetObjectSize(dataAsset);
+  }
+#/hquote
 };
 

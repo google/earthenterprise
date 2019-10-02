@@ -80,10 +80,14 @@ class VectorProjectConfig {
   void AfterLoad(const VectorProjectConfig::DeprecatedMembers &depmembers);
   bool HasSearchFields(void) const;
   uint64 GetSize() {
-    return sizeof(*this);
-            //+ GetObjectSize(layers)
+    uint64 layersSize = 0;
+    for (auto layer : layers) {
+      layersSize += layer.GetSize();
+    }
+    return sizeof(*this)
+            + layersSize
             //+ GetObjectSize(projectContextScript)
-            //+ GetObjectSize(poi_search_tab_overrides);
+            + poi_search_tab_overrides.GetSize();
   }
 #/hquote
 

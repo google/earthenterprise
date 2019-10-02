@@ -668,6 +668,10 @@ class khLevelCoverage {
   khLevelCoverage UpperCoverage(const khTilespace &tilespace) const;
   khLevelCoverage RightCoverage(const khTilespace &tilespace) const;
   khLevelCoverage UpperRightCoverage(const khTilespace &tilespace) const;
+  uint64 GetSize() {
+    return sizeof(*this)
+            + extents.GetSize();
+  }
 };
 
 

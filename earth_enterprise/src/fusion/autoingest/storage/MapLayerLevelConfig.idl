@@ -32,8 +32,12 @@ class MapLayerLevelConfig {
   #hquote
   public:
     uint64 GetSize() {
+      uint64 display_rules_Size = 0;
+      for (auto displayRule : display_rules_) {
+        display_rules_Size += displayRule.GetSize();
+      }
       return sizeof(*this)
-              + GetObjectSize(display_rules_)
+              + display_rules_Size
               + GetObjectSize(context_script_);
     }
   #/hquote
@@ -49,7 +53,6 @@ class MapLayerLevelConfig {
       sub_layers_Size += sublayer.GetSize();
     }
     return sizeof(*this)
-            + GetObjectSize(projection_)
             + sub_layers_Size;
   }
 #/hquote

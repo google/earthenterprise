@@ -54,7 +54,6 @@ class CombinedRPConfig {
   
   uint64 GetSize() {
     return + GetObjectSize(*this)
-            //+ GetObjectSize(mask_mode_)
             + khvr_config_.GetSize()
             + krp_config_.GetSize()
             + maskgen_config_.GetSize();

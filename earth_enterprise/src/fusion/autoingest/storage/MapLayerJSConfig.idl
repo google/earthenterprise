@@ -46,7 +46,8 @@ class MapLayerJSConfig {
    std::string ProjectionToString() const;
    static std::string ProjectionToString(const Projection projection);
    uint64 GetSize() {
-     return sizeof(*this);
+     return sizeof(*this)
+              + legend_.GetSize();
    }
 
 #/hquote
