@@ -115,9 +115,13 @@ class RasterProjectConfig {
   // Resets all IDs as it is in a config for a just created asset.
   void ResetIds(void);
   uint64 GetSize() {
+    uint64 insetsSize = 0;
+    for (auto inset : insets) {
+      insetsSize += inset.GetSize();
+    }
     return sizeof(*this)
-            //+ GetObjectSize(insets)
-            //+ GetObjectSize(legend)
+            + insetsSize
+            + legend.GetSize()
             + GetObjectSize(asset_uuid_);
   }
 #/hquote

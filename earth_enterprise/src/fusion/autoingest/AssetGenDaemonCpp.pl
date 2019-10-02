@@ -336,9 +336,9 @@ void ${name}AssetImplD::SerializeConfig(DOMElement *top) const
 }
 
 uint64 ${name}AssetImplD::GetSize() {
-    uint64 size = sizeof(config);
-    notify(NFY_WARN, "AssetImplD: %lu, %s, %lu", size, typeid(config).name(), config.GetSize());
-    return ${name}AssetImpl::GetSize() + size;
+    return sizeof(*this)
+            + ${name}AssetImpl::GetSize()
+            + config.GetSize();
 }
 
 extern void ToElement(DOMElement *elem, const AssetStorage &self);
@@ -628,9 +628,9 @@ void ${name}AssetVersionImplD::SerializeConfig(DOMElement *top) const
 }
 
 uint64 ${name}AssetVersionImplD::GetSize() {
-    uint64 size = sizeof(config);
-    notify(NFY_WARN,"AssetVersionImplD: %lu, %s, %lu", size, typeid(config).name(), config.GetSize());
-    return ${name}AssetVersionImpl::GetSize() + config.GetSize();
+    return sizeof(*this)
+            + ${name}AssetVersionImpl::GetSize()
+            + config.GetSize();
 }
 
 extern void ToElement(DOMElement *elem, const AssetVersionStorage &self);

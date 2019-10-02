@@ -17,6 +17,8 @@
 #ifndef __Defaultable_h
 #define __Defaultable_h
 
+#include "CacheSizeCalculations.h"
+
 template <class T>
 class Defaultable {
   bool useDefault;
@@ -61,6 +63,9 @@ class Defaultable {
   inline bool operator==(const Defaultable &other) const {
     return ((useDefault == other.useDefault) &&
             (useDefault || (val == other.val)));
+  }
+  uint64 GetSize() {
+    return sizeof(*this);
   }
 };
 

@@ -46,14 +46,18 @@ class QTPacketConfig {
   std::vector<DatedImageryIndexInfo> dated_imagery_indexes_ = std::vector<DatedImageryIndexInfo>();
 #hquote
   uint64 GetSize() {
+    uint64 dated_imagery_indexes_Size = 0;
+    for (auto diIndex : dated_imagery_indexes_) {
+      dated_imagery_indexes_Size += diIndex.GetSize();
+    }
     return sizeof(*this)
             + GetObjectSize(imagery_verref_)
             + GetObjectSize(terrain_verref_)
             + GetObjectSize(vector_verref_)
             + GetObjectSize(imageryproj_verref_)
             + GetObjectSize(terrainproj_verref_)
-            + GetObjectSize(imagery_date_string_);
-            //+ GetObjectSize(dated_imagery_indexes_);
+            + GetObjectSize(imagery_date_string_)
+            + dated_imagery_indexes_Size;
   }
 #/hquote
 

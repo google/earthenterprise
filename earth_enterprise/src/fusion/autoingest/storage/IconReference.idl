@@ -15,6 +15,7 @@
 
 #include <qstring.h>
 #include <khConstants.h>
+#include "CacheSizeCalculations.h"
 
 class IconReference {
   enum Type { Internal = 0, External = 1 };
@@ -38,7 +39,11 @@ class IconReference {
   std::string NormalHighlightHref(void) const {
     return std::string(href) + "_nh.png";
   }
-
+public:
+  uint64 GetSize() {
+    return sizeof(*this)
+            + GetObjectSize(href);
+  }
 #/hquote
 
 #cppquote

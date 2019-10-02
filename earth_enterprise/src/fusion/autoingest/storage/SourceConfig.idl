@@ -39,7 +39,7 @@ class SourceConfig {
     uint64 GetSize() {
       return sizeof(*this)
               + GetObjectSize(uri);
-              //+ GetObjectSize(mtime);
+              + GetObjectSize(mtime);
     }
   #/hquote
   };

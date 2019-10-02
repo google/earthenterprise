@@ -41,8 +41,8 @@ class VectorLayerXConfig {
 
   uint64 GetSize() {
     return sizeof(*this)
-            + GetObjectSize(vectorResource);
-            //+ GetObjectSize(legend);
+            + GetObjectSize(vectorResource)
+            + legend.GetSize();
   }
 #/hquote
 };

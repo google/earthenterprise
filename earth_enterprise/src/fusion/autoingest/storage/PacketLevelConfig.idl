@@ -113,7 +113,7 @@ class PacketLevelConfig {
     }
     return sizeof(*this)
             + insetsSize
-            //+ GetObjectSize(coverage)
+            + coverage.GetSize()
             + GetObjectSize(mergeTopDataRP)
             + GetObjectSize(mergeTopAlphaRP)
             + attributionsSize;

@@ -27,6 +27,15 @@ class FuseItem {
   FuseFeatureConfig feature;
   FuseSiteConfig site;
   std::string filename; // file containing output from completed queries
+#hquote
+public:
+  uint64 GetSize() {
+    return sizeof(*this)
+            + feature.GetSize()
+            + site.GetSize()
+            + GetObjectSize(filename);
+  }
+#/hquote
 };
 
 class FuseConfig {
@@ -37,10 +46,19 @@ class FuseConfig {
 
 #hquote
   uint64 GetSize() {
-    return GetObjectSize(items)
-            + GetObjectSize(contextScript)
-            //+ (uint64)sizeof(std::vector<SearchField>())
-            + (uint64)sizeof(std::string);
+    uint64 itemsSize = 0;
+    //uint64 searchFieldsSize = 0;
+    for (auto item : items) {
+      itemsSize += item.GetSize();
+    }
+    /*for (auto searchField : searchFields) {
+      searchFieldsSize += searchField.GetSize();
+    }*/
+    return sizeof(*this)
+            + itemsSize
+            + GetObjectSize(contextScript);
+            //+ searchFieldsSize
+            //+ GetObjectSize(searchStyle);
   }
 #/hquote
 
@@ -59,9 +77,9 @@ class VectorFuseAssetItem {
   }
 public:
   uint64 GetSize() {
-    return sizeof(*this);
-            //+ feature.GetSize()
-            //+ site.GetSize();
+    return sizeof(*this)
+            + feature.GetSize()
+            + site.GetSize();
   }
 #/hquote
   
@@ -88,13 +106,17 @@ class VectorFuseAssetConfig {
   VectorFuseAssetConfig(const LayerConfig &layerConfig);
   uint64 GetSize() {
     uint64 itemsSize = 0;
+    //uint64 searchFieldsSize = 0;
     for (auto item : items) {
       itemsSize += item.GetSize();
     }
+    /*for (auto searchField : searchFields) {
+      searchFieldsSize += searchField.GetSize();
+    }*/
     return sizeof(*this)
-            + itemsSize;
-            //+ GetObjectSize(contextScript)
-            //+ (uint64)sizeof(std::vector<SearchField>())
+            + itemsSize
+            + GetObjectSize(contextScript);
+            //+ searchFieldsSize
             //+ GetObjectSize(searchStyle);
   }
 #/hquote
