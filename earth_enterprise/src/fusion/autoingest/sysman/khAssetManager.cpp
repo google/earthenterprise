@@ -1222,12 +1222,9 @@ std::string khAssetManager::PublishDatabase(
 }
 
 std::string khAssetManager::RetrieveTasking(const FusionConnection::RecvPacket& msg) {
-  uint mutexWaitTime = MiscConfig::Instance().MutexTimedWaitSec;
 
   std::string replyPayload;
   try {
-    // will throw an exception if mutexWaitTime is exceeded trying to acquire the lock
-    khLockGuard timedLock(mutex, mutexWaitTime);
     TaskLists ret;
     std::string dummy;
     GetCurrTasks(dummy, ret);
@@ -1235,11 +1232,6 @@ std::string khAssetManager::RetrieveTasking(const FusionConnection::RecvPacket& 
 	    throw khException(kh::tr("Unable to encode %1 reply payload")
 	      .arg(ToQString(GET_TASKS)));
 	  }
-  }
-  catch (khTimedMutexException e) {
-    // Replying with a string beginning "ERROR:" passes an exception message back to the caller
-    // alternatively we could throw an exception but that could flood fusion logs with warnings
-    replyPayload = sysManBusyMsg;
   }
   catch (...) {
     // Allow all other exceptions to continue as before
