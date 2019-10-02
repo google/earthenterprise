@@ -193,7 +193,7 @@ for obj in commonobj:
     env.Depends(obj, commonh)
 
 for cppfile in commoncpp:
-    env.Depends(cppfile[:-3] + '.obj', commonh)
+    env.Depends(os.path.splitext(cppfile)[0] + '.obj', commonh)
 
 
 geautoingest = env.sharedLib('geautoingest',
