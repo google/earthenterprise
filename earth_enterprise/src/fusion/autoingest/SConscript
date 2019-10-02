@@ -189,6 +189,12 @@ for idlfile in idlfiles:
 
 commonobj = map(lambda src: env.SharedObject(src), commoncpp)
 
+for obj in commonobj:
+    env.Depends(obj, commonh)
+
+for cppfile in commoncpp:
+    env.Depends(cppfile[:-3] + '.obj', commonh)
+
 
 geautoingest = env.sharedLib('geautoingest',
                              commonobj + [ 'ReadOnlyExtra.cpp',
