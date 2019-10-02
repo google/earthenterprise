@@ -18,6 +18,7 @@
 
 Import('env')
 import string
+import os 
 origenv = env;
 
 # let subdirs refer to headers as relative to the autoingest directory
