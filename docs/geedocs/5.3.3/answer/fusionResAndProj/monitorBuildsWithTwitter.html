@@ -90,21 +90,82 @@ command.)</li>
 <li>A cron job that is set to call the custom script below.</li>
 </ul>
 <p class="rubric">To set up Fusion for Twitter:</p>
-<ol class="arabic simple">
-<li>Create a new file called <code class="docutils literal notranslate"><span class="pre">getwitter</span></code>.</li>
-<li>Save the file in a directory like <code class="docutils literal notranslate"><span class="pre">/usr/bin/</span></code> so it is
-automatically in your path.</li>
-<li>Run the <code class="docutils literal notranslate"><span class="pre">chmod</span></code> command on the file to allow execution.</li>
-<li>Copy the code below to your <code class="docutils literal notranslate"><span class="pre">getwitter</span></code> file. Change the
+<ol class="arabic">
+<li><p class="first">Create a new file called <code class="docutils literal notranslate"><span class="pre">getwitter</span></code>.</p>
+</li>
+<li><p class="first">Save the file in a directory like <code class="docutils literal notranslate"><span class="pre">/usr/bin/</span></code> so it is
+automatically in your path.</p>
+</li>
+<li><p class="first">Run the <code class="docutils literal notranslate"><span class="pre">chmod</span></code> command on the file to allow execution.</p>
+</li>
+<li><p class="first">Copy the code below to your <code class="docutils literal notranslate"><span class="pre">getwitter</span></code> file. Change the
 variables to reflect your Fusion server’s Twitter account
-credentials and, if needed, your server’s asset root.
-<code class="docutils literal notranslate"><span class="pre">#!/bin/bash</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">twittername=&quot;YourServersTwitterAccount&quot;</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">twitterpass=&quot;YourServersTwitterPassword&quot;</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">assetroot=&quot;/gevol/assets/&quot;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">find</span> <span class="pre">$assetroot.state</span> <span class="pre">-iname</span> <span class="pre">&quot;*.task&quot;</span> <span class="pre">-ls</span> <span class="pre">&gt;&gt;</span> <span class="pre">/tmp/filelist</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">taskcount=0</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">inprogresscount=1</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">declare</span> <span class="pre">-a</span> <span class="pre">inprogressarray</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">declare</span> <span class="pre">-a</span> <span class="pre">queuedarray</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">while</span> <span class="pre">read</span> <span class="pre">line</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">do</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">asset=`echo</span> <span class="pre">$line</span> <span class="pre">|</span> <span class="pre">awk</span> <span class="pre">'{print</span> <span class="pre">$13}'</span></code>       status=`/opt/google/bin/gequery –status $asset`           if [ “$status” = “InProgress” ]; then               inprogressarray[$[${#inprogressarray[&#64;]}+1]]=$asset           fi           if [ “$status” = “Queued” ]; then               queuedarray[$[${#queuedarray[&#64;]}+1]]=$asset           fi          let taskcount=taskcount+1       done &lt;/tmp/filelist                     for inprogress in ${inprogressarray[&#64;]}       do        logfile=`/opt/google/bin/gequery –logfile $inprogress`         while read line         do         progress=$line         done &lt;$logfile               curl –basic –user “$twittername:$twitterpass” –data-ascii “status=#GEEFusion Task$inprogresscount: $progress&amp;source=Google+Earth+Enterprise” “<a class="reference external" href="http://twitter.com/statuses/update.json">http://twitter.com/statuses/update.json</a>”               curl –basic –user “$twittername:$twitterpass” –data-ascii “status=#GEEFusion Task$inprogresscount: $inprogress&amp;source=Google+Earth+Enterprise” “<a class="reference external" href="http://twitter.com/statuses/update.json">http://twitter.com/statuses/update.json</a>”                 let inprogresscount=inprogresscount+1        done              curl –basic –user “$twittername:$twitterpass” –data-ascii “status=#GEEFusion Working on ${#inprogressarray[&#64;]} task(s), ${#queuedarray[&#64;]} queued &amp;source=Google+Earth+Enterprise” “<a class="reference external" href="http://twitter.com/statuses/update.json">http://twitter.com/statuses/update.json</a>”              rm /tmp/filelist`</li>
-<li>Add this file to your cron tab and set it to go off every half
-hour or every hour.
-<code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">crontab</span> <span class="pre">-e</span></code></li>
-<li>To run the Twitter update every 30 minutes, add the line:
-<code class="docutils literal notranslate"><span class="pre">*/30</span> <span class="pre">*</span> <span class="pre">*</span> <span class="pre">*</span> <span class="pre">*</span> <span class="pre">/usr/bin/getwitter</span></code></li>
-<li>Follow your Fusion server on Twitter.</li>
+credentials and, if needed, your server’s asset root.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>:literal:`#!/bin/bash
+
+twittername=&quot;YourServersTwitterAccount&quot;
+twitterpass=&quot;YourServersTwitterPassword&quot;
+assetroot=&quot;/gevol/assets/&quot;
+
+find $assetroot.state -iname &quot;*.task&quot; -ls &gt;&gt; /tmp/filelist
+
+taskcount=0
+inprogresscount=1
+declare -a inprogressarray
+declare -a queuedarray
+
+while read line
+do
+asset=`echo $line | awk &#39;{print $13}&#39;`
+status=`/opt/google/bin/gequery --status $asset`
+   if [ &quot;$status&quot; = &quot;InProgress&quot; ]; then
+      inprogressarray[$[${#inprogressarray[@]}+1]]=$asset
+   fi
+   if [ &quot;$status&quot; = &quot;Queued&quot; ]; then
+      queuedarray[$[${#queuedarray[@]}+1]]=$asset
+   fi
+let taskcount=taskcount+1
+done &lt;/tmp/filelist
+
+for inprogress in ${inprogressarray[@]}
+do
+   logfile=`/opt/google/bin/gequery --logfile $inprogress`
+      while read line
+      do
+      progress=$line
+      done &lt;$logfile
+
+   curl --basic --user &quot;$twittername:$twitterpass&quot; --data-ascii
+   &quot;status=#GEEFusion Task$inprogresscount:
+   $progress&amp;source=Google+Earth+Enterprise&quot;
+   &quot;http://twitter.com/statuses/update.json&quot;
+
+   curl --basic --user &quot;$twittername:$twitterpass&quot; --data-ascii
+   &quot;status=#GEEFusion Task$inprogresscount:
+   $inprogress&amp;source=Google+Earth+Enterprise&quot;
+   &quot;http://twitter.com/statuses/update.json&quot;
+
+   let inprogresscount=inprogresscount+1
+   done
+
+   curl --basic --user &quot;$twittername:$twitterpass&quot; --data-ascii
+   &quot;status=#GEEFusion Working on ${#inprogressarray[@]} task(s),
+   ${#queuedarray[@]} queued &amp;source=Google+Earth+Enterprise&quot;
+   &quot;http://twitter.com/statuses/update.json&quot;
+
+   rm /tmp/filelist
+</pre></div>
+</div>
+</li>
+<li><p class="first">Add this file to your cron tab and set it to go off every half
+hour or every hour.</p>
+<p><code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">crontab</span> <span class="pre">-e</span></code></p>
+</li>
+<li><p class="first">To run the Twitter update every 30 minutes, add the line:</p>
+<p><code class="docutils literal notranslate"><span class="pre">*/30</span> <span class="pre">*</span> <span class="pre">*</span> <span class="pre">*</span> <span class="pre">*</span> <span class="pre">/usr/bin/getwitter</span></code></p>
+</li>
+<li><p class="first">Follow your Fusion server on Twitter.</p>
+</li>
 </ol>
 </div>
 </div>

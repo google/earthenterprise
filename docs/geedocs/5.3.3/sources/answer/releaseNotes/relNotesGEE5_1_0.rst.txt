@@ -103,21 +103,21 @@ for information about the vulnerabilities addressed.
 
 -[ Known Issues ]-
 
-Known Issues        Number  Description  Workaround  17725523  When
-attempting to install GEE 5.1.0 on RHEL 6 using the GUI installer, the
-process is likely to fail.  To install GEE 5.1.0 on RHEL 6, use the
-command line installer for Fusion and Server instead.  17532512  When
-canceling the build process of a map database, the processes that
-build the map layer project will not be canceled.  When canceling the
-build process of a map database, you need also manually cancel the
-build process for the map layer project:  In the Asset Manager dialog,
-right-click the map database name that you are trying to cancel the
-build and choose Asset Versions from the context menu. The Properties
-dialog appears.  Select the version that you want to cancel, right-
-click and select Version Properties from the context menu to open the
-Version Properties dialog.  Click the + next to MapDatabase to open
-the tree of assets in the database. Right-click the MapLayer assets
-under Project and click Cancel in the context menu. The MapLayerLevels
+      Number  Description  Workaround  17725523  When attempting to
+install GEE 5.1.0 on RHEL 6 using the GUI installer, the process is
+likely to fail.  To install GEE 5.1.0 on RHEL 6, use the command line
+installer for Fusion and Server instead.  17532512  When canceling the
+build process of a map database, the processes that build the map
+layer project will not be canceled.  When canceling the build process
+of a map database, you need also manually cancel the build process for
+the map layer project:  In the Asset Manager dialog, right-click the
+map database name that you are trying to cancel the build and choose
+Asset Versions from the context menu. The Properties dialog appears.
+Select the version that you want to cancel, right-click and select
+Version Properties from the context menu to open the Version
+Properties dialog.  Click the + next to MapDatabase to open the tree
+of assets in the database. Right-click the MapLayer assets under
+Project and click Cancel in the context menu. The MapLayerLevels
 processing is canceled. Close the Version Properties and Properties
 dialogs to return to the Asset Manager.  17363564  3D databases with
 terrain projects, including overlay insets, that do not include

@@ -76,11 +76,11 @@ prerequisite libraries after uninstalling 5.1.3 but before installing
 
 -[ Known Issues ]-
 
-Known Issues        Number  Description  Workaround  2  MrSID imagery
-is not supported  MrSID support can be added by purchasing a
-proprietary GDAL plugin that supports MrSID and modifying the build
-process to include the plugin.  4  Google basemap fails to load in 2D
-Mercator Maps  Obtain a valid Google Maps API key and include it in
+      Number  Description  Workaround  2  MrSID imagery is not
+supported  MrSID support can be added by purchasing a proprietary GDAL
+plugin that supports MrSID and modifying the build process to include
+the plugin.  4  Google basemap fails to load in 2D Mercator Maps
+Obtain a valid Google Maps API key and include it in
 /opt/google/gehttpd/htdocs/maps/maps_google.html.  6  The Portable UI
 reports an error any time a cut is canceled, even if the cancel was
 successful  Ignore the misleading error message.  200  stage_install
@@ -139,28 +139,27 @@ Reboot and try again
 
 -[ Resolved Issues ]-
 
-Resolved Issues        Number  Description  Resolution  (none)  Error
-when fusing a mosaic in GDAL 2.x  Implemented IReadBlock() API for
-khVRRasterBand  16  gefusionuser must have write access to vector
-files  Removed the requirement for write access  26  Fusion
-segmentation faults when trying to push and the server is not
-available  Passed the correct data type to cURL function  167  If save
-fails because the Fusion server is not running, the user cannot save
-again even if the problem is fixed  Updated state management in
-resource creation form  179  Update date parsing to fix default date
-handling  Added code to handle default dates in Fusion tools  196
-Simplify SSL settings and enable TLS 1.2 by default  Consolidated SSL
-settings and updated the defaults to include TLS 1.2  239
-cachedreadaccessor_unittest fails on free() call on Ubuntu 16.04
-Increased the size of a buffer that was overflowing  243  Fix broken
-line in cutter script  Fixed the relevant line  351  Portable Globe
-Cutter fails with a Python error  Fixed import errors in the cutter
-scripts  381  Error running POI Search  Needed to declare the coding
-in headers of python script:# -- coding: utf-8 -  431  portable build
-failure - CentOS 7 - old version of pexpect.  Try loading fdpexpect
-for version 3.* and above. If not successful, fallback to fdpexpect
-from older pexpect package.  435  Specify C++ version for portable
-build  Updated the build_lib scripts to include the flag
-"-std=gnu++98"  436  Seg fault in fusion when opening vector resource
-created in old version  Eliminated NULL pointer error in date/time
-function
+      Number  Description  Resolution  (none)  Error when fusing a
+mosaic in GDAL 2.x  Implemented IReadBlock() API for khVRRasterBand
+16  gefusionuser must have write access to vector files  Removed the
+requirement for write access  26  Fusion segmentation faults when
+trying to push and the server is not available  Passed the correct
+data type to cURL function  167  If save fails because the Fusion
+server is not running, the user cannot save again even if the problem
+is fixed  Updated state management in resource creation form  179
+Update date parsing to fix default date handling  Added code to handle
+default dates in Fusion tools  196  Simplify SSL settings and enable
+TLS 1.2 by default  Consolidated SSL settings and updated the defaults
+to include TLS 1.2  239  cachedreadaccessor_unittest fails on free()
+call on Ubuntu 16.04  Increased the size of a buffer that was
+overflowing  243  Fix broken line in cutter script  Fixed the relevant
+line  351  Portable Globe Cutter fails with a Python error  Fixed
+import errors in the cutter scripts  381  Error running POI Search
+Needed to declare the coding in headers of python script:# -- coding:
+utf-8 -  431  portable build failure - CentOS 7 - old version of
+pexpect.  Try loading fdpexpect for version 3.* and above. If not
+successful, fallback to fdpexpect from older pexpect package.  435
+Specify C++ version for portable build  Updated the build_lib scripts
+to include the flag "-std=gnu++98"  436  Seg fault in fusion when
+opening vector resource created in old version  Eliminated NULL
+pointer error in date/time function

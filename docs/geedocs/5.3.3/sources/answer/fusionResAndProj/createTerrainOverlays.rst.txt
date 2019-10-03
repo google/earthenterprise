@@ -209,9 +209,9 @@ your server and database in the Server field. For example, the Publish
 point is myserver.mydomainname.com/mydatabase, where myserver and
 mydomainname are specific to your server.
 
-Click the Sign In button.  Caution: If you have logged in to this
-server with Google Earth EC previously, log out, clear your cache, and
-log back in. See Clearing the Google Earth EC cache.
+Click the Sign In button.  If you have logged in to this server with
+Google Earth EC previously, log out, clear your cache, and log back
+in. See Clearing the Google Earth EC cache.
 
 Google Earth EC displays your database. The Layers panel shows any
 terrain, imagery, and vector layers in the database.
@@ -234,4 +234,4 @@ EC displays the terrain overlay on top of the existing database.
 
 -[ Learn more ]-
 
-Defining and Building Projects :doc:../fusionTutorial/buildProject`
+Defining and Building Projects

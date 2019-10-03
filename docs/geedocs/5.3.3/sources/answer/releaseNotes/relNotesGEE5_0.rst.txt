@@ -167,14 +167,14 @@ installers.
 
 -[ Known Issues ]-
 
-Known Issues        Number  Description  Workaround  7239735  If
-libc.so.6 is located in a directory other than /lib, the installer and
-uninstaller display a message that /lib/libc.so.6 is missing. No known
-problems are associated.  Ignore the message and continue to install
-or uninstall.  7531358  Each terrain project (even terrain insets)
-must have worldwide resource. If not, the build fails with a "Fusion
-Fatal: Empty inset stack" error. This error is typically i caused by
-the terrain project not having a base terrain resource with complete
+      Number  Description  Workaround  7239735  If libc.so.6 is
+located in a directory other than /lib, the installer and uninstaller
+display a message that /lib/libc.so.6 is missing. No known problems
+are associated.  Ignore the message and continue to install or
+uninstall.  7531358  Each terrain project (even terrain insets) must
+have worldwide resource. If not, the build fails with a "Fusion Fatal:
+Empty inset stack" error. This error is typically i caused by the
+terrain project not having a base terrain resource with complete
 global coverage.  Include a low-resolution global terrain resource
 such as Gtopo (land only) or Etopo (bathymetry and land) with the
 terrain project, and then rebuild the database.  11715339  The Preview
@@ -187,21 +187,20 @@ window.location.href};
 
 -[ Resolved Issues ]-
 
-Resolved Issues        Number  Description  Resolution  7443814
-Certain polygon datasets with invalid geometries cause Fusion
-processing to hang.  Fixed in Fusion vector processing pipeline.
-7442639  GEE supports only one field per custom Search tab in EC 6.2
-and later. If you want to include multiple fields in your Search tabs,
-use EC 6.1.  The 5.0 release supports EC 7.0 and later. To include
-multiple Search tab fields for EC 7.0 or later:  Go to GEE Server
-admin console at http://localhost/admin.  Click Search tabs.  Click
-Create new.  Enter your first field definition, then click Add field.
-You can add as many fields as you want.  6888196  Publish fails with
-"Unable to parse POI file" in log.  Fixed in POI-file parsing scheme
-and POI data managing.  5570955  Postgres service running after GEE
-Server installer exits.  Fixed in installer.  7521159  A double slash
-in the -o option breaks genewterrainproject.  Fixed in asset managing
-scheme.  885079  Ability to assign dbroot snippets at database and
-virtual server level.  Fixed with new publisher.  6611496
-geserveradmin reports successful delete for nonexistent entities.
-Fixed in publisher back end.
+      Number  Description  Resolution  7443814  Certain polygon
+datasets with invalid geometries cause Fusion processing to hang.
+Fixed in Fusion vector processing pipeline.  7442639  GEE supports
+only one field per custom Search tab in EC 6.2 and later. If you want
+to include multiple fields in your Search tabs, use EC 6.1.  The 5.0
+release supports EC 7.0 and later. To include multiple Search tab
+fields for EC 7.0 or later:  Go to GEE Server admin console at
+http://localhost/admin.  Click Search tabs.  Click Create new.  Enter
+your first field definition, then click Add field. You can add as many
+fields as you want.  6888196  Publish fails with "Unable to parse POI
+file" in log.  Fixed in POI-file parsing scheme and POI data managing.
+5570955  Postgres service running after GEE Server installer exits.
+Fixed in installer.  7521159  A double slash in the -o option breaks
+genewterrainproject.  Fixed in asset managing scheme.  885079  Ability
+to assign dbroot snippets at database and virtual server level.  Fixed
+with new publisher.  6611496  geserveradmin reports successful delete
+for nonexistent entities.  Fixed in publisher back end.

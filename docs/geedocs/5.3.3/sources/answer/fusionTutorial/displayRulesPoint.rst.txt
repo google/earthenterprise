@@ -41,127 +41,53 @@ Select CA_POIs (a resource that you built in Defining and Building
 Resources), and click Open. The CA_POIs resource appears in the Vector
 Project Editor.  CA_POIs Resource
 
-Right-click
+Right-click CA_POIs and select Configure Display Rules from the
+context menu. The Display Rules dialog appears with the Feature tab in
+the foreground and the default select all rule highlighted.
 
-CA_POIs
+Specify the geometry characteristics of the POIs:  For Draw Features
+As, select Points.  For Simplification Method, select Representative
+Subset Per Tile.  For Choose, accept the default, 50% points.  For Min
+Points, enter 50.  For Max Points, enter 200.  Check the box next to
+Suppress Duplicate Points.  Under Elevation/Height, set Mode to Clamp
+to Ground.  On the right side of the dialog, check the box next to
+Draw Label.  For Visibility, accept the default range, 5 through 24.
+Do not make any changes under Label Properties.  This area allows you
+to specify the content and appearance of a text label for each POI.
+However, there are so many POIs in California that the view in Google
+Earth EC would be too crowded.
 
- and select
+Check the box next to Draw Icon and then:  Click the icon pair. The
+Icons dialog appears.  Icons Dialog  Scroll down, if necessary, and
+select blue_star, and click OK.  A yellow star appears next to
+Highlight, and a blue star appears next to Normal. The result of this
+setting is that Google Earth EC displays a blue star for each POI, and
+when you mouse over the star (highlight it), it turns yellow.  For
+both Highlight and Normal, accept the default color, white.  For
+Highlight, accept the default scale, 1.  For Normal, change the scale
+to 0.89.  The result of these settings is that when you mouse over a
+star, Google Earth EC displays the yellow (highlighted) star a little
+larger than the blue star.
 
-Configure Display Rules
-
- from the context menu. The Display Rules dialog appears with the
-Feature tab in the foreground and the
-
-default select all
-
- rule highlighted.
-
-Specify the geometry characteristics of the POIs:
-
-For Draw Features As, select Points.
-
-For Simplification Method, select Representative Subset Per Tile.
-
-For Choose, accept the default, 50% points.
-
-For Min Points, enter 50.
-
-For Max Points, enter 200.
-
-Check the box next to Suppress Duplicate Points.
-
-Under Elevation/Height, set Mode to Clamp to Ground.
-
-On the right side of the dialog, check the box next to Draw Label.
-
-For Visibility, accept the default range, 5 through 24.
-
-Do not make any changes under Label Properties.
-
-This area allows you to specify the content and appearance of a text
-label for each POI. However, there are so many POIs in California that
-the view in Google Earth EC would be too crowded.
-
-Check the box next to Draw Icon and then:
-
-Click the icon pair. The Icons dialog appears.  Icons Dialog
-
-Scroll down, if necessary, and select blue_star, and click OK.  A
-yellow star appears next to Highlight, and a blue star appears next to
-Normal. The result of this setting is that Google Earth EC displays a
-blue star for each POI, and when you mouse over the star (highlight
-it), it turns yellow.
-
-For both Highlight and Normal, accept the default color, white.
-
-For Highlight, accept the default scale, 1.
-
-For Normal, change the scale to 0.89.  The result of these settings is
-that when you mouse over a star, Google Earth EC displays the yellow
-(highlighted) star a little larger than the blue star.
-
-In the
-
-Balloon
-
- section, select
-
-Text
-
-, and then click the empty text field. The Label Format dialog
-appears.
-
-Select COUNTY from the Insert Field drop-down list.  «COUNTY» appears
-in the text box under Popup Text.  You can use some basic HTML tags to
-format the Label text, if desired.
-
-To the left of «COUNTY» enter <b>.
-
-To the right of «COUNTY» enter </b><br/><br/>.
-
-Press Enter. Adding this HTML code formats the name of the county as
-bold, followed by two line breaks to separate it from the text that
-follows (next step).
+In the Balloon section, select Text, and then click the empty text
+field. The Label Format dialog appears.  Select COUNTY from the Insert
+Field drop-down list.  «COUNTY» appears in the text box under Popup
+Text.  You can use some basic HTML tags to format the Label text, if
+desired.  To the left of «COUNTY» enter <b>.  To the right of «COUNTY»
+enter </b><br/><br/>.  Press Enter. Adding this HTML code formats the
+name of the county as bold, followed by two line breaks to separate it
+from the text that follows (next step).
 
 Select NAME from the Insert Field drop-down list. «NAME» appears on
-the next line of the text box.
+the next line of the text box.  To the right of «NAME» enter
+<br/><br/>.  Press Enter.
 
-To the right of «NAME» enter <br/><br/>.
+On the next line, enter Latitude:, and then select LATITUDE from the
+Insert Field drop-down menu.  To the right of «LATITUDE» enter
+<br/><br/>.  Press Enter.
 
-Press Enter.
-
-#. On the next line, enter
-
-Latitude:
-
-, and then select
-
-LATITUDE
-
- from the
-
-Insert Field
-
- drop-down menu.
-
-To the right of «LATITUDE» enter <br/><br/>.
-
-Press Enter.
-
-#. On the next line, enter
-
-Longitude:
-
- , and then select
-
-LONGITUDE
-
- from the
-
-Insert Field
-
- drop-down menu.
-
+On the next line, enter Longitude: , and then select LONGITUDE from
+the Insert Field drop-down menu.  image5
 
 Click the OK button.
 

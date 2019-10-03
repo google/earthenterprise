@@ -10,10 +10,9 @@ you take a look at the code directly.
 You can find the two Python files for the "ExampleSearch" plug-in in
 the following location:
 
-"/opt/google/gehttpd/wsgi-bin/search/plug-in/example_search_app.py"
+/opt/google/gehttpd/wsgi-bin/search/plug-in/example_search_app.py
 
-"/opt/google/gehttpd/wsgi-bin/search/plug-
-in/example_search_handler.py"
+/opt/google/gehttpd/wsgi-bin/search/plug-in/example_search_handler.py
 
 In Google Earth Enterprise, a search plug-in Python-based framework
 relies on the Python Web Server Gateway Interface (WSGI), a Python API

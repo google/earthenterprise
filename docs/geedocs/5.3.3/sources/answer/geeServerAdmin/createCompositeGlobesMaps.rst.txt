@@ -85,8 +85,8 @@ appears.
 
 Enter a name for the offline map or globe.  The name defines the file
 name for your composite map or globe. Composite maps and globes are
-created as .``glc`` files. Spaces, slashes, and double dots (..) will
-be converted to underscores in the saved map or globe name.
+created as .glc files. Spaces, slashes, and double dots (..) will be
+converted to underscores in the saved map or globe name.
 
 Enter a description to be associated with the composite file.  The
 description appears in the list of portable files in Portable when you
@@ -113,26 +113,12 @@ that all available layers are in use.
 
 To select a base globe option, click the Base globe options drop-down
 list and choose a portable globe, then click Yes to use the imagery
-and terrain data for the selected base globe.
+and terrain data for the selected base globe.  GEE Assembly tool base
+globe options  If your base globe is a portable file created using
+Portable Server 4.4 or earlier, click Yes next to Old (4.4) globe.
+This option only affects the imagery layer within older .glb files.
 
-
-If your base globe is a portable file created using Portable Server
-4.4 or earlier, click
-
-Yes
-
- next to
-
-Old (4.4) globe
-
-. This option only affects the imagery layer within older ".glb"
-files.
-
-Click
-
-Assemble Glc
-
-.
+Click Assemble Glc.
 
 -[ Extracting layers from a composite map or globe ]-
 

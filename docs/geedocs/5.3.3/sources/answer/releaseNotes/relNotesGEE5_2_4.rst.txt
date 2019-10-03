@@ -58,28 +58,28 @@ new PostgreSQL version used by Open GEE 5.2.4.
 
 -[ Resolved Issues ]-
 
-Resolved Issues        Number  Description  Resolution  881  Error
-Saving Map Layer with Icon  Saving map layers with icons now functions
-correctly.  882  GEE Portable build script fails on CentOS 6  Added
-code to use g++ from the devtoolset2 installation on CentOS 6 if the
-default g++ compiler version is too low.  934  Polygon displayed at
-the wrong location when viewing GLC assemly  The Cutter WSGI script
-now looks at the projection of the GLM files going into the assembly,
-rather than using a hardcoded Mercator projection for the assembly.
-Also, if a user tries to assemble GLMs with differing projections, a
-warning will be issued.  946  Panoramic Streetview JavaScript error
-Fixed bug in Google Maps API that prevented panoramic streetview from
-loading.  991  DNS diagnostics test fails when there is more than one
-hostname present  Test correctly reads host name entries.
+      Number  Description  Resolution  881  Error Saving Map Layer
+with Icon  Saving map layers with icons now functions correctly.  882
+GEE Portable build script fails on CentOS 6  Added code to use g++
+from the devtoolset2 installation on CentOS 6 if the default g++
+compiler version is too low.  934  Polygon displayed at the wrong
+location when viewing GLC assemly  The Cutter WSGI script now looks at
+the projection of the GLM files going into the assembly, rather than
+using a hardcoded Mercator projection for the assembly. Also, if a
+user tries to assemble GLMs with differing projections, a warning will
+be issued.  946  Panoramic Streetview JavaScript error  Fixed bug in
+Google Maps API that prevented panoramic streetview from loading.  991
+DNS diagnostics test fails when there is more than one hostname
+present  Test correctly reads host name entries.
 
 -[ Known Issues ]-
 
-Known Issues        Number  Description  Workaround  4  Google basemap
-fails to load in 2D Mercator Maps  Obtain a valid Google Maps API key
-and include it in /opt/google/gehttpd/htdocs/maps/maps_google.html.  8
-Ensure GEE Portable Cutter Job Completes  No known workaround.  9
-Improve FileUnpacker Handling of Invalid Files  No known workaround.
-20  Simplify build process for portable builds on MacOS  Building and
+      Number  Description  Workaround  4  Google basemap fails to load
+in 2D Mercator Maps  Obtain a valid Google Maps API key and include it
+in /opt/google/gehttpd/htdocs/maps/maps_google.html.  8  Ensure GEE
+Portable Cutter Job Completes  No known workaround.  9  Improve
+FileUnpacker Handling of Invalid Files  No known workaround.  20
+Simplify build process for portable builds on MacOS  Building and
 running Portable Server on MacOS should be possible with minimal
 changes.  34  Scons build creates temporary directories named “0”  No
 known workaround.  126  The Fusion installer creates a backup on the
