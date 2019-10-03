@@ -28,49 +28,48 @@ Enterprise Client (EC) version 7.1.8 and Google Earth Plug-in versions
 
 -[ Library Updates ]-
 
-Library Updates      Library  Updated Version  GDAL  2.1.2  Google
-Maps JS API V3  3.27  Apache httpd  2.2.32  OpenSSL  1.0.2k  freetype
-2.6.1
+    Library  Updated Version  GDAL  2.1.2  Google Maps JS API V3  3.27
+Apache httpd  2.2.32  OpenSSL  1.0.2k  freetype  2.6.1
 
 -[ Known Issues ]-
 
-Known Issues        Number  Description  Workaround  31619151  Missing
-historical imagery dates in EC timeslider  Ensure all assets in the
-project have valid timestamps and they are unique (in case some of the
-resources have the same date & time).  35093485  Google basemap fails
-to load in 2D Mercator databases built with "Use Google Basemap"
-option  Edit /opt/google/gehttpd/htdocs/maps/maps_google.html to
-include a valid API Key (or client id) to the Maps API JavaScript
-call. See https://developers.google.com/maps/documentation/javascript
-/error-messages#no-api-keys
+      Number  Description  Workaround  31619151  Missing historical
+imagery dates in EC timeslider  Ensure all assets in the project have
+valid timestamps and they are unique (in case some of the resources
+have the same date & time).  35093485  Google basemap fails to load in
+2D Mercator databases built with "Use Google Basemap" option  Edit
+/opt/google/gehttpd/htdocs/maps/maps_google.html to include a valid
+API Key (or client id) to the Maps API JavaScript call. See
+https://developers.google.com/maps/documentation/javascript/error-
+messages#no-api-keys
 
 -[ Resolved Issues ]-
 
-Resolved Issues        Number  Description  Resolution  1644180
-Improve granularity of image acquisition date  Fixed in Fusion:
-imagery acquisition date now supports hours, minutes and seconds with
-the (ISO-8601) format YYYY-MM-DD hh:mm:ss. This new extended timestamp
-is backward compatible and enabled in the Fusion UI as well as i
-command-line tools. Client support is being added to EC's timeslider;
-updated version coming soon.  11271105  gekmlgrabber fails to grab KML
-files referenced with relative URLs  Fixed in Cutter.  17300345,
-18021264  Missing cache_alpha files reported when building projects
-with pre-processed source data (KIP)  Fixed in Fusion: after
-upgrading, clean the latest blocked version of the database, clean the
-latest blocked version of the imagery/terrain project, and then
-rebuild.  21760202  gesystemmanager consumes large amount of of
-resources (cpu & memory) when cancelling large projects  Fixed in
-Fusion: optimized cache when building raster projects.  24375793  Use
-asynchronous communication with server in Portable Viewer  Fixed in
-Portable Server.  24469566  Search bar disappears after clicking 'go
-to polygon' in Portable Viewer  Fixed in Portable Server.  25954774
-Implement swap and replace functions when publishing databases  Fixed
-in GEE Server: to facilitate updates to existing published databases,
-geserveradmin supports --republish of databases which involves
-unpublishing an existing target, and publishing a new database on that
-same target while retaining its publish context i.e. virtual host,
-snippets, search services, WMS-serving. The --swaptargets option swaps
-the target path of two published databases along with their publish
+      Number  Description  Resolution  1644180  Improve granularity of
+image acquisition date  Fixed in Fusion: imagery acquisition date now
+supports hours, minutes and seconds with the (ISO-8601) format YYYY-
+MM-DD hh:mm:ss. This new extended timestamp is backward compatible and
+enabled in the Fusion UI as well as i command-line tools. Client
+support is being added to EC's timeslider; updated version coming
+soon.  11271105  gekmlgrabber fails to grab KML files referenced with
+relative URLs  Fixed in Cutter.  17300345, 18021264  Missing
+cache_alpha files reported when building projects with pre-processed
+source data (KIP)  Fixed in Fusion: after upgrading, clean the latest
+blocked version of the database, clean the latest blocked version of
+the imagery/terrain project, and then rebuild.  21760202
+gesystemmanager consumes large amount of of resources (cpu & memory)
+when cancelling large projects  Fixed in Fusion: optimized cache when
+building raster projects.  24375793  Use asynchronous communication
+with server in Portable Viewer  Fixed in Portable Server.  24469566
+Search bar disappears after clicking 'go to polygon' in Portable
+Viewer  Fixed in Portable Server.  25954774  Implement swap and
+replace functions when publishing databases  Fixed in GEE Server: to
+facilitate updates to existing published databases, geserveradmin
+supports --republish of databases which involves unpublishing an
+existing target, and publishing a new database on that same target
+while retaining its publish context i.e. virtual host, snippets,
+search services, WMS-serving. The --swaptargets option swaps the
+target path of two published databases along with their publish
 context. This makes it easy to test or revert databases in production
 environments. For more information, see geserveradmin usage.
 26964919, 27346002  POI searches fail when servers deployed behind

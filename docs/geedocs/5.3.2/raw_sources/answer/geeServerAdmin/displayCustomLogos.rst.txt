@@ -149,6 +149,7 @@ Display custom logos
          -  Default password: *geeadmin*
 
          .. note::
+
             If you do not know your username and password,
             contact your Google Earth Enterprise Server System
             Administrator.

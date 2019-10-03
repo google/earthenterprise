@@ -58,47 +58,48 @@ http://www.openssl.org/news/vulnerabilities.html
 
    Updated openssl from v0.9.8r to v0.9.8y.
 
-Known Issues        Number  Description  Workaround  12239387  For
-databases that include historical imagery, if you turn on Historical
-imagery in Google Earth EC and move the time slider to the current
-time, the most recent database in your historical imagery does not
-display correctly.  When you move the time slider to view the current
-database, turn off Historical imagery to display the database
-correctly.  14463855  In GEE Server, when publishing a database or
-portable, the publish point you specify is now case-insensitive. Upper
-and lower case are not differentiated.  Specify unique publish point
-path names. If you have already specified publish points that are
-distinguished only by case, such as "Google" and "google," Unpublish,
-specify unique publish points, then Publish again.  15221527  In GEE
-Server, when cutting a globe or map, the Cancel operation does not
-stop all associated processes.  Before you begin the cutting process,
-create a kill script as follows:  > sudo vi /opt/google/bin/kill_uid
-ps -eF | grep $1 | grep -v grep | awk '{print $2}' | xargs kill -9  >
-sudo chmod 755 /opt/google/bin/kill_uid  Start a cut. If you need to
-cancel it, do the following steps:  Copy the uid from the script
-window. It will be in the paths used in the commands and will look
-something like 14845_1401320450.614644.  Click the Cancel button.
-Kill any cutting processes on the server. For example: > sudo
-/opt/google/bin/kill_uid 14845_1401320450.614644  Note Because you are
-stopping the cutting process in the JavaScript, your script should
-only need to kill one process, i.e., the last process that was
-started.  11736928  Terrain copyright information listed in the
-Provider Manager does not display on the published globe in Google
-Earth EC.  No workaround.  14291339  Hebrew label characters that read
-right to left, for example, "מִבְחָן" get rendered in reverse, for
-example, "ןחָבְמִ". This issue only applies to 2D databases.  This
-example can be resolved as follows: "מִבְחָ
+-[ Known Issues ]-
+
+      Number  Description  Workaround  12239387  For databases that
+include historical imagery, if you turn on Historical imagery in
+Google Earth EC and move the time slider to the current time, the most
+recent database in your historical imagery does not display correctly.
+When you move the time slider to view the current database, turn off
+Historical imagery to display the database correctly.  14463855  In
+GEE Server, when publishing a database or portable, the publish point
+you specify is now case-insensitive. Upper and lower case are not
+differentiated.  Specify unique publish point path names. If you have
+already specified publish points that are distinguished only by case,
+such as "Google" and "google," Unpublish, specify unique publish
+points, then Publish again.  15221527  In GEE Server, when cutting a
+globe or map, the Cancel operation does not stop all associated
+processes.  Before you begin the cutting process, create a kill script
+as follows:  > sudo vi /opt/google/bin/kill_uid  ps -eF | grep $1 |
+grep -v grep | awk '{print $2}' | xargs kill -9  > sudo chmod 755
+/opt/google/bin/kill_uid  Start a cut. If you need to cancel it, do
+the following steps:  Copy the uid from the script window. It will be
+in the paths used in the commands and will look something like
+14845_1401320450.614644.  Click the Cancel button.  Kill any cutting
+processes on the server. For example: > sudo  /opt/google/bin/kill_uid
+14845_1401320450.614644  Note Because you are stopping the cutting
+process in the JavaScript, your script should only need to kill one
+process, i.e., the last process that was started.  11736928  Terrain
+copyright information listed in the Provider Manager does not display
+on the published globe in Google Earth EC.  No workaround.  14291339
+Hebrew label characters that read right to left, for example, "מִבְחָן"
+get rendered in reverse, for example, "ןחָבְמִ". This issue only applies
+to 2D databases.  This example can be resolved as follows: "מִבְחָ
 ן".split("").reverse().join("")
 
 -[ Resolved Issues ]-
 
-Resolved Issues        Number  Description  Resolution  13010755  You
-can add the Google Base Map as imagery for map databases but viewing a
-map database in a browser currently requires creating and editing a
-copy of /opt/google/gehttpd/htdocs/maps_google.html, one HTML file for
-each map published.  Fixed. No editing of maps_google.html required.
-Note that resolution allows using only Google Base Map or the Google
-Base Map and an imagery layer. See i Using Google Base Map..  14357181
+      Number  Description  Resolution  13010755  You can add the
+Google Base Map as imagery for map databases but viewing a map
+database in a browser currently requires creating and editing a copy
+of /opt/google/gehttpd/htdocs/maps_google.html, one HTML file for each
+map published.  Fixed. No editing of maps_google.html required. Note
+that resolution allows using only Google Base Map or the Google Base
+Map and an imagery layer. See i Using Google Base Map..  14357181
 When running the Cutter command, the Apache server connection may not
 close correctly after the background process has completely executed,
 leading to a build failure of the portable globe or map.  Fixed. The
