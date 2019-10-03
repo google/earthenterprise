@@ -259,7 +259,7 @@ Create terrain overlays
 
          .. warning::
 
-            **Caution:** If you have logged in to this server with
+            If you have logged in to this server with
             Google Earth EC previously, log out, clear your cache, and
             log back in. See :doc:`../googleEarthEnterpriseClient/clearGoogleEarthEC`.
 
@@ -281,7 +281,7 @@ Create terrain overlays
 
       .. rubric:: Learn more
 
-      -  `Defining and Building Projects :doc:`../fusionTutorial/buildProject`
+      -  :doc:`Defining and Building Projects <../fusionTutorial/buildProject>`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

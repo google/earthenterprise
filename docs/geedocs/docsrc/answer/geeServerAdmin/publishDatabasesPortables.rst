@@ -11,9 +11,7 @@ Publish databases and portables
       When you *publish* a Fusion database, you select the database you
       want to publish, specify a *publish point*, then apply *publishing
       options* in the **Publish** dialog. Before you publish a Fusion
-      database, you must register it by
-      :doc:`pushing <../fusionAdministration/pushAndPublishDB>` it to :doc:`GEE
-      Server <../geeServerAdmin/geeServerOverview>`.
+      database, you must register it by :doc:`pushing <../fusionAdministration/pushAndPublishDB>` it to :doc:`GEE Server <../geeServerAdmin/geeServerOverview>`.
 
       With portable files, the process is a little different. Instead,
       first you *register* your portable globes and maps in the **Manage
@@ -21,8 +19,7 @@ Publish databases and portables
       globe or map is similar to *pushing* a database from Fusion.
 
       -  :ref:`Publish a Fusion database <Publish_Fusion_Database>`
-      -  :ref:`Register and publish a portable globe or
-         map <Register_Publish_Portable_Map_Globe>`
+      -  :ref:`Register and publish a portable globe or map <Register_Publish_Portable_Map_Globe>`
 
       .. _Publish_Fusion_Database:
       .. rubric:: Publish a Fusion database
@@ -50,9 +47,9 @@ Publish databases and portables
 
       #. Specify the following options:
 
-         #. **POI Search** (Fusion databases with search data only)
-         #. **Search Tabs** (Fusion databases only)
-         #. **Snippet profile** (Fusion 3D databases only)
+         a. **POI Search** (Fusion databases with search data only)
+         b. **Search Tabs** (Fusion databases only)
+         c. **Snippet profile** (Fusion 3D databases only)
 
       #. Select a **Virtual host**.
       #. Optionally enable **Serve WMS.**
@@ -90,8 +87,7 @@ Publish databases and portables
       #. Click **Publish** to open the Publish dialog.
       #. Specify a **Publish point**, where the portable will be
          accessible from. For example, if you specify *grandcanyon*, it
-         will be accessible from
-         *myserver.mydomainname*.com/grandcanyon.
+         will be accessible from *myserver.mydomainname*.com/grandcanyon.
 
          .. note::
 
