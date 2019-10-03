@@ -69,13 +69,13 @@ namespace AssetFactory
             ref);
       }
     }
-  }  
-  
+  }
+
   template<class VersionType>
   void ValidateRefForInput(const std::string & ref) {
     return ValidateRefForInput<VersionType>(ref, VersionType::Impl::EXPECTED_TYPE);
   }
- 
+
   template<class MutableDerivedAssetHandleType, class ConfigType>
   MutableDerivedAssetHandleType Make( const std::string &ref_,
                                       AssetDefs::Type type_,
@@ -86,7 +86,7 @@ namespace AssetFactory
     using AssetStorageType = typename Impl::Base;
     return MutableDerivedAssetHandleType(std::make_shared<Impl>
                                             (AssetStorageType::MakeStorage(
-                                        ref_, type_, 
+                                        ref_, type_,
                                         Impl::EXPECTED_SUBTYPE,
                                         std::vector<SharedString>(), meta),
                                         config));
