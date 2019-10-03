@@ -57,7 +57,7 @@ Release notes: Open GEE 5.2.4
 
       .. rubric:: Resolved Issues
 
-      .. list-table:: Resolved Issues
+      .. list-table::
          :widths: 25 25 50
          :header-rows: 1
 
@@ -84,7 +84,7 @@ Release notes: Open GEE 5.2.4
 
       .. rubric:: Known Issues
 
-      .. list-table:: Known Issues
+      .. list-table::
          :widths: 25 25 50
          :header-rows: 1
 

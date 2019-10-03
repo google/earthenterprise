@@ -23,9 +23,10 @@ Socket connect
 
       From the command line, enter:
 
-      ``sudo /etc/init.d/geserver stop``
+      .. code-block:: none
       
-      ``sudo /etc/init.d/geserver start``
+            sudo /etc/init.d/geserver stop
+            sudo /etc/init.d/geserver start
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

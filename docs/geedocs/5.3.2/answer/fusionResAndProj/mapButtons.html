@@ -117,7 +117,11 @@ for each <code class="docutils literal notranslate"><span class="pre">GFusionTil
 <li>The maps layer is layer 1.</li>
 <li>The hybrid (Show Labels) layer is layer 2.</li>
 </ul>
-<p><code class="docutils literal notranslate"><span class="pre">var</span> <span class="pre">imagery_map_layer</span> <span class="pre">=</span> <span class="pre">new</span> <span class="pre">GFusionTileLayer(geeServerDefs.serverUrl,</span> <span class="pre">geeServerDefs.layers[0]);</span> <span class="pre">var</span> <span class="pre">painted_map_layer</span> <span class="pre">=</span> <span class="pre">new</span> <span class="pre">GFusionTileLayer(geeServerDefs.serverUrl,</span> <span class="pre">geeServerDefs.layers[1]);</span> <span class="pre">var</span> <span class="pre">labels_layer</span> <span class="pre">=</span> <span class="pre">new</span> <span class="pre">GFusionTileLayer(geeServerDefs.serverUrl,</span> <span class="pre">geeServerDefs.layers[2]);</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>var imagery_map_layer = new GFusionTileLayer(geeServerDefs.serverUrl, geeServerDefs.layers[0]);
+var painted_map_layer = new GFusionTileLayer(geeServerDefs.serverUrl, geeServerDefs.layers[1]);
+var labels_layer = new GFusionTileLayer(geeServerDefs.serverUrl, geeServerDefs.layers[2]);
+</pre></div>
+</div>
 <p>You can access the server definitions and other information
 about map and imagery layers directly from a web browser by
 using a URL in this format:
@@ -127,8 +131,7 @@ Responses will look like the image below:</p>
 <p>This data can also be returned by using the optional <code class="docutils literal notranslate"><span class="pre">v</span></code>
 parameter.</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">v=1</span></code> returns the data in the format shown in the image
-above.</li>
+<li><code class="docutils literal notranslate"><span class="pre">v=1</span></code> returns the data in the format shown in the image above.</li>
 <li><code class="docutils literal notranslate"><span class="pre">v=2</span></code> returns the data in the JSON format.</li>
 <li>A query without the <code class="docutils literal notranslate"><span class="pre">v</span></code> parameter acts as <code class="docutils literal notranslate"><span class="pre">v=1</span></code>.</li>
 </ul>
@@ -138,40 +141,59 @@ above.</li>
 <li><p class="first">Associate layers with buttons by using the <code class="docutils literal notranslate"><span class="pre">GMapType</span></code> class
 to define a map type for each of the <code class="docutils literal notranslate"><span class="pre">GTileLayer</span></code> objects.
 See the example below:</p>
-<p><code class="docutils literal notranslate"><span class="pre">var</span> <span class="pre">painted_map_type</span> <span class="pre">=</span> <span class="pre">new</span> <span class="pre">GMapType([painted_map_layer],new</span> <span class="pre">LatLngProjection(MAX_ZOOM_LEVEL),&quot;Maps&quot;);</span> <span class="pre">var</span> <span class="pre">imagery_map_type</span> <span class="pre">=</span> <span class="pre">new</span> <span class="pre">GMapType([imagery_map_layer],new</span> <span class="pre">LatLngProjection(MAX_ZOOM_LEVEL),&quot;Imagery&quot;);</span> <span class="pre">var</span> <span class="pre">labels_map_type</span> <span class="pre">=</span> <span class="pre">new</span> <span class="pre">GMapType([imagery_map_layer,</span> <span class="pre">labels_layer],new</span> <span class="pre">LatLngProjection(MAX_ZOOM_LEVEL),&quot;Hybrid&quot;);</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>var painted_map_type = new GMapType([painted_map_layer],new LatLngProjection(MAX_ZOOM_LEVEL),&quot;Maps&quot;);
+var imagery_map_type = new GMapType([imagery_map_layer],new LatLngProjection(MAX_ZOOM_LEVEL),&quot;Imagery&quot;);
+var labels_map_type = new GMapType([imagery_map_layer, labels_layer],new LatLngProjection(MAX_ZOOM_LEVEL),&quot;Hybrid&quot;);
+</pre></div>
+</div>
 </li>
 <li><p class="first">Use the <code class="docutils literal notranslate"><span class="pre">.addMapControl()</span></code> method to add each map type and
 its associated button to the map:</p>
-<p><code class="docutils literal notranslate"><span class="pre">map.addMapType(painted_map_type);</span> <span class="pre">map.addMapType(imagery_map_type);</span> <span class="pre">map.addMapType(labels_map_type);</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>map.addMapType(painted_map_type);
+map.addMapType(imagery_map_type);
+map.addMapType(labels_map_type);
+</pre></div>
+</div>
 </li>
 <li><p class="first">Remove the predefined Google Maps map types below so that the
 buttons display correctly:</p>
-<div class="line-block">
-<div class="line"><code class="docutils literal notranslate"><span class="pre">map.removeMapType(G_SATELLITE_MAP);</span></code> // Remove the default
-Satellite Map Type button</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">map.removeMapType(G_HYBRID_MAP);</span></code> // Remove the default
-Hybrid Map Type button</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">map.removeMapType(G_NORMAL_MAP);</span></code> // Remove the default
-Map Type button</div>
-</div>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">map.removeMapType(G_SATELLITE_MAP);</span></code> // Remove the default</dt>
+<dd><p class="first last">Satellite Map Type button</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">map.removeMapType(G_HYBRID_MAP);</span></code> // Remove the default</dt>
+<dd><p class="first last">Hybrid Map Type button</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">map.removeMapType(G_NORMAL_MAP);</span></code> // Remove the default</dt>
+<dd><p class="first last">Map Type button</p>
+</dd>
+</dl>
 </li>
 <li><p class="first">Add controls (like the zoom bar, the navigation bar, an
 overview map, and zooming options) to the map:</p>
-<p><code class="docutils literal notranslate"><span class="pre">map.addControl(new</span> <span class="pre">GSmallMapControl());</span> <span class="pre">map.addControl(new</span> <span class="pre">GOverviewMapControl());</span> <span class="pre">map.addControl(new</span> <span class="pre">GScaleControl());</span> <span class="pre">map.enableScrollWheelZoom();</span> <span class="pre">map.enableContinuousZoom();</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>map.addControl(new GSmallMapControl());
+map.addControl(new GOverviewMapControl());
+map.addControl(new GScaleControl());
+map.enableScrollWheelZoom();
+map.enableContinuousZoom();
+</pre></div>
+</div>
 </li>
 </ol>
 <p class="rubric" id="display-a-drop-down-menu-instead-of-buttons">Display a drop-down menu instead of buttons</p>
 <p>You can show a drop-down menu for the map layers instead of the
 side-by-side buttons, as shown below.</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils">
 <colgroup>
-<col width="47%" />
-<col width="53%" />
+<col width="25%" />
+<col width="75%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>Standard map type buttons</td>
-<td>Drop-down menu for map types</td>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Standard map type buttons</th>
+<th class="head">Drop-down menu for map types</th>
 </tr>
+</thead>
+<tbody valign="top">
 <tr class="row-even"><td><img alt="Map buttons" src="../../images/2972268_map_buttons.jpg" /></td>
 <td><img alt="Menu buttons" src="../../images/2972269_menu_buttons.jpg" /></td>
 </tr>
@@ -192,13 +214,28 @@ for an example of a location-based 2D virtual server configuration
 file.</p>
 <p>In this example, the server is hosted at</p>
 <p><code class="docutils literal notranslate"><span class="pre">http://machine123.company.internal/mapexample</span> <span class="pre">-</span> <span class="pre">/opt/google/gehttpd/conf.d/virtual_servers/example.location</span></code>.</p>
-<p><code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">The</span> <span class="pre">mapexample</span> <span class="pre">virtual</span> <span class="pre">server</span> <span class="pre">RewriteRule</span> <span class="pre">^/mapexample$</span> <span class="pre">/mapexample/</span> <span class="pre">[R]</span> <span class="pre">RewriteRule</span> <span class="pre">^/mapexample/+$</span> <span class="pre">/maps/maps_local.html</span> <span class="pre">[PT]</span> <span class="pre">RewriteRule</span> <span class="pre">^/mapexample/+maps/+mapfiles/(.*)$</span> <span class="pre">/maps/mapfiles/$1</span> <span class="pre">[PT]</span> <span class="pre">&lt;Location</span> <span class="pre">&quot;/mapexample/*&quot;&gt;</span> <span class="pre">SetHandler</span> <span class="pre">gedb-handler</span> <span class="pre">Include</span> <span class="pre">conf.d/virtual_servers/runtime/example_runtime</span> <span class="pre">&lt;/Location&gt;</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># The mapexample virtual server
+RewriteRule ^/mapexample$ /mapexample/ [R]
+RewriteRule ^/mapexample/+$ /maps/maps_local.html [PT]
+RewriteRule ^/mapexample/+maps/+mapfiles/(.*)$ /maps/mapfiles/$1 [PT]
+&lt;Location &quot;/mapexample/*&quot;&gt;
+SetHandler gedb-handler Include conf.d/virtual_servers/runtime/example_runtime
+&lt;/Location&gt;
+</pre></div>
+</div>
 <p>In the example above, the second RewriteRule specifies that the
 <code class="docutils literal notranslate"><span class="pre">/maps/maps_local.html</span></code> web page is loaded whenever users visit
-the virtual server URL
-<code class="docutils literal notranslate"><span class="pre">http://machine123.company.internal/mapexample</span></code>.</p>
+the virtual server URL <code class="docutils literal notranslate"><span class="pre">http://machine123.company.internal/mapexample</span></code>.</p>
 <p>You can change this setting to load a different web page:</p>
-<p><code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">The</span> <span class="pre">mapexample</span> <span class="pre">virtual</span> <span class="pre">server</span> <span class="pre">RewriteRule</span> <span class="pre">^/mapexample$</span> <span class="pre">/mapexample/</span> <span class="pre">[R]</span> <span class="pre">RewriteRule</span> <span class="pre">^/mapexample/+$</span> <span class="pre">/maps/gmaps_buttons.html</span> <span class="pre">[PT]</span> <span class="pre">RewriteRule</span> <span class="pre">^/mapexample/+maps/+mapfiles/(.*)$</span> <span class="pre">/maps/mapfiles/$1</span> <span class="pre">[PT]</span> <span class="pre">&lt;Location</span> <span class="pre">&quot;/mapexample/*&quot;&gt;</span> <span class="pre">SetHandler</span> <span class="pre">gedb-handler</span> <span class="pre">Include</span> <span class="pre">conf.d/virtual_servers/runtime/example_runtime</span> <span class="pre">&lt;/Location&gt;</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># The mapexample virtual server
+RewriteRule ^/mapexample$ /mapexample/ [R]
+RewriteRule ^/mapexample/+$ /maps/gmaps_buttons.html [PT]
+RewriteRule ^/mapexample/+maps/+mapfiles/(.*)$ /maps/mapfiles/$1 [PT]
+&lt;Location &quot;/mapexample/*&quot;&gt;
+SetHandler gedb-handler Include conf.d/virtual_servers/runtime/example_runtime
+&lt;/Location&gt;
+</pre></div>
+</div>
 <p>After you make changes to the file, restart the GEE Server to
 reload the configuration file and implement the change.</p>
 <p class="rubric">Access the imagery tiles hosted from another GEE 2D
@@ -211,10 +248,9 @@ map.</p>
 <p class="rubric">Data used to build the map and imagery tiles</p>
 <p class="rubric">Map data</p>
 <p>You can obtain a complete copy of the 2D Map layer display rules
-from the <a class="reference external" href="https://groups.google.com/group/google-earth-enterprise">Google Earth
-Enterprise</a>
-Google Group Files section. The maps and hybrid (Show Labels) map
-layers were built from three different datasets:</p>
+from the <a class="reference external" href="https://groups.google.com/group/google-earth-enterprise">Google Earth Enterprise</a> Google Group Files section.
+The maps and hybrid (Show Labels) map layers were built from
+three different datasets:</p>
 <ul class="simple">
 <li>Global borders (filled and outlined) in the maps and hybrid
 layers were created from the the Thematic Mapping World Borders
@@ -223,13 +259,11 @@ dataset, available under a Creative Commons license at
 <li>USA state boundaries in the maps and hybrid layers were created
 from the USA State borders vector data hosted by the National
 Atlas of the USA (now called the National Map). You can
-download state boundaries from
-<a class="reference external" href="https://nationalmap.gov/small_scale/atlasftp.html">https://nationalmap.gov/small_scale/atlasftp.html</a>.</li>
+download state boundaries from <a class="reference external" href="https://nationalmap.gov/small_scale/atlasftp.html">https://nationalmap.gov/small_scale/atlasftp.html</a>.</li>
 <li>The background water that is visible in the maps layer was
 created with a global KML file. You can obtain the KML water
-file from the <a class="reference external" href="https://groups.google.com/group/google-earth-enterprise">Google Earth
-Enterprise</a>
-Google Group Files section.</li>
+file from the <a class="reference external" href="https://groups.google.com/group/google-earth-enterprise">Google Earth Enterprise</a> Google Group
+Files section.</li>
 </ul>
 <p class="rubric">Imagery data</p>
 <p>Imagery for the globe was built from two different sources:</p>

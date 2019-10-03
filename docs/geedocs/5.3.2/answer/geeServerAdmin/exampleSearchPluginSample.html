@@ -79,8 +79,10 @@ description captures the overall mechanism of the plug-in but we
 recommend that you take a look at the code directly.</p>
 <p>You can find the two Python files for the <code class="docutils literal notranslate"><span class="pre">ExampleSearch</span></code>
 plug-in in the following location:</p>
-<p><code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/wsgi-bin/search/plug-in/example_search_app.py</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/wsgi-bin/search/plug-in/example_search_handler.py</span></code></p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/wsgi-bin/search/plug-in/example_search_app.py</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/wsgi-bin/search/plug-in/example_search_handler.py</span></code></li>
+</ul>
 <p>In Google Earth Enterprise, a search plug-in Python-based
 framework relies on the Python Web Server Gateway Interface
 (WSGI), a Python API that acts as an interface between web servers
@@ -130,19 +132,18 @@ query. The search query is standard SQL available at
 example, the following snippet shows the SQL query used to return
 the polygon perimeters of the neighborhoods listed in the
 “san_francisco_neighborhoods” SQL table:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">example_query</span> <span class="o">=</span> <span class="p">(</span>
-  <span class="s2">&quot;SELECT $</span><span class="si">{FUNC}</span><span class="s2">(ST_Force_3DZ(the_geom)) AS the_geom,Area(the_geom),&quot;</span>
-  <span class="s2">&quot;Perimeter(the_geom),sfar_distr,nbrhood, &quot;</span>
-  <span class="s2">&quot;GeometryType(the_geom) AS geom_type &quot;</span>
-  <span class="s2">&quot;FROM san_francisco_neighborhoods &quot;</span>
-  <span class="s2">&quot;WHERE &quot;</span>
-  <span class="s2">&quot;lower(nbrhood) like </span><span class="si">%s</span><span class="s2">&quot;</span>
-  <span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>self.example_query = (
+  &quot;SELECT ${FUNC}(ST_Force_3DZ(the_geom)) AS the_geom,Area(the_geom),&quot;
+  &quot;Perimeter(the_geom),sfar_distr,nbrhood, &quot;
+  &quot;GeometryType(the_geom) AS geom_type &quot;
+  &quot;FROM san_francisco_neighborhoods &quot;
+  &quot;WHERE &quot;
+  &quot;lower(nbrhood) like %s&quot;
+  )
 </pre></div>
 </div>
-<p>As the
-<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/wsgi-bin/search/common/geconstants.py</span></code> file
-includes the queries for all the system search plug-ins provided
+<p>As the <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/wsgi-bin/search/common/geconstants.py</span></code>
+file includes the queries for all the system search plug-ins provided
 with Google Earth Enterprise, you can check out the various
 constructs to help you build the plug-in. We recommend that you
 keep the SQL query in the handler of the plug-in.</p>

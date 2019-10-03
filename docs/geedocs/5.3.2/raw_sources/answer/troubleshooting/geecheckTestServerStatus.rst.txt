@@ -34,32 +34,26 @@ Geecheck: test your GEE Server status
       Geecheck is a Python application, ``geecheck.py``, and is
       installed in the following location:
 
-      ``/opt/google/gehttpd/cgi-bin``
+      .. code-block:: none
 
-      ``geecheck.py``
-
-      ``geecheck_tests/``
-
-      ``user_tests/``
-
-      ``fusion_tests/``
-
-      ``server_tests/``
-
-      ``run_geecheck.py``
-
-      ``set_geecheck_config.py``
+         /opt/google/gehttpd/cgi-bin
+            geecheck.py
+            geecheck_tests/
+               user_tests/
+               fusion_tests/
+               server_tests/
+            run_geecheck.py
+            set_geecheck_config.py
 
       -  ``geecheck.py`` runs and displays the results from any tests
          located in the subfolders:
 
-         ``geecheck_tests/``
-
-         ``user_tests/``
-
-         ``fusion_tests/``
-
-         ``server_tests/``
+         .. code-block:: none
+         
+         geecheck_tests/
+            user_tests/
+            fusion_tests/
+            server_tests/
 
       -  Tests must follow the naming convention ``*_test.py``, for
          example, ``dns_test.py``. Test results are organized by the
@@ -115,10 +109,12 @@ Geecheck: test your GEE Server status
       Python unit tests and must be copied to one of the three test
       subfolders to be run from geecheck:
 
-      ``geecheck_tests/``
-         ``user_tests/``
-         ``fusion_tests/``
-         ``server_tests/``
+      .. code-block:: none
+      
+         geecheck_tests/
+            user_tests/
+            fusion_tests/
+            server_tests/
 
       To get some idea of how you can write your own test, you can study
       the structure of the sample test, ``sample_test.py``, provided in
@@ -172,17 +168,21 @@ Geecheck: test your GEE Server status
       #. You can move ``geecheck_tests`` but you need to maintain the
          subfolder structure for geecheck to run:
 
-         ``geecheck_tests/``
-            ``user_tests/``
-            ``fusion_tests/``
-            ``server_tests/``
+         .. code-block:: none
+         
+            geecheck_tests/
+               user_tests/
+               fusion_tests/
+               server_tests/
 
       #. ``geecheck.py`` and ``set_geecheck_config.py`` must be moved
          with ``geecheck_tests/``:
 
-         ``geecheck.py``
-         ``set_geecheck_config.py``
-         ``geecheck_tests/``
+         .. code-block:: none
+         
+            geecheck.py
+            set_geecheck_config.py
+            geecheck_tests/
 
       -  ``run_geecheck.py`` looks for test scripts to run. It should not be moved. Once test scripts have been moved, ``set_geecheck_config.py`` should be run:
 

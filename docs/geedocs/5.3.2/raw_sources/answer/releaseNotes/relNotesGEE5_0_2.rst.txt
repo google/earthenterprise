@@ -34,15 +34,14 @@ Release notes: GEE 5.0.2
 
       .. rubric:: Library updates
 
-      **OpenSSL update to address
-      a**\ `vulnerability <http://www.openssl.org/news/vulnerabilities.html>`_\ **reported
-      by the**\ `OpenSSL Project <http://www.openssl.org/>`_
+      OpenSSL update to address a `vulnerability <http://www.openssl.org/news/vulnerabilities.html>`_
+      reported by the `OpenSSL Project <http://www.openssl.org/>`_
 
       -  Updates ``openssl`` from v0.9.8y to v0.9.8za.
 
       .. rubric:: Known Issues
 
-      .. list-table:: Known Issues
+      .. list-table::
          :widths: 25 25 50
          :header-rows: 1
 
@@ -63,7 +62,7 @@ Release notes: GEE 5.0.2
 
       .. rubric:: Resolved Issues
 
-      .. list-table:: Resolved Issues
+      .. list-table::
          :widths: 25 25 50
          :header-rows: 1
 

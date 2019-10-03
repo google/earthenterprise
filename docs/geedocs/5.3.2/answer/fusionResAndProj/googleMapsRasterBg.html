@@ -96,8 +96,9 @@ starting with the NASA 500-meter base. At this resolution,
 shorelines pixelate slightly at higher zoom levels. If you want a
 finer shoreline, you can start with a higher resolution base or
 re-sample the 500-meter base with increased resolution.</p>
-<ol class="arabic simple">
-<li>Set up your computer:<ul>
+<ol class="arabic">
+<li><p class="first">Set up your computer:</p>
+<ul class="simple">
 <li>Make sure you have at least 20 GB of hard disk space.</li>
 <li>Make sure you have all the GDAL binaries. Fusion installs
 <code class="docutils literal notranslate"><span class="pre">gdal_translate</span></code> and <code class="docutils literal notranslate"><span class="pre">gdal_rasterize</span></code>, but Fusion
@@ -110,68 +111,126 @@ binaries and a few other useful tools.</li>
 with Fusion, install GIMP on your Linux machine.</li>
 </ul>
 </li>
-<li>Obtain the data:<ul>
-<li>Download the A1 file in the Nasa Blue Marble July
+<li><p class="first">Obtain the data:</p>
+<ul>
+<li><p class="first">Download the A1 file in the Nasa Blue Marble July
 data set from
 <a class="reference external" href="https://visibleearth.nasa.gov/view_cat.php?categoryID=1484">https://visibleearth.nasa.gov/view_cat.php?categoryID=1484</a>.
 You can also download the BlueMarble A1 file from an HTTP
 mirror of the BlueMarble site at the Arctic Region
 Supercomputing Center at
-<a class="reference external" href="http://mirrors.arsc.edu/nasa/world_500m/">http://mirrors.arsc.edu/nasa/world_500m/</a>.
-<strong>Note</strong>: There are eight files, named A1, A2, B1, B2, C1,
+<a class="reference external" href="http://mirrors.arsc.edu/nasa/world_500m/">http://mirrors.arsc.edu/nasa/world_500m/</a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There are eight files, named A1, A2, B1, B2, C1,
 C2, D1, and D2. Download the A1 file only. The A1 tile
 represents the top left corner of the globe, D2 is the
 bottom right, and so on. You will generate the remaining seven
-tiles later.</li>
-<li>Georeference the A1 file data:
-<code class="docutils literal notranslate"><span class="pre">gdal_translate</span> <span class="pre">-a_srs</span> <span class="pre">WGS84</span> <span class="pre">-a_ullr</span> <span class="pre">-180</span> <span class="pre">90</span> <span class="pre">-90</span> <span class="pre">0</span> <span class="pre">world.topo.bathy.200407</span> <span class="pre">.3x21600x21600.A1.png</span> <span class="pre">world.topo.bathy.200407.3x21600x21600.A1.tif</span></code></li>
-<li>Download the shoreline dataset from:
+tiles later.</p>
+</div>
+</li>
+<li><p class="first">Georeference the A1 file data:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gdal_translate -a_srs WGS84 -a_ullr -180 90 -90 0
+world.topo.bathy.200407 .3x21600x21600.A1.png
+world.topo.bathy.200407.3x21600x21600.A1.tif
+</pre></div>
+</div>
+</li>
+<li><p class="first">Download the shoreline dataset from:
 <a class="reference external" href="http://www.ngdc.noaa.gov/mgg/shorelines/gshhs.html">http://www.ngdc.noaa.gov/mgg/shorelines/gshhs.html</a>. This
 dataset is in a single <code class="docutils literal notranslate"><span class="pre">.zip</span></code> file that expands into
 several directories named <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">l</span></code>, <code class="docutils literal notranslate"><span class="pre">i</span></code>, <code class="docutils literal notranslate"><span class="pre">h</span></code>, and
 <code class="docutils literal notranslate"><span class="pre">f</span></code>. The lowest resolution is in the <code class="docutils literal notranslate"><span class="pre">c</span></code> directory and
 the highest is in the <code class="docutils literal notranslate"><span class="pre">f</span></code> directory. There are four
-shapefiles in each directory:
-L1 = shorelines
+shapefiles in each directory:</p>
+<p>L1 = shorelines
 L2 = lakes and rivers
 L3 = islands in lakes
-L4 = ponds within islands in lakes</li>
+L4 = ponds within islands in lakes</p>
+</li>
 </ul>
 </li>
-<li>Create the blue background tiles:<ul>
-<li>Create the A1 tile for the ocean in the right size and in
+<li><p class="first">Create the blue background tiles:</p>
+<ul>
+<li><p class="first">Create the A1 tile for the ocean in the right size and in
 the Google Maps shade of blue. The NASA <code class="docutils literal notranslate"><span class="pre">.tif</span></code> geospatial
 image file is already the right size, so you can just edit
 its color layers to create a tile with the Google Maps RGB
-value of 153, 179, 204:
-<code class="docutils literal notranslate"><span class="pre">gdal_translate</span> <span class="pre">-b</span> <span class="pre">1</span> <span class="pre">-scale</span> <span class="pre">0</span> <span class="pre">255</span> <span class="pre">153</span> <span class="pre">153</span> <span class="pre">world-topo-bathy-200407-3x21600x21600-A1.tif</span> <span class="pre">red.tif</span> <span class="pre">gdal_translate</span> <span class="pre">-b</span> <span class="pre">1</span> <span class="pre">-scale</span> <span class="pre">0</span> <span class="pre">255</span> <span class="pre">179</span> <span class="pre">179</span> <span class="pre">world-topo-bathy-200407-3x21600x21600-A1.tif</span> <span class="pre">green.tif</span> <span class="pre">gdal_translate</span> <span class="pre">-b</span> <span class="pre">1</span> <span class="pre">-scale</span> <span class="pre">0</span> <span class="pre">255</span> <span class="pre">204</span> <span class="pre">204</span> <span class="pre">world-topo-bathy-200407-3x21600x21600-A1.tif</span> <span class="pre">blue.tif</span></code></li>
-<li>Merge the layers to form a 3-band <code class="docutils literal notranslate"><span class="pre">.tif</span></code> file called
-<code class="docutils literal notranslate"><span class="pre">GoogleBlueA1.tif:</span></code>
-<code class="docutils literal notranslate"><span class="pre">/usr/local/FWTools-2.0.6/bin_safe/gdal_merge.py</span> <span class="pre">-o</span> <span class="pre">GoogleBlueA1.tif</span> <span class="pre">-separate</span> <span class="pre">red.tif</span> <span class="pre">green.tif</span> <span class="pre">blue.tif</span></code></li>
-<li>Make a copy of this blue tile to use later:
-<code class="docutils literal notranslate"><span class="pre">cp</span> <span class="pre">GoogleBlueA1.tif</span> <span class="pre">GoogleBlue.tif</span></code></li>
-<li>Create the remaining seven blue tiles by using
+value of 153, 179, 204:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gdal_translate -b 1 -scale 0 255 153 153 world-topo-bathy-200407-3x21600x21600-A1.tif red.tif
+gdal_translate -b 1 -scale 0 255 179 179 world-topo-bathy-200407-3x21600x21600-A1.tif green.tif
+gdal_translate -b 1 -scale 0 255 204 204 world-topo-bathy-200407-3x21600x21600-A1.tif blue.tif
+</pre></div>
+</div>
+</li>
+<li><p class="first">Merge the layers to form a 3-band <code class="docutils literal notranslate"><span class="pre">.tif</span></code> file called
+<code class="docutils literal notranslate"><span class="pre">GoogleBlueA1.tif:</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/usr/local/FWTools-2.0.6/bin_safe/gdal_merge.py -o
+GoogleBlueA1.tif -separate red.tif green.tif blue.tif
+</pre></div>
+</div>
+</li>
+<li><p class="first">Make a copy of this blue tile to use later:</p>
+<p><code class="docutils literal notranslate"><span class="pre">cp</span> <span class="pre">GoogleBlueA1.tif</span> <span class="pre">GoogleBlue.tif</span></code></p>
+</li>
+<li><p class="first">Create the remaining seven blue tiles by using
 <code class="docutils literal notranslate"><span class="pre">gdal_translate</span></code> and inserting the appropriate corner
-coordinates:
-<code class="docutils literal notranslate"><span class="pre">gdal_translate</span> <span class="pre">-a_ullr</span> <span class="pre">-180</span>&#160; <span class="pre">0</span> <span class="pre">-90</span> <span class="pre">-90</span> <span class="pre">GoogleBlue.tif</span> <span class="pre">GoogleBlueA2.tif</span> <span class="pre">gdal_translate</span> <span class="pre">-a_ullr</span>&#160; <span class="pre">-90</span> <span class="pre">90</span>&#160;&#160; <span class="pre">0</span>&#160;&#160; <span class="pre">0</span> <span class="pre">GoogleBlue.tif</span> <span class="pre">GoogleBlueB1.tif</span> <span class="pre">gdal_translate</span> <span class="pre">-a_ullr</span>&#160; <span class="pre">-90</span>&#160; <span class="pre">0</span>&#160;&#160; <span class="pre">0</span> <span class="pre">-90</span> <span class="pre">GoogleBlue.tif</span> <span class="pre">GoogleBlueB2.tif</span> <span class="pre">gdal_translate</span> <span class="pre">-a_ullr</span>&#160;&#160;&#160; <span class="pre">0</span> <span class="pre">90</span>&#160; <span class="pre">90</span>&#160;&#160; <span class="pre">0</span> <span class="pre">GoogleBlue.tif</span> <span class="pre">GoogleBlueC1.tif</span> <span class="pre">gdal_translate</span> <span class="pre">-a_ullr</span>&#160;&#160;&#160; <span class="pre">0</span>&#160; <span class="pre">0</span>&#160; <span class="pre">90</span> <span class="pre">-90</span> <span class="pre">GoogleBlue.tif</span> <span class="pre">GoogleBlueC2.tif</span> <span class="pre">gdal_translate</span> <span class="pre">-a_ullr</span>&#160;&#160; <span class="pre">90</span> <span class="pre">90</span> <span class="pre">180</span>&#160;&#160; <span class="pre">0</span> <span class="pre">GoogleBlue.tif</span> <span class="pre">GoogleBlueD1.tif</span> <span class="pre">gdal_translate</span> <span class="pre">-a_ullr</span>&#160;&#160; <span class="pre">90</span>&#160; <span class="pre">0</span> <span class="pre">180</span> <span class="pre">-90</span> <span class="pre">GoogleBlue.tif</span> <span class="pre">GoogleBlueD2.tif</span></code></li>
+coordinates:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gdal_translate -a_ullr -180  0 -90 -90 GoogleBlue.tif GoogleBlueA2.tif
+gdal_translate -a_ullr  -90 90   0   0 GoogleBlue.tif GoogleBlueB1.tif
+gdal_translate -a_ullr  -90  0   0 -90 GoogleBlue.tif GoogleBlueB2.tif
+gdal_translate -a_ullr    0 90  90   0 GoogleBlue.tif GoogleBlueC1.tif
+gdal_translate -a_ullr    0  0  90 -90 GoogleBlue.tif GoogleBlueC2.tif
+gdal_translate -a_ullr   90 90 180   0 GoogleBlue.tif GoogleBlueD1.tif
+gdal_translate -a_ullr   90  0 180 -90 GoogleBlue.tif GoogleBlueD2.tif
+</pre></div>
+</div>
+</li>
 </ul>
 </li>
-<li>Add the vector data:<ul>
-<li>The shoreline data creates the continents, and the lake data
+<li><p class="first">Add the vector data:</p>
+<ul>
+<li><p class="first">The shoreline data creates the continents, and the lake data
 creates the lakes within the continents. These instructions
 use the <code class="docutils literal notranslate"><span class="pre">h</span></code> level of resolution from the shoreline data set
 because the blue marble is only in 500-meter resolution. If
 you re-sample the blue marble to a higher resolution, you
-might want to use one of the higher-resolution shorelines.
-The L1 layer for shorelines uses the RGB value for Google
+might want to use one of the higher-resolution shorelines.</p>
+<p>The L1 layer for shorelines uses the RGB value for Google
 Maps land areas, which is 242, 239, 233. The L2 layer for the
-lakes uses the same RGB value as the ocean (153, 179, 204).
-Burn the shorelines and lakes into the blue tiles one at a
-time:
-<code class="docutils literal notranslate"><span class="pre">gdal_rasterize</span> <span class="pre">-b</span> <span class="pre">1</span> <span class="pre">-burn</span> <span class="pre">242</span> <span class="pre">-b</span> <span class="pre">2</span> <span class="pre">-burn</span> <span class="pre">239</span> <span class="pre">-b</span> <span class="pre">3</span> <span class="pre">-burn</span> <span class="pre">233</span> <span class="pre">-l</span> <span class="pre">GSHHS_h_L1</span> <span class="pre">GSHHS_h_L1.shp</span> <span class="pre">GoogleBlueA1.tif</span> <span class="pre">gdal_rasterize</span> <span class="pre">-b</span> <span class="pre">1</span> <span class="pre">-burn</span> <span class="pre">153</span> <span class="pre">-b</span> <span class="pre">2</span> <span class="pre">-burn</span> <span class="pre">179</span> <span class="pre">-b</span> <span class="pre">3</span> <span class="pre">-burn</span> <span class="pre">204</span> <span class="pre">-l</span> <span class="pre">GSHHS_h_L2</span> <span class="pre">GSHHS_h_L2.shp</span> <span class="pre">GoogleBlueA1.tif</span>&#160; <span class="pre">gdal_rasterize</span> <span class="pre">-b</span> <span class="pre">1</span> <span class="pre">-burn</span> <span class="pre">242</span> <span class="pre">-b</span> <span class="pre">2</span> <span class="pre">-burn</span> <span class="pre">239</span> <span class="pre">-b</span> <span class="pre">3</span> <span class="pre">-burn</span> <span class="pre">233</span> <span class="pre">-l</span> <span class="pre">GSHHS_h_L1</span> <span class="pre">GSHHS_h_L1.shp</span> <span class="pre">GoogleBlueB1.tif</span> <span class="pre">gdal_rasterize</span> <span class="pre">-b</span> <span class="pre">1</span> <span class="pre">-burn</span> <span class="pre">153</span> <span class="pre">-b</span> <span class="pre">2</span> <span class="pre">-burn</span> <span class="pre">179</span> <span class="pre">-b</span> <span class="pre">3</span> <span class="pre">-burn</span> <span class="pre">204</span> <span class="pre">-l</span> <span class="pre">GSHHS_h_L2</span> <span class="pre">GSHHS_h_L2.shp</span> <span class="pre">GoogleBlueB1.tif</span>&#160; <span class="pre">gdal_rasterize</span> <span class="pre">-b</span> <span class="pre">1</span> <span class="pre">-burn</span> <span class="pre">242</span> <span class="pre">-b</span> <span class="pre">2</span> <span class="pre">-burn</span> <span class="pre">239</span> <span class="pre">-b</span> <span class="pre">3</span> <span class="pre">-burn</span> <span class="pre">233</span> <span class="pre">-l</span> <span class="pre">GSHHS_h_L1</span> <span class="pre">GSHHS_h_L1.shp</span> <span class="pre">GoogleBlueC1.tif</span> <span class="pre">gdal_rasterize</span> <span class="pre">-b</span> <span class="pre">1</span> <span class="pre">-burn</span> <span class="pre">153</span> <span class="pre">-b</span> <span class="pre">2</span> <span class="pre">-burn</span> <span class="pre">179</span> <span class="pre">-b</span> <span class="pre">3</span> <span class="pre">-burn</span> <span class="pre">204</span> <span class="pre">-l</span> <span class="pre">GSHHS_h_L2</span> <span class="pre">GSHHS_h_L2.shp</span> <span class="pre">GoogleBlueC1.tif</span>&#160; <span class="pre">gdal_rasterize</span> <span class="pre">-b</span> <span class="pre">1</span> <span class="pre">-burn</span> <span class="pre">242</span> <span class="pre">-b</span> <span class="pre">2</span> <span class="pre">-burn</span> <span class="pre">239</span> <span class="pre">-b</span> <span class="pre">3</span> <span class="pre">-burn</span> <span class="pre">233</span> <span class="pre">-l</span> <span class="pre">GSHHS_h_L1</span> <span class="pre">GSHHS_h_L1.shp</span> <span class="pre">GoogleBlueD1.tif</span> <span class="pre">gdal_rasterize</span> <span class="pre">-b</span> <span class="pre">1</span> <span class="pre">-burn</span> <span class="pre">153</span> <span class="pre">-b</span> <span class="pre">2</span> <span class="pre">-burn</span> <span class="pre">179</span> <span class="pre">-b</span> <span class="pre">3</span> <span class="pre">-burn</span> <span class="pre">204</span> <span class="pre">-l</span> <span class="pre">GSHHS_h_L2</span> <span class="pre">GSHHS_h_L2.shp</span> <span class="pre">GoogleBlueD1.tif</span>&#160; <span class="pre">gdal_rasterize</span> <span class="pre">-b</span> <span class="pre">1</span> <span class="pre">-burn</span> <span class="pre">242</span> <span class="pre">-b</span> <span class="pre">2</span> <span class="pre">-burn</span> <span class="pre">239</span> <span class="pre">-b</span> <span class="pre">3</span> <span class="pre">-burn</span> <span class="pre">233</span> <span class="pre">-l</span> <span class="pre">GSHHS_h_L1</span> <span class="pre">GSHHS_h_L1.shp</span> <span class="pre">GoogleBlueA2.tif</span> <span class="pre">gdal_rasterize</span> <span class="pre">-b</span> <span class="pre">1</span> <span class="pre">-burn</span> <span class="pre">153</span> <span class="pre">-b</span> <span class="pre">2</span> <span class="pre">-burn</span> <span class="pre">179</span> <span class="pre">-b</span> <span class="pre">3</span> <span class="pre">-burn</span> <span class="pre">204</span> <span class="pre">-l</span> <span class="pre">GSHHS_h_L2</span> <span class="pre">GSHHS_h_L2.shp</span> <span class="pre">GoogleBlueA2.tif</span>&#160; <span class="pre">gdal_rasterize</span> <span class="pre">-b</span> <span class="pre">1</span> <span class="pre">-burn</span> <span class="pre">242</span> <span class="pre">-b</span> <span class="pre">2</span> <span class="pre">-burn</span> <span class="pre">239</span> <span class="pre">-b</span> <span class="pre">3</span> <span class="pre">-burn</span> <span class="pre">233</span> <span class="pre">-l</span> <span class="pre">GSHHS_h_L1</span> <span class="pre">GSHHS_h_L1.shp</span> <span class="pre">GoogleBlueB2.tif</span> <span class="pre">gdal_rasterize</span> <span class="pre">-b</span> <span class="pre">1</span> <span class="pre">-burn</span> <span class="pre">153</span> <span class="pre">-b</span> <span class="pre">2</span> <span class="pre">-burn</span> <span class="pre">179</span> <span class="pre">-b</span> <span class="pre">3</span> <span class="pre">-burn</span> <span class="pre">204</span> <span class="pre">-l</span> <span class="pre">GSHHS_h_L2</span> <span class="pre">GSHHS_h_L2.shp</span> <span class="pre">GoogleBlueB2.tif</span>&#160; <span class="pre">gdal_rasterize</span> <span class="pre">-b</span> <span class="pre">1</span> <span class="pre">-burn</span> <span class="pre">242</span> <span class="pre">-b</span> <span class="pre">2</span> <span class="pre">-burn</span> <span class="pre">239</span> <span class="pre">-b</span> <span class="pre">3</span> <span class="pre">-burn</span> <span class="pre">233</span> <span class="pre">-l</span> <span class="pre">GSHHS_h_L1</span> <span class="pre">GSHHS_h_L1.shp</span> <span class="pre">GoogleBlueC2.tif</span> <span class="pre">gdal_rasterize</span> <span class="pre">-b</span> <span class="pre">1</span> <span class="pre">-burn</span> <span class="pre">153</span> <span class="pre">-b</span> <span class="pre">2</span> <span class="pre">-burn</span> <span class="pre">179</span> <span class="pre">-b</span> <span class="pre">3</span> <span class="pre">-burn</span> <span class="pre">204</span> <span class="pre">-l</span> <span class="pre">GSHHS_h_L2</span> <span class="pre">GSHHS_h_L2.shp</span> <span class="pre">GoogleBlueC2.tif</span>&#160; <span class="pre">gdal_rasterize</span> <span class="pre">-b</span> <span class="pre">1</span> <span class="pre">-burn</span> <span class="pre">242</span> <span class="pre">-b</span> <span class="pre">2</span> <span class="pre">-burn</span> <span class="pre">239</span> <span class="pre">-b</span> <span class="pre">3</span> <span class="pre">-burn</span> <span class="pre">233</span> <span class="pre">-l</span> <span class="pre">GSHHS_h_L1</span> <span class="pre">GSHHS_h_L1.shp</span> <span class="pre">GoogleBlueD2.tif</span> <span class="pre">gdal_rasterize</span> <span class="pre">-b</span> <span class="pre">1</span> <span class="pre">-burn</span> <span class="pre">153</span> <span class="pre">-b</span> <span class="pre">2</span> <span class="pre">-burn</span> <span class="pre">179</span> <span class="pre">-b</span> <span class="pre">3</span> <span class="pre">-burn</span> <span class="pre">204</span> <span class="pre">-l</span> <span class="pre">GSHHS_h_L2</span> <span class="pre">GSHHS_h_L2.shp</span> <span class="pre">GoogleBlueD2.tif</span></code></li>
+lakes uses the same RGB value as the ocean (153, 179, 204).</p>
+<p>Burn the shorelines and lakes into the blue tiles one at a
+time:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueA1.tif
+gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueA1.tif
+
+gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueB1.tif
+gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueB1.tif
+
+gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueC1.tif
+gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueC1.tif
+
+gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueD1.tif
+gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueD1.tif
+
+gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueA2.tif
+gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueA2.tif
+
+gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueB2.tif
+gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueB2.tif
+
+gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueC2.tif
+gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueC2.tif
+
+gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueD2.tif
+gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueD2.tif
+</pre></div>
+</div>
+</li>
 </ul>
 </li>
-<li>Create the resource and project:<ul>
+<li><p class="first">Create the resource and project:</p>
+<ul class="simple">
 <li>Create a single imagery resource from these eight tiles,
 then create an imagery project that contains this resource
 and nothing else.</li>

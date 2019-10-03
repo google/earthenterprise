@@ -47,85 +47,85 @@ Configuring Display Rules for Point Data
 
          |CA_POIs Resource|
 
-      Right-click **CA_POIs** and select **Configure Display Rules**
-      from the context menu.
-      The Display Rules dialog appears with the Feature tab in the
-      foreground and the **default select all** rule highlighted.
+      #. Right-click **CA_POIs** and select **Configure Display Rules**
+         from the context menu.
+         The Display Rules dialog appears with the Feature tab in the
+         foreground and the **default select all** rule highlighted.
 
-      Specify the geometry characteristics of the POIs:
+      #. Specify the geometry characteristics of the POIs:
 
-      a. For **Draw Features As**, select **Points**.
-      b. For **Simplification Method**, select **Representative Subset Per
-         Tile**.
-      c. For **Choose**, accept the default, **50**\ % points.
-      d. For **Min Points**, enter **50**.
-      e. For **Max Points**, enter **200**.
-      f. Check the box next to **Suppress Duplicate Points**.
-      g. Under **Elevation/Height**, set Mode to **Clamp to Ground.**
-      h. On the right side of the dialog, check the box next to **Draw Label**.
-      i. For **Visibility**, accept the default range, **5** through **24**.
-      j. Do not make any changes under **Label Properties**.
+         a. For **Draw Features As**, select **Points**.
+         b. For **Simplification Method**, select **Representative Subset Per
+            Tile**.
+         c. For **Choose**, accept the default, **50**\ % points.
+         d. For **Min Points**, enter **50**.
+         e. For **Max Points**, enter **200**.
+         f. Check the box next to **Suppress Duplicate Points**.
+         g. Under **Elevation/Height**, set Mode to **Clamp to Ground.**
+         h. On the right side of the dialog, check the box next to **Draw Label**.
+         i. For **Visibility**, accept the default range, **5** through **24**.
+         j. Do not make any changes under **Label Properties**.
 
-      This area allows you to specify the content and appearance of a
-      text label for each POI. However, there are so many POIs in
-      California that the view in Google Earth EC would be too crowded.
+            This area allows you to specify the content and appearance of a
+            text label for each POI. However, there are so many POIs in
+            California that the view in Google Earth EC would be too crowded.
 
       #. Check the box next to **Draw Icon** and then:
 
-      a. Click the icon pair. The Icons dialog appears.
+         a. Click the icon pair. The Icons dialog appears.
 
-         |Icons Dialog|
+            |Icons Dialog|
 
-      b. Scroll down, if necessary, and select **blue_star**, and click
-         **OK**.
+         b. Scroll down, if necessary, and select **blue_star**, and click
+            **OK**.
 
-         A yellow star appears next to **Highlight**, and a blue star
-         appears next to **Normal**. The result of this setting is that
-         Google Earth EC displays a blue star for each POI, and when you
-         mouse over the star (highlight it), it turns yellow.
+            A yellow star appears next to **Highlight**, and a blue star
+            appears next to **Normal**. The result of this setting is that
+            Google Earth EC displays a blue star for each POI, and when you
+            mouse over the star (highlight it), it turns yellow.
 
-      c. For both **Highlight** and **Normal**, accept the default color, white.
-      d. For **Highlight**, accept the default scale, **1**.
-      e. For **Normal**, change the scale to **0.89**.
+         c. For both **Highlight** and **Normal**, accept the default color, white.
+         d. For **Highlight**, accept the default scale, **1**.
+         e. For **Normal**, change the scale to **0.89**.
 
-         The result of these settings is that when you mouse over a
-         star, Google Earth EC displays the yellow (highlighted) star a
-         little larger than the blue star.
+            The result of these settings is that when you mouse over a
+            star, Google Earth EC displays the yellow (highlighted) star a
+            little larger than the blue star.
 
-      In the **Balloon** section, select **Text**, and then click the empty
-      text field. The Label Format dialog appears.
+      #. In the **Balloon** section, select **Text**, and then click the empty
+         text field. The Label Format dialog appears.
 
-      a. Select **COUNTY** from the **Insert Field** drop-down list.
+         a. Select **COUNTY** from the **Insert Field** drop-down list.
 
-         «\ **COUNTY**\ » appears in the text box under **Popup Text**.
+            «\ **COUNTY**\ » appears in the text box under **Popup Text**.
 
-         .. note::
+            .. note::
 
-            You can use some basic HTML tags to format the
-            Label text, if desired.
+               You can use some basic HTML tags to format the
+               Label text, if desired.
 
-      b. To the left of «\ **COUNTY**\ » enter **<b>**.
-      c. To the right of «\ **COUNTY**\ » enter **</b><br/><br/>**.
-      d. Press **Enter**. Adding this HTML code formats the name of the county
-         as bold, followed by two line breaks to separate it from the text that
-         follows (next step).
+         b. To the left of «\ **COUNTY**\ » enter **<b>**.
+         c. To the right of «\ **COUNTY**\ » enter **</b><br/><br/>**.
+         d. Press **Enter**. Adding this HTML code formats the name of the county
+            as bold, followed by two line breaks to separate it from the text that
+            follows (next step).
 
       #. Select **NAME** from the **Insert Field** drop-down list.
          «\ **NAME**\ » appears on the next line of the text box.
 
-      a. To the right of «\ **NAME**\ » enter **<br/><br/>**.
-      b. Press **Enter**.
+         a. To the right of «\ **NAME**\ » enter **<br/><br/>**.
+         b. Press **Enter**.
 
       #. On the next line, enter **Latitude:**, and then select
-      **LATITUDE** from the **Insert Field** drop-down menu.
+         **LATITUDE** from the **Insert Field** drop-down menu.
 
-      a. To the right of «\ **LATITUDE**\ » enter **<br/><br/>**.
-      b. Press **Enter**.
+         a. To the right of «\ **LATITUDE**\ » enter **<br/><br/>**.
+         b. Press **Enter**.
 
       #. On the next line, enter **Longitude:** , and then select
-      **LONGITUDE** from the **Insert Field** drop-down menu.
+         **LONGITUDE** from the **Insert Field** drop-down menu.
 
-      |image5|
+         |image5|
 
       #. Click the **OK** button.
       #. For **Style**, select **Default** from the drop-down list.

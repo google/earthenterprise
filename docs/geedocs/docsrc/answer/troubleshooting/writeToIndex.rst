@@ -30,11 +30,13 @@ Write to index
 
       #. Switch to root and enter:
 
-         ``/etc/init.d/gefusion stop``
-         ``/etc/init.d/geserver stop``
-         ``sleep 5``
-         ``killall -9 gesystemmanager``
-         ``killall -9 geresourceprovider``
+         .. code-block:: none
+         
+            /etc/init.d/gefusion stop
+            /etc/init.d/geserver stop
+            sleep 5
+            killall -9 gesystemmanager
+            killall -9 geresourceprovider
 
       #. Enter:
 
@@ -43,8 +45,10 @@ Write to index
       #. Look for and stop any Fusion processes in the output.
       #. Make sure that you have enough free disk space, and then enter:
 
-         ``/etc/init.d/gefusion start``
-         ``/etc/init.d/geserver start``
+         .. code-block:: none
+         
+            /etc/init.d/gefusion start
+            /etc/init.d/geserver start
 
       #. Cancel the build, and then resume it using the ``gecancel`` and
          ``geresume`` commands.
