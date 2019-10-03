@@ -67,16 +67,16 @@ new PostgreSQL version used by Open GEE 5.3.0.
 
 -[ Resolved Issues ]-
 
-Resolved Issues        Number  Description  Resolution  127  Incorrect
-error messages from Fusion installer.  Stop incorrect error from
-showing when re-installing with-uflag.  200  stage_install fails on
-the tutorial files when /home and /tmp are on different file systems.
-Files are linked in /tmp using symbolic links back to original
-locations.  279  Server upgrade resets the Admin Console password.
-When the GEE server is upgraded, either through the install_server.sh
-script or the RPMs, the Admin Console password will be preserved if
-the password file is found at the expected location.  799  The GEE
-Portable Server does not return valid JSON when queried with
+      Number  Description  Resolution  127  Incorrect error messages
+from Fusion installer.  Stop incorrect error from showing when re-
+installing with-uflag.  200  stage_install fails on the tutorial files
+when /home and /tmp are on different file systems.  Files are linked
+in /tmp using symbolic links back to original locations.  279  Server
+upgrade resets the Admin Console password.  When the GEE server is
+upgraded, either through the install_server.sh script or the RPMs, the
+Admin Console password will be preserved if the password file is found
+at the expected location.  799  The GEE Portable Server does not
+return valid JSON when queried with
 http://<server>/<map>/query?request=Json.  Added a v parameter to the
 query; when its value is 2, the GEE Portable Server will return proper
 JSON. Currently, it defaults to 1 if not specified.  1093  The
@@ -136,18 +136,18 @@ Fixed XML parsing in common.sh that could return incorrect values.
 
 -[ Known Issues ]-
 
-Known Issues        Number  Description  Workaround  4  Google basemap
-fails to load in 2D Mercator Maps  Obtain a valid Google Maps API key
-and include it in /opt/google/gehttpd/htdocs/maps/maps_google.html.  8
-Ensure GEE Portable Cutter job completes  No current work around.  9
-Improve FileUnpacker handling of invalid files  No current work
-around.  20  Simplify build process for portable builds on MacOS
-Building and running Portable Server on MacOS should be possible with
-minimal changes.  34  SCons build creates temporary directories named
-“0”  No current work around.  126  The Fusion installer creates a
-backup on the first run  The created backup can be deleted.  190
-Hostname mismatch check in installers doesn't work as expected  No
-current work around.  193  Updated docs are not copied if the
+      Number  Description  Workaround  4  Google basemap fails to load
+in 2D Mercator Maps  Obtain a valid Google Maps API key and include it
+in /opt/google/gehttpd/htdocs/maps/maps_google.html.  8  Ensure GEE
+Portable Cutter job completes  No current work around.  9  Improve
+FileUnpacker handling of invalid files  No current work around.  20
+Simplify build process for portable builds on MacOS  Building and
+running Portable Server on MacOS should be possible with minimal
+changes.  34  SCons build creates temporary directories named “0”  No
+current work around.  126  The Fusion installer creates a backup on
+the first run  The created backup can be deleted.  190  Hostname
+mismatch check in installers doesn't work as expected  No current work
+around.  193  Updated docs are not copied if the
 /tmp/fusion_os_install directory already exists  Delete
 /tmp/fusion_os_install at the beginning of the stage_install build
 process.  201  Some tiles are displayed incorrectly in the Enterprise

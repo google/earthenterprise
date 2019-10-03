@@ -60,8 +60,7 @@ Create composite globes and maps
       New ``.glc`` files are added to the default
       ``/opt/google/gehttpd/htdocs/cutter/globes`` directory. If you
       want to change the location of your portable files directory, see
-      :ref:`Serving a globe or map from GEE
-      Server <Serve_Globe_Map_GEE_Server>`.
+      :ref:`Serving a globe or map from GEE Server <Serve_Globe_Map_GEE_Server>`.
 
       If you want to extract the 2D or 3D layers from a composite .glc
       file, use the Disassembly tool, specifying a target directory
@@ -93,7 +92,7 @@ Create composite globes and maps
       #. Enter a name for the offline map or globe.
 
          The name defines the file name for your composite map or globe.
-         Composite maps and globes are created as .``glc`` files. Spaces,
+         Composite maps and globes are created as ``.glc`` files. Spaces,
          slashes, and double dots (..) will be converted to underscores
          in the saved map or globe name.
 
@@ -128,14 +127,14 @@ Create composite globes and maps
          drop-down list and choose a portable globe, then click **Yes** to use
          the imagery and terrain data for the selected base globe.
 
-      |GEE Assembly tool base globe options|
+         |GEE Assembly tool base globe options|
 
-      If your base globe is a portable file created using Portable
-      Server 4.4 or earlier, click **Yes** next to **Old (4.4) globe**.
-      This option only affects the imagery layer within older ``.glb``
-      files.
+         If your base globe is a portable file created using Portable
+         Server 4.4 or earlier, click **Yes** next to **Old (4.4) globe**.
+         This option only affects the imagery layer within older ``.glb``
+         files.
 
-      Click **Assemble Glc**.
+      #. Click **Assemble Glc**.
 
       .. _Extracting_Layers_Composite_Map_Globe:
       .. rubric:: Extracting layers from a composite map or globe

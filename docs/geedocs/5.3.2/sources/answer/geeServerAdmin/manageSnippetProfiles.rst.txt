@@ -38,12 +38,11 @@ Tip: Google Earth EC recognizes only the settings made by the first
   database that you connect to in Google Earth EC. This applies when
   you are connecting to multiple databases.
 
-Caution:
-
- If you are working with multiple GEE Server users on multiple
-workstations, it is important to remember that snippet profiles can be
-accessed by all users at the same time. Be sure to coordinate with any
-other users to avoid overwriting snippet profile settings.
+Warning: If you are working with multiple GEE Server users on
+  multiple workstations, it is important to remember that snippet
+  profiles can be accessed by all users at the same time. Be sure to
+  coordinate with any other users to avoid overwriting snippet profile
+  settings.
 
 Creating a snippet profile
 
@@ -63,8 +62,10 @@ and mydomainname with your server and domain.
 
 Sign in with the default credentials or the username and password
 assigned to you:  Default username: geapacheuser  Default password:
-geeadmin  If you do not know your username and password, contact your
-Google Earth Enterprise Server System Administrator.
+geeadmin
+
+   Note: If you do not know your username and password, contact your
+     Google Earth Enterprise Server System Administrator.
 
 Click Snippet profiles to display your snippet profiles.
 
@@ -107,17 +108,16 @@ snippets.
 
 -[ Snippet Settings ]-
 
-Snippet Settings          Snippet Name  Purpose  Syntax  Notes
-bbs_server_info  Specify BBS Server info.  base_url — URL of the
-server, including protocol, domain name, and port. file_submit_path —
-Path on server where files can be submitted. name — Name that will be
-displayed in context menu to user. Must be translated.
-post_wizard_path — Path on server where wizard can be found
-client_options  Disable disk caching in Google Earth EC.
-disable_disk_cache  Default value is False  cobrand_info  Add custom
-logo to Google Earth EC display window.  logo_url — URL of image to
-use as logo screen_size — Positive value <=1 specifies scale with
-screen. tie_point — Controls the reference point in the overlay
+        Snippet Name  Purpose  Syntax  Notes  bbs_server_info  Specify
+BBS Server info.  base_url — URL of the server, including protocol,
+domain name, and port. file_submit_path — Path on server where files
+can be submitted. name — Name that will be displayed in context menu
+to user. Must be translated. post_wizard_path — Path on server where
+wizard can be found    client_options  Disable disk caching in Google
+Earth EC.  disable_disk_cache  Default value is False  cobrand_info
+Add custom logo to Google Earth EC display window.  logo_url — URL of
+image to use as logo screen_size — Positive value <=1 specifies scale
+with screen. tie_point — Controls the reference point in the overlay
 x_coord.is_relative — If True, the coordinate is relative to the
 screen x_coord.value — Coordinate value Interpretation depends on
 value set in x_coord.is_relative. y_coord.is_relative — If True, the

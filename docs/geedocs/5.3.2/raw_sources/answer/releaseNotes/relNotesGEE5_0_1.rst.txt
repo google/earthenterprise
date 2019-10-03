@@ -57,7 +57,9 @@ Release notes: GEE 5.0.1
 
          -  Updated openssl from v0.9.8r to v0.9.8y.
 
-      .. list-table:: Known Issues
+      .. rubric:: Known Issues
+
+      .. list-table::
          :widths: 25 25 50
          :header-rows: 1
 
@@ -65,11 +67,17 @@ Release notes: GEE 5.0.1
            - Description
            - Workaround
          * - 12239387
-           - For databases that include historical imagery, if you turn on **Historical imagery** in Google Earth EC and move the time slider to the current time, the most recent database in your historical imagery does not display correctly.
-           - When you move the time slider to view the current database, turn off **Historical imagery** to display the database correctly.
+           - For databases that include historical imagery, if you turn on **Historical imagery** in Google Earth EC and
+             move the time slider to the current time, the most recent database in your historical imagery does not
+             display correctly.
+           - When you move the time slider to view the current database, turn off **Historical imagery**
+             to display the database correctly.
          * - 14463855
-           - In GEE Server, when publishing a database or portable, the publish point you specify is now case-*insensitive*. Upper and lower case are not differentiated.
-           - Specify unique publish point path names. If you have already specified publish points that are distinguished only by case, such as "Google" and "google," **Unpublish**, specify unique publish points, then **Publish** again.
+           - In GEE Server, when publishing a database or portable, the publish point you specify is now case-*insensitive*.
+             Upper and lower case are not differentiated.
+           - Specify unique publish point path names. If you have already specified publish points that are
+             distinguished only by case, such as "Google" and "google," **Unpublish**, specify unique publish points,
+             then **Publish** again.
          * - 15221527
            - In GEE Server, when cutting a globe or map, the **Cancel** operation does not stop all associated processes.
            - Before you begin the cutting process, create a *kill* script as follows:
@@ -102,7 +110,7 @@ Release notes: GEE 5.0.1
 
       .. rubric:: Resolved Issues
 
-      .. list-table:: Resolved Issues
+      .. list-table::
          :widths: 25 25 50
          :header-rows: 1
 

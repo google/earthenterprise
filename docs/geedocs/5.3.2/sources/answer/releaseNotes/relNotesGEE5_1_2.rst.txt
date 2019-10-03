@@ -28,45 +28,45 @@ Enterprise Client (EC) version 7.1.5 and Google Earth Plug-in versions
 
 -[ Library Updates ]-
 
-Library Updates      Library  Updated Version  Google Maps JS API V3
-3.20  Apache httpd  2.2.31  OpenSSL  0.9.8zg  libcurl  7.45
+    Library  Updated Version  Google Maps JS API V3  3.20  Apache
+httpd  2.2.31  OpenSSL  0.9.8zg  libcurl  7.45
 
 -[ Resolved Issues ]-
 
-Resolved Issues        Number  Description  Resolution  19946027
-Support additional search option.  A new SearchGoogle search tab is
-available for use with 3D databases which queries Google's location
-database. Search sugestions are also offered as you type.  20225923,
-19871110, 11179114  gesystemmanager crashes when processing very large
-projects  Fixed in Fusion: Optimized management of listeners of
-CombinedRPAsset versions in asset root. Also reduced the size of asset
-configuration files.  4431033  Extra data added in imagery projects
-for imagery that is not visible  Fixed in Fusion: skip identical
-assets with the same bounds.  21126307  Remove option for Disconnected
-Add-on from GEE Server installer to simplify installation.  Fixed in
-GEE Server Installer: Disconnected Add-on is always installed.
-20185775  Add a tool to check the consistency of pushed databases in
-the publish root.  Run gecheckpublishroot.py.  10280645
-gemodifyimageryresource incorrectly reports bad images.  Fixed in
-Fusion/gevirtualraster.  16135553  gemaskgen reports 'Process
-terminated by signal 8'.  Fixed in Fusion: check for invalid image
-sizes; improve logging.  22007798  Missing Apache directives when
-adding a SSL virtual host with geserveradmin --sslcode> .  Fixed in
-GEE Server: properly configure virtual host when 'vh_url' parameter is
-not specified.  21852939  Support opacity on 2D map layers.  Fixed in
-GEE Server: 2D Map Viewer includes sliders for controlling layer
-opacity  19499802  gebuild does not check whether source file has
-changed.  Fixed in Fusion: 'Refresh' functionality added to
-gemodifyvectorresource, gemodifyimageryresource, and
-gemodifyterrainresource to detect changes to source files, and update
-assets if necessary.  4171577  Disconnected delta publishes not
-possible if previous database versions are cleaned.  Fixed in GEE
-Fusion: generate and store database manifest files within versions of
-a database.  19962321  Report the number of cached Assets and Asset
-Versions in getop  Fixed in Fusion.  20859774  GLC Assembly fails with
-missing file: /opt/google/gehttpd/htdocs/cutter/template/earth.  Fixed
-in GEE Server/Cutter.  19995336, 21301170, 21301504  Selecting "Save
-As" creates duplicate IDs in Fusion.  Fixed in Fusion for Map Layer,
+      Number  Description  Resolution  19946027  Support additional
+search option.  A new SearchGoogle search tab is available for use
+with 3D databases which queries Google's location database. Search
+sugestions are also offered as you type.  20225923, 19871110, 11179114
+gesystemmanager crashes when processing very large projects  Fixed in
+Fusion: Optimized management of listeners of CombinedRPAsset versions
+in asset root. Also reduced the size of asset configuration files.
+4431033  Extra data added in imagery projects for imagery that is not
+visible  Fixed in Fusion: skip identical assets with the same bounds.
+21126307  Remove option for Disconnected Add-on from GEE Server
+installer to simplify installation.  Fixed in GEE Server Installer:
+Disconnected Add-on is always installed.  20185775  Add a tool to
+check the consistency of pushed databases in the publish root.  Run
+gecheckpublishroot.py.  10280645  gemodifyimageryresource incorrectly
+reports bad images.  Fixed in Fusion/gevirtualraster.  16135553
+gemaskgen reports 'Process terminated by signal 8'.  Fixed in Fusion:
+check for invalid image sizes; improve logging.  22007798  Missing
+Apache directives when adding a SSL virtual host with geserveradmin
+--sslcode> .  Fixed in GEE Server: properly configure virtual host
+when 'vh_url' parameter is not specified.  21852939  Support opacity
+on 2D map layers.  Fixed in GEE Server: 2D Map Viewer includes sliders
+for controlling layer opacity  19499802  gebuild does not check
+whether source file has changed.  Fixed in Fusion: 'Refresh'
+functionality added to gemodifyvectorresource,
+gemodifyimageryresource, and gemodifyterrainresource to detect changes
+to source files, and update assets if necessary.  4171577
+Disconnected delta publishes not possible if previous database
+versions are cleaned.  Fixed in GEE Fusion: generate and store
+database manifest files within versions of a database.  19962321
+Report the number of cached Assets and Asset Versions in getop  Fixed
+in Fusion.  20859774  GLC Assembly fails with missing file:
+/opt/google/gehttpd/htdocs/cutter/template/earth.  Fixed in GEE
+Server/Cutter.  19995336, 21301170, 21301504  Selecting "Save As"
+creates duplicate IDs in Fusion.  Fixed in Fusion for Map Layer,
 Raster projects and Vector assets.  18280076  Implement dbroot
 conversion  Fixed in GEE Server: enable support for disconnected
 publishing of GEE 4.x database to GEE 5.x Server.  6820671  Fatal
