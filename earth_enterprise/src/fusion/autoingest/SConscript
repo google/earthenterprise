@@ -18,6 +18,7 @@
 
 Import('env')
 import string
+import os 
 origenv = env;
 
 # let subdirs refer to headers as relative to the autoingest directory
@@ -188,6 +189,12 @@ for idlfile in idlfiles:
     env.Depends(osfile, commonh)
 
 commonobj = map(lambda src: env.SharedObject(src), commoncpp)
+
+for obj in commonobj:
+    env.Depends(obj, commonh)
+
+for cppfile in commoncpp:
+    env.Depends(os.path.splitext(cppfile)[0] + '.obj', commonh)
 
 
 geautoingest = env.sharedLib('geautoingest',

@@ -89,34 +89,43 @@ Server Publish Root.</li>
 <li>Gain access to an account with root-level privileges.</li>
 </ul>
 <p class="rubric">To create a custom globes folder:</p>
-<ol class="arabic simple">
-<li>Make sure that no globe cutting operations are in progress.
+<ol class="arabic">
+<li><p class="first">Make sure that no globe cutting operations are in progress.
 Creating a custom folder makes modifications directly to the
 folder where portable globes are hosted and can interfere with
-any ongoing globe cutting operations.</li>
-<li>Stop the GEE Server service:
-<code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">/etc/init.d/geserver</span> <span class="pre">stop</span></code></li>
-<li>Use either of the methods below to set up your custom folder:<ul>
-<li>Create a new folder:
-<code class="docutils literal notranslate"><span class="pre">mkdir</span> <span class="pre">/gevol/src/globes</span></code></li>
-<li>Move the original folder to a storage volume:
-<code class="docutils literal notranslate"><span class="pre">mv</span> <span class="pre">/opt/google/gehttpd/htdocs/cutter/globes</span> <span class="pre">/gevol/src/globes</span></code></li>
+any ongoing globe cutting operations.</p>
+</li>
+<li><p class="first">Stop the GEE Server service:</p>
+<p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">/etc/init.d/geserver</span> <span class="pre">stop</span></code></p>
+</li>
+<li><p class="first">Use either of the methods below to set up your custom folder:</p>
+<ul>
+<li><p class="first">Create a new folder:</p>
+<p><code class="docutils literal notranslate"><span class="pre">mkdir</span> <span class="pre">/gevol/src/globes</span></code></p>
+</li>
+<li><p class="first">Move the original folder to a storage volume:</p>
+<p><code class="docutils literal notranslate"><span class="pre">mv</span> <span class="pre">/opt/google/gehttpd/htdocs/cutter/globes</span> <span class="pre">/gevol/src/globes</span></code></p>
+</li>
 </ul>
 </li>
-<li>Create a symbolic link from the custom folder to the original
-folder location:
-<code class="docutils literal notranslate"><span class="pre">ln</span> <span class="pre">-sf</span> <span class="pre">/gevol/src/globes</span> <span class="pre">/opt/google/gehttpd/htdocs/cutter/globes</span></code></li>
-<li>Change ownership of the custom folder to
+<li><p class="first">Create a symbolic link from the custom folder to the original
+folder location:</p>
+<p><code class="docutils literal notranslate"><span class="pre">ln</span> <span class="pre">-sf</span> <span class="pre">/gevol/src/globes</span> <span class="pre">/opt/google/gehttpd/htdocs/cutter/globes</span></code></p>
+</li>
+<li><p class="first">Change ownership of the custom folder to
 <code class="docutils literal notranslate"><span class="pre">geapacheuser:gegroup</span></code> and change permissions to 755
-(rwxr-wr-w):
-<code class="docutils literal notranslate"><span class="pre">chown</span> <span class="pre">-R</span> <span class="pre">geapacheuser:gegroup</span> <span class="pre">/gevol/src/globes</span></code>
-<code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">-R</span> <span class="pre">755</span> <span class="pre">/gevol/src/globes</span></code></li>
-<li>Start the GEE Server service.</li>
-<li>To test that globe cutting works, load the GEE Globe Cutting
+(rwxr-wr-w):</p>
+<p><code class="docutils literal notranslate"><span class="pre">chown</span> <span class="pre">-R</span> <span class="pre">geapacheuser:gegroup</span> <span class="pre">/gevol/src/globes</span></code>
+<code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">-R</span> <span class="pre">755</span> <span class="pre">/gevol/src/globes</span></code></p>
+</li>
+<li><p class="first">Start the GEE Server service.</p>
+</li>
+<li><p class="first">To test that globe cutting works, load the GEE Globe Cutting
 web page and either create a new portable globe or test with an
 existing globe. If you have an existing globe, click <strong>List
 globes and maps directory</strong> in the GEE Globe Cutting web page
-and make sure that your globe appears there.</li>
+and make sure that your globe appears there.</p>
+</li>
 </ol>
 </div>
 </div>

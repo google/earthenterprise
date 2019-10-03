@@ -121,23 +121,26 @@ Enterprise Server 5.x is to create a connection.
 To connect to Google Earth Enterprise Server 5.x, use the following
 URL:
 
-   http://<gee_server_name or ip address>/<target_path_of_published_db>/wms
+"http://<gee_server_name or ip
+address>/<target_path_of_published_db>/wms"
 
-   In this example, "http://localhost/merc/wms", “merc” is the
-   target path of the published database.
-   Google Earth Enterprise Server 5.x supports the
+   In this example, "http://localhost/merc/wms", “merc” is the target
+   path of the published database. Google Earth Enterprise Server 5.x
+   supports the
+
    GetCapabilities
 
-    and 
+    and
+
    GetMap
 
-    requests for WMS versions
-   1.1.1 and 1.3.0. Use 
+    requests for WMS versions 1.1.1 and 1.3.0. Use
+
    GetCapabilities
 
-    to first request
-   metadata from which you can then specify the map images that you
-   want to request using 
+    to first request metadata from which you can then specify the map
+   images that you want to request using
+
    GetMap
 
    .
@@ -283,8 +286,11 @@ GetMap
 
  request is as follows:
 
-   http://<hostname>/<target_path>/wms?SERVICE=WMS&REQUEST=
-   GetMap&BBOX=<bounding_box_limits_of_the_requested_map>&SRS=<projection_type>&WIDTH=<width_of_requested_map>&HEIGHT=<height_of_requested_map>&LAYERS=<layer_name>&STYLES=<style_info>&FORMAT=<format_of_requested_map>&DPI=96&TRANSPARENT=TRUE
+"http://<hostname>/<target_path>/wms?SERVICE=WMS&REQUEST= GetMap&BBOX
+=<bounding_box_limits_of_the_requested_map>&SRS=<projection_type>&WID
+TH=<width_of_requested_map>&HEIGHT=<height_of_requested_map>&LAYERS=<
+layer_name>&STYLES=<style_info>&FORMAT=<format_of_requested_map>&DPI=
+96&TRANSPARENT=TRUE"
 
 The parameters for this operation are as follows:
 

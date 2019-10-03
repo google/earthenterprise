@@ -35,24 +35,45 @@ Supported file formats in GEE
 
       .. rubric:: Supported imagery and terrain data formats
 
-      =================== =============================================================================================================
-      File Format         Notes
-      =================== =============================================================================================================
-      DTED
-      Erdas Imagine (IMG)
-      GeoTIFF
-      GIF                 Geographic coordinates and projection information must be accompanied by external world and projection files.
-      JPEG                Geographic coordinates and projection information must be accompanied by external world and projection files.
-      JPEG2000
-      Microstation (DGN)  Microstation DGN files from prior to version 8 are supported. Versions 8 and later are not supported.
-      MrSID
-      NITF
-      PNG                 Geographic coordinates and projection information must be accompanied by external world and projection files.
-      TAB
-      TIF                 Geographic coordinates and projection information must be accompanied by external world and projection files.
-      USGS ASCII DEM
-      USGS SDTS DEM
-      =================== =============================================================================================================
+      .. list-table::
+         :widths: 20 60
+         :header-rows: 1
+
+         * - File Format
+           - Notes
+         * - DTED
+           -
+         * - Erdas Imagine (IMG)
+           -
+         * - GeoTIFF
+           -
+         * - GIF
+           - Geographic coordinates and projection information must be accompanied
+             by external world and projection files.
+         * - JPEG
+           - Geographic coordinates and projection information must be accompanied
+             by external world and projection files.
+         * - JPEG2000
+           -
+         * - Microstation (DGN)
+           - Microstation DGN files from prior to version 8 are supported.
+             Versions 8 and later are not supported.
+         * - MrSID
+           -
+         * - NITF
+           -
+         * - PNG
+           - Geographic coordinates and projection information must be accompanied
+             by external world and projection files.
+         * - TAB
+           -
+         * - TIF
+           - Geographic coordinates and projection information must be accompanied
+             by external world and projection files.
+         * - USGS ASCII DEM
+           -
+         * - USGS SDTS DEM
+           -
 
       .. tip::
 
@@ -73,15 +94,30 @@ Supported file formats in GEE
       and point file formats, as a subset of the `OGR vector
       formats <http://www.gdal.org/ogr_formats.html>`_.
 
-      ========================== ==================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================
-      File Format                Notes
-      ========================== ==================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================
-      ESRI Shape File (.shp)     For each ESRI shape file you import into Google Earth Enterprise Fusion, one DBF and one SHX configuration file, each with the same name as the original and the appropriate extension (.dbf and .shx) must be located in the same folder. In addition, if there is any projection in the image, a PRJ file with the same name as the original file and the appropriate extension (.prj) must be located in the same folder. Other associated files you can include with each SHP file are SBN, SBX, CPG, and LYR.
-      Generic ASCII              Point data only in comma-separated values or tab-delimited text format.
-      KML/KMZ
-      MapInfo File (.tab)
-      US Census Tiger Line Files
-      ========================== ==================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+      .. list-table::
+         :widths: 20 65
+         :header-rows: 1
+
+         * - File Format
+           - Notes
+         * - ESRI Shape File (.shp)
+           - For each ESRI shape file you import into Google Earth Enterprise
+             Fusion, one DBF and one SHX configuration file, each with the same
+             name as the original and the appropriate extension (.dbf and .shx)
+             must be located in the same folder. In addition, if there is any
+             projection in the image, a PRJ file with the same name as the
+             original file and the appropriate extension (.prj) must be located
+             in the same folder. Other associated files you can include with
+             each SHP file are SBN, SBX, CPG, and LYR.
+         * - Generic ASCII
+           - Point data only in comma-separated values or tab-delimited text
+             format.
+         * - KML/KMZ
+           -
+         * - MapInfo File (.tab)
+           -
+         * - US Census Tiger Line Files
+           -
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

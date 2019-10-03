@@ -71,17 +71,19 @@ Create Search tabs
          be very familiar with your search application to use this
          field.
 
-      **Caution:** Any web service, servlet, or web application
-      you configure the search tabs to query must return valid KML
-      to Google Earth EC. For Google Maps, it must return valid
-      JavaScript in the specified structure.
+         .. warning::
+         
+            Any web service, servlet, or web application
+            you configure the search tabs to query must return valid KML
+            to Google Earth EC. For Google Maps, it must return valid
+            JavaScript in the specified structure.
 
       #. Optionally provide additional config parameters.
          Specify the following field parameters:
 
-         #. **Label**: Label of the search box.
-         #. **Suggestion**: Suggestion to the user of what to search for.
-         #. **Key**: The parameter name that the value in the text
+         a. **Label**: Label of the search box.
+         b. **Suggestion**: Suggestion to the user of what to search for.
+         c. **Key**: The parameter name that the value in the text
             box will be assigned when the search is submitted.
 
       #. Optionally click **add field** to add another set of search
@@ -111,7 +113,7 @@ Create Search tabs
       #. In the HTML code, update the style and display elements
          to customize your search form.
       #. Save the HTML file with the name you want to use for your
-         search tabs, for example,
+         search tabs, e.g.,
          ``/opt/google/gehttpd/htdocs/earth/search_supplemental_ui_MySearchTab.html``.
       #. Publish your database with the selected search tab(s).
       #. View your database in Google Earth EC.

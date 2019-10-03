@@ -17,9 +17,8 @@ Example Search plug-in Python code sample
       You can find the two Python files for the ``ExampleSearch``
       plug-in in the following location:
 
-      ``/opt/google/gehttpd/wsgi-bin/search/plug-in/example_search_app.py``
-
-      ``/opt/google/gehttpd/wsgi-bin/search/plug-in/example_search_handler.py``
+      -  ``/opt/google/gehttpd/wsgi-bin/search/plug-in/example_search_app.py``
+      -  ``/opt/google/gehttpd/wsgi-bin/search/plug-in/example_search_handler.py``
 
       In Google Earth Enterprise, a search plug-in Python-based
       framework relies on the Python Web Server Gateway Interface
@@ -77,7 +76,7 @@ Example Search plug-in Python code sample
       the polygon perimeters of the neighborhoods listed in the
       “san_francisco_neighborhoods” SQL table:
 
-      ::
+      .. code-block:: none
 
          self.example_query = (
            "SELECT ${FUNC}(ST_Force_3DZ(the_geom)) AS the_geom,Area(the_geom),"
@@ -88,9 +87,8 @@ Example Search plug-in Python code sample
            "lower(nbrhood) like %s"
            )
 
-      As the
-      ``/opt/google/gehttpd/wsgi-bin/search/common/geconstants.py`` file
-      includes the queries for all the system search plug-ins provided
+      As the ``/opt/google/gehttpd/wsgi-bin/search/common/geconstants.py``
+      file includes the queries for all the system search plug-ins provided
       with Google Earth Enterprise, you can check out the various
       constructs to help you build the plug-in. We recommend that you
       keep the SQL query in the handler of the plug-in.

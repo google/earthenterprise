@@ -98,9 +98,10 @@ map.addMapType(imagery_map_type); map.addMapType(labels_map_type);
 
 Remove the predefined Google Maps map types below so that the buttons
 display correctly:  map.removeMapType(G_SATELLITE_MAP); // Remove the
-default Satellite Map Type button  map.removeMapType(G_HYBRID_MAP); //
-Remove the default Hybrid Map Type button
-map.removeMapType(G_NORMAL_MAP); // Remove the default Map Type button
+default  Satellite Map Type button  map.removeMapType(G_HYBRID_MAP);
+// Remove the default  Hybrid Map Type button
+map.removeMapType(G_NORMAL_MAP); // Remove the default  Map Type
+button
 
 Add controls (like the zoom bar, the navigation bar, an overview map,
 and zooming options) to the map:  map.addControl(new
@@ -138,11 +139,13 @@ In this example, the server is hosted at
 "http://machine123.company.internal/mapexample -
 /opt/google/gehttpd/conf.d/virtual_servers/example.location".
 
-"# The mapexample virtual server RewriteRule ^/mapexample$
-/mapexample/ [R] RewriteRule ^/mapexample/+$ /maps/maps_local.html
-[PT] RewriteRule ^/mapexample/+maps/+mapfiles/(.*)$ /maps/mapfiles/$1
-[PT] <Location "/mapexample/*"> SetHandler gedb-handler Include
-conf.d/virtual_servers/runtime/example_runtime </Location>"
+   # The mapexample virtual server
+   RewriteRule ^/mapexample$ /mapexample/ [R]
+   RewriteRule ^/mapexample/+$ /maps/maps_local.html [PT]
+   RewriteRule ^/mapexample/+maps/+mapfiles/(.*)$ /maps/mapfiles/$1 [PT]
+   <Location "/mapexample/*">
+   SetHandler gedb-handler Include conf.d/virtual_servers/runtime/example_runtime
+   </Location>
 
 In the example above, the second RewriteRule specifies that the
 "/maps/maps_local.html" web page is loaded whenever users visit the
@@ -150,11 +153,13 @@ virtual server URL "http://machine123.company.internal/mapexample".
 
 You can change this setting to load a different web page:
 
-"# The mapexample virtual server RewriteRule ^/mapexample$
-/mapexample/ [R] RewriteRule ^/mapexample/+$ /maps/gmaps_buttons.html
-[PT] RewriteRule ^/mapexample/+maps/+mapfiles/(.*)$ /maps/mapfiles/$1
-[PT] <Location "/mapexample/*"> SetHandler gedb-handler Include
-conf.d/virtual_servers/runtime/example_runtime </Location>"
+   # The mapexample virtual server
+   RewriteRule ^/mapexample$ /mapexample/ [R]
+   RewriteRule ^/mapexample/+$ /maps/gmaps_buttons.html [PT]
+   RewriteRule ^/mapexample/+maps/+mapfiles/(.*)$ /maps/mapfiles/$1 [PT]
+   <Location "/mapexample/*">
+   SetHandler gedb-handler Include conf.d/virtual_servers/runtime/example_runtime
+   </Location>
 
 After you make changes to the file, restart the GEE Server to reload
 the configuration file and implement the change.

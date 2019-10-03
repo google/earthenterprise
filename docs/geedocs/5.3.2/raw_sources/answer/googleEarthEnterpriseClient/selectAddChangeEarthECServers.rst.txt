@@ -48,9 +48,10 @@ Select, add, or change Earth EC servers
          * - Port
            - Select or enter the port for the server. If you don’t know the port number, ask your administrator.
          * - Always sign in to this server
-           - Select to skip the Select Server window and automatically sign in to this server whenever you start Earth EC. To display Select Server again, go to File > Disable Automatic Sign In.
+           - Select to skip the Select Server window and automatically sign in to this server whenever you start Earth EC.
+             To display Select Server again, select **File > Disable Automatic Sign In**.
          * - Disable caching
-           - 	Select this if you want to make sure that you are viewing the latest content from the server or if your cached files become corrupted. Note: Disabling the cache slows down performance.
+           - Select this if you want to make sure that you are viewing the latest content from the server or if your cached files become corrupted. **Note:** Disabling the cache slows down performance.
 
       .. rubric:: Sign out of an Earth EC server
          :name: sign-out-of-an-earth-ec-server
@@ -79,9 +80,9 @@ Select, add, or change Earth EC servers
       .. rubric:: To change your Earth EC server:
          :name: to-change-your-earth-ec-server
 
-      #. Go to **File** > **Server Sign Out**.
+      #. Select **File** > **Server Sign Out**.
          Earth EC signs out of your current server.
-      #. Go to **File** > **Server Sign In**.
+      #. Select **File** > **Server Sign In**.
       #. Select a server from the list that appears.
 
       .. rubric:: Useful resources
