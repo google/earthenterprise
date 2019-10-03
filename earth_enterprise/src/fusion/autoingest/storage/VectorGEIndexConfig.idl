@@ -45,15 +45,8 @@ class VectorGEIndexConfig {
 
 #hquote
   uint64 GetSize() {
-    /*uint64 packet_vers_Size = 0;
-    for (auto packetver : packet_vers_) {
-      packet_vers_Size += packerver.GetSize();
-    }*/
     return sizeof(*this)
             + GetObjectSize(db_name_);
-            //+ packet_vers_Size
-            //+ GetObjectSize(custom_icons_)
-            //+ GetObjectSize(layer_icons_);
   }
 #/hquote
 

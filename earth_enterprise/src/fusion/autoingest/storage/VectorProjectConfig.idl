@@ -86,7 +86,6 @@ class VectorProjectConfig {
     }
     return sizeof(*this)
             + layersSize
-            //+ GetObjectSize(projectContextScript)
             + poi_search_tab_overrides.GetSize();
   }
 #/hquote

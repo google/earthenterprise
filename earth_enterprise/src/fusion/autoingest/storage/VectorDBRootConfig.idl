@@ -85,7 +85,6 @@ class DBRootGenConfig {
     }
     return sizeof(*this)
             + layersSize
-            //+ GetObjectSize(layerProviders)
             + GetObjectSize(layerLODFiles)
             + GetObjectSize(layerProviderIds);
   }

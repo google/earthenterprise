@@ -47,18 +47,12 @@ class FuseConfig {
 #hquote
   uint64 GetSize() {
     uint64 itemsSize = 0;
-    //uint64 searchFieldsSize = 0;
     for (auto item : items) {
       itemsSize += item.GetSize();
     }
-    /*for (auto searchField : searchFields) {
-      searchFieldsSize += searchField.GetSize();
-    }*/
     return sizeof(*this)
             + itemsSize
             + GetObjectSize(contextScript);
-            //+ searchFieldsSize
-            //+ GetObjectSize(searchStyle);
   }
 #/hquote
 
@@ -106,18 +100,12 @@ class VectorFuseAssetConfig {
   VectorFuseAssetConfig(const LayerConfig &layerConfig);
   uint64 GetSize() {
     uint64 itemsSize = 0;
-    //uint64 searchFieldsSize = 0;
     for (auto item : items) {
       itemsSize += item.GetSize();
     }
-    /*for (auto searchField : searchFields) {
-      searchFieldsSize += searchField.GetSize();
-    }*/
     return sizeof(*this)
             + itemsSize
             + GetObjectSize(contextScript);
-            //+ searchFieldsSize
-            //+ GetObjectSize(searchStyle);
   }
 #/hquote
 

@@ -82,7 +82,6 @@ class DatabaseConfig {
             + GetObjectSize(imageryProject)
             + GetObjectSize(vectorProject)
             + GetObjectSize(terrainProject)
-            //+ GetObjectSize(magratheanCoverage)
             + search_tabs_Size
             + search_tab_refs_Size;
   }
