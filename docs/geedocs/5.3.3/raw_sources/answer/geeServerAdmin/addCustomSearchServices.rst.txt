@@ -89,7 +89,7 @@ Add custom search services
       plug-ins are defined in
       ``/opt/google/gehttpd/conf.d/mod_wsgi-ge.conf``.
 
-      ::
+      .. code-block:: none
 
          # Handles Places search requests.
            WSGIScriptAlias /gesearch/PlacesSearch /opt/google/gehttpd/wsgi-bin/search/plugin/geplaces_search_app.py
@@ -123,9 +123,11 @@ Add custom search services
          registration in the configuration file should look something
          like the following:
 
-         ``# Handles My Custom search requests.``
-         ``WSGIScriptAlias /gesearch/CustomSearch``
-         ``/opt/google/gehttpd/wsgi-bin/search/plugin/mycustom_search_app.py``
+         .. code-block:: none
+
+            # Handles My Custom search requests.
+            WSGIScriptAlias /gesearch/CustomSearch
+            /opt/google/gehttpd/wsgi-bin/search/plugin/mycustom_search_app.py
 
       #. Restart Google Earth Enterprise Server:
 

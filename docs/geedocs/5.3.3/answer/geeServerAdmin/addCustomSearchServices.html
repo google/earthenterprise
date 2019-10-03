@@ -141,16 +141,16 @@ follows:</p>
 <p>The plug-in end points are for Google Earth Enterprise search
 plug-ins are defined in
 <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf.d/mod_wsgi-ge.conf</span></code>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Handles Places search requests.</span>
-  <span class="n">WSGIScriptAlias</span> <span class="o">/</span><span class="n">gesearch</span><span class="o">/</span><span class="n">PlacesSearch</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">google</span><span class="o">/</span><span class="n">gehttpd</span><span class="o">/</span><span class="n">wsgi</span><span class="o">-</span><span class="nb">bin</span><span class="o">/</span><span class="n">search</span><span class="o">/</span><span class="n">plugin</span><span class="o">/</span><span class="n">geplaces_search_app</span><span class="o">.</span><span class="n">py</span>
-  <span class="c1"># Handles Coordinate search requests.</span>
-  <span class="n">WSGIScriptAlias</span> <span class="o">/</span><span class="n">gesearch</span><span class="o">/</span><span class="n">CoordinateSearch</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">google</span><span class="o">/</span><span class="n">gehttpd</span><span class="o">/</span><span class="n">wsgi</span><span class="o">-</span><span class="nb">bin</span><span class="o">/</span><span class="n">search</span><span class="o">/</span><span class="n">plugin</span><span class="o">/</span><span class="n">coordinate_search_app</span><span class="o">.</span><span class="n">py</span>
-  <span class="c1"># Handles Federated search requests.</span>
-  <span class="n">WSGIScriptAlias</span> <span class="o">/</span><span class="n">gesearch</span><span class="o">/</span><span class="n">FederatedSearch</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">google</span><span class="o">/</span><span class="n">gehttpd</span><span class="o">/</span><span class="n">wsgi</span><span class="o">-</span><span class="nb">bin</span><span class="o">/</span><span class="n">search</span><span class="o">/</span><span class="n">plugin</span><span class="o">/</span><span class="n">federated_search_app</span><span class="o">.</span><span class="n">py</span>
-  <span class="c1"># Handles Example search requests.</span>
-  <span class="n">WSGIScriptAlias</span> <span class="o">/</span><span class="n">gesearch</span><span class="o">/</span><span class="n">ExampleSearch</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">google</span><span class="o">/</span><span class="n">gehttpd</span><span class="o">/</span><span class="n">wsgi</span><span class="o">-</span><span class="nb">bin</span><span class="o">/</span><span class="n">search</span><span class="o">/</span><span class="n">plugin</span><span class="o">/</span><span class="n">example_search_app</span><span class="o">.</span><span class="n">py</span>
-  <span class="c1"># Handles POI search requests.</span>
-  <span class="n">WSGIScriptAlias</span> <span class="o">/</span><span class="n">POISearch</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">google</span><span class="o">/</span><span class="n">gehttpd</span><span class="o">/</span><span class="n">wsgi</span><span class="o">-</span><span class="nb">bin</span><span class="o">/</span><span class="n">search</span><span class="o">/</span><span class="n">plugin</span><span class="o">/</span><span class="n">poi_search_app</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Handles Places search requests.
+  WSGIScriptAlias /gesearch/PlacesSearch /opt/google/gehttpd/wsgi-bin/search/plugin/geplaces_search_app.py
+  # Handles Coordinate search requests.
+  WSGIScriptAlias /gesearch/CoordinateSearch /opt/google/gehttpd/wsgi-bin/search/plugin/coordinate_search_app.py
+  # Handles Federated search requests.
+  WSGIScriptAlias /gesearch/FederatedSearch /opt/google/gehttpd/wsgi-bin/search/plugin/federated_search_app.py
+  # Handles Example search requests.
+  WSGIScriptAlias /gesearch/ExampleSearch /opt/google/gehttpd/wsgi-bin/search/plugin/example_search_app.py
+  # Handles POI search requests.
+  WSGIScriptAlias /POISearch /opt/google/gehttpd/wsgi-bin/search/plugin/poi_search_app.py
 </pre></div>
 </div>
 <p class="rubric" id="implement-custom-search-plugin">Implement a custom search plug-in</p>
@@ -172,9 +172,11 @@ module configuration file:
 <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf.d/mod_wsgi-ge.conf</span></code>. Your
 registration in the configuration file should look something
 like the following:</p>
-<p><code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">Handles</span> <span class="pre">My</span> <span class="pre">Custom</span> <span class="pre">search</span> <span class="pre">requests.</span></code>
-<code class="docutils literal notranslate"><span class="pre">WSGIScriptAlias</span> <span class="pre">/gesearch/CustomSearch</span></code>
-<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/wsgi-bin/search/plugin/mycustom_search_app.py</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Handles My Custom search requests.
+WSGIScriptAlias /gesearch/CustomSearch
+/opt/google/gehttpd/wsgi-bin/search/plugin/mycustom_search_app.py
+</pre></div>
+</div>
 </li>
 <li><p class="first">Restart Google Earth Enterprise Server:</p>
 <p><code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">sudo</span> <span class="pre">/etc/init.d/geserver</span> <span class="pre">restart</span></code></p>

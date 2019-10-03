@@ -16,7 +16,7 @@ where the database was published.
 Look for client EC requests in the GEE Server logs:  Open a terminal
 window on the GEE Server.  Type the command tail -f
 /opt/google/gehttpd/logs/access_log  Start EC and try connecting to
-your GEE Server. In the terminal window, you should see time-stamped
+your GEE Server.  In the terminal window, you should see time-stamped
 access requests in the logs from the client, starting with a GET
 request for the dbRoot file, followed by flatfile requests—for
 example:  192.168.1.199 - - [08/Feb/2016:09:10:25 -0800] "GET

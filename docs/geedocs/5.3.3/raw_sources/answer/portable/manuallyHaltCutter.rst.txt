@@ -18,7 +18,14 @@ Manually halt the cutter process
       listed below. You can search for these as processes on the
       operating system:
 
-      ``/opt/google/bin/gepolygontoqtnodes /opt/google/bin/gerewritedbroot /opt/google/bin/gekmlgrabber /opt/google/bin/geportableglobebuilder /opt/google/bin/geportableglobepacker /opt/google/gehttpd/cgi-bin/globe_cutter.py``
+      .. code-block:: none
+         
+         /opt/google/bin/gepolygontoqtnodes
+         /opt/google/bin/gerewritedbroot
+         /opt/google/bin/gekmlgrabber
+         /opt/google/bin/geportableglobebuilder
+         /opt/google/bin/geportableglobepacker
+         /opt/google/gehttpd/cgi-bin/globe_cutter.py
 
       You can use either of these methods to halt the processes from the
       command line:

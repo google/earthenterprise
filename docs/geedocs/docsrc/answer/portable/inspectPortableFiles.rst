@@ -15,9 +15,7 @@ Inspecting portable files
 
       .. rubric:: geglxinfo
 
-      ::
-
-         geglxinfo [--glx glb_file_path]
+      ``geglxinfo [--glx glb_file_path]``
 
       .. rubric:: Purpose
 
@@ -30,14 +28,31 @@ Inspecting portable files
 
       **Valid file check**
 
-      ::
+      .. code-block:: none
 
          $ geglxinfo --glx NaturalView-US.glm --is_gee
          IsGee: 1
 
       **Get file timestamp**
 
-      ``$ geglxinfo --glx tutorial_3d.glc --extract_file earth/info.txt --output /tmp/info.txt $ cat /tmp/info.txt Portable Globe Copyright 2013 Google Inc. All Rights Reserved. 2014-01-15 16:03:15 GMT  2014-01-15 08:03:15 Globe description: Simple container for tutorial glb with gray marble backdrop. 2014-01-15 08:03:15 Executing: /opt/google/bin/gecreatemetadbroot --output="/tmp/cutter/glc_20598_1389801795.111116/metadbroot" --layers="/tmp/cutter/glc_20598_1389801795.111116/earth/dbroot_layer_info.txt"  --has_base_imagery  2014-01-15 08:03:15 SUCCESS 2014-01-15 08:03:15 Executing: /opt/google/bin/geportableglcpacker --layer_info="/tmp/cutter/glc_20598_1389801795.111116/earth/layer_info.txt" --output="/tmp/cutter/glc_20598_1389801795.111116/temp.glc" --make_copy``
+      .. code-block:: none
+      
+         $ geglxinfo --glx tutorial_3d.glc --extract_file earth/info.txt --output
+         /tmp/info.txt
+         $ cat /tmp/info.txt
+         Portable Globe
+         Copyright 2013 Google Inc. All Rights Reserved.
+         2014-01-15 16:03:15 GMT
+          
+         2014-01-15 08:03:15
+         Globe description: Simple container for tutorial glb with gray marble backdrop.
+         2014-01-15 08:03:15
+         Executing: /opt/google/bin/gecreatemetadbroot --output="/tmp/cutter/glc_20598_1389801795.111116/metadbroot" --layers="/tmp/cutter/glc_20598_1389801795.111116/earth/dbroot_layer_info.txt"  --has_base_imagery
+         
+         2014-01-15 08:03:15
+         SUCCESS
+         2014-01-15 08:03:15
+         Executing: /opt/google/bin/geportableglcpacker --layer_info="/tmp/cutter/glc_20598_1389801795.111116/earth/layer_info.txt" --output="/tmp/cutter/glc_20598_1389801795.111116/temp.glc" --make_copy``
 
       .. tip::
 
@@ -61,7 +76,7 @@ Inspecting portable files
 
       **Check CRC**
 
-      ::
+      .. code-block:: none
 
          $ geglxinfo --glx NaturalView-US.glm --check_crc
 
@@ -71,7 +86,7 @@ Inspecting portable files
 
       **List files**
 
-      ::
+      .. code-block:: none
 
          $ geglxinfo --glx NaturalView-US.glm --list_files
 
@@ -112,16 +127,14 @@ Inspecting portable files
 
       **Number of packets**
 
-      ::
+      .. code-block:: none
 
          $ geglxinfo --glx NaturalView-US.glm --number_of_packets
          298076 packets
 
       .. rubric:: geglxinfo commands
 
-      ::
-
-         --is_gee
+      ``--is_gee``
 
       *Optional*. Checks whether the .glx file appears to be a valid
       globe or map. Returns a value of 1 is globe is valid; 0 if found
@@ -129,84 +142,60 @@ Inspecting portable files
       using ``--crc``, especially on larger files, as it will catch
       almost all integrity issues.
 
-      ::
-
-         --glx glb_file_path
+      ``--glx glb_file_path``
 
       The path and file name of the portable globe or map that you want
       to analyze.
 
-      ::
-
-         --list_files
+      ``--list_files``
 
       *Optional*. Lists all of the files in the .glx.
 
-      ::
-
-         --id
+      ``--id``
 
       *Optional*. Unused.
 
-      ::
-
-         --check_crc
+      ``--check_crc``
 
       *Optional*. Checks the crc of the .glx.
 
-      ::
-
-         --extract_file relative_file_path
+      ``--extract_file relative_file_path``
 
       *Optional*. File to be extracted from the .glx. Use this option
       when you want to extract a .glm or .glb layer from one .glc in
       order to add it to a second .glc file.
 
-      ::
-
-         --extract_all_files
+      ``--extract_all_files``
 
       *Optional*. Extract all files from the .glx. Use this option when
       you want to extract .glm or .glb layers from one .glc in order to
       add them to a second .glc file.
 
-      ::
-
-         --number_of_packets
+      ``--number_of_packets``
 
       *Optional*. Returns the number of data packets in the .glx.
 
-      ::
-
-         --extract_packet quadtree_address
+      ``--extract_packet quadtree_address``
 
       *Optional*. Extracts a packet at a given quadtree address, for
       example, 310.
 
-      ::
-
-         --extract_packets
+      ``--extract_packets``
 
       *Optional*. Extract all packets from a portable file. Can be used
       with start_idx and end_idx parameters, and the layer_idx parameter
       if it is a .glc.
 
-      ::
-
-         --packet_type type_string
+      ``--packet_type type_string``
 
       *Optional*. Type of packet to extract:
       ``dbroot, qtp, img, ter, or vec``.
 
-      ::
-
-         --packet_channel channel_int
+      ``--packet_channel channel_int``
 
       *Optional*. Channel of packet to extract.
 
-      ::
-
-         --output dest_file_path
+      ``--output dest_file_path``
 
       *Optional*. Destination file path where extracted file(s) should
       be written.

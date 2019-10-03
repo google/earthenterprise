@@ -73,12 +73,14 @@
 <div class="docutils container">
 <div class="content docutils container">
 <p class="rubric">Contents</p>
-<p><a class="reference internal" href="#introduction-portable-developer"><span class="std std-ref">Introduction</span></a>
-<a class="reference internal" href="#useful-resources-portable-developer"><span class="std std-ref">Useful resources</span></a>
-<a class="reference internal" href="#hello-maps"><span class="std std-ref">Hello Maps!</span></a>
-<a class="reference internal" href="#hello-earth"><span class="std std-ref">Hello Earth!</span></a>
-<a class="reference internal" href="#json-documents"><span class="std std-ref">JSON documents</span></a>
-<a class="reference internal" href="#polygon-kml-document"><span class="std std-ref">Polygon KML document</span></a></p>
+<ul class="simple">
+<li><a class="reference internal" href="#introduction-portable-developer"><span class="std std-ref">Introduction</span></a></li>
+<li><a class="reference internal" href="#useful-resources-portable-developer"><span class="std std-ref">Useful resources</span></a></li>
+<li><a class="reference internal" href="#hello-maps"><span class="std std-ref">Hello Maps!</span></a></li>
+<li><a class="reference internal" href="#hello-earth"><span class="std std-ref">Hello Earth!</span></a></li>
+<li><a class="reference internal" href="#json-documents"><span class="std std-ref">JSON documents</span></a></li>
+<li><a class="reference internal" href="#polygon-kml-document"><span class="std std-ref">Polygon KML document</span></a></li>
+</ul>
 <p class="rubric" id="introduction-portable-developer">Introduction</p>
 <p>You can customize or extend GEE Portable, or create applications
 that work with it.</p>
@@ -91,25 +93,29 @@ needed, KML polygons.</p>
 <p>See the resources linked to below to learn how to edit and extend
 the <code class="docutils literal notranslate"><span class="pre">Hello_Maps.html</span></code> and <code class="docutils literal notranslate"><span class="pre">Hello_Earth.html</span></code> files.</p>
 <p class="rubric" id="useful-resources-portable-developer">Useful resources</p>
-<p><strong>Note</strong>: Clicking any of these links connects you to a site
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Clicking any of these links connects you to a site
 outside your network. If you are not sure if your organization
 allows outside connections, check with your administrator first.</p>
+</div>
 <p><code class="docutils literal notranslate"><span class="pre">Hello_Maps.html</span></code> and <code class="docutils literal notranslate"><span class="pre">Hello_Earth.html</span></code> are based on the
 Google Maps API and Google Earth API. More information about these
 APIs is linked to below. Also included are links to some resources
 for learning how to parse your JSON data and KML coordinates.</p>
-<ul class="simple">
-<li><a class="reference external" href="https://developers.google.com/maps/">Google Maps API help at https://developers.google.com/maps/</a>
-. Examples that use the Maps API.</li>
-<li><cite>Google Earth API
-help at https://developers.google.com/earth/ &lt;https://developers.google.com/earth/&gt;_</cite> <em>The Earth Plug-in and
-its API have been discontinued.</em></li>
-<li><a class="reference external" href="http://api.jquery.com/jQuery.parseJSON/">jQuery help at
-http://api.jquery.com/jQuery.parseJSON/</a> . A method for parsing
-JSON.</li>
-<li><a class="reference external" href="https://code.google.com/p/geoxml3/">geoxml3 at
-https://code.google.com/p/geoxml3/</a> . A KML processor for use
-with the Google Maps API.</li>
+<ul>
+<li><p class="first"><a class="reference external" href="https://developers.google.com/maps/">Google Maps API help at https://developers.google.com/maps/</a>.</p>
+<p>Examples that use the Maps API.</p>
+</li>
+<li><p class="first"><a class="reference external" href="https://developers.google.com/earth/">Google Earth API help at https://developers.google.com/earth/</a>.</p>
+<p><em>The Earth Plug-in and its API have been discontinued.</em></p>
+</li>
+<li><p class="first"><a class="reference external" href="http://api.jquery.com/jQuery.parseJSON/">jQuery help at http://api.jquery.com/jQuery.parseJSON/</a>.</p>
+<p>A method for parsing JSON.</p>
+</li>
+<li><p class="first"><a class="reference external" href="https://code.google.com/p/geoxml3/">geoxml3 at https://code.google.com/p/geoxml3/</a>.</p>
+<p>A KML processor for use with the Google Maps API.</p>
+</li>
 </ul>
 <p class="rubric" id="hello-maps">Hello Maps!</p>
 <p>To write a script to display portable 2D maps, start with
@@ -150,7 +156,26 @@ Below are some code snippets that show how the JSON works.</p>
 <p class="rubric">Globes JSON example</p>
 <p>This code snippet is from the Globes JSON document, which
 provides information about each available globe.</p>
-<p><code class="docutils literal notranslate"><span class="pre">Globes</span> <span class="pre">JSON:</span> <span class="pre">[yourhost]/?cmd=globes_info_json</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">[</span> <span class="pre">{</span>&#160; <span class="pre">&quot;name&quot;:&quot;test.glb&quot;,</span>&#160;&#160;&#160; <span class="pre">&quot;timestamp&quot;:&quot;2013-01-01</span> <span class="pre">12:00:00&quot;,</span>&#160;&#160;&#160; <span class="pre">&quot;size&quot;:&quot;20.00MB&quot;,</span>&#160;&#160;&#160; <span class="pre">&quot;description&quot;:&quot;Some</span> <span class="pre">globe</span> <span class="pre">description.&quot;,</span>&#160;&#160;&#160; <span class="pre">&quot;path&quot;:&quot;../../../../globes/test.glb&quot;,</span>&#160;&#160;&#160; <span class="pre">&quot;is_gee&quot;:true,</span>&#160;&#160;&#160; <span class="pre">&quot;is_2d&quot;:false,</span>&#160;&#160;&#160; <span class="pre">&quot;is_3d&quot;:true,</span>&#160;&#160;&#160; <span class="pre">&quot;has_polygon&quot;:true,</span>&#160;&#160;&#160; <span class="pre">&quot;is_mercator&quot;:false,</span>&#160;&#160;&#160; <span class="pre">&quot;is_being_served&quot;:false</span>&#160;&#160; <span class="pre">},</span>&#160;&#160; <span class="pre">{</span>&#160;&#160;&#160; <span class="pre">some</span> <span class="pre">other</span> <span class="pre">globe</span>&#160;&#160; <span class="pre">},...</span>&#160;&#160; <span class="pre">]</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Globes JSON: [yourhost]/?cmd=globes_info_json
+
+[ {  &quot;name&quot;:&quot;test.glb&quot;,
+   &quot;timestamp&quot;:&quot;2013-01-01 12:00:00&quot;,
+   &quot;size&quot;:&quot;20.00MB&quot;,
+   &quot;description&quot;:&quot;Some globe description.&quot;,
+   &quot;path&quot;:&quot;../../../../globes/test.glb&quot;,
+   &quot;is_gee&quot;:true,
+   &quot;is_2d&quot;:false,
+   &quot;is_3d&quot;:true,
+   &quot;has_polygon&quot;:true,
+   &quot;is_mercator&quot;:false,
+   &quot;is_being_served&quot;:false
+   },
+   {
+   some other globe
+   },...
+]
+</pre></div>
+</div>
 <p class="rubric">2D JSON and 3D JSON examples</p>
 <p>The 2D and 3D JSON documents contain layer information as well
 as information that helps the Search feature categorize the
@@ -163,9 +188,35 @@ If you are currently serving a globe, 3D JSON will be serving:</p>
 <p>Below are examples of layer definitions. The first is an imagery
 layer and the second is a vector layer.</p>
 <p class="rubric">Imagery layer example</p>
-<p><code class="docutils literal notranslate"><span class="pre">[</span>&#160;&#160; <span class="pre">...{</span>&#160;&#160;&#160; <span class="pre">icon</span> <span class="pre">:</span> <span class="pre">&quot;icons/1.png&quot;,</span>&#160;&#160;&#160; <span class="pre">id</span> <span class="pre">:</span> <span class="pre">1001,</span>&#160;&#160;&#160; <span class="pre">initialState</span> <span class="pre">:</span> <span class="pre">true,</span>&#160;&#160;&#160; <span class="pre">isPng</span> <span class="pre">:</span> <span class="pre">false,</span>&#160;&#160;&#160; <span class="pre">label</span> <span class="pre">:</span> <span class="pre">&quot;Imagery&quot;,</span>&#160;&#160;&#160; <span class="pre">lookAt</span> <span class="pre">:</span> <span class="pre">&quot;none&quot;,</span>&#160;&#160;&#160; <span class="pre">opacity</span> <span class="pre">:</span> <span class="pre">1,</span>&#160;&#160;&#160; <span class="pre">requestType</span> <span class="pre">:</span> <span class="pre">&quot;ImageryMaps&quot;,</span> <span class="pre">//</span> <span class="pre">A</span> <span class="pre">layer</span> <span class="pre">of</span> <span class="pre">imagery.</span> <span class="pre">version</span> <span class="pre">:</span> <span class="pre">8</span>&#160;&#160; <span class="pre">}...</span>&#160;&#160; <span class="pre">]</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[
+...{
+   icon : &quot;icons/1.png&quot;,
+   id : 1001,
+   initialState : true,
+   isPng : false,
+   label : &quot;Imagery&quot;,
+   lookAt : &quot;none&quot;,
+   opacity : 1,
+   requestType : &quot;ImageryMaps&quot;, // A layer of imagery. version : 8
+   }...
+]
+</pre></div>
+</div>
 <p class="rubric">Vector data example</p>
-<p><code class="docutils literal notranslate"><span class="pre">[</span>&#160;&#160; <span class="pre">...{</span>&#160;&#160;&#160; <span class="pre">icon</span> <span class="pre">:</span> <span class="pre">&quot;icons/2.png&quot;,</span>&#160;&#160;&#160; <span class="pre">id</span> <span class="pre">:</span> <span class="pre">1002,</span>&#160;&#160;&#160; <span class="pre">initialState</span> <span class="pre">:</span> <span class="pre">true,</span>&#160;&#160;&#160; <span class="pre">isPng</span> <span class="pre">:</span> <span class="pre">true,</span>&#160;&#160;&#160; <span class="pre">label</span> <span class="pre">:</span> <span class="pre">&quot;Tokyo&quot;,</span>&#160;&#160;&#160; <span class="pre">lookAt</span> <span class="pre">:</span> <span class="pre">&quot;none&quot;,</span>&#160;&#160;&#160; <span class="pre">opacity</span> <span class="pre">:</span> <span class="pre">1,</span>&#160;&#160;&#160; <span class="pre">requestType</span> <span class="pre">:</span> <span class="pre">&quot;VectorMapsRaster&quot;,</span> <span class="pre">//</span> <span class="pre">Vector</span> <span class="pre">data,</span> <span class="pre">such</span> <span class="pre">as</span> <span class="pre">roads,</span> <span class="pre">points,</span> <span class="pre">and</span> <span class="pre">borders.</span> <span class="pre">version</span> <span class="pre">:</span> <span class="pre">4</span>&#160;&#160; <span class="pre">}...</span>&#160;&#160; <span class="pre">]</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[
+...{
+   icon : &quot;icons/2.png&quot;,
+   id : 1002,
+   initialState : true,
+   isPng : true,
+   label : &quot;Tokyo&quot;,
+   lookAt : &quot;none&quot;,
+   opacity : 1,
+   requestType : &quot;VectorMapsRaster&quot;, // Vector data, such as roads, points, and borders. version : 4
+}...
+]
+</pre></div>
+</div>
 <p class="rubric" id="polygon-kml-document">Polygon KML document</p>
 <p>Some globes also serve a KML file that contains polygon
 coordinates, which define the initial display when the globe or
@@ -175,8 +226,57 @@ polygon data, the Polygon KML file is empty.</p>
 <p class="rubric">Polygon KML example</p>
 <p>This is an example of a KML document that contains a set of
 coordinates that define the bounds of your globe’s cut.</p>
-<blockquote>
-<div><code class="docutils literal notranslate"><span class="pre">Polygon</span> <span class="pre">KML:</span> <span class="pre">[your</span> <span class="pre">host]/earth/polygon.kml</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;?xml</span> <span class="pre">version=&quot;1.0&quot;</span>&#160;&#160;&#160; <span class="pre">encoding=&quot;UTF-8&quot;?&gt;</span>&#160;&#160; <span class="pre">&lt;kml&gt;</span>&#160;&#160; <span class="pre">&lt;Document&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;name&gt;polygons&lt;/name&gt;</span>&#160;&#160; <span class="pre">&lt;Placemark&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;Polygon&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">&lt;tessellate&gt;1&lt;/tessellate&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">&lt;outerBoundaryIs&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">&lt;LinearRing&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">&lt;coordinates&gt;</span>&#160;&#160; <span class="pre">-122.3185062675476,37.790043919799245,0</span>&#160;&#160;&#160; <span class="pre">-122.3395950675476,37.84095511979925,0</span>&#160;&#160;&#160; <span class="pre">-122.39050626754761,37.86204391979925,0</span>&#160;&#160;&#160; <span class="pre">-122.44141746754761,37.84095511979925,0</span>&#160;&#160;&#160; <span class="pre">-122.46250626754761,37.790043919799245,0</span>&#160;&#160;&#160; <span class="pre">-122.44141746754761,37.739132719799244,0</span>&#160;&#160;&#160; <span class="pre">-122.39050626754761,37.71804391979924,0</span>&#160;&#160;&#160; <span class="pre">-122.3395950675476,37.739132719799244,0</span>&#160;&#160;&#160; <span class="pre">-122.3185062675476,37.790043919799245,0</span>&#160;&#160; <span class="pre">&lt;/coordinates&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">&lt;/LinearRing&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;/outerBoundaryIs&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;/Polygon&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;/Placemark&gt;</span>&#160;&#160; <span class="pre">&lt;Placemark&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;Polygon&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;tessellate&gt;1&lt;/tessellate&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;outerBoundaryIs&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;LinearRing&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;coordinates&gt;</span>&#160;&#160; <span class="pre">-122.01254132080078,37.42221919299647,0</span>&#160;&#160;&#160; <span class="pre">-122.03363012080078,37.473130392996474,0</span>&#160;&#160;&#160; <span class="pre">-122.08454132080078,37.494219192996475,0</span>&#160;&#160;&#160; <span class="pre">-122.13545252080078,37.473130392996474,0</span>&#160;&#160;&#160; <span class="pre">-122.15654132080078,37.42221919299647,0</span>&#160;&#160;&#160; <span class="pre">-122.13545252080078,37.37130799299647,0</span>&#160;&#160;&#160; <span class="pre">-122.08454132080078,37.35021919299647,0</span>&#160;&#160;&#160; <span class="pre">-122.03363012080078,37.37130799299647,0</span>&#160;&#160;&#160; <span class="pre">-122.01254132080078,37.42221919299647,0</span>&#160;&#160; <span class="pre">&lt;/coordinates&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;/LinearRing&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;/outerBoundaryIs&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;/Polygon&gt;</span>&#160;&#160; <span class="pre">&lt;/Placemark&gt;</span>&#160;&#160; <span class="pre">&lt;/Document&gt;</span>&#160;&#160; <span class="pre">&lt;/kml&gt;</span></code></div></blockquote>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Polygon KML: [your host]/earth/polygon.kml
+
+&lt;?xml version=&quot;1.0&quot;
+encoding=&quot;UTF-8&quot;?&gt;
+&lt;kml&gt;
+&lt;Document&gt;
+   &lt;name&gt;polygons&lt;/name&gt;
+&lt;Placemark&gt;
+   &lt;Polygon&gt;
+      &lt;tessellate&gt;1&lt;/tessellate&gt;
+      &lt;outerBoundaryIs&gt;
+      &lt;LinearRing&gt;
+      &lt;coordinates&gt;
+         -122.3185062675476,37.790043919799245,0
+         -122.3395950675476,37.84095511979925,0
+         -122.39050626754761,37.86204391979925,0
+         -122.44141746754761,37.84095511979925,0
+         -122.46250626754761,37.790043919799245,0
+         -122.44141746754761,37.739132719799244,0
+         -122.39050626754761,37.71804391979924,0
+         -122.3395950675476,37.739132719799244,0
+         -122.3185062675476,37.790043919799245,0
+      &lt;/coordinates&gt;
+      &lt;/LinearRing&gt;
+      &lt;/outerBoundaryIs&gt;
+   &lt;/Polygon&gt;
+&lt;/Placemark&gt;
+&lt;Placemark&gt;
+   &lt;Polygon&gt;
+      &lt;tessellate&gt;1&lt;/tessellate&gt;
+      &lt;outerBoundaryIs&gt;
+      &lt;LinearRing&gt;
+      &lt;coordinates&gt;
+         -122.01254132080078,37.42221919299647,0
+         -122.03363012080078,37.473130392996474,0
+         -122.08454132080078,37.494219192996475,0
+         -122.13545252080078,37.473130392996474,0
+         -122.15654132080078,37.42221919299647,0
+         -122.13545252080078,37.37130799299647,0
+         -122.08454132080078,37.35021919299647,0
+         -122.03363012080078,37.37130799299647,0
+         -122.01254132080078,37.42221919299647,0
+      &lt;/coordinates&gt;
+      &lt;/LinearRing&gt;
+      &lt;/outerBoundaryIs&gt;
+   &lt;/Polygon&gt;
+&lt;/Placemark&gt;
+&lt;/Document&gt;
+&lt;/kml&gt;
+</pre></div>
+</div>
 </div>
 </div>
 </div>

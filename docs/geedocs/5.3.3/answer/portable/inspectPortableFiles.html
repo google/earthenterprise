@@ -77,9 +77,7 @@ composition of .glm, .glb, and .glc portable files. For example,
 you can determine the files included in a portable, extract those
 files, and test whether the portable file appears to be valid.</p>
 <p class="rubric">geglxinfo</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">geglxinfo</span> <span class="p">[</span><span class="o">--</span><span class="n">glx</span> <span class="n">glb_file_path</span><span class="p">]</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">geglxinfo</span> <span class="pre">[--glx</span> <span class="pre">glb_file_path]</span></code></p>
 <p class="rubric">Purpose</p>
 <p>To inspect the .glc, .glb, .glm, or .glc files, the <code class="docutils literal notranslate"><span class="pre">geglxinfo</span></code>
 tool analyzes the composition and provides valuable information
@@ -87,12 +85,29 @@ when you need to troubleshoot any issues that may arise when
 serving your portable files.</p>
 <p class="rubric">Examples</p>
 <p><strong>Valid file check</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ geglxinfo --glx NaturalView-US.glm --is_gee
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ geglxinfo --glx NaturalView-US.glm --is_gee
 IsGee: 1
 </pre></div>
 </div>
 <p><strong>Get file timestamp</strong></p>
-<p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">geglxinfo</span> <span class="pre">--glx</span> <span class="pre">tutorial_3d.glc</span> <span class="pre">--extract_file</span> <span class="pre">earth/info.txt</span> <span class="pre">--output</span> <span class="pre">/tmp/info.txt</span> <span class="pre">$</span> <span class="pre">cat</span> <span class="pre">/tmp/info.txt</span> <span class="pre">Portable</span> <span class="pre">Globe</span> <span class="pre">Copyright</span> <span class="pre">2013</span> <span class="pre">Google</span> <span class="pre">Inc.</span> <span class="pre">All</span> <span class="pre">Rights</span> <span class="pre">Reserved.</span> <span class="pre">2014-01-15</span> <span class="pre">16:03:15</span> <span class="pre">GMT</span>&#160; <span class="pre">2014-01-15</span> <span class="pre">08:03:15</span> <span class="pre">Globe</span> <span class="pre">description:</span> <span class="pre">Simple</span> <span class="pre">container</span> <span class="pre">for</span> <span class="pre">tutorial</span> <span class="pre">glb</span> <span class="pre">with</span> <span class="pre">gray</span> <span class="pre">marble</span> <span class="pre">backdrop.</span> <span class="pre">2014-01-15</span> <span class="pre">08:03:15</span> <span class="pre">Executing:</span> <span class="pre">/opt/google/bin/gecreatemetadbroot</span> <span class="pre">--output=&quot;/tmp/cutter/glc_20598_1389801795.111116/metadbroot&quot;</span> <span class="pre">--layers=&quot;/tmp/cutter/glc_20598_1389801795.111116/earth/dbroot_layer_info.txt&quot;</span>&#160; <span class="pre">--has_base_imagery</span>&#160; <span class="pre">2014-01-15</span> <span class="pre">08:03:15</span> <span class="pre">SUCCESS</span> <span class="pre">2014-01-15</span> <span class="pre">08:03:15</span> <span class="pre">Executing:</span> <span class="pre">/opt/google/bin/geportableglcpacker</span> <span class="pre">--layer_info=&quot;/tmp/cutter/glc_20598_1389801795.111116/earth/layer_info.txt&quot;</span> <span class="pre">--output=&quot;/tmp/cutter/glc_20598_1389801795.111116/temp.glc&quot;</span> <span class="pre">--make_copy</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ geglxinfo --glx tutorial_3d.glc --extract_file earth/info.txt --output
+/tmp/info.txt
+$ cat /tmp/info.txt
+Portable Globe
+Copyright 2013 Google Inc. All Rights Reserved.
+2014-01-15 16:03:15 GMT
+
+2014-01-15 08:03:15
+Globe description: Simple container for tutorial glb with gray marble backdrop.
+2014-01-15 08:03:15
+Executing: /opt/google/bin/gecreatemetadbroot --output=&quot;/tmp/cutter/glc_20598_1389801795.111116/metadbroot&quot; --layers=&quot;/tmp/cutter/glc_20598_1389801795.111116/earth/dbroot_layer_info.txt&quot;  --has_base_imagery
+
+2014-01-15 08:03:15
+SUCCESS
+2014-01-15 08:03:15
+Executing: /opt/google/bin/geportableglcpacker --layer_info=&quot;/tmp/cutter/glc_20598_1389801795.111116/earth/layer_info.txt&quot; --output=&quot;/tmp/cutter/glc_20598_1389801795.111116/temp.glc&quot; --make_copy``
+</pre></div>
+</div>
 <div class="admonition tip">
 <p class="first admonition-title">Tip</p>
 <p>You can use the timestamp information if you need to determine
@@ -112,7 +127,7 @@ Server, or <code class="docutils literal notranslate"><span class="pre">http://&
 Earth Server.</p>
 </div>
 <p><strong>Check CRC</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ geglxinfo --glx NaturalView-US.glm --check_crc
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ geglxinfo --glx NaturalView-US.glm --check_crc
 
 File crc: 0x7e6fbbfc
 Calculated crc :0x7e6fbbfc
@@ -120,7 +135,7 @@ Good crc!
 </pre></div>
 </div>
 <p><strong>List files</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ geglxinfo --glx NaturalView-US.glm --list_files
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ geglxinfo --glx NaturalView-US.glm --list_files
 
 Index has 11 files.
 0: earth/earth_local.html
@@ -159,75 +174,49 @@ size: 250
 </pre></div>
 </div>
 <p><strong>Number of packets</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ geglxinfo --glx NaturalView-US.glm --number_of_packets
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ geglxinfo --glx NaturalView-US.glm --number_of_packets
 298076 packets
 </pre></div>
 </div>
 <p class="rubric">geglxinfo commands</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">is_gee</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">--is_gee</span></code></p>
 <p><em>Optional</em>. Checks whether the .glx file appears to be a valid
 globe or map. Returns a value of 1 is globe is valid; 0 if found
 to have errors. Use this validity check before testing your globe
 using <code class="docutils literal notranslate"><span class="pre">--crc</span></code>, especially on larger files, as it will catch
 almost all integrity issues.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">glx</span> <span class="n">glb_file_path</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">--glx</span> <span class="pre">glb_file_path</span></code></p>
 <p>The path and file name of the portable globe or map that you want
 to analyze.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">list_files</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">--list_files</span></code></p>
 <p><em>Optional</em>. Lists all of the files in the .glx.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="nb">id</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">--id</span></code></p>
 <p><em>Optional</em>. Unused.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">check_crc</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">--check_crc</span></code></p>
 <p><em>Optional</em>. Checks the crc of the .glx.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">extract_file</span> <span class="n">relative_file_path</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">--extract_file</span> <span class="pre">relative_file_path</span></code></p>
 <p><em>Optional</em>. File to be extracted from the .glx. Use this option
 when you want to extract a .glm or .glb layer from one .glc in
 order to add it to a second .glc file.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">extract_all_files</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">--extract_all_files</span></code></p>
 <p><em>Optional</em>. Extract all files from the .glx. Use this option when
 you want to extract .glm or .glb layers from one .glc in order to
 add them to a second .glc file.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">number_of_packets</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">--number_of_packets</span></code></p>
 <p><em>Optional</em>. Returns the number of data packets in the .glx.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">extract_packet</span> <span class="n">quadtree_address</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">--extract_packet</span> <span class="pre">quadtree_address</span></code></p>
 <p><em>Optional</em>. Extracts a packet at a given quadtree address, for
 example, 310.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">extract_packets</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">--extract_packets</span></code></p>
 <p><em>Optional</em>. Extract all packets from a portable file. Can be used
 with start_idx and end_idx parameters, and the layer_idx parameter
 if it is a .glc.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">packet_type</span> <span class="n">type_string</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">--packet_type</span> <span class="pre">type_string</span></code></p>
 <p><em>Optional</em>. Type of packet to extract:
 <code class="docutils literal notranslate"><span class="pre">dbroot,</span> <span class="pre">qtp,</span> <span class="pre">img,</span> <span class="pre">ter,</span> <span class="pre">or</span> <span class="pre">vec</span></code>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">packet_channel</span> <span class="n">channel_int</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">--packet_channel</span> <span class="pre">channel_int</span></code></p>
 <p><em>Optional</em>. Channel of packet to extract.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">output</span> <span class="n">dest_file_path</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">dest_file_path</span></code></p>
 <p><em>Optional</em>. Destination file path where extracted file(s) should
 be written.</p>
 <p>See <a class="reference internal" href="../geeServerAdmin/settingsPage.html"><span class="doc">Settings</span></a> to learn about globe

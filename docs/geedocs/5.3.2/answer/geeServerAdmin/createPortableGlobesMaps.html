@@ -83,10 +83,9 @@ interest (POI) locations. Outside the specified area of interest,
 the globe or map stores only low-resolution imagery and terrain.
 You specify the levels of resolution when you cut the globe or
 map.</p>
-<p>You can <a class="reference internal" href="#"><span class="doc">create portable globes and
-maps</span></a> with the <a class="reference internal" href="settingsPage.html"><span class="doc">cutter tool</span></a> feature of the <a class="reference internal" href="signInAdminConsole.html"><span class="doc">Google Earth
-Enterprise (GEE) Server</span></a>, from existing
-GEE portable files, or you can obtain them from third-party
+<p>You can <a class="reference internal" href="#"><span class="doc">create portable globes and maps</span></a> with the
+<a class="reference internal" href="settingsPage.html"><span class="doc">cutter tool</span></a> feature of the <a class="reference internal" href="signInAdminConsole.html"><span class="doc">Google Earth Enterprise (GEE) Server</span></a>,
+from existing GEE portable files, or you can obtain them from third-party
 vendors. Depending on your area of coverage, it can take only a
 few minutes to specify and generate a globe or map and then save
 it to the GEE Portable maps directory.</p>
@@ -98,9 +97,7 @@ files are very large. This feature is often useful when you want
 to combine portable files with other <code class="docutils literal notranslate"><span class="pre">.glb</span></code> or <code class="docutils literal notranslate"><span class="pre">.glc</span></code> files to
 create a layered composite globe using the Assembly tool.</p>
 <p>To cut a globe or map from an existing portable file, first you
-must <a class="reference internal" href="publishDatabasesPortables.html#register-publish-portable-map-globe"><span class="std std-ref">register and
-publish</span></a> it on <a class="reference internal" href="signInAdminConsole.html"><span class="doc">GEE
-Server</span></a>.</p>
+must <a class="reference internal" href="publishDatabasesPortables.html#register-publish-portable-map-globe"><span class="std std-ref">register and publish</span></a> it on <a class="reference internal" href="signInAdminConsole.html"><span class="doc">GEE Server</span></a>.</p>
 <div class="admonition tip">
 <p class="first admonition-title">Tip</p>
 <p>Cutting globes and maps from existing portable files is a new
@@ -126,15 +123,23 @@ created. This information should give you a good idea of which
 version of GEE was used to create the file. Extract and output the
 <code class="docutils literal notranslate"><span class="pre">earth/info.txt</span></code> file, as in the following example use of the
 command:</p>
-<p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">geglxinfo</span> <span class="pre">--glx</span> <span class="pre">tutorial_3d.glc</span> <span class="pre">--extract_file</span> <span class="pre">earth/info.txt</span> <span class="pre">--output</span> <span class="pre">/tmp/info.txt</span></code>
-<code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">cat</span> <span class="pre">/tmp/info.txt</span></code>
-<code class="docutils literal notranslate"><span class="pre">Portable</span> <span class="pre">Globe</span></code>
-<code class="docutils literal notranslate"><span class="pre">Copyright</span> <span class="pre">2013</span> <span class="pre">Google</span> <span class="pre">Inc.</span> <span class="pre">All</span> <span class="pre">Rights</span> <span class="pre">Reserved.</span></code>
-<code class="docutils literal notranslate"><span class="pre">2014-01-15</span> <span class="pre">16:03:15</span> <span class="pre">GMT</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">2014-01-15</span> <span class="pre">08:03:15</span></code>
-<code class="docutils literal notranslate"><span class="pre">Globe</span> <span class="pre">description:</span> <span class="pre">Simple</span> <span class="pre">container</span> <span class="pre">for</span> <span class="pre">tutorial</span> <span class="pre">glb</span> <span class="pre">with</span> <span class="pre">gray</span> <span class="pre">marble</span> <span class="pre">backdrop.</span></code>
-<code class="docutils literal notranslate"><span class="pre">2014-01-15</span> <span class="pre">08:03:15</span></code>
-<code class="docutils literal notranslate"><span class="pre">Executing:</span> <span class="pre">/opt/google/bin/gecreatemetadbroot</span> <span class="pre">--output=&quot;/tmp/cutter/glc_20598_1389801795.111116/metadbroot&quot;</span> <span class="pre">--layers=&quot;/tmp/cutter/glc_20598_1389801795.111116/earth/dbroot_layer_info.txt&quot;</span>&#160; <span class="pre">--has_base_imagery</span>&#160; <span class="pre">2014-01-15</span> <span class="pre">08:03:15</span> <span class="pre">SUCCESS</span> <span class="pre">2014-01-15</span> <span class="pre">08:03:15</span> <span class="pre">Executing:</span> <span class="pre">/opt/google/bin/geportableglcpacker</span> <span class="pre">--layer_info=&quot;/tmp/cutter/glc_20598_1389801795.111116/earth/layer_info.txt&quot;</span> <span class="pre">--output=&quot;/tmp/cutter/glc_20598_1389801795.111116/temp.glc&quot;</span> <span class="pre">--make_copy</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ geglxinfo --glx tutorial_3d.glc --extract_file earth/info.txt --output /tmp/info.txt
+$ cat /tmp/info.txt
+Portable Globe
+Copyright 2013 Google Inc. All Rights Reserved.
+2014-01-15 16:03:15 GMT
+
+2014-01-15 08:03:15
+Globe description: Simple container for tutorial glb with gray marble backdrop.
+2014-01-15 08:03:15
+Executing: /opt/google/bin/gecreatemetadbroot --output=&quot;/tmp/cutter/glc_20598_1389801795.111116/metadbroot&quot; --layers=&quot;/tmp/cutter/glc_20598_1389801795.111116/earth/dbroot_layer_info.txt&quot;  --has_base_imagery
+
+2014-01-15 08:03:15
+SUCCESS
+2014-01-15 08:03:15
+Executing: /opt/google/bin/geportableglcpacker --layer_info=&quot;/tmp/cutter/glc_20598_1389801795.111116/earth/layer_info.txt&quot; --output=&quot;/tmp/cutter/glc_20598_1389801795.111116/temp.glc&quot; --make_copy
+</pre></div>
+</div>
 <p class="rubric">Composite globes and maps</p>
 <p>Portable globes and maps can also be assembled into layers to
 create a composite globe or map, a single file (<code class="docutils literal notranslate"><span class="pre">.glc</span></code>) that
@@ -210,10 +215,8 @@ and select <strong>Launch Cutter</strong> from the <strong>Tools</strong> menu.<
 <p>A new browser tab opens with the GEE Server — Cutting Tool and
 the <strong>Create new offline map</strong> window appears.</p>
 <p><img alt="GEE Cutter create offline map window" src="../../images/cutterTools.png" /></p>
-</li>
-</ol>
 <p class="rubric">Map or globe name</p>
-<ol class="arabic">
+</li>
 <li><p class="first">Use the drop-down menu to select the database or portable you wish
 to cut to create your offline map or globe.</p>
 </li>
@@ -254,18 +257,25 @@ are running the discontinued Google Earth Plug-in in your
 browser. This method works for cutting 2D maps from your
 browser.</p>
 </div>
-<ol class="arabic simple">
-<li>By default, you draw a polygon by hand so the <strong>Select Region</strong>
-drop-down list is set to <strong>Manual</strong>.</li>
-<li>Use the <img alt="Pan tool" src="../../images/cutterHandTool2.png" /> <strong>Hand</strong> tool to pan, then, using the navigation
-controls in the plug-in, zoom in to the region of interest.</li>
-<li>To use your mouse to define the polygon, click the <img alt="Polygon icon" src="../../images/cutterPolygonTool.png" /> polygon icon
-in the globe window.</li>
-<li>Click on the map or globe to define each point. You can use the
+<ol class="arabic">
+<li><p class="first">By default, you draw a polygon by hand so the <strong>Select Region</strong>
+drop-down list is set to <strong>Manual</strong>.</p>
+</li>
+<li><p class="first">Use the <img alt="Pan tool" src="../../images/cutterHandTool2.png" /> <strong>Hand</strong> tool to pan, then, using the navigation
+controls in the plug-in, zoom in to the region of interest.</p>
+</li>
+<li><p class="first">To use your mouse to define the polygon, click the <img alt="Polygon icon" src="../../images/cutterPolygonTool.png" /> polygon icon
+in the globe window.</p>
+</li>
+<li><p class="first">Click on the map or globe to define each point. You can use the
 navigation controls on the right to move the globe or change
-zoom levels while drawing.</li>
-<li>Click the final point at the point of origin to complete the polygon selection.</li>
-<li>If you need to redraw the polygon, click <strong>Clear</strong> to delete the polygon you just created.</li>
+zoom levels while drawing.</p>
+</li>
+<li><p class="first">Click the final point at the point of origin to complete the polygon selection.</p>
+<p><img alt="Polygon example" src="../../images/cutterPolygonExample.png" /></p>
+</li>
+<li><p class="first">If you need to redraw the polygon, click <strong>Clear</strong> to delete the polygon you just created.</p>
+</li>
 </ol>
 <p class="rubric">Defining the polygon with KML</p>
 <p>You can also use KML to define the polygon(s). The KML should be
@@ -290,11 +300,9 @@ maximum and minimum resolutions are specified as integers between
 1 and 24. These correspond to the zoom levels that are used in the
 Fusion server. Setting a resolution of 24 results in a cut of the
 entire globe.</p>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last"><strong>Caution:</strong> Setting a resolution of 24 to cut an entire globe
-may result in a very large file.</p>
-</div>
+<div class="warning docutils container">
+<strong>Caution:</strong> Setting a resolution of 24 to cut an entire globe
+may result in a very large file.</div>
 <p class="rubric" id="world-level-resolution">World level resolution</p>
 <p>The area outside of the defined polygon is included in the globe
 at a lower resolution, which you set using <strong>World level</strong>. Areas
@@ -411,10 +419,8 @@ You will be able to see areas that you have been to recently,
 but new image areas may appear blurry.</div></blockquote>
 <p class="rubric">Learn more</p>
 <ul class="simple">
-<li><a class="reference internal" href="../portable/portableUserGuideWinLinux.html#serve-globe-map-gee-portable"><span class="std std-ref">Serve a globe or map from GEE
-Portable</span></a></li>
-<li><a class="reference internal" href="../portable/portableUserGuideWinLinux.html#connect-gee-portable"><span class="std std-ref">Connect with GEE
-Portable</span></a> for
+<li><a class="reference internal" href="../portable/portableUserGuideWinLinux.html#serve-globe-map-gee-portable"><span class="std std-ref">Serve a globe or map from GEE Portable</span></a></li>
+<li><a class="reference internal" href="../portable/portableUserGuideWinLinux.html#connect-gee-portable"><span class="std std-ref">Connect with GEE Portable</span></a> for
 different ways you can connect to GEE Portable to view your
 offline maps and globes.</li>
 <li><a class="reference internal" href="../portable/portableDeveloperGuide.html"><span class="doc">Portable Developer Guide</span></a> for ways
