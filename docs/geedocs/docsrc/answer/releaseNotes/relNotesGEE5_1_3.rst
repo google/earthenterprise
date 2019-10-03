@@ -30,7 +30,7 @@ Release notes: GEE 5.1.3
 
       .. rubric:: Library Updates
 
-      .. list-table:: Library Updates
+      .. list-table::
          :widths: 30 30
          :header-rows: 1
 
@@ -49,7 +49,7 @@ Release notes: GEE 5.1.3
 
       .. rubric:: Known Issues
 
-      .. list-table:: Known Issues
+      .. list-table::
          :widths: 25 25 50
          :header-rows: 1
 
@@ -68,7 +68,7 @@ Release notes: GEE 5.1.3
 
       .. rubric:: Resolved Issues
 
-      .. list-table:: Resolved Issues
+      .. list-table::
          :widths: 25 25 50
          :header-rows: 1
 

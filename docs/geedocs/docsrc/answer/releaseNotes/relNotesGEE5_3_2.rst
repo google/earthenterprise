@@ -11,8 +11,8 @@ Release notes: Open GEE 5.3.2
       .. rubric:: New Features
 
       **Documentation overhaul**. All documentation was migrated to
-      Sphinx format, making it easier to edit and maintain. User 
-      documentation file names were also migrated from number-based naming 
+      Sphinx format, making it easier to edit and maintain. User
+      documentation file names were also migrated from number-based naming
       convention to self-explanatory descriptive titles. New documentation
       format also offers a search capability that was not possible before.
 
@@ -88,22 +88,22 @@ Release notes: Open GEE 5.3.2
              from making it to the server. Changing the command to be a POST request prevents this.
          * - 1376
            - Portable Globe Cutter fails the last step when using HTTPS
-           - Used the advanced configuration to set a URL that will be used when cutter tries to make an openurl call.            
+           - Used the advanced configuration to set a URL that will be used when cutter tries to make an openurl call.
          * - 1398
            - System Manager crash
            - Fixed the crash's underlying cause.
          * - 1401
            - No notification when System Manager Asset Cache size is exceeded causing performance issues
-           - Added a logging record when System Manager Asset Cache size is exceeded.           
+           - Added a logging record when System Manager Asset Cache size is exceeded.
          * - 1404
            - WMS fails when using HTTPS
-           - Skipped the internal Certificate Verification. 
+           - Skipped the internal Certificate Verification.
          * - 1420
            - Build should honor JAVA_HOME when creating rpm packages
            - Honored JAVA_HOME
          * - 1447
            - Compiling error when using scons cache
-           - Fixed compiling error when using scons cache                       
+           - Fixed compiling error when using scons cache
 
       .. rubric:: Known Issues
 
