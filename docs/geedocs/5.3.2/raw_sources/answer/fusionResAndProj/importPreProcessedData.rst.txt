@@ -16,24 +16,26 @@ Import pre-processed data
       Fusion import command or command option for each extension. The
       extensions and their import commands are described below:
 
-      +-----------------------+-----------------------+--------------------------+
-      | File Extension        | Data Type             | Import Command           |
-      +=======================+=======================+==========================+
-      | .kip                  | Imagery               | ``genewimageryresource`` |
-      |                       |                       |                          |
-      +-----------------------+-----------------------+--------------------------+
-      | .ktp                  | Terrain               | ``genewterrainresource`` |
-      |                       |                       |                          |
-      +-----------------------+-----------------------+--------------------------+
-      | .kvp                  | Vector                | ``genewvectorresource``  |
-      |                       |                       |                          |
-      +-----------------------+-----------------------+--------------------------+
-      | .kmp                  | Mask                  | ``--havemask`` command   |
-      |                       |                       | option                   |
-      |                       |                       | Use the ``--nomask``     |
-      |                       |                       | option to import         |
-      |                       |                       | files without a mask.    |
-      +-----------------------+-----------------------+--------------------------+
+      .. list-table::
+         :widths: 20 15 40
+         :header-rows: 1
+
+         * - File Extension
+           - Data Types
+           - Import Command
+         * - .kip
+           - Imagery
+           - ``genewimageryresource``
+         * - .ktp
+           - Terrain
+           - ``genewterrainresource``
+         * - .kvp
+           - Vector
+           - ``genewvectorresource``
+         * - .kmp
+           - Mask
+           - ``--havemask`` command option
+             Use the ``--nomask`` option to import files without a mask.
 
       .. rubric:: To import pre-processed data to Fusion:
 
@@ -44,7 +46,9 @@ Import pre-processed data
          by default) can access and read the files.
       #. Open a terminal window on your processing machine, then change
          directory to your asset root:
+
          ``cd /gevol/assets``
+
       #. Use the appropriate command for the type of data you have:
          imagery, terrain, or vector. Your command must contain either
          the ``--havemask`` or ``--nomask`` option. To import imagery
@@ -54,11 +58,15 @@ Import pre-processed data
          If you import it without using ``-nomask``, it displays a black
          line and circular gaps at each pole because the map edges are
          masked and the center of the earth is exposed.
+
          Commands are in the format:
+
          ``[commandname] [options] [--meta <key>=<value>]... -o <assetname> { --filelist <file> | <sourcefile> ...}``
+
          For all ``genew{imagery,terrain,vector}resource`` tools, the
          output path (``-o path``) must be relative to the asset root
          directory.
+
          You can specify source file names on the command line or in a
          file list. To view supported command options, enter
          ``[commandname] --help | -?``
@@ -95,6 +103,7 @@ Import pre-processed data
                 /gevol/src/vector/processed/noncommercial/nationalatlas/income.kvp``
 
       #. Use the ``gebuild`` command to build the asset:
+
          ``gebuild path/to/resource/directory/resourcename``
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png

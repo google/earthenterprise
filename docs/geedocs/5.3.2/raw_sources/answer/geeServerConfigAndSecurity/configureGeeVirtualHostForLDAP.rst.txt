@@ -80,16 +80,16 @@ Configure a GEE virtual host for LDAP authentication
 
          .. code-block:: none
 
-            ``<Location /private/*>``
-               ``AuthType Basic``
-               ``AuthName "LDAP LOGIN"``
-               ``AuthBasicProvider ldap``
-               ``AuthLDAPURL "ldap://server.name.local:389/cn=Users,dc=domain,dc=google,dc=com?uid"\``
-               ``AuthLDAPBindDN CN=geserver,OU=Users,OU=Yourorg,DC=DcNAME,DC=local``
-               ``AuthLDAPBindPassword localuserpassword``
-               ``AuthzLDAPAuthoritative Off``
-               ``Require valid-user``
-            ``</Location>``
+            <Location /private/*>
+               AuthType Basic
+               AuthName "LDAP LOGIN"
+               AuthBasicProvider ldap
+               AuthLDAPURL "ldap://server.name.local:389/cn=Users,dc=domain,dc=google,dc=com?uid"\
+               AuthLDAPBindDN CN=geserver,OU=Users,OU=Yourorg,DC=DcNAME,DC=local
+               AuthLDAPBindPassword localuserpassword
+               AuthzLDAPAuthoritative Off
+               Require valid-user
+            </Location>
 
       #. Restart your server and try to access the virtual server via
          the client.
