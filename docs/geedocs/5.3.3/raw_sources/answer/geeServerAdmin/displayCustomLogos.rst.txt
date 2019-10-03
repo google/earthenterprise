@@ -13,11 +13,10 @@ Display custom logos
       a GEE Server.
 
       Custom logos are added as database preferences or *snippets*,
-      which are managed using :doc:`snippet
-      profiles <../geeServerAdmin/manageSnippetProfiles>` you create using GEE Server.
-      Once you have saved a custom logo in a snippet profile, you can
-      assign it to any database you publish. You can apply a snippet
-      profile to as many databases as you need.
+      which are managed using :doc:`snippet profiles <../geeServerAdmin/manageSnippetProfiles>` you create
+      using GEE Server. Once you have saved a custom logo in a snippet
+      profile, you can assign it to any database you publish. You can
+      apply a snippet profile to as many databases as you need.
 
       .. rubric:: Cobrand_info snippet
 
@@ -50,7 +49,7 @@ Display custom logos
       height.
 
       The following **cobrand_info** example snippet places the
-      *top_right.jpg* logo in the upper-right corner of the window (the
+      *top_right.jpg* logo in the top-right corner of the window (the
       top right of the image is 5 pixels from the right edge of the
       window edge, using an absolute x coordinate value, and 95% from
       the bottom using a relative y coordinate value), and sets it to
@@ -149,6 +148,7 @@ Display custom logos
          -  Default password: *geeadmin*
 
          .. note::
+
             If you do not know your username and password,
             contact your Google Earth Enterprise Server System
             Administrator.
@@ -211,7 +211,7 @@ Display custom logos
 
       .. rubric:: Single logo at top-left
 
-      This example places one logo in the upper-left corner of the
+      This example places one logo in the top-left corner of the
       window (the top-left of the image is 5% of the window width
       from the left side of the window, and 95% from the bottom), and
       sets it to dynamically scale to 10% of the window width as the
@@ -239,7 +239,7 @@ Display custom logos
 
       |cobrand_info top-center example|
 
-      .. rubric:: Single logo at lower-right corner
+      .. rubric:: Single logo at bottom-right corner
 
       This example places one logo in the bottom-right corner of the
       window by combining relative and absolute coordinate values.
@@ -251,9 +251,9 @@ Display custom logos
 
          |cobrand_info bottom-right example|
 
-      .. rubric:: Single logo at upper-left corner
+      .. rubric:: Single logo at top-left corner
 
-      This example places one logo in the upper-left corner of the
+      This example places one logo in the top-left corner of the
       window using absolute pixel values. The top-left logo tiePoint
       is placed 5 pixels from the left window edge and 5 pixels from
       the top window edge, and the logo is displayed without scaling.

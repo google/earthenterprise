@@ -180,6 +180,7 @@ Portable Globe and Server 5.2
       page appears.
 
       |Cutter|
+
       Select the globe you wish to cut your portable version from in
       the drop-down menu.
 
@@ -515,7 +516,88 @@ Portable Globe and Server 5.2
       give a sense of what these command line tools accomplish and in
       what order they are run:
 
-      ``Building LevelFive ...      No description given. Added globe directory:   /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive Ok      Saved polygon to   /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/earth/polygon.kml   Convert polygon to quadtree nodes ...   Executing: /opt/google/bin/gepolygontoqtnodes --qt_nodes_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/qt_nodes.txt   --kml_polygon_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/earth/polygon.kml   --max_level=18   0 qtnodes Ok      Rewrite dbroot ...   Executing: /opt/google/bin/gerewritedbroot   --source=http://earth.localdomain/default_ge/   --icon_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/icons   --dbroot_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/dbroot.v5   --search_server=localhost   --search_port=9335   --kml_server=localhost   --kml_port=9335   --kml_map_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/kml_map.txt   8 icons   Executing: cp   /tmp/globe_builder/LevelFive_4282_1287494655.545115/dbroot.v5   /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/dbroot/dbroot_localhost_9335   Ok      Grab kml files ...   Executing: /opt/google/bin/gekmlgrabber   --kml_map_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/kml_map.txt   --output_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/kml   --source=http://earth.localdomain/default_ge/   --kml_server=localhost   --kml_port=9335   0 kml files Ok      Build globe ...   Executing: /opt/google/bin/geportableglobebuilder   --source=http://earth.localdomain/default_ge/   --default_level=5   --max_level=5   --hires_qt_nodes_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/qt_nodes.txt   --metadata_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/earth/metadata.json   --globe_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive   --dbroot_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/dbroot.v5 >   /tmp/globe_builder/LevelFive_4282_1287494655.545115/packet_info.txt & Ok      685 image packets   128 terrain packets   515 vectors packets      Extract search data ...   Getting search poi ids:   http://earth.localdomain/cgi-bin/globe_cutter.py?   cmd=POI_IDS&db=default_ge   Getting search poi data:   http://earth.localdomain/cgi-bin/globe_cutter.py?   cmd=SEARCH_FILE&poi_id=&   polygon=Paste%20in%20KML%20containing%20polygon.%20If%20KML%20contains%20more   %20than%20one%20polygon%2C%20the%20first%20polygon%20will%20be%20used.      Saving search poi data:   /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/search_db/gepoi_ Ok      Add plugin files ...   Executing: cp -r /opt/google/gehttpd/htdocs/cutter/template/earth/*   /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/earth Executing: cp -r /opt/google/gehttpd/htdocs/cutter/template/maps/*   /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/maps Executing: cp -r /opt/google/gehttpd/htdocs/cutter/template/js/*   /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/js Rewrite JSON from: http://earth.localdomain/default_ge//query?request=Json&var=geeServerDefs Ok      Packaging globe for download ...   Executing: /opt/google/bin/geportableglobepacker   --globe_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive   --output=/opt/google/gehttpd/htdocs/cutter/globes/LevelFive.glb   Executing: chmod a+r /opt/google/gehttpd/htdocs/cutter/globes/LevelFive.glb   /opt/google/gehttpd/htdocs/cutter/globes/LevelFive.glb 9.62MB Ok   Deleting tmp directory as: /tmp/globe_builder/LevelFive_4282_1287494655.545115 Ok``
+      .. code-block:: none
+      
+         Building LevelFive ...
+         
+         No description given. Added globe directory:
+         /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive Ok
+         
+         Saved polygon to
+         /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/earth/polygon.kml
+         Convert polygon to quadtree nodes ...
+         Executing: /opt/google/bin/gepolygontoqtnodes --qt_nodes_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/qt_nodes.txt
+         --kml_polygon_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/earth/polygon.kml
+         --max_level=18
+         0 qtnodes Ok
+         
+         Rewrite dbroot ...
+         Executing: /opt/google/bin/gerewritedbroot
+         --source=http://earth.localdomain/default_ge/
+         --icon_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/icons
+         --dbroot_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/dbroot.v5
+         --search_server=localhost
+         --search_port=9335
+         --kml_server=localhost
+         --kml_port=9335
+         --kml_map_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/kml_map.txt
+         8 icons
+         Executing: cp
+         /tmp/globe_builder/LevelFive_4282_1287494655.545115/dbroot.v5
+         /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/dbroot/dbroot_localhost_9335
+         Ok
+         
+         Grab kml files ...
+         Executing: /opt/google/bin/gekmlgrabber
+         --kml_map_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/kml_map.txt
+         --output_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/kml
+         --source=http://earth.localdomain/default_ge/
+         --kml_server=localhost
+         --kml_port=9335
+         0 kml files Ok
+         
+         Build globe ...
+         Executing: /opt/google/bin/geportableglobebuilder
+         --source=http://earth.localdomain/default_ge/
+         --default_level=5
+         --max_level=5
+         --hires_qt_nodes_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/qt_nodes.txt
+         --metadata_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/earth/metadata.json
+         --globe_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive
+         --dbroot_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/dbroot.v5 >
+         /tmp/globe_builder/LevelFive_4282_1287494655.545115/packet_info.txt & Ok
+         
+         685 image packets
+         128 terrain packets
+         515 vectors packets
+         
+         Extract search data ...
+         Getting search poi ids:
+         http://earth.localdomain/cgi-bin/globe_cutter.py?
+         cmd=POI_IDS&db=default_ge
+         Getting search poi data:
+         http://earth.localdomain/cgi-bin/globe_cutter.py?
+         cmd=SEARCH_FILE&poi_id=&
+         polygon=Paste%20in%20KML%20containing%20polygon.%20If%20KML%20contains%20more
+         %20than%20one%20polygon%2C%20the%20first%20polygon%20will%20be%20used.
+         
+         Saving search poi data:
+         /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/search_db/gepoi_ Ok
+         
+         Add plugin files ...
+         Executing: cp -r /opt/google/gehttpd/htdocs/cutter/template/earth/*
+         /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/earth Executing: cp -r /opt/google/gehttpd/htdocs/cutter/template/maps/*
+         /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/maps Executing: cp -r /opt/google/gehttpd/htdocs/cutter/template/js/*
+         /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/js Rewrite JSON from: http://earth.localdomain/default_ge//query?request=Json&var=geeServerDefs Ok
+         
+         Packaging globe for download ...
+         Executing: /opt/google/bin/geportableglobepacker
+         --globe_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive
+         --output=/opt/google/gehttpd/htdocs/cutter/globes/LevelFive.glb
+         Executing: chmod a+r /opt/google/gehttpd/htdocs/cutter/globes/LevelFive.glb
+         /opt/google/gehttpd/htdocs/cutter/globes/LevelFive.glb 9.62MB Ok
+         Deleting tmp directory as: /tmp/globe_builder/LevelFive_4282_1287494655.545115 Ok
+
       This section uses the following typographic conventions:
 
       .. list-table::

@@ -59,7 +59,11 @@ Map buttons
          -  The maps layer is layer 1.
          -  The hybrid (Show Labels) layer is layer 2.
 
-         ``var imagery_map_layer = new GFusionTileLayer(geeServerDefs.serverUrl, geeServerDefs.layers[0]); var painted_map_layer = new GFusionTileLayer(geeServerDefs.serverUrl, geeServerDefs.layers[1]); var labels_layer = new GFusionTileLayer(geeServerDefs.serverUrl, geeServerDefs.layers[2]);``
+         .. code-block:: none
+
+            var imagery_map_layer = new GFusionTileLayer(geeServerDefs.serverUrl, geeServerDefs.layers[0]);
+            var painted_map_layer = new GFusionTileLayer(geeServerDefs.serverUrl, geeServerDefs.layers[1]);
+            var labels_layer = new GFusionTileLayer(geeServerDefs.serverUrl, geeServerDefs.layers[2]);
 
          You can access the server definitions and other information
          about map and imagery layers directly from a web browser by
@@ -72,8 +76,7 @@ Map buttons
          This data can also be returned by using the optional ``v``
          parameter.
 
-         -  ``v=1`` returns the data in the format shown in the image
-            above.
+         -  ``v=1`` returns the data in the format shown in the image above.
          -  ``v=2`` returns the data in the JSON format.
          -  A query without the ``v`` parameter acts as ``v=1``.
 
@@ -84,27 +87,41 @@ Map buttons
          to define a map type for each of the ``GTileLayer`` objects.
          See the example below:
 
-         ``var painted_map_type = new GMapType([painted_map_layer],new LatLngProjection(MAX_ZOOM_LEVEL),"Maps"); var imagery_map_type = new GMapType([imagery_map_layer],new LatLngProjection(MAX_ZOOM_LEVEL),"Imagery"); var labels_map_type = new GMapType([imagery_map_layer, labels_layer],new LatLngProjection(MAX_ZOOM_LEVEL),"Hybrid");``
+         .. code-block:: none
+
+            var painted_map_type = new GMapType([painted_map_layer],new LatLngProjection(MAX_ZOOM_LEVEL),"Maps");
+            var imagery_map_type = new GMapType([imagery_map_layer],new LatLngProjection(MAX_ZOOM_LEVEL),"Imagery");
+            var labels_map_type = new GMapType([imagery_map_layer, labels_layer],new LatLngProjection(MAX_ZOOM_LEVEL),"Hybrid");
 
       #. Use the ``.addMapControl()`` method to add each map type and
          its associated button to the map:
 
-         ``map.addMapType(painted_map_type); map.addMapType(imagery_map_type); map.addMapType(labels_map_type);``
+         .. code-block:: none
+
+            map.addMapType(painted_map_type);
+            map.addMapType(imagery_map_type);
+            map.addMapType(labels_map_type);
 
       #. Remove the predefined Google Maps map types below so that the
          buttons display correctly:
 
-         | ``map.removeMapType(G_SATELLITE_MAP);`` // Remove the default
+         ``map.removeMapType(G_SATELLITE_MAP);`` // Remove the default
            Satellite Map Type button
-         | ``map.removeMapType(G_HYBRID_MAP);`` // Remove the default
+         ``map.removeMapType(G_HYBRID_MAP);`` // Remove the default
            Hybrid Map Type button
-         | ``map.removeMapType(G_NORMAL_MAP);`` // Remove the default
+         ``map.removeMapType(G_NORMAL_MAP);`` // Remove the default
            Map Type button
 
       #. Add controls (like the zoom bar, the navigation bar, an
          overview map, and zooming options) to the map:
 
-         ``map.addControl(new GSmallMapControl()); map.addControl(new GOverviewMapControl()); map.addControl(new GScaleControl()); map.enableScrollWheelZoom(); map.enableContinuousZoom();``
+         .. code-block:: none
+
+            map.addControl(new GSmallMapControl());
+            map.addControl(new GOverviewMapControl());
+            map.addControl(new GScaleControl());
+            map.enableScrollWheelZoom();
+            map.enableContinuousZoom();
 
       .. rubric:: Display a drop-down menu instead of buttons
          :name: display-a-drop-down-menu-instead-of-buttons
@@ -112,10 +129,14 @@ Map buttons
       You can show a drop-down menu for the map layers instead of the
       side-by-side buttons, as shown below.
 
-      ========================= ============================
-      Standard map type buttons Drop-down menu for map types
-      |Map buttons|             |Menu buttons|
-      ========================= ============================
+      .. list-table::
+         :widths: 20 60
+         :header-rows: 1
+
+         * - Standard map type buttons
+           - Drop-down menu for map types
+         * - |Map buttons|
+           - |Menu buttons|
 
       To accomplish this, replace the ``GHierarchicalMapTypeControl``
       call with a ``GMenuMapTypeControl``.
@@ -141,16 +162,31 @@ Map buttons
 
       ``http://machine123.company.internal/mapexample - /opt/google/gehttpd/conf.d/virtual_servers/example.location``.
 
-      ``# The mapexample virtual server RewriteRule ^/mapexample$ /mapexample/ [R] RewriteRule ^/mapexample/+$ /maps/maps_local.html [PT] RewriteRule ^/mapexample/+maps/+mapfiles/(.*)$ /maps/mapfiles/$1 [PT] <Location "/mapexample/*"> SetHandler gedb-handler Include conf.d/virtual_servers/runtime/example_runtime </Location>``
+      .. code-block:: none
+
+         # The mapexample virtual server
+         RewriteRule ^/mapexample$ /mapexample/ [R]
+         RewriteRule ^/mapexample/+$ /maps/maps_local.html [PT]
+         RewriteRule ^/mapexample/+maps/+mapfiles/(.*)$ /maps/mapfiles/$1 [PT]
+         <Location "/mapexample/*">
+         SetHandler gedb-handler Include conf.d/virtual_servers/runtime/example_runtime
+         </Location>
 
       In the example above, the second RewriteRule specifies that the
       ``/maps/maps_local.html`` web page is loaded whenever users visit
-      the virtual server URL
-      ``http://machine123.company.internal/mapexample``.
+      the virtual server URL ``http://machine123.company.internal/mapexample``.
 
       You can change this setting to load a different web page:
 
-      ``# The mapexample virtual server RewriteRule ^/mapexample$ /mapexample/ [R] RewriteRule ^/mapexample/+$ /maps/gmaps_buttons.html [PT] RewriteRule ^/mapexample/+maps/+mapfiles/(.*)$ /maps/mapfiles/$1 [PT] <Location "/mapexample/*"> SetHandler gedb-handler Include conf.d/virtual_servers/runtime/example_runtime </Location>``
+      .. code-block:: none
+
+         # The mapexample virtual server
+         RewriteRule ^/mapexample$ /mapexample/ [R]
+         RewriteRule ^/mapexample/+$ /maps/gmaps_buttons.html [PT]
+         RewriteRule ^/mapexample/+maps/+mapfiles/(.*)$ /maps/mapfiles/$1 [PT]
+         <Location "/mapexample/*">
+         SetHandler gedb-handler Include conf.d/virtual_servers/runtime/example_runtime
+         </Location>
 
       After you make changes to the file, restart the GEE Server to
       reload the configuration file and implement the change.
@@ -169,10 +205,9 @@ Map buttons
       .. rubric:: Map data
 
       You can obtain a complete copy of the 2D Map layer display rules
-      from the `Google Earth
-      Enterprise <https://groups.google.com/group/google-earth-enterprise>`_
-      Google Group Files section. The maps and hybrid (Show Labels) map
-      layers were built from three different datasets:
+      from the `Google Earth Enterprise <https://groups.google.com/group/google-earth-enterprise>`_ Google Group Files section.
+      The maps and hybrid (Show Labels) map layers were built from
+      three different datasets:
 
       -  Global borders (filled and outlined) in the maps and hybrid
          layers were created from the the Thematic Mapping World Borders
@@ -181,13 +216,11 @@ Map buttons
       -  USA state boundaries in the maps and hybrid layers were created
          from the USA State borders vector data hosted by the National
          Atlas of the USA (now called the National Map). You can
-         download state boundaries from
-         `https://nationalmap.gov/small_scale/atlasftp.html <https://nationalmap.gov/small_scale/atlasftp.html>`_.
+         download state boundaries from `https://nationalmap.gov/small_scale/atlasftp.html <https://nationalmap.gov/small_scale/atlasftp.html>`_.
       -  The background water that is visible in the maps layer was
          created with a global KML file. You can obtain the KML water
-         file from the `Google Earth
-         Enterprise <https://groups.google.com/group/google-earth-enterprise>`_
-         Google Group Files section.
+         file from the `Google Earth Enterprise <https://groups.google.com/group/google-earth-enterprise>`_ Google Group
+         Files section.
 
       .. rubric:: Imagery data
 

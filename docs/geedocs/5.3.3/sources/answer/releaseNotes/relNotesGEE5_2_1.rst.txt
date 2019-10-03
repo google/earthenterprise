@@ -79,18 +79,18 @@ new PostgreSQL version used by Open GEE 5.2.1.
 
 -[ Known Issues ]-
 
-Known Issues        Number  Description  Workaround  4  Google basemap
-fails to load in 2D Mercator Maps  Obtain a valid Google Maps API key
-and include it in /opt/google/gehttpd/htdocs/maps/maps_google.html.  8
-Ensure GEE Portable Cutter Job Completes  No current work around.  9
-Improve FileUnpacker Handling of Invalid Files  No current work
-around.  20  Simplify build process for portable builds on MacOS
-Building and running Portable Server on MacOS should be possible with
-minimal changes.  34  Scons build creates temporary directories named
-“0”  No current work around.  126  The Fusion installer creates a
-backup on the first run  No current work around. The created backup
-can be deleted.  127  Incorrect error messages from Fusion installer
-No current work around.  190  Hostname mismatch check in installers
+      Number  Description  Workaround  4  Google basemap fails to load
+in 2D Mercator Maps  Obtain a valid Google Maps API key and include it
+in /opt/google/gehttpd/htdocs/maps/maps_google.html.  8  Ensure GEE
+Portable Cutter Job Completes  No current work around.  9  Improve
+FileUnpacker Handling of Invalid Files  No current work around.  20
+Simplify build process for portable builds on MacOS  Building and
+running Portable Server on MacOS should be possible with minimal
+changes.  34  Scons build creates temporary directories named “0”  No
+current work around.  126  The Fusion installer creates a backup on
+the first run  No current work around. The created backup can be
+deleted.  127  Incorrect error messages from Fusion installer  No
+current work around.  190  Hostname mismatch check in installers
 doesn't work as expected  No current work around.  193  Updated docs
 are not copied if the /tmp/fusion_os_install directory already exists
 Delete /tmp/fusion_os_install at the beginning of the stage_install
@@ -186,39 +186,39 @@ that they were produced for.
 
 -[ Resolved Issues ]-
 
-Resolved Issues        Number  Description  Resolution  2  MrSID
-imagery is not supported  Build script now checks for MrSID libraries
-and if found, Fusion will be built with MrSID format support  6  The
-Portable UI reports an error any time a cut is canceled, even if the
-cancel was successful  Fixed concurrency issue  247  Default Imagery
-and Terrain file filters ignore files with the ".tiff" extension
-Added ".tiff" to list of supported format extensions  321, 335, 359
-If there is an error while saving a resource, the resource cannot be
-saved again even if the error is resolved  Fixed out-of-sync errors
-355  Package gtest under CentOS/RHEL 6  instructions for building
-OpenGEE under CentOS 6 were updated and build scripts modified to
-detect and use "devtoolset-2-toolchain"  375  Invalid version of
-psycopg2 on Ubuntu 16.04  Added PYTHONPATH to Apache environment, so
-it gets passed on to CGI scripts like Cutter  423  Slower JPEG2000
-performance than 5.1.3  Upgraded to new version of OpenJpeg: 2.3.0.
-This new version has multiple performance improvements.  476  Support
-building on CentOS6 with Python2.6  Added support for Python 2.6 for
-CentOS6.  515  gepolymaskgen segfaults with specific inputs  Fixed out
-of bounds error in box filter  524  Globe Database Fails to Publish if
-a Snippet is selected  Fixed spelling mistake  624  File permissions
-incorrect in /opt/google if root has a restrictive umask  Fixed
-permissions  634  Duplicate resources in imagery projects  Passed
-"re_init" flag down through prefill  658  Fix Perl Interpreter Paths
-in Built Scripts  Added initscripts as a dependency for opengee-server
-and updated find-requires and requiresCommands capabilities of RPM
-666  Running gerewritedbroot with the proper parameters results in a
-usage message  initialized variable in gerewritedbroot  668  Cannot
-push databases with search enabled in dual server configuration
-Ensured that poi data files are included in the manifest when pushing
-a database to the server  671  Documentation link on Server admin page
-is broken in release_5.2.1  Fixed links  677, 685  Trying to
-disassemble or assemble a portable globe or map GLC fails on RedHat 6
-Used a python 2.6 compatible function instead of python 2.7.  680
-Restoring a DB dump from earlier versions of GEE that does not have a
-search enabled will fail  Moved logic to add postgres extension when
+      Number  Description  Resolution  2  MrSID imagery is not
+supported  Build script now checks for MrSID libraries and if found,
+Fusion will be built with MrSID format support  6  The Portable UI
+reports an error any time a cut is canceled, even if the cancel was
+successful  Fixed concurrency issue  247  Default Imagery and Terrain
+file filters ignore files with the ".tiff" extension  Added ".tiff" to
+list of supported format extensions  321, 335, 359  If there is an
+error while saving a resource, the resource cannot be saved again even
+if the error is resolved  Fixed out-of-sync errors  355  Package gtest
+under CentOS/RHEL 6  instructions for building OpenGEE under CentOS 6
+were updated and build scripts modified to detect and use
+"devtoolset-2-toolchain"  375  Invalid version of psycopg2 on Ubuntu
+16.04  Added PYTHONPATH to Apache environment, so it gets passed on to
+CGI scripts like Cutter  423  Slower JPEG2000 performance than 5.1.3
+Upgraded to new version of OpenJpeg: 2.3.0. This new version has
+multiple performance improvements.  476  Support building on CentOS6
+with Python2.6  Added support for Python 2.6 for CentOS6.  515
+gepolymaskgen segfaults with specific inputs  Fixed out of bounds
+error in box filter  524  Globe Database Fails to Publish if a Snippet
+is selected  Fixed spelling mistake  624  File permissions incorrect
+in /opt/google if root has a restrictive umask  Fixed permissions  634
+Duplicate resources in imagery projects  Passed "re_init" flag down
+through prefill  658  Fix Perl Interpreter Paths in Built Scripts
+Added initscripts as a dependency for opengee-server and updated find-
+requires and requiresCommands capabilities of RPM  666  Running
+gerewritedbroot with the proper parameters results in a usage message
+initialized variable in gerewritedbroot  668  Cannot push databases
+with search enabled in dual server configuration  Ensured that poi
+data files are included in the manifest when pushing a database to the
+server  671  Documentation link on Server admin page is broken in
+release_5.2.1  Fixed links  677, 685  Trying to disassemble or
+assemble a portable globe or map GLC fails on RedHat 6  Used a python
+2.6 compatible function instead of python 2.7.  680  Restoring a DB
+dump from earlier versions of GEE that does not have a search enabled
+will fail  Moved logic to add postgres extension when
 restoring/upgrading earlier in the process

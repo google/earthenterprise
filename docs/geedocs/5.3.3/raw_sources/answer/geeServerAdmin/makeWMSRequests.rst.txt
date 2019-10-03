@@ -9,8 +9,7 @@ Make Web Map Service (WMS) requests
    .. container:: content
 
       Google Earth Enterprise Server 5.x supports the `OpenGIS Web Map
-      Service Interface Standard
-      (WMS) <http://www.opengeospatial.org/standards/wms>`_, which
+      Service Interface Standard (WMS) <http://www.opengeospatial.org/standards/wms>`_, which
       provides a standard HTTP interface to request map images from one
       or more published geospatial databases. Mapping images that are
       provided through a WMS over the Internet can show information such
@@ -21,10 +20,8 @@ Make Web Map Service (WMS) requests
       clients can request images from multiple WMS servers and then
       combine those mapping images into a single view. Because the WMS
       standard is used to get all the images, they can easily be
-      overlaid on one another. Supported clients include :ref:`QGIS
-      2.0.1 <Connecting_GE_Server_WMS_Using_QGIS>`, ArcGIS/ArcGIS Explorer Desktop, and
-      `Google Earth
-      Pro/EC <https://github.com/google/earthenterprise/wiki/Google-Earth-Enterprise-Client-(EC)>`_.
+      overlaid on one another. Supported clients include :ref:`QGIS 2.0.1 <Connecting_GE_Server_WMS_Using_QGIS>`,
+      ArcGIS/ArcGIS Explorer Desktop, and `Google Earth Pro/EC <https://github.com/google/earthenterprise/wiki/Google-Earth-Enterprise-Client-(EC)>`_.
 
       -  :ref:`Supported Database Types <Supported_Database_Types>`
       -  :ref:`Supported Projections <Supported_Projections>`
@@ -38,13 +35,11 @@ Make Web Map Service (WMS) requests
 
          -  :ref:`Connecting to Google Earth Server 5.x WMS using QGIS <Connecting_GE_Server_WMS_Using_QGIS>`
 
-
       .. _Supported_Database_Types:
       .. rubric:: Supported Database Types
 
       WMS is supported only with Fusion databases: 2D Plate Carrée and
       Mercator.
-
 
       .. _Supported_Projections:
       .. rubric:: Supported Projections
@@ -100,8 +95,7 @@ Make Web Map Service (WMS) requests
       |WMS-enabled databases in GEE Server|
 
       .. _Making_WMS_Requests_GEE_Server:
-      .. rubric:: Making WMS Requests to Google Earth Enterprise Server
-         5.x
+      .. rubric:: Making WMS Requests to Google Earth Enterprise Server 5.x
 
       The first step in creating maps via HTTP requests to Google Earth
       Enterprise Server 5.x is to create a connection.
@@ -109,13 +103,11 @@ Make Web Map Service (WMS) requests
       To connect to Google Earth Enterprise Server 5.x, use the
       following URL:
 
-      ::
+      ``http://<gee_server_name or ip address>/<target_path_of_published_db>/wms``
 
-         http://<gee_server_name or ip address>/<target_path_of_published_db>/wms
-
-      | In this example, ``http://localhost/merc/wms``, “merc” is the
+        In this example, ``http://localhost/merc/wms``, “merc” is the
         target path of the published database.
-      | Google Earth Enterprise Server 5.x supports the
+        Google Earth Enterprise Server 5.x supports the
         **GetCapabilities** and **GetMap** requests for WMS versions
         1.1.1 and 1.3.0. Use **GetCapabilities** to first request
         metadata from which you can then specify the map images that you
@@ -242,10 +234,8 @@ Make Web Map Service (WMS) requests
       The URL the GIS client should use to make the **GetMap** request
       is as follows:
 
-      ::
-
-         http://<hostname>/<target_path>/wms?SERVICE=WMS&REQUEST=
-         GetMap&BBOX=<bounding_box_limits_of_the_requested_map>&SRS=<projection_type>&WIDTH=<width_of_requested_map>&HEIGHT=<height_of_requested_map>&LAYERS=<layer_name>&STYLES=<style_info>&FORMAT=<format_of_requested_map>&DPI=96&TRANSPARENT=TRUE
+      ``http://<hostname>/<target_path>/wms?SERVICE=WMS&REQUEST=
+      GetMap&BBOX=<bounding_box_limits_of_the_requested_map>&SRS=<projection_type>&WIDTH=<width_of_requested_map>&HEIGHT=<height_of_requested_map>&LAYERS=<layer_name>&STYLES=<style_info>&FORMAT=<format_of_requested_map>&DPI=96&TRANSPARENT=TRUE``
 
       The parameters for this operation are as follows:
 
@@ -349,10 +339,10 @@ Make Web Map Service (WMS) requests
 
       #. Enter the following details:
 
-         -  Name for the connection
-         -  Connection URL as
-            ``http://<server>/<target_path_of_published_database>/wms``,
-            for example, ``http://localhost/my_map/wms``
+         a.  Name for the connection
+         b.  Connection URL as
+             ``http://<server>/<target_path_of_published_database>/wms``,
+             for example, ``http://localhost/my_map/wms``
 
       #. Optionally, supply the username and password if the database
          has been published to a secure virtual host set up with basic

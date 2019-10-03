@@ -52,35 +52,35 @@ new PostgreSQL version used by Open GEE 5.3.1.
 
 -[ Resolved Issues ]-
 
-Resolved Issues        Number  Description  Resolution  1255  Version
-errors with GEE patch releases  Limited internal version string to 3
-parts to fix patch releases.  1292  Invalid qtpacket status with
-SharedString fixes.  If one builds a project the status of the
-qtpacket will show as Bad even though it actually built successfully.
-This fixes the issue.  1304  Creating issues tickets in OpenGEE repo
-does not provide guidelines  Added template to create new issues in
-Open GEE repo.  1317  Lacking Test cases for genewimageryresource
-Added automated tests for Imagery resource creation.  1339  Building
-with incomplete assets can result in Blocked databases  Added error
-handling to certain asset caching to prevent incomplete assets from
-being cached. This prevents a version of the DelayedBuildChildren
-class of errors, and rectifies the run_historical.sh script problem.
+      Number  Description  Resolution  1255  Version errors with GEE
+patch releases  Limited internal version string to 3 parts to fix
+patch releases.  1292  Invalid qtpacket status with SharedString
+fixes.  If one builds a project the status of the qtpacket will show
+as Bad even though it actually built successfully. This fixes the
+issue.  1304  Creating issues tickets in OpenGEE repo does not provide
+guidelines  Added template to create new issues in Open GEE repo.
+1317  Lacking Test cases for genewimageryresource  Added automated
+tests for Imagery resource creation.  1339  Building with incomplete
+assets can result in Blocked databases  Added error handling to
+certain asset caching to prevent incomplete assets from being cached.
+This prevents a version of the DelayedBuildChildren class of errors,
+and rectifies the run_historical.sh script problem.
 
 -[ Known Issues ]-
 
-Known Issues        Number  Description  Workaround  4  Google basemap
-fails to load in 2D Mercator Maps  Obtain a valid Google Maps API key
-and include it in /opt/google/gehttpd/htdocs/maps/maps_google.html.  8
-Ensure GEE Portable Cutter Job Completes  No current work around.  9
-Improve FileUnpacker Handling of Invalid Files  No current work
-around.  20  Simplify build process for portable builds on MacOS
-Building and running Portable Server on MacOS should be possible with
-minimal changes.  34  Scons build creates temporary directories named
-“0”  No current work around.  126  The Fusion installer creates a
-backup on the first run  No current work around. The created backup
-can be deleted.  190  Hostname mismatch check in installers doesn't
-work as expected  No current work around.  193  Updated docs are not
-copied if the /tmp/fusion_os_install directory already exists  Delete
+      Number  Description  Workaround  4  Google basemap fails to load
+in 2D Mercator Maps  Obtain a valid Google Maps API key and include it
+in /opt/google/gehttpd/htdocs/maps/maps_google.html.  8  Ensure GEE
+Portable Cutter Job Completes  No current work around.  9  Improve
+FileUnpacker Handling of Invalid Files  No current work around.  20
+Simplify build process for portable builds on MacOS  Building and
+running Portable Server on MacOS should be possible with minimal
+changes.  34  Scons build creates temporary directories named “0”  No
+current work around.  126  The Fusion installer creates a backup on
+the first run  No current work around. The created backup can be
+deleted.  190  Hostname mismatch check in installers doesn't work as
+expected  No current work around.  193  Updated docs are not copied if
+the /tmp/fusion_os_install directory already exists  Delete
 /tmp/fusion_os_install at the beginning of the stage_install build
 process.  201  Some tiles are displayed incorrectly in the Enterprise
 Client when terrain is enabled  No current work around.  202  Icons
