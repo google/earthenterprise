@@ -205,7 +205,7 @@ class khCache {
   }
   // calculates the current size of a cache item
   uint64 calculateCacheItemSize(Item *item) {
-    return khCacheItemSize + sizeof(item) + GetObjectSize(item->key) + GetObjectSize(item->val);
+    return khCacheItemSize + GetObjectSize(item->key) + GetObjectSize(item->val);
   }
   // sets a given cache item's size to its current size and updates the total cache memory in use
   void updateCacheItemSize(const Key &key) {
