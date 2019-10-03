@@ -51,9 +51,11 @@ Customize your Google Maps landing page
       your platform), since your server contacts Google’s servers for
       functions that are not supported in the browser.
 
-      **Note:** The following procedure assumes that you have received
-      an email from Google that contains your license key for the Google
-      Maps API.
+      .. note::
+
+         The following procedure assumes that you have received
+         an email from Google that contains your license key for the Google
+         Maps API.
 
       .. rubric:: To configure your Google Maps API license key:
          :name: to-configure-your-google-maps-api-license-key

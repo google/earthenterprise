@@ -43,8 +43,8 @@ Extract each archive downloaded to that location. Be sure all the
 files have read permission for all users and directories have read and
 execute permission for all users.
 
-Note: due to a bug in the current Google Earth Enterprise Open Source
-version, vector source files also need the write permission.
+Note: Due to a bug in the current Google Earth Enterprise Open
+  Source version, vector source files also need the write permission.
 
 -[ Configuring the tutorial asset root and source volume ]-
 
@@ -83,34 +83,34 @@ Enter:  geconfigureassetroot --new --assetroot /username/assets  where
 username is the name of the user.  The username does not have to be
 the user’s official account name. It can be anything that
 distinguishes that user from other users on that particular
-workstation, such as edaniels or just Emily.  Note: Google recommends
-that you place the tutorial asset root on the same partition as the
-publish root, so the publisher uses hard links instead of making
-copies of the tutorial databases.  If you place the tutorial asset
-root on the root partition, ensure that there is enough disk space for
-the data created by each user working through the tutorial. If a user
-completes all lessons in the tutorial, allow 1.5 GB of disk space.
-The tool asks if you want to create a new source volume.
+workstation, such as edaniels or just Emily.  Google recommends that
+you place the tutorial asset root on the same partition as the publish
+root, so the publisher uses hard links instead of making copies of the
+tutorial databases.  If you place the tutorial asset root on the root
+partition, ensure that there is enough disk space for the data created
+by each user working through the tutorial. If a user completes all
+lessons in the tutorial, allow 1.5 GB of disk space.  The tool asks if
+you want to create a new source volume.
 
-Enter **Y**, and press Enter.  You are prompted to enter a directory
-for the source volume.
+Enter Y, and press Enter.  You are prompted to enter a directory for
+the source volume.
 
 Enter /opt/google/share/tutorials/fusion, and press Enter.  The tool
 asks if you want to add more volumes.
 
-If you want to create tutorial workspaces for more users, enter **Y**,
+If you want to create tutorial workspaces for more users, enter Y,
 press Enter, and repeat steps 3 through 5. If not, skip this step.
-Otherwise, enter **N**, and press Enter.  The tool displays the
-message “Configured /username/assets” and returns you to the command
-line prompt.
+Otherwise, enter N, and press Enter.  The tool displays the message
+“Configured /username/assets” and returns you to the command line
+prompt.
 
 Log out as root.
 
-Start the system manager by entering:  /etc/init.d/gefusion start
-Note: The new source volume and asset root are automatically selected
-for you. You do not have to run the geselectassetroot command. (See
-the next section, Select the Tutorial Asset Root, for more information
-about selecting different asset roots.)
+Start the system manager by entering:  /etc/init.d/gefusion start  The
+new source volume and asset root are automatically selected for you.
+You do not have to run the geselectassetroot command. (See the next
+section, Select the Tutorial Asset Root, for more information about
+selecting different asset roots.)
 
 -[ Select the tutorial asset root ]-
 
@@ -163,12 +163,10 @@ removing the tutorial source files, asset root, and published
 databases. This section describes the best way to perform that
 cleanup.
 
-Note:
-
- Google recommends that you keep the tutorial files intact, since they
-use very little space and can come in handy for users to practice,
-even after they have quite a bit of experience with Google Earth
-Enterprise Fusion.
+Note: Google recommends that you keep the tutorial files intact,
+  since they use very little space and can come in handy for users to
+  practice, even after they have quite a bit of experience with Google
+  Earth Enterprise Fusion.
 
 -[ To remove the tutorial source files, asset root, and databases: ]-
 
@@ -182,12 +180,12 @@ if necessary.
 
 Stop the Google Earth Enterprise Server:  /etc/init.d/geserver stop
 
-Delete the tutorial files: rm -Rf /opt/google/share/tutorials/fusion/
+Delete the tutorial files:  rm -Rf /opt/google/share/tutorials/fusion/
 
 Delete the user’s tutorial asset root by entering:  rm -Rf
 /username/assets  where username is the name of the user you specified
-when you configured the tutorial workspace.  Caution: Make sure you
-are removing the tutorial asset root, not the production root. If you
+when you configured the tutorial workspace.  Make sure you are
+removing the tutorial asset root, not the production root. If you
 delete the production root, there is no way to recover it (other than
 from backups, if available).
 
@@ -203,12 +201,11 @@ omitted, the server type defaults to stream.
 
 Select the database you want to remove by entering:  geserveradmin
 --deletedb db_name...  where db_name is the name of the database you
-want to delete.  Note: If you want to delete a currently published
-database, you can either publish a different database to the same
-virtual server or disable the virtual server on which it is published.
-Then you can delete the database.  This tool does not delete the
-actual files. It is similar to putting files in the trash on a Windows
-or Mac desktop.
+want to delete.  If you want to delete a currently published database,
+you can either publish a different database to the same virtual server
+or disable the virtual server on which it is published. Then you can
+delete the database.  This tool does not delete the actual files. It
+is similar to putting files in the trash on a Windows or Mac desktop.
 
 Permanently delete the selected databases by entering:  geserveradmin
 --garbagecollect

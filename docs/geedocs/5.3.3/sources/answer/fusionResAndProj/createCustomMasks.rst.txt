@@ -166,9 +166,7 @@ an area in the final mask.
 The final mask is built by subtracting and adding desired areas to
 hide or view by a sequence of operators.
 
-Note: Note:
-
-   It is easy to create very high resolution masks with
+Note: It is easy to create very high resolution masks with
   "gepolymaskgen", to the point of pixel-by-pixel matching for the
   source imagery. Please check the overall raster size of your source
   imagery before creating a custom mask with "gepolymaskgen" as it is
@@ -1393,11 +1391,9 @@ Places
 an independent "KML" file that can then be utilized with
 "gepolymaskgen".
 
-Note: Note:
-
-   Additional information about creating polygons within Google Earth
-  is also freely available with the Google Earth Outreach tutorials,
-  directly accessible at
+Note: Additional information about creating polygons within Google
+  Earth is also freely available with the Google Earth Outreach
+  tutorials, directly accessible at
 
   http://earth.google.com/outreach/tutorial_annotate.html#addpolygons
 
@@ -1554,10 +1550,8 @@ Appendix A
  for further information about enabling the "havemask" mask mode for
 an image resource.
 
-Note: Note:
-
-   This mask file could also be created in two steps as well - the
-  first step to create the base mask file (
+Note: This mask file could also be created in two steps as well -
+  the first step to create the base mask file (
 
   picture frame
 

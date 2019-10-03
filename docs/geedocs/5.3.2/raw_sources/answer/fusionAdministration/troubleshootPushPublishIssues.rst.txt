@@ -30,6 +30,7 @@ Troubleshoot push/publishing issues
       -  :doc:`../geeServerAdmin/publishDatabasesPortables`
       -  :doc:`../fusionAdministration/publishDBWithDiscPublishing`
 
+      .. index:: Troubleshoot Push Issues
       .. rubric:: Troubleshoot Push Issues
 
       Errors in the push operation may occur when Fusion fails to copy
@@ -82,7 +83,9 @@ Troubleshoot push/publishing issues
             To reset the username and password, run the following
             command, which prompts you to enter a new username and
             password:
-            ``sudo /opt/google/gehttpd/bin/htpasswd -c         /opt/google/gehttpd/conf.d/.htpasswd new_user_name``
+
+            ``sudo /opt/google/gehttpd/bin/htpasswd -c``
+            ``/opt/google/gehttpd/conf.d/.htpasswd new_user_name``
 
             If you do not know your username and password, contact your
             system administrator.
@@ -90,7 +93,21 @@ Troubleshoot push/publishing issues
       #. Review the HTTP and Postgres processes. They should look
          something like this:
 
-         ``# ps -ef | grep http       root      9220    1  0 Mar13 ?        00:00:00 /opt/google/gehttpd/bin/gehttpd       505   14608  9220  0 Mar15 ?      00:00:00 /opt/google/gehttpd/bin/gehttpd       505   14609  9220  0 Mar15 ?      00:00:00 /opt/google/gehttpd/bin/gehttpd              # ps -ef | grep post       gepguser  9206  9195  0 Mar13 ?       00:00:00 postgres: writer process       gepguser  9207  9195  0 Mar13 ?       00:00:00 postgres: stats buffer process       gepguser  9208  9207  0 Mar13 ?       00:00:00 postgres: stats collector process       gepguser 10639  9195  0 Mar13 ?       00:00:00 postgres: geuser gesearch 127.0.0.1(32772) idle       gepguser 10640  9195  0 Mar13 ?       00:00:00 postgres: geuser gesearch 127.0.0.1(32773) idle       gepguser 10641  9195  0 Mar13 ?       00:00:00 postgres: geuser gepoi 127.0.0.1(32774) idle       gepguser 10642  9195  0 Mar13 ?       00:00:00 postgres: geuser geplaces 127.0.0.1(32775) idle``
+         .. code-block:: none
+
+            # ps -ef | grep http
+            root 9220 1 0 Mar13 ? 00:00:00 /opt/google/gehttpd/bin/gehttpd
+            505 14608 9220 0 Mar15 ? 00:00:00 /opt/google/gehttpd/bin/gehttpd
+            505 14609 9220 0 Mar15 ? 00:00:00 /opt/google/gehttpd/bin/gehttpd
+
+            # ps -ef | grep post
+            gepguser 9206 9195 0 Mar13 ? 00:00:00 postgres: writer process
+            gepguser 9207 9195 0 Mar13 ? 00:00:00 postgres: stats buffer process
+            gepguser 9208 9207 0 Mar13 ? 00:00:00 postgres: stats collector process
+            gepguser 10639 9195 0 Mar13 ? 00:00:00 postgres: geuser gesearch 127.0.0.1(32772) idle
+            gepguser 10640 9195 0 Mar13 ? 00:00:00 postgres: geuser gesearch 127.0.0.1(32773) idle
+            gepguser 10641 9195 0 Mar13 ? 00:00:00 postgres: geuser gepoi 127.0.0.1(32774) idle
+            gepguser 10642 9195 0 Mar13 ? 00:00:00 postgres: geuser geplaces 127.0.0.1(32775) idle
 
          If you have any defunct processes or other unusual entries,
          stop them or try to find out why they are running. Run
@@ -98,12 +115,18 @@ Troubleshoot push/publishing issues
          shuts down and starts up quickly with no error messages. If you
          still get error messages, take the following steps:
 
-         -  Shut down the server: ``/etc/init.d/geserver stop``.
+         -  Shut down the server:
+
+            ``/etc/init.d/geserver stop``.
+
          -  Delete the ``postmaster.pid`` file:
-            ``rm /var/opt/google/pgsql/data/postmaster.pid``. (The
-            ``postmaster.pid`` file may not have been deleted if
+
+            ``rm /var/opt/google/pgsql/data/postmaster.pid``.
+
+            (The ``postmaster.pid`` file may not have been deleted if
             PostgreSQL services have not been stopped correctly, thereby
             preventing another instance of GEE Server from starting.)
+
          -  Reboot the GEE server.
          -  Re-run the two ``ps`` commands and the ``geserver restart``
             command to make sure that everything is running properly.
@@ -112,12 +135,17 @@ Troubleshoot push/publishing issues
          that support pushing and publishing. They should look something
          like this:
 
-         ``ps -ef | grep 'wsgi:ge'       65609 7272 3445 0 Aug10 ? 00:00:11 (wsgi:ge_push_serve) -k start       65609 7273 3445 0 Aug10 ? 00:00:12 (wsgi:ge_publish_serve) -k start       65609 7274 3445 0 Aug10 ? 00:00:11 (wsgi:ge_publish_aux_serve) -k start``
+         .. code-block:: none
+
+            ps -ef | grep 'wsgi:ge'
+            65609 7272 3445 0 Aug10 ? 00:00:11 (wsgi:ge_push_serve) -k start
+            65609 7273 3445 0 Aug10 ? 00:00:12 (wsgi:ge_publish_serve) -k start
+            65609 7274 3445 0 Aug10 ? 00:00:11 (wsgi:ge_publish_aux_serve) -k start
 
       .. rubric:: Check your hostnames
          :name: check-your-hostnames
 
-      Check sure that ``hostname -f`` returns the hostname you think it
+      Check to be sure that ``hostname -f`` returns the hostname you think it
       should. Make sure that the ``hostname -f`` is consistent between
       the GEE server, the DNS entry for the GEE server, and any local
       hosts files. When you install Fusion and GEE Server on your
@@ -224,6 +252,7 @@ Troubleshoot push/publishing issues
       #. To perform garbage collecting for deleted databases (stream):
          ``geserveradmin --stream_server_url http://earth.int --garbagecollect``
 
+      .. index:: Troubleshoot Publishing Issues
       .. rubric:: Troubleshoot Publishing Issues
          :name: troubleshoot-publishing-issues
 
@@ -264,6 +293,7 @@ Troubleshoot push/publishing issues
 
             Instead of using <code>geserveradmin --adddb/pushdb</code> commands, you can push the database directly from Fusion. See :doc:`../fusionAdministration/pushAndPublishDB`.
 
+      .. index:: Troubleshoot Disconnected Publishing Issues
       .. rubric:: Disconnected publishing issues
 
       If you publish a disconnected database and it fails when you
@@ -276,22 +306,30 @@ Troubleshoot push/publishing issues
       Try resetting the permissions on the folders created by
       ``gedisconnectedsend --sendpath`` and try the ``--pushdb`` again.
 
-      -  See "doc"`../fusionAdministration/publishDBWithDisconnectedPublishing`.
+      -  See :doc:`../fusionAdministration/publishDBWithDiscPublishing`.
 
       .. rubric:: Check your log files
 
       If you are having push or publishing issues, there are several log
       files you can review for errors.
 
-      ======================================================================================================= ================================================================================================================================================
-      Log file                                                                                                Error logging reported
-      ======================================================================================================= ================================================================================================================================================
-      ``/opt/google/gehttpd/logs/error_log``                                                                  Log file containing GEE Server publishing errors and authentication notices.
-      ``/opt/google/gehttpd/logs/access_log``                                                                 Log file containing HTTP GET requests for GEE Server.
-      ``/opt/google/gehttpd/logs/gestream_publisher.out`` ``/opt/google/gehttpd/logs/gesearch_publisher.out`` Log files containing detailed GEE Server publishing errors.
-      ``/var/opt/google/pgsql/logs/pg.log``                                                                   Log file containing postgres processing information for GEE Server. Note that “root” privileges are required to open this log file: use sudo su.
-      ``/home_dir_of_user/.fusion/gepublishdatabase.date.time``                                               Log file containing information about push attempts from Fusion.
-      ======================================================================================================= ================================================================================================================================================
+      .. index:: Troubleshoot Push and Publish issues - log files
+      .. list-table::
+         :widths: 50 50
+         :header-rows: 1
+
+         * - Log file
+           - Error logging reported
+         * - ``/opt/google/gehttpd/logs/error_log``
+           -  Log file containing GEE Server publishing errors and authentication notices.
+         * - ``/opt/google/gehttpd/logs/access_log``
+           -  Log file containing HTTP GET requests for GEE Server.
+         * - ``/opt/google/gehttpd/logs/gestream_publisher.out`` ``/opt/google/gehttpd/logs/gesearch_publisher.out``
+           - Log files containing detailed GEE Server publishing errors.
+         * - ``/var/opt/google/pgsql/logs/pg.log``
+           - Log file containing postgres processing information for GEE Server. Note that “root” privileges are required to open this log file: use sudo su.
+         * - ``/home_dir_of_user/.fusion/gepublishdatabase.date.time``
+           - Log file containing information about push attempts from Fusion.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

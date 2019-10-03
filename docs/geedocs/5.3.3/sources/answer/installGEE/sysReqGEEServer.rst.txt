@@ -15,11 +15,9 @@ Hardware Requirements
    higher preferred for Fusion GUI). You can install this graphics
    card in a separate workstation that accesses Fusion.
 
-   Note:
-
-    If you plan on cutting globes, this processing can be CPU-
-   intensive and you may also need to plan on providing more storage
-   depending on the size of the globes.
+   Note: If you plan on cutting globes, this processing can be CPU-
+     intensive and you may also need to plan on providing more storage
+     depending on the size of the globes.
 
    Note on virtual machines
 
@@ -64,16 +62,16 @@ Software Requirements
 
    For GEE 4.4, use Google Earth EC version 6.1 or later
 
-   Note:
+   Note: Although older versions of Google Earth EC, i.e., 6.0 and
+     earlier,
 
-    Although older versions of Google Earth EC, i.e., 6.0 and earlier,
+     may
 
-   may
-
-    still connect to Google Earth Enterprise or Portable 3D databases,
-   not all features will be available. Also, as Google Earth
-   Enterprise has not been tested or certified against older versions
-   of Google Earth EC, there may be unknown operational problems.
+      still connect to Google Earth Enterprise or Portable 3D
+     databases, not all features will be available. Also, as Google
+     Earth Enterprise has not been tested or certified against older
+     versions of Google Earth EC, there may be unknown operational
+     problems.
 
    Google Earth Enterprise Client (EC) is supported on the following
    platforms:
@@ -84,7 +82,7 @@ Software Requirements
 
    Linux
 
-      Unsupported Versions and Environments
+   Unsupported Versions and Environments
 
    There are many variations of operating systems and related
    software; point ("x.x") releases can sometimes contain changes that

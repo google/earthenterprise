@@ -153,9 +153,9 @@ they can easily be overlaid on one another. Supported clients include
 
 QGIS
 
-, ArcGIS/ArcGIS Explorer Desktop , and
+, ArcGIS/ArcGIS Explorer Desktop, and
 
-Google Earth Pro/EC
+Google Earth Enterprise Client(EC)
 
 .
 

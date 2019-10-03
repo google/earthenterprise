@@ -101,13 +101,15 @@ when adding a larger drive for source data).</p>
 </ul>
 <p>For more information on these commands, see
 <a class="reference internal" href="commandReference.html#geconfigassetroot"><span class="std std-ref">geconfigureassetroot</span></a>.</p>
-<div class="alert docutils container">
-Do not modify the volume definition after you save data to that
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Do not modify the volume definition after you save data to that
 volume. Because the local name and the network path definitions
 are used by Google Earth Enterprise Fusion for resources,
 projects, and database definitions, any change to a volume
 definition invalidates the data already processed on that
-volume.</div>
+volume.</p>
+</div>
 <p>If you add multiple asset roots, you can use the
 <code class="docutils literal notranslate"><span class="pre">geselectassetroot</span></code> to specify the volume in which you want to
 work and to switch back and forth among the available asset roots,
