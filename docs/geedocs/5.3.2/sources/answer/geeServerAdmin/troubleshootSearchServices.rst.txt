@@ -41,7 +41,7 @@ Francisco%', '%San Francisco%'] [2014-07-09 16:13:38,479]  DEBUG
 [MainThread] (poi_search_handler.py:515) - Parsed search tokens: San
 Francisco [2014-07-09 16:13:38,479]  DEBUG    [MainThread]
 (poi_search_handler.py:139) - Querying the database gepoi, at port
-5432, as user geuser on hostname 127.0.0.1. [2014-07-09 16:13:38,479]
+5432, as user geuser on hostname 127.0.0.1. 014-07-09 16:13:38,479]
 DEBUG    [MainThread] (poi_search_handler.py:140) - Query: SELECT
 ST_AsGeoJSON(the_geom) AS the_geom, "posn" FROM gepoi_9 WHERE (
 lower("posn") LIKE %s ) [2014-07-09 16:13:38,479]  DEBUG

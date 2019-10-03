@@ -106,13 +106,10 @@ flyToFirstElement=true&displayKeys;=location flies to the first
 element of your search results and displays the Location key in the
 results. Google Earth EC must be able to understand and respond to
 these key/value pairs, so you must be very familiar with your search
-application to use this field.
-
-Caution:
-
- Any web service, servlet, or web application you configure the search
-tabs to query must return valid KML to Google Earth EC. For Google
-Maps, it must return valid JavaScript in the specified structure.
+application to use this field.  Any web service, servlet, or web
+application you configure the search tabs to query must return valid
+KML to Google Earth EC. For Google Maps, it must return valid
+JavaScript in the specified structure.
 
 Optionally provide additional config parameters. Specify the following
 field parameters:  Label: Label of the search box.  Suggestion:
@@ -151,8 +148,8 @@ In the HTML code, update the style and display elements to customize
 your search form.
 
 Save the HTML file with the name you want to use for your search tabs,
-for example, /opt/google/gehttpd/htdocs/earth/search_supplemental_ui_
-MySearchTab.html.
+e.g., /opt/google/gehttpd/htdocs/earth/search_supplemental_ui_MySearc
+hTab.html.
 
 Publish your database with the selected search tab(s).
 

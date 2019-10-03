@@ -96,7 +96,7 @@ select which files are grouped into mosaics.</li>
 <p>The most efficient method of grouping tiles into virtual mosaics
 is to use <code class="docutils literal notranslate"><span class="pre">gevirtualraster</span></code>, a command line tool that lets you
 access the tile groups directly, making your mosaic management
-very flexible. <code class="docutils literal notranslate"><span class="pre">gevirtualraster</span></code> validates that each source file
+very flexible. <code class="docutils literal notranslate"><span class="pre">Gevirtualraster</span></code> validates that each source file
 has geographic coordinates and that all files are consistent
 projections, number of bands, and band formats.</p>
 <p class="rubric">Overview</p>
@@ -115,7 +115,7 @@ simple visualization.</p>
 <p>Fusion can also use the virtual raster file as source.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><code class="docutils literal notranslate"><span class="pre">gevirtualraster</span></code> is necessary if you are creating
+<p class="last"><code class="docutils literal notranslate"><span class="pre">Gevirtualraster</span></code> is necessary if you are creating
 a custom mask file for the imagery or terrain resource as there
 is a software requirement of one source file for one custom
 mask file. See <a class="reference internal" href="createCustomMasks.html"><span class="doc">Create custom masks</span></a>.</p>
@@ -130,29 +130,48 @@ mosaic:</p>
 <p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">ls</span> <span class="pre">-l</span> <span class="pre">*.tif</span> <span class="pre">|</span> <span class="pre">wc</span> <span class="pre">-l</span></code></p>
 <p>863</p>
 </li>
-</ol>
-<p>#. Create a virtual raster file, specifiying the fill value to be
+<li><p class="first">Create a virtual raster file, specifiying the fill value to be
 used for the mosaic (<code class="docutils literal notranslate"><span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0</span> <span class="pre">=</span> <span class="pre">black</span></code>), the name of the file to
 be generated (<code class="docutils literal notranslate"><span class="pre">my_virtualmosaic_20140624_1.khvr</span></code>), and include
-all of the <code class="docutils literal notranslate"><span class="pre">.tif</span></code> files in the current folder as input.</p>
-<p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">gevirtualraster</span> <span class="pre">--fill</span> <span class="pre">0,0,0</span> <span class="pre">--tolerance</span> <span class="pre">3</span> <span class="pre">-o</span> <span class="pre">my_virtualmosaic_20140624_1.khvr</span> <span class="pre">*.tif</span></code></p>
-<p>#. Import the virtual raster imagery file into Fusion, specifying the
+all of the <code class="docutils literal notranslate"><span class="pre">.tif</span></code> fwiles in the current folder as input.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ gevirtualraster --fill 0,0,0 --tolerance 3 -o
+my_virtualmosaic_20140624_1.khvr *.tif
+</pre></div>
+</div>
+</li>
+<li><p class="first">Import the virtual raster imagery file into Fusion, specifying the
 resource type, the virtual raster file to import and the output
 resource file, <code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">my_virtualmosaic_20140624.kip</span></code>.</p>
-<p><code class="docutils literal notranslate"><span class="pre">gerasterimport</span> <span class="pre">--imagery</span> <span class="pre">my_virtualmosaic_20140624_1.khvr</span> <span class="pre">-o</span> <span class="pre">my_virtualmosaic_20140624.kip</span></code></p>
-<p>#. Create a mask for the imagery resource, specifying band, fill,
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gerasterimport --imagery my_virtualmosaic_20140624_1.khvr -o
+my_virtualmosaic_20140624.kip
+</pre></div>
+</div>
+</li>
+<li><p class="first">Create a mask for the imagery resource, specifying band, fill,
 tolerance and feather values, the imagery resource file and
 the name of the mask created.</p>
-<p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">gemaskgen</span> <span class="pre">--mask</span> <span class="pre">--band</span> <span class="pre">1</span> <span class="pre">--fill</span> <span class="pre">0</span> <span class="pre">--tolerance</span> <span class="pre">3</span> <span class="pre">--feather</span> <span class="pre">100</span> <span class="pre">my_virtualmosaic_20140624_1.kip</span> <span class="pre">my_virtualmosaic_20140624_1-mask.tif</span></code></p>
-<p>#. Import the generated alpha mask, creating a <code class="docutils literal notranslate"><span class="pre">.kmp</span></code> folder.
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ gemaskgen --mask --band 1 --fill 0 --tolerance 3 --feather 100
+my_virtualmosaic_20140624_1.kip my_virtualmosaic_20140624_1-mask.tif
+</pre></div>
+</div>
+</li>
+<li><p class="first">Import the generated alpha mask, creating a <code class="docutils literal notranslate"><span class="pre">.kmp</span></code> folder.
 Corresponding <code class="docutils literal notranslate"><span class="pre">.kip</span></code> and <code class="docutils literal notranslate"><span class="pre">.kmp</span></code> folders should be stored in
 the same directory.</p>
-<p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">gerasterimport</span> <span class="pre">--alphamask</span> <span class="pre">my_virtualmosaic_20140624_1-mask.tif</span> <span class="pre">--imagery</span> <span class="pre">my_virtualmosaic_20140624_1.kip</span> <span class="pre">--output</span> <span class="pre">my_virtualmosaic_20140624_1.kmp</span></code></p>
-<ol class="arabic simple">
-<li>Define a new imagery resource.
-<code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">genewimageryresource</span> <span class="pre">-o</span> <span class="pre">Resources/Imagery/candid_my_virtualmosaic_20140624_1</span> <span class="pre">/gevol/src/candid/my_virtualmosaic_20140624_1/my_virtualmosaic_20140624_1.kip</span></code></li>
-<li>Build the new imagery resource.
-<code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">gebuild</span> <span class="pre">Resources/Imagery/candid_my_virtualmosaic_20140624_1</span></code></li>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ gerasterimport --alphamask my_virtualmosaic_20140624_1-mask.tif --imagery
+my_virtualmosaic_20140624_1.kip --output my_virtualmosaic_20140624_1.kmp
+</pre></div>
+</div>
+</li>
+<li><p class="first">Define a new imagery resource.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ genewimageryresource -o Resources/Imagery/candid_my_virtualmosaic_20140624_1
+/gevol/src/candid/my_virtualmosaic_20140624_1/my_virtualmosaic_20140624_1.kip
+</pre></div>
+</div>
+</li>
+<li><p class="first">Build the new imagery resource.</p>
+<p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">gebuild</span> <span class="pre">Resources/Imagery/candid_my_virtualmosaic_20140624_1</span></code></p>
+</li>
 </ol>
 <div class="admonition tip">
 <p class="first admonition-title">Tip</p>
@@ -174,14 +193,14 @@ the source imagery or terrain files.</p>
 <p class="rubric" id="example">Example</p>
 <p><code class="docutils literal notranslate"><span class="pre">gevirtualraster</span> <span class="pre">--fill</span> <span class="pre">0,0,0</span> <span class="pre">-o</span> <span class="pre">/gevol/src/imagery/usa/XX/new_location/all_files.khvr/gevol/src/imagery/usa/</span>&#160;&#160; <span class="pre">XX/new_location/*.tif</span></code></p>
 <p class="rubric" id="parameters">Parameters</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils">
 <colgroup>
-<col width="15%" />
-<col width="85%" />
+<col width="25%" />
+<col width="75%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head">Header</th>
-<th class="head">Header</th>
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Description</th>
 </tr>
 </thead>
 <tbody valign="top">
@@ -204,10 +223,12 @@ the source imagery or terrain files.</p>
 <td><em>Required</em>. Specify the name of the output file, which must have the <code class="docutils literal notranslate"><span class="pre">.khvr</span></code> extension.</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">sourcefile</span></code></td>
-<td><em>Required</em>. Specify the path and file name of the source file for the resource. You can reference any network-available source file as this value. (Optional if you specify <code class="docutils literal notranslate"><span class="pre">--filelist</span></code> file.)</td>
+<td><em>Required</em>. Specify the path and file name of the source file for the resource. You can
+reference any network-available source file as this value. (Optional if you specify <code class="docutils literal notranslate"><span class="pre">--filelist</span></code> file.)</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--filelist</span> <span class="pre">file</span></code></td>
-<td><em>Optional</em>. Specify the path and file name of a file that contains a list of source files that you want to include in the resource. You can use this option, list files individually, or use a combination of the two.</td>
+<td><em>Optional</em>. Specify the path and file name of a file that contains a list of source files that you
+want to include in the resource. You can use this option, list files individually, or use a combination of the two.</td>
 </tr>
 </tbody>
 </table>
@@ -225,14 +246,14 @@ a grid of image files designated as rows and columns.</p>
 <p class="rubric" id="example-1">Example</p>
 <p><code class="docutils literal notranslate"><span class="pre">gesplitkhvr</span> <span class="pre">--rows</span> <span class="pre">4</span> <span class="pre">--cols</span> <span class="pre">4</span> <span class="pre">--overlap</span> <span class="pre">10</span> <span class="pre">image_file.khvr</span></code></p>
 <p class="rubric">Parameters</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils">
 <colgroup>
-<col width="14%" />
-<col width="86%" />
+<col width="25%" />
+<col width="75%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head">Header</th>
-<th class="head">Header</th>
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Description</th>
 </tr>
 </thead>
 <tbody valign="top">
@@ -254,9 +275,9 @@ a grid of image files designated as rows and columns.</p>
 </tbody>
 </table>
 <p class="rubric">Learn more</p>
-<p><a class="reference internal" href="../fusionTutorial/createImageryMosaic.html"><span class="doc">Create virtual mosaics</span></a></p>
-<p><a class="reference internal" href="../fusionTutorial/segmentLargeImageryFiles.html"><span class="doc">Segmenting Large Imagery Files</span></a></p>
-<p><a class="reference internal" href="createCustomMasks.html"><span class="doc">Create custom masks</span></a></p>
+<p><a class="reference internal" href="../fusionTutorial/createImageryMosaic.html"><span class="doc">Create virtual mosaics</span></a>
+<a class="reference internal" href="../fusionTutorial/segmentLargeImageryFiles.html"><span class="doc">Segmenting Large Imagery Files</span></a>
+<a class="reference internal" href="createCustomMasks.html"><span class="doc">Create custom masks</span></a></p>
 </div>
 </div>
 </div>

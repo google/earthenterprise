@@ -104,18 +104,23 @@ something like:</p>
 <code class="docutils literal notranslate"><span class="pre">Include</span></code> statement you copied and saved, and update the
 LOCATION tags to the real virtual server:</div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">r...&#64;fusion.localhost.org:/opt/google/gehttpd/conf.d/virtual_servers</span> <span class="pre">#</span> <span class="pre">cat</span> <span class="pre">https_2d.location</span> <span class="pre">#</span> <span class="pre">This</span> <span class="pre">is</span> <span class="pre">an</span> <span class="pre">example</span> <span class="pre">of</span> <span class="pre">a</span> <span class="pre">location-based</span> <span class="pre">map</span> <span class="pre">virtual</span> <span class="pre">server</span> <span class="pre">#</span></code>
-<code class="docutils literal notranslate"><span class="pre">Substitute</span> <span class="pre">appropriate</span> <span class="pre">values</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">following</span> <span class="pre">variables</span></code>
-<code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">1.</span> <span class="pre">&lt;LOCATION&gt;</span> <span class="pre">:</span> <span class="pre">The</span> <span class="pre">new</span> <span class="pre">location</span> <span class="pre">name.</span></code>
-<code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">2.</span> <span class="pre">&lt;VS_NAME&gt;</span> <span class="pre">:</span> <span class="pre">The</span> <span class="pre">virtual</span> <span class="pre">server</span> <span class="pre">name</span> <span class="pre">used</span> <span class="pre">to</span> <span class="pre">create</span> <span class="pre">the</span> <span class="pre">virtual</span></code>
-<code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">server</span> <span class="pre">with</span> <span class="pre">geserveradmin</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">RewriteRule</span> <span class="pre">^/mymap$</span> <span class="pre">/mymap/</span> <span class="pre">[R]</span> <span class="pre">RewriteRule</span> <span class="pre">^/mymap/$</span> <span class="pre">/maps/fusionmaps_local.html</span> <span class="pre">[PT]</span> <span class="pre">RewriteRule</span> <span class="pre">^/mymap/mapfiles/(.*)$</span> <span class="pre">/maps/mapfiles/$1</span> <span class="pre">[PT]</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">&lt;Location</span> <span class="pre">&quot;/mymap/*&quot;&gt;</span></code>
-<code class="docutils literal notranslate"><span class="pre">SetHandler</span> <span class="pre">gedb-handler</span></code>
-<code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">conf.d/virtual_servers/runtime/https_2d_runtime</span></code>
-<code class="docutils literal notranslate"><span class="pre">SSLRequireSSL</span></code>
-<code class="docutils literal notranslate"><span class="pre">SSLVerifyClient</span> <span class="pre">none</span></code>
-<code class="docutils literal notranslate"><span class="pre">&lt;/Location&gt;</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>r...@fusion.localhost.org:/opt/google/gehttpd/conf.d/virtual_servers
+# cat https_2d.location # This is an example of a location-based map virtual server #
+Substitute appropriate values in the following variables
+# 1. &lt;LOCATION&gt; : The new location name.
+# 2. &lt;VS_NAME&gt; : The virtual server name used to create the virtual
+# server with geserveradmin
+
+RewriteRule ^/mymap$ /mymap/ [R] RewriteRule ^/mymap/$ /maps/fusionmaps_local.html [PT] RewriteRule ^/mymap/mapfiles/(.*)$ /maps/mapfiles/$1 [PT]
+
+&lt;Location &quot;/mymap/*&quot;&gt;
+SetHandler gedb-handler
+Include conf.d/virtual_servers/runtime/https_2d_runtime
+SSLRequireSSL
+SSLVerifyClient none
+&lt;/Location&gt;
+</pre></div>
+</div>
 </li>
 <li><div class="first line-block">
 <div class="line">Modify the <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/extra/httpd-ssl.conf</span></code>
@@ -124,18 +129,21 @@ file so that the
 file and the virtual server are loaded by the HTTPS/443
 virtual host and not the HTTP/80 virtual host:</div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">(vi</span> <span class="pre">/opt/google/gehttpd/conf/extra/httpd-ssl.conf...)</span></code>
-<code class="docutils literal notranslate"><span class="pre">&lt;snip&gt;</span></code>
-<code class="docutils literal notranslate"><span class="pre">...</span> <span class="pre">&lt;VirtualHost</span> <span class="pre">_default_:443&gt;</span></code>
-<code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">General</span> <span class="pre">setup</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">virtual</span> <span class="pre">host</span></code>
-<code class="docutils literal notranslate"><span class="pre">DocumentRoot</span> <span class="pre">&quot;/opt/google/gehttpd/htdocs&quot;</span></code>
-<code class="docutils literal notranslate"><span class="pre">ServerName</span> <span class="pre">myserver.org:443</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">ServerAdmin</span> <span class="pre">administra...&#64;myserver.org</span></code>
-<code class="docutils literal notranslate"><span class="pre">ErrorLog</span> <span class="pre">&quot;/opt/google/gehttpd/logs/error_log&quot;</span></code>
-<code class="docutils literal notranslate"><span class="pre">TransferLog</span> <span class="pre">&quot;/opt/google/gehttpd/logs/access_log&quot;</span></code>
-<code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">conf.d/virtual_servers/https_2d.location</span></code>
-<code class="docutils literal notranslate"><span class="pre">...</span></code>
-<code class="docutils literal notranslate"><span class="pre">&lt;snip&gt;</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(vi /opt/google/gehttpd/conf/extra/httpd-ssl.conf...)
+&lt;snip&gt;
+... &lt;VirtualHost _default_:443&gt;
+# General setup for the virtual host
+DocumentRoot &quot;/opt/google/gehttpd/htdocs&quot;
+ServerName myserver.org:443
+
+ServerAdmin administra...@myserver.org
+ErrorLog &quot;/opt/google/gehttpd/logs/error_log&quot;
+TransferLog &quot;/opt/google/gehttpd/logs/access_log&quot;
+Include conf.d/virtual_servers/https_2d.location
+...
+&lt;snip&gt;
+</pre></div>
+</div>
 </li>
 <li><div class="first line-block">
 <div class="line">Edit the HTTP/port 80 virtual host to load only the
@@ -148,21 +156,26 @@ HTTP-available virtual servers:</div>
 list the included location files so that the
 <code class="docutils literal notranslate"><span class="pre">https2d.location</span></code> file is excluded:</div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">LoadModule</span> <span class="pre">gedb_module</span> <span class="pre">/opt/google/gehttpd/modules/mod_gedb.so</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">NameVirtualHost</span> <span class="pre">*:80</span></code>
-<code class="docutils literal notranslate"><span class="pre">&lt;VirtualHost</span> <span class="pre">*:80&gt;</span></code>
-<code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">You</span> <span class="pre">should</span> <span class="pre">specify</span> <span class="pre">a</span> <span class="pre">ServerName</span> <span class="pre">in</span> <span class="pre">each</span> <span class="pre">VirtualHost</span> <span class="pre">declaration</span></code>
-<code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">to</span> <span class="pre">avoid</span> <span class="pre">unnecessary</span> <span class="pre">DNS</span> <span class="pre">lookups.</span></code>
-<code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">For</span> <span class="pre">example,</span> <span class="pre">ServerName</span> <span class="pre">www.mycompany.com</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">Redirect</span> <span class="pre">the</span> <span class="pre">home</span> <span class="pre">page</span> <span class="pre">to</span> <span class="pre">display</span> <span class="pre">the</span> <span class="pre">GE</span> <span class="pre">logo</span></code>
-<code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">conf.d/index_rewrite</span></code>
-<code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">conf.d/jkmount</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">Include</span> <span class="pre">all</span> <span class="pre">location-based</span> <span class="pre">virtual</span> <span class="pre">servers</span></code>
-<code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">Include</span> <span class="pre">conf.d/virtual_servers/*.location</span> <span class="pre">(Comment</span> <span class="pre">out</span> <span class="pre">this</span> <span class="pre">line.)</span></code>
-<code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">conf.d/virtual_servers/default_ge.location</span> <span class="pre">(Add</span> <span class="pre">this</span> <span class="pre">line.)</span></code>
-<code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">conf.d/virtual_servers/default_map.location</span> <span class="pre">(Add</span> <span class="pre">this</span> <span class="pre">line.)</span></code>
-<code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">conf.d/virtual_servers/default_search.location</span> <span class="pre">(Add</span> <span class="pre">this</span> <span class="pre">line.)</span></code>
-<code class="docutils literal notranslate"><span class="pre">&lt;/VirtualHost&gt;</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>LoadModule gedb_module /opt/google/gehttpd/modules/mod_gedb.so
+
+NameVirtualHost *:80
+&lt;VirtualHost *:80&gt;
+# You should specify a ServerName in each VirtualHost declaration
+# to avoid unnecessary DNS lookups.
+# For example, ServerName www.mycompany.com
+
+# Redirect the home page to display the GE logo
+Include conf.d/index_rewrite
+Include conf.d/jkmount
+
+# Include all location-based virtual servers
+# Include conf.d/virtual_servers/*.location (Comment out this line.)
+Include conf.d/virtual_servers/default_ge.location (Add this line.)
+Include conf.d/virtual_servers/default_map.location (Add this line.)
+Include conf.d/virtual_servers/default_search.location (Add this line.)
+&lt;/VirtualHost&gt;
+</pre></div>
+</div>
 </li>
 <li><div class="first line-block">
 <div class="line">Save the file and restart the GEE Server software:</div>
@@ -171,10 +184,13 @@ list the included location files so that the
 <p>This separates the HTTP and HTTPS virtual servers from the
 Apache software so that unencrypted and encrypted data can be
 hosted from both.</p>
-<p><strong>Note</strong>: The firewall blocks external port 80 / HTTP
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The firewall blocks external port 80 / HTTP
 connections, but the Publisher tool must use the HTTP port to
 upload information, even if your system only allows this
 internally.</p>
+</div>
 </li>
 <li><p class="first">Create a Fusion server association for the new <strong>https2d</strong>
 virtual server. Use <code class="docutils literal notranslate"><span class="pre">http://myserver.org</span></code> for the URL for

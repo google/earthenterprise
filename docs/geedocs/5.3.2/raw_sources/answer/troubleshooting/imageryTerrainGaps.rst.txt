@@ -38,20 +38,24 @@ Imagery or terrain gaps
 
       To manually create the mask file:
 
-      #. | Locate and record the full path to the resource ``kip`` and
-           ``kmp`` folders:
-         | ``gequery --outfiles resources/imagery/resource_i.kiasset``
+      #. Locate and record the full path to the resource ``kip`` and
+         ``kmp`` folders:
+         
+         ``gequery --outfiles resources/imagery/resource_i.kiasset``
 
          You will need this information for building the automask and
          importing the mask product.
 
       #. Locate the path to the ``mask.tif`` file created by the
          automasker:
+
          ``gequery --outfiles resources/imagery/resource_i.kiasset/maskgen.kia``
+
       #. Navigate to the ``mask.tif`` file and rename it to
          ``mask.tif.bak``.
-      #. | Create the new mask file:
-         | ``gemaskgen --mask --band 1 --fill 0 --feather 0 \ --holesize 100 /path/to/resource_i.kiasset/product.kia/ver/raster.kip \ -o ./mask.tif``
+      #. Create the new mask file:
+          
+         ``gemaskgen --mask --band 1 --fill 0 --feather 0 \ --holesize 100 /path/to/resource_i.kiasset/product.kia/ver/raster.kip \ -o ./mask.tif``
 
          If your source files are ``MrSID`` files, you might need to add
          a mask tolerance value (e.g., ``--tolerance 3``).
@@ -59,7 +63,9 @@ Imagery or terrain gaps
       #. Navigate to the resource ``kip`` and ``kmp`` folders, and move
          the ``mask.kmp`` folder to ``mask.kmp.bak``.
       #. Create the new mask.kmp:
+
          ``gerasterimport --alphamask /path/to/mask.tif --dataproduct /path/to/raster.kip \ --output ./mask.kmp``
+         
       #. Launch the Fusion GUI and preview the image resource.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png

@@ -78,7 +78,7 @@ conf.d/virtual_servers/default_search.location (Add this line.)
 Save the file and restart the GEE Server software:  /etc/init.d/
 geserver restart  This separates the HTTP and HTTPS virtual servers
 from the Apache software so that unencrypted and encrypted data can be
-hosted from both.  Note: The firewall blocks external port 80 / HTTP
+hosted from both.  The firewall blocks external port 80 / HTTP
 connections, but the Publisher tool must use the HTTP port to upload
 information, even if your system only allows this internally.
 
