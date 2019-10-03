@@ -79,12 +79,11 @@ Manage mosaics with virtual rasters
       #. Create a virtual raster file, specifiying the fill value to be
          used for the mosaic (``0, 0, 0 = black``), the name of the file to
          be generated (``my_virtualmosaic_20140624_1.khvr``), and include
-         all of the ``.tif`` fwiles in the current folder as input.
+         all of the ``.tif`` files in the current folder as input.
 
          .. code-block:: none
 
-            $ gevirtualraster --fill 0,0,0 --tolerance 3 -o
-            my_virtualmosaic_20140624_1.khvr *.tif
+            $ gevirtualraster --fill 0,0,0 --tolerance 3 -o my_virtualmosaic_20140624_1.khvr *.tif
 
       #. Import the virtual raster imagery file into Fusion, specifying the
          resource type, the virtual raster file to import and the output
@@ -92,8 +91,7 @@ Manage mosaics with virtual rasters
 
          .. code-block:: none
 
-            gerasterimport --imagery my_virtualmosaic_20140624_1.khvr -o
-            my_virtualmosaic_20140624.kip
+            $ gerasterimport --imagery my_virtualmosaic_20140624_1.khvr -o my_virtualmosaic_20140624.kip
 
       #. Create a mask for the imagery resource, specifying band, fill,
          tolerance and feather values, the imagery resource file and
@@ -102,7 +100,7 @@ Manage mosaics with virtual rasters
          .. code-block:: none
 
             $ gemaskgen --mask --band 1 --fill 0 --tolerance 3 --feather 100
-            my_virtualmosaic_20140624_1.kip my_virtualmosaic_20140624_1-mask.tif
+              my_virtualmosaic_20140624_1.kip my_virtualmosaic_20140624_1-mask.tif
 
       #. Import the generated alpha mask, creating a ``.kmp`` folder.
          Corresponding ``.kip`` and ``.kmp`` folders should be stored in
@@ -111,18 +109,20 @@ Manage mosaics with virtual rasters
          .. code-block:: none
 
             $ gerasterimport --alphamask my_virtualmosaic_20140624_1-mask.tif --imagery
-            my_virtualmosaic_20140624_1.kip --output my_virtualmosaic_20140624_1.kmp
+              my_virtualmosaic_20140624_1.kip --output my_virtualmosaic_20140624_1.kmp
 
       #. Define a new imagery resource.
 
          .. code-block:: none
 
             $ genewimageryresource -o Resources/Imagery/candid_my_virtualmosaic_20140624_1
-            /gevol/src/candid/my_virtualmosaic_20140624_1/my_virtualmosaic_20140624_1.kip
+              /gevol/src/candid/my_virtualmosaic_20140624_1/my_virtualmosaic_20140624_1.kip
 
       #. Build the new imagery resource.
 
-         ``$ gebuild Resources/Imagery/candid_my_virtualmosaic_20140624_1``
+         .. code-block:: none
+
+            $ gebuild Resources/Imagery/candid_my_virtualmosaic_20140624_1
 
       .. tip::
 
@@ -134,7 +134,10 @@ Manage mosaics with virtual rasters
       You can create a virtual raster of all source files stored in a
       test file using the ``gevirtualraster --filelist`` option:
 
-      ``$ gevirtualraster --fill 0,0,0 -o /gevol/src/imagery/example/example-mosaic-list.khvr --filelist /gevol/src/imagery/example/source-files.txt``
+      .. code-block:: none
+
+         $ gevirtualraster --fill 0,0,0 -o /gevol/src/imagery/example/example-mosaic-list.khvr
+           --filelist /gevol/src/imagery/example/source-files.txt
 
       The file list must include one column of file names and the full
       path of each source file must be included in the file list.
@@ -146,12 +149,18 @@ Manage mosaics with virtual rasters
       used as fill, tolerance values for the fill, and a file list of
       the source imagery or terrain files.
 
-      ``gevirtualraster [--crop pixelx,pixely,pixelx,pixelh] [--fill a,b,...] [--src override_srs] [--tolerance num] [--validate] -o output.khvr {sourcefile ... | --filelist file}``
+      .. code-block:: none
+
+         $ gevirtualraster [--crop pixelx,pixely,pixelx,pixelh] [--fill a,b,...] [--src override_srs]
+           [--tolerance num] [--validate] -o output.khvr {sourcefile ... | --filelist file}
 
       .. rubric:: Example
          :name: example
 
-      ``gevirtualraster --fill 0,0,0 -o /gevol/src/imagery/usa/XX/new_location/all_files.khvr/gevol/src/imagery/usa/   XX/new_location/*.tif``
+      .. code-block:: none
+
+         $ gevirtualraster --fill 0,0,0 -o /gevol/src/imagery/usa/XX/new_location/all_files.khvr
+           /gevol/src/imagery/usa/XX/new_location/*.tif
 
       .. rubric:: Parameters
          :name: parameters
