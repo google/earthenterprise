@@ -86,8 +86,6 @@ print $fh <<EOF;
 #include <AssetThrowPolicy.h>
 #include "AssetOperation.h"
 #include <fusion/autoingest/AssetFactory.h>
-#include <typeinfo>
-#include <type_traits>
 using namespace khxml;
 using namespace AssetFactory;
 EOF
