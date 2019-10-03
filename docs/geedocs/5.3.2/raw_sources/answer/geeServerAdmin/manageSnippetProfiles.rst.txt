@@ -30,15 +30,17 @@ Manage snippet profiles
 
       .. tip::
 
-         Google Earth EC recognizes only the settings made by the first
-         database that you connect to in Google Earth EC. This applies
-         when you are connecting to multiple databases.
+        Google Earth EC recognizes only the settings made by the first
+        database that you connect to in Google Earth EC. This applies
+        when you are connecting to multiple databases.
 
-      **Caution:** If you are working with multiple GEE Server users on
-      multiple workstations, it is important to remember that snippet
-      profiles can be accessed by all users at the same time. Be sure to
-      coordinate with any other users to avoid overwriting snippet profile
-      settings.
+      .. warning::
+      
+        If you are working with multiple GEE Server users on
+        multiple workstations, it is important to remember that snippet
+        profiles can be accessed by all users at the same time. Be sure to
+        coordinate with any other users to avoid overwriting snippet profile
+        settings.
 
       -  :ref:`Creating a snippet profile <Create_Snippet_Profile>`
       -  :ref:`Editing snippet settings <Edit_Snippet_Settings>`
@@ -59,10 +61,11 @@ Manage snippet profiles
          -  Default username: *geapacheuser*
          -  Default password: *geeadmin*
 
-         .. note::
-            If you do not know your username and password,
-            contact your Google Earth Enterprise Server System
-            Administrator.
+        .. note::
+        
+          If you do not know your username and password,
+          contact your Google Earth Enterprise Server System
+          Administrator.
 
       #. Click **Snippet profiles** to display your snippet profiles.
       #. Click **Create New**. The **Create new snippet profile** dialog
@@ -70,9 +73,9 @@ Manage snippet profiles
 
          |GEE Server Create Snippet Profile dialog|
 
-      #. Enter a name for the new snippet profile and click the **Create** button.
-         The snippet profile name appears in red in the **Existing
-         snippet profile** list and the **Snippet editor** opens.
+      #. Enter a name for the new snippet profile and click the **Create**
+         button. The snippet profile name appears in red in the 
+         **Existing snippet profile** list and the **Snippet editor** opens.
 
       .. rubric:: To edit snippet settings:
          :name: to-edit-snippet-settings
@@ -123,7 +126,7 @@ Manage snippet profiles
       .. _Table_Snippet_Settings:
       .. rubric:: Snippet Settings
 
-      .. list-table:: Snippet Settings
+      .. list-table::
          :widths: 15 25 25 25
          :header-rows: 1
 

@@ -86,12 +86,11 @@ imagery.  Auto mask works well to mask fill data though it cannot, for
 example, mask imagery to a coastline since the water would still be
 considered imagery and not fill. In such cases, create a custom mask.
 
-Create your own custom mask
-:doc:../fusionResAndProj/createCustomMasks` and use Have mask to apply
-your custom mask.
+Create your own custom mask and use Have mask to apply your custom
+mask.
 
 -[ Learn More ]-
 
-Defining imagery resources :ref:<Define_Imagery_Resources>
+Defining imagery resources
 
 Create custom masks

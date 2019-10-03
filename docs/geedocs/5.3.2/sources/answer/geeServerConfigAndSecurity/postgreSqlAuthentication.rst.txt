@@ -82,21 +82,22 @@ optional fields if needed.
 Create the encrypted password by inserting encyption functions into
 the database with the pgcrypto contributed module:  psql --port=5433
 --username=geeuser geauthdb <
-/usr/share/postgresql/8.4/contrib/pgcrypto.sql  You can substitute a
-different method for this step. The Password Formats section in the
-Apache documentation gives examples in multiple programming languages
-for encrypting the password so that it is readable by Apache.
+/usr/share/postgresql/8.4/contrib/pgcrypto.sql  Note: You can
+substitute a different method for this step. The Password Formats
+section in the Apache documentation gives examples in multiple
+programming languages for encrypting the password so that it is
+readable by Apache.
 
 Make sure the database works by inserting a test user:  psql
 --port=5433 --username=geeuser geauthdb INSERT INTO geepasswd VALUES
 ('jsmith', 'realm', encode(digest( 'jsmith' || ':' || 'realm' || ':'
 ||'password', 'md5'), 'hex'), 'Jane Smith'); \q  Replace "jsmith",
 "realm", "password" and "Jane Smith" with the values you want to use.
-The password is hashed with MD5 because the Apache mod_authn_dbd
+Note: The password is hashed with MD5 because the Apache mod_authn_dbd
 module requires it. This also prevents the password from appearing in
 plaintext.
 
-Create a file named pgsql-auth.confat  /opt/google/gehttpd/conf/extra
+Create a file named pgsql-auth.conf at  /opt/google/gehttpd/conf/extra
 /pgsql-auth.conf.
 
 Add these lines to the pgsql-auth.conf file:  ``DBDriver pgsql``
@@ -114,17 +115,16 @@ Earth Server-specific files Include /opt/google/gehttpd/conf/extra
 /pgsql-auth.conf Include conf.d/*.conf
 
 Add the following lines at the beginning of the <Location> directive
-of your virtual server:  ``AuthType Digest`` ``AuthName "realm"``
-``AuthDigestDomain '/default_map/'`` ``AuthDigestProvider dbd``
-``AuthDBDUserRealmQuery "SELECT passwd FROM geeauth WHERE username =
-%s and realm = %s"`` ``BrowserMatch "MSIE"
-AuthDigestEnableQueryStringHack=On``  If this is a _ge_ virtual
-server, add: BrowserMatch "GoogleEarth"
+of your virtual server:  AuthType Digest AuthName "realm"
+AuthDigestDomain '/default_map/' AuthDigestProvider dbd
+AuthDBDUserRealmQuery "SELECT passwd FROM geeauth WHERE username = %s
+and realm = %s" BrowserMatch "MSIE" AuthDigestEnableQueryStringHack=On
+If this is a _ge_ virtual server, add: BrowserMatch "GoogleEarth"
 AuthDigestEnableQueryStringHack=On  If this is a _map_ virtual server,
 add: BrowserMatch "MSIE" AuthDigestEnableQueryStringHack=On  For more
 information about AuthDigestEnableQueryStringHack, see the
 mod_auth_digest section in the Apache documentation.  The final
-<Location> directive looks like: <Location "/default_map/*"> AuthType
+<Location> directive looks like:  <Location "/default_map/*"> AuthType
 Digest AuthName "realm" AuthDigestDomain '/default_map/'
 AuthDigestProvider dbd AuthDBDUserRealmQuery "SELECT passwd FROM
 geeauth WHERE username = %s and realm = %s" BrowserMatch "MSIE"
@@ -134,6 +134,6 @@ conf.d/virtual_servers/runtime/default_map_runtime </Location>
 
 Save and close the virtual server configuration file.
 
-Restart the server: /etc/init.d/geserver restart  After you verify the
-configuration with your test user, you can add your users to the
+Restart the server:  /etc/init.d/geserver restart  After you verify
+the configuration with your test user, you can add your users to the
 database.

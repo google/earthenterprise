@@ -46,7 +46,7 @@ Back up the following files to /tmp or another archive folder:
 /gevol/assets/.config/volumes.xml
 /gevol/assets/.config/PacketLevel.taskrule
 /gevol/assets/.userdata/serverAssociations.xml
-/gevol/assets/.userdata/snippets.xml Replace assets with the name of
+/gevol/assets/.userdata/snippets.xml  Replace assets with the name of
 your asset root. For example, /gevol/tutorial.
 
 Edit the /gevol/assets/.userdata/snippets.xml file and update the
@@ -63,7 +63,7 @@ Change directory to /tmp and execute  sudo -u gepguser
 /opt/google/bin/geresetpgdb.
 
 Start the geserver and gefusion services:  /etc/init.d/geserver start
-/etc/init.d/gefusion start You can now change the server associations
+/etc/init.d/gefusion start  You can now change the server associations
 and publish the databases.
 
 To change the server associations and publish the databases:

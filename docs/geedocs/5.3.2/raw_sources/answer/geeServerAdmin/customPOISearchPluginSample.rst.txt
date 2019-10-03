@@ -20,9 +20,8 @@ Custom POI Search plug-in Python code sample
       You can find the two Python files for the ``POI Search`` plug-in
       in the following location:
 
-      ``/opt/google/gehttpd/wsgi-bin/search/plugin/custom_POI_search_app.py``
-
-      ``/opt/google/gehttpd/wsgi-bin/search/plugin/custom_POI_search_handler.py``
+      -  ``/opt/google/gehttpd/wsgi-bin/search/plugin/custom_POI_search_app.py``
+      -  ``/opt/google/gehttpd/wsgi-bin/search/plugin/custom_POI_search_handler.py``
 
       In this Python module, an implementation has been provided to
       access the `Google Places

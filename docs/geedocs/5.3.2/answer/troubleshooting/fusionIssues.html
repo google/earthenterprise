@@ -99,8 +99,10 @@ and <code class="docutils literal notranslate"><span class="pre">/gevol/publishe
 GEE Server):</p>
 <ol class="arabic">
 <li><p class="first">Shut down both the <code class="docutils literal notranslate"><span class="pre">gefusion</span></code> and <code class="docutils literal notranslate"><span class="pre">geserver</span></code> daemons:</p>
-<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span> <span class="pre">stop</span></code>
-<code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">stop</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/etc/init.d/gefusion stop
+/etc/init.d/geserver stop
+</pre></div>
+</div>
 </li>
 <li><p class="first">Update the hostname and IP address to the correct entries for
 the machines.</p>
@@ -113,11 +115,13 @@ address and hostname entries for the production machine.</p>
 </li>
 <li><p class="first">Back up the following files to <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> or another archive
 folder:</p>
-<p><code class="docutils literal notranslate"><span class="pre">/gevol/assets/.config/volumes.xml</span></code>
-<code class="docutils literal notranslate"><span class="pre">/gevol/assets/.config/PacketLevel.taskrule</span></code>
-<code class="docutils literal notranslate"><span class="pre">/gevol/assets/.userdata/serverAssociations.xml</span></code>
-<code class="docutils literal notranslate"><span class="pre">/gevol/assets/.userdata/snippets.xml</span></code>
-Replace <code class="docutils literal notranslate"><span class="pre">assets</span></code> with the name of your asset root. For example, <code class="docutils literal notranslate"><span class="pre">/gevol/tutorial</span></code>.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/gevol/assets/.config/volumes.xml
+/gevol/assets/.config/PacketLevel.taskrule
+/gevol/assets/.userdata/serverAssociations.xml
+/gevol/assets/.userdata/snippets.xml
+</pre></div>
+</div>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">assets</span></code> with the name of your asset root. For example, <code class="docutils literal notranslate"><span class="pre">/gevol/tutorial</span></code>.</p>
 </li>
 <li><p class="first">Edit the <code class="docutils literal notranslate"><span class="pre">/gevol/assets/.userdata/snippets.xml</span></code> file and
 update the hardcoded URLs to match the new hostname URL of the
@@ -133,9 +137,11 @@ and <code class="docutils literal notranslate"><span class="pre">/gevol/publishe
 <p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">gepguser</span> <span class="pre">/opt/google/bin/geresetpgdb</span></code>.</p>
 </li>
 <li><p class="first">Start the geserver and gefusion services:</p>
-<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">start</span></code>
-<code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span> <span class="pre">start</span></code>
-You can now change the server associations and publish the
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/etc/init.d/geserver start
+/etc/init.d/gefusion start
+</pre></div>
+</div>
+<p>You can now change the server associations and publish the
 databases.</p>
 </li>
 </ol>

@@ -80,55 +80,55 @@ new PostgreSQL version used by Open GEE 5.2.3.
 
 -[ Resolved Issues ]-
 
-Resolved Issues        Number  Description  Resolution  225  Fusion
-lets you create folder with space in the name  AssetManager UI only
-allows letters, numbers, and underscores for directory name creation
-226  Verify the wrongly spelled "aquisition" is not appearing anywhere
-in the product  Fixed these spelling errors by replacing with
-Acquisition in multiple files.  337  Add a compiler version check to
-scons scripts  Scons scripts ensure gcc version 4.8+ is installed
-before continuing with builds  342  Fusion UI crashes when opening non
-supported type of file  Added check to kiasset, ktasset, xml file load
-to handle invalid files  535  DownloadTutorial.sh often is not staged
-properly for install  Tutorial download script is now included in the
-Fusion RPM  682  Update geconfigurepublishroot to fully correct file
-permissions  geconfigurepublishroot recursively sets the owner and
-permissions for publish root  731  Error in publish of SSL-enabled
-database  Temporary fix from 5.2.2 was found to be the best solution
-762  Package libraries and utilities common to Fusion and Server for
-Ubuntu 16  opengee-common deb packages can be created for Ubuntu 16
-806  gecombineterrain defaulted to only 1 cpu to process data and
-ignored arguments  Added --numCompressThreads option to accept the
-number of threads to use. Default value is the number of CPUs
-available. Deprecated --numcpus option  821  Calling geeInitMap
-results in an infinite recursive loop  Code to display non-existent
-polygon removed  835  GE Server gets its URL from the client instead
-of itself  Fixed code so that when you publish DB, GEServer's URL will
-be used and not the URL which we get from the Publish request message.
-861  Running diagnostics on a server only installation will result in
-a failure for testAdqeuateDiskSpace  This test is skipped if Fusion is
-not present.  877  Fusion RPM install scripts to only chown the asset
-root when necessary  Recursively chown only when the asset root
-directory has incorrect ownership on a Fusion master host. This allows
-upgrading Fusion on machines where changing asset root ownership
-recursively would be very expensive.  912  TestDiskSpace diagnostics
-test fails on CentOS7  Changed a function to return the percentage of
-available disk space instead of the percentage of used disk space.
+      Number  Description  Resolution  225  Fusion lets you create
+folder with space in the name  AssetManager UI only allows letters,
+numbers, and underscores for directory name creation  226  Verify the
+wrongly spelled "aquisition" is not appearing anywhere in the product
+Fixed these spelling errors by replacing with Acquisition in multiple
+files.  337  Add a compiler version check to scons scripts  Scons
+scripts ensure gcc version 4.8+ is installed before continuing with
+builds  342  Fusion UI crashes when opening non supported type of file
+Added check to kiasset, ktasset, xml file load to handle invalid files
+535  DownloadTutorial.sh often is not staged properly for install
+Tutorial download script is now included in the Fusion RPM  682
+Update geconfigurepublishroot to fully correct file permissions
+geconfigurepublishroot recursively sets the owner and permissions for
+publish root  731  Error in publish of SSL-enabled database  Temporary
+fix from 5.2.2 was found to be the best solution  762  Package
+libraries and utilities common to Fusion and Server for Ubuntu 16
+opengee-common deb packages can be created for Ubuntu 16  806
+gecombineterrain defaulted to only 1 cpu to process data and ignored
+arguments  Added --numCompressThreads option to accept the number of
+threads to use. Default value is the number of CPUs available.
+Deprecated --numcpus option  821  Calling geeInitMap results in an
+infinite recursive loop  Code to display non-existent polygon removed
+835  GE Server gets its URL from the client instead of itself  Fixed
+code so that when you publish DB, GEServer's URL will be used and not
+the URL which we get from the Publish request message.  861  Running
+diagnostics on a server only installation will result in a failure for
+testAdqeuateDiskSpace  This test is skipped if Fusion is not present.
+877  Fusion RPM install scripts to only chown the asset root when
+necessary  Recursively chown only when the asset root directory has
+incorrect ownership on a Fusion master host. This allows upgrading
+Fusion on machines where changing asset root ownership recursively
+would be very expensive.  912  TestDiskSpace diagnostics test fails on
+CentOS7  Changed a function to return the percentage of available disk
+space instead of the percentage of used disk space.
 
 -[ Known Issues ]-
 
-Known Issues        Number  Description  Workaround  4  Google basemap
-fails to load in 2D Mercator Maps  Obtain a valid Google Maps API key
-and include it in /opt/google/gehttpd/htdocs/maps/maps_google.html.  8
-Ensure GEE Portable Cutter Job Completes  No current work around.  9
-Improve FileUnpacker Handling of Invalid Files  No current work
-around.  20  Simplify build process for portable builds on MacOS
-Building and running Portable Server on MacOS should be possible with
-minimal changes.  34  Scons build creates temporary directories named
-“0”  No current work around.  126  The Fusion installer creates a
-backup on the first run  No current work around. The created backup
-can be deleted.  127  Incorrect error messages from Fusion installer
-No current work around.  190  Hostname mismatch check in installers
+      Number  Description  Workaround  4  Google basemap fails to load
+in 2D Mercator Maps  Obtain a valid Google Maps API key and include it
+in /opt/google/gehttpd/htdocs/maps/maps_google.html.  8  Ensure GEE
+Portable Cutter Job Completes  No current work around.  9  Improve
+FileUnpacker Handling of Invalid Files  No current work around.  20
+Simplify build process for portable builds on MacOS  Building and
+running Portable Server on MacOS should be possible with minimal
+changes.  34  Scons build creates temporary directories named “0”  No
+current work around.  126  The Fusion installer creates a backup on
+the first run  No current work around. The created backup can be
+deleted.  127  Incorrect error messages from Fusion installer  No
+current work around.  190  Hostname mismatch check in installers
 doesn't work as expected  No current work around.  193  Updated docs
 are not copied if the /tmp/fusion_os_install directory already exists
 Delete /tmp/fusion_os_install at the beginning of the stage_install
