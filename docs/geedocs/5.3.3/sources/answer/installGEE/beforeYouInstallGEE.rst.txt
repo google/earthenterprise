@@ -28,8 +28,8 @@ advance before you begin the installation procedure.
 The following sections provide information about what the Google Earth
 Enterprise software requires in each of these areas.
 
-Be sure to complete all of the tasks described in these sections
-before installing the Google Earth Enterprise software.
+Warning: Be sure to complete all of the tasks described in these
+  sections before installing the Google Earth Enterprise software.
 
 -[ Configuring The Host Volumes ]-
 

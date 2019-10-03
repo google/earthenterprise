@@ -68,7 +68,7 @@ Running Fusion on a Machine with Multiple CPUs
 
          .. note::
 
-            **Note:** \**Fusion will use up to 200% CPU processing for
+            Fusion will use up to 200% CPU processing for
             imagery projects per ``gepackgen`` process, and up to 400%
             CPU processing for terrain projects. There is fundamentally
             a balance between assigning sufficient numbers of CPUs to

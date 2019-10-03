@@ -21,15 +21,14 @@ Relocate your asset root
 
       .. note::
 
-         **Note:** Your asset root and publish root,
+         Your asset root and publish root,
          ``/published_dbs/``, should be located on the same volume,
          enabling Fusion to use symbolic links. Keeping your asset root
          and publish root on separate volumes causes Fusion to make
          copies of your databases, obviously leading to greater use of
          disk space.
 
-      -  :ref:`Relocate your asset root and publish
-         root <Relocate_Asset_Publish_Roots>`
+      -  :ref:`Relocate your asset root and publish root <Relocate_Asset_Publish_Roots>`
       -  :ref:`Relocate your asset root only <Relocate_Asset_Root>`
 
       .. _Relocate_Asset_Publish_Roots:

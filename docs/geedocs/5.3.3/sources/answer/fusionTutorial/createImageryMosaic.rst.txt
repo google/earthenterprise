@@ -11,9 +11,7 @@ mosaic
 . This lesson guides you through the process of creating an imagery
 mosaic.
 
-Note: Note:
-
-   All of the steps in this lesson apply to terrain data as well.
+Note: All of the steps in this lesson apply to terrain data as well.
 
 Create an Imagery Resource
 
@@ -77,8 +75,8 @@ name of the resource appears on the right when you select the
 /ASSET_ROOT/Resources/Imageryfolder in the asset navigation tree.
 
 Right-click ImageryMosaic, and select Build from the context menu.
-Google Earth Enterprise Fusion builds the resource.  Note: Building
-this resource may take several minutes, since it contains four images.
+Google Earth Enterprise Fusion builds the resource.  Building this
+resource may take several minutes, since it contains four images.
 
 When the status of the resource changes to Succeeded in the Asset
 Manager, drag it to the Preview List pane.
@@ -171,8 +169,8 @@ Mosaic is still listed, you can leave the box next to it checked.)
 When you check the box next to all_files:0, a bounding box indicates
 the position of the entire virtual mosaic. When you check the box next
 to all_files:1, four bounding boxes indicate the position of each of
-the individual source files.  Note: Because you have not yet built
-this resource, only the bounding boxes appear, not the actual imagery.
+the individual source files.  Because you have not yet built this
+resource, only the bounding boxes appear, not the actual imagery.
 
 You can check and uncheck the boxes to see the different views. When
 you finish, right-click any layer in the Preview List pane, and select
@@ -239,8 +237,8 @@ name of the resource appears on the right when you select the
 /ASSET_ROOT/Resources/Imageryfolder in the asset navigation tree.
 
 Right-click VirtualMosaic, and select Build from the context menu.
-Google Earth Enterprise Fusion builds the resource.  Note: Building
-this resource may take several minutes.
+Google Earth Enterprise Fusion builds the resource.  Building this
+resource may take several minutes.
 
 When the status of the resource changes to Succeeded in the Asset
 Manager, drag it to the Preview List pane.

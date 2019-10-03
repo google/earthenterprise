@@ -8,6 +8,8 @@ Overview
 
    .. container:: content
 
+      .. index:: About Google Earth Enterprise
+
       Google Earth Enterprise (GEE) enables you to store and process
       terabytes of imagery, terrain, and vector data on your own server
       infrastructure, and publish globes and maps securely for your
@@ -144,9 +146,9 @@ Overview
       mapping images into a single view. Because the WMS standard is
       used to fetch the images, they can easily be overlaid on one
       another. Supported clients include
-      :doc:`QGIS <../geeServerAdmin/makeWMSRequests>`, ArcGIS/ArcGIS Explorer Desktop
-      , and `Google Earth
-      Pro/EC <https://github.com/google/earthenterprise/wiki/Google-Earth-Enterprise-Client-(EC)>`_.
+      :doc:`QGIS <../geeServerAdmin/makeWMSRequests>`, ArcGIS/ArcGIS
+      Explorer Desktop, and `Google Earth Enterprise Client(EC)
+      <https://github.com/google/earthenterprise/wiki/Google-Earth-Enterprise-Client-(EC)>`_.
 
       .. rubric:: Learn More
          :name: learn-more-4

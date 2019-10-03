@@ -164,10 +164,12 @@ also add other optional fields if needed.</li>
 functions into the database with the <code class="docutils literal notranslate"><span class="pre">pgcrypto</span></code> contributed
 module:</p>
 <p><code class="docutils literal notranslate"><span class="pre">psql</span> <span class="pre">--port=5433</span> <span class="pre">--username=geeuser</span> <span class="pre">geauthdb</span> <span class="pre">&lt;</span> <span class="pre">/usr/share/postgresql/8.4/contrib/pgcrypto.sql</span></code></p>
-<p>Note: You can substitute a different method for this step. The <a class="reference external" href="http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmisc%2Fpassword_encryptions.html&amp;sa=D&amp;sntz=1&amp;usg=AFrqEzdBJJpsOLV3eL6UCAatZv_IhxEZdg">Password Formats</a>
-section in the Apache documentation gives examples in multiple
-programming languages for encrypting the password so that it is
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You can substitute a different method for this step. The <a class="reference external" href="http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmisc%2Fpassword_encryptions.html&amp;sa=D&amp;sntz=1&amp;usg=AFrqEzdBJJpsOLV3eL6UCAatZv_IhxEZdg">Password Formats</a> section in the Apache documentation
+gives examples in multiple programming languages for encrypting the password so that it is
 readable by Apache.</p>
+</div>
 </li>
 <li><p class="first">Make sure the database works by inserting a test user:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>psql --port=5433 --username=geeuser geauthdb
@@ -177,9 +179,12 @@ INSERT INTO geepasswd VALUES (&#39;jsmith&#39;, &#39;realm&#39;, encode(digest( 
 </div>
 <p>Replace “jsmith”, “realm”, “password” and “Jane Smith” with the
 values you want to use.</p>
-<p>Note: The password is hashed with MD5 because the Apache
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The password is hashed with MD5 because the Apache
 <code class="docutils literal notranslate"><span class="pre">mod_authn_dbd</span></code> module requires it. This also prevents the
 password from appearing in plaintext.</p>
+</div>
 </li>
 <li><p class="first">Create a file named <code class="docutils literal notranslate"><span class="pre">pgsql-auth.conf</span></code>at</p>
 <p><code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/extra/pgsql-auth.conf</span></code>.</p>

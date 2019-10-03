@@ -94,7 +94,7 @@ creating and storing Mercator imagery resources. For more
 information, see <a class="reference internal" href="../fusionResAndProj/addFlatImageryToMercatorMapDBInGEE5.1.0.html"><span class="doc">Add flat imagery to Mercator map databases in GEE 5.1.0</span></a>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> As an alternative to your own imagery resources, you
+<p class="last">As an alternative to your own imagery resources, you
 can use the Google Base Map in place of an imagery project. See
 <a class="reference internal" href="#using-google-base-map"><span class="std std-ref">Using the Google Base Map</span></a> for more details.</p>
 </div>
@@ -116,7 +116,7 @@ viewing in Google Earth EC.</p>
 <li><a class="reference internal" href="#view-map-database"><span class="std std-ref">View Your Map Database</span></a></li>
 <li><a class="reference internal" href="#using-google-base-map"><span class="std std-ref">Using the Google Base Map</span></a></li>
 </ul>
-<p class="rubric" id="define-map-layer">Define a Map Layer</p>
+<p class="rubric" id="define-map-layer"><span id="index-0"></span>Define a Map Layer</p>
 <p>Defining a map layer consists of adding resources to the layer and
 defining the display rules and filters for the layer. This is
 similar to the process of defining display rules and filters for a
@@ -207,7 +207,7 @@ different text style for the labels.</p>
 default setting for <strong>Color</strong>, black.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> In version 3.0 and beyond, only one font and style
+<p class="last">In version 3.0 and beyond, only one font and style
 is provided, Sans regular. However, you can create a
 configuration file in which you can specify additional
 fonts, if desired. Refer to the <strong>Administration Guide</strong> for
@@ -236,7 +236,7 @@ The new map layer name appears in the Asset Manager’s asset
 list.</p>
 </li>
 </ol>
-<p class="rubric" id="define-map-project">Define a Map Project</p>
+<p class="rubric" id="define-map-project"><span id="index-1"></span>Define a Map Project</p>
 <p>The first step in defining a map project is to specify which map
 layers to include and give the project a name. Before you define a
 map project, however, add a subfolder to the asset navigation tree
@@ -291,7 +291,7 @@ The new map project name appears in the Asset Manager’s asset
 list.</p>
 </li>
 </ol>
-<p class="rubric" id="define-flat-imagery-project">Define a Flat Imagery Project</p>
+<p class="rubric" id="define-flat-imagery-project"><span id="index-2"></span>Define a Flat Imagery Project</p>
 <p>The maps layer includes Google Maps layers and uses the Google
 Maps API from google.com. Map databases use either Plate Carrée
 (EPSG: 4326) or Mercator (EPSG: 3857) projections and normally
@@ -325,26 +325,46 @@ The Open Source dialog opens to the
 <code class="docutils literal notranslate"><span class="pre">/ASSET_ROOT/Resources/Imagery</span></code> folder.</li>
 <li>Enter the name <strong>SFBayAreaLanSat_Merc</strong>, and click <strong>Save</strong>.</li>
 <li>Select <strong>File &gt; Close</strong></li>
-<li>Repeat steps <strong>3</strong> through <strong>11</strong> for the table that follows:
-+————-+————-+————-+————-+————-+
-| Name        | Acquisition | Provider    | Mask        | Source file |
-| (Resources/ | Date        |             |             |             |
-| Imagery/… |             |             |             |             |
-| )           |             |             |             |             |
-+=============+=============+=============+=============+=============+
-| <strong>BlueMarbl | Today’s     | NASA        | **No Mask</strong> | <code class="docutils literal notranslate"><span class="pre">bluemarbl</span> <span class="pre">|</span>
-<span class="pre">|</span> <span class="pre">e_Merc**</span>&#160;&#160;&#160; <span class="pre">|</span> <span class="pre">date</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">|</span> <span class="pre">Imagery</span>&#160;&#160;&#160;&#160; <span class="pre">|</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">|</span> <span class="pre">e_4km.tif</span></code> |
-+————-+————-+————-+————-+————-+
-| <strong>i3_15Mete | Today’s     | i3          | | **Auto    | ``i3SF15-me |
-| r_Merc</strong>    | date        |             |   Mask**    | ter.tif``   |
-|             |             |             | | Default   |             |
-|             |             |             |   values.   |             |
-+————-+————-+————-+————-+————-+
-| <strong>SFHighRes | Today’s     | USGS        | **Auto      | ``usgsSFHiR |
-| Inset_Merc* | date        | Imagery     | Mask</strong>      | es.tif``    |
-| *           |             |             | Default     |             |
-|             |             |             | values.     |             |
-+————-+————-+————-+————-+————-+</li>
+<li>Repeat steps <strong>3</strong> through <strong>11</strong> for the table that follows:</li>
+</ol>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="25%" />
+<col width="19%" />
+<col width="13%" />
+<col width="13%" />
+<col width="31%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name (Resources/Imagery/…)</th>
+<th class="head">Acquisition Date</th>
+<th class="head">Provider</th>
+<th class="head">Mask</th>
+<th class="head">Source File</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><strong>BlueMarble_Merc</strong></td>
+<td>Today’s date</td>
+<td>NASA Imagery</td>
+<td><strong>No Mask</strong></td>
+<td><code class="docutils literal notranslate"><span class="pre">bluemarble_4km.tif</span></code></td>
+</tr>
+<tr class="row-odd"><td><strong>i3_15Meter_Merc</strong></td>
+<td>Today’s date</td>
+<td>i3</td>
+<td><strong>Auto Mask</strong> Default values</td>
+<td><code class="docutils literal notranslate"><span class="pre">i3SF15-meter.tif</span></code></td>
+</tr>
+<tr class="row-even"><td><strong>SFHighResInset_Merc</strong></td>
+<td>Today’s date</td>
+<td>USGS Imagery</td>
+<td><strong>Auto Mask</strong> Default values</td>
+<td><code class="docutils literal notranslate"><span class="pre">usgsSFHiRes.tif</span></code></td>
+</tr>
+</tbody>
+</table>
+<ol class="arabic simple">
 <li>Click <img alt="image11" src="../../images/iconProjImageryMerc.png" />. The Mercator Imagery Project Editor appears
 with no resources selected.
 <img alt="image12" src="../../images/imageryProjEditorMerc.png" /></li>
@@ -356,7 +376,7 @@ table.</li>
 <code class="docutils literal notranslate"><span class="pre">/ASSET_ROOT/Projects/Imagery</span></code> folder.</li>
 <li>Enter the name <strong>SFBayAreaMercator</strong>, and click <strong>Save</strong>.</li>
 </ol>
-<p class="rubric" id="define-push-publish-map-database">Define, Push, and Publish a Map Database</p>
+<p class="rubric" id="define-push-publish-map-database"><span id="index-3"></span>Define, Push, and Publish a Map Database</p>
 <ol class="arabic">
 <li><p class="first">Select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu. The Asset Manager
 appears.</p>
@@ -403,7 +423,7 @@ context menu. The status of the database immediately changes to
 <strong>Waiting</strong> or <strong>Queued</strong> and then to <strong>In Progress</strong>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> It might take a while to build the map database,
+<p class="last">It might take a while to build the map database,
 because it is also building the project.</p>
 </div>
 <p>When Google Earth Enterprise Fusion finishes building the
@@ -426,14 +446,14 @@ Google Earth Enterprise Server, and displays a success message
 when it is done.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> If you get an error message, contact your Google
+<p class="last">If you get an error message, contact your Google
 Earth Enterprise Server administrator for help, or check the
 <em>Google Earth Enterprise Administration Guide</em> for more
 information.</p>
 </div>
 </li>
 </ol>
-<p class="rubric">Publish a Map Database on Google Earth Enterprise Server</p>
+<p class="rubric" id="index-4">Publish a Map Database on Google Earth Enterprise Server</p>
 <p class="rubric">To publish a database:</p>
 <ol class="arabic">
 <li><p class="first">Access the Google Earth Enterprise Server Admin console in a
@@ -447,9 +467,12 @@ password assigned to you:</p>
 <li>Default username: geapacheuser</li>
 <li>Default password: geeadmin</li>
 </ul>
-<p><strong>Note:</strong> If you do not know your username and password,
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you do not know your username and password,
 contact your Google Earth Enterprise Server System
 Administrator.</p>
+</div>
 </li>
 <li><p class="first">Click <strong>Databases</strong> to display the list of databases pushed to
 the server.</p>
@@ -471,7 +494,7 @@ dialog, see <a class="reference internal" href="../geeServerAdmin/createSearchTa
 published status of your database.</p>
 </li>
 </ol>
-<p class="rubric" id="view-map-database">View Your Map Database</p>
+<p class="rubric" id="view-map-database"><span id="index-5"></span>View a Map Database</p>
 <p>After you publish your map database, you can view it from Google
 Earth Enterprise Server or in any browser.</p>
 <p class="rubric">To view your map database from Google Earth Enterprise Server</p>
@@ -485,7 +508,7 @@ Earth Enterprise Server or in any browser.</p>
 <p>A new browser tab opens displaying your map database.</p>
 </li>
 </ol>
-<p class="rubric">To view your map database in any browser</p>
+<p class="rubric">To view your map database in any browser:</p>
 <ol class="arabic">
 <li><p class="first">Launch any web browser.</p>
 </li>
@@ -502,20 +525,20 @@ published the map database. For example:</p>
 <p>If you are not sure which server you published to, contact your
 Google Earth Enterprise Server administrator for help.</p>
 <p>Google Maps displays your database.</p>
-<p class="rubric" id="using-google-base-map">Using the Google Base Map</p>
+<p class="rubric" id="using-google-base-map"><span id="index-6"></span>Using the Google Base Map</p>
 <p>When you build a map database, you have the option to use the
 Google Base Map. Enabling this feature connects to www.google.com,
 loads Google base map tiles through the Google Maps Javascript API
 V3, and renders your map layers on top of them.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> As per Google’s terms of service, you may need to
+<p class="last">As per Google’s terms of service, you may need to
 purchase a Maps for Business license if you are deploying your
 application in an internal environment.</p>
 </div>
 <p>Deploying the Google Base Map involves adding it when you build
 your map database.</p>
-<p class="rubric">To build your map database to include the Google Base Map</p>
+<p class="rubric">To build your map database to include the Google Base Map:</p>
 <ol class="arabic">
 <li><p class="first">Select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu. The Asset Manager
 appears.</p>
@@ -545,7 +568,7 @@ Map.</p>
 <a class="reference internal" href="#define-push-publish-map-database"><span class="std std-ref">Define, Push, and Publish a Map Database</span></a>.</p>
 <p class="rubric">Learn more</p>
 <ul class="simple">
-<li><a class="reference external" href="https://developers.google.com/maps/documentation/javascript/reference">Google Maps Javascript API V3
+<li><a class="reference external" href="https://developers.google.com/maps/documentation/javascript/reference">Google Maps JavaScript API V3
 Reference</a></li>
 </ul>
 </div>

@@ -14,6 +14,6 @@ On the command line, change directory to /opt/google/qt/bin/ and enter
 
 Click the tabs at the top of the right side of the window to view the
 available options, and use the help text on the left side for help
-with each tab.  Note: The Qt Configuration tool is not a Google
-product. For more information about Qt Configuration, select either of
-the options on the Help menu.
+with each tab.  The Qt Configuration tool is not a Google product. For
+more information about Qt Configuration, select either of the options
+on the Help menu.
