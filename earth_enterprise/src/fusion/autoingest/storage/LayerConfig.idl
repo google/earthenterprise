@@ -90,7 +90,6 @@ class IconConfig {
   { }
   uint64 GetSize() {
     return sizeof(*this)
-            //+ GetObjectSize(name)
             + GetObjectSize(href)
             + GetObjectSize(normalColor)
             + GetObjectSize(highlightColor);
@@ -191,7 +190,6 @@ class StyleConfig {
 public:
   uint64 GetSize() {
     return sizeof(*this)
-            //+ GetObjectSize(rgba)
             + GetObjectSize(polyColor)
             + GetObjectSize(lineColor)
             + GetObjectSize(customHeightVariableName)
@@ -333,9 +331,6 @@ class FeatureConfig {
   uint64 GetSize() {
     return sizeof(*this)
             + style.GetSize();
-            //+ GetObjectSize(label)
-            //+ GetObjectSize(shield)
-            //+ GetObjectSize(suppressWords);
   }
 #/hquote
 };
@@ -521,11 +516,6 @@ class SiteConfig {
   uint64 GetSize() {
     return sizeof(*this)
             + style.GetSize()
-            //+ icon.GetSize()
-            //+ GetObjectSize(label)
-            //+ GetObjectSize(addr)
-            //+ GetObjectSize(phone)
-            //+ GetObjectSize(url)
             + GetObjectSize(popupText)
             + GetObjectSize(balloonText)
             + GetObjectSize(balloonBgColor)
@@ -695,16 +685,8 @@ class LocaleConfig {
   uint64 GetSize() {
     IconReference iRef(icon_.GetValue());
     return sizeof(*this)
-            //+ GetObjectSize(layerName)
-            //+ GetObjectSize(iconName)
-            //+ GetObjectSize(labels)
-            //+ GetObjectSize(desc)
-            //+ GetObjectSize(lookat)
-            //+ GetObjectSize(kmlUrl)
-            //+ GetObjectSize(required_client_version)
             + (name_.GetSize() + GetObjectSize(name_.GetValue()))
             + (icon_.GetSize() + iRef.GetSize())
-            //+ (labels_.GetSize() + GetObjectSize(labels_.GetValue()))
             + (is_checked_.GetSize() + GetObjectSize(is_checked_.GetValue()))
             + (desc_.GetSize() + GetObjectSize(desc_.GetValue()))
             + (look_at_.GetSize() + GetObjectSize(look_at_.GetValue()))
@@ -850,8 +832,6 @@ public:
     }
     return sizeof(*this)
             + GetObjectSize(assetRef)
-            //+ GetObjectSize(name)
-            //+ GetObjectSize(icon)
             + GetObjectSize(legend)
             + GetObjectSize(lodForce)
             + displayRulesSize

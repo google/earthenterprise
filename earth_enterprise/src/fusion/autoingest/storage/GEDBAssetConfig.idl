@@ -45,7 +45,6 @@ class GEDBAssetConfig {
             + GetObjectSize(imagery_project_)
             + GetObjectSize(terrain_project_)
             + search_tabs_Size;
-            //+ GetObjectSize(fusion_version_);
   }
 #/hquote
 
