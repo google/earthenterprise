@@ -107,12 +107,16 @@ console</span></a>, click <strong>Search tabs</strong>.
 #. Click <strong>Create</strong> <strong>new</strong>. The Create Search Definition dialog appears.</p>
 <blockquote>
 <div><img alt="Create Search Definition dialog" src="../../images/serverCreateSearchDefinition1.png" /></div></blockquote>
-<ol class="arabic simple">
-<li>Enter a unique <strong>Name</strong> for your search tab.</li>
-<li>Enter a <strong>Label</strong> that will display as the name of the search tab in the client.</li>
-<li>Provide a <strong>URL</strong>.</li>
-<li>If you want to reference a Google Earth Enterprise Server plug-in for the
-search tab, enter the name of the plug-in. The following plug-ins are available:<ul>
+<ol class="arabic">
+<li><p class="first">Enter a unique <strong>Name</strong> for your search tab.</p>
+</li>
+<li><p class="first">Enter a <strong>Label</strong> that will display as the name of the search tab in the client.</p>
+</li>
+<li><p class="first">Provide a <strong>URL</strong>.</p>
+</li>
+<li><p class="first">If you want to reference a Google Earth Enterprise Server plug-in for the
+search tab, enter the name of the plug-in. The following plug-ins are available:</p>
+<ul class="simple">
 <li>POISearch</li>
 <li>/gesearch/FederatedSearch</li>
 <li>/gesearch/CoordinateSearch</li>
@@ -120,31 +124,36 @@ search tab, enter the name of the plug-in. The following plug-ins are available:
 <li>/gesearch/ExampleSearch</li>
 </ul>
 </li>
-<li>Optionally provide additional query parameters.
+<li><p class="first">Optionally provide additional query parameters.
 The syntax is <strong>key1=value1&amp;key2;=value2</strong>. For example,
 <strong>flyToFirstElement=true&amp;displayKeys;=location</strong> flies to
 the first element of your search results and displays the
 Location key in the results. Google Earth EC must be able to
 understand and respond to these key/value pairs, so you must
 be very familiar with your search application to use this
-field.</li>
-</ol>
-<p><strong>Caution:</strong> Any web service, servlet, or web application
+field.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Any web service, servlet, or web application
 you configure the search tabs to query must return valid KML
 to Google Earth EC. For Google Maps, it must return valid
 JavaScript in the specified structure.</p>
-<ol class="arabic simple">
-<li>Optionally provide additional config parameters.
-Specify the following field parameters:<ol class="arabic">
+</div>
+</li>
+<li><p class="first">Optionally provide additional config parameters.
+Specify the following field parameters:</p>
+<ol class="loweralpha simple">
 <li><strong>Label</strong>: Label of the search box.</li>
 <li><strong>Suggestion</strong>: Suggestion to the user of what to search for.</li>
 <li><strong>Key</strong>: The parameter name that the value in the text
 box will be assigned when the search is submitted.</li>
 </ol>
 </li>
-<li>Optionally click <strong>add field</strong> to add another set of search
-field parameters.</li>
-<li>Click <strong>Save</strong>.</li>
+<li><p class="first">Optionally click <strong>add field</strong> to add another set of search
+field parameters.</p>
+</li>
+<li><p class="first">Click <strong>Save</strong>.</p>
+</li>
 </ol>
 <p><img alt="Create Search Definition dialog Full" src="../../images/serverCreateSearchDefinition-full.png" /></p>
 <p>The search tab is ready for you to add to your database. See
@@ -166,7 +175,7 @@ and open your renamed file for edit.</p>
 to customize your search form.</p>
 </li>
 <li><p class="first">Save the HTML file with the name you want to use for your
-search tabs, for example,
+search tabs, e.g.,
 <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/earth/search_supplemental_ui_MySearchTab.html</span></code>.</p>
 </li>
 <li><p class="first">Publish your database with the selected search tab(s).</p>

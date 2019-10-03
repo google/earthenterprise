@@ -73,21 +73,21 @@ information should give you a good idea of which version of GEE was
 used to create the file. Extract and output the "earth/info.txt" file,
 as in the following example use of the command:
 
-"$ geglxinfo --glx tutorial_3d.glc --extract_file earth/info.txt
---output /tmp/info.txt" "$ cat /tmp/info.txt" "Portable Globe"
-"Copyright 2013 Google Inc. All Rights Reserved." "2014-01-15 16:03:15
-GMT"
+   $ geglxinfo --glx tutorial_3d.glc --extract_file earth/info.txt --output /tmp/info.txt
+   $ cat /tmp/info.txt
+   Portable Globe
+   Copyright 2013 Google Inc. All Rights Reserved.
+   2014-01-15 16:03:15 GMT
 
-"2014-01-15 08:03:15" "Globe description: Simple container for
-tutorial glb with gray marble backdrop." "2014-01-15 08:03:15"
-"Executing: /opt/google/bin/gecreatemetadbroot
---output="/tmp/cutter/glc_20598_1389801795.111116/metadbroot" --layer
-s="/tmp/cutter/glc_20598_1389801795.111116/earth/dbroot_layer_info.tx
-t"  --has_base_imagery  2014-01-15 08:03:15 SUCCESS 2014-01-15
-08:03:15 Executing: /opt/google/bin/geportableglcpacker --layer_info=
-"/tmp/cutter/glc_20598_1389801795.111116/earth/layer_info.txt"
---output="/tmp/cutter/glc_20598_1389801795.111116/temp.glc"
---make_copy"
+   2014-01-15 08:03:15
+   Globe description: Simple container for tutorial glb with gray marble backdrop.
+   2014-01-15 08:03:15
+   Executing: /opt/google/bin/gecreatemetadbroot --output="/tmp/cutter/glc_20598_1389801795.111116/metadbroot" --layers="/tmp/cutter/glc_20598_1389801795.111116/earth/dbroot_layer_info.txt"  --has_base_imagery
+
+   2014-01-15 08:03:15
+   SUCCESS
+   2014-01-15 08:03:15
+   Executing: /opt/google/bin/geportableglcpacker --layer_info="/tmp/cutter/glc_20598_1389801795.111116/earth/layer_info.txt" --output="/tmp/cutter/glc_20598_1389801795.111116/temp.glc" --make_copy
 
 -[ Composite globes and maps ]-
 
@@ -171,9 +171,8 @@ to the Server.
 Click the Settings button Settings button in the top right of the
 window and select Launch Cutter from the Tools menu.  A new browser
 tab opens with the GEE Server — Cutting Tool and the Create new
-offline map window appears.  GEE Cutter create offline map window
-
--[ Map or globe name ]-
+offline map window appears.  GEE Cutter create offline map window  Map
+or globe name
 
 Use the drop-down menu to select the database or portable you wish to
 cut to create your offline map or globe.
@@ -222,7 +221,7 @@ navigation controls on the right to move the globe or change zoom
 levels while drawing.
 
 Click the final point at the point of origin to complete the polygon
-selection.
+selection.  Polygon example
 
 If you need to redraw the polygon, click Clear to delete the polygon
 you just created.
@@ -255,10 +254,10 @@ resolutions are specified as integers between 1 and 24. These
 correspond to the zoom levels that are used in the Fusion server.
 Setting a resolution of 24 results in a cut of the entire globe.
 
-Warning: Caution:
+Caution:
 
-   Setting a resolution of 24 to cut an entire globe may result in a
-  very large file.
+ Setting a resolution of 24 to cut an entire globe may result in a
+very large file.
 
 -[ World level resolution ]-
 

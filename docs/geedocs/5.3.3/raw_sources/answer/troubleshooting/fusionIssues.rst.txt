@@ -37,8 +37,10 @@ Fusion issues
 
       #. Shut down both the ``gefusion`` and ``geserver`` daemons:
 
-         ``/etc/init.d/gefusion stop``
-         ``/etc/init.d/geserver stop``
+         .. code-block:: none
+         
+            /etc/init.d/gefusion stop
+            /etc/init.d/geserver stop
 
       #. Update the hostname and IP address to the correct entries for
          the machines.
@@ -49,10 +51,13 @@ Fusion issues
       #. Back up the following files to ``/tmp`` or another archive
          folder:
 
-         ``/gevol/assets/.config/volumes.xml``
-         ``/gevol/assets/.config/PacketLevel.taskrule``
-         ``/gevol/assets/.userdata/serverAssociations.xml``
-         ``/gevol/assets/.userdata/snippets.xml``
+         .. code-block:: none
+         
+            /gevol/assets/.config/volumes.xml
+            /gevol/assets/.config/PacketLevel.taskrule
+            /gevol/assets/.userdata/serverAssociations.xml
+            /gevol/assets/.userdata/snippets.xml
+
          Replace ``assets`` with the name of your asset root. For example, ``/gevol/tutorial``.
 
       #. Edit the ``/gevol/assets/.userdata/snippets.xml`` file and
@@ -68,8 +73,11 @@ Fusion issues
 
       #. Start the geserver and gefusion services:
 
-         ``/etc/init.d/geserver start``
-         ``/etc/init.d/gefusion start``
+         .. code-block:: none
+         
+            /etc/init.d/geserver start
+            /etc/init.d/gefusion start
+
          You can now change the server associations and publish the
          databases.
 

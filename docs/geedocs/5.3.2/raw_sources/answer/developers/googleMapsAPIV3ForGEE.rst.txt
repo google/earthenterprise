@@ -231,7 +231,9 @@ Google Maps API v3 for GEE
       #. Store the GeoXml library in the GEE Server Apache Document
          root. Default location is ``/opt/google/gehttpd/htdocs/js``
       #. Load the GeoXml library in your GEE 2D Map HTML file:
+
          ``<script type="text/javascript" src="/js/geoxmlfull_v3.js"></script>``
+         
       #. Store the target KML file in the GEE Server Apache Document
          root.
       #. Create a GeoXml object in the GEE 2D Map HTML file to load your

@@ -95,11 +95,14 @@ and specifying a reverse geocoder server URL.</p>
 database that you connect to in Google Earth EC. This applies
 when you are connecting to multiple databases.</p>
 </div>
-<p><strong>Caution:</strong> If you are working with multiple GEE Server users on
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If you are working with multiple GEE Server users on
 multiple workstations, it is important to remember that snippet
 profiles can be accessed by all users at the same time. Be sure to
 coordinate with any other users to avoid overwriting snippet profile
 settings.</p>
+</div>
 <ul class="simple">
 <li><a class="reference internal" href="#create-snippet-profile"><span class="std std-ref">Creating a snippet profile</span></a></li>
 <li><a class="reference internal" href="#edit-snippet-settings"><span class="std std-ref">Editing snippet settings</span></a></li>
@@ -108,34 +111,36 @@ settings.</p>
 <li><a class="reference internal" href="#delete-snippet-profile"><span class="std std-ref">Deleting snippet profiles</span></a></li>
 </ul>
 <p class="rubric" id="create-snippet-profile">To create a snippet profile:</p>
-<ol class="arabic">
-<li><p class="first">Access the Google Earth Enterprise Server Admin console in a
+<ol class="arabic simple">
+<li>Access the Google Earth Enterprise Server Admin console in a
 browser window by going to <em>myserver.mydomainname</em>.com/admin,
 replacing <em>myserver</em> and <em>mydomainname</em> with your server and
-domain.</p>
-</li>
-<li><p class="first">Sign in with the default credentials or the username and
-password assigned to you:</p>
-<ul class="simple">
+domain.</li>
+<li>Sign in with the default credentials or the username and
+password assigned to you:<ul>
 <li>Default username: <em>geapacheuser</em></li>
 <li>Default password: <em>geeadmin</em></li>
 </ul>
-<div class="admonition note">
+</li>
+</ol>
+<blockquote>
+<div><div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">If you do not know your username and password,
 contact your Google Earth Enterprise Server System
 Administrator.</p>
 </div>
-</li>
+</div></blockquote>
+<ol class="arabic">
 <li><p class="first">Click <strong>Snippet profiles</strong> to display your snippet profiles.</p>
 </li>
 <li><p class="first">Click <strong>Create New</strong>. The <strong>Create new snippet profile</strong> dialog
 appears.</p>
 <p><img alt="GEE Server Create Snippet Profile dialog" src="../../images/snippet_profilesCreateDialog.png" /></p>
 </li>
-<li><p class="first">Enter a name for the new snippet profile and click the <strong>Create</strong> button.
-The snippet profile name appears in red in the <strong>Existing
-snippet profile</strong> list and the <strong>Snippet editor</strong> opens.</p>
+<li><p class="first">Enter a name for the new snippet profile and click the <strong>Create</strong>
+button. The snippet profile name appears in red in the
+<strong>Existing snippet profile</strong> list and the <strong>Snippet editor</strong> opens.</p>
 </li>
 </ol>
 <p class="rubric" id="to-edit-snippet-settings">To edit snippet settings:</p>
@@ -177,8 +182,7 @@ for your snippet profile, click the <strong>Save changes</strong> button.</p>
 <p>The following table lists the syntax for all of the available
 dbRoot snippets.</p>
 <p class="rubric" id="table-snippet-settings">Snippet Settings</p>
-<table border="1" class="colwidths-given docutils" id="id1">
-<caption><span class="caption-text">Snippet Settings</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<table border="1" class="colwidths-given docutils">
 <colgroup>
 <col width="17%" />
 <col width="28%" />

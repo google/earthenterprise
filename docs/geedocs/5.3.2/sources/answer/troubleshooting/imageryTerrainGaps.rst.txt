@@ -52,7 +52,7 @@ tolerance value (e.g., --tolerance 3).
 Navigate to the resource kip and kmp folders, and move the mask.kmp
 folder to mask.kmp.bak.
 
-Create the new mask.kmp: gerasterimport --alphamask /path/to/mask.tif
+Create the new mask.kmp:  gerasterimport --alphamask /path/to/mask.tif
 --dataproduct /path/to/raster.kip \ --output ./mask.kmp
 
 Launch the Fusion GUI and preview the image resource.

@@ -73,8 +73,7 @@
 <div class="docutils container">
 <div class="content docutils container">
 <p>Google Earth Enterprise Server 5.x supports the <a class="reference external" href="http://www.opengeospatial.org/standards/wms">OpenGIS Web Map
-Service Interface Standard
-(WMS)</a>, which
+Service Interface Standard (WMS)</a>, which
 provides a standard HTTP interface to request map images from one
 or more published geospatial databases. Mapping images that are
 provided through a WMS over the Internet can show information such
@@ -84,10 +83,8 @@ alternate high resolution satellite imagery and more.</p>
 clients can request images from multiple WMS servers and then
 combine those mapping images into a single view. Because the WMS
 standard is used to get all the images, they can easily be
-overlaid on one another. Supported clients include <a class="reference internal" href="#connecting-ge-server-wms-using-qgis"><span class="std std-ref">QGIS
-2.0.1</span></a>, ArcGIS/ArcGIS Explorer Desktop, and
-<a class="reference external" href="https://github.com/google/earthenterprise/wiki/Google-Earth-Enterprise-Client-(EC)">Google Earth
-Pro/EC</a>.</p>
+overlaid on one another. Supported clients include <a class="reference internal" href="#connecting-ge-server-wms-using-qgis"><span class="std std-ref">QGIS 2.0.1</span></a>,
+ArcGIS/ArcGIS Explorer Desktop, and <a class="reference external" href="https://github.com/google/earthenterprise/wiki/Google-Earth-Enterprise-Client-(EC)">Google Earth Pro/EC</a>.</p>
 <ul class="simple">
 <li><a class="reference internal" href="#supported-database-types"><span class="std std-ref">Supported Database Types</span></a></li>
 <li><a class="reference internal" href="#supported-projections"><span class="std std-ref">Supported Projections</span></a></li>
@@ -147,24 +144,20 @@ necessary to publish twice.</p>
 <p>Databases that have WMS enabled are identified with a WMS
 label in the description.</p>
 <p><img alt="WMS-enabled databases in GEE Server" src="../../images/WMS_description.png" /></p>
-<p class="rubric" id="making-wms-requests-gee-server">Making WMS Requests to Google Earth Enterprise Server
-5.x</p>
+<p class="rubric" id="making-wms-requests-gee-server">Making WMS Requests to Google Earth Enterprise Server 5.x</p>
 <p>The first step in creating maps via HTTP requests to Google Earth
 Enterprise Server 5.x is to create a connection.</p>
 <p>To connect to Google Earth Enterprise Server 5.x, use the
 following URL:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">http</span><span class="p">:</span><span class="o">//&lt;</span><span class="n">gee_server_name</span> <span class="ow">or</span> <span class="n">ip</span> <span class="n">address</span><span class="o">&gt;/&lt;</span><span class="n">target_path_of_published_db</span><span class="o">&gt;/</span><span class="n">wms</span>
-</pre></div>
-</div>
-<div class="line-block">
-<div class="line">In this example, <code class="docutils literal notranslate"><span class="pre">http://localhost/merc/wms</span></code>, “merc” is the
-target path of the published database.</div>
-<div class="line">Google Earth Enterprise Server 5.x supports the
+<p><code class="docutils literal notranslate"><span class="pre">http://&lt;gee_server_name</span> <span class="pre">or</span> <span class="pre">ip</span> <span class="pre">address&gt;/&lt;target_path_of_published_db&gt;/wms</span></code></p>
+<blockquote>
+<div>In this example, <code class="docutils literal notranslate"><span class="pre">http://localhost/merc/wms</span></code>, “merc” is the
+target path of the published database.
+Google Earth Enterprise Server 5.x supports the
 <strong>GetCapabilities</strong> and <strong>GetMap</strong> requests for WMS versions
 1.1.1 and 1.3.0. Use <strong>GetCapabilities</strong> to first request
 metadata from which you can then specify the map images that you
-want to request using <strong>GetMap</strong>.</div>
-</div>
+want to request using <strong>GetMap</strong>.</div></blockquote>
 <p class="rubric" id="get-capabilities">GetCapabilities</p>
 <p>The <strong>GetCapabilities</strong> operation requests information about the
 type of services and data (“capabilities”) that are provided by
@@ -282,10 +275,8 @@ Enterprise Server 5.x, based on the layer data that was discovered
 in the <strong>GetCapabilities</strong> step.</p>
 <p>The URL the GIS client should use to make the <strong>GetMap</strong> request
 is as follows:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://&lt;hostname&gt;/&lt;target_path&gt;/wms?SERVICE=WMS&amp;REQUEST=
-GetMap&amp;BBOX=&lt;bounding_box_limits_of_the_requested_map&gt;&amp;SRS=&lt;projection_type&gt;&amp;WIDTH=&lt;width_of_requested_map&gt;&amp;HEIGHT=&lt;height_of_requested_map&gt;&amp;LAYERS=&lt;layer_name&gt;&amp;STYLES=&lt;style_info&gt;&amp;FORMAT=&lt;format_of_requested_map&gt;&amp;DPI=96&amp;TRANSPARENT=TRUE
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">http://&lt;hostname&gt;/&lt;target_path&gt;/wms?SERVICE=WMS&amp;REQUEST=</span>
+<span class="pre">GetMap&amp;BBOX=&lt;bounding_box_limits_of_the_requested_map&gt;&amp;SRS=&lt;projection_type&gt;&amp;WIDTH=&lt;width_of_requested_map&gt;&amp;HEIGHT=&lt;height_of_requested_map&gt;&amp;LAYERS=&lt;layer_name&gt;&amp;STYLES=&lt;style_info&gt;&amp;FORMAT=&lt;format_of_requested_map&gt;&amp;DPI=96&amp;TRANSPARENT=TRUE</span></code></p>
 <p>The parameters for this operation are as follows:</p>
 <table border="1" class="colwidths-given docutils" id="id2">
 <caption><span class="caption-text"><strong>GetMap</strong> parameters</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
@@ -399,12 +390,12 @@ connection window displays.</p>
 <p><img alt="Create WMS connection dialog" src="../../images/4441253_connection_dialog.png" /></p>
 </li>
 <li><p class="first">Enter the following details:</p>
-<ul class="simple">
+<ol class="loweralpha simple">
 <li>Name for the connection</li>
 <li>Connection URL as
 <code class="docutils literal notranslate"><span class="pre">http://&lt;server&gt;/&lt;target_path_of_published_database&gt;/wms</span></code>,
 for example, <code class="docutils literal notranslate"><span class="pre">http://localhost/my_map/wms</span></code></li>
-</ul>
+</ol>
 </li>
 <li><p class="first">Optionally, supply the username and password if the database
 has been published to a secure virtual host set up with basic

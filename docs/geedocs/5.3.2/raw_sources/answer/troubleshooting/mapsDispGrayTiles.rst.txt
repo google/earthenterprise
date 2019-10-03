@@ -19,11 +19,13 @@ Maps display grey tiles
       browser:
 
       ``http://myserver.com/mymaps/query?request=LayerDefs``
+
       A response that includes a line like the example below indicates
       that GEE is directing users to your local host instead of the
       publishing server.
 
       ``var stream_url = "http://localhost.localdomain/default_map";``
+      
       To correct the hostname:
 
       #. Query ``hostname -f`` on the server, and verify that the path

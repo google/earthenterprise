@@ -164,12 +164,10 @@ also add other optional fields if needed.</li>
 functions into the database with the <code class="docutils literal notranslate"><span class="pre">pgcrypto</span></code> contributed
 module:</p>
 <p><code class="docutils literal notranslate"><span class="pre">psql</span> <span class="pre">--port=5433</span> <span class="pre">--username=geeuser</span> <span class="pre">geauthdb</span> <span class="pre">&lt;</span> <span class="pre">/usr/share/postgresql/8.4/contrib/pgcrypto.sql</span></code></p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">You can substitute a different method for this step. The <a class="reference external" href="http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmisc%2Fpassword_encryptions.html&amp;sa=D&amp;sntz=1&amp;usg=AFrqEzdBJJpsOLV3eL6UCAatZv_IhxEZdg">Password Formats</a> section in the Apache documentation
-gives examples in multiple programming languages for encrypting the password so that it is
+<p>Note: You can substitute a different method for this step. The <a class="reference external" href="http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmisc%2Fpassword_encryptions.html&amp;sa=D&amp;sntz=1&amp;usg=AFrqEzdBJJpsOLV3eL6UCAatZv_IhxEZdg">Password Formats</a>
+section in the Apache documentation gives examples in multiple
+programming languages for encrypting the password so that it is
 readable by Apache.</p>
-</div>
 </li>
 <li><p class="first">Make sure the database works by inserting a test user:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>psql --port=5433 --username=geeuser geauthdb
@@ -179,14 +177,11 @@ INSERT INTO geepasswd VALUES (&#39;jsmith&#39;, &#39;realm&#39;, encode(digest( 
 </div>
 <p>Replace “jsmith”, “realm”, “password” and “Jane Smith” with the
 values you want to use.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The password is hashed with MD5 because the Apache
+<p>Note: The password is hashed with MD5 because the Apache
 <code class="docutils literal notranslate"><span class="pre">mod_authn_dbd</span></code> module requires it. This also prevents the
 password from appearing in plaintext.</p>
-</div>
 </li>
-<li><p class="first">Create a file named <code class="docutils literal notranslate"><span class="pre">pgsql-auth.conf</span></code>at</p>
+<li><p class="first">Create a file named <code class="docutils literal notranslate"><span class="pre">pgsql-auth.conf</span></code> at</p>
 <p><code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/extra/pgsql-auth.conf</span></code>.</p>
 </li>
 <li><p class="first">Add these lines to the <code class="docutils literal notranslate"><span class="pre">pgsql-auth.conf</span></code> file:</p>
@@ -209,18 +204,20 @@ insert the line:</p>
 <p>above the line:</p>
 <p><code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">conf.d/*.conf</span></code></p>
 <p>The result is:</p>
-<p><code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">Include</span> <span class="pre">Google</span> <span class="pre">Earth</span> <span class="pre">Server-specific</span> <span class="pre">files</span></code>
-<code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">/opt/google/gehttpd/conf/extra/pgsql-auth.conf</span></code>
-<code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">conf.d/*.conf</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Include Google Earth Server-specific files
+Include /opt/google/gehttpd/conf/extra/pgsql-auth.conf
+Include conf.d/*.conf
+</pre></div>
+</div>
 </li>
 <li><p class="first">Add the following lines at the beginning of the
 <code class="docutils literal notranslate"><span class="pre">&lt;Location&gt;</span></code> directive of your virtual server:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>``AuthType Digest``
-``AuthName &quot;realm&quot;``
-``AuthDigestDomain &#39;/default_map/&#39;``
-``AuthDigestProvider dbd``
-``AuthDBDUserRealmQuery &quot;SELECT passwd FROM geeauth WHERE username = %s and realm = %s&quot;``
-``BrowserMatch &quot;MSIE&quot; AuthDigestEnableQueryStringHack=On``
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>AuthType Digest
+AuthName &quot;realm&quot;
+AuthDigestDomain &#39;/default_map/&#39;
+AuthDigestProvider dbd
+AuthDBDUserRealmQuery &quot;SELECT passwd FROM geeauth WHERE username = %s and realm = %s&quot;
+BrowserMatch &quot;MSIE&quot; AuthDigestEnableQueryStringHack=On
 </pre></div>
 </div>
 <p>If this is a <code class="docutils literal notranslate"><span class="pre">_ge_</span> <span class="pre">virtual</span></code> server, add:
@@ -230,24 +227,28 @@ insert the line:</p>
 <p>For more information about <code class="docutils literal notranslate"><span class="pre">AuthDigestEnableQueryStringHack</span></code>,
 see the <a class="reference external" href="http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmod%2Fmod_auth_digest.html%23msie&amp;sa=D&amp;sntz=1&amp;usg=AFrqEze9uh13hmi22IsT3-GMw3t8j7VHcA">mod_auth_digest</a>
 section in the Apache documentation.</p>
-<p>The final <code class="docutils literal notranslate"><span class="pre">&lt;Location&gt;</span></code> directive looks like:
-<code class="docutils literal notranslate"><span class="pre">&lt;Location</span> <span class="pre">&quot;/default_map/*&quot;&gt;</span></code>
-<code class="docutils literal notranslate"><span class="pre">AuthType</span> <span class="pre">Digest</span></code>
-<code class="docutils literal notranslate"><span class="pre">AuthName</span> <span class="pre">&quot;realm&quot;</span></code>
-<code class="docutils literal notranslate"><span class="pre">AuthDigestDomain</span> <span class="pre">'/default_map/'</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">AuthDigestProvider</span> <span class="pre">dbd</span></code>
-<code class="docutils literal notranslate"><span class="pre">AuthDBDUserRealmQuery</span> <span class="pre">&quot;SELECT</span> <span class="pre">passwd</span> <span class="pre">FROM</span> <span class="pre">geeauth</span> <span class="pre">WHERE</span> <span class="pre">username</span> <span class="pre">=</span> <span class="pre">%s</span> <span class="pre">and</span> <span class="pre">realm</span> <span class="pre">=</span> <span class="pre">%s&quot;</span></code>
-<code class="docutils literal notranslate"><span class="pre">BrowserMatch</span> <span class="pre">&quot;MSIE&quot;</span> <span class="pre">AuthDigestEnableQueryStringHack=On</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">Require</span> <span class="pre">valid-user</span></code>
-<code class="docutils literal notranslate"><span class="pre">SetHandler</span> <span class="pre">gedb-handler</span></code>
-<code class="docutils literal notranslate"><span class="pre">Include</span></code>
-<code class="docutils literal notranslate"><span class="pre">conf.d/virtual_servers/runtime/default_map_runtime</span></code>
-<code class="docutils literal notranslate"><span class="pre">&lt;/Location&gt;</span></code></p>
+<p>The final <code class="docutils literal notranslate"><span class="pre">&lt;Location&gt;</span></code> directive looks like:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Location &quot;/default_map/*&quot;&gt;
+AuthType Digest
+AuthName &quot;realm&quot;
+AuthDigestDomain &#39;/default_map/&#39;
+
+AuthDigestProvider dbd
+AuthDBDUserRealmQuery &quot;SELECT passwd FROM geeauth WHERE username = %s and realm = %s&quot;
+BrowserMatch &quot;MSIE&quot; AuthDigestEnableQueryStringHack=On
+
+Require valid-user
+SetHandler gedb-handler
+Include
+conf.d/virtual_servers/runtime/default_map_runtime
+&lt;/Location&gt;
+</pre></div>
+</div>
 </li>
 <li><p class="first">Save and close the virtual server configuration file.</p>
 </li>
-<li><p class="first">Restart the server:
-<code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">restart</span></code></p>
+<li><p class="first">Restart the server:</p>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">restart</span></code></p>
 <p>After you verify the configuration with your test user, you can
 add your users to the database.</p>
 </li>

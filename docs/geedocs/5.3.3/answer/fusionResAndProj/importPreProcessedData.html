@@ -79,15 +79,15 @@ have the same file name with different extensions. Vector data is
 in a single folder with a .kvp extension. There is a diferent
 Fusion import command or command option for each extension. The
 extensions and their import commands are described below:</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils">
 <colgroup>
-<col width="32%" />
-<col width="32%" />
-<col width="36%" />
+<col width="27%" />
+<col width="20%" />
+<col width="53%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">File Extension</th>
-<th class="head">Data Type</th>
+<th class="head">Data Types</th>
 <th class="head">Import Command</th>
 </tr>
 </thead>
@@ -106,11 +106,8 @@ extensions and their import commands are described below:</p>
 </tr>
 <tr class="row-odd"><td>.kmp</td>
 <td>Mask</td>
-<td><code class="docutils literal notranslate"><span class="pre">--havemask</span></code> command
-option
-Use the <code class="docutils literal notranslate"><span class="pre">--nomask</span></code>
-option to import
-files without a mask.</td>
+<td><code class="docutils literal notranslate"><span class="pre">--havemask</span></code> command option
+Use the <code class="docutils literal notranslate"><span class="pre">--nomask</span></code> option to import files without a mask.</td>
 </tr>
 </tbody>
 </table>
@@ -124,8 +121,8 @@ folder and subfiles so that the Fusion user (<code class="docutils literal notra
 by default) can access and read the files.</p>
 </li>
 <li><p class="first">Open a terminal window on your processing machine, then change
-directory to your asset root:
-<code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">/gevol/assets</span></code></p>
+directory to your asset root:</p>
+<p><code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">/gevol/assets</span></code></p>
 </li>
 <li><p class="first">Use the appropriate command for the type of data you have:
 imagery, terrain, or vector. Your command must contain either
@@ -135,13 +132,13 @@ your raster data does not have a mask, use <code class="docutils literal notrans
 For example, the NASA Blue Marble imagery does not have a mask.
 If you import it without using <code class="docutils literal notranslate"><span class="pre">-nomask</span></code>, it displays a black
 line and circular gaps at each pole because the map edges are
-masked and the center of the earth is exposed.
-Commands are in the format:
-<code class="docutils literal notranslate"><span class="pre">[commandname]</span> <span class="pre">[options]</span> <span class="pre">[--meta</span> <span class="pre">&lt;key&gt;=&lt;value&gt;]...</span> <span class="pre">-o</span> <span class="pre">&lt;assetname&gt;</span> <span class="pre">{</span> <span class="pre">--filelist</span> <span class="pre">&lt;file&gt;</span> <span class="pre">|</span> <span class="pre">&lt;sourcefile&gt;</span> <span class="pre">...}</span></code>
-For all <code class="docutils literal notranslate"><span class="pre">genew{imagery,terrain,vector}resource</span></code> tools, the
+masked and the center of the earth is exposed.</p>
+<p>Commands are in the format:</p>
+<p><code class="docutils literal notranslate"><span class="pre">[commandname]</span> <span class="pre">[options]</span> <span class="pre">[--meta</span> <span class="pre">&lt;key&gt;=&lt;value&gt;]...</span> <span class="pre">-o</span> <span class="pre">&lt;assetname&gt;</span> <span class="pre">{</span> <span class="pre">--filelist</span> <span class="pre">&lt;file&gt;</span> <span class="pre">|</span> <span class="pre">&lt;sourcefile&gt;</span> <span class="pre">...}</span></code></p>
+<p>For all <code class="docutils literal notranslate"><span class="pre">genew{imagery,terrain,vector}resource</span></code> tools, the
 output path (<code class="docutils literal notranslate"><span class="pre">-o</span> <span class="pre">path</span></code>) must be relative to the asset root
-directory.
-You can specify source file names on the command line or in a
+directory.</p>
+<p>You can specify source file names on the command line or in a
 file list. To view supported command options, enter
 <code class="docutils literal notranslate"><span class="pre">[commandname]</span> <span class="pre">--help</span> <span class="pre">|</span> <span class="pre">-?</span></code></p>
 <table border="1" class="colwidths-given docutils" id="id1">
@@ -187,8 +184,8 @@ file list. To view supported command options, enter
 </tbody>
 </table>
 </li>
-<li><p class="first">Use the <code class="docutils literal notranslate"><span class="pre">gebuild</span></code> command to build the asset:
-<code class="docutils literal notranslate"><span class="pre">gebuild</span> <span class="pre">path/to/resource/directory/resourcename</span></code></p>
+<li><p class="first">Use the <code class="docutils literal notranslate"><span class="pre">gebuild</span></code> command to build the asset:</p>
+<p><code class="docutils literal notranslate"><span class="pre">gebuild</span> <span class="pre">path/to/resource/directory/resourcename</span></code></p>
 </li>
 </ol>
 </div>

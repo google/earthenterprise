@@ -34,6 +34,7 @@ About this Tutorial
       Enterprise Fusion installation DVD.
 
       .. note::
+
          Work through the first five lessons in order.
 
       The Advanced Tasks section of this tutorial guides you through
