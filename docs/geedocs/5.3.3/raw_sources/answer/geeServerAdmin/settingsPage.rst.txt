@@ -13,7 +13,7 @@ Settings page
 
       .. rubric:: Perform .glc assembly
 
-      Create new .glc globes from existing globes (.glm/.glb):
+      To create new .glc globes from existing globes (.glm/.glb):
 
       #. Enter a name and description for the new .glc.
       #. Paste **Polygon** KML for use with the new globe.
@@ -29,7 +29,7 @@ Settings page
 
       .. rubric::  Perform .glc disassembly
 
-      Extract .glm/.glb files:
+      To extract .glm/.glb files:
 
       #. Select a .glc to disassemble.
       #. Enter a **New output directory** where the files will be
@@ -40,7 +40,7 @@ Settings page
 
       .. rubric:: Launch Cutter
 
-      Create a new .glm/.glb from published Fusion databases or
+      To create a new .glm/.glb from published Fusion databases or
       Portable globes (.glm/.glb, not .glc):
 
       #. Select a source map.
@@ -49,10 +49,10 @@ Settings page
          name.
       #. Choose a **Region Selection** method:
 
-         #. **Manual**: Manually draw the boundaries of your
+         -. **Manual**: Manually draw the boundaries of your
             region using the polygon button in the upper-right of
             the map.
-         #. **Paste KML**: Define your region by pasting a KML
+         -. **Paste KML**: Define your region by pasting a KML
             file.
 
       #. Specify a **World level**; this represents the highest

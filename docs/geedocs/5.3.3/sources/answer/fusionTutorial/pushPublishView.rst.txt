@@ -21,20 +21,16 @@ publish
 a specified publish point. Publishing is performed on Google Earth
 Enterprise Server.
 
-Note: Note:
+Note: This lesson assumes that Google Earth Enterprise Fusion, the
+  Google Earth Enterprise Server, and Google Earth EC are all
+  installed on your local workstation. If any of these applications
+  are installed elsewhere on your network, adjust the instructions in
+  this lesson accordingly.
 
-   This lesson assumes that Google Earth Enterprise Fusion, the Google
-  Earth Enterprise Server, and Google Earth EC are all installed on
-  your local workstation. If any of these applications are installed
-  elsewhere on your network, adjust the instructions in this lesson
-  accordingly.
-
-Note: Note:
-
-   This lesson describes the steps for pushing a 3D Fusion database.
-  The same workflow is used to push a 2D Mercator database, but note
-  that snippet profiles do not apply and that the published map can be
-  viewed in a web browser, not Google Earth EC. See
+Note: This lesson describes the steps for pushing a 3D Fusion
+  database. The same workflow is used to push a 2D Mercator database,
+  but note that snippet profiles do not apply and that the published
+  map can be viewed in a web browser, not Google Earth EC. See
 
   Creating a Map Database
 
@@ -68,10 +64,10 @@ selection on the Version drop-down list.  Push Database Dialog
 
 Click the Push button. Google Earth Enterprise Fusion pushes the
 database to Google Earth Enterprise Server, and displays a success
-message when it is done.  Note: If you get an error message, contact
-your Google Earth Enterprise Server administrator for help, or check
-the documentation on Before you Configure Google Earth Enterprise
-Fusion for more information.
+message when it is done.  If you get an error message, contact your
+Google Earth Enterprise Server administrator for help, or check the
+documentation on Before you Configure Google Earth Enterprise Fusion
+for more information.
 
 -[ Publish Your Database in Google Earth Enterprise Server ]-
 
@@ -86,9 +82,8 @@ and mydomainname with your server and domain.
 
 Sign in with the default credentials or the username and password
 assigned to you:  Default username: geapacheuser  Default
-password:geeadmin  Note: If you do not know your username and
-password, contact your Google Earth Enterprise Server System
-Administrator.
+password:geeadmin  If you do not know your username and password,
+contact your Google Earth Enterprise Server System Administrator.
 
 Click Databases to display the list of databases pushed to the Server.
 SFHighways-v001 is listed. The Description, Type, Date, and Size of
@@ -100,15 +95,14 @@ Databases page appears.  GEE Server Database Publish
 Click Publish. The Publish dialog appears.
 
 Change the default Publish point from SFHighways-v001 to
-BayAreaHighways.  GEE Server Database Publish dialog  Note: You can
-publish a database to multiple publish points, useful when you want to
-apply different search tabs, snippet profiles, and virtual host
-settings for different viewing needs.  Note: When publishing a
-database, the publish point you specify is case-insensitive. Upper and
-lower case are not differentiated. Make sure each publish point path
-name you specify is unique.  To learn more about the options available
-in the Publish dialog, see  Default database  Search Tabs  Snippet
-profiles  WMS
+BayAreaHighways.  GEE Server Database Publish dialog  You can publish
+a database to multiple publish points, useful when you want to apply
+different search tabs, snippet profiles, and virtual host settings for
+different viewing needs.  When publishing a database, the publish
+point you specify is case-insensitive. Upper and lower case are not
+differentiated. Make sure each publish point path name you specify is
+unique.  To learn more about the options available in the Publish
+dialog, see  Default database  Search Tabs  Snippet profiles  WMS
 
 Click the Publish  button. The Databases page updates to indicate the
 published status of your database.  GEE Server Database Published List

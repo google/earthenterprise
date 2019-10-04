@@ -82,8 +82,7 @@ rules.</p>
 <ul class="simple">
 <li><a class="reference internal" href="#define-vector-product3"><span class="std std-ref">Define, Configure, and Build a Vector Project</span></a></li>
 <li><a class="reference internal" href="#define-and-build-imagery-project"><span class="std std-ref">Define and Build an Imagery Project</span></a></li>
-<li><a class="reference internal" href="#define-point-database"><span class="std std-ref">Define, Build, Push, and Publish a Database for the Point
-Data</span></a></li>
+<li><a class="reference internal" href="#define-point-database"><span class="std std-ref">Define, Build, Push, and Publish a Database for the Point Data</span></a></li>
 <li><a class="reference internal" href="#view-database-geec-1"><span class="std std-ref">View Your Database in Google Earth EC</span></a></li>
 </ul>
 <p class="rubric" id="define-configure-and-build-a-vector-project"><span id="define-vector-product3"></span>Define, Configure, and Build a Vector Project</p>
@@ -108,30 +107,40 @@ Editor appears.</p>
 Editor.</p>
 <p><img alt="CA_POIs Resource" src="../../images/pointsProjEditor-full.png" /></p>
 </li>
-</ol>
-<p>Right-click <strong>CA_POIs</strong> and select <strong>Configure Display Rules</strong>
+<li><p class="first">Right-click <strong>CA_POIs</strong> and select <strong>Configure Display Rules</strong>
 from the context menu.
 The Display Rules dialog appears with the Feature tab in the
 foreground and the <strong>default select all</strong> rule highlighted.</p>
-<p>Specify the geometry characteristics of the POIs:</p>
-<ol class="loweralpha simple">
-<li>For <strong>Draw Features As</strong>, select <strong>Points</strong>.</li>
-<li>For <strong>Simplification Method</strong>, select <strong>Representative Subset Per
-Tile</strong>.</li>
-<li>For <strong>Choose</strong>, accept the default, <strong>50</strong>% points.</li>
-<li>For <strong>Min Points</strong>, enter <strong>50</strong>.</li>
-<li>For <strong>Max Points</strong>, enter <strong>200</strong>.</li>
-<li>Check the box next to <strong>Suppress Duplicate Points</strong>.</li>
-<li>Under <strong>Elevation/Height</strong>, set Mode to <strong>Clamp to Ground.</strong></li>
-</ol>
-<p>On the right side of the dialog, check the box next to <strong>Draw
-Label</strong>.
-For <strong>Visibility</strong>, accept the default range, <strong>5</strong> through <strong>24</strong>.
-Do not make any changes under <strong>Label Properties</strong>,
-This area allows you to specify the content and appearance of a
+</li>
+<li><p class="first">Specify the geometry characteristics of the POIs:</p>
+<ol class="loweralpha">
+<li><p class="first">For <strong>Draw Features As</strong>, select <strong>Points</strong>.</p>
+</li>
+<li><p class="first">For <strong>Simplification Method</strong>, select <strong>Representative Subset Per
+Tile</strong>.</p>
+</li>
+<li><p class="first">For <strong>Choose</strong>, accept the default, <strong>50</strong>% points.</p>
+</li>
+<li><p class="first">For <strong>Min Points</strong>, enter <strong>50</strong>.</p>
+</li>
+<li><p class="first">For <strong>Max Points</strong>, enter <strong>200</strong>.</p>
+</li>
+<li><p class="first">Check the box next to <strong>Suppress Duplicate Points</strong>.</p>
+</li>
+<li><p class="first">Under <strong>Elevation/Height</strong>, set Mode to <strong>Clamp to Ground.</strong></p>
+</li>
+<li><p class="first">On the right side of the dialog, check the box next to <strong>Draw Label</strong>.</p>
+</li>
+<li><p class="first">For <strong>Visibility</strong>, accept the default range, <strong>5</strong> through <strong>24</strong>.</p>
+</li>
+<li><p class="first">Do not make any changes under <strong>Label Properties</strong>.</p>
+<p>This area allows you to specify the content and appearance of a
 text label for each POI. However, there are so many POIs in
 California that the view in Google Earth EC would be too crowded.</p>
-<p>Check the box next to <strong>Draw Icon</strong> and then:</p>
+</li>
+</ol>
+</li>
+<li><p class="first">Check the box next to <strong>Draw Icon</strong> and then:</p>
 <ol class="loweralpha">
 <li><p class="first">Click the icon pair. The Icons dialog appears.</p>
 <p><a class="reference internal" href="../../images/iconsDia.png"><img alt="Icons Dialog" src="../../images/iconsDia.png" style="width: 256px; height: 213px;" /></a></p>
@@ -153,52 +162,71 @@ star, Google Earth EC displays the yellow (highlighted) star a
 little larger than the blue star.</p>
 </li>
 </ol>
-<p>In the <strong>Balloon</strong> section, select <strong>Text</strong>, and then click the empty
+</li>
+<li><p class="first">In the <strong>Balloon</strong> section, select <strong>Text</strong>, and then click the empty
 text field. The Label Format dialog appears.</p>
 <ol class="loweralpha">
 <li><p class="first">Select <strong>COUNTY</strong> from the <strong>Insert Field</strong> drop-down list.</p>
 <p>«<strong>COUNTY</strong>» appears in the text box under <strong>Popup Text</strong>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> You can use some basic HTML tags to format the
+<p class="last">You can use some basic HTML tags to format the
 Label text, if desired.</p>
 </div>
 </li>
-</ol>
-<p>To the left of «<strong>COUNTY</strong>» enter <strong>&lt;b&gt;</strong>.
-To the right of «<strong>COUNTY</strong>» enter <strong>&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;</strong>, and
-press <strong>Enter</strong>.
-Adding this HTML code formats the name of the county as bold,
-followed by two line breaks to separate it from the text that
+<li><p class="first">To the left of «<strong>COUNTY</strong>» enter <strong>&lt;b&gt;</strong>.</p>
+</li>
+<li><p class="first">To the right of «<strong>COUNTY</strong>» enter <strong>&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;</strong>.</p>
+</li>
+<li><p class="first">Press <strong>Enter</strong>. Adding this HTML code formats the name of the county
+as bold, followed by two line breaks to separate it from the text that
 follows (next step).</p>
-<p>Select <strong>NAME</strong> from the <strong>Insert Field</strong> drop-down list.
-«<strong>NAME</strong>» appears on the next line of the text box.
-To the right of «<strong>NAME</strong>» enter <strong>&lt;br/&gt;&lt;br/&gt;</strong>, and press
-<strong>Enter</strong>.
-On the next line, enter <strong>Latitude:</strong> , and then select
-<strong>LATITUDE</strong> from the <strong>Insert Field</strong> drop-down menu.
-To the right of «<strong>LATITUDE</strong>» enter <strong>&lt;br/&gt;&lt;br/&gt;</strong>, and press
-<strong>Enter</strong>.
-On the next line, enter <strong>Longitude:</strong> , and then select
-<strong>LONGITUDE</strong> from the <strong>Insert Field</strong> drop-down menu.
-<img alt="image5" src="../../images/pointsDisplayRules_LabelFormat.png" /></p>
-<p>Click <strong>OK</strong>
-For <strong>Style</strong>, select <strong>Default</strong> from the drop-down list.
-Check the box next to <strong>Directions</strong> to include “To here” and
-“From here” links in the description balloon in Google Earth EC.
-Click the <strong>Text Color</strong> button, and select a medium blue.
-Click the <strong>Background Color</strong> button, and select a light yellow.
-Click the <strong>OK</strong> button.
-You return to the Vector Project Editor.</p>
-<p>Select <strong>File &gt; Save</strong>.
-The Save dialog appears.</p>
-<p>Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Vector</span></code>folder.
-Enter <strong>CA_POIs</strong> as the name of your project, and click <strong>Save</strong>.
-The new project appears in the Asset Manager when you select
+</li>
+</ol>
+</li>
+<li><p class="first">Select <strong>NAME</strong> from the <strong>Insert Field</strong> drop-down list.
+«<strong>NAME</strong>» appears on the next line of the text box.</p>
+<ol class="loweralpha simple">
+<li>To the right of «<strong>NAME</strong>» enter <strong>&lt;br/&gt;&lt;br/&gt;</strong>.</li>
+<li>Press <strong>Enter</strong>.</li>
+</ol>
+</li>
+<li><p class="first">On the next line, enter <strong>Latitude:</strong>, and then select
+<strong>LATITUDE</strong> from the <strong>Insert Field</strong> drop-down menu.</p>
+<ol class="loweralpha simple">
+<li>To the right of «<strong>LATITUDE</strong>» enter <strong>&lt;br/&gt;&lt;br/&gt;</strong>.</li>
+<li>Press <strong>Enter</strong>.</li>
+</ol>
+</li>
+<li><p class="first">On the next line, enter <strong>Longitude:</strong> , and then select
+<strong>LONGITUDE</strong> from the <strong>Insert Field</strong> drop-down menu.</p>
+<p><img alt="image5" src="../../images/pointsDisplayRules_LabelFormat.png" /></p>
+</li>
+<li><p class="first">Click the <strong>OK</strong> button.</p>
+</li>
+<li><p class="first">For <strong>Style</strong>, select <strong>Default</strong> from the drop-down list.</p>
+</li>
+<li><p class="first">Check the box next to <strong>Directions</strong> to include <strong>“To here”</strong> and
+<strong>“From here”</strong> links in the description balloon in Google Earth EC.</p>
+</li>
+<li><p class="first">Click the <strong>Text Color</strong> button, and select a medium blue.</p>
+</li>
+<li><p class="first">Click the <strong>Background Color</strong> button, and select a light yellow.</p>
+</li>
+<li><p class="first">Click the <strong>OK</strong> button. You return to the Vector Project Editor.</p>
+</li>
+<li><p class="first">Select <strong>File &gt; Save</strong>. The Save dialog appears.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Vector</span></code>folder.</p>
+</li>
+<li><p class="first">Enter <strong>CA_POIs</strong> as the name of your project, and click <strong>Save</strong>.</p>
+<p>The new project appears in the Asset Manager when you select
 <strong>ASSET_ROOT/Projects/Vector</strong> in the asset navigation tree.</p>
-<p>Right-click <strong>CA_POIs</strong>, and select <strong>Build</strong> from the context
-menu.
-Google Earth Enterprise Fusion builds the project.</p>
+</li>
+<li><p class="first">Right-click <strong>CA_POIs</strong>, and select <strong>Build</strong> from the context
+menu. Google Earth Enterprise Fusion builds the project.</p>
+</li>
+</ol>
 <p class="rubric" id="define-and-build-an-imagery-project"><span id="define-and-build-imagery-project"></span>Define and Build an Imagery Project</p>
 <p>Although you can build and publish a database that includes a
 vector project only, you cannot connect directly to your server
@@ -217,7 +245,7 @@ project. So this exercise walks you through creating a small and
 simple imagery project.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> If you have already completed this exercise in
+<p class="last">If you have already completed this exercise in
 <a class="reference internal" href="displayRulesPolygon.html"><span class="doc">Configuring Display Rules for Polygon Data</span></a>, skip this exercise and move
 on to <a class="reference internal" href="#define-point-database"><span class="std std-ref">Define, Build, Push, and Publish a Database for the
 Point Data</span></a>.</p>
@@ -241,7 +269,7 @@ toolbar. The Imagery Project Editor appears.</p>
 <li><p class="first">Select <strong>File &gt; Save</strong>.</p>
 <p>The Save dialog appears.</p>
 </li>
-<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Imagery</span></code>folder.</p>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Imagery</span></code> folder.</p>
 </li>
 <li><p class="first">Enter <strong>BlueMarble</strong> as the name of your project, and click
 <strong>Save</strong>.</p>
@@ -278,11 +306,11 @@ Both projects appear on the list.</p>
 </li>
 <li><p class="first">Select <strong>File &gt; Save</strong>.</p>
 </li>
-<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Databases</span></code>folder.</p>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Databases</span></code> folder.</p>
 </li>
 <li><p class="first">Enter <strong>CA_POIs</strong> for the name of your database, and click
 <strong>Save</strong>. The name of the database appears on the right when
-you select the <code class="docutils literal notranslate"><span class="pre">/ASSET_ROOT/Databases</span></code>folder in the asset
+you select the <code class="docutils literal notranslate"><span class="pre">/ASSET_ROOT/Databases</span></code> folder in the asset
 navigation tree.</p>
 </li>
 <li><p class="first">Right-click <strong>CA_POIs</strong>, and select <strong>Build</strong> from the context
@@ -364,7 +392,7 @@ description balloon displays the information you specified in
 the format you defined in the Display Rules dialog.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> If you cannot see the vector data, make sure the
+<p class="last">If you cannot see the vector data, make sure the
 check box next to <strong>CA_POIs</strong> in the Layers panel is
 checked.</p>
 </div>

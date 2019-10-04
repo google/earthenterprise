@@ -24,7 +24,7 @@ Pushing, Publishing, and Viewing a Database
 
       .. note::
 
-         **Note:** This lesson assumes that Google Earth Enterprise
+         This lesson assumes that Google Earth Enterprise
          Fusion, the Google Earth Enterprise Server, and Google Earth EC
          are all installed on your local workstation. If any of these
          applications are installed elsewhere on your network, adjust
@@ -32,7 +32,7 @@ Pushing, Publishing, and Viewing a Database
 
       .. note::
 
-         **Note:** This lesson describes the steps for pushing a 3D
+         This lesson describes the steps for pushing a 3D
          Fusion database. The same workflow is used to push a 2D
          Mercator database, but note that snippet profiles do not apply
          and that the published map can be viewed in a web browser, not
@@ -71,10 +71,12 @@ Pushing, Publishing, and Viewing a Database
          database to Google Earth Enterprise Server, and displays a
          success message when it is done.
 
-         **Note:** If you get an error message, contact your Google
-         Earth Enterprise Server administrator for help, or check the
-         documentation on :doc:`../fusionAdministration/beforeYouConfigure` for more
-         information.
+         .. note::
+               
+            If you get an error message, contact your Google
+            Earth Enterprise Server administrator for help, or check the
+            documentation on :doc:`../fusionAdministration/beforeYouConfigure` for more
+            information.
 
       .. _Publish_Your_Database:
       .. rubric:: Publish Your Database in Google Earth Enterprise
@@ -96,9 +98,11 @@ Pushing, Publishing, and Viewing a Database
          -  Default username: geapacheuser
          -  Default password:geeadmin
 
-         **Note:** If you do not know your username and password,
-         contact your Google Earth Enterprise Server System
-         Administrator.
+          .. note::
+
+             If you do not know your username and password,
+             contact your Google Earth Enterprise Server System
+             Administrator.
 
       #. Click **Databases** to display the list of databases pushed to
          the Server.
@@ -121,14 +125,14 @@ Pushing, Publishing, and Viewing a Database
 
          .. note::
 
-            **Note:** You can publish a database to *multiple publish
+            You can publish a database to *multiple publish
             points*, useful when you want to apply different search
             tabs, snippet profiles, and virtual host settings for
             different viewing needs.
 
          .. note::
 
-            **Note:** When publishing a database, the publish point you
+            When publishing a database, the publish point you
             specify is case-*insensitive*. Upper and lower case are not
             differentiated. Make sure each publish point path name you
             specify is unique.

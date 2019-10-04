@@ -25,9 +25,7 @@ publishing it using the Google Earth Enterprise Server, using the
 tutorial files provided on the Google Earth Enterprise Fusion
 installation DVD.
 
-Note:
-
- Work through the first five lessons in order.
+Note: Work through the first five lessons in order.
 
 The Advanced Tasks section of this tutorial guides you through more
 advanced topics. You can work through the advanced lessons in any
@@ -79,6 +77,8 @@ Configuring Display Rules for Polygon Data
 Importing and Exporting Style Templates
 
 Specifying Search Fields for Individual Layers
+
+Configuring a Searchable Database
 
 Creating a Map Database
 

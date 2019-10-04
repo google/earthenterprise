@@ -33,7 +33,7 @@ Creating a Map Database
 
       .. note::
 
-         **Note:** As an alternative to your own imagery resources, you
+         As an alternative to your own imagery resources, you
          can use the Google Base Map in place of an imagery project. See
          :ref:`Using the Google Base Map <Using_Google_Base_Map>` for more details.
 
@@ -57,6 +57,7 @@ Creating a Map Database
       -  :ref:`View Your Map Database <View_Map_Database>`
       -  :ref:`Using the Google Base Map <Using_Google_Base_Map>`
 
+      .. index:: Map Layers
       .. _Define_Map_Layer:
       .. rubric:: Define a Map Layer
 
@@ -146,7 +147,7 @@ Creating a Map Database
 
          .. note::
 
-            **Note:** In version 3.0 and beyond, only one font and style
+            In version 3.0 and beyond, only one font and style
             is provided, Sans regular. However, you can create a
             configuration file in which you can specify additional
             fonts, if desired. Refer to the **Administration Guide** for
@@ -174,6 +175,7 @@ Creating a Map Database
          The new map layer name appears in the Asset Manager’s asset
          list.
 
+      .. index:: Map Projects
       .. _Define_Map_Project:
       .. rubric:: Define a Map Project
 
@@ -229,6 +231,7 @@ Creating a Map Database
          The new map project name appears in the Asset Manager’s asset
          list.
 
+      .. index:: Flat Imagery Projects
       .. _Define_Flat_Imagery_Project:
       .. rubric:: Define a Flat Imagery Project
 
@@ -266,25 +269,31 @@ Creating a Map Database
       #. Enter the name **SFBayAreaLanSat_Merc**, and click **Save**.
       #. Select **File > Close**
       #. Repeat steps **3** through **11** for the table that follows:
-         +-------------+-------------+-------------+-------------+-------------+
-         | Name        | Acquisition | Provider    | Mask        | Source file |
-         | (Resources/ | Date        |             |             |             |
-         | Imagery/... |             |             |             |             |
-         | )           |             |             |             |             |
-         +=============+=============+=============+=============+=============+
-         | **BlueMarbl | Today's     | NASA        | **No Mask** | ``bluemarbl |
-         | e_Merc**    | date        | Imagery     |             | e_4km.tif`` |
-         +-------------+-------------+-------------+-------------+-------------+
-         | **i3_15Mete | Today's     | i3          | | **Auto    | ``i3SF15-me |
-         | r_Merc**    | date        |             |   Mask**    | ter.tif``   |
-         |             |             |             | | Default   |             |
-         |             |             |             |   values.   |             |
-         +-------------+-------------+-------------+-------------+-------------+
-         | **SFHighRes | Today's     | USGS        | **Auto      | ``usgsSFHiR |
-         | Inset_Merc* | date        | Imagery     | Mask**      | es.tif``    |
-         | *           |             |             | Default     |             |
-         |             |             |             | values.     |             |
-         +-------------+-------------+-------------+-------------+-------------+
+
+      .. list-table:: 
+         :widths: 20 15 10 10 25
+         :header-rows: 1
+
+         * - Name (Resources/Imagery/...)
+           - Acquisition Date
+           - Provider
+           - Mask
+           - Source File
+         * - **BlueMarble_Merc**
+           - Today's date
+           - NASA Imagery
+           - **No Mask**
+           - ``bluemarble_4km.tif``
+         * - **i3_15Meter_Merc**
+           - Today's date
+           - i3
+           - **Auto Mask** Default values
+           - ``i3SF15-meter.tif``
+         * - **SFHighResInset_Merc**
+           - Today's date
+           - USGS Imagery
+           - **Auto Mask** Default values
+           - ``usgsSFHiRes.tif``
 
       #. Click |image11|. The Mercator Imagery Project Editor appears
          with no resources selected.
@@ -297,6 +306,7 @@ Creating a Map Database
          ``/ASSET_ROOT/Projects/Imagery`` folder.
       #. Enter the name **SFBayAreaMercator**, and click **Save**.
 
+      .. index:: Define, Push, and Publish a Map Database
       .. _Define_Push_Publish_Map_Database:
       .. rubric:: Define, Push, and Publish a Map Database
 
@@ -342,7 +352,7 @@ Creating a Map Database
 
          .. note::
 
-            **Note:** It might take a while to build the map database,
+            It might take a while to build the map database,
             because it is also building the project.
 
          When Google Earth Enterprise Fusion finishes building the
@@ -350,6 +360,7 @@ Creating a Map Database
          to **Succeeded**, and its **Current Version** column changes to the
          date and time the most recent build was started.
 
+      .. index: Push a Map Database to Google Earth Enterprise Server
       .. rubric:: Push a Map Database to Google Earth Enterprise Server
 
       .. rubric:: To push a map database:
@@ -368,11 +379,12 @@ Creating a Map Database
 
          .. note::
 
-            **Note:** If you get an error message, contact your Google
+            If you get an error message, contact your Google
             Earth Enterprise Server administrator for help, or check the
             *Google Earth Enterprise Administration Guide* for more
             information.
 
+      .. index:: Publish a Map Database on Google Earth Enterprise Server
       .. rubric:: Publish a Map Database on Google Earth Enterprise Server
 
       .. rubric:: To publish a database:
@@ -387,9 +399,11 @@ Creating a Map Database
          -  Default username: geapacheuser
          -  Default password: geeadmin
 
-         **Note:** If you do not know your username and password,
-         contact your Google Earth Enterprise Server System
-         Administrator.
+         .. note::
+         
+            If you do not know your username and password,
+            contact your Google Earth Enterprise Server System
+            Administrator.
 
       #. Click **Databases** to display the list of databases pushed to
          the server.
@@ -408,8 +422,9 @@ Creating a Map Database
       #. Click **Publish**. The Databases page updates to indicate the
          published status of your database.
 
+      .. index:: View a Map Database
       .. _View_Map_Database:
-      .. rubric:: View Your Map Database
+      .. rubric:: View a Map Database
 
       After you publish your map database, you can view it from Google
       Earth Enterprise Server or in any browser.
@@ -425,7 +440,7 @@ Creating a Map Database
 
          A new browser tab opens displaying your map database.
 
-      .. rubric:: To view your map database in any browser
+      .. rubric:: To view your map database in any browser:
 
       #. Launch any web browser.
       #. Point your browser to:
@@ -444,6 +459,7 @@ Creating a Map Database
 
       Google Maps displays your database.
 
+      .. index:: Use the Google Base Map
       .. _Using_Google_Base_Map:
       .. rubric:: Using the Google Base Map
 
@@ -454,14 +470,14 @@ Creating a Map Database
 
       .. note::
 
-         **Note:** As per Google's terms of service, you may need to
+         As per Google's terms of service, you may need to
          purchase a Maps for Business license if you are deploying your
          application in an internal environment.
 
       Deploying the Google Base Map involves adding it when you build
       your map database.
 
-      .. rubric:: To build your map database to include the Google Base Map
+      .. rubric:: To build your map database to include the Google Base Map:
 
       #. Select **Asset Manager** from the **Tools** menu. The Asset Manager
          appears.
@@ -491,8 +507,8 @@ Creating a Map Database
 
       .. rubric:: Learn more
 
-      -  `Google Maps Javascript API V3
-         Reference <https://developers.google.com/maps/documentation/javascript/reference>`__
+      -  `Google Maps JavaScript API V3
+         Reference <https://developers.google.com/maps/documentation/javascript/reference>`_
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

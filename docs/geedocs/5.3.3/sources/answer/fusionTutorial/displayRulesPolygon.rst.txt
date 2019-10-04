@@ -82,11 +82,11 @@ the counties):  For Draw Features As, select Polygons.  For
 Visibility, accept the default range, 4 through 24.  For Maximum
 Simplification Error, accept the default setting, 0.5.  Under Draw
 Style, set:  Mode to Outlined and Filled.  Fill Color to medium green.
-Tip: When you set fill color, specify a value of 125 for the alpha
-channel instead of 255. This makes the fill color semi-transparent
-instead of opaque.  Outline Color to black.  Outline Width to 1.  The
-result of these settings is that Google Earth EC displays each county
-as a semi-transparent green polygon with a black outline.  Under
+When you set fill color, specify a value of 125 for the alpha channel
+instead of 255. This makes the fill color semi-transparent instead of
+opaque.  Outline Color to black.  Outline Width to 1.  The result of
+these settings is that Google Earth EC displays each county as a semi-
+transparent green polygon with a black outline.  Under
 Elevation/Height, set:  Mode to Relative.  Check the box next to
 Extrude.  Check the box next to User-Defined Height.  Height Variable
 to POP2000. (Click the empty text field, select POP2000 from Insert
@@ -118,7 +118,7 @@ Select File > Save.  The Save dialog appears.
 Navigate to the ASSET_ROOT/Projects/Vectorfolder.
 
 Enter CACountyPopulation as the name of your project, and click Save.
-Note: Although this is the same name as the resource, Google Earth
+Although this is the same name as the resource, Google Earth
 Enterprise Fusion allows it, because they are different asset types
 and, therefore, have different file name extensions. In addition, they
 are being stored in different folders.  The new project appears in the
@@ -156,9 +156,7 @@ not desirable to spend a lot of time building a large imagery project.
 So this exercise walks you through creating a small and simple imagery
 project.
 
-Note: Note:
-
-   If you have already completed this exercise in
+Note: If you have already completed this exercise in
 
   Configuring Display Rules for Point Data
 
@@ -186,7 +184,7 @@ the Imagery Project Editor.
 
 Select File > Save.  The Save dialog appears.
 
-Navigate to the ASSET_ROOT/Projects/Imageryfolder.
+Navigate to the ASSET_ROOT/Projects/Imagery folder.
 
 Enter BlueMarble as the name of your project and click Save.  The new
 project appears in the Asset Manager when you select
@@ -280,16 +278,16 @@ published your map database. For example, if you specify
 CACountyPopulation-v001, it will be accessible from
 myserver.mydomainname.com/CACountyPopulation-v001.
 
-Click the Sign In button.  Caution: If you have logged in to this
-server with Google Earth EC previously, log out, clear your cache, and
-log back in. See Clearing the Google Earth EC cache.
+Click the Sign In button.  If you have logged in to this server with
+Google Earth EC previously, log out, clear your cache, and log back
+in. See Clearing the Google Earth EC cache.
 
 Zoom in to the west coast of the US.  Google Earth EC displays all of
 the counties in California labeled with the names of the counties. The
 closer you zoom in, the more spread out the counties look and the more
-county names you can see.  Note: If you cannot see the vector data,
-make sure the checkbox next to CACountyPopulation in the Layers panel
-is checked.
+county names you can see.  If you cannot see the vector data, make
+sure the checkbox next to CACountyPopulation in the Layers panel is
+checked.
 
 Turn and tilt the Earth so you can see the heights of the counties.
 Each county’s height indicates its relative population. Counties with

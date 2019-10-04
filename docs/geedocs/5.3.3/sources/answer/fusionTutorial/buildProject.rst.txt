@@ -66,23 +66,13 @@ SFBayAreaLanSat  i3_15Meter  SFHighResInset  The resources appear in
 order by resolution, with the higher resolution imagery at the top of
 the list.  Imagery Project Editor: list of resources
 
-Select
+Select File > Save.
 
-File > Save
+Navigate to the ASSET_ROOT/Projects/Imageryfolder.
 
-. Navigate to the "ASSET_ROOT/Projects/Imagery"folder. Enter
-
-SFBayArea
-
- as the name of your project, and click
-
-Save
-
-. The new project appears in the Asset Manager when you select
-
-ASSET_ROOT/Projects/Imagery
-
- in the asset navigation tree.
+Enter SFBayArea as the name of your project, and click Save. The new
+project appears in the Asset Manager when you select
+ASSET_ROOT/Projects/Imagery in the asset navigation tree.
 
 -[ Build an Imagery Project ]-
 
@@ -93,11 +83,9 @@ hierarchy at the same time. However, in this lesson, you will build
 the imagery project right away, so you can use it as a base map in the
 Preview pane.
 
-Note: Note:
-
-   It could take up to 10 minutes for the project to build. Do this
-  exercise when you can spend some time away from your computer while
-  the project builds.
+Note: It could take up to 10 minutes for the project to build. Do
+  this exercise when you can spend some time away from your computer
+  while the project builds.
 
 In the Asset Manager, navigate to ASSET_ROOT/Projects/Imagery in the
 asset navigation tree.
@@ -123,9 +111,7 @@ Succeeded
 
 You can preview an imagery project after you build it.
 
-Note: Note:
-
-   Only bounding boxes appear in the Preview pane, not the actual
+Note: Only bounding boxes appear in the Preview pane, not the actual
   imagery.
 
 -[ To preview an imagery project: ]-
@@ -140,10 +126,10 @@ boxes indicate the extents of each of the individual imagery
 resources. The largest bounding box is around the entire Earth, which
 is the BlueMarble imagery. (You might have to zoom out a bit to see
 it.) The other three bounding boxes are in the San Francisco Bay Area.
-You can zoom in to see them.  Note: The name of the project does not
-appear in the Preview List pane. When you close the Imagery Project
-Editor or uncheck the box next to Preview, the bounding boxes
-disappear. You can reset the view by pressing Ctrl+R.  Project Preview
+You can zoom in to see them.  The name of the project does not appear
+in the Preview List pane. When you close the Imagery Project Editor or
+uncheck the box next to Preview, the bounding boxes disappear. You can
+reset the view by pressing Ctrl+R.  Project Preview
 
 -[ Specify an Imagery Project as Your Base Map ]-
 
@@ -225,8 +211,8 @@ project right away.
 In the Asset Manager, right-click SF Terrain.
 
 Select Build from the context menu.  The status of the project
-immediately changes to Queued and then In Progress.  Note: It could
-take a while for this project to build, depending on the speed of your
+immediately changes to Queued and then In Progress.  It could take a
+while for this project to build, depending on the speed of your
 workstation.
 
 When the status of the terrain project build is
@@ -283,20 +269,20 @@ pane.  Vector Project Preview1
 Check the box next to USPopulation, switch to the Preview pane, and
 zoom out a bit.  Since this resource contains US census data by
 county, the outlines of counties across the US appear in the Preview
-pane as well as the roads in California.  Vector Project Preview2
-Note: The name of the project does not appear in the Preview List
-pane. When you close the Vector Project Editor or uncheck the boxes
-next to the resources, the vector data disappears. You can reset the
-view, if desired, by pressing Ctrl+R.
+pane as well as the roads in California.  Vector Project Preview2  The
+name of the project does not appear in the Preview List pane. When you
+close the Vector Project Editor or uncheck the boxes next to the
+resources, the vector data disappears. You can reset the view, if
+desired, by pressing Ctrl+R.
 
 In the Vector Project Editor, click USPopulation, and click Delete
 Icon to remove the US Population resource from the project. A message
 prompts you to confirm the deletion.
 
-Click the OK button. The USPopulation resource disappears.  Note:
-Removing the resource from the project does not delete the resource.
-The resource remains intact and available for use by other projects.
-It is simply not part of this particular project any longer.
+Click the OK button. The USPopulation resource disappears.  Removing
+the resource from the project does not delete the resource. The
+resource remains intact and available for use by other projects. It is
+simply not part of this particular project any longer.
 
 Select File > Save.
 
@@ -397,9 +383,7 @@ catch-all
  rule. It is designed to catch all of the data that does not match any
 other rules you create.
 
-Tip: Tip:
-
-   Google Earth Enterprise Fusion executes the display rules
+Tip: Google Earth Enterprise Fusion executes the display rules
   sequentially, based on the order in which they are listed on the
   Rules list. So you should always make the
 
@@ -462,7 +446,7 @@ Google Earth EC displaying the value of the NAME column for each road
 in your source data.  Display Rules Start  Click the OK button to save
 your display rule.
 
-Verify that your display rule does what you intend:  Ensure that
+Verify that the display rule does what you intend:  Ensure that
 nothing is listed in the Preview List pane. If one or more assets are
 listed, right-click any asset, and select Remove All Layers from the
 context menu; then click OK to confirm the removal.  In the Vector
@@ -471,17 +455,17 @@ CAHighways, and select Zoom to Layer from the context menu.  No roads
 appear because your display level is approximately 7, and you set the
 visibility level to between 9 and 18 in the Display Rules dialog.
 Zoom in to a display level of just over 9. Red lines appear for the
-roads in the Preview pane.  Note: Labels for vector projects do not
-appear in the Preview pane.  Zoom out to a display level less than 9.
-The roads disappear from the Preview pane.
+roads in the Preview pane.  Labels for vector projects do not appear
+in the Preview pane.  Zoom out to a display level less than 9. The
+roads disappear from the Preview pane.
 
 Save the vector project by selecting Save from the File menu in the
 Vector Project Editor.  This saves the project with the same name. If
 you want to save a project you create outside this tutorial with a
 different name, you can select Save As from the File menu, and follow
-the instructions in Add Resources to a Vector Project.  Note: Whenever
-you modify display rules or filters for your data, it is a good idea
-to save the project.
+the instructions in Add Resources to a Vector Project.  Whenever you
+modify display rules or filters for your data, it is a good idea to
+save the project.
 
 -[ Display Rules for Major Freeways ]-
 
