@@ -71,91 +71,43 @@ tools for Mercator maps appear in the toolbar.
 Click image7. The Map Database Editor appears with no projects
 selected.  Mercator Maps Database Editor
 
-#. Click   next to
+Click image9 next to Map Project. The Open Asset dialog appears.
 
-Map Project
+Navigate to the ASSET_ROOT/Projects/Mapfolder.
 
-. The Open Asset dialog appears. #. Navigate to the
-"ASSET_ROOT/Projects/Map"folder. #. Select the map project that you
-want to add to the map database and click
+Select the map project that you want to add to the map database and
+click Open. The map project appears in the Map Database Editor next to
+Map Project.
 
-Open
+Click image10 next to Imagery Project. The Open Asset dialog appears.
 
-. The map project appears in the Map Database Editor next to Map
-Project. #. Click   next to
+Navigate to the ASSET_ROOT/Projects/Imagery folder.
 
-Imagery Project
+Select Flat Imagery Project from the Type drop-down list, then select
+the imagery project to add and click Open. The imagery project appears
+in the Map Database Editor next to Imagery Project.
 
-. The Open Asset dialog appears. #. Navigate to the
-"ASSET_ROOT/Projects/Imagery" folder. #. Select
+Select File > Save.
 
-Flat Imagery Project
+Navigate to the ASSET_ROOT/Databases folder.
 
- from the
+In the Name field, enter a name, and click Save.  In the Asset
+Manager, the new map database appears, along with the other databases
+you have created. Notice that the Category column distinguishes
+between the Google Earth databases and the Google Maps database.
 
-Type
-
- drop-down list, then select the imagery project to add and click
-
-Open
-
-. The imagery project appears in the Map Database Editor next to
-Imagery Project. #. Select
-
-File > Save
-
-. #. Navigate to the "ASSET_ROOT/Databases" folder. #. In the
-
-Name
-
- field, enter a name, and click
-
-Save
-
-. In the Asset Manager, the new map database appears, along with the
-other databases you have created. Notice that the
-
-Category
-
- column distinguishes between the Google Earth databases and the
-Google Maps database. #. Right-click the name of your map database,
-and select
-
-Build
-
- from the context menu. The status of the database immediately changes
-to
-
-Waiting
-
- or
-
-Queued
-
- and then to
-
-In Progress
-
-. When Google Earth Enterprise Fusion finishes building the database,
-its
-
-Current State
-
- column in the Asset Manager changes to
-
-Succeeded
-
-, and its
-
-Current Version
-
- column changes to the date and time the most recent build was
+Right-click the name of your map database, and select Build from the
+context menu.  The status of the database immediately changes to
+Waiting or Queued and then to In Progress.  When Google Earth
+Enterprise Fusion finishes building the database, its Current State
+column in the Asset Manager changes to Succeeded, and its Current
+Version column changes to the date and time the most recent build was
 started.
 
 -[ Mercator on the Fly performance data ]-
 
 Mercator resolution increases relative to Plate Carrée as latitude
-increases (or decreases) from the equator for any given map level .
+increases (or decreases) from the equator for any given map level.
 Therefore to obtain the correct Mercator resolution, tiles must be
 sampled from higher Plate Carrée levels (known as upsampling). The
 higher the latitude, the greater the number of tiles required and, as
@@ -180,5 +132,6 @@ tile)  0 to 40  1  1-2  1 to 1.2 (2 tiles)  40 to 65  2  up to 4  2.1
 -[ Learn more ]-
 
 Push and publish databases
+
 
 Make Web Map Service (WMS) requests

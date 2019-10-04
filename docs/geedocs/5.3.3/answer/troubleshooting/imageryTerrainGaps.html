@@ -102,33 +102,29 @@ instructions below.</li>
 </ul>
 <p>To manually create the mask file:</p>
 <ol class="arabic">
-<li><div class="first line-block">
-<div class="line">Locate and record the full path to the resource <code class="docutils literal notranslate"><span class="pre">kip</span></code> and
-<code class="docutils literal notranslate"><span class="pre">kmp</span></code> folders:</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">gequery</span> <span class="pre">--outfiles</span> <span class="pre">resources/imagery/resource_i.kiasset</span></code></div>
-</div>
+<li><p class="first">Locate and record the full path to the resource <code class="docutils literal notranslate"><span class="pre">kip</span></code> and
+<code class="docutils literal notranslate"><span class="pre">kmp</span></code> folders:</p>
+<p><code class="docutils literal notranslate"><span class="pre">gequery</span> <span class="pre">--outfiles</span> <span class="pre">resources/imagery/resource_i.kiasset</span></code></p>
 <p>You will need this information for building the automask and
 importing the mask product.</p>
 </li>
 <li><p class="first">Locate the path to the <code class="docutils literal notranslate"><span class="pre">mask.tif</span></code> file created by the
-automasker:
-<code class="docutils literal notranslate"><span class="pre">gequery</span> <span class="pre">--outfiles</span> <span class="pre">resources/imagery/resource_i.kiasset/maskgen.kia</span></code></p>
+automasker:</p>
+<p><code class="docutils literal notranslate"><span class="pre">gequery</span> <span class="pre">--outfiles</span> <span class="pre">resources/imagery/resource_i.kiasset/maskgen.kia</span></code></p>
 </li>
 <li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">mask.tif</span></code> file and rename it to
 <code class="docutils literal notranslate"><span class="pre">mask.tif.bak</span></code>.</p>
 </li>
-<li><div class="first line-block">
-<div class="line">Create the new mask file:</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">gemaskgen</span> <span class="pre">--mask</span> <span class="pre">--band</span> <span class="pre">1</span> <span class="pre">--fill</span> <span class="pre">0</span> <span class="pre">--feather</span> <span class="pre">0</span> <span class="pre">\</span> <span class="pre">--holesize</span> <span class="pre">100</span> <span class="pre">/path/to/resource_i.kiasset/product.kia/ver/raster.kip</span> <span class="pre">\</span> <span class="pre">-o</span> <span class="pre">./mask.tif</span></code></div>
-</div>
+<li><p class="first">Create the new mask file:</p>
+<p><code class="docutils literal notranslate"><span class="pre">gemaskgen</span> <span class="pre">--mask</span> <span class="pre">--band</span> <span class="pre">1</span> <span class="pre">--fill</span> <span class="pre">0</span> <span class="pre">--feather</span> <span class="pre">0</span> <span class="pre">\</span> <span class="pre">--holesize</span> <span class="pre">100</span> <span class="pre">/path/to/resource_i.kiasset/product.kia/ver/raster.kip</span> <span class="pre">\</span> <span class="pre">-o</span> <span class="pre">./mask.tif</span></code></p>
 <p>If your source files are <code class="docutils literal notranslate"><span class="pre">MrSID</span></code> files, you might need to add
 a mask tolerance value (e.g., <code class="docutils literal notranslate"><span class="pre">--tolerance</span> <span class="pre">3</span></code>).</p>
 </li>
 <li><p class="first">Navigate to the resource <code class="docutils literal notranslate"><span class="pre">kip</span></code> and <code class="docutils literal notranslate"><span class="pre">kmp</span></code> folders, and move
 the <code class="docutils literal notranslate"><span class="pre">mask.kmp</span></code> folder to <code class="docutils literal notranslate"><span class="pre">mask.kmp.bak</span></code>.</p>
 </li>
-<li><p class="first">Create the new mask.kmp:
-<code class="docutils literal notranslate"><span class="pre">gerasterimport</span> <span class="pre">--alphamask</span> <span class="pre">/path/to/mask.tif</span> <span class="pre">--dataproduct</span> <span class="pre">/path/to/raster.kip</span> <span class="pre">\</span> <span class="pre">--output</span> <span class="pre">./mask.kmp</span></code></p>
+<li><p class="first">Create the new mask.kmp:</p>
+<p><code class="docutils literal notranslate"><span class="pre">gerasterimport</span> <span class="pre">--alphamask</span> <span class="pre">/path/to/mask.tif</span> <span class="pre">--dataproduct</span> <span class="pre">/path/to/raster.kip</span> <span class="pre">\</span> <span class="pre">--output</span> <span class="pre">./mask.kmp</span></code></p>
 </li>
 <li><p class="first">Launch the Fusion GUI and preview the image resource.</p>
 </li>

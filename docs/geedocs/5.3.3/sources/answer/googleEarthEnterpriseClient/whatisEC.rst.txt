@@ -14,6 +14,6 @@ servers only or can layer their data on top of Google’s global
 database of satellite imagery and mapping information.
 
 Google Earth EC is not part of the OpenGEE project, and can be
-downloaded separately from
+downloaded separately
 
 here.

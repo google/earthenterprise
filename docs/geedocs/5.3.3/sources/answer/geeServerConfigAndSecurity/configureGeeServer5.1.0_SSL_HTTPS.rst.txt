@@ -117,9 +117,9 @@ successful. Location-based Virtual Host created:
 The newly created virtual host configuration file in this example,
 /opt/google/gehttpd/conf.d/virtual_servers/test_ssl_host.location_ssl,
 includes the <Location> directives for SSL, in this case, test_ssl.
-``<Location “/test_ssl_host/*”>``    ``SetHandler fdb-handler``
-``SSLRequireSSL``    ``SSLVerifyClient none`` ``</Location>``  Use of
-the SSLRequireSSL directive prevents all HTTP requests that do not use
+<Location “/test_ssl_host/*”>    SetHandler fdb-handler
+SSLRequireSSL    SSLVerifyClient none </Location>  Use of the
+SSLRequireSSL directive prevents all HTTP requests that do not use
 SSL, thereby protecting your data from all but HTTPS requests. See
 Apache HTTP Server Version 2.2 Documentation for more information.
 Use of the SSLVerifyClient directive specifies the level of
@@ -153,7 +153,7 @@ Ensure the ServerName www.example.com is uncommented and matches the
 name defined in the /opt/google/gehttpd/conf/gehttpd.conf file, that
 is, the alias or real address users would enter in the network.  Check
 that the SSL virtual hosts configuration file location is already
-included in the  <VirtualHost _default_:443> list of directives:
+included in the <VirtualHost _default_:443> list of directives:
 <VirtualHost_default_:443>  Include
 conf.d/virtual_servers/*.location_ssl  Save and close the
 /opt/google/gehttpd/conf/extra/httpd-ssl.conf file.

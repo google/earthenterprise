@@ -85,7 +85,7 @@ Specifying Search Fields for Individual Layers
 
          .. note::
 
-            **Note:** This search performs an exact match, which means
+            This search performs an exact match, which means
             that the Google Earth EC user must enter the value exactly
             as it appears in the database. It can also perform a
             wildcard search, so users can enter part of the text they
@@ -142,10 +142,12 @@ Specifying Search Fields for Individual Layers
          database to Google Earth Enterprise Server, and displays a
          success message when it is done.
 
-         **Note:** If you get an error message, contact your Google
-         Earth Enterprise Server administrator for help, or check the
-         *Google Earth Enterprise Administration Guide* for more
-         information.
+         .. note::
+
+            If you get an error message, contact your Google
+            Earth Enterprise Server administrator for help, or check the
+            *Google Earth Enterprise Administration Guide* for more
+            information.
 
 
       .. _Specify_POI_Search_Publish:
@@ -167,9 +169,11 @@ Specifying Search Fields for Individual Layers
          -  Default username: *geapacheuser*
          -  Default password: *geeadmin*
 
-         **Note:** If you do not know your username and password,
-         contact your Google Earth Enterprise Server System
-         Administrator.
+         .. note::
+
+            If you do not know your username and password,
+            contact your Google Earth Enterprise Server System
+            Administrator.
 
       #. Click **Databases** to display the list of databases pushed to
          the server.
@@ -218,9 +222,9 @@ Specifying Search Fields for Individual Layers
          would be http://myhostname/CACountySearch.
       #. Click the **Sign In** button.
 
-      .. container:: alert
+      .. warning::
 
-         **Caution:** If you have logged in to this server with Google
+         If you have logged in to this server with Google
          Earth EC previously, log out, clear your cache, and log back
          in. See `clearing your cache <../answer/6010060.html>`__.
 

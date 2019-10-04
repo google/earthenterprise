@@ -89,9 +89,8 @@ security protocols you need to apply.</p>
 configurations provided with GEE Server.</p>
 <div class="admonition tip">
 <p class="first admonition-title">Tip</p>
-<p>See <a class="reference internal" href="../geeServerConfigAndSecurity/configureGeeServer5.1.0_SSL_HTTPS.html"><span class="doc">Configure GEE Server 5.1.0 for
-SSL/HTTPS</span></a> to add virtual hosts for
-HTTPS servers.</p>
+<p>See <a class="reference internal" href="../geeServerConfigAndSecurity/configureGeeServer5.1.0_SSL_HTTPS.html"><span class="doc">Configure GEE Server 5.1.0 for SSL/HTTPS</span></a> to add
+virtual hosts for HTTPS servers.</p>
 <p class="last">See <a class="reference internal" href="../fusionAdministration/commandReference.html#geserveradmin"><span class="std std-ref">geserveradmin</span></a> in
 the <a class="reference internal" href="../fusionAdministration/commandReference.html"><span class="doc">Command reference</span></a> for
 information about all the virtual host commands.</p>
@@ -122,8 +121,10 @@ with basic authentication. The default credentials are:</p>
 <li>Password: <em>geeuser</em></li>
 </ul>
 <p class="rubric">To reset the username and password:</p>
-<p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">/opt/google/gehttpd/bin/htpasswd</span></code>
-<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf.d/virtual_servers/.vhpasswd</span> <span class="pre">geeuser</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sudo /opt/google/gehttpd/bin/htpasswd
+/opt/google/gehttpd/conf.d/virtual_servers/.vhpasswd geeuser
+</pre></div>
+</div>
 <p>The public virtual host is unprotected and does not require any
 authentication.</p>
 <p class="rubric" id="create-register-virtual-hosts-digest-auth">Create and register a virtual host with digest
@@ -146,47 +147,55 @@ setting up security protocols from publishing maps and globes.</p>
 </div>
 <p class="rubric">To create and register a virtual host with digest
 authentication:</p>
-<ol class="arabic simple">
-<li>Create and register a virtual host in GEE Server using the
-<code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> command:</li>
-</ol>
+<ol class="arabic">
+<li><p class="first">Create and register a virtual host in GEE Server using the
+<code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> command:</p>
 <p><code class="docutils literal notranslate"><span class="pre">/opt/google/bin/geserveradmin</span> <span class="pre">--addvh</span> <span class="pre">digest</span> <span class="pre">[--vhurl</span> <span class="pre">&lt;url&gt;]</span> <span class="pre">[--vhcachelevel</span> <span class="pre">&lt;level&gt;]</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> creates the default location-based virtual host
-<code class="docutils literal notranslate"><span class="pre">digest_host.location</span></code> in
-<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf.d/virtual_servers</span></code> and registers it in
-GEE Server.</p>
+<code class="docutils literal notranslate"><span class="pre">digest_host.location</span></code> in <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf.d/virtual_servers</span></code>
+and registers it in GEE Server.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">vhurl</span></code> specifies the location of the virtual host. It must
 match the corresponding server-side virtual host configuration.</p>
-<p>#. Optionally, modify virtual host settings in
+</li>
+<li><p class="first">Optionally, modify virtual host settings in
 <code class="docutils literal notranslate"><span class="pre">digest_host.location</span></code> to set up authentication.</p>
+</li>
+</ol>
 <p class="rubric">To set up digest authentication:</p>
-<p>#. Edit the <code class="docutils literal notranslate"><span class="pre">digest_host.location</span></code> file to set up the
-authentication configuration:</p>
-<p><code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">/opt/google/gehttpd/conf.d/virtual_servers</span></code>
-<code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">vi</span> <span class="pre">digest_host.location</span></code></p>
 <ol class="arabic">
-<li><p class="first">Add the following content to the <code class="docutils literal notranslate"><span class="pre">digest_host.location</span></code> file:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>``# The digest virtual host.``
-``RewriteEngine on``
-
-``&lt;Location /digest_host/&gt;``
-``SetHandler fdb-handler``
-``AuthType Digest``
-``AuthName &quot;Private&quot;``
-``AuthDigestProvider file``
-``AuthUserFile /opt/google/gehttpd/conf.d/virtual_servers/.htdigest
-``Require valid-user``
-``&lt;/Location&gt;``
+<li><p class="first">Edit the <code class="docutils literal notranslate"><span class="pre">digest_host.location</span></code> file to set up the
+authentication configuration:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cd /opt/google/gehttpd/conf.d/virtual_servers
+sudo vi digest_host.location
 </pre></div>
 </div>
 </li>
-</ol>
-<p>#. Create the password with a given user name using the password path
+<li><p class="first">Add the following content to the <code class="docutils literal notranslate"><span class="pre">digest_host.location</span></code> file:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># The digest virtual host.
+RewriteEngine on
+
+&lt;Location /digest_host/&gt;
+   SetHandler fdb-handler
+   AuthType Digest
+   AuthName &quot;Private&quot;
+   AuthDigestProvider file
+   AuthUserFile /opt/google/gehttpd/conf.d/virtual_servers/.htdigest
+   Require valid-user
+&lt;/Location&gt;
+</pre></div>
+</div>
+</li>
+<li><p class="first">Create the password with a given user name using the password path
 that you specified in the <code class="docutils literal notranslate"><span class="pre">digest_host.location</span></code> file:</p>
-<p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">htdigest</span> <span class="pre">-c</span> <span class="pre">/opt/google/gehttpd/conf.d/virtual_servers/.htdigest</span> <span class="pre">Private</span> <span class="pre">username</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">chmod</span> <span class="pre">755</span> <span class="pre">/opt/google/gehttpd/conf.d/virtual_servers/.htdigest</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">#Enter</span> <span class="pre">password</span> <span class="pre">twice</span> <span class="pre">at</span> <span class="pre">prompt</span></code></p>
-<p>#. Restart <code class="docutils literal notranslate"><span class="pre">geserver</span></code> after virtual host settings have been
+</li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sudo htdigest -c /opt/google/gehttpd/conf.d/virtual_servers/.htdigest Private username
+sudo chmod 755 /opt/google/gehttpd/conf.d/virtual_servers/.htdigest
+#Enter password twice at prompt
+</pre></div>
+</div>
+<ol class="arabic">
+<li><p class="first">Restart <code class="docutils literal notranslate"><span class="pre">geserver</span></code> after virtual host settings have been
 modified.</p>
 <p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">/etc/init.d/geserver</span> <span class="pre">restart</span></code></p>
 <div class="admonition tip">
@@ -194,6 +203,8 @@ modified.</p>
 <p class="last">A virtual host can also be configured for SSL/HTTPS. See
 <a class="reference internal" href="../geeServerConfigAndSecurity/configureGeeServer5.1.0_SSL_HTTPS.html"><span class="doc">Configure GEE Server 5.1.0 for SSL/HTTPS</span></a>.</p>
 </div>
+</li>
+</ol>
 <p class="rubric" id="configure-virtual-host-custom-port-number">Configure virtual hosts with a custom port number</p>
 <p>You may need to configure a virtual host to use a custom port setting
 number, commonly to differentiate from any default port
@@ -224,10 +235,10 @@ may have configured:</p>
 <li><p class="first">Then manually add the Include directives for your custom port
 virtual host to the SSL configuration file for Apache server,
 <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/extra/httpd-ssl.conf</span></code>:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>``&lt;VirtualHost  _non_default_:4343&gt;``
-     ``# Include all SSL location-based virtual servers with custom port 4343.``
-     ``Include conf.d/virtual_servers/*.location_ssl_custom``
-``&lt;/VirtualHost&gt;``
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;VirtualHost  _non_default_:4343&gt;
+     # Include all SSL location-based virtual servers with custom port 4343.
+     Include conf.d/virtual_servers/*.location_ssl_custom
+&lt;/VirtualHost&gt;
 </pre></div>
 </div>
 </li>

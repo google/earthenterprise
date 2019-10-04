@@ -12,9 +12,7 @@ workstation configuration or modifying the local path of a network-
 mounted source volume (for example, when adding a larger drive for
 source data).
 
-Note: Note:
-
-   Your asset root and publish root, "/published_dbs/", should be
+Note: Your asset root and publish root, "/published_dbs/", should be
   located on the same volume, enabling Fusion to use symbolic links.
   Keeping your asset root and publish root on separate volumes causes
   Fusion to make copies of your databases, obviously leading to

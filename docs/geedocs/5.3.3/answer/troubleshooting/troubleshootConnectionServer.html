@@ -88,14 +88,14 @@ the database was published.</li>
 </ul>
 </li>
 <li><p class="first">Look for client EC requests in the GEE Server logs:</p>
-<ol class="arabic">
+<ol class="loweralpha">
 <li><p class="first">Open a terminal window on the GEE Server.</p>
 </li>
 <li><p class="first">Type the command
 <code class="docutils literal notranslate"><span class="pre">tail</span> <span class="pre">-f</span> <span class="pre">/opt/google/gehttpd/logs/access_log</span></code></p>
 </li>
-<li><p class="first">Start EC and try connecting to your GEE Server.
-In the terminal window, you should see time-stamped access
+<li><p class="first">Start EC and try connecting to your GEE Server.</p>
+<p>In the terminal window, you should see time-stamped access
 requests in the logs from the client, starting with a GET
 request for the <code class="docutils literal notranslate"><span class="pre">dbRoot</span></code> file, followed by <code class="docutils literal notranslate"><span class="pre">flatfile</span></code>
 requests—for example:</p>

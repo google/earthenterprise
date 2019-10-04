@@ -27,7 +27,7 @@ Import a subset of imagery
       the GDAL ``gdal_translate`` tool, includes support for JPEG2000
       format source imagery.
 
-      |getranslate imagery|
+      |getranslate imagery 1|
 
       .. rubric:: Example of importing a subset of imagery
 
@@ -42,24 +42,63 @@ Import a subset of imagery
       like this:
 
       ``/opt/google/bin/getranslate -of HFA -projwin 580907.14 4142271.64 581788.04 4141453.58 /path/to/input.sid /path/to/output.img``
-      |getranslate imagery|
+
+      |getranslate imagery 2|
 
       The resulting output.img file contains imagery for the area you
       specified with ``-projwin``:
 
-      |getranslate imagery|
+      |getranslate imagery 3|
 
       You can compare the size of the original image with the extracted
       area, as shown below:
-      |getranslate imagery|
+      |getranslate imagery 4|
 
       .. rubric:: getranslate command options
          :name: getranslate-command-options
 
-      ``usage: getranslate [options] <input> <output> Supported options are:  --help|-?     : Show this usage message  --formats     : Show supported formats and exit  -ot <Byte|Int16|UInt16|UInt32|Int32|Float32|Float64       |CInt16|CInt32|CFloat32|CFloat64>     : Pixel type of output (default: match input)  -not_strict  -of <format>     : File format of output (default: GTiff)  -b <band>     : Specifies band to copy (1 based indexing). Can be:       specified multiple times. (e.g. "-b 3 -b 2 -b 1")       will reverse the bands.  -outsize <xsize[%]> <ysize[%]>     : Size of the output image (pixels or % of original).  -scale [<src_min> <src_max> [<dst_min> <dst_max>]]     : Scale the input pixels values  -srcwin <xoff> <yoff> <xsize> <ysize>     : Select sub window from input  -a_srs <projection>     : Assign specified projection to the output       <projection> can be:          NAD27|NAD83|WGS84|WGS72          EPSG:<num>          <PROJ.4 definition>          <OpenGIS Well Known Text>          <filename of file with OpenGIS Well Known Text>          ESRI::<ESRI Well Known Text File(.prj)>  -projwin <ulx> <uly> <lrx> <lry>     : Select sub window from input. Like -srcwin but uses       georeferenced coordinates  -co "NAME=VALUE"*     : Pass construction arguments to output GDAL dataset  -mo "META-TAG=VALUE"*     : Meta information to be included in the output  -quiet``
+      .. code-block:: none
+      
+            usage: getranslate [options] <input> <output>
+            Supported options are:
+                  --help|-?     : Show this usage message
+                  --formats     : Show supported formats and exit
+                  -ot <Byte|Int16|UInt16|UInt32|Int32|Float32|Float64|CInt16|CInt32|CFloat32|CFloat64>
+                        : Pixel type of output (default: match input)
+                  -not_strict
+                  -of <format>
+                        : File format of output (default: GTiff)  -b <band>
+                        : Specifies band to copy (1 based indexing). Can be:
+                        specified multiple times. (e.g. "-b 3 -b 2 -b 1")
+                        will reverse the bands.
+                  -outsize <xsize[%]> <ysize[%]>
+                        : Size of the output image (pixels or % of original).
+                  -scale [<src_min> <src_max> [<dst_min> <dst_max>]]
+                        : Scale the input pixels values  -srcwin <xoff> <yoff> <xsize> <ysize>
+                        : Select sub window from input
+                  -a_srs <projection>
+                        : Assign specified projection to the output
+                        <projection> can be:
+                              NAD27|NAD83|WGS84|WGS72
+                              EPSG:<num>
+                              <PROJ.4 definition>
+                              <OpenGIS Well Known Text>
+                              <filename of file with OpenGIS Well Known Text>
+                              ESRI::<ESRI Well Known Text File(.prj)>
+                  -projwin <ulx> <uly> <lrx> <lry>
+                  : Select sub window from input. Like -srcwin but uses
+                        georeferenced coordinates  -co "NAME=VALUE"*
+                  : Pass construction arguments to output GDAL dataset
+                  -mo "META-TAG=VALUE"*
+                  : Meta information to be included in the output
+                  -quiet
+
       Utilizes GDAL 2.1.2, released October 2016
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
    :height: 44px
-.. |getranslate imagery| image:: ../../art/fusion/resources/2656013_getranslate_4.jpg
+.. |getranslate imagery 4| image:: ../../art/fusion/resources/2656013_getranslate_4.jpg
+.. |getranslate imagery 1| image:: ../../art/fusion/resources/2656008_getranslate_1.jpg
+.. |getranslate imagery 3| image:: ../../art/fusion/resources/2656011_getranslate_3.jpg
+.. |getranslate imagery 2| image:: ../../art/fusion/resources/2656074_getranslate_2.jpg

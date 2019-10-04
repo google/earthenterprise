@@ -8,6 +8,8 @@ Upgrade to GEE 5.x
 
    .. container:: content
 
+      .. index:: Upgrade Google Earth Enterprise
+
       You can upgrade to Google Earth Enterprise 5.x from versions 4.0.0
       through 4.4.1.
 
@@ -30,12 +32,12 @@ Upgrade to GEE 5.x
 
             .. note::
 
-               | **Note:** During the uninstallation/installation,
-                 contents of ``/opt/google/gehttpd`` and other key
-                 folders are automatically backed up to:
-               | ``/var/opt/google/fusion-backups``
-               | These backups are stored in a ``DATE.TIME`` named
-                 folder, for example, ``20140310.160027/``.
+               During the uninstallation/installation,
+               contents of ``/opt/google/gehttpd`` and other key
+               folders are automatically backed up to:
+               ``/var/opt/google/fusion-backups``
+               These backups are stored in a ``DATE.TIME`` named
+               folder, for example, ``20140310.160027/``.
 
          #. Remove symbolic links from ``/opt/google/gehttpd/`` to other
             directories.
@@ -51,12 +53,12 @@ Upgrade to GEE 5.x
             machine. This will clean all previously deleted databases in
             ``/gevol/published_dbs;``
 
-            | ``/opt/google/bin/geserveradmin --garbagecollect --server_type stream``
-            | ``/opt/google/bin/geserveradmin --garbagecollect --server_type search``
+            ``/opt/google/bin/geserveradmin --garbagecollect --server_type stream``
+            ``/opt/google/bin/geserveradmin --garbagecollect --server_type search``
 
          .. note::
 
-            **Note:** GEE 5.x does not support 2D maps in the flat
+            GEE 5.x does not support 2D maps in the flat
             (Plate Carrée) projection. If you have previously built and
             published a map with a flat projection, these databases will
             be marked as invalid, and you will not be able to perform
@@ -64,44 +66,46 @@ Upgrade to GEE 5.x
 
       .. rubric:: Upgrading
 
-      .. container::
+      .. rubric:: To upgrade to GEE 5.x:
+         :name: to-upgrade-to-gee-5.x
 
-         .. rubric:: To upgrade to GEE 5.x:
-            :name: to-upgrade-to-gee-5.x
+      #. Stop ``gefusion`` and ``geserver``.
+      #. If you are upgrading from GEE 4.x to 5.x, uninstall previous
+         versions of Google Earth Enterprise Fusion and Server.
 
-         #. Stop ``gefusion`` and ``geserver``.
-         #. If you are upgrading from GEE 4.x to 5.x, uninstall previous
-            versions of Google Earth Enterprise Fusion and Server.
+         .. note::
 
-            .. note::
+            When you uninstall Google Earth Enterprise
+            Fusion and Server, your asset root remains unchanged;
+            none of your resources or assets are removed.
 
-               **Note:** When you uninstall Google Earth Enterprise
-               Fusion and Server, your asset root remains unchanged;
-               none of your resources or assets are removed.
+      #. Install GEE Fusion and Server 5.x.
+      #. For GEE Server, run the following command:
+         ``sudo -u gepguser /opt/google/bin/geresetpgdb``
 
-         #. Install GEE Fusion and Server 5.x.
-         #. For GEE Server, run the following command:
-            ``sudo -u gepguser /opt/google/bin/geresetpgdb``
+         .. note::
 
-            .. note::
+            ``geresetpgd`` deletes registering information
+            about Fusion databases on GEE Server. After installing
+            GEE Server/Fusion you will need to:
 
-               **Note:** ``geresetpgd`` deletes registering information
-               about Fusion databases on GEE Server. After installing
-               GEE Server/Fusion you will need to:
+            -  Rebuild 3D database assets; if **Push** is not
+               available, then the database assets need to be
+               rebuilt.
+            -  Push all 3D and 2D Mercator databases. 2D Plate Carrée
+               databases are not valid in GEE 5.0. See `Web Map
+               Service (WMS) <../answer/4441137.html>`__ for
+               projection support for Plate Carrée maps.
 
-               -  Rebuild 3D database assets; if **Push** is not
-                  available, then the database assets need to be
-                  rebuilt.
-               -  Push all 3D and 2D Mercator databases. 2D Plate Carrée
-                  databases are not valid in GEE 5.0. See `Web Map
-                  Service (WMS) <../answer/4441137.html>`__ for
-                  projection support for Plate Carrée maps.
+      #. Upgrade asset root:
 
-         #. Upgrade asset root:
-            ``sudo /opt/google/bin/geupgradeassetroot --assetroot /gevol/assets``
-         #. Optionally enable cutter:
-            ``/opt/google/bin/gecutter enable``
-         #. Start ``gefusion`` and ``geserver``.
+         ``sudo /opt/google/bin/geupgradeassetroot --assetroot /gevol/assets``
+
+      #. Optionally enable cutter:
+
+         ``/opt/google/bin/gecutter enable``
+
+      #. Start ``gefusion`` and ``geserver``.
 
       .. rubric:: After you upgrade
 
@@ -130,7 +134,7 @@ Upgrade to GEE 5.x
 
          .. note::
 
-            **Note:** Push is not available if rebuild is required. You
+            Push is not available if rebuild is required. You
             will need to push each database (3D and 2D Mercator
             databases) to GEE Server (database will be registered on
             server, and updated files will be pushed), where they can

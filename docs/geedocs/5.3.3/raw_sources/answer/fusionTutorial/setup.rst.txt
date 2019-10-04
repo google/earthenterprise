@@ -32,15 +32,15 @@ Setting Up the Tutorial
       how to create 2D and 3D databases, as well as become familiar
       with the Google Earth Enterprise Fusion user interface.
 
-      -  `Select the Tutorial Asset Root <#SelectAssetRoot>`__
-      -  `Launch Google Earth Enterprise Fusion <#LaunchFusion>`__
-      -  `Build the Asset Navigation Tree <#AssetNavTree>`__
-      -  `Define Source Providers <#DefineSrcProv>`__
-      -  `Define Resource Paths <#DefineResPath>`__
+      -  :ref:`Select the Tutorial Asset Root <SelectAssetRoot>`
+      -  :ref:`Launch Google Earth Enterprise Fusion <LaunchFusion>`
+      -  :ref:`Build the Asset Navigation Tree <AssetNavTree>`
+      -  :ref:`Define Source Providers <DefineSrcProv>`
+      -  :ref:`Define Resource Paths <DefineResPath>`
 
-
+      .. index:: Tutorial Asset Root
+      .. _SelectAssetRoot:
       .. rubric:: Select the Tutorial Asset Root
-         :name: select-the-tutorial-asset-root
 
       There are two occasions when you must select a different asset
       root:
@@ -54,7 +54,7 @@ Setting Up the Tutorial
 
       This section explains how to select a different asset root.
 
-      .. container:: alert
+      .. warning::
 
          **Caution:** Even though your source volumes and asset roots
          are separate for each user or for the tutorial and production
@@ -76,15 +76,11 @@ Setting Up the Tutorial
       #. On the command line, log in as root.
       #. Stop the system manager by entering:
 
-         ::
-
-            /etc/init.d/gefusion stop
+         ``/etc/init.d/gefusion stop``
 
       #. Enter:
 
-         ::
-
-            geselectassetroot --assetroot /username/assets
+         ``geselectassetroot --assetroot /username/assets``
 
          where *username* is the name you or your system administrator
          used when configuring the tutorial asset root. (If you do not
@@ -94,16 +90,12 @@ Setting Up the Tutorial
       #. When you return to the prompt, log out as root.
       #. Start the system manager by entering:
 
-         ::
-
-            /etc/init.d/gefusion start
+         ``/etc/init.d/gefusion start``
 
 
+      .. index:: Launch Google Earth Enterprise Fusion
+      .. _LaunchFusion:
       .. rubric:: Launch Google Earth Enterprise Fusion
-         :name: launch-google-earth-enterprise-fusion
-
-      .. rubric:: To launch Google Earth Enterprise Fusion:
-         :name: to-launch-google-earth-enterprise-fusion
 
       #. Open a Linux terminal window.
       #. Enter ``fusion`` (or ``fusion &`` to return to the Linux
@@ -113,8 +105,9 @@ Setting Up the Tutorial
       graphical user interface (GUI) appears.
 
 
+      .. index:: Asset Navigation Tree
+      .. _AssetNavTree:
       .. rubric:: Build the Asset Navigation Tree
-         :name: build-the-asset-navigation-tree
 
       The components of a Google Earth Enterprise Fusion database are
       called *assets*. The main location where you store all of your
@@ -127,7 +120,7 @@ Setting Up the Tutorial
       In this exercise, you add subfolders to the tutorial asset root,
       so you can store your assets in an organized way.
 
-      .. container:: alert
+      .. warning::
 
          **Caution:** Once you create subfolders in your asset root, you
          cannot delete them. This makes it especially important for you
@@ -170,8 +163,9 @@ Setting Up the Tutorial
          the top right corner.
 
 
+      .. index:: Source Providers
+      .. _DefineSrcProv:
       .. rubric:: Define Source Providers
-         :name: define-source-providers
 
       The **Provider Manager** allows you to create a list of
       organizations that provide the source data you use in Google
@@ -192,33 +186,52 @@ Setting Up the Tutorial
          The **Edit Provider** dialog appears.
          |Edit Provider Dialog|
       #. Enter the following information:
+
          **Name:** USGS Imagery
          **Key:** USGS-I
          **Copyright Text:** Imagery © 2005 USGS
          To enter the copyright symbol, open a text editor, press
          CTRL-SHIFT-U, then enter the Unicode 00A9. Copy and paste the
          displayed symbol into the dialog.
+
       #. Click **OK**.
       #. Repeat steps **2** through **4** to add the following source
          providers:
-         ===================== ====== =========================================
-         Name                  Key    Copyright Text
-         ===================== ====== =========================================
-         i3                    i3     Imagery © 2005 i3
-         USGS Maps             USGS-M Roads © 2005 USGS
-         GNIS/US Census Bureau GNIS   Population © 2005 GNIS
-         USGS POIs             USGS-P POIs © 2004 USGS
-         USGS Terrain          USGS-T Terrain © USGS 2003
-         NASA Imagery          NASA   Imagery courtesy NASA’s Earth Observatory
-         ===================== ====== =========================================
+
+         .. list-table::
+            :widths: 25 10 45
+            :header-rows: 1
+
+            * - Name
+              - Key
+              - Copyright Text
+            * - i3
+              - i3
+              - Imagery © 2005 i3
+            * - USGS Maps
+              - USGS-M
+              - Roads © 2005 USGS
+            * - GNIS/US Census Bureau
+              - GNIS
+              - Population © 2005 GNIS
+            * - USGS POIs
+              - USGS-P
+              - POIs © 2004 USGS
+            * - USGS Terrain
+              - USGS-T
+              - Terrain © USGS 2003
+            * - NASA Imagery
+              - NASA
+              - Imagery courtesy NASA’s Earth Observatory
 
          The new providers appear in the Provider Manager dialog in the
          order in which you added them:
          |Provider Manager Full|
       #. Click **OK** to close the Provider Manager.
 
+      .. index:: Resource Paths
+      .. _DefineResPath:
       .. rubric:: Define Resource Paths
-         :name: define-resource-paths
 
       The **Asset Manager Resource Editor Default Source Paths** screen
       allows you to specify default paths for Vector, Imagery, and
@@ -234,7 +247,7 @@ Setting Up the Tutorial
 
          The **Select Folder** dialog appears.
          |Select Folder Dialog|
-      #. Navigate to */opt/google/share/tutorials/fusion*.
+      #. Navigate to ``/opt/google/share/tutorials/fusion``.
       #. Select **Vector**, then click **OK**.
       #. Repeat steps **2** through **4** for **Imagery** and
          **Terrain**.
