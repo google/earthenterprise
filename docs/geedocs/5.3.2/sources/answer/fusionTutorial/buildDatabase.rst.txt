@@ -36,9 +36,9 @@ no projects selected.  Database Editor With No Projects Selected
 
 Click New Icon in the Vector Project row.
 
-Navigate to ASSET_ROOT/Projects/Vector.  Note: The selection in the
-Type drop-down list near the bottom of this dialog determines the type
-of projects that appear on the list. Vector Project is automatically
+Navigate to ASSET_ROOT/Projects/Vector.  The selection in the Type
+drop-down list near the bottom of this dialog determines the type of
+projects that appear on the list. Vector Project is automatically
 selected, so only vector resources appear on the list.
 
 Select the CARoads project and click Open. The CA Roads project
@@ -61,9 +61,7 @@ name of the database is displayed when you select the
 
 Once the database has been defined, it is ready to be built.
 
-Note: Note:
-
-   If you had not built the projects included in this database
+Note: If you had not built the projects included in this database
   previously, the following process would build them in the course of
   building the database. As you might expect, the database build
   process takes much longer if it is building all of the projects in

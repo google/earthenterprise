@@ -10,12 +10,12 @@ Portable Developer Guide
 
       .. rubric:: Contents
 
-      :ref:`Introduction <Introduction_Portable_Developer>`
-      :ref:`Useful resources <Useful_Resources_Portable_Developer>`
-      :ref:`Hello Maps! <Hello_Maps>`
-      :ref:`Hello Earth! <Hello_Earth>`
-      :ref:`JSON documents <JSON_Documents>`
-      :ref:`Polygon KML document <Polygon_KML_Document>`
+      -  :ref:`Introduction <Introduction_Portable_Developer>`
+      -  :ref:`Useful resources <Useful_Resources_Portable_Developer>`
+      -  :ref:`Hello Maps! <Hello_Maps>`
+      -  :ref:`Hello Earth! <Hello_Earth>`
+      -  :ref:`JSON documents <JSON_Documents>`
+      -  :ref:`Polygon KML document <Polygon_KML_Document>`
 
       .. _Introduction_Portable_Developer:
       .. rubric:: Introduction
@@ -36,26 +36,32 @@ Portable Developer Guide
       .. _Useful_Resources_Portable_Developer:
       .. rubric:: Useful resources
 
-      **Note**: Clicking any of these links connects you to a site
-      outside your network. If you are not sure if your organization
-      allows outside connections, check with your administrator first.
+      .. note::
+      
+         Clicking any of these links connects you to a site
+         outside your network. If you are not sure if your organization
+         allows outside connections, check with your administrator first.
 
       ``Hello_Maps.html`` and ``Hello_Earth.html`` are based on the
       Google Maps API and Google Earth API. More information about these
       APIs is linked to below. Also included are links to some resources
       for learning how to parse your JSON data and KML coordinates.
 
-      -  `Google Maps API help at https://developers.google.com/maps/ <https://developers.google.com/maps/>`_
-         . Examples that use the Maps API.
-      -  `Google Earth API
-         help at https://developers.google.com/earth/ <https://developers.google.com/earth/>_` *The Earth Plug-in and
-         its API have been discontinued.*
-      -  `jQuery help at
-         http://api.jquery.com/jQuery.parseJSON/ <http://api.jquery.com/jQuery.parseJSON/>`_ . A method for parsing
-         JSON.
-      -  `geoxml3 at
-         https://code.google.com/p/geoxml3/ <https://code.google.com/p/geoxml3/>`_ . A KML processor for use
-         with the Google Maps API.
+      -  `Google Maps API help at https://developers.google.com/maps/ <https://developers.google.com/maps/>`_.
+         
+         Examples that use the Maps API.
+
+      -  `Google Earth API help at https://developers.google.com/earth/ <https://developers.google.com/earth/>`_.
+         
+         *The Earth Plug-in and its API have been discontinued.*
+
+      -  `jQuery help at http://api.jquery.com/jQuery.parseJSON/ <http://api.jquery.com/jQuery.parseJSON/>`_.
+         
+         A method for parsing JSON.
+
+      -  `geoxml3 at https://code.google.com/p/geoxml3/ <https://code.google.com/p/geoxml3/>`_.
+         
+         A KML processor for use with the Google Maps API.
 
       .. _Hello_Maps:
       .. rubric:: Hello Maps!
@@ -111,7 +117,26 @@ Portable Developer Guide
       This code snippet is from the Globes JSON document, which
       provides information about each available globe.
 
-      ``Globes JSON: [yourhost]/?cmd=globes_info_json      [ {  "name":"test.glb",    "timestamp":"2013-01-01 12:00:00",    "size":"20.00MB",    "description":"Some globe description.",    "path":"../../../../globes/test.glb",    "is_gee":true,    "is_2d":false,    "is_3d":true,    "has_polygon":true,    "is_mercator":false,    "is_being_served":false   },   {    some other globe   },...   ]``
+      .. code-block:: none
+      
+         Globes JSON: [yourhost]/?cmd=globes_info_json
+         
+         [ {  "name":"test.glb",
+            "timestamp":"2013-01-01 12:00:00",
+            "size":"20.00MB",
+            "description":"Some globe description.",
+            "path":"../../../../globes/test.glb",
+            "is_gee":true,
+            "is_2d":false,
+            "is_3d":true,
+            "has_polygon":true,
+            "is_mercator":false,
+            "is_being_served":false
+            },
+            {
+            some other globe
+            },...
+         ]
 
       .. rubric:: 2D JSON and 3D JSON examples
 
@@ -133,11 +158,37 @@ Portable Developer Guide
 
       .. rubric:: Imagery layer example
 
-      ``[   ...{    icon : "icons/1.png",    id : 1001,    initialState : true,    isPng : false,    label : "Imagery",    lookAt : "none",    opacity : 1,    requestType : "ImageryMaps", // A layer of imagery. version : 8   }...   ]``
+      .. code-block:: none
+      
+         [
+         ...{
+            icon : "icons/1.png",
+            id : 1001,
+            initialState : true,
+            isPng : false,
+            label : "Imagery",
+            lookAt : "none",
+            opacity : 1,
+            requestType : "ImageryMaps", // A layer of imagery. version : 8
+            }...
+         ]
 
       .. rubric:: Vector data example
 
-      ``[   ...{    icon : "icons/2.png",    id : 1002,    initialState : true,    isPng : true,    label : "Tokyo",    lookAt : "none",    opacity : 1,    requestType : "VectorMapsRaster", // Vector data, such as roads, points, and borders. version : 4   }...   ]``
+      .. code-block:: none
+      
+         [
+         ...{
+            icon : "icons/2.png",
+            id : 1002,
+            initialState : true,
+            isPng : true,
+            label : "Tokyo",
+            lookAt : "none",
+            opacity : 1,
+            requestType : "VectorMapsRaster", // Vector data, such as roads, points, and borders. version : 4
+         }...
+         ]
 
       .. _Polygon_KML_Document:
       .. rubric:: Polygon KML document
@@ -153,7 +204,57 @@ Portable Developer Guide
       This is an example of a KML document that contains a set of
       coordinates that define the bounds of your globe's cut.
 
-         ``Polygon KML: [your host]/earth/polygon.kml      <?xml version="1.0"    encoding="UTF-8"?>   <kml>   <Document>    <name>polygons</name>   <Placemark>    <Polygon>     <tessellate>1</tessellate>     <outerBoundaryIs>     <LinearRing>     <coordinates>   -122.3185062675476,37.790043919799245,0    -122.3395950675476,37.84095511979925,0    -122.39050626754761,37.86204391979925,0    -122.44141746754761,37.84095511979925,0    -122.46250626754761,37.790043919799245,0    -122.44141746754761,37.739132719799244,0    -122.39050626754761,37.71804391979924,0    -122.3395950675476,37.739132719799244,0    -122.3185062675476,37.790043919799245,0   </coordinates>     </LinearRing>    </outerBoundaryIs>    </Polygon>    </Placemark>   <Placemark>    <Polygon>    <tessellate>1</tessellate>    <outerBoundaryIs>    <LinearRing>    <coordinates>   -122.01254132080078,37.42221919299647,0    -122.03363012080078,37.473130392996474,0    -122.08454132080078,37.494219192996475,0    -122.13545252080078,37.473130392996474,0    -122.15654132080078,37.42221919299647,0    -122.13545252080078,37.37130799299647,0    -122.08454132080078,37.35021919299647,0    -122.03363012080078,37.37130799299647,0    -122.01254132080078,37.42221919299647,0   </coordinates>    </LinearRing>    </outerBoundaryIs>    </Polygon>   </Placemark>   </Document>   </kml>``
+      .. code-block:: none
+      
+         Polygon KML: [your host]/earth/polygon.kml
+         
+         <?xml version="1.0"
+         encoding="UTF-8"?>
+         <kml>
+         <Document>
+            <name>polygons</name>
+         <Placemark>
+            <Polygon>
+               <tessellate>1</tessellate>
+               <outerBoundaryIs>
+               <LinearRing>
+               <coordinates>
+                  -122.3185062675476,37.790043919799245,0
+                  -122.3395950675476,37.84095511979925,0
+                  -122.39050626754761,37.86204391979925,0
+                  -122.44141746754761,37.84095511979925,0
+                  -122.46250626754761,37.790043919799245,0
+                  -122.44141746754761,37.739132719799244,0
+                  -122.39050626754761,37.71804391979924,0
+                  -122.3395950675476,37.739132719799244,0
+                  -122.3185062675476,37.790043919799245,0
+               </coordinates>
+               </LinearRing>
+               </outerBoundaryIs>
+            </Polygon>
+         </Placemark>
+         <Placemark>
+            <Polygon>
+               <tessellate>1</tessellate>
+               <outerBoundaryIs>
+               <LinearRing>
+               <coordinates>
+                  -122.01254132080078,37.42221919299647,0
+                  -122.03363012080078,37.473130392996474,0
+                  -122.08454132080078,37.494219192996475,0
+                  -122.13545252080078,37.473130392996474,0
+                  -122.15654132080078,37.42221919299647,0
+                  -122.13545252080078,37.37130799299647,0
+                  -122.08454132080078,37.35021919299647,0
+                  -122.03363012080078,37.37130799299647,0
+                  -122.01254132080078,37.42221919299647,0
+               </coordinates>
+               </LinearRing>
+               </outerBoundaryIs>
+            </Polygon>
+         </Placemark>
+         </Document>
+         </kml>
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

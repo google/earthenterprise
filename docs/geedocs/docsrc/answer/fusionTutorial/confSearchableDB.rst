@@ -68,11 +68,13 @@ Configuring a Searchable Database
          the first element of your search results and displays the
          location key in the results.
 
-         **Tip:** When a Google Earth EC user specifies a search value,
-         the Key value is associated with the value specified by the
-         user and added to the ``URL GET`` request submitted to the
-         example plug-in. It does not necessarily correlate to a field
-         in the search database.
+         .. tip::
+
+            When a Google Earth EC user specifies a search value,
+            the Key value is associated with the value specified by the
+            user and added to the ``URL GET`` request submitted to the
+            example plug-in. It does not necessarily correlate to a field
+            in the search database.
 
       #. For **Additional config parameters**, leave the field blank.
       #. For **Field Definitions**, enter **San Francisco Neighborhood**
@@ -121,9 +123,9 @@ Configuring a Searchable Database
 
       #. Launch Google Earth EC and log in to your server.
 
-      .. container:: alert
+      .. warning::
 
-         **Caution:** If you have logged in to this server with Google
+         If you have logged in to this server with Google
          Earth EC previously, log out, clear your cache, and log back
          in. See :doc:`../googleEarthEnterpriseClient/clearGoogleEarthEC`.
 

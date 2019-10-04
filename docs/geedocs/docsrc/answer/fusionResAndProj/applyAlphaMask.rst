@@ -69,13 +69,12 @@ Apply alpha masking to imagery
             still be considered imagery and not fill. In such cases,
             create a custom mask.
 
-      -  `Create your own custom mask :doc:`../fusionResAndProj/createCustomMasks` and
+      -  :doc:`Create your own custom mask <../fusionResAndProj/createCustomMasks>` and
          use **Have mask** to apply your custom mask.
 
       .. rubric:: Learn More
 
-      -  `Defining imagery
-         resources :ref:<Define_Imagery_Resources>`
+      -  :ref:`Defining imagery resources <Define_Imagery_Resources>`
       -  :doc:`../fusionResAndProj/createCustomMasks`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
