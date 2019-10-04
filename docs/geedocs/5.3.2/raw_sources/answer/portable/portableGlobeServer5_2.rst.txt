@@ -517,12 +517,12 @@ Portable Globe and Server 5.2
       what order they are run:
 
       .. code-block:: none
-      
+
          Building LevelFive ...
-         
+
          No description given. Added globe directory:
          /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive Ok
-         
+
          Saved polygon to
          /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/earth/polygon.kml
          Convert polygon to quadtree nodes ...
@@ -530,7 +530,7 @@ Portable Globe and Server 5.2
          --kml_polygon_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/earth/polygon.kml
          --max_level=18
          0 qtnodes Ok
-         
+
          Rewrite dbroot ...
          Executing: /opt/google/bin/gerewritedbroot
          --source=http://earth.localdomain/default_ge/
@@ -546,7 +546,7 @@ Portable Globe and Server 5.2
          /tmp/globe_builder/LevelFive_4282_1287494655.545115/dbroot.v5
          /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/dbroot/dbroot_localhost_9335
          Ok
-         
+
          Grab kml files ...
          Executing: /opt/google/bin/gekmlgrabber
          --kml_map_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/kml_map.txt
@@ -555,7 +555,7 @@ Portable Globe and Server 5.2
          --kml_server=localhost
          --kml_port=9335
          0 kml files Ok
-         
+
          Build globe ...
          Executing: /opt/google/bin/geportableglobebuilder
          --source=http://earth.localdomain/default_ge/
@@ -566,11 +566,11 @@ Portable Globe and Server 5.2
          --globe_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive
          --dbroot_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/dbroot.v5 >
          /tmp/globe_builder/LevelFive_4282_1287494655.545115/packet_info.txt & Ok
-         
+
          685 image packets
          128 terrain packets
          515 vectors packets
-         
+
          Extract search data ...
          Getting search poi ids:
          http://earth.localdomain/cgi-bin/globe_cutter.py?
@@ -580,16 +580,16 @@ Portable Globe and Server 5.2
          cmd=SEARCH_FILE&poi_id=&
          polygon=Paste%20in%20KML%20containing%20polygon.%20If%20KML%20contains%20more
          %20than%20one%20polygon%2C%20the%20first%20polygon%20will%20be%20used.
-         
+
          Saving search poi data:
          /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/search_db/gepoi_ Ok
-         
+
          Add plugin files ...
          Executing: cp -r /opt/google/gehttpd/htdocs/cutter/template/earth/*
          /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/earth Executing: cp -r /opt/google/gehttpd/htdocs/cutter/template/maps/*
          /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/maps Executing: cp -r /opt/google/gehttpd/htdocs/cutter/template/js/*
          /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/js Rewrite JSON from: http://earth.localdomain/default_ge//query?request=Json&var=geeServerDefs Ok
-         
+
          Packaging globe for download ...
          Executing: /opt/google/bin/geportableglobepacker
          --globe_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive
@@ -614,7 +614,8 @@ Portable Globe and Server 5.2
 
       .. rubric:: Usage
 
-      **gepolygontoqtnodes** --kml_polygon_file=*filename*     --qt_nodes_file=*filename* --max_level=*int*
+      **gepolygontoqtnodes** -\\-kml_polygon_file=\ *filename*
+         -\\-qt_nodes_file=\ *filename* -\\-max_level=\ *int*
 
       .. rubric:: Description
 
@@ -623,15 +624,15 @@ Portable Globe and Server 5.2
 
       .. rubric:: Required
 
-      .. list-table:: Required
+      .. list-table::
          :widths: 35 50
          :header-rows: 0
 
-         * - --kml_polygon_file=*filename*
+         * - -\\-kml_polygon_file=\ *filename*
            - KML file containing a polygon that defines the region of interest.
-         * - --qt_nodes_file=*filename*
+         * - -\\-qt_nodes_file=\ *filename*
            - File where quadtree addresses are stored.
-         * - --max_level=*int*
+         * - -\\-max_level=\ *int*
            - Level of resolution of quadtree that is used to encompass the polygon.
 
       .. _gerewritedbroot:
@@ -640,7 +641,10 @@ Portable Globe and Server 5.2
       .. rubric:: Usage
 
       **gerewritedbroot**
-      --source=*server_name* --icon_directory=*directory*     --dbroot_file=*filename*  --kml_map_file=*filename*     [--search_service=*search_service_url*] [--preserve_search_service] [--kml_server=*server_name*]     [--kml_port=*num*] [--kml_url_path=*prefix*] [--use_ssl_for_kml=*bool*]      [--preserve_kml_filenames] [--disable_historical]
+      -\\-source=\ *server_name* -\\-icon_directory=\ *directory*
+      -\\-dbroot_file=\ *filename*  -\\-kml_map_file=\ *filename*
+      [-\\-search_service=\ *search_service_url*] [-\\-preserve_search_service] [-\\-kml_server=\ *server_name*]
+      [-\\-kml_port=\ *num*] [-\\-kml_url_path=\ *prefix*] [-\\-use_ssl_for_kml=\ *bool*]      [-\\-preserve_kml_filenames] [-\\-disable_historical]
 
       .. rubric:: Description
 
@@ -661,9 +665,9 @@ Portable Globe and Server 5.2
          :widths: 30 50
          :header-rows: 0
 
-         * - --source=*server_name*
+         * - -\\-source=\ *server_name*
            - Server whose dbRoot should be rewritten.
-         * - --dbroot_file=*filename*
+         * - -\\-dbroot_file=\ *filename*
            - File where the new dbRoot should be stored.
 
       .. rubric:: Options
@@ -672,25 +676,25 @@ Portable Globe and Server 5.2
          :widths: 40 50
          :header-rows: 0
 
-         * - --icon_directory=*directory*
+         * - -\\-icon_directory=\ *directory*
            - Directory where the icons should be stored.
-         * - --kml_map_file=*filename*
+         * - -\\-kml_map_file=\ *filename*
            - File where the KML map of source URLs to local files should be stored.
-         * - --search_service=*search_service_url*
+         * - -\\-search_service=\ *search_service_url*
            - URL to search service. If none is provided then uses relative URL for standard Portable search.
-         * - --preserve_search_service
+         * - -\\-preserve_search_service
            - Preserve the existing search service URL.
-         * - --kml_server=*server_name*
+         * - -\\-kml_server=\ *server_name*
            - Server to be used for KML files in the dbRoot. Default is ``localhost``.
-         * - --kml_port=*num*
+         * - -\\-kml_port=\ *num*
            -  Port to be used for KML files in the dbRoot. Default is ``8888``.
-         * - --kml_url_path=*prefix*
+         * - -\\-kml_url_path=\ *prefix*
            - Path in new URL to prefix KML file name. Default is ``kml``.
-         * - --use_ssl_for_kml=*bool*
+         * - -\\-use_ssl_for_kml=\ *bool*
            - Use ``https`` instead of ``http`` for accessing KML files. Default is ``false``.
-         * - --preserve_kml_filenames
+         * - -\\-preserve_kml_filenames
            - Preserve the existing file names of any KML files. Not used when creating portable globes.
-         * - --disable_historical
+         * - -\\-disable_historical
            - Remove the reference to the server to obtain historical data.
 
       .. _gekmlgrabber:
@@ -700,7 +704,10 @@ Portable Globe and Server 5.2
 
       .. rubric:: Usage
 
-      **gekmlgrabber** --kml_map_file=*filename* --output_directory=*path*     [--source=*server_name*] [--kml_server=*server_name*] [--kml_port=*num*]     [--kml_url_path=*prefix*] [--use_ssl_for_kml=*bool*]     [--no_recurse=*bool*] [--ignore_absolute_urls=*bool*]
+      **gekmlgrabber** -\\-kml_map_file=\ *filename* -\\-output_directory=\ *path*
+         [-\\-source=\ *server_name*] [-\\-kml_server=\ *server_name*] [-\\-kml_port=\ num*]
+         [-\\-kml_url_path=\ *prefix*] [-\\-use_ssl_for_kml=\ *bool*]
+         [-\\-no_recurse=\ *bool*] [-\\-ignore_absolute_urls=\ *bool*]
 
       .. rubric:: Description
 
@@ -715,9 +722,9 @@ Portable Globe and Server 5.2
          :widths: 30 50
          :header-rows: 0
 
-         * - --kml_map_file=*filename*
+         * - -\\-kml_map_file=\ *filename*
            - File where map of KML source URLs to local files are stored.
-         * - --output_directory=*path*
+         * - -\\-output_directory=\ *path*
            - Directory where local KML files are to be stored.
 
       .. rubric:: Options
@@ -726,29 +733,31 @@ Portable Globe and Server 5.2
          :widths: 35 50
          :header-rows: 0
 
-         * - --source=*server_name*
+         * - -\\-source=\ *server_name*
            - Source for KML files. Default is ``localhost``.
-         * - --kml_server=*server_name*
+         * - -\\-kml_server=\ *server_name*
            - Server to be referenced in the dbroot for KML files. Default is ``localhost``.
-         * - --kml_port=*num*
+         * - -\\-kml_port=\ *num*
            - Port to be referenced in the dbroot for KML files. Default is ``9335``.
-         * - --kml_url_path=*prefix*
+         * - -\\-kml_url_path=\ *prefix*
            - Path in new URL to prefix KML file name. Default is ``kml``.
-         * - --use_ssl_for_kml=*bool*
+         * - -\\-use_ssl_for_kml=\ *bool*
            - Require https:// instead of http:// for accessing KML files. Default is ``false``.
-         * - --no_recurse=*bool*
+         * - -\\-no_recurse=\ *bool*
            - Do NOT make all KML files linked within the KML files local files as well. Default is ``false``.
-         * - --ignore_absolute_urls=*bool*
+         * - -\\-ignore_absolute_urls=\ *bool*
            - If KML is linked with a full URL address ``(http://server/...)``, leave it as it is. Default is ``false``.
 
       .. _geportableglobebuilder:
       .. rubric:: geportableglobebuilder
 
-      ``geportableglobebuilder --source=http://myserver --max_level=18 --default_level=8 --hires_qt_nodes_file=qt_nodes.txt \   --globe_directory /tmp/my_portable_globe \``
+      ``geportableglobebuilder --source=http://myserver --max_level=18 --default_level=8 --hires_qt_nodes_file=qt_nodes.txt --globe_directory /tmp/my_portable_globe``
 
       .. rubric:: Usage
 
-      **geportableglobebuilder**\ --source=*server_name* --globe_directory=*path*     [--max_level=*num*] [--default_level=*num*] [--hires_qt_nodes_file=*filename*]     [--dbroot_file=*filename*] [--nowrite]
+      **geportableglobebuilder**\ -\\-source=\ *server_name* -\\-globe_directory=\ *path*
+         [-\\-max_level=\ *num*] [-\\-default_level=\ *num*] [-\\-hires_qt_nodes_file=\ *filename*]
+         [-\\-dbroot_file=\ *filename*] [-\\-nowrite]
 
       .. rubric:: Description
 
@@ -762,9 +771,9 @@ Portable Globe and Server 5.2
          :widths: 30 50
          :header-rows: 0
 
-         * - --source=*server_name*
+         * - -\\-source=\ *server_name*
            - The source globe from which the sub-globe is to be derived.
-         * - --globe_directory=*path*
+         * - -\\-globe_directory=\ *path*
            - Directory where the portable globe should be built.
 
       .. rubric:: Options
@@ -773,20 +782,20 @@ Portable Globe and Server 5.2
          :widths: 35 50
          :header-rows: 0
 
-         * - --max_level=*num*
+         * - -\\-max_level=\ *num*
            - Level of resolution of the quadtree above which no packets should be saved. Default is ``24``.
-         * - --default_level=*num*
+         * - -\\-default_level=\ *num*
            - Level of resolution of the quadtree for which all packets are kept independent of the
              region of interest. Default is ``7``.
-         * - --hires_qt_nodes_file=*filename*
+         * - -\\-hires_qt_nodes_file=\ *filename*
            - Name of file containing the quadtree nodes that define the high-resolution area of the globe. Default is no file.
-         * - --dbroot_file=*filename*
+         * - -\\-dbroot_file=\ *filename*
            - Name of file containing the dbRoot that should be saved with the globe. Default is no file,
              in which case the dbRoot is read from the source.
-         * - --metadata_file=*filename*
+         * - -\\-metadata_file=\ *filename*
            - Name of file containing boundary metadata that should be saved with the globe.
              Default is no file, in which case no metadata file is included.
-         * - --no_write
+         * - -\\-no_write
            - Do not write packets; print out the total size of the globe.
 
       .. _geportableglobepacker:
@@ -794,7 +803,7 @@ Portable Globe and Server 5.2
 
       .. rubric:: Usage
 
-      **geportableglobepacker** --globe_directory=*path* --output=*filename* [--make_copy=*bool*] [--is_2d=*bool*]
+      **geportableglobepacker** -\\-globe_directory=\ *path* -\\-output=\ *filename* [-\\-make_copy=\ *bool*] [-\\-is_2d=\ *bool*]
 
       .. rubric:: Description
 
@@ -809,14 +818,14 @@ Portable Globe and Server 5.2
          :widths: 30 50
          :header-rows: 0
 
-         * - --globe_directory=*path*
+         * - -\\-globe_directory=\ *path*
            - The directory containing the globes to be packed.
-         * - --output=*filename*
+         * - -\\-output=\ *filename*
            - The file to which to save the packed globe, including a file path if desired.
              The file name should use a ``.glb`` file extension.
-         * - --make_copy=*bool*
+         * - -\\-make_copy=\ *bool*
            - Make a copy of all files so that the globe directory is not disturbed. Default is ``false``.
-         * - --is_2d=*bool*
+         * - -\\-is_2d=\ *bool*
            - Are we packaging a 2D map. Default is ``false``.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
