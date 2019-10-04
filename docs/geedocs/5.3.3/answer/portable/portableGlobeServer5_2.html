@@ -588,25 +588,27 @@ Deleting tmp directory as: /tmp/globe_builder/LevelFive_4282_1287494655.545115 O
 </table>
 <p class="rubric" id="gepolygontoqtnodes">gepolygontoqtnodes</p>
 <p class="rubric">Usage</p>
-<p><strong>gepolygontoqtnodes</strong> –kml_polygon_file=*filename*     –qt_nodes_file=*filename* –max_level=*int*</p>
+<dl class="docutils">
+<dt><strong>gepolygontoqtnodes</strong> --kml_polygon_file=<em>filename</em></dt>
+<dd>--qt_nodes_file=<em>filename</em> --max_level=<em>int</em></dd>
+</dl>
 <p class="rubric">Description</p>
 <p>Creates a list of the quadtree nodes that encompass a polygon at
 the given <code class="docutils literal notranslate"><span class="pre">max_level</span></code>.</p>
 <p class="rubric">Required</p>
-<table border="1" class="colwidths-given docutils" id="id1">
-<caption><span class="caption-text">Required</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<table border="1" class="colwidths-given docutils">
 <colgroup>
 <col width="41%" />
 <col width="59%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>–kml_polygon_file=*filename*</td>
+<tr class="row-odd"><td>--kml_polygon_file=<em>filename</em></td>
 <td>KML file containing a polygon that defines the region of interest.</td>
 </tr>
-<tr class="row-even"><td>–qt_nodes_file=*filename*</td>
+<tr class="row-even"><td>--qt_nodes_file=<em>filename</em></td>
 <td>File where quadtree addresses are stored.</td>
 </tr>
-<tr class="row-odd"><td>–max_level=*int*</td>
+<tr class="row-odd"><td>--max_level=<em>int</em></td>
 <td>Level of resolution of quadtree that is used to encompass the polygon.</td>
 </tr>
 </tbody>
@@ -614,7 +616,10 @@ the given <code class="docutils literal notranslate"><span class="pre">max_level
 <p class="rubric" id="gerewritedbroot">gerewritedbroot</p>
 <p class="rubric">Usage</p>
 <p><strong>gerewritedbroot</strong>
-–source=*server_name* –icon_directory=*directory*     –dbroot_file=*filename*  –kml_map_file=*filename*     [–search_service=*search_service_url*] [–preserve_search_service] [–kml_server=*server_name*]     [–kml_port=*num*] [–kml_url_path=*prefix*] [–use_ssl_for_kml=*bool*]      [–preserve_kml_filenames] [–disable_historical]</p>
+--source=<em>server_name</em> --icon_directory=<em>directory</em>
+--dbroot_file=<em>filename</em>  --kml_map_file=<em>filename</em>
+[--search_service=<em>search_service_url</em>] [--preserve_search_service] [--kml_server=<em>server_name</em>]
+[--kml_port=<em>num</em>] [--kml_url_path=<em>prefix</em>] [--use_ssl_for_kml=<em>bool</em>]      [--preserve_kml_filenames] [--disable_historical]</p>
 <p class="rubric">Description</p>
 <ul class="simple">
 <li>Reads dbRoot and rewrites the search tabs so that they point to
@@ -629,57 +634,57 @@ original KML Layer URLs to their updated file names.</li>
 imagery data.</li>
 </ul>
 <p class="rubric">Required</p>
-<table border="1" class="colwidths-given docutils" id="id2">
-<caption><span class="caption-text">Required</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<table border="1" class="colwidths-given docutils" id="id1">
+<caption><span class="caption-text">Required</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="38%" />
 <col width="63%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>–source=*server_name*</td>
+<tr class="row-odd"><td>--source=<em>server_name</em></td>
 <td>Server whose dbRoot should be rewritten.</td>
 </tr>
-<tr class="row-even"><td>–dbroot_file=*filename*</td>
+<tr class="row-even"><td>--dbroot_file=<em>filename</em></td>
 <td>File where the new dbRoot should be stored.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Options</p>
-<table border="1" class="colwidths-given docutils" id="id3">
-<caption><span class="caption-text">Options</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
+<table border="1" class="colwidths-given docutils" id="id2">
+<caption><span class="caption-text">Options</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="44%" />
 <col width="56%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>–icon_directory=*directory*</td>
+<tr class="row-odd"><td>--icon_directory=<em>directory</em></td>
 <td>Directory where the icons should be stored.</td>
 </tr>
-<tr class="row-even"><td>–kml_map_file=*filename*</td>
+<tr class="row-even"><td>--kml_map_file=<em>filename</em></td>
 <td>File where the KML map of source URLs to local files should be stored.</td>
 </tr>
-<tr class="row-odd"><td>–search_service=*search_service_url*</td>
+<tr class="row-odd"><td>--search_service=<em>search_service_url</em></td>
 <td>URL to search service. If none is provided then uses relative URL for standard Portable search.</td>
 </tr>
-<tr class="row-even"><td>–preserve_search_service</td>
+<tr class="row-even"><td>--preserve_search_service</td>
 <td>Preserve the existing search service URL.</td>
 </tr>
-<tr class="row-odd"><td>–kml_server=*server_name*</td>
+<tr class="row-odd"><td>--kml_server=<em>server_name</em></td>
 <td>Server to be used for KML files in the dbRoot. Default is <code class="docutils literal notranslate"><span class="pre">localhost</span></code>.</td>
 </tr>
-<tr class="row-even"><td>–kml_port=*num*</td>
+<tr class="row-even"><td>--kml_port=<em>num</em></td>
 <td>Port to be used for KML files in the dbRoot. Default is <code class="docutils literal notranslate"><span class="pre">8888</span></code>.</td>
 </tr>
-<tr class="row-odd"><td>–kml_url_path=*prefix*</td>
+<tr class="row-odd"><td>--kml_url_path=<em>prefix</em></td>
 <td>Path in new URL to prefix KML file name. Default is <code class="docutils literal notranslate"><span class="pre">kml</span></code>.</td>
 </tr>
-<tr class="row-even"><td>–use_ssl_for_kml=*bool*</td>
+<tr class="row-even"><td>--use_ssl_for_kml=<em>bool</em></td>
 <td>Use <code class="docutils literal notranslate"><span class="pre">https</span></code> instead of <code class="docutils literal notranslate"><span class="pre">http</span></code> for accessing KML files. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</td>
 </tr>
-<tr class="row-odd"><td>–preserve_kml_filenames</td>
+<tr class="row-odd"><td>--preserve_kml_filenames</td>
 <td>Preserve the existing file names of any KML files. Not used when creating portable globes.</td>
 </tr>
-<tr class="row-even"><td>–disable_historical</td>
+<tr class="row-even"><td>--disable_historical</td>
 <td>Remove the reference to the server to obtain historical data.</td>
 </tr>
 </tbody>
@@ -687,141 +692,150 @@ imagery data.</li>
 <p class="rubric" id="gekmlgrabber">gekmlgrabber</p>
 <p><code class="docutils literal notranslate"><span class="pre">gekmlgrabber</span> <span class="pre">--kml_map_file=/tmp/kml_map</span></code></p>
 <p class="rubric">Usage</p>
-<p><strong>gekmlgrabber</strong> –kml_map_file=*filename* –output_directory=*path*     [–source=*server_name*] [–kml_server=*server_name*] [–kml_port=*num*]     [–kml_url_path=*prefix*] [–use_ssl_for_kml=*bool*]     [–no_recurse=*bool*] [–ignore_absolute_urls=*bool*]</p>
+<dl class="docutils">
+<dt><strong>gekmlgrabber</strong> --kml_map_file=<em>filename</em> --output_directory=<em>path</em></dt>
+<dd>[--source=<em>server_name</em>] [--kml_server=<em>server_name</em>] [--kml_port=num*]
+[--kml_url_path=<em>prefix</em>] [--use_ssl_for_kml=<em>bool</em>]
+[--no_recurse=<em>bool</em>] [--ignore_absolute_urls=<em>bool</em>]</dd>
+</dl>
 <p class="rubric">Description</p>
 <p>Reads KML references, retrieves them from network, and copies them
 into local files. If the <code class="docutils literal notranslate"><span class="pre">--no_recurse</span></code> flag is not set, it does
 the same for any additional KML files referenced within the given
 KML files.</p>
 <p class="rubric">Required</p>
-<table border="1" class="colwidths-given docutils" id="id4">
-<caption><span class="caption-text">Required</span><a class="headerlink" href="#id4" title="Permalink to this table">¶</a></caption>
+<table border="1" class="colwidths-given docutils" id="id3">
+<caption><span class="caption-text">Required</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="38%" />
 <col width="63%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>–kml_map_file=*filename*</td>
+<tr class="row-odd"><td>--kml_map_file=<em>filename</em></td>
 <td>File where map of KML source URLs to local files are stored.</td>
 </tr>
-<tr class="row-even"><td>–output_directory=*path*</td>
+<tr class="row-even"><td>--output_directory=<em>path</em></td>
 <td>Directory where local KML files are to be stored.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Options</p>
-<table border="1" class="colwidths-given docutils" id="id5">
-<caption><span class="caption-text">Options</span><a class="headerlink" href="#id5" title="Permalink to this table">¶</a></caption>
+<table border="1" class="colwidths-given docutils" id="id4">
+<caption><span class="caption-text">Options</span><a class="headerlink" href="#id4" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="41%" />
 <col width="59%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>–source=*server_name*</td>
+<tr class="row-odd"><td>--source=<em>server_name</em></td>
 <td>Source for KML files. Default is <code class="docutils literal notranslate"><span class="pre">localhost</span></code>.</td>
 </tr>
-<tr class="row-even"><td>–kml_server=*server_name*</td>
+<tr class="row-even"><td>--kml_server=<em>server_name</em></td>
 <td>Server to be referenced in the dbroot for KML files. Default is <code class="docutils literal notranslate"><span class="pre">localhost</span></code>.</td>
 </tr>
-<tr class="row-odd"><td>–kml_port=*num*</td>
+<tr class="row-odd"><td>--kml_port=<em>num</em></td>
 <td>Port to be referenced in the dbroot for KML files. Default is <code class="docutils literal notranslate"><span class="pre">9335</span></code>.</td>
 </tr>
-<tr class="row-even"><td>–kml_url_path=*prefix*</td>
+<tr class="row-even"><td>--kml_url_path=<em>prefix</em></td>
 <td>Path in new URL to prefix KML file name. Default is <code class="docutils literal notranslate"><span class="pre">kml</span></code>.</td>
 </tr>
-<tr class="row-odd"><td>–use_ssl_for_kml=*bool*</td>
+<tr class="row-odd"><td>--use_ssl_for_kml=<em>bool</em></td>
 <td>Require <a class="reference external" href="https://">https://</a> instead of <a class="reference external" href="http://">http://</a> for accessing KML files. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</td>
 </tr>
-<tr class="row-even"><td>–no_recurse=*bool*</td>
+<tr class="row-even"><td>--no_recurse=<em>bool</em></td>
 <td>Do NOT make all KML files linked within the KML files local files as well. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</td>
 </tr>
-<tr class="row-odd"><td>–ignore_absolute_urls=*bool*</td>
+<tr class="row-odd"><td>--ignore_absolute_urls=<em>bool</em></td>
 <td>If KML is linked with a full URL address <code class="docutils literal notranslate"><span class="pre">(http://server/...)</span></code>, leave it as it is. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric" id="geportableglobebuilder">geportableglobebuilder</p>
-<p><code class="docutils literal notranslate"><span class="pre">geportableglobebuilder</span> <span class="pre">--source=http://myserver</span> <span class="pre">--max_level=18</span> <span class="pre">--default_level=8</span> <span class="pre">--hires_qt_nodes_file=qt_nodes.txt</span> <span class="pre">\</span>&#160;&#160; <span class="pre">--globe_directory</span> <span class="pre">/tmp/my_portable_globe</span> <span class="pre">\</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">geportableglobebuilder</span> <span class="pre">--source=http://myserver</span> <span class="pre">--max_level=18</span> <span class="pre">--default_level=8</span> <span class="pre">--hires_qt_nodes_file=qt_nodes.txt</span> <span class="pre">--globe_directory</span> <span class="pre">/tmp/my_portable_globe</span></code></p>
 <p class="rubric">Usage</p>
-<p><strong>geportableglobebuilder</strong>–source=*server_name* –globe_directory=*path*     [–max_level=*num*] [–default_level=*num*] [–hires_qt_nodes_file=*filename*]     [–dbroot_file=*filename*] [–nowrite]</p>
+<dl class="docutils">
+<dt><strong>geportableglobebuilder</strong>--source=<em>server_name</em> --globe_directory=<em>path</em></dt>
+<dd>[--max_level=<em>num</em>] [--default_level=<em>num</em>] [--hires_qt_nodes_file=<em>filename</em>]
+[--dbroot_file=<em>filename</em>] [--nowrite]</dd>
+</dl>
 <p class="rubric">Description</p>
 <p>Creates a set of packet bundles and other associated files. These
 files can be combined into a globe file with
 <code class="docutils literal notranslate"><span class="pre">geportableglobepacker</span></code>.</p>
 <p class="rubric">Required</p>
-<table border="1" class="colwidths-given docutils" id="id6">
-<caption><span class="caption-text">Required</span><a class="headerlink" href="#id6" title="Permalink to this table">¶</a></caption>
+<table border="1" class="colwidths-given docutils" id="id5">
+<caption><span class="caption-text">Required</span><a class="headerlink" href="#id5" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="38%" />
 <col width="63%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>–source=*server_name*</td>
+<tr class="row-odd"><td>--source=<em>server_name</em></td>
 <td>The source globe from which the sub-globe is to be derived.</td>
 </tr>
-<tr class="row-even"><td>–globe_directory=*path*</td>
+<tr class="row-even"><td>--globe_directory=<em>path</em></td>
 <td>Directory where the portable globe should be built.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Options</p>
-<table border="1" class="colwidths-given docutils" id="id7">
-<caption><span class="caption-text">Options</span><a class="headerlink" href="#id7" title="Permalink to this table">¶</a></caption>
+<table border="1" class="colwidths-given docutils" id="id6">
+<caption><span class="caption-text">Options</span><a class="headerlink" href="#id6" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="41%" />
 <col width="59%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>–max_level=*num*</td>
+<tr class="row-odd"><td>--max_level=<em>num</em></td>
 <td>Level of resolution of the quadtree above which no packets should be saved. Default is <code class="docutils literal notranslate"><span class="pre">24</span></code>.</td>
 </tr>
-<tr class="row-even"><td>–default_level=*num*</td>
+<tr class="row-even"><td>--default_level=<em>num</em></td>
 <td>Level of resolution of the quadtree for which all packets are kept independent of the
 region of interest. Default is <code class="docutils literal notranslate"><span class="pre">7</span></code>.</td>
 </tr>
-<tr class="row-odd"><td>–hires_qt_nodes_file=*filename*</td>
+<tr class="row-odd"><td>--hires_qt_nodes_file=<em>filename</em></td>
 <td>Name of file containing the quadtree nodes that define the high-resolution area of the globe. Default is no file.</td>
 </tr>
-<tr class="row-even"><td>–dbroot_file=*filename*</td>
+<tr class="row-even"><td>--dbroot_file=<em>filename</em></td>
 <td>Name of file containing the dbRoot that should be saved with the globe. Default is no file,
 in which case the dbRoot is read from the source.</td>
 </tr>
-<tr class="row-odd"><td>–metadata_file=*filename*</td>
+<tr class="row-odd"><td>--metadata_file=<em>filename</em></td>
 <td>Name of file containing boundary metadata that should be saved with the globe.
 Default is no file, in which case no metadata file is included.</td>
 </tr>
-<tr class="row-even"><td>–no_write</td>
+<tr class="row-even"><td>--no_write</td>
 <td>Do not write packets; print out the total size of the globe.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric" id="geportableglobepacker">geportableglobepacker</p>
 <p class="rubric">Usage</p>
-<p><strong>geportableglobepacker</strong> –globe_directory=*path* –output=*filename* [–make_copy=*bool*] [–is_2d=*bool*]</p>
+<p><strong>geportableglobepacker</strong> --globe_directory=<em>path</em> --output=<em>filename</em> [--make_copy=<em>bool</em>] [--is_2d=<em>bool</em>]</p>
 <p class="rubric">Description</p>
 <p>Packs up all globe files into a single file. If <code class="docutils literal notranslate"><span class="pre">--make_copy</span></code> is
 set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, the globe directory is undisturbed. If not, then
 the globe directory is rendered unusable, but the command can run
 considerably faster.</p>
 <p class="rubric">Options</p>
-<table border="1" class="colwidths-given docutils" id="id8">
-<caption><span class="caption-text">Options</span><a class="headerlink" href="#id8" title="Permalink to this table">¶</a></caption>
+<table border="1" class="colwidths-given docutils" id="id7">
+<caption><span class="caption-text">Options</span><a class="headerlink" href="#id7" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="38%" />
 <col width="63%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>–globe_directory=*path*</td>
+<tr class="row-odd"><td>--globe_directory=<em>path</em></td>
 <td>The directory containing the globes to be packed.</td>
 </tr>
-<tr class="row-even"><td>–output=*filename*</td>
+<tr class="row-even"><td>--output=<em>filename</em></td>
 <td>The file to which to save the packed globe, including a file path if desired.
 The file name should use a <code class="docutils literal notranslate"><span class="pre">.glb</span></code> file extension.</td>
 </tr>
-<tr class="row-odd"><td>–make_copy=*bool*</td>
+<tr class="row-odd"><td>--make_copy=<em>bool</em></td>
 <td>Make a copy of all files so that the globe directory is not disturbed. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</td>
 </tr>
-<tr class="row-even"><td>–is_2d=*bool*</td>
+<tr class="row-even"><td>--is_2d=<em>bool</em></td>
 <td>Are we packaging a 2D map. Default is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</td>
 </tr>
 </tbody>
