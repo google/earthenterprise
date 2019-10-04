@@ -1,0 +1,281 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Portable Release Notes 5.0 &#8212; Google Earth Enterprise 5.3.2 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Portable User Guide for Windows and Linux" href="portableUserGuideWinLinux.html" />
+    <link rel="prev" title="Welcome to Portable 5.0" href="welcomePortable5_0.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="portableUserGuideWinLinux.html" title="Portable User Guide for Windows and Linux"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="welcomePortable5_0.html" title="Welcome to Portable 5.0"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../portable.html" accesskey="U">Portable</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="welcomePortable5_0.html"
+                        title="previous chapter">Welcome to Portable 5.0</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="portableUserGuideWinLinux.html"
+                        title="next chapter">Portable User Guide for Windows and Linux</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp10.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp10.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="portable-release-notes-5-0">
+<h1>Portable Release Notes 5.0<a class="headerlink" href="#portable-release-notes-5-0" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>This document includes the following information about the Google
+Earth Portable 5.0 release:</p>
+<p class="rubric">Overview</p>
+<p>Google Earth Enterprise (GEE) Portable 5.0 introduces a
+flexible and dynamic approach to serving portable maps and
+globes. It includes the following major changes:</p>
+<ul>
+<li><p class="first"><strong>User interface changes</strong></p>
+</li>
+<li><p class="first"><strong>Updated support for .glc files</strong></p>
+</li>
+<li><p class="first"><strong>Windows support for large-size portable files</strong></p>
+<ul class="simple">
+<li>Files that are 2 GB or larger can now be served on the
+Windows version of GEE Portable 5.0</li>
+</ul>
+</li>
+<li><p class="first"><strong>Linux support</strong></p>
+<ul class="simple">
+<li>Red Hat Enterprise Linux versions 5.6 to 6.2,
+including the most recent security patches</li>
+<li>Ubuntu 10.04 LTS and 12.04 LTS</li>
+</ul>
+</li>
+<li><p class="first"><strong>Google Maps JavaScript API version updated to v3.14</strong></p>
+</li>
+<li><p class="first"><strong>Support for .glr files has been deprecated</strong></p>
+<blockquote>
+<div><p>This also means that the broadcasting “key” is
+deprecated. Now when you broadcast, clients connect
+directly to your Portable Server. The main reason for
+this is that we now use relative paths in the dbroot,
+which makes use of the local proxy server unnecessary. It
+also means that when changing ports, there is better
+support for non-standard port usage , i.e., port 9335
+is no longer fixed.</p>
+</div></blockquote>
+</li>
+</ul>
+<p class="rubric">Supported Platforms</p>
+<p>GEE Portable 5.0 is supported on the following operating
+systems:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Windows 7 or later</li>
+<li>Mac OS X 10.7 and later</li>
+<li>Red Hat Enterprise Linux versions 6.0 to 6.4, including
+the most recent security patches</li>
+<li>CentOS 6.4</li>
+<li>Ubuntu 10.04 LTS and 12.04 LTS</li>
+</ul>
+</div></blockquote>
+<p>GEE Portable 5.0 is compatible with Google Earth Enterprise
+Client (EC) and Plugin versions 7.0.1 - 7.1.1.1888 for
+Windows, Mac, and Linux.</p>
+<p class="rubric">System Requirements</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you plan to serve large globes from Portable
+Server, you may also need to provide more storage, depending
+on their size.</p>
+</div>
+<p><strong>Windows 7 or later</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Minimum dual-core Intel or AMD CPUs; 2.0 GHz or higher
+recommended.</li>
+<li>Minimum 2 GB RAM.</li>
+<li>Minimum 2 GB of free space.</li>
+<li>Graphics card: DirectX9 and 3D capable with 256 MB of VRAM
+(discrete GPU recommended).</li>
+<li>Screen: 1280x1024, “32-bit True Color.”</li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We recommend using NTFS for attached storage
+devices hosting the portable globes, especially if the
+<code class="docutils literal notranslate"><span class="pre">.glx</span></code> files are &gt; 4 GB</p>
+</div>
+<p><strong>Mac OS X 10.7 or later</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Minimum dual-core Intel Mac</li>
+<li>Minimum 2 GB RAM.</li>
+<li>Minimum 2 GB of free space.</li>
+<li>Graphics card: DirectX9 and 3D capable with 256 MB of VRAM
+(discrete GPU recommended).</li>
+<li>Screen: 1280x1024, “Millions of Colors.”</li>
+</ul>
+</div></blockquote>
+<p><strong>Linux</strong></p>
+<p>Operating systems supported:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Red Hat Enterprise Linux versions 6.0 to 6.4, including
+the most recent security patches.</li>
+<li>CentOS 6.4</li>
+<li>Ubuntu 10.04 and 12.04 LTS</li>
+</ul>
+</div></blockquote>
+<p>Hardware requirements:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Minimum dual-core Intel or AMD CPUs; 2.0 GHz or higher
+recommended.</li>
+<li>Minimum 4 GB RAM.</li>
+<li>Minimum 2 GB of free space.</li>
+<li>Graphics card: at least 64 MB video RAM (NVIDIA GeForce4
+or higher preferred).</li>
+</ul>
+</div></blockquote>
+<p class="rubric">New features</p>
+<p><strong>Broadcasting set by portable.cfg file</strong>
+Broadcasting no longer can be set from the default user
+interface; instead you can set it using either of the
+following methods:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">http://localhost:9335/?cmd=set_key&amp;accept;_all_requests=t</span></code></li>
+<li>Add <code class="docutils literal notranslate"><span class="pre">accept_all_requests</span> <span class="pre">True</span></code> to your <code class="docutils literal notranslate"><span class="pre">portable.cfg</span></code>
+file</li>
+</ul>
+</div></blockquote>
+<p>You can also disable broadcasting via the <code class="docutils literal notranslate"><span class="pre">portable.cfg</span></code>
+file. This prevents a rogue page from turning on
+broadcasting via a localhost reference.</p>
+<blockquote>
+<div><ul class="simple">
+<li>Add <code class="docutils literal notranslate"><span class="pre">disable_broadcasting</span> <span class="pre">True</span></code> to your
+<code class="docutils literal notranslate"><span class="pre">portable.cfg</span></code> file</li>
+</ul>
+</div></blockquote>
+<p class="rubric">Known Issues</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="11%" />
+<col width="44%" />
+<col width="44%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Number</th>
+<th class="head">Description</th>
+<th class="head">Work Around</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>&#160;</td>
+<td>The new Preview options for 2D maps in GEE Server and Portable do not support the display of
+Plate Carrée 2D maps.</td>
+<td>With Portable, you can still view existing .glm Plate Carrée 2D map files via the old preview
+interface, which you can access by pointing GEE Portable at <a class="reference external" href="http://localhost:9335/list">http://localhost:9335/list</a>.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Resolved Issues</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="17%" />
+<col width="67%" />
+<col width="17%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Number</th>
+<th class="head">Description</th>
+<th class="head">Resolution</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>8627202</td>
+<td>Portable for Windows 4.4.1 fails to read map or globe files greater than 2 GB in size.</td>
+<td>Fixed</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="portableUserGuideWinLinux.html" title="Portable User Guide for Windows and Linux"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="welcomePortable5_0.html" title="Welcome to Portable 5.0"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../portable.html" >Portable</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

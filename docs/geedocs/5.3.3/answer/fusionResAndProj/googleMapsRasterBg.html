@@ -1,0 +1,274 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Google Maps raster background &#8212; Google Earth Enterprise 5.3.3 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Create custom masks" href="createCustomMasks.html" />
+    <link rel="prev" title="Vector data handling" href="vectorDataHandling.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="createCustomMasks.html" title="Create custom masks"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="vectorDataHandling.html" title="Vector data handling"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" accesskey="U">Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="vectorDataHandling.html"
+                        title="previous chapter">Vector data handling</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="createCustomMasks.html"
+                        title="next chapter">Create custom masks</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp2.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp2.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="google-maps-raster-background">
+<h1>Google Maps raster background<a class="headerlink" href="#google-maps-raster-background" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>Creating a Google Maps raster background for your vector data is
+useful to speed up processing times for large globes. Trying to
+create a vector-only globe can result in very long processing
+times. For example, building an ocean or a large continent using
+only vector data can take weeks or months. Instead, you can use
+Google Maps raster data to create a basic 2D background in either
+Mercator or Flat projection, then you can add vector layers like
+roads, cities, and borders.</p>
+<p class="rubric">Overview of steps</p>
+<p>These are the main steps to create a Google Maps raster
+background:</p>
+<ol class="arabic simple">
+<li>Set up your computer.</li>
+<li>Obtain the data.</li>
+<li>Create the blue background tiles.</li>
+<li>Add the vector data.</li>
+<li>Create the resource and project.</li>
+</ol>
+<p class="rubric">To create a Google Maps raster background:</p>
+<p>The instructions below show how to create the raster background
+starting with the NASA 500-meter base. At this resolution,
+shorelines pixelate slightly at higher zoom levels. If you want a
+finer shoreline, you can start with a higher resolution base or
+re-sample the 500-meter base with increased resolution.</p>
+<ol class="arabic">
+<li><p class="first">Set up your computer:</p>
+<ul class="simple">
+<li>Make sure you have at least 20 GB of hard disk space.</li>
+<li>Make sure you have all the GDAL binaries. Fusion installs
+<code class="docutils literal notranslate"><span class="pre">gdal_translate</span></code> and <code class="docutils literal notranslate"><span class="pre">gdal_rasterize</span></code>, but Fusion
+does not include the <code class="docutils literal notranslate"><span class="pre">gdal_merge</span></code> script. To obtain
+<code class="docutils literal notranslate"><span class="pre">gdal_merge</span></code>, download the latest GDAL binaries from the
+GDAL site or download FWTools and install it in the
+<code class="docutils literal notranslate"><span class="pre">/usr/local</span></code> directory. FWTools includes all the GDAL
+binaries and a few other useful tools.</li>
+<li>If you want to view the resulting tiles before you fuse them
+with Fusion, install GIMP on your Linux machine.</li>
+</ul>
+</li>
+<li><p class="first">Obtain the data:</p>
+<ul>
+<li><p class="first">Download the A1 file in the Nasa Blue Marble July
+data set from
+<a class="reference external" href="https://visibleearth.nasa.gov/view_cat.php?categoryID=1484">https://visibleearth.nasa.gov/view_cat.php?categoryID=1484</a>.
+You can also download the BlueMarble A1 file from an HTTP
+mirror of the BlueMarble site at the Arctic Region
+Supercomputing Center at
+<a class="reference external" href="http://mirrors.arsc.edu/nasa/world_500m/">http://mirrors.arsc.edu/nasa/world_500m/</a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There are eight files, named A1, A2, B1, B2, C1,
+C2, D1, and D2. Download the A1 file only. The A1 tile
+represents the top left corner of the globe, D2 is the
+bottom right, and so on. You will generate the remaining seven
+tiles later.</p>
+</div>
+</li>
+<li><p class="first">Georeference the A1 file data:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gdal_translate -a_srs WGS84 -a_ullr -180 90 -90 0
+world.topo.bathy.200407 .3x21600x21600.A1.png
+world.topo.bathy.200407.3x21600x21600.A1.tif
+</pre></div>
+</div>
+</li>
+<li><p class="first">Download the shoreline dataset from:
+<a class="reference external" href="http://www.ngdc.noaa.gov/mgg/shorelines/gshhs.html">http://www.ngdc.noaa.gov/mgg/shorelines/gshhs.html</a>. This
+dataset is in a single <code class="docutils literal notranslate"><span class="pre">.zip</span></code> file that expands into
+several directories named <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">l</span></code>, <code class="docutils literal notranslate"><span class="pre">i</span></code>, <code class="docutils literal notranslate"><span class="pre">h</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">f</span></code>. The lowest resolution is in the <code class="docutils literal notranslate"><span class="pre">c</span></code> directory and
+the highest is in the <code class="docutils literal notranslate"><span class="pre">f</span></code> directory. There are four
+shapefiles in each directory:</p>
+<p>L1 = shorelines
+L2 = lakes and rivers
+L3 = islands in lakes
+L4 = ponds within islands in lakes</p>
+</li>
+</ul>
+</li>
+<li><p class="first">Create the blue background tiles:</p>
+<ul>
+<li><p class="first">Create the A1 tile for the ocean in the right size and in
+the Google Maps shade of blue. The NASA <code class="docutils literal notranslate"><span class="pre">.tif</span></code> geospatial
+image file is already the right size, so you can just edit
+its color layers to create a tile with the Google Maps RGB
+value of 153, 179, 204:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gdal_translate -b 1 -scale 0 255 153 153 world-topo-bathy-200407-3x21600x21600-A1.tif red.tif
+gdal_translate -b 1 -scale 0 255 179 179 world-topo-bathy-200407-3x21600x21600-A1.tif green.tif
+gdal_translate -b 1 -scale 0 255 204 204 world-topo-bathy-200407-3x21600x21600-A1.tif blue.tif
+</pre></div>
+</div>
+</li>
+<li><p class="first">Merge the layers to form a 3-band <code class="docutils literal notranslate"><span class="pre">.tif</span></code> file called
+<code class="docutils literal notranslate"><span class="pre">GoogleBlueA1.tif:</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/usr/local/FWTools-2.0.6/bin_safe/gdal_merge.py -o
+GoogleBlueA1.tif -separate red.tif green.tif blue.tif
+</pre></div>
+</div>
+</li>
+<li><p class="first">Make a copy of this blue tile to use later:</p>
+<p><code class="docutils literal notranslate"><span class="pre">cp</span> <span class="pre">GoogleBlueA1.tif</span> <span class="pre">GoogleBlue.tif</span></code></p>
+</li>
+<li><p class="first">Create the remaining seven blue tiles by using
+<code class="docutils literal notranslate"><span class="pre">gdal_translate</span></code> and inserting the appropriate corner
+coordinates:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gdal_translate -a_ullr -180  0 -90 -90 GoogleBlue.tif GoogleBlueA2.tif
+gdal_translate -a_ullr  -90 90   0   0 GoogleBlue.tif GoogleBlueB1.tif
+gdal_translate -a_ullr  -90  0   0 -90 GoogleBlue.tif GoogleBlueB2.tif
+gdal_translate -a_ullr    0 90  90   0 GoogleBlue.tif GoogleBlueC1.tif
+gdal_translate -a_ullr    0  0  90 -90 GoogleBlue.tif GoogleBlueC2.tif
+gdal_translate -a_ullr   90 90 180   0 GoogleBlue.tif GoogleBlueD1.tif
+gdal_translate -a_ullr   90  0 180 -90 GoogleBlue.tif GoogleBlueD2.tif
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p class="first">Add the vector data:</p>
+<ul>
+<li><p class="first">The shoreline data creates the continents, and the lake data
+creates the lakes within the continents. These instructions
+use the <code class="docutils literal notranslate"><span class="pre">h</span></code> level of resolution from the shoreline data set
+because the blue marble is only in 500-meter resolution. If
+you re-sample the blue marble to a higher resolution, you
+might want to use one of the higher-resolution shorelines.</p>
+<p>The L1 layer for shorelines uses the RGB value for Google
+Maps land areas, which is 242, 239, 233. The L2 layer for the
+lakes uses the same RGB value as the ocean (153, 179, 204).</p>
+<p>Burn the shorelines and lakes into the blue tiles one at a
+time:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueA1.tif
+gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueA1.tif
+
+gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueB1.tif
+gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueB1.tif
+
+gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueC1.tif
+gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueC1.tif
+
+gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueD1.tif
+gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueD1.tif
+
+gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueA2.tif
+gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueA2.tif
+
+gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueB2.tif
+gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueB2.tif
+
+gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueC2.tif
+gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueC2.tif
+
+gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueD2.tif
+gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueD2.tif
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p class="first">Create the resource and project:</p>
+<ul class="simple">
+<li>Create a single imagery resource from these eight tiles,
+then create an imagery project that contains this resource
+and nothing else.</li>
+<li>Use this imagery project for the 2D map. You can also
+create a Mercator resource and project out of these same
+tiles.</li>
+</ul>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="createCustomMasks.html" title="Create custom masks"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="vectorDataHandling.html" title="Vector data handling"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" >Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

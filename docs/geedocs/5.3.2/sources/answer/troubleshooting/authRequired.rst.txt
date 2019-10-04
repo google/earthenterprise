@@ -1,0 +1,22 @@
+
+Authentication required
+
+-[ Error message ]-
+
+"Authentication required"
+
+-[ Description ]-
+
+When you try to publish a database on a server that requires
+authentication, you entered an invalid user name or password three
+times.
+
+-[ Resolution ]-
+
+Be sure that your keyboard does not have
+
+CapsLock
+
+ on. Check with your system administrator to make sure you have
+permission to publish a database and that you have a valid user name
+and password.

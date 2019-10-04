@@ -1,0 +1,205 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Building a Historical Imagery Project &#8212; Google Earth Enterprise 5.3.3 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Sample Data Files" href="sampleDataFiles.html" />
+    <link rel="prev" title="Segmenting Large Imagery Files" href="segmentLargeImageryFiles.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="sampleDataFiles.html" title="Sample Data Files"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="segmentLargeImageryFiles.html" title="Segmenting Large Imagery Files"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionTutorial.html" accesskey="U">Fusion Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="segmentLargeImageryFiles.html"
+                        title="previous chapter">Segmenting Large Imagery Files</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="sampleDataFiles.html"
+                        title="next chapter">Sample Data Files</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp3.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp3.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="building-a-historical-imagery-project">
+<h1>Building a Historical Imagery Project<a class="headerlink" href="#building-a-historical-imagery-project" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>To build a historical imagery project:</p>
+<ol class="arabic">
+<li><p class="first">Follow the steps in <a class="reference internal" href="buildResource.html"><span class="doc">Defining and Building Resources</span></a> to define and build the
+following:</p>
+<table border="1" class="colwidths-given docutils" id="id1">
+<caption><span class="caption-text">Resources</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="31%" />
+<col width="19%" />
+<col width="19%" />
+<col width="13%" />
+<col width="19%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name (Resources/Imagery/…)</th>
+<th class="head">Acquisition Date</th>
+<th class="head">Provider</th>
+<th class="head">Mask</th>
+<th class="head">Source File</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><strong>BlueMarble</strong></td>
+<td>Any date. The date of the base image does not affect
+historical imagery browsing.</td>
+<td>NASA Imagery</td>
+<td><strong>No Mask</strong></td>
+<td><strong>bluemarble_4km.tif</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>SFBayAreaLanSat_20021010</strong></td>
+<td>2002-10-10</td>
+<td>USGS Imagery</td>
+<td><strong>Auto Mask Tolerance: 2</strong>
+Default for all other mask values.</td>
+<td><strong>usgsLanSat.tif</strong></td>
+</tr>
+<tr class="row-even"><td><strong>i3_15Meter_20041010</strong></td>
+<td>2004-10-10</td>
+<td>i3</td>
+<td><strong>Auto Mask</strong> Default values.</td>
+<td><strong>i3SF15-meter.tif</strong></td>
+</tr>
+<tr class="row-odd"><td><strong>SFHighResInset_20061010</strong></td>
+<td>2006-10-10</td>
+<td>USGS Imagery</td>
+<td><strong>Auto Mask</strong> Default values.</td>
+<td><strong>usgsSFHiRes.tif</strong></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first">Open a new Imagery Project and add each of the image resources
+to the project:</p>
+<ul class="simple">
+<li><strong>Resources/Imagery/BlueMarble</strong></li>
+<li><strong>Resources/Imagery/SFBayAreaLanSat_20021010</strong></li>
+<li><strong>Resources/Imagery/i3_15Meter_20041010</strong></li>
+<li><strong>Resources/Imagery/SFHighResInset_20061010</strong></li>
+</ul>
+</li>
+<li><p class="first">Select the <strong>Support Historical Imagery</strong> checkbox.</p>
+</li>
+<li><p class="first">Select <strong>File &gt; Save</strong>.</p>
+</li>
+<li><p class="first">Enter  <strong>Projects/Imagery/SFBayAreaHistorical</strong> as the name of your
+project and click <strong>Save</strong>.</p>
+</li>
+<li><p class="first">Build the <strong>SFBayAreaHistorical</strong> project.</p>
+</li>
+<li><p class="first">Create a new Earth Database and add the <strong>SFBayAreaHistorical</strong>
+project.</p>
+</li>
+<li><p class="first">Save the new database as <strong>Databases/SFBayAreaHistorical</strong>.</p>
+</li>
+<li><p class="first">Build and push the database to GEE Server, then publish it on
+GEE Server to the default <strong>Publish point</strong>.</p>
+</li>
+<li><p class="first">Launch Google Earth EC.</p>
+</li>
+<li><p class="first">Enter or select the host name or IP address of your server in
+the Server field, and specify the <strong>Publish point</strong> that you
+selected when you published your map database.</p>
+<p>For example, if you specify SFBayAreaHistorical-v001, it will
+be accessible from
+<em>myserver.mydomainname</em>.com/SFBayAreaHistorical-v001.</p>
+</li>
+<li><p class="first">Zoom in to the San Francisco Bay Area.</p>
+</li>
+<li><p class="first">Select the <strong>Historical Imagery</strong> toolbar button <img alt="Historical Imagery toolbar button" src="../../images/historical_imagery_button.png" /> to display a time slider. The time
+slider allows you to move the view through time.</p>
+</li>
+</ol>
+<div class="line-block">
+<div class="line">The following two screens show how this project is displayed in
+the Google Earth EC client. Notice the timeslider is visible and
+the differences between the imagery dates and content.</div>
+<div class="line"><img alt="Historical Image From Oct 10 2004" src="../../images/EC_Historical1.png" /></div>
+</div>
+<p><img alt="Historical Image From Oct 10 2006" src="../../images/EC_Historical2.png" /></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="sampleDataFiles.html" title="Sample Data Files"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="segmentLargeImageryFiles.html" title="Segmenting Large Imagery Files"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionTutorial.html" >Fusion Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

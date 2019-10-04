@@ -1,0 +1,179 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Import a subset of imagery &#8212; Google Earth Enterprise 5.3.3 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Add .kip imagery" href="addKipImagery.html" />
+    <link rel="prev" title="Import pre-processed data" href="importPreProcessedData.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="addKipImagery.html" title="Add .kip imagery"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="importPreProcessedData.html" title="Import pre-processed data"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" accesskey="U">Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="importPreProcessedData.html"
+                        title="previous chapter">Import pre-processed data</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="addKipImagery.html"
+                        title="next chapter">Add .kip imagery</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp2.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp2.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="import-a-subset-of-imagery">
+<h1>Import a subset of imagery<a class="headerlink" href="#import-a-subset-of-imagery" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>You can import a single area of a source image to Fusion as a new,
+smaller image file. For example, shown below is a compressed,
+high-resolution MrSID source image of Santa Clara County,
+California. On a standard server machine, it would take several
+hours to import this entire image to Fusion.</p>
+<p>If you do not need the entire image, you can select an area of the
+image to import, then use <code class="docutils literal notranslate"><span class="pre">getranslate</span> <span class="pre">-projwin</span></code> to extract the
+area and create a new image from it. The <code class="docutils literal notranslate"><span class="pre">-projwin</span></code> parameter
+reads the coordinates of the bounding box you specify and writes
+out your selection as a new image. The coordinates are based on
+the native projection in the source image. You can use Google
+Earth to easily find corner coordinates for the area you want to
+copy. (To learn how, see <a class="reference external" href="https://support.google.com/earth/answer/148068">Find &amp; use location
+coordinates</a> in
+the <em>Google Earth Help</em>.) The <code class="docutils literal notranslate"><span class="pre">getranslate</span></code> tool, extended from
+the GDAL <code class="docutils literal notranslate"><span class="pre">gdal_translate</span></code> tool, includes support for JPEG2000
+format source imagery.</p>
+<p><img alt="getranslate imagery 1" src="../../images/2656008_getranslate_1.jpg" /></p>
+<p class="rubric">Example of importing a subset of imagery</p>
+<p>The source file shown below is in a UTM projection (UTM Zone 10N,
+NAD83 Datum) and references coordinates in meters. You can use
+Google Earth to locate coordinates for the upper-left (580907.14 E
+&amp; 4142271.64 N) and lower-right (581788.04 E &amp; 4141453.58 N)
+corners of the area you want to import. Then you can specify the
+coordinate values, the output format (for example, a file type
+like GeoTIFF, MrSID, or JPEG2000), and the projection (using the
+<code class="docutils literal notranslate"><span class="pre">-a_srs</span></code> option) for the new image. The command looks something
+like this:</p>
+<p><code class="docutils literal notranslate"><span class="pre">/opt/google/bin/getranslate</span> <span class="pre">-of</span> <span class="pre">HFA</span> <span class="pre">-projwin</span> <span class="pre">580907.14</span> <span class="pre">4142271.64</span> <span class="pre">581788.04</span> <span class="pre">4141453.58</span> <span class="pre">/path/to/input.sid</span> <span class="pre">/path/to/output.img</span></code></p>
+<p><img alt="getranslate imagery 2" src="../../images/2656074_getranslate_2.jpg" /></p>
+<p>The resulting output.img file contains imagery for the area you
+specified with <code class="docutils literal notranslate"><span class="pre">-projwin</span></code>:</p>
+<p><img alt="getranslate imagery 3" src="../../images/2656011_getranslate_3.jpg" /></p>
+<p>You can compare the size of the original image with the extracted
+area, as shown below:
+<img alt="getranslate imagery 4" src="../../images/2656013_getranslate_4.jpg" /></p>
+<p class="rubric" id="getranslate-command-options">getranslate command options</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>usage: getranslate [options] &lt;input&gt; &lt;output&gt;
+Supported options are:
+      --help|-?     : Show this usage message
+      --formats     : Show supported formats and exit
+      -ot &lt;Byte|Int16|UInt16|UInt32|Int32|Float32|Float64|CInt16|CInt32|CFloat32|CFloat64&gt;
+            : Pixel type of output (default: match input)
+      -not_strict
+      -of &lt;format&gt;
+            : File format of output (default: GTiff)  -b &lt;band&gt;
+            : Specifies band to copy (1 based indexing). Can be:
+            specified multiple times. (e.g. &quot;-b 3 -b 2 -b 1&quot;)
+            will reverse the bands.
+      -outsize &lt;xsize[%]&gt; &lt;ysize[%]&gt;
+            : Size of the output image (pixels or % of original).
+      -scale [&lt;src_min&gt; &lt;src_max&gt; [&lt;dst_min&gt; &lt;dst_max&gt;]]
+            : Scale the input pixels values  -srcwin &lt;xoff&gt; &lt;yoff&gt; &lt;xsize&gt; &lt;ysize&gt;
+            : Select sub window from input
+      -a_srs &lt;projection&gt;
+            : Assign specified projection to the output
+            &lt;projection&gt; can be:
+                  NAD27|NAD83|WGS84|WGS72
+                  EPSG:&lt;num&gt;
+                  &lt;PROJ.4 definition&gt;
+                  &lt;OpenGIS Well Known Text&gt;
+                  &lt;filename of file with OpenGIS Well Known Text&gt;
+                  ESRI::&lt;ESRI Well Known Text File(.prj)&gt;
+      -projwin &lt;ulx&gt; &lt;uly&gt; &lt;lrx&gt; &lt;lry&gt;
+      : Select sub window from input. Like -srcwin but uses
+            georeferenced coordinates  -co &quot;NAME=VALUE&quot;*
+      : Pass construction arguments to output GDAL dataset
+      -mo &quot;META-TAG=VALUE&quot;*
+      : Meta information to be included in the output
+      -quiet
+</pre></div>
+</div>
+<p>Utilizes GDAL 2.1.2, released October 2016</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="addKipImagery.html" title="Add .kip imagery"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="importPreProcessedData.html" title="Import pre-processed data"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" >Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
