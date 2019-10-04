@@ -186,6 +186,7 @@ namespace AssetFactory
       return asset->MyUpdate(needed, cachedinputs_);
   }
 
+
   template <class MutableDerivedVersionHandleType, class Version, class ConfigType>
   MutableDerivedVersionHandleType FindMakeAndUpdate(const std::string& ref_,
                                                   const std::vector<SharedString>& inputs_,
@@ -196,6 +197,7 @@ namespace AssetFactory
       using AssetHandleType = typename MutableDerivedVersionHandleType::Impl::MutableAssetType;
       auto asset = FindMake<AssetHandleType>
               (ref_, inputs_, meta_, config_);
+
       bool needed = false;
       return asset->MyUpdate(needed, cachedinputs_);
   }

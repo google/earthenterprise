@@ -28,8 +28,6 @@ using namespace AssetFactory;
 
 using AssetVersion = uint8_t;
 
-
-
 class MockAssetStorage
 {
 public:
@@ -75,6 +73,7 @@ public:
   static string EXPECTED_SUBTYPE;
 
   using Base = MockAssetStorage;
+  using Impl = MockAssetImpl;
 
   MockAssetConfig config;
   bool needed;
@@ -97,7 +96,12 @@ public:
                 const MockAssetConfig &config_)
               : MockAssetStorage(storage), config(config_), needed(false) {}
 
-  MockAssetImpl MyUpdate(bool& _needed, const vector<AssetVersion>& v = {})
+  MockAssetImpl* operator->()
+  {
+      return this;
+  }
+
+  /*MockAssetImpl MyUpdate(bool& _needed, const vector<AssetVersion>& v = {})
   {
       needed = _needed = true;
       return *this;
@@ -106,7 +110,7 @@ public:
   MockAssetImpl Update(bool& _needed, const vector<AssetVersion>& v = {})
   {
       return MyUpdate(needed, v);
-  }
+  }*/
 };
 
 AssetDefs::Type MockAssetImpl::EXPECTED_TYPE;
@@ -115,10 +119,11 @@ string MockAssetImpl::EXPECTED_SUBTYPE;
 // MockAssetVersionImpl { using MutableAssetTYpe = MockMutaableAsset... }
 // MockMutableAssetVersion similar to MockMutableAsset
 class MockMutableAsset; // forward declaration
+class MockMutableAssetVersion;
 class MockAssetVersionImpl : public MockAssetStorage
 {
 public:
-    using MutableAssetType = MockMutableAsset;
+    using MutableAssetType = MockMutableAssetVersion;//MockMutableAsset;
     static AssetDefs::Type EXPECTED_TYPE;
     static string EXPECTED_SUBTYPE;
 
@@ -145,13 +150,13 @@ public:
                   const MockAssetConfig &config_)
                 : MockAssetStorage(storage), config(config_), needed(false) {}
 
-    MockAssetVersionImpl MyUpdate(bool& _needed, const vector<AssetVersion>& v = {})
+    MutableAssetType MyUpdate(bool& _needed, const vector<AssetVersion>& v = {})
     {
         needed = _needed = true;
         return *this;
     }
 
-    MockAssetVersionImpl Update(bool& _needed, const vector<AssetVersion>& v = {})
+    MutableAssetType Update(bool& _needed, const vector<AssetVersion>& v = {})
     {
         return MyUpdate(needed, v);
     }
@@ -350,7 +355,6 @@ TEST_F(AssetFactoryTest, FindAndModifyAbsent)
 
 TEST_F(AssetFactoryTest, FindMakeAndUpdateAssets)
 {
-    //MockMutableAssetVersion
     MockMutableAssetVersion handle = FindMakeAndUpdateSubAsset
             <MockMutableAssetVersion, AssetVersion, MockAssetConfig>
             ("parent", "base", testInputs, testMeta, testConfig0, vector<AssetVersion>());
