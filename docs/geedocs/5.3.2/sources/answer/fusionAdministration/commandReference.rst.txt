@@ -2200,7 +2200,9 @@ Required
 . Specify the path to the asset root. If omitted, the asset root
 defaults to "/gevol/assets".
 
-   -\\-**noprompt**
+-\-
+
+noprompt
 
 Optional
 
