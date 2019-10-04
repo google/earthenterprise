@@ -88,7 +88,7 @@ Configure Fusion performance
 
          .. note::
 
-            **Note:** Fusion uses these names when the tasks run, so
+            Fusion uses these names when the tasks run, so
             do not change them.
 
       #. For the KRP and KRMP task rules, define the volumes you want
@@ -113,7 +113,7 @@ Configure Fusion performance
 
       .. note::
 
-         **Note:** Assigning more than two CPUs for each imagery project
+         Assigning more than two CPUs for each imagery project
          task does not necessarily speed up processing, so you should
          keep the ``maxNumCPU`` value at 2.
 

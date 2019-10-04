@@ -217,8 +217,8 @@ the target server will not be verified during cuting.</p>
 <code class="docutils literal notranslate"><span class="pre">http://yourserver/cutter</span></code>, where <code class="docutils literal notranslate"><span class="pre">yourserver</span></code> is the server
 on which Earth Enterprise Server is running. The <strong>Globe Creator</strong>
 page appears.</p>
-<p><img alt="Cutter" src="../../images/cutter_interface.png" />
-Select the globe you wish to cut your portable version from in
+<p><img alt="Cutter" src="../../images/cutter_interface.png" /></p>
+<p>Select the globe you wish to cut your portable version from in
 the drop-down menu.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -490,8 +490,88 @@ needs to be automated, these command line tools are available. The
 following is the series of events for creating a globe to help
 give a sense of what these command line tools accomplish and in
 what order they are run:</p>
-<p><code class="docutils literal notranslate"><span class="pre">Building</span> <span class="pre">LevelFive</span> <span class="pre">...</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">No</span> <span class="pre">description</span> <span class="pre">given.</span> <span class="pre">Added</span> <span class="pre">globe</span> <span class="pre">directory:</span>&#160;&#160; <span class="pre">/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive</span> <span class="pre">Ok</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">Saved</span> <span class="pre">polygon</span> <span class="pre">to</span>&#160;&#160; <span class="pre">/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/earth/polygon.kml</span>&#160;&#160; <span class="pre">Convert</span> <span class="pre">polygon</span> <span class="pre">to</span> <span class="pre">quadtree</span> <span class="pre">nodes</span> <span class="pre">...</span>&#160;&#160; <span class="pre">Executing:</span> <span class="pre">/opt/google/bin/gepolygontoqtnodes</span> <span class="pre">--qt_nodes_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/qt_nodes.txt</span>&#160;&#160; <span class="pre">--kml_polygon_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/earth/polygon.kml</span>&#160;&#160; <span class="pre">--max_level=18</span>&#160;&#160; <span class="pre">0</span> <span class="pre">qtnodes</span> <span class="pre">Ok</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">Rewrite</span> <span class="pre">dbroot</span> <span class="pre">...</span>&#160;&#160; <span class="pre">Executing:</span> <span class="pre">/opt/google/bin/gerewritedbroot</span>&#160;&#160; <span class="pre">--source=http://earth.localdomain/default_ge/</span>&#160;&#160; <span class="pre">--icon_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/icons</span>&#160;&#160; <span class="pre">--dbroot_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/dbroot.v5</span>&#160;&#160; <span class="pre">--search_server=localhost</span>&#160;&#160; <span class="pre">--search_port=9335</span>&#160;&#160; <span class="pre">--kml_server=localhost</span>&#160;&#160; <span class="pre">--kml_port=9335</span>&#160;&#160; <span class="pre">--kml_map_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/kml_map.txt</span>&#160;&#160; <span class="pre">8</span> <span class="pre">icons</span>&#160;&#160; <span class="pre">Executing:</span> <span class="pre">cp</span>&#160;&#160; <span class="pre">/tmp/globe_builder/LevelFive_4282_1287494655.545115/dbroot.v5</span>&#160;&#160; <span class="pre">/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/dbroot/dbroot_localhost_9335</span>&#160;&#160; <span class="pre">Ok</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">Grab</span> <span class="pre">kml</span> <span class="pre">files</span> <span class="pre">...</span>&#160;&#160; <span class="pre">Executing:</span> <span class="pre">/opt/google/bin/gekmlgrabber</span>&#160;&#160; <span class="pre">--kml_map_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/kml_map.txt</span>&#160;&#160; <span class="pre">--output_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/kml</span>&#160;&#160; <span class="pre">--source=http://earth.localdomain/default_ge/</span>&#160;&#160; <span class="pre">--kml_server=localhost</span>&#160;&#160; <span class="pre">--kml_port=9335</span>&#160;&#160; <span class="pre">0</span> <span class="pre">kml</span> <span class="pre">files</span> <span class="pre">Ok</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">Build</span> <span class="pre">globe</span> <span class="pre">...</span>&#160;&#160; <span class="pre">Executing:</span> <span class="pre">/opt/google/bin/geportableglobebuilder</span>&#160;&#160; <span class="pre">--source=http://earth.localdomain/default_ge/</span>&#160;&#160; <span class="pre">--default_level=5</span>&#160;&#160; <span class="pre">--max_level=5</span>&#160;&#160; <span class="pre">--hires_qt_nodes_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/qt_nodes.txt</span>&#160;&#160; <span class="pre">--metadata_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/earth/metadata.json</span>&#160;&#160; <span class="pre">--globe_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive</span>&#160;&#160; <span class="pre">--dbroot_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/dbroot.v5</span> <span class="pre">&gt;</span>&#160;&#160; <span class="pre">/tmp/globe_builder/LevelFive_4282_1287494655.545115/packet_info.txt</span> <span class="pre">&amp;</span> <span class="pre">Ok</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">685</span> <span class="pre">image</span> <span class="pre">packets</span>&#160;&#160; <span class="pre">128</span> <span class="pre">terrain</span> <span class="pre">packets</span>&#160;&#160; <span class="pre">515</span> <span class="pre">vectors</span> <span class="pre">packets</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">Extract</span> <span class="pre">search</span> <span class="pre">data</span> <span class="pre">...</span>&#160;&#160; <span class="pre">Getting</span> <span class="pre">search</span> <span class="pre">poi</span> <span class="pre">ids:</span>&#160;&#160; <span class="pre">http://earth.localdomain/cgi-bin/globe_cutter.py?</span>&#160;&#160; <span class="pre">cmd=POI_IDS&amp;db=default_ge</span>&#160;&#160; <span class="pre">Getting</span> <span class="pre">search</span> <span class="pre">poi</span> <span class="pre">data:</span>&#160;&#160; <span class="pre">http://earth.localdomain/cgi-bin/globe_cutter.py?</span>&#160;&#160; <span class="pre">cmd=SEARCH_FILE&amp;poi_id=&amp;</span>&#160;&#160; <span class="pre">polygon=Paste%20in%20KML%20containing%20polygon.%20If%20KML%20contains%20more</span>&#160;&#160; <span class="pre">%20than%20one%20polygon%2C%20the%20first%20polygon%20will%20be%20used.</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">Saving</span> <span class="pre">search</span> <span class="pre">poi</span> <span class="pre">data:</span>&#160;&#160; <span class="pre">/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/search_db/gepoi_</span> <span class="pre">Ok</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">Add</span> <span class="pre">plugin</span> <span class="pre">files</span> <span class="pre">...</span>&#160;&#160; <span class="pre">Executing:</span> <span class="pre">cp</span> <span class="pre">-r</span> <span class="pre">/opt/google/gehttpd/htdocs/cutter/template/earth/*</span>&#160;&#160; <span class="pre">/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/earth</span> <span class="pre">Executing:</span> <span class="pre">cp</span> <span class="pre">-r</span> <span class="pre">/opt/google/gehttpd/htdocs/cutter/template/maps/*</span>&#160;&#160; <span class="pre">/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/maps</span> <span class="pre">Executing:</span> <span class="pre">cp</span> <span class="pre">-r</span> <span class="pre">/opt/google/gehttpd/htdocs/cutter/template/js/*</span>&#160;&#160; <span class="pre">/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/js</span> <span class="pre">Rewrite</span> <span class="pre">JSON</span> <span class="pre">from:</span> <span class="pre">http://earth.localdomain/default_ge//query?request=Json&amp;var=geeServerDefs</span> <span class="pre">Ok</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">Packaging</span> <span class="pre">globe</span> <span class="pre">for</span> <span class="pre">download</span> <span class="pre">...</span>&#160;&#160; <span class="pre">Executing:</span> <span class="pre">/opt/google/bin/geportableglobepacker</span>&#160;&#160; <span class="pre">--globe_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive</span>&#160;&#160; <span class="pre">--output=/opt/google/gehttpd/htdocs/cutter/globes/LevelFive.glb</span>&#160;&#160; <span class="pre">Executing:</span> <span class="pre">chmod</span> <span class="pre">a+r</span> <span class="pre">/opt/google/gehttpd/htdocs/cutter/globes/LevelFive.glb</span>&#160;&#160; <span class="pre">/opt/google/gehttpd/htdocs/cutter/globes/LevelFive.glb</span> <span class="pre">9.62MB</span> <span class="pre">Ok</span>&#160;&#160; <span class="pre">Deleting</span> <span class="pre">tmp</span> <span class="pre">directory</span> <span class="pre">as:</span> <span class="pre">/tmp/globe_builder/LevelFive_4282_1287494655.545115</span> <span class="pre">Ok</span></code>
-This section uses the following typographic conventions:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Building LevelFive ...
+
+No description given. Added globe directory:
+/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive Ok
+
+Saved polygon to
+/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/earth/polygon.kml
+Convert polygon to quadtree nodes ...
+Executing: /opt/google/bin/gepolygontoqtnodes --qt_nodes_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/qt_nodes.txt
+--kml_polygon_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/earth/polygon.kml
+--max_level=18
+0 qtnodes Ok
+
+Rewrite dbroot ...
+Executing: /opt/google/bin/gerewritedbroot
+--source=http://earth.localdomain/default_ge/
+--icon_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/icons
+--dbroot_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/dbroot.v5
+--search_server=localhost
+--search_port=9335
+--kml_server=localhost
+--kml_port=9335
+--kml_map_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/kml_map.txt
+8 icons
+Executing: cp
+/tmp/globe_builder/LevelFive_4282_1287494655.545115/dbroot.v5
+/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/dbroot/dbroot_localhost_9335
+Ok
+
+Grab kml files ...
+Executing: /opt/google/bin/gekmlgrabber
+--kml_map_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/kml_map.txt
+--output_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/kml
+--source=http://earth.localdomain/default_ge/
+--kml_server=localhost
+--kml_port=9335
+0 kml files Ok
+
+Build globe ...
+Executing: /opt/google/bin/geportableglobebuilder
+--source=http://earth.localdomain/default_ge/
+--default_level=5
+--max_level=5
+--hires_qt_nodes_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/qt_nodes.txt
+--metadata_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/earth/metadata.json
+--globe_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive
+--dbroot_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/dbroot.v5 &gt;
+/tmp/globe_builder/LevelFive_4282_1287494655.545115/packet_info.txt &amp; Ok
+
+685 image packets
+128 terrain packets
+515 vectors packets
+
+Extract search data ...
+Getting search poi ids:
+http://earth.localdomain/cgi-bin/globe_cutter.py?
+cmd=POI_IDS&amp;db=default_ge
+Getting search poi data:
+http://earth.localdomain/cgi-bin/globe_cutter.py?
+cmd=SEARCH_FILE&amp;poi_id=&amp;
+polygon=Paste%20in%20KML%20containing%20polygon.%20If%20KML%20contains%20more
+%20than%20one%20polygon%2C%20the%20first%20polygon%20will%20be%20used.
+
+Saving search poi data:
+/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/search_db/gepoi_ Ok
+
+Add plugin files ...
+Executing: cp -r /opt/google/gehttpd/htdocs/cutter/template/earth/*
+/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/earth Executing: cp -r /opt/google/gehttpd/htdocs/cutter/template/maps/*
+/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/maps Executing: cp -r /opt/google/gehttpd/htdocs/cutter/template/js/*
+/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/js Rewrite JSON from: http://earth.localdomain/default_ge//query?request=Json&amp;var=geeServerDefs Ok
+
+Packaging globe for download ...
+Executing: /opt/google/bin/geportableglobepacker
+--globe_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive
+--output=/opt/google/gehttpd/htdocs/cutter/globes/LevelFive.glb
+Executing: chmod a+r /opt/google/gehttpd/htdocs/cutter/globes/LevelFive.glb
+/opt/google/gehttpd/htdocs/cutter/globes/LevelFive.glb 9.62MB Ok
+Deleting tmp directory as: /tmp/globe_builder/LevelFive_4282_1287494655.545115 Ok
+</pre></div>
+</div>
+<p>This section uses the following typographic conventions:</p>
 <table border="1" class="colwidths-given docutils">
 <colgroup>
 <col width="33%" />

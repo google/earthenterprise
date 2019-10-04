@@ -45,10 +45,10 @@ Publish databases with search
       globe, such as search and display a field, or simply display it.
 
       You can also modify the appearance of the POI search tab in Google
-      Earth EC by :doc:`editing the system search tab <../geeServerAdmin/createSearchTabs>`,
-      **POI Search**, which sets the query parameters for the search fields you added to the vector
-      layer, as well as specifying the labels for the tab, query field
-      and suggestion box.
+      Earth EC by :doc:`editing the system search tab <../geeServerAdmin/createSearchTabs>`, **POI Search**,
+      which sets the query parameters for the search fields you added to
+      the vector layer, as well as specifying the labels for the tab, query
+      field and suggestion box.
 
       .. rubric:: Use GEE-provided Search Data
 
@@ -61,18 +61,16 @@ Publish databases with search
       a searchable database of countries and cities that you can connect
       to using the **POI**, **GeocodingFederated**, **Places** or
       **Coordinate** plug-ins. The Places database is a subset of the
-      publicly available `geonames
-      database <http://www.geonames.org/about.html>`_. You might use
+      publicly available `geonames database <http://www.geonames.org/about.html>`_. You might use
       the **Places search tab** to perform queries based on city names,
       for example. You might use the **Coordinate search tab** to
       perform queries based on city, country, or lat/long values.
 
-      The ExampleSearch database in
-      ``/opt/google/share/searchexample`` is a table of San Francisco
-      neighborhoods. The **ExampleSearch search tab** is provided as a
-      showcase of how a custom search plug-in can be coded to extract
-      geometries from a spatial database and then return the results so
-      that they display according to the query parameters. The plug-in
+      The ExampleSearch database in ``/opt/google/share/searchexample`` is a 
+      table of San Francisco neighborhoods. The **ExampleSearch search tab**
+      is provided as a showcase of how a custom search plug-in can be coded
+      to extract geometries from a spatial database and then return the results
+      so that they display according to the query parameters. The plug-in
       supports query parameters that set **flyToFirstElement** and
       **displayKeys**.
 
@@ -80,8 +78,7 @@ Publish databases with search
 
          Places and ExampleSearch are both PostgreSQL databases so
          you can also access them using the ``psql`` command. See
-         `PostgreSQL 9.3.5
-         Documentation <http://www.postgresql.org/docs/9.3/static/app-psql.html>`_.
+         `PostgreSQL 9.3.5 Documentation <http://www.postgresql.org/docs/9.3/static/app-psql.html>`_.
 
       You can examine the Python code of the search plug-ins on which
       the search tabs are built, using it as a template for your own
@@ -108,8 +105,7 @@ Publish databases with search
          following formats are supported:
 
          -  Decimal Degrees (e.g. 39.507618° -84.168556°)
-         -  Degrees, Minutes, Seconds (e.g. 20°40'01.51" S 131°53'51.39"
-            E)
+         -  Degrees, Minutes, Seconds (e.g. 20°40'01.51" S 131°53'51.39" E)
          -  Degrees, Decimal Minutes (e.g. 49° 32.876' N 110° 9.193' E)
          -  Universal Transverse Mercator (e.g. 43 R 637072.95 m E
             2825582.86 m N)
@@ -165,7 +161,7 @@ Publish databases with search
 
       .. rubric:: Summary table of search options
 
-      .. list-table:: Search options
+      .. list-table::
          :widths: 20 30 30
          :header-rows: 1
 

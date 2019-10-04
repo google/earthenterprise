@@ -58,7 +58,7 @@ Manage mosaics with virtual rasters
 
       .. note::
 
-         **Note:** ``Gevirtualraster`` is necessary if you are creating
+         ``Gevirtualraster`` is necessary if you are creating
          a custom mask file for the imagery or terrain resource as there
          is a software requirement of one source file for one custom
          mask file. See :doc:`../fusionResAndProj/createCustomMasks`.
@@ -77,35 +77,52 @@ Manage mosaics with virtual rasters
          863
 
       #. Create a virtual raster file, specifiying the fill value to be
-      used for the mosaic (``0, 0, 0 = black``), the name of the file to
-      be generated (``my_virtualmosaic_20140624_1.khvr``), and include
-      all of the ``.tif`` files in the current folder as input.
+         used for the mosaic (``0, 0, 0 = black``), the name of the file to
+         be generated (``my_virtualmosaic_20140624_1.khvr``), and include
+         all of the ``.tif`` files in the current folder as input.
 
-      ``$ gevirtualraster --fill 0,0,0 --tolerance 3 -o my_virtualmosaic_20140624_1.khvr *.tif``
+         .. code-block:: none
+
+            $ gevirtualraster --fill 0,0,0 --tolerance 3 -o my_virtualmosaic_20140624_1.khvr *.tif
 
       #. Import the virtual raster imagery file into Fusion, specifying the
-      resource type, the virtual raster file to import and the output
-      resource file, ``$ my_virtualmosaic_20140624.kip``.
+         resource type, the virtual raster file to import and the output
+         resource file, ``$ my_virtualmosaic_20140624.kip``.
 
-      ``gerasterimport --imagery my_virtualmosaic_20140624_1.khvr -o my_virtualmosaic_20140624.kip``
+         .. code-block:: none
+
+            $ gerasterimport --imagery my_virtualmosaic_20140624_1.khvr -o my_virtualmosaic_20140624.kip
 
       #. Create a mask for the imagery resource, specifying band, fill,
-      tolerance and feather values, the imagery resource file and
-      the name of the mask created.
+         tolerance and feather values, the imagery resource file and
+         the name of the mask created.
 
-      ``$ gemaskgen --mask --band 1 --fill 0 --tolerance 3 --feather 100 my_virtualmosaic_20140624_1.kip my_virtualmosaic_20140624_1-mask.tif``
+         .. code-block:: none
+
+            $ gemaskgen --mask --band 1 --fill 0 --tolerance 3 --feather 100
+              my_virtualmosaic_20140624_1.kip my_virtualmosaic_20140624_1-mask.tif
 
       #. Import the generated alpha mask, creating a ``.kmp`` folder.
-      Corresponding ``.kip`` and ``.kmp`` folders should be stored in
-      the same directory.
+         Corresponding ``.kip`` and ``.kmp`` folders should be stored in
+         the same directory.
 
-      ``$ gerasterimport --alphamask my_virtualmosaic_20140624_1-mask.tif --imagery my_virtualmosaic_20140624_1.kip --output my_virtualmosaic_20140624_1.kmp``
+         .. code-block:: none
+
+            $ gerasterimport --alphamask my_virtualmosaic_20140624_1-mask.tif --imagery
+              my_virtualmosaic_20140624_1.kip --output my_virtualmosaic_20140624_1.kmp
 
       #. Define a new imagery resource.
-         ``$ genewimageryresource -o Resources/Imagery/candid_my_virtualmosaic_20140624_1 /gevol/src/candid/my_virtualmosaic_20140624_1/my_virtualmosaic_20140624_1.kip``
+
+         .. code-block:: none
+
+            $ genewimageryresource -o Resources/Imagery/candid_my_virtualmosaic_20140624_1
+              /gevol/src/candid/my_virtualmosaic_20140624_1/my_virtualmosaic_20140624_1.kip
 
       #. Build the new imagery resource.
-         ``$ gebuild Resources/Imagery/candid_my_virtualmosaic_20140624_1``
+
+         .. code-block:: none
+
+            $ gebuild Resources/Imagery/candid_my_virtualmosaic_20140624_1
 
       .. tip::
 
@@ -117,7 +134,10 @@ Manage mosaics with virtual rasters
       You can create a virtual raster of all source files stored in a
       test file using the ``gevirtualraster --filelist`` option:
 
-      ``$ gevirtualraster --fill 0,0,0 -o /gevol/src/imagery/example/example-mosaic-list.khvr --filelist /gevol/src/imagery/example/source-files.txt``
+      .. code-block:: none
+
+         $ gevirtualraster --fill 0,0,0 -o /gevol/src/imagery/example/example-mosaic-list.khvr
+           --filelist /gevol/src/imagery/example/source-files.txt
 
       The file list must include one column of file names and the full
       path of each source file must be included in the file list.
@@ -129,28 +149,46 @@ Manage mosaics with virtual rasters
       used as fill, tolerance values for the fill, and a file list of
       the source imagery or terrain files.
 
-      ``gevirtualraster [--crop pixelx,pixely,pixelx,pixelh] [--fill a,b,...] [--src override_srs] [--tolerance num] [--validate] -o output.khvr {sourcefile ... | --filelist file}``
+      .. code-block:: none
+
+         $ gevirtualraster [--crop pixelx,pixely,pixelx,pixelh] [--fill a,b,...] [--src override_srs]
+           [--tolerance num] [--validate] -o output.khvr {sourcefile ... | --filelist file}
 
       .. rubric:: Example
          :name: example
 
-      ``gevirtualraster --fill 0,0,0 -o /gevol/src/imagery/usa/XX/new_location/all_files.khvr/gevol/src/imagery/usa/   XX/new_location/*.tif``
+      .. code-block:: none
+
+         $ gevirtualraster --fill 0,0,0 -o /gevol/src/imagery/usa/XX/new_location/all_files.khvr
+           /gevol/src/imagery/usa/XX/new_location/*.tif
 
       .. rubric:: Parameters
          :name: parameters
 
-      ====================================== ======================================================================================================================================================================================================================
-      Header                                 Header
-      ====================================== ======================================================================================================================================================================================================================
-      ``--crop pixelx,pixely,pixelx,pixelh`` *Optional*. Crop the image to the specified pixel extents.
-      ``--fill a,b,...``                     *Optional*. Specify band values to use as fill.
-      ``--src override_srs``                 *Optional*. Specify the SRS.
-      ``--tolerance num``                    *Optional*. Specify the tolerance to be applied to the fill. The default is 0.
-      ``--validate``                         *Optional*. Validate the inputs and exit.
-      ``-o output.khvr``                     *Required*. Specify the name of the output file, which must have the ``.khvr`` extension.
-      ``sourcefile``                         *Required*. Specify the path and file name of the source file for the resource. You can reference any network-available source file as this value. (Optional if you specify ``--filelist`` file.)
-      ``--filelist file``                    *Optional*. Specify the path and file name of a file that contains a list of source files that you want to include in the resource. You can use this option, list files individually, or use a combination of the two.
-      ====================================== ======================================================================================================================================================================================================================
+      .. list-table::
+         :widths: 20 60
+         :header-rows: 1
+
+         * - Option
+           - Description
+         * - ``--crop pixelx,pixely,pixelx,pixelh``
+           - *Optional*. Crop the image to the specified pixel extents.
+         * - ``--fill a,b,...``
+           - *Optional*. Specify band values to use as fill.
+         * - ``--src override_srs``
+           - *Optional*. Specify the SRS.
+         * - ``--tolerance num``
+           - *Optional*. Specify the tolerance to be applied to the fill. The default is 0.
+         * - ``--validate``
+           - *Optional*. Validate the inputs and exit.
+         * - ``-o output.khvr``
+           - *Required*. Specify the name of the output file, which must have the ``.khvr`` extension.
+         * - ``sourcefile``
+           - *Required*. Specify the path and file name of the source file for the resource. You can
+             reference any network-available source file as this value. (Optional if you specify ``--filelist`` file.)
+         * - ``--filelist file``
+           - *Optional*. Specify the path and file name of a file that contains a list of source files that you
+             want to include in the resource. You can use this option, list files individually, or use a combination of the two.
 
       .. rubric:: Splitting large virtual raster mosaics
 
@@ -174,23 +212,27 @@ Manage mosaics with virtual rasters
 
       .. rubric:: Parameters
 
-      ================= =====================================================================================================
-      Header            Header
-      ================= =====================================================================================================
-      ``--rows num``    *Required*. Specify the number of resulting image files across.
-      ``--cols num``    *Required*. Specify the number of resulting image files high.
-      ``--overlap num`` *Optional*. Specify the number of pixels of overlap between the resulting images. The default is 300.
-      ``--quiet``       *Optional*. Do not display the progress messages in the terminal window.
-      ``input.khvr``    *Required*. Specify the name of the input file. It must be a ``.khvr`` file.
-      ================= =====================================================================================================
+      .. list-table::
+         :widths: 20 60
+         :header-rows: 1
+
+         * - Option
+           - Description
+         * - ``--rows num``
+           - *Required*. Specify the number of resulting image files across.
+         * - ``--cols num``
+           - *Required*. Specify the number of resulting image files high.
+         * - ``--overlap num``
+           - *Optional*. Specify the number of pixels of overlap between the resulting images. The default is 300.
+         * - ``--quiet``
+           - *Optional*. Do not display the progress messages in the terminal window.
+         * - ``input.khvr``
+           - *Required*. Specify the name of the input file. It must be a ``.khvr`` file.
 
       .. rubric:: Learn more
 
-
       :doc:`Create virtual mosaics <../fusionTutorial/createImageryMosaic>`
-
       :doc:`../fusionTutorial/segmentLargeImageryFiles`
-
       :doc:`../fusionResAndProj/createCustomMasks`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png

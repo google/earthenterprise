@@ -133,7 +133,7 @@ PostgreSQL authentication
          ``mod_authn_dbd`` module requires it. This also prevents the
          password from appearing in plaintext.
 
-      #. Create a file named ``pgsql-auth.conf``\ at
+      #. Create a file named ``pgsql-auth.conf`` at
 
          ``/opt/google/gehttpd/conf/extra/pgsql-auth.conf``.
 
@@ -164,21 +164,23 @@ PostgreSQL authentication
 
          The result is:
 
-         ``# Include Google Earth Server-specific files``
-         ``Include /opt/google/gehttpd/conf/extra/pgsql-auth.conf``
-         ``Include conf.d/*.conf``
+         .. code-block:: none
+
+            # Include Google Earth Server-specific files
+            Include /opt/google/gehttpd/conf/extra/pgsql-auth.conf
+            Include conf.d/*.conf
 
       #. Add the following lines at the beginning of the
          ``<Location>`` directive of your virtual server:
 
          .. code-block:: none
 
-            ``AuthType Digest``
-            ``AuthName "realm"``
-            ``AuthDigestDomain '/default_map/'``
-            ``AuthDigestProvider dbd``
-            ``AuthDBDUserRealmQuery "SELECT passwd FROM geeauth WHERE username = %s and realm = %s"``
-            ``BrowserMatch "MSIE" AuthDigestEnableQueryStringHack=On``
+            AuthType Digest
+            AuthName "realm"
+            AuthDigestDomain '/default_map/'
+            AuthDigestProvider dbd
+            AuthDBDUserRealmQuery "SELECT passwd FROM geeauth WHERE username = %s and realm = %s"
+            BrowserMatch "MSIE" AuthDigestEnableQueryStringHack=On
 
          If this is a ``_ge_ virtual`` server, add:
          ``BrowserMatch "GoogleEarth" AuthDigestEnableQueryStringHack=On``
@@ -192,24 +194,28 @@ PostgreSQL authentication
          section in the Apache documentation.
 
          The final ``<Location>`` directive looks like:
-         ``<Location "/default_map/*">``
-         ``AuthType Digest``
-         ``AuthName "realm"``
-         ``AuthDigestDomain '/default_map/'``
 
-         ``AuthDigestProvider dbd``
-         ``AuthDBDUserRealmQuery "SELECT passwd FROM geeauth WHERE username = %s and realm = %s"``
-         ``BrowserMatch "MSIE" AuthDigestEnableQueryStringHack=On``
+         .. code-block:: none
 
-         ``Require valid-user``
-         ``SetHandler gedb-handler``
-         ``Include``
-         ``conf.d/virtual_servers/runtime/default_map_runtime``
-         ``</Location>``
+            <Location "/default_map/*">
+            AuthType Digest
+            AuthName "realm"
+            AuthDigestDomain '/default_map/'
+
+            AuthDigestProvider dbd
+            AuthDBDUserRealmQuery "SELECT passwd FROM geeauth WHERE username = %s and realm = %s"
+            BrowserMatch "MSIE" AuthDigestEnableQueryStringHack=On
+
+            Require valid-user
+            SetHandler gedb-handler
+            Include
+            conf.d/virtual_servers/runtime/default_map_runtime
+            </Location>
 
       #. Save and close the virtual server configuration file.
 
       #. Restart the server:
+
          ``/etc/init.d/geserver restart``
 
          After you verify the configuration with your test user, you can

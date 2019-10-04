@@ -76,8 +76,8 @@ rule.
 Depending on the rule you want to use, name the task rule:
 ImageryPacketLevel.taskrule  TerrainPacketLevel.taskrule
 CombinedTerrain.taskrule  MapLayerLevel.taskrule  KRP.taskrule
-KRMP.taskrule  Note: Fusion uses these names when the tasks run, so do
-not change them.
+KRMP.taskrule  Fusion uses these names when the tasks run, so do not
+change them.
 
 For the KRP and KRMP task rules, define the volumes you want Fusion to
 write files to. See Defining volumes.
@@ -101,11 +101,9 @@ project process. For example, with eight CPUs assigned for Fusion,
 with two CPUs per imagery project task, you can have four concurrent
 imagery project tasks.
 
-Note: Note:
-
-   Assigning more than two CPUs for each imagery project task does not
-  necessarily speed up processing, so you should keep the "maxNumCPU"
-  value at 2.
+Note: Assigning more than two CPUs for each imagery project task
+  does not necessarily speed up processing, so you should keep the
+  "maxNumCPU" value at 2.
 
 -[ Sample: ImageryPacketLevel.taskrule ]-
 

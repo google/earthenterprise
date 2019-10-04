@@ -33,7 +33,9 @@ About this Tutorial
       Server, using the tutorial files provided on the Google Earth
       Enterprise Fusion installation DVD.
 
-      **Note:** Work through the first five lessons in order.
+      .. note::
+
+         Work through the first five lessons in order.
 
       The Advanced Tasks section of this tutorial guides you through
       more advanced topics. You can work through the advanced lessons in
@@ -79,6 +81,7 @@ About this Tutorial
       #. :doc:`../fusionTutorial/displayRulesPolygon`
       #. :doc:`../fusionTutorial/impExpStyleTemplates`
       #. :doc:`../fusionTutorial/searchFldsForLayers`
+      #. :doc:`../fusionTutorial/confSearchableDB`
       #. :doc:`../fusionTutorial/createMapDB`
       #. :doc:`../fusionTutorial/createImageryMosaic`
       #. :doc:`../fusionTutorial/segmentLargeImageryFiles`

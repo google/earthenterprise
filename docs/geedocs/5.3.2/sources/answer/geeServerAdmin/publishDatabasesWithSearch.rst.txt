@@ -224,27 +224,27 @@ the sites using internal IDs or city names.
 
 -[ Summary table of search options ]-
 
-Search options        Search options  Steps summary  Search appearance
-in Google Earth EC or in a browser  Query vector data layer using a
-simple text-based search.  Add a search field to a vector resource in
-a vector project or map layer. Turn on POI Search in the Publish
-dialog when you publish your database in GEE Server.  The POI Search
-appears in the main Search tab, labeled Point of interest, including
-the field label you specified in the vector data layer.  Query
-external database using a default search plugin, for example POI
-Search.  Edit the POI Search tab URL field to point to your own search
-database and edit or add query parameters. Add the POI Search tab in
-the Publish dialog.  When you click Query, the POI Search appears as a
-new additional tab in Search, displaying the custom label and any
-query field labels and suggestions you added.  Query the Places
-database provided by GEE.  Add the Places search tab in the Publish
-dialog to add location search to your globe or map.  The Places Search
-appears as a new additional tab in Search, displaying the custom label
-and any query field label and suggestion you added.  Query an external
-Postgres database and return polygons, lines, or geometries.  Write a
-custom search plug-in using the Python-based framework for search
-tabs. The ExampleSearch search plug-in is a useful demonstration for
-this purpose.  Your custom search plug-in appears as a new additional
-tab in Search, displaying the custom label and any query field labels
-and suggestions you added. Alternatively, you can send HTTP requests
-and receive a response within your own custom web application.
+      Search options  Steps summary  Search appearance in Google Earth
+EC or in a browser  Query vector data layer using a simple text-based
+search.  Add a search field to a vector resource in a vector project
+or map layer. Turn on POI Search in the Publish dialog when you
+publish your database in GEE Server.  The POI Search appears in the
+main Search tab, labeled Point of interest, including the field label
+you specified in the vector data layer.  Query external database using
+a default search plugin, for example POI Search.  Edit the POI Search
+tab URL field to point to your own search database and edit or add
+query parameters. Add the POI Search tab in the Publish dialog.  When
+you click Query, the POI Search appears as a new additional tab in
+Search, displaying the custom label and any query field labels and
+suggestions you added.  Query the Places database provided by GEE.
+Add the Places search tab in the Publish dialog to add location search
+to your globe or map.  The Places Search appears as a new additional
+tab in Search, displaying the custom label and any query field label
+and suggestion you added.  Query an external Postgres database and
+return polygons, lines, or geometries.  Write a custom search plug-in
+using the Python-based framework for search tabs. The ExampleSearch
+search plug-in is a useful demonstration for this purpose.  Your
+custom search plug-in appears as a new additional tab in Search,
+displaying the custom label and any query field labels and suggestions
+you added. Alternatively, you can send HTTP requests and receive a
+response within your own custom web application.

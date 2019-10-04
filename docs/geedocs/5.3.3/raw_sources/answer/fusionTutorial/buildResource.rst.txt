@@ -20,8 +20,7 @@ Defining and Building Resources
          -  :ref:`Explore Imagery Source Files <Explore_Imagery_Source_Files>`
          -  :ref:`Define Imagery Resources <Define_Imagery_resources_2>`
          -  :ref:`Build an Imagery Resource <Build_Imagery_Resource>`
-         -  :ref:`Define and Build the Remaining Imagery
-            Resources <Define_Build_Remaining_Imagery_Resources>`
+         -  :ref:`Define and Build the Remaining Imagery Resources <Define_Build_Remaining_Imagery_Resources>`
          -  :ref:`Preview the Imagery Resources <Preview_Imagery_Resources>`
 
       -  :ref:`Define Terrain Resources <Define_Terrain_Resources>`
@@ -35,8 +34,7 @@ Defining and Building Resources
          -  :ref:`Explore Vector Source Files <Explore_Vector_Source_Files>`
          -  :ref:`Define a Vector Resource <Define_a_Vector_Resource>`
          -  :ref:`Build a Vector Resource <Build_Vector_Resource>`
-         -  :ref:`Define and Build the Remaining Vector
-            Resources <define-and-build-the-remaining-vector-resources>`
+         -  :ref:`Define and Build the Remaining Vector Resources <Define_Build_Remaining_Imagery_Resources>`
 
       .. _Define_Imagery_Resources:
       .. rubric:: Define Imagery Resources
@@ -158,7 +156,7 @@ Defining and Building Resources
 
          .. note::
 
-            **Note:** When you work with real data, the acquisition date
+            When you work with real data, the acquisition date
             should reflect the date the data was released. You can
             obtain this information from the provider. However, for the
             purpose of simplifying this tutorial, use the current date
@@ -189,7 +187,7 @@ Defining and Building Resources
 
       .. note::
 
-         | **Notes:** Your system administrator should have configured a
+         | Your system administrator should have configured a
            tutorial environment for you to work on the tutorial lessons,
            keeping your practice data separate from your live production
            data. If you encounter an error message that tells you that a
@@ -206,7 +204,7 @@ Defining and Building Resources
            with an asset for now, you can close it and get it out of the
            way.
 
-      .. container:: alert
+      .. warning::
 
          **Caution:** When you are defining assets for your live
          production system, it is important to remember that you cannot
@@ -248,7 +246,7 @@ Defining and Building Resources
 
          .. note::
 
-            **Note:** Because imagery files are data-intensive, it can
+            Because imagery files are data-intensive, it can
             take some time to build imagery resources.
 
       #. Double-click the **Current Version** or **Current State**
@@ -328,7 +326,7 @@ Defining and Building Resources
 
          .. note::
 
-            **Note:** Google Earth Enterprise Fusion displays the
+            Google Earth Enterprise Fusion displays the
             resources in the order in which they are listed in the
             Preview List pane with the last asset on the list at the
             bottom of the stack and the first asset on the list on top.
@@ -413,7 +411,7 @@ Defining and Building Resources
 
          .. note::
 
-            **Note:** The Preview pane displays a bounding box for
+            The Preview pane displays a bounding box for
             terrain source data, not the actual terrain imagery. You
             must define and build terrain resources to be able to see a
             preview of the actual terrain.
@@ -474,7 +472,7 @@ Defining and Building Resources
 
          .. note::
 
-            **Note:** You can use the **Have Mask** option for resources
+            You can use the **Have Mask** option for resources
             that contain one source file only.
 
       #. Accept the **Elevation Units** default, **Meters**.
@@ -557,7 +555,7 @@ Defining and Building Resources
 
       .. note::
 
-         **Note:** The WorldTopography terrain resource is quite large
+         The WorldTopography terrain resource is quite large
          and could take up to 30 minutes to build, depending on the
          speed of your CPU. It is a good idea to start this exercise
          close to lunch time or just before you attend a meeting, so it
@@ -602,7 +600,7 @@ Defining and Building Resources
 
          .. note::
 
-            **Note:** Since the Preview pane in Google Earth Enterprise
+            Since the Preview pane in Google Earth Enterprise
             Fusion is meant for preview purposes only, it does not
             render terrain in 3D like Google Earth EC. Instead, it
             renders a grayscale interpretation of the terrain. The
@@ -725,7 +723,7 @@ Defining and Building Resources
       .. rubric:: To explore vector source files:
          :name: to-explore-vector-source-files
 
-      #. Click |Open File Icon|.
+      #. Click the |Open File Icon| button.
 
          The Open dialog appears.
 

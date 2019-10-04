@@ -15,10 +15,10 @@ not hosted on the Earth server, or to data that changes frequently. In
 fact, the free edition of Google Earth includes many KML layers that
 stream data from Google servers to the client.
 
-Each vector project must include at least one resource that is not a
-KML layer. If you try to build a project consisting only of KML
-layers, the build will fail with the error "No vector packets for
-indexing."
+Warning: Each vector project must include at least one resource that
+  is not a KML layer. If you try to build a project consisting only of
+  KML layers, the build will fail with the error "No vector packets
+  for indexing."
 
 -[ To add a KML layer: ]-
 

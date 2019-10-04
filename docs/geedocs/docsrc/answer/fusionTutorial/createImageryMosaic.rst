@@ -17,13 +17,11 @@ Creating Imagery Mosaics
 
       .. note::
 
-         **Note:** All of the steps in this lesson apply to terrain data
-         as well.
+         All of the steps in this lesson apply to terrain data as well.
 
       -  :ref:`Create an Imagery Resource <Create_Imagery_Resource>`
       -  :ref:`Create a Virtual Mosaic <Create_Virtual_Mosaic>`
-      -  :ref:`Apply a Custom Mask to the Virtual
-         Mosaic <Apply_Custom_Mask_Mosaic>`
+      -  :ref:`Apply a Custom Mask to the Virtual Mosaic <Apply_Custom_Mask_Mosaic>`
 
       .. _Create_Imagery_Resource:
       .. rubric:: Create an Imagery Resource
@@ -88,7 +86,7 @@ Creating Imagery Mosaics
 
          .. note::
 
-            **Note:** Building this resource may take several minutes,
+            Building this resource may take several minutes,
             since it contains four images.
 
       #. When the status of the resource changes to **Succeeded** in the
@@ -203,7 +201,7 @@ Creating Imagery Mosaics
 
             .. note::
 
-               **Note:** Because you have not yet built this resource,
+               Because you have not yet built this resource,
                only the bounding boxes appear, not the actual imagery.
 
       #. You can check and uncheck the boxes to see the different views.
@@ -276,7 +274,7 @@ Creating Imagery Mosaics
 
          .. note::
 
-            **Note:** Building this resource may take several minutes.
+            Building this resource may take several minutes.
 
       #. When the status of the resource changes to **Succeeded** in the
          Asset Manager, drag it to the Preview List pane.

@@ -26,19 +26,19 @@ custom folder makes modifications directly to the folder where
 portable globes are hosted and can interfere with any ongoing globe
 cutting operations.
 
-Stop the GEE Server service: sudo /etc/init.d/geserver stop
+Stop the GEE Server service:  sudo /etc/init.d/geserver stop
 
 Use either of the methods below to set up your custom folder:  Create
-a new folder: mkdir /gevol/src/globes  Move the original folder to a
-storage volume: mv /opt/google/gehttpd/htdocs/cutter/globes
+a new folder:  mkdir /gevol/src/globes  Move the original folder to a
+storage volume:  mv /opt/google/gehttpd/htdocs/cutter/globes
 /gevol/src/globes
 
 Create a symbolic link from the custom folder to the original folder
-location: ln -sf /gevol/src/globes
+location:  ln -sf /gevol/src/globes
 /opt/google/gehttpd/htdocs/cutter/globes
 
 Change ownership of the custom folder to geapacheuser:gegroup and
-change permissions to 755 (rwxr-wr-w): chown -R geapacheuser:gegroup
+change permissions to 755 (rwxr-wr-w):  chown -R geapacheuser:gegroup
 /gevol/src/globes chmod -R 755 /gevol/src/globes
 
 Start the GEE Server service.

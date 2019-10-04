@@ -18,8 +18,7 @@ Configuring Display Rules for Point Data
 
       -  :ref:`Define, Configure, and Build a Vector Project <Define_Vector_Product3>`
       -  :ref:`Define and Build an Imagery Project <Define_And_Build_Imagery_Project>`
-      -  :ref:`Define, Build, Push, and Publish a Database for the Point
-         Data <Define_Point_Database>`
+      -  :ref:`Define, Build, Push, and Publish a Database for the Point Data <Define_Point_Database>`
       -  :ref:`View Your Database in Google Earth EC <View_Database_GEEC_1>`
 
       .. _Define_Vector_Product3:
@@ -48,103 +47,102 @@ Configuring Display Rules for Point Data
 
          |CA_POIs Resource|
 
-      Right-click **CA_POIs** and select **Configure Display Rules**
-      from the context menu.
-      The Display Rules dialog appears with the Feature tab in the
-      foreground and the **default select all** rule highlighted.
+      #. Right-click **CA_POIs** and select **Configure Display Rules**
+         from the context menu.
+         The Display Rules dialog appears with the Feature tab in the
+         foreground and the **default select all** rule highlighted.
 
-      Specify the geometry characteristics of the POIs:
+      #. Specify the geometry characteristics of the POIs:
 
-      a. For **Draw Features As**, select **Points**.
-      b. For **Simplification Method**, select **Representative Subset Per
-         Tile**.
-      c. For **Choose**, accept the default, **50**\ % points.
-      d. For **Min Points**, enter **50**.
-      e. For **Max Points**, enter **200**.
-      f. Check the box next to **Suppress Duplicate Points**.
-      g. Under **Elevation/Height**, set Mode to **Clamp to Ground.**
+         a. For **Draw Features As**, select **Points**.
+         b. For **Simplification Method**, select **Representative Subset Per
+            Tile**.
+         c. For **Choose**, accept the default, **50**\ % points.
+         d. For **Min Points**, enter **50**.
+         e. For **Max Points**, enter **200**.
+         f. Check the box next to **Suppress Duplicate Points**.
+         g. Under **Elevation/Height**, set Mode to **Clamp to Ground.**
+         h. On the right side of the dialog, check the box next to **Draw Label**.
+         i. For **Visibility**, accept the default range, **5** through **24**.
+         j. Do not make any changes under **Label Properties**.
 
-      On the right side of the dialog, check the box next to **Draw
-      Label**.
-      For **Visibility**, accept the default range, **5** through **24**.
-      Do not make any changes under **Label Properties**,
-      This area allows you to specify the content and appearance of a
-      text label for each POI. However, there are so many POIs in
-      California that the view in Google Earth EC would be too crowded.
+            This area allows you to specify the content and appearance of a
+            text label for each POI. However, there are so many POIs in
+            California that the view in Google Earth EC would be too crowded.
 
-      Check the box next to **Draw Icon** and then:
+      #. Check the box next to **Draw Icon** and then:
 
-      a. Click the icon pair. The Icons dialog appears.
+         a. Click the icon pair. The Icons dialog appears.
 
-         |Icons Dialog|
+            |Icons Dialog|
 
-      b. Scroll down, if necessary, and select **blue_star**, and click
-         **OK**.
+         b. Scroll down, if necessary, and select **blue_star**, and click
+            **OK**.
 
-         A yellow star appears next to **Highlight**, and a blue star
-         appears next to **Normal**. The result of this setting is that
-         Google Earth EC displays a blue star for each POI, and when you
-         mouse over the star (highlight it), it turns yellow.
+            A yellow star appears next to **Highlight**, and a blue star
+            appears next to **Normal**. The result of this setting is that
+            Google Earth EC displays a blue star for each POI, and when you
+            mouse over the star (highlight it), it turns yellow.
 
-      c. For both **Highlight** and **Normal**, accept the default color, white.
-      d. For **Highlight**, accept the default scale, **1**.
-      e. For **Normal**, change the scale to **0.89**.
+         c. For both **Highlight** and **Normal**, accept the default color, white.
+         d. For **Highlight**, accept the default scale, **1**.
+         e. For **Normal**, change the scale to **0.89**.
 
-         The result of these settings is that when you mouse over a
-         star, Google Earth EC displays the yellow (highlighted) star a
-         little larger than the blue star.
+            The result of these settings is that when you mouse over a
+            star, Google Earth EC displays the yellow (highlighted) star a
+            little larger than the blue star.
 
-      In the **Balloon** section, select **Text**, and then click the empty
-      text field. The Label Format dialog appears.
+      #. In the **Balloon** section, select **Text**, and then click the empty
+         text field. The Label Format dialog appears.
 
-      a. Select **COUNTY** from the **Insert Field** drop-down list.
+         a. Select **COUNTY** from the **Insert Field** drop-down list.
 
-         «\ **COUNTY**\ » appears in the text box under **Popup Text**.
+            «\ **COUNTY**\ » appears in the text box under **Popup Text**.
 
-         .. note::
+            .. note::
 
-            **Note:** You can use some basic HTML tags to format the
-            Label text, if desired.
+               You can use some basic HTML tags to format the
+               Label text, if desired.
 
-      To the left of «\ **COUNTY**\ » enter **<b>**.
-      To the right of «\ **COUNTY**\ » enter **</b><br/><br/>**, and
-      press **Enter**.
-      Adding this HTML code formats the name of the county as bold,
-      followed by two line breaks to separate it from the text that
-      follows (next step).
+         b. To the left of «\ **COUNTY**\ » enter **<b>**.
+         c. To the right of «\ **COUNTY**\ » enter **</b><br/><br/>**.
+         d. Press **Enter**. Adding this HTML code formats the name of the county
+            as bold, followed by two line breaks to separate it from the text that
+            follows (next step).
 
-      Select **NAME** from the **Insert Field** drop-down list.
-      «\ **NAME**\ » appears on the next line of the text box.
-      To the right of «\ **NAME**\ » enter **<br/><br/>**, and press
-      **Enter**.
-      On the next line, enter **Latitude:** , and then select
-      **LATITUDE** from the **Insert Field** drop-down menu.
-      To the right of «\ **LATITUDE**\ » enter **<br/><br/>**, and press
-      **Enter**.
-      On the next line, enter **Longitude:** , and then select
-      **LONGITUDE** from the **Insert Field** drop-down menu.
-      |image5|
+      #. Select **NAME** from the **Insert Field** drop-down list.
+         «\ **NAME**\ » appears on the next line of the text box.
 
-      Click **OK**
-      For **Style**, select **Default** from the drop-down list.
-      Check the box next to **Directions** to include “To here” and
-      “From here” links in the description balloon in Google Earth EC.
-      Click the **Text Color** button, and select a medium blue.
-      Click the **Background Color** button, and select a light yellow.
-      Click the **OK** button.
-      You return to the Vector Project Editor.
+         a. To the right of «\ **NAME**\ » enter **<br/><br/>**.
+         b. Press **Enter**.
 
-      Select **File > Save**.
-      The Save dialog appears.
+      #. On the next line, enter **Latitude:**, and then select
+         **LATITUDE** from the **Insert Field** drop-down menu.
 
-      Navigate to the ``ASSET_ROOT/Projects/Vector``\ folder.
-      Enter **CA_POIs** as the name of your project, and click **Save**.
-      The new project appears in the Asset Manager when you select
-      **ASSET_ROOT/Projects/Vector** in the asset navigation tree.
+         a. To the right of «\ **LATITUDE**\ » enter **<br/><br/>**.
+         b. Press **Enter**.
 
-      Right-click **CA_POIs**, and select **Build** from the context
-      menu.
-      Google Earth Enterprise Fusion builds the project.
+      #. On the next line, enter **Longitude:** , and then select
+         **LONGITUDE** from the **Insert Field** drop-down menu.
+
+         |image5|
+
+      #. Click the **OK** button.
+      #. For **Style**, select **Default** from the drop-down list.
+      #. Check the box next to **Directions** to include **“To here”** and
+         **“From here”** links in the description balloon in Google Earth EC.
+      #. Click the **Text Color** button, and select a medium blue.
+      #. Click the **Background Color** button, and select a light yellow.
+      #. Click the **OK** button. You return to the Vector Project Editor.
+      #. Select **File > Save**. The Save dialog appears.
+      #. Navigate to the ``ASSET_ROOT/Projects/Vector``\ folder.
+      #. Enter **CA_POIs** as the name of your project, and click **Save**.
+
+         The new project appears in the Asset Manager when you select
+         **ASSET_ROOT/Projects/Vector** in the asset navigation tree.
+
+      #. Right-click **CA_POIs**, and select **Build** from the context
+         menu. Google Earth Enterprise Fusion builds the project.
 
       .. _Define_And_Build_Imagery_Project:
       .. rubric:: Define and Build an Imagery Project
@@ -169,7 +167,7 @@ Configuring Display Rules for Point Data
 
       .. note::
 
-         **Note:** If you have already completed this exercise in
+         If you have already completed this exercise in
          :doc:`../fusionTutorial/displayRulesPolygon`, skip this exercise and move
          on to :ref:`Define, Build, Push, and Publish a Database for the
          Point Data <Define_Point_Database>`.
@@ -195,7 +193,7 @@ Configuring Display Rules for Point Data
 
          The Save dialog appears.
 
-      #. Navigate to the ``ASSET_ROOT/Projects/Imagery``\ folder.
+      #. Navigate to the ``ASSET_ROOT/Projects/Imagery`` folder.
       #. Enter **BlueMarble** as the name of your project, and click
          **Save**.
 
@@ -233,10 +231,10 @@ Configuring Display Rules for Point Data
          Both projects appear on the list.
 
       #. Select **File > Save**.
-      #. Navigate to the ``ASSET_ROOT/Databases``\ folder.
+      #. Navigate to the ``ASSET_ROOT/Databases`` folder.
       #. Enter **CA_POIs** for the name of your database, and click
          **Save**. The name of the database appears on the right when
-         you select the ``/ASSET_ROOT/Databases``\ folder in the asset
+         you select the ``/ASSET_ROOT/Databases`` folder in the asset
          navigation tree.
       #. Right-click **CA_POIs**, and select **Build** from the context
          menu. Google Earth Enterprise Fusion builds the database.
@@ -315,7 +313,7 @@ Configuring Display Rules for Point Data
 
          .. note::
 
-            **Note:** If you cannot see the vector data, make sure the
+            If you cannot see the vector data, make sure the
             check box next to **CA_POIs** in the Layers panel is
             checked.
 
