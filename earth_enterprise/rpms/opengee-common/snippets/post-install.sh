@@ -26,7 +26,7 @@ add_python27_libs_to_ldconf()
 # Main Function
 #-----------------------------------------------------------------
 
-if [[ $(uname -r) == *el6* ]]; then
+if [[ ! -f /etc/os-release && -f /etc/redhat-release ]]; then
     add_python27_libs_to_ldconf
 fi
 
