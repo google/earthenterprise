@@ -259,15 +259,22 @@ void RasterAssetWidget::AddSource() {
   bool modified = false;
   QStringList files = FileDialog()->selectedFiles();
   for (QStringList::Iterator it = files.begin(); it != files.end(); ++it) {
-    if (source_list->findItem(*it, Qt::ExactMatch)) {
+    QString string = *it;
+    std::size_t idx = string.find("/header.xml");
+    if (idx != std::string::npos)
+    { 
+      string.remove( idx, strlen("/header.xml"));
+    }
+
+    if (source_list->findItem(string, Qt::ExactMatch)) {
       QMessageBox::warning(
           this, kh::tr("Warning : duplicate source.") ,
           kh::tr("Source '%1' already exists in this resource. Ignoring duplicates.")
-          .arg(*it),
+          .arg(string),
           kh::tr("OK"), 0, 0, 0);
       continue;
     } else {
-      source_list->insertItem(*it);
+      source_list->insertItem(string);
       modified = true;
     }
   }
