@@ -1267,9 +1267,8 @@ Command reference
       *Required*. Specify the path to the asset root. If omitted, the
       asset root defaults to ``/gevol/assets``.
 
-      .. code-block:: none
 
-         -\\-**noprompt**
+      -\\-**noprompt**
 
       *Optional*. Perform the upgrade without prompting the user for any
       input. This option requires that some commands have arguments
