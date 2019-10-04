@@ -75,6 +75,7 @@ class DbInfo(object):
     self.description = ""
     self.has_poi = False     # whether has POI data.
     self.serve_wms = False   # whether wms serving is enabled for the target.
+    self.default_database = False # whether this database is published as the default
     # Whether portable has polygon.
     # Set to None since it is only being used for portables, and undefined for
     # Fusion databases.

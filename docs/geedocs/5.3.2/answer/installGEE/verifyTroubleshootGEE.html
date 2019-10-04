@@ -74,8 +74,7 @@
 <div class="content docutils container">
 <ul class="simple">
 <li><a class="reference internal" href="#verifying-system-manager-running"><span class="std std-ref">Verifying that the System Manager is Running</span></a></li>
-<li><a class="reference internal" href="#troubleshooting-failed-system-manager"><span class="std std-ref">Troubleshooting a Failed System
-Manager</span></a></li>
+<li><a class="reference internal" href="#troubleshooting-failed-system-manager"><span class="std std-ref">Troubleshooting a Failed System Manager</span></a></li>
 <li><a class="reference internal" href="#restarting-system-manager"><span class="std std-ref">Restarting the Server</span></a></li>
 </ul>
 <p class="rubric" id="verifying-system-manager-running">Verifying That the System Manager Is Running</p>
@@ -87,8 +86,8 @@ Google Earth Enterprise Fusion and whenever you encounter problems
 building assets.</p>
 <p>To verify that the system manager is running, enter the following
 command at a shell prompt:</p>
-<p><code class="docutils literal notranslate"><span class="pre">getop</span></code>
-A list of running processes appears. Two processes appear on the
+<p><code class="docutils literal notranslate"><span class="pre">getop</span></code></p>
+<p>A list of running processes appears. Two processes appear on the
 list:</p>
 <ul>
 <li><p class="first"><code class="docutils literal notranslate"><span class="pre">gesystemmanager</span></code></p>
@@ -114,23 +113,26 @@ volumes for any connected workstations.</p>
 you can try stopping and restarting the it, which resolves most
 minor problems.</p>
 <p class="rubric" id="restarting-system-manager">Restarting the system manager</p>
-<ol class="arabic simple">
-<li>Log in as root.</li>
-<li>Stop the system manager:
-<code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span> <span class="pre">stop</span></code></li>
-<li>Start the system manager:
-<code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span> <span class="pre">start</span></code></li>
+<ol class="arabic">
+<li><p class="first">Log in as root.</p>
+</li>
+<li><p class="first">Stop the system manager:</p>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span> <span class="pre">stop</span></code></p>
+</li>
+<li><p class="first">Start the system manager:</p>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span> <span class="pre">start</span></code></p>
+</li>
 </ol>
 <p>If you are still having problems starting the system manager after
 stopping and restarting the system manager, you can view the log
 file for the system manager to see what errors have been reported.
 The log file is located in:</p>
-<p><code class="docutils literal notranslate"><span class="pre">/var/opt/google/log/gesystemmanager.log</span></code>
-Any errors are listed after the <strong>Started</strong> notice, which appears
+<p><code class="docutils literal notranslate"><span class="pre">/var/opt/google/log/gesystemmanager.log</span></code></p>
+<p>Any errors are listed after the <strong>Started</strong> notice, which appears
 in the log for each time you started the system manager.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> If you see a <code class="docutils literal notranslate"><span class="pre">Connection</span> <span class="pre">Refused</span></code> message when
+<p class="last">If you see a <code class="docutils literal notranslate"><span class="pre">Connection</span> <span class="pre">Refused</span></code> message when
 running the <code class="docutils literal notranslate"><span class="pre">getop</span></code> command, but do not see any error
 messages in the log file, ensure that the log directory is
 writable by Google Earth Enterprise Fusion users.</p>
@@ -138,11 +140,13 @@ writable by Google Earth Enterprise Fusion users.</p>
 <p>Likewise, if Google Earth Enterprise Server fails to run, you can
 try stopping and restarting it, which resolves most problems.</p>
 <p class="rubric">Restarting the Server</p>
-<ol class="arabic simple">
-<li>Log in as root.</li>
+<ol class="arabic">
+<li><p class="first">Log in as root.</p>
+</li>
+<li><p class="first">Stop and restart the server.</p>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">restart</span></code></p>
+</li>
 </ol>
-<p>#. Stop and restart the server.
-<code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">restart</span></code></p>
 </div>
 </div>
 </div>

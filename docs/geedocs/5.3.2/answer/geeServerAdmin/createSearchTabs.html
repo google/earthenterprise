@@ -99,61 +99,65 @@ you to pre-configure the search tabs to be used for any Fusion
 database. You define all of the search tabs using the
 <strong>Search tabs</strong> page, and then you select one or more search tabs
 for a specific database when you publish it using the <strong>Databases</strong>
-page. See <span class="xref std std-doc">3497763</span> for details.</p>
+page. See <a class="reference internal" href="publishDatabasesPortables.html"><span class="doc">Publish databases and portables</span></a> for details.</p>
 <p class="rubric">Define a new search tab</p>
 <p>To define a new search tab:</p>
-<p>#. In the <span class="xref std std-doc">GEE Server Admin
-console</span>, click <strong>Search tabs</strong>.
-#. Click <strong>Create</strong> <strong>new</strong>. The Create Search Definition
-dialog appears.
-<img alt="Create Search Definition dialog" src="../../images/serverCreateSearchDefinition-full.png" /></p>
-<ol class="arabic simple">
-<li>Enter a unique <strong>Name</strong> for your search tab.</li>
-</ol>
-<p>#. Enter a <strong>Label</strong> that will display as the name of the
-search tab in the client.
-#. Provide a <strong>URL</strong>.
-#. If you want to reference a Google Earth Enterprise Server
-plug-in for the search tab, enter the name of the plug-in.
-The following plug-ins are available:</p>
+<p>#. In the <a class="reference internal" href="signInAdminConsole.html"><span class="doc">GEE Server Admin
+console</span></a>, click <strong>Search tabs</strong>.
+#. Click <strong>Create</strong> <strong>new</strong>. The Create Search Definition dialog appears.</p>
 <blockquote>
-<div><ul class="simple">
+<div><img alt="Create Search Definition dialog" src="../../images/serverCreateSearchDefinition1.png" /></div></blockquote>
+<ol class="arabic">
+<li><p class="first">Enter a unique <strong>Name</strong> for your search tab.</p>
+</li>
+<li><p class="first">Enter a <strong>Label</strong> that will display as the name of the search tab in the client.</p>
+</li>
+<li><p class="first">Provide a <strong>URL</strong>.</p>
+</li>
+<li><p class="first">If you want to reference a Google Earth Enterprise Server plug-in for the
+search tab, enter the name of the plug-in. The following plug-ins are available:</p>
+<ul class="simple">
 <li>POISearch</li>
 <li>/gesearch/FederatedSearch</li>
 <li>/gesearch/CoordinateSearch</li>
 <li>/gesearch/PlacesSearch</li>
 <li>/gesearch/ExampleSearch</li>
 </ul>
-</div></blockquote>
-<ol class="arabic simple">
-<li>Optionally provide additional query parameters.
+</li>
+<li><p class="first">Optionally provide additional query parameters.
 The syntax is <strong>key1=value1&amp;key2;=value2</strong>. For example,
 <strong>flyToFirstElement=true&amp;displayKeys;=location</strong> flies to
 the first element of your search results and displays the
 Location key in the results. Google Earth EC must be able to
 understand and respond to these key/value pairs, so you must
 be very familiar with your search application to use this
-field.</li>
-</ol>
-<p><strong>Caution:</strong> Any web service, servlet, or web application
+field.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Any web service, servlet, or web application
 you configure the search tabs to query must return valid KML
 to Google Earth EC. For Google Maps, it must return valid
 JavaScript in the specified structure.</p>
-<p>Optionally provide additional config parameters.
+</div>
+</li>
+<li><p class="first">Optionally provide additional config parameters.
 Specify the following field parameters:</p>
-<ol class="arabic simple">
+<ol class="loweralpha simple">
 <li><strong>Label</strong>: Label of the search box.</li>
-<li><strong>Suggestion</strong>: Suggestion to the user of what to search
-for.</li>
+<li><strong>Suggestion</strong>: Suggestion to the user of what to search for.</li>
 <li><strong>Key</strong>: The parameter name that the value in the text
 box will be assigned when the search is submitted.</li>
-<li>Optionally click <strong>add field</strong> to add another set of search
-field parameters.</li>
 </ol>
-<p>#. Click <strong>Save</strong>.
-<img alt="Create Search Definition dialog" src="../../images/serverCreateSearchDefinition-full.png" /></p>
+</li>
+<li><p class="first">Optionally click <strong>add field</strong> to add another set of search
+field parameters.</p>
+</li>
+<li><p class="first">Click <strong>Save</strong>.</p>
+</li>
+</ol>
+<p><img alt="Create Search Definition dialog Full" src="../../images/serverCreateSearchDefinition-full.png" /></p>
 <p>The search tab is ready for you to add to your database. See
-<span class="xref std std-doc">3497763</span> for details.</p>
+<a class="reference internal" href="publishDatabasesPortables.html"><span class="doc">Publish databases and portables</span></a> for details.</p>
 <p class="rubric">Customize search tab style in Google Earth EC</p>
 <p>You may want to customize the appearance of the search tabs
 as they display in Google Earth EC. You can edit
@@ -171,7 +175,7 @@ and open your renamed file for edit.</p>
 to customize your search form.</p>
 </li>
 <li><p class="first">Save the HTML file with the name you want to use for your
-search tabs, for example,
+search tabs, e.g.,
 <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/earth/search_supplemental_ui_MySearchTab.html</span></code>.</p>
 </li>
 <li><p class="first">Publish your database with the selected search tab(s).</p>

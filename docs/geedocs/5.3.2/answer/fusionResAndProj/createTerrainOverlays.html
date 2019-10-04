@@ -74,12 +74,12 @@
 <div class="content docutils container">
 <p class="rubric">Create terrain overlays</p>
 <ul class="simple">
-<li><a class="reference internal" href="../geeServerAdmin/createCompositeGlobesMaps.html#introduction"><span class="std std-ref">Introduction</span></a></li>
-<li><span class="xref std std-ref">Creating Terrain Overlays</span></li>
-<li><cite>Define, Build, and Push a Database for the Terrain
-Overlay &lt;Define_Database_Terrain_Overlay&gt;</cite></li>
-<li><cite>Publish a Database for the Terrain Overlay &lt;Publish_Database_Terrain_overlay&gt;</cite></li>
-<li><cite>View the Database &lt;View_Database&gt;</cite></li>
+<li><a class="reference internal" href="#introduction"><span class="std std-ref">Introduction</span></a></li>
+<li><a class="reference internal" href="#creating-terrain-overlays"><span class="std std-ref">Creating Terrain Overlays</span></a></li>
+<li><a class="reference internal" href="#define-database-terrain-overlay"><span class="std std-ref">Define, Build, and Push a Database for the Terrain
+Overlay</span></a></li>
+<li><a class="reference internal" href="#publish-database-terrain-overlay"><span class="std std-ref">Publish a Database for the Terrain Overlay</span></a></li>
+<li><a class="reference internal" href="#view-database"><span class="std std-ref">View the Database</span></a></li>
 </ul>
 <p class="rubric" id="introduction">Introduction</p>
 <p>A terrain overlay is a secondary terrain database that you can use
@@ -130,7 +130,7 @@ opens.
 <li><p class="first">Click <img alt="Open file icon" src="../../images/4492675_open_file_icon.png" />. The <strong>Open</strong> dialog appears.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> The selection in the <strong>Type</strong> drop-down list near the
+<p class="last">The selection in the <strong>Type</strong> drop-down list near the
 bottom of this dialog determines the type of resources that
 appear on the list. Terrain Resource is automatically
 selected when you open this dialog from the Terrain Project
@@ -184,12 +184,12 @@ this example, the SFTerrain resource with a resolution level of
 the actual overlay terrain.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> It is the overlay resources and not the fill
+<p class="last">It is the overlay resources and not the fill
 resources that determine the extent of the overlay.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> If every resource is at or above the <strong>Resources
+<p class="last">If every resource is at or above the <strong>Resources
 Min Level</strong>, then 0 (sea level) is used for the fill
 terrain. Equally, if you set the <strong>Start Level</strong> to a
 resolution beyond the extent of the base terrain resource
@@ -263,7 +263,7 @@ password assigned to you:</p>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> If you do not know your username and password,
+<p class="last">If you do not know your username and password,
 contact your Google Earth Enterprise Server System
 Administrator.</p>
 </div>
@@ -307,10 +307,11 @@ For example, the Publish point is
 and <code class="docutils literal notranslate"><span class="pre">mydomainname</span></code> are specific to your server.</p>
 </li>
 <li><p class="first">Click the <strong>Sign In</strong> button.</p>
-<div class="alert docutils container">
-<p><strong>Caution:</strong> If you have logged in to this server with
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If you have logged in to this server with
 Google Earth EC previously, log out, clear your cache, and
-log back in. See <span class="xref std std-doc">6010060</span>.</p>
+log back in. See <a class="reference internal" href="../googleEarthEnterpriseClient/clearGoogleEarthEC.html"><span class="doc">Clearing the Google Earth EC cache</span></a>.</p>
 </div>
 </li>
 <li><p class="first">Google Earth EC displays your database. The Layers panel shows
@@ -337,7 +338,7 @@ existing database.</p>
 </ol>
 <p class="rubric">Learn more</p>
 <ul class="simple">
-<li><cite>Defining and Building Projects :doc:`4412421</cite></li>
+<li><a class="reference internal" href="../fusionTutorial/buildProject.html"><span class="doc">Defining and Building Projects</span></a></li>
 </ul>
 </div>
 </div>

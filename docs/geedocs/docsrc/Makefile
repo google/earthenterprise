@@ -2,7 +2,7 @@
 #
 
 # You can set these variables from the command line.
-SPHINXOPTS    =
+SPHINXOPTS    = -W
 SPHINXBUILD   = sphinx-build
 SPHINXPROJ    = GoogleEarthEnterpriseDocumentation
 SOURCEDIR     = .
@@ -26,4 +26,3 @@ help:
 	rm -rf ../$(OPENGEEVER)
 	mkdir ../$(OPENGEEVER)
 	cp -r ./$(BUILDDIR)/html/* ../$(OPENGEEVER)
-	rm -rf ../$(OPENGEEVER)/sources

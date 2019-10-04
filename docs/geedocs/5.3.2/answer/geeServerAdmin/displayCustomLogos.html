@@ -67,7 +67,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <p><a class="reference internal" href="answer/geeServerAdmin/../art/common/googlelogo_color_260x88dp.png"><img alt="Google logo" src="answer/geeServerAdmin/../art/common/googlelogo_color_260x88dp.png" style="width: 130px; height: 44px;" /></a></p>
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp4.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp4.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="display-custom-logos">
 <h1>Display custom logos<a class="headerlink" href="#display-custom-logos" title="Permalink to this headline">¶</a></h1>
 <div class="docutils container">
@@ -76,11 +76,10 @@
 multiple custom logos with your globes and maps when connected to
 a GEE Server.</p>
 <p>Custom logos are added as database preferences or <em>snippets</em>,
-which are managed using <a class="reference internal" href="../geeServerAdmin.html"><span class="doc">snippet
-profiles</span></a> you create using GEE Server.
-Once you have saved a custom logo in a snippet profile, you can
-assign it to any database you publish. You can apply a snippet
-profile to as many databases as you need.</p>
+which are managed using <a class="reference internal" href="manageSnippetProfiles.html"><span class="doc">snippet profiles</span></a> you create
+using GEE Server. Once you have saved a custom logo in a snippet
+profile, you can assign it to any database you publish. You can
+apply a snippet profile to as many databases as you need.</p>
 <p class="rubric">Cobrand_info snippet</p>
 <p>You can use the <strong>cobrand_info</strong> snippet within a snippet profile
 to place your logos anywhere in the Google Earth EC window.</p>
@@ -108,7 +107,7 @@ logo), and x and y coordinates, expressed as either absolute values
 in pixels or relative values of percentage of screen width or
 height.</p>
 <p>The following <strong>cobrand_info</strong> example snippet places the
-<em>top_right.jpg</em> logo in the upper-right corner of the window (the
+<em>top_right.jpg</em> logo in the top-right corner of the window (the
 top right of the image is 5 pixels from the right edge of the
 window edge, using an absolute x coordinate value, and 95% from
 the bottom using a relative y coordinate value), and sets it to
@@ -117,116 +116,97 @@ window is resized.</p>
 <p><img alt="GEE Server cobrand_info snippet example" src="../../images/Snippet_cobrand-full.png" /></p>
 <p class="rubric">Cobrand_info parameters</p>
 <p>The following table describes the cobrand_info snippet parameters,
-all of which are required.
-+———————————–+———————————–+
-| Name                              | Description                       |
-+===================================+===================================+
-| <strong>logoUrl</strong>                       | The location of the logo file.    |
-|                                   | For example,                      |
-|                                   | “<a class="reference external" href="http://yourserver.org/top-left-l">http://yourserver.org/top-left-l</a> |
-|                                   | ogo.gif”                          |
-|                                   | Logos can be accessed locally or  |
-|                                   | remotely via UNC, HTTP, or HTTPS. |
-|                                   | Supported logo formats are PNG,   |
-|                                   | GIF, and JPEG.                    |
-+———————————–+———————————–+
-| <strong>screen_size</strong>                   | Specifies a fraction of window    |
-|                                   | width the logo should be scaled   |
-|                                   | to. Value must be between 0.0 and |
-|                                   | 1.0, where 0.0 disables the       |
-|                                   | scaling feature.                  |
-+———————————–+———————————–+
-| <strong>tiePoint</strong>                      | Specifies the part of the logo    |
-|                                   | file that is placed at the        |
-|                                   | specified <strong>x_coord.value</strong> and   |
-|                                   | <strong>y_coord.value</strong> values. The     |
-|                                   | following screen positions are    |
-|                                   | allowed:                          |
-|                                   |                                   |
-|                                   | -  <strong>BOTTOM_LEFT</strong>                |
-|                                   | -  <strong>BOTTOM_CENTER</strong>              |
-|                                   | -  <strong>BOTTOM_RIGHT</strong>               |
-|                                   | -  <strong>MID_LEFT</strong>                   |
-|                                   | -  <strong>MID_CENTER</strong>                 |
-|                                   | -  <strong>MID_RIGHT</strong>                  |
-|                                   | -  <strong>TOP_LEFT</strong>                   |
-|                                   | -  <strong>TOP_CENTER</strong>                 |
-|                                   | -  <strong>TOP_RIGHT</strong>                  |
-+———————————–+———————————–+
-| <strong>x_coord.is_relative</strong>           | Used in conjunction with          |
-|                                   | <strong>x_coord.value</strong> to specify      |
-|                                   | absolute or relative pixel        |
-|                                   | placement of the <strong>tiePoint</strong>.    |
-|                                   |                                   |
-|                                   | -  <strong>False</strong> means                |
-|                                   |    <strong>x_coord.value</strong> is a pixel   |
-|                                   |    value         .                |
-|                                   | -  <strong>True</strong> means                 |
-|                                   |    <strong>x_coord.value</strong> is a window  |
-|                                   |    size fraction.                 |
-+———————————–+———————————–+
-| <strong>x_coord.value</strong>                 | The EC horizontal (X-axis)        |
-|                                   | coordinate for tiePoint.          |
-|                                   | <strong>x_coord.value</strong> specifies a     |
-|                                   | distance from the left edge of    |
-|                                   | the Earth window for logo         |
-|                                   | <strong>tiePoint</strong> placement.           |
-|                                   |                                   |
-|                                   | <strong>x_coord.value</strong> is used in      |
-|                                   | conjunction with                  |
-|                                   | <strong>x_coord.is_relative</strong>, which    |
-|                                   | specifies whether the distance is |
-|                                   | measured in pixel or relative     |
-|                                   | values.                           |
-|                                   |                                   |
-|                                   | -  If x_coord.is_relative is      |
-|                                   |    <strong>False</strong> (default),           |
-|                                   |    x_coord.is_relative is a pixel |
-|                                   |    value. You can use negative    |
-|                                   |    values to specify a distance   |
-|                                   |    from the right edge.           |
-|                                   | -  If x_coord.is_relative is      |
-|                                   |    <strong>True</strong>, allowed values for   |
-|                                   |    x_coord.is_relative are        |
-|                                   |    between 0.0 (left edge of      |
-|                                   |    window) and 1.0 (right edge).  |
-+———————————–+———————————–+
-| <strong>y_coord.is_relative</strong>           | Used in conjunction with          |
-|                                   | <strong>y_coord.value</strong> to specify      |
-|                                   | absolute or relative pixel        |
-|                                   | placement of the <strong>tiePoint</strong>.    |
-|                                   |                                   |
-|                                   | -  <strong>False</strong> means                |
-|                                   |    <strong>y_coord.value</strong> is a pixel   |
-|                                   |    value.                         |
-|                                   | -  <strong>True</strong> means                 |
-|                                   |    <strong>y_coord.value</strong> is a window  |
-|                                   |    size fraction.                 |
-+———————————–+———————————–+
-| <strong>y_coord.value</strong>                 | The EC vertical (Y-axis)          |
-|                                   | coordinate position for tiePoint. |
-|                                   | <strong>y_coord.value</strong> specifies a     |
-|                                   | distance from the bottom edge of  |
-|                                   | the Earth window for logo         |
-|                                   | tiePoint placement.               |
-|                                   |                                   |
-|                                   | <strong>y_coord.value</strong> is used in      |
-|                                   | conjunction with                  |
-|                                   | <strong>y_coord.is_relative</strong>, which    |
-|                                   | specifies whether the distance is |
-|                                   | measured in pixel or relative     |
-|                                   | values.                           |
-|                                   |                                   |
-|                                   | -  If y_coord.is_relative is      |
-|                                   |    <strong>False</strong>, this is a pixel     |
-|                                   |    value. You can use negative    |
-|                                   |    values to specify a distance   |
-|                                   |    from the top edge.             |
-|                                   | -  If y_coord.is_relative is      |
-|                                   |    <strong>True</strong>, allowed values are   |
-|                                   |    between 0.0 (bottom edge of    |
-|                                   |    window) and 1.0 (top edge).    |
-+———————————–+———————————–+</p>
+all of which are required.</p>
+<table border="1" class="colwidths-given docutils" id="id1">
+<caption><span class="caption-text">Cobrand_info parameters</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="38%" />
+<col width="62%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">logoUrl</span></code></td>
+<td>The location of the logo file, e.g.,``http://yourserver.org/top-left-logo.gif``
+Logos can be accessed locally or remotely via UNC, HTTP, or HTTPS. Supported logo formats are PNG, GIF, and JPEG.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">screen_size</span></code></td>
+<td>Specifies a fraction of window width the logo should be scaled to.
+Value must be between 0.0 and 1.0, where 0.0 disables the scaling feature.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tiePoint</span></code></td>
+<td><p class="first">Specifies the part of the logo file that is placed at the specified <code class="docutils literal notranslate"><span class="pre">x_coord.value</span></code> and <code class="docutils literal notranslate"><span class="pre">y_coord.value</span></code> values.
+The following screen positions are allowed:</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>BOTTOM_LEFT</li>
+<li>BOTTOM_CENTER</li>
+<li>BOTTOM_RIGHT</li>
+<li>TOP_LEFT</li>
+<li>BOTTOM_LEFT</li>
+<li>MID_LEFT</li>
+<li>TOP_RIGHT</li>
+<li>TOP_CENTER</li>
+<li>MID_RIGHT</li>
+<li>MID_CENTER</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">x_coord.is_relative</span></code></td>
+<td><p class="first">Used in conjunction with <code class="docutils literal notranslate"><span class="pre">x_coord.value</span></code> to specify absolute or relative pixel placement of the <code class="docutils literal notranslate"><span class="pre">tiePoint</span></code>.</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>False means <code class="docutils literal notranslate"><span class="pre">x_coord.value</span></code> is a pixel value.</li>
+<li>True means <code class="docutils literal notranslate"><span class="pre">x_coord.value</span></code> is a window size fraction.</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">x_coord.value</span></code></td>
+<td><p class="first">The EC horizontal (X axis) coordinate for <code class="docutils literal notranslate"><span class="pre">tiePoint</span></code>. <code class="docutils literal notranslate"><span class="pre">x_coord.value</span></code> specifies a distance
+from the left edge of the Earth window for logo tiePoint placement.</p>
+<p><code class="docutils literal notranslate"><span class="pre">x_coord.value</span></code> is used in conjunction with <code class="docutils literal notranslate"><span class="pre">x_coord.is_relative</span></code>, which specifies whether
+the distance is measured in pixel or relative values.</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>If <code class="docutils literal notranslate"><span class="pre">x_coord.is_relative</span></code> is False (default), <code class="docutils literal notranslate"><span class="pre">x_coord.is_relative</span></code> is a pixel value.
+You can use negative values to specify a distance from the right edge.</li>
+<li>If <code class="docutils literal notranslate"><span class="pre">x_coord.is_relative</span></code> is True, allowed values for <code class="docutils literal notranslate"><span class="pre">x_coord.is_relative</span></code> are
+between 0.0 (left edge of window) and 1.0 (right edge).</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">y_coord.is_relative</span></code></td>
+<td><p class="first">Used in conjunction with <code class="docutils literal notranslate"><span class="pre">y_coord.value</span></code> to specify absolute or relative pixel placement of the <code class="docutils literal notranslate"><span class="pre">tiePoint</span></code>.</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>False means <code class="docutils literal notranslate"><span class="pre">y_coord.value</span></code> is a pixel value</li>
+<li>True means <code class="docutils literal notranslate"><span class="pre">y_coord.value</span></code> is a window size fraction.</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">y_coord.value</span></code></td>
+<td><p class="first">The EC vertical (Y axis) coordinate position for <code class="docutils literal notranslate"><span class="pre">tiePoin``t.</span> <span class="pre">``y_coord.value</span></code> specifies a distance
+from the bottom edge of the Earth window for logo <code class="docutils literal notranslate"><span class="pre">tiePoint</span></code> placement.</p>
+<p><code class="docutils literal notranslate"><span class="pre">y_coord.value</span></code> is used in conjunction with <code class="docutils literal notranslate"><span class="pre">y_coord.is_relative</span></code>, which specifies whether the distance
+is measured in pixel or relative values.</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>If <code class="docutils literal notranslate"><span class="pre">y_coord.is_relative</span></code> is False, this is a pixel value. You can use negative values to specify a
+distance from the top edge.</li>
+<li>If <code class="docutils literal notranslate"><span class="pre">y_coord.is_relative</span></code> is True, allowed values are between 0.0 (bottom edge of window) and 1.0 (top edge).</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Add a custom logo</p>
 <p>You can add any number of custom logos to your maps and globes,
 adding each one using a <strong>cobrand_info</strong> snippet. The ideal size
@@ -249,9 +229,12 @@ password assigned to you:</p>
 <li>Default username: <em>geapacheuser</em></li>
 <li>Default password: <em>geeadmin</em></li>
 </ul>
-<p><strong>Note:</strong> If you do not know your username and password,
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you do not know your username and password,
 contact your Google Earth Enterprise Server System
 Administrator.</p>
+</div>
 </li>
 <li><p class="first">Click <strong>Snippet profiles</strong> to display your snippet profiles.</p>
 </li>
@@ -299,10 +282,10 @@ snippet profile to apply your custom logo.</p>
 </li>
 <li><p class="first">Click the <strong>Publish</strong> button to publish your database with the added
 snippet profile.</p>
-<p>Now, when you view your database in Google Earth EC, your custom</p>
+<p>Now, when you view your database in Google Earth EC, your custom
+logo is displayed.</p>
 </li>
 </ol>
-<p>logo is displayed.</p>
 <div class="admonition tip">
 <p class="first admonition-title">Tip</p>
 <p class="last">Google Earth EC recognizes only the snippet profile settings
@@ -310,9 +293,47 @@ made by the first database that you connect to. This applies
 when you are connecting to multiple databases.</p>
 </div>
 <p class="rubric">cobrand_info snippet definition examples</p>
+<p class="rubric">Single logo at top-left</p>
+<p>This example places one logo in the top-left corner of the
+window (the top-left of the image is 5% of the window width
+from the left side of the window, and 95% from the bottom), and
+sets it to dynamically scale to 10% of the window width as the
+window is resized.</p>
+<p><img alt="cobrand_info top-left example" src="../../images/cobrand_top_left.png" /></p>
+<p class="rubric">Single logo at mid right</p>
+<p>This example places one logo at the vertical midpoint on the
+right side of the window using absolute and relative coordinate
+values. The center-right logo tiePoint is placed 5 pixels from
+the right window edge and at 50% of the relative window height.
+EC requests the file using HTTPS (as specified in <strong>logo_url</strong>)
+and does not scale the logo.</p>
+<p><img alt="cobrand_info right-center example" src="../../images/cobrand_center_right.png" /></p>
+<p class="rubric">Single logo at top-center</p>
+<p>This example places one logo at the top-center of the window.
+The top-center tiePoint of the logo is placed, by relative
+coordinates, at the 50% window width and 98% window height, and
+the logo dynamically scales to 9% of the window width.</p>
+<p><img alt="cobrand_info top-center example" src="../../images/cobrand_top_center.png" /></p>
+<p class="rubric">Single logo at bottom-right corner</p>
+<p>This example places one logo in the bottom-right corner of the
+window by combining relative and absolute coordinate values.
+The bottom-right logo tiePoint is placed at 80% of the window
+width from the left window edge, leaving a 20% margin at the
+right window edge, and 30 pixels from the bottom window edge.
+The logo is dynamically scaled to occupy 20% of the window
+width.</p>
+<blockquote>
+<div><img alt="cobrand_info bottom-right example" src="../../images/cobrand_bottom_right.png" /></div></blockquote>
+<p class="rubric">Single logo at top-left corner</p>
+<p>This example places one logo in the top-left corner of the
+window using absolute pixel values. The top-left logo tiePoint
+is placed 5 pixels from the left window edge and 5 pixels from
+the top window edge, and the logo is displayed without scaling.</p>
+<blockquote>
+<div><img alt="cobrand_info upper-left example" src="../../images/cobrand_upper_left.png" /></div></blockquote>
 <p class="rubric">Learn more</p>
 <ul class="simple">
-<li><span class="xref std std-doc">6004748</span></li>
+<li><a class="reference internal" href="manageSnippetProfiles.html"><span class="doc">Manage snippet profiles</span></a></li>
 </ul>
 </div>
 </div>

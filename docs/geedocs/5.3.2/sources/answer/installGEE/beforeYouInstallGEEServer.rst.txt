@@ -1,0 +1,211 @@
+
+Before you install GEE Server
+
+Before installing Google Earth Enterprise (GEE) Server, you must
+configure your hardware, network, and GEE users. You should also
+carefully decide in advance where you want to store Fusion data and
+where you want to publish Fusion databases. You must provide this
+information during installation. The following sections provide
+information about GEE requirements, considerations, and best
+practices. Be sure to complete all of the tasks described in these
+sections before installing GEE Server.
+
+-[ Upgrading ]-
+
+To prevent compatibility issues, you must run the same version of GEE
+Server and Fusion. If you upgrade Fusion without upgrading GEE Server,
+you will not be able to publish to the GEE Server database.
+
+-[ Configuring Your Host Volumes ]-
+
+The best practices for naming your host volumes are:
+
+Network naming convention. You should use a network naming convention
+for any new volume that hosts Fusion or source data, whether it is
+initially part of a network or not, because you will almost certainly
+migrate to a network-based configuration eventually. Fusion requires
+both a network path and local name to resolve the locations of source
+files and related Fusion data, so changing the host volume name or
+path invalidates Fusion data. On a single workstation setup, the local
+and network paths are identical, but on a network-based configuration
+they are not.
+
+/gevol. You should use /gevol as your volume naming convention because
+it is unlikely to conflict with standard Linux volume definitions.
+Linux systems frequently use either /vol(*) or /data(*) as the local
+volume definition on a new system, so using this convention for Fusion
+can cause name conflicts if you later switch from a single workstation
+to a network-based configuration. For example, if you initially define
+/vol1/assets as the network location for a Fusion asset root, and you
+later add another workstation that has a local volume called /vol1,
+that workstation cannot reference /vol1/assetsthrough the network
+because of the name conflict with its local volume definition. (See
+Planning the Location of Your Asset Root for more information about
+the asset root.) You can avoid this conflict by using a unique naming
+convention for all volumes on your network (such as /vol1... /voln),
+but /gevol is a good choice because it is descriptive.
+
+-[ Configuring Multiple Storage Devices ]-
+
+GEE Server and the Fusion asset root, source volumes, and publish root
+require large amounts of disk storage space. Fusion requires about
+three times as much storage space as GEE Server. The storage space can
+be either in the form of internal disks, directly attached storage
+devices, network-attached storage (NAS) devices, or storage area
+network (SAN) devices. Typically, these devices are configured into
+redundant arrays of independent disks (RAIDs) and presented to the
+operating system as volumes. Volumes can range in size from several
+hundred gigabytes to tens of terabytes.
+
+The difference between configuring a workstation with one, two, or
+three volumes is how you define the mount point for the source and
+asset volumes.
+
+When configuring a Linux workstation, it is best practice to use the
+following mount point naming conventions:
+
+Single volume  Mount the single drive to slash (/). All data
+(/gevol/assets, /gevol/src, and /gevol/published_dbs) resides on that
+drive with the local path defined using the /gevol naming convention.
+
+Two volumes - a small system volume and a larger data volume  Mount
+the small system drive to slash (/). Mount the larger data drive to
+/gevol/. Source and asset data volumes can then be defined as
+/gevol/assets and /gevol/src.
+
+Three volumes - a small system volume and two larger data volumes
+Mount the small system drive to slash (/). Mount the first large data
+drive to /gevol/assets. Mount the second large data drive to
+/gevol/src.
+
+More than three volumes  There are several strategies for storing very
+large data sets. Fusion can read from and write to multiple volumes.
+For more information, you can request help on our Slack channel.
+
+It is also important to keep internal and external storage devices
+separated so that if your internal server goes down, it does not
+affect your ability to serve published data to external clients.
+Likewise, if your external server goes down, you can replace it and
+publish from the internal storage device. Perhaps more importantly,
+keeping your internal and external storage devices separate reduces
+the possibility of performance problems that could occur if you are
+building a large data set or if a client requests a time-consuming
+search.
+
+-[ Planning the Location of Your Publish Root ]-
+
+During GEE Server installation, you must specify a volume for the
+
+publish root
+
+. The publish root is the directory in which all of your published
+databases are stored.
+
+If you specify a different volume than the asset root
+
+:
+
+Whenever you publish a database, Fusion registers the database on the
+specified volume and then copies all of the database files to the
+designated volume.
+
+For example, if you specify "/gevol/assets" for your asset root and
+"/data1/published_dbs" for your publish root, whenever you publish a
+database, Fusion copies all of the database files from "/gevol/assets"
+to "/data1/published_dbs" (unless you allow symbolic links during
+installation). Copying takes more time as well as extra disk space.
+
+If you specify the same volume as the asset root
+
+:
+
+Whenever you publish a database, Fusion registers the database on the
+specified volume and sets symbolic links to the database files.
+
+For example, if you specify "/gevol/assets" for your asset root and
+"/gevol/published_dbs" for your publish root, whenever you publish a
+database, Fusion registers the database on "gevol" and sets hard links
+to the database files. No copying is necessary.
+
+-[ Setting Up GEE Users ]-
+
+The GEE installer automatically configures certain system users to
+perform background tasks at the system level. If you accept the
+default user names and allow the installer to create those users on
+your local workstation, you are implementing local authentication
+only. Local authentication is designed for standalone workstations
+only.
+
+If you are using GEE over a network with at least two workstations,
+storage devices, or servers, the best practice is to use a centralized
+network authentication system such as LDAP, NIS, or one of the many
+commercially available systems.
+
+If you use a centralized network authentication system, you must add
+the following users to your authentication system’s user list:
+
+gefusionuser
+
+geapacheuser
+
+gepguser
+
+The primary group for all of these users is
+
+gegroup
+
+.
+
+If you are in a multi-user environment in which multiple workstations
+share a common asset root on a NAS/SAN,
+
+these users must have the same UID on all devices, so you must assign
+them explicitly in both your network authentication system and in GEE
+
+.
+
+Be sure to configure each GEE workstation, storage device, and GEE
+Server to use your network authentication system. For more
+information, see your network authentication system documentation.
+
+-[ Customizing GEE User Names ]-
+
+You can use customized user and group names when installing Fusion.
+Specify the custom user and group names via the "-u" and "-g" options
+when running the installer. The GEE Server installer does not
+currently provide the option to customize user and group names.
+
+-[ Deciding Which Products To Install ]-
+
+You do not need to install all products on all devices. Follow the
+guidelines below.
+
+Development machine
+
+:
+
+Install both Fusion and GEE Server on the server machine that you want
+to use to import your source GIS data and create flyable 3D and 2D
+databases. A system in this configuration is typically called the
+"development machine" since its primary task is to build flyable
+databases and only a small number of users will view the flyable data
+for quality assurance testing.
+
+Install the Fusion tutorial files on the "development machine" for
+users who are new to Fusion or to this version of Fusion. You can also
+use the Fusion tutorial files to test publishing.
+
+Production machine
+
+:
+
+Install only the GEE Server on the server machine that hosts flyable
+3D and 2D databases. All authorized end-users will connect to this
+system -- typically referred to as the "production machine" -- to view
+the flyable databases. This machine must be accessible through the
+network from the development machine in order to publish databases.
+
+Users who will not have direct network access to their production
+machines, or users who plan to update remote systems with external
+hard drives, must also install the "Disconnected Publishing Add-on"
+for additional tools.

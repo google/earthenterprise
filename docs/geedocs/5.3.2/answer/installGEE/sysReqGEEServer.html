@@ -17,7 +17,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Before you install GEE Server" href="beforeYouInstallGEEServer.html" />
-    <link rel="prev" title="Installing GEE Server" href="installGEEServer.html" />
+    <link rel="prev" title="Uninstalling Google Earth Enterprise" href="uninstallGEE.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
@@ -33,7 +33,7 @@
           <a href="beforeYouInstallGEEServer.html" title="Before you install GEE Server"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="installGEEServer.html" title="Installing GEE Server"
+          <a href="uninstallGEE.html" title="Uninstalling Google Earth Enterprise"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../installGEE.html" accesskey="U">Install Google Earth Enterprise</a> &#187;</li> 
@@ -42,8 +42,8 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="installGEEServer.html"
-                        title="previous chapter">Installing GEE Server</a></p>
+  <p class="topless"><a href="uninstallGEE.html"
+                        title="previous chapter">Uninstalling Google Earth Enterprise</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="beforeYouInstallGEEServer.html"
                         title="next chapter">Before you install GEE Server</a></p>
@@ -85,9 +85,12 @@ GeForce4 or higher preferred for Fusion GUI). You can
 install this graphics card in a separate workstation that
 accesses Fusion.</li>
 </ul>
-<p><strong>Note:</strong> If you plan on cutting globes, this processing can
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you plan on cutting globes, this processing can
 be CPU-intensive and you may also need to plan on providing
 more storage depending on the size of the globes.</p>
+</div>
 <p><strong>Note on virtual machines</strong>: Fusion can be both CPU and I/O
 intensive. For optimal, stable performance, you should
 install it only on physical (non-virtual) machines. You can
@@ -95,7 +98,7 @@ run GEE Server on a virtualized platform, provided the guest
 OS is one of our supported 64-bit distributions and you
 allocate sufficient resources to the VM.</p>
 </div></blockquote>
-<p>Software Requirements</p>
+<p><strong>Software Requirements</strong></p>
 <blockquote>
 <div><p><strong>Operating Systems</strong></p>
 <p>OpenGEE is supported only on the 64-bit versions of the
@@ -122,13 +125,16 @@ browser.</p>
 <li>For GEE 5.x, use Google Earth EC version 7.0 or later</li>
 <li>For GEE 4.4, use Google Earth EC version 6.1 or later</li>
 </ul>
-<p><strong>Note:</strong> Although older versions of Google Earth EC,
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although older versions of Google Earth EC,
 i.e., 6.0 and earlier, <em>may</em> still connect to Google
 Earth Enterprise or Portable 3D databases, not all
 features will be available. Also, as Google Earth
 Enterprise has not been tested or certified against older
 versions of Google Earth EC, there may be unknown
 operational problems.</p>
+</div>
 <p>Google Earth Enterprise Client (EC) is supported on the
 following platforms:</p>
 <ul class="simple">
@@ -136,8 +142,7 @@ following platforms:</p>
 <li>Mac</li>
 <li>Linux</li>
 </ul>
-<blockquote>
-<div><strong>Unsupported Versions and Environments</strong></div></blockquote>
+<p><strong>Unsupported Versions and Environments</strong></p>
 <p>There are many variations of operating systems and related
 software; point (“x.x”) releases can sometimes contain
 changes that can impact your GEE installation. Although an
@@ -149,7 +154,7 @@ software specifications listed in this document. If a
 problem arises in an unsupported configuration, we may not
 be able to help you resolve it.</p>
 </div></blockquote>
-<p>Network Requirements</p>
+<p><strong>Network Requirements</strong></p>
 <blockquote>
 <div><p>Each destination server must meet the requirements below
 before you install GEE, and you must not change these
@@ -159,9 +164,8 @@ settings after deploying GEE. The hostname must be the FQDN
 <p>You can verify the hostname of your workstation by entering
 <code class="docutils literal notranslate"><span class="pre">hostname</span></code> at a shell prompt, and you can verify the
 network connection by using the <code class="docutils literal notranslate"><span class="pre">ping</span></code> command to reach
-other hosts in the same network. The requests should resolve</p>
-<blockquote>
-<div>using both an IP address and the FQDN.</div></blockquote>
+other hosts in the same network. The requests should resolve
+using both an IP address and the FQDN.</p>
 <ul class="simple">
 <li>Hostname registered in DNS</li>
 <li>Hosts file is acceptable for small-scale systems</li>
@@ -228,7 +232,7 @@ or protected network.</div></blockquote>
           <a href="beforeYouInstallGEEServer.html" title="Before you install GEE Server"
              >next</a> |</li>
         <li class="right" >
-          <a href="installGEEServer.html" title="Installing GEE Server"
+          <a href="uninstallGEE.html" title="Uninstalling Google Earth Enterprise"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../installGEE.html" >Install Google Earth Enterprise</a> &#187;</li> 

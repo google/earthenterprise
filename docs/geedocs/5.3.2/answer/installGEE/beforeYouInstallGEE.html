@@ -76,8 +76,7 @@
 <li><a class="reference internal" href="#overview-before-install-gee"><span class="std std-ref">Overview</span></a></li>
 <li><a class="reference internal" href="#configuring-host-volumes"><span class="std std-ref">Configuring Your Host Volumes</span></a></li>
 <li><a class="reference internal" href="#configuring-multiple-storage-devices-gee"><span class="std std-ref">Configuring Multiple Storage Devices</span></a></li>
-<li><a class="reference internal" href="#planning-location-asset-root-gee"><span class="std std-ref">Planning the Location of Your Asset
-Root</span></a></li>
+<li><a class="reference internal" href="#planning-location-asset-root-gee"><span class="std std-ref">Planning the Location of Your Asset Root</span></a></li>
 <li><a class="reference internal" href="#planning-location-publish-root-gee"><span class="std std-ref">Planning the Location of Your Publish Root</span></a></li>
 <li><a class="reference internal" href="#setting-up-gee-users"><span class="std std-ref">Setting Up Google Earth Enterprise Users</span></a></li>
 <li><a class="reference internal" href="#deciding-which-products-install"><span class="std std-ref">Deciding Which Products To Install</span></a></li>
@@ -93,10 +92,12 @@ consider these decisions in advance before you begin the
 installation procedure.</p>
 <p>The following sections provide information about what the Google
 Earth Enterprise software requires in each of these areas.</p>
-<div class="alert docutils container">
-Be sure to complete all of the tasks described in these
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Be sure to complete all of the tasks described in these
 sections before installing the Google Earth Enterprise
-software.</div>
+software.</p>
+</div>
 <p class="rubric" id="configuring-host-volumes">Configuring The Host Volumes</p>
 <p>Google Earth Enterprise Fusion data (resources, projects, and
 databases) require a local name and network path to resolve the
@@ -122,8 +123,7 @@ you later add another workstation that has a local volume called
 <code class="docutils literal notranslate"><span class="pre">/vol1</span></code>, that workstation cannot reference
 <code class="docutils literal notranslate"><span class="pre">/vol1/assets</span></code>through the network because of the name conflict
 with its local volume definition. (See <a class="reference internal" href="#planning-location-asset-root-gee"><span class="std std-ref">Planning the Location of
-Your Asset Root</span></a> for more
-information about the asset root.)</p>
+Your Asset Root</span></a> for more information about the asset root.)</p>
 <p>You can work around this problem by adopting a unique naming
 convention for all volumes on your network (such as <code class="docutils literal notranslate"><span class="pre">/vol1</span></code> …
 <code class="docutils literal notranslate"><span class="pre">/voln</span></code>). However, we suggest that you use <code class="docutils literal notranslate"><span class="pre">/gevol</span></code> as an
@@ -132,7 +132,7 @@ conflict with standard Linux volume definitions. The following
 diagram illustrates this point.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> On a single workstation that does not mount
+<p class="last">On a single workstation that does not mount
 <code class="docutils literal notranslate"><span class="pre">/gevol</span></code> on a network, <code class="docutils literal notranslate"><span class="pre">/gevol</span></code> is also required as a local
 volume definition.</p>
 </div>
@@ -211,7 +211,7 @@ unless that name conflicts with your established naming
 conventions.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> we recommend that you dedicate a network-attached
+<p class="last">we recommend that you dedicate a network-attached
 storage device (NAS) for your asset root.</p>
 </div>
 <p class="rubric" id="planning-location-publish-root-gee">Planning the Location of Your Publish Root</p>

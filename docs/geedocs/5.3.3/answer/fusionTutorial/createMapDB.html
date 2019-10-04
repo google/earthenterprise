@@ -1,0 +1,605 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Creating a Map Database &#8212; Google Earth Enterprise 5.3.3 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Creating Imagery Mosaics" href="createImageryMosaic.html" />
+    <link rel="prev" title="Configuring a Searchable Database" href="confSearchableDB.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="createImageryMosaic.html" title="Creating Imagery Mosaics"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="confSearchableDB.html" title="Configuring a Searchable Database"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionTutorial.html" accesskey="U">Fusion Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="confSearchableDB.html"
+                        title="previous chapter">Configuring a Searchable Database</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="createImageryMosaic.html"
+                        title="next chapter">Creating Imagery Mosaics</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp3.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp3.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="creating-a-map-database">
+<h1>Creating a Map Database<a class="headerlink" href="#creating-a-map-database" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>In addition to using Google Earth Enterprise Fusion to prepare and
+publish data in Google Earth, you can use it to prepare and
+publish data in Google Maps. Map data can be published with
+Google Earth Enterprise Fusion using Plate Carrée (EPSG: 4326) and
+Mercator (EPSG: 3857) projections, and is referred to hereafter as
+a <em>map layer</em>, <em>map project</em>, and <em>map database</em>.</p>
+<p>This lesson defines, builds, and publishes a Mercator map database
+and it also demonstrates how you can add an imagery project of
+<em>flat or Plate Carrée-based</em> imagery resources. When you publish
+the Mercator map database, the flat imagery is then projected as
+<em>Mercator on the Fly</em>. This feature converts a Plate Carrée-based
+imagery resource into a Mercator-based imagery resource when you
+define your Mercator map database. When hosted on GEE Server, the
+server requests the <em>Mercator on the Fly</em> imagery resource in the
+database and serves it with a Mercator projection.</p>
+<p>The option to project <em>Mercator on the Fly</em> enables you to reuse
+existing flat imagery resources for all your database types,
+including Mercator map databases, thereby saving you the task of
+creating and storing Mercator imagery resources. For more
+information, see <a class="reference internal" href="../fusionResAndProj/addFlatImageryToMercatorMapDBInGEE5.1.0.html"><span class="doc">Add flat imagery to Mercator map databases in GEE 5.1.0</span></a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">As an alternative to your own imagery resources, you
+can use the Google Base Map in place of an imagery project. See
+<a class="reference internal" href="#using-google-base-map"><span class="std std-ref">Using the Google Base Map</span></a> for more details.</p>
+</div>
+<p>The first step in preparing any data for publication is to import
+the source data as Google Earth Enterprise Fusion resources. You
+can use one of the vector resources you defined in <a class="reference internal" href="buildResource.html"><span class="doc">Defining and Building Resources</span></a> for Google Maps.</p>
+<p>After you define your vector resources, you must define and build
+at least one map layer for each map project. The first exercise in
+this lesson, <a class="reference internal" href="#define-map-layer"><span class="std std-ref">Define a Map Layer</span></a>, describes how to do
+so.</p>
+<p>The remaining steps are similar to defining, building, pushing,
+and publishing other databases that you have also created for
+viewing in Google Earth EC.</p>
+<ul class="simple">
+<li><a class="reference internal" href="#define-map-layer"><span class="std std-ref">Define a Map Layer</span></a></li>
+<li><a class="reference internal" href="#define-map-project"><span class="std std-ref">Define a Map Project</span></a></li>
+<li><a class="reference internal" href="#define-flat-imagery-project"><span class="std std-ref">Define a Flat Imagery Project</span></a></li>
+<li><a class="reference internal" href="#define-push-publish-map-database"><span class="std std-ref">Define, Push, and Publish a Map Database</span></a></li>
+<li><a class="reference internal" href="#view-map-database"><span class="std std-ref">View Your Map Database</span></a></li>
+<li><a class="reference internal" href="#using-google-base-map"><span class="std std-ref">Using the Google Base Map</span></a></li>
+</ul>
+<p class="rubric" id="define-map-layer"><span id="index-0"></span>Define a Map Layer</p>
+<p>Defining a map layer consists of adding resources to the layer and
+defining the display rules and filters for the layer. This is
+similar to the process of defining display rules and filters for a
+vector project destined for Google Earth EC.</p>
+<p class="rubric">To define a map layer</p>
+<ol class="arabic">
+<li><p class="first">Select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu. The Asset Manager
+appears.</p>
+</li>
+<li><p class="first">Select <strong>Mercator Map Tools (2D)</strong> from the drop-down menu.</p>
+</li>
+<li><p class="first">Click <img alt="image1" src="../../images/iconLayerMaps.png" />. The Map Layer Editor appears.</p>
+<p><img alt="image2" src="../../images/mapLayerDialog.png" /></p>
+<p>The legend area displays the current value of each property you
+can set for the map layer. The top row lists the names of the
+locales you support. When you first open this dialog for a new
+map layer, only the default locale and its values appear, and
+the box next to <strong>Hide unspecialized locales</strong> is checked.
+Google Maps uses the default locale settings when you do not
+specify different settings for a user’s locale in this tab.</p>
+</li>
+<li><p class="first">Set the property values for the default locale as follows:</p>
+<ol class="loweralpha simple">
+<li>Click the icon in the <strong>Icon</strong> field, select <strong>places3_new</strong>,
+and click <strong>OK</strong>. This is the icon that appears next to the
+name of the map layer in the Layers panel of Google Maps.</li>
+<li>Click in the <strong>Name</strong> field, enter <strong>CAfreeways</strong>, and press
+<strong>Enter</strong> to save the change. This is the text label that
+appears in the Layers panel of Google Maps.</li>
+<li>For <strong>Initial State</strong>, accept the default setting, <strong>Off</strong>. This
+setting determines whether the map layer is turned on or off
+in Google Maps.</li>
+</ol>
+</li>
+<li><p class="first">Click <strong>Add Resource</strong>.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Resources/Vector</span></code> folder.</p>
+</li>
+<li><p class="first">Select <strong>CAHighways</strong>, and click <strong>Open</strong>. The CAHighways
+resource appears on the resource list.</p>
+</li>
+<li><p class="first">Select <strong>default select all</strong> under the resource name.</p>
+<p>The <strong>Feature</strong> and <strong>Filter</strong> tabs appear on the right. The
+first option on the <strong>Feature</strong> tab is <strong>Draw Features As</strong>.
+This option allows you to specify the display rules for the
+selected resource. The value you set for <strong>Draw Features As</strong>
+determines the options available for you to specify.</p>
+<p>In this lesson, you define display rules for label only.</p>
+</li>
+<li><p class="first">For <strong>Draw Features As</strong>, select <strong>Lines</strong>. The <strong>Lines</strong>
+options appear.</p>
+</li>
+<li><p class="first">Under <strong>Line</strong>, accept the default visibility range for the
+lines, <strong>8</strong> and <strong>14</strong>.</p>
+</li>
+<li><p class="first">For <strong>Color</strong>, set it to orange.</p>
+</li>
+<li><p class="first">For <strong>Line Width</strong>, accept the default, <strong>2</strong>.</p>
+</li>
+<li><p class="first">Check the box next to <strong>Label</strong>.</p>
+</li>
+<li><p class="first">Under <strong>Label</strong>, accept the default setting on the drop-down
+list, <strong>Text</strong>.</p>
+</li>
+<li><p class="first">Click <a class="reference internal" href="../../images/iconEllipsis.png"><img alt="Label Format Open" src="../../images/iconEllipsis.png" style="width: 18px; height: 18px;" /></a>. The <strong>Label Format</strong> dialog appears.</p>
+<p>The <strong>Insert Field</strong> drop-down list contains the names of all
+fields in your source data.</p>
+</li>
+<li><div class="first line-block">
+<div class="line">Select <strong>NAME</strong>, and click <strong>OK</strong>.</div>
+</div>
+<p>In the source file for the selected resource, the <strong>Name</strong>
+column lists the names of the roads, so when you select the
+<strong>Name</strong> field here, the names of the roads
+are displayed in Google Maps.</p>
+</li>
+<li><p class="first">For the label, change the visibility range to <strong>10</strong> through
+<strong>14</strong>.</p>
+<p>The visibility range refers to the zoom level at which your
+labels are visible in Google Maps.</p>
+</li>
+<li><p class="first">The default text style is black on white in the Sans 12 font.
+Click the text style button (labeled <strong>Sans/12</strong>) to specify a
+different text style for the labels.</p>
+<p>The <strong>Text Style</strong> dialog appears.</p>
+</li>
+<li><p class="first">For <strong>Size</strong>, change the value to <strong>10</strong>, and accept the
+default setting for <strong>Color</strong>, black.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In version 3.0 and beyond, only one font and style
+is provided, Sans regular. However, you can create a
+configuration file in which you can specify additional
+fonts, if desired. Refer to the <strong>Administration Guide</strong> for
+details.</p>
+</div>
+<p>A preview of the label appears in the Preview box.</p>
+</li>
+<li><p class="first">Drag the preview over any button on the left. The new style is
+stored on that button. The button name reflects the font
+and font size of the style, and it appears with the selected color
+and outline attributes.</p>
+<p>After you save a style to a button, you can simply click that
+button to automatically select its text style settings for
+another label in the future.</p>
+</li>
+<li><p class="first">Click <strong>OK</strong>. You return to the Map Layer Editor, and the
+Feature tab shows all of your selections.</p>
+<p><img alt="image4" src="../../images/mapLayerEditor_Feature-full.png" /></p>
+</li>
+<li><p class="first">Select <strong>Save</strong> from the <strong>File</strong> menu.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/MapLayers</span></code> folder.</p>
+</li>
+<li><p class="first">In the <strong>Name</strong> field, enter <strong>SFMapLayer</strong>, and click <strong>Save</strong>.
+The new map layer name appears in the Asset Manager’s asset
+list.</p>
+</li>
+</ol>
+<p class="rubric" id="define-map-project"><span id="index-1"></span>Define a Map Project</p>
+<p>The first step in defining a map project is to specify which map
+layers to include and give the project a name. Before you define a
+map project, however, add a subfolder to the asset navigation tree
+in the Asset Manager in which you can store your map projects.</p>
+<p class="rubric">To add a subfolder for map projects</p>
+<ol class="arabic simple">
+<li>Select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu. The Asset Manager
+appears.</li>
+<li>Right-click <strong>Projects</strong> in the asset navigation tree, and
+select <strong>New Subfolder</strong>. The New Subfolder dialog appears.</li>
+<li>Enter <strong>Map</strong> in the <strong>Folder Name</strong> field, and click <strong>OK</strong>. The
+new Map subfolder appears under Projects in the asset
+navigation tree.</li>
+</ol>
+<p class="rubric">To create a map project</p>
+<ol class="arabic">
+<li><p class="first">In the Asset Manager, click <img alt="image5" src="../../images/iconProjMaps.png" />. The Map Project Editor
+appears.</p>
+</li>
+<li><p class="first">Click <img alt="image6" src="../../images/icon_new1.gif" />. The Open dialog appears.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/MapLayers</span></code>folder.</p>
+</li>
+<li><p class="first">Select <strong>SFMapLayer</strong>, the map layer you created in the
+previous exercise, and click <strong>Open</strong>. SFMapLayer appears in
+the Map Project Editor.</p>
+<p>The default legend name of the map layer, <strong>CAFreeways</strong>,
+appears in the Legend Name column, followed by <strong>&lt;DEFAULT&gt;</strong>,
+which indicates that this is the name you specified for the
+legend when you created the layer. The name and path of the map
+layer appears in the Layer column.</p>
+</li>
+<li><p class="first">Double-click <strong>CAFreeways</strong>. The Layer Legend dialog displays
+the current values for the map layer.</p>
+<p><img alt="image7" src="../../images/mapProject_LayerLegendDialog.png" /></p>
+</li>
+<li><p class="first">Double-click the name field, change the name to <strong>California
+Freeways</strong>, press <strong>Enter</strong> to save the change, and click
+<strong>OK</strong>.</p>
+<p>The new legend name appears in the Map Project Editor. Notice
+that <strong>&lt;DEFAULT&gt;</strong> no longer appears after the legend name. (If
+you want to return to the default name, right-click
+<strong>California Freeways</strong> in the <strong>Legend Name</strong> field, and select
+<strong>Use Layer Defaults</strong> from the context menu.)</p>
+</li>
+<li><p class="first">Select <strong>File &gt; Save</strong>.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Map</span></code>folder.</p>
+</li>
+<li><p class="first">In the <strong>Name</strong> field, enter <strong>SFMapProject</strong>, and click <strong>Save</strong>.
+The new map project name appears in the Asset Manager’s asset
+list.</p>
+</li>
+</ol>
+<p class="rubric" id="define-flat-imagery-project"><span id="index-2"></span>Define a Flat Imagery Project</p>
+<p>The maps layer includes Google Maps layers and uses the Google
+Maps API from google.com. Map databases use either Plate Carrée
+(EPSG: 4326) or Mercator (EPSG: 3857) projections and normally
+require corresponding imagery resource types. In this lesson you
+add a flat imagery project from a previous tutorial lesson to a
+Mercator map database, which can then be
+projected as <em>Mercator on the Fly</em>. For more information,
+see <a class="reference internal" href="../fusionResAndProj/addFlatImageryToMercatorMapDBInGEE5.1.0.html"><span class="doc">Add flat imagery to Mercator map databases in GEE 5.1.0</span></a></p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">If you did not complete the tutorial lesson to create an
+imagery project, see <a class="reference internal" href="buildProject.html#define-imagery-project"><span class="std std-ref">Define an Imagery Project</span></a></p>
+</div>
+<ol class="arabic simple">
+<li>Select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu. The Asset Manager
+appears.</li>
+<li>Select <strong>Mercator Map Tools (2D)</strong>. The tools for Mercator maps
+appear in the toolbar.</li>
+<li>Click <img alt="image8" src="../../images/iconResImageryMerc.png" />. The Mercator Imagery Resource Editor appears
+with no resources selected.
+<img alt="image9" src="../../images/imageryResEditorMerc.png" /></li>
+<li>Click the <strong>Add</strong> button.
+The Open Source dialog opens to the
+<code class="docutils literal notranslate"><span class="pre">/opt/google/share/tutorials/fusion/Imagery</span></code> folder.
+<img alt="image10" src="../../images/imageryOpen-2.png" /></li>
+<li>Select source file <strong>usgsLanSat.tif</strong>, and click the <strong>Open</strong> button.</li>
+<li>Enter today’s date for <strong>Acquisition Date</strong></li>
+<li>Select <strong>USGS Imagery</strong> for <strong>Provider</strong></li>
+<li>Enter <strong>2</strong> for <strong>Tolerance</strong></li>
+<li>Select <strong>File &gt; Save</strong> and navigate to the
+<code class="docutils literal notranslate"><span class="pre">/ASSET_ROOT/Resources/Imagery</span></code> folder.</li>
+<li>Enter the name <strong>SFBayAreaLanSat_Merc</strong>, and click <strong>Save</strong>.</li>
+<li>Select <strong>File &gt; Close</strong></li>
+<li>Repeat steps <strong>3</strong> through <strong>11</strong> for the table that follows:</li>
+</ol>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="25%" />
+<col width="19%" />
+<col width="13%" />
+<col width="13%" />
+<col width="31%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name (Resources/Imagery/…)</th>
+<th class="head">Acquisition Date</th>
+<th class="head">Provider</th>
+<th class="head">Mask</th>
+<th class="head">Source File</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><strong>BlueMarble_Merc</strong></td>
+<td>Today’s date</td>
+<td>NASA Imagery</td>
+<td><strong>No Mask</strong></td>
+<td><code class="docutils literal notranslate"><span class="pre">bluemarble_4km.tif</span></code></td>
+</tr>
+<tr class="row-odd"><td><strong>i3_15Meter_Merc</strong></td>
+<td>Today’s date</td>
+<td>i3</td>
+<td><strong>Auto Mask</strong> Default values</td>
+<td><code class="docutils literal notranslate"><span class="pre">i3SF15-meter.tif</span></code></td>
+</tr>
+<tr class="row-even"><td><strong>SFHighResInset_Merc</strong></td>
+<td>Today’s date</td>
+<td>USGS Imagery</td>
+<td><strong>Auto Mask</strong> Default values</td>
+<td><code class="docutils literal notranslate"><span class="pre">usgsSFHiRes.tif</span></code></td>
+</tr>
+</tbody>
+</table>
+<ol class="arabic simple">
+<li>Click <img alt="image11" src="../../images/iconProjImageryMerc.png" />. The Mercator Imagery Project Editor appears
+with no resources selected.
+<img alt="image12" src="../../images/imageryProjEditorMerc.png" /></li>
+<li>Click <img alt="image13" src="../../images/icon_new1.gif" />. The Open dialog appears.</li>
+<li>Select <strong>SFBayAreaLanSat_Merc</strong>, and click <strong>Open</strong>.</li>
+<li>Repeat steps <strong>14</strong> and <strong>15</strong> for Named entries in the above
+table.</li>
+<li>Select <strong>File &gt; Save</strong> and navigate to the
+<code class="docutils literal notranslate"><span class="pre">/ASSET_ROOT/Projects/Imagery</span></code> folder.</li>
+<li>Enter the name <strong>SFBayAreaMercator</strong>, and click <strong>Save</strong>.</li>
+</ol>
+<p class="rubric" id="define-push-publish-map-database"><span id="index-3"></span>Define, Push, and Publish a Map Database</p>
+<ol class="arabic">
+<li><p class="first">Select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu. The Asset Manager
+appears.</p>
+</li>
+<li><p class="first">Select <strong>Mercator Map Tools (2D)</strong>. The tools for Mercator maps
+appear in the toolbar.</p>
+</li>
+<li><p class="first">Click <a class="reference internal" href="../../images/iconDatabaseMap1.png"><img alt="image14" src="../../images/iconDatabaseMap1.png" style="width: 20px; height: 20px;" /></a>. The Map Database Editor appears with no
+projects selected.</p>
+<p><a class="reference internal" href="../../images/mapsMercDatabaseEditor1.png"><img alt="Mercator Maps Database Editor" src="../../images/mapsMercDatabaseEditor1.png" style="width: 434px; height: 175px;" /></a></p>
+</li>
+<li><p class="first">Click <img alt="image16" src="../../images/icon_new1.gif" /> next to <strong>Map Project</strong>. The Open Asset dialog
+appears.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Map</span></code>folder.</p>
+</li>
+<li><p class="first">Select <strong>SFMapProject</strong>, and click <strong>Open</strong>. The SF Map Project
+appears in the Map Database Editor next to Map Project.</p>
+</li>
+<li><p class="first">Click <img alt="image17" src="../../images/icon_new1.gif" /> next to <strong>Imagery Project</strong>. The Open Asset
+dialog appears.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Imagery</span></code>folder.</p>
+<p>Notice that <strong>Type</strong> is set to <strong>Mercator Imagery Project</strong> and
+only the Mercator imagery project(s) you have built are listed.</p>
+</li>
+<li><p class="first">Select <strong>SFBayAreaMercator</strong>, and click <strong>Open</strong>. The SF Bay
+Area Mercator imagery project appears in the Map Database
+Editor next to Imagery Project.</p>
+<p>Both map and Mercator imagery projects appear on the list.</p>
+</li>
+<li><p class="first">Select <strong>File &gt; Save</strong>.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Databases</span></code> folder.</p>
+</li>
+<li><p class="first">In the <strong>Name</strong> field, enter <strong>SFMapDatabase</strong>, and click <strong>Save</strong>.</p>
+<p>In the Asset Manager, the new map database appears, along with
+the other databases you have created. Notice that the <strong>Category</strong>
+column distinguishes between Google Earth databases and
+Google Maps database.</p>
+</li>
+<li><p class="first">Right-click <strong>SFMapDatabase</strong> and select <strong>Build</strong> from the
+context menu. The status of the database immediately changes to
+<strong>Waiting</strong> or <strong>Queued</strong> and then to <strong>In Progress</strong>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It might take a while to build the map database,
+because it is also building the project.</p>
+</div>
+<p>When Google Earth Enterprise Fusion finishes building the
+database, its <strong>Current State</strong> column in the Asset Manager changes
+to <strong>Succeeded</strong>, and its <strong>Current Version</strong> column changes to the
+date and time the most recent build was started.</p>
+</li>
+</ol>
+<p class="rubric">Push a Map Database to Google Earth Enterprise Server</p>
+<p class="rubric">To push a map database:</p>
+<ol class="arabic">
+<li><p class="first">Right-click the name of the map database you built in the
+previous exercise, and select <strong>Push</strong> from the context menu.
+The Push Database dialog appears.</p>
+<p><img alt="image18" src="../../images/pushMapDatabase.png" /></p>
+</li>
+<li><p class="first">Click the <strong>Push</strong> button.</p>
+<p>Google Earth Enterprise Fusion pushes the database to the
+Google Earth Enterprise Server, and displays a success message
+when it is done.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you get an error message, contact your Google
+Earth Enterprise Server administrator for help, or check the
+<em>Google Earth Enterprise Administration Guide</em> for more
+information.</p>
+</div>
+</li>
+</ol>
+<p class="rubric" id="index-4">Publish a Map Database on Google Earth Enterprise Server</p>
+<p class="rubric">To publish a database:</p>
+<ol class="arabic">
+<li><p class="first">Access the Google Earth Enterprise Server Admin console in a
+browser window by going to <em>myserver.mydomainname</em>/admin,
+replacing <em>myserver</em> and <em>mydomainname</em> with your server and
+domain.</p>
+</li>
+<li><p class="first">Sign in with the default credentials or the username and
+password assigned to you:</p>
+<ul class="simple">
+<li>Default username: geapacheuser</li>
+<li>Default password: geeadmin</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you do not know your username and password,
+contact your Google Earth Enterprise Server System
+Administrator.</p>
+</div>
+</li>
+<li><p class="first">Click <strong>Databases</strong> to display the list of databases pushed to
+the server.</p>
+</li>
+<li><p class="first">Check the box next to the map database you want to publish. The
+<strong>Publish</strong> button on the Databases page appears.</p>
+</li>
+<li><p class="first">Click the <strong>Publish</strong> button. The Publish dialog appears.</p>
+</li>
+<li><p class="first">Specify a <strong>Publish point</strong> where the database will be
+accessible from. For example, if you specify MySFMap, it will
+be accessible from <em>myserver.mydomainname</em>/MySFMap.</p>
+<p>To learn more about the options available in the Publish
+dialog, see <a class="reference internal" href="../geeServerAdmin/createSearchTabs.html"><span class="doc">Search Tabs</span></a>,
+<a class="reference internal" href="../geeServerAdmin/manageSnippetProfiles.html"><span class="doc">Snippet profiles</span></a>, and
+<a class="reference internal" href="../geeServerAdmin/makeWMSRequests.html"><span class="doc">WMS</span></a>.</p>
+</li>
+<li><p class="first">Click <strong>Publish</strong>. The Databases page updates to indicate the
+published status of your database.</p>
+</li>
+</ol>
+<p class="rubric" id="view-map-database"><span id="index-5"></span>View a Map Database</p>
+<p>After you publish your map database, you can view it from Google
+Earth Enterprise Server or in any browser.</p>
+<p class="rubric">To view your map database from Google Earth Enterprise Server</p>
+<ol class="arabic">
+<li><p class="first">Log in to the Admin console of Google Earth Enterprise Server.</p>
+<p>The Admin console opens to the Databases page.</p>
+</li>
+<li><p class="first">Check the box next to the map database that you want to view.</p>
+</li>
+<li><p class="first">Click <strong>Preview</strong>.</p>
+<p>A new browser tab opens displaying your map database.</p>
+</li>
+</ol>
+<p class="rubric">To view your map database in any browser:</p>
+<ol class="arabic">
+<li><p class="first">Launch any web browser.</p>
+</li>
+<li><p class="first">Point your browser to:</p>
+<p><code class="docutils literal notranslate"><span class="pre">http://myserver.mydomainname/publish_point</span></code></p>
+</li>
+</ol>
+<p>where <em>myserver.mydomainname</em> is the host name or IP address of
+your server to which you published the map database, and
+<em>publish_point</em> is the publish point that you specified when the
+published the map database. For example:</p>
+<blockquote>
+<div><code class="docutils literal notranslate"><span class="pre">http://my_host_name/MySFMap</span></code></div></blockquote>
+<p>If you are not sure which server you published to, contact your
+Google Earth Enterprise Server administrator for help.</p>
+<p>Google Maps displays your database.</p>
+<p class="rubric" id="using-google-base-map"><span id="index-6"></span>Using the Google Base Map</p>
+<p>When you build a map database, you have the option to use the
+Google Base Map. Enabling this feature connects to www.google.com,
+loads Google base map tiles through the Google Maps Javascript API
+V3, and renders your map layers on top of them.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">As per Google’s terms of service, you may need to
+purchase a Maps for Business license if you are deploying your
+application in an internal environment.</p>
+</div>
+<p>Deploying the Google Base Map involves adding it when you build
+your map database.</p>
+<p class="rubric">To build your map database to include the Google Base Map:</p>
+<ol class="arabic">
+<li><p class="first">Select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu. The Asset Manager
+appears.</p>
+</li>
+<li><p class="first">Select <strong>Mercator Map Tools (2D)</strong>. The tools for Mercator maps
+appear in the toolbar.</p>
+</li>
+<li><p class="first">Click <a class="reference internal" href="../../images/iconDatabaseMap1.png"><img alt="image19" src="../../images/iconDatabaseMap1.png" style="width: 20px; height: 20px;" /></a>. The Map Database Editor appears with no
+projects selected.</p>
+<p><img alt="Mercator Maps Database Editor Geo" src="../../images/mapsMercDatabaseEditor-geo.png" /></p>
+</li>
+<li><p class="first">Select the <strong>Use Google Base Map (google.com)</strong> checkbox.</p>
+</li>
+<li><p class="first">Add your map project.</p>
+<p>The map project appears in the Map Database Editor next to Map
+Project.</p>
+</li>
+<li><p class="first">Optionally add an imagery project. This is useful for
+overlaying high-resolution imagery insets on the Google Base
+Map.</p>
+</li>
+<li><p class="first">Select <strong>File &gt; Save</strong>.</p>
+<p>Your map database is saved to the location you specified.</p>
+</li>
+</ol>
+<p><strong>Build</strong>, <strong>Push</strong>, and <strong>Publish</strong> your map database as described in
+<a class="reference internal" href="#define-push-publish-map-database"><span class="std std-ref">Define, Push, and Publish a Map Database</span></a>.</p>
+<p class="rubric">Learn more</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.google.com/maps/documentation/javascript/reference">Google Maps JavaScript API V3
+Reference</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="createImageryMosaic.html" title="Creating Imagery Mosaics"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="confSearchableDB.html" title="Configuring a Searchable Database"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionTutorial.html" >Fusion Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

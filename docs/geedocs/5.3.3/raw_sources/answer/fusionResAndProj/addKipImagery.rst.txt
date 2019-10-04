@@ -1,0 +1,40 @@
+|Google logo|
+
+================
+Add .kip imagery
+================
+
+.. container::
+
+   .. container:: content
+
+      GEE can use pre-processed imagery in **Keyhole Imagery Product**
+      (``.kip``) format. Each ``.kip`` folder has a corresponding
+      **Keyhole Mask Product** (``.kmp``) folder that contains the mask
+      for the imagery. The corresponding folders have the same name.
+
+      To add ``.kip`` imagery to the asset tree:
+
+      #. Store each ``.kip/.kmp`` folder pair in the same directory.
+      #. Set read-and-execute permissions for the ``keyhole:users``
+         account.
+      #. Use the ``khnewimageryasset --havemask`` command to add the
+         files. Specify the asset name, the provider information (USGS),
+         and the location of the ``.kip`` folder. For example, if
+         ``city_one.kip`` and ``city_one.kmp`` are in
+         ``/gevol/src/preprocessed/noame/usa/``, the command is:
+
+         ``genewimageryasset --havemask --provider (PROVIDER_KEY) -o path/to/asset/in/tree/gevol/src/preprocessed/noame/usa/city_one.kip``
+
+      #. Repeat this step for each ``.kip/.kmp`` combination you want to
+         add.
+
+      You can access the assets from the Fusion Asset Manager whenever
+      you want to use them in imagery projects. You are still required to
+      build each asset in the system, but the build time will be
+      insignificant because each ``.kip/.kmp`` combination is
+      preprocessed.
+
+.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
+   :width: 130px
+   :height: 44px

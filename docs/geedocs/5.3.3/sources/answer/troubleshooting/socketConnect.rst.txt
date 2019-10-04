@@ -1,0 +1,24 @@
+
+Socket connect
+
+-[ Error message ]-
+
+"Socket connect"
+
+xxx.xx.xxx.xx
+
+_13031
+
+(where "xxx.xx.xxx.xx" is your IP address)
+
+-[ Description ]-
+
+This appears in the vector Asset Log or when starting Fusion from the
+command line when the system daemons are not running.
+
+-[ Resolution ]-
+
+From the command line, enter:
+
+   sudo /etc/init.d/geserver stop
+   sudo /etc/init.d/geserver start
