@@ -990,7 +990,6 @@ khAssetManager::MercatorMapDatabaseModify(const MapDatabaseEditRequest &req) {
 
 void
 khAssetManager::GetCurrTasks(const std::string &dummy, TaskLists &ret) {
-  assert(!mutex.TryLock());
   notify(NFY_INFO, "GetCurrTasks");
   khLockGuard lock(theResourceManager.mutex);
   theResourceManager.GetCurrTasks(ret);
