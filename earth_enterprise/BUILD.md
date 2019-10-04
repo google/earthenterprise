@@ -6,7 +6,7 @@ __NOTE:__ If you want to build, install, or run Portable server, see the
 Building is currently supported for 64-bit versions of Ubuntu 16.04 LTS,
 RHEL 6, RHEL 7, CentOS 6, and CentOS 7.
 
-## GEE 5.3.2 Build Prerequisites (all platforms)
+## GEE 5.3.3 Build Prerequisites (all platforms)
 
 1. Setup required Tools and Dependencies:
 
