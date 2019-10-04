@@ -58,12 +58,12 @@ Configure Tutorial Workspace
 
 This section explains how to select a different asset root.
 
-Caution:
+Warning: Caution:
 
- Even though your source volumes and asset roots are separate for each
-user or for the tutorial and production data, there is only one
-publish root on each virtual server for Earth databases and one for
-Map databases.
+   Even though your source volumes and asset roots are separate for
+  each user or for the tutorial and production data, there is only one
+  publish root on each virtual server for Earth databases and one for
+  Map databases.
 
 When two users are sharing a single workstation, both users are
 publishing to the same publish root. When one user publishes a
@@ -91,8 +91,6 @@ When you return to the prompt, log out as root.
 Start the system manager by entering:  /etc/init.d/gefusion start
 
 -[ Launch Google Earth Enterprise Fusion ]-
-
--[ To launch Google Earth Enterprise Fusion: ]-
 
 Open a Linux terminal window.
 
@@ -123,12 +121,12 @@ tutorial asset root
 In this exercise, you add subfolders to the tutorial asset root, so
 you can store your assets in an organized way.
 
-Caution:
+Warning: Caution:
 
- Once you create subfolders in your asset root, you cannot delete
-them. This makes it especially important for you to plan out and
-organize your subfolders before you or anyone else begins working with
-real data in Google Earth Enterprise Fusion.
+   Once you create subfolders in your asset root, you cannot delete
+  them. This makes it especially important for you to plan out and
+  organize your subfolders before you or anyone else begins working
+  with real data in Google Earth Enterprise Fusion.
 
 -[ To add a subfolder: ]-
 
@@ -176,7 +174,7 @@ Provider Manager
 Click the Page Icon icon:  The Edit Provider dialog appears. Edit
 Provider Dialog
 
-Enter the following information: Name: USGS Imagery Key: USGS-I
+Enter the following information:  Name: USGS Imagery Key: USGS-I
 Copyright Text: Imagery © 2005 USGS To enter the copyright symbol,
 open a text editor, press CTRL-SHIFT-U, then enter the Unicode 00A9.
 Copy and paste the displayed symbol into the dialog.
@@ -184,17 +182,12 @@ Copy and paste the displayed symbol into the dialog.
 Click OK.
 
 Repeat steps 2 through 4 to add the following source providers:
-===================== ====== =========================================
-Name                  Key    Copyright Text =====================
-====== ========================================= i3
-i3     Imagery © 2005 i3 USGS Maps             USGS-M Roads © 2005
-USGS GNIS/US Census Bureau GNIS   Population © 2005 GNIS USGS POIs
-USGS-P POIs © 2004 USGS USGS Terrain          USGS-T Terrain © USGS
-2003 NASA Imagery          NASA   Imagery courtesy NASA’s Earth
-Observatory ===================== ======
-=========================================  The new providers appear in
-the Provider Manager dialog in the order in which you added them:
-Provider Manager Full
+Name  Key  Copyright Text  i3  i3  Imagery © 2005 i3  USGS Maps
+USGS-M  Roads © 2005 USGS  GNIS/US Census Bureau  GNIS  Population ©
+2005 GNIS  USGS POIs  USGS-P  POIs © 2004 USGS  USGS Terrain  USGS-T
+Terrain © USGS 2003  NASA Imagery  NASA  Imagery courtesy NASA’s Earth
+Observatory  The new providers appear in the Provider Manager dialog
+in the order in which you added them: Provider Manager Full
 
 Click OK to close the Provider Manager.
 

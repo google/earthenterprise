@@ -8,7 +8,7 @@ and test whether the portable file appears to be valid.
 
 -[ geglxinfo ]-
 
-   geglxinfo [--glx glb_file_path]
+"geglxinfo [--glx glb_file_path]"
 
 -[ Purpose ]-
 
@@ -26,19 +26,22 @@ Valid file check
 
 Get file timestamp
 
-"$ geglxinfo --glx tutorial_3d.glc --extract_file earth/info.txt
---output /tmp/info.txt $ cat /tmp/info.txt Portable Globe Copyright
-2013 Google Inc. All Rights Reserved. 2014-01-15 16:03:15 GMT
-2014-01-15 08:03:15 Globe description: Simple container for tutorial
-glb with gray marble backdrop. 2014-01-15 08:03:15 Executing:
-/opt/google/bin/gecreatemetadbroot
---output="/tmp/cutter/glc_20598_1389801795.111116/metadbroot" --layer
-s="/tmp/cutter/glc_20598_1389801795.111116/earth/dbroot_layer_info.tx
-t"  --has_base_imagery  2014-01-15 08:03:15 SUCCESS 2014-01-15
-08:03:15 Executing: /opt/google/bin/geportableglcpacker --layer_info=
-"/tmp/cutter/glc_20598_1389801795.111116/earth/layer_info.txt"
---output="/tmp/cutter/glc_20598_1389801795.111116/temp.glc"
---make_copy"
+   $ geglxinfo --glx tutorial_3d.glc --extract_file earth/info.txt --output
+   /tmp/info.txt
+   $ cat /tmp/info.txt
+   Portable Globe
+   Copyright 2013 Google Inc. All Rights Reserved.
+   2014-01-15 16:03:15 GMT
+
+   2014-01-15 08:03:15
+   Globe description: Simple container for tutorial glb with gray marble backdrop.
+   2014-01-15 08:03:15
+   Executing: /opt/google/bin/gecreatemetadbroot --output="/tmp/cutter/glc_20598_1389801795.111116/metadbroot" --layers="/tmp/cutter/glc_20598_1389801795.111116/earth/dbroot_layer_info.txt"  --has_base_imagery
+
+   2014-01-15 08:03:15
+   SUCCESS
+   2014-01-15 08:03:15
+   Executing: /opt/google/bin/geportableglcpacker --layer_info="/tmp/cutter/glc_20598_1389801795.111116/earth/layer_info.txt" --output="/tmp/cutter/glc_20598_1389801795.111116/temp.glc" --make_copy``
 
 Tip: You can use the timestamp information if you need to determine
   which version of GEE was used to create your portable globes or map.
@@ -110,7 +113,7 @@ Number of packets
 
 -[ geglxinfo commands ]-
 
-   --is_gee
+"--is_gee"
 
 Optional
 
@@ -120,30 +123,30 @@ this validity check before testing your globe using "--crc",
 especially on larger files, as it will catch almost all integrity
 issues.
 
-   --glx glb_file_path
+"--glx glb_file_path"
 
 The path and file name of the portable globe or map that you want to
 analyze.
 
-   --list_files
+"--list_files"
 
 Optional
 
 . Lists all of the files in the .glx.
 
-   --id
+"--id"
 
 Optional
 
 . Unused.
 
-   --check_crc
+"--check_crc"
 
 Optional
 
 . Checks the crc of the .glx.
 
-   --extract_file relative_file_path
+"--extract_file relative_file_path"
 
 Optional
 
@@ -151,7 +154,7 @@ Optional
 extract a .glm or .glb layer from one .glc in order to add it to a
 second .glc file.
 
-   --extract_all_files
+"--extract_all_files"
 
 Optional
 
@@ -159,38 +162,38 @@ Optional
 extract .glm or .glb layers from one .glc in order to add them to a
 second .glc file.
 
-   --number_of_packets
+"--number_of_packets"
 
 Optional
 
 . Returns the number of data packets in the .glx.
 
-   --extract_packet quadtree_address
+"--extract_packet quadtree_address"
 
 Optional
 
 . Extracts a packet at a given quadtree address, for example, 310.
 
-   --extract_packets
+"--extract_packets"
 
 Optional
 
 . Extract all packets from a portable file. Can be used with start_idx
 and end_idx parameters, and the layer_idx parameter if it is a .glc.
 
-   --packet_type type_string
+"--packet_type type_string"
 
 Optional
 
 . Type of packet to extract: "dbroot, qtp, img, ter, or vec".
 
-   --packet_channel channel_int
+"--packet_channel channel_int"
 
 Optional
 
 . Channel of packet to extract.
 
-   --output dest_file_path
+"--output dest_file_path"
 
 Optional
 

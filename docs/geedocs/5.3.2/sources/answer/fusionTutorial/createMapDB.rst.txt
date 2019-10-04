@@ -51,10 +51,8 @@ Add flat imagery to Mercator map databases in GEE 5.1.0
 
 .
 
-Note: Note:
-
-   As an alternative to your own imagery resources, you can use the
-  Google Base Map in place of an imagery project. See
+Note: As an alternative to your own imagery resources, you can use
+  the Google Base Map in place of an imagery project. See
 
   Using the Google Base Map
 
@@ -167,11 +165,11 @@ the text style button (labeled Sans/12) to specify a different text
 style for the labels.  The Text Style dialog appears.
 
 For Size, change the value to 10, and accept the default setting for
-Color, black.  Note: In version 3.0 and beyond, only one font and
-style is provided, Sans regular. However, you can create a
-configuration file in which you can specify additional fonts, if
-desired. Refer to the Administration Guide for details.  A preview of
-the label appears in the Preview box.
+Color, black.  In version 3.0 and beyond, only one font and style is
+provided, Sans regular. However, you can create a configuration file
+in which you can specify additional fonts, if desired. Refer to the
+Administration Guide for details.  A preview of the label appears in
+the Preview box.
 
 Drag the preview over any button on the left. The new style is stored
 on that button. The button name reflects the font and font size of the
@@ -285,27 +283,13 @@ Enter the name SFBayAreaLanSat_Merc, and click Save.
 
 Select File > Close
 
-Repeat steps 3 through 11 for the table that follows: +-------------+
--------------+-------------+-------------+-------------+ | Name
-| Acquisition | Provider    | Mask        | Source file | |
-(Resources/ | Date        |             |             |             |
-| Imagery/... |             |             |             |
-| | )           |             |             |             |
-| +=============+=============+=============+=============+==========
-===+ | BlueMarbl | Today's     | NASA        | **No Mask | bluemarbl |
-| e_Merc**    | date        | Imagery     |             | e_4km.tif | 
-+-------------+-------------+-------------+-------------+------------
--+ | i3_15Mete | Today's     | i3          | | **Auto    | ``i3SF15-me
-| | r_Merc    | date        |             |   Mask**    | ter.tif``
-| |             |             |             | | Default   |
-| |             |             |             |   values.   |
-| +-------------+-------------+-------------+-------------+----------
----+ | SFHighRes | Today's     | USGS        | **Auto      |
-``usgsSFHiR | | Inset_Merc* | date        | Imagery     | Mask      |
-es.tif``    | | *           |             |             | Default
-|             | |             |             |             | values.
-|             | +-------------+-------------+-------------+----------
----+-------------+
+Repeat steps 3 through 11 for the table that follows:
+
+          Name (Resources/Imagery/...)  Acquisition Date  Provider
+Mask  Source File  BlueMarble_Merc  Today's date  NASA Imagery  No
+Mask  bluemarble_4km.tif  i3_15Meter_Merc  Today's date  i3  Auto Mask
+Default values  i3SF15-meter.tif  SFHighResInset_Merc  Today's date
+USGS Imagery  Auto Mask Default values  usgsSFHiRes.tif
 
 Click image11. The Mercator Imagery Project Editor appears with no
 resources selected. image12
@@ -359,12 +343,11 @@ between Google Earth databases and Google Maps database.
 
 Right-click SFMapDatabase and select Build from the context menu. The
 status of the database immediately changes to Waiting or Queued and
-then to In Progress.  Note: It might take a while to build the map
-database, because it is also building the project.  When Google Earth
-Enterprise Fusion finishes building the database, its Current State
-column in the Asset Manager changes to Succeeded, and its Current
-Version column changes to the date and time the most recent build was
-started.
+then to In Progress.  It might take a while to build the map database,
+because it is also building the project.  When Google Earth Enterprise
+Fusion finishes building the database, its Current State column in the
+Asset Manager changes to Succeeded, and its Current Version column
+changes to the date and time the most recent build was started.
 
 -[ Push a Map Database to Google Earth Enterprise Server ]-
 
@@ -376,9 +359,9 @@ dialog appears.  image18
 
 Click the Push button.  Google Earth Enterprise Fusion pushes the
 database to the Google Earth Enterprise Server, and displays a success
-message when it is done.  Note: If you get an error message, contact
-your Google Earth Enterprise Server administrator for help, or check
-the Google Earth Enterprise Administration Guide for more information.
+message when it is done.  If you get an error message, contact your
+Google Earth Enterprise Server administrator for help, or check the
+Google Earth Enterprise Administration Guide for more information.
 
 -[ Publish a Map Database on Google Earth Enterprise Server ]-
 
@@ -390,8 +373,8 @@ mydomainname with your server and domain.
 
 Sign in with the default credentials or the username and password
 assigned to you:  Default username: geapacheuser  Default password:
-geeadmin  Note: If you do not know your username and password, contact
-your Google Earth Enterprise Server System Administrator.
+geeadmin  If you do not know your username and password, contact your
+Google Earth Enterprise Server System Administrator.
 
 Click Databases to display the list of databases pushed to the server.
 
@@ -409,7 +392,7 @@ profiles, and WMS.
 Click Publish. The Databases page updates to indicate the published
 status of your database.
 
--[ View Your Map Database ]-
+-[ View a Map Database ]-
 
 After you publish your map database, you can view it from Google Earth
 Enterprise Server or in any browser.
@@ -423,7 +406,7 @@ Check the box next to the map database that you want to view.
 
 Click Preview.  A new browser tab opens displaying your map database.
 
--[ To view your map database in any browser ]-
+-[ To view your map database in any browser: ]-
 
 Launch any web browser.
 
@@ -455,16 +438,14 @@ Base Map. Enabling this feature connects to www.google.com, loads
 Google base map tiles through the Google Maps Javascript API V3, and
 renders your map layers on top of them.
 
-Note: Note:
-
-   As per Google's terms of service, you may need to purchase a Maps
-  for Business license if you are deploying your application in an
-  internal environment.
+Note: As per Google's terms of service, you may need to purchase a
+  Maps for Business license if you are deploying your application in
+  an internal environment.
 
 Deploying the Google Base Map involves adding it when you build your
 map database.
 
--[ To build your map database to include the Google Base Map ]-
+-[ To build your map database to include the Google Base Map: ]-
 
 Select Asset Manager from the Tools menu. The Asset Manager appears.
 
@@ -503,4 +484,4 @@ Define, Push, and Publish a Map Database
 
 -[ Learn more ]-
 
-Google Maps Javascript API V3 Reference
+Google Maps JavaScript API V3 Reference

@@ -25,9 +25,7 @@ Because you already defined display rules for population by county in
 the state of California in the last chapter, most of the work is
 already done.
 
-Note: Note:
-
-   If you have not completed
+Note: If you have not completed
 
   Configuring Display Rules for Polygon Data
 
@@ -114,15 +112,15 @@ Right-click USPopulation, and select Layer Properties from the context
 menu.  The Layer Properties dialog appears.
 
 Click Off next to Initial State to change it to On.  Changing the
-initial state to on results in the US Population layer being
+initial state to On results in the US Population layer being
 automatically checked (turned on) in Google Earth EC.
 
 Right-click USPopulation, and select Configure Display Rules from the
 context menu.  The Configure Display Rules dialog appears.
 
 Set Max Resolution Level to 14 (or to 12 if you want to save some
-time).  Tip: Leaving the level set at the default, 18, results in
-unduly long processing time.
+time).  Leaving the level set at the default, 18, results in unduly
+long processing time.
 
 Click OK.  You return to the Vector Project Editor.
 
@@ -224,14 +222,12 @@ myserver.mydomainname.com/USPopulation-v001.
 
 Click the Sign In button.
 
-Caution:
+Warning: If you have logged in to this server with Google Earth EC
+  previously, log out, clear your cache, and log back in. See
 
- If you have logged in to this server with Google Earth EC previously,
-log out, clear your cache, and log back in. See
+  Clearing the Google Earth EC cache
 
-Clearing the Google Earth EC cache
-
-.
+  .
 
 Zoom in until you can see part of the US.
 
@@ -242,8 +238,8 @@ the counties look and the more county names you can see. As with the
 database you created in Configuring Display Rules for Polygon Data,
 each county’s height indicates its relative population. Counties with
 higher populations are taller, and counties with lower populations are
-shorter.  Note: If you cannot see the vector data, make sure the check
-box next to US Population in the Layers panel is checked.
+shorter.  If you cannot see the vector data, make sure the check box
+next to US Population in the Layers panel is checked.
 
 If this were a real project, you might decide that displaying the
 names of the counties makes this view too cluttered. You can go back

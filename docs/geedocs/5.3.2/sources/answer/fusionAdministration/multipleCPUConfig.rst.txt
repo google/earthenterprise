@@ -94,10 +94,10 @@ Set minNumCPU=3 and maxNumCPU=4 in MapLayerLevel.taskrule (two
 concurrent gemaptilegen jobs possible).
 
 Set minNumCPU=7 and maxNumCPU=7 in CombinedTerrain.taskrule (one
-gecombineterrain task)  Note: **Fusion will use up to 200% CPU
-processing for imagery projects per gepackgen process, and up to 400%
-CPU processing for terrain projects. There is fundamentally a balance
-between assigning sufficient numbers of CPUs to each individual
-process for gepackgen while still enabling multiple concurrent
-gepackgen processes for parallel processing.  All other tasks in
-Fusion will continue to operate with min/max one CPU.
+gecombineterrain task)  Fusion will use up to 200% CPU processing for
+imagery projects per gepackgen process, and up to 400% CPU processing
+for terrain projects. There is fundamentally a balance between
+assigning sufficient numbers of CPUs to each individual process for
+gepackgen while still enabling multiple concurrent gepackgen processes
+for parallel processing.  All other tasks in Fusion will continue to
+operate with min/max one CPU.

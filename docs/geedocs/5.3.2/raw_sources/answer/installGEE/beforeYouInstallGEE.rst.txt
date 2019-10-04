@@ -11,8 +11,7 @@ Before you install Google Earth Enterprise
       -  :ref:`Overview <Overview_Before_Install_GEE>`
       -  :ref:`Configuring Your Host Volumes <Configuring_Host_Volumes>`
       -  :ref:`Configuring Multiple Storage Devices <Configuring_Multiple_Storage_Devices_GEE>`
-      -  :ref:`Planning the Location of Your Asset
-         Root <Planning_Location_Asset_Root_GEE>`
+      -  :ref:`Planning the Location of Your Asset Root <Planning_Location_Asset_Root_GEE>`
       -  :ref:`Planning the Location of Your Publish Root <Planning_Location_Publish_Root_GEE>`
       -  :ref:`Setting Up Google Earth Enterprise Users <Setting_Up_GEE_Users>`
       -  :ref:`Deciding Which Products To Install <Deciding_Which_Products_Install>`
@@ -32,7 +31,7 @@ Before you install Google Earth Enterprise
       The following sections provide information about what the Google
       Earth Enterprise software requires in each of these areas.
 
-      .. container:: alert
+      .. warning::
 
          Be sure to complete all of the tasks described in these
          sections before installing the Google Earth Enterprise
@@ -67,8 +66,7 @@ Before you install Google Earth Enterprise
       ``/vol1``, that workstation cannot reference
       ``/vol1/assets``\ through the network because of the name conflict
       with its local volume definition. (See :ref:`Planning the Location of
-      Your Asset Root <Planning_Location_Asset_Root_GEE>` for more
-      information about the asset root.)
+      Your Asset Root <Planning_Location_Asset_Root_GEE>` for more information about the asset root.)
 
       You can work around this problem by adopting a unique naming
       convention for all volumes on your network (such as ``/vol1`` ...

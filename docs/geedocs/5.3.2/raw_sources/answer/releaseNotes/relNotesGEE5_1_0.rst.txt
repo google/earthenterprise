@@ -78,7 +78,7 @@ Release notes: GEE 5.1.0
 
       .. rubric:: Known Issues
 
-      .. list-table:: Known Issues
+      .. list-table::
          :widths: 25 25 50
          :header-rows: 1
 

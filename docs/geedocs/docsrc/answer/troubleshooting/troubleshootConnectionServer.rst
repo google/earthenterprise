@@ -25,10 +25,11 @@ Troubleshoot connection to GEE Server
 
       #. Look for client EC requests in the GEE Server logs:
 
-         #. Open a terminal window on the GEE Server.
-         #. Type the command
+         a. Open a terminal window on the GEE Server.
+         b. Type the command
             ``tail -f /opt/google/gehttpd/logs/access_log``
-         #. Start EC and try connecting to your GEE Server.
+         c. Start EC and try connecting to your GEE Server.
+         
             In the terminal window, you should see time-stamped access
             requests in the logs from the client, starting with a GET
             request for the ``dbRoot`` file, followed by ``flatfile``

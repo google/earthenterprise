@@ -127,7 +127,7 @@ Portable Release Notes 5.0
 
       .. rubric:: Known Issues
 
-      .. list-table:: Known Issues
+      .. list-table::
          :widths: 10 40 40
          :header-rows: 1
 
@@ -142,7 +142,7 @@ Portable Release Notes 5.0
 
       .. rubric:: Resolved Issues
 
-      .. list-table:: Resolved Issues
+      .. list-table::
          :widths: 10 40 10
          :header-rows: 1
 

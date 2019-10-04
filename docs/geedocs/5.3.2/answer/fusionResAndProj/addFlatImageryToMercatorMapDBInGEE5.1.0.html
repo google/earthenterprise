@@ -98,12 +98,12 @@ disk space is a key consideration. However if serving speed is a
 key consideration, you should build both flat and Mercator imagery
 projects. The following table shows the decision matrix to guide
 you:</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils">
 <colgroup>
-<col width="15%" />
-<col width="4%" />
-<col width="6%" />
-<col width="75%" />
+<col width="25%" />
+<col width="13%" />
+<col width="13%" />
+<col width="50%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Build projects/serve databases</th>
@@ -116,7 +116,8 @@ you:</p>
 <tr class="row-even"><td>Flat imagery project</td>
 <td><strong>X</strong></td>
 <td><img alt="image1" src="../../images/checkmark-g16.png" /></td>
-<td><img alt="image2" src="../../images/checkmark-g16.png" /> Disk space is most important. Flat imagery projects used for all database types, with <em>Mercator on the Fly</em> used to serve flat imagery for Mercator map databases.</td>
+<td><img alt="image2" src="../../images/checkmark-g16.png" /> Disk space is most important. Flat imagery projects used for all
+database types, with <em>Mercator on the Fly</em> used to serve flat imagery for Mercator map databases.</td>
 </tr>
 <tr class="row-odd"><td>Mercator imagery project</td>
 <td><img alt="image3" src="../../images/checkmark-g16.png" /></td>
@@ -126,7 +127,8 @@ you:</p>
 <tr class="row-even"><td>Flat and Mercator imagery projects</td>
 <td><img alt="image4" src="../../images/checkmark-g16.png" /></td>
 <td><img alt="image5" src="../../images/checkmark-g16.png" /></td>
-<td><img alt="image6" src="../../images/checkmark-g16.png" /> Serving speed is most important. Flat imagery projects used for 3D and 2D flat databases; Mercator imagery projects for Mercator map databases.</td>
+<td><img alt="image6" src="../../images/checkmark-g16.png" /> Serving speed is most important. Flat imagery projects used for 3D and 2D flat
+databases; Mercator imagery projects for Mercator map databases.</td>
 </tr>
 </tbody>
 </table>
@@ -145,40 +147,48 @@ toolbar. The tools for Mercator maps appear in the toolbar.</p>
 projects selected.</p>
 <p><a class="reference internal" href="../../images/mapsMercDatabaseEditor.png"><img alt="Mercator Maps Database Editor" src="../../images/mapsMercDatabaseEditor.png" style="width: 434px; height: 175px;" /></a></p>
 </li>
-</ol>
-<p>#. Click <img alt="image9" src="../../images/icon_new.gif" /> next to <strong>Map Project</strong>. The Open Asset dialog
-appears.
-#. Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Map</span></code>folder.
-#. Select the map project that you want to add to the map database
+<li><p class="first">Click <img alt="image9" src="../../images/icon_new.gif" /> next to <strong>Map Project</strong>. The Open Asset dialog
+appears.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Map</span></code>folder.</p>
+</li>
+<li><p class="first">Select the map project that you want to add to the map database
 and click <strong>Open</strong>.
-The map project appears in the Map Database
-Editor next to Map Project.
-#. Click <img alt="image10" src="../../images/icon_new.gif" /> next to <strong>Imagery Project</strong>.
-The Open Asset dialog appears.
-#. Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Imagery</span></code> folder.
-#. Select <strong>Flat Imagery Project</strong> from the <strong>Type</strong> drop-down list,
+The map project appears in the Map Database Editor next to Map Project.</p>
+</li>
+<li><p class="first">Click <img alt="image10" src="../../images/icon_new.gif" /> next to <strong>Imagery Project</strong>. The Open Asset dialog appears.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Imagery</span></code> folder.</p>
+</li>
+<li><p class="first">Select <strong>Flat Imagery Project</strong> from the <strong>Type</strong> drop-down list,
 then select the imagery project to add and click <strong>Open</strong>.
 The imagery project appears in the Map Database Editor next to Imagery
-Project.
-#. Select <strong>File &gt; Save</strong>.
-#. Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Databases</span></code> folder.
-#. In the <strong>Name</strong> field, enter a name, and click <strong>Save</strong>.
-In the Asset Manager, the new map database appears, along with the
+Project.</p>
+</li>
+<li><p class="first">Select <strong>File &gt; Save</strong>.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Databases</span></code> folder.</p>
+</li>
+<li><p class="first">In the <strong>Name</strong> field, enter a name, and click <strong>Save</strong>.</p>
+<p>In the Asset Manager, the new map database appears, along with the
 other databases you have created. Notice that the <strong>Category</strong>
 column distinguishes between the Google Earth databases and the
-Google Maps database.
-#. Right-click the name of your map database, and select <strong>Build</strong>
-from the context menu.
-The status of the database immediately
-changes to <strong>Waiting</strong> or <strong>Queued</strong> and then to <strong>In Progress</strong>.
-When Google Earth Enterprise Fusion finishes building the
+Google Maps database.</p>
+</li>
+<li><p class="first">Right-click the name of your map database, and select <strong>Build</strong>
+from the context menu.</p>
+<p>The status of the database immediately changes to <strong>Waiting</strong> or
+<strong>Queued</strong> and then to <strong>In Progress</strong>.</p>
+<p>When Google Earth Enterprise Fusion finishes building the
 database, its <strong>Current State</strong> column in the Asset Manager
 changes to <strong>Succeeded</strong>, and its <strong>Current Version</strong> column
 changes to the date and time the most recent build was started.</p>
+</li>
+</ol>
 <p class="rubric" id="mercator-fly-performance-data">Mercator on the Fly performance data</p>
 <p>Mercator resolution increases relative to Plate Carrée as latitude
-increases (or decreases) from the equator for any given map level
-. Therefore to obtain the correct Mercator resolution, tiles must
+increases (or decreases) from the equator for any given map level.
+Therefore to obtain the correct Mercator resolution, tiles must
 be sampled from higher Plate Carrée levels (known as upsampling).
 The higher the latitude, the greater the number of tiles required
 and, as a result, processing time for <em>Mercator on the Fly</em>
@@ -187,12 +197,12 @@ the number of Plate Carrée tiles required to produce a single
 <em>Mercator on the Fly</em> tile vs. latitude (north or south) and the
 approximate expected increase in processing time assuming cached
 tiles.</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils">
 <colgroup>
-<col width="27%" />
-<col width="14%" />
-<col width="20%" />
-<col width="39%" />
+<col width="25%" />
+<col width="19%" />
+<col width="19%" />
+<col width="38%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Approximate Latitude Range(degrees)</th>
@@ -225,10 +235,8 @@ tiles.</p>
 </tbody>
 </table>
 <p class="rubric">Learn more</p>
-<ul class="simple">
-<li><a class="reference internal" href="../fusionAdministration/pushAndPublishDB.html"><span class="doc">Push and publish databases</span></a></li>
-<li><a class="reference internal" href="../geeServerAdmin/makeWMSRequests.html"><span class="doc">Make Web Map Service (WMS) requests</span></a></li>
-</ul>
+<p><a class="reference internal" href="../fusionAdministration/pushAndPublishDB.html"><span class="doc">Push and publish databases</span></a>
+<a class="reference internal" href="../geeServerAdmin/makeWMSRequests.html"><span class="doc">Make Web Map Service (WMS) requests</span></a></p>
 </div>
 </div>
 </div>

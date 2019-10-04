@@ -55,7 +55,7 @@ Databases page
          -  **Unregister**: To remove a portable from the list of
             databases. If the portable is published, it must be
             unpublished before being unregistered.
-         -  The name of a portable to download it.
+         -  The **name** of a portable to download it.
          -  **Refresh**: To refresh the list of portables.
          -  **Close**: To close the Manage Portables dialog.
 
