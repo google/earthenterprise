@@ -84,14 +84,10 @@ and how to switch back and forth between the tutorial asset root
 and the production asset root. You will also learn how to clean up the
 tutorial files when they are no longer needed.</p>
 <ul class="simple">
-<li><a class="reference internal" href="#download-tutorial-source"><span class="std std-ref">Download the Tutorial Source
-Files</span></a></li>
-<li>:ref:<a href="#id1"><span class="problematic" id="id2">`</span></a>Configure the tutorial asset root and source
-volume &lt;Configuring_Tutorial_Asset_Root&gt;</li>
-<li><a class="reference internal" href="#select-tutorial-asset-root"><span class="std std-ref">Select the tutorial asset
-root</span></a></li>
-<li><a class="reference internal" href="#clean-up-tutorial-workspace"><span class="std std-ref">Clean up the tutorial
-workspace</span></a></li>
+<li><a class="reference internal" href="#download-tutorial-source"><span class="std std-ref">Download the Tutorial Source Files</span></a></li>
+<li><a class="reference internal" href="#configuring-tutorial-asset-root"><span class="std std-ref">Configure the tutorial asset root and source volume</span></a></li>
+<li><a class="reference internal" href="#select-tutorial-asset-root"><span class="std std-ref">Select the tutorial asset root</span></a></li>
+<li><a class="reference internal" href="#clean-up-tutorial-workspace"><span class="std std-ref">Clean up the tutorial workspace</span></a></li>
 </ul>
 <p class="rubric" id="download-tutorial-source">Download the Tutorial Source Files</p>
 <p>The tutorial source files are available in the following archives.
@@ -116,9 +112,12 @@ section of the tutorial - 318 MB</li>
 exist. Extract each archive downloaded to that location. Be sure
 all the files have read permission for all users and directories
 have read and execute permission for all users.</p>
-<p>Note: due to a bug in the current Google Earth Enterprise Open
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Due to a bug in the current Google Earth Enterprise Open
 Source version, vector source files also need the write
 permission.</p>
+</div>
 <p class="rubric" id="configuring-tutorial-asset-root">Configuring the tutorial asset root and source volume</p>
 <p>When you install Google Earth Enterprise, you configure a source
 volume and asset root for your production data. If you accepted
@@ -139,30 +138,29 @@ install the Google Earth Enterprise Fusion tutorial files.</p>
 <li><p class="first">On the command line, log in as root.</p>
 </li>
 <li><p class="first">Stop the system manager by entering:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">gefusion</span> <span class="n">stop</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span> <span class="pre">stop</span></code></p>
 </li>
 <li><p class="first">Enter:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">geconfigureassetroot</span> <span class="o">--</span><span class="n">new</span> <span class="o">--</span><span class="n">assetroot</span> <span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">assets</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">geconfigureassetroot</span> <span class="pre">--new</span> <span class="pre">--assetroot</span> <span class="pre">/username/assets</span></code></p>
 <p>where <em>username</em> is the name of the user.</p>
 <p>The <em>username</em> does not have to be the user’s official account
 name. It can be anything that distinguishes that user from
 other users on that particular workstation, such as
 <code class="docutils literal notranslate"><span class="pre">edaniels</span></code> or just <code class="docutils literal notranslate"><span class="pre">Emily</span></code>.</p>
-<p><strong>Note:</strong> Google recommends that you place the tutorial asset
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Google recommends that you place the tutorial asset
 root on the same partition as the publish root, so the
 publisher uses hard links instead of making copies of the
 tutorial databases.</p>
-<p>If you place the tutorial asset root on the root partition,
+<p class="last">If you place the tutorial asset root on the root partition,
 ensure that there is enough disk space for the data created by
 each user working through the tutorial. If a user completes all
 lessons in the tutorial, allow 1.5 GB of disk space.</p>
+</div>
 <p>The tool asks if you want to create a new source volume.</p>
 </li>
-<li><p class="first">Enter <code class="docutils literal notranslate"><span class="pre">**Y**</span></code>, and press <strong>Enter</strong>.</p>
+<li><p class="first">Enter <strong>Y</strong>, and press <strong>Enter</strong>.</p>
 <p>You are prompted to enter a directory for the source volume.</p>
 </li>
 <li><p class="first">Enter <code class="docutils literal notranslate"><span class="pre">/opt/google/share/tutorials/fusion</span></code>, and press
@@ -170,8 +168,8 @@ lessons in the tutorial, allow 1.5 GB of disk space.</p>
 <p>The tool asks if you want to add more volumes.</p>
 </li>
 <li><p class="first">If you want to create tutorial workspaces for more users,
-enter <code class="docutils literal notranslate"><span class="pre">**Y**</span></code>, press <strong>Enter</strong>, and repeat steps <strong>3</strong> through
-<strong>5</strong>. If not, skip this step. Otherwise, enter <code class="docutils literal notranslate"><span class="pre">**N**</span></code>, and
+enter <strong>Y</strong>, press <strong>Enter</strong>, and repeat steps <strong>3</strong> through
+<strong>5</strong>. If not, skip this step. Otherwise, enter <strong>N</strong>, and
 press <strong>Enter</strong>.</p>
 <p>The tool displays the message “Configured
 <code class="docutils literal notranslate"><span class="pre">/</span></code><em>username</em><code class="docutils literal notranslate"><span class="pre">/assets</span></code>” and returns you to the
@@ -180,14 +178,15 @@ command line prompt.</p>
 <li><p class="first">Log out as root.</p>
 </li>
 <li><p class="first">Start the system manager by entering:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">gefusion</span> <span class="n">start</span>
-</pre></div>
-</div>
-<p><strong>Note:</strong> The new source volume and asset root are
+<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span> <span class="pre">start</span></code></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The new source volume and asset root are
 automatically selected for you. You do not have to run the
 <code class="docutils literal notranslate"><span class="pre">geselectassetroot</span></code> command. (See the next section, <a class="reference internal" href="#select-tutorial-asset-root"><span class="std std-ref">Select
 the Tutorial Asset Root</span></a>, for
 more information about selecting different asset roots.)</p>
+</div>
 </li>
 </ol>
 <p class="rubric" id="select-tutorial-asset-root">Select the tutorial asset root</p>
@@ -206,36 +205,29 @@ production data, there is only one publish root on each virtual
 server for Earth databases and one for Map databases.</p>
 <p>When two users are sharing a single workstation, they are both
 publishing to the same publish root. When one user publishes a
-database on that workstation, it overwrites any database published previously by another user on that same
-workstation. Likewise, if a user is switching back and forth
-between tutorial and production data on the same workstation, it
-is possible to overwrite a production database with a tutorial
-database and vice versa. Of course, the user can simply republish
-the desired database to make it available to Google Earth EC
-again.</p>
+database on that workstation, it overwrites any database published
+previously by another user on that same workstation. Likewise, if
+a user is switching back and forth between tutorial and production
+data on the same workstation, it is possible to overwrite a production
+database with a tutorial database and vice versa. Of course, the
+user can simply republish the desired database to make it available
+to Google Earth EC again.</p>
 <p class="rubric" id="to-select-the-tutorial-asset-root">To select the tutorial asset root:</p>
 <ol class="arabic">
 <li><p class="first">On the command line, log in as root.</p>
 </li>
 <li><p class="first">Stop the system manager by entering:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">gefusion</span> <span class="n">stop</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span> <span class="pre">stop</span></code></p>
 </li>
 <li><p class="first">Enter:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">geselectassetroot</span> <span class="o">--</span><span class="n">assetroot</span> <span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">assets</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">geselectassetroot</span> <span class="pre">--assetroot</span> <span class="pre">/username/assets</span></code></p>
 <p>where <em>username</em> is the name you used in step <strong>3</strong> of
-<a class="reference internal" href="#configuring-tutorial-asset-root"><span class="std std-ref">Configuring the tutorial asset root and source
-volume</span></a>.</p>
+<a class="reference internal" href="#configuring-tutorial-asset-root"><span class="std std-ref">Configuring the tutorial asset root and source volume</span></a>.</p>
 </li>
 <li><p class="first">Log out as root.</p>
 </li>
 <li><p class="first">Start the system manager by entering:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">gefusion</span> <span class="n">start</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span> <span class="pre">start</span></code></p>
 </li>
 </ol>
 <p class="rubric" id="clean-up-tutorial-workspace">Clean up the tutorial workspace</p>
@@ -244,77 +236,70 @@ data, you can clean up that tutorial workspace, if desired, by
 removing the tutorial source files, asset root, and published
 databases. This section describes the best way to perform that
 cleanup.</p>
-<p><strong>Note:</strong> Google recommends that you keep the tutorial files
-intact, since they use very little space and can come in handy for
-users to practice, even after they have quite a bit of experience
-with Google Earth Enterprise Fusion.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Google recommends that you keep the tutorial files intact, since
+they use very little space and can come in handy for users to practice,
+even after they have quite a bit of experience with Google Earth
+Enterprise Fusion.</p>
+</div>
 <p class="rubric" id="to-remove-the-tutorial-source-files-asset-root-and-databases">To remove the tutorial source files, asset root, and
 databases:</p>
 <ol class="arabic">
 <li><p class="first">At the command line prompt, log in as root.</p>
 </li>
 <li><p class="first">Stop the system manager by entering:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">gefusion</span> <span class="n">stop</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span> <span class="pre">stop</span></code></p>
 </li>
 <li><p class="first">Select the production asset root by entering:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">geselectassetroot</span> <span class="o">--</span><span class="n">assetroot</span> <span class="o">/</span><span class="n">gevol</span><span class="o">/</span><span class="n">assets</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">geselectassetroot</span> <span class="pre">--assetroot</span> <span class="pre">/gevol/assets</span></code></p>
 <p>Substitute the appropriate asset root path, if necessary.</p>
 </li>
 <li><p class="first">Stop the Google Earth Enterprise Server:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">geserver</span> <span class="n">stop</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">stop</span></code></p>
 </li>
-<li><p class="first">Delete the tutorial files:
-<code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">-Rf</span> <span class="pre">/opt/google/share/tutorials/fusion/</span></code></p>
+<li><p class="first">Delete the tutorial files:</p>
+<p><code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">-Rf</span> <span class="pre">/opt/google/share/tutorials/fusion/</span></code></p>
 </li>
 <li><p class="first">Delete the user’s tutorial asset root by entering:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rm</span> <span class="o">-</span><span class="n">Rf</span> <span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">assets</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">-Rf</span> <span class="pre">/username/assets</span></code></p>
 <p>where <em>username</em> is the name of the user you specified when you
 configured the tutorial workspace.</p>
-<p><strong>Caution:</strong> Make sure you are removing the tutorial asset
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Make sure you are removing the tutorial asset
 root, not the production root. If you delete the production
 root, there is no way to recover it (other than from backups,
 if available).</p>
+</div>
 </li>
 <li><p class="first">Start the Google Earth Enterprise Fusion system manager and
 Google Earth Enterprise Server:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">gefusion</span> <span class="n">start</span>
-<span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">geserver</span> <span class="n">start</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span> <span class="pre">start</span></code>
+<code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">start</span></code></p>
 <p>The order in which you start them does not matter.</p>
 </li>
 <li><p class="first">List the databases on the current server by entering:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">geserveradmin</span> <span class="o">--</span><span class="n">listdbs</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--listdbs</span></code></p>
 <p>The tool displays a list of all databases ever published
 (other than deleted databases) on the server. If the server
 type is omitted, the server type defaults to <code class="docutils literal notranslate"><span class="pre">stream</span></code>.</p>
 </li>
 <li><p class="first">Select the database you want to remove by entering:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">geserveradmin</span> <span class="o">--</span><span class="n">deletedb</span> <span class="n">db_name</span><span class="o">...</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--deletedb</span> <span class="pre">db_name...</span></code></p>
 <p>where <em>db_name</em> is the name of the database you want to delete.</p>
-<p><strong>Note:</strong> If you want to delete a currently published database,
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>If you want to delete a currently published database,
 you can either publish a different database to the same virtual
 server or disable the virtual server on which it is published.
 Then you can delete the database.</p>
-<p>This tool does not delete the actual files. It is similar to
+<p class="last">This tool does not delete the actual files. It is similar to
 putting files in the trash on a Windows or Mac desktop.</p>
+</div>
 </li>
 <li><p class="first">Permanently delete the selected databases by entering:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">geserveradmin</span> <span class="o">--</span><span class="n">garbagecollect</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--garbagecollect</span></code></p>
 </li>
 </ol>
 </div>

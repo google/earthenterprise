@@ -1,0 +1,23 @@
+
+EC bandwidth requirements
+
+User behavior dramatically influences bandwidth requirements. However,
+even with a good set of log files, bandwidth usage for Google Earth is
+difficult to measure. When assessing how much bandwidth you need, keep
+in mind the following considerations:
+
+Google Earth servers use HTTP, which is inherently stateless. This
+means that it is very difficult to measure concurrent users because it
+is not clear when users log out of the client or when users move to
+another application and leave the client running.
+
+The Google Earth client has a local cache, so after a user has visited
+one area on the globe, those tiles are not re-requested from the
+server. Consequently, bandwidth usage is affected by the size of the
+local cache and how often users revisit areas.
+
+User traffic comes in bursts, not a steady stream. When a client flies
+to a new location, the new set of tiles are sent to the client,
+causing a spike in traffic. After the client stops in one place,
+traffic goes to zero. You should set bandwidth requirements high
+enough to accommodate spikes in usage.

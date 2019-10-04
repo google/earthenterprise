@@ -1,0 +1,346 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Release notes: GEE 5.1.2 &#8212; Google Earth Enterprise 5.3.3 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Release notes: GEE 5.1.1" href="relNotesGEE5_1_1.html" />
+    <link rel="prev" title="Release notes: GEE 5.1.3" href="relNotesGEE5_1_3.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="relNotesGEE5_1_1.html" title="Release notes: GEE 5.1.1"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="relNotesGEE5_1_3.html" title="Release notes: GEE 5.1.3"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../releaseNotes.html" accesskey="U">Release notes</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="relNotesGEE5_1_3.html"
+                        title="previous chapter">Release notes: GEE 5.1.3</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="relNotesGEE5_1_1.html"
+                        title="next chapter">Release notes: GEE 5.1.1</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp11.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp11.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="release-notes-gee-5-1-2">
+<h1>Release notes: GEE 5.1.2<a class="headerlink" href="#release-notes-gee-5-1-2" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p class="rubric">Overview</p>
+<p>GEE 5.1.2 is an incremental release of
+<a class="reference internal" href="relNotesGEE5_1_0.html"><span class="doc">GEE 5.1</span></a>.
+It contains several bug fixes in Fusion and GEE Server,
+and updates to third-party libraries.</p>
+<p class="rubric">Supported Platforms</p>
+<p>The Google Earth Enterprise 5.1.2 release is supported on 64-bit
+versions of the following operating systems:</p>
+<ul class="simple">
+<li>Red Hat Enterprise Linux versions 6.0 to 7.1, including the
+most recent security patches</li>
+<li>CentOS 6.0 to 7.1</li>
+<li>Ubuntu 10.04 and 12.04 LTS</li>
+</ul>
+<p>Google Earth Enterprise 5.1.2 is compatible with Google Earth
+Enterprise Client (EC) version 7.1.5 and Google Earth Plug-in
+versions 7.0.1 - 7.1.5.1557 for Windows and Mac.</p>
+<p class="rubric">Library Updates</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Library</th>
+<th class="head">Updated Version</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Google Maps JS API V3</td>
+<td>3.20</td>
+</tr>
+<tr class="row-odd"><td>Apache httpd</td>
+<td>2.2.31</td>
+</tr>
+<tr class="row-even"><td>OpenSSL</td>
+<td>0.9.8zg</td>
+</tr>
+<tr class="row-odd"><td>libcurl</td>
+<td>7.45</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Resolved Issues</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="25%" />
+<col width="25%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Number</th>
+<th class="head">Description</th>
+<th class="head">Resolution</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>19946027</td>
+<td>Support additional search option.</td>
+<td>A new <strong>SearchGoogle</strong> search tab is available for use with 3D databases which
+queries Google’s location database. Search sugestions are also offered as you type.</td>
+</tr>
+<tr class="row-odd"><td>20225923, 19871110, 11179114</td>
+<td>gesystemmanager crashes when processing very large projects</td>
+<td>Fixed in Fusion: Optimized management of listeners of CombinedRPAsset versions in asset root.
+Also reduced the size of asset configuration files.</td>
+</tr>
+<tr class="row-even"><td>4431033</td>
+<td>Extra data added in imagery projects for imagery that is not visible</td>
+<td>Fixed in Fusion: skip identical assets with the same bounds.</td>
+</tr>
+<tr class="row-odd"><td>21126307</td>
+<td>Remove option for Disconnected Add-on from GEE Server installer to simplify installation.</td>
+<td>Fixed in GEE Server Installer: Disconnected Add-on is always installed.</td>
+</tr>
+<tr class="row-even"><td>20185775</td>
+<td>Add a tool to check the consistency of pushed databases in the publish root.</td>
+<td>Run <code class="docutils literal notranslate"><span class="pre">gecheckpublishroot.py</span></code>.</td>
+</tr>
+<tr class="row-odd"><td>10280645</td>
+<td><code class="docutils literal notranslate"><span class="pre">gemodifyimageryresource</span></code> incorrectly reports bad images.</td>
+<td>Fixed in Fusion/gevirtualraster.</td>
+</tr>
+<tr class="row-even"><td>16135553</td>
+<td><code class="docutils literal notranslate"><span class="pre">gemaskgen</span></code> reports ‘Process terminated by signal 8’.</td>
+<td>Fixed in Fusion: check for invalid image sizes; improve logging.</td>
+</tr>
+<tr class="row-odd"><td>22007798</td>
+<td>Missing Apache directives when adding a SSL virtual host with <code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--ssl</span></code>code&gt; .</td>
+<td>Fixed in GEE Server: properly configure virtual host when ‘vh_url’ parameter is not specified.</td>
+</tr>
+<tr class="row-even"><td>21852939</td>
+<td>Support opacity on 2D map layers.</td>
+<td>Fixed in GEE Server: 2D Map Viewer includes sliders for controlling layer opacity</td>
+</tr>
+<tr class="row-odd"><td>19499802</td>
+<td><code class="docutils literal notranslate"><span class="pre">gebuild</span></code> does not check whether source file has changed.</td>
+<td>Fixed in Fusion: ‘Refresh’ functionality added to <code class="docutils literal notranslate"><span class="pre">gemodifyvectorresource</span></code>,
+<code class="docutils literal notranslate"><span class="pre">gemodifyimageryresource</span></code>, and <code class="docutils literal notranslate"><span class="pre">gemodifyterrainresource</span></code> to detect changes
+to source files, and update assets if necessary.</td>
+</tr>
+<tr class="row-even"><td>4171577</td>
+<td>Disconnected delta publishes not possible if previous database versions are cleaned.</td>
+<td>Fixed in GEE Fusion: generate and store database manifest files within versions of a database.</td>
+</tr>
+<tr class="row-odd"><td>19962321</td>
+<td>Report the number of cached Assets and Asset Versions in <code class="docutils literal notranslate"><span class="pre">getop</span></code></td>
+<td>Fixed in Fusion.</td>
+</tr>
+<tr class="row-even"><td>20859774</td>
+<td>GLC Assembly fails with missing file: <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/cutter/template/earth</span></code>.</td>
+<td>Fixed in GEE Server/Cutter.</td>
+</tr>
+<tr class="row-odd"><td>19995336, 21301170, 21301504</td>
+<td>Selecting “Save As” creates duplicate IDs in Fusion.</td>
+<td>Fixed in Fusion for Map Layer, Raster projects and Vector assets.</td>
+</tr>
+<tr class="row-even"><td>18280076</td>
+<td>Implement dbroot conversion</td>
+<td>Fixed in GEE Server: enable support for disconnected publishing of GEE 4.x database to GEE 5.x Server.</td>
+</tr>
+<tr class="row-odd"><td>6820671</td>
+<td>Fatal error reported while registering disconnected database: unifiedindex files not found</td>
+<td>Fixed in Fusion.</td>
+</tr>
+<tr class="row-even"><td>17303394</td>
+<td>Implement automatic detection of old glbs for globe cutting or assembly</td>
+<td>Fixed in GEE Server.</td>
+</tr>
+<tr class="row-odd"><td>19991743</td>
+<td>Add support for database short names when pushing</td>
+<td>Fixed in GEE Server: e.g. <code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--adddb</span> <span class="pre">Databases/BlueMarble</span></code>.</td>
+</tr>
+<tr class="row-even"><td>18917848</td>
+<td>Include layer icons in 2D Maps</td>
+<td>Fixed in GEE Server.</td>
+</tr>
+<tr class="row-odd"><td>18922625</td>
+<td>Coordinate Search triggers Internal Server error (HTTP 500) for bad query strings</td>
+<td>Fixed in GEE Server: return HTTP 400 for incorrect search requests.</td>
+</tr>
+<tr class="row-even"><td>22097637</td>
+<td>Support search history in client</td>
+<td>Fixed in GEE Server: clicking on ‘History’ in EC shows previous successful search requests.</td>
+</tr>
+<tr class="row-odd"><td>22318180</td>
+<td>Security vulnerabilities in Cutter.</td>
+<td>Fixed in GEE Server/Cutter: patched <code class="docutils literal notranslate"><span class="pre">gecutter</span></code> and validated inputs
+to minimize risk of remote-code execution and SQL-injection when Cutter is enabled.</td>
+</tr>
+<tr class="row-even"><td>24132440</td>
+<td>Uncaught exception when serving 3D glbs: GET /query?request=Json&amp;var;=geeServerDefs&amp;is2d;=t</td>
+<td>Fixed in Portable Server.</td>
+</tr>
+<tr class="row-odd"><td>24103836</td>
+<td>Support ‘Satellite’ mapTypeControl for 2D databases built with Google Basemap</td>
+<td>Fixed in GEE Server.</td>
+</tr>
+<tr class="row-even"><td>23937667</td>
+<td>Search bar is not available when viewing 3D portable globe</td>
+<td>Fixed in Portable Server: POI and Places search available.</td>
+</tr>
+<tr class="row-odd"><td>23557041</td>
+<td>Missing icons in search results</td>
+<td>Fixed in Portable Server.</td>
+</tr>
+<tr class="row-even"><td>22097637</td>
+<td>Provide search tabs for 2D Map portable</td>
+<td>Fixed in GEE Server/Cutter.</td>
+</tr>
+<tr class="row-odd"><td>23569399</td>
+<td>‘db_id’ parameter missing when POI search is not present in a published database’s search services</td>
+<td>Fixed in GEE Server.</td>
+</tr>
+<tr class="row-even"><td>23496088</td>
+<td>Exception thrown when Places search returns no results</td>
+<td>Fixed in Portable Server.</td>
+</tr>
+<tr class="row-odd"><td>20068112</td>
+<td><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--addvh</span> <span class="pre">--ssl</span></code> creates a virtual host with an invalid port number</td>
+<td>Fixed in GEE Server: use the ‘–vhurl’ option for non-default SSL ports.
+See <code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> help for usage &amp; syntax.</td>
+</tr>
+<tr class="row-even"><td>22958187</td>
+<td>Include Google Geocoder in default search services</td>
+<td>Fixed in GEE Server: ‘SearchGoogle’ tab is available as a default search
+service for both 2D and 3D databases; queries Google’s geocoders and requires Internet access (client-side)</td>
+</tr>
+<tr class="row-odd"><td>23399349</td>
+<td>Incorrect handling of POI search queries like “Paris, France”</td>
+<td>Fixed in GEE Server: search queries like “Paris, France” are parsed as a single search token.</td>
+</tr>
+<tr class="row-even"><td>1826725</td>
+<td><code class="docutils literal notranslate"><span class="pre">gepackgen</span></code> fails with ‘Specified data products have different coverage’.</td>
+<td>Fixed in Fusion: implement Cluster Analyzer for virtual rasters <code class="docutils literal notranslate"><span class="pre">*.khvr</span> <span class="pre">files</span></code>.
+It analyzes inset clustering and area ratios to suggest optimal splits of a virtual raster.
+Check <code class="docutils literal notranslate"><span class="pre">gerasterimport</span></code> log, and see <code class="docutils literal notranslate"><span class="pre">gevirtualraster</span></code> for usage and syntax.</td>
+</tr>
+<tr class="row-odd"><td>22414308</td>
+<td>Support snippet for ‘View in Google Maps’ in EC</td>
+<td>Fixed in GEE Server: enable ‘View in Google Maps’ in EC, publishing 3D database i
+with ‘google_maps_url’ snippet set to ‘<a class="reference external" href="http://maps.google.com/">http://maps.google.com/</a>’.</td>
+</tr>
+<tr class="row-even"><td>22958590</td>
+<td>Places queries can makes server unresponsive for large number of search results</td>
+<td>Fixed in GEE Server.</td>
+</tr>
+<tr class="row-odd"><td>22879773</td>
+<td>Federated Search returns HTTP 500 error</td>
+<td>Fixed in GEE Server: if Coordinate search fails, proceed with Places search.</td>
+</tr>
+<tr class="row-even"><td>22954617</td>
+<td>Viewport for displaying multiple POI search results is incorrectly calculated.</td>
+<td>Fixed in GEE Server (2D Map Viewer).</td>
+</tr>
+<tr class="row-odd"><td>21165472</td>
+<td>GLC assembly fails to copy final glc to globes directory, for large glc files</td>
+<td>Fixed in GEE Server/Cutter.</td>
+</tr>
+<tr class="row-even"><td>25422176</td>
+<td>Fusion fails to push databases with very large POI files</td>
+<td>Fixed in Fusion: updated internal data structures to support POI files &gt; 4 GB; i
+improved logging in POI parser to report exceptions when ingesting POI data into postgres.</td>
+</tr>
+<tr class="row-odd"><td>11254639</td>
+<td>EC makes calls to google.com when rendering search results</td>
+<td>Fixed in GEE Server: localized all KML rendering; expose dbroot snippets in
+‘search_config’ group: <code class="docutils literal notranslate"><span class="pre">kml_render_url,</span> <span class="pre">kml_search_url,</span> <span class="pre">error_page_url</span></code>.</td>
+</tr>
+<tr class="row-even"><td>25430798</td>
+<td><code class="docutils literal notranslate"><span class="pre">SearchGoogle</span></code> search tab returns Server Error</td>
+<td>Fixed in GEE Server: updated User-Agent header in search handler.</td>
+</tr>
+<tr class="row-odd"><td>24407861</td>
+<td>Support database pushes over HTTPS/SSL</td>
+<td>Fixed in Fusion: Server Association Manager includes ‘CA certificate’ path and
+‘Insecure SSL connection’ checkbox for self-signed certificates.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="relNotesGEE5_1_1.html" title="Release notes: GEE 5.1.1"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="relNotesGEE5_1_3.html" title="Release notes: GEE 5.1.3"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../releaseNotes.html" >Release notes</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

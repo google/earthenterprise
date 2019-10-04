@@ -1,0 +1,33 @@
+
+Map projections
+
+Google Maps use Mercator projection for browser-based maps. When
+Fusion creates a map that uses
+
+maps.google.com
+
+ imagery as the source, it uses Google Maps projection for the
+rasterized vectors so that they match the underlying Google Map tiles.
+This EPSG code is
+
+EPSG:900913
+
+ or
+
+EPSG:3785
+
+.
+
+However, GEE builds 3D data using the
+
+WGS84
+
+ datum (
+
+EPSG:4326
+
+). If you want to reuse 3D database resources, you can create a flat
+map using the Fusion Flat (Plate Carrée) projection.
+
+If you build a Mercator-based database, you must build resources
+specifically for use with Mercator-based projection.

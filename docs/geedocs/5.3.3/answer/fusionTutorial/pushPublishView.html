@@ -1,0 +1,266 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Pushing, Publishing, and Viewing a Database &#8212; Google Earth Enterprise 5.3.3 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Configuring Display Rules for Point Data" href="displayRulesPoint.html" />
+    <link rel="prev" title="Defining and Building Databases" href="buildDatabase.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="displayRulesPoint.html" title="Configuring Display Rules for Point Data"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="buildDatabase.html" title="Defining and Building Databases"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionTutorial.html" accesskey="U">Fusion Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="buildDatabase.html"
+                        title="previous chapter">Defining and Building Databases</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="displayRulesPoint.html"
+                        title="next chapter">Configuring Display Rules for Point Data</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp3.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp3.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="pushing-publishing-and-viewing-a-database">
+<h1>Pushing, Publishing, and Viewing a Database<a class="headerlink" href="#pushing-publishing-and-viewing-a-database" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>Pushing a database is the process of making a Google Earth
+Enterprise Fusion database available on a Google Earth Enterprise
+Server so that it can then be published for viewing with Google
+Earth EC.</p>
+<p>The <em>push</em> operation copies all the necessary files associated
+with a given 2D/3D Fusion database version to Google Earth
+Enterprise Server and registers the database. Pushing is performed
+from Fusion.</p>
+<p>The <em>publish</em> operation makes a previously pushed database
+available for serving at a specified publish point. Publishing is
+performed on Google Earth Enterprise Server.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This lesson assumes that Google Earth Enterprise
+Fusion, the Google Earth Enterprise Server, and Google Earth EC
+are all installed on your local workstation. If any of these
+applications are installed elsewhere on your network, adjust
+the instructions in this lesson accordingly.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This lesson describes the steps for pushing a 3D
+Fusion database. The same workflow is used to push a 2D
+Mercator database, but note that snippet profiles do not apply
+and that the published map can be viewed in a web browser, not
+Google Earth EC. See <a class="reference internal" href="createMapDB.html"><span class="doc">Creating a Map Database</span></a> for more information.</p>
+</div>
+<ul class="simple">
+<li><a class="reference internal" href="#push-your-database"><span class="std std-ref">Push Your Database</span></a></li>
+<li><a class="reference internal" href="#publish-your-database"><span class="std std-ref">Publish Your Database</span></a></li>
+<li><a class="reference internal" href="#view-your-database"><span class="std std-ref">View Your Database</span></a></li>
+</ul>
+<p class="rubric" id="push-your-database-to-google-earth-enterprise-server"><span id="push-your-database"></span>Push Your Database to Google Earth Enterprise Server</p>
+<p>After you define and build your database, you “push” your database
+to Google Earth Enterprise Server. Pushed databases appear on the
+Databases page of the Google Earth Enterprise Server Admin
+console, from which you can then publish them.</p>
+<p class="rubric">To push a database:</p>
+<ol class="arabic">
+<li><p class="first">Select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu. The Asset Manager
+appears.</p>
+</li>
+<li><p class="first">Navigate to the <strong>SFHighways</strong> database you built in <a class="reference internal" href="buildDatabase.html"><span class="doc">Defining and Building Databases</span></a>.</p>
+</li>
+<li><p class="first">Right-click the name of the database, and select <strong>Push</strong> from
+the context menu.</p>
+<p>The Push Database dialog appears. The default server
+association is the only option on the Server Associations
+drop-down list. The most recent version of the selected
+database is the default selection on the <strong>Version</strong> drop-down
+list.</p>
+<p><img alt="Push Database Dialog" src="../../images/dbasePush-full1.png" /></p>
+</li>
+<li><p class="first">Click the <strong>Push</strong> button. Google Earth Enterprise Fusion pushes the
+database to Google Earth Enterprise Server, and displays a
+success message when it is done.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you get an error message, contact your Google
+Earth Enterprise Server administrator for help, or check the
+documentation on <a class="reference internal" href="../fusionAdministration/beforeYouConfigure.html"><span class="doc">Before you Configure Google Earth Enterprise Fusion</span></a> for more
+information.</p>
+</div>
+</li>
+</ol>
+<p class="rubric" id="publish-your-database-in-google-earth-enterprise-server"><span id="publish-your-database"></span>Publish Your Database in Google Earth Enterprise
+Server</p>
+<p>After you push your database to Google Earth Enterprise Server,
+you can publish it for viewing with Google Earth EC.</p>
+<p class="rubric">To publish a database:</p>
+<ol class="arabic">
+<li><p class="first">Access the Google Earth Enterprise Server Admin console in a
+browser window by going to <em>myserver.mydomainname</em>.com/admin,
+replacing <em>myserver</em> and <em>mydomainname</em> with your server and
+domain.</p>
+</li>
+<li><p class="first">Sign in with the default credentials or the username and
+password assigned to you:</p>
+<ul class="simple">
+<li>Default username: geapacheuser</li>
+<li>Default password:geeadmin</li>
+</ul>
+<blockquote>
+<div><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you do not know your username and password,
+contact your Google Earth Enterprise Server System
+Administrator.</p>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Click <strong>Databases</strong> to display the list of databases pushed to
+the Server.</p>
+<p>SFHighways-v001 is listed. The Description, Type, Date, and
+Size of the database are also noted.</p>
+<p><img alt="GEE Server Database Page" src="../../images/databaseServerList1.png" /></p>
+</li>
+<li><p class="first">Check the box next to SFHighways-v001. The <strong>Publish</strong> button
+on the Databases page appears.</p>
+<p><img alt="GEE Server Database Publish" src="../../images/databaseServerPublish.png" /></p>
+</li>
+<li><p class="first">Click <strong>Publish</strong>. The Publish dialog appears.</p>
+</li>
+<li><p class="first">Change the default <strong>Publish point</strong> from SFHighways-v001 to
+<strong>BayAreaHighways</strong>.</p>
+<p><img alt="GEE Server Database Publish dialog" src="../../images/databaseServerPublishDialog.png" /></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You can publish a database to <em>multiple publish
+points</em>, useful when you want to apply different search
+tabs, snippet profiles, and virtual host settings for
+different viewing needs.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When publishing a database, the publish point you
+specify is case-<em>insensitive</em>. Upper and lower case are not
+differentiated. Make sure each publish point path name you
+specify is unique.</p>
+</div>
+<p>To learn more about the options available in the Publish
+dialog, see</p>
+<ul class="simple">
+<li><a class="reference internal" href="../geeServerAdmin/publishDefaultDatabase.html"><span class="doc">Default database</span></a></li>
+<li><a class="reference internal" href="../geeServerAdmin/createSearchTabs.html"><span class="doc">Search Tabs</span></a></li>
+<li><a class="reference internal" href="../geeServerAdmin/manageSnippetProfiles.html"><span class="doc">Snippet profiles</span></a></li>
+<li><a class="reference internal" href="../geeServerAdmin/makeWMSRequests.html"><span class="doc">WMS</span></a></li>
+</ul>
+</li>
+<li><p class="first">Click the <strong>Publish</strong>  button. The Databases page updates to indicate the
+published status of your database.</p>
+<p><img alt="GEE Server Database Published List" src="../../images/databaseServerListPublished.png" /></p>
+</li>
+</ol>
+<p class="rubric" id="id1"><span id="view-your-database"></span>View Your Database</p>
+<p>After you publish your database, you can view it in Google Earth
+EC. Google Earth EC can be downloaded from
+<a class="reference external" href="https://github.com/google/earthenterprise/wiki/Google-Earth-Enterprise-Client-(EC)">here</a>.</p>
+<p class="rubric" id="to-view-your-database-2">To view your database:</p>
+<ol class="arabic">
+<li><p class="first">Launch Google Earth EC.</p>
+<p>The Login dialog appears.</p>
+</li>
+<li><p class="first">Specify the Publish point by entering or selecting the URL or
+IP address of your server and database in the <strong>Server</strong> field. For
+this tutorial, the Publish point is
+<em>myserver.mydomainname</em>.com/BayAreaHighways, where <em>myserver</em>
+and <em>mydomainname</em> are specific to your server. An example URL
+would be <a class="reference external" href="http://myhostname/BayAreaHighways">http://myhostname/BayAreaHighways</a>.</p>
+</li>
+<li><p class="first">Click the <strong>Sign In</strong> button.</p>
+</li>
+<li><p class="first">Double-click <strong>CAHighways</strong> to zoom in to your road data.</p>
+</li>
+</ol>
+<p>This concludes the basic lessons in this tutorial. If you want to
+continue with the <a class="reference internal" href="about.html#advanced-fusion-tutorial"><span class="std std-ref">advanced lessons</span></a>,
+you can work through them in any order you like. Alternatively,
+you can start working with real data now and come back and work
+through the advanced lessons as you need them.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="displayRulesPoint.html" title="Configuring Display Rules for Point Data"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="buildDatabase.html" title="Defining and Building Databases"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionTutorial.html" >Fusion Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
