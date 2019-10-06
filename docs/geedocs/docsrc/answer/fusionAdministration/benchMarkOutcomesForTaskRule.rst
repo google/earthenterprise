@@ -143,9 +143,9 @@ Benchmarking outcomes for applying task rules
       .. rubric:: Learn more
       :name: learn-more
 
-      -  `Configure Fusion performance <../answer/176738.html>`__
-      -  `Running Fusion on a Machine with Multiple
-         CPUs <../answer/6008655.html>`__
+      -  :doc:`Configure Fusion performance <../fusionAdministration/confTaskRulesForFusionPerf>`
+      -  :doc:`Running Fusion on a Machine with Multiple
+         CPUs <../fusionAdministration/multipleCPUConfig>`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

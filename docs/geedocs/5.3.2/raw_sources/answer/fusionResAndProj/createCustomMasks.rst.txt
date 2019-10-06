@@ -2264,8 +2264,8 @@ Create custom masks
       mask file is used to build the Fusion-format mask (``.kmp``) for a
       resource. It is possible to build complex mask files for image
       resources by combining output from the ``gemaskgen`` automask tool
-      and the ``gepolymaskgen`` tool, as described in the `Case 5
-      Example <Custom_Masks_gemaskgen_gepolymaskgen>`__ where the automatic fill data
+      and the ``gepolymaskgen`` tool, as described in the :ref:`Case 5
+      Example <Custom_Masks_gemaskgen_gepolymaskgen>` where the automatic fill data
       detection of ``gemaskgen`` can be combined with coastline masking
       capabilities of ``gepolymaskgen``.
 

@@ -8,6 +8,8 @@ through 4.4.1.
 
 -[ We recommend you do the following before upgrading to GEE 5.x: ]-
 
+answer/installGEE/sysReqGEEServer.rst
+
 Confirm your hardware and software meet the minimum requirements.
 
 Apply the latest Linux distribution software patches.

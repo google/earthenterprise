@@ -59,8 +59,8 @@ Overview
 
       .. rubric:: Learn More
 
-      -  `Defining and Building Databases <../answer/4412422.html>`__
-      -  `Creating a Map Database <../answer/4412455.html>`__
+      - :doc:`../fusionTutorial/buildDatabase`
+      - :doc:`../fusionTutorial/createMapDB`
 
       .. rubric:: 2. View your build logs
          :name: view-your-build-logs
