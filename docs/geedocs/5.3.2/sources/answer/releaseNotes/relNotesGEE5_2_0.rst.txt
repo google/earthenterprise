@@ -31,7 +31,7 @@ New Tutorial Files
 jp2 format. In addition, the tutorial files are stored and downloaded
 separately from the rest of the Open GEE code.
 
-Open GEE.org Web Site
+OpenGEE.org Web Site
 
 . The Open GEE repository now includes the source code for the Open
 GEE website, which can be viewed at

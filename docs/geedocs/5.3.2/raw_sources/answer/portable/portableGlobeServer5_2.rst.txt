@@ -839,5 +839,6 @@ Portable Globe and Server 5.2
 .. |Portable menu icon| image:: ../../art/fusion/portable/portable_menu_icon.png
    :class: inline
 .. |Broadcast globe icon| image:: ../../art/fusion/portable/broadcast_false.gif
-   :class: inline line-sized
+   :width: 38px
+   :height: 31px
 
