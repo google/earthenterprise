@@ -66,7 +66,7 @@ Release notes: Open GEE 5.3.1
            - If one builds a project the status of the qtpacket will show as Bad even
              though it actually built successfully. This fixes the issue.
          * - 1304
-           - Creating issues tickets in OpenGEE repo does not provide guidelines
+           - Creating issues tickets in Open GEE repo does not provide guidelines
            - Added template to create new issues in Open GEE repo.
          * - 1317
            - Lacking Test cases for genewimageryresource

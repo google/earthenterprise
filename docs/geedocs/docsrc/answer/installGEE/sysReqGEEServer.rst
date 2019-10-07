@@ -21,7 +21,7 @@ System Requirements for GEE Server
             accesses Fusion.
 
          .. note::
-         
+
             If you plan on cutting globes, this processing can
             be CPU-intensive and you may also need to plan on providing
             more storage depending on the size of the globes.
@@ -37,7 +37,7 @@ System Requirements for GEE Server
 
          **Operating Systems**
 
-         OpenGEE is supported only on the 64-bit versions of the
+         Open GEE is supported only on the 64-bit versions of the
          operating systems listed below.
 
          -  Red Hat Enterprise Linux 6.x and 7.x, including the most
@@ -65,7 +65,7 @@ System Requirements for GEE Server
          -  For GEE 4.4, use Google Earth EC version 6.1 or later
 
          .. note::
-         
+
             Although older versions of Google Earth EC,
             i.e., 6.0 and earlier, *may* still connect to Google
             Earth Enterprise or Portable 3D databases, not all

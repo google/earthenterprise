@@ -137,11 +137,10 @@ AuthDigestProvider file    AuthUserFile
 user </Location>
 
 Create the password with a given user name using the password path
-that you specified in the digest_host.location file:
-
-   sudo htdigest -c /opt/google/gehttpd/conf.d/virtual_servers/.htdigest Private username
-   sudo chmod 755 /opt/google/gehttpd/conf.d/virtual_servers/.htdigest
-   #Enter password twice at prompt
+that you specified in the digest_host.location file:  sudo htdigest -c
+/opt/google/gehttpd/conf.d/virtual_servers/.htdigest Private username
+sudo chmod 755 /opt/google/gehttpd/conf.d/virtual_servers/.htdigest
+#Enter password twice at prompt
 
 Restart geserver after virtual host settings have been modified.  sudo
 /etc/init.d/geserver restart  A virtual host can also be configured

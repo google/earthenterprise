@@ -195,7 +195,7 @@ file filters ignore files with the ".tiff" extension  Added ".tiff" to
 list of supported format extensions  321, 335, 359  If there is an
 error while saving a resource, the resource cannot be saved again even
 if the error is resolved  Fixed out-of-sync errors  355  Package gtest
-under CentOS/RHEL 6  instructions for building OpenGEE under CentOS 6
+under CentOS/RHEL 6  instructions for building Open GEE under CentOS 6
 were updated and build scripts modified to detect and use
 "devtoolset-2-toolchain"  375  Invalid version of psycopg2 on Ubuntu
 16.04  Added PYTHONPATH to Apache environment, so it gets passed on to

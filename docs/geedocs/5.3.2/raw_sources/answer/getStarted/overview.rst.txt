@@ -59,8 +59,8 @@ Overview
 
       .. rubric:: Learn More
 
-      -  `Defining and Building Databases <../answer/4412422.html>`__
-      -  `Creating a Map Database <../answer/4412455.html>`__
+      - :doc:`../fusionTutorial/buildDatabase`
+      - :doc:`../fusionTutorial/createMapDB`
 
       .. rubric:: 2. View your build logs
          :name: view-your-build-logs
@@ -95,6 +95,7 @@ Overview
         search tabs and snippets. Once published, your database is ready
         to be accessed by users through Google Earth EC (3D) or a web
         browser (2D).
+
       | If you want to publish databases on a server that does not have
         a network connection to your Fusion workstation, you can create
         a “disconnected database” which can be placed on portable media,
