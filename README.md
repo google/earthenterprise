@@ -49,7 +49,6 @@ following operating systems:
 * CentOS 7
 * Red Hat Enterprise Linux 6
 * Red Hat Enterprise Linux 7
-* Ubuntu 14.04 LTS
 * Ubuntu 16.04 LTS
 
 Refer to the [BUILD.md file](./earth_enterprise/BUILD.md) for instructions on
