@@ -394,7 +394,10 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
     // chkconfig fails, so this dependency is explicit.
     requires('chkconfig')
     requires('shadow-utils')
-    requires('python27')
+
+    version_string = "${findBuildNumber()}.${rpmPlatformString}"
+    if version_string.contains('el6'):
+        requires('python27')
 
     requiresCommands(packageSharedCommands +
         ['cat', 'cut', 'getent', 'grep'])
