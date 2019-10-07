@@ -112,10 +112,8 @@ public:
     using Impl = MockAssetVersionImpl;
     static string testSubTypeToUseForStringConstructor;
     shared_ptr<Impl> impl = nullptr;
-    shared_ptr<MockMutableAssetVersion> impl_ = nullptr;
 
     MockMutableAssetVersion() = default;
-    MockMutableAssetVersion(shared_ptr<Impl> impl_) : impl(impl_) {}
     MockMutableAssetVersion(const string& ref_)
     {
         MockAssetStorage storage;
@@ -129,7 +127,7 @@ public:
 
     MockMutableAssetVersion(const MockAssetStorage& storage, const MockAssetConfig& config)
     {
-        impl_ = make_shared<MockMutableAssetVersion>(storage, config);
+        impl = make_shared<Impl>(storage, config);
     }
 
     MockMutableAssetVersion(const string& name, AssetDefs::Type type)
@@ -138,7 +136,7 @@ public:
         storage.name = name;
         storage.type = type;
         MockAssetConfig config;
-        impl_ = make_shared<MockMutableAssetVersion>(storage,config);
+        impl = make_shared<Impl>(storage,config);
     }
 
     explicit operator bool(void) const
@@ -188,8 +186,6 @@ public:
       return this;
   }
 
-  //MockMutableAssetVersion Construct();
-
   MockMutableAssetVersion MyUpdate(bool& _needed, const vector<AssetVersion>& v = {})
   {
       auto retval = MockMutableAssetVersion(this->name, this->type);
@@ -206,19 +202,10 @@ public:
 AssetDefs::Type MockAssetImpl::EXPECTED_TYPE;
 string MockAssetImpl::EXPECTED_SUBTYPE;
 
-// MockAssetVersionImpl { using MutableAssetTYpe = MockMutaableAsset... }
-// MockMutableAssetVersion similar to MockMutableAsset
-
-
 AssetDefs::Type MockAssetVersionImpl::EXPECTED_TYPE;
 string MockAssetVersionImpl::EXPECTED_SUBTYPE;
 
 string MockMutableAssetVersion::testSubTypeToUseForStringConstructor;
-
-//MockMutableAssetVersion MockAssetImpl::Construct()
-//{
-//    return MockMutableAssetVersioMockMutableAssetn(this->name);
-//}
 
 class MockMutableAsset // pointer type
 {
@@ -378,19 +365,20 @@ TEST_F(AssetFactoryTest, FindAndModifyAbsent)
 
 TEST_F(AssetFactoryTest, FindMakeAndUpdateAssets)
 {
+    vector<AssetVersion> v;
     MockMutableAssetVersion
             handle6_5 = FindMakeAndUpdateSubAsset //tests 6 paramater FMAUS, which calls FMAU 5 params
                         <MockMutableAssetVersion, AssetVersion, MockAssetConfig>
-                        ("parent", "base", testInputs, testMeta, testConfig0, vector<AssetVersion>()),
+                        ("parent", "base", testInputs, testMeta, testConfig0, v),
             handle7_6 = FindMakeAndUpdateSubAsset // tests 7 parameter FMAUs, FMAU 6 params
                         <MockMutableAssetVersion, AssetVersion, MockAssetConfig>
                         ("parent1", AssetDefs::Imagery, "base1", testInputs1,
                          testMeta, testConfig0, vector<AssetVersion>()), // tests remaining FMAU 4 params
             handle_4  = FindMakeAndUpdate<MockMutableAssetVersion, AssetVersion, MockAssetConfig>
                         ("parent1", AssetDefs::Imagery, testMeta, testConfig0);
-
-//    ASSERT_EQ(handle6_5->needed, true);
-//    ASSERT_EQ(handle7_6->needed, true);
+    // want to just make sure paths reach MyUpdate method
+    ASSERT_EQ(handle6_5->needed, true);
+    ASSERT_EQ(handle7_6->needed, true);
     ASSERT_EQ(handle_4->needed, true);
 }
 

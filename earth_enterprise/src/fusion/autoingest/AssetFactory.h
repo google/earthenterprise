@@ -117,12 +117,11 @@ namespace AssetFactory
   {
     using Impl = typename MutableDerivedAssetHandleType::Impl;
     using AssetStorageType = typename Impl::Base;
-    return MutableDerivedAssetHandleType(std::make_shared<Impl>
-                                            (AssetStorageType::MakeStorage(
-                                        ref_, Impl::EXPECTED_TYPE,
-                                        Impl::EXPECTED_SUBTYPE,
-                                        inputs_, meta),
-                                        config));
+    auto storage = AssetStorageType::MakeStorage(
+                ref_, Impl::EXPECTED_TYPE,
+                Impl::EXPECTED_SUBTYPE,
+                inputs_, meta);
+    return MutableDerivedAssetHandleType(std::make_shared<Impl>(storage, config));
   }
 
   template<class MutableDerivedAssetHandleType, class ConfigType>
@@ -247,17 +246,15 @@ namespace AssetFactory
                                                             const std::vector<Version>& cachedinputs_)
   {
       using Impl = typename MutableDerivedVersionHandleType::Impl;
-      auto ref_ = AssetDefs::SubAssetName(parentAssetRef,
-                                          basename,
-                                          Impl::EXPECTED_TYPE,
-                                          Impl::EXPECTED_SUBTYPE);
 
       return FindMakeAndUpdate<MutableDerivedVersionHandleType, Version, ConfigType>
-              (ref_,
-               inputs_,
-               meta_,
-               config,
-               cachedinputs_);
+             (AssetDefs::SubAssetName(parentAssetRef, basename,
+                                      Impl::EXPECTED_TYPE, Impl::EXPECTED_SUBTYPE),
+              inputs_,
+              meta_,
+              config,
+              cachedinputs_);
+
   }
 
 
