@@ -28,6 +28,7 @@ Benchmarking outcomes for applying task rules
 
       The following table lists the software and hardware specifications
       that were used for testing.
+
       ========== ===============================
       OS         Ubuntu 12.04.1 LTS
       Processor  8x Intel(R) Xeon ® CPU @2.60GHz

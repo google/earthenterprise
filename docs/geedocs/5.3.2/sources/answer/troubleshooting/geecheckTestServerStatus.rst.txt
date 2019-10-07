@@ -45,7 +45,7 @@ the following location:
       set_geecheck_config.py
 
 geecheck.py runs and displays the results from any tests located in
-the subfolders:    geecheck_tests/  user_tests/ fusion_tests/
+the subfolders:  geecheck_tests/    user_tests/    fusion_tests/
 server_tests/
 
 Tests must follow the naming convention *_test.py, for example,

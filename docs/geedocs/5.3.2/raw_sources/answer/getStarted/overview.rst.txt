@@ -95,6 +95,7 @@ Overview
         search tabs and snippets. Once published, your database is ready
         to be accessed by users through Google Earth EC (3D) or a web
         browser (2D).
+
       | If you want to publish databases on a server that does not have
         a network connection to your Fusion workstation, you can create
         a “disconnected database” which can be placed on portable media,

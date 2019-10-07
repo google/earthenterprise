@@ -840,3 +840,4 @@ Portable Globe and Server 5.2
    :class: inline
 .. |Broadcast globe icon| image:: ../../art/fusion/portable/broadcast_false.gif
    :class: inline line-sized
+

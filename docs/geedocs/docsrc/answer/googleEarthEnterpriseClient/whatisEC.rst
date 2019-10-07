@@ -8,9 +8,9 @@ What is Google Earth Enterprise Client (EC)?
 
    .. container:: content
 
-      Open Google Earth Enterprise (OpenGEE) lets organizations build
+      Open Google Earth Enterprise (Open GEE) lets organizations build
       and host private globes created from their own geospatial data.
-      Government agencies and businesses can run OpenGEE in their own
+      Government agencies and businesses can run Open GEE in their own
       data centers, keeping their sensitive data behind the firewall
       with access restricted to authorized employees.
 
@@ -20,7 +20,7 @@ What is Google Earth Enterprise Client (EC)?
       internal servers only or can layer their data on top of Google’s
       global database of satellite imagery and mapping information.
 
-      Google Earth EC is not part of the OpenGEE project, and can be
+      Google Earth EC is not part of the Open GEE project, and can be
       downloaded separately `here. <https://github.com/google/earthenterprise/wiki/Google-Earth-Enterprise-Client-(EC)>`_
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png

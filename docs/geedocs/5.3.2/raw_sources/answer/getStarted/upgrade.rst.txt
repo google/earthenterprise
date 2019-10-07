@@ -21,8 +21,6 @@ Upgrade to GEE 5.x
             to GEE 5.x:
             :name: we-recommend-you-do-the-following-before-upgrading-to-gee-5.x
 
-         answer/installGEE/sysReqGEEServer.rst
-
          #. Confirm your hardware and software meet the :doc:`minimum
             requirements <../installGEE/sysReqGEEServer>`.
          #. Apply the latest Linux distribution software patches.
