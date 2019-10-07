@@ -30,7 +30,11 @@ import re
 import shutil
 import sys
 import time
+import ssl
 import urllib
+import urllib2
+from contextlib import closing
+
 from lxml import etree
 
 from common import form_wrap
@@ -344,6 +348,42 @@ class GlobeBuilder(object):
     fp.write("%s\n\n" % message)
     fp.close()
 
+  def HttpGet(self, url):
+    """Make an HTTP or HTTPS request with a context for checking or ignoring
+    certificate errors depending on Config settings.
+    """
+    context = None
+    response_data = ""
+    http_status_code = 0
+
+    try:
+      # TODO: When Python 2.7 is used on Centos6, this if version<=2.6 block can be removed
+      # and the 'else' ssl.SSLContext based block can be used instead.
+      if sys.version_info[0] == 2 and sys.version_info[1] <= 6:
+        with closing(urllib2.urlopen(url)) as fp:
+          http_status_code = fp.getcode()
+          response_data = fp.read()
+      else:
+        # Set the context based on cert requirements
+        if CONFIGS.GetBool("VALIDATE_CERTIFICATE"):
+          cert_file = CONFIGS.GetStr("CERTIFICATE_CHAIN_PATH")
+          key_file = CONFIGS.GetStr("CERTIFICATE_KEY_PATH")
+          context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+          context.load_cert_chain(cert_file, keyfile=key_file)
+        else:
+          context = ssl.create_default_context()
+          context.check_hostname = False
+          context.verify_mode = ssl.CERT_NONE
+        with closing(urllib2.urlopen(url)) as fp:
+          http_status_code = fp.getcode()
+          response_data = fp.read()
+
+    except:
+      GlobeBuilder.StatusWarning("FAILED: Caught exception reading {0}".format(url))
+      raise
+
+    return (response_data, http_status_code)
+
   def AddJsonFile(self, source, is_map, portable_server, json_file):
     """Get JSON from server and add it to the portable globe plugin files.
 
@@ -359,9 +399,10 @@ class GlobeBuilder(object):
     # Get JSON from the server.
     url = "%s/query?request=Json&var=geeServerDefs" % source
     self.Status("Rewrite JSON from: %s to: %s" % (url, json_file))
-    fp = urllib.urlopen(url)
-    json = fp.read()
-    fp.close()
+
+    json, code = self.HttpGet(url)
+    if (code != 200):
+      raise Exception("GET {0} failed with {1}".format(url, code))
 
     # Replace all urls to point at the portable server.
     start = 0
@@ -438,11 +479,12 @@ class GlobeBuilder(object):
       # Get JSON from the server.
       url = "%s/query?request=Icon&icon_path=icons/%s" % (source, icon)
       try:
-        fp = urllib.urlopen(url)
-        fpw = open("%s/%s" % (self.icons_dir, icon), "w")
-        fpw.write(fp.read())
-        fp.close()
-        fpw.close()
+        data, code = self.HttpGet(url)
+        if code == 200:
+          with open("%s/%s" % (self.icons_dir, icon), "w") as fpw:
+            fpw.write(data)
+        else:
+          raise Exception("Cannot fetch {0}".format(url))
       except:
         self.Status("Unable to retrieve icon %s" % icon)
 
@@ -490,13 +532,11 @@ class GlobeBuilder(object):
     self.Status("Querying search poi ids: target=%s" % target)
     poi_list = None
     try:
-      fp = urllib.urlopen(url)
-      http_status_code = fp.getcode()
+      data, http_status_code = self.HttpGet(url)
       if http_status_code == 200:
-        poi_list = fp.read().strip()
-      fp.close()
+        poi_list = data.strip()
     except Exception as e:
-      raise Exception("Request failed: cannot connect to server")
+      raise Exception("Request failed: cannot connect to server: {0}".format(e))
 
     if poi_list:
       # Quote polygon parameter for URI.
@@ -512,14 +552,13 @@ class GlobeBuilder(object):
         try:
           self.Status("Querying search poi data: poi_id=%s, polygon=%s" %
                       (poi_id, polygon))
-          fp = urllib.urlopen(url)
-          http_status_code = fp.getcode()
+          data, http_status_code = self.HttpGet(url)
           if http_status_code == 200:
             self.Status("Copying search poi data: gepoi_%s to globe" % poi_id)
-            fpw = open(search_file, "w")
-            fpw.write(fp.read().strip())
-            fpw.write("\n")
-            fpw.close()
+
+            with open(search_file, "w") as fpw:
+              fpw.write(data.strip())
+              fpw.write("\n")
           else:
             self.StatusWarning(fp.read())
 
@@ -901,7 +940,7 @@ if __name__ == "__main__":
     elif cgi_cmd == "ADD_PLUGIN_FILES":
       is_2d = FORM.getvalue("is_2d")
       globe_builder.CheckArgs(["globe_name", "source"], FORM)
-      globe_builder.AddPluginFiles(CONFIGS.GetStr("DATABASE_HOST"), is_2d)
+      globe_builder.AddPluginFiles(FORM.getvalue_url("source") , is_2d)
 
     elif cgi_cmd == "PACKAGE_GLOBE":
       globe_builder.CheckArgs(["globe_name"], FORM)

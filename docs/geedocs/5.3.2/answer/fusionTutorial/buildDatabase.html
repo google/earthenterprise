@@ -1,0 +1,208 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Defining and Building Databases &#8212; Google Earth Enterprise 5.3.2 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Pushing, Publishing, and Viewing a Database" href="pushPublishView.html" />
+    <link rel="prev" title="Defining and Building Projects" href="buildProject.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="pushPublishView.html" title="Pushing, Publishing, and Viewing a Database"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="buildProject.html" title="Defining and Building Projects"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionTutorial.html" accesskey="U">Fusion Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="buildProject.html"
+                        title="previous chapter">Defining and Building Projects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pushPublishView.html"
+                        title="next chapter">Pushing, Publishing, and Viewing a Database</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp3.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp3.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="defining-and-building-databases">
+<h1>Defining and Building Databases<a class="headerlink" href="#defining-and-building-databases" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>The following exercises guide you through defining and building a
+database, using the projects you created in the previous lesson.</p>
+<ul class="simple">
+<li><a class="reference internal" href="#define-database"><span class="std std-ref">Define a Database</span></a></li>
+<li><a class="reference internal" href="#build-database"><span class="std std-ref">Build a Database</span></a></li>
+</ul>
+<p class="rubric" id="define-database">Define a Database</p>
+<p>When you define a database, you specify one or more Google Earth
+Enterprise Fusion projects that Google Earth Enterprise Fusion
+combines into a single self-contained world that is flyable in
+Google Earth EC. You can select up to three projects for a
+database–one of each type:</p>
+<ul class="simple">
+<li>Vector</li>
+<li>Imagery</li>
+<li>Terrain</li>
+</ul>
+<p>Because the majority of your efforts involve defining and
+configuring different projects for inclusion in your database, it
+is relatively fast to define a database once the projects are
+created. You simply select the projects that comprise the database
+and give it a name.</p>
+<p class="rubric">To define a database:</p>
+<ol class="arabic">
+<li><p class="first">Select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu. The Asset Manager
+appears.</p>
+</li>
+<li><p class="first">Click <img alt="Database Icon" src="../../images/iconDatabase.png" /> in the toolbar. The
+Database Editor appears with no projects selected.</p>
+<p><img alt="Database Editor With No Projects Selected" src="../../images/databaseEditor.png" /></p>
+</li>
+<li><p class="first">Click <img alt="New Icon" src="../../images/icon_new1.gif" /> in the <strong>Vector Project</strong> row.</p>
+</li>
+<li><p class="first">Navigate to <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Vector</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The selection in the <strong>Type</strong> drop-down list near
+the bottom of this dialog determines the type of projects
+that appear on the list. Vector Project is automatically
+selected, so only vector resources appear on the list.</p>
+</div>
+</li>
+<li><p class="first">Select the <strong>CARoads</strong> project and click <strong>Open</strong>. The CA Roads
+project appears in the Database Editor next to Vector Project.</p>
+</li>
+<li><p class="first">Click <img alt="New Icon" src="../../images/icon_new1.gif" /> in the <strong>Imagery Project</strong> row and select
+<code class="docutils literal notranslate"><span class="pre">Projects/Imagery/SFBayArea.</span></code></p>
+</li>
+<li><p class="first">Click <img alt="New Icon" src="../../images/icon_new1.gif" /> in the <strong>Terrain Project</strong> row and select
+<code class="docutils literal notranslate"><span class="pre">Projects/Terrain/SFTerrain.</span></code></p>
+<p>All three projects are now listed in the Database Editor
+window:</p>
+<p><img alt="All Projects Listed Database Editor" src="../../images/databaseEditor-full.png" /></p>
+</li>
+<li><p class="first">Select <strong>File &gt; Save</strong> and navigate to the
+<code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Databases</span></code> folder.</p>
+</li>
+<li><p class="first">Enter <strong>SFHighways</strong> as the name of your database, and click
+<strong>Save</strong>.</p>
+<p>The name of the database is displayed when you select the
+<code class="docutils literal notranslate"><span class="pre">/ASSET_ROOT/Databases</span></code>folder in the asset navigation tree.</p>
+</li>
+</ol>
+<p class="rubric" id="build-database">Build a Database</p>
+<p>Once the database has been defined, it is ready to be built.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you had not built the projects included in this
+database previously, the following process would build them in
+the course of building the database. As you might expect, the
+database build process takes much longer if it is building all
+of the projects in the database at once. However, since Google
+Earth Enterprise Fusion gives you the option to build each
+project as soon as you finish making modifications or when you
+build the database, you can determine the best work style for
+yourself.</p>
+</div>
+<p class="rubric" id="to-build-a-database">To build a database:</p>
+<ol class="arabic">
+<li><p class="first">In the Asset Manager, select the <code class="docutils literal notranslate"><span class="pre">/ASSET_ROOT/Databases</span></code>
+folder.</p>
+<p><strong>SFHighways</strong> appears on the right with the <strong>Current Version</strong>
+and the <strong>Current State</strong> set to <strong>None</strong>, indicating that the
+database has not yet been built.</p>
+</li>
+<li><p class="first">Right-click <strong>SFHighways</strong> and select <strong>Build</strong>. The status of
+the database immediately changes to <strong>Queued</strong> and then to <strong>In
+Progress</strong>.</p>
+</li>
+<li><p class="first">Double-click the <strong>Current Version</strong> or <strong>Current State</strong> column of the
+<strong>SFHighways</strong> to view the progress of the build.</p>
+<p>The Version Properties dialog displays the most recent version
+of that database. You can expand the version tree to view the
+status of the build in real time by clicking the <strong>+</strong> signs.</p>
+</li>
+</ol>
+<p>When Google Earth Enterprise Fusion finishes building the
+database, its <strong>Current State</strong> column in the Asset Manager changes to
+<strong>Succeeded</strong>, and <strong>its Current</strong> Version column changes to the date
+and time the most recent build was started.</p>
+<p>Close the Asset Manager by clicking the close box (<strong>X</strong>) in the
+top right corner, and go on to the <a class="reference internal" href="pushPublishView.html"><span class="doc">next lesson</span></a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="pushPublishView.html" title="Pushing, Publishing, and Viewing a Database"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="buildProject.html" title="Defining and Building Projects"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionTutorial.html" >Fusion Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

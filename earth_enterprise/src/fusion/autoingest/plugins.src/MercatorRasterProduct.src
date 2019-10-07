@@ -150,9 +150,9 @@ class MercatorRasterProductAssetImplD {
 };
 
 class MercatorRasterProductAssetVersionImplD {
- protected:
-  virtual void OnStateChange(AssetDefs::State newstate,
-                             AssetDefs::State oldstate);
+ public:
+  virtual AssetDefs::State OnStateChange(AssetDefs::State newstate,
+                                         AssetDefs::State oldstate) override;
 };
 
 
@@ -248,7 +248,7 @@ MercatorRasterProductAssetImplD::HandleImportRequest(
   // Modified FindMake to preserve fuid_resource_.
   // The inputs are empty for now. We'll fill them in below.
   MutableMercatorRasterProductAssetD asset =
-    MercatorRasterProductFactory::Find(assetname);
+    Find<MercatorRasterProductAssetD>(assetname);
   if (asset) {
     // It is a regular (editing the same asset) or "SaveAs" re-writing request.
     // If this request is going to set the fuid_resource to 0, restore from
@@ -262,7 +262,7 @@ MercatorRasterProductAssetImplD::HandleImportRequest(
     asset->Modify(std::vector<SharedString>(), req.meta, product_config);
   } else {
     // It is a "Save" or "SaveAs" request when creating a new asset.
-    asset = MercatorRasterProductFactory::Make(assetname,
+    asset = AssetFactory::Make<MutableMercatorRasterProductAssetD, RasterProductConfig>(assetname,
                                                std::vector<SharedString>(),
                                                req.meta, req.config);
   }
@@ -338,7 +338,7 @@ MercatorRasterProductAssetImplD::HandleImportRequest(
   }
 }
 
-void
+AssetDefs::State
 MercatorRasterProductAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
                                               AssetDefs::State oldstate)
 {
@@ -361,6 +361,7 @@ MercatorRasterProductAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
       meta.SetValue("minlevel", tmp);
     }
   }
+  return state;
 }
 
 

@@ -1,0 +1,350 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Google Maps API v3 for GEE &#8212; Google Earth Enterprise 5.3.3 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Troubleshooting and error messages" href="../troubleshooting.html" />
+    <link rel="prev" title="Add Python Libraries to GEE Python" href="addPythonLibToGEPython.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../troubleshooting.html" title="Troubleshooting and error messages"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="addPythonLibToGEPython.html" title="Add Python Libraries to GEE Python"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../developers.html" accesskey="U">Developers</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="addPythonLibToGEPython.html"
+                        title="previous chapter">Add Python Libraries to GEE Python</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../troubleshooting.html"
+                        title="next chapter">Troubleshooting and error messages</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="google-maps-api-v3-for-gee">
+<h1>Google Maps API v3 for GEE<a class="headerlink" href="#google-maps-api-v3-for-gee" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<ul class="simple">
+<li><a class="reference internal" href="#overview"><span class="std std-ref">Overview</span></a></li>
+<li><a class="reference internal" href="#using-fusion-maps-api"><span class="std std-ref">Using the Fusion Maps API</span></a></li>
+<li><a class="reference internal" href="#factory-geecreatefusionmap"><span class="std std-ref">How geeCreateFusionMap works</span></a></li>
+<li><a class="reference internal" href="#factory"><span class="std std-ref">geeCreateFusionMap Factory</span></a></li>
+<li><a class="reference internal" href="#methodextensions"><span class="std std-ref">google.maps.Map Method extensions</span></a></li>
+<li><a class="reference internal" href="#apiexamples"><span class="std std-ref">Examples</span></a></li>
+<li><a class="reference internal" href="#kmlsupport"><span class="std std-ref">KML Support</span></a></li>
+</ul>
+<p class="rubric" id="overview">Overview</p>
+<p>The <a class="reference external" href="https://developers.google.com/maps/documentation/javascript/">Google Maps JavaScript API
+V3</a>
+is bundled with Google Earth Enterprise (GEE) Server and, for
+offline use, with Portable Server. As of November 2015, Google
+Maps JavaScript API v3.20 is bundled with GEE v5.1.2, but the API
+is updated periodically to align with the Release version.</p>
+<p>The bundled offline Google Maps JavaScript API is the same core
+JavaScript V3 API supporting:</p>
+<ul class="simple">
+<li><strong>Events</strong>: Listening to click, mouseover</li>
+<li><strong>Controls</strong>: Built-in zoom, pan, scale + custom controls</li>
+<li><strong>Overlays</strong>: Symbols, markers, polylines</li>
+</ul>
+<p>However there are some differences:</p>
+<ul class="simple">
+<li>Method of invoking the API from a GEE or Portable Server to
+load in a web page.</li>
+<li><code class="docutils literal notranslate"><span class="pre">geeCreateFusionMap</span></code> is a factory used to create instances of
+the <code class="docutils literal notranslate"><span class="pre">google.maps.Map</span></code> class.</li>
+<li>No support for objects that require access to online Google
+services:<ul>
+<li>Geocoding (<code class="docutils literal notranslate"><span class="pre">google.maps.Geocoder</span></code>)</li>
+<li>Directions (<code class="docutils literal notranslate"><span class="pre">google.maps.Directions</span></code>)</li>
+<li>StreetView (<code class="docutils literal notranslate"><span class="pre">google.maps.StreetViewPanorama</span></code>)</li>
+<li>Traffic (<code class="docutils literal notranslate"><span class="pre">google.maps.TrafficLayer</span></code>)</li>
+<li>Places API, Distance Matrix, Wikipedia, Panaramio, Weather
+layer, etc.</li>
+</ul>
+</li>
+</ul>
+<p class="rubric" id="using-fusion-maps-api">Using the Fusion Maps API</p>
+<p>The Fusion Maps API is used to create and interact with map layers
+created in Google Earth Enterprise. The API is based on the Google
+Maps API but includes <code class="docutils literal notranslate"><span class="pre">geeCreateFusionMap</span></code>, which makes it
+easier to interact with map layers generated by Google Earth
+Enterprise. Essentially, <code class="docutils literal notranslate"><span class="pre">geeCreateFusionMap</span></code> is a factory used
+to create instances of the <code class="docutils literal notranslate"><span class="pre">google.maps.Map</span></code> class in which the
+GEE-specific configuration options can be added as Method
+extensions.</p>
+<p>The following code snippet is a <a class="reference external" href="https://developers.google.com/maps/documentation/javascript/tutorial#HelloWorld">Hello
+World</a>
+example of using <code class="docutils literal notranslate"><span class="pre">geeCreateFusionMap</span></code> to load a map:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+   <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;viewport&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;initial-scale=1.0, user-scalable=no&quot;</span> <span class="p">/&gt;</span>
+      <span class="p">&lt;</span><span class="nt">style</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span><span class="p">&gt;</span>
+         <span class="nt">html</span> <span class="p">{</span> <span class="k">height</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span> <span class="p">}</span>
+         <span class="nt">body</span> <span class="p">{</span> <span class="k">height</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span> <span class="k">margin</span><span class="p">:</span> <span class="mi">0</span><span class="kt">px</span><span class="p">;</span> <span class="k">padding</span><span class="p">:</span> <span class="mi">0</span><span class="kt">px</span> <span class="p">}</span>
+         <span class="p">#</span><span class="nn">map_canvas</span> <span class="p">{</span> <span class="k">height</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span> <span class="p">}</span>
+      <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Hello World - GEE 2D Map Example<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+
+      <span class="c">&lt;!-- Start by defining GEE_BASE_URL. --&gt;</span>
+      <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;</span>
+         <span class="kd">var</span> <span class="nx">GEE_BASE_URL</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">protocol</span> <span class="o">+</span> <span class="s1">&#39;//&#39;</span> <span class="o">+</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">host</span><span class="p">;</span>
+      <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+
+      <span class="c">&lt;!-- Include the provided Maps API v3 files.  Located in /opt/google/gehttpd/htdocs/maps/api/ --&gt;</span>
+         <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;/maps/api/bootstrap.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+         <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span>
+         <span class="na">src</span><span class="o">=</span><span class="s">&quot;/maps/api/fusion_extended_map.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+
+         <span class="c">&lt;!-- geeServerDefs must be defined with the following script; insert name of your published 2D database --&gt;</span>
+         <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;/YourPublishedDatabase/query?request=Json&amp;var=geeServerDefs&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+
+         <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;</span>
+            <span class="kd">function</span> <span class="nx">initialize</span><span class="p">()</span> <span class="p">{</span>
+               <span class="kd">var</span> <span class="nx">myOptions</span> <span class="o">=</span> <span class="p">{</span>
+                  <span class="nx">center</span><span class="o">:</span> <span class="k">new</span> <span class="nx">google</span><span class="p">.</span><span class="nx">maps</span><span class="p">.</span><span class="nx">LatLng</span><span class="p">(</span><span class="o">-</span><span class="mf">34.397</span><span class="p">,</span> <span class="mf">150.644</span><span class="p">),</span> <span class="nx">zoom</span><span class="o">:</span> <span class="mi">8</span>
+                  <span class="p">};</span>
+            <span class="kd">var</span> <span class="nx">geemap</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">geeCreateFusionMap</span><span class="p">(</span><span class="s2">&quot;map_canvas&quot;</span><span class="p">,</span> <span class="nx">geeServerDefs</span><span class="p">,</span> <span class="nx">myOptions</span><span class="p">);</span>
+            <span class="p">}</span>
+         <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+
+      <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">body</span> <span class="na">onload</span><span class="o">=</span><span class="s">&quot;initialize()&quot;</span><span class="p">&gt;</span>
+         <span class="c">&lt;!-- Be sure there is an element on the page with the id you specified above (map_canvas in this case). --&gt;</span>
+         <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;map_canvas&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;width:100%; height:100%&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+   <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p class="rubric" id="factory-geecreatefusionmap">Factory geeCreateFusionMap</p>
+<p>Use of the factory <code class="docutils literal notranslate"><span class="pre">geeCreateFusionMap</span></code> is distinct from the
+standard Google Maps JavaScript API usage in the following ways:</p>
+<ul class="simple">
+<li>Instantiate <code class="docutils literal notranslate"><span class="pre">geeCreateFusionMap</span></code> in order to create a Fusion
+map. This is a factory for an extended version of the Maps API
+v3 <code class="docutils literal notranslate"><span class="pre">google.maps.Map</span></code> class, and the other methods are the
+extensions to that class.</li>
+<li>Use <code class="docutils literal notranslate"><span class="pre">geeCreateFusionMap</span></code> class instead of <code class="docutils literal notranslate"><span class="pre">google.maps.Map</span></code>
+to create applications that use layers from GME or GEE.</li>
+<li><code class="docutils literal notranslate"><span class="pre">geeCreateFusionMap(container,</span> <span class="pre">opts?)</span></code> creates a new map
+inside the given HTML container, typically a <code class="docutils literal notranslate"><span class="pre">DIV</span></code> element.
+Options are the same as those of <code class="docutils literal notranslate"><span class="pre">google.maps.Map</span></code></li>
+<li>If a map type is passed into the options, GEE Server will
+override these if an imagery layer is included in the Fusion
+Maps Database.</li>
+<li>The path and location of the new map is
+<code class="docutils literal notranslate"><span class="pre">serverURL/default_map</span></code>, for example,
+<em>http://my_host_name/default_map</em>.</li>
+</ul>
+<p class="rubric" id="factory-geecreatefusionmap-description">Factory geeCreateFusionMap Description</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Factory</span></code> and <code class="docutils literal notranslate"><span class="pre">Method</span> <span class="pre">extensions</span></code> are described in the
+following tables.</p>
+<p class="rubric" id="factory">Factory</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="44%" />
+<col width="56%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Factoryclass</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">geeCreateFusionMap(container,</span> <span class="pre">opts?)</span></code></td>
+<td>Creates a new Fusion map inside of the given HTML container, which is typically a
+<code class="docutils literal notranslate"><span class="pre">DIV</span></code> element. The options are the same as the options for <code class="docutils literal notranslate"><span class="pre">google.maps.Map</span></code>.
+However, if a map type is passed in to the options, the Fusion maps server will
+override these if an imagery layer is included in the Fusion Maps Database. After
+this constructor is invoked, the <code class="docutils literal notranslate"><span class="pre">setCenter()</span></code> method should be called
+before any methods that display Fusion layers on top of the map.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric" id="methodextensions">Method extensions</p>
+<p><code class="docutils literal notranslate"><span class="pre">geeCreateFusionMap</span></code> Method extensions are extensions of the
+Google Maps API v3 <code class="docutils literal notranslate"><span class="pre">google.maps.Map</span></code> class.</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="32%" />
+<col width="16%" />
+<col width="53%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Method extensions</th>
+<th class="head">Return Value</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">showInitialFusionLayers()</span></code></td>
+<td>None</td>
+<td>Show all layers that are enabled by default. This method should only be invoked
+after the <code class="docutils literal notranslate"><span class="pre">setCenter()</span></code>.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">getFusionLayerCount()</span></code></td>
+<td>Number</td>
+<td>Returns the number of Fusion map layers. This does not include the base imagery
+layer, which is built as a custom map type and serves as the background of the map.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">isFusionLayerVisible(index)</span></code></td>
+<td>Boolean</td>
+<td>Returns true if the layer is currently shown on the map and false if it is hidden.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">showFusionLayer(index)</span></code></td>
+<td>None</td>
+<td>Shows a previously hidden Fusion map layer. This method should only be invoked after
+the <code class="docutils literal notranslate"><span class="pre">setCenter()</span></code> method has been called to initially draw the map.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">hideFusionLayer(index)</span></code></td>
+<td>None</td>
+<td>Hides the specified Fusion map layer.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">getFusionLayerName(index)</span></code></td>
+<td>String</td>
+<td>Returns the name of the specified layer.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">getFusionLayerIcon(index)</span></code></td>
+<td>String</td>
+<td>Returns the URL of the icon associated with the specified layer.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric" id="apiexamples">Examples</p>
+<p>Several examples that illustrate how to use the Fusion Maps API
+are installed by default. You can find these examples in:</p>
+<p><code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/maps</span></code></p>
+<p>The following files are used by default for a published database.
+For example, when serving <code class="docutils literal notranslate"><span class="pre">http://your-host.com/YourPublishedDatabase</span></code>,
+this code is used to render the page.</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">maps_local.html</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">maps_google.html</span></code></li>
+</ul>
+<p>The following files provide basic examples of initializing a
+Fusion Map. You can use them as templates but you will need to edit
+them with the target path of a published 2D database to correctly
+initialize a map in the browser.</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">example_google.html</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">example_local.html</span></code></li>
+</ul>
+<p class="rubric" id="kmlsupport">KML Support</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">KMLLayer</span></code> object in the Google Maps JavaScript API is
+unavailable in GEE since KML rendering is performed server-side
+and requires a connection to google.com. As a workaround, you can
+overlay KML data on your 2D Map using the <strong>GeoXml</strong> parser
+extension for Google Maps.</p>
+<p>The following steps are needed to utilize the GeoXml library with
+2D maps hosted on a Google Earth Enterprise Server:</p>
+<ol class="arabic">
+<li><p class="first">Download the
+<a class="reference external" href="https://github.com/Garthanos/geoxml-v3">GeoXml</a> library to
+your GEE Server. <code class="docutils literal notranslate"><span class="pre">geoxmlfull_v3.js</span></code> is the main file to
+download.</p>
+</li>
+<li><p class="first">Store the GeoXml library in the GEE Server Apache Document
+root. Default location is <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/js</span></code></p>
+</li>
+<li><p class="first">Load the GeoXml library in your GEE 2D Map HTML file:</p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;script</span> <span class="pre">type=&quot;text/javascript&quot;</span> <span class="pre">src=&quot;/js/geoxmlfull_v3.js&quot;&gt;&lt;/script&gt;</span></code></p>
+</li>
+<li><p class="first">Store the target KML file in the GEE Server Apache Document
+root.</p>
+</li>
+<li><p class="first">Create a GeoXml object in the GEE 2D Map HTML file to load your
+KML file. Refer to GeoXml-specific
+<a class="reference external" href="https://code.google.com/archive/p/geoxml/wikis/GeoXmlMethods.wiki">methods</a>
+and
+<a class="reference external" href="https://code.google.com/archive/p/geoxml/wikis/GeoXmlOptions.wiki">options</a>.</p>
+</li>
+</ol>
+<p>See GeoXml
+<a class="reference external" href="http://www.dyasdesigns.com/geoxml/GeoXmlSamples.html">samples</a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>Performance may degrade with large KML files.</li>
+<li>GeoXml is an open-source package, not supported by Google.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../troubleshooting.html" title="Troubleshooting and error messages"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="addPythonLibToGEPython.html" title="Add Python Libraries to GEE Python"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../developers.html" >Developers</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

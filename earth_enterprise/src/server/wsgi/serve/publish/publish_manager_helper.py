@@ -225,12 +225,13 @@ class PublishManagerHelper(stream_manager.StreamManager):
             virtual_host_table.virtual_host_name,
             virtual_host_table.virtual_host_url,
             virtual_host_table.virtual_host_ssl,
-            target_table.target_path, target_table.serve_wms
-          FROM target_table, target_db_table, db_table, virtual_host_table
+            target_table.target_path, target_table.serve_wms, publish_context_table.ec_default_db
+          FROM target_table, target_db_table, db_table, virtual_host_table, publish_context_table
           WHERE target_table.target_path = %s AND
             target_table.target_id = target_db_table.target_id AND
             target_db_table.db_id = db_table.db_id AND
-            target_db_table.virtual_host_id = virtual_host_table.virtual_host_id
+            target_db_table.virtual_host_id = virtual_host_table.virtual_host_id AND
+            publish_context_table.publish_context_id = target_db_table.publish_context_id
           """)
 
       results = self.DbQuery(query_string, (norm_target_path,))
@@ -239,7 +240,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
         assert isinstance(results, list) and len(results) == 1
         (r_host_name, r_db_path, r_db_name, r_db_timestamp, r_db_size,
          r_virtual_host_name, r_virtual_host_url, r_virtual_host_ssl,
-         r_target_path, r_serve_wms) = results[0]
+         r_target_path, r_serve_wms, r_default_database) = results[0]
 
         db_info = basic_types.DbInfo()
         # TODO: make re-factoring - implement some Set function
@@ -259,6 +260,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
                                                     r_virtual_host_ssl)
         db_info.target_path = r_target_path
         db_info.serve_wms = r_serve_wms
+        db_info.default_database = r_default_database
         db_info.registered = True
 
         # Calculate database attributes.
@@ -615,13 +617,14 @@ class PublishManagerHelper(stream_manager.StreamManager):
 
     target_details = {}
     query_string = ("""SELECT db_table.host_name, db_table.db_name,
-              virtual_host_table.virtual_host_name, target_table.serve_wms
-              FROM target_table, target_db_table, db_table, virtual_host_table
+              virtual_host_table.virtual_host_name, target_table.serve_wms, publish_context_table.ec_default_db
+              FROM target_table, target_db_table, db_table, virtual_host_table, publish_context_table
               WHERE target_table.target_path = %s AND
               target_table.target_id = target_db_table.target_id AND
               target_db_table.db_id = db_table.db_id AND
               target_db_table.virtual_host_id =
-              virtual_host_table.virtual_host_id""")
+              virtual_host_table.virtual_host_id AND
+              publish_context_table.publish_context_id = target_db_table.publish_context_id""")
 
     result = self.DbQuery(query_string, (target_path,))
 
@@ -1181,14 +1184,16 @@ class PublishManagerHelper(stream_manager.StreamManager):
         db_info.target_base_url = vhname_to_baseurl[db_info.virtual_host_name]
         db_info.target_path = publish_info[1]
         db_info.serve_wms = publish_info[2]
+        db_info.default_database = publish_info[3]
         if len(publish_info_list) > 1:
-          for vh_name, target_path, serve_wms in publish_info_list[1:]:
+          for vh_name, target_path, serve_wms, default_database in publish_info_list[1:]:
             add_db_info = copy.copy(db_info)
             add_db_info.virtual_host_name = vh_name
             add_db_info.target_base_url = vhname_to_baseurl[
                 add_db_info.virtual_host_name]
             add_db_info.target_path = target_path
             add_db_info.serve_wms = serve_wms
+            add_db_info.default_database = default_database
             add_db_info_list.append(add_db_info)
     db_info_list.extend(add_db_info_list)
 
@@ -1450,19 +1455,20 @@ class PublishManagerHelper(stream_manager.StreamManager):
     query_db_target = (
         "SELECT target_db_table.db_id,"
         " virtual_host_table.virtual_host_name,"
-        " target_table.target_path, target_table.serve_wms"
-        " FROM target_db_table, target_table, virtual_host_table"
+        " target_table.target_path, target_table.serve_wms, publish_context_table.ec_default_db"
+        " FROM target_db_table, target_table, virtual_host_table, publish_context_table"
         " WHERE target_table.target_id = target_db_table.target_id AND"
-        " virtual_host_table.virtual_host_id = target_db_table.virtual_host_id")
+        " virtual_host_table.virtual_host_id = target_db_table.virtual_host_id AND"
+        " publish_context_table.publish_context_id = target_db_table.publish_context_id")
     results = self.DbQuery(query_db_target)
 
     # Build a dictionary.
     db_to_publish_info_dct = dict(
         (db_id, []) for (db_id, unused_vh_name, unused_target_path,
-                         unused_serve_wms) in results)
-    for db_id, vh_name, target_path, serve_wms in results:
+                         unused_serve_wms, unused_default_db) in results)
+    for db_id, vh_name, target_path, serve_wms, default_database in results:
       db_to_publish_info_dct[db_id].append(
-          (vh_name, target_path, serve_wms))
+          (vh_name, target_path, serve_wms, default_database))
 
     return db_to_publish_info_dct
 

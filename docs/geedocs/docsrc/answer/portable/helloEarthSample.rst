@@ -1,0 +1,148 @@
+|Google logo|
+
+========================
+Hello Earth! code sample
+========================
+
+.. container::
+
+   .. container:: content
+
+      .. code-block:: html
+
+         <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+         <html>
+
+               <head>
+
+                     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+                     <meta http-equiv="cache-control" content="max-age=0" />
+                     <meta http-equiv="cache-control" content="no-cache" />
+                     <meta http-equiv="expires" content="0" />
+                     <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+                     <meta http-equiv="pragma" content="no-cache" />
+                     <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+
+                           <!--This sample loads the necessary scripts for jQuery, Google Earth Plug-in, geeServerDefs, and the Maps API Fusion extension-->
+                           <title>Google Maps Engine Portable - Hello Earth Example</title>
+
+                                 <!--Loads jQuery from the local source.-->
+                                 <script src="/local/js/jquery-1.8.3.js"></script>
+
+                                 <!--Loads the Google Earth Plug-in from the local source.-->
+                                 <script src="/local/maps/api/earth_plugin_loader.js"></script>
+
+                                 <!--Loads the server database definitions (geeServerDefs) from the local source. To view your server database definitions, navigate to http://localhost:9335/query?request=Json-->
+                                 <script type="text/javascript">
+
+                                       $.ajax({
+                                             url: "http://localhost:9335/query?request=Json&var=geeServerDefs",
+                                                   statusCode: {
+                                                         500: function() {
+                                                               document.getElementById('not_serving').style.display = 'block';
+                                                               document.getElementById('earth').style.display = 'none';
+                                                               document.getElementById('not_serving').innerHTML =
+                                                               'Error: To view this example, you need to run Google Maps Engine Portable\
+                                                               and serve a 3D globe on http://localhost:9335.'
+                                                         }
+                                                   }
+                                             });
+
+                                             function initEarth() {
+                                                   google.earth.createInstance(
+                                                         'earth', initCB, failureCB, {database: 'http://localhost:9335'});
+                                             }
+
+                                             // The Earth callback function sets the navigation controls for your 3D maps.
+                                             // Unlike the Hello Maps code, Hello Earth requires the three functions below for initialization.
+                                             // Some additional control options are listed in the comments below.
+                                             // For even more options, see the Google Earth API Reference at: https://developers.google.com/earth/documentation/reference/.
+
+                                             function initCB(earth) {
+                                                   ge = earth;
+                                                   ge.getWindow().setVisibility(true);
+                                                   ge.getNavigationControl().setVisibility(ge.VISIBILITY_AUTO);
+
+                                                   //Other visibility options for Controls
+                                                   //ge.getNavigationControl().setVisibility(ge.VISIBILITY_HIDE);
+                                                   //ge.getNavigationControl().setVisibility(ge.VISIBILITY_SHOW);
+
+                                                   //Set Controls in Bottom Right
+                                                   //ge.getNavigationControl().getScreenXY().setXUnits(ge.UNITS_INSET_PIXELS);
+                                                   //ge.getNavigationControl().getScreenXY().setYUnits(ge.UNITS_PIXELS);
+
+                                                   //Set Controls in Top Left
+                                                   //ge.getNavigationControl().getScreenXY().setXUnits(ge.UNITS_PIXELS);
+                                                   //ge.getNavigationControl().getScreenXY().setYUnits(ge.UNITS_INSET_PIXELS);
+
+                                             }
+
+                                             // Error handling in case the map doesn't load.
+                                             function failureCB(earth) {
+                                                   alert('ALERT! The Google Earth Plug-in failed to load!');
+
+                                             }
+
+                                       </script>
+
+                                 style type="text/css">
+                                 #head {
+                                       margin: 0 auto;
+                                       margin-top: 16px;
+                                       height: 20px;
+                                       width: 600px;
+                                       font-family: "Arial", sans-serif;
+                                       font-size: 16px;
+                                       font-weight: normal;
+                                 }
+                                 #head span {
+                                       background-color: #F1F1F1;
+                                       color: #333;
+                                 }
+                                 #not_serving {
+                                       background-color: #CB392A;
+                                       color: #FFF;
+                                       font-weight: bold;
+                                 }
+                                 #head span,
+                                 #not_serving {
+                                       display: block;
+                                       padding: 16px;
+                                       border: 1px solid #DCDCDC;
+                                       font-size: 13px;
+                                       margin: 8px 0 8px 0;
+                                       box-shadow: 1px 1px 3px #F1F1F1;
+                                 }
+                                 #earth {
+                                       margin: 0 auto;
+                                       margin-top: 120px;
+                                       width: 600px;
+                                       height: 600px;
+                                 }
+
+                                 </style>
+
+                           </head>
+
+                           <body onload='initEarth()' id='body'>
+
+                                 <div id="head">Hello Earth! &#8212; Google Earth Plug-in &amp; Portable
+
+                                       <span>
+                                       To see how to initialize the Google Earth Plug-in and make a call to Portable, view the source for this page. To view this example, you need to run Google Maps Engine Portable and serve a 3D globe on http://localhost:9335.
+                                       </span>
+
+                                       <div id="not_serving" style="display:none;"></div>
+
+                                 </div>
+
+                           <div id="earth"></div>
+
+                     </body>
+
+               </html>
+
+.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
+   :width: 130px
+   :height: 44px

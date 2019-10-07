@@ -1,0 +1,16 @@
+
+Signal 6
+
+-[ Error message ]-
+
+"Process terminated with signal 6"
+
+-[ Description ]-
+
+This error indicates an issue with the operating environment, e.g., a
+software or hardware incompatibility.
+
+-[ Resolution ]-
+
+Confirm that your hardware and software meet the requirements listed
+in the technical documentation.

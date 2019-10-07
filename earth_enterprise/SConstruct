@@ -137,10 +137,9 @@ exportdirs = {
            }
 
 # create the environment that controls the builds
-env = khEnvironment(ENV={'PATH' : '/bin:/bin:/usr/bin'},
+env = khEnvironment(ENV={'PATH' : '/bin:/bin:/usr/bin', 'JAVA_HOME': os.environ.get('JAVA_HOME','')},
                     exportdirs=exportdirs,
-                    installdirs=installdirs,
-                    JAVA_HOME="/opt/google/java")
+                    installdirs=installdirs)
 
 def getArgumentVarsAsString():
   vars=''

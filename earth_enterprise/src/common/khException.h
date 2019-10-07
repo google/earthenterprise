@@ -40,6 +40,10 @@ inline QString no_tr(const char *srcText) {
 class khException : public std::runtime_error
 {
  public:
+  khException(const std::string &msg)
+      : std::runtime_error(msg) {}
+  khException(const char * msg)
+      : std::runtime_error(msg) {}
   khException(const QString &msg)
       : std::runtime_error(std::string((const char *)msg.utf8())) { }
   virtual ~khException(void) throw() { }
