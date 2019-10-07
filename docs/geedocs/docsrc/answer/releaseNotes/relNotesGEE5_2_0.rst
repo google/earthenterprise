@@ -34,7 +34,7 @@ Release notes: Open GEE 5.2.0
       files are stored and downloaded separately from the rest of the
       Open GEE code.
 
-      **Open GEE.org Web Site**. The Open GEE repository now includes the
+      **OpenGEE.org Web Site**. The Open GEE repository now includes the
       source code for the Open GEE website, which can be viewed at
       `http://www.opengee.org <http://www.opengee.org>`_.
 
