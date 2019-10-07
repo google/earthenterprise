@@ -11,6 +11,7 @@ To build the documentation, you need to install Sphinx:
 ```bash
 sudo apt install python-pip
 sudo pip install sphinx==1.7.5
+sudo pip install GitPython
 sudo pip install sphinxprettysearchresults
 ```
 
