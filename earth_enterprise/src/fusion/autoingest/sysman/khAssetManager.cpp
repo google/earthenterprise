@@ -990,8 +990,12 @@ khAssetManager::MercatorMapDatabaseModify(const MapDatabaseEditRequest &req) {
 
 void
 khAssetManager::GetCurrTasks(const std::string &dummy, TaskLists &ret) {
+  uint mutexWaitTime = MiscConfig::Instance().MutexTimedWaitSec;
+
+  // Passing in a timeout will throw khTimedMutexException if mutexWaitTime is
+  // exceeded trying to acquire the lock. 
   notify(NFY_INFO, "GetCurrTasks");
-  khLockGuard lock(theResourceManager.mutex);
+  khLockGuard timedLock(theResourceManager.mutex, mutexWaitTime);
   theResourceManager.GetCurrTasks(ret);
 }
 
@@ -1221,7 +1225,6 @@ std::string khAssetManager::PublishDatabase(
 }
 
 std::string khAssetManager::RetrieveTasking(const FusionConnection::RecvPacket& msg) {
-
   std::string replyPayload;
   try {
     TaskLists ret;
@@ -1231,6 +1234,11 @@ std::string khAssetManager::RetrieveTasking(const FusionConnection::RecvPacket& 
 	    throw khException(kh::tr("Unable to encode %1 reply payload")
 	      .arg(ToQString(GET_TASKS)));
 	  }
+  }
+  catch (khTimedMutexException e) {	
+    // Replying with a string beginning "ERROR:" passes an exception message back to the caller	
+    // alternatively we could throw an exception but that could flood fusion logs with warnings	
+    replyPayload = sysManBusyMsg;
   }
   catch (...) {
     // Allow all other exceptions to continue as before

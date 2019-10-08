@@ -925,26 +925,20 @@ void
 khResourceManager::GetCurrTasks(TaskLists &ret)
 {
   assert(!mutex.TryLock());
-  try {
-    for (TaskWaitingQueue::iterator t = taskWaitingQueue.begin();
-        t != taskWaitingQueue.end(); ++t) {
-      khTask *task = *t;
-      ret.waitingTasks.push_back
-        (TaskLists::WaitingTask(task->verref(),
-                                task->taskid(),
-                                task->priority(),
-                                task->submitTime(),
-                                task->activationError));
-    }
-
-    for (Providers::iterator p = providers.begin();
-        p != providers.end(); ++p) {
-      p->second->AddToTaskLists(ret);
-    }
+  for (TaskWaitingQueue::iterator t = taskWaitingQueue.begin();
+       t != taskWaitingQueue.end(); ++t) {
+    khTask *task = *t;
+    ret.waitingTasks.push_back
+      (TaskLists::WaitingTask(task->verref(),
+                              task->taskid(),
+                              task->priority(),
+                              task->submitTime(),
+                              task->activationError));
   }
-  catch(...)
-  {
-    notify(NFY_WARN, "Caught exception while retrieving task list. Ignoring...");
+
+  for (Providers::iterator p = providers.begin();
+       p != providers.end(); ++p) {
+    p->second->AddToTaskLists(ret);
   }
 
   // Get total numbers of assets and asset's versions cached.
