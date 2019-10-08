@@ -1,6 +1,3 @@
-Troubleshooting and error messages
-==================================
-
 .. toctree::
    :maxdepth: 3
    :glob:

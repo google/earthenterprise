@@ -12,28 +12,33 @@ Defining and Building Projects
       imagery, terrain, and vector projects using the resources you
       created in the previous lesson.
 
-      -  :ref:`Define an Imagery Project <Define_Imagery_Project>`
+      -  `Define an Imagery Project <#56899>`__
 
-         -  :ref:`Add Resources to an Imagery Project <Add_Resources_To_Imagery_Project>`
-         -  :ref:`Build an Imagery Project <Build_an_Imagery_Project>`
-         -  :ref:`Preview an Imagery Project <Preview_an_Imagery_Project>`
-         -  :ref:`Specify an Imagery Project as Your Base Map <Specify_an_Imagery_Project_as_BaseMap>`
+         -  `Add Resources to an Imagery Project <#90667>`__
+         -  `Build an Imagery Project <#BuildImgProj>`__
+         -  `Preview an Imagery Project <#PreImgProj>`__
+         -  `Specify an Imagery Project as Your Base
+            Map <#SpImgProgBM>`__
 
-      -  :ref:`Define a Terrain Project <Define_Terrain_Project>`
+      -  `Define a Terrain Project <#DefTerrProj>`__
 
-         -  :ref:`Add Resources to a Terrain Project <Add_Resource_To_Terrain_Project>`
-         -  :ref:`Build a Terrain Project <Build_Terrain_Project>`
+         -  `Add Resources to a Terrain Project <#AddRedTerrProj>`__
+         -  `Build a Terrain Project <#BuildTerrProj>`__
 
-      -  :ref:`Define a Vector Project <Define_Vector_Project>`
+      -  `Define a Vector Project <#55155>`__
 
-         -  :ref:`Add Resources to a Vector Project <Add_Resources_To_Vector_Project>`
-         -  :ref:`Configuring Layer Properties for a Vector Project <Conf_Layer_Prop_Vector_Project>`
-         -  :ref:`Configure Display Rules for a Vector Project <Conf_Display_Rules_for_Vector_Project>`
+         -  `Add Resources to a Vector Project <#34579>`__
+         -  `Configuring Layer Properties for a Vector
+            Project <#ConLayPropVec>`__
+         -  `Configure Display Rules for a Vector
+            Project <#ConDispRulesVec>`__
 
-            -  :ref:`Configure the Default Select All Rule <Conf_Select_All_Rule>`
-            -  :ref:`Display Rules for Major Freeways <Disp_Rules_For_Major_Freeways>`
+            -  `Configure the Default Select All
+               Rule <#ConDefSelAllRule>`__
+            -  `Display Rules for Major
+               Freeways <#DispRuleMajFreeway>`__
 
-         -  :ref:`Build a Vector Project <Build_Vector_Project>`
+         -  `Build a Vector Project <#BuildVecProj>`__
 
       .. _Define_Imagery_Project:
       .. rubric:: Define an Imagery Project
@@ -45,8 +50,8 @@ Defining and Building Projects
       develop your vector project, making it easier to visualize how
       your vector data will appear over your actual imagery.
 
-      .. _Add_Resources_To_Imagery_Project:
       .. rubric:: Add Resources to an Imagery Project
+         :name: add-resources-to-an-imagery-project
 
       Although you can change the display order of imagery and terrain
       resources within a project, the order is ultimately determined by
@@ -71,6 +76,7 @@ Defining and Building Projects
       |Imagery Resources Ordered by Resolution|
 
       .. rubric:: To add resources to an imagery project:
+         :name: to-add-resources-to-an-imagery-project
 
       #. Select **Asset Manager** from the **Tools** menu. The Asset Manager
          appears.
@@ -94,15 +100,15 @@ Defining and Building Projects
 
          |Imagery Project Editor: list of resources|
 
-      #. Select **File > Save**.
-      #. Navigate to the ``ASSET_ROOT/Projects/Imagery``\ folder.
-      #. Enter **SFBayArea** as the name of your project, and click
-         **Save**. The new project appears in the Asset Manager when you
-         select **ASSET_ROOT/Projects/Imagery** in the asset navigation
-         tree.
+      Select **File > Save**.
+      Navigate to the ``ASSET_ROOT/Projects/Imagery``\ folder.
+      Enter **SFBayArea** as the name of your project, and click
+      **Save**. The new project appears in the Asset Manager when you
+      select **ASSET_ROOT/Projects/Imagery** in the asset navigation
+      tree.
 
-      .. _Build_an_Imagery_Project:
       .. rubric:: Build an Imagery Project
+         :name: build-an-imagery-project
 
       As with resources, you do not have to build projects right away.
       You can define several projects and then build them all, or you
@@ -113,7 +119,7 @@ Defining and Building Projects
 
       .. note::
 
-         It could take up to 10 minutes for the project to
+         **Note:** It could take up to 10 minutes for the project to
          build. Do this exercise when you can spend some time away from
          your computer while the project builds.
 
@@ -136,17 +142,18 @@ Defining and Building Projects
       When the status of the imagery project build is **Succeeded**, go
       on to the next exercise.
 
-      .. _Preview_an_Imagery_Project:
       .. rubric:: Preview an Imagery Project
+         :name: preview-an-imagery-project
 
       You can preview an imagery project after you build it.
 
       .. note::
 
-         Only bounding boxes appear in the Preview pane, not
+         **Note:** Only bounding boxes appear in the Preview pane, not
          the actual imagery.
 
       .. rubric:: To preview an imagery project:
+         :name: to-preview-an-imagery-project
 
       #. Double-click the name of the imagery project you built in the
          last exercise, **SFBayArea**. The Imagery Project Editor for
@@ -163,20 +170,21 @@ Defining and Building Projects
 
          .. note::
 
-            The name of the project does not appear in the
+            **Note:** The name of the project does not appear in the
             Preview List pane. When you close the Imagery Project Editor
             or uncheck the box next to **Preview**, the bounding boxes
             disappear. You can reset the view by pressing **Ctrl+R**.
 
          |Project Preview|
 
-      .. _Specify_an_Imagery_Project_as_BaseMap:
       .. rubric:: Specify an Imagery Project as Your Base Map
+         :name: specify-an-imagery-project-as-your-base-map
 
       When the imagery project build is done, you can specify it as your
       base map.
 
       .. rubric:: To specify an imagery project as your base map:
+         :name: to-specify-an-imagery-project-as-your-base-map
 
       #. Select **Preferences** from the **Edit** menu. The Preferences
          dialog appears.
@@ -197,19 +205,20 @@ Defining and Building Projects
          you change it to another image or return it to the default
          imagery in the Preferences dialog.
 
-      .. _Define_Terrain_Project:
       .. rubric:: Define a Terrain Project
+         :name: define-a-terrain-project
 
       The terrain project for this tutorial is very simple. It includes
       one of the resources you built in the previous lesson.
 
-      .. _Add_Resource_To_Terrain_Project:
       .. rubric:: Add a Resource to a Terrain Project
+         :name: add-a-resource-to-a-terrain-project
 
       The following procedure provides the steps to add resources to a
       terrain project.
 
       .. rubric:: To add resources to a terrain project:
+         :name: to-add-resources-to-a-terrain-project
 
       #. Select **Asset Manager** from the **Tools** menu. The Asset Manager
          appears.
@@ -232,18 +241,18 @@ Defining and Building Projects
       #. Click |New Icon|. The Open dialog appears.
       #. Navigate to the ``ASSET_ROOT/Resources/Terrain`` folder.
       #. Select **WorldTopography**, and click **Open**. The
-         WorldTopography resource appears in the Terrain Project Editor.
+      WorldTopography resource appears in the Terrain Project Editor.
 
       |Terrain Project Editor|
 
       #. In the Terrain Project Editor, select **File > Save**.
       #. Navigate to the ``ASSET_ROOT/Projects/Terrain``\ folder.
       #. Enter **SFTerrain** as the name of your project, and click **Save**.
-         The new project appears in the Asset Manager when you select
-         **ASSET_ROOT/Projects/Terrain** in the asset navigation tree.
+      The new project appears in the Asset Manager when you select
+      **ASSET_ROOT/Projects/Terrain** in the asset navigation tree.
 
-      .. _Build_Terrain_Project:
       .. rubric:: Build a Terrain Project
+         :name: build-a-terrain-project
 
       As with the imagery project, in this exercise, you build the
       terrain project right away.
@@ -256,14 +265,14 @@ Defining and Building Projects
 
          .. note::
 
-            It could take a while for this project to build,
+            **Note:** It could take a while for this project to build,
             depending on the speed of your workstation.
 
       When the status of the terrain project build is **Succeeded**, go
       on to the next exercise.
 
-      .. _Define_Vector_Project:
       .. rubric:: Define a Vector Project
+         :name: define-a-vector-project
 
       The following exercises cover how to define, configure, and build
       a vector project using the resources you created in the previous
@@ -279,14 +288,15 @@ Defining and Building Projects
 
       |Road Display Example|
 
-      .. _Add_Resources_To_Vector_Project:
       .. rubric:: Add Resources to a Vector Project
+         :name: add-resources-to-a-vector-project
 
       Before specifying the display rules for this vector project, you
       must add the resource you created in `Defining and Building
       Resources <../answer/4412443.html>`__.
 
       .. rubric:: To add resources to a vector project:
+         :name: to-add-resources-to-a-vector-project
 
       #. Select **Asset Manager** from the **Tools** menu. The Asset Manager
          appears.
@@ -322,7 +332,7 @@ Defining and Building Projects
 
          .. note::
 
-            The name of the project does not appear in the
+            **Note:** The name of the project does not appear in the
             Preview List pane. When you close the Vector Project Editor
             or uncheck the boxes next to the resources, the vector data
             disappears. You can reset the view, if desired, by pressing
@@ -336,7 +346,7 @@ Defining and Building Projects
 
          .. note::
 
-            Removing the resource from the project does not
+            **Note:** Removing the resource from the project does not
             delete the resource. The resource remains intact and
             available for use by other projects. It is simply not part of
             this particular project any longer.
@@ -350,14 +360,15 @@ Defining and Building Projects
 
       Now you are ready to begin configuring the vector layer.
 
-      .. _Conf_Layer_Prop_Vector_Project:
       .. rubric:: Configuring Layer Properties for a Vector Project
+         :name: configuring-layer-properties-for-a-vector-project
 
       This exercise covers how to configure layer properties for your
       vector project. Layer properties determine a number of aspects of
       how your data appears and is accessed in Google Earth EC.
 
       .. rubric:: To configure layer properties:
+         :name: to-configure-layer-properties
 
       #. In the Asset Manager, double-click **CARoads** in the
          ``/ASSET_ROOT/Projects/Vector`` folder. The Vector Project
@@ -391,8 +402,9 @@ Defining and Building Projects
       #. Select **File > Save**. Google Earth Enterprise Fusion saves
          the vector project with the same name.
 
-      .. _Conf_Display_Rules_for_Vector_Project:
+      .. _Configure_Display_Rules_for_a_Vector_Project:
       .. rubric:: Configure Display Rules for a Vector Project
+         :name: configure-display-rules-for-a-vector-project
 
       This exercise covers how to specify display rules for your vector
       project. Display rules determine how your data looks in Google
@@ -425,6 +437,7 @@ Defining and Building Projects
       `https://nationalmap.gov/small_scale/mld/roadtrl.html <https://nationalmap.gov/small_scale/mld/roadtrl.html>`_
 
       .. rubric:: To configure a vector layer:
+         :name: to-configure-a-vector-layer
 
       #. In the Vector Project Editor, right-click **CAHighways**, and
          select **Configure Display Rules** from the context menu.
@@ -441,7 +454,7 @@ Defining and Building Projects
 
       .. tip::
 
-         Google Earth Enterprise Fusion executes the display
+         **Tip:** Google Earth Enterprise Fusion executes the display
          rules sequentially, based on the order in which they are listed
          on the Rules list. So you should always make the **default
          select all** rule the last one on the list.
@@ -462,8 +475,8 @@ Defining and Building Projects
       list, if any. This ensures that all vector data for the layer is
       displayed.
 
-      .. _Conf_Select_All_Rule:
       .. rubric:: Configure the Default Select All Rule
+         :name: configure-the-default-select-all-rule
 
       In this part of the exercise, you define the **default select
       all** rule. This rule applies to all of the surface streets that
@@ -473,6 +486,7 @@ Defining and Building Projects
       rule.
 
       .. rubric:: To define the default select all rule:
+         :name: to-define-the-default-select-all-rule
 
       #. Specify the geometry characteristics of the lines:
 
@@ -515,7 +529,7 @@ Defining and Building Projects
 
          e. Click the **OK** button to save your display rule.
 
-      #. Verify that the display rule does what you intend:
+      #. Verify that your display rule does what you intend:
 
          a. Ensure that nothing is listed in the Preview List pane. If
             one or more assets are listed, right-click any asset, and
@@ -535,7 +549,7 @@ Defining and Building Projects
 
             .. note::
 
-               Labels for vector projects do not appear in the
+               **Note:** Labels for vector projects do not appear in the
                Preview pane.
 
          e. Zoom out to a display level less than **9**. The roads
@@ -552,11 +566,11 @@ Defining and Building Projects
 
          .. note::
 
-            Whenever you modify display rules or filters for
+            **Note:** Whenever you modify display rules or filters for
             your data, it is a good idea to save the project.
 
-      .. _Disp_Rules_For_Major_Freeways:
       .. rubric:: Display Rules for Major Freeways
+         :name: display-rules-for-major-freeways
 
       This exercise guides you through creating the display rules
       necessary to achieve the desired appearance for the major freeways
@@ -582,6 +596,7 @@ Defining and Building Projects
       them appropriately.
 
       .. rubric:: To define a display rule for major freeways:
+         :name: to-define-a-display-rule-for-major-freeways
 
       #. In the Vector Project Editor, right-click **CAHighways**, and
          select **Configure Display Rules** from the context menu.
@@ -591,7 +606,7 @@ Defining and Building Projects
 
       #. Click |New Icon| at the bottom-left of the dialog. The New Rule
          dialog appears.
-      #. Enter **Major Freeways** in the **New Rule Name** field, and click
+      #. Enter **Major Freeways** in the New Rule Name field, and click
          **OK**. The new rule name appears on the Rules list below the
          **default select all** rule.
 
@@ -683,8 +698,8 @@ Defining and Building Projects
 
          This saves the project with the same name.
 
-      .. _Build_Vector_Project:
       .. rubric:: Build a Vector Project
+         :name: build-a-vector-project
 
       As with imagery and terrain projects, in this exercise, you build
       the vector project as soon as you finish configuring display
@@ -698,7 +713,7 @@ Defining and Building Projects
 
       When the status of the vector project build is **Succeeded**,
       close the Asset Manager by clicking the close box (**X**), and go
-      on to the :doc:`next lesson <../fusionTutorial/buildDatabase>`.
+      on to the :doc:`next lesson <4412422>`.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

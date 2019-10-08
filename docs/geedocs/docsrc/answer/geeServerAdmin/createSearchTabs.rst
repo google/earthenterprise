@@ -38,23 +38,25 @@ Create Search tabs
       database. You define all of the search tabs using the
       **Search tabs** page, and then you select one or more search tabs
       for a specific database when you publish it using the **Databases**
-      page. See :doc:`../geeServerAdmin/publishDatabasesPortables` for details.
+      page. See :doc:`3497763` for details.
 
       .. rubric:: Define a new search tab
 
       To define a new search tab:
 
       #. In the :doc:`GEE Server Admin
-      console <../geeServerAdmin/signInAdminConsole>`, click **Search tabs**.
-      #. Click **Create** **new**. The Create Search Definition dialog appears.
-         
-         |Create Search Definition dialog|
+      console <3470759>`, click **Search tabs**.
+      #. Click **Create** **new**. The Create Search Definition
+      dialog appears.
+      |Create Search Definition dialog|
 
       #. Enter a unique **Name** for your search tab.
-      #. Enter a **Label** that will display as the name of the search tab in the client.
+      #. Enter a **Label** that will display as the name of the
+      search tab in the client.
       #. Provide a **URL**.
-      #. If you want to reference a Google Earth Enterprise Server plug-in for the 
-         search tab, enter the name of the plug-in. The following plug-ins are available:
+      #. If you want to reference a Google Earth Enterprise Server
+      plug-in for the search tab, enter the name of the plug-in.
+      The following plug-ins are available:
 
          -  POISearch
          -  /gesearch/FederatedSearch
@@ -62,7 +64,7 @@ Create Search tabs
          -  /gesearch/PlacesSearch
          -  /gesearch/ExampleSearch
 
-      #. Optionally provide additional query parameters. 
+      #. Optionally provide additional query parameters.
          The syntax is **key1=value1&key2;=value2**. For example,
          **flyToFirstElement=true&displayKeys;=location** flies to
          the first element of your search results and displays the
@@ -71,30 +73,28 @@ Create Search tabs
          be very familiar with your search application to use this
          field.
 
-         .. warning::
-         
-            Any web service, servlet, or web application
-            you configure the search tabs to query must return valid KML
-            to Google Earth EC. For Google Maps, it must return valid
-            JavaScript in the specified structure.
+      **Caution:** Any web service, servlet, or web application
+      you configure the search tabs to query must return valid KML
+      to Google Earth EC. For Google Maps, it must return valid
+      JavaScript in the specified structure.
 
-      #. Optionally provide additional config parameters.
-         Specify the following field parameters:
+      Optionally provide additional config parameters.
+      Specify the following field parameters:
 
-         a. **Label**: Label of the search box.
-         b. **Suggestion**: Suggestion to the user of what to search for.
-         c. **Key**: The parameter name that the value in the text
-            box will be assigned when the search is submitted.
+      #. **Label**: Label of the search box.
+      #. **Suggestion**: Suggestion to the user of what to search
+         for.
+      #. **Key**: The parameter name that the value in the text
+         box will be assigned when the search is submitted.
 
       #. Optionally click **add field** to add another set of search
          field parameters.
 
       #. Click **Save**.
-
-      |Create Search Definition dialog Full|
+      |Create Search Definition dialog|
 
       The search tab is ready for you to add to your database. See
-      :doc:`../geeServerAdmin/publishDatabasesPortables` for details.
+      :doc:`3497763` for details.
 
       .. rubric:: Customize search tab style in Google Earth EC
 
@@ -113,7 +113,7 @@ Create Search tabs
       #. In the HTML code, update the style and display elements
          to customize your search form.
       #. Save the HTML file with the name you want to use for your
-         search tabs, e.g.,
+         search tabs, for example,
          ``/opt/google/gehttpd/htdocs/earth/search_supplemental_ui_MySearchTab.html``.
       #. Publish your database with the selected search tab(s).
       #. View your database in Google Earth EC.
@@ -125,4 +125,4 @@ Create Search tabs
    :width: 130px
    :height: 44px
 .. |Create Search Definition dialog| image:: ../../art/server/admin/serverCreateSearchDefinition.png
-.. |Create Search Definition dialog Full| image:: ../../art/server/admin/serverCreateSearchDefinition-full.png
+.. |Create Search Definition dialog| image:: ../../art/server/admin/serverCreateSearchDefinition-full.png

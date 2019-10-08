@@ -16,10 +16,10 @@ Configure your data locations
 
       -  **Add asset roots.**
 
-         If you use the :doc:`../fusionTutorial/about`, Google recommends that
+         If you use the :doc:`4412440`, Google recommends that
          you specify separate asset roots for each user’s tutorial data
          and a completely different asset root for your real working
-         data. See :doc:`../fusionTutorial/confTutorialWS` to learn how to configure
+         data. See :doc:`6028272` to learn how to configure
          and select an asset root for the tutorial, as well as how to
          clean up tutorial files.
 
@@ -40,7 +40,7 @@ Configure your data locations
       For more information on these commands, see
       :ref:`geconfigureassetroot <geconfigassetroot>`.
 
-      .. warning::
+      .. container:: alert
 
          Do not modify the volume definition after you save data to that
          volume. Because the local name and the network path definitions

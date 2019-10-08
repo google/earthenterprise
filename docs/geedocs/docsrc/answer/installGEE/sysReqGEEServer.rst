@@ -20,11 +20,9 @@ System Requirements for GEE Server
             install this graphics card in a separate workstation that
             accesses Fusion.
 
-         .. note::
-         
-            If you plan on cutting globes, this processing can
-            be CPU-intensive and you may also need to plan on providing
-            more storage depending on the size of the globes.
+         **Note:** If you plan on cutting globes, this processing can
+         be CPU-intensive and you may also need to plan on providing
+         more storage depending on the size of the globes.
 
          **Note on virtual machines**: Fusion can be both CPU and I/O
          intensive. For optimal, stable performance, you should
@@ -33,7 +31,7 @@ System Requirements for GEE Server
          OS is one of our supported 64-bit distributions and you
          allocate sufficient resources to the VM.
 
-      **Software Requirements**
+      Software Requirements
 
          **Operating Systems**
 
@@ -64,15 +62,13 @@ System Requirements for GEE Server
          -  For GEE 5.x, use Google Earth EC version 7.0 or later
          -  For GEE 4.4, use Google Earth EC version 6.1 or later
 
-         .. note::
-         
-            Although older versions of Google Earth EC,
-            i.e., 6.0 and earlier, *may* still connect to Google
-            Earth Enterprise or Portable 3D databases, not all
-            features will be available. Also, as Google Earth
-            Enterprise has not been tested or certified against older
-            versions of Google Earth EC, there may be unknown
-            operational problems.
+         **Note:** Although older versions of Google Earth EC,
+         i.e., 6.0 and earlier, *may* still connect to Google
+         Earth Enterprise or Portable 3D databases, not all
+         features will be available. Also, as Google Earth
+         Enterprise has not been tested or certified against older
+         versions of Google Earth EC, there may be unknown
+         operational problems.
 
          Google Earth Enterprise Client (EC) is supported on the
          following platforms:
@@ -81,7 +77,7 @@ System Requirements for GEE Server
          -  Mac
          -  Linux
 
-         **Unsupported Versions and Environments**
+           **Unsupported Versions and Environments**
 
          There are many variations of operating systems and related
          software; point ("x.x") releases can sometimes contain
@@ -96,7 +92,7 @@ System Requirements for GEE Server
          be able to help you resolve it.
 
 
-      **Network Requirements**
+      Network Requirements
 
          Each destination server must meet the requirements below
          before you install GEE, and you must not change these
@@ -108,7 +104,7 @@ System Requirements for GEE Server
          ``hostname`` at a shell prompt, and you can verify the
          network connection by using the ``ping`` command to reach
          other hosts in the same network. The requests should resolve
-         using both an IP address and the FQDN.
+          using both an IP address and the FQDN.
 
          -  Hostname registered in DNS
          -  Hosts file is acceptable for small-scale systems

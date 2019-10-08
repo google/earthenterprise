@@ -10,40 +10,44 @@ Building a Historical Imagery Project
 
       To build a historical imagery project:
 
-      #. Follow the steps in :doc:`../fusionTutorial/buildResource` to define and build the
+      #. Follow the steps in :doc:`4412443` to define and build the
          following:
 
-         .. list-table:: Resources
-            :widths: 25 15 15 10 15
-            :header-rows: 1
-
-            * - Name (Resources/Imagery/...)
-              - Acquisition Date
-              - Provider
-              - Mask
-              - Source File
-            * - **BlueMarble**
-              - Any date. The date of the base image does not affect
-                historical imagery browsing.
-              - NASA Imagery
-              - **No Mask**
-              - **bluemarble_4km.tif**
-            * - **SFBayAreaLanSat_20021010**
-              - 2002-10-10
-              - USGS Imagery
-              - **Auto Mask Tolerance: 2**
-                Default for all other mask values.
-              - **usgsLanSat.tif**
-            * - **i3_15Meter_20041010**
-              - 2004-10-10
-              - i3
-              - **Auto Mask** Default values.
-              - **i3SF15-meter.tif**
-            * - **SFHighResInset_20061010**
-              - 2006-10-10
-              - USGS Imagery
-              -  **Auto Mask** Default values.
-              - **usgsSFHiRes.tif**
+         +-------------+-------------+-------------+-------------+-------------+
+         | Name        | Acquisition | Provider    | Mask        | Source file |
+         | (Resources/ | Date        |             |             |             |
+         | Imagery/... |             |             |             |             |
+         | )           |             |             |             |             |
+         +=============+=============+=============+=============+=============+
+         | **BlueMarbl | Any date.   | NASA        | **No Mask** | ``bluemarbl |
+         | e**         | The date of | Imagery     |             | e_4km.tif`` |
+         |             | the base    |             |             |             |
+         |             | image does  |             |             |             |
+         |             | not affect  |             |             |             |
+         |             | historical  |             |             |             |
+         |             | imagery     |             |             |             |
+         |             | browsing.   |             |             |             |
+         +-------------+-------------+-------------+-------------+-------------+
+         | **SFBayArea | 2002-10-10  | USGS        | **Auto      | ``usgsLanSa |
+         | LanSat_2002 |             | Imagery     | Mask**      | t.tif``     |
+         | 1010**      |             |             | **Tolerance |             |
+         |             |             |             | **:         |             |
+         |             |             |             | 2           |             |
+         |             |             |             | Default for |             |
+         |             |             |             | all other   |             |
+         |             |             |             | mask        |             |
+         |             |             |             | values.     |             |
+         +-------------+-------------+-------------+-------------+-------------+
+         | **i3_15Mete | 2004-10-10  | i3          | | **Auto    | ``i3SF15-me |
+         | r_20041010* |             |             |   Mask**    | ter.tif``   |
+         | *           |             |             | | Default   |             |
+         |             |             |             |   values.   |             |
+         +-------------+-------------+-------------+-------------+-------------+
+         | **SFHighRes | 2006-10-10  | USGS        | **Auto      | ``usgsSFHiR |
+         | Inset_20061 |             | Imagery     | Mask**      | es.tif``    |
+         | 010**       |             |             | Default     |             |
+         |             |             |             | values.     |             |
+         +-------------+-------------+-------------+-------------+-------------+
 
       #. Open a new Imagery Project and add each of the image resources
          to the project:

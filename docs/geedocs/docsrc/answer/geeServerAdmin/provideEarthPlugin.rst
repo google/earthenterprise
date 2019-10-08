@@ -8,7 +8,7 @@
 
    .. container:: content
 
-      .. warning::
+      .. container:: alert
 
          The Google Earth Plug-in is deprecated and is no longer
          available for download. This page is only applicable if you

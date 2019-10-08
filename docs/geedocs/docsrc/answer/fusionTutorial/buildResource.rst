@@ -20,7 +20,8 @@ Defining and Building Resources
          -  :ref:`Explore Imagery Source Files <Explore_Imagery_Source_Files>`
          -  :ref:`Define Imagery Resources <Define_Imagery_resources_2>`
          -  :ref:`Build an Imagery Resource <Build_Imagery_Resource>`
-         -  :ref:`Define and Build the Remaining Imagery Resources <Define_Build_Remaining_Imagery_Resources>`
+         -  :ref:`Define and Build the Remaining Imagery
+            Resources <Define_Build_Remaining_Imagery_Resources>`
          -  :ref:`Preview the Imagery Resources <Preview_Imagery_Resources>`
 
       -  :ref:`Define Terrain Resources <Define_Terrain_Resources>`
@@ -34,7 +35,8 @@ Defining and Building Resources
          -  :ref:`Explore Vector Source Files <Explore_Vector_Source_Files>`
          -  :ref:`Define a Vector Resource <Define_a_Vector_Resource>`
          -  :ref:`Build a Vector Resource <Build_Vector_Resource>`
-         -  :ref:`Define and Build the Remaining Vector Resources <Define_Build_Remaining_Imagery_Resources>`
+         -  :ref:`Define and Build the Remaining Vector
+            Resources <Define_Build_Remaining_Imagery_Resources>`
 
       .. _Define_Imagery_Resources:
       .. rubric:: Define Imagery Resources
@@ -156,7 +158,7 @@ Defining and Building Resources
 
          .. note::
 
-            When you work with real data, the acquisition date
+            **Note:** When you work with real data, the acquisition date
             should reflect the date the data was released. You can
             obtain this information from the provider. However, for the
             purpose of simplifying this tutorial, use the current date
@@ -187,13 +189,13 @@ Defining and Building Resources
 
       .. note::
 
-         | Your system administrator should have configured a
+         | **Notes:** Your system administrator should have configured a
            tutorial environment for you to work on the tutorial lessons,
            keeping your practice data separate from your live production
            data. If you encounter an error message that tells you that a
            tutorial source file is not readable or you cannot save a
            resource, contact your system administrator or refer to the
-           :doc:`Google Earth Enterprise Administration Guide <../fusionTutorial/confTutorialWS>` and
+           :doc:`Google Earth Enterprise Administration Guide <6028272>` and
            configure the tutorial environment yourself before saving any
            practice data.
          | When you finish using any of the asset editors (such as the
@@ -204,7 +206,7 @@ Defining and Building Resources
            with an asset for now, you can close it and get it out of the
            way.
 
-      .. warning::
+      .. container:: alert
 
          **Caution:** When you are defining assets for your live
          production system, it is important to remember that you cannot
@@ -246,7 +248,7 @@ Defining and Building Resources
 
          .. note::
 
-            Because imagery files are data-intensive, it can
+            **Note:** Because imagery files are data-intensive, it can
             take some time to build imagery resources.
 
       #. Double-click the **Current Version** or **Current State**
@@ -274,31 +276,32 @@ Defining and Building Resources
       define and build the remaining imagery resources provided for this
       tutorial:
 
-      .. list-table:: Resources
-         :widths: 25 15 15 10 15
-         :header-rows: 1
-
-         * - Name (Resources/Imagery/...)
-           - Acquisition Date
-           - Provider
-           - Mask
-           - Source File
-         * - **SFBayAreaLanSat_20021010**
-           - Today's date
-           - USGS Imagery
-           - **Auto Mask Tolerance: 2**
-                Default for all other mask values.
-           - **usgsLanSat.tif**
-         * - **i3_15Meter_20041010**
-           - Today's date
-           - i3
-           - **Auto Mask** Default values.
-           - **i3SF15-meter.tif**
-         * - **SFHighResInset_20061010**
-           - Today's date
-           - USGS Imagery
-           -  **Auto Mask** Default values.
-           - **usgsSFHiRes.tif**
+      +-------------+-------------+-------------+-------------+-------------+
+      | Name        | Acquisition | Provider    | Mask        | Source file |
+      | (Resources/ | Date        |             |             |             |
+      | Imagery/... |             |             |             |             |
+      | )           |             |             |             |             |
+      +=============+=============+=============+=============+=============+
+      | **SFBayArea | Today's     | USGS        | **Auto      | ``usgsLanSa |
+      | LanSat_2002 | date        | Imagery     | Mask**      | t.tif``     |
+      | 1010**      |             |             | **Tolerance |             |
+      |             |             |             | **:         |             |
+      |             |             |             | 2           |             |
+      |             |             |             | Default for |             |
+      |             |             |             | all other   |             |
+      |             |             |             | mask        |             |
+      |             |             |             | values      |             |
+      +-------------+-------------+-------------+-------------+-------------+
+      | **i3_15Mete | Today's     | i3          | | **Auto    | ``i3SF15-me |
+      | r_20041010* | date        |             |   Mask**    | ter.tif``   |
+      | *           |             |             | | Default   |             |
+      |             |             |             |   values    |             |
+      +-------------+-------------+-------------+-------------+-------------+
+      | **SFHighRes | Today's     | USGS        | **Auto      | ``usgsSFHiR |
+      | Inset_20061 | date        | Imagery     | Mask**      | es.tif``    |
+      | 010**       |             |             | Default     |             |
+      |             |             |             | values      |             |
+      +-------------+-------------+-------------+-------------+-------------+
 
       While the resources are building, the Asset Manager list looks
       something like this:
@@ -326,7 +329,7 @@ Defining and Building Resources
 
          .. note::
 
-            Google Earth Enterprise Fusion displays the
+            **Note:** Google Earth Enterprise Fusion displays the
             resources in the order in which they are listed in the
             Preview List pane with the last asset on the list at the
             bottom of the stack and the first asset on the list on top.
@@ -411,7 +414,7 @@ Defining and Building Resources
 
          .. note::
 
-            The Preview pane displays a bounding box for
+            **Note:** The Preview pane displays a bounding box for
             terrain source data, not the actual terrain imagery. You
             must define and build terrain resources to be able to see a
             preview of the actual terrain.
@@ -472,7 +475,7 @@ Defining and Building Resources
 
          .. note::
 
-            You can use the **Have Mask** option for resources
+            **Note:** You can use the **Have Mask** option for resources
             that contain one source file only.
 
       #. Accept the **Elevation Units** default, **Meters**.
@@ -492,7 +495,7 @@ Defining and Building Resources
          The Save dialog appears.
 
       #. Navigate to the ``/ASSET_ROOT/Resources/Terrain`` folder you
-         created in :doc:`../fusionTutorial/setup`.
+         created in :doc:`4412441`.
       #. Enter the name **WorldTopography** for the resource, and click
          **Save**.
       #. Close the Terrain Resource Editor dialog.
@@ -538,7 +541,7 @@ Defining and Building Resources
          The Save dialog appears.
 
       #. Navigate to the ``/ASSET_ROOT/Resources/Terrain`` folder you
-         created in :doc:`../fusionTutorial/setup`.
+         created in :doc:`4412441`.
       #. Enter the name **SFTerrain** for the resource, and click
          **Save**.
       #. Close the Terrain Resource Editor dialog.
@@ -555,7 +558,7 @@ Defining and Building Resources
 
       .. note::
 
-         The WorldTopography terrain resource is quite large
+         **Note:** The WorldTopography terrain resource is quite large
          and could take up to 30 minutes to build, depending on the
          speed of your CPU. It is a good idea to start this exercise
          close to lunch time or just before you attend a meeting, so it
@@ -600,7 +603,7 @@ Defining and Building Resources
 
          .. note::
 
-            Since the Preview pane in Google Earth Enterprise
+            **Note:** Since the Preview pane in Google Earth Enterprise
             Fusion is meant for preview purposes only, it does not
             render terrain in 3D like Google Earth EC. Instead, it
             renders a grayscale interpretation of the terrain. The
@@ -723,7 +726,7 @@ Defining and Building Resources
       .. rubric:: To explore vector source files:
          :name: to-explore-vector-source-files
 
-      #. Click the |Open File Icon| button.
+      #. Click |Open File Icon|.
 
          The Open dialog appears.
 
@@ -761,8 +764,7 @@ Defining and Building Resources
 
          You can scroll through this data and sort it by columns to
          explore the values of each field to determine the potential
-         attributes to use in the filters you set up in
-         :ref:`Configuring Display Rules <Conf_Display_Rules_for_Vector_Project>`.
+         attributes to use in the filters you set up in :ref:`Configuring Display Rules <Configure_Display_Rules_for_a_Vector_Project>`.
 
       #. When you finish exploring the data, right-click the
          **california_roads_line**, and select **Remove Layer** to clear
@@ -812,14 +814,14 @@ Defining and Building Resources
 
          The selected file appears in the Source File(s) list.
 
-         |Vector Resource Editor Full|
+         |Vector Resource Editor|
 
       #. Select **Save** from the **File** menu.
 
          The Save dialog appears.
 
       #. Navigate to the ``/ASSET_ROOT/Resources/Vector`` folder you
-         created in :doc:`../fusionTutorial/setup`.
+         created in :doc:`4412441`.
       #. Enter the name **CAHighways** for the resource, and click
          **Save**.
       #. Close the Vector Resource Editor dialog.
@@ -884,8 +886,8 @@ Defining and Building Resources
 
       When Google Earth Enterprise Fusion finishes building the last
       resource, close the Asset Manager by clicking the close box
-      (**X**) in the top right corner, and go on to the
-      :doc:`next lesson <../fusionTutorial/buildProject>`.
+      (**X**) in the top right corner, and go on to the :doc:`next
+      lesson <4412421>`.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
@@ -922,4 +924,4 @@ Defining and Building Resources
 .. |Vector Resource Icon| image:: ../../art/fusion/tutorial/iconResVector.png
 .. |Vector Resource Editor| image:: ../../art/fusion/tutorial/vectorResEditor.png
 .. |Vector Open Source Dialog| image:: ../../art/fusion/tutorial/vectorFileOpenDia2.png
-.. |Vector Resource Editor Full| image:: ../../art/fusion/tutorial/vectorResEditor-full.png
+.. |Vector Resource Editor| image:: ../../art/fusion/tutorial/vectorResEditor-full.png

@@ -10,10 +10,10 @@ Google Maps API v3 for GEE
 
       -  :ref:`Overview <Overview>`
       -  :ref:`Using the Fusion Maps API <Using_Fusion_Maps_API>`
-      -  :ref:`How geeCreateFusionMap works <Factory_geeCreateFusionMap>`
-      -  :ref:`geeCreateFusionMap Factory <Factory>`
-      -  :ref:`google.maps.Map Method extensions <MethodExtensions>`
-      -  :ref:`Examples <APIExamples>`
+      -  :ref:`How ``geeCreateFusionMap`` works <Factory_geeCreateFusionMap>`
+      -  :ref:```geeCreateFusionMap`` Factory <Factory>`
+      -  :ref:```google.maps.Map`` Method extensions <MethodExtensions>`
+      -  :ref:`Examples <Examples>`
       -  :ref:`KML Support <KMLSupport>`
 
       .. _Overview:
@@ -49,7 +49,7 @@ Google Maps API v3 for GEE
          -  Places API, Distance Matrix, Wikipedia, Panaramio, Weather
             layer, etc.
 
-      .. _Using_Fusion_Maps_API:
+      .._Using_Fusion_Maps_API:
       .. rubric:: Using the Fusion Maps API
 
       The Fusion Maps API is used to create and interact with map layers
@@ -65,46 +65,7 @@ Google Maps API v3 for GEE
       World <https://developers.google.com/maps/documentation/javascript/tutorial#HelloWorld>`_
       example of using ``geeCreateFusionMap`` to load a map:
 
-      .. code-block:: html
-
-         <html>
-            <head>
-               <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-               <style type="text/css">
-                  html { height: 100% }
-                  body { height: 100%; margin: 0px; padding: 0px }
-                  #map_canvas { height: 100% }
-               </style>
-               <title>Hello World - GEE 2D Map Example</title>
-
-               <!-- Start by defining GEE_BASE_URL. -->
-               <script type="text/javascript">
-                  var GEE_BASE_URL = window.location.protocol + '//' + window.location.host;
-               </script>
-
-               <!-- Include the provided Maps API v3 files.  Located in /opt/google/gehttpd/htdocs/maps/api/ -->
-                  <script type="text/javascript" src="/maps/api/bootstrap.js"></script>
-                  <script type="text/javascript"
-                  src="/maps/api/fusion_extended_map.js"></script>
-
-                  <!-- geeServerDefs must be defined with the following script; insert name of your published 2D database -->
-                  <script type="text/javascript" src="/YourPublishedDatabase/query?request=Json&var=geeServerDefs"></script>
-
-                  <script type="text/javascript">
-                     function initialize() {
-                        var myOptions = {
-                           center: new google.maps.LatLng(-34.397, 150.644), zoom: 8
-                           };
-                     var geemap = new geeCreateFusionMap("map_canvas", geeServerDefs, myOptions);
-                     }
-                  </script>
-
-               </head>
-               <body onload="initialize()">
-                  <!-- Be sure there is an element on the page with the id you specified above (map_canvas in this case). -->
-                  <div id="map_canvas" style="width:100%; height:100%"></div>
-               </body>
-            </html>
+      ``<html>   <head>     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />     <style type="text/css">       html { height: 100% }       body { height: 100%; margin: 0px; padding: 0px }       #map_canvas { height: 100% }     </style>     <title>Hello World - GEE 2D Map Example</title>      <!-- Start by defining GEE_BASE_URL. -->     <script type="text/javascript">       var GEE_BASE_URL = window.location.protocol + '//' + window.location.host;     </script>      <!-- Include the provided Maps API v3 files.  Located in /opt/google/gehttpd/htdocs/maps/api/ -->     <script type="text/javascript" src="/maps/api/bootstrap.js"></script>     <script type="text/javascript"     src="/maps/api/fusion_extended_map.js"></script>      <!-- geeServerDefs must be defined with the following script; insert name of your published 2D database -->     <script type="text/javascript" src="/YourPublishedDatabase/query?request=Json&var=geeServerDefs"></script>      <script type="text/javascript">       function initialize() {         var myOptions = {           center: new google.maps.LatLng(-34.397, 150.644),           zoom: 8         };       var geemap = new geeCreateFusionMap("map_canvas", geeServerDefs, myOptions);       }     </script>    </head>   <body onload="initialize()">     <!-- Be sure there is an element on the page with the id you specified above (map_canvas in this case). -->     <div id="map_canvas" style="width:100%; height:100%"></div>   </body> </html>``
 
       .. _Factory_geeCreateFusionMap:
       .. rubric:: Factory geeCreateFusionMap
@@ -137,19 +98,13 @@ Google Maps API v3 for GEE
       .. _Factory:
       .. rubric:: Factory
 
-      .. list-table::
-         :widths: 40 50
-         :header-rows: 1
+      .. container::
 
-         * - Factoryclass
-           - Description
-         * - ``geeCreateFusionMap(container, opts?)``
-           - Creates a new Fusion map inside of the given HTML container, which is typically a
-             ``DIV`` element. The options are the same as the options for ``google.maps.Map``.
-             However, if a map type is passed in to the options, the Fusion maps server will
-             override these if an imagery layer is included in the Fusion Maps Database. After
-             this constructor is invoked, the ``setCenter()`` method should be called
-             before any methods that display Fusion layers on top of the map.
+         ======================================== ===============================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+         Factoryclass                             Description
+         ======================================== ===============================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+         ``geeCreateFusionMap(container, opts?)`` Creates a new Fusion map inside of the given HTML container, which is typically a ``DIV`` element. The options are the same as the options for ``google.maps.Map``. However, if a map type is passed in to the options, the Fusion maps server will override these if an imagery layer is included in the Fusion Maps Database. After this constructor is invoked, the ``setCenter()`` method should be called before any methods that display Fusion layers on top of the map.
+         ======================================== ===============================================================================================================================================================================================================================================================================================================================================================================================================================================================================
 
       .. _MethodExtensions:
       .. rubric:: Method extensions
@@ -157,39 +112,21 @@ Google Maps API v3 for GEE
       ``geeCreateFusionMap`` Method extensions are extensions of the
       Google Maps API v3 ``google.maps.Map`` class.
 
-      .. list-table::
-         :widths: 30 15 50
-         :header-rows: 1
+      .. container::
 
-         * - Method extensions
-           - Return Value
-           - Description
-         * - ``showInitialFusionLayers()``
-           - None
-           - Show all layers that are enabled by default. This method should only be invoked
-             after the ``setCenter()``.
-         * - ``getFusionLayerCount()``
-           - Number
-           - Returns the number of Fusion map layers. This does not include the base imagery
-             layer, which is built as a custom map type and serves as the background of the map.
-         * - ``isFusionLayerVisible(index)``
-           - Boolean
-           - Returns true if the layer is currently shown on the map and false if it is hidden.
-         * - ``showFusionLayer(index)``
-           - None
-           - Shows a previously hidden Fusion map layer. This method should only be invoked after
-             the ``setCenter()`` method has been called to initially draw the map.
-         * - ``hideFusionLayer(index)``
-           - None
-           - Hides the specified Fusion map layer.
-         * - ``getFusionLayerName(index)``
-           - String
-           - Returns the name of the specified layer.
-         * - ``getFusionLayerIcon(index)``
-           - String
-           - Returns the URL of the icon associated with the specified layer.
+         =============================== ============ ===================================================================================================================================================================
+         Method extensions               Return Value Description
+         =============================== ============ ===================================================================================================================================================================
+         ``showInitialFusionLayers()``   None         Show all layers that are enabled by default. This method should only be invoked after the ``setCenter()``.
+         ``getFusionLayerCount()``       Number       Returns the number of Fusion map layers. This does not include the base imagery layer, which is built as a custom map type and serves as the background of the map.
+         ``isFusionLayerVisible(index)`` Boolean      Returns true if the layer is currently shown on the map and false if it is hidden.
+         ``showFusionLayer(index)``      None         Shows a previously hidden Fusion map layer. This method should only be invoked after the ``setCenter()`` method has been called to initially draw the map.
+         ``hideFusionLayer(index)``      None         Hides the specified Fusion map layer.
+         ``getFusionLayerName(index)``   String       Returns the name of the specified layer.
+         ``getFusionLayerIcon(index)``   String       Returns the URL of the icon associated with the specified layer.
+         =============================== ============ ===================================================================================================================================================================
 
-      .. _APIExamples:
+      .._ Examples:
       .. rubric:: Examples
 
       Several examples that illustrate how to use the Fusion Maps API
@@ -198,8 +135,9 @@ Google Maps API v3 for GEE
       ``/opt/google/gehttpd/htdocs/maps``
 
       The following files are used by default for a published database.
-      For example, when serving ``http://your-host.com/YourPublishedDatabase``,
-      this code is used to render the page.
+      For example, when serving
+      ``http://your-host.com/YourPublishedDatabase``, this code is used
+      to render the page.
 
       -  ``maps_local.html``
       -  ``maps_google.html``
@@ -231,9 +169,7 @@ Google Maps API v3 for GEE
       #. Store the GeoXml library in the GEE Server Apache Document
          root. Default location is ``/opt/google/gehttpd/htdocs/js``
       #. Load the GeoXml library in your GEE 2D Map HTML file:
-
          ``<script type="text/javascript" src="/js/geoxmlfull_v3.js"></script>``
-         
       #. Store the target KML file in the GEE Server Apache Document
          root.
       #. Create a GeoXml object in the GEE 2D Map HTML file to load your
@@ -246,6 +182,8 @@ Google Maps API v3 for GEE
       `samples <http://www.dyasdesigns.com/geoxml/GeoXmlSamples.html>`_.
 
       .. note::
+
+         Note:
 
          -  Performance may degrade with large KML files.
          -  GeoXml is an open-source package, not supported by Google.

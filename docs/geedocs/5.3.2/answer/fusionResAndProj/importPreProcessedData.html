@@ -79,15 +79,15 @@ have the same file name with different extensions. Vector data is
 in a single folder with a .kvp extension. There is a diferent
 Fusion import command or command option for each extension. The
 extensions and their import commands are described below:</p>
-<table border="1" class="colwidths-given docutils">
+<table border="1" class="docutils">
 <colgroup>
-<col width="27%" />
-<col width="20%" />
-<col width="53%" />
+<col width="32%" />
+<col width="32%" />
+<col width="36%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">File Extension</th>
-<th class="head">Data Types</th>
+<th class="head">Data Type</th>
 <th class="head">Import Command</th>
 </tr>
 </thead>
@@ -106,8 +106,11 @@ extensions and their import commands are described below:</p>
 </tr>
 <tr class="row-odd"><td>.kmp</td>
 <td>Mask</td>
-<td><code class="docutils literal notranslate"><span class="pre">--havemask</span></code> command option
-Use the <code class="docutils literal notranslate"><span class="pre">--nomask</span></code> option to import files without a mask.</td>
+<td><code class="docutils literal notranslate"><span class="pre">--havemask</span></code> command
+option
+Use the <code class="docutils literal notranslate"><span class="pre">--nomask</span></code>
+option to import
+files without a mask.</td>
 </tr>
 </tbody>
 </table>
@@ -121,8 +124,8 @@ folder and subfiles so that the Fusion user (<code class="docutils literal notra
 by default) can access and read the files.</p>
 </li>
 <li><p class="first">Open a terminal window on your processing machine, then change
-directory to your asset root:</p>
-<p><code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">/gevol/assets</span></code></p>
+directory to your asset root:
+<code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">/gevol/assets</span></code></p>
 </li>
 <li><p class="first">Use the appropriate command for the type of data you have:
 imagery, terrain, or vector. Your command must contain either
@@ -132,21 +135,20 @@ your raster data does not have a mask, use <code class="docutils literal notrans
 For example, the NASA Blue Marble imagery does not have a mask.
 If you import it without using <code class="docutils literal notranslate"><span class="pre">-nomask</span></code>, it displays a black
 line and circular gaps at each pole because the map edges are
-masked and the center of the earth is exposed.</p>
-<p>Commands are in the format:</p>
-<p><code class="docutils literal notranslate"><span class="pre">[commandname]</span> <span class="pre">[options]</span> <span class="pre">[--meta</span> <span class="pre">&lt;key&gt;=&lt;value&gt;]...</span> <span class="pre">-o</span> <span class="pre">&lt;assetname&gt;</span> <span class="pre">{</span> <span class="pre">--filelist</span> <span class="pre">&lt;file&gt;</span> <span class="pre">|</span> <span class="pre">&lt;sourcefile&gt;</span> <span class="pre">...}</span></code></p>
-<p>For all <code class="docutils literal notranslate"><span class="pre">genew{imagery,terrain,vector}resource</span></code> tools, the
+masked and the center of the earth is exposed.
+Commands are in the format:
+<code class="docutils literal notranslate"><span class="pre">[commandname]</span> <span class="pre">[options]</span> <span class="pre">[--meta</span> <span class="pre">&lt;key&gt;=&lt;value&gt;]...</span> <span class="pre">-o</span> <span class="pre">&lt;assetname&gt;</span> <span class="pre">{</span> <span class="pre">--filelist</span> <span class="pre">&lt;file&gt;</span> <span class="pre">|</span> <span class="pre">&lt;sourcefile&gt;</span> <span class="pre">...}</span></code>
+For all <code class="docutils literal notranslate"><span class="pre">genew{imagery,terrain,vector}resource</span></code> tools, the
 output path (<code class="docutils literal notranslate"><span class="pre">-o</span> <span class="pre">path</span></code>) must be relative to the asset root
-directory.</p>
-<p>You can specify source file names on the command line or in a
+directory.
+You can specify source file names on the command line or in a
 file list. To view supported command options, enter
 <code class="docutils literal notranslate"><span class="pre">[commandname]</span> <span class="pre">--help</span> <span class="pre">|</span> <span class="pre">-?</span></code></p>
-<table border="1" class="colwidths-given docutils" id="id1">
-<caption><span class="caption-text">genew Commands</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<table border="1" class="docutils">
 <colgroup>
-<col width="10%" />
-<col width="40%" />
-<col width="50%" />
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">File Type</th>
@@ -156,36 +158,98 @@ file list. To view supported command options, enter
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>.kip (Imagery)</td>
-<td><code class="docutils literal notranslate"><span class="pre">genewimageryresource</span> <span class="pre">--provider</span> <span class="pre">&lt;PROVIDER_KEY&gt;</span> <span class="pre">--havemask</span> <span class="pre">-o</span>
-<span class="pre">path/to/resource/directory/resourcename</span>
-<span class="pre">/path/to/imagery.kip</span></code></td>
-<td>To add files named <code class="docutils literal notranslate"><span class="pre">SanFrancisco.kip</span></code> and <code class="docutils literal notranslate"><span class="pre">SanFrancisco.kmp</span></code> to the
-<code class="docutils literal notranslate"><span class="pre">/gevol/assets/imagery/noam/usa/ca/SanFrancisco</span></code> directory:
-<code class="docutils literal notranslate"><span class="pre">genewimageryresource</span> <span class="pre">--havemask</span> <span class="pre">-o</span> <span class="pre">imagery/noam/usa/ca/SanFrancisco</span>
-<span class="pre">/gevol/src/imagery/noam/usa/ca/SanFrancisco.kip</span></code></td>
+<td><p class="first"><a href="#id1"><span class="problematic" id="id2">``</span></a>genewimageryresourc
+e –provider &lt;PROVIDE
+R_KEY&gt; –havemask -o
+path/to/resource/dir
+ectory/resourcename </p>
+<blockquote>
+<div>/path/to/imagery.kip</div></blockquote>
+<p class="last"><a href="#id3"><span class="problematic" id="id4">``</span></a></p>
+</td>
+<td><dl class="first docutils">
+<dt>To add files named</dt>
+<dd><a href="#id5"><span class="problematic" id="id6">``</span></a>SanFrancisco.kip`</dd>
+</dl>
+<dl class="docutils">
+<dt><a href="#id7"><span class="problematic" id="id8">`</span></a></dt>
+<dd>and
+<a href="#id9"><span class="problematic" id="id10">``</span></a>SanFrancisco.kmp`</dd>
+</dl>
+<dl class="docutils">
+<dt><a href="#id11"><span class="problematic" id="id12">`</span></a></dt>
+<dd>to the
+<a href="#id13"><span class="problematic" id="id14">``</span></a>/gevol/assets/ima</dd>
+</dl>
+<p>gery/noam/usa/ca/SanF
+rancisco``</p>
+<blockquote>
+<div>directory:</div></blockquote>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">genewimageryresou</span>
+<span class="pre">rce</span> <span class="pre">--havemask</span> <span class="pre">-o</span> <span class="pre">\</span> <span class="pre">i</span>
+<span class="pre">magery/noam/usa/ca/Sa</span>
+<span class="pre">nFrancisco</span> <span class="pre">\</span> <span class="pre">/gevol/s</span>
+<span class="pre">rc/imagery/noam/usa/c</span>
+<span class="pre">a/SanFrancisco.kip</span></code></p>
+</td>
 </tr>
 <tr class="row-odd"><td>.ktp (Terrain)</td>
-<td><code class="docutils literal notranslate"><span class="pre">genewterrainresource</span> <span class="pre">--provider</span> <span class="pre">&lt;PROVIDER_KEY&gt;</span> <span class="pre">--havemask</span> <span class="pre">-o</span>
-<span class="pre">path/to/resource/directory/resourcename</span>
-<span class="pre">/path/to/terrain.ktp</span></code></td>
-<td>To add files named <code class="docutils literal notranslate"><span class="pre">GTOPO30.ktp</span></code> and <code class="docutils literal notranslate"><span class="pre">GTOPO30.kmp</span></code> to the
-<code class="docutils literal notranslate"><span class="pre">/gevol/assets/terrain/world/</span></code> directory:
-<code class="docutils literal notranslate"><span class="pre">genewterrainresource</span> <span class="pre">--havemask</span> <span class="pre">-o</span> <span class="pre">terrain/world/GTOPO30</span>
-<span class="pre">/gevol/src/terrain/world/GTOPO30.ktp</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">genewterrainresourc</span>
+<span class="pre">e</span> <span class="pre">--provider</span> <span class="pre">&lt;PROVIDE</span>
+<span class="pre">R_KEY&gt;</span> <span class="pre">--havemask</span> <span class="pre">-o</span>
+<span class="pre">\</span> <span class="pre">path/to/resource/di</span>
+<span class="pre">rectory/resourcename</span>
+<span class="pre">\</span> <span class="pre">/path/to/terrain.kt</span>
+<span class="pre">p</span></code></td>
+<td>To add files named
+<code class="docutils literal notranslate"><span class="pre">GTOPO30.ktp</span></code> and
+<code class="docutils literal notranslate"><span class="pre">GTOPO30.kmp</span></code> to
+the
+<code class="docutils literal notranslate"><span class="pre">/gevol/assets/terra</span>
+<span class="pre">in/world/</span></code>
+directory:
+<code class="docutils literal notranslate"><span class="pre">genewterrainresourc</span>
+<span class="pre">e</span> <span class="pre">--havemask</span> <span class="pre">-o</span> <span class="pre">\</span> <span class="pre">ter</span>
+<span class="pre">rain/world/GTOPO30</span> <span class="pre">\</span>
+<span class="pre">/gevol/src/terrain/wo</span>
+<span class="pre">rld/GTOPO30.ktp</span></code></td>
 </tr>
 <tr class="row-even"><td>.kvp (Vector)</td>
-<td><code class="docutils literal notranslate"><span class="pre">genewvectorresource</span> <span class="pre">--provider</span> <span class="pre">&lt;PROVIDER_KEY&gt;</span> <span class="pre">--encoding</span> <span class="pre">&lt;ENCODING_SCHEME&gt;</span> <span class="pre">-o</span>
-<span class="pre">path/to/resource/directory/resourcename</span> <span class="pre">/path/to/vector.kvp</span></code></td>
-<td>To add a file named <code class="docutils literal notranslate"><span class="pre">income.kvp</span></code> to the
-<code class="docutils literal notranslate"><span class="pre">/gevol/assets/vector/noam/usa/demographic/</span></code> directory:
-<code class="docutils literal notranslate"><span class="pre">genewvectorresource</span> <span class="pre">-o</span> <span class="pre">vector/noam/usa/demographic/income</span>
-<span class="pre">/gevol/src/vector/processed/noncommercial/nationalatlas/income.kvp</span></code></td>
+<td><dl class="first docutils">
+<dt><a href="#id15"><span class="problematic" id="id16">``</span></a>genewvectorresource</dt>
+<dd>–provider &lt;PROVIDER</dd>
+</dl>
+<p class="last">_KEY&gt; –encoding &lt;ENC
+ODING_SCHEME&gt; -o pa
+th/to/resource/direct
+ory/resourcename /p
+ath/to/vector.kvp``</p>
+</td>
+<td><dl class="first docutils">
+<dt>To add a file named</dt>
+<dd><code class="docutils literal notranslate"><span class="pre">income.kvp</span></code> to
+the
+<a href="#id17"><span class="problematic" id="id18">``</span></a>/gevol/assets/vec</dd>
+</dl>
+<p>tor/noam/usa/demograp
+hic/``</p>
+<blockquote>
+<div>directory:</div></blockquote>
+<p><a href="#id19"><span class="problematic" id="id20">``</span></a>genewvectorresour
+ce -o vector/noam/u
+sa/demographic/income</p>
+<blockquote>
+<div>/gevol/src/vector/</div></blockquote>
+<p class="last">processed/noncommerci
+al/nationalatlas/inco
+me.kvp``</p>
+</td>
 </tr>
 </tbody>
 </table>
 </li>
-<li><p class="first">Use the <code class="docutils literal notranslate"><span class="pre">gebuild</span></code> command to build the asset:</p>
-<p><code class="docutils literal notranslate"><span class="pre">gebuild</span> <span class="pre">path/to/resource/directory/resourcename</span></code></p>
+<li><p class="first">Use the <code class="docutils literal notranslate"><span class="pre">gebuild</span></code> command to build the asset:
+<code class="docutils literal notranslate"><span class="pre">gebuild</span> <span class="pre">path/to/resource/directory/resourcename</span></code></p>
 </li>
 </ol>
 </div>

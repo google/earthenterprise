@@ -95,7 +95,6 @@ gees.admin.databaseView = {
       var display = {};
       display.size = gees.tools.getDisplaySize(db.size);
       display.wms =  db.serve_wms ? this.wmsHoverText(db.target_path) : '';
-      display.def_db = db.default_database ? '<em class="default_db_label">Default</em>' : '';
       // Print string 'unpublished' in place of target path and virtual host
       // if the portable/databse in question is not published.
       var unpublished = '<text class=\'unpublished\'>unpublished</text>';
@@ -207,7 +206,6 @@ gees.admin.databaseView = {
         var checkbox = gees.dom.create('input');
         checkbox.id = 'masterCheckBox';
         checkbox.type = 'checkbox';
-        checkbox.className = 'frontPageCheck';
         var onclick = 'gees.admin.checkboxes.toggleAll()';
         checkbox.setAttribute('onclick', onclick);
         innerMenu.appendChild(checkbox);
@@ -278,7 +276,7 @@ gees.admin.databaseView = {
         this.createInnerSpan('gName', db.name, parentDiv, db.name);
         var pathHover = display.target_path_hover;
         var typeClass = gees.tools.isRemoteFusion(db) ? 'remote-host' : '';
-        var desc = display.def_db + display.wms + db.description;
+        var desc = display.wms + db.description;
         this.createInnerSpan(
             'gPublishPoint', display.target_path, parentDiv, pathHover);
         this.createInnerSpan(
@@ -305,7 +303,7 @@ gees.admin.databaseView = {
         var clickFunction = 'gees.admin.databaseView.toggleDatabaseItem' +
             '(\'' + index + '\');';
         var checkbox = gees.dom.create('input');
-        checkbox.className = 'dbCheck frontPageCheck';
+        checkbox.className = 'dbCheck';
         checkbox.name = 'dbCheck';
         checkbox.type = 'checkbox';
         checkbox.id = 'cb' + index + name;
@@ -433,7 +431,6 @@ gees.admin.databaseView = {
       // Use the name of the item as a suggested name for the target path.
       var targetPath = this.suggestTargetPath(item.target_path, displayName);
       gees.dom.get('NewGlobePublishPoint').value = targetPath;
-      gees.dom.setCheckbox('default_db_radio_off', true);
       gees.dom.setCheckbox('wms_radio_off', true);
       gees.dom.hide('NoPublishName');
       gees.dom.get('NewGlobePublishPoint').focus();
@@ -530,11 +527,6 @@ gees.admin.databaseView = {
 
       // Attach a listener to a published item's wms icon, if it exists.
       gees.admin.databaseView.addWmsHoverListeners();
-
-      // Refresh the database list if this database was published as the default
-      if( newItem.default_database ){
-        gees.admin.databaseView.onRefresh();
-      }
     },
 
     // Get the details of a published database, based on its target path.
@@ -605,10 +597,6 @@ gees.admin.databaseView = {
         return gees.dom.isChecked('wms_radio') ? '&ServeWms=1' : '';
       },
 
-      default_database: function() {
-        return gees.dom.isChecked('default_db_radio') ? '&EcDefaultDb=1' : '';
-      },
-
       searchDefs: function(name) {
         var array =
             gees.admin.databaseView.publish.ui.updateSearchSelect(name, true);
@@ -673,8 +661,7 @@ gees.admin.databaseView = {
         return '/geserve/Publish?Cmd=PublishDb&DbName=' +
             this.filePath(item) + '&TargetPath=' + target +
             this.virtualHost() + this.hostName(item) +
-            this.wms() + this.default_database() + 
-            this.fusionOnlyOptions(item);
+            this.wms() + this.fusionOnlyOptions(item);
       }
     },
 
@@ -748,10 +735,10 @@ gees.admin.databaseView = {
         }
 
         for (var i = 0; i < searchDrops.length; i++) {
-          var defaultMsg = 'add a search tab';
+          var defaultMsg = '-- add a search tab --';
           var select = searchDrops[i];
           var searchValue = select.options[select.selectedIndex].value;
-          if (searchValue.indexOf(defaultMsg) == -1) {
+          if (searchValue != defaultMsg) {
             var alreadySelected = tabsInUse.indexOf(searchValue) != -1;
             if (!alreadySelected) {
               count += 1;
@@ -878,7 +865,6 @@ gees.admin.databaseView = {
           this.toggleFusionOnlyElements('block');
 
           if (gees.tools.is2dDatabase(item)) {
-            gees.dom.hide('DefaultDatabase');
             gees.dom.hide('SnippetPublishOptions');
             gees.dom.hide('SupplementalSearchOptions');
             gees.dom.hide('SupplementalSearchLabel');
@@ -1163,7 +1149,6 @@ gees.admin.databaseView = {
         item.status = 'available';
         item.virtual_host_name = '';
         item.serve_wms = false;
-        item.default_database = false;
         // Make sortable name of undefined paths '~', so they will sort
         // last in a list.  A blank path sorts first, which is not helpful.
         item.sortPath = '~';

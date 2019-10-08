@@ -67,7 +67,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp5.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp5.png" style="width: 130px; height: 44px;" /></a></p>
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp4.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp4.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="configure-gee-server-5-1-0-for-ssl-https">
 <h1>Configure GEE Server 5.1.0 for SSL/HTTPS<a class="headerlink" href="#configure-gee-server-5-1-0-for-ssl-https" title="Permalink to this headline">¶</a></h1>
 <div class="docutils container">
@@ -174,13 +174,13 @@ over HTTPS.</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The virtual host name “secure” is reserved for GEE
+<p class="last"><strong>Note:</strong> The virtual host name “secure” is reserved for GEE
 Server use.</p>
 </div>
 <p class="rubric" id="to-add-a-virtual-host-for-https-serving">To add a virtual host for HTTPS serving:</p>
 <ol class="arabic">
 <li><p class="first">Register your new virtual host using the <code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code>
-command. See <a class="reference internal" href="../geeServerAdmin/manageVirtualHosts.html"><span class="doc">Manage virtual hosts</span></a>.</p>
+command. See <span class="xref std std-doc">6013604</span>.</p>
 <p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">–-addvh</span> <span class="pre">--ssl</span></code></p>
 <p>The <strong>–ssl</strong> option registers the newly created virtual host
 by creating a configuration file with the naming convention:
@@ -188,12 +188,12 @@ by creating a configuration file with the naming convention:
 <code class="docutils literal notranslate"><span class="pre">&lt;Apache</span> <span class="pre">path&gt;/conf.d/virtual_servers/</span></code>.</p>
 <p>For example, to create a location-based virtual host with a
 configuration file that specifies SSL:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># /opt/google/bin$ ./geserveradmin --addvh test_ssl --ssl
-Registering Virtual Host: test_ssl ...
-Virtual Host registration successful.
-Location-based Virtual Host created:
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># /opt/google/bin$ ./geserveradmin --addvh test_ssl --ssl</span>
+<span class="n">Registering</span> <span class="n">Virtual</span> <span class="n">Host</span><span class="p">:</span> <span class="n">test_ssl</span> <span class="o">...</span>
+<span class="n">Virtual</span> <span class="n">Host</span> <span class="n">registration</span> <span class="n">successful</span><span class="o">.</span>
+<span class="n">Location</span><span class="o">-</span><span class="n">based</span> <span class="n">Virtual</span> <span class="n">Host</span> <span class="n">created</span><span class="p">:</span>
 
-/conf.d/virtual_servers/test_ssl_host.location_ssl
+<span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">virtual_servers</span><span class="o">/</span><span class="n">test_ssl_host</span><span class="o">.</span><span class="n">location_ssl</span>
 </pre></div>
 </div>
 </li>
@@ -202,26 +202,22 @@ example,
 <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf.d/virtual_servers/test_ssl_host.location_ssl</span></code>,
 includes the <code class="docutils literal notranslate"><span class="pre">&lt;Location&gt;</span></code> directives for SSL, in this case,
 <code class="docutils literal notranslate"><span class="pre">test_ssl</span></code>.</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Location “/test_ssl_host/*”&gt;
-   SetHandler fdb-handler
-   SSLRequireSSL
-   SSLVerifyClient none
-&lt;/Location&gt;
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;Location</span> <span class="pre">“/test_ssl_host/*”&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">SetHandler</span> <span class="pre">fdb-handler</span>&#160;&#160;&#160;&#160; <span class="pre">SSLRequireSSL</span>&#160;&#160;&#160;&#160; <span class="pre">SSLVerifyClient</span> <span class="pre">none</span> <span class="pre">&lt;/Location&gt;</span></code></p>
 <div class="admonition tip">
 <p class="first admonition-title">Tip</p>
 <p class="last">Use of the <code class="docutils literal notranslate"><span class="pre">SSLRequireSSL</span></code> directive prevents all HTTP
 requests that do not use SSL, thereby protecting your data
-from all but HTTPS requests.
-See <a class="reference external" href="http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslrequiressl">Apache HTTP Server Version 2.2 Documentation</a>
+from all but HTTPS requests. See <a class="reference external" href="http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslrequiressl">Apache HTTP Server Version
+2.2
+Documentation</a>
 for more information.</p>
 </div>
 <div class="admonition tip">
 <p class="first admonition-title">Tip</p>
 <p class="last">Use of the <code class="docutils literal notranslate"><span class="pre">SSLVerifyClient</span></code> directive specifies the level
-of certificate verification required for the client.
-See <a class="reference external" href="http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslverifyclient">Apache HTTP Server Version 2.2 Documentation for SSLVerifyClient</a>
+of certificate verification required for the client. See
+<a class="reference external" href="http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslverifyclient">Apache HTTP Server Version 2.2
+Documentation</a>
 for more information.</p>
 </div>
 </li>
@@ -236,7 +232,7 @@ specified.</p>
 <ol class="arabic">
 <li><p class="first">Edit the Apache HTTP server configuration file,
 <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/gehttpd.conf</span></code> file, as follows:</p>
-<ol class="loweralpha simple">
+<ol class="arabic simple">
 <li>Uncomment and change <code class="docutils literal notranslate"><span class="pre">ServerName</span> <span class="pre">www.example.com</span></code> to
 <code class="docutils literal notranslate"><span class="pre">ServerName</span> <span class="pre">MyServerName</span></code>, where <code class="docutils literal notranslate"><span class="pre">MyServerName</span></code> is the
 real address users would enter in the network.</li>
@@ -254,21 +250,20 @@ file.</li>
 provides SSL support. It contains the configuration directives
 to instruct the server how to serve pages over an HTTPS
 connection. For detailed information about these directives see
-<a class="reference external" href="http://httpd.apache.org/docs/2.2/mod/mod_ssl.html">Apache 2.2 documentation</a>.</p>
-<ol class="loweralpha">
+<a class="reference external" href="http://httpd.apache.org/docs/2.2/mod/mod_ssl.html">Apache 2.2
+documentation</a>.</p>
+<ol class="arabic">
 <li><p class="first">Ensure the <code class="docutils literal notranslate"><span class="pre">ServerName</span> <span class="pre">www.example.com</span></code> is uncommented and
 matches the name defined in the
 <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/gehttpd.conf</span></code> file, that is, the
 alias or real address users would enter in the network.</p>
 </li>
-<li><p class="first">Check that the SSL virtual hosts configuration file location
-is already included in the <code class="docutils literal notranslate"><span class="pre">&lt;VirtualHost</span> <span class="pre">_default_:443&gt;</span></code>
-list of directives:</p>
-<dl class="docutils">
-<dt><code class="docutils literal notranslate"><span class="pre">&lt;VirtualHost_default_:443&gt;</span></code></dt>
-<dd><p class="first last"><code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">conf.d/virtual_servers/*.location_ssl</span></code></p>
-</dd>
-</dl>
+<li><div class="first line-block">
+<div class="line">Check that the SSL virtual hosts configuration file
+location is already included in the</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">&lt;VirtualHost</span> <span class="pre">_default_:443&gt;</span></code> list of directives:</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;VirtualHost_default_:443&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">Include</span> <span class="pre">conf.d/virtual_servers/*.location_ssl</span></code></p>
 </li>
 <li><p class="first">Save and close the
 <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/extra/httpd-ssl.conf</span></code> file.</p>

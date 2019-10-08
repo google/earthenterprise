@@ -13,10 +13,12 @@ Configuring Display Rules for Polygon Data
       you through the process of graphically distinguishing the
       population in each county in California using display rules.
 
-      -  :ref:`Define and Build a Vector Resource Using Polygon Data <Define_Vector_Polygon>`
-      -  :ref:`Define, Configure, and Build a Vector Project <Define_Vector_Project1>`
-      -  :ref:`Define and Build an Imagery Project <Define_Imagery_Project1>`
-      -  :ref:`Define, Build, and Publish a Database for the Polygon Data <Define_Polygon_Database>`
+      -  :ref:`Define and Build a Vector Resource Using Polygon
+         Data <Define_Vector_Polygon>`
+      -  :ref:`Define, Configure, and Build a Vector Project <Define_Vector_Project>`
+      -  :ref:`Define and Build an Imagery Project <Define_Imagery_Project>`
+      -  :ref:`Define, Build, and Publish a Database for the Polygon
+         Data <Define_Polygon_Database>`
       -  :ref:`View Your Database in Google Earth EC <View_Database_GEEC>`
 
       .. _Define_Vector_Polygon:
@@ -58,7 +60,7 @@ Configuring Display Rules for Polygon Data
          The Save dialog appears.
 
       #. Navigate to the ``/ASSET_ROOT/Resources/Vector`` folder you
-         created in :doc:`../fusionTutorial/setup`.
+         created in :doc:`4412441`.
       #. Enter the name **CACountyPopulation** for the resource, and
          click **Save**.
 
@@ -71,7 +73,7 @@ Configuring Display Rules for Polygon Data
 
          Google Earth Enterprise Fusion builds the resource.
 
-      .. _Define_Vector_Project1:
+      .. _Define_Vector_Project:
       .. rubric:: Define, Configure, and Build a Vector Project
 
       This exercise walks you through the process of defining,
@@ -115,7 +117,7 @@ Configuring Display Rules for Polygon Data
 
                .. tip::
 
-                  When you set fill color, specify a value of
+                  **Tip:** When you set fill color, specify a value of
                   125 for the alpha channel instead of 255. This makes
                   the fill color semi-transparent instead of opaque.
 
@@ -187,7 +189,7 @@ Configuring Display Rules for Polygon Data
 
          .. note::
 
-            Although this is the same name as the resource,
+            **Note:** Although this is the same name as the resource,
             Google Earth Enterprise Fusion allows it, because they are
             different asset types and, therefore, have different file
             name extensions. In addition, they are being stored in
@@ -201,7 +203,7 @@ Configuring Display Rules for Polygon Data
 
          Google Earth Enterprise Fusion builds the project.
 
-      .. _Define_Imagery_Project1:
+      .. _Define_Imagery_Project:
       .. rubric:: Define and Build an Imagery Project
 
       Although you can build, push, and publish a database that includes
@@ -215,7 +217,7 @@ Configuring Display Rules for Polygon Data
 
       This exercise walks you through the process of defining and
       building an imagery project using a resource you created in
-      :doc:`../fusionTutorial/buildResource`.
+      :doc:`4412443`.
       Since the focus of this lesson is on polygon display rules, it is
       not desirable to spend a lot of time building a large imagery
       project. So this exercise walks you through creating a small and
@@ -223,8 +225,8 @@ Configuring Display Rules for Polygon Data
 
       .. note::
 
-         If you have already completed this exercise in
-         :doc:`../fusionTutorial/displayRulesPoint`, skip this exercise and move
+         **Note:** If you have already completed this exercise in
+         :doc:`4412447`, skip this exercise and move
          on to :ref:`Define, Build, Push, and Publish a Database for the
          Polygon Data <Define_Polygon_Database>`.
 
@@ -250,7 +252,7 @@ Configuring Display Rules for Polygon Data
 
          The Save dialog appears.
 
-      #. Navigate to the ``ASSET_ROOT/Projects/Imagery`` folder.
+      #. Navigate to the ``ASSET_ROOT/Projects/Imagery``\ folder.
       #. Enter **BlueMarble** as the name of your project and click
          **Save**.
 
@@ -288,7 +290,7 @@ Configuring Display Rules for Polygon Data
          The CACountyPopulation project appears in the Database Editor
          next to Vector Project.
 
-      #. Repeat steps **2** through **4** to add **BlueMarble** as the imagery
+      #. Repeat steps 2 through 4 to add **BlueMarble** as the imagery
          project.
 
          You do not need to add a terrain project for this exercise.
@@ -351,12 +353,9 @@ Configuring Display Rules for Polygon Data
          *myserver.mydomainname*.com/CACountyPopulation-v001.
 
          To learn more about the options available in the Publish
-         dialog, see 
-
-         - :doc:`Default database <../geeServerAdmin/publishDefaultDatabase>`
-         - :doc:`Search Tabs <../geeServerAdmin/createSearchTabs>`
-         - :doc:`Snippet profiles <../geeServerAdmin/manageSnippetProfiles>`
-         - :doc:`WMS <../geeServerAdmin/makeWMSRequests>`
+         dialog, see :doc:`3497832`,
+         :doc:`Snippet profiles <6004748`, and
+         :doc:`WMS <4441137>`.
 
       #. Click the **Publish** button. The Databases page updates to indicate the
          published status of your database.
@@ -381,11 +380,11 @@ Configuring Display Rules for Polygon Data
          *myserver.mydomainname*.com/CACountyPopulation-v001.
       #. Click the **Sign In** button.
 
-         .. warning::
+         .. container:: alert
 
-            If you have logged in to this server with
+            **Caution:** If you have logged in to this server with
             Google Earth EC previously, log out, clear your cache, and
-            log back in. See :doc:`../googleEarthEnterpriseClient/clearGoogleEarthEC`.
+            log back in. See :doc:`6010060`.
 
       #. Zoom in to the west coast of the US.
 
@@ -396,7 +395,7 @@ Configuring Display Rules for Polygon Data
 
          .. note::
 
-            If you cannot see the vector data, make sure the
+            **Note:** If you cannot see the vector data, make sure the
             checkbox next to **CACountyPopulation** in the Layers panel
             is checked.
 

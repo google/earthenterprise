@@ -221,7 +221,7 @@ Create custom masks
 
       .. note::
 
-         It is easy to create very high resolution masks with
+         **Note:** It is easy to create very high resolution masks with
          ``gepolymaskgen``, to the point of pixel-by-pixel matching for
          the source imagery. Please check the overall raster size of
          your source imagery before creating a custom mask with
@@ -262,40 +262,18 @@ Create custom masks
       .. rubric:: Comparison of the gemaskgen and gepolymaskgen
          :name: comparison-of-the-gemaskgen-and-gepolymaskgen
 
-      .. list-table::
-         :widths: 40 20 20
-         :header-rows: 1
-
-         * - Capability
-           - ``gemaskgen``
-           - ``gepolymaskgen``
-         * - Reads Fusion format imagery (.kip) and terrain (.ktp)
-           - Yes
-           - No
-         * - Part of image resource import process
-           - Yes, for automask mode
-           - No
-         * - Can read source file images including:
-             ``khvrs;``
-             ``GeoTIFFs;``
-             ``JPEG2000``
-           - No, can only read Fusion imagery and terrain resource formats
-           - Yes
-         * - Can automatically identify and mask Fill Data automatically within imagery resource (holes)
-           - Yes
-           - No, but may be manually removed with KML polygons
-         * - Can feather a specified amount of pixels from the edge of the image, irrespective of the imagery pixel values
-           - No
-           - Yes
-         * - Capable of creating high-resolution mask files
-           - Yes, manually possible
-           - Yes - depends on raster dimensions of input source file
-         * - Can automatically distinguish Fill Data from usable imagery by pixel values
-           - Yes
-           - No
-         * - Can mask out arbitrary polygonal shapes within the image resource
-           - No
-           - Yes
+      ============================================================================================================= ============================================================= =======================================================
+      Capability                                                                                                    ``gemaskgen``                                                 ``gepolymaskgen``
+      ============================================================================================================= ============================================================= =======================================================
+      Reads Fusion format imagery (.kip) and terrain (.ktp)                                                         Yes                                                           No
+      Part of image resource import process                                                                         Yes, for automask mode                                        No
+      Can read source file images including: ``khvrs;         GeoTIFFs;         JPEG2000``                          No, can only read Fusion imagery and terrain resource formats Yes
+      Can automatically identify and mask Fill Data automatically within imagery resource (holes)                   Yes                                                           No, but may be manually removed with KML polygons
+      Can feather a specified amount of pixels from the edge of the image, irrespective of the imagery pixel values No                                                            Yes
+      Capable of creating high-resolution mask files                                                                Yes, manually possible                                        Yes - depends on raster dimensions of input source file
+      Can automatically distinguish Fill Data from usable imagery by pixel values                                   Yes                                                           No
+      Can mask out arbitrary polygonal shapes within the image resource                                             No                                                            Yes
+      ============================================================================================================= ============================================================= =======================================================
 
       .. _When_Use_gepolymaskgen:
       .. rubric:: When to use gepolymaskgen
@@ -356,13 +334,13 @@ Create custom masks
       #. **Specify which file to reference for creating the mask, or
          which existing mask file to load:**
 
-         -  ``--base_image``: specifies a source file that will be
+         -  **``--base_image``**: specifies a source file that will be
             used for overall raster dimensions, geographic coordinates,
             and projection information. May be a ``GeoTIFF``,
             ``JPEG2000``, or ``KHVR`` file. Each ``gepolymaskgen``
             invocation may only include either one ``--base_image`` or
             one ``--base_mask`` for masking operations.
-         -  ``--base_mask``: specifies a mask file to read in for
+         -  **``--base_mask``**: specifies a mask file to read in for
             further mask processing. The specified file may be a
             ``GeoTIFF``. Each ``gepolymaskgeninvocation`` may only
             include either one ``--base_image`` or one
@@ -371,7 +349,7 @@ Create custom masks
       #. **Modify the mask file by changing what is masked and
          feathering:**
 
-         -  ``--feather``: directs ``gepolymaskgen`` to create a
+         -  **``--feather``**: directs ``gepolymaskgen`` to create a
             feather along a masked edge by the specified number of
             pixels. Either positive or negative values may be specified
             with ``--feather`` to expand or contract the feathered edge
@@ -387,13 +365,13 @@ Create custom masks
             ``--feather`` option may be specified for each operator. The
             default feather value for ``--feather`` is set to 0 pixels.
 
-         -  ``--feather_border``: used in conjunction only with
+         -  **``--feather_border``**: used in conjunction only with
             ``--feather``. Directs ``gepolymaskgen`` to apply a
             feather to the extent of the mask file with the same
             feathering values specified with the ``--feather`` option.
             The ``--feather_border`` option is off by default.
 
-         -  ``--invert``: directs ``gepolymaskgen`` to invert a
+         -  **``--invert``:** directs ``gepolymaskgen`` to invert a
             specified mask from its original values to the opposite. In
             almost all cases, this involves swapping pixel values from 0
             to 255 or 255 to 0, depending on whether the
@@ -405,7 +383,7 @@ Create custom masks
             ``--base_image``, ``--base_mask``, ``--and_neg_mask``,
             ``--or_mask``, or ``--output_mask``.
 
-         -  ``--and_neg_mask``: directs ``gepolymaskgen`` to remove
+         -  **``--and_neg_mask``**: directs ``gepolymaskgen`` to remove
             a specified area from view (i.e. subtracting, or masking).
             May be combined with the\ ``--feather`` and
             ``--feather_border`` options to build a feathered edge along
@@ -414,7 +392,7 @@ Create custom masks
             complex mask builds. It is also possible for a
             ``gepolymaskgen``\ sequence to include
             both\ ``--and_neg_mask`` and ``--or_mask`` operations.
-         -  ``--or_mask``: directs ``gepolymaskgen`` to add a
+         -  **``--or_mask``**: directs ``gepolymaskgen`` to add a
             specified area into view (i.e. adding, or "unmasking"). May
             be combined with the ``--feather`` and ``--feather_border``
             options to build a feathered edge along masked areas.
@@ -426,7 +404,7 @@ Create custom masks
 
       #. **Specify the output mask**
 
-         -  ``--output_mask``: the folder path location and file name
+         -  **``--output_mask``**: the folder path location and file name
             ``gepolymaskgen`` is to write the finished mask file. The
             completed mask file to import with GEE Fusion Pro must have
             the same file name as the source file with a ``-mask.tif``
@@ -1483,14 +1461,12 @@ Create custom masks
 
       .. note::
 
-         Additional information about creating polygons within
+         **Note:** Additional information about creating polygons within
          Google Earth is also freely available with the Google Earth
          Outreach tutorials, directly accessible at
          `http://earth.google.com/outreach/tutorial_annotate.html#addpolygons <http://earth.google.com/outreach/tutorial_annotate.html#addpolygons>`_.
 
-      .. tip::
-
-         Each polygon correction should be saved out as a
+         **Tip:** Each polygon correction should be saved out as a
          ``KML`` file directly (four polygons saved to four separate
          ``KML`` files) as these will be separate mask operations within
          ``gepolymaskgen``.
@@ -1614,7 +1590,7 @@ Create custom masks
 
       .. note::
 
-         This mask file could also be created in two steps as
+         **Note:** This mask file could also be created in two steps as
          well - the first step to create the base mask file (**picture
          frame**) that provides a feathered edge for the overall image,
          and the second step to apply the internal mask with the
@@ -1833,11 +1809,8 @@ Create custom masks
 
       #. **Locate the mask computed during the image resource build:**
 
-         .. code-block:: none
-
-            gequery --outfiles
-            Resources/Imagery/YourImageResource.kiasset/maskgen.kia
-            /gevol/assets/Resources/Imagery/YourImageResource.kiasset/maskgen.kia/ver001/mask.tif
+         | ``gequery --outfiles Resources/Imagery/YourImageResource.kiasset/maskgen.kia``
+         | ``/gevol/assets/Resources/Imagery/YourImageResource.kiasset/maskgen.kia/ver001/mask.tif``
 
       #. **Create an inverted version of the mask:**
 
@@ -1873,8 +1846,7 @@ Create custom masks
          ``/gevol-local/gepolymaskgen/Resources/Imagery/SFBayAreaLanSat.kiasset/maskgen.kia/ver002/mask.tif``
 
       #. **Create a custom mask with gepolymaskgen using the gemaskgen base
-         mask and mask to the coastlines (three steps)**
-
+      mask and mask to the coastlines (three steps)**
          a. Invert the mask file built during the Fusion Pro import:
 
          ``jcain@machine123:/gevol-local/gepolymaskgen$ sudo``\ **``/opt/google/bin/gepolymaskgen --base_mask /gevol-local/gepolymaskgen/Resources/Imagery/SFBayAreaLanSat.kiasset/maskgen.kia/ver002/mask.tif --invert --output_mask /opt/google/share/tutorials/fusion/Imagery/usgsLanSat-invertbasemask.tif``**
@@ -2058,11 +2030,11 @@ Create custom masks
 
       #. Move the custom mask file to the same folder as the source file
          for the image.
-      #. Rename the custom mask file to be the same file name as the
-         source image file with a ``-mask.tif`` extension.
+      #. | Rename the custom mask file to be the same file name as the
+           source image file with a ``-mask.tif`` extension.
 
-         For example, if the ``/gevol/src/imagery/example.tif`` is the
-         source file, then the custom mask must be:
+         For example: If the ``/gevol/src/imagery/example.tif`` is the
+         source file, then the custom mask must be
 
          ``/gevol/src/imagery/example-mask.tif``
 
@@ -2095,8 +2067,10 @@ Create custom masks
       #. Rename the custom mask file to be the same file name as the
          source image file with a ``-mask.tif`` extension.
 
-         For example, if the ``/gevol/src/imagery/example.tif`` is the
-         source file, then the custom mask must be:
+         For example if the:
+
+         ``/gevol/src/imagery/example.tif`` is the source file, then the
+         custom mask must be:
 
          ``/gevol/src/imagery/example-mask.tif``
 
@@ -2128,8 +2102,10 @@ Create custom masks
       #. Rename the custom mask file to be the same file name as the
          source image file with a ``-mask.tif`` extension.
 
-         For example, if the ``/gevol/src/imagery/example.tif`` is the source
-         file, then the custom mask must be:
+         For example if the:
+
+         ``/gevol/src/imagery/example.tif`` is the source file, then the
+         custom mask must be:
 
          ``/gevol/src/imagery/example-mask.tif``
 
@@ -2163,8 +2139,10 @@ Create custom masks
       #. Rename the custom mask file to be the same file name as the
          source image file with a ``-mask.tif`` extension.
 
-         For example, if the ``/gevol/src/imagery/example.tif`` is the source
-         file, then the custom mask must be:
+         For example if the:
+
+         ``/gevol/src/imagery/example.tif`` is the source file, then the
+         custom mask must be:
 
          ``/gevol/src/imagery/example-mask.tif``
 
@@ -2340,8 +2318,9 @@ Create custom masks
       ``gepolymaskgen``, if the source file was specified as the
       ``gepolymaskgen --base_image``. Example output from ``geinfo`` is
       included below for the California 15-meter Landsat imagery that
-      was used with the :ref:`Case 3 Example <Masks_Coastline_Shared_Edges>`. The raster dimensions for the mosaic
-      are listed near the top for quick reference.
+      was used with the :ref:`Case 3 Example <Masks_Coastline_Shared_Edges>`. The
+      raster dimensions for the mosaic are highlighted for quick
+      reference.
 
       ``jcain@machine123:/gevol-local/src/gepolymaskgen-howto$ geinfo glandsat_15m_california_bay_area.khvr``
 
@@ -2351,17 +2330,17 @@ Create custom masks
 
       ``Extents:     (ns) 38.496093750000,35.859375000000``
 
-                     ``(ew) -121.113281250000,-124.189453125000``
+      ``(ew) -121.113281250000,-124.189453125000``
 
       ``Pixel Size:  (xy) 0.000085830688,-0.000085830688``
 
       ``Keyhole Normalized {``
 
-         ``Raster Size: 35840,30720``
+      ``Raster Size: 35840,30720``
 
-         ``Extents:     (ns) 38.496093750000,35.859375000000``
+      ``Extents:     (ns) 38.496093750000,35.859375000000``
 
-                        ``(ew) -121.113281250000,-124.189453125000``
+      ``(ew) -121.113281250000,-124.189453125000``
 
       ``Pixel Size:  (xy) 0.000085830688,-0.000085830688``
 
@@ -2373,19 +2352,19 @@ Create custom masks
 
       ``GEOGCS["WGS 84",``
 
-         ``DATUM["WGS_1984",``
+      ``DATUM["WGS_1984",``
 
-            ``SPHEROID["WGS 84",6378137,298.257223563,``
+      ``SPHEROID["WGS 84",6378137,298.257223563,``
 
-               ``AUTHORITY["EPSG","7030"]],``
+      ``AUTHORITY["EPSG","7030"]],``
 
-            ``AUTHORITY["EPSG","6326"]],``
+      ``AUTHORITY["EPSG","6326"]],``
 
-         ``PRIMEM["Greenwich",0],``
+      ``PRIMEM["Greenwich",0],``
 
-         ``UNIT["degree",0.0174532925199433],``
+      ``UNIT["degree",0.0174532925199433],``
 
-         ``AUTHORITY["EPSG","4326"]]``
+      ``AUTHORITY["EPSG","4326"]]``
 
       ``Corner Coordinates:``
 
@@ -2401,15 +2380,15 @@ Create custom masks
 
       ``Band 1 Block=2048x200 Type=Byte, ColorInterp=Red``
 
-         ``NoData Value=0``
+      ``NoData Value=0``
 
       ``Band 2 Block=2048x200 Type=Byte, ColorInterp=Green``
 
-         ``NoData Value=0``
+      ``NoData Value=0``
 
       ``Band 3 Block=2048x200 Type=Byte, ColorInterp=Blue``
 
-         ``NoData Value=0``
+      ``NoData Value=0``
 
       ``Band 4 Block=2048x200 Type=Byte, ColorInterp=Alpha``
 
@@ -2583,7 +2562,8 @@ Create custom masks
       #. Modify the SFBayAreaLanSat image resource to enable the
          ``HaveMask`` mask mode.
 
-         Please see :ref:`Appendix A <Importing_Custom_Masks_Imagery_Terrain_GEE_Fusion>`, Examples :ref:`3 <Enable_havemask_Existing_Image_Resource>` and :ref:`4 <Enable_havemask_Command_Line_Existing_Image_Resource>` for
+         Please see :ref:`Appendix A <Importing_Custom_Masks_Imagery_Terrain_GEE_Fusion>`, Examples
+         :ref:`3 <Enable_havemask_Existing_Image_Resource>` and :ref:`4 <Enable_havemask_Command_Line_Existing_Image_Resource>` for
          further details.
 
       #. Build the image resource to import the updated mask file.
@@ -2597,7 +2577,7 @@ Create custom masks
 
       .. rubric:: usgsLanSat mask before mask edits:
 
-      |usgsLanSat before mask|
+         |usgsLanSat before mask|
 
       .. _Building_Custom_Masks_Large_Source_Imagery:
       .. rubric:: Appendix F: Building custom masks for large source
@@ -2657,149 +2637,147 @@ Create custom masks
       A full copy of the help contents for ``gepolymaskgen`` is
       available in this appendix for reference:
 
-      .. code-block:: none
+      ``usage: gepolymaskgen --help | -?``
 
-         usage: gepolymaskgen --help | -?
+      ``gepolymaskgen [--feather <int_feather>] --base_mask <geotiff_mask_file> [options] --output_mask <geotiff_mask_file>``
 
-                  gepolymaskgen [--feather <int_feather>] --base_mask <geotiff_mask_file> [options] --output_mask <geotiff_mask_file>
+      ``gepolymaskgen [--feather <int_feather>] --base_image <geotiff_image_file> [options] --output_mask <geotiff_mask_file>``
 
-                  gepolymaskgen [--feather <int_feather>] --base_image <geotiff_image_file> [options] --output_mask <geotiff_mask_file>
+      ``Options are applied in order given.``
 
-         Options are applied in order given.
+      ``Valid options:``
 
-         Valid options:
+      ``--feather <int_feather>:     Feather to apply to all``
 
-                  --feather <int_feather>:          Feather to apply to all
+      ``subsequent masks until a``
 
-                                                   subsequent masks until a
+      ``different feather is given.``
 
-                                                   different feather is given.
+      ``Feather can be 0, positive,``
 
-                                                   Feather can be 0, positive,
+      ``or negative. Default is 0.``
 
-                                                   or negative. Default is 0.
+      ``--feather_border <int_flag>: If flag is non-zero, border``
 
-                  --feather_border <int_flag>:     If flag is non-zero, border
+      ``is feathered. Otherwise,``
 
-                                                   is feathered. Otherwise,
+      ``border is left in tact.``
 
-                                                   border is left in tact.
+      ``Flag remains in effect``
 
-                                                   Flag remains in effect
+      ``until it is modified.``
 
-                                                   until it is modified.
+      ``Default is border is``
 
-                                                   Default is border is
+      ``feathered.``
 
-                                                   feathered.
+      ``--and_neg_mask <mask_file>:  Bitwise AND of negative image``
 
-                  --and_neg_mask <mask_file>:      Bitwise AND of negative image
+      ``of polygon or raster mask``
 
-                                                   of polygon or raster mask
+      ``with the current mask.``
 
-                                                   with the current mask.
+      ``Polygons can be given in``
 
-                                                   Polygons can be given in
+      ``.kml or .shp files and are``
 
-                                                   .kml or .shp files and are
+      ``assumed to be filled with``
 
-                                                   assumed to be filled with
+      ``0x00. Raster masks should be``
 
-                                                   0x00. Raster masks should be
+      ``.tif files with the same pixel``
 
-                                                   .tif files with the same pixel
+      ``dimensions as the base mask.``
 
-                                                   dimensions as the base mask.
+      ``Care should be taken not to``
 
-                                                   Care should be taken not to
+      ``overlap feathered regions.``
 
-                                                   overlap feathered regions.
+      ``--or_mask <mask_file>:       Bitwise OR polygon or raster``
 
-                  --or_mask <mask_file>:           Bitwise OR polygon or raster
+      ``mask to the current mask.``
 
-                                                   mask to the current mask.
+      ``Polygons can be given in``
 
-                                                   Polygons can be given in
+      ``.kml or .shp files and are``
 
-                                                   .kml or .shp files and are
+      ``assumed to be filled with``
 
-                                                   assumed to be filled with
+      ``0xff. Raster masks should be``
 
-                                                   0xff. Raster masks should be
+      ``.tif files with the same pixel``
 
-                                                   .tif files with the same pixel
+      ``dimensions as the base mask.``
 
-                                                   dimensions as the base mask.
+      ``Care should be taken not to``
 
-                                                   Care should be taken not to
+      ``overlap feathered regions.``
 
-                                                   overlap feathered regions.
+      ``--threshold <thresh_byte>:   All pixels at or below the``
 
-                  --threshold <thresh_byte>:       All pixels at or below the
+      ``threshold byte are set to``
 
-                                                   threshold byte are set to
+      ``0x00; all other pixels are set``
 
-                                                   0x00; all other pixels are set
+      ``to 0xff.``
 
-                                                   to 0xff.
+      ``Please note that ordering of arguments is important; they are applied in the order that they are given. The feather argument implies that you are setting the feather to be used for any subsequent masks. E.g. to feather the base mask, you must set the feather before the base mask is given. Positive feathers erode the mask (white area retracts); negative feathers expand the mask (white area grows).``
 
-         Please note that ordering of arguments is important; they are applied in the order that they are given. The feather argument implies that you are setting the feather to be used for any subsequent masks. E.g. to feather the base mask, you must set the feather before the base mask is given. Positive feathers erode the mask (white area retracts); negative feathers expand the mask (white area grows).
+      ``Examples:``
 
-            Examples:
+      ``-- simple polygon mask with no feathering``
 
-            -- simple polygon mask with no feathering
+      ``gepolymaskgen --base_image /path/input_image.tif \``
 
-               gepolymaskgen   --base_image /path/input_image.tif \
+      ``--or_mask /path/polygon.kml \``
 
-                                 --or_mask /path/polygon.kml \
+      ``--output_mask /path/result_mask.tif``
 
-                                 --output_mask /path/result_mask.tif
+      ``-- negative polygon mask with some feathering``
 
-               -- negative polygon mask with some feathering
+      ``gepolymaskgen --base_image /path/input_image.tif \``
 
-               gepolymaskgen   --base_image /path/input_image.tif \
+      ``--feather 30 \``
 
-                                 --feather 30 \
+      ``--feather_border 0 \``
 
-                                 --feather_border 0 \
+      ``--and_neg_mask /path/polygon.kml \``
 
-                                 --and_neg_mask /path/polygon.kml \
+      ``--invert \``
 
-                                 --invert \
+      ``--output_mask /path/result_mask.tif``
 
-                                 --output_mask /path/result_mask.tif
+      ``-- OR and AND polygon and tiff masks with different feathers \``
 
-                                 -- OR and AND polygon and tiff masks with different feathers \
+      ``gepolymaskgen --feather 30 \``
 
-                                 gepolymaskgen --feather 30 \
+      ``--base_mask /path/base_mask.tif \``
 
-                                 --base_mask /path/base_mask.tif \
+      ``--feather 20 \``
 
-                                 --feather 20 \
+      ``--feather_border 0 \``
 
-                                 --feather_border 0 \
+      ``--or_mask /path/SF.kml \``
 
-                                 --or_mask /path/SF.kml \
+      ``--or_mask /path/daly_city.kml \``
 
-                                 --or_mask /path/daly_city.kml \
+      ``--feather 15 \``
 
-                                 --feather 15 \
+      ``--feather_border 1 \``
 
-                                 --feather_border 1 \
+      ``--or_mask /path/circle_mask.tif \``
 
-                                 --or_mask /path/circle_mask.tif \
+      ``--feather 5 \``
 
-                                 --feather 5 \
+      ``--and_neg_mask /path/gg_park.kml \``
 
-                                 --and_neg_mask /path/gg_park.kml \
+      ``--and_neg_mask /path/northbeach.kml \``
 
-                                 --and_neg_mask /path/northbeach.kml \
+      ``--feather 40 \``
 
-                                 --feather 40 \
+      ``--and_neg_mask /path/circle_mask2.tif \``
 
-                                 --and_neg_mask /path/circle_mask2.tif \
-
-                                 --output_mask /path/mask.tif
+      ``--output_mask /path/mask.tif``
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
@@ -2823,6 +2801,7 @@ Create custom masks
 .. |Finished image after custom mask import| image:: ../../art/custom_masks/image05.jpg
 .. |picture frame border mask| image:: ../../art/custom_masks/image30.jpg
 .. |finished mask of coastline and border feather| image:: ../../art/custom_masks/image07.jpg
+.. |Finished image after custom mask import| image:: ../../art/custom_masks/image42.jpg
 .. |finished mask in GIMP| image:: ../../art/custom_masks/image32.jpg
 .. |Fusion preview window with custom mark import| image:: ../../art/custom_masks/image43.jpg
 .. |image in Fusion with automask| image:: ../../art/custom_masks/image16.jpg

@@ -17,11 +17,13 @@ Creating Imagery Mosaics
 
       .. note::
 
-         All of the steps in this lesson apply to terrain data as well.
+         **Note:** All of the steps in this lesson apply to terrain data
+         as well.
 
       -  :ref:`Create an Imagery Resource <Create_Imagery_Resource>`
       -  :ref:`Create a Virtual Mosaic <Create_Virtual_Mosaic>`
-      -  :ref:`Apply a Custom Mask to the Virtual Mosaic <Apply_Custom_Mask_Mosaic>`
+      -  :ref:`Apply a Custom Mask to the Virtual
+         Mosaic <Apply_Custom_Mask_Mosaic>`
 
       .. _Create_Imagery_Resource:
       .. rubric:: Create an Imagery Resource
@@ -72,7 +74,7 @@ Creating Imagery Mosaics
       #. Select **File > Save**.
       #. Navigate to the ``/ASSET_ROOT/Resources/Imagery`` folder you
          created in `Setting Up the
-         Tutorial <../answer/../fusionTutorial/setup.html>`__.
+         Tutorial <../answer/4412441.html>`__.
       #. Enter the name **ImageryMosaic** for the resource, and click
          **Save**.
 
@@ -86,7 +88,7 @@ Creating Imagery Mosaics
 
          .. note::
 
-            Building this resource may take several minutes,
+            **Note:** Building this resource may take several minutes,
             since it contains four images.
 
       #. When the status of the resource changes to **Succeeded** in the
@@ -201,7 +203,7 @@ Creating Imagery Mosaics
 
             .. note::
 
-               Because you have not yet built this resource,
+               **Note:** Because you have not yet built this resource,
                only the bounding boxes appear, not the actual imagery.
 
       #. You can check and uncheck the boxes to see the different views.
@@ -263,7 +265,7 @@ Creating Imagery Mosaics
          file appears on the Source File(s) list.
       #. Select **File > Save**.
       #. Navigate to the ``/ASSET_ROOT/Resources/Imagery`` folder you
-         created in :doc:`../fusionTutorial/setup`.
+         created in :doc:`4412441`.
       #. Enter the name **VirtualMosaic** for the resource, and click
          **Save**. The name of the resource appears on the right when
          you select the ``/ASSET_ROOT/Resources/Imagery``\ folder in the
@@ -274,7 +276,7 @@ Creating Imagery Mosaics
 
          .. note::
 
-            Building this resource may take several minutes.
+            **Note:** Building this resource may take several minutes.
 
       #. When the status of the resource changes to **Succeeded** in the
          Asset Manager, drag it to the Preview List pane.

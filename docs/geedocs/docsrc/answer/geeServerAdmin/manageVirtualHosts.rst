@@ -28,16 +28,17 @@ Manage virtual hosts
 
       .. tip::
 
-         See :doc:`Configure GEE Server 5.1.0 for SSL/HTTPS <../geeServerConfigAndSecurity/configureGeeServer5.1.0_SSL_HTTPS>` to add
-         virtual hosts for HTTPS servers.
+         See `Configure GEE Server 5.1.0 for
+         SSL/HTTPS <../answer/6080928.html>`__ to add virtual hosts for
+         HTTPS servers.
 
          See :ref:`geserveradmin <geserveradmin>` in
-         the :doc:`../fusionAdministration/commandReference` for
+         the :doc:`3481558` for
          information about all the virtual host commands.
 
       .. note::
 
-         You may configure a virtual server in Apache using
+         **Note:** You may configure a virtual server in Apache using
          standard virtual host directives but it won’t be capable of
          hosting a GEE database until it is registered using
          ``geserveradmin``, as described in :ref:`Create and register a
@@ -46,10 +47,10 @@ Manage virtual hosts
       -  :ref:`Default virtual hosts <Default_Virtual_Hosts>`
       -  :ref:`Create and register a virtual host in GEE
          Server <Create_Register_Virtual_Hosts_Digest_Auth>`
-      -  :ref:`Configure virtual hosts with a custom port
-         number <Configure_Virtual_Host_Custom_Port_Number>`
-      -  :ref:`Associate a database with a virtual host <Associate_DB_Virtual_Host>`
-      -  :ref:`Naming virtual hosts <Naming_Virtual_Hosts>`
+      -  `Configure virtual hosts with a custom port
+         number <#custom_port>`__
+      -  `Associate a database with a virtual host <#AssociateVH>`__
+      -  `Naming virtual hosts <#NameVH>`__
 
       .. _Default_Virtual_Hosts:
       .. rubric:: Default virtual hosts
@@ -63,10 +64,7 @@ Manage virtual hosts
 
       .. rubric:: To reset the username and password:
 
-      .. code-block:: none
-      
-         sudo /opt/google/gehttpd/bin/htpasswd
-         /opt/google/gehttpd/conf.d/virtual_servers/.vhpasswd geeuser
+      ``sudo /opt/google/gehttpd/bin/htpasswd /opt/google/gehttpd/conf.d/virtual_servers/.vhpasswd geeuser``
 
       The public virtual host is unprotected and does not require any
       authentication.
@@ -98,64 +96,47 @@ Manage virtual hosts
       #. Create and register a virtual host in GEE Server using the
          ``geserveradmin`` command:
 
-         ``/opt/google/bin/geserveradmin --addvh digest [--vhurl <url>] [--vhcachelevel <level>]``
+      ``/opt/google/bin/geserveradmin --addvh digest [--vhurl <url>] [--vhcachelevel <level>]``
 
-         ``geserveradmin`` creates the default location-based virtual host
-         ``digest_host.location`` in ``/opt/google/gehttpd/conf.d/virtual_servers``
-         and registers it in GEE Server.
+      ``geserveradmin`` creates the default location-based virtual host
+      ``digest_host.location`` in
+      ``/opt/google/gehttpd/conf.d/virtual_servers`` and registers it in
+      GEE Server.
 
-         The ``vhurl`` specifies the location of the virtual host. It must
-         match the corresponding server-side virtual host configuration.
+      The ``vhurl`` specifies the location of the virtual host. It must
+      match the corresponding server-side virtual host configuration.
 
       #. Optionally, modify virtual host settings in
-         ``digest_host.location`` to set up authentication.
+      ``digest_host.location`` to set up authentication.
 
       .. rubric:: To set up digest authentication:
 
       #. Edit the ``digest_host.location`` file to set up the
-         authentication configuration:
-
-         .. code-block:: none
-         
-            cd /opt/google/gehttpd/conf.d/virtual_servers
-            sudo vi digest_host.location
+      authentication configuration:
+      ``cd /opt/google/gehttpd/conf.d/virtual_servers         sudo vi digest_host.location``
 
       #. Add the following content to the ``digest_host.location`` file:
+      ``# The digest virtual host.         RewriteEngine on``
 
-         .. code-block:: none
-
-            # The digest virtual host.
-            RewriteEngine on
-
-            <Location /digest_host/>
-               SetHandler fdb-handler
-               AuthType Digest
-               AuthName "Private"
-               AuthDigestProvider file
-               AuthUserFile /opt/google/gehttpd/conf.d/virtual_servers/.htdigest
-               Require valid-user
-            </Location>
+      ``<Location /digest_host/>          SetHandler fdb-handler          AuthType Digest          AuthName "Private"          AuthDigestProvider file          AuthUserFile /opt/google/gehttpd/conf.d/virtual_servers/.htdigest          Require valid-user         </Location>``
 
       #. Create the password with a given user name using the password path
-         that you specified in the ``digest_host.location`` file:
+      that you specified in the ``digest_host.location`` file:
+      ``sudo htdigest -c /opt/google/gehttpd/conf.d/virtual_servers/.htdigest Private username``
 
-      .. code-block:: none
-      
-         sudo htdigest -c /opt/google/gehttpd/conf.d/virtual_servers/.htdigest Private username
-         sudo chmod 755 /opt/google/gehttpd/conf.d/virtual_servers/.htdigest
-         #Enter password twice at prompt
+      ``sudo chmod 755 /opt/google/gehttpd/conf.d/virtual_servers/.htdigest``
+
+      ``#Enter password twice at prompt``
 
       #. Restart ``geserver`` after virtual host settings have been
-         modified.
+      modified.
+      ``sudo /etc/init.d/geserver restart``
 
-         ``sudo /etc/init.d/geserver restart``
+      .. tip::
 
-         .. tip::
+         A virtual host can also be configured for SSL/HTTPS. See
+         :doc:`6080928`.
 
-            A virtual host can also be configured for SSL/HTTPS. See
-            :doc:`../geeServerConfigAndSecurity/configureGeeServer5.1.0_SSL_HTTPS`.
-
-      .. _Configure_Virtual_Host_Custom_Port_Number:
       .. rubric:: Configure virtual hosts with a custom port number
 
       You may need to configure a virtual host to use a custom port setting
@@ -192,18 +173,12 @@ Manage virtual hosts
          virtual host to the SSL configuration file for Apache server,
          ``/opt/google/gehttpd/conf/extra/httpd-ssl.conf``:
 
-         .. code-block:: none
-
-            <VirtualHost  _non_default_:4343>
-                 # Include all SSL location-based virtual servers with custom port 4343.
-                 Include conf.d/virtual_servers/*.location_ssl_custom
-            </VirtualHost>
+         ``<VirtualHost  _non_default_:4343>               # Include all SSL location-based virtual servers with custom port 4343.               Include conf.d/virtual_servers/*.location_ssl_custom           </VirtualHost>``
 
       #. Restart GEE Server:
 
          ``sudo /etc/init.d/geserver restart``
 
-      .. _Associate_DB_Virtual_Host:
       .. rubric:: Associate a database with a virtual host
 
       To associate a database or portable globe or map with a virtual
@@ -212,9 +187,8 @@ Manage virtual hosts
       |Publish dialog virtual host example|
 
       See :doc:`Publishing databases and
-      portables <../geeServerAdmin/publishDatabasesPortables>`.
+      portables <3497763>`.
 
-      .. _Naming_Virtual_Hosts:
       .. rubric:: Naming virtual hosts
 
       Virtual hosts on GEE Server are name-based, meaning that you can
@@ -234,8 +208,8 @@ Manage virtual hosts
 
       .. rubric:: Learn more
 
-      -  :doc:`Configure GEE Server for SSL/HTTPS <../geeServerConfigAndSecurity/configureGeeServer5.1.0_SSL_HTTPS>`
-      -  :doc:`LDAP authentication <../geeServerConfigAndSecurity/configureGeeVirtualHostForLDAP>`
+      -  :doc:`Configure GEE Server for SSL/HTTPS <6080928>`
+      -  :doc:`LDAP authentication <2760544>`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

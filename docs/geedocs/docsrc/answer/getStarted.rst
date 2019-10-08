@@ -11,3 +11,4 @@ Get Started
    getStarted/upgrade.rst
    getStarted/download.rst
    getStarted/installTips.rst
+

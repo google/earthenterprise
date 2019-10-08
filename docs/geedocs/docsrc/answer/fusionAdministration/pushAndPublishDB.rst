@@ -82,6 +82,7 @@ Push and publish databases
       API for 2D databases.
 
       .. rubric:: To publish a database:
+         :name: to-publish-a-database
 
       #. Access the Google Earth Enterprise Server Admin console in a
          browser window by going to *myserver.mydomainname*.com/admin,
@@ -202,12 +203,11 @@ Push and publish databases
 
       .. rubric:: Learn more
 
-      -  :doc:`../geeServerAdmin/publishDefaultDatabase`
-      -  :doc:`../geeServerAdmin/createSearchTabs`
-      -  :doc:`../geeServerAdmin/manageSnippetProfiles`
-      -  :doc:`../geeServerAdmin/manageVirtualHosts`
-      -  :doc:`../geeServerAdmin/makeWMSRequests`
-      -  :doc:`../googleEarthEnterpriseClient/whatisEC`
+      -  :doc:`3497832`
+      -  :doc:`6004748`
+      -  :doc:`6013604`
+      -  :doc:`4441137`
+      -  :doc:`6006981`
 
       .. _Using_Command_Line:
       .. rubric:: Publish using the command line
@@ -266,12 +266,13 @@ Push and publish databases
 
          ``geserveradmin --publishdb /gevol/assets/Databases/SFMapDatabase.kmmdatabase/mapdb.kda/ver001/mapdb/ --targetpath http://myserver.org --setecdefault``
 
-         For more information about the geserveradmin command options, see the :doc:`../fusionAdministration/commandReference`.
+         For more information about the geserveradmin command options, see the :doc:`3481558`.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
    :height: 44px
 .. |Push Database Dialog| image:: ../../art/fusion/tutorial/dbasePush-full.png
+   :name: publishDatabase
 .. |GEE Server Database Page| image:: ../../art/server/publish_databases/databasesListOrder.png
 .. |Database list sort arrows| image:: ../../art/fusion/tutorial/databaseServerList.png
 .. |GEE Server Publish dialog| image:: ../../art/server/publish_databases/Publishdialog.png

@@ -76,27 +76,32 @@
 imagery, terrain, and vector projects using the resources you
 created in the previous lesson.</p>
 <ul class="simple">
-<li><a class="reference internal" href="#define-imagery-project"><span class="std std-ref">Define an Imagery Project</span></a><ul>
-<li><a class="reference internal" href="#add-resources-to-imagery-project"><span class="std std-ref">Add Resources to an Imagery Project</span></a></li>
-<li><a class="reference internal" href="#build-an-imagery-project"><span class="std std-ref">Build an Imagery Project</span></a></li>
-<li><a class="reference internal" href="#preview-an-imagery-project"><span class="std std-ref">Preview an Imagery Project</span></a></li>
-<li><a class="reference internal" href="#specify-an-imagery-project-as-basemap"><span class="std std-ref">Specify an Imagery Project as Your Base Map</span></a></li>
+<li><a class="reference external" href="#56899">Define an Imagery Project</a><ul>
+<li><a class="reference external" href="#90667">Add Resources to an Imagery Project</a></li>
+<li><a class="reference external" href="#BuildImgProj">Build an Imagery Project</a></li>
+<li><a class="reference external" href="#PreImgProj">Preview an Imagery Project</a></li>
+<li><a class="reference external" href="#SpImgProgBM">Specify an Imagery Project as Your Base
+Map</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#define-terrain-project"><span class="std std-ref">Define a Terrain Project</span></a><ul>
-<li><a class="reference internal" href="#add-resource-to-terrain-project"><span class="std std-ref">Add Resources to a Terrain Project</span></a></li>
-<li><a class="reference internal" href="#build-terrain-project"><span class="std std-ref">Build a Terrain Project</span></a></li>
+<li><a class="reference external" href="#DefTerrProj">Define a Terrain Project</a><ul>
+<li><a class="reference external" href="#AddRedTerrProj">Add Resources to a Terrain Project</a></li>
+<li><a class="reference external" href="#BuildTerrProj">Build a Terrain Project</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#define-vector-project"><span class="std std-ref">Define a Vector Project</span></a><ul>
-<li><a class="reference internal" href="#add-resources-to-vector-project"><span class="std std-ref">Add Resources to a Vector Project</span></a></li>
-<li><a class="reference internal" href="#conf-layer-prop-vector-project"><span class="std std-ref">Configuring Layer Properties for a Vector Project</span></a></li>
-<li><a class="reference internal" href="#conf-display-rules-for-vector-project"><span class="std std-ref">Configure Display Rules for a Vector Project</span></a><ul>
-<li><a class="reference internal" href="#conf-select-all-rule"><span class="std std-ref">Configure the Default Select All Rule</span></a></li>
-<li><a class="reference internal" href="#disp-rules-for-major-freeways"><span class="std std-ref">Display Rules for Major Freeways</span></a></li>
+<li><a class="reference external" href="#55155">Define a Vector Project</a><ul>
+<li><a class="reference external" href="#34579">Add Resources to a Vector Project</a></li>
+<li><a class="reference external" href="#ConLayPropVec">Configuring Layer Properties for a Vector
+Project</a></li>
+<li><a class="reference external" href="#ConDispRulesVec">Configure Display Rules for a Vector
+Project</a><ul>
+<li><a class="reference external" href="#ConDefSelAllRule">Configure the Default Select All
+Rule</a></li>
+<li><a class="reference external" href="#DispRuleMajFreeway">Display Rules for Major
+Freeways</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#build-vector-project"><span class="std std-ref">Build a Vector Project</span></a></li>
+<li><a class="reference external" href="#BuildVecProj">Build a Vector Project</a></li>
 </ul>
 </li>
 </ul>
@@ -107,7 +112,7 @@ That way, you can use the imagery project as the base image map in
 the Preview pane in Google Earth Enterprise Fusion when you
 develop your vector project, making it easier to visualize how
 your vector data will appear over your actual imagery.</p>
-<p class="rubric" id="add-resources-to-imagery-project">Add Resources to an Imagery Project</p>
+<p class="rubric" id="add-resources-to-an-imagery-project">Add Resources to an Imagery Project</p>
 <p>Although you can change the display order of imagery and terrain
 resources within a project, the order is ultimately determined by
 the resolution of the source files. That is, lower-resolution
@@ -126,7 +131,7 @@ The stacking order of same-resolution insets follows the order you
 define in the project. The following graphic illustrates this
 concept.</p>
 <p><img alt="Imagery Resources Ordered by Resolution" src="../../images/imageryLevels.png" /></p>
-<p class="rubric">To add resources to an imagery project:</p>
+<p class="rubric" id="to-add-resources-to-an-imagery-project">To add resources to an imagery project:</p>
 <ol class="arabic">
 <li><p class="first">Select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu. The Asset Manager
 appears.</p>
@@ -152,16 +157,13 @@ resource appears in the Imagery Project Editor.</p>
 resolution imagery at the top of the list.</p>
 <p><img alt="Imagery Project Editor: list of resources" src="../../images/imageryProjEditor-full2.png" /></p>
 </li>
-<li><p class="first">Select <strong>File &gt; Save</strong>.</p>
-</li>
-<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Imagery</span></code>folder.</p>
-</li>
-<li><p class="first">Enter <strong>SFBayArea</strong> as the name of your project, and click
+</ol>
+<p>Select <strong>File &gt; Save</strong>.
+Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Imagery</span></code>folder.
+Enter <strong>SFBayArea</strong> as the name of your project, and click
 <strong>Save</strong>. The new project appears in the Asset Manager when you
 select <strong>ASSET_ROOT/Projects/Imagery</strong> in the asset navigation
 tree.</p>
-</li>
-</ol>
 <p class="rubric" id="build-an-imagery-project">Build an Imagery Project</p>
 <p>As with resources, you do not have to build projects right away.
 You can define several projects and then build them all, or you
@@ -171,7 +173,7 @@ will build the imagery project right away, so you can use it as a base
 map in the Preview pane.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">It could take up to 10 minutes for the project to
+<p class="last"><strong>Note:</strong> It could take up to 10 minutes for the project to
 build. Do this exercise when you can spend some time away from
 your computer while the project builds.</p>
 </div>
@@ -198,10 +200,10 @@ on to the next exercise.</p>
 <p>You can preview an imagery project after you build it.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Only bounding boxes appear in the Preview pane, not
+<p class="last"><strong>Note:</strong> Only bounding boxes appear in the Preview pane, not
 the actual imagery.</p>
 </div>
-<p class="rubric">To preview an imagery project:</p>
+<p class="rubric" id="to-preview-an-imagery-project">To preview an imagery project:</p>
 <ol class="arabic">
 <li><p class="first">Double-click the name of the imagery project you built in the
 last exercise, <strong>SFBayArea</strong>. The Imagery Project Editor for
@@ -217,7 +219,7 @@ to zoom out a bit to see it.) The other three bounding boxes
 are in the San Francisco Bay Area. You can zoom in to see them.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The name of the project does not appear in the
+<p class="last"><strong>Note:</strong> The name of the project does not appear in the
 Preview List pane. When you close the Imagery Project Editor
 or uncheck the box next to <strong>Preview</strong>, the bounding boxes
 disappear. You can reset the view by pressing <strong>Ctrl+R</strong>.</p>
@@ -225,10 +227,10 @@ disappear. You can reset the view by pressing <strong>Ctrl+R</strong>.</p>
 <p><img alt="Project Preview" src="../../images/previewProject.png" /></p>
 </li>
 </ol>
-<p class="rubric" id="specify-an-imagery-project-as-basemap">Specify an Imagery Project as Your Base Map</p>
+<p class="rubric" id="specify-an-imagery-project-as-your-base-map">Specify an Imagery Project as Your Base Map</p>
 <p>When the imagery project build is done, you can specify it as your
 base map.</p>
-<p class="rubric">To specify an imagery project as your base map:</p>
+<p class="rubric" id="to-specify-an-imagery-project-as-your-base-map">To specify an imagery project as your base map:</p>
 <ol class="arabic">
 <li><p class="first">Select <strong>Preferences</strong> from the <strong>Edit</strong> menu. The Preferences
 dialog appears.</p>
@@ -251,13 +253,13 @@ you change it to another image or return it to the default
 imagery in the Preferences dialog.</p>
 </li>
 </ol>
-<p class="rubric" id="define-terrain-project">Define a Terrain Project</p>
+<p class="rubric" id="define-a-terrain-project">Define a Terrain Project</p>
 <p>The terrain project for this tutorial is very simple. It includes
 one of the resources you built in the previous lesson.</p>
-<p class="rubric" id="add-resource-to-terrain-project">Add a Resource to a Terrain Project</p>
+<p class="rubric" id="add-a-resource-to-a-terrain-project">Add a Resource to a Terrain Project</p>
 <p>The following procedure provides the steps to add resources to a
 terrain project.</p>
-<p class="rubric">To add resources to a terrain project:</p>
+<p class="rubric" id="to-add-resources-to-a-terrain-project">To add resources to a terrain project:</p>
 <ol class="arabic">
 <li><p class="first">Select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu. The Asset Manager
 appears.</p>
@@ -286,19 +288,18 @@ the extent of the terrain resource.</p>
 </li>
 <li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Resources/Terrain</span></code> folder.</p>
 </li>
-<li><p class="first">Select <strong>WorldTopography</strong>, and click <strong>Open</strong>. The
-WorldTopography resource appears in the Terrain Project Editor.</p>
-</li>
 </ol>
+<p>#. Select <strong>WorldTopography</strong>, and click <strong>Open</strong>. The
+WorldTopography resource appears in the Terrain Project Editor.</p>
 <p><img alt="Terrain Project Editor" src="../../images/terrainProjEditor-full.png" /></p>
 <ol class="arabic simple">
 <li>In the Terrain Project Editor, select <strong>File &gt; Save</strong>.</li>
 <li>Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Terrain</span></code>folder.</li>
-<li>Enter <strong>SFTerrain</strong> as the name of your project, and click <strong>Save</strong>.
-The new project appears in the Asset Manager when you select
-<strong>ASSET_ROOT/Projects/Terrain</strong> in the asset navigation tree.</li>
 </ol>
-<p class="rubric" id="build-terrain-project">Build a Terrain Project</p>
+<p>#. Enter <strong>SFTerrain</strong> as the name of your project, and click <strong>Save</strong>.
+The new project appears in the Asset Manager when you select
+<strong>ASSET_ROOT/Projects/Terrain</strong> in the asset navigation tree.</p>
+<p class="rubric" id="build-a-terrain-project">Build a Terrain Project</p>
 <p>As with the imagery project, in this exercise, you build the
 terrain project right away.</p>
 <ol class="arabic">
@@ -309,14 +310,14 @@ terrain project right away.</p>
 then <strong>In Progress</strong>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">It could take a while for this project to build,
+<p class="last"><strong>Note:</strong> It could take a while for this project to build,
 depending on the speed of your workstation.</p>
 </div>
 </li>
 </ol>
 <p>When the status of the terrain project build is <strong>Succeeded</strong>, go
 on to the next exercise.</p>
-<p class="rubric" id="define-vector-project">Define a Vector Project</p>
+<p class="rubric" id="define-a-vector-project">Define a Vector Project</p>
 <p>The following exercises cover how to define, configure, and build
 a vector project using the resources you created in the previous
 lesson.</p>
@@ -328,11 +329,11 @@ display purposes, such as road labels, features lines, and icons
 at viewing altitudes that are most appropriate for each feature.
 For example:</p>
 <p><img alt="Road Display Example" src="../../images/tutRoadDisplay.png" /></p>
-<p class="rubric" id="add-resources-to-vector-project">Add Resources to a Vector Project</p>
+<p class="rubric" id="add-resources-to-a-vector-project">Add Resources to a Vector Project</p>
 <p>Before specifying the display rules for this vector project, you
 must add the resource you created in <a class="reference external" href="../answer/4412443.html">Defining and Building
 Resources</a>.</p>
-<p class="rubric">To add resources to a vector project:</p>
+<p class="rubric" id="to-add-resources-to-a-vector-project">To add resources to a vector project:</p>
 <ol class="arabic">
 <li><p class="first">Select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu. The Asset Manager
 appears.</p>
@@ -368,7 +369,7 @@ as well as the roads in California.</p>
 <p><img alt="Vector Project Preview2" src="../../images/previewVectorProject2.png" /></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The name of the project does not appear in the
+<p class="last"><strong>Note:</strong> The name of the project does not appear in the
 Preview List pane. When you close the Vector Project Editor
 or uncheck the boxes next to the resources, the vector data
 disappears. You can reset the view, if desired, by pressing
@@ -383,7 +384,7 @@ confirm the deletion.</p>
 <li><p class="first">Click the <strong>OK</strong> button. The <strong>USPopulation</strong> resource disappears.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Removing the resource from the project does not
+<p class="last"><strong>Note:</strong> Removing the resource from the project does not
 delete the resource. The resource remains intact and
 available for use by other projects. It is simply not part of
 this particular project any longer.</p>
@@ -400,11 +401,11 @@ tree.</p>
 </li>
 </ol>
 <p>Now you are ready to begin configuring the vector layer.</p>
-<p class="rubric" id="conf-layer-prop-vector-project">Configuring Layer Properties for a Vector Project</p>
+<p class="rubric" id="configuring-layer-properties-for-a-vector-project">Configuring Layer Properties for a Vector Project</p>
 <p>This exercise covers how to configure layer properties for your
 vector project. Layer properties determine a number of aspects of
 how your data appears and is accessed in Google Earth EC.</p>
-<p class="rubric">To configure layer properties:</p>
+<p class="rubric" id="to-configure-layer-properties">To configure layer properties:</p>
 <ol class="arabic">
 <li><p class="first">In the Asset Manager, double-click <strong>CARoads</strong> in the
 <code class="docutils literal notranslate"><span class="pre">/ASSET_ROOT/Projects/Vector</span></code> folder. The Vector Project
@@ -439,7 +440,7 @@ latitude unless you expand the default column width.)</p>
 the vector project with the same name.</p>
 </li>
 </ol>
-<p class="rubric" id="conf-display-rules-for-vector-project">Configure Display Rules for a Vector Project</p>
+<p class="rubric" id="id1"><span id="configure-display-rules-for-a-vector-project"></span>Configure Display Rules for a Vector Project</p>
 <p>This exercise covers how to specify display rules for your vector
 project. Display rules determine how your data looks in Google
 Earth EC.</p>
@@ -465,7 +466,7 @@ data requires familiarity with the data fields in the source data.
 You can find information about the CAHighways layer of your vector
 project at this website:</p>
 <p><a class="reference external" href="https://nationalmap.gov/small_scale/mld/roadtrl.html">https://nationalmap.gov/small_scale/mld/roadtrl.html</a></p>
-<p class="rubric">To configure a vector layer:</p>
+<p class="rubric" id="to-configure-a-vector-layer">To configure a vector layer:</p>
 <ol class="arabic">
 <li><p class="first">In the Vector Project Editor, right-click <strong>CAHighways</strong>, and
 select <strong>Configure Display Rules</strong> from the context menu.</p>
@@ -481,7 +482,7 @@ rule. It is designed to catch all of the data that does not match
 any other rules you create.</p>
 <div class="admonition tip">
 <p class="first admonition-title">Tip</p>
-<p class="last">Google Earth Enterprise Fusion executes the display
+<p class="last"><strong>Tip:</strong> Google Earth Enterprise Fusion executes the display
 rules sequentially, based on the order in which they are listed
 on the Rules list. So you should always make the <strong>default
 select all</strong> rule the last one on the list.</p>
@@ -499,14 +500,14 @@ select all</strong> rule (or the default formatting, if you do not change
 it) to any data that does not match the previous rules on the
 list, if any. This ensures that all vector data for the layer is
 displayed.</p>
-<p class="rubric" id="conf-select-all-rule">Configure the Default Select All Rule</p>
+<p class="rubric" id="configure-the-default-select-all-rule">Configure the Default Select All Rule</p>
 <p>In this part of the exercise, you define the <strong>default select
 all</strong> rule. This rule applies to all of the surface streets that
 are left after the highways and freeways are covered by other
 rules. You define the additional rules for highways and freeways
 later in this exercise, because they are based on this default
 rule.</p>
-<p class="rubric">To define the default select all rule:</p>
+<p class="rubric" id="to-define-the-default-select-all-rule">To define the default select all rule:</p>
 <ol class="arabic">
 <li><p class="first">Specify the geometry characteristics of the lines:</p>
 <ol class="loweralpha simple">
@@ -558,7 +559,7 @@ value of the NAME column for each road in your source data.</p>
 </li>
 </ol>
 </li>
-<li><p class="first">Verify that the display rule does what you intend:</p>
+<li><p class="first">Verify that your display rule does what you intend:</p>
 <ol class="loweralpha">
 <li><p class="first">Ensure that nothing is listed in the Preview List pane. If
 one or more assets are listed, right-click any asset, and
@@ -578,7 +579,7 @@ from the context menu.</p>
 appear for the roads in the Preview pane.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Labels for vector projects do not appear in the
+<p class="last"><strong>Note:</strong> Labels for vector projects do not appear in the
 Preview pane.</p>
 </div>
 </li>
@@ -596,12 +597,12 @@ the instructions in <a class="reference external" href="#34579">Add Resources to
 Project</a>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Whenever you modify display rules or filters for
+<p class="last"><strong>Note:</strong> Whenever you modify display rules or filters for
 your data, it is a good idea to save the project.</p>
 </div>
 </li>
 </ol>
-<p class="rubric" id="disp-rules-for-major-freeways">Display Rules for Major Freeways</p>
+<p class="rubric" id="display-rules-for-major-freeways">Display Rules for Major Freeways</p>
 <p>This exercise guides you through creating the display rules
 necessary to achieve the desired appearance for the major freeways
 in the San Francisco Bay Area. When you finish this exercise, you
@@ -623,7 +624,7 @@ types:</p>
 column values to distinguish the limited access highways (major
 freeways) from other types of highways and roads, and then display
 them appropriately.</p>
-<p class="rubric">To define a display rule for major freeways:</p>
+<p class="rubric" id="to-define-a-display-rule-for-major-freeways">To define a display rule for major freeways:</p>
 <ol class="arabic">
 <li><p class="first">In the Vector Project Editor, right-click <strong>CAHighways</strong>, and
 select <strong>Configure Display Rules</strong> from the context menu.</p>
@@ -633,7 +634,7 @@ foreground and the <strong>default select all</strong> rule highlighted.</p>
 <li><p class="first">Click <img alt="New Icon" src="../../images/icon_new1.gif" /> at the bottom-left of the dialog. The New Rule
 dialog appears.</p>
 </li>
-<li><p class="first">Enter <strong>Major Freeways</strong> in the <strong>New Rule Name</strong> field, and click
+<li><p class="first">Enter <strong>Major Freeways</strong> in the New Rule Name field, and click
 <strong>OK</strong>. The new rule name appears on the Rules list below the
 <strong>default select all</strong> rule.</p>
 <p><img alt="New Display Rule" src="../../images/displayRulesNew.png" /></p>
@@ -728,7 +729,7 @@ menu in the Vector Project Editor.</p>
 <p>This saves the project with the same name.</p>
 </li>
 </ol>
-<p class="rubric" id="build-vector-project">Build a Vector Project</p>
+<p class="rubric" id="build-a-vector-project">Build a Vector Project</p>
 <p>As with imagery and terrain projects, in this exercise, you build
 the vector project as soon as you finish configuring display
 rules.</p>
@@ -742,7 +743,7 @@ then <strong>In Progress</strong>.</p>
 </ol>
 <p>When the status of the vector project build is <strong>Succeeded</strong>,
 close the Asset Manager by clicking the close box (<strong>X</strong>), and go
-on to the <a class="reference internal" href="buildDatabase.html"><span class="doc">next lesson</span></a>.</p>
+on to the <span class="xref std std-doc">next lesson</span>.</p>
 </div>
 </div>
 </div>

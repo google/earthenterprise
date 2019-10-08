@@ -36,10 +36,10 @@ Importing and Exporting Style Templates
 
       .. note::
 
-         If you have not completed :doc:`../fusionTutorial/displayRulesPolygon`, you must complete
+         **Note:** If you have not completed :doc:`4412681`, you must complete
          at least the first three exercises in that lesson (:ref:`Define and Build a Vector Resource Using Polygon
-         Data <Define_Vector_Polygon>`, :ref:`Define, Configure, and Build a Vector Project <Define_Vector_Project1>`, and
-         :ref:`Define and Build an Imagery Project <Define_Imagery_Project1>`) before continuing
+         Data <Define_Vector_Polygon>`, :ref:`Define, Configure, and Build a Vector Project <Define_Vector_Project>`, and
+         :ref:`Define and Build an Imagery Project <Define_Imagery_Project>`) before continuing
          with this lesson.
 
       -  :ref:`Export the Display Rules <Export_Display_Rules>`
@@ -56,7 +56,7 @@ Importing and Exporting Style Templates
          The Asset Manager appears.
 
       #. Navigate to the ``/ASSET_ROOT/Projects/Vector`` folder you
-         created in :doc:`../fusionTutorial/displayRulesPolygon`.
+         created in :doc:`4412681`.
       #. Double-click **CACountyPopulation** to open it in the Vector
          Project Editor.
       #. Right-click **CACountyPopulation**, and select **Export
@@ -121,7 +121,7 @@ Importing and Exporting Style Templates
 
       #. Click **Off** next to **Initial State** to change it to **On**.
 
-         Changing the initial state to On results in the US Population
+         Changing the initial state to on results in the US Population
          layer being automatically checked (turned on) in Google Earth
          EC.
 
@@ -133,10 +133,8 @@ Importing and Exporting Style Templates
       #. Set **Max Resolution Level** to **14** (or to 12 if you want to
          save some time).
 
-         .. tip::
-
-            Leaving the level set at the default, **18**, results
-            in unduly long processing time.
+         **Tip:** Leaving the level set at the default, **18**, results
+         in unduly long processing time.
 
       #. Click **OK**.
 
@@ -209,6 +207,7 @@ Importing and Exporting Style Templates
          success message when it is done.
 
       .. rubric:: To publish a database:
+         :name: to-publish-a-database
 
       #. Access the Google Earth Enterprise Server Admin console in a
          browser window by going to *myserver.mydomainname*.com/admin,
@@ -229,13 +228,9 @@ Importing and Exporting Style Templates
          accessible from *myserver.mydomainname*.com/USPopulation-v001.
 
          To learn more about the options available in the Publish
-         dialog, see
-
-         - :doc:`Default database <../geeServerAdmin/publishDefaultDatabase>`
-         - :doc:`Search Tabs <../geeServerAdmin/createSearchTabs>`
-         - :doc:`Snippet profiles <../geeServerAdmin/manageSnippetProfiles>`
-         - :doc:`WMS <../geeServerAdmin/makeWMSRequests>`
-
+         dialog, see :doc:`3497832`,
+         :doc:`Snippet profiles <6004748>`, and
+         :doc:`WMS <4441137>`.
 
       #. Click **Publish**. The Databases page updates to indicate the
          published status of your database.
@@ -260,11 +255,11 @@ Importing and Exporting Style Templates
          *myserver.mydomainname*.com/USPopulation-v001.
       #. Click the **Sign In** button.
 
-      .. warning::
+      .. container:: alert
 
-         If you have logged in to this server with Google
+         **Caution:** If you have logged in to this server with Google
          Earth EC previously, log out, clear your cache, and log back
-         in. See :doc:`../googleEarthEnterpriseClient/clearGoogleEarthEC`.
+         in. See :doc:`6010060`.
 
       #. Zoom in until you can see part of the US.
       #. Turn and tilt the Earth so you can see the *heights* of the
@@ -273,14 +268,14 @@ Importing and Exporting Style Templates
          Google Earth EC displays all of the counties in the US labeled
          with the names of the counties. The closer you zoom in, the
          more spread out the counties look and the more county names you
-         can see. As with the database you created in :doc:`../fusionTutorial/displayRulesPolygon`,
+         can see. As with the database you created in :doc:`4412681`,
          each county’s height indicates its relative population.
          Counties with higher populations are *taller*, and counties
          with lower populations are *shorter*.
 
          .. note::
 
-            If you cannot see the vector data, make sure the
+            **Note:** If you cannot see the vector data, make sure the
             check box next to **US Population** in the Layers panel is
             checked.
 

@@ -2,7 +2,7 @@
 #
 
 # You can set these variables from the command line.
-SPHINXOPTS    = -W
+SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 SPHINXPROJ    = GoogleEarthEnterpriseDocumentation
 SOURCEDIR     = .
@@ -23,6 +23,6 @@ help:
 %: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 	@$(SPHINX2GITHUB) "$(BUILDDIR)/html"
-	rm -rf ../$(OPENGEEVER)
-	mkdir ../$(OPENGEEVER)
+	rm -rf ../$(OPENGEEVER)/*
 	cp -r ./$(BUILDDIR)/html/* ../$(OPENGEEVER)
+	rm -rf ../$(OPENGEEVER)/sources

@@ -8,7 +8,6 @@ Installation tips
 
    .. container:: content
 
-      .. index:: Installation Tips
       .. rubric:: Before installation
          :name: before-installation
 
@@ -76,8 +75,8 @@ Installation tips
       .. rubric:: Learn more
          :name: learn-more-i
 
-      -  :doc:`Install Google Earth Enterprise <../installGEE/installOverviewGEE>`
-      -  :doc:`OpenGEE Wiki <../installGEE/wikiGEE>`
+      -  :doc:`Install Google Earth Enterprise <4492598>`
+      -  :doc:`Install GEE Server <3499934>`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

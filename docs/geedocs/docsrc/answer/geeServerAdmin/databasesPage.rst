@@ -9,7 +9,7 @@ Databases page
    .. container:: content
 
       The **Databases** page of the :doc:`GEE Server Admin
-      console <../geeServerAdmin/signInAdminConsole>` is where you manage Fusion
+      console <3470759>` is where you manage Fusion
       databases and portables. From this page you can:
 
       -  **View and sort your list of databases and portables**. The list is
@@ -21,7 +21,6 @@ Databases page
          **Refresh** button in the upper right corner to refresh the list.
       -  **Manage databases and portables**. Check the box next to a
          database, then click:
-
          -  **Publish**: To publish a database. Specify a **Publish**
             **point**, where the database or portable will be accessible
             from. For example, if you specify *sanfrancisco*, it will be
@@ -29,16 +28,16 @@ Databases page
 
             .. note::
 
-               When publishing a database, the publish point
+               **Note:** When publishing a database, the publish point
                you specify is case-*insensitive*. Upper and lower case
                are not differentiated. Make sure each publish point path
                name you specify is unique.
 
-         -  Choose a :doc:`virtual host <../geeServerAdmin/manageVirtualHosts>`, and,
+         -  Choose a :doc:`virtual host <6013604>`, and,
             depending on the type of item, the following options may
-            also be available: :doc:`Search Tabs <../geeServerAdmin/createSearchTabs>`,
-            :doc:`Snippet profiles <../geeServerAdmin/manageSnippetProfiles>`, and :doc:`Serve
-            WMS <../geeServerAdmin/makeWMSRequests>`.
+            also be available: :doc:`Search Tabs <3497832>`,
+            :doc:`Snippet profiles <6004748>`, and :doc:`Serve
+            WMS <4441137>`.
          -  **Unpublish**: To unpublish a database from its publish
             points.
          -  **Preview**: To preview a published database.
@@ -49,13 +48,12 @@ Databases page
             which you can view by clicking **Manage Portables**.
       -  **Register or unregister portables**. Click the **Manage
          Portables** button, then click:
-
          -  **Register**: To add a portable to the database list and
             make it available for publishing.
          -  **Unregister**: To remove a portable from the list of
             databases. If the portable is published, it must be
             unpublished before being unregistered.
-         -  The **name** of a portable to download it.
+         -  The name of a portable to download it.
          -  **Refresh**: To refresh the list of portables.
          -  **Close**: To close the Manage Portables dialog.
 

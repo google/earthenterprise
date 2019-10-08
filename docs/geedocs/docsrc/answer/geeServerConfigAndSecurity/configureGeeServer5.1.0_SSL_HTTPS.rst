@@ -125,14 +125,14 @@ Configure GEE Server 5.1.0 for SSL/HTTPS
 
       .. note::
 
-         The virtual host name “secure” is reserved for GEE
+         **Note:** The virtual host name “secure” is reserved for GEE
          Server use.
 
       .. rubric:: To add a virtual host for HTTPS serving:
          :name: to-add-a-virtual-host-for-https-serving
 
       #. Register your new virtual host using the ``geserveradmin``
-         command. See :doc:`../geeServerAdmin/manageVirtualHosts`.
+         command. See :doc:`6013604`.
 
          ``geserveradmin –-addvh --ssl``
 
@@ -144,7 +144,7 @@ Configure GEE Server 5.1.0 for SSL/HTTPS
          For example, to create a location-based virtual host with a
          configuration file that specifies SSL:
 
-         .. code-block:: none
+         ::
 
             # /opt/google/bin$ ./geserveradmin --addvh test_ssl --ssl
             Registering Virtual Host: test_ssl ...
@@ -159,29 +159,23 @@ Configure GEE Server 5.1.0 for SSL/HTTPS
          includes the ``<Location>`` directives for SSL, in this case,
          ``test_ssl``.
 
-         .. code-block:: none
-
-            <Location “/test_ssl_host/*”>
-               SetHandler fdb-handler
-               SSLRequireSSL
-               SSLVerifyClient none
-            </Location>
+         ``<Location “/test_ssl_host/*”>     SetHandler fdb-handler     SSLRequireSSL     SSLVerifyClient none </Location>``
 
          .. tip::
 
             Use of the ``SSLRequireSSL`` directive prevents all HTTP
             requests that do not use SSL, thereby protecting your data
-            from all but HTTPS requests.
-            See `Apache HTTP Server Version 2.2 Documentation
-            <http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslrequiressl>`_
+            from all but HTTPS requests. See `Apache HTTP Server Version
+            2.2
+            Documentation <http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslrequiressl>`_
             for more information.
 
          .. tip::
 
             Use of the ``SSLVerifyClient`` directive specifies the level
-            of certificate verification required for the client.
-            See `Apache HTTP Server Version 2.2 Documentation for SSLVerifyClient
-            <http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslverifyclient>`_
+            of certificate verification required for the client. See
+            `Apache HTTP Server Version 2.2
+            Documentation <http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslverifyclient>`_
             for more information.
 
 
@@ -199,15 +193,15 @@ Configure GEE Server 5.1.0 for SSL/HTTPS
       #. Edit the Apache HTTP server configuration file,
          ``/opt/google/gehttpd/conf/gehttpd.conf`` file, as follows:
 
-         a. Uncomment and change ``ServerName www.example.com`` to
+         #. Uncomment and change ``ServerName www.example.com`` to
             ``ServerName MyServerName``, where ``MyServerName`` is the
             real address users would enter in the network.
-         b. Check that ``Include conf/extra/httpd-ssl.conf`` appears and
+         #. Check that ``Include conf/extra/httpd-ssl.conf`` appears and
             uncomment it. Note that this ``Include`` for the
             ``httpd-ssl.conf`` configuration is commented out by default
             as it should only be loaded if you serve a virtual host over
             HTTPS.
-         c. Save and close the ``/opt/google/gehttpd/conf/gehttpd.conf``
+         #. Save and close the ``/opt/google/gehttpd/conf/gehttpd.conf``
             file.
 
       #. Edit the Apache server configuration file,
@@ -215,20 +209,20 @@ Configure GEE Server 5.1.0 for SSL/HTTPS
          provides SSL support. It contains the configuration directives
          to instruct the server how to serve pages over an HTTPS
          connection. For detailed information about these directives see
-         `Apache 2.2 documentation <http://httpd.apache.org/docs/2.2/mod/mod_ssl.html>`__.
+         `Apache 2.2
+         documentation <http://httpd.apache.org/docs/2.2/mod/mod_ssl.html>`__.
 
-         a. Ensure the ``ServerName www.example.com`` is uncommented and
+         #. Ensure the ``ServerName www.example.com`` is uncommented and
             matches the name defined in the
             ``/opt/google/gehttpd/conf/gehttpd.conf`` file, that is, the
             alias or real address users would enter in the network.
-         b. Check that the SSL virtual hosts configuration file location
-            is already included in the ``<VirtualHost _default_:443>`` 
-            list of directives:
+         #. | Check that the SSL virtual hosts configuration file
+              location is already included in the
+            | ``<VirtualHost _default_:443>`` list of directives:
 
-            ``<VirtualHost_default_:443>``
-               ``Include conf.d/virtual_servers/*.location_ssl``
+            ``<VirtualHost_default_:443>     Include conf.d/virtual_servers/*.location_ssl``
 
-         c. Save and close the
+         #. Save and close the
             ``/opt/google/gehttpd/conf/extra/httpd-ssl.conf`` file.
 
       #. Restart the Google Earth Enterprise Server software:
@@ -238,6 +232,7 @@ Configure GEE Server 5.1.0 for SSL/HTTPS
       #. Publish a database to the SSL/HTTPS virtual host.
       #. Test the connections with Google Earth Enterprise Client for
          HTTP and HTTPS-based virtual servers.
+
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

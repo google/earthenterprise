@@ -30,7 +30,7 @@ Configure font size in the GUI
 
          .. note::
 
-            The Qt Configuration tool is not a Google product.
+            **Note:** The Qt Configuration tool is not a Google product.
             For more information about Qt Configuration, select either
             of the options on the **Help** menu.
 

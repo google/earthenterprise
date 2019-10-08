@@ -67,7 +67,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp5.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp5.png" style="width: 130px; height: 44px;" /></a></p>
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp4.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp4.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="postgresql-authentication">
 <h1>PostgreSQL authentication<a class="headerlink" href="#postgresql-authentication" title="Permalink to this headline">¶</a></h1>
 <div class="docutils container">
@@ -92,9 +92,9 @@ authentication methods such as Digest authentication to control
 user access. This is useful if you already store user passwords in
 a PostgreSQL table, or if you want to use a unified authentication
 mechanism other than LDAP for your GEE Server and other systems.</p>
-<p class="rubric">Before you begin</p>
+<p class="rubric" id="before-you-begin">Before you begin</p>
 <ul class="simple">
-<li>Do not use the PostgreSQL database that ships with GEE. Instead,
+<li>Don’t use the PostgreSQL database that ships with GEE. Instead,
 install PostgreSQL on a separate port or a different host.</li>
 <li>You must set up client authentication for each virtual server
 you want to use authentication with.</li>
@@ -126,54 +126,43 @@ Ubuntu.</li>
 </ul>
 <p class="rubric" id="to-configure-client-authentication-for-postgresql">To configure client authentication for PostgreSQL:</p>
 <ol class="arabic">
-<li><p class="first">Connect to the PostgreSQL server:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sudo su - postgres
-psql --port=5433
-</pre></div>
+<li><div class="first line-block">
+<div class="line">Connect to the PostgreSQL server:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">su</span> <span class="pre">-</span> <span class="pre">postgres</span> <span class="pre">psql</span> <span class="pre">--port=5433</span></code></div>
 </div>
 </li>
-<li><p class="first">Create the database and user:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>CREATE USER geeuser WITH PASSWORD &#39;geeuserpasswd&#39;;
-CREATE DATABASE geeauthdb;
-GRANT ALL PRIVILEGES ON DATABASE geeauthdb to mypguser;
-\q
-</pre></div>
+<li><div class="first line-block">
+<div class="line">Create the database and user:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">USER</span> <span class="pre">geeuser</span> <span class="pre">WITH</span> <span class="pre">PASSWORD</span> <span class="pre">'geeuserpasswd';</span> <span class="pre">CREATE</span> <span class="pre">DATABASE</span> <span class="pre">geeauthdb;</span> <span class="pre">GRANT</span> <span class="pre">ALL</span> <span class="pre">PRIVILEGES</span> <span class="pre">ON</span> <span class="pre">DATABASE</span> <span class="pre">geeauthdb</span> <span class="pre">to</span> <span class="pre">mypguser;</span> <span class="pre">\q</span></code></div>
 </div>
 </li>
-<li><p class="first">Create a table to store the passwords:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>psql --port=5433 --username=geeuser geauthdb
-CREATE TABLE geepasswd (username varchar(32) NOT NULL, realm varchar(255)
-NOT NULL, passwd varchar(255) NOT NULL,
-   realname varchar(255), PRIMARY KEY (username, realm));
-\q
-</pre></div>
-</div>
-<p>The table includes these fields:</p>
-<blockquote>
-<div><ul class="simple">
+<li><p class="first">Create a table to store the passwords:
+<code class="docutils literal notranslate"><span class="pre">psql</span> <span class="pre">--port=5433</span> <span class="pre">--username=geeuser</span> <span class="pre">geauthdb</span> <span class="pre">CREATE</span> <span class="pre">TABLE</span> <span class="pre">geepasswd</span> <span class="pre">(username</span> <span class="pre">varchar(32)</span> <span class="pre">NOT</span> <span class="pre">NULL,</span> <span class="pre">realm</span> <span class="pre">varchar(255)</span> <span class="pre">NOT</span> <span class="pre">NULL,</span> <span class="pre">passwd</span> <span class="pre">varchar(255)</span> <span class="pre">NOT</span> <span class="pre">NULL,</span>&#160;&#160;&#160;&#160; <span class="pre">realname</span> <span class="pre">varchar(255),</span> <span class="pre">PRIMARY</span> <span class="pre">KEY</span> <span class="pre">(username,</span> <span class="pre">realm));</span> <span class="pre">\q</span></code></p>
+<ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">username</span></code>.</li>
 <li><code class="docutils literal notranslate"><span class="pre">realm</span></code>.</li>
 <li><code class="docutils literal notranslate"><span class="pre">password</span></code>.</li>
-<li><code class="docutils literal notranslate"><span class="pre">realname</span></code>. <em>Optional</em>. The realname field does not require
+<li><code class="docutils literal notranslate"><span class="pre">realname</span></code>. <em>Optional</em>. The realname field doesn’t require
 a value, but is included in case you want to use it. You can
 also add other optional fields if needed.</li>
 </ul>
-</div></blockquote>
 </li>
-<li><p class="first">Create the encrypted password by inserting encyption
+<li><div class="first line-block">
+<div class="line">Create the encrypted password by inserting encyption
 functions into the database with the <code class="docutils literal notranslate"><span class="pre">pgcrypto</span></code> contributed
-module:</p>
-<p><code class="docutils literal notranslate"><span class="pre">psql</span> <span class="pre">--port=5433</span> <span class="pre">--username=geeuser</span> <span class="pre">geauthdb</span> <span class="pre">&lt;</span> <span class="pre">/usr/share/postgresql/8.4/contrib/pgcrypto.sql</span></code></p>
-<p>Note: You can substitute a different method for this step. The <a class="reference external" href="http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmisc%2Fpassword_encryptions.html&amp;sa=D&amp;sntz=1&amp;usg=AFrqEzdBJJpsOLV3eL6UCAatZv_IhxEZdg">Password Formats</a>
+module:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">psql</span> <span class="pre">--port=5433</span> <span class="pre">--username=geeuser</span> <span class="pre">geauthdb</span> <span class="pre">&lt;</span> <span class="pre">/usr/share/postgresql/8.4/contrib/pgcrypto.sql</span></code></div>
+</div>
+<p>Note: You can substitute a different method for this step. The
+<a class="reference external" href="http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmisc%2Fpassword_encryptions.html&amp;sa=D&amp;sntz=1&amp;usg=AFrqEzdBJJpsOLV3eL6UCAatZv_IhxEZdg">Password
+Formats</a>
 section in the Apache documentation gives examples in multiple
 programming languages for encrypting the password so that it is
 readable by Apache.</p>
 </li>
-<li><p class="first">Make sure the database works by inserting a test user:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>psql --port=5433 --username=geeuser geauthdb
-INSERT INTO geepasswd VALUES (&#39;jsmith&#39;, &#39;realm&#39;, encode(digest( &#39;jsmith&#39; || &#39;:&#39; || &#39;realm&#39; || &#39;:&#39; ||&#39;password&#39;, &#39;md5&#39;), &#39;hex&#39;), &#39;Jane Smith&#39;);
-\q
-</pre></div>
+<li><div class="first line-block">
+<div class="line">Make sure the database works by inserting a test user:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">psql</span> <span class="pre">--port=5433</span> <span class="pre">--username=geeuser</span> <span class="pre">geauthdb</span> <span class="pre">INSERT</span> <span class="pre">INTO</span> <span class="pre">geepasswd</span> <span class="pre">VALUES</span> <span class="pre">('jsmith',</span> <span class="pre">'realm',</span> <span class="pre">encode(digest(</span> <span class="pre">'jsmith'</span> <span class="pre">||</span> <span class="pre">':'</span> <span class="pre">||</span> <span class="pre">'realm'</span> <span class="pre">||</span> <span class="pre">':'</span> <span class="pre">||'password',</span> <span class="pre">'md5'),</span> <span class="pre">'hex'),</span> <span class="pre">'Jane</span> <span class="pre">Smith');</span> <span class="pre">\q</span></code></div>
 </div>
 <p>Replace “jsmith”, “realm”, “password” and “Jane Smith” with the
 values you want to use.</p>
@@ -181,74 +170,65 @@ values you want to use.</p>
 <code class="docutils literal notranslate"><span class="pre">mod_authn_dbd</span></code> module requires it. This also prevents the
 password from appearing in plaintext.</p>
 </li>
-<li><p class="first">Create a file named <code class="docutils literal notranslate"><span class="pre">pgsql-auth.conf</span></code> at</p>
-<p><code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/extra/pgsql-auth.conf</span></code>.</p>
+<li><p class="first">Create a file named <code class="docutils literal notranslate"><span class="pre">pgsql-auth.conf</span></code>at
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/extra/pgsql-auth.conf</span></code>.</p>
 </li>
-<li><p class="first">Add these lines to the <code class="docutils literal notranslate"><span class="pre">pgsql-auth.conf</span></code> file:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>``DBDriver pgsql``
-``DBDParams &quot;hostaddr=yourpgserver port=yourport user=geuser password=yourpassword dbname=gee_auth&quot;``
-``DBDMin 4``
-``DBDKeep 8``
-``DBDMax 20``
-``DBDExptime 300``
-</pre></div>
+<li><div class="first line-block">
+<div class="line">Add these lines to the <code class="docutils literal notranslate"><span class="pre">pgsql-auth.conf</span></code> file:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">DBDriver</span> <span class="pre">pgsql</span> <span class="pre">DBDParams</span> <span class="pre">&quot;hostaddr=yourpgserver</span> <span class="pre">port=yourport</span> <span class="pre">user=geuser</span> <span class="pre">password=yourpassword</span> <span class="pre">dbname=gee_auth&quot;</span> <span class="pre">DBDMin</span> <span class="pre">4</span> <span class="pre">DBDKeep</span> <span class="pre">8</span> <span class="pre">DBDMax</span> <span class="pre">20</span> <span class="pre">DBDExptime</span> <span class="pre">300</span></code></div>
 </div>
 <p>Replace <code class="docutils literal notranslate"><span class="pre">yourpgserver</span></code> and <code class="docutils literal notranslate"><span class="pre">yourport</span></code> with the address or
 hostname of your PostgreSQL database. Replace <code class="docutils literal notranslate"><span class="pre">geuser</span></code> and
 <code class="docutils literal notranslate"><span class="pre">yourpassword</span></code> with the username and password of your test
 user.</p>
 </li>
-<li><p class="first">Open the <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/gehttpd.conf</span></code> file and
-insert the line:</p>
-<p><code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">/opt/google/gehttpd/conf/extra/pgsql-auth.conf</span></code></p>
-<p>above the line:</p>
-<p><code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">conf.d/*.conf</span></code></p>
-<p>The result is:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Include Google Earth Server-specific files
-Include /opt/google/gehttpd/conf/extra/pgsql-auth.conf
-Include conf.d/*.conf
-</pre></div>
+<li><div class="first line-block">
+<div class="line">Open the <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/gehttpd.conf</span></code> file and
+insert the line:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">/opt/google/gehttpd/conf/extra/pgsql-auth.conf</span></code></div>
+</div>
+<div class="line-block">
+<div class="line">above the line:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">conf.d/*.conf</span></code></div>
+</div>
+<div class="line-block">
+<div class="line">The result is:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">Include</span> <span class="pre">Google</span> <span class="pre">Earth</span> <span class="pre">Server-specific</span> <span class="pre">files</span> <span class="pre">Include</span> <span class="pre">/opt/google/gehttpd/conf/extra/pgsql-auth.conf</span> <span class="pre">Include</span> <span class="pre">conf.d/*.conf</span></code></div>
 </div>
 </li>
-<li><p class="first">Add the following lines at the beginning of the
-<code class="docutils literal notranslate"><span class="pre">&lt;Location&gt;</span></code> directive of your virtual server:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>AuthType Digest
-AuthName &quot;realm&quot;
-AuthDigestDomain &#39;/default_map/&#39;
-AuthDigestProvider dbd
-AuthDBDUserRealmQuery &quot;SELECT passwd FROM geeauth WHERE username = %s and realm = %s&quot;
-BrowserMatch &quot;MSIE&quot; AuthDigestEnableQueryStringHack=On
-</pre></div>
+<li><div class="first line-block">
+<div class="line">Add the following lines at the beginning of the
+<code class="docutils literal notranslate"><span class="pre">&lt;Location&gt;</span></code> directive of your virtual server:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">AuthType</span> <span class="pre">Digest</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">AuthName</span> <span class="pre">&quot;realm&quot;</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">AuthDigestDomain</span> <span class="pre">'/default_map/'</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">AuthDigestProvider</span> <span class="pre">dbd</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">AuthDBDUserRealmQuery</span> <span class="pre">&quot;SELECT</span> <span class="pre">passwd</span> <span class="pre">FROM</span> <span class="pre">geeauth</span> <span class="pre">WHERE</span> <span class="pre">username</span> <span class="pre">=</span> <span class="pre">%s</span> <span class="pre">and</span> <span class="pre">realm</span> <span class="pre">=</span> <span class="pre">%s&quot;</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">BrowserMatch</span> <span class="pre">&quot;MSIE&quot;</span> <span class="pre">AuthDigestEnableQueryStringHack=On</span></code></div>
 </div>
-<p>If this is a <code class="docutils literal notranslate"><span class="pre">_ge_</span> <span class="pre">virtual</span></code> server, add:
-<code class="docutils literal notranslate"><span class="pre">BrowserMatch</span> <span class="pre">&quot;GoogleEarth&quot;</span> <span class="pre">AuthDigestEnableQueryStringHack=On</span></code></p>
-<p>If this is a <code class="docutils literal notranslate"><span class="pre">_map_</span> <span class="pre">virtual</span></code> server, add:
-<code class="docutils literal notranslate"><span class="pre">BrowserMatch</span> <span class="pre">&quot;MSIE&quot;</span> <span class="pre">AuthDigestEnableQueryStringHack=On</span></code></p>
+<div class="line-block">
+<div class="line">If this is a <code class="docutils literal notranslate"><span class="pre">_ge_</span> <span class="pre">virtual</span></code> server, add:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">BrowserMatch</span> <span class="pre">&quot;GoogleEarth&quot;</span> <span class="pre">AuthDigestEnableQueryStringHack=On</span></code></div>
+</div>
+<div class="line-block">
+<div class="line">If this is a <code class="docutils literal notranslate"><span class="pre">_map_</span> <span class="pre">virtual</span></code> server, add:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">BrowserMatch</span> <span class="pre">&quot;MSIE&quot;</span> <span class="pre">AuthDigestEnableQueryStringHack=On</span></code></div>
+</div>
 <p>For more information about <code class="docutils literal notranslate"><span class="pre">AuthDigestEnableQueryStringHack</span></code>,
-see the <a class="reference external" href="http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmod%2Fmod_auth_digest.html%23msie&amp;sa=D&amp;sntz=1&amp;usg=AFrqEze9uh13hmi22IsT3-GMw3t8j7VHcA">mod_auth_digest</a>
+see the
+<a class="reference external" href="http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmod%2Fmod_auth_digest.html%23msie&amp;sa=D&amp;sntz=1&amp;usg=AFrqEze9uh13hmi22IsT3-GMw3t8j7VHcA">mod_auth_digest</a>
 section in the Apache documentation.</p>
-<p>The final <code class="docutils literal notranslate"><span class="pre">&lt;Location&gt;</span></code> directive looks like:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Location &quot;/default_map/*&quot;&gt;
-AuthType Digest
-AuthName &quot;realm&quot;
-AuthDigestDomain &#39;/default_map/&#39;
-
-AuthDigestProvider dbd
-AuthDBDUserRealmQuery &quot;SELECT passwd FROM geeauth WHERE username = %s and realm = %s&quot;
-BrowserMatch &quot;MSIE&quot; AuthDigestEnableQueryStringHack=On
-
-Require valid-user
-SetHandler gedb-handler
-Include
-conf.d/virtual_servers/runtime/default_map_runtime
-&lt;/Location&gt;
-</pre></div>
+<div class="line-block">
+<div class="line">The final <code class="docutils literal notranslate"><span class="pre">&lt;Location&gt;</span></code> directive looks like:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">&lt;Location</span> <span class="pre">&quot;/default_map/*&quot;&gt;</span> <span class="pre">AuthType</span> <span class="pre">Digest</span> <span class="pre">AuthName</span> <span class="pre">&quot;realm&quot;</span> <span class="pre">AuthDigestDomain</span> <span class="pre">'/default_map/'</span>&#160; <span class="pre">AuthDigestProvider</span> <span class="pre">dbd</span> <span class="pre">AuthDBDUserRealmQuery</span> <span class="pre">&quot;SELECT</span> <span class="pre">passwd</span> <span class="pre">FROM</span> <span class="pre">geeauth</span> <span class="pre">WHERE</span> <span class="pre">username</span> <span class="pre">=</span> <span class="pre">%s</span> <span class="pre">and</span> <span class="pre">realm</span> <span class="pre">=</span> <span class="pre">%s&quot;</span> <span class="pre">BrowserMatch</span> <span class="pre">&quot;MSIE&quot;</span> <span class="pre">AuthDigestEnableQueryStringHack=On</span>&#160; <span class="pre">Require</span> <span class="pre">valid-user</span> <span class="pre">SetHandler</span> <span class="pre">gedb-handler</span> <span class="pre">Include</span> <span class="pre">conf.d/virtual_servers/runtime/default_map_runtime</span> <span class="pre">&lt;/Location&gt;</span></code></div>
 </div>
 </li>
 <li><p class="first">Save and close the virtual server configuration file.</p>
 </li>
-<li><p class="first">Restart the server:</p>
-<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">restart</span></code></p>
+<li><div class="first line-block">
+<div class="line">Restart the server:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">restart</span></code></div>
+</div>
 <p>After you verify the configuration with your test user, you can
 add your users to the database.</p>
 </li>

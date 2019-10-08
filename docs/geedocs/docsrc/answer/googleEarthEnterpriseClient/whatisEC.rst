@@ -1,8 +1,8 @@
 |Google logo|
 
-============================================
-What is Google Earth Enterprise Client (EC)?
-============================================
+===========================================
+What is Google Earth Enterprise Client (EC)
+===========================================
 
 .. container::
 
@@ -21,7 +21,8 @@ What is Google Earth Enterprise Client (EC)?
       global database of satellite imagery and mapping information.
 
       Google Earth EC is not part of the OpenGEE project, and can be
-      downloaded separately `here. <https://github.com/google/earthenterprise/wiki/Google-Earth-Enterprise-Client-(EC)>`_
+      downloaded separately from
+      `here. <https://github.com/google/earthenterprise/wiki/Google-Earth-Enterprise-Client-(EC)>`_
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

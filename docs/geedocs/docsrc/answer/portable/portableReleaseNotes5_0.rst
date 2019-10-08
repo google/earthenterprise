@@ -44,8 +44,8 @@ Portable Release Notes 5.0
 
       .. rubric:: Supported Platforms
 
-      GEE Portable 5.0 is supported on the following operating
-      systems:
+         GEE Portable 5.0 is supported on the following operating
+         systems:
 
          -  Windows 7 or later
          -  Mac OS X 10.7 and later
@@ -54,18 +54,17 @@ Portable Release Notes 5.0
          -  CentOS 6.4
          -  Ubuntu 10.04 LTS and 12.04 LTS
 
-      GEE Portable 5.0 is compatible with Google Earth Enterprise
-      Client (EC) and Plugin versions 7.0.1 - 7.1.1.1888 for
-      Windows, Mac, and Linux.
+         GEE Portable 5.0 is compatible with Google Earth Enterprise
+         Client (EC) and Plugin versions 7.0.1 - 7.1.1.1888 for
+         Windows, Mac, and Linux.
 
       .. rubric:: System Requirements
 
-      .. note::
-         If you plan to serve large globes from Portable
+         **Note:** If you plan to serve large globes from Portable
          Server, you may also need to provide more storage, depending
          on their size.
 
-      **Windows 7 or later**
+         **Windows 7 or later**
 
          -  Minimum dual-core Intel or AMD CPUs; 2.0 GHz or higher
             recommended.
@@ -75,12 +74,11 @@ Portable Release Notes 5.0
             (discrete GPU recommended).
          -  Screen: 1280x1024, "32-bit True Color."
 
-      .. note::
-         We recommend using NTFS for attached storage
+         **Note:** We recommend using NTFS for attached storage
          devices hosting the portable globes, especially if the
          ``.glx`` files are > 4 GB
 
-      **Mac OS X 10.7 or later**
+         **Mac OS X 10.7 or later**
 
          -  Minimum dual-core Intel Mac
          -  Minimum 2 GB RAM.
@@ -89,16 +87,16 @@ Portable Release Notes 5.0
             (discrete GPU recommended).
          -  Screen: 1280x1024, "Millions of Colors."
 
-      **Linux**
+         **Linux**
 
-      Operating systems supported:
+         Operating systems supported:
 
          -  Red Hat Enterprise Linux versions 6.0 to 6.4, including
             the most recent security patches.
          -  CentOS 6.4
          -  Ubuntu 10.04 and 12.04 LTS
 
-      Hardware requirements:
+         Hardware requirements:
 
          -  Minimum dual-core Intel or AMD CPUs; 2.0 GHz or higher
             recommended.
@@ -109,49 +107,37 @@ Portable Release Notes 5.0
 
       .. rubric:: New features
 
-      **Broadcasting set by portable.cfg file**
-      Broadcasting no longer can be set from the default user
-      interface; instead you can set it using either of the
-      following methods:
+         **Broadcasting set by portable.cfg file**
+         Broadcasting no longer can be set from the default user
+         interface; instead you can set it using either of the
+         following methods:
 
          -  ``http://localhost:9335/?cmd=set_key&accept;_all_requests=t``
          -  Add ``accept_all_requests True`` to your ``portable.cfg``
             file
 
-      You can also disable broadcasting via the ``portable.cfg``
-      file. This prevents a rogue page from turning on
-      broadcasting via a localhost reference.
+         You can also disable broadcasting via the ``portable.cfg``
+         file. This prevents a rogue page from turning on
+         broadcasting via a localhost reference.
 
          -  Add ``disable_broadcasting True`` to your
             ``portable.cfg`` file
 
       .. rubric:: Known Issues
 
-      .. list-table::
-         :widths: 10 40 40
-         :header-rows: 1
-
-         * - Number
-           - Description
-           - Work Around
-         * -
-           - The new Preview options for 2D maps in GEE Server and Portable do not support the display of
-             Plate Carrée 2D maps.
-           - With Portable, you can still view existing .glm Plate Carrée 2D map files via the old preview
-             interface, which you can access by pointing GEE Portable at http://localhost:9335/list.
+         ====== ================================================================================================================== =========================================================================================================================================================================================
+         Number Description                                                                                                        Workaround
+         ====== ================================================================================================================== =========================================================================================================================================================================================
+         \      The new Preview options for 2D maps in GEE Server and Portable do not support the display of Plate Carrée 2D maps. With Portable, you can still view existing .glm Plate Carrée 2D map files via the old preview interface, which you can access by pointing GEE Portable at ``http://localhost:9335/list``.
+         ====== ================================================================================================================== =========================================================================================================================================================================================
 
       .. rubric:: Resolved Issues
 
-      .. list-table::
-         :widths: 10 40 10
-         :header-rows: 1
-
-         * - Number
-           - Description
-           - Resolution
-         * - 8627202
-           - Portable for Windows 4.4.1 fails to read map or globe files greater than 2 GB in size.
-           - Fixed
+         ======= ====================================================================================== ==========
+         Number  Description                                                                            Resolution
+         ======= ====================================================================================== ==========
+         8627202 Portable for Windows 4.4.1 fails to read map or globe files greater than 2 GB in size. Fixed.
+         ======= ====================================================================================== ==========
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

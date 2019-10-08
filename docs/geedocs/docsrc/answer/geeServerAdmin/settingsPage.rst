@@ -9,11 +9,11 @@ Settings page
    .. container:: content
 
       Click the |gear icon| **Settings** icon in the :doc:`GEE Server Admin
-      console <../geeServerAdmin/signInAdminConsole>` to:
+      console <3470759>` to:
 
       .. rubric:: Perform .glc assembly
 
-      To create new .glc globes from existing globes (.glm/.glb):
+      Create new .glc globes from existing globes (.glm/.glb):
 
       #. Enter a name and description for the new .glc.
       #. Paste **Polygon** KML for use with the new globe.
@@ -25,22 +25,22 @@ Settings page
       .glc files are added to the default globes directory when
       they are created.
 
-      See :doc:`../geeServerAdmin/createCompositeGlobesMaps`.
+      See :doc:`4643041`.
 
       .. rubric::  Perform .glc disassembly
 
-      To extract .glm/.glb files:
+      Extract .glm/.glb files:
 
       #. Select a .glc to disassemble.
       #. Enter a **New output directory** where the files will be
          placed.
       #. Click **Disassemble glc**.
 
-      See :doc:`../geeServerAdmin/createCompositeGlobesMaps`.
+      See :doc:`4643041`.
 
       .. rubric:: Launch Cutter
 
-      To create a new .glm/.glb from published Fusion databases or
+      Create a new .glm/.glb from published Fusion databases or
       Portable globes (.glm/.glb, not .glc):
 
       #. Select a source map.
@@ -49,10 +49,10 @@ Settings page
          name.
       #. Choose a **Region Selection** method:
 
-         -. **Manual**: Manually draw the boundaries of your
+         #. **Manual**: Manually draw the boundaries of your
             region using the polygon button in the upper-right of
             the map.
-         -. **Paste KML**: Define your region by pasting a KML
+         #. **Paste KML**: Define your region by pasting a KML
             file.
 
       #. Specify a **World level**; this represents the highest
@@ -67,7 +67,7 @@ Settings page
       screen. Upon successful completion, the globe is saved to
       the default globes directory.
 
-      See :doc:`../geeServerAdmin/createPortableGlobesMaps`.
+      See :doc:`3230777`.
 
       .. rubric:: View Apache logs
 

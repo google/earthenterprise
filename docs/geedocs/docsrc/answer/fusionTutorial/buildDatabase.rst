@@ -11,11 +11,11 @@ Defining and Building Databases
       The following exercises guide you through defining and building a
       database, using the projects you created in the previous lesson.
 
-      -  :ref:`Define a Database <Define_Database>`
-      -  :ref:`Build a Database <Build_Database>`
+      -  `Define a Database <#DefineDB>`__
+      -  `Build a Database <#BuildDB>`__
 
-      .. _Define_Database:
       .. rubric:: Define a Database
+         :name: define-a-database
 
       When you define a database, you specify one or more Google Earth
       Enterprise Fusion projects that Google Earth Enterprise Fusion
@@ -34,6 +34,7 @@ Defining and Building Databases
       and give it a name.
 
       .. rubric:: To define a database:
+         :name: to-define-a-database
 
       #. Select **Asset Manager** from the **Tools** menu. The Asset Manager
          appears.
@@ -47,7 +48,7 @@ Defining and Building Databases
 
          .. note::
 
-            The selection in the **Type** drop-down list near
+            **Note:** The selection in the **Type** drop-down list near
             the bottom of this dialog determines the type of projects
             that appear on the list. Vector Project is automatically
             selected, so only vector resources appear on the list.
@@ -72,14 +73,14 @@ Defining and Building Databases
          The name of the database is displayed when you select the
          ``/ASSET_ROOT/Databases``\ folder in the asset navigation tree.
 
-      .. _Build_Database:
       .. rubric:: Build a Database
+         :name: build-a-database
 
       Once the database has been defined, it is ready to be built.
 
       .. note::
 
-         If you had not built the projects included in this
+         **Note:** If you had not built the projects included in this
          database previously, the following process would build them in
          the course of building the database. As you might expect, the
          database build process takes much longer if it is building all
@@ -115,7 +116,8 @@ Defining and Building Databases
       and time the most recent build was started.
 
       Close the Asset Manager by clicking the close box (**X**) in the
-      top right corner, and go on to the :doc:`next lesson <../fusionTutorial/pushPublishView>`.
+      top right corner, and go on to the `next
+      lesson <../answer/4412446.html>`__.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

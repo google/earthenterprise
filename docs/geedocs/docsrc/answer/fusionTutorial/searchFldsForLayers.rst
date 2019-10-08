@@ -12,11 +12,10 @@ Specifying Search Fields for Individual Layers
       in your source data on which users of Google Earth EC can search.
       This lesson guides you through the process of specifying one field
       on one layer as searchable, using the vector project you created
-      in :doc:`../fusionTutorial/displayRulesPolygon`. If you have not yet completed
-      that lesson, complete at least the first two sections,
-      :ref:`Define and Build a Vector Resource Using Polygon Data <Define_Vector_Polygon>` and
-      :ref:`Define, Configure, and Build a Vector Project <Define_Vector_Project1>`,
-      before continuing with this lesson.
+      in :doc:`4412681`. If you have not yet completed
+      that lesson, complete at least the first two sections, :ref:`Define and Build a Vector Resource Using Polygon
+         Data <Define_Vector_Polygon>` and :ref:`Define, Configure, and Build a Vector Project <Define_Vector_Project>`, before
+      continuing with this lesson.
 
       -  :ref:`Specify Search Fields in Layer Properties <Specify_Search_Fields>`
       -  :ref:`Build and Push Your Database <Build_Push_Database>`
@@ -24,6 +23,7 @@ Specifying Search Fields for Individual Layers
          Database in Google Earth Enterprise Server <Specify_POI_Search_Publish>`
       -  :ref:`View your Database with the Search Field <View_Database_Search_Field>`
 
+      --------------
 
       .. _Specify_Search_Fields:
       .. rubric:: Specify Search Fields in Layer Properties
@@ -55,26 +55,26 @@ Specifying Search Fields for Individual Layers
 
       #. Click |New Icon|. The **Add Search Field** dialog appears.
 
-         |Layer Search Add|
+         |Add Search Field|
 
       #. Select **COUNTY** from the drop-down list next to **Column Name**,
          select **Search and Display** from the drop-down list next to
          **Use**, and then click **OK**.
 
-         |Search Field1|
+         |Add Search Field|
 
          These selections allow users to search on the COUNTY field and
          display the county name in the description label.
 
       #. Click |New Icon|. The **Add Search Field** dialog appears.
 
-         |Layer Search Add|
+         |Add Search Field|
 
       #. Select **POP2000** from the drop-down list next to **Column Name**,
          select **Display Only** from the drop-down list next to **Use**,
          and then click **OK**.
 
-         |Search Field2|
+         |Add Search Field|
 
          These selections result in the county population being
          displayed in the description label for each county that matches
@@ -85,7 +85,7 @@ Specifying Search Fields for Individual Layers
 
          .. note::
 
-            This search performs an exact match, which means
+            **Note:** This search performs an exact match, which means
             that the Google Earth EC user must enter the value exactly
             as it appears in the database. It can also perform a
             wildcard search, so users can enter part of the text they
@@ -97,7 +97,7 @@ Specifying Search Fields for Individual Layers
          Search panel in the order in which you added them. Use the Up
          or Down arrows to reorder the list.
 
-         |Layer Properties Search Tab Full|
+         |Layer Properties Search Tab|
 
          The order in which the fields appear on this list dictates the
          order in which they appear in the description label in Google
@@ -106,6 +106,7 @@ Specifying Search Fields for Individual Layers
       #. Click **OK**.
       #. Save the project.
 
+      --------------
 
       .. _Build_Push_Database:
       .. rubric:: Build and Push To Your Database
@@ -142,13 +143,12 @@ Specifying Search Fields for Individual Layers
          database to Google Earth Enterprise Server, and displays a
          success message when it is done.
 
-         .. note::
+         **Note:** If you get an error message, contact your Google
+         Earth Enterprise Server administrator for help, or check the
+         *Google Earth Enterprise Administration Guide* for more
+         information.
 
-            If you get an error message, contact your Google
-            Earth Enterprise Server administrator for help, or check the
-            *Google Earth Enterprise Administration Guide* for more
-            information.
-
+      --------------
 
       .. _Specify_POI_Search_Publish:
       .. rubric:: Specify Your Point of Interest Search and Publish Your
@@ -158,6 +158,7 @@ Specifying Search Fields for Individual Layers
       you can publish it for viewing with Google Earth EC.
 
       .. rubric:: To publish a database:
+         :name: to-publish-a-database
 
       #. Access the Google Earth Enterprise Server Admin console in a
          browser window by going to *myserver.mydomainname*.com/admin,
@@ -169,11 +170,9 @@ Specifying Search Fields for Individual Layers
          -  Default username: *geapacheuser*
          -  Default password: *geeadmin*
 
-         .. note::
-
-            If you do not know your username and password,
-            contact your Google Earth Enterprise Server System
-            Administrator.
+         **Note:** If you do not know your username and password,
+         contact your Google Earth Enterprise Server System
+         Administrator.
 
       #. Click **Databases** to display the list of databases pushed to
          the server.
@@ -195,16 +194,14 @@ Specifying Search Fields for Individual Layers
          |GEE Server Database Publish POI Search dialog|
 
          To learn more about the options available in the Publish
-         dialog, see
-
-         - :doc:`Default database <../geeServerAdmin/publishDefaultDatabase>`
-         - :doc:`Search Tabs <../geeServerAdmin/createSearchTabs>`
-         - :doc:`Snippet profiles <../geeServerAdmin/manageSnippetProfiles>`
-         - :doc:`WMS <../geeServerAdmin/makeWMSRequests>`
+         dialog, see :doc:`3497832`,
+         :doc:`Snippet profiles <6004748`, and
+         :doc:`WMS <4441137>`.
 
       #. Click **Publish**. The Databases page updates to indicate the
          published status of your database.
 
+      --------------
 
       .. _View_Database_Search_Field:
       .. rubric:: View your Database with the Search Field
@@ -222,9 +219,9 @@ Specifying Search Fields for Individual Layers
          would be http://myhostname/CACountySearch.
       #. Click the **Sign In** button.
 
-      .. warning::
+      .. container:: alert
 
-         If you have logged in to this server with Google
+         **Caution:** If you have logged in to this server with Google
          Earth EC previously, log out, clear your cache, and log back
          in. See `clearing your cache <../answer/6010060.html>`__.
 
@@ -241,9 +238,10 @@ Specifying Search Fields for Individual Layers
    :height: 44px
 .. |Layer Properties Search Tab| image:: ../../art/fusion/tutorial/layerProperties_SearchTab.png
 .. |New Icon| image:: ../../art/fusion/tutorial/icon_new.gif
-.. |Layer Search Add| image:: ../../art/fusion/tutorial/layerSearchAdd.png
-.. |Search Field1| image:: ../../art/fusion/tutorial/searchField1.png
-.. |Search Field2| image:: ../../art/fusion/tutorial/searchField2.png
-.. |Layer Properties Search Tab Full| image:: ../../art/fusion/tutorial/layerProperties_SearchTab-full.png
+.. |Add Search Field| image:: ../../art/fusion/tutorial/layerSearchAdd.png
+.. |Add Search Field| image:: ../../art/fusion/tutorial/searchField1.png
+.. |Add Search Field| image:: ../../art/fusion/tutorial/layerSearchAdd.png
+.. |Add Search Field| image:: ../../art/fusion/tutorial/searchField2.png
+.. |Layer Properties Search Tab| image:: ../../art/fusion/tutorial/layerProperties_SearchTab-full.png
 .. |GEE Server Database Publish POI Search dialog| image:: ../../art/fusion/tutorial/serverDatabasePublish-POI.png
 .. |Database With POI Search Field| image:: ../../art/fusion/tutorial/ECSearchTab-POI.png

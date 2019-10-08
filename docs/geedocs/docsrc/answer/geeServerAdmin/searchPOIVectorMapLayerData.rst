@@ -64,13 +64,13 @@ Search your POI vector data or map layer data
          project describes the use of US Census Bureau data and setting
          up fields to query the County name and display the population
          per county in the results shown in the client. See the tutorial
-         lesson :doc:`../fusionTutorial/searchFldsForLayers`.
+         lesson :doc:`4412684`.
 
       #. Repeat the steps above for each additional field you want to
          add to the search. Your selections appear on the list of search
          fields on the Search tab in the order in which you added them:
 
-         |Layer Properties Add Search Full|
+         |Layer Properties Add Search|
 
          The order in which the fields appear on this list is the order
          in which they appear in the description balloon in the client.
@@ -88,7 +88,7 @@ Search your POI vector data or map layer data
 
          .. note::
 
-            This search performs an exact match, which means
+            **Note:** This search performs an exact match, which means
             that the Google Earth EC user must enter the value exactly
             as it appears in the database. It can also perform a
             wildcard search, so users can enter part of the text they
@@ -114,7 +114,7 @@ Search your POI vector data or map layer data
 
       .. note::
 
-         The POI Search option in the Publish dialog is only
+         **Note:** The POI Search option in the Publish dialog is only
          available if you build your database with POI data as a vector
          resource layer. If you want to perform a POI search on a
          database external to your globe or map, e.g., on a
@@ -137,7 +137,7 @@ Search your POI vector data or map layer data
 
       .. rubric:: To specify the settings of the POI Search tab:
 
-      #. In the :doc:`GEE Server Admin console <../geeServerAdmin/signInAdminConsole>`,
+      #. In the :doc:`GEE Server Admin console <3470759>`,
          click **Search tabs**.
       #. Check the box next to **POISearch**, then click **Edit**.
 
@@ -169,7 +169,7 @@ Search your POI vector data or map layer data
          |POI Search Tab in Publish Dialog|
 
       #. Click the **Publish** button. A message appears to confirm the successful
-         publishing process.
+      publishing process.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
@@ -177,7 +177,7 @@ Search your POI vector data or map layer data
 .. |Layer Properties Search Tab| image:: ../../art/server/search/layer_prop_search_tab.png
 .. |New Icon| image:: ../../art/fusion/tutorial/icon_new.gif
 .. |Layer Properties Add Search| image:: ../../art/server/search/layer_prop_add_search.png
-.. |Layer Properties Add Search Full| image:: ../../art/server/search/layer_prop_add_search-full.png
+.. |Layer Properties Add Search| image:: ../../art/server/search/layer_prop_add_search-full.png
 .. |Layer Properties Add Search Up Arrow Icon| image:: ../../art/server/search/layer_prop_search_tab_up_arrow.png
 .. |Layer Properties Add Search Down Arrow Icon| image:: ../../art/server/search/layer_prop_search_tab_down_arrow.png
 .. |Layer Properties Add Search Delete Icon| image:: ../../art/server/search/layer_prop_search_tab_delete_icon.png

@@ -23,7 +23,6 @@ SourceFile
       At the command line, enter:
 
       ``sudo chmod -R a+r /gevol``
-      
       This command corrects the access permissions on all Fusion-related
       files. If ``/gevol`` is not your asset root, replace it with the
       name of your asset root.

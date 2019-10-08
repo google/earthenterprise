@@ -29,17 +29,17 @@ Creating a Map Database
       existing flat imagery resources for all your database types,
       including Mercator map databases, thereby saving you the task of
       creating and storing Mercator imagery resources. For more
-      information, see :doc:`../fusionResAndProj/addFlatImageryToMercatorMapDBInGEE5.1.0`.
+      information, see :doc:`6081069`.
 
       .. note::
 
-         As an alternative to your own imagery resources, you
+         **Note:** As an alternative to your own imagery resources, you
          can use the Google Base Map in place of an imagery project. See
          :ref:`Using the Google Base Map <Using_Google_Base_Map>` for more details.
 
       The first step in preparing any data for publication is to import
       the source data as Google Earth Enterprise Fusion resources. You
-      can use one of the vector resources you defined in :doc:`../fusionTutorial/buildResource` for Google Maps.
+      can use one of the vector resources you defined in :doc:`4412443` for Google Maps.
 
       After you define your vector resources, you must define and build
       at least one map layer for each map project. The first exercise in
@@ -53,11 +53,10 @@ Creating a Map Database
       -  :ref:`Define a Map Layer <Define_Map_Layer>`
       -  :ref:`Define a Map Project <Define_Map_Project>`
       -  :ref:`Define a Flat Imagery Project <Define_Flat_Imagery_Project>`
-      -  :ref:`Define, Push, and Publish a Map Database <Define_Push_Publish_Map_Database>`
+      -  :ref:`Define, Push, and Publish a Map Database <_Define_Push_Publish_Map_Database>`
       -  :ref:`View Your Map Database <View_Map_Database>`
       -  :ref:`Using the Google Base Map <Using_Google_Base_Map>`
 
-      .. index:: Map Layers
       .. _Define_Map_Layer:
       .. rubric:: Define a Map Layer
 
@@ -66,7 +65,8 @@ Creating a Map Database
       similar to the process of defining display rules and filters for a
       vector project destined for Google Earth EC.
 
-      .. rubric:: To define a map layer
+      .. rubric:: To define a map layer:
+         :name: to-define-a-map-layer
 
       #. Select **Asset Manager** from the **Tools** menu. The Asset Manager
          appears.
@@ -147,7 +147,7 @@ Creating a Map Database
 
          .. note::
 
-            In version 3.0 and beyond, only one font and style
+            **Note:** In version 3.0 and beyond, only one font and style
             is provided, Sans regular. However, you can create a
             configuration file in which you can specify additional
             fonts, if desired. Refer to the **Administration Guide** for
@@ -175,7 +175,6 @@ Creating a Map Database
          The new map layer name appears in the Asset Manager’s asset
          list.
 
-      .. index:: Map Projects
       .. _Define_Map_Project:
       .. rubric:: Define a Map Project
 
@@ -184,7 +183,8 @@ Creating a Map Database
       map project, however, add a subfolder to the asset navigation tree
       in the Asset Manager in which you can store your map projects.
 
-      .. rubric:: To add a subfolder for map projects
+      .. rubric:: To add a subfolder for map projects:
+         :name: to-add-a-subfolder-for-map-projects
 
       #. Select **Asset Manager** from the **Tools** menu. The Asset Manager
          appears.
@@ -194,7 +194,8 @@ Creating a Map Database
          new Map subfolder appears under Projects in the asset
          navigation tree.
 
-      .. rubric:: To create a map project
+      .. rubric:: To create a map project:
+         :name: to-create-a-map-project
 
       #. In the Asset Manager, click |image5|. The Map Project Editor
          appears.
@@ -231,8 +232,7 @@ Creating a Map Database
          The new map project name appears in the Asset Manager’s asset
          list.
 
-      .. index:: Flat Imagery Projects
-      .. _Define_Flat_Imagery_Project:
+      :: _Define_Flat_Imagery_Project:
       .. rubric:: Define a Flat Imagery Project
 
       The maps layer includes Google Maps layers and uses the Google
@@ -240,14 +240,14 @@ Creating a Map Database
       (EPSG: 4326) or Mercator (EPSG: 3857) projections and normally
       require corresponding imagery resource types. In this lesson you
       add a flat imagery project from a previous tutorial lesson to a
-      Mercator map database, which can then be
-      projected as *Mercator on the Fly*. For more information,
-      see :doc:`../fusionResAndProj/addFlatImageryToMercatorMapDBInGEE5.1.0`
+      Mercator map database, which can then be projected as *Mercator on
+      the Fly*. For more information, see :doc:`6081069`.
 
       .. tip::
 
          If you did not complete the tutorial lesson to create an
-         imagery project, see :ref:`Define an Imagery Project <Define_Imagery_Project>`
+         imagery project, see :ref:`Define an Imagery
+         Project <Define_Imagery_Project>`.
 
       #. Select **Asset Manager** from the **Tools** menu. The Asset Manager
          appears.
@@ -269,31 +269,25 @@ Creating a Map Database
       #. Enter the name **SFBayAreaLanSat_Merc**, and click **Save**.
       #. Select **File > Close**
       #. Repeat steps **3** through **11** for the table that follows:
-
-      .. list-table:: 
-         :widths: 20 15 10 10 25
-         :header-rows: 1
-
-         * - Name (Resources/Imagery/...)
-           - Acquisition Date
-           - Provider
-           - Mask
-           - Source File
-         * - **BlueMarble_Merc**
-           - Today's date
-           - NASA Imagery
-           - **No Mask**
-           - ``bluemarble_4km.tif``
-         * - **i3_15Meter_Merc**
-           - Today's date
-           - i3
-           - **Auto Mask** Default values
-           - ``i3SF15-meter.tif``
-         * - **SFHighResInset_Merc**
-           - Today's date
-           - USGS Imagery
-           - **Auto Mask** Default values
-           - ``usgsSFHiRes.tif``
+         +-------------+-------------+-------------+-------------+-------------+
+         | Name        | Acquisition | Provider    | Mask        | Source file |
+         | (Resources/ | Date        |             |             |             |
+         | Imagery/... |             |             |             |             |
+         | )           |             |             |             |             |
+         +=============+=============+=============+=============+=============+
+         | **BlueMarbl | Today's     | NASA        | **No Mask** | ``bluemarbl |
+         | e_Merc**    | date        | Imagery     |             | e_4km.tif`` |
+         +-------------+-------------+-------------+-------------+-------------+
+         | **i3_15Mete | Today's     | i3          | | **Auto    | ``i3SF15-me |
+         | r_Merc**    | date        |             |   Mask**    | ter.tif``   |
+         |             |             |             | | Default   |             |
+         |             |             |             |   values.   |             |
+         +-------------+-------------+-------------+-------------+-------------+
+         | **SFHighRes | Today's     | USGS        | **Auto      | ``usgsSFHiR |
+         | Inset_Merc* | date        | Imagery     | Mask**      | es.tif``    |
+         | *           |             |             | Default     |             |
+         |             |             |             | values.     |             |
+         +-------------+-------------+-------------+-------------+-------------+
 
       #. Click |image11|. The Mercator Imagery Project Editor appears
          with no resources selected.
@@ -306,7 +300,6 @@ Creating a Map Database
          ``/ASSET_ROOT/Projects/Imagery`` folder.
       #. Enter the name **SFBayAreaMercator**, and click **Save**.
 
-      .. index:: Define, Push, and Publish a Map Database
       .. _Define_Push_Publish_Map_Database:
       .. rubric:: Define, Push, and Publish a Map Database
 
@@ -352,7 +345,7 @@ Creating a Map Database
 
          .. note::
 
-            It might take a while to build the map database,
+            **Note:** It might take a while to build the map database,
             because it is also building the project.
 
          When Google Earth Enterprise Fusion finishes building the
@@ -360,10 +353,10 @@ Creating a Map Database
          to **Succeeded**, and its **Current Version** column changes to the
          date and time the most recent build was started.
 
-      .. index: Push a Map Database to Google Earth Enterprise Server
       .. rubric:: Push a Map Database to Google Earth Enterprise Server
 
       .. rubric:: To push a map database:
+         :name: to-push-a-map-database
 
       #. Right-click the name of the map database you built in the
          previous exercise, and select **Push** from the context menu.
@@ -379,13 +372,13 @@ Creating a Map Database
 
          .. note::
 
-            If you get an error message, contact your Google
+            **Note:** If you get an error message, contact your Google
             Earth Enterprise Server administrator for help, or check the
             *Google Earth Enterprise Administration Guide* for more
             information.
 
-      .. index:: Publish a Map Database on Google Earth Enterprise Server
-      .. rubric:: Publish a Map Database on Google Earth Enterprise Server
+      .. rubric:: Publish a Map Database on Google Earth Enterprise
+         Server
 
       .. rubric:: To publish a database:
 
@@ -399,11 +392,9 @@ Creating a Map Database
          -  Default username: geapacheuser
          -  Default password: geeadmin
 
-         .. note::
-         
-            If you do not know your username and password,
-            contact your Google Earth Enterprise Server System
-            Administrator.
+         **Note:** If you do not know your username and password,
+         contact your Google Earth Enterprise Server System
+         Administrator.
 
       #. Click **Databases** to display the list of databases pushed to
          the server.
@@ -415,21 +406,22 @@ Creating a Map Database
          be accessible from *myserver.mydomainname*/MySFMap.
 
          To learn more about the options available in the Publish
-         dialog, see :doc:`Search Tabs <../geeServerAdmin/createSearchTabs>`,
-         :doc:`Snippet profiles <../geeServerAdmin/manageSnippetProfiles>`, and
-         :doc:`WMS <../geeServerAdmin/makeWMSRequests>`.
+         dialog, see :doc:`3497832`,
+         :doc:`Snippet profiles <6004748>`, and
+         :doc:`WMS <4441137>`.
 
       #. Click **Publish**. The Databases page updates to indicate the
          published status of your database.
 
-      .. index:: View a Map Database
       .. _View_Map_Database:
-      .. rubric:: View a Map Database
+      .. rubric:: View Your Map Database
 
       After you publish your map database, you can view it from Google
       Earth Enterprise Server or in any browser.
 
-      .. rubric:: To view your map database from Google Earth Enterprise Server
+      .. rubric:: To view your map database from Google Earth Enterprise
+         Server:
+         :name: to-view-your-map-database-from-google-earth-enterprise-server
 
       #. Log in to the Admin console of Google Earth Enterprise Server.
 
@@ -441,25 +433,25 @@ Creating a Map Database
          A new browser tab opens displaying your map database.
 
       .. rubric:: To view your map database in any browser:
+         :name: to-view-your-map-database-in-any-browser
 
       #. Launch any web browser.
       #. Point your browser to:
 
          ``http://myserver.mydomainname/publish_point``
 
-      where *myserver.mydomainname* is the host name or IP address of
+         where *myserver.mydomainname* is the host name or IP address of
       your server to which you published the map database, and
       *publish_point* is the publish point that you specified when the
       published the map database. For example:
 
          ``http://my_host_name/MySFMap``
 
-      If you are not sure which server you published to, contact your
+           If you are not sure which server you published to, contact your
       Google Earth Enterprise Server administrator for help.
 
-      Google Maps displays your database.
+         Google Maps displays your database.
 
-      .. index:: Use the Google Base Map
       .. _Using_Google_Base_Map:
       .. rubric:: Using the Google Base Map
 
@@ -470,14 +462,15 @@ Creating a Map Database
 
       .. note::
 
-         As per Google's terms of service, you may need to
+         **Note:** As per Google's terms of service, you may need to
          purchase a Maps for Business license if you are deploying your
          application in an internal environment.
 
       Deploying the Google Base Map involves adding it when you build
       your map database.
 
-      .. rubric:: To build your map database to include the Google Base Map:
+      .. rubric:: To build your map database to include the Google Base
+         Map:
 
       #. Select **Asset Manager** from the **Tools** menu. The Asset Manager
          appears.
@@ -486,7 +479,7 @@ Creating a Map Database
       #. Click |image19|. The Map Database Editor appears with no
          projects selected.
 
-         |Mercator Maps Database Editor Geo|
+         |Mercator Maps Database Editor|
 
       #. Select the **Use Google Base Map (google.com)** checkbox.
       #. Add your map project.
@@ -502,13 +495,12 @@ Creating a Map Database
 
          Your map database is saved to the location you specified.
 
-      **Build**, **Push**, and **Publish** your map database as described in
-      :ref:`Define, Push, and Publish a Map Database <Define_Push_Publish_Map_Database>`.
-
+      **Build**, **Push**, and **Publish** your map database as
+      described in :ref:`Define, Push, and Publish a Map Database <_Define_Push_Publish_Map_Database>.
       .. rubric:: Learn more
 
-      -  `Google Maps JavaScript API V3
-         Reference <https://developers.google.com/maps/documentation/javascript/reference>`_
+      -  `Google Maps Javascript API V3
+         Reference <https://developers.google.com/maps/documentation/javascript/reference>`__
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
@@ -540,4 +532,4 @@ Creating a Map Database
 .. |image19| image:: ../../art/fusion/tutorial/iconDatabaseMap.png
    :width: 20px
    :height: 20px
-.. |Mercator Maps Database Editor Geo| image:: ../../art/fusion/tutorial/mapsMercDatabaseEditor-geo.png
+.. |Mercator Maps Database Editor| image:: ../../art/fusion/tutorial/mapsMercDatabaseEditor-geo.png

@@ -1,11 +1,7 @@
-Release notes
-=============
-
 .. toctree::
    :maxdepth: 3
    :glob:
 
-   releaseNotes/relNotesGEE5_3_3
    releaseNotes/relNotesGEE5_3_2
    releaseNotes/relNotesGEE5_3_1
    releaseNotes/relNotesGEE5_3_0

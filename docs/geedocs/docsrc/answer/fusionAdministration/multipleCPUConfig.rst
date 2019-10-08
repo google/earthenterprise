@@ -29,7 +29,7 @@ Running Fusion on a Machine with Multiple CPUs
 
       These tasks may be multithreaded by enabling *task rules* within
       Fusion. Implementation of task rules is described in more detail
-      in :doc:`../fusionAdministration/confTaskRulesForFusionPerf`.
+      in :doc:`176738`.
 
       The **ImageryPacketLevel.taskrule**,
       **TerrainPacketLevel.taskrule**, **MapLayerLevel.taskrule**, and
@@ -68,7 +68,7 @@ Running Fusion on a Machine with Multiple CPUs
 
          .. note::
 
-            Fusion will use up to 200% CPU processing for
+            **Note:** \**Fusion will use up to 200% CPU processing for
             imagery projects per ``gepackgen`` process, and up to 400%
             CPU processing for terrain projects. There is fundamentally
             a balance between assigning sufficient numbers of CPUs to

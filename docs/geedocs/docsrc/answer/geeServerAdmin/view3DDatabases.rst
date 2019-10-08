@@ -26,19 +26,19 @@ View 3D databases
       #. Launch Google Earth EC. The Select Server dialog appears.
       #. Specify the **Publish point** by entering or selecting the URL
          or IP address of your server and database in the **Server** field.
-
+         
          For example, a Publish point of **BayAreaHighways** would be
-         hosted at *http://myserver.mydomainname.com*/BayAreaHighways,
+         hosted at http://\ *myserver.mydomainname.com*/BayAreaHighways,
          where *myserver* and *mydomainname* are specific to your
          server.
-
+      
       #. Click the **Sign In** button.
 
-         .. warning::
+         .. container:: alert
 
             If you have logged in to this server with Google Earth EC
             previously, log out, clear your cache, and log back in. For
-            help with clearing your cache, see :doc:`../googleEarthEnterpriseClient/clearGoogleEarthEC`.
+            help with clearing your cache, see :doc:`6010060`.
 
       #. Google Earth EC displays your database. The Layers panel shows
          the terrain, imagery, and vector layers in the published
@@ -46,8 +46,8 @@ View 3D databases
 
       .. rubric:: Learn more
 
-      -  :doc:`What is Google Earth EC? <../googleEarthEnterpriseClient/whatisEC>`
-      -  :doc:`../googleEarthEnterpriseClient/clearGoogleEarthEC`
+      -  :doc:`What is Google Earth EC? <6006981>`
+      -  :doc:`6010060`
 
       .. _View_Globe_Browser:
       .. rubric:: Viewing 3D databases in a browser
@@ -68,8 +68,8 @@ View 3D databases
 
       .. rubric:: Learn more
 
-      -  :doc:`../geeServerAdmin/implementEarthPlugin`
-      -  :doc:`../geeServerAdmin/provideEarthPlugin`
+      -  :doc:`6051568`
+      -  :doc:`6051584`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

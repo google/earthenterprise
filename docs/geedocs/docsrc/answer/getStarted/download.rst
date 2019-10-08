@@ -1,18 +1,16 @@
 |Google logo|
 
-==================================
-Download documentation for GEE 5.x
-==================================
+====================================
+Download documentation for GEE 5.1.x
+====================================
 
 .. container::
 
    .. container:: content
 
-      .. index:: Download Documentation
-
       The majority of Google Earth Enterprise help content is now
       maintained in our `online
-      documentation <http://www.opengee.org/geedocs/>`_, which
+      documentation <http://www.opengee.org/geedocs/5.2.1/>`__, which
       means you can easily use search to find answers to your questions
       or browse through our articles. You can also access documentation
       offline from a Fusion or GEE Server installation:
@@ -31,8 +29,8 @@ Download documentation for GEE 5.x
          :name: learn-more-d
 
       -  :doc:`installTips`
-      -  :doc:`Install Google Earth Enterprise <../installGEE/installOverviewGEE>`
-      -  :doc:`OpenGEE Wiki <../installGEE/wikiGEE>`
+      -  :doc:`Install Google Earth Enterprise <4492598>`
+      -  :doc:`Install GEE Server <3499934>`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

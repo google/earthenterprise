@@ -9,7 +9,7 @@ Dashboard page
    .. container:: content
 
       The **Dashboard** page of the :doc:`GEE Server Admin
-      console <../geeServerAdmin/signInAdminConsole>` provides an overview of GEE
+      console <3470759>` provides an overview of GEE
       details, including:
 
       -  Number of Fusion databases

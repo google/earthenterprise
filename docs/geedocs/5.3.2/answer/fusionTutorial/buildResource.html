@@ -82,7 +82,8 @@ terrain, and vector resources.</p>
 <li><a class="reference internal" href="#explore-imagery-source-files"><span class="std std-ref">Explore Imagery Source Files</span></a></li>
 <li><a class="reference internal" href="#define-imagery-resources-2"><span class="std std-ref">Define Imagery Resources</span></a></li>
 <li><a class="reference internal" href="#build-imagery-resource"><span class="std std-ref">Build an Imagery Resource</span></a></li>
-<li><a class="reference internal" href="#define-build-remaining-imagery-resources"><span class="std std-ref">Define and Build the Remaining Imagery Resources</span></a></li>
+<li><a class="reference internal" href="#define-build-remaining-imagery-resources"><span class="std std-ref">Define and Build the Remaining Imagery
+Resources</span></a></li>
 <li><a class="reference internal" href="#preview-imagery-resources"><span class="std std-ref">Preview the Imagery Resources</span></a></li>
 </ul>
 </li>
@@ -96,7 +97,8 @@ terrain, and vector resources.</p>
 <li><a class="reference internal" href="#explore-vector-source-files"><span class="std std-ref">Explore Vector Source Files</span></a></li>
 <li><a class="reference internal" href="#define-a-vector-resource"><span class="std std-ref">Define a Vector Resource</span></a></li>
 <li><a class="reference internal" href="#build-vector-resource"><span class="std std-ref">Build a Vector Resource</span></a></li>
-<li><a class="reference internal" href="#define-build-remaining-imagery-resources"><span class="std std-ref">Define and Build the Remaining Vector Resources</span></a></li>
+<li><a class="reference internal" href="#define-build-remaining-imagery-resources"><span class="std std-ref">Define and Build the Remaining Vector
+Resources</span></a></li>
 </ul>
 </li>
 </ul>
@@ -200,7 +202,7 @@ left blank. For example:</p>
 <p>Leading zeros are not required when entering dates.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">When you work with real data, the acquisition date
+<p class="last"><strong>Note:</strong> When you work with real data, the acquisition date
 should reflect the date the data was released. You can
 obtain this information from the provider. However, for the
 purpose of simplifying this tutorial, use the current date
@@ -234,13 +236,13 @@ previous chapter.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <div class="last line-block">
-<div class="line">Your system administrator should have configured a
+<div class="line"><strong>Notes:</strong> Your system administrator should have configured a
 tutorial environment for you to work on the tutorial lessons,
 keeping your practice data separate from your live production
 data. If you encounter an error message that tells you that a
 tutorial source file is not readable or you cannot save a
 resource, contact your system administrator or refer to the
-<a class="reference internal" href="confTutorialWS.html"><span class="doc">Google Earth Enterprise Administration Guide</span></a> and
+<span class="xref std std-doc">Google Earth Enterprise Administration Guide</span> and
 configure the tutorial environment yourself before saving any
 practice data.</div>
 <div class="line">When you finish using any of the asset editors (such as the
@@ -252,12 +254,10 @@ with an asset for now, you can close it and get it out of the
 way.</div>
 </div>
 </div>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last"><strong>Caution:</strong> When you are defining assets for your live
+<div class="alert docutils container">
+<strong>Caution:</strong> When you are defining assets for your live
 production system, it is important to remember that you cannot
-delete or edit asset names after you save them.</p>
-</div>
+delete or edit asset names after you save them.</div>
 <p>In the Asset Manager, the name of the resource appears on the
 right when you select the
 <code class="docutils literal notranslate"><span class="pre">/ASSET_ROOT/Resources/Imagery</span></code>folder in the asset navigation
@@ -285,7 +285,7 @@ context menu. The status of the resource immediately changes to
 <strong>Queued</strong> and then to <strong>In Progress</strong>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Because imagery files are data-intensive, it can
+<p class="last"><strong>Note:</strong> Because imagery files are data-intensive, it can
 take some time to build imagery resources.</p>
 </div>
 </li>
@@ -311,45 +311,75 @@ most recent build was started.</p>
 <p>Now that you have defined and built one imagery resource, you can
 define and build the remaining imagery resources provided for this
 tutorial:</p>
-<table border="1" class="colwidths-given docutils" id="id1">
-<caption><span class="caption-text">Resources</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<table border="1" class="docutils">
 <colgroup>
-<col width="31%" />
-<col width="19%" />
-<col width="19%" />
-<col width="13%" />
-<col width="19%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head">Name (Resources/Imagery/…)</th>
-<th class="head">Acquisition Date</th>
+<tr class="row-odd"><th class="head">Name
+(Resources/
+Imagery/…
+)</th>
+<th class="head">Acquisition
+Date</th>
 <th class="head">Provider</th>
 <th class="head">Mask</th>
-<th class="head">Source File</th>
+<th class="head">Source file</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><strong>SFBayAreaLanSat_20021010</strong></td>
-<td>Today’s date</td>
-<td>USGS Imagery</td>
-<td><dl class="first last docutils">
-<dt><strong>Auto Mask Tolerance: 2</strong></dt>
-<dd>Default for all other mask values.</dd>
-</dl>
-</td>
-<td><strong>usgsLanSat.tif</strong></td>
+<tr class="row-even"><td><strong>SFBayArea
+LanSat_2002
+1010</strong></td>
+<td>Today’s
+date</td>
+<td>USGS
+Imagery</td>
+<td><strong>Auto
+Mask</strong>
+<a href="#id1"><span class="problematic" id="id2">**</span></a>Tolerance
+<a href="#id3"><span class="problematic" id="id4">**</span></a>:
+2
+Default for
+all other
+mask
+values</td>
+<td><code class="docutils literal notranslate"><span class="pre">usgsLanSa</span>
+<span class="pre">t.tif</span></code></td>
 </tr>
-<tr class="row-odd"><td><strong>i3_15Meter_20041010</strong></td>
-<td>Today’s date</td>
+<tr class="row-odd"><td><a href="#id5"><span class="problematic" id="id6">**</span></a>i3_15Mete
+r_20041010*
+*</td>
+<td>Today’s
+date</td>
 <td>i3</td>
-<td><strong>Auto Mask</strong> Default values.</td>
-<td><strong>i3SF15-meter.tif</strong></td>
+<td><div class="first last line-block">
+<div class="line"><strong>Auto
+Mask</strong></div>
+<div class="line">Default
+values</div>
+</div>
+</td>
+<td><code class="docutils literal notranslate"><span class="pre">i3SF15-me</span>
+<span class="pre">ter.tif</span></code></td>
 </tr>
-<tr class="row-even"><td><strong>SFHighResInset_20061010</strong></td>
-<td>Today’s date</td>
-<td>USGS Imagery</td>
-<td><strong>Auto Mask</strong> Default values.</td>
-<td><strong>usgsSFHiRes.tif</strong></td>
+<tr class="row-even"><td><strong>SFHighRes
+Inset_20061
+010</strong></td>
+<td>Today’s
+date</td>
+<td>USGS
+Imagery</td>
+<td><strong>Auto
+Mask</strong>
+Default
+values</td>
+<td><code class="docutils literal notranslate"><span class="pre">usgsSFHiR</span>
+<span class="pre">es.tif</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -372,7 +402,7 @@ resource from the Asset Name column onto the Preview List pane.</p>
 List pane, and then close the Asset Manager.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Google Earth Enterprise Fusion displays the
+<p class="last"><strong>Note:</strong> Google Earth Enterprise Fusion displays the
 resources in the order in which they are listed in the
 Preview List pane with the last asset on the list at the
 bottom of the stack and the first asset on the list on top.
@@ -439,7 +469,7 @@ boxes for all layers.</p>
 <li><p class="first">Zoom out a bit to see the entire bounding box.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The Preview pane displays a bounding box for
+<p class="last"><strong>Note:</strong> The Preview pane displays a bounding box for
 terrain source data, not the actual terrain imagery. You
 must define and build terrain resources to be able to see a
 preview of the actual terrain.</p>
@@ -494,7 +524,7 @@ automatically applies the mask file by reference to the source
 file.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">You can use the <strong>Have Mask</strong> option for resources
+<p class="last"><strong>Note:</strong> You can use the <strong>Have Mask</strong> option for resources
 that contain one source file only.</p>
 </div>
 </li>
@@ -512,7 +542,7 @@ that contain one source file only.</p>
 <p>The Save dialog appears.</p>
 </li>
 <li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">/ASSET_ROOT/Resources/Terrain</span></code> folder you
-created in <a class="reference internal" href="setup.html"><span class="doc">Setting Up the Tutorial</span></a>.</p>
+created in <span class="xref std std-doc">4412441</span>.</p>
 </li>
 <li><p class="first">Enter the name <strong>WorldTopography</strong> for the resource, and click
 <strong>Save</strong>.</p>
@@ -558,7 +588,7 @@ select <strong>SF_terrain.tif</strong>, and click <strong>Open</strong>.</p>
 <p>The Save dialog appears.</p>
 </li>
 <li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">/ASSET_ROOT/Resources/Terrain</span></code> folder you
-created in <a class="reference internal" href="setup.html"><span class="doc">Setting Up the Tutorial</span></a>.</p>
+created in <span class="xref std std-doc">4412441</span>.</p>
 </li>
 <li><p class="first">Enter the name <strong>SFTerrain</strong> for the resource, and click
 <strong>Save</strong>.</p>
@@ -574,7 +604,7 @@ navigation tree in <strong>Asset Manager</strong>.</p>
 resources right away.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The WorldTopography terrain resource is quite large
+<p class="last"><strong>Note:</strong> The WorldTopography terrain resource is quite large
 and could take up to 30 minutes to build, depending on the
 speed of your CPU. It is a good idea to start this exercise
 close to lunch time or just before you attend a meeting, so it
@@ -611,7 +641,7 @@ Preview pane, and the grayscale terrain imagery appears in the
 bounding box.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Since the Preview pane in Google Earth Enterprise
+<p class="last"><strong>Note:</strong> Since the Preview pane in Google Earth Enterprise
 Fusion is meant for preview purposes only, it does not
 render terrain in 3D like Google Earth EC. Instead, it
 renders a grayscale interpretation of the terrain. The
@@ -716,7 +746,7 @@ them to resources. This exercise provides an opportunity for you
 to use some additional preview tools.</p>
 <p class="rubric" id="to-explore-vector-source-files">To explore vector source files:</p>
 <ol class="arabic">
-<li><p class="first">Click the <img alt="Open File Icon" src="../../images/iconOpenFile.png" /> button.</p>
+<li><p class="first">Click <img alt="Open File Icon" src="../../images/iconOpenFile.png" />.</p>
 <p>The Open dialog appears.</p>
 </li>
 <li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">/opt/google/share/tutorials/fusion/Vector</span></code>
@@ -746,8 +776,7 @@ that correspond to the selected area appear in the Data List
 pane.</p>
 <p>You can scroll through this data and sort it by columns to
 explore the values of each field to determine the potential
-attributes to use in the filters you set up in
-<a class="reference internal" href="buildProject.html#conf-display-rules-for-vector-project"><span class="std std-ref">Configuring Display Rules</span></a>.</p>
+attributes to use in the filters you set up in <a class="reference internal" href="buildProject.html#configure-display-rules-for-a-vector-project"><span class="std std-ref">Configuring Display Rules</span></a>.</p>
 </li>
 <li><p class="first">When you finish exploring the data, right-click the
 <strong>california_roads_line</strong>, and select <strong>Remove Layer</strong> to clear
@@ -771,7 +800,7 @@ provided for this tutorial.</p>
 </li>
 <li><p class="first">Click <img alt="Vector Resource Icon" src="../../images/iconResVector.png" /> on the toolbar.</p>
 <p>The Vector Resource Editor appears.</p>
-<p><img alt="Vector Resource Editor" src="../../images/vectorResEditor.png" /></p>
+<p><img alt="Vector Resource Editor" src="../../images/vectorResEditor-full.png" /></p>
 </li>
 <li><p class="first">Set the acquisition date to today’s date in year-month-day
 format by clicking each section of the date and enter the
@@ -787,13 +816,13 @@ values.</p>
 <li><p class="first">Select the <code class="docutils literal notranslate"><span class="pre">california_roads_line.shp</span></code> file, and click
 <strong>Open</strong>.</p>
 <p>The selected file appears in the Source File(s) list.</p>
-<p><img alt="Vector Resource Editor Full" src="../../images/vectorResEditor-full.png" /></p>
+<p><img alt="Vector Resource Editor" src="../../images/vectorResEditor-full.png" /></p>
 </li>
 <li><p class="first">Select <strong>Save</strong> from the <strong>File</strong> menu.</p>
 <p>The Save dialog appears.</p>
 </li>
 <li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">/ASSET_ROOT/Resources/Vector</span></code> folder you
-created in <a class="reference internal" href="setup.html"><span class="doc">Setting Up the Tutorial</span></a>.</p>
+created in <span class="xref std std-doc">4412441</span>.</p>
 </li>
 <li><p class="first">Enter the name <strong>CAHighways</strong> for the resource, and click
 <strong>Save</strong>.</p>
@@ -852,8 +881,8 @@ from the context menu. By the time you finish defining the last
 resource, the other builds should all be complete.</p>
 <p>When Google Earth Enterprise Fusion finishes building the last
 resource, close the Asset Manager by clicking the close box
-(<strong>X</strong>) in the top right corner, and go on to the
-<a class="reference internal" href="buildProject.html"><span class="doc">next lesson</span></a>.</p>
+(<strong>X</strong>) in the top right corner, and go on to the <span class="xref std std-doc">next
+lesson</span>.</p>
 </div>
 </div>
 </div>

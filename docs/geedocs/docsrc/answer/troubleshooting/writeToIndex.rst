@@ -13,9 +13,7 @@ Write to index
       ``Any of these conditions occur:``
 
       -  The project Asset log lists this error:
-
          ``Fusion Fatal : Unable to write record to index``
-
       -  Current state / Version Properties reads "In Progress".
       -  Canceling the project build in the GUI or on the command line
          causes the program to hang.
@@ -29,27 +27,17 @@ Write to index
       .. rubric:: Resolution
 
       #. Switch to root and enter:
-
-         .. code-block:: none
-         
-            /etc/init.d/gefusion stop
-            /etc/init.d/geserver stop
-            sleep 5
-            killall -9 gesystemmanager
-            killall -9 geresourceprovider
-
+         ``/etc/init.d/gefusion stop``
+         ``/etc/init.d/geserver stop``
+         ``sleep 5``
+         ``killall -9 gesystemmanager``
+         ``killall -9 geresourceprovider``
       #. Enter:
-
          ``ps aux | grep ge``
-
       #. Look for and stop any Fusion processes in the output.
       #. Make sure that you have enough free disk space, and then enter:
-
-         .. code-block:: none
-         
-            /etc/init.d/gefusion start
-            /etc/init.d/geserver start
-
+         ``/etc/init.d/gefusion start``
+         ``/etc/init.d/geserver start``
       #. Cancel the build, and then resume it using the ``gecancel`` and
          ``geresume`` commands.
 

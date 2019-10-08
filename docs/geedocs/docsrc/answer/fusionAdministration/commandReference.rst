@@ -13,7 +13,9 @@ Command reference
       can find each tool’s syntax by entering the name of the tool on
       the command line with the ``--help`` option, for example:
 
-      ``geserveradmin --help``
+      ::
+
+         geserveradmin --help
 
       This article uses the following typographic conventions:
 
@@ -24,6 +26,7 @@ Command reference
       Square brackets **[ ]**                                                                     Optional commands or arguments
       Curly braces **{ }** with options separated by pipes **\|**; for example: **{even \| odd}** Lists a set of choices from which the user can select only one
       Parentheses **( )**                                                                         Grouped items that function together
+      ``Courier font``                                                                            Code or program output
       =========================================================================================== ==============================================================
 
       When using ``insetresource`` in imagery and terrain project
@@ -33,7 +36,10 @@ Command reference
       .. rubric:: geaddtoimageryproject
          :name: geaddtoimageryproject
 
-      **geaddtoimageryproject** [-\\-**mercator** | -\\-**flat**] [-\\-**historical_imagery** | -\\-**no_historical_imagery**] -o *projectname* {[-\\-**maxlevel** *level* | -\\-**maxleveloverride** *level*] *insetresource*}...
+      ::
+
+         geaddtoimageryproject [--mercator | --flat] [--historical_imagery |
+         --no_historical_imagery] -o projectname {[--maxlevel level | --maxleveloverride level] insetresource}...
 
       .. rubric:: Purpose
          :name: purpose
@@ -46,29 +52,38 @@ Command reference
       .. rubric:: Commands
          :name: commands
 
-      -\\-**mercator**
+      ::
+
+         --mercator
 
       *Optional*. Uses Mercator map projection for the imagery project.
 
-      -\\-**flat**
+      ::
+
+         --flat
 
       *Default*. Uses Flat map (Plate Carrée) projection.
 
-      -\\-**historical_imagery**
+      ::
+
+         --historical_imagery
 
       *Optional*. Uses historical imagery for the project..
 
-      -\\-**no_historical_imagery**
+      ::
+
+         --no_historical_imagery
 
       *Default*. Uses normal imagery for the project.
 
       .. rubric:: Options
          :name: options
 
-      -\\-**maxlevel** *level*
+      ::
 
-      .. warning::
+           --maxlevel level
 
+      .. NOTE::
          Deprecated in release GEE 5.2.5 and higher. Use
          ``--maxleveloverride`` instead.
 
@@ -76,7 +91,9 @@ Command reference
       Fusion scale. Deprecated because it does not match the levels specified
       in the Fusion UI.
 
-      -\\-**maxleveloverride** *level*
+      ::
+
+           --maxleveloverride level
 
       *Optional*. Sets the maximum level for the imagery. Uses the
       imagery scale in Fusion. Matches the levels in the Fusion UI.
@@ -84,27 +101,38 @@ Command reference
       .. rubric:: geaddtoterrainproject
          :name: geaddtoterrainproject
 
-      **geaddtoterrainproject** [-\\-**mercator** | -\\-**flat**] -o *projectname* {--**maxlevel** *level* | -\\-**maxleveloverride** *level*]} [-\\-**no_terrain_overlay** | {-\\-**terrain_overlay** -\\-**start_level** *level* -\\-**resource_min_level** *level* }] *insetresource*} ...
+      ::
+
+         geaddtoterrainproject [--mercator | --flat]
+          -o projectname {--maxlevel level | --maxleveloverride level]}
+          [--no_terrain_overlay | {--terrain_overlay --start_level level --resource_min_level level }]
+          insetresource} ...
 
       .. rubric:: Purpose
+         :name: purpose-1
 
       Adds additional resources to an existing terrain project. This
       tool is capable of building Mercator terrain projects for 2D
       databases or Flat (Plate Carrée) terrain projects.
 
       .. rubric:: Commands
+         :name: commands-1
 
-      -\\-**mercator**
+      ::
+
+         --mercator
 
       *Optional*. Uses Mercator map projection for the terrain project.
 
-      -\\-**flat**
+      ::
+
+         --flat
 
       *Default*. Uses Flat map (Plate Carrée) projection.
 
-      -\\-**maxlevel** *level*
+      ``--maxlevel level``
 
-      .. warning::
+      .. container:: alert
 
          Deprecated in release GEE 5.2.5 and higher. Use
          ``--maxleveloverride`` instead.
@@ -113,26 +141,36 @@ Command reference
       Fusion scale. Deprecated because it does not match the levels specified
       in the Fusion UI.
 
-      -\\-**maxleveloverride** *level*
+      ::
+
+         --maxleveloverride level
 
       *Optional*. Sets the maximum level for the terrain. Uses the
       terrain scale in Fusion. Matches the levels in the Fusion UI.
 
-      -\\-**no_terrain_overlay**
+      ::
+
+         --no_terrain_overlay
 
       *Default*. make this terrain project a normal project.
 
-      -\\-**terrain_overlay**
+      ::
+
+         --terrain_overlay
 
       *Optional*. make this terrain project an overlay project.
 
-      -\\-**start_level** *level*
+      ::
+
+         --start_level level
 
       *Optional*. the level from which to start building the terrain
       overlay project. start_level is an even integer between 4 and 24
       inclusive.
 
-      -\\-**resource_min_level** *level*
+      ::
+
+         --resource_min_level level
 
       *Optional*. the threshold level that separates fill terrain from
       overlay terrain. resource_min_level is any integer between 4 and
@@ -141,22 +179,23 @@ Command reference
       .. _geconfigassetroot:
       .. rubric:: geconfigureassetroot
 
-      **geconfigureassetroot** {-\\-**new** -\\-**assetroot path**  [-\\-**srcvol** *path*] | -\\-**repair** | -\\-**editvolumes** | -\\-**listvolumes** | -\\-**addvolume** | -\\-**fixmasterhost** | -\\-**noprompt**}  [-\\-*nochown*]
-
+      ``geconfigureassetroot {--new --assetroot path  [--srcvol path] | --repair | --editvolumes | --listvolumes | --addvolume | --fixmasterhost | --noprompt}  [--nochown]``
       .. rubric:: Purpose
+         :name: purpose-2
 
       To add volume definitions or edit existing volume definitions.
 
       .. tip::
 
          You must run this command as root. Except for the
-         **-\\-listvolumes** command, you must stop the fusion service
+         **--listvolumes** command, you must stop the fusion service
          before using this command and then start it again after you are
          done.
 
       .. rubric:: Example
+         :name: example
 
-      .. code-block:: none
+      ::
 
          geconfigureassetroot --new --assetroot /gevol/assets
          geconfigureassetroot --new --assetroot /gevol/assets --srcvol /data1/src
@@ -164,20 +203,27 @@ Command reference
          geconfigureassetroot --editvolumes
 
       .. rubric:: Options
+         :name: options-1
 
-      -\\-**assetroot** *path*
+      ::
+
+         --assetroot path
 
       Path to asset root. This option is mandatory or optional in the
       ``geconfigureassetroot`` commands. If optional, then the current
       asset root is used if it is not specified.
 
-      -\\-**noprompt**
+      ::
+
+         --noprompt
 
       *Optional*. Perform the command without prompting the user for any
       input. This option requires that some commands have arguments
       specified on the command line.
 
-      -\\-**chown**
+      ::
+
+         --chown
 
       *Optional*. Prevents attempts by this command to fix
       file/directory privileges. You may consider setting this option
@@ -185,92 +231,115 @@ Command reference
       of reconfiguring your asset root.
 
       .. rubric:: Commands
+         :name: commands-2
 
-      -\\-**new** -\\-**assetroot** *path*
+      ::
+
+         --new --assetroot path
 
       *Optional*. Creates a new asset root. Specify the path to the new
       asset root.
 
       .. note::
 
-         If you omit the path, the system creates a new asset
+         **Note:** If you omit the path, the system creates a new asset
          root in ``/gevol/assets``.
 
-      -\\-**srcvol** *path*
+      ::
+
+         --srcvol path
 
       *Optional*. Specify the path to the source volume.
 
-      -\\-**repair** [-\\-assetroot *path*]
+      ::
+
+         --repair [--assetroot path]
 
       *Optional*. Repairs various inconsistencies in the asset root
       (such as permissions, ownership, missing ID files, etc.).
       When you run this command, the tool auto-detects the problems that
       need to be repaired and fixes them.
 
-      .. warning::
+      **Note:** Do not use this command unless you see a system message
+      instructing you to do so.
 
-         Do not use this command unless you see a system message
-         instructing you to do so.
+      ::
 
-      -\\-**editvolumes** [-\\-assetroot *path*]
+         --editvolumes [--assetroot path]
 
       *Optional*. Follow the prompts to add a volume to the selected
       asset root or, modify the ``localpath`` definition for an existing
       volume, or to add a volume definition.
 
-      -\\-**listvolumes** [-\\-assetroot *path*]
+      ::
+
+         --listvolumes [--assetroot path]
 
       *Optional*. List the available (configured) volumes for the
       selected asset root.
 
-      -\\-**fixmasterhost** [-\\-assetroot *path*]
+      ::
+
+         --fixmasterhost [--assetroot path]
 
       *Optional*. Change the *assetroot host* entry to match the current
       host name. (This command corrects cases where a host name is
       changed after installing and configuring Google Earth Enterprise
       Fusion.)
 
-      -\\-**addvolume** *volume_name:path*]
+      ::
+
+         --addvolume volume_name:path]
 
       *Optional*. Change the *assetroot host* entry to match the current
       host name. (This command corrects cases where a host name is
       changed after installing and configuring Google Earth Enterprise
       Fusion.)
 
-      .. _Configure_Publish_Root_Different:
       .. rubric:: geconfigurepublishroot
          :name: geconfigurepublishroot
 
-      geconfigurepublishroot [-\\-path=*path*] [-\\-allow_symlinks] [-\\-noprompt]
+      ::
+
+         geconfigurepublishroot [--path=path] [--allow_symlinks] [--noprompt]
 
       .. rubric:: Purpose
+         :name: purpose-3
 
       To specify the path where you want to push databases for
       publishing and serving with the current Google Earth Enterprise
       Server. Follow the prompts.
 
-      .. note::
-
-         You must run this command as root.
+      **Note:** You must run this command as root.
 
       .. rubric:: Example
+         :name: example-1
 
-      geconfigurepublishroot -\\-path /gevol/published_dbs -\\-allow_symlinks
+      ::
+
+         geconfigurepublishroot --path /gevol/published_dbs --allow_symlinks
 
       .. rubric:: Commands
+         :name: commands-3
 
-      -\\-path=*path*
+      ::
+
+         --path=path
 
       *Optional*. The path to the publish root. Default value is
       ``/gevol/published_dbs``.
 
-      -\\-allow_symlinks
+      ::
+
+         --allow_symlinks
 
       *Optional*. Configures the publisher to accept symbolic links.
       Useful when the publish root is on a separate logical volume from
       the asset root. Default is no.
 
-      -\\-noprompt
+      ::
+
+         --noprompt
 
       *Optional*. Perform the command without prompting the user for any
       input. This option requires that some commands have arguments
@@ -278,7 +347,7 @@ Command reference
       or the configuration fails, the program will return -1 (0 is
       returned on success).
 
-      .. warning::
+      .. container:: alert
 
          Do not create more than one publish root for a single asset
          root. That configuration produces unpredictable or undesirable
@@ -289,7 +358,9 @@ Command reference
       .. rubric:: gecutter
          :name: gecutter
 
-      **gecutter** {**enable** | **disable**}
+      ::
+
+         gecutter {enable | disable}
 
       .. rubric:: Purpose
 
@@ -300,81 +371,106 @@ Command reference
 
       .. note::
 
-         The default admin security does not apply to the
+         **Note:** The default admin security does not apply to the
          Cutter, so although it provides security if you try to launch
          the Cutter from the Admin console Settings menu, it does not
          block direct access to the Cutter via the URL. If you need
-         Cutter security, you must add it separately. See
-         :doc:`../geeServerConfigAndSecurity/ports`.
+         Cutter security, you must add it separately. See :doc:`GEE
+         Server security <173056>`.
 
-      See :doc:`../geeServerAdmin/createPortableGlobesMaps`.
+      See :doc:`3230777`.
 
       .. rubric:: Example
 
-      .. code-block:: none
+      ::
 
          gecutter enable
+
+      ::
 
          gecutter disable
 
       .. rubric:: gedisconnectedclean
          :name: gedisconnectedclean
 
-      .. warning::
+      .. container:: alert
 
          Deprecated in release GEE 4.4 and higher.
 
-      **gedisconnectedclean** [-\\-**dbpath** *dbpath*] [-\\-**list** *assetroot*]
+      ::
+
+         gedisconnectedclean [--dbpath dbpath] [--list assetroot]
 
       .. rubric:: Purpose
+         :name: purpose-5
 
       To clean a disconnected database from a disconnected mock asset
       root.
 
       .. rubric:: Example
+         :name: example-3
 
-      gedisconnectedclean -\\-dbpath /gevol/assets/Databases/MyPOIs.kdatabase
+      ::
+
+         gedisconnectedclean --dbpath /gevol/assets/Databases/MyPOIs.kdatabase
 
       .. rubric:: Commands
+         :name: commands-4
 
-      -\\-**dbpath** *dbpath*
+      ::
+
+         --dbpath dbpath
 
       *Required*. Specify the database path to clean. This must be a
       low-level path to a database directory (one of the entries in the
       ``assetroot/dbpaths.list`` file). See ``--list`` command option to
       find databases stored within the mock asset root.
 
-      -\\-**list** *assetroot*
+      ::
+
+         --list assetroot
 
       *Optional*. List all dbpaths currently in disconnected asset root
 
       .. rubric:: gedisconnectedpublish
          :name: gedisconnectedpublish
 
-      .. warning::
+      .. container:: alert
 
          Deprecated in release GEE 4.4 and higher. Use
-         :ref:`geserveradmin --publishdb <Publish_DB_Disconnected>` instead.
+         ```geserveradmin --publishdb`` <#geserveradmin_pdb>`__
 
-      **gedisconnectedpublish** [*db_alias*] *db_name*
+      instead.
+      ::
+
+         gedisconnectedpublish [db_alias] db_name
 
       .. rubric:: Purpose
+         :name: purpose-6
 
       To publish a database on a disconnected server.
 
       .. rubric:: Example
+         :name: example-4
 
-      gedisconnectedpublish MyPOIs
+      ::
+
+         gedisconnectedpublish MyPOIs
 
       .. rubric:: Commands
+         :name: commands-5
 
-      *db_alias*
+      ::
+
+         db_alias
 
       *Optional*. Since *db_name* is the “low-level” name of the
       database, *db_alias* allows you to enter a name that is easier to
       remember, for example, ``Databases/SF Highways.kdabase?ver=1``.
 
-      *db_name*
+      ::
+
+         db_name
 
       *Required*. The full, “low-level” name of the database you want to
       publish.
@@ -382,101 +478,127 @@ Command reference
       .. rubric:: gedisconnectedreceive
          :name: gedisconnectedreceive
 
-      .. warning::
+      .. container:: alert
 
          Deprecated in version 4.0. ``gedisconnectedreceive`` is
          required only when the disconnected database was sent with an
          older (pre 4.0) version of Fusion.
 
-      **gedisconnectedreceive** -\\-**input** *dirname*
+      ::
+
+         gedisconnectedreceive --input dirname
 
       .. rubric:: Purpose
+         :name: purpose-7
 
       To copy a disconnected database from either detachable media or
       local storage into the mock asset root.
 
       .. rubric:: Example
+         :name: example-5
 
       For detachable media:
 
-      gedisconnectedreceive -\\-input /mnt/usbdrive/SFHighways_3dDatabase_v20
+      ::
+
+         gedisconnectedreceive --input /mnt/usbdrive/SFHighways_3dDatabase_v20
 
       For local storage:
 
-      .. code-block:: none
+      ::
 
          gedisconnectedreceive --input
          /gevol/src/disconnected_databases/SFHighways_3dDatabase_v20
 
       .. rubric:: Commands
+         :name: commands-6
 
-      -\\-**input** *dirname*
+      ::
+
+         --input dirname
 
       *Required*. Specify the directory that contains the files to be
       copied. This is typically the mount point of a hard drive.
 
-      .. note::
-
-         The ``gedisconnectedreceive`` command will create an asset tree
-         that mirrors the asset tree of the Fusion system that built the
-         database.
-
-         The ``gedisconnectedreceive`` command will copy data to the mock
-         asset root if the input folder is on a separate volume than the
-         mock asset root. Links to the input folder to the mock asset
-         root will be created if both the input and mock asset root
-         folders on the same volume.
+      | **Notes:**
+      | The ``gedisconnectedreceive`` command will create an asset tree
+        that mirrors the asset tree of the Fusion system that built the
+        database.
+      | The ``gedisconnectedreceive`` command will copy data to the mock
+        asset root if the input folder is on a separate volume than the
+        mock asset root. Links to the input folder to the mock asset
+        root will be created if both the input and mock asset root
+        folders on the same volume.
 
       .. rubric:: gedisconnectedsend
          :name: gedisconnectedsend
 
-      **gedisconnectedsend** [-\\-**extra** *filename*] [-\\-**havepath** *dbpath*] [-\\-**havepathfile** *file*] -\\-**output** *dirname* [-\\-**sendpath** *dbpath*] [-\\-**sendver** *dbver*]
+      ::
+
+         gedisconnectedsend [--extra filename] [--havepath dbpath] [--havepathfile file]
+         --output dirname [--sendpath dbpath] [--sendver dbver]
 
       .. rubric:: Purpose
+         :name: purpose-8
 
       To gather all the files from a Fusion asset root necessary for a
       disconnected push/publish, for either publishing new databases or
       publishing "delta" updates.
 
       .. rubric:: Example
+         :name: example-6
 
-      .. code-block:: none
+      ::
 
-         gedisconnectedsend --sendver Databases/SFHighways.kdatabase?version=2 --output /gevol/src/disconnected_databases/SFHighways_3dDatabase_v2
+         gedisconnectedsend --sendver Databases/SFHighways.kdatabase?version=2
+         --output /gevol/src/disconnected_databases/SFHighways_3dDatabase_v2
 
       .. rubric:: Commands
+         :name: commands-7
 
-      -\\-extra filename
+      ::
+
+         --extra filename
 
       *Optional*. Specify an extra file to package. This is typically
       used to repair broken files.
 
-      -\\-havepath dbpath
+      ::
+
+         --havepath dbpath
 
       *Optional*. Specify which database path already exists on the
       target server. This must be a low-level path to a database
       directory and may be specified more than once.
 
-      -\\-havepathfile file
+      ::
+
+         --havepathfile file
 
       *Optional*. Specify the file that contains the list of existing
       database paths (copy of *assetroot*\ ``/dbpaths.list`` from the
       remote server).
 
-      -\\-output dirname
+      ::
+
+         --output dirname
 
       *Required*. Specify where to gather the files. The directory must
       already exist and be empty. This is typically the mount point of
       a hard drive.
 
-      -\\-sendpath dbpath
+      ::
+
+         --sendpath dbpath
 
       *Optional*. Specify which database path to send. This must be a
       low-level path to a database directory. You can determine this
       path by entering ``gequery --outfiles``\ *dbver* on the source
       server.
 
-      -\\-sendver dbver
+      ::
+
+         --sendver dbver
 
       *Optional*. Specify which database version to send. Use the
       ``?version=...`` syntax. Available database versions may be found
@@ -484,9 +606,12 @@ Command reference
 
       .. rubric:: genewmapdatabase
 
-      **genewmapdatabase** [-\\-**mercator** | -\\-**flat**] ] -o *databasename* [-\\-**imagery** *imagery project*] [-\\-**map** *imap project*]...
+      ::
+
+         genewmapdatabase [--mercator | --flat] ] -o databasename [--imagery imagery project] [--map imap project]...
 
       .. rubric:: Purpose
+         :name: purpose-9
 
       Creates a new 2D map database. If an imagery or map project is
       specified, it is added to the database. Flat or mercator databases
@@ -496,16 +621,23 @@ Command reference
       projects.
 
       .. rubric:: Commands
+         :name: commands-8
 
-      -\\-mercator
+      ::
+
+         --mercator
 
       *Optional*. Uses Mercator map projection.
 
-      -\\-flat
+      ::
+
+         --flat
 
       *Default*. Uses Flat map (Plate Carrée) projection.
 
-      -\\-imagery imagery project
+      ::
+
+         --imagery imagery project
 
       *Optional*. The imagery project to be added to the database. If
       the database is mercator, the imagery project can be flat or
@@ -513,42 +645,60 @@ Command reference
       collisions. If the database is flat, the imagery project must be
       flat.
 
-      -\\-**map** map project
+      ::
+
+         --map map project
 
       *Optional*. The map project to be added to the database.
 
       .. rubric:: gemodifyimageryproject
          :name: gemodifyimageryproject
 
-      **gemodifyimageryproject** [-\\-**mercator** | -\\-**flat**] [-\\-**historical_imagery** | -\\-**no_historical_imagery**] -o *projectname* {[-\\-**maxlevel** *level* | -\\-**maxleveloverride** *level*] *insetresource*}...
+      ::
+
+          gemodifyimageryproject [--mercator | --flat] [--historical_imagery | --no_historical_imagery]
+            -o projectname {[--maxlevel level | --maxleveloverride level] insetresource}...
 
       .. rubric:: Purpose
+         :name: purpose-10
 
       Modifies an existing imagery project.
 
       .. rubric:: Commands
+         :name: commands-9
 
-      -\\-**mercator**
+      ::
+
+         --mercator
 
       *Optional*. Uses Mercator map projection for the imagery project.
 
-      -\\-**flat**
+      ::
+
+         --flat
 
       *Default*. Uses Flat map (Plate Carrée) projection.
 
-      -\\-**historical_imagery**
+      ::
+
+         --historical_imagery
 
       *Optional*. Uses historical imagery for the project.
 
-      -\\-**no_historical_imagery**
+      ::
+
+         --no_historical_imagery
 
       *Default*. Uses normal imagery for the project.
 
       .. rubric:: Options
+         :name: options-2
 
-      -\\-**maxlevel** *level*
+      ::
 
-      .. warning::
+           --maxlevel level
+
+      .. container:: alert
 
          Deprecated in release GEE 5.2.5 and higher. Use
          ``--maxleveloverride`` instead.
@@ -557,7 +707,9 @@ Command reference
       Fusion scale. Deprecated because it does not match the levels specified
       in the Fusion UI.
 
-      -\\-**maxleveloverride** *level*
+      ::
+
+           --maxleveloverride level
 
       *Optional*. Sets the maximum level for the imagery. Uses the
       imagery scale in Fusion. Matches the levels in the Fusion UI.
@@ -565,25 +717,36 @@ Command reference
       .. rubric:: gemodifyterrainproject
          :name: gemodifyterrainproject
 
-      **gemodifyterrainproject** [-\\-**mercator** | -\\-**flat**] -o *projectname* {-\\-**maxlevel** *level* | -\\-**maxleveloverride** *level*]} [-\-**no_terrain_overlay** | {-\\-**terrain_overlay** -\\-**start_level** *level* -\\-**resource_min_level** *level* }] *insetresource*} ...
+      ::
+
+          gemodifyterrainproject [--mercator | --flat]
+           -o projectname {--maxlevel level | --maxleveloverride level]}
+           [--no_terrain_overlay | {--terrain_overlay --start_level level --resource_min_level level }]
+           insetresource} ...
 
       .. rubric:: Purpose
+         :name: purpose-11
 
       Modifies an existing terrain project.
 
       .. rubric:: Commands
+         :name: commands-10
 
-      -\\-**mercator**
+      ::
+
+         --mercator
 
       *Optional*. Uses Mercator map projection for the terrain project.
 
-      -\\-**flat**
+      ::
+
+         --flat
 
       *Default*. Uses Flat map (Plate Carrée) projection.
 
-      -\\-**maxlevel** *level*
+      ``--maxlevel level``
 
-      .. warning::
+      .. container:: alert
 
          Deprecated in release GEE 5.2.5 and higher. Use
          ``--maxleveloverride`` instead.
@@ -592,28 +755,38 @@ Command reference
       Fusion scale. Deprecated because it does not match the levels specified
       in the Fusion UI.
 
-      -\\-**maxleveloverride** *level*
+      ::
+
+         --maxleveloverride level
 
       *Optional*. Sets the maximum level for the terrain. Uses the
       terrain scale in Fusion. Matches the levels in the Fusion UI.
 
       *Optional*.
 
-      -\\-**no_terrain_overlay**
+      ::
+
+         --no_terrain_overlay
 
       *Default*. make this terrain project a normal project.
 
-      -\\-**terrain_overlay**
+      ::
+
+         --terrain_overlay
 
       *Optional*. make this terrain project an overlay project.
 
-      -\\-**start_level** *level*
+      ::
+
+         --start_level level
 
       *Optional*. the level from which to start building the terrain
       overlay project. start_level is an even integer between 4 and 24
       inclusive.
 
-      -\\-**resource_min_level** *level*
+      ::
+
+         --resource_min_level level
 
       *Optional*. the threshold level that separates fill terrain from
       overlay terrain. resource_min_level is any integer between 4 and
@@ -622,35 +795,51 @@ Command reference
       .. rubric:: genewimageryproject
          :name: genewimageryproject
 
-      **genewimageryproject** [-\\-**mercator** | -\\-**flat**] [-\\-**historical_imagery** | -\\-**no_historical_imagery**] -o *projectname* {[-\\-**maxlevel** *level* | -\\-**maxleveloverride** *level*] *insetresource*}...
+      ::
+
+          genewimageryproject [--mercator | --flat] [--historical_imagery | --no_historical_imagery]
+           -o projectname {[--maxlevel level | --maxleveloverride level] insetresource}...
 
       .. rubric:: Purpose
+         :name: purpose-12
 
       Creates a new imagery project.
 
       .. rubric:: Commands
+         :name: commands-11
 
-      -\\-**mercator**
+      ::
+
+         --mercator
 
       *Optional*. Uses Mercator map projection for the imagery project.
 
-      -\\-**flat**
+      ::
+
+         --flat
 
       *Default*. Uses Flat map (Plate Carrée) projection.
 
-      -\\-**historical_imagery**
+      ::
+
+         --historical_imagery
 
       *Optional*. Uses historical imagery for the project.
 
-      -\\-**no_historical_imagery**
+      ::
+
+         --no_historical_imagery
 
       *Default*. Uses normal imagery for the project.
 
       .. rubric:: Options
+         :name: options-3
 
-      -\\-**maxlevel** *level*
+      ::
 
-      .. warning::
+           --maxlevel level
+
+      .. container:: alert
 
          Deprecated in release GEE 5.2.5 and higher. Use
          ``--maxleveloverride`` instead.
@@ -659,7 +848,9 @@ Command reference
       Fusion scale. Deprecated because it not match the levels specified
       in the Fusion UI.
 
-      -\\-**maxleveloverride** *level*
+      ::
+
+           --maxleveloverride level
 
       *Optional*. Sets the maximum level for the imagery. Uses the
       imagery scale in Fusion. Matches the levels in the Fusion UI.
@@ -667,25 +858,36 @@ Command reference
       .. rubric:: genewterrainproject
          :name: genewterrainproject
 
-      **genewterrainproject** [-\\-**mercator** | -\\-**flat**] -o *projectname* {-\\-**maxlevel** *level* | -\\-**maxleveloverride** *level*]} [-\\-**no_terrain_overlay** | {-\\-**terrain_overlay** -\\-**start_level** *level* -\\-**resource_min_level** *level* }] *insetresource*} ...
+      ::
+
+          genewterrainproject [--mercator | --flat]
+           -o projectname {--maxlevel level | --maxleveloverride level]}
+           [--no_terrain_overlay | {--terrain_overlay --start_level level --resource_min_level level }]
+           insetresource} ...
 
       .. rubric:: Purpose
+         :name: purpose-13
 
       Creates a new terrain project.
 
       .. rubric:: Commands
+         :name: commands-12
 
-      -\\-**mercator**
+      ::
+
+         --mercator
 
       *Optional*. Uses Mercator map projection for the terrain project.
 
-      -\\-**flat**
+      ::
+
+         --flat
 
       *Default*. Uses Flat map (Plate Carrée) projection.
 
-      -\\-**maxlevel** *level*
+      ``--maxlevel level``
 
-      .. warning::
+      .. container:: alert
 
          Deprecated in release GEE 5.2.5 and higher. Use
          ``--maxleveloverride`` instead.
@@ -694,28 +896,38 @@ Command reference
       Fusion scale. Deprecated because it does not match the levels specified
       in the Fusion UI.
 
-      -\\-**maxleveloverride** *level*
+      ::
+
+         --maxleveloverride level
 
       *Optional*. Sets the maximum level for the terrain. Uses the
       terrain scale in Fusion. Matches the levels in the Fusion UI.
 
       *Optional*.
 
-      -\\-**no_terrain_overlay**
+      ::
+
+         --no_terrain_overlay
 
       *Default*. make this terrain project a normal project.
 
-      -\\-**terrain_overlay**
+      ::
+
+         --terrain_overlay
 
       *Optional*. make this terrain project an overlay project.
 
-      -\\-**start_level** *level*
+      ::
+
+         --start_level level
 
       *Optional*. the level from which to start building the terrain
       overlay project. start_level is an even integer between 4 and 24
       inclusive.
 
-      -\\-**resource_min_level** *level*
+      ::
+
+         --resource_min_level level
 
       *Optional*. the threshold level that separates fill terrain from
       overlay terrain. resource_min_level is any integer between 4 and
@@ -724,18 +936,22 @@ Command reference
       .. rubric:: gepublishdatabase
          :name: gepublishdatabase
 
-      .. warning::
+      .. container:: alert
 
          Deprecated in GEE 4.0.
 
       Use ``geserveradmin`` to push and publish databases or use the
-      Fusion GUI and :doc:`GEE Server <../geeServerAdmin/publishDatabasesPortables>`.
+      Fusion GUI and `GEE Server <../answer/3497763.html>`__.
 
       .. rubric:: geselectassetroot
 
-      **geselectassetroot** [-\\-**lock**] [-\\-**noprompt**] [-\\-**unlock**] ( [-\\-**assetroot** *path* [-\\-**role** {**master** | **slave**}] [-\\-**numcpus** *num*]] )
+      ::
+
+         geselectassetroot [--lock] [--noprompt] [--unlock]
+         ( [--assetroot path [--role {master | slave}] [--numcpus num]] )
 
       .. rubric:: Purpose
+         :name: purpose-14
 
       To perform a variety of operations related to existing asset roots
       on the current machine.
@@ -747,8 +963,9 @@ Command reference
          command as root.
 
       .. rubric:: Example
+         :name: example-7
 
-      .. code-block:: none
+      ::
 
          geselectassetroot --list
          geselectassetroot --lock
@@ -757,86 +974,115 @@ Command reference
          geselectassetroot --assetroot /gevol/assets --role slave --numcpus 3
 
       .. rubric:: Options
+         :name: options-4
 
-      -\\-**assetroot <dir>**
+      ::
+
+         --assetroot <dir>
 
       Path to the asset root. ``--assetroot`` is shown in the commands
       below as mandatory or optional. If optional, then the current
       asset root is used if it is not specified.
 
-      -\\-**noprompt**
+      ::
+
+         --noprompt
 
       Do not prompt for more information, returns -1 to indicate an error
       if command fails or has insufficient arguments.
 
       .. rubric:: Commands
+         :name: commands-13
 
-      -\\-**list**
+      ::
+
+         --list
 
       *Optional.* Displays a list of the known asset roots on this
       machine.
 
-      -\\-**lock**
+      ::
+
+         --lock
 
       *Optional.* Disables the ability to select a different asset root
       on this machine.
 
-      -\\-**noprompt**
+      ::
+
+         --noprompt
 
       *Optional*. Perform the command without prompting the user for any
       input. This option requires that some commands have arguments
       specified on the command line.
 
-      -\\-**unlock**
+      ::
+
+         --unlock
 
       *Optional.* Enables the ability to select a different asset root
       on this machine. (Use only if ``--lock`` is enabled.)
 
-      -\\-**assetroot** *path*
+      ::
+
+         --assetroot path
 
       *Optional.* Specify the path to the asset root for this machine.
 
-      -\\-**role** {**master** | **slave**}
+      ::
+
+         --role {master | slave}
 
       *Optional.* Specify this machine's role in the asset root (master
       or slave). The default role is master. This command is available
-      only in combination with ``--assetroot``.
+      only in combination with --``assetroot``.
 
-      -\\-**numcpus** *num*
+      ::
+
+         --numcpus num
 
       *Optional.* Specify the number of CPUs on this machine to use for
       processing. The default will be the maximum number of CPUs
       detected on the machine during installation. This command is
-      available only in combination with ``--assetroot``.
+      available only in combination with --``assetroot``.
 
       .. rubric:: geselectpublishroot
          :name: geselectpublishroot
 
-      geselectpublishroot path
+      ::
+
+         geselectpublishroot path
 
       .. rubric:: Purpose
+         :name: purpose-15
 
       To specify a different publish root. The specified path must
       exist. If you want to create a publish root, see
-      :ref:`geconfigurepublishroot <Configure_Publish_Root_Different>`.
+      ```geconfigurepublishroot`` <#geconfigurepublishroot>`__.
 
       .. rubric:: Example
+         :name: example-8
 
-      ``geselectpublishroot /gevol/published_dbs``
+      ::
+
+         geselectpublishroot /gevol/published_dbs
 
       .. rubric:: Arguments
          :name: arguments
 
-      *path*
+      ``path``
 
       *Required*. Specify the path to the desired publish root.
 
       .. rubric:: geserveradmin
          :name: geserveradmin
 
-      **geserveradmin** [*options*] *commands*
+      ::
+
+         geserveradmin [options] commands
 
       .. rubric:: Purpose
+         :name: purpose-16
 
       To configure your Google Earth Enterprise Server. This section
       breaks down the ``geserveradmin`` commands into the following
@@ -853,7 +1099,7 @@ Command reference
       .. rubric:: Examples
          :name: examples
 
-      .. code-block:: none
+      ::
 
          geserveradmin --listdbs
          geserveradmin --server_type stream --dbdetails “/gevol/assets/Databases/SF Neighborhoods.kdatabase/gedb.kda/ver001/gedb”
@@ -868,28 +1114,36 @@ Command reference
       .. rubric:: Fusion host name
          :name: fusion-host-name
 
-      -\\-**fusion_host**
+      ::
+
+         --fusion_host
 
       *Optional*. Fusion host name. Defaults to the current host name.
 
       .. rubric:: Stream server URL
          :name: stream-server-url
 
-      -\\-**stream_server_url** *url*
+      ::
+
+         --stream_server_url url
 
       *Optional*. Specify a stream server other than the default.
       Defaults to the current server.
 
-      -\\-**search_server_url** *url*
+      ::
 
-      .. warning::
+         --search_server_url url
+
+      .. container:: alert
 
          Deprecated. Always specify a stream server.
 
       .. rubric:: Server type
          :name: server-type
 
-      -\\-**server_type** {**stream** | **search**}
+      ::
+
+         --server_type {stream | search}
 
       *Optional*. Specify whether the server(s) in question are
       ``stream`` or ``search`` server(s). The default is ``stream``.
@@ -907,7 +1161,9 @@ Command reference
       .. rubric:: List registered databases
          :name: list-registered-databases
 
-      -\\-**listdbs**  [-\\-**portable**]
+      ::
+
+         --listdbs  [--portable]
 
       Lists all databases registered on the server. If ``--portable`` is
       specified, only portable databases are listed.
@@ -915,7 +1171,9 @@ Command reference
       .. rubric:: Database file list
          :name: database-file-list
 
-      -\\-**dbdetails** *db_name*
+      ::
+
+         --dbdetails db_name
 
       Provides a list of all of the files required by the specified
       database. If omitted, the server type defaults to ``stream``.
@@ -923,7 +1181,9 @@ Command reference
       .. rubric:: List published databases
          :name: list-published-databases
 
-      -\\-**publisheddbs** [-\\-**portable**]
+      ::
+
+         --publisheddbs [--portable]
 
       Lists the database(s) currently published on the server. If
       ``--portable`` is specified, only portable databases are listed.
@@ -931,7 +1191,9 @@ Command reference
       .. rubric:: List target paths
          :name: list-target-paths
 
-      -\\-**listtgs**
+      ::
+
+         --listtgs
 
       Lists all the target paths currently serving databases on the
       server.
@@ -939,103 +1201,123 @@ Command reference
       .. rubric:: Add database
          :name: add-database
 
-      -\\-**adddb** *db_name* [-\\-dbalias *alias*]
+      ::
+
+         --adddb db_name [--dbalias alias]
 
       Registers a new database with the specified name.
 
-      .. list-table:: adddb option
-         :widths: 30 30 30
-         :header-rows: 1
-
-         * - -\\-adddb option
-           - Required/Optional
-           - Description
-         * - -\\-dbalias alias
-           - Optional
-           - Specifies a user-friendly name for the database.
+      +-----------------------+-----------------------+-----------------------+
+      | --adddb option        | Required/Optional     | Description           |
+      +=======================+=======================+=======================+
+      | --dbalias alias       | Optional              | Specifies a           |
+      |                       |                       | user-friendly name    |
+      |                       |                       | for the database.     |
+      +-----------------------+-----------------------+-----------------------+
 
       .. rubric:: Delete database
 
-      -\\-**deletedb** *db_name*
+      ::
+
+         --deletedb db_name
 
       Deletes the specified database entry from the server. Does not
       delete the actual files. (This command is similar to putting files
       in the trash on a Windows or Mac desktop. See also
       ``--garbagecollect``.)
 
-      .. note::
-
-         If you want to delete a currently published database, you
-         first need to unpublish. (See also ``--unpublish``.) To list
-         the currently published databases, use the ``--publisheddbs``
-         option. (See also ``--deletevh``.)
+      **Note:** If you want to delete a currently published database,
+      you first need to unpublish. (See also ``--unpublish``.) To list
+      the currently published databases, use the ``--publisheddbs``
+      option. (See also ``--deletevh``.)
 
       .. rubric:: Push databases
          :name: push-databases
 
-      -\\-**pushdb** *db_name*... [-\\-**force_copy**]
+      ::
+
+         --pushdb db_name... [--force_copy]
 
       Pushes one or more databases to the server. For example,
       ``--pushdb db1 --pushdb db2``
 
-      .. list-table:: pushdb option
-         :widths: 30 15 55
-         :header-rows: 1
+      +-----------------------+-----------------------+-----------------------+
+      | --pushdb option       | Required/Optional     | Description           |
+      +=======================+=======================+=======================+
+      | ::                    | Optional              | Copies database files |
+      |                       |                       | while                 |
+      |    --force_copy       |                       | pushing/publishing;   |
+      |                       |                       | otherwise creates a   |
+      |                       |                       | hard/symbolic link    |
+      |                       |                       | when server settings  |
+      |                       |                       | allow. To allow       |
+      |                       |                       | symbolic links,       |
+      |                       |                       | specify using         |
+      |                       |                       | ``geconfigurepublishr |
+      |                       |                       | oot``:                |
+      |                       |                       | ``sudo /opt/google/bi |
+      |                       |                       | n/geconfigurepublishr |
+      |                       |                       | oot -path=/gevol/publ |
+      |                       |                       | ished_dbs -allow_syml |
+      |                       |                       | inks.``               |
+      +-----------------------+-----------------------+-----------------------+
 
-         * - -\\-pushdb option
-           - Required/Optional
-           - Description
-         * - -\\-**force_copy**
-           - Optional
-           - Copies database files while pushing/publishing;
-             otherwise creates a hard/symbolic link when server
-             settings allow. To allow symbolic links, specify
-             using ``geconfigurepublishroot``: ``sudo /opt/google/bin/geconfigurepublishroot
-             -path=/gevol/published_dbs -allow_symlinks``.
-
-      .. _Publish_DB_Disconnected:
       .. rubric:: Publish database
          :name: publish-database
 
-      -\\-**publishdb** *db_name* -\\-**targetpath** *target_path* [-\\-**vhname** *vh_name*] [-\\-**setecdefault**] [-\\-**enable_poisearch** [-\\-**enable_enhancedsearch**]]
+      ::
+
+         --publishdb db_name --targetpath target_path [--vhname vh_name] [--setecdefault] [--enable_poisearch [--enable_enhancedsearch]]
 
       Publish the specified database on the specified target path. If
       the virtual host name is omitted, it publishes to the default
       virtual host: "public".
 
-      .. list-table:: publishdb option
-         :widths: 30 15 55
-         :header-rows: 1
-
-         * - -\\-publishdb option
-           - Required/Optional
-           - Description
-         * - -\\-**targetpath** *target_path*
-           - Required
-           - Specifies the target path on which to publish.
-         * - -\\-**vhname** *vh_name*
-           - Optional
-           - Specify the name of the virtual host. If the virtual host name is omitted,
-             it publishes to the default virtual host, “public”.
-         * - -\\-**setecdefault**
-           - Optional
-           - Publish this database as the default for the Earth Client to connect
-             to if no database or virtual host is specified upon initial connection.
-         * - -\\-**enable_poisearch**
-           - Optional
-           - Enable Point of Interest search if database contains POI data.
-         * - -\\-**enable_enhancedsearch**
-           - Optional
-           - If POI search is enabled, enable enhanced search.
+      +-----------------------+-----------------------+-----------------------+
+      | --publishdb Option    | Required/Optional     | Description           |
+      +=======================+=======================+=======================+
+      | ::                    | Required              | Specifies the target  |
+      |                       |                       | path on which to      |
+      |    --targetpath targe |                       | publish.              |
+      |:: t_path              |                       |                       |
+      +-----------------------+-----------------------+-----------------------+
+      | ::                    | Optional              | Specify the name of   |
+      |                       |                       | the virtual host. If  |
+      |    --vhname vh_name   |                       | the virtual host name |
+      |                       |                       | is omitted, it        |
+      |                       |                       | publishes to the      |
+      |                       |                       | default virtual host, |
+      |                       |                       | "public".             |
+      +-----------------------+-----------------------+-----------------------+
+      | ::                    | Optional              | Publish this database |
+      |                       |                       | as the default        |
+      |    --setecdefault     |                       | for the Earth Client  |
+      |                       |                       | to connect to if no   |
+      |                       |                       | database or virtual   |
+      |                       |                       | host is specified     |
+      |                       |                       | upon initial          |
+      |                       |                       | connection.           |
+      +-----------------------+-----------------------+-----------------------+
+      | ::                    | Optional              | Enable Point of       |
+      |                       |                       | Interest search if    |
+      |    --enable_poisearch |                       | database contains POI |
+      |                       |                       | data.                 |
+      +-----------------------+-----------------------+-----------------------+
+      | ::                    | Optional              | If POI search is      |
+      |                       |                       | enabled, enable       |
+      |    --enable_enhanceds |                       | enhanced search.      |
+      | earch                 |                       |                       |
+      +-----------------------+-----------------------+-----------------------+
 
       .. rubric:: Unpublish database
          :name: unpublish-database
 
-      -\\-**unpublish** *target_path*
+      ::
+
+         --unpublish target_path
 
       Unpublish database served from specified target path. For example,
       to unpublih a target path ``/test``:
-
       ``geserveradmin --unpublish /test``
 
       .. rubric:: geserveradmin Virtual Host Commands
@@ -1050,17 +1332,18 @@ Command reference
          secure publishing point for as many databases as you associate
          with it.
 
-      .. caution::
-
-         Publishing to virtual hosts other than the default server is
-         supported only in version 4.2 or later of Google Earth EC. If you
-         are using version 4.0 or earlier, only databases that you publish
-         to the default server can be accessed by Google Earth EC.
+      **Caution:** Publishing to virtual hosts other than the default
+      server is supported only in version 4.2 or later of Google Earth
+      EC. If you are using version 4.0 or earlier, only databases that
+      you publish to the default server can be accessed by Google Earth
+      EC.
 
       .. rubric:: List virtual hosts
          :name: list-virtual-hosts
 
-      -\\-**listvhs**
+      ::
+
+         --listvhs
 
       Provides a list of all registered virtual hosts configured for the
       current machine.
@@ -1068,7 +1351,9 @@ Command reference
       .. rubric:: List virtual host information
          :name: list-virtual-host-information
 
-      -\\-**vhdetails** *vh_name*
+      ::
+
+         --vhdetails vh_name
 
       Displays the name, URL, and cache level of the specified virtual
       host.
@@ -1076,91 +1361,195 @@ Command reference
       .. rubric:: Add virtual hosts
          :name: add-virtual-hosts
 
-      -\\-**addvh** *vh_name* [-\\-**vhurl** *url*] [-\\-**vhcachelevel** *level*] [-\\-**ssl**]
+      ::
+
+         --addvh vh_name [--vhurl url] [--vhcachelevel level] [--ssl]
 
       Registers a new virtual host with the specified name. Spaces are
       not allowed in the virtual host name. For example:
 
-      geserveradmin \\addvh public_vh -\\-vhurl http://mysite.com/public_vh
+      ``geserveradmin --addvh public_vh --vhurl http://mysite.com/public_vh``
 
-      .. list-table:: addvh options
-         :widths: 30 15 55
-         :header-rows: 1
-
-         * - -\\-addvh option
-           - Required/Optional
-           - Description
-         * - -\\-**vhurl** *url*
-           - Optional
-           - The ``vhurl``specifies the location of the virtual host. It must
-             match the corresponding server-side virtual host configuration.
-             If ``vhurl`` is omitted, it will be set to
-             ``http://yourserver.domain/vh_name``.
-             There are three ways to specify the ``vhurl``:
-
-             -  Location-based URL, such as ``/private_ge``.
-                For example, if the entire URL is
-                ``http://www.company.com/private_ge``,
-                you enter ``/private_ge``.
-                **Note:** Google recommends that you use the
-                ``_ge`` and ``_map`` naming convention to make
-                it easier to distinguish between virtual host types.
-             -  Port-based URL, such as: :: http://www.company.com:1234
-                The entire URL, including protocol, servername,
-                path (if applicable), and port are required.
-             -  Name-based URL, such as: :: http://corp.company.com
-
-             For this type of specification, you must modify
-             your DNS appropriately for the virtual host.
-             After you use this command, you must create a              |
-             configuration file for the new virtual host.
-         * - -\\-**vhcachelevel** *num*
-           - Optional
-           - Specify a cache level (``1``, ``2``, or ``3``)
-             for the virtual host. The default is ``2``. This cache
-             is different than the client cache. This option caches
-             only the index nodes at display levels 4, 8, and 12
-             (not data packets). If you increase this setting,
-             Google Earth Enterprise Fusion caches more of the
-             index in RAM, thereby decreasing server latency
-             at the cost of server RAM. Level 3 uses approximately
-             1 GB of RAM. Level 2 uses approximately 4 MB of RAM.
-             Level 1 uses approximately 16 KB of RAM. Each
-             additional cache level consumes 256 times the RAM
-             as the previous level and saves one disk read per packet served.
-
-             The server makes no checks that the RAM needed for caching
-             does not exceed the total RAM on the machine. For example,i
-             if you have three virtual hosts set to cache at level 3 on
-             a machine that has only 2 GB of RAM, the machine will thrash
-             memory. The default is Level 2, so you should be able to create
-             as many virtual hosts as you want at the default cache level
-             without worrying about running out of RAM.
-
-             Typically, users increase only a small number of virtual hosts
-             to cache level 3 on production servers and leave the rest of themi
-             at level 2. On servers that share a machine with Google Earth
-             Enterprise Fusion, do not increase the level to 3.
-             Google Earth Enterprise Fusion needs more RAM than the server does.
-
-         * - -\\-**ssl**
-           - Optional
-           - Create a location-based virtual host with SSL configuration
-             with the naming convention ``_host.location_ssl`` located in
-             the path ``/conf.d/virtual_servers/`` . For detailed information
-             about ensuring your Apache HTTP server configuration files are
-             set up correctly, see
-             :doc:`../geeServerConfigAndSecurity/configureGeeServer5.1.0_SSL_HTTPS`
+      +-----------------------+-----------------------+-----------------------+
+      | --addvh option        | Required/Optional     | Description           |
+      +=======================+=======================+=======================+
+      | ::                    | Optional              | The ``vhurl``         |
+      |                       |                       | specifies the         |
+      |    --vhurl url        |                       | location of the       |
+      |                       |                       | virtual host. It must |
+      |                       |                       | match the             |
+      |                       |                       | corresponding         |
+      |                       |                       | server-side virtual   |
+      |                       |                       | host configuration.   |
+      |                       |                       | If ``vhurl`` is       |
+      |                       |                       | omitted, it will be   |
+      |                       |                       | set to                |
+      |                       |                       | ``http://yourserver.d |
+      |                       |                       | omain/vh_name``.      |
+      |                       |                       | There are three ways  |
+      |                       |                       | to specify the        |
+      |                       |                       | ``vhurl``:            |
+      |                       |                       |                       |
+      |                       |                       | -  Location-based     |
+      |                       |                       |    URL, such as       |
+      |                       |                       |    ``/private_ge``.   |
+      |                       |                       |    For example, if    |
+      |                       |                       |    the entire URL is  |
+      |                       |                       |    ``http://www.compa |
+      |                       |                       | ny.com/private_ge``,  |
+      |                       |                       |    you enter          |
+      |                       |                       |    ``/private_ge``.   |
+      |                       |                       |                       |
+      |                       |                       |    **Note:** Google   |
+      |                       |                       |    recommends that    |
+      |                       |                       |    you use the        |
+      |                       |                       |    ``_ge`` and        |
+      |                       |                       |    ``_map`` naming    |
+      |                       |                       |    convention to make |
+      |                       |                       |    it easier to       |
+      |                       |                       |    distinguish        |
+      |                       |                       |    between virtual    |
+      |                       |                       |    host types.        |
+      |                       |                       |                       |
+      |                       |                       | -  Port-based URL,    |
+      |                       |                       |    such as:           |
+      |                       |                       |                       |
+      |                       |                       |    ::                 |
+      |                       |                       |                       |
+      |                       |                       |       http://www.comp |
+      |                       |                       | any.com:1234          |
+      |                       |                       |                       |
+      |                       |                       |    The entire URL,    |
+      |                       |                       |    including          |
+      |                       |                       |    protocol, server   |
+      |                       |                       |    name, path (if     |
+      |                       |                       |    applicable), and   |
+      |                       |                       |    port are required. |
+      |                       |                       |                       |
+      |                       |                       | -  Name-based URL,    |
+      |                       |                       |    such as:           |
+      |                       |                       |                       |
+      |                       |                       |    ::                 |
+      |                       |                       |                       |
+      |                       |                       |       http://corp.com |
+      |                       |                       | pany.com              |
+      |                       |                       |                       |
+      |                       |                       | For this type of      |
+      |                       |                       | specification, you    |
+      |                       |                       | must modify your DNS  |
+      |                       |                       | appropriately for the |
+      |                       |                       | virtual host.         |
+      |                       |                       |                       |
+      |                       |                       | After you use this    |
+      |                       |                       | command, you must     |
+      |                       |                       | create a              |
+      |                       |                       | configuration file    |
+      |                       |                       | for the new virtual   |
+      |                       |                       | host.                 |
+      +-----------------------+-----------------------+-----------------------+
+      | ::                    | Optional              | Specify a cache level |
+      |                       |                       | (``1``, ``2``, or     |
+      |    --vhcachelevel num |                       | ``3``) for the        |
+      |                       |                       | virtual host. The     |
+      |                       |                       | default is ``2``.     |
+      |                       |                       | This cache is         |
+      |                       |                       | different than the    |
+      |                       |                       | client cache. This    |
+      |                       |                       | option caches only    |
+      |                       |                       | the index nodes at    |
+      |                       |                       | display levels 4, 8,  |
+      |                       |                       | and 12 (not data      |
+      |                       |                       | packets). If you      |
+      |                       |                       | increase this         |
+      |                       |                       | setting, Google Earth |
+      |                       |                       | Enterprise Fusion     |
+      |                       |                       | caches more of the    |
+      |                       |                       | index in RAM, thereby |
+      |                       |                       | decreasing server     |
+      |                       |                       | latency at the cost   |
+      |                       |                       | of server RAM. Level  |
+      |                       |                       | 3 uses approximately  |
+      |                       |                       | 1 GB of RAM. Level 2  |
+      |                       |                       | uses approximately 4  |
+      |                       |                       | MB of RAM. Level 1    |
+      |                       |                       | uses approximately 16 |
+      |                       |                       | KB of RAM. Each       |
+      |                       |                       | additional cache      |
+      |                       |                       | level consumes 256    |
+      |                       |                       | times the RAM as the  |
+      |                       |                       | previous level and    |
+      |                       |                       | saves one disk read   |
+      |                       |                       | per packet served.    |
+      |                       |                       |                       |
+      |                       |                       | The server makes no   |
+      |                       |                       | checks that the RAM   |
+      |                       |                       | needed for caching    |
+      |                       |                       | does not exceed the   |
+      |                       |                       | total RAM on the      |
+      |                       |                       | machine. For example, |
+      |                       |                       | if you have three     |
+      |                       |                       | virtual hosts set to  |
+      |                       |                       | cache at level 3 on a |
+      |                       |                       | machine that has only |
+      |                       |                       | 2 GB of RAM, the      |
+      |                       |                       | machine will thrash   |
+      |                       |                       | memory. The default   |
+      |                       |                       | is Level 2, so you    |
+      |                       |                       | should be able to     |
+      |                       |                       | create as many        |
+      |                       |                       | virtual hosts as you  |
+      |                       |                       | want at the default   |
+      |                       |                       | cache level without   |
+      |                       |                       | worrying about        |
+      |                       |                       | running out of RAM.   |
+      |                       |                       |                       |
+      |                       |                       | Typically, users      |
+      |                       |                       | increase only a small |
+      |                       |                       | number of virtual     |
+      |                       |                       | hosts to cache level  |
+      |                       |                       | 3 on production       |
+      |                       |                       | servers and leave the |
+      |                       |                       | rest of them at level |
+      |                       |                       | 2. On servers that    |
+      |                       |                       | share a machine with  |
+      |                       |                       | Google Earth          |
+      |                       |                       | Enterprise Fusion, do |
+      |                       |                       | not increase the      |
+      |                       |                       | level to 3. Google    |
+      |                       |                       | Earth Enterprise      |
+      |                       |                       | Fusion needs more RAM |
+      |                       |                       | than the server does. |
+      +-----------------------+-----------------------+-----------------------+
+      | ::                    | Optional              | Create a              |
+      |                       |                       | location-based        |
+      |    --ssl              |                       | virtual host with SSL |
+      |                       |                       | configuration with    |
+      |                       |                       | the naming convention |
+      |                       |                       | ``_host.location_ssl` |
+      |                       |                       | `                     |
+      |                       |                       | located in the path   |
+      |                       |                       | ``/conf.d/virtual_ser |
+      |                       |                       | vers/``.              |
+      |                       |                       | For detailed          |
+      |                       |                       | information about     |
+      |                       |                       | ensuring your Apache  |
+      |                       |                       | HTTP server           |
+      |                       |                       | configuration files   |
+      |                       |                       | are set up correctly, |
+      |                       |                       | see :doc:`6080928`.   |
+      +-----------------------+-----------------------+-----------------------+
 
       .. rubric:: Delete virtual hosts
 
-      -\\-**deletevh** *vh_name*
+      ::
+
+         --deletevh vh_name
 
       Permanently deletes the specified virtual host.
 
       .. note::
 
-         If you want to delete a virtual host, you must first
+         **Note:** If you want to delete a virtual host, you must first
          unpublish all currently published databases associated with it.
          To list the currently published databases for the virtual host
          you want to delete, use the ``--publisheddbs`` option. (See
@@ -1175,7 +1564,9 @@ Command reference
       .. rubric:: Delete database files
          :name: delete-database-files
 
-      -\\-**garbagecollect**
+      ::
+
+         --garbagecollect
 
       Permanently deletes the files for databases that have been
       selected for deletion. Generally, you run this command nightly to
@@ -1184,15 +1575,15 @@ Command reference
       the trash on a Windows or Mac operating system. See also
       ``--deletedb``.)
 
-      .. note::
-
-         Deletes only those files that are not used by other
-         databases on that server.
+      **Note:** Deletes only those files that are not used by other
+      databases on that server.
 
       .. rubric:: Clean up portable globes and maps registration
          :name: clean-up-portable-globes-and-maps-registration
 
-      -\\-**portable_cleanup**
+      ::
+
+         --portable_cleanup
 
       Clean up portable globes registration information. The cleanup
       unregisters/unpublishes portable globes or maps that have been
@@ -1201,16 +1592,16 @@ Command reference
       when portable files, which are currently published/registered,
       have been removed from your ``/globes`` directory.
 
-      .. note::
-
-         The cleanup is not implemented when there are no
-         portable globes or maps in the globes directory:
-         ``/opt/google/gehttpd/htdocs/cutter/globes``.
+      **Note:** The cleanup is not implemented when there are no
+      portable globes or maps in the globes directory:
+      ``/opt/google/gehttpd/htdocs/cutter/globes``.
 
       .. _getop:
       .. rubric:: getop
 
-      **getop** [-\\-**delay** *seconds*]
+      ::
+
+         getop [--delay seconds]
 
       .. rubric:: Purpose
          :name: purpose-17
@@ -1224,12 +1615,16 @@ Command reference
       .. rubric:: Example
          :name: example-9
 
-      getop -\\-delay 30
+      ::
+
+         getop --delay 30
 
       .. rubric:: Commands
          :name: commands-14
 
-      -\\-**delay** *seconds*
+      ::
+
+         --delay seconds
 
       *Optional*. Specify the number of seconds' delay between refreshes.
       For example, if you specify ``30``, ``getop`` runs every 30
@@ -1239,7 +1634,9 @@ Command reference
       .. rubric:: geupgradeassetroot
          :name: geupgradeassetroot
 
-      **geupgradeassetroot** -\\-**assetroot** *path* [-\\-**noprompt**]
+      ::
+
+         geupgradeassetroot --assetroot path [--noprompt]
 
       .. rubric:: Purpose
          :name: purpose-18
@@ -1247,28 +1644,31 @@ Command reference
       To upgrade an existing asset root after installing a later version
       of the software.
 
-      .. note::
+      **Note:** You must run this command as root.
 
-         You must run this command as root.
-
-         You must stop the system manager before using this
-         command and then start it again after you are done.
+      **Note:** You must stop the system manager before using this
+      command and then start it again after you are done.
 
       .. rubric:: Example
          :name: example-10
 
-      geupgradeassetroot -\\-assetroot /data1/assets
+      ::
+
+         geupgradeassetroot --assetroot /data1/assets
 
       .. rubric:: Commands
          :name: commands-15
 
-      -\\-**assetroot** *path*
+      ::
+
+         --assetroot path
 
       *Required*. Specify the path to the asset root. If omitted, the
       asset root defaults to ``/gevol/assets``.
 
+      ::
 
-      -\\-**noprompt**
+         --noprompt
 
       *Optional*. Perform the upgrade without prompting the user for any
       input. This option requires that some commands have arguments

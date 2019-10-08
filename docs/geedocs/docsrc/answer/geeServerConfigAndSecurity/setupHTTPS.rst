@@ -12,11 +12,11 @@ Set up HTTPS
       can also set up a secure Fusion server for your browser-based
       maps.
 
-      .. warning::
+      .. container:: alert
 
          The following procedure is applicable only to release 4.x and
          previous versions of GEE. For **GEE release 5.x**, see
-         :doc:`../geeServerConfigAndSecurity/configureGeeServer5.1.0_SSL_HTTPS`.
+         :doc:`6080928`.
 
       .. rubric:: To set up an HTTPS virtual server for Fusion:
          :name: to-set-up-an-https-virtual-server-for-fusion
@@ -42,23 +42,7 @@ Set up HTTPS
            ``Include`` statement you copied and saved, and update the
            LOCATION tags to the real virtual server:
 
-         .. code-block:: none
-         
-            r...@fusion.localhost.org:/opt/google/gehttpd/conf.d/virtual_servers 
-            # cat https_2d.location # This is an example of a location-based map virtual server #
-            Substitute appropriate values in the following variables
-            # 1. <LOCATION> : The new location name.
-            # 2. <VS_NAME> : The virtual server name used to create the virtual
-            # server with geserveradmin
-
-            RewriteRule ^/mymap$ /mymap/ [R] RewriteRule ^/mymap/$ /maps/fusionmaps_local.html [PT] RewriteRule ^/mymap/mapfiles/(.*)$ /maps/mapfiles/$1 [PT]
-
-            <Location "/mymap/*">
-            SetHandler gedb-handler
-            Include conf.d/virtual_servers/runtime/https_2d_runtime
-            SSLRequireSSL
-            SSLVerifyClient none
-            </Location>
+         ``r...@fusion.localhost.org:/opt/google/gehttpd/conf.d/virtual_servers # cat https_2d.location # This is an example of a location-based map virtual server # Substitute appropriate values in the following variables # 1. <LOCATION> : The new location name. # 2. <VS_NAME> : The virtual server name used to create the virtual # server with geserveradmin  RewriteRule ^/mymap$ /mymap/ [R] RewriteRule ^/mymap/$ /maps/fusionmaps_local.html [PT] RewriteRule ^/mymap/mapfiles/(.*)$ /maps/mapfiles/$1 [PT]  <Location "/mymap/*"> SetHandler gedb-handler Include conf.d/virtual_servers/runtime/https_2d_runtime SSLRequireSSL SSLVerifyClient none </Location>``
 
       #. | Modify the ``/opt/google/gehttpd/conf/extra/httpd-ssl.conf``
            file so that the
@@ -66,21 +50,7 @@ Set up HTTPS
            file and the virtual server are loaded by the HTTPS/443
            virtual host and not the HTTP/80 virtual host:
 
-         .. code-block:: none
-         
-            (vi /opt/google/gehttpd/conf/extra/httpd-ssl.conf...)
-            <snip>
-            ... <VirtualHost _default_:443>
-            # General setup for the virtual host
-            DocumentRoot "/opt/google/gehttpd/htdocs"
-            ServerName myserver.org:443
-
-            ServerAdmin administra...@myserver.org
-            ErrorLog "/opt/google/gehttpd/logs/error_log"
-            TransferLog "/opt/google/gehttpd/logs/access_log"
-            Include conf.d/virtual_servers/https_2d.location
-            ...
-            <snip>
+         ``(vi /opt/google/gehttpd/conf/extra/httpd-ssl.conf...) <snip> ... <VirtualHost _default_:443> # General setup for the virtual host DocumentRoot "/opt/google/gehttpd/htdocs" ServerName myserver.org:443  ServerAdmin administra...@myserver.org ErrorLog "/opt/google/gehttpd/logs/error_log" TransferLog "/opt/google/gehttpd/logs/access_log" Include conf.d/virtual_servers/https_2d.location ... <snip>``
 
       #. | Edit the HTTP/port 80 virtual host to load only the
            HTTP-available virtual servers:
@@ -91,26 +61,7 @@ Set up HTTPS
            list the included location files so that the
            ``https2d.location`` file is excluded:
 
-         .. code-block:: none
-         
-            LoadModule gedb_module /opt/google/gehttpd/modules/mod_gedb.so
-
-            NameVirtualHost *:80
-            <VirtualHost *:80>
-            # You should specify a ServerName in each VirtualHost declaration
-            # to avoid unnecessary DNS lookups.
-            # For example, ServerName www.mycompany.com
-
-            # Redirect the home page to display the GE logo
-            Include conf.d/index_rewrite
-            Include conf.d/jkmount
-
-            # Include all location-based virtual servers
-            # Include conf.d/virtual_servers/*.location (Comment out this line.)
-            Include conf.d/virtual_servers/default_ge.location (Add this line.)
-            Include conf.d/virtual_servers/default_map.location (Add this line.)
-            Include conf.d/virtual_servers/default_search.location (Add this line.)
-            </VirtualHost>
+         ``LoadModule gedb_module /opt/google/gehttpd/modules/mod_gedb.so  NameVirtualHost *:80 <VirtualHost *:80> # You should specify a ServerName in each VirtualHost declaration # to avoid unnecessary DNS lookups. # For example, ServerName www.mycompany.com  # Redirect the home page to display the GE logo Include conf.d/index_rewrite Include conf.d/jkmount  # Include all location-based virtual servers # Include conf.d/virtual_servers/*.location (Comment out this line.) Include conf.d/virtual_servers/default_ge.location (Add this line.) Include conf.d/virtual_servers/default_map.location (Add this line.) Include conf.d/virtual_servers/default_search.location (Add this line.) </VirtualHost>``
 
       #. | Save the file and restart the GEE Server software:
 
@@ -120,12 +71,10 @@ Set up HTTPS
          Apache software so that unencrypted and encrypted data can be
          hosted from both.
 
-         .. note::
-         
-            The firewall blocks external port 80 / HTTP
-            connections, but the Publisher tool must use the HTTP port to
-            upload information, even if your system only allows this
-            internally.
+         **Note**: The firewall blocks external port 80 / HTTP
+         connections, but the Publisher tool must use the HTTP port to
+         upload information, even if your system only allows this
+         internally.
 
       #. Create a Fusion server association for the new **https2d**
          virtual server. Use ``http://myserver.org`` for the URL for

@@ -11,7 +11,6 @@ Upload failed
       .. rubric:: Error message
 
       ``Upload failed``
-      
       .. rubric:: Description
 
       When you try to publish a database, the network connection to the

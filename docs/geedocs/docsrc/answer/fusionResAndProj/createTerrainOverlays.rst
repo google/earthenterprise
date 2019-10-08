@@ -11,11 +11,11 @@ Create terrain overlays
       .. rubric:: Create terrain overlays
 
       -  :ref:`Introduction <Introduction>`
-      -  :ref:`Creating Terrain Overlays <Creating_Terrain_Overlays>`
-      -  :ref:`Define, Build, and Push a Database for the Terrain
+      -  :ref:`Creating Terrain Overlays <_Create_Terrain_Overlays>`
+      -  `Define, Build, and Push a Database for the Terrain
          Overlay <Define_Database_Terrain_Overlay>`
-      -  :ref:`Publish a Database for the Terrain Overlay <Publish_Database_Terrain_overlay>`
-      -  :ref:`View the Database <View_Database>`
+      -  `Publish a Database for the Terrain Overlay <Publish_Database_Terrain_overlay>`
+      -  `View the Database <View_Database>`
 
       .. _Introduction:
       .. rubric:: Introduction
@@ -78,7 +78,7 @@ Create terrain overlays
 
          .. note::
 
-            The selection in the **Type** drop-down list near the
+            **Note:** The selection in the **Type** drop-down list near the
             bottom of this dialog determines the type of resources that
             appear on the list. Terrain Resource is automatically
             selected when you open this dialog from the Terrain Project
@@ -132,12 +132,12 @@ Create terrain overlays
 
          .. note::
 
-            It is the overlay resources and not the fill
+            **Note:** It is the overlay resources and not the fill
             resources that determine the extent of the overlay.
 
          .. note::
 
-            If every resource is at or above the **Resources
+            **Note:** If every resource is at or above the **Resources
             Min Level**, then 0 (sea level) is used for the fill
             terrain. Equally, if you set the **Start Level** to a
             resolution beyond the extent of the base terrain resource
@@ -214,7 +214,7 @@ Create terrain overlays
 
          .. note::
 
-            If you do not know your username and password,
+            **Note:** If you do not know your username and password,
             contact your Google Earth Enterprise Server System
             Administrator.
 
@@ -257,11 +257,11 @@ Create terrain overlays
          and ``mydomainname`` are specific to your server.
       #. Click the **Sign In** button.
 
-         .. warning::
+         .. container:: alert
 
-            If you have logged in to this server with
+            **Caution:** If you have logged in to this server with
             Google Earth EC previously, log out, clear your cache, and
-            log back in. See :doc:`../googleEarthEnterpriseClient/clearGoogleEarthEC`.
+            log back in. See :doc:`6010060`.
 
       #. Google Earth EC displays your database. The Layers panel shows
          any terrain, imagery, and vector layers in the database.
@@ -281,7 +281,7 @@ Create terrain overlays
 
       .. rubric:: Learn more
 
-      -  :doc:`Defining and Building Projects <../fusionTutorial/buildProject>`
+      -  `Defining and Building Projects :doc:`4412421`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

@@ -9,9 +9,11 @@ Verifying and troubleshooting
    .. container:: content
 
       -  :ref:`Verifying that the System Manager is Running <Verifying_System_Manager_Running>`
-      -  :ref:`Troubleshooting a Failed System Manager <Troubleshooting_Failed_System_Manager>`
+      -  :ref:`Troubleshooting a Failed System
+         Manager <Troubleshooting_Failed_System_Manager>`
       -  :ref:`Restarting the Server <Restarting_System_Manager>`
 
+      --------------
 
       .. _Verifying_System_Manager_Running:
       .. rubric:: Verifying That the System Manager Is Running
@@ -27,7 +29,6 @@ Verifying and troubleshooting
       command at a shell prompt:
 
       ``getop``
-
       A list of running processes appears. Two processes appear on the
       list:
 
@@ -52,6 +53,7 @@ Verifying and troubleshooting
          If you see a ``connection refused`` message, see the
          :ref:`Troubleshooting <Troubleshooting_Failed_System_Manager>` section.
 
+      --------------
 
       .. _Troubleshooting_Failed_System_Manager:
       .. rubric:: Troubleshooting a Failed System Manager
@@ -65,11 +67,8 @@ Verifying and troubleshooting
 
       #. Log in as root.
       #. Stop the system manager:
-
          ``/etc/init.d/gefusion stop``
-
       #. Start the system manager:
-
          ``/etc/init.d/gefusion start``
 
       If you are still having problems starting the system manager after
@@ -78,13 +77,12 @@ Verifying and troubleshooting
       The log file is located in:
 
       ``/var/opt/google/log/gesystemmanager.log``
-
       Any errors are listed after the **Started** notice, which appears
       in the log for each time you started the system manager.
 
       .. note::
 
-         If you see a ``Connection Refused`` message when
+         **Note:** If you see a ``Connection Refused`` message when
          running the ``getop`` command, but do not see any error
          messages in the log file, ensure that the log directory is
          writable by Google Earth Enterprise Fusion users.
@@ -92,13 +90,13 @@ Verifying and troubleshooting
       Likewise, if Google Earth Enterprise Server fails to run, you can
       try stopping and restarting it, which resolves most problems.
 
+      --------------
 
       .. rubric:: Restarting the Server
 
       #. Log in as root.
       #. Stop and restart the server.
-      
-         ``/etc/init.d/geserver restart``
+      \ ``/etc/init.d/geserver restart``
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

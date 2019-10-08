@@ -24,7 +24,7 @@ Pushing, Publishing, and Viewing a Database
 
       .. note::
 
-         This lesson assumes that Google Earth Enterprise
+         **Note:** This lesson assumes that Google Earth Enterprise
          Fusion, the Google Earth Enterprise Server, and Google Earth EC
          are all installed on your local workstation. If any of these
          applications are installed elsewhere on your network, adjust
@@ -32,11 +32,11 @@ Pushing, Publishing, and Viewing a Database
 
       .. note::
 
-         This lesson describes the steps for pushing a 3D
+         **Note:** This lesson describes the steps for pushing a 3D
          Fusion database. The same workflow is used to push a 2D
          Mercator database, but note that snippet profiles do not apply
          and that the published map can be viewed in a web browser, not
-         Google Earth EC. See :doc:`../fusionTutorial/createMapDB` for more information.
+         Google Earth EC. See :doc:`4412455` for more information.
 
       -  :ref:`Push Your Database <Push_Your_Database>`
       -  :ref:`Publish Your Database <Publish_Your_Database>`
@@ -52,10 +52,11 @@ Pushing, Publishing, and Viewing a Database
       console, from which you can then publish them.
 
       .. rubric:: To push a database:
+         :name: to-push-a-database
 
       #. Select **Asset Manager** from the **Tools** menu. The Asset Manager
          appears.
-      #. Navigate to the **SFHighways** database you built in :doc:`../fusionTutorial/buildDatabase`.
+      #. Navigate to the **SFHighways** database you built in :doc:`4412422`.
       #. Right-click the name of the database, and select **Push** from
          the context menu.
 
@@ -71,12 +72,10 @@ Pushing, Publishing, and Viewing a Database
          database to Google Earth Enterprise Server, and displays a
          success message when it is done.
 
-         .. note::
-               
-            If you get an error message, contact your Google
-            Earth Enterprise Server administrator for help, or check the
-            documentation on :doc:`../fusionAdministration/beforeYouConfigure` for more
-            information.
+         **Note:** If you get an error message, contact your Google
+         Earth Enterprise Server administrator for help, or check the
+         documentation on :doc:`3481464` for more
+         information.
 
       .. _Publish_Your_Database:
       .. rubric:: Publish Your Database in Google Earth Enterprise
@@ -87,6 +86,7 @@ Pushing, Publishing, and Viewing a Database
       you can publish it for viewing with Google Earth EC.
 
       .. rubric:: To publish a database:
+         :name: to-publish-a-database
 
       #. Access the Google Earth Enterprise Server Admin console in a
          browser window by going to *myserver.mydomainname*.com/admin,
@@ -98,11 +98,9 @@ Pushing, Publishing, and Viewing a Database
          -  Default username: geapacheuser
          -  Default password:geeadmin
 
-          .. note::
-
-             If you do not know your username and password,
-             contact your Google Earth Enterprise Server System
-             Administrator.
+         **Note:** If you do not know your username and password,
+         contact your Google Earth Enterprise Server System
+         Administrator.
 
       #. Click **Databases** to display the list of databases pushed to
          the Server.
@@ -125,25 +123,22 @@ Pushing, Publishing, and Viewing a Database
 
          .. note::
 
-            You can publish a database to *multiple publish
+            **Note:** You can publish a database to *multiple publish
             points*, useful when you want to apply different search
             tabs, snippet profiles, and virtual host settings for
             different viewing needs.
 
          .. note::
 
-            When publishing a database, the publish point you
+            **Note:** When publishing a database, the publish point you
             specify is case-*insensitive*. Upper and lower case are not
             differentiated. Make sure each publish point path name you
             specify is unique.
 
          To learn more about the options available in the Publish
-         dialog, see
-
-         - :doc:`Default database <../geeServerAdmin/publishDefaultDatabase>`
-         - :doc:`Search Tabs <../geeServerAdmin/createSearchTabs>`
-         - :doc:`Snippet profiles <../geeServerAdmin/manageSnippetProfiles>`
-         - :doc:`WMS <../geeServerAdmin/makeWMSRequests>`
+         dialog, see :doc:`3497832`,
+         :doc:`Snippet profiles <6004748>`, and
+         :doc:`WMS <4441137>`.
 
       #. Click the **Publish**  button. The Databases page updates to indicate the
          published status of your database.
