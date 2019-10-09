@@ -24,7 +24,6 @@ import os
 import re
 import subprocess
 import sys
-import platform
 sys.path += ['scons']
 from khEnvironment import khEnvironment
 import getversion
@@ -172,7 +171,13 @@ exportdirs = {
     'bin': exportdir+'/bin/',
 }
 
-el_ver = platform.release().split('.')[-2]
+
+el_ver = ''
+if os.path.isfile('/etc/redhat-release') and not os.path.isfile('/etc/os-release'):
+  el_ver = 'el6'
+else:
+  el_ver = 'el7'
+
 
 if bundle_3rd_libs:
   python_version = '2.7.5'
@@ -204,6 +209,7 @@ try:
   arr=re.split('[\t\.\n]',vstring)
   major=int(arr[1])
   minor=int(arr[2])
+  el_ver = ''
   if arr[1] < 12:
     print 'Unknown Ubuntu version, minimum required version is 12.04.'
     Exit(1)
