@@ -67,7 +67,7 @@ class WmsGetMapRequest(object):
 
     image_format = utils.GetValue(self.parameters, "format")
     image_spec = image_specs.GetImageSpec(image_format)
-    logger.info("Requsted image_format: %s image_spec: %s will be applied to all layers.", image_format, image_spec)
+    logger.info("WMS Request image_format: %s image_spec: %s will be applied to all layers.", image_format, image_spec)
     # TRANSPARENT parameter from GIS client's.
     # It can take "TRUE"/"FALSE" values.
     # Default value is "FALSE" as per spec.
