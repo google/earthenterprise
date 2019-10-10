@@ -26,6 +26,8 @@
 using namespace std;
 using namespace AssetFactory;
 
+// AssetVersion is a placeholder to allow
+// for calls to MyUpdate
 using AssetVersion = uint8_t;
 
 // forward declare classes
@@ -34,7 +36,6 @@ class MockAssetConfig;
 class MockMutableAsset;
 class MockAssetVersionImpl;
 class MockMutableAssetVersion;
-//
 
 class MockAssetStorage
 {
@@ -106,7 +107,7 @@ public:
 };
 
 
-class MockMutableAssetVersion : public MockAssetStorage
+class MockMutableAssetVersion
 {
 public:
     using Impl = MockAssetVersionImpl;
@@ -158,7 +159,6 @@ public:
   static string EXPECTED_SUBTYPE;
 
   using Base = MockAssetStorage;
-  using Impl = MockAssetImpl;
   MockAssetConfig config;
   bool needed;
 
@@ -179,11 +179,6 @@ public:
   MockAssetImpl(MockAssetStorage storage,
                 const MockAssetConfig &config_)
               : MockAssetStorage(storage), config(config_), needed(false) {}
-
-  /*MockAssetImpl* operator->()
-  {
-      return this;
-  }*/
 
   MockMutableAssetVersion MyUpdate(bool& _needed, const vector<AssetVersion>& v = {})
   {
