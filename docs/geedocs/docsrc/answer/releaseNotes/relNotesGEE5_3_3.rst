@@ -18,10 +18,10 @@ Release notes: Open GEE 5.3.3
       to the client if the server URL is specified without a database name.
 
       **getop can retrieve and display information while gesystemmanager is busy**.
-      Previously, ``getop`` could not display information while ``gesystemmanager``
-      was in the middle of major calculations. Now, this is possible during most
-      calculations, such as when ``gesystemmanager`` is determining which images
-      overlap. 
+      Previously, ``getop`` could not display information while system manager
+      was in the middle of major calculations. Now, this restriction has been
+      removed for most calculations, such as when system manager is determining
+      which resources overlap. 
 
       .. rubric:: Supported Platforms
 
