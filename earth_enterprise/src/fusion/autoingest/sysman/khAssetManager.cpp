@@ -1235,9 +1235,9 @@ std::string khAssetManager::RetrieveTasking(const FusionConnection::RecvPacket& 
 	      .arg(ToQString(GET_TASKS)));
 	  }
   }
-  catch (khTimedMutexException e) {	
-    // Replying with a string beginning "ERROR:" passes an exception message back to the caller	
-    // alternatively we could throw an exception but that could flood fusion logs with warnings	
+  catch (khTimedMutexException e) {
+    // Replying with a string beginning "ERROR:" passes an exception message back to the caller
+    // alternatively we could throw an exception but that could flood fusion logs with warnings
     replyPayload = sysManBusyMsg;
   }
   catch (...) {
