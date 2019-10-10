@@ -245,15 +245,14 @@ namespace AssetFactory
                                                             const std::vector<Version>& cachedinputs_)
   {
       using Impl = typename MutableDerivedVersionHandleType::Impl;
-
+      auto ref_ = AssetDefs::SubAssetName(parentAssetRef, basename,
+                                          Impl::EXPECTED_TYPE, Impl::EXPECTED_SUBTYPE);
       return FindMakeAndUpdate<MutableDerivedVersionHandleType, Version, ConfigType>
-             (AssetDefs::SubAssetName(parentAssetRef, basename,
-                                      Impl::EXPECTED_TYPE, Impl::EXPECTED_SUBTYPE),
+             (ref_,
               inputs_,
               meta_,
               config,
               cachedinputs_);
-
   }
 
 

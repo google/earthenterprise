@@ -180,10 +180,10 @@ public:
                 const MockAssetConfig &config_)
               : MockAssetStorage(storage), config(config_), needed(false) {}
 
-  MockAssetImpl* operator->()
+  /*MockAssetImpl* operator->()
   {
       return this;
-  }
+  }*/
 
   MockMutableAssetVersion MyUpdate(bool& _needed, const vector<AssetVersion>& v = {})
   {
