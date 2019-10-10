@@ -63,7 +63,13 @@ class AssetListenerD {
 
 class khResourceManager;
 
-class khAssetManager
+class khAssetManagerInterface {
+ public:
+  virtual void NotifyVersionStateChange(const SharedString &ref,
+                                        AssetDefs::State state) = 0;
+};
+
+class khAssetManager : public khAssetManagerInterface
 {
   friend class khResourceManager;
   friend class khSystemManager;
@@ -80,8 +86,8 @@ class khAssetManager
 
   // routines others can call to tell me about things that need to be done
   // once the AssetGuard has been released
-  void NotifyVersionStateChange(const SharedString &ref,
-                                AssetDefs::State state);
+  virtual void NotifyVersionStateChange(const SharedString &ref,
+                                        AssetDefs::State state);
   void NotifyVersionProgress(const SharedString &ref,double progress);
   void SubmitTask(const SharedString &verref, const TaskDef &taskdef,
                   int32 priority = 0);

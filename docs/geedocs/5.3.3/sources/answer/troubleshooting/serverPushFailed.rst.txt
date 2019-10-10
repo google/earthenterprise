@@ -1,0 +1,23 @@
+
+Server push failed
+
+-[ Error message ]-
+
+""Stream server push failed" or "Search server push failed""
+
+-[ Description ]-
+
+The network connection to the server is down, or permissions are set
+incorrectly on the target server.
+
+-[ Resolution ]-
+
+Check your network connections and make sure that the targeted server
+is running and accessible.
+
+Check the access permissions in the publishing root directory.
+
+Check the GEE Server logs.
+
+Run the debug script to scan the system and assist in identifying
+problems: /opt/google/share/support/geecheck.pl

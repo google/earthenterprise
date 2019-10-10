@@ -354,6 +354,7 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
       return false;
     }
   }
+  cache.Prune();
   return true;
 }
 

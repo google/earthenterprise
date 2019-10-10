@@ -1,0 +1,154 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Segmenting Large Imagery Files &#8212; Google Earth Enterprise 5.3.3 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Building a Historical Imagery Project" href="buildHistImageryProj.html" />
+    <link rel="prev" title="Creating Imagery Mosaics" href="createImageryMosaic.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="buildHistImageryProj.html" title="Building a Historical Imagery Project"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="createImageryMosaic.html" title="Creating Imagery Mosaics"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionTutorial.html" accesskey="U">Fusion Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="createImageryMosaic.html"
+                        title="previous chapter">Creating Imagery Mosaics</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="buildHistImageryProj.html"
+                        title="next chapter">Building a Historical Imagery Project</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp3.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp3.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="segmenting-large-imagery-files">
+<h1>Segmenting Large Imagery Files<a class="headerlink" href="#segmenting-large-imagery-files" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>Google Earth Enterprise Fusion does not allow you to import raw
+imagery source files larger than 80 GB. (Raw size = number of
+pixels width * number of pixels height * 3.) Therefore, if you
+have an imagery source file that is larger than 80 GB, you can
+split it into two or more source files using the <code class="docutils literal notranslate"><span class="pre">gesplitkhvr</span></code>
+command.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">gesplitkhvr</span></code> tool produces a grid of image files designated
+as rows and columns. For example, if you specify two rows by two
+columns, the image is split into four smaller files. If you create
+a separate resource for each resulting source file, it would look
+like this in the Preview pane:</p>
+<p><img alt="Split Image" src="../../images/splitImage.png" /></p>
+<p>However, you can reconnect the split images by adding them all to
+a single resource, which would look like this in the Preview pane:</p>
+<p><img alt="Split Images Reconnected Into a Single Resource" src="../../images/splitImageSingleRes.png" /></p>
+<p class="rubric">To split a large source file into multiple smaller files:</p>
+<ol class="arabic">
+<li><p class="first">At the command prompt, change to the folder that contains the
+tutorial imagery source files by entering:</p>
+<p><code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">/opt/google/share/tutorials/fusion/Imagery</span></code></p>
+</li>
+<li><p class="first">Convert a <code class="docutils literal notranslate"><span class="pre">.tif</span></code> file to a <code class="docutils literal notranslate"><span class="pre">.khvr</span></code> file by entering:</p>
+<p><code class="docutils literal notranslate"><span class="pre">gevirtualraster</span> <span class="pre">-o</span> <span class="pre">path/virtual_raster.khvr</span> <span class="pre">usgsSFHiRes.tif</span></code></p>
+<p>where <em>path</em> is the path to the folder where you want to save
+the resulting <code class="docutils literal notranslate"><span class="pre">.khvr</span></code> file. (See <a class="reference internal" href="createImageryMosaic.html"><span class="doc">Creating Imagery Mosaics</span></a> for more information
+about the <code class="docutils literal notranslate"><span class="pre">gevirtualraster</span></code> tool.)</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The path where you save the resulting <code class="docutils literal notranslate"><span class="pre">.khvr</span></code> file must be on
+a known volume. (See “<code class="docutils literal notranslate"><span class="pre">geconfigureassetroot</span> <span class="pre">--editvolumes</span></code>”
+in the <a class="reference internal" href="../fusionAdministration/commandReference.html"><span class="doc">Command reference</span></a>.)</p>
+</div>
+</li>
+<li><p class="first">Change to the folder where you stored the virtual_raster.khvr
+(the value of <em>path</em> in step 2) by entering:</p>
+<p><code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">path</span></code></p>
+</li>
+<li><p class="first">Split the <code class="docutils literal notranslate"><span class="pre">.khvr</span></code> file into a 4x4 grid (16 image files) with
+a 10-pixel overlap among all of the files by entering:</p>
+<p><code class="docutils literal notranslate"><span class="pre">gesplitkhvr</span> <span class="pre">--rows</span> <span class="pre">4</span> <span class="pre">--cols</span> <span class="pre">4</span> <span class="pre">--overlap</span> <span class="pre">10</span> <span class="pre">virtual_raster.khvr</span></code></p>
+<p>The names of the resulting files appear on the screen as they
+are created. The file names are constructed from the name of
+the original file (<code class="docutils literal notranslate"><span class="pre">virtual_raster</span></code>), a row and column
+designation for each file (starting with <code class="docutils literal notranslate"><span class="pre">-R1C3</span></code>), and the
+<code class="docutils literal notranslate"><span class="pre">.khvr</span></code> extension.</p>
+</li>
+</ol>
+<p>Now you can import the 16 resulting image files into a resource.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="buildHistImageryProj.html" title="Building a Historical Imagery Project"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="createImageryMosaic.html" title="Creating Imagery Mosaics"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionTutorial.html" >Fusion Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

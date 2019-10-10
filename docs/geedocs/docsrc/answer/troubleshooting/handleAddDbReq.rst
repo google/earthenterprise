@@ -1,0 +1,34 @@
+|Google logo|
+
+==================
+HandleAddDbRequest
+==================
+
+.. container::
+
+   .. container:: content
+
+      .. rubric:: Error message
+
+      ``HandleAddDbRequest: Error adding files to publisher database``
+      
+      .. rubric:: Description
+
+      There is a special character in the name of a resource, project, or
+      database. Special characters are not allowed in asset names.
+      Special characters are:
+
+      @ # $ % ^ & \* ' " > <
+
+      .. rubric:: Resolution
+
+      #. Remove the resource from the project.
+      #. Hide the resource in the asset manager.
+      #. Build a new resource with the source imagery and name it
+         without special characters. Version 3.2 and later will check
+         for special characters when saving the resource.
+      #. Add the new resource to the project and rebuild the database.
+
+.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
+   :width: 130px
+   :height: 44px

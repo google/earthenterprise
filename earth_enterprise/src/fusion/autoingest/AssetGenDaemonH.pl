@@ -128,6 +128,7 @@ public:
     using MutableAssetType = MutableDerivedAssetHandleD_<AssetType, MutableAssetD>;
 
 
+
     virtual std::string GetName() const;
     virtual void SerializeConfig(khxml::DOMElement*) const;
 
