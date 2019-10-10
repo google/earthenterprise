@@ -114,7 +114,6 @@ class AssetVersionImplD : public virtual AssetVersionImpl
     }
   }
 
-  virtual void SetMyStateOnly(AssetDefs::State newstate, bool sendNotifications);
   bool OkToClean(std::vector<std::string> *wouldbreak = nullptr) const;
   bool OkToCleanAsInput(void) const;
   void SetBad(void);
