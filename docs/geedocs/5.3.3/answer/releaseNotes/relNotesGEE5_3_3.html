@@ -75,9 +75,14 @@
 <p>Open GEE 5.3.3 is currently in development</p>
 <p class="rubric">New Features</p>
 <p><strong>Ability to set default database from admin page</strong>. For 3D databases, there
-is an additional checkbox in the publish dialog that allows the user to
+is an additional option in the publish dialog that allows the user to
 specify a database as the “default”. The “default” database will be served
 to the client if the server URL is specified without a database name.</p>
+<p><strong>getop can retrieve and display information while gesystemmanager is busy</strong>.
+Previously, <code class="docutils literal notranslate"><span class="pre">getop</span></code> could not display information while <code class="docutils literal notranslate"><span class="pre">gesystemmanager</span></code>
+was in the middle of major calculations. Now, this is possible during most
+calculations, such as when <code class="docutils literal notranslate"><span class="pre">gesystemmanager</span></code> is determining which images
+overlap.</p>
 <p class="rubric">Supported Platforms</p>
 <p>The Open GEE 5.3.3 release is supported on 64-bit versions of the
 following operating systems:</p>
