@@ -89,7 +89,7 @@ coordinates</a> in
 the <em>Google Earth Help</em>.) The <code class="docutils literal notranslate"><span class="pre">getranslate</span></code> tool, extended from
 the GDAL <code class="docutils literal notranslate"><span class="pre">gdal_translate</span></code> tool, includes support for JPEG2000
 format source imagery.</p>
-<p><img alt="getranslate imagery" src="../../images/2656013_getranslate_4.jpg" /></p>
+<p><img alt="getranslate imagery 1" src="../../images/2656008_getranslate_1.jpg" /></p>
 <p class="rubric">Example of importing a subset of imagery</p>
 <p>The source file shown below is in a UTM projection (UTM Zone 10N,
 NAD83 Datum) and references coordinates in meters. You can use
@@ -100,17 +100,51 @@ coordinate values, the output format (for example, a file type
 like GeoTIFF, MrSID, or JPEG2000), and the projection (using the
 <code class="docutils literal notranslate"><span class="pre">-a_srs</span></code> option) for the new image. The command looks something
 like this:</p>
-<p><code class="docutils literal notranslate"><span class="pre">/opt/google/bin/getranslate</span> <span class="pre">-of</span> <span class="pre">HFA</span> <span class="pre">-projwin</span> <span class="pre">580907.14</span> <span class="pre">4142271.64</span> <span class="pre">581788.04</span> <span class="pre">4141453.58</span> <span class="pre">/path/to/input.sid</span> <span class="pre">/path/to/output.img</span></code>
-<img alt="getranslate imagery" src="../../images/2656013_getranslate_4.jpg" /></p>
+<p><code class="docutils literal notranslate"><span class="pre">/opt/google/bin/getranslate</span> <span class="pre">-of</span> <span class="pre">HFA</span> <span class="pre">-projwin</span> <span class="pre">580907.14</span> <span class="pre">4142271.64</span> <span class="pre">581788.04</span> <span class="pre">4141453.58</span> <span class="pre">/path/to/input.sid</span> <span class="pre">/path/to/output.img</span></code></p>
+<p><img alt="getranslate imagery 2" src="../../images/2656074_getranslate_2.jpg" /></p>
 <p>The resulting output.img file contains imagery for the area you
 specified with <code class="docutils literal notranslate"><span class="pre">-projwin</span></code>:</p>
-<p><img alt="getranslate imagery" src="../../images/2656013_getranslate_4.jpg" /></p>
+<p><img alt="getranslate imagery 3" src="../../images/2656011_getranslate_3.jpg" /></p>
 <p>You can compare the size of the original image with the extracted
 area, as shown below:
-<img alt="getranslate imagery" src="../../images/2656013_getranslate_4.jpg" /></p>
+<img alt="getranslate imagery 4" src="../../images/2656013_getranslate_4.jpg" /></p>
 <p class="rubric" id="getranslate-command-options">getranslate command options</p>
-<p><code class="docutils literal notranslate"><span class="pre">usage:</span> <span class="pre">getranslate</span> <span class="pre">[options]</span> <span class="pre">&lt;input&gt;</span> <span class="pre">&lt;output&gt;</span> <span class="pre">Supported</span> <span class="pre">options</span> <span class="pre">are:</span>&#160; <span class="pre">--help|-?</span>&#160;&#160;&#160;&#160; <span class="pre">:</span> <span class="pre">Show</span> <span class="pre">this</span> <span class="pre">usage</span> <span class="pre">message</span>&#160; <span class="pre">--formats</span>&#160;&#160;&#160;&#160; <span class="pre">:</span> <span class="pre">Show</span> <span class="pre">supported</span> <span class="pre">formats</span> <span class="pre">and</span> <span class="pre">exit</span>&#160; <span class="pre">-ot</span> <span class="pre">&lt;Byte|Int16|UInt16|UInt32|Int32|Float32|Float64</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">|CInt16|CInt32|CFloat32|CFloat64&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">:</span> <span class="pre">Pixel</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">output</span> <span class="pre">(default:</span> <span class="pre">match</span> <span class="pre">input)</span>&#160; <span class="pre">-not_strict</span>&#160; <span class="pre">-of</span> <span class="pre">&lt;format&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">:</span> <span class="pre">File</span> <span class="pre">format</span> <span class="pre">of</span> <span class="pre">output</span> <span class="pre">(default:</span> <span class="pre">GTiff)</span>&#160; <span class="pre">-b</span> <span class="pre">&lt;band&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">:</span> <span class="pre">Specifies</span> <span class="pre">band</span> <span class="pre">to</span> <span class="pre">copy</span> <span class="pre">(1</span> <span class="pre">based</span> <span class="pre">indexing).</span> <span class="pre">Can</span> <span class="pre">be:</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">specified</span> <span class="pre">multiple</span> <span class="pre">times.</span> <span class="pre">(e.g.</span> <span class="pre">&quot;-b</span> <span class="pre">3</span> <span class="pre">-b</span> <span class="pre">2</span> <span class="pre">-b</span> <span class="pre">1&quot;)</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">will</span> <span class="pre">reverse</span> <span class="pre">the</span> <span class="pre">bands.</span>&#160; <span class="pre">-outsize</span> <span class="pre">&lt;xsize[%]&gt;</span> <span class="pre">&lt;ysize[%]&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">:</span> <span class="pre">Size</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">output</span> <span class="pre">image</span> <span class="pre">(pixels</span> <span class="pre">or</span> <span class="pre">%</span> <span class="pre">of</span> <span class="pre">original).</span>&#160; <span class="pre">-scale</span> <span class="pre">[&lt;src_min&gt;</span> <span class="pre">&lt;src_max&gt;</span> <span class="pre">[&lt;dst_min&gt;</span> <span class="pre">&lt;dst_max&gt;]]</span>&#160;&#160;&#160;&#160; <span class="pre">:</span> <span class="pre">Scale</span> <span class="pre">the</span> <span class="pre">input</span> <span class="pre">pixels</span> <span class="pre">values</span>&#160; <span class="pre">-srcwin</span> <span class="pre">&lt;xoff&gt;</span> <span class="pre">&lt;yoff&gt;</span> <span class="pre">&lt;xsize&gt;</span> <span class="pre">&lt;ysize&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">:</span> <span class="pre">Select</span> <span class="pre">sub</span> <span class="pre">window</span> <span class="pre">from</span> <span class="pre">input</span>&#160; <span class="pre">-a_srs</span> <span class="pre">&lt;projection&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">:</span> <span class="pre">Assign</span> <span class="pre">specified</span> <span class="pre">projection</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">output</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;projection&gt;</span> <span class="pre">can</span> <span class="pre">be:</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">NAD27|NAD83|WGS84|WGS72</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">EPSG:&lt;num&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;PROJ.4</span> <span class="pre">definition&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;OpenGIS</span> <span class="pre">Well</span> <span class="pre">Known</span> <span class="pre">Text&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;filename</span> <span class="pre">of</span> <span class="pre">file</span> <span class="pre">with</span> <span class="pre">OpenGIS</span> <span class="pre">Well</span> <span class="pre">Known</span> <span class="pre">Text&gt;</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">ESRI::&lt;ESRI</span> <span class="pre">Well</span> <span class="pre">Known</span> <span class="pre">Text</span> <span class="pre">File(.prj)&gt;</span>&#160; <span class="pre">-projwin</span> <span class="pre">&lt;ulx&gt;</span> <span class="pre">&lt;uly&gt;</span> <span class="pre">&lt;lrx&gt;</span> <span class="pre">&lt;lry&gt;</span>&#160;&#160;&#160;&#160; <span class="pre">:</span> <span class="pre">Select</span> <span class="pre">sub</span> <span class="pre">window</span> <span class="pre">from</span> <span class="pre">input.</span> <span class="pre">Like</span> <span class="pre">-srcwin</span> <span class="pre">but</span> <span class="pre">uses</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">georeferenced</span> <span class="pre">coordinates</span>&#160; <span class="pre">-co</span> <span class="pre">&quot;NAME=VALUE&quot;*</span>&#160;&#160;&#160;&#160; <span class="pre">:</span> <span class="pre">Pass</span> <span class="pre">construction</span> <span class="pre">arguments</span> <span class="pre">to</span> <span class="pre">output</span> <span class="pre">GDAL</span> <span class="pre">dataset</span>&#160; <span class="pre">-mo</span> <span class="pre">&quot;META-TAG=VALUE&quot;*</span>&#160;&#160;&#160;&#160; <span class="pre">:</span> <span class="pre">Meta</span> <span class="pre">information</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">included</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">output</span>&#160; <span class="pre">-quiet</span></code>
-Utilizes GDAL 2.1.2, released October 2016</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>usage: getranslate [options] &lt;input&gt; &lt;output&gt;
+Supported options are:
+      --help|-?     : Show this usage message
+      --formats     : Show supported formats and exit
+      -ot &lt;Byte|Int16|UInt16|UInt32|Int32|Float32|Float64|CInt16|CInt32|CFloat32|CFloat64&gt;
+            : Pixel type of output (default: match input)
+      -not_strict
+      -of &lt;format&gt;
+            : File format of output (default: GTiff)  -b &lt;band&gt;
+            : Specifies band to copy (1 based indexing). Can be:
+            specified multiple times. (e.g. &quot;-b 3 -b 2 -b 1&quot;)
+            will reverse the bands.
+      -outsize &lt;xsize[%]&gt; &lt;ysize[%]&gt;
+            : Size of the output image (pixels or % of original).
+      -scale [&lt;src_min&gt; &lt;src_max&gt; [&lt;dst_min&gt; &lt;dst_max&gt;]]
+            : Scale the input pixels values  -srcwin &lt;xoff&gt; &lt;yoff&gt; &lt;xsize&gt; &lt;ysize&gt;
+            : Select sub window from input
+      -a_srs &lt;projection&gt;
+            : Assign specified projection to the output
+            &lt;projection&gt; can be:
+                  NAD27|NAD83|WGS84|WGS72
+                  EPSG:&lt;num&gt;
+                  &lt;PROJ.4 definition&gt;
+                  &lt;OpenGIS Well Known Text&gt;
+                  &lt;filename of file with OpenGIS Well Known Text&gt;
+                  ESRI::&lt;ESRI Well Known Text File(.prj)&gt;
+      -projwin &lt;ulx&gt; &lt;uly&gt; &lt;lrx&gt; &lt;lry&gt;
+      : Select sub window from input. Like -srcwin but uses
+            georeferenced coordinates  -co &quot;NAME=VALUE&quot;*
+      : Pass construction arguments to output GDAL dataset
+      -mo &quot;META-TAG=VALUE&quot;*
+      : Meta information to be included in the output
+      -quiet
+</pre></div>
+</div>
+<p>Utilizes GDAL 2.1.2, released October 2016</p>
 </div>
 </div>
 </div>

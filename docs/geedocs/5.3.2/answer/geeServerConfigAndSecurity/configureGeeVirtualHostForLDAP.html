@@ -137,16 +137,16 @@ Alternatively, you can use the command prompt:</p>
 </li>
 <li><p class="first">For testing purposes, add the lines below to the
 <code class="docutils literal notranslate"><span class="pre">private_host.location</span></code> file:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>``&lt;Location /private/*&gt;``
-   ``AuthType Basic``
-   ``AuthName &quot;LDAP LOGIN&quot;``
-   ``AuthBasicProvider ldap``
-   ``AuthLDAPURL &quot;ldap://server.name.local:389/cn=Users,dc=domain,dc=google,dc=com?uid&quot;\``
-   ``AuthLDAPBindDN CN=geserver,OU=Users,OU=Yourorg,DC=DcNAME,DC=local``
-   ``AuthLDAPBindPassword localuserpassword``
-   ``AuthzLDAPAuthoritative Off``
-   ``Require valid-user``
-``&lt;/Location&gt;``
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Location /private/*&gt;
+   AuthType Basic
+   AuthName &quot;LDAP LOGIN&quot;
+   AuthBasicProvider ldap
+   AuthLDAPURL &quot;ldap://server.name.local:389/cn=Users,dc=domain,dc=google,dc=com?uid&quot;\
+   AuthLDAPBindDN CN=geserver,OU=Users,OU=Yourorg,DC=DcNAME,DC=local
+   AuthLDAPBindPassword localuserpassword
+   AuthzLDAPAuthoritative Off
+   Require valid-user
+&lt;/Location&gt;
 </pre></div>
 </div>
 </li>

@@ -36,12 +36,72 @@ Monitor builds with Twitter
       #. Copy the code below to your ``getwitter`` file. Change the
          variables to reflect your Fusion server's Twitter account
          credentials and, if needed, your server's asset root.
-         :literal:`#!/bin/bash              twittername="YourServersTwitterAccount"       twitterpass="YourServersTwitterPassword"       assetroot="/gevol/assets/"              find $assetroot.state -iname "*.task" -ls >> /tmp/filelist              taskcount=0       inprogresscount=1       declare -a inprogressarray       declare -a queuedarray                     while read line       do       asset=`echo $line | awk '{print $13}'`       status=`/opt/google/bin/gequery --status $asset`           if [ "$status" = "InProgress" ]; then               inprogressarray[$[${#inprogressarray[@]}+1]]=$asset           fi           if [ "$status" = "Queued" ]; then               queuedarray[$[${#queuedarray[@]}+1]]=$asset           fi          let taskcount=taskcount+1       done </tmp/filelist                     for inprogress in ${inprogressarray[@]}       do        logfile=`/opt/google/bin/gequery --logfile $inprogress`         while read line         do         progress=$line         done <$logfile               curl --basic --user "$twittername:$twitterpass" --data-ascii "status=#GEEFusion Task$inprogresscount: $progress&source=Google+Earth+Enterprise" "http://twitter.com/statuses/update.json"               curl --basic --user "$twittername:$twitterpass" --data-ascii "status=#GEEFusion Task$inprogresscount: $inprogress&source=Google+Earth+Enterprise" "http://twitter.com/statuses/update.json"                 let inprogresscount=inprogresscount+1        done              curl --basic --user "$twittername:$twitterpass" --data-ascii "status=#GEEFusion Working on ${#inprogressarray[@]} task(s), ${#queuedarray[@]} queued &source=Google+Earth+Enterprise" "http://twitter.com/statuses/update.json"              rm /tmp/filelist`
+         
+         .. code-block:: none
+         
+            :literal:`#!/bin/bash
+            
+            twittername="YourServersTwitterAccount"
+            twitterpass="YourServersTwitterPassword"
+            assetroot="/gevol/assets/"
+            
+            find $assetroot.state -iname "*.task" -ls >> /tmp/filelist
+            
+            taskcount=0
+            inprogresscount=1
+            declare -a inprogressarray
+            declare -a queuedarray
+            
+            while read line
+            do
+            asset=`echo $line | awk '{print $13}'`
+            status=`/opt/google/bin/gequery --status $asset`
+               if [ "$status" = "InProgress" ]; then
+                  inprogressarray[$[${#inprogressarray[@]}+1]]=$asset
+               fi
+               if [ "$status" = "Queued" ]; then
+                  queuedarray[$[${#queuedarray[@]}+1]]=$asset
+               fi
+            let taskcount=taskcount+1
+            done </tmp/filelist
+            
+            for inprogress in ${inprogressarray[@]}
+            do
+               logfile=`/opt/google/bin/gequery --logfile $inprogress`
+                  while read line
+                  do
+                  progress=$line
+                  done <$logfile
+                  
+               curl --basic --user "$twittername:$twitterpass" --data-ascii
+               "status=#GEEFusion Task$inprogresscount:
+               $progress&source=Google+Earth+Enterprise"
+               "http://twitter.com/statuses/update.json"
+               
+               curl --basic --user "$twittername:$twitterpass" --data-ascii
+               "status=#GEEFusion Task$inprogresscount:
+               $inprogress&source=Google+Earth+Enterprise"
+               "http://twitter.com/statuses/update.json"
+               
+               let inprogresscount=inprogresscount+1
+               done
+               
+               curl --basic --user "$twittername:$twitterpass" --data-ascii
+               "status=#GEEFusion Working on ${#inprogressarray[@]} task(s),
+               ${#queuedarray[@]} queued &source=Google+Earth+Enterprise"
+               "http://twitter.com/statuses/update.json"
+               
+               rm /tmp/filelist
+
       #. Add this file to your cron tab and set it to go off every half
          hour or every hour.
+
          ``# crontab -e``
+
       #. To run the Twitter update every 30 minutes, add the line:
+
          ``*/30 * * * * /usr/bin/getwitter``
+
       #. Follow your Fusion server on Twitter.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png

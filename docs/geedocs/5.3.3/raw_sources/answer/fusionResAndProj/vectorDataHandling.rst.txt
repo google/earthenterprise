@@ -29,17 +29,43 @@ Vector data handling
 
       .. rubric:: How Fusion handles geometry
 
-      ============================ ============================================================================================================================================================================================================================ ===================================================
-      Example                      Description                                                                                                                                                                                                                  Fusion handling
-      ============================ ============================================================================================================================================================================================================================ ===================================================
-      |Self-intersecting polygons| Self-intersecting polygon cycles. For example, “bow tie” figures.                                                                                                                                                            Fusion might skip or might not process correctly.
-      |Crossing cycles|            Polygon cycles that are not properly nested. For example, an inner cycle that is partly outside the outer cycle, or cycles that cross each other within a single polygon.                                                    Fusion might skip or might not process correctly.
-      |Touching vertices|          Fusion allows polygon cycles with touching vertices. For example, outer cycle or inner cycle vertices that touch each other.                                                                                                 This geometry is valid. Fusion processes correctly.
-      |Identical coordinates|      Polygon cycle linestrings that have consecutive points within an XY tolerance that is equal to or less than 0.0003m.                                                                                                         Fusion removes the duplicate vertices.
-      |Spike|                      Polygon cycles with “spikes.“ A spike is defined as an angle that is equal to or less than 3.15e-3 radians.                                                                                                                  Fusion removes the spike and merges the edges.
-      |Gore|                       Polygon cycles with “gores.” A gore is defined as an angle that is equal to or less than 3.15e-3 radians.                                                                                                                    Fusion removes the gore and merges the edges.
-      |Zero area|                  Polygon cycles with zero area. If the polygon is a triangle with an angle that is less than 3.15e-3 radians, Fusion treats it as a spike and removes it. After the spike is removed, the result is a polygon with zero area. Fusion removes the polygon with zero area.
-      ============================ ============================================================================================================================================================================================================================ ===================================================
+      .. list-table::
+         :widths: 25 45 25
+         :header-rows: 1
+
+         * - Example
+           - Description
+           - Fusion handling
+         * - |Self-intersecting polygons|
+           - Self-intersecting polygon cycles. For example, “bow tie” figures.
+           - Fusion might skip or might not process correctly.
+         * - |Crossing cycles|
+           - Polygon cycles that are not properly nested. For example, an inner
+             cycle that is partly outside the outer cycle, or cycles that cross
+             each other within a single polygon.
+           - Fusion might skip or might not process correctly.
+         * - |Touching vertices|
+           - Fusion allows polygon cycles with touching vertices. For example,
+             outer cycle or inner cycle vertices that touch each other.
+           - This geometry is valid. Fusion processes correctly.
+         * - |Identical coordinates|
+           - Polygon cycle linestrings that have consecutive points within an XY
+             tolerance that is equal to or less than 0.0003m.
+           - Fusion removes the duplicate vertices.
+         * - |Spike|
+           - Polygon cycles with “spikes.“ A spike is defined as an angle that
+             is equal to or less than 3.15e-3 radians.
+           - Fusion removes the spike and merges the edges.
+         * - |Gore|
+           - Polygon cycles with “gores.” A gore is defined as an angle that is
+             equal to or less than 3.15e-3 radians.
+           - Fusion removes the gore and merges the edges.
+         * - |Zero area|
+           - Polygon cycles with zero area. If the polygon is a triangle with an
+             angle that is less than 3.15e-3 radians, Fusion treats it as a spike
+             and removes it. After the spike is removed, the result is a polygon
+             with zero area.
+           - Fusion removes the polygon with zero area.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

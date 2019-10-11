@@ -78,7 +78,7 @@ Create terrain overlays
 
          .. note::
 
-            **Note:** The selection in the **Type** drop-down list near the
+            The selection in the **Type** drop-down list near the
             bottom of this dialog determines the type of resources that
             appear on the list. Terrain Resource is automatically
             selected when you open this dialog from the Terrain Project
@@ -132,12 +132,12 @@ Create terrain overlays
 
          .. note::
 
-            **Note:** It is the overlay resources and not the fill
+            It is the overlay resources and not the fill
             resources that determine the extent of the overlay.
 
          .. note::
 
-            **Note:** If every resource is at or above the **Resources
+            If every resource is at or above the **Resources
             Min Level**, then 0 (sea level) is used for the fill
             terrain. Equally, if you set the **Start Level** to a
             resolution beyond the extent of the base terrain resource
@@ -214,7 +214,7 @@ Create terrain overlays
 
          .. note::
 
-            **Note:** If you do not know your username and password,
+            If you do not know your username and password,
             contact your Google Earth Enterprise Server System
             Administrator.
 
@@ -257,9 +257,9 @@ Create terrain overlays
          and ``mydomainname`` are specific to your server.
       #. Click the **Sign In** button.
 
-         .. container:: alert
+         .. warning::
 
-            **Caution:** If you have logged in to this server with
+            If you have logged in to this server with
             Google Earth EC previously, log out, clear your cache, and
             log back in. See :doc:`../googleEarthEnterpriseClient/clearGoogleEarthEC`.
 
@@ -281,7 +281,7 @@ Create terrain overlays
 
       .. rubric:: Learn more
 
-      -  `Defining and Building Projects :doc:`../fusionTutorial/buildProject`
+      -  :doc:`Defining and Building Projects <../fusionTutorial/buildProject>`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

@@ -36,7 +36,7 @@ Importing and Exporting Style Templates
 
       .. note::
 
-         **Note:** If you have not completed :doc:`../fusionTutorial/displayRulesPolygon`, you must complete
+         If you have not completed :doc:`../fusionTutorial/displayRulesPolygon`, you must complete
          at least the first three exercises in that lesson (:ref:`Define and Build a Vector Resource Using Polygon
          Data <Define_Vector_Polygon>`, :ref:`Define, Configure, and Build a Vector Project <Define_Vector_Project1>`, and
          :ref:`Define and Build an Imagery Project <Define_Imagery_Project1>`) before continuing
@@ -121,7 +121,7 @@ Importing and Exporting Style Templates
 
       #. Click **Off** next to **Initial State** to change it to **On**.
 
-         Changing the initial state to on results in the US Population
+         Changing the initial state to On results in the US Population
          layer being automatically checked (turned on) in Google Earth
          EC.
 
@@ -133,8 +133,10 @@ Importing and Exporting Style Templates
       #. Set **Max Resolution Level** to **14** (or to 12 if you want to
          save some time).
 
-         **Tip:** Leaving the level set at the default, **18**, results
-         in unduly long processing time.
+         .. tip::
+
+            Leaving the level set at the default, **18**, results
+            in unduly long processing time.
 
       #. Click **OK**.
 
@@ -258,9 +260,9 @@ Importing and Exporting Style Templates
          *myserver.mydomainname*.com/USPopulation-v001.
       #. Click the **Sign In** button.
 
-      .. container:: alert
+      .. warning::
 
-         **Caution:** If you have logged in to this server with Google
+         If you have logged in to this server with Google
          Earth EC previously, log out, clear your cache, and log back
          in. See :doc:`../googleEarthEnterpriseClient/clearGoogleEarthEC`.
 
@@ -278,7 +280,7 @@ Importing and Exporting Style Templates
 
          .. note::
 
-            **Note:** If you cannot see the vector data, make sure the
+            If you cannot see the vector data, make sure the
             check box next to **US Population** in the Layers panel is
             checked.
 

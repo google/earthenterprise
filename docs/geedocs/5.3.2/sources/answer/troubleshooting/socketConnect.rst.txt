@@ -20,6 +20,5 @@ command line when the system daemons are not running.
 
 From the command line, enter:
 
-"sudo /etc/init.d/geserver stop"
-
-"sudo /etc/init.d/geserver start"
+   sudo /etc/init.d/geserver stop
+   sudo /etc/init.d/geserver start

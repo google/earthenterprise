@@ -7,6 +7,8 @@ Welcome to Google Earth Enterprise
 
    .. container:: content
 
+      .. index:: Welcome to Google Earth Enterprise
+
       Be sure to read :doc:`../installGEE/sysReqFusionGEEServer` before you begin.
 
       -  If you need to install or access the documentation offline, see
@@ -15,7 +17,7 @@ Welcome to Google Earth Enterprise
       -  Read :doc:`../portable/portableUserGuideWinLinux` for instructions on installing
          and using the Portable Server.
 
-      After installing GEE, you should complete the :doc:`../fusionTutorial/about`, which helps you learn Fusion
+      After installing GEE, you should complete the :doc:`Fusion tutorial <../fusionTutorial/about>`, which helps you learn Fusion
       quickly and allows you to create a sample project that you can use
       whenever you need to test the push/publishing process.
 

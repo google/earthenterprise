@@ -54,32 +54,32 @@ new PostgreSQL version used by Open GEE 5.2.2.
 
 -[ Resolved Issues ]-
 
-Resolved Issues        Number  Description  Resolution  810  When GEE
-Server listens to specific IP address the returned default local
-virtual host is an IP address instead of the hostname  Resolved host
-name from ServerName in gehttpd.conf or FQDN.  252  Google Earth
-Server fails to load Admin console when there is an invalid link to a
-published portable file  Added check to ensure files actually exist
-before continuing on to database object creation.  660  Building
-OpenGee on Ubuntu 16.04 throws an error 'ImportError: No module named
-git:'  gitpython introduced dependency was documented in build
-instructions.  670  Diagnostics fails in current release_5.2.1  Fixed
-and temporary removed diagnostic link was restored.
+      Number  Description  Resolution  810  When GEE Server listens to
+specific IP address the returned default local virtual host is an IP
+address instead of the hostname  Resolved host name from ServerName in
+gehttpd.conf or FQDN.  252  Google Earth Server fails to load Admin
+console when there is an invalid link to a published portable file
+Added check to ensure files actually exist before continuing on to
+database object creation.  660  Building OpenGee on Ubuntu 16.04
+throws an error 'ImportError: No module named git:'  gitpython
+introduced dependency was documented in build instructions.  670
+Diagnostics fails in current release_5.2.1  Fixed and temporary
+removed diagnostic link was restored.
 
 -[ Known Issues ]-
 
-Known Issues        Number  Description  Workaround  4  Google basemap
-fails to load in 2D Mercator Maps  Obtain a valid Google Maps API key
-and include it in /opt/google/gehttpd/htdocs/maps/maps_google.html.  8
-Ensure GEE Portable Cutter Job Completes  No current work around.  9
-Improve FileUnpacker Handling of Invalid Files  No current work
-around.  20  Simplify build process for portable builds on MacOS
-Building and running Portable Server on MacOS should be possible with
-minimal changes.  34  Scons build creates temporary directories named
-“0”  No current work around.  126  The Fusion installer creates a
-backup on the first run  No current work around. The created backup
-can be deleted.  127  Incorrect error messages from Fusion installer
-No current work around.  190  Hostname mismatch check in installers
+      Number  Description  Workaround  4  Google basemap fails to load
+in 2D Mercator Maps  Obtain a valid Google Maps API key and include it
+in /opt/google/gehttpd/htdocs/maps/maps_google.html.  8  Ensure GEE
+Portable Cutter Job Completes  No current work around.  9  Improve
+FileUnpacker Handling of Invalid Files  No current work around.  20
+Simplify build process for portable builds on MacOS  Building and
+running Portable Server on MacOS should be possible with minimal
+changes.  34  Scons build creates temporary directories named “0”  No
+current work around.  126  The Fusion installer creates a backup on
+the first run  No current work around. The created backup can be
+deleted.  127  Incorrect error messages from Fusion installer  No
+current work around.  190  Hostname mismatch check in installers
 doesn't work as expected  No current work around.  193  Updated docs
 are not copied if the /tmp/fusion_os_install directory already exists
 Delete /tmp/fusion_os_install at the beginning of the stage_install

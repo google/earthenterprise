@@ -37,13 +37,17 @@ Troubleshoot search services
       #. In the log file, ``/opt/google/gehttpd/conf/ge_logging.conf``,
          change:
 
-         ``[logger_ge_search]``
-         ``level=INFO``
+         .. code-block:: none
+
+            [logger_ge_search]
+            level=INFO
 
          to:
 
-         ``[logger_ge_search]``
-         ``level=DEBUG``
+         .. code-block:: none
+         
+            [logger_ge_search]
+            level=DEBUG
 
       #. Restart GEE Server:
 
@@ -53,14 +57,16 @@ Troubleshoot search services
       #. Check ``/opt/google/gehttpd/logs/gesearch.out`` for the
          following type of entries:
 
-         ``[2014-07-09 16:13:38,162]  DEBUG    [MainThread] (poi_search_handler.py:141) - Params: ['%San Francisco%', '%San Francisco%', '%San Francisco%']``
-         ``[2014-07-09 16:13:38,479]  DEBUG    [MainThread] (poi_search_handler.py:515) - Parsed search tokens: San Francisco``
-         ``[2014-07-09 16:13:38,479]  DEBUG    [MainThread] (poi_search_handler.py:139) - Querying the database gepoi, at port 5432, as user geuser on hostname 127.0.0.1.``
-         ``[2014-07-09 16:13:38,479]  DEBUG    [MainThread] (poi_search_handler.py:140) - Query: SELECT ST_AsGeoJSON(the_geom) AS the_geom, "posn" FROM gepoi_9 WHERE ( lower("posn") LIKE %s )``
-         ``[2014-07-09 16:13:38,479]  DEBUG    [MainThread] (poi_search_handler.py:141) - Params: ['%San Francisco%']``
-         ``[2014-07-09 16:13:38,500]  DEBUG    [MainThread] (poi_search_handler.py:471) - poi search returned 2516 results``
-         ``[2014-07-09 16:13:38,501]  DEBUG    [MainThread] (poi_search_handler.py:472) - results: [[{'field_value': '{"type":"Point","coordinates":[-70.250012045966002,19.29999635719]}', 'field_name': 'geom', 'is_search_display': True, 'is_searchable': True, 'is_displayable': True}, {'field_value': 'San Francisco de Macoris', 'field_name': 'name', 'is_search_display': True, 'is_searchable': True, 'is_displayable': True}],``
-         ``...``
+         .. code-block:: none
+         
+            [2014-07-09 16:13:38,162]  DEBUG    [MainThread] (poi_search_handler.py:141) - Params: ['%San Francisco%', '%San Francisco%', '%San Francisco%']
+            [2014-07-09 16:13:38,479]  DEBUG    [MainThread] (poi_search_handler.py:515) - Parsed search tokens: San Francisco
+            [2014-07-09 16:13:38,479]  DEBUG    [MainThread] (poi_search_handler.py:139) - Querying the database gepoi, at port 5432, as user geuser on hostname 127.0.0.1.
+            014-07-09 16:13:38,479]  DEBUG    [MainThread] (poi_search_handler.py:140) - Query: SELECT ST_AsGeoJSON(the_geom) AS the_geom, "posn" FROM gepoi_9 WHERE ( lower("posn") LIKE %s )
+            [2014-07-09 16:13:38,479]  DEBUG    [MainThread] (poi_search_handler.py:141) - Params: ['%San Francisco%']
+            [2014-07-09 16:13:38,500]  DEBUG    [MainThread] (poi_search_handler.py:471) - poi search returned 2516 results
+            [2014-07-09 16:13:38,501]  DEBUG    [MainThread] (poi_search_handler.py:472) - results: [[{'field_value': '{"type":"Point","coordinates":[-70.250012045966002,19.29999635719]}', 'field_name': 'geom', 'is_search_display': True, 'is_searchable': True, 'is_displayable': True}, {'field_value': 'San Francisco de Macoris', 'field_name': 'name', 'is_search_display': True, 'is_searchable': True, 'is_displayable': True}],
+            ...
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

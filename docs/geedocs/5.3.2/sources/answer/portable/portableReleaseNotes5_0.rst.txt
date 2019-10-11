@@ -124,15 +124,14 @@ reference.
 
 -[ Known Issues ]-
 
-Known Issues        Number  Description  Work Around    The new
-Preview options for 2D maps in GEE Server and Portable do not support
-the display of Plate Carrée 2D maps.  With Portable, you can still
-view existing .glm Plate Carrée 2D map files via the old preview
-interface, which you can access by pointing GEE Portable at
-http://localhost:9335/list.
+      Number  Description  Work Around    The new Preview options for
+2D maps in GEE Server and Portable do not support the display of Plate
+Carrée 2D maps.  With Portable, you can still view existing .glm Plate
+Carrée 2D map files via the old preview interface, which you can
+access by pointing GEE Portable at http://localhost:9335/list.
 
 -[ Resolved Issues ]-
 
-Resolved Issues        Number  Description  Resolution  8627202
-Portable for Windows 4.4.1 fails to read map or globe files greater
-than 2 GB in size.  Fixed
+      Number  Description  Resolution  8627202  Portable for Windows
+4.4.1 fails to read map or globe files greater than 2 GB in size.
+Fixed

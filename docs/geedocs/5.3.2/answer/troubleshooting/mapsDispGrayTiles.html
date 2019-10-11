@@ -79,12 +79,12 @@ instead of <code class="docutils literal notranslate"><span class="pre">myserver
 <p>To verify the hostname:</p>
 <p>Query the Fusion 2D map configuration directly from the web
 browser:</p>
-<p><code class="docutils literal notranslate"><span class="pre">http://myserver.com/mymaps/query?request=LayerDefs</span></code>
-A response that includes a line like the example below indicates
+<p><code class="docutils literal notranslate"><span class="pre">http://myserver.com/mymaps/query?request=LayerDefs</span></code></p>
+<p>A response that includes a line like the example below indicates
 that GEE is directing users to your local host instead of the
 publishing server.</p>
-<p><code class="docutils literal notranslate"><span class="pre">var</span> <span class="pre">stream_url</span> <span class="pre">=</span> <span class="pre">&quot;http://localhost.localdomain/default_map&quot;;</span></code>
-To correct the hostname:</p>
+<p><code class="docutils literal notranslate"><span class="pre">var</span> <span class="pre">stream_url</span> <span class="pre">=</span> <span class="pre">&quot;http://localhost.localdomain/default_map&quot;;</span></code></p>
+<p>To correct the hostname:</p>
 <ol class="arabic simple">
 <li>Query <code class="docutils literal notranslate"><span class="pre">hostname</span> <span class="pre">-f</span></code> on the server, and verify that the path
 to the hostname can be resolved. (In other words, verify that
