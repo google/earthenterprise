@@ -92,7 +92,7 @@ sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.
 ### CentOS 6
 
 ```bash
-sudo yum install -y epel-release centos-release-scl
+sudo yum install -y epel-release ius-release
 ```
 
 ### RHEL 6
@@ -102,7 +102,7 @@ the latest updates.
 
 ```bash
 sudo subscription-manager repos --enable=rhel-6-server-optional-rpms
-sudo yum-config-manager --enable rhel-server-rhscl-6-rpms
+sudo yum-config-manager --enable ius
 sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
 ```
 

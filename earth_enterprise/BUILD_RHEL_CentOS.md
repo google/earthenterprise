@@ -21,7 +21,7 @@ sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.
 
 ```bash
 sudo wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
-sudo yum install -y epel-release centos-release-scl
+sudo yum install -y epel-release ius-release
 ```
 
 ### RHEL 6
@@ -213,6 +213,4 @@ Python 2.7 is installed as a system default.
 
 ```bash
 sudo yum install -y python27
-sudo bash -c 'echo "/opt/rh/python27/root/usr/lib64" >> /etc/ld.so.conf.d/opengee.conf'
-sudo ldconfig
 ```
