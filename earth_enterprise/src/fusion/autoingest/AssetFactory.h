@@ -256,6 +256,34 @@ namespace AssetFactory
   }
 
 
+  template <class MutableDerivedVersionHandleType, class Version, class ConfigType>
+  MutableDerivedVersionHandleType ReuseOrMakeAndUpdate(const std::string& ref_,
+                                                       AssetDefs::Type type_,
+                                                       const khMetaData& meta_,
+                                                       const ConfigType& config);
+
+  template <class MutableDerivedVersionHandleType, class Version, class ConfigType>
+  MutableDerivedVersionHandleType ReuseOrMakeAndUpdate(const std::string& ref_,
+                                                       AssetDefs::Type type_,
+                                                       const std::vector<SharedString>& inputs_,
+                                                       const khMetaData& meta_,
+                                                       const ConfigType& config,
+                                                       const std::vector<Version>& cachedinputs_);
+
+  template <class MutableDerivedVersionHandleType, class Version, class ConfigType>
+  MutableDerivedVersionHandleType ReuseOrMakeAndUpdate(const std::string& ref_,
+                                                       const std::vector<SharedString>& inputs,
+                                                       const khMetaData& meta_,
+                                                       const ConfigType& config,
+                                                       const std::vector<Version>& cachedinputs_);
+
+  template <class MutableDerivedVersionHandleType, class Version, class ConfigType, class Extras>
+  MutableDerivedVersionHandleType ReuseOrMakeAndUpdate(const std::string& ref_,
+                                                       AssetDefs::Type type_,
+                                                       const khMetaData& meta_,
+                                                       const ConfigType& config,
+                                                       const Extras& extraArgs);
+
   template <class MutableDerivedAssetHandleType, class ConfigType>
   MutableDerivedAssetHandleType FindAndModify(const std::string& ref_,
                                               const std::vector<SharedString>& inputs_,
