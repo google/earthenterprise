@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#include <algorithm>
+
 #include "StateUpdater.h"
 #include "AssetVersion.h"
 #include "common/notify.h"
@@ -270,10 +272,6 @@ void StateUpdater::SetState(
       // different from the passed-in state
       tree[vertex].state = version->state;
       tree[vertex].stateChanged = true;
-
-      if (finalStateChange) {
-        SendStateChangeNotification(name, version->state);
-      }
     }
     else {
       // This shoud never happen - we had to successfully load the asset
@@ -326,6 +324,10 @@ void StateUpdater::SetVersionStateAndRunHandlers(
       newState = nextState;
     }
   } while(version->state != newState);
+
+  if (finalStateChange) {
+    SendStateChangeNotification(name, version->state);
+  }
 }
 
 void StateUpdater::SendStateChangeNotification(
@@ -347,7 +349,7 @@ void StateUpdater::HandleStateChange(const SharedString & ref, AssetDefs::State 
 
   if (newState == AssetDefs::InProgress) {
     inProgressParents.insert(ref);
-    NotifyInProgress(ref);
+    SendInProgressNotifications(ref);
   }
   else if (oldState == AssetDefs::InProgress) {
     inProgressParents.erase(ref);
@@ -357,16 +359,17 @@ void StateUpdater::HandleStateChange(const SharedString & ref, AssetDefs::State 
 void StateUpdater::SetInProgress(const SharedString & ref) {
   auto version = storageManager->GetMutable(ref);
   SetVersionStateAndRunHandlers(ref, version, version->state, AssetDefs::InProgress, true);
-  SendStateChangeNotification(ref, version->state);
 }
 
-void StateUpdater::NotifyInProgress(const SharedString & ref) {
+void StateUpdater::SendInProgressNotifications(const SharedString & ref) {
   auto version = storageManager->GetMutable(ref);
-  for (const auto & parentRef : version->parents) {
-    HandleProgress(inProgressParents, parentRef);
-  }
-  for (const auto & listenerRef : version->listeners) {
-    HandleProgress(waitingListeners, listenerRef);
+  SendInProgressNotifications(version->parents, inProgressParents);
+  SendInProgressNotifications(version->listeners, waitingListeners);
+}
+
+void StateUpdater::SendInProgressNotifications(const std::vector<SharedString> & toNotify, const WaitingAssets & waitingAssets) {
+  for (const auto & ref : toNotify) {
+    HandleProgress(waitingAssets, ref);
   }
 }
 

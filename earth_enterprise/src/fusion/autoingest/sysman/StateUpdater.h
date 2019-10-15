@@ -57,7 +57,8 @@ class StateUpdater
         AssetDefs::State state);
     bool IsWaiting(const WaitingAssets & waitingAssets, const SharedString & ref);
     void HandleProgress(const WaitingAssets & waitingAssets, const SharedString & ref);
-    void NotifyInProgress(const SharedString & ref);
+    void SendInProgressNotifications(const SharedString & ref);
+    void SendInProgressNotifications(const std::vector<SharedString> & toNotify, const WaitingAssets & waitingAssets);
     void RecalcState(const SharedString & ref);
   public:
     StateUpdater(StorageManagerInterface<AssetVersionImpl> * sm, khAssetManagerInterface * am) :
