@@ -248,7 +248,9 @@ void StateUpdater::SetStateForRefAndDependents(
   catch (UnsupportedException) {
     // This is intended as a temporary condition that will no longer be needed
     // when all operations have been converted to use the state updater for
-    // propagating state changes.
+    // propagating state changes. When this happens, the legacy code will have
+    // already propagated the state change, so no further action is necessary
+    // here.
     notify(NFY_INFO, "Unsupported condition encountered in state updater. "
            "Reverting to legacy state propagation.");
   }
@@ -366,8 +368,20 @@ void StateUpdater::UpdateWaitingAssets(
 }
 
 void StateUpdater::SetInProgress(AssetHandle<AssetVersionImpl> & version) {
-  SetVersionStateAndRunHandlers(version, AssetDefs::InProgress);
-  PropagateInProgress(version);
+  try {
+    SetVersionStateAndRunHandlers(version, AssetDefs::InProgress);
+    PropagateInProgress(version);
+  }
+  catch (UnsupportedException) {
+    // This is intended as a temporary condition that will no longer be needed
+    // when all operations have been converted to use the state updater for
+    // propagating state changes. When this happens, the legacy code will have
+    // already propagated the state change, so no further action is necessary
+    // here.
+    notify(NFY_INFO, "Unsupported condition encountered while setting %s to"
+           "InProgress in state updater. Reverting to legacy state propagation.",
+           version->GetRef().toString().c_str());
+  }
 }
 
 void StateUpdater::PropagateInProgress(const AssetHandle<AssetVersionImpl> & version) {
