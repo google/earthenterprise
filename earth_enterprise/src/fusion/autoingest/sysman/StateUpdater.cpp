@@ -339,7 +339,9 @@ void StateUpdater::SendStateChangeNotification(
   assetManager->NotifyVersionStateChange(name, state);
 }
 
-void StateUpdater::HandleStateChange(AssetHandle<AssetVersionImpl> & version, AssetDefs::State oldState) {
+void StateUpdater::HandleStateChange(
+    AssetHandle<AssetVersionImpl> & version,
+    AssetDefs::State oldState) {
   SharedString ref = version->GetRef();
   AssetDefs::State newState = version->state;
   UpdateWaitingAssets(waitingListeners, AssetDefs::Waiting, ref, newState, oldState);
@@ -351,7 +353,12 @@ void StateUpdater::HandleStateChange(AssetHandle<AssetVersionImpl> & version, As
   }
 }
 
-void StateUpdater::UpdateWaitingAssets(WaitingAssets & waitingAssets, const AssetDefs::State waitingState, const SharedString & ref, AssetDefs::State newState, AssetDefs::State oldState) {
+void StateUpdater::UpdateWaitingAssets(
+    WaitingAssets & waitingAssets,
+    const AssetDefs::State waitingState,
+    const SharedString & ref,
+    AssetDefs::State newState,
+    AssetDefs::State oldState) {
   if (newState == waitingState) {
     waitingAssets.insert(ref);
   }
@@ -369,7 +376,9 @@ void StateUpdater::SendInProgressNotifications(AssetHandle<AssetVersionImpl> & v
   SendInProgressNotifications(version->listeners, waitingListeners);
 }
 
-void StateUpdater::SendInProgressNotifications(const std::vector<SharedString> & toNotify, const WaitingAssets & waitingAssets) {
+void StateUpdater::SendInProgressNotifications(
+    const std::vector<SharedString> & toNotify,
+    const WaitingAssets & waitingAssets) {
   for (const auto & ref : toNotify) {
     HandleProgress(waitingAssets, ref);
   }
@@ -379,7 +388,9 @@ bool StateUpdater::IsWaiting(const WaitingAssets & waitingAssets, const SharedSt
   return waitingAssets.find(ref) != waitingAssets.end();
 }
 
-void StateUpdater::HandleProgress(const WaitingAssets & waitingAssets, const SharedString & ref) {
+void StateUpdater::HandleProgress(
+    const WaitingAssets & waitingAssets,
+    const SharedString & ref) {
   if (!IsWaiting(waitingAssets, ref)) {
     RecalcState(ref);
   }

@@ -53,21 +53,32 @@ class StateUpdater
     void SendStateChangeNotification(
         const SharedString & name,
         AssetDefs::State state);
-    void UpdateWaitingAssets(WaitingAssets & waitingAssets, const AssetDefs::State waitingState, const SharedString & ref, AssetDefs::State newState, AssetDefs::State oldState);
+    void UpdateWaitingAssets(
+        WaitingAssets & waitingAssets,
+        const AssetDefs::State waitingState,
+        const SharedString & ref,
+        AssetDefs::State newState,
+        AssetDefs::State oldState);
     bool IsWaiting(const WaitingAssets & waitingAssets, const SharedString & ref);
     void HandleProgress(const WaitingAssets & waitingAssets, const SharedString & ref);
     void SendInProgressNotifications(AssetHandle<AssetVersionImpl> & version);
-    void SendInProgressNotifications(const std::vector<SharedString> & toNotify, const WaitingAssets & waitingAssets);
+    void SendInProgressNotifications(
+        const std::vector<SharedString> & toNotify,
+        const WaitingAssets & waitingAssets);
     void RecalcState(const SharedString & ref);
   public:
-    StateUpdater(StorageManagerInterface<AssetVersionImpl> * sm, khAssetManagerInterface * am) :
-        storageManager(sm), assetManager(am) {}
+    StateUpdater(
+        StorageManagerInterface<AssetVersionImpl> * sm,
+        khAssetManagerInterface * am) :
+      storageManager(sm), assetManager(am) {}
     StateUpdater() : StateUpdater(&AssetVersion::storageManager(), &theAssetManager) {}
     void SetStateForRefAndDependents(
         const SharedString & ref,
         AssetDefs::State newState,
         std::function<bool(AssetDefs::State)> updateStatePredicate);
-    void HandleStateChange(AssetHandle<AssetVersionImpl> & version, AssetDefs::State oldState);
+    void HandleStateChange(
+        AssetHandle<AssetVersionImpl> & version,
+        AssetDefs::State oldState);
     void SetInProgress(AssetHandle<AssetVersionImpl> & version);
 };
 
