@@ -17,13 +17,13 @@
 #ifndef STATEUPDATER_H
 #define STATEUPDATER_H
 
-#include <set>
-#include <vector>
-
 #include "AssetVersion.h"
 #include "DependentStateTree.h"
 #include "khAssetManager.h"
 #include "StorageManager.h"
+#include "WaitingAssets.h"
+
+#include <vector>
 
 // This class efficiently updates the states of lots of asset versions at the
 // same time. Internally, this class represents the asset versions as a
@@ -31,8 +31,6 @@
 class StateUpdater
 {
   private:
-    using WaitingAssets = std::set<SharedString>;
-
     class UnsupportedException {};
     class SetStateVisitor;
 
@@ -53,24 +51,17 @@ class StateUpdater
     void SendStateChangeNotification(
         const SharedString & name,
         AssetDefs::State state);
-    void UpdateWaitingAssets(
-        WaitingAssets & waitingAssets,
-        const AssetDefs::State waitingState,
-        const SharedString & ref,
-        AssetDefs::State newState,
-        AssetDefs::State oldState);
-    bool IsWaiting(const WaitingAssets & waitingAssets, const SharedString & ref);
-    void HandleProgress(const WaitingAssets & waitingAssets, const SharedString & ref);
     void SendInProgressNotifications(AssetHandle<AssetVersionImpl> & version);
     void SendInProgressNotifications(
-        const std::vector<SharedString> & toNotify,
-        const WaitingAssets & waitingAssets);
+        const WaitingAssets & waitingAssets,
+        const std::vector<SharedString> & toNotify);
     void RecalcState(const SharedString & ref);
   public:
     StateUpdater(
         StorageManagerInterface<AssetVersionImpl> * sm,
         khAssetManagerInterface * am) :
-      storageManager(sm), assetManager(am) {}
+      storageManager(sm), assetManager(am),
+      waitingListeners(AssetDefs::Waiting), inProgressParents(AssetDefs::InProgress) {}
     StateUpdater() : StateUpdater(&AssetVersion::storageManager(), &theAssetManager) {}
     void SetStateForRefAndDependents(
         const SharedString & ref,

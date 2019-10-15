@@ -16,7 +16,20 @@
 
 #include "WaitingAssets.h"
 
-WaitingAssets::WaitingAssets()
-{
-  
+using namespace std;
+
+void WaitingAssets::Update(
+    const SharedString & ref,
+    AssetDefs::State newState,
+    AssetDefs::State oldState) {
+  if (newState == waitingState) {
+    waiting.insert(ref);
+  }
+  else if (oldState == waitingState) {
+    waiting.erase(ref);
+  }
+}
+
+bool WaitingAssets::IsWaiting(const SharedString & ref) const {
+  return waiting.find(ref) != waiting.end();
 }

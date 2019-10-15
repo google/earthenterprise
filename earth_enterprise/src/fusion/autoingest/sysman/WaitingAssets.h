@@ -17,10 +17,26 @@
 #ifndef WAITINGASSETS_H
 #define WAITINGASSETS_H
 
+#include "autoingest/.idl/storage/AssetDefs.h"
+#include "common/SharedString.h"
+
+#include <functional>
+#include <set>
+#include <vector>
+
 class WaitingAssets
 {
+  private:
+    const AssetDefs::State waitingState;
+    std::set<SharedString> waiting;
   public:
-    WaitingAssets();
+    WaitingAssets() : WaitingAssets(AssetDefs::Waiting) {}
+    WaitingAssets(AssetDefs::State waitingState) : waitingState(waitingState) {}
+    void Update(
+        const SharedString & ref,
+        AssetDefs::State newState,
+        AssetDefs::State oldState);
+    bool IsWaiting(const SharedString & ref) const;
 };
 
 #endif // WAITINGASSETS_H

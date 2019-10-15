@@ -344,26 +344,12 @@ void StateUpdater::HandleStateChange(
     AssetDefs::State oldState) {
   SharedString ref = version->GetRef();
   AssetDefs::State newState = version->state;
-  UpdateWaitingAssets(waitingListeners, AssetDefs::Waiting, ref, newState, oldState);
+  waitingListeners.Update(ref, newState, oldState);
   if (!version->children.empty()) {
-    UpdateWaitingAssets(inProgressParents, AssetDefs::InProgress, ref, newState, oldState);
+    inProgressParents.Update(ref, newState, oldState);
   }
   if (newState == AssetDefs::InProgress) {
     SendInProgressNotifications(version);
-  }
-}
-
-void StateUpdater::UpdateWaitingAssets(
-    WaitingAssets & waitingAssets,
-    const AssetDefs::State waitingState,
-    const SharedString & ref,
-    AssetDefs::State newState,
-    AssetDefs::State oldState) {
-  if (newState == waitingState) {
-    waitingAssets.insert(ref);
-  }
-  else if (oldState == waitingState) {
-    waitingAssets.erase(ref);
   }
 }
 
@@ -372,27 +358,17 @@ void StateUpdater::SetInProgress(AssetHandle<AssetVersionImpl> & version) {
 }
 
 void StateUpdater::SendInProgressNotifications(AssetHandle<AssetVersionImpl> & version) {
-  SendInProgressNotifications(version->parents, inProgressParents);
-  SendInProgressNotifications(version->listeners, waitingListeners);
+  SendInProgressNotifications(inProgressParents, version->parents);
+  SendInProgressNotifications(waitingListeners, version->listeners);
 }
 
 void StateUpdater::SendInProgressNotifications(
-    const std::vector<SharedString> & toNotify,
-    const WaitingAssets & waitingAssets) {
-  for (const auto & ref : toNotify) {
-    HandleProgress(waitingAssets, ref);
-  }
-}
-
-bool StateUpdater::IsWaiting(const WaitingAssets & waitingAssets, const SharedString & ref) {
-  return waitingAssets.find(ref) != waitingAssets.end();
-}
-
-void StateUpdater::HandleProgress(
     const WaitingAssets & waitingAssets,
-    const SharedString & ref) {
-  if (!IsWaiting(waitingAssets, ref)) {
-    RecalcState(ref);
+    const std::vector<SharedString> & toNotify) {
+  for (const SharedString & ref : toNotify) {
+    if (!waitingAssets.IsWaiting(ref)) {
+      RecalcState(ref);
+    }
   }
 }
 
