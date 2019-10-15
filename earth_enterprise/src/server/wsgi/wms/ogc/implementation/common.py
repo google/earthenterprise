@@ -122,13 +122,9 @@ class WmsGetMapRequest(object):
         if composite_image is None:
           composite_image = im_user
         else:
-          # composite_image = Image.blend( im_user, composite_image, 0.5)
-          #composite_image = composite_image.paste(im_user, (0, 0), im_user)
           logger.debug( "Adding layer %s to composite image...", layer_name)
           composite_image.paste(im_user, (0, 0), im_user)
         buf = StringIO.StringIO()
-        # TODO - this broke!! 
-        
         output_format = image_spec.pil_format
         composite_image.save(buf, image_spec.pil_format, **im_user.info)
     headers = [("Content-Type", image_spec.content_type)]
