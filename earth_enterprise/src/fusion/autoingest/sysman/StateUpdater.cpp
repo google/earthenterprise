@@ -292,9 +292,12 @@ void StateUpdater::SetVersionStateAndRunHandlers(
   AssetDefs::State oldState = version->state;
   do {
     version->state = newState;
-    AssetDefs::State nextState = RunStateChangeHandlers(version, newState, oldState);
-    oldState = newState;
-    newState = nextState;
+    // Don't run handlers if this is a temporary state change.
+    if (finalStateChange) {
+      AssetDefs::State nextState = RunStateChangeHandlers(version, newState, oldState);
+      oldState = newState;
+      newState = nextState;
+    }
   } while(version->state != newState);
 
   if (finalStateChange) {
@@ -311,7 +314,7 @@ AssetDefs::State StateUpdater::RunStateChangeHandlers(
     UpdateWaitingAssets(version, oldState);
     nextState = RunVersionStateChangeHandler(version, newState, oldState);
   } catch (const UnsupportedException &) {
-    // Rethrow this exception - we will catch it farther up the stack
+    // We'll catch this exception farther up the stack
     throw;
   } catch (const StateChangeException &e) {
     notify(NFY_WARN, "Exception during %s: %s : %s",
