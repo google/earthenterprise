@@ -292,42 +292,55 @@ void StateUpdater::SetVersionStateAndRunHandlers(
   AssetDefs::State oldState = version->state;
   do {
     version->state = newState;
-    // Don't run handlers if this is a temporary state change.
-    if (finalStateChange) {
-      AssetDefs::State nextState = AssetDefs::Failed;
-      try {
-        UpdateWaitingAssets(version, oldState);
-        bool hasChildrenBefore = !version->children.empty();
-        // This will take care of stopping any running tasks, etc.
-        nextState = version->OnStateChange(newState, oldState);
-        bool hasChildrenAfter = !version->children.empty();
-        if (!hasChildrenBefore && hasChildrenAfter) {
-          // OnStateChange can call DelayedBuildChildren, which creates new
-          // children for this asset. This code is not yet able to handle that
-          // case, so we let OnStateChange perform the legacy state propagation
-          // and abandon this operation.
-          throw UnsupportedException();
-        }
-      } catch (const UnsupportedException &) {
-        // Rethrow this exception - we will catch it farther up the stack
-        throw;
-      } catch (const StateChangeException &e) {
-        notify(NFY_WARN, "Exception during %s: %s : %s",
-               e.location.c_str(), name.toString().c_str(), e.what());
-        version->WriteFatalLogfile(e.location, e.what());
-      } catch (const std::exception &e) {
-        notify(NFY_WARN, "Exception during OnStateChange: %s", e.what());
-      } catch (...) {
-        notify(NFY_WARN, "Unknown exception during OnStateChange");
-      }
-      oldState = newState;
-      newState = nextState;
-    }
+    AssetDefs::State nextState = RunStateChangeHandlers(version, newState, oldState);
+    oldState = newState;
+    newState = nextState;
   } while(version->state != newState);
 
   if (finalStateChange) {
     SendStateChangeNotification(name, version->state);
   }
+}
+
+AssetDefs::State StateUpdater::RunStateChangeHandlers(
+    AssetHandle<AssetVersionImpl> & version,
+    AssetDefs::State newState,
+    AssetDefs::State oldState) {
+  AssetDefs::State nextState = AssetDefs::Failed;
+  try {
+    UpdateWaitingAssets(version, oldState);
+    nextState = RunVersionStateChangeHandler(version, newState, oldState);
+  } catch (const UnsupportedException &) {
+    // Rethrow this exception - we will catch it farther up the stack
+    throw;
+  } catch (const StateChangeException &e) {
+    notify(NFY_WARN, "Exception during %s: %s : %s",
+           e.location.c_str(), version->GetRef().toString().c_str(), e.what());
+    version->WriteFatalLogfile(e.location, e.what());
+  } catch (const std::exception &e) {
+    notify(NFY_WARN, "Exception during OnStateChange: %s", e.what());
+  } catch (...) {
+    notify(NFY_WARN, "Unknown exception during OnStateChange");
+  }
+  return nextState;
+}
+
+AssetDefs::State StateUpdater::RunVersionStateChangeHandler(
+    AssetHandle<AssetVersionImpl> & version,
+    AssetDefs::State newState,
+    AssetDefs::State oldState) {
+  bool hasChildrenBefore = IsParent(version);
+  // This will take care of stopping any running tasks, etc.
+  AssetDefs::State nextState = version->OnStateChange(newState, oldState);
+  bool hasChildrenAfter = IsParent(version);
+  if (!hasChildrenBefore && hasChildrenAfter) {
+    // OnStateChange can call DelayedBuildChildren, which creates new
+    // children for this asset. This code is not yet able to handle that
+    // case, so we let OnStateChange perform the legacy state propagation
+    // and abandon this operation.
+    throw UnsupportedException();
+  }
+  return nextState;
 }
 
 void StateUpdater::SendStateChangeNotification(
