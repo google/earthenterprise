@@ -342,19 +342,17 @@ void StateUpdater::SendStateChangeNotification(
 void StateUpdater::HandleStateChange(
     AssetHandle<AssetVersionImpl> & version,
     AssetDefs::State oldState) {
-  SharedString ref = version->GetRef();
-  AssetDefs::State newState = version->state;
+  const SharedString ref = version->GetRef();
+  const AssetDefs::State newState = version->state;
   waitingListeners.Update(ref, newState, oldState);
   if (IsParent(version)) {
     inProgressParents.Update(ref, newState, oldState);
-  }
-  if (newState == AssetDefs::InProgress) {
-    SendInProgressNotifications(version);
   }
 }
 
 void StateUpdater::SetInProgress(AssetHandle<AssetVersionImpl> & version) {
   SetVersionStateAndRunHandlers(version, AssetDefs::InProgress, true);
+  SendInProgressNotifications(version);
 }
 
 void StateUpdater::SendInProgressNotifications(AssetHandle<AssetVersionImpl> & version) {
