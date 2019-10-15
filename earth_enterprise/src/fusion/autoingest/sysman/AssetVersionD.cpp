@@ -269,7 +269,7 @@ void AssetVersionImplD::SetState(
   if (newstate != state) {
     AssetDefs::State oldstate = state;
     state = newstate;
-    HandleStateChange(GetRef(), oldstate);
+    UpdateWaitingAssets(GetRef(), oldstate);
     try {
       // NOTE: This can end up calling back here to switch us to
       // another state (usually Failed or Succeded)

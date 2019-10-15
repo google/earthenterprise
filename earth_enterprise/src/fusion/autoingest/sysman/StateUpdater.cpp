@@ -296,7 +296,7 @@ void StateUpdater::SetVersionStateAndRunHandlers(
     if (finalStateChange) {
       AssetDefs::State nextState = AssetDefs::Failed;
       try {
-        HandleStateChange(version, oldState);
+        UpdateWaitingAssets(version, oldState);
         bool hasChildrenBefore = !version->children.empty();
         // This will take care of stopping any running tasks, etc.
         nextState = version->OnStateChange(newState, oldState);
@@ -339,7 +339,7 @@ void StateUpdater::SendStateChangeNotification(
   assetManager->NotifyVersionStateChange(name, state);
 }
 
-void StateUpdater::HandleStateChange(
+void StateUpdater::UpdateWaitingAssets(
     AssetHandle<AssetVersionImpl> & version,
     AssetDefs::State oldState) {
   const SharedString ref = version->GetRef();
@@ -352,15 +352,15 @@ void StateUpdater::HandleStateChange(
 
 void StateUpdater::SetInProgress(AssetHandle<AssetVersionImpl> & version) {
   SetVersionStateAndRunHandlers(version, AssetDefs::InProgress, true);
-  SendInProgressNotifications(version);
+  PropagateInProgress(version);
 }
 
-void StateUpdater::SendInProgressNotifications(AssetHandle<AssetVersionImpl> & version) {
-  SendInProgressNotifications(inProgressParents, version->parents);
-  SendInProgressNotifications(waitingListeners, version->listeners);
+void StateUpdater::PropagateInProgress(AssetHandle<AssetVersionImpl> & version) {
+  NotifyChildOrInputInProgress(inProgressParents, version->parents);
+  NotifyChildOrInputInProgress(waitingListeners, version->listeners);
 }
 
-void StateUpdater::SendInProgressNotifications(
+void StateUpdater::NotifyChildOrInputInProgress(
     const WaitingAssets & waitingAssets,
     const std::vector<SharedString> & toNotify) {
   for (const SharedString & ref : toNotify) {
