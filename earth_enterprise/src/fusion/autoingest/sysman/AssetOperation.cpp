@@ -66,7 +66,7 @@ void HandleTaskProgress(const TaskProgressMsg & msg) {
     if (version && version->taskid == msg.taskid) {
       version->beginTime = msg.beginTime;
       version->progressTime = msg.progressTime;
-      updater.SetInProgress(msg.verref);
+      updater.SetInProgress(version);
       version->progress = msg.progress;
       if (!AssetDefs::Finished(version->state)) {
         theAssetManager.NotifyVersionProgress(msg.verref, msg.progress);

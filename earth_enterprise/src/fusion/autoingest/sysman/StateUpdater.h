@@ -69,7 +69,7 @@ class StateUpdater
         AssetDefs::State newState,
         std::function<bool(AssetDefs::State)> updateStatePredicate);
     void HandleStateChange(const SharedString & ref, AssetDefs::State newState, AssetDefs::State oldState);
-    void SetInProgress(const SharedString & ref);
+    void SetInProgress(AssetHandle<AssetVersionImpl> & version);
 };
 
 #endif

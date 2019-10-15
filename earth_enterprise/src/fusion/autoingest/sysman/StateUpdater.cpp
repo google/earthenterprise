@@ -356,9 +356,8 @@ void StateUpdater::HandleStateChange(const SharedString & ref, AssetDefs::State 
   }
 }
 
-void StateUpdater::SetInProgress(const SharedString & ref) {
-  auto version = storageManager->GetMutable(ref);
-  SetVersionStateAndRunHandlers(ref, version, version->state, AssetDefs::InProgress, true);
+void StateUpdater::SetInProgress(AssetHandle<AssetVersionImpl> & version) {
+  SetVersionStateAndRunHandlers(version->GetRef(), version, version->state, AssetDefs::InProgress, true);
 }
 
 void StateUpdater::SendInProgressNotifications(const SharedString & ref) {
