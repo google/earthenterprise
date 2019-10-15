@@ -26,6 +26,17 @@
 using namespace std;
 using namespace AssetFactory;
 
+// AssetVersion is a placeholder to allow
+// for calls to MyUpdate
+using AssetVersion = uint8_t;
+
+// forward declare classes
+class MockAssetImpl;
+class MockAssetConfig;
+class MockMutableAsset;
+class MockAssetVersionImpl;
+class MockMutableAssetVersion;
+
 class MockAssetStorage
 {
 public:
@@ -51,16 +62,95 @@ public:
               }
 };
 
+
+// added ID field to aid in comparison
 class MockAssetConfig
 {
 public:
     int8_t ID;
-    MockAssetConfig(int8 _ID = -1) : ID(_ID){}
+    MockAssetConfig(int8 _ID = -1) : ID(_ID) {}
     bool operator==(const MockAssetConfig& other) const { return ID == other.ID; }
     bool operator==(uint8_t _ID) { return ID == _ID; }
     void operator=(const MockAssetConfig& other) { ID = other.ID; }
     void operator=(uint8_t _ID) { ID = _ID; }
  };
+
+class MockAssetVersionImpl : public MockAssetStorage
+{
+public:
+    using MutableAssetType = MockMutableAsset;
+    static AssetDefs::Type EXPECTED_TYPE;
+    static string EXPECTED_SUBTYPE;
+
+    using Base = MockAssetStorage;
+
+    MockAssetConfig config;
+    bool needed;
+
+    void Modify(const khMetaData& _meta, const MockAssetConfig& _config)
+    {
+        meta = _meta;
+        config = _config;
+    }
+
+    void Modify(const vector<SharedString>& _inputs,
+                const khMetaData& _meta,
+                const MockAssetConfig& _config)
+    {
+        inputs = _inputs;
+        Modify(_meta, _config);
+    }
+
+    MockAssetVersionImpl(MockAssetStorage storage,
+                  const MockAssetConfig &config_)
+                : MockAssetStorage(storage), config(config_), needed(false) {}
+};
+
+
+class MockMutableAssetVersion
+{
+public:
+    using Impl = MockAssetVersionImpl;
+    static string testSubTypeToUseForStringConstructor;
+    shared_ptr<Impl> impl = nullptr;
+
+    MockMutableAssetVersion() = default;
+    MockMutableAssetVersion(const string& ref_)
+    {
+        MockAssetStorage storage;
+        storage.name = ref_;
+        storage.type = Impl::EXPECTED_TYPE;
+        storage.subtype = testSubTypeToUseForStringConstructor;
+
+        MockAssetConfig config;
+        impl = make_shared<Impl>(storage, config);
+    }
+
+    MockMutableAssetVersion(const MockAssetStorage& storage, const MockAssetConfig& config)
+    {
+        impl = make_shared<Impl>(storage, config);
+    }
+
+    MockMutableAssetVersion(const string& name, AssetDefs::Type type)
+    {
+        MockAssetStorage storage;
+        storage.name = name;
+        storage.type = type;
+        MockAssetConfig config;
+        impl = make_shared<Impl>(storage,config);
+    }
+
+    explicit operator bool(void) const
+    {
+        return impl != nullptr;
+    }
+
+    Impl* operator->() const
+    {
+        return impl.get();
+    }
+
+};
 
 class MockAssetImpl: public MockAssetStorage
 {
@@ -70,6 +160,7 @@ public:
 
   using Base = MockAssetStorage;
   MockAssetConfig config;
+  bool needed;
 
   void Modify(const khMetaData& _meta, const MockAssetConfig& _config)
   {
@@ -85,28 +176,41 @@ public:
       Modify(_meta, _config);
   }
 
-  MockAssetImpl(MockAssetStorage storage, const MockAssetConfig &config_)
-                : MockAssetStorage(storage), config(config_) {
+  MockAssetImpl(MockAssetStorage storage,
+                const MockAssetConfig &config_)
+              : MockAssetStorage(storage), config(config_), needed(false) {}
+
+  MockMutableAssetVersion MyUpdate(bool& _needed, const vector<AssetVersion>& v = {})
+  {
+      auto retval = MockMutableAssetVersion(this->name, this->type);
+      retval->needed = _needed = true;
+      return retval;
+  }
+
+  MockMutableAssetVersion Update(bool& _needed, const vector<AssetVersion>& v = {})
+  {
+      return MyUpdate(needed, v);
   }
 };
 
 AssetDefs::Type MockAssetImpl::EXPECTED_TYPE;
 string MockAssetImpl::EXPECTED_SUBTYPE;
 
-class MockMutableAsset
+AssetDefs::Type MockAssetVersionImpl::EXPECTED_TYPE;
+string MockAssetVersionImpl::EXPECTED_SUBTYPE;
+
+string MockMutableAssetVersion::testSubTypeToUseForStringConstructor;
+
+class MockMutableAsset // pointer type
 {
  public:
     using Impl = MockAssetImpl;
 
     static string testSubTypeToUseForStringConstructor;
+    shared_ptr<Impl> impl = nullptr;
 
-    shared_ptr<MockAssetImpl> impl = nullptr;
-
-    MockMutableAsset(){}
-    MockMutableAsset(shared_ptr<MockAssetImpl> impl_)
-    {
-      impl = impl_;
-    }
+    MockMutableAsset() = default;
+    MockMutableAsset(shared_ptr<Impl> impl_) : impl(impl_) {}
 
     MockMutableAsset(const string &ref_)
     {
@@ -114,12 +218,12 @@ class MockMutableAsset
       // Leaving the subtype changeable by the tests via testSubTypeToUseForStringConstructor;
       MockAssetStorage storage;
       storage.name = ref_;
-      storage.type = MockAssetImpl::EXPECTED_TYPE;
+      storage.type = Impl::EXPECTED_TYPE;
       storage.subtype = testSubTypeToUseForStringConstructor;
-      MockAssetConfig config;
-      impl = std::make_shared<MockAssetImpl>(storage, config);
-    }
 
+      MockAssetConfig config;
+      impl = std::make_shared<Impl>(storage, config);
+    }
     // For the `if (asset)` check in MakeNew
     explicit operator bool(void) const
     {
@@ -135,20 +239,22 @@ string MockMutableAsset::testSubTypeToUseForStringConstructor;
 
 class AssetFactoryTest : public testing::Test {
  public:
-
-  AssetFactoryTest() 
+  AssetFactoryTest()
   {
-    MockAssetImpl::EXPECTED_TYPE = AssetDefs::Imagery;
-    MockAssetImpl::EXPECTED_SUBTYPE = "mockSubtype";
-    MockMutableAsset::testSubTypeToUseForStringConstructor = "someOtherSubtype";
+    MockAssetImpl::EXPECTED_TYPE = MockAssetVersionImpl::EXPECTED_TYPE = AssetDefs::Imagery;
+    MockAssetImpl::EXPECTED_SUBTYPE = MockAssetVersionImpl::EXPECTED_SUBTYPE = "mockSubtype";
+
+    MockMutableAsset::testSubTypeToUseForStringConstructor =
+    MockMutableAssetVersion::testSubTypeToUseForStringConstructor = "someOtherSubtype";
   }
 };
 
 // TEST DATA
 string testAssetRef = "/gevol/assets/AssetRef",
-       testAssetRef1 = "/gevol/assets/AssetRef1";
+       testAssetRef1 = "/gevol/assets/AssetRef1",
+       testAssetRef2 = "/gevol/assets/AssetRef2";
 std::vector<SharedString> testInputs { "Input1", "Input2"},
-                          testInputs1 { "Input3", "Input4"};
+                          testInputs1 { "Inputs3", "Inputs4", "Inputs5" };
 khMetaData testMeta;
 MockAssetConfig testConfig0(0);
 
@@ -163,10 +269,11 @@ TEST_F(AssetFactoryTest, MakeNew) {
 
 // ASSERT_THROW seems to trip up on function templates with more than one
 // template parameter. Making a function pointer helps it get past that.
+
 MockMutableAsset (*pMakeNew)( const std::string &ref_, 
-                                    const std::vector<SharedString>& inputs_,
-                                    const khMetaData &meta,
-                                    const MockAssetConfig &config) =
+                              const std::vector<SharedString>& inputs_,
+                              const khMetaData &meta,
+                              const MockAssetConfig &config) =
   MakeNew<MockMutableAsset, MockAssetConfig>;
 TEST_F(AssetFactoryTest, MakeNewAlreadyExists) {
   // Make sure the std::string constructor for MockMutableAsset will have the same
@@ -188,7 +295,6 @@ TEST_F(AssetFactoryTest, FindMake_New)
 
 TEST_F(AssetFactoryTest, FindMake_Exists)
 {
-    MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
     MockMutableAsset handle = FindMake<MockMutableAsset, MockAssetConfig>
             (testAssetRef, testInputs, testMeta, testConfig0);
     ASSERT_EQ(handle.impl->name, testAssetRef);
@@ -209,6 +315,55 @@ TEST_F(AssetFactoryTest, FindMake_Exists)
     ASSERT_EQ(handle.impl->meta, testMeta);
     ASSERT_EQ(handle.impl->type, AssetDefs::Imagery);
     ASSERT_EQ(handle.impl->config, 0);
+}
+
+TEST_F(AssetFactoryTest, FindAndModifyPresent)
+{
+    MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
+    MockMutableAsset handle = FindAndModify<MockMutableAsset, MockAssetConfig>(
+                testAssetRef, testInputs, testMeta, testConfig0);
+    ASSERT_EQ(handle.impl->name, testAssetRef);
+    handle = FindAndModify<MockMutableAsset, MockAssetConfig>
+            (testAssetRef, AssetDefs::Imagery, testInputs, testMeta, testConfig0);
+    ASSERT_EQ(handle.impl->config, testConfig0);
+    handle = FindAndModify<MockMutableAsset, MockAssetConfig>
+            (testAssetRef, AssetDefs::Imagery, testMeta, testConfig0);
+    ASSERT_EQ(handle.impl->meta, testMeta);
+    ASSERT_EQ(handle.impl->type, AssetDefs::Imagery);
+}
+
+MockMutableAsset (*pFAMAbsent)( const std::string &ref_,
+                                const std::vector<SharedString>& inputs_,
+                                const khMetaData &meta,
+                                const MockAssetConfig &config) =
+  FindAndModify<MockMutableAsset, MockAssetConfig>;
+
+TEST_F(AssetFactoryTest, FindAndModifyAbsent)
+{
+    try {
+        MockMutableAsset handle = FindAndModify<MockMutableAsset, MockAssetConfig>(
+                    string("not present"), testInputs, testMeta, testConfig0);
+        FAIL() << "FindAndModify should have thrown an exception";
+    } catch (...) {/* should throw an exception because ref isn't present*/}
+}
+
+TEST_F(AssetFactoryTest, FindMakeAndUpdateAssets)
+{
+    vector<AssetVersion> v;
+    MockMutableAssetVersion
+            handle6_5 = FindMakeAndUpdateSubAsset //tests 6 paramater FMAUS, which calls FMAU 5 params
+                        <MockMutableAssetVersion, AssetVersion, MockAssetConfig>
+                        ("parent", "base", testInputs, testMeta, testConfig0, v),
+            handle7_6 = FindMakeAndUpdateSubAsset // tests 7 parameter FMAUs, FMAU 6 params
+                        <MockMutableAssetVersion, AssetVersion, MockAssetConfig>
+                        ("parent1", AssetDefs::Imagery, "base1", testInputs1,
+                         testMeta, testConfig0, vector<AssetVersion>()), // tests remaining FMAU 4 params
+            handle_4  = FindMakeAndUpdate<MockMutableAssetVersion, AssetVersion, MockAssetConfig>
+                        ("parent1", AssetDefs::Imagery, testMeta, testConfig0);
+    // want to just make sure paths reach MyUpdate method
+    ASSERT_EQ(handle6_5->needed, true);
+    ASSERT_EQ(handle7_6->needed, true);
+    ASSERT_EQ(handle_4->needed, true);
 }
 
 int main(int argc, char **argv) {

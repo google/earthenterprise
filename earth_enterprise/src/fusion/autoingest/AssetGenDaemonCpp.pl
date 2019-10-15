@@ -121,61 +121,6 @@ ${name}Factory::SubAssetName(
                                    $actualtypearg, "$subtype");
 }
 
-Mutable${name}AssetD
-${name}Factory::FindAndModify(const std::string &ref_ $formaltypearg,
-                              $formalinputarg
-                              const khMetaData &meta_,
-                              const $config& config_)
-{
-    Mutable${name}AssetD asset = Find<${name}AssetD>(ref_, $typeref);
-    if (asset) {
-        asset->Modify($forwardinputarg meta_, config_);
-        return asset;
-    } else {
-        throw khException(kh::tr("$subtype '%2' doesn't exist")
-                          .arg(ref_));
-    }
-}
-
-
-$template
-Mutable${name}AssetVersionD
-${name}Factory::FindMakeAndUpdate(
-        const std::string &ref_ $formaltypearg,
-        $formalinputarg
-        const khMetaData &meta_,
-        const $config& config_
-        $formalcachedinputarg
-        $formalExtraUpdateArg)
-{
-
-    Mutable${name}AssetD asset = AssetFactory::FindMake<Mutable${name}AssetD>
-                                 (ref_ $forwardtypearg,
-                                  $forwardinputarg meta_, config_);
-    bool needed = false;
-    return asset->MyUpdate(needed $forwardcachedinputarg
-                           $forwardExtraUpdateArg);
-}
-
-$template
-Mutable${name}AssetVersionD
-${name}Factory::FindMakeAndUpdateSubAsset(
-        const std::string &parentAssetRef
-        $formaltypearg,
-        const std::string &basename,
-        $formalinputarg
-        const khMetaData &meta_,
-        const $config& config_
-        $formalcachedinputarg
-        $formalExtraUpdateArg)
-{
-    return FindMakeAndUpdate
-             (AssetDefs::SubAssetName(parentAssetRef, basename,
-                                      $actualtypearg, "$subtype")
-              $forwardtypearg, $forwardinputarg
-              meta_, config_ $forwardcachedinputarg
-              $forwardExtraUpdateArg);
-}
 EOF
 
 
@@ -493,7 +438,7 @@ if ($haveBindConfig) {
     if (!IsUpToDate(bound_config, *inputvers)) {
         Mutable${name}AssetD self(GetRef());
         Mutable${name}AssetVersionD newver =
-        MakeNewVersion<Mutable${name}AssetVersionD>(self, bound_config);
+            MakeNewVersion<Mutable${name}AssetD, ${name}AssetImplD::Config, Mutable${name}AssetVersionD>(self, bound_config);
         AssetVersionImplD::InputVersionGuard guard(newver.operator->(),
                                                    *inputvers);
 EOF
@@ -502,7 +447,7 @@ EOF
     // now see if I'm up to date
     if (!IsUpToDate(*inputvers)) {
         Mutable${name}AssetD self(GetRef());
-        Mutable${name}AssetVersionD newver = MakeNewVersion<Mutable${name}AssetVersionD>(self);
+        Mutable${name}AssetVersionD newver = MakeNewVersion<Mutable${name}AssetD, Mutable${name}AssetVersionD>(self);
         AssetVersionImplD::InputVersionGuard guard(newver.operator->(),
                                                    *inputvers);
 EOF
@@ -559,7 +504,7 @@ if ($haveBindConfig) {
     if (!IsUpToDate(bound_cofig)) {
         Mutable${name}AssetD self(GetRef());
         Mutable${name}AssetVersionD newver =
-        MakeNewVersion<Mutable${name}AssetVersionD>(self, bound_config);
+            MakeNewVersion<Mutable${name}AssetD, ${name}AssetImplD::Config, Mutable${name}AssetVersionD>(self, bound_config);
 
 EOF
 }else {
@@ -567,8 +512,7 @@ EOF
     // now see if I'm up to date
     if (!IsUpToDate()) {
         Mutable${name}AssetD self(GetRef());
-        Mutable${name}AssetVersionD newver = MakeNewVersion<Mutable${name}AssetVersionD>(self);
-
+        Mutable${name}AssetVersionD newver = MakeNewVersion<Mutable${name}AssetD, Mutable${name}AssetVersionD>(self);
 EOF
 }
 
