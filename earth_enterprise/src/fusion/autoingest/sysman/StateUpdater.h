@@ -47,9 +47,7 @@ class StateUpdater
         AssetDefs::State newState,
         bool temporary);
     void SetVersionStateAndRunHandlers(
-        const SharedString & name,
         AssetHandle<AssetVersionImpl> & version,
-        AssetDefs::State oldState,
         AssetDefs::State newState,
         bool temporary);
     void SendStateChangeNotification(

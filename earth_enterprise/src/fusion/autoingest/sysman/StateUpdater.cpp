@@ -266,7 +266,7 @@ void StateUpdater::SetState(
            name.toString().c_str(), ToString(oldState).c_str(), ToString(newState).c_str());
     auto version = storageManager->GetMutable(name);
     if (version) {
-      SetVersionStateAndRunHandlers(name, version, oldState, newState, finalStateChange);
+      SetVersionStateAndRunHandlers(version, newState, finalStateChange);
 
       // Get the new state directly from the asset version since it may be
       // different from the passed-in state
@@ -283,13 +283,13 @@ void StateUpdater::SetState(
 }
 
 void StateUpdater::SetVersionStateAndRunHandlers(
-    const SharedString & name,
     AssetHandle<AssetVersionImpl> & version,
-    AssetDefs::State oldState,
     AssetDefs::State newState,
     bool finalStateChange) {
   // OnStateChange can return a new state that we need to transition to, so we
   // may have to change the state repeatedly.
+  const SharedString name = version->GetRef();
+  AssetDefs::State oldState = version->state;
   do {
     version->state = newState;
     // Don't run handlers if this is a temporary state change.
@@ -361,7 +361,7 @@ void StateUpdater::UpdateWaitingAssets(WaitingAssets & waitingAssets, const Asse
 }
 
 void StateUpdater::SetInProgress(AssetHandle<AssetVersionImpl> & version) {
-  SetVersionStateAndRunHandlers(version->GetRef(), version, version->state, AssetDefs::InProgress, true);
+  SetVersionStateAndRunHandlers(version, AssetDefs::InProgress, true);
 }
 
 void StateUpdater::SendInProgressNotifications(AssetHandle<AssetVersionImpl> & version) {
