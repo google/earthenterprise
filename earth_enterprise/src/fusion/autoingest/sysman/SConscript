@@ -84,7 +84,7 @@ env.Command('ResourceProviderProxy.cpp',
             [ "${SOURCES[0]} --proxycpp $TARGET ${SOURCES[1]}" ])
 
 
-extraObjs = [
+otherDirObjs = [
     'fusion/geindexgen/.idl/BlendStack',
     'fusion/geindexgen/.idl/VectorStack',
     'fusion/geindexgen/.idl/UnifiedConfig',
@@ -103,20 +103,18 @@ sysmanFiles = ['AssetD.cpp', 'AssetVersionD.cpp',
   'ResourceProviderProxy.cpp', 'Reservation.cpp',
   'SysManExtra.cpp', 'SysManFromStorage.cpp', 'InsetInfo.cpp'] + \
   pluginFiles
-otherObjs = [TaskStorageObj, JobStorageObj, NextTaskIdObj, TaskRuleObj,
+extraObjs = [TaskStorageObj, JobStorageObj, NextTaskIdObj, TaskRuleObj,
   FusionUniqueIdObj] + \
   commonobj + \
-  env.ObjFromOtherDir(extraObjs)
+  env.ObjFromOtherDir(otherDirObjs)
 sysmanObjs = map(lambda f: str(f).replace(".cpp", ".o"), sysmanFiles)
-sysmanFiles += otherObjs
-sysmanObjs += otherObjs
 sysmanLibs = ['gegdal', 'geraster', 'gesearchtabs', 'genet', 'gepublish', 'gefconfigutil',
   'geindex_r', 'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'qt-mt', 'xerces-c', 'geos',
   'gomp']
 testLibs = sysmanLibs + ['gtest']
 
 gesystemmanager = env.executable('gesystemmanager',
-    [ 'gesystemmanager_main.cpp', env['FUSIONVER'] ] + sysmanFiles,
+    [ 'gesystemmanager_main.cpp', env['FUSIONVER'] ] + sysmanFiles + extraObjs,
     LIBS=sysmanLibs)
 
 geresourceprovider = env.executable('geresourceprovider',
@@ -136,24 +134,20 @@ env.install('fusion_root', [ 'gefusion' ], 'etc/init.d')
 
 SConscript(
     'parse-raster-project-xml-no-content_unittest/SConscript',
-    exports=[
-        'env', 'commonobj', 'plugins', 'extraObjs', 'TaskStorageObj',
-        'JobStorageObj', 'NextTaskIdObj', 'TaskRuleObj', 'FusionUniqueIdObj'])
+    exports=['env', 'sysmanObjs', 'extraObjs', 'testLibs'])
 
 SConscript(
     'memory-tests/SConscript',
-    exports=[
-        'env', 'commonobj', 'plugins', 'extraObjs', 'TaskStorageObj',
-        'JobStorageObj', 'NextTaskIdObj', 'TaskRuleObj', 'FusionUniqueIdObj'])
+    exports=['env', 'sysmanObjs', 'extraObjs', 'testLibs'])
 
 env.test('LeafAssetVersion_unittest',
-    sysmanObjs + [ 'LeafAssetVersion_unittest.cpp' ],
+    sysmanObjs + extraObjs + [ 'LeafAssetVersion_unittest.cpp' ],
     LIBS=testLibs)
 
 env.test('StateUpdater_unittest',
-    sysmanObjs +[ 'StateUpdater_unittest.cpp' ],
+    sysmanObjs + extraObjs + [ 'StateUpdater_unittest.cpp' ],
     LIBS=testLibs)
 
 env.test('StorageManagerAssetFactory_unittest',
-    sysmanObjs +[ 'StorageManagerAssetFactory_unittest.cpp' ],
+    sysmanObjs  + extraObjs + [ 'StorageManagerAssetFactory_unittest.cpp' ],
     LIBS=testLibs)
