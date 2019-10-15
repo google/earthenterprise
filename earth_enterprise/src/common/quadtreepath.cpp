@@ -30,7 +30,7 @@ const uint32 QuadtreePath::kMaxLevel;
 const uint32 QuadtreePath::kStoreSize;
 const uint32 QuadtreePath::kChildCount;
 
-// Construct from level, row, col.  Code adapated from kbf.cpp
+// Construct from level, row, col.  Code adapted from kbf.cpp
 
 QuadtreePath::QuadtreePath(uint32 level, uint32 row, uint32 col) : path_(0) {
   static const uint64 order[][2] = { {0, 3}, {1, 2} };
@@ -224,6 +224,8 @@ bool QuadtreePath::IsAncestorOf(const QuadtreePath &other) const {
     return false;
   }
 }
+
+
 
 
 QuadtreePath QuadtreePath::RelativePath(const QuadtreePath &parent,

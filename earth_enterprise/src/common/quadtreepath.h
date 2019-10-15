@@ -78,6 +78,10 @@ class QuadtreePath {
       && (path2.IsAncestorOf(path1) || path2 > path1);
   }
 
+  static inline bool OverlapsAtLevel(const QuadtreePath &path1, const QuadtreePath &path2, uint level) {
+        return path1.PathBits(level) == path2.PathBits(level);
+    }
+
   void GetLevelRowCol(uint32 *level, uint32 *row, uint32 *col) const;
   inline uint32 Level() const { return path_ & kLevelMask; }
   QuadtreePath Parent() const;

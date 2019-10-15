@@ -28,6 +28,33 @@
 #include "common/projection.h"
 
 
+
+
+
+// ****************************************************************************
+// ***  Older APIs
+// ****************************************************************************
+// Tilesize constants used in various places. These can't use the tilespace
+// members because they need to be "translation unit compile time constants" so
+// they can be used in template specializations.
+// TODO: find a way to unify these definitions with those of the
+// khTilespace constants. They'll probably never change, but having them in
+// two places is just wrong!
+static const uint ImageryQuadnodeResolution   = 256;
+static const uint TmeshQuadnodeResolution     = 32;
+static const uint HeightmapTileSize           = 1024;
+static const uint RasterProductTileResolution = 1024;
+// The best resolution Fusion can handle is 0.0186 m (18.6 mm).
+static const float kWidthAtMaxResolution       = 0.0186;
+
+
+// Really old (not quite ancient) style macros - define them now to be the
+// constants above. This results in the same values as before, but now
+// they'll have a type.
+#define NUM_LEVELS NumFusionLevels
+#define MAX_CLIENT_LEVEL MaxClientLevel
+
+
 // ****************************************************************************
 // ***  Packed 64bit tile address
 // ***    - Used in several places as a hash key for tiles
@@ -834,6 +861,14 @@ DegExtentsToPixelLevelRasterSize(const khExtents<double> &degExtents,
       static_cast<uint64>(degExtents.width()/pixelsize + 0.5),
       static_cast<uint64>(degExtents.height()/pixelsize + 0.5));
 }
+/*
+inline khExtents<uint32>
+DegExtentsToTileExtents( const khExtents<double> &degExtents,
+                                                    uint level) {
+    //return RasterProductTilespaceFlat.FromNormExtents(degExtents, level, level).extents;
+    khInsetCoverage kh = khInsetCoverage(RasterProductTilespaceFlat, degExtents, level, level, level);
+    return kh.levelExtents(kh.beginLevel());
+}*/
 
 // Translate Degree extents to a pixel raster size (number of _pixels_ in
 // width and height). This is NOT the same as making a khLevelCoverage from
@@ -870,28 +905,5 @@ int EfficientLOD(const double feature_diameter,
                  const khTilespace &tilespace,
                  const double diameter_at_lod = 1.0);
 
-
-// ****************************************************************************
-// ***  Older APIs
-// ****************************************************************************
-// Tilesize constants used in various places. These can't use the tilespace
-// members because they need to be "translation unit compile time constants" so
-// they can be used in template specializations.
-// TODO: find a way to unify these definitions with those of the
-// khTilespace constants. They'll probably never change, but having them in
-// two places is just wrong!
-static const uint ImageryQuadnodeResolution   = 256;
-static const uint TmeshQuadnodeResolution     = 32;
-static const uint HeightmapTileSize           = 1024;
-static const uint RasterProductTileResolution = 1024;
-// The best resolution Fusion can handle is 0.0186 m (18.6 mm).
-static const float kWidthAtMaxResolution       = 0.0186;
-
-
-// Really old (not quite ancient) style macros - define them now to be the
-// constants above. This results in the same values as before, but now
-// they'll have a type.
-#define NUM_LEVELS NumFusionLevels
-#define MAX_CLIENT_LEVEL MaxClientLevel
 
 #endif  // GEO_EARTH_ENTERPRISE_SRC_COMMON_KHTILEADDR_H_

@@ -99,6 +99,7 @@ class InsetInfo : public SimpleInsetInfo<ProductAssetVersion> {
 };
 
 
+
 class PacketGenInfo {
  public:
   SharedString              assetname;
@@ -222,6 +223,18 @@ public:
         return neededIndexes;
     }
 };
+
+
+extern void
+FindNeededImageryInsets(
+    const khInsetCoverage        &gencov,
+    const std::vector<khExtents<uint32>> &extents,
+    uint                          numExtents,
+    std::vector<uint>            &neededIndexes,
+    uint beginMinifyLevel,
+    uint endMinifyLevel,
+    uint level);
+
 
 template <typename ProductAssetVersion>
 extern void
