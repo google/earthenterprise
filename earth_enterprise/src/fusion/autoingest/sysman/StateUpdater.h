@@ -57,7 +57,7 @@ class StateUpdater
         AssetDefs::State state);
     bool IsWaiting(const WaitingAssets & waitingAssets, const SharedString & ref);
     void HandleProgress(const WaitingAssets & waitingAssets, const SharedString & ref);
-    void SendInProgressNotifications(const SharedString & ref);
+    void SendInProgressNotifications(AssetHandle<AssetVersionImpl> & version);
     void SendInProgressNotifications(const std::vector<SharedString> & toNotify, const WaitingAssets & waitingAssets);
     void RecalcState(const SharedString & ref);
   public:
@@ -68,7 +68,7 @@ class StateUpdater
         const SharedString & ref,
         AssetDefs::State newState,
         std::function<bool(AssetDefs::State)> updateStatePredicate);
-    void HandleStateChange(const SharedString & ref, AssetDefs::State newState, AssetDefs::State oldState);
+    void HandleStateChange(AssetHandle<AssetVersionImpl> & version, AssetDefs::State oldState);
     void SetInProgress(AssetHandle<AssetVersionImpl> & version);
 };
 

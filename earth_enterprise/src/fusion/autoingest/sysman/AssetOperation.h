@@ -22,6 +22,6 @@
 
 void RebuildVersion(const SharedString & ref);
 void HandleTaskProgress(const TaskProgressMsg & msg);
-void HandleStateChange(const SharedString & ref, AssetDefs::State newState, AssetDefs::State oldState);
+void HandleStateChange(const SharedString & ref, AssetDefs::State oldState);
 
 #endif // ASSETOPERATION_H

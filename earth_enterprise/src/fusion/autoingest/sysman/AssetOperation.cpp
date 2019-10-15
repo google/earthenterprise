@@ -87,8 +87,9 @@ void HandleTaskProgress(const TaskProgressMsg & msg) {
   }
 }
 
-void HandleStateChange(const SharedString & ref, AssetDefs::State newState, AssetDefs::State oldState) {
+void HandleStateChange(const SharedString & ref, AssetDefs::State oldState) {
   if (MiscConfig::Instance().GraphOperations) {
-    updater.HandleStateChange(ref, newState, oldState);
+    auto version = AssetVersion::storageManager().GetMutable(ref);
+    updater.HandleStateChange(version, oldState);
   }
 }

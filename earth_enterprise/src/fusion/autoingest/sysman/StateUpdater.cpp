@@ -296,7 +296,7 @@ void StateUpdater::SetVersionStateAndRunHandlers(
     if (finalStateChange) {
       AssetDefs::State nextState = AssetDefs::Failed;
       try {
-        HandleStateChange(name, newState, oldState);
+        HandleStateChange(version, oldState);
         bool hasChildrenBefore = !version->children.empty();
         // This will take care of stopping any running tasks, etc.
         nextState = version->OnStateChange(newState, oldState);
@@ -339,7 +339,9 @@ void StateUpdater::SendStateChangeNotification(
   assetManager->NotifyVersionStateChange(name, state);
 }
 
-void StateUpdater::HandleStateChange(const SharedString & ref, AssetDefs::State newState, AssetDefs::State oldState) {
+void StateUpdater::HandleStateChange(AssetHandle<AssetVersionImpl> & version, AssetDefs::State oldState) {
+  SharedString ref = version->GetRef();
+  AssetDefs::State newState = version->state;
   if (newState == AssetDefs::Waiting) {
     waitingListeners.insert(ref);
   }
@@ -349,7 +351,7 @@ void StateUpdater::HandleStateChange(const SharedString & ref, AssetDefs::State 
 
   if (newState == AssetDefs::InProgress) {
     inProgressParents.insert(ref);
-    SendInProgressNotifications(ref);
+    SendInProgressNotifications(version);
   }
   else if (oldState == AssetDefs::InProgress) {
     inProgressParents.erase(ref);
@@ -360,8 +362,7 @@ void StateUpdater::SetInProgress(AssetHandle<AssetVersionImpl> & version) {
   SetVersionStateAndRunHandlers(version->GetRef(), version, version->state, AssetDefs::InProgress, true);
 }
 
-void StateUpdater::SendInProgressNotifications(const SharedString & ref) {
-  auto version = storageManager->GetMutable(ref);
+void StateUpdater::SendInProgressNotifications(AssetHandle<AssetVersionImpl> & version) {
   SendInProgressNotifications(version->parents, inProgressParents);
   SendInProgressNotifications(version->listeners, waitingListeners);
 }
