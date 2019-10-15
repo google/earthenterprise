@@ -38,9 +38,12 @@ void RebuildVersion(const SharedString & ref) {
     {
       // Limit the scope to release the AssetVersion as quickly as possible.
       AssetVersion version(ref);
-      if (version->state & (AssetDefs::Succeeded | AssetDefs::Offline | AssetDefs::Bad)) {
+      if (version && version->state & (AssetDefs::Succeeded | AssetDefs::Offline | AssetDefs::Bad)) {
         throw khException(kh::tr("%1 marked as %2. Refusing to resume.")
                           .arg(ToQString(ref), ToQString(version->state)));
+      }
+      else if (!version){
+        notify(NFY_WARN, "Could not load %s for rebuild", ref.toString().c_str());
       }
     }
 
@@ -48,14 +51,19 @@ void RebuildVersion(const SharedString & ref) {
   }
   else {
     MutableAssetVersionD version(ref);
-    version->Rebuild();
+    if (version) {
+      version->Rebuild();
+    }
+    else {
+      notify(NFY_WARN, "Could not load %s for rebuild", ref.toString().c_str());
+    }
   }
 }
 
 void HandleTaskProgress(const TaskProgressMsg & msg) {
   if (MiscConfig::Instance().GraphOperations) {
     auto version = AssetVersion::storageManager().GetMutable(msg.verref);
-    if (version->taskid == msg.taskid) {
+    if (version && version->taskid == msg.taskid) {
       version->beginTime = msg.beginTime;
       version->progressTime = msg.progressTime;
       updater.SetInProgress(msg.verref);
@@ -64,11 +72,17 @@ void HandleTaskProgress(const TaskProgressMsg & msg) {
         theAssetManager.NotifyVersionProgress(msg.verref, msg.progress);
       }
     }
+    else if (!version) {
+      notify(NFY_WARN, "Could not load %s to update progress", msg.verref.c_str());
+    }
   }
   else {
     AssetVersionD ver(msg.verref);
-    if (ver->taskid == msg.taskid) {
+    if (ver && ver->taskid == msg.taskid) {
       MutableAssetVersionD(msg.verref)->HandleTaskProgress(msg);
+    }
+    else if (!ver) {
+      notify(NFY_WARN, "Could not load %s to update progress", msg.verref.c_str());
     }
   }
 }
