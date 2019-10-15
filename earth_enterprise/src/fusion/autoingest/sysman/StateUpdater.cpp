@@ -342,24 +342,21 @@ void StateUpdater::SendStateChangeNotification(
 void StateUpdater::HandleStateChange(AssetHandle<AssetVersionImpl> & version, AssetDefs::State oldState) {
   SharedString ref = version->GetRef();
   AssetDefs::State newState = version->state;
-  if (newState == AssetDefs::Waiting) {
-    waitingListeners.insert(ref);
-  }
-  else if (oldState == AssetDefs::Waiting) {
-    waitingListeners.erase(ref);
-  }
-
+  UpdateWaitingAssets(waitingListeners, AssetDefs::Waiting, ref, newState, oldState);
   if (!version->children.empty()) {
-    if (newState == AssetDefs::InProgress) {
-      inProgressParents.insert(ref);
-    }
-    else if (oldState == AssetDefs::InProgress) {
-      inProgressParents.erase(ref);
-    }
+    UpdateWaitingAssets(inProgressParents, AssetDefs::InProgress, ref, newState, oldState);
   }
-
   if (newState == AssetDefs::InProgress) {
     SendInProgressNotifications(version);
+  }
+}
+
+void StateUpdater::UpdateWaitingAssets(WaitingAssets & waitingAssets, const AssetDefs::State waitingState, const SharedString & ref, AssetDefs::State newState, AssetDefs::State oldState) {
+  if (newState == waitingState) {
+    waitingAssets.insert(ref);
+  }
+  else if (oldState == waitingState) {
+    waitingAssets.erase(ref);
   }
 }
 

@@ -55,6 +55,7 @@ class StateUpdater
     void SendStateChangeNotification(
         const SharedString & name,
         AssetDefs::State state);
+    void UpdateWaitingAssets(WaitingAssets & waitingAssets, const AssetDefs::State waitingState, const SharedString & ref, AssetDefs::State newState, AssetDefs::State oldState);
     bool IsWaiting(const WaitingAssets & waitingAssets, const SharedString & ref);
     void HandleProgress(const WaitingAssets & waitingAssets, const SharedString & ref);
     void SendInProgressNotifications(AssetHandle<AssetVersionImpl> & version);
