@@ -349,12 +349,17 @@ void StateUpdater::HandleStateChange(AssetHandle<AssetVersionImpl> & version, As
     waitingListeners.erase(ref);
   }
 
-  if (newState == AssetDefs::InProgress) {
-    inProgressParents.insert(ref);
-    SendInProgressNotifications(version);
+  if (!version->children.empty()) {
+    if (newState == AssetDefs::InProgress) {
+      inProgressParents.insert(ref);
+    }
+    else if (oldState == AssetDefs::InProgress) {
+      inProgressParents.erase(ref);
+    }
   }
-  else if (oldState == AssetDefs::InProgress) {
-    inProgressParents.erase(ref);
+
+  if (newState == AssetDefs::InProgress) {
+    SendInProgressNotifications(version);
   }
 }
 
