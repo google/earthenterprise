@@ -96,7 +96,7 @@ otherDirObjs = [
 pluginFiles = map(lambda p: 'plugins/'+p+'AssetD.cpp', plugins)
 sysmanFiles = ['AssetD.cpp', 'AssetVersionD.cpp',
   'AssetOperation.cpp', 'StateUpdater.cpp', 'DependentStateTree.cpp',
-  'khSystemManager.cpp',
+  'WaitingAssets.cpp', 'khSystemManager.cpp',
   'khAssetManager.cpp', 'khAssetManagerDispatch.cpp',
   'khResourceManager.cpp', 'khTask.cpp', 'TaskRequirements.cpp',
   'khResourceProviderProxy.cpp', 'khResourceProviderProxyDispatch.cpp',
