@@ -28,7 +28,8 @@ using namespace std;
 
 class StateUpdater::SetStateVisitor : public default_dfs_visitor {
   private:
-    StateUpdater * const updater;
+    StateUpdater & updater;
+    DependentStateTree & tree;
     const AssetDefs::State newState;
 
     bool NeedComputeState(AssetDefs::State state) const {
@@ -188,8 +189,8 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
     }
 
   public:
-    SetStateVisitor(StateUpdater * updater, AssetDefs::State newState) :
-        updater(updater), newState(newState) {}
+    SetStateVisitor(StateUpdater & updater, DependentStateTree & tree, AssetDefs::State newState) :
+        updater(updater), tree(tree), newState(newState) {}
 
     // This function is called after the DFS has completed for every vertex
     // below this one in the tree. Thus, we don't calculate the state for an
@@ -197,14 +198,14 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
     // children.
     void finish_vertex(
         DependentStateTreeVertexDescriptor vertex,
-        const DependentStateTree & tree) const {
+        const DependentStateTree &) const {
       SharedString name = tree[vertex].name;
       notify(NFY_PROGRESS, "Calculating state for '%s'", name.toString().c_str());
 
       // Set the state for assets in the dependent tree. "false" means we'll
       // set the state again below.
       if (tree[vertex].inDepTree) {
-        updater->SetState(vertex, newState, false);
+        updater.SetState(tree, vertex, newState, false);
       }
 
       // For all assets (including parents and listeners) update the state
@@ -216,7 +217,7 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
           // Run this in a separate block so that the asset version is released
           // before we try to update it.
           {
-            auto version = updater->storageManager->Get(name);
+            auto version = updater.storageManager->Get(name);
             if (!version) {
               // This shoud never happen - we had to successfully load the asset
               // previously to get it into the tree.
@@ -227,7 +228,7 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
             calculatedState = version->CalcStateByInputsAndChildren(data.stateData);
           }
           // Set the state. "true" means we're done changing this asset's state.
-          updater->SetState(vertex, calculatedState, true);
+          updater.SetState(tree, vertex, calculatedState, true);
         }
       }
     }
@@ -239,8 +240,8 @@ void StateUpdater::SetStateForRefAndDependents(
     function<bool(AssetDefs::State)> updateStatePredicate) {
   try {
     SharedString verref = AssetVersionImpl::Key(ref);
-    tree = BuildDependentStateTree(verref, updateStatePredicate, storageManager);
-    depth_first_search(tree, visitor(SetStateVisitor(this, newState)));
+    DependentStateTree tree = BuildDependentStateTree(verref, updateStatePredicate, storageManager);
+    depth_first_search(tree, visitor(SetStateVisitor(*this, tree, newState)));
   }
   catch (UnsupportedException) {
     // This is intended as a temporary condition that will no longer be needed
@@ -252,6 +253,7 @@ void StateUpdater::SetStateForRefAndDependents(
 }
 
 void StateUpdater::SetState(
+    DependentStateTree & tree,
     DependentStateTreeVertexDescriptor vertex,
     AssetDefs::State newState,
     bool finalStateChange) {

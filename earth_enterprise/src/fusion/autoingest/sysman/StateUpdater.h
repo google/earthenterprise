@@ -25,13 +25,9 @@
 #include "khAssetManager.h"
 #include "StorageManager.h"
 
-// This class efficiently updates the states of lots of asset versions at
-// the same time. The idea is that you create a state updater, use it to
-// perform one "macro" operation (such as a clean or resume), and then release
-// it.
-//
-// Internally, this class represents the asset versions as a directed
-// acyclic graph, and state updates are performed as graph operations.
+// This class efficiently updates the states of lots of asset versions at the
+// same time. Internally, this class represents the asset versions as a
+// directed acyclic graph, and state updates are performed as graph operations.
 class StateUpdater
 {
   private:
@@ -40,9 +36,9 @@ class StateUpdater
 
     StorageManagerInterface<AssetVersionImpl> * const storageManager;
     khAssetManagerInterface * const assetManager;
-    DependentStateTree tree;
 
     void SetState(
+        DependentStateTree & tree,
         DependentStateTreeVertexDescriptor vertex,
         AssetDefs::State newState,
         bool temporary);
