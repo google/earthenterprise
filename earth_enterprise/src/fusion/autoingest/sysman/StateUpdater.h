@@ -31,13 +31,15 @@
 class StateUpdater
 {
   private:
+    using WaitingAssets = std::set<SharedString>;
+
     class UnsupportedException {};
     class SetStateVisitor;
 
     StorageManagerInterface<AssetVersionImpl> * const storageManager;
     khAssetManagerInterface * const assetManager;
-    std::set<SharedString> waitingListeners;
-    std::set<SharedString> inProgressParents;
+    WaitingAssets waitingListeners;
+    WaitingAssets inProgressParents;
 
     void SetState(
         DependentStateTree & tree,
@@ -53,7 +55,8 @@ class StateUpdater
     void SendStateChangeNotification(
         const SharedString & name,
         AssetDefs::State state);
-    void HandleProgress(std::set<SharedString> & waitingAssets, const SharedString & ref);
+    bool IsWaiting(const WaitingAssets & waitingAssets, const SharedString & ref);
+    void HandleProgress(const WaitingAssets & waitingAssets, const SharedString & ref);
     void NotifyInProgress(const SharedString & ref);
     void RecalcState(const SharedString & ref);
   public:

@@ -370,8 +370,12 @@ void StateUpdater::NotifyInProgress(const SharedString & ref) {
   }
 }
 
-void StateUpdater::HandleProgress(std::set<SharedString> & waitingAssets, const SharedString & ref) {
-  if (waitingAssets.find(ref) == waitingAssets.end()) {
+bool StateUpdater::IsWaiting(const WaitingAssets & waitingAssets, const SharedString & ref) {
+  return waitingAssets.find(ref) != waitingAssets.end();
+}
+
+void StateUpdater::HandleProgress(const WaitingAssets & waitingAssets, const SharedString & ref) {
+  if (!IsWaiting(waitingAssets, ref)) {
     RecalcState(ref);
   }
 }
