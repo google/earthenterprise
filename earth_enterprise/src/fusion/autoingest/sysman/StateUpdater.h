@@ -50,12 +50,12 @@ class StateUpdater
         bool temporary);
     void SendStateChangeNotification(
         const SharedString & name,
-        AssetDefs::State state);
-    void PropagateInProgress(AssetHandle<AssetVersionImpl> & version);
+        AssetDefs::State state) const;
+    void PropagateInProgress(const AssetHandle<AssetVersionImpl> & version) const;
     void NotifyChildOrInputInProgress(
         const WaitingAssets & waitingAssets,
-        const std::vector<SharedString> & toNotify);
-    void RecalcState(const SharedString & ref);
+        const std::vector<SharedString> & toNotify) const;
+    void RecalcState(const SharedString & ref) const;
     bool IsParent(const AssetHandle<AssetVersionImpl> & version) const
         { return !version->children.empty(); }
   public:
@@ -70,7 +70,7 @@ class StateUpdater
         AssetDefs::State newState,
         std::function<bool(AssetDefs::State)> updateStatePredicate);
     void UpdateWaitingAssets(
-        AssetHandle<AssetVersionImpl> & version,
+        const AssetHandle<AssetVersionImpl> & version,
         AssetDefs::State oldState);
     void SetInProgress(AssetHandle<AssetVersionImpl> & version);
 };

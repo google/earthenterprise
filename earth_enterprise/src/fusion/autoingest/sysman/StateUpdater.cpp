@@ -332,7 +332,7 @@ void StateUpdater::SetVersionStateAndRunHandlers(
 
 void StateUpdater::SendStateChangeNotification(
     const SharedString & name,
-    AssetDefs::State state) {
+    AssetDefs::State state) const {
   notify(NFY_VERBOSE, "Calling theAssetManager.NotifyVersionStateChange(%s, %s)", 
          name.toString().c_str(), 
          ToString(state).c_str());
@@ -340,7 +340,7 @@ void StateUpdater::SendStateChangeNotification(
 }
 
 void StateUpdater::UpdateWaitingAssets(
-    AssetHandle<AssetVersionImpl> & version,
+    const AssetHandle<AssetVersionImpl> & version,
     AssetDefs::State oldState) {
   const SharedString ref = version->GetRef();
   const AssetDefs::State newState = version->state;
@@ -355,14 +355,14 @@ void StateUpdater::SetInProgress(AssetHandle<AssetVersionImpl> & version) {
   PropagateInProgress(version);
 }
 
-void StateUpdater::PropagateInProgress(AssetHandle<AssetVersionImpl> & version) {
+void StateUpdater::PropagateInProgress(const AssetHandle<AssetVersionImpl> & version) const {
   NotifyChildOrInputInProgress(inProgressParents, version->parents);
   NotifyChildOrInputInProgress(waitingListeners, version->listeners);
 }
 
 void StateUpdater::NotifyChildOrInputInProgress(
     const WaitingAssets & waitingAssets,
-    const std::vector<SharedString> & toNotify) {
+    const std::vector<SharedString> & toNotify) const {
   for (const SharedString & ref : toNotify) {
     if (!waitingAssets.IsWaiting(ref)) {
       RecalcState(ref);
@@ -370,7 +370,7 @@ void StateUpdater::NotifyChildOrInputInProgress(
   }
 }
 
-void StateUpdater::RecalcState(const SharedString & ref) {
+void StateUpdater::RecalcState(const SharedString & ref) const {
   auto version = storageManager->Get(ref);
   version->RecalcState();
 }
