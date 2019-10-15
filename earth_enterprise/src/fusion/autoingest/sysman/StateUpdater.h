@@ -43,11 +43,10 @@ class StateUpdater
         DependentStateTree & tree,
         DependentStateTreeVertexDescriptor vertex,
         AssetDefs::State newState,
-        bool temporary);
+        bool finalStateChange);
     void SetVersionStateAndRunHandlers(
         AssetHandle<AssetVersionImpl> & version,
-        AssetDefs::State newState,
-        bool temporary);
+        AssetDefs::State newState);
     AssetDefs::State RunStateChangeHandlers(
         AssetHandle<AssetVersionImpl> & version,
         AssetDefs::State newState,

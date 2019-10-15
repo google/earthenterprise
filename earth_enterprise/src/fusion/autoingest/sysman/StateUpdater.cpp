@@ -266,7 +266,13 @@ void StateUpdater::SetState(
            name.toString().c_str(), ToString(oldState).c_str(), ToString(newState).c_str());
     auto version = storageManager->GetMutable(name);
     if (version) {
-      SetVersionStateAndRunHandlers(version, newState, finalStateChange);
+      if (finalStateChange) {
+        SetVersionStateAndRunHandlers(version, newState);
+      }
+      else {
+        // Bypass the handlers if we're going to set the state again soon.
+        version->state = newState;
+      }
 
       // Get the new state directly from the asset version since it may be
       // different from the passed-in state
@@ -284,25 +290,18 @@ void StateUpdater::SetState(
 
 void StateUpdater::SetVersionStateAndRunHandlers(
     AssetHandle<AssetVersionImpl> & version,
-    AssetDefs::State newState,
-    bool finalStateChange) {
+    AssetDefs::State newState) {
   // OnStateChange can return a new state that we need to transition to, so we
   // may have to change the state repeatedly.
-  const SharedString name = version->GetRef();
   AssetDefs::State oldState = version->state;
   do {
     version->state = newState;
-    // Don't run handlers if this is a temporary state change.
-    if (finalStateChange) {
-      AssetDefs::State nextState = RunStateChangeHandlers(version, newState, oldState);
-      oldState = newState;
-      newState = nextState;
-    }
+    AssetDefs::State nextState = RunStateChangeHandlers(version, newState, oldState);
+    oldState = newState;
+    newState = nextState;
   } while(version->state != newState);
 
-  if (finalStateChange) {
-    SendStateChangeNotification(name, version->state);
-  }
+  SendStateChangeNotification(version->GetRef(), version->state);
 }
 
 AssetDefs::State StateUpdater::RunStateChangeHandlers(
@@ -367,7 +366,7 @@ void StateUpdater::UpdateWaitingAssets(
 }
 
 void StateUpdater::SetInProgress(AssetHandle<AssetVersionImpl> & version) {
-  SetVersionStateAndRunHandlers(version, AssetDefs::InProgress, true);
+  SetVersionStateAndRunHandlers(version, AssetDefs::InProgress);
   PropagateInProgress(version);
 }
 
