@@ -345,7 +345,7 @@ void StateUpdater::HandleStateChange(
   SharedString ref = version->GetRef();
   AssetDefs::State newState = version->state;
   waitingListeners.Update(ref, newState, oldState);
-  if (!version->children.empty()) {
+  if (IsParent(version)) {
     inProgressParents.Update(ref, newState, oldState);
   }
   if (newState == AssetDefs::InProgress) {

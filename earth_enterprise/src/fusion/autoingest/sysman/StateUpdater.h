@@ -56,6 +56,8 @@ class StateUpdater
         const WaitingAssets & waitingAssets,
         const std::vector<SharedString> & toNotify);
     void RecalcState(const SharedString & ref);
+    bool IsParent(const AssetHandle<AssetVersionImpl> & version) const
+        { return !version->children.empty(); }
   public:
     StateUpdater(
         StorageManagerInterface<AssetVersionImpl> * sm,
