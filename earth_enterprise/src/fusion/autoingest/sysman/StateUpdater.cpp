@@ -249,8 +249,7 @@ void StateUpdater::SetStateForRefAndDependents(
     // This is intended as a temporary condition that will no longer be needed
     // when all operations have been converted to use the state updater for
     // propagating state changes. When this happens, the legacy code will have
-    // already propagated the state change, so no further action is necessary
-    // here.
+    // already propagated the state change, so no further action is necessary.
     notify(NFY_INFO, "Unsupported condition encountered in state updater. "
            "Reverting to legacy state propagation.");
   }
@@ -376,8 +375,7 @@ void StateUpdater::SetInProgress(AssetHandle<AssetVersionImpl> & version) {
     // This is intended as a temporary condition that will no longer be needed
     // when all operations have been converted to use the state updater for
     // propagating state changes. When this happens, the legacy code will have
-    // already propagated the state change, so no further action is necessary
-    // here.
+    // already propagated the state change, so no further action is necessary.
     notify(NFY_INFO, "Unsupported condition encountered while setting %s to"
            "InProgress in state updater. Reverting to legacy state propagation.",
            version->GetRef().toString().c_str());
@@ -393,7 +391,7 @@ void StateUpdater::NotifyChildOrInputInProgress(
     const WaitingAssets & waitingAssets,
     const std::vector<SharedString> & toNotify) {
   // If the asset to notify is already waiting, there's nothing to do.
-  // Otherwise, we need to figure out if this should trigger a state change.
+  // Otherwise, we need to recalculate (and possibly propagate) the state.
   for (const SharedString & ref : toNotify) {
     if (!waitingAssets.IsWaiting(ref)) {
       RecalcState(ref);
@@ -406,7 +404,7 @@ void StateUpdater::RecalcState(const SharedString & ref) {
   if (!version->RecalcState()) {
     // If the state didn't change, we may still need to add the asset to the
     // waiting list. For example, Fusion could have restarted since the asset
-    // started waiting.
+    // transitioned to the Waiting state.
     UpdateWaitingAssets(version, AssetDefs::New);
   }
 }
