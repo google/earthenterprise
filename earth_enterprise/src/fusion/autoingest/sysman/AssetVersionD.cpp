@@ -25,6 +25,7 @@
 #include "Misc.h"
 #include "khAssetManager.h"
 #include "fusion/autoingest/MiscConfig.h"
+#include "AssetOperation.h"
 
 // ****************************************************************************
 // ***  StateUpdateNotifier
@@ -268,6 +269,7 @@ void AssetVersionImplD::SetState(
   if (newstate != state) {
     AssetDefs::State oldstate = state;
     state = newstate;
+    HandleStateChange(GetRef(), newstate, oldstate);
     try {
       // NOTE: This can end up calling back here to switch us to
       // another state (usually Failed or Succeded)
@@ -808,13 +810,18 @@ LeafAssetVersionImplD::HandleTaskDone(const TaskDoneMsg &msg)
   if (msg.success) {
     // the output files in the msg have full paths, make them relative to
     // the AssetRoot again
-    ClearOutfiles();                // should already be empty
-    for (const auto &of : msg.outfiles) {
-      outfiles.push_back(of);
-    }
+    ResetOutFiles(msg.outfiles);
     SetState(AssetDefs::Succeeded);
   } else {
     SetState(AssetDefs::Failed);
+  }
+}
+
+void
+LeafAssetVersionImplD::ResetOutFiles(const std::vector<std::string> & newOutfiles) {
+  ClearOutfiles();
+  for (const auto &of : newOutfiles) {
+    outfiles.push_back(of);
   }
 }
 

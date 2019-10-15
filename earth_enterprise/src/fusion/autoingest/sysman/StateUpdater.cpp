@@ -298,6 +298,7 @@ void StateUpdater::SetVersionStateAndRunHandlers(
     if (finalStateChange) {
       AssetDefs::State nextState = AssetDefs::Failed;
       try {
+        HandleStateChange(name, newState, oldState);
         bool hasChildrenBefore = !version->children.empty();
         // This will take care of stopping any running tasks, etc.
         nextState = version->OnStateChange(newState, oldState);
@@ -334,4 +335,48 @@ void StateUpdater::SendStateChangeNotification(
          name.toString().c_str(), 
          ToString(state).c_str());
   assetManager->NotifyVersionStateChange(name, state);
+}
+
+void StateUpdater::HandleStateChange(const SharedString & ref, AssetDefs::State newState, AssetDefs::State oldState) {
+  if (newState == AssetDefs::Waiting) {
+    waitingListeners.insert(ref);
+  }
+  else if (oldState == AssetDefs::Waiting) {
+    waitingListeners.erase(ref);
+  }
+
+  if (newState == AssetDefs::InProgress) {
+    inProgressParents.insert(ref);
+    NotifyInProgress(ref);
+  }
+  else if (oldState == AssetDefs::InProgress) {
+    inProgressParents.erase(ref);
+  }
+}
+
+void StateUpdater::SetInProgress(const SharedString & ref) {
+  auto version = storageManager->GetMutable(ref);
+  SetVersionStateAndRunHandlers(ref, version, version->state, AssetDefs::InProgress, true);
+  SendStateChangeNotification(ref, version->state);
+}
+
+void StateUpdater::NotifyInProgress(const SharedString & ref) {
+  auto version = storageManager->GetMutable(ref);
+  for (const auto & parentRef : version->parents) {
+    HandleProgress(inProgressParents, parentRef);
+  }
+  for (const auto & listenerRef : version->listeners) {
+    HandleProgress(waitingListeners, listenerRef);
+  }
+}
+
+void StateUpdater::HandleProgress(std::set<SharedString> & waitingAssets, const SharedString & ref) {
+  if (waitingAssets.find(ref) == waitingAssets.end()) {
+    RecalcState(ref);
+  }
+}
+
+void StateUpdater::RecalcState(const SharedString & ref) {
+  auto version = storageManager->Get(ref);
+  version->RecalcState();
 }

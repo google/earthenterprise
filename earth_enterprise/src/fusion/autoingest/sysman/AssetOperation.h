@@ -18,7 +18,10 @@
 #define ASSETOPERATION_H
 
 #include "common/SharedString.h"
+#include "fusion/autoingest/sysman/.idl/TaskStorage.h"
 
 void RebuildVersion(const SharedString & ref);
+void HandleTaskProgress(const TaskProgressMsg & msg);
+void HandleStateChange(const SharedString & ref, AssetDefs::State newState, AssetDefs::State oldState);
 
 #endif // ASSETOPERATION_H

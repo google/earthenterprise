@@ -18,7 +18,7 @@
 #define STATEUPDATER_H
 
 #include <set>
-#include <map>
+#include <vector>
 
 #include "AssetVersion.h"
 #include "DependentStateTree.h"
@@ -36,6 +36,8 @@ class StateUpdater
 
     StorageManagerInterface<AssetVersionImpl> * const storageManager;
     khAssetManagerInterface * const assetManager;
+    std::set<SharedString> waitingListeners;
+    std::set<SharedString> inProgressParents;
 
     void SetState(
         DependentStateTree & tree,
@@ -51,6 +53,9 @@ class StateUpdater
     void SendStateChangeNotification(
         const SharedString & name,
         AssetDefs::State state);
+    void HandleProgress(std::set<SharedString> & waitingAssets, const SharedString & ref);
+    void NotifyInProgress(const SharedString & ref);
+    void RecalcState(const SharedString & ref);
   public:
     StateUpdater(StorageManagerInterface<AssetVersionImpl> * sm, khAssetManagerInterface * am) :
         storageManager(sm), assetManager(am) {}
@@ -59,6 +64,8 @@ class StateUpdater
         const SharedString & ref,
         AssetDefs::State newState,
         std::function<bool(AssetDefs::State)> updateStatePredicate);
+    void HandleStateChange(const SharedString & ref, AssetDefs::State newState, AssetDefs::State oldState);
+    void SetInProgress(const SharedString & ref);
 };
 
 #endif

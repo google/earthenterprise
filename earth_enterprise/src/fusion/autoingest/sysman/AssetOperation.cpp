@@ -51,3 +51,30 @@ void RebuildVersion(const SharedString & ref) {
     version->Rebuild();
   }
 }
+
+void HandleTaskProgress(const TaskProgressMsg & msg) {
+  if (MiscConfig::Instance().GraphOperations) {
+    auto version = AssetVersion::storageManager().GetMutable(msg.verref);
+    if (version->taskid == msg.taskid) {
+      version->beginTime = msg.beginTime;
+      version->progressTime = msg.progressTime;
+      updater.SetInProgress(msg.verref);
+      version->progress = msg.progress;
+      if (!AssetDefs::Finished(version->state)) {
+        theAssetManager.NotifyVersionProgress(msg.verref, msg.progress);
+      }
+    }
+  }
+  else {
+    AssetVersionD ver(msg.verref);
+    if (ver->taskid == msg.taskid) {
+      MutableAssetVersionD(msg.verref)->HandleTaskProgress(msg);
+    }
+  }
+}
+
+void HandleStateChange(const SharedString & ref, AssetDefs::State newState, AssetDefs::State oldState) {
+  if (MiscConfig::Instance().GraphOperations) {
+    updater.HandleStateChange(ref, newState, oldState);
+  }
+}

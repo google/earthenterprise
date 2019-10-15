@@ -129,7 +129,7 @@ protected:
 
     SharedString(const std::string& str) {
         key = strStore.KeyFromRef(str);
-    } 
+    }
 
     SharedString(const char* s) {
         key = strStore.KeyFromRef(s);
