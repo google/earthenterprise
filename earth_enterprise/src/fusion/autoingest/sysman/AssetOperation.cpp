@@ -19,6 +19,8 @@
 #include "MiscConfig.h"
 #include "StateUpdater.h"
 
+StateUpdater updater;
+
 void RebuildVersion(const SharedString & ref) {
   if (MiscConfig::Instance().GraphOperations) {
     // Rebuilding an already succeeded asset is quite dangerous!
@@ -42,7 +44,6 @@ void RebuildVersion(const SharedString & ref) {
       }
     }
 
-    StateUpdater updater;
     updater.SetStateForRefAndDependents(ref, AssetDefs::New, AssetDefs::CanRebuild);
   }
   else {
