@@ -355,14 +355,16 @@ void StateUpdater::SetInProgress(AssetHandle<AssetVersionImpl> & version) {
   PropagateInProgress(version);
 }
 
-void StateUpdater::PropagateInProgress(const AssetHandle<AssetVersionImpl> & version) const {
+void StateUpdater::PropagateInProgress(const AssetHandle<AssetVersionImpl> & version) {
   NotifyChildOrInputInProgress(inProgressParents, version->parents);
   NotifyChildOrInputInProgress(waitingListeners, version->listeners);
 }
 
 void StateUpdater::NotifyChildOrInputInProgress(
     const WaitingAssets & waitingAssets,
-    const std::vector<SharedString> & toNotify) const {
+    const std::vector<SharedString> & toNotify) {
+  // If the asset to notify is already waiting, there's nothing to do.
+  // Otherwise, we need to figure out if this should trigger a state change.
   for (const SharedString & ref : toNotify) {
     if (!waitingAssets.IsWaiting(ref)) {
       RecalcState(ref);
@@ -370,7 +372,12 @@ void StateUpdater::NotifyChildOrInputInProgress(
   }
 }
 
-void StateUpdater::RecalcState(const SharedString & ref) const {
-  auto version = storageManager->Get(ref);
-  version->RecalcState();
+void StateUpdater::RecalcState(const SharedString & ref) {
+  auto version = storageManager->GetMutable(ref);
+  if (!version->RecalcState()) {
+    // If the state didn't change, we may still need to add the asset to the
+    // waiting list. For example, Fusion could have restarted since the asset
+    // started waiting.
+    UpdateWaitingAssets(version, AssetDefs::New);
+  }
 }

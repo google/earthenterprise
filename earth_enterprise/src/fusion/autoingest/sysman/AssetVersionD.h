@@ -91,7 +91,7 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   template<bool propagate = true>
   void SetState(AssetDefs::State newstate, const std::shared_ptr<StateChangeNotifier> = nullptr);
   void SetProgress(double newprogress);
-  virtual void SyncState(const std::shared_ptr<StateChangeNotifier> = nullptr) const; // const so can be called w/o mutable handle
+  virtual bool SyncState(const std::shared_ptr<StateChangeNotifier> = nullptr) const; // const so can be called w/o mutable handle
   // will create a mutable handle itself if it
   // needs to call SetState
   void PropagateStateChange(const std::shared_ptr<StateChangeNotifier> = nullptr);
@@ -124,7 +124,7 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   virtual AssetDefs::State OnStateChange(AssetDefs::State newstate,
                                          AssetDefs::State oldstate) override;
   virtual void HandleTaskProgress(const TaskProgressMsg &msg);
-  virtual void RecalcState() const override { SyncState(); }
+  virtual bool RecalcState() const override { return SyncState(); }
 
   class InputVersionHolder : public khRefCounter {
    public:

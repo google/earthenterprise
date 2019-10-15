@@ -25,9 +25,9 @@
 
 #include <vector>
 
-// This class efficiently updates the states of lots of asset versions at the
-// same time. Internally, this class represents the asset versions as a
-// directed acyclic graph, and state updates are performed as graph operations.
+// This class efficiently updates and propagates asset states. Internally, it
+// represents the asset versions as a directed acyclic graph, and state updates
+// are mostly performed as graph operations.
 class StateUpdater
 {
   private:
@@ -51,11 +51,11 @@ class StateUpdater
     void SendStateChangeNotification(
         const SharedString & name,
         AssetDefs::State state) const;
-    void PropagateInProgress(const AssetHandle<AssetVersionImpl> & version) const;
+    void PropagateInProgress(const AssetHandle<AssetVersionImpl> & version);
     void NotifyChildOrInputInProgress(
         const WaitingAssets & waitingAssets,
-        const std::vector<SharedString> & toNotify) const;
-    void RecalcState(const SharedString & ref) const;
+        const std::vector<SharedString> & toNotify);
+    void RecalcState(const SharedString & ref);
     bool IsParent(const AssetHandle<AssetVersionImpl> & version) const
         { return !version->children.empty(); }
   public:

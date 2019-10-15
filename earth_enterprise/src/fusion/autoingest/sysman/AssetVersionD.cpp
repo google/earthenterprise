@@ -308,7 +308,7 @@ AssetVersionImplD::SetProgress(double newprogress)
   }
 }
 
-void
+bool
 AssetVersionImplD::SyncState(const std::shared_ptr<StateChangeNotifier> notifier) const
 {
   if (CacheInputVersions()) {
@@ -321,14 +321,17 @@ AssetVersionImplD::SyncState(const std::shared_ptr<StateChangeNotifier> notifier
     if (newstate != state) {
       MutableAssetVersionD self(GetRef());
       self->SetState(newstate, notifier);
+      return true;
     }
   } else {
     AssetDefs::State newstate = ComputeState();
     if (newstate != state) {
       MutableAssetVersionD self(GetRef());
       self->SetState(newstate, notifier);
+      return true;
     }
   }
+  return false;
 }
 
 void

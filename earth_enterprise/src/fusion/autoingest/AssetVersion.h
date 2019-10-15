@@ -192,8 +192,9 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   virtual void ResetOutFiles(const std::vector<std::string> &) {
     assert(false);
   }
-  virtual void RecalcState() const {
+  virtual bool RecalcState() const {
     assert(false);
+    return false;
   }
 
   // static helpers
