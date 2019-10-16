@@ -23,6 +23,7 @@ Changes:
 ******************************************************************************/
 #include "fusion/autoingest/sysman/InsetTilespaceIndex.h"
 #include "common/khException.h"
+#include "autoingest/plugins/RasterProductAsset.h"
 #include <boost/range/sub_range.hpp>
 #include <boost/range/as_literal.hpp>
 #include <boost/range/algorithm.hpp>
@@ -36,9 +37,10 @@ Changes:
 #include <stdint.h>
 #include <assert.h>
 
+
 // getExtents functions - allow us to get khExtents<double> from the different types
 //   we want to work with
-khExtents<double>& getExtents(const khExtents<double> &extents){
+khExtents<double> getExtents(const khExtents<double> &extents){
     return extents;
 }
 
@@ -49,28 +51,34 @@ khExtents<double> getExtents(const InsetInfo<RasterProductAssetVersion> &insetIn
 
 
 // InsetTilespaceIndex methods
-template<class ExtentContainer>
-QuadtreePath InsetTilespaceIndex::add(const ExtentContainer &toAdd);
+template <class ExtentContainer>
+QuadtreePath InsetTilespaceIndex<ExtentContainer>::add(const ExtentContainer &toAdd){
     int level;
     khExtents<double> tempExtents = ::getExtents(toAdd);
+    // Temporary assert while debugging. It's possible that this could be triggered
+    // by valid data, but unlikely enough that I think it's still helpful for
+    // debugging.
+    assert(!(tempExtents.beginX() == 0.0 || tempExtents.endX() == 0.0 ||
+             tempExtents.beginY() == 0.0 || tempExtents.endY() == 0.0 ));
     QuadtreePath quadtreeMbr = getQuadtreeMBR(tempExtents, level, MAX_LEVEL);
 
     //std::vector<const khExtents<uint32>*> mbrExtentsVec = _mbrExtentsVecMap.find( mbrHash );
     ContainerVector *mbrExtentsVec;
-    QuadTreeMap::iterator it;
+    typename QuadTreeMap::iterator it;
     it = _mbrExtentsVecMap.find(quadtreeMbr);
 
     if (it == _mbrExtentsVecMap.end()) {
-        mbrExtentsVec = new std::vector<ExtentContainer*>();
+        mbrExtentsVec = new ContainerVector();//std::vector<ExtentContainer*>();
         _mbrExtentsVecMap.insert({quadtreeMbr, *mbrExtentsVec});
     } else {
         mbrExtentsVec = &(it->second);
     }
-    mbrExtentsVec->push_back(toAdd);
+    mbrExtentsVec->push_back(&toAdd);
     return quadtreeMbr;
 }
 
-QuadtreePath InsetTilespaceIndex::getQuadtreeMBR(const khExtents<double> &extents, int &level, const int max_level) {
+template <class ExtentContainer>
+QuadtreePath InsetTilespaceIndex<ExtentContainer>::getQuadtreeMBR(const khExtents<double> &extents, int &level, const int max_level) {
     double north = 180;
     double south = -180;
     double west = -180;
@@ -129,8 +137,9 @@ QuadtreePath InsetTilespaceIndex::getQuadtreeMBR(const khExtents<double> &extent
 
 }
 
+template <class ExtentContainer>
 std::vector <QuadtreePath>
-InsetTilespaceIndex::intersectingExtentsQuadtreePaths(QuadtreePath quadtreeMbr, uint32 minLevel, uint32 maxLevel) {
+InsetTilespaceIndex<ExtentContainer>::intersectingExtentsQuadtreePaths(QuadtreePath quadtreeMbr, uint32 minLevel, uint32 maxLevel) {
     //uint64 mbrHash = qtpath.internalPath();
     //std::vector <QuadtreePath>  mbrHashVec = _mbrExtentsVecMap.getKeys();
     std::vector <QuadtreePath> mbrHashVec;
@@ -155,9 +164,9 @@ InsetTilespaceIndex::intersectingExtentsQuadtreePaths(QuadtreePath quadtreeMbr, 
 }
 
 
-template<class ExtentContainer>
-ContainerVector
-InsetTilespaceIndex::intersectingExtents(const QuadtreePath quadtreeMbr, uint32 minLevel, uint32 maxLevel) {
+template <class ExtentContainer>
+typename InsetTilespaceIndex<ExtentContainer>::ContainerVector
+InsetTilespaceIndex<ExtentContainer>::intersectingExtents(const QuadtreePath quadtreeMbr, uint32 minLevel, uint32 maxLevel) {
     std::vector <QuadtreePath> intersectingQuadtreeMbrs = intersectingExtentsQuadtreePaths(quadtreeMbr, minLevel,
                                                                                            maxLevel);
     ContainerVector intersectingExtentsVec;
@@ -169,6 +178,7 @@ InsetTilespaceIndex::intersectingExtents(const QuadtreePath quadtreeMbr, uint32 
 }
 
 
-
+template class InsetTilespaceIndex<khExtents<double>>;
+template class InsetTilespaceIndex<InsetInfo<RasterProductAssetVersion>>;
 
 

@@ -46,12 +46,12 @@ const int MAX_LEVEL = 24;
 
 template<class ExtentContainer>
 class InsetTilespaceIndex {
-
+public:
+    using ContainerVector = typename std::vector<const ExtentContainer*>;
 protected:
-    using QuadTreeMap = std::map <QuadtreePath, std::vector<ExtentContainer*>>;
+    using QuadTreeMap = typename std::map <QuadtreePath, ContainerVector>;
     QuadTreeMap _mbrExtentsVecMap;
 public:
-    using ContainerVector = std::vector<ExtentContainer*>;
     InsetTilespaceIndex() = default;
 
     //QuadtreePath add(const khExtents <double> &extents);
@@ -59,8 +59,7 @@ public:
 
     QuadtreePath getQuadtreeMBR(const khExtents<double> &extents, int &level, const int max_level);
 
-    std::vector<khExtents <double> >
-        intersectingExtents(const QuadtreePath tilespaceMBR, uint32 minLevel, uint32 maxLevel);
+    ContainerVector intersectingExtents(const QuadtreePath tilespaceMBR, uint32 minLevel, uint32 maxLevel);
 
     std::vector <QuadtreePath>
     intersectingExtentsQuadtreePaths(const QuadtreePath tilespaceMBR, uint32 minLevel, uint32 maxLevel);
