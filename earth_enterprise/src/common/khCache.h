@@ -72,10 +72,10 @@ class khCacheItem {
 
 // #define CHECK_INVARIANTS
 
-template <class Key, class Value>
+template <class Key, class Value, template<typename...> class MapTemplate = std::map>
 class khCache {
   typedef khCacheItem<Key, Value> Item;
-  typedef std::map<Key, Item*> MapType;
+  typedef MapTemplate<Key, Item*> MapType;
   using TimePoint = std::chrono::time_point<std::chrono::high_resolution_clock>;
   MapType map;
   Item *head;

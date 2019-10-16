@@ -17,7 +17,7 @@
 #ifndef STORAGEMANAGER_H
 #define STORAGEMANAGER_H
 
-#include <map>
+#include <unordered_map>
 #include <mutex>
 #include <string>
 #include <time.h>
@@ -102,7 +102,7 @@ class StorageManager : public StorageManagerInterface<AssetType> {
     // Pass a handle to a non-const so callers can modify it.
     AssetHandle<AssetType> GetMutable(const AssetKey &);
   private:
-    using CacheType = khCache<AssetKey, PointerType>;
+    using CacheType = khCache<AssetKey, PointerType, std::unordered_map>;
 
     static const bool check_timestamps;
 
@@ -110,7 +110,7 @@ class StorageManager : public StorageManagerInterface<AssetType> {
     const std::string assetType;
     const SerializerPtr serializer;
     CacheType cache;
-    std::map<AssetKey, PointerType> dirtyMap;
+    std::unordered_map<AssetKey, PointerType> dirtyMap;
 
     StorageManager(const StorageManager &) = delete;
     StorageManager& operator=(const StorageManager &) = delete;
@@ -336,7 +336,7 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
     std::vector<AssetKey> *saved) {
   notify(NFY_INFO, "Writing %lu %s records", dirtyMap.size(), assetType.c_str());
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
-  typename std::map<AssetKey, PointerType>::iterator entry = dirtyMap.begin();
+  typename std::unordered_map<AssetKey, PointerType>::iterator entry = dirtyMap.begin();
   while (entry != dirtyMap.end()) {
     std::string filename = entry->second->XMLFilename() + ".new";
 
