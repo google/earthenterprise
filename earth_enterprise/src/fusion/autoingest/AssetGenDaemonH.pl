@@ -131,7 +131,7 @@ public:
 
     virtual std::string GetName() const;
     virtual void SerializeConfig(khxml::DOMElement*) const;
-    virtual uint64 GetSize() override;
+    virtual uint64 GetHeapUsage() const override;
 
     // Only used when constructing a new version from an asset.
     // The decision to use the raw ImplD* here was a tough one.
@@ -195,7 +195,7 @@ public:
     void Modify($formalinputarg
                 const khMetaData & meta_,
                 const Config &config_);
-    virtual uint64 GetSize() override;
+    virtual uint64 GetHeapUsage() const override;
 EOF
     
 if ($haveBindConfig) {

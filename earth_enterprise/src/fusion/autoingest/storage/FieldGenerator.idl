@@ -30,13 +30,7 @@ class FieldGenerator {
   inline bool HasJS(void) const {
     return ((mode == FieldGenerator::JSExpression) && !empty());
   }
-public:
-  uint64 GetSize() {
-    return sizeof(*this)
-            + GetObjectSize(value);
-  }
 #/hquote
 
 #pragma GenerateIsUpToDate
 };
-

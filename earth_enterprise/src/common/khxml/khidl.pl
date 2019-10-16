@@ -120,10 +120,14 @@ my $cppquote = '';
 my $IDLFILE;
 my $needqt = 0;
 my %ExternalHasDeprecated;
+my %RequiresGetHeapUsage;
 open($IDLFILE, $idlfile) || die "Unable to open $idlfile: $!\n";
 my $line;
 eval {
     while ($line = GetContentLine($IDLFILE)) {
+    if ($line =~ /CacheSizeCalculations/) {
+        $RequiresGetHeapUsage = 1;
+    }
 	if ($line =~ /^\s*class\s+/) {
 	    my $class = ParseClass($line, $IDLFILE);
 	    push @classes, $class;
@@ -143,9 +147,9 @@ eval {
 		$cppquote .= $line . "\n";
 		$line = GetLine($IDLFILE);
 	    }
-        } elsif ($line =~ /^ExternalHasDeprecated:\s*(\w+)/) {
-            $ExternalHasDeprecated{$1} = 1;
-        } else {
+    } elsif ($line =~ /^ExternalHasDeprecated:\s*(\w+)/) {
+        $ExternalHasDeprecated{$1} = 1;
+    } else {
 	    die "Expected class definition found '$line'\n";
 	}
     }
@@ -1147,6 +1151,32 @@ sub DumpClass
       print $fh $pad, $indent, "}\n";
     }
 
+    # GetHeapUsage
+    if ($RequiresGetHeapUsage) {
+        my $haveFirst = 0;
+        my $curr = 1;
+        my $size = @{$class->{members}};
+        print $fh $pad, $indent, "uint64 GetHeapUsage() const {\n";
+        foreach my $member (@{$class->{members}}) {
+            if ($curr == $size) {
+                if ($haveFirst) {
+                    print $fh $pad, $indent x2, "+ ::GetHeapUsage($member->{name});\n";
+                }else {
+                    print $fh $pad, $indent x2, "return ::GetHeapUsage($member->{name});\n";
+                }
+                last;
+            }
+	        if ($haveFirst) {
+            print $fh $pad, $indent x2, "+ ::GetHeapUsage($member->{name})\n";
+	        } else {
+	    	print $fh $pad, $indent, $indent, "return ::GetHeapUsage($member->{name})\n";
+	    	$haveFirst = 1;
+	        }
+            $curr++;
+	    }
+        print $fh $pad, $indent, "}\n";
+    }
+
     if ($class->{hquote}) {
 	print $fh $class->{hquote};
     }
@@ -1353,6 +1383,11 @@ sub DumpGlobalClassHelpers
     if ($class->{GenerateIsUpToDate}) {
         print $fh "inline bool IsUpToDate(const $class->{qualname} &a, const $class->{qualname} &b) {\n";
         print $fh $indent, "return a.IsUpToDate(b);\n";
+        print $fh "}\n\n";
+    }
+    if ($RequiresGetHeapUsage) {
+        print $fh "inline uint64 GetHeapUsage(const $class->{qualname} &obj) {\n";
+        print $fh $indent, "return obj.GetHeapUsage();\n";
         print $fh "}\n\n";
     }
 }

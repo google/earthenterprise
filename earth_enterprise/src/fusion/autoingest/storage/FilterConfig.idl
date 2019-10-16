@@ -23,13 +23,6 @@ class SelectRuleConfig {
   uint fieldNum;
   QString rvalue;
 #pragma GenerateIsUpToDate
-#hquote
-public:
-  uint64 GetSize() {
-    return sizeof(*this)
-            + GetObjectSize(rvalue);
-  }
-#/hquote
 };
 
 class FilterConfig {
@@ -40,16 +33,6 @@ class FilterConfig {
 #hquote
   inline bool HasJS(void) const {
     return ((match == JSExpression) && !matchScript.isEmpty());
-  }
-public:
-  uint64 GetSize() {
-    uint64 selectRulesSize = 0;
-    for (auto selectRule : selectRules) {
-      selectRulesSize += selectRule.GetSize();
-    }
-    return sizeof(*this)
-            + selectRulesSize
-            + GetObjectSize(matchScript);
   }
 #/hquote
 

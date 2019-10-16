@@ -22,11 +22,6 @@
 // ****************************************************************************
 class CombinedTerrainConfig {
   IsUpToDateIgnore uint index_version_;
-#hquote
-  uint64 GetSize() {
-    return sizeof(*this);
-  }
-#/hquote
 
   // Note: Basic rule for #version: "If the low level tool ever
   // changes to produce different output from the same config record, then

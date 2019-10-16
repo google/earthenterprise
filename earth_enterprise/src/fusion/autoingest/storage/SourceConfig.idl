@@ -34,14 +34,6 @@ class SourceConfig {
     uint64      size;
     time_t      mtime;
 #pragma GenerateIsUpToDate
-  #hquote
-  public:
-    uint64 GetSize() {
-      return sizeof(*this)
-              + GetObjectSize(uri);
-              + GetObjectSize(mtime);
-    }
-  #/hquote
   };
   std::vector<FileInfo> sources;
 
@@ -73,14 +65,6 @@ class SourceConfig {
         }
       }
     }
-  }
-  uint64 GetSize() {
-    uint64 sourcesSize = 0;
-    for (auto source : sources) {
-      sourcesSize += source.GetSize();
-    }
-    return sizeof(*this)
-            + sourcesSize;
   }
 #/hquote
 
@@ -120,5 +104,4 @@ class SourceConfig {
 #/cppquote
 
 
-}
-
+};

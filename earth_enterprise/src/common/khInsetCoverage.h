@@ -178,14 +178,9 @@ class khInsetCoverage {
                   uint stepOutSize,
                   uint paddingSize);
 
-  uint64 GetSize() {
-    uint64 extentsVecSize = 0;
-    for (auto extents : extentsVec) {
-      extentsVecSize += extents.GetSize();
-    }
-    return sizeof(*this)
-            + degree_extents_.GetSize()
-            + extentsVecSize;
+  uint64 GetHeapUsage() const {
+    return ::GetHeapUsage(degree_extents_)
+            + ::GetHeapUsage(extentsVec);
   }
 };
 
@@ -273,6 +268,10 @@ khInsetCoverage::Narrow(CovIter beginOthers, CovIter endOthers)
   }
 
   return false;
+}
+
+inline uint64 GetHeapUsage(const khInsetCoverage &insetCoverage) {
+  return insetCoverage.GetHeapUsage();
 }
 
 #endif /* __khInsetCoverage_h */

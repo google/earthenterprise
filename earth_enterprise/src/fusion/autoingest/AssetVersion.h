@@ -140,20 +140,19 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   }
 
   // determine amount of memory used by an AssetVersionImpl
-  virtual uint64 GetSize() {
-    return sizeof(*this)
-    + GetObjectSize(name)
-    + GetObjectSize(subtype)
-    + GetObjectSize(inputs)
-    + GetObjectSize(children)
-    + GetObjectSize(parents)
-    + GetObjectSize(listeners)
-    + GetObjectSize(outfiles)
-    + meta.GetSize()
-    + GetObjectSize(beginTime)
-    + GetObjectSize(progressTime)
-    + GetObjectSize(endTime)
-    + GetObjectSize(timestamp);
+  virtual uint64 GetHeapUsage() const {
+    return ::GetHeapUsage(name)
+    + ::GetHeapUsage(subtype)
+    + ::GetHeapUsage(inputs)
+    + ::GetHeapUsage(children)
+    + ::GetHeapUsage(parents)
+    + ::GetHeapUsage(listeners)
+    + ::GetHeapUsage(outfiles)
+    + ::GetHeapUsage(meta)
+    + ::GetHeapUsage(beginTime)
+    + ::GetHeapUsage(progressTime)
+    + ::GetHeapUsage(endTime)
+    + ::GetHeapUsage(timestamp);
   }
   template <class outIter>
   outIter GetInputs(outIter oi) const {
@@ -348,5 +347,8 @@ class CompositeAssetVersionImpl : public virtual AssetVersionImpl {
   std::string GetOutputFilename(uint i) const;
 };
 
+inline uint64 GetHeapUsage(const AssetVersionImpl &version) {
+  return version.GetHeapUsage();
+}
 
 #endif  // GEO_EARTH_ENTERPRISE_SRC_FUSION_AUTOINGEST_ASSETVERSION_H_

@@ -27,15 +27,6 @@ class FuseItem {
   FuseFeatureConfig feature;
   FuseSiteConfig site;
   std::string filename; // file containing output from completed queries
-#hquote
-public:
-  uint64 GetSize() {
-    return sizeof(*this)
-            + feature.GetSize()
-            + site.GetSize()
-            + GetObjectSize(filename);
-  }
-#/hquote
 };
 
 class FuseConfig {
@@ -44,17 +35,6 @@ class FuseConfig {
   deprecated std::vector<SearchField> searchFields = std::vector<SearchField>();
   deprecated std::string searchStyle = std::string();
 
-#hquote
-  uint64 GetSize() {
-    uint64 itemsSize = 0;
-    for (auto item : items) {
-      itemsSize += item.GetSize();
-    }
-    return sizeof(*this)
-            + itemsSize
-            + GetObjectSize(contextScript);
-  }
-#/hquote
 
 #pragma LoadAndSave
 };
@@ -68,12 +48,6 @@ class VectorFuseAssetItem {
 #hquote
   inline bool HasJS(void) const {
     return (feature.HasJS() || site.HasJS());
-  }
-public:
-  uint64 GetSize() {
-    return sizeof(*this)
-            + feature.GetSize()
-            + site.GetSize();
   }
 #/hquote
   
@@ -98,15 +72,6 @@ class VectorFuseAssetConfig {
 #hquote
   bool HasJS(void) const;
   VectorFuseAssetConfig(const LayerConfig &layerConfig);
-  uint64 GetSize() {
-    uint64 itemsSize = 0;
-    for (auto item : items) {
-      itemsSize += item.GetSize();
-    }
-    return sizeof(*this)
-            + itemsSize
-            + GetObjectSize(contextScript);
-  }
 #/hquote
 
 #cppquote
@@ -134,4 +99,3 @@ class VectorFuseAssetConfig {
   }
 #/cppquote
 };
-

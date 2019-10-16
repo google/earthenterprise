@@ -31,14 +31,6 @@ class PacketGenConfig {
     std::string rasterProductVersion;
     std::string packgenVersion = std::string();
 #pragma GenerateIsUpToDate
-  #hquote
-  public:
-    uint64 GetSize() {
-      return sizeof(*this)
-              + GetObjectSize(rasterProductVersion)
-              + GetObjectSize(packgenVersion);
-    }
-  #/hquote
   };
 
   std::vector<Inset> insets;
@@ -58,17 +50,6 @@ class PacketGenConfig {
   // add(or not) separate alpha_image into imagery-packet.
   deprecated bool            separate_alpha_ = true;
 
-#hquote
-  uint64 GetSize() {
-    uint64 insetsSize = 0;
-    for (auto inset : insets) {
-      insetsSize += inset.GetSize();
-    }
-    return sizeof(*this)
-            + insetsSize;
-            + coverage.GetSize();
-  }
-#/hquote
 
   // Note: Basic rule for #version: "If the low level tool ever
   // changes to produce different output from the same config record, then

@@ -41,9 +41,6 @@ class geRange {
       max(static_cast<T>(o.max))
   { }
 
-  uint64 GetSize() {
-    return sizeof(*this);
-  }
 };
 
 #endif // COMMON_GERANGE_H__

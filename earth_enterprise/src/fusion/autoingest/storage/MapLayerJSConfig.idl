@@ -40,32 +40,18 @@ class MapLayerJSConfig {
 
 #pragma GenerateIsUpToDate
 
-#hquote
- public:
-   // Converts a projection type to its string representation in maps.json.
-   std::string ProjectionToString() const;
-   static std::string ProjectionToString(const Projection projection);
-   uint64 GetSize() {
-     return sizeof(*this)
-              + legend_.GetSize();
-   }
-
-#/hquote
+  #hquote
+   public:
+     // Converts a projection type to its string representation in maps.json.
+     std::string ProjectionToString() const;
+     static std::string ProjectionToString(const Projection projection);
+  
+  #/hquote
 
   };
 
   std::vector<Layer> layers_;
 
-#hquote
-  uint64 GetSize() {
-    uint64 layers_Size = 0;
-    for (auto layer : layers_) {
-      layers_Size += layer.GetSize();
-    }
-    return sizeof(*this)
-            + layers_Size;
-  }
-#/hquote
 
 #pragma GenerateIsUpToDate
 #pragma LoadAndSave

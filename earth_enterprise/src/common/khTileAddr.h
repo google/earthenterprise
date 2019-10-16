@@ -26,6 +26,7 @@
 #include "common/khTileAddrConsts.h"
 #include "common/quadtreepath.h"
 #include "common/projection.h"
+#include "CacheSizeCalculations.h"
 
 
 // ****************************************************************************
@@ -668,9 +669,8 @@ class khLevelCoverage {
   khLevelCoverage UpperCoverage(const khTilespace &tilespace) const;
   khLevelCoverage RightCoverage(const khTilespace &tilespace) const;
   khLevelCoverage UpperRightCoverage(const khTilespace &tilespace) const;
-  uint64 GetSize() {
-    return sizeof(*this)
-            + extents.GetSize();
+  uint64 GetHeapUsage() const {
+    return ::GetHeapUsage(extents);
   }
 };
 
@@ -699,6 +699,10 @@ TranslateLevelCoverage(const khTilespaceBase& from, const khLevelCoverage& cov,
 
   return khLevelCoverage(TranslateTileLevel(from, cov.level, to),
                          tmp.extents);
+}
+
+inline uint64 GetHeapUsage(const khLevelCoverage &levelCoverage) {
+  return levelCoverage.GetHeapUsage();
 }
 
 

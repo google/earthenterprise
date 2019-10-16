@@ -30,11 +30,6 @@ class SearchTabReference
 #hquote
   // defined in autoingest/SearchTabReferenceImpl.cpp
   SearchTabDefinition Bind(void) const;
-public:
-  uint64 GetSize() {
-    return sizeof(*this)
-            + GetObjectSize(project_ref_);
-  }
 #/hquote
 
 #pragma GenerateIsUpToDate

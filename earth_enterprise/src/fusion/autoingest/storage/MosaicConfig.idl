@@ -36,12 +36,5 @@ class MosaicConfig {
       found = fill.find(", ");
     }
   }
-  uint64 GetSize() {
-    return sizeof(*this)
-            + GetObjectSize(fill)
-            + GetObjectSize(lutfile)
-            + GetObjectSize(overridesrs);
-  }
 #/hquote
 };
-

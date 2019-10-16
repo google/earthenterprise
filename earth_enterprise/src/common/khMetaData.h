@@ -42,13 +42,9 @@ class khMetaData
     map.erase(key);
   }
 
-  // determine amount of memory used by a khMetaData object and the map it holds
-  uint64 GetSize() {
-    uint64 total = 0;
-    for (const auto &i : map) {
-      total += GetObjectSize(i.first) + GetObjectSize(i.second);
-    }
-    return sizeof(*this) + total;
+  // determine amount of memory used by members
+  uint64 GetHeapUsage() const {
+    return ::GetHeapUsage(map);
   }
 
   bool operator==(const khMetaData &o) const { return map == o.map; }
@@ -77,5 +73,8 @@ class khMetaData
   }
 };
 
+inline uint64 GetHeapUsage(const khMetaData &metaData) {
+  return metaData.GetHeapUsage();
+}
 
 #endif /* __khMetaData_h */

@@ -333,10 +333,6 @@ class khExtents {
       return true;
     }
   }
-
-  uint64 GetSize() {
-    return sizeof(*this);
-  }
 };
 
 

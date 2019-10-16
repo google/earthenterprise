@@ -23,11 +23,6 @@
 class ProjectedMapProjectConfig {
   AssetDefs::Projection   projection_
   IsUpToDateIgnore uint32 index_version_ = uint(1);
-#hquote
-  uint64 GetSize() {
-    return sizeof(*this);
-  }
-#/hquote
 
 #pragma GenerateIsUpToDate
 };

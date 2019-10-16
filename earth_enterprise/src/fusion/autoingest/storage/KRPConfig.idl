@@ -30,12 +30,6 @@ class KRPConfig {
   double east_boundary = new:180.0, load:180.0;
   double west_boundary = new:-180.0, load:-180.0;
 
-#hquote
-  uint64 GetSize() {
-    return sizeof(*this)
-            + GetObjectSize(overridesrs);
-  }
-#/hquote
 
 #pragma GenerateIsUpToDate
 };

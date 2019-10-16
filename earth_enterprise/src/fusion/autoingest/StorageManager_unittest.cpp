@@ -56,10 +56,10 @@ class TestItem : public StorageManaged, public TestItemStorage {
 
   // determine amount of memory used by TestItem
   uint64 GetSize() {
-    return (GetObjectSize(val)
-    + GetObjectSize(type)
-    + GetObjectSize(savename)
-    + GetObjectSize(saveSucceeds));
+    return GetHeapUsage(val)
+    + ::GetHeapUsage(type)
+    + ::GetHeapUsage(savename)
+    + ::GetHeapUsage(saveSucceeds);
   }
 
   static string Filename(const std::string ref) {
