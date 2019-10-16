@@ -490,13 +490,14 @@ VectorProjectAssetVersionImplD::UpdateChildren(void)
     char layername[32];
     snprintf(layername, sizeof(layername), "layer%03d", channelId);
 
-    MutableAssetVersionD layer
-      = VectorLayerFactory::FindMakeAndUpdateSubAsset
-      (assetRef, layername,
-       makevec1<SharedString>(kvp->GetRef()),
-       khMetaData(),
-       *layerConfig,
-       makevec1<AssetVersion>(kvp));
+    MutableAssetVersionD layer =
+      AssetFactory::FindMakeAndUpdateSubAsset<MutableVectorLayerAssetVersionD, AssetVersion>
+                    (assetRef,
+                     layername,
+                     makevec1<SharedString>(kvp->GetRef()),
+                     khMetaData(),
+                     *layerConfig,
+                     makevec1<AssetVersion>(kvp));
 
     // Save the ref to this layer's current VectorFuseAssetVersion
     //     My other two children need them. We store it in a vector and
@@ -542,11 +543,13 @@ VectorProjectAssetVersionImplD::UpdateChildren(void)
 
     // make it my first child
     MutableAssetVersionD geindex =
-      VectorGEIndexFactory::FindMakeAndUpdateSubAsset(assetRef, "geindex",
-                                                      geindexinputs,
-                                                      khMetaData(),
-                                                      geindexConfig,
-                                                      geindexinputvers);
+      AssetFactory::FindMakeAndUpdateSubAsset<MutableVectorGEIndexAssetVersionD, AssetVersion>
+                    (assetRef,
+                    "geindex",
+                    geindexinputs,
+                    khMetaData(),
+                    geindexConfig,
+                    geindexinputvers);
     AddChild(geindex);
   }
 
@@ -570,11 +573,13 @@ VectorProjectAssetVersionImplD::UpdateChildren(void)
     // is how mine are listed. That way a reorder of the layers will force
     // a new dbRoot
     MutableAssetVersionD dbroot =
-      VectorDBRootFactory::FindMakeAndUpdateSubAsset(assetRef, "dbroot",
-                                                     vecfuses,
-                                                     khMetaData(),
-                                                     dbrootConfig,
-                                                     vecfusevers);
+      AssetFactory::FindMakeAndUpdateSubAsset<MutableVectorDBRootAssetVersionD, AssetVersion>
+                           (assetRef,
+                           "dbroot",
+                           vecfuses,
+                           khMetaData(),
+                           dbrootConfig,
+                           vecfusevers);
     AddChild(dbroot);
   }
 

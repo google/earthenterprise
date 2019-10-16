@@ -22,4 +22,5 @@ Fusion Administration
    fusionAdministration/pushAndPublishDB
    fusionAdministration/publishDBWithDiscPublishing
    fusionAdministration/troubleshootPushPublishIssues
+   fusionAdministration/osSettings
    fusionAdministration/commandReference

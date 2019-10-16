@@ -16,7 +16,7 @@
     <script type="text/javascript" src="../../static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Command reference" href="commandReference.html" />
+    <link rel="next" title="Operating System Settings That May Affect Fusion" href="osSettings.html" />
     <link rel="prev" title="Publish databases using disconnected publishing" href="publishDBWithDiscPublishing.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
@@ -30,7 +30,7 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="commandReference.html" title="Command reference"
+          <a href="osSettings.html" title="Operating System Settings That May Affect Fusion"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="publishDBWithDiscPublishing.html" title="Publish databases using disconnected publishing"
@@ -45,8 +45,8 @@
   <p class="topless"><a href="publishDBWithDiscPublishing.html"
                         title="previous chapter">Publish databases using disconnected publishing</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="commandReference.html"
-                        title="next chapter">Command reference</a></p>
+  <p class="topless"><a href="osSettings.html"
+                        title="next chapter">Operating System Settings That May Affect Fusion</a></p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <div class="searchformwrapper">
@@ -146,7 +146,7 @@ system administrator.</p>
 </li>
 <li><p class="first">Review the HTTP and Postgres processes. They should look
 something like this:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># ps -ef | grep http
+<div class="highlight-none notranslate"><div class="highlight"><pre># ps -ef | grep http
 root 9220 1 0 Mar13 ? 00:00:00 /opt/google/gehttpd/bin/gehttpd
 505 14608 9220 0 Mar15 ? 00:00:00 /opt/google/gehttpd/bin/gehttpd
 505 14609 9220 0 Mar15 ? 00:00:00 /opt/google/gehttpd/bin/gehttpd
@@ -186,7 +186,7 @@ command to make sure that everything is running properly.</p>
 <li><p class="first">Review the <code class="docutils literal notranslate"><span class="pre">wsgi:ge</span></code> processes, which are GEE Server services
 that support pushing and publishing. They should look something
 like this:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ps -ef | grep &#39;wsgi:ge&#39;
+<div class="highlight-none notranslate"><div class="highlight"><pre>ps -ef | grep &#39;wsgi:ge&#39;
 65609 7272 3445 0 Aug10 ? 00:00:11 (wsgi:ge_push_serve) -k start
 65609 7273 3445 0 Aug10 ? 00:00:12 (wsgi:ge_publish_serve) -k start
 65609 7274 3445 0 Aug10 ? 00:00:11 (wsgi:ge_publish_aux_serve) -k start
@@ -363,7 +363,7 @@ files you can review for errors.</p>
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="commandReference.html" title="Command reference"
+          <a href="osSettings.html" title="Operating System Settings That May Affect Fusion"
              >next</a> |</li>
         <li class="right" >
           <a href="publishDBWithDiscPublishing.html" title="Publish databases using disconnected publishing"
