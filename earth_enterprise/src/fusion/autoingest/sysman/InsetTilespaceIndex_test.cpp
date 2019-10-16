@@ -16,7 +16,7 @@
 #include "common/khStringUtils.h"
 #include "common/quadtreepath.h"
 #include "fusion/autoingest/sysman/InsetTilespaceIndex.h"
-//#include "fusion/autoingest/sysman/InsetInfo.h"
+#include "fusion/autoingest/sysman/InsetInfo.h"
 #include "common/khException.h"
 #include "common/khExtents.h"
 #include "common/khInsetCoverage.h"
@@ -42,59 +42,42 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-#include <iostream>
+
+
+class TestData {
+    // TODO - doc structure.
+    std::vector <khExtents<double>> extentsVec;
+
+public:
+    TestData(std::string fname) {
+        std::ifstream input(fname);
+
+        // First line and all even lines have 4 floats, for decimal degree representations of the input insets.
+        // Every odd line is a QtMBR.  Let's just read them in pairs.
+        for (std::string line; std::getline(input, line);)   //read stream line by line
+        {
+            std::istringstream in(line);
+            double x1, x2, y1, y2;
+            in >> x1 >> x2 >> y1 >> y2;
+            khExtents<double> extents(XYOrder, x1, x2, y1, y2);
+            std::getline(input, line);
+            // Note -  discarding the MBR for now, we'll recalculate it.
+            std::string qtp_txt, qtp_level;
+            in >> qtp_txt >> qtp_level;
+            // QuadtreePath qtpMbr(qtp_txt);
+            extentsVec.push_back(extents);
+        }
+    }
+
+    //std::map<khExtents < double>, QuadtreePath>
+    std::vector<khExtents<double>>
+    getData() { return extentsVec; }
+};
 
 class InsetTilespaceIndexTest : public testing::Test {
 protected:
     InsetTilespaceIndex insetTilespaceIndex;
 public:
-    struct TestData {
-        uint beginLevel;
-        uint endLevel;
-        uint numLevels;
-        khExtents<double> degExtents;
-        std::vector<khExtents<uint32>> levelExtentsVec;
-    };
-
-    std::vector<TestData> getTestData() {
-        std::vector<TestData> testDataVec;
-        std::ifstream dataFile("/home/jkent/VSCode/earthenterprise/earth_enterprise/src/fusion/testdata/TestDataForQTPs.txt");
-        int datasets = 1;
-        //TODO: fix condition to stop at last data set correctly.
-        while (datasets < 5) {
-            TestData testData;
-            std::string s;
-            dataFile >> testData.beginLevel;
-            dataFile >> testData.endLevel;
-            dataFile >> s;
-            std::stringstream degSS(s);
-            std::vector<double> degs;
-            for (double deg; degSS >> deg;) {
-                degs.push_back(deg);
-                if (degSS.peek() == ',') {
-                    degSS.ignore();
-                }
-            }
-            testData.degExtents = khExtents<double>(XYOrder, degs.at(0), degs.at(1), degs.at(2), degs.at(3));
-            dataFile >> testData.numLevels;
-            for (int i = 0; i < (int)testData.numLevels; i++) {
-                std::string s2;
-                dataFile >> s2;
-                std::stringstream levelSS(s2);
-                std::vector<uint32> levels;
-                for (uint32 level; levelSS >> level;) {
-                    levels.push_back(level);
-                    if (levelSS.peek() == ',') {
-                        levelSS.ignore();
-                    }
-                }
-                testData.levelExtentsVec.push_back(khExtents<uint32>(XYOrder, levels.at(0), levels.at(1), levels.at(2), levels.at(3)));
-            }
-            testDataVec.push_back(testData);
-            datasets++;
-        }
-        return testDataVec;
-    }
 
     // TODO - set gencov
     // Build an inset coverage from NORM extents
@@ -106,134 +89,75 @@ public:
     //                 uint beginCoverageLevel,
     //                 uint endCoverageLevel);
 
-    std::vector <khExtents<uint32>>
+    std::vector <khExtents<double>>
     findInsetsControlAlgo(const khInsetCoverage &coverage,
-                          const std::vector<khExtents<uint32>> &testLevelExtentsVec,
-                          const uint &level) {
-        uint beginMinifyLevel = 0;
-        uint endMinifyLevel = 21;
+                          const std::vector <khExtents<double>> &inputExtents) {
+        uint beginMinifyLevel = 1;
+        uint endMinifyLevel = 19;
         std::vector <uint32> neededIndexes; //This is our return value...
-        std::vector <khExtents<uint32>> matchingExtents;
-        
+        std::vector <khExtents<double>> matchingExtents;
+        std::vector <khExtents<uint32>> tileExtentsVec;
+
+
+        for (auto degExtents : inputExtents) {
+            khExtents <uint32> tileExtents = DegExtentsToTileExtents(degExtents, coverage.beginLevel());
+            tileExtentsVec.push_back(tileExtents);
+        }
+        uint vecsize = (uint) tileExtentsVec.size();
         FindNeededImageryInsets(coverage,
-                                testLevelExtentsVec,
-                                testLevelExtentsVec.size(),
+                                tileExtentsVec,
+                                (uint) tileExtentsVec.size(),
                                 neededIndexes,
                                 beginMinifyLevel,
-                                endMinifyLevel,
-                                level);
+                                endMinifyLevel);
+        notify(NFY_WARN, "%lu", neededIndexes.size());
         for (uint index : neededIndexes) {
-            khExtents<uint32> ex = testLevelExtentsVec[index];
+            khExtents<double> ex = inputExtents[index];
             matchingExtents.push_back(ex);
         };
-        
         return matchingExtents;
     }
 
     std::vector <khExtents<double>>
-    findInsetsExperimentalAlgo(const khExtents<double> &queryDegreeExtents,
-                                const khInsetCoverage &queryCoverage,
-                                const std::vector <khExtents<double>> &testDegreeExtents) {
+    findInsetsExperimentalAlgo(const khInsetCoverage &queryCoverage,
+                               const std::vector <khExtents<double>> &inputExtents) {
         std::vector <khExtents<double>> matchingExtentsVec;
         InsetTilespaceIndex qtIndex;
-        notify(NFY_WARN, "oriExtents: %f, %f, %f, %f", queryDegreeExtents.beginX(), queryDegreeExtents.endX(), 
-                                                                    queryDegreeExtents.beginY(), queryDegreeExtents.endY());
-        for (auto extents : testDegreeExtents) {
+
+        for (auto extents : inputExtents) {
             qtIndex.add(extents);
         }
         int level = queryCoverage.beginLevel();
-        auto queryMBR = qtIndex.getQuadtreeMBR(queryDegreeExtents, level, queryCoverage.endLevel());
-        notify(NFY_WARN, "queryMBR: %s", queryMBR.AsString().c_str());
+        auto queryMBR = qtIndex.getQuadtreeMBR(queryCoverage.degreeExtents(), level, queryCoverage.endLevel());
 
         matchingExtentsVec = qtIndex.intersectingExtents(
                 queryMBR,
                 queryCoverage.beginLevel(),
                 queryCoverage.endLevel());
+        notify(NFY_WARN, "Got Here");
 
         return matchingExtentsVec;
     }
 
 
     const bool compareAlgorithmOutputs() {
-        //TODO: Rewrite test to compare based on level.
-        TestData ori;
-        ori.beginLevel = 0;
-        ori.endLevel = 14;
-        ori.numLevels = 14;
-        ori.degExtents = khExtents<double>(XYOrder, -123.531, -120.713, 36.4544, 38.4647);
-        ori.levelExtentsVec.push_back(khExtents<uint32>(XYOrder, 0, 1, 0, 1));
-        ori.levelExtentsVec.push_back(khExtents<uint32>(XYOrder, 0, 1, 1, 2));
-        ori.levelExtentsVec.push_back(khExtents<uint32>(XYOrder, 0, 1, 2, 3));
-        ori.levelExtentsVec.push_back(khExtents<uint32>(XYOrder, 1, 2, 4, 5));
-        ori.levelExtentsVec.push_back(khExtents<uint32>(XYOrder, 2, 3, 9, 10));
-        ori.levelExtentsVec.push_back(khExtents<uint32>(XYOrder, 5, 6, 19, 20));
-        ori.levelExtentsVec.push_back(khExtents<uint32>(XYOrder, 10, 11, 38, 39));
-        ori.levelExtentsVec.push_back(khExtents<uint32>(XYOrder, 20, 22, 76, 78));
-        ori.levelExtentsVec.push_back(khExtents<uint32>(XYOrder, 40, 43, 153, 156));
-        ori.levelExtentsVec.push_back(khExtents<uint32>(XYOrder, 80, 85, 307, 311));
-        ori.levelExtentsVec.push_back(khExtents<uint32>(XYOrder, 160, 169, 615, 622));
-        ori.levelExtentsVec.push_back(khExtents<uint32>(XYOrder, 321, 338, 1231, 1243));
-        ori.levelExtentsVec.push_back(khExtents<uint32>(XYOrder, 642, 675, 2462, 2486));
-        ori.levelExtentsVec.push_back(khExtents<uint32>(XYOrder, 1284, 1350, 4925, 4972));
-        //khInsetCoverage oriCov = khInsetCoverage(ori.beginLevel, ori.endLevel, ori.levelExtentsVec);
-        std::vector<TestData> testDataVec = getTestData();
-        //std::vector<uint> requiredExtentsProdIndexes;
-        //std::vector<khExtents<double>> requiredExtentsProd;
-        //std::vector<khExtents<double>> requiredExtentsExp;
-        //std::vector<khExtents<double>> testDegreeExtents;
-        //std::vector<khExtents<uint32>> testLevelExtents;
-        std::vector<int> levelsCoveredProd(testDataVec.size());
-        std::vector<int> stopVec(testDataVec.size());
-        std::vector<int> levelsCoveredExp(testDataVec.size());
-        std::vector<khExtents<double>> requiredExtentsExp;
-        //bool listsMatch;
-        std::vector<khExtents<double>> testDegreeExtents;
-        khInsetCoverage oriCov = khInsetCoverage(ori.beginLevel, ori.endLevel, ori.levelExtentsVec);
-        for (auto testData : testDataVec) {
-            testDegreeExtents.push_back(testData.degExtents);
-        }
-        for (uint i = ori.beginLevel; i < ori.endLevel; i++) {
-            std::vector<khExtents<uint32>> requiredExtentsProd;
-            std::vector<khExtents<uint32>> testLevelExtentsVec;
-            for (auto testData : testDataVec) {
-                testLevelExtentsVec.push_back(testData.levelExtentsVec[i]);
-            }
-            requiredExtentsProd = findInsetsControlAlgo(oriCov, testLevelExtentsVec, i);
-            int k = 0;
-            for (auto levelExtents : testLevelExtentsVec) {
-                std::vector<khExtents<uint32>>::iterator it = std::find(requiredExtentsProd.begin(), requiredExtentsProd.end(), levelExtents);
-                if (it == requiredExtentsProd.end() || testDataVec[k].levelExtentsVec.size() - 1 == i || i == (ori.endLevel - 1)) {
-                    notify(NFY_WARN, "\tlevel: %u\tlevelExtents: %d, %d, %d, %d", i, levelExtents.beginX(), levelExtents.endX(), levelExtents.beginY(), levelExtents.endY());
-                    if (stopVec[k] == 0) {
-                        levelsCoveredProd[k] = i;
-                        stopVec[k] = 1;
-                    }
-                }
-                k++;
-            }
-        }
-        notify(NFY_WARN, "Control Algorithm Completed");
-        for (auto levels : levelsCoveredProd) {
-            notify(NFY_WARN, "\tlevel: %d", levels);
-        }
-        requiredExtentsExp = findInsetsExperimentalAlgo( ori.degExtents, oriCov, testDegreeExtents);
-        
 
+        TestData dataset("TestQTPs2.txt");
+        //std::vector<khExtents<double>> testExtents;
         /*
-        for (auto testData : testDataVec) {
-            testLevelExtents.push_back(testData.levelExtentsVec);
-            testDegreeExtents.push_back(testData.degExtents);
-        }
-        requiredExtentsProdIndexes = findInsetsControlAlgo(ori, testLevelExtents);
-        for (auto index : requiredExtentsProdIndexes) {
-            requiredExtentsProd.push_back(testDataVec[index].degExtents);
-        }
+        std::vector <QuadtreePath> mbrHashVec;
+        boost::copy(dataset.getData() | boost::adaptors::map_keys,
+                    std::back_inserter(testExtents));
+        */
+        khExtents<double> insetExtents(XYOrder, 114.032, 114.167, 19.1851, 19.3137);
+        khInsetCoverage coverage(RasterProductTilespace(false), insetExtents, 19, 7, 21);
+
+        std::vector<khExtents<double> > requiredExtentsProd = findInsetsControlAlgo(coverage, dataset.getData());
         notify(NFY_WARN, "Old Algo Done, %lu", requiredExtentsProd.size());
-        requiredExtentsExp = findInsetsExperimentalAlgo( ori.degExtents, oriCov, testDegreeExtents);
-        notify(NFY_WARN, "New Algo Done %lu", requiredExtentsExp.size());
-        listsMatch = (requiredExtentsProd == requiredExtentsExp);*/
-        //return listsMatch;
-        return true;
+        std::vector<khExtents<double> > requiredExtentsExp = findInsetsExperimentalAlgo(coverage, dataset.getData());
+        notify(NFY_WARN, "New Algo Done");
+        bool listsMatch = (requiredExtentsProd == requiredExtentsExp);
+        return listsMatch;
     }
 
     InsetTilespaceIndexTest() : insetTilespaceIndex() {};
@@ -263,8 +187,11 @@ EXPECT_EQ(MAX_LEVEL, level
 );
 }
 
-TEST_F(InsetTilespaceIndexTest, compareAlgorithmOutputs) {
-    EXPECT_EQ(compareAlgorithmOutputs(), true);
+TEST_F(InsetTilespaceIndexTest, compareAlgorithmOutputs
+) {
+EXPECT_EQ(compareAlgorithmOutputs(),
+
+true);
 }
 
 //This test should result in the quadtree path 202 being returned.
