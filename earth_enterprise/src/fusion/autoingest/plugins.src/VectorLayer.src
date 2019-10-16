@@ -74,8 +74,9 @@ VectorLayerAssetVersionImplD::UpdateChildren(void)
 
   // ********** VectorQueryAsset child **********
   MutableAssetVersionD query =
-    VectorQueryFactory::FindMakeAndUpdateSubAsset
-    (assetRef, "query",
+    AssetFactory::FindMakeAndUpdateSubAsset<MutableVectorQueryAssetVersionD, AssetVersion>
+    (assetRef,
+    "query",
      makevec1<SharedString>(source->GetRef()),
      khMetaData(),
      config.query_config_,
@@ -88,13 +89,15 @@ VectorLayerAssetVersionImplD::UpdateChildren(void)
   std::string fusename=khReplaceExtension(khBasename(assetRef),"packet");
   // Update my fuse child
   MutableAssetVersionD fuse =
-    VectorFuseFactory::FindMakeAndUpdateSubAsset(assetRef, fusename,
-                                                 makevec2<SharedString>(
-                                                     source->GetRef(),
-                                                     query->GetRef()),
-                                                 khMetaData(),
-                                                 config.fuse_config_,
-                                                 makevec2(source, (AssetVersion&)query));
+    AssetFactory::FindMakeAndUpdateSubAsset<MutableVectorFuseAssetVersionD, AssetVersion>
+                  (assetRef,
+                   fusename,
+                   makevec2<SharedString>
+                           (source->GetRef(),
+                            query->GetRef()),
+                   khMetaData(),
+                   config.fuse_config_,
+                    makevec2(source, (AssetVersion&)query));
 
 
   // add my fuse child to myself
@@ -111,12 +114,13 @@ VectorLayerAssetVersionImplD::UpdateChildren(void)
   // ********** VectorPOIAsset child **********
   if (!config.poi_config_.empty()) {
     MutableAssetVersionD poi =
-      VectorPOIFactory::FindMakeAndUpdateSubAsset
-      (assetRef, "poi",
-       makevec2<SharedString>(source->GetRef(), query->GetRef()),
-       khMetaData(),
-       config.poi_config_,
-       makevec2(source, (AssetVersion&)query));
+      AssetFactory::FindMakeAndUpdateSubAsset<MutableVectorPOIAssetVersionD, AssetVersion>
+                    (assetRef,
+                     "poi",
+                     makevec2<SharedString>(source->GetRef(), query->GetRef()),
+                     khMetaData(),
+                     config.poi_config_,
+                     makevec2(source, (AssetVersion&)query));
 
     AddChild(poi);
   }

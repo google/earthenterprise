@@ -990,9 +990,12 @@ khAssetManager::MercatorMapDatabaseModify(const MapDatabaseEditRequest &req) {
 
 void
 khAssetManager::GetCurrTasks(const std::string &dummy, TaskLists &ret) {
-  assert(!mutex.TryLock());
+  uint mutexWaitTime = MiscConfig::Instance().MutexTimedWaitSec;
+
+  // Passing in a timeout will throw khTimedMutexException if mutexWaitTime is
+  // exceeded trying to acquire the lock. 
   notify(NFY_INFO, "GetCurrTasks");
-  khLockGuard lock(theResourceManager.mutex);
+  khLockGuard timedLock(theResourceManager.mutex, mutexWaitTime);
   theResourceManager.GetCurrTasks(ret);
 }
 
@@ -1222,12 +1225,8 @@ std::string khAssetManager::PublishDatabase(
 }
 
 std::string khAssetManager::RetrieveTasking(const FusionConnection::RecvPacket& msg) {
-  uint mutexWaitTime = MiscConfig::Instance().MutexTimedWaitSec;
-
   std::string replyPayload;
   try {
-    // will throw an exception if mutexWaitTime is exceeded trying to acquire the lock
-    khLockGuard timedLock(mutex, mutexWaitTime);
     TaskLists ret;
     std::string dummy;
     GetCurrTasks(dummy, ret);
