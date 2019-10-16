@@ -764,10 +764,37 @@ TEST_F(StateUpdaterTest, SetInProgressUnsupportedException) {
   ASSERT_FALSE(GetVersion(sm, "a")->stateRecalced);
 }
 
+TEST_F(StateUpdaterTest, SetInProgressAlreadyWaiting) {
+  // This tests what happens when we encounter an asset that's already waiting
+  // but is not in the waiting list.
+  SetVersions(sm, {MockVersion("a"), MockVersion("b"), MockVersion("c")});
+  SetParentChild(sm, "a", "c");
+  SetListenerInput(sm, "b", "c");
+  GetMutableVersion(sm, "a")->state = AssetDefs::InProgress;
+  GetMutableVersion(sm, "b")->state = AssetDefs::Waiting;
+  GetMutableVersion(sm, "a")->recalcStateReturnVal = false;
+  GetMutableVersion(sm, "b")->recalcStateReturnVal = false;
+
+  SetInProgress(sm, updater, "c");
+  // Both the parent and listener should have been recalculated
+  ASSERT_TRUE(GetVersion(sm, "a")->stateRecalced);
+  ASSERT_TRUE(GetVersion(sm, "b")->stateRecalced);
+
+  // Now make sure the parent and listener are in the waiting list by setting
+  // the state again and making sure they aren't recalculated.
+  GetMutableVersion(sm, "a")->stateRecalced = false;
+  GetMutableVersion(sm, "b")->stateRecalced = false;
+  GetMutableVersion(sm, "c")->loadedMutable = false;
+  GetMutableVersion(sm, "c")->onStateChangeCalled = 0;
+  GetMutableVersion(sm, "c")->notificationsSent = 0;
+  GetMutableVersion(sm, "c")->state = AssetDefs::Queued;
+
+  SetInProgress(sm, updater, "c");
+  ASSERT_FALSE(GetVersion(sm, "a")->stateRecalced);
+  ASSERT_FALSE(GetVersion(sm, "b")->stateRecalced);
+}
+
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc,argv);
   return RUN_ALL_TESTS();
 }
-
-// TODO: SetInProgress tests
-// Recalc state when state doesn't change (make sure UpdateWaitingAssets is called)
