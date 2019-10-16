@@ -21,13 +21,6 @@
 class KRMPConfig {
   std::string overridesrs = std::string();
   bool useMercatorProjection = false;
-#hquote
-  uint64 GetSize() {
-    return sizeof(*this)
-            + GetObjectSize(overridesrs);
-  }
-#/hquote
 
 #pragma GenerateIsUpToDate
 };
-

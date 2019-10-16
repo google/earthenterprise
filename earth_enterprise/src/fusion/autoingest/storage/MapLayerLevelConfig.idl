@@ -29,33 +29,11 @@ class MapLayerLevelConfig {
     std::vector<MapDisplayRuleConfig> display_rules_;
     QString context_script_ = QString("");
 #pragma GenerateIsUpToDate
-  #hquote
-  public:
-    uint64 GetSize() {
-      uint64 display_rules_Size = 0;
-      for (auto displayRule : display_rules_) {
-        display_rules_Size += displayRule.GetSize();
-      }
-      return sizeof(*this)
-              + display_rules_Size
-              + GetObjectSize(context_script_);
-    }
-  #/hquote
   };
 
   uint level_;
   AssetDefs::Projection   projection_;
   std::vector<SubLayer> sub_layers_ = std::vector<MapLayerLevelConfig::SubLayer>();
-#hquote
-  uint64 GetSize() {
-    uint64 sub_layers_Size = 0;
-    for (auto sublayer : sub_layers_) {
-      sub_layers_Size += sublayer.GetSize();
-    }
-    return sizeof(*this)
-            + sub_layers_Size;
-  }
-#/hquote
 
 #pragma LoadAndSave
 #pragma GenerateIsUpToDate

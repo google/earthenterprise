@@ -16,10 +16,5 @@
 
 class CopyrightConfig {
   uint providerStart = uint(1);
-#hquote
-  uint64 GetSize() {
-    return sizeof(*this);
-  }
-#/hquote
 #pragma GenerateIsUpToDate
 };

@@ -333,10 +333,9 @@ void ${name}AssetImplD::SerializeConfig(DOMElement *top) const
     AddConfig(top, config);
 }
 
-uint64 ${name}AssetImplD::GetSize() {
-    return sizeof(*this)
-            + ${name}AssetImpl::GetSize()
-            + config.GetSize();
+uint64 ${name}AssetImplD::GetHeapUsage() const {
+    return ${name}AssetImpl::GetHeapUsage()
+            + ::GetHeapUsage(config);
 }
 
 extern void ToElement(DOMElement *elem, const AssetStorage &self);
@@ -625,10 +624,9 @@ void ${name}AssetVersionImplD::SerializeConfig(DOMElement *top) const
     AddConfig(top, config);
 }
 
-uint64 ${name}AssetVersionImplD::GetSize() {
-    return sizeof(*this)
-            + ${name}AssetVersionImpl::GetSize()
-            + config.GetSize();
+uint64 ${name}AssetVersionImplD::GetHeapUsage() const {
+    return ${name}AssetVersionImpl::GetHeapUsage()
+            + ::GetHeapUsage(config);
 }
 
 extern void ToElement(DOMElement *elem, const AssetVersionStorage &self);

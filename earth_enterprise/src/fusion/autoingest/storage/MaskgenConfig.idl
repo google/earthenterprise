@@ -50,10 +50,6 @@ class MaskgenConfig {
   MaskgenConfig(void) {
     SetFromOldValues(Unset, 100);
   }
-  uint64 GetSize() {
-    return sizeof(*this)
-          + GetObjectSize(nodata);
-  }
 #/hquote
 
 
@@ -102,4 +98,3 @@ void MaskgenConfig::SetFromOldValues(Mode oldmode, uint oldfeather) {
 
 
 };
-

@@ -51,13 +51,6 @@ class CombinedRPConfig {
 
 #hquote
   CombinedRPConfig(uint32 num_sources, const RasterProductConfig &rpconfig);
-  
-  uint64 GetSize() {
-    return + GetObjectSize(*this)
-            + khvr_config_.GetSize()
-            + krp_config_.GetSize()
-            + maskgen_config_.GetSize();
-  }
 #/hquote
 
 #cppquote

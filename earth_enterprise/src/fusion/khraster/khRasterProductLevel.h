@@ -135,7 +135,14 @@ class khRasterProductLevel
                              (uint64)tileExtents().endCol() *
                              (uint64)RasterProductTileResolution);
   }
-
+//TODO: finish def
+  inline uint64 GetHeapUsage() const {
+    return ::GetHeapUsage(product_)
+            + ::GetHeapUsage(coverage)
+            + ::GetHeapUsage(reader)
+            + ::GetHeapUsage(writer)
+            + ::GetHeapUsage(compdef);
+  }
 
 };
 
@@ -169,5 +176,7 @@ khRasterProductLevel::ReadTile(uint32 row, uint32 col, DestTile &dest) const
                                  DestTile::Storage, DestTile::NumComp);
 }
 
-
+inline uint64 GetHeapUsage(const khRasterProductLevel &khRasterProdLevel) {
+  return khRasterProdLevel.GetHeapUsage();
+}
 #endif /* __khRasterProductLevel_h */

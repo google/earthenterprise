@@ -58,10 +58,5 @@ class SearchField {
     else
       return DISPLAY_ONLY;
   }
-public:
-  uint64 GetSize() {
-    return sizeof(*this)
-            + GetObjectSize(name);
-  }
 #/hquote
 };

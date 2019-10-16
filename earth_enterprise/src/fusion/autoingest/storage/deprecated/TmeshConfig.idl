@@ -22,11 +22,5 @@ class TmeshConfig {
   uint startLevel;
   uint endLevel = uint(0);  // 0 -> as deep as necessary
   uint simplifyStartLevel = uint(32);
-#hquote
-  uint64 GetSize() {
-    return sizeof(*this)
-            + GetObjectSize(extentsAsset);
-  }
-#/hquote
 #pragma GenerateIsUpToDate
 };

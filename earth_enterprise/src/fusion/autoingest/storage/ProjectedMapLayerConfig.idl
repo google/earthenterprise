@@ -22,11 +22,6 @@
 
 class ProjectedMapLayerConfig {
   AssetDefs::Projection   projection_
-#hquote
-  uint64 GetSize() {
-    return sizeof(*this);
-  }
-#/hquote
 
 #pragma GenerateIsUpToDate
 };

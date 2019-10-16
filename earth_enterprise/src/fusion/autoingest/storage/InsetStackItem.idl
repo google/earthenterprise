@@ -23,12 +23,4 @@ class InsetStackItem {
   uint overridemax = uint(0);   // 0 -> no override
   deprecated uint peergroup = uint(0);     // no longer used
 #pragma GenerateIsUpToDate
-#hquote
-public:
-  uint64 GetSize() {
-    return sizeof(*this)
-            + GetObjectSize(dataAsset);
-  }
-#/hquote
 };
-

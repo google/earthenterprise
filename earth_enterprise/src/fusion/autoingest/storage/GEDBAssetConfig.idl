@@ -33,20 +33,6 @@ class GEDBAssetConfig {
   uint database_version_;
   deprecated bool search_tabs_enabled_ = true;
   deprecated std::string fusion_version_ = std::string();
-#hquote
-  uint64 GetSize() {
-    uint64 search_tabs_Size = 0;
-    for (auto searchTab : search_tabs_) {
-      search_tabs_Size += searchTab.GetSize();
-    }
-    return sizeof(*this)
-            + GetObjectSize(index_verref_)
-            + GetObjectSize(vector_project_)
-            + GetObjectSize(imagery_project_)
-            + GetObjectSize(terrain_project_)
-            + search_tabs_Size;
-  }
-#/hquote
 
 // To force rebuilds, increment this version.
 // When incrementing this version, you should also increment the

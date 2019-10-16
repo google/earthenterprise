@@ -97,14 +97,6 @@ class RasterProductConfig {
   void ResetIds(void) {
     fuid_resource_ = 0;
   }
-
-  uint64 GetSize() {
-    return sizeof(*this)
-          + GetObjectSize(fill)
-          + GetObjectSize(srs)
-          + GetObjectSize(lutfile)
-          + maskgenConfig.GetSize();
-  }
 #/hquote
 };
 

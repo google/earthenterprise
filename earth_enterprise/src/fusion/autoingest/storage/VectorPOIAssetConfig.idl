@@ -30,18 +30,6 @@ class POIConfig {
   std::vector<SearchField> search_fields_;
   std::string              search_style_;
   std::vector<std::string> query_files_;
-#hquote
-  uint64 GetSize() {
-    uint64 search_fields_Size = 0;
-    for (auto searchField : search_fields_) {
-      search_fields_Size += searchField.GetSize();
-    }
-    return sizeof(*this)
-            + search_fields_Size
-            + GetObjectSize(search_style_)
-            + GetObjectSize(query_files_);
-  }
-#/hquote
 
 #pragma LoadAndSave
 };
@@ -60,15 +48,6 @@ class VectorPOIAssetConfig {
 #hquote
   bool empty(void) const { return search_fields_.empty(); }
   VectorPOIAssetConfig(const LayerConfig &layerConfig);
-  uint64 GetSize() {
-    uint64 search_fields_Size = 0;
-    for (auto searchField : search_fields_) {
-      search_fields_Size += searchField.GetSize();
-    }
-    return sizeof(*this)
-            + search_fields_Size
-            + GetObjectSize(search_style_);
-  }
 #/hquote
 
 #cppquote
@@ -80,4 +59,3 @@ class VectorPOIAssetConfig {
   }
 #/cppquote
 };
-

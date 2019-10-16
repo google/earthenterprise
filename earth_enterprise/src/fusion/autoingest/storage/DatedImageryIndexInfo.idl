@@ -32,13 +32,6 @@ class DatedImageryIndexInfo
 
 #hquote
   // defined in DatedImageryProjectImpl.cpp
-public:
-  uint64 GetSize() {
-    return sizeof(*this)
-            + GetObjectSize(imagery_index_version_)
-            + GetObjectSize(date_string_);
-  }
 #/hquote
 
 };
-

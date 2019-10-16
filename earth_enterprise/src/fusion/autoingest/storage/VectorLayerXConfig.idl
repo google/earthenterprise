@@ -39,11 +39,6 @@ class VectorLayerXConfig {
     fuid_channel_ = 0;
   }
 
-  uint64 GetSize() {
-    return sizeof(*this)
-            + GetObjectSize(vectorResource)
-            + legend.GetSize();
-  }
 #/hquote
 };
 
@@ -54,4 +49,3 @@ class VectorLayerXEditRequest {
 
 #pragma StrLoadAndSave
 };
-

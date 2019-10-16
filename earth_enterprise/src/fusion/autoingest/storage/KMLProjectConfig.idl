@@ -25,13 +25,6 @@ class KMLProjectConfig {
     uint channelId = uint(0);
     //Defaultable<LayerLegend> legend = Defaultable<LayerLegend>();
     bool skipLayer = false;
-  #hquote
-  public:
-    uint64 GetSize() {
-      return sizeof(*this)
-              + GetObjectSize(assetRef);
-    }
-  #/hquote
 
 #pragma GenerateIsUpToDate
   };
@@ -57,14 +50,6 @@ class KMLProjectConfig {
     indexVersion = 1;
   }
 
-  uint64 GetSize() {
-    uint64 layersSize = 0;
-    for (auto layer : layers) {
-      layersSize += layer.GetSize();
-    }
-    return sizeof(*this)
-            + layersSize;
-  }
 #/hquote
 
 #cppquote
@@ -81,4 +66,3 @@ class KMLProjectEditRequest {
 
 #pragma StrLoadAndSave
 };
-

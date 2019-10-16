@@ -85,7 +85,6 @@ class khRefGuard {
   inline uint32 refcount(void) const  { return ptr ? ptr->refcount() : 0; }
   inline uint32 use_count(void) const { return refcount(); }
 
-  inline uint64 getSize(void) const { return sizeof(this) + ( ptr ? ptr->GetSize() : 0 ); }
   inline void release(void) {
     if (ptr) {
       ptr->unref();

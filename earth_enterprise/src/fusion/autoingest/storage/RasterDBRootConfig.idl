@@ -35,29 +35,10 @@ class RasterDBRootAssetConfig {
     uint32      channel_id_;
     std::string asset_uuid_ = std::string();
 #pragma GenerateIsUpToDate
-  #hquote
-  public:
-    uint64 GetSize() {
-      return sizeof(*this)
-              + legend_.GetSize()
-              + GetObjectSize(asset_uuid_);
-    }
-  #/hquote
   };
 
   std::vector<RasterDBRootAssetConfig::Layer> layers_;
   std::set<uint32> used_provider_ids_;
-#hquote
-  uint64 GetSize() {
-    uint64 layers_Size = 0;
-    for (auto layer : layers_) {
-      layers_Size += layer.GetSize();
-    }
-    return sizeof(*this)
-            + layers_Size
-            + GetObjectSize(used_provider_ids_);
-  }
-#/hquote
 
   // To force rebuilds, increment this version.
   // When incrementing this version, you should also increment the
@@ -77,28 +58,9 @@ class RasterDBRootGenConfig {
     LayerLegend legend_;
     uint32      channel_id_;
     std::string asset_uuid_ = std::string();
-  #hquote
-  public:
-    uint64 GetSize() {
-      return sizeof(*this)
-              + legend_.GetSize();
-              + GetObjectSize(asset_uuid_);
-    }
-  #/hquote
   };
   std::vector<RasterDBRootGenConfig::Layer> layers_;
   std::set<uint32>                          used_provider_ids_;
-#hquote
-  uint64 GetSize() {
-    uint64 layers_Size = 0;
-    for (auto layer : layers_) {
-      layers_Size += layer.GetSize();
-    }
-    return sizeof(*this)
-            + layers_Size
-            + GetObjectSize(used_provider_ids_);
-  }
-#/hquote
 
 #pragma LoadAndSave
 };

@@ -28,13 +28,6 @@ class VectorPacketVersion {
   std::string packet_verref_;
   uint32 channel_id_;
   uint32 version_;
-#hquote
-public:
-  uint64 GetSize() {
-    return sizeof(*this)
-            + GetObjectSize(packet_verref_);
-  }
-#/hquote
 };
 class VectorGEIndexConfig {
   std::string db_name_;
@@ -43,12 +36,6 @@ class VectorGEIndexConfig {
   deprecated std::vector<std::string> custom_icons_ = std::vector<std::string>();
   deprecated std::vector<std::string> layer_icons_ = std::vector<std::string>();
 
-#hquote
-  uint64 GetSize() {
-    return sizeof(*this)
-            + GetObjectSize(db_name_);
-  }
-#/hquote
 
 #pragma GenerateIsUpToDate
 };

@@ -46,14 +46,5 @@ class QueryConfig {
               const QStringList &contextScripts);
   QueryConfig(const MapSubLayerConfig &mapSubLayerConfig,
               const QStringList &contextScripts);
-  uint64 GetSize() {
-    uint64 filtersSize = 0;
-    for (auto filter : filters) {
-      filtersSize += filter.GetSize();
-    }
-    return sizeof(*this)
-            + filtersSize
-            + GetObjectSize(contextScript);
-  }
 #/hquote
 };

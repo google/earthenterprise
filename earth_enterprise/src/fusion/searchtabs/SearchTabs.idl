@@ -29,14 +29,6 @@ class SearchTabDefinition
     QString label;
     QString key;
 #pragma GenerateIsUpToDate
-  #hquote
-  public:
-    uint64 GetSize() {
-      return sizeof(*this)
-              + GetObjectSize(label)
-              + GetObjectSize(key);
-    }
-  #/hquote
   };
   
   QString label = QString();
@@ -54,22 +46,7 @@ class SearchTabDefinition
   QString IsOk();
   void ApplyLabelOverrides(const SearchTabLabelOverrides &overrides);
   static SearchTabDefinition DefaultPOIDefinition(void);
-public:
-  uint64 GetSize() {
-    uint64 fieldsSize = 0;
-    for (auto field : fields) {
-      fieldsSize += field.GetSize();
-    }
-    return sizeof(*this)
-            + GetObjectSize(label)
-            + fieldsSize
-            + GetObjectSize(url)
-            + GetObjectSize(plugin_name)
-            + GetObjectSize(query_params)
-            + GetObjectSize(config_params);
-  }
 #/hquote
-
 };
 
 
@@ -86,15 +63,5 @@ class SearchTabLabelOverrides {
     return SearchTabLabelOverrides
       (SearchTabDefinition::DefaultPOIDefinition());
   }
-public:
-  uint64 GetSize() {
-    uint64 fieldsSize = 0;
-    for (auto field : fields) {
-      fieldsSize += GetObjectSize(field);
-    }
-    return sizeof(*this)
-            + GetObjectSize(label)
-            + fieldsSize;
-  }
 #/hquote
-}
+};
