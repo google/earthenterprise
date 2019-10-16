@@ -21,14 +21,14 @@
 #include "common/SharedString.h"
 
 #include <functional>
-#include <set>
+#include <unordered_set>
 #include <vector>
 
 class WaitingAssets
 {
   private:
     const AssetDefs::State waitingState;
-    std::set<SharedString> waiting;
+    std::unordered_set<SharedString> waiting;
   public:
     WaitingAssets() : WaitingAssets(AssetDefs::Waiting) {}
     WaitingAssets(AssetDefs::State waitingState) : waitingState(waitingState) {}
