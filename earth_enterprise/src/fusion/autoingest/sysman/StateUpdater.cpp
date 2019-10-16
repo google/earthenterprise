@@ -376,7 +376,7 @@ void StateUpdater::SetInProgress(AssetHandle<AssetVersionImpl> & version) {
     // when all operations have been converted to use the state updater for
     // propagating state changes. When this happens, the legacy code will have
     // already propagated the state change, so no further action is necessary.
-    notify(NFY_INFO, "Unsupported condition encountered while setting %s to"
+    notify(NFY_INFO, "Unsupported condition encountered while setting %s to "
            "InProgress in state updater. Reverting to legacy state propagation.",
            version->GetRef().toString().c_str());
   }

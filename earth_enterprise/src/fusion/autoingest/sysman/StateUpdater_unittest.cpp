@@ -695,8 +695,10 @@ TEST_F(StateUpdaterTest, OnStateChangeReturnsNewState) {
 void SetInProgress(MockStorageManager & sm, StateUpdater & updater, AssetKey ref) {
   auto version = sm.GetMutable(fix(ref));
   updater.SetInProgress(version);
-  assertStateSet(sm, ref);
   ASSERT_EQ(GetVersion(sm, ref)->state, AssetDefs::InProgress);
+  if (GetVersion(sm, ref)->stateChangeBehavior != CHANGE_NUM_CHILDREN) {
+    assertStateSet(sm, ref);
+  }
 }
 
 TEST_F(StateUpdaterTest, BasicSetInProgress) {
@@ -714,6 +716,7 @@ TEST_F(StateUpdaterTest, SetInProgressNoWaiting) {
   ASSERT_TRUE(GetVersion(sm, "a")->stateRecalced);
   ASSERT_TRUE(GetVersion(sm, "b")->stateRecalced);
 }
+
 void UpdateWaiting(MockStorageManager & sm, StateUpdater & updater, AssetKey ref, AssetDefs::State oldState) {
   auto version = sm.GetMutable(fix(ref));
   updater.UpdateWaitingAssets(version, oldState);
@@ -748,6 +751,19 @@ TEST_F(StateUpdaterTest, SetInProgressTestWaiting) {
   ASSERT_TRUE(GetVersion(sm, "b")->stateRecalced);
 }
 
+TEST_F(StateUpdaterTest, SetInProgressUnsupportedException) {
+  SetVersions(sm, {MockVersion("a"), MockVersion("b"), MockVersion("c")});
+  SetParentChild(sm, "a", "c");
+  GetMutableVersion(sm, "c")->stateChangeBehavior = CHANGE_NUM_CHILDREN;
+  SetInProgress(sm, updater, "c");
+  // We should get partway through setting c's state
+  ASSERT_TRUE(GetVersion(sm, "c")->loadedMutable);
+  ASSERT_EQ(GetVersion(sm, "c")->onStateChangeCalled, 1);
+  ASSERT_EQ(GetVersion(sm, "c")->notificationsSent, 0);
+  // We should not recalculate a's state
+  ASSERT_FALSE(GetVersion(sm, "a")->stateRecalced);
+}
+
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc,argv);
   return RUN_ALL_TESTS();
@@ -755,4 +771,3 @@ int main(int argc, char **argv) {
 
 // TODO: SetInProgress tests
 // Recalc state when state doesn't change (make sure UpdateWaitingAssets is called)
-// Unsupported exception during OnStateChange
