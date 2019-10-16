@@ -19,8 +19,6 @@
 #ifndef COMMON_GERANGE_H__
 #define COMMON_GERANGE_H__
 
-#include "khTypes.h"
-
 template <class T>
 class geRange {
  public:
@@ -40,7 +38,6 @@ class geRange {
       min(static_cast<T>(o.min)),
       max(static_cast<T>(o.max))
   { }
-
 };
 
 #endif // COMMON_GERANGE_H__

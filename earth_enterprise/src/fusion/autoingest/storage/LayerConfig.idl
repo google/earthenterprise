@@ -26,6 +26,7 @@
 #include <autoingest/.idl/storage/FilterConfig.h>
 #include <autoingest/.idl/storage/SearchField.h>
 #include "common/khTileAddrConsts.h"
+#include "CacheSizeCalculations.h"
 
 #cppquote
 #include <autoingest/.idl/storage/IconReference_impl.h>
