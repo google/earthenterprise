@@ -14,7 +14,7 @@
 
 #include <vector>
 #include <autoingest/.idl/storage/InsetStackItem.h>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 #cppquote
 #include <autoingest/.idl/storage/InsetStackItem_impl.h>

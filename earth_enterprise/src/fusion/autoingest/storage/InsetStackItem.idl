@@ -14,7 +14,7 @@
 
 #include <string>
 #include <khTypes.h>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 class InsetStackItem {
   std::string dataAsset;

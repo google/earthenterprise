@@ -16,7 +16,7 @@
 #include <string>
 #include <vector>
 #include <khTypes.h>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 
 // ****************************************************************************

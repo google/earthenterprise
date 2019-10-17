@@ -14,7 +14,7 @@
 
 
 #include <qstring.h>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 
 class FieldGenerator {

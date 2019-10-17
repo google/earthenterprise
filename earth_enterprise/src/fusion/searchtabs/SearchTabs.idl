@@ -15,7 +15,7 @@
 
 #include <qstring.h>
 #include <vector>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 #hquote
 class SearchTabLabelOverrides;
@@ -64,4 +64,4 @@ class SearchTabLabelOverrides {
       (SearchTabDefinition::DefaultPOIDefinition());
   }
 #/hquote
-};
+}

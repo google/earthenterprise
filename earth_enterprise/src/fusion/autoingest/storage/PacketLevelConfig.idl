@@ -20,7 +20,7 @@
 #include "common/khTypes.h"
 #include "common/khTileAddr.h"
 #include "common/SharedString.h"
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 class PacketLevelConfig {
 #pragma DontEmitDefaults

@@ -18,7 +18,7 @@
 #include <vector>
 #include <map>
 #include <khTypes.h>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 // ****************************************************************************
 // ***  RasterGEIndex

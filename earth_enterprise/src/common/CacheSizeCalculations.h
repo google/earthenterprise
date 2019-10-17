@@ -24,9 +24,10 @@
 #include <string>
 #include "notify.h"
 #include <qstring.h>
-#include <typeinfo>
-#include <type_traits>
 #include "SharedString.h"
+
+template<class T>
+inline uint64 GetSize(const T &obj);
 
 //determine amount of memory used by an object pointed to by a pointer
 template<class T>
@@ -54,8 +55,16 @@ inline uint64 GetHeapUsage(const QString &qstr) {
 // returns 0 for all non specified objects
 template<class T>
 inline uint64 GetHeapUsage(const T &obj) {
-    notify(NFY_WARN, "\tGENERAL of %s", typeid(obj).name());
     return 0;
+}
+//determine amount of memory used by a map's contents
+template<class key, class val>
+inline uint64 GetHeapUsage(const std::map<key, val> &map) {
+    uint64 total = 0;
+    for (const auto &kv : map) {
+        total += GetHeapUsage(kv.first) + GetHeapUsage(kv.second);
+    }
+    return total;
 }
 // determine amount of memory used by a vector's contents
 template<class T>
@@ -75,21 +84,10 @@ inline uint64 GetHeapUsage(const std::set<T> &set) {
     }
     return total;
 }
-//determine amount of memory used by a map's contents
-template<class key, class val>
-inline uint64 GetHeapUsage(const std::map<key, val> &map) {
-    uint64 total = 0;
-    for (const auto &kv : map) {
-        total += GetHeapUsage(kv.first) + GetHeapUsage(kv.second);
-    }
-    return total;
-}
-// determine amount of memory used by a given object
+//determine amount of memory used by a given object
 template<class T>
 inline uint64 GetSize(const T &obj) {
-    notify(NFY_WARN, "GetSize of %s:", typeid(obj).name());
     uint64 objSize = GetHeapUsage(obj);
-    notify(NFY_WARN, "sizeof: %lu\tGetHeapUsage: %lu", sizeof(obj), objSize);
     return sizeof(obj) + objSize;
 }
 #endif

@@ -14,7 +14,7 @@
 
 #include <autoingest/.idl/storage/LayerConfig.h>
 #include <autoingest/.idl/storage/SearchField.h>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 
 #cppquote

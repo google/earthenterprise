@@ -16,7 +16,7 @@
 #include <string>
 #include <khTypes.h>
 #include <autoingest/.idl/storage/AssetDefs.h>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 #cppquote
 #include <autoingest/.idl/storage/AssetDefs_impl.h>

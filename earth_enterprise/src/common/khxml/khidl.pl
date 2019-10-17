@@ -125,9 +125,6 @@ open($IDLFILE, $idlfile) || die "Unable to open $idlfile: $!\n";
 my $line;
 eval {
     while ($line = GetContentLine($IDLFILE)) {
-    if ($line =~ /CacheSizeCalculations/) {
-        $RequiresGetHeapUsage = 1;
-    }
 	if ($line =~ /^\s*class\s+/) {
 	    my $class = ParseClass($line, $IDLFILE);
 	    push @classes, $class;
@@ -149,6 +146,9 @@ eval {
 	    }
     } elsif ($line =~ /^ExternalHasDeprecated:\s*(\w+)/) {
         $ExternalHasDeprecated{$1} = 1;
+    } elsif ($line =~ /^\s*\#requiresgetheapusage\s*$/) {
+        $RequiresGetHeapUsage = 1;
+        push @includes, "#include \"CacheSizeCalculations.h\"";
     } else {
 	    die "Expected class definition found '$line'\n";
 	}
@@ -1161,16 +1161,16 @@ sub DumpClass
             if ($curr == $size) {
                 if ($haveFirst) {
                     print $fh $pad, $indent x2, "+ ::GetHeapUsage($member->{name});\n";
-                }else {
+                } else {
                     print $fh $pad, $indent x2, "return ::GetHeapUsage($member->{name});\n";
                 }
                 last;
             }
 	        if ($haveFirst) {
-            print $fh $pad, $indent x2, "+ ::GetHeapUsage($member->{name})\n";
+                print $fh $pad, $indent x2, "+ ::GetHeapUsage($member->{name})\n";
 	        } else {
-	    	print $fh $pad, $indent, $indent, "return ::GetHeapUsage($member->{name})\n";
-	    	$haveFirst = 1;
+	    	    print $fh $pad, $indent, $indent, "return ::GetHeapUsage($member->{name})\n";
+	    	    $haveFirst = 1;
 	        }
             $curr++;
 	    }

@@ -19,7 +19,7 @@
 #include <autoingest/.idl/storage/MaskgenConfig.h>
 #include <autoingest/.idl/storage/MosaicConfig.h>
 #include <autoingest/.idl/storage/KRPConfig.h>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 #cppquote
 #include <autoingest/.idl/storage/MaskgenConfig_impl.h>

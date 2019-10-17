@@ -15,7 +15,7 @@
 
 #include <qstring.h>
 #include <khConstants.h>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 class IconReference {
   enum Type { Internal = 0, External = 1 };

@@ -15,7 +15,7 @@
 
 #include <autoingest/.idl/storage/LayerLegend.h>
 #include <autoingest/.idl/storage/MapSubLayerConfig.h>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 #cppquote
 #include <autoingest/.idl/storage/LayerLegend_impl.h>
