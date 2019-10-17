@@ -1008,11 +1008,14 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
 
       // reuse or make a new PacketGenAssetVersion
       MutableAssetVersionD packgen =
-        PacketGenFactory::ReuseOrMakeAndUpdate(genInfo[i].assetname,
-                                               type,
-                                               khMetaData(),
-                                               packetGenConfig,
-                                               extraArg);
+        //PacketGenFactory::
+        AssetFactory::ReuseOrMakeAndUpdate
+        <MutablePacketGenAssetVersionD, AssetVersion, PacketGenConfig>
+        (genInfo[i].assetname,
+         type,
+         khMetaData(),
+         packetGenConfig,
+         extraArg);
 
     if (packetGenConfig.cacheRaster) {
       // Extract the PacketLevel children from the new version and store

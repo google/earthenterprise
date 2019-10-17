@@ -178,8 +178,12 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
 
     // see if I need to khvr the source
     if (config.need_khvr_) {
-      source = MosaicFactory::ReuseOrMakeAndUpdateSubAsset
-               (assetRef, type, "mosaic",
+      source = //MosaicFactory
+        AssetFactory::ReuseOrMakeAndUpdateSubAsset
+        <MutableMosaicAssetVersionD, AssetVersion, MosaicConfig>
+               (assetRef,
+                type,
+                "mosaic",
                 makevec1<SharedString>(source->GetRef()),
                 khMetaData(),
                 config.khvr_config_,
@@ -188,8 +192,12 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
 
     // tell my raster child about the new source & have it update itself
     MutableKRPAssetVersionD krp2 =
-      KRPFactory::ReuseOrMakeAndUpdateSubAsset
-      (assetRef, type, "product",
+      //KRPFactory
+      AssetFactory::ReuseOrMakeAndUpdateSubAsset
+      <MutableKRPAssetVersionD, AssetVersion, KRPConfig>
+      (assetRef,
+       type,
+       "product",
        makevec1<SharedString>(source->GetRef()),
        khMetaData(),
        config.krp_config_,
@@ -216,8 +224,12 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
         }
       } else {
         krmp =
-          KRMPFactory::ReuseOrMakeAndUpdateSubAsset
-          (assetRef, type, "maskproduct",
+          //KRMPFactory
+          AssetFactory::ReuseOrMakeAndUpdateSubAsset
+          <MutableKRMPAssetVersionD, AssetVersion, KRMPConfig>
+          (assetRef,
+           type,
+           "maskproduct",
            makevec2<SharedString>(krp->GetRef(), inputs[1]),
            khMetaData(),
            KRMPConfig(config.krp_config_.overridesrs,
@@ -230,8 +242,12 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
     case CombinedRPConfig::AutoMask: {
       // tell my maskgen child about the new raster, have it update
       AssetVersion maskgen =
-        MaskgenFactory::ReuseOrMakeAndUpdateSubAsset
-        (assetRef, type, "maskgen",
+        //MaskgenFactory
+        AssetFactory::ReuseOrMakeAndUpdateSubAsset
+        <MutableMaskgenAssetVersionD, AssetVersion, MaskgenConfig>
+        (assetRef,
+         type,
+         "maskgen",
          makevec1<SharedString>(krp->GetRef()),
          khMetaData(),
          config.maskgen_config_,
@@ -239,8 +255,12 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
 
       // tell my KRMP child about the new raster & mask
       MutableAssetVersionD krmp =
-        KRMPFactory::ReuseOrMakeAndUpdateSubAsset
-        (assetRef, type, "maskproduct",
+        //KRMPFactory
+        AssetFactory::ReuseOrMakeAndUpdateSubAsset
+        <MutableKRMPAssetVersionD, AssetVersion, KRMPConfig>
+        (assetRef,
+         type,
+         "maskproduct",
          makevec2<SharedString>(krp->GetRef(), maskgen->GetRef()),
          khMetaData(),
          KRMPConfig("", config.krp_config_.useMercatorProjection),
