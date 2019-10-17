@@ -162,13 +162,15 @@ ProjectedMapLayerAssetVersionImplD::UpdateChildren(void)
       char levelname[32];
       snprintf(levelname, sizeof(levelname), "level%02d", level);
 
+
       MutableAssetVersionD levelver =
-        MapLayerLevelFactory::FindMakeAndUpdateSubAsset(
-            assetRef, levelname,
-            inputrefs,
-            khMetaData(),
-            level_config,
-            inputvers);
+        AssetFactory::FindMakeAndUpdateSubAsset<MutableMapLayerLevelAssetVersionD, AssetVersion>
+                     (assetRef,
+                      levelname,
+                      inputrefs,
+                      khMetaData(),
+                      level_config,
+                      inputvers);
 
       AddChild(levelver);
     }

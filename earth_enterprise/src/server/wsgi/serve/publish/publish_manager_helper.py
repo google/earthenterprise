@@ -617,7 +617,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
 
     target_details = {}
     query_string = ("""SELECT db_table.host_name, db_table.db_name,
-              virtual_host_table.virtual_host_name, target_table.serve_wms, publish_context_table.ec_default_db
+              virtual_host_table.virtual_host_name, target_table.serve_wms
               FROM target_table, target_db_table, db_table, virtual_host_table, publish_context_table
               WHERE target_table.target_path = %s AND
               target_table.target_id = target_db_table.target_id AND

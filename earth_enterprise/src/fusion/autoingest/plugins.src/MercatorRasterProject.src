@@ -713,12 +713,14 @@ void MercatorRasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
   dbrootConfig.used_provider_ids_ = used_provider_ids;
 
   MutableAssetVersionD dbroot =
-    RasterDBRootFactory::FindMakeAndUpdateSubAsset(
-        assetRef, type, "dbroot",
-        std::vector<SharedString>(),
-        khMetaData(),
-        dbrootConfig,
-        std::vector<AssetVersion>());
+    AssetFactory::FindMakeAndUpdateSubAsset<MutableRasterDBRootAssetVersionD, AssetVersion>
+                 (assetRef,
+                  type,
+                  "dbroot",
+                  std::vector<SharedString>(),
+                  khMetaData(),
+                  dbrootConfig,
+                  std::vector<AssetVersion>());
   AddChild(dbroot);
 
 
@@ -738,11 +740,12 @@ void MercatorRasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
             geindex_version,
             config.legend));
     MutableAssetVersionD layerjs =
-      MapLayerJSFactory::FindMakeAndUpdate(layerJSAssetName,
-                                           std::vector<SharedString>(),
-                                           khMetaData(),
-                                           layerJSConfig,
-                                           std::vector<AssetVersion>());
+      AssetFactory::FindMakeAndUpdate<MutableMapLayerJSAssetVersionD, AssetVersion>
+                        (layerJSAssetName,
+                         std::vector<SharedString>(),
+                         khMetaData(),
+                         layerJSConfig,
+                         std::vector<AssetVersion>());
     AddChild(layerjs);
   }
 
@@ -1110,11 +1113,13 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
     }
   }
   MutableRasterGEIndexAssetVersionD geindex =
-    RasterGEIndexFactory::FindMakeAndUpdate(geindexAssetName, type,
-                                            packgenkids,
-                                            khMetaData(),
-                                            geindexConfig,
-                                            packgenvers);
+    AssetFactory::FindMakeAndUpdate<MutableRasterGEIndexAssetVersionD, AssetVersion>
+                         (geindexAssetName,
+                          type,
+                          packgenkids,
+                          khMetaData(),
+                          geindexConfig,
+                          packgenvers);
   AddChild(geindex);
   return geindex->config.index_version_;
 }

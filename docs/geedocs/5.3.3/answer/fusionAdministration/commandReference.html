@@ -17,7 +17,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Fusion Resources and Projects" href="../fusionResAndProj.html" />
-    <link rel="prev" title="Troubleshoot push/publishing issues" href="troubleshootPushPublishIssues.html" />
+    <link rel="prev" title="Operating System Settings That May Affect Fusion" href="osSettings.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
@@ -33,7 +33,7 @@
           <a href="../fusionResAndProj.html" title="Fusion Resources and Projects"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="troubleshootPushPublishIssues.html" title="Troubleshoot push/publishing issues"
+          <a href="osSettings.html" title="Operating System Settings That May Affect Fusion"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" accesskey="U">Fusion Administration</a> &#187;</li> 
@@ -42,8 +42,8 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="troubleshootPushPublishIssues.html"
-                        title="previous chapter">Troubleshoot push/publishing issues</a></p>
+  <p class="topless"><a href="osSettings.html"
+                        title="previous chapter">Operating System Settings That May Affect Fusion</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="../fusionResAndProj.html"
                         title="next chapter">Fusion Resources and Projects</a></p>
@@ -183,7 +183,7 @@ before using this command and then start it again after you are
 done.</p>
 </div>
 <p class="rubric">Example</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>geconfigureassetroot --new --assetroot /gevol/assets
+<div class="highlight-none notranslate"><div class="highlight"><pre>geconfigureassetroot --new --assetroot /gevol/assets
 geconfigureassetroot --new --assetroot /gevol/assets --srcvol /data1/src
 geconfigureassetroot --repair
 geconfigureassetroot --editvolumes
@@ -293,7 +293,7 @@ Cutter security, you must add it separately. See
 </div>
 <p>See <a class="reference internal" href="../geeServerAdmin/createPortableGlobesMaps.html"><span class="doc">Create Portable Globes and Maps</span></a>.</p>
 <p class="rubric">Example</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gecutter enable
+<div class="highlight-none notranslate"><div class="highlight"><pre>gecutter enable
 
 gecutter disable
 </pre></div>
@@ -351,7 +351,7 @@ local storage into the mock asset root.</p>
 <p>For detachable media:</p>
 <p>gedisconnectedreceive --input /mnt/usbdrive/SFHighways_3dDatabase_v20</p>
 <p>For local storage:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gedisconnectedreceive --input
+<div class="highlight-none notranslate"><div class="highlight"><pre>gedisconnectedreceive --input
 /gevol/src/disconnected_databases/SFHighways_3dDatabase_v20
 </pre></div>
 </div>
@@ -377,7 +377,7 @@ folders on the same volume.</p>
 disconnected push/publish, for either publishing new databases or
 publishing “delta” updates.</p>
 <p class="rubric">Example</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gedisconnectedsend --sendver Databases/SFHighways.kdatabase?version=2 --output /gevol/src/disconnected_databases/SFHighways_3dDatabase_v2
+<div class="highlight-none notranslate"><div class="highlight"><pre>gedisconnectedsend --sendver Databases/SFHighways.kdatabase?version=2 --output /gevol/src/disconnected_databases/SFHighways_3dDatabase_v2
 </pre></div>
 </div>
 <p class="rubric">Commands</p>
@@ -566,7 +566,7 @@ then start it again after you are done. You must also run this
 command as root.</p>
 </div>
 <p class="rubric">Example</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>geselectassetroot --list
+<div class="highlight-none notranslate"><div class="highlight"><pre>geselectassetroot --list
 geselectassetroot --lock
 geselectassetroot --unlock
 geselectassetroot --assetroot /gevol/assets
@@ -632,7 +632,7 @@ categories:</p>
 <p>All of the commands of each type are described below. At least one
 command is required.</p>
 <p class="rubric" id="examples">Examples</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>geserveradmin --listdbs
+<div class="highlight-none notranslate"><div class="highlight"><pre>geserveradmin --listdbs
 geserveradmin --server_type stream --dbdetails “/gevol/assets/Databases/SF Neighborhoods.kdatabase/gedb.kda/ver001/gedb”
 geserveradmin --addvh my_public_vh --vhurl http://myserver.com/public_vh
 geserveradmin --deletevh my_public_vh
@@ -997,7 +997,7 @@ specified on the command line.</p>
           <a href="../fusionResAndProj.html" title="Fusion Resources and Projects"
              >next</a> |</li>
         <li class="right" >
-          <a href="troubleshootPushPublishIssues.html" title="Troubleshoot push/publishing issues"
+          <a href="osSettings.html" title="Operating System Settings That May Affect Fusion"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" >Fusion Administration</a> &#187;</li> 

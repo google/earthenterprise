@@ -17,6 +17,12 @@ Release notes: Open GEE 5.3.3
       specify a database as the "default". The "default" database will be served
       to the client if the server URL is specified without a database name.
 
+      **getop can retrieve and display information while gesystemmanager is busy**.
+      Previously, ``getop`` could not display information while system manager
+      was in the middle of major calculations. Now, this restriction has been
+      removed for most calculations, such as when system manager is determining
+      which resources overlap. 
+
       .. rubric:: Supported Platforms
 
       The Open GEE 5.3.3 release is supported on 64-bit versions of the
