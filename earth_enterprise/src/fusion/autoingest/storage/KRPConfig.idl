@@ -14,7 +14,7 @@
 
 
 #include <string>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 // ****************************************************************************
 // ***  KRP - Keyhole Raster Product (low level, Imagery & Terrain)

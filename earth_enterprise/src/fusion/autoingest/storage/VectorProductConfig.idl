@@ -17,7 +17,7 @@
 #include <khTypes.h>
 #include <khMetaData.h>
 #include <autoingest/.idl/storage/SourceConfig.h>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 #cppquote
 #include <autoingest/.idl/storage/SourceConfig_impl.h>

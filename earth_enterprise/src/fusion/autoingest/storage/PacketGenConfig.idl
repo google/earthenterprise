@@ -17,7 +17,7 @@
 #include <vector>
 #include <khTypes.h>
 #include <khInsetCoverage.h>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 class PacketGenConfig {
 #pragma DontEmitDefaults

@@ -19,7 +19,7 @@
 #include <khMetaData.h>
 #include <searchtabs/.idl/SearchTabs.h>
 #include <autoingest/.idl/storage/SearchTabReference.h>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 #cppquote
 #include <searchtabs/.idl/SearchTabs_impl.h>

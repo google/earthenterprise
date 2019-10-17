@@ -13,7 +13,7 @@
 // limitations under the License.
 
 #include <string>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 class ReprojectConfig {
   std::string srs;

@@ -15,7 +15,7 @@
 
 #include <string>
 #include <khTypes.h>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 class TmeshConfig {
   std::string extentsAsset;

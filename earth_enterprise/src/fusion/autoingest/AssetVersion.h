@@ -142,7 +142,11 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   // determine amount of memory used by an AssetVersionImpl
   virtual uint64 GetHeapUsage() const {
     return ::GetHeapUsage(name)
+    + ::GetHeapUsage(type)
     + ::GetHeapUsage(subtype)
+    + ::GetHeapUsage(state)
+    + ::GetHeapUsage(progress)
+    + ::GetHeapUsage(locked)
     + ::GetHeapUsage(inputs)
     + ::GetHeapUsage(children)
     + ::GetHeapUsage(parents)
@@ -152,7 +156,9 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
     + ::GetHeapUsage(beginTime)
     + ::GetHeapUsage(progressTime)
     + ::GetHeapUsage(endTime)
-    + ::GetHeapUsage(timestamp);
+    + ::GetHeapUsage(taskid)
+    + ::GetHeapUsage(timestamp)
+    + ::GetHeapUsage(filesize);
   }
   template <class outIter>
   outIter GetInputs(outIter oi) const {

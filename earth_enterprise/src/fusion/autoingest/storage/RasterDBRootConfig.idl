@@ -19,7 +19,7 @@
 #include <set>
 #include <khTypes.h>
 #include "LayerLegend.h"
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 #cppquote
 #include "LayerLegend_impl.h"

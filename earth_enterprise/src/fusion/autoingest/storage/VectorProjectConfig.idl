@@ -19,7 +19,7 @@
 #include <khMetaData.h>
 #include <autoingest/.idl/storage/LayerConfig.h>
 #include <searchtabs/.idl/SearchTabs.h>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 #cppquote
 #include <autoingest/.idl/storage/LayerConfig_impl.h>

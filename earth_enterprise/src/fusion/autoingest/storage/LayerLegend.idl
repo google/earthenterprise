@@ -17,7 +17,7 @@
 #include <map>
 #include <Defaultable.h>
 #include <autoingest/.idl/storage/IconReference.h>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 #cppquote
 #include <autoingest/.idl/storage/IconReference_impl.h>

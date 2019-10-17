@@ -16,7 +16,7 @@
 #include <vector>
 #include <autoingest/.idl/storage/LayerConfig.h>
 #include <autoingest/.idl/storage/VectorProjectConfig.h>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 #cppquote
 #include <autoingest/.idl/storage/LayerConfig_impl.h>

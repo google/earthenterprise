@@ -27,7 +27,7 @@
 #include <autoingest/.idl/storage/FilterConfig.h>
 #include <autoingest/.idl/storage/IconReference.h>
 #include <autoingest/.idl/storage/SearchField.h>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 #hquote
 class FieldBinderDef;

@@ -17,7 +17,7 @@
 #include <vector>
 #include <khTypes.h>
 #include <searchtabs/.idl/SearchTabs.h>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 #cppquote
 #include <searchtabs/.idl/SearchTabs_impl.h>

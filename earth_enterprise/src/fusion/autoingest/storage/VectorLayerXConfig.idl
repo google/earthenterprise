@@ -16,7 +16,7 @@
 #include <autoingest/.idl/storage/LayerLegend.h>
 #include <string>
 #include <khMetaData.h>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 #cppquote
 #include <autoingest/.idl/storage/LayerLegend_impl.h>

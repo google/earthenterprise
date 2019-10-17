@@ -17,7 +17,7 @@
 #include <autoingest/.idl/storage/VectorFuseAssetConfig.h>
 #include <autoingest/.idl/storage/VectorPOIAssetConfig.h>
 #include <khxml/geVersionedEnum.h>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 
 #cppquote

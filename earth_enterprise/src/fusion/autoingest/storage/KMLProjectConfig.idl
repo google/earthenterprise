@@ -17,7 +17,7 @@
 #include <vector>
 #include <khTypes.h>
 #include <khMetaData.h>
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 class KMLProjectConfig {
   class LayerItem {

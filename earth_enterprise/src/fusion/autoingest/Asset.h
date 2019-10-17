@@ -80,11 +80,13 @@ class AssetImpl : public AssetStorage, public StorageManaged {
   // determine amount of memory used by an AssetImpl
   virtual uint64 GetHeapUsage() const {
     return ::GetHeapUsage(name)
+    + ::GetHeapUsage(type)
     + ::GetHeapUsage(subtype)
     + ::GetHeapUsage(inputs)
     + ::GetHeapUsage(meta)
     + ::GetHeapUsage(versions)
-    + ::GetHeapUsage(timestamp);
+    + ::GetHeapUsage(timestamp)
+    + ::GetHeapUsage(filesize);
   }
 
   std::string  GetLastGoodVersionRef(void) const;

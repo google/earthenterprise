@@ -17,11 +17,11 @@
 #include <autoingest/.idl/storage/MapProjectConfig.h>
 #include <autoingest/.idl/storage/SearchField.h>
 #include <khxml/geVersionedEnum.h>
-#include "CacheSizeCalculations.h"
 
 class MapProjectConfig;
 
 #/hquote
+#requiresgetheapusage
 
 #cppquote
 #include <autoingest/.idl/storage/MapProjectConfig_impl.h>

@@ -18,7 +18,7 @@
 #include <khTypes.h>
 #include <geindex/Entries.h>
 #include "common/SharedString.h"
-#include "CacheSizeCalculations.h"
+#requiresgetheapusage
 
 // ****************************************************************************
 // ***  UnifiedIndex
@@ -39,4 +39,4 @@ class UnifiedIndexConfig {
   std::vector<UnifiedIndexEntry> indexes_;
 
 #pragma GenerateIsUpToDate
-};
+}
