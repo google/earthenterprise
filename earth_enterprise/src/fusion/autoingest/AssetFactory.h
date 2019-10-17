@@ -19,6 +19,7 @@
 
 #include <common/SharedString.h>
 #include <common/khMetaData.h>
+#include "AssetVersionRef.h"
 
 // The goal of this namspace is to have a single place in the code where all
 // asset creation is handled.
@@ -260,29 +261,202 @@ namespace AssetFactory
   MutableDerivedVersionHandleType ReuseOrMakeAndUpdate(const std::string& ref_,
                                                        AssetDefs::Type type_,
                                                        const khMetaData& meta_,
-                                                       const ConfigType& config);
+                                                       const ConfigType& config_)
+  {
+      using AssetHandleType = typename MutableDerivedVersionHandleType::Impl::MutableAssetType;
+      std::vector<SharedString> inputarg, boundInputs;
+      std::transform(inputarg.begin(), inputarg.end(), back_inserter(boundInputs),
+                     ptr_fun(&AssetVersionRef::Bind));
+
+      auto asset = Find<AssetHandleType>(ref_, type_);
+      if (asset)
+      {
+          for (const auto& v : asset->versions)
+          {
+              try
+              {
+                  auto version(v);
+                  version.LoadAsTemporary();
+                  if ((version->state != AssetDefs::Offline) &&
+                     (version->inputs == boundInputs) &&
+                      config_.IsUpToDate(version->config))
+                  {
+                      version.MakePermanent();
+                      return version;
+                  }
+                  else
+                  {
+                      version.NoLongerNeeded();
+                  }
+              }
+              catch (...)
+              {
+                  notify(NFY_WARN,"could not reuse a version");
+              }
+          }
+          asset->Modify(meta_, config_);
+      }
+      else
+      {
+          asset = Make<MutableDerivedVersionHandleType, ConfigType>
+                  (ref_, type_, meta_, config_);
+      }
+      bool needed = false;
+      return asset->MyUpdate(needed);
+  }
 
   template <class MutableDerivedVersionHandleType, class Version, class ConfigType>
   MutableDerivedVersionHandleType ReuseOrMakeAndUpdate(const std::string& ref_,
                                                        AssetDefs::Type type_,
                                                        const std::vector<SharedString>& inputs_,
                                                        const khMetaData& meta_,
-                                                       const ConfigType& config,
-                                                       const std::vector<Version>& cachedinputs_);
+                                                       const ConfigType& config_,
+                                                       const std::vector<Version>& cachedinputs_)
+  {
+      using AssetHandleType = typename MutableDerivedVersionHandleType::Impl::MutableAssetType;
+      std::vector<SharedString> inputarg { inputs_ }, boundInputs(inputarg.size());
+
+      std::transform(inputarg.begin(), inputarg.end(), back_inserter(boundInputs),
+                     ptr_fun(&AssetVersionRef::Bind));
+
+      auto asset = Find<AssetHandleType>(ref_, type_);
+      if (asset)
+      {
+          for (const auto& v : asset->versions)
+          {
+              try
+              {
+                  auto version(v);
+                  version.LoadAsTemporary();
+
+                  if ((version->state != AssetDefs::Offline) &&
+                     (version->inputs == boundInputs) &&
+                     config_.IsUpToDate(version->config))
+                  {
+                      version.MakePermanent();
+                      return version;
+                  }
+                  else
+                  {
+                      version.NoLongerNeeded();
+                  }
+              }
+              catch (...)
+              {
+                  notify(NFY_WARN,"could not reuse a version");
+              }
+          }
+
+          asset->Modify(inputs_, meta_, config_);
+      }
+      else
+      {
+          asset = Make<MutableDerivedVersionHandleType, ConfigType>
+                  (ref_, type_, inputs_, meta_, config_);
+      }
+      bool needed = false;
+      return asset->MyUpdate(needed, cachedinputs_);
+  }
 
   template <class MutableDerivedVersionHandleType, class Version, class ConfigType>
   MutableDerivedVersionHandleType ReuseOrMakeAndUpdate(const std::string& ref_,
-                                                       const std::vector<SharedString>& inputs,
+                                                       const std::vector<SharedString>& inputs_,
                                                        const khMetaData& meta_,
-                                                       const ConfigType& config,
-                                                       const std::vector<Version>& cachedinputs_);
+                                                       const ConfigType& config_,
+                                                       const std::vector<Version>& cachedinputs_)
+  {
+      using AssetHandleType = typename MutableDerivedVersionHandleType::Impl::MutableAssetType;
+
+      std::vector<SharedString> inputarg { inputs_ }, boundInputs(inputarg.size());
+      std::transform(inputarg.begin(), inputarg.end(), back_inserter(boundInputs),
+                         ptr_fun(&AssetVersionRef::Bind));
+
+      auto asset = Find<AssetHandleType>(ref_, AssetDefs::Terrain); //always terrain?
+      if (asset)
+      {
+          for (const auto& v : asset->versions)
+          {
+              try
+              {
+                  auto version(v);
+                  version.LoadAsTemporary();
+                  if ((version->state != AssetDefs::Offline) &&
+                      (version->inputs == boundInputs) &&
+                      config_.IsUpToDate(version->config))
+                  {
+                      version.MakePermanent();
+                      return version;
+                  }
+                  else
+                  {
+                      version.NoLongerNeeded();
+                  }
+              }
+              catch (...)
+              {
+                  notify(NFY_WARN,"could not reuse a version");
+              }
+          }
+          asset->Modify(inputs_, meta_, config_);
+      }
+      else
+      {
+          asset = Make<MutableDerivedVersionHandleType, ConfigType>
+                  (ref_, inputs_, meta_, config_);
+      }
+      bool needed = false;
+      return asset->MyUpdate(needed, cachedinputs_);
+  }
 
   template <class MutableDerivedVersionHandleType, class Version, class ConfigType, class Extras>
   MutableDerivedVersionHandleType ReuseOrMakeAndUpdate(const std::string& ref_,
                                                        AssetDefs::Type type_,
                                                        const khMetaData& meta_,
-                                                       const ConfigType& config,
-                                                       const Extras& extraArgs);
+                                                       const ConfigType& config_,
+                                                       const Extras& extraArgs)
+  {
+      using AssetHandleType = typename MutableDerivedVersionHandleType::Impl::MutableAssetType;
+      std::vector<SharedString> inputarg, boundInputs;
+      std::transform(inputarg.begin(), inputarg.end(), back_inserter(boundInputs),
+                     ptr_fun(&AssetVersionRef::Bind));
+
+      auto asset = Find<AssetHandleType>(ref_, type_);
+      if (asset)
+      {
+          for (const auto& v : asset->versions)
+          {
+              try
+              {
+                  auto version(v);
+                  version.LoadAsTemporary();
+                  if ((version->state != AssetDefs::Offline) &&
+                      (version->inputs == boundInputs) &&
+                      config_.IsUpToDate(version->config))
+                  {
+                      version.MakePermanent();
+                      return version;
+                  }
+                  else
+                  {
+                      version.NoLongerNeeded();
+                  }
+              }
+              catch(...)
+              {
+                  notify(NFY_WARN,"could not reuse a version");
+              }
+          }
+          asset->Modify(meta_, config_);
+      }
+      else
+      {
+          asset = Make<MutableDerivedVersionHandleType, ConfigType>
+                  (ref_, type_, meta_, config_);
+      }
+
+      bool needed = false;
+      return asset->MyUpdate(needed, extraArgs);
+  }
 
   template <class MutableDerivedAssetHandleType, class ConfigType>
   MutableDerivedAssetHandleType FindAndModify(const std::string& ref_,
