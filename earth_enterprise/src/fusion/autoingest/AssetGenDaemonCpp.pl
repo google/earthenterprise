@@ -159,21 +159,6 @@ ${name}Factory::ReuseOrMakeAndUpdate(
                   (version->inputs == boundInputs) &&
                   ::IsUpToDate(config_, version->config)) {
 
-#if 0
-                notify(NFY_NOTICE,
-                       "${name}: ReuseOrMakeAndUpdate (reusing %s)",
-                       version->GetRef().c_str());
-                notify(NFY_NOTICE, "         boundinputs:");
-                for (const auto & bi : boundInputs) {
-                    notify(NFY_NOTICE, "             %s", bi.c_str());
-                }
-                notify(NFY_NOTICE, "         version inputs:");
-                for (std::vector<std::string>::const_iterator iv =
-                     version->inputs.begin();
-                     iv != version->inputs.end(); ++iv) {
-                    notify(NFY_NOTICE, "             %s", iv->c_str());
-                }
-#endif
                 // Tell the storage manager that we're going to use this
                 // version again.
                 version.MakePermanent();

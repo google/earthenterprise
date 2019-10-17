@@ -226,7 +226,7 @@ namespace AssetFactory
       using Impl = typename MutableDerivedVersionHandleType::Impl;
       auto ref_ = AssetDefs::SubAssetName(parentAssetRef,
                                           basename,
-                                          type_,
+                                          type_, //Ipl::EXPECTED_TYPE
                                           Impl::EXPECTED_SUBTYPE);
       return FindMakeAndUpdate<MutableDerivedVersionHandleType, Version, ConfigType>
               (ref_,
@@ -456,6 +456,76 @@ namespace AssetFactory
 
       bool needed = false;
       return asset->MyUpdate(needed, extraArgs);
+  }
+
+  template <class MutableDerivedVersionHandleType, class Version, class ConfigType>
+  MutableDerivedVersionHandleType ReuseOrMakeAndUpdateSubAsset(
+          const std::string& parentName,
+          const std::string& baseName,
+          const std::vector<SharedString>& inputs_,
+          const khMetaData& meta_,
+          const ConfigType& config_,
+          const std::vector<Version>& cachedinputs_)
+  {
+      using Impl = typename MutableDerivedVersionHandleType::Impl;
+      auto ref_ = AssetDefs::SubAssetName(parentName,
+                                          basename,
+                                          Impl::EXPECTED_TYPE,
+                                          Impl::EXPECTED_SUBTYPE);
+      return ReuseOrMakeAndUpdate<MutableDerivedVersionHandleType, Version, ConfigType>
+             (ref_, inputs_, meta_, config_, cachedinputs_);
+  }
+
+  template <class MutableDerivedVersionHandleType, class Version, class ConfigType, class Extras>
+  MutableDerivedVersionHandleType ReuseOrMakeAndUpdateSubAsset(
+            const std::string& parentName,
+            AssetDefs::Type type_,
+            const std::string& basename ,
+            const khMetaData& meta_,
+            const ConfigType& config_,
+            const Extras& cachedinputs_)
+    {
+        using Impl = typename MutableDerivedVersionHandleType::Impl;
+        auto ref_ = AssetDefs::SubAssetName(parentName,
+                                            basename,
+                                            type_,
+                                            Impl::EXPECTED_SUBTYPE);
+        return ReuseOrMakeAndUpdate<MutableDerivedVersionHandleType, Version, ConfigType, Extras>
+               (ref_, type_, meta_, config_, cachedinputs_);
+    }
+
+  template <class MutableDerivedVersionHandleType, class Version, class ConfigType>
+  MutableDerivedVersionHandleType ReuseOrMakeAndUpdateSubAsset(
+            const std::string& parentName,
+            AssetDefs::Type type_,
+            const std::string& basename ,
+            const khMetaData& meta_,
+            const ConfigType& config_)
+    {
+        using Impl = typename MutableDerivedVersionHandleType::Impl;
+        auto ref_ = AssetDefs::SubAssetName(parentName,
+                                            basename,
+                                            type_,
+                                            Impl::EXPECTED_SUBTYPE);
+        return ReuseOrMakeAndUpdate<MutableDerivedVersionHandleType, Version, ConfigType>
+               (ref_, type_, meta_, config_);
+    }
+
+  template <class MutableDerivedVersionHandleType, class Version, class ConfigType>
+  MutableDerivedVersionHandleType ReuseOrMakeAndUpdateSubAsset(
+          const std::string& parentName,
+          AssetDefs::Type type_,
+          const std::string& baseName,
+          const std::vector<SharedString>& inputs_,
+          const khMetaData& meta_,
+          const ConfigType& config_,
+          const std::vector<Version>& cachedinputs_)
+  {
+      using Impl = typename MutableDerivedVersionHandleType::Impl;
+      auto ref_ = AssetDefs::SubAssetName(parentName, baseName,
+                                          type_, Impl::EXPECTED_SUBTYPE);
+      return ReuseOrMakeAndUpdate<MutableDerivedVersionHandleType, Version, ConfigType>
+              (ref_, type_, inputs_, meta_, config_, cachedinputs_);
   }
 
   template <class MutableDerivedAssetHandleType, class ConfigType>
