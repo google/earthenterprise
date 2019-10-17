@@ -211,7 +211,7 @@ class khCache {
   void updateCacheItemSize(const Key &key) {
     Item *item = FindItem(key);
     if ( item ) {
-      uint64 size;
+      uint64 size = 0;
       if (limitCacheMemory) size = calculateCacheItemSize(item);
       cacheMemoryUse = (cacheMemoryUse - item->size) + size;
       item->size = size;
