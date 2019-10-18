@@ -23,6 +23,14 @@ Release notes: Open GEE 5.3.3
       removed for most calculations, such as when system manager is determining
       which resources overlap. 
 
+      **Reported memory used by the caches is more accurate**.
+      Previously, the calculations for memory usage were
+      missing data and the reported usage in ``getop`` was
+      underestimated. Now, the reported usage is closer
+      to the actual memory used.
+
+=======
+
       .. rubric:: Supported Platforms
 
       The Open GEE 5.3.3 release is supported on 64-bit versions of the
