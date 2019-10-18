@@ -28,8 +28,8 @@ class MiscConfigStorage {
   uint        VersionCacheSize = uint(128000);
 
   // The maximum amount of memory allocated for each cache in bytes.
-  uint64      MaxAssetCacheMemorySize = uint64(10737418240);
-  uint64      MaxVersionCacheMemorySize = uint64(10737418240);
+  uint64      MaxAssetCacheMemorySize = uint64(805306368);
+  uint64      MaxVersionCacheMemorySize = uint64(2415919104);
 
   bool        LimitMemoryUtilization = false;
   
