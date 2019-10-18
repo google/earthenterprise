@@ -292,8 +292,8 @@ void StateUpdater::SetState(
 void StateUpdater::SetVersionStateAndRunHandlers(
     AssetHandle<AssetVersionImpl> & version,
     AssetDefs::State newState) {
-  // OnStateChange can return a new state that we need to transition to, so we
-  // may have to change the state repeatedly.
+  // RunStateChangeHandlers can return a new state that we need to transition
+  // to, so we may have to change the state repeatedly.
   AssetDefs::State oldState = version->state;
   do {
     version->state = newState;
