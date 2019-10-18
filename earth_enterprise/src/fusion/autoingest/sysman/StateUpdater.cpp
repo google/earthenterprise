@@ -310,8 +310,8 @@ AssetDefs::State StateUpdater::RunStateChangeHandlers(
     AssetDefs::State newState,
     AssetDefs::State oldState) {
   AssetDefs::State nextState = AssetDefs::Failed;
+  UpdateWaitingAssets(version, oldState);
   try {
-    UpdateWaitingAssets(version, oldState);
     nextState = RunVersionStateChangeHandler(version, newState, oldState);
   } catch (const UnsupportedException &) {
     // We'll catch this exception farther up the stack
