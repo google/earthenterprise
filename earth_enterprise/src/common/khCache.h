@@ -251,6 +251,7 @@ class khCache {
     item = new Item(key, val);
     Link(item);
     map[key] = item;
+    item->size = 0;
     if (limitCacheMemory) item->size = calculateCacheItemSize(item);
     cacheMemoryUse += item->size;
 #ifdef SUPPORT_VERBOSE
