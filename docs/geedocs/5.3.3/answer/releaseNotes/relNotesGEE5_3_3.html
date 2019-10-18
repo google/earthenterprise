@@ -83,16 +83,11 @@ Previously, <code class="docutils literal notranslate"><span class="pre">getop</
 was in the middle of major calculations. Now, this restriction has been
 removed for most calculations, such as when system manager is determining
 which resources overlap.</p>
-<p><strong>Reported memory used by the caches is more accurate</strong>.
-Previously, the calculations for memory usage were
-missing data and the reported usage in <code class="docutils literal notranslate"><span class="pre">getop</span></code> was
-underestimated. Now, the reported usage is closer
-to the actual memory used.</p>
-</div>
-</div>
-<hr class="docutils" />
-<blockquote>
-<div><p class="rubric">Supported Platforms</p>
+<p><strong>Improved memory usage reporting for caches</strong>.
+The memory usage estimation for the asset and
+asset version caches has been improved and is
+much more accurate.</p>
+<p class="rubric">Supported Platforms</p>
 <p>The Open GEE 5.3.3 release is supported on 64-bit versions of the
 following operating systems:</p>
 <ul class="simple">
@@ -367,7 +362,8 @@ correctly to the new PostgreSQL version used by Open GEE 5.3.3.</p>
 </tr>
 </tbody>
 </table>
-</div></blockquote>
+</div>
+</div>
 </div>
 
 
