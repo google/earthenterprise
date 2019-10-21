@@ -217,7 +217,7 @@ class khCache {
       item->size = size;
     }
   }
-  void setCacheMemoryLimit(bool enabled, uint maxMemory) {
+  void setCacheMemoryLimit(bool enabled, uint64 maxMemory) {
     limitCacheMemory = enabled;
     maxCacheMemory = maxMemory;
   }
