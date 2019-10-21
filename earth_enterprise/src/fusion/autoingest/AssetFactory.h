@@ -257,7 +257,8 @@ namespace AssetFactory
   }
 
 
-  template <class MutableDerivedVersionHandleType, class Version, class ConfigType>
+  template <class MutableDerivedVersionHandleType, class Version,
+            class ConfigType, class VersionDType, class Extras = int>
   MutableDerivedVersionHandleType ReuseOrMakeAndUpdate(const std::string& ref_,
                                                        AssetDefs::Type type_,
                                                        const khMetaData& meta_,
@@ -275,7 +276,7 @@ namespace AssetFactory
           {
               try
               {
-                  auto version(v);
+                  VersionDType version(v);
                   version.LoadAsTemporary();
                   if ((version->state != AssetDefs::Offline) &&
                      (version->inputs == boundInputs) &&
@@ -298,14 +299,15 @@ namespace AssetFactory
       }
       else
       {
-          asset = Make<MutableDerivedVersionHandleType, ConfigType>
+          asset = Make<AssetHandleType, ConfigType>
                   (ref_, type_, meta_, config_);
       }
       bool needed = false;
       return asset->MyUpdate(needed);
   }
 
-  template <class MutableDerivedVersionHandleType, class Version, class ConfigType>
+  template <class MutableDerivedVersionHandleType, class Version,
+            class ConfigType, class VersionDType, class Extras = int>
   MutableDerivedVersionHandleType ReuseOrMakeAndUpdate(const std::string& ref_,
                                                        AssetDefs::Type type_,
                                                        const std::vector<SharedString>& inputs_,
@@ -326,7 +328,7 @@ namespace AssetFactory
           {
               try
               {
-                  auto version(v);
+                  VersionDType version(v);
                   version.LoadAsTemporary();
 
                   if ((version->state != AssetDefs::Offline) &&
@@ -351,14 +353,15 @@ namespace AssetFactory
       }
       else
       {
-          asset = Make<MutableDerivedVersionHandleType, ConfigType>
+          asset = Make<AssetHandleType, ConfigType>
                   (ref_, type_, inputs_, meta_, config_);
       }
       bool needed = false;
       return asset->MyUpdate(needed, cachedinputs_);
   }
 
-  template <class MutableDerivedVersionHandleType, class Version, class ConfigType>
+  template <class MutableDerivedVersionHandleType, class Version,
+            class ConfigType, class VersionDType, class Extras = int>
   MutableDerivedVersionHandleType ReuseOrMakeAndUpdate(const std::string& ref_,
                                                        const std::vector<SharedString>& inputs_,
                                                        const khMetaData& meta_,
@@ -378,7 +381,7 @@ namespace AssetFactory
           {
               try
               {
-                  auto version(v);
+                  VersionDType version(v);
                   version.LoadAsTemporary();
                   if ((version->state != AssetDefs::Offline) &&
                       (version->inputs == boundInputs) &&
@@ -401,14 +404,15 @@ namespace AssetFactory
       }
       else
       {
-          asset = Make<MutableDerivedVersionHandleType, ConfigType>
+          asset = Make<AssetHandleType, ConfigType>
                   (ref_, inputs_, meta_, config_);
       }
       bool needed = false;
       return asset->MyUpdate(needed, cachedinputs_);
   }
 
-  template <class MutableDerivedVersionHandleType, class Version, class ConfigType, class Extras>
+  template <class MutableDerivedVersionHandleType, class Version,
+            class ConfigType, class VersionDType, class Extras = int>
   MutableDerivedVersionHandleType ReuseOrMakeAndUpdate(const std::string& ref_,
                                                        AssetDefs::Type type_,
                                                        const khMetaData& meta_,
@@ -427,7 +431,7 @@ namespace AssetFactory
           {
               try
               {
-                  auto version(v);
+                  VersionDType version(v);
                   version.LoadAsTemporary();
                   if ((version->state != AssetDefs::Offline) &&
                       (version->inputs == boundInputs) &&
@@ -450,7 +454,7 @@ namespace AssetFactory
       }
       else
       {
-          asset = Make<MutableDerivedVersionHandleType, ConfigType>
+          asset = Make<AssetHandleType, ConfigType>
                   (ref_, type_, meta_, config_);
       }
 
@@ -458,7 +462,8 @@ namespace AssetFactory
       return asset->MyUpdate(needed, extraArgs);
   }
 
-  template <class MutableDerivedVersionHandleType, class Version, class ConfigType>
+  template <class MutableDerivedVersionHandleType, class Version,
+            class ConfigType, class VersionDType, class Extras = int>
   MutableDerivedVersionHandleType ReuseOrMakeAndUpdateSubAsset(
           const std::string& parentName,
           const std::string& baseName,
@@ -472,11 +477,13 @@ namespace AssetFactory
                                           basename,
                                           Impl::EXPECTED_TYPE,
                                           Impl::EXPECTED_SUBTYPE);
-      return ReuseOrMakeAndUpdate<MutableDerivedVersionHandleType, Version, ConfigType>
+      return ReuseOrMakeAndUpdate<MutableDerivedVersionHandleType, Version,
+                                  ConfigType, VersionDType>
              (ref_, inputs_, meta_, config_, cachedinputs_);
   }
 
-  template <class MutableDerivedVersionHandleType, class Version, class ConfigType, class Extras>
+  template <class MutableDerivedVersionHandleType, class Version,
+            class ConfigType, class VersionDType, class Extras = int>
   MutableDerivedVersionHandleType ReuseOrMakeAndUpdateSubAsset(
             const std::string& parentName,
             AssetDefs::Type type_,
@@ -490,11 +497,13 @@ namespace AssetFactory
                                             basename,
                                             type_,
                                             Impl::EXPECTED_SUBTYPE);
-        return ReuseOrMakeAndUpdate<MutableDerivedVersionHandleType, Version, ConfigType, Extras>
+        return ReuseOrMakeAndUpdate<MutableDerivedVersionHandleType, Version,
+                                    ConfigType, VersionDType, Extras>
                (ref_, type_, meta_, config_, cachedinputs_);
     }
 
-  template <class MutableDerivedVersionHandleType, class Version, class ConfigType>
+  template <class MutableDerivedVersionHandleType, class Version,
+            class ConfigType, class VersionDType, class Extras = int>
   MutableDerivedVersionHandleType ReuseOrMakeAndUpdateSubAsset(
             const std::string& parentName,
             AssetDefs::Type type_,
@@ -507,11 +516,13 @@ namespace AssetFactory
                                             basename,
                                             type_,
                                             Impl::EXPECTED_SUBTYPE);
-        return ReuseOrMakeAndUpdate<MutableDerivedVersionHandleType, Version, ConfigType>
+        return ReuseOrMakeAndUpdate<MutableDerivedVersionHandleType, Version,
+                                    ConfigType, VersionDType>
                (ref_, type_, meta_, config_);
     }
 
-  template <class MutableDerivedVersionHandleType, class Version, class ConfigType>
+  template <class MutableDerivedVersionHandleType, class Version,
+            class ConfigType, class VersionDType, class Extras = int>
   MutableDerivedVersionHandleType ReuseOrMakeAndUpdateSubAsset(
           const std::string& parentName,
           AssetDefs::Type type_,
@@ -524,7 +535,8 @@ namespace AssetFactory
       using Impl = typename MutableDerivedVersionHandleType::Impl;
       auto ref_ = AssetDefs::SubAssetName(parentName, baseName,
                                           type_, Impl::EXPECTED_SUBTYPE);
-      return ReuseOrMakeAndUpdate<MutableDerivedVersionHandleType, Version, ConfigType>
+      return ReuseOrMakeAndUpdate<MutableDerivedVersionHandleType, Version,
+                                  ConfigType, VersionDType>
               (ref_, type_, inputs_, meta_, config_, cachedinputs_);
   }
 

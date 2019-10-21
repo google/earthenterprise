@@ -948,7 +948,8 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
       MutableAssetVersionD packgen =
         //PacketGenFactory
         AssetFactory::ReuseOrMakeAndUpdate
-        <MutablePacketGenAssetVersionD, AssetVersion, packetGenConfig>
+        <MutablePacketGenAssetVersionD, AssetVersion,
+         packetGenConfig, PacketGenAssetVersionD>
         (ssGenInfo[i].assetname,
          AssetDefs::Terrain,
          khMetaData(),

@@ -180,7 +180,8 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
     if (config.need_khvr_) {
       source = //MosaicFactory
         AssetFactory::ReuseOrMakeAndUpdateSubAsset
-        <MutableMosaicAssetVersionD, AssetVersion, MosaicConfig>
+        <MutableMosaicAssetVersionD, AssetVersion,
+         MosaicConfig, MosaicAssetVersionD>
                (assetRef,
                 type,
                 "mosaic",
@@ -194,7 +195,8 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
     MutableKRPAssetVersionD krp2 =
       //KRPFactory
       AssetFactory::ReuseOrMakeAndUpdateSubAsset
-      <MutableKRPAssetVersionD, AssetVersion, KRPConfig>
+      <MutableKRPAssetVersionD, AssetVersion,
+       KRPConfig, KRPAssetVersionD>
       (assetRef,
        type,
        "product",
@@ -226,7 +228,8 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
         krmp =
           //KRMPFactory
           AssetFactory::ReuseOrMakeAndUpdateSubAsset
-          <MutableKRMPAssetVersionD, AssetVersion, KRMPConfig>
+          <MutableKRMPAssetVersionD, AssetVersion,
+           KRMPConfig, KRMPAssetVersionD>
           (assetRef,
            type,
            "maskproduct",
@@ -244,7 +247,8 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
       AssetVersion maskgen =
         //MaskgenFactory
         AssetFactory::ReuseOrMakeAndUpdateSubAsset
-        <MutableMaskgenAssetVersionD, AssetVersion, MaskgenConfig>
+        <MutableMaskgenAssetVersionD, AssetVersion,
+         MaskgenConfig, MaskgenAssetVersionD>
         (assetRef,
          type,
          "maskgen",
@@ -257,7 +261,8 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
       MutableAssetVersionD krmp =
         //KRMPFactory
         AssetFactory::ReuseOrMakeAndUpdateSubAsset
-        <MutableKRMPAssetVersionD, AssetVersion, KRMPConfig>
+        <MutableKRMPAssetVersionD, AssetVersion,
+         KRMPConfig, KRMPAssetVersionD>
         (assetRef,
          type,
          "maskproduct",

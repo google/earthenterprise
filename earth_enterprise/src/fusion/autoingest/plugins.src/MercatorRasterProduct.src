@@ -286,7 +286,8 @@ MercatorRasterProductAssetImplD::HandleImportRequest(
   MutableAssetVersionD source =
       //SourceFactory
       AssetFactory::ReuseOrMakeAndUpdateSubAsset
-      <MutableSourceAssetVersionD, AssetVersion, SourceConfig>
+      <MutableSourceAssetVersionD, AssetVersion,
+       SourceConfig, SourceAssetVersionD>
       (asset->GetRef(),
        asset->type,
        "source",
@@ -334,7 +335,8 @@ MercatorRasterProductAssetImplD::HandleImportRequest(
     MutableAssetVersionD masksource =
         //SourceFactory
         AssetFactory::ReuseOrMakeAndUpdateSubAsset
-        <MutableSourceAssetVersionD, AssetVersion, SourceConfig>
+        <MutableSourceAssetVersionD, AssetVersion,
+         SourceConfig, SourceAssetVersionD>
         (asset->GetRef(),
          asset->type,
          "masksource",

@@ -1151,8 +1151,10 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
 
       MutableAssetVersionD packgen =
         //PacketGenFactory
-        AssetFactory::::ReuseOrMakeAndUpdate
-        <MutablePacketLevelAssetVersionD, AssetVersion, PacketLevelConfig>
+        AssetFactory::ReuseOrMakeAndUpdate
+        <MutablePacketGenAssetVersionD, AssetVersion,
+        PacketGenConfig, PacketGenAssetVersionD,
+        PacketGenExtraUpdateArg<RasterProductAssetVersion>>
         (genInfo[i].assetname,
          type,
          khMetaData(),
