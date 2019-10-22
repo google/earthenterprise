@@ -59,54 +59,99 @@ gtag('config', 'UA-108632131-2');
 
     <h3 id="resolved_issues_5.3.1">Resolved Issues</h3>
     <div>
-     <table class="nice-table">
-       <tbody>
-         <tr>
-           <th>Number</th>
-           <th class="narrow">Description</th>
-           <th>Resolution</th>
-         </tr>
-         <tr>
-           <td>1255</td>
-           <td>Version errors with GEE patch releases</td>
-           <td>
-             Limited internal version string to 3 parts to fix patch releases.
-           </td>
-         </tr>
-         <tr>
-           <td>1292</td>
-           <td>Invalid qtpacket status with SharedString fixes.</td>
-           <td>
-             If one builds a project the status of the qtpacket will show as Bad even though it actually built successfully.
-             This fixes the issue.
-           </td>
-         </tr>
-        <tr>
-          <td>1304</td>
-          <td>Creating issues tickets in OpenGEE repo does not provide guidelines</td>
-          <td>
-            Added template to create new issues in Open GEE repo.
-          </td>
-        </tr>
-        <tr>
-          <td>1317</td>
-          <td>Lacking Test cases for genewimageryresource</td>
-          <td>
-            Added automated tests for Imagery resource creation.
-          </td>
-        </tr>
-         <tr>
-           <td>1339</td>
-           <td>Building with incomplete assets can result in Blocked databases</td>
-           <td>
-             Added error handling to certain asset caching to prevent incomplete assets from being cached. This prevents a
-             version of the DelayedBuildChildren class of errors, and rectifies the <code>run_historical.sh</code> script
-             problem.
-           </td>
-        </tr>
-      </tbody>
-    </table>
-    <h3 id="known_issues_5.3.1">Known Issues</h3>
+      <table class="nice-table">
+        <tbody>
+          <tr>
+            <th>Number</th>
+            <th class="narrow">Description</th>
+            <th>Resolution</th>
+          </tr>
+          <tr>
+            <td>393</td>
+            <td>KML validation message is hidden under KML input box.</td>
+            <td>
+              This change just updates the z-index of the "Invalid KML" dialog box to a higher value than the "Paste KML" z-index.
+            </td>
+          </tr>
+
+          <tr>
+            <td>1236</td>
+            <td>Polygons and Polygon constructors should handle a KML string.</td>
+            <td>
+              In polygontoqtnodes.h, the Polygons and Polygon constructors expect a KML filename from which it creates an ifstream object to read the KML file. A very small change also allows it to read KML that's in an istringstream object. This is added for situations where the KML string has been read from a portable file.
+            </td>
+          </tr>
+
+          <tr>
+            <td>1255</td>
+            <td>Limits internal version string to 3 parts to fix patch releases.</td>
+            <td>
+              Fusion will only track 3 parts of the version string in order to maintain compatibility with the asset root and with client/server messages.
+            </td>
+          </tr>
+
+          <tr>
+            <td>1277</td>
+            <td>Change asset and asset version keys to ints.</td>
+            <td>
+              Fusion uses strings to refer to assets and asset versions (the string corresponds to the asset's location under the asset root). This results in lots of duplicate, possibly long strings since every asset needs to hold the string referring to every other asset it has a relationship with (children, parents, inputs, and listeners). For large builds this can take lots of memory and use extra processing time since string comparisons are inefficient. We should update Fusion to use ints instead of strings when referring to assets and just store a single table relating strings to assets. This should reduce memory consumption and improve performance.
+            </td>
+          </tr>
+
+          <tr>
+            <td>1292</td>
+            <td>Invalid qtpacket status with SharedString fixes.</td>
+            <td>
+              On the release_5.2.5.1_experimental branch with the SharedString fixes, if one builds a project the status of the qtpacket will show as Bad even though it actually built successfully.  This fixes the issue.
+            </td>
+          </tr>
+
+          <tr>
+            <td>1300</td>
+            <td>Add overlay cli.</td>
+            <td>
+              Adds 4 new options to genewterrainproject and gemodifyterrainproject.
+            </td>
+          </tr>
+
+          <tr>
+            <td>1301</td>
+            <td>Combine storage-related code.</td>
+            <td>
+              The code for storing and retrieving assets from disk, caching them in memory, and tracking modified assets is somewhat scattered. We should combine this code to make it easier to understand, easier to switch storage backends, and easier to improve, such as through parallelization. The first step in this direction is to create a storage manager that manages reading, writing, and caching.
+            </td>
+          </tr>
+
+          <tr>
+            <td>1317</td>
+            <td>Test cases for genewimageryresource.</td>
+            <td>
+              Create a set of gauge tests that will test the various command line options for the genewimageryresource utility.
+            </td>
+          </tr>
+
+          <tr>
+            <td>1339</td>
+            <td>Building with incomplete assets can result in Blocked databases.</td>
+            <td>
+              Added error handling to certain asset caching to prevent incomplete assets from being cached. This prevents a version of the DelayedBuildChildren class of errors, and rectifies the <code>run_historical.sh</code> script problem.
+            </td>
+          </tr>
+
+          <tr>
+            <td>1344</td>
+            <td>Add method in GlcUnpacker to "walk" a single layer.</td>
+            <td>
+              The GlcUnpacker class has a method to walk all of the map packets in all layers of a GLX file.  There should be a corresponding method to walk only the packets in a single layer.
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+  <h5>
+  <h5>
+    <p id="known_issues_5.3.1">Known Issues</p>
+  </h5>
     <table class="nice-table">
       <tbody>
         <tr>
