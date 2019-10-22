@@ -211,8 +211,7 @@ class khCache {
   void updateCacheItemSize(const Key &key) {
     Item *item = FindItem(key);
     if ( item ) {
-      uint64 size = 0;
-      if (limitCacheMemory) size = calculateCacheItemSize(item);
+      uint64 size = calculateCacheItemSize(item);
       cacheMemoryUse = (cacheMemoryUse - item->size) + size;
       item->size = size;
     }
@@ -251,8 +250,7 @@ class khCache {
     item = new Item(key, val);
     Link(item);
     map[key] = item;
-    item->size = 0;
-    if (limitCacheMemory) item->size = calculateCacheItemSize(item);
+    item->size = calculateCacheItemSize(item);
     cacheMemoryUse += item->size;
 #ifdef SUPPORT_VERBOSE
     if (verbose) notify(NFY_ALWAYS, "Adding %s to cache", key.c_str());

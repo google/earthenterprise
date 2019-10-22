@@ -110,10 +110,8 @@ khAssetManager::ApplyPending(void)
 
   notify(NFY_INFO, "Asset cache size = %d", Asset::CacheSize());
   notify(NFY_INFO, "Version cache size = %d", AssetVersion::CacheSize());
-  if (MiscConfig::Instance().LimitMemoryUtilization) {
-    notify(NFY_INFO, "Approx. memory used by asset cache = %lu B", Asset::CacheMemoryUse());
-    notify(NFY_INFO, "Approx. memory used by version cache = %lu B", AssetVersion::CacheMemoryUse());
-  }
+  notify(NFY_INFO, "Approx. memory used by asset cache = %lu B", Asset::CacheMemoryUse());
+  notify(NFY_INFO, "Approx. memory used by version cache = %lu B", AssetVersion::CacheMemoryUse());
 
 #ifndef SKIP_SAVE
 

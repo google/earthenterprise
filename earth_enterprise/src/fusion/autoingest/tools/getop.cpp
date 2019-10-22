@@ -243,17 +243,12 @@ main(int argc, char *argv[])
         }
 
         outline("");
-        if (MiscConfig::Instance().LimitMemoryUtilization) {
-          outline("Number of cached assets: %u, Approx. memory used: %s", 
-                  taskLists.num_assets_cached, 
-                  readableMemorySize(taskLists.asset_cache_memory).c_str());
-          outline("Number of cached asset versions: %u, Approx. memory used: %s",
-                  taskLists.num_assetversions_cached,
-                  readableMemorySize(taskLists.version_cache_memory).c_str());
-        } else {
-          outline("Number of cached assets: %u", taskLists.num_assets_cached);
-          outline("Number of cached asset versions: %u", taskLists.num_assetversions_cached);
-        }
+        outline("Number of cached assets: %u, Approx. memory used: %s",
+                taskLists.num_assets_cached,
+                readableMemorySize(taskLists.asset_cache_memory).c_str());
+        outline("Number of cached asset versions: %u, Approx. memory used: %s",
+                taskLists.num_assetversions_cached,
+                readableMemorySize(taskLists.version_cache_memory).c_str());
         outline("Number of strings cached: %u", taskLists.str_store_size);
 
       }
