@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#include <algorithm>
-
 #include "StateUpdater.h"
 #include "AssetVersion.h"
 #include "common/notify.h"
