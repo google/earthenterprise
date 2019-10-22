@@ -16,8 +16,6 @@
 
 #include "WaitingAssets.h"
 
-using namespace std;
-
 void WaitingAssets::Update(
     const SharedString & ref,
     AssetDefs::State newState,

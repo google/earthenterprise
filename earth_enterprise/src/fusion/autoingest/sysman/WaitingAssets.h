@@ -20,17 +20,13 @@
 #include "autoingest/.idl/storage/AssetDefs.h"
 #include "common/SharedString.h"
 
-#include <functional>
 #include <unordered_set>
-#include <vector>
 
-class WaitingAssets
-{
+class WaitingAssets {
   private:
     const AssetDefs::State waitingState;
     std::unordered_set<SharedString> waiting;
   public:
-    WaitingAssets() : WaitingAssets(AssetDefs::Waiting) {}
     WaitingAssets(AssetDefs::State waitingState) : waitingState(waitingState) {}
     void Update(
         const SharedString & ref,
