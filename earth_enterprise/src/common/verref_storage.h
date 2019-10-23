@@ -23,6 +23,7 @@
 #include <iostream>
 
 #include "common/khTypes.h"
+#include "CacheSizeCalculations.h"
 
 
 // Random access iterator for version reference generator.
@@ -128,6 +129,10 @@ struct _VerRefGenIterator :
   const std::string* operator->() const { return &cur_.GetRef(); }
 
   value_type cur_;
+
+  uint64 GetHeapUsage() const {
+    return ::GetHeapUsage(cur_);
+  }
 };
 
 // class _VerRefDef - version reference definition.
@@ -225,6 +230,11 @@ struct _VerRefDef {
   std::string asset_name;
   int32 ver_num;
 
+  uint64 GetHeapUsage() const {
+    return ::GetHeapUsage(asset_name)
+            + ::GetHeapUsage(ref);
+  }
+
  private:
   void InvalidateRef() const { ref.clear(); }
 
@@ -305,6 +315,12 @@ class VerRefGen {
  private:
   iterator start_;
   iterator finish_;
+
+ public:
+  uint64 GetHeapUsage() const {
+    return ::GetHeapUsage(start_)
+            + ::GetHeapUsage(finish_);
+  }
 };
 
 
@@ -314,6 +330,24 @@ inline std::string ToString(const VerRefGen &val) {
 
 inline void FromString(const std::string &str, VerRefGen &val) {
   val = VerRefGen(str);
+}
+
+inline uint64 GetHeapUsage(const _VerRefDef &verRefDef) {
+  return verRefDef.GetHeapUsage();
+}
+
+template <class _Tp>
+inline uint64 GetHeapUsage(const _VerRefGenIterator<_Tp, _Tp*, _Tp&> &verRefGenIter) {
+  return verRefGenIter.GetHeapUsage();
+}
+
+template <class _Tp>
+inline uint64 GetHeapUsage(const _VerRefGenIterator<_Tp, const _Tp*, const _Tp&> &constVerRefGenIter) {
+  return constVerRefGenIter.GetHeapUsage();
+}
+
+inline uint64 GetHeapUsage(const VerRefGen &verRefGen) {
+  return verRefGen.GetHeapUsage();
 }
 
 #endif  // GEO_EARTH_ENTERPRISE_SRC_COMMON_VERREF_STORAGE_H_
