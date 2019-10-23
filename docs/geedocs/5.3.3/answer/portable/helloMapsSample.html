@@ -72,6 +72,7 @@
 <h1>Hello Maps! code sample<a class="headerlink" href="#hello-maps-code-sample" title="Permalink to this headline">¶</a></h1>
 <div class="container">
 <div class="content container">
+
 <div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;&quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;</span>
 
    <span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
@@ -134,40 +135,40 @@
                                              <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 
                                              <span class="p">&lt;</span><span class="nt">style</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span><span class="p">&gt;</span>
-                                             <span class="nn">#head</span> <span class="p">{</span>
-                                                   <span class="nb">margin</span><span class="o">:</span> <span class="m">0</span> <span class="nb">auto</span><span class="p">;</span>
-                                                   <span class="nb">margin-top</span><span class="o">:</span> <span class="m">16px</span><span class="p">;</span>
-                                                   <span class="nb">height</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span>
-                                                   <span class="nb">width</span><span class="o">:</span> <span class="m">600px</span><span class="p">;</span>
-                                                   <span class="nb">font-family</span><span class="o">:</span> <span class="s2">&quot;Arial&quot;</span><span class="o">,</span> <span class="nb">sans-serif</span><span class="p">;</span>
-                                                   <span class="nb">font-size</span><span class="o">:</span> <span class="m">16px</span><span class="p">;</span>
-                                                   <span class="nb">font-weight</span><span class="o">:</span> <span class="nb">normal</span><span class="p">;</span>
+                                             <span class="p">#</span><span class="nn">head</span> <span class="p">{</span>
+                                                   <span class="k">margin</span><span class="p">:</span> <span class="mi">0</span> <span class="kc">auto</span><span class="p">;</span>
+                                                   <span class="k">margin-top</span><span class="p">:</span> <span class="mi">16</span><span class="kt">px</span><span class="p">;</span>
+                                                   <span class="k">height</span><span class="p">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+                                                   <span class="k">width</span><span class="p">:</span> <span class="mi">600</span><span class="kt">px</span><span class="p">;</span>
+                                                   <span class="k">font-family</span><span class="p">:</span> <span class="s2">&quot;Arial&quot;</span><span class="p">,</span> <span class="kc">sans-serif</span><span class="p">;</span>
+                                                   <span class="k">font-size</span><span class="p">:</span> <span class="mi">16</span><span class="kt">px</span><span class="p">;</span>
+                                                   <span class="k">font-weight</span><span class="p">:</span> <span class="kc">normal</span><span class="p">;</span>
                                              <span class="p">}</span>
-                                             <span class="nn">#head</span> <span class="nt">span</span> <span class="p">{</span>
-                                                   <span class="nb">background-color</span><span class="o">:</span> <span class="m">#F1F1F1</span><span class="p">;</span>
-                                                   <span class="nb">color</span><span class="o">:</span> <span class="m">#333</span><span class="p">;</span>
+                                             <span class="p">#</span><span class="nn">head</span> <span class="nt">span</span> <span class="p">{</span>
+                                                   <span class="k">background-color</span><span class="p">:</span> <span class="mh">#F1F1F1</span><span class="p">;</span>
+                                                   <span class="k">color</span><span class="p">:</span> <span class="mh">#333</span><span class="p">;</span>
                                              <span class="p">}</span>
-                                             <span class="nn">#not_serving</span> <span class="p">{</span>
-                                                   <span class="nb">background-color</span><span class="o">:</span> <span class="m">#CB392A</span><span class="p">;</span>
-                                                   <span class="nb">color</span><span class="o">:</span> <span class="m">#FFF</span><span class="p">;</span>
-                                                   <span class="nb">font-weight</span><span class="o">:</span> <span class="nb">bold</span><span class="p">;</span>
+                                             <span class="p">#</span><span class="nn">not_serving</span> <span class="p">{</span>
+                                                   <span class="k">background-color</span><span class="p">:</span> <span class="mh">#CB392A</span><span class="p">;</span>
+                                                   <span class="k">color</span><span class="p">:</span> <span class="mh">#FFF</span><span class="p">;</span>
+                                                   <span class="k">font-weight</span><span class="p">:</span> <span class="kc">bold</span><span class="p">;</span>
                                              <span class="p">}</span>
-                                             <span class="nn">#head</span> <span class="nt">span</span><span class="o">,</span>
-                                             <span class="nn">#not_serving</span> <span class="p">{</span>
-                                                   <span class="nb">display</span><span class="o">:</span> <span class="nb">block</span><span class="p">;</span>
-                                                   <span class="nb">padding</span><span class="o">:</span> <span class="m">16px</span><span class="p">;</span>
-                                                   <span class="nb">border</span><span class="o">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="m">#DCDCDC</span>
-                                                   <span class="nb">font-size</span><span class="o">:</span> <span class="m">13px</span><span class="p">;</span>
-                                                   <span class="nb">margin</span><span class="o">:</span> <span class="m">8px</span> <span class="m">0</span> <span class="m">8px</span> <span class="m">0</span><span class="p">;</span>
-                                                   <span class="n">box</span><span class="o">-</span><span class="n">shadow</span><span class="o">:</span> <span class="m">1px</span> <span class="m">1px</span> <span class="m">3px</span> <span class="m">#F1F1F1</span><span class="p">;</span>
+                                             <span class="p">#</span><span class="nn">head</span> <span class="nt">span</span><span class="o">,</span>
+                                             <span class="p">#</span><span class="nn">not_serving</span> <span class="p">{</span>
+                                                   <span class="k">display</span><span class="p">:</span> <span class="kc">block</span><span class="p">;</span>
+                                                   <span class="k">padding</span><span class="p">:</span> <span class="mi">16</span><span class="kt">px</span><span class="p">;</span>
+                                                   <span class="k">border</span><span class="p">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="kc">solid</span> <span class="mh">#DCDCDC</span>
+                                                   <span class="k">font-size</span><span class="o">:</span> <span class="mi">13</span><span class="kt">px</span><span class="p">;</span>
+                                                   <span class="k">margin</span><span class="p">:</span> <span class="mi">8</span><span class="kt">px</span> <span class="mi">0</span> <span class="mi">8</span><span class="kt">px</span> <span class="mi">0</span><span class="p">;</span>
+                                                   <span class="k">box-shadow</span><span class="p">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="mi">1</span><span class="kt">px</span> <span class="mi">3</span><span class="kt">px</span> <span class="mh">#F1F1F1</span><span class="p">;</span>
                                              <span class="p">}</span>
-                                             <span class="nn">#map</span> <span class="p">{</span>
-                                                   <span class="nb">margin</span><span class="o">:</span> <span class="m">0</span> <span class="nb">auto</span><span class="p">;</span>
-                                                   <span class="nb">margin-top</span><span class="o">:</span> <span class="m">120px</span>
+                                             <span class="p">#</span><span class="nn">map</span> <span class="p">{</span>
+                                                   <span class="k">margin</span><span class="p">:</span> <span class="mi">0</span> <span class="kc">auto</span><span class="p">;</span>
+                                                   <span class="k">margin-top</span><span class="p">:</span> <span class="mi">120</span><span class="kt">px</span>
 
                                                    <span class="c">/*The 2D map won’t load unless you set a height value. This code sample uses the CSS, but you can use a div element instead. For example, &lt;div id=&quot;map2d&quot; style=&quot;border: 1px solid silver; height: 600px; width: 800px;&quot;&gt; &lt;/div&gt;*/</span>
-                                                         <span class="nb">height</span><span class="o">:</span> <span class="m">600px</span><span class="p">;</span>
-                                                         <span class="nb">width</span><span class="o">:</span> <span class="m">600px</span><span class="p">;</span>
+                                                         <span class="k">height</span><span class="o">:</span> <span class="mi">600</span><span class="kt">px</span><span class="p">;</span>
+                                                         <span class="k">width</span><span class="p">:</span> <span class="mi">600</span><span class="kt">px</span><span class="p">;</span>
                                                    <span class="p">}</span>
                                                    <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
                                              <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
