@@ -48,8 +48,9 @@ new PostgreSQL version used by Open GEE 5.3.3.
 
 -[ Resolved Issues ]-
 
-Resolved Issues        Number  Description  Resolution  Issue Number
-Issue Description  Issue Resolution
+Resolved Issues        Number  Description  Resolution  1202  Can't
+select .KIP as source  Select 'header.xml' in .KIP directory to select
+.KIP
 
 -[ Known Issues ]-
 

@@ -57,9 +57,9 @@ Release notes: Open GEE 5.3.3
          * - Number
            - Description
            - Resolution
-         * - Issue Number
-           - Issue Description
-           - Issue Resolution
+         * - 1202
+           - Can't select .KIP as source
+           - Select 'header.xml' in .KIP directory to select .KIP
 
       .. rubric:: Known Issues
 
