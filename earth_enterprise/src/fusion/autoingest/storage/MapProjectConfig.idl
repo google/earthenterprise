@@ -16,6 +16,7 @@
 #include <autoingest/.idl/storage/MapLayerConfig.h>
 #include <autoingest/.idl/storage/LayerLegend.h>
 #include <searchtabs/.idl/SearchTabs.h>
+#requiresgetheapusage
 
 #cppquote
 #include <autoingest/.idl/storage/MapLayerConfig_impl.h>
@@ -58,4 +59,3 @@ class MapProjectEditRequest {
 
 #pragma StrLoadAndSave
 };
-

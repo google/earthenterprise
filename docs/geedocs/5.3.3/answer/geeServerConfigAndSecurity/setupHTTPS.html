@@ -104,7 +104,7 @@ something like:</p>
 <code class="docutils literal notranslate"><span class="pre">Include</span></code> statement you copied and saved, and update the
 LOCATION tags to the real virtual server:</div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre>r...@fusion.localhost.org:/opt/google/gehttpd/conf.d/virtual_servers
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>r...@fusion.localhost.org:/opt/google/gehttpd/conf.d/virtual_servers
 # cat https_2d.location # This is an example of a location-based map virtual server #
 Substitute appropriate values in the following variables
 # 1. &lt;LOCATION&gt; : The new location name.
@@ -129,7 +129,7 @@ file so that the
 file and the virtual server are loaded by the HTTPS/443
 virtual host and not the HTTP/80 virtual host:</div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre>(vi /opt/google/gehttpd/conf/extra/httpd-ssl.conf...)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(vi /opt/google/gehttpd/conf/extra/httpd-ssl.conf...)
 &lt;snip&gt;
 ... &lt;VirtualHost _default_:443&gt;
 # General setup for the virtual host
@@ -156,7 +156,7 @@ HTTP-available virtual servers:</div>
 list the included location files so that the
 <code class="docutils literal notranslate"><span class="pre">https2d.location</span></code> file is excluded:</div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre>LoadModule gedb_module /opt/google/gehttpd/modules/mod_gedb.so
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>LoadModule gedb_module /opt/google/gehttpd/modules/mod_gedb.so
 
 NameVirtualHost *:80
 &lt;VirtualHost *:80&gt;

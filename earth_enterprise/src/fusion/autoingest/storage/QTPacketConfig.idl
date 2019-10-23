@@ -18,6 +18,7 @@
 #include <khTypes.h>
 #include <autoingest/.idl/storage/DatedImageryIndexInfo.h>
 #include "common/SharedString.h"
+#requiresgetheapusage
 
 #cppquote
 #include <autoingest/.idl/storage/DatedImageryIndexInfo_impl.h>
