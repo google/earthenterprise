@@ -946,10 +946,10 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
 
       // ruse or make a new RasterBlendAssetVersion
       MutableAssetVersionD packgen =
-        //PacketGenFactory
         AssetFactory::ReuseOrMakeAndUpdate
         <MutablePacketGenAssetVersionD, AssetVersion,
-         packetGenConfig, PacketGenAssetVersionD>
+         packetGenConfig, PacketGenAssetVersionD,
+         PacketGenExtraUpdateArg<RasterProductAssetVersion>>
         (ssGenInfo[i].assetname,
          AssetDefs::Terrain,
          khMetaData(),

@@ -1008,10 +1008,10 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
 
       // reuse or make a new PacketGenAssetVersion
       MutableAssetVersionD packgen =
-        //PacketGenFactory::
         AssetFactory::ReuseOrMakeAndUpdate
         <MutablePacketGenAssetVersionD, AssetVersion,
-         PacketGenConfig, PacketGenAssetVersionD>
+         PacketGenConfig, PacketGenAssetVersionD,
+         PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion>>
         (genInfo[i].assetname,
          type,
          khMetaData(),

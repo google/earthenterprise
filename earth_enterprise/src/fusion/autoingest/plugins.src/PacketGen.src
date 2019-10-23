@@ -45,11 +45,12 @@ class PacketGenExtraUpdateArg {
 #include <autoingest/plugins/RasterProductAsset.h>
 #include <autoingest/plugins/MercatorRasterProductAsset.h>
 #include <memory>
-
+/*
 template
 MutablePacketGenAssetVersionD
 PacketGenFactory::ReuseOrMakeAndUpdate(
-    const std::string &ref_ , AssetDefs::Type type_,
+    const std::string &ref_,
+    AssetDefs::Type type_,
     const khMetaData &meta_,
     const PacketGenConfig& config_,
     const PacketGenExtraUpdateArg<RasterProductAssetVersion> &extra);
@@ -57,7 +58,8 @@ PacketGenFactory::ReuseOrMakeAndUpdate(
 template
 MutablePacketGenAssetVersionD
 PacketGenFactory::ReuseOrMakeAndUpdate(
-    const std::string &ref_ , AssetDefs::Type type_,
+    const std::string &ref_,
+    AssetDefs::Type type_,
     const khMetaData &meta_,
     const PacketGenConfig& config_,
     const PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion> &extra);
@@ -81,7 +83,7 @@ PacketGenFactory::ReuseOrMakeAndUpdateSubAsset(
     const khMetaData &meta_,
     const PacketGenConfig& config_,
     const PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion> &extra);
-
+*/
 template <typename ProductAssetVersion>
 void PacketGenAssetVersionImplD::UpdateChildren(
     const PacketGenExtraUpdateArg<ProductAssetVersion> &extra) {
@@ -341,7 +343,6 @@ void PacketGenAssetVersionImplD::UpdateChildren(
     char subname[32];
     snprintf(subname, sizeof(subname), "packlevel%02d", level);
     MutableAssetVersionD packLevelVer =
-      //PacketLevelFactory
       AssetFactory::ReuseOrMakeAndUpdateSubAsset
         <MutablePacketLevelAssetVersionD, AssetVersion,
          PacketLevelConfig, PacketLevelAssetVersionD>

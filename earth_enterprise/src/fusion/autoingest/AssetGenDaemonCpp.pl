@@ -128,7 +128,7 @@ if ($withreuse) {
 
     print $fh <<EOF;
 
-$template
+/*$template
 Mutable${name}AssetVersionD
 ${name}Factory::ReuseOrMakeAndUpdate(
         const std::string &ref_ $formaltypearg,
@@ -203,7 +203,7 @@ ${name}Factory::ReuseOrMakeAndUpdateSubAsset(
         $forwardtypearg, $forwardinputarg
         meta_, config_  $forwardcachedinputarg
         $forwardExtraUpdateArg);
-}
+}*/
 EOF
 }
 

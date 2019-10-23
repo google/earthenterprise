@@ -474,7 +474,7 @@ namespace AssetFactory
   {
       using Impl = typename MutableDerivedVersionHandleType::Impl;
       auto ref_ = AssetDefs::SubAssetName(parentName,
-                                          basename,
+                                          baseName,
                                           Impl::EXPECTED_TYPE,
                                           Impl::EXPECTED_SUBTYPE);
       return ReuseOrMakeAndUpdate<MutableDerivedVersionHandleType, Version,
@@ -487,14 +487,14 @@ namespace AssetFactory
   MutableDerivedVersionHandleType ReuseOrMakeAndUpdateSubAsset(
             const std::string& parentName,
             AssetDefs::Type type_,
-            const std::string& basename ,
+            const std::string& baseName ,
             const khMetaData& meta_,
             const ConfigType& config_,
             const Extras& cachedinputs_)
     {
         using Impl = typename MutableDerivedVersionHandleType::Impl;
         auto ref_ = AssetDefs::SubAssetName(parentName,
-                                            basename,
+                                            baseName,
                                             type_,
                                             Impl::EXPECTED_SUBTYPE);
         return ReuseOrMakeAndUpdate<MutableDerivedVersionHandleType, Version,
@@ -507,13 +507,13 @@ namespace AssetFactory
   MutableDerivedVersionHandleType ReuseOrMakeAndUpdateSubAsset(
             const std::string& parentName,
             AssetDefs::Type type_,
-            const std::string& basename ,
+            const std::string& baseName ,
             const khMetaData& meta_,
             const ConfigType& config_)
     {
         using Impl = typename MutableDerivedVersionHandleType::Impl;
         auto ref_ = AssetDefs::SubAssetName(parentName,
-                                            basename,
+                                            baseName,
                                             type_,
                                             Impl::EXPECTED_SUBTYPE);
         return ReuseOrMakeAndUpdate<MutableDerivedVersionHandleType, Version,

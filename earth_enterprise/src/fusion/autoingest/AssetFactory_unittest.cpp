@@ -36,6 +36,7 @@ class MockAssetConfig;
 class MockMutableAsset;
 class MockAssetVersionImpl;
 class MockMutableAssetVersion;
+class MockExtras;
 
 class MockAssetStorage
 {
@@ -86,6 +87,7 @@ public:
 
     MockAssetConfig config;
     bool needed;
+    AssetDefs::State state;
 
     void Modify(const khMetaData& _meta, const MockAssetConfig& _config)
     {
@@ -99,6 +101,17 @@ public:
     {
         inputs = _inputs;
         Modify(_meta, _config);
+    }
+
+    bool IsUpToDate(const MockAssetVersionImpl& other) const
+    {
+        return (this->name == other.name) &&
+               (this->subtype == other.subtype) &&
+               (this->meta == other.meta) &&
+               (this->inputs == other.inputs) &&
+               (this->config == other.config) &&
+               (this->state == other.state) &&
+               (this->type == other.type);
     }
 
     MockAssetVersionImpl(MockAssetStorage storage,

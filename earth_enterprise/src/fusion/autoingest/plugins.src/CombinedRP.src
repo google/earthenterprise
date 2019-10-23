@@ -178,7 +178,7 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
 
     // see if I need to khvr the source
     if (config.need_khvr_) {
-      source = //MosaicFactory
+      source =
         AssetFactory::ReuseOrMakeAndUpdateSubAsset
         <MutableMosaicAssetVersionD, AssetVersion,
          MosaicConfig, MosaicAssetVersionD>
@@ -193,7 +193,6 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
 
     // tell my raster child about the new source & have it update itself
     MutableKRPAssetVersionD krp2 =
-      //KRPFactory
       AssetFactory::ReuseOrMakeAndUpdateSubAsset
       <MutableKRPAssetVersionD, AssetVersion,
        KRPConfig, KRPAssetVersionD>
@@ -226,7 +225,6 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
         }
       } else {
         krmp =
-          //KRMPFactory
           AssetFactory::ReuseOrMakeAndUpdateSubAsset
           <MutableKRMPAssetVersionD, AssetVersion,
            KRMPConfig, KRMPAssetVersionD>
@@ -245,7 +243,6 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
     case CombinedRPConfig::AutoMask: {
       // tell my maskgen child about the new raster, have it update
       AssetVersion maskgen =
-        //MaskgenFactory
         AssetFactory::ReuseOrMakeAndUpdateSubAsset
         <MutableMaskgenAssetVersionD, AssetVersion,
          MaskgenConfig, MaskgenAssetVersionD>
@@ -259,7 +256,6 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
 
       // tell my KRMP child about the new raster & mask
       MutableAssetVersionD krmp =
-        //KRMPFactory
         AssetFactory::ReuseOrMakeAndUpdateSubAsset
         <MutableKRMPAssetVersionD, AssetVersion,
          KRMPConfig, KRMPAssetVersionD>
