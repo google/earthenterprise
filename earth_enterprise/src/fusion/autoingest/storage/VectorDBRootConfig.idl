@@ -16,6 +16,7 @@
 #include <vector>
 #include <autoingest/.idl/storage/LayerConfig.h>
 #include <autoingest/.idl/storage/VectorProjectConfig.h>
+#requiresgetheapusage
 
 #cppquote
 #include <autoingest/.idl/storage/LayerConfig_impl.h>
@@ -33,6 +34,7 @@ class VectorDBRootConfig {
   std::vector<uint32> providers = std::vector<uint32>();
 
   deprecated xmlattr int config_version_ = 0;
+
 
   // To force rebuilds, increment this version.
   // When incrementing this version, you should also increment the

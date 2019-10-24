@@ -18,6 +18,7 @@
 #include <khTypes.h>
 #include <khFileUtils.h>
 #include <khException.h>
+#requiresgetheapusage
 
 
 class SourceConfig {
@@ -103,5 +104,4 @@ class SourceConfig {
 #/cppquote
 
 
-}
-
+};

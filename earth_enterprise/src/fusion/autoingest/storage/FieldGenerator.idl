@@ -14,6 +14,7 @@
 
 
 #include <qstring.h>
+#requiresgetheapusage
 
 
 class FieldGenerator {
@@ -33,4 +34,3 @@ class FieldGenerator {
 
 #pragma GenerateIsUpToDate
 };
-

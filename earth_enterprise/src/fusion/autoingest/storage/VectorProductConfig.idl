@@ -17,6 +17,7 @@
 #include <khTypes.h>
 #include <khMetaData.h>
 #include <autoingest/.idl/storage/SourceConfig.h>
+#requiresgetheapusage
 
 #cppquote
 #include <autoingest/.idl/storage/SourceConfig_impl.h>

@@ -14,6 +14,7 @@
 
 #include <autoingest/.idl/storage/LayerConfig.h>
 #include <autoingest/.idl/storage/SearchField.h>
+#requiresgetheapusage
 
 
 #cppquote
@@ -33,6 +34,7 @@ class FuseConfig {
   QString contextScript = QString("");
   deprecated std::vector<SearchField> searchFields = std::vector<SearchField>();
   deprecated std::string searchStyle = std::string();
+
 
 #pragma LoadAndSave
 };
@@ -97,4 +99,3 @@ class VectorFuseAssetConfig {
   }
 #/cppquote
 };
-
