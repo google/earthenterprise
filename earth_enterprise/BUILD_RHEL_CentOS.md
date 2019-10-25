@@ -87,7 +87,7 @@ sudo yum install -y ant bzip2 doxygen gcc-c++ patch python-argparse python-lxml 
 ### EL6
 
 ```bash
-sudo yum install -y ant bzip2 doxygen gcc-c++ patch python27-argparse python27-lxml python27-setuptools \
+sudo yum install -y ant bzip2 doxygen gcc-c++ patch python-argparse python27-lxml python27-setuptools \
   swig tar
 ```
 
@@ -147,7 +147,7 @@ sudo yum install -y \
   libcap-devel libmng-devel libpng-devel libX11-devel libXcursor-devel \
   libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel pcre pcre-devel \
-  perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python27-devel python27-unittest2 \
+  perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python27-devel python-unittest2 \
   rpm-build rpmrebuild rsync scons shunit2 \
   xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
 ```
