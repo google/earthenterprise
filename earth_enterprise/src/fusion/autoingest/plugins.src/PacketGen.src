@@ -360,4 +360,8 @@ void PacketGenAssetVersionImplD::UpdateChildren(
   AddChildren(kids);
 }
 
+template PacketGenAssetVersionD
+PacketGenAssetImplD::MyUpdate<RasterProductAssetVersion>(bool &needed, const PacketGenExtraUpdateArg<RasterProductAssetVersion> &extra) const;
+template PacketGenAssetVersionD
+PacketGenAssetImplD::MyUpdate<MercatorRasterProductAssetVersion>(bool &needed, const PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion> &extra) const;
 
