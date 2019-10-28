@@ -66,16 +66,6 @@ if ($base eq 'Composite') {
     }
 }
 
-my $isPacketgen;
-if (index($thiscommand, "PacketGenAsset.h") != -1) {
-    $isPacketgen = 1;
-} else {
-    $isPacketgen = 0;
-}
-if (length($template) > 0) {
-    $template = "template <typename ExtraUpdateArg>";
-    $formalExtraUpdateArg = ",const ExtraUpdateArg& extra";
-}
 
 # *****************************************************************************
 # ***  ${name}AssetImpl.h

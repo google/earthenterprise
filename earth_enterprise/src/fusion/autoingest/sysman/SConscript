@@ -161,7 +161,7 @@ env.test('LeafAssetVersion_unittest',
     LIBS=['gegdal', 'geraster', 'gesearchtabs', 'genet', 'gepublish', 'gefconfigutil',
       'geindex_r', 'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'qt-mt', 'xerces-c', 'geos',
       'gtest', 'gomp'])
-
+'''
 env.test('StateUpdater_unittest',
     commonobj +
     map(lambda p: 'plugins/'+p+'AssetD.o', plugins) +
@@ -180,7 +180,7 @@ env.test('StateUpdater_unittest',
     LIBS=['gegdal', 'geraster', 'gesearchtabs', 'genet', 'gepublish', 'gefconfigutil',
       'geindex_r', 'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'qt-mt', 'xerces-c', 'geos',
       'gtest', 'gomp'])
-
+'''
 env.test('StorageManagerAssetFactory_unittest',
     commonobj +
     map(lambda p: 'plugins/'+p+'AssetD.o', plugins) +
