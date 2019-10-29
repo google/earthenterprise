@@ -15,6 +15,7 @@
 
 #include <vector>
 #include <qstring.h>
+#requiresgetheapusage
 
 class SelectRuleConfig {
   enum Operator { Equal = 0, LEqual = 1, GEqual = 2, Less = 3, Greater = 4, NEqual = 5, RegExpMatch = 6, NotRegExpMatch = 7 };

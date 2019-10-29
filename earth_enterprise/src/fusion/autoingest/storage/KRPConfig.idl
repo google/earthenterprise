@@ -14,6 +14,7 @@
 
 
 #include <string>
+#requiresgetheapusage
 
 // ****************************************************************************
 // ***  KRP - Keyhole Raster Product (low level, Imagery & Terrain)
@@ -28,6 +29,7 @@ class KRPConfig {
   double south_boundary = new:-90.0, load:-90.0;
   double east_boundary = new:180.0, load:180.0;
   double west_boundary = new:-180.0, load:-180.0;
+
 
 #pragma GenerateIsUpToDate
 };
