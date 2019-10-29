@@ -78,6 +78,7 @@ else:
       'mod_wsgi',
       'psycopg2', # requires postgresql.
       'mgrs',
+      'PIL',
       'skia'
   ]
 

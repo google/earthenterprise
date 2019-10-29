@@ -395,6 +395,10 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
     requires('chkconfig')
     requires('shadow-utils')
 
+    if ("${findBuildNumber()}.${rpmPlatformString}".contains('el6')) {
+        requires('python27')
+    }
+
     requiresCommands(packageSharedCommands +
         ['cat', 'cut', 'getent', 'grep'])
 

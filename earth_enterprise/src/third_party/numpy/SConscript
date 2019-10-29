@@ -52,7 +52,7 @@ numpy_extract = numpy_env.Command(
                        numpy_target))])
 
 # [2] Build numpy.
-python_cmd = '%s/bin/python' % root_dir
+python_cmd = numpy_env['python_bin']
 numpy_target = '%s/.build' % current_dir
 numpy_build = numpy_env.Command(
     numpy_target, numpy_extract,
