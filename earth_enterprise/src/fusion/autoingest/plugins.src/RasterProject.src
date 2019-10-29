@@ -125,13 +125,13 @@ class RasterProjectAssetVersionImpl {
     return RasterGEIndexAssetVersion();
   }
 };
-
 // ===== RasterProjectAsset.cpp =====
 
 // ===== RasterProjectAssetD.h =====
 #include "fusion/autoingest/sysman/InsetInfo.h"
 #include <limits>
 #include "autoingest/plugins/RasterProductAsset.h"
+
 
 class RasterProjectAssetImplD {
  protected:
@@ -181,7 +181,8 @@ class RasterProjectAssetVersionImplD {
   uint32 BuildIndex(
     const khTilespace &tilespace,
     const std::vector<InsetInfo<RasterProductAssetVersion> >& inset_infos,
-    const std::string& date);
+    const std::string& date/*,
+    InsetTilespaceIndex<InsetInfo<RasterProductAssetVersion>> &tilespaceIndex*/);
 
   // Utility to load all the InsetInfos for the project.
   void LoadInsetInfoForIndexing(
@@ -236,6 +237,7 @@ class RasterProjectAssetVersionImplD {
 #include "autoingest/sysman/plugins/MapLayerJSAssetD.h"
 #include "autoingest/Misc.h"
 #include "autoingest/sysman/.idl/FusionUniqueId.h"
+#include "autoingest/sysman/InsetTilespaceIndex.h"
 #include <set>
 #include <algorithm>
 #include "fusion/khraster/khRasterProduct.h"
@@ -1071,6 +1073,14 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
   packgenassets.reserve(numInsets);
   packgenvers.reserve(numInsets);
 
+  // Map each InsetInfo to its index in the inset_infos vector. Will need
+  // this later on for populating neededIndexes.
+  std::map<const InsetInfo<RasterProductAssetVersion>*, uint> indexMap;
+  for (uint idx = 0; idx < inset_infos.size(); idx++) {
+    indexMap[&inset_infos[idx]] = idx;
+  }
+  
+  InsetTilespaceIndex<InsetInfo<RasterProductAssetVersion>> localIndex;
   for (uint i = 0; i < genInfo.size(); ++i) {
     // Check if I even need to do any packet generation at all
     // Maybe the other insets will completely replace everything
@@ -1082,19 +1092,33 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     // Determine which insets (0 .. i) intersect this coverage area.
     std::vector<uint> neededIndexes;
     neededIndexes.reserve(i);
+    localIndex.add(inset_infos[i]);
 
     notify(NFY_PROGRESS, "BuildIndex finding intersections for inset %d of %lu",
            i+1, genInfo.size());
-
+    int maxQuadTreeLevel = 0;
+    QuadtreePath coverageMBR = localIndex.getQuadtreeMBR(genInfo[i].coverage.degreeExtents(), maxQuadTreeLevel, endMinifyLevel);
+    notify(NFY_WARN, "In BuildIndex, genInfo[%u].coverage is %f, %f, %f, %f", i, genInfo[i].coverage.degreeExtents().beginX(), genInfo[i].coverage.degreeExtents().beginY(), genInfo[i].coverage.degreeExtents().endX(), genInfo[i].coverage.degreeExtents().endY());
+    notify(NFY_WARN, "In BuildIndex, QuadtreePath for genInfo[%u].coverage is %s", i, coverageMBR.AsString().c_str());
+    notify(NFY_WARN, "Number of insets before quadpath filtering: %lu", insetInfoPtrs.size());
+    std::vector<const InsetInfo<RasterProductAssetVersion>*> qualifiedInsetInfoPtrs = /*tilespaceIndex*/localIndex.intersectingExtents(coverageMBR, beginMinifyLevel, endMinifyLevel);
+    notify(NFY_WARN, "Number of insets after quadpath filtering:  %lu", qualifiedInsetInfoPtrs.size());
     overlapEnvelope<RasterProductAssetVersion> env (
-        type, insetInfoPtrs, i,
+        type, qualifiedInsetInfoPtrs, qualifiedInsetInfoPtrs.size(),
         beginMinifyLevel, endMinifyLevel, i);
 
     std::shared_ptr<OverlapCalculator<RasterProductAssetVersion>> calc =
         std::make_shared<OverlapCalculator<RasterProductAssetVersion>>(env);
-    neededIndexes = std::move(calc->PreprocessForInset(genInfo[i].coverage));
-    neededIndexes.push_back(i); // each inset always intersects itself
-
+    std::vector<uint> tempNeededIndexes = std::move(calc->PreprocessForInset(genInfo[i].coverage));
+    for (auto & idx : tempNeededIndexes) {
+      auto infoptr = qualifiedInsetInfoPtrs[idx];
+      auto it = indexMap.find(infoptr);
+      if (it != indexMap.end())
+        neededIndexes.push_back(it->second);
+    }
+    // COMMENTING OUT the below line for now. With the new quadtree filtering, this should automatically get picked up    
+    //neededIndexes.push_back(i); // each inset always intersects itself
+    notify(NFY_WARN, "Size of neededIndexes is %zu\n", neededIndexes.size());
     // calculate the level range that will be minified
     uint effectiveBeginMinifyLevel =
       std::max(genInfo[i].coverage.beginLevel(), beginMinifyLevel);
@@ -1113,10 +1137,10 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
 
     packetGenConfig.useOpaqueTopInsetInsteadOfMerge = true;
     packetGenConfig.insets.reserve(neededIndexes.size());
-
+    notify(NFY_WARN, "About to start looping through neededIndexes.\n");
     for (const auto& idx : neededIndexes) {
       const PacketGenInfo &otherGenInfo(genInfo[idx]);
-
+      notify(NFY_WARN, "Processing genInfo[%u]\n", idx);
       // +1 below since we minify from the next level
       bool otherWillContribToMinify =
         otherGenInfo.coverage.intersectsLevels
@@ -1170,8 +1194,12 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     packgenvers.push_back(packgen);
   }
 
+notify(NFY_WARN, "At the end, about to call MakeIndexSubAsset.\n");
   // Make index subasset (RasterGEIndex).
-  return MakeIndexSubAsset(packgenkids, packgenassets, packgenvers, genInfo, date);
+  uint32 retval = MakeIndexSubAsset(packgenkids, packgenassets, packgenvers, genInfo, date);
+notify(NFY_WARN, "At the end, finished calling MakeIndexSubAsset. Returning...\n");
+  
+  return retval;
 }
 
 

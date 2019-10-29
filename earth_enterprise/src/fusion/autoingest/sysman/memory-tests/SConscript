@@ -51,6 +51,7 @@ env.test('build-raster-project_resourcetest',
             'fusion/autoingest/sysman/SysManExtra.o',
             'fusion/autoingest/sysman/SysManFromStorage.o',
             'fusion/autoingest/sysman/InsetInfo.o',
+            'fusion/autoingest/sysman/InsetTilespaceIndex.o',
             ]) +
         map(lambda o: o,
             [

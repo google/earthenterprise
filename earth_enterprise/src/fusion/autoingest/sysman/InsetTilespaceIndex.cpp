@@ -21,9 +21,10 @@ Changes:
 
 
 ******************************************************************************/
-#include "fusion/autoingest/sysman/InsetTilespaceIndex.h"
 #include "common/khException.h"
 #include "autoingest/plugins/RasterProductAsset.h"
+#include "autoingest/plugins/RasterProjectAsset.h"
+#include "fusion/autoingest/sysman/InsetTilespaceIndex.h"
 #include <boost/range/sub_range.hpp>
 #include <boost/range/as_literal.hpp>
 #include <boost/range/algorithm.hpp>
@@ -37,7 +38,6 @@ Changes:
 #include <stdint.h>
 #include <assert.h>
 
-
 // getExtents functions - allow us to get khExtents<double> from the different types
 //   we want to work with
 khExtents<double> getExtents(const khExtents<double> &extents){
@@ -45,16 +45,19 @@ khExtents<double> getExtents(const khExtents<double> &extents){
 }
 
 khExtents<double> getExtents(const InsetInfo<RasterProductAssetVersion> &insetInfo){
-    
     return insetInfo.degExtents;
 }
 
+// khExtents<double> getExtents(const InsetInfoAndIndex &info){
+//     return info.ptrInsetInfo->degExtents;
+// }
 
 // InsetTilespaceIndex methods
 template <class ExtentContainer>
 QuadtreePath InsetTilespaceIndex<ExtentContainer>::add(const ExtentContainer &toAdd){
     int level;
     khExtents<double> tempExtents = ::getExtents(toAdd);
+    notify(NFY_WARN, "Entered InsetTilespaceIndex<ExtentContainer>::add");
     // Temporary assert while debugging. It's possible that this could be triggered
     // by valid data, but unlikely enough that I think it's still helpful for
     // debugging.
@@ -63,17 +66,18 @@ QuadtreePath InsetTilespaceIndex<ExtentContainer>::add(const ExtentContainer &to
     QuadtreePath quadtreeMbr = getQuadtreeMBR(tempExtents, level, MAX_LEVEL);
 
     //std::vector<const khExtents<uint32>*> mbrExtentsVec = _mbrExtentsVecMap.find( mbrHash );
-    ContainerVector *mbrExtentsVec;
-    typename QuadTreeMap::iterator it;
-    it = _mbrExtentsVecMap.find(quadtreeMbr);
+    //ContainerVector *mbrExtentsVec;
+    quadTree.AddElementAtQuadTreePath(quadtreeMbr, &toAdd);
+    // typename QuadTreeMap::iterator it;
+    // it = _mbrExtentsVecMap.find(quadtreeMbr);
 
-    if (it == _mbrExtentsVecMap.end()) {
-        mbrExtentsVec = new ContainerVector();//std::vector<ExtentContainer*>();
-        _mbrExtentsVecMap.insert({quadtreeMbr, *mbrExtentsVec});
-    } else {
-        mbrExtentsVec = &(it->second);
-    }
-    mbrExtentsVec->push_back(&toAdd);
+    // if (it == _mbrExtentsVecMap.end()) {
+    //     mbrExtentsVec = new ContainerVector();//std::vector<ExtentContainer*>();
+    //     _mbrExtentsVecMap.insert({quadtreeMbr, *mbrExtentsVec});
+    // } else {
+    //     mbrExtentsVec = &(it->second);
+    // }
+    // mbrExtentsVec->push_back(&toAdd);
     return quadtreeMbr;
 }
 
@@ -137,48 +141,58 @@ QuadtreePath InsetTilespaceIndex<ExtentContainer>::getQuadtreeMBR(const khExtent
 
 }
 
-template <class ExtentContainer>
-std::vector <QuadtreePath>
-InsetTilespaceIndex<ExtentContainer>::intersectingExtentsQuadtreePaths(QuadtreePath quadtreeMbr, uint32 minLevel, uint32 maxLevel) {
-    //uint64 mbrHash = qtpath.internalPath();
-    //std::vector <QuadtreePath>  mbrHashVec = _mbrExtentsVecMap.getKeys();
-    std::vector <QuadtreePath> mbrHashVec;
-    boost::copy(_mbrExtentsVecMap | boost::adaptors::map_keys,
-                std::back_inserter(mbrHashVec));
-    std::vector <QuadtreePath> intersectingQuadtrees;
+// template <class ExtentContainer>
+// std::vector <QuadtreePath>
+// InsetTilespaceIndex<ExtentContainer>::intersectingExtentsQuadtreePaths(QuadtreePath quadtreeMbr, uint32 minLevel, uint32 maxLevel) {
+//     //uint64 mbrHash = qtpath.internalPath();
+//     //std::vector <QuadtreePath>  mbrHashVec = _mbrExtentsVecMap.getKeys();
+//     std::vector <QuadtreePath> mbrHashVec;
+//     boost::copy(_mbrExtentsVecMap | boost::adaptors::map_keys,
+//                 std::back_inserter(mbrHashVec));
+//     std::vector <QuadtreePath> intersectingQuadtrees;
 
-    // TODO - redo this section to use bitwise filtering and partitioning using the QuadtreePath's internal path_
-    // bits, as this will be most expeditions.  However, this requires  access to private constructors and data.
-    // BTree lookups in the mbrHashVec could also bring the time complexity to O(log n)
-    for (uint32 level = minLevel; minLevel <= maxLevel; level++) {
-        for (QuadtreePath &otherMbr : mbrHashVec) {
-            if (otherMbr.Level() >= minLevel && otherMbr.Level() <= maxLevel) {
-                if (QuadtreePath::OverlapsAtLevel(quadtreeMbr, otherMbr, level)) {
-                    intersectingQuadtrees.push_back(otherMbr);
-                    break;
-                }
-            }
-        }
-    }
-    return intersectingQuadtrees;
-}
+//     // TODO - redo this section to use bitwise filtering and partitioning using the QuadtreePath's internal path_
+//     // bits, as this will be most expeditions.  However, this requires  access to private constructors and data.
+//     // BTree lookups in the mbrHashVec could also bring the time complexity to O(log n)
+//     notify(NFY_WARN, "Looping from level %u to %u", minLevel, maxLevel);
+//     for (uint32 level = minLevel; level <= maxLevel; level++) {
+//         notify(NFY_WARN, "On level %u", level);
+//         for (QuadtreePath &otherMbr : mbrHashVec) {
+//             //if (otherMbr.Level() >= minLevel && otherMbr.Level() <= maxLevel) {
+//                 notify(NFY_WARN, "Comparing %s with %s", quadtreeMbr.AsString().c_str(), otherMbr.AsString().c_str());
+//                 if (QuadtreePath::OverlapsAtLevel(quadtreeMbr, otherMbr, level)) {
+//                     notify(NFY_WARN, "It's a match!");        
+//                     intersectingQuadtrees.push_back(otherMbr);
+//                     break;
+//                 }
+//             //}
+//         }
+//     }
+//     return intersectingQuadtrees;
+// }
 
 
 template <class ExtentContainer>
 typename InsetTilespaceIndex<ExtentContainer>::ContainerVector
 InsetTilespaceIndex<ExtentContainer>::intersectingExtents(const QuadtreePath quadtreeMbr, uint32 minLevel, uint32 maxLevel) {
-    std::vector <QuadtreePath> intersectingQuadtreeMbrs = intersectingExtentsQuadtreePaths(quadtreeMbr, minLevel,
-                                                                                           maxLevel);
-    ContainerVector intersectingExtentsVec;
-    for (auto otherMbr : intersectingQuadtreeMbrs) {
-        ContainerVector extentsVec = _mbrExtentsVecMap[otherMbr];
-        intersectingExtentsVec.insert(intersectingExtentsVec.end(), extentsVec.begin(), extentsVec.end());
-    };
-    return intersectingExtentsVec;
+    InsetTilespaceIndex<ExtentContainer>::ContainerVector vec;
+    vec = quadTree.GetElementsAtQuadTreePath(quadtreeMbr);
+    return vec;
+    // notify(NFY_WARN, "In InsetTilespaceIndex<ExtentContainer>::intersectingExtents, about to call intersectingExtentsQuadtreePaths");
+    // std::vector <QuadtreePath> intersectingQuadtreeMbrs = intersectingExtentsQuadtreePaths(quadtreeMbr, minLevel,
+    //                                                                                        maxLevel);
+    // notify(NFY_WARN, "In InsetTilespaceIndex<ExtentContainer>::intersectingExtents, got a vector of %zu elements", intersectingQuadtreeMbrs.size());
+    // ContainerVector intersectingExtentsVec;
+    // for (auto otherMbr : intersectingQuadtreeMbrs) {
+    //     ContainerVector extentsVec = _mbrExtentsVecMap[otherMbr];
+    //     intersectingExtentsVec.insert(intersectingExtentsVec.end(), extentsVec.begin(), extentsVec.end());
+    // }
+
+    // notify(NFY_WARN, "In InsetTilespaceIndex<ExtentContainer> finished work, about to return");
+    // return intersectingExtentsVec;
 }
 
 
 template class InsetTilespaceIndex<khExtents<double>>;
 template class InsetTilespaceIndex<InsetInfo<RasterProductAssetVersion>>;
-
-
+//template class InsetTilespaceIndex<InsetInfoAndIndex>;

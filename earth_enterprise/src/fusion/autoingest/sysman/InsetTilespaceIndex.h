@@ -32,6 +32,7 @@ Description: Support for terrain "overlay" projects.
 #include "common/khExtents.h"
 #include "common/khInsetCoverage.h"
 #include "fusion/autoingest/sysman/InsetInfo.h"
+#include <iostream>
 //#include "fusion/autoingest/sysman/InsetTilespaceIndex.h"
 
 // // TODO - pack this struct to fit in a tidy 64 bit "size_t" for optimal performance
@@ -40,6 +41,81 @@ Description: Support for terrain "overlay" projects.
 //     byte maxDepth,
 //     uint32 quadTreeBits
 // };
+template <class T>
+class QuadKeyTreeNode {
+//     friend class QuadKeyTree<T>;
+// protected:
+public:
+    //QuadKeyTreeNode() = default {}
+    std::array<std::shared_ptr<QuadKeyTreeNode<T>>, 4> nodes {{nullptr, nullptr, nullptr, nullptr}};
+    std::vector<const T*> data;
+};
+
+template <class T>
+class QuadKeyTree {
+private:
+    std::array<std::shared_ptr<QuadKeyTreeNode<T>>, 4> nodes {{nullptr, nullptr, nullptr, nullptr}};
+
+public:
+    void AddElementAtQuadTreePath(QuadtreePath path,  const T *element){
+        assert(path.Level() >= 1 && path.Level() <= 24);
+        std::cout << "path[0] = " << path[0] << "\n";
+        if (nodes[path[0]] == nullptr)
+            nodes[path[0]] = std::make_shared<QuadKeyTreeNode<T>>();
+        std::shared_ptr<QuadKeyTreeNode<T>> nodeptr = nodes[path[0]];
+        std::cout << "nodeptr is " << (nodeptr == nullptr ? "null" : "not null") << "\n";
+        for (uint32 level = 1; level < path.Level(); level++) {
+            std::cout << "path[" << level << "] = " << path[level] << "\n";
+            if (nodeptr->nodes[path[level]] == nullptr)
+                nodeptr->nodes[path[level]] = std::make_shared<QuadKeyTreeNode<T>>();
+            nodeptr = nodeptr->nodes[path[level]];
+            std::cout << "nodeptr is " << (nodeptr == nullptr ? "null" : "not null") << "\n";
+        }
+
+        assert(nodeptr != nullptr);
+        nodeptr->data.push_back(element);
+    }
+
+    std::vector<const T*> GetElementsAtQuadTreePath(QuadtreePath path, bool matchEntirePathUpAndDown = true) 
+    {
+        std::vector<const T*> vec;
+        if (nodes[path[0]] == nullptr)
+            return vec;
+
+        std::shared_ptr<QuadKeyTreeNode<T>> nodeptr = nodes[path[0]];
+        //for (uint32 level = 1; level < path.Level(); level++) {
+        uint32 level = 0;
+        while(nodeptr != nullptr && level < path.Level()-1 ) {
+            if (matchEntirePathUpAndDown)
+                vec.insert(std::end(vec), std::begin(nodeptr->data), std::end(nodeptr->data));
+            level++;
+            nodeptr = nodeptr->nodes[path[level]];
+        }
+
+        if (nodeptr != nullptr){
+            if (matchEntirePathUpAndDown) {
+                AddAllFromNodeAndChildren(nodeptr, vec);
+            }
+            else
+            {
+                vec.insert(std::end(vec), std::begin(nodeptr->data), std::end(nodeptr->data));                    
+            }
+            
+        }
+
+        return vec;
+    }
+
+    void AddAllFromNodeAndChildren(std::shared_ptr<QuadKeyTreeNode<T>> nodeptr, std::vector<const T*> &vec) {
+        vec.insert(std::end(vec), std::begin(nodeptr->data), std::end(nodeptr->data));
+
+        for (auto & childnode : nodeptr->nodes) {
+            if (childnode != nullptr)
+                AddAllFromNodeAndChildren(childnode, vec);
+        }
+    }
+};
+
 
 
 const int MAX_LEVEL = 24;
@@ -49,8 +125,9 @@ class InsetTilespaceIndex {
 public:
     using ContainerVector = typename std::vector<const ExtentContainer*>;
 protected:
-    using QuadTreeMap = typename std::map <QuadtreePath, ContainerVector>;
-    QuadTreeMap _mbrExtentsVecMap;
+    //using QuadTreeMap = typename std::map <QuadtreePath, ContainerVector>;
+    QuadKeyTree<ExtentContainer> quadTree;
+    //QuadTreeMap _mbrExtentsVecMap;
 public:
     InsetTilespaceIndex() = default;
 
@@ -61,12 +138,20 @@ public:
 
     ContainerVector intersectingExtents(const QuadtreePath tilespaceMBR, uint32 minLevel, uint32 maxLevel);
 
-    std::vector <QuadtreePath>
-    intersectingExtentsQuadtreePaths(const QuadtreePath tilespaceMBR, uint32 minLevel, uint32 maxLevel);
+    // std::vector <QuadtreePath>
+    // intersectingExtentsQuadtreePaths(const QuadtreePath tilespaceMBR, uint32 minLevel, uint32 maxLevel);
 
 protected:
 
 };
+// class InsetInfoAndIndex {
+// public:
+//     InsetInfoAndIndex(const InsetInfo<RasterProductAssetVersion>* _ptrInsetInfo, uint _index)
+//     : ptrInsetInfo(_ptrInsetInfo), index(_index) {}
+//     const InsetInfo<RasterProductAssetVersion>* ptrInsetInfo;
+//     uint index;
+// };
+
 
 #endif 
 

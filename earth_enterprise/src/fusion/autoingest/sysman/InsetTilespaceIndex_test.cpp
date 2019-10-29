@@ -76,7 +76,7 @@ public:
 
 class InsetTilespaceIndexTest : public testing::Test {
 protected:
-    InsetTilespaceIndex insetTilespaceIndex;
+    InsetTilespaceIndex<khExtents<double>> insetTilespaceIndex;
 public:
 
     // TODO - set gencov

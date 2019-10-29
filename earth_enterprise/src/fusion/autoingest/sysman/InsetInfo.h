@@ -232,8 +232,7 @@ FindNeededImageryInsets(
     uint                          numExtents,
     std::vector<uint>            &neededIndexes,
     uint beginMinifyLevel,
-    uint endMinifyLevel,
-    uint level);
+    uint endMinifyLevel);
 
 
 template <typename ProductAssetVersion>

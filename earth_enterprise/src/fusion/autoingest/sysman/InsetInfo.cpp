@@ -378,7 +378,7 @@ void FindNeededImageryInsets(
       khExtents<uint32> extents = i->coverage.levelExtents(level);
       extentsVec.push_back(extents);
   }
-  //FindNeededImageryInsets( gencov, extentsVec, numInsets, neededIndexes, beginMinifyLevel, endMinifyLevel );
+  FindNeededImageryInsets( gencov, extentsVec, numInsets, neededIndexes, beginMinifyLevel, endMinifyLevel );
   return;
 }
 
@@ -389,8 +389,7 @@ void FindNeededImageryInsets(
     uint                          numInsets,
     std::vector<uint>            &neededIndexes,
     uint beginMinifyLevel,
-    uint endMinifyLevel,
-    uint level) {
+    uint endMinifyLevel) {
   // For now we know that gencov's levelExtents are simple minifications
   // of the maxres one. That means that we can do the intersection only at
   // the lowest res and know that we will get all the insets needed for
@@ -403,7 +402,7 @@ void FindNeededImageryInsets(
     return;
   }
 
-  //uint level = gencov.beginLevel();
+  uint level = gencov.beginLevel();
 
   // Packgen will be caching the results - the cached results are
   // in product tilespace, so we need to do our intersection tests
@@ -420,16 +419,14 @@ void FindNeededImageryInsets(
                     ClientImageryTilespaceBase.tileSize);
 
   khExtents<uint32> genExtents(gencov.levelExtents(level));
-
   if (needAlign) {
     genExtents.alignBy(alignSize);
   }
-  notify(NFY_WARN, "oriExtents: %d, %d, %d, %d", genExtents.beginX(), genExtents.endX(), genExtents.beginY(), genExtents.endY());
+
   for (uint i = 0; i < numInsets; ++i) {
     // Aligning here would be redundant, so we save ourselves the effort.
-    const khExtents<uint32> *iExtents = &extents[i];
-    notify(NFY_WARN, "\ttestExtents: %d, %d, %d, %d", iExtents->beginX(), iExtents->endX(), iExtents->beginY(), iExtents->endY());
-    if (iExtents->intersects(genExtents)) {
+    //const khExtents<uint32> *iExtents = extents[i];
+    if (extents[i].intersects(genExtents)) {
       neededIndexes.push_back(i);
     }
   }

@@ -55,6 +55,7 @@ env.test('parse-raster-project-xml-no-content_unittest',
               'fusion/autoingest/sysman/SysManExtra.o',
               'fusion/autoingest/sysman/SysManFromStorage.o',
               'fusion/autoingest/sysman/InsetInfo.o',
+              'fusion/autoingest/sysman/InsetTilespaceIndex.o',
             ]) +
         map(lambda o: o,
             [
