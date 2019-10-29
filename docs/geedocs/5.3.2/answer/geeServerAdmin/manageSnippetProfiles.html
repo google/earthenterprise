@@ -1,0 +1,414 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Manage snippet profiles &#8212; Google Earth Enterprise 5.3.2 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Display custom logos" href="displayCustomLogos.html" />
+    <link rel="prev" title="Publish databases and portables" href="publishDatabasesPortables.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="displayCustomLogos.html" title="Display custom logos"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="publishDatabasesPortables.html" title="Publish databases and portables"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" accesskey="U">GEE Server administration</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="publishDatabasesPortables.html"
+                        title="previous chapter">Publish databases and portables</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="displayCustomLogos.html"
+                        title="next chapter">Display custom logos</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp4.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp4.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="manage-snippet-profiles">
+<h1>Manage snippet profiles<a class="headerlink" href="#manage-snippet-profiles" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>You can customize your database view and available features in
+Google Earth Enterprise Client (EC) by setting up <em>snippet
+profiles</em> in the the GEE Server admin console.</p>
+<p><em>Snippets</em> are different properties and options that may be
+specified for a Fusion 3D database. When you connect to a database
+in Google Earth EC, snippets control its appearance and behavior.
+GEE Server lets you set your snippet preferences, then combine
+snippets into a <em>snippet profile</em>, which can then be applied to
+any database that you publish. The snippet profile settings then
+modify the database’s behavior and appearance when you connect to
+it in Google Earth EC.</p>
+<p>For example, many of these preferences (or <em>snippets</em>) apply to
+display characteristics, such as showing or hiding different
+elements such as the Google logo or your own co-brand logo. You
+can also apply other settings, such as caching data on disk,
+enabling authentication, hiding user data in the <strong>About</strong> dialog,
+and specifying a reverse geocoder server URL.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Google Earth EC recognizes only the settings made by the first
+database that you connect to in Google Earth EC. This applies
+when you are connecting to multiple databases.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If you are working with multiple GEE Server users on
+multiple workstations, it is important to remember that snippet
+profiles can be accessed by all users at the same time. Be sure to
+coordinate with any other users to avoid overwriting snippet profile
+settings.</p>
+</div>
+<ul class="simple">
+<li><a class="reference internal" href="#create-snippet-profile"><span class="std std-ref">Creating a snippet profile</span></a></li>
+<li><a class="reference internal" href="#edit-snippet-settings"><span class="std std-ref">Editing snippet settings</span></a></li>
+<li><a class="reference internal" href="#table-snippet-settings"><span class="std std-ref">Table of snippet settings</span></a></li>
+<li><a class="reference internal" href="#modify-snippet-profile"><span class="std std-ref">Modifying snippet profiles</span></a></li>
+<li><a class="reference internal" href="#delete-snippet-profile"><span class="std std-ref">Deleting snippet profiles</span></a></li>
+</ul>
+<p class="rubric" id="create-snippet-profile">To create a snippet profile:</p>
+<ol class="arabic simple">
+<li>Access the Google Earth Enterprise Server Admin console in a
+browser window by going to <em>myserver.mydomainname</em>.com/admin,
+replacing <em>myserver</em> and <em>mydomainname</em> with your server and
+domain.</li>
+<li>Sign in with the default credentials or the username and
+password assigned to you:<ul>
+<li>Default username: <em>geapacheuser</em></li>
+<li>Default password: <em>geeadmin</em></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<div><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you do not know your username and password,
+contact your Google Earth Enterprise Server System
+Administrator.</p>
+</div>
+</div></blockquote>
+<ol class="arabic">
+<li><p class="first">Click <strong>Snippet profiles</strong> to display your snippet profiles.</p>
+</li>
+<li><p class="first">Click <strong>Create New</strong>. The <strong>Create new snippet profile</strong> dialog
+appears.</p>
+<p><img alt="GEE Server Create Snippet Profile dialog" src="../../images/snippet_profilesCreateDialog.png" /></p>
+</li>
+<li><p class="first">Enter a name for the new snippet profile and click the <strong>Create</strong>
+button. The snippet profile name appears in red in the
+<strong>Existing snippet profile</strong> list and the <strong>Snippet editor</strong> opens.</p>
+</li>
+</ol>
+<p class="rubric" id="to-edit-snippet-settings">To edit snippet settings:</p>
+<ol class="arabic">
+<li><p class="first">Click the <strong>Add a new snippet set to the profile</strong> drop-down to
+display the list of available snippets.</p>
+<p><img alt="GEE Server snippet profile list" src="../../images/snippet_profiles-list2.png" /></p>
+</li>
+<li><p class="first">Select a snippet from the list. The selected snippet options
+are added to the current snippet profile and appear in the
+profile list.</p>
+<p><img alt="GEE Server snippet examples" src="../../images/snippet_profiles-examples2.png" /></p>
+<p>You can select some snippets multiple times per profile, For
+example, you may want to add more than one customized logo to
+be displayed in Google Earth EC. For those snippets that cannot
+be added to a profile more than once, such as disable
+authentication, the snippet name is grayed out and a
+checkmark appears next to it in the snippet list.</p>
+<p><img alt="GEE Server snippet profile list-greyed" src="../../images/snippet_profiles-list-greyed.png" /></p>
+</li>
+<li><p class="first">Edit the snippet profile to specify values for the snippets.
+See the following <a class="reference internal" href="#edit-snippet-settings"><span class="std std-ref">Snippet Settings</span></a> table for
+snippet settings.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">When you add a snippet, you must enter values in the empty
+fields; if you want the snippet string to be empty, which is
+the default setting, you should not add the snippet and edit
+its values.</p>
+</div>
+</li>
+<li><p class="first">When you have finished adding snippets and specifying values
+for your snippet profile, click the <strong>Save changes</strong> button.</p>
+<p>Now you can apply your snippet profile to any 3D database you
+<a class="reference internal" href="publishDatabasesPortables.html"><span class="doc">publish</span></a>.</p>
+</li>
+</ol>
+<p class="rubric" id="edit-snippet-settings">Snippet Settings</p>
+<p>The following table lists the syntax for all of the available
+dbRoot snippets.</p>
+<p class="rubric" id="table-snippet-settings">Snippet Settings</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="17%" />
+<col width="28%" />
+<col width="28%" />
+<col width="28%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Snippet Name</th>
+<th class="head">Purpose</th>
+<th class="head">Syntax</th>
+<th class="head">Notes</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">bbs_server_info</span></code></td>
+<td>Specify BBS Server info.</td>
+<td><code class="docutils literal notranslate"><span class="pre">base_url</span></code> — URL of the server, including protocol, domain name, and port.
+<code class="docutils literal notranslate"><span class="pre">file_submit_path</span></code> — Path on server where files can be submitted.
+<code class="docutils literal notranslate"><span class="pre">name</span></code> — Name that will be displayed in context menu to user. Must be translated.
+<code class="docutils literal notranslate"><span class="pre">post_wizard_path</span></code> — Path on server where wizard can be found</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">client_options</span></code></td>
+<td>Disable disk caching in Google Earth EC.</td>
+<td><code class="docutils literal notranslate"><span class="pre">disable_disk_cache</span></code></td>
+<td>Default value is False</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cobrand_info</span></code></td>
+<td>Add custom logo to Google Earth EC display window.</td>
+<td><code class="docutils literal notranslate"><span class="pre">logo_url</span></code> — URL of image to use as logo
+<code class="docutils literal notranslate"><span class="pre">screen_size</span></code> — Positive value &lt;=1 specifies scale with screen.
+<code class="docutils literal notranslate"><span class="pre">tie_point</span></code> — Controls the reference point in the overlay
+<code class="docutils literal notranslate"><span class="pre">x_coord.is_relative</span></code> — If True, the coordinate is relative to the screen
+<code class="docutils literal notranslate"><span class="pre">x_coord.value</span></code> — Coordinate value Interpretation depends on value set in <code class="docutils literal notranslate"><span class="pre">x_coord.is_relative</span></code>.
+<code class="docutils literal notranslate"><span class="pre">y_coord.is_relative</span> <span class="pre">—</span> <span class="pre">If</span> <span class="pre">True,</span> <span class="pre">the</span> <span class="pre">coordinate</span> <span class="pre">is</span> <span class="pre">relative</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">screen</span>
+<span class="pre">``y_coord.value</span></code> — Coordinate value. Interpretation depends on value set in <code class="docutils literal notranslate"><span class="pre">y_coord.is_relative</span></code>.</td>
+<td><code class="docutils literal notranslate"><span class="pre">logo_url</span></code> can be remote or local.
+<code class="docutils literal notranslate"><span class="pre">screen_size</span></code> makes logo scalable with screen by forcing its width to occupy a fraction of the screen.
+For example, a value of 0.25 sets the given logo to occupy 25% of the screen.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">default_web_page_intl_url</span></code></td>
+<td>Default location of web page in Google Earth EC.</td>
+<td><code class="docutils literal notranslate"><span class="pre">https://www.google.com/?hl=%251</span></code></td>
+<td>Can be set to an internal IP or host name address. Default web page value in GEE is an empty string.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">disable_authentication</span></code></td>
+<td>Disable session cookie-based authentication.</td>
+<td><code class="docutils literal notranslate"><span class="pre">boolean</span></code></td>
+<td>Indicates that this database does not require session cookie-based authentication.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">earth_intl_url</span></code></td>
+<td>Location of international page for Google Earth.</td>
+<td><code class="docutils literal notranslate"><span class="pre">http://earth.google.com</span></code></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">elevation_service</span> <span class="pre">_base_url</span></code></td>
+<td>Terrain elevation service URL.</td>
+<td>&#160;</td>
+<td>If field is empty, service is unavailable.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">hide_user_data</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">True</span></code> = Suppress user name in the Help -&gt; About window. <code class="docutils literal notranslate"><span class="pre">False</span></code> = Display user name.</td>
+<td><code class="docutils literal notranslate"><span class="pre">boolean</span></code></td>
+<td>Default is False.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">keyboard_shortcuts_url</span></code></td>
+<td>URL for keyboard shortcuts page.
+If not specified, this URL is built from <code class="docutils literal notranslate"><span class="pre">user_guide_intl</span> <span class="pre">_url</span></code> as
+<code class="docutils literal notranslate"><span class="pre">user_guide_intl</span> <span class="pre">_url</span></code> + <code class="docutils literal notranslate"><span class="pre">keyboard.html</span></code></td>
+<td>&#160;</td>
+<td>Can be set to an internal IP or host name address.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">model</span></code></td>
+<td>&#160;</td>
+<td><p class="first"><code class="docutils literal notranslate"><span class="pre">compressed_negative_altitude_threshold</span></code> — Threshold below which negative altitudes are compressed</p>
+<p><code class="docutils literal notranslate"><span class="pre">elevation_bias</span></code> — Elevation bias</p>
+<p><code class="docutils literal notranslate"><span class="pre">flattening</span></code> — Planet flattening. Default value is 1.0/298.257223563 (from WGS84)</p>
+<p><code class="docutils literal notranslate"><span class="pre">negative_altitude_exponent_bias</span></code> — Bias for negative altitude so that ocean tiles can be streamed to older clients</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">radius</span></code> — Mean planet radius. Default value is the WGS84 model for earth</p>
+</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">privacy_policy_url</span></code></td>
+<td>URL for privacy policy.</td>
+<td><code class="docutils literal notranslate"><span class="pre">IP</span> <span class="pre">address</span> <span class="pre">or</span> <span class="pre">host</span> <span class="pre">name</span></code></td>
+<td>Can be set to an internal IP or host name address.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">release_notes_url</span></code></td>
+<td>URL for release notes.</td>
+<td><code class="docutils literal notranslate"><span class="pre">IP</span> <span class="pre">address</span> <span class="pre">or</span> <span class="pre">host</span> <span class="pre">name</span></code></td>
+<td>Can be set to an internal IP or host name address.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">reverse_geocoder_protocol_version</span></code></td>
+<td>Reverse geocoder protocol version.</td>
+<td><code class="docutils literal notranslate"><span class="pre">numeric</span> <span class="pre">value</span></code></td>
+<td>Default is 3 which is the protocol supported by newer clients.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">reverse_geocoder_url</span></code></td>
+<td>Reverse geocoder server URL.</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">show_signin_button</span></code></td>
+<td>If True, shows the signin button in the top-right corner of the display window.</td>
+<td><code class="docutils literal notranslate"><span class="pre">boolean</span></code></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">startup_tips_intl_url</span></code></td>
+<td>Localize international URL from which to load startup tips for Earth 7.0 or higher.</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">support_answer_intl_url</span></code></td>
+<td>Localize international URL for support answers.</td>
+<td><code class="docutils literal notranslate"><span class="pre">https://support.google.com/earth/#topic=4363013</span></code></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">support_center_intl_url</span></code></td>
+<td>Localize international URL for the support center.</td>
+<td><code class="docutils literal notranslate"><span class="pre">http://support.google.com/earth/</span></code></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">support_request_intl_url</span></code></td>
+<td>Localize international URL for support requests.</td>
+<td><code class="docutils literal notranslate"><span class="pre">https://support.google.com/earth/#topic=2364258</span></code></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">support_topic_intl_url</span></code></td>
+<td>Localize international URL for support topics.</td>
+<td><code class="docutils literal notranslate"><span class="pre">http://www.google.com/earth/learn/</span></code></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">swoop_parameters</span></code></td>
+<td>Controls how far from a target swooping should start.</td>
+<td><code class="docutils literal notranslate"><span class="pre">start_dist_in_meters</span></code></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tutorial_url</span></code></td>
+<td>URL for tutorial page.
+If URL is not specified, this URL is built from <code class="docutils literal notranslate"><span class="pre">user_guide_intl_url</span></code>
+as <code class="docutils literal notranslate"><span class="pre">user_guide_intl_url</span></code> +``tutorials/index.html``.</td>
+<td><code class="docutils literal notranslate"><span class="pre">http://www.google.com/earth/learn/</span></code></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">use_ge_logo</span></code></td>
+<td>Shows/hides Google Earth logo in lower-right corner of display.</td>
+<td><code class="docutils literal notranslate"><span class="pre">boolean</span></code></td>
+<td>Default is True.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">user_guide_intl_url</span></code></td>
+<td>Localize international URL for documentation.</td>
+<td><code class="docutils literal notranslate"><span class="pre">http://www.google.com/earth/learn/</span></code></td>
+<td>Defaults to local PDF file for Google Earth EC. Can be set to an internal IP or hostname address.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">valid_database</span></code></td>
+<td>Validates the database name and URL.</td>
+<td><code class="docutils literal notranslate"><span class="pre">database_name</span> <span class="pre">``—</span> <span class="pre">Human-readable</span> <span class="pre">name</span> <span class="pre">of</span> <span class="pre">database,</span> <span class="pre">for</span> <span class="pre">example,</span> <span class="pre">“Primary</span> <span class="pre">Database”</span> <span class="pre">or</span> <span class="pre">“Digital</span> <span class="pre">Globe</span> <span class="pre">Database”</span>
+<span class="pre">``database_url</span></code>— URL of server. This can include a path and a query, and must be a well-formed, absolute URL</td>
+<td>&#160;</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric" id="modify-snippet-profile">To modify a snippet profile:</p>
+<ol class="arabic">
+<li><p class="first">To change the snippets in a snippet profile, click the snippet
+profile name in the <strong>Existing snippet profiles</strong> list that you
+want to edit.</p>
+<p>The <strong>Snippet editor</strong> appears with the name of your selected
+snippet profile and the list of included snippets.</p>
+<p>All previously selected snippets can be edited with new
+options and settings.</p>
+</li>
+<li><p class="first">To add a snippet, click the drop-down list to select a new
+snippet.</p>
+</li>
+<li><p class="first">To delete a snippet from your profile, click <strong>delete</strong> in the
+snippet settings.</p>
+<p><img alt="GEE Server Snippet editor: delete snippet" src="../../images/snippet_profiles-delete-snippet.png" /></p>
+</li>
+<li><p class="first">Click <strong>Save Changes</strong>.</p>
+</li>
+</ol>
+<p class="rubric" id="delete-snippet-profile">To delete a snippet profile:</p>
+<ol class="arabic">
+<li><p class="first">Hover your cursor over the name of the snippet profile that you
+want to delete. The <strong>delete</strong> option appears.</p>
+<p><img alt="GEE Server Snippet profiles: delete snippet profile" src="../../images/snippet_profiles-delete.png" /></p>
+<p>A message prompts you to confirm that you want to delete the
+selected snippet profile.</p>
+</li>
+<li><p class="first">Click <strong>Yes</strong>.</p>
+<p>The snippet profile disappears from the <strong>Existing snippet
+profiles</strong> list.</p>
+</li>
+</ol>
+<p class="rubric">Learn more</p>
+<p><a class="reference internal" href="../googleEarthEnterpriseClient/whatisEC.html"><span class="doc">Google Earth Enterprise Client (EC)</span></a></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="displayCustomLogos.html" title="Display custom logos"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="publishDatabasesPortables.html" title="Publish databases and portables"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" >GEE Server administration</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

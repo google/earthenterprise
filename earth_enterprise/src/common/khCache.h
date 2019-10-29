@@ -88,7 +88,7 @@ class khCache {
   uint64 cacheMemoryUse;
   bool limitCacheMemory;
   uint64 maxCacheMemory;
-  const uint64 khCacheItemSize = sizeof(khCacheItem<Key, Value>) - sizeof(Key) - sizeof(Value);
+  const uint64 khCacheItemSize = sizeof(khCacheItem<Key, Value>);
   bool InList(Item *item) {
     Item *tmp = head;
     while (tmp) {
@@ -205,7 +205,7 @@ class khCache {
   }
   // calculates the current size of a cache item
   uint64 calculateCacheItemSize(Item *item) {
-    return khCacheItemSize + GetObjectSize(item->key) + GetObjectSize(item->val);
+    return khCacheItemSize + GetHeapUsage(item->key) + GetHeapUsage(item->val);
   }
   // sets a given cache item's size to its current size and updates the total cache memory in use
   void updateCacheItemSize(const Key &key) {
@@ -216,7 +216,7 @@ class khCache {
       item->size = size;
     }
   }
-  void setCacheMemoryLimit(bool enabled, uint maxMemory) {
+  void setCacheMemoryLimit(bool enabled, uint64 maxMemory) {
     limitCacheMemory = enabled;
     maxCacheMemory = maxMemory;
   }

@@ -76,11 +76,11 @@
 in your source data on which users of Google Earth EC can search.
 This lesson guides you through the process of specifying one field
 on one layer as searchable, using the vector project you created
-in <span class="xref std std-doc">4412681</span>. If you have not yet completed
-that lesson, complete at least the first two sections, :ref:<a href="#id1"><span class="problematic" id="id2">`</span></a>Define and Build a Vector Resource Using Polygon</p>
-<blockquote>
-<div>Data &lt;Define_Vector_Polygon&gt;` and <a class="reference internal" href="displayRulesPolygon.html#define-vector-project"><span class="std std-ref">Define, Configure, and Build a Vector Project</span></a>, before</div></blockquote>
-<p>continuing with this lesson.</p>
+in <a class="reference internal" href="displayRulesPolygon.html"><span class="doc">Configuring Display Rules for Polygon Data</span></a>. If you have not yet completed
+that lesson, complete at least the first two sections,
+<a class="reference internal" href="displayRulesPolygon.html#define-vector-polygon"><span class="std std-ref">Define and Build a Vector Resource Using Polygon Data</span></a> and
+<a class="reference internal" href="displayRulesPolygon.html#define-vector-project1"><span class="std std-ref">Define, Configure, and Build a Vector Project</span></a>,
+before continuing with this lesson.</p>
 <ul class="simple">
 <li><a class="reference internal" href="#specify-search-fields"><span class="std std-ref">Specify Search Fields in Layer Properties</span></a></li>
 <li><a class="reference internal" href="#build-push-database"><span class="std std-ref">Build and Push Your Database</span></a></li>
@@ -105,28 +105,28 @@ Properties</strong> from the context menu.</p>
 <p>The Layer Properties dialog appears.</p>
 </li>
 <li><p class="first">Click the <strong>Search</strong> tab.</p>
-<p><img alt="Layer Properties Search Tab" src="../../images/layerProperties_SearchTab-full.png" /></p>
+<p><img alt="Layer Properties Search Tab" src="../../images/layerProperties_SearchTab.png" /></p>
 <p>When you specify one or more search fields on this tab, a
 search panel appears in Google Earth EC that allows users to
 search for data in the selected field(s).</p>
 </li>
 <li><p class="first">Click <img alt="New Icon" src="../../images/icon_new1.gif" />. The <strong>Add Search Field</strong> dialog appears.</p>
-<p><img alt="Add Search Field" src="../../images/searchField2.png" /></p>
+<p><img alt="Layer Search Add" src="../../images/layerSearchAdd.png" /></p>
 </li>
 <li><p class="first">Select <strong>COUNTY</strong> from the drop-down list next to <strong>Column Name</strong>,
 select <strong>Search and Display</strong> from the drop-down list next to
 <strong>Use</strong>, and then click <strong>OK</strong>.</p>
-<p><img alt="Add Search Field" src="../../images/searchField2.png" /></p>
+<p><img alt="Search Field1" src="../../images/searchField1.png" /></p>
 <p>These selections allow users to search on the COUNTY field and
 display the county name in the description label.</p>
 </li>
 <li><p class="first">Click <img alt="New Icon" src="../../images/icon_new1.gif" />. The <strong>Add Search Field</strong> dialog appears.</p>
-<p><img alt="Add Search Field" src="../../images/searchField2.png" /></p>
+<p><img alt="Layer Search Add" src="../../images/layerSearchAdd.png" /></p>
 </li>
 <li><p class="first">Select <strong>POP2000</strong> from the drop-down list next to <strong>Column Name</strong>,
 select <strong>Display Only</strong> from the drop-down list next to <strong>Use</strong>,
 and then click <strong>OK</strong>.</p>
-<p><img alt="Add Search Field" src="../../images/searchField2.png" /></p>
+<p><img alt="Search Field2" src="../../images/searchField2.png" /></p>
 <p>These selections result in the county population being
 displayed in the description label for each county that matches
 the user’s search criteria. The first field selected for
@@ -135,7 +135,7 @@ for display becomes the snippet. Any additional fields selected
 for display become the description.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> This search performs an exact match, which means
+<p class="last">This search performs an exact match, which means
 that the Google Earth EC user must enter the value exactly
 as it appears in the database. It can also perform a
 wildcard search, so users can enter part of the text they
@@ -146,7 +146,7 @@ state search, the search results match “North Dakota” and
 <p>Your selections appear on the list of search fields on the
 Search panel in the order in which you added them. Use the Up
 or Down arrows to reorder the list.</p>
-<p><img alt="Layer Properties Search Tab" src="../../images/layerProperties_SearchTab-full.png" /></p>
+<p><img alt="Layer Properties Search Tab Full" src="../../images/layerProperties_SearchTab-full.png" /></p>
 <p>The order in which the fields appear on this list dictates the
 order in which they appear in the description label in Google
 Earth EC.</p>
@@ -186,17 +186,20 @@ selection on the <strong>Version</strong> drop-down list.</p>
 <li><p class="first">Click <strong>Push</strong>. Google Earth Enterprise Fusion pushes the
 database to Google Earth Enterprise Server, and displays a
 success message when it is done.</p>
-<p><strong>Note:</strong> If you get an error message, contact your Google
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you get an error message, contact your Google
 Earth Enterprise Server administrator for help, or check the
 <em>Google Earth Enterprise Administration Guide</em> for more
 information.</p>
+</div>
 </li>
 </ol>
 <p class="rubric" id="specify-poi-search-publish">Specify Your Point of Interest Search and Publish Your
 Database in Google Earth Enterprise Server</p>
 <p>After you push your database to Google Earth Enterprise Server,
 you can publish it for viewing with Google Earth EC.</p>
-<p class="rubric" id="to-publish-a-database">To publish a database:</p>
+<p class="rubric">To publish a database:</p>
 <ol class="arabic">
 <li><p class="first">Access the Google Earth Enterprise Server Admin console in a
 browser window by going to <em>myserver.mydomainname</em>.com/admin,
@@ -209,9 +212,12 @@ password assigned to you:</p>
 <li>Default username: <em>geapacheuser</em></li>
 <li>Default password: <em>geeadmin</em></li>
 </ul>
-<p><strong>Note:</strong> If you do not know your username and password,
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you do not know your username and password,
 contact your Google Earth Enterprise Server System
 Administrator.</p>
+</div>
 </li>
 <li><p class="first">Click <strong>Databases</strong> to display the list of databases pushed to
 the server.</p>
@@ -233,9 +239,9 @@ database</em> is automatically searched.</p>
 to <strong>CACountySearch</strong>.</p>
 <p><img alt="GEE Server Database Publish POI Search dialog" src="../../images/serverDatabasePublish-POI.png" /></p>
 <p>To learn more about the options available in the Publish
-dialog, see <span class="xref std std-doc">3497832</span>,
-<span class="xref std std-doc">Snippet profiles &lt;6004748</span>, and
-<span class="xref std std-doc">WMS</span>.</p>
+dialog, see <a class="reference internal" href="../geeServerAdmin/createSearchTabs.html"><span class="doc">Create Search tabs</span></a>,
+<a class="reference internal" href="../geeServerAdmin/manageSnippetProfiles.html"><span class="doc">Snippet profiles</span></a>, and
+<a class="reference internal" href="../geeServerAdmin/makeWMSRequests.html"><span class="doc">WMS</span></a>.</p>
 </li>
 <li><p class="first">Click <strong>Publish</strong>. The Databases page updates to indicate the
 published status of your database.</p>
@@ -255,10 +261,12 @@ and <em>mydomainname</em> are specific to your server. An example URL
 would be <a class="reference external" href="http://myhostname/CACountySearch">http://myhostname/CACountySearch</a>.</li>
 <li>Click the <strong>Sign In</strong> button.</li>
 </ol>
-<div class="alert docutils container">
-<strong>Caution:</strong> If you have logged in to this server with Google
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If you have logged in to this server with Google
 Earth EC previously, log out, clear your cache, and log back
-in. See <a class="reference external" href="../answer/6010060.html">clearing your cache</a>.</div>
+in. See <a class="reference external" href="../answer/6010060.html">clearing your cache</a>.</p>
+</div>
 <p>Google Earth EC displays your database with the search field you
 specified. When you enter a search string, such as “San”, all of
 the counties containing that string appear in the search results,

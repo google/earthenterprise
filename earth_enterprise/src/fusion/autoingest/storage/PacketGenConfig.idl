@@ -17,6 +17,7 @@
 #include <vector>
 #include <khTypes.h>
 #include <khInsetCoverage.h>
+#requiresgetheapusage
 
 class PacketGenConfig {
 #pragma DontEmitDefaults
@@ -48,6 +49,7 @@ class PacketGenConfig {
 
   // add(or not) separate alpha_image into imagery-packet.
   deprecated bool            separate_alpha_ = true;
+
 
   // Note: Basic rule for #version: "If the low level tool ever
   // changes to produce different output from the same config record, then

@@ -125,10 +125,13 @@ class ${name}AssetVersionImplD :
     friend class DerivedAssetHandleD_<${name}AssetVersion, AssetVersionD, ${name}AssetVersionImplD>;
 public:
     using AssetType = DerivedAssetHandleD_<${name}Asset, AssetD, ${name}AssetImplD>;
+    using MutableAssetType = MutableDerivedAssetHandleD_<AssetType, MutableAssetD>;
+
 
 
     virtual std::string GetName() const;
     virtual void SerializeConfig(khxml::DOMElement*) const;
+    virtual uint64 GetHeapUsage() const override;
 
     // Only used when constructing a new version from an asset.
     // The decision to use the raw ImplD* here was a tough one.
@@ -192,6 +195,7 @@ public:
     void Modify($formalinputarg
                 const khMetaData & meta_,
                 const Config &config_);
+    virtual uint64 GetHeapUsage() const override;
 EOF
     
 if ($haveBindConfig) {
@@ -210,11 +214,13 @@ print $fh <<EOF;
 protected:
     static std::shared_ptr<${name}AssetImplD> Load(const std::string &ref);
 
+public: // this will nee to be looked at or MyUpdate moved to AssetFactory
     $template
     ${name}AssetVersionD MyUpdate(bool &needed
                                   $formalcachedinputarg
                                   $formalExtraUpdateArg) const;
 
+protected:
     ${name}AssetImplD(const std::string &ref_ $formaltypearg,
 		$formalinputarg
                 const khMetaData &meta_,
@@ -294,35 +300,7 @@ public:
     SubAssetName(const std::string &parentAssetRef
                  $formaltypearg,
                  const std::string &basename);
-
-    static Mutable${name}AssetD
-    FindAndModify(const std::string &ref_ $formaltypearg,
-	     $formalinputarg
-	     const khMetaData &meta_,
-	     const $config& config_);
-
-    $template
-    static Mutable${name}AssetVersionD
-    FindMakeAndUpdate(const std::string &ref_ $formaltypearg,
-		      $formalinputarg
-		      const khMetaData &meta_,
-		      const $config& config_
-		      $formalcachedinputarg
-                      $formalExtraUpdateArg);
-
-    $template
-    static Mutable${name}AssetVersionD
-    FindMakeAndUpdateSubAsset(const std::string &parentAssetRef
-			      $formaltypearg,
-			      const std::string &basename,
-			      $formalinputarg
-			      const khMetaData &meta_,
-			      const $config& config_
-			      $formalcachedinputarg
-			      $formalExtraUpdateArg);
 EOF
-
-
 
 if ($withreuse) {
 

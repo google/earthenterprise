@@ -15,12 +15,12 @@
 
 #include <string>
 #include <khTypes.h>
+#requiresgetheapusage
 
 class TmeshConfig {
   std::string extentsAsset;
   uint startLevel;
   uint endLevel = uint(0);  // 0 -> as deep as necessary
   uint simplifyStartLevel = uint(32);
-
 #pragma GenerateIsUpToDate
 };

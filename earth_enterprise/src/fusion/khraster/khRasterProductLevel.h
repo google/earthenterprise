@@ -136,7 +136,6 @@ class khRasterProductLevel
                              (uint64)RasterProductTileResolution);
   }
 
-
 };
 
 /******************************************************************************
@@ -168,6 +167,5 @@ khRasterProductLevel::ReadTile(uint32 row, uint32 col, DestTile &dest) const
                                  dest.ucharBufs,
                                  DestTile::Storage, DestTile::NumComp);
 }
-
 
 #endif /* __khRasterProductLevel_h */

@@ -16,7 +16,7 @@
     <script type="text/javascript" src="../../static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Download documentation for GEE 5.1.x" href="download.html" />
+    <link rel="next" title="Download documentation for GEE 5.x" href="download.html" />
     <link rel="prev" title="Build and install GEE 5.x" href="buildAndInstall.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
@@ -30,7 +30,7 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="download.html" title="Download documentation for GEE 5.1.x"
+          <a href="download.html" title="Download documentation for GEE 5.x"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="buildAndInstall.html" title="Build and install GEE 5.x"
@@ -46,7 +46,7 @@
                         title="previous chapter">Build and install GEE 5.x</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="download.html"
-                        title="next chapter">Download documentation for GEE 5.1.x</a></p>
+                        title="next chapter">Download documentation for GEE 5.x</a></p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <div class="searchformwrapper">
@@ -67,14 +67,14 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp5.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp5.png" style="width: 130px; height: 44px;" /></a></p>
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp6.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp6.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="upgrade-to-gee-5-x">
 <h1>Upgrade to GEE 5.x<a class="headerlink" href="#upgrade-to-gee-5-x" title="Permalink to this headline">¶</a></h1>
 <div class="docutils container">
 <div class="content docutils container">
-<p>You can upgrade to Google Earth Enterprise 5.x from versions 4.0.0
+<p id="index-0">You can upgrade to Google Earth Enterprise 5.x from versions 4.0.0
 through 4.4.1.</p>
-<p>Before you upgrade</p>
+<p class="rubric">Before you upgrade</p>
 <div class="docutils container">
 <p class="rubric" id="we-recommend-you-do-the-following-before-upgrading-to-gee-5-x">We recommend you do the following before upgrading
 to GEE 5.x:</p>
@@ -91,14 +91,12 @@ custom KML data (including SuperOverlays), custom web pages,
 CGI scripts, web applications, and JavaScript or HTML files.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<div class="last line-block">
-<div class="line"><strong>Note:</strong> During the uninstallation/installation,
+<p class="last">During the uninstallation/installation,
 contents of <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd</span></code> and other key
-folders are automatically backed up to:</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">/var/opt/google/fusion-backups</span></code></div>
-<div class="line">These backups are stored in a <code class="docutils literal notranslate"><span class="pre">DATE.TIME</span></code> named
-folder, for example, <code class="docutils literal notranslate"><span class="pre">20140310.160027/</span></code>.</div>
-</div>
+folders are automatically backed up to:
+<code class="docutils literal notranslate"><span class="pre">/var/opt/google/fusion-backups</span></code>
+These backups are stored in a <code class="docutils literal notranslate"><span class="pre">DATE.TIME</span></code> named
+folder, for example, <code class="docutils literal notranslate"><span class="pre">20140310.160027/</span></code>.</p>
 </div>
 </li>
 <li><p class="first">Remove symbolic links from <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/</span></code> to other
@@ -117,23 +115,20 @@ default globes folder:
 <li><p class="first">Run garbage collect for stream/search on the GEE server
 machine. This will clean all previously deleted databases in
 <code class="docutils literal notranslate"><span class="pre">/gevol/published_dbs;</span></code></p>
-<div class="line-block">
-<div class="line"><code class="docutils literal notranslate"><span class="pre">/opt/google/bin/geserveradmin</span> <span class="pre">--garbagecollect</span> <span class="pre">--server_type</span> <span class="pre">stream</span></code></div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">/opt/google/bin/geserveradmin</span> <span class="pre">--garbagecollect</span> <span class="pre">--server_type</span> <span class="pre">search</span></code></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">/opt/google/bin/geserveradmin</span> <span class="pre">--garbagecollect</span> <span class="pre">--server_type</span> <span class="pre">stream</span></code>
+<code class="docutils literal notranslate"><span class="pre">/opt/google/bin/geserveradmin</span> <span class="pre">--garbagecollect</span> <span class="pre">--server_type</span> <span class="pre">search</span></code></p>
 </li>
 </ol>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> GEE 5.x does not support 2D maps in the flat
+<p class="last">GEE 5.x does not support 2D maps in the flat
 (Plate Carrée) projection. If you have previously built and
 published a map with a flat projection, these databases will
 be marked as invalid, and you will not be able to perform
 any delete, build, push, or publish actions on them.</p>
 </div>
 </div>
-<p>Upgrading</p>
-<div class="docutils container">
+<p class="rubric">Upgrading</p>
 <p class="rubric" id="to-upgrade-to-gee-5-x">To upgrade to GEE 5.x:</p>
 <ol class="arabic">
 <li><p class="first">Stop <code class="docutils literal notranslate"><span class="pre">gefusion</span></code> and <code class="docutils literal notranslate"><span class="pre">geserver</span></code>.</p>
@@ -142,7 +137,7 @@ any delete, build, push, or publish actions on them.</p>
 versions of Google Earth Enterprise Fusion and Server.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> When you uninstall Google Earth Enterprise
+<p class="last">When you uninstall Google Earth Enterprise
 Fusion and Server, your asset root remains unchanged;
 none of your resources or assets are removed.</p>
 </div>
@@ -153,7 +148,7 @@ none of your resources or assets are removed.</p>
 <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">gepguser</span> <span class="pre">/opt/google/bin/geresetpgdb</span></code></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p><strong>Note:</strong> <code class="docutils literal notranslate"><span class="pre">geresetpgd</span></code> deletes registering information
+<p><code class="docutils literal notranslate"><span class="pre">geresetpgd</span></code> deletes registering information
 about Fusion databases on GEE Server. After installing
 GEE Server/Fusion you will need to:</p>
 <ul class="last simple">
@@ -167,18 +162,17 @@ projection support for Plate Carrée maps.</li>
 </ul>
 </div>
 </li>
-<li><p class="first">Upgrade asset root:
-<code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">/opt/google/bin/geupgradeassetroot</span> <span class="pre">--assetroot</span> <span class="pre">/gevol/assets</span></code></p>
+<li><p class="first">Upgrade asset root:</p>
+<p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">/opt/google/bin/geupgradeassetroot</span> <span class="pre">--assetroot</span> <span class="pre">/gevol/assets</span></code></p>
 </li>
-<li><p class="first">Optionally enable cutter:
-<code class="docutils literal notranslate"><span class="pre">/opt/google/bin/gecutter</span> <span class="pre">enable</span></code></p>
+<li><p class="first">Optionally enable cutter:</p>
+<p><code class="docutils literal notranslate"><span class="pre">/opt/google/bin/gecutter</span> <span class="pre">enable</span></code></p>
 </li>
 <li><p class="first">Start <code class="docutils literal notranslate"><span class="pre">gefusion</span></code> and <code class="docutils literal notranslate"><span class="pre">geserver</span></code>.</p>
 </li>
 </ol>
-</div>
-<p>After you upgrade</p>
-<p class="rubric" id="after-upgrading">After upgrading:</p>
+<p class="rubric">After you upgrade</p>
+<p class="rubric">After upgrading:</p>
 <ol class="arabic">
 <li><p class="first">Restore backups of data stored in the <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/</span></code>
 folders, either from your own backup copies or from the backup
@@ -202,7 +196,7 @@ forced for terrain and imagery projects). For 2D Mercator
 databases, rebuilding is not required.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><strong>Note:</strong> Push is not available if rebuild is required. You
+<p class="last">Push is not available if rebuild is required. You
 will need to push each database (3D and 2D Mercator
 databases) to GEE Server (database will be registered on
 server, and updated files will be pushed), where they can
@@ -232,7 +226,7 @@ Plugin versions 7.0.1 - 7.3.x for Windows, Mac, and Linux.</p>
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="download.html" title="Download documentation for GEE 5.1.x"
+          <a href="download.html" title="Download documentation for GEE 5.x"
              >next</a> |</li>
         <li class="right" >
           <a href="buildAndInstall.html" title="Build and install GEE 5.x"

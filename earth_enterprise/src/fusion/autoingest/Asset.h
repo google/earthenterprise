@@ -78,15 +78,15 @@ class AssetImpl : public AssetStorage, public StorageManaged {
   const SharedString & GetRef(void) const { return name; }
 
   // determine amount of memory used by an AssetImpl
-  uint64 GetSize() {
-    return(GetObjectSize(name)
-    + GetObjectSize(type)
-    + GetObjectSize(subtype)
-    + GetObjectSize(inputs)
-    + meta.GetSize()
-    + GetObjectSize(versions)
-    + GetObjectSize(timestamp)
-    + GetObjectSize(filesize));
+  virtual uint64 GetHeapUsage() const {
+    return ::GetHeapUsage(name)
+    + ::GetHeapUsage(type)
+    + ::GetHeapUsage(subtype)
+    + ::GetHeapUsage(inputs)
+    + ::GetHeapUsage(meta)
+    + ::GetHeapUsage(versions)
+    + ::GetHeapUsage(timestamp)
+    + ::GetHeapUsage(filesize);
   }
 
   std::string  GetLastGoodVersionRef(void) const;
@@ -139,6 +139,10 @@ Asset::Valid(void) const
     }
     return handle && (handle->type != AssetDefs::Invalid);
   }
+}
+
+inline uint64 GetHeapUsage(const AssetImpl &asset) {
+  return asset.GetHeapUsage();
 }
 
 #endif /* __Asset_h */
