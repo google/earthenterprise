@@ -297,7 +297,8 @@ EOF
 if ($withreuse) {
 
 print $fh <<EOF;
-    /*$template
+    /*
+    $template
     static Mutable${name}AssetVersionD
     ReuseOrMakeAndUpdate(const std::string &ref_ $formaltypearg,
 			 $formalinputarg
@@ -315,7 +316,8 @@ print $fh <<EOF;
 				 const khMetaData &meta_,
 				 const $config& config_
 				 $formalcachedinputarg
-                                 $formalExtraUpdateArg);*/
+                                 $formalExtraUpdateArg);
+    */
 EOF
 }
 
