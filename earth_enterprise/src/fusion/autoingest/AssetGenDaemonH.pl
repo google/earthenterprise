@@ -44,16 +44,6 @@ if (!$daemon_h) {
     usage();
 }
 
-# PacketGenAssetD is a specific case, where
-# update functions hande an additional struct
-# containing extra update arguments, it is
-# useful to know when these files are generated
-
-my $isPacketGen = 1;
-if (index($thiscommand, "PacketGenAssetD.h") == -1) {
-    $isPacketGen = 0;
-}
-
 
 # ****************************************************************************
 # ***  Read .src file
@@ -173,29 +163,14 @@ print $fh <<EOF;
 
     static const AssetDefs::Type EXPECTED_TYPE;
     static const std::string EXPECTED_SUBTYPE;
-EOF
 
-if ($isPacketGen) {
-print $fh <<EOF;
-// this is PacketGenAssetD.h
-template <typename ExtraUpdateArg>
-void UpdateChildren(const ExtraUpdateArg& extra);
-EOF
-} else {
-print $fh <<EOF;
-// this is not PacketGenAssetD, treat normally
 $extra{"${name}AssetVersionImplD"}
-EOF
-}
 
-print $fh <<EOF;
     // supplied from ${name}.src ---v
 $config{"${name}AssetVersionImplD"}
     // supplied from ${name}.src ---^
 };
-EOF
 
-print $fh <<EOF;
 typedef DerivedAssetHandleD_<${name}AssetVersion, AssetVersionD, ${name}AssetVersionImplD>
     ${name}AssetVersionD;
 typedef MutableDerivedAssetHandleD_<${name}AssetVersionD, MutableAssetVersionD>
@@ -235,25 +210,11 @@ print $fh <<EOF;
 protected:
     static std::shared_ptr<${name}AssetImplD> Load(const std::string &ref);
 
-
-public: // this will need to be looked at or MyUpdate moved to AssetFactory
-EOF
-
-if ($isPacketGen) {
-print $fh <<EOF;
-    template <typename ExtraUpdateArg>
-    ${name}AssetVersionD MyUpdate(bool& needed,
-                                const ExtraUpdateArg& extra) const;
-EOF
-} else {
-print $fh <<EOF;
+public: // this will nee to be looked at or MyUpdate moved to AssetFactory
+    $template
     ${name}AssetVersionD MyUpdate(bool &needed
                                   $formalcachedinputarg
                                   $formalExtraUpdateArg) const;
-EOF
-}
-
-print $fh <<EOF;
 
 protected:
     ${name}AssetImplD(const std::string &ref_ $formaltypearg,
