@@ -129,7 +129,7 @@ protected:
 
     SharedString(const std::string& str) {
         key = strStore.KeyFromRef(str);
-    } 
+    }
 
     SharedString(const char* s) {
         key = strStore.KeyFromRef(s);
@@ -152,6 +152,10 @@ protected:
         return strStore.RefFromKey(key);
     }
 
+    uint32_t getKey() const {
+       return key;
+    }
+
     bool operator<(const SharedString &other) const {
       return (strStore.RefFromKey(key) < strStore.RefFromKey(other.key));
     }
@@ -165,7 +169,6 @@ protected:
     }
 };
 
-
 inline std::ostream & operator<<(std::ostream &out, const SharedString & str) {
   out << SharedString::strStore.RefFromKey(str.key);
   return out;
@@ -174,5 +177,15 @@ inline std::ostream & operator<<(std::ostream &out, const SharedString & str) {
 inline std::string ToString(const SharedString & str) {
   return str.toString();
 }
+
+namespace std {
+  template <>
+  class hash<SharedString> {
+    public :
+      size_t operator()(const SharedString & s) const {
+        return s.getKey();
+      }
+  };
+};
 
 #endif

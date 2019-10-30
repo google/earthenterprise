@@ -37,7 +37,6 @@ NextTaskIdObj  = env.SharedObject('.idl/NextTaskId.cpp')
 TaskRuleObj    = env.SharedObject('.idl/TaskRule.cpp')
 FusionUniqueIdObj  = env.SharedObject('.idl/FusionUniqueId.cpp')
 
-
 for plugin in plugins:
     src = '../plugins.src/'+plugin+'.src'
     env.Command('plugins/'+plugin+'AssetD.h',
@@ -46,7 +45,6 @@ for plugin in plugins:
     env.Command('plugins/'+plugin+'AssetD.cpp',
                 [ '../AssetGenDaemonCpp.pl', '../AssetGen.pm', src ],
                 [ "${SOURCES[0]} ${SOURCES[2]} $TARGET" ])
-
 
 env.Command('SysManFromStorage.cpp',
             [ '../FromStorageGen.pl' ],
@@ -86,7 +84,7 @@ env.Command('ResourceProviderProxy.cpp',
             [ "${SOURCES[0]} --proxycpp $TARGET ${SOURCES[1]}" ])
 
 
-extraObjs = [
+otherDirObjs = [
     'fusion/geindexgen/.idl/BlendStack',
     'fusion/geindexgen/.idl/VectorStack',
     'fusion/geindexgen/.idl/UnifiedConfig',
@@ -95,26 +93,29 @@ extraObjs = [
     'fusion/gemaptilegen/.idl/Config',
     ]
 
+pluginFiles = map(lambda p: 'plugins/'+p+'AssetD.cpp', plugins)
+sysmanFiles = ['AssetD.cpp', 'AssetVersionD.cpp',
+  'AssetOperation.cpp', 'StateUpdater.cpp', 'DependentStateTree.cpp',
+  'WaitingAssets.cpp', 'khSystemManager.cpp',
+  'khAssetManager.cpp', 'khAssetManagerDispatch.cpp',
+  'khResourceManager.cpp', 'khTask.cpp', 'TaskRequirements.cpp',
+  'khResourceProviderProxy.cpp', 'khResourceProviderProxyDispatch.cpp',
+  'ResourceProviderProxy.cpp', 'Reservation.cpp',
+  'SysManExtra.cpp', 'SysManFromStorage.cpp', 'InsetInfo.cpp'] + \
+  pluginFiles
+extraObjs = [TaskStorageObj, JobStorageObj, NextTaskIdObj, TaskRuleObj,
+  FusionUniqueIdObj] + \
+  commonobj + \
+  env.ObjFromOtherDir(otherDirObjs)
+sysmanObjs = map(lambda f: str(f).replace(".cpp", ".o"), sysmanFiles)
+sysmanLibs = ['gegdal', 'geraster', 'gesearchtabs', 'genet', 'gepublish', 'gefconfigutil',
+  'geindex_r', 'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'qt-mt', 'xerces-c', 'geos',
+  'gomp']
+testLibs = sysmanLibs + ['gtest']
+
 gesystemmanager = env.executable('gesystemmanager',
-    commonobj +
-    map(lambda p: 'plugins/'+p+'AssetD.cpp', plugins) +
-    [ 'gesystemmanager_main.cpp',
-      'AssetD.cpp', 'AssetVersionD.cpp',
-      'AssetOperation.cpp', 'StateUpdater.cpp', 'DependentStateTree.cpp',
-      'khSystemManager.cpp',
-      'khAssetManager.cpp', 'khAssetManagerDispatch.cpp',
-      'khResourceManager.cpp', 'khTask.cpp', 'TaskRequirements.cpp',
-      'khResourceProviderProxy.cpp', 'khResourceProviderProxyDispatch.cpp',
-      'ResourceProviderProxy.cpp', 'Reservation.cpp',
-      'SysManExtra.cpp', 'SysManFromStorage.cpp', 'InsetInfo.cpp',
-      TaskStorageObj, JobStorageObj, NextTaskIdObj, TaskRuleObj,
-      FusionUniqueIdObj,
-      env['FUSIONVER'],
-      ] +
-    env.ObjFromOtherDir(extraObjs),
-    LIBS=['gegdal', 'geraster', 'gesearchtabs', 'genet', 'gepublish', 'gefconfigutil',
-          'geindex_r', 'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'qt-mt', 'xerces-c', 'geos']
-    )
+    [ 'gesystemmanager_main.cpp', env['FUSIONVER'] ] + sysmanFiles + extraObjs,
+    LIBS=sysmanLibs)
 
 geresourceprovider = env.executable('geresourceprovider',
     ['geresourceprovider_main.cpp',
@@ -133,69 +134,20 @@ env.install('fusion_root', [ 'gefusion' ], 'etc/init.d')
 
 SConscript(
     'parse-raster-project-xml-no-content_unittest/SConscript',
-    exports=[
-        'env', 'commonobj', 'plugins', 'extraObjs', 'TaskStorageObj',
-        'JobStorageObj', 'NextTaskIdObj', 'TaskRuleObj', 'FusionUniqueIdObj'])
+    exports=['env', 'sysmanObjs', 'extraObjs', 'testLibs'])
 
 SConscript(
     'memory-tests/SConscript',
-    exports=[
-        'env', 'commonobj', 'plugins', 'extraObjs', 'TaskStorageObj',
-        'JobStorageObj', 'NextTaskIdObj', 'TaskRuleObj', 'FusionUniqueIdObj'])
+    exports=['env', 'sysmanObjs', 'extraObjs', 'testLibs'])
 
 env.test('LeafAssetVersion_unittest',
-    commonobj +
-    map(lambda p: 'plugins/'+p+'AssetD.o', plugins) +
-    [ 'LeafAssetVersion_unittest.cpp',
-      'AssetD.o', 'AssetVersionD.o',
-      'AssetOperation.o', 'StateUpdater.o', 'DependentStateTree.o',
-      'khSystemManager.o',
-      'khAssetManager.o', 'khAssetManagerDispatch.o',
-      'khResourceManager.o', 'khTask.o', 'TaskRequirements.o',
-      'khResourceProviderProxy.o', 'khResourceProviderProxyDispatch.o',
-      'ResourceProviderProxy.o', 'Reservation.o',
-      'SysManExtra.o', 'SysManFromStorage.o', 'InsetInfo.o',
-      TaskStorageObj, JobStorageObj, NextTaskIdObj, TaskRuleObj,
-      FusionUniqueIdObj] +
-    env.ObjFromOtherDir(extraObjs),
-    LIBS=['gegdal', 'geraster', 'gesearchtabs', 'genet', 'gepublish', 'gefconfigutil',
-      'geindex_r', 'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'qt-mt', 'xerces-c', 'geos',
-      'gtest', 'gomp'])
+    sysmanObjs + extraObjs + [ 'LeafAssetVersion_unittest.cpp' ],
+    LIBS=testLibs)
 
 env.test('StateUpdater_unittest',
-    commonobj +
-    map(lambda p: 'plugins/'+p+'AssetD.o', plugins) +
-    [ 'StateUpdater_unittest.cpp',
-      'AssetD.o', 'AssetVersionD.o',
-      'AssetOperation.o', 'StateUpdater.o', 'DependentStateTree.o',
-      'khSystemManager.o',
-      'khAssetManager.o', 'khAssetManagerDispatch.o',
-      'khResourceManager.o', 'khTask.o', 'TaskRequirements.o',
-      'khResourceProviderProxy.o', 'khResourceProviderProxyDispatch.o',
-      'ResourceProviderProxy.o', 'Reservation.o',
-      'SysManExtra.o', 'SysManFromStorage.o', 'InsetInfo.o',
-      TaskStorageObj, JobStorageObj, NextTaskIdObj, TaskRuleObj,
-      FusionUniqueIdObj] +
-    env.ObjFromOtherDir(extraObjs),
-    LIBS=['gegdal', 'geraster', 'gesearchtabs', 'genet', 'gepublish', 'gefconfigutil',
-      'geindex_r', 'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'qt-mt', 'xerces-c', 'geos',
-      'gtest', 'gomp'])
+    sysmanObjs + extraObjs + [ 'StateUpdater_unittest.cpp' ],
+    LIBS=testLibs)
 
 env.test('StorageManagerAssetFactory_unittest',
-    commonobj +
-    map(lambda p: 'plugins/'+p+'AssetD.o', plugins) +
-    [ 'StorageManagerAssetFactory_unittest.cpp',
-      'AssetD.o', 'AssetVersionD.o',
-      'AssetOperation.o', 'StateUpdater.o', 'DependentStateTree.o',
-      'khSystemManager.o',
-      'khAssetManager.o', 'khAssetManagerDispatch.o',
-      'khResourceManager.o', 'khTask.o', 'TaskRequirements.o',
-      'khResourceProviderProxy.o', 'khResourceProviderProxyDispatch.o',
-      'ResourceProviderProxy.o', 'Reservation.o',
-      'SysManExtra.o', 'SysManFromStorage.o', 'InsetInfo.o',
-      TaskStorageObj, JobStorageObj, NextTaskIdObj, TaskRuleObj,
-      FusionUniqueIdObj] +
-    env.ObjFromOtherDir(extraObjs),
-    LIBS=['gegdal', 'geraster', 'gesearchtabs', 'genet', 'gepublish', 'gefconfigutil',
-      'geindex_r', 'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'qt-mt', 'xerces-c', 'geos',
-      'gtest', 'gomp'])
+    sysmanObjs  + extraObjs + [ 'StorageManagerAssetFactory_unittest.cpp' ],
+    LIBS=testLibs)
