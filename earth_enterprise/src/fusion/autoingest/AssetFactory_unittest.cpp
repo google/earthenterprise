@@ -18,6 +18,7 @@
 #include <common/khException.h>
 #include "AssetFactory.h"
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 #include <string>
 #include <vector>
 #include <memory>
@@ -38,6 +39,8 @@ class MockAssetVersionImpl;
 class MockMutableAssetVersion;
 class MockExtras;
 
+class MockExtraArgs{};
+
 class MockAssetStorage
 {
 public:
@@ -46,6 +49,7 @@ public:
   string subtype;
   vector<SharedString> inputs;
   khMetaData meta;
+  vector<AssetVersion> versions;
 
   static MockAssetStorage MakeStorage(const SharedString &name_,
               AssetDefs::Type type_,
@@ -69,11 +73,16 @@ class MockAssetConfig
 {
 public:
     int8_t ID;
-    MockAssetConfig(int8 _ID = -1) : ID(_ID) {}
+    bool upToDate;
+    MockAssetConfig(int8 _ID = -1) : ID(_ID), upToDate(true) {}
     bool operator==(const MockAssetConfig& other) const { return ID == other.ID; }
     bool operator==(uint8_t _ID) { return ID == _ID; }
     void operator=(const MockAssetConfig& other) { ID = other.ID; }
     void operator=(uint8_t _ID) { ID = _ID; }
+    bool IsUpToDate(MockAssetConfig& other) const
+    {
+        return upToDate == other.upToDate;
+    }
  };
 
 class MockAssetVersionImpl : public MockAssetStorage
@@ -175,6 +184,7 @@ public:
   MockAssetConfig config;
   bool needed;
 
+
   void Modify(const khMetaData& _meta, const MockAssetConfig& _config)
   {
       meta = _meta;
@@ -193,12 +203,21 @@ public:
                 const MockAssetConfig &config_)
               : MockAssetStorage(storage), config(config_), needed(false) {}
 
-  MockMutableAssetVersion MyUpdate(bool& _needed, const vector<AssetVersion>& v = {})
+  MockMutableAssetVersion MyUpdate(bool& _needed,
+                                   const vector<AssetVersion>& v = {})
   {
       auto retval = MockMutableAssetVersion(this->name, this->type);
       retval->needed = _needed = true;
       return retval;
   }
+
+  MockMutableAssetVersion MyUpdate(bool& _needed,
+                                   const MockExtraArgs& extras)
+    {
+        auto retval = MockMutableAssetVersion(this->name, this->type);
+        retval->needed = _needed = true;
+        return retval;
+    }
 
   MockMutableAssetVersion Update(bool& _needed, const vector<AssetVersion>& v = {})
   {
@@ -377,6 +396,48 @@ TEST_F(AssetFactoryTest, FindMakeAndUpdateAssets)
     ASSERT_EQ(handle6_5->needed, true);
     ASSERT_EQ(handle7_6->needed, true);
     ASSERT_EQ(handle_4->needed, true);
+}
+
+class MockVersionDType : public MockMutableAssetVersion
+{
+public:
+    vector<AssetVersion> versions;
+    MockVersionDType(const AssetVersion& v)
+    {
+        versions.push_back(v);
+    }
+    void NoLongerNeeded() {}
+    void LoadAsTemporary() {}
+    void MakePermanent() {}
+};
+
+TEST_F(AssetFactoryTest, Reuse)
+{
+    MockMutableAssetVersion
+            // ROMAUS, 467: parentName, baseName, inputs_, meta_, config,
+            //              cachedinputs_
+            // calls ROMAU 262, 365: ref_, inputs, meta_, config, cachedinputs_
+            handle6_5_1,
+            // ROMAUS, 487: parentName, type_, baseName, meta_ config_
+            //              cachedinputs_
+            // calls ROMAU: ref_, type_ meta_, config_ cachedinputs_
+            handle6_5_2,
+            // ROMAUS 507: parentName, type_, baseName, meta_, config_
+            // calls ROMAU, 262: ref_, type_, meta_, config_
+            handle5_4,
+            // ROMAUS, 526: parentName, type_, baseName, inputs_, meta_,
+            //              config_, cachedinputs_
+            // calls ROMAU, 311: ref_, type, inputs_, meta_, config_,
+            //                   cachedinputs_
+            handle7_6,
+            // ROMAU, 416: ref_, type, meta_, config_, extraArgs
+            handle_5 = ReuseOrMakeAndUpdate
+                      <MockMutableAssetVersion, AssetVersion,
+                       MockAssetConfig, MockVersionDType,
+                       MockExtraArgs>
+                       ("reuse", AssetDefs::Imagery, testMeta,
+                        testConfig0, MockExtraArgs());
+
 }
 
 int main(int argc, char **argv) {

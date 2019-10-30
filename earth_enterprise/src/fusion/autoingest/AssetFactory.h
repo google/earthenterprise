@@ -412,7 +412,7 @@ namespace AssetFactory
   }
 
   template <class MutableDerivedVersionHandleType, class Version,
-            class ConfigType, class VersionDType, class Extras = int>
+            class ConfigType, class VersionDType, class Extras>
   MutableDerivedVersionHandleType ReuseOrMakeAndUpdate(const std::string& ref_,
                                                        AssetDefs::Type type_,
                                                        const khMetaData& meta_,
@@ -482,7 +482,7 @@ namespace AssetFactory
              (ref_, inputs_, meta_, config_, cachedinputs_);
   }
 
-  template <class MutableDerivedVersionHandleType, class Version,
+  /*template <class MutableDerivedVersionHandleType, class Version,
             class ConfigType, class VersionDType, class Extras = int>
   MutableDerivedVersionHandleType ReuseOrMakeAndUpdateSubAsset(
             const std::string& parentName,
@@ -500,7 +500,7 @@ namespace AssetFactory
         return ReuseOrMakeAndUpdate<MutableDerivedVersionHandleType, Version,
                                     ConfigType, VersionDType, Extras>
                (ref_, type_, meta_, config_, cachedinputs_);
-    }
+    }*/
 
   template <class MutableDerivedVersionHandleType, class Version,
             class ConfigType, class VersionDType, class Extras = int>
