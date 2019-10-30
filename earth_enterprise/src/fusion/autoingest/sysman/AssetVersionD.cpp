@@ -25,6 +25,7 @@
 #include "Misc.h"
 #include "khAssetManager.h"
 #include "fusion/autoingest/MiscConfig.h"
+#include "AssetOperation.h"
 
 // ****************************************************************************
 // ***  StateUpdateNotifier
@@ -268,6 +269,7 @@ void AssetVersionImplD::SetState(
   if (newstate != state) {
     AssetDefs::State oldstate = state;
     state = newstate;
+    UpdateWaitingAssets(GetRef(), oldstate);
     try {
       // NOTE: This can end up calling back here to switch us to
       // another state (usually Failed or Succeded)
@@ -306,7 +308,7 @@ AssetVersionImplD::SetProgress(double newprogress)
   }
 }
 
-void
+bool
 AssetVersionImplD::SyncState(const std::shared_ptr<StateChangeNotifier> notifier) const
 {
   if (CacheInputVersions()) {
@@ -319,14 +321,17 @@ AssetVersionImplD::SyncState(const std::shared_ptr<StateChangeNotifier> notifier
     if (newstate != state) {
       MutableAssetVersionD self(GetRef());
       self->SetState(newstate, notifier);
+      return true;
     }
   } else {
     AssetDefs::State newstate = ComputeState();
     if (newstate != state) {
       MutableAssetVersionD self(GetRef());
       self->SetState(newstate, notifier);
+      return true;
     }
   }
+  return false;
 }
 
 void
@@ -808,13 +813,18 @@ LeafAssetVersionImplD::HandleTaskDone(const TaskDoneMsg &msg)
   if (msg.success) {
     // the output files in the msg have full paths, make them relative to
     // the AssetRoot again
-    ClearOutfiles();                // should already be empty
-    for (const auto &of : msg.outfiles) {
-      outfiles.push_back(of);
-    }
+    ResetOutFiles(msg.outfiles);
     SetState(AssetDefs::Succeeded);
   } else {
     SetState(AssetDefs::Failed);
+  }
+}
+
+void
+LeafAssetVersionImplD::ResetOutFiles(const std::vector<std::string> & newOutfiles) {
+  ClearOutfiles();
+  for (const auto &of : newOutfiles) {
+    outfiles.push_back(of);
   }
 }
 

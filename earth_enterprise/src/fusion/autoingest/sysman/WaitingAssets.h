@@ -14,14 +14,25 @@
  * limitations under the License.
  */
 
-#ifndef ASSETOPERATION_H
-#define ASSETOPERATION_H
+#ifndef WAITINGASSETS_H
+#define WAITINGASSETS_H
 
+#include "autoingest/.idl/storage/AssetDefs.h"
 #include "common/SharedString.h"
-#include "fusion/autoingest/sysman/.idl/TaskStorage.h"
 
-void RebuildVersion(const SharedString & ref);
-void HandleTaskProgress(const TaskProgressMsg & msg);
-void UpdateWaitingAssets(const SharedString & ref, AssetDefs::State oldState);
+#include <unordered_set>
 
-#endif // ASSETOPERATION_H
+class WaitingAssets {
+  private:
+    const AssetDefs::State waitingState;
+    std::unordered_set<SharedString> waiting;
+  public:
+    WaitingAssets(AssetDefs::State waitingState) : waitingState(waitingState) {}
+    void Update(
+        const SharedString & ref,
+        AssetDefs::State newState,
+        AssetDefs::State oldState);
+    bool IsWaiting(const SharedString & ref) const;
+};
+
+#endif // WAITINGASSETS_H

@@ -91,12 +91,11 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   template<bool propagate = true>
   void SetState(AssetDefs::State newstate, const std::shared_ptr<StateChangeNotifier> = nullptr);
   void SetProgress(double newprogress);
-  virtual void SyncState(const std::shared_ptr<StateChangeNotifier> = nullptr) const; // const so can be called w/o mutable handle
+  virtual bool SyncState(const std::shared_ptr<StateChangeNotifier> = nullptr) const; // const so can be called w/o mutable handle
   // will create a mutable handle itself if it
   // needs to call SetState
   void PropagateStateChange(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual void HandleTaskLost(const TaskLostMsg &msg);
-  virtual void HandleTaskProgress(const TaskProgressMsg &msg);
   virtual void HandleTaskDone(const TaskDoneMsg &msg);
   virtual void HandleChildStateChange(NotifyStates, const std::shared_ptr<StateChangeNotifier>) const;
   virtual void HandleInputStateChange(NotifyStates, const std::shared_ptr<StateChangeNotifier>) const = 0;
@@ -125,6 +124,8 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   virtual bool MustForceUpdate(void) const { return false; }
   virtual AssetDefs::State OnStateChange(AssetDefs::State newstate,
                                          AssetDefs::State oldstate) override;
+  virtual void HandleTaskProgress(const TaskProgressMsg &msg);
+  virtual bool RecalcState() const override { return SyncState(); }
 
   class InputVersionHolder : public khRefCounter {
    public:
@@ -188,13 +189,14 @@ class LeafAssetVersionImplD : public virtual LeafAssetVersionImpl,
   virtual AssetDefs::State ComputeState(void) const;
   virtual bool CacheInputVersions(void) const;
   virtual void HandleTaskLost(const TaskLostMsg &msg);
-  virtual void HandleTaskProgress(const TaskProgressMsg &msg);
   virtual void HandleTaskDone(const TaskDoneMsg &msg);
   virtual void HandleInputStateChange(NotifyStates, const std::shared_ptr<StateChangeNotifier>) const;
   virtual void DoSubmitTask(void) = 0;
   virtual bool OfflineInputsBreakMe(void) const { return false; }
 
  public:
+  virtual void HandleTaskProgress(const TaskProgressMsg &msg) override;
+  virtual void ResetOutFiles(const std::vector<std::string> &) override;
   virtual void Cancel(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual void Rebuild(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual void DoClean(const std::shared_ptr<StateChangeNotifier> = nullptr);

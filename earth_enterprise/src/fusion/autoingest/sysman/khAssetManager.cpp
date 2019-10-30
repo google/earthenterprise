@@ -645,11 +645,7 @@ khAssetManager::TaskProgress(const TaskProgressMsg &msg)
 {
   assert(!mutex.TryLock());
   notify(NFY_INFO, "TaskProgress %s", msg.verref.c_str());
-
-  AssetVersionD ver(msg.verref);
-  if (ver->taskid == msg.taskid) {
-    MutableAssetVersionD(msg.verref)->HandleTaskProgress(msg);
-  }
+  ::HandleTaskProgress(msg);
 }
 
 void
