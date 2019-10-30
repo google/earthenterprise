@@ -20,19 +20,26 @@
 #include "autoingest/.idl/storage/AssetDefs.h"
 #include "common/SharedString.h"
 
-#include <unordered_set>
+#include <unordered_map>
 
 class WaitingAssets {
   private:
+    using WaitingContainer = std::unordered_map<SharedString, uint>;
     const AssetDefs::State waitingState;
-    std::unordered_set<SharedString> waiting;
+    WaitingContainer waiting;
+
+    inline bool IsWaiting(WaitingContainer::const_iterator asset) const
+      { return asset != waiting.end(); }
   public:
     WaitingAssets(AssetDefs::State waitingState) : waitingState(waitingState) {}
+    inline bool IsWaiting(const SharedString & ref) const
+      { return IsWaiting(waiting.find(ref)); }
     void Update(
         const SharedString & ref,
         AssetDefs::State newState,
-        AssetDefs::State oldState);
-    bool IsWaiting(const SharedString & ref) const;
+        AssetDefs::State oldState,
+        uint numWaitingFor);
+    bool DecrementAndCheckWaiting(const SharedString & ref);
 };
 
 #endif // WAITINGASSETS_H
