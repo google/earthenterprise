@@ -20,7 +20,7 @@ void WaitingAssets::Update(
     const SharedString & ref,
     AssetDefs::State newState,
     AssetDefs::State oldState,
-    uint numWaitingFor) {
+    uint32 numWaitingFor) {
   if (newState == waitingState && numWaitingFor > 0) {
     waiting[ref] = numWaitingFor;
   }

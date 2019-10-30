@@ -36,7 +36,7 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   friend class MutableAssetHandleD_<DerivedAssetHandle_<AssetVersion,
                                                         AssetVersionImplD> >;
 
-  AssetVersionImplD(const AssetVersionImplD&) =  delete;
+  AssetVersionImplD(const AssetVersionImplD&) = delete;
   AssetVersionImplD& operator=(const AssetVersionImplD&) = delete;
 
  protected:

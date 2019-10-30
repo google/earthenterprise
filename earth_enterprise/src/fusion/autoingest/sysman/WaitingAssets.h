@@ -24,7 +24,7 @@
 
 class WaitingAssets {
   private:
-    using WaitingContainer = std::unordered_map<SharedString, uint>;
+    using WaitingContainer = std::unordered_map<SharedString, uint32>;
     const AssetDefs::State waitingState;
     WaitingContainer waiting;
 
@@ -38,7 +38,7 @@ class WaitingAssets {
         const SharedString & ref,
         AssetDefs::State newState,
         AssetDefs::State oldState,
-        uint numWaitingFor);
+        uint32 numWaitingFor);
     bool DecrementAndCheckWaiting(const SharedString & ref);
 };
 
