@@ -29,16 +29,18 @@ Troubleshoot connection to GEE Server
          b. Type the command
             ``tail -f /opt/google/gehttpd/logs/access_log``
          c. Start EC and try connecting to your GEE Server.
-         
+
             In the terminal window, you should see time-stamped access
             requests in the logs from the client, starting with a GET
             request for the ``dbRoot`` file, followed by ``flatfile``
             requests—for example:
 
-            ``192.168.1.199 - - [08/Feb/2016:09:10:25 -0800] "GET /3d/dbRoot.v5?hl=en&gl=us&output=proto&cv=7.1.5.1557&ct=ec HTTP/1.1" 200 4512 "-" "GoogleEarth/7.1.5.1557(Windows;Microsoft Windows (6.2.9200.0);en;kml:2.2;client:EC;type:default)" 192.168.1.199 - - [08/Feb/2016:09:10:27 -0800] "GET /3d/dbRoot.v5?db=tm&hl=en&gl=us&output=proto&cv=7.1.5.1557&ct=ec HTTP/1.1" 200 1161 "-" "GoogleEarth/7.1.5.1557(Windows;Microsoft Windows (6.2.9200.0);en;kml:2.2;client:EC;type:default)"``
-            
-            ``192.168.1.199 - - [08/Feb/2016:09:10:27 -0800] "GET /3d/flatfile?lf-0-icons/help_l.png&h=32 HTTP/1.1" 200 426 "-" "GoogleEarth/7.1.5.1557(Windows;Microsoft Windows (6.2.9200.0);en;kml:2.2;client:EC;type:default)"``
-            
+            .. code-block:: none
+
+               192.168.1.199 - - [08/Feb/2016:09:10:25 -0800] "GET /3d/dbRoot.v5?hl=en&gl=us&output=proto&cv=7.1.5.1557&ct=ec HTTP/1.1" 200 4512 "-" "GoogleEarth/7.1.5.1557(Windows;Microsoft Windows (6.2.9200.0);en;kml:2.2;client:EC;type:default)" 192.168.1.199 - - [08/Feb/2016:09:10:27 -0800] "GET /3d/dbRoot.v5?db=tm&hl=en&gl=us&output=proto&cv=7.1.5.1557&ct=ec HTTP/1.1" 200 1161 "-" "GoogleEarth/7.1.5.1557(Windows;Microsoft Windows (6.2.9200.0);en;kml:2.2;client:EC;type:default)"
+
+               192.168.1.199 - - [08/Feb/2016:09:10:27 -0800] "GET /3d/flatfile?lf-0-icons/help_l.png&h=32 HTTP/1.1" 200 426 "-" "GoogleEarth/7.1.5.1557(Windows;Microsoft Windows (6.2.9200.0);en;kml:2.2;client:EC;type:default)"
+
             ​If no new entries appear in the logs, then EC was unable to
             establish a connection to the GEE Server. This may be due to
             a network or firewall problem, as described in the next

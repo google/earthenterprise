@@ -49,11 +49,11 @@ Geecheck: test your GEE Server status
          located in the subfolders:
 
          .. code-block:: none
-         
-         geecheck_tests/
-            user_tests/
-            fusion_tests/
-            server_tests/
+
+            geecheck_tests/
+               user_tests/
+               fusion_tests/
+               server_tests/
 
       -  Tests must follow the naming convention ``*_test.py``, for
          example, ``dns_test.py``. Test results are organized by the
@@ -110,7 +110,7 @@ Geecheck: test your GEE Server status
       subfolders to be run from geecheck:
 
       .. code-block:: none
-      
+
          geecheck_tests/
             user_tests/
             fusion_tests/
@@ -169,7 +169,7 @@ Geecheck: test your GEE Server status
          subfolder structure for geecheck to run:
 
          .. code-block:: none
-         
+
             geecheck_tests/
                user_tests/
                fusion_tests/
@@ -179,7 +179,7 @@ Geecheck: test your GEE Server status
          with ``geecheck_tests/``:
 
          .. code-block:: none
-         
+
             geecheck.py
             set_geecheck_config.py
             geecheck_tests/
