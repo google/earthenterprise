@@ -14,14 +14,20 @@
  * limitations under the License.
  */
 
-#ifndef ASSETOPERATION_H
-#define ASSETOPERATION_H
+#include "WaitingAssets.h"
 
-#include "common/SharedString.h"
-#include "fusion/autoingest/sysman/.idl/TaskStorage.h"
+void WaitingAssets::Update(
+    const SharedString & ref,
+    AssetDefs::State newState,
+    AssetDefs::State oldState) {
+  if (newState == waitingState) {
+    waiting.insert(ref);
+  }
+  else if (oldState == waitingState) {
+    waiting.erase(ref);
+  }
+}
 
-void RebuildVersion(const SharedString & ref);
-void HandleTaskProgress(const TaskProgressMsg & msg);
-void UpdateWaitingAssets(const SharedString & ref, AssetDefs::State oldState);
-
-#endif // ASSETOPERATION_H
+bool WaitingAssets::IsWaiting(const SharedString & ref) const {
+  return waiting.find(ref) != waiting.end();
+}
