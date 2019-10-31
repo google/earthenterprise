@@ -117,9 +117,9 @@ Geecheck: test your GEE Server status
             server_tests/
 
       To get some idea of how you can write your own test, you can study
-      the structure of the sample test, ``sample_test.py``, provided in
-      the ``user_tests`` subfolder. Use the code as a guide or simply
-      copy and edit it if you are unfamiliar with Python unit tests.
+      the structure of the existing tests in the ``user_tests`` subfolder. 
+      Use the code as a guide or simply copy and edit an existing test 
+      if you are unfamiliar with Python unit tests.
 
       .. _Run_geecheck_Command_Line:
       .. rubric:: Run geecheck on the command line
