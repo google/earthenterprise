@@ -99,6 +99,7 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   virtual void HandleInputStateChange(NotifyStates, const std::shared_ptr<StateChangeNotifier>) const = 0;
   inline bool BlockedByOfflineInputs(const InputAndChildStateData & stateData) const;
   virtual bool OfflineInputsBreakMe(void) const { return false; }
+  virtual uint32 GetChildrenWaitingFor() const { return 0; }
  public:
 
   bool NeedComputeState(void) const {
@@ -232,6 +233,7 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
   virtual void HandleInputStateChange(NotifyStates, const std::shared_ptr<StateChangeNotifier>) const;
   virtual void DelayedBuildChildren(void);
   virtual bool CompositeStateCaresAboutInputsToo(void) const { return false; }
+  virtual uint32 GetChildrenWaitingFor() const override { return numChildrenWaitingFor; }
 
   void AddChild(MutableAssetVersionD &child);
   void AddChildren(std::vector<MutableAssetVersionD> &children);

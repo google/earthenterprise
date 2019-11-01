@@ -269,9 +269,9 @@ void AssetVersionImplD::SetState(
   if (newstate != state) {
     AssetDefs::State oldstate = state;
     state = newstate;
+    HandleExternalStateChange(GetRef(), oldstate, numInputsWaitingFor, GetChildrenWaitingFor());
     try {
-      // NOTE: This can end up calling back here to switch us to
-      // another state (usually Failed or Succeded)
+      // OnStateChange may return a new state that we need to transition to.
       AssetDefs::State nextstate = OnStateChange(newstate, oldstate);
       if (nextstate != newstate) SetState(nextstate);
     } catch (const StateChangeException &e) {
@@ -879,7 +879,6 @@ LeafAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
                                      AssetDefs::State oldstate)
 {
   AssetVersionImplD::OnStateChange(newstate, oldstate);
-  HandleExternalStateChange(GetRef(), oldstate, numInputsWaitingFor, 0);
 
   // task related members that need to be maintained
   // - taskid (may need to SubmitTask or DeleteTask)
@@ -1206,7 +1205,6 @@ CompositeAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
          ToString(oldstate).c_str(),
          ToString(newstate).c_str());
   AssetVersionImplD::OnStateChange(newstate, oldstate);
-  HandleExternalStateChange(GetRef(), oldstate, numInputsWaitingFor, numChildrenWaitingFor);
 
   // certain plugins (e.g. Database, RasterProject) don't create their
   // children until after their inputs are done.
