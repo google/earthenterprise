@@ -64,14 +64,14 @@ TEST(AssetHandleTest, Finalize) {
   ASSERT_TRUE(finalized);
 }
 
-TEST(AssetHandleTest, ConvertConstToMutable) {
+TEST(AssetHandleTest, ConvertMutableToConst) {
   AssetHandle<TestItem> mutableHandle;
   AssetHandle<const TestItem> constHandle;
   constHandle = mutableHandle;
   ASSERT_EQ(mutableHandle.operator->(), constHandle.operator->());
 }
 
-TEST(AssetHandleTest, ConvertMutableToConst) {
+TEST(AssetHandleTest, ConvertConstToMutable) {
   // We should not be able to convert a mutable handle to a const handle.
   if(std::is_assignable<AssetHandle<TestItem>, AssetHandle<const TestItem>>::value) {
     // If the above statement is wrapped in ASSERT_FALSE it will fail to compile
