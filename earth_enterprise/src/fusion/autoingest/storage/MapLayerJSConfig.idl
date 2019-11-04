@@ -14,6 +14,7 @@
 
 
 #include <autoingest/.idl/storage/LayerLegend.h>
+#requiresgetheapusage
 
 #cppquote
 #include <autoingest/.idl/storage/LayerLegend_impl.h>
@@ -39,17 +40,18 @@ class MapLayerJSConfig {
 
 #pragma GenerateIsUpToDate
 
-#hquote
- public:
-   // Converts a projection type to its string representation in maps.json.
-   std::string ProjectionToString() const;
-   static std::string ProjectionToString(const Projection projection);
-
-#/hquote
+  #hquote
+   public:
+     // Converts a projection type to its string representation in maps.json.
+     std::string ProjectionToString() const;
+     static std::string ProjectionToString(const Projection projection);
+  
+  #/hquote
 
   };
 
   std::vector<Layer> layers_;
+
 
 #pragma GenerateIsUpToDate
 #pragma LoadAndSave

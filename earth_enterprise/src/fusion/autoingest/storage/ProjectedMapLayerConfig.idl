@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #include <autoingest/.idl/storage/AssetDefs.h>
+#requiresgetheapusage
 
 #cppquote
 #include <autoingest/.idl/storage/AssetDefs_impl.h>

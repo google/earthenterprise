@@ -314,6 +314,8 @@ Configure Fusion performance
       ``/gevol/assets/.config/misc.xml``
 
       ``<MutexTimedWaitSec>60</MutexTimedWaitSec>``
+
+      .. _graph-operations:
       .. rubric:: Improving Performance
 
       Included in ``/gevol/assets/.config/misc.xml`` is a

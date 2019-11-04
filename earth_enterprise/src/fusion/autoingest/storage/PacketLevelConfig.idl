@@ -20,6 +20,7 @@
 #include "common/khTypes.h"
 #include "common/khTileAddr.h"
 #include "common/SharedString.h"
+#requiresgetheapusage
 
 class PacketLevelConfig {
 #pragma DontEmitDefaults
@@ -81,6 +82,7 @@ class PacketLevelConfig {
 
   // add(or not) separate alpha_image to imagery-packet.
   deprecated bool separate_alpha_ = true;
+
 
   // Note: Basic rule for #version: "If the low level tool ever
   // changes to produce different output from the same config record, then

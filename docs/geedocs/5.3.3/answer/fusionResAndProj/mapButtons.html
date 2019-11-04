@@ -117,7 +117,7 @@ for each <code class="docutils literal notranslate"><span class="pre">GFusionTil
 <li>The maps layer is layer 1.</li>
 <li>The hybrid (Show Labels) layer is layer 2.</li>
 </ul>
-<div class="highlight-none notranslate"><div class="highlight"><pre>var imagery_map_layer = new GFusionTileLayer(geeServerDefs.serverUrl, geeServerDefs.layers[0]);
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>var imagery_map_layer = new GFusionTileLayer(geeServerDefs.serverUrl, geeServerDefs.layers[0]);
 var painted_map_layer = new GFusionTileLayer(geeServerDefs.serverUrl, geeServerDefs.layers[1]);
 var labels_layer = new GFusionTileLayer(geeServerDefs.serverUrl, geeServerDefs.layers[2]);
 </pre></div>
@@ -141,7 +141,7 @@ parameter.</p>
 <li><p class="first">Associate layers with buttons by using the <code class="docutils literal notranslate"><span class="pre">GMapType</span></code> class
 to define a map type for each of the <code class="docutils literal notranslate"><span class="pre">GTileLayer</span></code> objects.
 See the example below:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>var painted_map_type = new GMapType([painted_map_layer],new LatLngProjection(MAX_ZOOM_LEVEL),&quot;Maps&quot;);
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>var painted_map_type = new GMapType([painted_map_layer],new LatLngProjection(MAX_ZOOM_LEVEL),&quot;Maps&quot;);
 var imagery_map_type = new GMapType([imagery_map_layer],new LatLngProjection(MAX_ZOOM_LEVEL),&quot;Imagery&quot;);
 var labels_map_type = new GMapType([imagery_map_layer, labels_layer],new LatLngProjection(MAX_ZOOM_LEVEL),&quot;Hybrid&quot;);
 </pre></div>
@@ -149,7 +149,7 @@ var labels_map_type = new GMapType([imagery_map_layer, labels_layer],new LatLngP
 </li>
 <li><p class="first">Use the <code class="docutils literal notranslate"><span class="pre">.addMapControl()</span></code> method to add each map type and
 its associated button to the map:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>map.addMapType(painted_map_type);
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>map.addMapType(painted_map_type);
 map.addMapType(imagery_map_type);
 map.addMapType(labels_map_type);
 </pre></div>
@@ -171,7 +171,7 @@ buttons display correctly:</p>
 </li>
 <li><p class="first">Add controls (like the zoom bar, the navigation bar, an
 overview map, and zooming options) to the map:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>map.addControl(new GSmallMapControl());
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>map.addControl(new GSmallMapControl());
 map.addControl(new GOverviewMapControl());
 map.addControl(new GScaleControl());
 map.enableScrollWheelZoom();
@@ -214,7 +214,7 @@ for an example of a location-based 2D virtual server configuration
 file.</p>
 <p>In this example, the server is hosted at</p>
 <p><code class="docutils literal notranslate"><span class="pre">http://machine123.company.internal/mapexample</span> <span class="pre">-</span> <span class="pre">/opt/google/gehttpd/conf.d/virtual_servers/example.location</span></code>.</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre># The mapexample virtual server
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># The mapexample virtual server
 RewriteRule ^/mapexample$ /mapexample/ [R]
 RewriteRule ^/mapexample/+$ /maps/maps_local.html [PT]
 RewriteRule ^/mapexample/+maps/+mapfiles/(.*)$ /maps/mapfiles/$1 [PT]
@@ -227,7 +227,7 @@ SetHandler gedb-handler Include conf.d/virtual_servers/runtime/example_runtime
 <code class="docutils literal notranslate"><span class="pre">/maps/maps_local.html</span></code> web page is loaded whenever users visit
 the virtual server URL <code class="docutils literal notranslate"><span class="pre">http://machine123.company.internal/mapexample</span></code>.</p>
 <p>You can change this setting to load a different web page:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre># The mapexample virtual server
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># The mapexample virtual server
 RewriteRule ^/mapexample$ /mapexample/ [R]
 RewriteRule ^/mapexample/+$ /maps/gmaps_buttons.html [PT]
 RewriteRule ^/mapexample/+maps/+mapfiles/(.*)$ /maps/mapfiles/$1 [PT]

@@ -140,25 +140,25 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   }
 
   // determine amount of memory used by an AssetVersionImpl
-  uint64 GetSize() {
-    return (GetObjectSize(name)
-    + GetObjectSize(type)
-    + GetObjectSize(subtype)
-    + GetObjectSize(state)
-    + GetObjectSize(progress)
-    + GetObjectSize(locked)
-    + GetObjectSize(inputs)
-    + GetObjectSize(children)
-    + GetObjectSize(parents)
-    + GetObjectSize(listeners)
-    + GetObjectSize(outfiles)
-    + meta.GetSize()
-    + GetObjectSize(beginTime)
-    + GetObjectSize(progressTime)
-    + GetObjectSize(endTime)
-    + GetObjectSize(taskid)
-    + GetObjectSize(timestamp)
-    + GetObjectSize(filesize));
+  virtual uint64 GetHeapUsage() const {
+    return ::GetHeapUsage(name)
+    + ::GetHeapUsage(type)
+    + ::GetHeapUsage(subtype)
+    + ::GetHeapUsage(state)
+    + ::GetHeapUsage(progress)
+    + ::GetHeapUsage(locked)
+    + ::GetHeapUsage(inputs)
+    + ::GetHeapUsage(children)
+    + ::GetHeapUsage(parents)
+    + ::GetHeapUsage(listeners)
+    + ::GetHeapUsage(outfiles)
+    + ::GetHeapUsage(meta)
+    + ::GetHeapUsage(beginTime)
+    + ::GetHeapUsage(progressTime)
+    + ::GetHeapUsage(endTime)
+    + ::GetHeapUsage(taskid)
+    + ::GetHeapUsage(timestamp)
+    + ::GetHeapUsage(filesize);
   }
   template <class outIter>
   outIter GetInputs(outIter oi) const {
@@ -188,6 +188,13 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   }
   virtual void WriteFatalLogfile(const std::string &, const std::string &) const throw() {
     assert(false);
+  }
+  virtual void ResetOutFiles(const std::vector<std::string> &) {
+    assert(false);
+  }
+  virtual bool RecalcState() const {
+    assert(false);
+    return false;
   }
 
   // static helpers
@@ -353,5 +360,8 @@ class CompositeAssetVersionImpl : public virtual AssetVersionImpl {
   std::string GetOutputFilename(uint i) const;
 };
 
+inline uint64 GetHeapUsage(const AssetVersionImpl &version) {
+  return version.GetHeapUsage();
+}
 
 #endif  // GEO_EARTH_ENTERPRISE_SRC_FUSION_AUTOINGEST_ASSETVERSION_H_

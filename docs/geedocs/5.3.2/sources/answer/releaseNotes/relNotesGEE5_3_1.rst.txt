@@ -57,14 +57,14 @@ patch releases  Limited internal version string to 3 parts to fix
 patch releases.  1292  Invalid qtpacket status with SharedString
 fixes.  If one builds a project the status of the qtpacket will show
 as Bad even though it actually built successfully. This fixes the
-issue.  1304  Creating issues tickets in OpenGEE repo does not provide
-guidelines  Added template to create new issues in Open GEE repo.
-1317  Lacking Test cases for genewimageryresource  Added automated
-tests for Imagery resource creation.  1339  Building with incomplete
-assets can result in Blocked databases  Added error handling to
-certain asset caching to prevent incomplete assets from being cached.
-This prevents a version of the DelayedBuildChildren class of errors,
-and rectifies the run_historical.sh script problem.
+issue.  1304  Creating issues tickets in Open GEE repo does not
+provide guidelines  Added template to create new issues in Open GEE
+repo.  1317  Lacking Test cases for genewimageryresource  Added
+automated tests for Imagery resource creation.  1339  Building with
+incomplete assets can result in Blocked databases  Added error
+handling to certain asset caching to prevent incomplete assets from
+being cached. This prevents a version of the DelayedBuildChildren
+class of errors, and rectifies the run_historical.sh script problem.
 
 -[ Known Issues ]-
 

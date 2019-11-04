@@ -15,6 +15,7 @@
 
 #include <qstring.h>
 #include <khConstants.h>
+#requiresgetheapusage
 
 class IconReference {
   enum Type { Internal = 0, External = 1 };
@@ -38,7 +39,6 @@ class IconReference {
   std::string NormalHighlightHref(void) const {
     return std::string(href) + "_nh.png";
   }
-
 #/hquote
 
 #cppquote

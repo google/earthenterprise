@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #include <string>
+#requiresgetheapusage
 
 // ****************************************************************************
 // ***  KRMP - Keyhole Raster Mask Product (low level)
@@ -23,4 +24,3 @@ class KRMPConfig {
 
 #pragma GenerateIsUpToDate
 };
-

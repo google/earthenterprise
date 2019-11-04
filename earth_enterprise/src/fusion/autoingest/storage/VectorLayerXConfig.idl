@@ -16,6 +16,7 @@
 #include <autoingest/.idl/storage/LayerLegend.h>
 #include <string>
 #include <khMetaData.h>
+#requiresgetheapusage
 
 #cppquote
 #include <autoingest/.idl/storage/LayerLegend_impl.h>
@@ -48,4 +49,3 @@ class VectorLayerXEditRequest {
 
 #pragma StrLoadAndSave
 };
-
