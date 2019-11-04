@@ -72,7 +72,7 @@ TEST(AssetHandleTest, ConvertMutableToConst) {
 }
 
 TEST(AssetHandleTest, ConvertConstToMutable) {
-  // We should not be able to convert a mutable handle to a const handle.
+  // We should not be able to convert a const handle to a mutable handle.
   if(std::is_assignable<AssetHandle<TestItem>, AssetHandle<const TestItem>>::value) {
     // If the above statement is wrapped in ASSERT_FALSE it will fail to compile
     // for some reason. This is our simple workaround.
