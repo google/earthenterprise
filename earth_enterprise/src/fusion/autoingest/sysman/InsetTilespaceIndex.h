@@ -54,54 +54,86 @@ public:
 template <class T>
 class QuadKeyTree {
 private:
-    std::array<std::shared_ptr<QuadKeyTreeNode<T>>, 4> nodes {{nullptr, nullptr, nullptr, nullptr}};
-
+    //std::array<std::shared_ptr<QuadKeyTreeNode<T>>, 4> nodes {{nullptr, nullptr, nullptr, nullptr}};
+    std::shared_ptr<QuadKeyTreeNode<T>> levelZeroNode = std::make_shared<QuadKeyTreeNode<T>>();
 public:
     void AddElementAtQuadTreePath(QuadtreePath path,  const T *element){
-        assert(path.Level() >= 1 && path.Level() <= 24);
-        std::cout << "path[0] = " << path[0] << "\n";
-        if (nodes[path[0]] == nullptr)
-            nodes[path[0]] = std::make_shared<QuadKeyTreeNode<T>>();
-        std::shared_ptr<QuadKeyTreeNode<T>> nodeptr = nodes[path[0]];
-        std::cout << "nodeptr is " << (nodeptr == nullptr ? "null" : "not null") << "\n";
-        for (uint32 level = 1; level < path.Level(); level++) {
-            std::cout << "path[" << level << "] = " << path[level] << "\n";
-            if (nodeptr->nodes[path[level]] == nullptr)
-                nodeptr->nodes[path[level]] = std::make_shared<QuadKeyTreeNode<T>>();
-            nodeptr = nodeptr->nodes[path[level]];
-            std::cout << "nodeptr is " << (nodeptr == nullptr ? "null" : "not null") << "\n";
+        const uint pathLength = path.Level();
+        uint pathIndex = 0;
+        std::shared_ptr<QuadKeyTreeNode<T>> nodeptr = levelZeroNode;
+
+        while (pathIndex < pathLength){
+            uint qtIndexAtLevel = path[pathIndex];     // e.g., if path is "1320", tileAtLevel would be 3 for level=2
+            if (nodeptr->nodes[qtIndexAtLevel] == nullptr)
+                nodeptr->nodes[qtIndexAtLevel] = std::make_shared<QuadKeyTreeNode<T>>();
+            nodeptr = nodeptr->nodes[qtIndexAtLevel];
+            pathIndex++;
         }
 
         assert(nodeptr != nullptr);
         nodeptr->data.push_back(element);
+
+        // if (path.Level() == 0)
+        //     levelZeroNode->data.push_back(element);
+        // else{
+        //     if (levelZeroNode->nodes[path[0]] == nullptr)
+        //         levelZeroNode->nodes[path[0]] = std::make_shared<QuadKeyTreeNode<T>>();
+        //     std::shared_ptr<QuadKeyTreeNode<T>> nodeptr = levelZeroNode->nodes[path[0]];
+        //     for (uint32 level = 1; level < path.Level(); level++) {
+        //         if (nodeptr->nodes[path[level]] == nullptr)
+        //             nodeptr->nodes[path[level]] = std::make_shared<QuadKeyTreeNode<T>>();
+        //         nodeptr = nodeptr->nodes[path[level]];
+        //     }
+
+        //     assert(nodeptr != nullptr);
+        //     nodeptr->data.push_back(element);
+        // }
     }
 
-    std::vector<const T*> GetElementsAtQuadTreePath(QuadtreePath path, bool matchEntirePathUpAndDown = true) 
+    std::vector<const T*> GetElementsAtQuadTreePath(QuadtreePath path, uint startLevel) 
     {
         std::vector<const T*> vec;
-        if (nodes[path[0]] == nullptr)
-            return vec;
 
-        std::shared_ptr<QuadKeyTreeNode<T>> nodeptr = nodes[path[0]];
-        //for (uint32 level = 1; level < path.Level(); level++) {
-        uint32 level = 0;
-        while(nodeptr != nullptr && level < path.Level()-1 ) {
-            if (matchEntirePathUpAndDown)
-                vec.insert(std::end(vec), std::begin(nodeptr->data), std::end(nodeptr->data));
-            level++;
-            nodeptr = nodeptr->nodes[path[level]];
+        const uint pathLength = path.Level();
+        uint pathIndex = 0;
+        std::shared_ptr<QuadKeyTreeNode<T>> nodeptr = levelZeroNode;
+
+        while (pathIndex < pathLength && pathIndex < startLevel && nodeptr != nullptr){
+            vec.insert(std::end(vec), std::begin(nodeptr->data), std::end(nodeptr->data));
+            uint qtIndexAtLevel = path[pathIndex];     
+            nodeptr = nodeptr->nodes[qtIndexAtLevel];
+            ++pathIndex;
         }
 
-        if (nodeptr != nullptr){
-            if (matchEntirePathUpAndDown) {
-                AddAllFromNodeAndChildren(nodeptr, vec);
-            }
-            else
-            {
-                vec.insert(std::end(vec), std::begin(nodeptr->data), std::end(nodeptr->data));                    
-            }
+        if (nodeptr)
+            AddAllFromNodeAndChildren(nodeptr, vec);
+
+        // // Always add data from level 0
+        // vec.insert(std::end(vec), std::begin(levelZeroNode->data), std::end(levelZeroNode->data));
+
+        // if (levelZeroNode->nodes[path[0]] == nullptr)
+        //     return vec;
+
+        
+        // std::shared_ptr<QuadKeyTreeNode<T>> nodeptr = levelZeroNode->nodes[path[0]];
+        // uint32 level = 0;
+        // while(nodeptr != nullptr && level <= startLevel-1 && level <= path.Level()-1 ) {
+        //     //if (matchEntirePathUpAndDown)
+        //         vec.insert(std::end(vec), std::begin(nodeptr->data), std::end(nodeptr->data));
+        //     level++;
+        //     nodeptr = nodeptr->nodes[path[level]];
+        // }
+
+        // if (nodeptr != nullptr){
+        //     // if (matchEntirePathUpAndDown) {
+        //     //     AddAllFromNodeAndChildren(nodeptr, vec);
+        //     // }
+        //     // else
+        //     // {
+        //     //     vec.insert(std::end(vec), std::begin(nodeptr->data), std::end(nodeptr->data));                    
+        //     // }
             
-        }
+        // }
 
         return vec;
     }

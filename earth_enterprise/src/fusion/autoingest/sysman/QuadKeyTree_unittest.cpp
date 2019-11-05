@@ -28,45 +28,93 @@ class QuadKeyTreeTest : public testing::Test {
 };
 
 // TEST DATA
-
+// std::array<std::string, 9> data {{ "this", "is", "some", "string", "data", 
+//                                    "one fish", "two fish" , "red fish", "blue fish"}};
+QuadtreePath qtp01("01");
+QuadtreePath qtp011("011");
+QuadtreePath qtp012("012");
+QuadtreePath qtp0123("0123");
+QuadtreePath qtp1("1");
+QuadtreePath qtp01230("01230");
+QuadtreePath qtp01231("01232");
+QuadtreePath qtpEmpty("");
 
 // TEST FUNCTIONS
-TEST_F(QuadKeyTreeTest, DoStuff) {
-    std::array<std::string, 6> data {{ "01", "012", "0123", "1", "01230", "01231" }};
-    const uchar path01[2] = {0, 1};
-    const uchar path012[3] = {0, 1, 2};
-    const uchar path0123[4] = {0, 1, 2, 3};
-    const uchar path1[1] = {1};
-    const uchar path01230[5] = {0, 1, 2, 3, 0};
-    const uchar path01231[5] = {0, 1, 2, 3, 1};
-    QuadtreePath qtp01(2, path01);
-    QuadtreePath qtp012(3, path012);
-    QuadtreePath qtp0123(4, path0123);
-    QuadtreePath qtp1(1, path1);
-    QuadtreePath qtp01230(5, path01230);
-    QuadtreePath qtp01231(5, path01231);
-    QuadKeyTree<std::string> tree;
-    tree.AddElementAtQuadTreePath(qtp01, &data[0]);
-    tree.AddElementAtQuadTreePath(qtp012, &data[1]);
-    tree.AddElementAtQuadTreePath(qtp0123, &data[2]);
-    tree.AddElementAtQuadTreePath(qtp1, &data[3]);
-    tree.AddElementAtQuadTreePath(qtp01230, &data[4]);
-    tree.AddElementAtQuadTreePath(qtp01231, &data[5]);
-    std::vector<const std::string*> vec = tree.GetElementsAtQuadTreePath(qtp0123);
-    std::vector<const std::string*> vec2 = tree.GetElementsAtQuadTreePath(qtp0123, false);
-    std::cout << "vec\n";
-    for(auto & str : vec)
-      std::cout << *str << "\n";
-    std::cout << "vec2\n";
-    for(auto & str : vec2)
-      std::cout << *str << "\n";
+TEST_F(QuadKeyTreeTest, TestNormal) {
+    QuadKeyTree<QuadtreePath> tree;
+    tree.AddElementAtQuadTreePath(qtpEmpty, &qtpEmpty);
+    tree.AddElementAtQuadTreePath(qtp1, &qtp1);
+    tree.AddElementAtQuadTreePath(qtp01, &qtp01);
+    tree.AddElementAtQuadTreePath(qtp011, &qtp011);
+    tree.AddElementAtQuadTreePath(qtp012, &qtp012);
+    tree.AddElementAtQuadTreePath(qtp0123, &qtp0123);
+    
+    std::vector<const QuadtreePath*> vec = tree.GetElementsAtQuadTreePath(qtp012, 3);
+
+    // Should have matched everything except qtp011
+    ASSERT(std::find(vec.begin(), vec.end(), &qtpEmpty) != vec.end());
+    ASSERT(std::find(vec.begin(), vec.end(), &qtp01)    != vec.end());
+    ASSERT(std::find(vec.begin(), vec.end(), &qtp012)   != vec.end());
+    ASSERT(std::find(vec.begin(), vec.end(), &qtp0123)  != vec.end());
+    ASSERT_EQ(vec.size(), 4);
+}
+
+TEST_F(QuadKeyTreeTest, EmptyQuadtreePathMatchAll) {
+    QuadKeyTree<QuadtreePath> tree;
+    tree.AddElementAtQuadTreePath(qtpEmpty, &qtpEmpty);
+    tree.AddElementAtQuadTreePath(qtp1, &qtp1);
+    tree.AddElementAtQuadTreePath(qtp01, &qtp01);
+    tree.AddElementAtQuadTreePath(qtp011, &qtp011);
+    tree.AddElementAtQuadTreePath(qtp0123, &qtp0123);
+
+    std::vector<const QuadtreePath*> vec = tree.GetElementsAtQuadTreePath(qtpEmpty, 0);
+
+    ASSERT(std::find(vec.begin(), vec.end(), &qtpEmpty) != vec.end());
+    ASSERT(std::find(vec.begin(), vec.end(), &qtp1) != vec.end());
+    ASSERT(std::find(vec.begin(), vec.end(), &qtp01)    != vec.end());
+    ASSERT(std::find(vec.begin(), vec.end(), &qtp011)   != vec.end());
+    ASSERT(std::find(vec.begin(), vec.end(), &qtp0123)  != vec.end());
     ASSERT_EQ(vec.size(), 5);
-    ASSERT_EQ(vec2.size(), 1);
-    // ASSERT_EQ(qtp01.AsString(), "01");
-    // ASSERT_EQ(qtp012.AsString(), "012");
-    // ASSERT_EQ(qtp0123.AsString(), "0123");
-    // ASSERT_EQ(qtp1.AsString(), "1");
-    //QuadKeyTree
+}
+
+TEST_F(QuadKeyTreeTest, FindBasedOnLevel) {
+    QuadKeyTree<QuadtreePath> tree;
+    tree.AddElementAtQuadTreePath(qtpEmpty, &qtpEmpty);
+    tree.AddElementAtQuadTreePath(qtp1, &qtp1);
+    tree.AddElementAtQuadTreePath(qtp01, &qtp01);
+    tree.AddElementAtQuadTreePath(qtp011, &qtp011);
+    tree.AddElementAtQuadTreePath(qtp0123, &qtp0123);
+
+    // qtp0123 has a level of 4, but we're going to request all elements that match it
+    // starting at level 2. So, this should be the same result as matching qtp01
+    // at level 2.
+    std::vector<const QuadtreePath*> vec = tree.GetElementsAtQuadTreePath(qtp0123, 2);
+    std::vector<const QuadtreePath*> vec2 = tree.GetElementsAtQuadTreePath(qtp01, 2);
+
+    ASSERT(std::find(vec.begin(), vec.end(), &qtpEmpty) != vec.end());
+    ASSERT(std::find(vec.begin(), vec.end(), &qtp01)    != vec.end());
+    ASSERT(std::find(vec.begin(), vec.end(), &qtp011)   != vec.end());
+    ASSERT(std::find(vec.begin(), vec.end(), &qtp0123)  != vec.end());
+    ASSERT_EQ(vec.size(), 4);
+    ASSERT_EQ(vec, vec2);
+}
+
+TEST_F(QuadKeyTreeTest, FindWithLevelGreaterThanPath) {
+    QuadKeyTree<QuadtreePath> tree;
+    tree.AddElementAtQuadTreePath(qtpEmpty, &qtpEmpty);
+    tree.AddElementAtQuadTreePath(qtp1, &qtp1);
+    tree.AddElementAtQuadTreePath(qtp01, &qtp01);
+    tree.AddElementAtQuadTreePath(qtp011, &qtp011);
+    tree.AddElementAtQuadTreePath(qtp0123, &qtp0123);
+
+    std::vector<const QuadtreePath*> vec = tree.GetElementsAtQuadTreePath(qtp01, 5);
+
+    // Should have matched everything except qtp1
+    ASSERT(std::find(vec.begin(), vec.end(), &qtpEmpty) != vec.end());
+    ASSERT(std::find(vec.begin(), vec.end(), &qtp01)    != vec.end());
+    ASSERT(std::find(vec.begin(), vec.end(), &qtp011)   != vec.end());
+    ASSERT(std::find(vec.begin(), vec.end(), &qtp0123)  != vec.end());
+    ASSERT_EQ(vec.size(), 4);
 }
 
 int main(int argc, char **argv) {

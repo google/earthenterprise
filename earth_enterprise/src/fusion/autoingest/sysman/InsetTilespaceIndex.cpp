@@ -24,6 +24,7 @@ Changes:
 #include "common/khException.h"
 #include "autoingest/plugins/RasterProductAsset.h"
 #include "autoingest/plugins/RasterProjectAsset.h"
+#include "autoingest/plugins/MercatorRasterProductAsset.h"
 #include "fusion/autoingest/sysman/InsetTilespaceIndex.h"
 #include <boost/range/sub_range.hpp>
 #include <boost/range/as_literal.hpp>
@@ -45,6 +46,10 @@ khExtents<double> getExtents(const khExtents<double> &extents){
 }
 
 khExtents<double> getExtents(const InsetInfo<RasterProductAssetVersion> &insetInfo){
+    return insetInfo.degExtents;
+}
+
+khExtents<double> getExtents(const InsetInfo<MercatorRasterProductAssetVersion> &insetInfo){
     return insetInfo.degExtents;
 }
 
@@ -176,7 +181,11 @@ template <class ExtentContainer>
 typename InsetTilespaceIndex<ExtentContainer>::ContainerVector
 InsetTilespaceIndex<ExtentContainer>::intersectingExtents(const QuadtreePath quadtreeMbr, uint32 minLevel, uint32 maxLevel) {
     InsetTilespaceIndex<ExtentContainer>::ContainerVector vec;
-    vec = quadTree.GetElementsAtQuadTreePath(quadtreeMbr);
+
+    // We're not worred about maxLevel. We're not trying to filter out absolutely everything thats not needed. Just making
+    // a reasonable swag at cutting down the number of insets.
+    notify(NFY_WARN, "Calling GetElementsAtQuadTreePath with minLevel of %u", minLevel);
+    vec = quadTree.GetElementsAtQuadTreePath(quadtreeMbr, minLevel);
     return vec;
     // notify(NFY_WARN, "In InsetTilespaceIndex<ExtentContainer>::intersectingExtents, about to call intersectingExtentsQuadtreePaths");
     // std::vector <QuadtreePath> intersectingQuadtreeMbrs = intersectingExtentsQuadtreePaths(quadtreeMbr, minLevel,
@@ -192,7 +201,7 @@ InsetTilespaceIndex<ExtentContainer>::intersectingExtents(const QuadtreePath qua
     // return intersectingExtentsVec;
 }
 
-
+// Explicit instantiaions
 template class InsetTilespaceIndex<khExtents<double>>;
 template class InsetTilespaceIndex<InsetInfo<RasterProductAssetVersion>>;
-//template class InsetTilespaceIndex<InsetInfoAndIndex>;
+template class InsetTilespaceIndex<InsetInfo<MercatorRasterProductAssetVersion>>;

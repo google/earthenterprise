@@ -1098,27 +1098,29 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
            i+1, genInfo.size());
     int maxQuadTreeLevel = 0;
     QuadtreePath coverageMBR = localIndex.getQuadtreeMBR(genInfo[i].coverage.degreeExtents(), maxQuadTreeLevel, endMinifyLevel);
-    notify(NFY_WARN, "In BuildIndex, genInfo[%u].coverage is %f, %f, %f, %f", i, genInfo[i].coverage.degreeExtents().beginX(), genInfo[i].coverage.degreeExtents().beginY(), genInfo[i].coverage.degreeExtents().endX(), genInfo[i].coverage.degreeExtents().endY());
-    notify(NFY_WARN, "In BuildIndex, QuadtreePath for genInfo[%u].coverage is %s", i, coverageMBR.AsString().c_str());
-    notify(NFY_WARN, "Number of insets before quadpath filtering: %lu", insetInfoPtrs.size());
-    std::vector<const InsetInfo<RasterProductAssetVersion>*> qualifiedInsetInfoPtrs = /*tilespaceIndex*/localIndex.intersectingExtents(coverageMBR, beginMinifyLevel, endMinifyLevel);
-    notify(NFY_WARN, "Number of insets after quadpath filtering:  %lu", qualifiedInsetInfoPtrs.size());
+    std::vector<const InsetInfo<RasterProductAssetVersion>*> qualifiedInsetInfoPtrs = /*tilespaceIndex*/localIndex.intersectingExtents(coverageMBR, coverageMBR.Level() > 0 ? 1 : 0 /*beginMinifyLevel*/, endMinifyLevel);
     overlapEnvelope<RasterProductAssetVersion> env (
         type, qualifiedInsetInfoPtrs, qualifiedInsetInfoPtrs.size(),
         beginMinifyLevel, endMinifyLevel, i);
 
     std::shared_ptr<OverlapCalculator<RasterProductAssetVersion>> calc =
         std::make_shared<OverlapCalculator<RasterProductAssetVersion>>(env);
-    std::vector<uint> tempNeededIndexes = std::move(calc->PreprocessForInset(genInfo[i].coverage));
-    for (auto & idx : tempNeededIndexes) {
-      auto infoptr = qualifiedInsetInfoPtrs[idx];
+    // std::vector<uint> tempNeededIndexes = std::move(calc->PreprocessForInset(genInfo[i].coverage));
+    // for (auto & idx : tempNeededIndexes) {
+    //   auto infoptr = qualifiedInsetInfoPtrs[idx];
+    //   auto it = indexMap.find(infoptr);
+    //   if (it != indexMap.end())
+    //     neededIndexes.push_back(it->second);
+    // }
+    for (auto &infoptr : qualifiedInsetInfoPtrs){
       auto it = indexMap.find(infoptr);
-      if (it != indexMap.end())
+      assert(it != indexMap.end());
+      //if (it != indexMap.end())
         neededIndexes.push_back(it->second);
     }
     // COMMENTING OUT the below line for now. With the new quadtree filtering, this should automatically get picked up    
     //neededIndexes.push_back(i); // each inset always intersects itself
-    notify(NFY_WARN, "Size of neededIndexes is %zu\n", neededIndexes.size());
+    //notify(NFY_WARN, "Size of neededIndexes is %zu\n", neededIndexes.size());
     // calculate the level range that will be minified
     uint effectiveBeginMinifyLevel =
       std::max(genInfo[i].coverage.beginLevel(), beginMinifyLevel);
@@ -1137,10 +1139,8 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
 
     packetGenConfig.useOpaqueTopInsetInsteadOfMerge = true;
     packetGenConfig.insets.reserve(neededIndexes.size());
-    notify(NFY_WARN, "About to start looping through neededIndexes.\n");
     for (const auto& idx : neededIndexes) {
       const PacketGenInfo &otherGenInfo(genInfo[idx]);
-      notify(NFY_WARN, "Processing genInfo[%u]\n", idx);
       // +1 below since we minify from the next level
       bool otherWillContribToMinify =
         otherGenInfo.coverage.intersectsLevels
@@ -1194,10 +1194,8 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     packgenvers.push_back(packgen);
   }
 
-notify(NFY_WARN, "At the end, about to call MakeIndexSubAsset.\n");
   // Make index subasset (RasterGEIndex).
   uint32 retval = MakeIndexSubAsset(packgenkids, packgenassets, packgenvers, genInfo, date);
-notify(NFY_WARN, "At the end, finished calling MakeIndexSubAsset. Returning...\n");
   
   return retval;
 }
