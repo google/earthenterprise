@@ -25,11 +25,11 @@ Improved memory usage reporting for caches
 . The memory usage estimation for the asset and asset version caches
 has been improved and is much more accurate.
 
-Optimized handling for task status updates
+Optimized command and message processing
 
-. System manager's performance while handling updates about running
-tasks has been improved. This update is experimental and can be
-enabled using the
+. System manager's performance while handling cancel commands and
+updates about running tasks has been improved. These updates are
+experimental and can be enabled using the
 
 GraphOperations flag
 
@@ -60,7 +60,9 @@ new PostgreSQL version used by Open GEE 5.3.3.
 
 Resolved Issues        Number  Description  Resolution  1202  Can't
 select .KIP as source  Select 'header.xml' in .KIP directory to select
-.KIP
+.KIP  1517  geglxinfo should parse vector packets  geglxinfo will
+parse vector packets  1241  geglxinfo should parse all meshes in
+terrain packets  geglxinfo will parse all meshes in terrain packets
 
 -[ Known Issues ]-
 

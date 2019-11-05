@@ -107,10 +107,15 @@ Note: Assigning more than two CPUs for each imagery project task
 
 -[ Sample: ImageryPacketLevel.taskrule ]-
 
-"<TaskRule>  <taskname>ImageryPacketLevel</taskname>
-<inputConstraints/>  <outputConstraints/>  <cpuConstraint>
-<minNumCPU>2</minNumCPU>    <maxNumCPU>2</maxNumCPU>  </cpuConstraint>
-</TaskRule>"
+   <TaskRule>
+     <taskname>ImageryPacketLevel</taskname>
+     <inputConstraints/>
+     <outputConstraints/>
+     <cpuConstraint>
+       <minNumCPU>2</minNumCPU>
+       <maxNumCPU>2</maxNumCPU>
+     </cpuConstraint>
+   </TaskRule>
 
 -[ TerrainPacketLevel task rule ]-
 
@@ -128,10 +133,15 @@ a number between 2 and 6.
 
 -[ Sample: TerrainPacketLevel.taskrule ]-
 
-"<TaskRule>  <taskname>TerrainPacketLevel</taskname>
-<inputConstraints/>  <outputConstraints/>  <cpuConstraint>
-<minNumCPU>1</minNumCPU>    <maxNumCPU>6</maxNumCPU>  </cpuConstraint>
-</TaskRule>"
+   <TaskRule>
+     <taskname>TerrainPacketLevel</taskname>
+     <inputConstraints/>
+     <outputConstraints/>
+     <cpuConstraint>
+       <minNumCPU>1</minNumCPU>
+       <maxNumCPU>6</maxNumCPU>
+     </cpuConstraint>
+   </TaskRule>
 
 -[ CombinedTerrain task rule ]-
 
@@ -144,9 +154,15 @@ CombinedTerrain serial process.
 
 -[ Sample: CombinedTerrain.taskrule ]-
 
-"<TaskRule>  <taskname>CombinedTerrain</taskname>  <inputConstraints/>
-<outputConstraints/>  <cpuConstraint>    <minNumCPU>7</minNumCPU>
-<maxNumCPU>7</maxNumCPU>  </cpuConstraint> </TaskRule>"
+   <TaskRule>
+     <taskname>CombinedTerrain</taskname>
+     <inputConstraints/>
+     <outputConstraints/>
+     <cpuConstraint>
+       <minNumCPU>7</minNumCPU>
+       <maxNumCPU>7</maxNumCPU>
+     </cpuConstraint>
+   </TaskRule>
 
 -[ MapLayerLevel task rule ]-
 
@@ -158,9 +174,15 @@ set the rule to min/max 3.
 
 -[ Sample: MapLayerLevel.taskrule ]-
 
-"<TaskRule>  <taskname>MapLayerLevel</taskname>  <inputConstraints/>
-<outputConstraints/>  <cpuConstraint>    <minNumCPU>4</minNumCPU>
-<maxNumCPU>4</maxNumCPU>  </cpuConstraint> </TaskRule>"
+   <TaskRule>
+     <taskname>MapLayerLevel</taskname>
+     <inputConstraints/>
+     <outputConstraints/>
+     <cpuConstraint>
+       <minNumCPU>4</minNumCPU>
+       <maxNumCPU>4</maxNumCPU>
+     </cpuConstraint>
+   </TaskRule>
 
 -[ KRP task rule ]-
 
@@ -182,18 +204,26 @@ Defining volumes
 
 -[ Sample: KRP.taskrule ]-
 
-"<TaskRule>  <taskname>KRP</taskname>  <inputConstraints/>
-<outputConstraints>    <outputConstraint>      <num>0</num>
-<requiredVolume>products</requiredVolume>
-<pathPattern>${assetref:dirname:sansext}-
-${vernum}${defaultpath:ext}</pathPattern>    </outputConstraint>
-</outputConstraints>  <cpuConstraint>    <minNumCPU>1</minNumCPU>
-<maxNumCPU>1</maxNumCPU>  </cpuConstraint> </TaskRule>"
+   <TaskRule>
+     <taskname>KRP</taskname>
+     <inputConstraints/>
+     <outputConstraints>
+       <outputConstraint>
+         <num>0</num>
+         <requiredVolume>products</requiredVolume>
+         <pathPattern>${assetref:dirname:sansext}-${vernum}${defaultpath:ext}</pathPattern>
+       </outputConstraint>
+     </outputConstraints>
+     <cpuConstraint>
+       <minNumCPU>1</minNumCPU>
+       <maxNumCPU>1</maxNumCPU>
+     </cpuConstraint>
+   </TaskRule>
 
 You can also enter a second "requiredvolume" tag in your task rule to
 specify the next available volume in case the first volume fills up.
 However, you must to restart the system manager to trigger Fusion to
-write files to the next volume.
+wri.. code-block:: xml.. code-block:: xmlte files to the next volume.
 
 -[ KRMP task rule ]-
 
@@ -213,13 +243,21 @@ Defining Volumes
 
 -[ Sample: KRMP.taskrule ]-
 
-"<TaskRule>  <taskname>KRMP</taskname>  <inputConstraints/>
-<outputConstraints>    <outputConstraint>      <num>0</num>
-<requiredVolume>products</requiredVolume>
-<pathPattern>${assetref:dirname:sansext}-
-${vernum}${defaultpath:ext}</pathPattern>    </outputConstraint>
-</outputConstraints>  <cpuConstraint>    <minNumCPU>1</minNumCPU>
-<maxNumCPU>1</maxNumCPU>  </cpuConstraint> </TaskRule>"
+   <TaskRule>
+     <taskname>KRMP</taskname>
+     <inputConstraints/>
+     <outputConstraints>
+       <outputConstraint>
+         <num>0</num>
+         <requiredVolume>products</requiredVolume>
+         <pathPattern>${assetref:dirname:sansext}-${vernum}${defaultpath:ext}</pathPattern>
+       </outputConstraint>
+     </outputConstraints>
+     <cpuConstraint>
+       <minNumCPU>1</minNumCPU>
+       <maxNumCPU>1</maxNumCPU>
+     </cpuConstraint>
+   </TaskRule>
 
 You can also enter a second "requiredvolume" tag in your task rule to
 specify the next available volume in case the first volume fills up.
@@ -237,9 +275,13 @@ you are creating is called "products".
 
 -[ Sample: volumes.xml ]-
 
-"<products>  <netpath>/gevol/products</netpath>  <host>linux</host>
-<localpath>/gevol/products</localpath>
-<reserveSpace>100000</reserveSpace>  <isTmp>0</isTmp> </products>"
+   <products>
+     <netpath>/gevol/products</netpath>
+     <host>linux</host>
+     <localpath>/gevol/products</localpath>
+     <reserveSpace>100000</reserveSpace>
+     <isTmp>0</isTmp>
+   </products>
 
 -[ Example of File Locations ]-
 
@@ -293,15 +335,28 @@ automatically as part of the Open GEE Fusion install, so users that
 want to modify the parameters below must first create an "XMLparams"
 file. The "XMLparams" file has the following format:
 
-"# comments are preceded by '#'  # options are case-insensitive, and
-all need not be present  # the initial size of the XML heap in bytes #
-default is 16384 INIT_HEAP_SIZE=<value>  # the max size of the XML
-heap in bytes # default is 131072 MAX_HEAP_SIZE=<value>  # the size of
-XML heap allocation blocks in bytes # default is 4096
-BLOCK_SIZE=<value>  # whether or not to purge the XML cache; valid
-values are 0 or 1 # default is 1 PURGE=<value>  # the level at which
-to purge the XML cache; can be 1 (most often) to 5 (least often) #
-default is 3 PURGE_LEVEL=<value>"
+   # comments are preceded by '#'
+   # options are case-insensitive, and all need not be present
+
+   # the initial size of the XML heap in bytes
+   # default is 16384
+   INIT_HEAP_SIZE=<value>
+
+   # the max size of the XML heap in bytes
+   # default is 131072
+   MAX_HEAP_SIZE=<value>
+
+   # the size of XML heap allocation blocks in bytes
+   # default is 4096
+   BLOCK_SIZE=<value>
+
+   # whether or not to purge the XML cache; valid values are 0 or 1
+   # default is 1
+   PURGE=<value>
+
+   # the level at which to purge the XML cache; can be 1 (most often) to 5 (least often)
+   # default is 3
+   PURGE_LEVEL=<value>
 
 -[ PackGen analysis thread configuration ]-
 
@@ -325,7 +380,7 @@ by setting "MutexTimedWaitSec" in "/gevol/assets/.config/misc.xml"
 
 Included in "/gevol/assets/.config/misc.xml" is a "GraphOperations"
 option, and it may be set to "1" (true) or "0" (false). This enables
-optimized versions of certain operations. These options are
+optimized versions of certain operations. These optimizations are
 experimental and may contain bugs.
 
 -[ Learn more ]-

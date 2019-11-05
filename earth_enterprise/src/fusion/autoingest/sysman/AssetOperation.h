@@ -22,6 +22,7 @@
 #include "MiscConfig.h"
 
 void RebuildVersion(const SharedString & ref, bool graphOps = MiscConfig::Instance().GraphOperations);
+void CancelVersion(const SharedString & ref, bool graphOps = MiscConfig::Instance().GraphOperations);
 void HandleTaskProgress(const TaskProgressMsg & msg, bool graphOps = MiscConfig::Instance().GraphOperations);
 void HandleTaskDone(const TaskDoneMsg & msg, bool graphOps = MiscConfig::Instance().GraphOperations);
 void HandleExternalStateChange(

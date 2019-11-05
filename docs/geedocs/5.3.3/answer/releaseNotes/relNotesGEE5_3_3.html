@@ -87,10 +87,10 @@ which resources overlap.</p>
 The memory usage estimation for the asset and
 asset version caches has been improved and is
 much more accurate.</p>
-<p><strong>Optimized handling for task status updates</strong>.
-System manager’s performance while handling updates about running tasks
-has been improved. This update is experimental and can be enabled using
-the <a class="reference internal" href="../fusionAdministration/confTaskRulesForFusionPerf.html#graph-operations"><span class="std std-ref">GraphOperations flag</span></a>.</p>
+<p><strong>Optimized command and message processing</strong>.
+System manager’s performance while handling cancel commands and updates
+about running tasks has been improved. These updates are experimental and
+can be enabled using the <a class="reference internal" href="../fusionAdministration/confTaskRulesForFusionPerf.html#graph-operations"><span class="std std-ref">GraphOperations flag</span></a>.</p>
 <p class="rubric">Supported Platforms</p>
 <p>The Open GEE 5.3.3 release is supported on 64-bit versions of the
 following operating systems:</p>
@@ -125,6 +125,14 @@ correctly to the new PostgreSQL version used by Open GEE 5.3.3.</p>
 <tr class="row-even"><td>1202</td>
 <td>Can’t select .KIP as source</td>
 <td>Select ‘header.xml’ in .KIP directory to select .KIP</td>
+</tr>
+<tr class="row-odd"><td>1517</td>
+<td>geglxinfo should parse vector packets</td>
+<td>geglxinfo will parse vector packets</td>
+</tr>
+<tr class="row-even"><td>1241</td>
+<td>geglxinfo should parse all meshes in terrain packets</td>
+<td>geglxinfo will parse all meshes in terrain packets</td>
 </tr>
 </tbody>
 </table>

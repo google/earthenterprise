@@ -63,6 +63,33 @@ void RebuildVersion(const SharedString & ref, bool graphOps) {
   }
 }
 
+void CancelVersion(const SharedString & ref, bool graphOps) {
+  if (graphOps) {
+    {
+      auto version = assetOpStorageManager->Get(ref);
+      if (!version) {
+        notify(NFY_WARN, "Could not load %s for cancel", ref.toString().c_str());
+        return;
+      }
+      else if (!version->CanCancel()) {
+        throw khException(kh::tr("%1 already %2. Unable to cancel.")
+                          .arg(ToQString(ref), ToQString(version->state)));
+      }
+    }
+
+    stateUpdater->SetStateForRefAndDependents(ref, AssetDefs::Canceled, AssetDefs::NotFinished);
+  }
+  else {
+    MutableAssetVersionD version(ref);
+    if (version) {
+      version->Cancel();
+    }
+    else {
+      notify(NFY_WARN, "Could not load %s for cancel", ref.toString().c_str());
+    }
+  }
+}
+
 void HandleTaskProgress(const TaskProgressMsg & msg, bool graphOps) {
   if (graphOps) {
     auto version = assetOpStorageManager->GetMutable(msg.verref);

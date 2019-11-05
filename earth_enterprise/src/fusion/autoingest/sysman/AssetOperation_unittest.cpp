@@ -208,6 +208,68 @@ TEST_F(AssetOperationTest, RebuildBadVersion) {
   ASSERT_FALSE(sm.GetVersion()->stateSetForRefAndDependents);
 }
 
+TEST_F(AssetOperationTest, Cancel) {
+  sm.GetMutableVersion()->state = AssetDefs::Waiting;
+  CancelVersion(REF, true);
+  ASSERT_TRUE(sm.GetVersion()->stateSetForRefAndDependents);
+  ASSERT_EQ(sm.GetVersion()->refAndDependentsState, AssetDefs::Canceled);
+
+  // Make sure the function that determines which states to update returns the
+  // correct values.
+  ASSERT_TRUE(sm.GetVersion()->updateStateFunc(AssetDefs::New));
+  ASSERT_TRUE(sm.GetVersion()->updateStateFunc(AssetDefs::Waiting));
+  ASSERT_TRUE(sm.GetVersion()->updateStateFunc(AssetDefs::Blocked));
+  ASSERT_TRUE(sm.GetVersion()->updateStateFunc(AssetDefs::Queued));
+  ASSERT_TRUE(sm.GetVersion()->updateStateFunc(AssetDefs::InProgress));
+
+  ASSERT_FALSE(sm.GetVersion()->updateStateFunc(AssetDefs::Failed));
+  ASSERT_FALSE(sm.GetVersion()->updateStateFunc(AssetDefs::Succeeded));
+  ASSERT_FALSE(sm.GetVersion()->updateStateFunc(AssetDefs::Canceled));
+  ASSERT_FALSE(sm.GetVersion()->updateStateFunc(AssetDefs::Offline));
+  ASSERT_FALSE(sm.GetVersion()->updateStateFunc(AssetDefs::Bad));
+}
+
+void CancelWrongState(MockStorageManager & sm, AssetDefs::State state) {
+  sm.GetMutableVersion()->state = state;
+  ASSERT_THROW(CancelVersion(REF, true), khException);
+}
+
+TEST_F(AssetOperationTest, CancelWrongStateSucceeded) {
+  CancelWrongState(sm, AssetDefs::Succeeded);
+}
+
+TEST_F(AssetOperationTest, CancelWrongStateFailed) {
+  CancelWrongState(sm, AssetDefs::Failed);
+}
+
+TEST_F(AssetOperationTest, CancelWrongStateCanceled) {
+  CancelWrongState(sm, AssetDefs::Canceled);
+}
+
+TEST_F(AssetOperationTest, CancelWrongStateOffline) {
+  CancelWrongState(sm, AssetDefs::Offline);
+}
+
+TEST_F(AssetOperationTest, CancelWrongStateBad) {
+  CancelWrongState(sm, AssetDefs::Bad);
+}
+
+TEST_F(AssetOperationTest, CancelWrongStateNew) {
+  CancelWrongState(sm, AssetDefs::New);
+}
+
+TEST_F(AssetOperationTest, CancelWrongSubtype) {
+  sm.GetMutableVersion()->state = AssetDefs::InProgress;
+  sm.GetMutableVersion()->subtype = "Source";
+  ASSERT_THROW(CancelVersion(REF, true), khException);
+}
+
+TEST_F(AssetOperationTest, CancelBadVersion) {
+  sm.GetMutableVersion()->type = AssetDefs::Invalid;
+  CancelVersion(REF, true);
+  ASSERT_FALSE(sm.GetVersion()->stateSetForRefAndDependents);
+}
+
 TEST_F(AssetOperationTest, Progress) {
   const uint32 TASKID = 123;
   const time_t BEGIN_TIME = 456;

@@ -409,7 +409,7 @@ Configure Fusion performance
       Included in ``/gevol/assets/.config/misc.xml`` is a
       ``GraphOperations`` option, and it may be set to ``1`` (true) or
       ``0`` (false). This enables optimized versions of certain
-      operations. These options are experimental and may contain bugs.
+      operations. These optimizations are experimental and may contain bugs.
 
       .. rubric:: Learn more
 
