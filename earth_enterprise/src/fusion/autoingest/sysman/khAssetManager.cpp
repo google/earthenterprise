@@ -665,10 +665,7 @@ khAssetManager::TaskDone(const TaskDoneMsg &msg)
   alwaysTaskCmds.push_back
     (TaskCmd(std::mem_fun(&khResourceManager::BumpDownBlockers)));
 
-  AssetVersionD ver(msg.verref);
-  if (ver->taskid == msg.taskid) {
-    MutableAssetVersionD(msg.verref)->HandleTaskDone(msg);
-  }
+  ::HandleTaskDone(msg);
 }
 
 void

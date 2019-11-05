@@ -34,13 +34,17 @@ class StateChangeException : public khException {
     khException(msg), location(loc) {}
 };
 
-// Helper struct for passing data about input and child states.
+// Helper structs for passing data about input and child states.
+struct WaitingFor {
+  uint32 inputs;
+  uint32 children;
+};
+
 struct InputAndChildStateData {
   AssetDefs::State stateByInputs;
   AssetDefs::State stateByChildren;
   bool blockersAreOffline;
-  uint32 numInputsWaitingFor;
-  uint32 numChildrenWaitingFor;
+  WaitingFor waitingFor;
 };
 
 /******************************************************************************
@@ -192,9 +196,12 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   virtual void ResetOutFiles(const std::vector<std::string> &) {
     assert(false);
   }
-  virtual bool RecalcState() const {
+  virtual bool RecalcState(WaitingFor &) const {
     assert(false);
     return false;
+  }
+  virtual void SetAndPropagateState(AssetDefs::State) {
+    assert(false);
   }
 
   // static helpers
