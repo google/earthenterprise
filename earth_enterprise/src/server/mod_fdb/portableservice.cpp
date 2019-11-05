@@ -710,9 +710,18 @@ int PortableService::DoQuery(request_rec* r,
 
   if ((arg_map["request"] == "ImageryMaps") ||
       (arg_map["request"] == "VectorMapsRaster")) {
-    x = atoi(arg_map["x"].c_str());
-    y = atoi(arg_map["y"].c_str());
-    z = atoi(arg_map["z"].c_str());
+    if(arg_map["x"].empty())
+        x = atoi(arg_map["col"].c_str());
+    else
+        x = atoi(arg_map["x"].c_str());
+    if(arg_map["y"].empty())
+        y = atoi(arg_map["row"].c_str());
+    else
+        y = atoi(arg_map["y"].c_str());
+    if(arg_map["z"].empty())
+        z = atoi(arg_map["level"].c_str());
+    else
+        z = atoi(arg_map["z"].c_str());
     if (z > QuadtreePath::kMaxLevel) {
       ap_log_rerror(APLOG_MARK, APLOG_WARNING, 0, r,
                     "Zoom level exceeds maximum allowed value.");
