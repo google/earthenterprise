@@ -216,6 +216,7 @@ Cancel Project
   |------------|
   | InProgress |
   | Queued     |
+  | Succeeded  |
 * Verify that the state of imagery project "StatePropagationTest_CleanAfterCancel" is "Canceled"
 
 Clean Project

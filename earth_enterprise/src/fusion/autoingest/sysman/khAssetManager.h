@@ -67,6 +67,7 @@ class khAssetManagerInterface {
  public:
   virtual void NotifyVersionStateChange(const SharedString &ref,
                                         AssetDefs::State state) = 0;
+  virtual void NotifyVersionProgress(const SharedString &ref, double progress) = 0;
 };
 
 class khAssetManager : public khAssetManagerInterface
@@ -87,8 +88,8 @@ class khAssetManager : public khAssetManagerInterface
   // routines others can call to tell me about things that need to be done
   // once the AssetGuard has been released
   virtual void NotifyVersionStateChange(const SharedString &ref,
-                                        AssetDefs::State state);
-  void NotifyVersionProgress(const SharedString &ref,double progress);
+                                        AssetDefs::State state) override;
+  virtual void NotifyVersionProgress(const SharedString &ref, double progress) override;
   void SubmitTask(const SharedString &verref, const TaskDef &taskdef,
                   int32 priority = 0);
   void DeleteTask(const std::string &verref);
