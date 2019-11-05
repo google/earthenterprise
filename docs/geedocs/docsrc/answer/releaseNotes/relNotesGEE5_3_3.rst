@@ -68,6 +68,9 @@ Release notes: Open GEE 5.3.3
          * - 1517
            - geglxinfo should parse vector packets
            - geglxinfo will parse vector packets
+         * - 1241
+           - geglxinfo should parse all meshes in terrain packets
+           - geglxinfo will parse all meshes in terrain packets
 
       .. rubric:: Known Issues
 
