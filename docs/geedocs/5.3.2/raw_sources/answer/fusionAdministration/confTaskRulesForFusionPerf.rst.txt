@@ -119,9 +119,17 @@ Configure Fusion performance
 
       .. rubric:: Sample: ImageryPacketLevel.taskrule
 
-      .. container::
+      .. code-block:: xml
 
-         ``<TaskRule>  <taskname>ImageryPacketLevel</taskname>  <inputConstraints/>  <outputConstraints/>  <cpuConstraint>    <minNumCPU>2</minNumCPU>    <maxNumCPU>2</maxNumCPU>  </cpuConstraint> </TaskRule>``
+         <TaskRule>
+           <taskname>ImageryPacketLevel</taskname>
+           <inputConstraints/>
+           <outputConstraints/>
+           <cpuConstraint>
+             <minNumCPU>2</minNumCPU>
+             <maxNumCPU>2</maxNumCPU>
+           </cpuConstraint>
+         </TaskRule>
 
       .. rubric:: TerrainPacketLevel task rule
 
@@ -139,9 +147,17 @@ Configure Fusion performance
 
       .. rubric:: Sample: TerrainPacketLevel.taskrule
 
-      .. container::
+      .. code-block:: xml
 
-         ``<TaskRule>  <taskname>TerrainPacketLevel</taskname>  <inputConstraints/>  <outputConstraints/>  <cpuConstraint>    <minNumCPU>1</minNumCPU>    <maxNumCPU>6</maxNumCPU>  </cpuConstraint> </TaskRule>``
+         <TaskRule>
+           <taskname>TerrainPacketLevel</taskname>
+           <inputConstraints/>
+           <outputConstraints/>
+           <cpuConstraint>
+             <minNumCPU>1</minNumCPU>
+             <maxNumCPU>6</maxNumCPU>
+           </cpuConstraint>
+         </TaskRule>
 
       .. rubric:: CombinedTerrain task rule
 
@@ -154,10 +170,17 @@ Configure Fusion performance
 
       .. rubric:: Sample: CombinedTerrain.taskrule
 
+      .. code-block:: xml
 
-      .. container::
-
-         ``<TaskRule>  <taskname>CombinedTerrain</taskname>  <inputConstraints/>  <outputConstraints/>  <cpuConstraint>    <minNumCPU>7</minNumCPU>    <maxNumCPU>7</maxNumCPU>  </cpuConstraint> </TaskRule>``
+         <TaskRule>
+           <taskname>CombinedTerrain</taskname>
+           <inputConstraints/>
+           <outputConstraints/>
+           <cpuConstraint>
+             <minNumCPU>7</minNumCPU>
+             <maxNumCPU>7</maxNumCPU>
+           </cpuConstraint>
+         </TaskRule>
 
       .. rubric:: MapLayerLevel task rule
 
@@ -170,9 +193,17 @@ Configure Fusion performance
       .. rubric:: Sample: MapLayerLevel.taskrule
          :name: sample-maplayerlevel.taskrule
 
-      .. container::
+      .. code-block:: xml
 
-         ``<TaskRule>  <taskname>MapLayerLevel</taskname>  <inputConstraints/>  <outputConstraints/>  <cpuConstraint>    <minNumCPU>4</minNumCPU>    <maxNumCPU>4</maxNumCPU>  </cpuConstraint> </TaskRule>``
+         <TaskRule>
+           <taskname>MapLayerLevel</taskname>
+           <inputConstraints/>
+           <outputConstraints/>
+           <cpuConstraint>
+             <minNumCPU>4</minNumCPU>
+             <maxNumCPU>4</maxNumCPU>
+           </cpuConstraint>
+         </TaskRule>
 
       .. rubric:: KRP task rule
          :name: krp-task-rule
@@ -189,14 +220,28 @@ Configure Fusion performance
 
       .. rubric:: Sample: KRP.taskrule
 
-      .. container::
+      .. code-block:: xml
 
-         ``<TaskRule>  <taskname>KRP</taskname>  <inputConstraints/>  <outputConstraints>    <outputConstraint>      <num>0</num>      <requiredVolume>products</requiredVolume>      <pathPattern>${assetref:dirname:sansext}-      ${vernum}${defaultpath:ext}</pathPattern>    </outputConstraint>  </outputConstraints>  <cpuConstraint>    <minNumCPU>1</minNumCPU>    <maxNumCPU>1</maxNumCPU>  </cpuConstraint> </TaskRule>``
+         <TaskRule>
+           <taskname>KRP</taskname>
+           <inputConstraints/>
+           <outputConstraints>
+             <outputConstraint>
+               <num>0</num>
+               <requiredVolume>products</requiredVolume>
+               <pathPattern>${assetref:dirname:sansext}-${vernum}${defaultpath:ext}</pathPattern>
+             </outputConstraint>
+           </outputConstraints>
+           <cpuConstraint>
+             <minNumCPU>1</minNumCPU>
+             <maxNumCPU>1</maxNumCPU>
+           </cpuConstraint>
+         </TaskRule>
 
       You can also enter a second ``requiredvolume`` tag in your task
       rule to specify the next available volume in case the first volume
       fills up. However, you must to restart the system manager to
-      trigger Fusion to write files to the next volume.
+      trigger Fusion to wri.. code-block:: xml.. code-block:: xmlte files to the next volume.
 
       .. rubric:: KRMP task rule
          :name: krmp-task-rule
@@ -211,9 +256,23 @@ Configure Fusion performance
 
       .. rubric:: Sample: KRMP.taskrule
 
-      .. container::
+      .. code-block:: xml
 
-         ``<TaskRule>  <taskname>KRMP</taskname>  <inputConstraints/>  <outputConstraints>    <outputConstraint>      <num>0</num>      <requiredVolume>products</requiredVolume>      <pathPattern>${assetref:dirname:sansext}-      ${vernum}${defaultpath:ext}</pathPattern>    </outputConstraint>  </outputConstraints>  <cpuConstraint>    <minNumCPU>1</minNumCPU>    <maxNumCPU>1</maxNumCPU>  </cpuConstraint> </TaskRule>``
+         <TaskRule>
+           <taskname>KRMP</taskname>
+           <inputConstraints/>
+           <outputConstraints>
+             <outputConstraint>
+               <num>0</num>
+               <requiredVolume>products</requiredVolume>
+               <pathPattern>${assetref:dirname:sansext}-${vernum}${defaultpath:ext}</pathPattern>
+             </outputConstraint>
+           </outputConstraints>
+           <cpuConstraint>
+             <minNumCPU>1</minNumCPU>
+             <maxNumCPU>1</maxNumCPU>
+           </cpuConstraint>
+         </TaskRule>
 
       You can also enter a second ``requiredvolume`` tag in your task
       rule to specify the next available volume in case the first volume
@@ -233,9 +292,15 @@ Configure Fusion performance
       .. rubric:: Sample: volumes.xml
          :name: sample-volumes.xml
 
-      .. container::
+      .. code-block:: xml
 
-         ``<products>  <netpath>/gevol/products</netpath>  <host>linux</host>  <localpath>/gevol/products</localpath>  <reserveSpace>100000</reserveSpace>  <isTmp>0</isTmp> </products>``
+         <products>
+           <netpath>/gevol/products</netpath>
+           <host>linux</host>
+           <localpath>/gevol/products</localpath>
+           <reserveSpace>100000</reserveSpace>
+           <isTmp>0</isTmp>
+         </products>
 
       .. _Example_File_Locations:
       .. rubric:: Example of File Locations
@@ -294,7 +359,30 @@ Configure Fusion performance
       create an ``XMLparams`` file. The ``XMLparams`` file has the
       following format:
 
-      ``# comments are preceded by '#'  # options are case-insensitive, and all need not be present  # the initial size of the XML heap in bytes # default is 16384 INIT_HEAP_SIZE=<value>  # the max size of the XML heap in bytes # default is 131072 MAX_HEAP_SIZE=<value>  # the size of XML heap allocation blocks in bytes # default is 4096 BLOCK_SIZE=<value>  # whether or not to purge the XML cache; valid values are 0 or 1 # default is 1 PURGE=<value>  # the level at which to purge the XML cache; can be 1 (most often) to 5 (least often) # default is 3 PURGE_LEVEL=<value>``
+      .. code-block:: sh
+
+         # comments are preceded by '#'
+         # options are case-insensitive, and all need not be present
+
+         # the initial size of the XML heap in bytes
+         # default is 16384
+         INIT_HEAP_SIZE=<value>
+
+         # the max size of the XML heap in bytes
+         # default is 131072
+         MAX_HEAP_SIZE=<value>
+
+         # the size of XML heap allocation blocks in bytes
+         # default is 4096
+         BLOCK_SIZE=<value>
+
+         # whether or not to purge the XML cache; valid values are 0 or 1
+         # default is 1
+         PURGE=<value>
+
+         # the level at which to purge the XML cache; can be 1 (most often) to 5 (least often)
+         # default is 3
+         PURGE_LEVEL=<value>
 
       .. rubric:: PackGen analysis thread configuration
 

@@ -226,7 +226,7 @@ Specifying Search Fields for Individual Layers
 
          If you have logged in to this server with Google
          Earth EC previously, log out, clear your cache, and log back
-         in. See `clearing your cache <../answer/6010060.html>`__.
+         in. See :doc:`clearing your cache <../googleEarthEnterpriseClient/clearGoogleEarthEC>`.
 
       Google Earth EC displays your database with the search field you
       specified. When you enter a search string, such as “San”, all of
