@@ -544,6 +544,16 @@ class GlcAssembler(object):
   #   "polygon":"-- polygon --"
   #   "is_2d":true
   # }
+
+  def WritePolygonFile(self, polygon, logger):
+    with open(self.polygon_file, "w") as fp:
+      # Check XML validity and standardize representation
+      utils.PrintAndLog("Checking polygon")
+      xml = etree.ElementTree(etree.fromstring(str(polygon)))
+      utils.PrintAndLog("Writing polygon")
+      xml.write(fp, xml_declaration=True, encoding='UTF-8')
+      utils.PrintAndLog("SUCCESS", logger, None)
+
   def AssembleGlc(self, form_):
     """Assemble a 2d or 3d glc based on given parameters."""
     utils.PrintAndLog("Assembling ...")
@@ -604,13 +614,7 @@ class GlcAssembler(object):
 
       utils.PrintAndLog("Create polygon file: %s" % self.polygon_file, logger)
 
-      with open(self.polygon_file, "w") as fp:
-        # Check XML validity and standardize representation
-        utils.PrintAndLog("Checking polygon")
-        xml = etree.ElementTree(etree.fromstring(str(spec["polygon"])))
-        utils.PrintAndLog("Writing polygon")
-        xml.write(fp, xml_declaration=True, encoding='UTF-8')
-        utils.PrintAndLog("SUCCESS", logger, None)
+      self.WritePolygonFile(spec["polygon"], logger)
 
       if spec["is_2d"]:
         utils.PrintAndLog("Building 2d glc at %s ..." % path, logger)
