@@ -1168,6 +1168,8 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     packgenkids.push_back(packgen->GetRef());
     packgenassets.push_back(packgen->GetAssetRef());
     packgenvers.push_back(packgen);
+    Asset::storageManager().WriteDirty();
+    AssetVersion::storageManager().WriteDirty();
   }
 
   // Make index subasset (RasterGEIndex).
