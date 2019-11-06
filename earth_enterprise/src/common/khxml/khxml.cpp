@@ -47,12 +47,12 @@ const std::array<std::string,3> GEXMLObject::options
     MAX_HEAP_SIZE,
     BLOCK_SIZE,
 }};
-khMutex GEXMLObject::mutex;
 
 XMLSize_t GEXMLObject::initialDOMHeapAllocSize;
 XMLSize_t GEXMLObject::maxDOMHeapAllocSize;
 XMLSize_t GEXMLObject::maxDOMSubAllocationSize;
-bool GEXMLObject::xercesInitialized = false;
+
+static GEXMLObject XMLObj; // Ensures Xerces is initialized
 
 class XmlParamsException : public std::exception {};
 class MinValuesNotMet : public XmlParamsException
@@ -147,27 +147,23 @@ void GEXMLObject::initializeXMLParametersFromStream(std::istream & input) {
 }
 
 GEXMLObject::GEXMLObject() {
-  khLockGuard guard(mutex);
-  if (!xercesInitialized) {
-    try {
-      initializeXMLParameters();
-      XMLPlatformUtils::Initialize(initialDOMHeapAllocSize,
-                                   maxDOMHeapAllocSize,
-                                   maxDOMSubAllocationSize);
-      xercesInitialized = true;
-      notify(NFY_DEBUG, "XML initialization values:\n"
-                       "initialDOMHeapAllocSize=%zu\n"
-                       "maxDOMHeapAllocSize=%zu\n"
-                       "maxDOMSubAllocationSize=%zu\n",
-             initialDOMHeapAllocSize,
-             maxDOMHeapAllocSize,
-             maxDOMSubAllocationSize);
-    }
-    catch (const XMLException& toCatch)
-    {
-      notify(NFY_FATAL, "Unable to initialize Xerces: %s",
-             FromXMLStr(toCatch.getMessage()).c_str());
-    }
+  try {
+    initializeXMLParameters();
+    XMLPlatformUtils::Initialize(initialDOMHeapAllocSize,
+                                  maxDOMHeapAllocSize,
+                                  maxDOMSubAllocationSize);
+    notify(NFY_DEBUG, "XML initialization values:\n"
+                      "initialDOMHeapAllocSize=%zu\n"
+                      "maxDOMHeapAllocSize=%zu\n"
+                      "maxDOMSubAllocationSize=%zu\n",
+            initialDOMHeapAllocSize,
+            maxDOMHeapAllocSize,
+            maxDOMSubAllocationSize);
+  }
+  catch (const XMLException& toCatch)
+  {
+    notify(NFY_FATAL, "Unable to initialize Xerces: %s",
+            FromXMLStr(toCatch.getMessage()).c_str());
   }
 }
 

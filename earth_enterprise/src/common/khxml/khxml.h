@@ -132,25 +132,21 @@ class GEXMLObject {
     const static std::string BLOCK_SIZE;
     const static std::string XMLConfigFile;
     const static std::array<std::string,3> options;
-    static khMutex mutex;
 
     static XMLSize_t initialDOMHeapAllocSize;
     static XMLSize_t maxDOMHeapAllocSize;
     static XMLSize_t maxDOMSubAllocationSize;
-    static bool xercesInitialized;
 
     static void initializeXMLParameters();
     static void validateXMLParameters();
     static void setDefaultValues();
-  protected:
-    GEXMLObject();
   public:
+    GEXMLObject();
     // Allow users to specify the initialization file
     static void initializeXMLParametersFromStream(std::istream &);
-    virtual ~GEXMLObject() = default;
 };
 
-class GEDocument : private GEXMLObject {
+class GEDocument {
   protected:
     khxml::DOMDocument * doc = nullptr;
     // Don't instantiate this class directly. Instead, use one of its sub-classes.
