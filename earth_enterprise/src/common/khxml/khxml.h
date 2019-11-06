@@ -130,21 +130,14 @@ class GEXMLObject {
     const static std::string INIT_HEAP_SIZE;
     const static std::string MAX_HEAP_SIZE;
     const static std::string BLOCK_SIZE;
-    const static std::string PURGE;
-    const static std::string PURGE_LEVEL;
     const static std::string XMLConfigFile;
-    const static std::array<std::string,5> options;
+    const static std::array<std::string,3> options;
     static khMutex mutex;
 
     static XMLSize_t initialDOMHeapAllocSize;
     static XMLSize_t maxDOMHeapAllocSize;
     static XMLSize_t maxDOMSubAllocationSize;
-    static bool doPurge;
-    static int purgeLevel;
-    static XMLSize_t purgeThreshold;
     static bool xercesInitialized;
-
-    static uint32_t activeObjects;
 
     static void initializeXMLParameters();
     static void validateXMLParameters();
@@ -154,7 +147,7 @@ class GEXMLObject {
   public:
     // Allow users to specify the initialization file
     static void initializeXMLParametersFromStream(std::istream &);
-    virtual ~GEXMLObject();
+    virtual ~GEXMLObject() = default;
 };
 
 class GEDocument : private GEXMLObject {
