@@ -130,6 +130,9 @@ class SimpleMemoryManager : public MemoryManager {
       for (std::pair<byte *, XMLSize_t> entry : allocated) {
         delete [] entry.first;
       }
+      if (allocated.size() > 0) {
+        notify(NFY_WARN, "Cleared %zu memory allocations that weren't cleaned up", allocated.size());
+      }
       allocated.clear();
       allocatedSize = 0;
     }

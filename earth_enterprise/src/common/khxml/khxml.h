@@ -151,10 +151,10 @@ class GEXMLObject {
     static void setDefaultValues();
   protected:
     GEXMLObject();
-    ~GEXMLObject();
   public:
     // Allow users to specify the initialization file
     static void initializeXMLParametersFromStream(std::istream &);
+    virtual ~GEXMLObject();
 };
 
 class GEDocument : private GEXMLObject {
@@ -167,12 +167,13 @@ class GEDocument : private GEXMLObject {
     khxml::DOMElement * getDocumentElement();
     bool writeToFile(const std::string &);
     bool writeToString(std::string &);
+    virtual ~GEDocument() = default;
 };
 
 class GECreatedDocument : public GEDocument {
   public:
     GECreatedDocument(const std::string &);
-    ~GECreatedDocument();
+    virtual ~GECreatedDocument();
 };
 
 class GEParsedDocument : public GEDocument {
@@ -187,7 +188,7 @@ class GEParsedDocument : public GEDocument {
   public:
     GEParsedDocument(const std::string &);
     GEParsedDocument(const std::string &, const std::string &);
-    ~GEParsedDocument();
+    virtual ~GEParsedDocument();
 };
 
 #endif /* __KHXML_H */
