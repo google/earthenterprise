@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="configure-fusion-performance">
 <h1>Configure Fusion performance<a class="headerlink" href="#configure-fusion-performance" title="Permalink to this headline">¶</a></h1>
-<div class="docutils container">
-<div class="content docutils container">
+<div class="container">
+<div class="content container">
 <p>You can tune the performance of Fusion by setting up task rules
 and by modifying the sizes of the asset caches.</p>
 <p class="rubric" id="configure-task-rules">Configure task rules</p>
@@ -103,7 +103,7 @@ CPUs. For example:</p>
 enabling/disabling multithreading, and by specifying output
 locations (KRP/KRMP), as shown in the following table.</p>
 <p class="rubric" id="id1"><span id="task-rule-types"></span>Task rule types</p>
-<div class="docutils container">
+<div class="container">
 <table border="1" class="docutils">
 <colgroup>
 <col width="12%" />
@@ -200,7 +200,7 @@ task does not necessarily speed up processing, so you should
 keep the <code class="docutils literal notranslate"><span class="pre">maxNumCPU</span></code> value at 2.</p>
 </div>
 <p class="rubric">Sample: ImageryPacketLevel.taskrule</p>
-<div class="docutils container">
+<div class="container">
 <code class="docutils literal notranslate"><span class="pre">&lt;TaskRule&gt;</span>&#160; <span class="pre">&lt;taskname&gt;ImageryPacketLevel&lt;/taskname&gt;</span>&#160; <span class="pre">&lt;inputConstraints/&gt;</span>&#160; <span class="pre">&lt;outputConstraints/&gt;</span>&#160; <span class="pre">&lt;cpuConstraint&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;minNumCPU&gt;2&lt;/minNumCPU&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;maxNumCPU&gt;2&lt;/maxNumCPU&gt;</span>&#160; <span class="pre">&lt;/cpuConstraint&gt;</span> <span class="pre">&lt;/TaskRule&gt;</span></code></div>
 <p class="rubric">TerrainPacketLevel task rule</p>
 <p>During a project build, Fusion will have multiple concurrent
@@ -214,7 +214,7 @@ task. You can use this task rule to assign up to six CPUs instead.
 Set the minimum CPU value to a number from 1 to 6, and set the
 maximum to a number between 2 and 6.</p>
 <p class="rubric">Sample: TerrainPacketLevel.taskrule</p>
-<div class="docutils container">
+<div class="container">
 <code class="docutils literal notranslate"><span class="pre">&lt;TaskRule&gt;</span>&#160; <span class="pre">&lt;taskname&gt;TerrainPacketLevel&lt;/taskname&gt;</span>&#160; <span class="pre">&lt;inputConstraints/&gt;</span>&#160; <span class="pre">&lt;outputConstraints/&gt;</span>&#160; <span class="pre">&lt;cpuConstraint&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;minNumCPU&gt;1&lt;/minNumCPU&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;maxNumCPU&gt;6&lt;/maxNumCPU&gt;</span>&#160; <span class="pre">&lt;/cpuConstraint&gt;</span> <span class="pre">&lt;/TaskRule&gt;</span></code></div>
 <p class="rubric">CombinedTerrain task rule</p>
 <p>Since <code class="docutils literal notranslate"><span class="pre">gecombineterrain</span></code> is a serial process and must be
@@ -224,7 +224,7 @@ available CPUs to the build. For example, with eight CPUs assigned for
 Fusion, assuming that one CPU is reserved for the system, you can
 assign seven CPUs to the CombinedTerrain serial process.</p>
 <p class="rubric">Sample: CombinedTerrain.taskrule</p>
-<div class="docutils container">
+<div class="container">
 <code class="docutils literal notranslate"><span class="pre">&lt;TaskRule&gt;</span>&#160; <span class="pre">&lt;taskname&gt;CombinedTerrain&lt;/taskname&gt;</span>&#160; <span class="pre">&lt;inputConstraints/&gt;</span>&#160; <span class="pre">&lt;outputConstraints/&gt;</span>&#160; <span class="pre">&lt;cpuConstraint&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;minNumCPU&gt;7&lt;/minNumCPU&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;maxNumCPU&gt;7&lt;/maxNumCPU&gt;</span>&#160; <span class="pre">&lt;/cpuConstraint&gt;</span> <span class="pre">&lt;/TaskRule&gt;</span></code></div>
 <p class="rubric">MapLayerLevel task rule</p>
 <p>By default, Fusion assigns one CPU to work on map tile generation.
@@ -233,7 +233,7 @@ rule to assign multiple CPUs instead. Set the rule to min/max 4 on
 a 2 dual-core CPU system (3 may work well enough). On a 2
 quad-core CPU system, set the rule to min/max 3.</p>
 <p class="rubric" id="sample-maplayerlevel-taskrule">Sample: MapLayerLevel.taskrule</p>
-<div class="docutils container">
+<div class="container">
 <code class="docutils literal notranslate"><span class="pre">&lt;TaskRule&gt;</span>&#160; <span class="pre">&lt;taskname&gt;MapLayerLevel&lt;/taskname&gt;</span>&#160; <span class="pre">&lt;inputConstraints/&gt;</span>&#160; <span class="pre">&lt;outputConstraints/&gt;</span>&#160; <span class="pre">&lt;cpuConstraint&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;minNumCPU&gt;4&lt;/minNumCPU&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;maxNumCPU&gt;4&lt;/maxNumCPU&gt;</span>&#160; <span class="pre">&lt;/cpuConstraint&gt;</span> <span class="pre">&lt;/TaskRule&gt;</span></code></div>
 <p class="rubric" id="krp-task-rule">KRP task rule</p>
 <p>When Fusion creates an asset, it writes large imagery files to the
@@ -245,7 +245,7 @@ Locations</span></a>.</p>
 learn how to create a new volume, see <a class="reference internal" href="#defining-volumes"><span class="std std-ref">Defining
 volumes</span></a>.</p>
 <p class="rubric">Sample: KRP.taskrule</p>
-<div class="docutils container">
+<div class="container">
 <code class="docutils literal notranslate"><span class="pre">&lt;TaskRule&gt;</span>&#160; <span class="pre">&lt;taskname&gt;KRP&lt;/taskname&gt;</span>&#160; <span class="pre">&lt;inputConstraints/&gt;</span>&#160; <span class="pre">&lt;outputConstraints&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;outputConstraint&gt;</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;num&gt;0&lt;/num&gt;</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;requiredVolume&gt;products&lt;/requiredVolume&gt;</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;pathPattern&gt;${assetref:dirname:sansext}-</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">${vernum}${defaultpath:ext}&lt;/pathPattern&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;/outputConstraint&gt;</span>&#160; <span class="pre">&lt;/outputConstraints&gt;</span>&#160; <span class="pre">&lt;cpuConstraint&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;minNumCPU&gt;1&lt;/minNumCPU&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;maxNumCPU&gt;1&lt;/maxNumCPU&gt;</span>&#160; <span class="pre">&lt;/cpuConstraint&gt;</span> <span class="pre">&lt;/TaskRule&gt;</span></code></div>
 <p>You can also enter a second <code class="docutils literal notranslate"><span class="pre">requiredvolume</span></code> tag in your task
 rule to specify the next available volume in case the first volume
@@ -260,7 +260,7 @@ Locations</span></a>. In the sample below, the
 volume you have created is <code class="docutils literal notranslate"><span class="pre">products</span></code>. To learn how to create a
 new volume, see <a class="reference internal" href="#defining-volumes"><span class="std std-ref">Defining Volumes</span></a>.</p>
 <p class="rubric">Sample: KRMP.taskrule</p>
-<div class="docutils container">
+<div class="container">
 <code class="docutils literal notranslate"><span class="pre">&lt;TaskRule&gt;</span>&#160; <span class="pre">&lt;taskname&gt;KRMP&lt;/taskname&gt;</span>&#160; <span class="pre">&lt;inputConstraints/&gt;</span>&#160; <span class="pre">&lt;outputConstraints&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;outputConstraint&gt;</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;num&gt;0&lt;/num&gt;</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;requiredVolume&gt;products&lt;/requiredVolume&gt;</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">&lt;pathPattern&gt;${assetref:dirname:sansext}-</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">${vernum}${defaultpath:ext}&lt;/pathPattern&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;/outputConstraint&gt;</span>&#160; <span class="pre">&lt;/outputConstraints&gt;</span>&#160; <span class="pre">&lt;cpuConstraint&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;minNumCPU&gt;1&lt;/minNumCPU&gt;</span>&#160;&#160;&#160; <span class="pre">&lt;maxNumCPU&gt;1&lt;/maxNumCPU&gt;</span>&#160; <span class="pre">&lt;/cpuConstraint&gt;</span> <span class="pre">&lt;/TaskRule&gt;</span></code></div>
 <p>You can also enter a second <code class="docutils literal notranslate"><span class="pre">requiredvolume</span></code> tag in your task
 rule to specify the next available volume in case the first volume
@@ -274,7 +274,7 @@ define the volume, use the <code class="docutils literal notranslate"><span clas
 command, then edit the XML as shown in the sample below. In this
 sample, the volume you are creating is called <code class="docutils literal notranslate"><span class="pre">products</span></code>.</p>
 <p class="rubric" id="sample-volumes-xml">Sample: volumes.xml</p>
-<div class="docutils container">
+<div class="container">
 <code class="docutils literal notranslate"><span class="pre">&lt;products&gt;</span>&#160; <span class="pre">&lt;netpath&gt;/gevol/products&lt;/netpath&gt;</span>&#160; <span class="pre">&lt;host&gt;linux&lt;/host&gt;</span>&#160; <span class="pre">&lt;localpath&gt;/gevol/products&lt;/localpath&gt;</span>&#160; <span class="pre">&lt;reserveSpace&gt;100000&lt;/reserveSpace&gt;</span>&#160; <span class="pre">&lt;isTmp&gt;0&lt;/isTmp&gt;</span> <span class="pre">&lt;/products&gt;</span></code></div>
 <p class="rubric" id="example-file-locations">Example of File Locations</p>
 <p>The table below shows an example of the default file locations and
