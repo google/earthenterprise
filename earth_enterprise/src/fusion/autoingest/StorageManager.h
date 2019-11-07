@@ -66,19 +66,22 @@ class StorageManager : public StorageManagerInterface<AssetType> {
     StorageManager(uint cacheSize,
                    bool limitByMemory,
                    uint64 maxMemory,
+                   bool writeDirty,
                    const std::string & type,
                    SerializerPtr serializer) :
         assetType(type),
         serializer(std::move(serializer)),
-        cache(cacheSize, type)
+        cache(cacheSize, type),
+        writeDirty(writeDirty)
     {
       SetCacheMemoryLimit(limitByMemory, maxMemory);
     }
     StorageManager(uint cacheSize,
                    bool limitByMemory,
                    uint64 maxMemory,
+                   bool writeDirty,
                    const std::string & type) :
-        StorageManager(cacheSize, limitByMemory, maxMemory, type,
+        StorageManager(cacheSize, limitByMemory, maxMemory, writeDirty, type,
                        SerializerPtr(new AssetSerializerLocalXML<AssetType>())) {}
     ~StorageManager() = default;
 
@@ -112,6 +115,7 @@ class StorageManager : public StorageManagerInterface<AssetType> {
     const SerializerPtr serializer;
     CacheType cache;
     std::map<AssetKey, PointerType> dirtyMap;
+    const bool writeDirty;
 
     StorageManager(const StorageManager &) = delete;
     StorageManager& operator=(const StorageManager &) = delete;
@@ -338,10 +342,10 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
   notify(NFY_INFO, "Writing %lu %s records", dirtyMap.size(), assetType.c_str());
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
   typename std::map<AssetKey, PointerType>::iterator entry = dirtyMap.begin();
-  notify(NFY_WARN, "SaveDirty: %s", ToString(typeid(AssetType).name()).c_str());
+  //notify(NFY_WARN, "SaveDirty: %s", ToString(typeid(AssetType).name()).c_str());
   while (entry != dirtyMap.end()) {
     std::string filename = entry->second->XMLFilename() + ".new";
-    notify(NFY_WARN, "\t%s", filename.c_str());
+    //notify(NFY_WARN, "\t%s", filename.c_str());
 
     if (serializer->Save(entry->second, filename)) {
       savetrans.AddNewPath(filename);
@@ -360,30 +364,32 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
 
 template<class AssetType>
 void StorageManager<AssetType>::WriteDirty() {
-  std::lock_guard<std::recursive_mutex> lock(storageMutex);
-  khFilesTransaction savetrans(".new");
-  typename std::map<AssetKey, PointerType>::iterator entry = dirtyMap.begin();
-  notify(NFY_WARN, "WriteDirty: %s", ToString(typeid(AssetType).name()).c_str());
-  while (entry != dirtyMap.end()) {
-    if (entry->second.use_count() == 2) {
-      std::string filename = entry->second->XMLFilename() + ".new";
+  if (writeDirty) {
+    std::lock_guard<std::recursive_mutex> lock(storageMutex);
+    khFilesTransaction savetrans(".new");
+    typename std::map<AssetKey, PointerType>::iterator entry = dirtyMap.begin();
+    notify(NFY_WARN, "WriteDirty: %s", ToString(typeid(AssetType).name()).c_str());
+    while (entry != dirtyMap.end()) {
+      if (entry->second.use_count() == 2) {
+        std::string filename = entry->second->XMLFilename() + ".new";
 
-      if (serializer->Save(entry->second, filename)) {
-        savetrans.AddNewPath(filename);
-        notify(NFY_WARN, "\tRemoved: %s", entry->first.toString().c_str());
-        entry = dirtyMap.erase(entry);
+        if (serializer->Save(entry->second, filename)) {
+          savetrans.AddNewPath(filename);
+          notify(NFY_WARN, "\tRemoved: %s", entry->first.toString().c_str());
+          entry = dirtyMap.erase(entry);
+        }
+        else {
+          notify(NFY_WARN, "\tNot Saved: %s", entry->first.toString().c_str());
+        }
       }
       else {
-        notify(NFY_WARN, "\tNot Saved: %s", entry->first.toString().c_str());
+        notify(NFY_WARN, "\tNot removed: %s", entry->first.toString().c_str());
+        entry++;
       }
     }
-    else {
-      notify(NFY_WARN, "\tNot removed: %s", entry->first.toString().c_str());
-      entry++;
-    }
+    cache.Prune();
+    savetrans.Commit();
   }
-  cache.Prune();
-  savetrans.Commit();
 }
 
 #endif // STORAGEMANAGER_H

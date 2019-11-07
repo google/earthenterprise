@@ -37,6 +37,7 @@ class MiscConfigStorage {
   uint        MutexTimedWaitSec = uint(30);
   uint        PackGenAnalysisThreads = uint(1);
   bool        GraphOperations = false;
+  bool        PeriodicallyWriteDirtyToDisk = false;
 
 #pragma LoadAndSave
 
