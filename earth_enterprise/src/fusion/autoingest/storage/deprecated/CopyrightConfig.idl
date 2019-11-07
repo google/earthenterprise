@@ -13,9 +13,9 @@
 // limitations under the License.
 
 #include <khTypes.h>
+#requiresgetheapusage
 
 class CopyrightConfig {
   uint providerStart = uint(1);
-
 #pragma GenerateIsUpToDate
 };

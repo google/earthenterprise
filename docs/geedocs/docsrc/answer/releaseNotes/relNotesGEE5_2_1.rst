@@ -301,7 +301,7 @@ Release notes: Open GEE 5.2.1
            - Fixed out-of-sync errors
          * - 355
            - Package gtest under CentOS/RHEL 6
-           - instructions for building OpenGEE under CentOS 6 were updated and build scripts
+           - instructions for building Open GEE under CentOS 6 were updated and build scripts
              modified to detect and use "devtoolset-2-toolchain"
          * - 375
            - Invalid version of psycopg2 on Ubuntu 16.04

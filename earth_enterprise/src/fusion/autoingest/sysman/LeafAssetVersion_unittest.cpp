@@ -22,8 +22,9 @@ class LeafAssetVersionImplDTest : public LeafAssetVersionImplD, public testing::
  protected:
   mutable size_t stateSyncs = 0;
   // Override state sync so we can record when it's called
-  void SyncState(const std::shared_ptr<StateChangeNotifier>) const {
+  bool SyncState(const std::shared_ptr<StateChangeNotifier>) const {
     ++stateSyncs;
+    return true;
   }
  public:
   // Handle multiple input state changes (useful for testing)

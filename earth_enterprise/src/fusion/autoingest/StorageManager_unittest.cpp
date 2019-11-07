@@ -55,11 +55,15 @@ class TestItem : public StorageManaged, public TestItemStorage {
   }
 
   // determine amount of memory used by TestItem
-  uint64 GetSize() {
-    return (GetObjectSize(val)
-    + GetObjectSize(type)
-    + GetObjectSize(savename)
-    + GetObjectSize(saveSucceeds));
+  uint64 GetHeapUsage() const{
+    return ::GetHeapUsage(nextValue)
+    + ::GetHeapUsage(fileName)
+    + ::GetHeapUsage(isValidRef)
+    + ::GetHeapUsage(val)
+    + ::GetHeapUsage(type)
+    + ::GetHeapUsage(savename)
+    + ::GetHeapUsage(loadname)
+    + ::GetHeapUsage(saveSucceeds);
   }
 
   static string Filename(const std::string ref) {
@@ -72,6 +76,10 @@ class TestItem : public StorageManaged, public TestItemStorage {
     return isValidRef;
   }
 };
+
+inline uint64 GetHeapUsage(const TestItem &obj) {
+  return obj.GetHeapUsage();
+}
 
 class TestSerializer : public AssetSerializerInterface<TestItem> {
   public:

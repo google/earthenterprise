@@ -191,7 +191,7 @@ Setting Up the Tutorial
          **Key:** USGS-I
          **Copyright Text:** Imagery © 2005 USGS
          To enter the copyright symbol, open a text editor, press
-         CTRL-SHIFT-U, then enter the Unicode 00A9. Copy and paste the
+         **CTRL-SHIFT-U**, then enter the Unicode 00A9. Copy and paste the
          displayed symbol into the dialog.
 
       #. Click **OK**.

@@ -20,6 +20,21 @@ manager was in the middle of major calculations. Now, this restriction
 has been removed for most calculations, such as when system manager is
 determining which resources overlap.
 
+Improved memory usage reporting for caches
+
+. The memory usage estimation for the asset and asset version caches
+has been improved and is much more accurate.
+
+Optimized handling for task status updates
+
+. System manager's performance while handling updates about running
+tasks has been improved. This update is experimental and can be
+enabled using the
+
+GraphOperations flag
+
+.
+
 -[ Supported Platforms ]-
 
 The Open GEE 5.3.3 release is supported on 64-bit versions of the
@@ -43,8 +58,9 @@ new PostgreSQL version used by Open GEE 5.3.3.
 
 -[ Resolved Issues ]-
 
-Resolved Issues        Number  Description  Resolution  Issue Number
-Issue Description  Issue Resolution
+Resolved Issues        Number  Description  Resolution  1202  Can't
+select .KIP as source  Select 'header.xml' in .KIP directory to select
+.KIP
 
 -[ Known Issues ]-
 

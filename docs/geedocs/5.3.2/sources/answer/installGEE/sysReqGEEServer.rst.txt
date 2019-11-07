@@ -31,7 +31,7 @@ Software Requirements
 
    Operating Systems
 
-   OpenGEE is supported only on the 64-bit versions of the operating
+   Open GEE is supported only on the 64-bit versions of the operating
    systems listed below.
 
    Red Hat Enterprise Linux 6.x and 7.x, including the most recent

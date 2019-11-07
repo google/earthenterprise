@@ -71,7 +71,7 @@ Release notes: Open GEE 5.2.2
            - Google Earth Server fails to load Admin console when there is an invalid link to a published portable file
            - Added check to ensure files actually exist before continuing on to database object creation.
          * - 660
-           - Building OpenGee on Ubuntu 16.04 throws an error 'ImportError: No module named git:'
+           - Building Open GEE on Ubuntu 16.04 throws an error 'ImportError: No module named git:'
            - gitpython introduced dependency was documented in build instructions.
          * - 670
            - Diagnostics fails in current release_5.2.1
@@ -269,7 +269,7 @@ Release notes: Open GEE 5.2.2
            - Make sure that RPMS are installed on same EL version that they were produced for.
          * - 731
            - Error in publish of SSL-enabled database
-           - A temporary fix was added in this release. A more permanent fix will be done in OpenGEE 5.2.3.
+           - A temporary fix was added in this release. A more permanent fix will be done in Open GEE 5.2.3.
          * - 825
            - Geserver fails to startup fully due to conflicting protobuf library
            - Run ``pip uninstall protobuf`` to uninstall the protobuf library installed by pip.

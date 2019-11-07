@@ -17,6 +17,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <autoingest/.idl/storage/FilterConfig.h>
+#requiresgetheapusage
 
 #cppquote
 #include <autoingest/.idl/storage/FilterConfig_impl.h>

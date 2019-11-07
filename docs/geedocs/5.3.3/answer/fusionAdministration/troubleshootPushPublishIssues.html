@@ -146,7 +146,7 @@ system administrator.</p>
 </li>
 <li><p class="first">Review the HTTP and Postgres processes. They should look
 something like this:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre># ps -ef | grep http
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># ps -ef | grep http
 root 9220 1 0 Mar13 ? 00:00:00 /opt/google/gehttpd/bin/gehttpd
 505 14608 9220 0 Mar15 ? 00:00:00 /opt/google/gehttpd/bin/gehttpd
 505 14609 9220 0 Mar15 ? 00:00:00 /opt/google/gehttpd/bin/gehttpd
@@ -186,7 +186,7 @@ command to make sure that everything is running properly.</p>
 <li><p class="first">Review the <code class="docutils literal notranslate"><span class="pre">wsgi:ge</span></code> processes, which are GEE Server services
 that support pushing and publishing. They should look something
 like this:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>ps -ef | grep &#39;wsgi:ge&#39;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ps -ef | grep &#39;wsgi:ge&#39;
 65609 7272 3445 0 Aug10 ? 00:00:11 (wsgi:ge_push_serve) -k start
 65609 7273 3445 0 Aug10 ? 00:00:12 (wsgi:ge_publish_serve) -k start
 65609 7274 3445 0 Aug10 ? 00:00:11 (wsgi:ge_publish_aux_serve) -k start
