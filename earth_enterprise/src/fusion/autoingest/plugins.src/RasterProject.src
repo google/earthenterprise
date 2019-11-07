@@ -1018,6 +1018,8 @@ void RasterProjectAssetVersionImplD::FilterInsetInfosByDate(
   inset_infos->swap(output_inset_infos);
 }
 
+#define USE_QUADKEY_FILTERING
+//#define ABSOLUTELY_NO_FILTERING
 uint32 RasterProjectAssetVersionImplD::BuildIndex(
     const khTilespace &tilespace,
     const std::vector<InsetInfo<RasterProductAssetVersion> >& inset_infos,
@@ -1073,6 +1075,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
   packgenassets.reserve(numInsets);
   packgenvers.reserve(numInsets);
 
+#ifdef USE_QUADKEY_FILTERING
   // Map each InsetInfo to its index in the inset_infos vector. Will need
   // this later on for populating neededIndexes.
   std::map<const InsetInfo<RasterProductAssetVersion>*, uint> indexMap;
@@ -1081,6 +1084,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
   }
   
   InsetTilespaceIndex<InsetInfo<RasterProductAssetVersion>> localIndex;
+#endif
   for (uint i = 0; i < genInfo.size(); ++i) {
     // Check if I even need to do any packet generation at all
     // Maybe the other insets will completely replace everything
@@ -1092,35 +1096,51 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     // Determine which insets (0 .. i) intersect this coverage area.
     std::vector<uint> neededIndexes;
     neededIndexes.reserve(i);
-    localIndex.add(inset_infos[i]);
 
     notify(NFY_PROGRESS, "BuildIndex finding intersections for inset %d of %lu",
            i+1, genInfo.size());
+#ifdef USE_QUADKEY_FILTERING
+    localIndex.add(inset_infos[i]);
     int maxQuadTreeLevel = 0;
     QuadtreePath coverageMBR = localIndex.getQuadtreeMBR(genInfo[i].coverage.degreeExtents(), maxQuadTreeLevel, endMinifyLevel);
-    std::vector<const InsetInfo<RasterProductAssetVersion>*> qualifiedInsetInfoPtrs = /*tilespaceIndex*/localIndex.intersectingExtents(coverageMBR, coverageMBR.Level() > 0 ? 1 : 0 /*beginMinifyLevel*/, endMinifyLevel);
+if (genInfo[i].assetname.toString().find("synth_ortho_16x16_1_45_4m_R0_C0") != std::string::npos ||
+    genInfo[i].assetname.toString().find("synth_ortho_16x16_1_Neg45_4m_R0_C0") != std::string::npos)
+  notify(NFY_WARN, "For %s, the quadtree MBR is %s. Extents are %f, %f, %f, %f", 
+      genInfo[i].assetname.toString().c_str(), 
+      coverageMBR.AsString().c_str(),
+      genInfo[i].coverage.degreeExtents().beginX(),
+      genInfo[i].coverage.degreeExtents().beginY(),
+      genInfo[i].coverage.degreeExtents().endX(),
+      genInfo[i].coverage.degreeExtents().endY()
+      );
+    std::vector<const InsetInfo<RasterProductAssetVersion>*> qualifiedInsetInfoPtrs = localIndex.intersectingExtents(coverageMBR, coverageMBR.Level() > 0 ? 1 : 0 /*beginMinifyLevel*/, endMinifyLevel);
     overlapEnvelope<RasterProductAssetVersion> env (
         type, qualifiedInsetInfoPtrs, qualifiedInsetInfoPtrs.size(),
         beginMinifyLevel, endMinifyLevel, i);
 
     std::shared_ptr<OverlapCalculator<RasterProductAssetVersion>> calc =
         std::make_shared<OverlapCalculator<RasterProductAssetVersion>>(env);
-    // std::vector<uint> tempNeededIndexes = std::move(calc->PreprocessForInset(genInfo[i].coverage));
-    // for (auto & idx : tempNeededIndexes) {
-    //   auto infoptr = qualifiedInsetInfoPtrs[idx];
-    //   auto it = indexMap.find(infoptr);
-    //   if (it != indexMap.end())
-    //     neededIndexes.push_back(it->second);
-    // }
     for (auto &infoptr : qualifiedInsetInfoPtrs){
       auto it = indexMap.find(infoptr);
       assert(it != indexMap.end());
-      //if (it != indexMap.end())
-        neededIndexes.push_back(it->second);
+      neededIndexes.push_back(it->second);
     }
-    // COMMENTING OUT the below line for now. With the new quadtree filtering, this should automatically get picked up    
-    //neededIndexes.push_back(i); // each inset always intersects itself
-    //notify(NFY_WARN, "Size of neededIndexes is %zu\n", neededIndexes.size());
+#else
+    overlapEnvelope<RasterProductAssetVersion> env (
+        type, insetInfoPtrs, i,
+        beginMinifyLevel, endMinifyLevel, i);
+
+    std::shared_ptr<OverlapCalculator<RasterProductAssetVersion>> calc =
+        std::make_shared<OverlapCalculator<RasterProductAssetVersion>>(env);
+#ifdef ABSOLUTELY_NO_FILTERING
+    for (uint idx = 0; idx < inset_infos.size(); idx++)
+      neededIndexes.push_back(idx);
+#else
+    neededIndexes = std::move(calc->PreprocessForInset(genInfo[i].coverage));
+    neededIndexes.push_back(i); // each inset always intersects itself
+#endif //ABSOLUTELY_NO_FILTERING
+#endif //USE_QUADKEY_FILTERING
+
     // calculate the level range that will be minified
     uint effectiveBeginMinifyLevel =
       std::max(genInfo[i].coverage.beginLevel(), beginMinifyLevel);
