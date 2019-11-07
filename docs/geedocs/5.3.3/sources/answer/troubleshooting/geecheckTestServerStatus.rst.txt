@@ -45,7 +45,7 @@ the following location:
       set_geecheck_config.py
 
 geecheck.py runs and displays the results from any tests located in
-the subfolders:    geecheck_tests/  user_tests/ fusion_tests/
+the subfolders:  geecheck_tests/    user_tests/    fusion_tests/
 server_tests/
 
 Tests must follow the naming convention *_test.py, for example,
@@ -96,9 +96,9 @@ be run from geecheck:
       server_tests/
 
 To get some idea of how you can write your own test, you can study the
-structure of the sample test, "sample_test.py", provided in the
-"user_tests" subfolder. Use the code as a guide or simply copy and
-edit it if you are unfamiliar with Python unit tests.
+structure of the existing tests in the "user_tests" subfolder. Use the
+code as a guide or simply copy and edit an existing test if you are
+unfamiliar with Python unit tests.
 
 -[ Run geecheck on the command line ]-
 

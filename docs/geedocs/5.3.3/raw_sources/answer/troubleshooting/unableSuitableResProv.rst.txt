@@ -11,7 +11,7 @@ Unable to find a suitable resource provider
       .. rubric:: Error message
 
       ``Unable to find a suitable resource provider: no CPU(s) is available to start the task <task_name>``
-      
+
       .. rubric:: Description
 
       This error typically occurs when the system is building and no
@@ -36,7 +36,7 @@ Unable to find a suitable resource provider
          ``geselectassetroot --assetroot /gevol/assets --numcpus 8``
 
       -  If the task can complete with fewer CPUs, decrease the minimum
-         CPU setting for the `task rule. <../answer/176738.html>`__
+         CPU setting for the :doc:`task rule <../fusionAdministration/confTaskRulesForFusionPerf>`.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

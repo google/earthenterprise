@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp4.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp4.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="settings-page">
 <h1>Settings page<a class="headerlink" href="#settings-page" title="Permalink to this headline">¶</a></h1>
-<div class="docutils container">
-<div class="content docutils container">
+<div class="container">
+<div class="content container">
 <p>Click the <img alt="gear icon" src="../../images/accounts_icon_gear_padded.gif" /> <strong>Settings</strong> icon in the <a class="reference internal" href="signInAdminConsole.html"><span class="doc">GEE Server Admin
 console</span></a> to:</p>
 <p class="rubric">Perform .glc assembly</p>
@@ -99,35 +99,26 @@ placed.</li>
 <p class="rubric">Launch Cutter</p>
 <p>To create a new .glm/.glb from published Fusion databases or
 Portable globes (.glm/.glb, not .glc):</p>
-<ol class="arabic">
-<li><p class="first">Select a source map.</p>
+<ol class="arabic simple">
+<li>Select a source map.</li>
+<li>Enter a name and description for the offline map.</li>
+<li>Choose to <strong>Overwrite</strong> existing globes with the same
+name.</li>
+<li>Choose a <strong>Region Selection</strong> method:<ul>
+<li><strong>Manual</strong>: Manually draw the boundaries of your
+region using the polygon button in the upper-right of
+the map.</li>
+<li><strong>Paste KML</strong>: Define your region by pasting a KML
+file.</li>
+</ul>
 </li>
-<li><p class="first">Enter a name and description for the offline map.</p>
-</li>
-<li><p class="first">Choose to <strong>Overwrite</strong> existing globes with the same
-name.</p>
-</li>
-<li><p class="first">Choose a <strong>Region Selection</strong> method:</p>
-<dl class="docutils">
-<dt>-. <strong>Manual</strong>: Manually draw the boundaries of your</dt>
-<dd><p class="first last">region using the polygon button in the upper-right of
-the map.</p>
-</dd>
-<dt>-. <strong>Paste KML</strong>: Define your region by pasting a KML</dt>
-<dd><p class="first last">file.</p>
-</dd>
-</dl>
-</li>
-<li><p class="first">Specify a <strong>World level</strong>; this represents the highest
-resolution at which the entire world will be available.</p>
-</li>
-<li><p class="first">Optionally use the zoom buttons in the lower-right of the
+<li>Specify a <strong>World level</strong>; this represents the highest
+resolution at which the entire world will be available.</li>
+<li>Optionally use the zoom buttons in the lower-right of the
 map to change your zoom level. This represents the
 highest resolution at which the data within the region of
-interest will be available.</p>
-</li>
-<li><p class="first">Click <strong>Cut map</strong>.</p>
-</li>
+interest will be available.</li>
+<li>Click <strong>Cut map</strong>.</li>
 </ol>
 <p>The cut progress will be displayed at the bottom of the
 screen. Upon successful completion, the globe is saved to

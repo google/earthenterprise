@@ -65,6 +65,12 @@ Release notes: Open GEE 5.3.3
          * - 1202
            - Can't select .KIP as source
            - Select 'header.xml' in .KIP directory to select .KIP
+         * - 1517
+           - geglxinfo should parse vector packets
+           - geglxinfo will parse vector packets
+         * - 1241
+           - geglxinfo should parse all meshes in terrain packets
+           - geglxinfo will parse all meshes in terrain packets
 
       .. rubric:: Known Issues
 

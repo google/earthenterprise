@@ -28,6 +28,7 @@ Benchmarking outcomes for applying task rules
 
       The following table lists the software and hardware specifications
       that were used for testing.
+
       ========== ===============================
       OS         Ubuntu 12.04.1 LTS
       Processor  8x Intel(R) Xeon ® CPU @2.60GHz
@@ -143,9 +144,9 @@ Benchmarking outcomes for applying task rules
       .. rubric:: Learn more
       :name: learn-more
 
-      -  `Configure Fusion performance <../answer/176738.html>`__
-      -  `Running Fusion on a Machine with Multiple
-         CPUs <../answer/6008655.html>`__
+      -  :doc:`Configure Fusion performance <../fusionAdministration/confTaskRulesForFusionPerf>`
+      -  :doc:`Running Fusion on a Machine with Multiple
+         CPUs <../fusionAdministration/multipleCPUConfig>`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="publish-databases-using-disconnected-publishing">
 <h1>Publish databases using disconnected publishing<a class="headerlink" href="#publish-databases-using-disconnected-publishing" title="Permalink to this headline">¶</a></h1>
-<div class="docutils container">
-<div class="content docutils container">
+<div class="container">
+<div class="content container">
 <p>If you want to publish databases on a server that does not have a
 network connection to your Google Earth Enterprise Fusion
 workstations, you can create a database that can be output to
@@ -102,22 +102,28 @@ space required to store the disconnected database by running
 <ol class="arabic">
 <li><p class="first">From the command line, specify the database that you want to
 publish with the <code class="docutils literal notranslate"><span class="pre">--report_size_only</span></code> flag:</p>
-<p><code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">gedisconnectedsend</span> <span class="pre">--report_size_only</span> <span class="pre">--sendpath</span> <span class="pre">\</span>&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gedisconnectedsend --report_size_only --sendpath <span class="se">\</span>
+/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb
+</pre></div>
+</div>
 </li>
 </ol>
 <p class="rubric" id="to-create-a-disconnected-database">To create a disconnected database:</p>
 <ol class="arabic">
 <li><p class="first">Create an output directory on your portable media, which you
 will specify when you create the disconnected database.</p>
-<p><code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">-rf</span> <span class="pre">/media/ddb/test_ver001/</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">mkdir</span> <span class="pre">-p</span> <span class="pre">/media/ddb/test_ver001/</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rm -rf /media/ddb/test_ver001/
+mkdir -p /media/ddb/test_ver001/
+</pre></div>
+</div>
 </li>
 </ol>
 <p>Create the disconnected database and output the file to your
-portable media:
-<code class="docutils literal notranslate"><span class="pre">gedisconnectedsend</span> <span class="pre">--output</span> <span class="pre">/media/ddb/test_ver001/</span> <span class="pre">\</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">--sendpath</span>
-<span class="pre">/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb</span></code></p>
+portable media:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gedisconnectedsend --output /media/ddb/test_ver001/ <span class="se">\</span>
+--sendpath /gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb
+</pre></div>
+</div>
 <p>In this example,
 <code class="docutils literal notranslate"><span class="pre">/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/</span></code>
 is the path to the <code class="docutils literal notranslate"><span class="pre">gedb</span></code> directory of the disconnected
@@ -135,12 +141,16 @@ the delta disconnected database is created.</p>
 example, <code class="docutils literal notranslate"><span class="pre">machine_two</span></code>), verify the list of versions of the
 disconnected database for which you want to create the delta:</p>
 <p>For example, on <code class="docutils literal notranslate"><span class="pre">machine_two</span></code>:</p>
-<p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--fusion_host</span> <span class="pre">machine_one</span> <span class="pre">--listdbs</span> <span class="pre">&gt;</span> <span class="pre">/home/user_name/ddb/dblist_server_host</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geserveradmin --fusion_host machine_one --listdbs &gt; /home/user_name/ddb/dblist_server_host
+</pre></div>
+</div>
 <p>On <code class="docutils literal notranslate"><span class="pre">machine_one</span></code>, create the delta disconnected database using
 the <code class="docutils literal notranslate"><span class="pre">--havepathfile</span></code> option:</p>
-<p><code class="docutils literal notranslate"><span class="pre">gedisconnectedsend</span> <span class="pre">--output</span> <span class="pre">/media/ddb/test_ver001/</span> <span class="pre">\</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">--havepathfile</span> <span class="pre">/home/user_name/ddb/dblist_server_host</span> <span class="pre">\</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">--sendpath</span> <span class="pre">/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gedisconnectedsend --output /media/ddb/test_ver001/ <span class="se">\</span>
+--havepathfile /home/user_name/ddb/dblist_server_host <span class="se">\</span>
+--sendpath /gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb
+</pre></div>
+</div>
 <p class="rubric" id="publish-on-the-remote-server-host">Publish on the remote server host</p>
 <p>Connect the portable media to the Server host and mount the drive.
 In this example,
@@ -150,21 +160,27 @@ database.</p>
 <p class="rubric" id="to-publish-on-the-remote-server-host">To publish on the remote server host:</p>
 <ol class="arabic">
 <li><p class="first">Set ownership and permissions for the <code class="docutils literal notranslate"><span class="pre">gedb</span></code> directory:</p>
-<p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">sudo</span> <span class="pre">chown</span> <span class="pre">-R</span> <span class="pre">gefusionuser:gegroup</span> <span class="pre">ddb/</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">sudo</span> <span class="pre">chmod</span> <span class="pre">-R</span> <span class="pre">755</span> <span class="pre">ddb/</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo chown -R gefusionuser:gegroup ddb/
+sudo chmod -R <span class="m">755</span> ddb/
+</pre></div>
+</div>
 </li>
 <li><p class="first">Register the database on the Server. Specifying the
 –stream_server_url is optional.</p>
-<p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--fusion_host</span> <span class="pre">fusion_host.company.com</span> <span class="pre">\</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">--stream_server_url</span> <span class="pre">http://your_stream_server</span>&#160; <span class="pre">\</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">--adddb</span> <span class="pre">\</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geserveradmin --fusion_host fusion_host.company.com <span class="se">\</span>
+--stream_server_url http://your_stream_server <span class="se">\</span>
+--adddb <span class="se">\</span>
+/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/
+</pre></div>
+</div>
 </li>
 <li><p class="first">Push the files to the Server:</p>
-<p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--fusion_host</span> <span class="pre">fusion_host.company.com</span> <span class="pre">\</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">--stream_server_url</span> <span class="pre">http://your_stream_server</span> <span class="pre">\</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">--pushdb</span> <span class="pre">\</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geserveradmin --fusion_host fusion_host.company.com <span class="se">\</span>
+--stream_server_url http://your_stream_server <span class="se">\</span>
+--pushdb <span class="se">\</span>
+/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/
+</pre></div>
+</div>
 </li>
 <li><p class="first">Publish the database on the Server either using the <a class="reference internal" href="../geeServerAdmin/publishDatabasesPortables.html"><span class="doc">GEE Server
 Admin console</span></a> or on the command
@@ -178,26 +194,33 @@ options to</p>
 <li><a class="reference internal" href="../geeServerAdmin/makeWMSRequests.html"><span class="doc">turn on WMS</span></a>.</li>
 </ul>
 <p><strong>To publish on the command line:</strong></p>
-<p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--fusion_host</span> <span class="pre">fusion_host.company.com</span> <span class="pre">\</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">--stream_server_url</span> <span class="pre">http://your_stream_server</span> <span class="pre">\</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">--publishdb</span> <span class="pre">\</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geserveradmin --fusion_host fusion_host.company.com <span class="se">\</span>
+--stream_server_url http://your_stream_server <span class="se">\</span>
+--publishdb <span class="se">\</span>
+/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/
+</pre></div>
+</div>
 </li>
 <li><p class="first">Verify that the database manifests:</p>
-<p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--stream_server_url</span> <span class="pre">http://your_stream_server</span> <span class="pre">\</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">--listdbs</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--stream_server_url</span> <span class="pre">http://your_stream_server</span> <span class="pre">\</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">--dbdetails</span> <span class="pre">\</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geserveradmin --stream_server_url http://your_stream_server <span class="se">\</span>
+--listdbs
+
+geserveradmin --stream_server_url http://your_stream_server <span class="se">\</span>
+--dbdetails <span class="se">\</span>
+/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb
+</pre></div>
+</div>
 </li>
 <li><p class="first">Verify the integrity of files in the published database:</p>
-<p><code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">your_server</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">/opt/google/bin/geindexcheck</span> <span class="pre">--database</span> <span class="pre">\</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">/gevol/published_dbs/stream_space/your_fusion_host/gevol/assets/</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">Databases/test.kdatabase/gedb.kda/ver001/gedb</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">/opt/google/bin/geindexcheck</span> <span class="pre">--mode</span> <span class="pre">all</span> <span class="pre">--database</span> <span class="pre">\</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">/gevol/published_dbs/stream_space/your_fusion_host/gevol/assets/</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">Databases/test.kdatabase/gedb.kda/ver001/gedb</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh your_server
+
+/opt/google/bin/geindexcheck --database <span class="se">\</span>
+/gevol/published_dbs/stream_space/your_fusion_host/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb
+
+/opt/google/bin/geindexcheck --mode all --database <span class="se">\</span>
+/gevol/published_dbs/stream_space/your_fusion_host/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb
+</pre></div>
+</div>
 <div class="admonition tip">
 <p class="first admonition-title">Tip</p>
 <p class="last">The paths in the examples above were split onto multiple
@@ -241,21 +264,29 @@ separate web server.</p>
 </li>
 <li><p class="first">Identify which dbroot file needs to be updated, and store in an
 environment variable for later use:</p>
-<p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">TARGET_DBROOT='/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/targets/new_target/dbroots/dbroot.v5p.DEFAULT'</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">TARGET_DBROOT</span><span class="o">=</span><span class="s1">&#39;/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/targets/new_target/dbroots/dbroot.v5p.DEFAULT&#39;</span>
+</pre></div>
+</div>
 </li>
 <li><p class="first">Rewrite the KML layer links in the database on the Server.</p>
-<p><code class="docutils literal notranslate"><span class="pre">/opt/google/bin/gerewritedbroot</span> <span class="pre">--source</span> <span class="pre">http://your_stream_server/new_target</span> <span class="pre">\</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">--dbroot_file</span> <span class="pre">$TARGET_DBROOT\</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">--kml_server</span> <span class="pre">your_stream_server</span> <span class="pre">--kml_url_path</span>&#160; <span class="pre">your_htdoc_path/</span> <span class="pre">\</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">--preserve_kml_filenames</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/opt/google/bin/gerewritedbroot --source http://your_stream_server/new_target <span class="se">\</span>
+--dbroot_file <span class="nv">$TARGET_DBROOT</span> <span class="se">\</span>
+--kml_server your_stream_server --kml_url_path  your_htdoc_path/ <span class="se">\</span>
+--preserve_kml_filenames
+</pre></div>
+</div>
 </li>
 <li><p class="first">Changes are not refected until the server is restarted.</p>
-<p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">service</span> <span class="pre">geserver</span> <span class="pre">restart</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo service geserver restart
+</pre></div>
+</div>
 </li>
 <li><p class="first">Validate that the server has the correct database information
 by dumping the dbroot as text:</p>
-<p><code class="docutils literal notranslate"><span class="pre">wget</span> <span class="pre">-O</span> <span class="pre">dbroot.v5p.DEFAULT</span> <span class="pre">http://you_stream_server/new_target/dbRoot.v5</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">gedumpdbroot</span> <span class="pre">dbroot.v5p.DEFAULT</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget -O dbroot.v5p.DEFAULT http://you_stream_server/new_target/dbRoot.v5
+gedumpdbroot dbroot.v5p.DEFAULT
+</pre></div>
+</div>
 </li>
 </ol>
 <p class="rubric">Delete disconnected databases</p>
