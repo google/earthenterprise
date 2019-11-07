@@ -18,6 +18,7 @@
 #include "autoingest/.idl/storage/AssetDefs.h"
 
 #include <gtest/gtest.h>
+#include <type_traits>
 
 using namespace std;
 
@@ -61,6 +62,22 @@ TEST(AssetHandleTest, Finalize) {
     ASSERT_FALSE(finalized);
   }
   ASSERT_TRUE(finalized);
+}
+
+TEST(AssetHandleTest, ConvertMutableToConst) {
+  AssetHandle<TestItem> mutableHandle;
+  AssetHandle<const TestItem> constHandle;
+  constHandle = mutableHandle;
+  ASSERT_EQ(mutableHandle.operator->(), constHandle.operator->());
+}
+
+TEST(AssetHandleTest, ConvertConstToMutable) {
+  // We should not be able to convert a const handle to a mutable handle.
+  if(std::is_assignable<AssetHandle<TestItem>, AssetHandle<const TestItem>>::value) {
+    // If the above statement is wrapped in ASSERT_FALSE it will fail to compile
+    // for some reason. This is our simple workaround.
+    FAIL();
+  }
 }
 
 int main(int argc, char **argv) {

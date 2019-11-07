@@ -1,0 +1,283 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Before you install GEE Server &#8212; Google Earth Enterprise 5.3.2 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Installing GEE Server" href="installGEEServer.html" />
+    <link rel="prev" title="System Requirements for GEE Server" href="sysReqGEEServer.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="installGEEServer.html" title="Installing GEE Server"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="sysReqGEEServer.html" title="System Requirements for GEE Server"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../installGEE.html" accesskey="U">Install Google Earth Enterprise</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="sysReqGEEServer.html"
+                        title="previous chapter">System Requirements for GEE Server</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="installGEEServer.html"
+                        title="next chapter">Installing GEE Server</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp8.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp8.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="before-you-install-gee-server">
+<h1>Before you install GEE Server<a class="headerlink" href="#before-you-install-gee-server" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>Before installing Google Earth Enterprise (GEE) Server, you must
+configure your hardware, network, and GEE users. You should also
+carefully decide in advance where you want to store Fusion
+data and where you want to publish Fusion databases. You must
+provide this information during installation. The following
+sections provide information about GEE requirements,
+considerations, and best practices. Be sure to complete all of the
+tasks described in these sections before installing GEE Server.</p>
+<p class="rubric">Upgrading</p>
+<p>To prevent compatibility issues, you must run the same version of
+GEE Server and Fusion. If you upgrade Fusion without upgrading GEE
+Server, you will not be able to publish to the GEE Server database.</p>
+<p class="rubric">Configuring Your Host Volumes</p>
+<p>The best practices for naming your host volumes are:</p>
+<ul class="simple">
+<li><strong>Network naming convention</strong>. You should use a network naming
+convention for any new volume that hosts Fusion or source data,
+whether it is initially part of a network or not, because you
+will almost certainly migrate to a network-based configuration
+eventually. Fusion requires both a network path and local name
+to resolve the locations of source files and related Fusion
+data, so changing the host volume name or path invalidates
+Fusion data. On a single workstation setup, the local and
+network paths are identical, but on a network-based
+configuration they are not.</li>
+<li><strong>/gevol</strong>. You should use /<code class="docutils literal notranslate"><span class="pre">gevol</span></code> as your volume naming
+convention because it is unlikely to conflict with standard
+Linux volume definitions. Linux systems frequently use either
+<code class="docutils literal notranslate"><span class="pre">/vol(*)</span></code> or <code class="docutils literal notranslate"><span class="pre">/</span></code><code class="docutils literal notranslate"><span class="pre">data(*)</span></code> as the local volume
+definition on a new system, so using this convention for Fusion
+can cause name conflicts if you later switch from a single
+workstation to a network-based configuration. For example, if
+you initially define <code class="docutils literal notranslate"><span class="pre">/vol1/assets</span></code> as the network location
+for a Fusion <em>asset root</em>, and you later add another
+workstation that has a local volume called <code class="docutils literal notranslate"><span class="pre">/vol1</span></code>, that
+workstation cannot reference <code class="docutils literal notranslate"><span class="pre">/vol1/assets</span></code>through the
+network because of the name conflict with its local volume
+definition. (See <a class="reference internal" href="beforeYouInstallGEE.html#planning-location-asset-root-gee"><span class="std std-ref">Planning the Location of Your Asset Root</span></a> for
+more information about the asset root.) You can avoid this
+conflict by using a unique naming convention for all volumes
+on your network (such as /<code class="docutils literal notranslate"><span class="pre">vol1</span></code>… /<code class="docutils literal notranslate"><span class="pre">vol</span></code><em>n</em>), but
+/<code class="docutils literal notranslate"><span class="pre">gevol</span></code> is a good choice because it is descriptive.</li>
+</ul>
+<p class="rubric">Configuring Multiple Storage Devices</p>
+<p>GEE Server and the Fusion asset root, source volumes, and publish
+root require large amounts of disk storage space. Fusion requires
+about three times as much storage space as GEE Server. The storage
+space can be either in the form of internal disks, directly
+attached storage devices, network-attached storage (NAS) devices,
+or storage area network (SAN) devices. Typically, these devices
+are configured into redundant arrays of independent disks (RAIDs)
+and presented to the operating system as volumes. Volumes can
+range in size from several hundred gigabytes to tens of
+terabytes.</p>
+<p>The difference between configuring a workstation with one, two, or
+three volumes is how you define the mount point for the source and
+asset volumes.</p>
+<p>When configuring a Linux workstation, it is best practice to use
+the following mount point naming conventions:</p>
+<ul>
+<li><p class="first"><strong>Single volume</strong></p>
+<p>Mount the single drive to slash (/). All data
+(<code class="docutils literal notranslate"><span class="pre">/gevol/assets</span></code>, <code class="docutils literal notranslate"><span class="pre">/gevol/src</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">/gevol/published_dbs</span></code>) resides on that drive with the local
+path defined using the /<code class="docutils literal notranslate"><span class="pre">gevol</span></code> naming convention.</p>
+</li>
+<li><p class="first"><strong>Two volumes - a small system volume and a larger data
+volume</strong></p>
+<p>Mount the small system drive to slash (<code class="docutils literal notranslate"><span class="pre">/</span></code>). Mount the larger
+data drive to <code class="docutils literal notranslate"><span class="pre">/gevol/</span></code>. Source and asset data volumes can
+then be defined as <code class="docutils literal notranslate"><span class="pre">/gevol/assets</span></code> and <code class="docutils literal notranslate"><span class="pre">/gevol/src</span></code>.</p>
+</li>
+<li><p class="first"><strong>Three volumes - a small system volume and two larger data
+volumes</strong></p>
+<p>Mount the small system drive to slash (<code class="docutils literal notranslate"><span class="pre">/</span></code>). Mount the first
+large data drive to <code class="docutils literal notranslate"><span class="pre">/gevol/assets</span></code>. Mount the second large
+data drive to <code class="docutils literal notranslate"><span class="pre">/gevol/src</span></code>.</p>
+</li>
+<li><p class="first"><strong>More than three volumes</strong></p>
+<p>There are several strategies for storing very large data sets.
+Fusion can read from and write to multiple volumes. For more
+information, you can request help on our <a class="reference external" href="http://slack.opengee.org/">Slack
+channel</a>.</p>
+</li>
+</ul>
+<p>It is also important to keep internal and external storage devices
+separated so that if your internal server goes down, it does not
+affect your ability to serve published data to external clients.
+Likewise, if your external server goes down, you can replace it
+and publish from the internal storage device. Perhaps more
+importantly, keeping your internal and external storage devices
+separate reduces the possibility of performance problems that
+could occur if you are building a large data set or if a client
+requests a time-consuming search.</p>
+<p class="rubric">Planning the Location of Your Publish Root</p>
+<p>During GEE Server installation, you must specify a volume for the
+<em>publish root</em>. The publish root is the directory in which all of
+your published databases are stored.</p>
+<p><strong>If you specify a different volume than the asset root</strong>:</p>
+<p>Whenever you publish a database, Fusion registers the database on
+the specified volume and then copies all of the database files to
+the designated volume.</p>
+<p>For example, if you specify <code class="docutils literal notranslate"><span class="pre">/gevol/assets</span></code> for your asset root
+and <code class="docutils literal notranslate"><span class="pre">/data1/published_dbs</span></code> for your publish root, whenever you
+publish a database, Fusion copies all of the database files from
+<code class="docutils literal notranslate"><span class="pre">/gevol/assets</span></code> to <code class="docutils literal notranslate"><span class="pre">/data1/published_dbs</span></code> (unless you allow
+symbolic links during installation). Copying takes more time as
+well as extra disk space.</p>
+<p><strong>If you specify the same volume as the asset root</strong>:</p>
+<p>Whenever you publish a database, Fusion registers the database on
+the specified volume and sets symbolic links to the database
+files.</p>
+<p>For example, if you specify <code class="docutils literal notranslate"><span class="pre">/gevol/assets</span></code> for your asset root
+and <code class="docutils literal notranslate"><span class="pre">/gevol/published_dbs</span></code> for your publish root, whenever you
+publish a database, Fusion registers the database on <code class="docutils literal notranslate"><span class="pre">gevol</span></code> and
+sets hard links to the database files. No copying is necessary.</p>
+<p class="rubric">Setting Up GEE Users</p>
+<p>The GEE installer automatically configures certain system users to
+perform background tasks at the system level. If you accept the
+default user names and allow the installer to create those users
+on your local workstation, you are implementing local
+authentication only. Local authentication is designed for
+standalone workstations only.</p>
+<p>If you are using GEE over a network with at least two
+workstations, storage devices, or servers, the best practice is to
+use a centralized network authentication system such as LDAP, NIS,
+or one of the many commercially available systems.</p>
+<p>If you use a centralized network authentication system, you must
+add the following users to your authentication system’s user list:</p>
+<ul class="simple">
+<li><strong>gefusionuser</strong></li>
+<li><strong>geapacheuser</strong></li>
+<li><strong>gepguser</strong></li>
+</ul>
+<p>The primary group for all of these users is <strong>gegroup</strong>.</p>
+<p>If you are in a multi-user environment in which multiple
+workstations share a common asset root on a NAS/SAN, <strong>these users
+must have the same UID on all devices, so you must assign them
+explicitly in both your network authentication system and in
+GEE</strong>.</p>
+<p>Be sure to configure each GEE workstation, storage device, and GEE
+Server to use your network authentication system. For more
+information, see your network authentication system documentation.</p>
+<p class="rubric">Customizing GEE User Names</p>
+<p>You can use customized user and group names when installing
+Fusion. Specify the custom user and group names via the <code class="docutils literal notranslate"><span class="pre">-u</span></code> and
+<code class="docutils literal notranslate"><span class="pre">-g</span></code> options when running the installer. The GEE Server
+installer does not currently provide the option to customize user
+and group names.</p>
+<p class="rubric">Deciding Which Products To Install</p>
+<p>You do not need to install all products on all devices. Follow the
+guidelines below.</p>
+<p><strong>Development machine</strong>:</p>
+<ul class="simple">
+<li>Install both Fusion and GEE Server on the server machine that
+you want to use to import your source GIS data and create
+flyable 3D and 2D databases. A system in this configuration is
+typically called the “development machine” since its primary
+task is to build flyable databases and only a small number of
+users will view the flyable data for quality assurance testing.</li>
+<li>Install the Fusion tutorial files on the “development machine”
+for users who are new to Fusion or to this version of Fusion.
+You can also use the Fusion tutorial files to test publishing.</li>
+</ul>
+<p><strong>Production machine</strong>:</p>
+<ul class="simple">
+<li>Install only the GEE Server on the server machine that hosts
+flyable 3D and 2D databases. All authorized end-users will
+connect to this system – typically referred to as the
+“production machine” – to view the flyable databases. This
+machine must be accessible through the network from the
+development machine in order to publish databases.</li>
+<li>Users who will not have direct network access to their
+production machines, or users who plan to update remote systems
+with external hard drives, must also install the “Disconnected
+Publishing Add-on” for additional tools.</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="installGEEServer.html" title="Installing GEE Server"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="sysReqGEEServer.html" title="System Requirements for GEE Server"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../installGEE.html" >Install Google Earth Enterprise</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

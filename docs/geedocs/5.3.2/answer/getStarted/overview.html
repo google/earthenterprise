@@ -1,0 +1,311 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Overview &#8212; Google Earth Enterprise 5.3.2 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Build and install GEE 5.x" href="buildAndInstall.html" />
+    <link rel="prev" title="Welcome to Google Earth Enterprise" href="welcome.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="buildAndInstall.html" title="Build and install GEE 5.x"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="welcome.html" title="Welcome to Google Earth Enterprise"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../getStarted.html" accesskey="U">Get Started</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="welcome.html"
+                        title="previous chapter">Welcome to Google Earth Enterprise</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="buildAndInstall.html"
+                        title="next chapter">Build and install GEE 5.x</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp6.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp6.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p id="index-0">Google Earth Enterprise (GEE) enables you to store and process
+terabytes of imagery, terrain, and vector data on your own server
+infrastructure, and publish globes and maps securely for your
+users to view using the Google Earth Enterprise Client (EC), or
+through your own application using the Google Maps and Earth APIs.</p>
+<p>Google Earth Enterprise is comprised of two distinct software
+packages, Fusion and Server, that work together to build and host
+your private Google Earth and Google Maps layers. Your users can
+view these 3D globes and 2D maps using the Google Earth Enterprise
+Client or web browser, respectively. You can also create
+‘portable’ globes and maps that your users can view using Portable
+Server.</p>
+<p class="rubric" id="things-to-know-about-building-and-publishing-globes-maps">10 Things to Know About Building and Publishing Globes
+&amp; Maps</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Here are some common tasks and key tips when working with
+Google Earth Enterprise. To learn more, click on the references
+at the end of each section.</p>
+</div>
+<p class="rubric" id="build-databases-with-fusion">1. Build databases with Fusion</p>
+<p>Google Earth Enterprise Fusion combines all of your imagery,
+terrain, and vector data into a single, flyable Google Earth globe
+(3D) or a Google Map (2D). After you import source data into your
+asset root and begin working with it, it becomes part of three
+fundamental components of Fusion: Resources, Projects, and
+Databases. The relationship among these three components is well-
+defined. Resources comprise projects, and projects comprise
+databases. A given resource can be used in more than one project,
+and a given project can be used in more than one database.</p>
+<p>If you are working with Mercator map data, you also specify which
+resource(s) comprise each map layer, which map layer(s) comprise
+each Maps vector project, and which Maps vector project and
+imagery project comprise each Maps database.</p>
+<p>To build databases and manage all the resources and projects they
+comprise, you use the Asset Manager UI (or its command-line
+equivalents), from which you can also modify and push your
+databases.</p>
+<p class="rubric">Learn More</p>
+<ul class="simple">
+<li><a class="reference internal" href="../fusionTutorial/buildDatabase.html"><span class="doc">Defining and Building Databases</span></a></li>
+<li><a class="reference internal" href="../fusionTutorial/createMapDB.html"><span class="doc">Creating a Map Database</span></a></li>
+</ul>
+<p class="rubric" id="view-your-build-logs">2. View your build logs</p>
+<p>During the course of creating resources, projects, and databases,
+you can check on the various processes that control the builds,
+helping you determine how your system is performing as your assets
+are being built. Error messages and warnings are also displayed
+here. To view the asset logs in the <strong>Fusion Asset Manager</strong>,
+right-click on an Asset to open its Current Version Properties.
+The System Manager also lets you follow the progress of your
+builds, letting you review waiting and active builds, as well as a
+complete activity log.</p>
+<p class="rubric" id="learn-more-1">Learn More</p>
+<ul class="simple">
+<li><a class="reference internal" href="../installGEE/verifyTroubleshootGEE.html"><span class="doc">Verifying and troubleshooting</span></a></li>
+<li><a class="reference internal" href="../fusionAdministration/beforeYouConfigure.html"><span class="doc">Fusion Administration Guide</span></a></li>
+</ul>
+<p class="rubric" id="push-databases-to-gee-server">3. Push Databases to GEE Server</p>
+<p>Google Earth Enterprise Fusion prepares 2D and 3D databases for
+hosting by first pushing them to GEE server. Pushing a database
+registers it with an associated server and transfers database
+files to the <strong>publish root</strong>, which contains all the files needed
+to serve that database version from GEE Server.</p>
+<div class="line-block">
+<div class="line">Once it is registered, you “publish” a database on GEE server by
+specifying a “publish point”, virtual host, and optionally,
+search tabs and snippets. Once published, your database is ready
+to be accessed by users through Google Earth EC (3D) or a web
+browser (2D).</div>
+</div>
+<div class="line-block">
+<div class="line">If you want to publish databases on a server that does not have
+a network connection to your Fusion workstation, you can create
+a “disconnected database” which can be placed on portable media,
+and then pushed and published on a GEE Server.</div>
+</div>
+<p class="rubric" id="learn-more-2">Learn More</p>
+<ul class="simple">
+<li><a class="reference internal" href="../fusionAdministration/pushAndPublishDB.html"><span class="doc">Push and publish databases</span></a></li>
+<li><a class="reference internal" href="../fusionAdministration/publishDBWithDiscPublishing.html"><span class="doc">Publish databases using disconnected publishing</span></a></li>
+</ul>
+<p class="rubric" id="publish-databases-securely-with-gee-server">4. Publish databases securely with GEE Server</p>
+<p>Does your organization host multiple servers with different
+authentication protocols? If you need to specify unique options to
+publish a map or globe at a given URL, you create individual
+<strong>publish points</strong> so that the map or globe can then be easily
+published multiple times at different URLs. And if you need to
+apply different security protocols to that map or globe, you can
+create new <strong>virtual hosts</strong>.</p>
+<p>Associating <strong>search services</strong> and <strong>snippet profiles</strong> at the
+time of publishing allows you to present different versions on the
+same underlying Fusion database, which can then be made available
+at different URLs and under different security protocols. One
+example is to protect one set of searchable data but display it on
+the same globe as you do an unprotected set of searchable data.
+You might then publish the database at one URL with the sensitive
+search and a secured <strong>virtual host</strong>, then publish the same
+database at a different URL with a non-sensitive search and public
+virtual host.</p>
+<p class="rubric" id="learn-more-3">Learn More</p>
+<ul class="simple">
+<li><a class="reference internal" href="../geeServerAdmin/manageVirtualHosts.html"><span class="doc">Manage virtual hosts</span></a></li>
+<li><a class="reference internal" href="../geeServerConfigAndSecurity/configureGeeVirtualHostForLDAP.html"><span class="doc">Configure a GEE virtual host for LDAP authentication</span></a></li>
+<li><a class="reference internal" href="../geeServerConfigAndSecurity/configureGeeServer5.1.0_SSL_HTTPS.html"><span class="doc">Configure GEE Server 5.1.0 for SSL/HTTPS</span></a></li>
+</ul>
+<p class="rubric" id="make-web-map-service-wms-requests">5. Make Web Map Service (WMS) requests</p>
+<p>GEE Server supports the OpenGIS Web Map Service Interface Standard
+(WMS), which provides a standard HTTP interface to request map
+images from one or more published geospatial databases. One of the
+benefits of using the WMS standard is that supported clients can
+request images from multiple WMS servers and then combine those
+mapping images into a single view. Because the WMS standard is
+used to fetch the images, they can easily be overlaid on one
+another. Supported clients include
+<a class="reference internal" href="../geeServerAdmin/makeWMSRequests.html"><span class="doc">QGIS</span></a>, ArcGIS/ArcGIS
+Explorer Desktop, and <a class="reference external" href="https://github.com/google/earthenterprise/wiki/Google-Earth-Enterprise-Client-(EC)">Google Earth Enterprise Client(EC)</a>.</p>
+<p class="rubric" id="learn-more-4">Learn More</p>
+<ul class="simple">
+<li><a class="reference internal" href="../geeServerAdmin/makeWMSRequests.html"><span class="doc">Make Web Map Service (WMS) requests</span></a></li>
+</ul>
+<p class="rubric" id="view-databases">6. View databases</p>
+<p>You can enable your users to access your private or public 3D
+globe via Google Earth Enterprise Client (EC), or they can access
+your 2D maps through a browser using the Google Maps API.</p>
+<p>Google Earth EC is similar to the familiar Google Earth client and
+offers your users an easy way to view geospatial data compared to
+traditional desktop GIS software. Search data is made accessible
+by <strong>search tabs</strong> in the EC client window, and each search tab
+can appear with customizable query fields and parameters for your
+specific users’ needs.</p>
+<p class="rubric" id="learn-more-5">Learn More</p>
+<ul class="simple">
+<li><a class="reference internal" href="../fusionTutorial/pushPublishView.html"><span class="doc">Pushing, Publishing, and Viewing a Database</span></a></li>
+</ul>
+<p class="rubric" id="google-maps-javascript-api">7. Google Maps JavaScript API</p>
+<p>Web-based maps mashups can be easily built with your data through
+Google Earth Enterprise and data is securely viewable and
+accessible through a browser using the Google Earth or Google Maps
+API. Use the GEE-specific <code class="docutils literal notranslate"><span class="pre">geeCreateFusionMap</span></code> class to
+instantiate and interact with map layers to create a container
+within an HTML page and then apply the same options as you would
+use with <code class="docutils literal notranslate"><span class="pre">google.maps.Map</span></code>.</p>
+<p class="rubric" id="learn-more-6">Learn More</p>
+<ul class="simple">
+<li><a class="reference internal" href="../developers/googleMapsAPIV3ForGEE.html"><span class="doc">Google Maps API v3 for GEE</span></a></li>
+</ul>
+<p class="rubric" id="search-services">8. Search Services</p>
+<p>GEE provides <strong>search tabs</strong> that you can incorporate into your
+published databases. You can access search services in different
+ways: by specifying search fields (POI) in one or more of your
+vector layers, by adding one of the default search tabs, or by
+writing a custom application that uses “search plug-ins” to query
+external databases.</p>
+<p>Search data is accessed via a query interface in Google Earth EC
+or a browser in the form of search tabs. You can customize the
+labels and fields in a search tab and use query parameter settings
+to control how the results of a query will be displayed.</p>
+<p class="rubric" id="learn-more-7">Learn More</p>
+<ul class="simple">
+<li><a class="reference internal" href="../geeServerAdmin/publishDatabasesWithSearch.html"><span class="doc">Publish databases with search</span></a></li>
+<li><a class="reference internal" href="../geeServerAdmin/searchPOIVectorMapLayerData.html"><span class="doc">Search your POI vector data or map layer data</span></a></li>
+<li><a class="reference internal" href="../geeServerAdmin/createSearchTabs.html"><span class="doc">Create Search tabs</span></a></li>
+<li><a class="reference internal" href="../geeServerAdmin/addCustomSearchServices.html"><span class="doc">Add custom search services</span></a></li>
+</ul>
+<p class="rubric" id="portable">9. Portable</p>
+<p>With the <strong>Google Earth Enterprise Portable Server</strong>, your users
+can take Google Earth and Maps with them into the field for
+completely disconnected offline use. A portable globe or map is a
+single self-contained file that stores all the geospatial data
+available within your specified area of interest — including all
+high-resolution imagery, terrain, vector data, KML files, and
+searchable point of interest (POI) locations.</p>
+<p>To create a portable map or globe, you launch the <strong>cutter tool</strong>
+from GEE Server and “cut” a polygon or provide a KML to define the
+area of interest. Google Earth Enterprise Portable launches a web
+browser to display your portable globes or maps that have been
+saved to the GEE Portable maps directory. You can also assemble
+different cuts into <strong>composite portable files</strong>. You might want
+to apply layers that use different cuts or regions of interest,
+then assemble them to create one single portable map or globe. You
+can serve these portable globes from Portable Server or GEE
+Server, and then view the portable 3D globes (.glb) from EC, or 2D
+portable maps (.glm) from a web browser.</p>
+<p class="rubric" id="learn-more-8">Learn More</p>
+<ul class="simple">
+<li><a class="reference internal" href="../portable/portableUserGuideWinLinux.html"><span class="doc">Portable User Guide for Windows and Linux</span></a></li>
+<li><a class="reference internal" href="../portable/portableDeveloperGuide.html"><span class="doc">Portable Developer Guide</span></a></li>
+<li><a class="reference internal" href="../geeServerAdmin/createPortableGlobesMaps.html"><span class="doc">Create Portable Globes and Maps</span></a></li>
+</ul>
+<p class="rubric" id="manage-your-gee-system">10. Manage your GEE system</p>
+<p>Before you even install, you will need to make sure you have planned
+for the location of your resources and your published databases,
+your <strong>asset</strong> and <strong>publish roots</strong>. And you will need to consider
+administrative privileges, keeping in mind that you will need to
+accept the default user and group access privileges for GEE Server
+or customize them for your organization. As you are likely to be
+processing large amounts of data, we recommend having a maintenance
+plan in place for your GEE system to include backup &amp; restore
+strategies, and periodic clean-up of unwanted asset versions.</p>
+<p class="rubric" id="learn-more-9">Learn More</p>
+<ul class="simple">
+<li><a class="reference internal" href="../fusionAdministration.html"><span class="doc">Fusion Administration Guide</span></a></li>
+<li><a class="reference internal" href="../fusionAdministration/manageFusionDiskSpace.html"><span class="doc">Manage Fusion disk space</span></a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="buildAndInstall.html" title="Build and install GEE 5.x"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="welcome.html" title="Welcome to Google Earth Enterprise"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../getStarted.html" >Get Started</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

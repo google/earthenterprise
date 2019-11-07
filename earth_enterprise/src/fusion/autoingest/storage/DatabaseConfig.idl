@@ -19,6 +19,7 @@
 #include <khMetaData.h>
 #include <searchtabs/.idl/SearchTabs.h>
 #include <autoingest/.idl/storage/SearchTabReference.h>
+#requiresgetheapusage
 
 #cppquote
 #include <searchtabs/.idl/SearchTabs_impl.h>
@@ -67,7 +68,6 @@ class DatabaseConfig {
   void ResetIds(void) {
     indexVersion = 1;
   }
-
 #/hquote
 };
 

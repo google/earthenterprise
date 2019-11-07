@@ -22,6 +22,7 @@
 #include <autoingest/.idl/storage/LayerLegend.h>
 #include <autoingest/.idl/storage/AssetDefs.h>
 #include <third_party/rfc_uuid/uuid.h>
+#requiresgetheapusage
 
 #cppquote
 #include <autoingest/.idl/storage/InsetStackItem_impl.h>

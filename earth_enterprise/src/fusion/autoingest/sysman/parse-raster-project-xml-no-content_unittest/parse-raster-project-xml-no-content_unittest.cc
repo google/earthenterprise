@@ -20,12 +20,16 @@ class FriendlyRasterProjectAssetVersionImplD : public RasterProjectAssetVersionI
 
     public:
 
-    static std::shared_ptr<FriendlyRasterProjectAssetVersionImplD> Load(std::string boundref)
+    static FriendlyRasterProjectAssetVersionImplD * Load(std::string boundref)
     {
-        std::shared_ptr<RasterProjectAssetVersionImplD> unfriendly_result =
-            RasterProjectAssetVersionImplD::Load(boundref);
-        std::shared_ptr<FriendlyRasterProjectAssetVersionImplD> result = 
-            *reinterpret_cast<std::shared_ptr<FriendlyRasterProjectAssetVersionImplD>*>(&unfriendly_result);
+        AssetSerializerLocalXML<AssetVersionImpl> serializer;
+        // We don't wrap this in a shared_ptr to avoid having two independent
+        // shared_ptrs that don't know about each other pointing at the same
+        // object. Instead, we just return the raw pointer and depend on it
+        // to not be deleted based on the way the test is written.
+        FriendlyRasterProjectAssetVersionImplD * result =
+            reinterpret_cast<FriendlyRasterProjectAssetVersionImplD*>(
+                serializer.Load(boundref).operator->());
 
         return result;
     }
@@ -57,7 +61,7 @@ class ParseRasterProjectXmlNoContent_Test :
 
         assert(asset_name_exists(asset_name));
 
-        std::shared_ptr<FriendlyRasterProjectAssetVersionImplD> asset_version =
+        auto asset_version =
             FriendlyRasterProjectAssetVersionImplD::Load(asset_name);
 
         // Currently, this causes a segmentation fault:

@@ -29,8 +29,6 @@ struct AssetVertex {
   SharedString name;
   AssetDefs::State state;
   bool inDepTree;
-  bool recalcState;
-  bool stateChanged;
   size_t index; // Used by the dfs function
 };
 

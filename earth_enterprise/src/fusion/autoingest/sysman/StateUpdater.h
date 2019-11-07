@@ -17,38 +17,74 @@
 #ifndef STATEUPDATER_H
 #define STATEUPDATER_H
 
-#include <set>
-#include <map>
-
-#include "DependentStateTree.h"
 #include "AssetVersion.h"
+#include "khAssetManager.h"
 #include "StorageManager.h"
+#include "WaitingAssets.h"
 
-// This class efficiently updates the states of lots of asset versions at
-// the same time. The idea is that you create a state updater, use it to
-// perform one "macro" operation (such as a clean or resume), and then release
-// it.
-//
-// Internally, this class represents the asset versions as a directed
-// acyclic graph, and state updates are performed as graph operations.
+#include <vector>
+
+// This class efficiently updates and propagates asset states. Internally, it
+// represents the asset versions as a directed acyclic graph, and state updates
+// are performed as graph operations.
 class StateUpdater
 {
   private:
+    class UnsupportedException {};
     class SetStateVisitor;
 
     StorageManagerInterface<AssetVersionImpl> * const storageManager;
-    DependentStateTree tree;
+    khAssetManagerInterface * const assetManager;
+    WaitingAssets waitingListeners;
+    WaitingAssets inProgressParents;
 
-    void SetState(
-        DependentStateTreeVertexDescriptor vertex,
+    void SetVersionStateAndRunHandlers(
+        AssetHandle<AssetVersionImpl> & version,
         AssetDefs::State newState,
-        bool sendNotifications);
+        const WaitingFor & waitingFor = {0, 0},
+        bool sendNotification = true);
+    AssetDefs::State RunStateChangeHandlers(
+        AssetHandle<AssetVersionImpl> & version,
+        AssetDefs::State newState,
+        AssetDefs::State oldState,
+        const WaitingFor & waitingFor);
+    AssetDefs::State RunVersionStateChangeHandler(
+        AssetHandle<AssetVersionImpl> & version,
+        AssetDefs::State newState,
+        AssetDefs::State oldState);
+    void SendStateChangeNotification(
+        const SharedString & name,
+        AssetDefs::State state) const;
+    void PropagateInProgress(const AssetHandle<AssetVersionImpl> & version);
+    void NotifyChildOrInputInProgress(
+        const WaitingAssets & waitingAssets,
+        const std::vector<SharedString> & toNotify);
+    void NotifyChildOrInputSucceeded(
+        WaitingAssets & waitingAssets,
+        const std::vector<SharedString> & toNotify,
+        bool propagate);
+    void RecalcState(const SharedString & ref);
+    template <class AssetType> bool IsParent(AssetHandle<AssetType> & version) const
+        { return !version->children.empty(); }
   public:
-    StateUpdater(StorageManagerInterface<AssetVersionImpl> * sm = &AssetVersion::storageManager()) : storageManager(sm) {}
-    void SetStateForRefAndDependents(
+    StateUpdater(
+        StorageManagerInterface<AssetVersionImpl> * sm,
+        khAssetManagerInterface * am) :
+      storageManager(sm), assetManager(am),
+      waitingListeners(AssetDefs::Waiting), inProgressParents(AssetDefs::InProgress) {}
+    StateUpdater() : StateUpdater(&AssetVersion::storageManager(), &theAssetManager) {}
+    virtual void SetStateForRefAndDependents(
         const SharedString & ref,
         AssetDefs::State newState,
         std::function<bool(AssetDefs::State)> updateStatePredicate);
+    virtual void SetInProgress(AssetHandle<AssetVersionImpl> & version);
+    virtual void SetSucceeded(AssetHandle<AssetVersionImpl> & version);
+    virtual void SetFailed(AssetHandle<AssetVersionImpl> & version);
+    virtual void UpdateWaitingAssets(
+        AssetHandle<const AssetVersionImpl> version,
+        AssetDefs::State oldState,
+        const WaitingFor & waitingFor);
+    virtual void UpdateSucceeded(AssetHandle<const AssetVersionImpl> version, bool propagate);
 };
 
 #endif

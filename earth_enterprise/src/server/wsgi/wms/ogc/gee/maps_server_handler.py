@@ -1,6 +1,7 @@
 #!/usr/bin/python
 #
 # Copyright 2017 Google Inc.
+# Copyright 2019 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,10 +20,12 @@
 import json
 import logging
 import re
+import ssl
 from socket import gethostname
-import urllib2
 import urlparse
+from pprint import pformat
 
+import wms.ogc.common.wms_connection as wms_connection
 import wms.ogc.common.projections as projections
 
 # Example 'serverDefs' from Maps/Portable. The parts we use are the same
@@ -210,16 +213,7 @@ def _GetServerVars(target_url):
 
   target_url = urlparse.urljoin(target_url, _SERVER_DEF_URL)
 
-  logger.debug("Opening url: [%s]", target_url)
-
-  try:
-    fp = urllib2.urlopen(target_url)
-    result = fp.read()
-  except urllib2.HTTPError, e:
-    logger.warning("Server definitions didn't return any results %s.", e)
-    return {}
-
-  fp.close()
+  result = wms_connection.HandleConnection(target_url)
 
   logger.debug("Server definitions data read, start regex")
   logger.debug("JSON vars: %s", result)
@@ -297,8 +291,7 @@ def _LayersFromServerVars(target_url):
     layers_by_name[layer.name] = layer
 
     logger.debug("Found server layer: %s", layer.name)
-
-  logger.debug("Layers processing done")
+  logger.debug("Layers processing done.  Layer information: %s ", pformat( layers_by_name))
 
   return layers_by_name
 

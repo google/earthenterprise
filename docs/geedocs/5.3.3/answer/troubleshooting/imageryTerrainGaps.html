@@ -1,0 +1,163 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Imagery or terrain gaps &#8212; Google Earth Enterprise 5.3.3 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Troubleshoot connection to GEE Server" href="troubleshootConnectionServer.html" />
+    <link rel="prev" title="Maps display grey tiles" href="mapsDispGrayTiles.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="troubleshootConnectionServer.html" title="Troubleshoot connection to GEE Server"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="mapsDispGrayTiles.html" title="Maps display grey tiles"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../troubleshooting.html" accesskey="U">Troubleshooting and error messages</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="mapsDispGrayTiles.html"
+                        title="previous chapter">Maps display grey tiles</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="troubleshootConnectionServer.html"
+                        title="next chapter">Troubleshoot connection to GEE Server</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp12.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp12.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="imagery-or-terrain-gaps">
+<h1>Imagery or terrain gaps<a class="headerlink" href="#imagery-or-terrain-gaps" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>Your map imagery or terrain might display one or more of these
+issues:</p>
+<ul class="simple">
+<li>Small gaps in both imagery and terrain that change as you zoom
+in or out.</li>
+<li>Dropoffs to zero values in the terrain at the edges of your
+tiles.</li>
+<li>A permanent black seam at the edges of tiles where they meet
+the adjacent tiles.</li>
+<li>Gaps or tears in the imagery that appear at seemingly random
+places, and that disappear when the terrain is turned off.</li>
+</ul>
+<p>To resolve these issues:</p>
+<ul class="simple">
+<li>Make sure that the <em>input</em> imagery does not have gaps,
+seamlines, or holes.</li>
+<li>If there is usable data to each extent of your imagery, you can
+remove the mask.</li>
+<li>By default, the automask tool assumes that the pixel value of
+the green band is the fill data pixel value for the entire
+image. This is used for masking as well as the hole check. Make
+sure that the <strong>Nodata</strong> field contains a <code class="docutils literal notranslate"><span class="pre">0</span></code>. Do not leave it
+blank.</li>
+<li>If placing a <code class="docutils literal notranslate"><span class="pre">0</span></code> in the <strong>Nodata</strong> field does not resolve the
+issue, create a mask file manually with the <code class="docutils literal notranslate"><span class="pre">gemaskgen</span></code>
+command and recreate the <code class="docutils literal notranslate"><span class="pre">kmp</span></code> folder in Fusion. See
+instructions below.</li>
+</ul>
+<p>To manually create the mask file:</p>
+<ol class="arabic">
+<li><p class="first">Locate and record the full path to the resource <code class="docutils literal notranslate"><span class="pre">kip</span></code> and
+<code class="docutils literal notranslate"><span class="pre">kmp</span></code> folders:</p>
+<p><code class="docutils literal notranslate"><span class="pre">gequery</span> <span class="pre">--outfiles</span> <span class="pre">resources/imagery/resource_i.kiasset</span></code></p>
+<p>You will need this information for building the automask and
+importing the mask product.</p>
+</li>
+<li><p class="first">Locate the path to the <code class="docutils literal notranslate"><span class="pre">mask.tif</span></code> file created by the
+automasker:</p>
+<p><code class="docutils literal notranslate"><span class="pre">gequery</span> <span class="pre">--outfiles</span> <span class="pre">resources/imagery/resource_i.kiasset/maskgen.kia</span></code></p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">mask.tif</span></code> file and rename it to
+<code class="docutils literal notranslate"><span class="pre">mask.tif.bak</span></code>.</p>
+</li>
+<li><p class="first">Create the new mask file:</p>
+<p><code class="docutils literal notranslate"><span class="pre">gemaskgen</span> <span class="pre">--mask</span> <span class="pre">--band</span> <span class="pre">1</span> <span class="pre">--fill</span> <span class="pre">0</span> <span class="pre">--feather</span> <span class="pre">0</span> <span class="pre">\</span> <span class="pre">--holesize</span> <span class="pre">100</span> <span class="pre">/path/to/resource_i.kiasset/product.kia/ver/raster.kip</span> <span class="pre">\</span> <span class="pre">-o</span> <span class="pre">./mask.tif</span></code></p>
+<p>If your source files are <code class="docutils literal notranslate"><span class="pre">MrSID</span></code> files, you might need to add
+a mask tolerance value (e.g., <code class="docutils literal notranslate"><span class="pre">--tolerance</span> <span class="pre">3</span></code>).</p>
+</li>
+<li><p class="first">Navigate to the resource <code class="docutils literal notranslate"><span class="pre">kip</span></code> and <code class="docutils literal notranslate"><span class="pre">kmp</span></code> folders, and move
+the <code class="docutils literal notranslate"><span class="pre">mask.kmp</span></code> folder to <code class="docutils literal notranslate"><span class="pre">mask.kmp.bak</span></code>.</p>
+</li>
+<li><p class="first">Create the new mask.kmp:</p>
+<p><code class="docutils literal notranslate"><span class="pre">gerasterimport</span> <span class="pre">--alphamask</span> <span class="pre">/path/to/mask.tif</span> <span class="pre">--dataproduct</span> <span class="pre">/path/to/raster.kip</span> <span class="pre">\</span> <span class="pre">--output</span> <span class="pre">./mask.kmp</span></code></p>
+</li>
+<li><p class="first">Launch the Fusion GUI and preview the image resource.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="troubleshootConnectionServer.html" title="Troubleshoot connection to GEE Server"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="mapsDispGrayTiles.html" title="Maps display grey tiles"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../troubleshooting.html" >Troubleshooting and error messages</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

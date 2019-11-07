@@ -15,56 +15,11 @@
 # limitations under the License.
 #
 
-import os
-
-Import(
-    'env', 'commonobj', 'plugins', 'extraObjs', 'TaskStorageObj',
-    'JobStorageObj', 'NextTaskIdObj', 'TaskRuleObj', 'FusionUniqueIdObj')
+Import('env', 'sysmanObjs', 'extraObjs', 'testLibs')
 
 env = env.Clone()
-env.UpdateCppflagsForSkia()
-
-
-env.Append(CPPFLAGS = [
-        '-fno-strict-aliasing'
-    ])
 
 env.test('parse-raster-project-xml-no-content_unittest',
-    commonobj +
-        env.ObjFromOtherDir(
-                extraObjs
-            ) +
-        map(lambda p: '../plugins/'+p+'AssetD.o', plugins) +
-        map(lambda o: os.path.join(env.exportdirs['root'], o),
-            [
-              'fusion/autoingest/sysman/AssetD.o',
-              'fusion/autoingest/sysman/AssetVersionD.o',
-              'fusion/autoingest/sysman/AssetOperation.o',
-              'fusion/autoingest/sysman/StateUpdater.o',
-              'fusion/autoingest/sysman/DependentStateTree.o',
-              'fusion/autoingest/sysman/khSystemManager.o',
-              'fusion/autoingest/sysman/khAssetManager.o',
-              'fusion/autoingest/sysman/khAssetManagerDispatch.o',
-              'fusion/autoingest/sysman/khResourceManager.o',
-              'fusion/autoingest/sysman/khTask.o',
-              'fusion/autoingest/sysman/TaskRequirements.o',
-              'fusion/autoingest/sysman/khResourceProviderProxy.o',
-              'fusion/autoingest/sysman/khResourceProviderProxyDispatch.o',
-              'fusion/autoingest/sysman/ResourceProviderProxy.o',
-              'fusion/autoingest/sysman/Reservation.o',
-              'fusion/autoingest/sysman/SysManExtra.o',
-              'fusion/autoingest/sysman/SysManFromStorage.o',
-              'fusion/autoingest/sysman/InsetInfo.o',
-            ]) +
-        map(lambda o: o,
-            [
-                TaskStorageObj, JobStorageObj, NextTaskIdObj, TaskRuleObj,
-                FusionUniqueIdObj,
-            ]) +
-        ['parse-raster-project-xml-no-content_unittest.cc'],
-    LIBS = [
-        'dbmanifest', 'geautoingest', 'gegdal', 'geraster',
-        'gesearchtabs', 'genet', 'gepublish', 'gefconfigutil', 'geindex_r',
-        'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'gtest', 'qt-mt',
-        'xerces-c', 'yaml-cpp'
-    ])
+    map(lambda o: "../" + o, sysmanObjs) + extraObjs + \
+    ['parse-raster-project-xml-no-content_unittest.cc'],
+    LIBS = [ 'dbmanifest', 'geautoingest', 'yaml-cpp' ] + testLibs)

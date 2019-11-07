@@ -1,0 +1,25 @@
+
+Welcome to Portable 5.0
+
+For information about new features and known issues, see
+
+Portable Release Notes 5.0
+
+.
+
+-[ How to install, use, and customize Portable: ]-
+
+Portable User Guide for Windows and Linux. Information about viewing
+portable globes and maps on your laptop or desktop computer.
+
+Portable Developer Guide. For software developers who want to
+customize or create applications for Portable.
+
+-[ How to create portable offline globes and maps: ]-
+
+The Google Earth Enterprise cutter tool for Earth Enterprise.
+
+-[ Getting support ]-
+
+Before contacting Support, make sure you check this Help Center for
+instructions, FAQs, and troubleshooting information.

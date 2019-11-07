@@ -104,12 +104,12 @@ void MapDatabaseAssetImplD::PopulateInputs(const MapDatabaseConfig &config,
                                            std::vector<SharedString> &inputs)
 {
   if (!config.imageryProject.empty()) {
-    RasterProjectFactory::ValidateRefForInput(config.imageryProject,
-                                              AssetDefs::Imagery);
+    ValidateRefForInput<RasterProjectAssetVersionD>(config.imageryProject, AssetDefs::Imagery);
+
     inputs.push_back(config.imageryProject);
   }
   if (!config.mapProject.empty()) {
-    MapProjectFactory::ValidateRefForInput(config.mapProject);
+    ValidateRefForInput<MapProjectAssetVersionD>(config.mapProject);
 
     // make a projected map project for my input
     ProjectedMapProjectConfig proj_config(AssetDefs::FlatProjection);
@@ -124,10 +124,11 @@ void MapDatabaseAssetImplD::PopulateInputs(const MapDatabaseConfig &config,
                                     "ProjectedProject");
 
     MutableProjectedMapProjectAssetD proj_asset =
-      ProjectedMapProjectFactory::FindMake(projected_proj_name,
-                                           makevec<SharedString>(config.mapProject),
-                                           khMetaData(),
-                                           proj_config);
+      AssetFactory::FindMake<MutableProjectedMapProjectAssetD>
+          (projected_proj_name,
+           makevec<SharedString>(config.mapProject),
+           khMetaData(),
+           proj_config);
     inputs.push_back(proj_asset->GetRef());
   }
 }
@@ -145,10 +146,7 @@ MapDatabaseAssetImplD::HandleEditRequest(const MapDatabaseEditRequest &req)
                                   kMapDatabaseSubtype);
 
 
-  (void) MapDatabaseFactory::FindMake(dbname,
-                                      inputs,
-                                      req.meta,
-                                      req.config);
+  (void) AssetFactory::FindMake<MutableMapDatabaseAssetD>(dbname, inputs, req.meta, req.config);
 }
 
 void
@@ -163,7 +161,7 @@ MapDatabaseAssetImplD::HandleNewRequest(const MapDatabaseEditRequest &req)
     AssetDefs::NormalizeAssetName(req.assetname, AssetDefs::Database,
                                   kMapDatabaseSubtype);
 
-  (void) MapDatabaseFactory::MakeNew(dbname,
+  (void) AssetFactory::MakeNew<MutableMapDatabaseAssetD, MapDatabaseConfig>(dbname,
                                      inputs,
                                      req.meta,
                                      req.config);
@@ -183,7 +181,7 @@ MapDatabaseAssetImplD::HandleModifyRequest(const MapDatabaseEditRequest &req)
                                   kMapDatabaseSubtype);
 
   // find and modify the DB
-  (void) MapDatabaseFactory::FindAndModify(dbname,
+  (void) AssetFactory::FindAndModify<MutableMapDatabaseAssetD>(dbname,
                                            inputs,
                                            req.meta,
                                            req.config);
@@ -271,7 +269,7 @@ MapDatabaseAssetVersionImplD::DelayedBuildChildren(void)
     }
 
     unified_index =
-      UnifiedIndexFactory::FindMakeAndUpdate(
+      AssetFactory::FindMakeAndUpdate<MutableUnifiedIndexAssetVersionD, AssetVersion>(
           unified_index_asset_name,
           index_input_verrefs,
           khMetaData(),
@@ -307,7 +305,7 @@ MapDatabaseAssetVersionImplD::DelayedBuildChildren(void)
                                   GEE_VERSION);
     // update the mapdb asset
     mapdb =
-      MapDBFactory::FindMakeAndUpdate(
+      AssetFactory::FindMakeAndUpdate<MutableMapDBAssetVersionD, AssetVersion>(
           mapdb_asset_name,
           mapdb_input_verrefs,
           khMetaData(),

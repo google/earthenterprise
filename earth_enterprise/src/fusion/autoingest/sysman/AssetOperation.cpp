@@ -16,11 +16,15 @@
 
 #include "AssetOperation.h"
 #include "AssetVersionD.h"
-#include "MiscConfig.h"
 #include "StateUpdater.h"
 
-void RebuildVersion(const SharedString & ref) {
-  if (MiscConfig::Instance().GraphOperations) {
+#include <memory>
+
+std::unique_ptr<StateUpdater> stateUpdater(new StateUpdater());
+StorageManagerInterface<AssetVersionImpl> * assetOpStorageManager = &AssetVersion::storageManager();
+
+void RebuildVersion(const SharedString & ref, bool graphOps) {
+  if (graphOps) {
     // Rebuilding an already succeeded asset is quite dangerous!
     // Those who depend on me may have already finished their work with me.
     // If I rebuild, they have the right to recognize that nothing has
@@ -35,18 +39,105 @@ void RebuildVersion(const SharedString & ref) {
     // The same logic could hold true for 'Offline' as well.
     {
       // Limit the scope to release the AssetVersion as quickly as possible.
-      AssetVersion version(ref);
-      if (version->state & (AssetDefs::Succeeded | AssetDefs::Offline | AssetDefs::Bad)) {
+      auto version = assetOpStorageManager->Get(ref);
+      if (version && version->state & (AssetDefs::Succeeded | AssetDefs::Offline | AssetDefs::Bad)) {
         throw khException(kh::tr("%1 marked as %2. Refusing to resume.")
                           .arg(ToQString(ref), ToQString(version->state)));
       }
+      else if (!version){
+        notify(NFY_WARN, "Could not load %s for rebuild", ref.toString().c_str());
+        return;
+      }
     }
 
-    StateUpdater updater;
-    updater.SetStateForRefAndDependents(ref, AssetDefs::New, AssetDefs::CanRebuild);
+    stateUpdater->SetStateForRefAndDependents(ref, AssetDefs::New, AssetDefs::CanRebuild);
   }
   else {
     MutableAssetVersionD version(ref);
-    version->Rebuild();
+    if (version) {
+      version->Rebuild();
+    }
+    else {
+      notify(NFY_WARN, "Could not load %s for rebuild", ref.toString().c_str());
+    }
+  }
+}
+
+void HandleTaskProgress(const TaskProgressMsg & msg, bool graphOps) {
+  if (graphOps) {
+    auto version = assetOpStorageManager->GetMutable(msg.verref);
+    if (version && version->taskid == msg.taskid) {
+      version->beginTime = msg.beginTime;
+      version->progressTime = msg.progressTime;
+      version->progress = msg.progress;
+      stateUpdater->SetInProgress(version);
+    }
+    else if (!version) {
+      notify(NFY_WARN, "Could not load %s to update progress", msg.verref.c_str());
+    }
+  }
+  else {
+    AssetVersionD ver(msg.verref);
+    if (ver && ver->taskid == msg.taskid) {
+      MutableAssetVersionD(msg.verref)->HandleTaskProgress(msg);
+    }
+    else if (!ver) {
+      notify(NFY_WARN, "Could not load %s to update progress", msg.verref.c_str());
+    }
+  }
+}
+
+void HandleTaskDone(const TaskDoneMsg & msg, bool graphOps) {
+  if (graphOps) {
+    auto version = assetOpStorageManager->GetMutable(msg.verref);
+    if (version && version->taskid == msg.taskid) {
+      version->beginTime = msg.beginTime;
+      version->progressTime = msg.endTime;
+      version->endTime = msg.endTime;
+      if (msg.success) {
+        version->ResetOutFiles(msg.outfiles);
+        stateUpdater->SetSucceeded(version);
+      }
+      else {
+        stateUpdater->SetFailed(version);
+      }
+    }
+    else if (!version) {
+      notify(NFY_WARN, "Could not load %s to mark done", msg.verref.c_str());
+    }
+  }
+  else {
+    AssetVersionD ver(msg.verref);
+    if (ver && ver->taskid == msg.taskid) {
+      MutableAssetVersionD(msg.verref)->HandleTaskDone(msg);
+    }
+    else if (!ver) {
+      notify(NFY_WARN, "Could not load %s to mark done", msg.verref.c_str());
+    }
+  }
+}
+
+// This function ensures that the State Updater stays in sync with any state
+// changes that happen in the legacy code.
+void HandleExternalStateChange(
+    const SharedString & ref,
+    AssetDefs::State oldState,
+    uint32 numInputsWaitingFor,
+    uint32 numChildrenWaitingFor,
+    bool graphOps) {
+  if (graphOps) {
+    auto version = assetOpStorageManager->Get(ref);
+    if (version) {
+      // Update the lists of waiting assets
+      stateUpdater->UpdateWaitingAssets(version, oldState, {numInputsWaitingFor, numChildrenWaitingFor});
+      if (version->state == AssetDefs::Succeeded) {
+        // Notify this asset's parents and listeners so that they can decrement
+        // their waiting count.
+        stateUpdater->UpdateSucceeded(version, false);
+      }
+    }
+    else {
+      notify(NFY_WARN, "Could not load %s to update waiting assets", ref.toString().c_str());
+    }
   }
 }

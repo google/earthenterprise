@@ -17,66 +17,38 @@
 #include "StateUpdater.h"
 #include "AssetVersion.h"
 #include "common/notify.h"
+#include "DependentStateTree.h"
+
+#include <unordered_set>
+#include <memory>
+
+// Must be included before depth_first_search.hpp
+#include "InNodeVertexIndexMap.h"
+
+#include <boost/graph/depth_first_search.hpp>
 
 using namespace boost;
 using namespace std;
 
-// The depth_first_search function needs a way to map vertices to indexes. We
-// store a unique index inside each vertex; the code below provides a way for
-// boost to access them. These must be defined before including
-// depth_first_search.hpp.
-template <class Graph>
-class InNodeVertexIndexMap {
-  public:
-    typedef readable_property_map_tag category;
-    typedef size_t value_type;
-    typedef value_type reference;
-    typedef typename Graph::vertex_descriptor key_type;
-
-    InNodeVertexIndexMap(const Graph & graph) : graph(graph) {};
-    const Graph & graph;
-};
-
-namespace boost {
-  template<>
-  struct property_map<DependentStateTree, vertex_index_t> {
-    typedef InNodeVertexIndexMap<DependentStateTree> const_type;
-  };
-
-  template<class Graph>
-  InNodeVertexIndexMap<Graph> get(vertex_index_t, const Graph & graph) {
-    return InNodeVertexIndexMap<Graph>(graph);
-  }
-
-  template<class Graph>
-  typename InNodeVertexIndexMap<Graph>::value_type get(
-      const InNodeVertexIndexMap<Graph> & map,
-      typename InNodeVertexIndexMap<Graph>::key_type vertex) {
-    return map.graph[vertex].index;
-  }
-}
-
-#include <boost/graph/depth_first_search.hpp>
-
 class StateUpdater::SetStateVisitor : public default_dfs_visitor {
   private:
-    StateUpdater * const updater;
-    const AssetDefs::State newState;
+    using RecalcSet = std::unordered_set<SharedString>;
 
-    bool NeedComputeState(AssetDefs::State state) const {
-      // these states are explicitly set and must be explicitly cleared
-      return !(state & (AssetDefs::Bad |
-                        AssetDefs::Offline |
-                        AssetDefs::Canceled));
-    }
+    StateUpdater & updater;
+    DependentStateTree & tree;
+    const AssetDefs::State newState;
+    // This is a shared_ptr because the visitor will be copied several times
+    // during the course of the traversal.
+    const std::shared_ptr<RecalcSet> needsRecalc;
 
     // Helper class for calculating state from inputs
     class InputStates {
       private:
-        uint numinputs = 0;
-        uint numgood = 0;
-        uint numblocking = 0;
-        uint numoffline = 0;
+        bool decided = false;
+        uint32 numinputs = 0;
+        uint32 numgood = 0;
+        uint32 numblocking = 0;
+        uint32 numoffline = 0;
       public:
         void Add(AssetDefs::State inputState) {
           ++numinputs;
@@ -90,9 +62,12 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
                                    AssetDefs::Canceled |
                                    AssetDefs::Bad)) {
             ++numblocking;
+            // If we enter this case we know what the outputs will be, so we
+            // don't need to check any more states.
+            decided = true;
           }
         }
-        void GetOutputs(AssetDefs::State & stateByInputs, bool & blockersAreOffline, uint32 & numWaitingFor) {
+        void GetOutputs(AssetDefs::State & stateByInputs, bool & blockersAreOffline, uint32 & numInputsWaitingFor) {
           if (numinputs == numgood) {
             stateByInputs = AssetDefs::Queued;
           } else if (numblocking) {
@@ -104,19 +79,23 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
           blockersAreOffline = (numblocking == numoffline);
 
           if (stateByInputs == AssetDefs::Waiting) {
-            numWaitingFor = (numinputs - numgood);
+            numInputsWaitingFor = (numinputs - numgood);
           } else {
-            numWaitingFor = 0;
+            numInputsWaitingFor = 0;
           }
+        }
+        bool Decided() {
+          return decided;
         }
     };
     // Helper class for calculating state from children
     class ChildStates {
       private:
-        uint numkids = 0;
-        uint numgood = 0;
-        uint numblocking = 0;
-        uint numinprog = 0;
+        bool decided = false;
+        uint32 numkids = 0;
+        uint32 numgood = 0;
+        uint32 numblocking = 0;
+        uint32 numinprog = 0;
       public:
         void Add(AssetDefs::State childState) {
           ++numkids;
@@ -130,9 +109,12 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
                                    AssetDefs::Offline  |
                                    AssetDefs::Bad)) {
             ++numblocking;
+            // If we enter this case we know what the outputs will be, so we
+            // don't need to check any more states.
+            decided = true;
           }
         }
-        void GetOutputs(AssetDefs::State & stateByChildren) {
+        void GetOutputs(AssetDefs::State & stateByChildren, uint32 & numChildrenWaitingFor) {
           if (numkids == numgood) {
             stateByChildren = AssetDefs::Succeeded;
           } else if (numblocking) {
@@ -142,6 +124,16 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
           } else {
             stateByChildren = AssetDefs::Queued;
           }
+          
+          if (stateByChildren == AssetDefs::InProgress) {
+            numChildrenWaitingFor = numkids - numgood;
+          }
+          else {
+            numChildrenWaitingFor = 0;
+          }
+        }
+        bool Decided() {
+          return decided;
         }
     };
 
@@ -149,18 +141,11 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
     // everything the asset verion needs to know to figure out its state. This
     // data will be passed to the asset version so it can calculate its own
     // state.
-    void CalculateStateParameters(
-        DependentStateTreeVertexDescriptor vertex,
-        const DependentStateTree & tree,
-        AssetDefs::State &stateByInputs,
-        AssetDefs::State &stateByChildren,
-        bool & blockersAreOffline,
-        uint32 & numWaitingFor,
-        bool & childOrInputStateChanged) const {
+    InputAndChildStateData CalculateStateParameters(
+        DependentStateTreeVertexDescriptor vertex) const {
       InputStates inputStates;
       ChildStates childStates;
 
-      childOrInputStateChanged = false;
       auto edgeIters = out_edges(vertex, tree);
       auto edgeBegin = edgeIters.first;
       auto edgeEnd = edgeIters.second;
@@ -171,75 +156,116 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
         switch(type) {
           case INPUT:
             inputStates.Add(depState);
-            childOrInputStateChanged = childOrInputStateChanged || tree[dep].stateChanged;
             break;
           case CHILD:
           case DEPENDENT_AND_CHILD:
             childStates.Add(depState);
-            childOrInputStateChanged = childOrInputStateChanged || tree[dep].stateChanged;
             break;
           case DEPENDENT:
             // Dependents that are not also children are not considered when
             // calculating state.
             break;
         }
+        // If we already know what the value of all of the parameters will be
+        // we can exit the loop early.
+        if (inputStates.Decided() && childStates.Decided()) {
+          break;
+        }
       }
 
-      inputStates.GetOutputs(stateByInputs, blockersAreOffline, numWaitingFor);
-      childStates.GetOutputs(stateByChildren);
+      InputAndChildStateData data;
+      inputStates.GetOutputs(data.stateByInputs, data.blockersAreOffline, data.waitingFor.inputs);
+      childStates.GetOutputs(data.stateByChildren, data.waitingFor.children);
+      return data;
+    }
+
+    void SetState(
+        DependentStateTreeVertexDescriptor vertex,
+        AssetDefs::State newState,
+        const WaitingFor & waitingFor,
+        bool sendNotification) const {
+      SharedString name = tree[vertex].name;
+      AssetDefs::State oldState = tree[vertex].state;
+      if (newState != oldState) {
+        notify(NFY_PROGRESS, "Setting state of '%s' from '%s' to '%s'",
+              name.toString().c_str(), ToString(oldState).c_str(), ToString(newState).c_str());
+        auto version = updater.storageManager->GetMutable(name);
+        if (version) {
+          updater.SetVersionStateAndRunHandlers(version, newState, waitingFor, sendNotification);
+
+          // Get the new state directly from the asset version since it may be
+          // different from the passed-in state
+          tree[vertex].state = version->state;
+
+          needsRecalc->insert(version->parents.begin(), version->parents.end());
+          needsRecalc->insert(version->listeners.begin(), version->listeners.end());
+        }
+        else {
+          // This shoud never happen - we had to successfully load the asset
+          // previously to get it into the tree.
+          notify(NFY_WARN, "Could not load asset '%s' to set state.",
+                name.toString().c_str());
+        }
+      }
+    }
+
+    bool NeedComputeState(DependentStateTreeVertexDescriptor vertex) const {
+      auto & vertexData = tree[vertex];
+      bool userActionRequired = 
+          (vertexData.state & (AssetDefs::Bad |
+                               AssetDefs::Offline |
+                               AssetDefs::Canceled));
+      bool recalcRequested = (needsRecalc->find(vertexData.name) != needsRecalc->end());
+      return !userActionRequired && (vertexData.inDepTree || recalcRequested);
+    }
+
+    void ComputeAndSetState(
+        const SharedString & name,
+        DependentStateTreeVertexDescriptor vertex) const {
+      const InputAndChildStateData data = CalculateStateParameters(vertex);
+      AssetDefs::State calculatedState;
+      {
+        // Limit scope to release the asset version as quickly as possible
+        auto version = updater.storageManager->Get(name);
+        if (!version) {
+          // This shoud never happen - we had to successfully load the asset
+          // previously to get it into the tree.
+          notify(NFY_WARN, "Could not load asset '%s' to recalculate state.",
+                  name.toString().c_str());
+          return;
+        }
+        calculatedState = version->CalcStateByInputsAndChildren(data);
+      }
+      // Set the state. "true" means we're done changing this asset's state.
+      SetState(vertex, calculatedState, data.waitingFor, true);
     }
 
   public:
-    SetStateVisitor(StateUpdater * updater, AssetDefs::State newState) :
-        updater(updater), newState(newState) {}
+    SetStateVisitor(StateUpdater & updater, DependentStateTree & tree, AssetDefs::State newState) :
+        updater(updater), tree(tree), newState(newState),
+        needsRecalc(std::make_shared<RecalcSet>()) {}
 
     // This function is called after the DFS has completed for every vertex
     // below this one in the tree. Thus, we don't calculate the state for an
     // asset until we've calculated the state for all of its inputs and
     // children.
-    virtual void finish_vertex(
+    void finish_vertex(
         DependentStateTreeVertexDescriptor vertex,
-        const DependentStateTree & tree) const {
-      if (!tree[vertex].recalcState) return;
+        const DependentStateTree &) const {
       SharedString name = tree[vertex].name;
       notify(NFY_PROGRESS, "Calculating state for '%s'", name.toString().c_str());
 
-      // Set the state for assets in the dependent tree. Don't send
-      // notifications because we'll set the state again below.
+      // Set the state for assets in the dependent tree. "false" means we'll
+      // set the state again below.
       if (tree[vertex].inDepTree) {
-        updater->SetState(vertex, newState, false);
+        SetState(vertex, newState, {0, 0}, false);
       }
 
       // For all assets (including parents and listeners) update the state
       // based on the state of inputs and children.
-      if (NeedComputeState(tree[vertex].state)) {
-        AssetDefs::State stateByInputs;
-        AssetDefs::State stateByChildren;
-        bool blockersAreOffline;
-        uint32 numWaitingFor;
-        bool childOrInputStateChanged;
-        CalculateStateParameters(
-              vertex, tree, stateByInputs, stateByChildren,
-              blockersAreOffline, numWaitingFor, childOrInputStateChanged);
-        if (tree[vertex].stateChanged || childOrInputStateChanged) {
-          AssetDefs::State calculatedState;
-          // Run this in a separate block so that the asset version is released
-          // before we try to update it.
-          {
-            auto version = updater->storageManager->Get(name);
-            if (!version) {
-              // This shoud never happen - we had to successfully load the asset
-              // previously to get it into the tree.
-              notify(NFY_WARN, "Could not load asset '%s' to recalculate state.",
-                     name.toString().c_str());
-              return;
-            }
-            calculatedState = version->CalcStateByInputsAndChildren(
-                  stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
-          }
-          // Set the state and send notifications.
-          updater->SetState(vertex, calculatedState, true);
-        }
+      if (NeedComputeState(vertex)) {
+        ComputeAndSetState(name, vertex);
+        needsRecalc->erase(name);
       }
     }
 };
@@ -248,36 +274,187 @@ void StateUpdater::SetStateForRefAndDependents(
     const SharedString & ref,
     AssetDefs::State newState,
     function<bool(AssetDefs::State)> updateStatePredicate) {
-  SharedString verref = AssetVersionImpl::Key(ref);
-  tree = BuildDependentStateTree(verref, updateStatePredicate, storageManager);
-  depth_first_search(tree, visitor(SetStateVisitor(this, newState)));
+  try {
+    SharedString verref = AssetVersionImpl::Key(ref);
+    DependentStateTree tree = BuildDependentStateTree(verref, updateStatePredicate, storageManager);
+    depth_first_search(tree, visitor(SetStateVisitor(*this, tree, newState)));
+  }
+  catch (UnsupportedException) {
+    // This is intended as a temporary condition that will no longer be needed
+    // when all operations have been converted to use the state updater for
+    // propagating state changes. When this exception is thrown, the legacy
+    // code will have already propagated the state change, so no further action
+    // is necessary.
+    notify(NFY_INFO, "Unsupported condition encountered in state updater. "
+           "Reverting to legacy state propagation.");
+  }
 }
 
-void StateUpdater::SetState(
-    DependentStateTreeVertexDescriptor vertex,
+void StateUpdater::SetVersionStateAndRunHandlers(
+    AssetHandle<AssetVersionImpl> & version,
     AssetDefs::State newState,
-    bool sendNotifications) {
-  SharedString name = tree[vertex].name;
-  if (newState != tree[vertex].state) {
-    auto version = storageManager->GetMutable(name);
-    notify(NFY_PROGRESS, "Setting state of '%s' to '%s'",
-           name.toString().c_str(), ToString(newState).c_str());
-    if (version) {
-      // Set the state. The OnStateChange handler will take care
-      // of stopping any running tasks, etc.
-      // This call does not propagate the state change to other assets. We will
-      // take care of that inside the state updater.
-      version->SetMyStateOnly(newState, sendNotifications);
-      // Setting the state can trigger additional state changes, so get the new
-      // state directly from the asset version.
-      tree[vertex].state = version->state;
-      tree[vertex].stateChanged = true;
+    const WaitingFor & waitingFor,
+    bool sendNotification) {
+  // RunStateChangeHandlers can return a new state that we need to transition
+  // to, so we may have to change the state repeatedly.
+  AssetDefs::State oldState = version->state;
+  do {
+    version->state = newState;
+    AssetDefs::State nextState = RunStateChangeHandlers(version, newState, oldState, waitingFor);
+    oldState = newState;
+    newState = nextState;
+  } while(version->state != newState);
+
+  if (sendNotification) {
+    SendStateChangeNotification(version->GetRef(), version->state);
+  }
+}
+
+AssetDefs::State StateUpdater::RunStateChangeHandlers(
+    AssetHandle<AssetVersionImpl> & version,
+    AssetDefs::State newState,
+    AssetDefs::State oldState,
+    const WaitingFor & waitingFor) {
+  UpdateWaitingAssets(version, oldState, waitingFor);
+  try {
+    return RunVersionStateChangeHandler(version, newState, oldState);
+  } catch (const UnsupportedException &) {
+    // We'll catch this exception farther up the stack
+    throw;
+  } catch (const StateChangeException &e) {
+    notify(NFY_WARN, "Exception during %s: %s : %s",
+           e.location.c_str(), version->GetRef().toString().c_str(), e.what());
+    version->WriteFatalLogfile(e.location, e.what());
+  } catch (const std::exception &e) {
+    notify(NFY_WARN, "Exception during OnStateChange: %s", e.what());
+  } catch (...) {
+    notify(NFY_WARN, "Unknown exception during OnStateChange");
+  }
+  return AssetDefs::Failed;
+}
+
+AssetDefs::State StateUpdater::RunVersionStateChangeHandler(
+    AssetHandle<AssetVersionImpl> & version,
+    AssetDefs::State newState,
+    AssetDefs::State oldState) {
+  bool hasChildrenBefore = IsParent(version);
+  // This will take care of stopping any running tasks, etc.
+  AssetDefs::State nextState = version->OnStateChange(newState, oldState);
+  bool hasChildrenAfter = IsParent(version);
+  if (!hasChildrenBefore && hasChildrenAfter) {
+    // OnStateChange can call DelayedBuildChildren, which creates new
+    // children for this asset. This code is not yet able to handle that
+    // case, so we let OnStateChange perform the legacy state propagation
+    // and abandon this operation.
+    throw UnsupportedException();
+  }
+  return nextState;
+}
+
+void StateUpdater::SendStateChangeNotification(
+    const SharedString & name,
+    AssetDefs::State state) const {
+  notify(NFY_VERBOSE, "Calling theAssetManager.NotifyVersionStateChange(%s, %s)", 
+         name.toString().c_str(), 
+         ToString(state).c_str());
+  assetManager->NotifyVersionStateChange(name, state);
+}
+
+void StateUpdater::UpdateWaitingAssets(
+    AssetHandle<const AssetVersionImpl> version,
+    AssetDefs::State oldState,
+    const WaitingFor & waitingFor) {
+  const SharedString ref = version->GetRef();
+  const AssetDefs::State newState = version->state;
+  waitingListeners.Update(ref, newState, oldState, waitingFor.inputs);
+  if (IsParent(version)) {
+    inProgressParents.Update(ref, newState, oldState, waitingFor.children);
+  }
+}
+
+void StateUpdater::SetInProgress(AssetHandle<AssetVersionImpl> & version) {
+  try {
+    SetVersionStateAndRunHandlers(version, AssetDefs::InProgress);
+    PropagateInProgress(version);
+    if (!AssetDefs::Finished(version->state)) {
+      assetManager->NotifyVersionProgress(version->GetRef(), version->progress);
     }
-    else {
-      // This shoud never happen - we had to successfully load the asset
-      // previously to get it into the tree.
-      notify(NFY_WARN, "Could not load asset '%s' to set state.",
-             name.toString().c_str());
+  }
+  catch (UnsupportedException) {
+    // This is intended as a temporary condition that will no longer be needed
+    // when all operations have been converted to use the state updater for
+    // propagating state changes. When this exception is thrown, the legacy
+    // code will have already propagated the state change, so no further action
+    // is necessary.
+    notify(NFY_INFO, "Unsupported condition encountered while setting %s to "
+           "InProgress in state updater. Reverting to legacy state propagation.",
+           version->GetRef().toString().c_str());
+  }
+}
+
+void StateUpdater::PropagateInProgress(const AssetHandle<AssetVersionImpl> & version) {
+  NotifyChildOrInputInProgress(inProgressParents, version->parents);
+  NotifyChildOrInputInProgress(waitingListeners, version->listeners);
+}
+
+void StateUpdater::NotifyChildOrInputInProgress(
+    const WaitingAssets & waitingAssets,
+    const std::vector<SharedString> & toNotify) {
+  // If the asset to notify is already waiting, there's nothing to do.
+  // Otherwise, we need to recalculate (and possibly propagate) the state.
+  for (const SharedString & ref : toNotify) {
+    if (!waitingAssets.IsWaiting(ref)) {
+      RecalcState(ref);
     }
+  }
+}
+
+void StateUpdater::SetSucceeded(AssetHandle<AssetVersionImpl> & version) {
+  try {
+    SetVersionStateAndRunHandlers(version, AssetDefs::Succeeded);
+    UpdateSucceeded(version, true);
+  }
+  catch (UnsupportedException) {
+    // This is intended as a temporary condition that will no longer be needed
+    // when all operations have been converted to use the state updater for
+    // propagating state changes. When this exception is thrown, the legacy
+    // code will have already propagated the state change, so no further action
+    // is necessary.
+    notify(NFY_INFO, "Unsupported condition encountered while setting %s to "
+           "Succeeded in state updater. Reverting to legacy state propagation.",
+           version->GetRef().toString().c_str());
+  }
+}
+
+void StateUpdater::UpdateSucceeded(AssetHandle<const AssetVersionImpl> version, bool propagate) {
+  NotifyChildOrInputSucceeded(inProgressParents, version->parents, propagate);
+  NotifyChildOrInputSucceeded(waitingListeners, version->listeners, propagate);
+}
+
+void StateUpdater::NotifyChildOrInputSucceeded(
+    WaitingAssets & waitingAssets,
+    const std::vector<SharedString> & toNotify,
+    bool propagate) {
+  // If the asset is no longer waiting, or if it wasn't waiting to begin with,
+  // we need to recalculate and propagate the state.
+  for (const SharedString & ref : toNotify) {
+    if (!waitingAssets.DecrementAndCheckWaiting(ref) && propagate) {
+      RecalcState(ref);
+    }
+  }
+}
+
+void StateUpdater::SetFailed(AssetHandle<AssetVersionImpl> & version) {
+  version->SetAndPropagateState(AssetDefs::Failed);
+}
+
+void StateUpdater::RecalcState(const SharedString & ref) {
+  auto version = storageManager->Get(ref);
+  WaitingFor waitingFor;
+  if (!version->RecalcState(waitingFor)) {
+    // If the state didn't change, we may still need to add the asset to the
+    // waiting list. For example, Fusion could have restarted since the asset
+    // transitioned to the Waiting state.
+    UpdateWaitingAssets(version, AssetDefs::New, waitingFor);
   }
 }

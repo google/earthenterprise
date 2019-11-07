@@ -26,6 +26,27 @@
 #include "StorageManager.h"
 #include "CacheSizeCalculations.h"
 
+// Used by child classes of AssetVersionImpl
+class StateChangeException : public khException {
+ public:
+  const std::string location;
+  StateChangeException(const std::string & msg, const std::string & loc) :
+    khException(msg), location(loc) {}
+};
+
+// Helper structs for passing data about input and child states.
+struct WaitingFor {
+  uint32 inputs;
+  uint32 children;
+};
+
+struct InputAndChildStateData {
+  AssetDefs::State stateByInputs;
+  AssetDefs::State stateByChildren;
+  bool blockersAreOffline;
+  WaitingFor waitingFor;
+};
+
 /******************************************************************************
  ***  AssetVersionImpl
  ***
@@ -51,6 +72,7 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   AssetVersionImpl& operator=(const AssetVersionImpl&&) = delete;
 
  public:
+  using Base = AssetVersionStorage;
   std::string XMLFilename() const { return XMLFilename(GetRef()); }
   std::string WorkingDir(void) const { return WorkingDir(GetRef()); }
   std::string WorkingFileRef(const std::string &fname) const {
@@ -60,10 +82,16 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   // implemented in LoadAny.cpp
   static std::shared_ptr<AssetVersionImpl> Load(const std::string &boundref);
 
-  virtual bool Save(const std::string &filename) const {
-    assert(false); // Can only call from sub-classes
-    return false;
-  };
+  virtual std::string GetName() const {   // Returns the name of the asset version, e.g., "CombinedRPAssetVersion"
+    assert(false);
+    return "";
+  }
+
+  // Note for future development: It would be good to change SerializeConfig to something like
+  // GetConfig that would fill out a list of key/value pairs instead of dealing with XML directly
+  virtual void SerializeConfig(khxml::DOMElement*) const {
+    assert(false);
+  }
 
   std::string WorkingFilename(const std::string &fname) const {
     return AssetDefs::AssetPathToFilename(WorkingFileRef(fname));
@@ -116,25 +144,25 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   }
 
   // determine amount of memory used by an AssetVersionImpl
-  uint64 GetSize() {
-    return (GetObjectSize(name)
-    + GetObjectSize(type)
-    + GetObjectSize(subtype)
-    + GetObjectSize(state)
-    + GetObjectSize(progress)
-    + GetObjectSize(locked)
-    + GetObjectSize(inputs)
-    + GetObjectSize(children)
-    + GetObjectSize(parents)
-    + GetObjectSize(listeners)
-    + GetObjectSize(outfiles)
-    + meta.GetSize()
-    + GetObjectSize(beginTime)
-    + GetObjectSize(progressTime)
-    + GetObjectSize(endTime)
-    + GetObjectSize(taskid)
-    + GetObjectSize(timestamp)
-    + GetObjectSize(filesize));
+  virtual uint64 GetHeapUsage() const {
+    return ::GetHeapUsage(name)
+    + ::GetHeapUsage(type)
+    + ::GetHeapUsage(subtype)
+    + ::GetHeapUsage(state)
+    + ::GetHeapUsage(progress)
+    + ::GetHeapUsage(locked)
+    + ::GetHeapUsage(inputs)
+    + ::GetHeapUsage(children)
+    + ::GetHeapUsage(parents)
+    + ::GetHeapUsage(listeners)
+    + ::GetHeapUsage(outfiles)
+    + ::GetHeapUsage(meta)
+    + ::GetHeapUsage(beginTime)
+    + ::GetHeapUsage(progressTime)
+    + ::GetHeapUsage(endTime)
+    + ::GetHeapUsage(taskid)
+    + ::GetHeapUsage(timestamp)
+    + ::GetHeapUsage(filesize);
   }
   template <class outIter>
   outIter GetInputs(outIter oi) const {
@@ -154,12 +182,26 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
     // parent asset (ex: parent is canceled, so these children
     // must also be canceled.
   }
-  virtual AssetDefs::State CalcStateByInputsAndChildren(AssetDefs::State, AssetDefs::State, bool, uint32) const {
+  virtual AssetDefs::State CalcStateByInputsAndChildren(const InputAndChildStateData &) const {
     assert(false); // Can only call from sub-classes
     return AssetDefs::Bad;
   }
-  virtual void SetMyStateOnly(AssetDefs::State newstate, bool sendNotifications = true) {
-    assert(false);  // Can only call from sub-classes
+  virtual AssetDefs::State OnStateChange(AssetDefs::State, AssetDefs::State) {
+    assert(false);
+    return AssetDefs::Bad;
+  }
+  virtual void WriteFatalLogfile(const std::string &, const std::string &) const throw() {
+    assert(false);
+  }
+  virtual void ResetOutFiles(const std::vector<std::string> &) {
+    assert(false);
+  }
+  virtual bool RecalcState(WaitingFor &) const {
+    assert(false);
+    return false;
+  }
+  virtual void SetAndPropagateState(AssetDefs::State) {
+    assert(false);
   }
 
   // static helpers
@@ -325,5 +367,8 @@ class CompositeAssetVersionImpl : public virtual AssetVersionImpl {
   std::string GetOutputFilename(uint i) const;
 };
 
+inline uint64 GetHeapUsage(const AssetVersionImpl &version) {
+  return version.GetHeapUsage();
+}
 
 #endif  // GEO_EARTH_ENTERPRISE_SRC_FUSION_AUTOINGEST_ASSETVERSION_H_

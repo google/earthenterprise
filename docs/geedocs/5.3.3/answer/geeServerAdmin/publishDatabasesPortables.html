@@ -1,0 +1,206 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Publish databases and portables &#8212; Google Earth Enterprise 5.3.3 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Manage snippet profiles" href="manageSnippetProfiles.html" />
+    <link rel="prev" title="Databases page" href="databasesPage.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="manageSnippetProfiles.html" title="Manage snippet profiles"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="databasesPage.html" title="Databases page"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" accesskey="U">GEE Server administration</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="databasesPage.html"
+                        title="previous chapter">Databases page</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="manageSnippetProfiles.html"
+                        title="next chapter">Manage snippet profiles</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp4.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp4.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="publish-databases-and-portables">
+<h1>Publish databases and portables<a class="headerlink" href="#publish-databases-and-portables" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>When you <em>publish</em> a Fusion database, you select the database you
+want to publish, specify a <em>publish point</em>, then apply <em>publishing
+options</em> in the <strong>Publish</strong> dialog. Before you publish a Fusion
+database, you must register it by <a class="reference internal" href="../fusionAdministration/pushAndPublishDB.html"><span class="doc">pushing</span></a> it to <a class="reference internal" href="geeServerOverview.html"><span class="doc">GEE Server</span></a>.</p>
+<p>With portable files, the process is a little different. Instead,
+first you <em>register</em> your portable globes and maps in the <strong>Manage
+Portables</strong> dialog before publishing them. Registering a portable
+globe or map is similar to <em>pushing</em> a database from Fusion.</p>
+<ul class="simple">
+<li><a class="reference internal" href="#publish-fusion-database"><span class="std std-ref">Publish a Fusion database</span></a></li>
+<li><a class="reference internal" href="#register-publish-portable-map-globe"><span class="std std-ref">Register and publish a portable globe or map</span></a></li>
+</ul>
+<p class="rubric" id="publish-fusion-database">Publish a Fusion database</p>
+<p class="rubric">To publish a Fusion database:</p>
+<ol class="arabic">
+<li><p class="first">In the <a class="reference internal" href="signInAdminConsole.html"><span class="doc">GEE Server Admin console</span></a>,
+click <strong>Databases</strong>.</p>
+</li>
+<li><p class="first">Check the box next to the database or portable to publish.</p>
+</li>
+<li><p class="first">Click the <strong>Publish</strong> button to open the Publish dialog.</p>
+<p><img alt="Publish dialog example" src="../../images/Publishdialog1.png" /></p>
+</li>
+<li><p class="first">Specify a <strong>Publish point</strong>, which is where you access the
+database or portable. For example, if you specify
+<em>sanfrancisco</em>, it will be accessible from
+<em>myserver.mydomainname</em>.com/sanfrancisco.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When publishing a database, the publish point you
+specify is case-<em>insensitive</em>. Upper and lower case are not
+differentiated. Make sure each publish point path name you
+specify is unique.</p>
+</div>
+</li>
+<li><p class="first">Specify the following options:</p>
+<ol class="loweralpha simple">
+<li><strong>POI Search</strong> (Fusion databases with search data only)</li>
+<li><strong>Search Tabs</strong> (Fusion databases only)</li>
+<li><strong>Snippet profile</strong> (Fusion 3D databases only)</li>
+</ol>
+</li>
+<li><p class="first">Select a <strong>Virtual host</strong>.</p>
+</li>
+<li><p class="first">Optionally enable <strong>Serve WMS.</strong></p>
+</li>
+<li><p class="first">Click the <strong>Publish</strong> button. The <strong>Databases</strong> page updates to indicate
+the published status of your database.</p>
+</li>
+</ol>
+<span class="target" id="register-publish-portable-map-globe"></span><p class="rubric">To register a portable globe or map:</p>
+<ol class="arabic">
+<li><p class="first">In the <a class="reference internal" href="signInAdminConsole.html"><span class="doc">GEE Server Admin console</span></a>,
+click <strong>Databases</strong>.</p>
+</li>
+<li><p class="first">Click <strong>Manage Portables</strong> to open the Manage portable globes
+dialog.</p>
+<p><img alt="Manage Portables dialog example" src="../../images/ManagePortablesdialog.png" /></p>
+<p>The list of globes and maps corresponds to the files located in
+the default <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/cutter/globes</span></code>
+directory.</p>
+</li>
+<li><p class="first">Click <strong>Register</strong> next to the globe or map that you want to
+make available for publishing on GEE Server. The registered
+globe or map appears in the list on the <strong>Databases</strong> page of
+the Admin console.</p>
+<p>You can register as many portable globes or maps as you have
+listed in the dialog.
+Click <strong>Unregister</strong> to make a globe or
+map unavailable on GEE Server.</p>
+</li>
+<li><p class="first">On the <strong>Databases</strong> page of the Admin console, check the box
+next to the portable globe or map you wish to publish.</p>
+</li>
+<li><p class="first">Click <strong>Publish</strong> to open the Publish dialog.</p>
+</li>
+<li><p class="first">Specify a <strong>Publish point</strong>, where the portable will be
+accessible from. For example, if you specify <em>grandcanyon</em>, it
+will be accessible from <em>myserver.mydomainname</em>.com/grandcanyon.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When publishing a database, the publish point you
+specify is case-<em>insensitive</em>. Upper and lower case are not
+differentiated. Make sure each publish point path name you
+specify is unique.</p>
+</div>
+</li>
+<li><p class="first">Select a <strong>Virtual host</strong>.</p>
+</li>
+<li><p class="first">Click the <strong>Publish</strong> button. The <strong>Databases</strong> page updates to indicate
+the published status of your portable globe or map.</p>
+</li>
+</ol>
+<p class="rubric">Learn more</p>
+<ul class="simple">
+<li><a class="reference internal" href="manageSnippetProfiles.html"><span class="doc">Manage snippet profiles</span></a></li>
+<li><a class="reference internal" href="manageVirtualHosts.html"><span class="doc">Manage virtual hosts</span></a></li>
+<li><a class="reference internal" href="makeWMSRequests.html"><span class="doc">Make Web Map Service (WMS) requests</span></a></li>
+<li><a class="reference internal" href="createPortableGlobesMaps.html"><span class="doc">Create Portable Globes and Maps</span></a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="manageSnippetProfiles.html" title="Manage snippet profiles"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="databasesPage.html" title="Databases page"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" >GEE Server administration</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

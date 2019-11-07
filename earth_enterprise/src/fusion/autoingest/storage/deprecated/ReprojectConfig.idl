@@ -13,10 +13,10 @@
 // limitations under the License.
 
 #include <string>
+#requiresgetheapusage
 
 class ReprojectConfig {
   std::string srs;
   bool ispalette;
-
 #pragma GenerateIsUpToDate
 };

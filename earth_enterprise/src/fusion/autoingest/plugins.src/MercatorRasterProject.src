@@ -355,7 +355,7 @@ void MercatorRasterProjectAssetImplD::HandleEditRequest(
   for (std::vector<InsetStackItem>::const_iterator inset
          = req.config.insets.begin();
        inset != req.config.insets.end(); ++inset) {
-    MercatorRasterProductFactory::ValidateRefForInput(inset->dataAsset);
+    ValidateRefForInput<MercatorRasterProductAssetVersionD>(inset->dataAsset);
   }
 
   // Find/make our target project.
@@ -369,7 +369,7 @@ void MercatorRasterProjectAssetImplD::HandleEditRequest(
 
   // Custom FindMake - modified to set/preserve indexVersion & fuid_channel_.
   MutableMercatorRasterProjectAssetD project =
-      MercatorRasterProjectFactory::Find(projname);
+      Find<MercatorRasterProjectAssetD>(projname);
   if (project) {
     // It is a regular (editing the same asset) or "SaveAs" re-writing edit
     // request.
@@ -396,7 +396,7 @@ void MercatorRasterProjectAssetImplD::HandleEditRequest(
   } else {
     // It is a "Save" or "SaveAs" edit request when creating a new asset.
     assert(req.config.indexVersion == 1);
-    project = MercatorRasterProjectFactory::Make(projname, inputs,
+    project = AssetFactory::Make<MutableMercatorRasterProjectAssetD, RasterProjectConfig>(projname, inputs,
                                                  req.meta, req.config);
   }
 
@@ -418,7 +418,7 @@ void MercatorRasterProjectAssetImplD::HandleNewRequest(
   for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
          req.items.begin();
        item != req.items.end(); ++item) {
-    MercatorRasterProductFactory::ValidateRefForInput(item->dataAsset);
+    ValidateRefForInput<MercatorRasterProductAssetVersionD>(item->dataAsset);
   }
 
   // normalize the supplied asset name
@@ -427,14 +427,14 @@ void MercatorRasterProjectAssetImplD::HandleNewRequest(
                                   kMercatorProjectSubtype);
 
 
-  if (MercatorRasterProjectFactory::Find(projname)) {
+  if (Find<MercatorRasterProjectAssetD>(projname)) {
     throw khException(kh::tr("%1 project %2 already exists")
                       .arg(ToQString(req.type), ToQString(projname)));
   } else {
     // make it
     RasterProjectConfig projConfig(req.type);
     MutableMercatorRasterProjectAssetD project =
-      MercatorRasterProjectFactory::Make(projname,
+      AssetFactory::Make<MutableMercatorRasterProjectAssetD, RasterProjectConfig>(projname,
                                  std::vector<SharedString>(),
                                  khMetaData(),
                                  projConfig);
@@ -450,12 +450,12 @@ void MercatorRasterProjectAssetImplD::HandleModifyRequest(
   for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
          req.items.begin();
        item != req.items.end(); ++item) {
-    MercatorRasterProductFactory::ValidateRefForInput(item->dataAsset);
+    ValidateRefForInput<MercatorRasterProductAssetVersionD>(item->dataAsset);
   }
 
   // find it and make the change
   MutableMercatorRasterProjectAssetD project;
-  if ((project = MercatorRasterProjectFactory::Find(req.assetname))) {
+  if ((project = Find<MercatorRasterProjectAssetD>(req.assetname))) {
     // blow away old insets
     project->config.insets.clear();
     // define new ones
@@ -473,12 +473,12 @@ void MercatorRasterProjectAssetImplD::HandleAddToRequest(
   for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
          req.items.begin();
        item != req.items.end(); ++item) {
-    MercatorRasterProductFactory::ValidateRefForInput(item->dataAsset);
+    ValidateRefForInput<MercatorRasterProductAssetVersionD>(item->dataAsset);
   }
 
   // find it and make the change
   MutableMercatorRasterProjectAssetD project;
-  if ((project = MercatorRasterProjectFactory::Find(req.assetname))) {
+  if ((project = Find<MercatorRasterProjectAssetD>(req.assetname))) {
     // make sure my existing insets are still in order before adding more
     // a new version of a product asset could invalidate
     // my stacking order
@@ -497,7 +497,7 @@ void MercatorRasterProjectAssetImplD::HandleDropFromRequest(
     const RasterProjectDropFromRequest &req) {
   // find the project
   MutableMercatorRasterProjectAssetD project;
-  if (!(project = MercatorRasterProjectFactory::Find(req.assetname))) {
+  if (!(project = Find<MercatorRasterProjectAssetD>(req.assetname))) {
     throw khException(kh::tr("No %1 project named %2")
                       .arg(ToQString(req.type), ToQString(req.assetname)));
   }
@@ -713,12 +713,14 @@ void MercatorRasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
   dbrootConfig.used_provider_ids_ = used_provider_ids;
 
   MutableAssetVersionD dbroot =
-    RasterDBRootFactory::FindMakeAndUpdateSubAsset(
-        assetRef, type, "dbroot",
-        std::vector<SharedString>(),
-        khMetaData(),
-        dbrootConfig,
-        std::vector<AssetVersion>());
+    AssetFactory::FindMakeAndUpdateSubAsset<MutableRasterDBRootAssetVersionD, AssetVersion>
+                 (assetRef,
+                  type,
+                  "dbroot",
+                  std::vector<SharedString>(),
+                  khMetaData(),
+                  dbrootConfig,
+                  std::vector<AssetVersion>());
   AddChild(dbroot);
 
 
@@ -738,11 +740,12 @@ void MercatorRasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
             geindex_version,
             config.legend));
     MutableAssetVersionD layerjs =
-      MapLayerJSFactory::FindMakeAndUpdate(layerJSAssetName,
-                                           std::vector<SharedString>(),
-                                           khMetaData(),
-                                           layerJSConfig,
-                                           std::vector<AssetVersion>());
+      AssetFactory::FindMakeAndUpdate<MutableMapLayerJSAssetVersionD, AssetVersion>
+                        (layerJSAssetName,
+                         std::vector<SharedString>(),
+                         khMetaData(),
+                         layerJSConfig,
+                         std::vector<AssetVersion>());
     AddChild(layerjs);
   }
 
@@ -1110,11 +1113,13 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
     }
   }
   MutableRasterGEIndexAssetVersionD geindex =
-    RasterGEIndexFactory::FindMakeAndUpdate(geindexAssetName, type,
-                                            packgenkids,
-                                            khMetaData(),
-                                            geindexConfig,
-                                            packgenvers);
+    AssetFactory::FindMakeAndUpdate<MutableRasterGEIndexAssetVersionD, AssetVersion>
+                         (geindexAssetName,
+                          type,
+                          packgenkids,
+                          khMetaData(),
+                          geindexConfig,
+                          packgenvers);
   AddChild(geindex);
   return geindex->config.index_version_;
 }

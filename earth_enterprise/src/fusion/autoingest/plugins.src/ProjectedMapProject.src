@@ -180,7 +180,7 @@ ProjectedMapProjectAssetVersionImplD::UpdateChildren(void)
         AssetDefs::NormalizeAssetName(projected_layer_name, AssetDefs::Map,
                                       "ProjectedLayer");
       MutableProjectedMapLayerAssetVersionD layerver =
-        ProjectedMapLayerFactory::FindMakeAndUpdate(
+        AssetFactory::FindMakeAndUpdate<MutableProjectedMapLayerAssetVersionD, AssetVersion>(
             projected_layer_name,
             makevec1<SharedString>(base_layer_ver->GetRef()),
             khMetaData(),
@@ -227,7 +227,8 @@ ProjectedMapProjectAssetVersionImplD::UpdateChildren(void)
       }
     }
     MutableAssetVersionD geindex =
-      MapGEIndexFactory::FindMakeAndUpdate(geindexAssetName,
+      AssetFactory::FindMakeAndUpdate<MutableMapGEIndexAssetVersionD, AssetVersion>
+                                          (geindexAssetName,
                                            index_input_refs,
                                            khMetaData(),
                                            geindexConfig,
@@ -255,7 +256,8 @@ ProjectedMapProjectAssetVersionImplD::UpdateChildren(void)
               used_legends[i]));
     }
     MutableAssetVersionD layerjs =
-      MapLayerJSFactory::FindMakeAndUpdate(layerJSAssetName,
+      AssetFactory::FindMakeAndUpdate<MutableMapLayerJSAssetVersionD, AssetVersion>
+                                          (layerJSAssetName,
                                            std::vector<SharedString>(),
                                            khMetaData(),
                                            layerJSConfig,

@@ -73,8 +73,7 @@ MapLayerAssetImplD::HandleEditRequest(const MapLayerEditRequest &req)
   std::vector<SharedString> productrefs;
   productrefs.reserve(req.config.subLayers.size());
   for (uint s = 0; s < req.config.subLayers.size(); ++s) {
-    VectorProductFactory::ValidateRefForInput
-      (req.config.subLayers[s].asset_ref);
+    ValidateRefForInput<VectorProductAssetVersionD>(req.config.subLayers[s].asset_ref);
     productrefs.push_back(req.config.subLayers[s].asset_ref);
   }
 
@@ -87,7 +86,7 @@ MapLayerAssetImplD::HandleEditRequest(const MapLayerEditRequest &req)
 
   // Custom FindMake:
   // We need to make sure we don't clobber an existing fuid_channel.
-  MutableMapLayerAssetD maplayer = MapLayerFactory::Find(assetname);
+  MutableMapLayerAssetD maplayer = Find<MapLayerAssetD>(assetname);
 
   if (maplayer) {
     // It is a regular (editing the same asset) or "SaveAs" re-writing edit
@@ -102,7 +101,7 @@ MapLayerAssetImplD::HandleEditRequest(const MapLayerEditRequest &req)
     maplayer->Modify(productrefs, req.meta, layer_config);
   } else {
     // It is a "Save" or "SaveAs" edit request when creating a new asset.
-    maplayer = MapLayerFactory::Make(assetname,
+    maplayer = AssetFactory::Make<MutableMapLayerAssetD, MapLayerConfig>(assetname,
                                      productrefs,
                                      req.meta,
                                      req.config);
@@ -160,12 +159,13 @@ MapLayerAssetVersionImplD::UpdateChildren(void)
     char queryname[32];
     snprintf(queryname, sizeof(queryname), "query%02u", sl);
     MutableAssetVersionD query_version =
-      VectorQueryFactory::FindMakeAndUpdateSubAsset
-      (assetRef, queryname,
-       makevec1<SharedString>(guard->inputvers[sl]->GetRef()),
-       khMetaData(),
-       queryconfig,
-       makevec1(guard->inputvers[sl]));
+      AssetFactory::FindMakeAndUpdateSubAsset<MutableVectorQueryAssetVersionD, AssetVersion>
+                   (assetRef,
+                    queryname,
+                    makevec1<SharedString>(guard->inputvers[sl]->GetRef()),
+                    khMetaData(),
+                    queryconfig,
+                    makevec1(guard->inputvers[sl]));
 
     AddChild(query_version);
 
@@ -186,12 +186,13 @@ MapLayerAssetVersionImplD::UpdateChildren(void)
   if (numberOfSearchFields > 0) {
     MapPOIAssetConfig poiconfig(all_search_fields);
     MutableAssetVersionD poi =
-      MapPOIFactory::FindMakeAndUpdateSubAsset
-    (assetRef, "poi",
-     queryRefs,
-     khMetaData(),
-     poiconfig,
-     queries);
+      AssetFactory::FindMakeAndUpdateSubAsset<MutableMapPOIAssetVersionD, AssetVersion>
+                    (assetRef,
+                     "poi",
+                     queryRefs,
+                     khMetaData(),
+                     poiconfig,
+                     queries);
     AddChild(poi);
   }
 }

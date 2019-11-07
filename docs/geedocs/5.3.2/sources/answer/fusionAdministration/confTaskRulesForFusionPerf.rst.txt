@@ -1,0 +1,387 @@
+
+Configure Fusion performance
+
+You can tune the performance of Fusion by setting up task rules and by
+modifying the sizes of the asset caches.
+
+-[ Configure task rules ]-
+
+You can use
+
+task rules
+
+ to change how Fusion builds data. As soon as you implement a task
+rule, it customizes how specific processes in Fusion operate. In other
+words, you cannot apply task rules to individual assets or projects.
+
+Set the number of CPUs assigned to Fusion processing
+
+Task rule types
+
+Implement task rules
+
+-[ Set the number of CPUs assigned to Fusion processing ]-
+
+As some of the task rules described here rely on setting the number of
+CPUs assigned to Fusion processing, it is useful for you to know how
+many CPUs are available on your machine and how many are assigned for
+Fusion processing. The "getop" output lists the available CPUs on your
+machine as the "maxjobs" entry and corresponds to how many concurrent
+jobs Fusion may spawn at any one time.
+
+You can use the tool "geselectassetroot --assetroot path --numcpus" to
+assign more CPUs. For example:
+
+"geselectassetroot --assetroot /gevol/assets --numcpus 7"
+
+For information about assigning CPUs to Fusion processing, see
+
+Running Fusion on a Machine with Multiple CPUs
+
+.
+
+Task rules impact Fusion processing in two different ways: by
+enabling/disabling multithreading, and by specifying output locations
+(KRP/KRMP), as shown in the following table.
+
+-[ Task rule types ]-
+
+      Task rule type  Task rule  Description  Enable/Disable
+Multithreading  ImageryPacketLevel  Makes imagery project builds
+faster by assigning multiple CPUs to each task.  Enable/Disable
+Multithreading  TerrainPacketLevel  Makes terrain project builds
+faster by assigning multiple CPUs to each task.  Enable/Disable
+Multithreading  CombinedTerrain  Makes 3D database builds faster by
+assigning multiple CPUs to terrain completion tasks.  Enable/Disable
+Multithreading  MapLayerLevel  Makes 2D database builds faster by
+assigning multiple CPUs to each task.  Specify output locations  KRP
+Lets you specify the location where image resources will be written by
+Fusion for better storage management.  Specify output locations  KRMP
+Lets you specify the location where mask files will be written by
+Fusion for better storage management. Note that the same storage
+volume must be specified for the KRMP as the KRP.
+
+You can add one or more of these task rules to your asset root’s
+".config" directory.
+
+-[ Implement task rules ]-
+
+To implement a task rule:
+
+Make sure you have superuser privileges, i.e., root or sudo access.
+
+Create the task rule using the XML sample code shown below for each
+rule.
+
+Depending on the rule you want to use, name the task rule:
+ImageryPacketLevel.taskrule  TerrainPacketLevel.taskrule
+CombinedTerrain.taskrule  MapLayerLevel.taskrule  KRP.taskrule
+KRMP.taskrule  Fusion uses these names when the tasks run, so do not
+change them.
+
+For the KRP and KRMP task rules, define the volumes you want Fusion to
+write files to. See Defining volumes.
+
+Set file permissions to read-only for all (chmod 444).
+
+Set file ownership to the gefusionuser user account and gegroup group
+(chown gefusionuser:gegroup).
+
+Place the task rule files in the asset root's .config directory.
+
+Restart the system manager using the /etc/init.d/gefusion ``stop`` and
+``start`` commands.
+
+-[ ImageryPacketLevel task rule ]-
+
+During a project build, Fusion will have multiple concurrent imagery
+project tasks. The watchpoint is balancing the total number of CPUs
+assigned for Fusion, and the number of CPUs assigned for each imagery
+project process. For example, with eight CPUs assigned for Fusion,
+with two CPUs per imagery project task, you can have four concurrent
+imagery project tasks.
+
+Note: Assigning more than two CPUs for each imagery project task
+  does not necessarily speed up processing, so you should keep the
+  "maxNumCPU" value at 2.
+
+-[ Sample: ImageryPacketLevel.taskrule ]-
+
+   <TaskRule>
+     <taskname>ImageryPacketLevel</taskname>
+     <inputConstraints/>
+     <outputConstraints/>
+     <cpuConstraint>
+       <minNumCPU>2</minNumCPU>
+       <maxNumCPU>2</maxNumCPU>
+     </cpuConstraint>
+   </TaskRule>
+
+-[ TerrainPacketLevel task rule ]-
+
+During a project build, Fusion will have multiple concurrent terrain
+project tasks. The watchpoint is balancing the total number of CPUs
+assigned for Fusion and the number of CPUs assigned for each imagery
+project process. For example, with eight CPUs assigned for Fusion,
+with two CPUs per terrain project task, you can have four concurrent
+terrain project tasks.
+
+By default, Fusion assigns one CPU to work on each terrain project
+task. You can use this task rule to assign up to six CPUs instead. Set
+the minimum CPU value to a number from 1 to 6, and set the maximum to
+a number between 2 and 6.
+
+-[ Sample: TerrainPacketLevel.taskrule ]-
+
+   <TaskRule>
+     <taskname>TerrainPacketLevel</taskname>
+     <inputConstraints/>
+     <outputConstraints/>
+     <cpuConstraint>
+       <minNumCPU>1</minNumCPU>
+       <maxNumCPU>6</maxNumCPU>
+     </cpuConstraint>
+   </TaskRule>
+
+-[ CombinedTerrain task rule ]-
+
+Since "gecombineterrain" is a serial process and must be completed
+before the other database-level building activities can start, you can
+use the CombinedTerrain task rule to assign all available CPUs to the
+build. For example, with eight CPUs assigned for Fusion, assuming that
+one CPU is reserved for the system, you can assign seven CPUs to the
+CombinedTerrain serial process.
+
+-[ Sample: CombinedTerrain.taskrule ]-
+
+   <TaskRule>
+     <taskname>CombinedTerrain</taskname>
+     <inputConstraints/>
+     <outputConstraints/>
+     <cpuConstraint>
+       <minNumCPU>7</minNumCPU>
+       <maxNumCPU>7</maxNumCPU>
+     </cpuConstraint>
+   </TaskRule>
+
+-[ MapLayerLevel task rule ]-
+
+By default, Fusion assigns one CPU to work on map tile generation. As
+"maptilegen" can be run concurrently, you can use this task rule to
+assign multiple CPUs instead. Set the rule to min/max 4 on a 2 dual-
+core CPU system (3 may work well enough). On a 2 quad-core CPU system,
+set the rule to min/max 3.
+
+-[ Sample: MapLayerLevel.taskrule ]-
+
+   <TaskRule>
+     <taskname>MapLayerLevel</taskname>
+     <inputConstraints/>
+     <outputConstraints/>
+     <cpuConstraint>
+       <minNumCPU>4</minNumCPU>
+       <maxNumCPU>4</maxNumCPU>
+     </cpuConstraint>
+   </TaskRule>
+
+-[ KRP task rule ]-
+
+When Fusion creates an asset, it writes large imagery files to the
+raster.kip directory in asset root by default. You can manage your
+disk space by using the KRP task rule to write these files to a
+different volume. See
+
+Example of File Locations
+
+.
+
+In the sample below, the volume you have created is "products". To
+learn how to create a new volume, see
+
+Defining volumes
+
+.
+
+-[ Sample: KRP.taskrule ]-
+
+   <TaskRule>
+     <taskname>KRP</taskname>
+     <inputConstraints/>
+     <outputConstraints>
+       <outputConstraint>
+         <num>0</num>
+         <requiredVolume>products</requiredVolume>
+         <pathPattern>${assetref:dirname:sansext}-${vernum}${defaultpath:ext}</pathPattern>
+       </outputConstraint>
+     </outputConstraints>
+     <cpuConstraint>
+       <minNumCPU>1</minNumCPU>
+       <maxNumCPU>1</maxNumCPU>
+     </cpuConstraint>
+   </TaskRule>
+
+You can also enter a second "requiredvolume" tag in your task rule to
+specify the next available volume in case the first volume fills up.
+However, you must to restart the system manager to trigger Fusion to
+wri.. code-block:: xml.. code-block:: xmlte files to the next volume.
+
+-[ KRMP task rule ]-
+
+When Fusion creates an asset, it writes the mask files to the
+"mask.kmp" directory in asset root by default. You can manage your
+disk space by using the KRMP task rule to write these files to a
+different volume. See
+
+Example of File Locations
+
+. In the sample below, the volume you have created is "products". To
+learn how to create a new volume, see
+
+Defining Volumes
+
+.
+
+-[ Sample: KRMP.taskrule ]-
+
+   <TaskRule>
+     <taskname>KRMP</taskname>
+     <inputConstraints/>
+     <outputConstraints>
+       <outputConstraint>
+         <num>0</num>
+         <requiredVolume>products</requiredVolume>
+         <pathPattern>${assetref:dirname:sansext}-${vernum}${defaultpath:ext}</pathPattern>
+       </outputConstraint>
+     </outputConstraints>
+     <cpuConstraint>
+       <minNumCPU>1</minNumCPU>
+       <maxNumCPU>1</maxNumCPU>
+     </cpuConstraint>
+   </TaskRule>
+
+You can also enter a second "requiredvolume" tag in your task rule to
+specify the next available volume in case the first volume fills up.
+However, you must restart the system manager to trigger Fusion to
+write files to the next volume.
+
+-[ Defining Volumes ]-
+
+The KRP and KRMP task rules include a "requiredvolume" tag that
+indicates where to write files. You need to make sure that this volume
+is defined and has enough space to hold the files. To define the
+volume, use the "geconfigureassetroot -- editvolumes" command, then
+edit the XML as shown in the sample below. In this sample, the volume
+you are creating is called "products".
+
+-[ Sample: volumes.xml ]-
+
+   <products>
+     <netpath>/gevol/products</netpath>
+     <host>linux</host>
+     <localpath>/gevol/products</localpath>
+     <reserveSpace>100000</reserveSpace>
+     <isTmp>0</isTmp>
+   </products>
+
+-[ Example of File Locations ]-
+
+The table below shows an example of the default file locations and the
+locations after applying the KMP and KRMP task rules. In this example,
+the asset root is "/gevol/assets", the volume you have created is
+"products", and you have built an asset called "TestImage" in the
+imagery subdirectory.
+
+        Task rule  File type  Default location  Location with task
+rule  KMP  large imagery files
+/gevol/assets/imagery/TestImage.kiasset/products.kia/ver001/raster.kip
+/gevol/products/imagery/ TestImage-001.kip  KRMP  smaller mask files  
+/gevol/assets/imagery/TestImage.kiasset/maskproducts.kia/ver001/mask.
+kmp  /gevol/products/imagery/TestImage-001.kmp
+
+-[ Cache configuration ]-
+
+"gesystemmanager" caches information about the assets and asset
+versions it is working with. The default sizes for these caches should
+work fine for most builds; however, increasing the cache sizes may
+speed up very large builds at the cost of increased memory usage. The
+cache sizes are controlled by the file "misc.xml" which can be found
+at "/gevol/assets/.config/misc.xml" (assuming your asset root is
+"/gevol/assets"; if not, modify the path accordingly). The asset cache
+size is controlled by "AssetCacheSize" and the asset version cache
+size is controlled by "VersionCacheSize". Note that the asset version
+cache is generally larger than the asset cache because it may contain
+multiple versions of the same asset.
+
+Within "misc.xml", the following options are deprecated and are
+treated as if they are permanently enabled:
+"DisablePacketLevelVersionCachePurge" and
+"ConsolidateListenerNotifications".
+
+Also included within "misc.xml" is an experimental option that allows
+the user to limit the caches by memory usage instead of number of
+objects. This option is controlled by "LimitMemoryUtilization" and its
+default value is 0 (false). The maximum memory usage for each cache
+can be set with "MaxAssetCacheMemorySize" and
+"MaxVersionCacheMemorySize". This size is measured in bytes and the
+default setting is 1GB. While this option is enabled, the caches will
+not be limited by the number of objects in the cache. It should be
+noted that as of now the reported memory usage is very low and that
+this option is not recommended for production environments.
+
+The Xerces library maintains a separate cache for dealing with XML
+files. Users can modify aspects of this cache through a configuration
+file at "/etc/opt/google/XMLparams". This file is not created
+automatically as part of the Open GEE Fusion install, so users that
+want to modify the parameters below must first create an "XMLparams"
+file. The "XMLparams" file has the following format:
+
+   # comments are preceded by '#'
+   # options are case-insensitive, and all need not be present
+
+   # the initial size of the XML heap in bytes
+   # default is 16384
+   INIT_HEAP_SIZE=<value>
+
+   # the max size of the XML heap in bytes
+   # default is 131072
+   MAX_HEAP_SIZE=<value>
+
+   # the size of XML heap allocation blocks in bytes
+   # default is 4096
+   BLOCK_SIZE=<value>
+
+   # whether or not to purge the XML cache; valid values are 0 or 1
+   # default is 1
+   PURGE=<value>
+
+   # the level at which to purge the XML cache; can be 1 (most often) to 5 (least often)
+   # default is 3
+   PURGE_LEVEL=<value>
+
+-[ PackGen analysis thread configuration ]-
+
+Within "misc.xml", there is an experimental feature for setting the
+number of threads to use while analyzing and creating packgen tasks.
+The number of threads is controlled by "PackGenAnalysisThreads". This
+option is experimental and may contain bugs.
+
+-[ Status request timeout ]-
+
+Status requests to the system manager from clients like "getop" must
+wait to be fulfilled if the system manager is already engaged in
+another task. The system manager has a timeout that specifies the
+maximum amount of time it should spend waiting to fulfill a status
+request before it times out. This timeout can be configured manually
+by setting "MutexTimedWaitSec" in "/gevol/assets/.config/misc.xml"
+
+"<MutexTimedWaitSec>60</MutexTimedWaitSec>" .. rubric:: Improving
+Performance
+
+Included in "/gevol/assets/.config/misc.xml" is a "GraphOperations"
+option, and it may be set to "1" (true) or "0" (false). This enables
+optimized versions of certain operations. These options are
+experimental and may contain bugs.
+
+-[ Learn more ]-
+
+Benchmarking outcomes for applying task rules

@@ -15,6 +15,7 @@
 
 #include <qstring.h>
 #include <vector>
+#requiresgetheapusage
 
 #hquote
 class SearchTabLabelOverrides;
@@ -46,7 +47,6 @@ class SearchTabDefinition
   void ApplyLabelOverrides(const SearchTabLabelOverrides &overrides);
   static SearchTabDefinition DefaultPOIDefinition(void);
 #/hquote
-
 };
 
 

@@ -1,0 +1,40 @@
+
+Build and install GEE 5.x
+
+Currently, Google Earth Enterprise must be built from source before it
+can be installed. Refer to the
+
+EarthEnterprise Wiki
+
+ for instructions. Once you have built Google Earth Enterprise you can
+proceed to the
+
+install instructions
+
+.
+
+The
+
+GEE Server
+
+ software package contains:
+
+GEE Server software
+
+GEE documentation
+
+The
+
+Fusion
+
+ software package contains:
+
+Fusion software
+
+Fusion tutorial files
+
+GEE documentation
+
+Example data files
+
+Configuration files

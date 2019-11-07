@@ -15,6 +15,7 @@
 
 #include <autoingest/.idl/storage/LayerLegend.h>
 #include <autoingest/.idl/storage/MapSubLayerConfig.h>
+#requiresgetheapusage
 
 #cppquote
 #include <autoingest/.idl/storage/LayerLegend_impl.h>
@@ -37,7 +38,6 @@ class MapLayerConfig {
   void ResetIds(void) {
     fuid_channel_ = 0;
   }
-
 #/hquote
 
 #cppquote
@@ -65,4 +65,3 @@ class MapLayerEditRequest {
 
 #pragma StrLoadAndSave
 };
-

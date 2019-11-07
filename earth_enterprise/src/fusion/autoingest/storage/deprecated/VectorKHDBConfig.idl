@@ -15,12 +15,13 @@
 #include <string>
 #include <vector>
 #include <khTypes.h>
-
+#requiresgetheapusage
 
 class VectorPackVersion {
   std::string packAsset;
   uint channelId;
   uint version;
+
 };
 class VectorKHDBConfig {
   std::string dbname;
@@ -28,6 +29,5 @@ class VectorKHDBConfig {
   IsUpToDateIgnore std::vector<VectorPackVersion> packvers;
   std::vector<std::string> customIcons;
   std::vector<std::string> layerIcons = std::vector<std::string>(0, std::string());
-
 #pragma GenerateIsUpToDate
 };

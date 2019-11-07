@@ -23,3 +23,7 @@ earth_enterprise/tutorial/FusionTutorial/KML
 /*.includes
 
 .vscode/
+
+#sphinx generated files
+docs/geedocs/docsrc/build
+.doctrees

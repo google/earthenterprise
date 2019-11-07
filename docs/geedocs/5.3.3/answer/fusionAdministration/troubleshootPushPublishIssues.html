@@ -1,0 +1,380 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Troubleshoot push/publishing issues &#8212; Google Earth Enterprise 5.3.3 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Operating System Settings That May Affect Fusion" href="osSettings.html" />
+    <link rel="prev" title="Publish databases using disconnected publishing" href="publishDBWithDiscPublishing.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="osSettings.html" title="Operating System Settings That May Affect Fusion"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="publishDBWithDiscPublishing.html" title="Publish databases using disconnected publishing"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" accesskey="U">Fusion Administration</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="publishDBWithDiscPublishing.html"
+                        title="previous chapter">Publish databases using disconnected publishing</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="osSettings.html"
+                        title="next chapter">Operating System Settings That May Affect Fusion</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="troubleshoot-push-publishing-issues">
+<h1>Troubleshoot push/publishing issues<a class="headerlink" href="#troubleshoot-push-publishing-issues" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>If you are having problems pushing/publishing a database, follow
+the troubleshooting steps below to debug the issue.</p>
+<p class="rubric">A note about pushing and publishing databases</p>
+<p>The <em>push</em> operation copies all the necessary files associated
+with a given 2D/3D Fusion database version from the Fusion host to
+Google Earth Enterprise Server and <em>registers</em> the database.
+Pushing is performed from Fusion.</p>
+<p>The <em>publish</em> operation makes a previously pushed database
+available for serving at a specified publish point. Publishing is
+performed on Google Earth Enterprise Server.</p>
+<p>WIth <em>disconnected publishing</em>, you can create a database that can
+be output to portable media, which can then be pushed and
+published to GEE Server.</p>
+<ul class="simple">
+<li><a class="reference internal" href="pushAndPublishDB.html"><span class="doc">Push and publish databases</span></a></li>
+<li><a class="reference internal" href="../geeServerAdmin/publishDatabasesPortables.html"><span class="doc">Publish databases and portables</span></a></li>
+<li><a class="reference internal" href="publishDBWithDiscPublishing.html"><span class="doc">Publish databases using disconnected publishing</span></a></li>
+</ul>
+<p class="rubric" id="index-0">Troubleshoot Push Issues</p>
+<p>Errors in the push operation may occur when Fusion fails to copy
+and register the database files to GEE Server. Use the following
+debugging steps, presented in a logical order, to uncover and
+solve any push issues. The error you encounter may depend on the
+push method you use. For example, a local push may fail simply
+because of a shortage of disk space. A remote push may fail
+because of an incorrect server association setting.</p>
+<p class="rubric">Push methods</p>
+<p>The push method depends on how data is transferred between the GEE
+Fusion host and GEE Server.</p>
+<ul class="simple">
+<li><strong>Local push</strong>. GEE Fusion and Server are on the same host.</li>
+<li><strong>Remote push</strong>. GEE Fusion pushes to a physically separate GEE
+Server.</li>
+<li><strong>Disconnected push</strong>. Data is transferred from the Fusion host
+to the GEE Server by hard disk instead of a network. For
+information about pushing disconnected databases, see
+<a class="reference internal" href="publishDBWithDiscPublishing.html"><span class="doc">Publish databases using disconnected publishing</span></a>.</li>
+</ul>
+<p class="rubric">Check your server is running correctly</p>
+<p>If your attempts to push a database result in an error message:
+“No status message returned from request:
+<a class="reference external" href="http://your.GEEServer.com">http://your.GEEServer.com</a> Unable to contact stream data server,”
+GEE Server may not be running. Try these steps to determine the
+state of GEE Server:</p>
+<ol class="arabic">
+<li><p class="first">Try restarting GEE Server:</p>
+<p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">/etc/init.d/geserver</span> <span class="pre">restart</span></code></p>
+</li>
+<li><p class="first">Enter the URL of GEE Server in a browser. You should see the
+Google Earth Enterprise Server splash screen.</p>
+</li>
+<li><p class="first">Log in to the Admin console of GEE Server:</p>
+<ul>
+<li><p class="first">Go to <em>myserver.mydomainname.com/admin</em>, replacing
+<em>myserver</em> and <em>mydomainname</em> with your server and domain.</p>
+</li>
+<li><p class="first">Sign in with the default credentials:</p>
+<p>Username: <em>geapacheuser</em></p>
+<p>Password: <em>geeadmin</em></p>
+</li>
+</ul>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p>To reset the username and password, run the following
+command, which prompts you to enter a new username and
+password:</p>
+<p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">/opt/google/gehttpd/bin/htpasswd</span> <span class="pre">-c</span></code>
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf.d/.htpasswd</span> <span class="pre">new_user_name</span></code></p>
+<p class="last">If you do not know your username and password, contact your
+system administrator.</p>
+</div>
+</li>
+<li><p class="first">Review the HTTP and Postgres processes. They should look
+something like this:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># ps -ef | grep http
+root 9220 1 0 Mar13 ? 00:00:00 /opt/google/gehttpd/bin/gehttpd
+505 14608 9220 0 Mar15 ? 00:00:00 /opt/google/gehttpd/bin/gehttpd
+505 14609 9220 0 Mar15 ? 00:00:00 /opt/google/gehttpd/bin/gehttpd
+
+# ps -ef | grep post
+gepguser 9206 9195 0 Mar13 ? 00:00:00 postgres: writer process
+gepguser 9207 9195 0 Mar13 ? 00:00:00 postgres: stats buffer process
+gepguser 9208 9207 0 Mar13 ? 00:00:00 postgres: stats collector process
+gepguser 10639 9195 0 Mar13 ? 00:00:00 postgres: geuser gesearch 127.0.0.1(32772) idle
+gepguser 10640 9195 0 Mar13 ? 00:00:00 postgres: geuser gesearch 127.0.0.1(32773) idle
+gepguser 10641 9195 0 Mar13 ? 00:00:00 postgres: geuser gepoi 127.0.0.1(32774) idle
+gepguser 10642 9195 0 Mar13 ? 00:00:00 postgres: geuser geplaces 127.0.0.1(32775) idle
+</pre></div>
+</div>
+<p>If you have any defunct processes or other unusual entries,
+stop them or try to find out why they are running. Run
+<code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">restart</span></code> to make sure that the server
+shuts down and starts up quickly with no error messages. If you
+still get error messages, take the following steps:</p>
+<ul>
+<li><p class="first">Shut down the server:</p>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">stop</span></code>.</p>
+</li>
+<li><p class="first">Delete the <code class="docutils literal notranslate"><span class="pre">postmaster.pid</span></code> file:</p>
+<p><code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">/var/opt/google/pgsql/data/postmaster.pid</span></code>.</p>
+<p>(The <code class="docutils literal notranslate"><span class="pre">postmaster.pid</span></code> file may not have been deleted if
+PostgreSQL services have not been stopped correctly, thereby
+preventing another instance of GEE Server from starting.)</p>
+</li>
+<li><p class="first">Reboot the GEE server.</p>
+</li>
+<li><p class="first">Re-run the two <code class="docutils literal notranslate"><span class="pre">ps</span></code> commands and the <code class="docutils literal notranslate"><span class="pre">geserver</span> <span class="pre">restart</span></code>
+command to make sure that everything is running properly.</p>
+</li>
+</ul>
+</li>
+<li><p class="first">Review the <code class="docutils literal notranslate"><span class="pre">wsgi:ge</span></code> processes, which are GEE Server services
+that support pushing and publishing. They should look something
+like this:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ps -ef | grep &#39;wsgi:ge&#39;
+65609 7272 3445 0 Aug10 ? 00:00:11 (wsgi:ge_push_serve) -k start
+65609 7273 3445 0 Aug10 ? 00:00:12 (wsgi:ge_publish_serve) -k start
+65609 7274 3445 0 Aug10 ? 00:00:11 (wsgi:ge_publish_aux_serve) -k start
+</pre></div>
+</div>
+</li>
+</ol>
+<p class="rubric" id="check-your-hostnames">Check your hostnames</p>
+<p>Check to be sure that <code class="docutils literal notranslate"><span class="pre">hostname</span> <span class="pre">-f</span></code> returns the hostname you think it
+should. Make sure that the <code class="docutils literal notranslate"><span class="pre">hostname</span> <span class="pre">-f</span></code> is consistent between
+the GEE server, the DNS entry for the GEE server, and any local
+hosts files. When you install Fusion and GEE Server on your
+machine, the software queries the hostname of the server. This is
+used in all asset builds on Fusion. You can see what Fusion has
+registered as your hostname by looking at the host entry in the
+<code class="docutils literal notranslate"><span class="pre">volumes.xml</span></code> file in <code class="docutils literal notranslate"><span class="pre">/ASSET_ROOT/.config/volumes.xml</span></code>. Do
+not edit this file by hand.</p>
+<p>To correct the hostname for all assets on your server, run
+<code class="docutils literal notranslate"><span class="pre">geconfigureassetroot</span> <span class="pre">--fixmasterhost</span></code>.</p>
+<p class="rubric" id="check-your-gee-server-with-geserveradmin">Check your GEE Server with geserveradmin</p>
+<p>From the Fusion server, list the virtual servers on the GEE server
+and show the databases that have been pushed:</p>
+<p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--stream_server_url</span> <span class="pre">http://earth.int</span> <span class="pre">--listvhs</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--stream_server_url</span> <span class="pre">http://earth.int</span> <span class="pre">--listdbs</span></code></p>
+<p>Show the databases that are currently published:</p>
+<p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--stream_server_url</span> <span class="pre">http://earth.int</span> <span class="pre">--publisheddbs</span></code></p>
+<p>These commands should all work without error.</p>
+<p class="rubric" id="check-your-server-associations">Check your server associations</p>
+<p>Open the <strong>Server Associations Manager</strong> tool from Fusion. Make
+sure that the server associations are correct. Open the server
+association that you are trying to push to. There should be no
+error messages when you open it.</p>
+<p class="rubric" id="verify-which-user-account-you-are-pushing-with">Verify which user account you are pushing with</p>
+<p>All pushes from the Fusion system should be performed by a
+<em>non-root</em> user account. A basic user account has sufficient
+privileges to push databases locally on the Fusion system or
+remotely to the GEE Server system. Using the root account for
+pushes can introduce file-level permission problems (see next
+topic).</p>
+<p class="rubric">Verify the umask settings are 0022</p>
+<p>Temporary files are written into the <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> folder of the Fusion
+system during a publish. These files inherit permission settings of the
+user account used to publish them (<code class="docutils literal notranslate"><span class="pre">geuser</span></code>, <code class="docutils literal notranslate"><span class="pre">root</span></code>, etc.). These
+files are then read by the GEE Server user accounts
+(<code class="docutils literal notranslate"><span class="pre">geapacheuser</span></code>), which belong to the <code class="docutils literal notranslate"><span class="pre">gegroup</span></code> user group.
+Publish failures can happen if the <code class="docutils literal notranslate"><span class="pre">gegroup</span></code> accounts cannot
+read the files in <code class="docutils literal notranslate"><span class="pre">/tmp</span></code>, e.g., if they have very restrictive umask
+settings such as 0077 for all user accounts, or in the case of
+publishing while logged in as root. To check the unmask settings
+for your GEE Server accounts, type <code class="docutils literal notranslate"><span class="pre">umask</span></code> on the command line
+while logged into the Fusion system.</p>
+<p class="rubric" id="check-your-disk-space">Check your disk space</p>
+<p>If the GEE Server runs out of disk space, the push will fail. Run
+<code class="docutils literal notranslate"><span class="pre">df</span> <span class="pre">-h</span></code> to see if you have space left on the server. If you are
+out of space, use <code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> to delete some of the old
+databases that have been pushed to the server and then run
+<code class="docutils literal notranslate"><span class="pre">garbagecollect</span></code> to clean up the old data.</p>
+<p>Garbage collection deletes unused data from database versions
+deleted with <code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code>. It is not the same as deleting a
+database version in its entirety. If a database version is deleted
+directly from the file system, it usually breaks all subsequent
+versions of the database.</p>
+<p>You can use the <code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> command on the Fusion server to
+manage both locally pushed and remotely pushed databases. The
+<code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> command includes a <code class="docutils literal notranslate"><span class="pre">--stream_server_url</span></code>
+option that directs it to the server IP address or URL where the
+function should be run. If you omit this option, the
+<code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> command defaults to the local machine.</p>
+<p>The commands below show how to use <code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> to clean up
+unused data from the <code class="docutils literal notranslate"><span class="pre">earth.int</span></code> server.</p>
+<p>Assuming that <code class="docutils literal notranslate"><span class="pre">fusion.int</span></code> is the Fusion system and
+<code class="docutils literal notranslate"><span class="pre">server.int</span></code> is the GEE Server system, the commands on the
+remote server (<code class="docutils literal notranslate"><span class="pre">earth.int</span></code>) are:</p>
+<ol class="arabic">
+<li><p class="first">To list all pushed databases, optionally using <code class="docutils literal notranslate"><span class="pre">--portable</span></code>
+to specify portable databases only:</p>
+<p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--stream_server_url</span> <span class="pre">http://earth.int</span> <span class="pre">--listdbs</span> <span class="pre">[--portable]</span></code></p>
+</li>
+<li><p class="first">To list published databases, optionally using <code class="docutils literal notranslate"><span class="pre">--portable</span></code> to
+specify portable databases only:</p>
+<p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--stream_server_url</span> <span class="pre">http://earth.int</span> <span class="pre">--publisheddbs</span> <span class="pre">[--portable]</span></code></p>
+</li>
+<li><p class="first">To delete specific database versions:</p>
+<p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--stream_server_url</span> <span class="pre">http://earth.int</span> <span class="pre">--deletedb</span> <span class="pre">/path/to/mydatabase.kdatabase/verZYX/gedb</span></code></p>
+</li>
+<li><p class="first">To perform garbage collecting for deleted databases (stream):
+<code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--stream_server_url</span> <span class="pre">http://earth.int</span> <span class="pre">--garbagecollect</span></code></p>
+</li>
+</ol>
+<p class="rubric" id="troubleshoot-publishing-issues"><span id="index-1"></span>Troubleshoot Publishing Issues</p>
+<p>Errors in the publish operation may occur when GEE Server cannot
+publish to the specified publish point.</p>
+<p class="rubric">Delete your broken publish and try again</p>
+<p>If you have had a successful publish previously, then you should
+already have at least one good copy of the database pushed to the
+GEE Server. If a recent publish keeps failing, you can remove the
+failed publish and try again.</p>
+<p>Show the pushed and published databases, adding the optional
+<code class="docutils literal notranslate"><span class="pre">--portable</span></code> to specify portable databases only:</p>
+<p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--stream_server_url</span> <span class="pre">http://earth.int</span> <span class="pre">--listdbs</span> <span class="pre">[--portable]</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--stream_server_url</span> <span class="pre">http://earth.int</span> <span class="pre">--publisheddbs</span> <span class="pre">[--portable]</span></code></p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> to publish one of your older database
+versions, then use <code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> to delete the recent, failed
+publish. Clean up the garbage, then try the publish again.</p>
+<p>For example, if version 2 was working but version 4 is broken,
+re-try pushing version 4 of the database:</p>
+<p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--stream_server_url</span> <span class="pre">http://earth.int</span> <span class="pre">--deletedb</span> <span class="pre">/gevol/assets/Databases/GoogleEarth.kdatabase/gedb.kda/ver004/gedb</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--garbagecollect</span> <span class="pre">--server_type</span> <span class="pre">stream</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--stream_server_url</span> <span class="pre">http://earth.int</span> <span class="pre">--adddb</span> <span class="pre">/gevol/assets/Databases/GoogleEarth.kdatabase/gedb.kda/ver004/gedb</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--stream_server_url</span> <span class="pre">http://earth.int</span> <span class="pre">--pushdb</span> <span class="pre">/gevol/assets/Databases/GoogleEarth.kdatabase/gedb.kda/ver004/gedb</span></code></p>
+<blockquote>
+<div><div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Instead of using &lt;code&gt;geserveradmin –adddb/pushdb&lt;/code&gt; commands, you can push the database directly from Fusion. See <a class="reference internal" href="pushAndPublishDB.html"><span class="doc">Push and publish databases</span></a>.</p>
+</div>
+</div></blockquote>
+<p class="rubric" id="index-2">Disconnected publishing issues</p>
+<p>If you publish a disconnected database and it fails when you
+attempt to push the database, it may be that
+<code class="docutils literal notranslate"><span class="pre">gedisconnectedsend</span> <span class="pre">--sendpath</span></code> created folders with user/group
+permissions only, preventing the file from being read by
+<code class="docutils literal notranslate"><span class="pre">geapacheuser:gegroup</span></code>, which is used by
+<code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--pushdb</span></code>.</p>
+<p>Try resetting the permissions on the folders created by
+<code class="docutils literal notranslate"><span class="pre">gedisconnectedsend</span> <span class="pre">--sendpath</span></code> and try the <code class="docutils literal notranslate"><span class="pre">--pushdb</span></code> again.</p>
+<ul class="simple">
+<li>See <a class="reference internal" href="publishDBWithDiscPublishing.html"><span class="doc">Publish databases using disconnected publishing</span></a>.</li>
+</ul>
+<p class="rubric">Check your log files</p>
+<p>If you are having push or publishing issues, there are several log
+files you can review for errors.</p>
+<table border="1" class="colwidths-given docutils" id="index-3">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Log file</th>
+<th class="head">Error logging reported</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/logs/error_log</span></code></td>
+<td>Log file containing GEE Server publishing errors and authentication notices.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/logs/access_log</span></code></td>
+<td>Log file containing HTTP GET requests for GEE Server.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/logs/gestream_publisher.out</span></code> <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/logs/gesearch_publisher.out</span></code></td>
+<td>Log files containing detailed GEE Server publishing errors.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">/var/opt/google/pgsql/logs/pg.log</span></code></td>
+<td>Log file containing postgres processing information for GEE Server. Note that “root” privileges are required to open this log file: use sudo su.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">/home_dir_of_user/.fusion/gepublishdatabase.date.time</span></code></td>
+<td>Log file containing information about push attempts from Fusion.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="osSettings.html" title="Operating System Settings That May Affect Fusion"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="publishDBWithDiscPublishing.html" title="Publish databases using disconnected publishing"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" >Fusion Administration</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

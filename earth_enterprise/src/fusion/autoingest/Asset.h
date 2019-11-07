@@ -45,6 +45,8 @@ class AssetImpl : public AssetStorage, public StorageManaged {
   AssetImpl& operator=(const AssetImpl&) = delete;
   AssetImpl(const AssetImpl&&) = delete;
   AssetImpl& operator=(const AssetImpl&&) = delete;
+  public:
+    using Base = AssetStorage;
 
  protected:
   // used by my intermediate derived classes since their calls to
@@ -57,10 +59,16 @@ class AssetImpl : public AssetStorage, public StorageManaged {
   // implemented in LoadAny.cpp
   static std::shared_ptr<AssetImpl> Load(const std::string &boundref);
 
-  virtual bool Save(const std::string &filename) const {
-    assert(false); // Can only save from sub-classes
-    return false;
-  };
+  virtual std::string GetName() const { // Returns the name of the asset, e.g., "CombinedRPAsset"
+    assert(false);
+    return "";
+  }
+
+  // Note for future development: It would be good to change SerializeConfig to something like
+  // GetConfig that would fill out a list of key/value pairs instead of dealing with XML directly
+  virtual void SerializeConfig(khxml::DOMElement*) const {
+    assert(false);
+  }
 
   std::string WorkingDir(void) const { return WorkingDir(GetRef()); }
   std::string XMLFilename() const { return XMLFilename(GetRef()); }
@@ -70,15 +78,15 @@ class AssetImpl : public AssetStorage, public StorageManaged {
   const SharedString & GetRef(void) const { return name; }
 
   // determine amount of memory used by an AssetImpl
-  uint64 GetSize() {
-    return(GetObjectSize(name)
-    + GetObjectSize(type)
-    + GetObjectSize(subtype)
-    + GetObjectSize(inputs)
-    + meta.GetSize()
-    + GetObjectSize(versions)
-    + GetObjectSize(timestamp)
-    + GetObjectSize(filesize));
+  virtual uint64 GetHeapUsage() const {
+    return ::GetHeapUsage(name)
+    + ::GetHeapUsage(type)
+    + ::GetHeapUsage(subtype)
+    + ::GetHeapUsage(inputs)
+    + ::GetHeapUsage(meta)
+    + ::GetHeapUsage(versions)
+    + ::GetHeapUsage(timestamp)
+    + ::GetHeapUsage(filesize);
   }
 
   std::string  GetLastGoodVersionRef(void) const;
@@ -131,6 +139,10 @@ Asset::Valid(void) const
     }
     return handle && (handle->type != AssetDefs::Invalid);
   }
+}
+
+inline uint64 GetHeapUsage(const AssetImpl &asset) {
+  return asset.GetHeapUsage();
 }
 
 #endif /* __Asset_h */

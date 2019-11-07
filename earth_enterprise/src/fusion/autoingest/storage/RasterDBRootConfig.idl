@@ -19,6 +19,7 @@
 #include <set>
 #include <khTypes.h>
 #include "LayerLegend.h"
+#requiresgetheapusage
 
 #cppquote
 #include "LayerLegend_impl.h"

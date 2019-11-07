@@ -17,6 +17,7 @@
 #include <vector>
 #include <khTypes.h>
 #include <geindex/Entries.h>
+#requiresgetheapusage
 
 // ****************************************************************************
 // ***  MapGEIndex
@@ -33,7 +34,7 @@ class MapGEIndexConfig {
     uint32 index_version_;
     geindex::TypedEntry::TypeEnum type_ = geindex::TypedEntry::VectorMapsRaster;
     std::vector<Level> levels_ = std::vector<MapGEIndexConfig::Level>();
-	std::string date_string_ = std::string();  // Format expected: "YYYY-MM-DD"
+	  std::string date_string_ = std::string();  // Format expected: "YYYY-MM-DD"
 #pragma GenerateIsUpToDate
   };
   std::string db_name_;

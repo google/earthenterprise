@@ -31,6 +31,16 @@ geraster = env.sharedLib('geraster', ['khRasterProduct.cpp',
                                       ],
                          LIBS=['geautoingest', 'gexml', 'gemiscconfig'])
 
+env.Depends('khRasterProduct.os', ['../autoingest/.idl/Systemrc.h', '../autoingest/.idl/MiscConfigStorage.h', '.idl/RasterProductStorage.h'])
+env.Depends('pyrio.os', ['../autoingest/.idl/Systemrc.h', '../autoingest/.idl/MiscConfigStorage.h', '.idl/RasterProductStorage.h'])
+env.Depends('.idl/RasterProductStorage.os', ['../autoingest/.idl/Systemrc.h', '../autoingest/.idl/MiscConfigStorage.h', '.idl/RasterProductStorage.h'])
+env.Depends('khOpacityMask.os', ['../autoingest/.idl/Systemrc.h', '../autoingest/.idl/MiscConfigStorage.h', '.idl/RasterProductStorage.h'])
+env.Depends('khRasterProductLevel.os', ['../autoingest/.idl/Systemrc.h', '../autoingest/.idl/MiscConfigStorage.h', '.idl/RasterProductStorage.h'])
+env.Depends('Extract.os', ['../autoingest/.idl/Systemrc.h', '../autoingest/.idl/MiscConfigStorage.h', '.idl/RasterProductStorage.h'])
+env.Depends('CachedRasterInsetReader.os', ['../autoingest/.idl/Systemrc.h', '../autoingest/.idl/MiscConfigStorage.h', '.idl/RasterProductStorage.h'])
+env.Depends('AttributionByExtents.os', ['../autoingest/.idl/Systemrc.h', '../autoingest/.idl/MiscConfigStorage.h', '.idl/RasterProductStorage.h'])
+
+
 khrasterffio = env.sharedLib('khrasterffio', ['ffioRasterWriter.cpp',
                                               'ffioRasterReader.cpp',
                                               ],
