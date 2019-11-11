@@ -645,11 +645,7 @@ khAssetManager::TaskProgress(const TaskProgressMsg &msg)
 {
   assert(!mutex.TryLock());
   notify(NFY_INFO, "TaskProgress %s", msg.verref.c_str());
-
-  AssetVersionD ver(msg.verref);
-  if (ver->taskid == msg.taskid) {
-    MutableAssetVersionD(msg.verref)->HandleTaskProgress(msg);
-  }
+  ::HandleTaskProgress(msg);
 }
 
 void
@@ -669,10 +665,7 @@ khAssetManager::TaskDone(const TaskDoneMsg &msg)
   alwaysTaskCmds.push_back
     (TaskCmd(std::mem_fun(&khResourceManager::BumpDownBlockers)));
 
-  AssetVersionD ver(msg.verref);
-  if (ver->taskid == msg.taskid) {
-    MutableAssetVersionD(msg.verref)->HandleTaskDone(msg);
-  }
+  ::HandleTaskDone(msg);
 }
 
 void

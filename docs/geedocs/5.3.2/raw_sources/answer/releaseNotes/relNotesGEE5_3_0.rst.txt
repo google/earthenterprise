@@ -88,7 +88,7 @@ Release notes: Open GEE 5.3.0
            - TravisCI can pass when compilation fails.
            - Add logic to cause compilation failures to be detected and reported.
          * - 1104
-           - CentOS 7 (and maybe others) fails to build OpenGEE. Build seems to fail when
+           - CentOS 7 (and maybe others) fails to build Open GEE. Build seems to fail when
              building third party parts of Qt. This appears to be an issue with libpng.
            - Fixed by including ``libpng12`` in the build script.
          * - 1122

@@ -98,7 +98,7 @@ DependentStateTreeFactory::AddOrUpdateVertex(
     // I'm not in the graph yet, so make a new empty vertex and let the caller
     // know we need to load it with the correct information
     auto myVertex = add_vertex(tree);
-    tree[myVertex] = {ref, AssetDefs::New, inDepTree, false, index};
+    tree[myVertex] = {ref, AssetDefs::New, inDepTree, index};
     ++index;
     vertices[ref] = {myVertex, includeConnections};
     toFillInNext.insert(myVertex);

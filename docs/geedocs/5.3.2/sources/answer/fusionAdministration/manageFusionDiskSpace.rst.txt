@@ -73,7 +73,7 @@ Locate the asset to be moved. It will be in a directory with a
 .kiasset extension.
 
 Locate the raster.kip and the mask.kmp directories under the asset
-directory: find $asset.kiasset -type d -name raster.kip find
+directory:  find $asset.kiasset -type d -name raster.kip find
 $asset.kiasset -type d -name mask.kmp
 
 Copy the raster.kip and mask.kmp directories to the auxiliary storage
@@ -97,7 +97,7 @@ commands to recreate the assets, see Importing Preprocessed Resources
 in the Google Earth Enterprise Reference Guide.
 
 Rebuild the imagery project and any database that contains the imagery
-project:  gebuild imagery/EastChicago.  The gemodifyimageryasset and
+project:  gebuild imagery/EastChicago  The gemodifyimageryasset and
 gebuild commands will complete in seconds, because the heavy
 processing took place when the pyramid files were generated.
 
@@ -121,24 +121,33 @@ modified, built, and cleaned the asset.
 The example below copies all the pyramid files from
 "/gevol/assets/imagery" to "/gevol/volume1".
 
-"# The commands are echoed to the terminal so you can review them
-before executing.  # To enable the commands, uncomment the following
-line:  # do_command=true   asset_root=/gevol/assets
-asset_directory=Resources/Imagery  new_location=/gevol/volume1   cd
-$asset_root/$asset_directory  for asset in `ls | grep kiasset | sed
-'s/.kiasset//'"  do   # Find the raster.kip and mask.kmp under the
-asset directory  kip=`find $asset.kiasset -type d -name raster.kip`
-kmp=`find $asset.kiasset -type d -name mask.kmp`    # Copy the raster
-and mask directories to the new volume  echo "cp -av $kip
-$new_location/$asset.kip"  if [ "$do_command" == "true" ]; then cp -av
-$kip $new_location/$asset.kip; fi  echo "cp -av $kmp
-$new_location/$asset.kmp"  if [ "$do_command" == "true" ]; then cp -av
-$kmp $new_location/$asset.kmp; fi    # modify and build each of the
-imagery assets  echo "gemodifyimageryresource --havemask -o
-$asset_directory/$asset $new_location/$asset.kip"  #if [ "$do_command"
-== "true" ]; then gemodifyimageryresource --havemask -o
-$asset_directory/$asset $new_location/$asset.kip; fi  echo "gebuild
-$asset_directory/$asset"  if [ "$do_command" == "true" ]; then gebuild
-$asset_directory/$asset; fi done   # Rebuild, then clean the imagery
-project and the database,  # then verify that all the assets were
-cleaned.`
+   # The commands are echoed to the terminal so you can review them before executing.
+   # To enable the commands, uncomment the following line:
+   # do_command=true
+
+   asset_root=/gevol/assets
+   asset_directory=Resources/Imagery
+   new_location=/gevol/volume1
+
+   cd $asset_root/$asset_directory
+   for asset in `ls | grep kiasset | sed 's/\.kiasset//'`
+   do
+      # Find the raster.kip and mask.kmp under the asset directory
+      kip=`find $asset.kiasset -type d -name raster.kip`
+      kmp=`find $asset.kiasset -type d -name mask.kmp`
+
+      # Copy the raster and mask directories to the new volume
+      echo "cp -av $kip $new_location/$asset.kip"
+      if [ "$do_command" == "true" ]; then cp -av $kip $new_location/$asset.kip; fi
+      echo "cp -av $kmp $new_location/$asset.kmp"
+      if [ "$do_command" == "true" ]; then cp -av $kmp $new_location/$asset.kmp; fi
+
+      # modify and build each of the imagery assets
+      echo "gemodifyimageryresource --havemask -o $asset_directory/$asset $new_location/$asset.kip"
+      #if [ "$do_command" == "true" ]; then gemodifyimageryresource --havemask -o $asset_directory/$asset $new_location/$asset.kip; fi
+      echo "gebuild $asset_directory/$asset"
+      if [ "$do_command" == "true" ]; then gebuild $asset_directory/$asset; fi
+   done
+
+   # Rebuild, then clean the imagery project and the database,
+   # then verify that all the assets were cleaned.

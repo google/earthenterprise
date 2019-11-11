@@ -49,11 +49,11 @@ Geecheck: test your GEE Server status
          located in the subfolders:
 
          .. code-block:: none
-         
-         geecheck_tests/
-            user_tests/
-            fusion_tests/
-            server_tests/
+
+            geecheck_tests/
+               user_tests/
+               fusion_tests/
+               server_tests/
 
       -  Tests must follow the naming convention ``*_test.py``, for
          example, ``dns_test.py``. Test results are organized by the
@@ -110,16 +110,16 @@ Geecheck: test your GEE Server status
       subfolders to be run from geecheck:
 
       .. code-block:: none
-      
+
          geecheck_tests/
             user_tests/
             fusion_tests/
             server_tests/
 
       To get some idea of how you can write your own test, you can study
-      the structure of the sample test, ``sample_test.py``, provided in
-      the ``user_tests`` subfolder. Use the code as a guide or simply
-      copy and edit it if you are unfamiliar with Python unit tests.
+      the structure of the existing tests in the ``user_tests`` subfolder. 
+      Use the code as a guide or simply copy and edit an existing test 
+      if you are unfamiliar with Python unit tests.
 
       .. _Run_geecheck_Command_Line:
       .. rubric:: Run geecheck on the command line
@@ -169,7 +169,7 @@ Geecheck: test your GEE Server status
          subfolder structure for geecheck to run:
 
          .. code-block:: none
-         
+
             geecheck_tests/
                user_tests/
                fusion_tests/
@@ -179,7 +179,7 @@ Geecheck: test your GEE Server status
          with ``geecheck_tests/``:
 
          .. code-block:: none
-         
+
             geecheck.py
             set_geecheck_config.py
             geecheck_tests/

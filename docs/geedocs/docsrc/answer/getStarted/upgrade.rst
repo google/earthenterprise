@@ -21,8 +21,8 @@ Upgrade to GEE 5.x
             to GEE 5.x:
             :name: we-recommend-you-do-the-following-before-upgrading-to-gee-5.x
 
-         #. Confirm your hardware and software meet the `minimum
-            requirements <../answer/3499938.html>`__.
+         #. Confirm your hardware and software meet the :doc:`minimum
+            requirements <../installGEE/sysReqGEEServer>`.
          #. Apply the latest Linux distribution software patches.
          #. Create backups of data stored in the
             ``/opt/google/gehttpd/`` folders, including display rule
@@ -93,8 +93,8 @@ Upgrade to GEE 5.x
                available, then the database assets need to be
                rebuilt.
             -  Push all 3D and 2D Mercator databases. 2D Plate Carrée
-               databases are not valid in GEE 5.0. See `Web Map
-               Service (WMS) <../answer/4441137.html>`__ for
+               databases are not valid in GEE 5.0. See :doc:`Web Map
+               Service (WMS) <../geeServerAdmin/makeWMSRequests>` for
                projection support for Plate Carrée maps.
 
       #. Upgrade asset root:

@@ -113,7 +113,7 @@ function createSearchList() {
           '<h1  onclick="showHideDiv(\'' + divId + '\')"' +
           ' id="div_' + divId +'">' +
           '<span id="arrow_' + divId + '" class="right_arrow">' +
-          '<label>' + label + '</label></span>' + '</h1>' +
+          '<label>' + escapeHTML(label) + '</label></span>' + '</h1>' +
           '<span id="span_' + divId + '" style="display:none;"></span>';
     } else {
       targetDiv.innerHTML +=
@@ -123,7 +123,7 @@ function createSearchList() {
     // Fill the span with the foundation of the form.
     var targetSpan = document.getElementById('span_' + divId);
     targetSpan.innerHTML =
-        '<form id="SearchForm' + i + '" action="' + formAction + '" accept-charset="UTF-8">' +
+        '<form id="SearchForm' + i + '" action="' + escapeHTML(formAction) + '" accept-charset="UTF-8">' +
         '<div id="fields_' + divId + '">' +
         '</div>' +
         '<input type="submit" value="Search">' +
@@ -140,8 +140,8 @@ function createSearchList() {
       var suggestion = field.suggestion;
       var key = field.key;
       fieldsDiv.innerHTML +=
-          fieldLabel + '<input type="text" name="' + key + '">' +
-          '<label class="fieldLabel">' + suggestion + '</label>';
+          fieldLabel + '<input type="text" name="' + escapeHTML(key) + '">' +
+          '<label class="fieldLabel">' + escapeHTML(suggestion) + '</label>';
     }
 
     // Add additional parameters as form hidden parameters.
@@ -153,8 +153,8 @@ function createSearchList() {
       for (var j = 0; j < additionalParamList.length; j++) {
         var keyValue = additionalParamList[j].split('=');
         fieldsDiv.innerHTML +=
-           '<input type="hidden" name="' + keyValue[0] + '" ' +
-           'value="' + keyValue[1] + '">';
+           '<input type="hidden" name="' + escapeHTML(keyValue[0]) + '" ' +
+           'value="' + escapeHTML(keyValue[1]) + '">';
       }
     }
 
@@ -186,6 +186,13 @@ function makeGETRequest(url) {
   return retrieveDatabases.responseText;
 }
 
+// Escapes HTML characters so that the given string can be used within HTML
+function escapeHTML(str) {
+  var regex = /[&<>"']/g
+  return str.replace(regex, function onReplace(match) {
+                              return '&#' + match.charCodeAt(0) + ';';
+                            });
+}
 </script>
 
 <style type="text/css">
