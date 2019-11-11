@@ -1,4 +1,4 @@
-#!/usr/bin/python2.7
+#!/usr/bin/env python2.7
 #
 # Copyright 2017 Google Inc, 2019 Open GEE Contributors.
 #
