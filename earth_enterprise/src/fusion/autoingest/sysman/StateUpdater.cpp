@@ -30,6 +30,11 @@
 using namespace boost;
 using namespace std;
 
+static bool UserActionRequired(AssetDefs::State state) {
+  // User action is required to change the following states
+  return state & (AssetDefs::Bad | AssetDefs::Offline | AssetDefs::Canceled);
+}
+
 class StateUpdater::SetStateVisitor : public default_dfs_visitor {
   private:
     using RecalcSet = std::unordered_set<SharedString>;
@@ -209,11 +214,6 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
       }
     }
 
-    bool UserActionRequired(AssetDefs::State state) const {
-      // User action is required to change the following states
-      return state & (AssetDefs::Bad | AssetDefs::Offline | AssetDefs::Canceled);
-    }
-
     bool RelevantStateChanged(const AssetVertex & data) const {
       return data.inDepTree || needsRecalc->find(data.name) != needsRecalc->end();
     }
@@ -279,7 +279,9 @@ void StateUpdater::SetStateForRefAndDependents(
     function<bool(AssetDefs::State)> updateStatePredicate) {
   try {
     SharedString verref = AssetVersionImpl::Key(ref);
-    DependentStateTree tree = BuildDependentStateTree(verref, updateStatePredicate, storageManager);
+    bool includeDepDescendents = !UserActionRequired(newState);
+    DependentStateTree tree = BuildDependentStateTree(
+        verref, updateStatePredicate, includeDepDescendents, storageManager);
     depth_first_search(tree, visitor(SetStateVisitor(*this, tree, newState)));
   }
   catch (UnsupportedException) {

@@ -38,7 +38,8 @@ class DependentStateTreeFactory
     set<DependentStateTreeVertexDescriptor> toFillInNext;
     DependentStateTree tree;
 
-    inline bool IsDependent(DependencyType type) { return type == DEPENDENT || type == DEPENDENT_AND_CHILD; }
+    inline bool IsDependent(DependencyType type)
+        { return type == DEPENDENT || type == DEPENDENT_AND_CHILD; }
 
     DependentStateTreeVertexDescriptor AddOrUpdateVertex(
         const SharedString & ref,
@@ -205,6 +206,7 @@ void DependentStateTreeFactory::AddEdge(
 DependentStateTree BuildDependentStateTree(
     const SharedString & ref,
     std::function<bool(AssetDefs::State)> includePredicate,
+    bool includeDepDescendents,
     StorageManagerInterface<AssetVersionImpl> * sm) {
   DependentStateTreeFactory factory(sm);
   return factory.BuildDependentStateTree(ref, includePredicate);
