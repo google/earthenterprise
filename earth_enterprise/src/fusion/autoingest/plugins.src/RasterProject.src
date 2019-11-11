@@ -1018,7 +1018,7 @@ void RasterProjectAssetVersionImplD::FilterInsetInfosByDate(
   inset_infos->swap(output_inset_infos);
 }
 
-#define USE_QUADKEY_FILTERING
+//#define USE_QUADKEY_FILTERING
 //#define ABSOLUTELY_NO_FILTERING
 uint32 RasterProjectAssetVersionImplD::BuildIndex(
     const khTilespace &tilespace,
@@ -1082,15 +1082,31 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
   for (uint idx = 0; idx < inset_infos.size(); idx++) {
     indexMap[&inset_infos[idx]] = idx;
   }
-  
   InsetTilespaceIndex<InsetInfo<RasterProductAssetVersion>> localIndex;
 #endif
+
   for (uint i = 0; i < genInfo.size(); ++i) {
+#ifdef USE_QUADKEY_FILTERING
+    localIndex.add(inset_infos[i]);
+#endif
+
     // Check if I even need to do any packet generation at all
     // Maybe the other insets will completely replace everything
     // that this one would generate
-    if (genInfo[i].coverage.numLevels() == 0)
+    if (genInfo[i].coverage.numLevels() == 0){
+      InsetTilespaceIndex<InsetInfo<RasterProductAssetVersion>> tempIndex;
+      int junk = 0;
+      QuadtreePath coverageMBR = tempIndex.getQuadtreeMBR(genInfo[i].coverage.degreeExtents(), junk, endMinifyLevel);
+      notify(NFY_WARN, "In BuildIndex, skipping packet generation for %s. Quadtree MBR is %s. Extents are %f, %f, %f, %f.",
+      genInfo[i].assetname.toString().c_str(), 
+      coverageMBR.AsString().c_str(),
+      genInfo[i].coverage.degreeExtents().beginX(),
+      genInfo[i].coverage.degreeExtents().beginY(),
+      genInfo[i].coverage.degreeExtents().endX(),
+      genInfo[i].coverage.degreeExtents().endY()
+      );
       continue;
+    }
 
 
     // Determine which insets (0 .. i) intersect this coverage area.
@@ -1100,11 +1116,14 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     notify(NFY_PROGRESS, "BuildIndex finding intersections for inset %d of %lu",
            i+1, genInfo.size());
 #ifdef USE_QUADKEY_FILTERING
-    localIndex.add(inset_infos[i]);
     int maxQuadTreeLevel = 0;
     QuadtreePath coverageMBR = localIndex.getQuadtreeMBR(genInfo[i].coverage.degreeExtents(), maxQuadTreeLevel, endMinifyLevel);
 if (genInfo[i].assetname.toString().find("synth_ortho_16x16_1_45_4m_R0_C0") != std::string::npos ||
-    genInfo[i].assetname.toString().find("synth_ortho_16x16_1_Neg45_4m_R0_C0") != std::string::npos)
+    genInfo[i].assetname.toString().find("synth_ortho_16x16_1_Neg45_4m_R0_C0") != std::string::npos || 
+    genInfo[i].assetname.toString().find("synth_ortho_16x16_1_Neg1_4m") != std::string::npos ||
+    genInfo[i].assetname.toString().find("synth_ortho_16x16_45_Neg45_4m") != std::string::npos ||
+    genInfo[i].assetname.toString().find("synth_ortho_16x16_50_Neg50_4m") != std::string::npos ||
+    genInfo[i].assetname.toString().find("synth_ortho_16x16_50_Neg44_4m") != std::string::npos)
   notify(NFY_WARN, "For %s, the quadtree MBR is %s. Extents are %f, %f, %f, %f", 
       genInfo[i].assetname.toString().c_str(), 
       coverageMBR.AsString().c_str(),

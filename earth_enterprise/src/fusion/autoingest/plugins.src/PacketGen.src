@@ -83,6 +83,7 @@ PacketGenFactory::ReuseOrMakeAndUpdateSubAsset(
     const PacketGenConfig& config_,
     const PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion> &extra);
 
+#define USE_QUADKEY_FILTERING
 template <typename ProductAssetVersion>
 void PacketGenAssetVersionImplD::UpdateChildren(
     const PacketGenExtraUpdateArg<ProductAssetVersion> &extra) {
@@ -101,6 +102,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
   std::vector<MutableAssetVersionD> kids;
   kids.reserve(numLevels);
 
+#ifdef USE_QUADKEY_FILTERING
   // Map each InsetInfo to its index in the inset_infos vector. Will need
   // this later on for populating neededIndexes.
   std::map<const InsetInfo<ProductAssetVersion>*, uint> indexMap;
@@ -109,6 +111,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
   for (uint idx = 0; idx < extra.insetInfo.size(); idx++) {
       tilespaceIndex.add(*extra.insetInfo[idx]);
       indexMap[extra.insetInfo[idx]] = idx;
+      notify(NFY_WARN, "Added %s to quadtree map", extra.insetInfo[idx]->resource_.Ref().toString().c_str());
   }
 
   const khTilespaceBase &tilespace((type == AssetDefs::Imagery)
@@ -120,6 +123,8 @@ void PacketGenAssetVersionImplD::UpdateChildren(
   QuadtreePath prevCoverageMBR;
   std::vector<const InsetInfo<ProductAssetVersion>*> qualifiedInsetInfoPtrs;
   qualifiedInsetInfoPtrs.reserve(extra.insetInfo.size());
+  notify(NFY_WARN, "Starting to walk through levels during %s packgen", assetRef.c_str());
+#endif
   uint level = config.coverage.endLevel();
   while (level > config.coverage.beginLevel()) {
     --level;
@@ -128,6 +133,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
     const khLevelCoverage levCov(config.coverage.levelCoverage(level));
     std::vector<uint> neededIndexes;
 
+#ifdef USE_QUADKEY_FILTERING
     // Filter based on quadtree path
     khExtents<double> doubleExtents = levCov.degExtents(tilespace);
     int tempLevel = 0;
@@ -137,16 +143,20 @@ void PacketGenAssetVersionImplD::UpdateChildren(
         doubleExtents,
         tempLevel,
         config.endMinifyLevel);
-    if (coverageMBR != prevCoverageMBR) {
+    notify(NFY_WARN, "At level %u, coverageMBR is %s", level, coverageMBR.AsString().c_str());
+    if (coverageMBR != prevCoverageMBR || qualifiedInsetInfoPtrs.size() == 0) {
       qualifiedInsetInfoPtrs.clear();
       qualifiedInsetInfoPtrs.reserve(extra.insetInfo.size());
       qualifiedInsetInfoPtrs = 
-          tilespaceIndex.intersectingExtents(
+          std::move(tilespaceIndex.intersectingExtents(
               coverageMBR, 
               config.beginMinifyLevel, 
-              config.endMinifyLevel);
+              config.endMinifyLevel));
       prevCoverageMBR = coverageMBR;
     }
+
+    notify(NFY_WARN, "Found %lu insets by quadtree path", qualifiedInsetInfoPtrs.size());
+
 
     neededIndexes.reserve(numInsets);
     auto gencov = khInsetCoverage(levCov);
@@ -165,6 +175,20 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       if (it != indexMap.end())
         neededIndexes.push_back(it->second);
     }
+#else
+    neededIndexes.reserve(numInsets);
+    auto gencov = khInsetCoverage(levCov);
+    overlapEnvelope<ProductAssetVersion> env(
+        type,
+        extra.insetInfo,
+        numInsets,
+        config.beginMinifyLevel,
+        config.endMinifyLevel,
+        level);
+    extra.calc->setEnvelope(env);
+    neededIndexes = std::move(extra.calc->GetOverlapForLevel(gencov));
+#endif
+
 
     // Build most of PacketLevelConfig
     PacketLevelConfig packetLevelConfig;
