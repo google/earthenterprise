@@ -235,6 +235,28 @@ def EmitLongVersionFunc(target):
 def EmitLongVersionStrfunc(target):
   return 'EmitLongVersion(%s)' % (target,)
 
+def gcno_emitter( target, source, env, parent_emitter ):
+  new_target, new_source = parent_emitter(target, source, env)
+  for file in new_target:
+    base,ext = SCons.Util.splitext( str( file ) )
+    if ext == '.o' or ext == '.os': # I can't image the extions would be anythings else but...
+      new_target.append( base+'.gcno' )
+  return new_target, new_source
+
+def gcno_remover_emitter( target, source, env ):
+  new_target = target
+  new_source = []
+  # remove any .gcno files that get added because of
+  # object emitters
+  for file in source:
+    base,ext = SCons.Util.splitext( str( file ) )
+    base = base
+    if str( ext ) != '.gcno':
+      #print "gcno_remover_emitter keeping {0}; ext == {1}".format( str( file ), str( ext ) )
+      new_source.append(file)
+    #else:
+      #print "gcno_remover_emitter removing {0}; ext == {1}".format( str( file ), str( ext ) )
+  return new_target, new_source
 
 # our derived class
 class khEnvironment(Environment):
@@ -266,6 +288,10 @@ class khEnvironment(Environment):
       toolpath = []
     args = (self, platform, tools, toolpath, options)
     Environment.__init__(*args, **kw)
+
+    if 'coverage' in kw and kw['coverage']:
+      self.SetupCoverageTargets()
+
     self.exportdirs = exportdirs
     self.installdirs = installdirs
     self['BUILDERS']['uic'] = uic
@@ -285,6 +311,79 @@ class khEnvironment(Environment):
     """Escapes a given value as a BASH string."""
 
     return "'{0}'".format(value.replace("'", "'\\''"))
+
+  def SetupCoverageTargets(self):
+    """Properly adds .gcno files as targets for c files when coverage is enabled
+    This is needed so scons knows about these files and can act on them propely
+    for clean and cache activities"""
+
+    static_obj, shared_obj = SCons.Tool.createObjBuilders( self )
+    SCons.Tool.createSharedLibBuilder( self )
+    SCons.Tool.createStaticLibBuilder( self )
+    SCons.Tool.createProgBuilder( self )
+
+    def gcno_shared_emitter( target, source, env ):
+      return gcno_emitter( target, source, env, SCons.Defaults.SharedObjectEmitter )
+
+    def gcno_static_emitter( target, source, env ):
+      return gcno_emitter( target, source, env, SCons.Defaults.StaticObjectEmitter )
+
+    # add emitters to c file builder that will add the .gcno file as one of its targets
+    shared_obj.add_emitter( '.c', gcno_shared_emitter )
+    static_obj.add_emitter( '.c', gcno_static_emitter )
+    shared_obj.add_emitter( '.cc', gcno_shared_emitter )
+    static_obj.add_emitter( '.cc', gcno_static_emitter )
+    shared_obj.add_emitter( '.cpp', gcno_shared_emitter )
+    static_obj.add_emitter( '.cpp', gcno_static_emitter )
+
+    # unfortunately the above emitters trigger scons to now also add the .gcno files
+    # as sources to other builders like shared lib, static lib and program builder.
+    # But these builders don't need those files and will actually choke on them...
+    # So the below undoes what scons did and removes the .gcno files from the source
+    # collections of those other builders.  Removing the sources from the other builders
+    # still keeps the targets in place we just added and once that is done this brings
+    # balance back to the force and all is good once again in the universe. 
+    try:    
+      original_shared_lib_emitter = self['SHLIBEMITTER']
+      if type(original_shared_lib_emitter) == list:
+        original_shared_lib_emitter = original_shared_lib_emitter[0]
+    except KeyError:
+      original_shared_lib_emitter = None
+    
+    def gcno_shared_lib_emitter(target, source, env):
+      if original_shared_lib_emitter:
+        target, source = original_shared_lib_emitter(target, source, env)
+      return gcno_remover_emitter(target, source, env)
+
+    self['SHLIBEMITTER'] = gcno_shared_lib_emitter
+    
+    try:
+      original_static_lib_emitter = self['LIBEMITTER']
+      if type(original_static_lib_emitter) == list:
+        original_static_lib_emitter = original_static_lib_emitter[0]
+    except KeyError:
+      original_static_lib_emitter = None
+    
+    def gcno_static_lib_emitter(target, source, env):
+      if original_static_lib_emitter:
+        target, source = original_static_lib_emitter(target, source, env)
+      return gcno_remover_emitter(target, source, env)
+
+    self['LIBEMITTER'] = gcno_static_lib_emitter
+    
+    try:
+      original_prog_emitter = self['PROGEMITTER']
+      if type(original_prog_emitter) == list:
+        original_prog_emitter = original_prog_emitter[0]
+    except KeyError:
+      original_prog_emitter = None
+    
+    def gcno_prog_emitter(target, source, env):
+      if original_prog_emitter:
+        target, source = original_prog_emitter(target, source, env)
+      return gcno_remover_emitter(target, source, env)
+
+    self['PROGEMITTER'] = gcno_prog_emitter
 
   def DeepCopy(self):
     other = self.Clone()
