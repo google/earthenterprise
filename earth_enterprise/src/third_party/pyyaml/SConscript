@@ -1,0 +1,108 @@
+#-*- Python -*-
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+
+Import('third_party_env')
+
+pyyaml_version='PyYAML-3.10'
+pyyaml_ge_version = pyyaml_version.replace('pyyaml', 'pyyaml-ge')
+
+current_dir = Dir('.').abspath
+build_root = '%s/%s' % (current_dir, pyyaml_version)
+install_root = '%s/install' % current_dir
+install_root_opt = '%s/opt/google' % install_root
+
+pyyaml_source = File('#/../../earth_enterprise/third_party/pyyaml/%s.tar.gz' %
+                       pyyaml_version).abspath
+
+pyyaml_env = third_party_env.DeepCopy()
+
+root_dir = Dir(pyyaml_env.exportdirs['root']).abspath
+
+# [1] Extract pyyaml.
+pyyaml_target = '%s/.extract' % current_dir
+pyyaml_extract = pyyaml_env.Command(
+    pyyaml_target, pyyaml_source,
+    [pyyaml_env.MultiCommand(
+        'mkdir -p %s\n'
+        'cd %s\n'
+        'tar xzf %s\n'
+        'touch %s' % (current_dir, current_dir, pyyaml_source,
+                      pyyaml_target))])
+
+if third_party_env['is_min_ubuntu'] and not third_party_env['native_cc']:
+  env_opt = 'ac_cv_prog_cc_c99=no'
+else:
+  env_opt = ''
+
+# [2] Build pyyaml.
+python_cmd = pyyaml_env['python_bin']
+pyyaml_target = '%s/.build' % current_dir
+pyyaml_build = pyyaml_env.Command(
+    pyyaml_target, pyyaml_extract,
+    [pyyaml_env.MultiCommand(
+        'cd %s\n'
+        '%s%s %s setup.py build\n'
+        'touch %s' % (build_root, pyyaml_env['ENV']['mod_env'],
+                      env_opt, python_cmd, pyyaml_target))])
+
+# [3] Create pyyaml master installer.
+install_root_lib = '%s/lib/python%s/site-packages/yaml' % (
+    install_root, pyyaml_env['python_major_version'])
+install_root_doc = '%s/share/doc/packages/%s' % (
+    install_root_opt, pyyaml_ge_version)
+
+pyyaml_target = '%s/.install' % current_dir
+pyyaml_install = pyyaml_env.Command(
+    pyyaml_target, pyyaml_build,
+    [pyyaml_env.MultiCommand('\n'.join([
+        'cd %s' % build_root,
+        'rm -rf %s' % install_root_lib,
+        'rm -rf %s' % install_root_doc,
+        'mkdir -p %s' % install_root_lib,
+        'mkdir -p %s' % install_root_doc,
+        'rsync -pvr build/lib.linux-x86_64-%s/ %s' % (
+            pyyaml_env['python_major_version'], install_root_lib),
+        'cp -pr LICENSE %s' % install_root_doc,
+        'touch %s' % pyyaml_target]))])
+
+# [4] Install these into various directories as required for build.
+pyyaml_target = '%s/.install_for_build' % current_dir
+pyyaml_install_build = pyyaml_env.Command(
+    pyyaml_target, pyyaml_install,
+    [pyyaml_env.rsync_cmd % (
+        '%s' % install_root_lib,
+        '%s/lib/python%s' % (root_dir, pyyaml_env['python_major_version'])),
+        Touch('$TARGET')])
+
+
+Default(pyyaml_install_build)
+pyyaml_env.ExecuteOnClean('rm -rf %s' % current_dir)
+
+if 'install' in COMMAND_LINE_TARGETS:
+  pyyaml_env.InstallFileOrDir(
+      '%s/lib' % install_root,
+      '%s/opt/google/gepython/Python-%s' % (
+          pyyaml_env.installdirs['common_root'], pyyaml_env['python_version']),
+       pyyaml_install, 'install')
+  pyyaml_env.InstallFileOrDir(
+      '%s/opt/google/share/' % install_root,
+      '%s/opt/google/share/' % Dir(
+          pyyaml_env.installdirs['common_root']).abspath,
+      pyyaml_install, 'install')
+
+Return('pyyaml_extract pyyaml_install_build')
