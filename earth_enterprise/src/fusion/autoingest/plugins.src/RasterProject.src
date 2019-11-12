@@ -181,8 +181,7 @@ class RasterProjectAssetVersionImplD {
   uint32 BuildIndex(
     const khTilespace &tilespace,
     const std::vector<InsetInfo<RasterProductAssetVersion> >& inset_infos,
-    const std::string& date/*,
-    InsetTilespaceIndex<InsetInfo<RasterProductAssetVersion>> &tilespaceIndex*/);
+    const std::string& date);
 
   // Utility to load all the InsetInfos for the project.
   void LoadInsetInfoForIndexing(
