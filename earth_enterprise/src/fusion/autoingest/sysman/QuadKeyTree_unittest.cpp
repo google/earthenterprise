@@ -51,7 +51,7 @@ TEST_F(QuadKeyTreeTest, TestNormal) {
     
     std::vector<const QuadtreePath*> vec = tree.GetElementsAtQuadTreePath(qtp012, 3);
 
-    // Should have matched everything except qtp011
+    // Should have matched everything except qtp011 and qtp1
     ASSERT(std::find(vec.begin(), vec.end(), &qtpEmpty) != vec.end());
     ASSERT(std::find(vec.begin(), vec.end(), &qtp01)    != vec.end());
     ASSERT(std::find(vec.begin(), vec.end(), &qtp012)   != vec.end());
