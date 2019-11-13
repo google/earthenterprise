@@ -167,7 +167,7 @@ class AssetOperationTest : public testing::Test {
 
 TEST_F(AssetOperationTest, Rebuild) {
   sm.GetMutableVersion()->state = AssetDefs::Canceled;
-  RebuildVersion(REF, true);
+  RebuildVersion(REF, MiscConfig::ALL_GRAPH_OPS);
   ASSERT_TRUE(sm.GetVersion()->stateSetForRefAndDependents);
   ASSERT_EQ(sm.GetVersion()->refAndDependentsState, AssetDefs::New);
 
@@ -187,7 +187,7 @@ TEST_F(AssetOperationTest, Rebuild) {
 
 void RebuildWrongState(MockStorageManager & sm, AssetDefs::State state) {
   sm.GetMutableVersion()->state = state;
-  ASSERT_THROW(RebuildVersion(REF, true), khException);
+  ASSERT_THROW(RebuildVersion(REF, MiscConfig::ALL_GRAPH_OPS), khException);
 }
 
 TEST_F(AssetOperationTest, RebuildWrongStateSucceeded) {
@@ -204,13 +204,13 @@ TEST_F(AssetOperationTest, RebuildWrongStateBad) {
 
 TEST_F(AssetOperationTest, RebuildBadVersion) {
   sm.GetMutableVersion()->type = AssetDefs::Invalid;
-  RebuildVersion(REF, true);
+  RebuildVersion(REF, MiscConfig::ALL_GRAPH_OPS);
   ASSERT_FALSE(sm.GetVersion()->stateSetForRefAndDependents);
 }
 
 TEST_F(AssetOperationTest, Cancel) {
   sm.GetMutableVersion()->state = AssetDefs::Waiting;
-  CancelVersion(REF, true);
+  CancelVersion(REF, MiscConfig::ALL_GRAPH_OPS);
   ASSERT_TRUE(sm.GetVersion()->stateSetForRefAndDependents);
   ASSERT_EQ(sm.GetVersion()->refAndDependentsState, AssetDefs::Canceled);
 
@@ -231,7 +231,7 @@ TEST_F(AssetOperationTest, Cancel) {
 
 void CancelWrongState(MockStorageManager & sm, AssetDefs::State state) {
   sm.GetMutableVersion()->state = state;
-  ASSERT_THROW(CancelVersion(REF, true), khException);
+  ASSERT_THROW(CancelVersion(REF, MiscConfig::ALL_GRAPH_OPS), khException);
 }
 
 TEST_F(AssetOperationTest, CancelWrongStateSucceeded) {
@@ -261,12 +261,12 @@ TEST_F(AssetOperationTest, CancelWrongStateNew) {
 TEST_F(AssetOperationTest, CancelWrongSubtype) {
   sm.GetMutableVersion()->state = AssetDefs::InProgress;
   sm.GetMutableVersion()->subtype = "Source";
-  ASSERT_THROW(CancelVersion(REF, true), khException);
+  ASSERT_THROW(CancelVersion(REF, MiscConfig::ALL_GRAPH_OPS), khException);
 }
 
 TEST_F(AssetOperationTest, CancelBadVersion) {
   sm.GetMutableVersion()->type = AssetDefs::Invalid;
-  CancelVersion(REF, true);
+  CancelVersion(REF, MiscConfig::ALL_GRAPH_OPS);
   ASSERT_FALSE(sm.GetVersion()->stateSetForRefAndDependents);
 }
 
@@ -278,7 +278,7 @@ TEST_F(AssetOperationTest, Progress) {
 
   auto msg = TaskProgressMsg(REF, TASKID, BEGIN_TIME, PROGRESS_TIME, PROGRESS);
   sm.GetMutableVersion()->taskid = TASKID;
-  HandleTaskProgress(msg, true);
+  HandleTaskProgress(msg, MiscConfig::ALL_GRAPH_OPS);
   ASSERT_EQ(sm.GetVersion()->beginTime, BEGIN_TIME);
   ASSERT_EQ(sm.GetVersion()->progressTime, PROGRESS_TIME);
   ASSERT_EQ(sm.GetVersion()->progress, PROGRESS);
@@ -293,7 +293,7 @@ TEST_F(AssetOperationTest, ProgressWrongTaskId) {
 
   auto msg = TaskProgressMsg(REF, TASKID, BEGIN_TIME, PROGRESS_TIME, PROGRESS);
   sm.GetMutableVersion()->taskid = TASKID + 1;
-  HandleTaskProgress(msg, true);
+  HandleTaskProgress(msg, MiscConfig::ALL_GRAPH_OPS);
   ASSERT_NE(sm.GetVersion()->beginTime, BEGIN_TIME);
   ASSERT_NE(sm.GetVersion()->progressTime, PROGRESS_TIME);
   ASSERT_NE(sm.GetVersion()->progress, PROGRESS);
@@ -309,7 +309,7 @@ TEST_F(AssetOperationTest, ProgressBadVersion) {
   sm.GetMutableVersion()->type = AssetDefs::Invalid;
   auto msg = TaskProgressMsg(REF, TASKID, BEGIN_TIME, PROGRESS_TIME, PROGRESS);
   sm.GetMutableVersion()->taskid = TASKID + 1;
-  HandleTaskProgress(msg, true);
+  HandleTaskProgress(msg, MiscConfig::ALL_GRAPH_OPS);
   ASSERT_NE(sm.GetVersion()->beginTime, BEGIN_TIME);
   ASSERT_NE(sm.GetVersion()->progressTime, PROGRESS_TIME);
   ASSERT_NE(sm.GetVersion()->progress, PROGRESS);
@@ -324,7 +324,7 @@ TEST_F(AssetOperationTest, Done) {
 
   auto msg = TaskDoneMsg(REF, TASKID, true, BEGIN_TIME, END_TIME, OUTFILES);
   sm.GetMutableVersion()->taskid = TASKID;
-  HandleTaskDone(msg, true);
+  HandleTaskDone(msg, MiscConfig::ALL_GRAPH_OPS);
   ASSERT_EQ(sm.GetVersion()->beginTime, BEGIN_TIME);
   ASSERT_EQ(sm.GetVersion()->progressTime, END_TIME);
   ASSERT_EQ(sm.GetVersion()->endTime, END_TIME);
@@ -341,7 +341,7 @@ TEST_F(AssetOperationTest, DoneWrongTaskId) {
 
   auto msg = TaskDoneMsg(REF, TASKID, true, BEGIN_TIME, END_TIME, OUTFILES);
   sm.GetMutableVersion()->taskid = TASKID + 1;
-  HandleTaskDone(msg, true);
+  HandleTaskDone(msg, MiscConfig::ALL_GRAPH_OPS);
   ASSERT_NE(sm.GetVersion()->beginTime, BEGIN_TIME);
   ASSERT_NE(sm.GetVersion()->progressTime, END_TIME);
   ASSERT_NE(sm.GetVersion()->endTime, END_TIME);
@@ -358,7 +358,7 @@ TEST_F(AssetOperationTest, DoneFailed) {
 
   auto msg = TaskDoneMsg(REF, TASKID, false, BEGIN_TIME, END_TIME, OUTFILES);
   sm.GetMutableVersion()->taskid = TASKID;
-  HandleTaskDone(msg, true);
+  HandleTaskDone(msg, MiscConfig::ALL_GRAPH_OPS);
   ASSERT_EQ(sm.GetVersion()->beginTime, BEGIN_TIME);
   ASSERT_EQ(sm.GetVersion()->progressTime, END_TIME);
   ASSERT_EQ(sm.GetVersion()->endTime, END_TIME);
@@ -376,7 +376,7 @@ TEST_F(AssetOperationTest, DoneBadVersion) {
   sm.GetMutableVersion()->type = AssetDefs::Invalid;
   auto msg = TaskDoneMsg(REF, TASKID, true, BEGIN_TIME, END_TIME, OUTFILES);
   sm.GetMutableVersion()->taskid = TASKID;
-  HandleTaskDone(msg, true);
+  HandleTaskDone(msg, MiscConfig::ALL_GRAPH_OPS);
   ASSERT_NE(sm.GetVersion()->beginTime, BEGIN_TIME);
   ASSERT_NE(sm.GetVersion()->progressTime, END_TIME);
   ASSERT_NE(sm.GetVersion()->endTime, END_TIME);
@@ -390,7 +390,7 @@ TEST_F(AssetOperationTest, HandleExternalStateChangeWaiting) {
   const WaitingFor WAITING_FOR = {123, 456};
 
   sm.GetMutableVersion()->state = AssetDefs::Queued;
-  HandleExternalStateChange(REF, OLD_STATE, WAITING_FOR.inputs, WAITING_FOR.children, true);
+  HandleExternalStateChange(REF, OLD_STATE, WAITING_FOR.inputs, WAITING_FOR.children, MiscConfig::ALL_GRAPH_OPS);
   ASSERT_TRUE(sm.GetVersion()->updatedWaiting);
   ASSERT_EQ(sm.GetVersion()->oldState, OLD_STATE);
   ASSERT_EQ(sm.GetVersion()->waitingFor.inputs, WAITING_FOR.inputs);
@@ -403,7 +403,7 @@ TEST_F(AssetOperationTest, HandleExternalStateChangeSucceeded) {
   const WaitingFor WAITING_FOR = {123, 456};
 
   sm.GetMutableVersion()->state = AssetDefs::Succeeded;
-  HandleExternalStateChange(REF, OLD_STATE, WAITING_FOR.inputs, WAITING_FOR.children, true);
+  HandleExternalStateChange(REF, OLD_STATE, WAITING_FOR.inputs, WAITING_FOR.children, MiscConfig::ALL_GRAPH_OPS);
   ASSERT_TRUE(sm.GetVersion()->updatedWaiting);
   ASSERT_EQ(sm.GetVersion()->oldState, OLD_STATE);
   ASSERT_EQ(sm.GetVersion()->waitingFor.inputs, WAITING_FOR.inputs);
@@ -417,7 +417,7 @@ TEST_F(AssetOperationTest, HandleExternalStateChangeBadVersion) {
 
   sm.GetMutableVersion()->state = AssetDefs::Succeeded;
   sm.GetMutableVersion()->type = AssetDefs::Invalid;
-  HandleExternalStateChange(REF, OLD_STATE, WAITING_FOR.inputs, WAITING_FOR.children, true);
+  HandleExternalStateChange(REF, OLD_STATE, WAITING_FOR.inputs, WAITING_FOR.children, MiscConfig::ALL_GRAPH_OPS);
   ASSERT_FALSE(sm.GetVersion()->updatedWaiting);
   ASSERT_NE(sm.GetVersion()->oldState, OLD_STATE);
   ASSERT_NE(sm.GetVersion()->waitingFor.inputs, WAITING_FOR.inputs);
@@ -429,4 +429,3 @@ int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc,argv);
   return RUN_ALL_TESTS();
 }
-

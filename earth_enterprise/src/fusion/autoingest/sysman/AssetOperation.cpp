@@ -23,8 +23,8 @@
 std::unique_ptr<StateUpdater> stateUpdater(new StateUpdater());
 StorageManagerInterface<AssetVersionImpl> * assetOpStorageManager = &AssetVersion::storageManager();
 
-void RebuildVersion(const SharedString & ref, bool graphOps) {
-  if (graphOps) {
+void RebuildVersion(const SharedString & ref, MiscConfig::GraphOpsType graphOps) {
+  if (graphOps >= MiscConfig::FAST_GRAPH_OPS) {
     // Rebuilding an already succeeded asset is quite dangerous!
     // Those who depend on me may have already finished their work with me.
     // If I rebuild, they have the right to recognize that nothing has
@@ -63,8 +63,8 @@ void RebuildVersion(const SharedString & ref, bool graphOps) {
   }
 }
 
-void CancelVersion(const SharedString & ref, bool graphOps) {
-  if (graphOps) {
+void CancelVersion(const SharedString & ref, MiscConfig::GraphOpsType graphOps) {
+  if (graphOps >= MiscConfig::ALL_GRAPH_OPS) {
     {
       auto version = assetOpStorageManager->Get(ref);
       if (!version) {
@@ -90,8 +90,8 @@ void CancelVersion(const SharedString & ref, bool graphOps) {
   }
 }
 
-void HandleTaskProgress(const TaskProgressMsg & msg, bool graphOps) {
-  if (graphOps) {
+void HandleTaskProgress(const TaskProgressMsg & msg, MiscConfig::GraphOpsType graphOps) {
+  if (graphOps >= MiscConfig::FAST_GRAPH_OPS) {
     auto version = assetOpStorageManager->GetMutable(msg.verref);
     if (version && version->taskid == msg.taskid) {
       version->beginTime = msg.beginTime;
@@ -114,8 +114,8 @@ void HandleTaskProgress(const TaskProgressMsg & msg, bool graphOps) {
   }
 }
 
-void HandleTaskDone(const TaskDoneMsg & msg, bool graphOps) {
-  if (graphOps) {
+void HandleTaskDone(const TaskDoneMsg & msg, MiscConfig::GraphOpsType graphOps) {
+  if (graphOps >= MiscConfig::FAST_GRAPH_OPS) {
     auto version = assetOpStorageManager->GetMutable(msg.verref);
     if (version && version->taskid == msg.taskid) {
       version->beginTime = msg.beginTime;
@@ -151,8 +151,8 @@ void HandleExternalStateChange(
     AssetDefs::State oldState,
     uint32 numInputsWaitingFor,
     uint32 numChildrenWaitingFor,
-    bool graphOps) {
-  if (graphOps) {
+    MiscConfig::GraphOpsType graphOps) {
+  if (graphOps >= MiscConfig::FAST_GRAPH_OPS) {
     auto version = assetOpStorageManager->Get(ref);
     if (version) {
       // Update the lists of waiting assets
