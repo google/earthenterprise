@@ -412,11 +412,11 @@ Configure Fusion performance
       and in some cases may reduce performance compared to previous versions
       of Fusion. ``GraphOperations`` can be set to the following values:
 
-      - ``NO_GRAPH_OPS`` or ``0``: use the legacy version of all operations.
-      - ``FAST_GRAPH_OPS`` or ``1``: only use new operations that are likely to
-        improve performance.
+      - ``NO_GRAPH_OPS`` or ``0``: use the legacy version of all operations
+      - ``FAST_GRAPH_OPS`` or ``1``: use new operations that are likely to
+        improve performance
       - ``ALL_GRAPH_OPS`` or ``2``: use all new operations regardless of
-        performance impact.
+        performance impact
 
       .. rubric:: Learn more
 
