@@ -64,6 +64,9 @@ void RebuildVersion(const SharedString & ref, MiscConfig::GraphOpsType graphOps)
 }
 
 void CancelVersion(const SharedString & ref, MiscConfig::GraphOpsType graphOps) {
+  // The Cancel operation is currently slower than the legacy code, so we give
+  // users the ability to selectively disable it until we can optimize it
+  // further.
   if (graphOps >= MiscConfig::ALL_GRAPH_OPS) {
     {
       auto version = assetOpStorageManager->Get(ref);
