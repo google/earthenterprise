@@ -1918,10 +1918,11 @@ sub EmitEnumDOMReader
     my $i = 0;
     for ($i = 0; $i < @{$enum->{enumerators}}; ++$i) {
 	my $item = $enum->{enumerators}[$i];
+    my $conditional = "enumStr == \"$item->{name}\" || enumStr == \"$item->{value}\"";
 	if ($i == 0) {
-	    print $fh $indent, "if (enumStr == \"$item->{name}\") {\n";
+	    print $fh $indent, "if ($conditional) {\n";
 	} else {
-	    print $fh $indent, "} else if (enumStr == \"$item->{name}\") {\n";
+	    print $fh $indent, "} else if ($conditional) {\n";
 	}
 	print $fh $indent, $indent, "self = $enum->{qualbase}::$item->{name};\n";
 	print $fh $indent, $indent, "return;\n";

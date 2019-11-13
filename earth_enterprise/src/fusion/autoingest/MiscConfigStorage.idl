@@ -19,7 +19,7 @@
 #include <notify.h>
 
 class MiscConfigStorage {
-  typedef uint GraphOpsType;
+  enum GraphOpsType { NO_GRAPH_OPS = 0, FAST_GRAPH_OPS = 1, ALL_GRAPH_OPS = 2 };
 
   // delay between writing a file and reading it from NFS in order to
   // help work around the delayed NFS visibility problem.
@@ -44,10 +44,6 @@ class MiscConfigStorage {
 
 #hquote
  public:
-  static const GraphOpsType NO_GRAPH_OPS;
-  static const GraphOpsType FAST_GRAPH_OPS;
-  static const GraphOpsType ALL_GRAPH_OPS;
-
   static std::string Filename(void) {
     // NOTE: This intentionally doesn't call geAssetDefs::Filename
     // because we don't wan't users of MiscConfig to necessarily have to
@@ -78,11 +74,4 @@ class MiscConfigStorage {
     }
   }
 #/hquote
-
-#cppquote
-const MiscConfigStorage::GraphOpsType MiscConfigStorage::NO_GRAPH_OPS = 0;
-const MiscConfigStorage::GraphOpsType MiscConfigStorage::FAST_GRAPH_OPS = 1;
-const MiscConfigStorage::GraphOpsType MiscConfigStorage::ALL_GRAPH_OPS = 2;
-
-#/cppquote
 };
