@@ -1,0 +1,12 @@
+
+Ports
+
+GEE uses the following ports:
+
+Port 80 is used for publishing.
+
+Port 443 is an optional port that can be used for streaming and search
+when correctly configured for HTTPS.
+
+Ports 13031, 13032, and 13033 are used by Fusion when performing its
+processes.
