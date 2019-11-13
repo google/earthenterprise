@@ -203,6 +203,7 @@ StorageManager<AssetType>::Get(
     bool makeMutable) {
   const AssetKey key = AssetType::Key(ref);
   const std::string filename = AssetType::Filename(key);
+  bool onDisk = false;
 
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
 
@@ -211,15 +212,18 @@ StorageManager<AssetType>::Get(
   cache.Find(key, entry);
   if (entry && !handle->Valid(entry)) entry = PointerType();
   bool updated = false;
-
+  //notify(NFY_WARN, "%s", key.toString().c_str());
   // Try to load from XML.
   if (!entry) {
+    //notify(NFY_WARN, "\tNotInCache: %d", checkFileExistenceFirst);
     if (checkFileExistenceFirst) {
       if (!khExists(filename)) {
         // In this case DoBind is allowed not to throw even if
         // we configured to normally throw.
         return PointerType();
       }
+      //notify(NFY_WARN, "\t%s Exists\n", filename.c_str());
+      onDisk = true;
     }
 
     // Will succeed, generate stub, or throw exception.
@@ -234,6 +238,7 @@ StorageManager<AssetType>::Get(
       // The file has changed on disk.
 
       // Drop the current entry from the cache.
+      //notify(NFY_WARN, "\tRemove From Get");
       cache.Remove(key, false);  // Don't prune, the Add() will.
 
       // Will succeed, generate stub, or throw exception.
@@ -244,15 +249,15 @@ StorageManager<AssetType>::Get(
 
   if (entry) {
     // Add it to the cache.
-    if (addToCache && updated)
+    if (addToCache && updated && !onDisk) {
+      //notify(NFY_WARN, "\tAdd From Get");
       cache.Add(key, entry);
-
+    }
     // Add it to the dirty map. If it's already in the dirty map the existing
     // one will win; that's OK.
-    if (makeMutable)
-      dirtyMap.emplace(key, entry);
+    if (makeMutable) dirtyMap.emplace(key, entry);
   }
-
+  notify(NFY_WARN, "Cache: %lu\tMap: %lu", cache.size(), dirtyMap.size());
   return entry;
 }
 
@@ -342,10 +347,8 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
   notify(NFY_INFO, "Writing %lu %s records", dirtyMap.size(), assetType.c_str());
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
   typename std::map<AssetKey, PointerType>::iterator entry = dirtyMap.begin();
-  //notify(NFY_WARN, "SaveDirty: %s", ToString(typeid(AssetType).name()).c_str());
   while (entry != dirtyMap.end()) {
     std::string filename = entry->second->XMLFilename() + ".new";
-    //notify(NFY_WARN, "\t%s", filename.c_str());
 
     if (serializer->Save(entry->second, filename)) {
       savetrans.AddNewPath(filename);
@@ -375,19 +378,17 @@ void StorageManager<AssetType>::WriteDirty() {
 
         if (serializer->Save(entry->second, filename)) {
           savetrans.AddNewPath(filename);
-          notify(NFY_WARN, "\tRemoved: %s", entry->first.toString().c_str());
+          notify(NFY_WARN, "\t%s", filename.c_str());
+          cache.Remove(entry->first, false);
           entry = dirtyMap.erase(entry);
-        }
-        else {
-          notify(NFY_WARN, "\tNot Saved: %s", entry->first.toString().c_str());
         }
       }
       else {
-        notify(NFY_WARN, "\tNot removed: %s", entry->first.toString().c_str());
         entry++;
       }
     }
     cache.Prune();
+    notify(NFY_WARN, "Cache: %lu\tDirty: %lu", cache.size(), dirtyMap.size());
     savetrans.Commit();
   }
 }
