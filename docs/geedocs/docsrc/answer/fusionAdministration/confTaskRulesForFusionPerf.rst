@@ -407,9 +407,16 @@ Configure Fusion performance
       .. rubric:: Improving Performance
 
       Included in ``/gevol/assets/.config/misc.xml`` is a
-      ``GraphOperations`` option, and it may be set to ``1`` (true) or
-      ``0`` (false). This enables optimized versions of certain
-      operations. These optimizations are experimental and may contain bugs.
+      ``GraphOperations`` option that enables new versions of certain
+      operations. These updates are experimental and may contain bugs,
+      and in some cases may reduce performance compared to previous versions
+      of Fusion. ``GraphOperations`` can be set to the following values:
+
+      - ``NO_GRAPH_OPS`` or ``0``: use the legacy version of all operations.
+      - ``FAST_GRAPH_OPS`` or ``1``: only use new operations that are likely to
+        improve performance.
+      - ``ALL_GRAPH_OPS`` or ``2``: use all new operations regardless of
+        performance impact.
 
       .. rubric:: Learn more
 

@@ -25,11 +25,11 @@ Improved memory usage reporting for caches
 . The memory usage estimation for the asset and asset version caches
 has been improved and is much more accurate.
 
-Optimized command and message processing
+Optimized message processing
 
-. System manager's performance while handling cancel commands and
-updates about running tasks has been improved. These updates are
-experimental and can be enabled using the
+. System manager's performance while handling updates about running
+tasks has been improved. These updates are experimental and can be
+enabled using the
 
 GraphOperations flag
 

@@ -457,9 +457,17 @@ manually by setting <code class="docutils literal notranslate"><span class="pre"
 <p><code class="docutils literal notranslate"><span class="pre">&lt;MutexTimedWaitSec&gt;60&lt;/MutexTimedWaitSec&gt;</span></code></p>
 <p class="rubric" id="graph-operations">Improving Performance</p>
 <p>Included in <code class="docutils literal notranslate"><span class="pre">/gevol/assets/.config/misc.xml</span></code> is a
-<code class="docutils literal notranslate"><span class="pre">GraphOperations</span></code> option, and it may be set to <code class="docutils literal notranslate"><span class="pre">1</span></code> (true) or
-<code class="docutils literal notranslate"><span class="pre">0</span></code> (false). This enables optimized versions of certain
-operations. These optimizations are experimental and may contain bugs.</p>
+<code class="docutils literal notranslate"><span class="pre">GraphOperations</span></code> option that enables new versions of certain
+operations. These updates are experimental and may contain bugs,
+and in some cases may reduce performance compared to previous versions
+of Fusion. <code class="docutils literal notranslate"><span class="pre">GraphOperations</span></code> can be set to the following values:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">NO_GRAPH_OPS</span></code> or <code class="docutils literal notranslate"><span class="pre">0</span></code>: use the legacy version of all operations.</li>
+<li><code class="docutils literal notranslate"><span class="pre">FAST_GRAPH_OPS</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code>: only use new operations that are likely to
+improve performance.</li>
+<li><code class="docutils literal notranslate"><span class="pre">ALL_GRAPH_OPS</span></code> or <code class="docutils literal notranslate"><span class="pre">2</span></code>: use all new operations regardless of
+performance impact.</li>
+</ul>
 <p class="rubric">Learn more</p>
 <ul class="simple">
 <li><a class="reference internal" href="benchMarkOutcomesForTaskRule.html"><span class="doc">Benchmarking outcomes for applying task rules</span></a></li>
