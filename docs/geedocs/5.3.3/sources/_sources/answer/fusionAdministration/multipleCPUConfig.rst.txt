@@ -1,0 +1,103 @@
+
+Running Fusion on a Machine with Multiple CPUs
+
+Fusion can be configured to use a maximum number of CPUs on a machine
+with the following command:
+
+"/opt/google/bin/geselectassetroot --assetroot /my/assetroot --numcpus
+X" This number will show up as the maxjobs entry within getop output
+and corresponds to how many concurrent jobs Fusion may spawn at any
+one time. Note that the value for --numcpus should be equal to, or
+less than, the number of physical CPU cores on the machine.
+
+Each task within Fusion is configured to use 1 CPU by default.
+Changing the maximum number of CPUs using the above command will not
+affect the number of CPUs assigned to each individual task. Some tasks
+in Fusion are capable of multithreaded support including:
+
+gepackgen (imagery and terrain projects)
+
+gemaptilegen (2D vector-based map tiles)
+
+gecombineterrain (3D databases)
+
+These tasks may be multithreaded by enabling
+
+task rules
+
+ within Fusion. Implementation of task rules is described in more
+detail in
+
+Configure Fusion performance
+
+.
+
+The
+
+ImageryPacketLevel.taskrule
+
+,
+
+TerrainPacketLevel.taskrule
+
+,
+
+MapLayerLevel.taskrule
+
+, and
+
+CombinedTerrain.taskrule
+
+ task rules enable multiple CPUs to work on each individual task. For
+example, configuring a "minNumCPUs" and "maxNumCPUs" of two for the
+
+ImageryPacketLevel.taskrule
+
+ means that up to four gepackgen processes may run on Fusion when
+eight CPU cores are allocated.
+
+As a best practice,
+
+ImageryPacketLevel.taskrule
+
+,
+
+TerrainPacketLevel.taskrule
+
+ and
+
+MapLayerLevel.taskrule
+
+ should be configured such that multiple gepackgen and gemaptilegen
+processes can run concurrently.
+
+Since "gecombineterrain" is CPU-intensive and can be an operational
+bottleneck, more CPUs should be assigned to that task to expedite
+processing. So on a machine with
+
+eight
+
+ CPU cores available for Fusion processing:
+
+Set /opt/google/bin/geselectassetroot --assetroot /my/assetroot
+--numcpus=7. It's recommended to set the maximum number of CPUs
+allocated to Fusion to (N-1), such that one CPU core is reserved for
+system operations.
+
+Set minNumCPU=2 and maxNumCPU=2 in ImageryPacketLevel.taskrule for
+imagery projects (three concurrent gepackgen tasks possible).**
+
+Set minNumCPU=3 and maxNumCPU=4 in TerrainPacketLevel.taskrule for
+terrain projects (two concurrent gepackgen tasks possible)**
+
+Set minNumCPU=3 and maxNumCPU=4 in MapLayerLevel.taskrule (two
+concurrent gemaptilegen jobs possible).
+
+Set minNumCPU=7 and maxNumCPU=7 in CombinedTerrain.taskrule (one
+gecombineterrain task)  Fusion will use up to 200% CPU processing for
+imagery projects per gepackgen process, and up to 400% CPU processing
+for terrain projects. There is fundamentally a balance between
+assigning sufficient numbers of CPUs to each individual process for
+gepackgen while still enabling multiple concurrent gepackgen processes
+for parallel processing.  All other tasks in Fusion will continue to
+operate with min/max one CPU.
