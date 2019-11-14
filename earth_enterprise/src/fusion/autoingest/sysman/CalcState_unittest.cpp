@@ -23,6 +23,11 @@
 
 using namespace std;
 
+// This test checks all possible sets of inputs when calculating states and
+// compares them to known golden expected states, which are saved in text
+// files. To create new golden state files, uncomment the following line.
+//#define WRITE_GOLDEN
+
 vector<AssetDefs::State> states = { AssetDefs::New, AssetDefs::Waiting, AssetDefs::Blocked, AssetDefs::Queued, AssetDefs::InProgress, AssetDefs::Failed, AssetDefs::Succeeded, AssetDefs::Canceled, AssetDefs::Offline, AssetDefs::Bad };
 
 class ExpectedStates {
@@ -80,6 +85,7 @@ class ExpectedStates {
           [caresAboutInputs]
           = expected;
     }
+#if defined WRITE_GOLDEN
     void Write() {
       ofstream out(goldenFile);
       for (const auto & startingState : expectedStates) {
@@ -105,6 +111,7 @@ class ExpectedStates {
         }
       }
     }
+#endif
 };
 
 class TestLeafAssetVersionImplD : public LeafAssetVersionImplD {
@@ -212,20 +219,21 @@ void TestAll(
       }
     }
   }
+#if defined WRITE_GOLDEN
   expectedStates.Write();
+#endif
 }
 
 TEST(CalcStateTest, LeafAssetVersion) {
   auto hasChildren = false;  // Leaf assets have no children
   auto caresAboutInputs = {true};  // Leaf assets always care about inputs
-  TestAll<TestLeafAssetVersionImplD>("leafcalcstates.txt", hasChildren, caresAboutInputs);
+  TestAll<TestLeafAssetVersionImplD>("calcstatesleaf.txt", hasChildren, caresAboutInputs);
 }
 
 TEST(CalcStateTest, CompositeAssetVersion) {
   auto caresAboutInputs = {false, true};
-  for (auto hasChildren : {false, true}) {
-    TestAll<TestCompositeAssetVersionImplD>("compositecalcstates.txt", hasChildren, caresAboutInputs);
-  }
+  TestAll<TestCompositeAssetVersionImplD>("calcstatescompnokids.txt", false, caresAboutInputs);
+  TestAll<TestCompositeAssetVersionImplD>("calcstatescompkids.txt", true, caresAboutInputs);
 }
 
 int main(int argc, char **argv) {
