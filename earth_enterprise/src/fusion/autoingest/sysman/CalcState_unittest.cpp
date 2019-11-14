@@ -151,23 +151,32 @@ void TestCalcState(
               hasChildren, caresAboutInputs, actualState);
 }
 
+// This allows us to test all possible combinations of inputs to state
+// calculation functions. We make some effort to skip invalid combinations, but
+// this may test some cases that don't happen in real life.
 template <typename TestAssetVersionD>
 void TestAll(
-    vector<AssetDefs::State> byChildrenStates,
-    vector<bool> hasChildrenOptions,
+    bool hasChildren,
     vector<bool> caresAboutInputsOptions) {
   ExpectedStates expectedStates;
+  vector<AssetDefs::State> byChildrenStates;
+  if (hasChildren) {
+    byChildrenStates = {AssetDefs::Succeeded, AssetDefs::Blocked, AssetDefs::InProgress, AssetDefs::Queued };
+  }
+  else {
+    // If there are no chilren then numkids and numgood will both be 0, so the
+    // state by children will be succeeded.
+    byChildrenStates = {AssetDefs::Succeeded};
+  }
   for (auto startingState : states) { // All states are valid starting states
     for (auto byInputs : {AssetDefs::Queued, AssetDefs::Blocked, AssetDefs::Waiting}) {
       for (auto byChildren : byChildrenStates) {
-        for (auto hasChildren : hasChildrenOptions) {
-          for (auto blockersOffline : {false, true}) {
-            for (auto caresAboutInputs : caresAboutInputsOptions) {
-              for (auto offlineBreaks: {false, true}) {
-                TestCalcState<TestLeafAssetVersionImplD>(startingState,
-                    byInputs, byChildren, blockersOffline, offlineBreaks,
-                    hasChildren, caresAboutInputs, expectedStates);
-              }
+        for (auto blockersOffline : {false, true}) {
+          for (auto caresAboutInputs : caresAboutInputsOptions) {
+            for (auto offlineBreaks: {false, true}) {
+              TestCalcState<TestLeafAssetVersionImplD>(startingState,
+                  byInputs, byChildren, blockersOffline, offlineBreaks,
+                  hasChildren, caresAboutInputs, expectedStates);
             }
           }
         }
@@ -177,20 +186,16 @@ void TestAll(
 }
 
 TEST(CalcStateTest, LeafAssetVersion) {
-  auto byChildren = {AssetDefs::Succeeded, AssetDefs::Blocked, AssetDefs::InProgress, AssetDefs::Queued };
-  auto hasChildren = {false, true};
-  auto caresAboutInputs = {false, true};
-  TestAll<TestCompositeAssetVersionImplD>(byChildren, hasChildren, caresAboutInputs);
+  auto hasChildren = false;  // Leaf assets have no children
+  auto caresAboutInputs = {true};  // Leaf assets always care about inputs
+  TestAll<TestLeafAssetVersionImplD>(hasChildren, caresAboutInputs);
 }
 
 TEST(CalcStateTest, CompositeAssetVersion) {
-  auto byChildren = {AssetDefs::Succeeded};
-  // Leaf assets have no children
-  auto hasChildren = {false};
-  // Leaf assets always care about inputs
-  auto caresAboutInputs = {true};
-
-  TestAll<TestLeafAssetVersionImplD>(byChildren, hasChildren, caresAboutInputs);
+  auto caresAboutInputs = {false, true};
+  for (auto hasChildren : {false, true}) {
+    TestAll<TestCompositeAssetVersionImplD>(hasChildren, caresAboutInputs);
+  }
 }
 
 int main(int argc, char **argv) {
