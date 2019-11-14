@@ -16,6 +16,8 @@
 
 #include "AssetVersionD.h"
 
+#include <fstream>
+
 #include "gee_version.h"
 #include <gtest/gtest.h>
 
@@ -35,7 +37,9 @@ class ExpectedStates {
                     AssetDefs::State      // the expected state based on the above
                     >>>>>>>;
     MapType expectedStates;
+    const string goldenFile;
   public:
+    ExpectedStates(string goldenFile) : goldenFile("../../../fusion/testdata/" + goldenFile) {}
     AssetDefs::State Get(AssetDefs::State startingState,
         AssetDefs::State byInputs,
         AssetDefs::State byChildren,
@@ -76,7 +80,31 @@ class ExpectedStates {
           [caresAboutInputs]
           = expected;
     }
-
+    void Write() {
+      ofstream out(goldenFile);
+      for (const auto & startingState : expectedStates) {
+        for (const auto & byInputs : startingState.second) {
+          for (const auto & byChildren : byInputs.second) {
+            for (const auto & blockersOffline : byChildren.second) {
+              for (const auto & offlineBreaks : blockersOffline.second) {
+                for (const auto & hasChildren : offlineBreaks.second) {
+                  for (const auto & caresAboutInputs : hasChildren.second) {
+                    out << startingState.first << " "
+                        << byInputs.first << " "
+                        << byChildren.first << " "
+                        << blockersOffline.first << " "
+                        << offlineBreaks.first << " "
+                        << hasChildren.first << " "
+                        << caresAboutInputs.first << " "
+                        << caresAboutInputs.second << endl; // This is the expected state
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
 };
 
 class TestLeafAssetVersionImplD : public LeafAssetVersionImplD {
@@ -156,9 +184,10 @@ void TestCalcState(
 // this may test some cases that don't happen in real life.
 template <typename TestAssetVersionD>
 void TestAll(
+    const string & goldenFile,
     bool hasChildren,
     vector<bool> caresAboutInputsOptions) {
-  ExpectedStates expectedStates;
+  ExpectedStates expectedStates(goldenFile);
   vector<AssetDefs::State> byChildrenStates;
   if (hasChildren) {
     byChildrenStates = {AssetDefs::Succeeded, AssetDefs::Blocked, AssetDefs::InProgress, AssetDefs::Queued };
@@ -183,18 +212,19 @@ void TestAll(
       }
     }
   }
+  expectedStates.Write();
 }
 
 TEST(CalcStateTest, LeafAssetVersion) {
   auto hasChildren = false;  // Leaf assets have no children
   auto caresAboutInputs = {true};  // Leaf assets always care about inputs
-  TestAll<TestLeafAssetVersionImplD>(hasChildren, caresAboutInputs);
+  TestAll<TestLeafAssetVersionImplD>("leafcalcstates.txt", hasChildren, caresAboutInputs);
 }
 
 TEST(CalcStateTest, CompositeAssetVersion) {
   auto caresAboutInputs = {false, true};
   for (auto hasChildren : {false, true}) {
-    TestAll<TestCompositeAssetVersionImplD>(hasChildren, caresAboutInputs);
+    TestAll<TestCompositeAssetVersionImplD>("compositecalcstates.txt", hasChildren, caresAboutInputs);
   }
 }
 
