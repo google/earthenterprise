@@ -63,20 +63,15 @@ class ExpectedStates {
         bool offlineBreaks,
         bool hasChildren,
         bool caresAboutInputs) const {
-      try {
-        return expectedStates.at(startingState)
-            .at(byInputs)
-            .at(byChildren)
-            .at(blockersOffline)
-            .at(offlineBreaks)
-            .at(hasChildren)
-            .at(caresAboutInputs);
-      }
-      catch (out_of_range) {
-        // There's some mismatch between the states saved in the file and the
-        // states checked by the test.
-        assert(false);
-      }
+      // If there is a mismatch between what's in the file and what's checked
+      // in the test, this will throw an exception, causing the test to fail.
+      return expectedStates.at(startingState)
+          .at(byInputs)
+          .at(byChildren)
+          .at(blockersOffline)
+          .at(offlineBreaks)
+          .at(hasChildren)
+          .at(caresAboutInputs);
     }
 #if !defined WRITE_GOLDEN
   private:
