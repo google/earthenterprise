@@ -30,6 +30,13 @@ using namespace std;
 
 vector<AssetDefs::State> states = { AssetDefs::New, AssetDefs::Waiting, AssetDefs::Blocked, AssetDefs::Queued, AssetDefs::InProgress, AssetDefs::Failed, AssetDefs::Succeeded, AssetDefs::Canceled, AssetDefs::Offline, AssetDefs::Bad };
 
+istream &operator>>(istream & input, AssetDefs::State & state) {
+  uint stateInt;
+  input >> stateInt;
+  state = static_cast<AssetDefs::State>(stateInt);
+  return input;
+}
+
 class ExpectedStates {
   private:
     using MapType = map<AssetDefs::State, // starting state
@@ -44,7 +51,11 @@ class ExpectedStates {
     MapType expectedStates;
     const string goldenFile;
   public:
-    ExpectedStates(string goldenFile) : goldenFile("../../../fusion/testdata/" + goldenFile) {}
+    ExpectedStates(string goldenFile) : goldenFile("../../../fusion/testdata/" + goldenFile) {
+#if !defined WRITE_GOLDEN
+      Read();
+#endif
+    }
     AssetDefs::State Get(AssetDefs::State startingState,
         AssetDefs::State byInputs,
         AssetDefs::State byChildren,
@@ -67,6 +78,31 @@ class ExpectedStates {
         assert(false);
       }
     }
+#if !defined WRITE_GOLDEN
+  private:
+    void Read() {
+      AssetDefs::State startingState;
+      AssetDefs::State byInputs;
+      AssetDefs::State byChildren;
+      bool blockersOffline;
+      bool offlineBreaks;
+      bool hasChildren;
+      bool caresAboutInputs;
+      AssetDefs::State expected;
+      ifstream in(goldenFile);
+      while (in >> startingState
+                >> byInputs
+                >> byChildren
+                >> blockersOffline
+                >> offlineBreaks
+                >> hasChildren
+                >> caresAboutInputs
+                >> expected) {
+        Set(startingState, byInputs, byChildren, blockersOffline, offlineBreaks,
+            hasChildren, caresAboutInputs, expected);
+      }
+    }
+#endif
     void Set(
         AssetDefs::State startingState,
         AssetDefs::State byInputs,
@@ -125,7 +161,7 @@ class TestLeafAssetVersionImplD : public LeafAssetVersionImplD {
     static bool hasChildren;
     static bool caresAboutInputs;
 
-      // Not used - only included to make MockVersion non-virtual
+    // Not used - only included to make MockVersion non-virtual
     string PluginName(void) const override { return string(); }
     void GetOutputFilenames(vector<string> &) const override {}
     string GetOutputFilename(uint) const override { return string(); }
@@ -182,8 +218,14 @@ void TestCalcState(
   TestAssetVersionD version;
   version.state = startingState;
   AssetDefs::State actualState = version.CalcStateByInputsAndChildren(data);
+#if !defined WRITE_GOLDEN
+  AssetDefs::State expectedState = expected.Get(startingState, byInputs,
+      byChildren, blockersOffline, offlineBreaks, hasChildren, caresAboutInputs);
+  ASSERT_EQ(actualState, expectedState);
+#else
   expected.Set(startingState, byInputs, byChildren, blockersOffline, offlineBreaks,
               hasChildren, caresAboutInputs, actualState);
+#endif
 }
 
 // This allows us to test all possible combinations of inputs to state
