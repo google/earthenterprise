@@ -14,6 +14,7 @@
 
 
 #include <string>
+#requiresgetheapusage
 
 #hquote
 #/hquote
@@ -34,4 +35,3 @@ class DatedImageryIndexInfo
 #/hquote
 
 };
-

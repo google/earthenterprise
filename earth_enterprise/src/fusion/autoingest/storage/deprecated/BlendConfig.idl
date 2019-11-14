@@ -14,6 +14,7 @@
 
 #include <vector>
 #include <autoingest/.idl/storage/InsetStackItem.h>
+#requiresgetheapusage
 
 #cppquote
 #include <autoingest/.idl/storage/InsetStackItem_impl.h>
@@ -22,6 +23,5 @@
 
 class BlendConfig {
   std::vector<InsetStackItem> insets;
-
 #pragma GenerateIsUpToDate
 };

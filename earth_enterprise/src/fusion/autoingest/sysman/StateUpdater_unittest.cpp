@@ -20,13 +20,15 @@
 
 #include <algorithm>
 #include <assert.h>
+#include <functional>
 #include <gtest/gtest.h>
 #include <map>
 #include <string>
 
 using namespace std;
 
-// These tests cover both StateUpdater.cpp/.h and DependentStateTree.cpp/.h.
+// These tests cover StateUpdater.cpp/.h, DependentStateTree.cpp/.h, and
+// WaitingAssets.cpp/.h.
 
 // All refs must end with "?version=X" or the calls to AssetVersionRef::Bind
 // will try to load assets from disk. For simplicity, we force everything to
@@ -60,7 +62,11 @@ class MockVersion : public AssetVersionImpl {
     int notificationsSent;
     mutable bool fatalLogFileWritten;
     mutable InputAndChildStateData stateData;
+    mutable bool stateRecalced;
+    bool setAndPropagateStateCalled;
+    double progressNotified;
     OnStateChangeBehavior stateChangeBehavior;
+    bool recalcStateReturnVal;
     vector<AssetKey> dependents;
 
     MockVersion()
@@ -71,8 +77,12 @@ class MockVersion : public AssetVersionImpl {
           // Default the num*WaitingFor values to 999 instead of 0 to catch bugs where
           // they are never set.
           stateData({AssetDefs::New, AssetDefs::New, false, 999, 999}),
-          stateChangeBehavior(NO_ERRORS) {
-      type = AssetDefs::Imagery;
+          stateRecalced(false),
+          setAndPropagateStateCalled(false),
+          progressNotified(0.0),
+          stateChangeBehavior(NO_ERRORS),
+          recalcStateReturnVal(true) {
+      type = AssetDefs::Imagery; // Ensures that operator bool can return true
       state = STARTING_STATE;
     }
     MockVersion(const AssetKey & ref)
@@ -82,12 +92,12 @@ class MockVersion : public AssetVersionImpl {
     MockVersion(const MockVersion & that) : MockVersion() {
       name = that.name; // Don't add the suffix - the other MockVersion already did
     }
-    void DependentChildren(vector<SharedString> & d) const override {
+    virtual void DependentChildren(vector<SharedString> & d) const override {
       for(auto dependent : dependents) {
         d.push_back(dependent);
       }
     }
-    AssetDefs::State CalcStateByInputsAndChildren(const InputAndChildStateData & stateData) const override {
+    virtual AssetDefs::State CalcStateByInputsAndChildren(const InputAndChildStateData & stateData) const override {
       this->stateData = stateData;
       return CALCULATED_STATE;
     }
@@ -115,6 +125,16 @@ class MockVersion : public AssetVersionImpl {
     virtual void WriteFatalLogfile(const std::string &, const std::string &) const throw() override {
       fatalLogFileWritten = true;
     }
+    virtual bool RecalcState(WaitingFor & waitingFor) const override {
+      stateRecalced = true;
+      waitingFor.inputs = 2;
+      waitingFor.children = 2;
+      return recalcStateReturnVal;
+    }
+    virtual void SetAndPropagateState(AssetDefs::State newstate) override {
+      state = newstate;
+      setAndPropagateStateCalled = true;
+    }
 
     // Not used - only included to make MockVersion non-virtual
     string PluginName(void) const override { return string(); }
@@ -134,7 +154,6 @@ class MockStorageManager : public StorageManagerInterface<AssetVersionImpl> {
         return version;
       }
       cout << "Could not find asset version " << ref << endl;
-      assert(false);
       return nullptr;
     }
   public:
@@ -177,8 +196,11 @@ class MockAssetManager : public khAssetManagerInterface {
   public:
     MockAssetManager(MockStorageManager * sm) : sm(sm) {}
     virtual void NotifyVersionStateChange(const SharedString &ref,
-                                          AssetDefs::State state) {
+                                          AssetDefs::State state) override {
       ++GetMutableVersion(*sm, unfix(ref))->notificationsSent;
+    }
+    virtual void NotifyVersionProgress(const SharedString & ref, double progress) override {
+      GetMutableVersion(*sm, unfix(ref))->progressNotified = progress;
     }
 };
 
@@ -243,7 +265,12 @@ void GetBigTree(MockStorageManager & sm) {
   SetDependent(sm, "p1", "c1");
 }
 
-void assertStateSet(MockStorageManager & sm, const SharedString & ref, int stateChanges = 1) {
+// When calling SetStateForRefAndDependents, the state will change twice for assets in the
+// dependent tree - once to set it to the requested state and once after the state is
+// recalculated. For assets not in the dependent tree, or when calling functions other than
+// SetStateForRefAndDependents, the state will only be set once. In these cases we must
+// pass in the number of expected state changes.
+void assertStateSet(MockStorageManager & sm, const SharedString & ref, int stateChanges = 2) {
   ASSERT_TRUE(GetVersion(sm, ref)->loadedMutable) << ref << " was not loaded mutable";
   ASSERT_EQ(GetVersion(sm, ref)->onStateChangeCalled, stateChanges) << "OnStateChange was not called enough times for " << ref;
   ASSERT_EQ(GetVersion(sm, ref)->notificationsSent, 1) << "Wrong number of notifications sent for " << ref;
@@ -290,7 +317,7 @@ TEST_F(StateUpdaterTest, SetStateMultipleVersionsFromChild) {
   
   assertStateSet(sm, "p1");
   assertStateSet(sm, "c1");
-  assertStateSet(sm, "gp");
+  assertStateSet(sm, "gp", 1);
 
   assertStateNotSet(sm, "gpi");
   assertStateNotSet(sm, "pi1");
@@ -342,7 +369,7 @@ TEST_F(StateUpdaterTest, DontComputeStateCanceled) {
 
 TEST_F(StateUpdaterTest, ComputeState) {
   testNeedComputeState(sm, updater, AssetDefs::Queued);
-  assertStateSet(sm, "a");
+  assertStateSet(sm, "a", 1);
 }
 
 TEST_F(StateUpdaterTest, NoInputsNoChildren) {
@@ -350,8 +377,8 @@ TEST_F(StateUpdaterTest, NoInputsNoChildren) {
   updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByInputs, AssetDefs::Queued);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByChildren, AssetDefs::Succeeded);
-  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.numInputsWaitingFor, 0);
-  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.numChildrenWaitingFor, 0);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.inputs, 0);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.children, 0);
 }
 
 void OnlineInputBlockerTest(MockStorageManager & sm, StateUpdater & updater, AssetDefs::State inputState) {
@@ -365,8 +392,8 @@ void OnlineInputBlockerTest(MockStorageManager & sm, StateUpdater & updater, Ass
   updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByInputs, AssetDefs::Blocked);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.blockersAreOffline, false);
-  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.numInputsWaitingFor, 0);
-  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.numChildrenWaitingFor, 0);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.inputs, 0);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.children, 0);
 }
 
 TEST_F(StateUpdaterTest, BlockedInputBlocker) {
@@ -392,8 +419,8 @@ TEST_F(StateUpdaterTest, OfflineInputBlocker) {
   updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByInputs, AssetDefs::Blocked);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.blockersAreOffline, true);
-  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.numInputsWaitingFor, 0);
-  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.numChildrenWaitingFor, 0);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.inputs, 0);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.children, 0);
 }
 
 TEST_F(StateUpdaterTest, BlockedAndOfflineInput) {
@@ -405,8 +432,8 @@ TEST_F(StateUpdaterTest, BlockedAndOfflineInput) {
   updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByInputs, AssetDefs::Blocked);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.blockersAreOffline, false);
-  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.numInputsWaitingFor, 0);
-  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.numChildrenWaitingFor, 0);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.inputs, 0);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.children, 0);
 }
 
 TEST_F(StateUpdaterTest, WaitingOnInput) {
@@ -419,8 +446,8 @@ TEST_F(StateUpdaterTest, WaitingOnInput) {
   GetMutableVersion(sm, "d")->state = AssetDefs::Succeeded;
   updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByInputs, AssetDefs::Waiting);
-  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.numInputsWaitingFor, 2);
-  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.numChildrenWaitingFor, 0);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.inputs, 2);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.children, 0);
 }
 
 TEST_F(StateUpdaterTest, SucceededInputs) {
@@ -433,8 +460,8 @@ TEST_F(StateUpdaterTest, SucceededInputs) {
   GetMutableVersion(sm, "d")->state = AssetDefs::Succeeded;
   updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByInputs, AssetDefs::Queued);
-  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.numInputsWaitingFor, 0);
-  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.numChildrenWaitingFor, 0);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.inputs, 0);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.children, 0);
 }
 
 void ChildBlockerTest(MockStorageManager & sm, StateUpdater & updater, AssetDefs::State inputState) {
@@ -447,7 +474,7 @@ void ChildBlockerTest(MockStorageManager & sm, StateUpdater & updater, AssetDefs
   GetMutableVersion(sm, "d")->state = AssetDefs::Succeeded;
   updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByChildren, AssetDefs::Blocked);
-  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.numChildrenWaitingFor, 0);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.children, 0);
 }
 
 TEST_F(StateUpdaterTest, FailedChildBlocker) {
@@ -480,7 +507,7 @@ TEST_F(StateUpdaterTest, ChildInProgress) {
   GetMutableVersion(sm, "d")->state = AssetDefs::Succeeded;
   updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByChildren, AssetDefs::InProgress);
-  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.numChildrenWaitingFor, 2);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.children, 2);
 }
 
 TEST_F(StateUpdaterTest, ChildQueued) {
@@ -493,7 +520,7 @@ TEST_F(StateUpdaterTest, ChildQueued) {
   GetMutableVersion(sm, "d")->state = AssetDefs::Queued;
   updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByChildren, AssetDefs::Queued);
-  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.numChildrenWaitingFor, 0);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.children, 0);
 }
 
 TEST_F(StateUpdaterTest, SucceededChildren) {
@@ -506,7 +533,7 @@ TEST_F(StateUpdaterTest, SucceededChildren) {
   GetMutableVersion(sm, "d")->state = AssetDefs::Succeeded;
   updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByChildren, AssetDefs::Succeeded);
-  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.numChildrenWaitingFor, 0);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.children, 0);
 }
 
 TEST_F(StateUpdaterTest, ChildrenAndDependents) {
@@ -527,7 +554,7 @@ TEST_F(StateUpdaterTest, ChildrenAndDependents) {
     return !(state == AssetDefs::Succeeded || state == AssetDefs::Queued || state == AssetDefs::Failed);
   });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByChildren, AssetDefs::InProgress);
-  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.numChildrenWaitingFor, 1);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.children, 1);
 }
 
 TEST_F(StateUpdaterTest, ChildrenAndInputs) {
@@ -548,8 +575,8 @@ TEST_F(StateUpdaterTest, ChildrenAndInputs) {
   updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByChildren, AssetDefs::InProgress);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByInputs, AssetDefs::Waiting);
-  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.numInputsWaitingFor, 2);
-  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.numChildrenWaitingFor, 2);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.inputs, 2);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.children, 2);
 }
 
 // This tests a tricky corner case. d and e are inputs/children of a, but they
@@ -589,8 +616,8 @@ TEST_F(StateUpdaterTest, InputIsParent) {
   assertStateSet(sm, "a");
   assertStateSet(sm, "b");
   assertStateSet(sm, "c");
-  assertStateSet(sm, "d");
-  assertStateSet(sm, "e");
+  assertStateSet(sm, "d", 1);
+  assertStateSet(sm, "e", 1);
 }
 
 // This test creates a long chain of parents and dependents and makes sure
@@ -615,8 +642,8 @@ TEST_F(StateUpdaterTest, MultipleLevelsParentsDependents) {
   });
   assertStateNotSet(sm, "a");
   assertStateNotSet(sm, "b");
-  assertStateSet(sm, "c");
-  assertStateSet(sm, "d");
+  assertStateSet(sm, "c", 1);
+  assertStateSet(sm, "d", 1);
   assertStateSet(sm, "e");
   assertStateSet(sm, "f");
   assertStateSet(sm, "g");
@@ -627,11 +654,9 @@ TEST_F(StateUpdaterTest, MultipleLevelsParentsDependents) {
 // Verify that an asset's state doesn't change if its non-child dependent's
 // state changes.
 TEST_F(StateUpdaterTest, NonChildDependent) {
-  const AssetDefs::State NO_CHANGE_STATE = AssetDefs::Waiting;
   SetVersions(sm, {MockVersion("a"), MockVersion("b")});
   SetDependent(sm, "a", "b");
-  GetMutableVersion(sm, "a")->state = NO_CHANGE_STATE;
-  updater.SetStateForRefAndDependents(fix("a"), NO_CHANGE_STATE, [](AssetDefs::State) { return true; });
+  updater.SetStateForRefAndDependents(fix("b"), AssetDefs::Waiting, [](AssetDefs::State) { return true; });
   assertStateNotSet(sm, "a");
   assertStateSet(sm, "b");
 }
@@ -640,9 +665,10 @@ void StateChangeErrorTest(MockStorageManager & sm, StateUpdater & updater, OnSta
   SetVersions(sm, {MockVersion("a")});
   GetMutableVersion(sm, "a")->stateChangeBehavior = behavior;
   updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State state) { return true; });
-  // We will call OnStateChange twice - once after setting it to the requested
-  // state and again after setting it to Failed.
-  assertStateSet(sm, "a", 2);
+  // We will call OnStateChange four times: to set it to the requested state,
+  // which will trigger a transition to failed, and then to recalculate the
+  // state, which will trigger another transition to failed.
+  assertStateSet(sm, "a", 4);
   ASSERT_EQ(GetVersion(sm, "a")->state, AssetDefs::Failed);
 }
 
@@ -681,7 +707,261 @@ TEST_F(StateUpdaterTest, OnStateChangeReturnsNewState) {
   SetVersions(sm, {MockVersion("a")});
   GetMutableVersion(sm, "a")->stateChangeBehavior = RETURN_NEW_STATE;
   updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State state) { return true; });
-  assertStateSet(sm, "a", 3);
+  assertStateSet(sm, "a", 4);
+}
+
+TEST_F(StateUpdaterTest, ReferenceNonExistentAsset) {
+  // Test a case in which an asset references a non-existent asset. We mostly
+  // want to make sure this doesn't crash.
+  SetVersions(sm, {MockVersion("a")});
+  GetMutableVersion(sm, "a")->children.push_back(fix("b"));
+  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State state) { return true; });
+}
+
+// The expected outcomes from the SetInProgress and SetSucceeded functions are
+// similar, so they are testing using the same code.
+struct SetStateTestData {
+  function<void(StateUpdater *, AssetHandle<AssetVersionImpl> &)> SetStateFunc;
+  AssetDefs::State expectedState;
+};
+
+const SetStateTestData IN_PROGRESS_TEST_DATA = {&StateUpdater::SetInProgress, AssetDefs::InProgress};
+const SetStateTestData SUCCEEDED_TEST_DATA = {&StateUpdater::SetSucceeded, AssetDefs::Succeeded};
+
+void TestSetState(
+    MockStorageManager & sm,
+    StateUpdater & updater,
+    AssetKey ref,
+    const SetStateTestData & testData) {
+  auto version = sm.GetMutable(fix(ref));
+  testData.SetStateFunc(&updater, version);
+  ASSERT_EQ(GetVersion(sm, ref)->state, testData.expectedState);
+  if (GetVersion(sm, ref)->stateChangeBehavior != CHANGE_NUM_CHILDREN) {
+    assertStateSet(sm, ref, 1);
+  }
+}
+
+void SetInProgress(MockStorageManager & sm, StateUpdater & updater, AssetKey ref) {
+  TestSetState(sm, updater, ref, IN_PROGRESS_TEST_DATA);
+}
+
+void SetSucceeded(MockStorageManager & sm, StateUpdater & updater, AssetKey ref) {
+  TestSetState(sm, updater, ref, SUCCEEDED_TEST_DATA);
+}
+
+void RunSetStateTest(function<void(MockStorageManager &, StateUpdater &, const SetStateTestData &)> testFunc) {
+  vector<SetStateTestData> tests = {IN_PROGRESS_TEST_DATA, SUCCEEDED_TEST_DATA};
+
+  for (const auto & test : tests) {
+    MockStorageManager sm;
+    MockAssetManager am(&sm);
+    StateUpdater updater(&sm, &am);
+    testFunc(sm, updater, test);
+  }
+}
+
+TEST(SetStateTest, SetStateNoParentsListeners) {
+  RunSetStateTest([](MockStorageManager & sm, StateUpdater & updater, const SetStateTestData & test) {
+    SetVersions(sm, {MockVersion("a")});
+    TestSetState(sm, updater, "a", test);
+  });
+}
+
+TEST(SetStateTest, SetStateNoWaiting) {
+  RunSetStateTest([](MockStorageManager & sm, StateUpdater & updater, const SetStateTestData & test) {
+    SetVersions(sm, {MockVersion("a"), MockVersion("b"), MockVersion("c")});
+    SetParentChild(sm, "a", "c");
+    SetListenerInput(sm, "b", "c");
+    TestSetState(sm, updater, "c", test);
+    // Since nothing is marked waiting, both the parent and listener should have
+    // their states recalculated.
+    ASSERT_TRUE(GetVersion(sm, "a")->stateRecalced);
+    ASSERT_TRUE(GetVersion(sm, "b")->stateRecalced);
+  });
+}
+
+void UpdateWaiting(MockStorageManager & sm, StateUpdater & updater, AssetKey ref, AssetDefs::State oldState, uint32 numWaitingFor = 2) {
+  auto version = sm.Get(fix(ref));
+  updater.UpdateWaitingAssets(version, oldState, {numWaitingFor, numWaitingFor});
+}
+
+TEST(SetStateTest, SetStateTestWaiting) {
+  RunSetStateTest([](MockStorageManager & sm, StateUpdater & updater, const SetStateTestData & test) {
+    // Mark the parent and listener as waiting and make sure their states are
+    // not recalculated.
+    SetVersions(sm, {MockVersion("a"), MockVersion("b"), MockVersion("c")});
+    SetParentChild(sm, "a", "c");
+    SetListenerInput(sm, "b", "c");
+
+    GetMutableVersion(sm, "a")->state = AssetDefs::InProgress;
+    UpdateWaiting(sm, updater, "a", AssetDefs::Queued);
+    GetMutableVersion(sm, "b")->state = AssetDefs::Waiting;
+    UpdateWaiting(sm, updater, "b", AssetDefs::Queued);
+    TestSetState(sm, updater, "c", test);
+    ASSERT_FALSE(GetVersion(sm, "a")->stateRecalced);
+    ASSERT_FALSE(GetVersion(sm, "b")->stateRecalced);
+
+    // Now mark the parent and listener as not waiting again and make sure the
+    // updater goes back to calculating their states
+    GetMutableVersion(sm, "c")->state = AssetDefs::Queued;
+    GetMutableVersion(sm, "c")->onStateChangeCalled = 0;
+    GetMutableVersion(sm, "c")->notificationsSent = 0;
+    GetMutableVersion(sm, "a")->state = AssetDefs::Blocked;
+    UpdateWaiting(sm, updater, "a", AssetDefs::InProgress);
+    GetMutableVersion(sm, "b")->state = AssetDefs::Blocked;
+    UpdateWaiting(sm, updater, "b", AssetDefs::Waiting);
+    TestSetState(sm, updater, "c", test);
+    ASSERT_TRUE(GetVersion(sm, "a")->stateRecalced);
+    ASSERT_TRUE(GetVersion(sm, "b")->stateRecalced);
+  });
+}
+
+TEST(SetStateTest, SetStateUnsupportedException) {
+  RunSetStateTest([](MockStorageManager & sm, StateUpdater & updater, const SetStateTestData & test) {
+    SetVersions(sm, {MockVersion("a"), MockVersion("b"), MockVersion("c")});
+    SetParentChild(sm, "a", "c");
+    GetMutableVersion(sm, "c")->stateChangeBehavior = CHANGE_NUM_CHILDREN;
+    TestSetState(sm, updater, "c", test);
+    // We should get partway through setting c's state
+    ASSERT_TRUE(GetVersion(sm, "c")->loadedMutable);
+    ASSERT_EQ(GetVersion(sm, "c")->onStateChangeCalled, 1);
+    ASSERT_EQ(GetVersion(sm, "c")->notificationsSent, 0);
+    // We should not recalculate a's state
+    ASSERT_FALSE(GetVersion(sm, "a")->stateRecalced);
+  });
+}
+
+TEST_F(StateUpdaterTest, SetStateAlreadyWaiting) {
+  RunSetStateTest([](MockStorageManager & sm, StateUpdater & updater, const SetStateTestData & test) {
+    // This tests what happens when we encounter an asset that's already waiting
+    // but is not in the waiting list.
+    SetVersions(sm, {MockVersion("a"), MockVersion("b"), MockVersion("c")});
+    SetParentChild(sm, "a", "c");
+    SetListenerInput(sm, "b", "c");
+    GetMutableVersion(sm, "a")->state = AssetDefs::InProgress;
+    GetMutableVersion(sm, "b")->state = AssetDefs::Waiting;
+    GetMutableVersion(sm, "a")->recalcStateReturnVal = false;
+    GetMutableVersion(sm, "b")->recalcStateReturnVal = false;
+
+    TestSetState(sm, updater, "c", test);
+    // Both the parent and listener should have been recalculated
+    ASSERT_TRUE(GetVersion(sm, "a")->stateRecalced);
+    ASSERT_TRUE(GetVersion(sm, "b")->stateRecalced);
+
+    // Now make sure the parent and listener are in the waiting list by setting
+    // the state again and making sure they aren't recalculated.
+    GetMutableVersion(sm, "a")->stateRecalced = false;
+    GetMutableVersion(sm, "b")->stateRecalced = false;
+    GetMutableVersion(sm, "c")->loadedMutable = false;
+    GetMutableVersion(sm, "c")->onStateChangeCalled = 0;
+    GetMutableVersion(sm, "c")->notificationsSent = 0;
+    GetMutableVersion(sm, "c")->state = AssetDefs::Queued;
+
+    TestSetState(sm, updater, "c", test);
+    ASSERT_FALSE(GetVersion(sm, "a")->stateRecalced);
+    ASSERT_FALSE(GetVersion(sm, "b")->stateRecalced);
+
+    // Set the state again and make sure the waiting count has now gone down to
+    // zero and the states are recalculated. Waiting counts won't go down when
+    // we're setting in progress, so this is only done for the Succeeded test.
+    if (test.expectedState == AssetDefs::Succeeded) {
+      GetMutableVersion(sm, "a")->stateRecalced = false;
+      GetMutableVersion(sm, "b")->stateRecalced = false;
+      GetMutableVersion(sm, "c")->onStateChangeCalled = 0;
+      GetMutableVersion(sm, "c")->notificationsSent = 0;
+      GetMutableVersion(sm, "c")->state = AssetDefs::Queued;
+      TestSetState(sm, updater, "c", test);
+      ASSERT_TRUE(GetVersion(sm, "a")->stateRecalced);
+      ASSERT_TRUE(GetVersion(sm, "b")->stateRecalced);
+    }
+  });
+}
+
+TEST_F(StateUpdaterTest, RecalcWhenDoneWaiting) {
+  // Make sure parent and listener states are recalculated when the waiting for
+  // count gets to 0.
+  SetVersions(sm, {MockVersion("a"), MockVersion("b"), MockVersion("c")});
+  SetParentChild(sm, "a", "c");
+  SetListenerInput(sm, "b", "c");
+  GetMutableVersion(sm, "a")->state = AssetDefs::InProgress;
+  GetMutableVersion(sm, "b")->state = AssetDefs::Waiting;
+  UpdateWaiting(sm, updater, "a", AssetDefs::New, 3);
+  UpdateWaiting(sm, updater, "b", AssetDefs::New, 3);
+
+  // First completion - state should not be calculated
+  SetInProgress(sm, updater, "c");
+  GetMutableVersion(sm, "c")->onStateChangeCalled = 0;
+  GetMutableVersion(sm, "c")->notificationsSent = 0;
+  SetSucceeded(sm, updater, "c");
+  ASSERT_FALSE(GetVersion(sm, "a")->stateRecalced);
+  ASSERT_FALSE(GetVersion(sm, "b")->stateRecalced);
+
+  // Second completion - state should still not be calculated
+  GetMutableVersion(sm, "c")->state = AssetDefs::Queued;
+  GetMutableVersion(sm, "c")->onStateChangeCalled = 0;
+  GetMutableVersion(sm, "c")->notificationsSent = 0;
+  SetInProgress(sm, updater, "c");
+  GetMutableVersion(sm, "c")->onStateChangeCalled = 0;
+  GetMutableVersion(sm, "c")->notificationsSent = 0;
+  SetSucceeded(sm, updater, "c");
+  ASSERT_FALSE(GetVersion(sm, "a")->stateRecalced);
+  ASSERT_FALSE(GetVersion(sm, "b")->stateRecalced);
+
+  // Third completion - state should be recalculated after "c" succeeds
+  GetMutableVersion(sm, "c")->state = AssetDefs::Queued;
+  GetMutableVersion(sm, "c")->onStateChangeCalled = 0;
+  GetMutableVersion(sm, "c")->notificationsSent = 0;
+  SetInProgress(sm, updater, "c");
+  ASSERT_FALSE(GetVersion(sm, "a")->stateRecalced);
+  ASSERT_FALSE(GetVersion(sm, "b")->stateRecalced);
+  GetMutableVersion(sm, "c")->onStateChangeCalled = 0;
+  GetMutableVersion(sm, "c")->notificationsSent = 0;
+  SetSucceeded(sm, updater, "c");
+  ASSERT_TRUE(GetVersion(sm, "a")->stateRecalced);
+  ASSERT_TRUE(GetVersion(sm, "b")->stateRecalced);
+}
+
+void UpdateSucceeded(MockStorageManager & sm, StateUpdater & updater, AssetKey ref, bool propagate = true) {
+  auto version = sm.Get(fix(ref));
+  updater.UpdateSucceeded(version, propagate);
+}
+
+TEST_F(StateUpdaterTest, UpdateSucceededNoPropagate) {
+  // When we call UpdateSucceeded and disable propagation, no states should
+  // change.
+  SetVersions(sm, {MockVersion("a"), MockVersion("b"), MockVersion("c")});
+  SetParentChild(sm, "a", "c");
+  SetListenerInput(sm, "b", "c");
+  UpdateSucceeded(sm, updater, "c", false);
+  ASSERT_FALSE(GetVersion(sm, "a")->stateRecalced);
+  ASSERT_FALSE(GetVersion(sm, "b")->stateRecalced);
+  ASSERT_FALSE(GetVersion(sm, "c")->stateRecalced);
+}
+
+TEST_F(StateUpdaterTest, SetFailed) {
+  SetVersions(sm, {MockVersion("a")});
+  auto version = sm.GetMutable(fix("a"));
+  updater.SetFailed(version);
+  ASSERT_TRUE(GetVersion(sm, "a")->setAndPropagateStateCalled);
+  ASSERT_EQ(GetVersion(sm, "a")->state, AssetDefs::Failed);
+}
+
+TEST_F(StateUpdaterTest, NotifyProgressSuccess) {
+  const double PROGRESS = 12.3;
+  SetVersions(sm, {MockVersion("a")});
+  GetMutableVersion(sm, "a")->progress = PROGRESS;
+  SetInProgress(sm, updater, "a");
+  ASSERT_EQ(GetVersion(sm, "a")->progressNotified, PROGRESS);
+}
+
+TEST_F(StateUpdaterTest, NotifyProgressFailed) {
+  const double PROGRESS = 12.3;
+  SetVersions(sm, {MockVersion("a")});
+  GetMutableVersion(sm, "a")->progress = PROGRESS;
+  GetMutableVersion(sm, "a")->stateChangeBehavior = STATE_CHANGE_EXCEPTION;
+  auto version = sm.GetMutable(fix("a"));
+  updater.SetInProgress(version);
+  ASSERT_NE(GetVersion(sm, "a")->progressNotified, PROGRESS);
 }
 
 int main(int argc, char **argv) {

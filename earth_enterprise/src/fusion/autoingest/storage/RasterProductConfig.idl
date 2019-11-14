@@ -19,6 +19,7 @@
 #include <autoingest/.idl/storage/AssetDefs.h>
 #include <autoingest/.idl/storage/MaskgenConfig.h>
 #include <autoingest/.idl/storage/SourceConfig.h>
+#requiresgetheapusage
 
 #cppquote
 #include <autoingest/.idl/storage/AssetDefs_impl.h>
@@ -96,7 +97,6 @@ class RasterProductConfig {
   void ResetIds(void) {
     fuid_resource_ = 0;
   }
-
 #/hquote
 };
 

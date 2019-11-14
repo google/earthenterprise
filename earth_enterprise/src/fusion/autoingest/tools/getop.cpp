@@ -22,6 +22,7 @@
 #include <fusionversion.h>
 #include <config/gefConfigUtil.h>
 #include <autoingest/.idl/Systemrc.h>
+#include "MiscConfig.h"
 
 // global for convenience
 int numcols = 80;
@@ -212,7 +213,7 @@ main(int argc, char *argv[])
         for (std::vector<TaskLists::WaitingTask>::const_iterator w =
                taskLists.waitingTasks.begin();
              w != taskLists.waitingTasks.end(); ++w) {
-          if (numlines > 8) {
+          if (numlines > 6) {
             outline("  %s", w->verref.c_str());
             --numlines;
             if (!w->activationError.isEmpty()) {
@@ -228,7 +229,7 @@ main(int argc, char *argv[])
 
         outline("");
         outline("Fusion processes on this host:");
-        numlines -= 8;
+        numlines -= 6;
 
         for (uint i = 0; i < pslist.size(); ++i) {
           if (numlines > 2) {
@@ -242,12 +243,11 @@ main(int argc, char *argv[])
         }
 
         outline("");
-        outline("Number of cached assets: %u", taskLists.num_assets_cached);
-        outline("Number of cached asset versions: %u",
-                taskLists.num_assetversions_cached);
-        outline("Total memory used by cached assets: %s",
+        outline("Number of cached assets: %u, Approx. memory used: %s",
+                taskLists.num_assets_cached,
                 readableMemorySize(taskLists.asset_cache_memory).c_str());
-        outline("Total memory used by cached asset versions: %s",
+        outline("Number of cached asset versions: %u, Approx. memory used: %s",
+                taskLists.num_assetversions_cached,
                 readableMemorySize(taskLists.version_cache_memory).c_str());
         outline("Number of strings cached: %u", taskLists.str_store_size);
 

@@ -111,7 +111,7 @@ sandbox = int(ARGUMENTS.get('sandbox', 0))
 jobstats = ARGUMENTS.get('jobstats', 0)
 internal = int(ARGUMENTS.get('internal', 0))
 native_cc = not int(ARGUMENTS.get('cross_cc', 0))
-coverage = ARGUMENTS.get('coverage', 0)
+coverage = int(ARGUMENTS.get('coverage', 0))
 bundle_3rd_libs = int(ARGUMENTS.get('bundle_3rd_libs', 0))
 cc_dir = ARGUMENTS.get('cc_dir', None)
 log_performance = int( ARGUMENTS.get( 'log_performance', 0 ) )
@@ -288,7 +288,6 @@ if gprof:
 
 # setup -rpath-link and -rpath options
 rpathlink_dirs = [Dir(exportdirs['lib']).abspath]
-
 # SetUID binaries don't use RPATH's containing '$ORIGIN' (since that would be
 # exploitable).  Use absolute paths to library install locations instead:
 rpath_dirs = ["'$$ORIGIN/../qt/lib'",
@@ -472,6 +471,7 @@ env = khEnvironment(
     crosstool_version=crosstool_version,
     jobstats=jobstats,
     internal=internal,
+    coverage=coverage,
     native_cc=native_cc,
     bundle_3rd_libs=bundle_3rd_libs,
     cc_dir=cc_dir,

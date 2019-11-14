@@ -29,9 +29,6 @@ class AssetImplD : public virtual AssetImpl
   friend class DerivedAssetHandle_<Asset, AssetImplD>;
   friend class MutableAssetHandleD_<DerivedAssetHandle_<Asset, AssetImplD> >;
 
-  // private and unimplemented -- illegal to copy an AssetImplD
-  AssetImplD(const AssetImplD&);
-  AssetImplD& operator=(const AssetImplD&);
  protected:
   AssetImplD(void) : AssetImpl() { }
   AssetImplD(const AssetStorage &storage)
@@ -43,13 +40,19 @@ class AssetImplD : public virtual AssetImpl
                       const std::vector<AssetVersion> &cachedInputs) const;
   void UpdateInputs(std::vector<AssetVersion> &inputvers) const;
 
-  template<typename MutableVersionHandleType, typename MutableAssetHandleType>
+  template<typename MutableAssetHandleType, typename MutableVersionHandleType>
   static MutableVersionHandleType MakeNewVersion(MutableAssetHandleType &asset);
 
-  template<typename MutableVersionHandleType, typename MutableAssetHandleType, typename ConfigType>
+  template<typename MutableAssetHandleType, typename ConfigType, typename MutableVersionHandleType>
   static MutableVersionHandleType MakeNewVersion(MutableAssetHandleType &asset, const ConfigType &config);
 
  public:
+
+  // don't allow copying/moving, better error messaging
+  AssetImplD(const AssetImplD&) = delete;
+  AssetImplD& operator=(const AssetImplD&) = delete;
+  AssetImplD(AssetImplD&&) = delete;
+  AssetImplD& operator=(AssetImplD&&) = delete;
 
   // const so can be called w/o a MutableHandle (it could already be
   // uptodate).  needed is set to true iff everything was not up to date
@@ -62,7 +65,7 @@ class AssetImplD : public virtual AssetImpl
 typedef DerivedAssetHandle_<Asset, AssetImplD> AssetD;
 typedef MutableAssetHandleD_<AssetD> MutableAssetD;
 
-template<typename MutableVersionHandleType, typename MutableAssetHandleType, typename ConfigType>
+template<typename MutableAssetHandleType, typename ConfigType, typename MutableVersionHandleType>
 MutableVersionHandleType AssetImplD::MakeNewVersion(MutableAssetHandleType &asset, const ConfigType &config)
 {
     typedef typename MutableVersionHandleType::Impl VerImplType;
@@ -73,7 +76,7 @@ MutableVersionHandleType AssetImplD::MakeNewVersion(MutableAssetHandleType &asse
     return newver;
 }
 
-template<typename MutableVersionHandleType, typename MutableAssetHandleType>
+template<typename MutableAssetHandleType, typename MutableVersionHandleType>
 MutableVersionHandleType AssetImplD::MakeNewVersion(MutableAssetHandleType &asset)
 {
     typedef typename MutableVersionHandleType::Impl VerImplType;

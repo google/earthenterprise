@@ -550,7 +550,7 @@
 #ShowSelectedSearchTabs {
   display: block;
   margin-left: 202px;
-  margin-top: 8px;
+  margin-top: 0px;
   color: #777;
   font-style: italic;
   font-size: 11px;
@@ -984,10 +984,17 @@
   border: 1px solid #666;
   box-shadow: 0 1px 2px #DCDCDC;
 }
-#gDescription em {
+#gDescription .wms_label {
   font-style: normal;
   color: #fff;
-  background-color: rgb(216, 85, 85);
+  background-color: rgb(216,3,28);
+  padding: 4px;
+  margin-right: 4px;
+}
+#gDescription .default_db_label {
+  font-style: normal;
+  color: #fff;
+  background-color: rgb(15,56,96);
   padding: 4px;
   margin-right: 4px;
 }
@@ -1771,17 +1778,20 @@ Kennedy Elements
  pointer-events: none;
 }
 
+.frontPageCheck {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius:1px;
+  cursor:pointer;
+  position: absolute;
+  margin-top: 8px;
+  border: 0;
+  display: block;
+ }
+
 input[type=checkbox] {
- -webkit-appearance: none;
- appearance: none;
- width: 14px;
- height: 14px;
- border-radius:1px;
- cursor:pointer;
- position: absolute;
- margin-top: 8px;
- border: 0;
- display: block;
  content: url('../images/unchecked.png');
 }
 input[type=checkbox]:checked {

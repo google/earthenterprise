@@ -27,6 +27,7 @@
 #include <autoingest/.idl/storage/FilterConfig.h>
 #include <autoingest/.idl/storage/IconReference.h>
 #include <autoingest/.idl/storage/SearchField.h>
+#requiresgetheapusage
 
 #hquote
 class FieldBinderDef;
@@ -341,7 +342,6 @@ class MapSubLayerConfig {
   bool HasFilterJS(void) const;
   bool HasJS(void) const;
   bool HasSearchFields() const;
-
 #/hquote
 #cppquote
 void
@@ -386,4 +386,3 @@ MapSubLayerConfig::HasSearchFields(void) const
 
 #/cppquote
 };
-
