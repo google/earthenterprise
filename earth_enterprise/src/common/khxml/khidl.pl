@@ -1917,15 +1917,15 @@ sub EmitEnumDOMReader
     print $fh "{\n";
     my $i = 0;
     for ($i = 0; $i < @{$enum->{enumerators}}; ++$i) {
-	my $item = $enum->{enumerators}[$i];
-    my $conditional = "enumStr == \"$item->{name}\" || enumStr == \"$item->{value}\"";
-	if ($i == 0) {
-	    print $fh $indent, "if ($conditional) {\n";
-	} else {
-	    print $fh $indent, "} else if ($conditional) {\n";
-	}
-	print $fh $indent, $indent, "self = $enum->{qualbase}::$item->{name};\n";
-	print $fh $indent, $indent, "return;\n";
+      my $item = $enum->{enumerators}[$i];
+      my $conditional = "enumStr == \"$item->{name}\" || enumStr == \"$item->{value}\"";
+      if ($i == 0) {
+        print $fh $indent, "if ($conditional) {\n";
+      } else {
+        print $fh $indent, "} else if ($conditional) {\n";
+      }
+      print $fh $indent, $indent, "self = $enum->{qualbase}::$item->{name};\n";
+      print $fh $indent, $indent, "return;\n";
     }
     print $fh $indent, "}\n";
     print $fh $indent, "throw khException(kh::tr(\"Invalid string '%1' for enum '%2'\").arg(enumStr).arg(\"$enum->{qualname}\"));\n";
