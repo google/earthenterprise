@@ -16,7 +16,7 @@ LoadModule wsgi_module modules/mod_wsgi.so
 
 <IfModule wsgi_module>
     WSGIRestrictEmbedded On
-    WSGIPythonHome /usr
+    WSGIPythonHome @PYTHON_HOME_DIR@
 
     # Handles Fusion requests.
     WSGIDaemonProcess ge_fusion_serve threads=15 display-name=%{GROUP} python-path=/opt/google/gepython/Python-@PYTHON_VERSION@/lib/python@PYTHON_MAJOR_VERSION@/site-packages:/opt/google/gehttpd/wsgi-bin home=/tmp

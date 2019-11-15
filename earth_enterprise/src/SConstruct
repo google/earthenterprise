@@ -171,16 +171,33 @@ exportdirs = {
     'bin': exportdir+'/bin/',
 }
 
+
+el_ver = ''
+if os.path.isfile('/etc/redhat-release') and not os.path.isfile('/etc/os-release'):
+  el_ver = 'el6'
+else:
+  el_ver = 'el7'
+
+
 if bundle_3rd_libs:
   python_version = '2.7.5'
   python_major_version = '2.7'
   python_bin = os.path.join(exportdirs['bin'], 'python')
   python_include = os.path.join(exportdirs['root'], 'include/python%s' % python_major_version)
+  python_home = '/usr'
 else:
-  python_version = sys.version[:5]        # '2.7.6'
-  python_major_version = sys.version[:3]  # '2.7'
-  python_bin = '/usr/bin/python'
-  python_include = '/usr/include/python%s' % python_major_version
+  if el_ver == 'el6':
+    python_version = '2.7.1' # scl version for el6
+    python_major_version = '2.7' # scl major version for el6
+    python_bin = '/usr/bin/python2.7' # scl bin
+    python_include = '/usr/include/python%s' % python_major_version # scl include path
+    python_home = '/usr' # scl home
+  else:
+    python_version = sys.version[:5] # '2.7.6'
+    python_major_version = sys.version[:3] # '2.7'
+    python_bin = '/usr/bin/python'
+    python_include = '/usr/include/python%s' % python_major_version
+    python_home = '/usr'
 
 # setup platform specific operations
 is_min_ubuntu = True
@@ -192,6 +209,7 @@ try:
   arr=re.split('[\t\.\n]',vstring)
   major=int(arr[1])
   minor=int(arr[2])
+  el_ver = ''
   if arr[1] < 12:
     print 'Unknown Ubuntu version, minimum required version is 12.04.'
     Exit(1)
@@ -487,7 +505,9 @@ env = khEnvironment(
     python_bin=python_bin,
     python_include=python_include,
     python_version=python_version,
-    python_major_version=python_major_version
+    python_major_version=python_major_version,
+    python_home=python_home,
+    el_ver=el_ver
 )
 
 env.get_open_gee_version().backup_file = "version.txt"
