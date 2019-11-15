@@ -156,14 +156,14 @@ GEXMLObject::GEXMLObject() {
                       "initialDOMHeapAllocSize=%zu\n"
                       "maxDOMHeapAllocSize=%zu\n"
                       "maxDOMSubAllocationSize=%zu\n",
-            initialDOMHeapAllocSize,
-            maxDOMHeapAllocSize,
-            maxDOMSubAllocationSize);
+           initialDOMHeapAllocSize,
+           maxDOMHeapAllocSize,
+           maxDOMSubAllocationSize);
   }
   catch (const XMLException& toCatch)
   {
     notify(NFY_FATAL, "Unable to initialize Xerces: %s",
-            FromXMLStr(toCatch.getMessage()).c_str());
+           FromXMLStr(toCatch.getMessage()).c_str());
   }
 }
 
@@ -175,7 +175,7 @@ GEXMLObject::~GEXMLObject() {
     notify(NFY_DEBUG, "Terminated XML library");
   } catch(const XMLException& toCatch) {
     notify(NFY_WARN, "Unable to terminate Xerces: %s",
-            FromXMLStr(toCatch.getMessage()).c_str());
+           FromXMLStr(toCatch.getMessage()).c_str());
   }
 }
 
