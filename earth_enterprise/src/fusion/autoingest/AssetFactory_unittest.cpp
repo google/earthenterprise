@@ -486,8 +486,7 @@ TEST_F(AssetFactoryTest, Reuse)
             ReuseOrMakeAndUpdateSubAsset<MockMutableAssetVersion,
                                          AssetVersion,
                                          MockAssetConfig,
-                                         MockVersionDType,
-                                         MockExtraArgs>
+                                         MockVersionDType>
             (
              "reuse-parent",    // const std::string& parentName,
              AssetDefs::Imagery, // AssetDefs::Type type_,
@@ -515,7 +514,7 @@ TEST_F(AssetFactoryTest, Reuse)
         // calls ROMAU, 262: ref_, type_, meta_, config_
         MockMutableAssetVersion handle = 
             ReuseOrMakeAndUpdateSubAsset
-            <MockMutableAssetVersion, AssetVersion, MockAssetConfig, MockVersionDType, MockExtraArgs>
+            <MockMutableAssetVersion, AssetVersion, MockAssetConfig, MockVersionDType>
             (
              "reuse-parent",    // const std::string& parentName,
              AssetDefs::Imagery, // AssetDefs::Type type_,
@@ -543,7 +542,7 @@ TEST_F(AssetFactoryTest, Reuse)
         // calls ROMAU, 262: ref_, type_, meta_, config_
         MockMutableAssetVersion handle = 
             ReuseOrMakeAndUpdateSubAsset
-            <MockMutableAssetVersion, AssetVersion, MockAssetConfig, MockVersionDType, MockExtraArgs>
+            <MockMutableAssetVersion, AssetVersion, MockAssetConfig, MockVersionDType>
             (
              "reuse-parent",    // const std::string& parentName,
              AssetDefs::Imagery, // AssetDefs::Type type_,
@@ -570,7 +569,7 @@ TEST_F(AssetFactoryTest, Reuse)
         // calls ROMAU, 262: ref_, type_, meta_, config_
         MockMutableAssetVersion handle = 
             ReuseOrMakeAndUpdateSubAsset
-            <MockMutableAssetVersion, AssetVersion, MockAssetConfig, MockVersionDType, MockExtraArgs>
+            <MockMutableAssetVersion, AssetVersion, MockAssetConfig, MockVersionDType>
             (
              "reuse-parent",    // const std::string& parentName,
              AssetDefs::Imagery, // AssetDefs::Type type_,
@@ -593,7 +592,7 @@ TEST_F(AssetFactoryTest, Reuse)
         // calls ROMAU, 311: ref_, type, inputs_, meta_, config_,
         //                   cachedinputs_
         MockMutableAssetVersion handle = ReuseOrMakeAndUpdateSubAsset
-            <MockMutableAssetVersion, AssetVersion, MockAssetConfig, MockVersionDType, MockExtraArgs>
+            <MockMutableAssetVersion, AssetVersion, MockAssetConfig, MockVersionDType>
             (
              "reuse-parent",    // const std::string& parentName,
              AssetDefs::Terrain, // AssetDefs::Type type_,
