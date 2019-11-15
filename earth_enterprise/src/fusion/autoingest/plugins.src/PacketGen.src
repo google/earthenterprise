@@ -45,45 +45,7 @@ class PacketGenExtraUpdateArg {
 #include <autoingest/plugins/RasterProductAsset.h>
 #include <autoingest/plugins/MercatorRasterProductAsset.h>
 #include <memory>
-/*
-template
-MutablePacketGenAssetVersionD
-PacketGenFactory::ReuseOrMakeAndUpdate(
-    const std::string &ref_,
-    AssetDefs::Type type_,
-    const khMetaData &meta_,
-    const PacketGenConfig& config_,
-    const PacketGenExtraUpdateArg<RasterProductAssetVersion> &extra);
 
-template
-MutablePacketGenAssetVersionD
-PacketGenFactory::ReuseOrMakeAndUpdate(
-    const std::string &ref_,
-    AssetDefs::Type type_,
-    const khMetaData &meta_,
-    const PacketGenConfig& config_,
-    const PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion> &extra);
-
-template
-MutablePacketGenAssetVersionD
-PacketGenFactory::ReuseOrMakeAndUpdateSubAsset(
-    const std::string &parentAssetRef,
-    AssetDefs::Type type_,
-    const std::string &basename,
-    const khMetaData &meta_,
-    const PacketGenConfig& config_,
-    const PacketGenExtraUpdateArg<RasterProductAssetVersion> &extra);
-
-template
-MutablePacketGenAssetVersionD
-PacketGenFactory::ReuseOrMakeAndUpdateSubAsset(
-    const std::string &parentAssetRef,
-    AssetDefs::Type type_,
-    const std::string &basename,
-    const khMetaData &meta_,
-    const PacketGenConfig& config_,
-    const PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion> &extra);
-*/
 template <typename ProductAssetVersion>
 void PacketGenAssetVersionImplD::UpdateChildren(
     const PacketGenExtraUpdateArg<ProductAssetVersion> &extra) {

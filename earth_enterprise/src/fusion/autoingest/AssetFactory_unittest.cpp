@@ -262,10 +262,6 @@ class MockMutableAsset // pointer type
                                                                testSubTypeToUseForStringConstructor,
                                                                {},
                                                                khMetaData());
-      // storage.name = ref_;
-      // storage.type = Impl::EXPECTED_TYPE;
-      // storage.subtype = testSubTypeToUseForStringConstructor;
-
       MockAssetConfig config;
       impl = std::make_shared<Impl>(storage, config);
     }
@@ -533,8 +529,6 @@ TEST_F(AssetFactoryTest, Reuse)
         EXPECT_EQ(handle.impl->name, "reuse-parent/base.kia");
         EXPECT_EQ(testMeta, handle.impl->meta);
         EXPECT_EQ(AssetDefs::Imagery, handle.impl->type);
-        // EXPECT_EQ(testConfig0, handle.impl->config);
-        // EXPECT_EQ(AssetDefs::InProgress, handle.impl->state);
     }
 
     

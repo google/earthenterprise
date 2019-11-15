@@ -226,7 +226,7 @@ namespace AssetFactory
       using Impl = typename MutableDerivedVersionHandleType::Impl;
       auto ref_ = AssetDefs::SubAssetName(parentAssetRef,
                                           basename,
-                                          type_, //Ipl::EXPECTED_TYPE
+                                          type_,
                                           Impl::EXPECTED_SUBTYPE);
       return FindMakeAndUpdate<MutableDerivedVersionHandleType, Version, ConfigType>
               (ref_,
