@@ -30,6 +30,11 @@
 using namespace boost;
 using namespace std;
 
+static bool UserActionRequired(AssetDefs::State state) {
+  // User action is required to change the following states
+  return state & (AssetDefs::Bad | AssetDefs::Offline | AssetDefs::Canceled);
+}
+
 class StateUpdater::SetStateVisitor : public default_dfs_visitor {
   private:
     using RecalcSet = std::unordered_set<SharedString>;
@@ -209,14 +214,8 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
       }
     }
 
-    bool NeedComputeState(DependentStateTreeVertexDescriptor vertex) const {
-      auto & vertexData = tree[vertex];
-      bool userActionRequired = 
-          (vertexData.state & (AssetDefs::Bad |
-                               AssetDefs::Offline |
-                               AssetDefs::Canceled));
-      bool recalcRequested = (needsRecalc->find(vertexData.name) != needsRecalc->end());
-      return !userActionRequired && (vertexData.inDepTree || recalcRequested);
+    bool RelevantStateChanged(const AssetVertex & data) const {
+      return data.inDepTree || needsRecalc->find(data.name) != needsRecalc->end();
     }
 
     void ComputeAndSetState(
@@ -252,20 +251,24 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
     void finish_vertex(
         DependentStateTreeVertexDescriptor vertex,
         const DependentStateTree &) const {
-      SharedString name = tree[vertex].name;
-      notify(NFY_PROGRESS, "Calculating state for '%s'", name.toString().c_str());
+      const AssetVertex & data = tree[vertex];
+      notify(NFY_PROGRESS, "Calculating state for '%s'", data.name.toString().c_str());
 
-      // Set the state for assets in the dependent tree. "false" means we'll
-      // set the state again below.
-      if (tree[vertex].inDepTree) {
-        SetState(vertex, newState, {0, 0}, false);
+      // Set the state for assets in the dependent tree.
+      if (data.inDepTree) {
+        // Check if we're going to recalculate the state below. If not, we need
+        // to send the state change notification now.
+        bool sendNotification = UserActionRequired(newState);
+        SetState(vertex, newState, {0, 0}, sendNotification);
       }
 
-      // For all assets (including parents and listeners) update the state
-      // based on the state of inputs and children.
-      if (NeedComputeState(vertex)) {
-        ComputeAndSetState(name, vertex);
-        needsRecalc->erase(name);
+      // For all assets (including parents and listeners) recalculate the state
+      // based on the state of inputs and children. Only recalculate the state
+      // if user action is not required to change the state and if some
+      // previous state change forces a recalculation.
+      if (!UserActionRequired(data.state) && RelevantStateChanged(data)) {
+        ComputeAndSetState(data.name, vertex);
+        needsRecalc->erase(data.name);
       }
     }
 };
@@ -276,7 +279,9 @@ void StateUpdater::SetStateForRefAndDependents(
     function<bool(AssetDefs::State)> updateStatePredicate) {
   try {
     SharedString verref = AssetVersionImpl::Key(ref);
-    DependentStateTree tree = BuildDependentStateTree(verref, updateStatePredicate, storageManager);
+    bool includeDepDescendents = !UserActionRequired(newState);
+    DependentStateTree tree = BuildDependentStateTree(
+        verref, updateStatePredicate, includeDepDescendents, storageManager);
     depth_first_search(tree, visitor(SetStateVisitor(*this, tree, newState)));
   }
   catch (UnsupportedException) {

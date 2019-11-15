@@ -740,7 +740,7 @@ khAssetManager::CancelVersion(const std::string &verref)
 {
   assert(!mutex.TryLock());
   notify(NFY_INFO, "CancelVersion %s", verref.c_str());
-  MutableAssetVersionD(verref)->Cancel();
+  ::CancelVersion(verref);
 }
 
 void

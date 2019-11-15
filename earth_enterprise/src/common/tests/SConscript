@@ -54,12 +54,13 @@ testdir = os.path.join(env.exportdirs['bin'],'tests')
 env.copyfile(testdir, 'RunAllTests.pl')
 
 # Drop in the test data
-env.Command(
-    '%s/tests/fusion/' % Dir(env.exportdirs['bin']).abspath, # TARGET
+sync_test_data = env.Command(
+    '%s/tests/fusion' % Dir(env.exportdirs['bin']).abspath, # TARGET
     Dir('#fusion/testdata').abspath, # SOURCE
-    [env.rsync_cmd % (
+    env.rsync_cmd % (
         '$SOURCE',
-        '$TARGET'),
-     Touch('$TARGET')])
+        '$TARGET'))
+# Always sync the test data. rsync will make sure it doesn't do unnecessary work.
+env.AlwaysBuild(sync_test_data)
 
 env.sharedLib('getests', ['qtpathgen.cpp'])

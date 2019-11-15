@@ -50,6 +50,7 @@ using DependentStateTreeVertexDescriptor = DependentStateTree::vertex_descriptor
 DependentStateTree BuildDependentStateTree(
     const SharedString & ref,
     std::function<bool(AssetDefs::State)> includePredicate,
+    bool includeDepDescencents,
     StorageManagerInterface<AssetVersionImpl> * sm);
 
 #endif
