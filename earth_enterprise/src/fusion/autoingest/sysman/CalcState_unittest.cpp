@@ -51,7 +51,7 @@ class ExpectedStates {
     MapType expectedStates;
     const string goldenFile;
   public:
-    ExpectedStates(string goldenFile) : goldenFile("../../../fusion/testdata/" + goldenFile) {
+    ExpectedStates(string goldenFile) : goldenFile(goldenFile) {
 #if !defined WRITE_GOLDEN
       Read();
 #endif
@@ -84,7 +84,9 @@ class ExpectedStates {
       bool hasChildren;
       bool caresAboutInputs;
       AssetDefs::State expected;
-      ifstream in(goldenFile);
+      // When reading the test data, read from the temporary copy of the file
+      // in the test directory.
+      ifstream in("fusion/testdata/" + goldenFile);
       while (in >> startingState
                 >> byInputs
                 >> byChildren
@@ -118,7 +120,9 @@ class ExpectedStates {
     }
 #if defined WRITE_GOLDEN
     void Write() {
-      ofstream out(goldenFile);
+      // When writing the test data, write to the file that is stored in the
+      // repository.
+      ofstream out("../../../fusion/testdata/" + goldenFile);
       for (const auto & startingState : expectedStates) {
         for (const auto & byInputs : startingState.second) {
           for (const auto & byChildren : byInputs.second) {
