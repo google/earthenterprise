@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/python2.6
 #
 # Copyright 2017 Google Inc.
 #
