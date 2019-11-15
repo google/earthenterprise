@@ -39,6 +39,9 @@ istream &operator>>(istream & input, AssetDefs::State & state) {
 
 class ExpectedStates {
   private:
+    // This structure is used to map a set of inputs to an expected output. The
+    // first 7 entries are the inputs, and the last AssetDefs::State is the
+    // expected output.
     using MapType = map<AssetDefs::State, // starting state
                     map<AssetDefs::State, // state by inputs
                     map<AssetDefs::State, // state by children
