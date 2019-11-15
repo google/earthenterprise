@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/python2.4
 #
 # Copyright 2010 Google Inc. All Rights Reserved.
 """This program will create the virtual python setup.

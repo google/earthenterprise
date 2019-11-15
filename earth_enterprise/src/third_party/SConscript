@@ -58,8 +58,7 @@ if third_party_env['bundle_3rd_libs']:
       'setuptools',
       'mgrs',
       'PIL',
-      'skia',
-      'pyyaml'
+      'skia'
   ]
 else:
   third_party_libs = [
@@ -79,9 +78,7 @@ else:
       'mod_wsgi',
       'psycopg2', # requires postgresql.
       'mgrs',
-      'PIL',
-      'skia',
-      'pyyaml'
+      'skia'
   ]
 
 
