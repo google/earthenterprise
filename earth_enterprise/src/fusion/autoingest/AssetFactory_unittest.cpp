@@ -178,6 +178,53 @@ public:
     }
 };
 
+class MockVersionDType : public MockMutableAssetVersion
+{
+public:
+    // These are the parameters used to call MakeStorage() inside LoadAsTemporary()
+    // In regular code they're figured out automatically when the version is loaded
+    // in the constructor.  Since the mocks don't really load a version, these values
+    // are used instead.
+    static string EXPECTED_REF;
+    static AssetDefs::Type EXPECTED_TYPE;
+    static string EXPECTED_SUBTYPE;
+
+    vector<AssetVersion> versions;
+    bool permanent;
+
+    MockVersionDType(const AssetVersion& v)
+    {
+        permanent = false;
+        versions.push_back(v);
+    }
+    void NoLongerNeeded() {
+        impl->needed = false;
+        ++MockVersionDType::NOT_NEEDED_COUNT;
+    }
+    void LoadAsTemporary() {
+        MockAssetStorage storage = MockAssetStorage::MakeStorage(EXPECTED_REF,
+                                                                 EXPECTED_TYPE,
+                                                                 EXPECTED_SUBTYPE,
+                                                                 {},
+                                                                 khMetaData());
+        MockAssetConfig config;
+        permanent = false;
+        impl = std::make_shared<Impl>(storage, config);
+    }
+    void MakePermanent() {
+        permanent = true;
+        impl->needed = true;
+    }
+
+    static size_t NOT_NEEDED_COUNT;
+};
+
+string MockVersionDType::EXPECTED_REF;
+AssetDefs::Type MockVersionDType::EXPECTED_TYPE;
+string MockVersionDType::EXPECTED_SUBTYPE;
+size_t MockVersionDType::NOT_NEEDED_COUNT = 0;
+
+
 class MockAssetImpl: public MockAssetStorage
 {
 public:
@@ -407,52 +454,6 @@ TEST_F(AssetFactoryTest, FindMakeAndUpdateAssets)
     ASSERT_EQ(handle7_6->needed, true);
     ASSERT_EQ(handle_4->needed, true);
 }
-
-class MockVersionDType : public MockMutableAssetVersion
-{
-public:
-    // These are the parameters used to call MakeStorage() inside LoadAsTemporary()
-    // In regular code they're figured out automatically when the version is loaded
-    // in the constructor.  Since the mocks don't really load a version, these values
-    // are used instead.
-    static string EXPECTED_REF;
-    static AssetDefs::Type EXPECTED_TYPE;
-    static string EXPECTED_SUBTYPE;
-
-    vector<AssetVersion> versions;
-    bool permanent;
-
-    MockVersionDType(const AssetVersion& v)
-    {
-        permanent = false;
-        versions.push_back(v);
-    }
-    void NoLongerNeeded() {
-        impl->needed = false;
-        ++MockVersionDType::NOT_NEEDED_COUNT;
-    }
-    void LoadAsTemporary() {
-        MockAssetStorage storage = MockAssetStorage::MakeStorage(EXPECTED_REF,
-                                                                 EXPECTED_TYPE,
-                                                                 EXPECTED_SUBTYPE,
-                                                                 {},
-                                                                 khMetaData());
-        MockAssetConfig config;
-        permanent = false;
-        impl = std::make_shared<Impl>(storage, config);
-    }
-    void MakePermanent() {
-        permanent = true;
-        impl->needed = true;
-    }
-
-    static size_t NOT_NEEDED_COUNT;
-};
-
-string MockVersionDType::EXPECTED_REF;
-AssetDefs::Type MockVersionDType::EXPECTED_TYPE;
-string MockVersionDType::EXPECTED_SUBTYPE;
-size_t MockVersionDType::NOT_NEEDED_COUNT = 0;
 
 TEST_F(AssetFactoryTest, Reuse)
 {
