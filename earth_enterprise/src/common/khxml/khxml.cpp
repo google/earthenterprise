@@ -167,18 +167,6 @@ GEXMLObject::GEXMLObject() {
   }
 }
 
-GEXMLObject::~GEXMLObject() {
-  // Terminating Xerces is not strictly necessary but it makes memory checkers
-  // happier.
-  try {
-    XMLPlatformUtils::Terminate();
-    notify(NFY_DEBUG, "Terminated XML library");
-  } catch(const XMLException& toCatch) {
-    notify(NFY_WARN, "Unable to terminate Xerces: %s",
-           FromXMLStr(toCatch.getMessage()).c_str());
-  }
-}
-
 std::unique_ptr<GEDocument>
 CreateEmptyDocument(const std::string &rootTagname) throw()
 {

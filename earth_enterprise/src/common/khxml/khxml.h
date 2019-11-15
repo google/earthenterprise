@@ -142,7 +142,6 @@ class GEXMLObject {
     static void setDefaultValues();
   public:
     GEXMLObject();
-    ~GEXMLObject();
     // Allow users to specify the initialization file
     static void initializeXMLParametersFromStream(std::istream &);
 };
