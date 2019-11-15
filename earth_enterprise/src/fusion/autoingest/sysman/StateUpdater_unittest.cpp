@@ -294,7 +294,7 @@ TEST_F(StateUpdaterTest, SetStateSingleVersion) {
 
 TEST_F(StateUpdaterTest, SetStateMultipleVersions) {
   GetBigTree(sm);
-  updater.SetStateForRefAndDependents(fix("gp"), AssetDefs::New, [](AssetDefs::State) {return true; });
+  updater.SetStateForRefAndDependents(fix("gp"), AssetDefs::New, [](AssetDefs::State) { return true; });
   
   assertStateSet(sm, "gp");
   assertStateSet(sm, "p1");
@@ -962,6 +962,27 @@ TEST_F(StateUpdaterTest, NotifyProgressFailed) {
   auto version = sm.GetMutable(fix("a"));
   updater.SetInProgress(version);
   ASSERT_NE(GetVersion(sm, "a")->progressNotified, PROGRESS);
+}
+
+// Cancel commands should only set the state once, but they should still send
+// notifications.
+TEST_F(StateUpdaterTest, Cancel) {
+  GetBigTree(sm);
+  updater.SetStateForRefAndDependents(fix("p1"), AssetDefs::Canceled, [](AssetDefs::State) { return true; });
+  
+  assertStateSet(sm, "p1", 1);
+  assertStateSet(sm, "c1", 1);
+  assertStateSet(sm, "gp", 1);
+
+  assertStateNotSet(sm, "gpi");
+  assertStateNotSet(sm, "pi1");
+  assertStateNotSet(sm, "p2");
+  assertStateNotSet(sm, "c2");
+  assertStateNotSet(sm, "c3");
+  assertStateNotSet(sm, "c4");
+  assertStateNotSet(sm, "ci1");
+  assertStateNotSet(sm, "ci2");
+  assertStateNotSet(sm, "ci3");
 }
 
 int main(int argc, char **argv) {
