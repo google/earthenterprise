@@ -51,12 +51,15 @@ Manage Fusion disk space
       There are a few different ways to move pyramid files out of an
       asset root that is filling up:
 
-      -  | Move files out of the asset root and create symbolic links to
-           the files. To do this, copy the entire ``raster.kip``
-           directory to a different location and then symbolically link
-           ``raster.kip`` to the new location with the ``ln -s``
-           command:
-         | ``ln -s /path/to/new/raster.kip``
+      -  Move files out of the asset root and create symbolic links to
+         the files. To do this, copy the entire ``raster.kip``
+         directory to a different location and then symbolically link
+         ``raster.kip`` to the new location with the ``ln -s``
+         command:
+
+         .. code-block:: bash
+
+            ln -s /path/to/new/raster.kip
 
          This option is expedient and can provide significant short-term
          relief to a full asset root. However, extensive use of symbolic
@@ -83,10 +86,19 @@ Manage Fusion disk space
          ``.kiasset`` extension.
       #. Locate the ``raster.kip`` and the ``mask.kmp`` directories
          under the asset directory:
-         ``find $asset.kiasset -type d -name raster.kip find $asset.kiasset -type d -name mask.kmp``
-      #. | Copy the ``raster.kip`` and ``mask.kmp`` directories to the
-           auxiliary storage volume:
-         | ``cp -av $kip $new_location/$asset.kip cp -av $kmp $new_location/$asset.kmp``
+
+         .. code-block:: bash
+
+            find $asset.kiasset -type d -name raster.kip
+            find $asset.kiasset -type d -name mask.kmp
+
+      #. Copy the ``raster.kip`` and ``mask.kmp`` directories to the
+         auxiliary storage volume:
+
+         .. code-block:: bash
+
+            cp -av $kip $new_location/$asset.kip
+            cp -av $kmp $new_location/$asset.kmp
 
          **Note**: The auxiliary storage volume must be a defined Fusion
          volume. You can define the new volume with the
@@ -104,7 +116,9 @@ Manage Fusion disk space
          command, using the same name that the asset was originally
          created with:
 
-         ``gemodifyimageryasset -o imagery/EastChicago -havemask /gevol/newvolume/imagery/EastChicago.kip``
+         .. code-block:: bash
+
+            gemodifyimageryasset -o imagery/EastChicago -havemask /gevol/newvolume/imagery/EastChicago.kip
 
          For more details about the commands to recreate the assets,
          see *Importing Preprocessed Resources* in the Google Earth
@@ -113,7 +127,9 @@ Manage Fusion disk space
       #. Rebuild the imagery project and any database that contains the
          imagery project:
 
-         ``gebuild imagery/EastChicago``.
+         .. code-block:: bash
+
+            gebuild imagery/EastChicago
 
          The ``gemodifyimageryasset`` and ``gebuild`` commands will
          complete in seconds, because the heavy processing took place
@@ -143,7 +159,38 @@ Manage Fusion disk space
       The example below copies all the pyramid files from
       ``/gevol/assets/imagery`` to ``/gevol/volume1``.
 
-      :literal:`# The commands are echoed to the terminal so you can review them before executing.  # To enable the commands, uncomment the following line:  # do_command=true   asset_root=/gevol/assets  asset_directory=Resources/Imagery  new_location=/gevol/volume1   cd $asset_root/$asset_directory  for asset in `ls | grep kiasset | sed 's/\.kiasset//'`  do   # Find the raster.kip and mask.kmp under the asset directory  kip=`find $asset.kiasset -type d -name raster.kip`  kmp=`find $asset.kiasset -type d -name mask.kmp`    # Copy the raster and mask directories to the new volume  echo "cp -av $kip $new_location/$asset.kip"  if [ "$do_command" == "true" ]; then cp -av $kip $new_location/$asset.kip; fi  echo "cp -av $kmp $new_location/$asset.kmp"  if [ "$do_command" == "true" ]; then cp -av $kmp $new_location/$asset.kmp; fi    # modify and build each of the imagery assets  echo "gemodifyimageryresource --havemask -o $asset_directory/$asset $new_location/$asset.kip"  #if [ "$do_command" == "true" ]; then gemodifyimageryresource --havemask -o $asset_directory/$asset $new_location/$asset.kip; fi  echo "gebuild $asset_directory/$asset"  if [ "$do_command" == "true" ]; then gebuild $asset_directory/$asset; fi done   # Rebuild, then clean the imagery project and the database,  # then verify that all the assets were cleaned.`
+      .. code-block:: bash
+
+         # The commands are echoed to the terminal so you can review them before executing.
+         # To enable the commands, uncomment the following line:
+         # do_command=true
+
+         asset_root=/gevol/assets
+         asset_directory=Resources/Imagery
+         new_location=/gevol/volume1
+
+         cd $asset_root/$asset_directory
+         for asset in `ls | grep kiasset | sed 's/\.kiasset//'`
+         do
+            # Find the raster.kip and mask.kmp under the asset directory
+            kip=`find $asset.kiasset -type d -name raster.kip`
+            kmp=`find $asset.kiasset -type d -name mask.kmp`
+
+            # Copy the raster and mask directories to the new volume
+            echo "cp -av $kip $new_location/$asset.kip"
+            if [ "$do_command" == "true" ]; then cp -av $kip $new_location/$asset.kip; fi
+            echo "cp -av $kmp $new_location/$asset.kmp"
+            if [ "$do_command" == "true" ]; then cp -av $kmp $new_location/$asset.kmp; fi
+
+            # modify and build each of the imagery assets
+            echo "gemodifyimageryresource --havemask -o $asset_directory/$asset $new_location/$asset.kip"
+            #if [ "$do_command" == "true" ]; then gemodifyimageryresource --havemask -o $asset_directory/$asset $new_location/$asset.kip; fi
+            echo "gebuild $asset_directory/$asset"
+            if [ "$do_command" == "true" ]; then gebuild $asset_directory/$asset; fi
+         done
+
+         # Rebuild, then clean the imagery project and the database,
+         # then verify that all the assets were cleaned.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

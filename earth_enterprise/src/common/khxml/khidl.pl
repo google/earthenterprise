@@ -120,6 +120,7 @@ my $cppquote = '';
 my $IDLFILE;
 my $needqt = 0;
 my %ExternalHasDeprecated;
+my %RequiresGetHeapUsage;
 open($IDLFILE, $idlfile) || die "Unable to open $idlfile: $!\n";
 my $line;
 eval {
@@ -143,9 +144,12 @@ eval {
 		$cppquote .= $line . "\n";
 		$line = GetLine($IDLFILE);
 	    }
-        } elsif ($line =~ /^ExternalHasDeprecated:\s*(\w+)/) {
-            $ExternalHasDeprecated{$1} = 1;
-        } else {
+    } elsif ($line =~ /^ExternalHasDeprecated:\s*(\w+)/) {
+        $ExternalHasDeprecated{$1} = 1;
+    } elsif ($line =~ /^\s*\#requiresgetheapusage\s*$/) {
+        $RequiresGetHeapUsage = 1;
+        push @includes, "#include \"CacheSizeCalculations.h\"";
+    } else {
 	    die "Expected class definition found '$line'\n";
 	}
     }
@@ -1147,6 +1151,32 @@ sub DumpClass
       print $fh $pad, $indent, "}\n";
     }
 
+    # GetHeapUsage
+    if ($RequiresGetHeapUsage) {
+        my $haveFirst = 0;
+        my $curr = 1;
+        my $size = @{$class->{members}};
+        print $fh $pad, $indent, "uint64 GetHeapUsage() const {\n";
+        foreach my $member (@{$class->{members}}) {
+            if ($curr == $size) {
+                if ($haveFirst) {
+                    print $fh $pad, $indent x2, "+ ::GetHeapUsage($member->{name});\n";
+                } else {
+                    print $fh $pad, $indent x2, "return ::GetHeapUsage($member->{name});\n";
+                }
+                last;
+            }
+	        if ($haveFirst) {
+                print $fh $pad, $indent x2, "+ ::GetHeapUsage($member->{name})\n";
+	        } else {
+	    	    print $fh $pad, $indent, $indent, "return ::GetHeapUsage($member->{name})\n";
+	    	    $haveFirst = 1;
+	        }
+            $curr++;
+	    }
+        print $fh $pad, $indent, "}\n";
+    }
+
     if ($class->{hquote}) {
 	print $fh $class->{hquote};
     }
@@ -1353,6 +1383,11 @@ sub DumpGlobalClassHelpers
     if ($class->{GenerateIsUpToDate}) {
         print $fh "inline bool IsUpToDate(const $class->{qualname} &a, const $class->{qualname} &b) {\n";
         print $fh $indent, "return a.IsUpToDate(b);\n";
+        print $fh "}\n\n";
+    }
+    if ($RequiresGetHeapUsage) {
+        print $fh "inline uint64 GetHeapUsage(const $class->{qualname} &obj) {\n";
+        print $fh $indent, "return obj.GetHeapUsage();\n";
         print $fh "}\n\n";
     }
 }
@@ -1882,14 +1917,15 @@ sub EmitEnumDOMReader
     print $fh "{\n";
     my $i = 0;
     for ($i = 0; $i < @{$enum->{enumerators}}; ++$i) {
-	my $item = $enum->{enumerators}[$i];
-	if ($i == 0) {
-	    print $fh $indent, "if (enumStr == \"$item->{name}\") {\n";
-	} else {
-	    print $fh $indent, "} else if (enumStr == \"$item->{name}\") {\n";
-	}
-	print $fh $indent, $indent, "self = $enum->{qualbase}::$item->{name};\n";
-	print $fh $indent, $indent, "return;\n";
+      my $item = $enum->{enumerators}[$i];
+      my $conditional = "enumStr == \"$item->{name}\" || enumStr == \"$item->{value}\"";
+      if ($i == 0) {
+        print $fh $indent, "if ($conditional) {\n";
+      } else {
+        print $fh $indent, "} else if ($conditional) {\n";
+      }
+      print $fh $indent, $indent, "self = $enum->{qualbase}::$item->{name};\n";
+      print $fh $indent, $indent, "return;\n";
     }
     print $fh $indent, "}\n";
     print $fh $indent, "throw khException(kh::tr(\"Invalid string '%1' for enum '%2'\").arg(enumStr).arg(\"$enum->{qualname}\"));\n";

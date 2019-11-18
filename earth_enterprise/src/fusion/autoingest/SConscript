@@ -213,6 +213,10 @@ gemiscconfig = env.sharedLib('gemiscconfig',
                               '.idl/Systemrc.cpp'],
                              LIBS=['gexml'])
 
+env.Depends('MiscConfig.os', ['.idl/Systemrc.h', '.idl/MiscConfigStorage.h'])
+env.Depends('.idl/MiscConfigStorage.os', ['.idl/Systemrc.h', '.idl/MiscConfigStorage.h'])
+env.Depends('.idl/Systemrc.os', ['.idl/Systemrc.h', '.idl/MiscConfigStorage.h'])
+
 env.install('common_lib', [geautoingest, gemiscconfig])
 
 env.test('AssetDefsExtra_unittest',

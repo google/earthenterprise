@@ -23,6 +23,16 @@ Release notes: Open GEE 5.3.3
       removed for most calculations, such as when system manager is determining
       which resources overlap. 
 
+      **Improved memory usage reporting for caches**.
+      The memory usage estimation for the asset and
+      asset version caches has been improved and is
+      much more accurate.
+
+      **Optimized handling for task status updates**.
+      System manager's performance while handling updates about running tasks
+      has been improved. This update is experimental and can be enabled using
+      the :ref:`GraphOperations flag <graph-operations>`.
+
       .. rubric:: Supported Platforms
 
       The Open GEE 5.3.3 release is supported on 64-bit versions of the
@@ -52,9 +62,15 @@ Release notes: Open GEE 5.3.3
          * - Number
            - Description
            - Resolution
-         * - Issue Number
-           - Issue Description
-           - Issue Resolution
+         * - 1202
+           - Can't select .KIP as source
+           - Select 'header.xml' in .KIP directory to select .KIP
+         * - 1517
+           - geglxinfo should parse vector packets
+           - geglxinfo will parse vector packets
+         * - 1241
+           - geglxinfo should parse all meshes in terrain packets
+           - geglxinfo will parse all meshes in terrain packets
 
       .. rubric:: Known Issues
 

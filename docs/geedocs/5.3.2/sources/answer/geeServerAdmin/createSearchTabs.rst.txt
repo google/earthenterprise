@@ -69,23 +69,10 @@ Publish databases and portables
 
 To define a new search tab:
 
-#. In the
+In the GEE Server Admin console, click Search tabs.
 
-GEE Server Admin console
-
-, click
-
-Search tabs
-
-. #. Click
-
-Create
-
-
-new
-
-. The Create Search Definition dialog appears.
-
+Click Create new. The Create Search Definition dialog appears.  Create
+Search Definition dialog
 
 Enter a unique Name for your search tab.
 

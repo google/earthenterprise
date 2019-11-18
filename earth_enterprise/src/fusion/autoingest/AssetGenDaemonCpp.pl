@@ -179,6 +179,11 @@ void ${name}AssetImplD::SerializeConfig(DOMElement *top) const
     AddConfig(top, config);
 }
 
+uint64 ${name}AssetImplD::GetHeapUsage() const {
+    return ${name}AssetImpl::GetHeapUsage()
+            + ::GetHeapUsage(config);
+}
+
 extern void ToElement(DOMElement *elem, const AssetStorage &self);
 
 EOF
@@ -463,6 +468,11 @@ std::string ${name}AssetVersionImplD::GetName() const
 void ${name}AssetVersionImplD::SerializeConfig(DOMElement *top) const
 {
     AddConfig(top, config);
+}
+
+uint64 ${name}AssetVersionImplD::GetHeapUsage() const {
+    return ${name}AssetVersionImpl::GetHeapUsage()
+            + ::GetHeapUsage(config);
 }
 
 extern void ToElement(DOMElement *elem, const AssetVersionStorage &self);

@@ -11,7 +11,7 @@ Conflicts in plugins
       .. rubric:: Error message
 
       ``Conflicts in plugins``
-      
+
       .. rubric:: Description
 
       The first time each user runs the Fusion GUI, error messages like

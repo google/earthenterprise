@@ -72,7 +72,39 @@ in the `rpms/build/distributions` directory to install all rpms and dependencies
 in one step.  Note that using ```sudo yum install opengee-server-*.rpm``` or
 ```sudo yum install opengee-fusion-*.rpm``` will not automatically install
 **opengee-common** or **opengee-postgis** if they are not also specified and yum 
-will refuse to install if they were not previously installed.  
+will refuse to install if they were not previously installed.
+
+A note about needed enabled repositories: If the RPMs are to be installed on a
+machine where they were not built, certain repos need enabled:
+
+### CentOS 7
+
+```bash
+sudo yum install -y epel-release
+```
+
+### RHEL 7
+
+```bash
+sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+```
+
+### CentOS 6
+
+```bash
+sudo yum install -y epel-release ius-release
+```
+
+### RHEL 6
+
+__NOTE:__ The EPEL URL below assumes that your RHEL 6 installation has
+the latest updates.
+
+```bash
+sudo subscription-manager repos --enable=rhel-6-server-optional-rpms
+sudo yum-config-manager --enable ius
+sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
+```
 
 The RPMs install Open GEE to the same */opt/google* path that the non-package
 based install scripts did.  If Open GEE is already installed from the Git

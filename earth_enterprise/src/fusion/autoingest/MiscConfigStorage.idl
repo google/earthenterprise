@@ -19,24 +19,26 @@
 #include <notify.h>
 
 class MiscConfigStorage {
+  enum GraphOpsType { NO_GRAPH_OPS = 0, FAST_GRAPH_OPS = 1, ALL_GRAPH_OPS = 2 };
+
   // delay between writing a file and reading it from NFS in order to
   // help work around the delayed NFS visibility problem.
-  uint        NFSVisibilityDelay = uint(0);
+  uint         NFSVisibilityDelay = uint(0);
 
   // The maximum number of objects allowed in each cache
-  uint        AssetCacheSize = uint(128000);
-  uint        VersionCacheSize = uint(128000);
+  uint         AssetCacheSize = uint(128000);
+  uint         VersionCacheSize = uint(128000);
 
   // The maximum amount of memory allocated for each cache in bytes.
-  uint64      MaxAssetCacheMemorySize = uint64(1073741824);
-  uint64      MaxVersionCacheMemorySize = uint64(1073741824);
+  uint64       MaxAssetCacheMemorySize = uint64(805306368);
+  uint64       MaxVersionCacheMemorySize = uint64(2415919104);
 
-  bool        LimitMemoryUtilization = false;
+  bool         LimitMemoryUtilization = false;
   
-  bool        GenerateProductPreviews = true;
-  uint        MutexTimedWaitSec = uint(30);
-  uint        PackGenAnalysisThreads = uint(1);
-  bool        GraphOperations = false;
+  bool         GenerateProductPreviews = true;
+  uint         MutexTimedWaitSec = uint(30);
+  uint         PackGenAnalysisThreads = uint(1);
+  GraphOpsType GraphOperations = MiscConfigStorage::NO_GRAPH_OPS;
 
 #pragma LoadAndSave
 

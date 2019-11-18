@@ -18,7 +18,18 @@
 #define ASSETOPERATION_H
 
 #include "common/SharedString.h"
+#include "fusion/autoingest/sysman/.idl/TaskStorage.h"
+#include "MiscConfig.h"
 
-void RebuildVersion(const SharedString & ref);
+void RebuildVersion(const SharedString & ref, MiscConfig::GraphOpsType graphOps = MiscConfig::Instance().GraphOperations);
+void CancelVersion(const SharedString & ref, MiscConfig::GraphOpsType graphOps = MiscConfig::Instance().GraphOperations);
+void HandleTaskProgress(const TaskProgressMsg & msg, MiscConfig::GraphOpsType graphOps = MiscConfig::Instance().GraphOperations);
+void HandleTaskDone(const TaskDoneMsg & msg, MiscConfig::GraphOpsType graphOps = MiscConfig::Instance().GraphOperations);
+void HandleExternalStateChange(
+  const SharedString & ref,
+  AssetDefs::State oldState,
+  uint32 numInputsWaitingFor,
+  uint32 numChildrenWaitingFor,
+  MiscConfig::GraphOpsType graphOps = MiscConfig::Instance().GraphOperations);
 
 #endif // ASSETOPERATION_H

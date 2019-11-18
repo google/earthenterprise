@@ -19,6 +19,7 @@
 
 #include <functional>
 #include <memory>
+#include <type_traits>
 
 #include "autoingest/.idl/storage/AssetDefs.h"
 
@@ -26,23 +27,40 @@
 // This allows the storage manager to properly clean up when the other object
 // is done using the asset (release locks, update cache size, etc).
 //
-// This AssetHandle will eventually replace the AssetHandle_ definied in
+// This AssetHandle will eventually replace the AssetHandle_ defined in
 // AssetHandle.h and its derivatives.
-template<class AssetType>
+template<typename AssetType>
 class AssetHandle {
   private:
     AssetPointerType<AssetType> ptr;
     std::function<void(void)> onFinalize;
+
+    inline bool IsMutable() { return !std::is_const<AssetType>::value; }
   public:
     AssetHandle(AssetPointerType<AssetType> ptr,
                 std::function<void(void)> onFinalize)
-        : ptr(ptr), onFinalize(onFinalize) {}
+        : ptr(ptr), onFinalize(onFinalize) {
+      // The function to convert from a mutable to a non-mutable handle assumes
+      // that onFinalize is only needed for mutable handles. This will fail
+      // loudly if that assumption is broken so that future programmers will
+      // know to fix it.
+      assert(IsMutable() || onFinalize == nullptr);
+    }
     AssetHandle() = default;
     ~AssetHandle() {
       if (onFinalize) onFinalize();
     }
     inline AssetType * operator->() const { return ptr.operator->(); }
     inline explicit operator bool() const { return ptr && (ptr->type != AssetDefs::Invalid); }
+
+    // Allow conversions from mutable to const handles but not the other way
+    // around. The only way to get a mutable handle is to get it directly from
+    // the storage manager so that it can track modified assets. Note that
+    // onFinalize is not copied; we assume it is only needed for mutable
+    // handles.
+    inline operator AssetHandle<const AssetType>() const {
+      return AssetHandle<const AssetType>(ptr, nullptr);
+    }
 };
 
 #endif // STORAGEMANAGERASSETHANDLE_CPP

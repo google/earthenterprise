@@ -21,7 +21,7 @@ sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.
 
 ```bash
 sudo wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
-sudo yum install -y epel-release
+sudo yum install -y epel-release ius-release
 ```
 
 ### RHEL 6
@@ -77,8 +77,17 @@ sudo yum install -y git-lfs
 
 For all versions of CentOS and RHEL, install the standard development/build tools:
 
+### EL7
+
 ```bash
 sudo yum install -y ant bzip2 doxygen gcc-c++ patch python-argparse python-lxml python-setuptools \
+  swig tar
+```
+
+### EL6
+
+```bash
+sudo yum install -y ant bzip2 doxygen gcc-c++ patch python-argparse python27-lxml python27-setuptools \
   swig tar
 ```
 
@@ -121,7 +130,7 @@ sudo yum install -y \
   bison-devel boost-devel cmake daemonize freeglut-devel \
   gdbm-devel geos-devel giflib-devel GitPython \
   libcap-devel libmng-devel libpng12-devel libX11-devel libXcursor-devel \
-    libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
+  libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel \
   perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-devel \
   rpm-build rpmrebuild rsync scons \
@@ -136,9 +145,9 @@ sudo yum install -y \
   bison-devel boost-devel cmake daemonize freeglut-devel \
   gdbm-devel geos-devel gettext giflib-devel GitPython \
   libcap-devel libmng-devel libpng-devel libX11-devel libXcursor-devel \
-    libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
+  libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel pcre pcre-devel \
-  perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-devel python-unittest2 \
+  perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-devel python27-devel python-unittest2 \
   rpm-build rpmrebuild rsync scons shunit2 \
   xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
 ```
@@ -201,3 +210,15 @@ sudo yum install -y http://download-ib01.fedoraproject.org/pub/epel/6/x86_64/Pac
 ### CentOS 6 and RHEL 6
 
 shunit2 was installed in a previous step.
+
+## Install Python 2.7
+
+### CentOS 7 and RHEL 7
+
+Python 2.7 is installed as a system default.
+
+### CentOS 6 and RHEL 6
+
+```bash
+sudo yum install -y python27
+```

@@ -17,6 +17,7 @@
 #include <vector>
 #include <khTypes.h>
 #include <khMetaData.h>
+#requiresgetheapusage
 
 class KMLProjectConfig {
   class LayerItem {
@@ -65,4 +66,3 @@ class KMLProjectEditRequest {
 
 #pragma StrLoadAndSave
 };
-

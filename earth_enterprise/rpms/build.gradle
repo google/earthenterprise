@@ -197,7 +197,7 @@ def rpmCommandFilter = {
 def findBuildNumber = {
     return (!openGeeVersionFile.exists() || project.hasProperty('buildOpenGee')) ?
         getOsPackageBuildFromOpenGeeVersion(GeeCommandLine.expand(
-                ["../src/scons/getversion.py", "--long"],
+                ["${projectDir}/../src/scons/getversion.py", "--long"],
                 "Failed to get Open GEE build!"
             )) :
         getOsPackageBuildFromOpenGeeVersionFile(openGeeVersionFile)
@@ -207,7 +207,7 @@ def findBuildNumber = {
 def findVersionNumber = {
     return (!openGeeVersionFile.exists() || project.hasProperty('buildOpenGee')) ?
         getOsPackageVersionFromOpenGeeVersion(GeeCommandLine.expand(
-                ["../src/scons/getversion.py", "--long"],
+                ["${projectDir}/../src/scons/getversion.py", "--long"],
                 "Failed to get Open GEE version!"
             )) :
         getOsPackageVersionFromOpenGeeVersionFile(openGeeVersionFile)
@@ -395,6 +395,10 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
     requires('chkconfig')
     requires('shadow-utils')
 
+    if ("${findBuildNumber()}.${rpmPlatformString}".contains('el6')) {
+        requires('python27')
+    }
+
     requiresCommands(packageSharedCommands +
         ['cat', 'cut', 'getent', 'grep'])
 
@@ -556,16 +560,20 @@ task openGeeServerRpm(type: GeeRpm, dependsOn: openGeeServerInitScripts) {
     directory('/var/opt/google/pgsql/logs')
 
     filesMatching(
-        ['/etc/init.d/geserver']
-    ) {
+        '/etc/init.d/geserver')
+    {
         it.mode = 0755
     }
 
     // since these are "sourced" they cannot be exec...
     filesMatching(
-        ['/etc/profile.d/ge-server.csh',
-         '/etc/profile.d/ge-server.sh']
-    ) {
+        '/etc/profile.d/ge-server.csh')
+    {
+        it.mode = 0644
+    }
+    filesMatching(
+        '/etc/profile.d/ge-server.sh')
+    {
         it.mode = 0644
     }
 
@@ -649,15 +657,19 @@ task openGeeServerDeb (type: GeeDeb, dependsOn: openGeeServerInitScripts) {
     directory('/var/opt/google/pgsql/logs')
 
     filesMatching(
-        ['/etc/init.d/geserver']
+        '/etc/init.d/geserver'
     ) {
         it.mode = 0755
     }
 
     // since these are "sourced" they cannot be exec...
     filesMatching(
-        ['/etc/profile.d/ge-server.csh',
-         '/etc/profile.d/ge-server.sh']
+        '/etc/profile.d/ge-server.csh'
+    ) {
+        it.mode = 0644
+    }
+    filesMatching(
+         '/etc/profile.d/ge-server.sh'
     ) {
         it.mode = 0644
     }
@@ -760,15 +772,19 @@ built from raster, vector, and location properties data.
     directory('/var/opt/google/log', 0775)
 
     filesMatching(
-        ['/etc/init.d/gefusion']
+        '/etc/init.d/gefusion'
     ) {
         it.mode = 0755
     }
 
     // since these are "sourced" they cannot be exec...
     filesMatching(
-        ['/etc/profile.d/ge-fusion.csh',
-         '/etc/profile.d/ge-fusion.sh']
+        '/etc/profile.d/ge-fusion.csh'
+    ) {
+        it.mode = 0644
+    }
+    filesMatching(
+        '/etc/profile.d/ge-fusion.sh'
     ) {
         it.mode = 0644
     }
@@ -829,15 +845,19 @@ task openGeeFusionDeb (type: GeeDeb, dependsOn: openGeeFusionInitScripts) {
     directory('/var/opt/google/log', 0775)
 
     filesMatching(
-        ['/etc/init.d/gefusion']
+        '/etc/init.d/gefusion'
     ) {
         it.mode = 0755
     }
 
     // since these are "sourced" they cannot be exec...
     filesMatching(
-        ['/etc/profile.d/ge-fusion.csh',
-         '/etc/profile.d/ge-fusion.sh']
+        '/etc/profile.d/ge-fusion.csh'
+    ) {
+        it.mode = 0644
+    }
+    filesMatching(
+        '/etc/profile.d/ge-fusion.sh'
     ) {
         it.mode = 0644
     }

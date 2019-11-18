@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python2.7
 #
 # Copyright 2017 Google Inc.
 #
@@ -23,6 +23,7 @@ import wms.ogc.common.geom as geom
 import wms.ogc.common.image_specs as image_specs
 import wms.ogc.common.tiles as tiles
 import wms.ogc.common.utils as utils
+from pprint import pformat
 
 OPERATIONS = set(["GetMap", "GetCapabilities"])
 
@@ -66,7 +67,7 @@ class WmsGetMapRequest(object):
 
     image_format = utils.GetValue(self.parameters, "format")
     image_spec = image_specs.GetImageSpec(image_format)
-
+    logger.info("WMS Request image_format: %s image_spec: %s will be applied to all layers.", image_format, image_spec)
     # TRANSPARENT parameter from GIS client's.
     # It can take "TRUE"/"FALSE" values.
     # Default value is "FALSE" as per spec.
@@ -94,32 +95,39 @@ class WmsGetMapRequest(object):
       bgcolor = tuple(ord(c) for c in bgcolor.decode("hex"))
     else:
       bgcolor = tiles.ALL_WHITE_PIXELS
-
-    # Add the user requested image format, transparency
-    # and bgcolor to the layer python object.
-    self.requested_layer_obj.image_format = image_format
-    self.requested_layer_obj.is_transparent = is_transparent
-    self.requested_layer_obj.bgcolor = bgcolor
-
-    im_user = tiles.ProduceImage(
-        self.requested_layer_obj,
-        # There's a weird border artifact that MapServer shows when we
-        # ask for more than 360 laterally, and which natively we show
-        # fine. It's probably not us, but there's room for doubt.  If
-        # it was our calculations, it's likely the error would be most
-        # extreme for a large final image, and few tiles.
-        self.user_log_rect,
-        self.user_width, self.user_height)
-
-    buf = StringIO.StringIO()
-    im_user.save(buf, image_spec.pil_format, **im_user.info)
-
-    logger.debug("Image content type is :%s", image_spec.content_type)
-
+    layer_names = self._ExtractLayerNames(
+        utils.GetValue(self.parameters, 'layers'))
+    logger.info("Loop through layers: %s ", (str(layer_names)))
+    composite_image = None
+    for layer_name in layer_names:
+        # Add the user requested image format, transparency
+        # and bgcolor to the layer python object.
+        layer_obj = self._ExtractLayerObj(layer_name)
+        logger.debug("Processing a layer:  %s   \n%s ", layer_name, pformat( layer_obj ))
+        layer_obj.image_format = image_format 
+        layer_obj.is_transparent = is_transparent
+        layer_obj.bgcolor = bgcolor
+        # We'll assume that all WMS layers will have the same image_spec and projection 
+        # for
+        im_user = tiles.ProduceImage(
+            layer_obj,
+            # There's a weird border artifact that MapServer shows when we
+            # ask for more than 360 laterally, and which natively we show
+            # fine. It's probably not us, but there's room for doubt.  If
+            # it was our calculations, it's likely the error would be most
+            # extreme for a large final image, and few tiles.
+            self.user_log_rect,
+            self.user_width, self.user_height)            
+        im_user = im_user.convert("RGBA")
+        if composite_image is None:
+          composite_image = im_user
+        else:
+          logger.debug( "Adding layer %s to composite image...", layer_name)
+          composite_image.paste(im_user, (0, 0), im_user)
+        buf = StringIO.StringIO()
+        output_format = image_spec.pil_format
+        composite_image.save(buf, image_spec.pil_format, **im_user.info)
     headers = [("Content-Type", image_spec.content_type)]
-
-    logger.debug("Done generating the bitmap image")
-
     return headers, buf.getvalue()
 
   def _ServiceException(self, code, message):
@@ -287,6 +295,18 @@ class WmsGetMapRequest(object):
           _INVALID_FORMAT,
           "Unsupported format \'%s\'" % image_format)
 
+  def _ExtractLayerNames(self, layers_text):
+    return layers_text.split(',')
+  
+  def _ExtractLayerObj( self, layer_name): 
+    
+    server_layers_by_name = self.layer_obj.GetLayers(
+        utils.GetValue(self.parameters, "server-url"),
+        utils.GetValue(self.parameters, "TargetPath"))
+    logger.debug( "Server layers: %s ", pformat( server_layers_by_name ) )
+
+    layer_obj = server_layers_by_name.get(layer_name, None)
+    return layer_obj
 
 def main():
   map_req_obj = WmsGetMapRequest({"format": "image/jpeg"}, ["format"], [])

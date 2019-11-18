@@ -18,6 +18,7 @@
 #include <khTypes.h>
 #include <geindex/Entries.h>
 #include "common/SharedString.h"
+#requiresgetheapusage
 
 // ****************************************************************************
 // ***  UnifiedIndex
@@ -33,9 +34,9 @@ class UnifiedIndexEntry {
   uint32 channel_id_ = load:uint32(0);
   std::string date_string_ = std::string();  // Format expected: "YYYY-MM-DD"
 #pragma GenerateIsUpToDate
-}
+};
 class UnifiedIndexConfig {
   std::vector<UnifiedIndexEntry> indexes_;
 
 #pragma GenerateIsUpToDate
-};
+}

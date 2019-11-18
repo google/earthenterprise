@@ -64,7 +64,7 @@ Manage virtual hosts
       .. rubric:: To reset the username and password:
 
       .. code-block:: none
-      
+
          sudo /opt/google/gehttpd/bin/htpasswd
          /opt/google/gehttpd/conf.d/virtual_servers/.vhpasswd geeuser
 
@@ -116,7 +116,7 @@ Manage virtual hosts
          authentication configuration:
 
          .. code-block:: none
-         
+
             cd /opt/google/gehttpd/conf.d/virtual_servers
             sudo vi digest_host.location
 
@@ -139,11 +139,11 @@ Manage virtual hosts
       #. Create the password with a given user name using the password path
          that you specified in the ``digest_host.location`` file:
 
-      .. code-block:: none
-      
-         sudo htdigest -c /opt/google/gehttpd/conf.d/virtual_servers/.htdigest Private username
-         sudo chmod 755 /opt/google/gehttpd/conf.d/virtual_servers/.htdigest
-         #Enter password twice at prompt
+         .. code-block:: none
+
+            sudo htdigest -c /opt/google/gehttpd/conf.d/virtual_servers/.htdigest Private username
+            sudo chmod 755 /opt/google/gehttpd/conf.d/virtual_servers/.htdigest
+            #Enter password twice at prompt
 
       #. Restart ``geserver`` after virtual host settings have been
          modified.

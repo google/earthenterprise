@@ -65,21 +65,34 @@ Back up Fusion servers
          files if needed.
       #. Create a directory to hold the backup files:
 
-         ``mkdir -p /data/backup/assets mkdir -p /data/backup/gehttpd``
+         .. code-block:: bash
+
+            mkdir -p /data/backup/assets
+            mkdir -p /data/backup/gehttpd
 
       #. Back up the gehttpd files:
 
-         ``cd /opt/google/gehttpd rsync -r htdocs cgi-bin conf conf.d /data/backup/gehttpd``
+         .. code-block:: bash
+
+            cd /opt/google/gehttpd
+            rsync -r htdocs cgi-bin conf conf.d /data/backup/gehttpd
 
       #. Back up the XML files and config files to a safe place on a
          disk that is not part of the asset root or source directories:
 
-         ``cd /gevol/assets rsync -r .config .userdata /data/backup/assets/ find . -name "*.xml" > FileList.txt rsync --files-from=FileList.txt /gevol/assets /data/backup/assets/``
+         .. code-block:: bash
+
+            cd /gevol/assets
+            rsync -r .config .userdata /data/backup/assets/
+            find . -name "*.xml" > FileList.txt
+            rsync --files-from=FileList.txt /gevol/assets /data/backup/assets/
 
       #. (Optional.) Store a compressed backup of the files somewhere
          else:
 
-         ``tar czf /home/backups/GevolXmlBackup.tgz /data/backups``
+         .. code-block:: bash
+
+            tar czf /home/backups/GevolXmlBackup.tgz /data/backups
 
       .. rubric:: Restoring imagery and terrain
 
@@ -88,7 +101,12 @@ Back up Fusion servers
       #. Configure your asset root to be consistent with your old asset
          root. If you are not sure about this, manually run commands
          like:
-         ``geconfigureassetroot --new --assetroot /gevol/assets geselectassetroot --assetroot /gevol/assets``
+
+         .. code-block:: bash
+
+            geconfigureassetroot --new --assetroot /gevol/assets
+            geselectassetroot --assetroot /gevol/assets
+
       #. Restore the backed-up XML and configuration files to their
          original location in the asset root.
       #. Restore the source files to their original location on the
@@ -104,12 +122,35 @@ Back up Fusion servers
          terrain resources if you change ``kiasset`` to ``ktasset``.
          Example script:
 
-         :literal:`cd /gevol/assets for resource in `find . -type d -name "*.kiasset"` do     for file in `gequery --infiles $resource`     do         if [ ! -f $file ] && [ ! -d $file ]         then             echo "Can not find $file"         else             echo "Found $file"         fi     done done`
+         .. code-block:: bash
+
+            cd /gevol/assets
+            for resource in `find . -type d -name "*.kiasset"`
+            do
+               for file in `gequery --infiles $resource`
+               do
+                  if [ ! -f $file ] && [ ! -d $file ]
+                  then
+                        echo "Can not find $file"
+                  else
+                        echo "Found $file"
+                  fi
+               done
+            done
 
       #. After all the files are in place, generate a series of commands
          to rebuild the resources. For example:
 
-         :literal:`cd /gevol/assets for resource in `find . -type d -name "*.kiasset" | sed 's/.kiasset//'` do     gequery --infiles $resource > filelist     genewimageryresource -o $resource --filelist filelist     sleep 1     gebuild $resource done`
+         .. code-block:: bash
+
+            cd /gevol/assets
+            for resource in `find . -type d -name "*.kiasset" | sed 's/.kiasset//'`
+            do
+                gequery --infiles $resource > filelist
+                genewimageryresource -o $resource --filelist filelist
+                sleep 1
+                gebuild $resource
+            done
 
       #. There is a ``khasset.xml`` file under each ``.kiasset``
          directory that contains information about the mask tolerance,
@@ -137,9 +178,143 @@ Back up Fusion servers
       .. rubric:: restore_vector_project.pl
          :name: restore_vector_project.pl
 
-      .. container::
+      .. code-block:: perl
 
-         :literal:`#!/usr/bin/perl # # Do you want to back up your vector project or duplicate it as a new project? # # # This script generates the instructions and files necessary to completely rebuild your # vector project. It reads your current vector project and extracts the display rules # and determines which raw data files were used to create your resources. The results # of running this script is a series of four new scripts called Step_One thru Step_Four # Running the resulting four scripts in order rebuilds your vector project as it was before.  use File::Path; use File::Copy;  # Read in the vector project to be backed up and the directory to # write the scripts and files to. if ($#ARGV != 1){ usage(); exit; } $vector_project = $ARGV[0]; $output_dir = $ARGV[1]; chomp( $output_dir );  $assetroot = &get_assetroot(); chomp( $assetroot ); print "Using Asset Root $assetroot \n";  open(StepOne,  ">$output_dir/Step_One_Create_Resources.sh"); open(StepTwo,  ">$output_dir/Step_Two_Build_Resources.sh"); open(StepThree,">$output_dir/Step_Three_Create_Project.sh"); print StepThree "genewvectorproject -o $vector_project\n"; close(StepThree); open(StepFour, ">$output_dir/Step_Four_Add_Resources.sh");  # Locate the khasset.xml file for this project. $khasset = "$assetroot/$vector_project.kvproject/khasset.xml";  open(IN, "$khasset") || die "Can't open $khasset";  # Read in all of the header info on the khasset file and ignore it while(<IN>){ last if $_ !~ /<layers>/; }   # Keep reading the khasset file and parse out the information for each individual # layer.  while(<IN>){     my(@current_layer);      if ($_ =~ /<layer>/){ # Found a new layer         $_ = <IN>;         while ($_ !~ /<\/layer>/){ # Read all of the data on this layer             push(@current_layer, $_);             $_ = <IN>;         }         # Extract the important naming information from this layer including         # the name of the layer, and the resource that was used for this layer.         # The legend corresponds to the folder that contains the layer          $assetref = get_value( grep(/assetRef/, @current_layer));         $assetname = get_value(grep(/name useDefault/, @current_layer));         $assetname =~ s/ /_/g;         $assetname =~ s/\W/_/g;         $legend   = get_value( grep(/<legend>/, @current_layer));         $legend =~ s/\|/\//g;         $legend =~ s/ /_/g;          # Store all of the display rules in subdirectories that correspond to the         # structure of the folders that the layers are grouped in. This way, duplicate         # layer names will not overwrite eachother          if (! -d "$output_dir/$legend"){mkpath("$output_dir/$legend")};          # Begin writing each display rule to its own ".khdsp" file and simultaneously create         # the instructions for building the resource and adding the resource to the project         # using the correct ".khdsp" template.          if (length($assetref) >= 1){ # Not just a folder              open(OUT, ">$output_dir/$legend/$assetname.khdsp") ||                 die "Cant open $output_dir/$legend/$assetname.khdsp";             print OUT '<?xml version="1.0" encoding="UTF-8" standalone="no" ?>' . "\n";             print OUT "<LayerConfig>\n";             print OUT @current_layer;             print OUT "</LayerConfig>\n";             close( OUT );              $raw_files = `gequery --infiles "$assetref"`;             $raw_files =~ s/\n/ /g;             print StepOne "genewvectorresource -o $assetref $raw_files\n";             print StepTwo "gebuild $assetref\n";             print StepFour "geaddtovectorproject -o $vector_project --template $output_dir/$legend/$assetname.khdsp $assetref\n";          }         undef @current_layer;     }     last if $_ =~ /<\/layers>/; }  copy( $khasset, $output_dir);  close(IN); close(OUT); close(StepOne); close(StepTwo); close(StepThree); close(StepFour);  sub get_assetroot(){     open(IN, "/opt/google/etc/systemrc") ||     open(IN, "/usr/keyhole/etc/systemrc") ||     die "Can not open /opt/google/etc/systemrc or /usr/keyhole/etc/systemrc\n";     @sysrc = <IN>;     $assetroot=&get_value(grep(/assetroot/, @sysrc));     return $assetroot; }  sub get_value(){     $string=shift(@_);     $string =~ s/\s*<[^<>]*>//;     $string =~ s/<.*//;     chomp($string);     return $string; }  sub usage(){ print<<EndOfUsage  rebuild_vector_layer.pl vector_project output_dir  where:     vector_project is the name of your vector project relative to the asset     root - for example, MyProjects/MyVectors      output_dir is the directory for putting all of the output from this script.     This needs to be an absolute directory path like /home/mydir/vectors  EndOfUsage }`
+         #!/usr/bin/perl
+         #
+         # Do you want to back up your vector project or duplicate it as a new project?
+         #
+         #
+         # This script generates the instructions and files necessary to completely rebuild your
+         # vector project. It reads your current vector project and extracts the display rules
+         # and determines which raw data files were used to create your resources. The results
+         # of running this script is a series of four new scripts called Step_One thru Step_Four
+         # Running the resulting four scripts in order rebuilds your vector project as it was before.
+
+         use File::Path;
+         use File::Copy;
+
+         # Read in the vector project to be backed up and the directory to
+         # write the scripts and files to.
+         if ($#ARGV != 1){ usage(); exit; }
+         $vector_project = $ARGV[0];
+         $output_dir = $ARGV[1]; chomp( $output_dir );
+
+         $assetroot = &get_assetroot();
+         chomp( $assetroot );
+         print "Using Asset Root $assetroot \n";
+
+         open(StepOne,  ">$output_dir/Step_One_Create_Resources.sh");
+         open(StepTwo,  ">$output_dir/Step_Two_Build_Resources.sh");
+         open(StepThree,">$output_dir/Step_Three_Create_Project.sh");
+         print StepThree "genewvectorproject -o $vector_project\n";
+         close(StepThree);
+         open(StepFour, ">$output_dir/Step_Four_Add_Resources.sh");
+
+         # Locate the khasset.xml file for this project.
+         $khasset = "$assetroot/$vector_project.kvproject/khasset.xml";
+
+         open(IN, "$khasset") || die "Can't open $khasset";
+
+         # Read in all of the header info on the khasset file and ignore it
+         while(<IN>){ last if $_ !~ /<layers>/; }
+
+
+         # Keep reading the khasset file and parse out the information for each individual
+         # layer.
+
+         while(<IN>){
+            my(@current_layer);
+
+            if ($_ =~ /<layer>/){ # Found a new layer
+               $_ = <IN>;
+               while ($_ !~ /<\/layer>/){ # Read all of the data on this layer
+                     push(@current_layer, $_);
+                     $_ = <IN>;
+               }
+               # Extract the important naming information from this layer including
+               # the name of the layer, and the resource that was used for this layer.
+               # The legend corresponds to the folder that contains the layer
+
+               $assetref = get_value( grep(/assetRef/, @current_layer));
+               $assetname = get_value(grep(/name useDefault/, @current_layer));
+               $assetname =~ s/ /_/g;
+               $assetname =~ s/\W/_/g;
+               $legend   = get_value( grep(/<legend>/, @current_layer));
+               $legend =~ s/\|/\//g;
+               $legend =~ s/ /_/g;
+
+               # Store all of the display rules in subdirectories that correspond to the
+               # structure of the folders that the layers are grouped in. This way, duplicate
+               # layer names will not overwrite eachother
+
+               if (! -d "$output_dir/$legend"){mkpath("$output_dir/$legend")};
+
+               # Begin writing each display rule to its own ".khdsp" file and simultaneously create
+               # the instructions for building the resource and adding the resource to the project
+               # using the correct ".khdsp" template.
+
+               if (length($assetref) >= 1){ # Not just a folder
+
+                     open(OUT, ">$output_dir/$legend/$assetname.khdsp") ||
+                        die "Cant open $output_dir/$legend/$assetname.khdsp";
+                     print OUT '<?xml version="1.0" encoding="UTF-8" standalone="no" ?>' . "\n";
+                     print OUT "<LayerConfig>\n";
+                     print OUT @current_layer;
+                     print OUT "</LayerConfig>\n";
+                     close( OUT );
+
+                     $raw_files = `gequery --infiles "$assetref"`;
+                     $raw_files =~ s/\n/ /g;
+                     print StepOne "genewvectorresource -o $assetref $raw_files\n";
+                     print StepTwo "gebuild $assetref\n";
+                     print StepFour "geaddtovectorproject -o $vector_project --template $output_dir/$legend/$assetname.khdsp $assetref\n";
+
+               }
+               undef @current_layer;
+            }
+            last if $_ =~ /<\/layers>/;
+         }
+
+         copy( $khasset, $output_dir);
+
+         close(IN); close(OUT);
+         close(StepOne);
+         close(StepTwo);
+         close(StepThree);
+         close(StepFour);
+
+         sub get_assetroot(){
+            open(IN, "/opt/google/etc/systemrc") ||
+            open(IN, "/usr/keyhole/etc/systemrc") ||
+            die "Can not open /opt/google/etc/systemrc or /usr/keyhole/etc/systemrc\n";
+            @sysrc = <IN>;
+            $assetroot=&get_value(grep(/assetroot/, @sysrc));
+            return $assetroot;
+         }
+
+         sub get_value(){
+            $string=shift(@_);
+            $string =~ s/\s*<[^<>]*>//;
+            $string =~ s/<.*//;
+            chomp($string);
+            return $string;
+         }
+
+         sub usage(){
+         print<<EndOfUsage
+
+         rebuild_vector_layer.pl vector_project output_dir
+
+         where:
+            vector_project is the name of your vector project relative to the asset
+            root - for example, MyProjects/MyVectors
+
+            output_dir is the directory for putting all of the output from this script.
+            This needs to be an absolute directory path like /home/mydir/vectors
+
+         EndOfUsage
+         }
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px

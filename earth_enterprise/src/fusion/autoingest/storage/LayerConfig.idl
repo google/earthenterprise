@@ -26,6 +26,7 @@
 #include <autoingest/.idl/storage/FilterConfig.h>
 #include <autoingest/.idl/storage/SearchField.h>
 #include "common/khTileAddrConsts.h"
+#requiresgetheapusage
 
 #cppquote
 #include <autoingest/.idl/storage/IconReference_impl.h>
@@ -88,7 +89,6 @@ class IconConfig {
       normalScale(1.0),
       highlightScale(1.0)
   { }
-
 #/hquote
 };
 
@@ -295,8 +295,6 @@ class FeatureConfig {
       style.lineWidth = depmembers.style_depmembers.scale;
     }
   }
-
-
 #/hquote
 };
 
@@ -474,7 +472,6 @@ class SiteConfig {
       balloonStyleMode = SiteConfig::Basic;
     }
   }
-
 #/hquote
 };
 

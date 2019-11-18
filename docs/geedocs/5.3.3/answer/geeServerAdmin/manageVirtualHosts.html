@@ -187,14 +187,12 @@ RewriteEngine on
 </li>
 <li><p class="first">Create the password with a given user name using the password path
 that you specified in the <code class="docutils literal notranslate"><span class="pre">digest_host.location</span></code> file:</p>
-</li>
-</ol>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sudo htdigest -c /opt/google/gehttpd/conf.d/virtual_servers/.htdigest Private username
 sudo chmod 755 /opt/google/gehttpd/conf.d/virtual_servers/.htdigest
 #Enter password twice at prompt
 </pre></div>
 </div>
-<ol class="arabic">
+</li>
 <li><p class="first">Restart <code class="docutils literal notranslate"><span class="pre">geserver</span></code> after virtual host settings have been
 modified.</p>
 <p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">/etc/init.d/geserver</span> <span class="pre">restart</span></code></p>

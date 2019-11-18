@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python2.7
 #
 # Copyright 2017 Google Inc.
 # Copyright 2019 Open GEE Contributors
@@ -23,6 +23,7 @@ import re
 import ssl
 from socket import gethostname
 import urlparse
+from pprint import pformat
 
 import wms.ogc.common.wms_connection as wms_connection
 import wms.ogc.common.projections as projections
@@ -290,8 +291,7 @@ def _LayersFromServerVars(target_url):
     layers_by_name[layer.name] = layer
 
     logger.debug("Found server layer: %s", layer.name)
-
-  logger.debug("Layers processing done")
+  logger.debug("Layers processing done.  Layer information: %s ", pformat( layers_by_name))
 
   return layers_by_name
 

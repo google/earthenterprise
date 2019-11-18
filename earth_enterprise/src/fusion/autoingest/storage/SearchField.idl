@@ -15,6 +15,7 @@
 
 #include <qstring.h>
 #include <qobject.h>
+#requiresgetheapusage
 
 class SearchField {
   enum UseType { SEARCH_DISPLAY = 0, SEARCH_ONLY = 1, DISPLAY_ONLY = 2 };
@@ -57,6 +58,5 @@ class SearchField {
     else
       return DISPLAY_ONLY;
   }
-  
 #/hquote
 };

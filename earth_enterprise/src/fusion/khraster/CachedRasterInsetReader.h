@@ -53,10 +53,6 @@ class CachedProductTileImpl : public khRefCounter
 {
  public:
   TileType tile;
-  // determine amount of memory used by ProdTileKey
-  uint64 GetSize() {
-    return sizeof(tile);
-  }
 };
 
 
