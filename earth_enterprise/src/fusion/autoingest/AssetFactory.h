@@ -366,9 +366,6 @@ namespace AssetFactory
                                                        const Extras& extraArgs)
   {
       using AssetHandleType = typename MutableDerivedVersionHandleType::Impl::MutableAssetType;
-      std::vector<SharedString> inputarg, boundInputs;
-      std::transform(inputarg.begin(), inputarg.end(), back_inserter(boundInputs),
-                     ptr_fun(&AssetVersionRef::Bind));
 
       auto asset = Find<AssetHandleType>(ref_, type_);
       if (asset)
@@ -380,7 +377,7 @@ namespace AssetFactory
                   VersionDType version(v);
                   version.LoadAsTemporary();
                   if ((version->state != AssetDefs::Offline) &&
-                      (version->inputs == boundInputs) &&
+                      (version->inputs.size() == 0) &&
                       config_.IsUpToDate(version->config))
                   {
                       version.MakePermanent();
