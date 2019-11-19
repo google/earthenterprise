@@ -102,8 +102,7 @@ VectorProductAssetImplD::HandleImportRequest(const VectorProductImportRequest &r
   // Get our source asset
   MutableAssetVersionD source =
     AssetFactory::ReuseOrMakeAndUpdateSubAsset
-      <MutableSourceAssetVersionD,
-       SourceConfig, SourceAssetVersionD>
+      <MutableSourceAssetVersionD, SourceConfig, SourceAssetVersionD>
       (asset->GetRef(),
        AssetDefs::Vector,
        "source",

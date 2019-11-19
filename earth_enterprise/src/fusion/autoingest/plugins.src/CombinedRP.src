@@ -180,8 +180,7 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
     if (config.need_khvr_) {
       source =
         AssetFactory::ReuseOrMakeAndUpdateSubAsset
-        <MutableMosaicAssetVersionD, AssetVersion,
-         MosaicConfig, MosaicAssetVersionD>
+        <MutableMosaicAssetVersionD, MosaicConfig, MosaicAssetVersionD>
                (assetRef,
                 type,
                 "mosaic",
@@ -194,8 +193,7 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
     // tell my raster child about the new source & have it update itself
     MutableKRPAssetVersionD krp2 =
       AssetFactory::ReuseOrMakeAndUpdateSubAsset
-      <MutableKRPAssetVersionD, AssetVersion,
-       KRPConfig, KRPAssetVersionD>
+      <MutableKRPAssetVersionD, KRPConfig, KRPAssetVersionD>
       (assetRef,
        type,
        "product",
@@ -226,8 +224,7 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
       } else {
         krmp =
           AssetFactory::ReuseOrMakeAndUpdateSubAsset
-          <MutableKRMPAssetVersionD, AssetVersion,
-           KRMPConfig, KRMPAssetVersionD>
+          <MutableKRMPAssetVersionD, KRMPConfig, KRMPAssetVersionD>
           (assetRef,
            type,
            "maskproduct",
@@ -244,8 +241,7 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
       // tell my maskgen child about the new raster, have it update
       AssetVersion maskgen =
         AssetFactory::ReuseOrMakeAndUpdateSubAsset
-        <MutableMaskgenAssetVersionD, AssetVersion,
-         MaskgenConfig, MaskgenAssetVersionD>
+        <MutableMaskgenAssetVersionD, MaskgenConfig, MaskgenAssetVersionD>
         (assetRef,
          type,
          "maskgen",
@@ -257,8 +253,7 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
       // tell my KRMP child about the new raster & mask
       MutableAssetVersionD krmp =
         AssetFactory::ReuseOrMakeAndUpdateSubAsset
-        <MutableKRMPAssetVersionD, AssetVersion,
-         KRMPConfig, KRMPAssetVersionD>
+        <MutableKRMPAssetVersionD, KRMPConfig, KRMPAssetVersionD>
         (assetRef,
          type,
          "maskproduct",

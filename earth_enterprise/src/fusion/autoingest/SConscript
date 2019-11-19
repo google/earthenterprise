@@ -229,7 +229,7 @@ env.test('AssetSerializer_unittest',
 
 env.test('AssetFactory_unittest',
          'AssetFactory_unittest.cpp',
-         LIBS=['gecommon', 'gtest', 'geautoingest', 'qt-mt'])
+         LIBS=['gecommon', 'gtest', 'geautoingest', 'qt-mt', 'xerces-c'])
 
 env.test('JsUtils_unittest',
          'JsUtils_unittest.cpp',

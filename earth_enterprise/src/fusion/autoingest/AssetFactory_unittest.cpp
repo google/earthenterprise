@@ -17,6 +17,7 @@
 #include <autoingest/.idl/storage/AssetDefs.h>
 #include <common/khException.h>
 #include "AssetFactory.h"
+#include "AssetVersion.h"
 #include <gtest/gtest.h>
 #include <string>
 #include <vector>
@@ -28,7 +29,7 @@ using namespace AssetFactory;
 
 // AssetVersion is a placeholder to allow
 // for calls to MyUpdate
-using AssetVersion = uint8_t;
+// using AssetVersion = uint8_t;
 
 // forward declare classes
 class MockAssetImpl;
@@ -529,7 +530,7 @@ TEST_F(AssetFactoryTest, FiveParameterReuseOrMakeAndUpdateSubAsset)
     resetStaticMockVariables();
     MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
     MockVersionDType::EXPECTED_REF = "reuse-parent/base.kia";
-    MockAssetStorage::MOCK_VERSIONS={2, 1};
+    MockAssetStorage::MOCK_VERSIONS={AssetVersion(MockVersionDType::EXPECTED_REF), AssetVersion(MockVersionDType::EXPECTED_REF)};
     MockAssetVersionImpl::EXPECTED_STATE = AssetDefs::Offline;
     MockVersionDType::NOT_NEEDED_COUNT = 0;
 
@@ -557,7 +558,7 @@ TEST_F(AssetFactoryTest, FiveParameterReuseOrMakeAndUpdateSubAsset)
     resetStaticMockVariables();
     MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
     MockVersionDType::EXPECTED_REF = "reuse-parent/base.kia";
-    MockAssetStorage::MOCK_VERSIONS={2, 1};
+    MockAssetStorage::MOCK_VERSIONS={AssetVersion(MockVersionDType::EXPECTED_REF), AssetVersion(MockVersionDType::EXPECTED_REF)};
     MockVersionDType::THROW_IN_CONSTRUCTOR=true;
     MockVersionDType::NOT_NEEDED_COUNT = 0;
 
@@ -607,7 +608,7 @@ TEST_F(AssetFactoryTest, SevenParameterReuseOrMakeAndUpdateSubAsset)
     MockMutableAssetVersion
       handle =
       ReuseOrMakeAndUpdateSubAsset
-      <MockMutableAssetVersion, AssetVersion, MockAssetConfig, MockVersionDType>
+      <MockMutableAssetVersion, MockAssetConfig, MockVersionDType>
       (
        "reuse-parent",    // const std::string& parentName,
        AssetDefs::Imagery, // AssetDefs::Type type_,
@@ -632,13 +633,13 @@ TEST_F(AssetFactoryTest, SevenParameterReuseOrMakeAndUpdateSubAsset)
     resetStaticMockVariables();
     MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
     MockVersionDType::EXPECTED_REF = "reuse-parent/base.kia";
-    MockAssetStorage::MOCK_VERSIONS={2, 1};
+    MockAssetStorage::MOCK_VERSIONS={AssetVersion(MockVersionDType::EXPECTED_REF), AssetVersion(MockVersionDType::EXPECTED_REF)};
     MockAssetVersionImpl::EXPECTED_STATE = AssetDefs::Offline;
     MockVersionDType::NOT_NEEDED_COUNT = 0;
 
     MockMutableAssetVersion handle = 
       ReuseOrMakeAndUpdateSubAsset
-      <MockMutableAssetVersion, AssetVersion, MockAssetConfig, MockVersionDType>
+      <MockMutableAssetVersion, MockAssetConfig, MockVersionDType>
       (
        "reuse-parent",    // const std::string& parentName,
        AssetDefs::Imagery, // AssetDefs::Type type_,
@@ -663,13 +664,13 @@ TEST_F(AssetFactoryTest, SevenParameterReuseOrMakeAndUpdateSubAsset)
     resetStaticMockVariables();
     MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
     MockVersionDType::EXPECTED_REF = "reuse-parent/base.kia";
-    MockAssetStorage::MOCK_VERSIONS={2, 1};
+    MockAssetStorage::MOCK_VERSIONS={AssetVersion(MockVersionDType::EXPECTED_REF), AssetVersion(MockVersionDType::EXPECTED_REF)};
     MockVersionDType::THROW_IN_CONSTRUCTOR=true;
     MockVersionDType::NOT_NEEDED_COUNT = 0;
 
     MockMutableAssetVersion handle = 
       ReuseOrMakeAndUpdateSubAsset
-      <MockMutableAssetVersion, AssetVersion, MockAssetConfig, MockVersionDType>
+      <MockMutableAssetVersion, MockAssetConfig, MockVersionDType>
       (
        "reuse-parent",    // const std::string& parentName,
        AssetDefs::Imagery, // AssetDefs::Type type_,
@@ -727,7 +728,7 @@ TEST_F(AssetFactoryTest, ReuseOrMakeAndUpdate)
     resetStaticMockVariables();
     MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
     MockVersionDType::EXPECTED_REF = "reuse-parent/base.kta";
-    MockAssetStorage::MOCK_VERSIONS={2, 1};
+    MockAssetStorage::MOCK_VERSIONS={AssetVersion(MockVersionDType::EXPECTED_REF), AssetVersion(MockVersionDType::EXPECTED_REF)};
     MockAssetVersionImpl::EXPECTED_STATE = AssetDefs::Offline;
     MockVersionDType::NOT_NEEDED_COUNT = 0;
 
@@ -753,7 +754,7 @@ TEST_F(AssetFactoryTest, ReuseOrMakeAndUpdate)
     resetStaticMockVariables();
     MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
     MockVersionDType::EXPECTED_REF = "reuse-parent/base.kta";
-    MockAssetStorage::MOCK_VERSIONS={2, 1};
+    MockAssetStorage::MOCK_VERSIONS={AssetVersion(MockVersionDType::EXPECTED_REF), AssetVersion(MockVersionDType::EXPECTED_REF)};
     MockVersionDType::THROW_IN_CONSTRUCTOR=true;
     MockVersionDType::NOT_NEEDED_COUNT = 0;
 
