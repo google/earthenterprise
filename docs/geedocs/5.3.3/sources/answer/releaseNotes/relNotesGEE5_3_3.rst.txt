@@ -58,30 +58,30 @@ new PostgreSQL version used by Open GEE 5.3.3.
 
 -[ Resolved Issues ]-
 
-Resolved Issues        Number  Description  Resolution  1202  Can't
-select .KIP as source  Select 'header.xml' in .KIP directory to select
-.KIP  1517  geglxinfo should parse vector packets  geglxinfo will
-parse vector packets  1241  geglxinfo should parse all meshes in
-terrain packets  geglxinfo will parse all meshes in terrain packets
-1552  Make XML object destructors virtual  A memory management bug in
-XML processing has been fixed, resulting in lower memory utilization
-and significantly improved performance.
+      Number  Description  Resolution  1202  Can't select .KIP as
+source  Select 'header.xml' in .KIP directory to select .KIP  1517
+geglxinfo should parse vector packets  geglxinfo will parse vector
+packets  1241  geglxinfo should parse all meshes in terrain packets
+geglxinfo will parse all meshes in terrain packets  1552  XML objects
+are not properly cleaned up  A memory management bug in XML processing
+was fixed, resulting in lower memory utilization and significantly
+improved performance.
 
 -[ Known Issues ]-
 
-Known Issues        Number  Description  Resolution  4  Google basemap
-fails to load in 2D Mercator Maps  Obtain a valid Google Maps API key
-and include it in /opt/google/gehttpd/htdocs/maps/maps_google.html.  8
-Ensure GEE Portable Cutter Job Completes  No current work around.  9
-Improve FileUnpacker Handling of Invalid Files  No current work
-around.  20  Simplify build process for portable builds on MacOS
-Building and running Portable Server on MacOS should be possible with
-minimal changes.  34  Scons build creates temporary directories named
-“0”  No current work around.  126  The Fusion installer creates a
-backup on the first run  No current work around. The created backup
-can be deleted.  190  Hostname mismatch check in installers doesn't
-work as expected  No current work around.  193  Updated docs are not
-copied if the /tmp/fusion_os_install directory already exists  Delete
+      Number  Description  Resolution  4  Google basemap fails to load
+in 2D Mercator Maps  Obtain a valid Google Maps API key and include it
+in /opt/google/gehttpd/htdocs/maps/maps_google.html.  8  Ensure GEE
+Portable Cutter Job Completes  No current work around.  9  Improve
+FileUnpacker Handling of Invalid Files  No current work around.  20
+Simplify build process for portable builds on MacOS  Building and
+running Portable Server on MacOS should be possible with minimal
+changes.  34  Scons build creates temporary directories named “0”  No
+current work around.  126  The Fusion installer creates a backup on
+the first run  No current work around. The created backup can be
+deleted.  190  Hostname mismatch check in installers doesn't work as
+expected  No current work around.  193  Updated docs are not copied if
+the /tmp/fusion_os_install directory already exists  Delete
 /tmp/fusion_os_install at the beginning of the stage_install build
 process.  201  Some tiles are displayed incorrectly in the Enterprise
 Client when terrain is enabled  No current work around.  202  Icons
