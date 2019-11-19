@@ -63,6 +63,9 @@ select .KIP as source  Select 'header.xml' in .KIP directory to select
 .KIP  1517  geglxinfo should parse vector packets  geglxinfo will
 parse vector packets  1241  geglxinfo should parse all meshes in
 terrain packets  geglxinfo will parse all meshes in terrain packets
+1552  Make XML object destructors virtual  A memory management bug in
+XML processing has been fixed, resulting in lower memory utilization
+and significantly improved performance.
 
 -[ Known Issues ]-
 

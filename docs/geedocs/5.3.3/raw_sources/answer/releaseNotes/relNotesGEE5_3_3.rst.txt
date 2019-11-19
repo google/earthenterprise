@@ -71,6 +71,11 @@ Release notes: Open GEE 5.3.3
          * - 1241
            - geglxinfo should parse all meshes in terrain packets
            - geglxinfo will parse all meshes in terrain packets
+         * - 1552
+           - Make XML object destructors virtual
+           - A memory management bug in XML processing has been fixed,
+             resulting in lower memory utilization and significantly improved
+             performance.
 
       .. rubric:: Known Issues
 
