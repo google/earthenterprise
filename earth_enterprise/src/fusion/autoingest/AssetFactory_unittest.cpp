@@ -27,10 +27,6 @@
 using namespace std;
 using namespace AssetFactory;
 
-// AssetVersion is a placeholder to allow
-// for calls to MyUpdate
-// using AssetVersion = uint8_t;
-
 // forward declare classes
 class MockAssetImpl;
 class MockAssetConfig;
