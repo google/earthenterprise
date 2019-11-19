@@ -59,7 +59,6 @@ my ($template);
 $template = "";
 my $templateName="ProductAssetVersion";
 
-
 if ($base eq 'Composite') {
     if ($singleFormalExtraUpdateArg) {
       $template = "    template <typename $templateName>";
@@ -155,7 +154,6 @@ EOF
 }
 
 print $fh <<EOF;
-
 
     ${name}AssetVersionImplD(const AssetVersionStorage &storage,
                 const Config& config_)
@@ -269,9 +267,7 @@ ${name}AssetVersionImplD::${name}AssetVersionImplD
     : AssetVersionImpl(MakeStorageFromAsset(*asset)),
       ${base}AssetVersionImpl(),
       ${name}AssetVersionImpl(bound_config),
-      ${base}AssetVersionImplD(asset->inputs)
-{
-}
+      ${base}AssetVersionImplD(asset->inputs){}
 EOF
     } else {
         print $fh <<EOF;
@@ -280,9 +276,7 @@ ${name}AssetVersionImplD::${name}AssetVersionImplD(${name}AssetImplD *asset)
     : AssetVersionImpl(MakeStorageFromAsset(*asset)),
       ${base}AssetVersionImpl(),
       ${name}AssetVersionImpl(asset->config),
-      ${base}AssetVersionImplD(asset->inputs)
-{
-}
+      ${base}AssetVersionImplD(asset->inputs){}
 EOF
     }
 
@@ -301,31 +295,6 @@ public:
                  $formaltypearg,
                  const std::string &basename);
 EOF
-
-if ($withreuse) {
-
-    print $fh <<EOF;
-    $template
-    static Mutable${name}AssetVersionD
-    ReuseOrMakeAndUpdate(const std::string &ref_ $formaltypearg,
-			 $formalinputarg
-			 const khMetaData &meta_,
-			 const $config& config_
-			 $formalcachedinputarg
-                         $formalExtraUpdateArg);
-
-    $template
-    static Mutable${name}AssetVersionD
-    ReuseOrMakeAndUpdateSubAsset(const std::string &parentAssetRef
-				 $formaltypearg,
-				 const std::string &basename,
-				 $formalinputarg
-				 const khMetaData &meta_,
-				 const $config& config_
-				 $formalcachedinputarg
-				 $formalExtraUpdateArg);
-EOF
-}
 
 print $fh <<EOF;
 };

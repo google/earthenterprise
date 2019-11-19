@@ -46,47 +46,10 @@ class PacketGenExtraUpdateArg {
 #include <autoingest/plugins/MercatorRasterProductAsset.h>
 #include <memory>
 
-template
-MutablePacketGenAssetVersionD
-PacketGenFactory::ReuseOrMakeAndUpdate(
-    const std::string &ref_ , AssetDefs::Type type_,
-    const khMetaData &meta_,
-    const PacketGenConfig& config_,
-    const PacketGenExtraUpdateArg<RasterProductAssetVersion> &extra);
-
-template
-MutablePacketGenAssetVersionD
-PacketGenFactory::ReuseOrMakeAndUpdate(
-    const std::string &ref_ , AssetDefs::Type type_,
-    const khMetaData &meta_,
-    const PacketGenConfig& config_,
-    const PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion> &extra);
-
-template
-MutablePacketGenAssetVersionD
-PacketGenFactory::ReuseOrMakeAndUpdateSubAsset(
-    const std::string &parentAssetRef,
-    AssetDefs::Type type_,
-    const std::string &basename,
-    const khMetaData &meta_,
-    const PacketGenConfig& config_,
-    const PacketGenExtraUpdateArg<RasterProductAssetVersion> &extra);
-
-template
-MutablePacketGenAssetVersionD
-PacketGenFactory::ReuseOrMakeAndUpdateSubAsset(
-    const std::string &parentAssetRef,
-    AssetDefs::Type type_,
-    const std::string &basename,
-    const khMetaData &meta_,
-    const PacketGenConfig& config_,
-    const PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion> &extra);
-
 template <typename ProductAssetVersion>
 void PacketGenAssetVersionImplD::UpdateChildren(
     const PacketGenExtraUpdateArg<ProductAssetVersion> &extra) {
   std::string assetRef = GetAssetRef();
-
   uint numLevels = config.coverage.numLevels();
   if (numLevels == 0) {
     throw khException(kh::tr("Internal Error: No levels to build"));
@@ -341,8 +304,10 @@ void PacketGenAssetVersionImplD::UpdateChildren(
     char subname[32];
     snprintf(subname, sizeof(subname), "packlevel%02d", level);
     MutableAssetVersionD packLevelVer =
-      PacketLevelFactory::ReuseOrMakeAndUpdateSubAsset
-      (assetRef, type,
+      AssetFactory::ReuseOrMakeAndUpdateSubAsset
+        <MutablePacketLevelAssetVersionD, PacketLevelConfig, PacketLevelAssetVersionD>
+      (assetRef,
+       type,
        subname,
        levInputs,
        khMetaData(),
@@ -356,4 +321,8 @@ void PacketGenAssetVersionImplD::UpdateChildren(
   AddChildren(kids);
 }
 
+template PacketGenAssetVersionD
+PacketGenAssetImplD::MyUpdate<RasterProductAssetVersion>(bool &needed, const PacketGenExtraUpdateArg<RasterProductAssetVersion> &extra) const;
+template PacketGenAssetVersionD
+PacketGenAssetImplD::MyUpdate<MercatorRasterProductAssetVersion>(bool &needed, const PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion> &extra) const;
 
