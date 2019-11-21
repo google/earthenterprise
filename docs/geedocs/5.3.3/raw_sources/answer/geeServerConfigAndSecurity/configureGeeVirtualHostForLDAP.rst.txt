@@ -87,7 +87,6 @@ Configure a GEE virtual host for LDAP authentication
                AuthLDAPURL "ldap://server.name.local:389/cn=Users,dc=domain,dc=google,dc=com?uid"\
                AuthLDAPBindDN CN=geserver,OU=Users,OU=Yourorg,DC=DcNAME,DC=local
                AuthLDAPBindPassword localuserpassword
-               AuthzLDAPAuthoritative Off
                Require valid-user
             </Location>
 
@@ -96,18 +95,11 @@ Configure a GEE virtual host for LDAP authentication
          A login screen appears. If you cannot access Apache, open the
          file error log at
          ``/opt/google/gehttpd/logs/error_log and access_log``.
-         If ``AuthzLDAPAuthoritative`` is on, the client might
-         continually prompt for the username and password even though
-         you entered a valid username and password and the client is
-         functioning. To correct this, turn ``AuthzLDAPAuthoritative``
-         off.
 
       .. rubric:: Directives
 
       -  ``require valid-user``. Allows all users who log in with
          correct passwords.
-      -  ``AuthzLDAPAuthoritative``. Tells Apache whether a failed
-         authentication request can be passed to other Apache modules.
       -  ``AuthLDAPBindDN``. The distinguished name (DN) of the user
          account that Apache uses to connect to the directory system and
          authenticate the user.
@@ -121,9 +113,10 @@ Configure a GEE virtual host for LDAP authentication
          to use for Basic Authentication.
 
       For more information, see the Apache
-      `mod_ldap <http://httpd.apache.org/docs/2.2/mod/mod_ldap.html>`_
+      `mod_ldap <https://httpd.apache.org/docs/2.4/mod/mod_ldap.html>`_ 
+      `mpd_authnz_ldap <https://httpd.apache.org/docs/2.4/mod/mod_authnz_ldap.html>`_
       and
-      `mod_auth_basic <http://httpd.apache.org/docs/2.2/mod/mod_auth_basic.html>`_
+      `mod_auth_basic <https://httpd.apache.org/docs/2.4/mod/mod_auth_basic.html>`_
       documentation.
 
       .. tip::
