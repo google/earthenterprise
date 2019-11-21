@@ -1,16 +1,16 @@
 |Google logo|
 
-====================================================
-Configure a GEE virtual host for LDAP authentication
-====================================================
+=======================================================
+Configure GEE Server Admin page for LDAP authentication
+=======================================================
 
 .. container::
 
    .. container:: content
 
       You can use LDAP authentication, which is based on Microsoft
-      Active Directory, to authenticate users to access your GEE virtual
-      hosts. GEE server software is based on Apache ``httpd``.
+      Active Directory, to authenticate users to GEE server
+      admin page. GEE server software is based on Apache ``httpd``.
 
       It is easy to administer and manage user accounts. You can use a
       simple ``.htpasswd`` to secure a GEE virtual host, then you can
@@ -22,24 +22,27 @@ Configure a GEE virtual host for LDAP authentication
 
       .. tip::
 
-         This article explains how to configure a virtual host for LDAP
-         authentication using GEE Server 5.x.
+         This article explains how to configure GEE Server admin page for LDAP
+         authentication.
 
-      .. rubric:: To configure a GEE virtual host for LDAP
+      .. rubric:: To configure GEE server admin page for LDAP
          authentication:
-         :name: to-configure-a-gee-virtual-host-for-ldap-authentication
+         :name: to-configure-a-gee-server-admin-for-ldap-authentication
 
       #. Make sure that the LDAP modules are loaded on your Apache
          server. For most GEE installations, these are loaded
          automatically.
-      #. Create a ``geserver`` Active Directory account that can access
-         the user directory, and make sure to document the attributes.
-      #. Load the modules in your
-         ``/opt/google/gehttpd/conf.d/virtual_servers/private_host.location``
-         file or your custom virtual host file.
+
+      #. Load the ldap modules in your
+         ``/opt/google/gehttpd/conf/gehttpd.conf``
 
          After the modules are loaded, you can control access by
          querying the directory for particular attributes.
+
+         .. code-block:: none
+
+           LoadModule authnz_ldap_module modules/mod_authnz_ldap.so
+           LoadModule ldap_module modules/mod_ldap.so
 
       #. Point Apache to the LDAP server ``AuthLDAPUrl`` key directive.
 
@@ -53,48 +56,55 @@ Configure a GEE virtual host for LDAP authentication
          organizational unit). You can also customize these filters for
          additional security constraints.
 
-      #. Restart the GEE server to load the modules into the system:
-
-         ``# /etc/init.d/geserver restart``
-
       #. Create a user account in Active Directory ``geserver``.
          This can be any user account that has limited access. The user
          account only needs access to the global catalog. Make sure that
          your user has the full organizational unit name.
 
-      .. rubric:: To bind to Active Directory GUI:
+      #. Restart the GEE server to load the modules into the system:
 
-      #. If you do not know your LDAP domain name, ask your system
-         administrator. You can also find your domain name by searching
-         for it in the format ``Dn: CN=geserver,CN=Users,DC=location,DC=company,DC=com``. In
-         this example, the domain name is ``location.company.com``.
-      #. Use your domain name to configure the Apache module.
-         Alternatively, you can use the command prompt:
+         ``# /etc/init.d/geserver restart``
 
-         ``dsadd user UserDN [-samid SAMName] -pwd {Password|*}``
+      #. Add the directives to your config file under <Directory "/opt/google/gehttpd/htdocs/admin">
+         ``/opt/google/gehttp/conf/gehttpd.conf``.
 
-      #. Add the directives to your virtual server file at
-         ``/opt/google/gehttp/conf.d/virtual_servers``.
+         Comment/remove these lines :
+
+          | AuthUserFile /opt/google/gehttpd/conf.d/.htpasswd
+          | AuthGroupFile /dev/null
+
+         And Add these lines :
+
+          | AuthBasicProvider ldap
+          | AuthLDAPBindDN "user@server.name.local"
+          | AuthLDAPBindPassword "localuserpassword"
+          | AuthLDAPURL "ldap://server.name.local:389/cn=Users,dc=domain,dc=google,dc=com?uid"
+
+
       #. For testing purposes, add the lines below to the
-         ``private_host.location`` file:
+         ``gehhtpd.conf`` file:
 
          .. code-block:: none
 
-            <Location /private/*>
-               AuthType Basic
-               AuthName "LDAP LOGIN"
-               AuthBasicProvider ldap
-               AuthLDAPURL "ldap://server.name.local:389/cn=Users,dc=domain,dc=google,dc=com?uid"\
-               AuthLDAPBindDN CN=geserver,OU=Users,OU=Yourorg,DC=DcNAME,DC=local
-               AuthLDAPBindPassword localuserpassword
-               Require valid-user
-            </Location>
+            <Directory "/opt/google/gehttpd/htdocs/admin">
+                #AuthUserFile /opt/google/gehttpd/conf.d/.htpasswd
+                #AuthGroupFile /dev/null
+                AuthName "Earth Server admin pages"
+                AuthType Basic
 
-      #. Restart your server and try to access the virtual server via
-         the client.
-         A login screen appears. If you cannot access Apache, open the
-         file error log at
-         ``/opt/google/gehttpd/logs/error_log and access_log``.
+                AuthBasicProvider ldap
+                AuthLDAPBindDN "user@server.name.local"
+                AuthLDAPBindPassword "localuserpassword"
+                AuthLDAPURL "ldap://server.name.local:389/cn=Users,dc=domain,dc=google,dc=com?uid"
+
+                <Limit GET>
+                require valid-user
+                </Limit>
+            </Directory>
+
+      #. Restart your server and try to access the earth server admin page.
+         Authenticate with your LDAP credentials. If you cannot access Apache, open the
+         file error log at ``/opt/google/gehttpd/logs/error_log and access_log``.
 
       .. rubric:: Directives
 
@@ -113,7 +123,7 @@ Configure a GEE virtual host for LDAP authentication
          to use for Basic Authentication.
 
       For more information, see the Apache
-      `mod_ldap <https://httpd.apache.org/docs/2.4/mod/mod_ldap.html>`_ 
+      `mod_ldap <https://httpd.apache.org/docs/2.4/mod/mod_ldap.html>`_
       `mpd_authnz_ldap <https://httpd.apache.org/docs/2.4/mod/mod_authnz_ldap.html>`_
       and
       `mod_auth_basic <https://httpd.apache.org/docs/2.4/mod/mod_auth_basic.html>`_
