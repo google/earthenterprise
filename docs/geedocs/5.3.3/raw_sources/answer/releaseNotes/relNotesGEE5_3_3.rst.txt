@@ -55,7 +55,7 @@ Release notes: Open GEE 5.3.3
 
       .. rubric:: Resolved Issues
 
-      .. list-table:: Resolved Issues
+      .. list-table::
          :widths: 10 30 55
          :header-rows: 1
 
@@ -71,10 +71,15 @@ Release notes: Open GEE 5.3.3
          * - 1241
            - geglxinfo should parse all meshes in terrain packets
            - geglxinfo will parse all meshes in terrain packets
+         * - 1552
+           - XML objects are not properly cleaned up
+           - A memory management bug in XML processing was fixed,
+             resulting in lower memory utilization and significantly improved
+             performance.
 
       .. rubric:: Known Issues
 
-      .. list-table:: Known Issues
+      .. list-table::
          :widths: 10 30 55
          :header-rows: 1
 
