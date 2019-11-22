@@ -27,10 +27,6 @@
 #include "CacheSizeCalculations.h"
 #include "notify.h"
 
-#ifdef SUPPORT_VERBOSE
-#include <notify.h>
-#endif
-
 /******************************************************************************
  ***  Simple cache of refcounted objects
  ***
@@ -80,6 +76,7 @@ class khCache {
   MapType map;
   Item *head;
   Item *tail;
+  static const khNotifyLevel PURGE_TIME_NOTIFY_LEVEL = NFY_DEBUG;
   const uint targetMax;
   const std::string name;
 #ifdef SUPPORT_VERBOSE
@@ -328,7 +325,8 @@ class khCache {
     CheckListInvariant();
     TimePoint finishTime = std::chrono::high_resolution_clock::now();
     // Log when the cache size is exceeded
-    if (TooMuchMemory() || TooManyObjects()) {
+    if (getNotifyLevel() >= PURGE_TIME_NOTIFY_LEVEL &&
+        (TooMuchMemory() || TooManyObjects())) {
       LogPruneTime(startTime, finishTime);
     }
   }
@@ -347,7 +345,7 @@ class khCache {
       actualSize = map.size();
       units = "items";
     }
-    notify(NFY_INFO, "%s cache size exceeded. Configured size: %lu %s, Actual size: %lu %s, Prune time: %f seconds",
+    notify(PURGE_TIME_NOTIFY_LEVEL, "%s cache size exceeded. Configured size: %lu %s, Actual size: %lu %s, Prune time: %f seconds",
            name.c_str(), configuredSize, units.c_str(), actualSize, units.c_str(), elapsedTime.count());
   }
 
