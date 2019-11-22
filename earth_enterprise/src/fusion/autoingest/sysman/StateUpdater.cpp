@@ -374,9 +374,7 @@ void StateUpdater::UpdateWaitingAssets(
   const SharedString ref = version->GetRef();
   const AssetDefs::State newState = version->state;
   waitingListeners.Update(ref, newState, oldState, waitingFor.inputs);
-  if (IsParent(version)) {
-    inProgressParents.Update(ref, newState, oldState, waitingFor.children);
-  }
+  inProgressParents.Update(ref, newState, oldState, waitingFor.children);
 }
 
 void StateUpdater::SetInProgress(AssetHandle<AssetVersionImpl> & version) {
