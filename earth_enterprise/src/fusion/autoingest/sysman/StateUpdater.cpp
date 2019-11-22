@@ -196,7 +196,12 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
               name.toString().c_str(), ToString(oldState).c_str(), ToString(newState).c_str());
         auto version = updater.storageManager->GetMutable(name);
         if (version) {
-          updater.SetVersionStateAndRunHandlers(version, newState, waitingFor, runHandlers);
+          if (runHandlers) {
+            updater.SetVersionStateAndRunHandlers(version, newState, waitingFor);
+          }
+          else {
+            version->state = newState;
+          }
 
           // Get the new state directly from the asset version since it may be
           // different from the passed-in state
@@ -298,8 +303,7 @@ void StateUpdater::SetStateForRefAndDependents(
 void StateUpdater::SetVersionStateAndRunHandlers(
     AssetHandle<AssetVersionImpl> & version,
     AssetDefs::State newState,
-    const WaitingFor & waitingFor,
-    bool sendNotification) {
+    const WaitingFor & waitingFor) {
   // RunStateChangeHandlers can return a new state that we need to transition
   // to, so we may have to change the state repeatedly.
   AssetDefs::State oldState = version->state;
@@ -310,9 +314,7 @@ void StateUpdater::SetVersionStateAndRunHandlers(
     newState = nextState;
   } while(version->state != newState);
 
-  if (sendNotification) {
-    SendStateChangeNotification(version->GetRef(), version->state);
-  }
+  SendStateChangeNotification(version->GetRef(), version->state);
 }
 
 AssetDefs::State StateUpdater::RunStateChangeHandlers(

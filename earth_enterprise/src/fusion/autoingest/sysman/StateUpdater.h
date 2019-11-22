@@ -41,8 +41,7 @@ class StateUpdater
     void SetVersionStateAndRunHandlers(
         AssetHandle<AssetVersionImpl> & version,
         AssetDefs::State newState,
-        const WaitingFor & waitingFor = {0, 0},
-        bool sendNotification = true);
+        const WaitingFor & waitingFor = {0, 0});
     AssetDefs::State RunStateChangeHandlers(
         AssetHandle<AssetVersionImpl> & version,
         AssetDefs::State newState,
