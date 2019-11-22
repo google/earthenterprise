@@ -188,7 +188,7 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
         DependentStateTreeVertexDescriptor vertex,
         AssetDefs::State newState,
         const WaitingFor & waitingFor,
-        bool sendNotification) const {
+        bool runHandlers) const {
       SharedString name = tree[vertex].name;
       AssetDefs::State oldState = tree[vertex].state;
       if (newState != oldState) {
@@ -196,7 +196,7 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
               name.toString().c_str(), ToString(oldState).c_str(), ToString(newState).c_str());
         auto version = updater.storageManager->GetMutable(name);
         if (version) {
-          updater.SetVersionStateAndRunHandlers(version, newState, waitingFor, sendNotification);
+          updater.SetVersionStateAndRunHandlers(version, newState, waitingFor, runHandlers);
 
           // Get the new state directly from the asset version since it may be
           // different from the passed-in state
@@ -257,9 +257,9 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
       // Set the state for assets in the dependent tree.
       if (data.inDepTree) {
         // Check if we're going to recalculate the state below. If not, we need
-        // to send the state change notification now.
-        bool sendNotification = UserActionRequired(newState);
-        SetState(vertex, newState, {0, 0}, sendNotification);
+        // to run the handlers now.
+        bool runHandlers = UserActionRequired(newState);
+        SetState(vertex, newState, {0, 0}, runHandlers);
       }
 
       // For all assets (including parents and listeners) recalculate the state
