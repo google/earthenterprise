@@ -41,11 +41,11 @@ Configure a GEE virtual host for LDAP authentication
          After the modules are loaded, you can control access by
          querying the directory for particular attributes.
 
-      #. Point Apache to the LDAP server ``AuthLDAPUrl`` key directive.
+      #. Point Apache to the LDAP server ``AuthLDAPURL`` key directive.
 
-         An example of an ``AuthLDAPUrl`` directive is:
+         An example of an ``AuthLDAPURL`` directive is:
 
-         ``AuthLDAPUrl ldap://ldap.company.com/ou=People,dc=company,dc=com?uid``
+         ``AuthLDAPURL ldap://ldapserver.example.com:389/ou=Users,dc=example,dc=com?uid``
 
          The key directive format declares the LDAP server, the
          distinguished name (DN), and the attribute to use in the search
@@ -84,9 +84,9 @@ Configure a GEE virtual host for LDAP authentication
                AuthType Basic
                AuthName "LDAP LOGIN"
                AuthBasicProvider ldap
-               AuthLDAPURL "ldap://server.name.local:389/cn=Users,dc=domain,dc=google,dc=com?uid"\
-               AuthLDAPBindDN CN=geserver,OU=Users,OU=Yourorg,DC=DcNAME,DC=local
-               AuthLDAPBindPassword localuserpassword
+               AuthLDAPURL "ldap://ldapserver.example.com:389/ou=Users,dc=example,dc=com?uid"
+               AuthLDAPBindDN "someuser@example.com"
+               AuthLDAPBindPassword "somepassword"
                Require valid-user
             </Location>
 
@@ -113,8 +113,8 @@ Configure a GEE virtual host for LDAP authentication
          to use for Basic Authentication.
 
       For more information, see the Apache
-      `mod_ldap <https://httpd.apache.org/docs/2.4/mod/mod_ldap.html>`_ 
-      `mpd_authnz_ldap <https://httpd.apache.org/docs/2.4/mod/mod_authnz_ldap.html>`_
+      `mod_ldap <https://httpd.apache.org/docs/2.4/mod/mod_ldap.html>`_
+      `mod_authnz_ldap <https://httpd.apache.org/docs/2.4/mod/mod_authnz_ldap.html>`_
       and
       `mod_auth_basic <https://httpd.apache.org/docs/2.4/mod/mod_auth_basic.html>`_
       documentation.

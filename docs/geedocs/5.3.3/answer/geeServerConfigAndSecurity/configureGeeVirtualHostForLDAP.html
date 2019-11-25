@@ -17,7 +17,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Set up HTTPS" href="setupHTTPS.html" />
-    <link rel="prev" title="Configure GEE Server Admin page for LDAP authentication" href="configureGeeForLDAP.html" />
+    <link rel="prev" title="Configure GEE Server Admin pages for LDAP authentication" href="configureGeeForLDAP.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
@@ -33,7 +33,7 @@
           <a href="setupHTTPS.html" title="Set up HTTPS"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="configureGeeForLDAP.html" title="Configure GEE Server Admin page for LDAP authentication"
+          <a href="configureGeeForLDAP.html" title="Configure GEE Server Admin pages for LDAP authentication"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../geeServerConfigAndSecurity.html" accesskey="U">GEE Server Configuration And Security</a> &#187;</li> 
@@ -43,7 +43,7 @@
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="configureGeeForLDAP.html"
-                        title="previous chapter">Configure GEE Server Admin page for LDAP authentication</a></p>
+                        title="previous chapter">Configure GEE Server Admin pages for LDAP authentication</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="setupHTTPS.html"
                         title="next chapter">Set up HTTPS</a></p>
@@ -103,9 +103,9 @@ file or your custom virtual host file.</p>
 <p>After the modules are loaded, you can control access by
 querying the directory for particular attributes.</p>
 </li>
-<li><p class="first">Point Apache to the LDAP server <code class="docutils literal notranslate"><span class="pre">AuthLDAPUrl</span></code> key directive.</p>
-<p>An example of an <code class="docutils literal notranslate"><span class="pre">AuthLDAPUrl</span></code> directive is:</p>
-<p><code class="docutils literal notranslate"><span class="pre">AuthLDAPUrl</span> <span class="pre">ldap://ldap.company.com/ou=People,dc=company,dc=com?uid</span></code></p>
+<li><p class="first">Point Apache to the LDAP server <code class="docutils literal notranslate"><span class="pre">AuthLDAPURL</span></code> key directive.</p>
+<p>An example of an <code class="docutils literal notranslate"><span class="pre">AuthLDAPURL</span></code> directive is:</p>
+<p><code class="docutils literal notranslate"><span class="pre">AuthLDAPURL</span> <span class="pre">ldap://ldapserver.example.com:389/ou=Users,dc=example,dc=com?uid</span></code></p>
 <p>The key directive format declares the LDAP server, the
 distinguished name (DN), and the attribute to use in the search
 (typically the <code class="docutils literal notranslate"><span class="pre">Uid</span></code> attribute in the <code class="docutils literal notranslate"><span class="pre">People</span></code>
@@ -141,9 +141,9 @@ Alternatively, you can use the command prompt:</p>
    AuthType Basic
    AuthName &quot;LDAP LOGIN&quot;
    AuthBasicProvider ldap
-   AuthLDAPURL &quot;ldap://server.name.local:389/cn=Users,dc=domain,dc=google,dc=com?uid&quot;\
-   AuthLDAPBindDN CN=geserver,OU=Users,OU=Yourorg,DC=DcNAME,DC=local
-   AuthLDAPBindPassword localuserpassword
+   AuthLDAPURL &quot;ldap://ldapserver.example.com:389/ou=Users,dc=example,dc=com?uid&quot;
+   AuthLDAPBindDN &quot;someuser@example.com&quot;
+   AuthLDAPBindPassword &quot;somepassword&quot;
    Require valid-user
 &lt;/Location&gt;
 </pre></div>
@@ -174,7 +174,7 @@ to use for Basic Authentication.</li>
 </ul>
 <p>For more information, see the Apache
 <a class="reference external" href="https://httpd.apache.org/docs/2.4/mod/mod_ldap.html">mod_ldap</a>
-<a class="reference external" href="https://httpd.apache.org/docs/2.4/mod/mod_authnz_ldap.html">mpd_authnz_ldap</a>
+<a class="reference external" href="https://httpd.apache.org/docs/2.4/mod/mod_authnz_ldap.html">mod_authnz_ldap</a>
 and
 <a class="reference external" href="https://httpd.apache.org/docs/2.4/mod/mod_auth_basic.html">mod_auth_basic</a>
 documentation.</p>
@@ -204,7 +204,7 @@ making authentication requests.</p>
           <a href="setupHTTPS.html" title="Set up HTTPS"
              >next</a> |</li>
         <li class="right" >
-          <a href="configureGeeForLDAP.html" title="Configure GEE Server Admin page for LDAP authentication"
+          <a href="configureGeeForLDAP.html" title="Configure GEE Server Admin pages for LDAP authentication"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../geeServerConfigAndSecurity.html" >GEE Server Configuration And Security</a> &#187;</li> 

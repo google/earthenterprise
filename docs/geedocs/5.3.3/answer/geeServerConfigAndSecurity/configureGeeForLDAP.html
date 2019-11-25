@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Configure GEE Server Admin page for LDAP authentication &#8212; Google Earth Enterprise 5.3.3 documentation</title>
+    <title>Configure GEE Server Admin pages for LDAP authentication &#8212; Google Earth Enterprise 5.3.3 documentation</title>
     <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
@@ -68,15 +68,15 @@
           <div class="body" role="main">
             
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp5.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp5.png" style="width: 130px; height: 44px;" /></a></p>
-<div class="section" id="configure-gee-server-admin-page-for-ldap-authentication">
-<h1>Configure GEE Server Admin page for LDAP authentication<a class="headerlink" href="#configure-gee-server-admin-page-for-ldap-authentication" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="configure-gee-server-admin-pages-for-ldap-authentication">
+<h1>Configure GEE Server Admin pages for LDAP authentication<a class="headerlink" href="#configure-gee-server-admin-pages-for-ldap-authentication" title="Permalink to this headline">¶</a></h1>
 <div class="docutils container">
 <div class="content docutils container">
 <p>You can use LDAP authentication, which is based on Microsoft
-Active Directory, to authenticate users to GEE server
-admin page. GEE server software is based on Apache <code class="docutils literal notranslate"><span class="pre">httpd</span></code>.</p>
+Active Directory, to authenticate users to GEE Server
+admin pages. GEE server software is based on Apache <code class="docutils literal notranslate"><span class="pre">httpd</span></code>.</p>
 <p>It is easy to administer and manage user accounts. You can use a
-simple <code class="docutils literal notranslate"><span class="pre">.htpasswd</span></code> to secure a GEE virtual host, then you can
+simple <code class="docutils literal notranslate"><span class="pre">.htpasswd</span></code> to secure a GEE Server admin pages, then you can
 assign the permissions levels via groups or user level. If you
 have an existing Active Directory user catalog, you can use that
 instead of implementing a redundant authentication system. For
@@ -84,11 +84,10 @@ information about enabling your Active Directory for LDAP, see the
 <a class="reference external" href="http://www.openldap.org">OpenLDAP</a> documentation.</p>
 <div class="admonition tip">
 <p class="first admonition-title">Tip</p>
-<p class="last">This article explains how to configure GEE Server admin page for LDAP
+<p class="last">This article explains how to configure GEE Server admin pages for LDAP
 authentication.</p>
 </div>
-<p class="rubric" id="to-configure-a-gee-server-admin-for-ldap-authentication">To configure GEE server admin page for LDAP
-authentication:</p>
+<p class="rubric" id="to-configure-a-gee-server-admin-for-ldap-authentication">To configure GEE Server admin pages for LDAP authentication:</p>
 <ol class="arabic">
 <li><p class="first">Make sure that the LDAP modules are loaded on your Apache
 server. For most GEE installations, these are loaded
@@ -103,9 +102,9 @@ LoadModule ldap_module modules/mod_ldap.so
 </pre></div>
 </div>
 </li>
-<li><p class="first">Point Apache to the LDAP server <code class="docutils literal notranslate"><span class="pre">AuthLDAPUrl</span></code> key directive.</p>
-<p>An example of an <code class="docutils literal notranslate"><span class="pre">AuthLDAPUrl</span></code> directive is:</p>
-<p><code class="docutils literal notranslate"><span class="pre">AuthLDAPUrl</span> <span class="pre">ldap://ldap.company.com/ou=People,dc=company,dc=com?uid</span></code></p>
+<li><p class="first">Point Apache to the LDAP server <code class="docutils literal notranslate"><span class="pre">AuthLDAPURL</span></code> key directive.</p>
+<p>An example of an <code class="docutils literal notranslate"><span class="pre">AuthLDAPURL</span></code> directive is:</p>
+<p><code class="docutils literal notranslate"><span class="pre">AuthLDAPURL</span> <span class="pre">ldap://ldapserver.example.com:389/ou=Users,dc=example,dc=com?uid</span></code></p>
 <p>The key directive format declares the LDAP server, the
 distinguished name (DN), and the attribute to use in the search
 (typically the <code class="docutils literal notranslate"><span class="pre">Uid</span></code> attribute in the <code class="docutils literal notranslate"><span class="pre">People</span></code>
@@ -120,8 +119,8 @@ your user has the full organizational unit name.</p>
 <li><p class="first">Restart the GEE server to load the modules into the system:</p>
 <p><code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">/etc/init.d/geserver</span> <span class="pre">restart</span></code></p>
 </li>
-<li><p class="first">Add the directives to your config file under &lt;Directory “/opt/google/gehttpd/htdocs/admin”&gt;
-<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttp/conf/gehttpd.conf</span></code>.</p>
+<li><p class="first">Add the directives to your config file <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttp/conf/gehttpd.conf</span></code>
+under &lt;Directory “/opt/google/gehttpd/htdocs/admin”&gt;</p>
 <p>Comment/remove these lines :</p>
 <blockquote>
 <div><div class="line-block">
@@ -133,9 +132,9 @@ your user has the full organizational unit name.</p>
 <blockquote>
 <div><div class="line-block">
 <div class="line">AuthBasicProvider ldap</div>
-<div class="line">AuthLDAPBindDN “<a class="reference external" href="mailto:user&#37;&#52;&#48;server&#46;name&#46;local">user<span>&#64;</span>server<span>&#46;</span>name<span>&#46;</span>local</a>”</div>
-<div class="line">AuthLDAPBindPassword “localuserpassword”</div>
-<div class="line">AuthLDAPURL “<a class="reference external" href="ldap://server.name.local:389/cn=Users,dc=domain,dc=google,dc=com?uid">ldap://server.name.local:389/cn=Users,dc=domain,dc=google,dc=com?uid</a>”</div>
+<div class="line">AuthLDAPBindDN “<a class="reference external" href="mailto:someuser&#37;&#52;&#48;example&#46;com">someuser<span>&#64;</span>example<span>&#46;</span>com</a>”</div>
+<div class="line">AuthLDAPBindPassword “somepassword”</div>
+<div class="line">AuthLDAPURL “<a class="reference external" href="ldap://ldapserver.example.com:389/ou=Users,dc=example,dc=com?uid">ldap://ldapserver.example.com:389/ou=Users,dc=example,dc=com?uid</a>”</div>
 </div>
 </div></blockquote>
 </li>
@@ -148,9 +147,9 @@ your user has the full organizational unit name.</p>
     AuthType Basic
 
     AuthBasicProvider ldap
-    AuthLDAPBindDN &quot;user@server.name.local&quot;
-    AuthLDAPBindPassword &quot;localuserpassword&quot;
-    AuthLDAPURL &quot;ldap://server.name.local:389/cn=Users,dc=domain,dc=google,dc=com?uid&quot;
+    AuthLDAPBindDN &quot;someuser@example.com&quot;
+    AuthLDAPBindPassword &quot;somepassword&quot;
+    AuthLDAPURL &quot;ldap://ldapserver.example.com:389/ou=Users,dc=example,dc=com?uid&quot;
 
     &lt;Limit GET&gt;
     require valid-user
@@ -182,7 +181,7 @@ to use for Basic Authentication.</li>
 </ul>
 <p>For more information, see the Apache
 <a class="reference external" href="https://httpd.apache.org/docs/2.4/mod/mod_ldap.html">mod_ldap</a>
-<a class="reference external" href="https://httpd.apache.org/docs/2.4/mod/mod_authnz_ldap.html">mpd_authnz_ldap</a>
+<a class="reference external" href="https://httpd.apache.org/docs/2.4/mod/mod_authnz_ldap.html">mod_authnz_ldap</a>
 and
 <a class="reference external" href="https://httpd.apache.org/docs/2.4/mod/mod_auth_basic.html">mod_auth_basic</a>
 documentation.</p>

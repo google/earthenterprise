@@ -33,10 +33,10 @@ or your custom virtual host file.  After the modules are loaded, you
 can control access by querying the directory for particular
 attributes.
 
-Point Apache to the LDAP server AuthLDAPUrl key directive.  An example
-of an AuthLDAPUrl directive is:  AuthLDAPUrl
-ldap://ldap.company.com/ou=People,dc=company,dc=com?uid  The key
-directive format declares the LDAP server, the distinguished name
+Point Apache to the LDAP server AuthLDAPURL key directive.  An example
+of an AuthLDAPURL directive is:  AuthLDAPURL
+ldap://ldapserver.example.com:389/ou=Users,dc=example,dc=com?uid  The
+key directive format declares the LDAP server, the distinguished name
 (DN), and the attribute to use in the search (typically the Uid
 attribute in the People organizational unit). You can also customize
 these filters for additional security constraints.
@@ -65,11 +65,10 @@ Add the directives to your virtual server file at
 
 For testing purposes, add the lines below to the private_host.location
 file:  <Location /private/*>    AuthType Basic    AuthName "LDAP
-LOGIN"    AuthBasicProvider ldap    AuthLDAPURL "ldap://server.name.l
-ocal:389/cn=Users,dc=domain,dc=google,dc=com?uid"\    AuthLDAPBindDN
-CN=geserver,OU=Users,OU=Yourorg,DC=DcNAME,DC=local
-AuthLDAPBindPassword localuserpassword    Require valid-user
-</Location>
+LOGIN"    AuthBasicProvider ldap    AuthLDAPURL
+"ldap://ldapserver.example.com:389/ou=Users,dc=example,dc=com?uid"
+AuthLDAPBindDN "someuser@example.com"    AuthLDAPBindPassword
+"somepassword"    Require valid-user </Location>
 
 Restart your server and try to access the virtual server via the
 client. A login screen appears. If you cannot access Apache, open the
@@ -100,7 +99,7 @@ For more information, see the Apache
 mod_ldap
 
 
-mpd_authnz_ldap
+mod_authnz_ldap
 
  and
 

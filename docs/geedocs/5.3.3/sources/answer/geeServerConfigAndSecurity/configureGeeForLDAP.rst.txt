@@ -1,13 +1,13 @@
 
-Configure GEE Server Admin page for LDAP authentication
+Configure GEE Server Admin pages for LDAP authentication
 
 You can use LDAP authentication, which is based on Microsoft Active
-Directory, to authenticate users to GEE server admin page. GEE server
+Directory, to authenticate users to GEE Server admin pages. GEE server
 software is based on Apache "httpd".
 
 It is easy to administer and manage user accounts. You can use a
-simple ".htpasswd" to secure a GEE virtual host, then you can assign
-the permissions levels via groups or user level. If you have an
+simple ".htpasswd" to secure a GEE Server admin pages, then you can
+assign the permissions levels via groups or user level. If you have an
 existing Active Directory user catalog, you can use that instead of
 implementing a redundant authentication system. For information about
 enabling your Active Directory for LDAP, see the
@@ -16,10 +16,10 @@ OpenLDAP
 
  documentation.
 
-Tip: This article explains how to configure GEE Server admin page
+Tip: This article explains how to configure GEE Server admin pages
   for LDAP authentication.
 
--[ To configure GEE server admin page for LDAP authentication: ]-
+-[ To configure GEE Server admin pages for LDAP authentication: ]-
 
 Make sure that the LDAP modules are loaded on your Apache server. For
 most GEE installations, these are loaded automatically.
@@ -29,10 +29,10 @@ After the modules are loaded, you can control access by querying the
 directory for particular attributes.  LoadModule authnz_ldap_module
 modules/mod_authnz_ldap.so LoadModule ldap_module modules/mod_ldap.so
 
-Point Apache to the LDAP server AuthLDAPUrl key directive.  An example
-of an AuthLDAPUrl directive is:  AuthLDAPUrl
-ldap://ldap.company.com/ou=People,dc=company,dc=com?uid  The key
-directive format declares the LDAP server, the distinguished name
+Point Apache to the LDAP server AuthLDAPURL key directive.  An example
+of an AuthLDAPURL directive is:  AuthLDAPURL
+ldap://ldapserver.example.com:389/ou=Users,dc=example,dc=com?uid  The
+key directive format declares the LDAP server, the distinguished name
 (DN), and the attribute to use in the search (typically the Uid
 attribute in the People organizational unit). You can also customize
 these filters for additional security constraints.
@@ -45,22 +45,22 @@ organizational unit name.
 Restart the GEE server to load the modules into the system:  #
 /etc/init.d/geserver restart
 
-Add the directives to your config file under <Directory
-"/opt/google/gehttpd/htdocs/admin">
-/opt/google/gehttp/conf/gehttpd.conf.  Comment/remove these lines :
+Add the directives to your config file
+/opt/google/gehttp/conf/gehttpd.conf under <Directory
+"/opt/google/gehttpd/htdocs/admin">  Comment/remove these lines :
 AuthUserFile /opt/google/gehttpd/conf.d/.htpasswd  AuthGroupFile
 /dev/null  And Add these lines :  AuthBasicProvider ldap
-AuthLDAPBindDN "user@server.name.local"  AuthLDAPBindPassword
-"localuserpassword"  AuthLDAPURL
-"ldap://server.name.local:389/cn=Users,dc=domain,dc=google,dc=com?uid"
+AuthLDAPBindDN "someuser@example.com"  AuthLDAPBindPassword
+"somepassword"  AuthLDAPURL
+"ldap://ldapserver.example.com:389/ou=Users,dc=example,dc=com?uid"
 
 For testing purposes, add the lines below to the gehhtpd.conf file:
 <Directory "/opt/google/gehttpd/htdocs/admin">     #AuthUserFile
 /opt/google/gehttpd/conf.d/.htpasswd     #AuthGroupFile /dev/null
 AuthName "Earth Server admin pages"     AuthType Basic
-AuthBasicProvider ldap     AuthLDAPBindDN "user@server.name.local"
-AuthLDAPBindPassword "localuserpassword"     AuthLDAPURL
-"ldap://server.name.local:389/cn=Users,dc=domain,dc=google,dc=com?uid"
+AuthBasicProvider ldap     AuthLDAPBindDN "someuser@example.com"
+AuthLDAPBindPassword "somepassword"     AuthLDAPURL
+"ldap://ldapserver.example.com:389/ou=Users,dc=example,dc=com?uid"
 <Limit GET>     require valid-user     </Limit> </Directory>
 
 Restart your server and try to access the earth server admin page.
@@ -93,7 +93,7 @@ For more information, see the Apache
 mod_ldap
 
 
-mpd_authnz_ldap
+mod_authnz_ldap
 
  and
 
