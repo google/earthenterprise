@@ -296,7 +296,7 @@ int etDataPacket::getFlatFileCount()
   char fname[500];
   int count;
 
-  sprintf(fname, "%s.header", flatbasename);
+  snprintf(fname, 500, "%s.header", flatbasename);
   char* lastslash = strrchr(fname, '/');
 #if defined(_WIN32)
   if (!lastslash)
@@ -325,7 +325,7 @@ int etDataPacket::setFlatFileCount(int num)
   FILE *fp;
   char fname[500];
 
-  sprintf(fname, "%s.header", flatbasename);
+  snprintf(fname, 500, "%s.header", flatbasename);
   char* lastslash = strrchr(fname, '/');
 #if defined(_WIN32)
   if (!lastslash)
@@ -347,9 +347,9 @@ int etDataPacket::openFlat(char * flatfile)
   int filecount;
 
   //Set File Names
-  sprintf(flatbasename, "%s", flatfile);
-  sprintf(flatdirname, "%sDIR", flatfile);
-  sprintf(flatdataname, "%sDATA", flatfile);
+  snprintf(flatbasename, 500, "%s", flatfile);
+  snprintf(flatdirname, 500, "%sDIR", flatfile);
+  snprintf(flatdataname, 500, "%sDATA", flatfile);
 
   //Get Current File Count
   filecount = getFlatFileCount();
@@ -357,7 +357,7 @@ int etDataPacket::openFlat(char * flatfile)
     return -1;
 
   //Open Directory File
-  sprintf(fname, "%s.p%d", flatdirname, filecount);
+  snprintf(fname, 500, "%s.p%d", flatdirname, filecount);
   char* lastslash = strrchr(fname, '/');
 #if defined(_WIN32)
   if (!lastslash)
@@ -368,7 +368,7 @@ int etDataPacket::openFlat(char * flatfile)
     return -1;
 
   //Open Data File
-  sprintf(fname, "%s.p%d", flatdataname, filecount);
+  snprintf(fname, 500, "%s.p%d", flatdataname, filecount);
   lastslash = strrchr(fname, '/');
 #if defined(_WIN32)
   if (!lastslash)
@@ -402,8 +402,8 @@ unsigned long * phtable = NULL;
 void parsebcode(char * fname)
 {
   int i;
-  int bcode[500];
-  int bcodeR[500];
+  int bcode[500] = {0};
+  int bcodeR[500] = {0};
   int bsize;
 
   unsigned long num;
@@ -415,9 +415,6 @@ void parsebcode(char * fname)
   }
 
   bsize = 0;
-
-  memset(bcode, 0, 500);
-  memset(bcodeR, 0, 500);
 
   for(i=0; i < (int)strlen(fname); i++)
   {
@@ -467,9 +464,9 @@ int etDataPacket::saveFlat(char * fname, char* buffer, int buffersize)
   //parsebcode(fname);
 
   //Enter File into Directory
-  sprintf(text, "%s", fname);
+  snprintf(text, 100, "%s", fname);
   fwrite(text, 100, 1, flatdirfp);
-  sprintf(text, "%d", buffersize);
+  snprintf(text, 100, "%d", buffersize);
   fwrite(text, 100, 1, flatdirfp);
 
   //Save Data

@@ -54,18 +54,13 @@ int main(int argc, char* argv[])
     }
     else if (strcmp(argv[cursor], "-i") == 0)
     {
-      if (sscanf(argv[cursor], "-i%s", input) != 1)
-        sscanf(argv[++cursor], "%s", input);
+      if (sscanf(argv[cursor], "-i%1023s", input) != 1)
+        sscanf(argv[++cursor], "%1023s", input);
     }
     else if (strcmp(argv[cursor], "-o") == 0)
     {
-      if (sscanf(argv[cursor], "-o%s", output) != 1)
-        sscanf(argv[++cursor], "%s", output);
-    }
-    else if (strcmp(argv[cursor], "-i") == 0)
-    {
-      if (sscanf(argv[cursor], "-i%s", input) != 1)
-        sscanf(argv[++cursor], "%s", input);
+      if (sscanf(argv[cursor], "-o%1023s", output) != 1)
+        sscanf(argv[++cursor], "%1023s", output);
     }
     else if (strcmp(argv[cursor], "-m") == 0)
     {
@@ -74,11 +69,6 @@ int main(int argc, char* argv[])
     else if (strcmp(argv[cursor], "-v") == 0)
     {
       verbose = 1;
-    }
-    else if (strcmp(argv[cursor], "-i") == 0)
-    {
-      if (sscanf(argv[cursor], "-i%s", input) != 1)
-        sscanf(argv[++cursor], "%s", input);
     }
     else
     {
@@ -89,7 +79,7 @@ int main(int argc, char* argv[])
 
   // process remaining argument, if any
   if (cursor < argc && input[0] == '\0')
-    strcpy(input, argv[cursor++]);
+    strncpy(input, argv[cursor++], 1024);
 
   // validate configuration
   if ((filelist == NULL || filelist[0] == '\0') && input[0] == '\0')
@@ -114,7 +104,7 @@ int main(int argc, char* argv[])
     if (merge == 0)
     {
       char nextName[2048];
-      while (fscanf(fp, "%s", nextName) == 1)
+      while (fscanf(fp, "%2048s", nextName) == 1)
       {
         if (verbose)
           printf("%s\n", nextName);
@@ -132,7 +122,7 @@ int main(int argc, char* argv[])
         {
           *dot = '\0';
         }
-        sprintf(output, "%s.his", nextName);
+        snprintf(output, "%1018s.his", nextName);
 
         // write histogram
         if (h.write(output, format))
@@ -147,7 +137,7 @@ int main(int argc, char* argv[])
       char nextName[2048];
       KHistogram m;
 
-      while (fscanf(fp, "%s", nextName) == 1)
+      while (fscanf(fp, "%2048s", nextName) == 1)
       {
         KHistogram h;
 

@@ -901,7 +901,7 @@ void gstValue::GetRaw(const void* buf) {
       if (qstring_->isEmpty()) {
         *((char*)buf) = '\0';
       } else {
-        strcpy((char*)buf, qstring_->utf8());
+        strncpy((char*)buf, qstring_->utf8());
       }
       break;
   }

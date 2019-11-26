@@ -182,6 +182,7 @@ int ProcessCmdLineArgs(int argc,
 
   int i;
   char buff[1024];
+
   for (i=1; i<argc && argv[i][0]=='-'; i++) {
     if (strcmp(argv[i], "-q") == 0) {
       cmd.verbose = false;
@@ -196,11 +197,11 @@ int ProcessCmdLineArgs(int argc,
       sscanf(argv[++i], "%d", &(cmd.method));
     }
     else if (strcmp(argv[i], "-i") == 0) {
-      sscanf(argv[++i], "%s", buff);
+      sscanf(argv[++i], "%1023s", buff);
       cmd.xyzFile = string(buff);
     }
     else if (strcmp(argv[i], "-o") == 0) {
-      sscanf(argv[++i], "%s", buff);
+      sscanf(argv[++i], "%1023s", buff);
       cmd.bilFile = string(buff);
     }
     else {

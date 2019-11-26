@@ -119,16 +119,18 @@ std::string khComposeTimePath(const struct tm& time) {
 std::string
 khBasename(const std::string &filename)
 {
-  char buf[filename.size()+1];
-  strcpy(buf, filename.c_str());
+  int buflen = filename.size()+1;
+  char buf[buflen];
+  strncpy(buf, filename.c_str(), buflen);
   return basename(buf);
 }
 
 std::string
 khDirname(const std::string &filename)
 {
-  char buf[filename.size()+1];
-  strcpy(buf, filename.c_str());
+  int buflen = filename.size()+1;
+  char buf[buflen];
+  strncpy(buf, filename.c_str(), buflen);
   return dirname(buf);
 }
 
@@ -789,9 +791,9 @@ khTmpFilename(const std::string &basename, mode_t mode)
   khEnsureParentDir(fname);
 
   // must make a writable copy for mkstemp to play with
-  char tmpname[fname.size()+7];
-  strcpy(tmpname, fname.c_str());
-  strcat(tmpname, "XXXXXX");
+  int bufsize = fname.size() + 7;
+  char tmpname[bufsize];
+  snprintf(tmpname, bufsize, "%sXXXXXX", fname.c_str());
   int fd = mkstemp(tmpname);
 
   if (fd == -1) {
@@ -810,9 +812,9 @@ khCreateTmpDir(const std::string &prefix)
   std::string dirname = khTmpDirPath() + "/" + prefix;
 
   // must make a writable copy for mkstemp to play with
-  char tmpname[dirname.size()+7];
-  strcpy(tmpname, dirname.c_str());
-  strcat(tmpname, "XXXXXX");
+  int bufsize = dirname.size() + 7;
+  char tmpname[bufsize];
+  snprintf(tmpname, bufsize, "%sXXXXXX", dirname.c_str());
   char *result = mkdtemp(tmpname);
 
   if (result == NULL) {

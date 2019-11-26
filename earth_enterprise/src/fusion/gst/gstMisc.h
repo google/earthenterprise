@@ -32,16 +32,17 @@ inline char* strdupSafe(const char* s) {
   if (s == NULL || *s == 0)
     return NULL;
 
-  char* n = new char[strlen(s) + 1];
-  strcpy(n, s);
+  int lens = strlen(s);
+  char* n = new char[lens + 1];
+  strncpy(n, s, lens);
   return n;
 }
 
-inline char* strcpySafe(char* dst, const char* src) {
+inline char* strcpySafe(char* dst, const char* src, int maxlen) {
   if (src == NULL || *src == 0) {
     *dst = '\0';
   } else {
-    strcpy(dst, src);
+    strncpy(dst, src, maxlen);
   }
 
   return dst;

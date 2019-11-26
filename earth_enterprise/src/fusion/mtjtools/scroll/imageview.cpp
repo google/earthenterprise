@@ -466,8 +466,9 @@ void ImageView::setGlobalLutOut(const std::string &out) {
 
 void ImageView::loadInitImage(const std::string &image_file_path) {
   char *temp_path;
-  temp_path = new char[image_file_path.length() + 1];
-  strcpy(temp_path, image_file_path.c_str());
+  int pathlen = image_file_path.length();
+  temp_path = new char[pathlen + 1];
+  strncpy(temp_path, image_file_path.c_str(), pathlen);
   this->setFilename(temp_path);
   delete [] temp_path;
 }
@@ -483,8 +484,9 @@ void ImageView::setLutWork(const std::string &lutwork_file) {
     if (_sample == NULL) {
       _sample = (RGBSample *)calloc(sizeof(RGBSample), _sampleMax);
     }
-    char *ascii_lutwork = new char[lutwork_file.length() + 1];
-    strcpy(ascii_lutwork, lutwork_file.c_str());
+    int filelength = lutwork_file.length();
+    char *ascii_lutwork = new char[filelength + 1];
+    strncpy(ascii_lutwork, lutwork_file.c_str(), filelength);
     fh = fopen(ascii_lutwork, "r");
     delete [] ascii_lutwork;
     fscanf(fh,
@@ -584,12 +586,12 @@ void ImageView::setFilename(char *name) {
   }
 
   // remember new file name
-  strcpy(_filename, name);
+  strncpy(_filename, name, 512);
 
   // open file using GDAL
   _dataset = (GDALDataset *)GDALOpen(_filename, GA_ReadOnly);
   if (_dataset == NULL) {
-    sprintf(text, "GDAL error opening image '%s'", _filename);
+    snprintf(text, 512, "GDAL error opening image '%s'", _filename);
     _statusBar->message(text, 0);
     _filename[0] = '\0';
     return;
@@ -640,7 +642,7 @@ void ImageView::setFilename(char *name) {
 
     // has a histogram for this image already been computed?
     char hname[512];
-    sprintf(hname, "%s.his", _filename);
+    snprintf(hname, 512, "%s.his", _filename);
     KHistogram kh;
     if (kh.read(hname) == 0) {
       // && kh.size() == _hr.size()) //KH is not auto-sizing
@@ -679,7 +681,7 @@ void ImageView::setFilename(char *name) {
 
   repaintContents();
 
-  sprintf(text, "Loaded '%s' (%dx%d, %d bits per R/G/B)", _filename, width(), height(), 8*bytes());
+  snprintf(text, 512, "Loaded '%s' (%dx%d, %d bits per R/G/B)", _filename, width(), height(), 8*bytes());
   _statusBar->message(text, 0);
 }
 
@@ -918,7 +920,7 @@ void ImageView::keyPressEvent(QKeyEvent *e) {
 
       // write histogram to file
       char hname[512];
-      sprintf(hname, "%s.his", _filename);
+      snprintf(hname, 512, "%s.his", _filename);
       /*int hstatus = */ kh.write(hname);
 
       // update clip values
@@ -957,7 +959,7 @@ void ImageView::keyPressEvent(QKeyEvent *e) {
   else if (e->ascii() == 'A') {
     // apply the LUT and make a new image!
     char nname[512];
-    strcpy(nname, _filename);
+    strncpy(nname, _filename, 512);
 
     char *slash = nname + strlen(nname) - 1; // last character
     while (slash != nname && *slash != '\\' && *slash != '/')
@@ -966,12 +968,13 @@ void ImageView::keyPressEvent(QKeyEvent *e) {
       slash++;
 
     char rest[512];
-    strcpy(rest, slash);
+    strncpy(rest, slash, 512);
 
-    sprintf(slash, "new-%s", rest);
+    int slashlen = (strlen(nname) * 2) - 1;
+    snprintf(slash, slashlen, "new-%s", rest);
 
     char text[512];
-    sprintf(text, "Applying correction to create new image '%s'", nname);
+    snprintf(text, 512, "Applying correction to create new image '%s'", nname);
     _statusBar->message(text, 0);
 
     // construct and fill KHistogram with LUT data
@@ -1051,7 +1054,7 @@ void ImageView::sampleImage(int x, int y, int& rValue, int& gValue, int& bValue)
 
   if (_statusBar != NULL) {
     char text[512];
-    sprintf(text, "%s%s(%d,%d) r=%d, g=%d, b=%d (%dx%d) [rows=%d][%.2f%%/%.2f%%: %d/%d %d/%d %d/%d][%d%s](%6.3f+%6.3f*r, %2.0f%%)(%7.4f+%7.4f*b, %2.0f%%)[%d][%.3f/%.3f][%d]%.2f",
+    snprintf(text, 512, "%s%s(%d,%d) r=%d, g=%d, b=%d (%dx%d) [rows=%d][%.2f%%/%.2f%%: %d/%d %d/%d %d/%d][%d%s](%6.3f+%6.3f*r, %2.0f%%)(%7.4f+%7.4f*b, %2.0f%%)[%d][%.3f/%.3f][%d]%.2f",
             _resetOnFileOpen ? "1" : "n",
             _correct ? "C" : "R",
             x, y,
@@ -1918,7 +1921,7 @@ void ImageView::writeSamples(char *filename) {
 void ImageView::SaveLutWork(void) {
   // save settings to lutwork file
   char *ascii_lutwork = new char[gLutWorkOut.length() + 1];
-  strcpy(ascii_lutwork, gLutWorkOut.c_str());
+  strncpy(ascii_lutwork, gLutWorkOut.c_str(), gLutWorkOut.length());
   FILE* fh = fopen(ascii_lutwork, "w");
   delete [] ascii_lutwork;
   if (fh != NULL) {
