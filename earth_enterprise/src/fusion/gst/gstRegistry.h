@@ -129,17 +129,17 @@ class gstRegistry {
   };
 
   gstRegistry(const char* n = NULL);
-  ~gstRegistry() ;
+  ~gstRegistry();
+  gstRegistry(const gstRegistry&) = delete;
+  gstRegistry(gstRegistry&&) = delete;
+  gstRegistry& operator=(const gstRegistry&) = delete;
+  gstRegistry& operator=(gstRegistry&&) = delete;
 
   gstStatus load();
-  //gstStatus load(const char* buf, int buflen);
-  //gstStatus save();
-  //gstStatus save(char** buf, int &buflen);
 
   Group* findGroup(const char* g) { return _root->findGroup(g); }
 
   void setVal(const char*, const char*, uint32 type = gstTagString);
-  //const char* getVal(const char*, ...);
 
   gstValue* locateTag(const char* tag, int create = 0, uint32 type = gstTagString);
   Group* locateGroup(const char* tag, int create = 0);
@@ -160,8 +160,6 @@ class gstRegistry {
   QString fullPath(Group* g);
 
  private:
-  //gstStatus saveGroup(Group* group, uint depth);
-  //int putLine();
 
   gstStatus parse();
   char* nextLine();

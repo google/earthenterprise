@@ -445,6 +445,11 @@ class Image
 #endif
   }
 
+  Image(const Image&) = delete;
+  Image(Image&&) = delete;
+  Image& operator=(const Image&) = delete;
+  Image& operator=(Image&&) = delete;
+
   //#define QUICK 1
 
   Pixel getPixel(int x, int y)

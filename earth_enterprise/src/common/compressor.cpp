@@ -261,6 +261,10 @@ class LZCompressor : public Compressor {
  public:
   LZCompressor(int l, uint32 sz);
   virtual ~LZCompressor();
+  LZCompressor(const LZCompressor&) = delete;
+  LZCompressor(LZCompressor&&) = delete;
+  LZCompressor& operator=(const LZCompressor&) = delete;
+  LZCompressor& operator=(LZCompressor&&) = delete;
 
   virtual char *data() { return buf; }
   virtual uint32 dataLen() { return bufLen; }

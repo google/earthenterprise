@@ -66,6 +66,10 @@ class gstTextureManager {
  public:
   gstTextureManager(int memoryCacheSize, int textureCacheSize);
   ~gstTextureManager();
+  gstTextureManager(const gstTextureManager&) = delete;
+  gstTextureManager(gstTextureManager&&) = delete;
+  gstTextureManager& operator=(const gstTextureManager&) = delete;
+  gstTextureManager& operator=(gstTextureManager&&) = delete;
 
   // flush all caches
   void flush();

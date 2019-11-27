@@ -202,6 +202,12 @@ class JPEGCompressor : public Compressor {
   JPEGCompressor(uint32 w, uint32 h, uint c, int quality);
   virtual ~JPEGCompressor();
 
+  // do not allow copying/moving
+  JPEGCompressor(const JPEGCompressor&) = delete;
+  JPEGCompressor(JPEGCompressor&&) = delete;
+  JPEGCompressor& operator=(const JPEGCompressor&) = delete;
+  JPEGCompressor& operator=(JPEGCompressor&&) = delete;
+
   virtual char* data() { return writer_->buf; }
 
   virtual uint32 dataLen() { return writer_->bufSize - writer_->free_in_buffer; }
@@ -254,6 +260,11 @@ class MinifyCompressor : public Compressor {
  public:
   MinifyCompressor(Compressor* c, uint32 width, uint32 height, uint comp);
   virtual ~MinifyCompressor();
+
+  MinifyCompressor(const MinifyCompressor&) = delete;
+  MinifyCompressor(MinifyCompressor&&) = delete;
+  MinifyCompressor& operator=(const MinifyCompressor&) = delete;
+  MinifyCompressor& operator=(MinifyCompressor&&) = delete;
 
   virtual char* data() { return compressor_->data(); }
 
