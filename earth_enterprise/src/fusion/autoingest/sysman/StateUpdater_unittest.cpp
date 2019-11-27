@@ -265,12 +265,7 @@ void GetBigTree(MockStorageManager & sm) {
   SetDependent(sm, "p1", "c1");
 }
 
-// When calling SetStateForRefAndDependents, the state will change twice for assets in the
-// dependent tree - once to set it to the requested state and once after the state is
-// recalculated. For assets not in the dependent tree, or when calling functions other than
-// SetStateForRefAndDependents, the state will only be set once. In these cases we must
-// pass in the number of expected state changes.
-void assertStateSet(MockStorageManager & sm, const SharedString & ref, int stateChanges = 2) {
+void assertStateSet(MockStorageManager & sm, const SharedString & ref, int stateChanges = 1) {
   ASSERT_TRUE(GetVersion(sm, ref)->loadedMutable) << ref << " was not loaded mutable";
   ASSERT_EQ(GetVersion(sm, ref)->onStateChangeCalled, stateChanges) << "OnStateChange was not called enough times for " << ref;
   ASSERT_EQ(GetVersion(sm, ref)->notificationsSent, 1) << "Wrong number of notifications sent for " << ref;
@@ -665,10 +660,7 @@ void StateChangeErrorTest(MockStorageManager & sm, StateUpdater & updater, OnSta
   SetVersions(sm, {MockVersion("a")});
   GetMutableVersion(sm, "a")->stateChangeBehavior = behavior;
   updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State state) { return true; });
-  // We will call OnStateChange four times: to set it to the requested state,
-  // which will trigger a transition to failed, and then to recalculate the
-  // state, which will trigger another transition to failed.
-  assertStateSet(sm, "a", 4);
+  assertStateSet(sm, "a", 2);
   ASSERT_EQ(GetVersion(sm, "a")->state, AssetDefs::Failed);
 }
 
@@ -707,7 +699,7 @@ TEST_F(StateUpdaterTest, OnStateChangeReturnsNewState) {
   SetVersions(sm, {MockVersion("a")});
   GetMutableVersion(sm, "a")->stateChangeBehavior = RETURN_NEW_STATE;
   updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State state) { return true; });
-  assertStateSet(sm, "a", 4);
+  assertStateSet(sm, "a", 3);
 }
 
 TEST_F(StateUpdaterTest, ReferenceNonExistentAsset) {
