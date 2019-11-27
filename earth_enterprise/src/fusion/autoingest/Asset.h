@@ -118,7 +118,7 @@ Asset::storageManager(void)
 {
   static StorageManager<AssetImpl> storageManager(
       MiscConfig::Instance().AssetCacheSize, MiscConfig::Instance().LimitMemoryUtilization, MiscConfig::Instance().MaxAssetCacheMemorySize,
-      MiscConfig::Instance().PeriodicallyWriteDirtyToDisk, "asset");
+      MiscConfig::Instance().PeriodicallyWriteDirtyToDisk, MiscConfig::Instance().RemoveFromCache, MiscConfig::Instance().CheckOnDisk, "asset");
   return storageManager;
 }
 

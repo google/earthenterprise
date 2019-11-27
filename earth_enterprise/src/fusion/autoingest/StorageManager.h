@@ -67,12 +67,16 @@ class StorageManager : public StorageManagerInterface<AssetType> {
                    bool limitByMemory,
                    uint64 maxMemory,
                    bool writeDirty,
+                   bool removeDirty,
+                   bool checkDisk,
                    const std::string & type,
                    SerializerPtr serializer) :
         assetType(type),
         serializer(std::move(serializer)),
         cache(cacheSize, type),
-        writeDirty(writeDirty)
+        writeDirty(writeDirty),
+        removeDirty(removeDirty),
+        checkDisk(checkDisk)
     {
       SetCacheMemoryLimit(limitByMemory, maxMemory);
     }
@@ -80,8 +84,10 @@ class StorageManager : public StorageManagerInterface<AssetType> {
                    bool limitByMemory,
                    uint64 maxMemory,
                    bool writeDirty,
+                   bool removeDirty,
+                   bool checkDisk,
                    const std::string & type) :
-        StorageManager(cacheSize, limitByMemory, maxMemory, writeDirty, type,
+        StorageManager(cacheSize, limitByMemory, maxMemory, writeDirty, removeDirty, checkDisk, type,
                        SerializerPtr(new AssetSerializerLocalXML<AssetType>())) {}
     ~StorageManager() = default;
 
@@ -116,6 +122,8 @@ class StorageManager : public StorageManagerInterface<AssetType> {
     CacheType cache;
     std::map<AssetKey, PointerType> dirtyMap;
     const bool writeDirty;
+    const bool removeDirty;
+    const bool checkDisk;
 
     StorageManager(const StorageManager &) = delete;
     StorageManager& operator=(const StorageManager &) = delete;
@@ -222,7 +230,7 @@ StorageManager<AssetType>::Get(
         return PointerType();
       }
       //notify(NFY_WARN, "\t%s Exists", filename.c_str());
-      if (writeDirty) {
+      if (writeDirty && checkDisk) {
         onDisk = true;
       }
     }
@@ -382,9 +390,12 @@ void StorageManager<AssetType>::WriteDirty() {
         if (serializer->Save(entry->second, filename)) {
           savetrans.AddNewPath(filename);
           //notify(NFY_WARN, "\t%s", filename.c_str());
-          cache.Remove(entry->first, false);
-          //notify(NFY_WARN, "Remove: %s\tCache: %lu\tDirty: %lu", entry->first.toString().c_str(), cache.size(), dirtyMap.size());
+          if (removeDirty) {
+            cache.Remove(entry->first, false);
+            //notify(NFY_WARN, "Remove: %s\tCache: %lu", entry->first.toString().c_str(), cache.size());
+          }
           entry = dirtyMap.erase(entry);
+          //notify(NFY_WARN, "\tErase: Dirty: %lu", dirtyMap.size());
         }
       }
       else {
