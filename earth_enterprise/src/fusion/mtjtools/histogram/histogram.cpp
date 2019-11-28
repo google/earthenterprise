@@ -122,7 +122,7 @@ int main(int argc, char* argv[])
         {
           *dot = '\0';
         }
-        snprintf(output, "%1018s.his", nextName);
+        snprintf(output, 1018, "%s.his", nextName);
 
         // write histogram
         if (h.write(output, format))

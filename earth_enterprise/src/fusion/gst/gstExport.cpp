@@ -501,7 +501,7 @@ bool gstPacketFileExporter::AddLandmark(etLandmarkPacketData* pakdata,
     std::string src = desc->ValueAsString();
     int sz = src.length();
     char * ptr = static_cast<char*>(mem_pool_.Allocate(sz + 1));
-    strncpy(ptr, sz + 1, src.c_str());
+    strncpy(ptr, src.c_str(), sz + 1);
     while (sz && isspace(ptr[sz - 1])) {
       ptr[sz - 1] = '\0';
       --sz;

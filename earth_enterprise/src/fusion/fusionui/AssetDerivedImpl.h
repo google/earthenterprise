@@ -89,9 +89,10 @@ bool AssetDerived<Defs, FinalClass>::IsModified() {
     }
     return modified;
   } catch (...) {
-    // Don't report any errors. Just say that it is modified.  Caller's will
+    // Don't report any errors. Just say that it is modified.  Callers will
     // rediscover the errors on their own.  If we don't do this, we end up
     // with the potential for double messages being sent to the user.
+    UnhandledErrorCount++;
   }
   return true;
 }
@@ -139,6 +140,7 @@ void AssetDerived<Defs, FinalClass>::Init(bool re_init) {
     SetMeta(saved_edit_request_.meta);
 
     main_widget_->Prefill(saved_edit_request_);
+    UnhandledErrorCount = 0;
   }
 
   // defer to final class
