@@ -13,7 +13,7 @@ Configure GEE Server Admin pages for LDAP authentication
       admin pages. GEE server software is based on Apache ``httpd``.
 
       It is easy to administer and manage user accounts. You can use a
-      simple ``.htpasswd`` to secure a GEE Server admin pages, then you can
+      simple ``.htpasswd`` to secure GEE Server admin pages, then you can
       assign the permissions levels via groups or user level. If you
       have an existing Active Directory user catalog, you can use that
       instead of implementing a redundant authentication system. For
@@ -32,7 +32,7 @@ Configure GEE Server Admin pages for LDAP authentication
          server. For most GEE installations, these are loaded
          automatically.
 
-      #. Load the ldap modules in your
+      #. Load the LDAP modules in your
          ``/opt/google/gehttpd/conf/gehttpd.conf``
 
          After the modules are loaded, you can control access by
@@ -51,7 +51,7 @@ Configure GEE Server Admin pages for LDAP authentication
 
          The key directive format declares the LDAP server, the
          distinguished name (DN), and the attribute to use in the search
-         (typically the ``Uid`` attribute in the ``People``
+         (typically the ``Uid`` attribute in the ``Users``
          organizational unit). You can also customize these filters for
          additional security constraints.
 
@@ -65,19 +65,23 @@ Configure GEE Server Admin pages for LDAP authentication
          ``# /etc/init.d/geserver restart``
 
       #. Add the directives to your config file ``/opt/google/gehttp/conf/gehttpd.conf``
-         under <Directory "/opt/google/gehttpd/htdocs/admin">
+         for ``/opt/google/gehttpd/htdocs/admin`` Directory.
 
          Comment/remove these lines :
 
-          | AuthUserFile /opt/google/gehttpd/conf.d/.htpasswd
-          | AuthGroupFile /dev/null
+         .. code-block:: none
+
+            AuthUserFile /opt/google/gehttpd/conf.d/.htpasswd
+            AuthGroupFile /dev/null
 
          And Add these lines :
 
-          | AuthBasicProvider ldap
-          | AuthLDAPBindDN "someuser@example.com"
-          | AuthLDAPBindPassword "somepassword"
-          | AuthLDAPURL "ldap://ldapserver.example.com:389/ou=Users,dc=example,dc=com?uid"
+         .. code-block:: none
+
+            AuthBasicProvider ldap
+            AuthLDAPBindDN "someuser@example.com"
+            AuthLDAPBindPassword "somepassword"
+            AuthLDAPURL "ldap://ldapserver.example.com:389/ou=Users,dc=example,dc=com?uid"
 
 
       #. For testing purposes, add the lines below to the
@@ -115,7 +119,7 @@ Configure GEE Server Admin pages for LDAP authentication
       -  ``AuthLDAPBindPassword``. The password for the user account
          configured with the ``AuthLDAPBindDN`` directive.
       -  ``AuthLDAPURL``. The URL that tells where the directory server
-         is, where to look for users at, which user attribute is used to
+         is, where to look for users, which user attribute is used to
          identify a user, and other miscellaneous things that are
          specific to the LDAP query syntax.
       -  ``AuthBasicProvider``. Tells Apache which authentication module

@@ -49,7 +49,7 @@ Configure a GEE virtual host for LDAP authentication
 
          The key directive format declares the LDAP server, the
          distinguished name (DN), and the attribute to use in the search
-         (typically the ``Uid`` attribute in the ``People``
+         (typically the ``Uid`` attribute in the ``Users``
          organizational unit). You can also customize these filters for
          additional security constraints.
 
@@ -106,7 +106,7 @@ Configure a GEE virtual host for LDAP authentication
       -  ``AuthLDAPBindPassword``. The password for the user account
          configured with the ``AuthLDAPBindDN`` directive.
       -  ``AuthLDAPURL``. The URL that tells where the directory server
-         is, where to look for users at, which user attribute is used to
+         is, where to look for users, which user attribute is used to
          identify a user, and other miscellaneous things that are
          specific to the LDAP query syntax.
       -  ``AuthBasicProvider``. Tells Apache which authentication module

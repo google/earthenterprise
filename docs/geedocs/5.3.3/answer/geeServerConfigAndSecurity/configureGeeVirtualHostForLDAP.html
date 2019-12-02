@@ -108,7 +108,7 @@ querying the directory for particular attributes.</p>
 <p><code class="docutils literal notranslate"><span class="pre">AuthLDAPURL</span> <span class="pre">ldap://ldapserver.example.com:389/ou=Users,dc=example,dc=com?uid</span></code></p>
 <p>The key directive format declares the LDAP server, the
 distinguished name (DN), and the attribute to use in the search
-(typically the <code class="docutils literal notranslate"><span class="pre">Uid</span></code> attribute in the <code class="docutils literal notranslate"><span class="pre">People</span></code>
+(typically the <code class="docutils literal notranslate"><span class="pre">Uid</span></code> attribute in the <code class="docutils literal notranslate"><span class="pre">Users</span></code>
 organizational unit). You can also customize these filters for
 additional security constraints.</p>
 </li>
@@ -166,7 +166,7 @@ authenticate the user.</li>
 <li><code class="docutils literal notranslate"><span class="pre">AuthLDAPBindPassword</span></code>. The password for the user account
 configured with the <code class="docutils literal notranslate"><span class="pre">AuthLDAPBindDN</span></code> directive.</li>
 <li><code class="docutils literal notranslate"><span class="pre">AuthLDAPURL</span></code>. The URL that tells where the directory server
-is, where to look for users at, which user attribute is used to
+is, where to look for users, which user attribute is used to
 identify a user, and other miscellaneous things that are
 specific to the LDAP query syntax.</li>
 <li><code class="docutils literal notranslate"><span class="pre">AuthBasicProvider</span></code>. Tells Apache which authentication module
