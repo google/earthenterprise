@@ -19,7 +19,7 @@
 
 #include <notify.h>
 
-std::vector<gstJobStats*>* gstJobStats::stat_objects = NULL;
+std::vector<gstJobStats*>* gstJobStats::stat_objects = nullptr;
 
 gstJobStats::gstJobStats(const std::string& group_name,
                          const JobName* names, int job_count)
@@ -27,7 +27,7 @@ gstJobStats::gstJobStats(const std::string& group_name,
       job_names_(names),
       job_count_(job_count),
       jobs_(new JobUnit[job_count]) {
-  if (stat_objects == NULL) {
+  if (stat_objects == nullptr) {
     stat_objects = new std::vector<gstJobStats*>;
   }
   stat_objects->push_back(this);
@@ -63,7 +63,7 @@ void gstJobStats::End(int job_id) {
 }
 
 void gstJobStats::DumpAllStats() {
-  if (stat_objects != NULL) {
+  if (stat_objects != nullptr) {
     for (std::vector<gstJobStats*>::iterator it = stat_objects->begin();
          it != stat_objects->end(); ++it) {
       (*it)->DumpStats();
@@ -72,7 +72,7 @@ void gstJobStats::DumpAllStats() {
 }
 
 void gstJobStats::ResetAll() {
-  if (stat_objects != NULL) {
+  if (stat_objects != nullptr) {
     for (std::vector<gstJobStats*>::iterator it = stat_objects->begin();
          it != stat_objects->end(); ++it) {
       (*it)->Reset();

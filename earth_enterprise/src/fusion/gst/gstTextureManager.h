@@ -77,9 +77,6 @@ class gstTextureManager {
   // Initialize the texture manager from a valid graphics context
   void glinit();
 
-  // Open new texture given it's pathname
-  // returns texture object on success, NULL on failure
-  //gstTextureGuard openFile(const char *path, bool base = false);
   gstTextureGuard NewTextureFromPath(const std::string& path,
                                      bool* is_mercator_imagery);
   bool AddBaseTexture(gstTextureGuard texture);

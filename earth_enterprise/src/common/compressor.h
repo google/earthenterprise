@@ -55,15 +55,15 @@ enum CompressMode {
 inline std::string CompressModeName(CompressMode t) {
   switch (t) {
     case CompressNone:
-      return "None";
+      return std::string("None");
     case CompressLZ:
-      return "LZ";
+      return std::string("LZ");
     case CompressJPEG:
-      return "JPEG";
+      return std::string("JPEG");
     case CompressDXT1:
-      return "DXT1";
+      return std::string("DXT1");
     case CompressPNG:
-      return "PNG";
+      return std::string("PNG");
   }
   return std::string(); // unreached but silences warnings
 }
@@ -125,12 +125,12 @@ struct WriteBuffer : public jpeg_destination_mgr {
   size_t bufSize;
   static const size_t reserve_size = kCRC32Size;
 
-  WriteBuffer(size_t bsz, char *pakbuf = NULL) : bufSize(bsz) {
+  WriteBuffer(size_t bsz, char *pakbuf = nullptr) : bufSize(bsz) {
     init_destination = initDestination;
     empty_output_buffer = emptyOutputBuffer;
     term_destination = termDestination;
 
-    if (pakbuf == NULL) {
+    if (pakbuf == nullptr) {
       buf = new char[bufSize + reserve_size];
       track_buf_mem_ = true;
     } else {
@@ -175,7 +175,7 @@ struct ReadBuffer : public jpeg_source_mgr {
     resync_to_restart = jpeg_resync_to_restart;
     term_source = termSource;
     bytes_in_buffer = 0;
-    next_input_byte = NULL;
+    next_input_byte = nullptr;
     buf = (JOCTET*)data;
   }
 
@@ -187,7 +187,7 @@ struct ReadBuffer : public jpeg_source_mgr {
     ReadBuffer* src = (ReadBuffer*)cinfo->src;
     src->next_input_byte = &src->buf[0];
     src->bytes_in_buffer = src->bufSize;
-    return TRUE;
+    return true;
   }
 
   static void skipInputData(j_decompress_ptr cinfo, long nBytes) { ; }

@@ -315,7 +315,7 @@ gstStatus gstKVPFile::AddGeode(gstGeodeHandle geode) {
   // ensure our raw buffer is big enough
   rawBuf.reserve(rpos.size);
 
-  if (geode->ToRaw(&rawBuf[0]) == NULL) {
+  if (geode->ToRaw(&rawBuf[0]) == nullptr) {
     notify(NFY_WARN, "Failed to convert geode to raw buffer");
     return GST_UNKNOWN;
   }
@@ -372,7 +372,7 @@ gstStatus gstKVGeomFormat::OpenFile() {
                                  gstHeaderImpl::Create());
     ldef.SetBoundingBox(kvp_file_->BoundingBox());
     delete kvp_table_;
-    kvp_table_ = NULL;
+    kvp_table_ = nullptr;
   }
 
   return GST_OKAY;

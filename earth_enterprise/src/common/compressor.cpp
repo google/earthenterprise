@@ -64,7 +64,7 @@ uint32 MinifyCompressor::decompress(char* inbuf, int inbufSize, char* outbuf) {
 //------------------------------------------------------------------------------
 
 static void errorExit(j_common_ptr cinfo) {
-  ErrorMgr* err = (ErrorMgr*)cinfo->err;
+  ErrorMgr* err = static_cast<ErrorMgr*>(cinfo->err);//(ErrorMgr*)cinfo->err;
 
   // Format the warning message.
   char buffer[JMSG_LENGTH_MAX];
@@ -157,7 +157,7 @@ JPEGCompressor::JPEGCompressor(uint32 w, uint32 h,
 
   jpeg_set_defaults(&cinfo_);
 
-  jpeg_set_quality(&cinfo_, quality_, TRUE);
+  jpeg_set_quality(&cinfo_, quality_, true);
 }
 
 JPEGCompressor::~JPEGCompressor() {
@@ -167,7 +167,7 @@ JPEGCompressor::~JPEGCompressor() {
 
 uint32 JPEGCompressor::compress(const char *inbuf) {
   // Initialize internal state of jpeg compressor.
-  jpeg_start_compress(&cinfo_, TRUE);
+  jpeg_start_compress(&cinfo_, true);
 
   // Add JPEG comment tag, if available.
   if (!comment_string_.empty()) {

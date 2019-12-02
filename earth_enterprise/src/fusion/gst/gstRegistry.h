@@ -76,7 +76,7 @@ class gstRegistry {
           return _tags.removeIndex(ii);
         }
       }
-      return NULL;
+      return nullptr;
     }
 
     khArray<gstValue*>* tags() { return &_tags; }
@@ -88,7 +88,7 @@ class gstRegistry {
           return *t;
         }
       }
-      return NULL;
+      return nullptr;
     }
 
     Group* findGroup(const char* n) const {
@@ -98,7 +98,7 @@ class gstRegistry {
           return *g;
         }
       }
-      return NULL;
+      return nullptr;
     }
 
     Group* removeGroup(Group* grp) {
@@ -128,7 +128,7 @@ class gstRegistry {
     bool _altered;
   };
 
-  gstRegistry(const char* n = NULL);
+  gstRegistry(const char* n = nullptr);
   ~gstRegistry();
   gstRegistry(const gstRegistry&) = delete;
   gstRegistry(gstRegistry&&) = delete;

@@ -70,7 +70,7 @@ class gstFileInfo {
 
 class gstFileIO {
  public:
-  gstFileIO(int, ssize_t sz, char* buf = NULL);
+  gstFileIO(int, ssize_t sz, char* buf = nullptr);
   ~gstFileIO();
 
   gstFileIO(const gstFileIO&) = delete;
