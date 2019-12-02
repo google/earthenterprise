@@ -53,7 +53,7 @@ class PresenceHeader {
 COMPILE_TIME_CHECK(sizeof(PresenceHeader) == 32, BadPresenceHeaderSize);
 
 const char
-PresenceHeader::themagic[] = "Keyhole Presence Mask";
+PresenceHeader::themagic[] = "Keyhole Presence Mask";
 COMPILE_TIME_CHECK(sizeof(PresenceHeader::themagic)-1 ==
                    sizeof(PresenceHeader().magic),
                    InvalidMagicSize);
@@ -65,7 +65,6 @@ PresenceHeader::PresenceHeader(uint8 numLevels_, uint32 totalSize)
       totalFileSize(totalSize),
       unused1(0) {
   memcpy(magic, themagic, sizeof(magic));
-  magic[21] = '\0';
 }
 
 void
