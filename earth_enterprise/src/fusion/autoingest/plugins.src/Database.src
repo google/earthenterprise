@@ -213,7 +213,7 @@ private:
 #include <geindex/Entries.h>
 #include <khConstants.h>
 
-#undef DEBUG_SS_DECISIONS
+#define DEBUG_SS_DECISIONS 1
 
 #ifdef CREATE_SUBSAMPLED_TERRAIN
 namespace {
@@ -771,8 +771,8 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
     terrain_project->LoadInsetInfo(ClientTmeshTilespaceFlat,
                                   beginSSLevel, endSSLevel,
                                   terrainInsets);
-    const uint beginMinifyLevel  = StartTmeshLevel;
-    const uint endMinifyLevel    = terrainInsets[0].effectiveMaxLevel;
+    const uint beginMinifyLevel  = 0; // StartTmeshLevel;
+    const uint endMinifyLevel    = 0; // terrainInsets[0].effectiveMaxLevel;
 
 #ifdef DEBUG_SS_DECISIONS
     notify(NFY_NOTICE, "  beginMinifyLevel = %u", beginMinifyLevel);
@@ -881,8 +881,8 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
       FindNeededTerrainInsets(ssGenInfo[i].coverage,
                               terrainInsetPtrs, numTerrain,
                               neededIndexes,
-                              beginMinifyLevel,
-                              endMinifyLevel);
+                              0, //beginMinifyLevel,
+                              0); //endMinifyLevel);
 
       // ***** If there's nothing to super-sample from, just skip this
       // one.  This will not normally happen since there will usually
@@ -891,12 +891,14 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
         continue;
 
       // calculate the level range that will be minified
-      uint effectiveBeginMinifyLevel =
-        std::max(ssGenInfo[i].coverage.beginLevel(), beginMinifyLevel);
-      uint effectiveEndMinifyLevel =
-        std::min(ssGenInfo[i].coverage.endLevel(), endMinifyLevel);
+      uint effectiveBeginMinifyLevel = 0;
+      //std::max(ssGenInfo[i].coverage.beginLevel(), beginMinifyLevel);
+      uint effectiveEndMinifyLevel = 0;
+      //std::min(ssGenInfo[i].coverage.endLevel(), endMinifyLevel);
 
       // Build a PacketGenConfig
+      notify(NFY_DEBUG, "Database beginMinifyLevel: %ud endMinifyLevel %ud\n",
+           beginMinifyLevel, endMinifyLevel);
       PacketGenConfig packetGenConfig;
       packetGenConfig.coverage  = ssGenInfo[i].coverage;
       packetGenConfig.beginMinifyLevel   = beginMinifyLevel;

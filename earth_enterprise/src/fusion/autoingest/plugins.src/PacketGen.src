@@ -76,12 +76,16 @@ void PacketGenAssetVersionImplD::UpdateChildren(
 
     neededIndexes.reserve(numInsets);
     auto gencov = khInsetCoverage(levCov);
+    notify(NFY_DEBUG, "Packetgen beginMinifyLevel: %ud endMinifyLevel %ud\n",
+           config.beginMinifyLevel, config.endMinifyLevel);
+
     overlapEnvelope<ProductAssetVersion> env(
         type,
         extra.insetInfo,
         numInsets,
-        config.beginMinifyLevel,
-        config.endMinifyLevel,
+        // config.beginMinifyLevel,
+        // config.endMinifyLevel,
+        0, 0,
         level);
     extra.calc->setEnvelope(env);
     neededIndexes = std::move(extra.calc->GetOverlapForLevel(gencov));
