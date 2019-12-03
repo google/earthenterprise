@@ -341,6 +341,7 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
     std::string filename = entry->second->XMLFilename() + ".new";
 
     if (serializer->Save(entry->second, filename)) {
+      notify(NFY_WARN, "%s: %d", filename.c_str(), entry->second.use_count());
       savetrans.AddNewPath(filename);
       if (saved) {
         saved->push_back(entry->first);
@@ -358,24 +359,27 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
 template<class AssetType>
 void StorageManager<AssetType>::WriteDirty() {
   if (writeDirty) {
-    std::lock_guard<std::recursive_mutex> lock(storageMutex);
     khFilesTransaction savetrans(".new");
-    typename std::map<AssetKey, PointerType>::iterator entry = dirtyMap.begin();
-    while (entry != dirtyMap.end()) {
-      if (entry->second.use_count() == 2) {
-        std::string filename = entry->second->XMLFilename() + ".new";
-
-        if (serializer->Save(entry->second, filename)) {
-          savetrans.AddNewPath(filename);
-          entry = dirtyMap.erase(entry);
-        }
-      }
-      else {
-        entry++;
-      }
-    }
-    cache.Prune();
-    savetrans.Commit();
+    SaveDirtyToDotNew(savetrans, NULL);
+    if (!filetrans.Commit()) throw khException(kh::tr("Unable to commit asset changes"));
+//    std::lock_guard<std::recursive_mutex> lock(storageMutex);
+//    khFilesTransaction savetrans(".new");
+//    typename std::map<AssetKey, PointerType>::iterator entry = dirtyMap.begin();
+//    while (entry != dirtyMap.end()) {
+//      if (entry->second.use_count() == 2) {
+//        std::string filename = entry->second->XMLFilename() + ".new";
+//
+//        if (serializer->Save(entry->second, filename)) {
+//          savetrans.AddNewPath(filename);
+//          entry = dirtyMap.erase(entry);
+//        }
+//      }
+//      else {
+//        entry++;
+//      }
+//    }
+//    cache.Prune();
+//    savetrans.Commit();
   }
 }
 
