@@ -341,7 +341,7 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
     std::string filename = entry->second->XMLFilename() + ".new";
 
     if (serializer->Save(entry->second, filename)) {
-      notify(NFY_WARN, "%s: %l", filename.c_str(), entry->second.use_count());
+      notify(NFY_WARN, "%s: %lu", filename.c_str(), entry->second.use_count());
       savetrans.AddNewPath(filename);
       if (saved) {
         saved->push_back(entry->first);
