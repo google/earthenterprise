@@ -187,7 +187,7 @@ struct ReadBuffer : public jpeg_source_mgr {
     ReadBuffer* src = static_cast<ReadBuffer*>(cinfo->src);
     src->next_input_byte = &src->buf[0];
     src->bytes_in_buffer = src->bufSize;
-    return true;
+    return TRUE;
   }
 
   static void skipInputData(j_decompress_ptr cinfo, long nBytes) { ; }
