@@ -44,16 +44,16 @@ Create Search tabs
 
       To define a new search tab:
 
-      #. In the :doc:`GEE Server Admin
-      console <../geeServerAdmin/signInAdminConsole>`, click **Search tabs**.
+      #. In the :doc:`GEE Server Admin console <../geeServerAdmin/signInAdminConsole>`,
+         click **Search tabs**.
       #. Click **Create** **new**. The Create Search Definition dialog appears.
-         
+
          |Create Search Definition dialog|
 
       #. Enter a unique **Name** for your search tab.
       #. Enter a **Label** that will display as the name of the search tab in the client.
       #. Provide a **URL**.
-      #. If you want to reference a Google Earth Enterprise Server plug-in for the 
+      #. If you want to reference a Google Earth Enterprise Server plug-in for the
          search tab, enter the name of the plug-in. The following plug-ins are available:
 
          -  POISearch
@@ -62,7 +62,7 @@ Create Search tabs
          -  /gesearch/PlacesSearch
          -  /gesearch/ExampleSearch
 
-      #. Optionally provide additional query parameters. 
+      #. Optionally provide additional query parameters.
          The syntax is **key1=value1&key2;=value2**. For example,
          **flyToFirstElement=true&displayKeys;=location** flies to
          the first element of your search results and displays the
@@ -72,7 +72,7 @@ Create Search tabs
          field.
 
          .. warning::
-         
+
             Any web service, servlet, or web application
             you configure the search tabs to query must return valid KML
             to Google Earth EC. For Google Maps, it must return valid

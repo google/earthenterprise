@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp12.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp12.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="geecheck-test-your-gee-server-status">
 <h1>Geecheck: test your GEE Server status<a class="headerlink" href="#geecheck-test-your-gee-server-status" title="Permalink to this headline">¶</a></h1>
-<div class="container">
-<div class="content container">
+<div class="docutils container">
+<div class="content docutils container">
 <p><strong>Geecheck</strong> is a tool that checks the health and status of a GEE
 Server installation. With GEE 5.1.x, you can use geecheck to run
 tests and then view the results in a browser-based dashboard.
@@ -108,16 +108,12 @@ installed in the following location:</p>
 <ul>
 <li><p class="first"><code class="docutils literal notranslate"><span class="pre">geecheck.py</span></code> runs and displays the results from any tests
 located in the subfolders:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>geecheck_tests/
+   user_tests/
+   fusion_tests/
+   server_tests/
 </pre></div>
 </div>
-<dl class="docutils">
-<dt>geecheck_tests/</dt>
-<dd><p class="first last">user_tests/
-fusion_tests/
-server_tests/</p>
-</dd>
-</dl>
 </li>
 <li><p class="first">Tests must follow the naming convention <code class="docutils literal notranslate"><span class="pre">*_test.py</span></code>, for
 example, <code class="docutils literal notranslate"><span class="pre">dns_test.py</span></code>. Test results are organized by the
@@ -176,9 +172,9 @@ subfolders to be run from geecheck:</p>
 </pre></div>
 </div>
 <p>To get some idea of how you can write your own test, you can study
-the structure of the sample test, <code class="docutils literal notranslate"><span class="pre">sample_test.py</span></code>, provided in
-the <code class="docutils literal notranslate"><span class="pre">user_tests</span></code> subfolder. Use the code as a guide or simply
-copy and edit it if you are unfamiliar with Python unit tests.</p>
+the structure of the existing tests in the <code class="docutils literal notranslate"><span class="pre">user_tests</span></code> subfolder.
+Use the code as a guide or simply copy and edit an existing test
+if you are unfamiliar with Python unit tests.</p>
 <p class="rubric" id="run-geecheck-command-line">Run geecheck on the command line</p>
 <p>You can run <code class="docutils literal notranslate"><span class="pre">geecheck.py</span></code> from the command line with options to
 exclude tests and specify the output. The default settings

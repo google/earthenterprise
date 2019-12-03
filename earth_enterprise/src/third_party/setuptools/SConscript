@@ -51,7 +51,7 @@ else:
   env_opt = ''
 
 # [2] Build setuptools
-python_cmd = '%s/bin/python' % root_dir
+python_cmd = setuptools_env['python_bin']
 
 setuptools_target = '%s/.build' % current_dir
 setuptools_build = setuptools_env.Command(

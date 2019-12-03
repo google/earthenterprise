@@ -25,6 +25,7 @@
 #include "Misc.h"
 #include "khAssetManager.h"
 #include "fusion/autoingest/MiscConfig.h"
+#include "AssetOperation.h"
 
 // ****************************************************************************
 // ***  StateUpdateNotifier
@@ -142,7 +143,7 @@ AssetVersionImplD::StateChangeNotifier::DoNotify(
 // since AssetVersionImpl is a virtual base class
 // my derived classes will initialize it directly
 AssetVersionImplD::AssetVersionImplD(const std::vector<SharedString> &inputs)
-    : AssetVersionImpl(), verholder(0)
+    : AssetVersionImpl(), verholder(0), numInputsWaitingFor(0)
 {
   AddInputAssetRefs(inputs);
 }
@@ -268,9 +269,9 @@ void AssetVersionImplD::SetState(
   if (newstate != state) {
     AssetDefs::State oldstate = state;
     state = newstate;
+    HandleExternalStateChange(GetRef(), oldstate, numInputsWaitingFor, GetChildrenWaitingFor());
     try {
-      // NOTE: This can end up calling back here to switch us to
-      // another state (usually Failed or Succeded)
+      // OnStateChange may return a new state that we need to transition to.
       AssetDefs::State nextstate = OnStateChange(newstate, oldstate);
       if (nextstate != newstate) SetState(nextstate);
     } catch (const StateChangeException &e) {
@@ -306,7 +307,7 @@ AssetVersionImplD::SetProgress(double newprogress)
   }
 }
 
-void
+bool
 AssetVersionImplD::SyncState(const std::shared_ptr<StateChangeNotifier> notifier) const
 {
   if (CacheInputVersions()) {
@@ -319,14 +320,17 @@ AssetVersionImplD::SyncState(const std::shared_ptr<StateChangeNotifier> notifier
     if (newstate != state) {
       MutableAssetVersionD self(GetRef());
       self->SetState(newstate, notifier);
+      return true;
     }
   } else {
     AssetDefs::State newstate = ComputeState();
     if (newstate != state) {
       MutableAssetVersionD self(GetRef());
       self->SetState(newstate, notifier);
+      return true;
     }
   }
+  return false;
 }
 
 void
@@ -629,6 +633,10 @@ AssetVersionImplD::WriteFatalLogfile(const AssetVersionRef &verref,
   }
 }
 
+bool
+AssetVersionImplD::BlockedByOfflineInputs(const InputAndChildStateData & stateData) const {
+  return stateData.stateByInputs == AssetDefs::Blocked && stateData.blockersAreOffline;
+}
 
 // ****************************************************************************
 // ***  LeafAssetVersionImplD
@@ -719,7 +727,7 @@ LeafAssetVersionImplD::ComputeState(void) const
 
 AssetDefs::State
 LeafAssetVersionImplD::CalcStateByInputsAndChildren(const InputAndChildStateData & stateData) const {
-  this->numInputsWaitingFor = stateData.numInputsWaitingFor;
+  this->numInputsWaitingFor = stateData.waitingFor.inputs;
   AssetDefs::State newstate = state;
   if (!AssetDefs::Ready(state)) {
     // I'm currently not ready, so take whatever my inputs say
@@ -735,7 +743,7 @@ LeafAssetVersionImplD::CalcStateByInputsAndChildren(const InputAndChildStateData
       newstate = stateData.stateByInputs;
     } else {
       // my task has already finished
-      if ((stateData.stateByInputs == AssetDefs::Blocked) && stateData.blockersAreOffline) {
+      if (BlockedByOfflineInputs(stateData)) {
         // If the only reason my inputs have reverted is because
         // some of them have gone offline, that's usually OK and
         // I don't need to revert my state.
@@ -808,13 +816,18 @@ LeafAssetVersionImplD::HandleTaskDone(const TaskDoneMsg &msg)
   if (msg.success) {
     // the output files in the msg have full paths, make them relative to
     // the AssetRoot again
-    ClearOutfiles();                // should already be empty
-    for (const auto &of : msg.outfiles) {
-      outfiles.push_back(of);
-    }
+    ResetOutFiles(msg.outfiles);
     SetState(AssetDefs::Succeeded);
   } else {
     SetState(AssetDefs::Failed);
+  }
+}
+
+void
+LeafAssetVersionImplD::ResetOutFiles(const std::vector<std::string> & newOutfiles) {
+  ClearOutfiles();
+  for (const auto &of : newOutfiles) {
+    outfiles.push_back(of);
   }
 }
 
@@ -1065,12 +1078,13 @@ CompositeAssetVersionImplD::ComputeState(void) const
   if (!NeedComputeState()) {
     return state;
   }
+  numInputsWaitingFor = 0;
   numChildrenWaitingFor = 0;
 
   // Undecided composites take their state from their inputs
   if (children.empty()) {
     bool blockersAreOffline;
-    AssetDefs::State statebyinputs = StateByInputs(&blockersAreOffline);
+    AssetDefs::State statebyinputs = StateByInputs(&blockersAreOffline, &numInputsWaitingFor);
     return statebyinputs;
   }
 
@@ -1078,7 +1092,7 @@ CompositeAssetVersionImplD::ComputeState(void) const
   // inputs, for all others all that matters is the state of their children
   if (CompositeStateCaresAboutInputsToo()) {
     bool blockersAreOffline;
-    AssetDefs::State statebyinputs = StateByInputs(&blockersAreOffline);
+    AssetDefs::State statebyinputs = StateByInputs(&blockersAreOffline, &numInputsWaitingFor);
     if (statebyinputs != AssetDefs::Queued) {
       // something is wrong with my inputs (or they're not done yet)
       if ((statebyinputs == AssetDefs::Blocked) && blockersAreOffline) {
@@ -1148,7 +1162,8 @@ CompositeAssetVersionImplD::ComputeState(void) const
 
 AssetDefs::State
 CompositeAssetVersionImplD:: CalcStateByInputsAndChildren(const InputAndChildStateData & stateData) const {
-  this->numChildrenWaitingFor = stateData.numChildrenWaitingFor;
+  this->numInputsWaitingFor = stateData.waitingFor.inputs;
+  this->numChildrenWaitingFor = stateData.waitingFor.children;
 
   // Undecided composites take their state from their inputs
   if (children.empty()) {
@@ -1160,7 +1175,7 @@ CompositeAssetVersionImplD:: CalcStateByInputsAndChildren(const InputAndChildSta
   if (CompositeStateCaresAboutInputsToo()) {
     if (stateData.stateByInputs != AssetDefs::Queued) {
       // something is wrong with my inputs (or they're not done yet)
-      if ((stateData.stateByInputs == AssetDefs::Blocked) && stateData.blockersAreOffline) {
+      if (BlockedByOfflineInputs(stateData)) {
         if (OfflineInputsBreakMe()) {
           return stateData.stateByInputs;
         }
@@ -1352,4 +1367,20 @@ CompositeAssetVersionImplD::DoClean(const std::shared_ptr<StateChangeNotifier> c
              GetRef().toString().c_str(), i.toString().c_str());
     }
   }
+}
+
+bool
+LeafAssetVersionImplD::RecalcState(WaitingFor & waitingFor) const {
+  bool changed = SyncState();
+  waitingFor.inputs = numInputsWaitingFor;
+  waitingFor.children = 0;
+  return changed;
+}
+
+bool
+CompositeAssetVersionImplD::RecalcState(WaitingFor & waitingFor) const {
+  bool changed = SyncState();
+  waitingFor.inputs = numInputsWaitingFor;
+  waitingFor.children = numChildrenWaitingFor;
+  return changed;
 }

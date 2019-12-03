@@ -17,7 +17,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Set up HTTPS" href="setupHTTPS.html" />
-    <link rel="prev" title="PostgreSQL authentication" href="postgreSqlAuthentication.html" />
+    <link rel="prev" title="Configure GEE Server Admin page for LDAP authentication" href="configureGeeForLDAP.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
@@ -33,7 +33,7 @@
           <a href="setupHTTPS.html" title="Set up HTTPS"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="postgreSqlAuthentication.html" title="PostgreSQL authentication"
+          <a href="configureGeeForLDAP.html" title="Configure GEE Server Admin page for LDAP authentication"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../geeServerConfigAndSecurity.html" accesskey="U">GEE Server Configuration And Security</a> &#187;</li> 
@@ -42,8 +42,8 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="postgreSqlAuthentication.html"
-                        title="previous chapter">PostgreSQL authentication</a></p>
+  <p class="topless"><a href="configureGeeForLDAP.html"
+                        title="previous chapter">Configure GEE Server Admin page for LDAP authentication</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="setupHTTPS.html"
                         title="next chapter">Set up HTTPS</a></p>
@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp5.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp5.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="configure-a-gee-virtual-host-for-ldap-authentication">
 <h1>Configure a GEE virtual host for LDAP authentication<a class="headerlink" href="#configure-a-gee-virtual-host-for-ldap-authentication" title="Permalink to this headline">¶</a></h1>
-<div class="container">
-<div class="content container">
+<div class="docutils container">
+<div class="content docutils container">
 <p>You can use LDAP authentication, which is based on Microsoft
 Active Directory, to authenticate users to access your GEE virtual
 hosts. GEE server software is based on Apache <code class="docutils literal notranslate"><span class="pre">httpd</span></code>.</p>
@@ -144,7 +144,6 @@ Alternatively, you can use the command prompt:</p>
    AuthLDAPURL &quot;ldap://server.name.local:389/cn=Users,dc=domain,dc=google,dc=com?uid&quot;\
    AuthLDAPBindDN CN=geserver,OU=Users,OU=Yourorg,DC=DcNAME,DC=local
    AuthLDAPBindPassword localuserpassword
-   AuthzLDAPAuthoritative Off
    Require valid-user
 &lt;/Location&gt;
 </pre></div>
@@ -154,20 +153,13 @@ Alternatively, you can use the command prompt:</p>
 the client.
 A login screen appears. If you cannot access Apache, open the
 file error log at
-<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/logs/error_log</span> <span class="pre">and</span> <span class="pre">access_log</span></code>.
-If <code class="docutils literal notranslate"><span class="pre">AuthzLDAPAuthoritative</span></code> is on, the client might
-continually prompt for the username and password even though
-you entered a valid username and password and the client is
-functioning. To correct this, turn <code class="docutils literal notranslate"><span class="pre">AuthzLDAPAuthoritative</span></code>
-off.</p>
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/logs/error_log</span> <span class="pre">and</span> <span class="pre">access_log</span></code>.</p>
 </li>
 </ol>
 <p class="rubric">Directives</p>
 <ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">require</span> <span class="pre">valid-user</span></code>. Allows all users who log in with
 correct passwords.</li>
-<li><code class="docutils literal notranslate"><span class="pre">AuthzLDAPAuthoritative</span></code>. Tells Apache whether a failed
-authentication request can be passed to other Apache modules.</li>
 <li><code class="docutils literal notranslate"><span class="pre">AuthLDAPBindDN</span></code>. The distinguished name (DN) of the user
 account that Apache uses to connect to the directory system and
 authenticate the user.</li>
@@ -181,9 +173,10 @@ specific to the LDAP query syntax.</li>
 to use for Basic Authentication.</li>
 </ul>
 <p>For more information, see the Apache
-<a class="reference external" href="http://httpd.apache.org/docs/2.2/mod/mod_ldap.html">mod_ldap</a>
+<a class="reference external" href="https://httpd.apache.org/docs/2.4/mod/mod_ldap.html">mod_ldap</a>
+<a class="reference external" href="https://httpd.apache.org/docs/2.4/mod/mod_authnz_ldap.html">mpd_authnz_ldap</a>
 and
-<a class="reference external" href="http://httpd.apache.org/docs/2.2/mod/mod_auth_basic.html">mod_auth_basic</a>
+<a class="reference external" href="https://httpd.apache.org/docs/2.4/mod/mod_auth_basic.html">mod_auth_basic</a>
 documentation.</p>
 <div class="admonition tip">
 <p class="first admonition-title">Tip</p>
@@ -211,7 +204,7 @@ making authentication requests.</p>
           <a href="setupHTTPS.html" title="Set up HTTPS"
              >next</a> |</li>
         <li class="right" >
-          <a href="postgreSqlAuthentication.html" title="PostgreSQL authentication"
+          <a href="configureGeeForLDAP.html" title="Configure GEE Server Admin page for LDAP authentication"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../geeServerConfigAndSecurity.html" >GEE Server Configuration And Security</a> &#187;</li> 

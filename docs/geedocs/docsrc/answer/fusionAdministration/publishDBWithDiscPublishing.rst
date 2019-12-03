@@ -48,7 +48,10 @@ Publish databases using disconnected publishing
       #. From the command line, specify the database that you want to
          publish with the ``--report_size_only`` flag:
 
-         ``# gedisconnectedsend --report_size_only --sendpath \       /gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb``
+         .. code-block:: bash
+
+            gedisconnectedsend --report_size_only --sendpath \
+            /gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb
 
       .. rubric:: To create a disconnected database:
          :name: to-create-a-disconnected-database
@@ -56,16 +59,18 @@ Publish databases using disconnected publishing
       #. Create an output directory on your portable media, which you
          will specify when you create the disconnected database.
 
-         ``rm -rf /media/ddb/test_ver001/``
+         .. code-block:: bash
 
-         ``mkdir -p /media/ddb/test_ver001/``
+            rm -rf /media/ddb/test_ver001/
+            mkdir -p /media/ddb/test_ver001/
 
       Create the disconnected database and output the file to your
       portable media:
-      ``gedisconnectedsend --output /media/ddb/test_ver001/ \``
 
-      ``--sendpath
-      /gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb``
+      .. code-block:: bash
+
+         gedisconnectedsend --output /media/ddb/test_ver001/ \
+         --sendpath /gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb
 
       In this example,
       ``/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/``
@@ -89,16 +94,18 @@ Publish databases using disconnected publishing
 
       For example, on ``machine_two``:
 
-      ``geserveradmin --fusion_host machine_one --listdbs > /home/user_name/ddb/dblist_server_host``
+      .. code-block:: bash
+
+         geserveradmin --fusion_host machine_one --listdbs > /home/user_name/ddb/dblist_server_host
 
       On ``machine_one``, create the delta disconnected database using
       the ``--havepathfile`` option:
 
-      ``gedisconnectedsend --output /media/ddb/test_ver001/ \``
+      .. code-block:: bash
 
-      ``--havepathfile /home/user_name/ddb/dblist_server_host \``
-
-      ``--sendpath /gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb``
+         gedisconnectedsend --output /media/ddb/test_ver001/ \
+         --havepathfile /home/user_name/ddb/dblist_server_host \
+         --sendpath /gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb
 
       .. rubric:: Publish on the remote server host
          :name: publish-on-the-remote-server-host
@@ -114,30 +121,29 @@ Publish databases using disconnected publishing
 
       #. Set ownership and permissions for the ``gedb`` directory:
 
-         ``$ sudo chown -R gefusionuser:gegroup ddb/``
+         .. code-block:: bash
 
-         ``$ sudo chmod -R 755 ddb/``
+            sudo chown -R gefusionuser:gegroup ddb/
+            sudo chmod -R 755 ddb/
 
       #. Register the database on the Server. Specifying the
          --stream_server_url is optional.
 
-         ``geserveradmin --fusion_host fusion_host.company.com \``
+         .. code-block:: bash
 
-         ``--stream_server_url http://your_stream_server  \``
-
-         ``--adddb \``
-
-         ``/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/``
+            geserveradmin --fusion_host fusion_host.company.com \
+            --stream_server_url http://your_stream_server \
+            --adddb \
+            /media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/
 
       #. Push the files to the Server:
 
-         ``geserveradmin --fusion_host fusion_host.company.com \``
+         .. code-block:: bash
 
-         ``--stream_server_url http://your_stream_server \``
-
-         ``--pushdb \``
-
-         ``/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/``
+            geserveradmin --fusion_host fusion_host.company.com \
+            --stream_server_url http://your_stream_server \
+            --pushdb \
+            /media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/
 
       #. Publish the database on the Server either using the :doc:`GEE Server
          Admin console <../geeServerAdmin/publishDatabasesPortables>` or on the command
@@ -152,41 +158,35 @@ Publish databases using disconnected publishing
 
          **To publish on the command line:**
 
-         ``geserveradmin --fusion_host fusion_host.company.com \``
+         .. code-block:: bash
 
-         ``--stream_server_url http://your_stream_server \``
-
-         ``--publishdb \``
-
-         ``/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/``
+            geserveradmin --fusion_host fusion_host.company.com \
+            --stream_server_url http://your_stream_server \
+            --publishdb \
+            /media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/
 
       #. Verify that the database manifests:
 
-         ``geserveradmin --stream_server_url http://your_stream_server \``
+         .. code-block:: bash
 
-         ``--listdbs``
+            geserveradmin --stream_server_url http://your_stream_server \
+            --listdbs
 
-         ``geserveradmin --stream_server_url http://your_stream_server \``
-
-         ``--dbdetails \``
-
-         ``/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb``
+            geserveradmin --stream_server_url http://your_stream_server \
+            --dbdetails \
+            /media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb
 
       #. Verify the integrity of files in the published database:
 
-         ``ssh your_server``
+         .. code-block:: bash
 
-         ``/opt/google/bin/geindexcheck --database \``
+            ssh your_server
 
-         ``/gevol/published_dbs/stream_space/your_fusion_host/gevol/assets/``
+            /opt/google/bin/geindexcheck --database \
+            /gevol/published_dbs/stream_space/your_fusion_host/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb
 
-         ``Databases/test.kdatabase/gedb.kda/ver001/gedb``
-
-         ``/opt/google/bin/geindexcheck --mode all --database \``
-
-         ``/gevol/published_dbs/stream_space/your_fusion_host/gevol/assets/``
-
-         ``Databases/test.kdatabase/gedb.kda/ver001/gedb``
+            /opt/google/bin/geindexcheck --mode all --database \
+            /gevol/published_dbs/stream_space/your_fusion_host/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb
 
          .. tip::
 
@@ -235,28 +235,32 @@ Publish databases using disconnected publishing
       #. Identify which dbroot file needs to be updated, and store in an
          environment variable for later use:
 
-         ``export TARGET_DBROOT='/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/targets/new_target/dbroots/dbroot.v5p.DEFAULT'``
+         .. code-block:: bash
+
+            export TARGET_DBROOT='/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/targets/new_target/dbroots/dbroot.v5p.DEFAULT'
 
       #. Rewrite the KML layer links in the database on the Server.
 
-         ``/opt/google/bin/gerewritedbroot --source http://your_stream_server/new_target \``
+         .. code-block:: bash
 
-         ``--dbroot_file $TARGET_DBROOT\``
-
-         ``--kml_server your_stream_server --kml_url_path  your_htdoc_path/ \``
-
-         ``--preserve_kml_filenames``
+            /opt/google/bin/gerewritedbroot --source http://your_stream_server/new_target \
+            --dbroot_file $TARGET_DBROOT \
+            --kml_server your_stream_server --kml_url_path  your_htdoc_path/ \
+            --preserve_kml_filenames
 
       #. Changes are not refected until the server is restarted.
 
-         ``sudo service geserver restart``
+         .. code-block:: bash
+
+            sudo service geserver restart
 
       #. Validate that the server has the correct database information
          by dumping the dbroot as text:
 
-         ``wget -O dbroot.v5p.DEFAULT http://you_stream_server/new_target/dbRoot.v5``
+         .. code-block:: bash
 
-         ``gedumpdbroot dbroot.v5p.DEFAULT``
+            wget -O dbroot.v5p.DEFAULT http://you_stream_server/new_target/dbRoot.v5
+            gedumpdbroot dbroot.v5p.DEFAULT
 
       .. rubric:: Delete disconnected databases
 

@@ -85,7 +85,7 @@ appears to take some action when the --help flag is specified.  Help
 has been added through the --help option, or if any invalid parameter
 is given.  1098  TravisCI can pass when compilation fails.  Add logic
 to cause compilation failures to be detected and reported.  1104
-CentOS 7 (and maybe others) fails to build OpenGEE. Build seems to
+CentOS 7 (and maybe others) fails to build Open GEE. Build seems to
 fail when building third party parts of Qt. This appears to be an
 issue with libpng.  Fixed by including libpng12 in the build script.
 1122  Check for PIL (Python Imaging Library) returns an error.  Change
