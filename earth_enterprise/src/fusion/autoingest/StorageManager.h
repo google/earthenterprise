@@ -361,7 +361,7 @@ void StorageManager<AssetType>::WriteDirty() {
   if (writeDirty) {
     khFilesTransaction savetrans(".new");
     SaveDirtyToDotNew(savetrans, NULL);
-    if (!filetrans.Commit()) throw khException(kh::tr("Unable to commit asset changes"));
+    if (!savetrans.Commit()) throw khException(kh::tr("Unable to commit asset changes"));
 //    std::lock_guard<std::recursive_mutex> lock(storageMutex);
 //    khFilesTransaction savetrans(".new");
 //    typename std::map<AssetKey, PointerType>::iterator entry = dirtyMap.begin();
