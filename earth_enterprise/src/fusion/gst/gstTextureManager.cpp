@@ -425,8 +425,6 @@ void gstTextureManager::GetOverlayList(
                  khTilespace::Denormalize(tilebox.n));
   }
 
-  //for (std::map<uint, gstTextureGuard>::iterator it = texture_map_.begin();
-  //     it != texture_map_.end(); ++it) {
     for (const auto& it : texture_map_) {
       gstTextureGuard tex = it.second;
       if (tex && tex->enabled() && tex != base_texture_) {

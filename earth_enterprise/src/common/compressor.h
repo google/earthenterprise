@@ -184,7 +184,7 @@ struct ReadBuffer : public jpeg_source_mgr {
   static void initSource(j_decompress_ptr cinfo) { ; }
 
   static boolean fillInputBuffer(j_decompress_ptr cinfo) {
-    ReadBuffer* src = (ReadBuffer*)cinfo->src;
+    ReadBuffer* src = static_cast<ReadBuffer*>(cinfo->src);
     src->next_input_byte = &src->buf[0];
     src->bytes_in_buffer = src->bufSize;
     return true;
