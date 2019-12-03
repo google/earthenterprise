@@ -279,7 +279,7 @@ AssetVersion::storageManager(void)
 {
   static StorageManager<AssetVersionImpl> storageManager(
       MiscConfig::Instance().VersionCacheSize, MiscConfig::Instance().LimitMemoryUtilization, MiscConfig::Instance().MaxVersionCacheMemorySize,
-      MiscConfig::Instance().PeriodicallyWriteDirtyToDisk, MiscConfig::Instance().RemoveFromCache, MiscConfig::Instance().CheckOnDisk, "version");
+      MiscConfig::Instance().PeriodicallyWriteDirtyToDisk, "version");
   return storageManager;
 }
 

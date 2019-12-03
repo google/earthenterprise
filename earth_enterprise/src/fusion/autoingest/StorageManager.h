@@ -67,16 +67,12 @@ class StorageManager : public StorageManagerInterface<AssetType> {
                    bool limitByMemory,
                    uint64 maxMemory,
                    bool writeDirty,
-                   bool removeDirty,
-                   bool checkDisk,
                    const std::string & type,
                    SerializerPtr serializer) :
         assetType(type),
         serializer(std::move(serializer)),
         cache(cacheSize, type),
-        writeDirty(writeDirty),
-        removeDirty(removeDirty),
-        checkDisk(checkDisk)
+        writeDirty(writeDirty)
     {
       SetCacheMemoryLimit(limitByMemory, maxMemory);
     }
@@ -84,10 +80,8 @@ class StorageManager : public StorageManagerInterface<AssetType> {
                    bool limitByMemory,
                    uint64 maxMemory,
                    bool writeDirty,
-                   bool removeDirty,
-                   bool checkDisk,
                    const std::string & type) :
-        StorageManager(cacheSize, limitByMemory, maxMemory, writeDirty, removeDirty, checkDisk, type,
+        StorageManager(cacheSize, limitByMemory, maxMemory, writeDirty, type,
                        SerializerPtr(new AssetSerializerLocalXML<AssetType>())) {}
     ~StorageManager() = default;
 
@@ -122,8 +116,6 @@ class StorageManager : public StorageManagerInterface<AssetType> {
     CacheType cache;
     std::map<AssetKey, PointerType> dirtyMap;
     const bool writeDirty;
-    const bool removeDirty;
-    const bool checkDisk;
 
     StorageManager(const StorageManager &) = delete;
     StorageManager& operator=(const StorageManager &) = delete;
@@ -211,12 +203,10 @@ StorageManager<AssetType>::Get(
     bool makeMutable) {
   const AssetKey key = AssetType::Key(ref);
   const std::string filename = AssetType::Filename(key);
-  bool onDisk = false;
 
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
 
   // Check in cache.
-  //notify(NFY_WARN, "CheckCache");
   PointerType entry;
   cache.Find(key, entry);
   if (entry && !handle->Valid(entry)) entry = PointerType();
@@ -228,10 +218,6 @@ StorageManager<AssetType>::Get(
         // In this case DoBind is allowed not to throw even if
         // we configured to normally throw.
         return PointerType();
-      }
-      //notify(NFY_WARN, "\t%s Exists", filename.c_str());
-      if (writeDirty && checkDisk) {
-        onDisk = true;
       }
     }
 
@@ -248,7 +234,6 @@ StorageManager<AssetType>::Get(
 
       // Drop the current entry from the cache.
       cache.Remove(key, false);  // Don't prune, the Add() will.
-      //notify(NFY_WARN, "Remove: %s\tCache: %lu\tMap: %lu", key.toString().c_str(), cache.size(), dirtyMap.size());
 
       // Will succeed, generate stub, or throw exception.
       entry = serializer->Load(key);
@@ -258,16 +243,10 @@ StorageManager<AssetType>::Get(
 
   if (entry) {
     // Add it to the cache.
-    if (addToCache && updated && !onDisk) {
-      cache.Add(key, entry);
-      //notify(NFY_WARN, "Add: %s\tCache: %lu\tMap: %lu", key.toString().c_str(), cache.size(), dirtyMap.size());
-    }
+    if (addToCache && updated) cache.Add(key, entry);
     // Add it to the dirty map. If it's already in the dirty map the existing
     // one will win; that's OK.
-    if (makeMutable) {
-      dirtyMap.emplace(key, entry);
-      //notify(NFY_WARN, "Dirty: %s\tCache: %lu\tMap: %lu", key.toString().c_str(), cache.size(), dirtyMap.size());
-    }
+    if (makeMutable) dirtyMap.emplace(key, entry);
   }
   return entry;
 }
@@ -382,20 +361,13 @@ void StorageManager<AssetType>::WriteDirty() {
     std::lock_guard<std::recursive_mutex> lock(storageMutex);
     khFilesTransaction savetrans(".new");
     typename std::map<AssetKey, PointerType>::iterator entry = dirtyMap.begin();
-    //notify(NFY_WARN, "WriteDirty: %s", ToString(typeid(AssetType).name()).c_str());
     while (entry != dirtyMap.end()) {
       if (entry->second.use_count() == 2) {
         std::string filename = entry->second->XMLFilename() + ".new";
 
         if (serializer->Save(entry->second, filename)) {
           savetrans.AddNewPath(filename);
-          //notify(NFY_WARN, "\t%s", filename.c_str());
-          if (removeDirty) {
-            cache.Remove(entry->first, false);
-            //notify(NFY_WARN, "Remove: %s\tCache: %lu", entry->first.toString().c_str(), cache.size());
-          }
           entry = dirtyMap.erase(entry);
-          //notify(NFY_WARN, "\tErase: Dirty: %lu", dirtyMap.size());
         }
       }
       else {
@@ -403,7 +375,6 @@ void StorageManager<AssetType>::WriteDirty() {
       }
     }
     cache.Prune();
-    //notify(NFY_WARN, "Prune\tCache: %lu\tDirty: %lu", cache.size(), dirtyMap.size());
     savetrans.Commit();
   }
 }

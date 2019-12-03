@@ -38,8 +38,6 @@ class MiscConfigStorage {
   uint        PackGenAnalysisThreads = uint(1);
   bool        GraphOperations = false;
   bool        PeriodicallyWriteDirtyToDisk = false;
-  bool        RemoveFromCache = false;
-  bool        CheckOnDisk = false;
 
 #pragma LoadAndSave
 
