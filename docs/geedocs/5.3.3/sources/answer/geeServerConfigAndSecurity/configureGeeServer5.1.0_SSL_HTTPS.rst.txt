@@ -104,14 +104,14 @@ Note: The virtual host name “secure” is reserved for GEE Server use.
 -[ To add a virtual host for HTTPS serving: ]-
 
 Register your new virtual host using the geserveradmin command. See
-Manage virtual hosts.  geserveradmin –-addvh --ssl  The --ssl option
-registers the newly created virtual host by creating a configuration
-file with the naming convention: _host.location_ssl located in the
-path <Apache path>/conf.d/virtual_servers/.  For example, to create a
-location-based virtual host with a configuration file that specifies
-SSL:  # /opt/google/bin$ ./geserveradmin --addvh test_ssl --ssl
-Registering Virtual Host: test_ssl ... Virtual Host registration
-successful. Location-based Virtual Host created:
+Manage virtual hosts.  geserveradmin –-addvh <Virtual Host Name> --ssl
+The --ssl option registers the newly created virtual host by creating
+a configuration file with the naming convention: _host.location_ssl
+located in the path <Apache path>/conf.d/virtual_servers/.  For
+example, to create a location-based virtual host with a configuration
+file that specifies SSL:  # /opt/google/bin$ ./geserveradmin --addvh
+test_ssl --ssl Registering Virtual Host: test_ssl ... Virtual Host
+registration successful. Location-based Virtual Host created:
 /conf.d/virtual_servers/test_ssl_host.location_ssl
 
 The newly created virtual host configuration file in this example,

@@ -283,8 +283,8 @@ Defining and Building Projects
       .. rubric:: Add Resources to a Vector Project
 
       Before specifying the display rules for this vector project, you
-      must add the resource you created in `Defining and Building
-      Resources <../answer/4412443.html>`__.
+      must add the resource you created in :doc:`Defining and Building
+      Resources <../fusionTutorial/buildResource>`.
 
       .. rubric:: To add resources to a vector project:
 

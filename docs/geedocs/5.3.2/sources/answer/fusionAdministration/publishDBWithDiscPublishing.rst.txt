@@ -38,7 +38,7 @@ required to store the disconnected database by running
 -[ To estimate the size of a disconnected database: ]-
 
 From the command line, specify the database that you want to publish
-with the --report_size_only flag:  # gedisconnectedsend
+with the --report_size_only flag:  gedisconnectedsend
 --report_size_only --sendpath \
 /gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb
 
@@ -46,13 +46,13 @@ with the --report_size_only flag:  # gedisconnectedsend
 
 Create an output directory on your portable media, which you will
 specify when you create the disconnected database.  rm -rf
-/media/ddb/test_ver001/  mkdir -p /media/ddb/test_ver001/
+/media/ddb/test_ver001/ mkdir -p /media/ddb/test_ver001/
 
 Create the disconnected database and output the file to your portable
-media: "gedisconnectedsend --output /media/ddb/test_ver001/ \"
+media:
 
-"--sendpath
-/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb"
+   gedisconnectedsend --output /media/ddb/test_ver001/ \
+   --sendpath /gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb
 
 In this example,
 "/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/" is the
@@ -74,18 +74,14 @@ database for which you want to create the delta:
 
 For example, on "machine_two":
 
-"geserveradmin --fusion_host machine_one --listdbs >
-/home/user_name/ddb/dblist_server_host"
+   geserveradmin --fusion_host machine_one --listdbs > /home/user_name/ddb/dblist_server_host
 
 On "machine_one", create the delta disconnected database using the "--
 havepathfile" option:
 
-"gedisconnectedsend --output /media/ddb/test_ver001/ \"
-
-"--havepathfile /home/user_name/ddb/dblist_server_host \"
-
-"--sendpath
-/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb"
+   gedisconnectedsend --output /media/ddb/test_ver001/ \
+   --havepathfile /home/user_name/ddb/dblist_server_host \
+   --sendpath /gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb
 
 -[ Publish on the remote server host ]-
 
@@ -96,45 +92,44 @@ the disconnected database.
 
 -[ To publish on the remote server host: ]-
 
-Set ownership and permissions for the gedb directory:  $ sudo chown -R
-gefusionuser:gegroup ddb/  $ sudo chmod -R 755 ddb/
+Set ownership and permissions for the gedb directory:  sudo chown -R
+gefusionuser:gegroup ddb/ sudo chmod -R 755 ddb/
 
 Register the database on the Server. Specifying the
 --stream_server_url is optional.  geserveradmin --fusion_host
-fusion_host.company.com \  --stream_server_url
-http://your_stream_server  \  --adddb \  /media/ddb/test_ver001/gevol
-/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/
+fusion_host.company.com \ --stream_server_url
+http://your_stream_server \ --adddb \ /media/ddb/test_ver001/gevol/as
+sets/Databases/test.kdatabase/gedb.kda/ver001/gedb/
 
 Push the files to the Server:  geserveradmin --fusion_host
-fusion_host.company.com \  --stream_server_url
-http://your_stream_server \  --pushdb \  /media/ddb/test_ver001/gevol
-/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/
+fusion_host.company.com \ --stream_server_url
+http://your_stream_server \ --pushdb \ /media/ddb/test_ver001/gevol/a
+ssets/Databases/test.kdatabase/gedb.kda/ver001/gedb/
 
 Publish the database on the Server either using the GEE Server Admin
 console or on the command line. The GEE Server Admin console Publish
 dialog includes options to add search, snippet profiles, specify a
 virtual host, and turn on WMS.  To publish on the command line:
 geserveradmin --fusion_host fusion_host.company.com \
---stream_server_url http://your_stream_server \  --publishdb \  /medi
-a/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver0
-01/gedb/
+--stream_server_url http://your_stream_server \ --publishdb \ /media/
+ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001
+/gedb/
 
 Verify that the database manifests:  geserveradmin --stream_server_url
-http://your_stream_server \  --listdbs  geserveradmin
---stream_server_url http://your_stream_server \  --dbdetails \  /medi
-a/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver0
-01/gedb
+http://your_stream_server \ --listdbs  geserveradmin
+--stream_server_url http://your_stream_server \ --dbdetails \ /media/
+ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001
+/gedb
 
 Verify the integrity of files in the published database:  ssh
-your_server  /opt/google/bin/geindexcheck --database \
-/gevol/published_dbs/stream_space/your_fusion_host/gevol/assets/
-Databases/test.kdatabase/gedb.kda/ver001/gedb
-/opt/google/bin/geindexcheck --mode all --database \
-/gevol/published_dbs/stream_space/your_fusion_host/gevol/assets/
-Databases/test.kdatabase/gedb.kda/ver001/gedb  The paths in the
-examples above were split onto multiple lines for documentation using
-backslashes. They should be entered on one line when completing your
-commands.
+your_server  /opt/google/bin/geindexcheck --database \ /gevol/publish
+ed_dbs/stream_space/your_fusion_host/gevol/assets/Databases/test.kdat
+abase/gedb.kda/ver001/gedb  /opt/google/bin/geindexcheck --mode all
+--database \ /gevol/published_dbs/stream_space/your_fusion_host/gevol
+/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb  The paths in
+the examples above were split onto multiple lines for documentation
+using backslashes. They should be entered on one line when completing
+your commands.
 
 -[ Symbolic links ]-
 
@@ -180,7 +175,7 @@ db/targets/new_target/dbroots/dbroot.v5p.DEFAULT'
 
 Rewrite the KML layer links in the database on the Server.
 /opt/google/bin/gerewritedbroot --source
-http://your_stream_server/new_target \  --dbroot_file $TARGET_DBROOT\
+http://your_stream_server/new_target \ --dbroot_file $TARGET_DBROOT \
 --kml_server your_stream_server --kml_url_path  your_htdoc_path/ \
 --preserve_kml_filenames
 
@@ -189,7 +184,7 @@ geserver restart
 
 Validate that the server has the correct database information by
 dumping the dbroot as text:  wget -O dbroot.v5p.DEFAULT
-http://you_stream_server/new_target/dbRoot.v5  gedumpdbroot
+http://you_stream_server/new_target/dbRoot.v5 gedumpdbroot
 dbroot.v5p.DEFAULT
 
 -[ Delete disconnected databases ]-

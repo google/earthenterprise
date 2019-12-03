@@ -144,7 +144,7 @@ Release notes: GEE 5.1.0
          * - 16683365
            - The option to serve 3D databases using WMS has been deprecated.
            - Fixed. WMS now serves 2D flat projection map databases in addition to Mercator projection map databases.
-             See `Make Web Map Service (WMS) requests <../geeServerAdmin/makeWMSRequests>`__.
+             See :doc:`Make Web Map Service (WMS) requests <../geeServerAdmin/makeWMSRequests>`.
          * - 16701881
            - When attempting to set the maximum number of CPUs used for Fusion processing tasks, **geselectassetroot
              --numcpus** fails to update the value specified.

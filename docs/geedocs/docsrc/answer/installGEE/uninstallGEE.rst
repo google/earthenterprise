@@ -8,7 +8,7 @@ Uninstalling Google Earth Enterprise
 
    .. container:: content
 
-      OpenGEE provides command line uninstall scripts. To uninstall
+      Open GEE provides command line uninstall scripts. To uninstall
       Google Earth Enterprise Fusion and Server:
 
       #. Open a terminal window on your Linux workstation.

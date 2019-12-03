@@ -22,11 +22,9 @@ Search tabs page
          -  **Coordinate**: Search for latitude, longitude pairs. The
             following formats are supported:
 
-            -  Decimal Degrees (e.g. 39.507618° -84.168556°)
-            -  Degrees, Minutes, Seconds (e.g. 20°40'01.51" S
-               131°53'51.39" E)
-            -  Degrees, Decimal Minutes (e.g. 49° 32.876' N 110° 9.193'
-               E)
+            -  Decimal Degrees (e.g. 39.507618\ |deg| -84.168556\ |deg|)
+            -  Degrees, Minutes, Seconds (e.g. 20\ |deg|\ 40\ |prime|\ 01.51\ |Prime|\ S 131\ |deg|\ 53\ |prime|\ 51.39\ |Prime|\ E)
+            -  Degrees, Decimal Minutes (e.g. 49\ |deg|\ 32.876\ |prime|\ N 110\ |deg|\ 9.193\ |prime|\ E)
             -  Universal Transverse Mercator (e.g. 43 R 637072.95 m E
                2825582.86 m N)
             -  Military Grid Reference System (e.g. 36NTL8040632621)
@@ -49,3 +47,7 @@ Search tabs page
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
    :height: 44px
+
+.. |deg| unicode:: U+00B0 .. DEGREE
+.. |prime| unicode:: U+2032 .. PRIME
+.. |Prime| unicode:: U+2033 .. DOUBLE PRIME

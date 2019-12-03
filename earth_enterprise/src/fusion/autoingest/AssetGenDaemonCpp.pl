@@ -124,105 +124,6 @@ ${name}Factory::SubAssetName(
 EOF
 
 
-if ($withreuse) {
-
-    print $fh <<EOF;
-
-$template
-Mutable${name}AssetVersionD
-${name}Factory::ReuseOrMakeAndUpdate(
-        const std::string &ref_ $formaltypearg,
-        $formalinputarg
-        const khMetaData &meta_,
-        const $config& config_
-        $formalcachedinputarg
-        $formalExtraUpdateArg)
-{
-    // make a copy since actualinputarg is macro substituted, so begin() &
-    // end() could be called on different temporary objects
-    std::vector<SharedString> inputarg = $actualinputarg;
-    // bind my input versions refs
-    std::vector<SharedString> boundInputs;
-    boundInputs.reserve(inputarg.size());
-    std::transform(inputarg.begin(), inputarg.end(), back_inserter(boundInputs),
-                   ptr_fun(&AssetVersionRef::Bind));
-
-    Mutable${name}AssetD asset = Find<${name}AssetD>(ref_, $typeref);
-    if (asset) {
-        for (const auto& v : asset->versions) {
-            try {
-              ${name}AssetVersionD version(v);
-              // Load an asset version without caching since we may not need it
-              // (offline, obsolete and so on).
-              version.LoadAsTemporary();
-              if ((version->state != AssetDefs::Offline) &&
-                  (version->inputs == boundInputs) &&
-                  ::IsUpToDate(config_, version->config)) {
-
-#if 0
-                notify(NFY_NOTICE,
-                       "${name}: ReuseOrMakeAndUpdate (reusing %s)",
-                       version->GetRef().c_str());
-                notify(NFY_NOTICE, "         boundinputs:");
-                for (const auto & bi : boundInputs) {
-                    notify(NFY_NOTICE, "             %s", bi.c_str());
-                }
-                notify(NFY_NOTICE, "         version inputs:");
-                for (std::vector<std::string>::const_iterator iv =
-                     version->inputs.begin();
-                     iv != version->inputs.end(); ++iv) {
-                    notify(NFY_NOTICE, "             %s", iv->c_str());
-                }
-#endif
-                // Tell the storage manager that we're going to use this
-                // version again.
-                version.MakePermanent();
-
-                return version;
-              } else {
-                // Tell the storage manager we don't need this one any more.
-                version.NoLongerNeeded();
-              }
-           }
-           catch (...) {
-             notify(NFY_WARN,
-                    "${name}: ReuseOrMakeAndUpdate could not reuse a version." );
-           }
-        }
-        asset->Modify($forwardinputarg meta_, config_);
-    } else {
-        asset = AssetFactory::Make<Mutable${name}AssetD, $config>(ref_ $forwardtypearg,
-                                                                  $forwardinputarg
-                                                                  meta_, config_);
-    }
-    bool needed = false;
-    return asset->MyUpdate(needed $forwardcachedinputarg
-                           $forwardExtraUpdateArg);
-}
-
-$template
-Mutable${name}AssetVersionD
-${name}Factory::ReuseOrMakeAndUpdateSubAsset(
-        const std::string &parentAssetRef
-        $formaltypearg,
-        const std::string &basename,
-        $formalinputarg
-        const khMetaData &meta_,
-        const $config& config_
-        $formalcachedinputarg
-        $formalExtraUpdateArg)
-{
-    return ReuseOrMakeAndUpdate(
-        AssetDefs::SubAssetName(parentAssetRef, basename,
-                                $actualtypearg, "$subtype")
-        $forwardtypearg, $forwardinputarg
-        meta_, config_  $forwardcachedinputarg
-        $forwardExtraUpdateArg);
-}
-EOF
-}
-
-
 print $fh <<EOF;
 // ****************************************************************************
 // ***  ${name}AssetImplD -- Auto generated
@@ -404,6 +305,7 @@ ${name}AssetImplD::Update(bool &needed) const
 EOF
 
 }
+
 
 
 if ($hasinputs) {

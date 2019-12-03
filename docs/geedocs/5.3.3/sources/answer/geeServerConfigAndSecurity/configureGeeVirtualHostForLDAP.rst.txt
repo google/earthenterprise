@@ -68,24 +68,17 @@ file:  <Location /private/*>    AuthType Basic    AuthName "LDAP
 LOGIN"    AuthBasicProvider ldap    AuthLDAPURL "ldap://server.name.l
 ocal:389/cn=Users,dc=domain,dc=google,dc=com?uid"\    AuthLDAPBindDN
 CN=geserver,OU=Users,OU=Yourorg,DC=DcNAME,DC=local
-AuthLDAPBindPassword localuserpassword    AuthzLDAPAuthoritative Off
-Require valid-user </Location>
+AuthLDAPBindPassword localuserpassword    Require valid-user
+</Location>
 
 Restart your server and try to access the virtual server via the
 client. A login screen appears. If you cannot access Apache, open the
 file error log at /opt/google/gehttpd/logs/error_log and access_log.
-If AuthzLDAPAuthoritative is on, the client might continually prompt
-for the username and password even though you entered a valid username
-and password and the client is functioning. To correct this, turn
-AuthzLDAPAuthoritative off.
 
 -[ Directives ]-
 
 require valid-user. Allows all users who log in with correct
 passwords.
-
-AuthzLDAPAuthoritative. Tells Apache whether a failed authentication
-request can be passed to other Apache modules.
 
 AuthLDAPBindDN. The distinguished name (DN) of the user account that
 Apache uses to connect to the directory system and authenticate the
@@ -105,6 +98,9 @@ Basic Authentication.
 For more information, see the Apache
 
 mod_ldap
+
+
+mpd_authnz_ldap
 
  and
 

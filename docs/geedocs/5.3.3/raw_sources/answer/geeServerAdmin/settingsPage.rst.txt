@@ -49,11 +49,12 @@ Settings page
          name.
       #. Choose a **Region Selection** method:
 
-         -. **Manual**: Manually draw the boundaries of your
-            region using the polygon button in the upper-right of
-            the map.
-         -. **Paste KML**: Define your region by pasting a KML
-            file.
+         - **Manual**: Manually draw the boundaries of your
+           region using the polygon button in the upper-right of
+           the map.
+
+         - **Paste KML**: Define your region by pasting a KML
+           file.
 
       #. Specify a **World level**; this represents the highest
          resolution at which the entire world will be available.

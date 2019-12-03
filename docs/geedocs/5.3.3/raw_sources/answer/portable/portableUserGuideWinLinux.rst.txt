@@ -359,6 +359,7 @@ Portable User Guide for Windows and Linux
    :width: 130px
    :height: 44px
 .. |Broadcast globe icon| image:: ../../art/fusion/portable/broadcast_false.gif
-   :class: inline line-sized
+   :width: 38px
+   :height: 31px
 .. |Portable folder icon| image:: ../../art/fusion/portable/portable_folder_icon.png
 .. |Portable menu icon| image:: ../../art/fusion/portable/portable_menu_icon.png
