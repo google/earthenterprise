@@ -31,8 +31,9 @@ int main(int argc, char* argv[])
   int format = 3; // most compressed. format 4 is Mark Aubin's format
   int merge = 0;
   int verbose = 0;
-  char output[1024] = "histogram.txt";
-  char input[1024] = {0};
+  const size_t buflen = 1024;
+  char output[buflen] = "histogram.txt";
+  char input[buflen] = {0};
   char *filelist = NULL;
 
   // parse command line 'option arguments'
@@ -79,7 +80,7 @@ int main(int argc, char* argv[])
 
   // process remaining argument, if any
   if (cursor < argc && input[0] == '\0')
-    strncpy(input, argv[cursor++], 1024);
+    strncpy(input, argv[cursor++], buflen);
 
   // validate configuration
   if ((filelist == NULL || filelist[0] == '\0') && input[0] == '\0')
@@ -122,7 +123,7 @@ int main(int argc, char* argv[])
         {
           *dot = '\0';
         }
-        snprintf(output, 1018, "%s.his", nextName);
+        snprintf(output, buflen, "%s.his", nextName);
 
         // write histogram
         if (h.write(output, format))

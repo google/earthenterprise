@@ -323,9 +323,10 @@ int etDataPacket::getFlatFileCount()
 int etDataPacket::setFlatFileCount(int num)
 {
   FILE *fp;
-  char fname[500];
+  const size_t fname_len = 500;
+  char fname[fname_len];
 
-  snprintf(fname, 500, "%s.header", flatbasename);
+  snprintf(fname, fname_len, "%s.header", flatbasename);
   char* lastslash = strrchr(fname, '/');
 #if defined(_WIN32)
   if (!lastslash)

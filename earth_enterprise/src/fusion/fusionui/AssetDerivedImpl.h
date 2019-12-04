@@ -92,6 +92,8 @@ bool AssetDerived<Defs, FinalClass>::IsModified() {
     // Don't report any errors. Just say that it is modified.  Callers will
     // rediscover the errors on their own.  If we don't do this, we end up
     // with the potential for double messages being sent to the user.
+    //
+    // This count is for future code instrumentation
     UnhandledErrorCount++;
   }
   return true;

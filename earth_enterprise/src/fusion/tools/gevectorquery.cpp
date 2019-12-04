@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
         argn++;
         if (argn >= argc)
           usage();
-        int outputlen = strlen(argv[argn]);
+        size_t outputlen = strlen(argv[argn]);
         output = reinterpret_cast<char*>(alloca(outputlen + 1));
         strncpy(output, argv[argn], outputlen);
         // strip trailing slash if exists
