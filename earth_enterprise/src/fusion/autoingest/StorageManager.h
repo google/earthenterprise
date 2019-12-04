@@ -338,10 +338,14 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
   typename std::map<AssetKey, PointerType>::iterator entry = dirtyMap.begin();
   while (entry != dirtyMap.end()) {
+    if ((entry->second.use_count() > 2) && writeDirty)  {
+      notify(NFY_WARN, "%s: %lu", filename.c_str(), entry->second.use_count());
+      entry++;
+      continue;
+    }
     std::string filename = entry->second->XMLFilename() + ".new";
 
     if (serializer->Save(entry->second, filename)) {
-      if (entry->second.use_count() > 2) notify(NFY_WARN, "%s: %lu", filename.c_str(), entry->second.use_count());
       savetrans.AddNewPath(filename);
       if (saved) {
         saved->push_back(entry->first);
