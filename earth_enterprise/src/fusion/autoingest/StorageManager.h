@@ -339,7 +339,7 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
   typename std::map<AssetKey, PointerType>::iterator entry = dirtyMap.begin();
   while (entry != dirtyMap.end()) {
     if ((entry->second.use_count() > 2) && writeDirty)  {
-      notify(NFY_WARN, "%s: %lu", filename.c_str(), entry->second.use_count());
+      notify(NFY_WARN, "%s: %lu", entry->second->XMLFilename().c_str(), entry->second.use_count());
       entry++;
       continue;
     }
