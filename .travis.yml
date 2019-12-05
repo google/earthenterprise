@@ -1,5 +1,5 @@
 sudo: required
-dist: xenial 
+dist: trusty
 
 language: cpp
 
@@ -8,20 +8,19 @@ compiler:  gcc
 before_install:
 - sudo apt-get update -qq
 - sudo apt-get install -qq
-    alien autoconf bison++ bisonc++ cmake doxygen dpkg freeglut3-dev flex gettext
+    alien bison++ bisonc++ cmake doxygen freeglut3-dev flex gettext
     libboost-all-dev libc6 libc6-dev libcap-dev libfreetype6 libfreetype6-dev
       libgdbm-dev libgeos-dev libgeos++-dev libgif-dev libgtest-dev
       libjpeg-dev libjpeg8-dev libmng-dev libogdi3.2-dev
-      libpcre3 libpcre3-dev g++ gcc 
+      libpcre3 libpcre3-dev
       libperl4-corelibs-perl libpng12-0 libpng12-dev libpq-dev libproj-dev
       libstdc++6 libtool
       libx11-dev libxcursor-dev libxerces-c-dev libxft-dev libxinerama-dev
       libxml2-dev libxml2-utils libxmu-dev libxrandr-dev libyaml-cpp-dev libpcre3-dev
     openssl
     python-dev python-git python-imaging python-setuptools
-      python2.7 python2.7-dev python-lxml pip 
+      python2.7 python2.7-dev python2.7-psycopg2
     swig3.0 xorg-dev zlib1g-dev
-- sudo pip install psycopg2
 script: echo "Running build..."
 
 cache:
