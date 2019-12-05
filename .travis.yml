@@ -1,5 +1,5 @@
 sudo: required
-dist: trusty
+dist: xenial 
 
 language: cpp
 
@@ -20,7 +20,7 @@ before_install:
     openssl
     python-dev python-git python-imaging python-setuptools
       python2.7 python2.7-dev python2.7-psycopg2
-    swig xorg-dev zlib1g-dev
+    swig3 xorg-dev zlib1g-dev
 script: echo "Running build..."
 
 cache:

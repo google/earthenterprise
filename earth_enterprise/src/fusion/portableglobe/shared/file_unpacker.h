@@ -35,7 +35,10 @@ namespace fusion_portableglobe {
 class FileUnpacker {
  public:
   explicit FileUnpacker(const char* package_file);
-
+  FileUnpacker(FileUnpacker&&) = delete;
+  FileUnPacker(const FileUnpacker&) = delete;
+  FileUnpacker& operator=(const FileUnpacker&) = delete;
+  FileUnpacker& operator=(FileUnpacker&&) = delete;
   /**
    * Find data packet and set offset and size for the packet. Data packets can
    * be imagery, terrain or vectors.
