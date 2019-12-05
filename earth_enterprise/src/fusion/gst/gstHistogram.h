@@ -30,6 +30,8 @@ class gstHistogram {
   ~gstHistogram() {
     delete [] bins_;
   }
+  gstHistogram(const gstHistogram&) = delete;
+  gstHistogram(gstHistogram&&) = delete;
 
   uint hash(uint id) const { return id & hash_mask_; }
 

@@ -66,6 +66,10 @@ class gstTextureManager {
  public:
   gstTextureManager(int memoryCacheSize, int textureCacheSize);
   ~gstTextureManager();
+  gstTextureManager(const gstTextureManager&) = delete;
+  gstTextureManager(gstTextureManager&&) = delete;
+  gstTextureManager& operator=(const gstTextureManager&) = delete;
+  gstTextureManager& operator=(gstTextureManager&&) = delete;
 
   // flush all caches
   void flush();
@@ -73,9 +77,6 @@ class gstTextureManager {
   // Initialize the texture manager from a valid graphics context
   void glinit();
 
-  // Open new texture given it's pathname
-  // returns texture object on success, NULL on failure
-  //gstTextureGuard openFile(const char *path, bool base = false);
   gstTextureGuard NewTextureFromPath(const std::string& path,
                                      bool* is_mercator_imagery);
   bool AddBaseTexture(gstTextureGuard texture);

@@ -29,35 +29,20 @@ using namespace std;
 gstRegistry::gstRegistry(const char* n) {
   _fname = strdupSafe(n);
 
-  _root = new Group(n, NULL);
+  _root = new Group(n, nullptr);
 
-  _fp = NULL;
-  _buff = NULL;
+  _fp = nullptr;
+  _buff = nullptr;
 }
 
 gstRegistry::~gstRegistry() {
   delete _root;
 }
 
-
-#if 0
-gstStatus gstRegistry::load(const char* buff, int bufflen) {
-  if (buff == NULL || bufflen == 0)
-    return GST_OPEN_FAIL;
-
-  _buff = buff;
-  _bufflen = bufflen;
-  _buffpos = 0;
-  _fp = NULL;
-
-  return parse();
-}
-#endif
-
 gstStatus gstRegistry::load() {
   _fp = fopen(name(), "r");
 
-  if (_fp == NULL)
+  if (_fp == nullptr)
     return GST_OPEN_FAIL;
 
   _buff = new char[MaxBuf];
@@ -73,34 +58,14 @@ gstStatus gstRegistry::load() {
 
 char* gstRegistry::nextLine() {
   // read from file
-  //if (_fp) {
   fgets(_buff, MaxBuf, _fp);
   if (feof(_fp)) {
-    return NULL;
+    return nullptr;
   } else {
     while (isspace(_buff[strlen(_buff) - 1]))
       _buff[strlen(_buff) - 1] = '\0';
     return _buff;
   }
-  //}
-
-#if 0
-  // XXX What!  I don't think this will ever get reached!
-  assert(FALSE);
-
-  int currpos = _buffpos;
-
-  while (_buff[_buffpos] != '\n' && _buffpos < _bufflen)
-    ++_buffpos;
-
-  if (_buffpos >= _bufflen)
-    return NULL;
-
-  _buff[_buffpos] = '\0';
-  _buffpos++;
-
-  return &_buff[currpos];
-#endif
 }
 
 gstStatus gstRegistry::parse() {
@@ -117,7 +82,7 @@ gstStatus gstRegistry::parse() {
   int line_num = 0;
   int depth = 0;
 
-  while ((tag = nextLine()) != NULL) {
+  while ((tag = nextLine()) != nullptr) {
     ++line_num;
 
     uint32 varType = gstTagString;
@@ -198,19 +163,6 @@ gstStatus gstRegistry::parse() {
         goto error;
       }
 
-#if 0
-      while (*val && val[strlen(val) - 1] != '"')
-        val[strlen(val) - 1] = 0;
-
-      if (*val && val[strlen(val) - 1] == '"')
-        val[strlen(val) - 1] = 0;
-      else {
-        notify(NFY_WARN, "Syntax error in %s, line %d\n"
-               "\t\tExpecting closing quote", name(), line_num);
-        goto error;
-      }
-#endif
-
       gstValue* found = curGroup->findTag(tag);
 
       // create a new one if it doesn't exist (likely case)
@@ -223,7 +175,7 @@ gstStatus gstRegistry::parse() {
       // special-case to allow <CR> in strings
       if (strlenSafe(val) == 1 || val[strlenSafe(val) - 1] != '"') {
         QString bigval(val);
-        while ((val = nextLine()) != NULL) {
+        while ((val = nextLine()) != nullptr) {
           bigval += QChar('\n') + QString(val);
           if (strlenSafe(val) && val[strlenSafe(val) - 1] == '"')
             break;
@@ -260,132 +212,11 @@ error:
   return GST_READ_FAIL;
 }
 
-
-#if 0
-gstStatus gstRegistry::save()
-{
-  _fp = fopen(name(), "w");
-
-  if (_fp == NULL)
-    return GST_WRITE_FAIL;
-
-  _buff = new char[MaxBuf];
-
-  gstStatus retval = saveGroup(_root, 0);
-
-  fclose(_fp);
-
-  delete [] _buff;
-
-  return retval;
-}
-
-gstStatus gstRegistry::save(char **buff, int &bufflen)
-{
-  _buff = new char[MaxBuf];
-  _bufflen = 1024 * MaxBuf;
-  _outBuff = (char*)malloc(_bufflen);
-  _buffpos = 0;
-  _fp = NULL;
-
-  gstStatus retval = saveGroup(_root, 0);
-
-  if (retval != GST_OKAY) {
-    free(_outBuff);
-    return retval;
-  }
-
-  *buff = _outBuff;
-  bufflen = _buffpos;
-
-  delete [] _buff;
-
-  return GST_OKAY;
-}
-
-int gstRegistry::putLine()
-{
-  if (_fp) {
-    if (fputs(_buff, _fp) == EOF) {
-      notify(NFY_WARN, "Unable to save project header!");
-      return 0;
-    }
-    return 1;
-  }
-
-  int len = strlen(_buff);
-
-  // make sure buffer is large enough, and grow if needed
-  if (_buffpos + len > _bufflen) {
-    _bufflen += 1024 * MaxBuf;
-    _outBuff = (char*)realloc(_outBuff, _bufflen);
-    if (_outBuff == NULL) {
-      notify(NFY_WARN, "Unable to write project header, out of memory!");
-      return 0;
-    }
-  }
-
-  memcpy(_outBuff + _buffpos, _buff, len);
-  _buffpos += len;
-  return 1;
-}
-
-gstStatus gstRegistry::saveGroup(Group* group, uint depth) {
-  const int tabstop = 2;
-  char indent[depth * tabstop + 1];
-  indent[0] = 0;
-
-  for (uint ii = 0; ii < depth * tabstop; ++ii)
-    strcat(indent, " ");
-
-  for (uint ii = 0; ii < group->tags()->length(); ++ii) {
-    gstValue* t = group->tag(ii);
-    sprintf(_buff, "%s%s : \"%s\"\n", indent, t->name(), t->ValueAsString());
-    if (!putLine())
-      return GST_WRITE_FAIL;
-  }
-
-  Group** g = group->groups()->array();
-  for (uint ii = 0; ii < group->groups()->length(); ++ii, ++g) {
-    sprintf(_buff, "%s%s {\n", indent, (*g)->name());
-    if (!putLine())
-      return GST_WRITE_FAIL;
-    if (saveGroup(*g, depth + 1) != GST_OKAY)
-      return GST_WRITE_FAIL;
-    sprintf(_buff, "%s}\n", indent);
-    if (!putLine())
-      return GST_WRITE_FAIL;
-  }
-
-  return GST_OKAY;
-}
-#endif
-
-
 void gstRegistry::setVal(const char* tag, const char *val, uint32 type) {
   gstValue* tagp = locateTag(tag, 1, type);
-  assert(tagp != NULL);
+  assert(tagp != nullptr);
   tagp->set(val);
 }
-
-#if 0
-const char *gstRegistry::getVal(const char *tag, ...) {
-  char tagbuf[512];
-
-  va_list args;
-  va_start(args, tag);
-  vsprintf(tagbuf, tag, args);
-  va_end(args);
-
-  gstValue* tagp = locateTag(tagbuf);
-
-  if (tagp)
-    return tagp->ValueAsString();
-
-  notify(NFY_DEBUG, "Unknown tag: %s", tagbuf);
-  return NULL;
-}
-#endif
 
 uint gstRegistry::numGroups(const char *tag, ...) {
   char tagbuf[512];
@@ -423,20 +254,20 @@ uint gstRegistry::numTags(const char *tag, ...) {
 //    of the tag path
 
 gstValue *gstRegistry::locateTag(const char *tag, int create, uint32 type) {
-  if (tag == NULL || strlen(tag) == 0)
-    return NULL;
+  if (tag == nullptr || strlen(tag) == 0)
+    return nullptr;
 
   // separate tag from group path
   char *itag = (char*)alloca(strlen(tag) + 1);
   strcpy(itag, tag);
   char *sep = strrchr(itag, '/');
-  if (sep == NULL)
-    return NULL;
+  if (sep == nullptr)
+    return nullptr;
   *sep = 0;
 
   Group* grp = locateGroup(itag, create);
-  if (grp == NULL)
-    return NULL;
+  if (grp == nullptr)
+    return nullptr;
 
   itag = sep + 1;
 
@@ -461,7 +292,7 @@ gstRegistry::Group *gstRegistry::locateGroup(const char* tag, int create) {
   char* sep;
 
   while (itag) {
-    if ((sep = strchr(itag, '/')) != NULL)
+    if ((sep = strchr(itag, '/')) != nullptr)
       *sep = 0;
 
     tgrp = grp->findGroup(itag);
@@ -469,7 +300,7 @@ gstRegistry::Group *gstRegistry::locateGroup(const char* tag, int create) {
       if (create) {
         tgrp = grp->addGroup(itag);
       } else {
-        return NULL;
+        return nullptr;
       }
     }
     grp = tgrp;
@@ -477,7 +308,7 @@ gstRegistry::Group *gstRegistry::locateGroup(const char* tag, int create) {
     if (sep) {
       itag = sep + 1;
     } else {
-      itag = NULL;
+      itag = nullptr;
     }
   }
 

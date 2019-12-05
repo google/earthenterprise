@@ -35,6 +35,16 @@ class GlcReader;
  * Class for unpacking files from a single package file.
  */
 class FileUnpacker {
+  /**
+   * TODO: portable uses swig2, which does not handle c++11 syntax.
+   * In the migration to c++11, updating to swig3+ was missed. For the
+   * moment, copy constructor and assignment constructor are made private
+   * and the move constructors are commented out. When swig is updated,
+   * these will be deleted (as well as moves) and made public
+   */
+  FileUnpacker(const FileUnpacker&);
+  FileUnpacker& operator=(const FileUnpacker&);
+
  public:
   FileUnpacker(const GlcReader& glc_reader, uint64 offset, uint64 size);
   ~FileUnpacker();
