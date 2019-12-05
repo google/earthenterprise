@@ -793,7 +793,7 @@ khTmpFilename(const std::string &basename, mode_t mode)
   // must make a writable copy for mkstemp to play with
   size_t bufsize = fname.size() + 7;
   char tmpname[bufsize];
-  snprintf(tmpname, bufsize - 1, "%sXXXXXX", fname.c_str());
+  snprintf(tmpname, bufsize, "%sXXXXXX", fname.c_str());
   int fd = mkstemp(tmpname);
 
   if (fd == -1) {
@@ -814,7 +814,7 @@ khCreateTmpDir(const std::string &prefix)
   // must make a writable copy for mkstemp to play with
   size_t bufsize = dirname.size() + 7;
   char tmpname[bufsize];
-  snprintf(tmpname, bufsize - 1, "%sXXXXXX", dirname.c_str());
+  snprintf(tmpname, bufsize, "%sXXXXXX", dirname.c_str());
   char *result = mkdtemp(tmpname);
 
   if (result == NULL) {
