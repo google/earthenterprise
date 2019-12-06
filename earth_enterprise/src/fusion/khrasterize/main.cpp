@@ -197,11 +197,11 @@ int ProcessCmdLineArgs(int argc,
       sscanf(argv[++i], "%d", &(cmd.method));
     }
     else if (strcmp(argv[i], "-i") == 0) {
-      sscanf(argv[++i], "%1023s", buff);
+      sscanf(argv[++i], "%1024s", buff);
       cmd.xyzFile = string(buff);
     }
     else if (strcmp(argv[i], "-o") == 0) {
-      sscanf(argv[++i], "%1023s", buff);
+      sscanf(argv[++i], "%1024s", buff);
       cmd.bilFile = string(buff);
     }
     else {

@@ -1899,8 +1899,9 @@ void ImageView::writeSamples(char *filename) {
 
 void ImageView::SaveLutWork(void) {
   // save settings to lutwork file
-  char *ascii_lutwork = new char[gLutWorkOut.length() + 1];
-  strncpy(ascii_lutwork, gLutWorkOut.c_str(), gLutWorkOut.length());
+  size_t glutworklen = gLutWorkOut.length();
+  char *ascii_lutwork = new char[glutworklen + 1];
+  strncpy(ascii_lutwork, gLutWorkOut.c_str(), glutworklen);
   FILE* fh = fopen(ascii_lutwork, "w");
   delete [] ascii_lutwork;
   if (fh != NULL) {

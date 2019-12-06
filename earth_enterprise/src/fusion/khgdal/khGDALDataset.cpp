@@ -710,7 +710,7 @@ ReadDotGeoFile(const std::string &filename,
 
     char str[10][180];
     int geo_pad_to_edge = 1;
-    fscanf(geofile, "%179s %179s %179s %179s %179s %179s %179s %179s %179s\n",
+    fscanf(geofile, "%180s %180s %180s %180s %180s %180s %180s %180s %180s\n",
            str[0], str[1], str[2], str[3], str[4],
            str[5], str[6], str[7], str[8]);
 
