@@ -32,9 +32,9 @@ inline char* strdupSafe(const char* s) {
   if (s == NULL || *s == 0)
     return NULL;
 
-  int lens = strlen(s);
+  size_t lens = strlen(s);
   char* n = new char[lens + 1];
-  strncpy(n, s, lens);
+  strncpy(n, s, lens + 1);
   return n;
 }
 
