@@ -128,7 +128,7 @@ env_opt = 'PORT=80 INCLUDES=-I/opt/google/include EAPI_MM=%s/%s' % (build_root,
 config_opt += (
     ' --with-program-name=gehttpd --with-port=80 --prefix=/opt/google/gehttpd '
     '--enable-mods-shared=all --with-ssl=/opt/google --enable-ssl=shared '
-    '--with-crypto --enable-session-crypto '
+    '--with-crypto  '
     '--with-expat=/opt/google --with-mpm=worker --enable-proxy '
     '--enable-proxy-ajp --disable-proxy-connect --disable-proxy-ftp '
     '--disable-proxy-http --disable-proxy-balancer --without-sqlite2 '
