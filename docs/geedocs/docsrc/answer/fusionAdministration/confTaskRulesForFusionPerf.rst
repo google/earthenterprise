@@ -376,14 +376,6 @@ Configure Fusion performance
          # default is 4096
          BLOCK_SIZE=<value>
 
-         # whether or not to purge the XML cache; valid values are 0 or 1
-         # default is 1
-         PURGE=<value>
-
-         # the level at which to purge the XML cache; can be 1 (most often) to 5 (least often)
-         # default is 3
-         PURGE_LEVEL=<value>
-
       .. rubric:: PackGen analysis thread configuration
 
       Within ``misc.xml``, there is an experimental feature for setting
