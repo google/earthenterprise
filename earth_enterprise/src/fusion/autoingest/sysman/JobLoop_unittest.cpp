@@ -20,6 +20,11 @@
 
 class MockResourceProvider : public khResourceProvider {
   private:
+    bool GetSuccess(uint counter, bool status) {
+      if (alwaysPassFirst && counter == 1) return true;
+      else return status;
+    }
+
     virtual void StartLogFile(Job * job, const std::string &logfile) override {
       ++logStarted;
       if (setLogFile) {
@@ -41,7 +46,7 @@ class MockResourceProvider : public khResourceProvider {
     }
     virtual bool ExecCmdline(Job *job, const std::vector<std::string> &cmdline) override {
       ++executes;
-      return execPasses;
+      return GetSuccess(executes, execPasses);
     }
     virtual void SendProgress(uint32 jobid, double progress, time_t progressTime) override {
       assert(progress == 0);
@@ -50,12 +55,12 @@ class MockResourceProvider : public khResourceProvider {
     virtual void GetProcessStatus(pid_t pid, std::string* status_string,
                                   bool* success, bool* coredump, int* signum) override {
       ++getStatus;
-      *success = statusPasses;
+      *success = GetSuccess(getStatus, statusPasses);
     }
     virtual void WaitForPid(pid_t waitfor, bool &success, bool &coredump,
                             int &signum) override {
       ++waitFors;
-      success = statusPasses;
+      success = GetSuccess(waitFors, statusPasses);
     }
     virtual void DeleteJob(
         std::vector<Job>::iterator which,
@@ -78,6 +83,9 @@ class MockResourceProvider : public khResourceProvider {
     bool setLogFile;
     bool execPasses;
     bool statusPasses;
+    // Forces any failure to wait until the second pass so we can test with
+    // multiple commands
+    bool alwaysPassFirst;
 
     // These variables record what the class does
     uint logStarted;
@@ -98,6 +106,7 @@ class MockResourceProvider : public khResourceProvider {
         setLogFile(true),
         execPasses(true),
         statusPasses(true),
+        alwaysPassFirst(false),
         logStarted(0),
         executes(0),
         progSent(0),
@@ -253,11 +262,55 @@ TEST_F(JobLoopTest, MultiCommandSuccessNoLog) {
   ASSERT_NE(resProv.delTime, 0);
 }
 
+TEST_F(JobLoopTest, MultiCommandFailExec) {
+  resProv.execPasses = false;
+  resProv.alwaysPassFirst = true;
+  resProv.RunJobLoop(true);
+  ASSERT_EQ(resProv.logStarted, 1);
+  ASSERT_EQ(resProv.executes, 2);
+  ASSERT_EQ(resProv.progSent, 1);
+  ASSERT_EQ(resProv.getStatus, 1);
+  ASSERT_EQ(resProv.waitFors, 0);
+  ASSERT_EQ(resProv.resultsLogged, 1);
+  ASSERT_EQ(resProv.timeLogged, 0);
+  ASSERT_EQ(resProv.deletes, 1);
+  ASSERT_FALSE(resProv.delSuccess);
+}
+
+TEST_F(JobLoopTest, MultiCommandFailGetStatus) {
+  resProv.statusPasses = false;
+  resProv.alwaysPassFirst = true;
+  resProv.RunJobLoop(true);
+  ASSERT_EQ(resProv.logStarted, 1);
+  ASSERT_EQ(resProv.executes, 2);
+  ASSERT_EQ(resProv.progSent, 1);
+  ASSERT_EQ(resProv.getStatus, 2);
+  ASSERT_EQ(resProv.waitFors, 0);
+  ASSERT_EQ(resProv.resultsLogged, 2);
+  ASSERT_EQ(resProv.timeLogged, 1);
+  ASSERT_EQ(resProv.deletes, 1);
+  ASSERT_FALSE(resProv.delSuccess);
+}
+
+TEST_F(JobLoopTest, MultiCommandFailWaitFor) {
+  resProv.statusPasses = false;
+  resProv.alwaysPassFirst = true;
+  resProv.setLogFile = false;
+  resProv.RunJobLoop(true);
+  ASSERT_EQ(resProv.logStarted, 2);
+  ASSERT_EQ(resProv.executes, 2);
+  ASSERT_EQ(resProv.progSent, 1);
+  ASSERT_EQ(resProv.getStatus, 0);
+  ASSERT_EQ(resProv.waitFors, 2);
+  ASSERT_EQ(resProv.resultsLogged, 0);
+  ASSERT_EQ(resProv.timeLogged, 1);
+  ASSERT_EQ(resProv.deletes, 1);
+  ASSERT_FALSE(resProv.delSuccess);
+}
+
 /*
 TODO:
-- multiple commands where one fails in ExecCmdline
-- multiple commands where one fails in waitForPid
-- multiple commands where one fails in GetProcessStatus
+- multiple commands where one fails second FindJobById
 - no commands
 - set begin time on first command
 - locking behavior
