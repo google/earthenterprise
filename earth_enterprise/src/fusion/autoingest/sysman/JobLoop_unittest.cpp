@@ -20,7 +20,11 @@
 
 class MockResourceProvider : public khResourceProvider {
   private:
-    virtual void StartLogFile(Job * job, const std::string &logfile) override {}
+    virtual void StartLogFile(Job * job, const std::string &logfile) override {
+      if (setLogFile) {
+        job->logfile = stdout;
+      }
+    }
     virtual void LogJobResults(
         Job * job,
         const std::string &status_string,
@@ -59,6 +63,7 @@ class MockResourceProvider : public khResourceProvider {
     // These variables modify how the class behaves
     Job myJob;
     Job * jobPointer;
+    bool setLogFile;
     bool execPasses;
 
     // These variables record what the class does
@@ -71,13 +76,23 @@ class MockResourceProvider : public khResourceProvider {
     MockResourceProvider() :
         myJob(1),
         jobPointer(&myJob),
+        setLogFile(true),
         execPasses(true),
         executes(0),
         progSent(0),
         getStatus(0),
         waitFors(0),
         deletes(0) {}
-    void RunJobLoop() { JobLoop(StartJobMsg(1, "test.log", {{"cmd1"}})); }
+    void RunJobLoop(bool multiCommands = false) {
+      std::vector<std::vector<std::string>> commands;
+      if (multiCommands) {
+        commands = {{"cmd1"}, {"cmd2"}, {"cmd3"}};
+      }
+      else {
+        commands = {{"cmd1"}};
+      }
+      JobLoop(StartJobMsg(1, "test.log", commands)); 
+    }
 };
 
 class JobLoopTest : public testing::Test {
@@ -95,6 +110,25 @@ TEST_F(JobLoopTest, NoJob) {
   ASSERT_EQ(resProv.deletes, 0);
 }
 
+TEST_F(JobLoopTest, Success) {
+  resProv.RunJobLoop();
+  ASSERT_EQ(resProv.executes, 1);
+  ASSERT_EQ(resProv.progSent, 1);
+  ASSERT_EQ(resProv.getStatus, 1);
+  ASSERT_EQ(resProv.waitFors, 0);
+  ASSERT_EQ(resProv.deletes, 1);
+}
+
+TEST_F(JobLoopTest, SuccessNoLogFile) {
+  resProv.setLogFile = false;
+  resProv.RunJobLoop();
+  ASSERT_EQ(resProv.executes, 1);
+  ASSERT_EQ(resProv.progSent, 1);
+  ASSERT_EQ(resProv.getStatus, 0);
+  ASSERT_EQ(resProv.waitFors, 1);
+  ASSERT_EQ(resProv.deletes, 1);
+}
+
 TEST_F(JobLoopTest, ExecFails) {
   resProv.execPasses = false;
   resProv.RunJobLoop();
@@ -108,11 +142,16 @@ TEST_F(JobLoopTest, ExecFails) {
 /*
 TODO:
 - multiple commands
-- check SendProgress
 - waitForPid/GetProcessStatus based on whether there's a log file
 - second FindJobById returns null
 - not successful
 - successful
+- set begin time on first command
+- start log file on first command
+- locking behavior
+- don't log job results if there's no log file
+- multiple commands where one fails
+- no commands
 */
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc,argv);
