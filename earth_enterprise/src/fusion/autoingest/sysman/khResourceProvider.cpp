@@ -647,8 +647,9 @@ khResourceProvider::JobLoop(StartJobMsg start)
 
     // ***** Launch the command *****
     cmdtime = time(0);
-    if (!job->beginTime)
+    if (!job->beginTime) {
       job->beginTime = cmdtime;
+    }
 
     if (!job->logfile) {
       StartLogFile(job, start.logfile);
