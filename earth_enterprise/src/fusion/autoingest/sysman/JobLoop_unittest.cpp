@@ -35,9 +35,13 @@ class MockResourceProvider : public khResourceProvider {
       ++executes;
       return execPasses;
     }
-    virtual void SendProgress(uint32 jobid, double progress, time_t progressTime) override {}
+    virtual void SendProgress(uint32 jobid, double progress, time_t progressTime) override {
+      ++progSent;
+    }
     virtual void GetProcessStatus(pid_t pid, std::string* status_string,
-                                  bool* success, bool* coredump, int* signum) override {}
+                                  bool* success, bool* coredump, int* signum) override {
+      ++getStatus;
+    }
     virtual void WaitForPid(pid_t waitfor, bool &success, bool &coredump,
                             int &signum) override {
       ++waitFors;
@@ -59,6 +63,8 @@ class MockResourceProvider : public khResourceProvider {
 
     // These variables record what the class does
     uint executes;
+    uint progSent;
+    uint getStatus;
     uint waitFors;
     uint deletes;
 
@@ -67,6 +73,8 @@ class MockResourceProvider : public khResourceProvider {
         jobPointer(&myJob),
         execPasses(true),
         executes(0),
+        progSent(0),
+        getStatus(0),
         waitFors(0),
         deletes(0) {}
     void RunJobLoop() { JobLoop(StartJobMsg(1, "test.log", {{"cmd1"}})); }
@@ -81,6 +89,8 @@ TEST_F(JobLoopTest, NoJob) {
   resProv.jobPointer = nullptr;
   resProv.RunJobLoop();
   ASSERT_EQ(resProv.executes, 0);
+  ASSERT_EQ(resProv.progSent, 0);
+  ASSERT_EQ(resProv.getStatus, 0);
   ASSERT_EQ(resProv.waitFors, 0);
   ASSERT_EQ(resProv.deletes, 0);
 }
@@ -89,6 +99,8 @@ TEST_F(JobLoopTest, ExecFails) {
   resProv.execPasses = false;
   resProv.RunJobLoop();
   ASSERT_EQ(resProv.executes, 1);
+  ASSERT_EQ(resProv.progSent, 0);
+  ASSERT_EQ(resProv.getStatus, 0);
   ASSERT_EQ(resProv.waitFors, 0);
   ASSERT_EQ(resProv.deletes, 1);
 }
