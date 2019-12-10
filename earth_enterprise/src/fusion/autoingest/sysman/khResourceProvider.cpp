@@ -702,32 +702,7 @@ khResourceProvider::JobLoop(StartJobMsg start)
 
     // ***** report command status *****
     if (job->logfile) {
-      fflush(job->logfile);
-      // If process status information has been collected print that to log.
-      if (!status_string.empty()) {
-        fprintf(job->logfile, "%s", status_string.c_str());
-      }
-      fprintf(job->logfile,
-              "---------- End Command Output ----------\n");
-      if (signum != -1) {
-        fprintf(job->logfile,
-                "Process terminated by signal %d%s\n",
-                signum,
-                coredump ? " (core dumped)" : "");
-      }
-
-      fprintf(job->logfile, "ENDTIME: %s\n",
-              GetFormattedTimeString(endtime).c_str());
-      uint32 elapsed = endtime - cmdtime;
-      fprintf(job->logfile, "ELAPSEDTIME: %s\n",
-              GetFormattedElapsedTimeString(elapsed).c_str());
-      if (success) {
-        fprintf(job->logfile, "COMPLETED SUCCESSFULLY\n");
-      } else if ((signum == 2) || (signum == 15)) {
-        fprintf(job->logfile, "CANCELED\n");
-      } else {
-        fprintf(job->logfile, "FAILED\n");
-      }
+      LogJobResults(job, status_string, signum, coredump, success, cmdtime, endtime);
     }
 
     if (!success) {
@@ -761,6 +736,43 @@ khResourceProvider::StartLogFile(Job * job, const std::string &logfile) {
     }
     fprintf(job->logfile, "STARTTIME: %s\n",
             GetFormattedTimeString(job->beginTime).c_str());
+  }
+}
+
+void
+khResourceProvider::LogJobResults(
+    Job * job,
+    const std::string &status_string,
+    int signum,
+    bool coredump,
+    bool success,
+    time_t cmdtime,
+    time_t endtime) {
+  fflush(job->logfile);
+  // If process status information has been collected print that to log.
+  if (!status_string.empty()) {
+    fprintf(job->logfile, "%s", status_string.c_str());
+  }
+  fprintf(job->logfile,
+          "---------- End Command Output ----------\n");
+  if (signum != -1) {
+    fprintf(job->logfile,
+            "Process terminated by signal %d%s\n",
+            signum,
+            coredump ? " (core dumped)" : "");
+  }
+
+  fprintf(job->logfile, "ENDTIME: %s\n",
+          GetFormattedTimeString(endtime).c_str());
+  uint32 elapsed = endtime - cmdtime;
+  fprintf(job->logfile, "ELAPSEDTIME: %s\n",
+          GetFormattedElapsedTimeString(elapsed).c_str());
+  if (success) {
+    fprintf(job->logfile, "COMPLETED SUCCESSFULLY\n");
+  } else if ((signum == 2) || (signum == 15)) {
+    fprintf(job->logfile, "CANCELED\n");
+  } else {
+    fprintf(job->logfile, "FAILED\n");
   }
 }
 
