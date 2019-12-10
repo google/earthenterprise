@@ -650,21 +650,8 @@ khResourceProvider::JobLoop(StartJobMsg start)
     if (!job->beginTime)
       job->beginTime = cmdtime;
 
-    if (!job->logfile &&
-        ((job->logfile = fopen(start.logfile.c_str(), "w")))) {
-      // if this is first command, open the logfile & write the header
-      fprintf(job->logfile, "BUILD HOST: %s\n",
-              khHostname().c_str());
-      fprintf(job->logfile, "FUSION VERSION %s, BUILD %s\n",
-              GEE_VERSION, BUILD_DATE);
-      {
-        QString runtimeDesc = RuntimeOptions::DescString();
-        if (!runtimeDesc.isEmpty()) {
-          fprintf(job->logfile, "OPTIONS: %s\n", runtimeDesc.latin1());
-        }
-      }
-      fprintf(job->logfile, "STARTTIME: %s\n",
-              GetFormattedTimeString(job->beginTime).c_str());
+    if (!job->logfile) {
+      StartLogFile(job, start.logfile);
     }
 
     if (ExecCmdline(job, start.commands[cmdnum])) {
@@ -758,6 +745,24 @@ khResourceProvider::JobLoop(StartJobMsg start)
   DeleteJob(found, success, job->beginTime, endtime);
 }
 
+void
+khResourceProvider::StartLogFile(Job * job, const std::string &logfile) {
+  if (job->logfile = fopen(logfile.c_str(), "w")) {
+    // if this is first command, open the logfile & write the header
+    fprintf(job->logfile, "BUILD HOST: %s\n",
+            khHostname().c_str());
+    fprintf(job->logfile, "FUSION VERSION %s, BUILD %s\n",
+            GEE_VERSION, BUILD_DATE);
+    {
+      QString runtimeDesc = RuntimeOptions::DescString();
+      if (!runtimeDesc.isEmpty()) {
+        fprintf(job->logfile, "OPTIONS: %s\n", runtimeDesc.latin1());
+      }
+    }
+    fprintf(job->logfile, "STARTTIME: %s\n",
+            GetFormattedTimeString(job->beginTime).c_str());
+  }
+}
 
 // ****************************************************************************
 // ***  StopJob

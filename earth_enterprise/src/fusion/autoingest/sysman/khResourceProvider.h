@@ -77,6 +77,7 @@ class khResourceProvider
   // ***** stuff for handling jobs *****
   khThreadPool     *jobThreads;
   void JobLoop(StartJobMsg start); // pass by value because thread func
+  void StartLogFile(Job * job, const std::string &logfile);
   bool ExecCmdline(Job *job, const std::vector<std::string> &cmdline);
   void SendProgress(uint32 jobid, double progress, time_t progressTime);
 #if 0
