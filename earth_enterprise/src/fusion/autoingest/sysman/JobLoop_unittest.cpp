@@ -66,12 +66,15 @@ class MockResourceProvider : public khResourceProvider {
       delTime = beginTime;
     }
     virtual Job* FindJobById(uint32 jobid, std::vector<Job>::iterator &found) override {
-      return jobPointer;
+      Job * ret = jobPointer;
+      if (failSecondFindJob) jobPointer = nullptr;
+      return ret;
     }
   public:
     // These variables modify how the class behaves
     Job myJob;
     Job * jobPointer;
+    bool failSecondFindJob;
     bool setLogFile;
     bool execPasses;
     bool statusPasses;
@@ -91,6 +94,7 @@ class MockResourceProvider : public khResourceProvider {
     MockResourceProvider() :
         myJob(1),
         jobPointer(&myJob),
+        failSecondFindJob(false),
         setLogFile(true),
         execPasses(true),
         statusPasses(true),
@@ -207,6 +211,19 @@ TEST_F(JobLoopTest, WaitForPidFails) {
   ASSERT_FALSE(resProv.delSuccess);
 }
 
+TEST_F(JobLoopTest, FailSecondFindJob) {
+  resProv.failSecondFindJob = true;
+  resProv.RunJobLoop();
+  ASSERT_EQ(resProv.logStarted, 1);
+  ASSERT_EQ(resProv.executes, 1);
+  ASSERT_EQ(resProv.progSent, 1);
+  ASSERT_EQ(resProv.getStatus, 1);
+  ASSERT_EQ(resProv.waitFors, 0);
+  ASSERT_EQ(resProv.resultsLogged, 0);
+  ASSERT_EQ(resProv.timeLogged, 0);
+  ASSERT_EQ(resProv.deletes, 0);
+}
+
 TEST_F(JobLoopTest, MultiCommandSuccess) {
   resProv.RunJobLoop(true);
   ASSERT_EQ(resProv.logStarted, 1);
@@ -238,7 +255,6 @@ TEST_F(JobLoopTest, MultiCommandSuccessNoLog) {
 
 /*
 TODO:
-- second FindJobById returns null
 - multiple commands where one fails in ExecCmdline
 - multiple commands where one fails in waitForPid
 - multiple commands where one fails in GetProcessStatus
