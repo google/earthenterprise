@@ -16,6 +16,12 @@
 
 #include <gtest/gtest.h>
 
+#include "khResourceProvider.h"
+
+TEST(JobLoopTest, CreateResourceProvider) {
+  khResourceProvider resProv;
+}
+
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc,argv);
   return RUN_ALL_TESTS();
