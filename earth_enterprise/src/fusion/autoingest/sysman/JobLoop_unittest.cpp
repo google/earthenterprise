@@ -50,12 +50,12 @@ class MockResourceProvider : public khResourceProvider {
     virtual void GetProcessStatus(pid_t pid, std::string* status_string,
                                   bool* success, bool* coredump, int* signum) override {
       ++getStatus;
-      *success = true;
+      *success = statusPasses;
     }
     virtual void WaitForPid(pid_t waitfor, bool &success, bool &coredump,
                             int &signum) override {
       ++waitFors;
-      success = true;
+      success = statusPasses;
     }
     virtual void DeleteJob(
         std::vector<Job>::iterator which,
@@ -74,6 +74,7 @@ class MockResourceProvider : public khResourceProvider {
     Job * jobPointer;
     bool setLogFile;
     bool execPasses;
+    bool statusPasses;
 
     // These variables record what the class does
     uint logStarted;
@@ -92,6 +93,7 @@ class MockResourceProvider : public khResourceProvider {
         jobPointer(&myJob),
         setLogFile(true),
         execPasses(true),
+        statusPasses(true),
         logStarted(0),
         executes(0),
         progSent(0),
@@ -176,6 +178,35 @@ TEST_F(JobLoopTest, ExecFails) {
   ASSERT_FALSE(resProv.delSuccess);
 }
 
+TEST_F(JobLoopTest, GetStatusFails) {
+  resProv.statusPasses = false;
+  resProv.RunJobLoop();
+  ASSERT_EQ(resProv.logStarted, 1);
+  ASSERT_EQ(resProv.executes, 1);
+  ASSERT_EQ(resProv.progSent, 1);
+  ASSERT_EQ(resProv.getStatus, 1);
+  ASSERT_EQ(resProv.waitFors, 0);
+  ASSERT_EQ(resProv.resultsLogged, 1);
+  ASSERT_EQ(resProv.timeLogged, 0);
+  ASSERT_EQ(resProv.deletes, 1);
+  ASSERT_FALSE(resProv.delSuccess);
+}
+
+TEST_F(JobLoopTest, WaitForPidFails) {
+  resProv.statusPasses = false;
+  resProv.setLogFile = false;
+  resProv.RunJobLoop();
+  ASSERT_EQ(resProv.logStarted, 1);
+  ASSERT_EQ(resProv.executes, 1);
+  ASSERT_EQ(resProv.progSent, 1);
+  ASSERT_EQ(resProv.getStatus, 0);
+  ASSERT_EQ(resProv.waitFors, 1);
+  ASSERT_EQ(resProv.resultsLogged, 0);
+  ASSERT_EQ(resProv.timeLogged, 0);
+  ASSERT_EQ(resProv.deletes, 1);
+  ASSERT_FALSE(resProv.delSuccess);
+}
+
 TEST_F(JobLoopTest, MultiCommandSuccess) {
   resProv.RunJobLoop(true);
   ASSERT_EQ(resProv.logStarted, 1);
@@ -207,14 +238,15 @@ TEST_F(JobLoopTest, MultiCommandSuccessNoLog) {
 
 /*
 TODO:
-- waitForPid fails
-- GetProcessStatus fails
 - second FindJobById returns null
+- multiple commands where one fails in ExecCmdline
+- multiple commands where one fails in waitForPid
+- multiple commands where one fails in GetProcessStatus
+- no commands
 - set begin time on first command
 - locking behavior
-- multiple commands where one fails
-- no commands
 */
+
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc,argv);
   return RUN_ALL_TESTS();
