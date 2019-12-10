@@ -18,8 +18,7 @@
 
 #include "khResourceProvider.h"
 
-class MockResourceProvider : public khResourceProvider
-{
+class MockResourceProvider : public khResourceProvider {
   private:
     virtual void StartLogFile(Job * job, const std::string &logfile) override {}
     virtual void LogJobResults(
@@ -31,19 +30,42 @@ class MockResourceProvider : public khResourceProvider
         time_t cmdtime,
         time_t endtime) override {}
     virtual void LogTotalTime(Job * job, uint32 elapsed) override {}
-    virtual bool ExecCmdline(Job *job, const std::vector<std::string> &cmdline) override { return true; }
+
+    virtual bool ExecCmdline(Job *job, const std::vector<std::string> &cmdline) override {
+      ++executes;
+      return true;
+    }
     virtual void SendProgress(uint32 jobid, double progress, time_t progressTime) override {}
     virtual void GetProcessStatus(pid_t pid, std::string* status_string,
                                   bool* success, bool* coredump, int* signum) override {}
     virtual void WaitForPid(pid_t waitfor, bool &success, bool &coredump,
-                            int &signum) override {}
+                            int &signum) override {
+      ++waitFors;
+    }
     virtual void DeleteJob(
         std::vector<Job>::iterator which,
         bool success = false,
-        time_t beginTime = 0, time_t endTime = 0) override {}
-    virtual Job* FindJobById(uint32 jobid, std::vector<Job>::iterator &found) override { return nullptr; }
+        time_t beginTime = 0, time_t endTime = 0) override {
+      ++deletes;
+    }
+    virtual Job* FindJobById(uint32 jobid, std::vector<Job>::iterator &found) override {
+      return jobPointer;
+    }
   public:
-    void RunJobLoop(StartJobMsg msg) { JobLoop(msg); }
+    uint executes;
+    uint waitFors;
+    uint deletes;
+
+    Job myJob;
+    Job * jobPointer;
+
+    MockResourceProvider() :
+        executes(0),
+        waitFors(0),
+        deletes(0),
+        myJob(1),
+        jobPointer(&myJob) {}
+    void RunJobLoop() { JobLoop(StartJobMsg()); }
 };
 
 class JobLoopTest : public testing::Test {
@@ -51,8 +73,12 @@ class JobLoopTest : public testing::Test {
     MockResourceProvider resProv;
 };
 
-TEST_F(JobLoopTest, CreateResourceProvider) {
-  resProv.RunJobLoop(StartJobMsg());
+TEST_F(JobLoopTest, NoJob) {
+  resProv.jobPointer = nullptr;
+  resProv.RunJobLoop();
+  ASSERT_EQ(resProv.executes, 0);
+  ASSERT_EQ(resProv.waitFors, 0);
+  ASSERT_EQ(resProv.deletes, 0);
 }
 
 int main(int argc, char **argv) {
