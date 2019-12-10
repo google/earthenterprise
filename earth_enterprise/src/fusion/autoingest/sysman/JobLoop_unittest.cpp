@@ -21,6 +21,7 @@
 class MockResourceProvider : public khResourceProvider {
   private:
     virtual void StartLogFile(Job * job, const std::string &logfile) override {
+      ++logStarted;
       if (setLogFile) {
         job->logfile = stdout;
       }
@@ -32,29 +33,37 @@ class MockResourceProvider : public khResourceProvider {
         bool coredump,
         bool success,
         time_t cmdtime,
-        time_t endtime) override {}
-    virtual void LogTotalTime(Job * job, uint32 elapsed) override {}
-
+        time_t endtime) override {
+      ++resultsLogged;
+    }
+    virtual void LogTotalTime(Job * job, uint32 elapsed) override {
+      ++timeLogged;
+    }
     virtual bool ExecCmdline(Job *job, const std::vector<std::string> &cmdline) override {
       ++executes;
       return execPasses;
     }
     virtual void SendProgress(uint32 jobid, double progress, time_t progressTime) override {
+      assert(progress == 0);
       ++progSent;
     }
     virtual void GetProcessStatus(pid_t pid, std::string* status_string,
                                   bool* success, bool* coredump, int* signum) override {
       ++getStatus;
+      *success = true;
     }
     virtual void WaitForPid(pid_t waitfor, bool &success, bool &coredump,
                             int &signum) override {
       ++waitFors;
+      success = true;
     }
     virtual void DeleteJob(
         std::vector<Job>::iterator which,
         bool success = false,
         time_t beginTime = 0, time_t endTime = 0) override {
       ++deletes;
+      delSuccess = success;
+      delTime = beginTime;
     }
     virtual Job* FindJobById(uint32 jobid, std::vector<Job>::iterator &found) override {
       return jobPointer;
@@ -67,22 +76,32 @@ class MockResourceProvider : public khResourceProvider {
     bool execPasses;
 
     // These variables record what the class does
+    uint logStarted;
     uint executes;
     uint progSent;
     uint getStatus;
     uint waitFors;
+    uint resultsLogged;
+    uint timeLogged;
     uint deletes;
+    bool delSuccess;
+    time_t delTime;
 
     MockResourceProvider() :
         myJob(1),
         jobPointer(&myJob),
         setLogFile(true),
         execPasses(true),
+        logStarted(0),
         executes(0),
         progSent(0),
         getStatus(0),
         waitFors(0),
-        deletes(0) {}
+        resultsLogged(0),
+        timeLogged(0),
+        deletes(0),
+        delSuccess(false),
+        delTime(0) {}
     void RunJobLoop(bool multiCommands = false) {
       std::vector<std::vector<std::string>> commands;
       if (multiCommands) {
@@ -103,53 +122,96 @@ class JobLoopTest : public testing::Test {
 TEST_F(JobLoopTest, NoJob) {
   resProv.jobPointer = nullptr;
   resProv.RunJobLoop();
+  ASSERT_EQ(resProv.logStarted, 0);
   ASSERT_EQ(resProv.executes, 0);
   ASSERT_EQ(resProv.progSent, 0);
   ASSERT_EQ(resProv.getStatus, 0);
   ASSERT_EQ(resProv.waitFors, 0);
+  ASSERT_EQ(resProv.resultsLogged, 0);
+  ASSERT_EQ(resProv.timeLogged, 0);
   ASSERT_EQ(resProv.deletes, 0);
+  ASSERT_FALSE(resProv.delSuccess);
 }
 
 TEST_F(JobLoopTest, Success) {
   resProv.RunJobLoop();
+  ASSERT_EQ(resProv.logStarted, 1);
   ASSERT_EQ(resProv.executes, 1);
   ASSERT_EQ(resProv.progSent, 1);
   ASSERT_EQ(resProv.getStatus, 1);
   ASSERT_EQ(resProv.waitFors, 0);
+  ASSERT_EQ(resProv.resultsLogged, 1);
+  ASSERT_EQ(resProv.timeLogged, 0);
   ASSERT_EQ(resProv.deletes, 1);
+  ASSERT_TRUE(resProv.delSuccess);
+  ASSERT_NE(resProv.delTime, 0);
 }
 
 TEST_F(JobLoopTest, SuccessNoLogFile) {
   resProv.setLogFile = false;
   resProv.RunJobLoop();
+  ASSERT_EQ(resProv.logStarted, 1);
   ASSERT_EQ(resProv.executes, 1);
   ASSERT_EQ(resProv.progSent, 1);
   ASSERT_EQ(resProv.getStatus, 0);
   ASSERT_EQ(resProv.waitFors, 1);
+  ASSERT_EQ(resProv.resultsLogged, 0);
+  ASSERT_EQ(resProv.timeLogged, 0);
   ASSERT_EQ(resProv.deletes, 1);
+  ASSERT_TRUE(resProv.delSuccess);
+  ASSERT_NE(resProv.delTime, 0);
 }
 
 TEST_F(JobLoopTest, ExecFails) {
   resProv.execPasses = false;
   resProv.RunJobLoop();
+  ASSERT_EQ(resProv.logStarted, 1);
   ASSERT_EQ(resProv.executes, 1);
   ASSERT_EQ(resProv.progSent, 0);
   ASSERT_EQ(resProv.getStatus, 0);
   ASSERT_EQ(resProv.waitFors, 0);
+  ASSERT_EQ(resProv.resultsLogged, 0);
+  ASSERT_EQ(resProv.timeLogged, 0);
   ASSERT_EQ(resProv.deletes, 1);
+  ASSERT_FALSE(resProv.delSuccess);
+}
+
+TEST_F(JobLoopTest, MultiCommandSuccess) {
+  resProv.RunJobLoop(true);
+  ASSERT_EQ(resProv.logStarted, 1);
+  ASSERT_EQ(resProv.executes, 3);
+  ASSERT_EQ(resProv.progSent, 1);
+  ASSERT_EQ(resProv.getStatus, 3);
+  ASSERT_EQ(resProv.waitFors, 0);
+  ASSERT_EQ(resProv.resultsLogged, 3);
+  ASSERT_EQ(resProv.timeLogged, 1);
+  ASSERT_EQ(resProv.deletes, 1);
+  ASSERT_TRUE(resProv.delSuccess);
+  ASSERT_NE(resProv.delTime, 0);
+}
+
+TEST_F(JobLoopTest, MultiCommandSuccessNoLog) {
+  resProv.setLogFile = false;
+  resProv.RunJobLoop(true);
+  ASSERT_EQ(resProv.logStarted, 3);
+  ASSERT_EQ(resProv.executes, 3);
+  ASSERT_EQ(resProv.progSent, 1);
+  ASSERT_EQ(resProv.getStatus, 0);
+  ASSERT_EQ(resProv.waitFors, 3);
+  ASSERT_EQ(resProv.resultsLogged, 0);
+  ASSERT_EQ(resProv.timeLogged, 1);
+  ASSERT_EQ(resProv.deletes, 1);
+  ASSERT_TRUE(resProv.delSuccess);
+  ASSERT_NE(resProv.delTime, 0);
 }
 
 /*
 TODO:
-- multiple commands
-- waitForPid/GetProcessStatus based on whether there's a log file
+- waitForPid fails
+- GetProcessStatus fails
 - second FindJobById returns null
-- not successful
-- successful
 - set begin time on first command
-- start log file on first command
 - locking behavior
-- don't log job results if there's no log file
 - multiple commands where one fails
 - no commands
 */
