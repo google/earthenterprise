@@ -159,3 +159,7 @@ env.test('AssetOperation_unittest',
 env.test('CalcState_unittest',
     sysmanObjs + extraObjs + [ 'CalcState_unittest.cpp' ],
     LIBS=testLibs)
+
+env.test('JobLoop_unittest',
+         ['JobLoop_unittest.cpp'],
+         LIBS=['gtest'])
