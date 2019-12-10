@@ -18,8 +18,41 @@
 
 #include "khResourceProvider.h"
 
-TEST(JobLoopTest, CreateResourceProvider) {
-  khResourceProvider resProv;
+class MockResourceProvider : public khResourceProvider
+{
+  private:
+    virtual void StartLogFile(Job * job, const std::string &logfile) override {}
+    virtual void LogJobResults(
+        Job * job,
+        const std::string &status_string,
+        int signum,
+        bool coredump,
+        bool success,
+        time_t cmdtime,
+        time_t endtime) override {}
+    virtual void LogTotalTime(Job * job, uint32 elapsed) override {}
+    virtual bool ExecCmdline(Job *job, const std::vector<std::string> &cmdline) override { return true; }
+    virtual void SendProgress(uint32 jobid, double progress, time_t progressTime) override {}
+    virtual void GetProcessStatus(pid_t pid, std::string* status_string,
+                                  bool* success, bool* coredump, int* signum) override {}
+    virtual void WaitForPid(pid_t waitfor, bool &success, bool &coredump,
+                            int &signum) override {}
+    virtual void DeleteJob(
+        std::vector<Job>::iterator which,
+        bool success = false,
+        time_t beginTime = 0, time_t endTime = 0) override {}
+    virtual Job* FindJobById(uint32 jobid, std::vector<Job>::iterator &found) override { return nullptr; }
+  public:
+    void RunJobLoop(StartJobMsg msg) { JobLoop(msg); }
+};
+
+class JobLoopTest : public testing::Test {
+  protected:
+    MockResourceProvider resProv;
+};
+
+TEST_F(JobLoopTest, CreateResourceProvider) {
+  resProv.RunJobLoop(StartJobMsg());
 }
 
 int main(int argc, char **argv) {

@@ -680,12 +680,9 @@ khResourceProvider::JobLoop(StartJobMsg start)
 
       if (job->logfile) {
         // Collect process status summary just before it exits.
-        ProcPidStats::GetProcessStatus(waitfor, &status_string, &success,
-                                       &coredump, &signum);
+        GetProcessStatus(waitfor, &status_string, &success, &coredump, &signum);
       } else {
-        // I don't care about the return value, the pass by ref params will
-        // be set correctly either way
-        (void)khWaitForPid(waitfor, success, coredump, signum, NULL);
+        WaitForPid(waitfor, success, coredump, signum);
       }
 
       // get the endtime before re reacquire the lock
@@ -736,6 +733,20 @@ khResourceProvider::StartLogFile(Job * job, const std::string &logfile) {
     fprintf(job->logfile, "STARTTIME: %s\n",
             GetFormattedTimeString(job->beginTime).c_str());
   }
+}
+
+void
+khResourceProvider::GetProcessStatus(pid_t pid, std::string* status_string,
+                                     bool* success, bool* coredump, int* signum) {
+  ProcPidStats::GetProcessStatus(pid, status_string, success, coredump, signum);
+}
+
+void
+khResourceProvider::WaitForPid(pid_t waitfor, bool &success, bool &coredump,
+                               int &signum) {
+  // I don't care about the return value, the pass by ref params will
+  // be set correctly either way
+  (void)khWaitForPid(waitfor, success, coredump, signum, NULL);
 }
 
 void
