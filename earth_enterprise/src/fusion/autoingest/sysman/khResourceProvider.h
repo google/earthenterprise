@@ -86,6 +86,7 @@ class khResourceProvider
       bool success,
       time_t cmdtime,
       time_t endtime);
+  void LogTotalTime(Job * job, uint32 elapsed);
   bool ExecCmdline(Job *job, const std::vector<std::string> &cmdline);
   void SendProgress(uint32 jobid, double progress, time_t progressTime);
 #if 0

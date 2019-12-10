@@ -712,9 +712,7 @@ khResourceProvider::JobLoop(StartJobMsg start)
   } /* for cmdnum */
 
   if (cmdnum > 1) {
-    uint32 elapsed = endtime - job->beginTime;
-    fprintf(job->logfile, "\nTOTAL ELAPSEDTIME: %s\n",
-            GetFormattedElapsedTimeString(elapsed).c_str());
+    LogTotalTime(job, endtime - job->beginTime);
   }
 
   DeleteJob(found, success, job->beginTime, endtime);
@@ -774,6 +772,12 @@ khResourceProvider::LogJobResults(
   } else {
     fprintf(job->logfile, "FAILED\n");
   }
+}
+
+void
+khResourceProvider::LogTotalTime(Job * job, uint32 elapsed) {
+  fprintf(job->logfile, "\nTOTAL ELAPSEDTIME: %s\n",
+          GetFormattedElapsedTimeString(elapsed).c_str());
 }
 
 // ****************************************************************************
