@@ -33,7 +33,7 @@ class MockResourceProvider : public khResourceProvider {
 
     virtual bool ExecCmdline(Job *job, const std::vector<std::string> &cmdline) override {
       ++executes;
-      return true;
+      return execPasses;
     }
     virtual void SendProgress(uint32 jobid, double progress, time_t progressTime) override {}
     virtual void GetProcessStatus(pid_t pid, std::string* status_string,
@@ -52,20 +52,24 @@ class MockResourceProvider : public khResourceProvider {
       return jobPointer;
     }
   public:
+    // These variables modify how the class behaves
+    Job myJob;
+    Job * jobPointer;
+    bool execPasses;
+
+    // These variables record what the class does
     uint executes;
     uint waitFors;
     uint deletes;
 
-    Job myJob;
-    Job * jobPointer;
-
     MockResourceProvider() :
+        myJob(1),
+        jobPointer(&myJob),
+        execPasses(true),
         executes(0),
         waitFors(0),
-        deletes(0),
-        myJob(1),
-        jobPointer(&myJob) {}
-    void RunJobLoop() { JobLoop(StartJobMsg()); }
+        deletes(0) {}
+    void RunJobLoop() { JobLoop(StartJobMsg(1, "test.log", {{"cmd1"}})); }
 };
 
 class JobLoopTest : public testing::Test {
@@ -81,6 +85,23 @@ TEST_F(JobLoopTest, NoJob) {
   ASSERT_EQ(resProv.deletes, 0);
 }
 
+TEST_F(JobLoopTest, ExecFails) {
+  resProv.execPasses = false;
+  resProv.RunJobLoop();
+  ASSERT_EQ(resProv.executes, 1);
+  ASSERT_EQ(resProv.waitFors, 0);
+  ASSERT_EQ(resProv.deletes, 1);
+}
+
+/*
+TODO:
+- multiple commands
+- check SendProgress
+- waitForPid/GetProcessStatus based on whether there's a log file
+- second FindJobById returns null
+- not successful
+- successful
+*/
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc,argv);
   return RUN_ALL_TESTS();
