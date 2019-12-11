@@ -80,7 +80,7 @@ class khResourceProvider
   // ***** stuff for handling jobs *****
   khThreadPool     *jobThreads;
   virtual void StartLogFile(JobIter job, const std::string &logfile);
-  virtual void LogJobResults(
+  virtual void LogCmdResults(
       JobIter job,
       const std::string &status_string,
       int signum,

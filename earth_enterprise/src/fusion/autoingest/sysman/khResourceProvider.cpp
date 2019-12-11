@@ -619,8 +619,7 @@ void
 khResourceProvider::JobLoop(StartJobMsg start)
 {
   khLockGuard lock(mutex);
-  uint32 jobid = start.jobid;
-  JobIter job = FindJobById(jobid);
+  JobIter job = FindJobById(start.jobid);
   if (!Valid(job)) {
     // somebody already asked for me to go away
     return;
@@ -671,13 +670,13 @@ khResourceProvider::JobLoop(StartJobMsg start)
       }
       // now that we have the lock again, make sure the job hasn't been
       // deleted while we were waiting for it to finish
-      job = FindJobById(jobid);
+      job = FindJobById(job->jobid);
       if (Valid(job)) {
         job->pid = 0;
 
         // ***** report command status *****
         if (job->logfile) {
-          LogJobResults(job, status_string, signum, coredump, success, cmdtime, endtime);
+          LogCmdResults(job, status_string, signum, coredump, success, cmdtime, endtime);
         }
       }
     }
@@ -730,7 +729,7 @@ khResourceProvider::WaitForPid(pid_t waitfor, bool &success, bool &coredump,
 }
 
 void
-khResourceProvider::LogJobResults(
+khResourceProvider::LogCmdResults(
     JobIter job,
     const std::string &status_string,
     int signum,

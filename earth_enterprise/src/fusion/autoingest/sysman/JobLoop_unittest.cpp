@@ -30,7 +30,7 @@ class MockResourceProvider : public khResourceProvider {
         job->logfile = stdout;
       }
     }
-    virtual void LogJobResults(
+    virtual void LogCmdResults(
         JobIter job,
         const std::string &status_string,
         int signum,
