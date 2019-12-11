@@ -79,6 +79,7 @@ class khResourceProvider
 
   // ***** stuff for handling jobs *****
   khThreadPool     *jobThreads;
+  void RunJob(std::vector<Job>::iterator job);
   virtual void StartLogFile(Job * job, const std::string &logfile);
   virtual void LogJobResults(
       Job * job,

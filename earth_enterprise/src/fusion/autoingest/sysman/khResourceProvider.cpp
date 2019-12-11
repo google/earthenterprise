@@ -628,22 +628,23 @@ khResourceProvider::ExecCmdline(Job *job,
 void
 khResourceProvider::JobLoop(StartJobMsg start)
 {
-  uint32 jobid = start.jobid;
-  time_t endtime = 0;
-  bool success = false;
-
   khLockGuard lock(mutex);
   std::vector<Job>::iterator found;
+  uint32 jobid = start.jobid;
   Job *job = FindJobById(jobid, found);
   if (!job) {
     // somebody already asked for me to go away
     return;
   }
 
-  uint cmdnum = 0;
-  for (; cmdnum < start.commands.size(); ++cmdnum) {
+  time_t endtime = 0;
+  bool success = false;
+  bool logTotalTime = false;
+  bool doDelete = true;
+  for (uint cmdnum = 0; cmdnum < start.commands.size(); ++cmdnum) {
     time_t cmdtime = 0;
     pid_t waitfor = 0;
+    logTotalTime = (cmdnum > 0);
 
     // ***** Launch the command *****
     cmdtime = time(0);
@@ -687,7 +688,9 @@ khResourceProvider::JobLoop(StartJobMsg start)
       job = FindJobById(jobid, found);
       if (!job) {
         // somebody already asked for me to go away
-        return;
+        logTotalTime = false;
+        doDelete = false;
+        break;
       }
       job->pid = 0;
 
@@ -703,16 +706,23 @@ khResourceProvider::JobLoop(StartJobMsg start)
       }
     }
     else {
-      cmdnum = 0;
+      logTotalTime = false;
       break;
     }
   } /* for cmdnum */
 
-  if (cmdnum > 1) {
+  if (logTotalTime) {
     LogTotalTime(job, endtime - job->beginTime);
   }
 
-  DeleteJob(found, success, job->beginTime, endtime);
+  if (doDelete) {
+    DeleteJob(found, success, job->beginTime, endtime);
+  }
+}
+
+void
+khResourceProvider::RunJob(std::vector<Job>::iterator job) {
+
 }
 
 void
