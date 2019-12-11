@@ -662,47 +662,47 @@ khResourceProvider::RunCmd(
     time_t cmdtime,
     time_t & endtime,
     bool & logTotalTime) {
-  bool success = false;
-  if (ExecCmdline(job, commands)) {
-    pid_t waitfor = job->pid;
-
-    // ***** wait for command to finish *****
-    bool coredump = false;
-    int  signum   = -1;
-    std::string status_string;
-    {
-      // release the lock while we wait for the process to finish
-      khUnlockGuard unlock(mutex);
-
-      // notify the resource manager the first time
-      if (sendProgress) {
-        SendProgress(job, 0, time(0));
-      }
-
-      if (job->logfile) {
-        // Collect process status summary just before it exits.
-        GetProcessStatus(waitfor, &status_string, &success, &coredump, &signum);
-      } else {
-        WaitForPid(waitfor, success, coredump, signum);
-      }
-
-      // get the endtime before re reacquire the lock
-      endtime = time(0);
-    }
-    // now that we have the lock again, make sure the job hasn't been
-    // deleted while we were waiting for it to finish
-    job = FindJobById(job->jobid);
-    if (Valid(job)) {
-      job->pid = 0;
-
-      // ***** report command status *****
-      if (job->logfile) {
-        LogCmdResults(job, status_string, signum, coredump, success, cmdtime, endtime);
-      }
-    }
-  }
-  else {
+  if (!ExecCmdline(job, commands)) {
     logTotalTime = false;
+    return false;
+  }
+
+  // ***** wait for command to finish *****
+  bool success = false;
+  pid_t waitfor = job->pid;
+  bool coredump = false;
+  int  signum   = -1;
+  std::string status_string;
+  {
+    // release the lock while we wait for the process to finish
+    khUnlockGuard unlock(mutex);
+
+    // notify the resource manager the first time
+    if (sendProgress) {
+      SendProgress(job, 0, time(0));
+    }
+
+    if (job->logfile) {
+      // Collect process status summary just before it exits.
+      GetProcessStatus(waitfor, &status_string, &success, &coredump, &signum);
+    } else {
+      WaitForPid(waitfor, success, coredump, signum);
+    }
+
+    // get the endtime before re reacquire the lock
+    endtime = time(0);
+  }
+
+  // now that we have the lock again, make sure the job hasn't been
+  // deleted while we were waiting for it to finish
+  job = FindJobById(job->jobid);
+  if (!Valid(job)) return false;
+
+  job->pid = 0;
+
+  // ***** report command status *****
+  if (job->logfile) {
+    LogCmdResults(job, status_string, signum, coredump, success, cmdtime, endtime);
   }
   return success;
 }
