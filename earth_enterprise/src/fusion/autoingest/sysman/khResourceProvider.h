@@ -79,6 +79,13 @@ class khResourceProvider
 
   // ***** stuff for handling jobs *****
   khThreadPool     *jobThreads;
+  bool RunCmd(
+      JobIter & job,
+      const std::vector<std::string> & commands,
+      bool sendProgress,
+      time_t cmdtime,
+      time_t & endtime,
+      bool & logTotalTime);
   virtual void StartLogFile(JobIter job, const std::string &logfile);
   virtual void LogCmdResults(
       JobIter job,
