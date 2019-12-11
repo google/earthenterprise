@@ -56,8 +56,7 @@ khResourceProvider theResourceProvider;
 // ***  FindJobBy* routines
 // ****************************************************************************
 khResourceProvider::Job*
-khResourceProvider::FindJobById(uint32 jobid,
-                                std::vector<Job>::iterator &found)
+khResourceProvider::FindJobById(uint32 jobid, JobIter &found)
 {
   found = std::find_if(jobs.begin(), jobs.end(),
                        mem_var_pred_ref<std::equal_to>(&Job::jobid, jobid));
@@ -627,7 +626,7 @@ void
 khResourceProvider::JobLoop(StartJobMsg start)
 {
   khLockGuard lock(mutex);
-  std::vector<Job>::iterator found;
+  JobIter found;
   uint32 jobid = start.jobid;
   Job *job = FindJobById(jobid, found);
   if (!job) {
@@ -790,7 +789,7 @@ khResourceProvider::StopJob(const StopJobMsg &stop)
   // the mutex must be locked
   assert(!mutex.trylock());
 
-  std::vector<Job>::iterator found;
+  JobIter found;
   Job *job = FindJobById(stop.jobid, found);
   if (job) {
     if (job->pid > 0) {
@@ -877,7 +876,7 @@ khResourceProvider::ChangeVolumeReservations(const VolumeReservations &res)
 }
 
 void
-khResourceProvider::DeleteJob(std::vector<Job>::iterator which,
+khResourceProvider::DeleteJob(JobIter which,
                               bool success,
                               time_t beginTime, time_t endTime)
 {

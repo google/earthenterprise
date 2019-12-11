@@ -36,9 +36,9 @@ class khResourceProvider
     pid_t  pid;
     time_t beginTime;
 
-
     Job(uint32 jobid) : jobid(jobid), logfile(0), pid(0), beginTime(0) { }
   };
+  using JobIter = std::vector<Job>::iterator;
 
   void JobLoop(StartJobMsg start); // pass by value because thread func
 
@@ -98,7 +98,7 @@ class khResourceProvider
 #if 0
   void ReadProgress(int readfd, uint32 jobid);
 #endif
-  virtual void DeleteJob(std::vector<Job>::iterator which,
+  virtual void DeleteJob(JobIter which,
                  bool success = false,
                  time_t beginTime = 0, time_t endTime = 0);
 
@@ -115,7 +115,8 @@ class khResourceProvider
   VolResMap volResMap;
 
 
-  virtual Job* FindJobById(uint32 jobid, std::vector<Job>::iterator &found);
+  virtual Job* FindJobById(uint32 jobid, JobIter &found);
+  virtual bool ValidJob(JobIter job) { return job != jobs.end(); }
   bool WantExit(void) {
     khLockGuard lock(mutex);
     return wantexit;

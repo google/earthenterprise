@@ -62,14 +62,14 @@ class MockResourceProvider : public khResourceProvider {
       success = !(waitFors == failStatusOn);
     }
     virtual void DeleteJob(
-        std::vector<Job>::iterator which,
+        JobIter which,
         bool success = false,
         time_t beginTime = 0, time_t endTime = 0) override {
       ++deletes;
       delSuccess = success;
       delTime = beginTime;
     }
-    virtual Job* FindJobById(uint32 jobid, std::vector<Job>::iterator &found) override {
+    virtual Job* FindJobById(uint32 jobid, JobIter &found) override {
       ++findJobs;
       return (findJobs == failFindJobOn ? nullptr : &myJob);
     }
