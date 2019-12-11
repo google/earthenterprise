@@ -18,6 +18,10 @@
 
 #include "khResourceProvider.h"
 
+const std::vector<std::vector<std::string>> NO_COMMANDS = {};
+const std::vector<std::vector<std::string>> ONE_COMMAND = {{"cmd1"}};
+const std::vector<std::vector<std::string>> MULTI_COMMANDS = {{"cmd1"}, {"cmd2"}, {"cmd3"}};
+
 class MockResourceProvider : public khResourceProvider {
   private:
     virtual void StartLogFile(Job * job, const std::string &logfile) override {
@@ -108,14 +112,7 @@ class MockResourceProvider : public khResourceProvider {
         deletes(0),
         delSuccess(false),
         delTime(0) {}
-    void RunJobLoop(bool multiCommands = false) {
-      std::vector<std::vector<std::string>> commands;
-      if (multiCommands) {
-        commands = {{"cmd1"}, {"cmd2"}, {"cmd3"}};
-      }
-      else {
-        commands = {{"cmd1"}};
-      }
+    void RunJobLoop(const std::vector<std::vector<std::string>> & commands = ONE_COMMAND) {
       JobLoop(StartJobMsg(1, "test.log", commands)); 
     }
 };
@@ -225,7 +222,7 @@ TEST_F(JobLoopTest, FailSecondFindJob) {
 }
 
 TEST_F(JobLoopTest, MultiCommandSuccess) {
-  resProv.RunJobLoop(true);
+  resProv.RunJobLoop(MULTI_COMMANDS);
   ASSERT_EQ(resProv.logStarted, 1);
   ASSERT_EQ(resProv.executes, 3);
   ASSERT_EQ(resProv.progSent, 1);
@@ -240,7 +237,7 @@ TEST_F(JobLoopTest, MultiCommandSuccess) {
 
 TEST_F(JobLoopTest, MultiCommandSuccessNoLog) {
   resProv.setLogFile = false;
-  resProv.RunJobLoop(true);
+  resProv.RunJobLoop(MULTI_COMMANDS);
   ASSERT_EQ(resProv.logStarted, 3);
   ASSERT_EQ(resProv.executes, 3);
   ASSERT_EQ(resProv.progSent, 1);
@@ -255,7 +252,7 @@ TEST_F(JobLoopTest, MultiCommandSuccessNoLog) {
 
 TEST_F(JobLoopTest, MultiCommandFailExec) {
   resProv.failExecOn = 2;
-  resProv.RunJobLoop(true);
+  resProv.RunJobLoop(MULTI_COMMANDS);
   ASSERT_EQ(resProv.logStarted, 1);
   ASSERT_EQ(resProv.executes, 2);
   ASSERT_EQ(resProv.progSent, 1);
@@ -269,7 +266,7 @@ TEST_F(JobLoopTest, MultiCommandFailExec) {
 
 TEST_F(JobLoopTest, MultiCommandFailGetStatus) {
   resProv.failStatusOn = 2;
-  resProv.RunJobLoop(true);
+  resProv.RunJobLoop(MULTI_COMMANDS);
   ASSERT_EQ(resProv.logStarted, 1);
   ASSERT_EQ(resProv.executes, 2);
   ASSERT_EQ(resProv.progSent, 1);
@@ -284,7 +281,7 @@ TEST_F(JobLoopTest, MultiCommandFailGetStatus) {
 TEST_F(JobLoopTest, MultiCommandFailWaitFor) {
   resProv.failStatusOn = 2;
   resProv.setLogFile = false;
-  resProv.RunJobLoop(true);
+  resProv.RunJobLoop(MULTI_COMMANDS);
   ASSERT_EQ(resProv.logStarted, 2);
   ASSERT_EQ(resProv.executes, 2);
   ASSERT_EQ(resProv.progSent, 1);
@@ -298,7 +295,7 @@ TEST_F(JobLoopTest, MultiCommandFailWaitFor) {
 
 TEST_F(JobLoopTest, MultiCommandFailFind) {
   resProv.failFindJobOn = 3;
-  resProv.RunJobLoop(true);
+  resProv.RunJobLoop(MULTI_COMMANDS);
   ASSERT_EQ(resProv.logStarted, 1);
   ASSERT_EQ(resProv.executes, 2);
   ASSERT_EQ(resProv.progSent, 1);
@@ -310,11 +307,22 @@ TEST_F(JobLoopTest, MultiCommandFailFind) {
   ASSERT_FALSE(resProv.delSuccess);
 }
 
+TEST_F(JobLoopTest, NoCommands) {
+  resProv.RunJobLoop(NO_COMMANDS);
+  ASSERT_EQ(resProv.logStarted, 0);
+  ASSERT_EQ(resProv.executes, 0);
+  ASSERT_EQ(resProv.progSent, 0);
+  ASSERT_EQ(resProv.getStatus, 0);
+  ASSERT_EQ(resProv.waitFors, 0);
+  ASSERT_EQ(resProv.resultsLogged, 0);
+  ASSERT_EQ(resProv.timeLogged, 0);
+  ASSERT_EQ(resProv.deletes, 1);
+  ASSERT_FALSE(resProv.delSuccess);
+}
+
 /*
 TODO:
-- no commands
 - set begin time on first command
-- locking behavior
 */
 
 int main(int argc, char **argv) {
