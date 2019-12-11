@@ -296,9 +296,22 @@ TEST_F(JobLoopTest, MultiCommandFailWaitFor) {
   ASSERT_FALSE(resProv.delSuccess);
 }
 
+TEST_F(JobLoopTest, MultiCommandFailFind) {
+  resProv.failFindJobOn = 3;
+  resProv.RunJobLoop(true);
+  ASSERT_EQ(resProv.logStarted, 1);
+  ASSERT_EQ(resProv.executes, 2);
+  ASSERT_EQ(resProv.progSent, 1);
+  ASSERT_EQ(resProv.getStatus, 2);
+  ASSERT_EQ(resProv.waitFors, 0);
+  ASSERT_EQ(resProv.resultsLogged, 1);
+  ASSERT_EQ(resProv.timeLogged, 0);
+  ASSERT_EQ(resProv.deletes, 0);
+  ASSERT_FALSE(resProv.delSuccess);
+}
+
 /*
 TODO:
-- multiple commands where one fails second FindJobById
 - no commands
 - set begin time on first command
 - locking behavior
