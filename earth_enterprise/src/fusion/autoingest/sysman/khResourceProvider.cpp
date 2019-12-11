@@ -640,14 +640,11 @@ khResourceProvider::JobLoop(StartJobMsg start)
   time_t endtime = 0;
   bool success = false;
   bool logTotalTime = false;
-  bool doDelete = true;
   for (uint cmdnum = 0; cmdnum < start.commands.size(); ++cmdnum) {
-    time_t cmdtime = 0;
-    pid_t waitfor = 0;
     logTotalTime = (cmdnum > 0);
 
     // ***** Launch the command *****
-    cmdtime = time(0);
+    time_t cmdtime = time(0);
     if (!job->beginTime) {
       job->beginTime = cmdtime;
     }
@@ -658,7 +655,7 @@ khResourceProvider::JobLoop(StartJobMsg start)
 
     success = false;
     if (ExecCmdline(job, start.commands[cmdnum])) {
-      waitfor = job->pid;
+      pid_t waitfor = job->pid;
 
       // ***** wait for command to finish *****
       bool coredump = false;
@@ -689,30 +686,23 @@ khResourceProvider::JobLoop(StartJobMsg start)
       if (job) {
         job->pid = 0;
 
-
         // ***** report command status *****
         if (job->logfile) {
           LogJobResults(job, status_string, signum, coredump, success, cmdtime, endtime);
         }
       }
-      else {
-        // somebody already asked for me to go away
-        logTotalTime = false;
-        doDelete = false;
-        success = false;
-      }
     }
     else {
       logTotalTime = false;
     }
-    if (!success) break;
+    if (!success || !job) break;
   } /* for cmdnum */
 
-  if (logTotalTime) {
-    LogTotalTime(job, endtime - job->beginTime);
-  }
+  if (job) {
+    if (logTotalTime) {
+      LogTotalTime(job, endtime - job->beginTime);
+    }
 
-  if (doDelete) {
     DeleteJob(found, success, job->beginTime, endtime);
   }
 }
