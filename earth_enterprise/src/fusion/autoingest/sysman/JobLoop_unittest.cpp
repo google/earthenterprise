@@ -320,11 +320,6 @@ TEST_F(JobLoopTest, NoCommands) {
   ASSERT_FALSE(resProv.delSuccess);
 }
 
-/*
-TODO:
-- set begin time on first command
-*/
-
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc,argv);
   return RUN_ALL_TESTS();
