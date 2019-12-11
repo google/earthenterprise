@@ -686,29 +686,26 @@ khResourceProvider::JobLoop(StartJobMsg start)
       // now that we have the lock again, make sure the job hasn't been
       // deleted while we were waiting for it to finish
       job = FindJobById(jobid, found);
-      if (!job) {
+      if (job) {
+        job->pid = 0;
+
+
+        // ***** report command status *****
+        if (job->logfile) {
+          LogJobResults(job, status_string, signum, coredump, success, cmdtime, endtime);
+        }
+      }
+      else {
         // somebody already asked for me to go away
         logTotalTime = false;
         doDelete = false;
-        break;
-      }
-      job->pid = 0;
-
-
-      // ***** report command status *****
-      if (job->logfile) {
-        LogJobResults(job, status_string, signum, coredump, success, cmdtime, endtime);
-      }
-
-      if (!success) {
-        ++cmdnum;
-        break;
+        success = false;
       }
     }
     else {
       logTotalTime = false;
-      break;
     }
+    if (!success) break;
   } /* for cmdnum */
 
   if (logTotalTime) {
@@ -718,11 +715,6 @@ khResourceProvider::JobLoop(StartJobMsg start)
   if (doDelete) {
     DeleteJob(found, success, job->beginTime, endtime);
   }
-}
-
-void
-khResourceProvider::RunJob(std::vector<Job>::iterator job) {
-
 }
 
 void
