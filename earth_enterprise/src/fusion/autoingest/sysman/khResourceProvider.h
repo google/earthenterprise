@@ -79,18 +79,18 @@ class khResourceProvider
 
   // ***** stuff for handling jobs *****
   khThreadPool     *jobThreads;
-  virtual void StartLogFile(Job * job, const std::string &logfile);
+  virtual void StartLogFile(JobIter job, const std::string &logfile);
   virtual void LogJobResults(
-      Job * job,
+      JobIter job,
       const std::string &status_string,
       int signum,
       bool coredump,
       bool success,
       time_t cmdtime,
       time_t endtime);
-  virtual void LogTotalTime(Job * job, uint32 elapsed);
-  virtual bool ExecCmdline(Job *job, const std::vector<std::string> &cmdline);
-  virtual void SendProgress(Job * job, double progress, time_t progressTime);
+  virtual void LogTotalTime(JobIter job, uint32 elapsed);
+  virtual bool ExecCmdline(JobIter job, const std::vector<std::string> &cmdline);
+  virtual void SendProgress(JobIter job, double progress, time_t progressTime);
   virtual void GetProcessStatus(pid_t pid, std::string* status_string,
                                 bool* success, bool* coredump, int* signum);
   virtual void WaitForPid(pid_t waitfor, bool &success, bool &coredump,
@@ -115,8 +115,8 @@ class khResourceProvider
   VolResMap volResMap;
 
 
-  virtual Job* FindJobById(uint32 jobid, JobIter &found);
-  virtual bool ValidJob(JobIter job) { return job != jobs.end(); }
+  virtual JobIter FindJobById(uint32 jobid);
+  virtual inline bool Valid(JobIter job) const { return job != jobs.end(); }
   bool WantExit(void) {
     khLockGuard lock(mutex);
     return wantexit;

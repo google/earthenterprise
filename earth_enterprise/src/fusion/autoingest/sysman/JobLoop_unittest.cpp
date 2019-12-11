@@ -24,14 +24,14 @@ const std::vector<std::vector<std::string>> MULTI_COMMANDS = {{"cmd1"}, {"cmd2"}
 
 class MockResourceProvider : public khResourceProvider {
   private:
-    virtual void StartLogFile(Job * job, const std::string &logfile) override {
+    virtual void StartLogFile(JobIter job, const std::string &logfile) override {
       ++logStarted;
       if (setLogFile) {
         job->logfile = stdout;
       }
     }
     virtual void LogJobResults(
-        Job * job,
+        JobIter job,
         const std::string &status_string,
         int signum,
         bool coredump,
@@ -40,14 +40,14 @@ class MockResourceProvider : public khResourceProvider {
         time_t endtime) override {
       ++resultsLogged;
     }
-    virtual void LogTotalTime(Job * job, uint32 elapsed) override {
+    virtual void LogTotalTime(JobIter job, uint32 elapsed) override {
       ++timeLogged;
     }
-    virtual bool ExecCmdline(Job * job, const std::vector<std::string> &cmdline) override {
+    virtual bool ExecCmdline(JobIter job, const std::vector<std::string> &cmdline) override {
       ++executes;
       return !(executes == failExecOn);
     }
-    virtual void SendProgress(Job * job, double progress, time_t progressTime) override {
+    virtual void SendProgress(JobIter job, double progress, time_t progressTime) override {
       assert(progress == 0);
       ++progSent;
     }
@@ -69,13 +69,14 @@ class MockResourceProvider : public khResourceProvider {
       delSuccess = success;
       delTime = beginTime;
     }
-    virtual Job* FindJobById(uint32 jobid, JobIter &found) override {
+    virtual JobIter FindJobById(uint32 jobid) override {
       ++findJobs;
-      return (findJobs == failFindJobOn ? nullptr : &myJob);
+      return (findJobs == failFindJobOn ? myJob.end() : myJob.begin());
     }
+    virtual inline bool Valid(JobIter job) const override { return job != myJob.end(); }
   public:
     // These variables modify how the class behaves
-    Job myJob;
+    std::vector<Job> myJob;
     bool setLogFile;
     // Indicates which call of each function should fail
     uint failFindJobOn;
@@ -96,7 +97,7 @@ class MockResourceProvider : public khResourceProvider {
     time_t delTime;
 
     MockResourceProvider() :
-        myJob(1),
+        myJob({1}),
         setLogFile(true),
         failFindJobOn(0),
         failExecOn(0),

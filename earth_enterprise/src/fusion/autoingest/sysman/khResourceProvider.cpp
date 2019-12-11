@@ -55,16 +55,11 @@ khResourceProvider theResourceProvider;
 // ****************************************************************************
 // ***  FindJobBy* routines
 // ****************************************************************************
-khResourceProvider::Job*
-khResourceProvider::FindJobById(uint32 jobid, JobIter &found)
+khResourceProvider::JobIter
+khResourceProvider::FindJobById(uint32 jobid)
 {
-  found = std::find_if(jobs.begin(), jobs.end(),
-                       mem_var_pred_ref<std::equal_to>(&Job::jobid, jobid));
-  if (found != jobs.end()) {
-    return &*found;
-  } else {
-    return 0;
-  }
+  return std::find_if(jobs.begin(), jobs.end(),
+                      mem_var_pred_ref<std::equal_to>(&Job::jobid, jobid));
 }
 
 // ****************************************************************************
@@ -392,19 +387,17 @@ khResourceProvider::PruneLoop(void)
 // ***  ProgressLoop
 // ****************************************************************************
 void
-khResourceProvider::SendProgress(Job * job, double progress,
+khResourceProvider::SendProgress(JobIter job, double progress,
                                  time_t progressTime) {
   khLockGuard lock(mutex);
-  if (job) {
-    // notify the resource manager
-    sendQueue->push
-      (SendCmd(std::mem_fun(&khResourceManagerProxy::JobProgress),
-               JobProgressMsg(job->jobid,
-                              job->beginTime,
-                              progressTime,
-                              progress),
-               0 /* timeout */));
-  }
+  // notify the resource manager
+  sendQueue->push
+    (SendCmd(std::mem_fun(&khResourceManagerProxy::JobProgress),
+              JobProgressMsg(job->jobid,
+                            job->beginTime,
+                            progressTime,
+                            progress),
+              0 /* timeout */));
 }
 
 
@@ -510,7 +503,7 @@ khResourceProvider::StartJob(const StartJobMsg &start)
 
 
 bool
-khResourceProvider::ExecCmdline(Job *job,
+khResourceProvider::ExecCmdline(JobIter job,
                                 const std::vector<std::string> &cmdline)
 {
   // prepend command to logfile & flush it to disk
@@ -626,10 +619,9 @@ void
 khResourceProvider::JobLoop(StartJobMsg start)
 {
   khLockGuard lock(mutex);
-  JobIter found;
   uint32 jobid = start.jobid;
-  Job *job = FindJobById(jobid, found);
-  if (!job) {
+  JobIter job = FindJobById(jobid);
+  if (!Valid(job)) {
     // somebody already asked for me to go away
     return;
   }
@@ -679,8 +671,8 @@ khResourceProvider::JobLoop(StartJobMsg start)
       }
       // now that we have the lock again, make sure the job hasn't been
       // deleted while we were waiting for it to finish
-      job = FindJobById(jobid, found);
-      if (job) {
+      job = FindJobById(jobid);
+      if (Valid(job)) {
         job->pid = 0;
 
         // ***** report command status *****
@@ -692,20 +684,20 @@ khResourceProvider::JobLoop(StartJobMsg start)
     else {
       logTotalTime = false;
     }
-    if (!success || !job) break;
+    if (!success || !Valid(job)) break;
   } /* for cmdnum */
 
-  if (job) {
+  if (Valid(job)) {
     if (logTotalTime) {
       LogTotalTime(job, endtime - job->beginTime);
     }
 
-    DeleteJob(found, success, job->beginTime, endtime);
+    DeleteJob(job, success, job->beginTime, endtime);
   }
 }
 
 void
-khResourceProvider::StartLogFile(Job * job, const std::string &logfile) {
+khResourceProvider::StartLogFile(JobIter job, const std::string &logfile) {
   if (job->logfile = fopen(logfile.c_str(), "w")) {
     // if this is first command, open the logfile & write the header
     fprintf(job->logfile, "BUILD HOST: %s\n",
@@ -739,7 +731,7 @@ khResourceProvider::WaitForPid(pid_t waitfor, bool &success, bool &coredump,
 
 void
 khResourceProvider::LogJobResults(
-    Job * job,
+    JobIter job,
     const std::string &status_string,
     int signum,
     bool coredump,
@@ -775,7 +767,7 @@ khResourceProvider::LogJobResults(
 }
 
 void
-khResourceProvider::LogTotalTime(Job * job, uint32 elapsed) {
+khResourceProvider::LogTotalTime(JobIter job, uint32 elapsed) {
   fprintf(job->logfile, "\nTOTAL ELAPSEDTIME: %s\n",
           GetFormattedElapsedTimeString(elapsed).c_str());
 }
@@ -790,23 +782,21 @@ khResourceProvider::StopJob(const StopJobMsg &stop)
   assert(!mutex.trylock());
 
   JobIter found;
-  Job *job = FindJobById(stop.jobid, found);
-  if (job) {
-    if (job->pid > 0) {
-      // It's already running, so try to kill it. Killing -pid instead
-      // of pid says to send the signal to all processes in the
-      // process group pid. When we fork our chid we make it a process
-      // group leader.
-      notify(NFY_DEBUG, "Killing pgid %d", -job->pid);
-      if (!khKillPid(-job->pid)) {
-        // warning has already been emitted
-        DeleteJob(found);
-      }
-    } else {
-      // it's not running yet, taking it out of the list
-      // will keep it from ever running
+  JobIter job = FindJobById(stop.jobid);
+  if (Valid(job) && job->pid > 0) {
+    // It's already running, so try to kill it. Killing -pid instead
+    // of pid says to send the signal to all processes in the
+    // process group pid. When we fork our chid we make it a process
+    // group leader.
+    notify(NFY_DEBUG, "Killing pgid %d", -job->pid);
+    if (!khKillPid(-job->pid)) {
+      // warning has already been emitted
       DeleteJob(found);
     }
+  } else {
+    // it's not running yet, taking it out of the list
+    // will keep it from ever running
+    DeleteJob(found);
   }
 }
 
