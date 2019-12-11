@@ -20,11 +20,6 @@
 
 class MockResourceProvider : public khResourceProvider {
   private:
-    bool GetSuccess(uint counter, bool status) {
-      if (alwaysPassFirst && counter == 1) return true;
-      else return status;
-    }
-
     virtual void StartLogFile(Job * job, const std::string &logfile) override {
       ++logStarted;
       if (setLogFile) {
@@ -46,7 +41,7 @@ class MockResourceProvider : public khResourceProvider {
     }
     virtual bool ExecCmdline(Job *job, const std::vector<std::string> &cmdline) override {
       ++executes;
-      return GetSuccess(executes, execPasses);
+      return !(executes == failExecOn);
     }
     virtual void SendProgress(uint32 jobid, double progress, time_t progressTime) override {
       assert(progress == 0);
@@ -55,12 +50,12 @@ class MockResourceProvider : public khResourceProvider {
     virtual void GetProcessStatus(pid_t pid, std::string* status_string,
                                   bool* success, bool* coredump, int* signum) override {
       ++getStatus;
-      *success = GetSuccess(getStatus, statusPasses);
+      *success = !(getStatus == failStatusOn);
     }
     virtual void WaitForPid(pid_t waitfor, bool &success, bool &coredump,
                             int &signum) override {
       ++waitFors;
-      success = GetSuccess(waitFors, statusPasses);
+      success = !(waitFors == failStatusOn);
     }
     virtual void DeleteJob(
         std::vector<Job>::iterator which,
@@ -71,23 +66,20 @@ class MockResourceProvider : public khResourceProvider {
       delTime = beginTime;
     }
     virtual Job* FindJobById(uint32 jobid, std::vector<Job>::iterator &found) override {
-      Job * ret = jobPointer;
-      if (failSecondFindJob) jobPointer = nullptr;
-      return ret;
+      ++findJobs;
+      return (findJobs == failFindJobOn ? nullptr : &myJob);
     }
   public:
     // These variables modify how the class behaves
     Job myJob;
-    Job * jobPointer;
-    bool failSecondFindJob;
     bool setLogFile;
-    bool execPasses;
-    bool statusPasses;
-    // Forces any failure to wait until the second pass so we can test with
-    // multiple commands
-    bool alwaysPassFirst;
+    // Indicates which call of each function should fail
+    uint failFindJobOn;
+    uint failExecOn;
+    uint failStatusOn;
 
     // These variables record what the class does
+    uint findJobs;
     uint logStarted;
     uint executes;
     uint progSent;
@@ -101,12 +93,11 @@ class MockResourceProvider : public khResourceProvider {
 
     MockResourceProvider() :
         myJob(1),
-        jobPointer(&myJob),
-        failSecondFindJob(false),
         setLogFile(true),
-        execPasses(true),
-        statusPasses(true),
-        alwaysPassFirst(false),
+        failFindJobOn(0),
+        failExecOn(0),
+        failStatusOn(0),
+        findJobs(0),
         logStarted(0),
         executes(0),
         progSent(0),
@@ -135,7 +126,7 @@ class JobLoopTest : public testing::Test {
 };
 
 TEST_F(JobLoopTest, NoJob) {
-  resProv.jobPointer = nullptr;
+  resProv.failFindJobOn = 1;
   resProv.RunJobLoop();
   ASSERT_EQ(resProv.logStarted, 0);
   ASSERT_EQ(resProv.executes, 0);
@@ -178,7 +169,7 @@ TEST_F(JobLoopTest, SuccessNoLogFile) {
 }
 
 TEST_F(JobLoopTest, ExecFails) {
-  resProv.execPasses = false;
+  resProv.failExecOn = 1;
   resProv.RunJobLoop();
   ASSERT_EQ(resProv.logStarted, 1);
   ASSERT_EQ(resProv.executes, 1);
@@ -192,7 +183,7 @@ TEST_F(JobLoopTest, ExecFails) {
 }
 
 TEST_F(JobLoopTest, GetStatusFails) {
-  resProv.statusPasses = false;
+  resProv.failStatusOn = 1;
   resProv.RunJobLoop();
   ASSERT_EQ(resProv.logStarted, 1);
   ASSERT_EQ(resProv.executes, 1);
@@ -206,7 +197,7 @@ TEST_F(JobLoopTest, GetStatusFails) {
 }
 
 TEST_F(JobLoopTest, WaitForPidFails) {
-  resProv.statusPasses = false;
+  resProv.failStatusOn = 1;
   resProv.setLogFile = false;
   resProv.RunJobLoop();
   ASSERT_EQ(resProv.logStarted, 1);
@@ -221,7 +212,7 @@ TEST_F(JobLoopTest, WaitForPidFails) {
 }
 
 TEST_F(JobLoopTest, FailSecondFindJob) {
-  resProv.failSecondFindJob = true;
+  resProv.failFindJobOn = 2;
   resProv.RunJobLoop();
   ASSERT_EQ(resProv.logStarted, 1);
   ASSERT_EQ(resProv.executes, 1);
@@ -263,8 +254,7 @@ TEST_F(JobLoopTest, MultiCommandSuccessNoLog) {
 }
 
 TEST_F(JobLoopTest, MultiCommandFailExec) {
-  resProv.execPasses = false;
-  resProv.alwaysPassFirst = true;
+  resProv.failExecOn = 2;
   resProv.RunJobLoop(true);
   ASSERT_EQ(resProv.logStarted, 1);
   ASSERT_EQ(resProv.executes, 2);
@@ -278,8 +268,7 @@ TEST_F(JobLoopTest, MultiCommandFailExec) {
 }
 
 TEST_F(JobLoopTest, MultiCommandFailGetStatus) {
-  resProv.statusPasses = false;
-  resProv.alwaysPassFirst = true;
+  resProv.failStatusOn = 2;
   resProv.RunJobLoop(true);
   ASSERT_EQ(resProv.logStarted, 1);
   ASSERT_EQ(resProv.executes, 2);
@@ -293,8 +282,7 @@ TEST_F(JobLoopTest, MultiCommandFailGetStatus) {
 }
 
 TEST_F(JobLoopTest, MultiCommandFailWaitFor) {
-  resProv.statusPasses = false;
-  resProv.alwaysPassFirst = true;
+  resProv.failStatusOn = 2;
   resProv.setLogFile = false;
   resProv.RunJobLoop(true);
   ASSERT_EQ(resProv.logStarted, 2);
