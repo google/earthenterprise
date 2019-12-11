@@ -43,11 +43,11 @@ class MockResourceProvider : public khResourceProvider {
     virtual void LogTotalTime(Job * job, uint32 elapsed) override {
       ++timeLogged;
     }
-    virtual bool ExecCmdline(Job *job, const std::vector<std::string> &cmdline) override {
+    virtual bool ExecCmdline(Job * job, const std::vector<std::string> &cmdline) override {
       ++executes;
       return !(executes == failExecOn);
     }
-    virtual void SendProgress(uint32 jobid, double progress, time_t progressTime) override {
+    virtual void SendProgress(Job * job, double progress, time_t progressTime) override {
       assert(progress == 0);
       ++progSent;
     }

@@ -393,16 +393,14 @@ khResourceProvider::PruneLoop(void)
 // ***  ProgressLoop
 // ****************************************************************************
 void
-khResourceProvider::SendProgress(uint32 jobid, double progress,
+khResourceProvider::SendProgress(Job * job, double progress,
                                  time_t progressTime) {
   khLockGuard lock(mutex);
-  std::vector<Job>::iterator unused;
-  Job *job = FindJobById(jobid, unused);
   if (job) {
     // notify the resource manager
     sendQueue->push
       (SendCmd(std::mem_fun(&khResourceManagerProxy::JobProgress),
-               JobProgressMsg(jobid,
+               JobProgressMsg(job->jobid,
                               job->beginTime,
                               progressTime,
                               progress),
@@ -667,7 +665,7 @@ khResourceProvider::JobLoop(StartJobMsg start)
 
         // notify the resource manager the first time
         if (cmdnum == 0) {
-          SendProgress(jobid, 0, time(0));
+          SendProgress(job, 0, time(0));
         }
 
         if (job->logfile) {

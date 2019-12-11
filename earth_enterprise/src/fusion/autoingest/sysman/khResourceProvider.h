@@ -90,7 +90,7 @@ class khResourceProvider
       time_t endtime);
   virtual void LogTotalTime(Job * job, uint32 elapsed);
   virtual bool ExecCmdline(Job *job, const std::vector<std::string> &cmdline);
-  virtual void SendProgress(uint32 jobid, double progress, time_t progressTime);
+  virtual void SendProgress(Job * job, double progress, time_t progressTime);
   virtual void GetProcessStatus(pid_t pid, std::string* status_string,
                                 bool* success, bool* coredump, int* signum);
   virtual void WaitForPid(pid_t waitfor, bool &success, bool &coredump,
