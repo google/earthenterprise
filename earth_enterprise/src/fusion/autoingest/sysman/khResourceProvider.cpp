@@ -631,7 +631,6 @@ khResourceProvider::JobLoop(StartJobMsg start)
   for (uint cmdnum = 0; cmdnum < start.commands.size(); ++cmdnum) {
     logTotalTime = (cmdnum > 0);
 
-    // ***** Launch the command *****
     time_t cmdtime = time(0);
     if (!job->beginTime) {
       job->beginTime = cmdtime;
@@ -642,16 +641,15 @@ khResourceProvider::JobLoop(StartJobMsg start)
     }
 
     success = RunCmd(job, start.commands[cmdnum], cmdnum == 0, cmdtime, endtime, logTotalTime);
-    if (!success || !Valid(job)) break;
+    if (!Valid(job)) return;  // check if somebody already asked for me to go away
+    if (!success) break;
   } /* for cmdnum */
 
-  if (Valid(job)) {
-    if (logTotalTime) {
-      LogTotalTime(job, endtime - job->beginTime);
-    }
-
-    DeleteJob(job, success, job->beginTime, endtime);
+  if (logTotalTime) {
+    LogTotalTime(job, endtime - job->beginTime);
   }
+
+  DeleteJob(job, success, job->beginTime, endtime);
 }
 
 bool
@@ -662,16 +660,17 @@ khResourceProvider::RunCmd(
     time_t cmdtime,
     time_t & endtime,
     bool & logTotalTime) {
+
+  // ***** Launch the command *****
   if (!ExecCmdline(job, commands)) {
     logTotalTime = false;
     return false;
   }
 
-  // ***** wait for command to finish *****
   bool success = false;
   pid_t waitfor = job->pid;
   bool coredump = false;
-  int  signum   = -1;
+  int signum = -1;
   std::string status_string;
   {
     // release the lock while we wait for the process to finish
@@ -682,6 +681,7 @@ khResourceProvider::RunCmd(
       SendProgress(job, 0, time(0));
     }
 
+    // ***** wait for command to finish *****
     if (job->logfile) {
       // Collect process status summary just before it exits.
       GetProcessStatus(waitfor, &status_string, &success, &coredump, &signum);
@@ -689,7 +689,7 @@ khResourceProvider::RunCmd(
       WaitForPid(waitfor, success, coredump, signum);
     }
 
-    // get the endtime before re reacquire the lock
+    // get the endtime before re-acquiring the lock
     endtime = time(0);
   }
 
@@ -709,17 +709,16 @@ khResourceProvider::RunCmd(
 
 void
 khResourceProvider::StartLogFile(JobIter job, const std::string &logfile) {
-  if (job->logfile = fopen(logfile.c_str(), "w")) {
-    // if this is first command, open the logfile & write the header
+  job->logfile = fopen(logfile.c_str(), "w");
+  if (job->logfile) {
+    // open the logfile & write the header
     fprintf(job->logfile, "BUILD HOST: %s\n",
             khHostname().c_str());
     fprintf(job->logfile, "FUSION VERSION %s, BUILD %s\n",
             GEE_VERSION, BUILD_DATE);
-    {
-      QString runtimeDesc = RuntimeOptions::DescString();
-      if (!runtimeDesc.isEmpty()) {
-        fprintf(job->logfile, "OPTIONS: %s\n", runtimeDesc.latin1());
-      }
+    QString runtimeDesc = RuntimeOptions::DescString();
+    if (!runtimeDesc.isEmpty()) {
+      fprintf(job->logfile, "OPTIONS: %s\n", runtimeDesc.latin1());
     }
     fprintf(job->logfile, "STARTTIME: %s\n",
             GetFormattedTimeString(job->beginTime).c_str());
