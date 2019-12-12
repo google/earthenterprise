@@ -132,7 +132,7 @@ sudo yum install -y \
   libcap-devel libmng-devel libpng12-devel libX11-devel libXcursor-devel \
   libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel \
-  perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-devel \
+  perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-defusedxml python-devel \
   rpm-build rpmrebuild rsync scons \
   xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
 ```
@@ -147,12 +147,13 @@ sudo yum install -y \
   libcap-devel libmng-devel libpng-devel libX11-devel libXcursor-devel \
   libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel pcre pcre-devel \
-  perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-devel python27-devel python-unittest2 \
+  perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-defusedxml \
+  python-devel python27-devel python-unittest2 \
   rpm-build rpmrebuild rsync scons shunit2 \
   xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
 ```
 
-If you encounter an error about git dependency conflicts, consider 
+If you encounter an error about git dependency conflicts, consider
 experimenting with the `--skip-broken` parameter.
 
 ## GTest 1.8
