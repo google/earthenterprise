@@ -771,8 +771,12 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
     terrain_project->LoadInsetInfo(ClientTmeshTilespaceFlat,
                                   beginSSLevel, endSSLevel,
                                   terrainInsets);
-    const uint beginMinifyLevel  = 0; // StartTmeshLevel;
-    const uint endMinifyLevel    = 0; // terrainInsets[0].effectiveMaxLevel;
+    const uint beginMinifyLevel  = (MiscConfig::Instance().UseMinification
+                                    ? StartTmeshLevel
+                                    : 0);
+    const uint endMinifyLevel    = (MiscConfig::Instance().UseMinification
+                                    ? terrainInsets[0].effectiveMaxLevel
+                                    : );
 
 #ifdef DEBUG_SS_DECISIONS
     notify(NFY_NOTICE, "  beginMinifyLevel = %u", beginMinifyLevel);
@@ -881,8 +885,12 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
       FindNeededTerrainInsets(ssGenInfo[i].coverage,
                               terrainInsetPtrs, numTerrain,
                               neededIndexes,
-                              0, //beginMinifyLevel,
-                              0); //endMinifyLevel);
+                              (MiscConfig::Instance().UseMinification
+                               ? beginMinifyLevel
+                               : 0),
+                              (MiscConfig::Instance().UseMinification
+                               ? endMinifyLevel
+                               : 0));
 
       // ***** If there's nothing to super-sample from, just skip this
       // one.  This will not normally happen since there will usually
@@ -891,10 +899,12 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
         continue;
 
       // calculate the level range that will be minified
-      uint effectiveBeginMinifyLevel = 0;
-      //std::max(ssGenInfo[i].coverage.beginLevel(), beginMinifyLevel);
-      uint effectiveEndMinifyLevel = 0;
-      //std::min(ssGenInfo[i].coverage.endLevel(), endMinifyLevel);
+      uint effectiveBeginMinifyLevel = (MiscConfig::Instance().UseMinification
+                                        ? std::max(ssGenInfo[i].coverage.beginLevel(), beginMinifyLevel)
+                                        : 0);
+      uint effectiveEndMinifyLevel = (MiscConfig::Instance().UseMinification
+                                      ? std::min(ssGenInfo[i].coverage.endLevel(), endMinifyLevel)
+                                      : 0);
 
       // Build a PacketGenConfig
       notify(NFY_DEBUG, "Database beginMinifyLevel: %ud endMinifyLevel %ud\n",

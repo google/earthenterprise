@@ -1042,11 +1042,15 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
   // resolution inset can be minified instead of blended. This increases
   // speed, reduces grey line artifacts around insets, and generally
   // increases low res image quality.
-  const uint beginMinifyLevel  = 0;
-  const uint endMinifyLevel    = 0;
+  const uint beginMinifyLevel  = (MiscConfig::Instance().UseMinification
+                                  ? beginProjectLevel
+                                  : 0);
+  const uint endMinifyLevel    = (MiscConfig::Instance().UseMinification
+                                  ? inset_infos[0].effectiveMaxLevel
+                                  : 0);
+  // const uint beginMinifyLevel  = 0;
+  // const uint endMinifyLevel    = 0;
 
-  // const uint beginMinifyLevel  = beginProjectLevel;
-  // const uint endMinifyLevel    = inset_infos[0].effectiveMaxLevel;
 
   // Calc the info about what work to do.
   std::vector<PacketGenInfo> genInfo;
@@ -1105,16 +1109,18 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     neededIndexes.push_back(i); // each inset always intersects itself
 
     // calculate the level range that will be minified
-    uint effectiveBeginMinifyLevel = 0;
-    // std::max(genInfo[i].coverage.beginLevel(), beginMinifyLevel);
-    uint effectiveEndMinifyLevel = 0;
-    // std::min(genInfo[i].coverage.endLevel(), endMinifyLevel);
+    uint effectiveBeginMinifyLevel = (MiscConfig::Instance().UseMinification
+                                      ? std::max(genInfo[i].coverage.beginLevel(), beginMinifyLevel)
+                                      : 0);
+    uint effectiveEndMinifyLevel = (MiscConfig::Instance().UseMinification
+                                    ? std::min(genInfo[i].coverage.endLevel(), endMinifyLevel)
+                                    : 0);
 
     // Build a PacketGenConfig
     PacketGenConfig packetGenConfig;
     packetGenConfig.coverage  = genInfo[i].coverage;
-    packetGenConfig.beginMinifyLevel = 0; // beginMinifyLevel;
-    packetGenConfig.endMinifyLevel   = 0; // endMinifyLevel;
+    packetGenConfig.beginMinifyLevel = beginMinifyLevel;
+    packetGenConfig.endMinifyLevel   = endMinifyLevel;
     packetGenConfig.cacheRaster      = !inset_infos[i].alphaRPFile.empty();
 
     packetGenConfig.beginSkipTransparentLevel =
