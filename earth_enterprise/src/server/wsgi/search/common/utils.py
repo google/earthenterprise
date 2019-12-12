@@ -22,7 +22,7 @@ import logging
 import logging.config
 import re
 from string import Template
-from xml.sax.saxutils import escape
+from defusedxml.sax.saxutils import escape
 from search.common import geconstants
 
 # saxutils escape characters like "<", ">" and "&".

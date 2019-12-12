@@ -23,7 +23,7 @@ import logging
 import re
 import socket
 import urllib2
-import xml.sax.saxutils as saxutils
+import defusedxml.sax.saxutils as saxutils
 from geAbstractionFetcher import GetHostName
 
 GEHTTPD_CONF_PATH = "/opt/google/gehttpd/conf/gehttpd.conf"

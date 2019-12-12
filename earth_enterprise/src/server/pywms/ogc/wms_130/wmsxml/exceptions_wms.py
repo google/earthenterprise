@@ -35,22 +35,21 @@ Verbose_import_ = False
     ) = range(3)
 XMLParser_import_library = None
 try:
-    # lxml
-    from lxml import etree as etree_
-    XMLParser_import_library = XMLParser_import_lxml
+    import defusedxml.ElementTree as etree_
+    XMLParser_import_library = XMLParser_import_elementtree
     if Verbose_import_:
-        print("running with lxml.etree")
+        print("running with defusedxml.ElementTree")
 except ImportError:
     try:
         # cElementTree from Python 2.5+
-        import xml.etree.cElementTree as etree_
+        import defusedxml.cElementTree as etree_
         XMLParser_import_library = XMLParser_import_elementtree
         if Verbose_import_:
             print("running with cElementTree on Python 2.5+")
     except ImportError:
         try:
             # ElementTree from Python 2.5+
-            import xml.etree.ElementTree as etree_
+            import defusedxml.ElementTree as etree_
             XMLParser_import_library = XMLParser_import_elementtree
             if Verbose_import_:
                 print("running with ElementTree on Python 2.5+")
