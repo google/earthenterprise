@@ -470,7 +470,7 @@ void ImageView::loadInitImage(const std::string &image_file_path) {
   char *temp_path;
   int pathlen = image_file_path.length();
   temp_path = new char[pathlen + 1];
-  strncpy(temp_path, image_file_path.c_str(), pathlen);
+  strncpy(temp_path, image_file_path.c_str(), pathlen + 1);
   this->setFilename(temp_path);
   delete [] temp_path;
 }
@@ -488,7 +488,7 @@ void ImageView::setLutWork(const std::string &lutwork_file) {
     }
     int filelength = lutwork_file.length();
     char *ascii_lutwork = new char[filelength + 1];
-    strncpy(ascii_lutwork, lutwork_file.c_str(), filelength);
+    strncpy(ascii_lutwork, lutwork_file.c_str(), filelength + 1);
     fh = fopen(ascii_lutwork, "r");
     delete [] ascii_lutwork;
     fscanf(fh,
@@ -1901,7 +1901,7 @@ void ImageView::SaveLutWork(void) {
   // save settings to lutwork file
   size_t glutworklen = gLutWorkOut.length();
   char *ascii_lutwork = new char[glutworklen + 1];
-  strncpy(ascii_lutwork, gLutWorkOut.c_str(), glutworklen);
+  strncpy(ascii_lutwork, gLutWorkOut.c_str(), glutworklen + 1);
   FILE* fh = fopen(ascii_lutwork, "w");
   delete [] ascii_lutwork;
   if (fh != NULL) {

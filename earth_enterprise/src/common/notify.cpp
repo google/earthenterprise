@@ -122,7 +122,7 @@ std::string NotifyPrefix("Fusion");
 const std::string TimePrefix("[time]");
 
 std::string GetNotifyPrefixValue(khNotifyLevel severity, const std::string& notify_prefix) {
-  const size_t buflen = 1024;
+  size_t buflen = 1024;
   char prefix_buf[buflen];
   if (notify_prefix == TimePrefix) {
     time_t timeval;

@@ -38,11 +38,11 @@ inline char* strdupSafe(const char* s) {
   return n;
 }
 
-inline char* strcpySafe(char* dst, const char* src, int maxlen) {
+inline char* strcpySafe(char* dst, const char* src) {
   if (src == NULL || *src == 0) {
     *dst = '\0';
   } else {
-    strncpy(dst, src, maxlen);
+    strcpy(dst, src);
   }
 
   return dst;

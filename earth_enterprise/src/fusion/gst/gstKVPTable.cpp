@@ -252,12 +252,10 @@ void gstKVPTable::SetHeader(const gstHeaderHandle& hdr) {
   //
   char buf[sz];
   char* tbuf = buf;
-  int maxlen = sz;
   for (uint ii = 0; ii < hdr->numColumns(); ++ii) {
     *(reinterpret_cast<uint32*>(tbuf)) = hdr->ftype(ii);
     tbuf += sizeof(uint32);
-    maxlen += sizeof(uint32);
-    strcpySafe(tbuf, hdr->Name(ii).utf8(), maxlen);
+    strcpySafe(tbuf, hdr->Name(ii).utf8());
     tbuf += strlenSafe(hdr->Name(ii).utf8()) + 1;
   }
 
