@@ -168,7 +168,7 @@ void DependentStateTreeFactory::FillInVertex(
   if (vertices[name].includeConnections) {
     // In some cases, assets in the dependent tree don't need their inputs and
     // children to calculate their states.
-    if (includeDepDescendents || !tree[myVertex].inDepTree) {
+    if (includeDepDescendents) {
       for (const auto &child : version->children)
       {
         auto childVertex = AddOrUpdateVertex(child, false, false);

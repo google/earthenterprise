@@ -725,13 +725,11 @@ LeafAssetVersionImplD::ComputeState(void) const
   return newstate;
 }
 
-AssetDefs::State
-LeafAssetVersionImplD::CalcStateByInputsAndChildren(const InputAndChildStateData & stateData) const {
-  this->numInputsWaitingFor = stateData.waitingFor.inputs;
-  AssetDefs::State newstate = state;
+bool LeafAssetVersionImplD::InputStatesAffectMyState(const InputAndChildStateData & stateData) const {
+  bool InputStatesAffectMyState = false;
   if (!AssetDefs::Ready(state)) {
     // I'm currently not ready, so take whatever my inputs say
-    newstate = stateData.stateByInputs;
+    InputStatesAffectMyState = true;
   } else if (stateData.stateByInputs != AssetDefs::Queued) {
     // My inputs have regressed
     // Let's see if I should regress too
@@ -740,7 +738,7 @@ LeafAssetVersionImplD::CalcStateByInputsAndChildren(const InputAndChildStateData
       // I'm in the middle of building myself
       // revert my state to wait/block on my inputs
       // OnStateChange will pick up this revert and stop my running task
-      newstate = stateData.stateByInputs;
+      InputStatesAffectMyState = true;
     } else {
       // my task has already finished
       if (BlockedByOfflineInputs(stateData)) {
@@ -750,22 +748,31 @@ LeafAssetVersionImplD::CalcStateByInputsAndChildren(const InputAndChildStateData
         // Check to see if I care about my inputs going offline
         if (OfflineInputsBreakMe()) {
           // I care, revert my state too.
-          newstate = stateData.stateByInputs;
+          InputStatesAffectMyState = true;
         } else {
           // I don't care, so leave my state alone.
-          newstate = state;
         }
       } else {
         // My inputs have regresseed for some reason other than some
         // of them going offline.
         // revert my state
-        newstate = stateData.stateByInputs;
+        InputStatesAffectMyState = true;
       }
     }
   } else {
     // nothing to do
     // my current state is correct based on what my task has told me so far
   }
+  
+  return InputStatesAffectMyState;
+}
+
+AssetDefs::State
+LeafAssetVersionImplD::CalcStateByInputsAndChildren(const InputAndChildStateData & stateData) const {
+  this->numInputsWaitingFor = stateData.waitingFor.inputs;
+  AssetDefs::State newstate = state;
+  if (InputStatesAffectMyState(stateData))
+    newstate = stateData.stateByInputs;
 
   return newstate;
 }
@@ -1160,14 +1167,11 @@ CompositeAssetVersionImplD::ComputeState(void) const
   return stateByChildren;
 }
 
-AssetDefs::State
-CompositeAssetVersionImplD:: CalcStateByInputsAndChildren(const InputAndChildStateData & stateData) const {
-  this->numInputsWaitingFor = stateData.waitingFor.inputs;
-  this->numChildrenWaitingFor = stateData.waitingFor.children;
-
+bool CompositeAssetVersionImplD::InputStatesAffectMyState(const InputAndChildStateData & stateData) const {
   // Undecided composites take their state from their inputs
+  bool InputStatesAffectMyState = false;
   if (children.empty()) {
-    return stateData.stateByInputs;
+    InputStatesAffectMyState = true;
   }
 
   // some composite assets (namely Database) care about the state of their
@@ -1177,13 +1181,45 @@ CompositeAssetVersionImplD:: CalcStateByInputsAndChildren(const InputAndChildSta
       // something is wrong with my inputs (or they're not done yet)
       if (BlockedByOfflineInputs(stateData)) {
         if (OfflineInputsBreakMe()) {
-          return stateData.stateByInputs;
+          InputStatesAffectMyState = true;
         }
       } else {
-        return stateData.stateByInputs;
+        InputStatesAffectMyState = true;
       }
     }
   }
+
+  return InputStatesAffectMyState;
+}
+
+bool CompositeAssetVersionImplD::ChildStatesAffectMyState(const InputAndChildStateData & stateData) const {
+  return true;
+}
+
+AssetDefs::State
+CompositeAssetVersionImplD::CalcStateByInputsAndChildren(const InputAndChildStateData & stateData) const {
+  this->numInputsWaitingFor = stateData.waitingFor.inputs;
+  this->numChildrenWaitingFor = stateData.waitingFor.children;
+
+  // // Undecided composites take their state from their inputs
+  // if (children.empty()) {
+  //   return stateData.stateByInputs;
+  // }
+
+  // // some composite assets (namely Database) care about the state of their
+  // // inputs, for all others all that matters is the state of their children
+  // if (CompositeStateCaresAboutInputsToo()) {
+  //   if (stateData.stateByInputs != AssetDefs::Queued) {
+  //     // something is wrong with my inputs (or they're not done yet)
+  //     if (BlockedByOfflineInputs(stateData)) {
+  //       if (OfflineInputsBreakMe()) {
+  //         return stateData.stateByInputs;
+  //       }
+  //     } else {
+  //       return stateData.stateByInputs;
+  //     }
+  //   }
+  // }
 
   return stateData.stateByChildren;
 }
