@@ -1201,25 +1201,8 @@ CompositeAssetVersionImplD::CalcStateByInputsAndChildren(const InputAndChildStat
   this->numInputsWaitingFor = stateData.waitingFor.inputs;
   this->numChildrenWaitingFor = stateData.waitingFor.children;
 
-  // // Undecided composites take their state from their inputs
-  // if (children.empty()) {
-  //   return stateData.stateByInputs;
-  // }
-
-  // // some composite assets (namely Database) care about the state of their
-  // // inputs, for all others all that matters is the state of their children
-  // if (CompositeStateCaresAboutInputsToo()) {
-  //   if (stateData.stateByInputs != AssetDefs::Queued) {
-  //     // something is wrong with my inputs (or they're not done yet)
-  //     if (BlockedByOfflineInputs(stateData)) {
-  //       if (OfflineInputsBreakMe()) {
-  //         return stateData.stateByInputs;
-  //       }
-  //     } else {
-  //       return stateData.stateByInputs;
-  //     }
-  //   }
-  // }
+  if (InputStatesAffectMyState(stateData))
+    return stateData.stateByInputs;
 
   return stateData.stateByChildren;
 }
