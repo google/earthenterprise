@@ -26,6 +26,7 @@
 #include "packet.h"
 
 char * khnull;
+const size_t fname_len = 500;
 
 #ifdef offsetof
 #undef offsetof
@@ -43,9 +44,9 @@ char * khnull;
 
 // FlatFile DataPacket variables
 #ifdef PACKET_EXPORT
-char   etDataPacket::flatbasename[500];
-char   etDataPacket::flatdirname[500];
-char   etDataPacket::flatdataname[500];
+char   etDataPacket::flatbasename[fname_len];
+char   etDataPacket::flatdirname[fname_len];
+char   etDataPacket::flatdataname[fname_len];
 FILE * etDataPacket::flatdirfp = NULL;
 FILE * etDataPacket::flatdatafp = NULL;
 long   etDataPacket::datafilesize = 0;
@@ -293,10 +294,10 @@ int etDataPacket::save(void * buffer, int buffersize)
 int etDataPacket::getFlatFileCount()
 {
   FILE *fp;
-  char fname[500];
+  char fname[fname_len];
   int count;
 
-  snprintf(fname, 500, "%s.header", flatbasename);
+  snprintf(fname, fname_len, "%s.header", flatbasename);
   char* lastslash = strrchr(fname, '/');
 #if defined(_WIN32)
   if (!lastslash)
@@ -323,7 +324,6 @@ int etDataPacket::getFlatFileCount()
 int etDataPacket::setFlatFileCount(int num)
 {
   FILE *fp;
-  const size_t fname_len = 500;
   char fname[fname_len];
 
   snprintf(fname, fname_len, "%s.header", flatbasename);
@@ -344,13 +344,13 @@ int etDataPacket::setFlatFileCount(int num)
 
 int etDataPacket::openFlat(char * flatfile)
 { 
-  char fname[500];
+  char fname[fname_len];
   int filecount;
 
   //Set File Names
-  snprintf(flatbasename, 500, "%s", flatfile);
-  snprintf(flatdirname, 500, "%sDIR", flatfile);
-  snprintf(flatdataname, 500, "%sDATA", flatfile);
+  snprintf(flatbasename, fname_len, "%s", flatfile);
+  snprintf(flatdirname, fname_len, "%sDIR", flatfile);
+  snprintf(flatdataname, fname_len, "%sDATA", flatfile);
 
   //Get Current File Count
   filecount = getFlatFileCount();
@@ -358,7 +358,7 @@ int etDataPacket::openFlat(char * flatfile)
     return -1;
 
   //Open Directory File
-  snprintf(fname, 500, "%s.p%d", flatdirname, filecount);
+  snprintf(fname, fname_len, "%s.p%d", flatdirname, filecount);
   char* lastslash = strrchr(fname, '/');
 #if defined(_WIN32)
   if (!lastslash)
@@ -369,7 +369,7 @@ int etDataPacket::openFlat(char * flatfile)
     return -1;
 
   //Open Data File
-  snprintf(fname, 500, "%s.p%d", flatdataname, filecount);
+  snprintf(fname, fname_len, "%s.p%d", flatdataname, filecount);
   lastslash = strrchr(fname, '/');
 #if defined(_WIN32)
   if (!lastslash)
@@ -457,7 +457,8 @@ void parsebcode(char * fname)
 
 int etDataPacket::saveFlat(char * fname, char* buffer, int buffersize)
 {
-  char text[100];
+  size_t textlen = 100;
+  char text[textlen];
 
   if(flatmode == 0)
     return -1;
@@ -465,10 +466,10 @@ int etDataPacket::saveFlat(char * fname, char* buffer, int buffersize)
   //parsebcode(fname);
 
   //Enter File into Directory
-  snprintf(text, 100, "%s", fname);
-  fwrite(text, 100, 1, flatdirfp);
-  snprintf(text, 100, "%d", buffersize);
-  fwrite(text, 100, 1, flatdirfp);
+  snprintf(text, textlen, "%s", fname);
+  fwrite(text, textlen, 1, flatdirfp);
+  snprintf(text, textlen, "%d", buffersize);
+  fwrite(text, textlen, 1, flatdirfp);
 
   //Save Data
   fwrite(buffer, buffersize, 1, flatdatafp);

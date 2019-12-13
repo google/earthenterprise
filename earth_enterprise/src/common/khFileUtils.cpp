@@ -119,7 +119,7 @@ std::string khComposeTimePath(const struct tm& time) {
 std::string
 khBasename(const std::string &filename)
 {
-  int buflen = filename.size()+1;
+  size_t buflen = filename.size()+1;
   char buf[buflen];
   strncpy(buf, filename.c_str(), buflen);
   return basename(buf);
