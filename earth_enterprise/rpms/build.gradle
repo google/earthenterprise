@@ -531,7 +531,7 @@ task openGeeServerRpm(type: GeeRpm, dependsOn: openGeeServerInitScripts) {
     requires('python-unittest2')
     // The WMS Service requires PIL, which is not automatically detected:
     requires('python-imaging')
-    requires('python-lxml')
+    requires('python-defusedxml')
 
     requiresCommands(
         packageSharedCommands +
@@ -631,6 +631,7 @@ task openGeeServerDeb (type: GeeDeb, dependsOn: openGeeServerInitScripts) {
     conflicts('opengee-postgis', '2.4', GREATER | EQUAL)
 
     requires('python-pil')
+    requires('python-defusedxml')
 
     requiresCommands(
         packageSharedCommands +
