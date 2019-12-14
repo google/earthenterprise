@@ -40,6 +40,9 @@ class MiscConfigStorage {
   uint         PackGenAnalysisThreads = uint(1);
   GraphOpsType GraphOperations = MiscConfigStorage::NO_GRAPH_OPS;
 
+  // True to minify previous imagery level, false to minify source image
+  bool         UseMinification = true;
+
 #pragma LoadAndSave
 
 #hquote
