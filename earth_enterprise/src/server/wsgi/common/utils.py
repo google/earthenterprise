@@ -23,7 +23,6 @@ import logging
 import re
 import socket
 import urllib2
-import 
 import defusedxml.sax as DefusedSax
 from xml.sax import saxutils
 from geAbstractionFetcher import GetHostName

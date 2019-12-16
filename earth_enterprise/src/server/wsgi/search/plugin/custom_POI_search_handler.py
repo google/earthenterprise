@@ -21,10 +21,13 @@ import logging
 import logging.config
 from string import Template
 import urllib2
-import xml.cElementTree as ET
-import defusedxml.cElementTree as DefusedET
+from xml.cElementTree import SubElement, tostring
+import defusedxml.cElementTree as ET
 from search.common import exceptions
 from search.common import utils
+
+ET.SubElement = SubElement
+ET.tostring = tostring
 
 # Get the logger for logging purposes.
 logging.config.fileConfig("/opt/google/gehttpd/conf/ge_logging.conf",
@@ -184,7 +187,7 @@ class CustomPOISearch(object):
     xmlstr = ""
     total_results = 0
     # Perform XML parsing using cElementTree.
-    root = DefusedET.parse(xml_data).getroot()
+    root = ET.parse(xml_data).getroot()
 
     for element in root:
       if element.tag == "result":

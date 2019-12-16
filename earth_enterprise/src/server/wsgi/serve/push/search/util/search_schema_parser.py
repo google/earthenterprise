@@ -28,7 +28,7 @@ from struct import pack
 import sys
 from tempfile import SpooledTemporaryFile as TempFile
 import time
-import defusedxml.cElementTree
+import defusedxml.cElementTree as ET
 import os
 
 from common import exceptions
@@ -123,9 +123,9 @@ class SearchSchemaParser(object):
       logger.info("File prefix is '%s'", file_prefix)
     self.__StartDocument()
     try:
-      context = defusedxml.cElementTree.iterparse(search_file,
+      context = ET.iterparse(search_file,
                                                  SearchSchemaParser.EVENTS)
-    except defusedxml.cElementTree.ParseError, e:
+    except ET.ParseError, e:
       row, column = e.position
       raise exceptions.SearchSchemaParserException(
           "Unable to parse POI file %s."
