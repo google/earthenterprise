@@ -22,8 +22,7 @@ import logging
 import logging.config
 import re
 from string import Template
-from defusedxml.sax as DefusedSax
-from xml.sax import saxutils
+from xml.sax.saxutils import escape
 from search.common import geconstants
 
 DefusedSax.saxutils = saxutils
@@ -38,7 +37,7 @@ _HTML_ESCAPE_TABLE = {
 
 
 def HtmlEscape(msg):
-  return DefusedSax.saxutils.escape(msg, _HTML_ESCAPE_TABLE)
+  return escape(msg, _HTML_ESCAPE_TABLE)
 
 
 class SearchUtils(object):

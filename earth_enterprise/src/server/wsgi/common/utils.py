@@ -23,8 +23,7 @@ import logging
 import re
 import socket
 import urllib2
-import defusedxml.sax as DefusedSax
-from xml.sax import saxutils
+from xml.sax.saxutils import escape
 from geAbstractionFetcher import GetHostName
 
 DefusedSax.saxutils = saxutils
@@ -285,7 +284,7 @@ def HtmlEscape(text):
   Returns:
     HTML escaped string.
   """
-  return DefusedSax.saxutils.escape(text, _HTML_ESCAPE_TABLE)
+  return escape(text, _HTML_ESCAPE_TABLE)
 
 
 def JoinQueryStrings(a, b):
