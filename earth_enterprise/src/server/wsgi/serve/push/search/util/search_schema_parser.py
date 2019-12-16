@@ -29,10 +29,12 @@ import sys
 from tempfile import SpooledTemporaryFile as TempFile
 import time
 import defusedxml.cElementTree as ET
+from xml.etree.cElementTree import ParseError
 import os
 
 from common import exceptions
 
+ET.ParseError = ParseError
 
 # Memory buffer size for temp file, before it's written
 _K_SPOOL_SIZE = 1024 * 1024 * 256
@@ -123,8 +125,7 @@ class SearchSchemaParser(object):
       logger.info("File prefix is '%s'", file_prefix)
     self.__StartDocument()
     try:
-      context = ET.iterparse(search_file,
-                                                 SearchSchemaParser.EVENTS)
+      context = ET.iterparse(search_file, SearchSchemaParser.EVENTS)
     except ET.ParseError, e:
       row, column = e.position
       raise exceptions.SearchSchemaParserException(
