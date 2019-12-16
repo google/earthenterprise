@@ -21,7 +21,8 @@ import logging
 import logging.config
 from string import Template
 import urllib2
-import defusedxml.cElementTree as ET
+import xml.cElementTree as ET
+import defusedxml.cElementTree as DefusedET
 from search.common import exceptions
 from search.common import utils
 
@@ -183,7 +184,7 @@ class CustomPOISearch(object):
     xmlstr = ""
     total_results = 0
     # Perform XML parsing using cElementTree.
-    root = ET.parse(xml_data).getroot()
+    root = DefusedET.parse(xml_data).getroot()
 
     for element in root:
       if element.tag == "result":

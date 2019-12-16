@@ -23,9 +23,12 @@ import logging
 import re
 import socket
 import urllib2
-import defusedxml.sax.saxutils as saxutils
+import 
+import defusedxml.sax as DefusedSax
+from xml.sax import saxutils
 from geAbstractionFetcher import GetHostName
 
+DefusedSax.saxutils = saxutils
 GEHTTPD_CONF_PATH = "/opt/google/gehttpd/conf/gehttpd.conf"
 POSTGRES_PROPERTIES_PATH = (
     "/opt/google/gehttpd/wsgi-bin/conf/postgres.properties")
@@ -283,7 +286,7 @@ def HtmlEscape(text):
   Returns:
     HTML escaped string.
   """
-  return saxutils.escape(text, _HTML_ESCAPE_TABLE)
+  return DefusedSax.saxutils.escape(text, _HTML_ESCAPE_TABLE)
 
 
 def JoinQueryStrings(a, b):
