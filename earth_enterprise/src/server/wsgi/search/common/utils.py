@@ -25,8 +25,6 @@ from string import Template
 from xml.sax.saxutils import escape
 from search.common import geconstants
 
-DefusedSax.saxutils = saxutils
-
 # saxutils escape characters like "<", ">" and "&".
 # Any other characters to be escaped should be added to the below
 # dictionary.

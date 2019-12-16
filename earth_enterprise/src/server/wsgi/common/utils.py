@@ -26,7 +26,6 @@ import urllib2
 from xml.sax.saxutils import escape
 from geAbstractionFetcher import GetHostName
 
-DefusedSax.saxutils = saxutils
 GEHTTPD_CONF_PATH = "/opt/google/gehttpd/conf/gehttpd.conf"
 POSTGRES_PROPERTIES_PATH = (
     "/opt/google/gehttpd/wsgi-bin/conf/postgres.properties")
