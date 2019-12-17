@@ -132,7 +132,7 @@ sudo yum install -y \
   libcap-devel libmng-devel libpng12-devel libX11-devel libXcursor-devel \
   libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel \
-  perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-devel \
+  perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-defusedxml python-devel \
   rpm-build rpmrebuild rsync scons \
   xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
 ```
@@ -151,6 +151,8 @@ sudo yum install -y \
   python-devel python27-devel python27-pip python-unittest2 \
   rpm-build rpmrebuild rsync scons shunit2 \
   xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
+
+sudo pip2.7 install defusedxml
 ```
 
 If you encounter an error about git dependency conflicts, consider

@@ -633,7 +633,7 @@ task openGeeServerDeb (type: GeeDeb, dependsOn: openGeeServerInitScripts) {
 
     requires('python-pil')
     requires('python-lxml')
-    requires('python27-pip')
+    requires('python-defusedxml')
 
     requiresCommands(
         packageSharedCommands +
