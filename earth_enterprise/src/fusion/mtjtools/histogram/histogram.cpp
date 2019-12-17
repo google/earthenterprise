@@ -55,13 +55,13 @@ int main(int argc, char* argv[])
     }
     else if (strcmp(argv[cursor], "-i") == 0)
     {
-      if (sscanf(argv[cursor], "-i%1024s", input) != 1)
-        sscanf(argv[++cursor], "%1024s", input);
+      if (sscanf(argv[cursor], "-i%1023s", input) != 1)
+        sscanf(argv[++cursor], "%1023s", input);
     }
     else if (strcmp(argv[cursor], "-o") == 0)
     {
-      if (sscanf(argv[cursor], "-o%1024s", output) != 1)
-        sscanf(argv[++cursor], "%1024s", output);
+      if (sscanf(argv[cursor], "-o%1023s", output) != 1)
+        sscanf(argv[++cursor], "%1023s", output);
     }
     else if (strcmp(argv[cursor], "-m") == 0)
     {
@@ -105,7 +105,7 @@ int main(int argc, char* argv[])
     if (merge == 0)
     {
       char nextName[2048];
-      while (fscanf(fp, "%2048s", nextName) == 1)
+      while (fscanf(fp, "%2047s", nextName) == 1)
       {
         if (verbose)
           printf("%s\n", nextName);
@@ -138,7 +138,7 @@ int main(int argc, char* argv[])
       char nextName[2048];
       KHistogram m;
 
-      while (fscanf(fp, "%2048s", nextName) == 1)
+      while (fscanf(fp, "%2047s", nextName) == 1)
       {
         KHistogram h;
 
