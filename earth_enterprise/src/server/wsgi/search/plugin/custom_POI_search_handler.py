@@ -21,7 +21,7 @@ import logging
 import logging.config
 from string import Template
 import urllib2
-from xml.cElementTree import SubElement, tostring
+from xml.etree.cElementTree import SubElement, tostring
 import defusedxml.cElementTree as ET
 from search.common import exceptions
 from search.common import utils
