@@ -27,6 +27,7 @@ third_party_env = env.Clone()
 if third_party_env['bundle_3rd_libs']:
   third_party_libs = [
       'date',
+      'defusedxml',
       'gtest',
       'libjs',
       'libattr',
@@ -64,6 +65,7 @@ if third_party_env['bundle_3rd_libs']:
 else:
   third_party_libs = [
       'date',
+      'defusedxml',
       'gtest',
       'libjs',
       'openssl',
