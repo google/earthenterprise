@@ -55,8 +55,6 @@ main_preinstall()
     if [ -f "$BASEINSTALLDIR_OPT/gehttpd/conf.d/.htpasswd" ]; then
         mv -f "$BASEINSTALLDIR_OPT/gehttpd/conf.d/.htpasswd" "/tmp/"
     fi
-
-    install_defusedxml
 }
 
 #-----------------------------------------------------------------
@@ -93,11 +91,6 @@ save_portable_globe_symlink()
     if [ -L "$BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/globes" ]; then
         mv "$BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/globes" "$BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/globes_symlink"
     fi
-}
-
-install_defusedxml()
-{
-    sudo pip2.7 install defusedxml
 }
 
 #-----------------------------------------------------------------
