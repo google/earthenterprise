@@ -33,8 +33,9 @@ File:        ffioWriter.cpp
 void
 ffio::Writer::OpenNextFile(void)
 {
-  char fnum[64];
-  sprintf(fnum, "%02d", nextfilenum++);
+  const size_t fnum_len = 64;
+  char fnum[fnum_len];
+  snprintf(fnum, fnum_len, "%02d", nextfilenum++);
   std::string fname = outdir + "/pack." + fnum;
 
   // make our life easier by letting all users read and write this file!

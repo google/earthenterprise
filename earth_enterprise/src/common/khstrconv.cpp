@@ -25,7 +25,7 @@ bool FromStringStrict(const std::string str, float *f) {
     return false;
   // Make sure no extra characters are present.
   khDeleteGuard<char> buffer(TransferOwnership(new char[str.length() + 1]));
-  strcpy(buffer, str.c_str());
+  strncpy(buffer, str.c_str(), (str.length() + 1));
   char *current = buffer;
   strtod(current, &current);
   // Return success iff we parsed to the end of the input.

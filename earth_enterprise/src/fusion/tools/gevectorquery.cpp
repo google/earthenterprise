@@ -53,8 +53,9 @@ int main(int argc, char** argv) {
         argn++;
         if (argn >= argc)
           usage();
-        output = reinterpret_cast<char*>(alloca(strlen(argv[argn]) + 1));
-        strcpy(output, argv[argn]);
+        size_t outputlen = strlen(argv[argn]);
+        output = reinterpret_cast<char*>(alloca(outputlen + 1));
+        strncpy(output, argv[argn], outputlen + 1);
         // strip trailing slash if exists
         if (output[strlen(output) - 1] == '/')
           output[strlen(output) - 1] = '\0';

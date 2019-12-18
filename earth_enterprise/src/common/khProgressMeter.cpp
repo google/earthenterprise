@@ -253,7 +253,7 @@ QString khProgressMeter::msToString( int64 ms )
   uint secs =  uint( ( msLeft / msPerSec ) + 0.5 );
 
   char timebuf[ 20 ];
-  sprintf( timebuf, "%02u:%02u:%02u", hours, mins, secs );
+  snprintf( timebuf, 20, "%02u:%02u:%02u", hours, mins, secs );
 
   QString timeStr;
   if ( days > 1 )

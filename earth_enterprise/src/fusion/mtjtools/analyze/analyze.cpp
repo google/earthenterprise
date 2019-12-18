@@ -169,8 +169,8 @@ int main(int argc, char* argv[])
     {
       // get file name
       gray[0] = '\0';
-      if (sscanf(argv[cursor], "-g%s", gray) != 1)
-        sscanf(argv[++cursor], "%s", gray);
+      if (sscanf(argv[cursor], "-g%255s", gray) != 1)
+        sscanf(argv[++cursor], "%255s", gray);
 
       // read values
       FILE *fp = fopen(gray, "r");
@@ -205,13 +205,13 @@ int main(int argc, char* argv[])
     }
     else if (strncmp(argv[cursor], "-i", 2) == 0)
     {
-      if (sscanf(argv[cursor], "-i%s", input) != 1)
-        sscanf(argv[++cursor], "%s", input);
+      if (sscanf(argv[cursor], "-i%255s", input) != 1)
+        sscanf(argv[++cursor], "%255s", input);
     }
     else if (strncmp(argv[cursor], "-o", 2) == 0)
     {
-      if (sscanf(argv[cursor], "-o%s", output) != 1)
-        sscanf(argv[++cursor], "%s", output);
+      if (sscanf(argv[cursor], "-o%255s", output) != 1)
+        sscanf(argv[++cursor], "%255s", output);
     }
     else if (strncmp(argv[cursor], "-G", 2) == 0)
     {

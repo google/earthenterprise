@@ -122,7 +122,8 @@ std::string NotifyPrefix("Fusion");
 const std::string TimePrefix("[time]");
 
 std::string GetNotifyPrefixValue(khNotifyLevel severity, const std::string& notify_prefix) {
-  char prefix_buf[1024];
+  size_t buflen = 1024;
+  char prefix_buf[buflen];
   if (notify_prefix == TimePrefix) {
     time_t timeval;
     struct tm ts;
@@ -132,12 +133,12 @@ std::string GetNotifyPrefixValue(khNotifyLevel severity, const std::string& noti
     if ((timeval != (time_t)-1) &&
         (localtime_r(&timeval, &ts) != 0) &&
         (strftime(buf, sizeof(buf), "%F %T", &ts) > 0)) {
-      sprintf(prefix_buf, "[%s] %s: ", buf, notifyLevels[severity]);
+      snprintf(prefix_buf, buflen, "[%s] %s: ", buf, notifyLevels[severity]);
     } else {
-      sprintf(prefix_buf, "[time] %s: ", notifyLevels[severity]);
+      snprintf(prefix_buf, buflen, "[time] %s: ", notifyLevels[severity]);
     }
   } else {
-    sprintf(prefix_buf, "%s %s:\t",
+    snprintf(prefix_buf, buflen, "%s %s:\t",
             NotifyPrefix.c_str(), notifyLevels[severity]);
   }
   return std::string(prefix_buf);

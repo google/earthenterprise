@@ -225,7 +225,7 @@ main(int argc, char *argv[])
         uint xsize = std::min(outWidth, rasterSize.width - xoff);
 
         char buf[256];
-        sprintf(buf, ".r%02uc%02u", row, col);
+        snprintf(buf, 256, ".r%02uc%02u", row, col);
         std::string outfile;
         if (needKHVR) {
           outfile = base + buf + ext;

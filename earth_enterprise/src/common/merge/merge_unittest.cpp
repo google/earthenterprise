@@ -72,7 +72,7 @@ class MergeUnitTest : public UnitTest<MergeUnitTest> {
     MergeSourceNumbers *source;
     for (int i = 0; i < num_sources; ++i) {
       char name[16];
-      sprintf(name, "Src%d", i);
+      snprintf(name, 16, "Src%d", i);
       int increment = 1 + i*2;
       source = new MergeSourceNumbers(name, i, increment, limit);
       if (i < num_sources-1) {          // don't add last source yet

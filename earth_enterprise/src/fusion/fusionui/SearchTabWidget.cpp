@@ -24,7 +24,7 @@
 
 SearchTabWidget::SearchTabWidget(QWidget* parent,
                                  const char* name)
-  : QTabWidget(parent, name), is_ge_db_(false) {
+  : QTabWidget(parent, name), is_ge_db_(false), UnhandledErrorCount(0) {
 }
 
 
@@ -121,6 +121,8 @@ void SearchTabWidget::AddTab() {
       tab_refs.push_back(std::make_pair(def.label, ref));
     } catch (...) {
       // no op
+      // this count is for future code instrumentation
+      UnhandledErrorCount++;
     }
   }
 

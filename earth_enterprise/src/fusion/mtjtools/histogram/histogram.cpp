@@ -31,8 +31,9 @@ int main(int argc, char* argv[])
   int format = 3; // most compressed. format 4 is Mark Aubin's format
   int merge = 0;
   int verbose = 0;
-  char output[1024] = "histogram.txt";
-  char input[1024] = {0};
+  const size_t buflen = 1024;
+  char output[buflen] = "histogram.txt";
+  char input[buflen] = {0};
   char *filelist = NULL;
 
   // parse command line 'option arguments'
@@ -54,18 +55,13 @@ int main(int argc, char* argv[])
     }
     else if (strcmp(argv[cursor], "-i") == 0)
     {
-      if (sscanf(argv[cursor], "-i%s", input) != 1)
-        sscanf(argv[++cursor], "%s", input);
+      if (sscanf(argv[cursor], "-i%1023s", input) != 1)
+        sscanf(argv[++cursor], "%1023s", input);
     }
     else if (strcmp(argv[cursor], "-o") == 0)
     {
-      if (sscanf(argv[cursor], "-o%s", output) != 1)
-        sscanf(argv[++cursor], "%s", output);
-    }
-    else if (strcmp(argv[cursor], "-i") == 0)
-    {
-      if (sscanf(argv[cursor], "-i%s", input) != 1)
-        sscanf(argv[++cursor], "%s", input);
+      if (sscanf(argv[cursor], "-o%1023s", output) != 1)
+        sscanf(argv[++cursor], "%1023s", output);
     }
     else if (strcmp(argv[cursor], "-m") == 0)
     {
@@ -74,11 +70,6 @@ int main(int argc, char* argv[])
     else if (strcmp(argv[cursor], "-v") == 0)
     {
       verbose = 1;
-    }
-    else if (strcmp(argv[cursor], "-i") == 0)
-    {
-      if (sscanf(argv[cursor], "-i%s", input) != 1)
-        sscanf(argv[++cursor], "%s", input);
     }
     else
     {
@@ -89,7 +80,7 @@ int main(int argc, char* argv[])
 
   // process remaining argument, if any
   if (cursor < argc && input[0] == '\0')
-    strcpy(input, argv[cursor++]);
+    strncpy(input, argv[cursor++], buflen);
 
   // validate configuration
   if ((filelist == NULL || filelist[0] == '\0') && input[0] == '\0')
@@ -114,7 +105,7 @@ int main(int argc, char* argv[])
     if (merge == 0)
     {
       char nextName[2048];
-      while (fscanf(fp, "%s", nextName) == 1)
+      while (fscanf(fp, "%2047s", nextName) == 1)
       {
         if (verbose)
           printf("%s\n", nextName);
@@ -132,7 +123,7 @@ int main(int argc, char* argv[])
         {
           *dot = '\0';
         }
-        sprintf(output, "%s.his", nextName);
+        snprintf(output, buflen, "%s.his", nextName);
 
         // write histogram
         if (h.write(output, format))
@@ -147,7 +138,7 @@ int main(int argc, char* argv[])
       char nextName[2048];
       KHistogram m;
 
-      while (fscanf(fp, "%s", nextName) == 1)
+      while (fscanf(fp, "%2047s", nextName) == 1)
       {
         KHistogram h;
 
