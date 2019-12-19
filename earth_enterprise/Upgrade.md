@@ -1,11 +1,11 @@
-# Upgrading Earth Enterprise Fusion and Server to version 5.3.3
+# Upgrading Earth Enterprise Fusion and Server to version 5.3.4
 
-Upgrading to GEE 5.3.3 is supported from Earth Enterprise 5.2.x and above versions.
+Upgrading to GEE 5.3.4 is supported from Earth Enterprise 5.2.x and above versions.
 
 Do NOT uninstall GEE 5.2.x. We recommend that you upgrade GEE 5.2.x by simply
-installing GEE 5.3.3. Installing GEE 5.3.3 on top of GEE 5.2.x will ensure that
+installing GEE 5.3.4. Installing GEE 5.3.4 on top of GEE 5.2.x will ensure that
 your PostgreSQL databases are backed up and upgraded correctly to the new
-PostgreSQL version used by GEE 5.3.3
+PostgreSQL version used by GEE 5.3.4
 
 Upgrade is supported using either scripts or RPMs:
 
@@ -25,7 +25,7 @@ Upgrade is supported using either scripts or RPMs:
 ## Upgrading with RPM packages (Red Hat and CentOS only)
 
 Alternatively, instead of using scripts, on Red Hat and CentOS, you can upgrade
-GEE 5.2.x to GEE 5.3.3 using [RPM packages](https://github.com/google/earthenterprise/blob/master/earth_enterprise/BUILD_RPMS.md).
+GEE 5.2.x to GEE 5.3.4 using [RPM packages](https://github.com/google/earthenterprise/blob/master/earth_enterprise/BUILD_RPMS.md).
 
 Upgrading from any previous version installed via RPM:
 
@@ -52,9 +52,9 @@ Upgrading from any previous version installed via RPM:
 
 Uninstall is NOT recommended before upgrading.
 
-If you decide that you want to uninstall GEE 5.2.0 before installing GEE 5.3.3,
+If you decide that you want to uninstall GEE 5.2.0 before installing GEE 5.3.4,
 first make sure to backup your PostgreSQL databases. Please keep in mind that
-the database backup, made by 5.2.0, would not be compatible with GEE 5.3.3
+the database backup, made by 5.2.0, would not be compatible with GEE 5.3.4
 PostgreSQL databases.
 
     * Create a backup folder: `mkdir -p /tmp/MyBackupFolder`
