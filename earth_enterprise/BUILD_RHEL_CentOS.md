@@ -225,7 +225,7 @@ sudo yum install -y python27
 
 ### Building on fips-enabled machines
 
-In some ircumstances on stig-ed machines, where md5 cryptography is used, fips will prevent OpenGee from being built. When trying to build, a message similar to the following will be displayed 
+In some circumstances on stig-ed machines, where md5 cryptography is used, fips will prevent OpenGee from being built. When trying to build, a message similar to the following will be displayed 
 
 ```bash
 $ scons -j4 internal=1 build
@@ -254,7 +254,7 @@ First remove all dracut-fips packages
 $ sudo yum remove -y dracut-fips*
 ```
 
-It is recommended that intramfs is backed up
+It is recommended that initramfs is backed up
 ```bash
 $ sudo cp -p /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r).backup
 ```
