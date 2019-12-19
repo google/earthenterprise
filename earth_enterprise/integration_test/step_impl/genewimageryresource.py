@@ -18,7 +18,7 @@ def executeCommand(sTestDir):
    sImageryFile = "Imagery/bluemarble_4km.tif"
    
    # Download the imagery, if not available.
-   sCommandToRun = "sudo " + sImageryRoot + "download_tutorial.sh >/dev/null 2>/dev/null"
+   sCommandToRun = "sudo bash " + sImageryRoot + "download_tutorial.sh >/dev/null 2>/dev/null"
    print sCommandToRun
    pHandle = subprocess.Popen(sCommandToRun, shell=True)
    assert (pHandle.wait() == 0)
