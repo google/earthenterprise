@@ -1,6 +1,6 @@
 #-*- Python -*-
 #
-# Copyright 2019 Google Inc.
+# Copyright 2019 The Open GEE Contributors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -56,7 +56,7 @@ defusedxml_build = defusedxml_env.Command(
     defusedxml_target, defusedxml_extract,
     [defusedxml_env.MultiCommand(
         'cd %s\n'
-        '%s%s %s setup.py build\n'
+        '%s%s %s setup.py build --build-lib build/lib\n'
         'touch %s' % (build_root, defusedxml_env['ENV']['mod_env'],
                       env_opt, python_cmd, defusedxml_target))])
 
