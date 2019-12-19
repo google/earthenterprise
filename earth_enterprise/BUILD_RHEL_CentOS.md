@@ -225,7 +225,7 @@ sudo yum install -y python27
 
 ### Building on fips-enabled machines
 
-In some ircumstances on stig-ed machines, where md5 cryptography is used, fips will prevent OpenGee from being built. When trying to build, a message similar to the following will display while trying to build
+In some ircumstances on stig-ed machines, where md5 cryptography is used, fips will prevent OpenGee from being built. When trying to build, a message similar to the following will be displayed 
 
 ```bash
 $ scons -j4 internal=1 build
@@ -254,17 +254,17 @@ First remove all dracut-fips packages
 $ sudo yum remove -y dracut-fips*
 ```
 
-It is recommended that FIPS intramfs is backed up
+It is recommended that intramfs is backed up
 ```bash
 $ sudo cp -p /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r).backup
 ```
-Then, recreate the initramfs file
+Then, recreate a new initramfs file
 
 ```bash
 $ sudo dracut -f
 ```
 
-Now, disable ``fips=1`` from the kernel command line. Do this, by modifying command line of the current kernel in ``grub.cfg``. This is done by adding the option ``fips=0`` to the GRUB_CMDLINE_LINUX line in ``/etc/default/grub`` e.g.
+Now, disable ``fips=1`` from the kernel command line. Do this, by modifying command line of the current kernel in ``grub.cfg``. This is done by adding the option ``fips=0`` to the `GRUB_CMDLINE_LINUX` line in ``/etc/default/grub`` e.g.
 
 ``GRUB_CMDLINE_LINUX="console=tty0 crashkernel=auto console=ttyS0,115200"``
 
@@ -299,7 +299,7 @@ First, check that fips is supported
 $ openssl version
 OpenSSL 1.0.2k-fips  26 Jan 2017
 ```
-This sould be 1.0.1 and above
+This should be 1.0.1 and above
 
 Then, check that fips is disabled
 
