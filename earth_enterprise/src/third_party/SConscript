@@ -65,7 +65,6 @@ if third_party_env['bundle_3rd_libs']:
 else:
   third_party_libs = [
       'date',
-      'defusedxml',
       'gtest',
       'libjs',
       'openssl',
@@ -83,7 +82,8 @@ else:
       'mgrs',
       'PIL',
       'skia',
-      'pyyaml'
+      'pyyaml',
+      'defusedxml'
   ]
 
 
