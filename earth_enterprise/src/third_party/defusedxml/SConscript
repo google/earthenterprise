@@ -75,7 +75,7 @@ defusedxml_install = defusedxml_env.Command(
         'rm -rf %s' % install_root_doc,
         'mkdir -p %s' % install_root_lib,
         'mkdir -p %s' % install_root_doc,
-        'rsync -pvr build/lib/defusedxml/ %s' % (install_root_lib),
+        'rsync -pvr build/lib/defusedxml %s' % (install_root_lib),
         'cp -pr LICENSE %s' % install_root_doc,
         'touch %s' % defusedxml_target]))])
 
