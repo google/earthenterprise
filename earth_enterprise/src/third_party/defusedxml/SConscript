@@ -1,0 +1,107 @@
+#-*- Python -*-
+#
+# Copyright 2019 The Open GEE Contributors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+
+Import('third_party_env')
+
+defusedxml_version='defusedxml-0.6.0'
+defusedxml_ge_version = defusedxml_version.replace('defusedxml', 'defusedxml-ge')
+
+current_dir = Dir('.').abspath
+build_root = '%s/%s' % (current_dir, defusedxml_version)
+install_root = '%s/install' % current_dir
+install_root_opt = '%s/opt/google' % install_root
+
+defusedxml_source = File('#/../../earth_enterprise/third_party/defusedxml/%s.tar.gz' %
+                       defusedxml_version).abspath
+
+defusedxml_env = third_party_env.DeepCopy()
+
+root_dir = Dir(defusedxml_env.exportdirs['root']).abspath
+
+# [1] Extract defusedxml.
+defusedxml_target = '%s/.extract' % current_dir
+defusedxml_extract = defusedxml_env.Command(
+    defusedxml_target, defusedxml_source,
+    [defusedxml_env.MultiCommand(
+        'mkdir -p %s\n'
+        'cd %s\n'
+        'tar xzf %s\n'
+        'touch %s' % (current_dir, current_dir, defusedxml_source,
+                      defusedxml_target))])
+
+if third_party_env['is_min_ubuntu'] and not third_party_env['native_cc']:
+  env_opt = 'ac_cv_prog_cc_c99=no'
+else:
+  env_opt = ''
+
+# [2] Build defusedxml.
+python_cmd = defusedxml_env['python_bin']
+defusedxml_target = '%s/.build' % current_dir
+defusedxml_build = defusedxml_env.Command(
+    defusedxml_target, defusedxml_extract,
+    [defusedxml_env.MultiCommand(
+        'cd %s\n'
+        '%s%s %s setup.py build --build-lib build/lib\n'
+        'touch %s' % (build_root, defusedxml_env['ENV']['mod_env'],
+                      env_opt, python_cmd, defusedxml_target))])
+
+# [3] Create defusedxml master installer.
+install_root_lib = '%s/lib/python%s/site-packages' % (
+    install_root, defusedxml_env['python_major_version'])
+install_root_doc = '%s/share/doc/packages/%s' % (
+    install_root_opt, defusedxml_ge_version)
+
+defusedxml_target = '%s/.install' % current_dir
+defusedxml_install = defusedxml_env.Command(
+    defusedxml_target, defusedxml_build,
+    [defusedxml_env.MultiCommand('\n'.join([
+        'cd %s' % build_root,
+        'rm -rf %s' % install_root_lib,
+        'rm -rf %s' % install_root_doc,
+        'mkdir -p %s' % install_root_lib,
+        'mkdir -p %s' % install_root_doc,
+        'rsync -pvr build/lib/defusedxml %s' % (install_root_lib),
+        'cp -pr LICENSE %s' % install_root_doc,
+        'touch %s' % defusedxml_target]))])
+
+# [4] Install these into various directories as required for build.
+defusedxml_target = '%s/.install_for_build' % current_dir
+defusedxml_install_build = defusedxml_env.Command(
+    defusedxml_target, defusedxml_install,
+    [defusedxml_env.rsync_cmd % (
+        '%s' % install_root_lib,
+        '%s/lib/python%s' % (root_dir, defusedxml_env['python_major_version'])),
+        Touch('$TARGET')])
+
+
+Default(defusedxml_install_build)
+defusedxml_env.ExecuteOnClean('rm -rf %s' % current_dir)
+
+if 'install' in COMMAND_LINE_TARGETS:
+  defusedxml_env.InstallFileOrDir(
+      '%s/lib' % install_root,
+      '%s/opt/google/gepython/Python-%s' % (
+          defusedxml_env.installdirs['common_root'], defusedxml_env['python_version']),
+       defusedxml_install, 'install')
+  defusedxml_env.InstallFileOrDir(
+      '%s/opt/google/share/' % install_root,
+      '%s/opt/google/share/' % Dir(
+          defusedxml_env.installdirs['common_root']).abspath,
+      defusedxml_install, 'install')
+
+Return('defusedxml_extract defusedxml_install_build')
