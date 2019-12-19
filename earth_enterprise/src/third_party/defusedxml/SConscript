@@ -61,7 +61,7 @@ defusedxml_build = defusedxml_env.Command(
                       env_opt, python_cmd, defusedxml_target))])
 
 # [3] Create defusedxml master installer.
-install_root_lib = '%s/lib/python%s/site-packages/defusedxml' % (
+install_root_lib = '%s/lib/python%s/site-packages' % (
     install_root, defusedxml_env['python_major_version'])
 install_root_doc = '%s/share/doc/packages/%s' % (
     install_root_opt, defusedxml_ge_version)
