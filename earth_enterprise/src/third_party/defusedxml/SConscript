@@ -1,3 +1,21 @@
+#-*- Python -*-
+#
+# Copyright 2019 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+
 Import('third_party_env')
 
 defusedxml_version='defusedxml-0.6.0'
@@ -43,7 +61,7 @@ defusedxml_build = defusedxml_env.Command(
                       env_opt, python_cmd, defusedxml_target))])
 
 # [3] Create defusedxml master installer.
-install_root_lib = '%s/lib/python%s/site-packages' % (
+install_root_lib = '%s/lib/python%s/site-packages/defusedxml' % (
     install_root, defusedxml_env['python_major_version'])
 install_root_doc = '%s/share/doc/packages/%s' % (
     install_root_opt, defusedxml_ge_version)
@@ -57,7 +75,7 @@ defusedxml_install = defusedxml_env.Command(
         'rm -rf %s' % install_root_doc,
         'mkdir -p %s' % install_root_lib,
         'mkdir -p %s' % install_root_doc,
-        'rsync -pvr build/lib.linux-x86_64-%s/ %s' % (install_root_lib),
+        'rsync -pvr build/lib/defusedxml/ %s' % (install_root_lib),
         'cp -pr LICENSE %s' % install_root_doc,
         'touch %s' % defusedxml_target]))])
 
