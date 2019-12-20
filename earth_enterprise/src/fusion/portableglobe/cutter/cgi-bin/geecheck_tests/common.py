@@ -24,11 +24,11 @@ LATEST_VERSION = '5.3.4'
 
 SUPPORTED_OS_LIST = {
     'redhat': {'min_release': '6.0',
-               'max_release': '7.4'},
+               'max_release': '7.6'},
     'Ubuntu': {'min_release': '10.04',
                'max_release': '16.04'},
     'CentOS': {'min_release': '6.0',
-               'max_release': '7.4'}
+               'max_release': '7.6'}
 }
 
 BAD_HOSTNAMES = ['', 'linux', 'localhost', 'dhcp', 'bootp']
