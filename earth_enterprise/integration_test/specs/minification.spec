@@ -21,7 +21,7 @@ Example for scenario including cleanups (aka POST-STEP):
 '##########################################
 
 
-Open GEE New Imagery Resource Command Test
+Test Open GEE Minification Settings
 ==========================================
 Test that Fusion respects the UseMinification setting in misc.xml
 
