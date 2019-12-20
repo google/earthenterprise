@@ -885,12 +885,8 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
       FindNeededTerrainInsets(ssGenInfo[i].coverage,
                               terrainInsetPtrs, numTerrain,
                               neededIndexes,
-                              (MiscConfig::Instance().UseMinification
-                               ? beginMinifyLevel
-                               : 0),
-                              (MiscConfig::Instance().UseMinification
-                               ? endMinifyLevel
-                               : 0));
+                              beginMinifyLevel,
+                              endMinifyLevel);
 
       // ***** If there's nothing to super-sample from, just skip this
       // one.  This will not normally happen since there will usually
