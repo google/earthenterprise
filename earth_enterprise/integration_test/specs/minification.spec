@@ -23,7 +23,8 @@ Example for scenario including cleanups (aka POST-STEP):
 
 Open GEE New Imagery Resource Command Test
 ==========================================
-Testing the Command: Set minification
+Test that Fusion respects the UseMinification setting in misc.xml
+
 
 
 GEE minification test: Test that images built with minification have more dependencies
