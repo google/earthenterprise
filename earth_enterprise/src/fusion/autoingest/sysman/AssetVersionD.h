@@ -113,8 +113,6 @@ class AssetVersionImplD : public virtual AssetVersionImpl
     }
   }
 
-  virtual bool InputStatesAffectMyState(const InputAndChildStateData & stateData) const = 0;
-  virtual bool ChildStatesAffectMyState(const InputAndChildStateData & stateData) const = 0;
   bool OkToClean(std::vector<std::string> *wouldbreak = nullptr) const;
   bool OkToCleanAsInput(void) const;
   void SetBad(void);
@@ -208,8 +206,8 @@ class LeafAssetVersionImplD : public virtual LeafAssetVersionImpl,
   virtual AssetDefs::State OnStateChange(AssetDefs::State newstate,
                                          AssetDefs::State oldstate) override;
   virtual AssetDefs::State CalcStateByInputsAndChildren(const InputAndChildStateData &) const override;
-  virtual bool InputStatesAffectMyState(const InputAndChildStateData & stateData) const override;
-  virtual bool ChildStatesAffectMyState(const InputAndChildStateData & stateData) const override { return false; }
+  virtual bool InputStatesAffectMyState(AssetDefs::State stateByInputs, bool blockedByOfflineInputs) const override;
+  virtual bool ChildStatesAffectMyState() const override { return false; }
 };
 
 
@@ -251,8 +249,8 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
   virtual AssetDefs::State OnStateChange(AssetDefs::State newstate,
                                          AssetDefs::State oldstate) override;
   virtual bool RecalcState(WaitingFor &) const override;
-  virtual bool InputStatesAffectMyState(const InputAndChildStateData & stateData) const override;
-  virtual bool ChildStatesAffectMyState(const InputAndChildStateData & stateData) const override;
+  virtual bool InputStatesAffectMyState(AssetDefs::State stateByInputs, bool blockedByOfflineInputs) const override;
+  virtual bool ChildStatesAffectMyState() const override;
 };
 
 #endif /* __AssetVersionD_h */

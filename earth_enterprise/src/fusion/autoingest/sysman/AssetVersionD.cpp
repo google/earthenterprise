@@ -725,12 +725,12 @@ LeafAssetVersionImplD::ComputeState(void) const
   return newstate;
 }
 
-bool LeafAssetVersionImplD::InputStatesAffectMyState(const InputAndChildStateData & stateData) const {
+bool LeafAssetVersionImplD::InputStatesAffectMyState(AssetDefs::State stateByInputs, bool blockedByOfflineInputs) const {
   bool InputStatesAffectMyState = false;
   if (!AssetDefs::Ready(state)) {
     // I'm currently not ready, so take whatever my inputs say
     InputStatesAffectMyState = true;
-  } else if (stateData.stateByInputs != AssetDefs::Queued) {
+  } else if (stateByInputs != AssetDefs::Queued) {
     // My inputs have regressed
     // Let's see if I should regress too
 
@@ -741,7 +741,7 @@ bool LeafAssetVersionImplD::InputStatesAffectMyState(const InputAndChildStateDat
       InputStatesAffectMyState = true;
     } else {
       // my task has already finished
-      if (BlockedByOfflineInputs(stateData)) {
+      if (blockedByOfflineInputs) {
         // If the only reason my inputs have reverted is because
         // some of them have gone offline, that's usually OK and
         // I don't need to revert my state.
@@ -771,7 +771,7 @@ AssetDefs::State
 LeafAssetVersionImplD::CalcStateByInputsAndChildren(const InputAndChildStateData & stateData) const {
   this->numInputsWaitingFor = stateData.waitingFor.inputs;
   AssetDefs::State newstate = state;
-  if (InputStatesAffectMyState(stateData))
+  if (InputStatesAffectMyState(stateData.stateByInputs, BlockedByOfflineInputs(stateData)))
     newstate = stateData.stateByInputs;
 
   return newstate;
@@ -1167,7 +1167,7 @@ CompositeAssetVersionImplD::ComputeState(void) const
   return stateByChildren;
 }
 
-bool CompositeAssetVersionImplD::InputStatesAffectMyState(const InputAndChildStateData & stateData) const {
+bool CompositeAssetVersionImplD::InputStatesAffectMyState(AssetDefs::State stateByInputs, bool blockedByOfflineInputs) const {
   // Undecided composites take their state from their inputs
   bool InputStatesAffectMyState = false;
   if (children.empty()) {
@@ -1177,9 +1177,9 @@ bool CompositeAssetVersionImplD::InputStatesAffectMyState(const InputAndChildSta
   // some composite assets (namely Database) care about the state of their
   // inputs, for all others all that matters is the state of their children
   if (CompositeStateCaresAboutInputsToo()) {
-    if (stateData.stateByInputs != AssetDefs::Queued) {
+    if (stateByInputs != AssetDefs::Queued) {
       // something is wrong with my inputs (or they're not done yet)
-      if (BlockedByOfflineInputs(stateData)) {
+      if (blockedByOfflineInputs) {
         if (OfflineInputsBreakMe()) {
           InputStatesAffectMyState = true;
         }
@@ -1192,7 +1192,7 @@ bool CompositeAssetVersionImplD::InputStatesAffectMyState(const InputAndChildSta
   return InputStatesAffectMyState;
 }
 
-bool CompositeAssetVersionImplD::ChildStatesAffectMyState(const InputAndChildStateData & stateData) const {
+bool CompositeAssetVersionImplD::ChildStatesAffectMyState() const {
   return true;
 }
 
@@ -1201,7 +1201,7 @@ CompositeAssetVersionImplD::CalcStateByInputsAndChildren(const InputAndChildStat
   this->numInputsWaitingFor = stateData.waitingFor.inputs;
   this->numChildrenWaitingFor = stateData.waitingFor.children;
 
-  if (InputStatesAffectMyState(stateData))
+  if (InputStatesAffectMyState(stateData.stateByInputs, BlockedByOfflineInputs(stateData)))
     return stateData.stateByInputs;
 
   return stateData.stateByChildren;

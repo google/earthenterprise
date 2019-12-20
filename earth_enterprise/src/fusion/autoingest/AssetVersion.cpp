@@ -51,6 +51,52 @@ AssetVersionImpl::GetInputFilenames(std::vector<std::string> &out) const
 
 
 // ****************************************************************************
+// ***  LeafAssetVersionImpl
+// ****************************************************************************
+// bool LeafAssetVersionImpl::InputStatesAffectMyState(AssetDefs::State stateByInputs, bool blockedByOfflineInputs) const {
+//   bool InputStatesAffectMyState = false;
+//   if (!AssetDefs::Ready(state)) {
+//     // I'm currently not ready, so take whatever my inputs say
+//     InputStatesAffectMyState = true;
+//   } else if (stateByInputs != AssetDefs::Queued) {
+//     // My inputs have regressed
+//     // Let's see if I should regress too
+
+//     if (AssetDefs::Working(state)) {
+//       // I'm in the middle of building myself
+//       // revert my state to wait/block on my inputs
+//       // OnStateChange will pick up this revert and stop my running task
+//       InputStatesAffectMyState = true;
+//     } else {
+//       // my task has already finished
+//       if (blockedByOfflineInputs) {
+//         // If the only reason my inputs have reverted is because
+//         // some of them have gone offline, that's usually OK and
+//         // I don't need to revert my state.
+//         // Check to see if I care about my inputs going offline
+//         if (OfflineInputsBreakMe()) {
+//           // I care, revert my state too.
+//           InputStatesAffectMyState = true;
+//         } else {
+//           // I don't care, so leave my state alone.
+//         }
+//       } else {
+//         // My inputs have regresseed for some reason other than some
+//         // of them going offline.
+//         // revert my state
+//         InputStatesAffectMyState = true;
+//       }
+//     }
+//   } else {
+//     // nothing to do
+//     // my current state is correct based on what my task has told me so far
+//   }
+  
+//   return InputStatesAffectMyState;
+// }
+
+
+// ****************************************************************************
 // ***  CompositeAssetVersionImpl
 // ****************************************************************************
 void
@@ -78,6 +124,35 @@ CompositeAssetVersionImpl::GetOutputFilename(uint i) const
   }
   return std::string();
 }
+
+// bool CompositeAssetVersionImpl::InputStatesAffectMyState(AssetDefs::State stateByInputs, bool blockedByOfflineInputs) const {
+//   // Undecided composites take their state from their inputs
+//   bool InputStatesAffectMyState = false;
+//   if (children.empty()) {
+//     InputStatesAffectMyState = true;
+//   }
+
+//   // some composite assets (namely Database) care about the state of their
+//   // inputs, for all others all that matters is the state of their children
+//   if (CompositeStateCaresAboutInputsToo()) {
+//     if (stateByInputs != AssetDefs::Queued) {
+//       // something is wrong with my inputs (or they're not done yet)
+//       if (blockedByOfflineInputs) {
+//         if (OfflineInputsBreakMe()) {
+//           InputStatesAffectMyState = true;
+//         }
+//       } else {
+//         InputStatesAffectMyState = true;
+//       }
+//     }
+//   }
+
+//   return InputStatesAffectMyState;
+// }
+
+// bool CompositeAssetVersionImpl::ChildStatesAffectMyState() const {
+//   return true;
+// }
 
 namespace {
 // Construct a versioned asset path from a full gedb/mapdb path.

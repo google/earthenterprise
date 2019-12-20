@@ -32,6 +32,7 @@ class StateUpdater
   private:
     class UnsupportedException {};
     class SetStateVisitor;
+    class SetBlockingStateVisitor;
 
     StorageManagerInterface<AssetVersionImpl> * const storageManager;
     khAssetManagerInterface * const assetManager;
