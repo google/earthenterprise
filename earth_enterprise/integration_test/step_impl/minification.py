@@ -10,22 +10,16 @@ import assets
 MISC_XML_PATH = os.path.join(assets.ASSET_ROOT, ".config", "misc.xml")
 
 
-# now = datetime.datetime.now()
-# outputDirectoryForTest = "minification.output." + now.strftime("%Y.%m.%d.%H.%M.%S")
-# outputROOT = "/gevol/assets"
-
-
 @step("Turn minification <status>")
 def turn_minification(status):
     "Turn off minification in misc.xml."
 
-    fromState = None
-    toState = None
     if status == "off":
         sedFilter = "s/<UseMinification>1<\/UseMinification>/<UseMinification>0<\/UseMinification>/"
 
     elif status == "on":
         sedFilter = "s/<UseMinification>0<\/UseMinification>/<UseMinification>1<\/UseMinification>/"
+
     else:
         raise Exception('Can only turn minification "on" or "off"')
 
