@@ -79,7 +79,7 @@ Release notes: Open GEE 5.3.3
          * - 1577
            - Use defusedxml in server code
            - Added defusedxml as a dependecy.  Using defusedxml in place of
-             python xml.
+             python XML to improve security.
 
       .. rubric:: Known Issues
 
