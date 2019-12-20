@@ -169,10 +169,9 @@ Click Databases to display the list of databases and portables pushed
 to the Server.
 
 Click the Settings button Settings button in the top right of the
-window and select Launch Cutter from the Tools menu.  A new browser
-tab opens with the GEE Server — Cutting Tool and the Create new
-offline map window appears.  GEE Cutter create offline map window  Map
-or globe name
+window and select Launch Cutter.  A new browser tab opens with the GEE
+Server — Cutting Tool and the Create new offline map window appears.
+GEE Cutter create offline map window  Map or globe name
 
 Use the drop-down menu to select the database or portable you wish to
 cut to create your offline map or globe.
@@ -182,18 +181,17 @@ name for your offline map or globe. Offline maps are created as .glm
 files; offline globes are created as .glb files. Both file types are a
 single-file format for sharing Google Earth Enterprise maps and
 globes. Spaces, slashes, and double dots (..) will be converted to
-underscores in the saved globe name.  Building an offline map or globe
-will overwrite any existing offline maps or globes with the same name.
-If multiple users are cutting maps or globes, we recommend assigning
-unique prefixes to each user for their globe names to ensure that
-files are not accidentally overwritten.
+underscores in the saved globe name.
 
 Enter a description to be associated with the offline map or globe.
 We recommend adding sufficient descriptive information for each
 offline map or globe, so that others will know what geographic area,
 or what mission, they were created for.
 
-If you are overwriting an existing cut, select Yes for Overwrite?.
+If you have entered a globe name that is already in use, a warning is
+displayed. If you wish to overwrite the existing cut, select the
+Overwrite check box. If you do not wish to overwrite the existing cut,
+modify the globe name.
 
 -[ Drawing the polygon ]-
 
@@ -207,9 +205,6 @@ Warning: When cutting a 3D globe this method is only available if
   you are running the discontinued Google Earth Plug-in in your
   browser. This method works for cutting 2D maps from your browser.
 
-By default, you draw a polygon by hand so the Select Region drop-down
-list is set to Manual.
-
 Use the Pan tool Hand tool to pan, then, using the navigation controls
 in the plug-in, zoom in to the region of interest.
 
@@ -220,31 +215,39 @@ Click on the map or globe to define each point. You can use the
 navigation controls on the right to move the globe or change zoom
 levels while drawing.
 
-Click the final point at the point of origin to complete the polygon
-selection.  Polygon example
+Double-click the final point to complete the polygon selection. The
+polygon turns orange.  Polygon example
 
-If you need to redraw the polygon, click Clear to delete the polygon
-you just created.
+To modify the polygon, click and drag the white edit points.
+
+To delete a vertex, click and hold the mouse on the point until it is
+removed from the map.
+
+To redraw the polygon, press the Esc key and begin again.
+
+To save the polygon, press the Enter key.
 
 -[ Defining the polygon with KML ]-
 
 You can also use KML to define the polygon(s). The KML should be
-complete, and may contain single or multiple elements.
+complete, and may contain single or multiple elements. If it contains
+multiple elements, the first element will be used to define the
+polygon.
 
 To insert your KML:
 
-From the Select Region drop-down list, select Paste KML. The Paste KML
-window appears.
+Click the KML KML button on the toolbar at the top of the window. The
+Paste KML window appears.
 
-Paste your KML into the text field, then click Use KML.  GEE Server
-validates the KML and then draws the polygon using the KML data you
-provided. Your polygon appears on the map or globe (the latter only if
-you have the discontinued Google Earth plug-in running in your
+Paste the KML into the text field, then click the Use KML button.  GEE
+Server validates the KML and then draws the polygon using the KML data
+you provided. The polygon appears on the map or globe (the latter only
+if you have the discontinued Google Earth plug-in running in your
 browser).
 
 -[ Globe resolution ]-
 
-The polygon you specified in the previous step defines your
+The polygon you specified in the previous step defines the
 
 area of interest
 
@@ -357,9 +360,9 @@ depending on the area selected and the desired resolution.
 
 -[ To build the map or globe: ]-
 
-Click Cut map to start the build process.  The progress of the build
-appears in the Build window.  When the build is finished, a .glb file
-is created in the default globes directory,
+Click the Cut map button to start the build process.  The progress of
+the build appears in the Cutting window.  When the build is finished,
+a .glb file is created in the default globes directory,
 /opt/google/gehttpd/htdocs/cutter/globes, and a download link appears
 to the file's location on GEE Server.
 

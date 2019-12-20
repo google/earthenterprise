@@ -211,7 +211,7 @@ Administrator.</p>
 portables pushed to the Server.</p>
 </li>
 <li><p class="first">Click the <img alt="Settings button" src="../../images/cutterSettingsButton.png" /> <strong>Settings</strong> button in the top right of the window
-and select <strong>Launch Cutter</strong> from the <strong>Tools</strong> menu.</p>
+and select <strong>Launch Cutter</strong>.</p>
 <p>A new browser tab opens with the GEE Server — Cutting Tool and
 the <strong>Create new offline map</strong> window appears.</p>
 <p><img alt="GEE Cutter create offline map window" src="../../images/cutterTools.png" /></p>
@@ -227,14 +227,6 @@ created as <code class="docutils literal notranslate"><span class="pre">.glb</sp
 format for sharing Google Earth Enterprise maps and globes.
 Spaces, slashes, and double dots (..) will be converted to
 underscores in the saved globe name.</p>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">Building an offline map or globe will overwrite any existing
-offline maps or globes with the same name. If multiple users
-are cutting maps or globes, we recommend assigning unique
-prefixes to each user for their globe names to ensure that
-files are not accidentally overwritten.</p>
-</div>
 </li>
 <li><p class="first">Enter a description to be associated with the offline map or
 globe.</p>
@@ -242,7 +234,10 @@ globe.</p>
 offline map or globe, so that others will know what geographic
 area, or what mission, they were created for.</p>
 </li>
-<li><p class="first">If you are overwriting an existing cut, select <strong>Yes</strong> for <strong>Overwrite?</strong>.</p>
+<li><p class="first">If you have entered a globe name that is already in use, a warning
+is displayed. If you wish to overwrite the existing cut, select
+the <strong>Overwrite</strong> check box. If you do not wish to overwrite the
+existing cut, modify the globe name.</p>
 </li>
 </ol>
 <p class="rubric">Drawing the polygon</p>
@@ -258,9 +253,6 @@ browser. This method works for cutting 2D maps from your
 browser.</p>
 </div>
 <ol class="arabic">
-<li><p class="first">By default, you draw a polygon by hand so the <strong>Select Region</strong>
-drop-down list is set to <strong>Manual</strong>.</p>
-</li>
 <li><p class="first">Use the <img alt="Pan tool" src="../../images/cutterHandTool2.png" /> <strong>Hand</strong> tool to pan, then, using the navigation
 controls in the plug-in, zoom in to the region of interest.</p>
 </li>
@@ -271,29 +263,38 @@ in the globe window.</p>
 navigation controls on the right to move the globe or change
 zoom levels while drawing.</p>
 </li>
-<li><p class="first">Click the final point at the point of origin to complete the polygon selection.</p>
+<li><p class="first">Double-click the final point to complete the polygon selection.
+The polygon turns orange.</p>
 <p><img alt="Polygon example" src="../../images/cutterPolygonExample.png" /></p>
 </li>
-<li><p class="first">If you need to redraw the polygon, click <strong>Clear</strong> to delete the polygon you just created.</p>
+<li><p class="first">To modify the polygon, click and drag the white edit points.</p>
+</li>
+<li><p class="first">To delete a vertex, click and hold the mouse on the point until
+it is removed from the map.</p>
+</li>
+<li><p class="first">To redraw the polygon, press the <strong>Esc</strong> key and begin again.</p>
+</li>
+<li><p class="first">To save the polygon, press the <strong>Enter</strong> key.</p>
 </li>
 </ol>
 <p class="rubric">Defining the polygon with KML</p>
 <p>You can also use KML to define the polygon(s). The KML should be
-complete, and may contain single or multiple elements.</p>
+complete, and may contain single or multiple elements. If it contains
+multiple elements, the first element will be used to define the polygon.</p>
 <p><strong>To insert your KML:</strong></p>
 <ol class="arabic">
-<li><p class="first">From the <strong>Select Region</strong> drop-down list, select <strong>Paste
-KML</strong>. The Paste KML window appears.</p>
+<li><p class="first">Click the <img alt="KML" src="../../images/uploadPolygon.png" /> <strong>KML</strong> button on the toolbar at the top of the window.
+The Paste KML window appears.</p>
 </li>
-<li><p class="first">Paste your KML into the text field, then click <strong>Use KML</strong>.</p>
+<li><p class="first">Paste the KML into the text field, then click the <strong>Use KML</strong> button.</p>
 <p>GEE Server validates the KML and then draws the polygon using
-the KML data you provided. Your polygon appears on the map or
+the KML data you provided. The polygon appears on the map or
 globe (the latter only if you have the discontinued Google
 Earth plug-in running in your browser).</p>
 </li>
 </ol>
 <p class="rubric">Globe resolution</p>
-<p>The polygon you specified in the previous step defines your <em>area of
+<p>The polygon you specified in the previous step defines the <em>area of
 interest</em>. This area contains high-resolution imagery and data,
 and search tabs are created for vector data within this zone. The
 maximum and minimum resolutions are specified as integers between
@@ -371,12 +372,11 @@ size varies widely depending on the area selected and the desired
 resolution.</p>
 <p class="rubric">To build the map or globe:</p>
 <ul>
-<li><p class="first">Click <strong>Cut map</strong> to start the build process.</p>
-<p>The progress of the build appears in the <strong>Build</strong> window.</p>
+<li><p class="first">Click the <strong>Cut map</strong> button to start the build process.</p>
+<p>The progress of the build appears in the <strong>Cutting</strong> window.</p>
 <p>When the build is finished, a <code class="docutils literal notranslate"><span class="pre">.glb</span></code> file is created in the
-default globes directory,
-<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/cutter/globes</span></code>, and a download
-link appears to the file’s location on GEE Server.</p>
+default globes directory, <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/cutter/globes</span></code>,
+and a download link appears to the file’s location on GEE Server.</p>
 </li>
 </ul>
 <p class="rubric">KML files</p>
