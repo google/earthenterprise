@@ -65,7 +65,8 @@ packets  1241  geglxinfo should parse all meshes in terrain packets
 geglxinfo will parse all meshes in terrain packets  1552  XML objects
 are not properly cleaned up  A memory management bug in XML processing
 was fixed, resulting in lower memory utilization and significantly
-improved performance.
+improved performance.  1577  Use defusedxml in server code  Added
+defusedxml as a dependecy.  Using defusedxml in place of python xml.
 
 -[ Known Issues ]-
 
