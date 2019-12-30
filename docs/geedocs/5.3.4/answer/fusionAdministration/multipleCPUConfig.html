@@ -1,0 +1,176 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Running Fusion on a Machine with Multiple CPUs &#8212; Google Earth Enterprise 5.3.4 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Dynamically adjusting logging levels" href="dynamicLogLevelSetting.html" />
+    <link rel="prev" title="Before you Configure Google Earth Enterprise Fusion" href="beforeYouConfigure.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="dynamicLogLevelSetting.html" title="Dynamically adjusting logging levels"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="beforeYouConfigure.html" title="Before you Configure Google Earth Enterprise Fusion"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" accesskey="U">Fusion Administration</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="beforeYouConfigure.html"
+                        title="previous chapter">Before you Configure Google Earth Enterprise Fusion</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="dynamicLogLevelSetting.html"
+                        title="next chapter">Dynamically adjusting logging levels</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="running-fusion-on-a-machine-with-multiple-cpus">
+<h1>Running Fusion on a Machine with Multiple CPUs<a class="headerlink" href="#running-fusion-on-a-machine-with-multiple-cpus" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>Fusion can be configured to use a maximum number of CPUs on a
+machine with the following command:</p>
+<p><code class="docutils literal notranslate"><span class="pre">/opt/google/bin/geselectassetroot</span> <span class="pre">--assetroot</span> <span class="pre">/my/assetroot</span> <span class="pre">--numcpus</span> <span class="pre">X</span></code>
+This number will show up as the maxjobs entry within getop output
+and corresponds to how many concurrent jobs Fusion may spawn at
+any one time. Note that the value for –numcpus should be equal
+to, or less than, the number of physical CPU cores on the machine.</p>
+<p>Each task within Fusion is configured to use 1 CPU by default.
+Changing the maximum number of CPUs using the above command will
+not affect the number of CPUs assigned to each individual task.
+Some tasks in Fusion are capable of multithreaded support
+including:</p>
+<ul class="simple">
+<li>gepackgen (imagery and terrain projects)</li>
+<li>gemaptilegen (2D vector-based map tiles)</li>
+<li>gecombineterrain (3D databases)</li>
+</ul>
+<p>These tasks may be multithreaded by enabling <em>task rules</em> within
+Fusion. Implementation of task rules is described in more detail
+in <a class="reference internal" href="confTaskRulesForFusionPerf.html"><span class="doc">Configure Fusion performance</span></a>.</p>
+<p>The <strong>ImageryPacketLevel.taskrule</strong>,
+<strong>TerrainPacketLevel.taskrule</strong>, <strong>MapLayerLevel.taskrule</strong>, and
+<strong>CombinedTerrain.taskrule</strong> task rules enable multiple CPUs to
+work on each individual task. For example, configuring a
+<code class="docutils literal notranslate"><span class="pre">minNumCPUs</span></code> and <code class="docutils literal notranslate"><span class="pre">maxNumCPUs</span></code> of two for the
+<strong>ImageryPacketLevel.taskrule</strong> means that up to four gepackgen
+processes may run on Fusion when eight CPU cores are allocated.</p>
+<p>As a best practice, <strong>ImageryPacketLevel.taskrule</strong>,
+<strong>TerrainPacketLevel.taskrule</strong> and <strong>MapLayerLevel.taskrule</strong>
+should be configured such that multiple gepackgen and gemaptilegen
+processes can run concurrently.</p>
+<p>Since <code class="docutils literal notranslate"><span class="pre">gecombineterrain</span></code> is CPU-intensive and can be an
+operational bottleneck, more CPUs should be assigned to that task
+to expedite processing. So on a machine with <strong>eight</strong> CPU cores available
+for Fusion processing:</p>
+<ol class="arabic">
+<li><p class="first">Set
+<code class="docutils literal notranslate"><span class="pre">/opt/google/bin/geselectassetroot</span> <span class="pre">--assetroot</span> <span class="pre">/my/assetroot</span> <span class="pre">--numcpus=7</span></code>.
+It’s recommended to set the maximum number of CPUs allocated to
+Fusion to <strong>(N-1)</strong>, such that one CPU core is reserved for system
+operations.</p>
+</li>
+<li><p class="first">Set <code class="docutils literal notranslate"><span class="pre">minNumCPU=2</span></code> and <code class="docutils literal notranslate"><span class="pre">maxNumCPU=2</span></code> in
+<strong>ImageryPacketLevel.taskrule</strong> for imagery projects (<strong>three</strong>
+concurrent <code class="docutils literal notranslate"><span class="pre">gepackgen</span></code> tasks possible).**</p>
+</li>
+<li><p class="first">Set <code class="docutils literal notranslate"><span class="pre">minNumCPU=3</span></code> and <code class="docutils literal notranslate"><span class="pre">maxNumCPU=4</span></code> in
+<strong>TerrainPacketLevel.taskrule</strong> for terrain projects (<strong>two</strong>
+concurrent <code class="docutils literal notranslate"><span class="pre">gepackgen</span></code> tasks possible)**</p>
+</li>
+<li><p class="first">Set <code class="docutils literal notranslate"><span class="pre">minNumCPU=3</span></code> and <code class="docutils literal notranslate"><span class="pre">maxNumCPU=4</span></code> in
+<strong>MapLayerLevel.taskrule</strong> (<strong>two</strong> concurrent <code class="docutils literal notranslate"><span class="pre">gemaptilegen</span></code> jobs
+possible).</p>
+</li>
+<li><p class="first">Set <code class="docutils literal notranslate"><span class="pre">minNumCPU=7</span></code> and <code class="docutils literal notranslate"><span class="pre">maxNumCPU=7</span></code> in
+<strong>CombinedTerrain.taskrule</strong> (<strong>one</strong> <code class="docutils literal notranslate"><span class="pre">gecombineterrain</span></code> task)</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Fusion will use up to 200% CPU processing for
+imagery projects per <code class="docutils literal notranslate"><span class="pre">gepackgen</span></code> process, and up to 400%
+CPU processing for terrain projects. There is fundamentally
+a balance between assigning sufficient numbers of CPUs to
+each individual process for <code class="docutils literal notranslate"><span class="pre">gepackgen</span></code> while still
+enabling multiple concurrent <code class="docutils literal notranslate"><span class="pre">gepackgen</span></code> processes for
+parallel processing.</p>
+</div>
+<p>All other tasks in Fusion will continue to operate with min/max
+one CPU.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="dynamicLogLevelSetting.html" title="Dynamically adjusting logging levels"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="beforeYouConfigure.html" title="Before you Configure Google Earth Enterprise Fusion"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" >Fusion Administration</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,149 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Configure fonts for the Text Style dialog &#8212; Google Earth Enterprise 5.3.4 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Customize your Google Maps landing page" href="customizeGoogleMapsLandingPage.html" />
+    <link rel="prev" title="Configure font size in the GUI" href="confGUIFontsize.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="customizeGoogleMapsLandingPage.html" title="Customize your Google Maps landing page"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="confGUIFontsize.html" title="Configure font size in the GUI"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" accesskey="U">Fusion Administration</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="confGUIFontsize.html"
+                        title="previous chapter">Configure font size in the GUI</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="customizeGoogleMapsLandingPage.html"
+                        title="next chapter">Customize your Google Maps landing page</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="configure-fonts-for-the-text-style-dialog">
+<h1>Configure fonts for the Text Style dialog<a class="headerlink" href="#configure-fonts-for-the-text-style-dialog" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>When you are specifying a map layer in Google Earth Enterprise
+Fusion, the Text Style dialog allows users to select the text
+style for vector labels. (See <a class="reference internal" href="../fusionTutorial/searchFldsForLayers.html"><span class="doc">Specifying Search Fields for Individual Layers</span></a>.) Google Earth
+Enterprise Fusion supplies only one font and style, <em>Sans
+regular</em>. However, if you want to provide a choice of fonts for
+your users to select in the Text Style dialog, you can create a
+font list file that contains information about the fonts you want
+to support. This section explains how to create a font list file.</p>
+<p class="rubric" id="to-create-a-font-list-file">To create a font list file:</p>
+<ol class="arabic simple">
+<li>Create an ASCII text file and save it as
+<code class="docutils literal notranslate"><span class="pre">/opt/google/share/fonts/fontlist</span></code>.</li>
+<li>For each font you want to support, enter one line in the file
+that contains the four following pieces of information:<ul>
+<li><strong>Font name</strong> - the name of the font, which appears on the
+drop-down list of fonts available in the Text Style dialog
+(for example, <code class="docutils literal notranslate"><span class="pre">TimesRoman</span></code>). No spaces are allowed in the
+font face name. Multiple variations of the font, such as
+regular, bold, italic, are automatically grouped under the
+same name in the drop-down list.</li>
+<li><strong>File Path</strong> - the full path to the TrueType (<code class="docutils literal notranslate"><span class="pre">.ttf</span></code>)
+font file. No spaces are allowed in this path.</li>
+<li><strong>Bold</strong> - 1 if the font is bold; 0 if not.</li>
+<li><strong>Italic</strong> - 1 if the font is italic (or oblique); 0 if not.</li>
+</ul>
+</li>
+<li>Save the file.</li>
+</ol>
+<p>For example, your font list file might contain:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LucidaBrightDemi</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">fonts</span><span class="o">/</span><span class="n">LucidaBrightDemiBold</span><span class="o">.</span><span class="n">ttf</span> <span class="mi">1</span> <span class="mi">0</span>
+<span class="n">LucidaBrightDemi</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">fonts</span><span class="o">/</span><span class="n">LucidaBrightDemiItalic</span><span class="o">.</span><span class="n">ttf</span> <span class="mi">0</span> <span class="mi">1</span>
+<span class="n">LucidaBright</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">fonts</span><span class="o">/</span><span class="n">LucidaBrightItalic</span><span class="o">.</span><span class="n">ttf</span> <span class="mi">0</span> <span class="mi">1</span>
+<span class="n">LucidaBright</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">fonts</span><span class="o">/</span><span class="n">LucidaBrightRegular</span><span class="o">.</span><span class="n">ttf</span> <span class="mi">0</span> <span class="mi">0</span>
+<span class="n">LucidaSansDemi</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">fonts</span><span class="o">/</span><span class="n">LucidaSansDemiBold</span><span class="o">.</span><span class="n">ttf</span> <span class="mi">1</span> <span class="mi">0</span>
+<span class="n">LucidaSans</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">fonts</span><span class="o">/</span><span class="n">LucidaSansRegular</span><span class="o">.</span><span class="n">ttf</span> <span class="mi">0</span> <span class="mi">0</span>
+<span class="n">LucidaTypewriter</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">fonts</span><span class="o">/</span><span class="n">LucidaTypewriterBold</span><span class="o">.</span><span class="n">ttf</span> <span class="mi">1</span> <span class="mi">0</span>
+<span class="n">LucidaTypewriter</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">fonts</span><span class="o">/</span><span class="n">LucidaTypewriterRegular</span><span class="o">.</span><span class="n">ttf</span> <span class="mi">0</span> <span class="mi">0</span>
+<span class="n">LucidaTypewriter</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">oblique</span><span class="o">-</span><span class="n">fonts</span><span class="o">/</span><span class="n">LucidaTypewriterBoldOblique</span><span class="o">.</span><span class="n">ttf</span> <span class="mi">1</span> <span class="mi">1</span>
+<span class="n">LucidaSansDemi</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">oblique</span><span class="o">-</span><span class="n">fonts</span><span class="o">/</span><span class="n">LucidaSansDemiOblique</span><span class="o">.</span><span class="n">ttf</span> <span class="mi">0</span> <span class="mi">1</span>
+<span class="n">LucidaSans</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">oblique</span><span class="o">-</span><span class="n">fonts</span><span class="o">/</span><span class="n">LucidaSansOblique</span><span class="o">.</span><span class="n">ttf</span> <span class="mi">0</span> <span class="mi">1</span>
+<span class="n">LucidaTypewriter</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">oblique</span><span class="o">-</span><span class="n">fonts</span><span class="o">/</span><span class="n">LucidaTypewriterOblique</span><span class="o">.</span><span class="n">ttf</span> <span class="mi">0</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="customizeGoogleMapsLandingPage.html" title="Customize your Google Maps landing page"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="confGUIFontsize.html" title="Configure font size in the GUI"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" >Fusion Administration</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

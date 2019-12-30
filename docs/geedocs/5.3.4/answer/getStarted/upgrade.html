@@ -1,0 +1,243 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Upgrade to GEE 5.x &#8212; Google Earth Enterprise 5.3.4 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Download documentation for GEE 5.x" href="download.html" />
+    <link rel="prev" title="Build and install GEE 5.x" href="buildAndInstall.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="download.html" title="Download documentation for GEE 5.x"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="buildAndInstall.html" title="Build and install GEE 5.x"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../getStarted.html" accesskey="U">Get Started</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="buildAndInstall.html"
+                        title="previous chapter">Build and install GEE 5.x</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="download.html"
+                        title="next chapter">Download documentation for GEE 5.x</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp6.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp6.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="upgrade-to-gee-5-x">
+<h1>Upgrade to GEE 5.x<a class="headerlink" href="#upgrade-to-gee-5-x" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p id="index-0">You can upgrade to Google Earth Enterprise 5.x from versions 4.0.0
+through 4.4.1.</p>
+<p class="rubric">Before you upgrade</p>
+<div class="docutils container">
+<p class="rubric" id="we-recommend-you-do-the-following-before-upgrading-to-gee-5-x">We recommend you do the following before upgrading
+to GEE 5.x:</p>
+<ol class="arabic">
+<li><p class="first">Confirm your hardware and software meet the <a class="reference internal" href="../installGEE/sysReqGEEServer.html"><span class="doc">minimum
+requirements</span></a>.</p>
+</li>
+<li><p class="first">Apply the latest Linux distribution software patches.</p>
+</li>
+<li><p class="first">Create backups of data stored in the
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/</span></code> folders, including display rule
+templates, snippet profiles, icons, virtual 2D and 3D hosts,
+custom KML data (including SuperOverlays), custom web pages,
+CGI scripts, web applications, and JavaScript or HTML files.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">During the uninstallation/installation,
+contents of <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd</span></code> and other key
+folders are automatically backed up to:
+<code class="docutils literal notranslate"><span class="pre">/var/opt/google/fusion-backups</span></code>
+These backups are stored in a <code class="docutils literal notranslate"><span class="pre">DATE.TIME</span></code> named
+folder, for example, <code class="docutils literal notranslate"><span class="pre">20140310.160027/</span></code>.</p>
+</div>
+</li>
+<li><p class="first">Remove symbolic links from <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/</span></code> to other
+directories.</p>
+</li>
+<li><p class="first">Create backup copies of any customized Apache Server
+configuration files, SSL/HTTPS certificates, user access
+lists, symbolic links to other file system directories, and
+files served from the Apache document root
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs</span></code>.</p>
+</li>
+<li><p class="first">Move or copy portable globe files (.glb or .glm) from the
+default globes folder:
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/cutter/globes</span></code>.</p>
+</li>
+<li><p class="first">Run garbage collect for stream/search on the GEE server
+machine. This will clean all previously deleted databases in
+<code class="docutils literal notranslate"><span class="pre">/gevol/published_dbs;</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">/opt/google/bin/geserveradmin</span> <span class="pre">--garbagecollect</span> <span class="pre">--server_type</span> <span class="pre">stream</span></code>
+<code class="docutils literal notranslate"><span class="pre">/opt/google/bin/geserveradmin</span> <span class="pre">--garbagecollect</span> <span class="pre">--server_type</span> <span class="pre">search</span></code></p>
+</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">GEE 5.x does not support 2D maps in the flat
+(Plate Carrée) projection. If you have previously built and
+published a map with a flat projection, these databases will
+be marked as invalid, and you will not be able to perform
+any delete, build, push, or publish actions on them.</p>
+</div>
+</div>
+<p class="rubric">Upgrading</p>
+<p class="rubric" id="to-upgrade-to-gee-5-x">To upgrade to GEE 5.x:</p>
+<ol class="arabic">
+<li><p class="first">Stop <code class="docutils literal notranslate"><span class="pre">gefusion</span></code> and <code class="docutils literal notranslate"><span class="pre">geserver</span></code>.</p>
+</li>
+<li><p class="first">If you are upgrading from GEE 4.x to 5.x, uninstall previous
+versions of Google Earth Enterprise Fusion and Server.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When you uninstall Google Earth Enterprise
+Fusion and Server, your asset root remains unchanged;
+none of your resources or assets are removed.</p>
+</div>
+</li>
+<li><p class="first">Install GEE Fusion and Server 5.x.</p>
+</li>
+<li><p class="first">For GEE Server, run the following command:
+<code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">gepguser</span> <span class="pre">/opt/google/bin/geresetpgdb</span></code></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">geresetpgd</span></code> deletes registering information
+about Fusion databases on GEE Server. After installing
+GEE Server/Fusion you will need to:</p>
+<ul class="last simple">
+<li>Rebuild 3D database assets; if <strong>Push</strong> is not
+available, then the database assets need to be
+rebuilt.</li>
+<li>Push all 3D and 2D Mercator databases. 2D Plate Carrée
+databases are not valid in GEE 5.0. See <a class="reference internal" href="../geeServerAdmin/makeWMSRequests.html"><span class="doc">Web Map
+Service (WMS)</span></a> for
+projection support for Plate Carrée maps.</li>
+</ul>
+</div>
+</li>
+<li><p class="first">Upgrade asset root:</p>
+<p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">/opt/google/bin/geupgradeassetroot</span> <span class="pre">--assetroot</span> <span class="pre">/gevol/assets</span></code></p>
+</li>
+<li><p class="first">Optionally enable cutter:</p>
+<p><code class="docutils literal notranslate"><span class="pre">/opt/google/bin/gecutter</span> <span class="pre">enable</span></code></p>
+</li>
+<li><p class="first">Start <code class="docutils literal notranslate"><span class="pre">gefusion</span></code> and <code class="docutils literal notranslate"><span class="pre">geserver</span></code>.</p>
+</li>
+</ol>
+<p class="rubric">After you upgrade</p>
+<p class="rubric">After upgrading:</p>
+<ol class="arabic">
+<li><p class="first">Restore backups of data stored in the <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/</span></code>
+folders, either from your own backup copies or from the backup
+folder automatically created during
+uninstallation/installation:
+<code class="docutils literal notranslate"><span class="pre">/var/opt/google/fusion-backups</span></code>.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Only restore data that you have customized, including
+display rule templates, snippet profiles, icons, virtual 2D
+and 3D hosts, custom KML data (including SuperOverlays),
+custom web pages, CGI scripts, web applications, JavaScript
+or HTML files, Apache Server configuration files, SSL/HTTPS
+certificates, user access lists, symbolic links to other
+file system directories, and files served from the Apache
+document root <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs</span></code>.</p>
+</div>
+</li>
+<li><p class="first">Rebuild your 3D Fusion database assets (a minimal rebuild will be
+forced for terrain and imagery projects). For 2D Mercator
+databases, rebuilding is not required.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Push is not available if rebuild is required. You
+will need to push each database (3D and 2D Mercator
+databases) to GEE Server (database will be registered on
+server, and updated files will be pushed), where they can
+then be published from the GEE Server Admin console. GEE
+Server supports serving imagery packets of old 2D Mercator
+and 3D Fusion databases.</p>
+</div>
+</li>
+</ol>
+<p class="rubric" id="compatibility-with-google-earth-ec">Compatibility with Google Earth EC</p>
+<p>GEE 5.x is compatible with Google Earth Enterprise Client (EC) and
+Plugin versions 7.0.1 - 7.3.x for Windows, Mac, and Linux.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="download.html" title="Download documentation for GEE 5.x"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="buildAndInstall.html" title="Build and install GEE 5.x"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../getStarted.html" >Get Started</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

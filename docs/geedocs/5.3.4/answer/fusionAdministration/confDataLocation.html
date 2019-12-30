@@ -1,0 +1,149 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Configure your data locations &#8212; Google Earth Enterprise 5.3.4 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Push and publish databases" href="pushAndPublishDB.html" />
+    <link rel="prev" title="Relocate your asset root" href="relocateAssetRoot.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="pushAndPublishDB.html" title="Push and publish databases"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="relocateAssetRoot.html" title="Relocate your asset root"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" accesskey="U">Fusion Administration</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="relocateAssetRoot.html"
+                        title="previous chapter">Relocate your asset root</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pushAndPublishDB.html"
+                        title="next chapter">Push and publish databases</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="configure-your-data-locations">
+<h1>Configure your data locations<a class="headerlink" href="#configure-your-data-locations" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>The Google Earth Enterprise installation script prompts you to
+enter information about your system and then properly configures
+your primary asset root and source volume. After you install
+Google Earth Enterprise Fusion, use the <code class="docutils literal notranslate"><span class="pre">geconfigureassetroot</span></code>
+command to:</p>
+<ul>
+<li><p class="first"><strong>Add asset roots.</strong></p>
+<p>If you use the <a class="reference internal" href="../fusionTutorial/about.html"><span class="doc">About this Tutorial</span></a>, Google recommends that
+you specify separate asset roots for each user’s tutorial data
+and a completely different asset root for your real working
+data. See <a class="reference internal" href="../fusionTutorial/confTutorialWS.html"><span class="doc">Configure Tutorial Workspace</span></a> to learn how to configure
+and select an asset root for the tutorial, as well as how to
+clean up tutorial files.</p>
+</li>
+<li><p class="first"><strong>Identify source volumes.</strong></p>
+<p>You must identify each directory that contains your source data
+files (or subdirectories of your source data files). Google
+Earth Enterprise Fusion is not able to read files located in
+other directories.</p>
+</li>
+<li><p class="first"><strong>Modify the current volume.</strong></p>
+<p>You can modify volume definitions when migrating from a single-
+to a multiple-workstation configuration or when modifying the
+local path of a network-mounted source volume (for example,
+when adding a larger drive for source data).</p>
+</li>
+</ul>
+<p>For more information on these commands, see
+<a class="reference internal" href="commandReference.html#geconfigassetroot"><span class="std std-ref">geconfigureassetroot</span></a>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Do not modify the volume definition after you save data to that
+volume. Because the local name and the network path definitions
+are used by Google Earth Enterprise Fusion for resources,
+projects, and database definitions, any change to a volume
+definition invalidates the data already processed on that
+volume.</p>
+</div>
+<p>If you add multiple asset roots, you can use the
+<code class="docutils literal notranslate"><span class="pre">geselectassetroot</span></code> to specify the volume in which you want to
+work and to switch back and forth among the available asset roots,
+if desired. For more information on these commands, see
+<a class="reference internal" href="commandReference.html#geconfigassetroot"><span class="std std-ref">geconfigureassetroot</span></a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="pushAndPublishDB.html" title="Push and publish databases"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="relocateAssetRoot.html" title="Relocate your asset root"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" >Fusion Administration</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
