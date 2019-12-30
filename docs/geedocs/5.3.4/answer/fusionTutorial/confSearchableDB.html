@@ -1,0 +1,223 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Configuring a Searchable Database &#8212; Google Earth Enterprise 5.3.4 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Creating a Map Database" href="createMapDB.html" />
+    <link rel="prev" title="Specifying Search Fields for Individual Layers" href="searchFldsForLayers.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="createMapDB.html" title="Creating a Map Database"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="searchFldsForLayers.html" title="Specifying Search Fields for Individual Layers"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionTutorial.html" accesskey="U">Fusion Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="searchFldsForLayers.html"
+                        title="previous chapter">Specifying Search Fields for Individual Layers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="createMapDB.html"
+                        title="next chapter">Creating a Map Database</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp3.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp3.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="configuring-a-searchable-database">
+<h1>Configuring a Searchable Database<a class="headerlink" href="#configuring-a-searchable-database" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>Search tabs allow Google Earth EC and Google Maps users to search
+external databases on Google Earth Enterprise Servers as well as
+non-Google servers. For example, if you have a database of San
+Francisco neighborhoods that contains specific information that
+your users need about each neighborhood, you can add a search tab
+called SF Neighborhoods and configure it to search for
+neighborhoods in your database, even if that database is stored on
+another server. Google distributes some sample databases with the
+Google Earth Enterprise Server.</p>
+<p>The first thing you need to do is create a search tab definition
+using the Search tabs page of Google Earth Enterprise Server. Then
+you can associate the search tab with a published database. The
+exercises in this lesson show you how to perform both steps.</p>
+<ul class="simple">
+<li><a class="reference internal" href="#define-search-tab"><span class="std std-ref">Define Search Tab</span></a></li>
+<li><a class="reference internal" href="#add-search-tab"><span class="std std-ref">Add Search Tab To Your Database</span></a></li>
+</ul>
+<p class="rubric" id="define-search-tab">Define Search Tab</p>
+<p class="rubric" id="to-define-a-new-search-tab">To define a new search tab:</p>
+<ol class="arabic">
+<li><p class="first">Access the Google Earth Enterprise Server Admin console in a
+browser window by going to <em>myserver.mydomainname</em>.com/admin,
+replacing <em>myserver</em> and <em>mydomainname</em> with your server and
+domain.</p>
+</li>
+<li><p class="first">Sign in with the default credentials:</p>
+<ul class="simple">
+<li>Username: <em>geapacheuser</em></li>
+<li>Password: <em>geeadmin</em></li>
+</ul>
+</li>
+<li><p class="first">Click <strong>Search tabs</strong>.</p>
+</li>
+<li><p class="first">Click <strong>Create</strong> <strong>new</strong>. The Create Search Definition dialog
+appears.</p>
+<p><img alt="Create Search Definition dialog" src="../../images/serverCreateSearchDefinition.png" /></p>
+</li>
+<li><p class="first">Enter <strong>SFNeighborhoods</strong> in the <strong>Name</strong> field as the unique
+name for your search tab.</p>
+</li>
+<li><p class="first">Enter <strong>San Francisco Neighborhoods</strong> in the <strong>Label</strong> field.</p>
+<p>This label will appear on the search tab that displays with
+your database in Google Earth EC.</p>
+</li>
+<li><p class="first">Enter <strong>/gesearch/ExampleSearch</strong> in the <strong>URL</strong> field.</p>
+<p>The <strong>ExampleSearch</strong> is one of the search plug-ins that are
+available with Google Earth Enterprise Server.
+<strong>ExampleSearch</strong> provides a searchable database of information
+about San Francisco neighborhoods.</p>
+</li>
+<li><p class="first">Enter <strong>flyToFirstElement=true&amp;displayKeys;=location</strong> in the
+<strong>Additional query parameters</strong> field.</p>
+<p>These query parameters specify that Google Earth EC flies to
+the first element of your search results and displays the
+location key in the results.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">When a Google Earth EC user specifies a search value,
+the Key value is associated with the value specified by the
+user and added to the <code class="docutils literal notranslate"><span class="pre">URL</span> <span class="pre">GET</span></code> request submitted to the
+example plug-in. It does not necessarily correlate to a field
+in the search database.</p>
+</div>
+</li>
+<li><p class="first">For <strong>Additional config parameters</strong>, leave the field blank.</p>
+</li>
+<li><p class="first">For <strong>Field Definitions</strong>, enter <strong>San Francisco Neighborhood</strong>
+in the <strong>Suggestion</strong> field and <strong>q</strong> in the <strong>Key</strong> field.</p>
+<p>This is one of the plug-in examples supplied with Google Earth
+Enterprise Server. For more information about plug-ins for
+search tabs and the other fields in this dialog, see <a class="reference internal" href="../geeServerAdmin/createSearchTabs.html"><span class="doc">Create Search tabs</span></a>.</p>
+</li>
+<li><p class="first">Click the <strong>Save</strong> button. Now the search tab is ready for you to add to
+your databases.</p>
+</li>
+</ol>
+<p class="rubric" id="add-search-tab">Add Search Tab To Your Database</p>
+<p class="rubric">To add search tabs to your database:</p>
+<ol class="arabic">
+<li><p class="first">In Google Earth Enterprise Server, click <strong>Databases</strong> on the
+Admin console.</p>
+<p>The Databases page appears.</p>
+<p><img alt="GEE Server Database Publish" src="../../images/serverUnpublishSearchTab.png" /></p>
+</li>
+<li><p class="first">Check the box next to the <strong>SFHighways</strong> database that you
+built in <a class="reference internal" href="buildDatabase.html"><span class="doc">Defining and Building Databases</span></a> and click <strong>Unpublish</strong>.</p>
+<p>The <strong>Publish point</strong> and <strong>Virtual host</strong> fields update to
+<strong>unpublished</strong>.</p>
+<p>Even though you published the database before, you must publish
+it again to include the new search tab.</p>
+</li>
+<li><p class="first">Click the <strong>Publish</strong> button. The Publish dialog appears.</p>
+<p><img alt="Publish Search Definition dialog" src="../../images/serverDatabasePublish-searchtab.png" /></p>
+</li>
+<li><p class="first">Accept the default <strong>Publish point</strong> of the database name,
+<strong>SFHighways</strong> and the version number.</p>
+</li>
+<li><p class="first">Select <strong>SFNeighborhoods</strong> from the <strong>Search Tabs</strong> drop-down
+list.</p>
+</li>
+<li><p class="first">Click <strong>Publish</strong>.</p>
+<p>Google Earth Enterprise Server publishes the <strong>SFHighways</strong>
+database with the associated <strong>SFNeighborhoods</strong> search tab.</p>
+</li>
+<li><p class="first">Launch Google Earth EC and log in to your server.</p>
+</li>
+</ol>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If you have logged in to this server with Google
+Earth EC previously, log out, clear your cache, and log back
+in. See <a class="reference internal" href="../googleEarthEnterpriseClient/clearGoogleEarthEC.html"><span class="doc">Clearing the Google Earth EC cache</span></a>.</p>
+</div>
+<p>Google Earth EC displays your database with the <strong>SF
+Neighborhoods</strong> search tab you specified.</p>
+<p><img alt="EC Search Tab" src="../../images/ECSearchTab1.png" /></p>
+<p><img alt="EC With Search Tab and Search Results" src="../../images/ECSearchTab2.png" /></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="createMapDB.html" title="Creating a Map Database"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="searchFldsForLayers.html" title="Specifying Search Fields for Individual Layers"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionTutorial.html" >Fusion Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

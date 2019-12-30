@@ -1,0 +1,27 @@
+
+Snippet profiles page
+
+The
+
+Snippet profiles
+
+ page of the
+
+GEE Server Admin console
+
+ is where you manage Snippet profiles for use with 3D Fusion
+databases. Snippet profiles allow specific snippet needs to be managed
+and uniformly applied to all databases that require them. From this
+page, you can:
+
+Create new snippets:  Click Create new, add a name, and click Create.
+Select one or more snippets.  Click Save changes.
+
+Edit snippet profiles: Click a snippet name and edit it, then click
+Save changes.
+
+Delete a snippet by clicking Delete next to a snippet name.
+
+-[ Learn more ]-
+
+Manage snippet profiles
