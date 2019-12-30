@@ -1,0 +1,108 @@
+
+Fusion issues
+
+When you install GEE on a server, the software does a query for
+"hostname -f". Each time you build a resource, project, or database on
+the Fusion server, the initial "hostname -f" response is added to all
+the files in each asset’s subdirectory. Changing the hostname or
+moving assets from one server to another without updating the hostname
+in all places will make your Fusion system inoperable. To safely
+change your hostname, follow the instructions below.
+
+To change the hostname for a production system (GEE Server only, no
+Fusion):
+
+Shut down the geserver daemon at /etc/init.d/geserver stop.
+
+Update the hostname and IP address to the correct entries for the
+machine.
+
+Edit /opt/google/gehttpd/htdocs/intl/en/tips/tip*.html and update any
+hardcoded URLs to the new machine URL.
+
+Remove the contents of /gevol/published_dbs/stream_space and
+/gevol/published_dbs/search_space.
+
+Change directory to /tmp and execute sudo -u gepguser
+/opt/google/bin/geresetpgdb.
+
+Start the GEE Server: /etc/init.d/geserver start.
+
+To change the hostname for a development system (both Fusion and GEE
+Server):
+
+Shut down both the gefusion and geserver daemons:
+/etc/init.d/gefusion stop /etc/init.d/geserver stop
+
+Update the hostname and IP address to the correct entries for the
+machines.
+
+If needed, edit the /etc/hosts file to update the IP address and
+hostname entries for the production machine.
+
+Execute /opt/google/bin/geconfigureassetroot --fixmasterhost.
+
+Back up the following files to /tmp or another archive folder:
+/gevol/assets/.config/volumes.xml
+/gevol/assets/.config/PacketLevel.taskrule
+/gevol/assets/.userdata/serverAssociations.xml
+/gevol/assets/.userdata/snippets.xml  Replace assets with the name of
+your asset root. For example, /gevol/tutorial.
+
+Edit the /gevol/assets/.userdata/snippets.xml file and update the
+hardcoded URLs to match the new hostname URL of the production
+machine.
+
+Edit /opt/google/gehttpd/htdocs/intl/en/tips/tip*.html and update any
+hardcoded URLs to the new machine URL.
+
+Remove the contents of /gevol/published_dbs/stream_space and
+/gevol/published_dbs/search_space.
+
+Change directory to /tmp and execute  sudo -u gepguser
+/opt/google/bin/geresetpgdb.
+
+Start the geserver and gefusion services:  /etc/init.d/geserver start
+/etc/init.d/gefusion start  You can now change the server associations
+and publish the databases.
+
+To change the server associations and publish the databases:
+
+Log in to Fusion as a user (not as root) by entering fusion on the
+command line.
+
+Select Tools > Server Associations Manager.
+
+Edit the default_ge and default_mapentries and update the URL to match
+the hostname of the development machine.
+
+Edit the remaining entries for the production server associations and
+update the URL to the new production machine URL, then close the
+Server Associations Manager.
+
+Select Tools > Asset Manager.
+
+Navigate to the Databases folder, right-click 3D database, and select
+Publish.
+
+From the Publish menu, select default_ge and publish to the local
+development machine. Repeat for the production machine.
+
+Right-click 2D database and select Publish.
+
+From the Publish menu, select default_map and publish to the local
+development machine. Repeat for the production machine.
+
+To verify that the databases are published and working:
+
+Connect a web browser to http://production/default_map.
+
+Connect a web browser to http://development/default_map.
+
+Connect GE Enterprise Client to http://production.
+
+Connect GE Enterprise Client to http://development.
+
+Note: During testing, you can check
+  "/opt/google/gehttpd/logs/access_log" and "error_log" to determine
+  if any errors are reported by Apache.
