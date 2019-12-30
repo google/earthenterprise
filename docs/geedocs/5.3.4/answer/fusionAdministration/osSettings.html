@@ -1,0 +1,144 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Operating System Settings That May Affect Fusion &#8212; Google Earth Enterprise 5.3.4 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Command reference" href="commandReference.html" />
+    <link rel="prev" title="Troubleshoot push/publishing issues" href="troubleshootPushPublishIssues.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="commandReference.html" title="Command reference"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="troubleshootPushPublishIssues.html" title="Troubleshoot push/publishing issues"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" accesskey="U">Fusion Administration</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="troubleshootPushPublishIssues.html"
+                        title="previous chapter">Troubleshoot push/publishing issues</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="commandReference.html"
+                        title="next chapter">Command reference</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="operating-system-settings-that-may-affect-fusion">
+<h1>Operating System Settings That May Affect Fusion<a class="headerlink" href="#operating-system-settings-that-may-affect-fusion" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>The Linux operating system implements several limits that may prevent
+Fusion processes from running correctly, particularly when building large
+projects or databases.</p>
+<p>You may need to reboot your system after making the configuration changes
+below to ensure that the new configuration takes effect.</p>
+<p class="rubric" id="number-of-processes">Number of processes</p>
+<p>Linux limits the number of processes that each user can run. Since Fusion
+runs many processes to build assets in parallel, you may need to
+increase the limit by adding the following lines to
+<code class="docutils literal notranslate"><span class="pre">/etc/security/limits.conf</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gefusionuser  soft    nproc   &lt;num_procs&gt;
+gefusionuser  hard    nproc   &lt;num_procs&gt;
+</pre></div>
+</div>
+<p>Fusion starts up to one process per core, plus two more (for the system manager
+and resource provider). <code class="docutils literal notranslate"><span class="pre">&lt;num_procs&gt;</span></code> should be considerably larger than
+that number to allow for operating system processes.</p>
+<p class="rubric" id="number-of-open-files">Number of open files</p>
+<p>Linux also limits the number of files each process can open at once.
+Since Fusion may open many files when building an imagery project, for
+example, you may need to increase the limit by adding the following lines
+to <code class="docutils literal notranslate"><span class="pre">/etc/security/limits.conf</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gefusionuser  soft    nofile   &lt;num_files&gt;
+gefusionuser  hard    nofile   &lt;num_files&gt;
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;num_files&gt;</span></code> should be at least the number of resources in your
+largest project, plus some extra to allow for the additional files Fusion
+uses, such as configuration files.</p>
+<p class="rubric" id="number-of-memory-maps">Number of memory mappings</p>
+<p>Fusion uses memory mapping when reading some types of files. Since Linux
+limits the number of memory mappings each process can define, you may
+need to add the following lines to <code class="docutils literal notranslate"><span class="pre">/etc/sysctl.conf</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>vm.max_map_count = &lt;num_maps&gt;
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;num_maps&gt;</span></code> should be more than twice the number of resources in your
+largest project.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="commandReference.html" title="Command reference"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="troubleshootPushPublishIssues.html" title="Troubleshoot push/publishing issues"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" >Fusion Administration</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
