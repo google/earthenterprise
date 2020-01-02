@@ -3,28 +3,33 @@ import os, random, fnmatch, subprocess, datetime
 from subprocess import Popen
 import shutil
 
+from xml.etree.ElementTree import parse
+
 # Re-use some of the functionalities
 import assets
 
 
 MISC_XML_PATH = os.path.join(assets.ASSET_ROOT, ".config", "misc.xml")
 
-
 @step("Turn minification <status>")
 def turn_minification(status):
     "Turn off minification in misc.xml."
 
-    if status == "off":
-        sedFilter = "s/<UseMinification>1<\/UseMinification>/<UseMinification>0<\/UseMinification>/"
+    newStatus = {"off": "0",
+                 "on":  "1"}[status]
 
-    elif status == "on":
-        sedFilter = "s/<UseMinification>0<\/UseMinification>/<UseMinification>1<\/UseMinification>/"
+    miscTree = parse(MISC_XML_PATH)
 
-    else:
-        raise Exception('Can only turn minification "on" or "off"')
+    for config in miscTree.iter('MiscConfigStorage'):
+        minificationCount = len(list(config.iter('UseMinification')))
+        if minificationCount == 0:
+            minification = ElementTree.SubElement(config, 'UseMinification')
+            minification.text = newStatus
+        else:
+            for useMin in config.iter('UseMinification'):
+                useMin.text = newStatus
 
-    commandLine = ["sed", "-i", "-e", sedFilter, MISC_XML_PATH]
-    assets.call(commandLine, "Failed to set minification status.")
+    miscTree.write(MISC_XML_PATH)
     
 
 def run_and_wait(command):
@@ -48,4 +53,7 @@ def restart_fusion():
 def verify_minification(first, second):
     firstDepCount = len(subprocess.check_output(["/opt/google/bin/gequery", "--dependencies", os.path.join(assets.IMAGERY_PROJECT_PATH, first)]).splitlines())
     secondDepCount = len(subprocess.check_output(["/opt/google/bin/gequery", "--dependencies", os.path.join(assets.IMAGERY_PROJECT_PATH, second)]).splitlines())
+    print "firstDepCount = {} secondDepCount = {}".format(firstDepCount, secondDepCount)
+    assert(firstDepCount == 119)
+    assert(secondDepCount == 101)
     assert(firstDepCount > secondDepCount)
