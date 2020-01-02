@@ -1,4 +1,4 @@
-from getgauge.python import step, before_scenario, Messages
+from getgauge.python import step
 import os, random, fnmatch, subprocess, datetime
 from subprocess import Popen
 import shutil
