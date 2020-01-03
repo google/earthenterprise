@@ -286,7 +286,6 @@ class StateUpdater::SetBlockingStateVisitor : public default_dfs_visitor {
     StateUpdater & updater;
     DependentStateTree & tree;
     const AssetDefs::State newState;
-    // These are intended for things not in the dependency tree. 
     // This is a shared_ptr because the visitor will be copied several times
     // during the course of the traversal.
     const std::shared_ptr<RecalcSet> hasBlockingInputs;
