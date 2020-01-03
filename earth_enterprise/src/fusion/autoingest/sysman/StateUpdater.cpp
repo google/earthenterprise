@@ -316,9 +316,7 @@ class StateUpdater::SetBlockingStateVisitor : public default_dfs_visitor {
           auto & data = tree[vertex];
           data.state = version->state;
 
-          if (tree[vertex].inDepTree){  // This condition should always be true for this visitor. Maybe take this out later?
-            // Indiscriminately add all parents and listeners. Things in the 
-            // dependency tree will remove themselves as they are visited.
+          if (AssetDefs::Canceled == newState || AssetDefs::Blocked == newState || AssetDefs::Failed == newState){
             hasBlockingChildren->insert(version->parents.begin(), version->parents.end());
             hasBlockingInputs->insert(version->listeners.begin(), version->listeners.end());
           }
@@ -346,7 +344,7 @@ class StateUpdater::SetBlockingStateVisitor : public default_dfs_visitor {
         DependentStateTreeVertexDescriptor vertex,
         const DependentStateTree &) const {
       const AssetVertex & data = tree[vertex];
-      notify(NFY_PROGRESS, "Calculating state for '%s' in SetBlockingStateVisitor", data.name.toString().c_str());
+      notify(NFY_PROGRESS, "Calculating state for '%s'", data.name.toString().c_str());
 
       // Set the state for assets in the dependent tree.
       if (data.inDepTree) {
@@ -362,7 +360,7 @@ class StateUpdater::SetBlockingStateVisitor : public default_dfs_visitor {
       else {
         auto version = updater.storageManager->Get(data.name);
         if (hasBlockingInputs->find(data.name) != hasBlockingInputs->end() && 
-            version->InputStatesAffectMyState(newState, true)) {
+            version->InputStatesAffectMyState(AssetDefs::Blocked, true)) {
           SetState(vertex, AssetDefs::Blocked, {0,0}, true );
         }
 
@@ -374,8 +372,9 @@ class StateUpdater::SetBlockingStateVisitor : public default_dfs_visitor {
     }
 };
 
-
-
+/**********************************************
+* StateUpdater
+**********************************************/
 void StateUpdater::SetStateForRefAndDependents(
     const SharedString & ref,
     AssetDefs::State newState,
