@@ -87,6 +87,8 @@ sudo yum install -y epel-release
 
 ```bash
 sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+sudo yum-config-manager --enable rhel-7-server-rhui-optional-rpms
+sudo yum-config-manager --enable rhel-7-server-rhui-extras-rpms
 ```
 
 ### CentOS 6
