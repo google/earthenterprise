@@ -385,6 +385,7 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
         'OpenLDAP and ' +
         'OpenSSL and ' +
         'Skia 5.1.2'
+ 
     type = BINARY
     autoFindProvides = true
     autoFindRequires = true
@@ -397,6 +398,7 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
 
     if ("${findBuildNumber()}.${rpmPlatformString}".contains('el6')) {
         requires('python27')
+        requires('python27-lxml')
     }
 
     requiresCommands(packageSharedCommands +

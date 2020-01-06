@@ -98,6 +98,7 @@ python XML to improve security. 1582 Fix asset version state calculation
 unit tests. 1586 Permissions issue on download_tutorial.sh 1591 License 
 file for defusedxml added. 1593 Resolve python dependency issues.
 
+
 -[ Known Issues ]-
 
       Number  Description  Resolution  4  Google basemap fails to load

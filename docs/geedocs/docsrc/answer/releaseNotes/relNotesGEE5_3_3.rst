@@ -21,7 +21,7 @@ Release notes: Open GEE 5.3.3
       Previously, ``getop`` could not display information while system manager
       was in the middle of major calculations. Now, this restriction has been
       removed for most calculations, such as when system manager is determining
-      which resources overlap. 
+      which resources overlap.
 
       **Improved memory usage reporting for caches**.
       The memory usage estimation for the asset and
@@ -76,6 +76,10 @@ Release notes: Open GEE 5.3.3
            - A memory management bug in XML processing was fixed,
              resulting in lower memory utilization and significantly improved
              performance.
+         * - 1577
+           - Use defusedxml in server code
+           - Added defusedxml as a dependecy.  Using defusedxml in place of
+             python XML to improve security.
 
       .. rubric:: Known Issues
 
