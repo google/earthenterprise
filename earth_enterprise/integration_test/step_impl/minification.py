@@ -49,11 +49,11 @@ def restart_fusion():
     run_and_wait("sudo service gefusion status")
     
 
-@step("Verify project <first> has more dependencies than project <second>")
-def verify_minification(first, second):
+@step("Verify project <first> has <first_count> dependencies and project <second> has <second_count>")
+def verify_minification(first, first_count, second, second_count):
     firstDepCount = len(subprocess.check_output(["/opt/google/bin/gequery", "--dependencies", os.path.join(assets.IMAGERY_PROJECT_PATH, first)]).splitlines())
     secondDepCount = len(subprocess.check_output(["/opt/google/bin/gequery", "--dependencies", os.path.join(assets.IMAGERY_PROJECT_PATH, second)]).splitlines())
-    print "firstDepCount = {} secondDepCount = {}".format(firstDepCount, secondDepCount)
-    assert(firstDepCount == 119)
-    assert(secondDepCount == 101)
-    assert(firstDepCount > secondDepCount)
+    firstCountAsInt = int(first_count)
+    secondCountAsInt = int(second_count)
+    assert(firstDepCount == firstCountAsInt)
+    assert(secondDepCount == secondCountAsInt)
