@@ -47,5 +47,4 @@ GEE minification test: Test that images built with minification have more depend
 * Add imagery resource "sf_hires_no_minify" to project "without_minification"
 * Build imagery project "without_minification"
 * Wait for imagery project "without_minification" to reach state "Succeeded"
-* Verify project "with_minification" has more dependencies than project "without_minification"
-
+* Verify project "with_minification" has "119" dependencies and project "without_minification" has "101"
