@@ -92,6 +92,10 @@ class MockVersion : public AssetVersionImpl {
     MockVersion(const MockVersion & that) : MockVersion() {
       name = that.name; // Don't add the suffix - the other MockVersion already did
     }
+
+    virtual bool InputStatesAffectMyState(AssetDefs::State stateByInputs, bool blockedByOfflineInputs) const override {return true;}
+    virtual bool ChildStatesAffectMyState() const override {return true;}
+
     virtual void DependentChildren(vector<SharedString> & d) const override {
       for(auto dependent : dependents) {
         d.push_back(dependent);
@@ -960,6 +964,10 @@ TEST_F(StateUpdaterTest, NotifyProgressFailed) {
 // notifications.
 TEST_F(StateUpdaterTest, Cancel) {
   GetBigTree(sm);
+
+  // The STARTING_STATE defined above is Blocked. If we don't set the state of "gp"
+  // to something else, it will not be updated.
+  GetMutableVersion(sm, "gp")->state = AssetDefs::InProgress;
   updater.SetStateForRefAndDependents(fix("p1"), AssetDefs::Canceled, [](AssetDefs::State) { return true; });
   
   assertStateSet(sm, "p1", 1);

@@ -351,10 +351,6 @@ class StateUpdater::SetBlockingStateVisitor : public default_dfs_visitor {
         // to run the handlers now.
         bool runHandlers = true;//UserActionRequired(newState);
         SetState(vertex, newState, {0, 0}, runHandlers);
-        if (hasBlockingInputs->find(data.name) != hasBlockingInputs->end())
-          hasBlockingInputs->erase(data.name);
-        if (hasBlockingChildren->find(data.name) != hasBlockingChildren->end())
-          hasBlockingChildren->erase(data.name);
       }
       else {
         auto version = updater.storageManager->Get(data.name);
@@ -362,8 +358,7 @@ class StateUpdater::SetBlockingStateVisitor : public default_dfs_visitor {
             version->InputStatesAffectMyState(AssetDefs::Blocked, true)) {
           SetState(vertex, AssetDefs::Blocked, {0,0}, true );
         }
-
-        if (hasBlockingChildren->find(data.name) != hasBlockingChildren->end() && 
+        else if (hasBlockingChildren->find(data.name) != hasBlockingChildren->end() && 
             version->ChildStatesAffectMyState()) {
           SetState(vertex, AssetDefs::Blocked, {0,0}, true );
         }
