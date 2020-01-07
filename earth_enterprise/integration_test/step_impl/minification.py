@@ -3,7 +3,7 @@ import os, random, fnmatch, subprocess, datetime
 from subprocess import Popen
 import shutil
 
-from xml.etree.ElementTree import parse
+from xml.etree.ElementTree import parse, SubElement
 
 # Re-use some of the functionalities
 import assets
@@ -23,7 +23,7 @@ def turn_minification(status):
     for config in miscTree.iter('MiscConfigStorage'):
         minificationCount = len(list(config.iter('UseMinification')))
         if minificationCount == 0:
-            minification = ElementTree.SubElement(config, 'UseMinification')
+            minification = SubElement(config, 'UseMinification')
             minification.text = newStatus
         else:
             for useMin in config.iter('UseMinification'):

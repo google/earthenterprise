@@ -410,6 +410,21 @@ Configure Fusion performance
       - ``ALL_GRAPH_OPS`` or ``2``: use all new operations regardless of
         performance impact
 
+      .. rubric:: Use Minification
+
+      Included in ``/gevol/assets/.config/misc.xml`` is a
+      ``UseMinification`` option that controls whether terrain and imagery 
+      levels are generated from the previous level or from the original source
+      file.  This allows reducing dependencies between levels in favor of 
+      increased memory use, and can increase performance in some situations by
+      increasing parallelism.
+      ``UseMinification`` can be set to the following values:
+      - ``0``: Each level is minified from the original source.  This increases
+        memory use, but decreases dependencies between resources.
+      - ``1``: Each level is minified from the previous level.  This increases
+        the number of dependencies between resources, but decreases memory use.
+
+
       .. rubric:: Learn more
 
       -  :doc:`../fusionAdministration/benchMarkOutcomesForTaskRule`
