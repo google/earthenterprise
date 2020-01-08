@@ -42,9 +42,19 @@ _fusionTutorial_ folder.
 
    ```bash
    cd earthenterprise/docs/geedocs/docsrc
-   rm -rf build
    make html
    ```
+
+   **NOTE**: To Generate HTML in Windows
+   ```
+   add this in your git config of your repo
+   cd earthenterprise
+   Add this line in .git/config under [core]
+    autocrlf = input
+   cd earthenterprise\docs\geedocs\docsrc
+   make html
+   ```
+
 
    Depending on your version of Open GEE, appropriate HTML folders will be
    updated when you execute `make`.
