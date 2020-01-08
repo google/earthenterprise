@@ -47,6 +47,7 @@ _fusionTutorial_ folder.
 
    **NOTE**: To Generate HTML in Windows
    ```
+   Open a cmd prompt as Administrator
    add this in your git config of your repo
    cd earthenterprise
    Add this line in .git/config under [core]
