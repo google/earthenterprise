@@ -129,7 +129,7 @@ void HandleTaskDone(const TaskDoneMsg & msg, MiscConfig::GraphOpsType graphOps) 
         stateUpdater->SetSucceeded(version);
       }
       else {
-        stateUpdater->SetFailed(version);
+        stateUpdater->SetStateForRefAndDependents(msg.verref, AssetDefs::Failed, AssetDefs::Finished);
       }
     }
     else if (!version) {

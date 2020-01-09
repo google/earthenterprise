@@ -347,10 +347,7 @@ class StateUpdater::SetBlockingStateVisitor : public default_dfs_visitor {
 
       // Set the state for assets in the dependent tree.
       if (data.inDepTree) {
-        // Check if we're going to recalculate the state below. If not, we need
-        // to run the handlers now.
-        bool runHandlers = true;//UserActionRequired(newState);
-        SetState(vertex, newState, {0, 0}, runHandlers);
+        SetState(vertex, newState, {0, 0}, true);
       }
       else {
         auto version = updater.storageManager->Get(data.name);
@@ -375,11 +372,13 @@ void StateUpdater::SetStateForRefAndDependents(
     function<bool(AssetDefs::State)> updateStatePredicate) {
   try {
     SharedString verref = AssetVersionImpl::Key(ref);
-    bool includeDepDescendents = !UserActionRequired(newState);
+    bool includeAllChildrenAndInputs = !UserActionRequired(newState);
+    // For all states except Failed, we will load dependent children into the tree
+    bool includeDependentChildren = newState != AssetDefs::Failed;
     DependentStateTree tree = BuildDependentStateTree(
-        verref, updateStatePredicate, includeDepDescendents, storageManager);
+        verref, updateStatePredicate, includeDependentChildren, includeAllChildrenAndInputs, storageManager);
       
-    if (AssetDefs::Canceled == newState)
+    if (AssetDefs::Canceled == newState || AssetDefs::Failed == newState)
       depth_first_search(tree, visitor(SetBlockingStateVisitor(*this, tree, newState)));
     else
       depth_first_search(tree, visitor(SetStateVisitor(*this, tree, newState)));
