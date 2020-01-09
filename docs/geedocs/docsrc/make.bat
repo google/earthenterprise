@@ -44,7 +44,7 @@ rmdir /S /Q ..\%OPENGEEVER%
 echo.Creating %OPENGEEVER% directory
 mkdir ..\%OPENGEEVER%
 echo.Copying %BUILDDIR%\html to ..\%OPENGEEVER% directory
-xcopy   /O /X /E /H /K .\%BUILDDIR%\html\* ..\%OPENGEEVER%
+xcopy /E /K .\%BUILDDIR%\html\* ..\%OPENGEEVER%
 
 goto end
 

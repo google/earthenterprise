@@ -47,9 +47,9 @@ _fusionTutorial_ folder.
 
    **NOTE**: To Generate HTML in Windows
    ```
-   Open a cmd prompt as Administrator
-   add this in your git config of your repo
+   Open a cmd prompt
    cd earthenterprise
+   add this in your git config of your repo
    Add this line in .git/config under [core]
     autocrlf = input
    cd earthenterprise\docs\geedocs\docsrc
