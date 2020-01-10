@@ -149,7 +149,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
         PublishManagerHelper.TARGET_PATH_TEMPL.format(
             db_publish_path, target_path))
 
-  def IsDefaultDb(self, publish_context_id):
+  def IsDefaultDatabase(self, publish_context_id):
     query_string = ("""
         SELECT publish_context_table.ec_default_db
         FROM publish_context_table
