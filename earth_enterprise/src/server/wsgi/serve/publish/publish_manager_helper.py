@@ -150,14 +150,18 @@ class PublishManagerHelper(stream_manager.StreamManager):
             db_publish_path, target_path))
 
   def IsDefaultDatabase(self, publish_context_id):
-    query_string = ("""
-        SELECT publish_context_table.ec_default_db
-        FROM publish_context_table
-        WHERE publish_context_table.publish_context_id = %s AND
-        publish_context_table.ec_default_db = TRUE
-        """)
-    results = self.DbQuery(query_string, (publish_context_id,))
-    return bool(results)
+    # Ensure the publish_context_id is valid
+    if publish_context_id != 0:
+      query_string = ("""
+          SELECT publish_context_table.ec_default_db
+          FROM publish_context_table
+          WHERE publish_context_table.publish_context_id = %s AND
+          publish_context_table.ec_default_db = TRUE
+          """)
+      results = self.DbQuery(query_string, (publish_context_id,))
+      if results:
+        return True
+    return False
 
   def HandleQueryRequest(self, request, response):
     """Handles query requests.
