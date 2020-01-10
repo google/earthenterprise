@@ -42,9 +42,9 @@ Release notes: Open GEE 5.3.4
          * - Number
            - Description
            - Resolution
-         * - Issue number
-           - Issue Description
-           - Issue Resolution
+         * - 1604
+           - WMS capability doesn't work with reverse proxies
+           - It now works, as long as the protocol (http vs https) matches
 
       .. rubric:: Known Issues
 
