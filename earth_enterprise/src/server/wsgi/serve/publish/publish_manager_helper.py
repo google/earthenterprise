@@ -156,13 +156,8 @@ class PublishManagerHelper(stream_manager.StreamManager):
         WHERE publish_context_table.publish_context_id = %s AND
         publish_context_table.ec_default_db = TRUE
         """)
-
     results = self.DbQuery(query_string, (publish_context_id,))
-
-    if results:
-      return True
-    else:
-      return False
+    return bool(results)
 
   def HandleQueryRequest(self, request, response):
     """Handles query requests.
