@@ -83,7 +83,7 @@ Portable Server 5.3.3
       Server solution.
 
       .. _Cutter_Installation:
-      .. rubric:: Cutter installation
+      .. rubric:: Cutter Installation
 
       The Cutter application is installed with GEE Server and is disabled by
       default. To enable it, you must set the ``--enable_cutter`` flag
@@ -98,15 +98,15 @@ Portable Server 5.3.3
       is the case for your server, you may consider designating a
       different directory as the storage area for Cutter.
 
-      .. _Portable_Globe_Server_Installation:
-      .. rubric:: Portable globe server installation
+      .. _Portable_Server_Installation:
+      .. rubric:: Portable Server Installation
 
       Refer to the `Portable Server Wiki
       page <https://github.com/google/earthenterprise/wiki/Portable-Server>`_
       for build and install instructions.
 
-      .. _Creating_Portable_Globe:
-      .. rubric:: Creating a portable globe
+      .. _Creating_Portable:
+      .. rubric:: Creating a Portable
 
       Creating a portable is accomplished with a simple web interface.
       You will use your mouse, or import a KML, to define a polygon, which
@@ -132,7 +132,7 @@ Portable Server 5.3.3
       .. _Before_You_Begin:
       .. rubric:: Before you begin
 
-      .. rubric:: Enable the cutter
+      .. rubric:: Enable the Cutter
 
       Before creating portables, you must enable the Cutter application from the
       command-line:
@@ -149,7 +149,7 @@ Portable Server 5.3.3
          certificate of the target server will not be verified during cutting.
 
       .. _Cutter_Interface:
-      .. rubric:: The Cutter interface
+      .. rubric:: The Cutter Interface
 
       To create a portable, navigate to
       ``http://yourserver/cutter``, where ``yourserver`` is the server
@@ -171,7 +171,7 @@ Portable Server 5.3.3
          increase build times and globe sizes.
 
       .. _Portable_Name:
-      .. rubric:: Portable name
+      .. rubric:: Portable Name
 
       The name defines the file name of the portable - a single-file format for
       sharing GEE maps and globes. Spaces, slashes, and double dots (..) will be
@@ -190,7 +190,7 @@ Portable Server 5.3.3
          overwritten.
 
       .. _Drawing_Polygon:
-      .. rubric:: Drawing the polygon
+      .. rubric:: Drawing the Polygon
 
       Once the portable name has been specified, you can define the
       geographic region to be cut by drawing a polygon. There are two ways to
@@ -208,7 +208,7 @@ Portable Server 5.3.3
       #. Click outside of the text field. Your polygon appears on the
          map, if you are running the deprecated Google Earth plug-in.
 
-      .. rubric:: Manually drawing the polygon
+      .. rubric:: Manually Drawing the Polygon
 
       *This method is only available if you have the deprecated
       Google Earth plug-in running in your browser.*
@@ -227,25 +227,24 @@ Portable Server 5.3.3
       You can view the KML of the shape you have drawn by selecting the
       **Enter polygon as KML** checkbox.
 
-      .. _Globe_Resolution:
-      .. rubric:: Globe resolution
+      .. _Portable_Resolution:
+      .. rubric:: Portable Resolution
 
-      The polygon you specified in the previous step defines your 'area of
-      interest.' This area will contain high-resolution imagery and
-      data, and search tabs will be created for information that lies
-      within this zone. The maximum and minimum resolutions are
-      specified as integers between 1 and 24. These correspond to the
-      zoom levels that are used in the Fusion server.
+      The polygon made in the previous step defines your *area of
+      interest*. This area will contain high-resolution content, and search
+      tabs will be created for information that lying within. The maximum and
+      minimum resolutions are specified as whole numbers between 1 and 24. These
+      correspond to the zoom levels used in GEE Fusion.
 
-      .. rubric:: Minimum resolution
+      .. rubric:: Minimum Resolution
 
       The zoom level for the polygon area is specified in the **Maximum
       resolution to extract** field.
 
       A minimum zoom level of 5-7 will present a decent-looking world to
       the user and will most likely include vector layers such as
-      international boundaries and state boundaries and main cities
-      without affecting the size of the ``.glb`` file very much. For
+      international boundaries, state boundaries, and major cities
+      without affecting the size of the portable file very much. For
       example:
 
       -  A cut globe with minimum and maximum resolution values set to 5
@@ -256,79 +255,79 @@ Portable Server 5.3.3
          is 120 MB.
 
       These numbers are small in comparison to the overall size of your
-      globe when a suitable maximum resolution has been selected. For
-      example, a globe that contains all of the city of Atlanta, GA, USA
+      database when a suitable maximum resolution has been selected. For
+      example, a globe that contains all of the city of Atlanta, GA
       in 1-foot resolution requires approximately 5 GB of storage. Even
       level 7 imagery, at 120 MB, is a small percentage of the overall
       globe size.
 
-      .. rubric:: Maximum resolution
+      .. rubric:: Maximum Resolution
 
       The area outside of the defined polygon will be included in the
       globe at a lower resolution, which is defined within the **Minimum
       resolution to extract** field. Areas near the polygon may be
       included at a higher resolution.
 
-      The maximum resolution of the cut globe will be no higher than the
-      maximum resolution of the source globe. For example, if the
-      maximum resolution in the cutter is specified at 24, but the
+      The maximum resolution of the portable will be no higher than the
+      maximum resolution of the source database. For example, if the
+      maximum resolution in Cutter is specified at 24, but the
       source imagery is at 18 (approximately 1-meter resolution), the
-      cut globe will contain level 18 imagery. You can leave this field
+      portable will contain level 18 imagery. You can leave this field
       blank to use the highest available imagery.
 
-      You may enter a lower number to reduce the size of your globe, by
+      You may enter a lower number to reduce the size of your portable, by
       not including the highest resolution imagery.
 
-      .. _Building_Globe:
-      .. rubric:: Building the globe
+      .. _Cutting_Database:
+      .. rubric:: Cutting the Database
 
       Click **Build** to start the build process. Depending on the size
       of your polygon, this can take from a few minutes to a few hours;
       likewise, file size will vary widely depending on the area
       selected and the desired resolution.
 
-      When the build is finished, a ``.glb`` file is created and a
-      download link appears to the file's location on the Earth Server.
+      When the build is finished, a portable file is created and a
+      download link appears to the file's location on the GEE Server.
       Save the file into the ``<portable-server-unpack-directory>/data``
-      directory with the other ``.glb`` files. Alternately, the globe
-      file can be copied onto portable media like a DVD, thumb drive, or
+      directory with the other portable files. Alternately, the portable
+      file can be copied onto other media like a DVD, thumb drive, or
       external hard drive to be delivered to users.
 
-      The ``.glb`` file contains all that you need to share your
-      portable globe — imagery, terrain, and vector assets, plus the
+      The portable file contains all that you need to share your
+      portable map or globe — imagery, terrain, vector assets, and the
       search database. For this reason, it is important to retain control
-      of your globe if it contains sensitive or proprietary information.
+      of the portable if it contains sensitive or proprietary information.
 
-      .. rubric:: Search tabs
+      .. rubric:: Search Tabs
 
-      When a globe is cut, the search tabs associated with the globe are
-      also bundled with the globe. However, because search plugins in
-      Google Earth Enterprise run within the Tomcat / Apache instance on
-      the Earth server, most search tabs will not work in a portable
-      globe.
+      When a database is cut, its search tabs are also bundled with the
+      portable. However, because search plugins in GEE Server run within the
+      Tomcat/Apache instance, most search tabs will not work with Portable
+      Server.
 
       The Portable Server uses its own search framework that allows
       Python code stored on the portable machine to execute in place of
       the GEE plugin.
 
-      .. rubric:: KML files
+      .. rubric:: KML Files
 
       When a portable globe is cut from a source containing KML links in
       the Layer panel:
 
-      -  KML files that are stored locally on the primary Earth Server
+      -  KML files that are stored locally on GEE Server
          will be bundled into the portable globe. Only the main KML file
          will be copied, not any links or files that are embedded as
          links in the main KML file. The default copy is not recursive.
-      -  KML links that refer to servers other than the primary Earth
+
+      -  KML links that refer to servers other than GEE
          Server are not copied. The layer will be visible in the client,
          but clicking the link will not cause any data to be displayed.
          If access to external servers is needed, a small KML file
-         should be stored locally on the primary Earth Server. This KML
+         should be stored locally on GEE Server. This KML
          file should contain a link to the intended external server.
 
       These behaviors can be modified if the globe is built from the
-      command line rather than from the GUI as described in the :ref:`Command
+      command-line rather than from the GUI as described in the :ref:`Command
       line reference <Command_Line_Reference>` section.
 
       .. rubric:: Historic Imagery
