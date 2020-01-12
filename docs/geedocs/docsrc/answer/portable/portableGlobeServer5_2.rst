@@ -366,29 +366,28 @@ Portable Server 5.3.3
       .. _Portable_Server:
       .. rubric:: Portable server
 
-      The portable server is a lightweight web server that runs on Linux
-      and Windows computers. The web server starts within seconds and
-      begins serving one of the globes that has been saved to the
-      ``data`` directory. Once the globe is served, it can be opened in
-      a web browser.
+      Portable Server is a lightweight web server for Windows and Linux
+      platforms. The web server starts within seconds and begins serving one of
+      the portables that has been saved to the ``data`` directory. Once the
+      portable is served, it can be viewed in a web browser.
 
-      .. _Serving_Globe:
-      .. rubric:: Serving a globe
+      .. _Serving_Portable:
+      .. rubric:: Serving a Portable
 
-      Copy the globe to be served into the ``data`` subdirectory (or
+      Copy the portable to be served into the ``data`` subdirectory (or
       whichever directory is specified as the ``globes_directory`` in
       ``portable.cfg``).
 
       #. To start serving run the following command in the directory where you
-         unpacked Portable Server:
+         installed Portable Server:
 
          ``python portable_server.py``
 
       #. Navigate to the Portable Server administrative page at
          ``http://localhost:9335``. If you have set a custom ``port``
-         number in ``portable.cfg``, substitute that for "9335".
+         number in ``portable.cfg``, substitute that for ``9335``.
 
-      You can select what globe is being served from the administrative
+      You can select what portable is being served from the administrative
       page. Click the |Portable folder icon| folder icon and you
       will see a screen where you can select what globe or map
       should be served by Portable Server.
@@ -397,10 +396,10 @@ Portable Server 5.3.3
       well. Click the |Portable menu icon| menu button,
       then select **Quit**.
 
-      .. _Broadcasting_Globe:
-      .. rubric:: Broadcasting a globe
+      .. _Broadcasting_Portable:
+      .. rubric:: Broadcasting a Portable
 
-      To share a globe with others on your network:
+      To share a portable with other users on the network:
 
       #. Make sure ``disable_broadcasting`` is set to ``False`` in your
          ``portable.cfg``.
