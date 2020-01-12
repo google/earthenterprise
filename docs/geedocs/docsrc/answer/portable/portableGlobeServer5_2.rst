@@ -1,8 +1,8 @@
 |Google logo|
 
-=============================
-Portable Globe and Server 5.2
-=============================
+=====================
+Portable Server 5.3.3
+=====================
 
 .. container::
 
@@ -46,81 +46,60 @@ Portable Globe and Server 5.2
       .. _Overview_Portable_Globe_Server:
       .. rubric:: Overview
 
-      The Google Earth Enterprise Portable Server solution enables
-      organizations to access portions of their custom globes in the
-      field when no network access may be available or possible. Using a
-      web interface, end users may select an area of interest to
-      download from a Google Earth Enterprise Server for offline use on
-      their Linux or Windows laptop with the Portable Server
-      application.
+      Google Earth Enterprise Portable Server enables organizations to access
+      portions of their enterprise maps and globes when network access may be
+      unavailable or unreliable. Using the GEE Cutter web application, you can
+      select an area of interest to download for use in isolated environments
+      and view these using Portable Server for Windows or Linux.
 
-      All data available within a specified area of interest is
-      downloaded and stored in a portable globe, including all
-      high-resolution imagery, terrain, vector data, KML files, and
-      searchable Point of Interest (POI) locations. Outside of the
-      specified area of interest, only low resolution imagery and
-      terrain will be stored in a portable globe. These levels of
-      resolution can be specified when the globe is cut.
+      All map and globe content within the area of interest is packaged in a
+      portable file, including all high-resolution imagery, terrain, vector
+      data, KML files, and searchable point of interest (POI) locations.
+      Outside the specified area of interest, only lower resolution imagery and
+      terrain will be kept. These levels of resolution are specified when the
+      portable map or globe is created with the GEE Cutter.
 
-      Portable globes may be specified, generated, and downloaded in as
-      little as a few minutes — depending on the area of coverage — to
-      support rapid preparation for first responders. Larger globes
-      may be built in advanced preparation for responders to have ready
-      on the shelf.
+      Portables can be created and downloaded in minutes, depending on the
+      coverage area, to support rapid distribution. Larger portables can be
+      built in advance to have *on the shelf*.
 
       |GEE portable diagram|
 
-      The Portable Server solution is made up of two applications:
+      The GEE Portable solution includes two applications:
 
-      -  The :ref:`globe cutter <Globe_Cutter_Installation>` tool, which is installed
-         on a production Google Earth Enterprise Server system hosting a
-         3D database. This tool allows end-users and administrators to
-         select, package, and download a portion of the 3D Earth as a
-         portable globe file.
-      -  The :ref:`portable server <Portable_Server>` is installed on Linux
-         or Windows machines in the field. It can operate in a
-         single-user mode for complete offline usage by one user, or can
-         broadcast a portable globe so that multiple Portable Server
-         users, and/or mobile users with compatible Android-based smart
-         phones, can view the same globe.
+      -  The :ref:`globe cutter <Globe_Cutter_Installation>` is bundled with GEE
+         Server and provides tools to select and area of interest and download
+         the portion of a map or globe as a portable file.
 
-      .. note::
+      -  The :ref:`portable server <Portable_Server>` can be deployed on Windows
+         or Linux platforms. It can run in single-user mode for local use only
+         or can broadcast portable maps and globes to multiple users on isolated
+         and open networks.
 
-         The Portable Server solution can also create portable
-         maps from a 2D map source. This document uses the term
-         *portable globe* only, but instructions apply to both globes
-         and maps.
-
-      .. _Installation_Portable_Globe_Server:
+      .. _Installation_Portable_Server:
       .. rubric:: Installation
 
-      This section describes installation of the two applications that
-      make up the Portable Server solution.
+      This section describes configuration and installation of the Portable
+      Server solution.
 
-      .. _Globe_Cutter_Installation:
-      .. rubric:: Globe cutter installation
+      .. _Cutter_Installation:
+      .. rubric:: Cutter installation
 
-      The portable globe cutter tool is installed with Google Earth
-      Enterprise Server Open Source. Globe cutting is disabled by
-      default; to enable it you must set the ``--enable_cutter`` flag
-      for ``geserveradmin`` from the command line:
+      The Cutter application is installed with GEE Server and is disabled by
+      default. To enable it, you must set the ``--enable_cutter`` flag
+      for ``geserveradmin`` from the command-line:
 
       ``# geserveradmin --enable_cutter``
 
-      By default, the cut globes will be stored in the
-      ``/opt/google/gehttpd/htdocs/cutter/globes`` directory. The cut
-      globes can be large, and many servers do not have sufficient
-      storage allocated in this directory for multiple globes. If this
+      Portables will be stored in the
+      ``/opt/google/gehttpd/htdocs/cutter/globes`` directory. These
+      can be large and many servers do not have sufficient
+      storage space in this directory for multiple portables. If this
       is the case for your server, you may consider designating a
-      different directory as the storage area for the cut globes.
+      different directory as the storage area for Cutter.
 
       .. _Portable_Globe_Server_Installation:
       .. rubric:: Portable globe server installation
-
-      The portable server is supported on:
-
-      -  Linux distributions Cent OS 7, RHEL 7, Ubuntu 14, Ubuntu 16
-      -  Windows 7 and 10
 
       Refer to the `Portable Server Wiki
       page <https://github.com/google/earthenterprise/wiki/Portable-Server>`_
@@ -129,64 +108,60 @@ Portable Globe and Server 5.2
       .. _Creating_Portable_Globe:
       .. rubric:: Creating a portable globe
 
-      Cutting a globe is accomplished with a simple web interface.
+      Creating a portable is accomplished with a simple web interface.
       You will use your mouse, or import a KML, to define a polygon, which
-      defines your 'area of interest.' This polygon not only defines the
+      defines your *area of interest*. This polygon not only defines the
       area that will display high-resolution imagery, but is also used
       by Fusion to create a localized search database.
 
       .. note::
 
-         The globe cutting processes are CPU and disk
-         intensive, as they are retrieving all data within the specified
-         polygon from the Earth Enterprise Server. This can affect the
-         overall performance of the Server, including slowing end-user
-         access.
+         The cutting processes are CPU and IO intensive, as they are
+         retrieving all data within the specified polygon from the GEE Server.
+         This can affect the overall performance of Server, including slowing
+         end-user access.
 
-         To mitigate performance impact to end users, you may consider:
+         To mitigate performance impact to other users, you may consider:
 
-         -  Limiting the number of users with access to globe cutting.
-         -  Creating pre-cut portable globes to host as downloadable
+         -  Limiting the number of users with access to cutting.
+         -  Creating pre-cut portables to host as downloadable
             files for portable users.
          -  Operating a separate GEE Server specifically to support
-            on-demand globe cutting needs.
+            on-demand cutting needs.
 
       .. _Before_You_Begin:
       .. rubric:: Before you begin
 
       .. rubric:: Enable the cutter
 
-      Before cutting a globe, you must enable the cutter from the
-      command line:
+      Before creating portables, you must enable the Cutter application from the
+      command-line:
 
       ``# geserveradmin --enable_cutter``
 
       .. note::
 
          **About authentication and SSL:** Cutting is not currently
-         supported on globes that require end-user authentication, e.g.,
+         supported for published databases that require authentication, e.g.,
          LDAP. One workaround is to allow unauthenticated access from
-         localhost on your Earth Enterprise Server. Refer to Apache
-         documentation to enable such a configuration. Cutting a
-         globe over HTTPS is supported; however the SSL certificate of
-         the target server will not be verified during cuting.
+         localhost on your GEE Server. Refer to Apache documentation to enable
+         such a configuration. Cutting over HTTPS is supported; however the SSL
+         certificate of the target server will not be verified during cutting.
 
-      .. _Globe_Cutter_Interface:
-      .. rubric:: The globe cutter interface
+      .. _Cutter_Interface:
+      .. rubric:: The Cutter interface
 
-      To create a portable globe, point your browser to
+      To create a portable, navigate to
       ``http://yourserver/cutter``, where ``yourserver`` is the server
-      on which Earth Enterprise Server is running. The **Globe Creator**
-      page appears.
+      on which GEE Server is running.
 
       |Cutter|
 
-      Select the globe you wish to cut your portable version from in
-      the drop-down menu.
+      Select the published database you wish to cut from the drop-down menu.
 
       .. note::
 
-         Additional options can be shown by clicking on the
+         Additional options can be shown by clicking the
          **Advanced** button after a cut region has been selected. These
          options are, namely, *Polygon level*. This setting is useful
          when cutting with large polygons, e.g., use 12 for a
@@ -195,34 +170,31 @@ Portable Globe and Server 5.2
          Use caution when changing them as they may dramatically
          increase build times and globe sizes.
 
-      .. _Globe_Name:
-      .. rubric:: Globe name
+      .. _Portable_Name:
+      .. rubric:: Portable name
 
-      The globe name defines the file name of this globe; it will be
-      created as a ``.glb`` file, which is a single-file format for
-      sharing Google Earth Enterprise globes. Spaces, slashes, and
-      double dots (..) will be converted to underscores in the saved
-      globe name.
+      The name defines the file name of the portable - a single-file format for
+      sharing GEE maps and globes. Spaces, slashes, and double dots (..) will be
+      converted to underscores in the final portable filename.
 
-      We recommend using a descriptive name for each globe, so that
-      others will know what geographic area, or what mission, the globe
+      It's recommend to use a descriptive name for each portable, so that
+      others will know the area of interest or the purpose the portable
       was created for.
 
       .. note::
 
-         Building a globe will overwrite any existing globes
-         with the same name. If multiple users are cutting globes, we
+         Building a portable will overwrite any existing portables
+         with the same name. If multiple users are Cutter, it's
          recommend assigning unique prefixes to each user for their
-         globe names to ensure that files are not accidentally
+         portable names to ensure that files are not accidentally
          overwritten.
 
       .. _Drawing_Polygon:
       .. rubric:: Drawing the polygon
 
-      Once the globe name has been specified, you can define the
-      geographic region to be cut by drawing a polygon on the globe.
-      There are two ways to draw the polygon, one of which has been
-      deprecated.
+      Once the portable name has been specified, you can define the
+      geographic region to be cut by drawing a polygon. There are two ways to
+      draw the polygon, one of which has been deprecated.
 
       .. rubric:: Defining the polygon with KML
          :name: defining-the-polygon-with-kml
@@ -236,13 +208,13 @@ Portable Globe and Server 5.2
       #. Click outside of the text field. Your polygon appears on the
          map, if you are running the deprecated Google Earth plug-in.
 
-      .. rubric:: Hand drawing the polygon
+      .. rubric:: Manually drawing the polygon
 
-      *This method is only available if you are have the deprecated
+      *This method is only available if you have the deprecated
       Google Earth plug-in running in your browser.*
 
       First, using the navigation controls in the plugin, zoom in to
-      the region of interest. To use your mouse to define the polygon,
+      the area of interest. To use your mouse to define the polygon,
       click the |Polygon icon| polygon icon in the globe window.
 
       Then, click the globe to define each point. You can use the
@@ -372,6 +344,7 @@ Portable Globe and Server 5.2
          historic imagery can be streamed from the Earth server. Once in
          the field, however, and disconnected from the Earth server, no
          historic imagery will be displayed.
+
       -  If historic imagery has been cached on the portable globe
          machine.
 
@@ -383,6 +356,13 @@ Portable Globe and Server 5.2
               download new images.**
             | You will be able to see areas that you have been to recently,
               but new image areas may appear blurry.
+
+
+
+
+
+
+
 
       .. _Portable_Server:
       .. rubric:: Portable server
