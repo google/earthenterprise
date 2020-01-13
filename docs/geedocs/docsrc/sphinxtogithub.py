@@ -35,8 +35,8 @@ class Replacer(object):
 
     def __init__(self, from_, to):
 
-        self.from_ = from_
-        self.to = to
+        self.from_ = from_.replace( '\\', '/')
+        self.to = to.replace( '\\', '/' )
 
     def process(self, text):
 

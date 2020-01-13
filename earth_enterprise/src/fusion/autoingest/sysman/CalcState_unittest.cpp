@@ -254,7 +254,7 @@ void TestAll(
         for (auto blockersOffline : {false, true}) {
           for (auto caresAboutInputs : caresAboutInputsOptions) {
             for (auto offlineBreaks: {false, true}) {
-              TestCalcState<TestLeafAssetVersionImplD>(startingState,
+              TestCalcState<TestAssetVersionD>(startingState,
                   byInputs, byChildren, blockersOffline, offlineBreaks,
                   hasChildren, caresAboutInputs, expectedStates);
             }

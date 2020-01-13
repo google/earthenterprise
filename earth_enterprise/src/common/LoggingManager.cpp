@@ -126,4 +126,6 @@ void LoggingManager::NotifyHandler(
   // Handle FATAL messages by exiting (this is the standard behavior of notify).
   if (severity == NFY_FATAL)
     exit(-1);
+
+  va_end(ap);
 }

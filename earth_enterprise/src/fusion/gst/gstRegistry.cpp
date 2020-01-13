@@ -258,8 +258,10 @@ gstValue *gstRegistry::locateTag(const char *tag, int create, uint32 type) {
     return nullptr;
 
   // separate tag from group path
-  char *itag = (char*)alloca(strlen(tag) + 1);
-  strcpy(itag, tag);
+  size_t taglen = strlen(tag) + 1;
+  char *itag = (char*)alloca(taglen);
+  strncpy(itag, tag, taglen);
+
   char *sep = strrchr(itag, '/');
   if (sep == nullptr)
     return nullptr;
@@ -286,8 +288,9 @@ gstRegistry::Group *gstRegistry::locateGroup(const char* tag, int create) {
   Group *tgrp, *grp = _root;
 
   // make a local copy so we can muck with it
-  char* itag = (char*)alloca(strlen(tag) + 1);
-  strcpy(itag, tag);
+  size_t taglen = strlen(tag) + 1;
+  char *itag = (char*)alloca(taglen);
+  strncpy(itag, tag, taglen);
 
   char* sep;
 
