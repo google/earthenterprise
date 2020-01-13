@@ -150,8 +150,20 @@ class PublishManagerHelper(stream_manager.StreamManager):
             db_publish_path, target_path))
 
   def IsDefaultDatabase(self, publish_context_id):
-    # Ensure the publish_context_id is valid
-    if publish_context_id != 0:
+    """
+    Checks whether the passed-in database is the default database or not. When
+    upgrading from older releases such as 5.1.2, the publish_context_table may
+    not have an entry for a published database, so we have to perform two
+    queries: one to get the list of databases and one to check if each database
+    is the default. It would simplify things somewhat to move the ec_default_db
+    field to the target_table database so that we can get all the data we want
+    with a single query. However, this would make the upgrade code more
+    complicated because we would have to manage 3 schemas: one from before we
+    added ec_default_db and two with the ec_default_db in different places.
+    This method seems to be the simplest overall option even though it requires
+    multiple queries.
+    """
+    if publish_context_id != 0: # Ensure the publish_context_id is valid
       query_string = ("""
           SELECT publish_context_table.ec_default_db
           FROM publish_context_table
