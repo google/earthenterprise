@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp5.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp5.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="configure-gee-server-5-1-0-for-ssl-https">
 <h1>Configure GEE Server 5.1.0 for SSL/HTTPS<a class="headerlink" href="#configure-gee-server-5-1-0-for-ssl-https" title="Permalink to this headline">¶</a></h1>
-<div class="docutils container">
-<div class="content docutils container">
+<div class="container">
+<div class="content container">
 <p>Data transmission between Google Earth EC and GEE Server occurs on
 unencrypted HTTP by default. However, you may have strict
 requirements that secure HTTP (HTTPS) be used for all data
@@ -188,7 +188,7 @@ by creating a configuration file with the naming convention:
 <code class="docutils literal notranslate"><span class="pre">&lt;Apache</span> <span class="pre">path&gt;/conf.d/virtual_servers/</span></code>.</p>
 <p>For example, to create a location-based virtual host with a
 configuration file that specifies SSL:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># /opt/google/bin$ ./geserveradmin --addvh test_ssl --ssl
+<div class="highlight-none notranslate"><div class="highlight"><pre># /opt/google/bin$ ./geserveradmin --addvh test_ssl --ssl
 Registering Virtual Host: test_ssl ...
 Virtual Host registration successful.
 Location-based Virtual Host created:
@@ -202,7 +202,7 @@ example,
 <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf.d/virtual_servers/test_ssl_host.location_ssl</span></code>,
 includes the <code class="docutils literal notranslate"><span class="pre">&lt;Location&gt;</span></code> directives for SSL, in this case,
 <code class="docutils literal notranslate"><span class="pre">test_ssl</span></code>.</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Location “/test_ssl_host/*”&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre>&lt;Location “/test_ssl_host/*”&gt;
    SetHandler fdb-handler
    SSLRequireSSL
    SSLVerifyClient none

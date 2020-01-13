@@ -90,17 +90,22 @@ Release notes: Open GEE 5.3.3
            - geglxinfo will parse all meshes in terrain packets
          * - 1511
            - Missing Systemrc.h causes compiler error
+           - Remove requirement for Systemrc.h
          * - 1517
            - geglxinfo should parse vector packets
            - geglxinfo will parse vector packets
          * - 1530
+           - Cancel command is complicated
            - Simplify cancel command
          * - 1532
            - Supplemental search fields should be escaped for HTML
              when viewing on an HTML page
+           - Escape supplemental search fields
          * - 1538
+           - Code coverage builds incompatible with scons cache
            - Make code coverage builds compatible with scons cache
          * - 1540
+           - Gradle wrapper is obsolete
            - Update gradle wrapper
          * - 1552
            - XML objects are not properly cleaned up
@@ -108,24 +113,32 @@ Release notes: Open GEE 5.3.3
              resulting in lower memory utilization and significantly improved
              performance.
          * - 1561
+           - Unused REST end point in asset manager
            - Remove unused asset manager REST endpoint
          * - 1564
+           - Apache does not build with crypto enabled
            - Apache builds with crypto enabled
          * - 1572
+           - Unused directory
            - Remove obsolete directory
          * - 1574
+           - Broken GLFS pointer for PyYAML tarball
            - Fix GLFS pointer for PyYAML tarball
          * - 1577
            - Use defusedxml in server code
            - Added defusedxml as a dependecy.  Using defusedxml in place of
              python XML to improve security.
          * - 1582
+           - Unit tests for asset version state calculation inaccurate
            - Fix asset version state calculation unit tests.
          * - 1586
+           - Wrong permissions on download_tutorial.sh
            - Permissions issue on download_tutorial.sh
          * - 1591
+           - New library defusedxml
            - License file for defusedxml added.
          * - 1593
+           - Python dependency issues for Python 2.7
            - Resolve Python dependency issues.
 
       .. rubric:: Known Issues

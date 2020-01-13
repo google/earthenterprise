@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp4.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp4.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="example-search-plug-in-python-code-sample">
 <h1>Example Search plug-in Python code sample<a class="headerlink" href="#example-search-plug-in-python-code-sample" title="Permalink to this headline">¶</a></h1>
-<div class="docutils container">
-<div class="content docutils container">
+<div class="container">
+<div class="content container">
 <p>The <code class="docutils literal notranslate"><span class="pre">ExampleSearch</span></code> search plug-in for GEE Server provides the
 interface to query a SQL database of San Francisco neighborhoods
 via a search tab in Google Earth EC or a browser. The following
@@ -132,7 +132,7 @@ query. The search query is standard SQL available at
 example, the following snippet shows the SQL query used to return
 the polygon perimeters of the neighborhoods listed in the
 “san_francisco_neighborhoods” SQL table:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>self.example_query = (
+<div class="highlight-none notranslate"><div class="highlight"><pre>self.example_query = (
   &quot;SELECT ${FUNC}(ST_Force_3DZ(the_geom)) AS the_geom,Area(the_geom),&quot;
   &quot;Perimeter(the_geom),sfar_distr,nbrhood, &quot;
   &quot;GeometryType(the_geom) AS geom_type &quot;

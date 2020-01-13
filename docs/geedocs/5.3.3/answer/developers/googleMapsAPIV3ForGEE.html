@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="google-maps-api-v3-for-gee">
 <h1>Google Maps API v3 for GEE<a class="headerlink" href="#google-maps-api-v3-for-gee" title="Permalink to this headline">¶</a></h1>
-<div class="docutils container">
-<div class="content docutils container">
+<div class="container">
+<div class="content container">
 <ul class="simple">
 <li><a class="reference internal" href="#overview"><span class="std std-ref">Overview</span></a></li>
 <li><a class="reference internal" href="#using-fusion-maps-api"><span class="std std-ref">Using the Fusion Maps API</span></a></li>
@@ -124,44 +124,44 @@ extensions.</p>
 <p>The following code snippet is a <a class="reference external" href="https://developers.google.com/maps/documentation/javascript/tutorial#HelloWorld">Hello
 World</a>
 example of using <code class="docutils literal notranslate"><span class="pre">geeCreateFusionMap</span></code> to load a map:</p>
-<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
-   <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;viewport&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;initial-scale=1.0, user-scalable=no&quot;</span> <span class="p">/&gt;</span>
-      <span class="p">&lt;</span><span class="nt">style</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span><span class="p">&gt;</span>
-         <span class="nt">html</span> <span class="p">{</span> <span class="k">height</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span> <span class="p">}</span>
-         <span class="nt">body</span> <span class="p">{</span> <span class="k">height</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span> <span class="k">margin</span><span class="p">:</span> <span class="mi">0</span><span class="kt">px</span><span class="p">;</span> <span class="k">padding</span><span class="p">:</span> <span class="mi">0</span><span class="kt">px</span> <span class="p">}</span>
-         <span class="p">#</span><span class="nn">map_canvas</span> <span class="p">{</span> <span class="k">height</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span> <span class="p">}</span>
-      <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Hello World - GEE 2D Map Example<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span class="nt">&lt;html&gt;</span>
+   <span class="nt">&lt;head&gt;</span>
+      <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">&quot;viewport&quot;</span> <span class="na">content=</span><span class="s">&quot;initial-scale=1.0, user-scalable=no&quot;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;style </span><span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
+         <span class="nt">html</span> <span class="p">{</span> <span class="k">height</span><span class="o">:</span> <span class="m">100</span><span class="o">%</span> <span class="p">}</span>
+         <span class="nt">body</span> <span class="p">{</span> <span class="k">height</span><span class="o">:</span> <span class="m">100</span><span class="o">%</span><span class="p">;</span> <span class="k">margin</span><span class="o">:</span> <span class="m">0px</span><span class="p">;</span> <span class="k">padding</span><span class="o">:</span> <span class="m">0px</span> <span class="p">}</span>
+         <span class="nf">#map_canvas</span> <span class="p">{</span> <span class="k">height</span><span class="o">:</span> <span class="m">100</span><span class="o">%</span> <span class="p">}</span>
+      <span class="nt">&lt;/style&gt;</span>
+      <span class="nt">&lt;title&gt;</span>Hello World - GEE 2D Map Example<span class="nt">&lt;/title&gt;</span>
 
       <span class="c">&lt;!-- Start by defining GEE_BASE_URL. --&gt;</span>
-      <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;</span>
+      <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
          <span class="kd">var</span> <span class="nx">GEE_BASE_URL</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">protocol</span> <span class="o">+</span> <span class="s1">&#39;//&#39;</span> <span class="o">+</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">host</span><span class="p">;</span>
-      <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+      <span class="nt">&lt;/script&gt;</span>
 
       <span class="c">&lt;!-- Include the provided Maps API v3 files.  Located in /opt/google/gehttpd/htdocs/maps/api/ --&gt;</span>
-         <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;/maps/api/bootstrap.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-         <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span>
-         <span class="na">src</span><span class="o">=</span><span class="s">&quot;/maps/api/fusion_extended_map.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+         <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;/maps/api/bootstrap.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+         <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span>
+         <span class="na">src=</span><span class="s">&quot;/maps/api/fusion_extended_map.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
 
          <span class="c">&lt;!-- geeServerDefs must be defined with the following script; insert name of your published 2D database --&gt;</span>
-         <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;/YourPublishedDatabase/query?request=Json&amp;var=geeServerDefs&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+         <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;/YourPublishedDatabase/query?request=Json&amp;var=geeServerDefs&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
 
-         <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;</span>
+         <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
             <span class="kd">function</span> <span class="nx">initialize</span><span class="p">()</span> <span class="p">{</span>
                <span class="kd">var</span> <span class="nx">myOptions</span> <span class="o">=</span> <span class="p">{</span>
                   <span class="nx">center</span><span class="o">:</span> <span class="k">new</span> <span class="nx">google</span><span class="p">.</span><span class="nx">maps</span><span class="p">.</span><span class="nx">LatLng</span><span class="p">(</span><span class="o">-</span><span class="mf">34.397</span><span class="p">,</span> <span class="mf">150.644</span><span class="p">),</span> <span class="nx">zoom</span><span class="o">:</span> <span class="mi">8</span>
                   <span class="p">};</span>
             <span class="kd">var</span> <span class="nx">geemap</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">geeCreateFusionMap</span><span class="p">(</span><span class="s2">&quot;map_canvas&quot;</span><span class="p">,</span> <span class="nx">geeServerDefs</span><span class="p">,</span> <span class="nx">myOptions</span><span class="p">);</span>
             <span class="p">}</span>
-         <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+         <span class="nt">&lt;/script&gt;</span>
 
-      <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">body</span> <span class="na">onload</span><span class="o">=</span><span class="s">&quot;initialize()&quot;</span><span class="p">&gt;</span>
+      <span class="nt">&lt;/head&gt;</span>
+      <span class="nt">&lt;body</span> <span class="na">onload=</span><span class="s">&quot;initialize()&quot;</span><span class="nt">&gt;</span>
          <span class="c">&lt;!-- Be sure there is an element on the page with the id you specified above (map_canvas in this case). --&gt;</span>
-         <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;map_canvas&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;width:100%; height:100%&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-      <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-   <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+         <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;map_canvas&quot;</span> <span class="na">style=</span><span class="s">&quot;width:100%; height:100%&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+      <span class="nt">&lt;/body&gt;</span>
+   <span class="nt">&lt;/html&gt;</span>
 </pre></div>
 </div>
 <p class="rubric" id="factory-geecreatefusionmap">Factory geeCreateFusionMap</p>
@@ -188,7 +188,7 @@ Maps Database.</li>
 <p>The <code class="docutils literal notranslate"><span class="pre">Factory</span></code> and <code class="docutils literal notranslate"><span class="pre">Method</span> <span class="pre">extensions</span></code> are described in the
 following tables.</p>
 <p class="rubric" id="factory">Factory</p>
-<table border="1" class="colwidths-given docutils">
+<table border="1" class="docutils">
 <colgroup>
 <col width="44%" />
 <col width="56%" />
@@ -212,7 +212,7 @@ before any methods that display Fusion layers on top of the map.</td>
 <p class="rubric" id="methodextensions">Method extensions</p>
 <p><code class="docutils literal notranslate"><span class="pre">geeCreateFusionMap</span></code> Method extensions are extensions of the
 Google Maps API v3 <code class="docutils literal notranslate"><span class="pre">google.maps.Map</span></code> class.</p>
-<table border="1" class="colwidths-given docutils">
+<table border="1" class="docutils">
 <colgroup>
 <col width="32%" />
 <col width="16%" />
