@@ -94,6 +94,10 @@ class TreeNumbering {
  public:
   TreeNumbering(int branching_factor, int depth, bool mangle_second_row);
   virtual ~TreeNumbering();
+  TreeNumbering(const TreeNumbering&) = delete;
+  TreeNumbering(TreeNumbering&&) = delete;
+  TreeNumbering& operator=(const TreeNumbering&) = delete;
+  TreeNumbering& operator=(TreeNumbering&&) = delete;
 
   // Return the total number of nodes in the tree
   int num_nodes() const {
@@ -199,8 +203,6 @@ class TreeNumbering {
 
   // Store the number of nodes in the tree at levels <= the given level
   int *nodes_at_levels_;
-
-  DISALLOW_COPY_AND_ASSIGN(TreeNumbering);
 };
 
 }  // namespace qtpacket

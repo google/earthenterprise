@@ -21,7 +21,7 @@ sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.
 
 ```bash
 sudo wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
-sudo yum install -y epel-release
+sudo yum install -y epel-release ius-release
 ```
 
 ### RHEL 6
@@ -77,8 +77,17 @@ sudo yum install -y git-lfs
 
 For all versions of CentOS and RHEL, install the standard development/build tools:
 
+### EL7
+
 ```bash
 sudo yum install -y ant bzip2 doxygen gcc-c++ patch python-argparse python-lxml python-setuptools \
+  swig tar
+```
+
+### EL6
+
+```bash
+sudo yum install -y ant bzip2 doxygen gcc-c++ patch python-argparse python27-lxml python27-setuptools \
   swig tar
 ```
 
@@ -121,7 +130,7 @@ sudo yum install -y \
   bison-devel boost-devel cmake daemonize freeglut-devel \
   gdbm-devel geos-devel giflib-devel GitPython \
   libcap-devel libmng-devel libpng12-devel libX11-devel libXcursor-devel \
-    libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
+  libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel \
   perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-devel \
   rpm-build rpmrebuild rsync scons \
@@ -136,9 +145,9 @@ sudo yum install -y \
   bison-devel boost-devel cmake daemonize freeglut-devel \
   gdbm-devel geos-devel gettext giflib-devel GitPython \
   libcap-devel libmng-devel libpng-devel libX11-devel libXcursor-devel \
-    libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
+  libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel pcre pcre-devel \
-  perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-devel python-unittest2 \
+  perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-devel python27-devel python-unittest2 \
   rpm-build rpmrebuild rsync scons shunit2 \
   xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
 ```
@@ -201,3 +210,149 @@ sudo yum install -y http://download-ib01.fedoraproject.org/pub/epel/6/x86_64/Pac
 ### CentOS 6 and RHEL 6
 
 shunit2 was installed in a previous step.
+
+## Install Python 2.7
+
+### CentOS 7 and RHEL 7
+
+Python 2.7 is installed as a system default.
+
+### CentOS 6 and RHEL 6
+
+```bash
+sudo yum install -y python27
+```
+
+### Building on fips-enabled machines
+
+In some circumstances on stig-ed machines, where md5 cryptography is used, fips will prevent OpenGee from being built. When trying to build, a message similar to the following will be displayed 
+
+```bash
+$ scons -j4 internal=1 build
+scons: Reading SConscript files ... 
+scons: done reading SConscript files.
+scons: Building targets ... 
+scons: *** [build] ValueError : error:060800A3:digital envelope routines:EVP_DigestInit_ex:disabled for fips
+scons: building terminated because of errors.
+```
+
+## prerequisites
+
+* grub2
+* openssl 1.0.1+
+
+# Disabling fips
+
+Before beginning, make sure that fips is indeed enabled. 1 - enabled, 0 - disabled
+```bash
+$ sudo cat /proc/sys/crypto/fips_enabled
+1
+```
+
+First remove all dracut-fips packages
+```bash
+$ sudo yum remove -y dracut-fips*
+```
+
+It is recommended that initramfs is backed up
+```bash
+$ sudo cp -p /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r).backup
+```
+Then, recreate a new initramfs file
+
+```bash
+$ sudo dracut -f
+```
+
+Now, disable ``fips=1`` from the kernel command line. Do this, by modifying command line of the current kernel in ``grub.cfg``. This is done by adding the option ``fips=0`` to the `GRUB_CMDLINE_LINUX` line in ``/etc/default/grub`` e.g.
+
+``GRUB_CMDLINE_LINUX="console=tty0 crashkernel=auto console=ttyS0,115200"``
+
+Would become
+
+``GRUB_CMDLINE_LINUX="console=tty0 crashkernel=auto console=ttyS0,115200 fips=0"``
+
+Now, after making the change to ``/etc/default/grub``, rebuild ``grub.cfg``
+
+```bash
+$ sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+```
+
+On UEFI machines, this would be done by:
+
+```bash
+$ sudogrub2-mkconfig -o /boot/efi/EFI/<redhat or centos>/grub.cfg
+```
+
+Reboot the system and then verify that fips has been disabled
+
+```bash
+$ cat /proc/sys/crypto/fips_enabled
+0
+```
+
+# Enabling fips
+
+First, check that fips is supported
+
+```bash
+$ openssl version
+OpenSSL 1.0.2k-fips  26 Jan 2017
+```
+This should be 1.0.1 and above
+
+Then, check that fips is disabled
+
+```bash
+$ cat /proc/sys/crypto/fips_enabled
+0
+```
+
+It is recommended that `df -h` and `blkid` are backed up
+
+```bash
+$ blkid > /var/tmp/blkid_bkp.bak
+$ df -h > /var/tmp/df_bkp.bak
+```
+
+Now, make sure that `PRELINKING` is disabled in `/etc/sysconfig/prelink`. In other words, make sure that `PRELINKING=no` exists in the aforementioned file.
+
+Then, make fips active on the kernel
+
+```bash
+$ sudo yum -y install dracut-fips-aesni dracut-fips
+```
+
+It is recommended that the current initramfs is backed up
+
+```bash
+$ sudo cp -p /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r).backup
+```
+
+At this point, recreate the initramfs file
+
+```bash
+$ sudo dracut -f
+```
+
+Make sure that the `GRUB_CMDLINE_LINUX` line in `/etc/default/grib.cfg` contains `fips=1`
+
+Rebuild grub.cfg
+
+```bash
+$ sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+```
+
+On UEFI machines, this would be done in the following manner
+
+```bash
+$ grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg
+```
+
+Reboot and then confirm that fips has been enabled
+
+```bash
+$ cat /proc/sys/crypto/fips_enabled
+1
+```
+

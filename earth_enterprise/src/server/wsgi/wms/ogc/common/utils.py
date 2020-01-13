@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python2.7
 #
 # Copyright 2017 Google Inc.
 #
@@ -104,7 +104,11 @@ def GetParameters(environ):
   # Examples for "this-endpoint" would be 'http://localhost/<target_path>/wms'
   # or 'http://servername/<target_path>/wms'
   (parameters["server-url"],
-   parameters["this-endpoint"]) = GetServerURL(environ)
+   parameters["this-endpoint"],
+   parameters["proxy-endpoint"]) = GetServerURL(environ)
+
+  if parameters["proxy-endpoint"] is None:
+    del parameters["proxy-endpoint"]
 
   return parameters
 
@@ -137,7 +141,14 @@ def GetServerURL(environ):
   complete_url += urllib.quote(environ.get("REDIRECT_URL", ""))
   complete_url += urllib.quote(environ.get("PATH_INFO", ""))
 
-  return server_url, complete_url
+  if environ.get("HTTP_X_FORWARDED_HOST"):
+    proxy_url = environ["wsgi.url_scheme"] + "://" + environ["HTTP_X_FORWARDED_HOST"]
+    proxy_url += urllib.quote(environ.get("REDIRECT_URL", ""))
+    proxy_url += urllib.quote(environ.get("PATH_INFO", ""))
+  else:
+    proxy_url = None
+
+  return server_url, complete_url, proxy_url
 
 
 def main():

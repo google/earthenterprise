@@ -1,0 +1,227 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Hello Maps! code sample &#8212; Google Earth Enterprise 5.3.4 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Inspecting portable files" href="inspectPortableFiles.html" />
+    <link rel="prev" title="Hello Earth! code sample" href="helloEarthSample.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="inspectPortableFiles.html" title="Inspecting portable files"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="helloEarthSample.html" title="Hello Earth! code sample"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../portable.html" accesskey="U">Portable</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="helloEarthSample.html"
+                        title="previous chapter">Hello Earth! code sample</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="inspectPortableFiles.html"
+                        title="next chapter">Inspecting portable files</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp10.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp10.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="hello-maps-code-sample">
+<h1>Hello Maps! code sample<a class="headerlink" href="#hello-maps-code-sample" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;&quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;</span>
+
+   <span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+
+         <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+
+               <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&quot;content-type&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;text/html; charset=utf-8&quot;</span> <span class="p">/&gt;</span>
+               <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&quot;cache-control&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;max-age=0&quot;</span> <span class="p">/&gt;</span>
+               <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&quot;cache-control&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;no-cache&quot;</span> <span class="p">/&gt;</span>
+               <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&quot;expires&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;0&quot;</span> <span class="p">/&gt;</span>
+               <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&quot;expires&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;Tue, 01 Jan 1980 1:00:00 GMT&quot;</span> <span class="p">/&gt;</span>
+               <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&quot;pragma&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;no-cache&quot;</span> <span class="p">/&gt;</span>
+               <span class="p">&lt;</span><span class="nt">META</span> <span class="na">HTTP-EQUIV</span><span class="o">=</span><span class="s">&quot;Pragma&quot;</span> <span class="na">CONTENT</span><span class="o">=</span><span class="s">&quot;no-cache&quot;</span><span class="p">&gt;</span>
+
+                     <span class="c">&lt;!--This sample loads the necessary scripts for jQuery, Maps API, geeServerDefs, and the Maps API Fusion extension.--&gt;</span>
+
+                           <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Google Maps Engine Portable - Hello Maps Example<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+
+                                 <span class="c">&lt;!--Loads jQuery from the local source.--&gt;</span>
+                                       <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;/local/js/jquery-1.8.3.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+
+                                       <span class="c">&lt;!--Loads the Maps API from the local source.--&gt;</span>
+                                       <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&#39;text/javascript&#39;</span> <span class="na">src</span><span class="o">=</span><span class="s">&#39;/local/maps/api/pbootstrap_loader.js&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+
+                                       <span class="c">&lt;!--Loads the server database definitions (geeServerDefs) from the local source. To view your server database definitions, navigate to http://localhost:9335/query?request=Json&amp;is2d=t--&gt;</span>
+                                       <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://localhost:9335/query?request=Json&amp;amp;var=geeServerDefs&amp;amp;is2d=t&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+
+                                       <span class="c">&lt;!--Loads the Maps API Fusion extension from the local source.--&gt;</span>
+                                       <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&#39;text/javascript&#39;</span> <span class="na">src</span><span class="o">=</span><span class="s">&#39;/local/maps/api/fusion_extended_map.js&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+
+                                       <span class="c">&lt;!--Error handling in case the map doesn&#39;t load.--&gt;</span>
+                                 <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;</span>
+
+                                 <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+                                       <span class="nx">url</span><span class="o">:</span> <span class="s2">&quot;http://localhost:9335/query?request=Json&amp;var=geeServerDefs&amp;is2d=t&quot;</span><span class="p">,</span>
+                                             <span class="nx">statusCode</span><span class="o">:</span> <span class="p">{</span>
+                                                   <span class="mi">500</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                                                         <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;not_serving&#39;</span><span class="p">).</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;block&#39;</span><span class="p">;</span>
+                                                         <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;not_serving&#39;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span>
+                                                         <span class="s1">&#39;Error: To view this example, you need to run Google Maps Engine Portable and serve a 2D globe on http://localhost:9335.&#39;</span><span class="p">}</span>
+                                                         <span class="p">}</span>
+                                                   <span class="p">});</span>
+
+                                                   <span class="kd">function</span> <span class="nx">loadMap</span><span class="p">()</span> <span class="p">{</span>
+
+                                             <span class="c1">// Initializes a variable for your map and defines its settings.</span>
+                                             <span class="kd">var</span> <span class="nx">mapOpts</span> <span class="o">=</span> <span class="p">{</span>
+
+                                                               <span class="c1">// Sets the default Zoom, Center, and other settings for the map&#39;s initial  display.</span>
+                                                               <span class="nx">zoom</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+                                                               <span class="nx">center</span><span class="o">:</span> <span class="k">new</span> <span class="nx">google</span><span class="p">.</span><span class="nx">maps</span><span class="p">.</span><span class="nx">LatLng</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">22</span><span class="p">),</span>
+                                                               <span class="nx">navigationControl</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+                                                               <span class="nx">mapTypeControl</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+                                                               <span class="nx">streetViewControl</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+                                                               <span class="nx">scaleControl</span><span class="o">:</span> <span class="kc">false</span>
+                                                         <span class="p">};</span>
+                                                               <span class="nx">geemap</span> <span class="o">=</span> <span class="nx">geeCreateFusionMap</span><span class="p">(</span><span class="s1">&#39;map&#39;</span><span class="p">,</span> <span class="nx">geeServerDefs</span><span class="p">,</span> <span class="nx">mapOpts</span><span class="p">);</span>
+                                                   <span class="p">}</span>
+
+                                             <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+
+                                             <span class="p">&lt;</span><span class="nt">style</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span><span class="p">&gt;</span>
+                                             <span class="p">#</span><span class="nn">head</span> <span class="p">{</span>
+                                                   <span class="k">margin</span><span class="p">:</span> <span class="mi">0</span> <span class="kc">auto</span><span class="p">;</span>
+                                                   <span class="k">margin-top</span><span class="p">:</span> <span class="mi">16</span><span class="kt">px</span><span class="p">;</span>
+                                                   <span class="k">height</span><span class="p">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+                                                   <span class="k">width</span><span class="p">:</span> <span class="mi">600</span><span class="kt">px</span><span class="p">;</span>
+                                                   <span class="k">font-family</span><span class="p">:</span> <span class="s2">&quot;Arial&quot;</span><span class="p">,</span> <span class="kc">sans-serif</span><span class="p">;</span>
+                                                   <span class="k">font-size</span><span class="p">:</span> <span class="mi">16</span><span class="kt">px</span><span class="p">;</span>
+                                                   <span class="k">font-weight</span><span class="p">:</span> <span class="kc">normal</span><span class="p">;</span>
+                                             <span class="p">}</span>
+                                             <span class="p">#</span><span class="nn">head</span> <span class="nt">span</span> <span class="p">{</span>
+                                                   <span class="k">background-color</span><span class="p">:</span> <span class="mh">#F1F1F1</span><span class="p">;</span>
+                                                   <span class="k">color</span><span class="p">:</span> <span class="mh">#333</span><span class="p">;</span>
+                                             <span class="p">}</span>
+                                             <span class="p">#</span><span class="nn">not_serving</span> <span class="p">{</span>
+                                                   <span class="k">background-color</span><span class="p">:</span> <span class="mh">#CB392A</span><span class="p">;</span>
+                                                   <span class="k">color</span><span class="p">:</span> <span class="mh">#FFF</span><span class="p">;</span>
+                                                   <span class="k">font-weight</span><span class="p">:</span> <span class="kc">bold</span><span class="p">;</span>
+                                             <span class="p">}</span>
+                                             <span class="p">#</span><span class="nn">head</span> <span class="nt">span</span><span class="o">,</span>
+                                             <span class="p">#</span><span class="nn">not_serving</span> <span class="p">{</span>
+                                                   <span class="k">display</span><span class="p">:</span> <span class="kc">block</span><span class="p">;</span>
+                                                   <span class="k">padding</span><span class="p">:</span> <span class="mi">16</span><span class="kt">px</span><span class="p">;</span>
+                                                   <span class="k">border</span><span class="p">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="kc">solid</span> <span class="mh">#DCDCDC</span>
+                                                   <span class="k">font-size</span><span class="o">:</span> <span class="mi">13</span><span class="kt">px</span><span class="p">;</span>
+                                                   <span class="k">margin</span><span class="p">:</span> <span class="mi">8</span><span class="kt">px</span> <span class="mi">0</span> <span class="mi">8</span><span class="kt">px</span> <span class="mi">0</span><span class="p">;</span>
+                                                   <span class="k">box-shadow</span><span class="p">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="mi">1</span><span class="kt">px</span> <span class="mi">3</span><span class="kt">px</span> <span class="mh">#F1F1F1</span><span class="p">;</span>
+                                             <span class="p">}</span>
+                                             <span class="p">#</span><span class="nn">map</span> <span class="p">{</span>
+                                                   <span class="k">margin</span><span class="p">:</span> <span class="mi">0</span> <span class="kc">auto</span><span class="p">;</span>
+                                                   <span class="k">margin-top</span><span class="p">:</span> <span class="mi">120</span><span class="kt">px</span>
+
+                                                   <span class="c">/*The 2D map won’t load unless you set a height value. This code sample uses the CSS, but you can use a div element instead. For example, &lt;div id=&quot;map2d&quot; style=&quot;border: 1px solid silver; height: 600px; width: 800px;&quot;&gt; &lt;/div&gt;*/</span>
+                                                         <span class="k">height</span><span class="o">:</span> <span class="mi">600</span><span class="kt">px</span><span class="p">;</span>
+                                                         <span class="k">width</span><span class="p">:</span> <span class="mi">600</span><span class="kt">px</span><span class="p">;</span>
+                                                   <span class="p">}</span>
+                                                   <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+                                             <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+
+                                             <span class="p">&lt;</span><span class="nt">body</span> <span class="na">onload</span><span class="o">=</span><span class="s">&#39;loadMap()&#39;</span> <span class="na">id</span><span class="o">=</span><span class="s">&#39;body&#39;</span><span class="p">&gt;</span>
+
+                                             <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;head&quot;</span><span class="p">&gt;</span>
+
+                                             Hello Maps! <span class="ni">&amp;#8212;</span> Google Maps API <span class="ni">&amp;amp;</span> Portable
+
+                                             <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>
+                                             To see how to initialize the Google Maps API and make a call to Portable, view the source for this page. To view this example, you need to run Google Maps Engine Portable and serve a 2D globe on http://localhost:9335.
+                                             <span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+
+                                             <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;not_serving&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;display:none;&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+                                             <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+                                             <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;map&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+                                             <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+
+                                             <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="inspectPortableFiles.html" title="Inspecting portable files"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="helloEarthSample.html" title="Hello Earth! code sample"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../portable.html" >Portable</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

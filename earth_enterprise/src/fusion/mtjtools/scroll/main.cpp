@@ -104,7 +104,7 @@ int main(int argc, char ** argv)
         mw->setGlobalLutOut(output);
       }
       char title[2048];
-      sprintf(title, "%s (%s)", "Scroll", histogram);
+      snprintf(title, 2047, "%s (%s)", "Scroll", histogram);
       mw->setCaption( title );
     } else {
       if (! output.empty()) {

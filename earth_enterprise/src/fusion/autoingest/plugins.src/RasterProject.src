@@ -1150,11 +1150,15 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     }
 
       MutableAssetVersionD packgen =
-        PacketGenFactory::ReuseOrMakeAndUpdate(genInfo[i].assetname,
-                                               type,
-                                               khMetaData(),
-                                               packetGenConfig, // new vector?
-                                               extraArg);
+        AssetFactory::ReuseOrMakeAndUpdate
+        <MutablePacketGenAssetVersionD,
+        PacketGenConfig, PacketGenAssetVersionD,
+        PacketGenExtraUpdateArg<RasterProductAssetVersion>>
+        (genInfo[i].assetname,
+         type,
+         khMetaData(),
+         packetGenConfig,
+         extraArg);
 
     
     if (packetGenConfig.cacheRaster) {

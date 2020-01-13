@@ -27,13 +27,13 @@ env.Append(CPPPATH = ['#fusion/autoingest', # static header files
                       ])
 
 
-idlfiles = [ 'storage/deprecated/ReprojectConfig',
+idlfiles = [ 'AssetStorage',
+             'storage/deprecated/ReprojectConfig',
              'storage/deprecated/BlendConfig',
              'storage/deprecated/TmeshConfig',
              'storage/deprecated/CopyrightConfig',
              'storage/deprecated/RasterKHDBConfig',
              'storage/deprecated/VectorKHDBConfig',
-             'AssetStorage',
              'TaskLists', 'gstProvider', 'Locale', 'ServerCombination',
              'Snippet',
              'AssetChanges', 'VolumeStorage', 'StreamServers',
@@ -92,14 +92,14 @@ idlfiles = [ 'storage/deprecated/ReprojectConfig',
 env.idl(map(lambda n: n+'.idl', idlfiles))
 
 
-plugins = [ 'deprecated/Reproject',
+plugins = [ 'Source',
+            'deprecated/Reproject',
             'deprecated/Blend',
             'deprecated/Tmesh',
             'deprecated/Copyright',
             'deprecated/RasterKHDB',
             'deprecated/ImeshKHDB',
             'deprecated/VectorKHDB',
-            'Source',
             'Mosaic',
             'Maskgen',
             'KRP',
@@ -229,7 +229,7 @@ env.test('AssetSerializer_unittest',
 
 env.test('AssetFactory_unittest',
          'AssetFactory_unittest.cpp',
-         LIBS=['gecommon', 'gtest', 'geautoingest', 'qt-mt'])
+         LIBS=['gecommon', 'gtest', 'geautoingest', 'qt-mt', 'xerces-c'])
 
 env.test('JsUtils_unittest',
          'JsUtils_unittest.cpp',

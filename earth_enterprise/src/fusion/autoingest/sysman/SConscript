@@ -149,5 +149,13 @@ env.test('StateUpdater_unittest',
     LIBS=testLibs)
 
 env.test('StorageManagerAssetFactory_unittest',
-    sysmanObjs  + extraObjs + [ 'StorageManagerAssetFactory_unittest.cpp' ],
+    sysmanObjs + extraObjs + [ 'StorageManagerAssetFactory_unittest.cpp' ],
+    LIBS=testLibs)
+
+env.test('AssetOperation_unittest',
+    sysmanObjs + extraObjs + ['AssetOperation_unittest.cpp'],
+    LIBS=testLibs)
+
+env.test('CalcState_unittest',
+    sysmanObjs + extraObjs + [ 'CalcState_unittest.cpp' ],
     LIBS=testLibs)

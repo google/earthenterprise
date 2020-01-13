@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python2.7
 #
 # Copyright 2017 Google Inc.
 #
@@ -21,9 +21,13 @@ import logging
 import logging.config
 from string import Template
 import urllib2
-import xml.etree.cElementTree as ET
+from xml.etree.cElementTree import SubElement, tostring
+import defusedxml.cElementTree as ET
 from search.common import exceptions
 from search.common import utils
+
+ET.SubElement = SubElement
+ET.tostring = tostring
 
 # Get the logger for logging purposes.
 logging.config.fileConfig("/opt/google/gehttpd/conf/ge_logging.conf",

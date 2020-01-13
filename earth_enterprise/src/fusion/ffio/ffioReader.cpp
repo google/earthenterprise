@@ -33,8 +33,9 @@ ffio::Reader::Reader(const std::string &ffdir)
   uint64 runningOffset = 0;
 
   for (uint i = 0; ; ++i) {
-    char fnum[64];
-    sprintf(fnum, "%02d", i);
+    const size_t fnum_len = 64;
+    char fnum[fnum_len];
+    snprintf(fnum, fnum_len, "%02d", i);
     std::string fname = ffdir + "/pack." + fnum;
 
     uint64 size;

@@ -19,15 +19,30 @@
 void WaitingAssets::Update(
     const SharedString & ref,
     AssetDefs::State newState,
-    AssetDefs::State oldState) {
-  if (newState == waitingState) {
-    waiting.insert(ref);
+    AssetDefs::State oldState,
+    uint32 numWaitingFor) {
+  if (newState == waitingState && numWaitingFor > 0) {
+    waiting[ref] = numWaitingFor;
   }
   else if (oldState == waitingState) {
     waiting.erase(ref);
   }
 }
 
-bool WaitingAssets::IsWaiting(const SharedString & ref) const {
-  return waiting.find(ref) != waiting.end();
+bool WaitingAssets::DecrementAndCheckWaiting(const SharedString & ref) {
+  auto asset = waiting.find(ref);
+  if (IsWaiting(asset)) {
+    --asset->second;
+    if (asset->second > 0) {
+      // Still waiting
+      return true;
+    }
+    else {
+      // This was the last one we were waiting for, so we're no longer waiting
+      waiting.erase(asset);
+      return false;
+    }
+  }
+  // We were not waiting to begin with
+  return false;
 }

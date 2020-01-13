@@ -64,7 +64,7 @@ uint32 MinifyCompressor::decompress(char* inbuf, int inbufSize, char* outbuf) {
 //------------------------------------------------------------------------------
 
 static void errorExit(j_common_ptr cinfo) {
-  ErrorMgr* err = (ErrorMgr*)cinfo->err;
+  ErrorMgr* err = static_cast<ErrorMgr*>(cinfo->err);
 
   // Format the warning message.
   char buffer[JMSG_LENGTH_MAX];
@@ -261,6 +261,10 @@ class LZCompressor : public Compressor {
  public:
   LZCompressor(int l, uint32 sz);
   virtual ~LZCompressor();
+  LZCompressor(const LZCompressor&) = delete;
+  LZCompressor(LZCompressor&&) = delete;
+  LZCompressor& operator=(const LZCompressor&) = delete;
+  LZCompressor& operator=(LZCompressor&&) = delete;
 
   virtual char *data() { return buf; }
   virtual uint32 dataLen() { return bufLen; }

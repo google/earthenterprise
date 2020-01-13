@@ -151,6 +151,39 @@ bool getPackageFileLocs(GlcUnpacker* const unpacker,
   return true;
 }
 
+void printTerrainPacket(LittleEndianReadBuffer& buffer, std::ostringstream& s) {
+
+  geterrain::Mesh m;
+
+  int skip = 0;
+  int count = 0;
+  while ((buffer.CurrPos() < buffer.size()) || skip > 0) {
+    count++;
+
+    if (count != 1) {
+      s << std::endl << std::endl;
+    }
+
+    s << "mesh " << count << " of 20:" << std::endl;
+
+    if (skip > 0) {
+      skip--;
+      s << "Skipped because of previous empty mesh header." << std::endl;
+    } else {
+      m.Pull(buffer);
+      if (m.source_size() > 0) {
+        m.PrintMesh(s);
+      } else {
+        skip = 3;
+        s << "EMPTY MESH HEADER -- Skipping next "
+          << skip << " mesh entries." << std::endl;
+      }
+    }
+  }
+
+  s << std::endl;
+}
+
 void printVectorPacketBitFlags(const ushort bitFlags, std::ostringstream& s) {
   s << "      bitFlags: 0x" << std::hex << bitFlags << std::dec << " (";
   
@@ -337,7 +370,7 @@ void printVectorPacket(const LittleEndianReadBuffer& buffer, std::ostringstream&
         s << "        latitude * 180: " << vecPoint->elem[1] * 180.0 << std::endl;
         s << "        altitude (raw): " << vecPoint->elem[2] << std::endl;
       } else {
-        s << "      NEED TO ADD HANDLING FOR THIS TYPE" << std::endl;
+        s << "      NEED TO HANDLE THIS TYPE" << std::endl;
       }
 
       s << std::endl;
@@ -430,10 +463,8 @@ void extractAllPackets(GlcUnpacker* const unpacker,
           LittleEndianReadBuffer decompressed;
           etEncoder::DecodeWithDefaultKey(&buffer[0], buffer.size());
           if (KhPktDecompress(buffer.data(), buffer.size(), &decompressed)) {
-            geterrain::Mesh m;
-            m.Pull(decompressed);
             std::ostringstream s;
-            m.PrintMesh(s);
+            printTerrainPacket(decompressed, s);
             writePacketToFile(index_item, s.str(), false, "globetiles", "_terrain");
           }
         }

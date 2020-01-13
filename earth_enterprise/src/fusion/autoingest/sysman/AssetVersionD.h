@@ -36,9 +36,8 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   friend class MutableAssetHandleD_<DerivedAssetHandle_<AssetVersion,
                                                         AssetVersionImplD> >;
 
-  // private and unimplemented -- illegal to copy an AssetVersionImpl
-  AssetVersionImplD(const AssetVersionImplD&);
-  AssetVersionImplD& operator=(const AssetVersionImplD&);
+  AssetVersionImplD(const AssetVersionImplD&) = delete;
+  AssetVersionImplD& operator=(const AssetVersionImplD&) = delete;
 
  protected:
   // Tracks the state of inputs and children to a given asset version that have
@@ -79,7 +78,7 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   // since AssetVersionImpl is a virtual base class
   // my derived classes will initialize it directly
   // therefore I don't need a contructor from storage
-  AssetVersionImplD(void) : AssetVersionImpl(), verholder(nullptr) { }
+  AssetVersionImplD(void) : AssetVersionImpl(), verholder(nullptr), numInputsWaitingFor(0) { }
 
   // used when being contructed from an asset
   // these are the inputs I need to bind and attach to
@@ -96,10 +95,11 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   // needs to call SetState
   void PropagateStateChange(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual void HandleTaskLost(const TaskLostMsg &msg);
-  virtual void HandleTaskDone(const TaskDoneMsg &msg);
   virtual void HandleChildStateChange(NotifyStates, const std::shared_ptr<StateChangeNotifier>) const;
   virtual void HandleInputStateChange(NotifyStates, const std::shared_ptr<StateChangeNotifier>) const = 0;
+  inline bool BlockedByOfflineInputs(const InputAndChildStateData & stateData) const;
   virtual bool OfflineInputsBreakMe(void) const { return false; }
+  virtual uint32 GetChildrenWaitingFor() const { return 0; }
  public:
 
   bool NeedComputeState(void) const {
@@ -125,7 +125,9 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   virtual AssetDefs::State OnStateChange(AssetDefs::State newstate,
                                          AssetDefs::State oldstate) override;
   virtual void HandleTaskProgress(const TaskProgressMsg &msg);
-  virtual bool RecalcState() const override { return SyncState(); }
+  virtual void HandleTaskDone(const TaskDoneMsg &msg);
+  virtual void SetAndPropagateState(AssetDefs::State newstate) override
+    { SetState(newstate); }
 
   class InputVersionHolder : public khRefCounter {
    public:
@@ -158,6 +160,8 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   // accessable only through InputVersionGuard
   mutable InputVersionHolder* verholder;
 
+ protected:
+  mutable uint32 numInputsWaitingFor;
 };
 
 
@@ -169,19 +173,17 @@ class LeafAssetVersionImplD : public virtual LeafAssetVersionImpl,
                               public AssetVersionImplD
 {
  protected:
-  mutable uint32 numInputsWaitingFor;
-
   // since AssetVersionImpl and LeafAssetVersionImpl are virtual base
   // classes my derived classes will initialize it directly
   // therefore I don't need a contructor from storage
   LeafAssetVersionImplD(void)
       : AssetVersionImpl(), LeafAssetVersionImpl(),
-        AssetVersionImplD(), numInputsWaitingFor(0) { }
+        AssetVersionImplD() { }
   // used when being contructed from an asset
   // these are the inputs I need to bind and attach to
   LeafAssetVersionImplD(const std::vector<SharedString> &inputs)
       : AssetVersionImpl(), LeafAssetVersionImpl(),
-        AssetVersionImplD(inputs), numInputsWaitingFor(0) { }
+        AssetVersionImplD(inputs) { }
 
   void SubmitTask(void);
   void ClearOutfiles(void);
@@ -189,14 +191,15 @@ class LeafAssetVersionImplD : public virtual LeafAssetVersionImpl,
   virtual AssetDefs::State ComputeState(void) const;
   virtual bool CacheInputVersions(void) const;
   virtual void HandleTaskLost(const TaskLostMsg &msg);
-  virtual void HandleTaskDone(const TaskDoneMsg &msg);
   virtual void HandleInputStateChange(NotifyStates, const std::shared_ptr<StateChangeNotifier>) const;
   virtual void DoSubmitTask(void) = 0;
   virtual bool OfflineInputsBreakMe(void) const { return false; }
 
  public:
   virtual void HandleTaskProgress(const TaskProgressMsg &msg) override;
+  virtual void HandleTaskDone(const TaskDoneMsg &msg) override;
   virtual void ResetOutFiles(const std::vector<std::string> &) override;
+  virtual bool RecalcState(WaitingFor &) const override;
   virtual void Cancel(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual void Rebuild(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual void DoClean(const std::shared_ptr<StateChangeNotifier> = nullptr);
@@ -230,6 +233,7 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
   virtual void HandleInputStateChange(NotifyStates, const std::shared_ptr<StateChangeNotifier>) const;
   virtual void DelayedBuildChildren(void);
   virtual bool CompositeStateCaresAboutInputsToo(void) const { return false; }
+  virtual uint32 GetChildrenWaitingFor() const override { return numChildrenWaitingFor; }
 
   void AddChild(MutableAssetVersionD &child);
   void AddChildren(std::vector<MutableAssetVersionD> &children);
@@ -242,6 +246,7 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
   virtual void DependentChildren(std::vector<SharedString> &out) const override;
   virtual AssetDefs::State OnStateChange(AssetDefs::State newstate,
                                          AssetDefs::State oldstate) override;
+  virtual bool RecalcState(WaitingFor &) const override;
 };
 
 #endif /* __AssetVersionD_h */

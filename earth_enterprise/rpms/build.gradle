@@ -395,6 +395,10 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
     requires('chkconfig')
     requires('shadow-utils')
 
+    if ("${findBuildNumber()}.${rpmPlatformString}".contains('el6')) {
+        requires('python27')
+    }
+
     requiresCommands(packageSharedCommands +
         ['cat', 'cut', 'getent', 'grep'])
 
@@ -627,6 +631,7 @@ task openGeeServerDeb (type: GeeDeb, dependsOn: openGeeServerInitScripts) {
     conflicts('opengee-postgis', '2.4', GREATER | EQUAL)
 
     requires('python-pil')
+    requires('python-lxml')
 
     requiresCommands(
         packageSharedCommands +

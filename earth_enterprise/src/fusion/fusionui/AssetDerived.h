@@ -56,6 +56,7 @@ class AssetDerived : public AssetBase {
  private:
   void Init(bool re_init = false);
   typename Defs::Request AssembleEditRequest(void);
+  int UnhandledErrorCount;
 
   // Reset IDs(asset_uuid, fuid_resource, fuid_channel, indexVersion) in fuse
   // config. It is used to support unique IDs for assets in system - "SaveAs"
