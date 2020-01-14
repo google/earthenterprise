@@ -798,20 +798,22 @@ khResourceProvider::StopJob(const StopJobMsg &stop)
   assert(!mutex.trylock());
 
   JobIter job = FindJobById(stop.jobid);
-  if (Valid(job) && job->pid > 0) {
-    // It's already running, so try to kill it. Killing -pid instead
-    // of pid says to send the signal to all processes in the
-    // process group pid. When we fork our chid we make it a process
-    // group leader.
-    notify(NFY_DEBUG, "Killing pgid %d", -job->pid);
-    if (!khKillPid(-job->pid)) {
-      // warning has already been emitted
+  if (Valid(job)) {
+    if (job->pid > 0) {
+      // It's already running, so try to kill it. Killing -pid instead
+      // of pid says to send the signal to all processes in the
+      // process group pid. When we fork our chid we make it a process
+      // group leader.
+      notify(NFY_DEBUG, "Killing pgid %d", -job->pid);
+      if (!khKillPid(-job->pid)) {
+        // warning has already been emitted
+        DeleteJob(job);
+      }
+    } else {
+      // it's not running yet, taking it out of the list
+      // will keep it from ever running
       DeleteJob(job);
     }
-  } else {
-    // it's not running yet, taking it out of the list
-    // will keep it from ever running
-    DeleteJob(job);
   }
 }
 
