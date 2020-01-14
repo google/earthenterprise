@@ -92,3 +92,4 @@ Settings page
 .. |gear icon| image:: ../../art/server/admin/accounts_icon_gear_padded.gif
 .. |Pan tool| image:: ../../art/fusion/portable/cutterHandTool2.png
 .. |Polygon icon| image:: ../../art/fusion/portable/cutterPolygonTool.png
+.. |KML| image:: ../../art/fusion/portable/uploadPolygon.png

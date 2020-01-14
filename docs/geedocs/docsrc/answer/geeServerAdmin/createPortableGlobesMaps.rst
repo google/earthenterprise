@@ -251,7 +251,7 @@ Create Portable Globes and Maps
             </Placemark>
             
       -  You may also paste in the entire KML file. If it contains
-      multiple elements, the first element will be used to define the polygon.
+         multiple elements, the first element will be used to define the polygon.
 
       **To insert a KML:**
 
