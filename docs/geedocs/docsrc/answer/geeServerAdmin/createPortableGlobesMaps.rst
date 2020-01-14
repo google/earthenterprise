@@ -164,7 +164,7 @@ Create Portable Globes and Maps
       #. Click **Databases** to display the list of databases and
          portables pushed to the Server.
       #. Click the |Settings button| **Settings** button in the top right of the window
-         and select **Launch Cutter** from the **Tools** menu.
+         and select **Launch Cutter**.
 
          A new browser tab opens with the GEE Server — Cutting Tool and
          the **Create new offline map** window appears.
@@ -185,14 +185,6 @@ Create Portable Globes and Maps
          Spaces, slashes, and double dots (..) will be converted to
          underscores in the saved globe name.
 
-         .. warning::
-
-            Building an offline map or globe will overwrite any existing
-            offline maps or globes with the same name. If multiple users
-            are cutting maps or globes, we recommend assigning unique
-            prefixes to each user for their globe names to ensure that
-            files are not accidentally overwritten.
-
       #. Enter a description to be associated with the offline map or
          globe.
 
@@ -200,7 +192,10 @@ Create Portable Globes and Maps
          offline map or globe, so that others will know what geographic
          area, or what mission, they were created for.
 
-      #. If you are overwriting an existing cut, select **Yes** for **Overwrite?**.
+      #. If you have entered a globe name that is already in use, a warning
+         is displayed. If you wish to overwrite the existing cut, select
+         the **Overwrite** check box. If you do not wish to overwrite the
+         existing cut, modify the globe name.
 
 
       .. rubric:: Drawing the polygon
@@ -218,40 +213,61 @@ Create Portable Globes and Maps
          browser. This method works for cutting 2D maps from your
          browser.
 
-      #. By default, you draw a polygon by hand so the **Select Region**
-         drop-down list is set to **Manual**.
       #. Use the |Pan tool| **Hand** tool to pan, then, using the navigation
          controls in the plug-in, zoom in to the region of interest.
-      #. To use your mouse to define the polygon, click the |Polygon icon| polygon icon
-         in the globe window.
+      #. To use your mouse to define the polygon, click the |Polygon icon| **Draw Polygon**
+         button on the toolbar in the globe window.
       #. Click on the map or globe to define each point. You can use the
          navigation controls on the right to move the globe or change
          zoom levels while drawing.
-      #. Click the final point at the point of origin to complete the polygon selection.
+      #. Double-click the final point to complete the polygon selection.
+         The polygon turns orange.
 
          |Polygon example|
 
-      #. If you need to redraw the polygon, click **Clear** to delete the polygon you just created.
+      #. To modify the polygon, click and drag the white edit points.
+      #. To delete a vertex, click and hold the mouse on the point until
+         it is removed from the map.
+      #. To redraw the polygon, press the **Esc** key and begin again.
+      #. To save the polygon, press the **Enter** key.
 
       .. rubric:: Defining the polygon with KML
 
-      You can also use KML to define the polygon(s). The KML should be
-      complete, and may contain single or multiple elements.
+      You may also use KML to define the polygon. You can add it in one of two ways:
+      
+      -  Simply paste in the complete polygon placemark from the KML. It should
+         resemble the following:
+         
+         .. code-block:: none
 
-      **To insert your KML:**
+            <Placemark>
+               <Polygon>
+                  <outerBoundaryIs>
+                     <LinearRing>
+                        <coordinates>-98.7802734,46.3826973 -101.0214844,44.7211201 -97.3740234,43.9352319 -98.7802734,46.3826973</coordinates>
+                     </LinearRing>
+                  </outerBoundaryIs>
+               </Polygon>
+            </Placemark>
+            
+      -  You may also paste in the entire KML file. If it contains
+      multiple elements, the first element will be used to define the polygon.
 
-      #. From the **Select Region** drop-down list, select **Paste
-         KML**. The Paste KML window appears.
-      #. Paste your KML into the text field, then click **Use KML**.
+      **To insert a KML:**
+
+      #. Click the |KML| **KML** button on the toolbar at the top of the window.
+         The Paste KML window appears.
+      #. Paste the KML into the text field, using one of the options described above,
+         then click the **Use KML** button.
 
          GEE Server validates the KML and then draws the polygon using
-         the KML data you provided. Your polygon appears on the map or
+         the KML data you provided. The polygon appears on the map or
          globe (the latter only if you have the discontinued Google
          Earth plug-in running in your browser).
 
       .. rubric:: Globe resolution
 
-      The polygon you specified in the previous step defines your *area of
+      The polygon you specified in the previous step defines the *area of
       interest*. This area contains high-resolution imagery and data,
       and search tabs are created for vector data within this zone. The
       maximum and minimum resolutions are specified as integers between
@@ -346,14 +362,13 @@ Create Portable Globes and Maps
 
       .. rubric:: To build the map or globe:
 
-      -  Click **Cut map** to start the build process.
+      -  Click the **Cut map** button to start the build process.
 
-         The progress of the build appears in the **Build** window.
+         The progress of the build appears in the **Cutting** window.
 
          When the build is finished, a ``.glb`` file is created in the
-         default globes directory,
-         ``/opt/google/gehttpd/htdocs/cutter/globes``, and a download
-         link appears to the file's location on GEE Server.
+         default globes directory, ``/opt/google/gehttpd/htdocs/cutter/globes``,
+         and a download link appears to the file's location on GEE Server.
 
       .. rubric:: KML files
 
@@ -415,3 +430,4 @@ Create Portable Globes and Maps
 .. |Pan tool| image:: ../../art/fusion/portable/cutterHandTool2.png
 .. |Polygon icon| image:: ../../art/fusion/portable/cutterPolygonTool.png
 .. |Polygon example| image:: ../../art/fusion/portable/cutterPolygonExample.png
+.. |KML| image:: ../../art/fusion/portable/uploadPolygon.png

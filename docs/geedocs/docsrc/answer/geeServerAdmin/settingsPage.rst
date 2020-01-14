@@ -44,17 +44,28 @@ Settings page
       Portable globes (.glm/.glb, not .glc):
 
       #. Select a source map.
-      #. Enter a name and description for the offline map.
-      #. Choose to **Overwrite** existing globes with the same
-         name.
-      #. Choose a **Region Selection** method:
+      #. Enter a name for the offline map or globe.
+      #. If you have entered a globe name that is already in use, a warning
+         is displayed. If you wish to overwrite the existing cut, select
+         the **Overwrite** check box. If you do not wish to overwrite the
+         existing cut, modify the globe name.
+      #. Enter a description to be associated with the offline map or
+         globe.
+      #. Use the |Pan tool| **Hand** tool to pan, then, using the navigation
+         controls in the plug-in, zoom in to the region of interest.
+      #. Select the geographic region you wish to cut using one of the following
+         methods: 
 
-         - **Manual**: Manually draw the boundaries of your
-           region using the polygon button in the upper-right of
-           the map.
+         -  To use your mouse to define the polygon, click the |Polygon icon| **Draw Polygon**
+            button on the toolbar in the globe window and follow the
+            directions onscreen.
+         -  To use KML to define the polygon, click the |KML| **KML** button
+            on the toolbar at the top of the window and paste either:
 
-         - **Paste KML**: Define your region by pasting a KML
-           file.
+            -  the complete polygon placemark from the KML; or
+            -  the entire KML file. Please note that if the KML file
+               contains multiple elements, the first element will be
+               used to define the polygon.
 
       #. Specify a **World level**; this represents the highest
          resolution at which the entire world will be available.
@@ -79,3 +90,5 @@ Settings page
    :width: 130px
    :height: 44px
 .. |gear icon| image:: ../../art/server/admin/accounts_icon_gear_padded.gif
+.. |Pan tool| image:: ../../art/fusion/portable/cutterHandTool2.png
+.. |Polygon icon| image:: ../../art/fusion/portable/cutterPolygonTool.png
