@@ -81,6 +81,7 @@ class khResourceProvider
   khThreadPool     *jobThreads;
   bool RunCmd(
       JobIter & job,
+      uint32 jobid,
       const std::vector<std::string> & commands,
       bool sendProgress,
       time_t cmdtime,
