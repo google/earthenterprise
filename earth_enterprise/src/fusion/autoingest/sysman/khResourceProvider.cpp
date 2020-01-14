@@ -793,7 +793,6 @@ khResourceProvider::StopJob(const StopJobMsg &stop)
   // the mutex must be locked
   assert(!mutex.trylock());
 
-  JobIter found;
   JobIter job = FindJobById(stop.jobid);
   if (Valid(job) && job->pid > 0) {
     // It's already running, so try to kill it. Killing -pid instead
@@ -803,12 +802,12 @@ khResourceProvider::StopJob(const StopJobMsg &stop)
     notify(NFY_DEBUG, "Killing pgid %d", -job->pid);
     if (!khKillPid(-job->pid)) {
       // warning has already been emitted
-      DeleteJob(found);
+      DeleteJob(job);
     }
   } else {
     // it's not running yet, taking it out of the list
     // will keep it from ever running
-    DeleteJob(found);
+    DeleteJob(job);
   }
 }
 
