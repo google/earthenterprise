@@ -621,17 +621,18 @@ khResourceProvider::ExecCmdline(JobIter job,
 void
 khResourceProvider::JobLoop(StartJobMsg start)
 {
-  khLockGuard lock(mutex);
   uint32 jobid = start.jobid;
+  time_t endtime = 0;
+  bool success = false;
+  bool logTotalTime = false;
+
+  khLockGuard lock(mutex);
   JobIter job = FindJobById(jobid);
   if (!Valid(job)) {
     // somebody already asked for me to go away
     return;
   }
 
-  time_t endtime = 0;
-  bool success = false;
-  bool logTotalTime = false;
   for (uint cmdnum = 0; cmdnum < start.commands.size(); ++cmdnum) {
     logTotalTime = (cmdnum > 0);
 
