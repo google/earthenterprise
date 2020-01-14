@@ -47,7 +47,7 @@ class MockResourceProvider : public khResourceProvider {
       ++executes;
       return !(executes == failExecOn);
     }
-    virtual void SendProgress(JobIter job, double progress, time_t progressTime) override {
+    virtual void SendProgress(uint32 job, double progress, time_t progressTime) override {
       assert(progress == 0);
       ++progSent;
     }
