@@ -107,8 +107,8 @@ class khResourceProvider
   void ReadProgress(int readfd, uint32 jobid);
 #endif
   virtual void DeleteJob(JobIter which,
-                 bool success = false,
-                 time_t beginTime = 0, time_t endTime = 0);
+                         bool success = false,
+                         time_t beginTime = 0, time_t endTime = 0);
 
   // ***** stuff for CheckVolumeAvailLoop *****
   void CheckVolumeAvailLoop(void);
