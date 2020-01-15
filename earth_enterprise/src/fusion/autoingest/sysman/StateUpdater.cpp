@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 The Open GEE Contributors
+ * Copyright 2020 The Open GEE Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -294,8 +294,7 @@ class StateUpdater::SetBlockingStateVisitor : public default_dfs_visitor {
     void SetState(
         DependentStateTreeVertexDescriptor vertex,
         AssetDefs::State newState,
-        const WaitingFor & waitingFor,
-        bool runHandlers) const {
+        const WaitingFor & waitingFor) const {
       SharedString name = tree[vertex].name;
       AssetDefs::State oldState = tree[vertex].state;
       if (newState != oldState) {
@@ -303,12 +302,7 @@ class StateUpdater::SetBlockingStateVisitor : public default_dfs_visitor {
               name.toString().c_str(), ToString(oldState).c_str(), ToString(newState).c_str());
         auto version = updater.storageManager->GetMutable(name);
         if (version) {
-          if (runHandlers) {
             updater.SetVersionStateAndRunHandlers(version, newState, waitingFor);
-          }
-          else {
-            version->state = newState;
-          }
 
           // Get the new state directly from the asset version since it may be
           // different from the passed-in state
@@ -347,17 +341,18 @@ class StateUpdater::SetBlockingStateVisitor : public default_dfs_visitor {
 
       // Set the state for assets in the dependent tree.
       if (data.inDepTree) {
-        SetState(vertex, newState, {0, 0}, true);
+        SetState(vertex, newState, {0, 0});
       }
       else {
+        // Set the state to blocked if needed, otherwise do nothing
         auto version = updater.storageManager->Get(data.name);
         if (hasBlockingInputs->find(data.name) != hasBlockingInputs->end() && 
             version->InputStatesAffectMyState(AssetDefs::Blocked, true)) {
-          SetState(vertex, AssetDefs::Blocked, {0,0}, true );
+          SetState(vertex, AssetDefs::Blocked, {0,0});
         }
         else if (hasBlockingChildren->find(data.name) != hasBlockingChildren->end() && 
             version->ChildStatesAffectMyState()) {
-          SetState(vertex, AssetDefs::Blocked, {0,0}, true );
+          SetState(vertex, AssetDefs::Blocked, {0,0});
         }
       }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 The Open GEE Contributors
+ * Copyright 2020 The Open GEE Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,6 +68,8 @@ class MockVersion : public AssetVersionImpl {
     OnStateChangeBehavior stateChangeBehavior;
     bool recalcStateReturnVal;
     vector<AssetKey> dependents;
+    bool inputStatesAffectMyState;
+    bool childStatesAffectMyState;
 
     MockVersion()
         : loadedMutable(false),
@@ -81,7 +83,9 @@ class MockVersion : public AssetVersionImpl {
           setAndPropagateStateCalled(false),
           progressNotified(0.0),
           stateChangeBehavior(NO_ERRORS),
-          recalcStateReturnVal(true) {
+          recalcStateReturnVal(true),
+          inputStatesAffectMyState(true),
+          childStatesAffectMyState(true) {
       type = AssetDefs::Imagery; // Ensures that operator bool can return true
       state = STARTING_STATE;
     }
@@ -93,8 +97,8 @@ class MockVersion : public AssetVersionImpl {
       name = that.name; // Don't add the suffix - the other MockVersion already did
     }
 
-    virtual bool InputStatesAffectMyState(AssetDefs::State stateByInputs, bool blockedByOfflineInputs) const override {return true;}
-    virtual bool ChildStatesAffectMyState() const override {return true;}
+    virtual bool InputStatesAffectMyState(AssetDefs::State stateByInputs, bool blockedByOfflineInputs) const override {return inputStatesAffectMyState;}
+    virtual bool ChildStatesAffectMyState() const override {return childStatesAffectMyState;}
 
     virtual void DependentChildren(vector<SharedString> & d) const override {
       for(auto dependent : dependents) {
@@ -983,6 +987,90 @@ TEST_F(StateUpdaterTest, Cancel) {
   assertStateNotSet(sm, "ci1");
   assertStateNotSet(sm, "ci2");
   assertStateNotSet(sm, "ci3");
+}
+
+TEST_F(StateUpdaterTest, FailedInput) {
+  SetVersions(sm, {
+                    MockVersion("l"),
+                    MockVersion("i")
+                  });
+  SetListenerInput(sm, "l", "i");
+
+  GetMutableVersion(sm, "l")->state = AssetDefs::Waiting;
+  GetMutableVersion(sm, "i")->state = AssetDefs::InProgress;
+
+  // MockVersion::InputStatesAffectMyState will return true, so setting this input
+  // to a Failed state should cause the listener to become Blocked
+  updater.SetStateForRefAndDependents(fix("i"), AssetDefs::Failed, [](AssetDefs::State) { return true; });
+
+  assertStateSet(sm, "l");
+  assertStateSet(sm, "i");
+  assert(AssetDefs::Blocked == GetMutableVersion(sm, "l")->state);
+  assert(AssetDefs::Failed == GetMutableVersion(sm, "i")->state );
+}
+
+TEST_F(StateUpdaterTest, FailedInputDontCare) {
+  SetVersions(sm, {
+                    MockVersion("l"),
+                    MockVersion("i")
+                  });
+  SetListenerInput(sm, "l", "i");
+
+  GetMutableVersion(sm, "l")->state = AssetDefs::Waiting;
+  GetMutableVersion(sm, "i")->state = AssetDefs::InProgress;
+
+  GetMutableVersion(sm, "l")->inputStatesAffectMyState = false;
+
+  // MockVersion::InputStatesAffectMyState will return true, so setting this input
+  // to a Failed state should cause the listener to become Blocked
+  updater.SetStateForRefAndDependents(fix("i"), AssetDefs::Failed, [](AssetDefs::State) { return true; });
+
+  assertStateNotSet(sm, "l");
+  assertStateSet(sm, "i");
+  assert(AssetDefs::Waiting == GetMutableVersion(sm, "l")->state);
+  assert(AssetDefs::Failed == GetMutableVersion(sm, "i")->state );
+}
+
+TEST_F(StateUpdaterTest, FailedChild) {
+  SetVersions(sm, {
+                    MockVersion("p"),
+                    MockVersion("c")
+                  });
+  SetParentChild(sm, "p", "c");
+
+  GetMutableVersion(sm, "p")->state = AssetDefs::InProgress;
+  GetMutableVersion(sm, "c")->state = AssetDefs::InProgress;
+
+  // MockVersion::InputStatesAffectMyState will return true, so setting this input
+  // to a Failed state should cause the listener to become Blocked
+  updater.SetStateForRefAndDependents(fix("c"), AssetDefs::Failed, [](AssetDefs::State) { return true; });
+
+  assertStateSet(sm, "p");
+  assertStateSet(sm, "c");
+  assert(AssetDefs::Blocked == GetMutableVersion(sm, "p")->state);
+  assert(AssetDefs::Failed == GetMutableVersion(sm, "c")->state );
+}
+
+TEST_F(StateUpdaterTest, FailedChildDontCare) {
+  SetVersions(sm, {
+                    MockVersion("p"),
+                    MockVersion("c")
+                  });
+  SetParentChild(sm, "p", "c");
+
+  GetMutableVersion(sm, "p")->state = AssetDefs::InProgress;
+  GetMutableVersion(sm, "c")->state = AssetDefs::InProgress;
+
+  GetMutableVersion(sm, "p")->childStatesAffectMyState = false;
+
+  // MockVersion::InputStatesAffectMyState will return true, so setting this input
+  // to a Failed state should cause the listener to become Blocked
+  updater.SetStateForRefAndDependents(fix("c"), AssetDefs::Failed, [](AssetDefs::State) { return true; });
+
+  assertStateNotSet(sm, "p");
+  assertStateSet(sm, "c");
+  assert(AssetDefs::InProgress == GetMutableVersion(sm, "p")->state);
+  assert(AssetDefs::Failed == GetMutableVersion(sm, "c")->state );
 }
 
 int main(int argc, char **argv) {
