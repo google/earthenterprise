@@ -45,6 +45,9 @@ Release notes: Open GEE 5.3.4
          * - 1604
            - WMS capability doesn't work with reverse proxies
            - It now works, as long as the protocol (http vs https) matches
+         * - 1579
+           - Add an option to misc.xml for disabling minification
+           - An option was added to control minification.
 
       .. rubric:: Known Issues
 
