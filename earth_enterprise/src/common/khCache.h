@@ -86,6 +86,7 @@ class khCache {
   bool limitCacheMemory;
   uint64 maxCacheMemory;
   const uint64 khCacheItemSize = sizeof(khCacheItem<Key, Value>);
+  bool pruneConditionMet = true;
   bool InList(Item *item) {
     Item *tmp = head;
     while (tmp) {
@@ -217,6 +218,7 @@ class khCache {
     limitCacheMemory = enabled;
     maxCacheMemory = maxMemory;
   }
+  void setPruneConditionVal(bool val) { pruneConditionMet = val; }
   void clear(void) {
     CheckListInvariant();
     // Delete all the items.
@@ -231,6 +233,7 @@ class khCache {
   }
   void Add(const Key &key, const Value &val, bool prune = true) {
     CheckListInvariant();
+    prune = pruneConditionMet;
 
     // delete any previous item
     Item *item = FindItem(key);
@@ -263,6 +266,7 @@ class khCache {
 
   void Remove(const Key &key, bool prune = true) {
     CheckListInvariant();
+    prune = pruneConditionMet;
 
     Item *item = FindItem(key);
     if (item) {

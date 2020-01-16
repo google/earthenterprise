@@ -66,19 +66,22 @@ class StorageManager : public StorageManagerInterface<AssetType> {
     StorageManager(uint cacheSize,
                    bool limitByMemory,
                    uint64 maxMemory,
+                   float maxSizeDiff,
                    const std::string & type,
                    SerializerPtr serializer) :
         assetType(type),
         serializer(std::move(serializer)),
-        cache(cacheSize, type)
+        cache(cacheSize, type),
+        maxSizeDiff(maxSizeDiff)
     {
       SetCacheMemoryLimit(limitByMemory, maxMemory);
     }
     StorageManager(uint cacheSize,
                    bool limitByMemory,
                    uint64 maxMemory,
+                   float maxSizeDiff,
                    const std::string & type) :
-        StorageManager(cacheSize, limitByMemory, maxMemory, type,
+        StorageManager(cacheSize, limitByMemory, maxMemory, maxSizeDiff, type,
                        SerializerPtr(new AssetSerializerLocalXML<AssetType>())) {}
     ~StorageManager() = default;
 
@@ -92,6 +95,7 @@ class StorageManager : public StorageManagerInterface<AssetType> {
     inline void AddNew(const AssetKey &, const PointerType &);
     inline void AddExisting(const AssetKey &, const PointerType &);
     inline void NoLongerNeeded(const AssetKey &, bool = true);
+    bool DetermineIfPrune();
     void Abort();
     bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<AssetKey> *);
     PointerType Get(const AssetHandleInterface<AssetType> *, const AssetKey &, bool, bool, bool);
@@ -111,6 +115,7 @@ class StorageManager : public StorageManagerInterface<AssetType> {
     const SerializerPtr serializer;
     CacheType cache;
     std::map<AssetKey, PointerType> dirtyMap;
+    const float maxSizeDiff;
 
     StorageManager(const StorageManager &) = delete;
     StorageManager& operator=(const StorageManager &) = delete;
@@ -164,6 +169,7 @@ template<class AssetType>
 inline void
 StorageManager<AssetType>::AddNew(const AssetKey & key, const PointerType & value) {
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
+  cache.setPruneConditionVal(DetermineIfPrune());
   cache.Add(key, value);
   // New assets are automatically dirty
   dirtyMap.emplace(key, value);
@@ -173,6 +179,7 @@ template<class AssetType>
 inline void
 StorageManager<AssetType>::AddExisting(const AssetKey & key, const PointerType & value) {
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
+  cache.setPruneConditionVal(DetermineIfPrune());
   cache.Add(key, value);
 }
 
@@ -180,6 +187,7 @@ template<class AssetType>
 inline void
 StorageManager<AssetType>::NoLongerNeeded(const AssetKey & key, bool prune) {
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
+  cache.setPruneConditionVal(DetermineIfPrune());
   cache.Remove(key, prune);
 }
 
@@ -229,6 +237,7 @@ StorageManager<AssetType>::Get(
       // The file has changed on disk.
 
       // Drop the current entry from the cache.
+      cache.setPruneConditionVal(DetermineIfPrune());
       cache.Remove(key, false);  // Don't prune, the Add() will.
 
       // Will succeed, generate stub, or throw exception.
@@ -240,6 +249,7 @@ StorageManager<AssetType>::Get(
   if (entry) {
     // Add it to the cache.
     if (addToCache && updated)
+      cache.setPruneConditionVal(DetermineIfPrune());
       cache.Add(key, entry);
 
     // Add it to the dirty map. If it's already in the dirty map the existing
@@ -282,6 +292,7 @@ StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & ref) {
       // The file has changed on disk.
 
       // Drop the current entry from the cache.
+      cache.setPruneConditionVal(DetermineIfPrune());
       cache.Remove(key, false);  // Don't prune, the Add() will.
 
       // Will succeed, generate stub, or throw exception.
@@ -292,6 +303,7 @@ StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & ref) {
 
   if (entry && updated) {
     // Add it to the cache.
+    cache.setPruneConditionVal(DetermineIfPrune());
     cache.Add(key, entry);
   }
 
@@ -322,6 +334,7 @@ void StorageManager<AssetType>::Abort() {
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
   // remove all the dirty Impls from the cache
   for (const std::pair<AssetKey, PointerType> & entry : dirtyMap) {
+    cache.setPruneConditionVal(DetermineIfPrune());
     cache.Remove(entry.first, false); // false -> don't prune
   }
   cache.Prune();  // prune at the end to avoid possible prune thrashing
@@ -353,6 +366,31 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
   }
   cache.Prune();
   return true;
+}
+
+template<class AssetType>
+bool StorageManager<AssetType>::DetermineIfPrune() {
+  std::lock_guard<std::recursive_mutex> lock(storageMutex);
+  uint32 cacheSize = CacheSize();
+  uint32 dirtySize = DirtySize();
+  uint32 oriNum;
+  uint32 newNum;
+  uint32 diff;
+  float percent;
+
+  if (cacheSize > dirtySize) {
+    oriNum = cacheSize;
+    newNum = dirtySize;
+  }
+  else {
+    oriNum = dirtySize;
+    newNum = cacheSize;
+  }
+  if (oriNum == newNum || oriNum == 0 || newNum == 0) { return false; }
+  diff = oriNum - newNum;
+  percent = ((float)diff / (float)oriNum) * 100;
+  notify(NFY_WARN, "Percent Diff: %f", percent);
+  return (percent > maxSizeDiff);
 }
 
 #endif // STORAGEMANAGER_H
