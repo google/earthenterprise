@@ -148,6 +148,19 @@ class GlcUnpacker {
   bool FindFile(const char* file_name, PackageFileLoc* file_loc) const;
 
   /**
+   * Find all files in a layer/directory and set offset and size for
+   * each file content.
+   * @param directory_name Absolute path to directory in package.
+   * @param layer Layer (side database) within the meta dbroot.
+   * @param file_locs Returns location of file data and name data for each file.
+   * @return whether any files were found.
+   */
+  bool FindLayerDirectoryFiles(
+      const char* directory_name,
+      int layer,
+      std::map<const char* , PackageFileLoc*>* file_locs);
+
+  /**
    * Find meta dbroot from a 3d glc file and set offset and size for the
    * content.
    * @param data_loc Returns location of meta dbroot data.

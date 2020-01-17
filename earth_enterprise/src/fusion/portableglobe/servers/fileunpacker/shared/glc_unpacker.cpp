@@ -449,6 +449,30 @@ bool GlcUnpacker::FindFile(const char* file_name,
 }
 
 /**
+ * Find each file in a provided directory on a layer and retrieve their names,
+ * offsets, and sizes.
+ */
+bool GlcUnpacker::FindLayerDirectoryFiles(const char* directory_name,
+                                     int layer,
+                                     std::map<const char* , PackageFileLoc*>* file_locs) {
+    FileUnpacker* unpacker = GetUnpacker(layer);
+
+    for (int i = 0; i < unpacker->IndexSize(); ++i) {
+      const char *package_file = unpacker->IndexFile(i);
+
+      PackageFileLoc file_loc;
+
+      if (FindFile(package_file, &file_loc)) {
+        if (!strncmp(directory_name, package_file, strlen(directory_name))) {
+          (*file_locs).emplace(package_file, &file_loc);
+        }
+      }
+  }
+
+  return !((*file_locs).empty());
+}
+
+/**
  * Find meta dbroot for the composite globe.
  */
 bool GlcUnpacker::FindMetaDbRoot(PackageFileLoc* data_loc) {
