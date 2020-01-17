@@ -73,7 +73,7 @@ class StateUpdater
       storageManager(sm), assetManager(am),
       waitingListeners(AssetDefs::Waiting), inProgressParents(AssetDefs::InProgress) {}
     StateUpdater() : StateUpdater(&AssetVersion::storageManager(), &theAssetManager) {}
-    virtual void SetStateForRefAndDependents(
+    virtual void SetAndPropagateState(
         const SharedString & ref,
         AssetDefs::State newState,
         std::function<bool(AssetDefs::State)> updateStatePredicate);

@@ -360,7 +360,7 @@ class StateUpdater::SetBlockingStateVisitor : public default_dfs_visitor {
 /**********************************************
 * StateUpdater
 **********************************************/
-void StateUpdater::SetStateForRefAndDependents(
+void StateUpdater::SetAndPropagateState(
     const SharedString & ref,
     AssetDefs::State newState,
     function<bool(AssetDefs::State)> updateStatePredicate) {
@@ -538,7 +538,7 @@ void StateUpdater::NotifyChildOrInputSucceeded(
 }
 
 void StateUpdater::SetFailed(AssetHandle<AssetVersionImpl> & version) {
-  SetStateForRefAndDependents(
+  SetAndPropagateState(
       version->GetRef(), 
       AssetDefs::Failed, 
       [](AssetDefs::State){return true;}

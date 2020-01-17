@@ -32,7 +32,7 @@ const AssetKey REF = "a";
 
 class MockVersion : public AssetVersionImpl {
   public:
-    bool stateSetForRefAndDependents;
+    bool statePropagated;
     AssetDefs::State refAndDependentsState;
     std::function<bool(AssetDefs::State)> updateStateFunc;
     bool setProgress;
@@ -45,7 +45,7 @@ class MockVersion : public AssetVersionImpl {
     mutable bool updatedSucceeded;
 
     MockVersion() :
-        stateSetForRefAndDependents(false),
+        statePropagated(false),
         refAndDependentsState(AssetDefs::Failed),
         updateStateFunc(nullptr),
         setProgress(false),
@@ -116,13 +116,13 @@ class MockStateUpdater : public StateUpdater {
     MockStorageManager * sm;
   public:
     MockStateUpdater(MockStorageManager * sm) : sm(sm) {}
-    virtual void SetStateForRefAndDependents(
+    virtual void SetAndPropagateState(
         const SharedString & ref,
         AssetDefs::State newState,
         std::function<bool(AssetDefs::State)> updateStatePredicate) {
       assert(ref == REF);
       auto version = sm->GetMutableVersion();
-      version->stateSetForRefAndDependents = true;
+      version->statePropagated = true;
       version->refAndDependentsState = newState;
       version->updateStateFunc = updateStatePredicate;
     }
@@ -168,7 +168,7 @@ class AssetOperationTest : public testing::Test {
 TEST_F(AssetOperationTest, Rebuild) {
   sm.GetMutableVersion()->state = AssetDefs::Canceled;
   RebuildVersion(REF, MiscConfig::ALL_GRAPH_OPS);
-  ASSERT_TRUE(sm.GetVersion()->stateSetForRefAndDependents);
+  ASSERT_TRUE(sm.GetVersion()->statePropagated);
   ASSERT_EQ(sm.GetVersion()->refAndDependentsState, AssetDefs::New);
 
   // Make sure the function that determines which states to update returns the
@@ -205,13 +205,13 @@ TEST_F(AssetOperationTest, RebuildWrongStateBad) {
 TEST_F(AssetOperationTest, RebuildBadVersion) {
   sm.GetMutableVersion()->type = AssetDefs::Invalid;
   RebuildVersion(REF, MiscConfig::ALL_GRAPH_OPS);
-  ASSERT_FALSE(sm.GetVersion()->stateSetForRefAndDependents);
+  ASSERT_FALSE(sm.GetVersion()->statePropagated);
 }
 
 TEST_F(AssetOperationTest, Cancel) {
   sm.GetMutableVersion()->state = AssetDefs::Waiting;
   CancelVersion(REF, MiscConfig::ALL_GRAPH_OPS);
-  ASSERT_TRUE(sm.GetVersion()->stateSetForRefAndDependents);
+  ASSERT_TRUE(sm.GetVersion()->statePropagated);
   ASSERT_EQ(sm.GetVersion()->refAndDependentsState, AssetDefs::Canceled);
 
   // Make sure the function that determines which states to update returns the
@@ -267,7 +267,7 @@ TEST_F(AssetOperationTest, CancelWrongSubtype) {
 TEST_F(AssetOperationTest, CancelBadVersion) {
   sm.GetMutableVersion()->type = AssetDefs::Invalid;
   CancelVersion(REF, MiscConfig::ALL_GRAPH_OPS);
-  ASSERT_FALSE(sm.GetVersion()->stateSetForRefAndDependents);
+  ASSERT_FALSE(sm.GetVersion()->statePropagated);
 }
 
 TEST_F(AssetOperationTest, Progress) {
