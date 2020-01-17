@@ -359,8 +359,7 @@ TEST_F(AssetOperationTest, DoneFailed) {
   auto msg = TaskDoneMsg(REF, TASKID, false, BEGIN_TIME, END_TIME, OUTFILES);
   sm.GetMutableVersion()->taskid = TASKID;
   HandleTaskDone(msg, MiscConfig::ALL_GRAPH_OPS);
-  ASSERT_TRUE(sm.GetVersion()->stateSetForRefAndDependents);
-  ASSERT_EQ(sm.GetVersion()->refAndDependentsState, AssetDefs::Failed);
+  ASSERT_TRUE(sm.GetVersion()->setFailed);
   ASSERT_EQ(sm.GetVersion()->beginTime, BEGIN_TIME);
   ASSERT_EQ(sm.GetVersion()->progressTime, END_TIME);
   ASSERT_EQ(sm.GetVersion()->endTime, END_TIME);

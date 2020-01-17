@@ -942,7 +942,6 @@ TEST_F(StateUpdaterTest, SetFailed) {
   SetVersions(sm, {MockVersion("a")});
   auto version = sm.GetMutable(fix("a"));
   updater.SetFailed(version);
-  ASSERT_TRUE(GetVersion(sm, "a")->setAndPropagateStateCalled);
   ASSERT_EQ(GetVersion(sm, "a")->state, AssetDefs::Failed);
 }
 

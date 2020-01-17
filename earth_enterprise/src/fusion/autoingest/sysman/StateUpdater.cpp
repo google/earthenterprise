@@ -539,7 +539,11 @@ void StateUpdater::NotifyChildOrInputSucceeded(
 }
 
 void StateUpdater::SetFailed(AssetHandle<AssetVersionImpl> & version) {
-  version->SetAndPropagateState(AssetDefs::Failed);
+  SetStateForRefAndDependents(
+      version->GetRef(), 
+      AssetDefs::Failed, 
+      [](AssetDefs::State){return true;}
+  );
 }
 
 void StateUpdater::RecalcState(const SharedString & ref) {
