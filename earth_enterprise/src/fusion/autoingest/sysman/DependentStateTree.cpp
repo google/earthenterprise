@@ -153,8 +153,8 @@ void DependentStateTreeFactory::FillInVertex(
     tree[myVertex].inDepTree = false;
     vertices[name].includeConnections = false;
   }
-  // If I'm in the dependency tree I need to add my dependents because they are
-  // also in the dependency tree.
+  // If I'm in the dependency tree, and if the new state propagates to dependents,
+  // then I need to add my dependents to the graph and the dependency tree.
   if (tree[myVertex].inDepTree && includeDependentChildren) {
     vector<SharedString> dependents;
     version->DependentChildren(dependents);

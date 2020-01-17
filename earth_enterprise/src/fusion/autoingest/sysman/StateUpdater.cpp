@@ -299,10 +299,10 @@ class StateUpdater::SetBlockingStateVisitor : public default_dfs_visitor {
       AssetDefs::State oldState = tree[vertex].state;
       if (newState != oldState) {
         notify(NFY_PROGRESS, "Setting state of '%s' from '%s' to '%s'",
-              name.toString().c_str(), ToString(oldState).c_str(), ToString(newState).c_str());
+            name.toString().c_str(), ToString(oldState).c_str(), ToString(newState).c_str());
         auto version = updater.storageManager->GetMutable(name);
         if (version) {
-            updater.SetVersionStateAndRunHandlers(version, newState, waitingFor);
+          updater.SetVersionStateAndRunHandlers(version, newState, waitingFor);
 
           // Get the new state directly from the asset version since it may be
           // different from the passed-in state
@@ -318,7 +318,7 @@ class StateUpdater::SetBlockingStateVisitor : public default_dfs_visitor {
           // This shoud never happen - we had to successfully load the asset
           // previously to get it into the tree.
           notify(NFY_WARN, "Could not load asset '%s' to set state.",
-                name.toString().c_str());
+              name.toString().c_str());
         }
       }
     }
