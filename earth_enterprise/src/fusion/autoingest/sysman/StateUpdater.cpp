@@ -306,8 +306,7 @@ class StateUpdater::SetBlockingStateVisitor : public default_dfs_visitor {
 
           // Get the new state directly from the asset version since it may be
           // different from the passed-in state
-          auto & data = tree[vertex];
-          data.state = version->state;
+          tree[vertex].state = version->state;
 
           if (AssetDefs::Canceled == newState || AssetDefs::Blocked == newState || AssetDefs::Failed == newState){
             hasBlockingChildren->insert(version->parents.begin(), version->parents.end());

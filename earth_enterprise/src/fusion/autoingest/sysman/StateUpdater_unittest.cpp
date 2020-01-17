@@ -990,44 +990,44 @@ TEST_F(StateUpdaterTest, Cancel) {
 
 TEST_F(StateUpdaterTest, FailedInput) {
   SetVersions(sm, {
-                    MockVersion("l"),
-                    MockVersion("i")
+                    MockVersion("a"),
+                    MockVersion("b")
                   });
-  SetListenerInput(sm, "l", "i");
+  SetListenerInput(sm, "a", "b");
 
-  GetMutableVersion(sm, "l")->state = AssetDefs::Waiting;
-  GetMutableVersion(sm, "i")->state = AssetDefs::InProgress;
+  GetMutableVersion(sm, "a")->state = AssetDefs::Waiting;
+  GetMutableVersion(sm, "b")->state = AssetDefs::InProgress;
 
   // MockVersion::InputStatesAffectMyState will return true, so setting this input
   // to a Failed state should cause the listener to become Blocked
-  updater.SetStateForRefAndDependents(fix("i"), AssetDefs::Failed, [](AssetDefs::State) { return true; });
+  updater.SetStateForRefAndDependents(fix("b"), AssetDefs::Failed, [](AssetDefs::State) { return true; });
 
-  assertStateSet(sm, "l");
-  assertStateSet(sm, "i");
-  assert(AssetDefs::Blocked == GetMutableVersion(sm, "l")->state);
-  assert(AssetDefs::Failed == GetMutableVersion(sm, "i")->state );
+  assertStateSet(sm, "a");
+  assertStateSet(sm, "b");
+  assert(AssetDefs::Blocked == GetMutableVersion(sm, "a")->state);
+  assert(AssetDefs::Failed == GetMutableVersion(sm, "b")->state);
 }
 
 TEST_F(StateUpdaterTest, FailedInputDontCare) {
   SetVersions(sm, {
-                    MockVersion("l"),
-                    MockVersion("i")
+                    MockVersion("a"),
+                    MockVersion("b")
                   });
-  SetListenerInput(sm, "l", "i");
+  SetListenerInput(sm, "a", "b");
 
-  GetMutableVersion(sm, "l")->state = AssetDefs::Waiting;
-  GetMutableVersion(sm, "i")->state = AssetDefs::InProgress;
+  GetMutableVersion(sm, "a")->state = AssetDefs::Waiting;
+  GetMutableVersion(sm, "b")->state = AssetDefs::InProgress;
 
-  GetMutableVersion(sm, "l")->inputStatesAffectMyState = false;
+  GetMutableVersion(sm, "a")->inputStatesAffectMyState = false;
 
   // MockVersion::InputStatesAffectMyState will return true, so setting this input
   // to a Failed state should cause the listener to become Blocked
-  updater.SetStateForRefAndDependents(fix("i"), AssetDefs::Failed, [](AssetDefs::State) { return true; });
+  updater.SetStateForRefAndDependents(fix("b"), AssetDefs::Failed, [](AssetDefs::State) { return true; });
 
-  assertStateNotSet(sm, "l");
-  assertStateSet(sm, "i");
-  assert(AssetDefs::Waiting == GetMutableVersion(sm, "l")->state);
-  assert(AssetDefs::Failed == GetMutableVersion(sm, "i")->state );
+  assertStateNotSet(sm, "a");
+  assertStateSet(sm, "b");
+  assert(AssetDefs::Waiting == GetMutableVersion(sm, "a")->state);
+  assert(AssetDefs::Failed == GetMutableVersion(sm, "b")->state );
 }
 
 TEST_F(StateUpdaterTest, FailedChild) {
