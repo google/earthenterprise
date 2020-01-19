@@ -130,6 +130,8 @@ skia_rel_dir = 'third_party/skia'
 src_keyhole_abs_dir = os.path.join(top_dir, 'keyhole')
 
 optdir = '/opt/google'
+#qtdir = '/usr/lib64/qt-3.3'
+
 
 # Our builds link against some golden (old) versions of various system libs.
 # This helps a single build run on multiple distros (SLES, RHEL, Goobuntu).
@@ -290,12 +292,14 @@ if gprof:
 rpathlink_dirs = [Dir(exportdirs['lib']).abspath]
 # SetUID binaries don't use RPATH's containing '$ORIGIN' (since that would be
 # exploitable).  Use absolute paths to library install locations instead:
-rpath_dirs = ["'$$ORIGIN/../qt/lib'",
+qtdir = '/usr/lib64/qt-3.3'
+
+rpath_dirs = ["'/usr/lib64/qt-3.3/lib'", #"'$$ORIGIN/../qt/lib'",
               "'$$ORIGIN/../lib64'",
               "'$$ORIGIN/../lib'",
               '%s/lib64' % optdir,
               '%s/lib' % optdir,
-              '%s/qt/lib' % optdir]
+              '%s/lib' % qtdir]
 
 # Binaries for unit tests, and other tests don't reside in the `bin` directory
 # where other executables go.  Instead, they are put in `bin/tests`.  So, the
@@ -562,7 +566,18 @@ if home: env['ENV']['HOME'] = str(home)
 # setup QTDIR & friends
 # always use our Qt
 qtdir = exportdir
-qtdir_lib = '%s/lib' % exportdir
+sys.stdout.write("Checking for QT...")
+qtpath=os.popen('find /usr/lib* -type d -name qt* 2> /dev/null').read().lstrip().rstrip()
+if len(qtpath) == 0:
+	print " not found!"
+	exit(1)
+print " %s" % qtpath
+
+# got tired of trying to mess with compiler options, and since this isn't
+# getting merged, just run a hacky script to symlink
+os.system('for f in {0}; do ln -s {0}/lib/* {1}/lib; ln -s {0}/bin/* {1}/bin; ln -s {0}/include/* {1}/include; done'.format(qtpath,qtdir))
+
+qtdir_lib = '%s/lib' % qtdir #exportdir
 env['ENV']['QTDIR'] = str(qtdir)
 env['QTDIR'] = str(qtdir)
 env['QTINCDIR'] = qtdir+'/include'
