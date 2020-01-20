@@ -8,7 +8,7 @@ source files and then generate HTML using Sphinx.
 
 To build the documentation, the following packages (and versions) need to be installed :
 
-python 2.7 (required)
+python 2.7
 git 1.8+
 python-pip
 python packages: sphinx(1.7.5), GitPython(1.0.1), sphinxprettysearchresults(0.3.5)
@@ -148,7 +148,7 @@ branch and master.
       HTML changes. You can keep 5.3.2 html changes from the 5.3.2 branch while resolving
       conflicts. If there are conflicts in 5.3.3 html files, regenerating the html files
       is the best way to solve it.
-      If there are conflicts in the RST, resolve them and generate HTML for master
+      If there are conflicts in the RST, resolve them and generate HTML
       which will update the HTML for 5.3.3.
 
    d. Commit 5.3.2 merge:
