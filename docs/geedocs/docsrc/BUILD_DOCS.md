@@ -6,14 +6,12 @@ source files and then generate HTML using Sphinx.
 
 ## Prerequisites
 
-To build the documentation, you need to install Sphinx:
+To build the documentation, the following packages (and versions) need to be installed :
 
-```bash
-sudo apt install python-pip
-sudo pip install sphinx==1.7.5
-sudo pip install GitPython
-sudo pip install sphinxprettysearchresults
-```
+python 2.7 (required)
+git 1.8+
+python-pip
+python packages: sphinx(1.7.5), GitPython(1.0.1), sphinxprettysearchresults(0.3.5)
 
 ## Documentation Organization
 
@@ -145,10 +143,12 @@ branch and master.
       Keep the change, which has |release| instead of 5.3.3. This will help
       update the documentation based on the current Open GEE release.
 
-      Merges may become tricky if there are conflicts in the generated HTML.
+      NOTE: Merges may become tricky if there are conflicts in the generated HTML.
       If bringing 5.3.2 changes into master there will be 5.3.2
-      HTML changes. You can keep changes in the 5.3.2 branch while resolving
-      conflicts. Resolve conflicts in the RST and generated HTML for master
+      HTML changes. You can keep 5.3.2 html changes from the 5.3.2 branch while resolving
+      conflicts. If there are conflicts in 5.3.3 html files, regenerating the html files
+      is the best way to solve it.
+      If there are conflicts in the RST, resolve them and generate HTML for master
       which will update the HTML for 5.3.3.
 
    d. Commit 5.3.2 merge:
