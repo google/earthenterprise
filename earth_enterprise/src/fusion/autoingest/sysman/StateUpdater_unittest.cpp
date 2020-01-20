@@ -69,7 +69,6 @@ class MockVersion : public AssetVersionImpl {
     bool recalcStateReturnVal;
     vector<AssetKey> dependents;
     bool inputStatesAffectMyState;
-    bool childStatesAffectMyState;
 
     MockVersion()
         : loadedMutable(false),
@@ -84,8 +83,7 @@ class MockVersion : public AssetVersionImpl {
           progressNotified(0.0),
           stateChangeBehavior(NO_ERRORS),
           recalcStateReturnVal(true),
-          inputStatesAffectMyState(true),
-          childStatesAffectMyState(true) {
+          inputStatesAffectMyState(true) {
       type = AssetDefs::Imagery; // Ensures that operator bool can return true
       state = STARTING_STATE;
     }
@@ -98,7 +96,6 @@ class MockVersion : public AssetVersionImpl {
     }
 
     virtual bool InputStatesAffectMyState(AssetDefs::State stateByInputs, bool blockedByOfflineInputs) const override {return inputStatesAffectMyState;}
-    virtual bool ChildStatesAffectMyState() const override {return childStatesAffectMyState;}
 
     virtual void DependentChildren(vector<SharedString> & d) const override {
       for(auto dependent : dependents) {
@@ -1047,28 +1044,6 @@ TEST_F(StateUpdaterTest, FailedChild) {
   assertStateSet(sm, "p");
   assertStateSet(sm, "c");
   assert(AssetDefs::Blocked == GetMutableVersion(sm, "p")->state);
-  assert(AssetDefs::Failed == GetMutableVersion(sm, "c")->state );
-}
-
-TEST_F(StateUpdaterTest, FailedChildDontCare) {
-  SetVersions(sm, {
-                    MockVersion("p"),
-                    MockVersion("c")
-                  });
-  SetParentChild(sm, "p", "c");
-
-  GetMutableVersion(sm, "p")->state = AssetDefs::InProgress;
-  GetMutableVersion(sm, "c")->state = AssetDefs::InProgress;
-
-  GetMutableVersion(sm, "p")->childStatesAffectMyState = false;
-
-  // MockVersion::InputStatesAffectMyState will return true, so setting this input
-  // to a Failed state should cause the listener to become Blocked
-  updater.SetAndPropagateState(fix("c"), AssetDefs::Failed, [](AssetDefs::State) { return true; });
-
-  assertStateNotSet(sm, "p");
-  assertStateSet(sm, "c");
-  assert(AssetDefs::InProgress == GetMutableVersion(sm, "p")->state);
   assert(AssetDefs::Failed == GetMutableVersion(sm, "c")->state );
 }
 

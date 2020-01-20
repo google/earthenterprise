@@ -1192,10 +1192,6 @@ bool CompositeAssetVersionImplD::InputStatesAffectMyState(AssetDefs::State state
   return InputStatesAffectMyState;
 }
 
-bool CompositeAssetVersionImplD::ChildStatesAffectMyState() const {
-  return true;
-}
-
 AssetDefs::State
 CompositeAssetVersionImplD::CalcStateByInputsAndChildren(const InputAndChildStateData & stateData) const {
   this->numInputsWaitingFor = stateData.waitingFor.inputs;

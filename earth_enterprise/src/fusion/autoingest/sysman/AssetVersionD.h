@@ -207,7 +207,6 @@ class LeafAssetVersionImplD : public virtual LeafAssetVersionImpl,
                                          AssetDefs::State oldstate) override;
   virtual AssetDefs::State CalcStateByInputsAndChildren(const InputAndChildStateData &) const override;
   virtual bool InputStatesAffectMyState(AssetDefs::State stateByInputs, bool blockedByOfflineInputs) const override;
-  virtual bool ChildStatesAffectMyState() const override { return false; }
 };
 
 
@@ -250,7 +249,6 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
                                          AssetDefs::State oldstate) override;
   virtual bool RecalcState(WaitingFor &) const override;
   virtual bool InputStatesAffectMyState(AssetDefs::State stateByInputs, bool blockedByOfflineInputs) const override;
-  virtual bool ChildStatesAffectMyState() const override;
 };
 
 #endif /* __AssetVersionD_h */

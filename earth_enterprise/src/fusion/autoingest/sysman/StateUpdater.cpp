@@ -349,8 +349,7 @@ class StateUpdater::SetBlockingStateVisitor : public default_dfs_visitor {
             version->InputStatesAffectMyState(AssetDefs::Blocked, true)) {
           SetState(vertex, AssetDefs::Blocked, {0,0});
         }
-        else if (hasBlockingChildren->find(data.name) != hasBlockingChildren->end() && 
-            version->ChildStatesAffectMyState()) {
+        else if (hasBlockingChildren->find(data.name) != hasBlockingChildren->end()) {
           SetState(vertex, AssetDefs::Blocked, {0,0});
         }
       }
