@@ -302,7 +302,7 @@ class StateUpdater::SetBlockingStateVisitor : public StateUpdater::VisitorBase {
     const std::shared_ptr<BlockedSet> hasBlockingChildren;
 
     void MarkParentsForLaterProcessing(AssetHandle<AssetVersionImpl> & version) const override {
-      if (AssetDefs::Canceled == newState || AssetDefs::Blocked == newState || AssetDefs::Failed == newState){
+      if (AssetDefs::IsBlocking(newState)){
         hasBlockingChildren->insert(version->parents.begin(), version->parents.end());
         hasBlockingInputs->insert(version->listeners.begin(), version->listeners.end());
       }
