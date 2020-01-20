@@ -29,6 +29,7 @@ Test that Fusion respects the UseMinification setting in misc.xml
 
 GEE minification test: Test that images built with minification have more dependencies
 ------------------------------------------------
+Tags: build, minification, minify, resources, misc.xml
 * Turn minification "on"
 * Restart fusion
 * Create imagery resource "blue_marble_minify" from "Imagery/bluemarble_4km.tif"
@@ -49,3 +50,4 @@ GEE minification test: Test that images built with minification have more depend
 * Wait for imagery project "without_minification" to reach state "Succeeded"
 * Verify project "with_minification" has "119" dependencies and project "without_minification" has "101"
 * Turn minification "on"
+* Restart fusion
