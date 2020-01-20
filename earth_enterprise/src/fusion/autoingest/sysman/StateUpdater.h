@@ -31,6 +31,7 @@ class StateUpdater
 {
   private:
     class UnsupportedException {};
+    class VisitorBase;
     class SetStateVisitor;
     class SetBlockingStateVisitor;
 

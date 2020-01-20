@@ -35,13 +35,56 @@ static bool UserActionRequired(AssetDefs::State state) {
   return state & (AssetDefs::Bad | AssetDefs::Offline | AssetDefs::Canceled);
 }
 
-class StateUpdater::SetStateVisitor : public default_dfs_visitor {
-  private:
-    using RecalcSet = std::unordered_set<SharedString>;
-
+class StateUpdater::VisitorBase: public default_dfs_visitor {
+  protected:
     StateUpdater & updater;
     DependentStateTree & tree;
     const AssetDefs::State newState;
+
+    VisitorBase(StateUpdater & updater, DependentStateTree & tree, AssetDefs::State newState) :
+        updater(updater), tree(tree), newState(newState) {}
+
+    virtual void MarkParentsForLaterProcessing(AssetHandle<AssetVersionImpl> & version) const = 0;
+
+    void SetState(
+        DependentStateTreeVertexDescriptor vertex,
+        AssetDefs::State newState,
+        const WaitingFor & waitingFor,
+        bool runHandlers) const {
+      SharedString name = tree[vertex].name;
+      AssetDefs::State oldState = tree[vertex].state;
+      if (newState != oldState) {
+        notify(NFY_PROGRESS, "Setting state of '%s' from '%s' to '%s'",
+            name.toString().c_str(), ToString(oldState).c_str(), ToString(newState).c_str());
+        auto version = updater.storageManager->GetMutable(name);
+        if (version) {
+          if (runHandlers) {
+            updater.SetVersionStateAndRunHandlers(version, newState, waitingFor);
+          }
+          else {
+            version->state = newState;
+          }
+
+          // Get the new state directly from the asset version since it may be
+          // different from the passed-in state
+          tree[vertex].state = version->state;
+
+          MarkParentsForLaterProcessing(version);
+        }
+        else {
+          // This shoud never happen - we had to successfully load the asset
+          // previously to get it into the tree.
+          notify(NFY_WARN, "Could not load asset '%s' to set state.",
+              name.toString().c_str());
+        }
+      }
+    }
+};
+
+class StateUpdater::SetStateVisitor : public StateUpdater::VisitorBase {
+  private:
+    using RecalcSet = std::unordered_set<SharedString>;
+
     // This is a shared_ptr because the visitor will be copied several times
     // during the course of the traversal.
     const std::shared_ptr<RecalcSet> needsRecalc;
@@ -184,39 +227,9 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
       return data;
     }
 
-    void SetState(
-        DependentStateTreeVertexDescriptor vertex,
-        AssetDefs::State newState,
-        const WaitingFor & waitingFor,
-        bool runHandlers) const {
-      SharedString name = tree[vertex].name;
-      AssetDefs::State oldState = tree[vertex].state;
-      if (newState != oldState) {
-        notify(NFY_PROGRESS, "Setting state of '%s' from '%s' to '%s'",
-              name.toString().c_str(), ToString(oldState).c_str(), ToString(newState).c_str());
-        auto version = updater.storageManager->GetMutable(name);
-        if (version) {
-          if (runHandlers) {
-            updater.SetVersionStateAndRunHandlers(version, newState, waitingFor);
-          }
-          else {
-            version->state = newState;
-          }
-
-          // Get the new state directly from the asset version since it may be
-          // different from the passed-in state
-          tree[vertex].state = version->state;
-
-          needsRecalc->insert(version->parents.begin(), version->parents.end());
-          needsRecalc->insert(version->listeners.begin(), version->listeners.end());
-        }
-        else {
-          // This shoud never happen - we had to successfully load the asset
-          // previously to get it into the tree.
-          notify(NFY_WARN, "Could not load asset '%s' to set state.",
-                name.toString().c_str());
-        }
-      }
+    void MarkParentsForLaterProcessing(AssetHandle<AssetVersionImpl> & version) const override {
+      needsRecalc->insert(version->parents.begin(), version->parents.end());
+      needsRecalc->insert(version->listeners.begin(), version->listeners.end());
     }
 
     bool RelevantStateChanged(const AssetVertex & data) const {
@@ -246,7 +259,7 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
 
   public:
     SetStateVisitor(StateUpdater & updater, DependentStateTree & tree, AssetDefs::State newState) :
-        updater(updater), tree(tree), newState(newState),
+        VisitorBase(updater, tree, newState),
         needsRecalc(std::make_shared<RecalcSet>()) {}
 
     // This function is called after the DFS has completed for every vertex
@@ -279,54 +292,27 @@ class StateUpdater::SetStateVisitor : public default_dfs_visitor {
 };
 
 
-class StateUpdater::SetBlockingStateVisitor : public default_dfs_visitor {
+class StateUpdater::SetBlockingStateVisitor : public StateUpdater::VisitorBase {
   private:
-    using RecalcSet = std::unordered_set<SharedString>;
+    using BlockedSet = std::unordered_set<SharedString>;
 
-    StateUpdater & updater;
-    DependentStateTree & tree;
-    const AssetDefs::State newState;
     // This is a shared_ptr because the visitor will be copied several times
     // during the course of the traversal.
-    const std::shared_ptr<RecalcSet> hasBlockingInputs;
-    const std::shared_ptr<RecalcSet> hasBlockingChildren;
+    const std::shared_ptr<BlockedSet> hasBlockingInputs;
+    const std::shared_ptr<BlockedSet> hasBlockingChildren;
 
-    void SetState(
-        DependentStateTreeVertexDescriptor vertex,
-        AssetDefs::State newState,
-        const WaitingFor & waitingFor) const {
-      SharedString name = tree[vertex].name;
-      AssetDefs::State oldState = tree[vertex].state;
-      if (newState != oldState) {
-        notify(NFY_PROGRESS, "Setting state of '%s' from '%s' to '%s'",
-            name.toString().c_str(), ToString(oldState).c_str(), ToString(newState).c_str());
-        auto version = updater.storageManager->GetMutable(name);
-        if (version) {
-          updater.SetVersionStateAndRunHandlers(version, newState, waitingFor);
-
-          // Get the new state directly from the asset version since it may be
-          // different from the passed-in state
-          tree[vertex].state = version->state;
-
-          if (AssetDefs::Canceled == newState || AssetDefs::Blocked == newState || AssetDefs::Failed == newState){
-            hasBlockingChildren->insert(version->parents.begin(), version->parents.end());
-            hasBlockingInputs->insert(version->listeners.begin(), version->listeners.end());
-          }
-        }
-        else {
-          // This shoud never happen - we had to successfully load the asset
-          // previously to get it into the tree.
-          notify(NFY_WARN, "Could not load asset '%s' to set state.",
-              name.toString().c_str());
-        }
+    void MarkParentsForLaterProcessing(AssetHandle<AssetVersionImpl> & version) const override {
+      if (AssetDefs::Canceled == newState || AssetDefs::Blocked == newState || AssetDefs::Failed == newState){
+        hasBlockingChildren->insert(version->parents.begin(), version->parents.end());
+        hasBlockingInputs->insert(version->listeners.begin(), version->listeners.end());
       }
     }
 
   public:
     SetBlockingStateVisitor(StateUpdater & updater, DependentStateTree & tree, AssetDefs::State newState) :
-        updater(updater), tree(tree), newState(newState),
-        hasBlockingInputs(std::make_shared<RecalcSet>()),
-        hasBlockingChildren(std::make_shared<RecalcSet>()) {}
+        VisitorBase(updater, tree, newState),
+        hasBlockingInputs(std::make_shared<BlockedSet>()),
+        hasBlockingChildren(std::make_shared<BlockedSet>()) {}
 
     // This function is called after the DFS has completed for every vertex
     // below this one in the tree. Thus, we don't calculate the state for an
@@ -340,17 +326,17 @@ class StateUpdater::SetBlockingStateVisitor : public default_dfs_visitor {
 
       // Set the state for assets in the dependent tree.
       if (data.inDepTree) {
-        SetState(vertex, newState, {0, 0});
+        SetState(vertex, newState, {0, 0}, true);
       }
       else {
         // Set the state to blocked if needed, otherwise do nothing
         auto version = updater.storageManager->Get(data.name);
         if (hasBlockingInputs->find(data.name) != hasBlockingInputs->end() && 
             version->InputStatesAffectMyState(AssetDefs::Blocked, true)) {
-          SetState(vertex, AssetDefs::Blocked, {0,0});
+          SetState(vertex, AssetDefs::Blocked, {0,0}, true);
         }
         else if (hasBlockingChildren->find(data.name) != hasBlockingChildren->end()) {
-          SetState(vertex, AssetDefs::Blocked, {0,0});
+          SetState(vertex, AssetDefs::Blocked, {0,0}, true);
         }
       }
     }
