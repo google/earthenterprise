@@ -80,8 +80,12 @@ void PacketGenAssetVersionImplD::UpdateChildren(
         type,
         extra.insetInfo,
         numInsets,
-        config.beginMinifyLevel,
-        config.endMinifyLevel,
+        (MiscConfig::Instance().UseMinification
+         ? config.beginMinifyLevel
+         : 0),
+        (MiscConfig::Instance().UseMinification
+         ? config.endMinifyLevel
+         : 0),
         level);
     extra.calc->setEnvelope(env);
     neededIndexes = std::move(extra.calc->GetOverlapForLevel(gencov));

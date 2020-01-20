@@ -33,4 +33,7 @@ if [ `gequery ${FAILED_RESOURCE_NAME} --status` != "Failed" ]; then
   echo "Error setting up tests. Please try again."
 fi
 
+# Allow modifying misc.xml during tests
+sudo chmod o+w /gevol/assets/.config/misc.xml
+
 sudo /etc/init.d/gefusion restart
