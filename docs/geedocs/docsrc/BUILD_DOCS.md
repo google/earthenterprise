@@ -1,17 +1,17 @@
 # Build Instructions for Open GEE Documentation
 
 Open GEE documentation at release 5.3.2 has migrated from HTML format to RST
-(reStructuredText) format. To update this documentation, make changes to the RST
+(reStructuredText) format. To update Open GEE documentation, make changes to the RST
 source files and then generate HTML using Sphinx.
 
 ## Prerequisites
 
 To build the documentation, the following packages (and versions) need to be installed :
 
-python 2.7
-git 1.8+
-python-pip
-python packages: sphinx(1.7.5), GitPython(1.0.1), sphinxprettysearchresults(0.3.5)
+    python 2.7
+    git 1.8+
+    python-pip
+    python packages: sphinx(1.7.5), GitPython(1.0.1), sphinxprettysearchresults(0.3.5)
 
 ## Documentation Organization
 
@@ -58,14 +58,14 @@ _fusionTutorial_ folder.
    Depending on your version of Open GEE, appropriate HTML folders will be
    updated when you execute `make`.
 
-   For example, after running `make` for version 5.3.2, you will see a lot of
-   generated files under _earthenterprise/docs/geedocs/5.3.2_.
+   For example, after running `make` for version 5.x.y, you will see a lot of
+   generated files under _earthenterprise/docs/geedocs/5.x.y_.
 
    Add the RST files that you added or changed under _docsrc_ and the generated
    files under the release folder to your commit.
 
    ```bash
-   git add earthenterprise/docs/geedocs/5.3.2/*
+   git add earthenterprise/docs/geedocs/5.x.y/*
    git add earthenterprise/docs/geedocs/docsrc/*
    ```
 
@@ -73,7 +73,7 @@ _fusionTutorial_ folder.
 
 ## Making doc Changes in a release folder and merging into Master
 
-1. Create a branch off release_5.x.y branch
+1. Create a branch off release_5.x.y branch in your fork
 
    ```bash
    git checkout -b release_5.x.y upstream/release_5.x.y
@@ -98,7 +98,7 @@ _fusionTutorial_ folder.
       git push origin master
       ```
 
-   b. Create a branch off master:
+   b. Create a branch off master in your fork:
 
       ```bash
       git checkout master
