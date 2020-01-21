@@ -98,8 +98,9 @@ class GlcUnpacker {
    * @param walker   A function specifier taking a const string& parameter
    *                 to process. If walker returns false after handling a
    *                 packet, the traversal will stop.
+   * @return whether the walker exited early
    */
-  void MapFileWalker(const map_file_walker& walker);
+  bool MapFileWalker(const map_file_walker& walker);
 
   /**
    * Call walker function on all directory contents in the specified layer of the file.
@@ -107,8 +108,9 @@ class GlcUnpacker {
    * @param walker   A function specifier taking a const string& parameter
    *                 to process. If walker returns false after handling a
    *                 packet, the traversal will stop.
+   * @return whether the walker exited early
    */
-  void MapFileWalker(int layer, const map_file_walker& walker);
+  bool MapFileWalker(int layer, const map_file_walker& walker);
 
   /**
    * Find qtp packet and set offset and size for the packet. Qtp packets can
