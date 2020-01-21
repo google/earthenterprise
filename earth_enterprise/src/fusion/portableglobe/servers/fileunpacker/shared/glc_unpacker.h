@@ -94,6 +94,23 @@ class GlcUnpacker {
   void MapDataPacketWalker(int layer, const map_packet_walker& walker) const;
 
   /**
+   * Call walker function on all directory contents in all layers of the file.
+   * @param walker   A function specifier taking a const string& parameter
+   *                 to process. If walker returns false after handling a
+   *                 packet, the traversal will stop.
+   */
+  void MapFileWalker(const map_file_walker& walker);
+
+  /**
+   * Call walker function on all directory contents in the specified layer of the file.
+   * @param layer    The layer to walk
+   * @param walker   A function specifier taking a const string& parameter
+   *                 to process. If walker returns false after handling a
+   *                 packet, the traversal will stop.
+   */
+  void MapFileWalker(int layer, const map_file_walker& walker);
+
+  /**
    * Find qtp packet and set offset and size for the packet. Qtp packets can
    * be quadtree packets or a dbroot packet.
    * @param qtpath Quadtree path (with leading 0).

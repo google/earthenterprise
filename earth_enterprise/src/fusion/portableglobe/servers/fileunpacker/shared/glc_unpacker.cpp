@@ -334,6 +334,31 @@ void GlcUnpacker::MapDataPacketWalker(int layer, const map_packet_walker& walker
 }
 
 /**
+ * Find the names of all files in each layer of a globe.
+ */
+void GlcUnpacker::MapFileWalker(const map_file_walker& walker)
+{
+    for( auto& index_item : unpacker_index_) {
+        MapFileWalker(index_item.first, walker);
+    }
+}
+
+void GlcUnpacker::MapFileWalker(int layer, const map_file_walker& walker)
+{
+  FileUnpacker* unpacker = GetUnpacker(layer);
+
+  for (int i = 0; i < unpacker->IndexSize(); ++i) {
+    const char *package_file = unpacker->IndexFile(i);
+
+    std::string str(package_file);
+
+    if (walker(str) != true) {
+      break;
+    }
+  }
+}
+
+/**
  * Find qtp packet and set offset and size for the packet. Qtp packets can
  * be quadtree packets or a dbroot packet.
  */
