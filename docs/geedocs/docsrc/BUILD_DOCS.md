@@ -47,8 +47,7 @@ _fusionTutorial_ folder.
    ```
    Open a cmd prompt
    cd earthenterprise
-   add this in your git config of your repo
-   Add this line in .git/config under [core]
+   Add this line in .git/config of your repo under [core]
     autocrlf = input
    cd earthenterprise\docs\geedocs\docsrc
    make html
@@ -109,7 +108,7 @@ _fusionTutorial_ folder.
 
       ```bash
       $ git pull upstream release_5.x.y
-      ```bash
+      ```
 
       NOTE: Merges may become tricky if there are conflicts in the generated HTML.
       If bringing 5.x.y changes into master there will be 5.x.y
