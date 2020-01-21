@@ -1,6 +1,6 @@
 # Build Instructions for Open GEE Documentation
 
-Open GEE documentation at release 5.3.2 has migrated from HTML format to RST
+Open GEE documentation at release 5.3.2 has been migrated from HTML format to RST
 (reStructuredText) format. To update Open GEE documentation, make changes to the RST
 source files and then generate HTML using Sphinx.
 
