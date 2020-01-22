@@ -366,8 +366,8 @@ bool StorageManager<AssetType>::DetermineIfPrune() {
   float cacheSize = (float)CacheSize();
   float dirtySize = (float)DirtySize();
 
-  notify(NFY_WARN, "CacheSize: %f, DirtySize: %f, Percent: %f", cacheSize, dirtySize, (cacheSize * (1 - maxPurgePercent)));
-  return (dirtySize < (cacheSize * (1 - maxPurgePercent)));
+  notify(NFY_WARN, "CacheSize: %f, DirtySize: %f, Percent: %f", cacheSize, dirtySize, (cacheSize * (1.00 - maxPurgePercent)));
+  return (dirtySize < (cacheSize * (1.00 - maxPurgePercent)));
 }
 
 #endif // STORAGEMANAGER_H
