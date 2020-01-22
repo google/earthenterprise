@@ -331,12 +331,19 @@ class StateUpdater::SetBlockingStateVisitor : public StateUpdater::VisitorBase {
       else {
         // Set the state to blocked if needed, otherwise do nothing
         auto version = updater.storageManager->Get(data.name);
-        if (hasBlockingInputs->find(data.name) != hasBlockingInputs->end() && 
+        auto inputIt = hasBlockingInputs->find(data.name);
+        if (inputIt != hasBlockingInputs->end() && 
             version->InputStatesAffectMyState(AssetDefs::Blocked, true)) {
           SetState(vertex, AssetDefs::Blocked, {0,0}, true);
+          hasBlockingInputs->erase(inputIt);
         }
-        else if (hasBlockingChildren->find(data.name) != hasBlockingChildren->end()) {
+
+        auto childIt = hasBlockingChildren->find(data.name);
+        if (childIt != hasBlockingChildren->end()) {
+          // SetState could already have been called because of a blocking input.
+          // If that's the case, it will return immediately without doing anything.
           SetState(vertex, AssetDefs::Blocked, {0,0}, true);
+          hasBlockingChildren->erase(childIt);
         }
       }
     }
