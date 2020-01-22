@@ -374,7 +374,7 @@ bool StorageManager<AssetType>::DetermineIfPrune() {
   //notify(NFY_WARN, "Percent Diff: %f", percent);
   //return (percent > maxPurgePercent);
   notify(NFY_WARN, "CacheSize: %f, DirtySize: %f, Percent: %f", cacheSize, dirtySize, (cacheSize * maxPurgePercent));
-  return (dirtySize < (cacheSize * maxPurgePercent));
+  return !(dirtySize < (cacheSize * maxPurgePercent));
 }
 
 #endif // STORAGEMANAGER_H

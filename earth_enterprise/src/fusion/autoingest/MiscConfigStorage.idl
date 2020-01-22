@@ -36,7 +36,7 @@ class MiscConfigStorage {
   bool         LimitMemoryUtilization = false;
 
   // The maximum percentage difference between the sizes of cache and dirty map.
-  float         SizeDifferencePercentage = float(75.0);
+  float         SizeDifferencePercentage = float(.75);
   
   bool         GenerateProductPreviews = true;
   uint         MutexTimedWaitSec = uint(30);
