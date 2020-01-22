@@ -1024,7 +1024,7 @@ TEST_F(StateUpdaterTest, FailedInputDontCare) {
   assertStateNotSet(sm, "a");
   assertStateSet(sm, "b");
   assert(AssetDefs::Waiting == GetMutableVersion(sm, "a")->state);
-  assert(AssetDefs::Failed == GetMutableVersion(sm, "b")->state );
+  assert(AssetDefs::Failed == GetMutableVersion(sm, "b")->state);
 }
 
 TEST_F(StateUpdaterTest, FailedChild) {
@@ -1044,7 +1044,7 @@ TEST_F(StateUpdaterTest, FailedChild) {
   assertStateSet(sm, "p");
   assertStateSet(sm, "c");
   assert(AssetDefs::Blocked == GetMutableVersion(sm, "p")->state);
-  assert(AssetDefs::Failed == GetMutableVersion(sm, "c")->state );
+  assert(AssetDefs::Failed == GetMutableVersion(sm, "c")->state);
 }
 
 int main(int argc, char **argv) {
