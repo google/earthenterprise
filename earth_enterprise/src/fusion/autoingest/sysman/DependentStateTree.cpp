@@ -169,8 +169,8 @@ void DependentStateTreeFactory::FillInVertex(
   // state. If I don't need to recalculate my state, I don't need to add any of
   // my connections. I'm only used to calculate someone else's state.
   if (vertices[name].includeConnections) {
-    // In some cases, assets in the dependent tree don't need their inputs and
-    // children to calculate their states.
+    // In some cases, assets don't need all their inputs and children to
+    // calculate their states.
     if (includeAllChildrenAndInputs) {
       for (const auto &child : version->children)
       {

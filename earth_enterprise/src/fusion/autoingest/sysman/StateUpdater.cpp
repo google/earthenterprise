@@ -302,17 +302,16 @@ class StateUpdater::SetBlockingStateVisitor : public StateUpdater::VisitorBase {
     const std::shared_ptr<BlockedSet> hasBlockingChildren;
 
     void MarkParentsForLaterProcessing(AssetHandle<AssetVersionImpl> & version) const override {
-      if (AssetDefs::IsBlocking(newState)){
-        hasBlockingChildren->insert(version->parents.begin(), version->parents.end());
-        hasBlockingInputs->insert(version->listeners.begin(), version->listeners.end());
-      }
+      hasBlockingChildren->insert(version->parents.begin(), version->parents.end());
+      hasBlockingInputs->insert(version->listeners.begin(), version->listeners.end());
     }
 
   public:
     SetBlockingStateVisitor(StateUpdater & updater, DependentStateTree & tree, AssetDefs::State newState) :
         VisitorBase(updater, tree, newState),
         hasBlockingInputs(std::make_shared<BlockedSet>()),
-        hasBlockingChildren(std::make_shared<BlockedSet>()) {}
+        hasBlockingChildren(std::make_shared<BlockedSet>()) 
+        { assert(AssetDefs::IsBlocking(newState)); }
 
     // This function is called after the DFS has completed for every vertex
     // below this one in the tree. Thus, we don't calculate the state for an
@@ -359,8 +358,12 @@ void StateUpdater::SetAndPropagateState(
   try {
     SharedString verref = AssetVersionImpl::Key(ref);
     bool includeAllChildrenAndInputs = !UserActionRequired(newState);
-    // For all states except Failed, we will load dependent children into the tree
-    bool includeDependentChildren = newState != AssetDefs::Failed;
+    bool includeDependentChildren = true;
+    // If the newState is Failed, don't load any children or inputs. We're
+    // only going to propagate UP the tree.
+    if (AssetDefs::Failed == newState)
+      includeAllChildrenAndInputs = includeDependentChildren = false;
+
     DependentStateTree tree = BuildDependentStateTree(
         verref, updateStatePredicate, includeDependentChildren, includeAllChildrenAndInputs, storageManager);
       
