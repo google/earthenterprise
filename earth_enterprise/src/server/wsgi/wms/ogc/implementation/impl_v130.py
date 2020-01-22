@@ -1,6 +1,7 @@
 #!/usr/bin/env python2.7
 #
 # Copyright 2017 Google Inc.
+# Copyright 2019-2020 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -113,6 +114,8 @@ class GetCapabilitiesRequest(object):
     return (limits.x0, limits.y0, limits.x1, limits.y1)
 
   def GetOnlineResource(self):
+    if "proxy-endpoint" in self.parameters:
+        return self._MakeOnlineResourceXml(self.parameters["proxy-endpoint"])
     return self._MakeOnlineResourceXml(self.parameters["this-endpoint"])
 
   def GetDCPTypeInfo(self):
