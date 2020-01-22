@@ -49,7 +49,7 @@ Release notes: Open GEE 5.3.3
       made to existing documentation. Instructions also added for building
       on FIPS-enabled machines.
 
-      **GraphOperations flag    Improved ease of use of Portable for WMS clients**.
+      **GraphOperations flag Improved ease of use of Portable for WMS clients**.
       Accept col/row/level if x/y/z is missing in WMS request when
       serving portable globes.
 
@@ -69,7 +69,7 @@ Release notes: Open GEE 5.3.3
 
       To upgrade from Open GEE 5.2.0, do NOT uninstall it. We recommend
       that you upgrade Open GEE 5.2.0 by simply installing Open GEE
-      5.3.2. Installing Open GEE 5.3.3 on top of Open GEE 5.2.0 will
+      5.3.3. Installing Open GEE 5.3.3 on top of Open GEE 5.2.0 will
       ensure that your PostgreSQL databases are backed up and upgraded
       correctly to the new PostgreSQL version used by Open GEE 5.3.3.
 
@@ -127,13 +127,13 @@ Release notes: Open GEE 5.3.3
          * - 1577
            - Use defusedxml in server code
            - Added defusedxml as a dependecy.  Using defusedxml in place of
-             python XML to improve security.
+             PYTHON XML to improve security.
          * - 1582
            - Unit tests for asset version state calculation inaccurate
            - Fix asset version state calculation unit tests.
          * - 1586
            - Wrong permissions on download_tutorial.sh
-           - Permissions issue on download_tutorial.sh
+           - Fix permissions issue on download_tutorial.sh
          * - 1591
            - New library defusedxml
            - License file for defusedxml added.
@@ -276,7 +276,7 @@ Release notes: Open GEE 5.3.3
            - No current work around.
          * - 474
            - Running gee_check on some supported platforms reports that the platform is not supported
-           - You can ignore the failed test if using a supported platform (Ubuntu 14.04, Ubuntu 16.04, RHEL 7, and CentOS 7).
+           - You can ignore the failed test if using a supported platform (Ubuntu 16.04, RHEL 7, and CentOS 7).
          * - 477
            - 'service geserver stop/start/restart' doesn't work on Ubuntu 16.04 without a reboot
            - Reboot and try again.
@@ -293,7 +293,7 @@ Release notes: Open GEE 5.3.3
            - geserver service installation and uninstallation issues
            - Before uninstalling geserver verify if it's running or not.
          * - 590
-           - Maps API Javascript Files Not Found
+           - Maps API JaVaScRiPt Files Not Found
            - No current work around.
          * - 594
            - Save errors only reported for the first image
@@ -317,7 +317,7 @@ Release notes: Open GEE 5.3.3
            - Search fails after transferring and publishing a database using disconnected send from the command line
            - Re-publish the database from the web interface.
          * - 825
-           - Geserver fails to startup fully due to conflicting protobuf library
+           - Geserver fails to start up fully due to conflicting protobuf library
            - Run ``pip uninstall protobuf`` to uninstall the protobuf library installed by pip.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
