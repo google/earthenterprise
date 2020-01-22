@@ -527,6 +527,7 @@ Build database
   |------------|
   | InProgress |
   | Queued     |
+  | Succeeded  |
 * Verify that the state of vector resource "CA_POIs_Merc" is "Succeeded"
 * Verify that the state of mercator imagery project "StatePropagationTest_Mercator" is "Waiting"
 * Verify that the state of mercator imagery resource "BlueMarble_Mercator" is "InProgress"
