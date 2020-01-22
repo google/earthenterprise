@@ -365,16 +365,9 @@ bool StorageManager<AssetType>::DetermineIfPrune() {
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
   float cacheSize = (float)CacheSize();
   float dirtySize = (float)DirtySize();
-  //uint32 diff;
-  //float percent;
 
-  //if (cacheSize == 0) { return true; }
-  //diff = cacheSize - dirtySize;
-  //percent = ((float)diff / (float)cacheSize) * 100;
-  //notify(NFY_WARN, "Percent Diff: %f", percent);
-  //return (percent > maxPurgePercent);
-  notify(NFY_WARN, "CacheSize: %f, DirtySize: %f, Percent: %f", cacheSize, dirtySize, (cacheSize * maxPurgePercent));
-  return !(dirtySize < (cacheSize * maxPurgePercent));
+  notify(NFY_WARN, "CacheSize: %f, DirtySize: %f, Percent: %f", cacheSize, dirtySize, (cacheSize * (1 - maxPurgePercent)));
+  return (dirtySize < (cacheSize * (1 - maxPurgePercent)));
 }
 
 #endif // STORAGEMANAGER_H
