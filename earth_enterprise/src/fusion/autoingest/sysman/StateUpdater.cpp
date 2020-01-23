@@ -331,9 +331,9 @@ class StateUpdater::SetBlockingStateVisitor : public StateUpdater::VisitorBase {
         // Set the state to blocked if needed, otherwise do nothing
         auto version = updater.storageManager->Get(data.name);
         auto inputIt = hasBlockingInputs->find(data.name);
-        if (inputIt != hasBlockingInputs->end() && 
-            version->InputStatesAffectMyState(AssetDefs::Blocked, true)) {
-          SetState(vertex, AssetDefs::Blocked, {0,0}, true);
+        if (inputIt != hasBlockingInputs->end()) {
+          if (version->InputStatesAffectMyState(AssetDefs::Blocked, true))
+            SetState(vertex, AssetDefs::Blocked, {0,0}, true);
           hasBlockingInputs->erase(inputIt);
         }
 

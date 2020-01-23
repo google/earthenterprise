@@ -1018,7 +1018,7 @@ TEST_F(StateUpdaterTest, FailedInputDontCare) {
   GetMutableVersion(sm, "a")->inputStatesAffectMyState = false;
 
   // MockVersion::InputStatesAffectMyState will return false, so the listener's
-  // state should be uanffected.
+  // state should be unaffected.
   updater.SetAndPropagateState(fix("b"), AssetDefs::Failed, [](AssetDefs::State) { return true; });
 
   assertStateNotSet(sm, "a");
