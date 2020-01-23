@@ -12,6 +12,10 @@ Release notes: Open GEE 5.3.4
 
       .. rubric:: New Features
 
+      **Option to retry failed tasks**.
+      Users can now configure Fusion to
+      :ref:`retry tasks that fail <retry-failed-tasks>`, which allows
+      Fusion to deal with intermittent failures gracefully.
 
       .. rubric:: Supported Platforms
 
