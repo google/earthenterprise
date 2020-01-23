@@ -31,7 +31,7 @@ platforms on how to setup the dependencies, tools, and compilers.
         more error prone):
 
         ```bash
-        git clone git@github.com:google/earthenterprise.git
+        git clone https://github.com/google/earthenterprise.git
         ```
 
     * Method 2: Clone and download LFS files in two steps:
