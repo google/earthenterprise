@@ -51,7 +51,7 @@ class FileWalkerTest : public testing::Test {
     PortableGlcReader reader(glb_file.c_str());
     GlcUnpacker unpacker(reader, false, false);
     std::list<std::string> files;
-    unpacker.MapFileWalker(0, [&] (int layer, const std::string& file_name) {
+    unpacker.MapFileWalker(0, [&] (int layer, const char* file_name) {
       files.push_back(file_name);
       return true;
     });
@@ -74,7 +74,7 @@ class FileWalkerTest : public testing::Test {
     PortableGlcReader reader(glc_file.c_str());
     GlcUnpacker unpacker(reader, true, false);
     std::map<int, std::list<std::string>> file_map;
-    unpacker.MapFileWalker([&] (int layer, const std::string& file_name) {
+    unpacker.MapFileWalker([&] (int layer, const char* file_name) {
       file_map[layer].push_back(file_name);
       return true;
     });
