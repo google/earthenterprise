@@ -636,6 +636,7 @@ khResourceProvider::JobLoop(StartJobMsg start, const uint cmdTries, const uint s
   }
 
   for (uint cmdnum = 0; cmdnum < start.commands.size(); ++cmdnum) {
+    // Write out the overall time if we run more than one command
     logTotalTime = (cmdnum > 0);
 
     time_t cmdtime = time(0);
@@ -648,9 +649,9 @@ khResourceProvider::JobLoop(StartJobMsg start, const uint cmdTries, const uint s
     }
 
     success = false;
-    uint tries = 0;
-    while(!success && tries < cmdTries) {
+    for (uint tries = 0; tries < cmdTries && !success; ++tries) {
       if (tries > 0) {
+        // Write out the overall time if we run a command more than once.
         logTotalTime = true;
         if (job->logfile) {
           LogRetry(job, tries, cmdTries, sleepBetweenTriesSec);
@@ -669,8 +670,8 @@ khResourceProvider::JobLoop(StartJobMsg start, const uint cmdTries, const uint s
       }
       success = RunCmd(job, jobid, start.commands[cmdnum], cmdtime, endtime, progressSent);
       if (!Valid(job)) return;  // check if somebody already asked for me to go away
-      ++tries;
     }
+    // If we failed on all of the tries, give up
     if (!success) break;
   } /* for cmdnum */
 
