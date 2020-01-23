@@ -58,3 +58,9 @@ env.InstallFileOrDir(
     '%s/glc_unpacker.py' % build_root,
     '%s/common' % env.installdirs['httpdwsgi'],
     libglc_unpacker, 'install')
+
+# Tests
+filewalker_test = env.test('filewalker_test',
+    ['filewalker_unittest.cpp'],
+    LIBS=['glb', portable_glc_reader_sobj, 'gedbroot',
+          'gtest', 'gecommon', 'qtutils'])
