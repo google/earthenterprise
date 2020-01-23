@@ -5,6 +5,14 @@ Open GEE 5.3.4 is currently in development
 
 -[ New Features ]-
 
+Option to retry failed tasks
+
+. Users can now configure Fusion to
+
+retry tasks that fail
+
+, which allows Fusion to deal with intermittent failures gracefully.
+
 -[ Supported Platforms ]-
 
 The Open GEE 5.3.4 release is supported on 64-bit versions of the
