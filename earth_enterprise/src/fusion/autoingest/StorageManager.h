@@ -185,7 +185,7 @@ template<class AssetType>
 inline void
 StorageManager<AssetType>::NoLongerNeeded(const AssetKey & key, bool prune) {
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
-  cache.Remove(key, DetermineIfPrune());
+  cache.Remove(key, (DetermineIfPrune() && prune));
 }
 
 // This is the "legacy" Get function used by the AssetHandle_ class (see
@@ -363,11 +363,7 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
 template<class AssetType>
 bool StorageManager<AssetType>::DetermineIfPrune() {
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
-  float cacheSize = (float)CacheSize();
-  float dirtySize = (float)DirtySize();
-
-  notify(NFY_WARN, "CacheSize: %f, DirtySize: %f, Percent: %f", cacheSize, dirtySize, (cacheSize * (1.00 - maxPurgePercent)));
-  return (dirtySize < (cacheSize * (1 - maxPurgePercent)));
+  return ((float)DirtySize() < ((float)CacheSize() * (1 - maxPurgePercent)));
 }
 
 #endif // STORAGEMANAGER_H
