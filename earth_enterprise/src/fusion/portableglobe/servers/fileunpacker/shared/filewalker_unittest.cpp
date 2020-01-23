@@ -15,6 +15,7 @@
 // Unit Tests for walking globe files.
 
 #include <algorithm>
+#include <fstream>
 #include <limits.h>
 #include <map>
 #include <string>
@@ -38,16 +39,29 @@ class FileWalkerTest : public testing::Test {
 
   // Helper function to find values in lists
   template<typename T>
-  bool contains(std::list<T> & element_list, const T & element)
+  bool Contains(std::list<T> & element_list, const T & element)
   {
 	  auto it = std::find(element_list.begin(), element_list.end(), element);
 	  return it != element_list.end();
+  }
+
+  // Helper function to check if a file exists
+  bool FileExists(const char *filename)
+  {
+    std::ifstream ifile(filename);
+    return (bool)ifile;
   }
 
   /**
     * Test that the contents of the test GLB have expected size and values
     */
   void TestGlbContents() {
+    EXPECT_TRUE(FileExists(glb_file.c_str()));
+
+    if (!FileExists(glb_file.c_str())) {
+      return;
+    }
+
     PortableGlcReader reader(glb_file.c_str());
     GlcUnpacker unpacker(reader, false, false);
     std::list<std::string> files;
@@ -60,17 +74,31 @@ class FileWalkerTest : public testing::Test {
 
     EXPECT_EQ(files.size(), 59);
 
-    EXPECT_FALSE(contains(files, std::string("data")));
+    EXPECT_FALSE(Contains(files, std::string("data")));
 
-    EXPECT_TRUE(contains(files, std::string("data/index")));
+    EXPECT_TRUE(Contains(files, std::string("data/index")));
 
-    EXPECT_TRUE(contains(files, std::string("icons/773_l.png")));
+    EXPECT_TRUE(Contains(files, std::string("icons/773_l.png")));
+
+    files.clear();
+    unpacker.MapFileWalker(0, [&] (int layer, const char* file_name) {
+      files.push_back(file_name);
+      return false;
+    });
+
+    EXPECT_EQ(files.size(), 1);
   }
 
   /**
     * Test that the contents of the test GLC layers have expected size and values
     */
   void TestGlcContents() {
+    EXPECT_TRUE(FileExists(glc_file.c_str()));
+
+    if (!FileExists(glc_file.c_str())) {
+      return;
+    }
+
     PortableGlcReader reader(glc_file.c_str());
     GlcUnpacker unpacker(reader, true, false);
     std::map<int, std::list<std::string>> file_map;
@@ -84,19 +112,19 @@ class FileWalkerTest : public testing::Test {
       layer_ids.push_back(pair.first);
     }
 
-    EXPECT_TRUE(contains(layer_ids, 1));
+    EXPECT_TRUE(Contains(layer_ids, 1));
 
-    EXPECT_TRUE(contains(layer_ids, 2));
+    EXPECT_TRUE(Contains(layer_ids, 2));
 
     EXPECT_EQ(layer_ids.size(), 2);
     
-    EXPECT_FALSE(contains(file_map[1], std::string("data")));
+    EXPECT_FALSE(Contains(file_map[1], std::string("data")));
 
-    EXPECT_FALSE(contains(file_map[2], std::string("data")));
+    EXPECT_FALSE(Contains(file_map[2], std::string("data")));
 
-    EXPECT_TRUE(contains(file_map[1], std::string("icons/773_l.png")));
+    EXPECT_TRUE(Contains(file_map[1], std::string("icons/773_l.png")));
 
-    EXPECT_TRUE(contains(file_map[2], std::string("icons/773_l.png")));
+    EXPECT_TRUE(Contains(file_map[2], std::string("icons/773_l.png")));
 
     EXPECT_EQ(file_map[1].size(), 59);
 
