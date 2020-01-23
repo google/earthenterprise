@@ -362,7 +362,7 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
 
 template<class AssetType>
 bool StorageManager<AssetType>::DetermineIfPrune() {
-  return (DirtySize() < (CacheSize() * prunePercent));
+  return (DirtySize() <= (CacheSize() * prunePercent));
 }
 
 #endif // STORAGEMANAGER_H
