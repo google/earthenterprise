@@ -139,6 +139,7 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
     return (state == AssetDefs::Bad);
   }
 
+  virtual bool InputStatesAffectMyState(AssetDefs::State stateByInputs, bool blockedByOfflineInputs) const {assert(false); return true;}
   const SharedString & GetRef(void) const { return name; }
   std::string GetAssetRef(void) const {
     AssetVersionRef verref(name);
