@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp4.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp4.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="make-web-map-service-wms-requests">
 <h1>Make Web Map Service (WMS) requests<a class="headerlink" href="#make-web-map-service-wms-requests" title="Permalink to this headline">¶</a></h1>
-<div class="container">
-<div class="content container">
+<div class="docutils container">
+<div class="content docutils container">
 <p>Google Earth Enterprise Server 5.x supports the <a class="reference external" href="http://www.opengeospatial.org/standards/wms">OpenGIS Web Map
 Service Interface Standard (WMS)</a>, which
 provides a standard HTTP interface to request map images from one
@@ -166,7 +166,7 @@ Google Earth Enterprise Server 5.x.</p>
 request is as follows:</p>
 <p><code class="docutils literal notranslate"><span class="pre">http://&lt;hostname&gt;/&lt;target_path&gt;/wms?SERVICE=WMS&amp;REQUEST=GetCapabilities&amp;VERSION=x.y.z</span></code></p>
 <p>The parameters for this operation are as follows:</p>
-<table border="1" class="docutils" id="id1">
+<table border="1" class="colwidths-given docutils" id="id1">
 <caption><span class="caption-text"><strong>GetCapabilities</strong> parameters</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="19%" />
@@ -215,7 +215,7 @@ database. Each layer provides the following information:<ul>
 supported, etc.</li>
 </ul>
 <p>An example <strong>GetCapabilities</strong> request output is as follows:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>&lt;WMT_MS_Capabilities updateSequence=&quot;0&quot; version=&quot;1.1.1&quot;&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;WMT_MS_Capabilities updateSequence=&quot;0&quot; version=&quot;1.1.1&quot;&gt;
    &lt;Service&gt;
       &lt;Name&gt;OGC:WMS&lt;/Name&gt;
       &lt;Title&gt;Google Earth WMS service.&lt;/Title&gt;
@@ -278,7 +278,7 @@ is as follows:</p>
 <p><code class="docutils literal notranslate"><span class="pre">http://&lt;hostname&gt;/&lt;target_path&gt;/wms?SERVICE=WMS&amp;REQUEST=</span>
 <span class="pre">GetMap&amp;BBOX=&lt;bounding_box_limits_of_the_requested_map&gt;&amp;SRS=&lt;projection_type&gt;&amp;WIDTH=&lt;width_of_requested_map&gt;&amp;HEIGHT=&lt;height_of_requested_map&gt;&amp;LAYERS=&lt;layer_name&gt;&amp;STYLES=&lt;style_info&gt;&amp;FORMAT=&lt;format_of_requested_map&gt;&amp;DPI=96&amp;TRANSPARENT=TRUE</span></code></p>
 <p>The parameters for this operation are as follows:</p>
-<table border="1" class="docutils" id="id2">
+<table border="1" class="colwidths-given docutils" id="id2">
 <caption><span class="caption-text"><strong>GetMap</strong> parameters</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="19%" />

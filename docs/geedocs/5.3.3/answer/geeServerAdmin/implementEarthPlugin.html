@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp4.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp4.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="implement-google-earth-plugin">
 <h1>Implement Google Earth Plugin<a class="headerlink" href="#implement-google-earth-plugin" title="Permalink to this headline">¶</a></h1>
-<div class="container">
-<div class="content container">
+<div class="docutils container">
+<div class="content docutils container">
 <p>Included with Google Earth Enterprise is an example of how to
 implement the Google Earth Plugin in
 <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/earth/earth_local.html</span></code>. By default,
@@ -81,47 +81,47 @@ Google Earth Plugin is deprecated and is not supported by modern
 browsers.</p>
 <p>The following HTML is the content of the <code class="docutils literal notranslate"><span class="pre">earth_local.html</span></code>
 file.</p>
-<div class="highlight-html notranslate"><div class="highlight"><pre><span class="nt">&lt;html&gt;</span>
-<span class="nt">&lt;head&gt;</span>
-      <span class="nt">&lt;title&gt;</span>Google Earth Enterprise Earth Plug-in: Local Example<span class="nt">&lt;/title&gt;</span>
-      <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&#39;stylesheet&#39;</span> <span class="na">type=</span><span class="s">&#39;text/css&#39;</span> <span class="na">href=</span><span class="s">&#39;/earth/earth.css&#39;</span> <span class="nt">/&gt;</span>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Google Earth Enterprise Earth Plug-in: Local Example<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#39;stylesheet&#39;</span> <span class="na">type</span><span class="o">=</span><span class="s">&#39;text/css&#39;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#39;/earth/earth.css&#39;</span> <span class="p">/&gt;</span>
 
-      <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&#39;text/javascript&#39;</span><span class="nt">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&#39;text/javascript&#39;</span><span class="p">&gt;</span>
             <span class="c1">// To serve your static content from a different server, simply override</span>
             <span class="c1">// GEE_SERVER_URL to the URL of your GEE Server, e.g.:</span>
             <span class="c1">// &quot;http://yourhost.com/default_ge/&quot; var GEE_SERVER_URL = &quot;&quot;;</span>
-      <span class="nt">&lt;/script&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 
       <span class="c">&lt;!-- Load the required Javascript files. The loader for the Earth Plug-in API:</span>
 <span class="c">earth_plugin_loader.js. Utilities for this example UI: fusion_utils.js and search_tabs.js The main routine: geeInit() is found in  fusion_earthplugin.js which defines the example UI and behaviors. --&gt;</span>
-      <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&#39;text/javascript&#39;</span> <span class="na">src=</span><span class="s">&#39;/js/earth_plugin_loader.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
-      <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&#39;text/javascript&#39;</span> <span class="na">src=</span><span class="s">&#39;/js/fusion_utils.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
-      <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&#39;text/javascript&#39;</span> <span class="na">src=</span><span class="s">&#39;/js/search_tabs.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
-      <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&#39;text/javascript&#39;</span> <span class="na">src=</span><span class="s">&#39;/js/fusion_earthplugin.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
-<span class="nt">&lt;/head&gt;</span>
+      <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&#39;text/javascript&#39;</span> <span class="na">src</span><span class="o">=</span><span class="s">&#39;/js/earth_plugin_loader.js&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&#39;text/javascript&#39;</span> <span class="na">src</span><span class="o">=</span><span class="s">&#39;/js/fusion_utils.js&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&#39;text/javascript&#39;</span> <span class="na">src</span><span class="o">=</span><span class="s">&#39;/js/search_tabs.js&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&#39;text/javascript&#39;</span> <span class="na">src</span><span class="o">=</span><span class="s">&#39;/js/fusion_earthplugin.js&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
 
-<span class="nt">&lt;body</span> <span class="na">onload=</span><span class="s">&#39;geeInit()&#39;</span> <span class="na">onresize=</span><span class="s">&#39;geeResizeDivs();&#39;</span><span class="nt">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span> <span class="na">onload</span><span class="o">=</span><span class="s">&#39;geeInit()&#39;</span> <span class="na">onresize</span><span class="o">=</span><span class="s">&#39;geeResizeDivs();&#39;</span><span class="p">&gt;</span>
 
-      <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&#39;header&#39;</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&#39;logo&#39;</span><span class="nt">&gt;</span> <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;/earth/images/gee.gif&quot;</span> <span class="na">align=</span><span class="s">&quot;left&quot;</span> <span class="nt">/&gt;</span>
-            <span class="nt">&lt;/div&gt;</span>
-            <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&#39;search_tabs&#39;</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;/div&gt;</span>
-      <span class="nt">&lt;/div&gt;</span>
+      <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#39;header&#39;</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#39;logo&#39;</span><span class="p">&gt;</span> <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;/earth/images/gee.gif&quot;</span> <span class="na">align</span><span class="o">=</span><span class="s">&quot;left&quot;</span> <span class="p">/&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#39;search_tabs&#39;</span><span class="p">&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 
-      <span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&quot;clear: both;&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+      <span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;clear: both;&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 
-            <span class="nt">&lt;table</span> <span class="na">cellspacing=</span><span class="s">&quot;0&quot;</span> <span class="na">cellpadding=</span><span class="s">&quot;0&quot;</span> <span class="na">width=</span><span class="s">&quot;100%&quot;</span><span class="nt">&gt;</span>
-                  <span class="nt">&lt;tr</span> <span class="na">valign=</span><span class="s">&quot;top&quot;</span><span class="nt">&gt;</span>
-                        <span class="nt">&lt;td</span> <span class="na">id=</span><span class="s">&#39;left_panel_cell&#39;</span><span class="nt">&gt;</span>
-                              <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&#39;left_panel&#39;</span><span class="nt">&gt;&lt;/div&gt;</span> <span class="nt">&lt;/td&gt;</span>
-                        <span class="nt">&lt;td&gt;</span>
-                              <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&#39;map&#39;</span><span class="nt">&gt;&lt;/div&gt;</span>
-                        <span class="nt">&lt;/td&gt;</span>
-                  <span class="nt">&lt;/tr&gt;</span>
-            <span class="nt">&lt;/table&gt;</span>
-<span class="nt">&lt;/body&gt;</span>
-<span class="nt">&lt;/html&gt;</span>
+            <span class="p">&lt;</span><span class="nt">table</span> <span class="na">cellspacing</span><span class="o">=</span><span class="s">&quot;0&quot;</span> <span class="na">cellpadding</span><span class="o">=</span><span class="s">&quot;0&quot;</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;100%&quot;</span><span class="p">&gt;</span>
+                  <span class="p">&lt;</span><span class="nt">tr</span> <span class="na">valign</span><span class="o">=</span><span class="s">&quot;top&quot;</span><span class="p">&gt;</span>
+                        <span class="p">&lt;</span><span class="nt">td</span> <span class="na">id</span><span class="o">=</span><span class="s">&#39;left_panel_cell&#39;</span><span class="p">&gt;</span>
+                              <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#39;left_panel&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span> <span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+                        <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;</span>
+                              <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#39;map&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+                        <span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+                  <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">table</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
 </pre></div>
 </div>
 </div>

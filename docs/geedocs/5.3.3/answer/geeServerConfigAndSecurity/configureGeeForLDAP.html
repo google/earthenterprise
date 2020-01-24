@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp5.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp5.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="configure-gee-server-admin-pages-for-ldap-authentication">
 <h1>Configure GEE Server Admin pages for LDAP authentication<a class="headerlink" href="#configure-gee-server-admin-pages-for-ldap-authentication" title="Permalink to this headline">¶</a></h1>
-<div class="container">
-<div class="content container">
+<div class="docutils container">
+<div class="content docutils container">
 <p>You can use LDAP authentication, which is based on Microsoft
 Active Directory, to authenticate users to GEE Server
 admin pages. GEE server software is based on Apache <code class="docutils literal notranslate"><span class="pre">httpd</span></code>.</p>
@@ -97,7 +97,7 @@ automatically.</p>
 <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/gehttpd.conf</span></code></p>
 <p>After the modules are loaded, you can control access by
 querying the directory for particular attributes.</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>LoadModule authnz_ldap_module modules/mod_authnz_ldap.so
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>LoadModule authnz_ldap_module modules/mod_authnz_ldap.so
 LoadModule ldap_module modules/mod_ldap.so
 </pre></div>
 </div>
@@ -122,12 +122,12 @@ your user has the full organizational unit name.</p>
 <li><p class="first">Add the directives to your config file <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttp/conf/gehttpd.conf</span></code>
 for <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/admin</span></code> Directory.</p>
 <p>Comment/remove these lines :</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>AuthUserFile /opt/google/gehttpd/conf.d/.htpasswd
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>AuthUserFile /opt/google/gehttpd/conf.d/.htpasswd
 AuthGroupFile /dev/null
 </pre></div>
 </div>
 <p>And Add these lines :</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>AuthBasicProvider ldap
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>AuthBasicProvider ldap
 AuthLDAPBindDN &quot;someuser@example.com&quot;
 AuthLDAPBindPassword &quot;somepassword&quot;
 AuthLDAPURL &quot;ldap://ldapserver.example.com:389/ou=Users,dc=example,dc=com?uid&quot;
@@ -136,7 +136,7 @@ AuthLDAPURL &quot;ldap://ldapserver.example.com:389/ou=Users,dc=example,dc=com?u
 </li>
 <li><p class="first">For testing purposes, add the lines below to the
 <code class="docutils literal notranslate"><span class="pre">gehhtpd.conf</span></code> file:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>&lt;Directory &quot;/opt/google/gehttpd/htdocs/admin&quot;&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Directory &quot;/opt/google/gehttpd/htdocs/admin&quot;&gt;
     #AuthUserFile /opt/google/gehttpd/conf.d/.htpasswd
     #AuthGroupFile /dev/null
     AuthName &quot;Earth Server admin pages&quot;

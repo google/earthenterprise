@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp5.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp5.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="postgresql-authentication">
 <h1>PostgreSQL authentication<a class="headerlink" href="#postgresql-authentication" title="Permalink to this headline">¶</a></h1>
-<div class="container">
-<div class="content container">
+<div class="docutils container">
+<div class="content docutils container">
 <p>Client authentication determines which users are allowed to view
 published databases. By default, the GEE Server does not require
 authentication for user access. However, you can configure
@@ -127,13 +127,13 @@ Ubuntu.</li>
 <p class="rubric" id="to-configure-client-authentication-for-postgresql">To configure client authentication for PostgreSQL:</p>
 <ol class="arabic">
 <li><p class="first">Connect to the PostgreSQL server:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>sudo su - postgres
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sudo su - postgres
 psql --port=5433
 </pre></div>
 </div>
 </li>
 <li><p class="first">Create the database and user:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>CREATE USER geeuser WITH PASSWORD &#39;geeuserpasswd&#39;;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>CREATE USER geeuser WITH PASSWORD &#39;geeuserpasswd&#39;;
 CREATE DATABASE geeauthdb;
 GRANT ALL PRIVILEGES ON DATABASE geeauthdb to mypguser;
 \q
@@ -141,7 +141,7 @@ GRANT ALL PRIVILEGES ON DATABASE geeauthdb to mypguser;
 </div>
 </li>
 <li><p class="first">Create a table to store the passwords:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>psql --port=5433 --username=geeuser geauthdb
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>psql --port=5433 --username=geeuser geauthdb
 CREATE TABLE geepasswd (username varchar(32) NOT NULL, realm varchar(255)
 NOT NULL, passwd varchar(255) NOT NULL,
    realname varchar(255), PRIMARY KEY (username, realm));
@@ -170,7 +170,7 @@ programming languages for encrypting the password so that it is
 readable by Apache.</p>
 </li>
 <li><p class="first">Make sure the database works by inserting a test user:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>psql --port=5433 --username=geeuser geauthdb
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>psql --port=5433 --username=geeuser geauthdb
 INSERT INTO geepasswd VALUES (&#39;jsmith&#39;, &#39;realm&#39;, encode(digest( &#39;jsmith&#39; || &#39;:&#39; || &#39;realm&#39; || &#39;:&#39; ||&#39;password&#39;, &#39;md5&#39;), &#39;hex&#39;), &#39;Jane Smith&#39;);
 \q
 </pre></div>
@@ -185,7 +185,7 @@ password from appearing in plaintext.</p>
 <p><code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/extra/pgsql-auth.conf</span></code>.</p>
 </li>
 <li><p class="first">Add these lines to the <code class="docutils literal notranslate"><span class="pre">pgsql-auth.conf</span></code> file:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>``DBDriver pgsql``
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>``DBDriver pgsql``
 ``DBDParams &quot;hostaddr=yourpgserver port=yourport user=geuser password=yourpassword dbname=gee_auth&quot;``
 ``DBDMin 4``
 ``DBDKeep 8``
@@ -204,7 +204,7 @@ insert the line:</p>
 <p>above the line:</p>
 <p><code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">conf.d/*.conf</span></code></p>
 <p>The result is:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre># Include Google Earth Server-specific files
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Include Google Earth Server-specific files
 Include /opt/google/gehttpd/conf/extra/pgsql-auth.conf
 Include conf.d/*.conf
 </pre></div>
@@ -212,7 +212,7 @@ Include conf.d/*.conf
 </li>
 <li><p class="first">Add the following lines at the beginning of the
 <code class="docutils literal notranslate"><span class="pre">&lt;Location&gt;</span></code> directive of your virtual server:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>AuthType Digest
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>AuthType Digest
 AuthName &quot;realm&quot;
 AuthDigestDomain &#39;/default_map/&#39;
 AuthDigestProvider dbd
@@ -228,7 +228,7 @@ BrowserMatch &quot;MSIE&quot; AuthDigestEnableQueryStringHack=On
 see the <a class="reference external" href="http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmod%2Fmod_auth_digest.html%23msie&amp;sa=D&amp;sntz=1&amp;usg=AFrqEze9uh13hmi22IsT3-GMw3t8j7VHcA">mod_auth_digest</a>
 section in the Apache documentation.</p>
 <p>The final <code class="docutils literal notranslate"><span class="pre">&lt;Location&gt;</span></code> directive looks like:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>&lt;Location &quot;/default_map/*&quot;&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Location &quot;/default_map/*&quot;&gt;
 AuthType Digest
 AuthName &quot;realm&quot;
 AuthDigestDomain &#39;/default_map/&#39;

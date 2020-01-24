@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="back-up-fusion-servers">
 <h1>Back up Fusion servers<a class="headerlink" href="#back-up-fusion-servers" title="Permalink to this headline">¶</a></h1>
-<div class="container">
-<div class="content container">
+<div class="docutils container">
+<div class="content docutils container">
 <p>The Fusion server typically stores multiple terabytes of source
 data and intermediate assets. If you have a tape backup system or
 enough disk space, you should perform a full back up of the server
@@ -122,20 +122,20 @@ locations with the locations of your own asset root and backups.</p>
 files if needed.</p>
 </li>
 <li><p class="first">Create a directory to hold the backup files:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre>mkdir -p /data/backup/assets
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir -p /data/backup/assets
 mkdir -p /data/backup/gehttpd
 </pre></div>
 </div>
 </li>
 <li><p class="first">Back up the gehttpd files:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span class="nb">cd</span> /opt/google/gehttpd
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /opt/google/gehttpd
 rsync -r htdocs cgi-bin conf conf.d /data/backup/gehttpd
 </pre></div>
 </div>
 </li>
 <li><p class="first">Back up the XML files and config files to a safe place on a
 disk that is not part of the asset root or source directories:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span class="nb">cd</span> /gevol/assets
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /gevol/assets
 rsync -r .config .userdata /data/backup/assets/
 find . -name <span class="s2">&quot;*.xml&quot;</span> &gt; FileList.txt
 rsync --files-from<span class="o">=</span>FileList.txt /gevol/assets /data/backup/assets/
@@ -144,7 +144,7 @@ rsync --files-from<span class="o">=</span>FileList.txt /gevol/assets /data/backu
 </li>
 <li><p class="first">(Optional.) Store a compressed backup of the files somewhere
 else:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre>tar czf /home/backups/GevolXmlBackup.tgz /data/backups
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tar czf /home/backups/GevolXmlBackup.tgz /data/backups
 </pre></div>
 </div>
 </li>
@@ -157,7 +157,7 @@ is running.</p>
 <li><p class="first">Configure your asset root to be consistent with your old asset
 root. If you are not sure about this, manually run commands
 like:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre>geconfigureassetroot --new --assetroot /gevol/assets
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geconfigureassetroot --new --assetroot /gevol/assets
 geselectassetroot --assetroot /gevol/assets
 </pre></div>
 </div>
@@ -178,30 +178,30 @@ example of a script for reporting where all your imagery source
 files should be located. You can use the same script for
 terrain resources if you change <code class="docutils literal notranslate"><span class="pre">kiasset</span></code> to <code class="docutils literal notranslate"><span class="pre">ktasset</span></code>.
 Example script:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span class="nb">cd</span> /gevol/assets
-<span class="k">for </span>resource in <span class="sb">`</span>find . -type d -name <span class="s2">&quot;*.kiasset&quot;</span><span class="sb">`</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /gevol/assets
+<span class="k">for</span> resource in <span class="sb">`</span>find . -type d -name <span class="s2">&quot;*.kiasset&quot;</span><span class="sb">`</span>
 <span class="k">do</span>
-<span class="k">   for </span>file in <span class="sb">`</span>gequery --infiles <span class="nv">$resource</span><span class="sb">`</span>
+   <span class="k">for</span> file in <span class="sb">`</span>gequery --infiles <span class="nv">$resource</span><span class="sb">`</span>
    <span class="k">do</span>
-<span class="k">      if</span> <span class="o">[</span> ! -f <span class="nv">$file</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">[</span> ! -d <span class="nv">$file</span> <span class="o">]</span>
+      <span class="k">if</span> <span class="o">[</span> ! -f <span class="nv">$file</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">[</span> ! -d <span class="nv">$file</span> <span class="o">]</span>
       <span class="k">then</span>
-<span class="k">            </span><span class="nb">echo</span> <span class="s2">&quot;Can not find $file&quot;</span>
+            <span class="nb">echo</span> <span class="s2">&quot;Can not find </span><span class="nv">$file</span><span class="s2">&quot;</span>
       <span class="k">else</span>
-<span class="k">            </span><span class="nb">echo</span> <span class="s2">&quot;Found $file&quot;</span>
+            <span class="nb">echo</span> <span class="s2">&quot;Found </span><span class="nv">$file</span><span class="s2">&quot;</span>
       <span class="k">fi</span>
-<span class="k">   done</span>
+   <span class="k">done</span>
 <span class="k">done</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">After all the files are in place, generate a series of commands
 to rebuild the resources. For example:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span class="nb">cd</span> /gevol/assets
-<span class="k">for </span>resource in <span class="sb">`</span>find . -type d -name <span class="s2">&quot;*.kiasset&quot;</span> | sed <span class="s1">&#39;s/.kiasset//&#39;</span><span class="sb">`</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /gevol/assets
+<span class="k">for</span> resource in <span class="sb">`</span>find . -type d -name <span class="s2">&quot;*.kiasset&quot;</span> <span class="p">|</span> sed <span class="s1">&#39;s/.kiasset//&#39;</span><span class="sb">`</span>
 <span class="k">do</span>
-<span class="k">    </span>gequery --infiles <span class="nv">$resource</span> &gt; filelist
+    gequery --infiles <span class="nv">$resource</span> &gt; filelist
     genewimageryresource -o <span class="nv">$resource</span> --filelist filelist
-    sleep 1
+    sleep <span class="m">1</span>
     gebuild <span class="nv">$resource</span>
 <span class="k">done</span>
 </pre></div>
@@ -230,7 +230,7 @@ directory, and is included in the backup script listed above. The
 file, and creates the commands and display templates necessary to
 rebuild the entire vector project.</p>
 <p class="rubric" id="restore-vector-project-pl">restore_vector_project.pl</p>
-<div class="highlight-perl notranslate"><div class="highlight"><pre><span class="c1">#!/usr/bin/perl</span>
+<div class="highlight-perl notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/perl</span>
 <span class="c1">#</span>
 <span class="c1"># Do you want to back up your vector project or duplicate it as a new project?</span>
 <span class="c1">#</span>
@@ -241,8 +241,8 @@ rebuild the entire vector project.</p>
 <span class="c1"># of running this script is a series of four new scripts called Step_One thru Step_Four</span>
 <span class="c1"># Running the resulting four scripts in order rebuilds your vector project as it was before.</span>
 
-<span class="k">use</span> <span class="nn">File::</span><span class="n">Path</span><span class="p">;</span>
-<span class="k">use</span> <span class="nn">File::</span><span class="n">Copy</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">File::Path</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">File::Copy</span><span class="p">;</span>
 
 <span class="c1"># Read in the vector project to be backed up and the directory to</span>
 <span class="c1"># write the scripts and files to.</span>
@@ -334,7 +334,7 @@ rebuild the entire vector project.</p>
 <span class="nb">close</span><span class="p">(</span><span class="n">StepThree</span><span class="p">);</span>
 <span class="nb">close</span><span class="p">(</span><span class="n">StepFour</span><span class="p">);</span>
 
-<span class="k">sub </span><span class="nf">get_assetroot</span><span class="p">(){</span>
+<span class="k">sub</span> <span class="nf">get_assetroot</span><span class="p">(){</span>
    <span class="nb">open</span><span class="p">(</span><span class="n">IN</span><span class="p">,</span> <span class="s">&quot;/opt/google/etc/systemrc&quot;</span><span class="p">)</span> <span class="o">||</span>
    <span class="nb">open</span><span class="p">(</span><span class="n">IN</span><span class="p">,</span> <span class="s">&quot;/usr/keyhole/etc/systemrc&quot;</span><span class="p">)</span> <span class="o">||</span>
    <span class="nb">die</span> <span class="s">&quot;Can not open /opt/google/etc/systemrc or /usr/keyhole/etc/systemrc\n&quot;</span><span class="p">;</span>
@@ -343,7 +343,7 @@ rebuild the entire vector project.</p>
    <span class="k">return</span> <span class="nv">$assetroot</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="k">sub </span><span class="nf">get_value</span><span class="p">(){</span>
+<span class="k">sub</span> <span class="nf">get_value</span><span class="p">(){</span>
    <span class="nv">$string</span><span class="o">=</span><span class="nb">shift</span><span class="p">(</span><span class="nv">@_</span><span class="p">);</span>
    <span class="nv">$string</span> <span class="o">=~</span> <span class="sr">s/\s*&lt;[^&lt;&gt;]*&gt;//</span><span class="p">;</span>
    <span class="nv">$string</span> <span class="o">=~</span> <span class="sr">s/&lt;.*//</span><span class="p">;</span>
@@ -351,8 +351,8 @@ rebuild the entire vector project.</p>
    <span class="k">return</span> <span class="nv">$string</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="k">sub </span><span class="nf">usage</span><span class="p">(){</span>
-<span class="k">print</span><span class="s">&lt;&lt;EndOfUsage</span>
+<span class="k">sub</span> <span class="nf">usage</span><span class="p">(){</span>
+<span class="k">print</span><span class="s">&lt;&lt;</span><span class="dl">EndOfUsage</span><span class="s"></span>
 
 <span class="s">rebuild_vector_layer.pl vector_project output_dir</span>
 
@@ -363,7 +363,7 @@ rebuild the entire vector project.</p>
 <span class="s">   output_dir is the directory for putting all of the output from this script.</span>
 <span class="s">   This needs to be an absolute directory path like /home/mydir/vectors</span>
 
-<span class="s">EndOfUsage</span>
+<span class="dl">EndOfUsage</span>
 <span class="p">}</span>
 </pre></div>
 </div>

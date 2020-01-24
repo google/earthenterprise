@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp12.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp12.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="troubleshoot-connection-to-gee-server">
 <h1>Troubleshoot connection to GEE Server<a class="headerlink" href="#troubleshoot-connection-to-gee-server" title="Permalink to this headline">¶</a></h1>
-<div class="container">
-<div class="content container">
+<div class="docutils container">
+<div class="content docutils container">
 <p>If the Google Earth EC is unable to connect to your GEE Server, you will
 see the error, “Google Earth failed to connect to database”:</p>
 <p>To resolve this issue, try these troubleshooting steps:</p>
@@ -99,7 +99,7 @@ the database was published.</li>
 requests in the logs from the client, starting with a GET
 request for the <code class="docutils literal notranslate"><span class="pre">dbRoot</span></code> file, followed by <code class="docutils literal notranslate"><span class="pre">flatfile</span></code>
 requests—for example:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>192.168.1.199 - - [08/Feb/2016:09:10:25 -0800] &quot;GET /3d/dbRoot.v5?hl=en&amp;gl=us&amp;output=proto&amp;cv=7.1.5.1557&amp;ct=ec HTTP/1.1&quot; 200 4512 &quot;-&quot; &quot;GoogleEarth/7.1.5.1557(Windows;Microsoft Windows (6.2.9200.0);en;kml:2.2;client:EC;type:default)&quot; 192.168.1.199 - - [08/Feb/2016:09:10:27 -0800] &quot;GET /3d/dbRoot.v5?db=tm&amp;hl=en&amp;gl=us&amp;output=proto&amp;cv=7.1.5.1557&amp;ct=ec HTTP/1.1&quot; 200 1161 &quot;-&quot; &quot;GoogleEarth/7.1.5.1557(Windows;Microsoft Windows (6.2.9200.0);en;kml:2.2;client:EC;type:default)&quot;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>192.168.1.199 - - [08/Feb/2016:09:10:25 -0800] &quot;GET /3d/dbRoot.v5?hl=en&amp;gl=us&amp;output=proto&amp;cv=7.1.5.1557&amp;ct=ec HTTP/1.1&quot; 200 4512 &quot;-&quot; &quot;GoogleEarth/7.1.5.1557(Windows;Microsoft Windows (6.2.9200.0);en;kml:2.2;client:EC;type:default)&quot; 192.168.1.199 - - [08/Feb/2016:09:10:27 -0800] &quot;GET /3d/dbRoot.v5?db=tm&amp;hl=en&amp;gl=us&amp;output=proto&amp;cv=7.1.5.1557&amp;ct=ec HTTP/1.1&quot; 200 1161 &quot;-&quot; &quot;GoogleEarth/7.1.5.1557(Windows;Microsoft Windows (6.2.9200.0);en;kml:2.2;client:EC;type:default)&quot;
 
 192.168.1.199 - - [08/Feb/2016:09:10:27 -0800] &quot;GET /3d/flatfile?lf-0-icons/help_l.png&amp;h=32 HTTP/1.1&quot; 200 426 &quot;-&quot; &quot;GoogleEarth/7.1.5.1557(Windows;Microsoft Windows (6.2.9200.0);en;kml:2.2;client:EC;type:default)&quot;
 </pre></div>

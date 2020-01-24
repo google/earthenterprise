@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp2.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp2.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="manage-mosaics-with-virtual-rasters">
 <h1>Manage mosaics with virtual rasters<a class="headerlink" href="#manage-mosaics-with-virtual-rasters" title="Permalink to this headline">¶</a></h1>
-<div class="container">
-<div class="content container">
+<div class="docutils container">
+<div class="content docutils container">
 <p>When you have large datasets of imagery or terrain resources,
 importing them into Fusion can be inefficient and lead to gaps
 between data tiles. GEE provides a tool, <code class="docutils literal notranslate"><span class="pre">gevirtualraster</span></code>,
@@ -134,21 +134,21 @@ mosaic:</p>
 used for the mosaic (<code class="docutils literal notranslate"><span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0</span> <span class="pre">=</span> <span class="pre">black</span></code>), the name of the file to
 be generated (<code class="docutils literal notranslate"><span class="pre">my_virtualmosaic_20140624_1.khvr</span></code>), and include
 all of the <code class="docutils literal notranslate"><span class="pre">.tif</span></code> files in the current folder as input.</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>$ gevirtualraster --fill 0,0,0 --tolerance 3 -o my_virtualmosaic_20140624_1.khvr *.tif
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ gevirtualraster --fill 0,0,0 --tolerance 3 -o my_virtualmosaic_20140624_1.khvr *.tif
 </pre></div>
 </div>
 </li>
 <li><p class="first">Import the virtual raster imagery file into Fusion, specifying the
 resource type, the virtual raster file to import and the output
 resource file, <code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">my_virtualmosaic_20140624.kip</span></code>.</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>$ gerasterimport --imagery my_virtualmosaic_20140624_1.khvr -o my_virtualmosaic_20140624.kip
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ gerasterimport --imagery my_virtualmosaic_20140624_1.khvr -o my_virtualmosaic_20140624.kip
 </pre></div>
 </div>
 </li>
 <li><p class="first">Create a mask for the imagery resource, specifying band, fill,
 tolerance and feather values, the imagery resource file and
 the name of the mask created.</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>$ gemaskgen --mask --band 1 --fill 0 --tolerance 3 --feather 100
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ gemaskgen --mask --band 1 --fill 0 --tolerance 3 --feather 100
   my_virtualmosaic_20140624_1.kip my_virtualmosaic_20140624_1-mask.tif
 </pre></div>
 </div>
@@ -156,19 +156,19 @@ the name of the mask created.</p>
 <li><p class="first">Import the generated alpha mask, creating a <code class="docutils literal notranslate"><span class="pre">.kmp</span></code> folder.
 Corresponding <code class="docutils literal notranslate"><span class="pre">.kip</span></code> and <code class="docutils literal notranslate"><span class="pre">.kmp</span></code> folders should be stored in
 the same directory.</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>$ gerasterimport --alphamask my_virtualmosaic_20140624_1-mask.tif --imagery
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ gerasterimport --alphamask my_virtualmosaic_20140624_1-mask.tif --imagery
   my_virtualmosaic_20140624_1.kip --output my_virtualmosaic_20140624_1.kmp
 </pre></div>
 </div>
 </li>
 <li><p class="first">Define a new imagery resource.</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>$ genewimageryresource -o Resources/Imagery/candid_my_virtualmosaic_20140624_1
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ genewimageryresource -o Resources/Imagery/candid_my_virtualmosaic_20140624_1
   /gevol/src/candid/my_virtualmosaic_20140624_1/my_virtualmosaic_20140624_1.kip
 </pre></div>
 </div>
 </li>
 <li><p class="first">Build the new imagery resource.</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>$ gebuild Resources/Imagery/candid_my_virtualmosaic_20140624_1
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ gebuild Resources/Imagery/candid_my_virtualmosaic_20140624_1
 </pre></div>
 </div>
 </li>
@@ -181,7 +181,7 @@ virtual mosaics</span></a>.</p>
 <p class="rubric">Creating a virtual raster from a file list</p>
 <p>You can create a virtual raster of all source files stored in a
 test file using the <code class="docutils literal notranslate"><span class="pre">gevirtualraster</span> <span class="pre">--filelist</span></code> option:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>$ gevirtualraster --fill 0,0,0 -o /gevol/src/imagery/example/example-mosaic-list.khvr
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ gevirtualraster --fill 0,0,0 -o /gevol/src/imagery/example/example-mosaic-list.khvr
   --filelist /gevol/src/imagery/example/source-files.txt
 </pre></div>
 </div>
@@ -192,17 +192,17 @@ path of each source file must be included in the file list.</p>
 virtual raster files, including specifying the band values to be
 used as fill, tolerance values for the fill, and a file list of
 the source imagery or terrain files.</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>$ gevirtualraster [--crop pixelx,pixely,pixelx,pixelh] [--fill a,b,...] [--src override_srs]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ gevirtualraster [--crop pixelx,pixely,pixelx,pixelh] [--fill a,b,...] [--src override_srs]
   [--tolerance num] [--validate] -o output.khvr {sourcefile ... | --filelist file}
 </pre></div>
 </div>
 <p class="rubric" id="example">Example</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>$ gevirtualraster --fill 0,0,0 -o /gevol/src/imagery/usa/XX/new_location/all_files.khvr
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ gevirtualraster --fill 0,0,0 -o /gevol/src/imagery/usa/XX/new_location/all_files.khvr
   /gevol/src/imagery/usa/XX/new_location/*.tif
 </pre></div>
 </div>
 <p class="rubric" id="parameters">Parameters</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils">
 <colgroup>
 <col width="25%" />
 <col width="75%" />
@@ -255,7 +255,7 @@ a grid of image files designated as rows and columns.</p>
 <p class="rubric" id="example-1">Example</p>
 <p><code class="docutils literal notranslate"><span class="pre">gesplitkhvr</span> <span class="pre">--rows</span> <span class="pre">4</span> <span class="pre">--cols</span> <span class="pre">4</span> <span class="pre">--overlap</span> <span class="pre">10</span> <span class="pre">image_file.khvr</span></code></p>
 <p class="rubric">Parameters</p>
-<table border="1" class="docutils">
+<table border="1" class="colwidths-given docutils">
 <colgroup>
 <col width="25%" />
 <col width="75%" />

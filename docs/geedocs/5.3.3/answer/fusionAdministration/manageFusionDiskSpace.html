@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="manage-fusion-disk-space">
 <h1>Manage Fusion disk space<a class="headerlink" href="#manage-fusion-disk-space" title="Permalink to this headline">¶</a></h1>
-<div class="container">
-<div class="content container">
+<div class="docutils container">
+<div class="content docutils container">
 <p>Fusion writes all assets, projects, and databases to the asset
 root directory (typically named <code class="docutils literal notranslate"><span class="pre">/gevol/assets</span></code>). As a result,
 the asset root can fill up quickly.</p>
@@ -116,7 +116,7 @@ the files. To do this, copy the entire <code class="docutils literal notranslate
 directory to a different location and then symbolically link
 <code class="docutils literal notranslate"><span class="pre">raster.kip</span></code> to the new location with the <code class="docutils literal notranslate"><span class="pre">ln</span> <span class="pre">-s</span></code>
 command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre>ln -s /path/to/new/raster.kip
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ln -s /path/to/new/raster.kip
 </pre></div>
 </div>
 <p>This option is expedient and can provide significant short-term
@@ -145,14 +145,14 @@ space is:</p>
 </li>
 <li><p class="first">Locate the <code class="docutils literal notranslate"><span class="pre">raster.kip</span></code> and the <code class="docutils literal notranslate"><span class="pre">mask.kmp</span></code> directories
 under the asset directory:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre>find <span class="nv">$asset</span>.kiasset -type d -name raster.kip
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>find <span class="nv">$asset</span>.kiasset -type d -name raster.kip
 find <span class="nv">$asset</span>.kiasset -type d -name mask.kmp
 </pre></div>
 </div>
 </li>
 <li><p class="first">Copy the <code class="docutils literal notranslate"><span class="pre">raster.kip</span></code> and <code class="docutils literal notranslate"><span class="pre">mask.kmp</span></code> directories to the
 auxiliary storage volume:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre>cp -av <span class="nv">$kip</span> <span class="nv">$new_location</span>/<span class="nv">$asset</span>.kip
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp -av <span class="nv">$kip</span> <span class="nv">$new_location</span>/<span class="nv">$asset</span>.kip
 cp -av <span class="nv">$kmp</span> <span class="nv">$new_location</span>/<span class="nv">$asset</span>.kmp
 </pre></div>
 </div>
@@ -172,7 +172,7 @@ the directories should be called <code class="docutils literal notranslate"><spa
 <li><p class="first">Modify the imagery asset with the <code class="docutils literal notranslate"><span class="pre">gemodifyimageryasset</span></code>
 command, using the same name that the asset was originally
 created with:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre>gemodifyimageryasset -o imagery/EastChicago -havemask /gevol/newvolume/imagery/EastChicago.kip
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gemodifyimageryasset -o imagery/EastChicago -havemask /gevol/newvolume/imagery/EastChicago.kip
 </pre></div>
 </div>
 <p>For more details about the commands to recreate the assets,
@@ -181,7 +181,7 @@ Enterprise Reference Guide.</p>
 </li>
 <li><p class="first">Rebuild the imagery project and any database that contains the
 imagery project:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre>gebuild imagery/EastChicago
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gebuild imagery/EastChicago
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">gemodifyimageryasset</span></code> and <code class="docutils literal notranslate"><span class="pre">gebuild</span></code> commands will
@@ -210,36 +210,36 @@ asset.</p>
 <p class="rubric" id="example-script">Example script</p>
 <p>The example below copies all the pyramid files from
 <code class="docutils literal notranslate"><span class="pre">/gevol/assets/imagery</span></code> to <code class="docutils literal notranslate"><span class="pre">/gevol/volume1</span></code>.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span class="c"># The commands are echoed to the terminal so you can review them before executing.</span>
-<span class="c"># To enable the commands, uncomment the following line:</span>
-<span class="c"># do_command=true</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># The commands are echoed to the terminal so you can review them before executing.</span>
+<span class="c1"># To enable the commands, uncomment the following line:</span>
+<span class="c1"># do_command=true</span>
 
 <span class="nv">asset_root</span><span class="o">=</span>/gevol/assets
 <span class="nv">asset_directory</span><span class="o">=</span>Resources/Imagery
 <span class="nv">new_location</span><span class="o">=</span>/gevol/volume1
 
 <span class="nb">cd</span> <span class="nv">$asset_root</span>/<span class="nv">$asset_directory</span>
-<span class="k">for </span>asset in <span class="sb">`</span>ls | grep kiasset | sed <span class="s1">&#39;s/\.kiasset//&#39;</span><span class="sb">`</span>
+<span class="k">for</span> asset in <span class="sb">`</span>ls <span class="p">|</span> grep kiasset <span class="p">|</span> sed <span class="s1">&#39;s/\.kiasset//&#39;</span><span class="sb">`</span>
 <span class="k">do</span>
-   <span class="c"># Find the raster.kip and mask.kmp under the asset directory</span>
+   <span class="c1"># Find the raster.kip and mask.kmp under the asset directory</span>
    <span class="nv">kip</span><span class="o">=</span><span class="sb">`</span>find <span class="nv">$asset</span>.kiasset -type d -name raster.kip<span class="sb">`</span>
    <span class="nv">kmp</span><span class="o">=</span><span class="sb">`</span>find <span class="nv">$asset</span>.kiasset -type d -name mask.kmp<span class="sb">`</span>
 
-   <span class="c"># Copy the raster and mask directories to the new volume</span>
-   <span class="nb">echo</span> <span class="s2">&quot;cp -av $kip $new_location/$asset.kip&quot;</span>
-   <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$do_command&quot;</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span> <span class="o">]</span>; <span class="k">then </span>cp -av <span class="nv">$kip</span> <span class="nv">$new_location</span>/<span class="nv">$asset</span>.kip; <span class="k">fi</span>
-<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;cp -av $kmp $new_location/$asset.kmp&quot;</span>
-   <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$do_command&quot;</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span> <span class="o">]</span>; <span class="k">then </span>cp -av <span class="nv">$kmp</span> <span class="nv">$new_location</span>/<span class="nv">$asset</span>.kmp; <span class="k">fi</span>
+   <span class="c1"># Copy the raster and mask directories to the new volume</span>
+   <span class="nb">echo</span> <span class="s2">&quot;cp -av </span><span class="nv">$kip</span><span class="s2"> </span><span class="nv">$new_location</span><span class="s2">/</span><span class="nv">$asset</span><span class="s2">.kip&quot;</span>
+   <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="nv">$do_command</span><span class="s2">&quot;</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span> cp -av <span class="nv">$kip</span> <span class="nv">$new_location</span>/<span class="nv">$asset</span>.kip<span class="p">;</span> <span class="k">fi</span>
+   <span class="nb">echo</span> <span class="s2">&quot;cp -av </span><span class="nv">$kmp</span><span class="s2"> </span><span class="nv">$new_location</span><span class="s2">/</span><span class="nv">$asset</span><span class="s2">.kmp&quot;</span>
+   <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="nv">$do_command</span><span class="s2">&quot;</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span> cp -av <span class="nv">$kmp</span> <span class="nv">$new_location</span>/<span class="nv">$asset</span>.kmp<span class="p">;</span> <span class="k">fi</span>
 
-   <span class="c"># modify and build each of the imagery assets</span>
-   <span class="nb">echo</span> <span class="s2">&quot;gemodifyimageryresource --havemask -o $asset_directory/$asset $new_location/$asset.kip&quot;</span>
-   <span class="c">#if [ &quot;$do_command&quot; == &quot;true&quot; ]; then gemodifyimageryresource --havemask -o $asset_directory/$asset $new_location/$asset.kip; fi</span>
-   <span class="nb">echo</span> <span class="s2">&quot;gebuild $asset_directory/$asset&quot;</span>
-   <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$do_command&quot;</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span> <span class="o">]</span>; <span class="k">then </span>gebuild <span class="nv">$asset_directory</span>/<span class="nv">$asset</span>; <span class="k">fi</span>
+   <span class="c1"># modify and build each of the imagery assets</span>
+   <span class="nb">echo</span> <span class="s2">&quot;gemodifyimageryresource --havemask -o </span><span class="nv">$asset_directory</span><span class="s2">/</span><span class="nv">$asset</span><span class="s2"> </span><span class="nv">$new_location</span><span class="s2">/</span><span class="nv">$asset</span><span class="s2">.kip&quot;</span>
+   <span class="c1">#if [ &quot;$do_command&quot; == &quot;true&quot; ]; then gemodifyimageryresource --havemask -o $asset_directory/$asset $new_location/$asset.kip; fi</span>
+   <span class="nb">echo</span> <span class="s2">&quot;gebuild </span><span class="nv">$asset_directory</span><span class="s2">/</span><span class="nv">$asset</span><span class="s2">&quot;</span>
+   <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="nv">$do_command</span><span class="s2">&quot;</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span> gebuild <span class="nv">$asset_directory</span>/<span class="nv">$asset</span><span class="p">;</span> <span class="k">fi</span>
 <span class="k">done</span>
 
-<span class="c"># Rebuild, then clean the imagery project and the database,</span>
-<span class="c"># then verify that all the assets were cleaned.</span>
+<span class="c1"># Rebuild, then clean the imagery project and the database,</span>
+<span class="c1"># then verify that all the assets were cleaned.</span>
 </pre></div>
 </div>
 </div>

@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp10.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp10.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="inspecting-portable-files">
 <h1>Inspecting portable files<a class="headerlink" href="#inspecting-portable-files" title="Permalink to this headline">¶</a></h1>
-<div class="container">
-<div class="content container">
+<div class="docutils container">
+<div class="content docutils container">
 <p>The <code class="docutils literal notranslate"><span class="pre">geglxinfo</span></code> command provides different tools to analyze the
 composition of .glm, .glb, and .glc portable files. For example,
 you can determine the files included in a portable, extract those
@@ -85,12 +85,12 @@ when you need to troubleshoot any issues that may arise when
 serving your portable files.</p>
 <p class="rubric">Examples</p>
 <p><strong>Valid file check</strong></p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>$ geglxinfo --glx NaturalView-US.glm --is_gee
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ geglxinfo --glx NaturalView-US.glm --is_gee
 IsGee: 1
 </pre></div>
 </div>
 <p><strong>Get file timestamp</strong></p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>$ geglxinfo --glx tutorial_3d.glc --extract_file earth/info.txt --output
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ geglxinfo --glx tutorial_3d.glc --extract_file earth/info.txt --output
 /tmp/info.txt
 $ cat /tmp/info.txt
 Portable Globe
@@ -127,7 +127,7 @@ Server, or <code class="docutils literal notranslate"><span class="pre">http://&
 Earth Server.</p>
 </div>
 <p><strong>Check CRC</strong></p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>$ geglxinfo --glx NaturalView-US.glm --check_crc
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ geglxinfo --glx NaturalView-US.glm --check_crc
 
 File crc: 0x7e6fbbfc
 Calculated crc :0x7e6fbbfc
@@ -135,7 +135,7 @@ Good crc!
 </pre></div>
 </div>
 <p><strong>List files</strong></p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>$ geglxinfo --glx NaturalView-US.glm --list_files
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ geglxinfo --glx NaturalView-US.glm --list_files
 
 Index has 11 files.
 0: earth/earth_local.html
@@ -174,7 +174,7 @@ size: 250
 </pre></div>
 </div>
 <p><strong>Number of packets</strong></p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>$ geglxinfo --glx NaturalView-US.glm --number_of_packets
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ geglxinfo --glx NaturalView-US.glm --number_of_packets
 298076 packets
 </pre></div>
 </div>

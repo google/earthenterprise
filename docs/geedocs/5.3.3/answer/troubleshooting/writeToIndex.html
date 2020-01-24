@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp12.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp12.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="write-to-index">
 <h1>Write to index<a class="headerlink" href="#write-to-index" title="Permalink to this headline">¶</a></h1>
-<div class="container">
-<div class="content container">
+<div class="docutils container">
+<div class="content docutils container">
 <p class="rubric">Error message</p>
 <p><code class="docutils literal notranslate"><span class="pre">Any</span> <span class="pre">of</span> <span class="pre">these</span> <span class="pre">conditions</span> <span class="pre">occur:</span></code></p>
 <ul>
@@ -92,7 +92,7 @@ disconnected.</p>
 <p class="rubric">Resolution</p>
 <ol class="arabic">
 <li><p class="first">Switch to root and enter:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>/etc/init.d/gefusion stop
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/etc/init.d/gefusion stop
 /etc/init.d/geserver stop
 sleep 5
 killall -9 gesystemmanager
@@ -101,14 +101,14 @@ killall -9 geresourceprovider
 </div>
 </li>
 <li><p class="first">Enter:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>ps aux | grep ge
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ps aux | grep ge
 </pre></div>
 </div>
 </li>
 <li><p class="first">Look for and stop any Fusion processes in the output.</p>
 </li>
 <li><p class="first">Make sure that you have enough free disk space, and then enter:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>/etc/init.d/gefusion start
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/etc/init.d/gefusion start
 /etc/init.d/geserver start
 </pre></div>
 </div>

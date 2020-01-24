@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="operating-system-settings-that-may-affect-fusion">
 <h1>Operating System Settings That May Affect Fusion<a class="headerlink" href="#operating-system-settings-that-may-affect-fusion" title="Permalink to this headline">¶</a></h1>
-<div class="container">
-<div class="content container">
+<div class="docutils container">
+<div class="content docutils container">
 <p>The Linux operating system implements several limits that may prevent
 Fusion processes from running correctly, particularly when building large
 projects or databases.</p>
@@ -82,7 +82,7 @@ below to ensure that the new configuration takes effect.</p>
 runs many processes to build assets in parallel, you may need to
 increase the limit by adding the following lines to
 <code class="docutils literal notranslate"><span class="pre">/etc/security/limits.conf</span></code>:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>gefusionuser  soft    nproc   &lt;num_procs&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gefusionuser  soft    nproc   &lt;num_procs&gt;
 gefusionuser  hard    nproc   &lt;num_procs&gt;
 </pre></div>
 </div>
@@ -94,7 +94,7 @@ that number to allow for operating system processes.</p>
 Since Fusion may open many files when building an imagery project, for
 example, you may need to increase the limit by adding the following lines
 to <code class="docutils literal notranslate"><span class="pre">/etc/security/limits.conf</span></code>:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>gefusionuser  soft    nofile   &lt;num_files&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gefusionuser  soft    nofile   &lt;num_files&gt;
 gefusionuser  hard    nofile   &lt;num_files&gt;
 </pre></div>
 </div>
@@ -105,7 +105,7 @@ uses, such as configuration files.</p>
 <p>Fusion uses memory mapping when reading some types of files. Since Linux
 limits the number of memory mappings each process can define, you may
 need to add the following lines to <code class="docutils literal notranslate"><span class="pre">/etc/sysctl.conf</span></code>:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>vm.max_map_count = &lt;num_maps&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>vm.max_map_count = &lt;num_maps&gt;
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">&lt;num_maps&gt;</span></code> should be more than twice the number of resources in your

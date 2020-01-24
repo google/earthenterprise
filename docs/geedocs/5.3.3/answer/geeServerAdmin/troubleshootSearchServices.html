@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp4.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp4.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="troubleshoot-search-services">
 <h1>Troubleshoot search services<a class="headerlink" href="#troubleshoot-search-services" title="Permalink to this headline">¶</a></h1>
-<div class="container">
-<div class="content container">
+<div class="docutils container">
+<div class="content docutils container">
 <p>Once you have added search services to a published database, you
 can query the searchable data from either Google Earth EC or from
 a browser using Google Maps. Querying search data involves sending
@@ -98,12 +98,12 @@ successfully to the client’s query, you can change the
 <ol class="arabic">
 <li><p class="first">In the log file, <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/ge_logging.conf</span></code>,
 change:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>[logger_ge_search]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[logger_ge_search]
 level=INFO
 </pre></div>
 </div>
 <p>to:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>[logger_ge_search]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[logger_ge_search]
 level=DEBUG
 </pre></div>
 </div>
@@ -115,7 +115,7 @@ level=DEBUG
 </li>
 <li><p class="first">Check <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/logs/gesearch.out</span></code> for the
 following type of entries:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>[2014-07-09 16:13:38,162]  DEBUG    [MainThread] (poi_search_handler.py:141) - Params: [&#39;%San Francisco%&#39;, &#39;%San Francisco%&#39;, &#39;%San Francisco%&#39;]
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[2014-07-09 16:13:38,162]  DEBUG    [MainThread] (poi_search_handler.py:141) - Params: [&#39;%San Francisco%&#39;, &#39;%San Francisco%&#39;, &#39;%San Francisco%&#39;]
 [2014-07-09 16:13:38,479]  DEBUG    [MainThread] (poi_search_handler.py:515) - Parsed search tokens: San Francisco
 [2014-07-09 16:13:38,479]  DEBUG    [MainThread] (poi_search_handler.py:139) - Querying the database gepoi, at port 5432, as user geuser on hostname 127.0.0.1.
 014-07-09 16:13:38,479]  DEBUG    [MainThread] (poi_search_handler.py:140) - Query: SELECT ST_AsGeoJSON(the_geom) AS the_geom, &quot;posn&quot; FROM gepoi_9 WHERE ( lower(&quot;posn&quot;) LIKE %s )

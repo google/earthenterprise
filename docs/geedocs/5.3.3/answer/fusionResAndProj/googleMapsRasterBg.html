@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp2.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp2.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="google-maps-raster-background">
 <h1>Google Maps raster background<a class="headerlink" href="#google-maps-raster-background" title="Permalink to this headline">¶</a></h1>
-<div class="container">
-<div class="content container">
+<div class="docutils container">
+<div class="content docutils container">
 <p>Creating a Google Maps raster background for your vector data is
 useful to speed up processing times for large globes. Trying to
 create a vector-only globe can result in very long processing
@@ -130,7 +130,7 @@ tiles later.</p>
 </div>
 </li>
 <li><p class="first">Georeference the A1 file data:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>gdal_translate -a_srs WGS84 -a_ullr -180 90 -90 0
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gdal_translate -a_srs WGS84 -a_ullr -180 90 -90 0
 world.topo.bathy.200407 .3x21600x21600.A1.png
 world.topo.bathy.200407.3x21600x21600.A1.tif
 </pre></div>
@@ -157,7 +157,7 @@ the Google Maps shade of blue. The NASA <code class="docutils literal notranslat
 image file is already the right size, so you can just edit
 its color layers to create a tile with the Google Maps RGB
 value of 153, 179, 204:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>gdal_translate -b 1 -scale 0 255 153 153 world-topo-bathy-200407-3x21600x21600-A1.tif red.tif
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gdal_translate -b 1 -scale 0 255 153 153 world-topo-bathy-200407-3x21600x21600-A1.tif red.tif
 gdal_translate -b 1 -scale 0 255 179 179 world-topo-bathy-200407-3x21600x21600-A1.tif green.tif
 gdal_translate -b 1 -scale 0 255 204 204 world-topo-bathy-200407-3x21600x21600-A1.tif blue.tif
 </pre></div>
@@ -165,7 +165,7 @@ gdal_translate -b 1 -scale 0 255 204 204 world-topo-bathy-200407-3x21600x21600-A
 </li>
 <li><p class="first">Merge the layers to form a 3-band <code class="docutils literal notranslate"><span class="pre">.tif</span></code> file called
 <code class="docutils literal notranslate"><span class="pre">GoogleBlueA1.tif:</span></code></p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>/usr/local/FWTools-2.0.6/bin_safe/gdal_merge.py -o
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/usr/local/FWTools-2.0.6/bin_safe/gdal_merge.py -o
 GoogleBlueA1.tif -separate red.tif green.tif blue.tif
 </pre></div>
 </div>
@@ -176,7 +176,7 @@ GoogleBlueA1.tif -separate red.tif green.tif blue.tif
 <li><p class="first">Create the remaining seven blue tiles by using
 <code class="docutils literal notranslate"><span class="pre">gdal_translate</span></code> and inserting the appropriate corner
 coordinates:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>gdal_translate -a_ullr -180  0 -90 -90 GoogleBlue.tif GoogleBlueA2.tif
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gdal_translate -a_ullr -180  0 -90 -90 GoogleBlue.tif GoogleBlueA2.tif
 gdal_translate -a_ullr  -90 90   0   0 GoogleBlue.tif GoogleBlueB1.tif
 gdal_translate -a_ullr  -90  0   0 -90 GoogleBlue.tif GoogleBlueB2.tif
 gdal_translate -a_ullr    0 90  90   0 GoogleBlue.tif GoogleBlueC1.tif
@@ -201,7 +201,7 @@ Maps land areas, which is 242, 239, 233. The L2 layer for the
 lakes uses the same RGB value as the ocean (153, 179, 204).</p>
 <p>Burn the shorelines and lakes into the blue tiles one at a
 time:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre>gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueA1.tif
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueA1.tif
 gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueA1.tif
 
 gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueB1.tif

@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp4.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp4.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="add-custom-search-services">
 <h1>Add custom search services<a class="headerlink" href="#add-custom-search-services" title="Permalink to this headline">¶</a></h1>
-<div class="container">
-<div class="content container">
+<div class="docutils container">
+<div class="content docutils container">
 <p>If you want to access a custom data source, you can create your
 own search plug-in and access it as a search tab definition in
 Google Earth Enterprise Server. A custom search plug-in will
@@ -141,7 +141,7 @@ follows:</p>
 <p>The plug-in end points are for Google Earth Enterprise search
 plug-ins are defined in
 <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf.d/mod_wsgi-ge.conf</span></code>.</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre># Handles Places search requests.
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Handles Places search requests.
   WSGIScriptAlias /gesearch/PlacesSearch /opt/google/gehttpd/wsgi-bin/search/plugin/geplaces_search_app.py
   # Handles Coordinate search requests.
   WSGIScriptAlias /gesearch/CoordinateSearch /opt/google/gehttpd/wsgi-bin/search/plugin/coordinate_search_app.py
@@ -172,7 +172,7 @@ module configuration file:
 <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf.d/mod_wsgi-ge.conf</span></code>. Your
 registration in the configuration file should look something
 like the following:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre># Handles My Custom search requests.
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Handles My Custom search requests.
 WSGIScriptAlias /gesearch/CustomSearch
 /opt/google/gehttpd/wsgi-bin/search/plugin/mycustom_search_app.py
 </pre></div>
