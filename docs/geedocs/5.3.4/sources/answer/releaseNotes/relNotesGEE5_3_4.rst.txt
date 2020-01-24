@@ -5,6 +5,16 @@ Open GEE 5.3.4 is currently in development
 
 -[ New Features ]-
 
+Optimized handling of status updates for Canceled and Failed tasks
+
+. System manager's algorithm for handling updates for Canceled and
+Failed tasks has been modified to use less memory. This change is
+experimental and can be enabled using the
+
+GraphOperations flag
+
+.
+
 -[ Supported Platforms ]-
 
 The Open GEE 5.3.4 release is supported on 64-bit versions of the

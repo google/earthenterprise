@@ -12,6 +12,10 @@ Release notes: Open GEE 5.3.4
 
       .. rubric:: New Features
 
+      **Optimized handling of status updates for Canceled and Failed tasks**.
+      System manager's algorithm for handling updates for Canceled and Failed
+      tasks has been modified to use less memory. This change is experimental
+      and can be enabled using the :ref:`GraphOperations flag <graph-operations>`.
 
       .. rubric:: Supported Platforms
 
