@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp12.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp12.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="fusion-issues">
 <h1>Fusion issues<a class="headerlink" href="#fusion-issues" title="Permalink to this headline">¶</a></h1>
-<div class="docutils container">
-<div class="content docutils container">
+<div class="container">
+<div class="content container">
 <p>When you install GEE on a server, the software does a query for
 <code class="docutils literal notranslate"><span class="pre">hostname</span> <span class="pre">-f</span></code>. Each time you build a resource, project, or
 database on the Fusion server, the initial <code class="docutils literal notranslate"><span class="pre">hostname</span> <span class="pre">-f</span></code>
@@ -99,7 +99,7 @@ and <code class="docutils literal notranslate"><span class="pre">/gevol/publishe
 GEE Server):</p>
 <ol class="arabic">
 <li><p class="first">Shut down both the <code class="docutils literal notranslate"><span class="pre">gefusion</span></code> and <code class="docutils literal notranslate"><span class="pre">geserver</span></code> daemons:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/etc/init.d/gefusion stop
+<div class="highlight-none notranslate"><div class="highlight"><pre>/etc/init.d/gefusion stop
 /etc/init.d/geserver stop
 </pre></div>
 </div>
@@ -115,7 +115,7 @@ address and hostname entries for the production machine.</p>
 </li>
 <li><p class="first">Back up the following files to <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> or another archive
 folder:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/gevol/assets/.config/volumes.xml
+<div class="highlight-none notranslate"><div class="highlight"><pre>/gevol/assets/.config/volumes.xml
 /gevol/assets/.config/PacketLevel.taskrule
 /gevol/assets/.userdata/serverAssociations.xml
 /gevol/assets/.userdata/snippets.xml
@@ -137,7 +137,7 @@ and <code class="docutils literal notranslate"><span class="pre">/gevol/publishe
 <p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">gepguser</span> <span class="pre">/opt/google/bin/geresetpgdb</span></code>.</p>
 </li>
 <li><p class="first">Start the geserver and gefusion services:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/etc/init.d/geserver start
+<div class="highlight-none notranslate"><div class="highlight"><pre>/etc/init.d/geserver start
 /etc/init.d/gefusion start
 </pre></div>
 </div>

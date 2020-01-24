@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp10.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp10.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="custom-folders">
 <h1>Custom folders<a class="headerlink" href="#custom-folders" title="Permalink to this headline">¶</a></h1>
-<div class="docutils container">
-<div class="content docutils container">
+<div class="container">
+<div class="content container">
 <p>By default, GEE Portable stores cut globes in the Apache Document
 root of the GEE Server at
 <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/cutter/globes</span></code>. However, you can
@@ -96,19 +96,19 @@ folder where portable globes are hosted and can interfere with
 any ongoing globe cutting operations.</p>
 </li>
 <li><p class="first">Stop the GEE Server service:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo /etc/init.d/geserver stop
+<div class="highlight-bash notranslate"><div class="highlight"><pre>sudo /etc/init.d/geserver stop
 </pre></div>
 </div>
 </li>
 <li><p class="first">Use either of the methods below to set up your custom folder:</p>
 <ul>
 <li><p class="first">Create a new folder:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir /gevol/src/globes
+<div class="highlight-bash notranslate"><div class="highlight"><pre>mkdir /gevol/src/globes
 </pre></div>
 </div>
 </li>
 <li><p class="first">Move the original folder to a storage volume:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mv /opt/google/gehttpd/htdocs/cutter/globes /gevol/src/globes
+<div class="highlight-bash notranslate"><div class="highlight"><pre>mv /opt/google/gehttpd/htdocs/cutter/globes /gevol/src/globes
 </pre></div>
 </div>
 </li>
@@ -116,15 +116,15 @@ any ongoing globe cutting operations.</p>
 </li>
 <li><p class="first">Create a symbolic link from the custom folder to the original
 folder location:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ln -sf /gevol/src/globes /opt/google/gehttpd/htdocs/cutter/globes
+<div class="highlight-bash notranslate"><div class="highlight"><pre>ln -sf /gevol/src/globes /opt/google/gehttpd/htdocs/cutter/globes
 </pre></div>
 </div>
 </li>
 <li><p class="first">Change ownership of the custom folder to
 <code class="docutils literal notranslate"><span class="pre">geapacheuser:gegroup</span></code> and change permissions to 755
 (rwxr-wr-w):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chown -R geapacheuser:gegroup /gevol/src/globes
-chmod -R <span class="m">755</span> /gevol/src/globes
+<div class="highlight-bash notranslate"><div class="highlight"><pre>chown -R geapacheuser:gegroup /gevol/src/globes
+chmod -R 755 /gevol/src/globes
 </pre></div>
 </div>
 </li>

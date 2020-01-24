@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="configure-fusion-performance">
 <h1>Configure Fusion performance<a class="headerlink" href="#configure-fusion-performance" title="Permalink to this headline">¶</a></h1>
-<div class="docutils container">
-<div class="content docutils container">
+<div class="container">
+<div class="content container">
 <p>You can tune the performance of Fusion by setting up task rules
 and by modifying the sizes of the asset caches.</p>
 <p class="rubric" id="configure-task-rules">Configure task rules</p>
@@ -103,7 +103,7 @@ CPUs. For example:</p>
 enabling/disabling multithreading, and by specifying output
 locations (KRP/KRMP), as shown in the following table.</p>
 <p class="rubric" id="id1"><span id="task-rule-types"></span>Task rule types</p>
-<div class="docutils container">
+<div class="container">
 <table border="1" class="docutils">
 <colgroup>
 <col width="12%" />
@@ -200,7 +200,7 @@ task does not necessarily speed up processing, so you should
 keep the <code class="docutils literal notranslate"><span class="pre">maxNumCPU</span></code> value at 2.</p>
 </div>
 <p class="rubric">Sample: ImageryPacketLevel.taskrule</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;TaskRule&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span class="nt">&lt;TaskRule&gt;</span>
   <span class="nt">&lt;taskname&gt;</span>ImageryPacketLevel<span class="nt">&lt;/taskname&gt;</span>
   <span class="nt">&lt;inputConstraints/&gt;</span>
   <span class="nt">&lt;outputConstraints/&gt;</span>
@@ -223,7 +223,7 @@ task. You can use this task rule to assign up to six CPUs instead.
 Set the minimum CPU value to a number from 1 to 6, and set the
 maximum to a number between 2 and 6.</p>
 <p class="rubric">Sample: TerrainPacketLevel.taskrule</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;TaskRule&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span class="nt">&lt;TaskRule&gt;</span>
   <span class="nt">&lt;taskname&gt;</span>TerrainPacketLevel<span class="nt">&lt;/taskname&gt;</span>
   <span class="nt">&lt;inputConstraints/&gt;</span>
   <span class="nt">&lt;outputConstraints/&gt;</span>
@@ -242,7 +242,7 @@ available CPUs to the build. For example, with eight CPUs assigned for
 Fusion, assuming that one CPU is reserved for the system, you can
 assign seven CPUs to the CombinedTerrain serial process.</p>
 <p class="rubric">Sample: CombinedTerrain.taskrule</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;TaskRule&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span class="nt">&lt;TaskRule&gt;</span>
   <span class="nt">&lt;taskname&gt;</span>CombinedTerrain<span class="nt">&lt;/taskname&gt;</span>
   <span class="nt">&lt;inputConstraints/&gt;</span>
   <span class="nt">&lt;outputConstraints/&gt;</span>
@@ -260,7 +260,7 @@ rule to assign multiple CPUs instead. Set the rule to min/max 4 on
 a 2 dual-core CPU system (3 may work well enough). On a 2
 quad-core CPU system, set the rule to min/max 3.</p>
 <p class="rubric" id="sample-maplayerlevel-taskrule">Sample: MapLayerLevel.taskrule</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;TaskRule&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span class="nt">&lt;TaskRule&gt;</span>
   <span class="nt">&lt;taskname&gt;</span>MapLayerLevel<span class="nt">&lt;/taskname&gt;</span>
   <span class="nt">&lt;inputConstraints/&gt;</span>
   <span class="nt">&lt;outputConstraints/&gt;</span>
@@ -281,7 +281,7 @@ Locations</span></a>.</p>
 learn how to create a new volume, see <a class="reference internal" href="#defining-volumes"><span class="std std-ref">Defining
 volumes</span></a>.</p>
 <p class="rubric">Sample: KRP.taskrule</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;TaskRule&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span class="nt">&lt;TaskRule&gt;</span>
   <span class="nt">&lt;taskname&gt;</span>KRP<span class="nt">&lt;/taskname&gt;</span>
   <span class="nt">&lt;inputConstraints/&gt;</span>
   <span class="nt">&lt;outputConstraints&gt;</span>
@@ -311,7 +311,7 @@ Locations</span></a>. In the sample below, the
 volume you have created is <code class="docutils literal notranslate"><span class="pre">products</span></code>. To learn how to create a
 new volume, see <a class="reference internal" href="#defining-volumes"><span class="std std-ref">Defining Volumes</span></a>.</p>
 <p class="rubric">Sample: KRMP.taskrule</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;TaskRule&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span class="nt">&lt;TaskRule&gt;</span>
   <span class="nt">&lt;taskname&gt;</span>KRMP<span class="nt">&lt;/taskname&gt;</span>
   <span class="nt">&lt;inputConstraints/&gt;</span>
   <span class="nt">&lt;outputConstraints&gt;</span>
@@ -340,7 +340,7 @@ define the volume, use the <code class="docutils literal notranslate"><span clas
 command, then edit the XML as shown in the sample below. In this
 sample, the volume you are creating is called <code class="docutils literal notranslate"><span class="pre">products</span></code>.</p>
 <p class="rubric" id="sample-volumes-xml">Sample: volumes.xml</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;products&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span class="nt">&lt;products&gt;</span>
   <span class="nt">&lt;netpath&gt;</span>/gevol/products<span class="nt">&lt;/netpath&gt;</span>
   <span class="nt">&lt;host&gt;</span>linux<span class="nt">&lt;/host&gt;</span>
   <span class="nt">&lt;localpath&gt;</span>/gevol/products<span class="nt">&lt;/localpath&gt;</span>
@@ -417,19 +417,19 @@ not created automatically as part of the Open GEE Fusion install,
 so users that want to modify the parameters below must first
 create an <code class="docutils literal notranslate"><span class="pre">XMLparams</span></code> file. The <code class="docutils literal notranslate"><span class="pre">XMLparams</span></code> file has the
 following format:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># comments are preceded by &#39;#&#39;</span>
-<span class="c1"># options are case-insensitive, and all need not be present</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span class="c"># comments are preceded by &#39;#&#39;</span>
+<span class="c"># options are case-insensitive, and all need not be present</span>
 
-<span class="c1"># the initial size of the XML heap in bytes</span>
-<span class="c1"># default is 16384</span>
+<span class="c"># the initial size of the XML heap in bytes</span>
+<span class="c"># default is 16384</span>
 <span class="nv">INIT_HEAP_SIZE</span><span class="o">=</span>&lt;value&gt;
 
-<span class="c1"># the max size of the XML heap in bytes</span>
-<span class="c1"># default is 131072</span>
+<span class="c"># the max size of the XML heap in bytes</span>
+<span class="c"># default is 131072</span>
 <span class="nv">MAX_HEAP_SIZE</span><span class="o">=</span>&lt;value&gt;
 
-<span class="c1"># the size of XML heap allocation blocks in bytes</span>
-<span class="c1"># default is 4096</span>
+<span class="c"># the size of XML heap allocation blocks in bytes</span>
+<span class="c"># default is 4096</span>
 <span class="nv">BLOCK_SIZE</span><span class="o">=</span>&lt;value&gt;
 </pre></div>
 </div>

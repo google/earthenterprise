@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp2.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp2.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="create-custom-masks">
 <h1>Create custom masks<a class="headerlink" href="#create-custom-masks" title="Permalink to this headline">¶</a></h1>
-<div class="docutils container">
-<div class="content docutils container">
+<div class="container">
+<div class="content container">
 <p class="rubric">Table of Contents</p>
 <ul class="simple">
 <li><a class="reference internal" href="#getting-started"><span class="std std-ref">Getting started</span></a></li>
@@ -309,7 +309,7 @@ details.</li>
 </li>
 </ul>
 <p class="rubric" id="comparison-of-the-gemaskgen-and-gepolymaskgen">Comparison of the gemaskgen and gepolymaskgen</p>
-<table border="1" class="colwidths-given docutils">
+<table border="1" class="docutils">
 <colgroup>
 <col width="50%" />
 <col width="25%" />
@@ -1389,7 +1389,7 @@ import the custom mask</li>
 <p>The <strong>command templates</strong> for building this custom mask will be:</p>
 <ol class="arabic">
 <li><p class="first"><strong>Locate the mask computed during the image resource build:</strong></p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gequery --outfiles
+<div class="highlight-none notranslate"><div class="highlight"><pre>gequery --outfiles
 Resources/Imagery/YourImageResource.kiasset/maskgen.kia
 /gevol/assets/Resources/Imagery/YourImageResource.kiasset/maskgen.kia/ver001/mask.tif
 </pre></div>
@@ -2040,7 +2040,7 @@ Preview window.</li>
 <p class="rubric" id="gepolymaskgen-help-menu">Appendix G: gepolymaskgen help menu</p>
 <p>A full copy of the help contents for <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> is
 available in this appendix for reference:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>usage: gepolymaskgen --help | -?
+<div class="highlight-none notranslate"><div class="highlight"><pre>usage: gepolymaskgen --help | -?
 
          gepolymaskgen [--feather &lt;int_feather&gt;] --base_mask &lt;geotiff_mask_file&gt; [options] --output_mask &lt;geotiff_mask_file&gt;
 

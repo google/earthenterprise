@@ -70,8 +70,8 @@
   <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="command-reference">
 <h1>Command reference<a class="headerlink" href="#command-reference" title="Permalink to this headline">¶</a></h1>
-<div class="docutils container">
-<div class="content docutils container">
+<div class="container">
+<div class="content container">
 <p>This article describes all of the command line tools used for
 system administration in alphabetical order. If you prefer, you
 can find each tool’s syntax by entering the name of the tool on
@@ -183,7 +183,7 @@ before using this command and then start it again after you are
 done.</p>
 </div>
 <p class="rubric">Example</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>geconfigureassetroot --new --assetroot /gevol/assets
+<div class="highlight-none notranslate"><div class="highlight"><pre>geconfigureassetroot --new --assetroot /gevol/assets
 geconfigureassetroot --new --assetroot /gevol/assets --srcvol /data1/src
 geconfigureassetroot --repair
 geconfigureassetroot --editvolumes
@@ -293,7 +293,7 @@ Cutter security, you must add it separately. See
 </div>
 <p>See <a class="reference internal" href="../geeServerAdmin/createPortableGlobesMaps.html"><span class="doc">Create Portable Globes and Maps</span></a>.</p>
 <p class="rubric">Example</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gecutter enable
+<div class="highlight-none notranslate"><div class="highlight"><pre>gecutter enable
 
 gecutter disable
 </pre></div>
@@ -351,7 +351,7 @@ local storage into the mock asset root.</p>
 <p>For detachable media:</p>
 <p>gedisconnectedreceive --input /mnt/usbdrive/SFHighways_3dDatabase_v20</p>
 <p>For local storage:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gedisconnectedreceive --input
+<div class="highlight-none notranslate"><div class="highlight"><pre>gedisconnectedreceive --input
 /gevol/src/disconnected_databases/SFHighways_3dDatabase_v20
 </pre></div>
 </div>
@@ -377,7 +377,7 @@ folders on the same volume.</p>
 disconnected push/publish, for either publishing new databases or
 publishing “delta” updates.</p>
 <p class="rubric">Example</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gedisconnectedsend --sendver Databases/SFHighways.kdatabase?version=2 --output /gevol/src/disconnected_databases/SFHighways_3dDatabase_v2
+<div class="highlight-none notranslate"><div class="highlight"><pre>gedisconnectedsend --sendver Databases/SFHighways.kdatabase?version=2 --output /gevol/src/disconnected_databases/SFHighways_3dDatabase_v2
 </pre></div>
 </div>
 <p class="rubric">Commands</p>
@@ -566,7 +566,7 @@ then start it again after you are done. You must also run this
 command as root.</p>
 </div>
 <p class="rubric">Example</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>geselectassetroot --list
+<div class="highlight-none notranslate"><div class="highlight"><pre>geselectassetroot --list
 geselectassetroot --lock
 geselectassetroot --unlock
 geselectassetroot --assetroot /gevol/assets
@@ -632,7 +632,7 @@ categories:</p>
 <p>All of the commands of each type are described below. At least one
 command is required.</p>
 <p class="rubric" id="examples">Examples</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>geserveradmin --listdbs
+<div class="highlight-none notranslate"><div class="highlight"><pre>geserveradmin --listdbs
 geserveradmin --server_type stream --dbdetails “/gevol/assets/Databases/SF Neighborhoods.kdatabase/gedb.kda/ver001/gedb”
 geserveradmin --addvh my_public_vh --vhurl http://myserver.com/public_vh
 geserveradmin --deletevh my_public_vh
@@ -683,7 +683,7 @@ server.</p>
 <p class="rubric" id="add-database">Add database</p>
 <p>--<strong>adddb</strong> <em>db_name</em> [--dbalias <em>alias</em>]</p>
 <p>Registers a new database with the specified name.</p>
-<table border="1" class="colwidths-given docutils" id="id1">
+<table border="1" class="docutils" id="id1">
 <caption><span class="caption-text">adddb option</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="33%" />
@@ -720,7 +720,7 @@ option. (See also <code class="docutils literal notranslate"><span class="pre">-
 <p>--<strong>pushdb</strong> <em>db_name</em>… [--<strong>force_copy</strong>]</p>
 <p>Pushes one or more databases to the server. For example,
 <code class="docutils literal notranslate"><span class="pre">--pushdb</span> <span class="pre">db1</span> <span class="pre">--pushdb</span> <span class="pre">db2</span></code></p>
-<table border="1" class="colwidths-given docutils" id="id2">
+<table border="1" class="docutils" id="id2">
 <caption><span class="caption-text">pushdb option</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="30%" />
@@ -749,7 +749,7 @@ using <code class="docutils literal notranslate"><span class="pre">geconfigurepu
 <p>Publish the specified database on the specified target path. If
 the virtual host name is omitted, it publishes to the default
 virtual host: “public”.</p>
-<table border="1" class="colwidths-given docutils" id="id3">
+<table border="1" class="docutils" id="id3">
 <caption><span class="caption-text">publishdb option</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="30%" />
@@ -821,7 +821,7 @@ host.</p>
 <p>Registers a new virtual host with the specified name. Spaces are
 not allowed in the virtual host name. For example:</p>
 <p>geserveradmin \addvh public_vh --vhurl <a class="reference external" href="http://mysite.com/public_vh">http://mysite.com/public_vh</a></p>
-<table border="1" class="colwidths-given docutils" id="id4">
+<table border="1" class="docutils" id="id4">
 <caption><span class="caption-text">addvh options</span><a class="headerlink" href="#id4" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="30%" />
