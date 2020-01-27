@@ -49,7 +49,7 @@ Release notes: Open GEE 5.3.3
       made to existing documentation. Instructions also added for building
       on FIPS-enabled machines.
 
-      **GraphOperations flag Improved ease of use of Portable for WMS clients**.
+      **Improved ease of use of Portable for WMS clients**.
       Accept col/row/level if x/y/z is missing in WMS request when
       serving portable globes.
 
