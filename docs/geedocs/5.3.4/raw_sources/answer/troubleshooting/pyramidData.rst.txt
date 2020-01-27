@@ -1,0 +1,53 @@
+|Google logo|
+
+============
+Pyramid data
+============
+
+.. container::
+
+   .. container:: content
+
+      .. rubric:: Error message
+
+      ``Unable to decompress pyramid data Fusion Fatal: PrepLoop: Unable to read tile (lrc)``
+      
+      .. rubric:: Description
+
+      This error occurs when you try to build an imagery project with a
+      corrupt imagery resouce.
+
+      .. rubric:: Resolution
+
+      -  If the imagery project must be finished as soon as possible and
+         the failed imagery resource can be omitted:
+
+         Drop the failed imagery resource from the project. A new
+         version of the imagery project will be built that does not
+         include the corrupt imagery resource.
+
+      -  If the imagery project must be finished as soon as possible,
+         the failed imagery resource must be included, and the source is
+         based on prebuilt imagery ``.kip/.kmp`` folders from another
+         machine:
+
+         Verify that all ``.pyr`` files in both the ``.kip`` and
+         ``.kmp`` folders are their true size between both systems, then
+         replace any ``.pyr`` files that have differences between file
+         sizes or checksums. To check for differences, calculate md5
+         checksums for each pyramid file in the source folders and the
+         target folders. You can restart the failed imagery project
+         blend, or blends, afterward.
+
+      -  If the imagery project does not have an immediate deadline, the
+         failed imagery resource must be included, and the imagery
+         resource was imported from raw source files (such as JPEG2000
+         or GeoTIFF) that have good integrity and are not corrupt:
+
+         Re-import the source imagery as a new version of the imagery
+         resource. Build a new version of the imagery project to blend
+         the new version of the imagery resource.
+
+.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
+   :width: 130px
+   :height: 44px

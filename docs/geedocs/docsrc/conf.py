@@ -31,7 +31,7 @@ print gee_version_number
 # -- Project information -----------------------------------------------------
 
 project = u'Google Earth Enterprise'
-copyright = u'2019, Open GEE Contributors'
+copyright = u'2020, Open GEE Contributors'
 author = u'Open GEE Contributors'
 
 # The short X.Y version

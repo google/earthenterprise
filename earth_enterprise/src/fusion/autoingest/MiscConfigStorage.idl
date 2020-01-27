@@ -40,6 +40,9 @@ class MiscConfigStorage {
   uint         PackGenAnalysisThreads = uint(1);
   GraphOpsType GraphOperations = MiscConfigStorage::NO_GRAPH_OPS;
 
+  // True to minify previous levels, false to build from source imagery and terrain
+  bool         UseMinification = true;
+
 #pragma LoadAndSave
 
 #hquote

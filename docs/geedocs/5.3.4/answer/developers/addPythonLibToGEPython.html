@@ -1,0 +1,125 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Add Python Libraries to GEE Python &#8212; Google Earth Enterprise 5.3.4 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Google Maps API v3 for GEE" href="googleMapsAPIV3ForGEE.html" />
+    <link rel="prev" title="Developers" href="../developers.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="googleMapsAPIV3ForGEE.html" title="Google Maps API v3 for GEE"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../developers.html" title="Developers"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../developers.html" accesskey="U">Developers</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../developers.html"
+                        title="previous chapter">Developers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="googleMapsAPIV3ForGEE.html"
+                        title="next chapter">Google Maps API v3 for GEE</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="add-python-libraries-to-gee-python">
+<h1>Add Python Libraries to GEE Python<a class="headerlink" href="#add-python-libraries-to-gee-python" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>GEE uses system Python with some extra libraries to support
+functionality such as publishing and custom search plug-ins.</p>
+<p>Additional modules specific to GEE are installed in:</p>
+<p><code class="docutils literal notranslate"><span class="pre">/opt/google/gepython/Python-2.7.x/lib/python2.7/site-packages</span></code>
+, where x is determined by the system Python version.</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">psycopg2</span></code> is a PostgreSQL database adapter</li>
+<li><code class="docutils literal notranslate"><span class="pre">google/protobuf</span></code> is Google’s serialization mechanism for
+structured data.</li>
+<li><code class="docutils literal notranslate"><span class="pre">mgrs</span></code> provides conversion to and from MGRS</li>
+<li><code class="docutils literal notranslate"><span class="pre">GDAL</span></code> (Geospatial Data Abstraction Library) Python library</li>
+</ul>
+<p class="rubric">Add a Python library</p>
+<p>You can add a Python library to either the system Python path, or
+to the <code class="docutils literal notranslate"><span class="pre">/opt/google/gepython/Python-2.7.x</span></code> path for it to be
+enabled with GEE. One of the easiest ways to install a Python
+library is to use the Python package tool, <code class="docutils literal notranslate"><span class="pre">pip</span></code>. You may also
+need to consider any other dependencies for your newly installed
+library.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="googleMapsAPIV3ForGEE.html" title="Google Maps API v3 for GEE"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../developers.html" title="Developers"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../developers.html" >Developers</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

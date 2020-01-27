@@ -15,11 +15,11 @@
 # limitations under the License.
 #
 
-Import('env', 'sysmanObjs', 'extraObjs', 'testLibs')
+Import('env', 'sysmanObjs', 'sysmanExtraObjs', 'sysmanTestLibs')
 
 env = env.Clone()
 
 env.test('parse-raster-project-xml-no-content_unittest',
-    map(lambda o: "../" + o, sysmanObjs) + extraObjs + \
+    map(lambda o: "../" + o, sysmanObjs) + sysmanExtraObjs + \
     ['parse-raster-project-xml-no-content_unittest.cc'],
-    LIBS = [ 'dbmanifest', 'geautoingest', 'yaml-cpp' ] + testLibs)
+    LIBS = [ 'dbmanifest', 'geautoingest', 'yaml-cpp' ] + sysmanTestLibs)

@@ -1,0 +1,369 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Display custom logos &#8212; Google Earth Enterprise 5.3.4 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Manage virtual hosts" href="manageVirtualHosts.html" />
+    <link rel="prev" title="Manage snippet profiles" href="manageSnippetProfiles.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="manageVirtualHosts.html" title="Manage virtual hosts"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="manageSnippetProfiles.html" title="Manage snippet profiles"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" accesskey="U">GEE Server administration</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="manageSnippetProfiles.html"
+                        title="previous chapter">Manage snippet profiles</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="manageVirtualHosts.html"
+                        title="next chapter">Manage virtual hosts</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp4.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp4.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="display-custom-logos">
+<h1>Display custom logos<a class="headerlink" href="#display-custom-logos" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>Google Earth Enterprise Client (EC) 5.0 and later can display
+multiple custom logos with your globes and maps when connected to
+a GEE Server.</p>
+<p>Custom logos are added as database preferences or <em>snippets</em>,
+which are managed using <a class="reference internal" href="manageSnippetProfiles.html"><span class="doc">snippet profiles</span></a> you create
+using GEE Server. Once you have saved a custom logo in a snippet
+profile, you can assign it to any database you publish. You can
+apply a snippet profile to as many databases as you need.</p>
+<p class="rubric">Cobrand_info snippet</p>
+<p>You can use the <strong>cobrand_info</strong> snippet within a snippet profile
+to place your logos anywhere in the Google Earth EC window.</p>
+<p>The benefits of using <strong>cobrand_info</strong> are:</p>
+<ul class="simple">
+<li>You can access logos at both local and remote addresses (UNC,
+HTTP, and HTTPS). However, we recommend that you host your logos
+on GEE Server to ensure accessiblity to the server and Google
+Earth EC.</li>
+<li>PNG, GIF, and JPEG image formats are supported.</li>
+<li>Transparent logos are supported.</li>
+<li>You can place logos anywhere on the screen.</li>
+<li>You can display multiple logos at the same time.</li>
+<li>You can use either absolute pixel values or relative screen
+size values to place logos.</li>
+<li>Logos can either be a fixed size or scaled to the width of the
+screen.</li>
+<li>Logos are included with saved images and printouts from EC.</li>
+</ul>
+<p class="rubric">Cobrand_info snippet definition</p>
+<p>You define the <strong>cobrand_info</strong> snippet by specifying the URL from
+which the logo will be served, the screen width size, the tie
+point (which controls the reference point used when overlaying the
+logo), and x and y coordinates, expressed as either absolute values
+in pixels or relative values of percentage of screen width or
+height.</p>
+<p>The following <strong>cobrand_info</strong> example snippet places the
+<em>top_right.jpg</em> logo in the top-right corner of the window (the
+top right of the image is 5 pixels from the right edge of the
+window edge, using an absolute x coordinate value, and 95% from
+the bottom using a relative y coordinate value), and sets it to
+dynamically scale to 5% of the screen width as the Google Earth EC
+window is resized.</p>
+<p><img alt="GEE Server cobrand_info snippet example" src="../../images/Snippet_cobrand-full.png" /></p>
+<p class="rubric">Cobrand_info parameters</p>
+<p>The following table describes the cobrand_info snippet parameters,
+all of which are required.</p>
+<table border="1" class="colwidths-given docutils" id="id1">
+<caption><span class="caption-text">Cobrand_info parameters</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="38%" />
+<col width="62%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">logoUrl</span></code></td>
+<td>The location of the logo file, e.g.,``http://yourserver.org/top-left-logo.gif``
+Logos can be accessed locally or remotely via UNC, HTTP, or HTTPS. Supported logo formats are PNG, GIF, and JPEG.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">screen_size</span></code></td>
+<td>Specifies a fraction of window width the logo should be scaled to.
+Value must be between 0.0 and 1.0, where 0.0 disables the scaling feature.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tiePoint</span></code></td>
+<td><p class="first">Specifies the part of the logo file that is placed at the specified <code class="docutils literal notranslate"><span class="pre">x_coord.value</span></code> and <code class="docutils literal notranslate"><span class="pre">y_coord.value</span></code> values.
+The following screen positions are allowed:</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>BOTTOM_LEFT</li>
+<li>BOTTOM_CENTER</li>
+<li>BOTTOM_RIGHT</li>
+<li>TOP_LEFT</li>
+<li>BOTTOM_LEFT</li>
+<li>MID_LEFT</li>
+<li>TOP_RIGHT</li>
+<li>TOP_CENTER</li>
+<li>MID_RIGHT</li>
+<li>MID_CENTER</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">x_coord.is_relative</span></code></td>
+<td><p class="first">Used in conjunction with <code class="docutils literal notranslate"><span class="pre">x_coord.value</span></code> to specify absolute or relative pixel placement of the <code class="docutils literal notranslate"><span class="pre">tiePoint</span></code>.</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>False means <code class="docutils literal notranslate"><span class="pre">x_coord.value</span></code> is a pixel value.</li>
+<li>True means <code class="docutils literal notranslate"><span class="pre">x_coord.value</span></code> is a window size fraction.</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">x_coord.value</span></code></td>
+<td><p class="first">The EC horizontal (X axis) coordinate for <code class="docutils literal notranslate"><span class="pre">tiePoint</span></code>. <code class="docutils literal notranslate"><span class="pre">x_coord.value</span></code> specifies a distance
+from the left edge of the Earth window for logo tiePoint placement.</p>
+<p><code class="docutils literal notranslate"><span class="pre">x_coord.value</span></code> is used in conjunction with <code class="docutils literal notranslate"><span class="pre">x_coord.is_relative</span></code>, which specifies whether
+the distance is measured in pixel or relative values.</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>If <code class="docutils literal notranslate"><span class="pre">x_coord.is_relative</span></code> is False (default), <code class="docutils literal notranslate"><span class="pre">x_coord.is_relative</span></code> is a pixel value.
+You can use negative values to specify a distance from the right edge.</li>
+<li>If <code class="docutils literal notranslate"><span class="pre">x_coord.is_relative</span></code> is True, allowed values for <code class="docutils literal notranslate"><span class="pre">x_coord.is_relative</span></code> are
+between 0.0 (left edge of window) and 1.0 (right edge).</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">y_coord.is_relative</span></code></td>
+<td><p class="first">Used in conjunction with <code class="docutils literal notranslate"><span class="pre">y_coord.value</span></code> to specify absolute or relative pixel placement of the <code class="docutils literal notranslate"><span class="pre">tiePoint</span></code>.</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>False means <code class="docutils literal notranslate"><span class="pre">y_coord.value</span></code> is a pixel value</li>
+<li>True means <code class="docutils literal notranslate"><span class="pre">y_coord.value</span></code> is a window size fraction.</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">y_coord.value</span></code></td>
+<td><p class="first">The EC vertical (Y axis) coordinate position for <code class="docutils literal notranslate"><span class="pre">tiePoin``t.</span> <span class="pre">``y_coord.value</span></code> specifies a distance
+from the bottom edge of the Earth window for logo <code class="docutils literal notranslate"><span class="pre">tiePoint</span></code> placement.</p>
+<p><code class="docutils literal notranslate"><span class="pre">y_coord.value</span></code> is used in conjunction with <code class="docutils literal notranslate"><span class="pre">y_coord.is_relative</span></code>, which specifies whether the distance
+is measured in pixel or relative values.</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>If <code class="docutils literal notranslate"><span class="pre">y_coord.is_relative</span></code> is False, this is a pixel value. You can use negative values to specify a
+distance from the top edge.</li>
+<li>If <code class="docutils literal notranslate"><span class="pre">y_coord.is_relative</span></code> is True, allowed values are between 0.0 (bottom edge of window) and 1.0 (top edge).</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Add a custom logo</p>
+<p>You can add any number of custom logos to your maps and globes,
+adding each one using a <strong>cobrand_info</strong> snippet. The ideal size
+for your logo is 64 x 64 pixels.</p>
+<p class="rubric">To add a custom logo:</p>
+<ol class="arabic">
+<li><p class="first">Upload your logo file to a web server in the network. To host
+the file on your GEE Server (for example,
+<code class="docutils literal notranslate"><span class="pre">http://servername/filename.ext</span></code>), copy it to
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs</span></code>.</p>
+</li>
+<li><p class="first">Access the Google Earth Enterprise Server Admin console in a
+browser window by going to <em>myserver.mydomainname</em>.com/admin,
+replacing <em>myserver</em> and <em>mydomainname</em> with your server and
+domain.</p>
+</li>
+<li><p class="first">Sign in with the default credentials or the username and
+password assigned to you:</p>
+<ul class="simple">
+<li>Default username: <em>geapacheuser</em></li>
+<li>Default password: <em>geeadmin</em></li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you do not know your username and password,
+contact your Google Earth Enterprise Server System
+Administrator.</p>
+</div>
+</li>
+<li><p class="first">Click <strong>Snippet profiles</strong> to display your snippet profiles.</p>
+</li>
+<li><p class="first">Click <strong>Create New</strong>. The <strong>Create new snippet profile</strong> dialog
+appears.</p>
+<p><img alt="GEE Server Create Snippet Profile dialog" src="../../images/snippet_profilesCreateDialog.png" /></p>
+</li>
+<li><p class="first">Enter a name for the new snippet profile and click <strong>Create</strong>.
+The snippet profile name appears in red in the <strong>Existing
+snippet profile</strong> list and the <strong>Snippet editor</strong> opens.</p>
+</li>
+<li><p class="first">Click the <strong>Add a new snippet set to the profile</strong> drop-down to
+display the list of available snippets.</p>
+</li>
+<li><p class="first">Select the <strong>cobrand_info</strong> snippet from the list.</p>
+<p><img alt="GEE Server Select cobrand_info Snippet" src="../../images/Snippet_cobrandSelect.png" /></p>
+</li>
+<li><p class="first">Enter a URL for the path of the custom logo. Select whether
+your x and y coordinate values are expressed as relative or
+absolute and enter the parameter values. All fields must be
+completed.</p>
+<p><img alt="GEE Server cobrand_info Snippet definition" src="../../images/Snippet_cobrand.png" /></p>
+</li>
+<li><p class="first">Click <strong>Save changes</strong> to save the snippet profile.</p>
+</li>
+</ol>
+<p class="rubric">To apply a custom logo to a globe or map:</p>
+<ol class="arabic">
+<li><p class="first">In the GEE Server Admin console, click <strong>Databases</strong>. The list
+of databases on GEE server appears.</p>
+</li>
+<li><p class="first">Check the box next to the database to which you want to apply
+your custom logo. Click <strong>Publish</strong>. The Publish dialog
+appears.</p>
+</li>
+<li><p class="first">Select your snippet profile for your custom logo from the
+<strong>Snippet profiles</strong> drop-down list.</p>
+<p><img alt="GEE Server Publish dialog snippet profile" src="../../images/Publish_snippet.png" /></p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">If you have already published your database, you need to
+<strong>Unpublish</strong> before publishing again, this time adding your
+snippet profile to apply your custom logo.</p>
+</div>
+</li>
+<li><p class="first">Click the <strong>Publish</strong> button to publish your database with the added
+snippet profile.</p>
+<p>Now, when you view your database in Google Earth EC, your custom
+logo is displayed.</p>
+</li>
+</ol>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Google Earth EC recognizes only the snippet profile settings
+made by the first database that you connect to. This applies
+when you are connecting to multiple databases.</p>
+</div>
+<p class="rubric">cobrand_info snippet definition examples</p>
+<p class="rubric">Single logo at top-left</p>
+<p>This example places one logo in the top-left corner of the
+window (the top-left of the image is 5% of the window width
+from the left side of the window, and 95% from the bottom), and
+sets it to dynamically scale to 10% of the window width as the
+window is resized.</p>
+<p><img alt="cobrand_info top-left example" src="../../images/cobrand_top_left.png" /></p>
+<p class="rubric">Single logo at mid right</p>
+<p>This example places one logo at the vertical midpoint on the
+right side of the window using absolute and relative coordinate
+values. The center-right logo tiePoint is placed 5 pixels from
+the right window edge and at 50% of the relative window height.
+EC requests the file using HTTPS (as specified in <strong>logo_url</strong>)
+and does not scale the logo.</p>
+<p><img alt="cobrand_info right-center example" src="../../images/cobrand_center_right.png" /></p>
+<p class="rubric">Single logo at top-center</p>
+<p>This example places one logo at the top-center of the window.
+The top-center tiePoint of the logo is placed, by relative
+coordinates, at the 50% window width and 98% window height, and
+the logo dynamically scales to 9% of the window width.</p>
+<p><img alt="cobrand_info top-center example" src="../../images/cobrand_top_center.png" /></p>
+<p class="rubric">Single logo at bottom-right corner</p>
+<p>This example places one logo in the bottom-right corner of the
+window by combining relative and absolute coordinate values.
+The bottom-right logo tiePoint is placed at 80% of the window
+width from the left window edge, leaving a 20% margin at the
+right window edge, and 30 pixels from the bottom window edge.
+The logo is dynamically scaled to occupy 20% of the window
+width.</p>
+<blockquote>
+<div><img alt="cobrand_info bottom-right example" src="../../images/cobrand_bottom_right.png" /></div></blockquote>
+<p class="rubric">Single logo at top-left corner</p>
+<p>This example places one logo in the top-left corner of the
+window using absolute pixel values. The top-left logo tiePoint
+is placed 5 pixels from the left window edge and 5 pixels from
+the top window edge, and the logo is displayed without scaling.</p>
+<blockquote>
+<div><img alt="cobrand_info upper-left example" src="../../images/cobrand_upper_left.png" /></div></blockquote>
+<p class="rubric">Learn more</p>
+<ul class="simple">
+<li><a class="reference internal" href="manageSnippetProfiles.html"><span class="doc">Manage snippet profiles</span></a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="manageVirtualHosts.html" title="Manage virtual hosts"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="manageSnippetProfiles.html" title="Manage snippet profiles"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" >GEE Server administration</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
