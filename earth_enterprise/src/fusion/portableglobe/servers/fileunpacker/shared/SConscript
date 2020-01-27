@@ -59,6 +59,13 @@ env.InstallFileOrDir(
     '%s/common' % env.installdirs['httpdwsgi'],
     libglc_unpacker, 'install')
 
+# Drop in the test globes
+sync_test_globes = env.Command(
+    '%s/tests/fusion/testdata' % Dir(env.exportdirs['bin']).abspath, # TARGET
+    Dir('#fusion/portableglobe/servers/fileunpacker/test_data').abspath, # SOURCE
+    env.rsync_cmd % ('$SOURCE', '$TARGET'))
+#env.AlwaysBuild(sync_test_globes)
+
 # Tests
 filewalker_test = env.test('filewalker_test',
     ['filewalker_unittest.cpp'],

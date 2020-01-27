@@ -33,8 +33,8 @@ class FileWalkerTest : public testing::Test {
   std::string glc_file;
 
   virtual void SetUp() {
-    glb_file = "../../../fusion/portableglobe/servers/fileunpacker/test_data/test.glb";
-    glc_file = "../../../fusion/portableglobe/servers/fileunpacker/test_data/test.glc";
+    glb_file = "fusion/testdata/test_data/test.glb";
+    glc_file = "fusion/testdata/test_data/test.glc";
   }
 
   // Helper function to find values in lists
@@ -55,7 +55,7 @@ class FileWalkerTest : public testing::Test {
   /**
     * Test that the contents of the test GLB have expected size and values
     */
-  void TestGlbContents() {
+  void TestFilesGlobe() {
     EXPECT_TRUE(FileExists(glb_file.c_str()));
 
     if (!FileExists(glb_file.c_str())) {
@@ -65,10 +65,10 @@ class FileWalkerTest : public testing::Test {
     PortableGlcReader reader(glb_file.c_str());
     GlcUnpacker unpacker(reader, false, false);
     std::list<std::string> files;
-    unpacker.MapFileWalker(0, [&] (int layer, const char* file_name) {
+    EXPECT_FALSE(unpacker.MapFileWalker(0, [&] (int layer, const char* file_name) {
       files.push_back(file_name);
       return true;
-    });
+    }));
 
     EXPECT_FALSE(files.empty());
 
@@ -79,20 +79,12 @@ class FileWalkerTest : public testing::Test {
     EXPECT_TRUE(Contains(files, std::string("data/index")));
 
     EXPECT_TRUE(Contains(files, std::string("icons/773_l.png")));
-
-    files.clear();
-    unpacker.MapFileWalker(0, [&] (int layer, const char* file_name) {
-      files.push_back(file_name);
-      return false;
-    });
-
-    EXPECT_EQ(files.size(), 1);
   }
 
   /**
     * Test that the contents of the test GLC layers have expected size and values
     */
-  void TestGlcContents() {
+  void TestFilesComposite() {
     EXPECT_TRUE(FileExists(glc_file.c_str()));
 
     if (!FileExists(glc_file.c_str())) {
@@ -102,10 +94,10 @@ class FileWalkerTest : public testing::Test {
     PortableGlcReader reader(glc_file.c_str());
     GlcUnpacker unpacker(reader, true, false);
     std::map<int, std::list<std::string>> file_map;
-    unpacker.MapFileWalker([&] (int layer, const char* file_name) {
+    EXPECT_FALSE(unpacker.MapFileWalker([&] (int layer, const char* file_name) {
       file_map[layer].push_back(file_name);
       return true;
-    });
+    }));
 
     std::list<int> layer_ids;
     for(auto const& pair: file_map) {
@@ -130,12 +122,28 @@ class FileWalkerTest : public testing::Test {
 
     EXPECT_EQ(file_map[2].size(), 52);
   }
+
+  /**
+    * Test that exiting early returns the expected size
+    */
+  void TestFilesCompositeEarlyExit() {
+    PortableGlcReader reader(glc_file.c_str());
+    GlcUnpacker unpacker(reader, true, false);
+    std::list<std::string> files;
+    EXPECT_TRUE(unpacker.MapFileWalker([&] (int layer, const char* file_name) {
+      files.push_back(file_name);
+      return false;
+    }));
+
+    EXPECT_EQ(files.size(), 1);
+  }
 };
 
 // Tests GLB and GLC directory contents
 TEST_F(FileWalkerTest, TestFiles) {
-  TestGlbContents();
-  TestGlcContents();
+  TestFilesGlobe();
+  TestFilesComposite();
+  TestFilesCompositeEarlyExit();
 }
 
 int main(int argc, char *argv[]) {
