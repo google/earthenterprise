@@ -580,6 +580,36 @@ TEST_F(StorageManagerTest, InvalidRef) {
   ASSERT_FALSE(asset) << "Invalid refs should return empty handles";
 }
 
+TEST_F(StorageManagerTest, PruneLimiting) {
+  storageManager.SetPrunePercent(.5);
+
+  PointerType newItem = make_shared<TestItem>();
+  ASSERT_EQ(storageManager.CacheSize(), 0) << "Storage manager has unexpected item in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
+
+  storageManager.AddNew("newItem", newItem);
+  ASSERT_EQ(storageManager.CacheSize(), 1) << "Storage manager has wrong number of items in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has wrong number of items in dirty map";
+  ASSERT_EQ(storageManager.DetermineIfPrune(), false) << "Storage manager has determined wrong choice for pruning cache";
+
+  {
+    AssetHandle<const TestItem> handles[CACHE_SIZE+1];
+    for (size_t i = 0; i < CACHE_SIZE+1; ++i) {
+      stringstream s;
+      s << "anotherOne" << i;
+      handles[i] = storageManager.Get(s.str());
+      ASSERT_EQ(storageManager.CacheSize(), i+2) << "Unexpected number of items in cache";
+      ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has unexpected item in dirty map";
+    }
+  }
+
+  ASSERT_EQ(storageManager.DetermineIfPrune(), true) << "Storage manager has determined wrong choice for pruning cache";
+
+  storageManager.NoLongerNeeded("anotherOne1");
+  ASSERT_EQ(storageManager.CacheSize(), CACHE_SIZE) << "Unexpected number of items in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has unexpected item in dirty map";
+}
+
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc,argv);
   return RUN_ALL_TESTS();

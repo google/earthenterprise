@@ -95,6 +95,8 @@ class StorageManager : public StorageManagerInterface<AssetType> {
     inline void AddNew(const AssetKey &, const PointerType &);
     inline void AddExisting(const AssetKey &, const PointerType &);
     inline void NoLongerNeeded(const AssetKey &, bool = true);
+    inline void SetPrunePercent(const float & percent);
+    inline bool DetermineIfPrune();
     void Abort();
     bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<AssetKey> *);
     PointerType Get(const AssetHandleInterface<AssetType> *, const AssetKey &, bool, bool, bool);
@@ -114,13 +116,12 @@ class StorageManager : public StorageManagerInterface<AssetType> {
     const SerializerPtr serializer;
     CacheType cache;
     std::map<AssetKey, PointerType> dirtyMap;
-    const float prunePercent;
+    float prunePercent;
 
     StorageManager(const StorageManager &) = delete;
     StorageManager& operator=(const StorageManager &) = delete;
     
     PointerType GetEntryFromCacheOrDisk(const AssetKey &);
-    bool DetermineIfPrune();
 };
 
 template<class AssetType>
@@ -358,6 +359,12 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
   }
   cache.Prune();
   return true;
+}
+
+template<class AssetType>
+void StorageManager<AssetType>::SetPrunePercent(const float & percent) {
+  std::lock_guard<std::recursive_mutex> lock(storageMutex);
+  prunePercent = percent;
 }
 
 template<class AssetType>
