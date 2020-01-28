@@ -61,7 +61,7 @@ pyyaml_build = pyyaml_env.Command(
                       env_opt, python_cmd, pyyaml_target))])
 
 # [3] Create pyyaml master installer.
-install_root_lib = '%s/lib/python%s/site-packages/yaml' % (
+install_root_lib = '%s/lib/python%s/site-packages' % (
     install_root, pyyaml_env['python_major_version'])
 install_root_doc = '%s/share/doc/packages/%s' % (
     install_root_opt, pyyaml_ge_version)

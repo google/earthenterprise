@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/env python2.7
 #-*- Python -*-
 #
 # Copyright 2017 GEE Open Source Team <github.com/google/earthenterprise>
