@@ -35,8 +35,8 @@ class MiscConfigStorage {
 
   bool         LimitMemoryUtilization = false;
 
-  // The percentage of cache size that the dirty map size must meet for cache to not be pruned.
-  float         PrunePercentage = float(1);
+  // The cache will only be pruned if the size of the dirty map is less than or equal to this fraction of the cache.
+  float         PrunePercentage = float(100);
   
   bool         GenerateProductPreviews = true;
   uint         MutexTimedWaitSec = uint(30);

@@ -369,7 +369,7 @@ void StorageManager<AssetType>::SetPrunePercent(const float & percent) {
 
 template<class AssetType>
 bool StorageManager<AssetType>::DetermineIfPrune() {
-  return (DirtySize() <= (CacheSize() * prunePercent));
+  return (DirtySize() <= (CacheSize() * (prunePercent / 100)));
 }
 
 #endif // STORAGEMANAGER_H

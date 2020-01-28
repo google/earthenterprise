@@ -125,7 +125,7 @@ class StorageManagerTest : public testing::Test {
  protected:
   StorageManager<TestItem> storageManager;
  public:
-  StorageManagerTest() : storageManager(CACHE_SIZE, false, 0, 1, "test", unique_ptr<TestSerializer>(new TestSerializer())) {
+  StorageManagerTest() : storageManager(CACHE_SIZE, false, 0, 100, "test", unique_ptr<TestSerializer>(new TestSerializer())) {
     // Reset the static variables in TestItem
     TestItem::nextValue = 1;
     TestItem::fileName = "/dev/null"; // A file that exists
@@ -581,31 +581,30 @@ TEST_F(StorageManagerTest, InvalidRef) {
 }
 
 TEST_F(StorageManagerTest, PruneLimiting) {
-  storageManager.SetPrunePercent(.5);
+  storageManager.SetPrunePercent(50);
 
   PointerType newItem = make_shared<TestItem>();
-  ASSERT_EQ(storageManager.CacheSize(), 0) << "Storage manager has unexpected item in cache";
-  ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
-
   storageManager.AddNew("newItem", newItem);
   ASSERT_EQ(storageManager.CacheSize(), 1) << "Storage manager has wrong number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has wrong number of items in dirty map";
+  // Make sure DetermineIfPrune() returns false since the size of the dirty map is not less than or equal to half the size of the cache.
   ASSERT_EQ(storageManager.DetermineIfPrune(), false) << "Storage manager has determined wrong choice for pruning cache";
-
+  // Add items to the cache so the number of items exceeds the limit by two.
   {
     AssetHandle<const TestItem> handles[CACHE_SIZE+1];
     for (size_t i = 0; i < CACHE_SIZE+1; ++i) {
       stringstream s;
-      s << "anotherOne" << i;
+      s << "anotherItem" << i;
       handles[i] = storageManager.Get(s.str());
       ASSERT_EQ(storageManager.CacheSize(), i+2) << "Unexpected number of items in cache";
       ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has unexpected item in dirty map";
     }
   }
-
+  // Make sure DetermineIfPrune() returns true since the size of the dirty map is now less than half the size of the cache.
   ASSERT_EQ(storageManager.DetermineIfPrune(), true) << "Storage manager has determined wrong choice for pruning cache";
 
-  storageManager.NoLongerNeeded("anotherOne1");
+  // Remove an item from the cache and make sure cache is pruned as well.
+  storageManager.NoLongerNeeded("anotherItem0");
   ASSERT_EQ(storageManager.CacheSize(), CACHE_SIZE) << "Unexpected number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has unexpected item in dirty map";
 }
