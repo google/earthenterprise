@@ -416,6 +416,10 @@ def main():
       (r"/(.*)", portable_web_interface.SetUpHandler),
       ])
 
+  flags = 0
+  mask = ENABLE_EXTENDED_FLAGS | ENABLE_QUICK_EDIT_MODE
+  update_console_mode(flags, mask, restore=True)
+
   tornado.web.globe_ = portable_globe.Globe()
   tornado.web.local_server_ = local_server.LocalServer()
   http_server = tornado.httpserver.HTTPServer(application)
