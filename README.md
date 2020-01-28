@@ -68,6 +68,6 @@ source before proceeding with the install.
 [slack]: http://slack.opengee.org
 [slack-img]: https://img.shields.io/badge/chat-on%20slack-ff69b4.svg
 [travis]: https://travis-ci.org/google/earthenterprise/builds
-[travis-img]: https://travis-ci.org/google/earthenterprise.svg?branch=release_5.3.3
+[travis-img]: https://travis-ci.org/google/earthenterprise.svg?branch=master
 [install]: https://github.com/google/earthenterprise/wiki/Install-Fusion-or-Earth-Server
 [flow]: https://lh3.googleusercontent.com/ZGQH04lc2mYmw1JEx0Jvwiardw5H6cwrmRhSj75pSKF6r1FRwwYUBUIBnTE6n5uY071XV7__mmVDKdV6B1tEpUQwFNYnt1HBfxiz3Hrqbw99HUFQKVFnht11EkPz70xCtuhFlCi3
