@@ -33,8 +33,8 @@ class FileWalkerTest : public testing::Test {
   std::string glc_file;
 
   virtual void SetUp() {
-    glb_file = "fusion/testdata/test_data/test.glb";
-    glc_file = "fusion/testdata/test_data/test.glc";
+    glb_file = "portable/test_data/test.glb";
+    glc_file = "portable/test_data/test.glc";
   }
 
   // Helper function to find values in lists
