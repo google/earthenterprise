@@ -41,7 +41,7 @@ from the *earth_enterprise* subdirectory.  This can be used after
 This will setup the stage install directory, install Gradle if needed, and
 then uses Gradle to generate RPMs.  The RPMs are created in the
 *rpms/build/distributions* subdirectory.  A typical invocation for building
-release RPMs might be ```scons -j8 release=1 package_install```.  All other
+release RPMs might be ```python2.7 /usr/bin/scons -j8 release=1 package_install```.  All other
 files related to RPM generation are found in the *rpms* sub-directory as
 well. Scripts for pre/post install operations are found under the related
 package directory in *rpms*, and common templates for package script generation
