@@ -73,7 +73,7 @@ platforms on how to setup the dependencies, tools, and compilers.
 
     ```bash
     cd earthenterprise/earth_enterprise
-    scons -j8 release=1 build
+    python2.7 /usr/bin/scons -j8 release=1 build
     ```
 
 5. Run unit tests (note: that the `REL` part of the path will vary if you use

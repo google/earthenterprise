@@ -74,6 +74,10 @@
 <div class="content docutils container">
 <p>Open GEE 5.3.4 is currently in development</p>
 <p class="rubric">New Features</p>
+<p><strong>Optimized handling of status updates for Canceled and Failed tasks</strong>.
+System manager’s algorithm for handling updates for Canceled and Failed
+tasks has been modified to use less memory. This change is experimental
+and can be enabled using the <a class="reference internal" href="../fusionAdministration/confTaskRulesForFusionPerf.html#graph-operations"><span class="std std-ref">GraphOperations flag</span></a>.</p>
 <p class="rubric">Supported Platforms</p>
 <p>The Open GEE 5.3.4 release is supported on 64-bit versions of the
 following operating systems:</p>
@@ -104,9 +108,13 @@ correctly to the new PostgreSQL version used by Open GEE 5.3.4.</p>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>Issue number</td>
-<td>Issue Description</td>
-<td>Issue Resolution</td>
+<tr class="row-even"><td>1604</td>
+<td>WMS capability doesn’t work with reverse proxies</td>
+<td>It now works, as long as the protocol (http vs https) matches</td>
+</tr>
+<tr class="row-odd"><td>1579</td>
+<td>Add an option to misc.xml for disabling minification</td>
+<td>An option was added to control minification.</td>
 </tr>
 </tbody>
 </table>

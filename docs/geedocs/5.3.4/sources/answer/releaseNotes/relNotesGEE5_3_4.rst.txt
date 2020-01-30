@@ -5,6 +5,16 @@ Open GEE 5.3.4 is currently in development
 
 -[ New Features ]-
 
+Optimized handling of status updates for Canceled and Failed tasks
+
+. System manager's algorithm for handling updates for Canceled and
+Failed tasks has been modified to use less memory. This change is
+experimental and can be enabled using the
+
+GraphOperations flag
+
+.
+
 -[ Supported Platforms ]-
 
 The Open GEE 5.3.4 release is supported on 64-bit versions of the
@@ -28,8 +38,10 @@ new PostgreSQL version used by Open GEE 5.3.4.
 
 -[ Resolved Issues ]-
 
-      Number  Description  Resolution  Issue number  Issue Description
-Issue Resolution
+      Number  Description  Resolution  1604  WMS capability doesn't
+work with reverse proxies  It now works, as long as the protocol (http
+vs https) matches  1579  Add an option to misc.xml for disabling
+minification  An option was added to control minification.
 
 -[ Known Issues ]-
 
