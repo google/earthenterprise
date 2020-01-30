@@ -12,6 +12,10 @@ Release notes: Open GEE 5.3.4
 
       .. rubric:: New Features
 
+      **Optimized handling of status updates for Canceled and Failed tasks**.
+      System manager's algorithm for handling updates for Canceled and Failed
+      tasks has been modified to use less memory. This change is experimental
+      and can be enabled using the :ref:`GraphOperations flag <graph-operations>`.
 
       .. rubric:: Supported Platforms
 
@@ -45,6 +49,9 @@ Release notes: Open GEE 5.3.4
          * - 1604
            - WMS capability doesn't work with reverse proxies
            - It now works, as long as the protocol (http vs https) matches
+         * - 1579
+           - Add an option to misc.xml for disabling minification
+           - An option was added to control minification.
 
       .. rubric:: Known Issues
 
