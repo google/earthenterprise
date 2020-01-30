@@ -21,7 +21,7 @@
 # Simply run this script after building and it will install wsgi modules under
 # the /opt/google/gehttpd/wsg-bin/.
 #
-# Note: to build python modules run 'scons -j8 optimize=1 build_py'
+# Note: to build python modules run 'python2.7 /usr/bin/scons -j8 optimize=1 build_py'
 
 set -x
 set -e
