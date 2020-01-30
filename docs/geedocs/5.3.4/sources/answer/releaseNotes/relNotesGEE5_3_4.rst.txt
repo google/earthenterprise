@@ -21,7 +21,7 @@ Option to retry failed tasks
 
 retry tasks that fail
 
-, which allows Fusion to deal with intermittent failures gracefully.
+, which allows Fusion to recover from intermittent failures.
 
 -[ Supported Platforms ]-
 

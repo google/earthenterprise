@@ -427,7 +427,7 @@ Configure Fusion performance
       .. rubric:: Retry Failed tasks
 
       Users can configure Fusion to retry tasks that fail, which allows Fusion
-      to handle intermittent failures gracefully.
+      to recover from intermittent failures.
       This feature is disabled by default.
       To enable it, set the following parameters in
       ``/gevol/assets/.config/misc.xml``:
