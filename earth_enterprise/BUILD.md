@@ -37,7 +37,7 @@ platforms on how to setup the dependencies, tools, and compilers.
     * Method 2: Clone and download LFS files in two steps:
 
         ```bash
-        GIT_LFS_SKIP_SMUDGE=1 git clone git@github.com:google/earthenterprise.git
+        GIT_LFS_SKIP_SMUDGE=1 git clone https://github.com/google/earthenterprise.git
         cd earthenterprise
         git lfs pull
         ```
