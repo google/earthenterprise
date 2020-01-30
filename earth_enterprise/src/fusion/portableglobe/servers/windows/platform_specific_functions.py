@@ -47,39 +47,28 @@ kernel32.SetConsoleMode.argtypes = (
     wintypes.HANDLE, # _In_  hConsoleHandle
     wintypes.DWORD,) # _Out_ lpMode
 
-def get_console_mode(output=False):
-    '''Get the mode of the active console input or output
-       buffer. Note that if the process isn't attached to a
-       console, this function raises an EBADF IOError.
-    '''
-    device = r'\\.\CONOUT$' if output else r'\\.\CONIN$'
-    with open(device, 'r+') as con:
-        mode = wintypes.DWORD()
-        hCon = msvcrt.get_osfhandle(con.fileno())
-        kernel32.GetConsoleMode(hCon, ctypes.byref(mode))
-        return mode.value
+def prepare_for_io_loop():
+  # On Windows, we want to disable Quick Edit Mode so users don't inadvertently
+  # cause portable to freeze while Python is stuck trying to print to the console
+  restore = True
+  try:
+    flags = 0
+    mask = ENABLE_EXTENDED_FLAGS | ENABLE_QUICK_EDIT_MODE
+    console_input_handle = kernel32.GetStdHandle(-10)
+    current_mode = wintypes.DWORD()
+    kernel32.GetConsoleMode(console_input_handle, ctypes.byref(current_mode))
+    original_mode = current_mode.value
 
-def set_console_mode(mode, output=False):
-    '''Set the mode of the active console input or output
-       buffer. Note that if the process isn't attached to a
-       console, this function raises an EBADF IOError.
-    '''
-    device = r'\\.\CONOUT$' if output else r'\\.\CONIN$'
-    with open(device, 'r+') as con:
-        hCon = msvcrt.get_osfhandle(con.fileno())
-        kernel32.SetConsoleMode(hCon, mode)
-
-def update_console_mode(flags, mask, output=False, restore=False):
-    '''Update a masked subset of the current mode of the active
-       console input or output buffer. Note that if the process
-       isn't attached to a console, this function raises an
-       EBADF IOError.
-    '''
-    current_mode = get_console_mode(output)
-    if current_mode & mask != flags & mask:
-        mode = current_mode & ~mask | flags & mask
-        set_console_mode(mode, output)
+    if original_mode & mask != flags & mask:
+        mode = original_mode & ~mask | flags & mask
+        kernel32.SetConsoleMode(console_input_handle, mode)
     else:
         restore = False
-    if restore:
-        atexit.register(set_console_mode, current_mode, output)
+  except WindowsError:
+    # GetConsoleMode or SetConsoleMode failed. Likely an invalid handle.
+    # Make no further attempt to set the mode.
+    print "Error disabling Quick Edit Mode ..."
+    restore = False
+
+  if restore:
+    atexit.register(kernel32.SetConsoleMode, console_input_handle ,original_mode)
