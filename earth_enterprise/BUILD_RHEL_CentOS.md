@@ -14,8 +14,15 @@ sudo yum install -y epel-release
 ### RHEL 7
 
 ```bash
+# Setup subscriptions for RHEL 7
 sudo subscription-manager repos --enable=rhel-7-server-optional-rpms
+
+# For RHEL 7 in AWS
+sudo yum-config-manager --enable rhel-7-server-rhui-optional-rpms
+
+# For all RHEL 7
 sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+
 ```
 
 ### CentOS 6
@@ -33,13 +40,18 @@ the latest updates.
 ```bash
 # For RHEL 6 Workstation:
 sudo subscription-manager repos --enable=rhel-x86_64-workstation-dts-2
+sudo subscription-manager repos --enable=rhel-6-server-optional-rpms
+sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
 
 # For RHEL 6 Server:
 sudo subscription-manager repos --enable=rhel-server-dts2-6-rpms
-
-# For all RHEL 6 Editions:
 sudo subscription-manager repos --enable=rhel-6-server-optional-rpms
 sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
+
+# For RHEL 6 in AWS
+sudo yum-config-manager repos --enable rhui-REGION-rhel-server-releases-optional
+sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
+
 ```
 
 ## Install Git
@@ -48,11 +60,10 @@ It's recommended to install a recent version of Git from the [IUS repositories](
 but the older RedHat or Centos packages can also be used.
 
 ```bash
-
-# To the system default version:
+# To install the system default version:
 sudo yum install -y git
 
-# To Install Git 2.16 on RHEL 6 and Centos 6
+# To install Git 2.16 on RHEL 6 and Centos 6
 sudo yum install -y https://repo.ius.io/ius-release-el6.rpm
 sudo yum install -y git216
 
