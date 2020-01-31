@@ -414,7 +414,8 @@ how often the cache is pruned. This option is controlled by
 moddified can not be removed from the cache until they are written to
 disk. If the number of unwritten modified assets exceeds the
 configured percentage of the cache size, the cache will not attempt
-to prune.</p>
+to prune. The value for <code class="docutils literal notranslate"><span class="pre">PrunePercent</span></code> can be any number from 0 up
+to 100.</p>
 <p>The Xerces library maintains a separate cache for dealing with XML
 files. Users can modify aspects of this cache through a
 configuration file at <code class="docutils literal notranslate"><span class="pre">/etc/opt/google/XMLparams</span></code>. This file is

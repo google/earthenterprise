@@ -337,7 +337,8 @@ Configure Fusion performance
    moddified can not be removed from the cache until they are written
    to disk. If the number of unwritten modified assets exceeds the
    configured percentage of the cache size, the cache will not attempt
-   to prune.
+   to prune. The value for "PrunePercent" can be any number from 0 up
+   to 100.
 
    The Xerces library maintains a separate cache for dealing with XML
    files. Users can modify aspects of this cache through a
