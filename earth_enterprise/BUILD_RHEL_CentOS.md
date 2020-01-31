@@ -37,20 +37,20 @@ sudo yum install -y epel-release ius-release
 __NOTE:__ The EPEL URL below assumes that your RHEL 6 installation has
 the latest updates.
 
+__NOTE:__ Installing devtoolset-2 on RHEL6 in AWS requires a RedHat
+subscription.
+
 ```bash
 # For RHEL 6 Workstation:
 sudo subscription-manager repos --enable=rhel-x86_64-workstation-dts-2
-sudo subscription-manager repos --enable=rhel-6-server-optional-rpms
-sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
 
 # For RHEL 6 Server:
 sudo subscription-manager repos --enable=rhel-server-dts2-6-rpms
+
+# For All RHEL 6
 sudo subscription-manager repos --enable=rhel-6-server-optional-rpms
 sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
 
-# For RHEL 6 in AWS
-sudo yum-config-manager repos --enable rhui-REGION-rhel-server-releases-optional
-sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
 
 ```
 
