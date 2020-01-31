@@ -17,6 +17,10 @@ Release notes: Open GEE 5.3.4
       tasks has been modified to use less memory. This change is experimental
       and can be enabled using the :ref:`GraphOperations flag <graph-operations>`.
 
+      **Option to limit cache pruning**.
+      Users can now limit how often the cache is pruned by use of an experimental
+      option, :ref:`PrunePercent <prune-percent>`.
+
       .. rubric:: Supported Platforms
 
       The Open GEE 5.3.4 release is supported on 64-bit versions of the

@@ -344,12 +344,19 @@ Configure Fusion performance
       number of objects. This option is controlled by
       ``LimitMemoryUtilization`` and its default value is 0 (false). The
       maximum memory usage for each cache can be set with
-      ``MaxAssetCacheMemorySize`` and ``MaxVersionCacheMemorySize``.
-      This size is measured in bytes and the default setting is 1GB.
-      While this option is enabled, the caches will not be limited by
-      the number of objects in the cache. It should be noted that as of
-      now the reported memory usage is very low and that this option is
-      not recommended for production environments.
+      ``MaxAssetCacheMemorySize`` and ``MaxVersionCacheMemorySize`` and
+      is in terms of bytes. While this option is enabled, the caches will
+      not be limited by the number of objects in the cache.
+
+      .. _prune-percent:
+
+      Another experimental option in ``misc.xml`` allows the user to limit
+      how often the cache is pruned. This option is controlled by
+      ``PrunePercent`` and is set to 100 by default. Assets that have been
+      moddified can not be removed from the cache until they are written to
+      disk. If the number of unwritten modified assets exceeds the
+      configured percentage of the cache size, the cache will not attempt
+      to prune.
 
       The Xerces library maintains a separate cache for dealing with XML
       files. Users can modify aspects of this cache through a
