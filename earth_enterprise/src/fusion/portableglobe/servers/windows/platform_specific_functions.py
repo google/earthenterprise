@@ -28,14 +28,21 @@ ENABLE_QUICK_EDIT_MODE = 0x0040
 ENABLE_EXTENDED_FLAGS  = 0x0080
 
 def check_zero(result, func, args):    
-    if not result:
-        err = ctypes.get_last_error()
-        if err:
-            raise ctypes.WinError(err)
-    return args
+  """
+  check_zero is used by the GetConsoleMode and SetConsoleMode functions to 
+  verify that the return value of the system call is 0, indicating "no error".
+  It's not immediately obvious, but the ctypes.WinError that is raised here
+  gets processed by the system and eventually results in the WindowsError
+  that is handled in prepare_for_io_loop.
+  """
+  if not result:
+      err = ctypes.get_last_error()
+      if err:
+          raise ctypes.WinError(err)
+  return args
 
 if not hasattr(wintypes, 'LPDWORD'): # PY2
-    wintypes.LPDWORD = ctypes.POINTER(wintypes.DWORD)
+  wintypes.LPDWORD = ctypes.POINTER(wintypes.DWORD)
 
 kernel32.GetConsoleMode.errcheck= check_zero
 kernel32.GetConsoleMode.argtypes = (
@@ -48,27 +55,35 @@ kernel32.SetConsoleMode.argtypes = (
     wintypes.DWORD,) # _Out_ lpMode
 
 def prepare_for_io_loop():
-  # On Windows, we want to disable Quick Edit Mode so users don't inadvertently
-  # cause portable to freeze while Python is stuck trying to print to the console
+  """
+  On Windows, we want to disable Quick Edit Mode prior to starting the I/O loop
+  so users don't inadvertently cause portable to freeze while Python is stuck
+  trying to print to the console. This happens if the user clicks in the console
+  and causes it to enter "Select" mode. It's very easy to do unintentionally.
+  """
   restore = True
   try:
     flags = 0
     mask = ENABLE_EXTENDED_FLAGS | ENABLE_QUICK_EDIT_MODE
+    # Get the current mode. The handle ID of -10 represents the console input
+    # handle.
     console_input_handle = kernel32.GetStdHandle(-10)
     current_mode = wintypes.DWORD()
     kernel32.GetConsoleMode(console_input_handle, ctypes.byref(current_mode))
     original_mode = current_mode.value
 
+    # Mask out Quick Edit Mode flag and set the mode
     if original_mode & mask != flags & mask:
-        mode = original_mode & ~mask | flags & mask
-        kernel32.SetConsoleMode(console_input_handle, mode)
+      mode = original_mode & ~mask | flags & mask
+      kernel32.SetConsoleMode(console_input_handle, mode)
     else:
-        restore = False
+      # Quick Edit Mode is not enabled. No need to restore the old mode on exit.
+      restore = False
   except WindowsError:
     # GetConsoleMode or SetConsoleMode failed. Likely an invalid handle.
-    # Make no further attempt to set the mode.
-    print "Error disabling Quick Edit Mode ..."
+    # Make no further attempt to set the mode, and don't restore the mode
+    # on exit.
     restore = False
 
   if restore:
-    atexit.register(kernel32.SetConsoleMode, console_input_handle ,original_mode)
+    atexit.register(kernel32.SetConsoleMode, console_input_handle, original_mode)
