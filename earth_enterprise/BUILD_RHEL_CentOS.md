@@ -14,7 +14,7 @@ sudo yum install -y epel-release
 ### RHEL 7
 
 ```bash
-# Setup subscriptions for RHEL 7
+# Setup subscriptions for non-AWS RHEL 7
 sudo subscription-manager repos --enable=rhel-7-server-optional-rpms
 
 # For RHEL 7 in AWS
