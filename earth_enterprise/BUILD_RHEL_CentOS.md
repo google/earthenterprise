@@ -60,9 +60,6 @@ It's recommended to install a recent version of Git from the [IUS repositories](
 but the older RedHat or Centos packages can also be used.
 
 ```bash
-# To install the system default version:
-sudo yum install -y git
-
 # To install Git 2.16 on RHEL 6 and Centos 6
 sudo yum install -y https://repo.ius.io/ius-release-el6.rpm
 sudo yum install -y git216
@@ -72,6 +69,8 @@ sudo yum install -y git216
 sudo yum install -y https://repo.ius.io/ius-release-el7.rpm
 sudo yum install -y git216
 
+# To install the system default version:
+sudo yum install -y git
 ```
 
 ## Install Git LFS
