@@ -181,8 +181,10 @@ main(int argc, char *argv[])
           pclose(tputFILE);
         }
 
-        // clear screen
-        (void)clearscreen.System();
+        if (delay) {
+          // clear screen when looping
+          (void)clearscreen.System();
+        }
 
         // emit khtop header
         outline("FUSION VERSION: %s", GEE_VERSION);
