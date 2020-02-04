@@ -46,12 +46,15 @@ Release notes: Open GEE 5.3.4
          * - Number
            - Description
            - Resolution
-         * - 1604
-           - WMS capability doesn't work with reverse proxies
-           - It now works, as long as the protocol (http vs https) matches
          * - 1579
            - Add an option to misc.xml for disabling minification
            - An option was added to control minification.
+         * - 1604
+           - WMS capability doesn't work with reverse proxies
+           - It now works, as long as the protocol (http vs https) matches
+         * - 1642
+           - Getop does not have an option to display status and exit
+           - A ``--delay 0`` option was added
 
       .. rubric:: Known Issues
 
