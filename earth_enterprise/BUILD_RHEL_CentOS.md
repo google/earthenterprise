@@ -85,25 +85,23 @@ sudo yum install -y git-lfs
 
 ## GCC 4.8
 
-For all versions of CentOS and RHEL, install the standard development/build tools:
 
-### EL7
+### RHEL 7 And Centos 7
+For all versions of CentOS and RHEL, install the standard development/build tools:
 
 ```bash
 sudo yum install -y ant bzip2 doxygen gcc-c++ patch swig tar \
                     python python-argparse python-lxml python-setuptools
 ```
 
-### EL6
+### For RHEL6 and Centos 6
 
 ```bash
 sudo yum install -y ant bzip2 doxygen gcc-c++ patch swig tar \
                     python27 python-argparse python27-lxml python27-setuptools
 ```
 
-For CentOS 6 and RHEL 6, also install the devtoolset toolchain.
-
-### CentOS 6 and RHEL 6
+Also install the devtoolset toolchain.
 
 ```bash
 sudo yum install -y devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-toolchain
@@ -146,11 +144,12 @@ Execute:
 ```bash
 sudo yum install -y \
   bison-devel boost-devel cmake daemonize freeglut-devel \
-  gdbm-devel geos-devel gettext giflib-devel GitPython \
+  gdbm-devel geos-devel gettext giflib-devel \
   libcap-devel libmng-devel libpng-devel libX11-devel libXcursor-devel \
   libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel pcre pcre-devel \
-  proj-devel python-devel python27-devel python-unittest2 \
+  proj-devel python27 \
+  python27-pip python27-devel python27-lxml python27-setuptools python-unittest2 \
   rpm-build rpmrebuild rsync scons shunit2 \
   xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
 ```
@@ -215,12 +214,25 @@ sudo yum install -y http://download-ib01.fedoraproject.org/pub/epel/6/x86_64/Pac
 
 shunit2 was installed in a previous step.
 
+
+## Install Python 2.7 Packages
+
+### CentOS 7 and RHEL 7
+
+Python 2.7 is installed as a system default, so no additional packages are needed.
+
+### CentOS 6 and RHEL 6
+
+```bash
+sudo pip2.7 install gitpython
+```
+
 ### Building on fips-enabled machines
 
 In some circumstances on stig-ed machines, where md5 cryptography is used, fips will prevent OpenGee from being built. When trying to build, a message similar to the following will be displayed 
 
 ```bash
-$ scons -j4 internal=1 build
+$ python2.7 /usr/bin/scons -j4 internal=1 build
 scons: Reading SConscript files ... 
 scons: done reading SConscript files.
 scons: Building targets ... 

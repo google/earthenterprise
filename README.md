@@ -19,7 +19,7 @@ The application suite consists of three core components:
 
 ## Releases
 
-[Release 5.3.3](https://github.com/google/earthenterprise/releases/tag/5.3.3-RC1)
+[Release 5.3.3](https://github.com/google/earthenterprise/releases/tag/5.3.3-1398.37)
 
 * [Release Notes](https://www.opengee.org/geedocs/5.3.3/answer/releaseNotes/relNotesGEE5_3_3.html)
 * [Release Documentation](https://www.opengee.org/geedocs/5.3.3/)
