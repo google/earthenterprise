@@ -332,10 +332,11 @@ performance. Assets that have been modified can not be removed from
 the cache until they are written to disk. To limit pruning, the amount
 of unwritten modified assets is compared to a percentage of the
 current size of each cache. This percentage is controlled by
-"PrunePercent" and is set to 100 by default, which retains current
-behavior. The value for "PrunePercent" can be any number from 0 up to
-100. If the number of unwritten modified assets exceeds the configured
-percentage of the cache size, the cache will not attempt to prune.
+"PrunePercent" and is set to 100 by default, which doesn't enforce
+prune limiting. The value for "PrunePercent" can be any number from 0
+up to 100. If the number of unwritten modified assets exceeds the
+configured percentage of the cache size, the cache will not attempt to
+prune.
 
 The Xerces library maintains a separate cache for dealing with XML
 files. Users can modify aspects of this cache through a configuration
