@@ -6,3 +6,4 @@
 *.glc filter=lfs diff=lfs merge=lfs -text
 *.glm filter=lfs diff=lfs merge=lfs -text
 earth_enterprise/src/fusion/portableglobe/servers/fileunpacker/test_data/** binary
+earth_enterprise/third_party/swig/swig-4.0.1.tar.gz filter=lfs diff=lfs merge=lfs -text
