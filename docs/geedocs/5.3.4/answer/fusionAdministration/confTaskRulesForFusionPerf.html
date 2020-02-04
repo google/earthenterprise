@@ -71,8 +71,7 @@
 <div class="section" id="configure-fusion-performance">
 <h1>Configure Fusion performance<a class="headerlink" href="#configure-fusion-performance" title="Permalink to this headline">¶</a></h1>
 <div class="docutils container">
-<blockquote>
-<div><div class="content docutils container">
+<div class="content docutils container">
 <p>You can tune the performance of Fusion by setting up task rules
 and by modifying the sizes of the asset caches.</p>
 <p class="rubric" id="configure-task-rules">Configure task rules</p>
@@ -477,12 +476,23 @@ minifying the level below it, where possible.  This is the default.</li>
 original source data.  This reduces dependencies between levels and
 may improve performance in some situations.</li>
 </ul>
+<p class="rubric" id="retry-failed-tasks">Retry Failed tasks</p>
+<p>Users can configure Fusion to retry tasks that fail, which allows Fusion
+to recover from intermittent failures.
+This feature is disabled by default.
+To enable it, set the following parameters in
+<code class="docutils literal notranslate"><span class="pre">/gevol/assets/.config/misc.xml</span></code>:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">TriesPerCommand</span></code>: the maximum number of times that Fusion will
+try to execute each command. Must be at least 1. Default: 1.</li>
+<li><code class="docutils literal notranslate"><span class="pre">SleepBetweenCommandTriesSec</span></code>: the number of seconds to pause before
+retrying a failed command. Must be at least 0. Default: 0.</li>
+</ul>
 <p class="rubric">Learn more</p>
 <ul class="simple">
 <li><a class="reference internal" href="benchMarkOutcomesForTaskRule.html"><span class="doc">Benchmarking outcomes for applying task rules</span></a></li>
 </ul>
 </div>
-</div></blockquote>
 </div>
 </div>
 

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -331,6 +332,33 @@ void GlcUnpacker::MapDataPacketWalker(int layer, const map_packet_walker& walker
     return;
   }
   iter->second->MapDataPacketWalker(layer, walker);
+}
+
+/**
+ * Find the names of all files in each layer of a globe.
+ */
+bool GlcUnpacker::MapFileWalker(const map_file_walker& walker)
+{
+    for( auto& index_item : unpacker_index_) {
+        if (MapFileWalker(index_item.first, walker)) {
+          return true;
+        }
+    }
+    return false;
+}
+
+bool GlcUnpacker::MapFileWalker(int layer, const map_file_walker& walker)
+{
+  FileUnpacker* unpacker = GetUnpacker(layer);
+
+  for (int i = 0; i < unpacker->IndexSize(); ++i) {
+    const char *package_file = unpacker->IndexFile(i);
+
+    if (walker(layer, package_file) != true) {
+      return true;
+    }
+  }
+  return false;
 }
 
 /**

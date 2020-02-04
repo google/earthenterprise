@@ -17,6 +17,11 @@ Release notes: Open GEE 5.3.4
       tasks has been modified to use less memory. This change is experimental
       and can be enabled using the :ref:`GraphOperations flag <graph-operations>`.
 
+      **Option to retry failed tasks**.
+      Users can now configure Fusion to
+      :ref:`retry tasks that fail <retry-failed-tasks>`, which allows
+      Fusion to recover from intermittent failures.
+
       **Option to limit cache pruning**.
       Users can now limit how often the asset and asset version caches are pruned
       by use of an experimental option, :ref:`PrunePercent <prune-percent>`.

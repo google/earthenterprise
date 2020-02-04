@@ -15,6 +15,14 @@ GraphOperations flag
 
 .
 
+Option to retry failed tasks
+
+. Users can now configure Fusion to
+
+retry tasks that fail
+
+, which allows Fusion to recover from intermittent failures.
+
 Option to limit cache pruning
 
 . Users can now limit how often the asset and asset version caches are
