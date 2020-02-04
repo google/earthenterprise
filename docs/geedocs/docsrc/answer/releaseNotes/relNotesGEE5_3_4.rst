@@ -18,8 +18,8 @@ Release notes: Open GEE 5.3.4
       and can be enabled using the :ref:`GraphOperations flag <graph-operations>`.
 
       **Option to limit cache pruning**.
-      Users can now limit how often the cache is pruned by use of an experimental
-      option, :ref:`PrunePercent <prune-percent>`.
+      Users can now limit how often the asset and asset version caches are pruned
+      by use of an experimental option, :ref:`PrunePercent <prune-percent>`.
 
       .. rubric:: Supported Platforms
 

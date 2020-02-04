@@ -351,13 +351,13 @@ Configure Fusion performance
       .. _prune-percent:
 
       Another experimental option in ``misc.xml`` allows the user to limit
-      how often the cache is pruned. This option is controlled by
-      ``PrunePercent`` and is set to 100 by default. Assets that have been
-      moddified can not be removed from the cache until they are written to
-      disk. If the number of unwritten modified assets exceeds the
-      configured percentage of the cache size, the cache will not attempt
-      to prune. The value for ``PrunePercent`` can be any number from 0 up
-      to 100.
+      how often the asset and asset version caches are pruned, which can
+      improve performance. This option is controlled by ``PrunePercent``
+      and is set to 100 by default. Assets that have been moddified can not
+      be removed from the cache until they are written to disk. If the
+      number of unwritten modified assets exceeds the configured percentage
+      of the cache size, the cache will not attempt to prune. The value for
+      ``PrunePercent`` can be any number from 0 up to 100.
 
       The Xerces library maintains a separate cache for dealing with XML
       files. Users can modify aspects of this cache through a

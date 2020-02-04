@@ -17,8 +17,8 @@ GraphOperations flag
 
 Option to limit cache pruning
 
-. Users can now limit how often the cache is pruned by use of an
-experimental option,
+. Users can now limit how often the asset and asset version caches are
+pruned by use of an experimental option,
 
 PrunePercent
 
