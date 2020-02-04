@@ -16,15 +16,26 @@
 
 #include <gtest/gtest.h>
 
+#include <chrono>
+#include <set>
+
 #include "khResourceProvider.h"
 
-const std::vector<std::vector<std::string>> NO_COMMANDS = {};
-const std::vector<std::vector<std::string>> ONE_COMMAND = {{"cmd1"}};
-const std::vector<std::vector<std::string>> MULTI_COMMANDS = {{"cmd1"}, {"cmd2"}, {"cmd3"}};
+using namespace std;
+
+const vector<vector<string>> NO_COMMANDS = {};
+const vector<vector<string>> ONE_COMMAND = {{"cmd1"}};
+const vector<vector<string>> MULTI_COMMANDS = {{"cmd1"}, {"cmd2"}, {"cmd3"}};
+
+const uint DEFAULT_TRIES = 3;
+
+bool contains(const set<uint> & s, uint v) {
+  return s.find(v) != s.end();
+}
 
 class MockResourceProvider : public khResourceProvider {
   private:
-    virtual void StartLogFile(JobIter job, const std::string &logfile) override {
+    virtual void StartLogFile(JobIter job, const string &logfile) override {
       ++logStarted;
       if (setLogFile) {
         job->logfile = stdout;
@@ -32,7 +43,7 @@ class MockResourceProvider : public khResourceProvider {
     }
     virtual void LogCmdResults(
         JobIter job,
-        const std::string &status_string,
+        const string &status_string,
         int signum,
         bool coredump,
         bool success,
@@ -43,23 +54,23 @@ class MockResourceProvider : public khResourceProvider {
     virtual void LogTotalTime(JobIter job, uint32 elapsed) override {
       ++timeLogged;
     }
-    virtual bool ExecCmdline(JobIter job, const std::vector<std::string> &cmdline) override {
+    virtual bool ExecCmdline(JobIter job, const vector<string> &cmdline) override {
       ++executes;
-      return !(executes == failExecOn);
+      return !contains(failExecOn, executes);
     }
     virtual void SendProgress(uint32 job, double progress, time_t progressTime) override {
       assert(progress == 0);
       ++progSent;
     }
-    virtual void GetProcessStatus(pid_t pid, std::string* status_string,
+    virtual void GetProcessStatus(pid_t pid, string* status_string,
                                   bool* success, bool* coredump, int* signum) override {
       ++getStatus;
-      *success = !(getStatus == failStatusOn);
+      *success = !contains(failStatusOn, getStatus);
     }
     virtual void WaitForPid(pid_t waitfor, bool &success, bool &coredump,
                             int &signum) override {
       ++waitFors;
-      success = !(waitFors == failStatusOn);
+      success = !contains(failStatusOn, waitFors);
     }
     virtual void DeleteJob(
         JobIter which,
@@ -74,14 +85,20 @@ class MockResourceProvider : public khResourceProvider {
       return (findJobs == failFindJobOn ? myJob.end() : myJob.begin());
     }
     virtual inline bool Valid(JobIter job) const override { return job != myJob.end(); }
+    virtual void LogRetry(JobIter job, uint tries, uint totalTries, uint sleepBetweenTries) override {
+      ++retriesLogged;
+    }
   public:
     // These variables modify how the class behaves
-    std::vector<Job> myJob;
+    vector<Job> myJob;
     bool setLogFile;
-    // Indicates which call of each function should fail
+    // Indicates which calls of each function should fail
+    // If find job fails we abort immediately, so it only needs to fail once
     uint failFindJobOn;
-    uint failExecOn;
-    uint failStatusOn;
+    // Other failures cause retries, so they may need to fail multiple times in
+    // the tests (thus they are sets)
+    set<uint> failExecOn;
+    set<uint> failStatusOn;
 
     // These variables record what the class does
     uint findJobs;
@@ -95,13 +112,14 @@ class MockResourceProvider : public khResourceProvider {
     uint deletes;
     bool delSuccess;
     time_t delTime;
+    uint retriesLogged;
 
     MockResourceProvider() :
         myJob({1}),
         setLogFile(true),
         failFindJobOn(0),
-        failExecOn(0),
-        failStatusOn(0),
+        failExecOn(),
+        failStatusOn(),
         findJobs(0),
         logStarted(0),
         executes(0),
@@ -112,18 +130,26 @@ class MockResourceProvider : public khResourceProvider {
         timeLogged(0),
         deletes(0),
         delSuccess(false),
-        delTime(0) {}
-    void RunJobLoop(const std::vector<std::vector<std::string>> & commands = ONE_COMMAND) {
-      JobLoop(StartJobMsg(1, "test.log", commands)); 
+        delTime(0),
+        retriesLogged(0) {}
+    void RunJobLoop(const vector<vector<string>> & commands = ONE_COMMAND,
+                    const uint cmdTries = DEFAULT_TRIES,
+                    const uint sleepBetweenTriesSec = 0) {
+      JobLoop(StartJobMsg(1, "test.log", commands), cmdTries, sleepBetweenTriesSec); 
     }
 };
 
-class JobLoopTest : public testing::Test {
-  protected:
-    MockResourceProvider resProv;
-};
+// Set the given failure to occur on all tries of a specific command.
+void SetFailures(set<uint> & failOn, uint cmd) {
+  uint startFail = cmd;
+  uint endFail = cmd + DEFAULT_TRIES;
+  for (uint i = startFail; i < endFail; ++i) {
+    failOn.emplace(i);
+  }
+}
 
-TEST_F(JobLoopTest, NoJob) {
+TEST(JobLoopTest, NoJob) {
+  MockResourceProvider resProv;
   resProv.failFindJobOn = 1;
   resProv.RunJobLoop();
   ASSERT_EQ(resProv.logStarted, 0);
@@ -133,11 +159,13 @@ TEST_F(JobLoopTest, NoJob) {
   ASSERT_EQ(resProv.waitFors, 0);
   ASSERT_EQ(resProv.resultsLogged, 0);
   ASSERT_EQ(resProv.timeLogged, 0);
+  ASSERT_EQ(resProv.retriesLogged, 0);
   ASSERT_EQ(resProv.deletes, 0);
   ASSERT_FALSE(resProv.delSuccess);
 }
 
-TEST_F(JobLoopTest, Success) {
+TEST(JobLoopTest, Success) {
+  MockResourceProvider resProv;
   resProv.RunJobLoop();
   ASSERT_EQ(resProv.logStarted, 1);
   ASSERT_EQ(resProv.executes, 1);
@@ -147,11 +175,13 @@ TEST_F(JobLoopTest, Success) {
   ASSERT_EQ(resProv.resultsLogged, 1);
   ASSERT_EQ(resProv.timeLogged, 0);
   ASSERT_EQ(resProv.deletes, 1);
+  ASSERT_EQ(resProv.retriesLogged, 0);
   ASSERT_TRUE(resProv.delSuccess);
   ASSERT_NE(resProv.delTime, 0);
 }
 
-TEST_F(JobLoopTest, SuccessNoLogFile) {
+TEST(JobLoopTest, SuccessNoLogFile) {
+  MockResourceProvider resProv;
   resProv.setLogFile = false;
   resProv.RunJobLoop();
   ASSERT_EQ(resProv.logStarted, 1);
@@ -162,54 +192,62 @@ TEST_F(JobLoopTest, SuccessNoLogFile) {
   ASSERT_EQ(resProv.resultsLogged, 0);
   ASSERT_EQ(resProv.timeLogged, 0);
   ASSERT_EQ(resProv.deletes, 1);
+  ASSERT_EQ(resProv.retriesLogged, 0);
   ASSERT_TRUE(resProv.delSuccess);
   ASSERT_NE(resProv.delTime, 0);
 }
 
-TEST_F(JobLoopTest, ExecFails) {
-  resProv.failExecOn = 1;
+TEST(JobLoopTest, ExecFails) {
+  MockResourceProvider resProv;
+  SetFailures(resProv.failExecOn, 1);
   resProv.RunJobLoop();
   ASSERT_EQ(resProv.logStarted, 1);
-  ASSERT_EQ(resProv.executes, 1);
+  ASSERT_EQ(resProv.executes, DEFAULT_TRIES);
   ASSERT_EQ(resProv.progSent, 0);
   ASSERT_EQ(resProv.getStatus, 0);
   ASSERT_EQ(resProv.waitFors, 0);
   ASSERT_EQ(resProv.resultsLogged, 0);
-  ASSERT_EQ(resProv.timeLogged, 0);
+  ASSERT_EQ(resProv.timeLogged, 1);
+  ASSERT_EQ(resProv.retriesLogged, DEFAULT_TRIES - 1);
   ASSERT_EQ(resProv.deletes, 1);
   ASSERT_FALSE(resProv.delSuccess);
 }
 
-TEST_F(JobLoopTest, GetStatusFails) {
-  resProv.failStatusOn = 1;
+TEST(JobLoopTest, GetStatusFails) {
+  MockResourceProvider resProv;
+  SetFailures(resProv.failStatusOn, 1);
   resProv.RunJobLoop();
   ASSERT_EQ(resProv.logStarted, 1);
-  ASSERT_EQ(resProv.executes, 1);
+  ASSERT_EQ(resProv.executes, DEFAULT_TRIES);
   ASSERT_EQ(resProv.progSent, 1);
-  ASSERT_EQ(resProv.getStatus, 1);
+  ASSERT_EQ(resProv.getStatus, DEFAULT_TRIES);
   ASSERT_EQ(resProv.waitFors, 0);
-  ASSERT_EQ(resProv.resultsLogged, 1);
-  ASSERT_EQ(resProv.timeLogged, 0);
+  ASSERT_EQ(resProv.resultsLogged, DEFAULT_TRIES);
+  ASSERT_EQ(resProv.timeLogged, 1);
+  ASSERT_EQ(resProv.retriesLogged, DEFAULT_TRIES - 1);
   ASSERT_EQ(resProv.deletes, 1);
   ASSERT_FALSE(resProv.delSuccess);
 }
 
-TEST_F(JobLoopTest, WaitForPidFails) {
-  resProv.failStatusOn = 1;
+TEST(JobLoopTest, WaitForPidFails) {
+  MockResourceProvider resProv;
+  SetFailures(resProv.failStatusOn, 1);
   resProv.setLogFile = false;
   resProv.RunJobLoop();
   ASSERT_EQ(resProv.logStarted, 1);
-  ASSERT_EQ(resProv.executes, 1);
+  ASSERT_EQ(resProv.executes, DEFAULT_TRIES);
   ASSERT_EQ(resProv.progSent, 1);
   ASSERT_EQ(resProv.getStatus, 0);
-  ASSERT_EQ(resProv.waitFors, 1);
+  ASSERT_EQ(resProv.waitFors, DEFAULT_TRIES);
   ASSERT_EQ(resProv.resultsLogged, 0);
   ASSERT_EQ(resProv.timeLogged, 0);
+  ASSERT_EQ(resProv.retriesLogged, 0);
   ASSERT_EQ(resProv.deletes, 1);
   ASSERT_FALSE(resProv.delSuccess);
 }
 
-TEST_F(JobLoopTest, FailSecondFindJob) {
+TEST(JobLoopTest, FailSecondFindJob) {
+  MockResourceProvider resProv;
   resProv.failFindJobOn = 2;
   resProv.RunJobLoop();
   ASSERT_EQ(resProv.logStarted, 1);
@@ -222,7 +260,8 @@ TEST_F(JobLoopTest, FailSecondFindJob) {
   ASSERT_EQ(resProv.deletes, 0);
 }
 
-TEST_F(JobLoopTest, MultiCommandSuccess) {
+TEST(JobLoopTest, MultiCommandSuccess) {
+  MockResourceProvider resProv;
   resProv.RunJobLoop(MULTI_COMMANDS);
   ASSERT_EQ(resProv.logStarted, 1);
   ASSERT_EQ(resProv.executes, 3);
@@ -232,11 +271,13 @@ TEST_F(JobLoopTest, MultiCommandSuccess) {
   ASSERT_EQ(resProv.resultsLogged, 3);
   ASSERT_EQ(resProv.timeLogged, 1);
   ASSERT_EQ(resProv.deletes, 1);
+  ASSERT_EQ(resProv.retriesLogged, 0);
   ASSERT_TRUE(resProv.delSuccess);
   ASSERT_NE(resProv.delTime, 0);
 }
 
-TEST_F(JobLoopTest, MultiCommandSuccessNoLog) {
+TEST(JobLoopTest, MultiCommandSuccessNoLog) {
+  MockResourceProvider resProv;
   resProv.setLogFile = false;
   resProv.RunJobLoop(MULTI_COMMANDS);
   ASSERT_EQ(resProv.logStarted, 3);
@@ -245,56 +286,64 @@ TEST_F(JobLoopTest, MultiCommandSuccessNoLog) {
   ASSERT_EQ(resProv.getStatus, 0);
   ASSERT_EQ(resProv.waitFors, 3);
   ASSERT_EQ(resProv.resultsLogged, 0);
-  ASSERT_EQ(resProv.timeLogged, 1);
+  ASSERT_EQ(resProv.timeLogged, 0);
   ASSERT_EQ(resProv.deletes, 1);
+  ASSERT_EQ(resProv.retriesLogged, 0);
   ASSERT_TRUE(resProv.delSuccess);
   ASSERT_NE(resProv.delTime, 0);
 }
 
-TEST_F(JobLoopTest, MultiCommandFailExec) {
-  resProv.failExecOn = 2;
+TEST(JobLoopTest, MultiCommandFailExec) {
+  MockResourceProvider resProv;
+  SetFailures(resProv.failExecOn, 2);
   resProv.RunJobLoop(MULTI_COMMANDS);
   ASSERT_EQ(resProv.logStarted, 1);
-  ASSERT_EQ(resProv.executes, 2);
+  ASSERT_EQ(resProv.executes, 1 + DEFAULT_TRIES);
   ASSERT_EQ(resProv.progSent, 1);
   ASSERT_EQ(resProv.getStatus, 1);
   ASSERT_EQ(resProv.waitFors, 0);
   ASSERT_EQ(resProv.resultsLogged, 1);
-  ASSERT_EQ(resProv.timeLogged, 0);
+  ASSERT_EQ(resProv.timeLogged, 1);
+  ASSERT_EQ(resProv.retriesLogged, DEFAULT_TRIES - 1);
   ASSERT_EQ(resProv.deletes, 1);
   ASSERT_FALSE(resProv.delSuccess);
 }
 
-TEST_F(JobLoopTest, MultiCommandFailGetStatus) {
-  resProv.failStatusOn = 2;
+TEST(JobLoopTest, MultiCommandFailGetStatus) {
+  MockResourceProvider resProv;
+  SetFailures(resProv.failStatusOn, 2);
   resProv.RunJobLoop(MULTI_COMMANDS);
   ASSERT_EQ(resProv.logStarted, 1);
-  ASSERT_EQ(resProv.executes, 2);
+  ASSERT_EQ(resProv.executes, 1 + DEFAULT_TRIES);
   ASSERT_EQ(resProv.progSent, 1);
-  ASSERT_EQ(resProv.getStatus, 2);
+  ASSERT_EQ(resProv.getStatus, 1 + DEFAULT_TRIES);
   ASSERT_EQ(resProv.waitFors, 0);
-  ASSERT_EQ(resProv.resultsLogged, 2);
+  ASSERT_EQ(resProv.resultsLogged, 1 + DEFAULT_TRIES);
   ASSERT_EQ(resProv.timeLogged, 1);
+  ASSERT_EQ(resProv.retriesLogged, DEFAULT_TRIES - 1);
   ASSERT_EQ(resProv.deletes, 1);
   ASSERT_FALSE(resProv.delSuccess);
 }
 
-TEST_F(JobLoopTest, MultiCommandFailWaitFor) {
-  resProv.failStatusOn = 2;
+TEST(JobLoopTest, MultiCommandFailWaitFor) {
+  MockResourceProvider resProv;
+  SetFailures(resProv.failStatusOn, 2);
   resProv.setLogFile = false;
   resProv.RunJobLoop(MULTI_COMMANDS);
   ASSERT_EQ(resProv.logStarted, 2);
-  ASSERT_EQ(resProv.executes, 2);
+  ASSERT_EQ(resProv.executes, 1 + DEFAULT_TRIES);
   ASSERT_EQ(resProv.progSent, 1);
   ASSERT_EQ(resProv.getStatus, 0);
-  ASSERT_EQ(resProv.waitFors, 2);
+  ASSERT_EQ(resProv.waitFors, 1 + DEFAULT_TRIES);
   ASSERT_EQ(resProv.resultsLogged, 0);
-  ASSERT_EQ(resProv.timeLogged, 1);
+  ASSERT_EQ(resProv.timeLogged, 0);
+  ASSERT_EQ(resProv.retriesLogged, 0);
   ASSERT_EQ(resProv.deletes, 1);
   ASSERT_FALSE(resProv.delSuccess);
 }
 
-TEST_F(JobLoopTest, MultiCommandFailFind) {
+TEST(JobLoopTest, MultiCommandFailFind) {
+  MockResourceProvider resProv;
   resProv.failFindJobOn = 3;
   resProv.RunJobLoop(MULTI_COMMANDS);
   ASSERT_EQ(resProv.logStarted, 1);
@@ -304,11 +353,13 @@ TEST_F(JobLoopTest, MultiCommandFailFind) {
   ASSERT_EQ(resProv.waitFors, 0);
   ASSERT_EQ(resProv.resultsLogged, 1);
   ASSERT_EQ(resProv.timeLogged, 0);
+  ASSERT_EQ(resProv.retriesLogged, 0);
   ASSERT_EQ(resProv.deletes, 0);
   ASSERT_FALSE(resProv.delSuccess);
 }
 
-TEST_F(JobLoopTest, NoCommands) {
+TEST(JobLoopTest, NoCommands) {
+  MockResourceProvider resProv;
   resProv.RunJobLoop(NO_COMMANDS);
   ASSERT_EQ(resProv.logStarted, 0);
   ASSERT_EQ(resProv.executes, 0);
@@ -317,8 +368,101 @@ TEST_F(JobLoopTest, NoCommands) {
   ASSERT_EQ(resProv.waitFors, 0);
   ASSERT_EQ(resProv.resultsLogged, 0);
   ASSERT_EQ(resProv.timeLogged, 0);
+  ASSERT_EQ(resProv.retriesLogged, 0);
   ASSERT_EQ(resProv.deletes, 1);
   ASSERT_FALSE(resProv.delSuccess);
+}
+
+TEST(JobLoopTest, ExecFailsOnce) {
+  MockResourceProvider resProv;
+  resProv.failExecOn.emplace(1);
+  resProv.RunJobLoop();
+  ASSERT_EQ(resProv.logStarted, 1);
+  ASSERT_EQ(resProv.executes, 2);
+  ASSERT_EQ(resProv.progSent, 1);
+  ASSERT_EQ(resProv.getStatus, 1);
+  ASSERT_EQ(resProv.waitFors, 0);
+  ASSERT_EQ(resProv.resultsLogged, 1);
+  ASSERT_EQ(resProv.timeLogged, 1);
+  ASSERT_EQ(resProv.deletes, 1);
+  ASSERT_EQ(resProv.retriesLogged, 1);
+  ASSERT_TRUE(resProv.delSuccess);
+  ASSERT_NE(resProv.delTime, 0);
+}
+
+TEST(JobLoopTest, GetStatusFailsOnce) {
+  MockResourceProvider resProv;
+  resProv.failStatusOn.emplace(1);
+  resProv.RunJobLoop();
+  ASSERT_EQ(resProv.logStarted, 1);
+  ASSERT_EQ(resProv.executes, 2);
+  ASSERT_EQ(resProv.progSent, 1);
+  ASSERT_EQ(resProv.getStatus, 2);
+  ASSERT_EQ(resProv.waitFors, 0);
+  ASSERT_EQ(resProv.resultsLogged, 2);
+  ASSERT_EQ(resProv.timeLogged, 1);
+  ASSERT_EQ(resProv.deletes, 1);
+  ASSERT_EQ(resProv.retriesLogged, 1);
+  ASSERT_TRUE(resProv.delSuccess);
+  ASSERT_NE(resProv.delTime, 0);
+}
+
+TEST(JobLoopTest, WaitForPidFailsOnce) {
+  MockResourceProvider resProv;
+  resProv.failStatusOn.emplace(1);
+  resProv.setLogFile = false;
+  resProv.RunJobLoop();
+  ASSERT_EQ(resProv.logStarted, 1);
+  ASSERT_EQ(resProv.executes, 2);
+  ASSERT_EQ(resProv.progSent, 1);
+  ASSERT_EQ(resProv.getStatus, 0);
+  ASSERT_EQ(resProv.waitFors, 2);
+  ASSERT_EQ(resProv.resultsLogged, 0);
+  ASSERT_EQ(resProv.timeLogged, 0);
+  ASSERT_EQ(resProv.deletes, 1);
+  ASSERT_EQ(resProv.retriesLogged, 0);
+  ASSERT_TRUE(resProv.delSuccess);
+  ASSERT_NE(resProv.delTime, 0);
+}
+
+TEST(JobLoopTest, FailTwice) {
+  const uint FAILURES = 2;
+
+  MockResourceProvider resProv;
+  for (uint i = 1; i <= FAILURES; ++i) {
+    resProv.failExecOn.emplace(i);
+  }
+  resProv.RunJobLoop(ONE_COMMAND, FAILURES + 1);
+  ASSERT_EQ(resProv.logStarted, 1);
+  ASSERT_EQ(resProv.executes, 3);
+  ASSERT_EQ(resProv.progSent, 1);
+  ASSERT_EQ(resProv.getStatus, 1);
+  ASSERT_EQ(resProv.waitFors, 0);
+  ASSERT_EQ(resProv.resultsLogged, 1);
+  ASSERT_EQ(resProv.timeLogged, 1);
+  ASSERT_EQ(resProv.deletes, 1);
+  ASSERT_EQ(resProv.retriesLogged, 2);
+  ASSERT_TRUE(resProv.delSuccess);
+  ASSERT_NE(resProv.delTime, 0);
+}
+
+TEST(JobLoopTest, SleepBetweenFails) {
+  using TimePoint = chrono::time_point<std::chrono::high_resolution_clock>;
+
+  const uint SLEEP_TIME_SEC = 1;
+  const uint FAILURES = 2;
+
+  MockResourceProvider resProv;
+  for (uint i = 1; i <= FAILURES; ++i) {
+    resProv.failExecOn.emplace(i);
+  }
+  TimePoint start = chrono::high_resolution_clock::now();
+  resProv.RunJobLoop(ONE_COMMAND, FAILURES + 1, SLEEP_TIME_SEC);
+  TimePoint finish = chrono::high_resolution_clock::now();
+  chrono::duration<double> elapsed = finish - start;
+  ASSERT_GE(elapsed.count(), FAILURES * SLEEP_TIME_SEC);
+  // Assume non-sleep processing takes less than a second
+  ASSERT_LE(elapsed.count(), FAILURES * SLEEP_TIME_SEC + 1);
 }
 
 int main(int argc, char **argv) {

@@ -15,6 +15,14 @@ GraphOperations flag
 
 .
 
+Option to retry failed tasks
+
+. Users can now configure Fusion to
+
+retry tasks that fail
+
+, which allows Fusion to recover from intermittent failures.
+
 -[ Supported Platforms ]-
 
 The Open GEE 5.3.4 release is supported on 64-bit versions of the

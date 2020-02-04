@@ -423,11 +423,24 @@ Configure Fusion performance
         original source data.  This reduces dependencies between levels and
         may improve performance in some situations.
 
+      .. _retry-failed-tasks:
+      .. rubric:: Retry Failed tasks
+
+      Users can configure Fusion to retry tasks that fail, which allows Fusion
+      to recover from intermittent failures.
+      This feature is disabled by default.
+      To enable it, set the following parameters in
+      ``/gevol/assets/.config/misc.xml``:
+
+      - ``TriesPerCommand``: the maximum number of times that Fusion will
+        try to execute each command. Must be at least 1. Default: 1.
+      - ``SleepBetweenCommandTriesSec``: the number of seconds to pause before
+        retrying a failed command. Must be at least 0. Default: 0.
+
       .. rubric:: Learn more
 
       -  :doc:`../fusionAdministration/benchMarkOutcomesForTaskRule`
 
-
- .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
+.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
    :height: 44px
