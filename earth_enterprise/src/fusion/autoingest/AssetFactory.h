@@ -21,11 +21,24 @@
 #include <common/khMetaData.h>
 #include "AssetVersionRef.h"
 #include "AssetVersion.h"
+#include "AssetRegistry.h"
 
 // The goal of this namspace is to have a single place in the code where all
 // asset creation is handled.
 namespace AssetFactory
 {
+  template<class AssetType>
+  static std::shared_ptr<AssetType> CreateNewFromDOM(
+    const std::string & tagName, 
+    void *e)
+  {
+      typename AssetRegistry<AssetType>::AssetPluginInterface *plugin = AssetRegistry<AssetType>::GetPlugin(tagName);
+      if (plugin)
+        return (plugin->pNewFromDom)(e);
+      return nullptr;
+  }
+
+
   template<class AssetType>
   AssetType Find(const std::string & ref, const AssetDefs::Type & type)
   {

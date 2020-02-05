@@ -96,8 +96,8 @@ public:
     ${name}AssetImpl(const AssetStorage &storage, const Config& config_)
         : AssetImpl(storage), config(config_) { }
 
-protected:
     static std::shared_ptr<${name}AssetImpl> NewFromDOM(void *e);
+protected:
     static std::shared_ptr<${name}AssetImpl> NewInvalid(const std::string &ref);
 
     // implemented in ReadOnlyFromStorage.cpp and

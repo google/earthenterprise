@@ -57,6 +57,7 @@ print $fh <<EOF;
 using namespace khxml;
 #include <autoingest/AssetThrowPolicy.h>
 #include <khGuard.h>
+#include <autoingest/AssetFactory.h>
 EOF
 
 foreach my $plugin (@plugins) {
@@ -91,30 +92,16 @@ AssetImpl::Load(const std::string &boundref)
 		    if (!top)
 			throw khException(kh::tr("No document element"));
 		    std::string tagname = FromXMLStr(top->getTagName());
-EOF
-
-
-    my $first = 1;
-    foreach my $plugin (@plugins) {
-	if ($first) {
-	    print $fh $indent x5;
-	    $first = 0;
-	}
-	print $fh "if (tagname == \"${plugin}Asset\") {\n";
-	print $fh $indent x6, "result = ${plugin}AssetImpl::NewFromDOM(top);\n";
-	print $fh $indent x5, "} else ";
-    }
-    print $fh "{\n";
-
-    print $fh <<EOF;
+			result = AssetFactory::CreateNewFromDOM<AssetImpl>(tagname,top);
+			if (nullptr == result) {
 		        AssetThrowPolicy::WarnOrThrow
                           (kh::tr("Unknown asset type '%1' while parsing %2")
 			   .arg(ToQString(tagname), ToQString(filename)));
 		    }
-	        } catch (const std::exception &e) {
-		    AssetThrowPolicy::WarnOrThrow
-		      (kh::tr("Error loading %1: %2")
-		       .arg(ToQString(filename), QString::fromUtf8(e.what())));
+		} catch (const std::exception &e) {
+		AssetThrowPolicy::WarnOrThrow
+			(kh::tr("Error loading %1: %2")
+			.arg(ToQString(filename), QString::fromUtf8(e.what())));
 		} catch (...) {
 		    AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to load ")
 						  + filename);
@@ -162,7 +149,7 @@ AssetVersionImpl::Load(const std::string &boundref)
 		    if (!top)
 			throw khException(kh::tr("No document element"));
 		    std::string tagname = FromXMLStr(top->getTagName());
-			result = AssetVersionImpl::CreateNewFromDOM(tagname,top);
+			result = AssetFactory::CreateNewFromDOM<AssetVersionImpl>(tagname,top);
 			if (nullptr == result) {
 		        AssetThrowPolicy::WarnOrThrow
                           (kh::tr("Unknown asset version type '%1' while parsing %2")

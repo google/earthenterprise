@@ -69,6 +69,7 @@ print $fh <<EOF;
 #include <khGuard.h>
 #include <khxml/khdom.h>
 #include <memory>
+#include <autoingest/AssetRegistry.h>
 using namespace khxml;
 
 
@@ -83,6 +84,18 @@ $config{"Asset.cpp"}
 // ****************************************************************************
 namespace {
     void GetConfig(DOMElement *elem, $config &config);
+}
+
+
+
+namespace{
+    auto assetPlugin = std::unique_ptr<AssetRegistry<AssetImpl>::AssetPluginInterface>(
+        new AssetRegistry<AssetImpl>::AssetPluginInterface(
+            ${name}AssetImpl::NewFromDOM
+        )
+    );
+    AssetRegistry<AssetImpl>::PluginRegistrar assetPluginRegistrar(
+        "${name}Asset", std::move(assetPlugin));
 }
 
 extern void FromElement(DOMElement *elem, AssetStorage &self);
@@ -114,20 +127,13 @@ ${name}AssetImpl::NewInvalid(const std::string &ref)
 extern void FromElement(DOMElement *elem, AssetVersionStorage &self);
 
 namespace{
-    // auto plugin = std::unique_ptr<AssetVersionImpl::AssetPluginInterface>(
-    //     new AssetVersionImpl::AssetPluginInterface(
-    //         ${name}AssetVersionImpl::NewFromDOM
-    //     )
-    // );
-    // AssetVersionImpl::PluginRegistrar pluginRegistrar(
-    //     "${name}AssetVersion", std::move(plugin));
-    auto plugin = std::unique_ptr<AssetRegistry<AssetVersionImpl>::AssetPluginInterface>(
+    auto assetVersionPlugin = std::unique_ptr<AssetRegistry<AssetVersionImpl>::AssetPluginInterface>(
         new AssetRegistry<AssetVersionImpl>::AssetPluginInterface(
             ${name}AssetVersionImpl::NewFromDOM
         )
     );
-    AssetRegistry<AssetVersionImpl>::PluginRegistrar pluginRegistrar(
-        "${name}AssetVersion", std::move(plugin));
+    AssetRegistry<AssetVersionImpl>::PluginRegistrar assetVersionPluginRegistrar(
+        "${name}AssetVersion", std::move(assetVersionPlugin));
 }
 
 std::shared_ptr<${name}AssetVersionImpl>

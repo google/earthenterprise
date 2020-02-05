@@ -25,7 +25,6 @@
 #include "common/khFileUtils.h"
 #include "StorageManager.h"
 #include "CacheSizeCalculations.h"
-#include "AssetRegistry.h"
 
 // Used by child classes of AssetVersionImpl
 class StateChangeException : public khException {
@@ -281,19 +280,6 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
     std::string db_ref;
     return GetGedbPathAndType(dbname, gedb_path, &db_type, &db_ref);
   }
-
-public:
-
-  static std::shared_ptr<AssetVersionImpl> CreateNewFromDOM(
-    const std::string & tagName, 
-    void *e)
-  {
-      AssetRegistry<AssetVersionImpl>::AssetPluginInterface *plugin = AssetRegistry<AssetVersionImpl>::GetPlugin(tagName);
-      if (plugin)
-        return (plugin->pNewFromDom)(e);
-      return nullptr;
-  }
-
 };
 
 
