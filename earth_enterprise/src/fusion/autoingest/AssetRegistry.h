@@ -1,0 +1,77 @@
+/*
+ * Copyright 2020 The Open GEE Contributors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef ASSET_REGISTRY_H
+#define ASSET_REGISTRY_H
+
+#include <functional>
+#include <memory>
+#include <unordered_map>
+
+template <class AssetType>
+class AssetRegistry{
+public:
+  AssetRegistry() = delete;
+
+  using newfromdom_func = std::function<std::shared_ptr<AssetType>(void*)>;
+
+  class AssetPluginInterface {
+    public:
+      std::function<std::shared_ptr<AssetType>(void*)> pNewFromDom;
+
+      explicit AssetPluginInterface(std::function<std::shared_ptr<AssetType>(void*)> pNFD):
+        pNewFromDom(pNFD) {}
+  };
+
+
+  class PluginRegistrar
+  {
+    public:
+      explicit PluginRegistrar(
+        std::string const & name, 
+        std::unique_ptr<AssetPluginInterface> assetPlugin)
+      {
+          AssetRegistry<AssetType>::RegisterPlugin(name, std::move(assetPlugin));
+      }
+  };
+
+  static void RegisterPlugin(
+    std::string const & assetTypeName, 
+    std::unique_ptr<AssetPluginInterface> assetPlugin)
+  {
+    PluginRegistry()[assetTypeName] = std::move(assetPlugin);
+  }
+
+  static AssetPluginInterface * GetPlugin(const std::string & assetTypeName) {
+    auto it = PluginRegistry().find(assetTypeName);
+    if (it != PluginRegistry().end())
+      return it->second.get();
+    return nullptr;
+  }
+
+private:
+  static std::unordered_map<std::string, std::unique_ptr<AssetRegistry::AssetPluginInterface>> & PluginRegistry();
+};
+
+template <class AssetType>
+std::unordered_map<std::string, std::unique_ptr<typename AssetRegistry<AssetType>::AssetPluginInterface>> & AssetRegistry<AssetType>::PluginRegistry()
+{
+  static std::unordered_map<std::string, std::unique_ptr<AssetRegistry<AssetType>::AssetPluginInterface>> reg;
+  return reg;
+}
+
+
+#endif //ASSET_REGISTRY_H

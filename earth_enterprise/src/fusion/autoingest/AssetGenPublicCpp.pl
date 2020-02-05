@@ -113,6 +113,23 @@ ${name}AssetImpl::NewInvalid(const std::string &ref)
 // ****************************************************************************
 extern void FromElement(DOMElement *elem, AssetVersionStorage &self);
 
+namespace{
+    // auto plugin = std::unique_ptr<AssetVersionImpl::AssetPluginInterface>(
+    //     new AssetVersionImpl::AssetPluginInterface(
+    //         ${name}AssetVersionImpl::NewFromDOM
+    //     )
+    // );
+    // AssetVersionImpl::PluginRegistrar pluginRegistrar(
+    //     "${name}AssetVersion", std::move(plugin));
+    auto plugin = std::unique_ptr<AssetRegistry<AssetVersionImpl>::AssetPluginInterface>(
+        new AssetRegistry<AssetVersionImpl>::AssetPluginInterface(
+            ${name}AssetVersionImpl::NewFromDOM
+        )
+    );
+    AssetRegistry<AssetVersionImpl>::PluginRegistrar pluginRegistrar(
+        "${name}AssetVersion", std::move(plugin));
+}
+
 std::shared_ptr<${name}AssetVersionImpl>
 ${name}AssetVersionImpl::NewFromDOM(void *e)
 {

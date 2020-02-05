@@ -119,6 +119,7 @@ class ${name}AssetVersionImpl : public virtual ${base}AssetVersionImpl
 {
     friend class DerivedAssetHandle_<AssetVersion, ${name}AssetVersionImpl>;
     friend std::shared_ptr<AssetVersionImpl> AssetVersionImpl::Load(const std::string &);
+    friend class AssetVersionImpl;
 
 public:
     typedef $config Config;
@@ -139,9 +140,9 @@ public:
           ${base}AssetVersionImpl(),
           config(config_) { }
 
+    static std::shared_ptr<${name}AssetVersionImpl> NewFromDOM(void *e);
 protected:
 
-    static std::shared_ptr<${name}AssetVersionImpl> NewFromDOM(void *e);
     static std::shared_ptr<${name}AssetVersionImpl> NewInvalid(const std::string &ref);
 
     // implemented in ReadOnlyFromStorage.cpp and

@@ -162,27 +162,13 @@ AssetVersionImpl::Load(const std::string &boundref)
 		    if (!top)
 			throw khException(kh::tr("No document element"));
 		    std::string tagname = FromXMLStr(top->getTagName());
-EOF
-
-
-    $first = 1;
-    foreach my $plugin (@plugins) {
-	if ($first) {
-	    print $fh $indent x5;
-	    $first = 0;
-	}
-	print $fh "if (tagname == \"${plugin}AssetVersion\") {\n";
-	print $fh $indent x6, "result = ${plugin}AssetVersionImpl::NewFromDOM(top);\n";
-	print $fh $indent x5, "} else ";
-    }
-    print $fh "{\n";
-
-    print $fh <<EOF;
+			result = AssetVersionImpl::CreateNewFromDOM(tagname,top);
+			if (nullptr == result) {
 		        AssetThrowPolicy::WarnOrThrow
                           (kh::tr("Unknown asset version type '%1' while parsing %2")
 			   .arg(ToQString(tagname), ToQString(filename)));
 		    }
-	        } catch (const std::exception &e) {
+	    } catch (const std::exception &e) {
 		    AssetThrowPolicy::WarnOrThrow
 		      (kh::tr("Error loading %1: %2")
 		       .arg(ToQString(filename), QString::fromUtf8(e.what())));
