@@ -169,6 +169,7 @@ exportdirs = {
     'root': exportdir+'/',
     'lib': exportdir+'/lib/',
     'bin': exportdir+'/bin/',
+    'share': exportdir+'/share/',
 }
 
 

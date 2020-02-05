@@ -41,5 +41,5 @@ sudo apt-get install \
     openssl libpcre3 libpcre3-dev \
     python-dev python-imaging python-psycopg2 \
     python-setuptools python2.7 python2.7-dev python-lxml python-git \
-    scons shunit2 swig xorg-dev zlib1g-dev
+    scons shunit2 xorg-dev zlib1g-dev
 ```

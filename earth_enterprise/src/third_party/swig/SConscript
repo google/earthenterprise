@@ -29,7 +29,7 @@ swig_source = File('#/../third_party/swig/%s.tar.gz' %
                       swig_version).abspath
 
 swig_env = third_party_env.DeepCopy()
-root_dir = "/usr"
+root_dir = Dir(gdal_env.exportdirs['root']).abspath)
 
 # [1] Extract swig
 swig_target = '%s/.extract' % current_dir
@@ -51,7 +51,7 @@ swig_configure = swig_env.Command(
         '%s%s ./configure --with-python=%s --prefix=%s %s\n'
         'touch %s' % (build_root,
                       swig_env['ENV']['mod_env'], env_opt,
-                      swig_env['python_executable'], '/usr', 
+                      swig_env['python_bin'], install_root, 
                       config_opt,
                       swig_target))])
 
@@ -81,11 +81,9 @@ swig_target = '%s/.install_for_build' % current_dir
 swig_install_build = swig_env.Command(
     swig_target, swig_install,
     [swig_env.rsync_cmd % ('%s/bin/' % install_root,
-                              '%s/bin/' % root_dir),
-     swig_env.rsync_cmd % ('%s/include/' % install_root,
-                              '%s/include/' % root_dir),
-     swig_env.rsync_cmd % ('%s/lib/' % install_root,
-                              '%s/lib/' % root_dir),
+                              '%s/bin/' % Dir(swig_env.exportdirs['bin']).abspath)),
+     swig_env.rsync_cmd % ('%s/share/' % install_root,
+                              '%s/share/' % Dir(swig_env.exportdirs['share']).abspath)),
      Touch('$TARGET')])
 
 Default(swig_install_build)
