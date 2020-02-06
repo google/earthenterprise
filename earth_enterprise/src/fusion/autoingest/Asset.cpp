@@ -17,6 +17,10 @@
 #include "fusion/autoingest/Asset.h"
 #include "fusion/autoingest/AssetVersion.h"
 
+// When an error occurs while loading an asset from disk, an invalid placeholder
+// is created using a SourceAsset. Unclear at this time if SourceAsset
+// has other uses or not.
+const std::string AssetImpl::PLACEHOLDER_ASSET_REGISTRY_KEY = "SourceAsset";
 
 std::string AssetImpl::GetLastGoodVersionRef(void) const {
   for (VersionList::const_iterator i = versions.begin();

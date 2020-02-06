@@ -20,7 +20,6 @@
 #include <common/SharedString.h>
 #include <common/khMetaData.h>
 #include "AssetVersionRef.h"
-#include "AssetVersion.h"
 #include "AssetRegistry.h"
 
 // The goal of this namspace is to have a single place in the code where all
@@ -33,11 +32,24 @@ namespace AssetFactory
     void *e)
   {
       typename AssetRegistry<AssetType>::AssetPluginInterface *plugin = AssetRegistry<AssetType>::GetPlugin(tagName);
-      if (plugin)
+      if (plugin && plugin->pNewFromDom)
         return (plugin->pNewFromDom)(e);
       return nullptr;
   }
 
+  template<class AssetType>
+  static std::shared_ptr<AssetType> CreateNewInvalid(
+    const std::string & tagName, 
+    const std::string & ref)
+  {
+      typename AssetRegistry<AssetType>::AssetPluginInterface *plugin = AssetRegistry<AssetType>::GetPlugin(tagName);
+      if (plugin) {
+        typename AssetRegistry<AssetType>::AssetPluginInterface *invalidTypePlugin = AssetRegistry<AssetType>::GetPlugin(plugin->invalidAssetTypeName);
+        if (invalidTypePlugin && invalidTypePlugin->pNewInvalid)
+            return (invalidTypePlugin->pNewInvalid)(ref);
+      }
+      return nullptr;
+  }
 
   template<class AssetType>
   AssetType Find(const std::string & ref, const AssetDefs::Type & type)
@@ -317,13 +329,13 @@ namespace AssetFactory
       return asset->MyUpdate(needed);
   }
 
-  template <class MutableDerivedVersionHandleType, class ConfigType, class VersionDType>
+  template <class MutableDerivedVersionHandleType, class ConfigType, class VersionDType, class CachedInputType>
   MutableDerivedVersionHandleType ReuseOrMakeAndUpdate(const std::string& ref_,
                                                        AssetDefs::Type type_,
                                                        const std::vector<SharedString>& inputs_,
                                                        const khMetaData& meta_,
                                                        const ConfigType& config_,
-                                                      const std::vector<AssetVersion>& cachedinputs_)
+                                                      const std::vector<CachedInputType>& cachedinputs_)
   {
       using AssetHandleType = typename MutableDerivedVersionHandleType::Impl::MutableAssetType;
       std::vector<SharedString> inputarg { inputs_ }, boundInputs(inputarg.size());
@@ -435,7 +447,7 @@ namespace AssetFactory
                (ref_, type_, meta_, config_);
     }
 
-  template <class MutableDerivedVersionHandleType, class ConfigType, class VersionDType>
+  template <class MutableDerivedVersionHandleType, class ConfigType, class VersionDType, class CachedInputType>
   MutableDerivedVersionHandleType ReuseOrMakeAndUpdateSubAsset(
           const std::string& parentName,
           AssetDefs::Type type_,
@@ -443,7 +455,7 @@ namespace AssetFactory
           const std::vector<SharedString>& inputs_,
           const khMetaData& meta_,
           const ConfigType& config_,
-          const std::vector<AssetVersion>& cachedinputs_)
+          const std::vector<CachedInputType>& cachedinputs_)
   {
       using Impl = typename MutableDerivedVersionHandleType::Impl;
       auto ref_ = AssetDefs::SubAssetName(parentName, baseName,

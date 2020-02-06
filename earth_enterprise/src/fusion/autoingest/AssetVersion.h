@@ -72,6 +72,7 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   AssetVersionImpl& operator=(const AssetVersionImpl&&) = delete;
 
  public:
+  static const std::string PLACEHOLDER_ASSET_REGISTRY_KEY;
   using Base = AssetVersionStorage;
   std::string XMLFilename() const { return XMLFilename(GetRef()); }
   std::string WorkingDir(void) const { return WorkingDir(GetRef()); }
@@ -79,8 +80,6 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
     return WorkingDir() + fname;
   }
 
-  // implemented in LoadAny.cpp
-  static std::shared_ptr<AssetVersionImpl> Load(const std::string &boundref);
 
   virtual std::string GetName() const {   // Returns the name of the asset version, e.g., "CombinedRPAssetVersion"
     assert(false);

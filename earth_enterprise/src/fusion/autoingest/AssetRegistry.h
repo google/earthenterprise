@@ -26,19 +26,28 @@ class AssetRegistry{
 public:
   AssetRegistry() = delete;
 
-  using newfromdom_func = std::function<std::shared_ptr<AssetType>(void*)>;
-
   class AssetPluginInterface {
+    /*
+    * Collection of plugin-specific versions of functions and data.
+    */
     public:
-      std::function<std::shared_ptr<AssetType>(void*)> pNewFromDom;
+      using new_from_dom_func = std::function<std::shared_ptr<AssetType>(void*)>;
+      using new_invalid_func = std::function<std::shared_ptr<AssetType>(const std::string &ref)>;
+      new_from_dom_func pNewFromDom;
+      new_invalid_func pNewInvalid;
+      std::string invalidAssetTypeName;
 
-      explicit AssetPluginInterface(std::function<std::shared_ptr<AssetType>(void*)> pNFD):
-        pNewFromDom(pNFD) {}
+      explicit AssetPluginInterface(new_from_dom_func pNFD, new_invalid_func pNI, std::string invalidType):
+        pNewFromDom(pNFD), pNewInvalid(pNI), invalidAssetTypeName(invalidType) {}
   };
 
 
   class PluginRegistrar
   {
+    /*
+    * PluginRegistrar objects are instantiated within a plugin's cpp file to
+    * register the plugin.
+    */
     public:
       explicit PluginRegistrar(
         std::string const & name, 

@@ -89,11 +89,14 @@ namespace {
 
 
 namespace{
-    auto assetPlugin = std::unique_ptr<AssetRegistry<AssetImpl>::AssetPluginInterface>(
-        new AssetRegistry<AssetImpl>::AssetPluginInterface(
-            ${name}AssetImpl::NewFromDOM
-        )
-    );
+    auto assetPlugin =
+        std::unique_ptr<AssetRegistry<AssetImpl>::AssetPluginInterface>(
+            new AssetRegistry<AssetImpl>::AssetPluginInterface(
+                ${name}AssetImpl::NewFromDOM,
+                ${name}AssetImpl::NewInvalid,
+                "SourceAsset"
+            )
+        );
     AssetRegistry<AssetImpl>::PluginRegistrar assetPluginRegistrar(
         "${name}Asset", std::move(assetPlugin));
 }
@@ -127,11 +130,14 @@ ${name}AssetImpl::NewInvalid(const std::string &ref)
 extern void FromElement(DOMElement *elem, AssetVersionStorage &self);
 
 namespace{
-    auto assetVersionPlugin = std::unique_ptr<AssetRegistry<AssetVersionImpl>::AssetPluginInterface>(
-        new AssetRegistry<AssetVersionImpl>::AssetPluginInterface(
-            ${name}AssetVersionImpl::NewFromDOM
-        )
-    );
+    auto assetVersionPlugin =
+        std::unique_ptr<AssetRegistry<AssetVersionImpl>::AssetPluginInterface>(
+            new AssetRegistry<AssetVersionImpl>::AssetPluginInterface(
+                ${name}AssetVersionImpl::NewFromDOM,
+                ${name}AssetVersionImpl::NewInvalid,
+                "SourceAssetVersion"
+            )
+        );
     AssetRegistry<AssetVersionImpl>::PluginRegistrar assetVersionPluginRegistrar(
         "${name}AssetVersion", std::move(assetVersionPlugin));
 }
