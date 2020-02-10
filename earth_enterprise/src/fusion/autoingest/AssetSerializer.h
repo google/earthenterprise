@@ -18,6 +18,21 @@ class AssetSerializerInterface {
     virtual ~AssetSerializerInterface() = default;
 };
 
+/*
+* GetFileInfo and ReadXMLDocument were added as function templates to allow
+* them to be overridden in unit tests. The versions here should be used for
+* all asset types during normal operation.
+*/
+template<class AssetType>
+bool GetFileInfo(const std::string &fname, uint64 &size, time_t &mtime) {
+  return khGetFileInfo(fname, size, mtime);
+}
+
+template<class AssetType>
+std::unique_ptr<GEDocument> ReadXMLDocument(const std::string &filename) {
+  return ReadDocument(filename);
+}
+
 template<class AssetType>
 class AssetSerializerLocalXML : public AssetSerializerInterface<AssetType>
 {
@@ -29,8 +44,8 @@ class AssetSerializerLocalXML : public AssetSerializerInterface<AssetType>
       time_t timestamp = 0;
       uint64 filesize = 0;
 
-      if (khGetFileInfo(filename, filesize, timestamp) && (filesize > 0)) {
-        std::unique_ptr<GEDocument> doc = ReadDocument(filename);
+      if (GetFileInfo<AssetType>(filename, filesize, timestamp) && (filesize > 0)) {
+        std::unique_ptr<GEDocument> doc = ReadXMLDocument<AssetType>(filename);
         if (doc) {
           try {
             DOMElement *top = doc->getDocumentElement();
