@@ -32,6 +32,8 @@ khGDALReader::TypedRead(const khExtents<uint32> &srcExtents, bool topToBottom,
                         TileType &tile, const khOffset<uint32> &tileOffset)
 {
   assert(storage == khTypes::Helper<SrcPixelType>::Storage);
+  // Make sure SrcPixelType has a min and max
+  assert(std::numeric_limits<SrcPixelType>::is_specialized);
 
   if (topToBottom != this->topToBottom) {
     throw khException(kh::tr("topToBottom doesn't match dataset"));
@@ -49,7 +51,6 @@ khGDALReader::TypedRead(const khExtents<uint32> &srcExtents, bool topToBottom,
   SrcPixelType no_data = 0;
   if (nodata_exists) {
     // Check that nodata fits in the pixel type
-    assert(std::numeric_limits<SrcPixelType>::is_specialized);
     if (full_no_data >= std::numeric_limits<SrcPixelType>::min() &&
         full_no_data <= std::numeric_limits<SrcPixelType>::max()) {
       no_data = static_cast<SrcPixelType>(full_no_data);
