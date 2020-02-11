@@ -37,7 +37,6 @@ class TestItem : public TestItemStorage {
     static int nextValue;
     static string loadFile;
     static string xmlFilename;
-    static const string PLACEHOLDER_ASSET_REGISTRY_KEY;
     static bool newInvalidCalled;
     int val;
     uint64 timestamp; 
@@ -58,12 +57,12 @@ class TestItem : public TestItemStorage {
       newInvalidCalled = true;
       return std::make_shared<TestItem>();
     }
+    static std::string GetPlaceholderAssetRegistryKey() { return "TestItemAsset"; }
 };
 
 int TestItem::nextValue;
 string TestItem::loadFile;
 string TestItem::xmlFilename;
-const string TestItem::PLACEHOLDER_ASSET_REGISTRY_KEY = "TestItemAsset";
 bool TestItem::newInvalidCalled;
 
 class TestXMLException : public XMLException {

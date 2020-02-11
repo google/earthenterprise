@@ -79,7 +79,7 @@ class AssetSerializerLocalXML : public AssetSerializerInterface<AssetType>
               boundref.c_str());
         // Use SourceAssetImpl since AssetImpl is pure virtual
         result = AssetFactory::CreateNewInvalid<AssetType>(
-          AssetType::PLACEHOLDER_ASSET_REGISTRY_KEY, boundref
+          AssetType::GetPlaceholderAssetRegistryKey(), boundref
         );
 
         // Leave timestamp alone if it failed but there was a valid timestamp

@@ -24,12 +24,6 @@
 // ****************************************************************************
 // ***  AssetVersionImpl
 // ****************************************************************************
-
-// When an error occurs while loading an asset from disk, an invalid placeholder
-// is created using a SourceAssetVersion. Unclear at this time if
-// SourceAssetVersion has other uses or not.
-const std::string AssetVersionImpl::PLACEHOLDER_ASSET_REGISTRY_KEY = "SourceAssetVersion";
-
 std::string
 AssetVersionImpl::WorkingDir(const AssetVersionRef &ref)
 {

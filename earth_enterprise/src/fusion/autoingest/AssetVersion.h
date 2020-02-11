@@ -72,7 +72,7 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   AssetVersionImpl& operator=(const AssetVersionImpl&&) = delete;
 
  public:
-  static const std::string PLACEHOLDER_ASSET_REGISTRY_KEY;
+  static std::string GetPlaceholderAssetRegistryKey() { return "SourceAsset"; }
   using Base = AssetVersionStorage;
   std::string XMLFilename() const { return XMLFilename(GetRef()); }
   std::string WorkingDir(void) const { return WorkingDir(GetRef()); }

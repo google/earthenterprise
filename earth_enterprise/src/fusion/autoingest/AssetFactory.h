@@ -39,14 +39,12 @@ namespace AssetFactory
 
   template<class AssetType>
   static std::shared_ptr<AssetType> CreateNewInvalid(
-    const std::string & tagName, 
+    std::string tagName, 
     const std::string & ref)
   {
       typename AssetRegistry<AssetType>::AssetPluginInterface *plugin = AssetRegistry<AssetType>::GetPlugin(tagName);
-      if (plugin) {
-        typename AssetRegistry<AssetType>::AssetPluginInterface *invalidTypePlugin = AssetRegistry<AssetType>::GetPlugin(plugin->invalidAssetTypeName);
-        if (invalidTypePlugin && invalidTypePlugin->pNewInvalid)
-            return (invalidTypePlugin->pNewInvalid)(ref);
+      if (plugin && plugin->pNewInvalid) {
+        return (plugin->pNewInvalid)(ref);
       }
       return nullptr;
   }
