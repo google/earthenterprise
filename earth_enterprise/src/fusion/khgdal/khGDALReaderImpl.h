@@ -19,6 +19,7 @@
 
 #include "khGDALReader.h"
 #include "ReadHelpers.h"
+#include <limits>
 
 
 // ****************************************************************************
@@ -40,15 +41,25 @@ khGDALReader::TypedRead(const khExtents<uint32> &srcExtents, bool topToBottom,
   const uint pixelsPerBand = srcExtents.width() * srcExtents.height();
   const uint bandSize = (pixelsPerBand * sizeof(SrcPixelType));
   rawReadBuf.reserve(numBands * bandSize);
-  // Fill buffer with 0 (or NoData if it exists)
+
+  // Get the nodata value
   int nodata_exists = 0;
-  SrcPixelType no_data =
-      static_cast<SrcPixelType>(
-          srcDS->GetRasterBand(1)->GetNoDataValue(&nodata_exists));
-  if (!nodata_exists)
-    no_data = 0;
-  for (uint i = 0; i < pixelsPerBand * numBands; ++i)
+  double full_no_data = srcDS->GetRasterBand(1)->GetNoDataValue(&nodata_exists);
+
+  SrcPixelType no_data = 0;
+  if (nodata_exists) {
+    // Check that nodata fits in the pixel type
+    assert(std::numeric_limits<SrcPixelType>::is_specialized);
+    if (full_no_data >= std::numeric_limits<SrcPixelType>::min() &&
+        full_no_data <= std::numeric_limits<SrcPixelType>::max()) {
+      no_data = static_cast<SrcPixelType>(full_no_data);
+    }
+  }
+
+  // Fill buffer with 0 (or NoData if it exists)
+  for (uint i = 0; i < pixelsPerBand * numBands; ++i) {
     ((SrcPixelType *) (&rawReadBuf[0]))[i] = no_data;
+  }
 
   // read pixels from all bands into rawReadBuf
   FetchPixels(srcExtents);
