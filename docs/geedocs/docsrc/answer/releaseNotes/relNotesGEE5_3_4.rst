@@ -22,6 +22,10 @@ Release notes: Open GEE 5.3.4
       :ref:`retry tasks that fail <retry-failed-tasks>`, which allows
       Fusion to recover from intermittent failures.
 
+      **Option to limit cache pruning**.
+      Users can now limit how often the asset and asset version caches are pruned
+      by use of an experimental option, :ref:`PrunePercent <prune-percent>`.
+
       .. rubric:: Supported Platforms
 
       The Open GEE 5.3.4 release is supported on 64-bit versions of the
