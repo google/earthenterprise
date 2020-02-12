@@ -55,6 +55,9 @@ khGDALReader::TypedRead(const khExtents<uint32> &srcExtents, bool topToBottom,
         full_no_data <= std::numeric_limits<SrcPixelType>::max()) {
       no_data = static_cast<SrcPixelType>(full_no_data);
     }
+    else {
+      notify(NFY_WARN, "Ignoring NoData (%.2f) because it is too large for the pixel type.", full_no_data);
+    }
   }
 
   // Fill buffer with 0 (or NoData if it exists)
