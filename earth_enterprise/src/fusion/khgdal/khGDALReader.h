@@ -42,6 +42,10 @@ class khGDALReader
   template <class SrcPixelType, class TileType>
   void TypedRead(const khExtents<uint32> &readExtents, bool topToBottom,
                  TileType &tile, const khOffset<uint32> &tileOffset);
+  template <class SrcPixelType> SrcPixelType GetNoDataOrZero();
+  // virtual so it can be overridden by unit tests
+  virtual void GetNoDataFromSrc(double & no_data, int & nodata_exists);
+
  protected:
   khGDALDataset     srcDS;
   uint              numBands;

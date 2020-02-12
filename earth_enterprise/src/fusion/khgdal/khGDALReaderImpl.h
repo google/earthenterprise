@@ -44,35 +44,11 @@ khGDALReader::TypedRead(const khExtents<uint32> &srcExtents, bool topToBottom,
   const uint bandSize = (pixelsPerBand * sizeof(SrcPixelType));
   rawReadBuf.reserve(numBands * bandSize);
 
-  // Get the nodata value
-  int nodata_exists = 0;
-  double full_no_data = srcDS->GetRasterBand(1)->GetNoDataValue(&nodata_exists);
-
-  SrcPixelType no_data = 0;
-  if (nodata_exists) {
-    // Check that nodata fits in the pixel type
-    if (full_no_data >= std::numeric_limits<SrcPixelType>::min() &&
-        full_no_data <= std::numeric_limits<SrcPixelType>::max()) {
-      no_data = static_cast<SrcPixelType>(full_no_data);
-    }
-    else if (printNotifications) {
-      notify(NFY_WARN, "Ignoring NoData (%.2f) because it is too large for the pixel type.", full_no_data);
-    }
-  }
-
-  if (printNotifications && no_data != 0) {
-    notify(NFY_NOTICE, "Using non-zero NoData (%.2f). If Fusion produces black regions "
-                       "around this image, consider creating your own mask and disabling "
-                       "Auto Masking for this resource.");
-  }
-
-  // Fill buffer with 0 (or NoData if it exists)
+  // Fill buffer with NoData or zero
+  SrcPixelType no_data = GetNoDataOrZero<SrcPixelType>();
   for (uint i = 0; i < pixelsPerBand * numBands; ++i) {
     ((SrcPixelType *) (&rawReadBuf[0]))[i] = no_data;
   }
-
-  // Only print notifications the first time through
-  printNotifications = false;
 
   // read pixels from all bands into rawReadBuf
   FetchPixels(srcExtents);
@@ -130,6 +106,35 @@ khGDALReader::TypedRead(const khExtents<uint32> &srcExtents, bool topToBottom,
       memcpy(tile.bufs[b], tile.bufs[0], TileType::BandBufSize);
     }
   }
+}
+
+template <class SrcPixelType>
+SrcPixelType khGDALReader::GetNoDataOrZero() {
+  double no_data;
+  int nodata_exists;
+  GetNoDataFromSrc(no_data, nodata_exists);
+  SrcPixelType sanitized_no_data = 0;
+  if (nodata_exists) {
+    // Check that nodata fits in the pixel type
+    if (no_data >= std::numeric_limits<SrcPixelType>::min() &&
+        no_data <= std::numeric_limits<SrcPixelType>::max()) {
+      sanitized_no_data = static_cast<SrcPixelType>(no_data);
+    }
+    else if (printNotifications) {
+      notify(NFY_WARN, "Ignoring NoData (%.2f) because it is too large for the pixel type.", no_data);
+    }
+  }
+
+  if (printNotifications && sanitized_no_data != 0) {
+    notify(NFY_NOTICE, "Using non-zero NoData (%.2f). If Fusion produces black regions "
+                       "around this image, consider creating your own mask and disabling "
+                       "Auto Masking for this resource.", no_data);
+  }
+
+  // Only print notifications the first time through
+  printNotifications = false;
+
+  return sanitized_no_data;
 }
 
 

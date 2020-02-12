@@ -92,6 +92,9 @@ khGDALReader::khGDALReader(const khGDALDataset &srcDS_, uint numbands)
   }
 }
 
+void khGDALReader::GetNoDataFromSrc(double & no_data, int & nodata_exists) {
+  no_data = srcDS->GetRasterBand(1)->GetNoDataValue(&nodata_exists);
+}
 
 // ****************************************************************************
 // ***  khGDALSimpleReader
