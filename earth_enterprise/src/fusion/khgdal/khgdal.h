@@ -32,9 +32,9 @@
 // ****************************************************************************
 class CPLStrGuard
 {
-  // private and unimplemented - it would be a waste to copy the strings
-  CPLStrGuard(const CPLStrGuard &o);
-  CPLStrGuard& operator=(const CPLStrGuard &o);
+  // it would be a waste to copy the strings
+  CPLStrGuard(const CPLStrGuard &o) = delete;
+  CPLStrGuard& operator=(const CPLStrGuard &o) = delete;
 
   char *str;
  public:
