@@ -35,10 +35,9 @@ public:
       using new_invalid_func = std::function<std::shared_ptr<AssetType>(const std::string &ref)>;
       new_from_dom_func pNewFromDom;
       new_invalid_func pNewInvalid;
-      std::string invalidAssetTypeName;
 
-      explicit AssetPluginInterface(new_from_dom_func pNFD, new_invalid_func pNI, std::string invalidType):
-        pNewFromDom(pNFD), pNewInvalid(pNI), invalidAssetTypeName(invalidType) {}
+      explicit AssetPluginInterface(new_from_dom_func pNFD, new_invalid_func pNI):
+        pNewFromDom(pNFD), pNewInvalid(pNI) {}
   };
 
 

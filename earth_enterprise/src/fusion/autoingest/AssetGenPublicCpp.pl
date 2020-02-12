@@ -93,8 +93,7 @@ namespace{
         std::unique_ptr<AssetRegistry<AssetImpl>::AssetPluginInterface>(
             new AssetRegistry<AssetImpl>::AssetPluginInterface(
                 ${name}AssetImpl::NewFromDOM,
-                ${name}AssetImpl::NewInvalid,
-                "SourceAsset"
+                ${name}AssetImpl::NewInvalid
             )
         );
     AssetRegistry<AssetImpl>::PluginRegistrar assetPluginRegistrar(
@@ -134,8 +133,7 @@ namespace{
         std::unique_ptr<AssetRegistry<AssetVersionImpl>::AssetPluginInterface>(
             new AssetRegistry<AssetVersionImpl>::AssetPluginInterface(
                 ${name}AssetVersionImpl::NewFromDOM,
-                ${name}AssetVersionImpl::NewInvalid,
-                "SourceAssetVersion"
+                ${name}AssetVersionImpl::NewInvalid
             )
         );
     AssetRegistry<AssetVersionImpl>::PluginRegistrar assetVersionPluginRegistrar(
