@@ -55,15 +55,24 @@ khGDALReader::TypedRead(const khExtents<uint32> &srcExtents, bool topToBottom,
         full_no_data <= std::numeric_limits<SrcPixelType>::max()) {
       no_data = static_cast<SrcPixelType>(full_no_data);
     }
-    else {
+    else if (printNotifications) {
       notify(NFY_WARN, "Ignoring NoData (%.2f) because it is too large for the pixel type.", full_no_data);
     }
+  }
+
+  if (printNotifications && no_data != 0) {
+    notify(NFY_NOTICE, "Using non-zero NoData (%.2f). If Fusion produces black regions "
+                       "around this image, consider creating your own mask and disabling "
+                       "Auto Masking for this resource.");
   }
 
   // Fill buffer with 0 (or NoData if it exists)
   for (uint i = 0; i < pixelsPerBand * numBands; ++i) {
     ((SrcPixelType *) (&rawReadBuf[0]))[i] = no_data;
   }
+
+  // Only print notifications the first time through
+  printNotifications = false;
 
   // read pixels from all bands into rawReadBuf
   FetchPixels(srcExtents);

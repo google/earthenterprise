@@ -49,6 +49,7 @@ class khGDALReader
   GDALDataType      gdalDatatype;
   khTypes::StorageEnum storage;
   bool              topToBottom;
+  bool              printNotifications;
 
   uint paletteSize;
   const GDALColorEntry *palette;

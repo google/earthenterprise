@@ -1,0 +1,63 @@
+src/server/mod_fdb/portableservice.cpp:343:      reader->Read(&data_buffer, data_loc.Offset(), data_loc.Size(), r);
+src/server/mod_fdb/portableservice.cpp:391:        reader->Read(&data_buffer, data_loc.Offset(), data_loc.Size());
+src/server/mod_fdb/portableservice.cpp:427:  uint64 size = reader->Size();
+src/server/mod_fdb/portableservice.cpp:624:              reader->Read(&data_buffer, data_loc.Offset(), data_loc.Size(), r);
+src/server/mod_fdb/portableservice.cpp:663:    reader->Read(&data_buffer, data_loc.Offset(), data_loc.Size(), r);
+src/server/mod_fdb/portableservice.cpp:826:        reader->Read(&data, data_loc.Offset(), data_loc.Size(), r);
+src/server/mod_fdb/portableservice.cpp:881:    reader->Read(&data_buffer, data_loc.Offset(), data_loc.Size(), r);
+src/server/mod_fdb/motf_generator.cpp:191:  reader->GetData(*arg_map, buf, is_cacheable);
+src/server/mod_fdb/motf_generator.cpp:553:  reader->GetUint32Arg((*arg_map)["channel"], &channel);
+src/server/mod_fdb/motf_generator.cpp:555:  reader->GetUint32Arg((*arg_map)["version"], &version);
+src/server/mod_fdb/motf_generator.cpp:576:      int levelok = reader->CheckLevel(read_key, static_cast<uint32>(z_up),
+src/server/mod_fdb/motf_generator.cpp:599:        int levelok = reader->CheckLevel(read_key, static_cast<uint32>(z_up),
+src/server/mod_fdb/motf_generator.cpp:628:        int levelok = reader->CheckLevel(read_key, static_cast<uint32>(z_up),
+src/server/mod_fdb/motf_generator.cpp:645:    int levelok = reader->CheckLevel(read_key, static_cast<uint32>(z_up),
+src/server/mod_fdb/motf_generator.cpp:668:      int levelok = reader->CheckLevel(read_key, static_cast<uint32>(z_up),
+src/server/mod_fdb/fdb_reader_manager.cpp:42:    it_reader->second->SetCuttingEnabled(is_cutting_enabled_);
+src/server/mod_fdb/fdb_reader_manager.cpp:76:    return it_reader->second;
+src/server/mod_fdb/fdb_reader_manager.cpp:118:      if (it_reader->second) {
+src/server/mod_fdb/fdb_reader_manager.cpp:119:        delete it_reader->second;
+src/server/mod_fdb/fusiondbservice.cpp:273:    const MimeType content_type = reader->GetData(arg_map, buf, is_cacheable);
+src/fusion/portableglobe/geglxinfo.cpp:425:    if (reader->ReadData(&index_item, offset, sizeof(IndexItem))) {
+src/fusion/portableglobe/geglxinfo.cpp:431:      } else if (reader->ReadData(
+src/fusion/geindexgen/Generator.cpp:38:      MergeSource<MergeEntry>(reader->Name()),
+src/fusion/rasterfuse/pyrinfo.cpp:60:  const pyrio::Header &hdr(reader->header());
+src/fusion/rasterfuse/pyrinfo.cpp:94:  if (!reader->ReadAllBandBufs(0, 0, bufs, hdr.componentType,
+src/fusion/rasterfuse/pyrinfo.cpp:108:  const pyrio::Header &hdr(reader->header());
+src/fusion/rasterfuse/pyrinfo.cpp:145:        if (!reader->ReadBandBuf(j, i, n, bufs[n],
+src/fusion/rasterfuse/ReaderCache.h:50:      reader->Close();
+src/fusion/rasterfuse/ReaderCache.h:60:      if (!reader->FindReadTile(addr, dest)) {
+src/fusion/rasterfuse/RasterGenerator.cpp:635:  reader->Read(srcReadPixelExtents, topToBottom, tile, tilePixelOffset);
+src/fusion/rasterfuse/RasterMerger.cpp:122:    if (!cached_blend_reader->ValidLevel(magnify_level)) {
+src/fusion/rasterfuse/RasterMerger.cpp:135:        (cached_blend_reader->levelCoverage(magnify_level).extents);
+src/fusion/rasterfuse/RasterMerger.cpp:159:    magnifyCoverage = cached_blend_reader->levelCoverage(magnify_level);
+src/fusion/rasterfuse/RasterMerger.cpp:207:      inset->cached_blend_reader->presence().GetPresence(addr)) {
+src/fusion/rasterfuse/RasterMerger.cpp:213:        inset->cached_blend_alpha_reader->presence().GetPresence(addr)) {
+src/fusion/khgdal/geinfo.cpp:231:              size_t read = reader->ReadAtCRC(entry.position(),
+src/fusion/khraster/khRasterProductLevel.h:99:    return (reader->header().numComponents == 1);
+src/fusion/khraster/khRasterProductLevel.h:165:  return reader->ReadAllBandBufs(row - tileExtents().beginRow(),
+src/fusion/khraster/khRasterProductLevel.cpp:77:  return reader->ReadBandBuf(row - tileExtents().beginRow(),
+src/fusion/khraster/khRasterProductLevel.cpp:122:      if (!reader->ReadBandBufs(row, col, readBufs, bands, numbands,
+src/common/geindex/ReaderTmpl.h:56:  bundleReader->LoadWithCRC(entryBucketAddr, tmpBuf);
+src/common/geindex/ReaderTmpl.h:61:  if (bundleReader->header.slotsAreSingle) {
+src/common/geindex/ReaderTmpl.h:103:    bundleReader->LoadWithCRC(entryBucketAddr, buffer);
+src/common/geindex/ReaderTmpl.h:107:    if (bundleReader->header.slotsAreSingle) {
+src/common/geindex/Reader.h:202:  bundleReader->LoadWithCRC(entryBucketAddr, tmpBuf);
+src/common/geindex/Reader.h:208:  if (bundleReader->header.slotsAreSingle) {
+src/common/geindex/Reader.h:257:    bundleReader->LoadWithCRC(entryBucketAddr, buffer);
+src/common/geindex/Reader.h:261:    if (bundleReader->header.slotsAreSingle) {
+src/common/geindex/Reader.cpp:230:    fileFormatVersion(bundleReader->header.fileFormatVersion),
+src/common/geindex/Reader.cpp:233:    packetFileReaders(bundleReader->PacketFileCount())
+src/common/geindex/Reader.cpp:237:  if (!bundleReader->header.rootChildAddr) {
+src/common/geindex/Reader.cpp:245:    LoadedChildBucket loaded(bundleReader->header.rootChildAddr,
+src/common/geindex/Reader.cpp:256:    return bundleReader->header.rootEntryAddr;
+src/common/geindex/Reader.cpp:404:  bundleReader->LoadWithCRC(bundleAddr, tmpBuf);
+src/common/geindex/Reader.cpp:434:  bundleReader->LoadWithCRC(bundleAddr, tmpBuf);
+src/common/geindex/Reader.cpp:467:                                 bundleReader->GetPacketFile(fileNum));
+src/common/geindex/Reader.cpp:487:  return bundleReader->header.GetPacketExtra(packetfile_num);
+src/common/packetfile/packetfilereaderpool.cpp:56:  reader->EnableReadCache(read_cache_max_blocks_, read_cache_block_size_);
+src/third_party/gdal/gdal-mrsiddataset.patch:27:+        poImageReader->release();
+src/third_party/gdal/gdal-mrsiddataset.patch:45:+        status = pReader->initialize( oFileSpec, true );
+src/third_party/gdal/gdal-mrsiddataset.patch:51:-    if ( !LT_SUCCESS( poDS->poImageReader->initialize() ) )
+src/third_party/gdal/gdal-mrsiddataset.patch:56:+        status = pReader->initialize( oFileSpec, false ); 
+src/third_party/gdal/gdal-mrsiddataset.patch:58:+    // was: if ( !LT_SUCCESS( poDS->poImageReader->initialize(oFileSpec) ) )

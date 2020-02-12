@@ -25,6 +25,7 @@ khGDALReader::khGDALReader(const khGDALDataset &srcDS_, uint numbands)
     numBands(numbands),
     gdalDatatype(srcDS->GetRasterBand(1)->GetRasterDataType()),
     topToBottom(srcDS.normalizedGeoExtents().topToBottom()),
+    printNotifications(true),
     paletteSize(0),
     palette(0)
 {
