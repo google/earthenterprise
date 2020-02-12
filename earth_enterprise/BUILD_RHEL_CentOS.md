@@ -150,7 +150,7 @@ sudo yum install -y \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel pcre pcre-devel \
   proj-devel python27 \
   python27-pip python27-devel python27-lxml python27-setuptools python-unittest2 \
-  rpm-build rpmrebuild rsync scons shunit2 \
+  python-devel rpm-build rpmrebuild rsync scons shunit2 \
   xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
 ```
 
