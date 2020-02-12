@@ -181,8 +181,7 @@ class PluginRegisterHandler {
         std::unique_ptr<AssetRegistry<TestItem>::AssetPluginInterface>(
           new AssetRegistry<TestItem>::AssetPluginInterface(
             TestItem::NewFromDOM,
-            TestItem::NewInvalid,
-            "TestItemAsset" // For testing, just have the same asset type as the invalid placeholder.
+            TestItem::NewInvalid
           )
         );
       AssetRegistry<TestItem>::PluginRegistrar assetPluginRegistrar(
