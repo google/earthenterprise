@@ -42,7 +42,6 @@ class khGDALReader
   template <class SrcPixelType, class TileType>
   void TypedRead(const khExtents<uint32> &readExtents, bool topToBottom,
                  TileType &tile, const khOffset<uint32> &tileOffset);
-  template <class SrcPixelType> SrcPixelType GetNoDataOrZero();
   // virtual so it can be overridden by unit tests
   virtual void GetNoDataFromSrc(double & no_data, int & nodata_exists);
 
@@ -59,6 +58,9 @@ class khGDALReader
   const GDALColorEntry *palette;
 
   std::vector<uchar> rawReadBuf;
+
+  // Protected so it can be called from unit tests
+  template <class SrcPixelType> SrcPixelType GetNoDataOrZero();
 
   // reads numBands worth of gdalDatatype pixels into rawReadBuf
   // assumes rawReadBuf has already been sized appropriately

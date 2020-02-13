@@ -116,8 +116,9 @@ SrcPixelType khGDALReader::GetNoDataOrZero() {
   SrcPixelType sanitized_no_data = 0;
   if (nodata_exists) {
     // Check that nodata fits in the pixel type
-    if (no_data >= std::numeric_limits<SrcPixelType>::min() &&
-        no_data <= std::numeric_limits<SrcPixelType>::max()) {
+    SrcPixelType pixelMin = std::numeric_limits<SrcPixelType>::lowest();
+    SrcPixelType pixelMax = std::numeric_limits<SrcPixelType>::max();
+    if (no_data >= pixelMin && no_data <= pixelMax) {
       sanitized_no_data = static_cast<SrcPixelType>(no_data);
     }
     else if (printNotifications) {
