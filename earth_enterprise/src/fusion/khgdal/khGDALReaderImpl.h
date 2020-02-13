@@ -110,32 +110,32 @@ khGDALReader::TypedRead(const khExtents<uint32> &srcExtents, bool topToBottom,
 
 template <class SrcPixelType>
 SrcPixelType khGDALReader::GetNoDataOrZero() {
-  double no_data;
-  int nodata_exists;
-  GetNoDataFromSrc(no_data, nodata_exists);
-  SrcPixelType sanitized_no_data = 0;
-  if (nodata_exists) {
-    // Check that nodata fits in the pixel type
-    SrcPixelType pixelMin = std::numeric_limits<SrcPixelType>::lowest();
-    SrcPixelType pixelMax = std::numeric_limits<SrcPixelType>::max();
-    if (no_data >= pixelMin && no_data <= pixelMax) {
-      sanitized_no_data = static_cast<SrcPixelType>(no_data);
+  if (!no_data_set) {
+    double no_data;
+    int nodata_exists;
+    GetNoDataFromSrc(no_data, nodata_exists);
+    if (nodata_exists) {
+      // Check that nodata fits in the pixel type
+      SrcPixelType pixelMin = std::numeric_limits<SrcPixelType>::lowest();
+      SrcPixelType pixelMax = std::numeric_limits<SrcPixelType>::max();
+      if (no_data >= pixelMin && no_data <= pixelMax) {
+        sanitized_no_data = no_data;
+      }
+      else {
+        notify(NFY_WARN, "Ignoring NoData (%.2f) because it is too large for the pixel type.", no_data);
+      }
     }
-    else if (printNotifications) {
-      notify(NFY_WARN, "Ignoring NoData (%.2f) because it is too large for the pixel type.", no_data);
+
+    if (sanitized_no_data != 0) {
+      notify(NFY_NOTICE, "Using non-zero NoData (%.2f). If Fusion produces black regions "
+                         "around this image, consider creating your own mask and disabling "
+                         "Auto Masking for this resource.", no_data);
     }
+
+    no_data_set = true;
   }
 
-  if (printNotifications && sanitized_no_data != 0) {
-    notify(NFY_NOTICE, "Using non-zero NoData (%.2f). If Fusion produces black regions "
-                       "around this image, consider creating your own mask and disabling "
-                       "Auto Masking for this resource.", no_data);
-  }
-
-  // Only print notifications the first time through
-  printNotifications = false;
-
-  return sanitized_no_data;
+  return static_cast<SrcPixelType>(sanitized_no_data);
 }
 
 

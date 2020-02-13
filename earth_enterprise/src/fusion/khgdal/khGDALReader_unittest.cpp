@@ -81,7 +81,8 @@ TEST(khGDALReaderTest, NoDataMultipleCalls) {
   ASSERT_EQ(1, reader.num_gets);
   nodata = reader.CallGetNoDataOrZero<float64>();
   ASSERT_EQ(16, nodata);
-  ASSERT_EQ(2, reader.num_gets);
+  // Make sure we only extract the NoData value once
+  ASSERT_EQ(1, reader.num_gets);
 }
 
 int main(int argc, char** argv) {
