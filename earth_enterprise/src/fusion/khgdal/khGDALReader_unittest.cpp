@@ -15,6 +15,8 @@
 #include <gtest/gtest.h>
 #include "khGDALReaderImpl.h"
 
+// Point the dataset at a valid image. We won't use this, but it prevents crashes
+// due to an invalid dataset.
 khGDALDataset dataset("fusion/testdata/i3SF15-meter.tif");
 
 class MockReader : public khGDALReader {
