@@ -176,12 +176,14 @@ class PluginRegisterHandler {
   * Simple class for registering and unregistering an asset plugin.
   */
   public:
-    PluginRegisterHandler() {
+    PluginRegisterHandler(
+      std::function<std::shared_ptr<TestItem>(void*)> newFromDOM = TestItem::NewFromDOM,
+      std::function<std::shared_ptr<TestItem>(const std::string &ref)> newInvalid = TestItem::NewInvalid) {
       auto assetPlugin =
         std::unique_ptr<AssetRegistry<TestItem>::AssetPluginInterface>(
           new AssetRegistry<TestItem>::AssetPluginInterface(
-            TestItem::NewFromDOM,
-            TestItem::NewInvalid
+            newFromDOM,
+            newInvalid
           )
         );
       AssetRegistry<TestItem>::PluginRegistrar assetPluginRegistrar(
@@ -244,6 +246,25 @@ TEST_F(AssetSerializerTest, Load_NewInvalid) {
   ASSERT_TRUE(TestItem::newInvalidCalled);
   ASSERT_EQ(testItem->timestamp, getFileInfoTime);
   ASSERT_EQ(testItem->filesize, getFileInfoSize);
+}
+
+TEST_F(AssetSerializerTest, Load_NewInvalidNoInvalidType) {
+  // Passing nullptr as the second parameter will result in
+  // AssetFactory::CreateNewInvalid returning nullptr.
+  PluginRegisterHandler prh(TestItem::NewFromDOM, nullptr);
+  bool originalThrowPolicy = AssetThrowPolicy::allow_throw;
+  AssetThrowPolicy::allow_throw = false;
+
+  // Cause a Load failure so serializer attemps to create an invalid placeholder
+  getFileInfoReturnValue = false;  
+
+  string boundref = "doesnt_matter";
+  auto testItem = serializer.Load(boundref);
+
+  AssetThrowPolicy::allow_throw = originalThrowPolicy;
+
+  ASSERT_EQ(testItem, nullptr);
+  ASSERT_FALSE(TestItem::newInvalidCalled);
 }
 
 void ExceptionTest(AssetSerializerLocalXML<TestItem> & serializer, ExceptionType type) {

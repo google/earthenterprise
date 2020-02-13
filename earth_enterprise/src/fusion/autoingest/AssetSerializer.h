@@ -87,8 +87,10 @@ class AssetSerializerLocalXML : public AssetSerializerInterface<AssetType>
       }
 
       // Store the timestamp so the cache can check it later
-      result->timestamp = timestamp;
-      result->filesize  = filesize;
+      if (result) {
+        result->timestamp = timestamp;
+        result->filesize  = filesize;
+      }
 
       return result;
     }
