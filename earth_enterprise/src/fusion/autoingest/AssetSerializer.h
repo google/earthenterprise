@@ -76,13 +76,14 @@ class AssetSerializerLocalXML : public AssetSerializerInterface<AssetType>
       if (!result) {
         notify(NFY_DEBUG, "Creating placeholder for bad asset %s",
           boundref.c_str());
-        // Use SourceAssetImpl since AssetImpl is pure virtual
+        // Since AssetType may be pure virtual, we will create an asset of its
+        // "placeholder" type instead.
         result = AssetFactory::CreateNewInvalid<AssetType>(
           AssetType::GetPlaceholderAssetRegistryKey(), boundref
         );
 
         // Leave timestamp alone if it failed but there was a valid timestamp
-        // we want to remember the timestamp of the one that failed
+        // we want to remember the timestamp of the one that failed.
       }
 
       // Store the timestamp so the cache can check it later
