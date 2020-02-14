@@ -81,13 +81,13 @@ class AssetSerializerLocalXML : public AssetSerializerInterface<AssetType>
         result = AssetFactory::CreateNewInvalid<AssetType>(
           AssetType::GetPlaceholderAssetRegistryKey(), boundref
         );
-
-        // Leave timestamp alone if it failed but there was a valid timestamp
-        // we want to remember the timestamp of the one that failed.
       }
 
       // Store the timestamp so the cache can check it later
       if (result) {
+        // NOTE: In the case where GetFileInfo succeeded but the contents of
+        // the file were invalid, result->timestamp will still contain the
+        // timestamp of the original, invalid file.
         result->timestamp = timestamp;
         result->filesize  = filesize;
       }
