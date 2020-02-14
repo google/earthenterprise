@@ -63,16 +63,6 @@ public:
     PluginRegistry()[assetTypeName] = std::move(assetPlugin);
   }
 
-  static void UnregisterPlugin(
-    std::string const & assetTypeName)
-  {
-    auto it = PluginRegistry().find(assetTypeName);
-    if (it != PluginRegistry().end()) {
-      it->second.reset();
-      PluginRegistry().erase(it);
-    }
-  }
-
   static AssetPluginInterface * GetPlugin(const std::string & assetTypeName) {
     auto it = PluginRegistry().find(assetTypeName);
     if (it != PluginRegistry().end())
@@ -80,7 +70,7 @@ public:
     return nullptr;
   }
 
-private:
+protected:
   static std::unordered_map<std::string, std::unique_ptr<AssetRegistry::AssetPluginInterface>> & PluginRegistry();
 };
 

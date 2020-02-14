@@ -171,6 +171,19 @@ TEST_F(AssetSerializerTest, Load_UnknownAssetType) {
   ASSERT_EQ(errorMsg, "Error loading filename.xml: Unknown asset type 'DummyAsset' while parsing filename.xml");
 }
 
+class TestItemRegistry: public AssetRegistry<TestItem> {
+public:
+  static void UnregisterPlugin(
+    std::string const & assetTypeName)
+  {
+    auto it = PluginRegistry().find(assetTypeName);
+    if (it != PluginRegistry().end()) {
+      it->second.reset();
+      PluginRegistry().erase(it);
+    }
+  }
+};
+
 class PluginRegisterHandler {
   /*
   * Simple class for registering and unregistering an asset plugin.
@@ -180,17 +193,17 @@ class PluginRegisterHandler {
       std::function<std::shared_ptr<TestItem>(void*)> newFromDOM = TestItem::NewFromDOM,
       std::function<std::shared_ptr<TestItem>(const std::string &ref)> newInvalid = TestItem::NewInvalid) {
       auto assetPlugin =
-        std::unique_ptr<AssetRegistry<TestItem>::AssetPluginInterface>(
-          new AssetRegistry<TestItem>::AssetPluginInterface(
+        std::unique_ptr<TestItemRegistry::AssetPluginInterface>(
+          new TestItemRegistry::AssetPluginInterface(
             newFromDOM,
             newInvalid
           )
         );
-      AssetRegistry<TestItem>::PluginRegistrar assetPluginRegistrar(
+      TestItemRegistry::PluginRegistrar assetPluginRegistrar(
         "TestItemAsset", std::move(assetPlugin));
     }
     ~PluginRegisterHandler() {
-      AssetRegistry<TestItem>::UnregisterPlugin("TestItemAsset");
+      TestItemRegistry::UnregisterPlugin("TestItemAsset");
     }
 };
 
