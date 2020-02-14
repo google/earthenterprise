@@ -39,8 +39,8 @@ class TestItem : public TestItemStorage {
     static string xmlFilename;
     static bool newInvalidCalled;
     int val;
-    uint64 timestamp; 
-    time_t filesize;
+    time_t timestamp; 
+    uint64 filesize;
     string name;
     TestItem() : val(nextValue++), name("TestItem") {}
     string GetName() const {
