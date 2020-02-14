@@ -158,7 +158,6 @@ TEST_F(AssetSerializerTest, Load_InvalidXMLDoc) {
 
 TEST_F(AssetSerializerTest, Load_NoDocElement) {
   geDocPtr = std::unique_ptr<GEDocument>(new GECreatedDocument(""));
-  ASSERT_FALSE(geDocPtr == nullptr);
   string errorMsg = RunLoadForException(serializer);
   ASSERT_EQ(errorMsg, "Error loading filename.xml: No document element");
 }
@@ -166,7 +165,6 @@ TEST_F(AssetSerializerTest, Load_NoDocElement) {
 TEST_F(AssetSerializerTest, Load_UnknownAssetType) {
   string docElement = "DummyAsset";
   geDocPtr = CreateEmptyDocument(docElement);
-  ASSERT_FALSE(geDocPtr == nullptr);
   string errorMsg = RunLoadForException(serializer);
   ASSERT_EQ(errorMsg, "Error loading filename.xml: Unknown asset type 'DummyAsset' while parsing filename.xml");
 }
