@@ -58,24 +58,24 @@ class AssetSerializerLocalXML : public AssetSerializerInterface<AssetType>
                 .arg(ToQString(tagname), ToQString(filename)));
             }
           } catch (const std::exception &e) {
-          AssetThrowPolicy::WarnOrThrow
-            (kh::tr("Error loading %1: %2")
-            .arg(ToQString(filename), QString::fromUtf8(e.what())));
+            AssetThrowPolicy::WarnOrThrow
+              (kh::tr("Error loading %1: %2")
+              .arg(ToQString(filename), QString::fromUtf8(e.what())));
           } catch (...) {
-              AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to load ")
-                    + filename);
+            AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to load ")
+                  + filename);
           }
         } else {
-            AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to read ")
-                  + filename);
+          AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to read ")
+                + filename);
         }
       } else {
-          AssetThrowPolicy::WarnOrThrow(kh::tr("No such file: ") + filename);
+        AssetThrowPolicy::WarnOrThrow(kh::tr("No such file: ") + filename);
       }
 
       if (!result) {
         notify(NFY_DEBUG, "Creating placeholder for bad asset %s",
-              boundref.c_str());
+          boundref.c_str());
         // Use SourceAssetImpl since AssetImpl is pure virtual
         result = AssetFactory::CreateNewInvalid<AssetType>(
           AssetType::GetPlaceholderAssetRegistryKey(), boundref
@@ -100,39 +100,39 @@ class AssetSerializerLocalXML : public AssetSerializerInterface<AssetType>
 
       std::unique_ptr<GEDocument> doc = CreateEmptyDocument(asset->GetName());
       if (!doc) {
-          notify(NFY_WARN,
-                "Unable to create empty document: %s", asset->GetName().c_str());
-          return false;
+        notify(NFY_WARN,
+              "Unable to create empty document: %s", asset->GetName().c_str());
+        return false;
       }
       bool status = false;
       try {
-          khxml::DOMElement *top = doc->getDocumentElement();
-          if (top) {
-              const AssetStorageType &storage = *asset;
-              ToElement(top, storage);
-              asset->SerializeConfig(top);
-              status = WriteDocument(doc.get(), filename);
+        khxml::DOMElement *top = doc->getDocumentElement();
+        if (top) {
+          const AssetStorageType &storage = *asset;
+          ToElement(top, storage);
+          asset->SerializeConfig(top);
+          status = WriteDocument(doc.get(), filename);
 
-              if (!status && khExists(filename)) {
-                  khUnlink(filename);
-              }
-          } else {
-              notify(NFY_WARN, "Unable to create document element %s",
-                    filename.c_str());
+          if (!status && khExists(filename)) {
+            khUnlink(filename);
           }
+        } else {
+          notify(NFY_WARN, "Unable to create document element %s",
+                filename.c_str());
+        }
       } catch (const khxml::XMLException& toCatch) {
-          notify(NFY_WARN, "Error saving %s: %s",
-                 filename.c_str(), khxml::XMLString::transcode(toCatch.getMessage()));
+        notify(NFY_WARN, "Error saving %s: %s",
+                filename.c_str(), khxml::XMLString::transcode(toCatch.getMessage()));
       } catch (const khxml::DOMException& toCatch) {
-          notify(NFY_WARN, "Error saving %s: %s",
-                 filename.c_str(), khxml::XMLString::transcode(toCatch.msg));
+        notify(NFY_WARN, "Error saving %s: %s",
+                filename.c_str(), khxml::XMLString::transcode(toCatch.msg));
       } catch (const std::exception &e) {
-          notify(NFY_WARN, "%s while saving %s", e.what(), filename.c_str());
+        notify(NFY_WARN, "%s while saving %s", e.what(), filename.c_str());
       } catch (...) {
-          notify(NFY_WARN, "Unable to save %s", filename.c_str());
+        notify(NFY_WARN, "Unable to save %s", filename.c_str());
       }
-      return status;
-    }
+    return status;
+  }
 };
 
 
