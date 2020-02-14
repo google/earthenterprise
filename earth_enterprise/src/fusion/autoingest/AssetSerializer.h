@@ -6,7 +6,6 @@
 #include "common/khxml/khdom.h"
 #include "autoingest/.idl/storage/AssetDefs.h"
 #include <khxml/khdom.h>
-using namespace khxml;
 #include <autoingest/AssetThrowPolicy.h>
 #include <autoingest/AssetFactory.h>
 
@@ -48,7 +47,7 @@ class AssetSerializerLocalXML : public AssetSerializerInterface<AssetType>
         std::unique_ptr<GEDocument> doc = ReadXMLDocument<AssetType>(filename);
         if (doc) {
           try {
-            DOMElement *top = doc->getDocumentElement();
+            khxml::DOMElement *top = doc->getDocumentElement();
             if (!top)
               throw khException(kh::tr("No document element"));
             std::string tagname = FromXMLStr(top->getTagName());
