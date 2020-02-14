@@ -28,7 +28,7 @@ public:
 
   class AssetPluginInterface {
     /*
-    * Collection of plugin-specific versions of functions and data.
+    * Collection of plugin-specific versions of functions.
     */
     public:
       using new_from_dom_func = std::function<std::shared_ptr<AssetType>(void*)>;
@@ -70,14 +70,16 @@ public:
     return nullptr;
   }
 
+  using PluginMap = std::unordered_map<std::string, std::unique_ptr<AssetRegistry<AssetType>::AssetPluginInterface>>;
+
 protected:
-  static std::unordered_map<std::string, std::unique_ptr<AssetRegistry::AssetPluginInterface>> & PluginRegistry();
+  static PluginMap & PluginRegistry();
 };
 
 template <class AssetType>
-std::unordered_map<std::string, std::unique_ptr<typename AssetRegistry<AssetType>::AssetPluginInterface>> & AssetRegistry<AssetType>::PluginRegistry()
+typename AssetRegistry<AssetType>::PluginMap & AssetRegistry<AssetType>::PluginRegistry()
 {
-  static std::unordered_map<std::string, std::unique_ptr<AssetRegistry<AssetType>::AssetPluginInterface>> reg;
+  static PluginMap reg;
   return reg;
 }
 
