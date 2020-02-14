@@ -333,7 +333,7 @@ namespace AssetFactory
                                                        const std::vector<SharedString>& inputs_,
                                                        const khMetaData& meta_,
                                                        const ConfigType& config_,
-                                                      const std::vector<CachedInputType>& cachedinputs_)
+                                                       const std::vector<CachedInputType>& cachedinputs_)
   {
       using AssetHandleType = typename MutableDerivedVersionHandleType::Impl::MutableAssetType;
       std::vector<SharedString> inputarg { inputs_ }, boundInputs(inputarg.size());
