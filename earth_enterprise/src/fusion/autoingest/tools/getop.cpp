@@ -111,8 +111,8 @@ main(int argc, char *argv[])
       usage(progname);
     if (help)
       usage(progname);
-    if (delay <= 0)
-      usage(progname, "--delay must be positive");
+    if (delay < 0)
+      usage(progname, "--delay must not be less than zero");
     if (timeout < 0)
       usage(progname, "--timeout must not be less than zero");
 
@@ -181,8 +181,10 @@ main(int argc, char *argv[])
           pclose(tputFILE);
         }
 
-        // clear screen
-        (void)clearscreen.System();
+        if (delay) {
+          // clear screen when looping
+          (void)clearscreen.System();
+        }
 
         // emit khtop header
         outline("FUSION VERSION: %s", GEE_VERSION);
@@ -252,7 +254,11 @@ main(int argc, char *argv[])
         outline("Number of strings cached: %u", taskLists.str_store_size);
 
       }
-      sleep(delay);
+
+      if (delay)
+        sleep(delay);
+      else
+        break;
     };
   } catch (const std::exception &e) {
     notify(NFY_FATAL, "%s", e.what());

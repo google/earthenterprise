@@ -22,6 +22,10 @@ Release notes: Open GEE 5.3.4
       :ref:`retry tasks that fail <retry-failed-tasks>`, which allows
       Fusion to recover from intermittent failures.
 
+      **Option to limit cache pruning**.
+      Users can now limit how often the asset and asset version caches are pruned
+      by use of an experimental option, :ref:`PrunePercent <prune-percent>`.
+
       .. rubric:: Supported Platforms
 
       The Open GEE 5.3.4 release is supported on 64-bit versions of the
@@ -51,12 +55,20 @@ Release notes: Open GEE 5.3.4
          * - Number
            - Description
            - Resolution
-         * - 1604
-           - WMS capability doesn't work with reverse proxies
-           - It now works, as long as the protocol (http vs https) matches
          * - 1579
            - Add an option to misc.xml for disabling minification
            - An option was added to control minification.
+         * - 1604
+           - WMS capability doesn't work with reverse proxies
+           - It now works, as long as the protocol (http vs https) matches
+         * - 1634
+           - On Windows, Portable Server locks up if the user enters "Select"
+             Mode by clicking inside the command terminal.
+           - Quick Edit mode is now disabled by default in the Portable Server
+             command window.
+         * - 1642
+           - Getop does not have an option to display status and exit
+           - A ``--delay 0`` option was added
 
       .. rubric:: Known Issues
 
