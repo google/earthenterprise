@@ -5,8 +5,9 @@
 #include "common/khxml/khxml.h"
 #include "common/khxml/khdom.h"
 #include "autoingest/.idl/storage/AssetDefs.h"
-#include "AssetFactory.h"
-#include "AssetThrowPolicy.h"
+#include <khxml/khdom.h>
+#include <autoingest/AssetThrowPolicy.h>
+#include <autoingest/AssetFactory.h>
 
 template<class AssetType>
 class AssetSerializerInterface {
@@ -37,7 +38,7 @@ class AssetSerializerLocalXML : public AssetSerializerInterface<AssetType>
   public:
     virtual AssetPointerType<AssetType> Load(const std::string &boundref)
     {
-      std::string filename = AssetType::Filename(boundref);
+      std::string filename = AssetType::XMLFilename(boundref);
       AssetPointerType<AssetType> result;
       time_t timestamp = 0;
       std::uint64_t filesize = 0;
@@ -100,39 +101,39 @@ class AssetSerializerLocalXML : public AssetSerializerInterface<AssetType>
 
       std::unique_ptr<GEDocument> doc = CreateEmptyDocument(asset->GetName());
       if (!doc) {
-          notify(NFY_WARN,
-                "Unable to create empty document: %s", asset->GetName().c_str());
-          return false;
+        notify(NFY_WARN,
+              "Unable to create empty document: %s", asset->GetName().c_str());
+        return false;
       }
       bool status = false;
       try {
-          khxml::DOMElement *top = doc->getDocumentElement();
-          if (top) {
-              const AssetStorageType &storage = *asset;
-              ToElement(top, storage);
-              asset->SerializeConfig(top);
-              status = WriteDocument(doc.get(), filename);
+        khxml::DOMElement *top = doc->getDocumentElement();
+        if (top) {
+          const AssetStorageType &storage = *asset;
+          ToElement(top, storage);
+          asset->SerializeConfig(top);
+          status = WriteDocument(doc.get(), filename);
 
-              if (!status && khExists(filename)) {
-                  khUnlink(filename);
-              }
-          } else {
-              notify(NFY_WARN, "Unable to create document element %s",
-                    filename.c_str());
+          if (!status && khExists(filename)) {
+            khUnlink(filename);
           }
+        } else {
+          notify(NFY_WARN, "Unable to create document element %s",
+                filename.c_str());
+        }
       } catch (const khxml::XMLException& toCatch) {
-          notify(NFY_WARN, "Error saving %s: %s",
-                 filename.c_str(), khxml::XMLString::transcode(toCatch.getMessage()));
+        notify(NFY_WARN, "Error saving %s: %s",
+                filename.c_str(), khxml::XMLString::transcode(toCatch.getMessage()));
       } catch (const khxml::DOMException& toCatch) {
-          notify(NFY_WARN, "Error saving %s: %s",
-                 filename.c_str(), khxml::XMLString::transcode(toCatch.msg));
+        notify(NFY_WARN, "Error saving %s: %s",
+                filename.c_str(), khxml::XMLString::transcode(toCatch.msg));
       } catch (const std::exception &e) {
-          notify(NFY_WARN, "%s while saving %s", e.what(), filename.c_str());
+        notify(NFY_WARN, "%s while saving %s", e.what(), filename.c_str());
       } catch (...) {
-          notify(NFY_WARN, "Unable to save %s", filename.c_str());
+        notify(NFY_WARN, "Unable to save %s", filename.c_str());
       }
-      return status;
-    }
+    return status;
+  }
 };
 
 

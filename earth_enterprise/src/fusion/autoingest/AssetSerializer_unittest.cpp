@@ -47,7 +47,7 @@ class TestItem : public TestItemStorage {
       return name;
     }
     void SerializeConfig(khxml::DOMElement*) const {}
-    static std::string Filename(const std::string &boundref) {
+    static std::string XMLFilename(const std::string &boundref) {
       return xmlFilename;
     }
     static std::shared_ptr<TestItem> NewFromDOM(void *e) {
@@ -73,11 +73,11 @@ class TestXMLException : public XMLException {
 };
 
 // Define a TestItem-specific version of GetFileInfo for testing
-static std::uint64_t getFileInfoSize;
+static uint64 getFileInfoSize;
 static time_t getFileInfoTime;
 static bool getFileInfoReturnValue;
 template<>
-bool GetFileInfo<TestItem>(const std::string &fname, std::uint64_t &size, time_t &mtime) {
+bool GetFileInfo<TestItem>(const std::string &fname, uint64 &size, time_t &mtime) {
   size = getFileInfoSize;
   mtime = getFileInfoTime;
   return getFileInfoReturnValue;

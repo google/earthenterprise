@@ -81,8 +81,6 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
     return WorkingDir() + fname;
   }
 
-  // implemented in LoadAny.cpp
-  static std::shared_ptr<AssetVersionImpl> Load(const std::string &boundref);
 
   virtual std::string GetName() const {   // Returns the name of the asset version, e.g., "CombinedRPAssetVersion"
     assert(false);

@@ -21,7 +21,6 @@
 #include <common/khMetaData.h>
 #include "AssetVersionRef.h"
 #include "AssetRegistry.h"
-#include "autoingest/.idl/AssetStorage.h"
 
 // The goal of this namspace is to have a single place in the code where all
 // asset creation is handled.
@@ -55,8 +54,8 @@ namespace AssetFactory
       return nullptr;
   }
 
-  template<class FindType>
-  static FindType Find(const std::string & ref, const AssetDefs::Type & type, const std::string & subtype)
+  template<class AssetType>
+  AssetType Find(const std::string & ref, const AssetDefs::Type & type)
   {
     assert(type != AssetDefs::Invalid);
     try {
@@ -288,14 +287,13 @@ namespace AssetFactory
     return asset->MyUpdate(needed);
   }
 
-  template <class AssetType, class CachedInputType>
-  typename AssetType::MutableVersionD ReuseOrMakeAndUpdate(
-        const std::string &ref_,
-        AssetDefs::Type type_,
-        const std::vector<SharedString>& inputs_,
-        const khMetaData &meta_,
-        const typename AssetType::Config& config_,
-        const std::vector<CachedInputType>& cachedinputs_)
+  template <class MutableDerivedVersionHandleType, class ConfigType, class VersionDType, class CachedInputType>
+  MutableDerivedVersionHandleType ReuseOrMakeAndUpdate(const std::string& ref_,
+                                                       AssetDefs::Type type_,
+                                                       const std::vector<SharedString>& inputs_,
+                                                       const khMetaData& meta_,
+                                                       const ConfigType& config_,
+                                                       const std::vector<CachedInputType>& cachedinputs_)
   {
     // make a copy since actualinputarg is macro substituted, so begin() &
     // end() could be called on different temporary objects
@@ -363,13 +361,15 @@ namespace AssetFactory
     return asset->MyUpdate(needed, extra);
   }
 
-  template <class AssetType>
-  typename AssetType::MutableVersionD ReuseOrMakeAndUpdateSubAsset(
-        const std::string &parentAssetRef,
-        AssetDefs::Type type_,
-        const std::string &basename,
-        const khMetaData &meta_,
-        const typename AssetType::Config& config_)
+  template <class MutableDerivedVersionHandleType, class ConfigType, class VersionDType, class CachedInputType>
+  MutableDerivedVersionHandleType ReuseOrMakeAndUpdateSubAsset(
+          const std::string& parentName,
+          AssetDefs::Type type_,
+          const std::string& baseName,
+          const std::vector<SharedString>& inputs_,
+          const khMetaData& meta_,
+          const ConfigType& config_,
+          const std::vector<CachedInputType>& cachedinputs_)
   {
     auto ref_ =  AssetDefs::SubAssetName(
         parentAssetRef, basename, type_, AssetType::SUBTYPE);

@@ -152,10 +152,6 @@ for plugin in plugins:
     env.Depends('plugins/'+plugin+'Asset.os', 'plugins/'+plugin+'Asset.h')
     env.Depends('plugins/'+plugin+'Asset.os', 'plugins/'+plugin+'Asset.cpp')
 
-env.Command('LoadAny.cpp',
-            [ 'LoadAnyGen.pl' ],
-            [ "$SOURCE --cppfile $TARGET " + string.join(plugins, ' ') ])
-
 env.Command('ReadOnlyFromStorage.cpp',
             [ 'FromStorageGen.pl' ],
             [ "$SOURCE --cppfile $TARGET " + string.join(plugins, ' ') ])
@@ -173,7 +169,7 @@ env.Command('khAssetManagerProxy.cpp',
 commoncpp = [
     'AssetVersionRef.cpp', 'khFusionURI.cpp',
     'Asset.cpp', 'AssetVersion.cpp',
-    'Misc.cpp', 'AvailId.cpp', 'LoadAny.cpp', 'khVolumeManager.cpp',
+    'Misc.cpp', 'AvailId.cpp', 'khVolumeManager.cpp',
     'FusionConnection.cpp', 'AssetChangeListener.cpp',
     'AssetDefsExtra.cpp', 'VectorProjectConfigImpl.cpp',
     'LayerConfigImpl.cpp', 'MapProjectConfigImpl.cpp',
