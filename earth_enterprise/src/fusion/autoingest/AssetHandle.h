@@ -139,9 +139,6 @@ class DerivedAssetHandle_ : public virtual Base_ {
   typedef typename Base::HandleType HandleType;
 
  public:
-  virtual HandleType Load(const std::string &boundref) const {
-    return HandleType(Impl::Load(boundref));
-  }
 
   virtual bool Valid(const HandleType & entry) const { 
     // we have to check if it maps to Impl* since somebody

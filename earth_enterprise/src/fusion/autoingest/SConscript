@@ -150,10 +150,6 @@ for plugin in plugins:
                 [ 'AssetGenPublicCpp.pl', 'AssetGen.pm', src ],
                 [ "${SOURCES[0]} ${SOURCES[2]} $TARGET" ])
 
-env.Command('LoadAny.cpp',
-            [ 'LoadAnyGen.pl' ],
-            [ "$SOURCE --cppfile $TARGET " + string.join(plugins, ' ') ])
-
 env.Command('ReadOnlyFromStorage.cpp',
             [ 'FromStorageGen.pl' ],
             [ "$SOURCE --cppfile $TARGET " + string.join(plugins, ' ') ])
@@ -171,7 +167,7 @@ env.Command('khAssetManagerProxy.cpp',
 commoncpp = [
     'AssetVersionRef.cpp', 'khFusionURI.cpp',
     'Asset.cpp', 'AssetVersion.cpp',
-    'Misc.cpp', 'AvailId.cpp', 'LoadAny.cpp', 'khVolumeManager.cpp',
+    'Misc.cpp', 'AvailId.cpp', 'khVolumeManager.cpp',
     'FusionConnection.cpp', 'AssetChangeListener.cpp',
     'AssetDefsExtra.cpp', 'VectorProjectConfigImpl.cpp',
     'LayerConfigImpl.cpp', 'MapProjectConfigImpl.cpp',
