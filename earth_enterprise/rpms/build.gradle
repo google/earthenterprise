@@ -527,9 +527,6 @@ task openGeeServerRpm(type: GeeRpm, dependsOn: openGeeServerInitScripts) {
     requires('opengee-postgis', '2.3.9', GREATER | EQUAL)
     conflicts('opengee-postgis', '2.0', LESS )
     conflicts('opengee-postgis', '2.4', GREATER | EQUAL)
-    // `opengee-server` bundles Apache, and Apache requires utilities from the
-    // `initscripts` package:
-    requires('initscripts')
     requires('python-unittest2')
     // The WMS Service requires PIL, which is not automatically detected:
     requires('python-imaging')
