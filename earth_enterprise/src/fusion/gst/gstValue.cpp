@@ -623,7 +623,7 @@ void gstValue::set(const char* buf, int len) {
       if (codec_) {
         *qstring_ = codec_->toUnicode(ExtractString(buf, len).c_str());
       } else {
-        *qstring_ = QString(ExtractString(buf, len, &need_codec_));
+        *qstring_ = QString(ExtractString(buf, len, &need_codec_).c_str());
       }
       break;
   }
@@ -1162,16 +1162,16 @@ QString gstValue::ValueAsUnicode() const {
       string.setNum(num_data_.uiVal);
       break;
     case gstTagInt64:
-      string = ValueAsString();
+      string = ValueAsString().c_str();
       break;
     case gstTagUInt64:
-      string = ValueAsString();
+      string = ValueAsString().c_str();
       break;
     case gstTagFloat:
-      string = ValueAsString();
+      string = ValueAsString().c_str();
       break;
     case gstTagDouble:
-      string = ValueAsString();
+      string = ValueAsString().c_str();
       break;
   }
 

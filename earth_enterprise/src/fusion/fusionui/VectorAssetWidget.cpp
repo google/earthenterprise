@@ -12,18 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-#include <qfiledialog.h>
-#include <qdatetimeedit.h>
-#include <qspinbox.h>
-#include <qtextcodec.h>
-#include <qcombobox.h>
-#include <qlistbox.h>
-#include <qcheckbox.h>
-#include <qmessagebox.h>
-#include <qlabel.h>
-#include <qinputdialog.h>
-
+#include <Qt/qobjectdefs.h>
+#include <Qt/qdatetimeedit.h>
+#include <Qt/qspinbox.h>
+#include <Qt/qtextcodec.h>
+#include <Qt/q3listbox.h>
+#include <Qt/qcheckbox.h>
+#include <Qt/qmessagebox.h>
+#include <Qt/qlabel.h>
+#include <Qt/qinputdialog.h>
+#include<Qt/q3combobox.h>
 #include "common/khFileUtils.h"
 #include "common/khException.h"
 #include "common/khConstants.h"
@@ -73,7 +71,7 @@ struct StdConversion {
 const int NumStdConversions =
     static_cast<int>(sizeof(StdConversions) / sizeof(StdConversions[0]));
 
-const QString custom_conversion(QObject::tr("Other..."));
+const QString custom_conversion(kh::tr("Other..."));
 
 
 // Force feature type conversion enum.
@@ -131,10 +129,10 @@ VectorAssetWidget::VectorAssetWidget(QWidget* parent, AssetBase* base)
   {
     gstProviderSet providers;
     if (!providers.Load()) {
-      QMessageBox::critical(this, tr("Error"),
-                            tr("Unable to load providers\n") +
-                            tr("Check console for more information"),
-                            tr("OK"), 0, 0, 0);
+      QMessageBox::critical(this, kh::tr("Error"),
+                            kh::tr("Unable to load providers\n") +
+                            kh::tr("Check console for more information"),
+                            kh::tr("OK"), 0, 0, 0);
     } else {
       provider_combo->insertStringList(providers.GetNames());
       // grab ids now in case the user changes them before
@@ -177,19 +175,19 @@ VectorAssetWidget::VectorAssetWidget(QWidget* parent, AssetBase* base)
                                   acquisition_date_day);
 }
 
-QFileDialog* VectorAssetWidget::FileDialog() {
+Q3FileDialog* VectorAssetWidget::FileDialog() {
   if (!file_dialog_) {
-    file_dialog_ = new QFileDialog(this);
-    file_dialog_->setMode(QFileDialog::ExistingFiles);
-    file_dialog_->setCaption(tr("Open Source"));
-    if (khDirExists(Preferences::DefaultVectorPath().latin1())) {
+    file_dialog_ = new Q3FileDialog(this);
+    file_dialog_->setMode(Q3FileDialog::ExistingFiles);
+    file_dialog_->setCaption(kh::tr("Open Source"));
+    if (khDirExists(Preferences::DefaultVectorPath().toUtf8().constData())) {
       file_dialog_->setDir(Preferences::DefaultVectorPath());
     } else {
       QMessageBox::critical(
-          this, tr("Error"),
-          tr("The default vector source path is not valid.\n"
+          this, kh::tr("Error"),
+          kh::tr("The default vector source path is not valid.\n"
              "Please update your preferences."),
-          tr("OK"), 0, 0, 0);
+          kh::tr("OK"), 0, 0, 0);
     }
 
     file_dialog_->addFilter(
@@ -239,8 +237,8 @@ void VectorAssetWidget::CustomConversion(const QString& str) {
 
   bool ok;
   double conv = QInputDialog::getDouble(
-                  tr("Custom Unit Conversion Factor"),
-                  tr("Enter multiplier to convert source values to meters:"),
+                  kh::tr("Custom Unit Conversion Factor"),
+                  kh::tr("Enter multiplier to convert source values to meters:"),
                   1.0, -2147483647, 2147483647, 16, &ok, this);
 
   if (ok) {
@@ -319,7 +317,7 @@ bool VectorAssetWidget::GetDoNotFixInvalidGeometriesCheck() const {
 
 void VectorAssetWidget::Prefill(const VectorProductImportRequest& request) {
   acquisition_date_wrapper_->SetDate(0, 0, 0);
-  std::string date = request.meta.GetValue("sourcedate");
+  std::string date = request.meta.GetValue("sourcedate").toUtf8().constData();
   if (!date.empty()) {
     acquisition_date_wrapper_->SetDate(date);
   }
@@ -366,7 +364,7 @@ void VectorAssetWidget::Prefill(const VectorProductImportRequest& request) {
        src != request.sources.sources.end(); ++src) {
     khFusionURI furi(src->uri);
     if (furi.Valid()) {
-      source_list->insertItem(furi.NetworkPath());
+      source_list->insertItem(furi.NetworkPath().c_str());
     } else {
       source_list->insertItem(src->uri.c_str());
     }
@@ -394,7 +392,7 @@ void VectorAssetWidget::Prefill(const VectorProductImportRequest& request) {
 
 void VectorAssetWidget::AssembleEditRequest(
     VectorProductImportRequest* request) {
-  request->config.encoding = codec_combo->currentText().latin1();
+  request->config.encoding = codec_combo->currentText().toUtf8().constData();
   if (request->config.encoding == "<none>")
     request->config.encoding = "";
 
@@ -440,21 +438,26 @@ void VectorAssetWidget::AssembleEditRequest(
   }
 
   request->sources.clear();
+  std::string msg;
   for (int row = 0; row < source_list->numRows(); row++) {
-    std::string filename = source_list->text(row).latin1();
+    std::string filename = source_list->text(row).toUtf8().constData();
     SourceConfig::AddResult result = request->sources.AddFile(filename);
     switch (result) {
+      case SourceConfig::NonVolume:
+          msg.clear();
+          msg = filename;
+          msg += kh::tr(" doesn't reside on a known volume.\n").toUtf8().constData();
+          msg += " You can move your asset files to a known volume, or create a new volume\n";
+          msg += " that contains their current location using geconfigureassetroot command.";
+          throw khException(msg);
       case SourceConfig::FileOK:
         break;
       case SourceConfig::CantStat:
-        throw khException(tr("Unable to get file information for ")
-                          + filename + "\n" +
-                          khErrnoException::errorString(errno));
-      case SourceConfig::NonVolume:
-        throw khException(filename + tr(" doesn't reside on a known volume.\n") +
-                         " You can move your asset files to a known volume, or create a new volume\n" +
-			 " that contains their current location using geconfigureassetroot command.");
- 
+        msg.clear();
+        msg = kh::tr("Unable to get file information for ").toUtf8().constData();
+        msg += filename + "\n";
+        msg += khErrnoException::errorString(errno).toUtf8().constData();
+        throw khException(msg);
     }
   }
   bool ok_north = false;
@@ -468,7 +471,7 @@ void VectorAssetWidget::AssembleEditRequest(
   std::string boundary_error;
   if (!ok_north) {
     boundary_error += "Bad double value for north '";
-    boundary_error += north_boundary->text().latin1();
+    boundary_error += north_boundary->text().toUtf8().constData();
     boundary_error += "'\n";
   } else if (request->config.north_boundary < -90 ||
              request->config.north_boundary > 90    ) {
@@ -476,7 +479,7 @@ void VectorAssetWidget::AssembleEditRequest(
   }
   if (!ok_south) {
     boundary_error += "Bad double value for south '";
-    boundary_error += south_boundary->text().latin1();
+    boundary_error += south_boundary->text().toUtf8().constData();
     boundary_error += "'\n";
   } else if (request->config.south_boundary < -90 ||
              request->config.south_boundary > 90    ) {
@@ -489,7 +492,7 @@ void VectorAssetWidget::AssembleEditRequest(
   const std::string::size_type boundary_error_length = boundary_error.length();
   if (!ok_east) {
     boundary_error += "Bad double value for east '";
-    boundary_error += east_boundary->text().latin1();
+    boundary_error += east_boundary->text().toUtf8().constData();
     boundary_error += "'\n";
   } else if (request->config.east_boundary < -180 ||
              request->config.east_boundary > 180    ) {
@@ -497,7 +500,7 @@ void VectorAssetWidget::AssembleEditRequest(
   }
   if (!ok_west) {
     boundary_error += "Bad double value for west '";
-    boundary_error += west_boundary->text().latin1();
+    boundary_error += west_boundary->text().toUtf8().constData();
     boundary_error += "'\n";
   } else if (request->config.west_boundary < -180 ||
              request->config.west_boundary > 180    ) {

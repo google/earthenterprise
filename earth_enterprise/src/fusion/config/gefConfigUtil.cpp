@@ -105,7 +105,7 @@ void LoadSystemrc(Systemrc &systemrc, bool override_cache) {
       systemrc = cached_systemrc = tmp;
     }
   } else {
-    throw khException(kh::tr("'%1' is missing").arg(Systemrc::Filename()));
+    throw khException(kh::tr("'%1' is missing").arg(Systemrc::Filename().c_str()));
   }
 }
 
@@ -129,7 +129,7 @@ void LoadVolumesOrThrow(const std::string &assetroot, VolumeDefList &volumes) {
     geAssetRoot::Filename(assetroot, geAssetRoot::VolumeFile);
   if (!khExists(volumefname) || !volumes.Load(volumefname)) {
     throw khException(kh::tr("Unable to load volumes for %1")
-                      .arg(assetroot));
+                      .arg(assetroot.c_str()));
   }
 }
 
@@ -139,7 +139,7 @@ void SaveVolumesOrThrow(const std::string &assetroot,
     geAssetRoot::Filename(assetroot, geAssetRoot::VolumeFile);
   if (!volumes.Save(volumefname)) {
     throw khException(kh::tr("Unable to save volumes for %1")
-                      .arg(assetroot));
+                      .arg(assetroot.c_str()));
   }
   (void)khChmod(volumefname, geAssetRoot::FilePerms(geAssetRoot::VolumeFile));
 }

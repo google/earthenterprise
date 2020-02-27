@@ -210,19 +210,19 @@ int main(int argc, char *argv[]) {
       if (index == std::string::npos) {
         throw khException(kh::tr("'%1' isn't a valid volume specifier.\n"
                              "Use --addvolume <volume_name>:<dir>")
-                      .arg(addvolume));
+                      .arg(addvolume.c_str()));
       }
       std::string volume_name = addvolume.substr(0, index);
       std::string volume_directory = addvolume.substr(index+1);
       if (volume_name.empty()) {
         throw khException(kh::tr("'%1' is missing a volume name.\n"
                              "Use --addvolume <volume_name>:<dir>")
-                      .arg(addvolume));
+                      .arg(addvolume.c_str()));
       }
       if (volume_directory.empty()) {
         throw khException(kh::tr("'%1' is missing a volume directory.\n"
                              "Use --addvolume <volume_name>:<dir>")
-                      .arg(addvolume));
+                      .arg(addvolume.c_str()));
       }
       AddVolume(status, volume_name, volume_directory);
     }
@@ -249,7 +249,7 @@ void ValidateAssetRootForConfigure(const AssetRootStatus &status,
   QString UseNewMsg = kh::tr(
       "%1 isn't an existing assetroot.\n"
       "You must use --new to make a new one.")
-      .arg(status.assetroot_);
+      .arg(status.assetroot_.c_str());
 
   if (status.assetroot_.empty()) {
     throw khException(kh::tr("No asset root has been specified."));
@@ -274,7 +274,7 @@ void ValidateAssetRootForConfigure(const AssetRootStatus &status,
         "%1 already exists.\n"
         "But it does not contain a valid asset root.\n"
         "Do you want to create a new asset root there")
-                                  .arg(status.assetroot_), 'N')) {
+                                  .arg(status.assetroot_.c_str()), 'N')) {
       throw khException(kh::tr("Aborted by user"));
     }
 
@@ -286,7 +286,7 @@ void ValidateAssetRootForConfigure(const AssetRootStatus &status,
     throw khException(
         kh::tr("%1 is an existing assetroot.\n"
                "You cannot configure it with --new.")
-        .arg(status.assetroot_));
+        .arg(status.assetroot_.c_str()));
   }
 
 
@@ -294,9 +294,9 @@ void ValidateAssetRootForConfigure(const AssetRootStatus &status,
     throw khException(kh::tr(
         "%1 is currently defined as the master for %2.\n"
         "You must run geconfigureassetroot from %3")
-                      .arg(status.master_host_)
-                      .arg(status.assetroot_)
-                      .arg(status.master_host_));
+                      .arg(status.master_host_.c_str())
+                      .arg(status.assetroot_.c_str())
+                      .arg(status.master_host_.c_str()));
   }
 
   if (!isfixmaster && status.SoftwareNeedsUpgrade()) {
@@ -435,9 +435,9 @@ void listCurrentVolumes(VolumeDefList *const voldefs, std::vector<std::string> v
 
 void ListHostVolumes(const std::string &host, VolumeDefList *const voldefs) {
   std::vector<std::string> volnames;
-  for (VolumeDefList::VolumeDefMap::const_iterator v = voldefs->volumedefs.begin(); v != voldefs->volumedefs.end(); ++v) {
-    if (v->second.host == host) {
-      volnames.push_back(v->first);
+  for (const auto& v : voldefs->volumedefs) {
+    if (v.second.host == host) {
+      volnames.push_back(v.first);
     }
   }
   listCurrentVolumes(voldefs, volnames);
@@ -456,14 +456,13 @@ void ListVolumes(const AssetRootStatus &status) {
 void EditHostVolumes(const std::string &host, VolumeDefList *const voldefs) {
   std::string assetroot;
   std::vector<std::string> volnames;
-  for (VolumeDefList::VolumeDefMap::const_iterator v =
-         voldefs->volumedefs.begin();
-       v != voldefs->volumedefs.end(); ++v) {
-    if (v->first == geAssetRoot::VolumeName) {
-      assetroot = v->second.netpath;
+
+  for (const auto& v : voldefs->volumedefs) {
+    if (v.first == geAssetRoot::VolumeName) {
+      assetroot = v.second.netpath;
     }
-    if (v->second.host == host) {
-      volnames.push_back(v->first);
+    if (v.second.host == host) {
+      volnames.push_back(v.first);
     }
   }
 
@@ -549,7 +548,7 @@ void AddVolume(const AssetRootStatus &status,
           voldefs.volumedefs.find(volume_name);
   if (found != voldefs.volumedefs.end()) {
     throw khException(kh::tr("A volume named '%1' already exists")
-                  .arg(volume_name));
+                  .arg(volume_name.c_str()));
   }
 
   // Check for a unique netpath.
@@ -558,7 +557,7 @@ void AddVolume(const AssetRootStatus &status,
        v != voldefs.volumedefs.end(); ++v) {
     if (v->second.netpath == volume_dir) {
        throw khException(kh::tr("A netpath named '%1' already exists")
-                .arg(volume_name));
+                .arg(volume_name.c_str()));
     }
   }
 
@@ -589,7 +588,7 @@ void RemoveVolume(const AssetRootStatus &status,
           voldefs.volumedefs.find(volume_name);
   if (found == voldefs.volumedefs.end()) {
     throw khException(kh::tr("The volume named '%1' does not exist")
-                  .arg(volume_name));
+                  .arg(volume_name.c_str()));
   }
 
   // Update the Volume def.

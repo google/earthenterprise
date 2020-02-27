@@ -218,7 +218,7 @@ bool MaybeSetUrlFromEta(const EtaStruct& root, const char* struct_name,
   string field_name = string(struct_name) + ".host";
   string host;
   MaybeReadFromNamedChild(root, field_name.c_str(), &host);
-  url.setHost(host);
+  url.setHost(host.c_str());
 
   if (!url.isValid()) {
     return false;
@@ -232,14 +232,14 @@ bool MaybeSetUrlFromEta(const EtaStruct& root, const char* struct_name,
   field_name = string(struct_name) + ".path";
   string path;
   MaybeReadFromNamedChild(root, field_name.c_str(), &path);
-  url.setPath(host);
+  url.setPath(host.c_str());
 
   field_name = string(struct_name) + ".secureSS";
   bool secure = false;
   MaybeReadFromNamedChild(root, field_name.c_str(), &secure);
   url.setProtocol(secure ? "https" : "http");
 
-  AddStringToProto(url.toString(), output);
+  AddStringToProto(url.toString().toStdString(), output);
 
   return true;
 }
@@ -460,7 +460,7 @@ void ParseStyleMaps(const EtaDocument& eta_doc, dbroot::DbRootProto* dbroot) {
 }
 
 const string ConvertToValidUTF8(const string& input) {
-  return std::string(QString(input).utf8());
+  return std::string(QString(input.c_str()).utf8());
 }
 
 
@@ -1085,9 +1085,9 @@ void ParseSearchTabs(const EtaDocument& eta_doc,
 
     // Read URL fragments and build URL.
     QUrl url;
-    url.setHost(reader.GetString("host", ""));
+    url.setHost(reader.GetString("host", "").c_str());
     url.setPort(reader.GetInt("port", 0));
-    url.setPath(reader.GetString("path", ""));
+    url.setPath(reader.GetString("path", "").c_str());
     url.setProtocol(reader.GetBool("secure", false) ? "https" : "http");
     if (url.isValid()) {
       search_tab->set_base_url(url.toString());
@@ -1098,22 +1098,22 @@ void ParseSearchTabs(const EtaDocument& eta_doc,
                         string(url.protocol()).c_str() );
     }
 
-    string viewport_prefix = reader.GetString("viewportPrefix", "");
+    string viewport_prefix = reader.GetString("viewportPrefix", "").c_str();
     if (!viewport_prefix.empty()) {
       search_tab->set_viewport_prefix(viewport_prefix);
     }
 
     // First input box.
-    label = reader.GetString("inputLabel1", "");
-    string query = reader.GetString("inputQueryVerb1", "");
-    string query_prepend = reader.GetString("inputQueryPrepend1", "");
+    label = reader.GetString("inputLabel1", "").c_str();
+    string query = reader.GetString("inputQueryVerb1", "").c_str();
+    string query_prepend = reader.GetString("inputQueryPrepend1", "").c_str();
 
     MaybeAddInputBox(search_tab, label, query, query_prepend);
 
     // Second input box.
-    label = reader.GetString("inputLabel2", "");
-    query = reader.GetString("inputQueryVerb2", "");
-    query_prepend = reader.GetString("inputQueryPrepend2", "");
+    label = reader.GetString("inputLabel2", "").c_str();
+    query = reader.GetString("inputQueryVerb2", "").c_str();
+    query_prepend = reader.GetString("inputQueryPrepend2", "").c_str();
 
     MaybeAddInputBox(search_tab, label, query, query_prepend);
   }
@@ -1210,7 +1210,7 @@ void ParseValidDatabases(const EtaDocument& eta_doc,
 
       // Build url from host (which can be a full url) and port.
       QUrl url;
-      url.setHost(host);
+      url.setHost(host.c_str());
       if (port != 0) {
         url.setPort(port);
       }

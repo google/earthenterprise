@@ -81,7 +81,7 @@ AssetDefs::NormalizeAssetName(const std::string &name,
   }
   if (assetname[0] == '/') {
     throw khException(kh::tr("Invalid asset name '%1'. Starts with /")
-                      .arg(assetname));
+                      .arg(assetname.c_str()));
   }
 
   if (!AssetDefs::ValidateAssetName(assetname)) {
@@ -92,7 +92,7 @@ AssetDefs::NormalizeAssetName(const std::string &name,
                              "space character.\n\n"
                              "For pre-existing assets, please see the\n"
                              "GEE Admin Guide for steps to resolve the\n"
-                             "issue(s).\n").arg(assetname));
+                             "issue(s).\n").arg(assetname.c_str()));
   }
   //
   // Remove double(or multiple) fwd slashes(//) from pathname
@@ -164,7 +164,7 @@ AssetDefs::GuessAssetRef(const std::string &name)
   }
   if (name[0] == '/') {
     throw khException(kh::tr("Invalid asset name '%1'. Starts with '/'")
-                      .arg(name));
+                      .arg(name.c_str()));
   }
 
   // check to see if it's already fully qualified
@@ -188,7 +188,7 @@ AssetDefs::GuessAssetRef(const std::string &name)
   {
     DIR *dir = opendir(path.c_str());
     if (!dir) {
-      throw khException(kh::tr("No such asset: '%1'").arg(name));
+      throw khException(kh::tr("No such asset: '%1'").arg(name.c_str()));
     }
     khDIRCloser closer(dir);
 
@@ -206,10 +206,10 @@ AssetDefs::GuessAssetRef(const std::string &name)
     }
   }
   if (matches.empty()) {
-    throw khException(kh::tr("No such asset: '%1'").arg(name));
+    throw khException(kh::tr("No such asset: '%1'").arg(name.c_str()));
   } else if (matches.size() > 1) {
-    throw khException(kh::tr("Asset '%1' is ambiguous:\n").arg(name) +
-                      join(matches.begin(), matches.end(), "\n"));
+    throw khException(kh::tr("Asset '%1' is ambiguous:\n").arg(name.c_str()) +
+                      join(matches.begin(), matches.end(), "\n").c_str());
   }
   return matches[0];
 }

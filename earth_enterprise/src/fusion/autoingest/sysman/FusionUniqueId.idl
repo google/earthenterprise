@@ -65,7 +65,7 @@ class FusionUniqueId {
     if (id+1 == 0) {
       throw khException(
           kh::tr("INTERNAL ERROR: Fusion unique %1 id rolled back to 0")
-          .arg(ToString(category)));
+          .arg(ToString(category).c_str()));
     }
 
     ID_MAP[category] = id+1;
@@ -78,7 +78,7 @@ class FusionUniqueId {
       throw khException(
           kh::tr("Unable to save %1\n"
                  "Check system manager logfile for more details.")
-          .arg(filename));
+          .arg(filename.c_str()));
     }
     (void)khChmod(filename, geAssetRoot::FilePerms(geAssetRoot::UniqueIdFile));
     return id;
@@ -98,9 +98,9 @@ class FusionUniqueId {
     time_t mtime;
     if (!khGetFileInfo(filename, size, mtime)) {
       throw khException(msg
-                        .arg(assetroot)
+                        .arg(assetroot.c_str())
                         .arg(kh::tr("missing"))
-                        .arg(assetroot));
+                        .arg(assetroot.c_str()));
     }
 
     FusionUniqueId storage;
@@ -110,7 +110,7 @@ class FusionUniqueId {
       // But that's OK since we just want the default in this case anyway
     } else if (!storage.Load(filename)) {
       throw khException(msg
-                        .arg(assetroot)
+                        .arg(assetroot.c_str())
                         .arg(kh::tr("broken")));
     }
 
@@ -123,7 +123,7 @@ class FusionUniqueId {
                                                  geAssetRoot::UniqueIdFile);
     if (!khMakeEmptyFile(idfname)) {
       throw khException(kh::tr("Unable to create %1")
-                        .arg(idfname));
+                        .arg(idfname.c_str()));
     }
     (void)khChmod(idfname, geAssetRoot::FilePerms(geAssetRoot::UniqueIdFile));
   }
@@ -133,7 +133,7 @@ class FusionUniqueId {
                                                  geAssetRoot::UniqueIdFile);
     if (!Save(filename)) {
       throw khException(kh::tr("Unable to save %1")
-                        .arg(filename));
+                        .arg(filename.c_str()));
     }
     (void)khChmod(filename, geAssetRoot::FilePerms(geAssetRoot::UniqueIdFile));
   }

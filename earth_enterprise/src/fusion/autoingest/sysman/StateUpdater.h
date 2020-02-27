@@ -31,9 +31,7 @@ class StateUpdater
 {
   private:
     class UnsupportedException {};
-    class VisitorBase;
     class SetStateVisitor;
-    class SetBlockingStateVisitor;
 
     StorageManagerInterface<AssetVersionImpl> * const storageManager;
     khAssetManagerInterface * const assetManager;
@@ -74,7 +72,7 @@ class StateUpdater
       storageManager(sm), assetManager(am),
       waitingListeners(AssetDefs::Waiting), inProgressParents(AssetDefs::InProgress) {}
     StateUpdater() : StateUpdater(&AssetVersion::storageManager(), &theAssetManager) {}
-    virtual void SetAndPropagateState(
+    virtual void SetStateForRefAndDependents(
         const SharedString & ref,
         AssetDefs::State newState,
         std::function<bool(AssetDefs::State)> updateStatePredicate);

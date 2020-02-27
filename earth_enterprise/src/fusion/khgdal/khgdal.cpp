@@ -285,10 +285,10 @@ ValidateGDALCreateFormat(const std::string &fmt)
   GDALDriverH driver = GDALGetDriverByName(fmt.c_str());
   QString msg;
   if (!driver) {
-    msg = kh::tr("%1 is not a recognized format").arg(fmt);
+    msg = kh::tr("%1 is not a recognized format").arg(fmt.c_str());
   } else if ((GDALGetMetadataItem(driver, GDAL_DCAP_CREATE, 0) == 0) &&
              (GDALGetMetadataItem(driver, GDAL_DCAP_CREATECOPY, 0) == 0)) {
-    msg = kh::tr("%1 format does not support writing").arg(fmt);
+    msg = kh::tr("%1 format does not support writing").arg(fmt.c_str());
   } else {
     return;
   }
@@ -304,13 +304,13 @@ LoadPRJFile(const std::string &fname, OGRSpatialReference &ogrSRS)
     try {
       InterpretSRSString(buf, ogrSRS);
     } catch (const std::exception &e) {
-      throw khException(kh::tr("%1: %2").arg(fname).arg(e.what()));
+      throw khException(kh::tr("%1: %2").arg(fname.c_str()).arg(e.what()));
     } catch (...) {
-      throw khException(kh::tr("%1: Unknown exception in LoadPRJFile").arg(fname));
+      throw khException(kh::tr("%1: Unknown exception in LoadPRJFile").arg(fname.c_str()));
     }
   } else {
     // more specific message will already have been emitted with NFY_WARN
-    throw khException(kh::tr("Unable to read %1").arg(fname));
+    throw khException(kh::tr("Unable to read %1").arg(fname.c_str()));
   }
 }
 

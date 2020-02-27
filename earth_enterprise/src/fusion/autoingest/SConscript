@@ -152,6 +152,10 @@ for plugin in plugins:
     env.Depends('plugins/'+plugin+'Asset.os', 'plugins/'+plugin+'Asset.h')
     env.Depends('plugins/'+plugin+'Asset.os', 'plugins/'+plugin+'Asset.cpp')
 
+env.Command('LoadAny.cpp',
+            [ 'LoadAnyGen.pl' ],
+            [ "$SOURCE --cppfile $TARGET " + string.join(plugins, ' ') ])
+
 env.Command('ReadOnlyFromStorage.cpp',
             [ 'FromStorageGen.pl' ],
             [ "$SOURCE --cppfile $TARGET " + string.join(plugins, ' ') ])
@@ -169,7 +173,7 @@ env.Command('khAssetManagerProxy.cpp',
 commoncpp = [
     'AssetVersionRef.cpp', 'khFusionURI.cpp',
     'Asset.cpp', 'AssetVersion.cpp',
-    'Misc.cpp', 'AvailId.cpp', 'khVolumeManager.cpp',
+    'Misc.cpp', 'AvailId.cpp', 'LoadAny.cpp', 'khVolumeManager.cpp',
     'FusionConnection.cpp', 'AssetChangeListener.cpp',
     'AssetDefsExtra.cpp', 'VectorProjectConfigImpl.cpp',
     'LayerConfigImpl.cpp', 'MapProjectConfigImpl.cpp',
@@ -201,7 +205,7 @@ geautoingest = env.sharedLib('geautoingest',
                                            'khAssetManagerProxy.cpp',
                                            env['FUSIONVER'] ],
                              LIBS=['gesearchtabs', 'gemiscconfig', 'genet',
-                                   'geindex_r', 'geutil', 'qt-mt']
+                                   'geindex_r', 'geutil', 'QtCore','QtGui']
                              )
 
 
@@ -223,11 +227,11 @@ env.test('AssetDefsExtra_unittest',
 
 env.test('AssetSerializer_unittest',
          'AssetSerializer_unittest.cpp',
-          LIBS=['gecommon', 'gexml', 'qt-mt', 'xerces-c', 'gtest'])
+          LIBS=['gecommon', 'gexml', 'QtCore','QtGui',  'xerces-c', 'gtest'])
 
 env.test('AssetFactory_unittest',
          'AssetFactory_unittest.cpp',
-         LIBS=['gecommon', 'gtest', 'geautoingest', 'qt-mt', 'xerces-c'])
+         LIBS=['gecommon', 'gtest', 'geautoingest', 'QtCore','QtGui', 'xerces-c'])
 
 env.test('JsUtils_unittest',
          'JsUtils_unittest.cpp',
@@ -235,7 +239,7 @@ env.test('JsUtils_unittest',
 
 env.test('StorageManager_unittest',
          'StorageManager_unittest.cpp',
-         LIBS=['gecommon', 'gemiscconfig', 'gtest', 'qt-mt', 'xerces-c', 'gexml'])
+         LIBS=['gecommon', 'gemiscconfig', 'gtest', 'QtCore', 'QtGui', 'xerces-c', 'gexml'])
 
 env.test('StorageManagerAssetHandle_unittest',
          'StorageManagerAssetHandle_unittest.cpp',

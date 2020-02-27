@@ -296,7 +296,7 @@ void LayerItem::update() {
   QImage img;
   img = thePixmapManager->GetPixmap(gstIcon(layer_->Icon(), layer_->IconType()),
                                     PixmapManager::LayerIcon);
-  setPixmap(0, img);
+  setPixmap(0, QPixmap(img));
 }
 
 ProjectManager* LayerItem::myProjectManager() const {
@@ -413,7 +413,7 @@ LayerGroupItem::LayerGroupItem(QListView* parent, gstLayer* l)
   QImage img;
   img = thePixmapManager->GetPixmap(gstIcon(layer_->Icon(), layer_->IconType()),
                                     PixmapManager::LayerIcon);
-  setPixmap(0, img);
+  setPixmap(0, QPixmap(img));
 }
 
 LayerGroupItem::LayerGroupItem(QListViewItem* parent, gstLayer* l)
@@ -425,7 +425,7 @@ LayerGroupItem::LayerGroupItem(QListViewItem* parent, gstLayer* l)
   QImage img;
   img = thePixmapManager->GetPixmap(gstIcon(layer_->Icon(), layer_->IconType()),
                                     PixmapManager::LayerIcon);
-  setPixmap(0, img);
+  setPixmap(0, QPixmap(img));
 }
 
 LayerGroupItem::~LayerGroupItem() {
@@ -452,7 +452,7 @@ void LayerGroupItem::update() {
   QImage img;
   img = thePixmapManager->GetPixmap(gstIcon(layer_->Icon(), layer_->IconType()),
                                     PixmapManager::LayerIcon);
-  setPixmap(0, img);
+  setPixmap(0, QPixmap(img));
 }
 
 bool LayerGroupItem::isChildOf(QListViewItem* item) {
@@ -893,7 +893,7 @@ bool ProjectManager::UuidSanityCheck(QListViewItem* item,
         new_uuid = create_uuid_string();
       }
     } else if (old_uuid != "" && old_uuid != new_uuid) {
-      if (FindUuid(firstChild(), item, new_uuid)) {
+      if (FindUuid(firstChild(), item, new_uuid.c_str())) {
         QMessageBox::critical(
           this, tr("Error"),
           tr("This Universal Unique ID  already exists for another asset.\n"
@@ -917,7 +917,7 @@ bool ProjectManager::UuidSanityCheck(QListViewItem* item,
           new_uuid = old_uuid;
         }
       }
-    } else if (FindUuid(firstChild(), item, new_uuid)) {
+    } else if (FindUuid(firstChild(), item, new_uuid.c_str())) {
       QMessageBox::critical(
           this, tr("Error"),
           tr("This Universal Unique ID  already exists for another asset.\n"
@@ -1683,9 +1683,9 @@ bool ProjectManager::applyQueries(gstLayer* layer) {
   progress_dialog.show();
 
   while (query_progress.GetState() == gstProgress::Busy) {
-    progress_dialog.setProgress(query_progress.Val());
+    progress_dialog.setValue(query_progress.Val());
     qApp->processEvents();
-    if (progress_dialog.wasCancelled()) {
+    if (progress_dialog.wasCanceled()) {
       query_progress.SetInterrupted();
     }
   }

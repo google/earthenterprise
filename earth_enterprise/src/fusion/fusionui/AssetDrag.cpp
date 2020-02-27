@@ -27,11 +27,10 @@ const char kSep = ':';
 //   QTextDrag::setText("boundary.kvasset")
 //   QTextDrag::setSubtype("Vector:Product")
 
-
 AssetDrag::AssetDrag(QWidget* drag_source, Asset asset)
   : QTextDrag(drag_source)
 {
-  setText(asset->GetRef().toString());
+  setText(asset->GetRef().toString().c_str());
   std::string subtype = ToString(asset->type) + kSep + asset->subtype;
   setSubtype(subtype.c_str());
 }

@@ -81,6 +81,7 @@ $config{"Asset.h"}
 class ${name}AssetImpl : public virtual AssetImpl
 {
     friend class DerivedAssetHandle_<Asset, ${name}AssetImpl>;
+    friend std::shared_ptr<AssetImpl> AssetImpl::Load(const std::string &);
 public:
     typedef $config Config;
     Config config;
@@ -95,10 +96,10 @@ public:
     ${name}AssetImpl(const AssetStorage &storage, const Config& config_)
         : AssetImpl(storage), config(config_) { }
 
+protected:
     static std::shared_ptr<${name}AssetImpl> NewFromDOM(void *e);
     static std::shared_ptr<${name}AssetImpl> NewInvalid(const std::string &ref);
 
-protected:
     // implemented in ReadOnlyFromStorage.cpp and
     // sysman/SysManFromStorage.cpp
     static std::shared_ptr<${name}AssetImpl>
@@ -117,7 +118,7 @@ $config{"${name}AssetImpl"}
 class ${name}AssetVersionImpl : public virtual ${base}AssetVersionImpl
 {
     friend class DerivedAssetHandle_<AssetVersion, ${name}AssetVersionImpl>;
-    friend class AssetVersionImpl;
+    friend std::shared_ptr<AssetVersionImpl> AssetVersionImpl::Load(const std::string &);
 
 public:
     typedef $config Config;
@@ -138,10 +139,11 @@ public:
           ${base}AssetVersionImpl(),
           config(config_) { }
 
+protected:
+
     static std::shared_ptr<${name}AssetVersionImpl> NewFromDOM(void *e);
     static std::shared_ptr<${name}AssetVersionImpl> NewInvalid(const std::string &ref);
 
-protected:
     // implemented in ReadOnlyFromStorage.cpp and
     // sysman/SysManFromStorage.cpp
     static std::shared_ptr<${name}AssetVersionImpl>

@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-#include <qtextedit.h>
-#include <qregexp.h>
-#include <qmessagebox.h>
+#include <Qt/qtextedit.h>
+#include <Qt/qregexp.h>
+#include <Qt/qmessagebox.h>
 
 #include "BalloonStyleText.h"
 

@@ -26,7 +26,9 @@ SConscript('site-icons/SConscript')
 # Qt (moc & uic) generates code with unused functions and unused values
 # so add command line options to suppress those warnings
 env = env.Clone()
-env.Append( CXXFLAGS = ['-Wno-unused-function', '-Wno-unused-value'],
+env.Append( CXXFLAGS = ['-Wno-unused-function', '-Wno-unused-value',
+                        '-DQT3_SUPPORT',
+                        '-DQDOC','-DQ_DECLARE_TR_FUNCTIONS'],
             CPPPATH = ['#fusion/fusionui',
                        Dir('.ui')],              # for generated files
             LINKFLAGS=['-L/usr/lib/x86_64-linux-gnu'],
@@ -44,7 +46,7 @@ env.Append( CXXFLAGS = ['-Wno-unused-function', '-Wno-unused-value'],
                   'gif',
                   'jpeg',
                   'freetype',
-                  'qt-mt',
+                  'QtCore', 'QtGui', 'Qt3Support', 'QtOpenGL',
                   'xerces-c',
                   'GL'])
 
@@ -134,6 +136,8 @@ hmocfiles = [
   'AssetVersionActions.h',
   'WidgetControllers.h',
   'TextStyle.h',
+  'StyleSave.h',
+  'TextPreviewLabel.h',
   'FieldGeneratorController.h',
   'MapLayer.h',
   'ScriptFilterController.h',

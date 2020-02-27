@@ -341,7 +341,7 @@ ffio::IndexWriter::IndexWriter(Type type_,
   filebuf = mmap(0, totalIndexSize, PROT_READ|PROT_WRITE,
                  MAP_SHARED, fd, 0);
   if (filebuf == MAP_FAILED) {
-    throw khErrnoException(kh::tr("Unable to mmap %1").arg(filename));
+    throw khErrnoException(kh::tr("Unable to mmap %1").arg(filename.c_str()));
   }
   munmapGuard.DelayedSet(filebuf, totalIndexSize);
 
@@ -454,19 +454,19 @@ ffio::IndexReader::IndexReader(const std::string &filename)
   // open the file, read & verify the header
   fileHandle = ::open(filename.c_str(), O_RDONLY);
   if (fileHandle.fd() < 0) {
-    throw khErrnoException(kh::tr("Unable to open index %1").arg(filename));
+    throw khErrnoException(kh::tr("Unable to open index %1").arg(filename.c_str()));
   }
   IndexStorage::Header header;
   if (!khReadAll(fileHandle.fd(), &header, sizeof(header))) {
     throw khErrnoException(kh::tr("Unable to read index header %1").
-                           arg(filename));
+                           arg(filename.c_str()));
   }
   header.LittleEndianToHost();
 
   if (memcmp(header.magic, IndexStorage::Header::themagic,
              sizeof(header.magic)) != 0) {
     throw khException(kh::tr("Corrupted index header %1").
-                      arg(filename));
+                      arg(filename.c_str()));
   }
 
   if (header.indexFormatVersion == 1) {
@@ -480,7 +480,7 @@ ffio::IndexReader::IndexReader(const std::string &filename)
   } else {
     throw khException(kh::tr
                       ("Unsupported index format version (%1) for %2").
-                      arg(header.indexFormatVersion).arg(filename));
+                      arg(header.indexFormatVersion).arg(filename.c_str()));
   }
 #if 0
   printf("indexFormatVersion = %d\n", header.indexFormatVersion);
@@ -495,7 +495,7 @@ ffio::IndexReader::IndexReader(const std::string &filename)
   filebuf = mmap(0, totalIndexSize, PROT_READ,
                  MAP_PRIVATE, fileHandle.fd(), 0);
   if (filebuf == MAP_FAILED) {
-    throw khErrnoException(kh::tr("Unable to mmap %1").arg(filename));
+    throw khErrnoException(kh::tr("Unable to mmap %1").arg(filename.c_str()));
   }
   munmapGuard.DelayedSet(filebuf, totalIndexSize);
 
@@ -522,14 +522,14 @@ ffio::IndexReader::IndexReader(const std::string &filename)
     if (rec.levelNum > MaxFusionLevel) {
       throw khException(kh::tr
                         ("Corrupted index header (levelNum) %1: level %2").
-                        arg(filename).arg(rec.levelNum));
+                        arg(filename.c_str()).arg(rec.levelNum));
     }
     if (rec.tileRecordsOffset +
         rec.totalStoredTiles * sizeof(IndexStorage::TileRecord) >
         totalIndexSize) {
       throw khException(kh::tr
                         ("Corrupted index header (totalIndexSize) %1: level %2").
-                        arg(filename).arg(rec.levelNum));
+                        arg(filename.c_str()).arg(rec.levelNum));
     }
     // interpret the LevelRecord to build my LevelInfo object
     levelvec.push_back

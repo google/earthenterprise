@@ -20,9 +20,10 @@
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
-
-#include <qtextedit.h>
-#include <qscrollview.h>
+#include <Qt/q3textedit.h>
+//#include <qtextedit.h>
+#include <Qt/q3scrollview.h>
+//#include <qscrollview.h>
 
 #include "AssetLog.h"
 
@@ -35,6 +36,8 @@
 #define MIN(a,b) ((a<b) ? a : b)
 #endif
 
+using QTextEdit = Q3TextEdit;
+using QScrollView = Q3ScrollView;
 AssetLog::LogMap AssetLog::openlogs;
 
 void

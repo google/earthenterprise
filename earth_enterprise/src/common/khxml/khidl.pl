@@ -669,6 +669,7 @@ sub EmitMemberReader
     my $mtname = $member->{tagname};
     
     if (defined($member->{loaddefault})) {
+        print $fh, "// hello world 1";
         if ($member->{xmlattr}) {
             print $fh $prefix, "GetAttributeOrDefault(elem, \"$mtname\", $obj.$mname, $member->{loaddefault});\n";
         } elsif ($member->{xmlbody}) {
@@ -680,9 +681,15 @@ sub EmitMemberReader
         } elsif ($member->{xmlskiptag}) {
             print $fh $prefix, "FromElement(elem, $obj.$mname);\n";
         } else {
-            print $fh $prefix, "GetElementOrDefault(elem, \"$mtname\", $obj.$mname, $member->{loaddefault});\n";
+            my $temp=$member->{loaddefault};
+            if (index($temp, "Qt::") != -1)
+            {
+               $temp = "static_cast<QColor>(".$temp.")";
+            }
+            print $fh $prefix, "GetElementOrDefault(elem, \"$mtname\", $obj.$mname, $temp);\n";
         }
     } else {
+        print $fh, "//hello world 2";
         if ($member->{xmlattr}) {
             print $fh $prefix, "GetAttribute(elem, \"$mtname\", $obj.$mname);\n";
         } elsif ($member->{xmlbody}) {
@@ -1591,7 +1598,8 @@ sub EmitDOMWriter
 bool
 $class->{qualname}::Save(const std::string &file) const throw()
 {
-    std::unique_ptr<GEDocument> doc = CreateEmptyDocument("$class->{TagName}");
+    //std::unique_ptr<GEDocument>
+    auto doc = CreateEmptyDocument("$class->{TagName}");
     if (!doc) {
         notify(NFY_WARN, "Unable to create empty document: $class->{TagName}");
         return false;
@@ -1629,7 +1637,8 @@ EOF
 bool
 $class->{qualname}::SaveToString(std::string &buf, const std::string &ref) const throw()
 {
-    std::unique_ptr<GEDocument> doc = CreateEmptyDocument("$class->{TagName}");
+    //std::unique_ptr<GEDocument>
+    auto doc = CreateEmptyDocument("$class->{TagName}");
     if (!doc) return false;
     bool status = false;
     try {
@@ -1753,7 +1762,7 @@ sub EmitDOMReader
 	print $fh "{\n";
     } else {
 	print $fh "void\n";
-	print $fh "FromElement(DOMElement *elem, $class->{qualname} &self)\n";
+        print $fh "FromElement(DOMElement *elem, $class->{qualname} &self)\n";
 	print $fh "{\n";
     }
 
@@ -1803,11 +1812,11 @@ sub EmitDOMReader
 	}
     }
     print $fh "}\n\n";
-    
+
     if (HasDeprecatedMembers($class)) {
 	# little wrapper to avoid all pieces needing to pass depmembers
 	print $fh "void\n";
-	print $fh "FromElement(DOMElement *elem, $class->{qualname} &self) {\n";
+        print $fh "FromElement(DOMElement *elem, $class->{qualname} &self) {\n";
 	print $fh $indent, "$class->{qualname}::DeprecatedMembers depmembers;\n";
 	print $fh $indent, "FromElementWithDeprecated(elem, self, depmembers);\n";
 	print $fh "}\n";
@@ -1835,7 +1844,8 @@ bool
 $class->{qualname}::Load(const std::string &file) throw()
 {
     bool result = false;
-    std::unique_ptr<GEDocument> doc = ReadDocument(file);
+    //std::unique_ptr<GEDocument>
+    auto doc = ReadDocument(file);
     if (doc) {
         try {
             DOMElement *docelem = doc->getDocumentElement();
@@ -1869,7 +1879,8 @@ $class->{qualname}::LoadFromString(const std::string &buf,
     const std::string &ref) throw()
 {
     bool result = false;
-    std::unique_ptr<GEDocument> doc = ReadDocumentFromString(buf, ref);
+    //std::unique_ptr<GEDocument>
+    auto doc = ReadDocumentFromString(buf, ref);
     if (doc) {
         try {
             DOMElement *docelem = doc->getDocumentElement();
@@ -1929,7 +1940,7 @@ sub EmitEnumDOMReader
       print $fh $indent, $indent, "return;\n";
     }
     print $fh $indent, "}\n";
-    print $fh $indent, "throw khException(kh::tr(\"Invalid string '%1' for enum '%2'\").arg(enumStr).arg(\"$enum->{qualname}\"));\n";
+    print $fh $indent, "throw khException(kh::tr(\"Invalid string '%1' for enum '%2'\").arg(enumStr.c_str()).arg(\"$enum->{qualname}\"));\n";
     print $fh "}\n\n";
 }
 

@@ -23,9 +23,9 @@
 
 AboutFusion::AboutFusion(QWidget* parent)
     : AboutFusionBase(parent, 0, false, 0) {
-  setCaption(GetFusionProductName());
+  setCaption(GetFusionProductName().c_str());
 
-  fusionNameLabel->setText(GetFusionProductName());
+  fusionNameLabel->setText(GetFusionProductName().c_str());
   versionLabel->setText(QString("%1").arg(GEE_LONG_VERSION));
 
   buildDateLabel->setText(QString("%1").arg(BUILD_DATE));

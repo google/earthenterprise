@@ -18,15 +18,16 @@
 #ifndef KHSRC_FUSION_FUSIONUI_SOURCEFILEDIALOG_H__
 #define KHSRC_FUSION_FUSIONUI_SOURCEFILEDIALOG_H__
 
-#include <qfiledialog.h>
-#include <qstringlist.h>
-#include <qcheckbox.h>
+#include <Qt/qobjectdefs.h>
+#include <Qt/q3filedialog.h>
+#include <Qt/qstringlist.h>
+#include <Qt/qcheckbox.h>
 #include <fusionui/.idl/filehistory.h>
 
 class QComboBox;
 class FileHistory;
 
-class SourceFileDialog : public QFileDialog {
+class SourceFileDialog : public Q3FileDialog {
   Q_OBJECT
 
  public:
@@ -45,7 +46,7 @@ class SourceFileDialog : public QFileDialog {
   static SourceFileDialog* onlyone;
 };
 
-class DatabaseIndexDialog : public QFileDialog {
+class DatabaseIndexDialog : public Q3FileDialog {
   Q_OBJECT
 
  public:
@@ -60,7 +61,7 @@ class DatabaseIndexDialog : public QFileDialog {
 };
 
 
-class AssetDialog : public QFileDialog {
+class AssetDialog : public Q3FileDialog {
   Q_OBJECT
 
  public:
@@ -76,7 +77,7 @@ class AssetDialog : public QFileDialog {
   QStringList dirMatchList;
 };
 
-class OpenWithHistoryDialog : public QFileDialog {
+class OpenWithHistoryDialog : public Q3FileDialog {
   Q_OBJECT
 
  public:

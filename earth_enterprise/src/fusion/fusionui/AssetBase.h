@@ -18,19 +18,20 @@
 #ifndef KHSRC_FUSION_FUSIONUI_ASSETBASE_H__
 #define KHSRC_FUSION_FUSIONUI_ASSETBASE_H__
 
-#include <qvariant.h>
-#include <qmainwindow.h>
+#include <QtGui/qmenudata.h>
+#include <Qt/qaction.h>
+#include <Qt/qvariant.h>
+#include <Qt/qmainwindow.h>
 #include <khMetaData.h>
+#include <Qt/q3popupmenu.h>
 #include <autoingest/.idl/storage/AssetDefs.h>
 
 class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
 class QSpacerItem;
-class QAction;
-class QActionGroup;
 class QToolBar;
-class QPopupMenu;
+using QPopupMenu = Q3PopupMenu;
 class QLabel;
 class QFrame;
 

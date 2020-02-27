@@ -18,7 +18,7 @@
 Import('env')
 
 env = env.Clone()
-env.Append( CXXFLAGS = ['-Wno-unused-function', '-Wno-unused-value'],
+env.Append( CXXFLAGS = ['-Wno-unused-function', '-Wno-unused-value', '-DQT3_SUPPORT'],
             CPPPATH = ['#fusion/mtjtools/histogram'])
 
 hmocfiles = [ 'application.h' ]
@@ -32,6 +32,6 @@ scroll = env.executable('scroll',
                          'linreg.cpp',
                          'application.cpp'
                          ] + qtobjs,
-                        LIBS=['gehistogram', 'gdal', 'geutil', 'gecommon', 'qt-mt', 'geos'])
+                        LIBS=['gehistogram', 'gdal', 'geutil', 'gecommon', 'QtCore', 'QtGui', 'Qt3Support', 'geos'])
 
 env.install('tools_bin', [scroll])

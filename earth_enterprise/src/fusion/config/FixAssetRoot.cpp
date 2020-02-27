@@ -37,12 +37,12 @@ void FixDirPerms(const std::string &fname, unsigned int mode) {
     if (sb.st_mode != mode) {
       if (!khChmod(fname, mode)) {
         throw khException(kh::tr("Unable to chmod %1 0x%2")
-                          .arg(fname).arg(mode, 8));
+                          .arg(fname.c_str()).arg(mode, 8));
       }
     }
   } else if (!khMakeDir(fname, mode)) {
     throw khException(kh::tr("Unable to mkdir %1")
-                      .arg(fname));
+                      .arg(fname.c_str()));
   } else {
     // just in case the umask clobberd the perms.
     khChmod(fname, mode);
@@ -54,7 +54,7 @@ void FixFilePerms(const std::string &fname, unsigned int mode) {
     if (sb.st_mode != mode) {
       if (!khChmod(fname, mode)) {
         throw khException(kh::tr("Unable to chmod %1 0x%2")
-                          .arg(fname).arg(mode, 8));
+                          .arg(fname.c_str()).arg(mode, 8));
       }
     }
   }
@@ -92,12 +92,12 @@ void PromptUserAndFixOwnership(const std::string &assetroot, bool noprompt) {
 "This tool will now run the following command:\n"
 "    chown -R %4:%5 %6\n"
 "Depending on the size of your asset root, this could take a while.\n")
-                .arg(assetroot)
-                .arg(Systemrc::FusionUsername())
-                 .arg(Systemrc::UserGroupname())
-                .arg(Systemrc::FusionUsername())
-                .arg(Systemrc::UserGroupname())
-                .arg(assetroot)
+                .arg(assetroot.c_str())
+                .arg(Systemrc::FusionUsername().c_str())
+                 .arg(Systemrc::UserGroupname().c_str())
+                .arg(Systemrc::FusionUsername().c_str())
+                .arg(Systemrc::UserGroupname().c_str())
+                .arg(assetroot.c_str())
                 ;
 
   if (!noprompt) {
@@ -137,14 +137,14 @@ MakeDirWithAttrs(const std::string &dirname, mode_t mode, const geUserId &user)
   if (stat64(dirname.c_str(), &sb) < 0) {
     if (!khMakeDir(dirname, mode)) {
       throw khException(kh::tr("Unable to mkdir %1")
-                        .arg(dirname));
+                        .arg(dirname.c_str()));
     } else {
       // just incase the umask clobbered the perms
       khChmod(dirname, mode);
     }
     if (stat64(dirname.c_str(), &sb) < 0) {
       throw khException(kh::tr("Unable to stat %1")
-                        .arg(dirname));
+                        .arg(dirname.c_str()));
     }
 
   }
@@ -154,19 +154,19 @@ MakeDirWithAttrs(const std::string &dirname, mode_t mode, const geUserId &user)
     if (::chown(dirname.c_str(), user.Uid(), user.Gid()) < 0) {
       throw khErrnoException(
           kh::tr("Unable to 'chown %1:%2 %3'")
-          .arg(user.Uid()).arg(user.Gid()).arg(dirname));
+          .arg(user.Uid()).arg(user.Gid()).arg(dirname.c_str()));
     }
 
     if (stat64(dirname.c_str(), &sb) < 0) {
       throw khException(kh::tr("Unable to stat %1")
-                        .arg(dirname));
+                        .arg(dirname.c_str()));
     }
   }
 
   if ((sb.st_mode != mode) && (::chmod(dirname.c_str(), mode) < 0)) {
     throw khErrnoException(
         kh::tr("Unable to 'chmod 0%1 %2'")
-        .arg(mode, 0, 8).arg(dirname));
+        .arg(mode, 0, 8).arg(dirname.c_str()));
   }
 
   return user_changed;
@@ -182,7 +182,7 @@ bool MakeSpecialDirs(const std::string &assetroot,
   // make any parents of the asset root w/ more restrictive permissisons
   if (!khEnsureParentDir(assetroot, 0755)) {
     throw khException(kh::tr("Cannot create parent directories for %1")
-                      .arg(assetroot));
+                      .arg(assetroot.c_str()));
   }
 
   // now make/fix the other dirs

@@ -15,11 +15,16 @@
 
 
 #include <khConstants.h>
-#include <qmime.h>
-#include <qdragobject.h>
+#include <QtGui/QMimeSource>
+#include <Qt/q3mimefactory.h>
+#include <Qt/qobject.h>
+#include <Qt/q3dragobject.h>
 #include <map>
 
 #include "AssetDisplayHelper.h"
+
+using QImageDrag = Q3ImageDrag;
+using QMimeSourceFactory = Q3MimeSourceFactory;
 
 AssetDisplayHelper::AssetKey AssetDisplayHelper::MakeKey(
     AssetDefs::Type t, const std::string &st) {

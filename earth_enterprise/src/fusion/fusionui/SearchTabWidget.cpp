@@ -14,14 +14,16 @@
 // limitations under the License.
 
 
-#include <qcursor.h>
-#include <qpopupmenu.h>
-#include <qinputdialog.h>
-#include <qmessagebox.h>
+#include <Qt/qcursor.h>
+#include <Qt/q3popupmenu.h>
+#include <Qt/qinputdialog.h>
+#include <Qt/qmessagebox.h>
 #include "SearchTabWidget.h"
 #include "SearchTabDetails.h"
 #include <autoingest/.idl/SearchTabSet.h>
 #include <notify.h>
+
+using QPopupMenu = Q3PopupMenu;
 
 SearchTabWidget::SearchTabWidget(QWidget* parent,
                                  const char* name)

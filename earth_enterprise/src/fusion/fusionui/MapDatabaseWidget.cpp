@@ -42,7 +42,7 @@ void MapDatabaseWidget::Prefill(const MapDatabaseEditRequest& request) {
 
   if (request.config.mapProject.size() != 0) {
     projects.push_back(request.config.mapProject);
-    map_project_label->setText(shortAssetName(request.config.mapProject));
+    map_project_label->setText(shortAssetName(request.config.mapProject.c_str()));
   } else {
     map_project_label->setText(empty_text);
   }
@@ -53,7 +53,7 @@ void MapDatabaseWidget::Prefill(const MapDatabaseEditRequest& request) {
     if (request.config.imageryProject.size() != 0) {
       projects.push_back(request.config.imageryProject);
       imagery_project_label->setText(
-          shortAssetName(request.config.imageryProject));
+          shortAssetName(request.config.imageryProject.c_str()));
     } else {
       imagery_project_label->setText(empty_text);
     }
@@ -79,15 +79,16 @@ void MapDatabaseWidget::EnableImageryProject(bool state) {
 void MapDatabaseWidget::AssembleEditRequest(MapDatabaseEditRequest* request) {
   if (map_project_label->text() != empty_text) {
     request->config.mapProject =
-        map_project_label->text().latin1() + kMapProjectSuffix;
+        map_project_label->text().toUtf8().constData();
+    request->config.mapProject += kMapProjectSuffix;
   } else {
     request->config.mapProject = std::string();
   }
 
   if (imagery_project_label->text() != empty_text) {
     request->config.imageryProject =
-        imagery_project_label->text().latin1() +
-        std::string(kImageryProjectSuffix);
+        imagery_project_label->text().toUtf8().constData();
+    request->config.imageryProject +=  std::string(kImageryProjectSuffix);
   } else {
     request->config.imageryProject = std::string();
   }
@@ -106,7 +107,7 @@ void MapDatabaseWidget::ChooseMapProject() {
   if (!chooser.getFullPath(newpath))
     return;
 
-  map_project_label->setText(shortAssetName(newpath));
+  map_project_label->setText(shortAssetName(newpath.toUtf8().constData()));
 }
 
 void MapDatabaseWidget::ChooseImageryProject() {
@@ -119,7 +120,7 @@ void MapDatabaseWidget::ChooseImageryProject() {
   if (!chooser.getFullPath(newpath))
     return;
 
-  imagery_project_label->setText(shortAssetName(newpath));
+  imagery_project_label->setText(shortAssetName(newpath.toUtf8().constData()));
 }
 
 void MapDatabaseWidget::ClearMapProject() {

@@ -62,7 +62,7 @@ class ServerCombinationSet
   void
   ServerCombinationSet::EnsureDefaultsExist(void)
   {
-    const QString kDefaultHost = AssetDefs::MasterHostName();
+    const QString kDefaultHost = AssetDefs::MasterHostName().c_str();
 
     std::vector<ServerCombination>::const_iterator it = combinations.begin();
     for (; it != combinations.end(); ++it) {
@@ -71,9 +71,10 @@ class ServerCombinationSet
       }
     }
 
-    std::string default_url = "http://" + AssetDefs::MasterHostName();
-    ServerConfig sc_default(default_url, kDefaultHost);
-    ServerCombination default_host(kDefaultHost, sc_default);
+    std::string default_url { "http://" };
+    default_url += AssetDefs::MasterHostName();
+    ServerConfig sc_default(default_url, kDefaultHost.toUtf8().constData());
+    ServerCombination default_host(kDefaultHost.toUtf8().constData(), sc_default);
 
     combinations.push_back(default_host);
   }

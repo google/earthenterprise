@@ -137,13 +137,13 @@ void Cp(const std::string &src, const std::string &dest) {
   if (!khEnsureParentDir(dest)) {
     // more specific message already emitted
     throw khException(kh::tr("Unable to ensure parent dir for %1")
-                      .arg(dest));
+                      .arg(dest.c_str()));
   }
   cmd << "cp" << "-r" << src << dest;
   if (!cmd.System()) {
     // more specific message already emitted
     throw khException(kh::tr("Unable to cp -r %1 %2")
-                      .arg(src).arg(dest));
+                      .arg(src.c_str()).arg(dest.c_str()));
   }
 }
 

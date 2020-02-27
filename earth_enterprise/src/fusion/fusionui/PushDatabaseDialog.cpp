@@ -13,9 +13,9 @@
 // limitations under the License.
 
 #include "fusion/fusionui/PushDatabaseDialog.h"
-#include <qcombobox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
+#include <Qt/qcombobox.h>
+#include <Qt/qlabel.h>
+#include <Qt/qpushbutton.h>
 #include "fusion/autoingest/AssetVersion.h"
 #include "fusion/autoingest/plugins/DatabaseAsset.h"
 #include "fusion/autoingest/plugins/MapDatabaseAsset.h"
@@ -30,8 +30,8 @@ PushDatabaseDialog::PushDatabaseDialog(
     const std::vector<QString>& nicknames)
     : PushDatabaseDialogBase(parent, 0, false, 0) {
 
-  std::string database_name = shortAssetName(asset->GetRef().toString());
-  db_name_label->setText(database_name);
+  std::string database_name = shortAssetName(asset->GetRef().toString().c_str());
+  db_name_label->setText(database_name.c_str());
 
   std::vector<QString>::const_iterator nickname = nicknames.begin();
   for (; nickname != nicknames.end(); ++nickname) {
@@ -68,7 +68,7 @@ PushDatabaseDialog::PushDatabaseDialog(
     valid_versions_.push_back(*version);
     QString item = QString("%1:").arg(asset_version->version);
     item += "    " + asset_version->meta.GetValue("createdtime");
-    item += "  " + asset_version->PrettyState();
+    item += "  " + QString(asset_version->PrettyState().c_str());
     version_combo->insertItem(item);
   }
 
@@ -78,7 +78,7 @@ PushDatabaseDialog::PushDatabaseDialog(
 
   int current_server_index = 0;
   for (int i = 0; i < static_cast<int>(nicknames.size()); ++i) {
-    if (previous_server_name == nicknames[i].ascii()) {
+    if (previous_server_name == nicknames[i].toUtf8().constData()) {
       current_server_index = i;
       break;
     }

@@ -1,7 +1,6 @@
 #!/usr/bin/env python2.7
 #
 # Copyright 2017 Google Inc.
-# Copyright 2019-2020 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -143,11 +142,7 @@ def GetServerURL(environ):
   complete_url += urllib.quote(environ.get("PATH_INFO", ""))
 
   if environ.get("HTTP_X_FORWARDED_HOST"):
-    proxy_scheme = environ["wsgi.url_scheme"]
-    if environ.get("HTTP_X_FORWARDED_PROTO"):
-      proxy_scheme = environ["HTTP_X_FORWARDED_PROTO"]
-
-    proxy_url = proxy_scheme + "://" + environ["HTTP_X_FORWARDED_HOST"]
+    proxy_url = environ["wsgi.url_scheme"] + "://" + environ["HTTP_X_FORWARDED_HOST"]
     proxy_url += urllib.quote(environ.get("REDIRECT_URL", ""))
     proxy_url += urllib.quote(environ.get("PATH_INFO", ""))
   else:

@@ -42,7 +42,7 @@ void VectorLayerWidget::Prefill(const VectorLayerXEditRequest& req) {
   if (req.config.vectorResource.empty()) {
     vector_resource_label->setText(empty_text);
   } else {
-    vector_resource_label->setText(shortAssetName(req.config.vectorResource));
+    vector_resource_label->setText(shortAssetName(req.config.vectorResource.c_str()));
   }
 }
 
@@ -66,7 +66,7 @@ void VectorLayerWidget::chooseVectorResource() {
   if (!chooser.getFullPath(newpath))
     return;
 
-  vector_resource_label->setText(shortAssetName(newpath));
+  vector_resource_label->setText(shortAssetName(newpath.toUtf8().constData()));
 }
 
 // ****************************************************************************

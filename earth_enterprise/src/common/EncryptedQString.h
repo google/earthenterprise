@@ -34,7 +34,7 @@ class EncryptedQString : public QString {
   inline EncryptedQString(const QChar *unicode, unsigned int length) :
       QString(unicode, length ) { }
   inline EncryptedQString(const char *str) : QString(str) { }
-  inline EncryptedQString(const std::string &str) : QString(str) { }
+  inline EncryptedQString(const std::string &str) : QString(str.c_str()) { }
 };
 
 

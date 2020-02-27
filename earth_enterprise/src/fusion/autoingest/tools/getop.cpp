@@ -112,8 +112,8 @@ main(int argc, char *argv[])
       usage(progname);
     if (help)
       usage(progname);
-    if (delay < 0)
-      usage(progname, "--delay must not be less than zero");
+    if (delay <= 0)
+      usage(progname, "--delay must be positive");
     if (timeout < 0)
       usage(progname, "--timeout must not be less than zero");
 
@@ -130,7 +130,7 @@ main(int argc, char *argv[])
                                              error, timeout)) {
       	if (error.compare("GetCurrTasks: socket recvall: Resource temporarily unavailable") == 0)
           outline("No data received from gesystemmanager\nStarting new request");
-        else if (error.compare(SYS_MGR_BUSY_MSG) == 0)
+        else if (error.compare(SYS_MGR_BUSY_MSG.c_str()) == 0)
           outline("System Manager is busy.  Retrying in %d seconds", delay);
         else
           notify(NFY_FATAL, "%s", error.latin1());
@@ -182,10 +182,8 @@ main(int argc, char *argv[])
           pclose(tputFILE);
         }
 
-        if (delay) {
-          // clear screen when looping
-          (void)clearscreen.System();
-        }
+        // clear screen
+        (void)clearscreen.System();
 
         // emit khtop header
         outline("FUSION VERSION: %s", GEE_VERSION);
@@ -255,11 +253,7 @@ main(int argc, char *argv[])
         outline("Number of strings cached: %u", taskLists.str_store_size);
 
       }
-
-      if (delay)
-        sleep(delay);
-      else
-        break;
+      sleep(delay);
     };
   } catch (const std::exception &e) {
     notify(NFY_FATAL, "%s", e.what());

@@ -184,25 +184,25 @@ khPresenceMask::khPresenceMask(const std::string &filename)
   time_t mtime;
   if (!khGetFileInfo(filename, fileSize, mtime)) {
     throw khErrnoException(
-        kh::tr("Unable to get file size for %1").arg(filename));
+        kh::tr("Unable to get file size for %1").arg(filename.c_str()));
   }
 
   // open the file, read & verify the header
   khReadFileCloser fileHandle(::open(filename.c_str(), O_RDONLY));
   if (fileHandle.fd() < 0) {
-    throw khErrnoException(kh::tr("Unable to open %1").arg(filename));
+    throw khErrnoException(kh::tr("Unable to open %1").arg(filename.c_str()));
   }
   PresenceHeader header;
   if (!khReadAll(fileHandle.fd(), &header, sizeof(header))) {
     throw khErrnoException(kh::tr("Unable to read header %1").
-                           arg(filename));
+                           arg(filename.c_str()));
   }
   header.LittleEndianToHost();
 
   if (memcmp(header.magic, PresenceHeader::themagic,
              sizeof(header.magic)) != 0) {
     throw khException(kh::tr("Corrupted header (magic) %1").
-                      arg(filename));
+                      arg(filename.c_str()));
   }
 
   if (header.presenceFormatVersion == 1) {
@@ -210,7 +210,7 @@ khPresenceMask::khPresenceMask(const std::string &filename)
   } else {
     throw khException(kh::tr
                       ("Unsupported format version (%1) for %2").
-                      arg(header.presenceFormatVersion).arg(filename));
+                      arg(header.presenceFormatVersion).arg(filename.c_str()));
   }
 
 #if 0
@@ -222,11 +222,11 @@ khPresenceMask::khPresenceMask(const std::string &filename)
   // some sanity checks
   if (header.totalFileSize != fileSize) {
     throw khException(kh::tr("Corrupted header (file size) %1").
-                      arg(filename));
+                      arg(filename.c_str()));
   }
   if (header.numLevels > NumFusionLevels) {
     throw khException(kh::tr("Corrupted header (num levels) %1").
-                      arg(filename));
+                      arg(filename.c_str()));
   }
 
   // set my member now that I know what it shold be
@@ -236,7 +236,7 @@ khPresenceMask::khPresenceMask(const std::string &filename)
   unsigned char *filebuf = static_cast<unsigned char*>(mmap(0, header.totalFileSize, PROT_READ,
                                             MAP_PRIVATE, fileHandle.fd(), 0));
   if (filebuf == MAP_FAILED) {
-    throw khErrnoException(kh::tr("Unable to mmap %1").arg(filename));
+    throw khErrnoException(kh::tr("Unable to mmap %1").arg(filename.c_str()));
   }
   khMunmapGuard munmapGuard(filebuf, header.totalFileSize);
 
@@ -261,20 +261,20 @@ khPresenceMask::khPresenceMask(const std::string &filename)
     if (rec.levelNum >= NumFusionLevels) {
       throw khException
         (kh::tr("Corrupted level header (levelNum) %1: level %2").
-         arg(filename).arg(rec.levelNum));
+         arg(filename.c_str()).arg(rec.levelNum));
     }
     if (rec.presenceBufferSize !=
         khLevelPresenceMask::CalcBufferSize(rec.numRows,
                                             rec.numCols)) {
       throw khException
         (kh::tr("Corrupted level header (size) %1: level %2").
-         arg(filename).arg(rec.levelNum));
+         arg(filename.c_str()).arg(rec.levelNum));
     }
     if (rec.presenceBufferOffset + rec.presenceBufferSize >
         header.totalFileSize) {
       throw khException
         (kh::tr("Corrupted level header (offset) %1: level %2").
-         arg(filename).arg(rec.levelNum));
+         arg(filename.c_str()).arg(rec.levelNum));
     }
 
 
@@ -298,7 +298,7 @@ khPresenceMask::khPresenceMask(const std::string &filename)
   if (numLevels != endLevel - beginLevel) {
     throw khException
       (kh::tr("Corrupted header (min/max/num) %1").
-       arg(filename));
+       arg(filename.c_str()));
   }
 
   // munmapGuard's destructor will call munmap
@@ -408,7 +408,7 @@ khPresenceMaskWriter::khPresenceMaskWriter(const std::string &filename,
   unsigned char *filebuf = static_cast<unsigned char*>(
       mmap(0, totalFileSize, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0));
   if (filebuf == MAP_FAILED) {
-    throw khErrnoException(kh::tr("Unable to mmap %1").arg(filename));
+    throw khErrnoException(kh::tr("Unable to mmap %1").arg(filename.c_str()));
   }
   munmapper.DelayedSet(filebuf, totalFileSize);
 

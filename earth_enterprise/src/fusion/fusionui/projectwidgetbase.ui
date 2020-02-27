@@ -507,6 +507,9 @@
 </slots>
 <pixmapinproject/>
 <layoutdefaults spacing="6" margin="11"/>
+<includes>
+    <include location="global" impldecl="in declaration">Qt/qobjectdefs.h</include>
+</includes>
 <includehints>
     <includehint>LayerLegendWidget.h</includehint>
     <includehint>ProjectLayerView.h</includehint>

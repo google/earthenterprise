@@ -208,25 +208,25 @@ khOpacityMask::khOpacityMask(const std::string &filename)
   time_t mtime;
   if (!khGetFileInfo(filename, fileSize, mtime)) {
     throw khErrnoException(
-        kh::tr("Unable to get file size for %1").arg(filename));
+        kh::tr("Unable to get file size for %1").arg(filename.c_str()));
   }
 
   // open the file, read & verify the header
   khReadFileCloser fileHandle(::open(filename.c_str(), O_RDONLY));
   if (fileHandle.fd() < 0) {
-    throw khErrnoException(kh::tr("Unable to open %1").arg(filename));
+    throw khErrnoException(kh::tr("Unable to open %1").arg(filename.c_str()));
   }
   OpacityHeader header;
   if (!khReadAll(fileHandle.fd(), &header, sizeof(header))) {
     throw khErrnoException(kh::tr("Unable to read header %1").
-                           arg(filename));
+                           arg(filename.c_str()));
   }
   header.LittleEndianToHost();
 
   if (memcmp(header.magic, OpacityHeader::themagic,
              sizeof(header.magic)) != 0) {
     throw khErrnoException(kh::tr("Corrupted header (magic) %1").
-                           arg(filename));
+                           arg(filename.c_str()));
   }
 
   if (header.opacityFormatVersion == 1) {
@@ -234,7 +234,7 @@ khOpacityMask::khOpacityMask(const std::string &filename)
   } else {
     throw khException(kh::tr
                       ("Unsupported format version (%1) for %2").
-                      arg(header.opacityFormatVersion).arg(filename));
+                      arg(header.opacityFormatVersion).arg(filename.c_str()));
   }
 
 #if 0
@@ -246,11 +246,11 @@ khOpacityMask::khOpacityMask(const std::string &filename)
   // some sanity checks
   if (header.totalFileSize != fileSize) {
     throw khErrnoException(kh::tr("Corrupted header (file size) %1").
-                           arg(filename));
+                           arg(filename.c_str()));
   }
   if (header.numLevels > NumFusionLevels) {
     throw khErrnoException(kh::tr("Corrupted header (num levels) %1").
-                           arg(filename));
+                           arg(filename.c_str()));
   }
 
   // set my member now that I know what it shold be
@@ -261,7 +261,7 @@ khOpacityMask::khOpacityMask(const std::string &filename)
       reinterpret_cast<unsigned char*>(mmap(0, header.totalFileSize, PROT_READ,
                                     MAP_PRIVATE, fileHandle.fd(), 0));
   if (filebuf == MAP_FAILED) {
-    throw khErrnoException(kh::tr("Unable to mmap %1").arg(filename));
+    throw khErrnoException(kh::tr("Unable to mmap %1").arg(filename.c_str()));
   }
   khMunmapGuard munmapGuard(filebuf, header.totalFileSize);
 
@@ -286,19 +286,19 @@ khOpacityMask::khOpacityMask(const std::string &filename)
     if (rec.levelNum >= NumFusionLevels) {
       throw khException
         (kh::tr("Corrupted level header (levelNum) %1: level %2").
-         arg(filename).arg(rec.levelNum));
+         arg(filename.c_str()).arg(rec.levelNum));
     }
     if (rec.opacityBufferSize !=
         khOpacityMask::Level::BufferSize(rec.numRows, rec.numCols)) {
       throw khException
         (kh::tr("Corrupted level header (size) %1: level %2").
-         arg(filename).arg(rec.levelNum));
+         arg(filename.c_str()).arg(rec.levelNum));
     }
     if (rec.opacityBufferOffset + rec.opacityBufferSize >
         header.totalFileSize) {
       throw khException
         (kh::tr("Corrupted level header (offset) %1: level %2").
-         arg(filename).arg(rec.levelNum));
+         arg(filename.c_str()).arg(rec.levelNum));
     }
 
 
@@ -320,7 +320,7 @@ khOpacityMask::khOpacityMask(const std::string &filename)
   if (numLevels != endLevel - beginLevel) {
     throw khException
       (kh::tr("Corrupted header (min/max/num) %1").
-       arg(filename));
+       arg(filename.c_str()));
   }
 
   // munmapGuard's destructor will call munmap
@@ -352,7 +352,7 @@ void khOpacityMask::Save(const std::string &filename) {
       reinterpret_cast<unsigned char*>(mmap(0, totalFileSize, PROT_READ|PROT_WRITE,
                                     MAP_SHARED, fd, 0));
   if (filebuf == MAP_FAILED) {
-    throw khErrnoException(kh::tr("Unable to mmap %1").arg(filename));
+    throw khErrnoException(kh::tr("Unable to mmap %1").arg(filename.c_str()));
   }
   khMunmapGuard munmapGuard(filebuf, totalFileSize);
 

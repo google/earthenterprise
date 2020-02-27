@@ -36,7 +36,7 @@ std::string GetSupportedEncodings(void) {
   // fetch QT's supported encodings & sort them alphbetically
   QTextCodec *codec;
   for (int i = 0; (codec = QTextCodec::codecForIndex(i)); i++) {
-    std::string encoding = codec->name();
+    std::string encoding = codec->name().constData();
     encodings.push_back(encoding);
     longest = std::max((size_t)(encoding.size()), (size_t)longest);
   }

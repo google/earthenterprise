@@ -14,7 +14,7 @@
 
 
 #include <string>
-#include <qstring.h>
+#include <Qt/qstring.h>
 #include <list>
 #include <map>
 
@@ -40,7 +40,7 @@ class AssetManagerLayout
   bool showme;
 
   ViewMode viewMode = AssetManagerLayout::List;
-  QString selectedPath = QString::null;
+  QString selectedPath = QString();
   int filterType = 0;
   int filterSubType = 0;
   bool showHidden = false;
@@ -89,7 +89,7 @@ class TemplateImportLayout
   int width;
   int height;
 
-  QString lastDirectory = QString::null;
+  QString lastDirectory = QString();
 
 #pragma LoadAndSave
 };

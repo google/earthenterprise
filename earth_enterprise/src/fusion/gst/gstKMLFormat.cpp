@@ -136,7 +136,8 @@ void gstKMLFormat::ParseKml(khxml::DOMNode* root) {
           QString delimeter = "";
           for (unsigned int j = 0; j < kTagsSize; ++j) {
             if (khxml::DOMElement* el_tag
-                = GetFirstNamedChild(el_lookAt, tags[j])) {
+                = GetFirstNamedChild(el_lookAt,
+                                     tags[j].toUtf8().constData())) {
               QString tag_data;
               FromElement(el_tag, tag_data);
               lookat += delimeter;

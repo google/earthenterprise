@@ -27,7 +27,7 @@ ffio::raster::Reader<OutTile>::Reader(const std::string &ffdir) :
                       NonSquareTile);
 
   if (ffreader.type() != ffio::Raster) {
-    throw khException(kh::tr("%1 is not a raster ff").arg(ffdir));
+    throw khException(kh::tr("%1 is not a raster ff").arg(ffdir.c_str()));
   }
 
   // fetch and verify the raster specific data store in the index

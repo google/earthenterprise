@@ -520,10 +520,10 @@ AssetVersionImplD::Clean(void)
   // Check to see if it's OK to clean me
   std::vector<std::string> wouldbreak;
   if (!OkToClean(&wouldbreak)) {
-    throw khException
-      (kh::tr("Unable to clean '%1'.\nIt would break the following:\n")
-       .arg(GetRef().toString()) +
-       join<std::vector<std::string>::iterator>(wouldbreak.begin(), wouldbreak.end(), "\n"));
+    std::string msg { kh::tr("Unable to clean '%1'.\nIt would break the following:\n")
+                      .arg(GetRef().toString().c_str()).toUtf8().constData() };
+    msg += join<std::vector<std::string>::iterator>(wouldbreak.begin(), wouldbreak.end(), "\n");
+    throw khException(msg);
   }
 
   DoClean();
@@ -726,12 +726,14 @@ LeafAssetVersionImplD::ComputeState(void) const
   return newstate;
 }
 
-bool LeafAssetVersionImplD::InputStatesAffectMyState(AssetDefs::State stateByInputs, bool blockedByOfflineInputs) const {
-  bool InputStatesAffectMyState = false;
+AssetDefs::State
+LeafAssetVersionImplD::CalcStateByInputsAndChildren(const InputAndChildStateData & stateData) const {
+  this->numInputsWaitingFor = stateData.waitingFor.inputs;
+  AssetDefs::State newstate = state;
   if (!AssetDefs::Ready(state)) {
     // I'm currently not ready, so take whatever my inputs say
-    InputStatesAffectMyState = true;
-  } else if (stateByInputs != AssetDefs::Queued) {
+    newstate = stateData.stateByInputs;
+  } else if (stateData.stateByInputs != AssetDefs::Queued) {
     // My inputs have regressed
     // Let's see if I should regress too
 
@@ -739,41 +741,32 @@ bool LeafAssetVersionImplD::InputStatesAffectMyState(AssetDefs::State stateByInp
       // I'm in the middle of building myself
       // revert my state to wait/block on my inputs
       // OnStateChange will pick up this revert and stop my running task
-      InputStatesAffectMyState = true;
+      newstate = stateData.stateByInputs;
     } else {
       // my task has already finished
-      if (blockedByOfflineInputs) {
+      if (BlockedByOfflineInputs(stateData)) {
         // If the only reason my inputs have reverted is because
         // some of them have gone offline, that's usually OK and
         // I don't need to revert my state.
         // Check to see if I care about my inputs going offline
         if (OfflineInputsBreakMe()) {
           // I care, revert my state too.
-          InputStatesAffectMyState = true;
+          newstate = stateData.stateByInputs;
         } else {
           // I don't care, so leave my state alone.
+          newstate = state;
         }
       } else {
         // My inputs have regresseed for some reason other than some
         // of them going offline.
         // revert my state
-        InputStatesAffectMyState = true;
+        newstate = stateData.stateByInputs;
       }
     }
   } else {
     // nothing to do
     // my current state is correct based on what my task has told me so far
   }
-  
-  return InputStatesAffectMyState;
-}
-
-AssetDefs::State
-LeafAssetVersionImplD::CalcStateByInputsAndChildren(const InputAndChildStateData & stateData) const {
-  this->numInputsWaitingFor = stateData.waitingFor.inputs;
-  AssetDefs::State newstate = state;
-  if (InputStatesAffectMyState(stateData.stateByInputs, BlockedByOfflineInputs(stateData)))
-    newstate = stateData.stateByInputs;
 
   return newstate;
 }
@@ -1168,38 +1161,30 @@ CompositeAssetVersionImplD::ComputeState(void) const
   return stateByChildren;
 }
 
-bool CompositeAssetVersionImplD::InputStatesAffectMyState(AssetDefs::State stateByInputs, bool blockedByOfflineInputs) const {
+AssetDefs::State
+CompositeAssetVersionImplD:: CalcStateByInputsAndChildren(const InputAndChildStateData & stateData) const {
+  this->numInputsWaitingFor = stateData.waitingFor.inputs;
+  this->numChildrenWaitingFor = stateData.waitingFor.children;
+
   // Undecided composites take their state from their inputs
-  bool InputStatesAffectMyState = false;
   if (children.empty()) {
-    InputStatesAffectMyState = true;
+    return stateData.stateByInputs;
   }
 
   // some composite assets (namely Database) care about the state of their
   // inputs, for all others all that matters is the state of their children
   if (CompositeStateCaresAboutInputsToo()) {
-    if (stateByInputs != AssetDefs::Queued) {
+    if (stateData.stateByInputs != AssetDefs::Queued) {
       // something is wrong with my inputs (or they're not done yet)
-      if (blockedByOfflineInputs) {
+      if (BlockedByOfflineInputs(stateData)) {
         if (OfflineInputsBreakMe()) {
-          InputStatesAffectMyState = true;
+          return stateData.stateByInputs;
         }
       } else {
-        InputStatesAffectMyState = true;
+        return stateData.stateByInputs;
       }
     }
   }
-
-  return InputStatesAffectMyState;
-}
-
-AssetDefs::State
-CompositeAssetVersionImplD::CalcStateByInputsAndChildren(const InputAndChildStateData & stateData) const {
-  this->numInputsWaitingFor = stateData.waitingFor.inputs;
-  this->numChildrenWaitingFor = stateData.waitingFor.children;
-
-  if (InputStatesAffectMyState(stateData.stateByInputs, BlockedByOfflineInputs(stateData)))
-    return stateData.stateByInputs;
 
   return stateData.stateByChildren;
 }

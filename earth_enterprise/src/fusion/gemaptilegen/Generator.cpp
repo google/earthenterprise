@@ -371,7 +371,7 @@ class PreparerMergeSource : public MergeSource<Generator::MergeEntry> {
     if (!curr_ || !curr_->Data()) {
       QString warn(kh::tr("No element for merge source for layer %1").arg(
           layer_no + 1));
-      notify(NFY_WARN, "%s", warn.latin1());
+      notify(NFY_WARN, "%s", warn.toUtf8().constData());
     } else {
       curr_entry_.first = curr_->Data();
     }
@@ -825,9 +825,9 @@ Generator::Generator(geFilePool &file_pool, const std::string &outdir,
         }
         if (!message.empty()) {
           QString warn(kh::tr("The file listing vector features to display "
-                              "\"%1\" %2 ").arg(disprule.query_selectfile_,
-                                               message));
-          messages = messages + warn.latin1();
+                              "\"%1\" %2 ").arg(disprule.query_selectfile_.c_str(),
+                                               message.c_str()));
+          messages = messages + warn.toUtf8().constData();
           continue;
         }
       }
@@ -841,7 +841,7 @@ Generator::Generator(geFilePool &file_pool, const std::string &outdir,
       if (!messages.empty()) {
         QString warn(kh::tr(
             "Please check the vector filter rules for layer %1.").arg(sl + 1));
-        messages = messages + warn.latin1();
+        messages = messages + warn.toUtf8().constData();
         notify(NFY_WARN, "%s", messages.c_str());
       }
       continue;

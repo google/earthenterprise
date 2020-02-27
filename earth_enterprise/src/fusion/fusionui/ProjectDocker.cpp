@@ -13,9 +13,9 @@
 // limitations under the License.
 
 
-#include <qvgroupbox.h>
-#include <qhgroupbox.h>
-#include <qlayout.h>
+#include <Qt/q3vgroupbox.h>
+using QVGroupBox = Q3VGroupBox;
+#include <Qt/qlayout.h>
 
 #include "ProjectDocker.h"
 #include "ProjectManager.h"
@@ -37,7 +37,7 @@ ProjectDocker::ProjectDocker(Place p, QWidget* parent, const char* name)
 }
 
 void ProjectDocker::selectBox(const gstDrawState& draw_state,
-                              Qt::ButtonState btn_state) {
+                              Qt::KeyboardModifier btn_state) {
   preview_->selectBox(draw_state, btn_state);
 }
 

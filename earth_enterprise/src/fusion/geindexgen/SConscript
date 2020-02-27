@@ -27,11 +27,11 @@ geindexgen = env.executable('geindexgen',
                             ['geindexgen.cpp', 'PacketReader.cpp',
                              'Todo.cpp', 'Generator.cpp',
                              BlendStackObj, VectorStackObj],
-                            LIBS=['geindex_rw', 'geindex_r', 'gexml', 'geutil', 'gecommon', 'qt-mt', 'xerces-c'])
+                            LIBS=['geindex_rw', 'geindex_r', 'gexml', 'geutil', 'gecommon', 'QtCore', 'QtGui', 'xerces-c'])
 
 geunifiedindexgen = env.executable('geunifiedindexgen',
                                    ['geunifiedindexgen.cpp',
                                     UnifiedConfigObj ],
-                                   LIBS=['geindex_rw', 'geindex_r', 'gexml', 'geutil', 'gecommon', 'qt-mt', 'xerces-c'])
+                                   LIBS=['geindex_rw', 'geindex_r', 'gexml', 'geutil', 'gecommon', 'QtCore', 'QtGui', 'xerces-c'])
 
 env.install('fusion_bin', [geindexgen, geunifiedindexgen])

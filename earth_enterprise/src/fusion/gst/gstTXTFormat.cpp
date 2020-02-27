@@ -40,9 +40,11 @@ bool gstTXTFormat::DiscoverLayout(const char* fname,
   if (!csvfile.open(IO_ReadOnly | IO_Translate))
     return false;
 
-  QString firstline;
-  if (csvfile.readLine(firstline, 2048) == -1)
+  //QString firstline;
+  char buff[2048] { '\0' };
+  if (csvfile.readLine(buff, 2048) == -1)
     return false;
+  QString firstline(buff);
 
   gstRegistry::Group* layout = inforeg->locateGroup("Layout", 1);
   layout->addTag(new gstValue("delimited"))->SetName("FileType");

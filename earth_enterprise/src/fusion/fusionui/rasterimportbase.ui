@@ -885,5 +885,8 @@
     <slot>mosaicFillActivated(const QString&amp;)</slot>
 </slots>
 <pixmapinproject/>
+<includes>
+    <include location="global" impldecl="in declaration">Qt/qobjectdefs.h</include>
+</includes>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

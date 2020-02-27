@@ -46,7 +46,7 @@ class FieldBinderDef;
 class MapTextStyleConfig {
   enum FontWeight { Regular, Bold, Italic, BoldItalic };
 
-  QString     font   = QString(kDefaultFont);
+  QString     font   = QString(kDefaultFont.c_str());
   FontWeight  weight = MapTextStyleConfig::Regular;
   unsigned int        size   = 12U;
   QColor      color  = Qt::black;

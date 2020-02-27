@@ -12,19 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-#include <qlabel.h>
-#include <qpopupmenu.h>
-#include <qdragobject.h>
-#include <qfont.h>
-#include <qmessagebox.h>
-
+#include <Qt/qlabel.h>
+#include <Qt/q3popupmenu.h>
+#include <Qt/q3dragobject.h>
+#include <Qt/qfont.h>
+#include <Qt/qmessagebox.h>
 #include <autoingest/AssetVersion.h>
 #include <autoingest/khAssetManagerProxy.h>
+#include <Qt/qpalette.h>
 
 #include "AssetManager.h"
 #include "AssetVersionProperties.h"
 #include "AssetLog.h"
+#include <Qt/q3mimefactory.h>
+
+using QMimeSourceFactory = Q3MimeSourceFactory;
+using QPopupWindow = Q3PopupMenu;
+using QImageDrag = Q3ImageDrag;
 
 static QPixmap uic_load_pixmap( const QString &name )
 {
@@ -43,14 +47,14 @@ static QPixmap uic_load_pixmap( const QString &name )
 #define COL_LOG 2
 #define COL_REF 3
 
-AssetChildItem::AssetChildItem( QListView *parent, const AssetVersion &ver)
-    : QListViewItem( parent ), AssetWatcher(ver->GetRef())
+AssetChildItem::AssetChildItem( Q3ListView *parent, const AssetVersion &ver)
+    : Q3ListViewItem( parent ), AssetWatcher(ver->GetRef())
 {
   configureWidgets(ver);
 }
 
-AssetChildItem::AssetChildItem( QListViewItem *parent, const AssetVersion &ver, const std::string &msg )
-    : QListViewItem( parent ), AssetWatcher(ver->GetRef())
+AssetChildItem::AssetChildItem( Q3ListViewItem *parent, const AssetVersion &ver, const std::string &msg )
+    : Q3ListViewItem( parent ), AssetWatcher(ver->GetRef())
 {
   configureWidgets(ver, msg);
 }
@@ -59,8 +63,10 @@ void
 AssetChildItem::configureWidgets(const AssetVersion &ver,
                                  const std::string &msg)
 {
-  setText( COL_SUBTYPE, msg + ver->PrettySubtype());
-  setText( COL_STATE, ver->PrettyState() );
+  std::string tmpMsg(msg);
+  tmpMsg += ver->PrettySubtype();
+  setText( COL_SUBTYPE, tmpMsg.c_str());
+  setText( COL_STATE, ver->PrettyState().c_str()) ;
   if ( ver->Logfile().size() != 0 )
     setPixmap( COL_LOG, uic_load_pixmap( "history.png" ) );
   setText( COL_REF, ver->GetRef().toString().c_str() );
@@ -74,7 +80,7 @@ void
 AssetChildItem::changed(void)
 {
   AssetVersion ver(ref);
-  setText( COL_STATE, ver->PrettyState() );
+  setText( COL_STATE, ver->PrettyState().c_str() );
 }
 
 void
@@ -104,13 +110,13 @@ AssetChildItem::setOpen(bool open)
 
 
     // open second
-    QListViewItem::setOpen(open);
+    Q3ListViewItem::setOpen(open);
   } else {
     // close first
-    QListViewItem::setOpen(open);
+    Q3ListViewItem::setOpen(open);
 
     // delete all my children
-    QListViewItem *tokill;
+    Q3ListViewItem *tokill;
     while ((tokill = firstChild())) {
       delete tokill;
     }
@@ -122,9 +128,9 @@ void AssetChildItem::paintCell( QPainter *p, const QColorGroup &cg, int col, int
   QColorGroup ngrp = cg;
 
   if ( col == COL_STATE )
-    ngrp = AssetManager::GetStateDrawStyle( text( col ), p, cg );
+    ngrp = AssetManager::GetStateDrawStyle( text( col ).toUtf8().constData(), p, cg );
 
-  QListViewItem::paintCell( p, ngrp, col, width, align );
+  Q3ListViewItem::paintCell( p, ngrp, col, width, align );
 }
 
 std::string
@@ -141,13 +147,13 @@ AssetVersionProperties::VerPropMap AssetVersionProperties::openverprops;
 AssetVersionProperties::AssetVersionProperties( const std::string &verref_ )
     : AssetVersionPropertiesBase( 0, 0, false, Qt::WDestructiveClose ), verref( verref_ )
 {
-  depListView->setColumnWidthMode( 0, QListView::Maximum );
-  depListView->setColumnWidthMode( 1, QListView::Maximum );
+  depListView->setColumnWidthMode( 0, Q3ListView::Maximum );
+  depListView->setColumnWidthMode( 1, Q3ListView::Maximum );
   depListView->setSorting( -1 );
   depListView->setRootIsDecorated( true );
 
-  connect( depListView, SIGNAL( contextMenuRequested( QListViewItem *, const QPoint &, int ) ),
-           this, SLOT( rmbClicked( QListViewItem *, const QPoint &, int ) ) );
+  connect( depListView, SIGNAL( contextMenuRequested( Q3ListViewItem *, const QPoint &, int ) ),
+           this, SLOT( rmbClicked( Q3ListViewItem *, const QPoint &, int ) ) );
 
   openverprops.insert(std::make_pair(verref, this));
 
@@ -166,7 +172,7 @@ void AssetVersionProperties::refresh()
 
 
   AssetVersion ver(verref);
-  QListViewItem *item = new AssetChildItem( depListView, ver );
+  Q3ListViewItem *item = new AssetChildItem( depListView, ver );
 
   // automatically open the first level
   item->setOpen( true );
@@ -179,7 +185,7 @@ void AssetVersionProperties::refresh()
 
 }
 
-void AssetVersionProperties::clicked( QListViewItem *item, const QPoint & pos, int col )
+void AssetVersionProperties::clicked( Q3ListViewItem *item, const QPoint & pos, int col )
 {
   if ( item == NULL || col != COL_LOG )
     return;
@@ -205,7 +211,7 @@ AssetVersionProperties::Open(const std::string &verref)
 }
 
 void
-AssetVersionProperties::rmbClicked( QListViewItem *item,
+AssetVersionProperties::rmbClicked( Q3ListViewItem *item,
                                     const QPoint &pos, int )
 {
   AssetChildItem *childItem = dynamic_cast<AssetChildItem*>(item);

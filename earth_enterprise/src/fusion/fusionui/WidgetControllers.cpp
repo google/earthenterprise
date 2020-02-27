@@ -17,15 +17,17 @@
 
 #include "fusion/fusionui/WidgetControllers.h"
 
-#include <qpushbutton.h>
-#include <qcolordialog.h>
-#include <qgroupbox.h>
-#include <qspinbox.h>
-#include <qlineedit.h>
-#include <qtextedit.h>
-#include <qvalidator.h>
-#include <qdatetime.h>
-#include <qlabel.h>
+#include <Qt/qpushbutton.h>
+#include <Qt/qcolordialog.h>
+#include <Qt/qgroupbox.h>
+#include <Qt/qspinbox.h>
+#include <Qt/qlineedit.h>
+#include <Qt/q3textedit.h>
+#include <Qt/qvalidator.h>
+#include <Qt/qdatetime.h>
+#include <Qt/qlabel.h>
+
+using QTextEdit = Q3TextEdit;
 
 #include <autoingest/.idl/storage/MapSubLayerConfig.h>
 
@@ -167,14 +169,14 @@ IconButtonController::SetIcon()
 void
 IconButtonController::SyncToConfig(void)
 {
-  icon_href_ = shield_.IconRef().href;
+  icon_href_ = shield_.IconRef().href.toUtf8().constData();
   icon_type_ = shield_.IconRef().type;
 }
 
 void
 IconButtonController::MySyncToWidgetsImpl(void)
 {
-  shield_ = gstIcon(IconReference(icon_type_, icon_href_));
+  shield_ = gstIcon(IconReference(icon_type_, icon_href_.c_str()));
   SetIcon();
 }
 

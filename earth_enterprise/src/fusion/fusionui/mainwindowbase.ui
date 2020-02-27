@@ -194,7 +194,32 @@
                 <string>Move to Placemark</string>
             </property>
         </widget>
-        <widget class="Spacer">
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Preview Projection:</string>
+            </property>
+        </widget>
+        <widget class="Q3ComboBox">
+            <item>
+                <property name="text">
+                    <string>Flat</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Mercator</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>previewProjection</cstring>
+            </property>
+        </widget>
+        <!-- Relies originally on Qt3 Spacer, which is QSpacerItem,
+             This has changed significantly in Qt4, making it almost useless
+          <widget class="QSpacerItem">
             <property name="name">
                 <cstring>spacer1</cstring>
             </property>
@@ -210,30 +235,8 @@
                     <height>27</height>
                 </size>
             </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel1</cstring>
-            </property>
-            <property name="text">
-                <string>Preview Projection:</string>
-            </property>
-        </widget>
-        <widget class="QComboBox">
-            <item>
-                <property name="text">
-                    <string>Flat</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>Mercator</string>
-                </property>
-            </item>
-            <property name="name">
-                <cstring>previewProjection</cstring>
-            </property>
-        </widget>
+        </widget>-->
+
     </toolbar>
 </toolbars>
 <customwidgets>
@@ -1357,6 +1360,9 @@
 </slots>
 <pixmapinproject/>
 <layoutdefaults spacing="6" margin="8"/>
+<includes>
+    <include location="global" impldecl="in declaration">Qt/qobjectdefs.h</include>
+</includes>
 <includehints>
     <includehint>GfxView.h</includehint>
 </includehints>

@@ -231,10 +231,10 @@ ImageInfo::ImageInfo(const std::string &infile,
     ComputeTileExtents();
 
   } catch (const std::exception &e) {
-    throw khException(kh::tr("%1: %2").arg(infile).arg(e.what()));
+    throw khException(kh::tr("%1: %2").arg(infile.c_str()).arg(e.what()));
   } catch (...) {
     throw khException(kh::tr("%1: Unknown error processing file")
-                      .arg(infile));
+                      .arg(infile.c_str()));
   }
 }
 
@@ -284,26 +284,10 @@ ImageInfo::ImageInfo(const std::string &infile,
 
     // verify input and set values
     if (rasterband->GetColorInterpretation() == GCI_PaletteIndex) {
-#if 1
       // Despite the GDAL API, Grey color tables really aren't
       // supported in GDAL right now.
       throw khException
         (kh::tr("Color tables not supported for heightmaps"));
-#else
-      GDALColorTable *ctbl = rasterband->GetColorTable();
-      if (!ctbl) {
-        throw khException
-          (kh::tr("Unable to get color table"));
-      }
-      if (ctbl->GetPaletteInterpretation() != GPI_Gray) {
-        throw khException
-          (kh::tr("Only Grayscale color tables supported for heightmaps"));
-      }
-      // palette images need NearestNeighbor sampling because
-      // the pixel values cannot change
-      resampleAlg = GRA_NearestNeighbour;
-      componentType = khTypes::Int16;
-#endif
     } else if (rasterband->GetRasterDataType() == GDT_Byte) {
       if ((scale == 1.0) && !mustResample) {
         notify(NFY_WARN,
@@ -348,10 +332,10 @@ ImageInfo::ImageInfo(const std::string &infile,
     ComputeTileExtents();
 
   } catch (const std::exception &e) {
-    throw khException(kh::tr("%1: %2").arg(infile).arg(e.what()));
+    throw khException(kh::tr("%1: %2").arg(infile.c_str()).arg(e.what()));
   } catch (...) {
     throw khException(kh::tr("%1: Unknown error processing file")
-                      .arg(infile));
+                      .arg(infile.c_str()));
   }
 }
 
@@ -438,10 +422,10 @@ ImageInfo::ImageInfo(const std::string &maskfile,
     ComputeTileExtents();
 
   } catch (const std::exception &e) {
-    throw khException(kh::tr("%1: %2").arg(maskfile).arg(e.what()));
+    throw khException(kh::tr("%1: %2").arg(maskfile.c_str()).arg(e.what()));
   } catch (...) {
     throw khException(kh::tr("%1: Unknown error processing file")
-                      .arg(maskfile));
+                      .arg(maskfile.c_str()));
   }
 }
 
@@ -811,8 +795,9 @@ RasterGenerator::RasterGenerator(const ImageInfo &imageInfo,
                                imageInfo.toplevel(),
                                imageInfo.degExtents());
   if (!outRP) {
-    throw khException(kh::tr("Unable to create output rasterproduct ") +
-                      outfile);
+    std::string msg { kh::tr("Unable to create output rasterproduct ").toUtf8().constData() };
+    msg += outfile;
+    throw khException(msg.c_str());
   }
 
   notify(NFY_DEBUG, "GLOBAL PIXEL LOD: Upsample = %u",
@@ -847,8 +832,9 @@ RasterGenerator::RasterGenerator(const ImageInfo &imageInfo,
                                toplevel,
                                imageInfo.degExtents());
   if (!outRP) {
-    throw khException(kh::tr("Unable to create mask output rasterproduct ") +
-                      outfile);
+    std::string msg { kh::tr("Unable to create mask output rasterproduct ").toUtf8().constData() };
+    msg += outfile;
+    throw khException(msg.c_str());
   }
 
   notify(NFY_DEBUG, "GLOBAL PIXEL LOD: Upsample = %u", toplevel);
@@ -880,8 +866,9 @@ RasterGenerator::RasterGenerator(const khRasterProduct *inRP,
        extractCov.meterExtents(RasterProductTilespaceBase) :
        extractCov.degExtents(RasterProductTilespaceBase)));  /* data extents */
   if (!outRP) {
-    throw khException(kh::tr("Unable to create output rasterproduct ") +
-                      outfile);
+    std::string msg { kh::tr("Unable to create output rasterproduct ").toUtf8().constData() };
+    msg+= outfile;
+    throw khException(msg.c_str());
   }
 }
 

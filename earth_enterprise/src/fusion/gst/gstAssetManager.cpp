@@ -133,7 +133,7 @@ bool gstAssetManager::ImportRaster(const std::string& folder,
 bool gstAssetManager::makeDir(const std::string& assetdir, QString &error)
 {
   if (khExists(AssetDefs::AssetPathToFilename(assetdir))) {
-    error = kh::tr("'%1' already exists").arg(assetdir);
+    error = kh::tr("'%1' already exists").arg(assetdir.c_str());
     return false;
   }
 

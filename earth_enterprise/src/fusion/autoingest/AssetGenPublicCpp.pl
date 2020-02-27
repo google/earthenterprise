@@ -69,7 +69,6 @@ print $fh <<EOF;
 #include <khGuard.h>
 #include <khxml/khdom.h>
 #include <memory>
-#include <autoingest/AssetRegistry.h>
 using namespace khxml;
 
 
@@ -84,26 +83,6 @@ $config{"Asset.cpp"}
 // ****************************************************************************
 namespace {
     void GetConfig(DOMElement *elem, $config &config);
-}
-
-
-
-namespace{
-    // Define the plugin interface for ${name}Asset. Clients can get
-    // the interface via AssetRegistry::GetPlugin.
-    auto assetPlugin =
-        std::unique_ptr<AssetRegistry<AssetImpl>::AssetPluginInterface>(
-            new AssetRegistry<AssetImpl>::AssetPluginInterface(
-                ${name}AssetImpl::NewFromDOM,
-                ${name}AssetImpl::NewInvalid
-            )
-        );
-
-    // The constructor of the PluginRegistrar takes care of registering the
-    // plugin for us. Using std::move because AssetPluginInterface disallows
-    // copying.
-    AssetRegistry<AssetImpl>::PluginRegistrar assetPluginRegistrar(
-        "${name}Asset", std::move(assetPlugin));
 }
 
 extern void FromElement(DOMElement *elem, AssetStorage &self);
@@ -133,24 +112,6 @@ ${name}AssetImpl::NewInvalid(const std::string &ref)
 // ***  ${name}AssetVersionImpl - Auto generated
 // ****************************************************************************
 extern void FromElement(DOMElement *elem, AssetVersionStorage &self);
-
-namespace{
-    // Define the plugin interface for ${name}AssetVersion. Clients can get
-    // the interface via AssetRegistry::GetPlugin.
-    auto assetVersionPlugin =
-        std::unique_ptr<AssetRegistry<AssetVersionImpl>::AssetPluginInterface>(
-            new AssetRegistry<AssetVersionImpl>::AssetPluginInterface(
-                ${name}AssetVersionImpl::NewFromDOM,
-                ${name}AssetVersionImpl::NewInvalid
-            )
-        );
-
-    // The constructor of the PluginRegistrar takes care of registering the
-    // plugin for us. Using std::move because AssetPluginInterface disallows
-    // copying.
-    AssetRegistry<AssetVersionImpl>::PluginRegistrar assetVersionPluginRegistrar(
-        "${name}AssetVersion", std::move(assetVersionPlugin));
-}
 
 std::shared_ptr<${name}AssetVersionImpl>
 ${name}AssetVersionImpl::NewFromDOM(void *e)
