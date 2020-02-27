@@ -45,10 +45,10 @@ for plugin in plugins:
     env.Command('plugins/'+plugin+'AssetD.cpp',
                 [ '../AssetGenDaemonCpp.pl', '../AssetGen.pm', src ],
                 [ "${SOURCES[0]} ${SOURCES[2]} $TARGET" ])
-    env.Depends('plugins/'+plugin+'AssetD.cpp','plugins/'+plugin+'AssetD.h')
+    env.Depends('plugins/'+plugin+'AssetD.os','plugins/'+plugin+'AssetD.h')
     env.Depends('plugins/'+plugin+'AssetD.os', 'plugins/'+plugin+'AssetD.cpp')
 
-env.Depends('../plugins/ProjectedMapProjectAsset.cpp', 'plugins/MapLayerAssetD.h')
+env.Depends('../plugins/ProjectedMapProjectAsset.os', 'plugins/MapLayerAssetD.h')
 
 env.Command('SysManFromStorage.cpp',
             [ '../FromStorageGen.pl' ],
