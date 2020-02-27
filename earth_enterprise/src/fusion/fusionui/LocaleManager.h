@@ -23,7 +23,7 @@
 
 class LocaleManager : public LocaleManagerBase {
  public:
-  LocaleManager(QWidget* parent, bool modal, WFlags flags);
+  LocaleManager(QWidget* parent, bool modal, Qt::WFlags flags);
 
   // inherited from QDialog
   virtual void accept();

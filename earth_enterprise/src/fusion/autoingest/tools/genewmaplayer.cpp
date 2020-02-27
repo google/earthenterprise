@@ -144,7 +144,7 @@ main(int argc, char *argv[]) {
     IconReference& icon =
         req.config.legend.defaultLocale.icon.GetMutableValue();
     IconReference::CheckIconExistence(icon_name, &icon.type);
-    icon.href = icon_name;
+    icon.href = icon_name.c_str();
     if (debug) {
       std::string reqstr;
       req.SaveToString(reqstr, "");

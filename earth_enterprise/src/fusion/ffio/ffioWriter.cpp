@@ -44,7 +44,7 @@ ffio::Writer::OpenNextFile(void)
   // will automatically close previous file (if any)
   fileHandle = ::open(fname.c_str(), O_WRONLY|O_CREAT|O_LARGEFILE, 0666);
   if (fileHandle.fd() < 0) {
-    throw khErrnoException(kh::tr("Unable to create %1").arg(fname));
+    throw khErrnoException(kh::tr("Unable to create %1").arg(fname.c_str()));
   }
 }
 
@@ -105,7 +105,7 @@ ffio::Writer::WritePacket(char *buf, uint32 buflen, uint32 bufsize,
   if (!khWriteAll(fileHandle.fd(), &hdr, sizeof(hdr))) {
     throw khErrnoException
       (kh::tr("Failed to write ff tile header (lrc:%1,%2,%3) in %4")
-       .arg(addr.level).arg(addr.row).arg(addr.col).arg(outdir));
+       .arg(addr.level).arg(addr.row).arg(addr.col).arg(outdir.c_str()));
   }
 
   size_t towrite = fillNeeded ? buflen : wlen;
@@ -114,7 +114,7 @@ ffio::Writer::WritePacket(char *buf, uint32 buflen, uint32 bufsize,
       (kh::tr
        ("Failed to write ff tile data (%1 bytes) (lrc:%2,%3,%4) in %5")
        .arg(towrite).arg(addr.level).arg(addr.row).arg(addr.col)
-       .arg(outdir));
+       .arg(outdir.c_str()));
   }
 
   if (fillNeeded) {
@@ -127,7 +127,7 @@ ffio::Writer::WritePacket(char *buf, uint32 buflen, uint32 bufsize,
         (kh::tr
          ("Failed to write padding (%1 bytes) (lrc:%2,%3,%4) in %5")
          .arg(fillNeeded).arg(addr.level).arg(addr.row).arg(addr.col)
-         .arg(outdir));
+         .arg(outdir.c_str()));
     }
   }
 

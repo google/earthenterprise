@@ -15,12 +15,12 @@
 
 #include "LayerItemBase.h"
 
-LayerItemBase::LayerItemBase(QListView* parent)
-    : QListViewItem(parent) {
+LayerItemBase::LayerItemBase(Q3ListView* parent)
+    : Q3ListViewItem(parent) {
 }
 
-LayerItemBase::LayerItemBase(QListViewItem* parent)
-    : QListViewItem(parent) {
+LayerItemBase::LayerItemBase(Q3ListViewItem* parent)
+    : Q3ListViewItem(parent) {
 }
 
 bool LayerItemBase::CanMoveUp() const {

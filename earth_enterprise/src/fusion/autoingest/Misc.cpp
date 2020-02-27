@@ -102,15 +102,16 @@ varsubst(const std::string &str,
           std::vector<std::string> qualstrs;
           split(result.substr(qualpos+1, end - (qualpos+1)), ":",
                 std::back_inserter(qualstrs));
-          for (std::vector<std::string>::const_iterator q =
-                 qualstrs.begin(); q != qualstrs.end(); ++q) {
+          for(const auto& q : qualstrs) {
+          //for (std::vector<std::string>::const_iterator q =
+          //       qualstrs.begin(); q != qualstrs.end(); ++q) {
             SubstQualMap::const_iterator found =
-              qualifiers.find(*q);
+              qualifiers.find(q);
             if (found != qualifiers.end()) {
               tosubst = (*found->second)(tosubst);
             } else {
               throw khException
-                (kh::tr("Unrecognized qualifier: ") + *q);
+                (kh::tr("Unrecognized qualifier: ").toUtf8().constData() + q);
             }
           }
           result.replace(pos, end - pos + 1, tosubst);

@@ -56,7 +56,7 @@ JSContextUser::~JSContextUser(void) {
 
 void JSContextUser::AddNamedRoot(void *rp, const std::string &name) {
   if (!JS_AddNamedRoot(rawcx, rp, name.c_str())) {
-    throwError(kh::tr("Unable to add root for %1 object").arg(name));
+    throwError(kh::tr("Unable to add root for %1 object").arg(name.c_str()));
   }
 }
 

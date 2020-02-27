@@ -20,35 +20,12 @@
 #include <common/SharedString.h>
 #include <common/khMetaData.h>
 #include "AssetVersionRef.h"
-#include "AssetRegistry.h"
+#include "AssetVersion.h"
 
 // The goal of this namspace is to have a single place in the code where all
 // asset creation is handled.
 namespace AssetFactory
 {
-  template<class AssetType>
-  static std::shared_ptr<AssetType> CreateNewFromDOM(
-    const std::string & tagName, 
-    void *e)
-  {
-      typename AssetRegistry<AssetType>::AssetPluginInterface *plugin = AssetRegistry<AssetType>::GetPlugin(tagName);
-      if (plugin && plugin->pNewFromDom)
-        return (plugin->pNewFromDom)(e);
-      return nullptr;
-  }
-
-  template<class AssetType>
-  static std::shared_ptr<AssetType> CreateNewInvalid(
-    std::string tagName, 
-    const std::string & ref)
-  {
-      typename AssetRegistry<AssetType>::AssetPluginInterface *plugin = AssetRegistry<AssetType>::GetPlugin(tagName);
-      if (plugin && plugin->pNewInvalid) {
-        return (plugin->pNewInvalid)(ref);
-      }
-      return nullptr;
-  }
-
   template<class AssetType>
   AssetType Find(const std::string & ref, const AssetDefs::Type & type)
   {
@@ -327,13 +304,13 @@ namespace AssetFactory
       return asset->MyUpdate(needed);
   }
 
-  template <class MutableDerivedVersionHandleType, class ConfigType, class VersionDType, class CachedInputType>
+  template <class MutableDerivedVersionHandleType, class ConfigType, class VersionDType>
   MutableDerivedVersionHandleType ReuseOrMakeAndUpdate(const std::string& ref_,
                                                        AssetDefs::Type type_,
                                                        const std::vector<SharedString>& inputs_,
                                                        const khMetaData& meta_,
                                                        const ConfigType& config_,
-                                                       const std::vector<CachedInputType>& cachedinputs_)
+                                                      const std::vector<AssetVersion>& cachedinputs_)
   {
       using AssetHandleType = typename MutableDerivedVersionHandleType::Impl::MutableAssetType;
       std::vector<SharedString> inputarg { inputs_ }, boundInputs(inputarg.size());
@@ -445,7 +422,7 @@ namespace AssetFactory
                (ref_, type_, meta_, config_);
     }
 
-  template <class MutableDerivedVersionHandleType, class ConfigType, class VersionDType, class CachedInputType>
+  template <class MutableDerivedVersionHandleType, class ConfigType, class VersionDType>
   MutableDerivedVersionHandleType ReuseOrMakeAndUpdateSubAsset(
           const std::string& parentName,
           AssetDefs::Type type_,
@@ -453,7 +430,7 @@ namespace AssetFactory
           const std::vector<SharedString>& inputs_,
           const khMetaData& meta_,
           const ConfigType& config_,
-          const std::vector<CachedInputType>& cachedinputs_)
+          const std::vector<AssetVersion>& cachedinputs_)
   {
       using Impl = typename MutableDerivedVersionHandleType::Impl;
       auto ref_ = AssetDefs::SubAssetName(parentName, baseName,
@@ -478,7 +455,7 @@ namespace AssetFactory
           return asset;
       }
       throw khException(kh::tr("%1 '%2' does not exist")
-                        .arg(Impl::EXPECTED_SUBTYPE).arg(ref_));
+                        .arg(Impl::EXPECTED_SUBTYPE.c_str()).arg(ref_.c_str()));
   }
 
   template <class MutableDerivedAssetHandleType, class ConfigType>
@@ -496,7 +473,7 @@ namespace AssetFactory
           return asset;
       }
       throw khException(kh::tr("%1 '%2' does not exist")
-                        .arg(Impl::EXPECTED_SUBTYPE).arg(ref_));
+                        .arg(Impl::EXPECTED_SUBTYPE.c_str()).arg(ref_.c_str()));
   }
 
   template <class MutableDerivedAssetHandleType, class ConfigType>
@@ -513,7 +490,7 @@ namespace AssetFactory
           return asset;
       }
       throw khException(kh::tr("%1 '%2' does not exist")
-                        .arg(Impl::EXPECTED_SUBTYPE).arg(ref_));
+                        .arg(Impl::EXPECTED_SUBTYPE.c_str()).arg(ref_.c_str()));
   }
 
   template<class MutableDerivedAssetHandleType, class ConfigType>
@@ -526,10 +503,10 @@ namespace AssetFactory
     MutableDerivedAssetHandleType asset = Find<MutableDerivedAssetHandleType>(ref_);
     if (asset) {
         throw khException(kh::tr("%1 '%2' already exists")
-                          .arg(Impl::EXPECTED_SUBTYPE).arg(ref_));
-    } else {
-        return Make<MutableDerivedAssetHandleType, ConfigType>(ref_, inputs_, meta, config);
+                          .arg(Impl::EXPECTED_SUBTYPE.c_str()).arg(ref_.c_str()));
     }
+
+    return Make<MutableDerivedAssetHandleType, ConfigType>(ref_, inputs_, meta, config);
   }
 }
 

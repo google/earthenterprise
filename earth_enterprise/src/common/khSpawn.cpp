@@ -162,10 +162,10 @@ bool geCheckPidFile(const std::string &procname,
       if (pid > 0) {
         return khPidActive(pid);
       } else {
-        throw khException(kh::tr("Unable to parse pid from %1").arg(pidfile));
+        throw khException(kh::tr("Unable to parse pid from %1").arg(pidfile.c_str()));
       }
     } else {
-      throw khException(kh::tr("Unable to read pidfile %1").arg(pidfile));
+      throw khException(kh::tr("Unable to read pidfile %1").arg(pidfile.c_str()));
     }
   }
   return false;

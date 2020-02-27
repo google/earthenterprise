@@ -587,7 +587,6 @@ copy_files_to_target()
 	mkdir -p $BASEINSTALLDIR_OPT/share/gdal
 	mkdir -p $BASEINSTALLDIR_OPT/share/fonts
 	mkdir -p $BASEINSTALLDIR_OPT/gepython
-	mkdir -p $BASEINSTALLDIR_OPT/qt
 	mkdir -p $BASEINSTALLDIR_OPT/lib
 	mkdir -p $BASEINSTALLDIR_VAR/openssl/private
 	mkdir -p $BASEINSTALLDIR_VAR/openssl/misc
@@ -609,14 +608,8 @@ copy_files_to_target()
 	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -rf $TMPINSTALLDIR/common/opt/google/share $BASEINSTALLDIR_OPT
 	if [ $? -ne 0 ]; then error_on_copy=1; fi
-	cp -rf $TMPINSTALLDIR/common/opt/google/qt $BASEINSTALLDIR_OPT
-	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	
 	# copy "lib*" vs "*" because "cp *" will skip dir 'pkgconfig' and return error
-	cp -f $TMPINSTALLDIR/common/opt/google/qt/lib/lib* $BASEINSTALLDIR_OPT/lib
-	if [ $? -ne 0 ]; then error_on_copy=1; fi
-	cp -rf $TMPINSTALLDIR/common/opt/google/qt/lib/pkgconfig $BASEINSTALLDIR_OPT/lib
-	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -rf $TMPINSTALLDIR/common/opt/google/gepython $BASEINSTALLDIR_OPT
 	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -rf $TMPINSTALLDIR/manual/opt/google/share/doc/manual/ $BASEINSTALLDIR_OPT/share/doc
@@ -886,7 +879,6 @@ fix_postinstall_filepermissions()
     
     # suid enabled
     chmod +s $BASEINSTALLDIR_OPT/bin/geserveradmin
-    chmod -R 755 $BASEINSTALLDIR_OPT/qt
     chmod 755 $BASEINSTALLDIR_ETC/openldap
 
     # Share

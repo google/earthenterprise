@@ -22,7 +22,8 @@
 #include <qpushbutton.h>
 #include <qcombobox.h>
 #include <qmessagebox.h>
-#include <qiconview.h>
+#include <Qt/q3iconview.h>
+//#include <qiconview.h>
 #include <qinputdialog.h>
 #include <qapplication.h>
 
@@ -61,7 +62,7 @@ class FolderItem : public QIconViewItem {
 
 FolderItem::FolderItem(QIconView* parent, const gstAssetFolder& f)
     : QIconViewItem(parent), folder(f) {
-  setText(shortAssetName(f.name()));
+  setText(shortAssetName(f.name().toUtf8().constData()));
   AssetDisplayHelper a(AssetDefs::Invalid, std::string());
   setPixmap(a.GetPixmap());
   setKey(QString("0" + text()));
@@ -82,7 +83,7 @@ class AssetItem : public QIconViewItem {
 
 AssetItem::AssetItem(QIconView* parent, gstAssetHandle handle)
     : QIconViewItem(parent), assetHandle(handle) {
-  setText(shortAssetName(handle->getName()));
+  setText(shortAssetName(handle->getName().toUtf8().constData()));
 
   Asset asset = handle->getAsset();
   AssetDisplayHelper a(asset->type, asset->subtype);
@@ -123,7 +124,7 @@ AssetChooser::AssetChooser(QWidget* parent, AssetChooser::Mode m,
   ok_btn->setEnabled(false);
 
   // Accept key presses.
-  setFocusPolicy(QWidget::StrongFocus);
+  setFocusPolicy(Qt::StrongFocus);
 
   // Restore previous directory for this type/subtype.
   RestorePreviousDir(adh);
@@ -192,7 +193,7 @@ AssetChooser::AssetChooser(
   ok_btn->setEnabled(false);
 
   // Accept key presses.
-  setFocusPolicy(QWidget::StrongFocus);
+  setFocusPolicy(Qt::StrongFocus);
 
   // Restore previous directory for this type/subtype.
   const AssetDisplayHelper& adh = compatible_asset_types_[0];
@@ -205,7 +206,9 @@ void AssetChooser::RestorePreviousDir(const AssetDisplayHelper& adh) {
             Preferences::filepath("assetchooser.xml").latin1())) {
       QString dir = chooser_history_.FindDir(adh.GetSortKey());
       if (!dir.isEmpty()) {
-        QString path = AssetDefs::AssetRoot() + "/" + dir;
+        QString path = AssetDefs::AssetRoot().c_str();
+        path += "/";
+        path += dir;
         if (khDirExists(path.latin1())) {
           updateView(gstAssetFolder(path));
         } else {
@@ -246,7 +249,7 @@ bool AssetChooser::matchFilter(const gstAssetHandle handle) const {
     return false;
   }
 
-  return (a.PrettyName() == match_string_);
+  return (a.PrettyName() == match_string_.c_str());
 }
 
 void AssetChooser::keyPressEvent(QKeyEvent* e) {
@@ -285,19 +288,19 @@ void AssetChooser::accept() {
       // If name doesn't match with current item name, then reset item
       // pointer to initiate searching of item by name below.
       if (assetItem != NULL &&
-          getName() != shortAssetName(assetItem->getAssetHandle()->getName())) {
+          getName() != shortAssetName(assetItem->getAssetHandle()->getName().toUtf8().constData())) {
         item = NULL;
       }
     }
 
     if (item == NULL) {
       // Note: means that name have been edited and we try to find item by name.
-      item = iconView->findItem(getName(), Qt::ExactMatch);
+      item = iconView->findItem(getName(), QKeySequence::ExactMatch);
     }
 
     AssetItem* assetItem = dynamic_cast<AssetItem*>(item);
     if (assetItem != NULL) {
-      nameEdit->setText(shortAssetName(assetItem->getAssetHandle()->getName()));
+      nameEdit->setText(shortAssetName(assetItem->getAssetHandle()->getName().toUtf8().constData()));
       gstAssetHandle asset_handle = assetItem->getAssetHandle();
       Asset asset = asset_handle->getAsset();
       type_ = asset->type;
@@ -320,7 +323,8 @@ void AssetChooser::accept() {
 
   if (mode_ == Save || mode_ == SaveAs) {
     // validate this asset name is unique and prompt if not!
-    if (Asset(fullpath)) {
+      std::string ref { fullpath.toUtf8().constData() };
+    if (Asset(ref)) {
       if (QMessageBox::warning(this, "Warning",
           fullpath + tr(" already exists.\nDo you want to replace it?"),
           tr("OK"), tr("Cancel"), 0, 1) == 1)
@@ -328,7 +332,8 @@ void AssetChooser::accept() {
     }
   } else {
     // Validate whether this asset exists and has compatible asset type.
-    if (!Asset(fullpath)) {
+      std::string ref { fullpath.toUtf8().constData() };
+    if (!Asset(ref)) {
       QMessageBox::critical(
           this, "Error",
           tr("The specified asset \"") + getName() + tr("\" does not exist."),
@@ -400,7 +405,7 @@ const gstAssetFolder& AssetChooser::getFolder() const {
 void AssetChooser::selectItem(QIconViewItem* item) {
   AssetItem* assetItem = dynamic_cast<AssetItem*>(item);
   if (assetItem != NULL) {
-    nameEdit->setText(shortAssetName(assetItem->getAssetHandle()->getName()));
+    nameEdit->setText(shortAssetName(assetItem->getAssetHandle()->getName().toUtf8().constData()));
   }
 }
 
@@ -413,7 +418,7 @@ void AssetChooser::nameChanged(const QString& str) {
        // If name doesn't match with current item, then clear selection.
       AssetItem* assetItem = dynamic_cast<AssetItem*>(item);
       if (assetItem != NULL &&
-          getName() != shortAssetName(assetItem->getAssetHandle()->getName())) {
+          getName() != shortAssetName(assetItem->getAssetHandle()->getName().toUtf8().constData())) {
         iconView->clearSelection();
       }
     }

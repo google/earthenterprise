@@ -595,7 +595,7 @@ wroteSomeTiles(false)
                                                  projectionType())) {
     throw khException
       (kh::tr("%1 has invalid extents: (nsew) %2,%3,%4,%5")
-       .arg(filename)
+       .arg(filename.c_str())
        .arg(degOrMeterExtents().north())
        .arg(degOrMeterExtents().south())
        .arg(degOrMeterExtents().east())
@@ -633,13 +633,13 @@ wroteSomeTiles(false)
           throw khException
             (kh::tr("%1 has a broken opacity mask.\n"
                     "Rebuild resouce from scratch to repair.")
-             .arg(filename));
+             .arg(filename.c_str()));
         }
       } else if (!noOpacityOK) {
         throw khException
           (kh::tr("%1 is missing an opacity mask.\n"
                   "Rebuild resource from scratch to repair.")
-           .arg(filename));
+           .arg(filename.c_str()));
       }
     }
     if (!opacityMask_) {

@@ -48,7 +48,9 @@ khTask::khTask(const SubmitTaskMsg &msg)
 
   // make our persistent copy (it's just a symlink)
   if (!khSymlink(verref_, TaskFilename())) {
-    throw khErrnoException(kh::tr("Unable to write ") + TaskFilename());
+    std::string msg { kh::tr("Unable to write ").toUtf8().constData() };
+    msg += TaskFilename();
+    throw khErrnoException(msg.c_str());
   }
 
   // now that we're persistent, add myself to the lists

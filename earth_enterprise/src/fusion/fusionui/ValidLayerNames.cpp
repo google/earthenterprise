@@ -15,7 +15,7 @@
 //
 
 #include "ValidLayerNames.h"
-
+#include "khException.h"
 #include <qvalidator.h>
 #include <qobject.h>
 
@@ -27,7 +27,7 @@
 static QRegExp ValidLayerNameRegExp("[^|\\[\\]]+");
 
 QString InvalidLayerNameMessage
-(QObject::tr("Layer name cannot contain the following characters: [ ] | #"));
+(kh::tr("Layer name cannot contain the following characters: [ ] | #"));
 
 const QValidator* NewLayerNameValidator(void) {
   return new QRegExpValidator(ValidLayerNameRegExp, 0);

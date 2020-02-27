@@ -15,14 +15,14 @@
 
 #include "fusion/fusionui/ProjectWidget.h"
 
-#include <qpushbutton.h>
-#include <qlistview.h>
-#include <qcheckbox.h>
-#include <qgroupbox.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qspinbox.h>
+#include <Qt/qpushbutton.h>
+#include <Qt/qlistview.h>
+#include <Qt/qcheckbox.h>
+#include <Qt/qgroupbox.h>
+#include <Qt/qlayout.h>
+#include <Qt/qlabel.h>
+#include <Qt/qlineedit.h>
+#include <Qt/qspinbox.h>
 
 #include "fusion/fusionui/LayerItemBase.h"
 #include "fusion/fusionui/ProjectLayerView.h"
@@ -244,6 +244,6 @@ void ProjectWidget::SetGenericCheckboxText(const QString& text) {
 }
 
 void ProjectWidget::ContextMenu(
-    QListViewItem* item, const QPoint& pt, int col) {
+    Q3ListViewItem* item, const QPoint& pt, int col) {
   // do nothing, let derived classes override
 }

@@ -21,6 +21,8 @@
 #include <thematicfilterbase.h>
 
 #include <gstRecord.h>
+#include <Qt/q3listbox.h>
+using QListBoxItem = Q3ListBoxItem;
 
 class gstLayer;
 class gstSource;

@@ -19,7 +19,8 @@
 #ifndef GEO_EARTH_ENTERPRISE_SRC_FUSION_GST_GSTSIMPLEEARTHSTREAM_H__
 #define GEO_EARTH_ENTERPRISE_SRC_FUSION_GST_GSTSIMPLEEARTHSTREAM_H__
 
-#include <qcstring.h>
+#include <Qt/q3cstring.h>
+//#include <qcstring.h>
 #include <curl/curl.h>
 #include <khEndian.h>
 #include <string>

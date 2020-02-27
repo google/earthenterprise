@@ -17,17 +17,17 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <qapplication.h>
-#include <qpainter.h>
-#include <qstylefactory.h>
+#include <Qt/qapplication.h>
+#include <Qt/qpainter.h>
+#include <Qt/qstylefactory.h>
 #include <gstRegistry.h>
-#include <qtranslator.h>
-#include <qtextcodec.h>
-#include <qgl.h>
-#include <qwidget.h>
-#include <qimage.h>
-#include <qfile.h>
-#include <qeventloop.h>
+#include <Qt/qtranslator.h>
+#include <Qt/qtextcodec.h>
+#include <Qt/qgl.h>
+#include <Qt/qwidget.h>
+#include <Qt/qimage.h>
+#include <Qt/qfile.h>
+#include <Qt/qeventloop.h>
 
 #include <builddate.h>
 #include "fusion/fusionversion.h"

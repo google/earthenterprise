@@ -112,7 +112,7 @@ ToElement(khxml::DOMElement *elem, const EncryptedQString &value)
 {
   elem->setAttribute(ToXMLStr("method"), ToXMLStr("simple"));
   QString tmp = value;
-  for (uint i = 0; i < tmp.length(); ++i) {
+  for (int i = 0; i < tmp.length(); ++i) {
     tmp[i] = tmp[i].unicode() + 13;
   }
   elem->appendChild(
@@ -827,7 +827,7 @@ FromElement(khxml::DOMElement *elem, EncryptedQString &val)
           return;
         } else if (method == "simple") {
           QString tmp = QString::fromUcs2(data->getData());
-          for (uint i = 0; i < tmp.length(); ++i) {
+          for (int i = 0; i < tmp.length(); ++i) {
             tmp[i] = tmp[i].unicode() - 13;
           }
           val = tmp;

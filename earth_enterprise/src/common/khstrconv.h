@@ -28,7 +28,7 @@ inline
 void
 FromString(const std::string &str, QString &val)
 {
-  val = str;
+  val = str.c_str();
 }
 
 template <class T>

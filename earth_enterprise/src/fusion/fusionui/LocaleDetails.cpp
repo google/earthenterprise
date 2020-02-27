@@ -13,21 +13,23 @@
 // limitations under the License.
 
 
-#include <qheader.h>
-#include <qcombobox.h>
-#include <qgroupbox.h>
-#include <qlineedit.h>
-#include <qvalidator.h>
-#include <qregexp.h>
-#include <qpushbutton.h>
-#include <qobjectlist.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qstringlist.h>
-#include <qmessagebox.h>
-#include <qpopupmenu.h>
-#include <qpainter.h>
-#include <qcursor.h>
+
+#include <Qt/q3header.h>
+using QHeader = Q3Header;
+#include <Qt/qcombobox.h>
+#include <Qt/qgroupbox.h>
+#include <Qt/qlineedit.h>
+#include <Qt/qvalidator.h>
+#include <Qt/qregexp.h>
+#include <Qt/qpushbutton.h>
+#include <Qt/qlayout.h>
+#include <Qt/qlabel.h>
+#include <Qt/qstringlist.h>
+#include <Qt/qmessagebox.h>
+#include <Qt/q3popupmenu.h>
+using QPopupMenu = Q3PopupMenu;
+#include <Qt/qpainter.h>
+#include <Qt/qcursor.h>
 
 #include <gstIconManager.h>
 #include <gstSource.h>
@@ -41,7 +43,7 @@
 #include "Preferences.h"
 #include "LayerLegendWidget.h"
 
-
+using QTable = Q3Table;
 
 
 // ****************************************************************************

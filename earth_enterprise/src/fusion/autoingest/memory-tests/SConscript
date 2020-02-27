@@ -32,5 +32,5 @@ for test_name in [
         test_name,
         ['{0}.cc'.format(test_name)],
         LIBS = [
-            'geautoingest', 'gemiscconfig', 'gecommon', 'yaml-cpp', 'qt-mt', 'gexml', 'xerces-c'
+            'geautoingest', 'gemiscconfig', 'gecommon', 'yaml-cpp', 'QtCore', 'QtGui', 'gexml', 'xerces-c'
         ])

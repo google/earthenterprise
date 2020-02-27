@@ -22,11 +22,13 @@
 #include <vector>
 #include <map>
 
-#include <qstring.h>
-#include <qstringlist.h>
+#include <Qt/qstring.h>
+#include <Qt/qstringlist.h>
 #include "scripteditorbase.h"
 #include <gstRecord.h>
 #include <gstSourceManager.h>
+#include <Qt/q3listbox.h>
+using QListBoxItem = Q3ListBoxItem;
 
 class gstFormat;
 

@@ -24,23 +24,24 @@
 #include <qstringlist.h>
 #include <qcombobox.h>
 #include <qapplication.h>
-#include <qpopupmenu.h>
 #include <qmessagebox.h>
 #include <qpixmap.h>
-#include <qheader.h>
-#include <qprogressdialog.h>
-#include <qlineedit.h>
-#include <qtabwidget.h>
-#include <qimage.h>
-#include <qpushbutton.h>
-#include <qinputdialog.h>
-#include <qlayout.h>
-#include <qpainter.h>
-#include <qcheckbox.h>
-#include <qsplitter.h>
-#include <qwidgetstack.h>
-#include <qcursor.h>
-#include <qthread.h>
+#include <Qt/q3header.h>
+using QHeader = Q3Header;
+#include <Qt/qprogressdialog.h>
+#include <Qt/qlineedit.h>
+#include <Qt/qtabwidget.h>
+#include <Qt/qimage.h>
+#include <Qt/qpushbutton.h>
+#include <Qt/qinputdialog.h>
+#include <Qt/qlayout.h>
+#include <Qt/qpainter.h>
+#include <Qt/qcheckbox.h>
+#include <Qt/qsplitter.h>
+#include <Qt/q3widgetstack.h>
+using QWidgetStack = Q3WidgetStack;
+#include <Qt/qcursor.h>
+#include <Qt/qthread.h>
 
 #include "fusion/autoingest/plugins/RasterProductAsset.h"
 #include "fusion/autoingest/plugins/MercatorRasterProductAsset.h"
@@ -1003,7 +1004,7 @@ void AssetManager::ShowAssetMenu(const gstAssetHandle& asset_handle,
   // first item in menu should be the asset name since the table
   // might get redrawn after the menu has popped-up
   AssetDisplayHelper a(current_asset->type, current_asset->subtype);
-  menu.insertItem(a.GetPixmap(), shortAssetName(asset_handle->getName()));
+  menu.insertItem(a.GetPixmap(), shortAssetName(asset_handle->getName().c_str()));
 
   menu.insertSeparator();
   menu.insertSeparator();
@@ -1217,7 +1218,7 @@ void AssetManager::PushDatabase(const gstAssetHandle& handle) {
   // Update the preferences with the user's choice. We want to remember these
   // choices so that we can automatically select this server next time they
   // push/publish.
-  std::string database_name = shortAssetName(asset->GetRef().toString());
+  std::string database_name = shortAssetName(asset->GetRef().toString().c_str());
   Preferences::UpdatePublishServerDbMap(database_name, nickname);
 
   ServerConfig stream_server, search_server;
@@ -1351,7 +1352,7 @@ void AssetManager::PublishDatabase(const gstAssetHandle& handle) {
   // Update the preferences with the user's choice. We want to remember these
   // choices so that we can automatically select this server next time they
   // push/publish.
-  std::string database_name = shortAssetName(asset->GetRef().toString());
+  std::string database_name = shortAssetName(asset->GetRef().toString().c_str());
   Preferences::UpdatePublishServerDbMap(database_name, nickname);
 
   ServerConfig stream_server, search_server;

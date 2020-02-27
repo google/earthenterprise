@@ -33,7 +33,7 @@ class VectorDbrootGenerator : public ProtoDbrootGenerator {
     std::vector<uint> states;
 
     LOD(const std::string &name_, uint id, uint lodFlags_) :
-        name(name_),
+        name(name_.c_str()),
         channelId(id),
         lodFlags(lodFlags_) { }
   };

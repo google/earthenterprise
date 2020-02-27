@@ -16,25 +16,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <qpainter.h>
-#include <qinputdialog.h>
-#include <qcombobox.h>
-#include <qstatusbar.h>
-#include <qapplication.h>
-#include <qlayout.h>
-#include <qlcdnumber.h>
-#include <qspinbox.h>
-#include <qvbox.h>
-#include <qdockwindow.h>
-#include <qmessagebox.h>
-#include <qpopupmenu.h>
-#include <qmenubar.h>
-#include <qlabel.h>
-#include <qprogressbar.h>
-#include <qdragobject.h>
-#include <qpushbutton.h>
-#include <qfile.h>
-#include <qtextstream.h>
+#include <Qt/qpainter.h>
+#include <Qt/qinputdialog.h>
+#include <Qt/qcombobox.h>
+#include <Qt/qstatusbar.h>
+#include <Qt/qapplication.h>
+#include <Qt/qlayout.h>
+#include <Qt/qlcdnumber.h>
+#include <Qt/qspinbox.h>
+#include <Qt/q3vbox.h>
+#include <Qt/q3dockwindow.h>
+using QDockWindow = Q3DockWindow;
+#include <Qt/qmessagebox.h>
+#include <Qt/q3popupmenu.h>
+using QPopupMenu = Q3PopupMenu;
+#include <Qt/qmenubar.h>
+#include <Qt/qlabel.h>
+#include <Qt/qprogressbar.h>
+#include <Qt/q3dragobject.h>
+#include <Qt/qpushbutton.h>
+#include <Qt/qfile.h>
+#include <Qt/qtextstream.h>
 
 #include <builddate.h>
 #include "fusion/fusionversion.h"

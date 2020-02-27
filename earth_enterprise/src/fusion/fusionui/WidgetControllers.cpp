@@ -16,15 +16,15 @@
 
 #include "fusion/fusionui/WidgetControllers.h"
 
-#include <qpushbutton.h>
-#include <qcolordialog.h>
-#include <qgroupbox.h>
-#include <qspinbox.h>
-#include <qlineedit.h>
-#include <qtextedit.h>
-#include <qvalidator.h>
-#include <qdatetime.h>
-#include <qlabel.h>
+#include <Qt/qpushbutton.h>
+#include <Qt/qcolordialog.h>
+#include <Qt/qgroupbox.h>
+#include <Qt/qspinbox.h>
+#include <Qt/qlineedit.h>
+#include <Qt/qtextedit.h>
+#include <Qt/qvalidator.h>
+#include <Qt/qdatetime.h>
+#include <Qt/qlabel.h>
 
 #include <autoingest/.idl/storage/MapSubLayerConfig.h>
 

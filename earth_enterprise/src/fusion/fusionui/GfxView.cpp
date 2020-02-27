@@ -12,32 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-#include <qcursor.h>
-#include <qtimer.h>
-#include <qdragobject.h>
-#include <qmessagebox.h>
-#include <qbitmap.h>
-
+#include <Qt/qglobal.h>
+#include <Qt/qobject.h>
+#include <Qt/qcursor.h>
+#include <Qt/qtimer.h>
+#include <Qt/q3dragobject.h>
+#include <Qt/qmessagebox.h>
+#include <Qt/qbitmap.h>
+#include <Qt/qcoreapplication.h>
 #include <gstTexture.h>
 #include <gstTextureManager.h>
 #include <notify.h>
 #include <gstHistogram.h>
 #include <font.h>
-#include <qpainter.h>
+#include <Qt/qpainter.h>
 #include <khTimer.h>
 #include <gstIconManager.h>
 #include <khTileAddr.h>
 #include <gstGridUtils.h>
-
+#include "khException.h"
 #include "GfxView.h"
 #include "Preferences.h"
+
+using QTextDrag = Q3TextDrag;
 
 QString GfxView::MaxTexSize;
 QString GfxView::BitsPerComp;
 
 GfxView* GfxView::instance = 0;
-
+using QImageDrag = Q3ImageDrag;
 GfxView::GfxView(QWidget* parent, const char* name)
     : QGLWidget(parent, name),
       start_scale_(-1.0),               // less than 0 -> not dragging
@@ -112,7 +115,7 @@ void GfxView::mousePressEvent(QMouseEvent* e) {
   drag_box_.start(e->x(), e->y());
   drag_box_.end(e->x(), e->y());
 
-  if (e->button() == LeftButton) {
+  if (e->button() == Qt::LeftButton) {
     switch (tool_mode_) {
       case Edit: {
         const int kPickBox = 4;
@@ -147,7 +150,7 @@ void GfxView::mousePressEvent(QMouseEvent* e) {
         break;
     }
 
-  } else if (e->button() == MidButton) {
+  } else if (e->button() == Qt::MidButton) {
     save_tool_mode_ = tool_mode_;
     tool_mode_ = Pan;
     start_pan_[0] = state_.frust.CenterX();
@@ -162,24 +165,24 @@ void GfxView::mouseMoveEvent(QMouseEvent* e) {
                      khTilespace::Denormalize(point.x));
 
   // ignore if no button is pressed
-  if (!(e->state() & (LeftButton | MidButton | RightButton)))
+  if (!(e->state() & (Qt::LeftButton | Qt::MidButton | Qt::RightButton)))
     return;
 
   drag_box_.end(e->x(), e->y());
 
-  switch (tool_mode_ | (e->state() & MouseButtonMask)) {
-    case Edit | LeftButton:
+  switch (tool_mode_ | (e->state() & Qt::MouseButtonMask)) {
+    case Edit | Qt::LeftButton:
       emit MouseMove(ConvertScreenToNormalizedWorld(e->x(), e->y()));
       break;
 
-    case Select | LeftButton:
-    case ZoomBox | LeftButton:
+    case Select | Qt::LeftButton:
+    case ZoomBox | Qt::LeftButton:
       if (rubberband_on_)
         updateGL();
       break;
 
-    case Pan | LeftButton:
-    case Pan | MidButton:
+    case Pan | Qt::LeftButton:
+    case Pan | Qt::MidButton:
       {
         double cx = start_pan_[0] - (static_cast<double>(drag_box_.dX()) *
                                      state_.Scale());
@@ -192,7 +195,7 @@ void GfxView::mouseMoveEvent(QMouseEvent* e) {
       }
       break;
 
-    case ZoomDrag | LeftButton:
+    case ZoomDrag | Qt::LeftButton:
       {
         if (snap_to_level_) {
           // For snapping to level zooming, we choose to step a level for
@@ -232,11 +235,11 @@ void GfxView::mouseMoveEvent(QMouseEvent* e) {
 
 void GfxView::mouseReleaseEvent(QMouseEvent* e) {
   switch (tool_mode_ | e->button()) {
-    case Edit | LeftButton:
+    case Edit | Qt::LeftButton:
       emit MouseRelease();
       break;
 
-    case Select | LeftButton:
+    case Select | Qt::LeftButton:
       if (rubberband_on_) {
         rubberband_on_ = false;
         selectFeatures(e->state());
@@ -244,7 +247,7 @@ void GfxView::mouseReleaseEvent(QMouseEvent* e) {
       }
       break;
 
-    case ZoomBox | LeftButton:
+    case ZoomBox | Qt::LeftButton:
       if (rubberband_on_) {
         rubberband_on_ = false;
         SetCenter(state_.frust.w + drag_box_.cX() * state_.Scale(),
@@ -261,14 +264,14 @@ void GfxView::mouseReleaseEvent(QMouseEvent* e) {
         updateGL();
       }
       break;
-    case Pan | MidButton:
-    case Pan | LeftButton:
+    case Pan | Qt::MidButton:
+    case Pan | Qt::LeftButton:
       if (save_tool_mode_ != Unknown) {
         tool_mode_ = save_tool_mode_;
         save_tool_mode_ = Unknown;
       }
       break;
-    case ZoomDrag | LeftButton:
+    case ZoomDrag | Qt::LeftButton:
       start_scale_ = -1.0;
       adjustLevel(0);
       break;
@@ -394,9 +397,9 @@ void GfxView::zoomToBox(const gstBBox& bbox) {
 void GfxView::toolModeZoomBox(bool state) {
   if (state == 1) {
     tool_mode_ = ZoomBox;
-    QPixmap zoombox(QPixmap::fromMimeSource("zoombox_cursor.png"));
+    QPixmap zoombox("zoombox_cursor.png");
     QBitmap mask;
-    mask = QPixmap::fromMimeSource("zoombox_cursor_mask.png");
+    mask = QPixmap("zoombox_cursor_mask.png");
     zoombox.setMask(mask);
     setCursor(zoombox);
   }
@@ -405,28 +408,28 @@ void GfxView::toolModeZoomBox(bool state) {
 void GfxView::toolModeZoomDrag(bool state) {
   if (state == 1) {
     tool_mode_ = ZoomDrag;
-    setCursor(SizeVerCursor);
+    setCursor(Qt::SizeVerCursor);
   }
 }
 
 void GfxView::toolModeSelect(bool state) {
   if (state == 1) {
     tool_mode_ = Select;
-    setCursor(ArrowCursor);
+    setCursor(Qt::ArrowCursor);
   }
 }
 
 void GfxView::toolModePan(bool state) {
   if (state == 1) {
     tool_mode_ = Pan;
-    setCursor(PointingHandCursor);
+    setCursor(Qt::PointingHandCursor);
   }
 }
 
 void GfxView::toolModeEdit(bool state) {
   if (state == 1) {
     tool_mode_ = Edit;
-    setCursor(CrossCursor);
+    setCursor(Qt::CrossCursor);
   }
 }
 
@@ -840,12 +843,12 @@ void GfxView::ValidateGfxMode() {
                       arg(blue).arg(alpha);
     QMessageBox error(
       "Error",
-      tr("Unable to find appropriate graphics mode.\n") +
-      tr("Fusion needs 24 bits for RGB and 8 bits for alpha, or 8/8/8/8.\n") +
-      tr("This system is currently configured to provide: ") +
+      kh::tr("Unable to find appropriate graphics mode.\n") +
+      kh::tr("Fusion needs 24 bits for RGB and 8 bits for alpha, or 8/8/8/8.\n") +
+      kh::tr("This system is currently configured to provide: ") +
       clrmode + "\n" +
-      tr("Perhaps your graphics driver is not installed correctly.\n") +
-      tr("Fusion will attempt to continue, but graphics may perform poorly."),
+      kh::tr("Perhaps your graphics driver is not installed correctly.\n") +
+      kh::tr("Fusion will attempt to continue, but graphics may perform poorly."),
       QMessageBox::Critical,                      // icon
       QMessageBox::Ok,                            // button #1 text
       QMessageBox::NoButton,                      // button #2 text
@@ -853,7 +856,7 @@ void GfxView::ValidateGfxMode() {
       this,                                       // parent
       0,                                          // name
       true,                                       // modal
-      WStyle_DialogBorder | WStyle_StaysOnTop);   // style
+      Qt::MSWindowsFixedSizeDialogHint | Qt::WindowStaysOnTopHint);   // style
     error.exec();
   }
 }

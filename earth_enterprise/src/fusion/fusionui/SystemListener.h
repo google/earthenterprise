@@ -25,7 +25,7 @@ For history see CVS log (cvs log SystemListener.h -or- Emacs Ctrl-xvl).
 #ifndef __SystemListener_h
 #define __SystemListener_h
 
-#include <qobject.h>
+#include <Qt/qobject.h>
 #include <autoingest/AssetChangeListener.h>
 
 class SystemListener : public QObject {

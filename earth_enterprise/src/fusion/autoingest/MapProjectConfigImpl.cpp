@@ -25,7 +25,7 @@ MapProjectConfig::AddLayer(const LayerItem& layer_item)
        layer != layers.end(); ++layer) {
     if (layer->assetRef == layer_item.assetRef) {
       throw khException(kh::tr("Layer '%1' already exists in project")
-                        .arg(layer_item.assetRef));
+                        .arg(layer_item.assetRef.c_str()));
     }
   }
 
@@ -44,7 +44,7 @@ MapProjectConfig::DeleteLayer(const LayerItem& layer_item)
     }
   }
   throw khException(kh::tr("Layer '%1' not in project").arg(
-      layer_item.assetRef));
+      layer_item.assetRef.c_str()));
 }
 
 bool

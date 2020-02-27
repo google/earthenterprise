@@ -17,15 +17,15 @@
 
 #include <assert.h>
 
-#include <qtable.h>
-#include <qmessagebox.h>
-#include <qheader.h>
-#include <qpushbutton.h>
-#include <qurl.h>
-
+#include <Qt/q3table.h>
+#include <Qt/qmessagebox.h>
+#include <Qt/q3header.h>
+#include <Qt/qpushbutton.h>
+#include <Qt/qurl.h>
+#include "khException.h"
 #include "fusion/fusionui/ServerCombinationEdit.h"
 
-Publisher::Publisher(QWidget* parent, bool modal, WFlags flags)
+Publisher::Publisher(QWidget* parent, bool modal, Qt::WFlags flags)
   : PublisherBase(parent, 0, modal, flags) {
   server_combination_table->verticalHeader()->hide();
   server_combination_table->setLeftMargin(0);
@@ -34,10 +34,10 @@ Publisher::Publisher(QWidget* parent, bool modal, WFlags flags)
   server_combination_table->setNumRows(0);
 
   if (!server_combination_set_.Load()) {
-    QMessageBox::critical(this, tr("Error"),
-                          tr("Unable to load existing Server Associations\n") +
-                          tr("Check console for more information"),
-                          tr("OK"), 0, 0, 0);
+    QMessageBox::critical(this, kh::tr("Error"),
+                          kh::tr("Unable to load existing Server Associations\n") +
+                          kh::tr("Check console for more information"),
+                          kh::tr("OK"), 0, 0, 0);
   }
 
   for (uint row = 0; row < server_combination_set_.combinations.size(); ++row) {
@@ -56,12 +56,12 @@ void Publisher::SetRow(int row, const ServerCombination& c) {
   if (row > (num_rows - 1))
     server_combination_table->setNumRows(row + 1);
   server_combination_table->setText(row, 0, c.nickname);
-  server_combination_table->setText(row, 1, c.stream.url);
-  QUrl url(c.stream.url);
+  server_combination_table->setText(row, 1, c.stream.url.c_str());
+  QUrl url(c.stream.url.c_str());
   bool is_https = (url.protocol() == QString("https"));
   // Display SSL options only for URLs with https-scheme.
   if (is_https) {
-    server_combination_table->setText(row, 2, c.stream.cacert_ssl);
+    server_combination_table->setText(row, 2, c.stream.cacert_ssl.c_str());
     server_combination_table->setText(
         row, 3, c.stream.insecure_ssl ? "True" : "False");
   } else {
@@ -74,8 +74,8 @@ void Publisher::SetRow(int row, const ServerCombination& c) {
 ServerCombination Publisher::GetCombinationFromRow(int row) {
   ServerCombination c;
   c.nickname = server_combination_table->text(row, 0);
-  c.stream.url = server_combination_table->text(row, 1);
-  c.stream.cacert_ssl = server_combination_table->text(row, 2);
+  c.stream.url = server_combination_table->text(row, 1).toUtf8().constData();
+  c.stream.cacert_ssl = server_combination_table->text(row, 2).toUtf8().constData();
   c.stream.insecure_ssl = (server_combination_table->text(row, 3) == "True");
   return c;
 }
@@ -139,7 +139,7 @@ void Publisher::DeleteCombination() {
 
   if (QMessageBox::warning(this, "Confirm Delete",
       trUtf8("Confirm Delete."),
-      tr("OK"), tr("Cancel"), QString::null, 1, 1) == 0)
+      kh::tr("OK"), kh::tr("Cancel"), QString::null, 1, 1) == 0)
     server_combination_table->removeRow(row);
 }
 
@@ -191,10 +191,10 @@ void Publisher::accept() {
 
   if (!server_combination_set_.Save()) {
     QMessageBox::critical(
-        this, tr("Error"),
-        tr("Unable to save associations") +
-        tr("Check console for more information"),
-        tr("OK"), 0, 0, 0);
+        this, kh::tr("Error"),
+        kh::tr("Unable to save associations") +
+        kh::tr("Check console for more information"),
+        kh::tr("OK"), 0, 0, 0);
   }
   PublisherBase::accept();
 }

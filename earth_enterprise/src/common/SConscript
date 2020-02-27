@@ -130,11 +130,11 @@ utilsources = [
     ]
 # TODO: consider to remove dependency from qt
 geutil = env.sharedLib('geutil', utilsources,
-                       LIBS = ['gecommon', 'qt-mt'])
+                       LIBS = ['gecommon', 'QtGui', 'QtCore'])
 
 env.test('quadtreepath_unittest',
          'quadtreepath_unittest.cpp',
-         LIBS=['geutil', 'gecommon', 'qt-mt'])
+         LIBS=['geutil', 'gecommon', 'QtGui', 'QtCore'])
 
 env.test('crc_unittest',
          '../third_party/rsa_md5/crc_unittest.cpp',
@@ -142,7 +142,7 @@ env.test('crc_unittest',
 
 env.test('filebundle_unittest',
          'filebundle/filebundle_unittest.cpp',
-         LIBS=['geutil', 'gecommon', 'qt-mt'])
+         LIBS=['geutil', 'gecommon', 'QtGui', 'QtCore'])
 
 env.test('cachedreadaccessor_unittest',
          'filebundle/cachedreadaccessor_unittest.cpp',
@@ -158,7 +158,7 @@ env.test('packetfile_unittest',
 
 env.test('packetcompress_unittest',
          'packetcompress_unittest.cpp',
-         LIBS=['geutil', 'gecommon', 'qt-mt'])
+         LIBS=['geutil', 'gecommon', 'QtGui', 'QtCore'])
 
 env.test('uuid_unittest',
          '../third_party/rfc_uuid/uuid_unittest.cpp',
@@ -174,7 +174,7 @@ env.test('procpidstats_unittest',
 
 env.test('tile_resampler_unittest',
          'tile_resampler_unittest.cpp',
-         LIBS=['gecommon', 'gtest', 'qt-mt'])
+         LIBS=['gecommon', 'gtest', 'QtGui', 'QtCore'])
 
 env.test('verref_storage_unittest',
          'verref_storage_unittest.cpp',

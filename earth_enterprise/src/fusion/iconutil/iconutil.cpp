@@ -34,7 +34,7 @@ void Extract(const std::string &src, ExtractType type,
 
   GDALDataset *srcDataset = (GDALDataset*)GDALOpen(src.c_str(), GA_ReadOnly );
   if (!srcDataset) {
-    throw khException(kh::tr("Unable to open %1").arg(src));
+    throw khException(kh::tr("Unable to open %1").arg(src.c_str()));
   }
 
 

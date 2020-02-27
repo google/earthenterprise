@@ -22,8 +22,9 @@
 #include "common/notify.h"
 #include "fusion/gst/gstTypes.h"
 #include "fusion/gst/gstBBox.h"
-
-#include <qaction.h>
+#include <Qt/qglobal.h>
+#include <Qt/qobject.h>
+#include <Qt/qaction.h>
 
 #include "mainwindowbase.h"
 

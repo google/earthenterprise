@@ -82,7 +82,7 @@ TaskRequirements::TaskRequirements(const TaskDef &taskdef, uint taskid,
           // just leave ipath pointing to the mosaic
         }
       } else {
-        throw khException(kh::tr("Unable to load '%1'").arg(ipath));
+        throw khException(kh::tr("Unable to load '%1'").arg(ipath.c_str()).toUtf8().constData());
       }
     }
 
@@ -95,7 +95,7 @@ TaskRequirements::TaskRequirements(const TaskDef &taskdef, uint taskid,
           // just leave ipath pointing to the mosaic
         }
       } else {
-        throw khException(kh::tr("Unable to load '%1'").arg(ipath));
+        throw khException(kh::tr("Unable to load '%1'").arg(ipath.c_str()).toUtf8().constData());
       }
     }
 
@@ -317,7 +317,7 @@ TaskRequirements::ApplyOutputConstraint(uint index,
         theVolumeManager.GetVolumeDef(oc.requiredVolume);
       if (!voldef) {
         throw khException(kh::tr("Unknown volume name '%1' in output constraint")
-                          .arg(oc.requiredVolume));
+                          .arg(oc.requiredVolume.c_str()).toUtf8().constData());
       }
       output.volume = oc.requiredVolume;
       output.host   = voldef->host;
@@ -421,7 +421,7 @@ TaskRequirements::ApplyUserSuppliedRules(const TaskDef &taskDef,
         ApplyInputConstraint(ic->num, *ic);
       } else {
         throw khException(kh::tr("Invalid input constraint number %1.\nValid range is (0, %2].")
-                          .arg(ToString(ic->num),
+                          .arg(ToString(ic->num).c_str(),
                                ToQString(inputs.size())));
       }
     }

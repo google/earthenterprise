@@ -311,7 +311,7 @@ void Renderer::RenderFeatureShield(SkCanvas &canvas,
   SkBitmap icon;
   if (bitmap_shields) {
     // Try to read the icon file:
-    IconReference ref(config.icon_type_, config.icon_href_);
+    IconReference ref(config.icon_type_, config.icon_href_.c_str());
     bitmap_shields =
         SkImageDecoder::DecodeFile(ref.SourcePath().c_str(), &icon);
   }

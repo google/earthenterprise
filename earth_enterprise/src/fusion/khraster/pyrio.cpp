@@ -335,10 +335,10 @@ pyrio::Reader::Reader(const std::string &filename) :
 {
   pyrfile = ::open(filename.c_str(), O_RDONLY|O_LARGEFILE);
   if (pyrfile.fd() < 0) {
-    throw khErrnoException(kh::tr("Unable to open %1").arg(filename));
+    throw khErrnoException(kh::tr("Unable to open %1").arg(filename.c_str()));
   }
   if (!pyrio::IndexStorage::Header::Read(header_, pyrfile.fd())) {
-    throw khException(kh::tr("Error reading %1").arg(filename));
+    throw khException(kh::tr("Error reading %1").arg(filename.c_str()));
   }
   switch (header_.compressMode) {
     case CompressNone:
@@ -346,7 +346,7 @@ pyrio::Reader::Reader(const std::string &filename) :
       break;
     case CompressJPEG:
       if (header_.componentType != khTypes::UInt8) {
-        throw khException(kh::tr("Error reading %1: JPEG compression with non uint8 pixel type").arg(filename));
+        throw khException(kh::tr("Error reading %1: JPEG compression with non uint8 pixel type").arg(filename.c_str()));
       }
       compressor = TransferOwnership(
           new JPEGCompressor(RasterProductTileResolution,
@@ -363,10 +363,10 @@ pyrio::Reader::Reader(const std::string &filename) :
                           header_.bandBufSize()));
       break;
     case CompressDXT1:
-      throw khException(kh::tr("Error reading %1: DXT1 decompression not supported").arg(filename));
+      throw khException(kh::tr("Error reading %1: DXT1 decompression not supported").arg(filename.c_str()));
       break;
     case CompressPNG:
-      throw khException(kh::tr("Error reading %1: PNG decompression not supported").arg(filename));
+      throw khException(kh::tr("Error reading %1: PNG decompression not supported").arg(filename.c_str()));
       break;
   }
 
@@ -589,7 +589,7 @@ pyrio::Writer::Writer(const std::string &filename,
 {
   if (compressMode == CompressJPEG &&
       componentType != khTypes::UInt8) {
-    throw khException(kh::tr("Error writing %1: JPEG compression with non uint8 pixel type").arg(filename));
+    throw khException(kh::tr("Error writing %1: JPEG compression with non uint8 pixel type").arg(filename.c_str()));
   }
 
   header.numComponents  = numComponents;
@@ -604,10 +604,10 @@ pyrio::Writer::Writer(const std::string &filename,
 
   pyrfile = ::open(filename.c_str(), O_WRONLY|O_LARGEFILE|O_CREAT|O_TRUNC, 0666);
   if (pyrfile.fd() < 0) {
-    throw khErrnoException(kh::tr("Unable to open %1").arg(filename));
+    throw khErrnoException(kh::tr("Unable to open %1").arg(filename.c_str()));
   }
   if (!pyrio::IndexStorage::Header::Write(pyrfile.fd(), header)) {
-    throw khException(kh::tr("Error writing %1").arg(filename));
+    throw khException(kh::tr("Error writing %1").arg(filename.c_str()));
   }
   switch (header.compressMode) {
     case CompressNone:
@@ -629,7 +629,7 @@ pyrio::Writer::Writer(const std::string &filename,
       break;
     default:
       throw khException(CompressModeName(header.compressMode) +
-                        kh::tr(" compressor not supported for pyramid files!"));
+                        kh::tr(" compressor not supported for pyramid files!").toStdString());
       break;
   }
 }

@@ -13,14 +13,15 @@
 // limitations under the License.
 
 
-#include <qtable.h>
-#include <qmessagebox.h>
-#include <qinputdialog.h>
+#include <Qt/q3table.h>
+using QTable = Q3Table;
+#include <Qt/qmessagebox.h>
+#include <Qt/qinputdialog.h>
 #include <notify.h>
 
 #include "LocaleManager.h"
 
-LocaleManager::LocaleManager(QWidget* parent, bool modal, WFlags flags)
+LocaleManager::LocaleManager(QWidget* parent, bool modal, Qt::WFlags flags)
   : LocaleManagerBase(parent, 0, modal, flags) {
   locale_table->verticalHeader()->hide();
   locale_table->setLeftMargin(0);

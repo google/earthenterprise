@@ -679,7 +679,12 @@ sub EmitMemberReader
         } elsif ($member->{xmlskiptag}) {
             print $fh $prefix, "FromElement(elem, $obj.$mname);\n";
         } else {
-            print $fh $prefix, "GetElementOrDefault(elem, \"$mtname\", $obj.$mname, $member->{loaddefault});\n";
+            my $temp=$member->{loaddefault};
+            if (index($temp, "Qt::") != -1)
+            {
+               $temp = "static_cast<QColor>(".$temp.")";
+            }
+            print $fh $prefix, "GetElementOrDefault(elem, \"$mtname\", $obj.$mname, $temp);\n";
         }
     } else {
         if ($member->{xmlattr}) {
@@ -1928,7 +1933,7 @@ sub EmitEnumDOMReader
       print $fh $indent, $indent, "return;\n";
     }
     print $fh $indent, "}\n";
-    print $fh $indent, "throw khException(kh::tr(\"Invalid string '%1' for enum '%2'\").arg(enumStr).arg(\"$enum->{qualname}\"));\n";
+    print $fh $indent, "throw khException(kh::tr(\"Invalid string '%1' for enum '%2'\").arg(enumStr.c_str()).arg(\"$enum->{qualname}\"));\n";
     print $fh "}\n\n";
 }
 

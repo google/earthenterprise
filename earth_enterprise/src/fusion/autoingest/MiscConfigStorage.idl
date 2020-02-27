@@ -34,20 +34,11 @@ class MiscConfigStorage {
   uint64       MaxVersionCacheMemorySize = uint64(2415919104);
 
   bool         LimitMemoryUtilization = false;
-
-  // The cache will only be pruned if the size of the dirty map is less than or equal to this fraction of the cache.
-  float         PrunePercentage = float(100);
   
   bool         GenerateProductPreviews = true;
   uint         MutexTimedWaitSec = uint(30);
   uint         PackGenAnalysisThreads = uint(1);
   GraphOpsType GraphOperations = MiscConfigStorage::NO_GRAPH_OPS;
-
-  // True to minify previous levels, false to build from source imagery and terrain
-  bool         UseMinification = true;
-
-  uint         TriesPerCommand = uint(1);
-  uint         SleepBetweenCommandTriesSec = uint(0);
 
 #pragma LoadAndSave
 

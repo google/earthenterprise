@@ -13,16 +13,16 @@
 // limitations under the License.
 
 
-#include <qfiledialog.h>
-#include <qdatetimeedit.h>
-#include <qspinbox.h>
-#include <qtextcodec.h>
-#include <qcombobox.h>
-#include <qlistbox.h>
-#include <qcheckbox.h>
-#include <qmessagebox.h>
-#include <qlabel.h>
-#include <qinputdialog.h>
+#include <Qt/qfiledialog.h>
+#include <Qt/qdatetimeedit.h>
+#include <Qt/qspinbox.h>
+#include <Qt/qtextcodec.h>
+#include <Qt/qcombobox.h>
+#include <Qt/q3listbox.h>
+#include <Qt/qcheckbox.h>
+#include <Qt/qmessagebox.h>
+#include <Qt/qlabel.h>
+#include <Qt/qinputdialog.h>
 
 #include "common/khFileUtils.h"
 #include "common/khException.h"
@@ -73,7 +73,7 @@ struct StdConversion {
 const int NumStdConversions =
     static_cast<int>(sizeof(StdConversions) / sizeof(StdConversions[0]));
 
-const QString custom_conversion(QObject::tr("Other..."));
+const QString custom_conversion(kh::tr("Other..."));
 
 
 // Force feature type conversion enum.
@@ -131,10 +131,10 @@ VectorAssetWidget::VectorAssetWidget(QWidget* parent, AssetBase* base)
   {
     gstProviderSet providers;
     if (!providers.Load()) {
-      QMessageBox::critical(this, tr("Error"),
-                            tr("Unable to load providers\n") +
-                            tr("Check console for more information"),
-                            tr("OK"), 0, 0, 0);
+      QMessageBox::critical(this, kh::tr("Error"),
+                            kh::tr("Unable to load providers\n") +
+                            kh::tr("Check console for more information"),
+                            kh::tr("OK"), 0, 0, 0);
     } else {
       provider_combo->insertStringList(providers.GetNames());
       // grab ids now in case the user changes them before
@@ -181,15 +181,15 @@ QFileDialog* VectorAssetWidget::FileDialog() {
   if (!file_dialog_) {
     file_dialog_ = new QFileDialog(this);
     file_dialog_->setMode(QFileDialog::ExistingFiles);
-    file_dialog_->setCaption(tr("Open Source"));
+    file_dialog_->setCaption(kh::tr("Open Source"));
     if (khDirExists(Preferences::DefaultVectorPath().latin1())) {
       file_dialog_->setDir(Preferences::DefaultVectorPath());
     } else {
       QMessageBox::critical(
-          this, tr("Error"),
-          tr("The default vector source path is not valid.\n"
+          this, kh::tr("Error"),
+          kh::tr("The default vector source path is not valid.\n"
              "Please update your preferences."),
-          tr("OK"), 0, 0, 0);
+          kh::tr("OK"), 0, 0, 0);
     }
 
     file_dialog_->addFilter(
@@ -239,8 +239,8 @@ void VectorAssetWidget::CustomConversion(const QString& str) {
 
   bool ok;
   double conv = QInputDialog::getDouble(
-                  tr("Custom Unit Conversion Factor"),
-                  tr("Enter multiplier to convert source values to meters:"),
+                  kh::tr("Custom Unit Conversion Factor"),
+                  kh::tr("Enter multiplier to convert source values to meters:"),
                   1.0, -2147483647, 2147483647, 16, &ok, this);
 
   if (ok) {
@@ -447,11 +447,11 @@ void VectorAssetWidget::AssembleEditRequest(
       case SourceConfig::FileOK:
         break;
       case SourceConfig::CantStat:
-        throw khException(tr("Unable to get file information for ")
+        throw khException(kh::tr("Unable to get file information for ")
                           + filename + "\n" +
                           khErrnoException::errorString(errno));
       case SourceConfig::NonVolume:
-        throw khException(filename + tr(" doesn't reside on a known volume.\n") +
+        throw khException(filename + kh::tr(" doesn't reside on a known volume.\n") +
                          " You can move your asset files to a known volume, or create a new volume\n" +
 			 " that contains their current location using geconfigureassetroot command.");
  

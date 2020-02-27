@@ -154,14 +154,14 @@ num_jobs = GetOption('num_jobs')
 
 # Build Fusion and Server
 build_cmds = {'build': [
-    'cd src; python2.7 /usr/bin/scons -j%d %s third_party' % (num_jobs, arg_vars),
-    'cd src; python2.7 /usr/bin/scons -j%d %s' % (num_jobs, arg_vars)
+    'cd src; scons -j%d %s third_party' % (num_jobs, arg_vars),
+    'cd src; scons -j%d %s' % (num_jobs, arg_vars)
 ]}
 run_build = env.PhonyTargets(**build_cmds)
 
 # Copy the binaries to the install staging directory
 stage_bin_cmds = {'stage_bin': [
-    'cd src; python2.7 /usr/bin/scons -j%d installdir="%s" %s install' % (num_jobs, installdir, arg_vars)
+    'cd src; scons -j%d installdir="%s" %s install' % (num_jobs, installdir, arg_vars)
 ]}
 stage_bin = env.PhonyTargets(**stage_bin_cmds)
 
@@ -177,7 +177,7 @@ env.copyfile(inst_common_dir('.'), './src/version.txt')
 
 # Copy the tutorial to the install staging directory if it exists.
 stage_tutorial_cmds = {'stage_tutorial': [
-    'cd tutorial; if [ -d FusionTutorial ]; then python2.7 /usr/bin/scons -j%d installdir="%s"; else echo "Skipping tutorial; no tutorial files found."; fi' % (num_jobs, installdir)
+    'cd tutorial; if [ -d FusionTutorial ]; then scons -j%d installdir="%s"; else echo "Skipping tutorial; no tutorial files found."; fi' % (num_jobs, installdir)
 ]}
 stage_tutorial = env.PhonyTargets(**stage_tutorial_cmds)
 env.Depends(stage_tutorial, stage_data)

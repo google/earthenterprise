@@ -33,7 +33,8 @@ gedbroot = env.sharedLib('gedbroot',
                           ],
                          LIBS=['gecommon',
                                'geprotobuf',
-                               'qt-mt',
+                               'QtGui',
+                               'QtCore'
                                ])
 env.install('common_lib', [gedbroot])
 

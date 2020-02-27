@@ -27,7 +27,7 @@
 #include <WidgetControllers.h>
 
 class QListView;
-class QListViewItem;
+//class QListViewItem;
 class RasterProjectEditRequest;
 class gstDrawState;
 class LayerItemBase;

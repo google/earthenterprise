@@ -19,7 +19,8 @@
 #define GEO_EARTH_ENTERPRISE_SRC_FUSION_FUSIONUI_MAPLAYER_H_
 
 #include <vector>
-
+#include <Qt/q3listview.h>
+using QListViewItem = Q3ListViewItem;
 #include "autoingest/.idl/storage/MapLayerConfig.h"
 #include "fusion/gst/gstTextureManager.h"
 #include "fusion/fusionui/WidgetControllers.h"

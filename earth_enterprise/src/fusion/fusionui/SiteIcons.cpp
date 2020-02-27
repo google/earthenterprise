@@ -15,12 +15,11 @@
 
 #include <sys/types.h>
 #include <dirent.h>
-
-#include <qimage.h>
-#include <qpixmap.h>
-#include <qiconview.h>
-#include <qtabwidget.h>
-#include <qmessagebox.h>
+#include <Qt/qimage.h>
+#include <Qt/qpixmap.h>
+#include <Qt/q3iconview.h>
+#include <Qt/qtabwidget.h>
+#include <Qt/qmessagebox.h>
 
 #include <khArray.h>
 #include <notify.h>

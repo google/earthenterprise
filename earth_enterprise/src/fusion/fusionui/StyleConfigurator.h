@@ -18,8 +18,8 @@
 #ifndef KHSRC_FUSION_FUSIONUI_STYLECONFIGURATOR_H__
 #define KHSRC_FUSION_FUSIONUI_STYLECONFIGURATOR_H__
 
-#include <qscrollview.h>
-
+#include<Qt/q3scrollview.h>
+using QScrollView = Q3ScrollView;
 class StyleConfigurator : public QScrollView {
   Q_OBJECT
 

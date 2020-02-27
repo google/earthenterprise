@@ -239,7 +239,7 @@ int main(int argc, char* argv[]) {
       if (i < 0)
         locale = kDefaultLocaleSuffix;
       else
-        locale = locale_set.supportedLocales[i];
+        locale = locale_set.supportedLocales[i].toUtf8().constData();
 
       if (!config.imagery_layerdefs_path_.empty()) {
         khReadStringFromFile(LocalizedLayerDefs(config.imagery_layerdefs_path_,

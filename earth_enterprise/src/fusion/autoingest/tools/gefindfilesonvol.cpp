@@ -116,7 +116,7 @@ ValidateVolume(const std::string &volname)
 {
   if (theVolumeManager.GetVolumeDef(volname) == 0) {
     throw khException(kh::tr("Unknown volume '%1' specified with --vol")
-                      .arg(volname));
+                      .arg(volname.c_str()));
   }
 }
 
@@ -128,7 +128,7 @@ ValidateAssetVer(const std::string &verstr)
   AssetVersion assetver(verref);
   if (!assetver) {
     throw khException(kh::tr("Unknown asset version '%1' specified with --assetver")
-                      .arg(verstr));
+                      .arg(verstr.c_str()));
   }
 }
 

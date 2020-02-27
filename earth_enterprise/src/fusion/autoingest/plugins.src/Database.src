@@ -268,7 +268,7 @@ DatabaseAssetImplD::HandleEditRequest(const DatabaseEditRequest &req)
 
   if (!db) {
     throw khException(kh::tr("Unable to create database %1")
-                      .arg(dbname));
+                      .arg(dbname.c_str()));
   }
 
 }
@@ -417,7 +417,7 @@ DatabaseAssetVersionImplD::DelayedBuildChildren(void)
           kh::tr("Imagery resources in time machine projects are required to "
                  "have valid acquisition dates.\n"
                  "The following imagery resource(s) do not have acquisition "
-                 "dates specified:%1.\n").arg(missing_dates));
+                 "dates specified:%1.\n").arg(missing_dates.c_str()));
     }
   }
 
@@ -550,7 +550,7 @@ DatabaseAssetVersionImplD::CreateQTPacket(
     input_verrefs.push_back(subindex.Ref());
     qtpacket_config.imagery_verref_ = subindex.Ref();
     qtpacket_config.imageryproj_verref_ = imagery_project->GetRef();
-    qtpacket_config.imagery_date_string_ = imagery_project->GetAcquisitionDate();
+    qtpacket_config.imagery_date_string_ = imagery_project->GetAcquisitionDate();//.toStdString();
   }
   if (combined_terrain) {
     input_versions.push_back(combined_terrain);
@@ -602,7 +602,7 @@ DatabaseAssetVersionImplD::CreateUnifiedIndex(
     AssetVersion subindex = imagery_project->GetGEIndexVersion();
     index_input_versions.push_back(subindex);
     index_input_verrefs.push_back(subindex.Ref());
-    std::string date_string = imagery_project->GetAcquisitionDate();
+    std::string date_string = imagery_project->GetAcquisitionDate();//.toStdString();
     unified_index_config.indexes_.push_back(
         UnifiedIndexEntry(ToString(geindex::TypedEntry::Imagery),
                           subindex.Ref(),
@@ -771,12 +771,8 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
     terrain_project->LoadInsetInfo(ClientTmeshTilespaceFlat,
                                   beginSSLevel, endSSLevel,
                                   terrainInsets);
-    const uint beginMinifyLevel  = (MiscConfig::Instance().UseMinification
-                                    ? StartTmeshLevel
-                                    : 0);
-    const uint endMinifyLevel    = (MiscConfig::Instance().UseMinification
-                                    ? terrainInsets[0].effectiveMaxLevel
-                                    : 0);
+    const uint beginMinifyLevel  = StartTmeshLevel;
+    const uint endMinifyLevel    = terrainInsets[0].effectiveMaxLevel;
 
 #ifdef DEBUG_SS_DECISIONS
     notify(NFY_NOTICE, "  beginMinifyLevel = %u", beginMinifyLevel);
@@ -895,12 +891,10 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
         continue;
 
       // calculate the level range that will be minified
-      uint effectiveBeginMinifyLevel = (MiscConfig::Instance().UseMinification
-                                        ? std::max(ssGenInfo[i].coverage.beginLevel(), beginMinifyLevel)
-                                        : 0);
-      uint effectiveEndMinifyLevel = (MiscConfig::Instance().UseMinification
-                                      ? std::min(ssGenInfo[i].coverage.endLevel(), endMinifyLevel)
-                                      : 0);
+      uint effectiveBeginMinifyLevel =
+        std::max(ssGenInfo[i].coverage.beginLevel(), beginMinifyLevel);
+      uint effectiveEndMinifyLevel =
+        std::min(ssGenInfo[i].coverage.endLevel(), endMinifyLevel);
 
       // Build a PacketGenConfig
       PacketGenConfig packetGenConfig;

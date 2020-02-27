@@ -18,9 +18,11 @@
 #ifndef _GfxView_h_
 #define _GfxView_h_
 
-#include <qgl.h>
-#include <qaction.h>
-
+#include <QtOpenGL/QGLWidget>
+//#include <qgl.h>
+#include <Qt/q3action.h>
+//#include <qaction.h>
+#include <QtGui/QMouseEvent>
 #include <gstGeode.h>
 
 class gstTextureManager;

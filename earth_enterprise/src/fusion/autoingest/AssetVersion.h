@@ -72,7 +72,6 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   AssetVersionImpl& operator=(const AssetVersionImpl&&) = delete;
 
  public:
-  static std::string GetPlaceholderAssetRegistryKey() { return "SourceAssetVersion"; }
   using Base = AssetVersionStorage;
   std::string XMLFilename() const { return XMLFilename(GetRef()); }
   std::string WorkingDir(void) const { return WorkingDir(GetRef()); }
@@ -80,6 +79,8 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
     return WorkingDir() + fname;
   }
 
+  // implemented in LoadAny.cpp
+  static std::shared_ptr<AssetVersionImpl> Load(const std::string &boundref);
 
   virtual std::string GetName() const {   // Returns the name of the asset version, e.g., "CombinedRPAssetVersion"
     assert(false);
@@ -136,7 +137,6 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
     return (state == AssetDefs::Bad);
   }
 
-  virtual bool InputStatesAffectMyState(AssetDefs::State stateByInputs, bool blockedByOfflineInputs) const {assert(false); return true;}
   const SharedString & GetRef(void) const { return name; }
   std::string GetAssetRef(void) const {
     AssetVersionRef verref(name);
@@ -292,7 +292,7 @@ inline StorageManager<AssetVersionImpl>&
 AssetVersion::storageManager(void)
 {
   static StorageManager<AssetVersionImpl> storageManager(
-      MiscConfig::Instance().VersionCacheSize, MiscConfig::Instance().LimitMemoryUtilization, MiscConfig::Instance().MaxVersionCacheMemorySize, MiscConfig::Instance().PrunePercentage, "version");
+      MiscConfig::Instance().VersionCacheSize, MiscConfig::Instance().LimitMemoryUtilization, MiscConfig::Instance().MaxVersionCacheMemorySize, "version");
   return storageManager;
 }
 

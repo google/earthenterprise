@@ -115,7 +115,7 @@ public:
     // verify that assetroot is an absolute path
     if (!assetroot.length() || assetroot[0] != '/') {
       throw khException(kh::tr("Invalid assetroot name: '%1'")
-                        .arg(assetroot));
+                        .arg(assetroot.c_str()));
     }
 
     // we cannot verify that the assetroot actually exists or is properly

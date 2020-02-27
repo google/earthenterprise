@@ -26,7 +26,7 @@
 #include <qpixmap.h>
 #include <qmessagebox.h>
 #include <SkFontHost.h>
-
+#include "khException.h"
 #include <common/geInstallPaths.h>
 #include <common/khFileUtils.h>
 #include <common/khstl.h>
@@ -150,10 +150,10 @@ TextStyle::TextStyle(QWidget *parent,
     }
   } else {
     QMessageBox::warning(
-        parent, tr("Error"),
-        tr("Unable to load saved text styles.\n") +
-        tr("Check console for more details."),
-        tr("OK"), QString::null, QString::null);
+        parent, kh::tr("Error"),
+        kh::tr("Unable to load saved text styles.\n") +
+        kh::tr("Check console for more details."),
+        kh::tr("OK"), QString::null, QString::null);
   }
 }
 
@@ -170,10 +170,10 @@ void TextStyle::accept() {
   if (new_text_styles != orig_text_styles) {
     if (!new_text_styles.Save()) {
       QMessageBox::warning(
-          this, tr("Error"),
-          tr("Unable to save text styles.\n") +
-          tr("Check console for more details."),
-          tr("OK"), QString::null, QString::null);
+          this, kh::tr("Error"),
+          kh::tr("Unable to save text styles.\n") +
+          kh::tr("Check console for more details."),
+          kh::tr("OK"), QString::null, QString::null);
     }
   }
   TextStyleBase::accept();

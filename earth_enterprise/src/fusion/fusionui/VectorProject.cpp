@@ -107,7 +107,7 @@ void VectorLayerItem::Init() {
 
   setText(0, layer_config_.defaultLocale.name_);
 
-  setText(1, shortAssetName(layer_config_.assetRef));
+  setText(1, shortAssetName(layer_config_.assetRef.c_str()));
 
   std::vector<uint> fill_rgba, outline_rgba;
   for (std::vector<DisplayRuleConfig>::iterator rule = layer_config_.displayRules.begin();

@@ -137,7 +137,7 @@ FusionConnection::khAssetManagerAddr(void)
     SockAddr addr(node, khAssetManagerPort);
     if (!addr) {
       throw khException(kh::tr("Host %1 not found")
-                        .arg(node));
+                        .arg(node.c_str()));
     }
     return addr;
   }
@@ -153,7 +153,7 @@ FusionConnection::khResourceManagerAddr(void)
     SockAddr addr(node, khResourceManagerPort);
     if (!addr) {
       throw khException(kh::tr("Host %1 not found")
-                        .arg(node));
+                        .arg(node.c_str()));
     }
     return addr;
   }
