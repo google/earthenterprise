@@ -149,6 +149,8 @@ for plugin in plugins:
     env.Command('plugins/'+plugin+'Asset.cpp',
                 [ 'AssetGenPublicCpp.pl', 'AssetGen.pm', src ],
                 [ "${SOURCES[0]} ${SOURCES[2]} $TARGET" ])
+    env.Depends('plugins/'+plugin+'Asset.cpp', 'plugins/'+plugin+'Asset.h')
+    env.Depends('plugins/'+plugin+'Asset.os', 'plugins/'+plugin+'Asset.cpp')
 
 env.Command('ReadOnlyFromStorage.cpp',
             [ 'FromStorageGen.pl' ],
