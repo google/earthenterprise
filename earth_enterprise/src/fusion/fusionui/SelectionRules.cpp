@@ -19,7 +19,7 @@
 
 
 #include <Qt/q3deepcopy.h>
-#include <Qt/qtable.h>
+#include <Qt/q3table.h>
 
 #include <Qt/qmessagebox.h>
 #include <Qt/qinputdialog.h>
@@ -1407,7 +1407,7 @@ void SelectionRules::compileAndAccept() {
         it != config.displayRules.end(); ++it) {
     if (it->site.enabled &&
         it->site.enablePopup &&
-        (it->site.balloonText.find('"') != -1)) {
+        (it->site.balloonText.indexOf('"') != -1)) {
         QMessageBox::critical(this, kh::tr("Error"),
             kh::tr("BalloonStyle Text for (%1) contains a \"\nThis is not allowed.")
             .arg(it->name),

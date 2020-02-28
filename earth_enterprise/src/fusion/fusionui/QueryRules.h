@@ -25,7 +25,7 @@
 
 #include <autoingest/.idl/storage/FilterConfig.h>
 
-class QComboBox;
+class Q3ComboBox;
 class QLineEdit;
 
 class QueryRules : public Q3ScrollView {
@@ -58,9 +58,8 @@ class QueryRules : public Q3ScrollView {
   int rule_modified_;
   int rb_item_height_;
   QStringList* field_descriptors_;
-
-  QComboBox* field_[kMaxRuleCount];
-  QComboBox* oper_[kMaxRuleCount];
+  Q3ComboBox* field_[kMaxRuleCount];
+  Q3ComboBox* oper_[kMaxRuleCount];
   QLineEdit* rval_[kMaxRuleCount];
 };
 

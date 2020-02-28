@@ -18,7 +18,7 @@
 #include <Qt/qstringlist.h>
 //#include <Qt/qgroupbox.h>
 #include <Qt/q3groupbox.h>
-using QGroupBox = Q3GroupBox;
+//using QGroupBox = Q3GroupBox;
 #include <Qt/qlineedit.h>
 //#include <Qt/qobject.h>
 #include <Qt/q3ptrlist.h>
@@ -49,7 +49,7 @@ void QueryRules::init(const FilterConfig& config) {
     QObject* obj;
     while ((obj = *it) != 0) {
       ++it;
-      QGroupBox* box = reinterpret_cast<QGroupBox*>(obj);
+      Q3GroupBox* box = reinterpret_cast<Q3GroupBox*>(obj);
       delete box;
     }
   }
@@ -173,7 +173,7 @@ void QueryRules::fewerRules() {
     return;
 
   const QObjectList c = viewport()->children();
-  QGroupBox* lastbox = reinterpret_cast<QGroupBox*>(c.last());
+  Q3GroupBox* lastbox = reinterpret_cast<Q3GroupBox*>(c.last());
   removeChild(lastbox);
   delete lastbox;
 

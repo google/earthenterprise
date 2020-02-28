@@ -34,7 +34,7 @@
 
 #include <Qt/q3popupmenu.h>
 #include <Qt/q3header.h>
-#include <Qt/qlineedit.h>
+#include <Qt/qlineedit.h
 #include <Qt/qmessagebox.h>
 
 using QPopupMenu = Q3PopupMenu;
@@ -138,7 +138,7 @@ RasterLayerItem::RasterLayerItem(QListView* parent, const QString& asset_path,
   : LayerItemBase(parent),
     level_diff_(level_diff),
     is_mercator_(is_mercator) {
-  config_.dataAsset = asset_path;
+  config_.dataAsset = asset_path.toUtf8().constData();
 
   InitMetaData();
   InitBBox();
@@ -221,7 +221,7 @@ QString RasterLayerItem::text(int col) const {
           config_.overridemax));
     }
 
-    return QString(shortAssetName(config_.dataAsset.toUtf8().constData())) + level;
+    return QString(shortAssetName(config_.dataAsset.c_str())) + level;
   } else {
     return QString();
   }
@@ -313,7 +313,7 @@ RasterProjectWidget::RasterProjectWidget(QWidget *parent,
     ListView()->removeColumn(0);
   }
   ListView()->header()->hide();
-  ListView()->setResizeMode(QListView::AllColumns);
+  ListView()->setResizeMode(Q3ListView::AllColumns);
   ListView()->EnableAssetDrops(asset_type, sub_type_.c_str());
   SetGenericCheckboxText(kh::tr("Preview"));
 
@@ -351,9 +351,9 @@ void RasterProjectWidget::Prefill(const RasterProjectEditRequest &req) {
   // but this is taken care of by hiding this edit box from them.
   // Here let's make sure something gets recorded when the edit is sent.
   if (cfg.asset_uuid_ == "") {
-    uuid_edit->setText(create_uuid_string());
+    uuid_edit->setText(create_uuid_string().c_str());
   } else {
-    uuid_edit->setText(cfg.asset_uuid_);
+    uuid_edit->setText(cfg.asset_uuid_.c_str());
   }
 
   if (cfg.is_timemachine_project_ && CheckForValidDates())
@@ -537,7 +537,7 @@ LayerItemBase* RasterProjectWidget::NewLayerItem(const QString& assetref) {
   }
 
   // Check that the layer has a valid acquisition date if timemachine is active.
-  if (GetTimeMachineCheckboxState() && !CheckForValidDates(assetref))
+  if (GetTimeMachineCheckboxState() && !CheckForValidDates(assetref.toUtf8().constData()))
     return 0;
 
   RasterLayerItem* item = new RasterLayerItem(ListView(), assetref, level_diff_,
@@ -602,7 +602,7 @@ bool RasterProjectWidget::CheckForValidDates(const std::string& resource) {
                   "Imagery resources in time machine projects are required to "
                   "have valid acquisition dates.\n"
                   "The following imagery resource(s) do not have acquisition "
-                  "dates specified:%1.\n").arg(missing_dates.c_str()f),
+                  "dates specified:%1.\n").arg(missing_dates.c_str()),
               "OK", 0, 0, 0);
     return false;
   }

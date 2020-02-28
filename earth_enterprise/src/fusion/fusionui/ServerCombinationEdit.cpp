@@ -65,15 +65,15 @@ void ServerCombinationEdit::QueryServer() {
         this, "Query Failed",
         tr("Error: %1\nPlease check if Server on the host '%2'"
            " is running and reachable from Fusion Host.").arg(
-            publisher_client.ErrMsg(),
-            stream_server.url),
+            publisher_client.ErrMsg().c_str(),
+            stream_server.url.c_str()),
         0, 0, 0);
     query_status_label->setText("<font color=\"red\"><b>Failure</b></font>");
     return;
   }
 
   if (nickname_edit->text().isEmpty()) {
-    nickname_edit->setText(stream_server.url);
+    nickname_edit->setText(stream_server.url.c_str());
   }
   ok_btn->setEnabled(true);
   query_status_label->setText("<font color=\"#007f00\"><b>Success</b></font>");

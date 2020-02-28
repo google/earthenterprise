@@ -23,7 +23,7 @@
 #include <Qt/qcheckbox.h>
 #include <Qt/qcolordialog.h>
 #include <Qt/qcombobox.h>
-#include <Qt/qfiledialog.h>
+#include <Qt/q3filedialog.h>
 #include <Qt/qgroupbox.h>
 #include <qinputdialog.h>
 #include <Qt/qinputdialog.h>
@@ -33,6 +33,7 @@
 #include <Qt/qpushbutton.h>
 #include <qspinbox.h>
 #include <Qt/qspinbox.h>
+#include <Qt/q3listview.h>
 
 #include "autoingest/.idl/gstProvider.h"
 #include "autoingest/.idl/storage/RasterProductConfig.h"
@@ -161,11 +162,11 @@ RasterAssetWidget::RasterAssetWidget(QWidget* parent, AssetDefs::Type type)
                                   acquisition_date_seconds);
 }
 
-QFileDialog* RasterAssetWidget::FileDialog() {
+Q3FileDialog* RasterAssetWidget::FileDialog() {
   if (!file_dialog_) {
     // will be automatically deleted with this
-    file_dialog_ = new QFileDialog(this);
-    file_dialog_->setMode(QFileDialog::ExistingFiles);
+    file_dialog_ = new Q3FileDialog(this);
+    file_dialog_->setMode(Q3FileDialog::ExistingFiles);
     file_dialog_->setCaption(tr("Open Source"));
     bool add_dem_file_filter = false;
 
@@ -268,8 +269,8 @@ void RasterAssetWidget::AddSource() {
     { 
       string.remove( idx, strlen("/header.xml"));
     }
-
-    if (source_list->findItem(string, Qt::ExactMatch)) {
+    // was Qt::ExactMatch
+    if (source_list->findItem(string, Q3ListView::ExactMatch)) {
       QMessageBox::warning(
           this, kh::tr("Warning : duplicate source.") ,
           kh::tr("Source '%1' already exists in this resource. Ignoring duplicates.")
@@ -402,7 +403,7 @@ std::string RasterAssetWidget::GetMosaicFill() const {
     }
   }
 
-  return mosaic_fill_combo->currentText().latin1();
+  return std::string(mosaic_fill_combo->currentText().toUtf8().constData());
 }
 
 void RasterAssetWidget::ChangeMaskType(int mode) {
@@ -489,7 +490,7 @@ double RasterAssetWidget::GetElevUnits() const {
 }
 
 void RasterAssetWidget::ChooseLutfile() {
-  QFileDialog lutDialog(this, "Choose a Keyhole LUT file", true);
+  Q3FileDialog lutDialog(this, "Choose a Keyhole LUT file", true);
   lutDialog.addFilter("Keyhole LUT file ( *.lut )");
 
   if (lutDialog.exec() == QDialog::Accepted)

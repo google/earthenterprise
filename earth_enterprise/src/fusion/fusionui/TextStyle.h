@@ -28,7 +28,7 @@
 #include <autoingest/.idl/MapTextStyle.h>
 #include "WidgetControllers.h"
 #include <Qt/qwidget.h>
-//#include "textstylebase.h"
+#include "textstylebase.h"
 
 class FontDef {
  public:
