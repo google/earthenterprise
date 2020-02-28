@@ -15,13 +15,14 @@
 
 #include <vector>
 
-#include <qtable.h>
-#include <qpopupmenu.h>
-#include <qcursor.h>
-#include <qmessagebox.h>
-#include <qfiledialog.h>
-#include <qapplication.h>
-#include <qclipboard.h>
+
+#include <Qt/q3table.h>
+#include <Qt/q3popupmenu.h>
+#include <Qt/qcursor.h>
+#include <Qt/qmessagebox.h>
+#include <Qt/qfiledialog.h>
+#include <Qt/qapplication.h>
+#include <Qt/qclipboard.h>
 
 #include <khFileUtils.h>
 #include <gstFilter.h>
@@ -39,7 +40,7 @@
 #include "ObjectDetail.h"
 #include "GfxView.h"
 
-SelectionView::SelectionView(QWidget* parent, const char* name, WFlags fl)
+SelectionView::SelectionView(QWidget* parent, const char* name, Qt::WFlags fl)
     : SelectionViewBase(parent, name, fl) {
   connect(selectionTable, SIGNAL(contextMenuRequested(int, int, const QPoint&)),
           this, SLOT(openContextMenu(int, int, const QPoint&)));

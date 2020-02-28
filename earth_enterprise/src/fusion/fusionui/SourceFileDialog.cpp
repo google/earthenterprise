@@ -8,21 +8,21 @@
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either  express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
 
 #include <vector>
 
-#include <qlabel.h>
-#include <qcombobox.h>
-#include <qpopupmenu.h>
-#include <qpushbutton.h>
-#include <qcursor.h>
-#include <qstringlist.h>
-#include <qtextcodec.h>
-#include <qlayout.h>
+#include <Qt/qlabel.h>
+#include <Qt/qcombobox.h>
+#include <Qt/q3popupmenu.h>
+#include <Qt/qpushbutton.h>
+#include <Qt/qcursor.h>
+#include <Qt/qstringlist.h>
+#include <Qt/qtextcodec.h>
+#include <Qt/qlayout.h>
 
 #include <khFileUtils.h>
 #include <gstFormatManager.h>
@@ -30,19 +30,20 @@
 #include "SourceFileDialog.h"
 #include "Preferences.h"
 #include "FileHistory.h"
+#include "khException.h"
 
 
-SourceFileDialog* SourceFileDialog::onlyone = NULL;
+SourceFileDialog* SourceFileDialog::onlyone = nullptr;
 
 SourceFileDialog* SourceFileDialog::self() {
-  if (onlyone == NULL)
-    onlyone = new SourceFileDialog(0);
+  if (onlyone == nullptr)
+    onlyone = new SourceFileDialog(nullptr);
   return onlyone;
 }
 
 SourceFileDialog::SourceFileDialog(QWidget* parent)
     : QFileDialog(parent) {
-  setCaption(tr("Open"));
+  setCaption(kh::tr("Open"));
   history_btn_ = new FileHistory(this, Preferences::filepath(
                                      "fileaccesshistory.xml"));
   addToolButton(history_btn_);
@@ -82,7 +83,7 @@ SourceFileDialog::SourceFileDialog(QWidget* parent)
     }
   }
 
-  addWidgets(label, codecCombo, NULL);
+  addWidgets(label, codecCombo, nullptr);
 
 #if 0
   //////////////////////////////////////////////////////////////////////////////
@@ -110,7 +111,7 @@ SourceFileDialog::SourceFileDialog(QWidget* parent)
 
 void SourceFileDialog::chooseCodec(const QString& str) {
   if (str == "<none>") {
-    codec = QString::null;
+    codec = QString::nullptr;
   } else {
     codec = str;
   }

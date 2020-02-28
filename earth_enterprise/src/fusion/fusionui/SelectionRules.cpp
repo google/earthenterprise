@@ -37,9 +37,9 @@
 #include <Qt/qlayout.h>
 #include <Qt/qvalidator.h>
 #include <Qt/qtabwidget.h>
-#include <Qt/qwidgetstack.h>
+#include <Qt/q3widgetstack.h>
 #include <Qt/qimage.h>
-#include <Qt/qdragobject.h>
+#include <Qt/q3dragobject.h>
 #include <Qt/qbuttongroup.h>
 #include <common/khTileAddrConsts.h>
 #include "fusion/fusionui/QueryRules.h"

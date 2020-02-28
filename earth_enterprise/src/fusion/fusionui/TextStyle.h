@@ -115,47 +115,4 @@ class TextStyleButtonController : public WidgetController
   MapTextStyleConfig  workingConfig;
 };
 
-
-// ****************************************************************************
-// ***  Preview Label
-// ****************************************************************************
-class TextPreviewLabel : public QLabel {
-  Q_OBJECT
-
- public:
-  TextPreviewLabel(QWidget* parent, const char* name);
-
-  // inherited from QWidget
-  // support drag
-  virtual void mousePressEvent(QMouseEvent* event);
-  virtual void mouseMoveEvent(QMouseEvent* event);
-
-  void UpdateConfig(const MapTextStyleConfig& config);
- 
- private:
-  bool dragging_;
-  MapTextStyleConfig config_;
-};
-
-
-// ****************************************************************************
-// ***  Style Save Button
-// ****************************************************************************
-
-class StyleSaveButton : public QPushButton {
-  Q_OBJECT
-
- public:
-  StyleSaveButton(QWidget* parent, const char* name);
-
-  // inherited from QWidget
-  // support drop
-  virtual void dragEnterEvent(QDragEnterEvent* event);
-  virtual void dropEvent(QDropEvent* event);
-  virtual void dragLeaveEvent(QDragLeaveEvent* event);
-
- signals:
-  void StyleChanged(QWidget* btn);
-};
-
 #endif // FUSION_FUSIONUI_TEXTSTYLE_H__

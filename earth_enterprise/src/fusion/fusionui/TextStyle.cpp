@@ -15,6 +15,8 @@
 //
 
 #include "TextStyle.h"
+#include "StyleSave.h"
+#include "TextPreviewLabel.h"
 #include <qcombobox.h>
 #include <qspinbox.h>
 #include <qbuttongroup.h>

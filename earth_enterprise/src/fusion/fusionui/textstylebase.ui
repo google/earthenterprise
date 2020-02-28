@@ -697,6 +697,7 @@
 <pixmapinproject/>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>StyleSave.h</includehint>
     <includehint>TextStyle.h</includehint>
     <includehint>TextStyle.h</includehint>
     <includehint>TextStyle.h</includehint>

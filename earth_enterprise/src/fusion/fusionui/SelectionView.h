@@ -18,8 +18,8 @@
 #ifndef _SelectionView_h_
 #define _SelectionView_h_
 
-#include <qdockwindow.h>
-
+#include <Qt/q3dockwindow.h>
+using QDockWindow = Q3DockWindow;
 #include "selectionviewbase.h"
 #include <gstBBox.h>
 
@@ -29,7 +29,7 @@ class SelectionView : public SelectionViewBase {
   Q_OBJECT
 
  public:
-  SelectionView(QWidget* parent = 0, const char* name = 0, WFlags fl = 0);
+  SelectionView(QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0);
 
 protected slots:
 void configure(gstSelector* s);
