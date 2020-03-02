@@ -34,7 +34,7 @@
 
 #include <Qt/q3popupmenu.h>
 #include <Qt/q3header.h>
-#include <Qt/qlineedit.h
+#include <Qt/qlineedit.h>
 #include <Qt/qmessagebox.h>
 
 using QPopupMenu = Q3PopupMenu;

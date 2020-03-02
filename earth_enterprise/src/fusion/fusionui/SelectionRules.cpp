@@ -54,6 +54,8 @@
 #include "fusion/gst/gstSource.h"
 #include "fusion/gst/gstRecordJSContext.h"
 #include "fusion/fusionui/BalloonStyleText.h"
+using QImageDrag = Q3ImageDrag;
+using QMimeSourceFactory = Q3MimeSourceFactory;
 
 enum { QueryRulesStackId = 0, JavascriptStackId = 1 };
 
@@ -187,7 +189,7 @@ void SelectionRules::MoveRuleUp() {
 
 void SelectionRules::InsertFilter(const DisplayRuleConfig& cfg) {
   config.displayRules.push_back(cfg);
-  filterList->insertItem(Q3DeepCopy<Qt/qString>(cfg.name));
+  filterList->insertItem(Q3DeepCopy<QString>(cfg.name));
   selected_filter_ = -1;
   filterList->setSelected(filterList->numRows() - 1, true);
 }
@@ -203,7 +205,7 @@ void SelectionRules::NewRule() {
 
   if (ok && !filter_name.isEmpty()) {
     DisplayRuleConfig cfg;
-    cfg.name = Q3DeepCopy<Qt/qString>(filter_name);
+    cfg.name = Q3DeepCopy<QString>(filter_name);
     InsertFilter(cfg);
   }
 }
@@ -222,7 +224,7 @@ void SelectionRules::CopyRule() {
 
   if (ok && !filter_name.isEmpty()) {
     DisplayRuleConfig cfg = from_cfg;
-    cfg.name = Q3DeepCopy<Qt/qString>(filter_name);
+    cfg.name = Q3DeepCopy<QString>(filter_name);
     // must zero out style id's
     cfg.feature.style.id = 0;
     cfg.site.style.id = 0;
@@ -287,7 +289,7 @@ void SelectionRules::RenameRule() {
         continue;
       }
       filterList->blockSignals(true);
-      config.displayRules[id].name = Q3DeepCopy<Qt/qString>(text);
+      config.displayRules[id].name = Q3DeepCopy<QString>(text);
       filterList->changeItem(text, id);
       filterList->blockSignals(false);
       break;

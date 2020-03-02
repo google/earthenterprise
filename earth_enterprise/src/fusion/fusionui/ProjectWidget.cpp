@@ -23,7 +23,6 @@
 #include <Qt/qlabel.h>
 #include <Qt/qlineedit.h>
 #include <Qt/qspinbox.h>
-
 #include "fusion/fusionui/LayerItemBase.h"
 #include "fusion/fusionui/ProjectLayerView.h"
 
@@ -151,10 +150,10 @@ void ProjectWidget::SetTimeMachineCheckboxState(bool state) {
   is_timemachine_checkbox->setChecked(state);
   if (state) {
     timemachine_pixmap->setPixmap(
-                                QPixmap::fromMimeSource("timemachine-on.png"));
+                                QPixmap("timemachine-on.png"));
   } else {
     timemachine_pixmap->setPixmap(
-                                QPixmap::fromMimeSource("timemachine-off.png"));
+                                QPixmap("timemachine-off.png"));
   }
 }
 

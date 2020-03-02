@@ -24,7 +24,7 @@ class StyleConfigurator : public QScrollView {
   Q_OBJECT
 
  public:
-  StyleConfigurator(QWidget* parent = 0, const char* name = 0, WFlags f = 0);
+  StyleConfigurator(QWidget* parent = 0, const char* name = 0, Qt::WFlags f = 0);
 };
 
 #endif  // !KHSRC_FUSION_FUSIONUI_STYLECONFIGURATOR_H__

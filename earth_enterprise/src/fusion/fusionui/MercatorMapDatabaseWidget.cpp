@@ -45,7 +45,7 @@ void MercatorMapDatabaseWidget::Prefill(const MapDatabaseEditRequest& request) {
 
   if (request.config.mapProject.size() != 0) {
     projects.push_back(request.config.mapProject);
-    map_project_label->setText(shortAssetName(request.config.mapProject.c_str()))
+    map_project_label->setText(shortAssetName(request.config.mapProject.c_str()));
   } else {
     map_project_label->setText(empty_text);
   }

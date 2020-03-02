@@ -33,7 +33,7 @@ class SelectionRules : public SelectionRulesBase {
   SelectionRules(QWidget *parent, const LayerConfig &, gstLayer *layer_,
                  const gstHeaderHandle &hdr, int id = 0);
 
-  LayerConfig getConfig() const { return config; }
+  LayerConfig getCofnfig() const { return config; }
   void minLevel(int, int);
 
   // inherited from QDialog
