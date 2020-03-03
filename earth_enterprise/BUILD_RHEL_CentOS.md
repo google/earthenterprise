@@ -39,6 +39,7 @@ sudo subscription-manager repos --enable=rhel-server-dts2-6-rpms
 # For all RHEL 6 Editions:
 sudo subscription-manager repos --enable=rhel-6-server-optional-rpms
 sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
+sudo yum install -y https://repo.ius.io/ius-release-el6.rpm
 ```
 
 ## Install Git
