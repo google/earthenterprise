@@ -18,6 +18,7 @@
 #ifndef KHSRC_FUSION_FUSIONUI_SOURCEFILEDIALOG_H__
 #define KHSRC_FUSION_FUSIONUI_SOURCEFILEDIALOG_H__
 
+#include <Qt/qobjectdefs.h>
 #include <Qt/q3filedialog.h>
 #include <Qt/qstringlist.h>
 #include <Qt/qcheckbox.h>

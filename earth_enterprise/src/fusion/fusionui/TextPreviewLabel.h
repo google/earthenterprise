@@ -19,7 +19,7 @@
 
 #include <Qt/qlabel.h>
 #include <Qt/qwidget.h>
-
+#include <Qt/qobjectdefs.h>
 class QMouseEvent;
 class MapTextStyleEvent;
 

@@ -23,7 +23,7 @@
 #include <Qt/qcombobox.h>
 #include <Qt/q3table.h>
 #include <Qt/q3header.h>
-#include <qwidgetstack.h>
+#include <Qt/q3widgetstack.h>
 #include <qmessagebox.h>
 #include "khException.h"
 #include "fusion/fusionui/PixmapManager.h"

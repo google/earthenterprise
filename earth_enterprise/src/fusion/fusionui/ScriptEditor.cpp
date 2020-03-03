@@ -16,14 +16,14 @@
 
 #include <set>
 
-#include <qmessagebox.h>
-#include <qtextedit.h>
-#include <qlistbox.h>
-#include <qstringlist.h>
-#include <qpushbutton.h>
-#include <qbuttongroup.h>
-#include <qprogressdialog.h>
-#include <qapplication.h>
+#include <Qt/qmessagebox.h>
+#include <Qt/qtextedit.h>
+#include <Qt/q3listbox.h>
+#include <Qt/qstringlist.h>
+#include <Qt/qpushbutton.h>
+#include <Qt/q3buttongroup.h>
+#include <Qt/qprogressdialog.h>
+#include <Qt/qapplication.h>
 
 #include "ScriptEditor.h"
 #include <gstFormat.h>
@@ -84,10 +84,10 @@ ScriptEditor::ScriptEditor(QWidget* parent,
 
 ScriptEditor::~ScriptEditor(void)
 {
-  for (ValueCache::const_iterator i = cachedValues.begin();
-       i != cachedValues.end(); ++i) {
-    if (i->second) {
-      delete i->second;
+
+  for (const auto& i : cachedValues) {
+    if (i.second) {
+      delete i.second;
     }
   }
 }

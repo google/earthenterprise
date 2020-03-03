@@ -19,6 +19,7 @@
 #define KHSRC_FUSION_FUSIONUI_STYLECONFIGURATOR_H__
 
 #include<Qt/q3scrollview.h>
+#include <Qt/qobjectdefs.h>
 using QScrollView = Q3ScrollView;
 class StyleConfigurator : public QScrollView {
   Q_OBJECT

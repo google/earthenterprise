@@ -16,7 +16,7 @@
 
 #ifndef STYLESAVE_H
 #define STYLESAVE_H
-
+#include <Qt/qobjectdefs.h>
 #include <Qt/qpushbutton.h>
 #include <Qt/qwidget.h>
 #include "TextPreviewLabel.h"

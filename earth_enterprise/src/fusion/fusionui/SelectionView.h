@@ -18,6 +18,7 @@
 #ifndef _SelectionView_h_
 #define _SelectionView_h_
 
+#include <Qt/qobjectdefs.h>
 #include <Qt/q3dockwindow.h>
 using QDockWindow = Q3DockWindow;
 #include "selectionviewbase.h"

@@ -18,6 +18,7 @@
 #ifndef _ObjectDetail_h_
 #define _ObjectDetail_h_
 
+#include <Qt/qobjectdefs.h>
 #include <Qt/qobject.h>
 #include <Qt/q3listview.h>
 using QListViewItem = Q3ListViewItem;

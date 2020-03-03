@@ -21,7 +21,7 @@
 #include <khArray.h>
 #include <Qt/q3scrollview.h>
 #include <Qt/qwidget.h>
-//using QScrollView = Q3ScrollView;
+#include <Qt/qobjectdefs.h>
 
 #include <autoingest/.idl/storage/FilterConfig.h>
 

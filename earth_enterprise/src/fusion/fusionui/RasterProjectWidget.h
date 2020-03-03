@@ -18,7 +18,7 @@
 
 #ifndef FUSION_FUSIONUI_RASTERPROJECTWIDGET_H__
 #define FUSION_FUSIONUI_RASTERPROJECTWIDGET_H__
-
+#include <Qt/qobjectdefs.h>
 #include "ProjectWidget.h"
 #include <string>
 #include <autoingest/.idl/storage/AssetDefs.h>
@@ -27,7 +27,7 @@
 #include <WidgetControllers.h>
 
 class QListView;
-//class QListViewItem;
+class QListViewItem;
 class RasterProjectEditRequest;
 class gstDrawState;
 class LayerItemBase;

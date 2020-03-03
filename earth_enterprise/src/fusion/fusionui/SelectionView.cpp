@@ -39,6 +39,7 @@
 #include "DataViewTable.h"
 #include "ObjectDetail.h"
 #include "GfxView.h"
+#include <Qt/qtextstream.h>
 using QHeader = Q3Header;
 using QPopupMenu = Q3PopupMenu;
 

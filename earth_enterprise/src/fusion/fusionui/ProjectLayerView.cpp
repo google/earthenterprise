@@ -19,6 +19,8 @@
 #include <Qt/qobject.h>
 #include "ProjectLayerView.h"
 #include "Preferences.h"
+using QListView = Q3ListView;
+
 
 ProjectLayerView::ProjectLayerView(QWidget* parent, const char* n, Qt::WFlags f)
     : QListView(parent, n, f) {
@@ -37,8 +39,8 @@ void ProjectLayerView::EnableAssetDrops(AssetDefs::Type type,
   viewport()->setAcceptDrops(true);
 }
 
-void ProjectLayerView::SelectItem(QListViewItem* item) {
-  QListViewItem* child = firstChild();
+void ProjectLayerView::SelectItem(Q3ListViewItem* item) {
+  Q3ListViewItem* child = firstChild();
   while (child) {
     setSelected(child, false);
     child = child->nextSibling();

@@ -109,7 +109,7 @@ void ProjectWidget::MoveLayerDown() {
 }
 
 void ProjectWidget::SelectLayer() {
-  QListViewItem* item = layer_listview->selectedItem();
+  Q3ListViewItem* item = layer_listview->selectedItem();
   LayerItemBase* layer_item = static_cast<LayerItemBase*>(item);
   if (layer_item) {
     delete_layer_btn->setEnabled(true);

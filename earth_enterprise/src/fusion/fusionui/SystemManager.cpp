@@ -18,11 +18,14 @@
 #include "SystemListener.h"
 #include <autoingest/khAssetManagerProxy.h>
 #include <notify.h>
-#include <qapplication.h>
-#include <qlistbox.h>
-#include <qtooltip.h>
-#include <qpainter.h>
-#include <qpen.h>
+#include <Qt/qapplication.h>
+#include <Qt/q3listbox.h>
+#include <Qt/qtooltip.h>
+#include <Qt/qpainter.h>
+#include <Qt/qpen.h>
+using QListBoxText = Q3ListBoxText;
+using QListBoxItem = Q3ListBoxItem;
+using QListBox = Q3ListBox;
 
 
 class WaitingItem : public QListBoxText
@@ -31,7 +34,7 @@ class WaitingItem : public QListBoxText
   virtual void paint(QPainter *painter) {
     if (!error.isEmpty()) {
       QPen oldpen = painter->pen();
-      painter->setPen(QObject::red);
+      painter->setPen(Qt::red);
       QListBoxText::paint(painter);
       painter->setPen(oldpen);
     } else {
@@ -67,7 +70,7 @@ class WaitingErrorTip : public QToolTip
   }
 };
 
-SystemManager::SystemManager( QWidget* parent, const char* name, bool modal, WFlags fl )
+SystemManager::SystemManager( QWidget* parent, const char* name, bool modal, Qt::WFlags fl )
     : SystemManagerBase( parent, name, modal, fl ), taskTimer(this)
 {
   connect(&taskTimer, SIGNAL(timeout()), this, SLOT(updateTasks()));
@@ -125,7 +128,9 @@ SystemManager::assetsChanged(const AssetChanges &changes)
   // add new log entries
   for (AssetChanges::CIterator i = changes.items.begin();
        i != changes.items.end(); ++i) {
-    activityList->insertItem( i->ref + ": " + i->desc );
+    std::string itemname { i->ref.toString() };
+    itemname += ": " + i->desc;
+    activityList->insertItem(QString(itemname.c_str()));
   }
 
 
@@ -148,12 +153,14 @@ SystemManager::updateTasks(void)
   TaskLists taskLists;
   if (!khAssetManagerProxy::GetCurrTasks("dummy", taskLists, error)) {
     QString errorMsg;
-    static const QString BUSY_MSG = "GetCurrTasks: " + sysManBusyMsg;
+    std::string temp_msg { "GetCurrTasks: "};
+    temp_msg += sysManBusyMsg;
+    static const QString BUSY_MSG = temp_msg.c_str();
     if (error.compare(BUSY_MSG) == 0)
-      errorMsg = tr("--- System Manager is busy ---");
+      errorMsg = kh::tr("--- System Manager is busy ---");
     else
-      errorMsg = tr("--- Unable to contact System Manager ---");
-    
+      errorMsg = kh::tr("--- Unable to contact System Manager ---");
+
     // Can't get TaskList...
     // clean top panes and display message about
     // being unable to connect to asset manager
@@ -168,7 +175,7 @@ SystemManager::updateTasks(void)
     for (std::vector<TaskLists::WaitingTask>::const_iterator w =
            taskLists.waitingTasks.begin();
          w != taskLists.waitingTasks.end(); ++w) {
-      (void) new WaitingItem(waitingList, w->verref,
+      (void) new WaitingItem(waitingList, w->verref.c_str(),
                              w->activationError);
     }
 
@@ -180,7 +187,10 @@ SystemManager::updateTasks(void)
       for (std::vector<TaskLists::ActiveTask>::const_iterator a =
              p->activeTasks.begin();
            a != p->activeTasks.end(); ++a) {
-        activeList->insertItem(p->hostname + ": " + a->verref);
+        QString itemname = p->hostname.c_str();
+        itemname += "; ";
+        itemname += a->verref.c_str();
+        activeList->insertItem(itemname);
       }
     }
   }
