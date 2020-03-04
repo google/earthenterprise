@@ -51,7 +51,7 @@ SourceFileDialog::SourceFileDialog(QWidget* parent)
 
   QStringList file_list = history_btn_->getFileList();
   if (file_list.size() != 0)
-    setDir(khDirname(file_list[0].toUtf8().constData()));
+    setDir(khDirname(file_list[0].toUtf8().constData()).c_str());
 
   setMode(Q3FileDialog::ExistingFiles);
 
@@ -138,7 +138,7 @@ DatabaseIndexDialog::DatabaseIndexDialog()
 
   QStringList fileList = history_btn_->getFileList();
   if (fileList.size() != 0)
-    setDir(khDirname(fileList[0].toUtf8().constData()));
+    setDir(khDirname(fileList[0].toUtf8().constData()).c_str());
 }
 
 void DatabaseIndexDialog::ChooseRecent(const QString& fname) {
@@ -182,7 +182,7 @@ OpenWithHistoryDialog::OpenWithHistoryDialog(QWidget *parent,
 
   QStringList file_list = history_btn_->getFileList();
   if (file_list.size() != 0)
-    setDir(khDirname(file_list[0].toUtf8().constData()));
+    setDir(khDirname(file_list[0].toUtf8().constData()).c_str());
 
   setMode(Q3FileDialog::ExistingFile);
 }

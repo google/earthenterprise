@@ -17,16 +17,16 @@
 #include "TextStyle.h"
 #include "StyleSave.h"
 #include "TextPreviewLabel.h"
-#include <qcombobox.h>
-#include <qspinbox.h>
-#include <qbuttongroup.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qgroupbox.h>
-#include <qimage.h>
-#include <qdragobject.h>
-#include <qpixmap.h>
-#include <qmessagebox.h>
+#include <Qt/qcombobox.h>
+#include <Qt/qspinbox.h>
+#include <Qt/qbuttongroup.h>
+#include <Qt/qlabel.h>
+#include <Qt/qpushbutton.h>
+#include <Qt/qgroupbox.h>
+#include <Qt/qimage.h>
+#include <Qt/q3dragobject.h>
+#include <Qt/qpixmap.h>
+#include <Qt/qmessagebox.h>
 #include <SkFontHost.h>
 #include "khException.h"
 #include <common/geInstallPaths.h>
@@ -34,6 +34,7 @@
 #include <common/khstl.h>
 #include <gst/maprender/TextRenderer.h>
 #include <gst/maprender/SGLHelps.h>
+using QImageDrag = Q3ImageDrag;
 
 void TextStyle::ShowMissingFontsDialog(
   QWidget* widget, const std::set<maprender::FontInfo>& missing_fonts) {

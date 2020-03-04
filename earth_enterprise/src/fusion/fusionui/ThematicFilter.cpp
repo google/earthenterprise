@@ -74,7 +74,7 @@ class Histogram {
  public:
   class ValueCount {
    public:
-    ValueCount() : value(QString(0)), count(0) {}
+    ValueCount(const char* c = nullptr) : value(QString(c)), count(0) {}
     QString value;
     int count;
   };

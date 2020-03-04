@@ -13,7 +13,6 @@
 // limitations under the License.
 
 
-#include <Qt/qfiledialog.h>
 #include <Qt/qdatetimeedit.h>
 #include <Qt/qspinbox.h>
 #include <Qt/qtextcodec.h>
@@ -177,10 +176,10 @@ VectorAssetWidget::VectorAssetWidget(QWidget* parent, AssetBase* base)
                                   acquisition_date_day);
 }
 
-QFileDialog* VectorAssetWidget::FileDialog() {
+Q3FileDialog* VectorAssetWidget::FileDialog() {
   if (!file_dialog_) {
-    file_dialog_ = new QFileDialog(this);
-    file_dialog_->setMode(QFileDialog::ExistingFiles);
+    file_dialog_ = new Q3FileDialog(this);
+    file_dialog_->setMode(Q3FileDialog::ExistingFiles);
     file_dialog_->setCaption(kh::tr("Open Source"));
     if (khDirExists(Preferences::DefaultVectorPath().latin1())) {
       file_dialog_->setDir(Preferences::DefaultVectorPath());
@@ -319,7 +318,7 @@ bool VectorAssetWidget::GetDoNotFixInvalidGeometriesCheck() const {
 
 void VectorAssetWidget::Prefill(const VectorProductImportRequest& request) {
   acquisition_date_wrapper_->SetDate(0, 0, 0);
-  std::string date = request.meta.GetValue("sourcedate");
+  std::string date = request.meta.GetValue("sourcedate").toUtf8().constData();
   if (!date.empty()) {
     acquisition_date_wrapper_->SetDate(date);
   }
@@ -366,7 +365,7 @@ void VectorAssetWidget::Prefill(const VectorProductImportRequest& request) {
        src != request.sources.sources.end(); ++src) {
     khFusionURI furi(src->uri);
     if (furi.Valid()) {
-      source_list->insertItem(furi.NetworkPath());
+      source_list->insertItem(furi.NetworkPath().c_str());
     } else {
       source_list->insertItem(src->uri.c_str());
     }
@@ -440,21 +439,26 @@ void VectorAssetWidget::AssembleEditRequest(
   }
 
   request->sources.clear();
+  std::string msg;
   for (int row = 0; row < source_list->numRows(); row++) {
-    std::string filename = source_list->text(row).latin1();
+    std::string filename = source_list->text(row).toUtf8().constData();
     SourceConfig::AddResult result = request->sources.AddFile(filename);
     switch (result) {
+      case SourceConfig::NonVolume:
+          msg.clear();
+          msg = filename;
+          msg += kh::tr(" doesn't reside on a known volume.\n").toUtf8().constData();
+          msg += " You can move your asset files to a known volume, or create a new volume\n";
+          msg += " that contains their current location using geconfigureassetroot command.";
+          throw khException(msg);
       case SourceConfig::FileOK:
         break;
       case SourceConfig::CantStat:
-        throw khException(kh::tr("Unable to get file information for ")
-                          + filename + "\n" +
-                          khErrnoException::errorString(errno));
-      case SourceConfig::NonVolume:
-        throw khException(filename + kh::tr(" doesn't reside on a known volume.\n") +
-                         " You can move your asset files to a known volume, or create a new volume\n" +
-			 " that contains their current location using geconfigureassetroot command.");
- 
+        msg.clear();
+        msg = kh::tr("Unable to get file information for ").toUtf8().constData();
+        msg += filename + "\n";
+        msg += khErrnoException::errorString(errno).toUtf8().constData();
+        throw khException(msg);
     }
   }
   bool ok_north = false;
