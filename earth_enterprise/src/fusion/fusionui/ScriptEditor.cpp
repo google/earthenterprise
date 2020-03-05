@@ -15,14 +15,13 @@
 //
 
 #include <set>
-
 #include <Qt/qmessagebox.h>
 #include <Qt/q3textedit.h>
 #include <Qt/q3listbox.h>
 #include <Qt/qstringlist.h>
 #include <Qt/qpushbutton.h>
 #include <Qt/q3buttongroup.h>
-#include <Qt/qprogressdialog.h>
+#include <Qt/q3progressdialog.h>
 #include <Qt/qapplication.h>
 #include <Qt/q3button.h>
 #include "ScriptEditor.h"
@@ -34,6 +33,7 @@
 
 using QTextEdit = Q3TextEdit;
 using QButton = Q3Button;
+using QProgressDialog = Q3ProgressDialog;
 
 ScriptEditor::ScriptEditor(QWidget* parent,
                            const gstSharedSource &source_,
@@ -284,10 +284,12 @@ void ScriptEditor::getValues() {
 }
 
 void ScriptEditor::insertButtonClicked(int id) {
-  QButton *button = insertButtonGroup->find(id);
+  QButton *button = static_cast<QButton*>(insertButtonGroup->find(id));
   if (!button) return;
-  QPushButton *pushButton = static_cast<QPushButton*>(button);
-  QString text = pushButton->text();
+  // originally, QButton (Q3Button) is cast to QPushButton
+  // this cast is not allowed in Qt4, as QButton does not exist
+  // however, the text() method can be called directly on QButton now
+  QString text = button->text();
   text.replace("&&", "&");  // undo double '&' needed to avoid accelerator key
   scriptEdit->insert(text);
 }

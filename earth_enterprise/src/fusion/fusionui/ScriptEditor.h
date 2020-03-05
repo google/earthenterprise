@@ -21,7 +21,7 @@
 
 #include <vector>
 #include <map>
-
+#include <Qt/qobjectdefs.h>
 #include <Qt/qstring.h>
 #include <Qt/qstringlist.h>
 #include "scripteditorbase.h"

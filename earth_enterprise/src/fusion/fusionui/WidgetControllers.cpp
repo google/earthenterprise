@@ -166,7 +166,7 @@ IconButtonController::SetIcon()
 void
 IconButtonController::SyncToConfig(void)
 {
-  icon_href_ = shield_.IconRef().href;
+  icon_href_ = shield_.IconRef().href.toUtf8().constData();
   icon_type_ = shield_.IconRef().type;
 }
 

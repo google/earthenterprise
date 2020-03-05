@@ -19,6 +19,8 @@
 #include <Qt/qobjectdefs.h>
 #include <Qt/qpushbutton.h>
 #include <Qt/qwidget.h>
+#include <Qt/q3button.h>
+#include <Qt/q3combobox.h>
 #include "TextPreviewLabel.h"
 class QDragEnterEvent;
 class QDropEvent;

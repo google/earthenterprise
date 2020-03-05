@@ -13,13 +13,14 @@
 // limitations under the License.
 
 //
-
+#include <Qt/qobjectdefs.h>
 #include "TextStyle.h"
 #include "StyleSave.h"
 #include "TextPreviewLabel.h"
-#include <Qt/qcombobox.h>
+#include <Qt/q3combobox.h>
 #include <Qt/qspinbox.h>
 #include <Qt/qbuttongroup.h>
+#include <Qt/q3button.h>
 #include <Qt/qlabel.h>
 #include <Qt/qpushbutton.h>
 #include <Qt/qgroupbox.h>
@@ -35,6 +36,8 @@
 #include <gst/maprender/TextRenderer.h>
 #include <gst/maprender/SGLHelps.h>
 using QImageDrag = Q3ImageDrag;
+using QButton = Q3Button;
+
 
 void TextStyle::ShowMissingFontsDialog(
   QWidget* widget, const std::set<maprender::FontInfo>& missing_fonts) {
@@ -53,7 +56,7 @@ void TextStyle::ShowMissingFontsDialog(
     }
   }
   message.append("\nUsing default Sans font instead");
-  QMessageBox::critical(widget, "Error", message, "OK", 0, 0, 0);
+  QMessageBox::critical(widget, "Error", message.c_str(), "OK", 0, 0, 0);
 }
 
 
@@ -140,7 +143,7 @@ TextStyle::TextStyle(QWidget *parent,
       maprender::FontInfo::CheckTextStyleSanity(&savedConfigs[it->first],
                                                 &missing_fonts);
 
-      QButton* button = saved_buttongroup->find(it->first);
+      QButton* button = static_cast<QButton*>(saved_buttongroup->find(it->first));
       if (button) {
         button->setPixmap(
           maprender::TextStyleToPixmap(
@@ -224,7 +227,8 @@ TextStyle::UpdateWeightCombo(int fontPos)
     if (fonts[fontPos].weights[i] == config.weight) {
       weightPos = i;
     }
-    style_combo->insertItem(ToString(fonts[fontPos].weights[i]));
+    // need index number
+    style_combo->insertItem(ToString(fonts[fontPos].weights[i]).c_str());
   }
   style_combo->setCurrentItem(weightPos);
   if (fonts[fontPos].weights.size() > 1) {

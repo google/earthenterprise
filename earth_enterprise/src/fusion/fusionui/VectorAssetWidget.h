@@ -21,6 +21,9 @@
 #include "fusionui/.ui/vectorassetwidgetbase.h"
 #include "fusion/fusionui/AssetWidgetBase.h"
 #include <Qt/q3filedialog.h>
+#include "common/khTypes.h"
+
+
 namespace qt_fusion {
   class QDateWrapper;
 }

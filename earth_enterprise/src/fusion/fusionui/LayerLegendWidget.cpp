@@ -16,9 +16,10 @@
 
 #include "LayerLegendWidget.h"
 
-#include <qlayout.h>
-#include <qtable.h>
-#include <qcheckbox.h>
+#include <Qt/qlayout.h>
+#include <Qt/q3table.h>
+#include <Qt/qcheckbox.h>
+#include "khException.h"
 
 class EndEditTable : public QTable {
  public:
@@ -33,7 +34,7 @@ void EndEditTable::EndEdit() {
 }
 
 LayerLegendWidget::LayerLegendWidget(QWidget* parent, const char* name,
-                                     WFlags fl) :
+                                     Qt::WFlags fl) :
     QWidget(parent, name, fl)
 {
   vlayout = new QVBoxLayout(this);
@@ -71,5 +72,5 @@ QTable* LayerLegendWidget::GetTable() {
 }
 
 void LayerLegendWidget::languageChange() {
-  filter_check->setText(tr("Hide unspecialized locales"));
+  filter_check->setText(kh::tr("Hide unspecialized locales"));
 }

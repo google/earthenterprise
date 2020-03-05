@@ -19,6 +19,7 @@
 #ifndef FUSION_FUSIONUI_LAYERLEGENDWIDGET_H__
 #define FUSION_FUSIONUI_LAYERLEGENDWIDGET_H__
 
+#include <Qt/qobjectdefs.h>
 #include <Qt/qwidget.h>
 #include <Qt/q3table.h>
 

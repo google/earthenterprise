@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
+#include <Qt/qobjectdefs.h>
 #include <Qt/qdatetimeedit.h>
 #include <Qt/qspinbox.h>
 #include <Qt/qtextcodec.h>
-#include <Qt/qcombobox.h>
 #include <Qt/q3listbox.h>
 #include <Qt/qcheckbox.h>
 #include <Qt/qmessagebox.h>
 #include <Qt/qlabel.h>
 #include <Qt/qinputdialog.h>
-
+#include<Qt/q3combobox.h>
 #include "common/khFileUtils.h"
 #include "common/khException.h"
 #include "common/khConstants.h"
@@ -181,7 +180,7 @@ Q3FileDialog* VectorAssetWidget::FileDialog() {
     file_dialog_ = new Q3FileDialog(this);
     file_dialog_->setMode(Q3FileDialog::ExistingFiles);
     file_dialog_->setCaption(kh::tr("Open Source"));
-    if (khDirExists(Preferences::DefaultVectorPath().latin1())) {
+    if (khDirExists(Preferences::DefaultVectorPath().toUtf8().constData())) {
       file_dialog_->setDir(Preferences::DefaultVectorPath());
     } else {
       QMessageBox::critical(
@@ -393,7 +392,7 @@ void VectorAssetWidget::Prefill(const VectorProductImportRequest& request) {
 
 void VectorAssetWidget::AssembleEditRequest(
     VectorProductImportRequest* request) {
-  request->config.encoding = codec_combo->currentText().latin1();
+  request->config.encoding = codec_combo->currentText().toUtf8().constData();
   if (request->config.encoding == "<none>")
     request->config.encoding = "";
 
@@ -472,7 +471,7 @@ void VectorAssetWidget::AssembleEditRequest(
   std::string boundary_error;
   if (!ok_north) {
     boundary_error += "Bad double value for north '";
-    boundary_error += north_boundary->text().latin1();
+    boundary_error += north_boundary->text().toUtf8().constData();
     boundary_error += "'\n";
   } else if (request->config.north_boundary < -90 ||
              request->config.north_boundary > 90    ) {
@@ -480,7 +479,7 @@ void VectorAssetWidget::AssembleEditRequest(
   }
   if (!ok_south) {
     boundary_error += "Bad double value for south '";
-    boundary_error += south_boundary->text().latin1();
+    boundary_error += south_boundary->text().toUtf8().constData();
     boundary_error += "'\n";
   } else if (request->config.south_boundary < -90 ||
              request->config.south_boundary > 90    ) {
@@ -493,7 +492,7 @@ void VectorAssetWidget::AssembleEditRequest(
   const std::string::size_type boundary_error_length = boundary_error.length();
   if (!ok_east) {
     boundary_error += "Bad double value for east '";
-    boundary_error += east_boundary->text().latin1();
+    boundary_error += east_boundary->text().toUtf8().constData();
     boundary_error += "'\n";
   } else if (request->config.east_boundary < -180 ||
              request->config.east_boundary > 180    ) {
@@ -501,7 +500,7 @@ void VectorAssetWidget::AssembleEditRequest(
   }
   if (!ok_west) {
     boundary_error += "Bad double value for west '";
-    boundary_error += west_boundary->text().latin1();
+    boundary_error += west_boundary->text().toUtf8().constData();
     boundary_error += "'\n";
   } else if (request->config.west_boundary < -180 ||
              request->config.west_boundary > 180    ) {
