@@ -364,7 +364,16 @@ TextPreviewLabel::TextPreviewLabel(QWidget* parent, const char* name)
   setFrameShape(QLabel::LineEditPanel);
   setFrameShadow(QLabel::Sunken);
   setScaledContents(false);
-  setAlignment(int(QLabel::AlignCenter));
+  setAlignment(Qt::AlignCenter);
+}
+
+TextPreviewLabel::TextPreviewLabel(QDialog* parent)
+  : QLabel(parent), dragging_(false)
+{
+    setFrameShape(QLabel::LineEditPanel);
+    setFrameShadow(QLabel::Sunken);
+    setScaledContents(false);
+    setAlignment(Qt::AlignCenter);
 }
 
 void TextPreviewLabel::mousePressEvent(QMouseEvent* event) {
@@ -398,6 +407,10 @@ void TextPreviewLabel::UpdateConfig(const MapTextStyleConfig& config) {
 StyleSaveButton::StyleSaveButton(QWidget* parent, const char* name)
   : QPushButton(parent, name) {
 }
+
+StyleSaveButton::StyleSaveButton(Q3ButtonGroup* parent)
+  : QPushButton(parent)
+{}
 
 void StyleSaveButton::dragEnterEvent(QDragEnterEvent* event) {
   if (QImageDrag::canDecode(event)) {

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
+#include <Qt/qobjectdefs.h>
 #include <Qt/qapplication.h>
 #include <Qt/qpainter.h>
 #include <Qt/qstringlist.h>
@@ -21,7 +21,7 @@
 #include <Qt/q3iconview.h>
 #include <Qt/qicon.h>
 #include <Qt/qmessagebox.h>
-
+#include <Qt/qpalette.h>
 #include "IconManager.h"
 #include "PixmapManager.h"
 #include "Preferences.h"
@@ -50,7 +50,7 @@ void PixmapView::drawContents(QPainter* p, int cx, int cy, int cw, int ch) {
   p->drawPixmap(0, 0, pixmap);
 }
 
-void PixmapView::previewUrl(const QUrl& u) {
+void PixmapView::previewUrl(const Q3Url& u) {
   if (u.isLocalFile()) {
     QString path = u.path();
     QPixmap pix(path);

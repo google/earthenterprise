@@ -15,7 +15,8 @@
 
 #include "fusion/fusionui/ThematicFilter.h"
 
-#include <Qt/qprogressdialog.h>
+//#include <Qt/qprogressdialog.h>
+#include <Qt/q3progressdialog.h>
 #include <Qt/qapplication.h>
 #include <Qt/q3listbox.h>
 #include <Qt/qcolordialog.h>
@@ -35,7 +36,7 @@
 
 using QTable = Q3Table;
 using QTableItem = Q3TableItem;
-
+using QProgressDialog = Q3ProgressDialog;
 class ColorItem : public QTableItem {
  public:
   ColorItem(QTable* table, const QColor& color);

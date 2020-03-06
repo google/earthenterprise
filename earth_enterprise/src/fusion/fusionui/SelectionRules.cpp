@@ -562,7 +562,7 @@ void SelectionRules::editSiteLabel() {
   switch (siteLabelModeCombo->currentItem()) {
     case LabelConfig::Original:
       {
-      LabelFormat label_format(this, layer_->GetSourceAtkh::tr(),
+      LabelFormat label_format(this, layer_->GetSourceAttr(),
                                siteLabelText->text(),
                                LabelFormat::SingleLine);
       if (label_format.exec() == QDialog::Accepted)

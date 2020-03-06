@@ -26,8 +26,8 @@
 #include <gstBBox.h>
 #include <WidgetControllers.h>
 
-class QListView;
-class QListViewItem;
+//class QListView;
+//class QListViewItem;
 class RasterProjectEditRequest;
 class gstDrawState;
 class LayerItemBase;
@@ -72,7 +72,7 @@ class RasterProjectWidget : public ProjectWidget {
     return CheckForValidDates(empty_string);
   }
   // inherited from ProjectWidget
-  virtual void ContextMenu(QListViewItem* item, const QPoint& pt, int col);
+  virtual void ContextMenu(Q3ListViewItem* item, const QPoint& pt, int col);
   virtual LayerItemBase* NewLayerItem();
   virtual LayerItemBase* NewLayerItem(const QString& assetref);
   virtual void GenericCheckboxToggled(bool state);

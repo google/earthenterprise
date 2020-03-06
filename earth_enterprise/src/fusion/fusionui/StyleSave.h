@@ -20,8 +20,10 @@
 #include <Qt/qpushbutton.h>
 #include <Qt/qwidget.h>
 #include <Qt/q3button.h>
+#include <Qt/q3buttongroup.h>
 #include <Qt/q3combobox.h>
 #include "TextPreviewLabel.h"
+
 class QDragEnterEvent;
 class QDropEvent;
 class QDragLeaveEvent;
@@ -44,6 +46,7 @@ class StyleSaveButton : public QPushButton {
 
  public:
   StyleSaveButton(QWidget* parent, const char* name);
+  StyleSaveButton(Q3ButtonGroup*);
 
   // inherited from QWidget
   // support drop

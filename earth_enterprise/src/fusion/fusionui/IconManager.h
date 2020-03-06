@@ -20,13 +20,10 @@
 
 #include <Qt/qfiledialog.h>
 #include <Qt/q3scrollview.h>
-//#include <qscrollview.h>
 #include <Qt/qpixmap.h>
-#include <Qt/qurl.h>
 #include <Qt3Support/Q3FilePreview>
 #include "iconmanagerbase.h"
-//using QScrollView = Q3ScrollView;
-//using QFilePreview = Q3FilePreview;
+
 class PixmapView : public Q3ScrollView,
                    public Q3FilePreview {
  public:
@@ -37,7 +34,7 @@ class PixmapView : public Q3ScrollView,
   virtual void drawContents(QPainter* p, int, int, int, int);
 
   // inherited from QFilePreview
-  virtual void previewUrl(const QUrl& u);
+  virtual void previewUrl(const Q3Url& u);
 
  private:
   QPixmap pixmap;

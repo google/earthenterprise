@@ -173,7 +173,7 @@ IconButtonController::SyncToConfig(void)
 void
 IconButtonController::MySyncToWidgetsImpl(void)
 {
-  shield_ = gstIcon(IconReference(icon_type_, icon_href_));
+  shield_ = gstIcon(IconReference(icon_type_, icon_href_.c_str()));
   SetIcon();
 }
 

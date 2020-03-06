@@ -14,7 +14,6 @@
 
 
 #include "fusion/fusionui/ProjectWidget.h"
-
 #include <Qt/qpushbutton.h>
 #include <Qt/qlistview.h>
 #include <Qt/qcheckbox.h>
