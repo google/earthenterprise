@@ -19,6 +19,7 @@
 
 #include "khGDALReader.h"
 #include "ReadHelpers.h"
+#include <limits>
 
 
 // ****************************************************************************
@@ -31,6 +32,8 @@ khGDALReader::TypedRead(const khExtents<uint32> &srcExtents, bool topToBottom,
                         TileType &tile, const khOffset<uint32> &tileOffset)
 {
   assert(storage == khTypes::Helper<SrcPixelType>::Storage);
+  // Make sure SrcPixelType has a min and max
+  assert(std::numeric_limits<SrcPixelType>::is_specialized);
 
   if (topToBottom != this->topToBottom) {
     throw khException(kh::tr("topToBottom doesn't match dataset"));
@@ -40,15 +43,12 @@ khGDALReader::TypedRead(const khExtents<uint32> &srcExtents, bool topToBottom,
   const uint pixelsPerBand = srcExtents.width() * srcExtents.height();
   const uint bandSize = (pixelsPerBand * sizeof(SrcPixelType));
   rawReadBuf.reserve(numBands * bandSize);
-  // Fill buffer with 0 (or NoData if it exists)
-  int nodata_exists = 0;
-  SrcPixelType no_data =
-      static_cast<SrcPixelType>(
-          srcDS->GetRasterBand(1)->GetNoDataValue(&nodata_exists));
-  if (!nodata_exists)
-    no_data = 0;
-  for (uint i = 0; i < pixelsPerBand * numBands; ++i)
+
+  // Fill buffer with NoData or zero
+  SrcPixelType no_data = GetNoDataOrZero<SrcPixelType>();
+  for (uint i = 0; i < pixelsPerBand * numBands; ++i) {
     ((SrcPixelType *) (&rawReadBuf[0]))[i] = no_data;
+  }
 
   // read pixels from all bands into rawReadBuf
   FetchPixels(srcExtents);
@@ -106,6 +106,36 @@ khGDALReader::TypedRead(const khExtents<uint32> &srcExtents, bool topToBottom,
       memcpy(tile.bufs[b], tile.bufs[0], TileType::BandBufSize);
     }
   }
+}
+
+template <class SrcPixelType>
+SrcPixelType khGDALReader::GetNoDataOrZero() {
+  if (!no_data_set) {
+    double no_data;
+    int nodata_exists;
+    GetNoDataFromSrc(no_data, nodata_exists);
+    if (nodata_exists) {
+      // Check that nodata fits in the pixel type
+      SrcPixelType pixelMin = std::numeric_limits<SrcPixelType>::lowest();
+      SrcPixelType pixelMax = std::numeric_limits<SrcPixelType>::max();
+      if (no_data >= pixelMin && no_data <= pixelMax) {
+        sanitized_no_data = no_data;
+      }
+      else {
+        notify(NFY_WARN, "Ignoring NoData (%.2f) because it is too large for the pixel type.", no_data);
+      }
+    }
+
+    if (sanitized_no_data != 0) {
+      notify(NFY_NOTICE, "Using non-zero NoData (%.2f). If Fusion produces black regions "
+                         "around this image, consider creating your own mask and disabling "
+                         "Auto Masking for this resource.", no_data);
+    }
+
+    no_data_set = true;
+  }
+
+  return static_cast<SrcPixelType>(sanitized_no_data);
 }
 
 
