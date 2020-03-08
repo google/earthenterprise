@@ -5,6 +5,7 @@ Release notes
    :maxdepth: 3
    :glob:
 
+   releaseNotes/relNotesGEE5_3_5
    releaseNotes/relNotesGEE5_3_4
    releaseNotes/relNotesGEE5_3_3
    releaseNotes/relNotesGEE5_3_2
