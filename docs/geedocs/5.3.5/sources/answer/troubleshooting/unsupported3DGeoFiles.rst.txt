@@ -1,0 +1,16 @@
+
+Unsupported 3D geometry files
+
+Fusion does not support 3D geometry GIS data files, but you can use
+the
+
+ogr2ogr
+
+ Open Source tool to convert your dataset from 3D points, polygons,
+and lines into 2D points, polygons, and lines.
+
+For more information about ogr2ogr, see the
+
+GDAL
+
+ website.

@@ -1,0 +1,31 @@
+
+Welcome to Google Earth Enterprise
+
+Be sure to read
+
+System requirements for Fusion and GEE Server
+
+ before you begin.
+
+If you need to install or access the documentation offline, see
+Download documentation for GEE 5.x.
+
+Read Installation tips before beginning the installation process for
+Fusion and GEE Server.
+
+Read Portable User Guide for Windows and Linux for instructions on
+installing and using the Portable Server.
+
+After installing GEE, you should complete the
+
+Fusion tutorial
+
+, which helps you learn Fusion quickly and allows you to create a
+sample project that you can use whenever you need to test the
+push/publishing process.
+
+-[ Google Earth Enterprise Fusion Training Videos ]-
+
+Google Earth Enterprise Essentials Playlist
+
+Google Earth Enterprise Advanced Topics
