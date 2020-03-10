@@ -48,9 +48,9 @@ swig_configure = swig_env.Command(
     swig_target, swig_extract,
     [swig_env.MultiCommand(
         'cd %s\n'
-        '%s%s ./configure --with-python=%s --prefix=%s %s\n'
+        '%s ./configure --with-python=%s --prefix=%s %s\n'
         'touch %s' % (build_root,
-                      swig_env['ENV']['mod_env'], env_opt,
+                      swig_env['ENV']['mod_env']
                       swig_env['python_bin'], install_root, 
                       config_opt,
                       swig_target))])
