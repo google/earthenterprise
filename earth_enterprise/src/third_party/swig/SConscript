@@ -51,8 +51,7 @@ swig_configure = swig_env.Command(
         '%s ./configure --with-python=%s --prefix=%s %s\n'
         'touch %s' % (build_root,
                       swig_env['ENV']['mod_env'],
-                      swig_env['python_bin'], install_root, 
-                      config_opt,
+                      swig_env['python_bin'], install_root,
                       swig_target))])
 
 # [4] Build
