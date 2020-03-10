@@ -194,7 +194,9 @@
                 <string>Move to Placemark</string>
             </property>
         </widget>
-        <widget class="Spacer">
+        <!-- Relies originally on Qt3 Spacer, which is QSpacerItem,
+             This has changed significantly in Qt4, making it almost useless
+          <widget class="QSpacerItem">
             <property name="name">
                 <cstring>spacer1</cstring>
             </property>
@@ -210,7 +212,7 @@
                     <height>27</height>
                 </size>
             </property>
-        </widget>
+        </widget>-->
         <widget class="QLabel">
             <property name="name">
                 <cstring>textLabel1</cstring>

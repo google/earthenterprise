@@ -16,7 +16,7 @@
 #include <sys/prctl.h>
 #include <sys/types.h>
 #include <unistd.h>
-
+#include <Qt/qobjectdefs.h>
 #include <Qt/qapplication.h>
 #include <Qt/qpainter.h>
 #include <Qt/qstylefactory.h>
@@ -55,8 +55,8 @@ void qt_wait_for_window_manager(QWidget* widget);
 class SplashScreen : public QWidget {
  public:
   explicit SplashScreen(const QPixmap& pix);
-  void setStatus(const QString &message, int alignment = AlignLeft,
-                 const QColor &color = white);
+  void setStatus(const QString &message, int alignment = Qt::AlignLeft,
+                 const QColor &color = Qt::white);
   void finish(QWidget* main_win);
   void repaint();
 
@@ -64,23 +64,24 @@ class SplashScreen : public QWidget {
   QPixmap pix_;
 };
 
+// WStyle_Customize no longer needed: https://doc.qt.io/archives/qt-4.8/qt.html
 SplashScreen::SplashScreen(const QPixmap& pix)
-    : QWidget(0, 0, WStyle_Customize | WStyle_Splash),
+    : QWidget(0, Qt::SplashScreen),
       pix_(pix) {
   resize(pix_.size());
   QRect scr = QApplication::desktop()->screenGeometry();
   move(scr.center() - rect().center());
 
   QString versionText = QString("%1 v%2")
-                        .arg(GetFusionProductShortName())
+                        .arg(GetFusionProductShortName().c_str())
                         .arg(GEE_VERSION);
 
   setFont(QFont("arial", 13));
-  QPainter painter(&pix_, this);
+  QPainter painter(&pix_);
   QColor dark_green(3, 158, 40);
   painter.setPen(dark_green);
   QRect r = rect();
-  painter.boundingRect(r, AlignLeft | AlignTop, versionText);
+  painter.boundingRect(r, Qt::AlignLeft | Qt::AlignTop, versionText);
   painter.drawText(5, r.height() - 16, versionText);
 
   setErasePixmap(pix_);
@@ -106,7 +107,7 @@ void SplashScreen::setStatus(const QString& message, int alignment,
                              const QColor& color) {
   setFont(QFont("Times", 10, QFont::Bold));
   QPixmap text_pix = pix_;
-  QPainter painter(&text_pix, this);
+  QPainter painter(&text_pix);
   painter.setPen(color);
   QRect r = rect();
   r.setRect(r.x() + 10, r.y() + 10, r.width() - 20, r.height() - 20);
@@ -161,9 +162,9 @@ int main(int argc, char** argv) {
   //
   QString pixname("fusion_splash.png");
   if (!QFile::exists(pixname)) {
-    pixname = khComposePath(kGESharePath, pixname);
+    pixname = khComposePath(kGESharePath, pixname.toUtf8().constData()).c_str();
     if (!QFile::exists(pixname))
-      pixname.setLength(0);
+      pixname.resize(0);
   }
 
   SplashScreen* splash = NULL;
@@ -195,7 +196,8 @@ int main(int argc, char** argv) {
   //
   // install translator
   //
-  QTranslator translator(0);
+  QObject* parent = NULL;
+  QTranslator translator(parent);
   if (translator.load(QString("fusion_") + QTextCodec::locale(), ".")) {
     a.installTranslator(&translator);
   } else if (translator.load(QString("fusion_") + QTextCodec::locale(),

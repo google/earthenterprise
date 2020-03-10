@@ -42,6 +42,10 @@ using QHeader = Q3Header;
 using QWidgetStack = Q3WidgetStack;
 #include <Qt/qcursor.h>
 #include <Qt/qthread.h>
+#include <Qt/q3dragobject.h>
+using QImageDrag = Q3ImageDrag;
+#include <Qt/q3mimefactory.h>
+using QMimeSourceFactory = Q3MimeSourceFactory;
 
 #include "fusion/autoingest/plugins/RasterProductAsset.h"
 #include "fusion/autoingest/plugins/MercatorRasterProductAsset.h"
@@ -576,7 +580,7 @@ AssetManager::AssetManager(QWidget* parent)
       showHiddenCheck->setChecked(layout_persist_.showHidden);
 
       if (layout_persist_.folderSplitter.front() != 0) {
-        QValueList<int> splitter_list = layout_persist_.folderSplitter;
+        Q3ValueList<int> splitter_list = layout_persist_.folderSplitter;
         folder_splitter->setSizes(splitter_list);
       }
     }
@@ -598,7 +602,7 @@ AssetManager::AssetManager(QWidget* parent)
 AssetManager::~AssetManager() {
   if (asset_manager_icon_choice_orig_ !=
       Preferences::getConfig().assetManagerIconChoice) {
-    Preferences::getConfig().Save(Preferences::filepath("preferences.xml"));
+    Preferences::getConfig().Save(Preferences::filepath("preferences.xml").toUtf8().constData());
   }
   layout_persist_.showme = isShown();
   if (assetTabWidget->currentPageIndex() == 0) {
@@ -615,8 +619,8 @@ AssetManager::~AssetManager() {
   }
 
   layout_persist_.folderSplitter.clear();
-  QValueList<int> folder_splitter_list = folder_splitter->sizes();
-  for (QValueList<int>::Iterator it = folder_splitter_list.begin();
+  Q3ValueList<int> folder_splitter_list = folder_splitter->sizes();
+  for (Q3ValueList<int>::Iterator it = folder_splitter_list.begin();
        it != folder_splitter_list.end(); ++it) {
     layout_persist_.folderSplitter.push_back(*it);
   }
@@ -645,7 +649,7 @@ void AssetManager::HandleNewWindow(AssetBase* asset_window) {
 }
 
 bool AssetManager::RestoreExisting(const std::string& asset_ref) {
-  AssetAction* action = AssetAction::FindAsset(asset_ref);
+  AssetAction* action = AssetAction::FindAsset(asset_ref.c_str());
   if (action == NULL) {
     return false;
   } else {

@@ -52,7 +52,10 @@ class WaitingItem : public QListBoxText
 class WaitingErrorTip : public QToolTip
 {
  public:
-  WaitingErrorTip(QListBox *listbox) : QToolTip(listbox) { }
+  WaitingErrorTip(QListBox *listbox)// : QToolTip(listbox) { }
+  {
+      add(listbox, QString());
+  }
   virtual ~WaitingErrorTip(void) { }
  protected:
   virtual void maybeTip(const QPoint &p) {
@@ -62,7 +65,9 @@ class WaitingErrorTip : public QToolTip
       if (item) {
         WaitingItem *witem = dynamic_cast<WaitingItem*>(item);
         if (witem && !witem->error.isEmpty()) {
-          tip(listbox->itemRect(item), witem->error);
+          // the original QT3 call to display a tooltop popup was to:
+          //    tip(listbox->itemRect(item), witem->error);
+          showText(listbox->itemRect(item).topLeft(),witem->error);
         }
       }
             

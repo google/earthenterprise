@@ -17,7 +17,7 @@
 
 #ifndef GEO_EARTH_ENTERPRISE_SRC_FUSION_FUSIONUI_MAINWINDOW_H_
 #define GEO_EARTH_ENTERPRISE_SRC_FUSION_FUSIONUI_MAINWINDOW_H_
-
+#include <Qt/qobjectdefs.h>
 #include "common/khArray.h"
 #include "common/notify.h"
 #include "fusion/gst/gstTypes.h"
@@ -30,7 +30,6 @@
 
 class QLabel;
 class QProgressBar;
-class QListViewItem;
 
 class ProjectManager;
 class ProjectDocker;
@@ -58,7 +57,7 @@ class MainWindow : public MainWindowBase {
 
  public:
   MainWindow(QWidget* parent = 0, const char* name = 0,
-             WFlags fl = WType_TopLevel);
+             Qt::WFlags fl = Qt::Window);
   ~MainWindow();
 
   void Init();

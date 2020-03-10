@@ -37,6 +37,10 @@ using QPopupMenu = Q3PopupMenu;
 #include <Qt/qpushbutton.h>
 #include <Qt/qfile.h>
 #include <Qt/qtextstream.h>
+#include <Qt/q3mimefactory.h>
+using QMimeSourceFactory = Q3MimeSourceFactory;
+#include <Qt/q3dragobject.h>
+using QImageDrag = Q3ImageDrag;
 
 #include <builddate.h>
 #include "fusion/fusionversion.h"
@@ -91,7 +95,7 @@ void NameAction::ChangeText(const QString& text) {
 // globally visible structures
 MainWindow* MainWindow::self = 0;
 
-MainWindow::MainWindow(QWidget* parent, const char* name, WFlags fl)
+MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags fl)
     : MainWindowBase(parent, name, fl),
       placemark_manager_(),
       project_manager_docker_(),
@@ -259,7 +263,7 @@ void MainWindow::previewProjectionActivated(int choice) {
   if (is_mercator_preview != Preferences::getConfig().isMercatorPreview) {
     Preferences::getConfig().isMercatorPreview = is_mercator_preview;
     GfxView::SetIsMercatorPreview(Preferences::getConfig().isMercatorPreview);
-    Preferences::getConfig().Save(Preferences::filepath("preferences.xml"));
+    Preferences::getConfig().Save(Preferences::filepath("preferences.xml").toUtf8().constData());
     updateImageLayers();  // Read the background texture (for this projection).
     {  // Adjust the frustum so that the center of map is same lat-lon
       gstBBox& frust = gfxview->state()->frust;
@@ -280,10 +284,10 @@ void MainWindow::previewProjectionActivated(int choice) {
 
 void MainWindow::launchHelpManual() {
   // find manual
-  QString doc = khComposePath(
+  QString doc(khComposePath(
       kGESharePath,
-      "doc/manual/index.html");
-  if (!khExists(doc.latin1())) {
+      "doc/manual/index.html").c_str());
+  if (!khExists(doc.toUtf8().constData())) {
     QMessageBox::critical(
         this, "Error",
         tr("Unable to find manual. Please re-install fusion to correct this."),
@@ -298,7 +302,7 @@ void MainWindow::launchHelpManual() {
   mpath << "/usr/bin/google-chrome";
 
   for (QStringList::Iterator it = mpath.begin(); it != mpath.end(); ++it) {
-    if (khExists(*it)) {
+    if (khExists(it->toUtf8().constData())) {
       browser = *it;
       break;
     }
@@ -398,7 +402,7 @@ class TextureWarning : public QMessageBox {
                     QMessageBox::NoButton, parent, 0, false) {
     // must set this flag here because the base QWidget will
     // not honor it if modal is not true
-    setWFlags(WDestructiveClose);
+    setWindowFlags(Qt::WA_DeleteOnClose);
   }
 };
 
