@@ -31,6 +31,8 @@ import portable_server_base
 import portable_web_interface
 
 
+from platform_specific_functions import prepare_for_io_loop
+
 class FlatFileHandler(portable_server_base.BaseHandler):
   """Class for handling flatfile requests."""
 
@@ -414,6 +416,8 @@ def main():
       (r"/eb_balloon", BalloonHandler),
       (r"/(.*)", portable_web_interface.SetUpHandler),
       ])
+
+  prepare_for_io_loop()
 
   tornado.web.globe_ = portable_globe.Globe()
   tornado.web.local_server_ = local_server.LocalServer()

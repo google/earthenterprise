@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <unistd.h>
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -27,6 +28,7 @@
 #include "builddate.h"
 #include "fusion/fusionversion.h"
 #include "fusion/autoingest/Misc.h"
+#include "fusion/autoingest/MiscConfig.h"
 #include "fusion/autoingest/.idl/Systemrc.h"
 #include "fusion/autoingest/.idl/storage/AssetDefs.h"
 #include "fusion/autoingest/khVolumeManager.h"
@@ -497,11 +499,12 @@ khResourceProvider::StartJob(const StartJobMsg &start)
   // add the new job to my list
   jobs.push_back(Job(start.jobid));
 
-
   // start the job thread
+  uint cmdTries = std::max(MiscConfig::Instance().TriesPerCommand, uint(1)); // Have to try at least once
+  uint sleepBetweenTriesSec = MiscConfig::Instance().SleepBetweenCommandTriesSec;
   jobThreads->run
     (khFunctor<void>(std::mem_fun(&khResourceProvider::JobLoop),
-                     this, start));
+                     this, start, cmdTries, sleepBetweenTriesSec));
 }
 
 
@@ -616,15 +619,14 @@ khResourceProvider::ExecCmdline(JobIter job,
   return true;
 }
 
-
-
 void
-khResourceProvider::JobLoop(StartJobMsg start)
+khResourceProvider::JobLoop(StartJobMsg start, const uint cmdTries, const uint sleepBetweenTriesSec)
 {
-  uint32 jobid = start.jobid;
+  const uint32 jobid = start.jobid;
   time_t endtime = 0;
   bool success = false;
   bool logTotalTime = false;
+  bool progressSent = false;
 
   khLockGuard lock(mutex);
   JobIter job = FindJobById(jobid);
@@ -634,6 +636,7 @@ khResourceProvider::JobLoop(StartJobMsg start)
   }
 
   for (uint cmdnum = 0; cmdnum < start.commands.size(); ++cmdnum) {
+    // Write out the overall time if we run more than one command
     logTotalTime = (cmdnum > 0);
 
     time_t cmdtime = time(0);
@@ -645,12 +648,34 @@ khResourceProvider::JobLoop(StartJobMsg start)
       StartLogFile(job, start.logfile);
     }
 
-    success = RunCmd(job, jobid, start.commands[cmdnum], cmdnum == 0, cmdtime, endtime, logTotalTime);
-    if (!Valid(job)) return;  // check if somebody already asked for me to go away
+    success = false;
+    for (uint tries = 0; tries < cmdTries && !success; ++tries) {
+      if (tries > 0) {
+        // Write out the overall time if we run a command more than once.
+        logTotalTime = true;
+        if (job->logfile) {
+          LogRetry(job, tries, cmdTries, sleepBetweenTriesSec);
+        }
+        if (sleepBetweenTriesSec > 0) {
+          {
+            // Release the lock while we sleep
+            khUnlockGuard unlock(mutex);
+            sleep(sleepBetweenTriesSec);
+          }
+          // Once we have the lock again, check if someone deleted the job while
+          // we were sleeping
+          job = FindJobById(jobid);
+          if (!Valid(job)) return;
+        }
+      }
+      success = RunCmd(job, jobid, start.commands[cmdnum], cmdtime, endtime, progressSent);
+      if (!Valid(job)) return;  // check if somebody already asked for me to go away
+    }
+    // If we failed on all of the tries, give up
     if (!success) break;
   } /* for cmdnum */
 
-  if (logTotalTime) {
+  if (job->logfile && logTotalTime) {
     LogTotalTime(job, endtime - job->beginTime);
   }
 
@@ -661,15 +686,13 @@ bool
 khResourceProvider::RunCmd(
     JobIter & job,
     uint32 jobid,
-    const std::vector<std::string> & commands,
-    bool sendProgress,
+    const std::vector<std::string> & command,
     time_t cmdtime,
     time_t & endtime,
-    bool & logTotalTime) {
+    bool & progressSent) {
 
   // ***** Launch the command *****
-  if (!ExecCmdline(job, commands)) {
-    logTotalTime = false;
+  if (!ExecCmdline(job, command)) {
     return false;
   }
 
@@ -683,8 +706,9 @@ khResourceProvider::RunCmd(
     khUnlockGuard unlock(mutex);
 
     // notify the resource manager the first time
-    if (sendProgress) {
+    if (!progressSent) {
       SendProgress(jobid, 0, time(0));
+      progressSent = true;
     }
 
     // ***** wait for command to finish *****
@@ -780,6 +804,13 @@ khResourceProvider::LogCmdResults(
   } else {
     fprintf(job->logfile, "FAILED\n");
   }
+}
+
+void
+khResourceProvider::LogRetry(JobIter job, uint tries, uint totalTries, uint sleepBetweenTries) {
+  fprintf(job->logfile, "\nRETRYING FAILED COMMAND after %d seconds, try %d of %d\n",
+          sleepBetweenTries, tries + 1, totalTries);
+  fflush(job->logfile);
 }
 
 void

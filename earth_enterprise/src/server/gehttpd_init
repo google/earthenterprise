@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2017 Google Inc.
+# Copyright 2017-2020 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -48,6 +48,11 @@ if test -f /opt/google/gehttpd/bin/envvars; then
   . /opt/google/gehttpd/bin/envvars
 fi
 
+if [ "$EUID" != "0" ] ; then
+    echo "$(basename "$0") must be run as root."
+    exit 1
+fi
+
 # Set this variable to a command that increases the maximum
 # number of file descriptors allowed per child process. This is
 # critical for configurations that use many file descriptors,
@@ -69,105 +74,28 @@ args=''
 # this script
 RETVAL=0
 
+echo "Google Earth Enterprise Server"
 
-if grep -q -s 'Ubuntu\|LinuxMint' /etc/lsb-release ; then
-    # ---------- Ubuntu ----------
-    echo "Google Earth Enterprise Server for Ubuntu"
-
-    start() {
-      echo -n $"Starting $prog: "
-      $apachectl start $args
-      RETVAL=$?
-    }
-    stop() {
-      echo -n $"Stopping $prog: "
-      $apachectl stop
-      RETVAL=$?
-    }
-    reload() {
-      echo -n $"Reloading $prog: "
-      $apachectl restart
-      RETVAL=$?
-    }
-    getstatus() {
-      echo -n $"Checking for httpd: "
-      $apachectl status
-      RETVAL=$?
-    }
-
-elif [ -f /etc/redhat-release ] ; then
-    # ---------- RedHat ----------
-    # This will prevent initlog from swallowing up a pass-phrase prompt if
-    # mod_ssl needs a pass-phrase from the user.
-    echo "Google Earth Enterprise Server for RedHat"
-    INITLOG_ARGS=""
-
-    . /etc/rc.d/init.d/functions
-
-    start() {
-      echo -n $"Starting $prog: "
-      daemon $httpd $args
-      RETVAL=$?
-      echo
-      [ $RETVAL = 0 ] && touch /var/lock/subsys/httpd
-    }
-
-    stop() {
-      echo -n $"Stopping $prog: "
-      killproc $httpd
-      RETVAL=$?
-      echo
-      [ $RETVAL = 0 ] && rm -f /var/lock/subsys/httpd $pidfile
-    }
-
-    reload() {
-      echo -n $"Reloading $prog: "
-      killproc $httpd -HUP
-      RETVAL=$?
-      echo
-    }
-
-    getstatus() {
-    status $httpd
+start() {
+    echo -n $"Starting $prog: "
+    $apachectl start $args
     RETVAL=$?
-    }
-else
-    # ---------- SUSE ----------
-    echo "Google Earth Enterprise Server for SUSE"
-    . /etc/rc.status
-    rc_reset
-
-    start() {
-      echo -n $"Starting $prog: "
-      /sbin/startproc $httpd $args
-      RETVAL=$?
-      rc_failed $RETVAL
-      rc_status -v
-    }
-    stop() {
-      echo -n $"Stopping $prog: "
-      /sbin/killproc $httpd
-      RETVAL=$?
-      rc_failed $RETVAL
-      rc_status -v
-    }
-    reload() {
-      echo -n $"Reloading $prog: "
-      /sbin/killproc $httpd -HUP
-      RETVAL=$?
-      rc_failed $RETVAL
-      rc_status -v
-    }
-    getstatus() {
-      echo -n $"Checking for httpd: "
-      /sbin/checkproc $HTTPD_BIN
-      RETVAL=$?
-      rc_failed $RETVAL
-      rc_status -v
-    }
-fi
-
-
+}
+stop() {
+    echo -n $"Stopping $prog: "
+    $apachectl stop
+    RETVAL=$?
+}
+reload() {
+    echo -n $"Reloading $prog: "
+    $apachectl restart
+    RETVAL=$?
+}
+getstatus() {
+    echo -n $"Checking for httpd: "
+    $apachectl status
+    RETVAL=$?
+}
 
 # See how we were called.
 case "$1" in
@@ -179,11 +107,11 @@ case "$1" in
     stop
     ;;
   status)
-        getstatus
+    getstatus
     ;;
   restart)
     stop
-  sleep 2
+    sleep 2
     start
     ;;
   condrestart)

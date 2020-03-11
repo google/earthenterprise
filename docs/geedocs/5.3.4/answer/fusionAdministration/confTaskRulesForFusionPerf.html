@@ -71,8 +71,7 @@
 <div class="section" id="configure-fusion-performance">
 <h1>Configure Fusion performance<a class="headerlink" href="#configure-fusion-performance" title="Permalink to this headline">¶</a></h1>
 <div class="docutils container">
-<blockquote>
-<div><div class="content docutils container">
+<div class="content docutils container">
 <p>You can tune the performance of Fusion by setting up task rules
 and by modifying the sizes of the asset caches.</p>
 <p class="rubric" id="configure-task-rules">Configure task rules</p>
@@ -405,12 +404,20 @@ allows the user to limit the caches by memory usage instead of
 number of objects. This option is controlled by
 <code class="docutils literal notranslate"><span class="pre">LimitMemoryUtilization</span></code> and its default value is 0 (false). The
 maximum memory usage for each cache can be set with
-<code class="docutils literal notranslate"><span class="pre">MaxAssetCacheMemorySize</span></code> and <code class="docutils literal notranslate"><span class="pre">MaxVersionCacheMemorySize</span></code>.
-This size is measured in bytes and the default setting is 1GB.
-While this option is enabled, the caches will not be limited by
-the number of objects in the cache. It should be noted that as of
-now the reported memory usage is very low and that this option is
-not recommended for production environments.</p>
+<code class="docutils literal notranslate"><span class="pre">MaxAssetCacheMemorySize</span></code> and <code class="docutils literal notranslate"><span class="pre">MaxVersionCacheMemorySize</span></code> and
+is in terms of bytes. While this option is enabled, the caches will
+not be limited by the number of objects in the cache.</p>
+<p id="prune-percent">Another experimental option in <code class="docutils literal notranslate"><span class="pre">misc.xml</span></code> allows the user to limit
+how often the asset and asset version caches are pruned, which can
+improve performance. Assets that have been modified can not be
+removed from the cache until they are written to disk. To limit
+pruning, the amount of unwritten modified assets is compared to a
+percentage of the current size of each cache. This percentage is
+controlled by <code class="docutils literal notranslate"><span class="pre">PrunePercent</span></code> and is set to 100 by default, which
+doesn’t enforce prune limiting. The value for <code class="docutils literal notranslate"><span class="pre">PrunePercent</span></code> can be
+any number from 0 up to 100. If the number of unwritten modified
+assets exceeds the configured percentage of the cache size, the cache
+will not attempt to prune.</p>
 <p>The Xerces library maintains a separate cache for dealing with XML
 files. Users can modify aspects of this cache through a
 configuration file at <code class="docutils literal notranslate"><span class="pre">/etc/opt/google/XMLparams</span></code>. This file is
@@ -472,12 +479,23 @@ minifying the level below it, where possible.  This is the default.</li>
 original source data.  This reduces dependencies between levels and
 may improve performance in some situations.</li>
 </ul>
+<p class="rubric" id="retry-failed-tasks">Retry Failed tasks</p>
+<p>Users can configure Fusion to retry tasks that fail, which allows Fusion
+to recover from intermittent failures.
+This feature is disabled by default.
+To enable it, set the following parameters in
+<code class="docutils literal notranslate"><span class="pre">/gevol/assets/.config/misc.xml</span></code>:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">TriesPerCommand</span></code>: the maximum number of times that Fusion will
+try to execute each command. Must be at least 1. Default: 1.</li>
+<li><code class="docutils literal notranslate"><span class="pre">SleepBetweenCommandTriesSec</span></code>: the number of seconds to pause before
+retrying a failed command. Must be at least 0. Default: 0.</li>
+</ul>
 <p class="rubric">Learn more</p>
 <ul class="simple">
 <li><a class="reference internal" href="benchMarkOutcomesForTaskRule.html"><span class="doc">Benchmarking outcomes for applying task rules</span></a></li>
 </ul>
 </div>
-</div></blockquote>
 </div>
 </div>
 

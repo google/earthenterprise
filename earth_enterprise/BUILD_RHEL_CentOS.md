@@ -14,13 +14,21 @@ sudo yum install -y epel-release
 ### RHEL 7
 
 ```bash
+# Setup subscriptions for non-AWS RHEL 7
+sudo subscription-manager repos --enable=rhel-7-server-optional-rpms
+
+# For RHEL 7 in AWS
+sudo yum-config-manager --enable rhel-7-server-rhui-optional-rpms
+
+# For all RHEL 7
 sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+
 ```
 
 ### CentOS 6
 
 ```bash
-sudo wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
+sudo curl -o /etc/yum.repos.d/devtools-2.repo https://people.centos.org/tru/devtools-2/devtools-2.repo
 sudo yum install -y epel-release ius-release
 ```
 
@@ -29,6 +37,9 @@ sudo yum install -y epel-release ius-release
 __NOTE:__ The EPEL URL below assumes that your RHEL 6 installation has
 the latest updates.
 
+__NOTE:__ Installing devtoolset-2 on RHEL6 in AWS requires a RedHat
+subscription.
+
 ```bash
 # For RHEL 6 Workstation:
 sudo subscription-manager repos --enable=rhel-x86_64-workstation-dts-2
@@ -36,36 +47,34 @@ sudo subscription-manager repos --enable=rhel-x86_64-workstation-dts-2
 # For RHEL 6 Server:
 sudo subscription-manager repos --enable=rhel-server-dts2-6-rpms
 
-# For all RHEL 6 Editions:
+# For All RHEL 6
 sudo subscription-manager repos --enable=rhel-6-server-optional-rpms
 sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
+sudo yum install -y https://repo.ius.io/ius-release-el6.rpm
 ```
 
 ## Install Git
 
-Install the system default version:
+It's recommended to install a recent version of Git from the [IUS repositories](https://ius.io),
+but the older RedHat or Centos packages can also be used.
 
 ```bash
+# To install Git 2.16 on RHEL 6 and Centos 6
+sudo yum install -y https://repo.ius.io/ius-release-el6.rpm
+sudo yum install -y git216
+
+
+# To install Git 2.16 on RHEL 7 and CentOS 7
+sudo yum install -y https://repo.ius.io/ius-release-el7.rpm
+sudo yum install -y git216
+
+# To install the system default version:
 sudo yum install -y git
-```
-
-Alternatively, install the latest version from the IUS repository (recommended).
-See the [Getting Started](https://ius.io/GettingStarted/) page to find the RPM
-URL for your system. Use this URL below:
-
-```bash
-sudo yum install -y wget
-cd /tmp
-
-# CentOS 7
-wget https://centos7.iuscommunity.org/ius-release.rpm
-sudo yum install -y ius-release.rpm
-sudo yum install -y git2u-all
 ```
 
 ## Install Git LFS
 
-Execute the following commands:
+OpenGEE uses Git LFS to store large binary files.  To install Git LFS, use the following commands:
 
 ```bash
 curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh \
@@ -75,25 +84,25 @@ sudo yum install -y git-lfs
 
 ## GCC 4.8
 
+
+### RHEL 7 And Centos 7
 For all versions of CentOS and RHEL, install the standard development/build tools:
 
 ```bash
 sudo yum install -y ant bzip2 doxygen gcc-c++ patch python-argparse python-lxml python-setuptools tar
 ```
 
-For CentOS 6 and RHEL 6, also install the devtoolset toolchain.
-
-### CentOS 6
+### For RHEL6 and Centos 6
 
 ```bash
-sudo yum install -y devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-toolchain devtoolset-2-gcc-gfortran
+sudo yum install -y ant bzip2 doxygen gcc-c++ patch swig tar \
+                    python27 python-argparse python27-lxml python27-setuptools
 ```
 
-### RHEL 6
+Also install the devtoolset toolchain.
 
 ```bash
-sudo yum install -y devtoolset-2-gcc devtoolset-2-binutils \
-  devtoolset-2-toolchain devtoolset-2-gcc-c++ devtoolset-2-gcc-gfortran
+sudo yum install -y devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-toolchain
 ```
 
 The GCC 4.8 installation will be located in the `/opt/rh/devtoolset-2/root/usr/bin/` directory.
@@ -137,9 +146,9 @@ sudo yum install -y \
   libcap-devel libmng-devel libpng-devel libX11-devel libXcursor-devel \
   libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel pcre pcre-devel \
-  perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-devel python27 \
+  proj-devel python27 \
   python27-pip python27-devel python27-lxml python27-setuptools python-unittest2 \
-  rpm-build rpmrebuild rsync scons shunit2 \
+  python-devel rpm-build rpmrebuild rsync scons shunit2 \
   xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
 ```
 
@@ -165,6 +174,7 @@ the rest of the GEE build process.
 To clone this Git repository and build the RPM on RHEL6, execute the following:
 
 ```bash
+sudo yum install -y wget
 mkdir -p ~/opengee/rpm-build/
 cd ~/opengee/rpm-build/
 
@@ -201,6 +211,7 @@ sudo yum install -y http://download-ib01.fedoraproject.org/pub/epel/6/x86_64/Pac
 ### CentOS 6 and RHEL 6
 
 shunit2 was installed in a previous step.
+
 
 ## Install Python 2.7 Packages
 

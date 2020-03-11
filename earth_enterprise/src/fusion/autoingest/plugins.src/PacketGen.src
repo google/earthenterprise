@@ -309,7 +309,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
     snprintf(subname, sizeof(subname), "packlevel%02d", level);
     MutableAssetVersionD packLevelVer =
       AssetFactory::ReuseOrMakeAndUpdateSubAsset
-        <MutablePacketLevelAssetVersionD, PacketLevelConfig, PacketLevelAssetVersionD>
+        <MutablePacketLevelAssetVersionD, PacketLevelConfig, PacketLevelAssetVersionD, AssetVersion>
       (assetRef,
        type,
        subname,

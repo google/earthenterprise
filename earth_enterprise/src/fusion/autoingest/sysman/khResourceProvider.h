@@ -40,7 +40,7 @@ class khResourceProvider
   };
   using JobIter = std::vector<Job>::iterator;
 
-  void JobLoop(StartJobMsg start); // pass by value because thread func
+  void JobLoop(StartJobMsg start, const uint cmdTries, const uint sleepBetweenTriesSec); // pass by value because thread func
 
  private:
   // routines implemented in khResourceProviderDispatch.cpp
@@ -82,11 +82,10 @@ class khResourceProvider
   bool RunCmd(
       JobIter & job,
       uint32 jobid,
-      const std::vector<std::string> & commands,
-      bool sendProgress,
+      const std::vector<std::string> & command,
       time_t cmdtime,
       time_t & endtime,
-      bool & logTotalTime);
+      bool & progressSent);
   virtual void StartLogFile(JobIter job, const std::string &logfile);
   virtual void LogCmdResults(
       JobIter job,
@@ -96,6 +95,7 @@ class khResourceProvider
       bool success,
       time_t cmdtime,
       time_t endtime);
+  virtual void LogRetry(JobIter job, uint tries, uint totalTries, uint sleepBetweenTries);
   virtual void LogTotalTime(JobIter job, uint32 elapsed);
   virtual bool ExecCmdline(JobIter job, const std::vector<std::string> &cmdline);
   virtual void SendProgress(uint32 jobid, double progress, time_t progressTime);

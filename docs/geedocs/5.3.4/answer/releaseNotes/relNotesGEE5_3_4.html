@@ -78,6 +78,13 @@
 System manager’s algorithm for handling updates for Canceled and Failed
 tasks has been modified to use less memory. This change is experimental
 and can be enabled using the <a class="reference internal" href="../fusionAdministration/confTaskRulesForFusionPerf.html#graph-operations"><span class="std std-ref">GraphOperations flag</span></a>.</p>
+<p><strong>Option to retry failed tasks</strong>.
+Users can now configure Fusion to
+<a class="reference internal" href="../fusionAdministration/confTaskRulesForFusionPerf.html#retry-failed-tasks"><span class="std std-ref">retry tasks that fail</span></a>, which allows
+Fusion to recover from intermittent failures.</p>
+<p><strong>Option to limit cache pruning</strong>.
+Users can now limit how often the asset and asset version caches are pruned
+by use of an experimental option, <a class="reference internal" href="../fusionAdministration/confTaskRulesForFusionPerf.html#prune-percent"><span class="std std-ref">PrunePercent</span></a>.</p>
 <p class="rubric">Supported Platforms</p>
 <p>The Open GEE 5.3.4 release is supported on 64-bit versions of the
 following operating systems:</p>
@@ -108,13 +115,23 @@ correctly to the new PostgreSQL version used by Open GEE 5.3.4.</p>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>1604</td>
+<tr class="row-even"><td>1579</td>
+<td>Add an option to misc.xml for disabling minification</td>
+<td>An option was added to control minification.</td>
+</tr>
+<tr class="row-odd"><td>1604</td>
 <td>WMS capability doesn’t work with reverse proxies</td>
 <td>It now works, as long as the protocol (http vs https) matches</td>
 </tr>
-<tr class="row-odd"><td>1579</td>
-<td>Add an option to misc.xml for disabling minification</td>
-<td>An option was added to control minification.</td>
+<tr class="row-even"><td>1634</td>
+<td>On Windows, Portable Server locks up if the user enters “Select”
+Mode by clicking inside the command terminal.</td>
+<td>Quick Edit mode is now disabled by default in the Portable Server
+command window.</td>
+</tr>
+<tr class="row-odd"><td>1642</td>
+<td>Getop does not have an option to display status and exit</td>
+<td>A <code class="docutils literal notranslate"><span class="pre">--delay</span> <span class="pre">0</span></code> option was added</td>
 </tr>
 </tbody>
 </table>

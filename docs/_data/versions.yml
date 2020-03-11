@@ -20,3 +20,5 @@
   stability: latest stable
 - version: 5.3.4
   stability: unstable
+- version: 5.3.5
+  stability: unstable
