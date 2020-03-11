@@ -49,12 +49,15 @@ class WaitingItem : public QListBoxText
   }
 };
 
-class WaitingErrorTip : public QToolTip
+/* Momentarily disabled
+
+class WaitingErrorTip // : public QToolTip
 {
+
  public:
-  WaitingErrorTip(QListBox *listbox)// : QToolTip(listbox) { }
+  WaitingErrorTip(QListBox *listbox) // : QToolTip(listbox) { }
   {
-      add(listbox, QString());
+      QToolTip::add(listbox, QString());
   }
   virtual ~WaitingErrorTip(void) { }
  protected:
@@ -67,13 +70,13 @@ class WaitingErrorTip : public QToolTip
         if (witem && !witem->error.isEmpty()) {
           // the original QT3 call to display a tooltop popup was to:
           //    tip(listbox->itemRect(item), witem->error);
-          showText(listbox->itemRect(item).topLeft(),witem->error);
+          QToolTip::showText(listbox->itemRect(item).topLeft(),witem->error);
         }
       }
             
     }
   }
-};
+};*/
 
 SystemManager::SystemManager( QWidget* parent, const char* name, bool modal, Qt::WFlags fl )
     : SystemManagerBase( parent, name, modal, fl ), taskTimer(this)
@@ -83,7 +86,7 @@ SystemManager::SystemManager( QWidget* parent, const char* name, bool modal, Qt:
   waitingList->setSelectionMode(QListBox::NoSelection);
   activeList->setSelectionMode(QListBox::NoSelection);
 
-  (void) new WaitingErrorTip(waitingList);
+  //(void) new WaitingErrorTip(waitingList);
 }
 
 

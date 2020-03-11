@@ -22,9 +22,10 @@
 #include <vector>
 #include <set>
 #include <map>
-
+#include <Qt/qobjectdefs.h>
 #include <Qt/qlistview.h>
 #include <Qt/q3iconview.h>
+using QIconViewItem = Q3IconViewItem;
 #include <Qt/qstringlist.h>
 #include <Qt/qaction.h>
 #include <Qt/qthread.h>

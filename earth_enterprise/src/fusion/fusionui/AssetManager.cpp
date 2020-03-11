@@ -19,7 +19,6 @@
 #include <stdio.h>
 #include <errno.h>
 #include <iostream>
-
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qcombobox.h>
@@ -484,8 +483,9 @@ void ServeAssistant::SetCanceled() {
 }
 
 void ServeAssistant::Perform() {
-  progress_dialog_->setTotalSteps(progress_->total());
-  progress_dialog_->setProgress(progress_->done());
+  progress_dialog_->setMinimum(0);
+  progress_dialog_->setMaximum(progress_->total());
+  progress_dialog_->setValue(progress_->done());
 
   // Check to see if a request for user authentication has been made.
   // If so, pop up the dialog and signal when we are finished.
@@ -1008,7 +1008,7 @@ void AssetManager::ShowAssetMenu(const gstAssetHandle& asset_handle,
   // first item in menu should be the asset name since the table
   // might get redrawn after the menu has popped-up
   AssetDisplayHelper a(current_asset->type, current_asset->subtype);
-  menu.insertItem(a.GetPixmap(), shortAssetName(asset_handle->getName().c_str()));
+  menu.insertItem(a.GetPixmap(), shortAssetName(asset_handle->getName().toUtf8().constData()));
 
   menu.insertSeparator();
   menu.insertSeparator();
@@ -1246,13 +1246,13 @@ void AssetManager::PushDatabase(const gstAssetHandle& handle) {
   if (!publisher_client.AddDatabase(
           gedb_path, push_db_dlg.GetSelectedVersion())) {
     QMessageBox::critical(this, "Push Failed",
-            tr("Error: %1 ").arg(publisher_client.ErrMsg()), 0, 0, 0);
+            tr("Error: %1 ").arg(publisher_client.ErrMsg().c_str()), 0, 0, 0);
     return;
   }
 
   FixCursor fix_cursor(this);
   QProgressDialog progress_dialog(tr("Pushing database..."),
-                                  tr("Cancel"), 100, this, "progress", true);
+                                  tr("Cancel"), 0, 100, this);
   progress_dialog.setCaption(tr("Pushing"));
 
   // PublisherClient will now be run in a separate thread,
@@ -1286,7 +1286,7 @@ void AssetManager::PushDatabase(const gstAssetHandle& handle) {
 
   if (!push_thread.retval()) {
     QMessageBox::critical(this, "Push Failed",
-            tr("Error: %1").arg(publisher_client.ErrMsg()), 0, 0, 0);
+            tr("Error: %1").arg(publisher_client.ErrMsg().c_str()), 0, 0, 0);
     return;
   }
 
@@ -1357,7 +1357,7 @@ void AssetManager::PublishDatabase(const gstAssetHandle& handle) {
   // choices so that we can automatically select this server next time they
   // push/publish.
   std::string database_name = shortAssetName(asset->GetRef().toString().c_str());
-  Preferences::UpdatePublishServerDbMap(database_name, nickname);
+  Preferences::UpdatePublishServerDbMap(database_name, nickname.toUtf8().constData());
 
   ServerConfig stream_server, search_server;
   for (it = sc_set.combinations.begin();
@@ -1380,7 +1380,7 @@ void AssetManager::PublishDatabase(const gstAssetHandle& handle) {
                                    &progress, &auth);
   FixCursor fix_cursor(this);
   QProgressDialog progress_dialog(tr("Publishing database..."),
-                                  tr("Cancel"), 100, this, "progress", true);
+                                  tr("Cancel"), 0, 100, this);
   progress_dialog.setCaption(tr("Publishing"));
 
   // PublisherClient will now be run in a separate thread,
@@ -1414,7 +1414,7 @@ void AssetManager::PublishDatabase(const gstAssetHandle& handle) {
 
   if (!publish_thread.retval()) {
     QMessageBox::critical(this, "Publish Failed",
-            tr("Error: %1").arg(publisher_client.ErrMsg()), 0, 0, 0);
+            tr("Error: %1").arg(publisher_client.ErrMsg().c_str()), 0, 0, 0);
     return;
   }
 
@@ -1749,7 +1749,7 @@ void AssetManager::UpdateTableItem(int row, gstAssetHandle handle,
   if (category == kMercatorProductSubtype) {
     category = kResourceSubtype;
   }
-  assetTableView->setText(row, col++, category);
+  assetTableView->setText(row, col++, category.c_str());
 
   {
     std::string providerstr;
@@ -1767,9 +1767,9 @@ void AssetManager::UpdateTableItem(int row, gstAssetHandle handle,
       VectorProductAsset prod = asset;
       providerstr = GetProviderById(prod->config.provider_id_);
     } else {
-      providerstr = asset->meta.GetValue("provider");
+      providerstr = asset->meta.GetValue("provider").toUtf8().constData();
     }
-    assetTableView->setText(row, col++, providerstr);
+    assetTableView->setText(row, col++, providerstr.c_str());
   }
 
   AssetVersion version(asset->CurrVersionRef());
@@ -1778,7 +1778,7 @@ void AssetManager::UpdateTableItem(int row, gstAssetHandle handle,
                             version->meta.GetValue("createdtime"));
     assetTableView->setItem(row, col++,
                             new AssetStateItem(assetTableView,
-                                               version->PrettyState()));
+                                               version->PrettyState().c_str()));
   } else {
     assetTableView->setText(row, col++, "None");
     assetTableView->setItem(row, col++,
@@ -1793,7 +1793,7 @@ void AssetManager::TrackChangesInTableView(
   // process each changed assetRef
   for (std::set<std::string>::const_iterator ref = changed.begin();
        ref != changed.end(); ++ref) {
-    QString baseRef = khBasename(*ref);
+    QString baseRef = khBasename(*ref).c_str();
     bool found = false;
 
     // try to find a match in the existing items
@@ -2016,7 +2016,7 @@ QColorGroup AssetManager::GetStateDrawStyle(
 
   if (txt == "Canceled" || txt == "Failed") {
     bold = true;
-    clr = red;
+    clr = QColor(255,0,0);
   } else if (txt == "Blocked") {
     bold = true;
     clr = QColor(255, 162, 0);  // orange

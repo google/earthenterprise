@@ -24,14 +24,14 @@
 #include <Qt/qspinbox.h>
 #include "fusion/fusionui/LayerItemBase.h"
 #include "fusion/fusionui/ProjectLayerView.h"
-
 #include "common/khTileAddrConsts.h"
 
 ProjectWidget::ProjectWidget(QWidget* parent)
     : ProjectWidgetBase(parent),
       start_level_validator_(StartTmeshLevel, MaxTmeshLevel) {
   // Set overlay_terrain_start_level_spinbox.
-  overlay_terrain_start_level_spinbox->setValidator(&start_level_validator_);
+  // Qt4 accepts integer values by defaul
+  //overlay_terrain_start_level_spinbox->setValidator(&start_level_validator_);
 
   HideUuid();
   HideTimeMachineCheckbox();

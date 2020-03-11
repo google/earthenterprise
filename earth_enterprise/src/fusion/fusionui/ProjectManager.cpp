@@ -40,7 +40,8 @@ using QVGroupBox = Q3VGroupBox;
 #include <Qt/q3hgroupbox.h>
 using QHGroupBox = Q3HGroupBox;
 #include <Qt/qtooltip.h>
-
+#include <Qt/q3mimefactory.h>
+using QMimeSourceFactory = Q3MimeSourceFactory;
 #include <khConstants.h>
 #include <khGuard.h>
 
@@ -77,9 +78,11 @@ using QHGroupBox = Q3HGroupBox;
 #include <fusionui/.idl/layoutpersist.h>
 #include "Preferences.h"
 #include "ValidLayerNames.h"
-
+#include <Qt/q3dragobject.h>
 #include <autoingest/.idl/storage/VectorProjectConfig.h>
 #include <third_party/rfc_uuid/uuid.h>
+
+using QImageDrag = Q3ImageDrag;
 
 namespace {
 const int ConfigDispRuleEventId  = (int)QEvent::User;
@@ -141,7 +144,7 @@ class FilterItem : public Q3ListViewItem {
 
 // -----------------------------------------------------------------------------
 
-class LayerItem : public QCheckListItem {
+class LayerItem : public QC3heckListItem {
  public:
   LayerItem(Q3ListView* parent, gstLayer* l);
   LayerItem(Q3ListViewItem* parent, gstLayer* l);
@@ -1440,12 +1443,12 @@ void ProjectManager::FileOpen() {
     QFileInfo fi(*it);
 
     QString name = (fi.fileName() == kHeaderXmlFile) ?
-                   fi.dirPath(true).latin1() : fi.absFilePath().latin1();
+                   fi.dirPath(true) : fi.absFilePath();
 
     addLayers(name.latin1(), codec.latin1());
   }
 
-  progress.setProgress(100);
+  progress.setValue(100);
 
   emit redrawPreview();
 }

@@ -221,7 +221,7 @@
                 <string>Preview Projection:</string>
             </property>
         </widget>
-        <widget class="QComboBox">
+        <widget class="Q3ComboBox">
             <item>
                 <property name="text">
                     <string>Flat</string>

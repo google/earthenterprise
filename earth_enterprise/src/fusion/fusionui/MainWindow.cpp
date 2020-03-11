@@ -115,7 +115,7 @@ void MainWindow::Init() {
   //
   // set all global values here...
   //
-  setCaption(QString(GetFusionProductName()) + Preferences::CaptionText());
+  setCaption(QString(GetFusionProductName().c_str()) + Preferences::CaptionText());
 
   asset_manager_ = NULL;
   feature_editor_ = NULL;
@@ -128,8 +128,9 @@ void MainWindow::Init() {
   statusBar()->addWidget(lat_lon_, 0, true);
 
   busy_progress_bar_ = new QProgressBar(statusBar());
-  busy_progress_bar_->setPercentageVisible(FALSE);
-  busy_progress_bar_->setTotalSteps(10);
+  busy_progress_bar_->setTextVisible(FALSE);
+  busy_progress_bar_->setMinimum(0);
+  busy_progress_bar_->setMaximum(10);
   busy_progress_bar_->setFixedWidth(150);
   statusBar()->addWidget(busy_progress_bar_, 0, true);
   busy_progress_max_ = 10;
@@ -245,7 +246,6 @@ void MainWindow::Init() {
   previewProjection->setCurrentItem(
       Preferences::getConfig().isMercatorPreview ? 1 : 0);
 }
-
 MainWindow::~MainWindow() {
   delete project_manager_docker_;
   delete selection_view_docker_;
@@ -608,7 +608,8 @@ void MainWindow::drawstats(int frame, double tex, double geom) {
 
 void MainWindow::busyProgress(int val) {
   if (val == 0) {
-    busy_progress_bar_->setProgress(0);
+    //busy_progress_bar_->setProgress(0);
+    busy_progress_bar_->setValue(0);
     busy_progress_max_ = 10;
     return;
   }
@@ -622,5 +623,6 @@ void MainWindow::busyProgress(int val) {
   if (percent < 1)  // always draw something!
     percent = 1;
 
-  busy_progress_bar_->setProgress(percent);
+  //busy_progress_bar_->setProgress(percent);
+  busy_progress_bar_->setValue(0);
 }

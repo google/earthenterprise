@@ -196,8 +196,7 @@ int main(int argc, char** argv) {
   //
   // install translator
   //
-  QObject* parent = NULL;
-  QTranslator translator(parent);
+  QTranslator translator(0,0);
   if (translator.load(QString("fusion_") + QTextCodec::locale(), ".")) {
     a.installTranslator(&translator);
   } else if (translator.load(QString("fusion_") + QTextCodec::locale(),
