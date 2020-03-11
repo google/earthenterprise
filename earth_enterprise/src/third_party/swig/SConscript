@@ -80,9 +80,9 @@ swig_target = '%s/.install_for_build' % current_dir
 swig_install_build = swig_env.Command(
     swig_target, swig_install,
     [swig_env.rsync_cmd % ('%s/bin/*' % install_root,
-                              '%s/bin/' % Dir(swig_env.exportdirs['bin']).abspath),
+                              '%s' % Dir(swig_env.exportdirs['bin']).abspath),
      swig_env.rsync_cmd % ('%s/share/*' % install_root,
-                              '%s/share/' % Dir(swig_env.exportdirs['share']).abspath),
+                              '%s' % Dir(swig_env.exportdirs['share']).abspath),
      Touch('$TARGET')])
 
 Default(swig_install_build)
