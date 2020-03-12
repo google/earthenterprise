@@ -195,14 +195,14 @@ int main(int argc, char** argv) {
 
   //
   // install translator
-  //
-  QTranslator translator(0,0);
+  // disabling for now
+  /*QTranslator translator(0,0);
   if (translator.load(QString("fusion_") + QTextCodec::locale(), ".")) {
     a.installTranslator(&translator);
   } else if (translator.load(QString("fusion_") + QTextCodec::locale(),
                              kGESharePath)) {
     a.installTranslator(&translator);
-  }
+  }*/
 
   //
   // configure qt style
@@ -239,8 +239,7 @@ int main(int argc, char** argv) {
 
     // first event is really slow for some unknown reason
     // so process it now before taking the splash screen away
-    a.eventLoop()->processEvents(QEventLoop::ExcludeUserInput, 10);
-
+    a.processEvents(QEventLoop::ExcludeUserInputEvents, 10);
     w->show();
 
     if (splash) {
@@ -250,6 +249,7 @@ int main(int argc, char** argv) {
 
     a.connect(&a, SIGNAL(lastWindowClosed()), w, SLOT(fileExit()));
 
+    // qt3 support method
     a.setMainWidget(w);
 
     int status = a.exec();

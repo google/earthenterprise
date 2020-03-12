@@ -14,17 +14,17 @@
 
 
 #include "fusion/fusionui/AssetManager.h"
-
+#include "Qt/qobjectdefs.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
 #include <iostream>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qcombobox.h>
-#include <qapplication.h>
-#include <qmessagebox.h>
-#include <qpixmap.h>
+#include <Qt/qstring.h>
+#include <Qt/qstringlist.h>
+#include <Qt/qcombobox.h>
+#include <Qt/qapplication.h>
+#include <Qt/qmessagebox.h>
+#include <Qt/qpixmap.h>
 #include <Qt/q3header.h>
 using QHeader = Q3Header;
 #include <Qt/qprogressdialog.h>

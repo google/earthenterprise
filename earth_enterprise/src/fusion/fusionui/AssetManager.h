@@ -23,7 +23,7 @@
 #include <set>
 #include <map>
 #include <Qt/qobjectdefs.h>
-#include <Qt/qlistview.h>
+//#include <Qt/qlistview.h>
 #include <Qt/q3iconview.h>
 using QIconViewItem = Q3IconViewItem;
 #include <Qt/qstringlist.h>
@@ -33,6 +33,7 @@ using QIconViewItem = Q3IconViewItem;
 #include <Qt/q3popupmenu.h>
 using QPopupMenu = Q3PopupMenu;
 #include <Qt/q3listview.h>
+using QListView = Q3ListView;
 using QListViewItem = Q3ListViewItem;
 #include <Qt/qobject.h>
 #include "fusion/autoingest/.idl/storage/AssetDefs.h"

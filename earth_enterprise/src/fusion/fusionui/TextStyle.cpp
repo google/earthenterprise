@@ -95,7 +95,7 @@ TextStyle::TextStyle(QWidget *parent,
       }
     } while (++i != end && font_name == i->first.name_);
 
-    fonts.push_back(FontDef(font_name, weights));
+    fonts.push_back(FontDef(font_name.c_str(), weights));
   }
 
   // populate font combo with valid values from fontlist

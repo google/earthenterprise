@@ -42,9 +42,9 @@ using QHGroupBox = Q3HGroupBox;
 #include <Qt/qtooltip.h>
 #include <Qt/q3mimefactory.h>
 using QMimeSourceFactory = Q3MimeSourceFactory;
+#include <Qt/q3listview.h>
 #include <khConstants.h>
 #include <khGuard.h>
-
 #include <autoingest/Asset.h>
 #include <autoingest/AssetVersion.h>
 #include <autoingest/khAssetManagerProxy.h>
@@ -83,6 +83,7 @@ using QMimeSourceFactory = Q3MimeSourceFactory;
 #include <third_party/rfc_uuid/uuid.h>
 
 using QImageDrag = Q3ImageDrag;
+using QScrollView = Q3ScrollView;
 
 namespace {
 const int ConfigDispRuleEventId  = (int)QEvent::User;
@@ -143,8 +144,8 @@ class FilterItem : public Q3ListViewItem {
 };
 
 // -----------------------------------------------------------------------------
-
-class LayerItem : public QC3heckListItem {
+using QCheckListItem = Q3CheckListItem;
+class LayerItem : public QCheckListItem {
  public:
   LayerItem(Q3ListView* parent, gstLayer* l);
   LayerItem(Q3ListViewItem* parent, gstLayer* l);
@@ -1436,13 +1437,13 @@ void ProjectManager::FileOpen() {
   QStringList::Iterator it;
 
   QProgressDialog progress(tr("Please wait while loading..."),
-                           tr("Abort load"), 100, this, "progress", true);
+                           tr("Abort load"), 0, 100, this);
   progress.setCaption(tr("Loading"));
 
   for (it = files.begin(); it != files.end(); ++it) {
     QFileInfo fi(*it);
 
-    QString name = (fi.fileName() == kHeaderXmlFile) ?
+    QString name = (fi.fileName() == kHeaderXmlFile.c_str()) ?
                    fi.dirPath(true) : fi.absFilePath();
 
     addLayers(name.latin1(), codec.latin1());
@@ -1564,7 +1565,8 @@ void ProjectManager::AddAssetLayer(const char* assetname) {
                                       0,
                                       isasset);
     if (newsource) {
-      QString layername = shortAssetName(khBasename(asset->GetRef().toString().c_str()));
+      std::string ref = asset->GetRef().toString();
+      QString layername = shortAssetName(khBasename(ref.c_str()));
       gstLayer* layer = CreateNewLayer(layername,
                                        newsource, 0 /* src layer num */,
                                        asset->GetRef());
@@ -1751,7 +1753,7 @@ void ProjectManager::RefreshLayerList(bool setLegends,
       layer->SetSortId(project_->layers_.size());
     if (setLegends) {
       if (it.current()->parent() == 0)
-        layer->SetLegend(std::string());
+        layer->SetLegend(QString());
       else
         layer->SetLegend(extractLayer(it.current()->parent())->GetPath());
     }
@@ -1796,7 +1798,7 @@ bool ProjectManager::FindUuid(Q3ListViewItem* parent, Q3ListViewItem* item, cons
     // only look into Layers and LayerGroups
     if (rtti == LAYER || rtti == GROUP) {
       if (extractLayer(parent)) {
-        if (extractLayer(parent)->GetUuid() == uuid) {
+        if (extractLayer(parent)->GetUuid() == uuid.toUtf8().constData()) {
           return true;
         }
       }
@@ -1995,8 +1997,8 @@ void ProjectManager::selectBox(const gstDrawState& drawState,
   }
 
   int mode;
-  if (btnState & ShiftButton) {
-    if (btnState & ControlButton) {
+  if (btnState & Qt::ShiftModifier) {
+    if (btnState & Qt::ControlModifier) {
       mode = gstSelector::PICK_SUBTRACT;
     } else {
       mode = gstSelector::PICK_ADD;
@@ -2125,7 +2127,7 @@ void ProjectManager::openAllLayers(bool state) {
 
 
 void ProjectManager::contentsMousePressEvent(QMouseEvent* e) {
-  if (e->button() == LeftButton) {
+  if (e->button() == Qt::LeftButton) {
     QPoint p(contentsToViewport(e->pos()));
     Q3ListViewItem* i = itemAt(p);
     if (i && (i->rtti() == LAYER || i->rtti() == GROUP)) {
@@ -2278,7 +2280,9 @@ void ProjectManager::contentsDropEvent(QDropEvent* e) {
       if (ver) {
          AddAssetLayer((*it).latin1());
       } else {
-        nogoodversions += "   " + shortAssetName(it->toUtf8().constData()) + "\n";
+        nogoodversions += QString("   " )
+                       +  QString(shortAssetName(it->toUtf8().constData()))
+                       +  QString("\n");
       }
     }
 
