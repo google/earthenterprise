@@ -372,9 +372,8 @@ AssetAction* AssetAction::FindAsset(const QString& txt) {
 }
 
 bool AssetAction::OkToCloseAll() {
-  for (std::vector<AssetAction*>::iterator it = all_actions.begin();
-       it != all_actions.end(); ++it) {
-    if (!(*it)->asset_window_->OkToQuit())
+  for (const auto& it : all_actions) {
+    if (!it->asset_window_->OkToQuit())
       return false;
   }
   return true;
@@ -384,10 +383,9 @@ void AssetAction::CloseAll() {
   // make a copy of our asset window vector since deleting will
   // invalidate iterators on the original
   std::vector<AssetAction*> close_actions = all_actions;
-  for (std::vector<AssetAction*>::iterator it = close_actions.begin();
-       it != close_actions.end(); ++it) {
-    if ((*it)->asset_window_->OkToQuit()) {
-      delete (*it)->asset_window_;
+  for (auto& it : close_actions) {
+    if (it->asset_window_->OkToQuit()) {
+      delete it->asset_window_;
     } else {
       // terminate at first failure
       return;
@@ -400,11 +398,11 @@ void AssetAction::Cascade(const QPoint& start_pos) {
   const int yoffset = 20;
   int x = start_pos.x() + xoffset;
   int y = start_pos.y() + yoffset;
-  for (std::vector<AssetAction*>::iterator it = all_actions.begin();
-       it != all_actions.end(); ++it) {
-    (*it)->asset_window_->move(x, y);
-    (*it)->asset_window_->showNormal();
-    (*it)->asset_window_->raise();
+
+  for (auto& it : all_actions) {
+    it->asset_window_->move(x, y);
+    it->asset_window_->showNormal();
+    it->asset_window_->raise();
     x += xoffset;
     y += yoffset;
   }
@@ -552,9 +550,9 @@ AssetManager::AssetManager(QWidget* parent)
   categories->header()->setStretchEnabled(true);
   categories->header()->hide();
 
-  if (khExists(Preferences::filepath("assetmanager.layout").latin1())) {
+  if (khExists(Preferences::filepath("assetmanager.layout").toUtf8().constData())) {
     if (layout_persist_.Load(
-            Preferences::filepath("assetmanager.layout").latin1())) {
+            Preferences::filepath("assetmanager.layout").toUtf8().constData())) {
       // update filter combox
       filter_type_ = layout_persist_.filterType;
       filter_subtype_ = layout_persist_.filterSubType;
@@ -627,7 +625,7 @@ AssetManager::~AssetManager() {
 
   layout_persist_.filterType = filter_type_;
   layout_persist_.filterSubType = filter_subtype_;
-  layout_persist_.Save(Preferences::filepath("assetmanager.layout").latin1());
+  layout_persist_.Save(Preferences::filepath("assetmanager.layout").toUtf8().constData());
 }
 
 AssetManagerLayout::Size AssetManager::GetLayoutSize(const QString& name) {
@@ -653,7 +651,7 @@ bool AssetManager::RestoreExisting(const std::string& asset_ref) {
   if (action == NULL) {
     return false;
   } else {
-    action->activate();
+    action->activate(QAction::Trigger); // could also be QAction::Hover
     return true;
   }
 }
@@ -1223,7 +1221,7 @@ void AssetManager::PushDatabase(const gstAssetHandle& handle) {
   // choices so that we can automatically select this server next time they
   // push/publish.
   std::string database_name = shortAssetName(asset->GetRef().toString().c_str());
-  Preferences::UpdatePublishServerDbMap(database_name, nickname);
+  Preferences::UpdatePublishServerDbMap(database_name, nickname.toUtf8().constData());
 
   ServerConfig stream_server, search_server;
   for (it = sc_set.combinations.begin();
@@ -1601,7 +1599,7 @@ void AssetManager::assetsChanged(const AssetChanges& changes) {
   }
 
   // convert it to std::string only once for speed
-  std::string curr = currpath.latin1();
+  std::string curr = currpath.toUtf8().constData();
 
   // check to see if any of the changes are in this directory
   std::set<std::string> changedHere;
@@ -1837,10 +1835,9 @@ void AssetManager::TrackChangesInTableView(
   // But it can end up changing the selection
   assetTableView->sortColumn
     (assetTableView->horizontalHeader()->sortIndicatorSection(),
-     assetTableView->horizontalHeader()->sortIndicatorOrder() == Ascending,
+     assetTableView->horizontalHeader()->sortIndicatorOrder() == Qt::AscendingOrder,
      true /* whole rows */);
 }
-
 
 void AssetManager::UpdateTableView(const gstAssetFolder& folder) {
   // reset table

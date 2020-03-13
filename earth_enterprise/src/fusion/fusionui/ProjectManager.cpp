@@ -692,7 +692,7 @@ ProjectManager::MakeDefaultLayerConfig(const QString &name,
   cfg.defaultLocale.ClearDefaultFlags();
   cfg.defaultLocale.name_ = name;
   cfg.defaultLocale.icon_ = IconReference(IconReference::Internal,
-                                          kDefaultIconName);
+                                          kDefaultIconName.c_str());
 
   // Add a default display rule and get some refs to the internal pieces
   // so we can poke in some override values below
@@ -736,7 +736,7 @@ ProjectManager::MakeDefaultGroupConfig(const QString &name) const {
   cfg.defaultLocale.ClearDefaultFlags();
   cfg.defaultLocale.name_ = name;
   cfg.defaultLocale.icon_ = IconReference(IconReference::Internal,
-                                          kDefaultIconName);
+                                          kDefaultIconName.c_str());
 
   return cfg;
 }
@@ -1081,7 +1081,7 @@ void ProjectManager::contextMenu(Q3ListViewItem* item, const QPoint& pos, int) {
           bool ok_to_proceed = UuidSanityCheck(item, oldcfg.asset_uuid_, new_uuid);
           // Set the uuidEdit (in case it's changed).
           newcfg.asset_uuid_ = new_uuid;
-          prop.uuidEdit->setText(new_uuid);
+          prop.uuidEdit->setText(new_uuid.c_str());
           // If it's not unique, we need to continue and let the user try again.
           if (!ok_to_proceed) continue;
 
@@ -1139,7 +1139,7 @@ void ProjectManager::contextMenu(Q3ListViewItem* item, const QPoint& pos, int) {
           std::string new_uuid = newcfg.asset_uuid_;
           bool ok_to_proceed = UuidSanityCheck(item, oldcfg.asset_uuid_, new_uuid);
           // Set the uuidEdit (in case it's changed).
-          prop.uuidEdit->setText(new_uuid);
+          prop.uuidEdit->setText(new_uuid.c_str());
           newcfg.asset_uuid_ = new_uuid;
           // If it's not unique, we need to continue and let the user try again.
           if (!ok_to_proceed) continue;
@@ -1227,9 +1227,9 @@ void ProjectManager::contextMenu(Q3ListViewItem* item, const QPoint& pos, int) {
 }
 
 void ProjectManager::exportDisplayTemplate(gstLayer* layer) {
-  QFileDialog fd(this);
+  Q3FileDialog fd(this);
   fd.setCaption(tr("Export Template"));
-  fd.setMode(QFileDialog::AnyFile);
+  fd.setMode(Q3FileDialog::AnyFile);
   fd.addFilter(tr("Fusion Template File (*.khdsp)"));
 
   //
@@ -1565,8 +1565,8 @@ void ProjectManager::AddAssetLayer(const char* assetname) {
                                       0,
                                       isasset);
     if (newsource) {
-      std::string ref = asset->GetRef().toString();
-      QString layername = shortAssetName(khBasename(ref.c_str()));
+      std::string basename = khBasename(asset->GetRef().toString());
+      QString layername = shortAssetName(basename.c_str());
       gstLayer* layer = CreateNewLayer(layername,
                                        newsource, 0 /* src layer num */,
                                        asset->GetRef());
@@ -1678,7 +1678,7 @@ bool ProjectManager::applyQueries(gstLayer* layer) {
     return true;
 
   QProgressDialog progress_dialog(tr("Please wait while applying queries..."),
-                                  tr("Cancel"), 100, 0, "progress", true);
+                                  tr("Cancel"), 0, 100);
   progress_dialog.setCaption(tr("Applying Queries"));
 
   gstProgress query_progress;

@@ -402,7 +402,7 @@ class TextureWarning : public QMessageBox {
                     QMessageBox::NoButton, parent, 0, false) {
     // must set this flag here because the base QWidget will
     // not honor it if modal is not true
-    setWindowFlags(Qt::WA_DeleteOnClose);
+    setWindowFlags(static_cast<Qt::WindowFlags>(Qt::WA_DeleteOnClose));
   }
 };
 

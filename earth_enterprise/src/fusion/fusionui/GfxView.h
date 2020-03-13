@@ -18,11 +18,10 @@
 #ifndef _GfxView_h_
 #define _GfxView_h_
 
-#include <QtOpenGL/QGLWidget>
-//#include <qgl.h>
+#include <Qt/qobjectdefs.h>
+#include <Qt/qgl.h>
 #include <Qt/q3action.h>
-//#include <qaction.h>
-#include <QtGui/QMouseEvent>
+#include <Qt/qevent.h>
 #include <gstGeode.h>
 
 class gstTextureManager;
@@ -52,6 +51,7 @@ class GfxView : public QGLWidget {
   static GfxView* instance;
 
   GfxView(QWidget* parent, const char *name);
+  GfxView(QWidget* parent);
   ~GfxView(void);
 
   gstDrawState* state() { return &state_; }

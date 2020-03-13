@@ -41,6 +41,9 @@ QString GfxView::BitsPerComp;
 
 GfxView* GfxView::instance = 0;
 using QImageDrag = Q3ImageDrag;
+
+GfxView::GfxView(QWidget* parent) : GfxView(parent,0) {}
+
 GfxView::GfxView(QWidget* parent, const char* name)
     : QGLWidget(parent, name),
       start_scale_(-1.0),               // less than 0 -> not dragging

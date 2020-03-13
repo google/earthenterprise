@@ -450,6 +450,7 @@ void RasterProjectWidget::ContextMenu(Q3ListViewItem* item,
     menu.setItemEnabled(id, false);
   menu.insertSeparator();
   maxoverride_menu = TransferOwnership(new QPopupMenu());
+  // should be defined through QT3_SUPPORT... ?
   maxoverride_menu->insertItem(overridemax_level_slider);
   menu.insertItem(kh::tr("Adjust Max Level Override"),
                   (QPopupMenu*)maxoverride_menu);
