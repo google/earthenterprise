@@ -19,7 +19,7 @@ Portable User Guide for Windows and Linux
       -  :ref:`Connect using GEE Portable <Connect_GEE_Portable>`
       -  :ref:`Connect using the Google Earth EC <Connect_Using_GEEC>`
       -  :ref:`Connect using the Google Earth Plug-in <Connect_Using_Google_earth_Plugin>`
-      -  :ref:`Get info about your globe or map <Get_Info_About_Globe_Map>`
+      -  :ref:`Get info about your map <Get_Info_About_Globe_Map>`
       -  :ref:`Change your configuration options <Change_Configuration_Options>`
 
       .. _Introduction_Portable:
@@ -253,8 +253,9 @@ Portable User Guide for Windows and Linux
       ``http://localhost:9335`` (using any
       custom port or hostname you may have configured). Click the
       |Portable folder icon| **Folder** (outlined in red), then select the
-      globe or map you want to view. You can view only one globe or
-      map at a time.
+      map you want to view. You can view only one map at a time. Globes
+      cannot be viewed from the Portable. Use Google Earth Enterprise
+      Client to view globes.
 
       Globes and maps that are broadcast on your local network might
       require an access key. If prompted, enter the key to view the
@@ -272,26 +273,22 @@ Portable User Guide for Windows and Linux
       .. _Connect_Using_Google_earth_Plugin:
       .. rubric:: Connect using the Google Earth Plug-in
 
-      GEE Portable comes with preconfigured HTML pages called
-      ``hello_earth.html`` and ``hello_maps.html`` that display your
-      globe or map using the Google Earth API or Google Map API. Note
-      that the ``hello_earth.html`` sample uses the deprecated Google
-      Earth Plug-in.
+      GEE Portable comes with preconfigured HTML page called
+      ``hello_maps.html`` that display your map using the Google Map API.
 
       If you wish to make your own custom application, start by making
       a copy of either of these files and then add your own edits.
 
       To access either of the files, enter the URL in your browser:
 
-      | ``http://localhost:9335/local/preview/developers/hello_earth.html``
       | ``http://localhost:9335/local/preview/developers/hello_maps.html``
 
       .. note::
 
          Although it is possible to configure GEE Portable to
-         display multiple globes or maps at the same time, this is not
+         display multiple maps at the same time, this is not
          recommended or supported. The additional configuration requires
-         you to build the globe or map to reference a specific port
+         you to build the map to reference a specific port
          number, which means you would have to rebuild it if you wanted
          to re-use it for any other ports.
 
@@ -302,10 +299,10 @@ Portable User Guide for Windows and Linux
       list of the globes and maps you can access. Each globe or map is
       listed with its file name, description, creation date, and size.
 
-      Select a globe or map, then click the |Portable menu icon| **Menu**
+      Select a map, then click the |Portable menu icon| **Menu**
       (outlined in red) then select **Show layer list** to see
-      all the layers for that globe or map. You can use the list to
-      select the layers you want the globe or map to display. To hide
+      all the layers for that map. You can use the list to
+      select the layers you want the map to display. To hide
       the layer list, click the **Menu**, then select **Hide layer
       list**.
       |
