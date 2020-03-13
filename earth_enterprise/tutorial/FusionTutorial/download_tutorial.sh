@@ -10,8 +10,8 @@ if [ $(id -u) != 0 ] ; then
 fi
 
 if [ ! -d "$SCRIPTDIR/Imagery" ]; then
-	wget "http://data.opengee.org/FusionTutorial-Full.tar.gz" -O "$TMPFILE"
-	tar -xvzf "$TMPFILE" -C "$SCRIPTDIR"
-	rm -f "$TMPFILE"
-	chown -R gefusionuser:gegroup "$SCRIPTDIR"
+    wget "https://opengee-dev.s3.amazonaws.com/FusionTutorial-Full.tar.gz" -O "$TMPFILE"
+    tar -xvzf "$TMPFILE" -C "$SCRIPTDIR"
+    rm -f "$TMPFILE"
+    chown -R gefusionuser:gegroup "$SCRIPTDIR"
 fi
