@@ -273,8 +273,8 @@ Portable User Guide for Windows and Linux
       .. _Connect_Using_Google_earth_Plugin:
       .. rubric:: Connect using the Google Earth Plug-in
 
-      GEE Portable comes with preconfigured HTML page called
-      ``hello_maps.html`` that display your map using the Google Map API.
+      GEE Portable comes with a preconfigured HTML page called
+      ``hello_maps.html`` that displays your map using the Google Map API.
 
       If you wish to make your own custom application, start by making
       a copy of either of these files and then add your own edits.
