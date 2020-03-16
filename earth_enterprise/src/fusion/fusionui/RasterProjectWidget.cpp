@@ -17,7 +17,7 @@
 #include "fusion/fusionui/RasterProjectWidget.h"
 
 #include <string>
-
+#include <array>
 #include "fusion/fusionui/LayerItemBase.h"
 #include "fusion/fusionui/ProjectLayerView.h"
 #include "fusion/fusionui/AssetChooser.h"
@@ -176,14 +176,15 @@ void RasterLayerItem::InitBBox() {
   }
 }
 
-static int LevelColors[][3] = {
-  { 255, 0, 0 },
-  { 0, 255, 0 },
-  { 0, 0, 255 },
-  { 255, 255, 0 },
-  { 255, 0, 255 },
-  { 0, 255, 255 }
-};
+static std::array<std::array<int,3>,6> LevelColors =
+{{
+     {{ 255,   0,   0 }},
+     {{   0, 255,   0 }},
+     {{   0,   0, 255 }},
+     {{ 255, 255,   0 }},
+     {{ 255,   0, 255 }},
+     {{   0, 255, 255 }}
+}};
 
 void RasterLayerItem::Draw(const gstDrawState& state) {
   gstBBox box = bbox_;

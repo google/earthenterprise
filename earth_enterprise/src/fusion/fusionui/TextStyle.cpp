@@ -35,6 +35,7 @@
 #include <common/khstl.h>
 #include <gst/maprender/TextRenderer.h>
 #include <gst/maprender/SGLHelps.h>
+#include <Qt/qevent.h>
 using QImageDrag = Q3ImageDrag;
 using QButton = Q3Button;
 
@@ -359,9 +360,9 @@ TextStyleButtonController::Create(WidgetControllerManager &manager,
 // ****************************************************************************
 
 TextPreviewLabel::TextPreviewLabel(QWidget* parent, const char* name)
-  : QLabel(parent, name),
+  : QLabel(name, parent),
     dragging_(false) {
-  setFrameShape(QLabel::LineEditPanel);
+  setFrameShape(QFrame::StyledPanel);
   setFrameShadow(QLabel::Sunken);
   setScaledContents(false);
   setAlignment(Qt::AlignCenter);
@@ -370,7 +371,7 @@ TextPreviewLabel::TextPreviewLabel(QWidget* parent, const char* name)
 TextPreviewLabel::TextPreviewLabel(QDialog* parent)
   : QLabel(parent), dragging_(false)
 {
-    setFrameShape(QLabel::LineEditPanel);
+    setFrameShape(QFrame::StyledPanel);
     setFrameShadow(QLabel::Sunken);
     setScaledContents(false);
     setAlignment(Qt::AlignCenter);
@@ -405,7 +406,7 @@ void TextPreviewLabel::UpdateConfig(const MapTextStyleConfig& config) {
 // ****************************************************************************
 
 StyleSaveButton::StyleSaveButton(QWidget* parent, const char* name)
-  : QPushButton(parent, name) {
+  : QPushButton(name, parent) {
 }
 
 StyleSaveButton::StyleSaveButton(Q3ButtonGroup* parent)
@@ -413,7 +414,7 @@ StyleSaveButton::StyleSaveButton(Q3ButtonGroup* parent)
 {}
 
 void StyleSaveButton::dragEnterEvent(QDragEnterEvent* event) {
-  if (QImageDrag::canDecode(event)) {
+  if (QImageDrag::canDecode(dynamic_cast<const QMimeSource*>(event))) {
     event->accept();
     setDown(true);
   }
@@ -425,7 +426,7 @@ void StyleSaveButton::dragLeaveEvent(QDragLeaveEvent* event) {
 
 void StyleSaveButton::dropEvent(QDropEvent* event) {
   QPixmap pixmap;
-  if (QImageDrag::decode(event, pixmap))
+  if (QImageDrag::decode(dynamic_cast<const QMimeSource*>(event), pixmap))
     setPixmap(pixmap);
   emit StyleChanged(this);
 }
