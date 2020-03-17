@@ -253,9 +253,9 @@ Portable User Guide for Windows and Linux
       ``http://localhost:9335`` (using any
       custom port or hostname you may have configured). Click the
       |Portable folder icon| **Folder** (outlined in red), then select the
-      map you want to view. You can view only one map at a time. Globes
-      cannot be viewed from the Portable. Use Google Earth Enterprise
-      Client to view globes.
+      map you want to view. You can view only one map at a time.
+      Portable globes cannot be viewed with a web browser. Use
+      Google Earth Enterprise Client to view globes.
 
       Globes and maps that are broadcast on your local network might
       require an access key. If prompted, enter the key to view the
@@ -274,7 +274,7 @@ Portable User Guide for Windows and Linux
       .. rubric:: Connect using the Google Earth Plug-in
 
       GEE Portable comes with a preconfigured HTML page called
-      ``hello_maps.html`` that displays your map using the Google Map API.
+      ``hello_maps.html`` that displays your map using the ``Google Maps API``.
 
       If you wish to make your own custom application, start by making
       a copy of either of these files and then add your own edits.
