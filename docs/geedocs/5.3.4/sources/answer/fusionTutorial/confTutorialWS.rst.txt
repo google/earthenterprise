@@ -27,15 +27,12 @@ The tutorial source files are available in the following archives. It
 can be downloaded all together, or for convenience it can be
 downloaded in two parts.
 
-FusionTutorial-Full.tar.gz [md5] - Contains all the source data needed
-to complete the tutorial - 600 MB
+FusionTutorial-Full.tar.gz - Contains all the source data needed to
+complete the tutorial - 600 MB
 
-FusionTutorial-NoMosaicImagery.tar.gz [md5] - Contains all the source
-data needed to complete the tutorial, except for the Mosaic section -
-282 MB
-
-FusionTutorial-Imagery-mosaic.tar.gz [md5] - Contains only the souce
-data needed to complete the Mosaic section of the tutorial - 318 MB
+FusionTutorial-NoMosaicImagery.tar.gz - Contains all the source data
+needed to complete the tutorial, except for the Mosaic section - 282
+MB
 
 Once the source files are downloaded, as root, create the
 "/opt/google/share/tutorials/fusion" directory if it doesn't exist.
