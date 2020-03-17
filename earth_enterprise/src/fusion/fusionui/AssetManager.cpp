@@ -165,7 +165,7 @@ QPixmap* folderOpen = 0;
 class AssetFolder : public QListViewItem {
  public:
   AssetFolder(QListViewItem* parent, const gstAssetFolder& f);
-  AssetFolder(QListView* parent, const gstAssetFolder& f);
+  AssetFolder(Q3ListView* parent, const gstAssetFolder& f);
 
   const gstAssetFolder& getFolder() const { return folder; }
 
@@ -183,7 +183,7 @@ class AssetFolder : public QListViewItem {
 
 // -----------------------------------------------------------------------------
 
-AssetFolder::AssetFolder(QListView* parent, const gstAssetFolder& f)
+AssetFolder::AssetFolder(Q3ListView* parent, const gstAssetFolder& f)
     : QListViewItem(parent, f.name()),
       folder(f),
       type_(ASSET_MANAGER) {

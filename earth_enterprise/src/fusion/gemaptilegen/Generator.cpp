@@ -824,9 +824,9 @@ Generator::Generator(geFilePool &file_pool, const std::string &outdir,
         }
         if (!message.empty()) {
           QString warn(kh::tr("The file listing vector features to display "
-                              "\"%1\" %2 ").arg(disprule.query_selectfile_,
-                                               message));
-          messages = messages + warn.latin1();
+                              "\"%1\" %2 ").arg(disprule.query_selectfile_.c_str(),
+                                               message.c_str()));
+          messages = messages + warn.toUtf8().constData();
           continue;
         }
       }

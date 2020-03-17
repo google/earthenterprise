@@ -33,7 +33,7 @@ using QIconViewItem = Q3IconViewItem;
 #include <Qt/q3popupmenu.h>
 using QPopupMenu = Q3PopupMenu;
 #include <Qt/q3listview.h>
-using QListView = Q3ListView;
+//using QListView = Q3ListView;
 using QListViewItem = Q3ListViewItem;
 #include <Qt/qobject.h>
 #include "fusion/autoingest/.idl/storage/AssetDefs.h"

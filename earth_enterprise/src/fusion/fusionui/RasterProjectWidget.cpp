@@ -176,15 +176,14 @@ void RasterLayerItem::InitBBox() {
   }
 }
 
-static std::array<std::array<int,3>,6> LevelColors =
-{{
-     {{ 255,   0,   0 }},
-     {{   0, 255,   0 }},
-     {{   0,   0, 255 }},
-     {{ 255, 255,   0 }},
-     {{ 255,   0, 255 }},
-     {{   0, 255, 255 }}
-}};
+static int LevelColors[][3] = {
+  { 255, 0, 0 },
+  { 0, 255, 0 },
+  { 0, 0, 255 },
+  { 255, 255, 0 },
+  { 255, 0, 255 },
+  { 0, 255, 255 }
+};
 
 void RasterLayerItem::Draw(const gstDrawState& state) {
   gstBBox box = bbox_;

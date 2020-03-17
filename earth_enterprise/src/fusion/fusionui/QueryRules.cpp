@@ -94,8 +94,7 @@ int QueryRules::BuildRule() {
   box->setColumns(3);
   box->setInsideSpacing(kRuleBoxMargin);
   box->setInsideMargin(kRuleBoxMargin);
-  box->setFrameShape(NoFrame);
-
+  box->setFrameShape(static_cast<Q3GroupBox::DummyFrame>(0));
   Q3ComboBox* field_box = new Q3ComboBox(box);
   if (field_descriptors_) {
     field_box->insertStringList(*field_descriptors_);
