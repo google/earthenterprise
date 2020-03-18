@@ -18,14 +18,14 @@
 
 #ifndef FUSION_FUSIONUI_TEXTSTYLE_H__
 #define FUSION_FUSIONUI_TEXTSTYLE_H__
-
+#include <Qt/qobjectdefs.h>
 #include <Qt/qglobal.h>
 #include <Qt/qobject.h>
 #include <Qt/qpixmap.h>
 #include <Qt/qlabel.h>
 #include <Qt/qpushbutton.h>
-#include <autoingest/.idl/storage/MapSubLayerConfig.h>
-#include <autoingest/.idl/MapTextStyle.h>
+//#include <autoingest/.idl/storage/MapSubLayerConfig.h>
+//#include <autoingest/.idl/MapTextStyle.h>
 #include "WidgetControllers.h"
 #include <Qt/qwidget.h>
 #include "textstylebase.h"

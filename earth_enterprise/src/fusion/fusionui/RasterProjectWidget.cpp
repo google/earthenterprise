@@ -15,7 +15,7 @@
 //
 
 #include "fusion/fusionui/RasterProjectWidget.h"
-
+#include <memory>
 #include <string>
 #include <array>
 #include "fusion/fusionui/LayerItemBase.h"
@@ -33,6 +33,7 @@
 #include "fusion/autoingest/plugins/RasterProductAsset.h"
 
 #include <Qt/q3popupmenu.h>
+#include <Qt/qmenu.h>
 #include <Qt/q3header.h>
 #include <Qt/qlineedit.h>
 #include <Qt/qmessagebox.h>
@@ -438,7 +439,7 @@ void RasterProjectWidget::ContextMenu(Q3ListViewItem* item,
       1, static_cast<int>(ProductToDisplayLevel(insetmax)),
       static_cast<int>(ProductToDisplayLevel(current_level)), this);
 
-  QPopupMenu menu(this);
+  QPopupMenu menu(dynamic_cast<QWidget*>(this));
   menu.insertItem(kh::tr("&Zoom to Layer"), ZOOM_TO_LAYER);
   int id = menu.insertItem(kh::tr("Move Layer &Up"), MOVE_UP);
 
@@ -451,7 +452,7 @@ void RasterProjectWidget::ContextMenu(Q3ListViewItem* item,
   menu.insertSeparator();
   maxoverride_menu = TransferOwnership(new QPopupMenu());
   // should be defined through QT3_SUPPORT... ?
-  maxoverride_menu->insertItem(overridemax_level_slider);
+  maxoverride_menu->insertItem(QString(), overridemax_level_slider,0);
   menu.insertItem(kh::tr("Adjust Max Level Override"),
                   (QPopupMenu*)maxoverride_menu);
 

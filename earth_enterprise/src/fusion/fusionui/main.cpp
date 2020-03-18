@@ -28,6 +28,7 @@
 #include <Qt/qimage.h>
 #include <Qt/qfile.h>
 #include <Qt/qeventloop.h>
+#include <Qt/qdesktopwidget.h>
 
 #include <builddate.h>
 #include "fusion/fusionversion.h"
@@ -122,6 +123,7 @@ int main(int argc, char** argv) {
   int argn;
   FusionProductType type = GetFusionProductType();
   khGetopt options;
+
   options.choiceOpt("mode", type,
                     makemap(std::string("LT"),       FusionLT,
                             std::string("Pro"),      FusionPro,

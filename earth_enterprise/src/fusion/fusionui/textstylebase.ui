@@ -696,6 +696,9 @@
 </slots>
 <pixmapinproject/>
 <layoutdefaults spacing="6" margin="11"/>
+<forwards>
+    <forward>class TextStyle;</forward>
+</forwards>
 <includehints>
     <includehint>StyleSave.h</includehint>
     <includehint>TextStyle.h</includehint>

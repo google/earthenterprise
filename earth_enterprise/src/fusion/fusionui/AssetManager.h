@@ -195,6 +195,7 @@ class AssetManager : public AssetManagerBase {
 // Thread classes for serving pushing and publishing.
 class ServeThread : /*public QObject,*/ public QThread {
   //Q_OBJECT already present in QThread
+  Q_OBJECT
 
  public:
   virtual ~ServeThread();

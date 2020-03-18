@@ -23,7 +23,7 @@
 #include <Qt/q3action.h>
 #include <Qt/qevent.h>
 #include <gstGeode.h>
-
+#include <Qt/q3combobox.h>
 class gstTextureManager;
 class TexTile;
 class QTimer;

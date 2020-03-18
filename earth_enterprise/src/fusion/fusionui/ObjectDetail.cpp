@@ -69,7 +69,7 @@ ObjectDetail::VertexItem::VertexItem(QListViewItem* parent,
 
 ObjectDetail::ObjectDetail(QWidget* parent, uint id, gstGeodeHandle geode,
                            gstRecordHandle attrib)
-    : ObjectDetailBase(parent , 0, false, Qt::WA_DeleteOnClose),
+    : ObjectDetailBase(parent , 0, false, static_cast<Qt::WindowFlags>(Qt::WA_DeleteOnClose)),
       geode_handle_(geode),
       drawVertex(false) {
   setCaption(QString("Feature %1 Detail").arg(id));

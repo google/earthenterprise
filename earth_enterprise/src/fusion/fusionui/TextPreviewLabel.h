@@ -20,6 +20,8 @@
 #include <Qt/qlabel.h>
 #include <Qt/qwidget.h>
 #include <Qt/qobjectdefs.h>
+#include <autoingest/.idl/storage/MapSubLayerConfig.h>
+#include <autoingest/.idl/MapTextStyle.h>
 class QMouseEvent;
 class MapTextStyleEvent;
 

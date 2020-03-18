@@ -40,7 +40,7 @@ class AssetManagerLayout
   bool showme;
 
   ViewMode viewMode = AssetManagerLayout::List;
-  QString selectedPath = QString::null;
+  QString selectedPath = QString();
   int filterType = 0;
   int filterSubType = 0;
   bool showHidden = false;

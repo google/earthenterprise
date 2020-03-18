@@ -194,25 +194,6 @@
                 <string>Move to Placemark</string>
             </property>
         </widget>
-        <!-- Relies originally on Qt3 Spacer, which is QSpacerItem,
-             This has changed significantly in Qt4, making it almost useless
-          <widget class="QSpacerItem">
-            <property name="name">
-                <cstring>spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>28</width>
-                    <height>27</height>
-                </size>
-            </property>
-        </widget>-->
         <widget class="QLabel">
             <property name="name">
                 <cstring>textLabel1</cstring>
@@ -236,6 +217,26 @@
                 <cstring>previewProjection</cstring>
             </property>
         </widget>
+        <!-- Relies originally on Qt3 Spacer, which is QSpacerItem,
+             This has changed significantly in Qt4, making it almost useless
+          <widget class="QSpacerItem">
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>28</width>
+                    <height>27</height>
+                </size>
+            </property>
+        </widget>-->
+
     </toolbar>
 </toolbars>
 <customwidgets>
