@@ -416,14 +416,7 @@ function initServing() {
 
 // Initializes Earth plugin serving.
 function init3DServing() {
-  if (operatingSystemName == 'Linux') {
-    document.getElementById('NoMap').style.display = 'block';
-    document.getElementById('ZmControls').style.display = 'none';
-  } else {
-    initEarth();
-    loadIframes();
-    initSearchPane();
-  }
+  document.getElementById('NoMap').style.display = 'block';
 }
 
 // Initializes Map serving.
