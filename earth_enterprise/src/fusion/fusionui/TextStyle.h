@@ -44,6 +44,7 @@ namespace maprender {
   class FontInfo;
 }
 
+
 class TextStyle : public TextStyleBase {
   Q_OBJECT
 

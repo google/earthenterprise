@@ -14,7 +14,7 @@
 
 
 #include <string>
-#include <qstring.h>
+#include <Qt/qstring.h>
 #include <list>
 #include <map>
 
@@ -89,7 +89,7 @@ class TemplateImportLayout
   int width;
   int height;
 
-  QString lastDirectory = QString::null;
+  QString lastDirectory = QString();
 
 #pragma LoadAndSave
 };

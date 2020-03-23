@@ -1360,6 +1360,9 @@
 </slots>
 <pixmapinproject/>
 <layoutdefaults spacing="6" margin="8"/>
+<includes>
+    <include location="global" impldecl="in declaration">Qt/qobjectdefs.h</include>
+</includes>
 <includehints>
     <includehint>GfxView.h</includehint>
 </includehints>
