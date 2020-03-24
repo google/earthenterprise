@@ -43,9 +43,7 @@ buildscript {
     }
 
     dependencies {
-        // OSPackage 4.4.0, 4.4.1, 4.4.2, 4.5.0, 4.5.1 produce RPMs that fail
-        // to install on Cent OS 6, so we use the older version:
-        classpath 'com.netflix.nebula:gradle-ospackage-plugin:4.3.0'
+        classpath 'com.netflix.nebula:gradle-ospackage-plugin:8.2.0'
     }
 }
 
@@ -906,10 +904,4 @@ task openGeeDebs(
 task osPackage(dependsOn: org.opengee.os.Platform.osId == 'ubuntu' ? openGeeDebs : openGeeRpms) {
     group = 'Packaging'
     description = "Build ${org.opengee.os.Platform.osId == 'ubuntu' ? 'Deb' : 'RPM'} packages from on OpenGEE staged install."
-}
-
-// Mostly for documentation purposes.  You need to comment out the rest of the
-// Gradle file to run this task:
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.2'
 }
