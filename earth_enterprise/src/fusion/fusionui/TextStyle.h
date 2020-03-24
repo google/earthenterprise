@@ -24,11 +24,13 @@
 #include <Qt/qpixmap.h>
 #include <Qt/qlabel.h>
 #include <Qt/qpushbutton.h>
-//#include <autoingest/.idl/storage/MapSubLayerConfig.h>
-//#include <autoingest/.idl/MapTextStyle.h>
+#include <memory>
+#include <autoingest/.idl/storage/MapSubLayerConfig.h>
+#include <autoingest/.idl/MapTextStyle.h>
 #include "WidgetControllers.h"
 #include <Qt/qwidget.h>
 #include "textstylebase.h"
+#include <Qt/qsharedpointer.h>
 
 class FontDef {
  public:
@@ -44,14 +46,15 @@ namespace maprender {
   class FontInfo;
 }
 
-
-class TextStyle : public TextStyleBase {
+class TextStyleBase;
+class TextStyle : public QWidget {
   Q_OBJECT
 
  public:
+  QSharedPointer<TextStyleBase> base;
   TextStyle(QWidget *parent,
             const MapTextStyleConfig &config_);
-  virtual ~TextStyle(void);
+  virtual ~TextStyle(void) = default;
   const MapTextStyleConfig& Config(void) const { return config; }
 
   // from QDialog
@@ -75,7 +78,7 @@ class TextStyle : public TextStyleBase {
   void UpdateWeightCombo(int fontPos);
   void UpdateFontCombos(void);
 
-  static const uint kMaxSavedStyles = 10;
+  static const unsigned int kMaxSavedStyles = 10;
   MapTextStyleConfig config;
   std::vector<FontDef> fonts;
   std::vector<bool> haveSave;

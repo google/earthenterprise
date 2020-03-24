@@ -17,16 +17,16 @@
 
 #include <list>
 
-#include <qstring.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qcombobox.h>
-#include <qmessagebox.h>
+#include <Qt/qstring.h>
+#include <Qt/qlineedit.h>
+#include <Qt/qpushbutton.h>
+#include <Qt/qcombobox.h>
+#include <Qt/qmessagebox.h>
 #include <Qt/q3iconview.h>
 //#include <qiconview.h>
-#include <qinputdialog.h>
-#include <qapplication.h>
-
+#include <Qt/qinputdialog.h>
+#include <Qt/qapplication.h>
+#include <Qt/qcoreevent.h>
 #include "fusion/gst/gstAssetManager.h"
 
 #include "fusion/fusionui/Preferences.h"
@@ -48,7 +48,7 @@ class ChangeDirEvent : public QCustomEvent {
 };
 
 // -----------------------------------------------------------------------------
-
+using QIconView = Q3IconView;
 class FolderItem : public QIconViewItem {
  public:
   FolderItem(QIconView* parent, const gstAssetFolder& f);
