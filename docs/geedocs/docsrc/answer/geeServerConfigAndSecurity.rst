@@ -12,3 +12,4 @@ GEE Server Configuration And Security
    geeServerConfigAndSecurity/configureGeeForLDAP
    geeServerConfigAndSecurity/configureGeeVirtualHostForLDAP
    geeServerConfigAndSecurity/setupHTTPS
+   geeServerConfigAndSecurity/ECSupportedAuthMethods
