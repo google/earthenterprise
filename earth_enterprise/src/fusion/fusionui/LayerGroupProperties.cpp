@@ -11,18 +11,17 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+#include <Qt/qobjectdefs.h>
 #include <Qt/qlineedit.h>
-//#include <qlineedit.h>
 #include <Qt/q3combobox.h>
-//#include <qcombobox.h>
-#include <qspinbox.h>
-#include <qlabel.h>
-#include <qpixmap.h>
-#include <qpushbutton.h>
-#include <qimage.h>
-#include <qcheckbox.h>
-#include <qgroupbox.h>
-#include <qtabwidget.h>
+#include <Qt/qspinbox.h>
+#include <Qt/qlabel.h>
+#include <Qt/qpixmap.h>
+#include <Qt/qpushbutton.h>
+#include <Qt/qimage.h>
+#include <Qt/qcheckbox.h>
+#include <Qt/qgroupbox.h>
+#include <Qt/qtabwidget.h>
 #include <Qt/q3textedit.h>
 #include <gstLayer.h>
 

@@ -136,10 +136,10 @@ class FeatureEditor : public FeatureEditorBase {
 
  protected slots:
   void DrawFeatures(const gstDrawState& s);
-  void MousePress(const gstBBox& b, Qt::ButtonState s);
+  void MousePress(const gstBBox& b, Qt::KeyboardModifier s);
   void MouseMove(const gstVertex& v);
   void MouseRelease();
-  void SelectBox(const gstDrawState& state, Qt::ButtonState btn_state);
+  void SelectBox(const gstDrawState& state, Qt::KeyboardModifier btn_state);
   void KeyPress(QKeyEvent* e);
   
   // file menu

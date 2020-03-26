@@ -14,6 +14,7 @@
 
 
 #include <set>
+#include <Qt/qobjectdefs.h>
 #include <Qt/qlineedit.h>
 #include <Qt/qcombobox.h>
 #include <Qt/qspinbox.h>
@@ -22,8 +23,6 @@
 #include <Qt/qpushbutton.h>
 #include <Qt/qimage.h>
 #include <Qt/qcheckbox.h>
-#include <Qt/qgroupbox.h>
-//#include <Qt/qtextedit.h>
 #include <Qt/q3textedit.h>
 #include <Qt/qmessagebox.h>
 #include <Qt/qtabwidget.h>

@@ -19,6 +19,7 @@
 #define KHSRC_FUSION_FUSIONUI_PROJECTDOCKER_H__
 
 #include <Qt/q3dockwindow.h>
+#include <Qt/qobjectdefs.h>
 using QDockWindow = Q3DockWindow;
 class QPushButton;
 class ProjectManager;
@@ -33,7 +34,7 @@ class ProjectDocker : public QDockWindow {
   ProjectManager* Preview() const { return preview_; }
 
  protected slots:
-  void selectBox(const gstDrawState& s, Qt::ButtonState bs);
+  void selectBox(const gstDrawState& s, Qt::KeyboardModifier bs);
 
   void enableAllLayers();
   void disableAllLayers();

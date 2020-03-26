@@ -18,12 +18,10 @@
 #ifndef KHSRC_FUSION_FUSIONUI_LOCALEDETAILS_H__
 #define KHSRC_FUSION_FUSIONUI_LOCALEDETAILS_H__
 
+#include <Qt/qobjectdefs.h>
 #include <Qt/q3table.h>
-using QTable = Q3Table;
-using QTableItem = Q3TableItem;
 #include <Qt/qcheckbox.h>
 #include <Qt/q3scrollview.h>
-using QScrollView = Q3ScrollView;
 #include <map>
 #include "WidgetControllers.h"
 #include <autoingest/.idl/storage/LayerConfig.h>
@@ -90,7 +88,7 @@ private slots:
                  const LocaleConfig& config,
                  bool is_defaultable = true);
 
-  QTable *table_;
+  Q3Table *table_;
 
   LocaleConfig *default_locale_config_;
   LocaleMap    *locale_map_config_;

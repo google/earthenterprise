@@ -399,8 +399,8 @@ FeatureEditor::FeatureEditor(QWidget* parent)
 
   connect(this, SIGNAL(RedrawPreview()), GfxView::instance, SLOT(updateGL()));
 
-  connect(GfxView::instance, SIGNAL(MousePress(const gstBBox&, Qt::ButtonState)),
-          this, SLOT(MousePress(const gstBBox&, Qt::ButtonState)));
+  connect(GfxView::instance, SIGNAL(MousePress(const gstBBox&, Qt::KeyboardModifier)),
+          this, SLOT(MousePress(const gstBBox&, Qt::KeyboardModifier)));
   connect(GfxView::instance, SIGNAL(MouseMove(const gstVertex&)),
           this, SLOT(MouseMove(const gstVertex&)));
   connect(GfxView::instance, SIGNAL(MouseRelease()),
@@ -408,8 +408,8 @@ FeatureEditor::FeatureEditor(QWidget* parent)
   connect(this, SIGNAL(ZoomToBox(const gstBBox&)),
           GfxView::instance, SLOT(zoomToBox(const gstBBox&)));
 
-  connect(GfxView::instance, SIGNAL(selectBox(const gstDrawState &, Qt::ButtonState)),
-          this, SLOT(SelectBox(const gstDrawState &, Qt::ButtonState)));
+  connect(GfxView::instance, SIGNAL(selectBox(const gstDrawState &, Qt::KeyboardModifier)),
+          this, SLOT(SelectBox(const gstDrawState &, Qt::KeyboardModifier)));
 
   setAcceptDrops(true);
 
@@ -725,7 +725,7 @@ void FeatureEditor::GetSelectList(std::vector<FeatureItem*>* select_list) {
 }
 
 
-void FeatureEditor::MousePress(const gstBBox& box_point, Qt::ButtonState state) {
+void FeatureEditor::MousePress(const gstBBox& box_point, Qt::KeyboardModifier state) {
   // cancel any editing that's currently underway
   editing_vertex_ = false;
 
@@ -1245,7 +1245,7 @@ void FeatureEditor::AddFeaturesFromSource(gstSource* source) {
 }
 
 void FeatureEditor::SelectBox(const gstDrawState& state,
-                              Qt::ButtonState btn_state) {
+                              Qt::KeyboardModifier btn_state) {
   // three possible states:
   //   clear & add - no keyboard modifiers
   //   add         - shift

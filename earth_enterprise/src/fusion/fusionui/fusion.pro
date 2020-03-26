@@ -9,6 +9,8 @@ DEFINES	+= QT_NO_ASCII_CAST
 
 INCLUDEPATH	+= ../include
 
+QT += qt3support
+
 HEADERS	+= GfxView.h \
 	ProjectManager.h \
 	MainWindow.h \

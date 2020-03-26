@@ -27,7 +27,6 @@ using QHeader = Q3Header;
 #include <Qt/qstringlist.h>
 #include <Qt/qmessagebox.h>
 #include <Qt/q3popupmenu.h>
-using QPopupMenu = Q3PopupMenu;
 #include <Qt/qpainter.h>
 #include <Qt/qcursor.h>
 
@@ -44,7 +43,9 @@ using QPopupMenu = Q3PopupMenu;
 #include "LayerLegendWidget.h"
 
 using QTable = Q3Table;
-
+using QTableItem = Q3TableItem;
+using QScrollView = Q3ScrollView;
+using QPopupMenu = Q3PopupMenu;
 
 // ****************************************************************************
 // ***  ItemBase
