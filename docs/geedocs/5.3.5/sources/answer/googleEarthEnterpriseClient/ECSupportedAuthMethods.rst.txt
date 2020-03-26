@@ -1,0 +1,6 @@
+
+EC Supported Authentication Methods
+
+        Authentication Type  Version 7.0.8  Version 7.3.2  Version
+7.3.3  Basic/Digest  Yes  Yes  Yes  PKI  Yes  Yes  Yes  OAuth 2.0  No
+No  No  SAML 2.0  No  No  No
