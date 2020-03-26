@@ -10,3 +10,4 @@ Google Earth Enterprise client
    googleEarthEnterpriseClient/bandwidthRequirementsForEC
    googleEarthEnterpriseClient/selectAddChangeEarthECServers
    googleEarthEnterpriseClient/fixEarthECIssues
+   geeServerConfigAndSecurity/ECSupportedAuthMethods
