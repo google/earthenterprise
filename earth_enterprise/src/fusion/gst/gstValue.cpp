@@ -774,7 +774,7 @@ void gstValue::set(int64 v) {
     case gstTagString:
     case gstTagUnicode:
       char buf[kMaxString];
-      snprintf(buf, kMaxString, "%lld", (unsigned long long)v);
+      snprintf(buf, kMaxString, "%llu", (unsigned long long)v);
       *qstring_ = buf;
       break;
   }

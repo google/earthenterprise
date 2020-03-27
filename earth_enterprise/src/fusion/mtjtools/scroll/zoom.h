@@ -391,7 +391,7 @@ class Image
   {
 #ifdef MALLOG
     log = fopen("c:/mallog.txt", "a"); // XXX
-    fprintf(log, "\nImage::Image(%d, %d, 0x%08x, %d)\n\n", x, y, d, s);
+    fprintf(log, "\nImage::Image(%d, %d, 0x%08x, %d)\n\n", x, y, static_cast<unsigned int>(d), s);
 #endif
 
     xsize = x;
@@ -417,7 +417,7 @@ class Image
   {
 #ifdef MALLOG
     log = fopen("c:/mallog.txt", "a"); // XXX
-    fprintf(log, "\nImage::Image(%d, %d, 0x%08x ... zoom)\n\n", x, y, source);
+    fprintf(log, "\nImage::Image(%d, %d, 0x%08x ... zoom)\n\n", x, y, static_cast<unsigned int>(source));
 #endif
 
     xsize = x;
@@ -545,7 +545,7 @@ class Image
     void *item = ::malloc(size);
 
     if (log != nullptr)
-      fprintf(log, "A 0x%08x %8d\n", item, size);
+      fprintf(log, "A 0x%08x %8lu\n", static_cast<unsigned int>(item), static_cast<unsigned long>(size));
 
     return item;
   }
@@ -554,14 +554,14 @@ class Image
     void *item = ::calloc(size, count);
 
     if (log != nullptr)
-      fprintf(log, "C 0x%08x %8d (%8d * %8d)\n", item, size*count, size, count);
+      fprintf(log, "C 0x%08x %8lu (%8lu * %8lu)\n", static_cast<unsigned int>(item), static_cast<unsigned long>(size*count), static_cast<unsigned long>(size), static_cast<unsigned long>(count));
 
     return item;
   }
   void free(void *item)
   {
     if (log != nullptr)
-      fprintf(log, "F 0x%08x\n", item);
+      fprintf(log, "F 0x%08x\n", static_cast<unsigned int>(item));
 
     ::free(item);
   }

@@ -151,7 +151,7 @@ int main(int argc, char *argv[]) {
   }
   ssize_t wktlen = strlen(wkt);
 
-  printf("----- wktlen = %d -----\n", wktlen);
+  printf("----- wktlen = %lu -----\n", static_cast<unsigned long>(wktlen));
   printf("----- wkt = %s -----\n", wkt);
 
   khEnsureParentDir(out);

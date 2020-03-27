@@ -310,7 +310,7 @@ void FusionDbService::DoStatus(std::string* data) {
   std::map<std::string, std::vector<std::string> > fusiondb_to_targets;
   GetFusionDbToTargetsMap(&fusiondb_to_targets);
   char str[256];
-  snprintf(str, sizeof(str), "%lu", fusiondb_to_targets.size());
+  snprintf(str, sizeof(str), "%lu", static_cast<unsigned long>(fusiondb_to_targets.size()));
   data->append("<h4>Fusion DB(s) serving on Target(s) (");
   data->append(str);
   data->append("):</h4>");

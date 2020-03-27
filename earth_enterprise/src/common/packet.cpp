@@ -451,7 +451,7 @@ void parsebcode(char * fname)
   phtable[num]++;
 
   if(phtable[num] > 1)
-    printf("t%ld: %ld\n", num, phtable[num]);
+    printf("t%lu: %lu\n", num, phtable[num]);
 
 }
 
