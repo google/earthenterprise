@@ -63,8 +63,8 @@ int main(int argc, char *argv[]) {
     if (strncmp(argv[cursor], "-v", 2) == 0) {
       verbose = 1;
     } else if (strncmp(argv[cursor], "-i", 2) == 0) {
-      if (sscanf(argv[cursor], "-i%s", input) != 1)
-        sscanf(argv[++cursor], "%s", input);
+      if (sscanf(argv[cursor], "-i%255s", input) != 1)
+        sscanf(argv[++cursor], "%255s", input);
     } else if (strncmp(argv[cursor], "-a", 2) == 0) {
       // Subject: Cir to natural colors
       // Came across a method for transforming color infra-red imagery to
@@ -112,8 +112,8 @@ int main(int argc, char *argv[]) {
       --cursor;
 
     } else if (strncmp(argv[cursor], "-o", 2) == 0) {
-      if (sscanf(argv[cursor], "-o%s", output) != 1)
-        sscanf(argv[++cursor], "%s", output);
+      if (sscanf(argv[cursor], "-o%255s", output) != 1)
+        sscanf(argv[++cursor], "%255s", output);
     } else {
       printf("error: unknown option '%s'\n\n", argv[cursor]);
       usage();

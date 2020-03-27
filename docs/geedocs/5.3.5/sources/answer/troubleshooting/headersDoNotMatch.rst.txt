@@ -1,0 +1,18 @@
+
+Headers do not match
+
+-[ Error message ]-
+
+"Headers do not match"
+
+-[ Description ]-
+
+The error appears in the vector Asset log when there is more than one
+source file in the resource and their attributes are not exactly
+identical. Either the labels are not the same, or one data file has an
+attribute that the other is missing.
+
+-[ Resolution ]-
+
+Make the attribute labels match or, if one data set is lacking an
+attribute, give it an empty column with the same attribute label.

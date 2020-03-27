@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2019, Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -603,8 +604,7 @@ function createGlcJson() {
   }
   glcJson.name = gees.dom.get('glc_name_field').value;
   glcJson.description = gees.dom.get('glc_desc_field').value;
-  var kmlString = gees.dom.get('glc_poly_field').value;
-  glcJson.polygon = validateKml(kmlString);
+  glcJson.polygon = gees.dom.get('glc_poly_field').value;
   return JSON.stringify(glcJson);
 }
 

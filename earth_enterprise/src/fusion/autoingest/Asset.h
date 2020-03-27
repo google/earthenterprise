@@ -45,8 +45,9 @@ class AssetImpl : public AssetStorage, public StorageManaged {
   AssetImpl& operator=(const AssetImpl&) = delete;
   AssetImpl(const AssetImpl&&) = delete;
   AssetImpl& operator=(const AssetImpl&&) = delete;
-  public:
-    using Base = AssetStorage;
+ public:
+  using Base = AssetStorage;
+  static std::string GetPlaceholderAssetRegistryKey() { return "SourceAsset"; }
 
  protected:
   // used by my intermediate derived classes since their calls to
@@ -56,8 +57,6 @@ class AssetImpl : public AssetStorage, public StorageManaged {
       AssetStorage(storage) { }
 
  public:
-  // implemented in LoadAny.cpp
-  static std::shared_ptr<AssetImpl> Load(const std::string &boundref);
 
   virtual std::string GetName() const { // Returns the name of the asset, e.g., "CombinedRPAsset"
     assert(false);
@@ -117,7 +116,7 @@ inline StorageManager<AssetImpl>&
 Asset::storageManager(void)
 {
   static StorageManager<AssetImpl> storageManager(
-      MiscConfig::Instance().AssetCacheSize, MiscConfig::Instance().LimitMemoryUtilization, MiscConfig::Instance().MaxAssetCacheMemorySize, "asset");
+      MiscConfig::Instance().AssetCacheSize, MiscConfig::Instance().LimitMemoryUtilization, MiscConfig::Instance().MaxAssetCacheMemorySize, MiscConfig::Instance().PrunePercentage, "asset");
   return storageManager;
 }
 

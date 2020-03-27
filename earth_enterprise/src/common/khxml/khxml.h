@@ -130,34 +130,23 @@ class GEXMLObject {
     const static std::string INIT_HEAP_SIZE;
     const static std::string MAX_HEAP_SIZE;
     const static std::string BLOCK_SIZE;
-    const static std::string PURGE;
-    const static std::string PURGE_LEVEL;
     const static std::string XMLConfigFile;
-    const static std::array<std::string,5> options;
-    static khMutex mutex;
+    const static std::array<std::string,3> options;
 
     static XMLSize_t initialDOMHeapAllocSize;
     static XMLSize_t maxDOMHeapAllocSize;
     static XMLSize_t maxDOMSubAllocationSize;
-    static bool doPurge;
-    static int purgeLevel;
-    static XMLSize_t purgeThreshold;
-    static bool xercesInitialized;
-
-    static uint32_t activeObjects;
 
     static void initializeXMLParameters();
     static void validateXMLParameters();
     static void setDefaultValues();
-  protected:
-    GEXMLObject();
-    ~GEXMLObject();
   public:
+    GEXMLObject();
     // Allow users to specify the initialization file
     static void initializeXMLParametersFromStream(std::istream &);
 };
 
-class GEDocument : private GEXMLObject {
+class GEDocument {
   protected:
     khxml::DOMDocument * doc = nullptr;
     // Don't instantiate this class directly. Instead, use one of its sub-classes.
@@ -167,12 +156,13 @@ class GEDocument : private GEXMLObject {
     khxml::DOMElement * getDocumentElement();
     bool writeToFile(const std::string &);
     bool writeToString(std::string &);
+    virtual ~GEDocument() = default;
 };
 
 class GECreatedDocument : public GEDocument {
   public:
     GECreatedDocument(const std::string &);
-    ~GECreatedDocument();
+    virtual ~GECreatedDocument();
 };
 
 class GEParsedDocument : public GEDocument {
@@ -187,7 +177,7 @@ class GEParsedDocument : public GEDocument {
   public:
     GEParsedDocument(const std::string &);
     GEParsedDocument(const std::string &, const std::string &);
-    ~GEParsedDocument();
+    virtual ~GEParsedDocument();
 };
 
 #endif /* __KHXML_H */

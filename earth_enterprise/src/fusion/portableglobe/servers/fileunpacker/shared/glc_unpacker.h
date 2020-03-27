@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,6 +93,25 @@ class GlcUnpacker {
    *                 handling a packet, the traversal will stop.
    */
   void MapDataPacketWalker(int layer, const map_packet_walker& walker) const;
+
+  /**
+   * Call walker function on all directory contents in all layers of the file.
+   * @param walker   A function specifier taking a const string& parameter
+   *                 to process. If walker returns false after handling a
+   *                 packet, the traversal will stop.
+   * @return whether the walker exited early
+   */
+  bool MapFileWalker(const map_file_walker& walker);
+
+  /**
+   * Call walker function on all directory contents in the specified layer of the file.
+   * @param layer    The layer to walk
+   * @param walker   A function specifier taking a const string& parameter
+   *                 to process. If walker returns false after handling a
+   *                 packet, the traversal will stop.
+   * @return whether the walker exited early
+   */
+  bool MapFileWalker(int layer, const map_file_walker& walker);
 
   /**
    * Find qtp packet and set offset and size for the packet. Qtp packets can

@@ -771,8 +771,12 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
     terrain_project->LoadInsetInfo(ClientTmeshTilespaceFlat,
                                   beginSSLevel, endSSLevel,
                                   terrainInsets);
-    const uint beginMinifyLevel  = StartTmeshLevel;
-    const uint endMinifyLevel    = terrainInsets[0].effectiveMaxLevel;
+    const uint beginMinifyLevel  = (MiscConfig::Instance().UseMinification
+                                    ? StartTmeshLevel
+                                    : 0);
+    const uint endMinifyLevel    = (MiscConfig::Instance().UseMinification
+                                    ? terrainInsets[0].effectiveMaxLevel
+                                    : 0);
 
 #ifdef DEBUG_SS_DECISIONS
     notify(NFY_NOTICE, "  beginMinifyLevel = %u", beginMinifyLevel);
@@ -891,10 +895,12 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
         continue;
 
       // calculate the level range that will be minified
-      uint effectiveBeginMinifyLevel =
-        std::max(ssGenInfo[i].coverage.beginLevel(), beginMinifyLevel);
-      uint effectiveEndMinifyLevel =
-        std::min(ssGenInfo[i].coverage.endLevel(), endMinifyLevel);
+      uint effectiveBeginMinifyLevel = (MiscConfig::Instance().UseMinification
+                                        ? std::max(ssGenInfo[i].coverage.beginLevel(), beginMinifyLevel)
+                                        : 0);
+      uint effectiveEndMinifyLevel = (MiscConfig::Instance().UseMinification
+                                      ? std::min(ssGenInfo[i].coverage.endLevel(), endMinifyLevel)
+                                      : 0);
 
       // Build a PacketGenConfig
       PacketGenConfig packetGenConfig;
@@ -946,7 +952,10 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
 
       // ruse or make a new RasterBlendAssetVersion
       MutableAssetVersionD packgen =
-        PacketGenFactory::ReuseOrMakeAndUpdate
+        AssetFactory::ReuseOrMakeAndUpdate
+        <MutablePacketGenAssetVersionD,
+         packetGenConfig, PacketGenAssetVersionD,
+         PacketGenExtraUpdateArg<RasterProductAssetVersion>>
         (ssGenInfo[i].assetname,
          AssetDefs::Terrain,
          khMetaData(),

@@ -117,6 +117,10 @@ class gstKVGeomFormat : public gstFormat {
  public:
   gstKVGeomFormat(const char* n);
   virtual ~gstKVGeomFormat();
+  gstKVGeomFormat(const gstKVGeomFormat&) = delete;
+  gstKVGeomFormat(gstKVGeomFormat&&) = delete;
+  gstKVGeomFormat& operator=(const gstKVGeomFormat&) = delete;
+  gstKVGeomFormat& operator=(gstKVGeomFormat&&) = delete;
 
   // gstFormat
   virtual gstStatus OpenFile();

@@ -48,7 +48,7 @@ void ReadThread::run(void) {
   texman->readThreadFunc();
 }
 
-gstTextureManager *theTextureManager = NULL;
+gstTextureManager *theTextureManager = nullptr;
 
 gstTextureManager::gstTextureManager(int memoryCacheSize, int textureCacheSize)
     : base_texture_(),
@@ -375,7 +375,7 @@ int gstTextureManager::prepareBaseTexture(TexTile& tile) {
   tile.src = 0;
 
   TileExistance* te = tile_existance_cache_->fetch(tile.addr());
-  assert(te != NULL);
+  assert(te != nullptr);
 
   // reset address (if necessary)
   requested_level_ = LEVFROMADDR(te->bestAvailable);
@@ -425,12 +425,11 @@ void gstTextureManager::GetOverlayList(
                  khTilespace::Denormalize(tilebox.n));
   }
 
-  for (std::map<uint, gstTextureGuard>::iterator it = texture_map_.begin();
-       it != texture_map_.end(); ++it) {
-    gstTextureGuard tex = it->second;
-    if (tex && tex->enabled() && tex != base_texture_) {
-      if (tilebox.Intersect(tex->bbox()))
-        draw_list.push_back(tex);
+    for (const auto& it : texture_map_) {
+      gstTextureGuard tex = it.second;
+      if (tex && tex->enabled() && tex != base_texture_) {
+        if (tilebox.Intersect(tex->bbox()))
+          draw_list.push_back(tex);
     }
   }
 }
@@ -451,7 +450,7 @@ int gstTextureManager::prepareTexture(TexTile& tile,
   // determine what is the best tile that exists in our db
   TileExistance* te = tile_existance_cache_->fetch(tile.addr());
 
-  assert(te != NULL);
+  assert(te != nullptr);
 
   // no texture available
   if (te->bestAvailable == 0)
@@ -505,7 +504,7 @@ bool gstTextureManager::bindTile(uint& reuseID, const uint64& addr) {
   uchar* buf = memory_cache_->fetchAndPin(addr);
 
   // Nope, queue it up to be loaded
-  if (buf == NULL) {
+  if (buf == nullptr) {
     if (requested_level_ == LEVFROMADDR(addr)) {
       readQueue.push(addr);
       render_unfinished_++;
@@ -586,7 +585,7 @@ bool gstTextureManager::bindTile(uint& reuseID, const uint64& addr) {
 void gstTextureManager::readThreadFunc() {
   int idx = 0;
   int qsz = 0;
-  uchar* next_buffer = NULL;
+  uchar* next_buffer = nullptr;
   uint64 addr;
 
   while (true) {
@@ -600,7 +599,7 @@ void gstTextureManager::readThreadFunc() {
       gstTextureGuard tex = FindTexture(SRCFROMADDR(addr));
       assert(tex);
 
-      if (next_buffer == NULL) {
+      if (next_buffer == nullptr) {
         next_buffer = new uchar[tex->cellSize()];
         notify(NFY_VERBOSE,
                "(%d) New tex buffer [%d] sz=%d c:%d r:%d l:%d s:%d",

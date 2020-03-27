@@ -840,8 +840,12 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
   // resolution inset can be minified instead of blended. This increases
   // speed, reduces grey line artifacts around insets, and generally
   // increases low res image quality.
-  const uint beginMinifyLevel  = beginProjectLevel;
-  const uint endMinifyLevel    = inset_infos[0].effectiveMaxLevel;
+  const uint beginMinifyLevel  = (MiscConfig::Instance().UseMinification
+                                        ? beginProjectLevel
+                                        : 0);
+  const uint endMinifyLevel    = (MiscConfig::Instance().UseMinification
+                                        ? inset_infos[0].effectiveMaxLevel
+                                        : 0);
 
   // Calc the info about what work to do
   std::vector<PacketGenInfo> genInfo;
@@ -956,10 +960,12 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
 
 
     // calculate the level range that will be minified
-    uint effectiveBeginMinifyLevel =
-      std::max(genInfo[i].coverage.beginLevel(), beginMinifyLevel);
-    uint effectiveEndMinifyLevel =
-      std::min(genInfo[i].coverage.endLevel(), endMinifyLevel);
+    uint effectiveBeginMinifyLevel = (MiscConfig::Instance().UseMinification
+                                      ? std::max(genInfo[i].coverage.beginLevel(), beginMinifyLevel)
+                                      : 0);
+    uint effectiveEndMinifyLevel = (MiscConfig::Instance().UseMinification
+                                    ? std::min(genInfo[i].coverage.endLevel(), endMinifyLevel)
+                                    : 0);
 
     // Build a PacketGenConfig
     PacketGenConfig packetGenConfig;
@@ -1008,11 +1014,15 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
 
       // reuse or make a new PacketGenAssetVersion
       MutableAssetVersionD packgen =
-        PacketGenFactory::ReuseOrMakeAndUpdate(genInfo[i].assetname,
-                                               type,
-                                               khMetaData(),
-                                               packetGenConfig,
-                                               extraArg);
+        AssetFactory::ReuseOrMakeAndUpdate
+        <MutablePacketGenAssetVersionD,
+         PacketGenConfig, PacketGenAssetVersionD,
+         PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion>>
+        (genInfo[i].assetname,
+         type,
+         khMetaData(),
+         packetGenConfig,
+         extraArg);
 
     if (packetGenConfig.cacheRaster) {
       // Extract the PacketLevel children from the new version and store

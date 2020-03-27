@@ -30,15 +30,19 @@ class DependentStateTreeFactory
       DependentStateTreeVertexDescriptor vertex;
       bool includeConnections;
     };
-    
+
+    SharedString ref;
+    std::function<bool(AssetDefs::State)> includePredicate;
+    bool includeDependentChildren;
+    bool includeAllChildrenAndInputs;
     StorageManagerInterface<AssetVersionImpl> * const storageManager;
     map<SharedString, VertexData> vertices;
     size_t index;
-    function<bool(AssetDefs::State)> includePredicate;
     set<DependentStateTreeVertexDescriptor> toFillInNext;
     DependentStateTree tree;
 
-    inline bool IsDependent(DependencyType type) { return type == DEPENDENT || type == DEPENDENT_AND_CHILD; }
+    inline bool IsDependent(DependencyType type)
+        { return type == DEPENDENT || type == DEPENDENT_AND_CHILD; }
 
     DependentStateTreeVertexDescriptor AddOrUpdateVertex(
         const SharedString & ref,
@@ -50,11 +54,16 @@ class DependentStateTreeFactory
         DependentStateTreeVertexDescriptor to,
         AssetEdge data);
   public:
-    DependentStateTreeFactory(StorageManagerInterface<AssetVersionImpl> * sm) :
-      storageManager(sm), index(0) {}
-    DependentStateTree BuildDependentStateTree(
-        const SharedString & ref,
-        std::function<bool(AssetDefs::State)> includePredicate);
+    DependentStateTreeFactory(
+        const SharedString &ref,
+        std::function<bool(AssetDefs::State)> includePredicate,
+        bool includeDependentChildren,
+        bool includeAllChildrenAndInputs,
+        StorageManagerInterface<AssetVersionImpl> *sm) :
+      ref(ref), includePredicate(includePredicate), 
+      includeDependentChildren(includeDependentChildren),
+      includeAllChildrenAndInputs(includeAllChildrenAndInputs), storageManager(sm), index(0) {}
+    DependentStateTree BuildTree();
 };
 
 // Builds a tree containing the specified asset, its depedent children, their
@@ -62,10 +71,7 @@ class DependentStateTreeFactory
 // to update the state of these assets. That includes their inputs and children,
 // their parents and listeners all the way up the tree, and the inputs and
 // children for their parents and listeners.
-DependentStateTree DependentStateTreeFactory::BuildDependentStateTree(
-    const SharedString & ref,
-    function<bool(AssetDefs::State)> pred) {
-  includePredicate = pred;
+DependentStateTree DependentStateTreeFactory::BuildTree() {
   // First create an empty vertex for the provided asset. Then fill it in,
   // which includes adding its connections to other assets. Every time we fill
   // in a node we will get new assets to add to the tree until all assets have
@@ -147,9 +153,9 @@ void DependentStateTreeFactory::FillInVertex(
     tree[myVertex].inDepTree = false;
     vertices[name].includeConnections = false;
   }
-  // If I'm in the dependency tree I need to add my dependents because they are
-  // also in the dependency tree.
-  if (tree[myVertex].inDepTree) {
+  // If I'm in the dependency tree, and if the new state propagates to dependents,
+  // then I need to add my dependents to the graph and the dependency tree.
+  if (tree[myVertex].inDepTree && includeDependentChildren) {
     vector<SharedString> dependents;
     version->DependentChildren(dependents);
     for (const auto & dep : dependents) {
@@ -163,13 +169,18 @@ void DependentStateTreeFactory::FillInVertex(
   // state. If I don't need to recalculate my state, I don't need to add any of
   // my connections. I'm only used to calculate someone else's state.
   if (vertices[name].includeConnections) {
-    for (const auto & child : version->children) {
-      auto childVertex = AddOrUpdateVertex(child, false, false);
-      AddEdge(myVertex, childVertex, {CHILD});
-    }
-    for (const auto & input : version->inputs) {
-      auto inputVertex = AddOrUpdateVertex(input, false, false);
-      AddEdge(myVertex, inputVertex, {INPUT});
+    // In some cases, assets don't need all their inputs and children to
+    // calculate their states.
+    if (includeAllChildrenAndInputs) {
+      for (const auto &child : version->children)
+      {
+        auto childVertex = AddOrUpdateVertex(child, false, false);
+        AddEdge(myVertex, childVertex, {CHILD});
+      }
+      for (const auto & input : version->inputs) {
+        auto inputVertex = AddOrUpdateVertex(input, false, false);
+        AddEdge(myVertex, inputVertex, {INPUT});
+      }
     }
     for (const auto & parent : version->parents) {
       auto parentVertex = AddOrUpdateVertex(parent, false, true);
@@ -205,7 +216,9 @@ void DependentStateTreeFactory::AddEdge(
 DependentStateTree BuildDependentStateTree(
     const SharedString & ref,
     std::function<bool(AssetDefs::State)> includePredicate,
+    bool includeDependentChildren,
+    bool includeAllChildrenAndInputs,
     StorageManagerInterface<AssetVersionImpl> * sm) {
-  DependentStateTreeFactory factory(sm);
-  return factory.BuildDependentStateTree(ref, includePredicate);
+  DependentStateTreeFactory factory(ref, includePredicate, includeDependentChildren, includeAllChildrenAndInputs, sm);
+  return factory.BuildTree();
 }

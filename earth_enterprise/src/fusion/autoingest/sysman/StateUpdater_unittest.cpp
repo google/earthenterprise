@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 The Open GEE Contributors
+ * Copyright 2020 The Open GEE Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,6 +68,7 @@ class MockVersion : public AssetVersionImpl {
     OnStateChangeBehavior stateChangeBehavior;
     bool recalcStateReturnVal;
     vector<AssetKey> dependents;
+    bool inputStatesAffectMyState;
 
     MockVersion()
         : loadedMutable(false),
@@ -81,7 +82,8 @@ class MockVersion : public AssetVersionImpl {
           setAndPropagateStateCalled(false),
           progressNotified(0.0),
           stateChangeBehavior(NO_ERRORS),
-          recalcStateReturnVal(true) {
+          recalcStateReturnVal(true),
+          inputStatesAffectMyState(true) {
       type = AssetDefs::Imagery; // Ensures that operator bool can return true
       state = STARTING_STATE;
     }
@@ -92,6 +94,9 @@ class MockVersion : public AssetVersionImpl {
     MockVersion(const MockVersion & that) : MockVersion() {
       name = that.name; // Don't add the suffix - the other MockVersion already did
     }
+
+    virtual bool InputStatesAffectMyState(AssetDefs::State stateByInputs, bool blockedByOfflineInputs) const override {return inputStatesAffectMyState;}
+
     virtual void DependentChildren(vector<SharedString> & d) const override {
       for(auto dependent : dependents) {
         d.push_back(dependent);
@@ -265,12 +270,7 @@ void GetBigTree(MockStorageManager & sm) {
   SetDependent(sm, "p1", "c1");
 }
 
-// When calling SetStateForRefAndDependents, the state will change twice for assets in the
-// dependent tree - once to set it to the requested state and once after the state is
-// recalculated. For assets not in the dependent tree, or when calling functions other than
-// SetStateForRefAndDependents, the state will only be set once. In these cases we must
-// pass in the number of expected state changes.
-void assertStateSet(MockStorageManager & sm, const SharedString & ref, int stateChanges = 2) {
+void assertStateSet(MockStorageManager & sm, const SharedString & ref, int stateChanges = 1) {
   ASSERT_TRUE(GetVersion(sm, ref)->loadedMutable) << ref << " was not loaded mutable";
   ASSERT_EQ(GetVersion(sm, ref)->onStateChangeCalled, stateChanges) << "OnStateChange was not called enough times for " << ref;
   ASSERT_EQ(GetVersion(sm, ref)->notificationsSent, 1) << "Wrong number of notifications sent for " << ref;
@@ -287,14 +287,14 @@ TEST_F(StateUpdaterTest, SetStateSingleVersion) {
   AssetKey ref1 = "test1";
   AssetKey ref2 = "test2";
   SetVersions(sm, {MockVersion(ref1), MockVersion(ref2)});
-  updater.SetStateForRefAndDependents(fix(ref1), AssetDefs::New, [](AssetDefs::State) { return true; });
+  updater.SetAndPropagateState(fix(ref1), AssetDefs::New, [](AssetDefs::State) { return true; });
   assertStateSet(sm, ref1);
   assertStateNotSet(sm, ref2);
 }
 
 TEST_F(StateUpdaterTest, SetStateMultipleVersions) {
   GetBigTree(sm);
-  updater.SetStateForRefAndDependents(fix("gp"), AssetDefs::New, [](AssetDefs::State) {return true; });
+  updater.SetAndPropagateState(fix("gp"), AssetDefs::New, [](AssetDefs::State) { return true; });
   
   assertStateSet(sm, "gp");
   assertStateSet(sm, "p1");
@@ -313,7 +313,7 @@ TEST_F(StateUpdaterTest, SetStateMultipleVersions) {
 
 TEST_F(StateUpdaterTest, SetStateMultipleVersionsFromChild) {
   GetBigTree(sm);
-  updater.SetStateForRefAndDependents(fix("p1"), AssetDefs::New, [](AssetDefs::State) { return true; });
+  updater.SetAndPropagateState(fix("p1"), AssetDefs::New, [](AssetDefs::State) { return true; });
   
   assertStateSet(sm, "p1");
   assertStateSet(sm, "c1");
@@ -333,7 +333,7 @@ TEST_F(StateUpdaterTest, SetStateMultipleVersionsFromChild) {
 TEST_F(StateUpdaterTest, StateDoesntChange) {
   SetVersions(sm, {MockVersion("a")});
   GetMutableVersion(sm, "a")->state = CALCULATED_STATE;
-  updater.SetStateForRefAndDependents(fix("a"), CALCULATED_STATE, [](AssetDefs::State) { return true; });
+  updater.SetAndPropagateState(fix("a"), CALCULATED_STATE, [](AssetDefs::State) { return true; });
   assertStateNotSet(sm, "a");
 }
 
@@ -349,7 +349,7 @@ void testNeedComputeState(MockStorageManager & sm, StateUpdater & updater, Asset
   SetParentChild(sm, "a", "b");
   SetDependent(sm, "a", "b");
   GetMutableVersion(sm, "a")->state = state;
-  updater.SetStateForRefAndDependents(fix("a"), state, [](AssetDefs::State) { return true; });
+  updater.SetAndPropagateState(fix("a"), state, [](AssetDefs::State) { return true; });
 }
 
 TEST_F(StateUpdaterTest, DontComputeStateBad) {
@@ -374,7 +374,7 @@ TEST_F(StateUpdaterTest, ComputeState) {
 
 TEST_F(StateUpdaterTest, NoInputsNoChildren) {
   SetVersions(sm, {MockVersion("a")});
-  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
+  updater.SetAndPropagateState(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByInputs, AssetDefs::Queued);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByChildren, AssetDefs::Succeeded);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.inputs, 0);
@@ -389,7 +389,7 @@ void OnlineInputBlockerTest(MockStorageManager & sm, StateUpdater & updater, Ass
   GetMutableVersion(sm, "b")->state = inputState;
   GetMutableVersion(sm, "c")->state = AssetDefs::InProgress;
   GetMutableVersion(sm, "d")->state = AssetDefs::Succeeded;
-  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
+  updater.SetAndPropagateState(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByInputs, AssetDefs::Blocked);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.blockersAreOffline, false);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.inputs, 0);
@@ -416,7 +416,7 @@ TEST_F(StateUpdaterTest, OfflineInputBlocker) {
   SetVersions(sm, {MockVersion("a"), MockVersion("b")});
   SetListenerInput(sm, "a", "b");
   GetMutableVersion(sm, "b")->state = AssetDefs::Offline;
-  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
+  updater.SetAndPropagateState(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByInputs, AssetDefs::Blocked);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.blockersAreOffline, true);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.inputs, 0);
@@ -429,7 +429,7 @@ TEST_F(StateUpdaterTest, BlockedAndOfflineInput) {
   SetListenerInput(sm, "a", "c");
   GetMutableVersion(sm, "b")->state = AssetDefs::Offline;
   GetMutableVersion(sm, "c")->state = AssetDefs::Failed;
-  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
+  updater.SetAndPropagateState(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByInputs, AssetDefs::Blocked);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.blockersAreOffline, false);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.inputs, 0);
@@ -444,7 +444,7 @@ TEST_F(StateUpdaterTest, WaitingOnInput) {
   GetMutableVersion(sm, "b")->state = AssetDefs::Queued;
   GetMutableVersion(sm, "c")->state = AssetDefs::InProgress;
   GetMutableVersion(sm, "d")->state = AssetDefs::Succeeded;
-  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
+  updater.SetAndPropagateState(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByInputs, AssetDefs::Waiting);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.inputs, 2);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.children, 0);
@@ -458,7 +458,7 @@ TEST_F(StateUpdaterTest, SucceededInputs) {
   GetMutableVersion(sm, "b")->state = AssetDefs::Succeeded;
   GetMutableVersion(sm, "c")->state = AssetDefs::Succeeded;
   GetMutableVersion(sm, "d")->state = AssetDefs::Succeeded;
-  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
+  updater.SetAndPropagateState(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByInputs, AssetDefs::Queued);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.inputs, 0);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.children, 0);
@@ -472,7 +472,7 @@ void ChildBlockerTest(MockStorageManager & sm, StateUpdater & updater, AssetDefs
   GetMutableVersion(sm, "b")->state = inputState;
   GetMutableVersion(sm, "c")->state = AssetDefs::InProgress;
   GetMutableVersion(sm, "d")->state = AssetDefs::Succeeded;
-  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
+  updater.SetAndPropagateState(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByChildren, AssetDefs::Blocked);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.children, 0);
 }
@@ -505,7 +505,7 @@ TEST_F(StateUpdaterTest, ChildInProgress) {
   GetMutableVersion(sm, "b")->state = AssetDefs::Queued;
   GetMutableVersion(sm, "c")->state = AssetDefs::InProgress;
   GetMutableVersion(sm, "d")->state = AssetDefs::Succeeded;
-  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
+  updater.SetAndPropagateState(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByChildren, AssetDefs::InProgress);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.children, 2);
 }
@@ -518,7 +518,7 @@ TEST_F(StateUpdaterTest, ChildQueued) {
   GetMutableVersion(sm, "b")->state = AssetDefs::Queued;
   GetMutableVersion(sm, "c")->state = AssetDefs::Queued;
   GetMutableVersion(sm, "d")->state = AssetDefs::Queued;
-  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
+  updater.SetAndPropagateState(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByChildren, AssetDefs::Queued);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.children, 0);
 }
@@ -531,7 +531,7 @@ TEST_F(StateUpdaterTest, SucceededChildren) {
   GetMutableVersion(sm, "b")->state = AssetDefs::Succeeded;
   GetMutableVersion(sm, "c")->state = AssetDefs::Succeeded;
   GetMutableVersion(sm, "d")->state = AssetDefs::Succeeded;
-  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
+  updater.SetAndPropagateState(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByChildren, AssetDefs::Succeeded);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.children, 0);
 }
@@ -549,7 +549,7 @@ TEST_F(StateUpdaterTest, ChildrenAndDependents) {
   GetMutableVersion(sm, "b")->state = AssetDefs::Succeeded;
   GetMutableVersion(sm, "c")->state = AssetDefs::Queued;
   GetMutableVersion(sm, "d")->state = AssetDefs::Failed;
-  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State state) {
+  updater.SetAndPropagateState(fix("a"), AssetDefs::New, [](AssetDefs::State state) {
     // Don't change the state of any children, just recalculate the parent's state
     return !(state == AssetDefs::Succeeded || state == AssetDefs::Queued || state == AssetDefs::Failed);
   });
@@ -572,7 +572,7 @@ TEST_F(StateUpdaterTest, ChildrenAndInputs) {
   GetMutableVersion(sm, "e")->state = AssetDefs::Queued;
   GetMutableVersion(sm, "f")->state = AssetDefs::InProgress;
   GetMutableVersion(sm, "g")->state = AssetDefs::Succeeded;
-  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
+  updater.SetAndPropagateState(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByChildren, AssetDefs::InProgress);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.stateByInputs, AssetDefs::Waiting);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateData.waitingFor.inputs, 2);
@@ -592,7 +592,7 @@ TEST_F(StateUpdaterTest, ChildDepIsInput) {
   SetDependent(sm, "c", "e");
   SetListenerInput(sm, "a", "d");
   SetParentChild(sm, "a", "e");
-  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
+  updater.SetAndPropagateState(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   assertStateSet(sm, "a");
   assertStateSet(sm, "b");
   assertStateSet(sm, "c");
@@ -612,7 +612,7 @@ TEST_F(StateUpdaterTest, InputIsParent) {
   SetParentChild(sm, "a", "e");
   SetParentChild(sm, "d", "c");
   SetListenerInput(sm, "e", "c");
-  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
+  updater.SetAndPropagateState(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
   assertStateSet(sm, "a");
   assertStateSet(sm, "b");
   assertStateSet(sm, "c");
@@ -637,7 +637,7 @@ TEST_F(StateUpdaterTest, MultipleLevelsParentsDependents) {
   SetDependent(sm, "h", "i");
   GetMutableVersion(sm, "b")->state = CALCULATED_STATE;
   GetMutableVersion(sm, "h")->state = NO_CHANGE_STATE;
-  updater.SetStateForRefAndDependents(fix("e"), AssetDefs::New, [](AssetDefs::State state) {
+  updater.SetAndPropagateState(fix("e"), AssetDefs::New, [](AssetDefs::State state) {
     return state != NO_CHANGE_STATE;
   });
   assertStateNotSet(sm, "a");
@@ -656,7 +656,7 @@ TEST_F(StateUpdaterTest, MultipleLevelsParentsDependents) {
 TEST_F(StateUpdaterTest, NonChildDependent) {
   SetVersions(sm, {MockVersion("a"), MockVersion("b")});
   SetDependent(sm, "a", "b");
-  updater.SetStateForRefAndDependents(fix("b"), AssetDefs::Waiting, [](AssetDefs::State) { return true; });
+  updater.SetAndPropagateState(fix("b"), AssetDefs::Waiting, [](AssetDefs::State) { return true; });
   assertStateNotSet(sm, "a");
   assertStateSet(sm, "b");
 }
@@ -664,11 +664,8 @@ TEST_F(StateUpdaterTest, NonChildDependent) {
 void StateChangeErrorTest(MockStorageManager & sm, StateUpdater & updater, OnStateChangeBehavior behavior) {
   SetVersions(sm, {MockVersion("a")});
   GetMutableVersion(sm, "a")->stateChangeBehavior = behavior;
-  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State state) { return true; });
-  // We will call OnStateChange four times: to set it to the requested state,
-  // which will trigger a transition to failed, and then to recalculate the
-  // state, which will trigger another transition to failed.
-  assertStateSet(sm, "a", 4);
+  updater.SetAndPropagateState(fix("a"), AssetDefs::New, [](AssetDefs::State state) { return true; });
+  assertStateSet(sm, "a", 2);
   ASSERT_EQ(GetVersion(sm, "a")->state, AssetDefs::Failed);
 }
 
@@ -691,7 +688,7 @@ TEST_F(StateUpdaterTest, UnknownExceptionTest) {
 TEST_F(StateUpdaterTest, DelayedBuildChildrenTest) {
   SetVersions(sm, {MockVersion("a"), MockVersion("b")});
   GetMutableVersion(sm, "a")->stateChangeBehavior = CHANGE_NUM_CHILDREN;
-  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State state) { return true; });
+  updater.SetAndPropagateState(fix("a"), AssetDefs::New, [](AssetDefs::State state) { return true; });
   auto * version = GetMutableVersion(sm, "a");
   // Make sure OnStateChange behaved as expected
   ASSERT_NE(find(version->children.begin(), version->children.end(), fix("b")), version->children.end());
@@ -706,8 +703,8 @@ TEST_F(StateUpdaterTest, DelayedBuildChildrenTest) {
 TEST_F(StateUpdaterTest, OnStateChangeReturnsNewState) {
   SetVersions(sm, {MockVersion("a")});
   GetMutableVersion(sm, "a")->stateChangeBehavior = RETURN_NEW_STATE;
-  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State state) { return true; });
-  assertStateSet(sm, "a", 4);
+  updater.SetAndPropagateState(fix("a"), AssetDefs::New, [](AssetDefs::State state) { return true; });
+  assertStateSet(sm, "a", 3);
 }
 
 TEST_F(StateUpdaterTest, ReferenceNonExistentAsset) {
@@ -715,7 +712,7 @@ TEST_F(StateUpdaterTest, ReferenceNonExistentAsset) {
   // want to make sure this doesn't crash.
   SetVersions(sm, {MockVersion("a")});
   GetMutableVersion(sm, "a")->children.push_back(fix("b"));
-  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State state) { return true; });
+  updater.SetAndPropagateState(fix("a"), AssetDefs::New, [](AssetDefs::State state) { return true; });
 }
 
 // The expected outcomes from the SetInProgress and SetSucceeded functions are
@@ -942,7 +939,6 @@ TEST_F(StateUpdaterTest, SetFailed) {
   SetVersions(sm, {MockVersion("a")});
   auto version = sm.GetMutable(fix("a"));
   updater.SetFailed(version);
-  ASSERT_TRUE(GetVersion(sm, "a")->setAndPropagateStateCalled);
   ASSERT_EQ(GetVersion(sm, "a")->state, AssetDefs::Failed);
 }
 
@@ -962,6 +958,93 @@ TEST_F(StateUpdaterTest, NotifyProgressFailed) {
   auto version = sm.GetMutable(fix("a"));
   updater.SetInProgress(version);
   ASSERT_NE(GetVersion(sm, "a")->progressNotified, PROGRESS);
+}
+
+// Cancel commands should only set the state once, but they should still send
+// notifications.
+TEST_F(StateUpdaterTest, Cancel) {
+  GetBigTree(sm);
+
+  // The STARTING_STATE defined above is Blocked. If we don't set the state of "gp"
+  // to something else, it will not be updated.
+  GetMutableVersion(sm, "gp")->state = AssetDefs::InProgress;
+  updater.SetAndPropagateState(fix("p1"), AssetDefs::Canceled, [](AssetDefs::State) { return true; });
+  
+  assertStateSet(sm, "p1", 1);
+  assertStateSet(sm, "c1", 1);
+  assertStateSet(sm, "gp", 1);
+
+  assertStateNotSet(sm, "gpi");
+  assertStateNotSet(sm, "pi1");
+  assertStateNotSet(sm, "p2");
+  assertStateNotSet(sm, "c2");
+  assertStateNotSet(sm, "c3");
+  assertStateNotSet(sm, "c4");
+  assertStateNotSet(sm, "ci1");
+  assertStateNotSet(sm, "ci2");
+  assertStateNotSet(sm, "ci3");
+}
+
+TEST_F(StateUpdaterTest, FailedInput) {
+  SetVersions(sm, {
+                    MockVersion("a"),
+                    MockVersion("b")
+                  });
+  SetListenerInput(sm, "a", "b");
+
+  GetMutableVersion(sm, "a")->state = AssetDefs::Waiting;
+  GetMutableVersion(sm, "b")->state = AssetDefs::InProgress;
+
+  // MockVersion::InputStatesAffectMyState will return true, so setting this input
+  // to a Failed state should cause the listener to become Blocked
+  updater.SetAndPropagateState(fix("b"), AssetDefs::Failed, [](AssetDefs::State) { return true; });
+
+  assertStateSet(sm, "a");
+  assertStateSet(sm, "b");
+  assert(AssetDefs::Blocked == GetMutableVersion(sm, "a")->state);
+  assert(AssetDefs::Failed == GetMutableVersion(sm, "b")->state);
+}
+
+TEST_F(StateUpdaterTest, FailedInputDontCare) {
+  SetVersions(sm, {
+                    MockVersion("a"),
+                    MockVersion("b")
+                  });
+  SetListenerInput(sm, "a", "b");
+
+  GetMutableVersion(sm, "a")->state = AssetDefs::Waiting;
+  GetMutableVersion(sm, "b")->state = AssetDefs::InProgress;
+
+  GetMutableVersion(sm, "a")->inputStatesAffectMyState = false;
+
+  // MockVersion::InputStatesAffectMyState will return false, so the listener's
+  // state should be unaffected.
+  updater.SetAndPropagateState(fix("b"), AssetDefs::Failed, [](AssetDefs::State) { return true; });
+
+  assertStateNotSet(sm, "a");
+  assertStateSet(sm, "b");
+  assert(AssetDefs::Waiting == GetMutableVersion(sm, "a")->state);
+  assert(AssetDefs::Failed == GetMutableVersion(sm, "b")->state);
+}
+
+TEST_F(StateUpdaterTest, FailedChild) {
+  SetVersions(sm, {
+                    MockVersion("p"),
+                    MockVersion("c")
+                  });
+  SetParentChild(sm, "p", "c");
+
+  GetMutableVersion(sm, "p")->state = AssetDefs::InProgress;
+  GetMutableVersion(sm, "c")->state = AssetDefs::InProgress;
+
+  // MockVersion::InputStatesAffectMyState will return true, so setting this input
+  // to a Failed state should cause the listener to become Blocked
+  updater.SetAndPropagateState(fix("c"), AssetDefs::Failed, [](AssetDefs::State) { return true; });
+
+  assertStateSet(sm, "p");
+  assertStateSet(sm, "c");
+  assert(AssetDefs::Blocked == GetMutableVersion(sm, "p")->state);
+  assert(AssetDefs::Failed == GetMutableVersion(sm, "c")->state);
 }
 
 int main(int argc, char **argv) {

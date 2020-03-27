@@ -3,18 +3,8 @@
 #include <sstream>
 
 #include <mem_usage/raster_project_function_tester.hpp>
-
 #include <autoingest/plugins/RasterProjectAsset.h>
-
-
-
-// Get access to the protected RasterProjectAssetImpl::Load method:
-class FriendlyRasterProjectAssetImpl : public RasterProjectAssetImpl
-{
-    private:
-
-    friend class ParseAssetXml_Tester;
-};
+#include <autoingest/AssetSerializer.h>
 
 class ParseAssetXml_Tester : public opengee::mem_usage::RasterProjectFunctionTester
 {
@@ -38,8 +28,8 @@ class ParseAssetXml_Tester : public opengee::mem_usage::RasterProjectFunctionTes
             return true;
         }
 
-        std::shared_ptr<AssetImpl> asset =
-            FriendlyRasterProjectAssetImpl::Load(asset_name);
+        AssetSerializerLocalXML<AssetImpl> serializer;
+        std::shared_ptr<AssetImpl> asset = serializer.Load(asset_name);
 
         // Use the asset in an operation before throwing it away:
         asset_ref_character_count += asset->GetRef().toString().length();

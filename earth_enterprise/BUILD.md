@@ -6,7 +6,7 @@ __NOTE:__ If you want to build, install, or run Portable server, see the
 Building is currently supported for 64-bit versions of Ubuntu 16.04 LTS,
 RHEL 6, RHEL 7, CentOS 6, and CentOS 7.
 
-## GEE 5.3.3 Build Prerequisites (all platforms)
+## GEE 5.3.4 Build Prerequisites (all platforms)
 
 1. Setup required Tools and Dependencies:
 
@@ -31,13 +31,13 @@ platforms on how to setup the dependencies, tools, and compilers.
         more error prone):
 
         ```bash
-        git clone git@github.com:google/earthenterprise.git
+        git clone https://github.com/google/earthenterprise.git
         ```
 
     * Method 2: Clone and download LFS files in two steps:
 
         ```bash
-        GIT_LFS_SKIP_SMUDGE=1 git clone git@github.com:google/earthenterprise.git
+        GIT_LFS_SKIP_SMUDGE=1 git clone https://github.com/google/earthenterprise.git
         cd earthenterprise
         git lfs pull
         ```
@@ -73,7 +73,7 @@ platforms on how to setup the dependencies, tools, and compilers.
 
     ```bash
     cd earthenterprise/earth_enterprise
-    scons -j8 release=1 build
+    python2.7 /usr/bin/scons -j8 release=1 build
     ```
 
 5. Run unit tests (note: that the `REL` part of the path will vary if you use

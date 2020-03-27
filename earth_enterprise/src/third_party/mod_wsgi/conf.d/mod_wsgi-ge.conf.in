@@ -16,7 +16,7 @@ LoadModule wsgi_module modules/mod_wsgi.so
 
 <IfModule wsgi_module>
     WSGIRestrictEmbedded On
-    WSGIPythonHome /usr
+    WSGIPythonHome @PYTHON_HOME_DIR@
 
     # Handles Fusion requests.
     WSGIDaemonProcess ge_fusion_serve threads=15 display-name=%{GROUP} python-path=/opt/google/gepython/Python-@PYTHON_VERSION@/lib/python@PYTHON_MAJOR_VERSION@/site-packages:/opt/google/gehttpd/wsgi-bin home=/tmp
@@ -24,8 +24,6 @@ LoadModule wsgi_module modules/mod_wsgi.so
     WSGIScriptAlias /geserve/StreamPush /opt/google/gehttpd/wsgi-bin/serve/push/stream/stream_push_app.wsgi process-group=ge_fusion_serve
     # --Handles search data pushing requests.
     WSGIScriptAlias /geserve/SearchPush /opt/google/gehttpd/wsgi-bin/serve/push/search/core/search_push_app.wsgi process-group=ge_fusion_serve
-    # --Handles Asset Manager requests.
-    WSGIScriptAlias /gefusion/assetmanager /opt/google/gehttpd/wsgi-bin/fusion/asset_manager/asset_manager_app.wsgi process-group=ge_fusion_serve
 
     # Handles publishing requests.
     # Note: Publish service will be initialized on starting httpd server.

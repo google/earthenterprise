@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python2.7
 #
 # Copyright 2017 Google Inc.
 #
@@ -23,7 +23,7 @@ import logging
 import re
 import socket
 import urllib2
-import xml.sax.saxutils as saxutils
+from xml.sax.saxutils import escape
 from geAbstractionFetcher import GetHostName
 
 GEHTTPD_CONF_PATH = "/opt/google/gehttpd/conf/gehttpd.conf"
@@ -283,7 +283,7 @@ def HtmlEscape(text):
   Returns:
     HTML escaped string.
   """
-  return saxutils.escape(text, _HTML_ESCAPE_TABLE)
+  return escape(text, _HTML_ESCAPE_TABLE)
 
 
 def JoinQueryStrings(a, b):

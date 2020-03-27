@@ -1,0 +1,161 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Troubleshoot search services &#8212; Google Earth Enterprise 5.3.4 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Example Search plug-in Python code sample" href="exampleSearchPluginSample.html" />
+    <link rel="prev" title="Add custom search services" href="addCustomSearchServices.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="exampleSearchPluginSample.html" title="Example Search plug-in Python code sample"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="addCustomSearchServices.html" title="Add custom search services"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" accesskey="U">GEE Server administration</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="addCustomSearchServices.html"
+                        title="previous chapter">Add custom search services</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="exampleSearchPluginSample.html"
+                        title="next chapter">Example Search plug-in Python code sample</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp4.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp4.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="troubleshoot-search-services">
+<h1>Troubleshoot search services<a class="headerlink" href="#troubleshoot-search-services" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>Once you have added search services to a published database, you
+can query the searchable data from either Google Earth EC or from
+a browser using Google Maps. Querying search data involves sending
+a search request from the client and returning the search service
+results back to the client. If a problem occurs with
+your query, you can most likely find out by checking the log files
+for GEE Server.</p>
+<p class="rubric">Did GEE Server receive a search request from the
+client?</p>
+<p>Follow these steps to determine if GEE Server received the search
+request from the client:</p>
+<ol class="arabic">
+<li><p class="first">Perform a search from the client.</p>
+</li>
+<li><p class="first">Check the log file <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/logs/access_log</span></code> for
+the following type of <code class="docutils literal notranslate"><span class="pre">GET</span></code> request:</p>
+<p><code class="docutils literal notranslate"><span class="pre">192.168.1.27</span> <span class="pre">-</span> <span class="pre">-</span> <span class="pre">[09/Jul/2014:16:13:28</span> <span class="pre">-0700]</span> <span class="pre">&quot;GET</span> <span class="pre">/3d/POISearch?q=San%20Francisco&amp;flyToFirstElement;=true&amp;displayKeys;=location&amp;DbId;=20&amp;PoiFederated;=1&amp;callback;=handleSearchResults</span> <span class="pre">HTTP/1.1&quot;</span> <span class="pre">200</span> <span class="pre">541334</span></code></p>
+</li>
+</ol>
+<p class="rubric">Did the search service return results to the query?</p>
+<p>To establish whether the search service returns results
+successfully to the client’s query, you can change the
+<code class="docutils literal notranslate"><span class="pre">logger_ge_search</span></code> level to <code class="docutils literal notranslate"><span class="pre">DEBUG</span></code>.</p>
+<ol class="arabic">
+<li><p class="first">In the log file, <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/ge_logging.conf</span></code>,
+change:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[logger_ge_search]
+level=INFO
+</pre></div>
+</div>
+<p>to:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[logger_ge_search]
+level=DEBUG
+</pre></div>
+</div>
+</li>
+<li><p class="first">Restart GEE Server:</p>
+<p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">/etc/init.d/geserver</span> <span class="pre">restart</span></code></p>
+</li>
+<li><p class="first">Perform a search from the client.</p>
+</li>
+<li><p class="first">Check <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/logs/gesearch.out</span></code> for the
+following type of entries:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[2014-07-09 16:13:38,162]  DEBUG    [MainThread] (poi_search_handler.py:141) - Params: [&#39;%San Francisco%&#39;, &#39;%San Francisco%&#39;, &#39;%San Francisco%&#39;]
+[2014-07-09 16:13:38,479]  DEBUG    [MainThread] (poi_search_handler.py:515) - Parsed search tokens: San Francisco
+[2014-07-09 16:13:38,479]  DEBUG    [MainThread] (poi_search_handler.py:139) - Querying the database gepoi, at port 5432, as user geuser on hostname 127.0.0.1.
+014-07-09 16:13:38,479]  DEBUG    [MainThread] (poi_search_handler.py:140) - Query: SELECT ST_AsGeoJSON(the_geom) AS the_geom, &quot;posn&quot; FROM gepoi_9 WHERE ( lower(&quot;posn&quot;) LIKE %s )
+[2014-07-09 16:13:38,479]  DEBUG    [MainThread] (poi_search_handler.py:141) - Params: [&#39;%San Francisco%&#39;]
+[2014-07-09 16:13:38,500]  DEBUG    [MainThread] (poi_search_handler.py:471) - poi search returned 2516 results
+[2014-07-09 16:13:38,501]  DEBUG    [MainThread] (poi_search_handler.py:472) - results: [[{&#39;field_value&#39;: &#39;{&quot;type&quot;:&quot;Point&quot;,&quot;coordinates&quot;:[-70.250012045966002,19.29999635719]}&#39;, &#39;field_name&#39;: &#39;geom&#39;, &#39;is_search_display&#39;: True, &#39;is_searchable&#39;: True, &#39;is_displayable&#39;: True}, {&#39;field_value&#39;: &#39;San Francisco de Macoris&#39;, &#39;field_name&#39;: &#39;name&#39;, &#39;is_search_display&#39;: True, &#39;is_searchable&#39;: True, &#39;is_displayable&#39;: True}],
+...
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="exampleSearchPluginSample.html" title="Example Search plug-in Python code sample"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="addCustomSearchServices.html" title="Add custom search services"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" >GEE Server administration</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

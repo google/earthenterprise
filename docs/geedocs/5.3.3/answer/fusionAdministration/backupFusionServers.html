@@ -122,18 +122,31 @@ locations with the locations of your own asset root and backups.</p>
 files if needed.</p>
 </li>
 <li><p class="first">Create a directory to hold the backup files:</p>
-<p><code class="docutils literal notranslate"><span class="pre">mkdir</span> <span class="pre">-p</span> <span class="pre">/data/backup/assets</span> <span class="pre">mkdir</span> <span class="pre">-p</span> <span class="pre">/data/backup/gehttpd</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir -p /data/backup/assets
+mkdir -p /data/backup/gehttpd
+</pre></div>
+</div>
 </li>
 <li><p class="first">Back up the gehttpd files:</p>
-<p><code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">/opt/google/gehttpd</span> <span class="pre">rsync</span> <span class="pre">-r</span> <span class="pre">htdocs</span> <span class="pre">cgi-bin</span> <span class="pre">conf</span> <span class="pre">conf.d</span> <span class="pre">/data/backup/gehttpd</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /opt/google/gehttpd
+rsync -r htdocs cgi-bin conf conf.d /data/backup/gehttpd
+</pre></div>
+</div>
 </li>
 <li><p class="first">Back up the XML files and config files to a safe place on a
 disk that is not part of the asset root or source directories:</p>
-<p><code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">/gevol/assets</span> <span class="pre">rsync</span> <span class="pre">-r</span> <span class="pre">.config</span> <span class="pre">.userdata</span> <span class="pre">/data/backup/assets/</span> <span class="pre">find</span> <span class="pre">.</span> <span class="pre">-name</span> <span class="pre">&quot;*.xml&quot;</span> <span class="pre">&gt;</span> <span class="pre">FileList.txt</span> <span class="pre">rsync</span> <span class="pre">--files-from=FileList.txt</span> <span class="pre">/gevol/assets</span> <span class="pre">/data/backup/assets/</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /gevol/assets
+rsync -r .config .userdata /data/backup/assets/
+find . -name <span class="s2">&quot;*.xml&quot;</span> &gt; FileList.txt
+rsync --files-from<span class="o">=</span>FileList.txt /gevol/assets /data/backup/assets/
+</pre></div>
+</div>
 </li>
 <li><p class="first">(Optional.) Store a compressed backup of the files somewhere
 else:</p>
-<p><code class="docutils literal notranslate"><span class="pre">tar</span> <span class="pre">czf</span> <span class="pre">/home/backups/GevolXmlBackup.tgz</span> <span class="pre">/data/backups</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tar czf /home/backups/GevolXmlBackup.tgz /data/backups
+</pre></div>
+</div>
 </li>
 </ol>
 <p class="rubric">Restoring imagery and terrain</p>
@@ -143,8 +156,11 @@ is running.</p>
 </li>
 <li><p class="first">Configure your asset root to be consistent with your old asset
 root. If you are not sure about this, manually run commands
-like:
-<code class="docutils literal notranslate"><span class="pre">geconfigureassetroot</span> <span class="pre">--new</span> <span class="pre">--assetroot</span> <span class="pre">/gevol/assets</span> <span class="pre">geselectassetroot</span> <span class="pre">--assetroot</span> <span class="pre">/gevol/assets</span></code></p>
+like:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geconfigureassetroot --new --assetroot /gevol/assets
+geselectassetroot --assetroot /gevol/assets
+</pre></div>
+</div>
 </li>
 <li><p class="first">Restore the backed-up XML and configuration files to their
 original location in the asset root.</p>
@@ -162,11 +178,34 @@ example of a script for reporting where all your imagery source
 files should be located. You can use the same script for
 terrain resources if you change <code class="docutils literal notranslate"><span class="pre">kiasset</span></code> to <code class="docutils literal notranslate"><span class="pre">ktasset</span></code>.
 Example script:</p>
-<p><code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">/gevol/assets</span> <span class="pre">for</span> <span class="pre">resource</span> <span class="pre">in</span> <span class="pre">`find</span> <span class="pre">.</span> <span class="pre">-type</span> <span class="pre">d</span> <span class="pre">-name</span> <span class="pre">&quot;*.kiasset&quot;</span></code> do     for file in <cite>gequery –infiles $resource</cite>     do         if [ ! -f $file ] &amp;&amp; [ ! -d $file ]         then             echo “Can not find $file”         else             echo “Found $file”         fi     done done`</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /gevol/assets
+<span class="k">for</span> resource in <span class="sb">`</span>find . -type d -name <span class="s2">&quot;*.kiasset&quot;</span><span class="sb">`</span>
+<span class="k">do</span>
+   <span class="k">for</span> file in <span class="sb">`</span>gequery --infiles <span class="nv">$resource</span><span class="sb">`</span>
+   <span class="k">do</span>
+      <span class="k">if</span> <span class="o">[</span> ! -f <span class="nv">$file</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">[</span> ! -d <span class="nv">$file</span> <span class="o">]</span>
+      <span class="k">then</span>
+            <span class="nb">echo</span> <span class="s2">&quot;Can not find </span><span class="nv">$file</span><span class="s2">&quot;</span>
+      <span class="k">else</span>
+            <span class="nb">echo</span> <span class="s2">&quot;Found </span><span class="nv">$file</span><span class="s2">&quot;</span>
+      <span class="k">fi</span>
+   <span class="k">done</span>
+<span class="k">done</span>
+</pre></div>
+</div>
 </li>
 <li><p class="first">After all the files are in place, generate a series of commands
 to rebuild the resources. For example:</p>
-<p><code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">/gevol/assets</span> <span class="pre">for</span> <span class="pre">resource</span> <span class="pre">in</span> <span class="pre">`find</span> <span class="pre">.</span> <span class="pre">-type</span> <span class="pre">d</span> <span class="pre">-name</span> <span class="pre">&quot;*.kiasset&quot;</span> <span class="pre">|</span> <span class="pre">sed</span> <span class="pre">'s/.kiasset//'</span></code> do     gequery –infiles $resource &gt; filelist     genewimageryresource -o $resource –filelist filelist     sleep 1     gebuild $resource done`</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /gevol/assets
+<span class="k">for</span> resource in <span class="sb">`</span>find . -type d -name <span class="s2">&quot;*.kiasset&quot;</span> <span class="p">|</span> sed <span class="s1">&#39;s/.kiasset//&#39;</span><span class="sb">`</span>
+<span class="k">do</span>
+    gequery --infiles <span class="nv">$resource</span> &gt; filelist
+    genewimageryresource -o <span class="nv">$resource</span> --filelist filelist
+    sleep <span class="m">1</span>
+    gebuild <span class="nv">$resource</span>
+<span class="k">done</span>
+</pre></div>
+</div>
 </li>
 <li><p class="first">There is a <code class="docutils literal notranslate"><span class="pre">khasset.xml</span></code> file under each <code class="docutils literal notranslate"><span class="pre">.kiasset</span></code>
 directory that contains information about the mask tolerance,

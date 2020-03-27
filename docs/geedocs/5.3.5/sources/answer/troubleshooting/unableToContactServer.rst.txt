@@ -1,0 +1,19 @@
+
+Unable to contact server
+
+-[ Error message ]-
+
+""Unable to contact search server" or "Unable to contact stream
+server""
+
+-[ Description ]-
+
+When you try to publish a database, the specified service is not
+running, cannot be reached, or a service that it requires is not
+running.
+
+-[ Resolution ]-
+
+Enter this command to restart the server:
+
+"sudo /etc/init.d/geserver restart"

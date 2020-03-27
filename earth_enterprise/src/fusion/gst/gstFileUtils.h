@@ -70,8 +70,13 @@ class gstFileInfo {
 
 class gstFileIO {
  public:
-  gstFileIO(int, ssize_t sz, char* buf = NULL);
+  gstFileIO(int, ssize_t sz, char* buf = nullptr);
   ~gstFileIO();
+
+  gstFileIO(const gstFileIO&) = delete;
+  gstFileIO(gstFileIO&&) = delete;
+  gstFileIO& operator=(const gstFileIO&) = delete;
+  gstFileIO& operator=(gstFileIO&&) = delete;
 
   gstStatus write(int64 pos);
   gstStatus read(int64 pos);

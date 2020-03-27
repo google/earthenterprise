@@ -48,6 +48,7 @@ class SearchTabWidget : public QTabWidget {
   bool is_ge_db_;  // True if we're editing a GE database.
                    // Necessary because of search tab limit of the earth client.
   std::vector<std::string> projects_;
+  unsigned int UnhandledErrorCount;
 };
 
 

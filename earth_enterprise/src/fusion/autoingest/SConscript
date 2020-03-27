@@ -27,13 +27,13 @@ env.Append(CPPPATH = ['#fusion/autoingest', # static header files
                       ])
 
 
-idlfiles = [ 'storage/deprecated/ReprojectConfig',
+idlfiles = [ 'AssetStorage',
+             'storage/deprecated/ReprojectConfig',
              'storage/deprecated/BlendConfig',
              'storage/deprecated/TmeshConfig',
              'storage/deprecated/CopyrightConfig',
              'storage/deprecated/RasterKHDBConfig',
              'storage/deprecated/VectorKHDBConfig',
-             'AssetStorage',
              'TaskLists', 'gstProvider', 'Locale', 'ServerCombination',
              'Snippet',
              'AssetChanges', 'VolumeStorage', 'StreamServers',
@@ -92,14 +92,14 @@ idlfiles = [ 'storage/deprecated/ReprojectConfig',
 env.idl(map(lambda n: n+'.idl', idlfiles))
 
 
-plugins = [ 'deprecated/Reproject',
+plugins = [ 'Source',
+            'deprecated/Reproject',
             'deprecated/Blend',
             'deprecated/Tmesh',
             'deprecated/Copyright',
             'deprecated/RasterKHDB',
             'deprecated/ImeshKHDB',
             'deprecated/VectorKHDB',
-            'Source',
             'Mosaic',
             'Maskgen',
             'KRP',
@@ -149,10 +149,8 @@ for plugin in plugins:
     env.Command('plugins/'+plugin+'Asset.cpp',
                 [ 'AssetGenPublicCpp.pl', 'AssetGen.pm', src ],
                 [ "${SOURCES[0]} ${SOURCES[2]} $TARGET" ])
-
-env.Command('LoadAny.cpp',
-            [ 'LoadAnyGen.pl' ],
-            [ "$SOURCE --cppfile $TARGET " + string.join(plugins, ' ') ])
+    env.Depends('plugins/'+plugin+'Asset.os', 'plugins/'+plugin+'Asset.h')
+    env.Depends('plugins/'+plugin+'Asset.os', 'plugins/'+plugin+'Asset.cpp')
 
 env.Command('ReadOnlyFromStorage.cpp',
             [ 'FromStorageGen.pl' ],
@@ -171,7 +169,7 @@ env.Command('khAssetManagerProxy.cpp',
 commoncpp = [
     'AssetVersionRef.cpp', 'khFusionURI.cpp',
     'Asset.cpp', 'AssetVersion.cpp',
-    'Misc.cpp', 'AvailId.cpp', 'LoadAny.cpp', 'khVolumeManager.cpp',
+    'Misc.cpp', 'AvailId.cpp', 'khVolumeManager.cpp',
     'FusionConnection.cpp', 'AssetChangeListener.cpp',
     'AssetDefsExtra.cpp', 'VectorProjectConfigImpl.cpp',
     'LayerConfigImpl.cpp', 'MapProjectConfigImpl.cpp',
@@ -229,7 +227,7 @@ env.test('AssetSerializer_unittest',
 
 env.test('AssetFactory_unittest',
          'AssetFactory_unittest.cpp',
-         LIBS=['gecommon', 'gtest', 'geautoingest', 'qt-mt'])
+         LIBS=['gecommon', 'gtest', 'geautoingest', 'qt-mt', 'xerces-c'])
 
 env.test('JsUtils_unittest',
          'JsUtils_unittest.cpp',

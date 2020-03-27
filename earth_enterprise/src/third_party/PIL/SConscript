@@ -50,8 +50,7 @@ else:
   env_opt = ''
 
 # [2] Build Imaging.
-python_cmd = '%s/bin/python' % root_dir
-
+python_cmd = Imaging_env['python_bin']
 Imaging_target = '%s/.build' % current_dir
 Imaging_build = Imaging_env.Command(
     Imaging_target, Imaging_extract,

@@ -24,7 +24,7 @@
 # ./update_bin -h|-help|--help reports usage.
 #
 # Note: Needs to be run with "sudo".
-# Note: To build python modules, run 'scons -j8 optimize=1 build_py'
+# Note: To build python modules, run 'python2.7 /usr/bin/scons -j8 optimize=1 build_py'
 
 set -e
 

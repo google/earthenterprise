@@ -1,0 +1,132 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Custom POI Search plug-in Python code sample &#8212; Google Earth Enterprise 5.3.5 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Create Portable Globes and Maps" href="createPortableGlobesMaps.html" />
+    <link rel="prev" title="Example Search plug-in Python code sample" href="exampleSearchPluginSample.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="createPortableGlobesMaps.html" title="Create Portable Globes and Maps"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="exampleSearchPluginSample.html" title="Example Search plug-in Python code sample"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" accesskey="U">GEE Server administration</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="exampleSearchPluginSample.html"
+                        title="previous chapter">Example Search plug-in Python code sample</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="createPortableGlobesMaps.html"
+                        title="next chapter">Create Portable Globes and Maps</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp4.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp4.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="custom-poi-search-plug-in-python-code-sample">
+<h1>Custom POI Search plug-in Python code sample<a class="headerlink" href="#custom-poi-search-plug-in-python-code-sample" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>The <code class="docutils literal notranslate"><span class="pre">Custom</span> <span class="pre">POI</span> <span class="pre">Search</span></code> search plug-in sample code uses the GEE
+Python search module to query the <strong>Google Places database
+(www.google.com)</strong> via the <a class="reference external" href="https://developers.google.com/places/">Google Places
+API</a>. It demonstrates
+how to construct and query an external database based on a URL
+search string, extract geometries from the result, associate
+various styles with them, and return the response back to the
+client.</p>
+<p>You can find the two Python files for the <code class="docutils literal notranslate"><span class="pre">POI</span> <span class="pre">Search</span></code> plug-in
+in the following location:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/wsgi-bin/search/plugin/custom_POI_search_app.py</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/wsgi-bin/search/plugin/custom_POI_search_handler.py</span></code></li>
+</ul>
+<p>In this Python module, an implementation has been provided to
+access the <a class="reference external" href="https://developers.google.com/places/">Google Places
+database</a>, format the
+results, and send the response in XML or JSON as per the
+requirement. Valid inputs are:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">location=lat,lng</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">radius</span> <span class="pre">=</span> <span class="pre">10(in</span> <span class="pre">miles)</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">key</span> <span class="pre">=</span> <span class="pre">&lt;server</span> <span class="pre">key</span> <span class="pre">required</span> <span class="pre">to</span> <span class="pre">access</span> <span class="pre">the</span> <span class="pre">Google</span> <span class="pre">Places</span> <span class="pre">database&gt;</span></code></li>
+</ul>
+<p>Further information about obtaining a server key is documented at:</p>
+<p><a class="reference external" href="https://developers.google.com/places/documentation/">https://developers.google.com/places/documentation/</a></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="createPortableGlobesMaps.html" title="Create Portable Globes and Maps"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="exampleSearchPluginSample.html" title="Example Search plug-in Python code sample"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" >GEE Server administration</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

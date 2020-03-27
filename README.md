@@ -19,6 +19,11 @@ The application suite consists of three core components:
 
 ## Releases
 
+[Release 5.3.3](https://github.com/google/earthenterprise/releases/tag/5.3.3-1398.37)
+
+* [Release Notes](https://www.opengee.org/geedocs/5.3.3/answer/releaseNotes/relNotesGEE5_3_3.html)
+* [Release Documentation](https://www.opengee.org/geedocs/5.3.3/)
+
 [Release 5.3.2](https://github.com/google/earthenterprise/releases/tag/5.3.2-1244.74)
 
 * [Release Notes](https://www.opengee.org/geedocs/5.3.2/answer/releaseNotes/relNotesGEE5_3_2.html)
@@ -63,6 +68,6 @@ source before proceeding with the install.
 [slack]: http://slack.opengee.org
 [slack-img]: https://img.shields.io/badge/chat-on%20slack-ff69b4.svg
 [travis]: https://travis-ci.org/google/earthenterprise/builds
-[travis-img]: https://travis-ci.org/google/earthenterprise.svg?branch=master
+[travis-img]: https://travis-ci.org/google/earthenterprise.svg?branch=release_5.3.4
 [install]: https://github.com/google/earthenterprise/wiki/Install-Fusion-or-Earth-Server
 [flow]: https://lh3.googleusercontent.com/ZGQH04lc2mYmw1JEx0Jvwiardw5H6cwrmRhSj75pSKF6r1FRwwYUBUIBnTE6n5uY071XV7__mmVDKdV6B1tEpUQwFNYnt1HBfxiz3Hrqbw99HUFQKVFnht11EkPz70xCtuhFlCi3

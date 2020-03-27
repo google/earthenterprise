@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <unistd.h>
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -27,6 +28,7 @@
 #include "builddate.h"
 #include "fusion/fusionversion.h"
 #include "fusion/autoingest/Misc.h"
+#include "fusion/autoingest/MiscConfig.h"
 #include "fusion/autoingest/.idl/Systemrc.h"
 #include "fusion/autoingest/.idl/storage/AssetDefs.h"
 #include "fusion/autoingest/khVolumeManager.h"
@@ -55,17 +57,11 @@ khResourceProvider theResourceProvider;
 // ****************************************************************************
 // ***  FindJobBy* routines
 // ****************************************************************************
-khResourceProvider::Job*
-khResourceProvider::FindJobById(uint32 jobid,
-                                std::vector<Job>::iterator &found)
+khResourceProvider::JobIter
+khResourceProvider::FindJobById(uint32 jobid)
 {
-  found = std::find_if(jobs.begin(), jobs.end(),
-                       mem_var_pred_ref<std::equal_to>(&Job::jobid, jobid));
-  if (found != jobs.end()) {
-    return &*found;
-  } else {
-    return 0;
-  }
+  return std::find_if(jobs.begin(), jobs.end(),
+                      mem_var_pred_ref<std::equal_to>(&Job::jobid, jobid));
 }
 
 // ****************************************************************************
@@ -396,9 +392,8 @@ void
 khResourceProvider::SendProgress(uint32 jobid, double progress,
                                  time_t progressTime) {
   khLockGuard lock(mutex);
-  std::vector<Job>::iterator unused;
-  Job *job = FindJobById(jobid, unused);
-  if (job) {
+  JobIter job = FindJobById(jobid);
+  if (Valid(job)) {
     // notify the resource manager
     sendQueue->push
       (SendCmd(std::mem_fun(&khResourceManagerProxy::JobProgress),
@@ -504,16 +499,17 @@ khResourceProvider::StartJob(const StartJobMsg &start)
   // add the new job to my list
   jobs.push_back(Job(start.jobid));
 
-
   // start the job thread
+  uint cmdTries = std::max(MiscConfig::Instance().TriesPerCommand, uint(1)); // Have to try at least once
+  uint sleepBetweenTriesSec = MiscConfig::Instance().SleepBetweenCommandTriesSec;
   jobThreads->run
     (khFunctor<void>(std::mem_fun(&khResourceProvider::JobLoop),
-                     this, start));
+                     this, start, cmdTries, sleepBetweenTriesSec));
 }
 
 
 bool
-khResourceProvider::ExecCmdline(Job *job,
+khResourceProvider::ExecCmdline(JobIter job,
                                 const std::vector<std::string> &cmdline)
 {
   // prepend command to logfile & flush it to disk
@@ -623,141 +619,205 @@ khResourceProvider::ExecCmdline(Job *job,
   return true;
 }
 
-
-
 void
-khResourceProvider::JobLoop(StartJobMsg start)
+khResourceProvider::JobLoop(StartJobMsg start, const uint cmdTries, const uint sleepBetweenTriesSec)
 {
-  uint32 jobid = start.jobid;
+  const uint32 jobid = start.jobid;
   time_t endtime = 0;
   bool success = false;
+  bool logTotalTime = false;
+  bool progressSent = false;
 
   khLockGuard lock(mutex);
-  std::vector<Job>::iterator found;
-  Job *job = FindJobById(jobid, found);
-  if (!job) {
+  JobIter job = FindJobById(jobid);
+  if (!Valid(job)) {
     // somebody already asked for me to go away
     return;
   }
 
-  uint cmdnum = 0;
-  for (; cmdnum < start.commands.size(); ++cmdnum) {
-    time_t cmdtime = 0;
-    pid_t waitfor = 0;
+  for (uint cmdnum = 0; cmdnum < start.commands.size(); ++cmdnum) {
+    // Write out the overall time if we run more than one command
+    logTotalTime = (cmdnum > 0);
 
-    // ***** Launch the command *****
-    cmdtime = time(0);
-    if (!job->beginTime)
+    time_t cmdtime = time(0);
+    if (!job->beginTime) {
       job->beginTime = cmdtime;
+    }
 
-    if (!job->logfile &&
-        ((job->logfile = fopen(start.logfile.c_str(), "w")))) {
-      // if this is first command, open the logfile & write the header
-      fprintf(job->logfile, "BUILD HOST: %s\n",
-              khHostname().c_str());
-      fprintf(job->logfile, "FUSION VERSION %s, BUILD %s\n",
-              GEE_VERSION, BUILD_DATE);
-      {
-        QString runtimeDesc = RuntimeOptions::DescString();
-        if (!runtimeDesc.isEmpty()) {
-          fprintf(job->logfile, "OPTIONS: %s\n", runtimeDesc.latin1());
+    if (!job->logfile) {
+      StartLogFile(job, start.logfile);
+    }
+
+    success = false;
+    for (uint tries = 0; tries < cmdTries && !success; ++tries) {
+      if (tries > 0) {
+        // Write out the overall time if we run a command more than once.
+        logTotalTime = true;
+        if (job->logfile) {
+          LogRetry(job, tries, cmdTries, sleepBetweenTriesSec);
+        }
+        if (sleepBetweenTriesSec > 0) {
+          {
+            // Release the lock while we sleep
+            khUnlockGuard unlock(mutex);
+            sleep(sleepBetweenTriesSec);
+          }
+          // Once we have the lock again, check if someone deleted the job while
+          // we were sleeping
+          job = FindJobById(jobid);
+          if (!Valid(job)) return;
         }
       }
-      fprintf(job->logfile, "STARTTIME: %s\n",
-              GetFormattedTimeString(job->beginTime).c_str());
+      success = RunCmd(job, jobid, start.commands[cmdnum], cmdtime, endtime, progressSent);
+      if (!Valid(job)) return;  // check if somebody already asked for me to go away
     }
-
-    if (ExecCmdline(job, start.commands[cmdnum])) {
-      waitfor = job->pid;
-    } else {
-      // exec failed, errors already written to logfile
-      DeleteJob(found);
-      return;
-    }
-
-
-    // ***** wait for command to finish *****
-    success  = false;
-    bool coredump = false;
-    int  signum   = -1;
-    std::string status_string;
-    {
-      // release the lock while we wait for the process to finish
-      khUnlockGuard unlock(mutex);
-
-      // notify the resource manager the first time
-      if (cmdnum == 0) {
-        SendProgress(jobid, 0, time(0));
-      }
-
-      if (job->logfile) {
-        // Collect process status summary just before it exits.
-        ProcPidStats::GetProcessStatus(waitfor, &status_string, &success,
-                                       &coredump, &signum);
-      } else {
-        // I don't care about the return value, the pass by ref params will
-        // be set correctly either way
-        (void)khWaitForPid(waitfor, success, coredump, signum, NULL);
-      }
-
-      // get the endtime before re reacquire the lock
-      endtime = time(0);
-    }
-    // now that we have the lock again, make sure the job hasn't been
-    // deleted while we were waiting for it to finish
-    job = FindJobById(jobid, found);
-    if (!job) {
-      // somebody already asked for me to go away
-      return;
-    }
-    job->pid = 0;
-
-
-    // ***** report command status *****
-    if (job->logfile) {
-      fflush(job->logfile);
-      // If process status information has been collected print that to log.
-      if (!status_string.empty()) {
-        fprintf(job->logfile, "%s", status_string.c_str());
-      }
-      fprintf(job->logfile,
-              "---------- End Command Output ----------\n");
-      if (signum != -1) {
-        fprintf(job->logfile,
-                "Process terminated by signal %d%s\n",
-                signum,
-                coredump ? " (core dumped)" : "");
-      }
-
-      fprintf(job->logfile, "ENDTIME: %s\n",
-              GetFormattedTimeString(endtime).c_str());
-      uint32 elapsed = endtime - cmdtime;
-      fprintf(job->logfile, "ELAPSEDTIME: %s\n",
-              GetFormattedElapsedTimeString(elapsed).c_str());
-      if (success) {
-        fprintf(job->logfile, "COMPLETED SUCCESSFULLY\n");
-      } else if ((signum == 2) || (signum == 15)) {
-        fprintf(job->logfile, "CANCELED\n");
-      } else {
-        fprintf(job->logfile, "FAILED\n");
-      }
-    }
-
-    if (!success) {
-      ++cmdnum;
-      break;
-    }
+    // If we failed on all of the tries, give up
+    if (!success) break;
   } /* for cmdnum */
 
-  if (cmdnum > 1) {
-    uint32 elapsed = endtime - job->beginTime;
-    fprintf(job->logfile, "\nTOTAL ELAPSEDTIME: %s\n",
-            GetFormattedElapsedTimeString(elapsed).c_str());
+  if (job->logfile && logTotalTime) {
+    LogTotalTime(job, endtime - job->beginTime);
   }
 
-  DeleteJob(found, success, job->beginTime, endtime);
+  DeleteJob(job, success, job->beginTime, endtime);
 }
 
+bool
+khResourceProvider::RunCmd(
+    JobIter & job,
+    uint32 jobid,
+    const std::vector<std::string> & command,
+    time_t cmdtime,
+    time_t & endtime,
+    bool & progressSent) {
+
+  // ***** Launch the command *****
+  if (!ExecCmdline(job, command)) {
+    return false;
+  }
+
+  bool success = false;
+  pid_t waitfor = job->pid;
+  bool coredump = false;
+  int signum = -1;
+  std::string status_string;
+  {
+    // release the lock while we wait for the process to finish
+    khUnlockGuard unlock(mutex);
+
+    // notify the resource manager the first time
+    if (!progressSent) {
+      SendProgress(jobid, 0, time(0));
+      progressSent = true;
+    }
+
+    // ***** wait for command to finish *****
+    if (job->logfile) {
+      // Collect process status summary just before it exits.
+      GetProcessStatus(waitfor, &status_string, &success, &coredump, &signum);
+    } else {
+      WaitForPid(waitfor, success, coredump, signum);
+    }
+
+    // get the endtime before re-acquiring the lock
+    endtime = time(0);
+  }
+
+  // now that we have the lock again, make sure the job hasn't been
+  // deleted while we were waiting for it to finish
+  job = FindJobById(jobid);
+  if (!Valid(job)) return false;
+
+  job->pid = 0;
+
+  // ***** report command status *****
+  if (job->logfile) {
+    LogCmdResults(job, status_string, signum, coredump, success, cmdtime, endtime);
+  }
+  return success;
+}
+
+void
+khResourceProvider::StartLogFile(JobIter job, const std::string &logfile) {
+  job->logfile = fopen(logfile.c_str(), "w");
+  if (job->logfile) {
+    // open the logfile & write the header
+    fprintf(job->logfile, "BUILD HOST: %s\n",
+            khHostname().c_str());
+    fprintf(job->logfile, "FUSION VERSION %s, BUILD %s\n",
+            GEE_VERSION, BUILD_DATE);
+    QString runtimeDesc = RuntimeOptions::DescString();
+    if (!runtimeDesc.isEmpty()) {
+      fprintf(job->logfile, "OPTIONS: %s\n", runtimeDesc.latin1());
+    }
+    fprintf(job->logfile, "STARTTIME: %s\n",
+            GetFormattedTimeString(job->beginTime).c_str());
+  }
+}
+
+void
+khResourceProvider::GetProcessStatus(pid_t pid, std::string* status_string,
+                                     bool* success, bool* coredump, int* signum) {
+  ProcPidStats::GetProcessStatus(pid, status_string, success, coredump, signum);
+}
+
+void
+khResourceProvider::WaitForPid(pid_t waitfor, bool &success, bool &coredump,
+                               int &signum) {
+  // I don't care about the return value, the pass by ref params will
+  // be set correctly either way
+  (void)khWaitForPid(waitfor, success, coredump, signum, NULL);
+}
+
+void
+khResourceProvider::LogCmdResults(
+    JobIter job,
+    const std::string &status_string,
+    int signum,
+    bool coredump,
+    bool success,
+    time_t cmdtime,
+    time_t endtime) {
+  fflush(job->logfile);
+  // If process status information has been collected print that to log.
+  if (!status_string.empty()) {
+    fprintf(job->logfile, "%s", status_string.c_str());
+  }
+  fprintf(job->logfile,
+          "---------- End Command Output ----------\n");
+  if (signum != -1) {
+    fprintf(job->logfile,
+            "Process terminated by signal %d%s\n",
+            signum,
+            coredump ? " (core dumped)" : "");
+  }
+
+  fprintf(job->logfile, "ENDTIME: %s\n",
+          GetFormattedTimeString(endtime).c_str());
+  uint32 elapsed = endtime - cmdtime;
+  fprintf(job->logfile, "ELAPSEDTIME: %s\n",
+          GetFormattedElapsedTimeString(elapsed).c_str());
+  if (success) {
+    fprintf(job->logfile, "COMPLETED SUCCESSFULLY\n");
+  } else if ((signum == 2) || (signum == 15)) {
+    fprintf(job->logfile, "CANCELED\n");
+  } else {
+    fprintf(job->logfile, "FAILED\n");
+  }
+}
+
+void
+khResourceProvider::LogRetry(JobIter job, uint tries, uint totalTries, uint sleepBetweenTries) {
+  fprintf(job->logfile, "\nRETRYING FAILED COMMAND after %d seconds, try %d of %d\n",
+          sleepBetweenTries, tries + 1, totalTries);
+  fflush(job->logfile);
+}
+
+void
+khResourceProvider::LogTotalTime(JobIter job, uint32 elapsed) {
+  fprintf(job->logfile, "\nTOTAL ELAPSEDTIME: %s\n",
+          GetFormattedElapsedTimeString(elapsed).c_str());
+}
 
 // ****************************************************************************
 // ***  StopJob
@@ -768,9 +828,8 @@ khResourceProvider::StopJob(const StopJobMsg &stop)
   // the mutex must be locked
   assert(!mutex.trylock());
 
-  std::vector<Job>::iterator found;
-  Job *job = FindJobById(stop.jobid, found);
-  if (job) {
+  JobIter job = FindJobById(stop.jobid);
+  if (Valid(job)) {
     if (job->pid > 0) {
       // It's already running, so try to kill it. Killing -pid instead
       // of pid says to send the signal to all processes in the
@@ -779,12 +838,12 @@ khResourceProvider::StopJob(const StopJobMsg &stop)
       notify(NFY_DEBUG, "Killing pgid %d", -job->pid);
       if (!khKillPid(-job->pid)) {
         // warning has already been emitted
-        DeleteJob(found);
+        DeleteJob(job);
       }
     } else {
       // it's not running yet, taking it out of the list
       // will keep it from ever running
-      DeleteJob(found);
+      DeleteJob(job);
     }
   }
 }
@@ -855,7 +914,7 @@ khResourceProvider::ChangeVolumeReservations(const VolumeReservations &res)
 }
 
 void
-khResourceProvider::DeleteJob(std::vector<Job>::iterator which,
+khResourceProvider::DeleteJob(JobIter which,
                               bool success,
                               time_t beginTime, time_t endTime)
 {

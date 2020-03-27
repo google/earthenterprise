@@ -1,0 +1,180 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Add KML layers &#8212; Google Earth Enterprise 5.3.4 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Non-clickable icons" href="nonClickableIcons.html" />
+    <link rel="prev" title="Add flat imagery to Mercator map databases in GEE 5.1.0" href="addFlatImageryToMercatorMapDBInGEE5.1.0.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="nonClickableIcons.html" title="Non-clickable icons"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="addFlatImageryToMercatorMapDBInGEE5.1.0.html" title="Add flat imagery to Mercator map databases in GEE 5.1.0"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" accesskey="U">Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="addFlatImageryToMercatorMapDBInGEE5.1.0.html"
+                        title="previous chapter">Add flat imagery to Mercator map databases in GEE 5.1.0</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="nonClickableIcons.html"
+                        title="next chapter">Non-clickable icons</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp2.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp2.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="add-kml-layers">
+<h1>Add KML layers<a class="headerlink" href="#add-kml-layers" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>Fusion lets you add <strong>KML layers</strong> in addition to fused vector
+layers. KML layers consist of a wrapper layer (typically a small,
+simple resource) that contains a link to a KML or KMZ file. The
+layer displays the linked content, not the wrapper layer content.</p>
+<p>KML layers are useful if you want to give users access to data
+that is not hosted on the Earth server, or to data that changes
+frequently. In fact, the free edition of Google Earth includes
+many KML layers that stream data from Google servers to the
+client.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Each vector project must include at least one resource that is
+not a KML layer. If you try to build a project consisting only
+of KML layers, the build will fail with the error “No vector
+packets for indexing.”</p>
+</div>
+<p class="rubric">To add a KML layer:</p>
+<ol class="arabic">
+<li><p class="first">Open your Fusion vector project and click the blank-page icon
+in the top right corner of the dialog box.</p>
+<p>The <strong>Add a layer</strong> dialog box appears.</p>
+</li>
+<li><p class="first">Add a resource to use as a wrapper layer for the KML or KMZ
+link.</p>
+<p>Users will not see the content of the wrapper layer, so add any
+small, simple resource that contains lines or polygons, such as the “CAHighways” resource in the Fusion tutorial
+dataset. If you want to use a resource that is already in your
+project, add it a second time.</p>
+</li>
+<li><p class="first">Right-click the new layer and select <strong>Layer Properties</strong>.</p>
+<p>The <strong>Layer Properties</strong> dialog box appears.</p>
+</li>
+<li><p class="first">In the <strong>KML URL</strong> field, enter the link to your KML or KMZ
+file.</p>
+<p>The file must be on a server that is accessible to users at all
+times. If the file is missing, the client may fail. To prevent
+this, place the file on the Google Earth server or place a
+small KML file on the Earth server that contains a NetworkLink
+reference to your target KML or KMZ file on another server.</p>
+</li>
+<li><p class="first">Enter a name and select an icon for the layer.</p>
+</li>
+<li><p class="first">Click <strong>OK</strong> to save your changes and exit the <strong>Layer
+Properties</strong> dialog box.</p>
+<p>The vector project lists your new KML layer.</p>
+</li>
+<li><p class="first">Save the vector project, then rebuild and publish your
+database.</p>
+<p>After the client connects to the published database, users can
+view the KML layer.</p>
+</li>
+</ol>
+<p class="rubric">To add multiple KML layers:</p>
+<p>If you want to add multiple KML or KMZ files that are not hosted on
+the Google Earth server, the best practice is to place one KML
+file on the Earth server that links to all your files on other
+servers. Then you can create a layer that loads the single KML
+file. That way, even if the server that hosts your KML or KMZ
+files stops responding, the client is unlikely to fail.</p>
+<ol class="arabic">
+<li><p class="first">Place the KML or KMZ files on the server or servers that will
+host them.</p>
+</li>
+<li><p class="first">Create a new parent KML file that contains NetworkLink
+references to each of the KML or KMZ files.</p>
+</li>
+<li><p class="first">Place the parent KML file on the Earth server.</p>
+</li>
+<li><p class="first">In Fusion, create a KML layer that links to the parent KML file
+on the Earth server.</p>
+<p>In the Earth client, users can expand the parent KML layer to
+select a child KML layer.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="nonClickableIcons.html" title="Non-clickable icons"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="addFlatImageryToMercatorMapDBInGEE5.1.0.html" title="Add flat imagery to Mercator map databases in GEE 5.1.0"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" >Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

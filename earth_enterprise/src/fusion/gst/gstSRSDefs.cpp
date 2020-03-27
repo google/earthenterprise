@@ -118,7 +118,7 @@ void gstSRSDefs::init() {
     char name[100];
     for (uint r = 0; r < spcsTable.NumRows(); ++r) {
       gstRecordHandle rec = spcsTable.Row(r);
-      sprintf(name, "%s %s (%d)", rec->Field(1)->ValueAsString().c_str(),
+      snprintf(name, 100, "%s %s (%d)", rec->Field(1)->ValueAsString().c_str(),
               rec->Field(2)->ValueAsString().c_str(),
               rec->Field(0)->ValueAsInt());
       if (*(rec->Field(4)) == gstValue("NAD83")) {

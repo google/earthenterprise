@@ -1,0 +1,282 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Benchmarking outcomes for applying task rules &#8212; Google Earth Enterprise 5.3.5 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Configure font size in the GUI" href="confGUIFontsize.html" />
+    <link rel="prev" title="Configure Fusion performance" href="confTaskRulesForFusionPerf.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="confGUIFontsize.html" title="Configure font size in the GUI"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="confTaskRulesForFusionPerf.html" title="Configure Fusion performance"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" accesskey="U">Fusion Administration</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="confTaskRulesForFusionPerf.html"
+                        title="previous chapter">Configure Fusion performance</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="confGUIFontsize.html"
+                        title="next chapter">Configure font size in the GUI</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="benchmarking-outcomes-for-applying-task-rules">
+<h1>Benchmarking outcomes for applying task rules<a class="headerlink" href="#benchmarking-outcomes-for-applying-task-rules" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>This article describes the benchmarking of outcomes for applying
+various task rules to a test set of data in a similar
+environment. The results are useful in providing guidance in how
+task rules can improve GEE performance of loading assets and build
+times.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">This set of tests was designed to help assess how GEE performs
+in a specific environment. Although certain conclusions can be
+drawn from the test results, your results may differ. The
+figures presented here can be used as a reference for the GEE
+performance only. This testing was conducted with GEE 4.4 using
+publicly available geospatial data to build a 3D database.</p>
+</div>
+<p class="rubric" id="gee-system-specifications">GEE System Specifications</p>
+<p>The following table lists the software and hardware specifications
+that were used for testing.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="76%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>OS</td>
+<td>Ubuntu 12.04.1 LTS</td>
+</tr>
+<tr class="row-even"><td>Processor</td>
+<td>8x Intel(R) Xeon ® CPU &#64;2.60GHz</td>
+</tr>
+<tr class="row-odd"><td>CPU</td>
+<td>2599.998 MHz</td>
+</tr>
+<tr class="row-even"><td>Cache size</td>
+<td>20488 KB</td>
+</tr>
+<tr class="row-odd"><td>Memory</td>
+<td>30 GB</td>
+</tr>
+</tbody>
+</table>
+<p>This set of tests used raster data, terrain data, and vector data
+that are freely available online. Some of them provide global
+coverage and others provide local high resolution coverage.</p>
+<p class="rubric" id="fusion-server-configurations-task-rules">Fusion Server Configurations - Task Rules</p>
+<p>A number of task rules can be configured to increase
+processing speed. You configure task rule settings to assign a
+number of CPUs to processes that can be run concurrently.</p>
+<p>Fusion Server has the following two binaries which are
+multithreaded to increase processing speed when building a 3D
+database:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">gepackgen</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">gecombineterrain</span></code></li>
+</ul>
+<p>You can identify the activity of these binaries during the
+processing of your databases by checking the log files listed in
+the Version Properties dialog. (Right-click an asset in the Asset
+Manager dialog.)</p>
+<p><code class="docutils literal notranslate"><span class="pre">gepackgen</span></code> generates imagery or terrain project packets.
+Multiple <code class="docutils literal notranslate"><span class="pre">gepackgen</span></code> processes can run concurrently to speed up
+the building of the imagery projects. <code class="docutils literal notranslate"><span class="pre">gecombineterrain</span></code>
+processes 3D databases and merges terrain packets from the
+specified indices.</p>
+<p>Task rules can be configured based on the number of concurrent
+processes required to be run on the Fusion server. Since
+<code class="docutils literal notranslate"><span class="pre">gecombineterrain</span></code> is a serial process and must be completed
+before the other database-level building activities can start, the
+<strong>CombinedTerrain</strong> task rule is used to put all available
+CPUs/cores onto the build, assuming that one core is reserved for
+the system.</p>
+<p>The <strong>ImageryPacketLevel</strong> and <strong>TerrainPacketLevel</strong> task rules
+configure <code class="docutils literal notranslate"><span class="pre">gepackgen</span></code> for concurrent processing. Both assign
+more or fewer CPUs to the pack files that are created during
+project builds.</p>
+<p>The task rules apply to all subsequent tasks that the Fusion
+server performs, and cannot be applied to individual assets or
+projects.</p>
+<p>To compare the effect of different task rule settings on the
+performance of the Fusion server when loading assets and building
+resources, projects, and databases, three different task rule
+configurations were used: <em>default taskrule</em>, <em>taskrule 2</em> and
+<em>taskrule 3</em>. <em>Default task rule</em> is the GEE default setting after
+installation.</p>
+<p>Detailed settings are in the following table.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="23%" />
+<col width="17%" />
+<col width="17%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"></th>
+<th class="head">Default taskrule</th>
+<th class="head">Default taskrule</th>
+<th class="head">Taskrule 2</th>
+<th class="head">Taskrule 2</th>
+<th class="head">Taskrule 3</th>
+<th class="head">Taskrule 3</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td></td>
+<td>Min CPU</td>
+<td>Max CPU</td>
+<td>Min CPU</td>
+<td>Max CPU</td>
+<td>Min CPU</td>
+<td>Max CPU</td>
+</tr>
+<tr class="row-odd"><td><strong>CombinedTerrain</strong></td>
+<td>1</td>
+<td>1</td>
+<td>7</td>
+<td>7</td>
+<td>7</td>
+<td>7</td>
+</tr>
+<tr class="row-even"><td><strong>ImageryPacketLevel</strong></td>
+<td>1</td>
+<td>1</td>
+<td>3</td>
+<td>3</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr class="row-odd"><td><strong>TerrainPacketLevel</strong></td>
+<td>1</td>
+<td>1</td>
+<td>3</td>
+<td>4</td>
+<td>3</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+<p>In this set of tests, the server was permitted to use 7 CPU cores
+for Fusion processing. In Taskrule 2, for example, there can be
+up to 2 gepackgen tasks running concurrently with three CPUs assigned
+for each task.</p>
+<p class="rubric" id="project-build-time-under-different-taskrules">Project build time under different taskrules</p>
+<p>Total raster, terrain, and vector project build times are
+illustrated in the following charts. The vector project build time
+does not change much at all because the task rule settings have no
+impact on the <code class="docutils literal notranslate"><span class="pre">gevectorfuse</span></code> command. For the imagery project,
+<em>taskrule 2</em> provides the best build performance. For the terrain
+project, <em>taskrule 3</em> provides the best build performance.</p>
+<p><img alt="Task rule benchmarking outcomes" src="../../images/benchmark_taskrules1.png" /></p>
+<p class="rubric" id="total-database-build-time">Total database build time</p>
+<p>The database build time with <em>task rule 3</em> was the fastest -
+reducing the time to 25.31 hours. Under the <em>default task rule</em>
+setting, the total database build time took the longest time to
+finish, 33.52 hours.</p>
+<p class="rubric" id="recommendations">Recommendations</p>
+<p>Always set the task rule other than default to have better image
+project build performance.
+With this test dataset, <em>task rule 3</em> provides the shortest total
+database building time on this server - with two imagery
+<code class="docutils literal notranslate"><span class="pre">gepackgen</span></code> tasks running concurrently with two CPUs assigned for
+each task; with all available CPU assigned to <strong>CombinedTerrain</strong>
+and two terrain <code class="docutils literal notranslate"><span class="pre">gepackgen</span></code> tasks running concurrently with three or four
+CPUs assigned for each task.
+Set <strong>CombinedTerrain</strong> to put all available CPUs/cores onto the
+build.
+Select a machine with more memory if processing vector data as
+fusing vector data (<code class="docutils literal notranslate"><span class="pre">gevectorfuse</span></code>) can consume a lot of memory.
+.. rubric:: Learn more
+:name: learn-more</p>
+<ul class="simple">
+<li><a class="reference internal" href="confTaskRulesForFusionPerf.html"><span class="doc">Configure Fusion performance</span></a></li>
+<li><a class="reference internal" href="multipleCPUConfig.html"><span class="doc">Running Fusion on a Machine with Multiple
+CPUs</span></a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="confGUIFontsize.html" title="Configure font size in the GUI"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="confTaskRulesForFusionPerf.html" title="Configure Fusion performance"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" >Fusion Administration</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
