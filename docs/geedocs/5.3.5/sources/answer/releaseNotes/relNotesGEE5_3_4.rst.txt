@@ -53,11 +53,12 @@ new PostgreSQL version used by Open GEE 5.3.4.
 
 -[ Resolved Issues ]-
 
-    Number  Description  1667  FusionTutorial files are available on
-s3.  download_tutorial.sh needs to be updated.  1666  User sees
-"plugin failed to load" alerts when browsing to portable server page
-1657  fatal error: autoingest/sysman/plugins/MapLayerAssetD.h: No such
-file or directory  1650  WMS https doesn't work behind reverse proxies
+    Number  Description  1677  Some mercator maps fail to display in
+dual-server setups  1667  FusionTutorial files are available on s3.
+download_tutorial.sh needs to be updated.  1666  User sees "plugin
+failed to load" alerts when browsing to portable server page  1657
+fatal error: autoingest/sysman/plugins/MapLayerAssetD.h: No such file
+or directory  1650  WMS https doesn't work behind reverse proxies
 1649  Consolidate XML loading code into AssetSerializer  1643
 geserver_init still relies on initscripts  1642  Getop does not have
 an option to print status and exit  1634  Portable server on Windows
