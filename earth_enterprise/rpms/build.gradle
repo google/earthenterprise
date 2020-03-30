@@ -262,6 +262,9 @@ task openGeePostGisRpm(type: GeeRpm) {
     autoFindRequires = true
 
     requires('opengee-common', ospackage.version, GREATER | EQUAL)
+    // The code in GeeRpm decides that this RPM should depend on proj, but
+    // it actually depends on proj-devel.
+    requires('proj-devel')
 
     from (stagedInstallDir_postgis_opt) {
         into new File(packageInstallRootDir, 'opt')

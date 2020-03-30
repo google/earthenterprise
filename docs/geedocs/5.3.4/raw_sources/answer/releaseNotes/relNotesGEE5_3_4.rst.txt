@@ -52,6 +52,8 @@ Release notes: Open GEE 5.3.4
 
          * - Number
            - Description
+         * - 1677
+           - Some mercator maps fail to display in dual-server setups
          * - 1667
            - FusionTutorial files are available on s3.  download_tutorial.sh needs to be updated.
          * - 1666
