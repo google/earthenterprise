@@ -21,7 +21,7 @@ card that can be read by the client's computer.
 -[ SAML 2.0 and OAuth 2.0 (Unsupported as of 7.3.3) ]-
 
 SAML and OAuth operate differently under the hood, but the underlying
-concept is similar. In both cases, when a user attempts to access and
+concept is similar. In both cases, when a user attempts to access a
 service, they are redirected to a separate Identity Provider to login.
 Once their identity has been verified, an access token is created that
 allows access the requested service.
