@@ -35,7 +35,7 @@ import urllib
 import urllib2
 from contextlib import closing
 
-from lxml import etree
+import defusedxml as etree
 
 from common import form_wrap
 from common import postgres_manager_wrap

@@ -30,7 +30,7 @@ import urllib
 import yaml
 from common import utils
 import common.configs
-from lxml import etree
+import defusedxml as etree 
 
 
 CONFIG_FILE = "/opt/google/gehttpd/cgi-bin/advanced_cutter.cfg"
