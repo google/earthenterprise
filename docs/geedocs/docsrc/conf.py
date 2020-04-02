@@ -25,8 +25,12 @@ import getversion
 # Check version of git -- may not be able to reliably generate correct opengee version string.
 gee_version_number = getversion.open_gee_version.get_short()
 if getversion.open_gee_version.get_warning_message():
-    print getversion.open_gee_version.get_warning_message()
-print gee_version_number
+    sys.stderr.write(getversion.open_gee_version.get_warning_message())
+    sys.stderr.write('\n')
+    sys.stderr.flush()
+sys.stdout.write(gee_version_number)
+sys.stdout.write('\n')
+sys.stdout.flush()
 
 # -- Project information -----------------------------------------------------
 
