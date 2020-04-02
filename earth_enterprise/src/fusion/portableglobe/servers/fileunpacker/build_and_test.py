@@ -70,7 +70,7 @@ def configure_c_compiler(os_dir):
       raise ValueError('Version of g++ ({0}) is below minimum (4.8)!'.format(
           '.'.join(version)))
 
-def BuildLibrary(os_dir, ignore_results):
+def BuildLibrary(os_dir, ignore_results, opengee_build_dir):
   """Returns whether able to build file unpacker library."""
   try:
     os.mkdir("dist")
@@ -78,6 +78,8 @@ def BuildLibrary(os_dir, ignore_results):
     pass  # ok if it already exists
 
   configure_c_compiler(os_dir)
+  if opengee_build_dir:
+    opengee.environ.env_prepend_path('PATH', os.path.join(opengee_build_dir, 'bin'), if_present='move')
 
   specialDefs = ''
   if os_dir == "Windows":
@@ -129,18 +131,25 @@ def RunTests():
 
 def main(argv):
   """Main for build and test."""
-  if (len(argv) != 2 or
-      argv[1].lower() not in ["mac", "windows", "linux"]):
-    print "Usage: build_and_test.py <OS_target>"
+  print(argv)
+  if ((len(argv) < 2 or argv[1].lower() not in ["mac", "windows", "linux"]) or 
+      (len(argv) < 3 and argv[1].lower() == 'linux')):
+    print "Usage: build_and_test.py <OS_target> <opengee_build_directory>"
     print
     print "<OS_target> can be Mac, Windows, or Linux"
+    print "<opengee_build_directory> is only needed on Linux"
     return
 
   os.chdir(os.path.dirname(os.path.realpath(__file__)))
   os_dir = "%s%s" % (argv[1][0:1].upper(), argv[1][1:].lower())
+  if len(argv) > 2:
+    opengee_build_dir = argv[2]
+  else:
+    opengee_build_dir = None
+
   print "Build and test file unpacker library for %s Portable Server." % os_dir
 
-  if BuildLibrary(os_dir, argv[1].lower()=="windows"):
+  if BuildLibrary(os_dir, argv[1].lower()=="windows", opengee_build_dir):
     print "Library built."
     RunTests()
   else:
