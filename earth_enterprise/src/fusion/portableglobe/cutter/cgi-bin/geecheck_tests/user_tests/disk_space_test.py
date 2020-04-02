@@ -16,7 +16,7 @@
 
 
 import os
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 from geecheck_tests import common
 
 # Need to use unittest2 for Python 2.6.
