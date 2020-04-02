@@ -21,7 +21,7 @@ Connect using the Google Earth EC
 
 Connect using the Google Earth Plug-in
 
-Get info about your globe or map
+Get info about your map
 
 Change your configuration options
 
@@ -211,8 +211,9 @@ launches, open a browser and navigate to "http://localhost:9335"
 
 Folder
 
- (outlined in red), then select the globe or map you want to view. You
-can view only one globe or map at a time.
+ (outlined in red), then select the map you want to view. You can view
+only one map at a time. Portable globes cannot be viewed with a web
+browser. Use Google Earth Enterprise Client to view globes.
 
 Globes and maps that are broadcast on your local network might require
 an access key. If prompted, enter the key to view the globe or map.
@@ -228,25 +229,21 @@ instead.
 
 -[ Connect using the Google Earth Plug-in ]-
 
-GEE Portable comes with preconfigured HTML pages called
-"hello_earth.html" and "hello_maps.html" that display your globe or
-map using the Google Earth API or Google Map API. Note that the
-"hello_earth.html" sample uses the deprecated Google Earth Plug-in.
+GEE Portable comes with a preconfigured HTML page called
+"hello_maps.html" that displays your map using the "Google Maps API".
 
 If you wish to make your own custom application, start by making a
 copy of either of these files and then add your own edits.
 
 To access either of the files, enter the URL in your browser:
 
-   "http://localhost:9335/local/preview/developers/hello_earth.html"
    "http://localhost:9335/local/preview/developers/hello_maps.html"
 
 Note: Although it is possible to configure GEE Portable to display
-  multiple globes or maps at the same time, this is not recommended or
+  multiple maps at the same time, this is not recommended or
   supported. The additional configuration requires you to build the
-  globe or map to reference a specific port number, which means you
-  would have to rebuild it if you wanted to re-use it for any other
-  ports.
+  map to reference a specific port number, which means you would have
+  to rebuild it if you wanted to re-use it for any other ports.
 
 -[ Get info about your globe or map ]-
 
@@ -258,7 +255,7 @@ Folder
 access. Each globe or map is listed with its file name, description,
 creation date, and size.
 
-Select a globe or map, then click the
+Select a map, then click the
 
 Menu
 
@@ -266,9 +263,9 @@ Menu
 
 Show layer list
 
- to see all the layers for that globe or map. You can use the list to
-select the layers you want the globe or map to display. To hide the
-layer list, click the
+ to see all the layers for that map. You can use the list to select
+the layers you want the map to display. To hide the layer list, click
+the
 
 Menu
 
