@@ -136,6 +136,8 @@ hmocfiles = [
   'AssetVersionActions.h',
   'WidgetControllers.h',
   'TextStyle.h',
+  'StyleSave.h',
+  'TextPreviewLabel.h',
   'FieldGeneratorController.h',
   'MapLayer.h',
   'ScriptFilterController.h',
