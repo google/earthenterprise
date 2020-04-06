@@ -21,10 +21,12 @@
 #include <Qt/qgroupbox.h>
 #include <Qt/qspinbox.h>
 #include <Qt/qlineedit.h>
-#include <Qt/qtextedit.h>
+#include <Qt/q3textedit.h>
 #include <Qt/qvalidator.h>
 #include <Qt/qdatetime.h>
 #include <Qt/qlabel.h>
+
+using QTextEdit = Q3TextEdit;
 
 #include <autoingest/.idl/storage/MapSubLayerConfig.h>
 

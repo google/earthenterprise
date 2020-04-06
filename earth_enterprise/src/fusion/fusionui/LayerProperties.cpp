@@ -114,7 +114,7 @@ LayerConfig LayerProperties::GetConfig() {
   SyncToConfig();
 
   layer_config_.channelId = static_cast<uint>(idSpinBox->value());
-  layer_config_.asset_uuid_ = uuidEdit->text().ascii();
+  layer_config_.asset_uuid_ = uuidEdit->text().toUtf8().constData();
   layer_config_.preserveTextLevel = static_cast<uint>(
       preserveTextSpin->value());
   layer_config_.isVisible = isVisibleCheck->isChecked();
@@ -136,7 +136,7 @@ LayerConfig LayerProperties::GetConfig() {
 void LayerProperties::editScript() {
   QString script = scriptEdit->text();
   QStringList contextScripts = layer_->GetExternalContextScripts();
-  if (ScriptEditor::Run(this,
+  if (ScriptEditor::Run(dynamic_cast<QWidget *>(this),
                         layer_->GetSharedSource(),
                         script, ScriptEditor::StatementBlock,
                         contextScripts)) {
@@ -186,7 +186,7 @@ void LayerProperties::DeleteSearchField() {
   if ( row == -1 )
     return;
 
-  if (QMessageBox::warning(this, "Warning",
+  if (QMessageBox::warning(dynamic_cast<QWidget*>(this), "Warning",
                            QObject::trUtf8("Confirm delete.\n\n"),
                            kh::tr("OK"), kh::tr("Cancel"),
                            QString::null, 1, 1) == 0)
@@ -203,8 +203,7 @@ QStringList LayerProperties::AvailableAttributes() {
   const gstHeaderHandle &record_header = layer_->GetSourceAttr();
   if (record_header && record_header->numColumns() != 0) {
     for (uint col = 0; col < record_header->numColumns(); ++col) {
-      if (existing_fields.find(record_header->Name(col)) ==
-          existing_fields.end())
+      if (existing_fields.find(record_header->Name(col)) == existing_fields.end())
         remaining_fields.append(record_header->Name(col));
     }
   }
