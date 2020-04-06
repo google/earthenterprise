@@ -54,9 +54,11 @@ getranslate = env.executable('getranslate', 'getranslate.cpp',
 gereproject = env.executable('gereproject', 'gereproject.cpp',
                              LIBS=['gegdal', 'geutil', 'gdal', 'geos'])
 
-
 khgdal_test = env.test('khgdal_test', ['khgdal_test.cpp'], LIBS=['gegdal', 'gecommon', 'geos'])
 
+khGDALReader_unittest = env.test('khGDALReader_unittest',
+    ['khGDALReader_unittest.cpp'],
+    LIBS=['gegdal', 'gecommon', 'geos', 'gtest'])
 
 env.install('fusion_bin', [geinfo, gevirtualraster, gesplitkhvr,
                            getranslate, gereproject])

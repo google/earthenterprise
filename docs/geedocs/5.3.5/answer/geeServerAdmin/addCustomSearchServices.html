@@ -1,0 +1,246 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Add custom search services &#8212; Google Earth Enterprise 5.3.5 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Troubleshoot search services" href="troubleshootSearchServices.html" />
+    <link rel="prev" title="Create Search tabs" href="createSearchTabs.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="troubleshootSearchServices.html" title="Troubleshoot search services"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="createSearchTabs.html" title="Create Search tabs"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" accesskey="U">GEE Server administration</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="createSearchTabs.html"
+                        title="previous chapter">Create Search tabs</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="troubleshootSearchServices.html"
+                        title="next chapter">Troubleshoot search services</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp4.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp4.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="add-custom-search-services">
+<h1>Add custom search services<a class="headerlink" href="#add-custom-search-services" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>If you want to access a custom data source, you can create your
+own search plug-in and access it as a search tab definition in
+Google Earth Enterprise Server. A custom search plug-in will
+create requests and responses using the common Python-based search
+framework, letting you adapt your search to any data source. Your
+custom search plug-in will receive search requests directly from
+Google Earth Enterprise Client (EC), or any other clients in the
+form of URL parameters.</p>
+<p>For example, with custom search plug-ins you can use Maps API and
+Places API to leverage the power of their data sets. You can also
+use a proprietary database, e.g., power conversion sites,
+then search for the sites using internal IDs or city names.</p>
+<p>A custom search plug-in may also provide a solution if you want to
+search data that is not on your Google Earth Enterprise Server or
+you want to combine Google Earth Enterprise databases in new ways.
+For example, you may want to combine a Places search with your own
+vector point data set, enabling your users to search by city name
+or facility name. The custom search plug-in would
+forward your request to both the <strong>POI Search</strong> plug-in and the
+<strong>Places</strong> plug-in and return a merged set.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Google Maps API and Places API access services over
+the internet, and require licenses to use.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You will need some familiarity with Python to work
+with custom search plug-ins.</p>
+</div>
+<ul class="simple">
+<li><a class="reference internal" href="#configure-search-queries-geec-maps"><span class="std std-ref">Configure search queries for Google Earth EC and Google
+Maps</span></a></li>
+<li><a class="reference internal" href="#access-search-plugins"><span class="std std-ref">Access Search Plug-ins</span></a></li>
+<li><a class="reference internal" href="#implement-custom-search-plugin"><span class="std std-ref">Implement your custom search plug-in</span></a></li>
+</ul>
+<p class="rubric" id="configure-search-queries-geec-maps">Configure search queries for Google Earth EC and
+Google Maps</p>
+<p>Any web service, servlet, or web application you configure the
+search tabs to query:</p>
+<ul class="simple">
+<li>Must return valid KML to Google Earth EC.</li>
+<li>Must return valid JSONP in the specified structure.</li>
+</ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Because search tabs are returned as JSONP, they must
+originate from the same server as the HTML page containing
+the 2D map.</p>
+</div>
+<p class="rubric" id="access-search-plugins">Access Search Plug-ins</p>
+<p>The Google Earth Enterprise search plug-ins are stored in a
+default directory that you can use to add or delete your custom
+plug-ins as required. You can also modify the configuration
+file <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf.d/mod_wsgi-ge.conf</span></code> to
+register new search plug-ins with Google Earth Enterprise Server
+instead of creating search tabs. The configuration file provides a
+convenient method for managing search plug-ins with scripts, for
+example, to register newly created plug-in endpoints so that they
+can be accessible when you view your database in Google Earth EC.</p>
+<p>You can access the plug-ins that are installed with Google Earth
+Enterprise Server at:</p>
+<p><code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/wsgi-bin/search/plugin</span></code></p>
+<p>For example, access <code class="docutils literal notranslate"><span class="pre">/gesearch/ExampleSearch</span></code> in your browser as
+follows:</p>
+<p><code class="docutils literal notranslate"><span class="pre">http://your.gee.server/gesearch/ExampleSearch</span></code></p>
+<p>The plug-in end points are for Google Earth Enterprise search
+plug-ins are defined in
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf.d/mod_wsgi-ge.conf</span></code>.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Handles Places search requests.
+  WSGIScriptAlias /gesearch/PlacesSearch /opt/google/gehttpd/wsgi-bin/search/plugin/geplaces_search_app.py
+  # Handles Coordinate search requests.
+  WSGIScriptAlias /gesearch/CoordinateSearch /opt/google/gehttpd/wsgi-bin/search/plugin/coordinate_search_app.py
+  # Handles Federated search requests.
+  WSGIScriptAlias /gesearch/FederatedSearch /opt/google/gehttpd/wsgi-bin/search/plugin/federated_search_app.py
+  # Handles Example search requests.
+  WSGIScriptAlias /gesearch/ExampleSearch /opt/google/gehttpd/wsgi-bin/search/plugin/example_search_app.py
+  # Handles POI search requests.
+  WSGIScriptAlias /POISearch /opt/google/gehttpd/wsgi-bin/search/plugin/poi_search_app.py
+</pre></div>
+</div>
+<p class="rubric" id="implement-custom-search-plugin">Implement a custom search plug-in</p>
+<p>You implement a custom search plug-in by creating your own
+Python search application using WSGI, then registering the new
+search plug-in so that it can be added as you publish databases.</p>
+<p class="rubric">To implement a custom search plug-in:</p>
+<ol class="arabic">
+<li><p class="first">Create your search application, using the WSGI framework. See
+the <a class="reference internal" href="exampleSearchPluginSample.html"><span class="doc">Example Search Python module</span></a>
+for example code.</p>
+</li>
+<li><p class="first">Locate your search plug-in, for example <code class="docutils literal notranslate"><span class="pre">custom_search.py</span></code>,
+in the <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/wsgi-bin/search/plugin/</span></code>
+directory.</p>
+</li>
+<li><p class="first">Register your plug-in by adding its definition in the Python
+module configuration file:
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf.d/mod_wsgi-ge.conf</span></code>. Your
+registration in the configuration file should look something
+like the following:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Handles My Custom search requests.
+WSGIScriptAlias /gesearch/CustomSearch
+/opt/google/gehttpd/wsgi-bin/search/plugin/mycustom_search_app.py
+</pre></div>
+</div>
+</li>
+<li><p class="first">Restart Google Earth Enterprise Server:</p>
+<p><code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">sudo</span> <span class="pre">/etc/init.d/geserver</span> <span class="pre">restart</span></code></p>
+</li>
+<li><p class="first">Open the Google Earth Enterprise Server Admin console and click
+<strong>Search tabs</strong>. The list of Search tabs definitions appears.</p>
+</li>
+<li><p class="first">Click <strong>Create New</strong> to create a new search definition.</p>
+</li>
+<li><p class="first">Add a name and label.</p>
+</li>
+<li><p class="first">In the URL field, add the <code class="docutils literal notranslate"><span class="pre">WSGIScriptAlias</span></code> that you
+specified in the
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf.d/mod_wsgi-ge.conf</span></code> file. In this
+example, you would enter <code class="docutils literal notranslate"><span class="pre">gesearch/CustomSearch</span></code>.</p>
+</li>
+<li><p class="first">If you want to add query parameters that are hidden from Google
+Earth EC, such as the way the results will be sorted or the
+number of results displayed at a time, enter them in the
+<strong>Additional Query Parameters</strong> field. The syntax is
+<strong>key1=value1&amp;key2;=value2</strong>.
+For example, <strong>sortby=name&amp;numresults;=10</strong> sorts by the name field and
+displays 10 results at a time. The search application must be
+able to understand and respond to these key/value pairs, so you
+must be very familiar with the search application to use this
+field.</p>
+</li>
+<li><p class="first">Set the fields and other options as needed and click <strong>Save</strong>.
+Your new custom search definition is added to the list on the
+<strong>Search tabs</strong> page.</p>
+</li>
+<li><p class="first">When you publish a database, add your search definition from
+the <strong>Search tabs</strong> drop-down list in the Publish dialog.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="troubleshootSearchServices.html" title="Troubleshoot search services"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="createSearchTabs.html" title="Create Search tabs"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" >GEE Server administration</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

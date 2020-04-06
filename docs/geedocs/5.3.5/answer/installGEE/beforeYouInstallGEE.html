@@ -1,0 +1,345 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Before you install Google Earth Enterprise &#8212; Google Earth Enterprise 5.3.5 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Installing Google Earth Enterprise" href="installGoogleEarth.html" />
+    <link rel="prev" title="System requirements for Fusion and GEE Server" href="sysReqFusionGEEServer.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="installGoogleEarth.html" title="Installing Google Earth Enterprise"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="sysReqFusionGEEServer.html" title="System requirements for Fusion and GEE Server"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../installGEE.html" accesskey="U">Install Google Earth Enterprise</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="sysReqFusionGEEServer.html"
+                        title="previous chapter">System requirements for Fusion and GEE Server</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="installGoogleEarth.html"
+                        title="next chapter">Installing Google Earth Enterprise</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp8.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp8.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="before-you-install-google-earth-enterprise">
+<h1>Before you install Google Earth Enterprise<a class="headerlink" href="#before-you-install-google-earth-enterprise" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<ul class="simple">
+<li><a class="reference internal" href="#overview-before-install-gee"><span class="std std-ref">Overview</span></a></li>
+<li><a class="reference internal" href="#configuring-host-volumes"><span class="std std-ref">Configuring Your Host Volumes</span></a></li>
+<li><a class="reference internal" href="#configuring-multiple-storage-devices-gee"><span class="std std-ref">Configuring Multiple Storage Devices</span></a></li>
+<li><a class="reference internal" href="#planning-location-asset-root-gee"><span class="std std-ref">Planning the Location of Your Asset Root</span></a></li>
+<li><a class="reference internal" href="#planning-location-publish-root-gee"><span class="std std-ref">Planning the Location of Your Publish Root</span></a></li>
+<li><a class="reference internal" href="#setting-up-gee-users"><span class="std std-ref">Setting Up Google Earth Enterprise Users</span></a></li>
+<li><a class="reference internal" href="#deciding-which-products-install"><span class="std std-ref">Deciding Which Products To Install</span></a></li>
+</ul>
+<p class="rubric" id="overview-before-install-gee">Overview</p>
+<p>Before you install the Google Earth Enterprise software, you must
+configure your hardware, network, and Google Earth Enterprise
+users. You must also think about where you want to store
+Google Earth Enterprise Fusion data and where you want to publish
+Google Earth Enterprise Fusion databases. You will need to
+provide this information during installation, but you should
+consider these decisions in advance before you begin the
+installation procedure.</p>
+<p>The following sections provide information about what the Google
+Earth Enterprise software requires in each of these areas.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Be sure to complete all of the tasks described in these
+sections before installing the Google Earth Enterprise
+software.</p>
+</div>
+<p class="rubric" id="configuring-host-volumes">Configuring The Host Volumes</p>
+<p>Google Earth Enterprise Fusion data (resources, projects, and
+databases) require a local name and network path to resolve the
+locations of both source files and related Google Earth Enterprise
+Fusion data. For that reason, you cannot change the network naming
+convention you adopt for host volumes without invalidating Google
+Earth Enterprise Fusion data.</p>
+<p>On a single workstation setup (non-network based), the network
+path and local path for Google Earth Enterprise Fusion data are
+identical. However, because migration to a network-based
+configuration is inevitable, we recommend that you use a network
+naming convention for any new volume hosting Google Earth
+Enterprise Fusion data or source data, whether it is part of a
+network initially or not.</p>
+<p>Because Linux systems frequently use either <code class="docutils literal notranslate"><span class="pre">/vol(*)</span></code> or
+<code class="docutils literal notranslate"><span class="pre">/</span></code><code class="docutils literal notranslate"><span class="pre">data(*)</span></code> as the local volume definition on a new system,
+using this convention for the initial Google Earth Enterprise
+Fusion data location can cause name conflicts if you later switch
+from a single workstation to a network-based configuration. For
+example, if you initially define <code class="docutils literal notranslate"><span class="pre">/vol1/assets</span></code> as the network
+location for a Google Earth Enterprise Fusion <em>asset root</em>, and
+you later add another workstation that has a local volume called
+<code class="docutils literal notranslate"><span class="pre">/vol1</span></code>, that workstation cannot reference
+<code class="docutils literal notranslate"><span class="pre">/vol1/assets</span></code>through the network because of the name conflict
+with its local volume definition. (See <a class="reference internal" href="#planning-location-asset-root-gee"><span class="std std-ref">Planning the Location of
+Your Asset Root</span></a> for more information about the asset root.)</p>
+<p>You can work around this problem by adopting a unique naming
+convention for all volumes on your network (such as <code class="docutils literal notranslate"><span class="pre">/vol1</span></code> …
+<code class="docutils literal notranslate"><span class="pre">/voln</span></code>). However, we suggest that you use <code class="docutils literal notranslate"><span class="pre">/gevol</span></code> as an
+alternative volume naming convention because it is unlikely to
+conflict with standard Linux volume definitions. The following
+diagram illustrates this point.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On a single workstation that does not mount
+<code class="docutils literal notranslate"><span class="pre">/gevol</span></code> on a network, <code class="docutils literal notranslate"><span class="pre">/gevol</span></code> is also required as a local
+volume definition.</p>
+</div>
+<p class="rubric" id="configuring-multiple-storage-devices-gee">Configuring Multiple Storage Devices</p>
+<p>Google Earth Enterprise Server and the Google Earth Enterprise
+Fusion asset root, source volumes, and publish root require large
+amounts of disk storage space. Google Earth Enterprise Fusion
+requires about three times as much storage space as Google Earth
+Enterprise Server. The storage space can be either in the form of
+internal disks, directly attached storage devices,
+network-attached storage (NAS) devices, or storage area network
+(SAN) devices. Typically, these devices are configured into
+redundant arrays of independent disks (RAIDs) and presented to the
+operating system as volumes. Volumes can be several hundred
+gigabytes up to tens of terabytes.</p>
+<p>The difference between configuring a workstation with a single
+hard disk and a workstation with multiple volumes relates to the
+mount point definitions for the source and asset volumes.When
+configuring a Linux workstation, we strongly recommend that you
+use the following mount point naming conventions:</p>
+<ul>
+<li><p class="first"><strong>Single volume</strong></p>
+<p>Mount the single drive to slash (/). All data
+(<code class="docutils literal notranslate"><span class="pre">/gevol/assets</span></code>, <code class="docutils literal notranslate"><span class="pre">/gevol/src</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">/gevol/published_dbs</span></code>) resides on that drive with the local
+path defined using the <code class="docutils literal notranslate"><span class="pre">/gevol</span></code> naming convention.</p>
+</li>
+<li><p class="first"><strong>Two volumes - a small system volume and a larger data
+volume</strong></p>
+<p>Mount the small system drive to slash (<code class="docutils literal notranslate"><span class="pre">/</span></code>). Mount the larger
+data drive to <code class="docutils literal notranslate"><span class="pre">/gevol</span></code>. Source and asset data volumes can
+then be defined as <code class="docutils literal notranslate"><span class="pre">/gevol/assets</span></code> and <code class="docutils literal notranslate"><span class="pre">/gevol/src</span></code>.</p>
+</li>
+<li><p class="first"><strong>Three volumes - a small system volume and two larger data
+volumes</strong></p>
+<p>Mount the small system drive to slash (<code class="docutils literal notranslate"><span class="pre">/</span></code>). Mount the first
+large data drive to <code class="docutils literal notranslate"><span class="pre">/gevol/assets</span></code>. Mount the second large
+data drive to <code class="docutils literal notranslate"><span class="pre">/gevol/src</span></code>.</p>
+</li>
+<li><p class="first"><strong>More than three volumes</strong></p>
+<p>There are several strategies for storing very large data sets.
+Google Earth Enterprise Fusion can read from and write to
+multiple volumes. For more information, you can request help on
+our <a class="reference external" href="http://slack.opengee.org/">Slack channel</a>.</p>
+</li>
+</ul>
+<p>It is also important to keep internal and external storage devices
+separated so that if your internal server goes down, it does not
+affect your ability to serve published data to external clients.
+Likewise, if your external server goes down, you can replace it
+and publish from the internal storage device. In addition (and
+perhaps more important), keeping your internal and external
+storage devices separate reduces the possibility of performance
+problems that could occur if you are building a large data set or
+a client requests a time-consuming search.</p>
+<p class="rubric" id="planning-location-asset-root-gee">Planning the Location of Your Asset Root</p>
+<p>During the Google Earth Enterprise Fusion installation procedure,
+you must specify a location for your <em>asset root</em>. The asset root
+is the main location where all of the assets (resources, map
+layers, projects, and databases) are stored that are created with
+Google Earth Enterprise Fusion.</p>
+<p>The asset root must be located on a single volume. It cannot be
+split across multiple volumes. Therefore, it is important to think
+ahead and allocate as much storage space as possible for the asset
+root.</p>
+<p>Unless you have an established partitioning scheme for all of your
+storage devices, we recommend that you accept the default
+partitioning scheme presented to you while installing Linux. That
+scheme gives you a reasonable amount of space in <code class="docutils literal notranslate"><span class="pre">/opt</span></code> for
+Google Earth Enterprise and other system software, a small amount
+of space for <code class="docutils literal notranslate"><span class="pre">/home</span></code>, and the remaining space on your storage
+device for the asset root.</p>
+<p>We also recommend that you accept the default volume designation
+for your asset root during installation (<code class="docutils literal notranslate"><span class="pre">/gevol/assets</span></code>),
+unless that name conflicts with your established naming
+conventions.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">we recommend that you dedicate a network-attached
+storage device (NAS) for your asset root.</p>
+</div>
+<p class="rubric" id="planning-location-publish-root-gee">Planning the Location of Your Publish Root</p>
+<p>During the Google Earth Enterprise Server installation procedure,
+you must specify a volume for the <em>publish root</em>. The publish root
+is the directory in which all of your published databases are
+stored.</p>
+<p>If you specify the same volume as the asset root, when you publish
+a database, Google Earth Enterprise Fusion registers the database
+on the specified volume and sets symbolic links to the database
+files. If you specify a different volume than the asset root, when
+you publish a database, Google Earth Enterprise Fusion registers
+the database on the specified volume and then copies all of the
+database files to the designated volume.</p>
+<p>For example, if you specify <code class="docutils literal notranslate"><span class="pre">/gevol/assets</span></code> for your asset root
+and <code class="docutils literal notranslate"><span class="pre">/gevol/published_dbs</span></code> for your publish root, when you
+publish a database, Google Earth Enterprise Fusion registers the
+database on <code class="docutils literal notranslate"><span class="pre">gevol</span></code> and sets hard links to the database files;
+no copying is necessary.</p>
+<p>However, if you specify <code class="docutils literal notranslate"><span class="pre">/gevol/assets</span></code> for your asset root and
+<code class="docutils literal notranslate"><span class="pre">/data1/published_dbs</span></code> for your publish root, when you publish a
+database, Google Earth Enterprise Fusion copies all of the
+database files from <code class="docutils literal notranslate"><span class="pre">/gevol/assets</span></code> to <code class="docutils literal notranslate"><span class="pre">/data1/published_dbs</span></code>
+(unless you allow symbolic links during installation). Copying
+takes more time as well as extra disk space.</p>
+<p class="rubric" id="setting-up-gee-users">Setting Up Google Earth Enterprise Users</p>
+<p>The Google Earth Enterprise installer automatically configures
+certain system users to perform background tasks at the system
+level. If you accept the default user names and allow the
+installer to create those users on your local workstation, you are
+implementing local authentication only. Local authentication is
+designed for standalone workstations only.</p>
+<p>If you are using Google Earth Enterprise over a network with at
+least two workstations, storage devices, and/or servers, we
+strongly recommend that you use a centralized network
+authentication system, such as LDAP, NIS, or one of the many
+commercially available systems.</p>
+<p>If you use a centralized network authentication system, you must
+add the following users to your authentication system’s user list:</p>
+<ul class="simple">
+<li><strong>gefusionuser</strong></li>
+<li><strong>geapacheuser</strong></li>
+<li><strong>gepguser</strong></li>
+</ul>
+<p>The primary group for all of these users is <strong>gegroup</strong>.</p>
+<p>If you are in a multi-user environment in which multiple
+workstations share a common asset root on a NAS/SAN, <strong>these users
+must have the same UID on all devices, so you must assign them
+explicitly in both your network authentication system and in
+GEE</strong>.</p>
+<p>Be sure to configure each GEE workstation, storage device, and GEE
+Server to use your network authentication system. For more
+information, see your network authentication system documentation.</p>
+<p class="rubric">Customizing Google Earth Enterprise User Names</p>
+<p>You can use customized user names and group names. Specify the
+custom user and group names when running the installers.</p>
+<p class="rubric" id="deciding-which-products-install">Deciding Which Products To Install</p>
+<p>You do not need to install all products on all devices. To
+determine which products to install, follow these general
+guidelines:</p>
+<ul class="simple">
+<li>Install Google Earth Enterprise Fusion and Google Earth
+Enterprise Server on the server machine selected to import your
+source GIS data and create flyable 3D and 2D databases. A
+system in this configuration is typically called the
+“development machine” since its primary task is to build
+flyable databases and only a small number of users will view
+the flyable data for quality assurance testing.</li>
+<li>Install the Google Earth Enterprise Fusion tutorial files on
+the “development machine” for users who are new to Google Earth
+Enterprise Fusion.</li>
+<li>Install only the Google Earth Enterprise Server software on the
+server machine selected to only host flyable 3D and 2D
+databases only. All authorized end users will connect to this
+system – typically referred to as the “production machine” –
+to view the flyable databases. This machine must be accessible
+through the network from the development machine in order for
+database publishes. Users who will not have direct network
+access to their production machines, or users who plan to
+update remote systems with external hard drives, must also
+install the “Disconnected Publishing Add-on” for additional
+tools.</li>
+</ul>
+<p>The following diagram shows a sample system configuration.</p>
+<p><img alt="Networking diagram" src="../../images/entnetwork.jpg" /></p>
+<p>In this example, there are two server-class machines assigned to
+data building and data hosting tasks, plus one workstation to be
+used for data management.</p>
+<p>A GIS specialist uses the workstation to remotely log in to the
+development machine with Google Earth Enterprise Fusion Pro
+installed to import source GIS data and output a flyable globe to
+publish for end users. Google Earth Enterprise Server software is
+also installed on the development machine so the GIS specialist
+may perform quality assurance tests on the data before publishing
+to the production machine.</p>
+<p>Only Google Earth Enterprise Server is installed on the production
+machine which authorized end users in the network may access with
+Google Earth Enterprise Client (EC) for 3D databases, or a
+compatible web browser for 2D databases.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="installGoogleEarth.html" title="Installing Google Earth Enterprise"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="sysReqFusionGEEServer.html" title="System requirements for Fusion and GEE Server"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../installGEE.html" >Install Google Earth Enterprise</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

@@ -33,18 +33,12 @@ Configure Tutorial Workspace
       It can be downloaded all together, or for convenience it can be
       downloaded in two parts.
 
-      -  `FusionTutorial-Full.tar.gz <http://data.opengee.org/FusionTutorial-Full.tar.gz>`__
-         [`md5 <http://data.opengee.org/FusionTutorial-Full.tar.gz.md5>`__]
+      -  `FusionTutorial-Full.tar.gz <https://opengee-dev.s3.amazonaws.com/FusionTutorial-Full.tar.gz>`__
          - Contains all the source data needed to complete the tutorial
          - 600 MB
-      -  `FusionTutorial-NoMosaicImagery.tar.gz <http://data.opengee.org/FusionTutorial-NoMosaicImagery.tar.gz>`__
-         [`md5 <http://data.opengee.org/FusionTutorial-NoMosaicImagery.tar.gz.md5>`__]
+      -  `FusionTutorial-NoMosaicImagery.tar.gz <https://opengee-dev.s3.amazonaws.com/FusionTutorial-NoMosaicImagery.tar.gz>`__
          - Contains all the source data needed to complete the tutorial,
          except for the Mosaic section - 282 MB
-      -  `FusionTutorial-Imagery-mosaic.tar.gz <http://data.opengee.org/FusionTutorial-Imagery-mosaic.tar.gz>`__
-         [`md5 <http://data.opengee.org/FusionTutorial-Imagery-mosaic.tar.gz.md5>`__]
-         - Contains only the souce data needed to complete the Mosaic
-         section of the tutorial - 318 MB
 
       Once the source files are downloaded, as root, create the
       ``/opt/google/share/tutorials/fusion`` directory if it doesn't

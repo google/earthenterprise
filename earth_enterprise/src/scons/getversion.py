@@ -384,11 +384,15 @@ def main():
     parser.add_argument("-l", "--long", action="store_true", help="Output long format of version string")
     args = parser.parse_args()
 
-    print open_gee_version.get_long() if args.long else open_gee_version.get_short()
+    sys.stdout.write(open_gee_version.get_long() if args.long else open_gee_version.get_short())
+    sys.stdout.write('\n')
+    sys.stdout.flush()
 
     warning_message = open_gee_version.get_warning_message()
     if warning_message is not None:
-        print >> sys.stderr, warning_message
+        sys.stderr.write(warning_message)
+        sys.stderr.write('\n')
+        sys.stderr.flush()
 
 
 __all__ = ['open_gee_version']
