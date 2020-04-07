@@ -95,8 +95,7 @@ sudo yum install -y ant bzip2 doxygen gcc-c++ patch python-argparse python-lxml 
 ### For RHEL6 and Centos 6
 
 ```bash
-sudo yum install -y ant bzip2 doxygen gcc-c++ patch swig tar \
-                    python27 python-argparse python27-lxml python27-setuptools
+sudo yum install -y ant bzip2 doxygen gcc-c++ patch tar python27 python-argparse python27-lxml python27-setuptools
 ```
 
 Also install the devtoolset toolchain.
