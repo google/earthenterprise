@@ -89,7 +89,8 @@ ValidOptions = set(
      'long_version',     # Value to override the Open GEE long version string.
      'build_folder',     # where to put the build output and intermediate files
      'cache_dir',        # use a cache dir to speed up build
-     'third_party_only'  # build third party code only
+     'third_party_only', # build third party code only
+     'portable_3rd_libs' # build third party code needed for portable server only
      ]);
 
 for argkey in ARGUMENTS:
@@ -113,6 +114,7 @@ internal = int(ARGUMENTS.get('internal', 0))
 native_cc = not int(ARGUMENTS.get('cross_cc', 0))
 coverage = int(ARGUMENTS.get('coverage', 0))
 bundle_3rd_libs = int(ARGUMENTS.get('bundle_3rd_libs', 0))
+portable_3rd_libs = int(ARGUMENTS.get('portable_3rd_libs', 0))
 cc_dir = ARGUMENTS.get('cc_dir', None)
 log_performance = int( ARGUMENTS.get( 'log_performance', 0 ) )
 cpp_standard = ARGUMENTS.get('cpp_standard', 'gnu++11')
@@ -475,6 +477,7 @@ env = khEnvironment(
     coverage=coverage,
     native_cc=native_cc,
     bundle_3rd_libs=bundle_3rd_libs,
+    portable_3rd_libs=portable_3rd_libs,
     cc_dir=cc_dir,
     is_min_ubuntu=is_min_ubuntu,
     exportdirs=exportdirs,
