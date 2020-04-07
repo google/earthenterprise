@@ -57,7 +57,6 @@ if cache_dir:
 third_party_only = ARGUMENTS.get('third_party_only', 0)
 portable_3rd_libs = int(ARGUMENTS.get('portable_3rd_libs', 0))
 
-
 # list of dirs to try to build (if present)
 if os.path.isfile('.treat_third_party_as_sdk'):
   # this is useful if you want to share pre-built 3rd party builds
