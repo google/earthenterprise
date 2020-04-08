@@ -42,14 +42,13 @@ def PipePexpectStreamNonBlocking(source_stream, destination_stream):
     except (pexpect.TIMEOUT, pexpect.EOF):
       return
 
-def ExecuteCmd(os_cmd, use_shell=False, cwd=None):
+def ExecuteCmd(os_cmd, use_shell=False):
   """Execute os command and log results."""
   print "Executing: {0}".format(os_cmd if use_shell else ' '.join(os_cmd))
   process = None
   try:
     process = subprocess.Popen(os_cmd, stdin=None, stdout=subprocess.PIPE,
-                               stderr=subprocess.PIPE, bufsize=0, shell=use_shell
-                               cwd=cwd)
+                               stderr=subprocess.PIPE, bufsize=0, shell=use_shell)
     stdout_stream = fdpexpect.fdspawn(process.stdout)
     stderr_stream = fdpexpect.fdspawn(process.stderr)
     # process.returncode is None until the subprocess completes. Then, it gets

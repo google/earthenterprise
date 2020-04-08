@@ -48,7 +48,7 @@ import opengee.version
 def build_swig(source_dir):
     opengee_build_dir = os.path.join(source_dir, 'NATIVE-REL-x86_64')
     swig_builder = subprocess.Popen('python2.7 /usr/bin/scons -j1 release=1 portable_3rd_libs=1', 
-                                    use_shell=True, cwd=source_dir, env=os.environ.copy())
+                                    shell=True, cwd=source_dir, env=os.environ.copy())
     if swig_builder.wait() != 0:
       raise ValueError('Swig build failed!')
     
