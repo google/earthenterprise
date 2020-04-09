@@ -36,5 +36,16 @@ env['CPPFLAGS'] += [
 objects = map(lambda f: env.StaticObject(f), proto_inputs)
 geprotos = env.staticLib('geprotos', objects)
 
+for gen_pb_file in proto_inputs:
+  # scons seems to have issues resolving dependencies of dependencies when 
+  # the first file is generated (in this case the .cc file). Scons does
+  # not seem to properly resolve the .cc file needs the .h file (also generated)
+  # and there by this means the .so file needs the .h file too.
+  # This can lead to build errors if the generated files are not created
+  # soon enough. So adding dependencies explicitly
+  proto_out_basename = os.path.splitext(str(gen_pb_file))[0]
+  env.Depends(proto_out_basename+'.os', proto_out_basename+'.h')
+  env.Depends(proto_out_basename+'.os', proto_out_basename+'.cc')
+
 env.test('protobuf_unittest', 'protobuf_unittest.cpp',
          LIBS=[geprotos, 'geprotobuf'])
