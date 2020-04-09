@@ -72,13 +72,15 @@
 <h1>Ports<a class="headerlink" href="#ports" title="Permalink to this headline">¶</a></h1>
 <div class="docutils container">
 <div class="content docutils container">
-<p>GEE uses the following ports:</p>
+<p>GEE Server uses the following ports:</p>
 <ul class="simple">
-<li>Port 80 is used for publishing.</li>
-<li>Port 443 is an optional port that can be used for streaming and
-search when correctly configured for HTTPS.</li>
-<li>Ports 13031, 13032, and 13033 are used by Fusion when
-performing its processes.</li>
+<li>Port 80 is used for publishing and streaming data to clients.</li>
+<li>Port 443 is used instead of port 80 when GEE is configured for HTTPS.</li>
+</ul>
+<p>GEE Fusion uses the following ports:</p>
+<ul class="simple">
+<li>Ports 13031, 13032, and 13033 are used to communicate between the
+Fusion master and Fusion slaves.</li>
 </ul>
 </div>
 </div>
