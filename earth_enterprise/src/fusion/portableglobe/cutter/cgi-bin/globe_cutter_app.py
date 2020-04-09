@@ -36,7 +36,7 @@ import urllib2
 from contextlib import closing
 
 import defusedxml.ElementTree as etree
-
+import xml.etree.ElementTree.ElementTree as etree2
 
 from common import form_wrap
 from common import postgres_manager_wrap
@@ -205,7 +205,7 @@ class GlobeBuilder(object):
     with open(self.polygon_file, "w") as fp:
       if polygon:
         # Check XML validity and standardize representation
-        xml = etree(etree.fromstring(polygon))
+        xml = etree2(etree.fromstring(polygon))
         xml.write(fp, xml_declaration=True, encoding='UTF-8')
         self.Status("Saved polygon to %s" % self.polygon_file)
       else:

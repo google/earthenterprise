@@ -148,7 +148,7 @@ sudo yum install -y \
   libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel pcre pcre-devel \
   proj-devel python27 \
-  python27-pip python27-devel python2-defusedxml python27-setuptools python-unittest2 \
+  python27-pip python27-devel python27-setuptools python-unittest2 \
   python-devel rpm-build rpmrebuild rsync scons shunit2 \
   xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
 ```
