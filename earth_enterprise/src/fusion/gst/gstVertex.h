@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +22,7 @@
 #include <stdio.h>
 #include <vector>
 #include <deque>
+#include <cstdint>
 
 #include "common/khTypes.h"
 
@@ -254,6 +256,6 @@ class Vert2 {
 };
 
 typedef Vert2<double> gstVert2D;
-typedef Vert2<int16> gstVert2S;
+typedef Vert2<std::int16_t> gstVert2S;
 
 #endif  // GEO_EARTH_ENTERPRISE_SRC_FUSION_GST_GSTVERTEX_H_

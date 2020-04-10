@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +24,8 @@
 #include <common/base/macros.h>
 #include <string>
 #include <memory>
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "common/khTileAddr.h"
 #include "common/khGuard.h"
 
@@ -52,19 +54,19 @@
 // *** partially specialized that have the routines to manipulate these
 // *** tiles. See some of the other headers in this directory ...
 // ****************************************************************************
-template <class T, uint tileWidth, uint tileHeight, uint numcomp>
+template <class T, unsigned int tileWidth, unsigned int tileHeight, unsigned int numcomp>
 class khRasterTile {
  public:
   typedef T PixelType;
-  static const uint TileWidth  = tileWidth;
-  static const uint TileHeight = tileHeight;
-  static const uint NumComp    = numcomp;
+  static const unsigned int TileWidth  = tileWidth;
+  static const unsigned int TileHeight = tileHeight;
+  static const unsigned int NumComp    = numcomp;
   static const khTypes::StorageEnum Storage
   = khTypes::Helper<PixelType>::Storage;
-  static const uint BandPixelCount  = tileWidth * tileHeight;
-  static const uint TotalPixelCount = BandPixelCount * numcomp;
-  static const uint BandBufSize     = BandPixelCount * sizeof(PixelType);
-  static const uint TotalBufSize    = TotalPixelCount * sizeof(PixelType);
+  static const unsigned int BandPixelCount  = tileWidth * tileHeight;
+  static const unsigned int TotalPixelCount = BandPixelCount * numcomp;
+  static const unsigned int BandBufSize     = BandPixelCount * sizeof(PixelType);
+  static const unsigned int TotalBufSize    = TotalPixelCount * sizeof(PixelType);
 
  public:
   // actual storage
@@ -72,15 +74,15 @@ class khRasterTile {
 
   // pointers to each band - no memory ownership
   PixelType* bufs[numcomp];
-  uchar* ucharBufs[numcomp];
+  unsigned char* ucharBufs[numcomp];
 
   khRasterTile(void)
     : storage(TransferOwnership(new PixelType[TotalPixelCount])),
       is_monochromatic_(false) {
     // now fill in the pointers to each band
-    for (uint i = 0; i < numcomp; ++i) {
+    for (unsigned int i = 0; i < numcomp; ++i) {
       bufs[i] = &storage[i * BandPixelCount];
-      ucharBufs[i] = reinterpret_cast<uchar*>(bufs[i]);
+      ucharBufs[i] = reinterpret_cast<unsigned char*>(bufs[i]);
     }
   }
 
@@ -88,9 +90,9 @@ class khRasterTile {
     : storage(TransferOwnership(new PixelType[TotalPixelCount])),
       is_monochromatic_(is_monochromatic) {
     // now fill in the pointers to each band
-    for (uint i = 0; i < numcomp; ++i) {
+    for (unsigned int i = 0; i < numcomp; ++i) {
       bufs[i] = &storage[i * BandPixelCount];
-      ucharBufs[i] = reinterpret_cast<uchar*>(bufs[i]);
+      ucharBufs[i] = reinterpret_cast<unsigned char*>(bufs[i]);
     }
   }
 
@@ -100,57 +102,57 @@ class khRasterTile {
   }
 
   void FillWithZeros(void) {
-    for (uint i = 0; i < numcomp; ++i) {
+    for (unsigned int i = 0; i < numcomp; ++i) {
       memset(bufs[i], 0, BandBufSize);
     }
   }
   void Fill(T t) {
-    for (uint b = 0; b < numcomp; ++b) {
-      for (uint i = 0; i < BandPixelCount; ++i) {
+    for (unsigned int b = 0; b < numcomp; ++b) {
+      for (unsigned int i = 0; i < BandPixelCount; ++i) {
         bufs[b][i] = t;
       }
     }
   }
-  void FillQuadWithZeros(uint quad) {
-    uint32 Qoffset = QuadtreePath::QuadToBufferOffset(quad, tileWidth,
+  void FillQuadWithZeros(unsigned int quad) {
+    std::uint32_t Qoffset = QuadtreePath::QuadToBufferOffset(quad, tileWidth,
                                                       tileHeight);
-    for (uint i = 0; i < numcomp; ++i) {
-      for (uint j = 0; j < tileHeight/2; ++j) {
-        uint32 quadLineOffset = Qoffset + j * tileWidth;
+    for (unsigned int i = 0; i < numcomp; ++i) {
+      for (unsigned int j = 0; j < tileHeight/2; ++j) {
+        std::uint32_t quadLineOffset = Qoffset + j * tileWidth;
         memset(bufs[i] + quadLineOffset,
                0, (tileWidth/2)*sizeof(PixelType));
       }
     }
   }
-  void FillQuad(uint quad, T value) {
-    uint32 Qoffset = QuadtreePath::QuadToBufferOffset(quad, tileWidth,
+  void FillQuad(unsigned int quad, T value) {
+    std::uint32_t Qoffset = QuadtreePath::QuadToBufferOffset(quad, tileWidth,
                                                       tileHeight);
-    for (uint b = 0; b < numcomp; ++b) {
-      for (uint j = 0; j < tileHeight/2; ++j) {
-        uint32 quadLineOffset = Qoffset + j * tileWidth;
-        for (uint i = quadLineOffset; i < quadLineOffset + tileWidth/2; ++i)
+    for (unsigned int b = 0; b < numcomp; ++b) {
+      for (unsigned int j = 0; j < tileHeight/2; ++j) {
+        std::uint32_t quadLineOffset = Qoffset + j * tileWidth;
+        for (unsigned int i = quadLineOffset; i < quadLineOffset + tileWidth/2; ++i)
           bufs[b][i] = value;
       }
     }
   }
 
-  void FillExtent(const khExtents<uint32> &extents, T value) {
-    for (uint b = 0; b < numcomp; ++b) {
+  void FillExtent(const khExtents<std::uint32_t> &extents, T value) {
+    for (unsigned int b = 0; b < numcomp; ++b) {
       PixelType* row_start = bufs[b] + extents.beginRow() * tileWidth;
-      for (uint j = extents.beginRow();
+      for (unsigned int j = extents.beginRow();
            j < extents.endRow(); ++j, row_start += tileWidth) {
-        for (uint i = extents.beginCol(); i < extents.endCol(); ++i) {
+        for (unsigned int i = extents.beginCol(); i < extents.endCol(); ++i) {
           *(row_start + i) = value;
         }
       }
     }
   }
 
-  void FillExtentWithZeros(const khExtents<uint32> &extents) {
-    for (uint32 b = 0; b < numcomp; ++b) {
+  void FillExtentWithZeros(const khExtents<std::uint32_t> &extents) {
+    for (std::uint32_t b = 0; b < numcomp; ++b) {
       PixelType* row_start = bufs[b] + extents.beginRow() * tileWidth +
           extents.beginCol();
-      for (uint32 j = extents.beginRow();
+      for (std::uint32_t j = extents.beginRow();
            j < extents.endRow(); ++j, row_start += tileWidth) {
         memset(row_start, 0, extents.width()*sizeof(PixelType));
       }
@@ -162,7 +164,7 @@ class khRasterTile {
   // used by derived classes to skip allocation
   khRasterTile(Skip, bool is_monochromatic)
       : is_monochromatic_(is_monochromatic) {
-    for (uint i = 0; i < numcomp; ++i) {
+    for (unsigned int i = 0; i < numcomp; ++i) {
       bufs[i] = 0;
       ucharBufs[i] = 0;
     }
@@ -175,35 +177,35 @@ class khRasterTile {
 
 // explicit specialization for uchar-PixelType instantiations.
 template <>
-inline void khRasterTile<uchar, RasterProductTileResolution,
-                         RasterProductTileResolution, 1>::Fill(uchar t) {
+inline void khRasterTile<unsigned char, RasterProductTileResolution,
+                         RasterProductTileResolution, 1>::Fill(unsigned char t) {
   memset(bufs[0], t, BandPixelCount);
 }
 
 template <>
-inline void khRasterTile<uchar, RasterProductTileResolution,
-                         RasterProductTileResolution, 3>::Fill(uchar t) {
-  for (uint b = 0; b < NumComp; ++b) {
+inline void khRasterTile<unsigned char, RasterProductTileResolution,
+                         RasterProductTileResolution, 3>::Fill(unsigned char t) {
+  for (unsigned int b = 0; b < NumComp; ++b) {
     memset(bufs[b], t, BandPixelCount);
   }
 }
 
 template <>
-inline void khRasterTile<uchar, ImageryQuadnodeResolution,
-                         ImageryQuadnodeResolution, 3>::Fill(uchar t) {
-  for (uint b = 0; b < NumComp; ++b) {
+inline void khRasterTile<unsigned char, ImageryQuadnodeResolution,
+                         ImageryQuadnodeResolution, 3>::Fill(unsigned char t) {
+  for (unsigned int b = 0; b < NumComp; ++b) {
     memset(bufs[b], t, BandPixelCount);
   }
 }
 
 // Specialization for one band, 8 bit per pixel raster.
 template <>
-inline void khRasterTile<uchar, RasterProductTileResolution,
+inline void khRasterTile<unsigned char, RasterProductTileResolution,
                          RasterProductTileResolution, 1>::FillExtent(
-                             const khExtents<uint32> &extents, uchar value) {
+                             const khExtents<std::uint32_t> &extents, unsigned char value) {
   PixelType* row_start = bufs[0] + extents.beginRow() * TileWidth +
       extents.beginCol();
-  for (uint32 j = extents.beginRow();
+  for (std::uint32_t j = extents.beginRow();
        j < extents.endRow(); ++j, row_start += TileWidth) {
     memset(row_start, value, extents.width());
   }
@@ -211,26 +213,26 @@ inline void khRasterTile<uchar, RasterProductTileResolution,
 
 // Specialization for one band, 8 bit per pixel raster.
 template <>
-inline void khRasterTile<uchar, RasterProductTileResolution,
+inline void khRasterTile<unsigned char, RasterProductTileResolution,
                          RasterProductTileResolution, 1>::FillExtentWithZeros(
-                             const khExtents<uint32> &extents) {
-  FillExtent(extents, static_cast<uchar>(0));
+                             const khExtents<std::uint32_t> &extents) {
+  FillExtent(extents, static_cast<unsigned char>(0));
 }
 
 // ****************************************************************************
 // ***  ConvenienceNames
 // ****************************************************************************
-typedef khRasterTile<uchar, RasterProductTileResolution,
+typedef khRasterTile<unsigned char, RasterProductTileResolution,
                      RasterProductTileResolution, 1> AlphaProductTile;
-typedef khRasterTile<uchar, RasterProductTileResolution,
+typedef khRasterTile<unsigned char, RasterProductTileResolution,
                      RasterProductTileResolution, 3> ImageryProductTile;
-typedef khRasterTile<int16, RasterProductTileResolution,
+typedef khRasterTile<std::int16_t, RasterProductTileResolution,
                      RasterProductTileResolution, 1> HeightmapInt16ProductTile;
 typedef khRasterTile<float32, RasterProductTileResolution,
                      RasterProductTileResolution, 1>
 HeightmapFloat32ProductTile;
 
-typedef khRasterTile<uchar, ImageryQuadnodeResolution,
+typedef khRasterTile<unsigned char, ImageryQuadnodeResolution,
                      ImageryQuadnodeResolution, 3> ImageryFFTile;
 
 // special tiles used for "one extra" tmesh samples
@@ -257,9 +259,9 @@ class khRasterTileBorrowBufs : public TileType {
       // tell my base to skipalloc
       : TileType(TileType::SkipAlloc, is_monochromatic) {
     // assign the buf pointer from my args
-    for (uint i = 0; i < TileType::NumComp; ++i) {
+    for (unsigned int i = 0; i < TileType::NumComp; ++i) {
       this->bufs[i] = borrow[i];
-      this->ucharBufs[i] = reinterpret_cast<uchar*>(borrow[i]);
+      this->ucharBufs[i] = reinterpret_cast<unsigned char*>(borrow[i]);
     }
   }
 };

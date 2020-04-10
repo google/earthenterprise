@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,13 +56,13 @@ class RecordFilter {
   bool ReadQueryResultsFile(const std::string& path,
                             const gstSharedSource &source);
 
-  uint32 Intersect(const gstBBox& b, std::vector<int>* match_list);
+  std::uint32_t Intersect(const gstBBox& b, std::vector<int>* match_list);
  private:
   DISALLOW_COPY_AND_ASSIGN(RecordFilter);
 
   FilterConfig config;
   gstGeoIndexHandle geoIndex;
-  uint32 currentCount;
+  std::uint32_t currentCount;
   khDeletingVector<gstSelectRule> selectRules;
 };
 
@@ -72,7 +73,7 @@ class PreviewSelector :
  public:
   PreviewSelector(const gstSharedSource &source,
                   const QueryConfig &config_,
-                  const std::vector<geMultiRange<uint32> > &validLevels_,
+                  const std::vector<geMultiRange<std::uint32_t> > &validLevels_,
                   const khTilespace &tilspace_, double oversizeFactor);
   virtual ~PreviewSelector(void) { }
 
@@ -84,7 +85,7 @@ class PreviewSelector :
 
   bool CanReuse(const gstSharedSource &source_,
                 const QueryConfig &config_,
-                const std::vector<geMultiRange<uint32> > &validLevels_) const {
+                const std::vector<geMultiRange<std::uint32_t> > &validLevels_) const {
     return ((source == source_) &&
             (config == config_) &&
             (validLevels == validLevels_));
@@ -92,7 +93,7 @@ class PreviewSelector :
 
  private:
   const QueryConfig config;
-  const std::vector<geMultiRange<uint32> > validLevels;
+  const std::vector<geMultiRange<std::uint32_t> > validLevels;
   gstSharedSource source;
   const khTilespace& tilespace;
   double oversizeFactor;

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@
 #include <endian.h>
 #include <common/base/macros.h>
 #include <khTypes.h>
+#include <cstdint>
 #include <khGuard.h>
 #include <khSimpleException.h>
 #include <khEndianImpl.h>
@@ -40,7 +42,7 @@
 // ***  treat them as a stream for pushing/pulling things to be serialized.
 
 // ***  Things that support streaming to/from EndianBuffers
-// ***  - numeric types (e.g uint8, int16, float, etc.)
+// ***  - numeric types (e.g std::uint8_t, std::int16_t, float, etc.)
 // ***  - std::string
 // ***        -> serialized as zero-terminated string
 // ***  - FixedLengthString(str, len, pad=0)
@@ -54,25 +56,25 @@
 // ***  enum Color {Oracle, Red, Green, Blue};
 // ***  ...
 // ***  LittleEndianWriteBuffer buf;
-// ***  int32 myi = 123;
+// ***  std::int32_t myi = 123;
 // ***  std::string mystr = "Hello World";
 // ***  float64 myf = 456.789;
 // ***  Color myc = Red;
 // ***  buf << myi << mystr << myf
-// ***      << EncodeAs<uint8>(myc)
+// ***      << EncodeAs<std::uint8_t>(myc)
 // ***      << FixedLengthString("Google Magic", 16, ' ');
-// ***  uint32 RecordSize = buf.size();
+// ***  std::uint32_t RecordSize = buf.size();
 // ***  writer.Write(buf.data(), RecordSize);
 // ***  ...
 // ***  LittleEndianReadBuffer rbuf;
 // ***  reader.Read(buf, RecordSize);
-// ***  int32 ri;
+// ***  std::int32_t ri;
 // ***  std::string rstr;
 // ***  float64 rf;
 // ***  Color rc;
 // ***  std::string rmagic;
 // ***  rbuf >> ri >> rstr >> rf
-// ***       >> DecodeAs<uint8>(rc)
+// ***       >> DecodeAs<std::uint8_t>(rc)
 // ***       >> FixedLengthString(rmagic, 16);
 // ***
 // ****************************************************************************
@@ -97,7 +99,7 @@
 // ***
 // ***  -- example --
 // ***  LittleEndianWriteBuffer buf;
-// ***  int32 myi = 123;
+// ***  std::int32_t myi = 123;
 // ***  float64 myf = 456.789;
 // ***  buf << myi << myf;
 // ***  writer.Read(buf.data(), buf.size());
@@ -109,8 +111,8 @@ class EndianWriteBuffer {
   typedef std::string::size_type size_type;
 
   size_type CurrPos(void) const { return position_; }
-  void rawwrite(const void *src, uint len);
-  void pad(uint len, char pad);
+  void rawwrite(const void *src, unsigned int len);
+  void pad(unsigned int len, char pad);
 
   // push object to buffer - instantiated only for numeric types
   template <class T> inline void push(const T &t);
@@ -131,7 +133,7 @@ class EndianWriteBuffer {
     position_ = new_position;
   }
  protected:
-  EndianWriteBuffer(Endianness bufEndianness, uint reserve);
+  EndianWriteBuffer(Endianness bufEndianness, unsigned int reserve);
 
  private:
 
@@ -139,7 +141,7 @@ class EndianWriteBuffer {
   std::string buf;
   size_type position_;
 
-  inline size_type PrepareToStore(uint len) {
+  inline size_type PrepareToStore(unsigned int len) {
     size_type new_position = position_ + len;
     if (new_position > buf.size()) {
       buf.resize(new_position);
@@ -153,14 +155,14 @@ class EndianWriteBuffer {
 
 class LittleEndianWriteBuffer : public EndianWriteBuffer {
  public:
-  inline LittleEndianWriteBuffer(uint reserve = 2048) :
+  inline LittleEndianWriteBuffer(unsigned int reserve = 2048) :
       EndianWriteBuffer(LittleEndian, reserve) { }
  private:
   DISALLOW_COPY_AND_ASSIGN(LittleEndianWriteBuffer);
 };
 class BigEndianWriteBuffer : public EndianWriteBuffer {
  public:
-  inline BigEndianWriteBuffer(uint reserve = 2048) :
+  inline BigEndianWriteBuffer(unsigned int reserve = 2048) :
       EndianWriteBuffer(BigEndian, reserve) { }
  private:
   DISALLOW_COPY_AND_ASSIGN(BigEndianWriteBuffer);
@@ -182,7 +184,7 @@ class BigEndianWriteBuffer : public EndianWriteBuffer {
 // ***  LittleEndianReadBuffer buf;
 // ***  buf.resize(toread);
 // ***  reader.Read(&buf[0], toread);
-// ***  int32 myi;
+// ***  std::int32_t myi;
 // ***  float64 myf;
 // ***  buf >> myi >> myf;
 // ****************************************************************************
@@ -234,7 +236,7 @@ class EndianReadBuffer : public std::string {
   }
  protected:
   EndianReadBuffer(Endianness bufEndianness, const void* data, size_type size);
-  EndianReadBuffer(Endianness bufEndianness, uint reserve = kDefaultReserve);
+  EndianReadBuffer(Endianness bufEndianness, unsigned int reserve = kDefaultReserve);
 
  private:
 
@@ -252,7 +254,7 @@ class LittleEndianReadBuffer : public EndianReadBuffer {
       EndianReadBuffer(LittleEndian, &data[0], data.size()) { }
   inline LittleEndianReadBuffer(const std::vector<char> &data) :
       EndianReadBuffer(LittleEndian, &data[0], data.size()) { }
-  inline LittleEndianReadBuffer(const std::vector<uchar> &data) :
+  inline LittleEndianReadBuffer(const std::vector<unsigned char> &data) :
       EndianReadBuffer(LittleEndian, &data[0], data.size()) { }
   inline LittleEndianReadBuffer(size_type reserve = kDefaultReserve) :
       EndianReadBuffer(LittleEndian, reserve) { }
@@ -267,7 +269,7 @@ class BigEndianReadBuffer : public EndianReadBuffer {
       EndianReadBuffer(BigEndian, &data[0], data.size()) { }
   inline BigEndianReadBuffer(const std::vector<char> &data) :
       EndianReadBuffer(BigEndian, &data[0], data.size()) { }
-  inline BigEndianReadBuffer(const std::vector<uchar> &data) :
+  inline BigEndianReadBuffer(const std::vector<unsigned char> &data) :
       EndianReadBuffer(BigEndian, &data[0], data.size()) { }
   inline BigEndianReadBuffer(size_type reserve = kDefaultReserve) :
       EndianReadBuffer(BigEndian, reserve) { }
@@ -287,7 +289,7 @@ class BigEndianReadBuffer : public EndianReadBuffer {
  ** --- example ---
  ** std::vector<char> buf(50);
  ** ToLittleEndianBuffer(&buf[27], 12345);
- ** int32 i;
+ ** std::int32_t i;
  ** FromLittleEndianBuffer(&i, &buf[27]);
  ** assert(i==12345);
  ** ---------------
@@ -325,14 +327,14 @@ inline void FromLittleEndianBuffer(T *t, const void *buf) {     \
 }
 #endif
 
-DefineToFromEndianBuffer(int8);
-DefineToFromEndianBuffer(uint8);
-DefineToFromEndianBuffer(int16);
-DefineToFromEndianBuffer(uint16);
-DefineToFromEndianBuffer(int32);
-DefineToFromEndianBuffer(uint32);
-DefineToFromEndianBuffer(int64);
-DefineToFromEndianBuffer(uint64);
+DefineToFromEndianBuffer(std::int8_t);
+DefineToFromEndianBuffer(std::uint8_t);
+DefineToFromEndianBuffer(std::int16_t);
+DefineToFromEndianBuffer(std::uint16_t);
+DefineToFromEndianBuffer(std::int32_t);
+DefineToFromEndianBuffer(std::uint32_t);
+DefineToFromEndianBuffer(std::int64_t);
+DefineToFromEndianBuffer(std::uint64_t);
 DefineToFromEndianBuffer(float32);
 DefineToFromEndianBuffer(float64);
 
@@ -388,14 +390,14 @@ inline EndianReadBuffer& operator>>(EndianReadBuffer& buf, T &t) {      \
   buf.Pull(&t);                                                         \
   return buf;                                                           \
 }
-DefineStreamOperators(int8);
-DefineStreamOperators(uint8);
-DefineStreamOperators(int16);
-DefineStreamOperators(uint16);
-DefineStreamOperators(int32);
-DefineStreamOperators(uint32);
-DefineStreamOperators(int64);
-DefineStreamOperators(uint64);
+DefineStreamOperators(std::int8_t);
+DefineStreamOperators(std::uint8_t);
+DefineStreamOperators(std::int16_t);
+DefineStreamOperators(std::uint16_t);
+DefineStreamOperators(std::int32_t);
+DefineStreamOperators(std::uint32_t);
+DefineStreamOperators(std::int64_t);
+DefineStreamOperators(std::uint64_t);
 DefineStreamOperators(float32);
 DefineStreamOperators(float64);
 DefineStreamOperators(std::string);
@@ -452,8 +454,8 @@ inline EndianDecoder<T,U> DecodeAs(U &u) {
 template <class T>
 inline EndianWriteBuffer& operator<<(EndianWriteBuffer& buf,
                                      const std::vector<T> &t) {
-  buf << EncodeAs<uint32>(t.size());
-  for (uint i = 0; i < t.size(); ++i) {
+  buf << EncodeAs<std::uint32_t>(t.size());
+  for (unsigned int i = 0; i < t.size(); ++i) {
     buf << t[i];
   }
   return buf;
@@ -462,10 +464,10 @@ inline EndianWriteBuffer& operator<<(EndianWriteBuffer& buf,
 template <class T>
 inline EndianReadBuffer& operator>>(EndianReadBuffer& buf,
                                     std::vector<T> &t) {
-  uint32 count;
+  std::uint32_t count;
   buf >> count;
   t.resize(count);
-  for (uint i = 0; i < t.size(); ++i) {
+  for (unsigned int i = 0; i < t.size(); ++i) {
     buf >> t[i];
   }
   return buf;
@@ -475,12 +477,12 @@ inline EndianReadBuffer& operator>>(EndianReadBuffer& buf,
 // ***  bool stream operators
 // ****************************************************************************
 inline EndianWriteBuffer& operator<<(EndianWriteBuffer& buf, const bool &t) {
-  buf << EncodeAs<uint8>(t);
+  buf << EncodeAs<std::uint8_t>(t);
   return buf;
 }
 
 inline EndianReadBuffer& operator>>(EndianReadBuffer& buf, bool &t) {
-  buf >> DecodeAs<uint8>(t);
+  buf >> DecodeAs<std::uint8_t>(t);
   return buf;
 }
 
@@ -505,59 +507,59 @@ inline EndianReadBuffer& operator>>(EndianReadBuffer& buf, bool &t) {
 
 class FixedLengthWriteString {
   const std::string &str;
-  uint fixedLength;
+  unsigned int fixedLength;
   char padding;
 
  public:
   void Push(EndianWriteBuffer& buf) const;
 
-  FixedLengthWriteString(const std::string &str_, uint len, char pad) :
+  FixedLengthWriteString(const std::string &str_, unsigned int len, char pad) :
       str(str_), fixedLength(len), padding(pad) { }
 };
 class FixedLengthWriteStringRaw {
   const char *str;
-  uint strLength;
-  uint fixedLength;
+  unsigned int strLength;
+  unsigned int fixedLength;
   char padding;
 
  public:
   void Push(EndianWriteBuffer& buf) const;
 
-  FixedLengthWriteStringRaw(const char *str_, uint len, char pad) :
+  FixedLengthWriteStringRaw(const char *str_, unsigned int len, char pad) :
       str(str_), strLength(strlen(str_)), fixedLength(len), padding(pad) { }
 };
 class FixedLengthReadString {
   std::string &str;
-  uint fixedLength;
+  unsigned int fixedLength;
 
  public:
   void Pull(EndianReadBuffer& buf) const;
 
-  FixedLengthReadString(std::string &str_, uint len) :
+  FixedLengthReadString(std::string &str_, unsigned int len) :
       str(str_), fixedLength(len) { }
 };
 class FixedLengthReadStringRaw {
   char *str;
-  uint fixedLength;
+  unsigned int fixedLength;
 
  public:
   void Pull(EndianReadBuffer& buf) const;
 
-  FixedLengthReadStringRaw(char *str_, uint len) :
+  FixedLengthReadStringRaw(char *str_, unsigned int len) :
       str(str_), fixedLength(len) { }
 };
 inline FixedLengthWriteString FixedLengthString(const std::string &str_,
-                                                uint len, char pad = 0) {
+                                                unsigned int len, char pad = 0) {
   return FixedLengthWriteString(str_, len, pad);
 }
 inline FixedLengthWriteStringRaw FixedLengthString(const char *str_,
-                                                   uint len, char pad = 0) {
+                                                   unsigned int len, char pad = 0) {
   return FixedLengthWriteStringRaw(str_, len, pad);
 }
-inline FixedLengthReadString FixedLengthString(std::string &str_, uint len) {
+inline FixedLengthReadString FixedLengthString(std::string &str_, unsigned int len) {
   return FixedLengthReadString(str_, len);
 }
-inline FixedLengthReadStringRaw FixedLengthString(char *str_, uint len) {
+inline FixedLengthReadStringRaw FixedLengthString(char *str_, unsigned int len) {
   return FixedLengthReadStringRaw(str_, len);
 }
 
@@ -592,8 +594,8 @@ inline EndianReadBuffer& operator>>(EndianReadBuffer& buf,
  ** host endianness.
  **
  ** --- example ---
- ** int32 litleEndianI = ...;
- ** int32 i = LittleEndianToHost(littleEndianI);
+ ** std::int32_t litleEndianI = ...;
+ ** std::int32_t i = LittleEndianToHost(littleEndianI);
  ** ---------------
  **
  ** NOTE: You should probably be using a higher level API like EndianBuffer
@@ -620,15 +622,15 @@ inline T LittleEndianToHost(T t) {              \
 }
 #endif
 
-DefineEndianToHost(int8);
-DefineEndianToHost(uint8);
-DefineEndianToHost(int16);
-DefineEndianToHost(uint16);
-DefineEndianToHost(int32);
-DefineEndianToHost(uint32);
+DefineEndianToHost(std::int8_t);
+DefineEndianToHost(std::uint8_t);
+DefineEndianToHost(std::int16_t);
+DefineEndianToHost(std::uint16_t);
+DefineEndianToHost(std::int32_t);
+DefineEndianToHost(std::uint32_t);
 DefineEndianToHost(long int);
 DefineEndianToHost(long long int);
-DefineEndianToHost(uint64);
+DefineEndianToHost(std::uint64_t);
 DefineEndianToHost(float32);
 DefineEndianToHost(float64);
 

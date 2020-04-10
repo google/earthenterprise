@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,7 +31,7 @@ class TaskRule {
       TaskRule::Preference pref;
     }
 
-    uint num;
+    unsigned int num;
     TaskRule::Preference localToJob = TaskRule::DontCare;
     std::string requiredVolume = std::string();
     std::string pathPattern    = std::string();
@@ -42,8 +43,8 @@ class TaskRule {
   };
 
   class CPUConstraint {
-    uint minNumCPU = uint(1);
-    uint maxNumCPU = uint(1);
+    unsigned int minNumCPU = uint(1);
+    unsigned int maxNumCPU = uint(1);
   };
 
   std::string taskname;

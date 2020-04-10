@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 The Open GEE Contributors
+ * Copyright 2020 The Open GEE Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ void WaitingAssets::Update(
     const SharedString & ref,
     AssetDefs::State newState,
     AssetDefs::State oldState,
-    uint32 numWaitingFor) {
+    std::uint32_t numWaitingFor) {
   if (newState == waitingState && numWaitingFor > 0) {
     waiting[ref] = numWaitingFor;
   }

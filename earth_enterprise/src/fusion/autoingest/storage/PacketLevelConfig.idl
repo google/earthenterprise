@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +18,8 @@
 #include <string>
 #include <vector>
 
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "common/khTileAddr.h"
 #include "common/SharedString.h"
 #requiresgetheapusage
@@ -50,7 +52,7 @@ class PacketLevelConfig {
   class Attribution {
     std::string dataRP;
     std::string acquisitionDate;
-    uint32      fuid_resource_;
+    std::uint32_t      fuid_resource_;
   };
 
   std::vector<Inset> insets;
@@ -65,7 +67,7 @@ class PacketLevelConfig {
 
   // used only when type==Terrain
   bool               decimate    = true;
-  uint               sampleSize  = uint(TmeshQuadnodeResolution);
+  unsigned int               sampleSize  = uint(TmeshQuadnodeResolution);
 
   // used during merges of project PackgetLevel's (not supersample) to
   // indicate products to check for opaque tiles (instead of merging) this

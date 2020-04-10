@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,8 +50,8 @@ class gstKMLFormat : public gstFormat {
  private:
   FORWARD_ALL_SEQUENTIAL_ACCESS_TO_BASE;
 
-  virtual gstGeodeHandle GetFeatureImpl(uint32 layer, uint32 id);
-  virtual gstRecordHandle GetAttributeImpl(uint32 layer, uint32 id);
+  virtual gstGeodeHandle GetFeatureImpl(std::uint32_t layer, std::uint32_t id);
+  virtual gstRecordHandle GetAttributeImpl(std::uint32_t layer, std::uint32_t id);
 
   FORWARD_GETFEATUREBOX_TO_BASE;
 

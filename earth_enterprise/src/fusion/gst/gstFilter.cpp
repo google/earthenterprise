@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -172,7 +173,7 @@ bool gstFilter::SiteEnabled() const {
 
 
 void gstFilter::ClearSelectRules() {
-  for (uint ii = 0; ii < select_rules_.length(); ++ii)
+  for (unsigned int ii = 0; ii < select_rules_.length(); ++ii)
     delete select_rules_[ii];
 
   select_rules_.clear();
@@ -237,7 +238,7 @@ void gstFilter::ThrowingTryApply(const gstRecordHandle &rec,
         have_match = false;
       } else {
         // select rule and rec needs to be tested
-        for (uint ii = 0; ii < select_rules_.length(); ++ii) {
+        for (unsigned int ii = 0; ii < select_rules_.length(); ++ii) {
           gstSelectRule* rule = select_rules_[ii];
           if (rule->eval(rec)) {
             have_match = true;
@@ -333,7 +334,7 @@ bool gstFilter::ThrowingTryHasMatch(const gstRecordHandle &rec,
         have_match = false;
       } else {
         // select rule and rec needs to be tested
-        for (uint ii = 0; ii < select_rules_.length(); ++ii) {
+        for (unsigned int ii = 0; ii < select_rules_.length(); ++ii) {
           gstSelectRule* rule = select_rules_[ii];
           if (rule->eval(rec)) {
             have_match = true;

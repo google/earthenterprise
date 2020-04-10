@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,9 +84,9 @@
 #ifndef COMMON_QTPACKET_TREE_UTILS_H__
 #define COMMON_QTPACKET_TREE_UTILS_H__
 
+#include <cstdint>
 #include <string>
 #include <common/base/macros.h>
-#include <khTypes.h>
 #include <quadtreepath.h>
 
 namespace qtpacket {

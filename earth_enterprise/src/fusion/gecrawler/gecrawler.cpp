@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,13 +19,13 @@
 // through http protocol, or from a serialized disk file already
 // saved.
 
+#include <cstdint>
 #include <sstream>
 #include <khGetopt.h>
 #include <notify.h>
 #include <khEndian.h>
 #include <khAbortedException.h>
 #include <khSimpleException.h>
-#include <khTypes.h>
 #include <packetcompress.h>
 #include "httpcrawlersource.h"
 #include "archivesource.h"
@@ -166,7 +167,7 @@ void FetchRefData(const gecrawler::CrawlerSourceBase::PacketType packet_type,
              refs[i].qt_path().AsString().c_str(),
              refs[i].channel(),
              refs[i].version());
-      const uint32* local_buf = reinterpret_cast<const uint32*>(buffer.data());
+      const std::uint32_t* local_buf = reinterpret_cast<const std::uint32_t*>(buffer.data());
       notify(NFY_WARN, "Packet header expected %x, got %x",
              kPktMagic, local_buf[0]);
     }

@@ -23,7 +23,7 @@ class AssetSerializerInterface {
 * all asset types during normal operation.
 */
 template<class AssetType>
-bool GetFileInfo(const std::string &fname, uint64 &size, time_t &mtime) {
+bool GetFileInfo(const std::string &fname, std::uint64_t &size, time_t &mtime) {
   return khGetFileInfo(fname, size, mtime);
 }
 
@@ -41,7 +41,7 @@ class AssetSerializerLocalXML : public AssetSerializerInterface<AssetType>
       std::string filename = AssetType::XMLFilename(boundref);
       AssetPointerType<AssetType> result;
       time_t timestamp = 0;
-      uint64 filesize = 0;
+      std::uint64_t filesize = 0;
 
       if (GetFileInfo<AssetType>(filename, filesize, timestamp) && (filesize > 0)) {
         std::unique_ptr<GEDocument> doc = ReadXMLDocument<AssetType>(filename);

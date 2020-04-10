@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,9 +14,9 @@
 // limitations under the License.
 
 
+#include <cstdint>
 #include <string>
 #include <vector>
-#include <khTypes.h>
 #include <gstTypes.h>
 #include <qstring.h>
 
@@ -24,7 +25,7 @@ class gstKVPAsset
   class Source
   {
     std::string file;
-    uint32 featureCount;
+    std::uint32_t featureCount;
     double xmin;
     double xmax;
     double ymin;
@@ -38,19 +39,19 @@ class gstKVPAsset
   class Record
   {
     QString name;
-    uint32 type;
+    std::uint32_t type;
   };
 
   std::vector<Record> header;
 
   std::vector<Source> sources;
   std::string name;
-  uint32 primType = uint32(gstUnknown);
+  std::uint32_t primType = std::uint32_t(gstUnknown);
 
   // The resolution levels calculated by max, min, and average feature size.
-  uint32 minResolutionLevel = uint32(0);
-  uint32 maxResolutionLevel = uint32(0);
-  uint32 efficientResolutionLevel = uint32(0);
+  std::uint32_t minResolutionLevel = std::uint32_t(0);
+  std::uint32_t maxResolutionLevel = std::uint32_t(0);
+  std::uint32_t efficientResolutionLevel = std::uint32_t(0);
 
 #pragma LoadAndSave
 };

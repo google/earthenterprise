@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,7 +24,7 @@
 #include <config/geConfigUtil.h>
 #include <config/gefConfigUtil.h>
 
-typedef std::vector<std::pair<std::string, uint64> > FileList;
+typedef std::vector<std::pair<std::string, std::uint64_t> > FileList;
 
 void
 usage(const std::string &progn, const char *msg = 0, ...)
@@ -100,11 +101,11 @@ main(int argc, char *argv[]) {
     // Get the size info for each file to be copied
     FileList to_copy;
     to_copy.reserve(files.size());
-    uint64 totalsize = 0;
+    std::uint64_t totalsize = 0;
     for (std::vector<std::string>::const_iterator file = files.begin();
          file != files.end(); ++file) {
       std::string infile = khComposePath(input, *file);
-      uint64 filesize = khGetFileSizeOrThrow(infile);
+      std::uint64_t filesize = khGetFileSizeOrThrow(infile);
       to_copy.push_back(std::make_pair(*file, filesize));
       totalsize += filesize;
     }

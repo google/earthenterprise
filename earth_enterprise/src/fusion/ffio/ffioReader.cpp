@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,15 +31,15 @@ ffio::Reader::Reader(const std::string &ffdir)
       indexReader_(),
       ffdir_(ffdir)
 {
-  uint64 runningOffset = 0;
+  std::uint64_t runningOffset = 0;
 
-  for (uint i = 0; ; ++i) {
+  for (unsigned int i = 0; ; ++i) {
     const size_t fnum_len = 64;
     char fnum[fnum_len];
     snprintf(fnum, fnum_len, "%02d", i);
     std::string fname = ffdir + "/pack." + fnum;
 
-    uint64 size;
+    std::uint64_t size;
     time_t mtime;
     if (!khGetFileInfo(fname, size, mtime))
       break;
@@ -51,16 +52,16 @@ ffio::Reader::Reader(const std::string &ffdir)
 
 bool
 ffio::Reader::FindTile(const khTileAddr &addr,
-                       uint32 &fileIndex, uint64 &fileOffset,
-                       uint32 &dataLen) const
+                       std::uint32_t &fileIndex, std::uint64_t &fileOffset,
+                       std::uint32_t &dataLen) const
 {
-  uint64 beginOffset = 0;
-  uint32 len = 0;
+  std::uint64_t beginOffset = 0;
+  std::uint32_t len = 0;
   if (presenceMask.GetPresence(addr)) {
     OpenIndex();
     if (indexReader_->FindTile(addr, beginOffset, len)) {
-      uint64 endOffset = beginOffset + len; // one beyond
-      for (uint i = 0; i < files.size(); ++i) {
+      std::uint64_t endOffset = beginOffset + len; // one beyond
+      for (unsigned int i = 0; i < files.size(); ++i) {
         const FileInfo &file(files[i]);
         if ((beginOffset >= file.beginOffset) &&
             (endOffset   <= file.endOffset)) {
@@ -82,13 +83,13 @@ ffio::Reader::FindTile(const khTileAddr &addr,
 }
 
 
-uint32
+std::uint32_t
 ffio::Reader::FindReadBlock(const khTileAddr &addr,
-                            std::vector<uchar> &buf) const
+                            std::vector<unsigned char> &buf) const
 {
   std::string filename;
-  uint64 fileOffset = 0;
-  uint32 dataLen = 0;
+  std::uint64_t fileOffset = 0;
+  std::uint32_t dataLen = 0;
   if (FindTile(addr, filename, fileOffset, dataLen)) {
     buf.resize(dataLen);
 
@@ -101,10 +102,10 @@ ffio::Reader::FindReadBlock(const khTileAddr &addr,
   }
 }
 
-uint32
+std::uint32_t
 ffio::Reader::ReadBlock(const std::string &filename,
-                        uint64 fileOffset, uint32 dataLen,
-                        uchar *buf) const
+                        std::uint64_t fileOffset, std::uint32_t dataLen,
+                        unsigned char *buf) const
 {
   if (!fileHandle.valid() || (openFilename != filename)) {
     fileHandle = ::open(filename.c_str(), O_RDONLY|O_LARGEFILE);

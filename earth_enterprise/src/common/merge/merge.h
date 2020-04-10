@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,11 +82,11 @@ template <class ValueType> class Merge : public MergeSource<ValueType> {
   class QueueItem {
    public:
     QueueItem(const khTransferGuard<MergeSource<ValueType> > &item,
-              uint id) :
+              unsigned int id) :
         item_(item.take()),
         id_(id)
     {}
-    inline uint Id(void) const { return id_; }
+    inline unsigned int Id(void) const { return id_; }
     inline bool operator>(const QueueItem &other) const {
       return item_->Current() > other.item_->Current();
     }
@@ -100,7 +101,7 @@ template <class ValueType> class Merge : public MergeSource<ValueType> {
     }
    private:
     MergeSource<ValueType> *item_;
-    uint id_;
+    unsigned int id_;
   };
 
  public:
@@ -182,7 +183,7 @@ template <class ValueType> class Merge : public MergeSource<ValueType> {
     }
   }
 
-  const uint CurrentSourceId() const {  // first source on heap
+  const unsigned int CurrentSourceId() const {  // first source on heap
     if (Active()) {
       return sources_.top().Id();
     } else {
@@ -211,7 +212,7 @@ template <class ValueType> class Merge : public MergeSource<ValueType> {
 
  private:
   bool started_;                        // true after Start called
-  uint next_source_id_;
+  unsigned int next_source_id_;
 
   // Min-heap priority queue of sources.  Close() or ~Merge() will
   // delete any sources left over in the queue.

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,8 +45,8 @@ typedef khRefGuard<ReservationImpl> Reservation;
 class CPUReservationImpl : public ReservationImpl
 {
   std::string host;
-  uint num_;
-  CPUReservationImpl(const std::string &host_, uint n);
+  unsigned int num_;
+  CPUReservationImpl(const std::string &host_, unsigned int n);
  protected:
   virtual ~CPUReservationImpl(void) {
     if (!released) {
@@ -54,9 +55,9 @@ class CPUReservationImpl : public ReservationImpl
     }
   }
  public:
-  uint num(void) const { return num_; }
+  unsigned int num(void) const { return num_; }
   virtual void Release(void);
-  static Reservation Make(const std::string &host, uint num) {
+  static Reservation Make(const std::string &host, unsigned int num) {
     PERF_CONF_LOGGING( "CPU_Reservation_Request",host,num);
     return Reservation(khRefGuardFromNew(new CPUReservationImpl(host, num)));
   }

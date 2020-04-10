@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -58,7 +59,7 @@ class VectorFuseAssetConfig {
 #hquote
   static const int curr_config_version = 1;
 #/hquote
-  deprecated uint channelId = uint(0);
+  deprecated unsigned int channelId = uint(0);
   std::vector<VectorFuseAssetItem> items;
   IsUpToDateIgnoreIf(!HasJS()) QString contextScript = QString("");
   deprecated std::vector<SearchField> searchFields = std::vector<SearchField>();

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,14 +23,14 @@ class geColor {
  public:
   enum ColorOrder { RGBA, BGRA, AGBR };
 
-  uchar r;
-  uchar g;
-  uchar b;
-  uchar a;
+  unsigned char r;
+  unsigned char g;
+  unsigned char b;
+  unsigned char a;
 
   geColor() : r(0), g(0), b(0), a(0) {}
 
-  geColor(ColorOrder order, uchar w, uchar x, uchar y, uchar z) {
+  geColor(ColorOrder order, unsigned char w, unsigned char x, unsigned char y, unsigned char z) {
     switch (order) {
       case RGBA:
         r = w; g = x; b = y; a = z;
@@ -57,11 +58,11 @@ class geColor {
   bool IsEmpty() const { return r == 0 && g == 0 && b == 0 && a == 0; }
   bool IsTransparent() const { return a == 0; }
 
-  uint32 PackedRGBA() const {
-    return (uint32)r << 24 |
-           (uint32)g << 16 |
-           (uint32)b << 8  |
-           (uint32)a;
+  std::uint32_t PackedRGBA() const {
+    return (std::uint32_t)r << 24 |
+           (std::uint32_t)g << 16 |
+           (std::uint32_t)b << 8  |
+           (std::uint32_t)a;
   }
 };
 

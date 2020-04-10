@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,7 +58,7 @@ class WorkflowOutputTile : public LayerTile<DisplayRuleConfig> {
 
  private:
   QuadtreePath path_;
-  uint64 generation_sequence_;
+  std::uint64_t generation_sequence_;
   inline bool operator>(const WorkflowOutputTile &other) const;
 
   DISALLOW_COPY_AND_ASSIGN(WorkflowOutputTile);

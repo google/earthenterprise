@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,16 +42,16 @@ std::string ApacheUserNameServerOnly();
 std::string FusionUserNameServerOnly();
 std::string UserGroupnameServerOnly();
 
-uint GetNumCPUs(void);
+unsigned int GetNumCPUs(void);
 
 // Return the physical memory size in bytes.
 // Return 0 if the value can't be safely found.
-uint64 GetPhysicalMemorySize(void);
+ std::uint64_t GetPhysicalMemorySize(void);
 
 // Return the Max number of open file descriptors.
 // if requested is <= 0 -> max(1, RLIMIT_NOFILE - requested)
 // if requested is positive -> min(RLIMIT_NOFILE, requested),
-uint GetMaxFds(int requested);
+unsigned int GetMaxFds(int requested);
 
 bool IsRedHat(void);
 

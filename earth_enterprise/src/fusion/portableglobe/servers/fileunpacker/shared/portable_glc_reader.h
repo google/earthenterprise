@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +24,6 @@
 #include <stdio.h>
 #include <string>
 #include "./glc_reader.h"
-#include "./khTypes.h"
 
 // Work around for problems in Windows with files >2G.
 #ifdef __MINGW32__
@@ -48,7 +48,7 @@ class PortableGlcReader : public GlcReader {
    * @param size Size of data in bytes to read.
    * @return whether data was read.
    */
-  virtual bool Read(std::string* buffer, uint64 offset, uint64 size) const;
+  virtual bool Read(std::string* buffer, std::uint64_t offset, std::uint64_t size) const;
 
   /**
    * Reads data into given memory location from the given
@@ -58,13 +58,13 @@ class PortableGlcReader : public GlcReader {
    * @param size Size of data to read.
    * @return whether data was read.
    */
-  virtual bool ReadData(void* ptr, uint64 offset, uint64 size) const;
+  virtual bool ReadData(void* ptr, std::uint64_t offset, std::uint64_t size) const;
 
   /**
    * Returns the size of the file or 0 if there is a problem with
    * the file.
    */
-  virtual uint64 Size() const;
+  virtual std::uint64_t Size() const;
 
   /**
    * Returns the 3-char suffix of the file being read.
@@ -78,7 +78,7 @@ class PortableGlcReader : public GlcReader {
 
  private:
   mutable int glc_file_;
-  uint64 glc_file_size_;
+  std::uint64_t glc_file_size_;
   const std::string path_;
   std::string filename_nosuffix_;
   std::string suffix_;

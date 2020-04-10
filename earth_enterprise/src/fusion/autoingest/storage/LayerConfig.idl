@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -66,16 +67,16 @@ class IconConfig {
   IconReference::Type type = IconReference::Internal;
   deprecated std::string name = std::string("771");
   QString href = QString("771");
-  std::vector<uint> normalColor = std::vector<uint>(4,255);
-  std::vector<uint> highlightColor = std::vector<uint>(4,255);
+  std::vector< unsigned int>  normalColor = std::vector< unsigned int> (4,255);
+  std::vector< unsigned int>  highlightColor = std::vector< unsigned int> (4,255);
   deprecated bool normalRandomColor = false;
   deprecated bool highlightRandomColor = false;
   double normalScale = 1.0;
   double highlightScale = 1.0;
-  deprecated uint posX = uint(0);
-  deprecated uint posY = uint(0);
-  deprecated uint width = uint(32);
-  deprecated uint height = uint(32);
+  deprecated unsigned int posX = uint(0);
+  deprecated unsigned int posY = uint(0);
+  deprecated unsigned int width = uint(32);
+  deprecated unsigned int height = uint(32);
 
 #pragma GenerateIsUpToDate
 
@@ -101,8 +102,8 @@ class LabelConfig {
   enum BuildMode { Original = 0, JSExpression = 1 };
   QString label = QString();
   bool reformat = false;
-  std::vector<uint> normalColor = std::vector<uint>(4, 255);
-  std::vector<uint> highlightColor = std::vector<uint>(4, 255);
+  std::vector< unsigned int>  normalColor = std::vector< unsigned int> (4, 255);
+  std::vector< unsigned int>  highlightColor = std::vector< unsigned int> (4, 255);
   deprecated bool normalRandomColor = false;
   deprecated bool highlightRandomColor = false;
   double normalScale = 1.0;
@@ -142,12 +143,12 @@ class StyleConfig {
   // same field in the FuseStyleConfig below
   enum AltitudeMode { ClampToGround = 0, Relative = 1, Absolute = 2 };
 
-  deprecated std::vector<uint> rgba = std::vector<uint>(4, 255);
+  deprecated std::vector< unsigned int>  rgba = std::vector< unsigned int> (4, 255);
   deprecated float scale = 1.0f;
 
-  uint32 id = uint32(0);
-  std::vector<uint> polyColor = std::vector<uint>(4, 255);
-  std::vector<uint> lineColor = std::vector<uint>(4, 255);
+  std::uint32_t id = std::uint32_t(0);
+  std::vector< unsigned int>  polyColor = std::vector< unsigned int> (4, 255);
+  std::vector< unsigned int>  lineColor = std::vector< unsigned int> (4, 255);
   deprecated bool randomPolyColor = false
   deprecated bool randomLineColor = false
   double lineWidth = new:1.0, load:-1.0;
@@ -180,7 +181,7 @@ class StyleConfig {
 class FuseStyleConfig {
   // WARNING - if you add fields here, you must add the
   // same field in the StyleConfig above
-  uint32 id = uint32(0);
+  std::uint32_t id = std::uint32_t(0);
   StyleConfig::AltitudeMode altitudeMode = StyleConfig::ClampToGround;
   bool extrude = false;
 
@@ -219,26 +220,26 @@ class FeatureConfig {
   enum RoadLabelType { Label = 0, Shield = 1 };
 
   deprecated bool enabled = false;
-  deprecated uint32 level = uint32(StartVectorLevel);
+  deprecated std::uint32_t level = std::uint32_t(StartVectorLevel);
   StyleConfig style = StyleConfig();
   deprecated Type type = FeatureConfig::PolyLine;
   deprecated QString label = QString();
   deprecated QString shield = QString();
   deprecated std::vector<QString> suppressWords = std::vector<QString>(0, QString());
-  deprecated uint shieldType = uint(0);
+  deprecated unsigned int shieldType = uint(0);
   deprecated RoadLabelType nameType = FeatureConfig::Label;
   deprecated bool reformatLabel = false;
-  uint32 maxLevel = uint32(MaxVectorLevel);
+  std::uint32_t maxLevel = std::uint32_t(MaxVectorLevel);
 
   VectorDefs::FeatureDisplayType featureType = VectorDefs::PointZ;
-  uint32 minLevel = uint32(StartVectorLevel);
+  std::uint32_t minLevel = std::uint32_t(StartVectorLevel);
   bool drawAsRoads = false;
   RoadLabelType roadLabelType = FeatureConfig::Label;
   VectorDefs::PolygonDrawMode polygonDrawMode = VectorDefs::FillAndOutline;
   double maxError = 0.5;
   // Building beyond 18 is expensive, so we default to 18 and warn if they want
   // to build deeper.
-  uint32 maxBuildLevel = uint32(kMaxRecommendedBuildLevel);
+  std::uint32_t maxBuildLevel = std::uint32_t(kMaxRecommendedBuildLevel);
 
 #pragma AfterLoad
 #pragma GenerateIsUpToDate
@@ -303,14 +304,14 @@ class FuseFeatureConfig {
   // WARNING - if you add fields here, you must add the
   // same field in the FeatureConfig above
   FuseStyleConfig style = FuseStyleConfig();
-  uint32 maxLevel = uint32(MaxVectorLevel);
+  std::uint32_t maxLevel = std::uint32_t(MaxVectorLevel);
   VectorDefs::FeatureDisplayType featureType = VectorDefs::PointZ;
-  uint32 minLevel = uint32(StartVectorLevel);
+  std::uint32_t minLevel = std::uint32_t(StartVectorLevel);
   bool drawAsRoads = false;
   double maxError = 0.5;
   // Building beyond 18 is expensive, so we default to 18 and warn if they want
   // to build deeper.
-  uint32 maxBuildLevel = uint32(kMaxRecommendedBuildLevel);
+  std::uint32_t maxBuildLevel = std::uint32_t(kMaxRecommendedBuildLevel);
 
 #pragma DontEmitFunc
 #pragma GenerateIsUpToDate
@@ -374,7 +375,7 @@ class SiteConfig {
   enum BalloonStyleMode { ClientDefault = 0, Basic = 1, Advanced = 2, Undefined = 99 };
 
   bool enabled = false;
-  deprecated uint32 level = uint32(5);
+  deprecated std::uint32_t level = std::uint32_t(5);
   StyleConfig style = StyleConfig();
   deprecated Type type = SiteConfig::Landmark;
   VectorDefs::SiteDisplayPosition position = VectorDefs::AreaCenter;
@@ -386,19 +387,19 @@ class SiteConfig {
   deprecated QString addr = QString();
   deprecated QString phone = QString();
   deprecated QString url = QString();
-  uint32 maxLevel = uint32(24);
-  uint32 maxQuadCount = uint32(100);
+  std::uint32_t maxLevel = std::uint32_t(24);
+  std::uint32_t maxQuadCount = std::uint32_t(100);
 
-  uint32 minLevel = uint32(5);
+  std::uint32_t minLevel = std::uint32_t(5);
   QString popupText = QString();
   PointDecimationMode decimationMode = SiteConfig::MaxFit;
   bool suppressDuplicateSites = false;
-  uint32 minQuadCount = uint32(0);
+  std::uint32_t minQuadCount = std::uint32_t(0);
   double decimationRatio = 0.5;
   LabelConfig::BuildMode popupTextMode = LabelConfig::Original;
   QString balloonText = QString();
-  std::vector<uint> balloonBgColor = std::vector<uint>(4, 255);
-  std::vector<uint> balloonFgColor = makevec4<uint>(0,0,0,255);
+  std::vector< unsigned int>  balloonBgColor = std::vector< unsigned int> (4, 255);
+  std::vector< unsigned int>  balloonFgColor = makevec4< unsigned int> (0,0,0,255);
   BalloonStyleMode balloonStyleMode = new:SiteConfig::Basic, load:SiteConfig::Undefined;
   bool balloonInsertHeader = false;
   bool balloonInsertDirections = false;
@@ -458,8 +459,8 @@ class SiteConfig {
     // already had some options so must determine if the balloonStyleMode should
     // be set to Advanced for the 2.5 users
     if (balloonStyleMode == SiteConfig::Undefined) {
-      if (!balloonText.isEmpty() || balloonBgColor != std::vector<uint>(4, 255) ||
-          balloonFgColor != makevec4<uint>(0,0,0,255)) {
+      if (!balloonText.isEmpty() || balloonBgColor != std::vector< unsigned int> (4, 255) ||
+          balloonFgColor != makevec4< unsigned int> (0,0,0,255)) {
         balloonStyleMode = SiteConfig::Advanced;
       } else {
         balloonStyleMode = SiteConfig::Basic;
@@ -482,13 +483,13 @@ class FuseSiteConfig {
   FuseStyleConfig style = FuseStyleConfig();
   VectorDefs::SiteDisplayPosition position = VectorDefs::AreaCenter;
   bool enablePopup = false;
-  uint32 maxLevel = uint32(24);
-  uint32 maxQuadCount = uint32(100);
-  uint32 minLevel = uint32(5);
+  std::uint32_t maxLevel = std::uint32_t(24);
+  std::uint32_t maxQuadCount = std::uint32_t(100);
+  std::uint32_t minLevel = std::uint32_t(5);
   QString popupText = QString();
   SiteConfig::PointDecimationMode decimationMode = SiteConfig::MaxFit;
   bool suppressDuplicateSites = false;
-  uint32 minQuadCount = uint32(0);
+  std::uint32_t minQuadCount = std::uint32_t(0);
   double decimationRatio = 0.5;
   LabelConfig::BuildMode popupTextMode = LabelConfig::Original;
 
@@ -575,7 +576,7 @@ class LocaleConfig {
   deprecated QString iconName = QString("");
   deprecated IconReference::Type iconType = IconReference::Internal;
   deprecated bool icon_default = true;
-  deprecated std::set<uint> labels = makeset<uint>(0);
+  deprecated std::set< unsigned int>  labels = makeset< unsigned int> (0);
   deprecated bool labels_default = true;
   deprecated bool isChecked = false;
   deprecated bool isChecked_default = true;
@@ -591,7 +592,7 @@ class LocaleConfig {
   xmlattr int config_version  = new:LocaleConfig::curr_config_version, load:0;
   Defaultable<QString>       name_          = Defaultable<QString>(true /* use_default */, "");
   Defaultable<IconReference> icon_          = Defaultable<IconReference>(true /* use_default */, IconReference(IconReference::Internal, ""));
-  deprecated Defaultable<std::set<uint> > labels_      = Defaultable<std::set<uint> >(true /* use_default */, makeset<uint>(0));
+  deprecated Defaultable<std::set< unsigned int>  > labels_      = Defaultable<std::set< unsigned int>  >(true /* use_default */, makeset< unsigned int> (0));
   Defaultable<bool>          is_checked_    = Defaultable<bool>(true /* use_default */, false);
   Defaultable<QString>       desc_          = Defaultable<QString>(true /* use_default */, "");
   Defaultable<QString>       look_at_       = Defaultable<QString>(true /* use_default */, "");
@@ -706,15 +707,15 @@ class LocaleConfig {
 
 // ********** used by VectorLayerAsset **********
 class LayerConfig {
-  uint channelId = uint(0);
+  unsigned int channelId = uint(0);
   std::string assetRef = std::string();
   deprecated QString name = QString();                   // dbroot only
   deprecated std::string icon = std::string();           // dbroot only
   deprecated bool initialShow = false;                   // dbroot only
   QString legend = QString("");               // dbroot only (names parent layer)
-  std::vector<uint8> lodForce = std::vector<uint8>(0, 0);
+  std::vector<std::uint8_t> lodForce = std::vector<std::uint8_t>(0, 0);
   std::vector<DisplayRuleConfig> displayRules = std::vector<DisplayRuleConfig>(0, DisplayRuleConfig());
-  uint preserveTextLevel = uint(24);          // dbroot only
+  unsigned int preserveTextLevel = uint(24);          // dbroot only
   bool allowFeatureDuplication = false;       // if true allows every filter to get a
                                               // a copy of the feature
   deprecated IconReference::Type iconType = IconReference::Internal;
@@ -781,8 +782,8 @@ class LayerConfig {
   // Resets all IDs as it is in a config for a just created asset.
   void ResetIds(void);
 
-  void SaveOldStyleIds(std::deque<uint32> &old);
-  void TryRestoreOldStyleIds(std::deque<uint32> &old);
+  void SaveOldStyleIds(std::deque<std::uint32_t> &old);
+  void TryRestoreOldStyleIds(std::deque<std::uint32_t> &old);
   void AfterLoad(LayerConfig::DeprecatedMembers &depmembers);
   std::string MapName(std::string oldName);
   LocaleConfig GetLocale(const QString& localeName) const;

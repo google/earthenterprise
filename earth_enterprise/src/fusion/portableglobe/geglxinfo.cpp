@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@
 #include <sstream>  // NOLINT(readability/streams)
 #include <string>
 #include <iomanip>
+#include <cstdint>
 #include "common/etencoder.h"
 #include "common/khAbortedException.h"
 #include "common/khFileUtils.h"
@@ -31,7 +33,7 @@
 #include "common/khEndian.h"
 #include "common/khGetopt.h"
 #include "common/khSimpleException.h"
-#include "common/khTypes.h"
+#include <cstdint>
 #include "common/proto_streaming_imagery.h"
 #include "common/packet.h"
 #include "common/packetcompress.h"
@@ -47,11 +49,11 @@ namespace {
 // and level. The btree is a 48-bit representation of up to a
 // 24-level address. It is filled from the high bits down. The
 // number of meaningful bits is level*2.
-void GetXY(int level, uint64 btree, uint64* x, uint64* y) {
+void GetXY(int level, std::uint64_t btree, std::uint64_t* x, std::uint64_t* y) {
   int shift = 48 - level * 2;
   *x = 0;
   *y = 0;
-  uint64 half_node = 1;
+  std::uint64_t half_node = 1;
   for (int i = 0; i < level; ++i) {
     // Check next quadnode value (0 - 3).
     int next_node = (btree >> shift) & 3;
@@ -81,9 +83,9 @@ void writePacketToFile(const IndexItem& index_item,
                        const std::string& extraSuffix) {
   char path[256];
   const char* suffix;
-  uint64 x;
-  uint64 y;
-  uint64 btree = index_item.btree_high;
+  std::uint64_t x;
+  std::uint64_t y;
+  std::uint64_t btree = index_item.btree_high;
   btree <<= 16;
   btree |= (index_item.btree_low & 0xffff);
   GetXY(index_item.level, btree, &x, &y);
@@ -202,7 +204,7 @@ void printVectorPacketBitFlags(const ushort bitFlags, std::ostringstream& s) {
 
 void printVectorPacket(const LittleEndianReadBuffer& buffer, std::ostringstream& s) {
 
-  const std::map<uint32, std::string> vTypeNames = {
+  const std::map<std::uint32_t, std::string> vTypeNames = {
     {TYPE_STREETPACKET, "TYPE_STREETPACKET"},
     {TYPE_SITEPACKET, "TYPE_SITEPACKET"},
     {TYPE_DRAWABLEPACKET, "TYPE_DRAWABLEPACKET"},
@@ -239,7 +241,7 @@ void printVectorPacket(const LittleEndianReadBuffer& buffer, std::ostringstream&
   s << "  version = " << drawablePacket.packetHeader.version << std::endl;
   s << std::endl;
 
-  for(uint32_t idx = 0; idx < drawablePacket.packetHeader.numInstances; idx++){
+  for(std::uint32_t idx = 0; idx < drawablePacket.packetHeader.numInstances; idx++){
     const etDataPacket *pChildPacket = drawablePacket.getPtr(idx);
     const char *pChildPacketDataBuffer = pPacketDataBuffer +
                                 pChildPacket->packetHeader.dataBufferOffset +
@@ -248,7 +250,7 @@ void printVectorPacket(const LittleEndianReadBuffer& buffer, std::ostringstream&
     s << "ChildDataPacket " << idx << ":" << std::endl;
     s << "  packetHeader.numInstances = " << pChildPacket->packetHeader.numInstances << std::endl;
 
-    for(uint32_t instance_idx = 0; instance_idx < pChildPacket->packetHeader.numInstances; instance_idx++){
+    for(std::uint32_t instance_idx = 0; instance_idx < pChildPacket->packetHeader.numInstances; instance_idx++){
 
       s << "    Instance " << instance_idx << ":" << std::endl;
 
@@ -380,8 +382,8 @@ void printVectorPacket(const LittleEndianReadBuffer& buffer, std::ostringstream&
 
 void extractAllPackets(GlcUnpacker* const unpacker,
                     PortableGlcReader* const reader,
-                    uint64 start_idx,
-                    uint64 end_idx,
+                    std::uint64_t start_idx,
+                    std::uint64_t end_idx,
                     int layer_idx,
                     bool is_composite,
                     const std::string& index_file,
@@ -400,7 +402,7 @@ void extractAllPackets(GlcUnpacker* const unpacker,
     return;
   }
 
-  uint64 number_of_packets = index_file_loc.Size() / sizeof(IndexItem);
+  std::uint64_t number_of_packets = index_file_loc.Size() / sizeof(IndexItem);
   std::cout << "Extracting " << (end_idx - start_idx)
             << " of " << number_of_packets
             << " packets" << std::endl;
@@ -411,19 +413,19 @@ void extractAllPackets(GlcUnpacker* const unpacker,
     end_idx = number_of_packets;
   }
 
-  uint64 offset = index_file_loc.Offset() + sizeof(IndexItem) * start_idx;
+  std::uint64_t offset = index_file_loc.Offset() + sizeof(IndexItem) * start_idx;
   std::string buffer;
-  uint64 max_size = 200000;
+  std::uint64_t max_size = 200000;
   buffer.resize(max_size);
   // Main extraction loop.
   // Reads sequential index entries and saves packets as files
   // to disk. Directories are arranged in z, x, y order and the
   // name of the file corresponds to the channel.
-  for (uint64 i = start_idx; i < end_idx; ++i) {
+  for (std::uint64_t i = start_idx; i < end_idx; ++i) {
     IndexItem index_item;
     // std::cout << "index offset: " << offset << std::endl;
     if (reader->ReadData(&index_item, offset, sizeof(IndexItem))) {
-      uint64 data_offset = data_file_loc.Offset() + index_item.offset;
+      std::uint64_t data_offset = data_file_loc.Offset() + index_item.offset;
       buffer.resize(MIN(max_size, index_item.packet_size));
       if (index_item.packet_size >= max_size) {
         std::cout << "Data item is too big: " << i
@@ -475,7 +477,7 @@ void extractAllPackets(GlcUnpacker* const unpacker,
           LittleEndianReadBuffer decompressed;
           etEncoder::DecodeWithDefaultKey(&buffer[0], buffer.size());
           if (KhPktDecompress(buffer.data(), buffer.size(), &decompressed) &&
-             (decompressed.size() >= sizeof(uint32)*2)) {
+             (decompressed.size() >= sizeof(std::uint32_t)*2)) {
             std::ostringstream s;
             printVectorPacket(decompressed, s);
             writePacketToFile(index_item, s.str(), false, "globetiles", "_vector");
@@ -507,8 +509,8 @@ void ExtractPackets(GlcUnpacker* const unpacker,
                     const std::string& suffix,
                     bool is_composite,
                     int layer_idx,
-                    uint64 start_idx,
-                    uint64 end_idx) {
+                    std::uint64_t start_idx,
+                    std::uint64_t end_idx) {
   if (unpacker->Is3d()) {
     std::cout << "Extracting packets for a globe file" << std::endl;
     extractAllPackets(unpacker, reader, start_idx, end_idx, layer_idx, is_composite, "data/index", "data/pbundle_0000");
@@ -617,8 +619,8 @@ void ListFiles(GlcUnpacker* const unpacker) {
 // writes to out_file.
 void ExtractFile(const std::string& out_file,
                  const std::string& glx_file,
-                 uint64 offset,
-                 uint64 size) {
+                 std::uint64_t offset,
+                 std::uint64_t size) {
   if (out_file.empty()) {
     notify(NFY_WARN, "No file specified for output.");
     return;
@@ -629,7 +631,7 @@ void ExtractFile(const std::string& out_file,
 
   // Copy data from package to file.
   fp_in.seekg(offset, std::ios::beg);
-  for (uint64 i = 0; i < size; ++i) {
+  for (std::uint64_t i = 0; i < size; ++i) {
     fp_out.put(fp_in.get());
   }
 
@@ -796,8 +798,8 @@ int main(int argc, char **argv) {
 
     // Check crc.
     if (check_crc) {
-      uint32 read_crc = Package::ReadCrc(reader);
-      uint32 calculated_crc = Package::CalculateCrc(reader);
+      std::uint32_t read_crc = Package::ReadCrc(reader);
+      std::uint32_t calculated_crc = Package::CalculateCrc(reader);
       std::cout.flags(std::ios::right | std::ios::hex | std::ios::showbase);
       std::cout << "\nFile crc: " << read_crc<< std::endl;
       std::cout << "Calculated crc :" << calculated_crc << std::endl;
@@ -832,11 +834,11 @@ int main(int argc, char **argv) {
       if (!layer_idx_str.empty()) {
         sscanf(layer_idx_str.c_str(), "%u", &layer_idx);
       }
-      uint64 start_idx = 0;
+      std::uint64_t start_idx = 0;
       if (!start_idx_str.empty()) {
         sscanf(start_idx_str.c_str(), "%lu", &start_idx);
       }
-      uint64 end_idx = 0x3fffffffffffffff;
+      std::uint64_t end_idx = 0x3fffffffffffffff;
       if (!end_idx_str.empty()) {
         sscanf(end_idx_str.c_str(), "%lu", &end_idx);
       }

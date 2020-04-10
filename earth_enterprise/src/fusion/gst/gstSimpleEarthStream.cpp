@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -113,9 +114,9 @@ void Request::Start(const std::string& url, std::string* stream) {
   if (GetBufferSize() == 0) {
     size_t buffer_size = GetBufferSize();
     notify(NFY_DEBUG, "Curl_easy_perform: Returned buffer size is %lu.\n",
-           static_cast<uint64>(buffer_size));
+           static_cast<std::uint64_t>(buffer_size));
   }
-  int64 result_code = 0;
+  std::int64_t result_code = 0;
   curl_easy_getinfo(curl_easy_handle_, CURLINFO_RESPONSE_CODE, &result_code);
   if (result_code != 200 || GetBufferSize() == 0) {
     notify(NFY_DEBUG, "curl_easy_getinfo: response code: %ld\n", result_code);

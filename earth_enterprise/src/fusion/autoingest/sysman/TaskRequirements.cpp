@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -42,9 +43,9 @@ TaskRequirements::Input::Input(const std::string &v,
 TaskRequirements::Output::Output(const std::string &v,
                                  const std::string &h,
                                  const std::string &p,
-                                 uint64 s,
+                                 std::uint64_t s,
                                  Preference local,
-                                 uint numInputs) :
+                                 unsigned int numInputs) :
     volume(v), host(h), path(p), size(s), localToJob(local),
     differentVolumes(numInputs, TaskRule::Prefer),
     relocateURI()
@@ -55,7 +56,7 @@ TaskRequirements::Output::Output(const std::string &v,
 // ****************************************************************************
 // ***  TaskRequirements
 // ****************************************************************************
-TaskRequirements::TaskRequirements(const TaskDef &taskdef, uint taskid,
+TaskRequirements::TaskRequirements(const TaskDef &taskdef, unsigned int taskid,
                                    const std::string &verref)
 {
   // pre-fill my inputs with volume & host info from taskdef's inputs
@@ -179,7 +180,7 @@ TaskRequirements::EnsureNoConflicts(void)
 {
   // check for required host collisions
   // while we're at it, save the required host and preferred host
-  for (uint i = 0; i < inputs.size(); ++i) {
+  for (unsigned int i = 0; i < inputs.size(); ++i) {
     Input &input(inputs[i]);
     if (input.host.size()) {
       if (input.localToJob == TaskRule::Must) {
@@ -200,7 +201,7 @@ TaskRequirements::EnsureNoConflicts(void)
     }
   }
 
-  for (uint i = 0; i < outputs.size(); ++i) {
+  for (unsigned int i = 0; i < outputs.size(); ++i) {
     Output &output(outputs[i]);
     if (output.volume != "*anytmp*") {
       if (output.localToJob == TaskRule::Must) {
@@ -221,9 +222,9 @@ TaskRequirements::EnsureNoConflicts(void)
   }
 
   // check for same volume collisions
-  for (uint o = 0; o < outputs.size(); ++o) {
+  for (unsigned int o = 0; o < outputs.size(); ++o) {
     Output &output(outputs[o]);
-    for (uint i = 0; i < inputs.size(); ++i) {
+    for (unsigned int i = 0; i < inputs.size(); ++i) {
       Input &input(inputs[i]);
       if (input.volume.size()) {
         if (output.differentVolumes[i] == TaskRule::Must) {
@@ -241,7 +242,7 @@ TaskRequirements::EnsureNoConflicts(void)
 
 
 void
-TaskRequirements::ApplyInputConstraint(uint index,
+TaskRequirements::ApplyInputConstraint(unsigned int index,
                                        const TaskRule::InputConstraint &ic)
 {
   inputs[index].localToJob = ic.localToJob;
@@ -267,7 +268,7 @@ class PathPatternTool
   std::string assetref;
 
  public:
-  PathPatternTool(uint taskid_,
+  PathPatternTool(unsigned int taskid_,
                   const std::string &defaultpath_,
                   const AssetVersionRef &verref)
       : taskid(ToString(taskid_)),
@@ -279,7 +280,7 @@ class PathPatternTool
     qualifiers["sansext"]  = &khDropExtension;
     qualifiers["ext"]      = &GetExtension;
 
-    uint num = 0;
+    unsigned int num = 0;
     FromString(verref.Version(), num);
     std::ostringstream out;
     out << std::setw(3) << std::setfill('0') << num;
@@ -300,9 +301,9 @@ class PathPatternTool
 
 
 void
-TaskRequirements::ApplyOutputConstraint(uint index,
+TaskRequirements::ApplyOutputConstraint(unsigned int index,
                                         const TaskRule::OutputConstraint &oc,
-                                        uint taskid,
+                                        unsigned int taskid,
                                         const std::string &verref)
 {
   Output &output(outputs[index]);
@@ -345,7 +346,7 @@ TaskRequirements::ApplyOutputConstraint(uint index,
          oc.differentVolumes.begin();
        ip != oc.differentVolumes.end(); ++ip) {
     if (ip->num == -1) {
-      for (uint i = 0; i < inputs.size(); ++i) {
+      for (unsigned int i = 0; i < inputs.size(); ++i) {
         output.differentVolumes[i] = ip->pref;
       }
     } else if ((ip->num >= 0) && (ip->num < (int)inputs.size())) {
@@ -396,7 +397,7 @@ TaskRequirements::ApplyOutputConstraint(uint index,
 // ****************************************************************************
 void
 TaskRequirements::ApplyUserSuppliedRules(const TaskDef &taskDef,
-                                         uint taskid,
+                                         unsigned int taskid,
                                          const std::string &verref)
 {
   // first type to find the taskrule specialized by asset type
@@ -414,7 +415,7 @@ TaskRequirements::ApplyUserSuppliedRules(const TaskDef &taskDef,
            taskrule.inputConstraints.begin();
          ic != taskrule.inputConstraints.end(); ++ic) {
       if (ic->num == -1) {
-        for (uint i = 0; i < inputs.size(); ++i) {
+        for (unsigned int i = 0; i < inputs.size(); ++i) {
           ApplyInputConstraint(i, *ic);
         }
       } else if ((ic->num >= 0) && (ic->num < (int)inputs.size())) {

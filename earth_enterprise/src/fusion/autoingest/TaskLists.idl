@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,25 +13,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
+#include <cstdint>
 #include <vector>
 #include <string>
-#include <khTypes.h>
 #include <sys/types.h>
 #include <qstring.h>
 
 class TaskLists {
   class WaitingTask {
     std::string verref;
-    uint32      taskid;
-    int32       priority;
+    std::uint32_t      taskid;
+    std::int32_t       priority;
     time_t      submitTime;
     QString     activationError;
   };
 
   class ActiveTask {
     std::string verref;
-    uint32      taskid;
+    std::uint32_t      taskid;
     time_t      beginTime
     time_t      progressTime;
     double      progress;
@@ -38,7 +38,7 @@ class TaskLists {
 
   class Provider {
     std::string hostname;
-    uint        maxjobs;
+    unsigned int        maxjobs;
     std::vector<TaskLists::ActiveTask> activeTasks;
   };
 
@@ -46,13 +46,13 @@ class TaskLists {
   std::vector<Provider>    providers;
 
   // Number of assets cached.
-  uint32 num_assets_cached = uint32(0);
+  std::uint32_t num_assets_cached = std::uint32_t(0);
   // Number of asset versions cached.
-  uint32 num_assetversions_cached = uint32(0);
+  std::uint32_t num_assetversions_cached = std::uint32_t(0);
   // Approx. memory used by cached assets
-  uint64 asset_cache_memory = uint64(0);
+  std::uint64_t asset_cache_memory = std::uint64_t(0);
   // Approx. memory used by cached asset versions
-  uint64 version_cache_memory = uint64(0);
+  std::uint64_t version_cache_memory = std::uint64_t(0);
   // Number of strings in SharedString string store
   size_t str_store_size = size_t(0);
 #pragma StrLoadAndSave

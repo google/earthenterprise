@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -157,7 +158,7 @@ gstStatus gstOGRFormat::AddOGRLayer(int layer, OGRLayer* poLayer) {
     for (int def = 0; def < featureDefn->GetFieldCount(); ++def) {
       OGRFieldDefn* fieldDefn = featureDefn->GetFieldDefn(def);
       const char* name = fieldDefn->GetNameRef();
-      uint32 type = 0;
+      std::uint32_t type = 0;
       switch (fieldDefn->GetType()) {
         case OFTInteger:
         case OFTIntegerList:
@@ -283,7 +284,7 @@ gstStatus gstOGRFormat::AddOGRLayer(int layer, OGRLayer* poLayer) {
     // return GST_UNKNOWN;
   }
 
-  uint32 featureCount = poLayer->GetFeatureCount();
+  std::uint32_t featureCount = poLayer->GetFeatureCount();
   gstLayerDef& ldef = AddLayer(type, featureCount, header);
 
   if (featureCount == 0) {
@@ -313,7 +314,7 @@ gstStatus gstOGRFormat::AddOGRLayer(int layer, OGRLayer* poLayer) {
   return GST_OKAY;
 }
 
-void gstOGRFormat::ResetReadingImpl(uint32 layer) {
+void gstOGRFormat::ResetReadingImpl(std::uint32_t layer) {
   seqReadIsDone = false;
   currentLayer = layer;
   OGRLayer* poLayer = GetOGRLayer(layer);
@@ -358,7 +359,7 @@ void gstOGRFormat::IncrementReadingImpl() {
   seqReadIsDone = (currentFeature == NULL);
 }
 
-gstGeodeHandle gstOGRFormat::GetFeatureImpl(uint32 layer, uint32 fidx) {
+gstGeodeHandle gstOGRFormat::GetFeatureImpl(std::uint32_t layer, std::uint32_t fidx) {
   // should be checked by gstSource before calling me
   assert(layer < NumLayers());
   assert(fidx < NumFeatures(layer));
@@ -387,7 +388,7 @@ gstGeodeHandle gstOGRFormat::GetFeatureImpl(uint32 layer, uint32 fidx) {
 }
 
 
-gstRecordHandle gstOGRFormat::GetAttributeImpl(uint32 layer, uint32 fidx) {
+gstRecordHandle gstOGRFormat::GetAttributeImpl(std::uint32_t layer, std::uint32_t fidx) {
   // should be checked by gstSource before calling me
   assert(layer < NumLayers());
   assert(fidx < NumFeatures(layer));
@@ -583,7 +584,7 @@ gstGeodeHandle gstOGRFormat::TranslateGeometry(OGRFeature* feature) const {
 
 
 gstRecordHandle gstOGRFormat::TranslateAttribute(
-    OGRFeature *feature, uint layerid) {
+    OGRFeature *feature, unsigned int layerid) {
   // get the header for this layer
   gstHeaderHandle header = layer_defs_[layerid].AttrDefs();
 
@@ -879,10 +880,10 @@ gstStatus gstOGRSQLFormat::OpenFile(void) {
   return GST_OKAY;
 }
 
-gstGeodeHandle gstOGRSQLFormat::GetFeatureImpl(uint32, uint32) {
+gstGeodeHandle gstOGRSQLFormat::GetFeatureImpl(std::uint32_t, std::uint32_t) {
   throw khException(kh::tr("Random access not supported for SQL sources"));
 }
 
-gstRecordHandle gstOGRSQLFormat::GetAttributeImpl(uint32, uint32) {
+gstRecordHandle gstOGRSQLFormat::GetAttributeImpl(std::uint32_t, std::uint32_t) {
   throw khException(kh::tr("Random access not supported for SQL sources"));
 }

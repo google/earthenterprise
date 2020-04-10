@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,10 +34,10 @@ class Reader {
   khTypes::StorageEnum datatype;
   Subtype              subtype_;
   TileOrientation      orientation;
-  uint32               uncompressedTileSize;
+  std::uint32_t               uncompressedTileSize;
 
-  mutable std::vector<uchar>    readBuf;
-  mutable std::vector<uchar>    tmpBuf;
+  mutable std::vector<unsigned char>    readBuf;
+  mutable std::vector<unsigned char>    tmpBuf;
   khDeleteGuard<Compressor> decompressor;
 
   typedef typename OutTile::PixelType PixelType;
@@ -47,14 +48,14 @@ class Reader {
   Subtype              subtype(void) const { return subtype_; }
 
   inline bool FindTile(const khTileAddr &addr,
-                       std::string &filename, uint64 &fileOffset,
-                       uint32 &dataLen) const {
+                       std::string &filename, std::uint64_t &fileOffset,
+                       std::uint32_t &dataLen) const {
     return ffreader.FindTile(addr, filename, fileOffset, dataLen);
   }
 
   // low level read - used if you've already called FindTile
   bool ReadTile(const std::string &filename,
-                uint64 fileOffset, uint32 dataLen,
+                std::uint64_t fileOffset, std::uint32_t dataLen,
                 OutTile &destTile) const;
 
   // Find and read tile
@@ -68,15 +69,15 @@ class Reader {
     presence().PopulateCoverage(cov);
   }
 
-  inline bool ValidLevel(uint level) const {
+  inline bool ValidLevel(unsigned int level) const {
     return presence().ValidLevel(level);
   }
 
-  inline khExtents<uint32> levelTileExtents(uint level) const {
+  inline khExtents<std::uint32_t> levelTileExtents(unsigned int level) const {
     return presence().levelTileExtents(level);
   }
 
-  inline khLevelCoverage levelCoverage(uint level) const {
+  inline khLevelCoverage levelCoverage(unsigned int level) const {
     return khLevelCoverage(level, levelTileExtents(level));
   }
 

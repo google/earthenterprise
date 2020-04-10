@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,8 +38,8 @@ class gstTXTTable : public gstTable {
   virtual gstStatus Open(gstReadMode);
   virtual gstStatus Close();
 
-  bool Readline(uint32 row);
-  virtual gstRecordHandle Row(uint32 r);
+  bool Readline(std::uint32_t row);
+  virtual gstRecordHandle Row(std::uint32_t r);
 
   gstStatus Status() const { return status_; }
 
@@ -52,16 +53,16 @@ class gstTXTTable : public gstTable {
   const char Delimiter() const { return delimiter_; }
   void SetDelimiter(char d) { delimiter_ = d; }
 
-  uint32 SkipRows() const { return skip_rows_; }
-  void SetSkipRows(uint32 s) { skip_rows_ = s; }
+  std::uint32_t SkipRows() const { return skip_rows_; }
+  void SetSkipRows(std::uint32_t s) { skip_rows_ = s; }
 
  private:
   struct IndexHeader {
     char magic[8];     // KEYINDEX
-    int32 numrows;
-    int32 numcols;
-    int64 mtime;       // mod time of txt file
-    int64 offset;      // where index table starts
+    std::int32_t numrows;
+    std::int32_t numcols;
+    std::int64_t mtime;       // mod time of txt file
+    std::int64_t offset;      // where index table starts
   };
 
   int file_descriptor_;
@@ -69,7 +70,7 @@ class gstTXTTable : public gstTable {
 
   FileType file_type_;
   char delimiter_;
-  uint32 skip_rows_;
+  std::uint32_t skip_rows_;
 
   std::vector<off64_t> record_index_;
 

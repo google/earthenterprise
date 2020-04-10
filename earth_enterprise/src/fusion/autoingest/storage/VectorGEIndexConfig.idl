@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,9 +14,9 @@
 // limitations under the License.
 
 
+#include <cstdint>
 #include <string>
 #include <vector>
-#include <khTypes.h>
 #requiresgetheapusage
 
 
@@ -26,12 +27,12 @@ class VectorPacketVersion {
   // cannot pre-bind this to a packetfile output name, since this config
   // gets built before all the vectorfuses are completed
   std::string packet_verref_;
-  uint32 channel_id_;
-  uint32 version_;
+  std::uint32_t channel_id_;
+  std::uint32_t version_;
 };
 class VectorGEIndexConfig {
   std::string db_name_;
-  IsUpToDateIgnore uint32 index_version_;
+  IsUpToDateIgnore std::uint32_t index_version_;
   IsUpToDateIgnore std::vector<VectorPacketVersion> packet_vers_;
   deprecated std::vector<std::string> custom_icons_ = std::vector<std::string>();
   deprecated std::vector<std::string> layer_icons_ = std::vector<std::string>();

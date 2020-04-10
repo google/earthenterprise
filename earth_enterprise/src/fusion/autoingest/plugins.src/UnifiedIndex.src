@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -48,7 +49,7 @@ UnifiedIndexAssetVersionImplD::DoSubmitTask(void)
   // ************************************************
   geindexgen::UnifiedConfig geindex_config;
   geindex_config.indexes_.reserve(config.indexes_.size());
-  for (uint i = 0; i < config.indexes_.size(); ++i) {
+  for (unsigned int i = 0; i < config.indexes_.size(); ++i) {
     AssetVersion assetver(config.indexes_[i].verref_);
     std::string indexdir = assetver->GetOutputFilename(0);
     // TODO: not worth fixing the framework at this

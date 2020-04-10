@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -52,18 +53,18 @@ gstJobStats* job_stats = new gstJobStats("GECOMBINETERRAIN", JobNames, 3);
 
 namespace {
 
-const uint32 kDefaultNumCPUs = 1;
+const std::uint32_t kDefaultNumCPUs = 1;
 
 // Number of cache blocks per filebundle.
-const uint32 kDefaultReadCacheBlocks = 5;
+const std::uint32_t kDefaultReadCacheBlocks = 5;
 
 // Optimal Read cache block size.
-const uint32 kDefaultReadCacheBlockKilobyteSize = 64;
+const std::uint32_t kDefaultReadCacheBlockKilobyteSize = 64;
 
-const uint32 kDefaultSortBufferMegabytes = 512;
+const std::uint32_t kDefaultSortBufferMegabytes = 512;
 
 // Assume 4GB is the min recommended.
-const uint64 kDefaultMinMemoryAssumed = 4000000000U;
+const std::uint64_t kDefaultMinMemoryAssumed = 4000000000U;
 
 const static std::string taskName = "gecombinterrain";
 
@@ -131,7 +132,7 @@ class TranslatingTerrainTraverser : public MergeSource<TerrainQuadsetItem> {
     {
       const geindex::IndexBundleReader &reader =
         source_traverser_.GetIndexBundleReader();
-      for (uint32 p = 0; p < reader.PacketFileCount(); ++p) {
+      for (std::uint32_t p = 0; p < reader.PacketFileCount(); ++p) {
         std::string packetfile = reader.GetPacketFile(p);
         // skip removed packetfiles (delta index)
         if (packetfile.empty()) {
@@ -165,7 +166,7 @@ class TranslatingTerrainTraverser : public MergeSource<TerrainQuadsetItem> {
       QuadtreePath qt_path = source_traverser_.Current().qt_path();
       ++source_index_;
 
-      uint32 fileNum = source_current.dataAddress.fileNum;
+      std::uint32_t fileNum = source_current.dataAddress.fileNum;
       if (fileNum >= tokens_.size()) {
         throw khSimpleException("TranslatingTerrainTraverser::Advance(): ")
           << "fileNum(" << fileNum
@@ -218,11 +219,11 @@ int main(int argc, char **argv) {
     int sortbuf = kDefaultSortBufferMegabytes;
     
     //initialize to 0 to make it easier to determine if parameter was passed
-    uint32 numcpus = 0,
+    std::uint32_t numcpus = 0,
            numCompressThreads = 0;
     PERF_CONF_LOGGING( "proc_exec_config_default_numcpus", taskName, numcpus );
-    uint32 read_cache_max_blocks = kDefaultReadCacheBlocks;
-    uint32 read_cache_block_size = kDefaultReadCacheBlockKilobyteSize;
+    std::uint32_t read_cache_max_blocks = kDefaultReadCacheBlocks;
+    std::uint32_t read_cache_block_size = kDefaultReadCacheBlockKilobyteSize;
 
     khGetopt options;
     options.flagOpt("help", help);
@@ -231,14 +232,14 @@ int main(int argc, char **argv) {
     options.opt("indexversion", index_version);
     options.opt("sortbuf", sortbuf);
     options.opt("numCompressThreads",numCompressThreads,
-               &khGetopt::RangeValidator<uint32, 1, kMaxNumJobsLimit_2>);
+               &khGetopt::RangeValidator<std::uint32_t, 1, kMaxNumJobsLimit_2>);
     options.opt("numcpus", numcpus,
-                &khGetopt::RangeValidator<uint32, 1, kMaxNumJobsLimit_2>);
+                &khGetopt::RangeValidator<std::uint32_t, 1, kMaxNumJobsLimit_2>);
     PERF_CONF_LOGGING( "proc_exec_config_cli_numcpus", taskName, numcpus );
     options.opt("read_cache_max_blocks", read_cache_max_blocks,
-                &khGetopt::RangeValidator<uint32, 0, 1024>);
+                &khGetopt::RangeValidator<std::uint32_t, 0, 1024>);
     options.opt("read_cache_block_size", read_cache_block_size,
-                &khGetopt::RangeValidator<uint32, 1, 1024>);
+                &khGetopt::RangeValidator<std::uint32_t, 1, 1024>);
     if (!options.processAll(argc, argv, argn)) {
       usage(progname);
     }
@@ -249,8 +250,8 @@ int main(int argc, char **argv) {
     if (argn == argc) {
       usage(progname, "No input indices specified");
     }
-    uint cmdDefaultCPUs = CommandlineNumCPUsDefault();
-    uint numavailable = GetMaxNumJobs();
+    unsigned int cmdDefaultCPUs = CommandlineNumCPUsDefault();
+    unsigned int numavailable = GetMaxNumJobs();
 
     /* 
         Choosing number of CPUs:
@@ -337,7 +338,7 @@ int main(int argc, char **argv) {
                        "to a number 2 or greater.\n", argv[0]);
     } else {
       // Get the physical memory size to help choose the read_cache_max_blocks.
-      uint64 physical_memory_size = GetPhysicalMemorySize();
+      std::uint64_t physical_memory_size = GetPhysicalMemorySize();
       PERF_CONF_LOGGING( "proc_exec_config_memsize", taskName, physical_memory_size );
       if (physical_memory_size == 0) {
         physical_memory_size = kDefaultMinMemoryAssumed;
@@ -355,8 +356,8 @@ int main(int argc, char **argv) {
 
       // Figure out the worst case size of the read cache
       // (if all of max_open_fds are open simultaneously)
-      uint64 estimated_read_cache_bytes = max_open_fds *
-        static_cast<uint64>(read_cache_max_blocks * read_cache_block_size);
+      std::uint64_t estimated_read_cache_bytes = max_open_fds *
+        static_cast<std::uint64_t>(read_cache_max_blocks * read_cache_block_size);
       notify(NFY_NOTICE,
              "Read Cache Settings: %u count %u byte blocks per resource "
              "(max files open set to %u)\n"

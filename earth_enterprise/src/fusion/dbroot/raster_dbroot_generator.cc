@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,7 +28,7 @@ RasterDbrootGenerator::RasterDbrootGenerator(
                          false /* map_strings_to_ids */),
     raster_context_(raster_context) {
   // My config has the list of used providers. Add them to the baseclass.
-  for (std::set<uint32>::const_iterator p =
+  for (std::set<std::uint32_t>::const_iterator p =
            raster_context_->config_.used_provider_ids_.begin();
        p != raster_context_->config_.used_provider_ids_.end(); ++p) {
     AddProvider(*p);

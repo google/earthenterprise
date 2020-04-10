@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,30 +27,30 @@ void TileAlignedTraversalImpl_(const khLevelCoverage &currLevelCoverage,
                                const khInsetCoverage &insetCoverage,
                                Operation &op)
 {
-  uint currLevel = currLevelCoverage.level;
+  unsigned int currLevel = currLevelCoverage.level;
   assert(insetCoverage.hasLevel(currLevel));
   assert(insetCoverage.levelExtents(currLevel)
          .contains(currLevelCoverage.extents));
 
   if (currLevel + 1 == insetCoverage.endLevel()) {
     // We're at the bottom level, process the intersected tiles
-    for (uint32 row = currLevelCoverage.extents.beginRow();
+    for (std::uint32_t row = currLevelCoverage.extents.beginRow();
          row < currLevelCoverage.extents.endRow(); ++row) {
-      for (uint32 col = currLevelCoverage.extents.beginCol();
+      for (std::uint32_t col = currLevelCoverage.extents.beginCol();
            col < currLevelCoverage.extents.endCol(); ++col) {
         op(khTileAddr(currLevel, row, col));
       }
     }
   } else {
     // We're not at the bottom yet, recurse until we are
-    for (uint32 row = currLevelCoverage.extents.beginRow();
+    for (std::uint32_t row = currLevelCoverage.extents.beginRow();
          row < currLevelCoverage.extents.endRow(); ++row) {
-      for (uint32 col = currLevelCoverage.extents.beginCol();
+      for (std::uint32_t col = currLevelCoverage.extents.beginCol();
            col < currLevelCoverage.extents.endCol(); ++col) {
         khTileAddr thisAddr(currLevel, row, col);
         TileAlignedTraversalImpl_
           (khLevelCoverage(currLevel+1,
-                           khExtents<uint32>::Intersection
+                           khExtents<std::uint32_t>::Intersection
                            (insetCoverage.levelExtents(currLevel+1),
                             thisAddr.MagnifiedBy(1).extents)),
            insetCoverage,
@@ -67,7 +68,7 @@ void TileAlignedTraversalImpl_(const khLevelCoverage &currLevelCoverage,
 template <class Operation>
 void TileAlignedTraversal(const khTilespace &tilespace,
                           const khLevelCoverage &targetCoverage,
-                          uint beginAlignLevel,
+                          unsigned int beginAlignLevel,
                           Operation op)
 {
   khInsetCoverage insetCoverage(tilespace,
@@ -95,11 +96,11 @@ template <class Operation>
 void TopRightToBottomLeftTraversal(const khLevelCoverage &targetCoverage,
                                    Operation op)
 {
-  const khExtents<uint32> &extents(targetCoverage.extents);
-  uint32 w = extents.width();
-  uint32 h = extents.height();
-  for (uint i = 0; i < w + h - 1; ++i) {
-    uint32 row, col, num;
+  const khExtents<std::uint32_t> &extents(targetCoverage.extents);
+  std::uint32_t w = extents.width();
+  std::uint32_t h = extents.height();
+  for (unsigned int i = 0; i < w + h - 1; ++i) {
+    std::uint32_t row, col, num;
     if (i < w) {
       col = extents.endCol() - (i + 1);
       row = extents.endRow() - 1;
@@ -109,7 +110,7 @@ void TopRightToBottomLeftTraversal(const khLevelCoverage &targetCoverage,
       row = (extents.endRow() - 1) - (i - w + 1);
       num = std::min(w, row - extents.beginRow() + 1);
     }
-    for (uint j = 0; j < num; ++j) {
+    for (unsigned int j = 0; j < num; ++j) {
       op(khTileAddr(targetCoverage.level, row, col));
       ++col;
       --row;

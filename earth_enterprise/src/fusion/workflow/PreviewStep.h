@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -97,10 +98,10 @@ class AggregateChainedPreviewStep : public PreviewStep<Out> {
       PreviewStep<Out>(), processor(processor_),
       inputSteps(inputSteps_),
       inputs() {
-    uint count = inputSteps.size();
+    unsigned int count = inputSteps.size();
     assert(count > 0);
     inputs.resize(count);
-    for (uint i = 0; i < count; ++i) {
+    for (unsigned int i = 0; i < count; ++i) {
       inputs[i] = TransferOwnership(new In());
     }
   }
@@ -109,7 +110,7 @@ class AggregateChainedPreviewStep : public PreviewStep<Out> {
   virtual bool Fetch(Out *out) {
     std::vector<const In*> found;
     try {
-      for (uint i = 0; i < inputs.size(); ++i) {
+      for (unsigned int i = 0; i < inputs.size(); ++i) {
         ResetTile(&*inputs[i]);
         inputs[i]->SetPath(out->path);
 
@@ -118,7 +119,7 @@ class AggregateChainedPreviewStep : public PreviewStep<Out> {
         }
       }
     } catch (...) {
-      for (uint i = 0; i < inputs.size(); ++i) {
+      for (unsigned int i = 0; i < inputs.size(); ++i) {
         ResetTile(&*inputs[i]);
       }
       throw;

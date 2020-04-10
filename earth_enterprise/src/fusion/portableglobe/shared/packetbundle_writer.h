@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +25,8 @@
 #include <fstream>  // NOLINT(readability/streams)
 #include <string>
 #include <vector>
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "fusion/portableglobe/shared/packetbundle.h"
 #include "fusion/portableglobe/shared/file_packer.h"
 #include "fusion/portableglobe/shared/file_unpacker.h"
@@ -47,8 +49,8 @@ class PacketBundleWriter : public PacketBundle {
    * file index.
    */
   PacketBundleWriter(const std::string& directory,
-                     uint64 max_file_size = kMaxFileSize,
-                     uint16 file_id = 0);
+                     std::uint64_t max_file_size = kMaxFileSize,
+                     std::uint16_t file_id = 0);
   /**
    * Constructor for a delta packet bundle writer with a particular
    * file index. If a packet is only written if it does not exist
@@ -57,8 +59,8 @@ class PacketBundleWriter : public PacketBundle {
   PacketBundleWriter(const std::string& directory,
                      const std::string& base_file,
                      bool is_qtp_bundle = false,
-                     uint64 max_file_size = kMaxFileSize,
-                     uint16 file_id = 0);
+                     std::uint64_t max_file_size = kMaxFileSize,
+                     std::uint16_t file_id = 0);
   ~PacketBundleWriter();
 
   /**
@@ -66,16 +68,16 @@ class PacketBundleWriter : public PacketBundle {
    * packetbundle is full, close it and start a new one.
    */
   bool AppendPacket(const std::string qtpath,
-                    uint8 packet_type,
-                    uint16 channel,
+                    std::uint8_t packet_type,
+                    std::uint16_t channel,
                     const std::string& data) {
     return AppendPacket(qtpath, packet_type, channel,
                         data.c_str(), data.size());
   }
 
   bool AppendPacket(const std::string qtpath,
-                    uint8 packet_type,
-                    uint16 channel,
+                    std::uint8_t packet_type,
+                    std::uint16_t channel,
                     const char* const data,
                     const size_t size);
 
@@ -87,11 +89,11 @@ class PacketBundleWriter : public PacketBundle {
   std::ofstream index_file_;
 
   // Id of the packetbundle file we are currently writing.
-  uint16 file_id_;
+  std::uint16_t file_id_;
   // Maximum size of the packetbundle file before starting a new file.
-  uint64 max_file_size_;
+  std::uint64_t max_file_size_;
   // Size of the packetbundle file we are currently writing.
-  uint64 current_file_size_;
+  std::uint64_t current_file_size_;
   // Keep track of last index item so we can detect if a packet
   // somehow comes out of order. Then we fail.
   IndexItem last_index_item_;

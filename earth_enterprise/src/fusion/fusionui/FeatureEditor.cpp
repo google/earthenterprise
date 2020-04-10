@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -173,7 +174,7 @@ FeatureItem::FeatureItem(QListView* parent, int id, gstGeodeHandle geode,
   setRenameEnabled(0, false);
 
   if (attrib) {
-    for (uint f = 0; f < attrib->NumFields(); ++f) {
+    for (unsigned int f = 0; f < attrib->NumFields(); ++f) {
       setText(f + 1, attrib->Field(f)->ValueAsUnicode());
       setRenameEnabled(f + 1, true);
     }
@@ -214,7 +215,7 @@ void FeatureItem::setOpen(bool o) {
       case gstPolygon:
       case gstPolygon25D:
       case gstPolygon3D:
-        for (uint i = 0;  i < geode_->NumParts(); ++i) {
+        for (unsigned int i = 0;  i < geode_->NumParts(); ++i) {
           new SubpartItem(this, i, geode_);
         }
         break;
@@ -317,7 +318,7 @@ void SubpartItem::setOpen(bool o) {
 #if 0
   if (o) {
     setPixmap(0, *folderOpen);
-    for (uint v = 0; v < geode_->vertexCount(id_); ++v)
+    for (unsigned int v = 0; v < geode_->vertexCount(id_); ++v)
       new VertexItem(this, v, geode_);
   } else {
     setPixmap(0, *folderClosed);
@@ -547,9 +548,9 @@ void FeatureEditor::ContextMenu(QListViewItem* item, const QPoint& pos, int) {
           const gstGeode *geode_copy_buffer =
               static_cast<const gstGeode*>(&(*geode_copy_buffer_));
 
-          for (uint p = 0; p < geode_copy_buffer->NumParts(); ++p) {
+          for (unsigned int p = 0; p < geode_copy_buffer->NumParts(); ++p) {
             geode->AddPart(geode_copy_buffer->VertexCount(p));
-            for (uint v = 0; v < geode_copy_buffer->VertexCount(p); ++v) {
+            for (unsigned int v = 0; v < geode_copy_buffer->VertexCount(p); ++v) {
               geode->AddVertex(geode_copy_buffer->GetVertex(p, v));
             }
           }
@@ -690,7 +691,7 @@ bool FeatureEditor::ExportKVP(const QString& fname) {
       notify(NFY_WARN, "Unable to add feature geometry");
       return false;
     }
-    for (uint c = 0; c < current_header_->numColumns(); ++c) {
+    for (unsigned int c = 0; c < current_header_->numColumns(); ++c) {
       rec->Field(c)->set(item->text(c + 1));
     }
     if (kdb.AddRecord(rec) != GST_OKAY) {
@@ -751,8 +752,8 @@ void FeatureEditor::MousePress(const gstBBox& box_point, Qt::ButtonState state) 
              __func__);
     } else {
       gstGeode *geode = static_cast<gstGeode*>(&(*geodeh));
-      for (uint p = 0; p < geode->NumParts() && match == 0; ++p) {
-        for (uint v = 0; v < geode->VertexCount(p) && match == 0; ++v) {
+      for (unsigned int p = 0; p < geode->NumParts() && match == 0; ++p) {
+        for (unsigned int v = 0; v < geode->VertexCount(p) && match == 0; ++v) {
           if (box_point.Contains(geode->GetVertex(p, v))) {
             if (state & Qt::ControlButton) {
               (*it)->EnsureBackup();
@@ -793,9 +794,9 @@ void FeatureEditor::MousePress(const gstBBox& box_point, Qt::ButtonState state) 
                __func__);
       } else {
         gstGeode *geode = static_cast<gstGeode*>(&(*geodeh));
-        uint part;
+        unsigned int part;
         if (geode->Intersect(box_point, &part)) {
-          for (uint v = 0; v < geode->VertexCount(part) - 1; ++v) {
+          for (unsigned int v = 0; v < geode->VertexCount(part) - 1; ++v) {
             // find the segment that is intersected
             gstVertex v0 = geode->GetVertex(part, v);
             gstVertex v1 = geode->GetVertex(part, v + 1);
@@ -1182,7 +1183,7 @@ void FeatureEditor::AddFeaturesFromSource(gstSource* source) {
 
   // configure columns for attribute data
   current_header_ = source->GetAttrDefs(0);
-  for (uint col = 0; col < current_header_->numColumns(); ++col)
+  for (unsigned int col = 0; col < current_header_->numColumns(); ++col)
     feature_listview->addColumn(current_header_->Name(col));
 
   // only adjust columns after all have been added
@@ -1191,7 +1192,7 @@ void FeatureEditor::AddFeaturesFromSource(gstSource* source) {
   SoftErrorPolicy soft_errors(kMaxBadFeatures);
   try {
     // iterate over all source features from layer 0
-    for (uint32 f = 0; f < source->NumFeatures(0); ++f) {
+    for (std::uint32_t f = 0; f < source->NumFeatures(0); ++f) {
       try {
         // retrieve feature & attribute
         const bool is_mercator_preview = false;  // This call chain is from
@@ -1212,7 +1213,7 @@ void FeatureEditor::AddFeaturesFromSource(gstSource* source) {
     if (soft_errors.NumSoftErrors() > 0) {
       QString error = kh::tr("Encountered %1 error(s) during query:")
                       .arg(soft_errors.NumSoftErrors());
-      for (uint i = 0; i < soft_errors.Errors().size(); ++i) {
+      for (unsigned int i = 0; i < soft_errors.Errors().size(); ++i) {
         error += "\n";
         error += QString::fromUtf8(soft_errors.Errors()[i].c_str());
       }
@@ -1224,7 +1225,7 @@ void FeatureEditor::AddFeaturesFromSource(gstSource* source) {
 
   } catch (const SoftErrorPolicy::TooManyException &e) {
     QString error(kh::tr("Too many bad features"));
-    for (uint i = 0; i < e.errors_.size(); ++i) {
+    for (unsigned int i = 0; i < e.errors_.size(); ++i) {
       error += "\n" + e.errors_[i];
     }
     QMessageBox::critical(this, tr("Error"),
@@ -1323,8 +1324,8 @@ void FeatureEditor::BoxCut() {
                        box_cut_spin->value(),
                        box_cut_spin->value());
 
-    for (uint row = lc.extents.beginY(); row < lc.extents.endY(); ++row) {
-      for (uint col = lc.extents.beginX(); col < lc.extents.endX(); ++col) {
+    for (unsigned int row = lc.extents.beginY(); row < lc.extents.endY(); ++row) {
+      for (unsigned int col = lc.extents.beginX(); col < lc.extents.endX(); ++col) {
         double w = static_cast<double>(col) * grid_step;
         double e = w + grid_step;
         double s = static_cast<double>(row) * grid_step;
@@ -1370,8 +1371,8 @@ void FeatureEditor::MobileConvert() {
                        mobile_level_spin->value());
 
     // cut up geode for each block that it intersects
-    for (uint row = lc.extents.beginY(); row < lc.extents.endY(); ++row) {
-      for (uint col = lc.extents.beginX(); col < lc.extents.endX(); ++col) {
+    for (unsigned int row = lc.extents.beginY(); row < lc.extents.endY(); ++row) {
+      for (unsigned int col = lc.extents.beginX(); col < lc.extents.endX(); ++col) {
         MobileBlockHandle eb = MobileBlockImpl::Create(
             khTileAddr(mobile_level_spin->value(), row, col),
             snap_grid_spin->value(),
@@ -1502,8 +1503,8 @@ void FeatureEditor::Join() {
   }
 
   //  int before_count = glist.size();
-  uint64 num_duplicates = 0;
-  uint64 num_joined = 0;
+  std::uint64_t num_duplicates = 0;
+  std::uint64_t num_joined = 0;
   vectorprep::PolylineJoiner<GeodeList>::
       RemoveDuplicatesAndJoinNeighborsAtDegreeTwoVertices(
           glist, &num_duplicates, &num_joined);

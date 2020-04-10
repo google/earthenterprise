@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -51,7 +52,7 @@ bool khMutexBase::TryLock(void) {
   return (err == 0);
 }
 
-bool khMutexBase::TimedTryLock(uint secToWait) {
+bool khMutexBase::TimedTryLock(unsigned int secToWait) {
   timespec timeoutThreshold;
   clock_gettime(CLOCK_REALTIME, &timeoutThreshold);
   timeoutThreshold.tv_sec += secToWait;

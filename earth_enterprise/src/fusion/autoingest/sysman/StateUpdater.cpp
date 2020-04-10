@@ -93,10 +93,10 @@ class StateUpdater::SetStateVisitor : public StateUpdater::VisitorBase {
     class InputStates {
       private:
         bool decided = false;
-        uint32 numinputs = 0;
-        uint32 numgood = 0;
-        uint32 numblocking = 0;
-        uint32 numoffline = 0;
+        std::uint32_t numinputs = 0;
+        std::uint32_t numgood = 0;
+        std::uint32_t numblocking = 0;
+        std::uint32_t numoffline = 0;
       public:
         void Add(AssetDefs::State inputState) {
           ++numinputs;
@@ -115,7 +115,7 @@ class StateUpdater::SetStateVisitor : public StateUpdater::VisitorBase {
             decided = true;
           }
         }
-        void GetOutputs(AssetDefs::State & stateByInputs, bool & blockersAreOffline, uint32 & numInputsWaitingFor) {
+        void GetOutputs(AssetDefs::State & stateByInputs, bool & blockersAreOffline, std::uint32_t & numInputsWaitingFor) {
           if (numinputs == numgood) {
             stateByInputs = AssetDefs::Queued;
           } else if (numblocking) {
@@ -140,10 +140,10 @@ class StateUpdater::SetStateVisitor : public StateUpdater::VisitorBase {
     class ChildStates {
       private:
         bool decided = false;
-        uint32 numkids = 0;
-        uint32 numgood = 0;
-        uint32 numblocking = 0;
-        uint32 numinprog = 0;
+        std::uint32_t numkids = 0;
+        std::uint32_t numgood = 0;
+        std::uint32_t numblocking = 0;
+        std::uint32_t numinprog = 0;
       public:
         void Add(AssetDefs::State childState) {
           ++numkids;
@@ -162,7 +162,7 @@ class StateUpdater::SetStateVisitor : public StateUpdater::VisitorBase {
             decided = true;
           }
         }
-        void GetOutputs(AssetDefs::State & stateByChildren, uint32 & numChildrenWaitingFor) {
+        void GetOutputs(AssetDefs::State & stateByChildren, std::uint32_t & numChildrenWaitingFor) {
           if (numkids == numgood) {
             stateByChildren = AssetDefs::Succeeded;
           } else if (numblocking) {

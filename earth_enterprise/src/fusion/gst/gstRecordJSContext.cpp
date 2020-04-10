@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -140,7 +141,7 @@ JSPropertyOp TinyIdGetterFuncs[] = {
   GetGstValueFieldByIndexPlus256,
   GetGstValueFieldByIndexPlus384,
 };
-const uint gstRecordJSContextImpl::MaxNumProperties = 512;
+const unsigned int gstRecordJSContextImpl::MaxNumProperties = 512;
 
 JSClass gstRecord_wrapper_class = {
     "gstRecord_wrapper_class", JSCLASS_HAS_PRIVATE,
@@ -173,7 +174,7 @@ gstRecordJSWrapperImpl::gstRecordJSWrapperImpl(KHJSContext &cx_,
 
   // Walk the recordHeader, add each viable field name as a property to the
   // newly created object.
-  for (uint f = 0; f < std::min(headerHandle->numColumns(),
+  for (unsigned int f = 0; f < std::min(headerHandle->numColumns(),
                                 gstRecordJSContextImpl::MaxNumProperties);
        ++f) {
     QString name = headerHandle->Name(f);
@@ -294,14 +295,14 @@ void gstRecordJSContextImpl::ExecuteScript(const KHJSScript &script,
   switch (ret.Type()) {
     case gstTagInt:
       {
-        int32 tmp;
+        std::int32_t tmp;
         cx->ExecuteScript(script, tmp);
         ret.set(tmp);
       }
       break;
     case gstTagUInt:
       {
-        uint32 tmp;
+        std::uint32_t tmp;
         cx->ExecuteScript(script, tmp);
         ret.set(tmp);
       }

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,8 +77,8 @@ class Preferences : public PreferencesBase {
   static bool initOnce;
   QString EmptyCheck(const QString& txt);
 
-  std::vector<uint> selectOutline;
-  std::vector<uint> selectFill;
+  std::vector< unsigned int>  selectOutline;
+  std::vector< unsigned int>  selectFill;
 };
 
 #endif  // !KHSRC_FUSION_FUSIONUI_PREFERENCES_H__

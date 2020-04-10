@@ -2,6 +2,7 @@
 #define _CRC_H_
 
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +17,7 @@
 // limitations under the License.
 
 #include <common/base/macros.h>
-#include <khTypes.h>
+#include <cstdint>
 
 // This class implements CRCs (aka Rabin Fingerprints).
 // Treats the input as a polynomial with coefficients in Z(2),
@@ -85,35 +86,35 @@ class CRC {
   // Roll().
   // Each call to New() yeilds a pointer to a new object
   // that may be deallocated with delete.
-  static CRC *New(uint64 lo, uint64 hi, int degree, size_t roll_length);
+  static CRC *New(std::uint64_t lo, std::uint64_t hi, int degree, size_t roll_length);
 
   virtual ~CRC();
 
   // Place the CRC of the empty string in "*lo,*hi"
-  virtual void Empty(uint64 *lo, uint64 *hi) const = 0;
+  virtual void Empty(std::uint64_t *lo, std::uint64_t *hi) const = 0;
 
   // If "*lo,*hi" is the CRC of bytestring A, place the CRC of
   // the bytestring formed from the concatenation of A and the "length"
   // bytes at "bytes" into "*lo,*hi".
-  virtual void Extend(/*INOUT*/ uint64 *lo, /*INOUT*/ uint64 *hi,
+  virtual void Extend(/*INOUT*/ std::uint64_t *lo, /*INOUT*/ std::uint64_t *hi,
                       const void *bytes, size_t length) const = 0;
 
   // Equivalent to Extend(lo, hi, bytes, length) where "bytes"
   // points to an array of "length" zero bytes.
-  virtual void ExtendByZeroes(/*INOUT*/ uint64 *lo, /*INOUT*/ uint64 *hi,
+  virtual void ExtendByZeroes(/*INOUT*/ std::uint64_t *lo, /*INOUT*/ std::uint64_t *hi,
                               size_t length) const = 0;
 
   // If "*lo,*hi" is the CRC of a byte string of length "roll_length"
   // (which is an argument to New() and Default()) that consists of
   // byte "o_byte" followed by string S, set "*lo,*hi" to the CRC of
   // the string that consists of S followed by the byte "i_byte".
-  virtual void Roll(/*INOUT*/ uint64 *lo, /*INOUT*/ uint64 *hi,
-                    uint8 o_byte, uint8 i_byte) const = 0;
+  virtual void Roll(/*INOUT*/ std::uint64_t *lo, /*INOUT*/ std::uint64_t *hi,
+                    std::uint8_t o_byte, std::uint8_t i_byte) const = 0;
 
   // POLYS[] is an array of valid triples that may be given to New()
   static const struct Poly {
-    uint64 lo;                      // first half suitable CRC polynomial
-    uint64 hi;                      // second half of suitable CRC polynomial
+    std::uint64_t lo;                      // first half suitable CRC polynomial
+    std::uint64_t hi;                      // second half of suitable CRC polynomial
     int degree;                     // degree of suitable CRC polynomial
   } *const POLYS;
   // It is guaranteed that no two entries in POLYS[] are identical,

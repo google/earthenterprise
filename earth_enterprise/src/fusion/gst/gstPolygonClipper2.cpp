@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -187,7 +188,7 @@ void PolygonClipper::Run(const gstGeodeHandle &geodeh,
     const gstGeodeCollection *multi_geode =
         static_cast<const gstGeodeCollection*>(&(*geodeh));
     // Process independently each part(polygon) of multi-polygon geometry.
-    for (uint p = 0; p < multi_geode->NumParts(); ++p) {
+    for (unsigned int p = 0; p < multi_geode->NumParts(); ++p) {
       bool _completely_covered = false;
       const gstGeodeHandle &cur_geodeh = multi_geode->GetGeode(p);
       const gstGeode *cur_geode = static_cast<const gstGeode*>(&(*cur_geodeh));
@@ -331,7 +332,7 @@ bool PolygonClipper::AcceptPolygon(const gstGeode *geode, GeodeList *pieces) {
       gstGeode *new_geode = static_cast<gstGeode*>(&(*new_geodeh));
 
       new_geode->AddPart(geode->VertexCount(0));
-      for (uint v = 0; v < geode->VertexCount(0); ++v) {
+      for (unsigned int v = 0; v < geode->VertexCount(0); ++v) {
         new_geode->AddVertexAndEdgeFlag(
             geode->GetVertex(0, v), kNormalEdge);
       }
@@ -341,13 +342,13 @@ bool PolygonClipper::AcceptPolygon(const gstGeode *geode, GeodeList *pieces) {
     }
 
     // Accept data for further processing.
-    for (uint part = 0; part < geode->NumParts(); ++part) {
+    for (unsigned int part = 0; part < geode->NumParts(); ++part) {
       notify(NFY_VERBOSE, "number vertexes in geode part %d: %d", part,
              geode->VertexCount(part));
       polygon_builder_.AcceptPolygonPart(geode, part);
     }
   } else {
-    for (uint part = 0; part < geode->NumParts(); ++part) {
+    for (unsigned int part = 0; part < geode->NumParts(); ++part) {
       notify(NFY_VERBOSE, "number vertexes in geode part %d: %d", part,
              geode->VertexCount(part));
       if (box_.Contains(geode->BoundingBoxOfPart(part))) {

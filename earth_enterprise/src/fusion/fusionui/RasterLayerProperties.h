@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +25,8 @@
 
 #include "rasterlayerpropertiesbase.h"
 
-typedef uint (*FromPixelFunc)( uint );
-typedef uint (*ToPixelFunc)( uint );
+typedef unsigned int (*FromPixelFunc)( unsigned int );
+typedef unsigned int (*ToPixelFunc)( unsigned int );
 
 class RasterLayerProperties : public RasterLayerPropertiesBase
 {

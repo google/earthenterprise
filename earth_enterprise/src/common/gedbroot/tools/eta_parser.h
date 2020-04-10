@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +26,8 @@
 #include <string>
 #include <vector>
 
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "common/notify.h"
 #include "common/khGuard.h"
 
@@ -55,11 +57,11 @@ class EtaStruct {
   // Returns value converted to bool, false by default.
   bool GetBoolValue() const;
 
-  // Converts value to int32, returns 0 if conversion cannot be done.
-  int32 GetInt32Value() const;
+  // Converts value to std::int32_t, returns 0 if conversion cannot be done.
+  std::int32_t GetInt32Value() const;
 
-  // Converts value to int32, returns 0 if conversion cannot be done.
-  uint32 GetUInt32Value() const;
+  // Converts value to std::int32_t, returns 0 if conversion cannot be done.
+  std::uint32_t GetUInt32Value() const;
 
   // Converts value to float, returns 0.0f if conversion cannot be done.
   float GetFloatValue() const;

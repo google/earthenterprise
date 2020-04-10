@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +23,8 @@
 #include <string>
 #include <queue>
 #include <common/base/macros.h>
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "common/quadtreepath.h"
 #include "common/qtpacket/quadtreepacket.h"
 #include "common/packetcompress.h"
@@ -64,7 +66,7 @@ class CrawlerSourceBase {
     return to_do_.top();
   }
   inline const std::string &name() { return name_; }
-  inline uint64 packet_count() const { return packet_count_; }
+  inline std::uint64_t packet_count() const { return packet_count_; }
   static void RemoveOddLevelRefs(
       std::vector<qtpacket::KhQuadtreeDataReference> *ter_refs);
 
@@ -80,7 +82,7 @@ class CrawlerSourceBase {
 
   std::string compressed_packet_buffer_;
   LittleEndianReadBuffer packet_buffer_;
-  uint64 packet_count_;
+  std::uint64_t packet_count_;
   PacketType packet_type_;
   keyhole::JpegCommentDate jpeg_date_;
   DISALLOW_COPY_AND_ASSIGN(CrawlerSourceBase);

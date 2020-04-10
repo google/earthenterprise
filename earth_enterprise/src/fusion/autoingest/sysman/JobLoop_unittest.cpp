@@ -27,9 +27,9 @@ const vector<vector<string>> NO_COMMANDS = {};
 const vector<vector<string>> ONE_COMMAND = {{"cmd1"}};
 const vector<vector<string>> MULTI_COMMANDS = {{"cmd1"}, {"cmd2"}, {"cmd3"}};
 
-const uint DEFAULT_TRIES = 3;
+const unsigned int DEFAULT_TRIES = 3;
 
-bool contains(const set<uint> & s, uint v) {
+bool contains(const set< unsigned int>  & s, unsigned int v) {
   return s.find(v) != s.end();
 }
 
@@ -51,14 +51,14 @@ class MockResourceProvider : public khResourceProvider {
         time_t endtime) override {
       ++resultsLogged;
     }
-    virtual void LogTotalTime(JobIter job, uint32 elapsed) override {
+    virtual void LogTotalTime(JobIter job, std::uint32_t elapsed) override {
       ++timeLogged;
     }
     virtual bool ExecCmdline(JobIter job, const vector<string> &cmdline) override {
       ++executes;
       return !contains(failExecOn, executes);
     }
-    virtual void SendProgress(uint32 job, double progress, time_t progressTime) override {
+    virtual void SendProgress(std::uint32_t job, double progress, time_t progressTime) override {
       assert(progress == 0);
       ++progSent;
     }
@@ -80,12 +80,12 @@ class MockResourceProvider : public khResourceProvider {
       delSuccess = success;
       delTime = beginTime;
     }
-    virtual JobIter FindJobById(uint32 jobid) override {
+    virtual JobIter FindJobById(std::uint32_t jobid) override {
       ++findJobs;
       return (findJobs == failFindJobOn ? myJob.end() : myJob.begin());
     }
     virtual inline bool Valid(JobIter job) const override { return job != myJob.end(); }
-    virtual void LogRetry(JobIter job, uint tries, uint totalTries, uint sleepBetweenTries) override {
+    virtual void LogRetry(JobIter job, unsigned int tries, unsigned int totalTries, unsigned int sleepBetweenTries) override {
       ++retriesLogged;
     }
   public:
@@ -94,25 +94,25 @@ class MockResourceProvider : public khResourceProvider {
     bool setLogFile;
     // Indicates which calls of each function should fail
     // If find job fails we abort immediately, so it only needs to fail once
-    uint failFindJobOn;
+    unsigned int failFindJobOn;
     // Other failures cause retries, so they may need to fail multiple times in
     // the tests (thus they are sets)
-    set<uint> failExecOn;
-    set<uint> failStatusOn;
+    set< unsigned int>  failExecOn;
+    set< unsigned int>  failStatusOn;
 
     // These variables record what the class does
-    uint findJobs;
-    uint logStarted;
-    uint executes;
-    uint progSent;
-    uint getStatus;
-    uint waitFors;
-    uint resultsLogged;
-    uint timeLogged;
-    uint deletes;
+    unsigned int findJobs;
+    unsigned int logStarted;
+    unsigned int executes;
+    unsigned int progSent;
+    unsigned int getStatus;
+    unsigned int waitFors;
+    unsigned int resultsLogged;
+    unsigned int timeLogged;
+    unsigned int deletes;
     bool delSuccess;
     time_t delTime;
-    uint retriesLogged;
+    unsigned int retriesLogged;
 
     MockResourceProvider() :
         myJob({1}),
@@ -133,17 +133,17 @@ class MockResourceProvider : public khResourceProvider {
         delTime(0),
         retriesLogged(0) {}
     void RunJobLoop(const vector<vector<string>> & commands = ONE_COMMAND,
-                    const uint cmdTries = DEFAULT_TRIES,
-                    const uint sleepBetweenTriesSec = 0) {
+                    const unsigned int cmdTries = DEFAULT_TRIES,
+                    const unsigned int sleepBetweenTriesSec = 0) {
       JobLoop(StartJobMsg(1, "test.log", commands), cmdTries, sleepBetweenTriesSec); 
     }
 };
 
 // Set the given failure to occur on all tries of a specific command.
-void SetFailures(set<uint> & failOn, uint cmd) {
-  uint startFail = cmd;
-  uint endFail = cmd + DEFAULT_TRIES;
-  for (uint i = startFail; i < endFail; ++i) {
+void SetFailures(set< unsigned int>  & failOn, unsigned int cmd) {
+  unsigned int startFail = cmd;
+  unsigned int endFail = cmd + DEFAULT_TRIES;
+  for (unsigned int i = startFail; i < endFail; ++i) {
     failOn.emplace(i);
   }
 }
@@ -426,10 +426,10 @@ TEST(JobLoopTest, WaitForPidFailsOnce) {
 }
 
 TEST(JobLoopTest, FailTwice) {
-  const uint FAILURES = 2;
+  const unsigned int FAILURES = 2;
 
   MockResourceProvider resProv;
-  for (uint i = 1; i <= FAILURES; ++i) {
+  for (unsigned int i = 1; i <= FAILURES; ++i) {
     resProv.failExecOn.emplace(i);
   }
   resProv.RunJobLoop(ONE_COMMAND, FAILURES + 1);
@@ -449,11 +449,11 @@ TEST(JobLoopTest, FailTwice) {
 TEST(JobLoopTest, SleepBetweenFails) {
   using TimePoint = chrono::time_point<std::chrono::high_resolution_clock>;
 
-  const uint SLEEP_TIME_SEC = 1;
-  const uint FAILURES = 2;
+  const unsigned int SLEEP_TIME_SEC = 1;
+  const unsigned int FAILURES = 2;
 
   MockResourceProvider resProv;
-  for (uint i = 1; i <= FAILURES; ++i) {
+  for (unsigned int i = 1; i <= FAILURES; ++i) {
     resProv.failExecOn.emplace(i);
   }
   TimePoint start = chrono::high_resolution_clock::now();

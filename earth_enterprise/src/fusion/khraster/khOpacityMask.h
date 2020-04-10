@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,28 +63,28 @@ class khOpacityMask {
     Level& operator=(const Level&);
 
     // used to build a level from a stored buffer
-    Level(uint lev, const khExtents<uint32> &extents,
-          uchar *src);
+    Level(unsigned int lev, const khExtents<std::uint32_t> &extents,
+          unsigned char *src);
 
     // used to build an empty level (all transparent) in preparation
     // to fill it in with real values
-    Level(uint lev, const khExtents<uint32> &extents);
+    Level(unsigned int lev, const khExtents<std::uint32_t> &extents);
 
    public:
-    khDeleteGuard<uchar, ArrayDeleter> buf;
+    khDeleteGuard<unsigned char, ArrayDeleter> buf;
 
     // Will return 'Unknown' if you ask for somthing outside it's known
     // range.
-    OpacityType GetOpacity(uint32 row, uint32 col) const;
-    void SetOpacity(uint32 row, uint32 col, OpacityType opacity);
+    OpacityType GetOpacity(std::uint32_t row, std::uint32_t col) const;
+    void SetOpacity(std::uint32_t row, std::uint32_t col, OpacityType opacity);
 
-    static uint32 BufferSize(uint32 numRows, uint32 numCols) {
+    static std::uint32_t BufferSize(std::uint32_t numRows, std::uint32_t numCols) {
       // We can store four OpacityType's per byte (2 bits each)
       // so calc the number of tiles, and divide by 4 (rounding up)
       return ((numRows * numCols + 3) / 4);
     }
 
-    inline uint32 BufferSize(void) const {
+    inline std::uint32_t BufferSize(void) const {
       return BufferSize(extents.height(), extents.width());
     }
   };
@@ -109,9 +110,9 @@ class khOpacityMask {
     levels[addr.level]->SetOpacity(addr.row, addr.col, opacity);
   }
 
-  uint numLevels;
-  uint beginLevel;
-  uint endLevel;
+  unsigned int numLevels;
+  unsigned int beginLevel;
+  unsigned int endLevel;
   khDeleteGuard<Level> levels[NumFusionLevels];
 
  private:
@@ -133,7 +134,7 @@ ComputeOpacity(const TileType &tile) {
 extern khOpacityMask::OpacityType
 ComputeOpacity(const AlphaProductTile &tile);
 khOpacityMask::OpacityType
-ComputeOpacity(const AlphaProductTile &tile, const khExtents<uint32>& extents);
+ComputeOpacity(const AlphaProductTile &tile, const khExtents<std::uint32_t>& extents);
 
 
 

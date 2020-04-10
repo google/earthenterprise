@@ -74,7 +74,7 @@ class PolyMaskTest : public testing::Test {
     }
 
     // Helper function indicates if all bytes in image match the given byte.
-    bool EqualMaskData(std::vector<uchar> data, uchar match_byte, size_t size) {
+    bool EqualMaskData(std::vector<unsigned char> data, unsigned char match_byte, size_t size) {
       for (size_t i = 0; i < size; ++i) {
         if (data[i] != match_byte) {
           return false;
@@ -86,10 +86,10 @@ class PolyMaskTest : public testing::Test {
     // Helper function counts number of occurrences of a given byte in the
     // given mask.
     int CountBytes(std::string mask,
-                   uchar match_byte,
+                   unsigned char match_byte,
                    int width,
                    int height) {
-      std::vector<uchar> data(width * height);
+      std::vector<unsigned char> data(width * height);
       int count = 0;
 
       // Load mask to count from file.
@@ -109,11 +109,11 @@ class PolyMaskTest : public testing::Test {
     // is equal to the given byte.
     bool XorMaskMatch(std::string mask1,
                       std::string mask2,
-                      uchar match_byte,
+                      unsigned char match_byte,
                       int width,
                       int height) {
-      std::vector<uchar> data1(width * height);
-      std::vector<uchar> data2(width * height);
+      std::vector<unsigned char> data1(width * height);
+      std::vector<unsigned char> data2(width * height);
 
       // Load two masks from given files.
       PolyMask::LoadMask(mask1, &data1, width, height);
@@ -122,7 +122,7 @@ class PolyMaskTest : public testing::Test {
       // Check if all bytes are equal.
       bool equal = true;
       for (int i = 0; i < width * height; ++i) {
-        uchar xor_byte = data1[i] ^ data2[i];
+        unsigned char xor_byte = data1[i] ^ data2[i];
         if (xor_byte != match_byte) {
           notify(NFY_NOTICE,
                  "failed at %d (d1: %x d2: %x xor: %x match: %x)",

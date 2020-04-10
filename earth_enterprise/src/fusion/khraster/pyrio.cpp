@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -49,21 +50,21 @@ namespace IndexStorage {
 // so we can't read/write this header in one go, but that's OK. :-)
 struct Header {
  private:
-  static const uint numHeaderElem = 16;
-  static const uint32 EndianCheck = 0x11223344;
+  static const unsigned int numHeaderElem = 16;
+  static const std::uint32_t EndianCheck = 0x11223344;
  public:
   static const char themagic[];
   char   magic[20];
-  uint32 iparams[numHeaderElem];
+  std::uint32_t iparams[numHeaderElem];
   double dparams[numHeaderElem];
  private:
-  uint formatMajorVersion(void) const {
+  unsigned int formatMajorVersion(void) const {
     return magic[17] - '0';
   }
-  uint formatMinorVersion(void) const {
+  unsigned int formatMinorVersion(void) const {
     return magic[19] - '0';
   }
-  uint formatVersion(void) const {
+  unsigned int formatVersion(void) const {
     return formatMajorVersion() * 10 + formatMinorVersion();
   }
 
@@ -94,10 +95,10 @@ struct Header {
 
   inline void LittleEndianToHost(void) {
     // nothing to do for magic
-    for (uint i = 0; i < numHeaderElem; ++i) {
+    for (unsigned int i = 0; i < numHeaderElem; ++i) {
       iparams[i] = ::LittleEndianToHost(iparams[i]);
     }
-    for (uint i = 0; i < numHeaderElem; ++i) {
+    for (unsigned int i = 0; i < numHeaderElem; ++i) {
       dparams[i] = ::LittleEndianToHost(dparams[i]);
     }
   }
@@ -170,7 +171,7 @@ pyrio::IndexStorage::Header::Read(pyrio::Header &phdr, int fd)
     case 10:
       phdr.numComponents = hdr.numComponents();
       phdr.level = hdr.level();
-      phdr.levelSize = khSize<uint32>(hdr.numCols(), hdr.numRows());
+      phdr.levelSize = khSize<std::uint32_t>(hdr.numCols(), hdr.numRows());
       phdr.dataExtents = khExtents<double>(NSEWOrder,
                                               hdr.dataNorth(),
                                               hdr.dataSouth(),
@@ -194,7 +195,7 @@ pyrio::IndexStorage::Header::Read(pyrio::Header &phdr, int fd)
 
         // Earlier versions of pyramidio only supported since byte
         // components. It also left the unused fields as garbage. :-(
-        // When support for int16 conponents was put in, they staeted
+        // When support for std::int16_t conponents was put in, they staeted
         // filling in the componentsize. So in this old header, if the
         // component size isn't 2, make it one. This is the same backwards
         // compatibility logic that was in older version of pyramidio
@@ -276,7 +277,7 @@ pyrio::IndexStorage::Header::Write(int fd, const pyrio::Header &phdr)
   hdr.numRows()       = phdr.levelSize.height;
   hdr.level()         = phdr.level;
   hdr.tilesize()      = RasterProductTileResolution;
-  hdr.compression()   = (uint32)phdr.compressMode;
+  hdr.compression()   = (std::uint32_t)phdr.compressMode;
   hdr.numComponents() = phdr.numComponents;
   hdr.componentSize() = khTypes::StorageSize(phdr.componentType);
   hdr.dataNorth()     = phdr.dataExtents.north();
@@ -287,8 +288,8 @@ pyrio::IndexStorage::Header::Write(int fd, const pyrio::Header &phdr)
   hdr.tileSouth()     = phdr.tileExtents.south();
   hdr.tileEast()      = phdr.tileExtents.east();
   hdr.tileWest()      = phdr.tileExtents.west();
-  hdr.rasterType()    = (uint32)phdr.rasterType;
-  hdr.componentType() = (uint32)phdr.componentType;
+  hdr.rasterType()    = (std::uint32_t)phdr.rasterType;
+  hdr.componentType() = (std::uint32_t)phdr.componentType;
 
   // convert from host byte order
   hdr.HostToLittleEndian();
@@ -346,7 +347,7 @@ pyrio::Reader::Reader(const std::string &filename) :
       break;
     case CompressJPEG:
       if (header_.componentType != khTypes::UInt8) {
-        throw khException(kh::tr("Error reading %1: JPEG compression with non uint8 pixel type").arg(filename));
+        throw khException(kh::tr("Error reading %1: JPEG compression with non std::uint8_t pixel type").arg(filename));
       }
       compressor = TransferOwnership(
           new JPEGCompressor(RasterProductTileResolution,
@@ -375,27 +376,27 @@ pyrio::Reader::Reader(const std::string &filename) :
   // bloat instead of compress.  If we guess too small, we'll just make it
   // bigger later.
   if (compressor) {
-    readBufSize = (uint32)(RasterProductTileResolution *
+    readBufSize = (std::uint32_t)(RasterProductTileResolution *
                            RasterProductTileResolution *
                            1 * /* pyrio always compresses on band at a time */
                            khTypes::StorageSize(header_.componentType) *
                            1.1);
-    readBuf = TransferOwnership(new uchar[readBufSize]);
+    readBuf = TransferOwnership(new unsigned char[readBufSize]);
   }
 }
 
 
 bool
-pyrio::Reader::ReadBandBufs(uint32 row, uint32 col,
-                            uchar* destBufs[], uint bandsRequested[],
-                            uint numBandsRequested,
+pyrio::Reader::ReadBandBufs(std::uint32_t row, std::uint32_t col,
+                            unsigned char* destBufs[], unsigned int bandsRequested[],
+                            unsigned int numBandsRequested,
                             khTypes::StorageEnum destType,
                             bool flipTopToBottom) const
 {
-  const uint NumIndexElem = 1 + header_.numComponents;
-  const uint32 PixelCount =
+  const unsigned int NumIndexElem = 1 + header_.numComponents;
+  const std::uint32_t PixelCount =
     RasterProductTileResolution * RasterProductTileResolution;
-  const uint32 UncompressedBandSize =
+  const std::uint32_t UncompressedBandSize =
     PixelCount * khTypes::StorageSize(header_.componentType);
 
   if ((row >= header_.levelSize.height) ||
@@ -404,7 +405,7 @@ pyrio::Reader::ReadBandBufs(uint32 row, uint32 col,
     // above this one will catch tile requests that are outside what
     // "should" be here. If we get to here it means this is an old pyr
     // that's missing tiles due to rounding errors
-    for (uint b = 0; b < numBandsRequested; ++b) {
+    for (unsigned int b = 0; b < numBandsRequested; ++b) {
       memset(destBufs[b], 0,
              PixelCount * khTypes::StorageSize(destType));
     }
@@ -428,7 +429,7 @@ pyrio::Reader::ReadBandBufs(uint32 row, uint32 col,
            khstrerror(errno).c_str());
     return false;
   }
-  for (uint i = 0; i < NumIndexElem; ++i) {
+  for (unsigned int i = 0; i < NumIndexElem; ++i) {
     indexinfo[i] = ::LittleEndianToHost(indexinfo[i]);
   }
 
@@ -439,45 +440,45 @@ pyrio::Reader::ReadBandBufs(uint32 row, uint32 col,
 
   if ((header_.componentType != destType) && !convertBuf) {
     if (!convertBuf) {
-      convertBuf = TransferOwnership(new uchar[UncompressedBandSize]);
+      convertBuf = TransferOwnership(new unsigned char[UncompressedBandSize]);
     }
   }
   if (flipTopToBottom) {
     if (!flipBuf) {
       flipBuf = TransferOwnership(
-          new uchar[PixelCount * khTypes::StorageSize(destType)]);
+          new unsigned char[PixelCount * khTypes::StorageSize(destType)]);
     }
   }
 
   // For mono-chromatic images read just one band and replicate if necessary.
-  uint one_band = 0;
+  unsigned int one_band = 0;
   uint* const bands = header_.numComponents == 1 ? &one_band : bandsRequested;
-  const uint numBands = header_.numComponents == 1 ? 1 : numBandsRequested;
+  const unsigned int numBands = header_.numComponents == 1 ? 1 : numBandsRequested;
 
-  for (uint i = 0; i < numBands; ++i) {
+  for (unsigned int i = 0; i < numBands; ++i) {
     // figure out which band to read next
-    uint b = bands[i];
+    unsigned int b = bands[i];
     if (b >= header_.numComponents) {
       notify(NFY_WARN, "Internal Error: Invalid band number: %u >= %u",
              b, header_.numComponents);
       return false;
     }
-    uchar *bandBuf = destBufs[i];
-    const uint32 toread = indexinfo[b+1];
+    unsigned char *bandBuf = destBufs[i];
+    const std::uint32_t toread = indexinfo[b+1];
 
     // calculate the offset of the band data (tile offset + sizes of
     // previous bands)
     off64_t bandOffset = indexinfo[0];
-    for (uint j = 0; j < b; ++j)
+    for (unsigned int j = 0; j < b; ++j)
       bandOffset += indexinfo[j+1];
 
     // setup tmpbuf so we can read into it
-    uchar *tmpbuf;
+    unsigned char *tmpbuf;
     if (compressor) {
       // make sure my read buf is big enough
       if (readBufSize < toread) {
         readBufSize = toread;
-        readBuf = TransferOwnership(new uchar[readBufSize]);
+        readBuf = TransferOwnership(new unsigned char[readBufSize]);
       }
       tmpbuf = &*readBuf;
     } else {
@@ -520,7 +521,7 @@ pyrio::Reader::ReadBandBufs(uint32 row, uint32 col,
       } else {
         uncompBuf = (char*)bandBuf;
       }
-      uint32 size = compressor->decompress((char*)tmpbuf, toread,
+      std::uint32_t size = compressor->decompress((char*)tmpbuf, toread,
                                            uncompBuf);
       if (size != UncompressedBandSize) {
         if (size == 0) {
@@ -533,10 +534,10 @@ pyrio::Reader::ReadBandBufs(uint32 row, uint32 col,
           return false;
         }
       }
-      tmpbuf = (uchar*)uncompBuf;
+      tmpbuf = (unsigned char*)uncompBuf;
     }
     if (header_.componentType != destType) {
-      uchar *castbuf;
+      unsigned char *castbuf;
       if (flipTopToBottom) {
         castbuf = &*flipBuf;
       } else {
@@ -548,9 +549,9 @@ pyrio::Reader::ReadBandBufs(uint32 row, uint32 col,
       tmpbuf = castbuf;
     }
     if (flipTopToBottom) {
-      uint32 lineSize = RasterProductTileResolution *
+      std::uint32_t lineSize = RasterProductTileResolution *
                         khTypes::StorageSize(destType);
-      for (uint i = 0; i < RasterProductTileResolution; ++i) {
+      for (unsigned int i = 0; i < RasterProductTileResolution; ++i) {
         memcpy(bandBuf + lineSize * i,
                tmpbuf + (lineSize *
                          (RasterProductTileResolution - i - 1)),
@@ -561,7 +562,7 @@ pyrio::Reader::ReadBandBufs(uint32 row, uint32 col,
   // Replicate if necessary
   if (header_.numComponents == 1) {
     const size_t num_bytes = PixelCount * khTypes::StorageSize(destType);
-    for (uint i = 1; i < numBandsRequested; ++i) {
+    for (unsigned int i = 1; i < numBandsRequested; ++i) {
       memcpy(destBufs[i], destBufs[0], num_bytes);
     }
   }
@@ -574,9 +575,9 @@ pyrio::Reader::ReadBandBufs(uint32 row, uint32 col,
 // ***  pyrio::Writer
 // ****************************************************************************
 pyrio::Writer::Writer(const std::string &filename,
-                      uint numComponents,
-                      uint level,
-                      const khSize<uint32> &levelSize,
+                      unsigned int numComponents,
+                      unsigned int level,
+                      const khSize<std::uint32_t> &levelSize,
                       const khExtents<double> &dataExtents,
                       const khExtents<double> &tileExtents,
                       CompressMode        compressMode,
@@ -589,7 +590,7 @@ pyrio::Writer::Writer(const std::string &filename,
 {
   if (compressMode == CompressJPEG &&
       componentType != khTypes::UInt8) {
-    throw khException(kh::tr("Error writing %1: JPEG compression with non uint8 pixel type").arg(filename));
+    throw khException(kh::tr("Error writing %1: JPEG compression with non std::uint8_t pixel type").arg(filename));
   }
 
   header.numComponents  = numComponents;
@@ -637,7 +638,7 @@ pyrio::Writer::Writer(const std::string &filename,
 
 template <class SrcTile>
 bool
-pyrio::Writer::WritePyrTile(uint32 row, uint32 col, const SrcTile &src)
+pyrio::Writer::WritePyrTile(std::uint32_t row, std::uint32_t col, const SrcTile &src)
 {
   COMPILE_TIME_ASSERT(SrcTile::TileWidth == RasterProductTileResolution,
                       InvalidTileWidth);
@@ -649,8 +650,8 @@ pyrio::Writer::WritePyrTile(uint32 row, uint32 col, const SrcTile &src)
   assert(row < header.levelSize.height);
   assert(col < header.levelSize.width);
 
-  static const uint NumIndexElem = 1 +  header.numComponents;
-  static const uint32 UncompressedBandSize = SrcTile::BandBufSize;
+  static const unsigned int NumIndexElem = 1 +  header.numComponents;
+  static const std::uint32_t UncompressedBandSize = SrcTile::BandBufSize;
   off64_t indexinfo[NumIndexElem];
 
   indexinfo[0] = runningOffset;
@@ -662,8 +663,8 @@ pyrio::Writer::WritePyrTile(uint32 row, uint32 col, const SrcTile &src)
            khstrerror(errno).c_str());
     return false;
   }
-  for (uint b = 0; b <  header.numComponents; ++b) {
-    uint32 writesize;
+  for (unsigned int b = 0; b <  header.numComponents; ++b) {
+    std::uint32_t writesize;
     void *tmpbuf;
     // compress the band data
     if (compressor) {
@@ -688,7 +689,7 @@ pyrio::Writer::WritePyrTile(uint32 row, uint32 col, const SrcTile &src)
   }
 
   // Load the tile offset and band sizes
-  for (uint i = 0; i < NumIndexElem; ++i) {
+  for (unsigned int i = 0; i < NumIndexElem; ++i) {
     indexinfo[i] = ::HostToLittleEndian(indexinfo[i]);
   }
   if (lseek64(pyrfile.fd(),
@@ -711,16 +712,16 @@ pyrio::Writer::WritePyrTile(uint32 row, uint32 col, const SrcTile &src)
 // ***** explicit instantiations since this is in the cpp file *****
 template bool
 pyrio::Writer::WritePyrTile<AlphaProductTile>
-(uint32, uint32, const AlphaProductTile &);
+(std::uint32_t, std::uint32_t, const AlphaProductTile &);
 template bool
 pyrio::Writer::WritePyrTile<ImageryProductTile>
-(uint32, uint32, const ImageryProductTile &);
+(std::uint32_t, std::uint32_t, const ImageryProductTile &);
 template bool
 pyrio::Writer::WritePyrTile<HeightmapFloat32ProductTile>
-(uint32, uint32, const HeightmapFloat32ProductTile &);
+(std::uint32_t, std::uint32_t, const HeightmapFloat32ProductTile &);
 template bool
 pyrio::Writer::WritePyrTile<HeightmapInt16ProductTile>
-(uint32, uint32, const HeightmapInt16ProductTile &);
+(std::uint32_t, std::uint32_t, const HeightmapInt16ProductTile &);
 
 
 bool
@@ -754,7 +755,7 @@ pyrio::SplitPyramidName(const std::string &srcfile,
 std::string
 pyrio::ComposePyramidName(const std::string &basename,
                           const std::string &suffix,
-                          uint level)
+                          unsigned int level)
 {
   std::ostringstream out;
   out << basename << std::setw(2) << std::setfill('0') << level << suffix;
@@ -765,7 +766,7 @@ pyrio::ComposePyramidName(const std::string &basename,
 bool
 pyrio::FindPyramidMinMax(const std::string &basename,
                          const std::string &suffix,
-                         uint &minRet, uint &maxRet)
+                         unsigned int &minRet, unsigned int &maxRet)
 {
   bool foundTop = false;
   for (int lev = (int)MaxFusionLevel; lev >= 0; --lev) {
@@ -791,7 +792,7 @@ pyrio::FindHighestResPyramidFile(const std::string &srcfile,
   std::string basename;
   std::string suffix;
   if (SplitPyramidName(srcfile, basename, suffix)) {
-    uint min, max;
+    unsigned int min, max;
     if (FindPyramidMinMax(basename, suffix, min, max)) {
       if (fileRet) {
         *fileRet = ComposePyramidName(basename, suffix, max);
@@ -815,7 +816,7 @@ pyrio::FindHighestResMaskPyramidFile(const std::string &srcfile,
       (dirext == ".kmp")) {
     // the pyramid file is part of a product, use new naming scheme
     std::string basename = khDropExtension(dirname) + ".kmp/level";
-    uint min, max;
+    unsigned int min, max;
     if (FindPyramidMinMax(basename, ".pyr", min, max)) {
       if (fileRet) {
         *fileRet = ComposePyramidName(basename, ".pyr", max);
@@ -827,7 +828,7 @@ pyrio::FindHighestResMaskPyramidFile(const std::string &srcfile,
     std::string basename;
     std::string suffix;
     if (SplitPyramidName(srcfile, basename, suffix)) {
-      uint min, max;
+      unsigned int min, max;
       if (FindPyramidMinMax(basename, "-mask.pyr", min, max)) {
         if (fileRet) {
           *fileRet = ComposePyramidName(basename, "-mask.pyr", max);

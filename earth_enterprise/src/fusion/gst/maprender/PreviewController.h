@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,15 +50,15 @@ class PreviewController {
                     bool debug_ = false);
   ~PreviewController(void);
 
-  bool GetTile(uint64 addr, uchar *outBuf);
-  bool HasLevel(uint32 level);
+  bool GetTile(std::uint64_t addr, unsigned char *outBuf);
+  bool HasLevel(std::uint32_t level);
  private:
   void BuildChildren(SelectorVector &oldSelectors,
                      gstProgress &progress);
 
   const khTilespace& tilespace;
   double oversizeFactor;
-  uint addrShift;
+  unsigned int addrShift;
 
   // we keep a copy ourselves. We pass references to subpieces of this config
   // to our various PreviewStp children
@@ -70,7 +71,7 @@ class PreviewController {
   khDeleteGuard<RendererStep> renderer;
 
   khCache<QuadtreePath, khSharedHandle<RendererOutputTile> > cache;
-  geMultiRange<uint32> validLevels;
+  geMultiRange<std::uint32_t> validLevels;
   bool debug;
 
   DISALLOW_COPY_AND_ASSIGN(PreviewController);

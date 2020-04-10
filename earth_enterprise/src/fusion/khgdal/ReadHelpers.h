@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,14 +25,14 @@
 // ****************************************************************************
 // ***  PaletteAssigner
 // ****************************************************************************
-template <class T, uint numcomp>
+template <class T, unsigned int numcomp>
 class PaletteAssigner { };
 // specialized for numcomp == 1
 template <class T>
 class PaletteAssigner<T, 1>
 {
  public:
-  inline static void Assign(T *const dest[], uint32 pos,
+  inline static void Assign(T *const dest[], std::uint32_t pos,
                             const GDALColorEntry &entry) {
     dest[0][pos] = ClampRange<T>(entry.c1);
   }
@@ -41,7 +42,7 @@ template <class T>
 class PaletteAssigner<T, 3>
 {
  public:
-  inline static void Assign(T *const dest[], uint32 pos,
+  inline static void Assign(T *const dest[], std::uint32_t pos,
                             const GDALColorEntry &entry) {
     dest[0][pos] = ClampRange<T>(entry.c1);
     dest[1][pos] = ClampRange<T>(entry.c2);
@@ -53,14 +54,14 @@ class PaletteAssigner<T, 3>
 // ****************************************************************************
 // ***  ZeroAssigner
 // ****************************************************************************
-template <class T, uint numcomp>
+template <class T, unsigned int numcomp>
 class ZeroAssigner { };
 // specialized for numcomp == 1
 template <class T>
 class ZeroAssigner<T, 1>
 {
  public:
-  inline static void Assign(T *const dest[], uint32 pos) {
+  inline static void Assign(T *const dest[], std::uint32_t pos) {
     dest[0][pos] = 0;
   }
 };
@@ -69,7 +70,7 @@ template <class T>
 class ZeroAssigner<T, 3>
 {
  public:
-  inline static void Assign(T *const dest[], uint32 pos) {
+  inline static void Assign(T *const dest[], std::uint32_t pos) {
     dest[0][pos] = 0;
     dest[1][pos] = 0;
     dest[2][pos] = 0;

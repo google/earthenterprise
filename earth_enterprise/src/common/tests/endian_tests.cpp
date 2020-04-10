@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,17 +24,17 @@
 class khEndianUnitTest : public UnitTest<khEndianUnitTest> {
  public:
   bool TestDefines() {
-    uint32 test = 0x12345678;
+    std::uint32_t test = 0x12345678;
 #if __BYTE_ORDER == __BIG_ENDIAN
-    TestAssert(((uint8*)&test)[0] == 0x12);
-    TestAssert(((uint8*)&test)[1] == 0x34);
-    TestAssert(((uint8*)&test)[2] == 0x56);
-    TestAssert(((uint8*)&test)[3] == 0x78);
+    TestAssert(((std::uint8_t*)&test)[0] == 0x12);
+    TestAssert(((std::uint8_t*)&test)[1] == 0x34);
+    TestAssert(((std::uint8_t*)&test)[2] == 0x56);
+    TestAssert(((std::uint8_t*)&test)[3] == 0x78);
 #elif __BYTE_ORDER == __LITTLE_ENDIAN
-    TestAssert(((uint8*)&test)[0] == 0x78);
-    TestAssert(((uint8*)&test)[1] == 0x56);
-    TestAssert(((uint8*)&test)[2] == 0x34);
-    TestAssert(((uint8*)&test)[3] == 0x12);
+    TestAssert(((std::uint8_t*)&test)[0] == 0x78);
+    TestAssert(((std::uint8_t*)&test)[1] == 0x56);
+    TestAssert(((std::uint8_t*)&test)[2] == 0x34);
+    TestAssert(((std::uint8_t*)&test)[3] == 0x12);
 #endif
     return true;
   }
@@ -60,36 +61,36 @@ class khEndianUnitTest : public UnitTest<khEndianUnitTest> {
 
   bool TestOldLowLevel() {
     return 
-      TestOldLowLevelType<uint8> (0x12, 0x12) &&
-      TestOldLowLevelType<uint16>(0x1234, 0x3412) &&
-      TestOldLowLevelType<uint32>(0x12345678UL, 0x78563412UL) &&
-      TestOldLowLevelType<uint64>(0x1234567890123456ULL,
+      TestOldLowLevelType<std::uint8_t> (0x12, 0x12) &&
+      TestOldLowLevelType<std::uint16_t>(0x1234, 0x3412) &&
+      TestOldLowLevelType<std::uint32_t>(0x12345678UL, 0x78563412UL) &&
+      TestOldLowLevelType<std::uint64_t>(0x1234567890123456ULL,
                                   0x5634129078563412ULL) &&
-      TestOldLowLevelType<int8> (0x12, 0x12) && 
-      TestOldLowLevelType<int16>(0x1234, 0x3412) &&
-      TestOldLowLevelType<int32>(0x12345678L, 0x78563412L) &&
-      TestOldLowLevelType<int64>(0x1234567890123456LL, 0x5634129078563412LL);
+      TestOldLowLevelType<std::int8_t> (0x12, 0x12) && 
+      TestOldLowLevelType<std::int16_t>(0x1234, 0x3412) &&
+      TestOldLowLevelType<std::int32_t>(0x12345678L, 0x78563412L) &&
+      TestOldLowLevelType<std::int64_t>(0x1234567890123456LL, 0x5634129078563412LL);
   }
 
 
   template <class WBuffer, class RBuffer>
   bool TestBasicStreamTyped(void) {
-    const uint8  t1      = 0x12;
-    const uint16 t2      = 0x3456;
+    const std::uint8_t  t1      = 0x12;
+    const std::uint16_t t2      = 0x3456;
     const std::string t3 = "This old man, he played one...";
-    const uint32 t4      = 0x34567890UL;
+    const std::uint32_t t4      = 0x34567890UL;
     const bool   t5      = false;
-    const uint64 t6      = 0x3456789012345678ULL;
+    const std::uint64_t t6      = 0x3456789012345678ULL;
     const bool   t7      = true;
     WBuffer wbuf;
     wbuf << t1 << t2 << t3 << t4 << t5 << t6 << t7;
 
-    uint8  r1;
-    uint16 r2;
+    std::uint8_t  r1;
+    std::uint16_t r2;
     std::string r3;
-    uint32 r4;
+    std::uint32_t r4;
     bool   r5;
-    uint64 r6;
+    std::uint64_t r6;
     bool   r7;
     RBuffer rbuf(wbuf.data(), wbuf.size());
     rbuf >> r1 >> r2 >> r3 >> r4 >> r5 >> r6 >> r7;
@@ -130,18 +131,18 @@ class khEndianUnitTest : public UnitTest<khEndianUnitTest> {
 
   bool TestFixedString(void) {
     LittleEndianWriteBuffer wbuf;
-    const uint32 t = 0x12345678;
+    const std::uint32_t t = 0x12345678;
     const std::string magic = "Google Magic";
     wbuf << FixedLengthString(magic, 16)      << t
          << FixedLengthString("Google Magic", 8)       << t
          << FixedLengthString("Google Magic", 16, ' ') << t;
 
     std::string r1;
-    uint32      r2;
+    std::uint32_t      r2;
     std::string r3;
-    uint32      r4;
+    std::uint32_t      r4;
     std::string r5;
-    uint32      r6;
+    std::uint32_t      r6;
     LittleEndianReadBuffer rbuf(wbuf.data(), wbuf.size());
     rbuf >> FixedLengthString(r1, 16) >> r2
          >> FixedLengthString(r3, 8)  >> r4
@@ -158,7 +159,7 @@ class khEndianUnitTest : public UnitTest<khEndianUnitTest> {
       fprintf(stderr, "r1: '%s' ?= '%s'\n", r1.c_str(), "Google Magic");
       fprintf(stderr, "r3: '%s' ?= '%s'\n", r3.c_str(), "Google M");
       fprintf(stderr, "r5: '%s' ?= '%s'\n", r5.c_str(), "Google Magic    ");
-      fprintf(stderr, "r5.size() = %u\n", (uint)r5.size());
+      fprintf(stderr, "r5.size() = %u\n", (unsigned int)r5.size());
       fprintf(stderr, "r6: %u ?= %u\n", r6, t);
     }
     return success;
@@ -170,20 +171,20 @@ class khEndianUnitTest : public UnitTest<khEndianUnitTest> {
     const bool b1 = true;
     bool b2 = false;
     Color color = Green;
-    wbuf << EncodeAs<uint8>(b1) << EncodeAs<int16>(b2)
-         << EncodeAs<uint8>(color);
+    wbuf << EncodeAs<std::uint8_t>(b1) << EncodeAs<std::int16_t>(b2)
+         << EncodeAs<std::uint8_t>(color);
 
     bool r1;
     bool r2;
     Color r3;
     LittleEndianReadBuffer rbuf(wbuf.data(), wbuf.size());
-    rbuf >> DecodeAs<uint8>(r1) >> DecodeAs<int16>(r2)
-         >> DecodeAs<uint8>(r3);
+    rbuf >> DecodeAs<std::uint8_t>(r1) >> DecodeAs<std::int16_t>(r2)
+         >> DecodeAs<std::uint8_t>(r3);
 
     bool success = ((b1 == r1) &&
                     (b2 == r2) &&
                     (color == r3) &&
-                    (wbuf.size() == 2 * sizeof(uint8) + sizeof(int16))
+                    (wbuf.size() == 2 * sizeof(std::uint8_t) + sizeof(std::int16_t))
                     );
                     
     return success;
@@ -191,12 +192,12 @@ class khEndianUnitTest : public UnitTest<khEndianUnitTest> {
 
   template <class WBuffer, class RBuffer>
   bool TestRandomAccessTyped(void) {
-    uint8 w1 = 0xC2;
-    uint32 w2 = 0xABCD0123;
-    uint64 w3 = 0xFEDCBA9876543210LL;
-    int32 w4 = -87654;
+    std::uint8_t w1 = 0xC2;
+    std::uint32_t w2 = 0xABCD0123;
+    std::uint64_t w3 = 0xFEDCBA9876543210LL;
+    std::int32_t w4 = -87654;
     std::string w5 = "This is a test. This is only a test.";
-    uint32 w6 = 0x6543210F;
+    std::uint32_t w6 = 0x6543210F;
 
     WBuffer wbuf;
     wbuf.Seek(sizeof(w1) + sizeof(w2) + sizeof(w3) + sizeof(w4));
@@ -211,12 +212,12 @@ class khEndianUnitTest : public UnitTest<khEndianUnitTest> {
                    (sizeof(w1) + sizeof(w2) + sizeof(w3) + sizeof(w4)
                     + w5.size() + 1 + sizeof(w6));
 
-    uint8 r1;
-    uint32 r2;
-    uint64 r3;
-    int32 r4;
+    std::uint8_t r1;
+    std::uint32_t r2;
+    std::uint64_t r3;
+    std::int32_t r4;
     std::string r5;
-    uint32 r6;
+    std::uint32_t r6;
 
     RBuffer rbuf(wbuf.data(), wbuf.size());
     rbuf >> r1 >> r2 >> r3 >> r4 >> r5 >> r6;
@@ -259,32 +260,32 @@ class khEndianUnitTest : public UnitTest<khEndianUnitTest> {
     // Test that the NewBuffer factory method works properly
     WBuffer wbuf;
     const int rbuf_size = 5;
-    for (int32 i = 0; i < 3 * rbuf_size; ++i) {
+    for (std::int32_t i = 0; i < 3 * rbuf_size; ++i) {
       wbuf << i;
     }
 
-    RBuffer rbuf1(wbuf.data(), rbuf_size * sizeof(int32));
+    RBuffer rbuf1(wbuf.data(), rbuf_size * sizeof(std::int32_t));
 
     for (int i = 0; i < rbuf_size; ++i) {
-      int32 j;
+      std::int32_t j;
       rbuf1 >> j;
       result = result && (i == j);
     }
 
     khDeleteGuard<EndianReadBuffer>
-      rbuf2(rbuf1.NewBuffer(&wbuf[rbuf_size * sizeof(int32)],
-                            rbuf_size * sizeof(int32)));
+      rbuf2(rbuf1.NewBuffer(&wbuf[rbuf_size * sizeof(std::int32_t)],
+                            rbuf_size * sizeof(std::int32_t)));
     for (int i = 0; i < rbuf_size; ++i) {
-      int32 j;
+      std::int32_t j;
       *rbuf2 >> j;
       result = result && (i+rbuf_size == j);
     }
 
     khDeleteGuard<EndianReadBuffer> rbuf3(rbuf1.NewBuffer());
-    rbuf3->SetValue(std::string(&wbuf[2 * rbuf_size * sizeof(int32)],
-                                rbuf_size * sizeof(int32)));
+    rbuf3->SetValue(std::string(&wbuf[2 * rbuf_size * sizeof(std::int32_t)],
+                                rbuf_size * sizeof(std::int32_t)));
     for (int i = 0; i < rbuf_size; ++i) {
-      int32 j;
+      std::int32_t j;
       *rbuf3 >> j;
       result = result && (i+2*rbuf_size == j);
     }

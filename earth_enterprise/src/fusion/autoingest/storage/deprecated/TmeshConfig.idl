@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,14 +14,14 @@
 // limitations under the License.
 
 
+#include <cstdint>
 #include <string>
-#include <khTypes.h>
 #requiresgetheapusage
 
 class TmeshConfig {
   std::string extentsAsset;
-  uint startLevel;
-  uint endLevel = uint(0);  // 0 -> as deep as necessary
-  uint simplifyStartLevel = uint(32);
+  unsigned int startLevel;
+  unsigned int endLevel = uint(0);  // 0 -> as deep as necessary
+  unsigned int simplifyStartLevel = uint(32);
 #pragma GenerateIsUpToDate
 };

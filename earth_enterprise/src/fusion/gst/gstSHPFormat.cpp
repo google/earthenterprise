@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,7 +29,7 @@ gstSHPFormat::gstSHPFormat(const char* n)
     : gstFormat(n), _table(NULL), _fpSHP(NULL), _shxRecords(NULL) {
   // figure out this machine's endianess
   int i = 1;
-  _bigEndian = (*((uchar *) &i) == 1) ? false : true;
+  _bigEndian = (*((unsigned char *) &i) == 1) ? false : true;
 }
 
 gstSHPFormat::~gstSHPFormat() {
@@ -71,7 +72,7 @@ gstStatus gstSHPFormat::OpenFile() {
     // pre-multiply offset and length
     // they are counts of 16-bit words
     // additionally, shift offset to skip past record header (8 bytes)
-    for ( uint r = 0; r < _numRecords; r++ ) {
+    for ( unsigned int r = 0; r < _numRecords; r++ ) {
       SHX_RecHeader_i *irec = &_shxRecords[ r ];
       if ( !_bigEndian ) {
         gstByteSwap( irec->Offset );
@@ -175,12 +176,12 @@ gstStatus gstSHPFormat::CloseFile() {
   return GST_OKAY;
 }
 
-gstGeode* gstSHPFormat::GetFeature(uint32 layer, uint32 fidx) {
+gstGeode* gstSHPFormat::GetFeature(std::uint32_t layer, std::uint32_t fidx) {
   if ( layer != 0 || fidx >= _numRecords )
     return NULL;
 
   // create any geometry from the binary object
-  uchar buff[_shxRecords[fidx].RecSize];
+  unsigned char buff[_shxRecords[fidx].RecSize];
 
   if ( fseek( _fpSHP, _shxRecords[fidx].Offset, SEEK_SET ) != 0 ) {
     notify( NFY_WARN, "Unable to load feature %d (seek fail)\n", fidx );
@@ -199,7 +200,7 @@ gstGeode* gstSHPFormat::GetFeature(uint32 layer, uint32 fidx) {
   //
   // validate type
   // first 4 bytes defines the type
-  int32 type = *( (int32*)buff );
+  std::int32_t type = *( (std::int32_t*)buff );
   if ( _bigEndian )
     gstByteSwap( type );
 
@@ -226,7 +227,7 @@ gstGeode* gstSHPFormat::GetFeature(uint32 layer, uint32 fidx) {
   return geode;
 }
 
-gstRecordHandle gstSHPFormat::GetAttribute(uint32 layer, uint32 id) {
+gstRecordHandle gstSHPFormat::GetAttribute(std::uint32_t layer, std::uint32_t id) {
   if (!_table) {
     return gstRecordHandle();
   } else {
@@ -240,7 +241,7 @@ gstRecordHandle gstSHPFormat::GetAttribute(uint32 layer, uint32 id) {
 //
 //////////////////////////////////////////////////////////////////////
 
-gstGeode *gstSHPFormat::parsePoint(uchar *buff)
+gstGeode *gstSHPFormat::parsePoint(unsigned char *buff)
 {
   SHP_Point_Rec *newPoint = (SHP_Point_Rec*)buff;
 
@@ -274,7 +275,7 @@ gstGeode *gstSHPFormat::parsePoint(uchar *buff)
 //
 //////////////////////////////////////////////////////////////////////
 
-gstGeode *gstSHPFormat::parsePolyLine(uchar *buff)
+gstGeode *gstSHPFormat::parsePolyLine(unsigned char *buff)
 {
   SHP_PolyLine_Rec newPolyLine;
 
@@ -291,9 +292,9 @@ gstGeode *gstSHPFormat::parsePolyLine(uchar *buff)
   }
 
   // now fix the pointers
-  newPolyLine.Parts = (int32*)(buff + 40);
+  newPolyLine.Parts = (std::int32_t*)(buff + 40);
   newPolyLine.Points = (SHP_Point_Rec *)(buff + 40 +
-                                         (newPolyLine.NumParts * sizeof(int32*)));
+                                         (newPolyLine.NumParts * sizeof(std::int32_t*)));
 
   if ( _bigEndian ) {
     int ii;
@@ -335,7 +336,7 @@ gstGeode *gstSHPFormat::parsePolyLine(uchar *buff)
 //
 //////////////////////////////////////////////////////////////////////
 
-gstGeode *gstSHPFormat::parsePolygon(uchar *buff)
+gstGeode *gstSHPFormat::parsePolygon(unsigned char *buff)
 {
   SHP_Polygon_Rec newPoly;
 
@@ -352,8 +353,8 @@ gstGeode *gstSHPFormat::parsePolygon(uchar *buff)
   }
 
   // now fix the pointers
-  newPoly.Parts = (int32*)(buff + 40);
-  newPoly.Points = (SHP_Point_Rec *)(buff + 40 + (newPoly.NumParts * sizeof(int32*)));
+  newPoly.Parts = (std::int32_t*)(buff + 40);
+  newPoly.Points = (SHP_Point_Rec *)(buff + 40 + (newPoly.NumParts * sizeof(std::int32_t*)));
 
   if ( _bigEndian ) {
     int ii;
@@ -393,7 +394,7 @@ gstGeode *gstSHPFormat::parsePolygon(uchar *buff)
 
 SHP_FileHeader_i *gstSHPFormat::readFileHeader(FILE *fp)
 {
-  uchar buff[sizeof(SHP_FileHeader_i)];
+  unsigned char buff[sizeof(SHP_FileHeader_i)];
 
   if (fread(&buff, 100, 1, fp) != 1) {
     notify(NFY_WARN, "Unable to read file header for %s", FormatName());
@@ -435,7 +436,7 @@ SHP_FileHeader_i *gstSHPFormat::readFileHeader(FILE *fp)
 
 SHP_RecHeader_i *gstSHPFormat::readRecHeader(FILE *fp)
 {
-  static uchar buff[sizeof(SHP_RecHeader_i)];
+  static unsigned char buff[sizeof(SHP_RecHeader_i)];
   static SHP_RecHeader_i irec;
 
   if (fread(&buff, 8, 1, fp) != 1)

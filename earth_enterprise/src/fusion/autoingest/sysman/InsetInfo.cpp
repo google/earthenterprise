@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -35,9 +36,9 @@ SimpleInsetInfo<ProductAssetVersion>::SimpleInsetInfo(
                                  const khTilespace & /* unused1 */,
                                  const ProductAssetVersion &resource,
                                  const CombinedRPAssetVersion &combinedrp,
-                                 uint  effectiveMaxProdLev,
-                                 uint  /* unused2 */,
-                                 uint  /* unused3 */) :
+                                 unsigned int  effectiveMaxProdLev,
+                                 unsigned int  /* unused2 */,
+                                 unsigned int  /* unused3 */) :
     resource_(resource),
     combinedrp_(combinedrp),
     effectiveMaxLevel(combinedrp->type == AssetDefs::Imagery ?
@@ -58,9 +59,9 @@ InsetInfo<ProductAssetVersion>::InsetInfo(
     const khTilespace &tilespace,
     const ProductAssetVersion &resource,
     const CombinedRPAssetVersion &combinedrp,
-    uint  effectiveMaxProdLev,
-    uint  beginCovLev,
-    uint  endCovLev)
+    unsigned int  effectiveMaxProdLev,
+    unsigned int  beginCovLev,
+    unsigned int  endCovLev)
     : SimpleInsetInfo<ProductAssetVersion>(tilespace, resource, combinedrp,
                     effectiveMaxProdLev, beginCovLev, endCovLev),
       coverage(tilespace,
@@ -110,11 +111,11 @@ void PacketGenInfo::PopulatePacketLevels(AssetVersion packgenVer) {
   // it accordingly.
   packetLevels.resize(coverage.endLevel());
 
-  uint numkids = packgenVer->children.size();
-  for (uint c = 0; c < numkids; ++c) {
+  unsigned int numkids = packgenVer->children.size();
+  for (unsigned int c = 0; c < numkids; ++c) {
     // my children are in reverse level order, because that's how they
     // are built.
-    uint levelNum = coverage.endLevel() - c - 1;
+    unsigned int levelNum = coverage.endLevel() - c - 1;
     packetLevels[levelNum] = packgenVer->children[c];
   }
 }
@@ -165,29 +166,29 @@ template <class InsetInfo>
 void CalcPacketGenInfo(const khTilespace            &tilespace,
                        const AssetDefs::Type         gentype,
                        const std::vector<InsetInfo> &insetInfos,
-                       const uint32                  beginCoverageLevel,
+                       const std::uint32_t                  beginCoverageLevel,
                        std::vector<PacketGenInfo>   &genInfos,
-                       const int32                   maxLevelDelta,
+                       const std::int32_t                   maxLevelDelta,
                        const bool   is_overlay_terrain_proj,
-                       const uint32 overlay_terrain_resources_min_level) {
+                       const std::uint32_t overlay_terrain_resources_min_level) {
   if (insetInfos.empty()) {
     genInfos.clear();
     return;
   }
 
   // As of client 4.0, the client no longer needs imagery padding. Bug1019418.
-  uint32 padding = 0;
+  std::uint32_t padding = 0;
   // Old comment and version (preserved for documentation):
   // Imagery insets need to be padded by four tiles in each direction.
   // This is is so a client "detail area" of 1024x0124 (currently the
   // biggest) will still be able to load all "real" high res data. The padded
   // tiles will be magnified versions of the tiles underneath.
-  // uint padding = (gentype == AssetDefs::Imagery) ? 4 : 0;
+  // unsigned int padding = (gentype == AssetDefs::Imagery) ? 4 : 0;
 
   // Terrain tiles need to step out one tile at each level. This makes sure
   // that there is only one level of detail difference between any two
   // terrain tiles.
-  uint32 stepout = (gentype == AssetDefs::Imagery) ? 0 : 1;
+  std::uint32_t stepout = (gentype == AssetDefs::Imagery) ? 0 : 1;
 
   // Optimization for Terrain "Overlay"-mode:
   // To build "Overlay"-insets we need only those tiles from
@@ -216,14 +217,14 @@ void CalcPacketGenInfo(const khTilespace            &tilespace,
       AssetImpl::WorkingDir(verref.AssetRef())
       + "packgen" + AssetDefs::FileExtension(gentype, "PacketGen");
 
-    uint32 beginCovLevel = beginCoverageLevel;
+    std::uint32_t beginCovLevel = beginCoverageLevel;
 
     // "+ 1" since endLevel is "one beyond" max for ctor khInsetCoverage.
     // add maxLevelDelta in case insetLevels aren't the same as coverage levels.
-    int32 endLevel = insetInfo.effectiveMaxLevel + maxLevelDelta + 1;
+    std::int32_t endLevel = insetInfo.effectiveMaxLevel + maxLevelDelta + 1;
 
-    if (endLevel < static_cast<int32>(beginCovLevel)) {
-      endLevel = static_cast<int32>(beginCovLevel);  // Coverage will be empty.
+    if (endLevel < static_cast<std::int32_t>(beginCovLevel)) {
+      endLevel = static_cast<std::int32_t>(beginCovLevel);  // Coverage will be empty.
     }
 
     if (gentype == AssetDefs::Imagery) {  // Imagery inset.
@@ -233,7 +234,7 @@ void CalcPacketGenInfo(const khTilespace            &tilespace,
                                         insetInfo.degExtents,
                                         insetInfo.fullresLevel,
                                         beginCovLevel,
-                                        static_cast<uint32>(endLevel),
+                                        static_cast<std::uint32_t>(endLevel),
                                         stepout,
                                         padding)));
     } else {   // Terrain inset.
@@ -254,9 +255,9 @@ void CalcPacketGenInfo(const khTilespace            &tilespace,
           // [startLevel, endLevel] and "filling insets for levels
           // [startLevel+1, endLevel].
           ++beginCovLevel;
-          if (endLevel < static_cast<int32>(beginCovLevel)) {
+          if (endLevel < static_cast<std::int32_t>(beginCovLevel)) {
             // Coverage will be empty.
-            endLevel =  static_cast<int32>(beginCovLevel);
+            endLevel =  static_cast<std::int32_t>(beginCovLevel);
           }
         }
       }
@@ -270,7 +271,7 @@ void CalcPacketGenInfo(const khTilespace            &tilespace,
                                deg_extents_filling : insetInfo.degExtents),
                               insetInfo.fullresLevel,
                               beginCovLevel,
-                              static_cast<uint32>(endLevel),
+                              static_cast<std::uint32_t>(endLevel),
                               stepout,
                               padding)));
     }
@@ -291,22 +292,22 @@ void CalcPacketGenInfo<SimpleInsetInfo<RasterProductAssetVersion> > (
     const khTilespace     &tilespace,
     const AssetDefs::Type  gentype,
     const std::vector<SimpleInsetInfo<RasterProductAssetVersion> > &insetInfo,
-    const uint32           beginCovLevel,
+    const std::uint32_t           beginCovLevel,
     std::vector<PacketGenInfo> &genInfo,
-    const int32            maxLevelDelta,
+    const std::int32_t            maxLevelDelta,
     const bool             is_overlay_terrain_proj,
-    const uint32           overlay_terrain_resources_min_level);
+    const std::uint32_t           overlay_terrain_resources_min_level);
 
 template
 void CalcPacketGenInfo<InsetInfo<RasterProductAssetVersion> >(
     const khTilespace     &tilespace,
     const AssetDefs::Type  gentype,
     const std::vector<InsetInfo<RasterProductAssetVersion> > &insetInfo,
-    const uint32           beginCovLevel,
+    const std::uint32_t           beginCovLevel,
     std::vector<PacketGenInfo> &genInfo,
-    const int32            maxLevelDelta,
+    const std::int32_t            maxLevelDelta,
     const bool             is_overlay_terrain_proj,
-    const uint32           overlay_terrain_resources_min_level);
+    const std::uint32_t           overlay_terrain_resources_min_level);
 
 template
 void CalcPacketGenInfo<SimpleInsetInfo<MercatorRasterProductAssetVersion> > (
@@ -314,26 +315,26 @@ void CalcPacketGenInfo<SimpleInsetInfo<MercatorRasterProductAssetVersion> > (
     const AssetDefs::Type  gentype,
     const std::vector<SimpleInsetInfo<MercatorRasterProductAssetVersion> >
         &insetInfo,
-    const uint32           beginCovLevel,
+    const std::uint32_t           beginCovLevel,
     std::vector<PacketGenInfo> &genInfo,
-    const int32            maxLevelDelta,
+    const std::int32_t            maxLevelDelta,
     const bool             is_overlay_terrain_proj,
-    const uint32           overlay_terrain_resources_min_level);
+    const std::uint32_t           overlay_terrain_resources_min_level);
 
 template
 void CalcPacketGenInfo<InsetInfo<MercatorRasterProductAssetVersion> > (
     const khTilespace     &tilespace,
     const AssetDefs::Type  gentype,
     const std::vector<InsetInfo<MercatorRasterProductAssetVersion> > &insetInfo,
-    const uint32           beginCovLevel,
+    const std::uint32_t           beginCovLevel,
     std::vector<PacketGenInfo> &genInfo,
-    const int32            maxLevelDelta,
+    const std::int32_t            maxLevelDelta,
     const bool             is_overlay_terrain_proj,
-    const uint32           overlay_terrain_resources_min_level);
+    const std::uint32_t           overlay_terrain_resources_min_level);
 
 template <typename ProductAssetVersion>
 void OverlapCalculator<ProductAssetVersion>::
-    CalculateOverlap(std::vector<uint>& neededIndexes,
+    CalculateOverlap(std::vector< unsigned int> & neededIndexes,
                      const khInsetCoverage& gencov)
 {
     if (env.type == AssetDefs::Imagery)
@@ -366,10 +367,10 @@ template <typename ProductAssetVersion>
 void FindNeededImageryInsets(
     const khInsetCoverage        &gencov,
     const std::vector<const InsetInfo<ProductAssetVersion> *> &insets,
-    uint                          numInsets,
-    std::vector<uint>            &neededIndexes,
-    uint beginMinifyLevel,
-    uint endMinifyLevel) {
+    unsigned int                          numInsets,
+    std::vector< unsigned int>             &neededIndexes,
+    unsigned int beginMinifyLevel,
+    unsigned int endMinifyLevel) {
   // For now we know that gencov's levelExtents are simple minifications
   // of the maxres one. That means that we can do the intersection only at
   // the lowest res and know that we will get all the insets needed for
@@ -382,7 +383,7 @@ void FindNeededImageryInsets(
     return;
   }
 
-  uint level = gencov.beginLevel();
+  unsigned int level = gencov.beginLevel();
 
   // Packgen will be caching the results - the cached results are
   // in product tilespace, so we need to do our intersection tests
@@ -395,17 +396,17 @@ void FindNeededImageryInsets(
   // against ALL insets.
   bool needAlign = ((gencov.numLevels() > 1) ||
                     ((level > beginMinifyLevel)&&(level <= endMinifyLevel)));
-  uint alignSize = (RasterProductTilespaceBase.tileSize /
+  unsigned int alignSize = (RasterProductTilespaceBase.tileSize /
                     ClientImageryTilespaceBase.tileSize);
 
-  khExtents<uint32> genExtents(gencov.levelExtents(level));
+  khExtents<std::uint32_t> genExtents(gencov.levelExtents(level));
   if (needAlign) {
     genExtents.alignBy(alignSize);
   }
 
-  for (uint i = 0; i < numInsets; ++i) {
+  for (unsigned int i = 0; i < numInsets; ++i) {
     // Aligning here would be redundant, so we save ourselves the effort.
-    const khExtents<uint32> &iExtents
+    const khExtents<std::uint32_t> &iExtents
       (insets[i]->coverage.levelExtents(level));
 
     if (iExtents.intersects(genExtents)) {
@@ -420,20 +421,20 @@ void
 FindNeededImageryInsets(
     const khInsetCoverage        &gencov,
     const std::vector<const InsetInfo<RasterProductAssetVersion> *> &insets,
-    uint                          numInsets,
-    std::vector<uint>            &neededIndexes,
-    uint beginMinifyLevel,
-    uint endMinifyLevel);
+    unsigned int                          numInsets,
+    std::vector< unsigned int>             &neededIndexes,
+    unsigned int beginMinifyLevel,
+    unsigned int endMinifyLevel);
 template
 void
 FindNeededImageryInsets(
     const khInsetCoverage        &gencov,
     const std::vector<const InsetInfo<MercatorRasterProductAssetVersion> *>&
         insets,
-    uint                          numInsets,
-    std::vector<uint>            &neededIndexes,
-    uint beginMinifyLevel,
-    uint endMinifyLevel);
+    unsigned int                          numInsets,
+    std::vector< unsigned int>             &neededIndexes,
+    unsigned int beginMinifyLevel,
+    unsigned int endMinifyLevel);
 
 
 // ****************************************************************************
@@ -447,10 +448,10 @@ template <typename ProductAssetVersion>
 void FindNeededTerrainInsets(
     const khInsetCoverage        &gencov,
     const std::vector<const InsetInfo<ProductAssetVersion> *> &insets,
-    uint                          numInsets,
-    std::vector<uint>            &neededIndexes,
-    uint beginMinifyLevel,
-    uint endMinifyLevel) {
+    unsigned int                          numInsets,
+    std::vector< unsigned int>             &neededIndexes,
+    unsigned int beginMinifyLevel,
+    unsigned int endMinifyLevel) {
   // For now we know that gencov's levelExtents are simple minifications
   // of the maxres one. That means that we can do the intersection only at
   // the lowest res and know that we will get all the insets needed for
@@ -463,7 +464,7 @@ void FindNeededTerrainInsets(
     return;
   }
 
-  uint level = gencov.beginLevel();
+  unsigned int level = gencov.beginLevel();
 
   // Packgen will be caching the results - the cached results are
   // in product tilespace, so we need to do our intersection tests
@@ -476,16 +477,16 @@ void FindNeededTerrainInsets(
   // against ALL insets.
   bool needAlign = ((gencov.numLevels() > 1) ||
                     ((level > beginMinifyLevel)&&(level <= endMinifyLevel)));
-  uint alignSize = (RasterProductTilespaceBase.tileSize /
+  unsigned int alignSize = (RasterProductTilespaceBase.tileSize /
                     ClientTmeshTilespaceBase.tileSize);
 
   const khLevelCoverage levCov(gencov.levelCoverage(level));
-  khExtents<uint32> genExtents(levCov.extents);
-  khExtents<uint32> upperExtents
+  khExtents<std::uint32_t> genExtents(levCov.extents);
+  khExtents<std::uint32_t> upperExtents
     (levCov.UpperCoverage(ClientTmeshTilespaceFlat).extents);
-  khExtents<uint32> rightExtents
+  khExtents<std::uint32_t> rightExtents
     (levCov.RightCoverage(ClientTmeshTilespaceFlat).extents);
-  khExtents<uint32> upperRightExtents
+  khExtents<std::uint32_t> upperRightExtents
     (levCov.UpperRightCoverage(ClientTmeshTilespaceFlat).extents);
   if (needAlign) {
     genExtents.alignBy(alignSize);
@@ -494,9 +495,9 @@ void FindNeededTerrainInsets(
     upperRightExtents.alignBy(alignSize);
   }
 
-  for (uint i = 0; i < numInsets; ++i) {
+  for (unsigned int i = 0; i < numInsets; ++i) {
     // Aligning here would be redundant, so we save ourselves the effort.
-    const khExtents<uint32> &iExtents
+    const khExtents<std::uint32_t> &iExtents
       (insets[i]->coverage.levelExtents(level));
 
     if (iExtents.intersects(genExtents) ||
@@ -514,20 +515,20 @@ void
 FindNeededTerrainInsets(
     const khInsetCoverage        &gencov,
     const std::vector<const InsetInfo<RasterProductAssetVersion> *> &insets,
-    uint                          numInsets,
-    std::vector<uint>            &neededIndexes,
-    uint beginMinifyLevel,
-    uint endMinifyLevel);
+    unsigned int                          numInsets,
+    std::vector< unsigned int>             &neededIndexes,
+    unsigned int beginMinifyLevel,
+    unsigned int endMinifyLevel);
 template
 void
 FindNeededTerrainInsets(
     const khInsetCoverage        &gencov,
     const std::vector<const InsetInfo<MercatorRasterProductAssetVersion> *>&
         insets,
-    uint                          numInsets,
-    std::vector<uint>            &neededIndexes,
-    uint beginMinifyLevel,
-    uint endMinifyLevel);
+    unsigned int                          numInsets,
+    std::vector< unsigned int>             &neededIndexes,
+    unsigned int beginMinifyLevel,
+    unsigned int endMinifyLevel);
 
 template class SimpleInsetInfo<RasterProductAssetVersion>;
 template class SimpleInsetInfo<MercatorRasterProductAssetVersion>;

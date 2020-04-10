@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +19,8 @@
 #define GEO_EARTH_ENTERPRISE_SRC_FUSION_RASTERFUSE_PACKGENTRAVERSER_H_
 
 #include <string>
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "common/khMTTypes.h"
 #include "common/khTileAddr.h"
 #include "common/khGuard.h"
@@ -90,7 +92,7 @@ class PackgenTraverser {
                    const khLevelCoverage &productCoverage_,
                    ffio::raster::Subtype cacheSubtype);
   virtual ~PackgenTraverser(void) { }
-  void DoTraverse(uint numWorkThreads);
+  void DoTraverse(unsigned int numWorkThreads);
 };
 
 }  // namespace rasterfuse

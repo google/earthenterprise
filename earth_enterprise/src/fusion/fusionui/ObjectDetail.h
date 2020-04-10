@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +37,7 @@ class ObjectDetail : public ObjectDetailBase {
   Q_OBJECT
 
  public:
-  ObjectDetail(QWidget* parent, uint id, gstGeodeHandle g, gstRecordHandle rec);
+  ObjectDetail(QWidget* parent, unsigned int id, gstGeodeHandle g, gstRecordHandle rec);
   ~ObjectDetail();
 
   class VertexItem : public QListViewItem {
