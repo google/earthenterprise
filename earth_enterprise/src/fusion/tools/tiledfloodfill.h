@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,11 +43,11 @@
 // TODO: remove requirement on adding seeds in a particular order
 
 #include <deque>
+#include <cstdint>
 #include <stack>
 #include <vector>
 
 #include <qdatetime.h>
-#include "khTypes.h"
 
 
 // A Span is a horizontal segment of len pixels to flood into. It is
@@ -93,7 +94,7 @@ class TiledFloodFill {
 
   // Adds a fill value.  A pixel in the image may be filled if is
   // within tolerance_ of a fill value.
-  void AddFillValue(uchar fv);
+  void AddFillValue(unsigned char fv);
 
   // Adds a seed point to flood from.  Seeds must be added in
   // decreasing y order.
@@ -107,14 +108,14 @@ class TiledFloodFill {
                                            // specified.
  protected:
   // Gets a pointer to the image for a tile. Caller will not free.
-  virtual const uchar *LoadImageTile(int tx, int ty) = 0;
+  virtual const unsigned char *LoadImageTile(int tx, int ty) = 0;
 
   // Gets a pointer to tile mask data. Should be initially all
   // kNotFilled.  Caller will not free the image.  old_opacity should
   // be kNotFilled the first time the tile is loaded, and then the
   // value from SaveMaskTile after that. opacity is the average value
   // of the mask tile.
-  virtual uchar *LoadMaskTile(int tx, int ty, double *old_opacity) = 0;
+  virtual unsigned char *LoadMaskTile(int tx, int ty, double *old_opacity) = 0;
 
   // Saves data (supplied in LoadMaskTile) to store.  See LoadMaskTile
   // for opacity.
@@ -125,15 +126,15 @@ class TiledFloodFill {
   int num_tiles_x_, num_tiles_y_;   // number of tiles in each direction
 
   // These must be defined in your derived class .cpp file, for example:
-  // const uchar TiledFloodFill::kNotFilled = 0;
-  // const uchar TiledFloodFill::kFilled = 255;
-  static const uchar kFilled;     // values to represent filled pixels
-  static const uchar kNotFilled;  // and unfilled pixels
+  // const unsigned char TiledFloodFill::kNotFilled = 0;
+  // const unsigned char TiledFloodFill::kFilled = 255;
+  static const unsigned char kFilled;     // values to represent filled pixels
+  static const unsigned char kNotFilled;  // and unfilled pixels
 
  private:
-  // FillOk returns true iff the uchar should be filled, i.e. whether
+  // FillOk returns true iff the unsigned char should be filled, i.e. whether
   // it's within tolerance_ of a fill value.
-  inline bool FillOk(uchar u) const;
+  inline bool FillOk(unsigned char u) const;
 
   // A direction of sweeping, used for both x and y.
   enum Direction {DIRECTION_MINUS = 0, DIRECTION_PLUS, NUM_DIRECTIONS};
@@ -149,15 +150,15 @@ class TiledFloodFill {
   // definition for details.
   void ProcessTile(int tile_col, int tile_row,
                    Direction x_direction, Direction y_direction,
-                   std::vector<std::vector<uchar> > *vert_sides);
+                   std::vector<std::vector<unsigned char> > *vert_sides);
 
   // ProcessSpan floods a single span, adding Spans to tile_col_todo_
   // as needed. y_direction is the direction of sweep (up or down) in
   // the tile.  span_len=0 results in propagation both up and down.
   // Returns the number of pixels filled.
   int ProcessSpan(int global_row, int tile_col,
-                  const uchar *image_row_beg, const uchar *image_row_end,
-                  uchar *fill_row, Direction y_direction,
+                  const unsigned char *image_row_beg, const unsigned char *image_row_end,
+                  unsigned char *fill_row, Direction y_direction,
                   int span_beg_offset_in_row, int span_len);
 
   int tolerance_;     // see FillOk() for description

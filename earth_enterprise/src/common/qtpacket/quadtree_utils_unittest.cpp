@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -59,7 +60,7 @@ class QuadtreeUtilsUnitTest : public UnitTest<QuadtreeUtilsUnitTest>  {
     };
 
     QuadtreeNumbering tree2(2, true);
-    for (uint i = 0; i < ARRAYSIZE(tests2); ++i) {
+    for (unsigned int i = 0; i < ARRAYSIZE(tests2); ++i) {
       tree2.SubindexToLevelXY(tests2[i].subindex, &level, &x, &y);
       CHECK_EQ(level, tests2[i].level);
       CHECK_EQ(x, tests2[i].x);
@@ -90,7 +91,7 @@ class QuadtreeUtilsUnitTest : public UnitTest<QuadtreeUtilsUnitTest>  {
     };
 
     QuadtreeNumbering tree5(5, true);
-    for (uint i = 0; i < ARRAYSIZE(tests5); ++i) {
+    for (unsigned int i = 0; i < ARRAYSIZE(tests5); ++i) {
       tree5.SubindexToLevelXY(tests5[i].subindex, &level, &x, &y);
       CHECK_EQ(level, tests5[i].level);
       CHECK_EQ(x, tests5[i].x);
@@ -106,7 +107,7 @@ class QuadtreeUtilsUnitTest : public UnitTest<QuadtreeUtilsUnitTest>  {
   bool TestGlobalNodeNumber() {
     struct PathTest {
       const char *path;
-      uint32 node_number;
+      std::uint32_t node_number;
     };
     static const PathTest tests[] = {
       { "",      0 },
@@ -124,7 +125,7 @@ class QuadtreeUtilsUnitTest : public UnitTest<QuadtreeUtilsUnitTest>  {
       { "00000", 341 },
     };
 
-    for (uint i = 0; i < ARRAYSIZE(tests); ++i) {
+    for (unsigned int i = 0; i < ARRAYSIZE(tests); ++i) {
       // Convert path to right format
       std::string str = QuadtreePath(tests[i].path).AsString();
       CHECK_EQ(QuadtreeNumbering::TraversalPathToGlobalNodeNumber(str),
@@ -141,9 +142,9 @@ class QuadtreeUtilsUnitTest : public UnitTest<QuadtreeUtilsUnitTest>  {
 
   bool TestLevelRowColumn() {
     struct {
-      uint32 level;
-      uint32 row;
-      uint32 column;
+      std::uint32_t level;
+      std::uint32_t row;
+      std::uint32_t column;
       const char *path;
       const char *maps;
     } tests[] = {
@@ -178,12 +179,12 @@ class QuadtreeUtilsUnitTest : public UnitTest<QuadtreeUtilsUnitTest>  {
 
     // Convert row numbers from Magrathean convention to Fusion
     // convention (row numbering runs in opposite directions)
-    for (uint i = 0; i < ARRAYSIZE(tests); ++i) {
+    for (unsigned int i = 0; i < ARRAYSIZE(tests); ++i) {
       tests[i].row = (1 << tests[i].level) - tests[i].row - 1;
     }
 
     // Test conversion from level, row, column to quadtree path & maps path.
-    for (uint i = 0; i < ARRAYSIZE(tests); ++i) {
+    for (unsigned int i = 0; i < ARRAYSIZE(tests); ++i) {
       std::string result =
         QuadtreePath(tests[i].level, tests[i].row, tests[i].column).AsString();
 
@@ -196,10 +197,10 @@ class QuadtreeUtilsUnitTest : public UnitTest<QuadtreeUtilsUnitTest>  {
     }
 
     // Test conversion from quadtree path & maps path to level, row, column.
-    for (uint i = 0; i < ARRAYSIZE(tests); ++i) {
+    for (unsigned int i = 0; i < ARRAYSIZE(tests); ++i) {
       QuadtreePath path2(tests[i].path);
 
-      uint level, row, col;
+      unsigned int level, row, col;
       path2.GetLevelRowCol(&level, &row, &col);
       CHECK_EQ(tests[i].level, level);
       CHECK_EQ(tests[i].row, row);
@@ -222,7 +223,7 @@ class QuadtreeUtilsUnitTest : public UnitTest<QuadtreeUtilsUnitTest>  {
   bool TestQuadsetAndSubindex() {
     struct {
       const char *path;
-      uint64 quadset;
+      std::uint64_t quadset;
       int subindex;
     } tests[] = {
       { "",    0, 0, },
@@ -239,13 +240,13 @@ class QuadtreeUtilsUnitTest : public UnitTest<QuadtreeUtilsUnitTest>  {
       { "000000001", 0x1555, 3 },
     };
 
-    for (uint i = 0; i < ARRAYSIZE(tests); ++i) {
+    for (unsigned int i = 0; i < ARRAYSIZE(tests); ++i) {
       QuadtreePath expected_path(tests[i].path);
       QuadtreePath path = QuadtreeNumbering::QuadsetAndSubindexToTraversalPath(
           tests[i].quadset, tests[i].subindex);
       CHECK(expected_path == path);
 
-      uint64 quadset;
+      std::uint64_t quadset;
       int subindex;
       QuadtreeNumbering::TraversalPathToQuadsetAndSubindex(expected_path,
                                                            &quadset,
@@ -265,7 +266,7 @@ class QuadtreeUtilsUnitTest : public UnitTest<QuadtreeUtilsUnitTest>  {
         true, false, false, false,
         true, false, false, false,
         true, false };
-    for (uint32 level = 0; level <= QuadtreePath::kMaxLevel; ++level) {
+    for (std::uint32_t level = 0; level <= QuadtreePath::kMaxLevel; ++level) {
       if (QuadtreeNumbering::IsQuadsetRootLevel(level)
           != is_quadset_level[level])
         return false;

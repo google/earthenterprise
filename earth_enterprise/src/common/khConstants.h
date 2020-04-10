@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +22,7 @@
 #include <string>
 
 #include "common/khTypes.h"
+#include <cstdint>
 
 
 /******************************************************************************
@@ -59,16 +61,16 @@ static const double khIntlFoot = 0.3048;
 
 // Typical compression ratio JPEG(Q75): at least 10:1, PNG: at least 1.5:1.
 // We'll allow for 5x for jpeg just to make sure we have enough space.
-static const uint32 kJpegCompressionRatio = 5;
+static const std::uint32_t kJpegCompressionRatio = 5;
 // PNG compression ratio for RGBA image.
-static const uint32 kPngCompressionRatio = 2;
+static const std::uint32_t kPngCompressionRatio = 2;
 // PNG compression ratio for alpha band: assume at least 10:1.
 // We use 4x to be sure that we allocate large enough memory.
-static const uint32 kPngCompressionAlphaRatio = 4;
+static const std::uint32_t kPngCompressionAlphaRatio = 4;
 
 // GE hardcoded channel numbers
-static const uint32 kGEImageryChannelId = 0;
-static const uint32 kGETerrainChannelId = 2;
+static const std::uint32_t kGEImageryChannelId = 0;
+static const std::uint32_t kGETerrainChannelId = 2;
 
 // Default Locale Suffix.
 extern const std::string kDefaultLocaleSuffix;
@@ -172,14 +174,14 @@ extern const std::string kEmptyString;
 
 // The oldest valid date as defined by the Google Earth 4.4 client.
 extern const std::string kTimeMachineOldestDateString;
-extern const int32 kTimeMachineOldestDateInt;
+extern const std::int32_t kTimeMachineOldestDateInt;
 extern const std::string kTimeMachineOldestHexDateString;
 
 extern const std::string kDefaultIconName;
 
 // The Google Earth Client has a hard limit of 3 search tabs...the plugin
 // and Maps do not have a limit.
-static const uint kMaxEarthClientTabCount = 3;
+static const unsigned int kMaxEarthClientTabCount = 3;
 
 // Names of our default virtual servers.
 extern const std::string kDefaultMapVirtualServer;
@@ -200,7 +202,7 @@ extern const std::string kDbVectorLayerConfigFile;
 extern const std::string kDbManifestFilesListFile;
 
 // The level below which we remove overlapping road segments.
-extern const uint kAvoidRemovingOverlappingRoadSegmentsAtOrHigherZoomLevel;
+extern const unsigned int kAvoidRemovingOverlappingRoadSegmentsAtOrHigherZoomLevel;
 
 extern const std::string kGedbBase;
 // The gedb_aux sub-directory to keep auxiliary files generated for GE db.
@@ -232,7 +234,7 @@ extern const std::string kLinkedFileNameTemplate;
 // Version of globe format.
 extern const std::string kPortableGlobeVersion;
 // Globe index offset
-extern const uint32 kPortableGlobeIndexOffset;
+extern const std::uint32_t kPortableGlobeIndexOffset;
 
 //
 // This max has been around for a long time. It used to have to match the
@@ -240,9 +242,9 @@ extern const uint32 kPortableGlobeIndexOffset;
 // gone, this is probably the only place that enforces the packet limit.
 // The client's need to enforce these limits is gone. These are enforced in
 // Fusion here, just to make the client experience interactive.
-extern const uint32 kMaxPacketSize;
-extern const uint32 kTargetPacketSize;
-extern const uint32 kCompressedBufferSize;
+extern const std::uint32_t kMaxPacketSize;
+extern const std::uint32_t kTargetPacketSize;
+extern const std::uint32_t kCompressedBufferSize;
 
 extern const char kQuadTreePathSeparator;
 

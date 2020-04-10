@@ -170,51 +170,51 @@ class PolyMask {
   void BlendMasks(const BuildMaskCommand blend_type,
                   const std::string file_name,
                   const int feather,
-                  std::vector<uchar>* data_buffer,
-                  std::vector<uchar>* mask_data);
+                  std::vector<unsigned char>* data_buffer,
+                  std::vector<unsigned char>* mask_data);
 
   // Fills buffer with the given value.
-  void FillBuffer(std::vector<uchar>* buffer, uchar byte);
+  void FillBuffer(std::vector<unsigned char>* buffer, unsigned char byte);
 
   // Applies logical operator to bytes from data and the given buffer and
   // replaces the bytes in the buffer.
-  void LogicalOpDataAndBuffer(const std::vector<uchar>& data,
-                              std::vector<uchar>* buffer,
+  void LogicalOpDataAndBuffer(const std::vector<unsigned char>& data,
+                              std::vector<unsigned char>* buffer,
                               BuildMaskCommand logic_op);
 
   // If uchars in data vector are equal to those in buffer vector
   // the pixel is set to 0x00, otherwise, 0xff.
-  static void DiffDataAndBuffer(const std::vector<uchar>& data,
-                                 std::vector<uchar>* buffer);
+  static void DiffDataAndBuffer(const std::vector<unsigned char>& data,
+                                 std::vector<unsigned char>* buffer);
 
   // If uchars in data vector and buffer vector are 0xff, then the buffer
   // pixel is set to 0xff, otherwise 0xff.
-  static void SameWhite(const std::vector<uchar>& data,
-                        std::vector<uchar>* buffer);
+  static void SameWhite(const std::vector<unsigned char>& data,
+                        std::vector<unsigned char>* buffer);
 
   // If uchars in data vector and buffer vector are not 0x00, then the buffer
   // pixel is set to 0xff, otherwise 0xff.
-  static void SameNotBlack(const std::vector<uchar>& data,
-                           std::vector<uchar>* buffer);
+  static void SameNotBlack(const std::vector<unsigned char>& data,
+                           std::vector<unsigned char>* buffer);
 
 
   // Inverts all uchars in image.
-  static void InvertImage(std::vector<uchar>* image);
+  static void InvertImage(std::vector<unsigned char>* image);
 
   // Threshold image so that all values at or below threshold are 0x00 and all
   // above are 0xff. Can be used to "de-feather" an image.
-  static void ThresholdImage(std::vector<uchar>* image,
-                             const uchar threshold_byte);
+  static void ThresholdImage(std::vector<unsigned char>* image,
+                             const unsigned char threshold_byte);
 
   // Loads mask data from given file. Data should be allocated to hold
   // width * height bytes.
   static void LoadMask(const std::string mask_file,
-                       std::vector<uchar>* alpha_buffer,
+                       std::vector<unsigned char>* alpha_buffer,
                        const int width,
                        const int height);
 
   // Save alpha buffer to the object's mask file with the given geo extents.
-  void SaveMask(std::vector<uchar>* alpha_buffer,
+  void SaveMask(std::vector<unsigned char>* alpha_buffer,
                 const int width,
                 const int height,
                 const khGeoExtents geo_extents);
@@ -229,7 +229,7 @@ class PolyMask {
   // Adds polygon from polygon file to the mask. If is_positive_mask is true,
   // the polygon is filled with 0x00, otherwise it is filled with 0xff.
   void ApplyPolygon(const std::string& polygon_file,
-                    const uchar pixel_byte);
+                    const unsigned char pixel_byte);
 
   // Creates a temporary directory and converts the kml to a shp file
   // in that directory. Other associated files are also created.
@@ -240,11 +240,11 @@ class PolyMask {
 
   // Feathers the edges of the mask. Border should usually match the base
   // mask value which is based on is_pass0_positive_mask_ (see InitMask).
-  void FeatherMask(const int feather, const uchar border);
+  void FeatherMask(const int feather, const unsigned char border);
 
-  void FeatherMaskData(std::vector<uchar>* mask_data,
+  void FeatherMaskData(std::vector<unsigned char>* mask_data,
                        const int feather,
-                       const uchar border);
+                       const unsigned char border);
 
   // Check that the input file is readable and that another one hasn't been
   // specified.

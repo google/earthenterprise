@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,10 +37,10 @@ namespace readerimpl {
 
 
 // -1 -> unknown, 0 -> no such bucket, 1 -> index into bucketIds below
-typedef int32 ChildBucketId; 
+typedef std::int32_t ChildBucketId; 
 static const ChildBucketId kUnknownBucket = -1;
 static const ChildBucketId kNonExistentBucket = 0;
-static const uint32 kInvalidAddrIndex = 0;
+static const std::uint32_t kInvalidAddrIndex = 0;
 
 class ChildBucketCache;
 
@@ -47,10 +48,10 @@ class ReaderBase {
  public:
   ~ReaderBase(void);
 
-  uint32 GetPacketExtra(uint32 packetfile_num);
+  std::uint32_t GetPacketExtra(std::uint32_t packetfile_num);
  protected:
   ReaderBase(geFilePool &filepool_, const std::string &filename,
-             uint numBucketLevelsCached);
+             unsigned int numBucketLevelsCached);
 
   ChildBucketId
   FetchCachedChildBucketId(const BucketPath &targetChildBucketPath,
@@ -63,9 +64,9 @@ class ReaderBase {
   void LoadExternalData(const ExternalDataAddress &addr,
                         EndianReadBuffer &buf);
 
-  const uint NumBucketLevelsCached;
+  const unsigned int NumBucketLevelsCached;
   khDeleteGuard<IndexBundleReader> bundleReader;
-  const uint fileFormatVersion;
+  const unsigned int fileFormatVersion;
 
  private:
   ChildBucketAddr LoadChildBucketToGetChildAddr
@@ -74,7 +75,7 @@ class ReaderBase {
   EntryBucketAddr LoadChildBucketToGetEntryAddr
   (ChildBucketAddr addr, const BucketPath &subpath, EndianReadBuffer &tmpBuf);
 
-  PacketFileReader* GetPacketFileReader(uint32 fileNum);
+  PacketFileReader* GetPacketFileReader(std::uint32_t fileNum);
 
 
   geFilePool &filePool;

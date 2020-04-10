@@ -15,12 +15,12 @@
 
 #include "geConsoleProgress.h"
 
-bool geConsoleProgress::incrementTotal(int64 val) {
+bool geConsoleProgress::incrementTotal(std::int64_t val) {
   progress_meter_.incrementTotal(val);
   return true;
 }
 
-bool geConsoleProgress::incrementDone(int64 val) {
+bool geConsoleProgress::incrementDone(std::int64_t val) {
   progress_meter_.incrementDone(val);
   return true;
 }

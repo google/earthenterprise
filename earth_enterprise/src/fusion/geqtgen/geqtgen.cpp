@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -85,8 +86,8 @@ class QuadtreePacketSource
  public:
   QuadtreePacketSource(const std::string &name,
                        khTransferGuard<MergeSource<QTPMergeEntryType> > source,
-                       const std::map<uint32,uint32> &inset_provider_map,
-                       const std::map<uint32, std::string> &channel_to_date_map)
+                       const std::map<std::uint32_t,std::uint32_t> &inset_provider_map,
+                       const std::map<std::uint32_t, std::string> &channel_to_date_map)
       : MergeSource<MergeType>(name),
         source_(source),
         source_item_index_(0),
@@ -146,12 +147,12 @@ class QuadtreePacketSource
   size_t source_item_index_;
   MergeType current_;
   bool finished_;
-  const std::map<uint32,uint32> &inset_provider_map_;
-  const std::map<uint32, std::string> &channel_to_date_map_;
+  const std::map<std::uint32_t,std::uint32_t> &inset_provider_map_;
+  const std::map<std::uint32_t, std::string> &channel_to_date_map_;
 
-  uint32 LookupProvider(uint32 inset) const {
+  std::uint32_t LookupProvider(std::uint32_t inset) const {
     if (inset != 0) {
-      std::map<uint32, uint32>::const_iterator found =
+      std::map<std::uint32_t, std::uint32_t>::const_iterator found =
         inset_provider_map_.find(inset);
       if (found != inset_provider_map_.end()) {
         //        notify(NFY_NOTICE, "%u -> %u", inset, found->second);
@@ -166,7 +167,7 @@ class QuadtreePacketSource
   // Translate from AllInfoEntry output of source to QuadtreePacketItem
   void TranslateSource(const QuadtreePath qt_path,
                        const geindex::AllInfoEntry &source_item) {
-    uint32 level, row, col;
+    std::uint32_t level, row, col;
     qt_path.GetLevelRowCol(&level, &row, &col);
     switch (source_item.type) {
       case geindex::TypedEntry::Imagery: {
@@ -176,11 +177,11 @@ class QuadtreePacketSource
         // client never pulls from level 0 or 1 anyway to draw the front of
         // the globe. So we still the the NASA copyright even when zoomed
         // all the way out.
-        uint32 provider = (level > 1)
+        std::uint32_t provider = (level > 1)
                           ? LookupProvider(source_item.insetId)
                           : 0;
         std::string date_string;
-        std::map<uint32, std::string>::const_iterator iter =
+        std::map<std::uint32_t, std::string>::const_iterator iter =
           channel_to_date_map_.find(source_item.channel);
         if (iter != channel_to_date_map_.end()) {
           date_string = iter->second;
@@ -200,11 +201,11 @@ class QuadtreePacketSource
         // client never pulls from level 0 or 1 anyway to draw the front of
         // the globe. So we still the the NASA copyright even when zoomed
         // all the way out.
-        uint32 provider = (level > 1)
+        std::uint32_t provider = (level > 1)
                           ? LookupProvider(source_item.insetId)
                           : 0;
         std::string date_string;
-        std::map<uint32, std::string>::const_iterator iter =
+        std::map<std::uint32_t, std::string>::const_iterator iter =
           channel_to_date_map_.find(source_item.channel);
         if (iter != channel_to_date_map_.end()) {
           date_string = iter->second;
@@ -224,7 +225,7 @@ class QuadtreePacketSource
         // client never pulls from level 0 or 1 anyway to draw the front of
         // the globe. So we still the the NASA copyright even when zoomed
         // all the way out.
-        uint32 provider = (level > 1)
+        std::uint32_t provider = (level > 1)
                           ? LookupProvider(source_item.insetId)
                           : 0;
         current_ = MergeType(qt_path,
@@ -256,10 +257,10 @@ class QuadtreePacketSource
 
 // CountIndexPackets - return count of packets in packet files of index
 
-uint64 CountIndexPackets(const geindex::IndexBundle &bundle) {
-  uint64 packet_count = 0;
-  uint32 packet_file_count = bundle.PacketFileCount();
-  for (uint32 i = 0; i < packet_file_count; ++i) {
+ std::uint64_t CountIndexPackets(const geindex::IndexBundle &bundle) {
+  std::uint64_t packet_count = 0;
+  std::uint32_t packet_file_count = bundle.PacketFileCount();
+  for (std::uint32_t i = 0; i < packet_file_count; ++i) {
     const std::string &packet_file_name = bundle.GetPacketFile(i);
     if (!packet_file_name.empty()) {
       packet_count +=
@@ -335,14 +336,14 @@ int main(int argc, char **argv) {
     input_files.push_back(config.imagery_index_);
     input_files.push_back(config.terrain_index_);
     input_files.push_back(config.vector_index_);
-    for (uint i = 0; i < config.dated_imagery_indexes_.size(); ++i) {
+    for (unsigned int i = 0; i < config.dated_imagery_indexes_.size(); ++i) {
       input_files.push_back(config.dated_imagery_indexes_[i].
                             imagery_index_version_);
     }
     khPrintFileSizes("Input File Sizes", input_files);
 
     // Must create a map from imagery channels to date strings.
-    std::map<uint32, std::string> channel_to_date_map;
+    std::map<std::uint32_t, std::string> channel_to_date_map;
 
     khDeleteGuard<QTPMergeType> merger(
         TransferOwnership(new QTPMergeType("QTPacketGen Merger")));
@@ -415,7 +416,7 @@ int main(int argc, char **argv) {
                   TransferOwnership(traverser),
                   0 /* unused override channel id*/)));
     }
-    for (uint i = 0; i < config.dated_imagery_indexes_.size(); ++i) {
+    for (unsigned int i = 0; i < config.dated_imagery_indexes_.size(); ++i) {
       const DatedImageryIndexInfo& dated_imagery =
         config.dated_imagery_indexes_[i];
       typedef geindex::Traverser<geindex::BlendBucket> BlendTraverser;
@@ -426,7 +427,7 @@ int main(int argc, char **argv) {
       progress_meter.incrementTotal(
           CountIndexPackets(traverser->GetIndexBundleReader()));
       std::string date_string = dated_imagery.date_string_;
-      int32 channel_id = dated_imagery.channel_id_;
+      std::int32_t channel_id = dated_imagery.channel_id_;
       merger->AddSource(
           TransferOwnership(
               new geindex::AllInfoAdaptingTraverser<BlendTraverser>(
@@ -457,7 +458,7 @@ int main(int argc, char **argv) {
     // packet and written to a packetfile.
     // We'll construct a vector of writers (to handle case of writing
     // one or both quadtree formats) and
-    const uint kFormatCount = 2;  // We have format1 for 4.3 and earlier,
+    const unsigned int kFormatCount = 2;  // We have format1 for 4.3 and earlier,
                                   // format2 for GE 4.4+
      // Determine which formats of QuadTree packets we need to build.
     bool build_format1 = !outdir_format1.empty();
@@ -479,7 +480,7 @@ int main(int argc, char **argv) {
     do {
       // Loop through each format (we may be building 1 or both formats and
       // the code is roughly the same except the packet format.
-      for (uint format_id = 0; format_id < kFormatCount; ++format_id) {
+      for (unsigned int format_id = 0; format_id < kFormatCount; ++format_id) {
         if (!build_format[format_id])
           continue;
 
@@ -535,7 +536,7 @@ int main(int argc, char **argv) {
     gather.Close();
 
     // Finish the packet file(s)
-    for (uint format_id = 0; format_id < kFormatCount; ++format_id) {
+    for (unsigned int format_id = 0; format_id < kFormatCount; ++format_id) {
       if (writers[format_id] != NULL) {
         writers[format_id]->Close(static_cast<size_t>(sortbuf) * 1024 * 1024);
       }

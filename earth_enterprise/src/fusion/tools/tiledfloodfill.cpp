@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -55,8 +56,8 @@ const int TiledFloodFill::kNoFillValueSpecified =
 
 // The filled areas will be masked out, so kFilled = 0 to form the
 // alpha mask.
-const uchar TiledFloodFill::kNotFilled = 255;
-const uchar TiledFloodFill::kFilled = 0;
+const unsigned char TiledFloodFill::kNotFilled = 255;
+const unsigned char TiledFloodFill::kFilled = 0;
 
 // The number of seconds between progress reports for long computations.
 const int PROGRESS_REPORT_INTERVAL_SECONDS = 30;
@@ -101,13 +102,13 @@ void TiledFloodFill::AddSeed(int x, int y) {
 }
 
 
-void TiledFloodFill::AddFillValue(uchar fv) {
+void TiledFloodFill::AddFillValue(unsigned char fv) {
   for (int i = std::max(0, fv - tolerance_);
        i <= std::min(255, fv + tolerance_); ++i)
     fill_value_lookup_[i] = true;
 }
 
-inline bool TiledFloodFill::FillOk(uchar u) const {
+inline bool TiledFloodFill::FillOk(unsigned char u) const {
   return fill_value_lookup_[u];
 }
 
@@ -143,7 +144,7 @@ void TiledFloodFill::FloodFill() {
             col_todo.top().row_in_image < tile_height_ * (tile_row + 1)) {
           // The following is used to pass flood-fill info
           // horizontally between tiles.
-          vector<std::vector<uchar> > tile_vert_sides;
+          vector<std::vector<unsigned char> > tile_vert_sides;
           ProcessTile(col, tile_row,
                       DIRECTION_PLUS,  // x_direction
                       y_direction, &tile_vert_sides);
@@ -154,7 +155,7 @@ void TiledFloodFill::FloodFill() {
         // Do hole detection for all unvisited tiles, left to right.
         for (int col = 0; col < num_tiles_x_; ++col)
           if (!visited_[col]) {
-            vector<std::vector<uchar> > tile_vert_sides;
+            vector<std::vector<unsigned char> > tile_vert_sides;
             ProcessTile(col, tile_row, DIRECTION_PLUS, y_direction,
                         &tile_vert_sides);
           }
@@ -177,26 +178,26 @@ void TiledFloodFill::FloodFill() {
 
 void TiledFloodFill::ProcessTile(int tile_col, int tile_row,
                                  Direction x_direction, Direction y_direction,
-                                 std::vector<std::vector<uchar> > *vert_sides) {
+                                 std::vector<std::vector<unsigned char> > *vert_sides) {
   // Store horizontal-propagation info.  The sides of tile i are
   // vert_sides[i] and vert_sides[i+1].  Each value is set to kFilled
   // if a pixel has been set on either side of the tile border during
   // this tile row of propagation.
-  (*vert_sides).resize(num_tiles_x_ + 1, vector<uchar>());
+  (*vert_sides).resize(num_tiles_x_ + 1, vector<unsigned char>());
 
   do {
     notify(NFY_VERBOSE, "flood fill tile %d, %d, dir %d",
            tile_col, tile_row, DirToDelta(y_direction));
 
     // Load tile with image data & previous fill data.
-    const uchar *tile = LoadImageTile(tile_col, tile_row);
+    const unsigned char *tile = LoadImageTile(tile_col, tile_row);
     double old_opacity;
-    uchar *alpha = LoadMaskTile(tile_col, tile_row, &old_opacity);
+    unsigned char *alpha = LoadMaskTile(tile_col, tile_row, &old_opacity);
 
     // Get or create side bars for propagation in/out.
     // side_bar bit is set if pixel on either side of border has
     // been set during propagation in this row of tiles.
-    vector<uchar> *side_bar[2] = {&(*vert_sides)[tile_col],
+    vector<unsigned char> *side_bar[2] = {&(*vert_sides)[tile_col],
                                   &(*vert_sides)[tile_col + 1]};
     side_bar[0]->resize(tile_height_, kNotFilled);
     side_bar[1]->resize(tile_height_, kNotFilled);
@@ -206,7 +207,7 @@ void TiledFloodFill::ProcessTile(int tile_col, int tile_row,
                             image_height_ - tile_row * tile_height_);
     int row_len = std::min(tile_width_, image_width_ - tile_col * tile_width_);
     int sidecols[2] = {0, row_len - 1};
-    vector<uchar> old_sides[2];
+    vector<unsigned char> old_sides[2];
     for (int side = 0; side < 2;  ++side) {
       old_sides[side].resize(tile_height_);
       for (int row = 0; row < last_row; ++row)
@@ -232,9 +233,9 @@ void TiledFloodFill::ProcessTile(int tile_col, int tile_row,
           row = to_do->top().row_in_image % tile_height_;
 
         int global_row = row + tile_row * tile_height_;
-        const uchar *row_beg = tile + row * tile_width_;
-        const uchar *row_end = row_beg + row_len;
-        uchar *fill_row = alpha + row * tile_width_;
+        const unsigned char *row_beg = tile + row * tile_width_;
+        const unsigned char *row_end = row_beg + row_len;
+        unsigned char *fill_row = alpha + row * tile_width_;
 
         // Propagate spans on todo list for this row.  Must pop row
         // into temporary because ProcessSpan pushes next row.
@@ -243,7 +244,7 @@ void TiledFloodFill::ProcessTile(int tile_col, int tile_row,
           temp_to_do.push_back(to_do->top());
           to_do->pop();
         }
-        for (uint i = 0; i < temp_to_do.size(); ++i)
+        for (unsigned int i = 0; i < temp_to_do.size(); ++i)
           filled_pixels += ProcessSpan(global_row, tile_col,
                                        row_beg, row_end, fill_row,
                                        tile_y_direction,
@@ -361,8 +362,8 @@ void TiledFloodFill::ProcessTile(int tile_col, int tile_row,
 
 
 int TiledFloodFill::ProcessSpan(int global_row, int tile_col,
-                                const uchar *row_beg, const uchar *row_end,
-                                uchar *fill_row,
+                                const unsigned char *row_beg, const unsigned char *row_end,
+                                unsigned char *fill_row,
                                 Direction y_direction,
                                 int span_beg, int span_len) {
   const int next_row = global_row + DirToDelta(y_direction);
@@ -370,8 +371,8 @@ int TiledFloodFill::ProcessSpan(int global_row, int tile_col,
 
   stack<Span> &to_do = tile_col_to_do_[y_direction][tile_col],
           &rev_to_do = tile_col_to_do_[ReverseDirection(y_direction)][tile_col];
-  const uchar * const left = row_beg + span_beg;
-  const uchar * const right = left + span_len;
+  const unsigned char * const left = row_beg + span_beg;
+  const unsigned char * const right = left + span_len;
   int filled_count = 0;
 
   if (!to_do.empty() &&
@@ -382,8 +383,8 @@ int TiledFloodFill::ProcessSpan(int global_row, int tile_col,
     notify(NFY_FATAL, "TiledFloodFill: reverse to_do list not in order");
 
   // If the first pixel is valid, expand left.
-  const uchar *exp_left = left;
-  uchar *fill = fill_row + span_beg;
+  const unsigned char *exp_left = left;
+  unsigned char *fill = fill_row + span_beg;
   if ((*fill != kFilled) && FillOk(*exp_left)) {
     for (--exp_left, --fill;
          exp_left >= row_beg && (*fill != kFilled) && FillOk(*exp_left);
@@ -394,8 +395,8 @@ int TiledFloodFill::ProcessSpan(int global_row, int tile_col,
   // At this point exp_left is min(leftmost valid pixel, left).
 
   // Flood fill the middle. Also update To_Do list for next row.
-  const uchar *exp_right = left;
-  const uchar *last = exp_left;
+  const unsigned char *exp_right = left;
+  const unsigned char *last = exp_left;
   for (fill = fill_row + span_beg; exp_right < right; ++fill, ++exp_right)
     if ((*fill != kFilled) && FillOk(*exp_right)) {
       *fill = kFilled;
@@ -455,7 +456,7 @@ void TiledFloodFill::ProgressTileDone(int tile_row) {
                     PROGRESS_REPORT_INTERVAL_SECONDS * 1000)) {
     float tiles_per_ms = (static_cast<float>(tiles_processed_) /
                           ms_elapsed);
-    int64 ms_remaining = static_cast<int64>(tiles_to_process /
+    std::int64_t ms_remaining = static_cast<std::int64_t>(tiles_to_process /
                                             tiles_per_ms);
     if (tiles_to_process > 0) {
       fprintf(stderr, "Flooded %d tiles (%.1f/sec),"

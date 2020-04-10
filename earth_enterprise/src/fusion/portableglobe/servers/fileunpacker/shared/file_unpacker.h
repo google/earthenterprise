@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +47,7 @@ class FileUnpacker {
   FileUnpacker& operator=(const FileUnpacker&);
 
  public:
-  FileUnpacker(const GlcReader& glc_reader, uint64 offset, uint64 size);
+  FileUnpacker(const GlcReader& glc_reader, std::uint64_t offset, std::uint64_t size);
   ~FileUnpacker();
 
   /**
@@ -118,11 +119,11 @@ class FileUnpacker {
   /**
    * Helper for reading in consecutive fields from the glc file.
    */
-  bool Read(void* data, uint64 size);
+  bool Read(void* data, std::uint64_t size);
 
   const GlcReader& glc_reader_;
-  uint64 base_offset_;  // Base offset to package within the composite.
-  uint64 base_size_;    // Size of package within the composite.
+  std::uint64_t base_offset_;  // Base offset to package within the composite.
+  std::uint64_t base_size_;    // Size of package within the composite.
 
   std::map<std::string, PackageFileLoc> index_;
 
@@ -143,7 +144,7 @@ class FileUnpacker {
   std::string dbroot_path_;
 
   // Offset for consecutive reads from the reader.
-  uint64 reader_offset_;
+  std::uint64_t reader_offset_;
 };
 
 #endif  // GEO_EARTH_ENTERPRISE_SRC_FUSION_PORTABLEGLOBE_SERVERS_FILEUNPACKER_SHARED_FILE_UNPACKER_H_

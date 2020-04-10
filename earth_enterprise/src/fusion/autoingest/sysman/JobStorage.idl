@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,13 +14,12 @@
 // limitations under the License.
 
 
+#include <cstdint>
 #include <string>
 #include <vector>
-#include <khTypes.h>
-
 
 class StartJobMsg {
-  uint32 jobid;
+  std::uint32_t jobid;
   std::string logfile;
   std::vector<std::vector<std::string> > commands;
 
@@ -27,32 +27,32 @@ class StartJobMsg {
 };
 
 class StopJobMsg {
-  uint32 jobid;
+  std::uint32_t jobid;
 
 #pragma StrLoadAndSave
 };
 
 class JobProgressMsg {
-  uint32 jobid;
-  uint32 beginTime;
-  uint32 progressTime;
+  std::uint32_t jobid;
+  std::uint32_t beginTime;
+  std::uint32_t progressTime;
   double progress;
 
 #pragma StrLoadAndSave
 };
 
 class JobDoneMsg {
-  uint32 jobid;
+  std::uint32_t jobid;
   bool   success;
-  uint32 beginTime;
-  uint32 endTime;
+  std::uint32_t beginTime;
+  std::uint32_t endTime;
 
 #pragma StrLoadAndSave
 };
 
 class ProviderConnectMsg {
   std::string host;
-  uint        numCPUs;
+  unsigned int        numCPUs;
   std::string fusionVer = std::string();
 
 #pragma StrLoadAndSave

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,7 +19,7 @@
 // providers.
 
 #include "fusion/dbroot/proto_dbroot_combiner.h"
-#include "common/khTypes.h"
+#include <cstdint>
 
 ProtoDbrootCombiner::ProtoDbrootCombiner(void) {
 }
@@ -37,7 +38,7 @@ void ProtoDbrootCombiner::RemoveDuplicateProviders(void) {
   // independently from each other. They each might have a provider entry
   // for the same provider. We only want to send each provider once.
   // This routine looks for duplicates and keeps the "best".
-  typedef std::map<int32, keyhole::dbroot::ProviderInfoProto> ProviderMap;
+  typedef std::map<std::int32_t, keyhole::dbroot::ProviderInfoProto> ProviderMap;
   ProviderMap keep_providers;
 
   // loop through all providers in the output protodbroot

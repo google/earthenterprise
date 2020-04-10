@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +22,7 @@
 
 class gstQuadAddress {
  public:
-  gstQuadAddress(uint32 l = 0, uint32 r = 0, uint32 c = 0)
+  gstQuadAddress(std::uint32_t l = 0, std::uint32_t r = 0, std::uint32_t c = 0)
       : level_(l), row_(r), col_(c) {
     calcBBox();
     validate();
@@ -63,15 +64,15 @@ class gstQuadAddress {
     return ((level_ * 151) + (row_ * 733) + (col_ * 1013)) & d;
   }
 
-  uint32 level() const { return level_; }
-  uint32 row() const { return row_; }
-  uint32 col() const { return col_; }
+  std::uint32_t level() const { return level_; }
+  std::uint32_t row() const { return row_; }
+  std::uint32_t col() const { return col_; }
 
-  void blist(uchar* blist) const {
-    uint64 right, top;
+  void blist(unsigned char* blist) const {
+    std::uint64_t right, top;
     static const int order[][2] = { {0, 3}, {1, 2} };
 
-    for (uint32 j = 0; j < level_; ++j) {
+    for (std::uint32_t j = 0; j < level_; ++j) {
       right = col_ & (0x1U << (level_ - j - 1));
       top   = row_ & (0x1U << (level_ - j - 1));
       blist[j] = order[right != 0][top != 0];
@@ -79,11 +80,11 @@ class gstQuadAddress {
   }
 
   std::string BlistAsString() const {
-    uchar branch_list[32];
+    unsigned char branch_list[32];
     char child_names[] = "0123";
     blist(branch_list);
     std::string blist_string;
-    for (uint lev = 0; lev < level_; ++lev)
+    for (unsigned int lev = 0; lev < level_; ++lev)
       blist_string += child_names[branch_list[lev]];
     return blist_string;
   }
@@ -122,7 +123,7 @@ class gstQuadAddress {
 
  private:
   void validate() {
-    uint32 max = 0x01U << level_;
+    std::uint32_t max = 0x01U << level_;
     if (row_ >= max || col_ >= max) {
       valid_ = false;
     } else {
@@ -137,9 +138,9 @@ class gstQuadAddress {
                     row_ * grid, (row_ + 1) * grid);
   }
 
-  uint32 level_;
-  uint32 row_;
-  uint32 col_;
+  std::uint32_t level_;
+  std::uint32_t row_;
+  std::uint32_t col_;
   gstBBox bbox_;
   bool valid_;
 };

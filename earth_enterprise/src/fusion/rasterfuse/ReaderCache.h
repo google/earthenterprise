@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +52,7 @@ class FFIORasterReaderCache
     }
 
     // determine amount of memory used by FFIORasterReaderCache
-    uint64 GetSize() {
+    std::uint64_t GetSize() {
       return sizeof(reader);
     }
 
@@ -69,7 +70,7 @@ class FFIORasterReaderCache
   mutable khCache<const RawReader*, CachedReader> cache;
 
  public:
-  inline FFIORasterReaderCache(uint cacheSize) : cache(cacheSize, "reader") { }
+  inline FFIORasterReaderCache(unsigned int cacheSize) : cache(cacheSize, "reader") { }
 
   inline void
   ReadTile(const RawReader *reader, const khTileAddr &addr,

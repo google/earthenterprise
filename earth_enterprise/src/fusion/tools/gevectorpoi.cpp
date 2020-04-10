@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,7 +25,7 @@
 #include <sstream>
 
 // 10 million records, about 1 gigabyte
-const uint32 MAX_RECORDS_PER_POI_SEGMENT = 10 * 1000 * 1000;
+const std::uint32_t MAX_RECORDS_PER_POI_SEGMENT = 10 * 1000 * 1000;
 
 void usage(const std::string &progn, const char *msg = 0, ...) {
   if (msg) {
@@ -52,19 +53,19 @@ void EmitSearchFileData(FILE *search_file_, const std::string& fileName);
 void EmitSearchFileHeader(FILE *search_file_, const POIConfig &config);
 void EmitSearchFileFooter(FILE *search_file_, const POIConfig &config);
 void EmitSearchRecord(gstSource &src,
-                      int32 fid,
+                      std::int32_t fid,
                       FILE *search_file_,
                       const std::vector<SearchField> &search_fields);
 
 // ****************************************************************************
 // ***  MergeSource to pull from Query file
 // ****************************************************************************
-class QueryMergeSource: public MergeSource<int32> {
-  typedef std::deque<int32> Container;
+class QueryMergeSource: public MergeSource<std::int32_t> {
+  typedef std::deque<std::int32_t> Container;
   typedef Container::const_iterator Iterator;
  public:
   QueryMergeSource(const std::string &debug_desc, const std::string &queryfile)
-      : MergeSource<int32>(debug_desc) {
+      : MergeSource<std::int32_t>(debug_desc) {
     // open the query file
     FILE* select_fp = ::fopen(queryfile.c_str(), "r");
     if (select_fp == NULL) {
@@ -96,7 +97,7 @@ class QueryMergeSource: public MergeSource<int32> {
     // initialize the iterator
     current = ids.begin();
   }
-  virtual const int32 &Current(void) const {
+  virtual const std::int32_t &Current(void) const {
     if (current != ids.end()) {
       return *current;
     } else {
@@ -148,7 +149,7 @@ int main(int argc, char *argv[]) {
 
     gstInit();
 
-    for (uint32 i = 0; i < output.size(); ++i) {
+    for (std::uint32_t i = 0; i < output.size(); ++i) {
 
       // load and validate the POIConfig
       POIConfig poi_config;
@@ -179,8 +180,8 @@ int main(int argc, char *argv[]) {
       EmitSearchFileHeader(search_file_, poi_config);
 
       // make a merger with all of the query files
-      Merge <int32> merger("Query Merger");
-      for (uint f = 0; f < poi_config.query_files_.size(); ++f) {
+      Merge <std::int32_t> merger("Query Merger");
+      for (unsigned int f = 0; f < poi_config.query_files_.size(); ++f) {
         merger.AddSource(
             TransferOwnership(new QueryMergeSource(
                 "Query Source: " + poi_config.query_files_[f],
@@ -189,9 +190,9 @@ int main(int argc, char *argv[]) {
 
       // traverse and process them all
       merger.Start();
-      uint32 record_count = MAX_RECORDS_PER_POI_SEGMENT;
-      int32 prev_id = -1;
-      uint32 data_file_num = 0;
+      std::uint32_t record_count = MAX_RECORDS_PER_POI_SEGMENT;
+      std::int32_t prev_id = -1;
+      std::uint32_t data_file_num = 0;
       std::string data_file_name = output[i] + Itoa(data_file_num);
       FILE * data_file_ = fopen(data_file_name.c_str(), "w");
       if (!data_file_) {
@@ -200,7 +201,7 @@ int main(int argc, char *argv[]) {
                    data_file_name));
       }
       do {
-        int32 cur_id = merger.Current();
+        std::int32_t cur_id = merger.Current();
         if (cur_id != prev_id) {
           prev_id = cur_id;
 
@@ -276,7 +277,7 @@ void EmitSearchFileHeader(FILE *search_file_, const POIConfig &config) {
       "<field name=\"lon\" displayname=\"lon\" type=\"???\" use=\"???\"/>\n");
   fprintf(search_file_,
       "<field name=\"lat\" displayname=\"lat\" type=\"???\" use=\"???\"/>\n");
-  for (uint i = 0; i < config.search_fields_.size(); ++i) {
+  for (unsigned int i = 0; i < config.search_fields_.size(); ++i) {
     fprintf(search_file_,
         "<field name=\"%s\" displayname=\"%s\" type=\"VARCHAR\" use=\"%s\"/>\n",
         QString("field%1").arg(i).latin1(),
@@ -310,7 +311,7 @@ char * BinasciiHexlify(double val, char * buffer) {
   return buffer;
 }
 
-void EmitSearchRecord(gstSource &src, int32 fid, FILE *search_file_,
+void EmitSearchRecord(gstSource &src, std::int32_t fid, FILE *search_file_,
                       const std::vector<SearchField> &search_fields) {
   // fetch the geometry and the record
   gstRecordHandle rec = src.GetAttributeOrThrow(0, fid);
@@ -327,7 +328,7 @@ void EmitSearchRecord(gstSource &src, int32 fid, FILE *search_file_,
                     geode->BoundingBox().CenterY());
   }
 
-  for (uint32 i = 0; i < search_fields.size(); ++i) {
+  for (std::uint32_t i = 0; i < search_fields.size(); ++i) {
     QString fname = QString("field%1").arg(i);
 
     gstValue *val = rec->FieldByName(search_fields[i].name);

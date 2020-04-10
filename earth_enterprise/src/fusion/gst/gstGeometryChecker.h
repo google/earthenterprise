@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,7 +69,7 @@ class GeometryChecker {
   void RemoveSpikes(gstGeodeHandle* const geodeh) const;
 
   void RemoveSpikesInPart(const gstGeode &geode,
-                          uint part,
+                          unsigned int part,
                           gstGeodePart *res_part) const;
 
   // Checks points for collinearity.
@@ -84,7 +85,7 @@ class GeometryChecker {
   void CheckAndFixCycleOrientation(gstGeodeHandle* const geodeh) const;
 
   // Calculates cycle orientation.
-  CycleOrientation CalcCycleOrientation(gstGeode* const geode, uint part) const;
+  CycleOrientation CalcCycleOrientation(gstGeode* const geode, unsigned int part) const;
 
   // Less XY-functor for gstVertex without tolerance.
   XYLexicographicLess<gstVertex> less_xy_;

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,9 +14,9 @@
 // limitations under the License.
 
 
+#include <cstdint>
 #include <string>
 #include <vector>
-#include <khTypes.h>
 #include <geindex/Entries.h>
 #include "common/SharedString.h"
 #requiresgetheapusage
@@ -26,12 +27,12 @@
 class UnifiedIndexEntry {
   std::string type_;
   SharedString verref_;
-  uint32 version_;
+  std::uint32_t version_;
 
   // used to add channel id to something that otherwise wouldn't have one
   // load old ones as 0, but don't make a default for new ones
   // this forces us to visit all places that make a new one
-  uint32 channel_id_ = load:uint32(0);
+  std::uint32_t channel_id_ = load:std::uint32_t(0);
   std::string date_string_ = std::string();  // Format expected: "YYYY-MM-DD"
 #pragma GenerateIsUpToDate
 };

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,15 +50,15 @@ class IndexItem {
   // Order matters here. Do NOT cross 64 bit boundaries,
   // or the structure may be laid out differently of 32-bit
   // and 64-bit machines.
-  uint32 btree_high;
-  uint16 btree_low;
-  uint8 level;
-  uint8 packet_type;
+  std::uint32_t btree_high;
+  std::uint16_t btree_low;
+  std::uint8_t level;
+  std::uint8_t packet_type;
   // Channel is vector channel or time machine date channel.
-  uint16 channel;
-  uint16 file_id;
-  uint32 packet_size;
-  uint64 offset;
+  std::uint16_t channel;
+  std::uint16_t file_id;
+  std::uint32_t packet_size;
+  std::uint64_t offset;
 
   /**
    * Returns whether the given IndexItem points to the same packet.
@@ -80,14 +81,14 @@ class IndexItem {
   /**
    * Fills in values for an index item.
    */
-  void Fill(const std::string& qtpath, uint8 packet_type, uint16 channel);
+  void Fill(const std::string& qtpath, std::uint8_t packet_type, std::uint16_t channel);
 
   // Special value for packet_type indicating channel
   // and type  should be ignored.
-  static const uint8 kIgnoreChannelAndType;
+  static const std::uint8_t kIgnoreChannelAndType;
 
   // Maximum level (lod) supported by the indexing system.
-  static const uint8 kMaxLevel;
+  static const std::uint8_t kMaxLevel;
 };
 
 /**
@@ -100,7 +101,7 @@ class PacketBundle {
   /**
    * Returns packetbundle file's name for the given file id.
    */
-  std::string PacketBundleFileName(uint16 file_id) const;
+  std::string PacketBundleFileName(std::uint16_t file_id) const;
 
   /**
    * Returns index file's name.
@@ -108,7 +109,7 @@ class PacketBundle {
   std::string IndexFileName() const;
 
   PacketBundle() { }
-  static const uint64 kMaxFileSize;                 // 0x7fffffffffffffff;
+  static const std::uint64_t kMaxFileSize;                 // 0x7fffffffffffffff;
   static const std::string kIndexFile;              // "index"
   static const std::string kPacketbundlePrefix;     // "pbundle_"
   static const std::string kDirectoryDelimiter;     // "/"

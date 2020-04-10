@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +21,7 @@
 #define GEO_EARTH_ENTERPRISE_SRC_COMMON_GEDBROOT_ETA_DBROOT_H_
 
 #include <string>
-#include "common/khTypes.h"
+#include <cstdint>
 
 class EtaDbroot {
  public:
@@ -31,7 +32,7 @@ class EtaDbroot {
   };
   static bool IsEtaDbroot(const std::string &content, const ExpectType type);
   static bool DecodeBinary(const std::string &binary, std::string *text,
-                           uint16 *epoch);
+                           std::uint16_t *epoch);
 };
 
 

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,9 +31,9 @@ CachingProductTileReader_Heightmap::FetchExtraPixels
 (const khRasterProductLevel *prodLev,
  const khTileAddr &addr,
  ExpandedTileType &dstTile,
- const khOffset<uint32> &dstOffset,
- const khExtents<uint32> &srcExtents,
- const khExtents<uint32> &fallbackExtents)
+ const khOffset<std::uint32_t> &dstOffset,
+ const khExtents<std::uint32_t> &srcExtents,
+ const khExtents<std::uint32_t> &fallbackExtents)
 {
   if (prodLev->tileExtents().ContainsRowCol(addr.row, addr.col)) {
     // we have the desired tile, fetch in and copy the extra pixels
@@ -78,42 +79,42 @@ CachingProductTileReader_Heightmap::FetchAndCacheProductTile
 void
 MagnifyQuadrant_Heightmap(ExpandedHeightmapTile &destTile,
                           const ExpandedHeightmapTile &srcTile,
-                          uint quad)
+                          unsigned int quad)
 {
 
   typedef khCalcHelper<ExpandedHeightmapTile::PixelType> Helper;
-  static const uint TileWidth  = ExpandedHeightmapTile::TileWidth;
-  //    static const uint TileHeight = ExpandedHeightmapTile::TileHeight;
-  static const uint ProdTileWidth  = ExpandedHeightmapTile::TileWidth - 1;
-  static const uint ProdTileHeight = ExpandedHeightmapTile::TileHeight - 1;
+  static const unsigned int TileWidth  = ExpandedHeightmapTile::TileWidth;
+  //    static const unsigned int TileHeight = ExpandedHeightmapTile::TileHeight;
+  static const unsigned int ProdTileWidth  = ExpandedHeightmapTile::TileWidth - 1;
+  static const unsigned int ProdTileHeight = ExpandedHeightmapTile::TileHeight - 1;
 
   // use 'quad' to determine the offsets into the source tile
   // quads are numbered 0 : miny, minx
   //                    1 : miny, maxx
   //                    2 : maxy, minx
   //                    3 : maxy, maxx
-  const uint beginSrcX = (quad & 0x1) ? ProdTileWidth/2 : 0;
-  const uint endSrcX   = beginSrcX + ProdTileWidth/2;
-  const uint beginSrcY = (quad & 0x2) ? ProdTileHeight/2 : 0;
-  const uint endSrcY   = beginSrcY + ProdTileHeight/2;
+  const unsigned int beginSrcX = (quad & 0x1) ? ProdTileWidth/2 : 0;
+  const unsigned int endSrcX   = beginSrcX + ProdTileWidth/2;
+  const unsigned int beginSrcY = (quad & 0x2) ? ProdTileHeight/2 : 0;
+  const unsigned int endSrcY   = beginSrcY + ProdTileHeight/2;
 
   // offset variables that represent where we write the results
-  uint32 to0 = 0;
-  uint32 to1 = TileWidth;
+  std::uint32_t to0 = 0;
+  std::uint32_t to1 = TileWidth;
 
   // traverse each row in the source quadrant
-  uint srcY;
+  unsigned int srcY;
   for (srcY = beginSrcY; srcY < endSrcY; ++srcY) {
     // calculate the buffer offset for the 2 source rows we'll use
-    uint32 thisOffY = srcY*TileWidth;
-    uint32 nextOffY = thisOffY+TileWidth;
+    std::uint32_t thisOffY = srcY*TileWidth;
+    std::uint32_t nextOffY = thisOffY+TileWidth;
 
     // traverse each column in the source quadrant
-    uint srcX;
+    unsigned int srcX;
     for (srcX = beginSrcX; srcX < endSrcX; ++srcX) {
       // calculate the buffer offset for the 3 source columns we'll use
-      uint32 thisOffX = srcX;
-      uint32 nextOffX = thisOffX+1;
+      std::uint32_t thisOffX = srcX;
+      std::uint32_t nextOffX = thisOffX+1;
 
       // make the four result pixels by combining the various source
       //lower left
@@ -137,7 +138,7 @@ MagnifyQuadrant_Heightmap(ExpandedHeightmapTile &destTile,
 
     // bring over the extra pixles to complete the ExpandedHeightmap row
     {
-      uint32 thisOffX = srcX;
+      std::uint32_t thisOffX = srcX;
 
       //lower left
       destTile.bufs[0][to0++] = srcTile.bufs[0][thisOffY+thisOffX];
@@ -155,14 +156,14 @@ MagnifyQuadrant_Heightmap(ExpandedHeightmapTile &destTile,
   // bring over the extra pixels to fill the last ExpandedHeightmapRow
   {
     // calculate the buffer offset for the 2 source rows we'll use
-    uint32 thisOffY = srcY*TileWidth;
+    std::uint32_t thisOffY = srcY*TileWidth;
 
     // traverse each column in the source quadrant
-    uint srcX;
+    unsigned int srcX;
     for (srcX = beginSrcX; srcX < endSrcX; ++srcX) {
       // calculate the buffer offset for the 3 source columns we'll use
-      uint32 thisOffX = srcX;
-      uint32 nextOffX = thisOffX+1;
+      std::uint32_t thisOffX = srcX;
+      std::uint32_t nextOffX = thisOffX+1;
 
       // make the two result pixels by combining the various source
       //lower left
@@ -176,7 +177,7 @@ MagnifyQuadrant_Heightmap(ExpandedHeightmapTile &destTile,
 
     // bring over the extra pixel to complete the upper right corner
     {
-      uint32 thisOffX = srcX;
+      std::uint32_t thisOffX = srcX;
 
       //lower left
       destTile.bufs[0][to0++] = srcTile.bufs[0][thisOffY+thisOffX];
@@ -187,9 +188,9 @@ MagnifyQuadrant_Heightmap(ExpandedHeightmapTile &destTile,
 
 static void
 MagnifyTile_Heightmap(const khTileAddr &targetAddr,
-                      uint srcLevel,
+                      unsigned int srcLevel,
                       ExpandedHeightmapTile* tiles[],
-                      uint startIndex)
+                      unsigned int startIndex)
 {
   while (srcLevel < targetAddr.level) {
     // Determine the magnification quad by mapping the
@@ -199,7 +200,7 @@ MagnifyTile_Heightmap(const khTileAddr &targetAddr,
     // Then using even/odd addresses to determine
     // the quadrant:
     // SW:0  SE:1  NW:2  NE:3
-    uint quad = (tmpAddr.row & 0x1)*2 + (tmpAddr.col & 0x1);
+    unsigned int quad = (tmpAddr.row & 0x1)*2 + (tmpAddr.col & 0x1);
 
     MagnifyQuadrant_Heightmap(*tiles[(startIndex+1)%2],
                               *tiles[startIndex], quad);
@@ -223,9 +224,9 @@ CachingProductTileReader_Heightmap
   // The later processing costs (blending, merging, compressing) likely
   // dwarf the costs of the magnify.
 
-  uint readLevel = prodLev->levelnum();
+  unsigned int readLevel = prodLev->levelnum();
   assert(readLevel <= targetAddr.level);
-  uint numMagnify = targetAddr.level - readLevel;
+  unsigned int numMagnify = targetAddr.level - readLevel;
 
   // translate coords from targetLevel to readLevel
   khTileAddr readAddr(targetAddr.MinifiedBy(numMagnify));
@@ -239,14 +240,14 @@ CachingProductTileReader_Heightmap
       &tmpTile1,
       &tmpTile2
     };
-    uint tileIndex = (numMagnify % 2) ? 1 : 0;
+    unsigned int tileIndex = (numMagnify % 2) ? 1 : 0;
 
     // fetch primary tile and copy it into the oversized heightmap buf
     CachedTile found = FetchAndCacheProductTile(prodLev, readAddr);
     CopySubtile(*tiles[tileIndex],
-                khOffset<uint32>(RowColOrder, 0, 0),
+                khOffset<std::uint32_t>(RowColOrder, 0, 0),
                 found->tile,
-                khExtents<uint32>(RowColOrder,
+                khExtents<std::uint32_t>(RowColOrder,
                                   0, TileType::TileHeight,
                                   0, TileType::TileWidth));
 
@@ -266,14 +267,14 @@ CachingProductTileReader_Heightmap
                        readAddr.UpperAddr(tile_space),
                        *tiles[tileIndex],
                        // dstOffset
-                       khOffset<uint32>(RowColOrder,
+                       khOffset<std::uint32_t>(RowColOrder,
                                         TileType::TileHeight, 0),
                        // srcExtents
-                       khExtents<uint32>(RowColOrder,
+                       khExtents<std::uint32_t>(RowColOrder,
                                          0, 1,
                                          0, TileType::TileWidth),
                        // fallbackExtents
-                       khExtents<uint32>(RowColOrder,
+                       khExtents<std::uint32_t>(RowColOrder,
                                          TileType::TileHeight-1,
                                          TileType::TileHeight,
                                          0, TileType::TileWidth));
@@ -284,14 +285,14 @@ CachingProductTileReader_Heightmap
                        readAddr.RightAddr(tile_space),
                        *tiles[tileIndex],
                        // dstOffset
-                       khOffset<uint32>(RowColOrder,
+                       khOffset<std::uint32_t>(RowColOrder,
                                         0, TileType::TileWidth),
                        // srcExtents
-                       khExtents<uint32>(RowColOrder,
+                       khExtents<std::uint32_t>(RowColOrder,
                                          0, TileType::TileHeight,
                                          0, 1),
                        // fallbackExtents
-                       khExtents<uint32>(RowColOrder,
+                       khExtents<std::uint32_t>(RowColOrder,
                                          0, TileType::TileHeight,
                                          TileType::TileWidth-1,
                                          TileType::TileWidth));
@@ -302,14 +303,14 @@ CachingProductTileReader_Heightmap
                        readAddr.UpperRightAddr(tile_space),
                        *tiles[tileIndex],
                        // dstOffset
-                       khOffset<uint32>(RowColOrder,
+                       khOffset<std::uint32_t>(RowColOrder,
                                         TileType::TileHeight,
                                         TileType::TileWidth),
                        // srcExtents
-                       khExtents<uint32>(RowColOrder,
+                       khExtents<std::uint32_t>(RowColOrder,
                                          0, 1, 0, 1),
                        // fallbackExtents
-                       khExtents<uint32>(RowColOrder,
+                       khExtents<std::uint32_t>(RowColOrder,
                                          TileType::TileHeight-1,
                                          TileType::TileHeight,
                                          TileType::TileWidth-1,
@@ -319,9 +320,9 @@ CachingProductTileReader_Heightmap
     MagnifyTile_Heightmap(targetAddr, readLevel, tiles, tileIndex);
 
     CopySubtile(dstTile,
-                khOffset<uint32>(RowColOrder, 0, 0),
+                khOffset<std::uint32_t>(RowColOrder, 0, 0),
                 tmpTile1,
-                khExtents<uint32>(RowColOrder,
+                khExtents<std::uint32_t>(RowColOrder,
                                   0, TileType::TileHeight,
                                   0, TileType::TileWidth));
   }

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@
 #define __khCalcHelper_h
 
 #include <khTypes.h>
+#include <cstdint>
 #include <limits>
 
 // ****************************************************************************
@@ -59,7 +61,7 @@ class IntegralCalcHelper {
                                    CalcType, CalcType) {
     return a;
   }
-  static inline CalcType Average(AccumType accum, uint count) {
+  static inline CalcType Average(AccumType accum, unsigned int count) {
     // since we have to check for count == 0 anyway, we may as well
     // optimize the average for the cases we can
     switch (count) {
@@ -126,7 +128,7 @@ class FloatingPointCalcHelper {
                                    CalcType, CalcType) {
     return a;
   }
-  static inline CalcType Average(AccumType accum, uint count) {
+  static inline CalcType Average(AccumType accum, unsigned int count) {
     if (!count)
       return 0.0;
     else
@@ -152,28 +154,28 @@ template <class T>
 class khCalcHelper { };
 
 template <>
-class khCalcHelper<uint8> :
-    public IntegralCalcHelper<uint8, uint16, int16, int16>{ };
+class khCalcHelper<std::uint8_t> :
+    public IntegralCalcHelper<std::uint8_t, std::uint16_t, std::int16_t, std::int16_t>{ };
 
 template <>
-class khCalcHelper<int8> :
-    public IntegralCalcHelper<int8, int16, int16, int8> { };
+class khCalcHelper<std::int8_t> :
+    public IntegralCalcHelper<std::int8_t, std::int16_t, std::int16_t, std::int8_t> { };
 
 template <>
-class khCalcHelper<uint16> :
-    public IntegralCalcHelper<uint16, uint32, int32, int32>{ };
+class khCalcHelper<std::uint16_t> :
+    public IntegralCalcHelper<std::uint16_t, std::uint32_t, std::int32_t, std::int32_t>{ };
 
 template <>
-class khCalcHelper<int16> :
-    public IntegralCalcHelper<int16, int32, int32, int16> { };
+class khCalcHelper<std::int16_t> :
+    public IntegralCalcHelper<std::int16_t, std::int32_t, std::int32_t, std::int16_t> { };
 
 template <>
-class khCalcHelper<uint32> :
-    public IntegralCalcHelper<uint32, uint64, int64, int64>{ };
+class khCalcHelper<std::uint32_t> :
+    public IntegralCalcHelper<std::uint32_t, std::uint64_t, std::int64_t, std::int64_t>{ };
 
 template <>
-class khCalcHelper<int32> :
-    public IntegralCalcHelper<int32, int64, int64, int32> { };
+class khCalcHelper<std::int32_t> :
+    public IntegralCalcHelper<std::int32_t, std::int64_t, std::int64_t, std::int32_t> { };
 
 template <>
 class khCalcHelper<float> :
@@ -232,26 +234,26 @@ class IntegralDataClamper<In, Out, false, true> {
       return (Out)val;
   }
 };
-// uint64 -> Signed
+// std::uint64_t -> Signed
 template <class Out>
-class IntegralDataClamper<uint64, Out, false, true> {
+class IntegralDataClamper<std::uint64_t, Out, false, true> {
  public:
-  inline static Out Clamp(uint64 val) {
-    if (val > (uint64)std::numeric_limits<Out>::max())
+  inline static Out Clamp(std::uint64_t val) {
+    if (val > (std::uint64_t)std::numeric_limits<Out>::max())
       return std::numeric_limits<Out>::max();
     else
       return (Out)val;
   }
 };
-// Signed -> uint64
+// Signed -> std::uint64_t
 template <class In>
-class IntegralDataClamper<In, uint64, true, false> {
+class IntegralDataClamper<In, std::uint64_t, true, false> {
  public:
-  inline static uint64 Clamp(In val) {
+  inline static std::uint64_t Clamp(In val) {
     if (val < 0)
       return 0;
     else
-      return (uint64)val;
+      return (std::uint64_t)val;
   }
 };
 
@@ -342,13 +344,13 @@ class DataClamper<InOut, InOut> {
 // ***
 // ***  usage:
 // ***  short  s = -1233;
-// ***  uint32 i = 34000;
-// ***  uint8  b = 145;
+// ***  std::uint32_t i = 34000;
+// ***  std::uint8_t  b = 145;
 // ***  float  f = -134.567;
-// ***  uint8  r1 = ClampRange<uint8>(s);
-// ***  uint16 r2 = ClampRange<uint16>(i);
-// ***  uint8  r3 = ClampRange<uint8>(b);
-// ***  int16  r4 = ClampRange<int16>(f);
+// ***  std::uint8_t  r1 = ClampRange<std::uint8_t>(s);
+// ***  std::uint16_t r2 = ClampRange<std::uint16_t>(i);
+// ***  std::uint8_t  r3 = ClampRange<std::uint8_t>(b);
+// ***  std::int16_t  r4 = ClampRange<std::int16_t>(f);
 // ***  etc...
 // ****************************************************************************
 template <class Out, class In>

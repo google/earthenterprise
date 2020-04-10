@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -61,7 +62,7 @@ gstStatus gstDBFTable::Close() {
 }
 
 
-gstRecordHandle gstDBFTable::Row(uint32 row) {
+gstRecordHandle gstDBFTable::Row(std::uint32_t row) {
   if (row < 0 || row >= _fileHeader.RecordNum) {
     notify(NFY_WARN, "Row %d is outside the valid range of 0-%d for file %s",
            row, _fileHeader.RecordNum - 1, name());
@@ -84,7 +85,7 @@ gstRecordHandle gstDBFTable::Row(uint32 row) {
   gstRecordHandle rec = NewRecord();
 
   notify(NFY_VERBOSE, "-------");
-  for (uint32 jj = 0; jj < NumColumns(); ++jj) {
+  for (std::uint32_t jj = 0; jj < NumColumns(); ++jj) {
     int len = _fieldList[jj]->Length;
     char str[len + 1];
     strncpy(str, &buff[_fieldList[jj]->Offset], len);
@@ -101,7 +102,7 @@ gstRecordHandle gstDBFTable::Row(uint32 row) {
 
 #if 0
     fprintf(stderr, "                  : ");
-    uchar* xout = static_cast<uchar*>(&str[0]);
+    unsigned char* xout = static_cast<unsigned char*>(&str[0]);
     for (int x = 0; x < strlen(str); x++, xout++)
       fprintf(stderr, "%02x ", *xout);
     fprintf(stderr, "\n");
@@ -178,7 +179,7 @@ gstStatus gstDBFTable::ReadFieldDescriptors() {
          NumColumns(),
          static_cast<long long unsigned>(sizeof(DBF_FieldDescriptor)));
 
-  if (static_cast<uint32>(fread(fields, sizeof(DBF_FieldDescriptor),
+  if (static_cast<std::uint32_t>(fread(fields, sizeof(DBF_FieldDescriptor),
                                 NumColumns(), file_pointer_)) != NumColumns()) {
     notify(NFY_WARN, "Unable to read field descriptions.");
     return GST_READ_FAIL;
@@ -188,7 +189,7 @@ gstStatus gstDBFTable::ReadFieldDescriptors() {
   // record is not deleted and an asterisk (2AH) if it is deleted.
   int prevOffset = 1;
   int prevSize = 0;
-  for (uint32 ii = 0; ii < NumColumns(); ++ii, ++fields) {
+  for (std::uint32_t ii = 0; ii < NumColumns(); ++ii, ++fields) {
     DBF_FieldDescriptor_i *ifield = new DBF_FieldDescriptor_i;
     GET_STR(fields->Name, ifield->Name);
     notify(NFY_VERBOSE, "   Field %d:\t%s", ii, ifield->Name);

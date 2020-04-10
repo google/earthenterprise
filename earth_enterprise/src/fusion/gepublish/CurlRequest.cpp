@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -166,7 +167,7 @@ bool UploadRequest::EnsureDestPath(const std::string& escaped_file_path) {
 
 
 bool UploadRequest::Start(bool report_progress, geProgress* progress) {
-  int64 processed_size = 0;
+  std::int64_t processed_size = 0;
   size_t num_entries = entries_->size();
   for (size_t i = 0; i < num_entries; ++i) {
     const ManifestEntry& entry = (*entries_)[i];
@@ -245,7 +246,7 @@ GetRequest::GetRequest(const std::string& username,
     : CurlRequest(username, password, url, cacert, insecure, curl),
       status_code_(-1),
       timeout_secs_(timeout_secs) {
-  for (uint i = 0; i < header_names.size(); ++i) {
+  for (unsigned int i = 0; i < header_names.size(); ++i) {
     if (!header_names[i].empty())
       headers_[header_names[i]] = std::vector<std::string>();
   }
@@ -319,7 +320,7 @@ void GetRequest::ParseResponse() {
          response_str_.empty() ? "empty" : response_str_.c_str());
 
   TokenizeString(response_str_, lines, "\n");
-  for (uint i = 0; i < lines.size(); ++i) {
+  for (unsigned int i = 0; i < lines.size(); ++i) {
     std::string kDelim = ":";
     std::string kStatusCode = "Gepublish-StatusCode";
     std::string kStatusMessage = "Gepublish-StatusMessage";

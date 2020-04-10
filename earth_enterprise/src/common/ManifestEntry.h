@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +23,8 @@
 
 #include <string>
 #include <vector>
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "common/khFileUtils.h"
 
 struct ManifestEntry;
@@ -30,7 +32,7 @@ struct ManifestEntry;
 struct ManifestEntry {
   std::string orig_path;
   std::string current_path;
-  uint64 data_size;
+  std::uint64_t data_size;
   std::vector<ManifestEntry> dependents;
 
   ManifestEntry() : data_size(0) {}
@@ -50,7 +52,7 @@ struct ManifestEntry {
 
   ManifestEntry(const std::string& orig_path_,
                 const std::string& current_path_,
-                uint64 data_size_)
+                std::uint64_t data_size_)
       : orig_path(orig_path_),
         current_path(current_path_),
         data_size(data_size_) {

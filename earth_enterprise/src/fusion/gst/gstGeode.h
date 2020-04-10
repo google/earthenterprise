@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +26,8 @@
 
 #include "common/base/macros.h"
 #include "common/khRefCounter.h"
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "common/khMTTypes.h"
 
 #include "fusion/gst/gstLimits.h"
@@ -39,7 +41,7 @@
 class gstFeaturePreviewConfig;
 class gstGeodeTest;
 
-typedef uint32 gstDrawModes;
+typedef std::uint32_t gstDrawModes;
 
 class gstDrawState {
  public:
@@ -133,16 +135,16 @@ typedef std::vector<gstGeodeHandle> GeodeVector;
 class gstGeodeImpl : public khMTRefCounter {
  public:
   struct RecHeader {
-    uint32 type;
-    uint32 count;
-    uint32 size;
-    uint32 fid;      // unique feature id
+    std::uint32_t type;
+    std::uint32_t count;
+    std::uint32_t size;
+    std::uint32_t fid;      // unique feature id
   };
 
   virtual ~gstGeodeImpl();
 
   // determine amount of memory used by getGeodeImpl
-  uint64 GetSize() {
+  std::uint64_t GetSize() {
     return sizeof(gcount)
     + sizeof(isectCount)
     + sizeof(isectDeepCount)
@@ -184,14 +186,14 @@ class gstGeodeImpl : public khMTRefCounter {
   // @return true if geode is degenerate, otherwise it returns false.
   virtual bool IsDegenerate() const = 0;
 
-  virtual uint NumParts() const = 0;
-  virtual uint TotalVertexCount() const = 0;
+  virtual unsigned int NumParts() const = 0;
+  virtual unsigned int TotalVertexCount() const = 0;
 
-  virtual void ErasePart(uint part) = 0;
+  virtual void ErasePart(unsigned int part) = 0;
 
   virtual void Clear() = 0;
 
-  virtual gstBBox BoundingBoxOfPart(uint part) const = 0;
+  virtual gstBBox BoundingBoxOfPart(unsigned int part) const = 0;
 
   virtual bool Equals(const gstGeodeHandle &bh,
                       bool reverse_ok = false) const = 0;
@@ -200,7 +202,7 @@ class gstGeodeImpl : public khMTRefCounter {
   // @param part the part index.
   // @param x, y returned coordinates of center of mass.
   // @param area returned area value.
-  virtual int Centroid(uint part,
+  virtual int Centroid(unsigned int part,
                        double *x, double *y, double *area) const = 0;
 
   // Moves the given point into the specified polygon.
@@ -210,7 +212,7 @@ class gstGeodeImpl : public khMTRefCounter {
   // with.
   // @param centroid the centroid of the "part"th polygon.
   // @return a point inside the polygon.
-  virtual gstVertex GetPointInPolygon(uint part,
+  virtual gstVertex GetPointInPolygon(unsigned int part,
                                       const gstVertex& centroid) const = 0;
 
   // Computes the "Center" of the geode.
@@ -229,14 +231,14 @@ class gstGeodeImpl : public khMTRefCounter {
   // For polyline flatten multiple polylines into segments(exactly two vertex)
   // and create one geode for each segment. For streets(roads) flatten multiple
   // polylines into multiple single polyline geodes.
-  virtual uint Flatten(GeodeList* pieces) const = 0;
+  virtual unsigned int Flatten(GeodeList* pieces) const = 0;
 
   virtual int RemoveCollinearVerts() = 0;
 
   virtual bool Intersect(const gstBBox& b, uint* part = NULL) const = 0;
 
   // raw interface
-  virtual uint32 RawSize() const = 0;
+  virtual std::uint32_t RawSize() const = 0;
   virtual char* ToRaw(char* buf) const = 0;
 
   gstPrimType PrimType() const {
@@ -284,7 +286,7 @@ class gstGeodeImpl : public khMTRefCounter {
 
   // Defines what this gstGeodeImpl implements. One of gstUnknown, gstPoint,
   // gstPolyLine, gstStreet, gstPolygon, gstPolygon25D, gstPolygon3D, ...
-  uint8 prim_type_;  // Though this is gstPrimType we use char for mem-opt
+  std::uint8_t prim_type_;  // Though this is gstPrimType we use char for mem-opt
 
   mutable bool center_is_valid_;
 
@@ -330,16 +332,16 @@ class gstGeode : public gstGeodeImpl {
   virtual void ChangePrimType(gstPrimType new_type,
                               gstGeodeHandle *new_geodeh = NULL);
 
-  virtual uint NumParts() const;
+  virtual unsigned int NumParts() const;
 
-  virtual uint TotalVertexCount() const;
+  virtual unsigned int TotalVertexCount() const;
 
   virtual bool IsEmpty() const;
   virtual bool IsDegenerate() const;
 
   virtual void Clear();
 
-  virtual gstBBox BoundingBoxOfPart(uint part) const;
+  virtual gstBBox BoundingBoxOfPart(unsigned int part) const;
 
   virtual bool Equals(const gstGeodeHandle &bh, bool reverse_ok = false) const;
 
@@ -347,7 +349,7 @@ class gstGeode : public gstGeodeImpl {
   // @param part the part index.
   // @param x, y returned coordinates of center of mass.
   // @param area returned area value.
-  virtual int Centroid(uint part, double* x, double* y, double* area) const;
+  virtual int Centroid(unsigned int part, double* x, double* y, double* area) const;
 
   // Moves the given point into the specified polygon.
   // This is useful for ensuring that a point is on the inside of a concave
@@ -355,7 +357,7 @@ class gstGeode : public gstGeodeImpl {
   // @param part the index of the polygon in parts_ that we are dealing with.
   // @param centroid the centroid of the "part"th polygon
   // @return a point inside the polygon
-  virtual gstVertex GetPointInPolygon(uint part,
+  virtual gstVertex GetPointInPolygon(unsigned int part,
                                       const gstVertex& centroid) const;
 
   // Computes the "Center" of the geode.
@@ -373,59 +375,59 @@ class gstGeode : public gstGeodeImpl {
   // For polyline flatten multiple polylines into segments(exactly two vertex)
   // and create one geode for each segment. For streets(roads) flatten multiple
   // polylines into multiple single polyline geodes.
-  virtual uint Flatten(GeodeList* pieces) const;
+  virtual unsigned int Flatten(GeodeList* pieces) const;
 
   virtual int RemoveCollinearVerts();
 
   virtual bool Intersect(const gstBBox& b, uint* part = NULL) const;
 
   // raw interface
-  virtual uint32 RawSize() const;
+  virtual std::uint32_t RawSize() const;
   virtual char* ToRaw(char* buf) const;
 
   // Assumes the first and last points are same, only parts_[0] and num vertices
   // are equal
   bool IsEqual(const gstGeodeImpl* b, bool check_reverse) const;
 
-  uint VertexCount(uint p) const {
+  unsigned int VertexCount(unsigned int p) const {
     assert(p < parts_.size());
     if (p < parts_.size())
       return parts_[p].size();
     return 0;
   }
 
-  const gstVertex& GetVertex(uint p, uint v) const {
+  const gstVertex& GetVertex(unsigned int p, unsigned int v) const {
     assert(p < parts_.size());
     assert(v < parts_[p].size());
     return parts_[p][v];
   }
 
-  const gstVertex& GetFirstVertex(uint p) const {
+  const gstVertex& GetFirstVertex(unsigned int p) const {
     assert(p < parts_.size());
     assert(!parts_[p].empty());
     return parts_[p].front();
   }
 
-  const gstVertex& GetLastVertex(uint p) const {
+  const gstVertex& GetLastVertex(unsigned int p) const {
     assert(p < parts_.size());
     assert(!parts_[p].empty());
     return parts_[p].back();
   }
 
-  double MinZ(uint p) const {
+  double MinZ(unsigned int p) const {
     assert(p < parts_.size());
     double minZ = 180;
-    for (uint i = 0; i < parts_[p].size(); i++) {
+    for (unsigned int i = 0; i < parts_[p].size(); i++) {
       if (parts_[p][i].z < minZ)
         minZ = parts_[p][i].z;
     }
     return minZ;
   }
 
-  double MaxZ(uint p) const {
+  double MaxZ(unsigned int p) const {
     assert(p < parts_.size());
     double maxZ = -180;
-    for (uint i = 0; i < parts_[p].size(); ++i) {
+    for (unsigned int i = 0; i < parts_[p].size(); ++i) {
       if (parts_[p][i].z > maxZ)
         maxZ = parts_[p][i].z;
     }
@@ -463,19 +465,19 @@ class gstGeode : public gstGeodeImpl {
   void Join(const std::deque<std::pair<gstGeodeImpl*, bool> >& to_join,
             const bool join_at_last_vertex);
 
-  void SetVertexes(const double* buf, uint32 count, bool is25D);
+  void SetVertexes(const double* buf, std::uint32_t count, bool is25D);
 
   // Note: invalidates internal data of geode(center and
   // bounding box).
-  void ModifyVertex(uint p, uint v, const gstVertex& vertex);
+  void ModifyVertex(unsigned int p, unsigned int v, const gstVertex& vertex);
 
   // Note: invalidates only center data of geode and does not invalidate
   // bounding box.
-  void InsertVertex(uint p, uint v, const gstVertex& vertex);
+  void InsertVertex(unsigned int p, unsigned int v, const gstVertex& vertex);
 
   // Note: invalidates internal data of geode(center and
   // bounding box).
-  void DeleteVertex(uint p, uint v);
+  void DeleteVertex(unsigned int p, unsigned int v);
 
   // Note: invalidates only center data of geode and does not invalidate
   // bounding box.
@@ -490,7 +492,7 @@ class gstGeode : public gstGeodeImpl {
   // Note: it's not effective because we use vector-container,
   // but it's not used in gstGeode. I added it in gstGeode because I need this
   // functionality in gstGeodeCollection.
-  virtual void ErasePart(uint part) {
+  virtual void ErasePart(unsigned int part) {
     parts_.erase(parts_.begin() + part);
   }
 
@@ -515,7 +517,7 @@ class gstGeode : public gstGeodeImpl {
   // counterclockwise or vice versa.
   // Note: should be used for geode w/o edge-flags (only source
   // geometry).
-  void ReversePart(uint p) {
+  void ReversePart(unsigned int p) {
     assert(edge_flags_.empty());
     assert(p < parts_.size());
     gstGeodePart &part = parts_[p];
@@ -523,7 +525,7 @@ class gstGeode : public gstGeodeImpl {
   }
 
   // TODO: move this functionality to gstBoxCutter.
-  uint BoxCut(const gstBBox& box, GeodeList* pieces) const {
+  unsigned int BoxCut(const gstBBox& box, GeodeList* pieces) const {
     if (!box.Intersect(BoundingBox()))
       return 0;
     return BoxCutDeep(box, pieces);
@@ -534,7 +536,7 @@ class gstGeode : public gstGeodeImpl {
   int Simplify(const std::vector<int>& vertices);
 
   void AddEdgeFlag(gstEdgeType edge_type) {
-    edge_flags_.push_back(static_cast<int8>(edge_type));
+    edge_flags_.push_back(static_cast<std::int8_t>(edge_type));
   }
 
   void AddVertexAndEdgeFlag(const gstVertex& v, gstEdgeType edge_type) {
@@ -552,7 +554,7 @@ class gstGeode : public gstGeodeImpl {
             edge_flags_[i] != kNormalEdge);
   }
 
-  const std::vector<int8>& EdgeFlags() const {
+  const std::vector<std::int8_t>& EdgeFlags() const {
     return edge_flags_;
   }
 
@@ -560,7 +562,7 @@ class gstGeode : public gstGeodeImpl {
 
   /////////////////////////////////////////////////////////////////////////
 
-  double Area(uint p) const {
+  double Area(unsigned int p) const {
     double area;
     double x, y;
     Centroid(p, &x, &y, &area);
@@ -586,23 +588,23 @@ class gstGeode : public gstGeodeImpl {
   virtual void ComputeBounds() const;
 
   // Return true if the "part_index"th part is a convex polygon.
-  bool IsConvex(uint part_index) const;
+  bool IsConvex(unsigned int part_index) const;
 
  private:
   friend class khRefGuard<gstGeodeImpl>;
 
   explicit gstGeode(gstPrimType t);
 
-  uint BoxCutDeep(const gstBBox& box, GeodeList* pieces) const;
+  unsigned int BoxCutDeep(const gstBBox& box, GeodeList* pieces) const;
 
   bool IntersectDeep(const gstBBox& b, uint* part) const;
 
-  mutable int8 clipped_;    // This takes -1, 0, 1 values
+  mutable std::int8_t clipped_;    // This takes -1, 0, 1 values
 
   gstGeodeParts parts_;
 
   // edge flags specify whether the edge is internal or external
-  std::vector<int8> edge_flags_;
+  std::vector<std::int8_t> edge_flags_;
 
   DISALLOW_COPY_AND_ASSIGN(gstGeode);
 };
@@ -623,19 +625,19 @@ class gstGeodeCollection : public gstGeodeImpl {
   virtual bool IsEmpty() const;
   virtual bool IsDegenerate() const;
 
-  virtual uint NumParts() const;
-  virtual uint TotalVertexCount() const;
+  virtual unsigned int NumParts() const;
+  virtual unsigned int TotalVertexCount() const;
 
   // Note: it's not effective because we use deque-container.
   // But currently it is called from GeometryChecker only and if we
   // get invalid source geometry and also our deque contains gstGeodeHandle-s.
-  virtual void ErasePart(uint part) {
+  virtual void ErasePart(unsigned int part) {
     geodes_.erase(geodes_.begin() + part);
   }
 
   virtual void Clear();
 
-  virtual gstBBox BoundingBoxOfPart(uint part) const;
+  virtual gstBBox BoundingBoxOfPart(unsigned int part) const;
 
   virtual bool Equals(const gstGeodeHandle &bh, bool reverse_ok = false) const;
 
@@ -643,7 +645,7 @@ class gstGeodeCollection : public gstGeodeImpl {
   // @param part the part index.
   // @param x, y returned coordinates of center of mass.
   // @param area returned area value.
-  virtual int Centroid(uint part, double* x, double* y, double* area) const;
+  virtual int Centroid(unsigned int part, double* x, double* y, double* area) const;
 
   // Moves the given point into the specified polygon.
   // This is useful for ensuring that a point is on the inside of a concave
@@ -651,7 +653,7 @@ class gstGeodeCollection : public gstGeodeImpl {
   // @param part the index of the polygon in geodes_ that we are dealing with.
   // @param centroid the centroid of the "part"th polygon.
   // @return a point inside the polygon.
-  virtual gstVertex GetPointInPolygon(uint part,
+  virtual gstVertex GetPointInPolygon(unsigned int part,
                                       const gstVertex& centroid) const;
 
   // Compute the "Center" of the geode.
@@ -670,14 +672,14 @@ class gstGeodeCollection : public gstGeodeImpl {
   // For polyline flatten multiple polylines into segments(exactly two vertex)
   // and create one geode for each segment. For streets(roads) flatten multiple
   // polylines into multiple single polyline geodes.
-  virtual uint Flatten(GeodeList* pieces) const;
+  virtual unsigned int Flatten(GeodeList* pieces) const;
 
   virtual int RemoveCollinearVerts();
 
   virtual bool Intersect(const gstBBox& b, uint* part = NULL) const;
 
   // raw interface
-  virtual uint32 RawSize() const;
+  virtual std::uint32_t RawSize() const;
   virtual char* ToRaw(char* buf) const;
 
   // GeodeCollecion interface.
@@ -685,12 +687,12 @@ class gstGeodeCollection : public gstGeodeImpl {
     geodes_.push_back(geode);
   }
 
-  inline gstGeodeHandle& GetGeode(uint part) {
+  inline gstGeodeHandle& GetGeode(unsigned int part) {
     assert(part < NumParts());
     return geodes_[part];
   }
 
-  inline const gstGeodeHandle& GetGeode(uint part) const {
+  inline const gstGeodeHandle& GetGeode(unsigned int part) const {
     assert(part < NumParts());
     return geodes_[part];
   }

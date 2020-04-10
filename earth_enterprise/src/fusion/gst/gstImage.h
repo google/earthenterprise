@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +29,7 @@ class gstImageStats {
         ignore_(ignore) {
     // allocate space for histogram
     int sz = 0x01 << (8 * sizeof(Type));
-    histogram_ = new uint64[sz];
+    histogram_ = new std::uint64_t[sz];
     memset(histogram_, 0, sz);
 
     collectFromBuffer(n, buf);
@@ -40,9 +41,9 @@ class gstImageStats {
 
   Type getMin() const { return min_; }
   Type getMax() const { return max_; }
-  uint64 getTotal() const { return total_; }
+  std::uint64_t getTotal() const { return total_; }
 
-  uint64 getVal(Type n) const {
+  std::uint64_t getVal(Type n) const {
     return histogram_[bias(n)];
   }
 
@@ -66,16 +67,16 @@ class gstImageStats {
     }
   }
 
-  uint32 bias(Type v) const {
-    static const uint32 shift =
-      static_cast<uint32>(0 - std::numeric_limits<Type>::min());
+  std::uint32_t bias(Type v) const {
+    static const std::uint32_t shift =
+      static_cast<std::uint32_t>(0 - std::numeric_limits<Type>::min());
     return v + shift;
   }
 
   Type min_;
   Type max_;
-  uint64 total_;
-  uint64* histogram_;
+  std::uint64_t total_;
+  std::uint64_t* histogram_;
   Type ignore_;
 };
 
@@ -130,7 +131,7 @@ class gstImageLut {
                    double(stats.getTotal());
 
     // compute equalize lut
-    uint64 sum = 0;
+    std::uint64_t sum = 0;
     for (int t = min; t <= max; ++t) {
       sum += stats.getVal(t);
       lutBuf[bias(t)] = OutType((double(sum) * scale) + 0.5);
@@ -150,9 +151,9 @@ class gstImageLut {
 
   OutType *lutBuf;
 
-  uint32 bias(InType v) const {
-    static const uint32 shift =
-      static_cast<uint32>(0 - std::numeric_limits<InType>::min());
+  std::uint32_t bias(InType v) const {
+    static const std::uint32_t shift =
+      static_cast<std::uint32_t>(0 - std::numeric_limits<InType>::min());
     return v + shift;
   }
 };
@@ -161,9 +162,9 @@ template<class OutType>
 class gstImageLut<float, OutType> { };
 
 template<class OutType>
-class gstImageLut<uint32, OutType> { };
+class gstImageLut<std::uint32_t, OutType> { };
 
 template<class OutType>
-class gstImageLut<int32, OutType> { };
+class gstImageLut<std::int32_t, OutType> { };
 
 #endif  // !KHSRC_FUSION_GST_GSTIMAGE_H__

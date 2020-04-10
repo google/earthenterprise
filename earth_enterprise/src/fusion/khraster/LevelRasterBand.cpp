@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,7 +20,7 @@
 // ***  LevelRasterBand
 // ****************************************************************************
 LevelRasterBand::LevelRasterBand(GDALDataset *ds, int gdalBand,
-                                 uint extractBand_,
+                                 unsigned int extractBand_,
                                  const khRasterProductLevel &plev,
                                  khTypes::StorageEnum type) :
     prodLevel(&plev),
@@ -49,7 +50,7 @@ CPLErr LevelRasterBand::IReadBlock(int x, int y, void *buf) {
      prodLevel->tileExtents().numRows() - y - 1, /* row */
      prodLevel->tileExtents().beginCol() + x, /* col */
      extractBand,
-     reinterpret_cast<uchar*>(buf),
+     reinterpret_cast<unsigned char*>(buf),
      extractType,
      RasterProductTileResolution *
      RasterProductTileResolution *

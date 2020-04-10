@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,10 +13,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
+#include <cstdint>
 #include <searchtabs/.idl/SearchTabs.h>
 #include <autoingest/.idl/storage/AssetDefs.h>
-#include <khTypes.h>
 
 #cppquote
 #include <searchtabs/.idl/SearchTabs_impl.h>
@@ -27,18 +27,18 @@ class SearchTabSet
 #pragma LoadAndSave
 
   class Tab {
-    uint32 id_;
+    std::uint32_t id_;
     SearchTabDefinition definition_;
   };
 
   std::vector<SearchTabSet::Tab> tabs_ = std::vector<SearchTabSet::Tab>();
-  uint32           next_tab_id_ = uint32(1);
+  std::uint32_t           next_tab_id_ = std::uint32_t(1);
 
 #hquote
   QString SearchTabsFilename(void);
   bool Load(void);
   bool Save(void);
-  SearchTabDefinition FindByIdOrThrow(uint32 id);
+  SearchTabDefinition FindByIdOrThrow(std::uint32_t id);
 #/hquote
 
 #cppquote
@@ -77,8 +77,8 @@ class SearchTabSet
     }
   }
 
-  SearchTabDefinition SearchTabSet::FindByIdOrThrow(uint32 id) {
-    for (uint i = 0; i < tabs_.size(); ++i) {
+  SearchTabDefinition SearchTabSet::FindByIdOrThrow(std::uint32_t id) {
+    for (unsigned int i = 0; i < tabs_.size(); ++i) {
       if (tabs_[i].id_ == id) {
         return tabs_[i].definition_;
       }

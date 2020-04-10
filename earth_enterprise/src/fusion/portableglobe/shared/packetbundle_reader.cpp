@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -45,8 +46,8 @@ PacketBundleReader::PacketBundleReader(std::string directory)
  * into the data string.
  */
 bool PacketBundleReader::ReadPacket(std::string qtpath,
-                                    uint8 packet_type,
-                                    uint16 channel,
+                                    std::uint8_t packet_type,
+                                    std::uint16_t channel,
                                     std::string* data) {
   IndexItem index_item;
   index_item.Fill(qtpath, packet_type, channel);
@@ -83,11 +84,11 @@ bool PacketBundleReader::FindPacketInIndex(IndexItem* index_item) {
 
   // Do a binary search for the index item.
   IndexItem next_item;
-  int32 top = num_index_items_ - 1;
-  int32 bottom = 0;
+  std::int32_t top = num_index_items_ - 1;
+  std::int32_t bottom = 0;
   while (top >= bottom) {
     // Look in the middle.
-    int32 idx = bottom + ((top - bottom) >> 1);
+    std::int32_t idx = bottom + ((top - bottom) >> 1);
     index_file.seekg(idx * sizeof(IndexItem), std::ios::beg);
     index_file.read(reinterpret_cast<char*>(&next_item), sizeof(IndexItem));
 
@@ -127,7 +128,7 @@ bool PacketBundleReader::BruteForceFindPacketInIndexForDebug(
 
   // Sequential search.
   IndexItem next_item;
-  for (uint32 i = 0; i < num_index_items_; ++i) {
+  for (std::uint32_t i = 0; i < num_index_items_; ++i) {
     index_file.read(reinterpret_cast<char*>(&next_item), sizeof(IndexItem));
 
     // If we found the item, get the file id and offset.

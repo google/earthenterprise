@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +24,9 @@
 #include <string>
 #include <vector>
 #include "common/khGuard.h"
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
+#include <cstdint>
 
 std::string khBasename(const std::string &filename);
 std::string khDirname(const std::string &filename);
@@ -66,7 +69,7 @@ void khFindFilesInDir(const std::string &dirname,
 void khFindBasenamesInDir(const std::string &dirname,
                           const std::string &ext,
                           std::vector<std::string> *files_return);  // basename
-uint32 khCountFilesInDir(const std::string &dirname);
+ std::uint32_t khCountFilesInDir(const std::string &dirname);
 
 // will return empty string if not found
 std::string khFindFileInPath(const std::string &file);
@@ -107,8 +110,8 @@ std::string khCreateTmpDir(const std::string &prefix);
 void khGetNumericFilenames(const std::string &pattern,
                            std::vector<std::string>& out);
 std::string khMakeNumericFilename(const std::string &base,
-                                  uint64 num,
-                                  uint numPlaces = 3);
+                                  std::uint64_t num,
+                                  unsigned int numPlaces = 3);
 
 // Return a list of files (in no particular order) that
 // start with specified prefix and end with the specified suffix.
@@ -143,19 +146,19 @@ std::string GetLogFileNameAndCleanupLogs(std::string dirnameInput,
                              std::string logFilesToKeepEnvVariable);
 
 // will throw if file doesn't exist
-uint64 khGetFileSizeOrThrow(const std::string &fname);
+ std::uint64_t khGetFileSizeOrThrow(const std::string &fname);
 
 // Will get the disk usage for a file/directory.
 // returns 0 if the file does not exist.
-uint64 khDiskUsage(const std::string& path);
+ std::uint64_t khDiskUsage(const std::string& path);
 
 // Will get the disk usage for a file/directory.
 // returns 0 if the file does not exist.
 // Convenience utility. Same as khDiskUsage but returns only 32bit size.
-uint32 khDiskUsage32(const std::string& path);
+ std::uint32_t khDiskUsage32(const std::string& path);
 
-bool khGetFileInfo(const std::string &fname, uint64 &size, time_t &mtime);
-bool khGetFilesystemFreeSpace(const std::string &path, uint64 &free);
+bool khGetFileInfo(const std::string &fname, std::uint64_t &size, time_t &mtime);
+bool khGetFilesystemFreeSpace(const std::string &path, std::uint64_t &free);
 
 // Print to stdout the title and a line with the file/directory size for
 // each given path.  Empty paths are skipped.
@@ -169,7 +172,7 @@ void khGetOverflowFilenames(const std::string &filename,
                             std::vector<std::string>& overflowFiles);
 
 // will default to low number if cannot query system
-uint32 khMaxOpenFiles(void);
+ std::uint32_t khMaxOpenFiles(void);
 
 // Try really hard to read count bytes from fd into buf
 // will retry if partial read or if errno == EINTR
@@ -187,13 +190,13 @@ bool khPwriteAll(int fd, const void *buf, size_t count, off64_t offset);
 // if returns false, warning has already been emitted
 bool khAppendFile(const std::string &srcFilename,
                   const std::string &destFilename,
-                  uint64 &offsetReturn);
+                  std::uint64_t &offsetReturn);
 
 // if returns false, warning has already been emitted
 bool khMakeEmptyFile(const std::string &destFilename);
 
 // if returns false, warning has already been emitted
-bool khFillFile(int fd, char fill, uint64 size);
+bool khFillFile(int fd, char fill, std::uint64_t size);
 
 // Copy from source to dest file. Files are closed upon completion.
 bool khCopyOpenFile(const int srcFd, const char* const srcFname,
@@ -230,7 +233,7 @@ void khReadStringVectorFromFile(const std::string &filename,
 // Read file into a string - appends to str.
 // if limit is greater than zero, read only that man bytes
 bool khReadStringFromFile(const std::string &filename, std::string &str,
-                          uint64 limit = 0);
+                          std::uint64_t limit = 0);
 
 // Write the buffer to the specified file - overwrite file if exists
 bool khWriteSimpleFile(const std::string &filename, const void* buf,
@@ -238,11 +241,11 @@ bool khWriteSimpleFile(const std::string &filename, const void* buf,
 
 // Read simple file supplied for symmetry (same as Read String From File)
 inline bool khReadSimpleFile(const std::string &filename, std::string &str,
-                             uint64 limit = 0) {
+                             std::uint64_t limit = 0) {
   return khReadStringFromFile(filename, str, limit);
 }
 
-void WaitIfFileIsTooNew(const std::string &filename, uint delaySec);
+void WaitIfFileIsTooNew(const std::string &filename, unsigned int delaySec);
 
 // very thin wrappers around ::open
 // no warnings emitted, no parent dirs created

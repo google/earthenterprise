@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,22 +19,23 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <khTypes.h>
+#include <cstdint>
 
 class gstProvider
 {
   QString name;
   std::string key;
   QString copyright;
-  int32  copyrightVerticalPos = -1
+  std::int32_t  copyrightVerticalPos = -1
   bool  report = false;
-  int32 copyrightPriority = 256;
-  uint32 id = uint32(0);
+  std::int32_t copyrightPriority = 256;
+  std::uint32_t id = std::uint32_t(0);
 };
 
 class gstProviderSet
 {
   std::vector<gstProvider> items;
-  uint32 next_id = uint32(1);
+  std::uint32_t next_id = std::uint32_t(1);
 
 #pragma AfterLoad
 #pragma LoadAndSave
@@ -43,17 +45,17 @@ class gstProviderSet
   bool Load(void);
   bool Save(void);
   void AfterLoad(void);
-  uint32 GetNextId(void);
+  std::uint32_t GetNextId(void);
   QStringList GetKeys(void) const;
   QStringList GetNames(void) const;
-  std::vector<uint32> GetIds(void) const;
-  uint32 GetIdFromKey(const std::string &key) const;
+  std::vector<std::uint32_t> GetIds(void) const;
+  std::uint32_t GetIdFromKey(const std::string &key) const;
   bool ValidateProvider(const std::string &key) const;
   static bool LoadAndValidateProvider(const std::string &key);
-  bool ValidateProvider(uint32 id) const;
-  static bool LoadAndValidateProvider(uint32 id);
+  bool ValidateProvider(std::uint32_t id) const;
+  static bool LoadAndValidateProvider(std::uint32_t id);
 
-  static uint32 LoadAndGetIdFromKey(const std::string &key);
+  static std::uint32_t LoadAndGetIdFromKey(const std::string &key);
 #/hquote
 
 #cppquote
@@ -63,22 +65,22 @@ class gstProviderSet
 
   QStringList gstProviderSet::GetNames() const {
     QStringList list;
-    for (uint p = 0; p < items.size(); ++p)
+    for (unsigned int p = 0; p < items.size(); ++p)
       list << items[p].name;
     return list;
   }
 
   QStringList gstProviderSet::GetKeys() const {
     QStringList list;
-    for (uint p = 0; p < items.size(); ++p)
+    for (unsigned int p = 0; p < items.size(); ++p)
       list << QString::fromUtf8(items[p].key.c_str());
     return list;
   }
 
-  std::vector<uint32> gstProviderSet::GetIds(void) const {
-    std::vector<uint32> ids;
+  std::vector<std::uint32_t> gstProviderSet::GetIds(void) const {
+    std::vector<std::uint32_t> ids;
     ids.resize(items.size());
-    for (uint p = 0; p < items.size(); ++p) {
+    for (unsigned int p = 0; p < items.size(); ++p) {
       ids[p] = items[p].id;
     }
     return ids;
@@ -118,17 +120,17 @@ class gstProviderSet
   void gstProviderSet::AfterLoad(void) {
     if (items.size() && (items[0].id == 0)) {
       // first time loading after id was added
-      for (uint i = 0; i < items.size(); ++i) {
+      for (unsigned int i = 0; i < items.size(); ++i) {
         items[i].id = GetNextId();
       }
     }
   }
 
-  uint32 gstProviderSet::GetNextId(void) {
-    uint32 start = next_id;
+  std::uint32_t gstProviderSet::GetNextId(void) {
+    std::uint32_t start = next_id;
     while (1) {
       bool dup = false;
-      for (uint i = 0; i < items.size(); ++i) {
+      for (unsigned int i = 0; i < items.size(); ++i) {
         if (items[i].id == next_id) {
           dup = true;
           break;
@@ -152,8 +154,8 @@ class gstProviderSet
     return next_id++;
   }
 
-  uint32 gstProviderSet::GetIdFromKey(const std::string &key) const {
-    for (uint i = 0; i < items.size(); ++i) {
+  std::uint32_t gstProviderSet::GetIdFromKey(const std::string &key) const {
+    for (unsigned int i = 0; i < items.size(); ++i) {
       if (items[i].key == key) {
         return items[i].id;
       }
@@ -162,7 +164,7 @@ class gstProviderSet
   }
 
   // static version
-  uint32 gstProviderSet::LoadAndGetIdFromKey(const std::string &key) {
+  std::uint32_t gstProviderSet::LoadAndGetIdFromKey(const std::string &key) {
     gstProviderSet providers;
     if (providers.Load()) {
       return providers.GetIdFromKey(key);
@@ -186,7 +188,7 @@ class gstProviderSet
     return false;
   }
 
-  bool gstProviderSet::ValidateProvider(uint32 id) const {
+  bool gstProviderSet::ValidateProvider(std::uint32_t id) const {
     for (std::vector<gstProvider>::const_iterator p = items.begin();
          p != items.end(); ++p) {
       if (p->id == id)
@@ -194,7 +196,7 @@ class gstProviderSet
     }
     return false;
   }
-  bool gstProviderSet::LoadAndValidateProvider(uint32 id) {
+  bool gstProviderSet::LoadAndValidateProvider(std::uint32_t id) {
     gstProviderSet providers;
     if (providers.Load()) {
       return providers.ValidateProvider(id);

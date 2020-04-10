@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,8 +53,8 @@ class gstVectorProject {
   }
   void serverType(VectorProjectConfig::ServerType type);
 
-  uint buildVersion() const { return config_.indexVersion; }
-  void buildVersion(uint v);
+  unsigned int buildVersion() const { return config_.indexVersion; }
+  void buildVersion(unsigned int v);
 
  private:
   std::string name_;

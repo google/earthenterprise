@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,8 +38,8 @@ class PacketFileAdaptingTraverserBase :
   PacketFileAdaptingTraverserBase(geFilePool &file_pool,
                                   const std::string &merge_source_name,
                                   TypedEntry::TypeEnum type,
-                                  uint32 version,
-                                  uint32 channel,
+                                  std::uint32_t version,
+                                  std::uint32_t channel,
                                   const std::string packetfile);
   ~PacketFileAdaptingTraverserBase(void);
 
@@ -50,8 +51,8 @@ class PacketFileAdaptingTraverserBase :
 
  private:
   khDeleteGuard<PacketIndexReader> packet_index_reader_;
-  uint32 version_;
-  uint32 channel_;
+  std::uint32_t version_;
+  std::uint32_t channel_;
   bool have_current_;
 
   void ReadNext(void);

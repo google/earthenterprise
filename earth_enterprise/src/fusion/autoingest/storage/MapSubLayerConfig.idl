@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,12 +13,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <cstdint>
 #include <string>
 #include <vector>
 #include <qstring.h>
 #include <qcolor.h>
 #include <khConstants.h>
-#include <khTypes.h>
 #include <khMetaData.h>
 #include <geRange.h>
 #include <geMultiRange.h>
@@ -47,7 +48,7 @@ class MapTextStyleConfig {
 
   QString     font   = QString(kDefaultFont);
   FontWeight  weight = MapTextStyleConfig::Regular;
-  uint        size   = 12U;
+  unsigned int        size   = 12U;
   QColor      color  = Qt::black;
   bool        drawOutline = true;
   IsUpToDateIgnoreIf(!drawOutline) float outlineThickness = 4.0F;
@@ -60,7 +61,7 @@ class MapLabelConfig {
 #pragma DontEmitFunc
 
   bool               enabled         = false;
-  geRange<uint32>    levelRange      = geRange<uint32>(8, 14);
+  geRange<std::uint32_t>    levelRange      = geRange<std::uint32_t>(8, 14);
   bool               hasOutlineLabel = false;
   FieldGenerator     text            = FieldGenerator();
   FieldGenerator     outlineText     = FieldGenerator();
@@ -81,8 +82,8 @@ class MapLabelConfig {
   void MaybeAddFieldBinderDefOutline(std::vector<FieldBinderDef> *defs,
                               const QString &fname) const;
   inline bool DontEmitFunc(void) const { return !enabled; }
-  bool EnabledForLevel(uint level) const;
-  void PinToLevel(uint level);
+  bool EnabledForLevel(unsigned int level) const;
+  void PinToLevel(unsigned int level);
 #/hquote
 #cppquote
   void MapLabelConfig::MaybeAddFieldBinderDef
@@ -98,12 +99,12 @@ class MapLabelConfig {
     }
   }
 
-  bool MapLabelConfig::EnabledForLevel(uint level) const {
+  bool MapLabelConfig::EnabledForLevel(unsigned int level) const {
     return (enabled && levelRange.Contains(level));
   }
-  void MapLabelConfig::PinToLevel(uint level) {
+  void MapLabelConfig::PinToLevel(unsigned int level) {
     if (EnabledForLevel(level)) {
-      levelRange = geRange<uint32>(level, level);
+      levelRange = geRange<std::uint32_t>(level, level);
     } else {
       enabled = false;
     }
@@ -166,7 +167,7 @@ class MapFeatureConfig {
   QColor fill_color = Qt::white;
   QColor stroke_color = Qt::white;
   float stroke_width = 2.0F;
-  geRange<uint32> levelRange = geRange<uint32>(8, 14);
+  geRange<std::uint32_t> levelRange = geRange<std::uint32_t>(8, 14);
   bool drawAsRoads = false;
   VectorDefs::PointMarker pointMarker = VectorDefs::Circle;
   float pointWidth = 4.0F;
@@ -176,17 +177,17 @@ class MapFeatureConfig {
   VectorDefs::EightSides labelPositionRelativeToPoint = VectorDefs::TopRight;
 
 #hquote
-  inline geMultiRange<uint32> ValidLevels(void) const {
+  inline geMultiRange<std::uint32_t> ValidLevels(void) const {
     if (!Enabled()) {
-      return geMultiRange<uint32>();
+      return geMultiRange<std::uint32_t>();
     }
-    geMultiRange<uint32> ret(levelRange);
+    geMultiRange<std::uint32_t> ret(levelRange);
     if (label.enabled) {
-      ret = geMultiRange<uint32>::Union(ret, geMultiRange<uint32>(
+      ret = geMultiRange<std::uint32_t>::Union(ret, geMultiRange<std::uint32_t>(
                                             label.levelRange));
     }
     if (shield.enabled) {
-      ret = geMultiRange<uint32>::Union(ret, geMultiRange<uint32>(
+      ret = geMultiRange<std::uint32_t>::Union(ret, geMultiRange<std::uint32_t>(
                                             shield.levelRange));
     }
     return ret;
@@ -223,7 +224,7 @@ class MapFeatureConfig {
   }
 
   void PopulateFieldBinderDefs(std::vector<FieldBinderDef> *defs) const;
-  void PinToLevel(uint level);
+  void PinToLevel(unsigned int level);
 #/hquote
 
 #cppquote
@@ -232,12 +233,12 @@ class MapFeatureConfig {
     label.MaybeAddFieldBinderDef(defs, "label");
     shield.MaybeAddFieldBinderDef(defs, "shield");
   }
-  void MapFeatureConfig::PinToLevel(uint level) {
+  void MapFeatureConfig::PinToLevel(unsigned int level) {
     if (Enabled()) {
       if (levelRange.Contains(level)) {
-        levelRange = geRange<uint32>(level, level);
+        levelRange = geRange<std::uint32_t>(level, level);
       } else {
-        levelRange = geRange<uint32>(level+1, level+1);
+        levelRange = geRange<std::uint32_t>(level+1, level+1);
       }
       label.PinToLevel(level);
       shield.PinToLevel(level);
@@ -255,9 +256,9 @@ class MapSiteConfig {
   VectorDefs::SiteReduceMethod reduceMethod = VectorDefs::ReduceSiteNone;
 
 #hquote
-  inline geMultiRange<uint32> ValidLevels(void) const {
-    return Enabled() ? geMultiRange<uint32>(label.levelRange) :
-      geMultiRange<uint32>();
+  inline geMultiRange<std::uint32_t> ValidLevels(void) const {
+    return Enabled() ? geMultiRange<std::uint32_t>(label.levelRange) :
+      geMultiRange<std::uint32_t>();
   }
   inline bool HasJS(void) const { return label.HasJS(); }
   inline bool Enabled(void) const { return label.enabled; }
@@ -273,7 +274,7 @@ class MapSiteConfig {
     return display_position;
   }
   void PopulateFieldBinderDefs(std::vector<FieldBinderDef> *defs) const;
-  inline void PinToLevel(uint level) {
+  inline void PinToLevel(unsigned int level) {
     label.PinToLevel(level);
   }
 #/hquote
@@ -297,8 +298,8 @@ class MapDisplayRuleConfig {
   FilterConfig     filter  = FilterConfig();
 
 #hquote
-  inline geMultiRange<uint32> ValidLevels(void) const {
-    return geMultiRange<uint32>::Union(feature.ValidLevels(),
+  inline geMultiRange<std::uint32_t> ValidLevels(void) const {
+    return geMultiRange<std::uint32_t>::Union(feature.ValidLevels(),
                                        site.ValidLevels());
   }
   inline bool HasFilterJS(void) const {
@@ -310,7 +311,7 @@ class MapDisplayRuleConfig {
   inline bool HasJS(void) const {
     return (HasFilterJS() || HasPrepJS());
   }
-  inline void PinToLevel(uint level) {
+  inline void PinToLevel(unsigned int level) {
     feature.PinToLevel(level);
     site.PinToLevel(level);
   }

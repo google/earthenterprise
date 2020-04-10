@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +27,9 @@
 #ifndef COMMON_PACKETFILE_PACKETFILEREADERPOOL_H__
 #define COMMON_PACKETFILE_PACKETFILEREADERPOOL_H__
 
+#include <cstdint>
 #include <string>
 #include <vector>
-#include <khTypes.h>
 #include <khGuard.h>
 #include <packetfile/packetfilereader.h>
 
@@ -60,17 +61,17 @@ class PacketFileReaderToken {
         packet_file_index_(0xFFFFFFFF) {
   }
 
-  uint32 PacketFileIndex() const { return packet_file_index_; }
+  std::uint32_t PacketFileIndex() const { return packet_file_index_; }
 
  private:
-  PacketFileReaderToken(uint32 pool_hash, uint32 packet_file_index)
+  PacketFileReaderToken(std::uint32_t pool_hash, std::uint32_t packet_file_index)
       : pool_hash_(pool_hash),
         packet_file_index_(packet_file_index) {
   }
   friend class PacketFileReaderPool;
 
-  uint32 pool_hash_;
-  uint32 packet_file_index_;
+  std::uint32_t pool_hash_;
+  std::uint32_t packet_file_index_;
 };
 
 // PacketFileReaderPool
@@ -101,7 +102,7 @@ class PacketFileReaderPool {
   // a FileBundle.
   // For a quadtree traversal, perhaps use max_blocks=10, block_size=5MB.
   // max_blocks must be >= 2.
-  void EnableReadCache(uint32 max_blocks, uint32 block_size) {
+  void EnableReadCache(std::uint32_t max_blocks, std::uint32_t block_size) {
     read_cache_max_blocks_ = max_blocks;
     read_cache_block_size_ = block_size;
   }
@@ -113,15 +114,15 @@ class PacketFileReaderPool {
   geFilePool &file_pool() const { return file_pool_; }
  private:
   geFilePool &file_pool_;
-  uint32 pool_hash_;
+  std::uint32_t pool_hash_;
   const std::string pool_name_;
 
   std::vector<std::string> names_;
   khDeletingVector<PacketFileReaderBase> readers_;
 
   // Support for optional read caching
-  uint32 read_cache_max_blocks_;
-  uint32 read_cache_block_size_;
+  std::uint32_t read_cache_max_blocks_;
+  std::uint32_t read_cache_block_size_;
 
   DISALLOW_COPY_AND_ASSIGN(PacketFileReaderPool);
 };

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,15 +13,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <cstdint>
 #include <string>
 #include <vector>
-#include <khTypes.h>
 
 class geindexgen::VectorStack {
   class Layer {
     std::string packetfile_;
-    uint32 channel_id_;
-    uint32 index_version_;
+    std::uint32_t channel_id_;
+    std::uint32_t index_version_;
   };
 
   std::vector<Layer> layers_;

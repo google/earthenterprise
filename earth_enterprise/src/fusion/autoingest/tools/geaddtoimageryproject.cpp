@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -116,8 +117,8 @@ main(int argc, char *argv[]) {
       AssetType = AssetDefs::Imagery;
     
     // constants
-    const uint MINIMUM_LEVEL = 4;
-    const uint MAXIMUM_LEVEL = 24;
+    const unsigned int MINIMUM_LEVEL = 4;
+    const unsigned int MAXIMUM_LEVEL = 24;
 
     // process commandline options
     bool help = false;
@@ -129,11 +130,11 @@ main(int argc, char *argv[]) {
     bool enable_terrain_overlay = false;
     bool disable_terrain_overlay = false;
     
-    uint peergroup = 0;
-    uint overridemax_deprecated = 0;
-    uint overridemax = 0;
-    uint start_level = 0;          
-    uint resource_min_level = 0;  
+    unsigned int peergroup = 0;
+    unsigned int overridemax_deprecated = 0;
+    unsigned int overridemax = 0;
+    unsigned int start_level = 0;          
+    unsigned int resource_min_level = 0;  
 
     RasterProjectModifyRequest req(AssetType);
 
@@ -153,9 +154,9 @@ main(int argc, char *argv[]) {
     options.opt("terrain_overlay", enable_terrain_overlay);
     options.opt("no_terrain_overlay", disable_terrain_overlay);
     options.opt("start_level", start_level, 
-      &khGetopt::IsEvenNumberInRange<uint, MINIMUM_LEVEL, MAXIMUM_LEVEL>); 
+      &khGetopt::IsEvenNumberInRange<unsigned int, MINIMUM_LEVEL, MAXIMUM_LEVEL>); 
     options.opt("resource_min_level", resource_min_level, 
-      &khGetopt::RangeValidator<uint, MINIMUM_LEVEL, MAXIMUM_LEVEL>);
+      &khGetopt::RangeValidator<unsigned int, MINIMUM_LEVEL, MAXIMUM_LEVEL>);
 
 
     // While processing the command line args, we must record the request items
@@ -221,7 +222,7 @@ main(int argc, char *argv[]) {
     }
 
     // Process the request items, which are a variable length list of strings.
-    for(uint i = 0; i < request_items.size(); ++i) {
+    for(unsigned int i = 0; i < request_items.size(); ++i) {
       req.items.push_back(
         RasterProjectModifyRequest::Item(
             AssetDefs::NormalizeAssetName(request_items[i], AssetType,

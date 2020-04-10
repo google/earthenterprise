@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -104,12 +105,12 @@ class LabelPaths {
   static const float kDefault_label_spacing_goal;
   static const float kDefault_shield_spacing_goal;
 
-  explicit LabelPaths(uint tile_size) {
+  explicit LabelPaths(unsigned int tile_size) {
     area_bounds_.set(0, 0, tile_size, tile_size);
     UpdateCosine();
   }
 
-  LabelPaths(uint tile_size, const ParameterSet &params) {
+  LabelPaths(unsigned int tile_size, const ParameterSet &params) {
     area_bounds_.set(0, 0, tile_size, tile_size);
     SetParameters(params);
   }

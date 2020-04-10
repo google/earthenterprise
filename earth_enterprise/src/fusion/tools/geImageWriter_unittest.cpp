@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -34,7 +35,7 @@ class geImageWriterTest : public testing::Test {
     int maskWidth_;
     GDALRasterBand* alphaBand_;
     GDALDriver* driver_;
-    uchar* alphaBuf_;
+    unsigned char* alphaBuf_;
 
     virtual void SetUp() {
       testInputFile_ = "fusion/testdata/testmask.tif";
@@ -49,7 +50,7 @@ class geImageWriterTest : public testing::Test {
       GDALDataset* dataset = reinterpret_cast<GDALDataset*>(
           GDALOpen(testInputFile_.c_str(), GA_ReadOnly));
       alphaBand_ = dataset->GetRasterBand(1);
-      alphaBuf_ = new uchar[maskWidth_ * maskHeight_];
+      alphaBuf_ = new unsigned char[maskWidth_ * maskHeight_];
 
       if (alphaBand_->RasterIO(GF_Read, 0, 0,
                                maskWidth_, maskHeight_,
@@ -79,7 +80,7 @@ TEST_F(geImageWriterTest, ImageWriterBasicTest) {
   khExtents<double> imageDExtents(imageDOffset, imageDSize);
   khGeoExtents imageDGeoExtents(
       7, imageDExtents, true /* top->bottom */, false);
-  khSize<uint32> imageSize(maskWidth_, maskHeight_);
+  khSize<std::uint32_t> imageSize(maskWidth_, maskHeight_);
 
   geImageWriter::WriteAlphaImage(imageSize, alphaBuf_, driver_,
                                  testOutputAlphaFile_, imageDGeoExtents,
@@ -87,7 +88,7 @@ TEST_F(geImageWriterTest, ImageWriterBasicTest) {
 
   EXPECT_TRUE(khExists(testOutputAlphaFile_));
   // Header info should make it bigger than the data itself
-  EXPECT_LT(static_cast<uint64>(maskHeight_ * maskWidth_),
+  EXPECT_LT(static_cast<std::uint64_t>(maskHeight_ * maskWidth_),
             khGetFileSizeOrThrow(testOutputAlphaFile_));
 }
 

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -76,10 +77,10 @@ usage(const std::string &progn, const char *msg = 0, ...)
 
 // Convert the amount of memory used by caches to a more easily read format
 std::string
-readableMemorySize(uint64 size) {
+readableMemorySize(std::uint64_t size) {
   double readable = static_cast<double>(size);
   const std::array<std::string, 9> units = {"B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
-  uint8 i = 0;
+  std::uint8_t i = 0;
   std::stringstream memoryUsed;
 
   while (readable > 1024) {
@@ -233,7 +234,7 @@ main(int argc, char *argv[])
         outline("Fusion processes on this host:");
         numlines -= 6;
 
-        for (uint i = 0; i < pslist.size(); ++i) {
+        for (unsigned int i = 0; i < pslist.size(); ++i) {
           if (numlines > 2) {
             outline("%s", pslist[i].c_str());
             --numlines;

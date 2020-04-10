@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,36 +50,36 @@ class gstSource : public gstMemory {
   gstFormat* Format() const { return format_; }
 
   // convenience routines for format object
-  uint32 NumLayers() const;
-  uint32 NumFeatures(uint32 layer) const;
-  double AverageFeatureDiameter(uint32 layer) const;
-  uint32 RecommendedMaxResolutionLevel() const;
-  uint32 RecommendedMinResolutionLevel() const;
-  uint32 RecommendedEfficientResolutionLevel() const;
+  std::uint32_t NumLayers() const;
+  std::uint32_t NumFeatures(std::uint32_t layer) const;
+  double AverageFeatureDiameter(std::uint32_t layer) const;
+  std::uint32_t RecommendedMaxResolutionLevel() const;
+  std::uint32_t RecommendedMinResolutionLevel() const;
+  std::uint32_t RecommendedEfficientResolutionLevel() const;
 
   // ===== new sequential access API =====
-  void ResetReadingOrThrow(uint32 layer);
+  void ResetReadingOrThrow(std::uint32_t layer);
   gstGeodeHandle GetNormCurrFeatureOrThrow(void);
   gstRecordHandle GetCurrentAttributeOrThrow(void);
   void IncrementReadingOrThrow(void);
   bool IsReadingDone(void);
 
   // ===== random access API =====
-  gstGeodeHandle GetFeatureOrThrow(uint32 layer, uint32 id,
+  gstGeodeHandle GetFeatureOrThrow(std::uint32_t layer, std::uint32_t id,
                                    bool is_mercator_preview);
-  gstRecordHandle GetAttributeOrThrow(uint32 layer, uint32 id);
-  gstBBox GetFeatureBoxOrThrow(uint32 layer, uint32 id);
+  gstRecordHandle GetAttributeOrThrow(std::uint32_t layer, std::uint32_t id);
+  gstBBox GetFeatureBoxOrThrow(std::uint32_t layer, std::uint32_t id);
 
 
-  gstPrimType GetPrimType(uint32 layer) const;
-  const gstHeaderHandle& GetAttrDefs(uint32 layer) const;
-  bool HasAttrib(uint32 layer) const {
+  gstPrimType GetPrimType(std::uint32_t layer) const;
+  const gstHeaderHandle& GetAttrDefs(std::uint32_t layer) const;
+  bool HasAttrib(std::uint32_t layer) const {
     return (GetAttrDefs(layer)->numColumns() > 0);
   }
 #if 0
   gstBBox BoundingBox();
 #endif
-  gstBBox BoundingBox(uint32 layer);
+  gstBBox BoundingBox(std::uint32_t layer);
 
   bool NoFile() const { return no_file_; }
   void SetNoFile(bool nf) { no_file_ = nf; }

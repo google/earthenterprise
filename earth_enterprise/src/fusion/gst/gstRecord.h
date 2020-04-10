@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +38,7 @@ class gstHeaderImpl : public khMTRefCounter {
  public:
   struct FieldSpec {
     QString name;
-    uint32 ftype;
+    std::uint32_t ftype;
     int length;
     double multiplier;
     bool operator==(const FieldSpec& b) const {
@@ -69,20 +70,20 @@ class gstHeaderImpl : public khMTRefCounter {
 
   const QString & Name(int c) const { return field_specs_[c].name; }
   //  const char* name(int c) const { return field_specs_[c].name.latin1(); }
-  uint32 ftype(int c) const { return field_specs_[c].ftype; }
+  std::uint32_t ftype(int c) const { return field_specs_[c].ftype; }
   int length(int c) const { return field_specs_[c].length; }
   double mult(int c) const { return field_specs_[c].multiplier; }
-  uint numColumns() const { return field_specs_.size(); }
+  unsigned int numColumns() const { return field_specs_.size(); }
   bool HasAttrib(void) const {
     return (numColumns() > 0);
   }
 
   void addSpec(const FieldSpec& spec);
-  void addSpec(const char* n, uint32 t, int l = -1, double m = 0.0);
-  void addSpec(const QString &n, uint32 t, int l = -1, double m = 0.0);
+  void addSpec(const char* n, std::uint32_t t, int l = -1, double m = 0.0);
+  void addSpec(const QString &n, std::uint32_t t, int l = -1, double m = 0.0);
 
   gstRecordHandle NewRecord();
-  uint32 RawSize(const gstRecordHandle rec);
+  std::uint32_t RawSize(const gstRecordHandle rec);
   gstRecordHandle FromRaw(const char* buf, int size);
   char* ToRaw(const gstRecordHandle rec, char* buf);
 
@@ -102,9 +103,9 @@ class gstRecordImpl : public khMTRefCounter {
   gstRecordImpl();
   ~gstRecordImpl();
 
-  uint NumFields() const { return fields_.size(); }
+  unsigned int NumFields() const { return fields_.size(); }
   bool IsEmpty() const { return NumFields() == 0; }
-  gstValue* Field(uint c);
+  gstValue* Field(unsigned int c);
   gstValue* FieldByName(const QString& fieldName);
   gstHeaderHandle Header() const { return header_; }
   bool ValidateEncoding() const;
@@ -113,7 +114,7 @@ class gstRecordImpl : public khMTRefCounter {
  private:
   friend class gstHeaderImpl;
   friend void TestSelector();
-  gstRecordImpl(uint l, gstHeaderHandle header);
+  gstRecordImpl(unsigned int l, gstHeaderHandle header);
   void AddField(gstValue* v) { fields_.push_back(v); }
 
   gstHeaderHandle header_;

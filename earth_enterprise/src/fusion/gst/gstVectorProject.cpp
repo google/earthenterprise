@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -45,7 +46,7 @@ void gstVectorProject::serverType(VectorProjectConfig::ServerType type) {
   }
 }
 
-void gstVectorProject::buildVersion(uint v) {
+void gstVectorProject::buildVersion(unsigned int v) {
   if (v != config_.indexVersion) {
     config_.indexVersion = v;
   }
@@ -103,7 +104,7 @@ bool gstVectorProject::Prefill(const VectorProjectConfig& cfg) {
       notify(NFY_DEBUG, "  ** Group");
       continue;
     }
-    for (uint f = 0; f < (*it)->NumFilters(); ++f) {
+    for (unsigned int f = 0; f < (*it)->NumFilters(); ++f) {
       notify(NFY_DEBUG,
              "  filter %d, name = \"%s\": feature style = %d, site style = %d",
              f, (*it)->GetFilterById(f)->Name().latin1(),
@@ -141,7 +142,7 @@ void gstVectorProject::AssembleEditRequest(VectorProjectEditRequest *request) {
 
   // Now update all the configs in the gstLayers, small things may have
   // changed (ids assigned, names made unique, etc).
-  for (uint i = 0; i < layers_.size(); ++i) {
+  for (unsigned int i = 0; i < layers_.size(); ++i) {
     layers_[i]->SetConfig(request->config.layers[i]);
   }
 }

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +27,8 @@ class gstLayerBase {
   gstLayerBase(const gstLayerBase& l);
   virtual ~gstLayerBase();
 
-  uint sortID() const { return sort_id_; }
-  void sortID(uint i);
+  unsigned int sortID() const { return sort_id_; }
+  void sortID(unsigned int i);
 
   const std::string& Name() const { return name_; }
   void SetName(const std::string& name) { name_ = name; }
@@ -35,7 +36,7 @@ class gstLayerBase {
  private:
   void operator=(const gstLayerBase&);  // private and unimplemented
   std::string name_;
-  uint sort_id_;
+  unsigned int sort_id_;
 };
 
 #endif  // !KHSRC_FUSION_GST_GSTLAYERBASE_H__

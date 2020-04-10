@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -34,7 +35,7 @@ class ReaderMergeSource :
       public MergeSource<typename Reader::MergeEntry> {
   typedef typename Reader::MergeEntry MergeEntry;
  public:
-  ReaderMergeSource(Reader *reader, const uint32 cache_size) :
+  ReaderMergeSource(Reader *reader, const std::uint32_t cache_size) :
       MergeSource<MergeEntry>(reader->Name()),
       reader_(reader),
       valid_(true),
@@ -79,11 +80,11 @@ class ReaderMergeSource :
  private:
   Reader *reader_;
   bool        valid_;
-  uint64      remaining_;
-  uint32      cache_size_;
+  std::uint64_t      remaining_;
+  std::uint32_t      cache_size_;
   std::vector<MergeEntry> entries_;
-  uint32      curr_entry_;
-  uint32      num_entries_;
+  std::uint32_t      curr_entry_;
+  std::uint32_t      num_entries_;
   LittleEndianReadBuffer tmp_read_buffer;
 
   DISALLOW_COPY_AND_ASSIGN(ReaderMergeSource);
@@ -98,11 +99,11 @@ class ReaderMergeSource :
 template <class Def>
 Generator<Def>::Generator(geFilePool &file_pool,
                           const std::string &outdir,
-                          uint merge_session_size,
-                          uint queue_size,
+                          unsigned int merge_session_size,
+                          unsigned int queue_size,
                           Stack &stack,
                           geindex::TypedEntry::TypeEnum desc,
-                          uint num_writer_threads) :
+                          unsigned int num_writer_threads) :
     writer_(file_pool, outdir, Writer::FullIndexMode,
             ToString(desc),
             num_writer_threads * 3 /* num cached write buffers */),
@@ -166,7 +167,7 @@ void Generator<Def>::WriterLoop(void) {
 
 template <class Def>
 void Generator<Def>::IndexLoop(void) {
-  const uint index_pull_batch = 50;
+  const unsigned int index_pull_batch = 50;
 
   CommandQueue::PullHandle next;
 
@@ -194,9 +195,9 @@ void Generator<Def>::IndexLoop(void) {
 
 template <class Def>
 void Generator<Def>::MergeLoop(void) {
-  const uint merge_acquire_batch = 50;
+  const unsigned int merge_acquire_batch = 50;
 
-  uint num_merged = 0;
+  unsigned int num_merged = 0;
 
   IndexCommandPusher index_command_pusher(merge_acquire_batch,
                                           index_command_queue_);
@@ -268,7 +269,7 @@ void Generator<Def>::DoIndexing(void) {
 
 
     khDeletingVector<mttypes::ManagedThread> write_threads;
-    for (uint i = 0; i < num_writer_threads_; ++i) {
+    for (unsigned int i = 0; i < num_writer_threads_; ++i) {
       write_threads.push_back(
           TransferOwnership(
               new mttypes::ManagedThread(

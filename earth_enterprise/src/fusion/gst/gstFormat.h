@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +41,7 @@ class QTextCodec;
 extern char *getStr(const char *buf, int nbuf, char *obuf);
 extern void strLeftShift(char *buf);
 extern int getInt(const char *buf, int nbuf);
-extern uint64 getUInt64(const char *buf, int nbuf);
+extern std::uint64_t getUInt64(const char *buf, int nbuf);
 extern double getDouble(const char *buf, int nbuf);
 
 #define GET_INT(_field) getInt(_field, sizeof _field)
@@ -49,7 +50,7 @@ extern double getDouble(const char *buf, int nbuf);
 #define GET_STR(_field, _buf) getStr(_field, sizeof _field, _buf)
 
 extern int getIntB(const char *buf, int nbuf);
-extern int getIntB_le(const uchar *buf, int nbuf);
+extern int getIntB_le(const unsigned char *buf, int nbuf);
 #define GET_INT_B(_field) getIntB(_field, sizeof _field)
 #define GET_INT_B_LE(_field) getIntB_le(_field, sizeof _field)
 
@@ -69,15 +70,15 @@ typedef gstFormat *(*gstFormatNewFmtFunc)(const char *);
 
 class gstLayerDef {
  public:
-  gstLayerDef(gstPrimType ftype, uint32 fcount, const gstHeaderHandle& header);
-  gstLayerDef(uint32 fcount, const gstHeaderHandle& header);
+  gstLayerDef(gstPrimType ftype, std::uint32_t fcount, const gstHeaderHandle& header);
+  gstLayerDef(std::uint32_t fcount, const gstHeaderHandle& header);
   ~gstLayerDef();
 
   void SetType(gstPrimType t) { type_ = t; }
   gstPrimType Type() const { return type_; }
 
-  void SetNumFeatures(uint32 f) { num_features_ = f; }
-  uint32 NumFeatures() const { return num_features_; }
+  void SetNumFeatures(std::uint32_t f) { num_features_ = f; }
+  std::uint32_t NumFeatures() const { return num_features_; }
 
   void SetAverageFeatureDiameter(double d) {
     average_feature_diameter_ = d;
@@ -87,27 +88,27 @@ class gstLayerDef {
     return average_feature_diameter_;
   }
 
-  void SetMinResolutionLevel(uint32 min_resolution_level) {
+  void SetMinResolutionLevel(std::uint32_t min_resolution_level) {
     min_resolution_level_ = min_resolution_level;
   }
 
-  uint32 MinResolutionLevel() const {
+  std::uint32_t MinResolutionLevel() const {
     return min_resolution_level_;
   }
 
-  void SetMaxResolutionLevel(uint32 max_resolution_level) {
+  void SetMaxResolutionLevel(std::uint32_t max_resolution_level) {
     max_resolution_level_ = max_resolution_level;
   }
 
-  uint32 MaxResolutionLevel() const {
+  std::uint32_t MaxResolutionLevel() const {
     return max_resolution_level_;
   }
 
-  void SetEfficientResolutionLevel(uint32 efficient_resolution_level) {
+  void SetEfficientResolutionLevel(std::uint32_t efficient_resolution_level) {
     efficient_resolution_level_ = efficient_resolution_level;
   }
 
-  uint32 EfficientResolutionLevel() const {
+  std::uint32_t EfficientResolutionLevel() const {
     return efficient_resolution_level_;
   }
 
@@ -121,7 +122,7 @@ class gstLayerDef {
 
  private:
   gstPrimType type_;
-  uint32 num_features_;
+  std::uint32_t num_features_;
   gstHeaderHandle attrib_defs_;
   gstBBox bounding_box_;
   // The average feature diameter at level 0. It is calculated based on
@@ -131,9 +132,9 @@ class gstLayerDef {
 
   // The (min, max, efficient) resolution levels calculated by (max, min,
   // average) feature size.
-  uint32  min_resolution_level_;
-  uint32  max_resolution_level_;
-  uint32  efficient_resolution_level_;
+  std::uint32_t  min_resolution_level_;
+  std::uint32_t  max_resolution_level_;
+  std::uint32_t  efficient_resolution_level_;
 };
 
 class gstFormat : public gstMemory {
@@ -161,7 +162,7 @@ class gstFormat : public gstMemory {
   // Classes that don't directly support seqential access can use the
   // FORWARD_ALL_SEQENTIAL_ACCESS_TO_BASE macro to generate all the
   // forwarding functions for these pure virtuals
-  virtual void ResetReadingImpl(uint32 layer) = 0;
+  virtual void ResetReadingImpl(std::uint32_t layer) = 0;
   gstGeodeHandle GetNormCurrFeatureImpl(void);
   virtual gstGeodeHandle GetCurrentFeatureImpl(void) = 0;
   virtual gstRecordHandle GetCurrentAttributeImpl(void) = 0;
@@ -172,22 +173,22 @@ class gstFormat : public gstMemory {
   // Classes that don't directly support fetching of BBoxes separate from
   // features can use the FORWARD_GETFEATUREBOX_TO_BASE macro to generate
   // the forwarding function
-  gstGeodeHandle GetNormFeatureImpl(uint32 layer, uint32 id,
+  gstGeodeHandle GetNormFeatureImpl(std::uint32_t layer, std::uint32_t id,
                                     bool is_mercator_preview);
-  virtual gstGeodeHandle  GetFeatureImpl(uint32 layer, uint32 id) = 0;
-  virtual gstRecordHandle GetAttributeImpl(uint32 layer, uint32 id) = 0;
-  virtual gstBBox         GetFeatureBoxImpl(uint32 layer, uint32 id) = 0;
+  virtual gstGeodeHandle  GetFeatureImpl(std::uint32_t layer, std::uint32_t id) = 0;
+  virtual gstRecordHandle GetAttributeImpl(std::uint32_t layer, std::uint32_t id) = 0;
+  virtual gstBBox         GetFeatureBoxImpl(std::uint32_t layer, std::uint32_t id) = 0;
 
  protected:
   // default implementation for sequential access API
-  void DefaultResetReadingImpl(uint32 layer);
+  void DefaultResetReadingImpl(std::uint32_t layer);
   gstGeodeHandle DefaultGetCurrentFeatureImpl(void);
   gstRecordHandle DefaultGetCurrentAttributeImpl(void);
   void DefaultIncrementReadingImpl(void);
   bool DefaultIsReadingDoneImpl(void);
 
   // default implementation for random access API
-  gstBBox DefaultGetFeatureBoxImpl(uint32 layer, uint32 id);
+  gstBBox DefaultGetFeatureBoxImpl(std::uint32_t layer, std::uint32_t id);
 
   void TransformGeode(gstGeodeHandle g) const;
   void TransformGeode(gstGeode *g) const;
@@ -220,11 +221,11 @@ class gstFormat : public gstMemory {
             && !strcmp(nm+(strlen(nm) - strlen(sfx)), sfx));
   }
 
-  uint32 NumLayers() const {
+  std::uint32_t NumLayers() const {
     return layer_defs_.size();
   }
 
-  uint32 NumFeatures(uint32 layer) const {
+  std::uint32_t NumFeatures(std::uint32_t layer) const {
     return layer_defs_[layer].NumFeatures();
   }
 
@@ -236,8 +237,8 @@ class gstFormat : public gstMemory {
   bool IsMercatorImagery() const { return is_mercator_imagery_; }
 
  protected:
-  gstLayerDef& AddLayer(gstPrimType t, uint32 n, const gstHeaderHandle& h);
-  gstLayerDef& AddLayer(uint32 n, const gstHeaderHandle& h);
+  gstLayerDef& AddLayer(gstPrimType t, std::uint32_t n, const gstHeaderHandle& h);
+  gstLayerDef& AddLayer(std::uint32_t n, const gstHeaderHandle& h);
   void AddLayer(const gstLayerDef& l);
 
  private:
@@ -269,8 +270,8 @@ class gstFormat : public gstMemory {
   bool nofileok;
 
   ///////////////////////////////////////////////////////////////
-  uint32 seqReadLayer;
-  uint32 seqReadCurrID;
+  std::uint32_t seqReadLayer;
+  std::uint32_t seqReadCurrID;
   bool seqReadIsDone;
 
   bool noXForm;
@@ -279,7 +280,7 @@ class gstFormat : public gstMemory {
 
 
 #define FORWARD_ALL_SEQUENTIAL_ACCESS_TO_BASE           \
-virtual void ResetReadingImpl(uint32 layer) {           \
+virtual void ResetReadingImpl(std::uint32_t layer) {           \
   DefaultResetReadingImpl(layer);                       \
 }                                                       \
 virtual gstGeodeHandle GetCurrentFeatureImpl(void) {    \
@@ -297,7 +298,7 @@ virtual bool IsReadingDoneImpl(void) {                  \
 
 
 #define FORWARD_GETFEATUREBOX_TO_BASE                           \
-virtual gstBBox GetFeatureBoxImpl(uint32 layer, uint32 id) {    \
+virtual gstBBox GetFeatureBoxImpl(std::uint32_t layer, std::uint32_t id) {    \
   return DefaultGetFeatureBoxImpl(layer, id);                   \
 }
 

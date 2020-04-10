@@ -24,8 +24,8 @@
 // Same as CRC::Extend, but one byte at a time.
 
 static
-void MyExtend(CRC *crc, uint64 *lo, uint64 *hi, const char *str, size_t len) {
-  for (uint32 i = 0; i != len; i++) {
+void MyExtend(CRC *crc, std::uint64_t *lo, std::uint64_t *hi, const char *str, size_t len) {
+  for (std::uint32_t i = 0; i != len; i++) {
     crc->Extend(lo, hi, &str[i], 1);
   }
 }
@@ -79,8 +79,8 @@ int main (int argc, char *argv[]) {
                           CRC::POLYS[i].degree, r);
       // Try all test strings
       for (int j = 0; j != sizeof (strings) / sizeof (strings[0]); j++) {
-        uint64 lo;
-        uint64 hi;
+        std::uint64_t lo;
+        std::uint64_t hi;
 
         if (FLAGS_print_output) {
           printf ("%s %d   %d\n",
@@ -89,24 +89,24 @@ int main (int argc, char *argv[]) {
         crc->Empty(&lo, &hi);
         if (FLAGS_print_output) {
           printf ("%016llx%016llx\n",
-                  (long long unsigned uint)hi,
-                  (long long unsigned uint)lo);
+                  (long long unsigned int)hi,
+                  (long long unsigned int)lo);
         }
         crc->Extend(&lo, &hi, strings[j].str, strings[j].len);
         if (FLAGS_print_output) {
           printf("%016llx%016llx\n",
-                 (long long unsigned uint)hi,
-                 (long long unsigned uint)lo);
+                 (long long unsigned int)hi,
+                 (long long unsigned int)lo);
         }
 
-        uint64 mlo;
-        uint64 mhi;
+        std::uint64_t mlo;
+        std::uint64_t mhi;
         crc->Empty(&mlo, &mhi);
         MyExtend(crc, &mlo, &mhi, strings[j].str, strings[j].len);
         if (FLAGS_print_output) {
           printf ("%016llx%016llx\n",
-                  (long long unsigned uint)mhi,
-                  (long long unsigned uint)mlo);
+                  (long long unsigned int)mhi,
+                  (long long unsigned int)mlo);
         }
         CHECK_EQ(mlo, lo);
         CHECK_EQ(mhi, hi);
@@ -148,15 +148,15 @@ int main (int argc, char *argv[]) {
   CHECK_EQ(crc13_8_1, crc13_8_2);
   CHECK_EQ(crc13_9_1, crc13_9_2);
   CHECK(crc13_8_1 != crc13_9_1);
-  uint64 lo0;
-  uint64 hi0;
+  std::uint64_t lo0;
+  std::uint64_t hi0;
   crc13_8_1->Empty(&lo0, &hi0);
   crc13_8_1->Extend(&lo0, &hi0, "hello", 5);
   CRC *crc = CRC::New(CRC::POLYS[13].lo, CRC::POLYS[13].hi,
                       CRC::POLYS[13].degree, 8);
   CHECK(crc13_8_1 != crc);
-  uint64 lo1;
-  uint64 hi1;
+  std::uint64_t lo1;
+  std::uint64_t hi1;
   crc->Empty(&lo1, &hi1);
   crc->Extend(&lo1, &hi1, "hello", 5);
   delete crc;
@@ -168,17 +168,17 @@ int main (int argc, char *argv[]) {
   // Test strings of all 0
 
   const int nzeros = 4;
-  const uint32 crc32_0[nzeros] =
+  const std::uint32_t crc32_0[nzeros] =
     { 0x838d55bd, 0xf13cf8ed, 0x71eea7d9, 0x7f3f0d27 };
-  const uchar zeros[nzeros] = { 0, 0, 0, 0 };
+  const unsigned char zeros[nzeros] = { 0, 0, 0, 0 };
 
-  for (uint32 i = 1; i <= 4; ++i) {
-    uint32 crcval = Crc32(zeros, i);
+  for (std::uint32_t i = 1; i <= 4; ++i) {
+    std::uint32_t crcval = Crc32(zeros, i);
     CHECK_EQ(crcval, crc32_0[i-1]);
   }
 
   // Try all test strings
-  static const uint32 string_crc32[] = {
+  static const std::uint32_t string_crc32[] = {
     0xb9e50c1d,
     0x838d55bd,
     0xf75de6fc,
@@ -188,7 +188,7 @@ int main (int argc, char *argv[]) {
     0xb692c92d };
 
   for (int j = 0; j != sizeof (strings) / sizeof (strings[0]); j++) {
-    uint32 crcval = Crc32(strings[j].str, strings[j].len);
+    std::uint32_t crcval = Crc32(strings[j].str, strings[j].len);
     CHECK_EQ(crcval, string_crc32[j]);
   }
 

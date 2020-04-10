@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,23 +23,23 @@
 
 namespace geindex {
 
-bool ShouldStoreSinglesSparsely(uint32 entrySize, uint16 numSlots) {
+bool ShouldStoreSinglesSparsely(std::uint32_t entrySize, std::uint16_t numSlots) {
   // Buckets with single entries per slot can be stored in one of two ways
   // -- sparsely populated --
-  // uint16 numSlots;
+  // std::uint16_t numSlots;
   // BucketChildSlotType [numSlots]
   // { Entry for first  slot}
   // { Entry for second slot}
   // { Entry for third  slot}
   // -- fully populated --
-  // uint16 numSlots;
+  // std::uint16_t numSlots;
   // Entry[kEntrySlotsPerBucket]
 
   // we want to choose the one that costs us the least to store
-  uint32 totalSparseCost = sizeof(uint16) +
+  std::uint32_t totalSparseCost = sizeof(std::uint16_t) +
                            numSlots * sizeof(BucketChildSlotType) +
                            numSlots * entrySize;
-  uint32 totalFixedCost = sizeof(uint16) + kEntrySlotsPerBucket * entrySize;
+  std::uint32_t totalFixedCost = sizeof(std::uint16_t) + kEntrySlotsPerBucket * entrySize;
   return totalSparseCost < totalFixedCost;
 }
 
@@ -66,7 +67,7 @@ void SimpleInsetEntry::Push(EndianWriteBuffer &buf) const {
       << insetId;
 }
 void SimpleInsetEntry::VersionedPull(EndianReadBuffer &buf,
-                                        uint16 /* fileFormatVersion */) {
+                                        std::uint16_t /* fileFormatVersion */) {
   buf >> dataAddress
       >> version
       >> insetId;
@@ -81,7 +82,7 @@ void BlendEntry::Push(EndianWriteBuffer &buf) const {
       << insetId;
 }
 void BlendEntry::VersionedPull(EndianReadBuffer &buf,
-                               uint16 /* fileFormatVersion */) {
+                               std::uint16_t /* fileFormatVersion */) {
   buf >> dataAddress
       >> version
       >> insetId;
@@ -96,7 +97,7 @@ void ChannelledEntry::Push(EndianWriteBuffer &buf) const {
       << channel;
 }
 void ChannelledEntry::VersionedPull(EndianReadBuffer &buf,
-                                    uint16 /* fileFormatVersion */) {
+                                    std::uint16_t /* fileFormatVersion */) {
   buf >> dataAddress
       >> version
       >> channel;
@@ -109,14 +110,14 @@ void TypedEntry::Push(EndianWriteBuffer &buf) const {
   buf << dataAddress
       << version
       << channel
-      << EncodeAs<uint8>(type);
+      << EncodeAs<std::uint8_t>(type);
 }
 void TypedEntry::VersionedPull(EndianReadBuffer &buf,
-                               uint16 /* fileFormatVersion */) {
+                               std::uint16_t /* fileFormatVersion */) {
   buf >> dataAddress
       >> version
       >> channel
-      >> DecodeAs<uint8>(type);
+      >> DecodeAs<std::uint8_t>(type);
 }
 
 

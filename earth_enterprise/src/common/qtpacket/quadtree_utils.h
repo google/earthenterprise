@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -111,43 +112,43 @@ class QuadtreeNumbering : public TreeNumbering {
   // Return the subindex for the given level and (x, y) position.
   int LevelXYToSubindex(int level, int x, int y) const;
 
-  static uint64 TraversalPathToGlobalNodeNumber(QuadtreePath path);
-  static uint64 TraversalPathToGlobalNodeNumber(const std::string &path) {
+  static std::uint64_t TraversalPathToGlobalNodeNumber(QuadtreePath path);
+  static std::uint64_t TraversalPathToGlobalNodeNumber(const std::string &path) {
     return TraversalPathToGlobalNodeNumber(QuadtreePath(path));
   }
-  static QuadtreePath GlobalNodeNumberToTraversalPath(uint64 num);
+  static QuadtreePath GlobalNodeNumberToTraversalPath(std::uint64_t num);
 
   // Convert a traversal path to a quadset number, and a node within
   // the quadset.
   static void TraversalPathToQuadsetAndSubindex(QuadtreePath path,
-                                                uint64 *quadset_num,
+                                                std::uint64_t *quadset_num,
                                                 int *subindex);
   static void TraversalPathToQuadsetAndSubindex(const std::string &path,
-                                                uint64 *quadset_num,
+                                                std::uint64_t *quadset_num,
                                                 int *subindex) {
     TraversalPathToQuadsetAndSubindex(QuadtreePath(path),
                                       quadset_num,
                                       subindex);
   }
 
-  static bool IsQuadsetRootLevel(uint32 level);
+  static bool IsQuadsetRootLevel(std::uint32_t level);
 
-  static QuadtreePath QuadsetAndSubindexToTraversalPath(uint64 quadset_num,
+  static QuadtreePath QuadsetAndSubindexToTraversalPath(std::uint64_t quadset_num,
                                                         int subindex);
 
-  static void QuadsetAndSubindexToLevelRowColumn(uint64 quadset_num,
+  static void QuadsetAndSubindexToLevelRowColumn(std::uint64_t quadset_num,
                                                  int subindex,
                                                  int *level, int *row, int *col);
 
   // Return the number of nodes (subindex values) in a quadset
-  static int NumNodes(uint64 quadset_num);
+  static int NumNodes(std::uint64_t quadset_num);
 
   // Convert subindex to inorder numbering for a specified quadset
-  static int QuadsetAndSubindexToInorder(uint64 quadset_num,
+  static int QuadsetAndSubindexToInorder(std::uint64_t quadset_num,
                                          int subindex);
 
   // Get numbering for given quadset
-  static const QuadtreeNumbering &Numbering(uint64 quadset_num);
+  static const QuadtreeNumbering &Numbering(std::uint64_t quadset_num);
 
   // Given a tile's level, row and column, return its Maps tile name.
   static std::string LevelRowColumnToMapsTraversalPath(int level,

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +22,8 @@
 
 #include "common/khTileAddr.h"
 #include "common/khGuard.h"
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 
 
 // khLevelPresenceMask
@@ -34,41 +36,41 @@ class khLevelPresenceMask : public khLevelCoverage {
   khLevelPresenceMask(const khLevelPresenceMask &o);
 
   // Used to build a level from a stored buffer.
-  khLevelPresenceMask(uint lev, const khExtents<uint32> &extents, uchar *src);
+  khLevelPresenceMask(unsigned int lev, const khExtents<std::uint32_t> &extents, unsigned char *src);
 
   // Used to build an empty level (all not-present) or a filled
   // level (all present) in preparation to fill it in with real values.
   // set_present - whether build level with all "not present" or all "present".
-  khLevelPresenceMask(uint lev, const khExtents<uint32> &extents,
+  khLevelPresenceMask(unsigned int lev, const khExtents<std::uint32_t> &extents,
                       bool set_present = false);
 
-  khDeleteGuard<uchar, ArrayDeleter> buf;
+  khDeleteGuard<unsigned char, ArrayDeleter> buf;
 
   // Whether presence is set for specific (row, col).
   // If asked for (row, col) outside the extents it will always return false.
-  bool GetPresence(uint32 row, uint32 col) const;
+  bool GetPresence(std::uint32_t row, std::uint32_t col) const;
 
   // Set presence for all elements.
   void SetPresence(bool set_present);
 
   // Set presence for element (row, col).
   template<int IsCoverageT>
-  void SetPresence(uint32 row, uint32 col, bool present,
+  void SetPresence(std::uint32_t row, std::uint32_t col, bool present,
                    const Int2Type<IsCoverageT>&);
 
-  static uint32 CalcBufferSize(uint32 numRows, uint32 numCols) {
+  static std::uint32_t CalcBufferSize(std::uint32_t numRows, std::uint32_t numCols) {
     // We can store 8 bools per byte (1 bit each)
     // so calc the number of tiles, and divide by 8 (rounding up)
 
     // Check for overflow.
-    assert(((static_cast<uint64>(numRows) *
-             static_cast<uint64>(numCols) + 7) >> 3) <=
-           std::numeric_limits<uint32>::max());
-    return static_cast<uint32>((static_cast<uint64>(numRows) *
-                                static_cast<uint64>(numCols) + 7) >> 3);
+    assert(((static_cast<std::uint64_t>(numRows) *
+             static_cast<std::uint64_t>(numCols) + 7) >> 3) <=
+           std::numeric_limits<std::uint32_t>::max());
+    return static_cast<std::uint32_t>((static_cast<std::uint64_t>(numRows) *
+                                static_cast<std::uint64_t>(numCols) + 7) >> 3);
   }
 
-  inline uint32 BufferSize(void) const {
+  inline std::uint32_t BufferSize(void) const {
     return CalcBufferSize(extents.height(),
                           extents.width());
   }
@@ -77,11 +79,11 @@ class khLevelPresenceMask : public khLevelCoverage {
 // Specialization of SetPresence() that is used from khPresenceMask.
 template<>
 void khLevelPresenceMask::SetPresence(
-    uint32 row, uint32 col, bool present, const Int2Type<false>&);
+    std::uint32_t row, std::uint32_t col, bool present, const Int2Type<false>&);
 
 // Specialization of SetPresence() that is used from khCoverageMask.
 template<>
 void khLevelPresenceMask::SetPresence(
-    uint32 row, uint32 col, bool present, const Int2Type<true>&);
+    std::uint32_t row, std::uint32_t col, bool present, const Int2Type<true>&);
 
 #endif  // GEO_EARTH_ENTERPRISE_SRC_COMMON_KHLEVELPRESENCEMASK_H_

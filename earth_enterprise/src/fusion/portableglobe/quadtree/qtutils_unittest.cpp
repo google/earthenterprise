@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -114,17 +115,17 @@ TEST_F(QtUtilsTest, ConvertFlatToMercatorQtAddressesTest) {
   // Make sure x and z don't change and that
   // y values are contiguous.
   qtaddress = "0312301233";
-  uint32 flat_x;
-  uint32 flat_y;
-  uint32 flat_z;
+  std::uint32_t flat_x;
+  std::uint32_t flat_y;
+  std::uint32_t flat_z;
   ConvertFromQtNode(qtaddress, &flat_x, &flat_y, &flat_z);
 
   ConvertFlatToMercatorQtAddresses(qtaddress, &mercator_qtaddresses);
 
-  uint32 merc_x;
-  uint32 merc_y;
-  uint32 merc_z;
-  uint32 last_merc_y = 0;
+  std::uint32_t merc_x;
+  std::uint32_t merc_y;
+  std::uint32_t merc_z;
+  std::uint32_t last_merc_y = 0;
   for (size_t i = 0; i < mercator_qtaddresses.size(); ++i) {
     ConvertFromQtNode(mercator_qtaddresses[i], &merc_x, &merc_y, &merc_z);
     EXPECT_EQ(flat_x, merc_x);
@@ -142,10 +143,10 @@ TEST_F(QtUtilsTest, ConvertFlatToMercatorQtAddressesTest) {
 
   flat_z = 10;
   // Y dimension in map space at LOD 10.
-  uint32 ydim = 1 << flat_z;
-  uint32 qtr_ydim = ydim >> 2;
+  std::uint32_t ydim = 1 << flat_z;
+  std::uint32_t qtr_ydim = ydim >> 2;
   flat_x = 93;
-  uint32 highest_merc_y = 0;
+  std::uint32_t highest_merc_y = 0;
   // Loop over all plate carree y values in one column.
   for (flat_y = qtr_ydim; flat_y < ydim - qtr_ydim; ++flat_y) {
     qtaddress = ConvertToQtNode(flat_x, flat_y, flat_z);
@@ -168,13 +169,13 @@ TEST_F(QtUtilsTest, ConvertFlatToMercatorQtAddressesTest) {
 // Tests that values are at least reasonable (monotonic) and that
 // inverse function works.
 TEST_F(QtUtilsTest, LatToYPosTest) {
-  uint32 ypos;
+  std::uint32_t ypos;
   // Y dimension in map space at LOD 12.
-  uint32 size_at_12 = 1 << 12;
+  std::uint32_t size_at_12 = 1 << 12;
   // Half of y dimension in map space at LOD 12.
-  uint32 halfsize_at_12 = size_at_12 >> 1;
+  std::uint32_t halfsize_at_12 = size_at_12 >> 1;
   // Quarter of y dimension in map space at LOD 12.
-  uint32 qtrsize_at_12 = halfsize_at_12 >> 1;
+  std::uint32_t qtrsize_at_12 = halfsize_at_12 >> 1;
 
   // At equator, both Mercator and flat should be the same.
   // Just above the equator.
@@ -239,11 +240,11 @@ TEST_F(QtUtilsTest, TestLatToMercatorToLat) {
 // Make sure we are getting a linear distribution across the
 // normalized y values that correspond to ypos.
 TEST_F(QtUtilsTest, TestYToYPos) {
-  for (uint32 depth = 5; depth <= 22; ++depth) {
-    uint32 size = 1 << depth;
+  for (std::uint32_t depth = 5; depth <= 22; ++depth) {
+    std::uint32_t size = 1 << depth;
 
     // Check midline.
-    uint32 ypos = YToYPos(1.0e-15, depth);
+    std::uint32_t ypos = YToYPos(1.0e-15, depth);
     EXPECT_EQ(size >> 1, ypos);
     ypos = YToYPos(-1.0e-15, depth);
     EXPECT_EQ((size >> 1) - 1, ypos);
@@ -256,7 +257,7 @@ TEST_F(QtUtilsTest, TestYToYPos) {
     EXPECT_LE(y, -PI);
     EXPECT_EQ(0u, ypos);
     // Check legal positions.
-    for (uint32 i = 0; i < size; ++i) {
+    for (std::uint32_t i = 0; i < size; ++i) {
       y += step;
       ypos = YToYPos(y, depth);
       EXPECT_EQ(i, ypos);
@@ -271,9 +272,9 @@ TEST_F(QtUtilsTest, TestYToYPos) {
 
 // Check conversion between x, y and z and qt addresses.
 TEST_F(QtUtilsTest, TestConvertToAndFromQtNode) {
-  uint32 x;
-  uint32 y;
-  uint32 z;
+  std::uint32_t x;
+  std::uint32_t y;
+  std::uint32_t z;
   std::string result;
 
   // Test a couple a simple of known cases.

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -52,7 +53,7 @@ bool ApacheFdbReader::IsOpen() const {
  * Reads data into string buffer. Resizes the string first.
  */
 bool ApacheFdbReader::Read(
-    std::string* buffer, uint64 offset, uint64 size, request_rec* r) const {
+    std::string* buffer, std::uint64_t offset, std::uint64_t size, request_rec* r) const {
   buffer->resize(size);
   return ReadData(&(*buffer)[0], offset, size);
 }
@@ -61,7 +62,7 @@ bool ApacheFdbReader::Read(
  * Reads data into string buffer. Resizes the string first.
  */
 bool ApacheFdbReader::Read(
-    std::string* buffer, uint64 offset, uint64 size) const {
+    std::string* buffer, std::uint64_t offset, std::uint64_t size) const {
   buffer->resize(size);
   return ReadData(&(*buffer)[0], offset, size);
 }
@@ -70,7 +71,7 @@ bool ApacheFdbReader::Read(
  * Reads the data from the globe file depending on what was last found.
  * Exceptions propagate to caller.
  */
-bool ApacheFdbReader::ReadData(void* buffer, uint64 offset, uint64 size) const {
+bool ApacheFdbReader::ReadData(void* buffer, std::uint64_t offset, std::uint64_t size) const {
   reader_.Pread(buffer, size, offset);
   return true;
 }
@@ -79,6 +80,6 @@ bool ApacheFdbReader::ReadData(void* buffer, uint64 offset, uint64 size) const {
  * Returns the size of the file or 0 if there is a problem with
  * the file.
  */
-uint64 ApacheFdbReader::Size() const {
+ std::uint64_t ApacheFdbReader::Size() const {
   return reader_.Filesize();
 }

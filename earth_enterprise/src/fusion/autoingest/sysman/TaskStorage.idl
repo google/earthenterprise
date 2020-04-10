@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +16,7 @@
 
 #include <string>
 #include <vector>
-#include <khTypes.h>
+#include <cstdint>
 #include <khstrconv.h>
 #include <khException.h>
 #include <khFileUtils.h>
@@ -27,7 +28,7 @@ class TaskDef {
   };
   class Output {
     std::string path; // default outpath (relative to asset root)
-    uint64      sizeEstimate;
+    std::uint64_t      sizeEstimate;
   };
 
   std::string              taskName;
@@ -70,7 +71,7 @@ class TaskDef {
       inputs.push_back(Input(*p));
     }
   }
-  void AddOutput(const std::string &path, uint64 sizeEstimate) {
+  void AddOutput(const std::string &path, std::uint64_t sizeEstimate) {
     if (path.empty() || (path[0] == '/')) {
       throw khException(kh::tr("Invalid output path '%1'")
                         .arg(ToQString(path)));
@@ -84,8 +85,8 @@ class TaskDef {
 
 class SubmitTaskMsg {
   std::string verref;
-  uint32      taskid;
-  int32       priority;
+  std::uint32_t      taskid;
+  std::int32_t       priority;
   TaskDef     taskdef;
 
 #pragma StrLoadAndSave
@@ -94,7 +95,7 @@ class SubmitTaskMsg {
 
 class TaskProgressMsg {
   std::string verref;
-  uint32      taskid;
+  std::uint32_t      taskid;
   time_t      beginTime;
   time_t      progressTime;
   double      progress;
@@ -104,14 +105,14 @@ class TaskProgressMsg {
 
 class TaskLostMsg {
   std::string verref;
-  uint32      taskid;
+  std::uint32_t      taskid;
 
 #pragma StrLoadAndSave
 };
 
 class TaskDoneMsg {
   std::string              verref;
-  uint32                   taskid;
+  std::uint32_t                   taskid;
   bool                     success;
   time_t                   beginTime;
   time_t                   endTime;

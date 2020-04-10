@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +24,9 @@
 #include <common/khTypes.h>
 
 extern std::string GetFormattedTimeString(time_t timeval = 0);
-extern std::string GetFormattedElapsedTimeString(uint elapsed);
+extern std::string GetFormattedElapsedTimeString(unsigned int elapsed);
 extern void GetMinMaxLevels(const std::string &ref,
-                            uint &minlevel, uint &maxlevel);
+                            unsigned int &minlevel, unsigned int &maxlevel);
 
 typedef std::map<std::string,std::string(*)(const std::string &)> SubstQualMap;
 // this can throw
@@ -38,13 +39,13 @@ extern const char * const PluginNames[];
 extern unsigned int NumPlugins;
 
 template <class Inset>
-inline uint ComputeEffectiveMaxLevel(const Inset &inset)
+inline unsigned int ComputeEffectiveMaxLevel(const Inset &inset)
 {
-  uint insetmin = 0;
-  uint insetmax = 0;
+  unsigned int insetmin = 0;
+  unsigned int insetmax = 0;
   GetMinMaxLevels(inset.dataAsset, insetmin, insetmax);
 
-  uint effectivemax = inset.overridemax;
+  unsigned int effectivemax = inset.overridemax;
   if (!effectivemax) {
     effectivemax = insetmax;
   } else if (effectivemax < insetmin) {

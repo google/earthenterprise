@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,7 +21,7 @@
 
 #ifndef BASE_INTEGRAL_TYPES_H_
 #define BASE_INTEGRAL_TYPES_H_
-
+#include <cstdint>
 // These typedefs are also defined in base/google.swig. In the
 // SWIG environment, we use those definitions and avoid duplicate
 // definitions here with an ifdef. The definitions should be the
@@ -109,10 +110,10 @@ typedef unsigned long      uword_t;
 #endif  // COMPILER_MSVC
 
 
-static const uint8  kuint8max  = (( uint8) 0xFF);
-static const uint16 kuint16max = ((uint16) 0xFFFF);
-static const uint32 kuint32max = ((uint32) 0xFFFFFFFF);
-static const uint64 kuint64max = ((uint64) GG_LONGLONG(0xFFFFFFFFFFFFFFFF));
+static const std::uint8_t  kuint8max  = (( std::uint8_t) 0xFF);
+static const std::uint16_t kuint16max = ((std::uint16_t) 0xFFFF);
+static const std::uint32_t kuint32max = ((std::uint32_t) 0xFFFFFFFF);
+static const std::uint64_t kuint64max = ((std::uint64_t) GG_LONGLONG(0xFFFFFFFFFFFFFFFF));
 static const  int8  kint8min   = ((  int8) ~0x7F);
 static const  int8  kint8max   = ((  int8) 0x7F);
 static const  int16 kint16min  = (( int16) ~0x7FFF);
@@ -124,7 +125,7 @@ static const  int64 kint64max  = (( int64) GG_LONGLONG(0x7FFFFFFFFFFFFFFF));
 
 // TODO: remove this eventually.
 // No object has kIllegalFprint as its Fingerprint.
-typedef uint64 Fprint;
+typedef std::uint64_t Fprint;
 static const Fprint kIllegalFprint = 0;
 static const Fprint kMaxFprint = GG_ULONGLONG(0xFFFFFFFFFFFFFFFF);
 

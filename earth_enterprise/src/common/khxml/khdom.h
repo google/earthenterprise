@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +33,8 @@
 #include <qcolor.h>
 #include <xercesc/dom/DOM.hpp>
 
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "common/khExtents.h"
 #include "common/khTileAddr.h"
 #include "common/khInsetCoverage.h"
@@ -112,7 +114,7 @@ ToElement(khxml::DOMElement *elem, const EncryptedQString &value)
 {
   elem->setAttribute(ToXMLStr("method"), ToXMLStr("simple"));
   QString tmp = value;
-  for (uint i = 0; i < tmp.length(); ++i) {
+  for (unsigned int i = 0; i < tmp.length(); ++i) {
     tmp[i] = tmp[i].unicode() + 13;
   }
   elem->appendChild(
@@ -827,7 +829,7 @@ FromElement(khxml::DOMElement *elem, EncryptedQString &val)
           return;
         } else if (method == "simple") {
           QString tmp = QString::fromUcs2(data->getData());
-          for (uint i = 0; i < tmp.length(); ++i) {
+          for (unsigned int i = 0; i < tmp.length(); ++i) {
             tmp[i] = tmp[i].unicode() - 13;
           }
           val = tmp;
@@ -1118,8 +1120,8 @@ FromElement(khxml::DOMElement *elem, khExtents<T> &extents)
 inline void
 FromElement(khxml::DOMElement *elem, khLevelCoverage &cov)
 {
-  uint level;
-  khExtents<uint32> extents;
+  unsigned int level;
+  khExtents<std::uint32_t> extents;
 
   GetElement(elem, "level", level);
   GetElement(elem, "extents", extents);
@@ -1129,9 +1131,9 @@ FromElement(khxml::DOMElement *elem, khLevelCoverage &cov)
 inline void
 FromElement(khxml::DOMElement *elem, khInsetCoverage &cov)
 {
-  uint beginLevel;
-  uint endLevel;
-  std::vector<khExtents<uint32> > levelExtents;
+  unsigned int beginLevel;
+  unsigned int endLevel;
+  std::vector<khExtents<std::uint32_t> > levelExtents;
 
   GetElement(elem, "beginLevel", beginLevel);
   GetElement(elem, "endLevel", endLevel);
@@ -1139,7 +1141,7 @@ FromElement(khxml::DOMElement *elem, khInsetCoverage &cov)
     throw khException
       (kh::tr("Internal Error: Bad level for khInsetCoverage"));
   }
-  uint numLevels = endLevel - beginLevel;
+  unsigned int numLevels = endLevel - beginLevel;
   levelExtents.reserve(numLevels);
 
   GetElement(elem, "levelExtents", levelExtents);

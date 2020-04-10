@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +49,7 @@ class DisplayRuleBase {
   ~DisplayRuleBase(void);
 
   bool Prepare(const gstBBox &cutBox,
-               uint level,
+               unsigned int level,
                FeatureTile *featureOut,
                SiteTile    *siteOut,
                const vectorquery::DisplayRuleTile &in);
@@ -57,10 +58,10 @@ class DisplayRuleBase {
  private:
   gstVertex GetSiteLocation(const gstGeodeHandle &geode);
   void ConvertFeatureType(gstGeodeHandle &geode);
-  void ReduceFeatures(uint level, FeatureTile *tile);
+  void ReduceFeatures(unsigned int level, FeatureTile *tile);
   void ReduceSites(SiteTile *tile);
   void ReducePolylines(FeatureTile *tile);
-  void ReduceRoads(bool remove_overlapping_segments, uint level,
+  void ReduceRoads(bool remove_overlapping_segments, unsigned int level,
                    FeatureTile *tile);
   void ReducePolygons(FeatureTile *tile);
   static void RemoveDuplicateSegments(GeodeList *glist);
@@ -83,15 +84,15 @@ class DisplayRuleBase {
   VectorDefs::FeatureReduceMethod featureReduceMethod;
   khDeletingVector<Binder>        featureBinders;
   gstHeaderHandle                 featureBoundHeader;
-  int32                           featureKeyFieldNum;
-  geMultiRange<uint32>            featureValidLevels;
+  std::int32_t                           featureKeyFieldNum;
+  geMultiRange<std::uint32_t>            featureValidLevels;
 
   VectorDefs::SiteDisplayPosition siteDisplayPosition;
   VectorDefs::SiteReduceMethod    siteReduceMethod;
   khDeletingVector<Binder>        siteBinders;
   gstHeaderHandle                 siteBoundHeader;
-  int32                           siteKeyFieldNum;
-  geMultiRange<uint32>            siteValidLevels;
+  std::int32_t                           siteKeyFieldNum;
+  geMultiRange<std::uint32_t>            siteValidLevels;
 };
 
 

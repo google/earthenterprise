@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +49,7 @@ class TaskRequirements
     std::string volume;
     std::string host;
     std::string path;
-    uint64      size;
+    std::uint64_t      size;
     Preference  localToJob;
     std::vector<Preference> differentVolumes; // indexed by input #
     khFusionURI relocateURI;
@@ -56,16 +57,16 @@ class TaskRequirements
     Output(const std::string &v,
            const std::string &h,
            const std::string &p,
-           uint64 s,
+           std::uint64_t s,
            Preference local,
-           uint numInputs);
+           unsigned int numInputs);
   };
   class CPU {
    public:
-    uint minNumCPU;
-    uint maxNumCPU;
+    unsigned int minNumCPU;
+    unsigned int maxNumCPU;
 
-    CPU(uint min = 1, uint max = 1) :
+    CPU(unsigned int min = 1, unsigned int max = 1) :
         minNumCPU(min), maxNumCPU(max) { }
   };
 
@@ -80,17 +81,17 @@ class TaskRequirements
   std::string preferredBuildHost;
 
   // will throw exception describing conflicts
-  TaskRequirements(const TaskDef &taskdef, uint taskid,
+  TaskRequirements(const TaskDef &taskdef, unsigned int taskid,
                    const std::string &verref);
  private:
   // will throw exception describing conflicts
   void EnsureNoConflicts(void);
 
-  void ApplyInputConstraint(uint index, const TaskRule::InputConstraint &);
-  void ApplyOutputConstraint(uint index,
+  void ApplyInputConstraint(unsigned int index, const TaskRule::InputConstraint &);
+  void ApplyOutputConstraint(unsigned int index,
                              const TaskRule::OutputConstraint &,
-                             uint taskid, const std::string &verref);
-  void ApplyUserSuppliedRules(const TaskDef &taskDef, uint taskid,
+                             unsigned int taskid, const std::string &verref);
+  void ApplyUserSuppliedRules(const TaskDef &taskDef, unsigned int taskid,
                               const std::string &verref);
 };
 

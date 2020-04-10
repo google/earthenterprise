@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +28,7 @@
 // ***  minification of tiles. The purpose of this template is to allow
 // ***  efficient code inside the very tight nested loops of the minification.
 // ****************************************************************************
-template <class T, class Averager, uint numcomp>
+template <class T, class Averager, unsigned int numcomp>
 class PixelAverager { };
 
 // specialized for numcomp == 1
@@ -36,12 +37,12 @@ class PixelAverager<T, Averager, 1>
 {
  public:
   inline static void Average(T *const dest[],
-                             uint32 to,
+                             std::uint32_t to,
                              const T *const src[],
-                             uint32 from1,
-                             uint32 from2,
-                             uint32 from3,
-                             uint32 from4,
+                             std::uint32_t from1,
+                             std::uint32_t from2,
+                             std::uint32_t from3,
+                             std::uint32_t from4,
                              Averager averager) {
     dest[0][to] = averager(src[0][from1],
                            src[0][from2],
@@ -56,12 +57,12 @@ class PixelAverager<T, Averager, 3>
 {
  public:
   inline static void Average(T *const dest[],
-                             uint32 to,
+                             std::uint32_t to,
                              const T *const src[],
-                             uint32 from1,
-                             uint32 from2,
-                             uint32 from3,
-                             uint32 from4,
+                             std::uint32_t from1,
+                             std::uint32_t from2,
+                             std::uint32_t from3,
+                             std::uint32_t from4,
                              Averager averager) {
     dest[0][to] = averager(src[0][from1],
                            src[0][from2],
@@ -84,18 +85,18 @@ class PixelAverager<T, Averager, 3>
 // ****************************************************************************
 template <class TileType, class Averager>
 void
-MinifyTile(TileType &destTile, uint quad, const TileType &srcTile,
+MinifyTile(TileType &destTile, unsigned int quad, const TileType &srcTile,
            Averager averager)
 {
-  uint32 Qoffset = QuadtreePath::QuadToBufferOffset(quad, TileType::TileWidth,
+  std::uint32_t Qoffset = QuadtreePath::QuadToBufferOffset(quad, TileType::TileWidth,
                                                     TileType::TileHeight);
 
-  for (uint j = 0; j < TileType::TileHeight/2; ++j) {
-    uint32 to    = Qoffset + (j * TileType::TileWidth);
-    uint32 from1 = (j * 2)     * TileType::TileWidth;
-    uint32 from2 = (j * 2 + 1) * TileType::TileWidth;
+  for (unsigned int j = 0; j < TileType::TileHeight/2; ++j) {
+    std::uint32_t to    = Qoffset + (j * TileType::TileWidth);
+    std::uint32_t from1 = (j * 2)     * TileType::TileWidth;
+    std::uint32_t from2 = (j * 2 + 1) * TileType::TileWidth;
 
-    for(uint k = 0; k < TileType::TileWidth/2; k++) {
+    for(unsigned int k = 0; k < TileType::TileWidth/2; k++) {
       PixelAverager<
         typename TileType::PixelType,
         Averager,

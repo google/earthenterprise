@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -97,11 +98,11 @@ const char* ReadPart(const char* buf, gstGeodeHandle *geodeh) {
   *geodeh = gstGeodeImpl::Create(gstPrimType(hdr->type));
 
   const char* fbuf = buf + sizeof(gstGeodeImpl::RecHeader);
-  const uint32 vert_size_xy = sizeof(double) * 2;
-  const uint32 vert_size_xyz = sizeof(double) * 3;
+  const std::uint32_t vert_size_xy = sizeof(double) * 2;
+  const std::uint32_t vert_size_xyz = sizeof(double) * 3;
 
   // iterate through each feature part
-  for (uint ii = 0; ii < hdr->count; ++ii) {
+  for (unsigned int ii = 0; ii < hdr->count; ++ii) {
     switch (hdr->type) {
       case gstUnknown:
         geodeh->release();
@@ -131,8 +132,8 @@ const char* ReadPart(const char* buf, gstGeodeHandle *geodeh) {
       case gstPolygon:
         {
           gstGeode *geode = static_cast<gstGeode*>(&(**geodeh));
-          uint32 verts = *(reinterpret_cast<const uint32*>(fbuf));
-          fbuf += sizeof(uint32) * 2;
+          std::uint32_t verts = *(reinterpret_cast<const std::uint32_t*>(fbuf));
+          fbuf += sizeof(std::uint32_t) * 2;
           // false means that it isn't 2.5D extension.
           geode->SetVertexes(reinterpret_cast<const double*>(fbuf), verts,
                              false);
@@ -148,8 +149,8 @@ const char* ReadPart(const char* buf, gstGeodeHandle *geodeh) {
       case gstPolygon3D:
         {
           gstGeode *geode = static_cast<gstGeode*>(&(**geodeh));
-          uint32 verts = *(reinterpret_cast<const uint32*>(fbuf));
-          fbuf += sizeof(uint32) * 2;
+          std::uint32_t verts = *(reinterpret_cast<const std::uint32_t*>(fbuf));
+          fbuf += sizeof(std::uint32_t) * 2;
           geode->SetVertexes(reinterpret_cast<const double*>(fbuf), verts,
                              true);  // true means that it is 2.5D extension.
           fbuf += (vert_size_xyz * verts);
@@ -175,7 +176,7 @@ const char* ReadPart(const char* buf, gstGeodeHandle *geodeh) {
 }  // namespace
 
 gstGeodeImpl::gstGeodeImpl(gstPrimType t)
-    : prim_type_(static_cast<int8>(t)) {
+    : prim_type_(static_cast<std::int8_t>(t)) {
   ++gcount;
   InvalidateCachedData(false);  // No need to invalidate the bounding box here.
 }
@@ -262,9 +263,9 @@ gstGeodeHandle gstGeode::Duplicate() const {
   gstGeodeHandle new_geodeh = gstGeodeImpl::Create(PrimType());
   gstGeode *new_geode = static_cast<gstGeode*>(&(*new_geodeh));
 
-  for (uint p = 0; p < NumParts(); ++p) {
+  for (unsigned int p = 0; p < NumParts(); ++p) {
     new_geode->AddPart(VertexCount(p));
-    for (uint v = 0; v < VertexCount(p); ++v) {
+    for (unsigned int v = 0; v < VertexCount(p); ++v) {
       new_geode->AddVertex(GetVertex(p, v));
     }
   }
@@ -285,10 +286,10 @@ void gstGeode::ChangePrimType(gstPrimType new_type,
         gstGeodeImpl::Create(GetMultiGeodeTypeFromSingle(new_type));
     gstGeodeCollection *new_multi_geode =
         static_cast<gstGeodeCollection*>(&(*new_multi_geodeh));
-    for (uint p = 0; p < NumParts(); ++p) {
+    for (unsigned int p = 0; p < NumParts(); ++p) {
       gstGeodeHandle new_geodeh = gstGeodeImpl::Create(new_type);
       gstGeode *new_geode = static_cast<gstGeode*>(&(*new_geodeh));
-      for (uint v = 0; v < VertexCount(p); ++v) {
+      for (unsigned int v = 0; v < VertexCount(p); ++v) {
         new_geode->AddVertex(GetVertex(p, v));
       }
       new_multi_geode->AddGeode(new_geodeh);
@@ -303,8 +304,8 @@ void gstGeode::ChangePrimType(gstPrimType new_type,
 
   if (gstPolygon25D == prim_type_ && gstPolygon == new_type) {
     // Set z-coordinate to 0.
-    for (uint p = 0; p < NumParts(); ++p) {
-      for (uint v = 0; v < VertexCount(p); ++v) {
+    for (unsigned int p = 0; p < NumParts(); ++p) {
+      for (unsigned int v = 0; v < VertexCount(p); ++v) {
         gstVertex vpt = GetVertex(p, v);
         vpt.z = .0;
         ModifyVertex(p, v, vpt);
@@ -312,15 +313,15 @@ void gstGeode::ChangePrimType(gstPrimType new_type,
     }
   }
 
-  prim_type_ = static_cast<int8>(new_type);
+  prim_type_ = static_cast<std::int8_t>(new_type);
 }
 
-uint gstGeode::NumParts() const {
+unsigned int gstGeode::NumParts() const {
   return parts_.size();
 }
 
-uint gstGeode::TotalVertexCount() const {
-  uint total = 0;
+unsigned int gstGeode::TotalVertexCount() const {
+  unsigned int total = 0;
   for (gstGeodeParts::const_iterator it = parts_.begin();
        it != parts_.end(); ++it)
     total += it->size();
@@ -347,7 +348,7 @@ bool gstGeode::IsEmpty() const {
     case gstStreet25D:
       if (parts_.size() == 0)
         return true;
-      for (uint p = 0; p < parts_.size(); ++p) {
+      for (unsigned int p = 0; p < parts_.size(); ++p) {
         if (parts_[p].size() != 0)
           return false;
       }
@@ -361,7 +362,7 @@ bool gstGeode::IsEmpty() const {
 #else
       if (parts_.size() == 0)
         return true;
-      for (uint p = 0; p < parts_.size(); ++p) {
+      for (unsigned int p = 0; p < parts_.size(); ++p) {
         if (parts_[p].size() != 0)
           return false;
       }
@@ -402,7 +403,7 @@ bool gstGeode::IsDegenerate() const {
       // for multi-polyline. Such case is impossible because of degenerate
       // polylines should be skipped during data extraction.
       // degenerate = (VertexCount(0) < kMinPolylineVertices);
-      for (uint p = 0; p < parts_.size(); ++p) {
+      for (unsigned int p = 0; p < parts_.size(); ++p) {
         if (parts_[p].size() < kMinPolylineVertices)
           notify(NFY_WARN, "degenerate poly-line primitive");
       }
@@ -432,7 +433,7 @@ bool gstGeode::Intersect(const gstBBox& b, uint* part) const {
 
   ++isectDeepCount;
   if (part == NULL) {
-    uint ignore;
+    unsigned int ignore;
     return IntersectDeep(b, &ignore);
   } else {
     return IntersectDeep(b, part);
@@ -475,12 +476,12 @@ bool gstGeode::Equals(const gstGeodeHandle &bh, bool reverse_ok) const {
   if (NumParts() != b->NumParts())
     return false;
 
-  for (uint part = 0; part < NumParts(); ++part) {
+  for (unsigned int part = 0; part < NumParts(); ++part) {
     if (VertexCount(part) != b->VertexCount(part))
       return false;
   }
 
-  for (uint part = 0; part < NumParts(); ++part) {
+  for (unsigned int part = 0; part < NumParts(); ++part) {
     const gstGeodePart& a_part = parts_[part];
     const gstGeodePart& b_part = b->parts_[part];
     if (a_part != b_part &&
@@ -569,7 +570,7 @@ void gstGeode::ComputeBounds() const {
   }
 }
 
-gstBBox gstGeode::BoundingBoxOfPart(uint p) const {
+gstBBox gstGeode::BoundingBoxOfPart(unsigned int p) const {
   assert(p < NumParts());
 
   gstBBox part_box_;
@@ -599,7 +600,7 @@ gstBBox gstGeode::BoundingBoxOfPart(uint p) const {
 // vertices are ordered in a counterclockwise direction in the
 // x-y plane, and negative otherwise."
 //
-int gstGeode::Centroid(uint part, double* x, double* y, double* area) const {
+int gstGeode::Centroid(unsigned int part, double* x, double* y, double* area) const {
   if (VertexCount(part) < kMinCycleVertices) {
     return 1;
   }
@@ -611,7 +612,7 @@ int gstGeode::Centroid(uint part, double* x, double* y, double* area) const {
   double xtmp = 0;
   double ytmp = 0;
   // This counts the first and last vertex as the same.
-  const uint vertex_count = VertexCount(part);
+  const unsigned int vertex_count = VertexCount(part);
 
   // The algorithm takes the cross product of the previous and current vertices.
   // Start with the ith vertex being the 0th vertex.
@@ -620,7 +621,7 @@ int gstGeode::Centroid(uint part, double* x, double* y, double* area) const {
   // Offset the vertex coordinates.
   double x_prev = vertex_last.x - offset.x;
   double y_prev = vertex_last.y - offset.y;
-  for (uint i = 1; i < vertex_count; ++i) {
+  for (unsigned int i = 1; i < vertex_count; ++i) {
     const gstVertex& vertex_i = GetVertex(part, i);
     // Offset the vertex coordinates.
     double x_i = vertex_i.x - offset.x;
@@ -706,7 +707,7 @@ gstVertex gstGeode::Center() const {
       double x, y;
       int largest_part_index = 0;
       gstVertex centroid_of_largest_part;
-      for (uint p = 0; p < NumParts(); ++p) {
+      for (unsigned int p = 0; p < NumParts(); ++p) {
         if (Centroid(p, &x, &y, &area) == 0) {
           if (fabs(area) > largest_area) {
             largest_area = fabs(area);
@@ -732,13 +733,13 @@ gstVertex gstGeode::Center() const {
   return center_;
 }
 
-bool gstGeode::IsConvex(uint part_index) const {
+bool gstGeode::IsConvex(unsigned int part_index) const {
   if (part_index >= parts_.size())
     return true;  // Empty is convex for our purposes.
   return gstPolygonUtils::IsConvex(parts_[part_index]);
 }
 
-gstVertex gstGeode::GetPointInPolygon(uint part_index,
+gstVertex gstGeode::GetPointInPolygon(unsigned int part_index,
                                       const gstVertex& centroid) const {
   if (part_index >= parts_.size())
     return centroid;  // No part for this index. Return the centroid.
@@ -775,7 +776,7 @@ gstVertex gstGeode::GetPointInPolygon(uint part_index,
   return vertex;
 }
 
-void gstGeode::InsertVertex(uint p, uint v, const gstVertex& vert) {
+void gstGeode::InsertVertex(unsigned int p, unsigned int v, const gstVertex& vert) {
   std::vector<gstVertex>::iterator pos = parts_[p].begin() + v;
   parts_[p].insert(pos, vert);
 
@@ -788,7 +789,7 @@ void gstGeode::InsertVertex(uint p, uint v, const gstVertex& vert) {
   InvalidateCachedData(false);  // No need to invalidate the bounding box here.
 }
 
-void gstGeode::DeleteVertex(uint p, uint v) {
+void gstGeode::DeleteVertex(unsigned int p, unsigned int v) {
   if ((p < parts_.size()) && (v < parts_[p].size())) {
     std::vector<gstVertex>::iterator pos = parts_[p].begin() + v;
     parts_[p].erase(pos);
@@ -803,7 +804,7 @@ void gstGeode::DeleteVertex(uint p, uint v) {
   InvalidateCachedData(true);
 }
 
-void gstGeode::ModifyVertex(uint p, uint v, const gstVertex& vert) {
+void gstGeode::ModifyVertex(unsigned int p, unsigned int v, const gstVertex& vert) {
   assert((p < parts_.size()) && (v < parts_[p].size()));
   parts_[p][v] = vert;
 
@@ -1001,8 +1002,8 @@ bool gstGeode::IntersectDeep(const gstBBox& box, uint* part) const {
     case gstPolyLine25D:
     case gstStreet:
     case gstStreet25D:
-      for (uint p = 0; p < NumParts(); ++p, ++(*part)) {
-        for (uint v = 0; v < VertexCount(p) - 1; ++v) {
+      for (unsigned int p = 0; p < NumParts(); ++p, ++(*part)) {
+        for (unsigned int v = 0; v < VertexCount(p) - 1; ++v) {
           if (box.Intersect(GetVertex(p, v), GetVertex(p, v + 1)))
             return true;
         }
@@ -1012,8 +1013,8 @@ bool gstGeode::IntersectDeep(const gstBBox& box, uint* part) const {
     case gstPolygon:
     case gstPolygon25D:
     case gstPolygon3D:
-      for (uint p = 0; p < NumParts(); ++p, ++(*part)) {
-        for (uint v = 0; v < VertexCount(p) - 1; ++v) {
+      for (unsigned int p = 0; p < NumParts(); ++p, ++(*part)) {
+        for (unsigned int v = 0; v < VertexCount(p) - 1; ++v) {
           if (box.Intersect(GetVertex(p, v), GetVertex(p, v + 1)))
             return true;
         }
@@ -1069,7 +1070,7 @@ gstJobStats* boxcut_stats = new gstJobStats("Geode Box Cut", JobNames, 11);
 #endif
 
 
-uint gstGeode::Flatten(GeodeList* pieces) const {
+unsigned int gstGeode::Flatten(GeodeList* pieces) const {
   switch (PrimType()) {
     case gstUnknown:
     case gstPoint:
@@ -1080,8 +1081,8 @@ uint gstGeode::Flatten(GeodeList* pieces) const {
     case gstPolyLine25D:
       {
         // iterate across all segments, one at a time
-        for (uint p = 0; p < NumParts(); ++p) {
-          for (uint v = 0; v < VertexCount(p) - 1; ++v) {
+        for (unsigned int p = 0; p < NumParts(); ++p) {
+          for (unsigned int v = 0; v < VertexCount(p) - 1; ++v) {
             gstGeodeHandle new_geodeh = gstGeodeImpl::Create(PrimType());
             pieces->push_back(new_geodeh);
 
@@ -1100,7 +1101,7 @@ uint gstGeode::Flatten(GeodeList* pieces) const {
     case gstStreet25D:
       {
         // iterate across all segments, one at a time
-        for (uint p = 0; p < NumParts(); ++p) {
+        for (unsigned int p = 0; p < NumParts(); ++p) {
           if (VertexCount(p) == 0) {
             continue;
           }
@@ -1108,9 +1109,9 @@ uint gstGeode::Flatten(GeodeList* pieces) const {
           pieces->push_back(new_geodeh);
 
           gstGeode *new_geode = static_cast<gstGeode*>(&(*new_geodeh));
-          uint num_vertices = VertexCount(p);
+          unsigned int num_vertices = VertexCount(p);
           new_geode->AddPart(num_vertices);  // To optimize with vector reserve.
-          for (uint v = 0; v < num_vertices; ++v) {
+          for (unsigned int v = 0; v < num_vertices; ++v) {
             const gstVertex& v0 = GetVertex(p, v);
             new_geode->AddVertexToPart0(gstVertex(v0.x, v0.y, 0.0));
           }
@@ -1123,12 +1124,12 @@ uint gstGeode::Flatten(GeodeList* pieces) const {
     case gstPolygon25D:
     case gstPolygon3D:
       {
-        for (uint part = 0; part < NumParts(); ++part) {
+        for (unsigned int part = 0; part < NumParts(); ++part) {
           gstGeodeHandle new_geodeh = gstGeodeImpl::Create(PrimType());
           pieces->push_back(new_geodeh);
 
           gstGeode *new_geode = static_cast<gstGeode*>(&(*new_geodeh));
-          for (uint i = 0; i < VertexCount(part); ++i) {
+          for (unsigned int i = 0; i < VertexCount(part); ++i) {
             new_geode->AddVertexToPart0(GetVertex(part, i));
             new_geode->AddEdgeFlag(kNormalEdge);
           }
@@ -1147,7 +1148,7 @@ uint gstGeode::Flatten(GeodeList* pieces) const {
 }
 
 // TODO: move this functionality to gstBoxCutter.
-uint gstGeode::BoxCutDeep(const gstBBox& box, GeodeList* pieces) const {
+unsigned int gstGeode::BoxCutDeep(const gstBBox& box, GeodeList* pieces) const {
   JOBSTATS_SCOPED(boxcut_stats, JOBSTATS_INTERSECT);
 
   switch (PrimType()) {
@@ -1173,14 +1174,14 @@ uint gstGeode::BoxCutDeep(const gstBBox& box, GeodeList* pieces) const {
       // multi-polygon workaround. we have to make the
       // box cutter do the right thing eventually
       // cut all parts of the mutipolygon separately
-      for (uint part = 0; part < NumParts(); ++part) {
+      for (unsigned int part = 0; part < NumParts(); ++part) {
         // check to see if the geode is completely
         // contained inside the quad
         if (box.Contains(BoundingBoxOfPart(part))) {
           JOBSTATS_SCOPED(boxcut_stats, JOBSTATS_POLYGON_WHOLE);
           gstGeodeHandle new_geodeh = gstGeodeImpl::Create(PrimType());
           gstGeode *new_geode = static_cast<gstGeode*>(&(*new_geodeh));
-          for (uint i = 0; i < VertexCount(part); ++i) {
+          for (unsigned int i = 0; i < VertexCount(part); ++i) {
             new_geode->AddVertexToPart0(GetVertex(part, i));
             new_geode->AddEdgeFlag(kNormalEdge);
           }
@@ -1194,7 +1195,7 @@ uint gstGeode::BoxCutDeep(const gstBBox& box, GeodeList* pieces) const {
         pcPolygon in_poly;
         JOBSTATS_BEGIN(boxcut_stats, JOBSTATS_POLYGON_PART1);
         in_poly.Reserve(VertexCount(part) + 1);
-        for (uint v = 0; v < VertexCount(part); ++v) {
+        for (unsigned int v = 0; v < VertexCount(part); ++v) {
           in_poly.AddVertex(GetVertex(part, v));
         }
         JOBSTATS_END(boxcut_stats, JOBSTATS_POLYGON_PART1);
@@ -1204,7 +1205,7 @@ uint gstGeode::BoxCutDeep(const gstBBox& box, GeodeList* pieces) const {
         in_poly.ClipPolygon(&out_poly, box.w, box.e, box.s, box.n);
         JOBSTATS_END(boxcut_stats, JOBSTATS_POLYGON_PART2);
 
-        uint vert = 0;
+        unsigned int vert = 0;
         JOBSTATS_BEGIN(boxcut_stats, JOBSTATS_POLYGON_PART3);
         while (vert < out_poly.vertex_list.size()) {
           gstGeodeHandle new_geodeh = gstGeodeImpl::Create(PrimType());
@@ -1249,7 +1250,7 @@ uint gstGeode::BoxCutDeep(const gstBBox& box, GeodeList* pieces) const {
       if (box.Contains(BoundingBox())) {
           gstGeodeHandle new_geodeh = gstGeodeImpl::Create(PrimType());
           gstGeode *new_geode = static_cast<gstGeode*>(&(*new_geodeh));
-          for (uint i = 0; i < VertexCount(0); i++) {
+          for (unsigned int i = 0; i < VertexCount(0); i++) {
             new_geode->AddVertexToPart0(GetVertex(0, i));
             new_geode->AddEdgeFlag(kNormalEdge);
           }
@@ -1284,7 +1285,7 @@ uint gstGeode::BoxCutDeep(const gstBBox& box, GeodeList* pieces) const {
       if (!N.z && !N.x)
         swapX = false;
 
-      for (uint v = 0; v < VertexCount(0); ++v) {
+      for (unsigned int v = 0; v < VertexCount(0); ++v) {
         gstVertex vert = GetVertex(0, v);
         if (!N.z && swapX) {
           in_poly.AddVertex(pcVertex(vert.z, vert.y, 0, false));
@@ -1304,7 +1305,7 @@ uint gstGeode::BoxCutDeep(const gstBBox& box, GeodeList* pieces) const {
       in_poly.ClipPolygon(&out_poly, west, east, south, north);
 
       // compute the 3rd component from the plane equation
-      for (uint i = 0; i < out_poly.vertex_list.size(); ++i) {
+      for (unsigned int i = 0; i < out_poly.vertex_list.size(); ++i) {
         if (!N.z && swapX) {
           double temp = (D - N.y * out_poly.vertex_list[i].y) / N.x;
           out_poly.vertex_list[i].z = out_poly.vertex_list[i].x;
@@ -1318,7 +1319,7 @@ uint gstGeode::BoxCutDeep(const gstBBox& box, GeodeList* pieces) const {
                                        N.y * out_poly.vertex_list[i].y) / N.z;
         }
       }
-      uint i = 0;
+      unsigned int i = 0;
       while (i < out_poly.vertex_list.size()) {
         gstGeodeHandle new_geodeh = gstGeodeImpl::Create(PrimType());
         gstGeode *new_geode = static_cast<gstGeode*>(&(*new_geodeh));
@@ -1362,7 +1363,7 @@ uint gstGeode::BoxCutDeep(const gstBBox& box, GeodeList* pieces) const {
 // list remain.  Returns the number of vertices removed.
 int gstGeode::Simplify(const std::vector<int>& vertices) {
   std::vector<bool> remaining(VertexCount(0), false);
-  for (uint i = 0; i < vertices.size(); ++i) {
+  for (unsigned int i = 0; i < vertices.size(); ++i) {
     remaining[vertices[i]] = true;
   }
 
@@ -1373,9 +1374,9 @@ int gstGeode::Simplify(const std::vector<int>& vertices) {
 
   // Fix up the edge flags if necessary.
   if (PrimType() == gstPolygon) {
-    std::vector<int8> new_edge_flags;
+    std::vector<std::int8_t> new_edge_flags;
     new_edge_flags.reserve(parts_[0].size());
-    for (uint i = 0; i < remaining.size(); ++i) {
+    for (unsigned int i = 0; i < remaining.size(); ++i) {
       if (remaining[i]) {
         new_edge_flags.push_back(edge_flags_[i]);
       }
@@ -1425,7 +1426,7 @@ bool gstGeode::Overlaps(const gstGeode *that, double epsilon) {
   {
     const gstVertex& last = that->GetLastVertex(0);
     bool have_winner = false;
-    for (uint v2 = 0; v2 < VertexCount(0) - 1; ++v2) {
+    for (unsigned int v2 = 0; v2 < VertexCount(0) - 1; ++v2) {
       // if any vertex fails the test, we're done
       if (last.Distance(GetVertex(0, v2), GetVertex(0, v2 + 1)) < epsilon) {
         have_winner = true;
@@ -1436,10 +1437,10 @@ bool gstGeode::Overlaps(const gstGeode *that, double epsilon) {
       return false;
   }
 
-  for (uint v1 = 0; v1 < that->VertexCount(0) - 1; ++v1) {
+  for (unsigned int v1 = 0; v1 < that->VertexCount(0) - 1; ++v1) {
     const gstVertex& vert1 = that->GetVertex(0, v1);
     bool have_winner = false;
-    for (uint v2 = 0; v2 < VertexCount(0) - 1; ++v2) {
+    for (unsigned int v2 = 0; v2 < VertexCount(0) - 1; ++v2) {
       // if any vertex fails the test, we're done
       if (vert1.Distance(GetVertex(0, v2), GetVertex(0, v2 + 1)) < epsilon) {
         have_winner = true;
@@ -1489,15 +1490,15 @@ bool gstGeode::Join(const gstGeodeHandle fromh) {
 
   if (GetLastVertex(0) == from->GetFirstVertex(0)) {
     parts_[0].reserve(parts_[0].size() + from->VertexCount(0) - 1);
-    for (uint v = 1; v < from->VertexCount(0); ++v)
+    for (unsigned int v = 1; v < from->VertexCount(0); ++v)
       AddVertexToPart0(from->GetVertex(0, v));
   } else if (from->GetLastVertex(0) == GetFirstVertex(0)) {
     gstGeodePart part0;
     part0.swap(parts_[0]);
     parts_[0].reserve(part0.size() + from->VertexCount(0) - 1);
-    for (uint v = 0; v < from->VertexCount(0); ++v)
+    for (unsigned int v = 0; v < from->VertexCount(0); ++v)
       AddVertexToPart0(from->GetVertex(0, v));
-    for (uint v = 1; v < part0.size(); ++v)
+    for (unsigned int v = 1; v < part0.size(); ++v)
       AddVertexToPart0(part0[v]);
   } else if (GetLastVertex(0) == from->GetLastVertex(0)) {
     parts_[0].reserve(parts_[0].size() + from->VertexCount(0) - 1);
@@ -1507,9 +1508,9 @@ bool gstGeode::Join(const gstGeodeHandle fromh) {
     gstGeodePart part0;
     part0.swap(parts_[0]);
     parts_[0].reserve(part0.size() + from->VertexCount(0) - 1);
-    for (uint v = from->VertexCount(0) - 1; v != 0; --v)
+    for (unsigned int v = from->VertexCount(0) - 1; v != 0; --v)
       AddVertexToPart0(from->GetVertex(0, v));
-    for (uint v = 0; v < part0.size(); ++v)
+    for (unsigned int v = 0; v < part0.size(); ++v)
       AddVertexToPart0(part0[v]);
   } else {
     return false;
@@ -1544,15 +1545,15 @@ void gstGeode::Join(const std::deque<std::pair<gstGeodeImpl*, bool> >&
     for (std::deque<std::pair<gstGeodeImpl*, bool> >::const_iterator i =
              to_join.begin(); i != to_join.end(); ++i) {
       const gstGeode *from = static_cast<const gstGeode*>(i->first);
-      const uint v_end = from->VertexCount(0);
+      const unsigned int v_end = from->VertexCount(0);
       const bool join_this_segment_at_first_vertex = i->second;
       if (join_this_segment_at_first_vertex) {
         // Add n-1 vertices [1 .. v_end-1]
-        for (uint v = 1; v < v_end; ++v) {
+        for (unsigned int v = 1; v < v_end; ++v) {
           AddVertexToPart0(from->GetVertex(0, v));
         }
       } else {  // Add n-1 vertices [v_end-2 .. 0]
-        for (uint v = v_end - 1; v > 0; ) {
+        for (unsigned int v = v_end - 1; v > 0; ) {
           --v;
           AddVertexToPart0(from->GetVertex(0, v));
         }
@@ -1567,15 +1568,15 @@ void gstGeode::Join(const std::deque<std::pair<gstGeodeImpl*, bool> >&
     for (std::deque<std::pair<gstGeodeImpl*, bool> >::const_reverse_iterator i =
              to_join.rbegin(); i != to_join.rend(); ++i) {
       const gstGeode *from = static_cast<const gstGeode*>(i->first);
-      const uint v_end_minus_1 = from->VertexCount(0) - 1;
+      const unsigned int v_end_minus_1 = from->VertexCount(0) - 1;
       const bool join_this_segment_at_first_vertex = i->second;
       if (join_this_segment_at_first_vertex) {
         // Add n-1 vertices [v_end-1 .. 1]
-        for (uint v = v_end_minus_1; v > 0; --v) {
+        for (unsigned int v = v_end_minus_1; v > 0; --v) {
           AddVertexToPart0(from->GetVertex(0, v));
         }
       } else {  // Add n-1 vertices [0 .. v_end-2]
-        for (uint v = 0; v < v_end_minus_1; ++v) {
+        for (unsigned int v = 0; v < v_end_minus_1; ++v) {
           AddVertexToPart0(from->GetVertex(0, v));
         }
       }
@@ -1586,11 +1587,11 @@ void gstGeode::Join(const std::deque<std::pair<gstGeodeImpl*, bool> >&
 }
 
 
-uint32 gstGeode::RawSize() const {
-  uint32 size = sizeof(RecHeader);
-  uint32 vert_size_xy = sizeof(double) * 2;
+ std::uint32_t gstGeode::RawSize() const {
+  std::uint32_t size = sizeof(RecHeader);
+  std::uint32_t vert_size_xy = sizeof(double) * 2;
   // The vertex has 3 coordinates for a 2.5d extensions.
-  uint32 vert_size_xyz = sizeof(double) * 3;
+  std::uint32_t vert_size_xyz = sizeof(double) * 3;
 
   switch (PrimType()) {
     case gstUnknown:
@@ -1608,7 +1609,7 @@ uint32 gstGeode::RawSize() const {
     case gstPolyLine:
     case gstStreet:
     case gstPolygon:
-      size += (sizeof(uint32) * 2) * NumParts();
+      size += (sizeof(std::uint32_t) * 2) * NumParts();
       size += vert_size_xy * TotalVertexCount();
       break;
 
@@ -1616,7 +1617,7 @@ uint32 gstGeode::RawSize() const {
     case gstStreet25D:
     case gstPolygon25D:
     case gstPolygon3D:
-      size += sizeof(uint32) * 2 * NumParts();        // length is a double
+      size += sizeof(std::uint32_t) * 2 * NumParts();        // length is a double
       size += vert_size_xyz * TotalVertexCount();
       break;
 
@@ -1644,11 +1645,11 @@ char* gstGeode::ToRaw(char* buf) const {
   hdr->fid = 0;                          // feature id
 
   char *tbuf = buf + sizeof(RecHeader);
-  const uint32 vert_size_xy = sizeof(double) * 2;
-  const uint32 vert_size_xyz = sizeof(double) * 3;
+  const std::uint32_t vert_size_xy = sizeof(double) * 2;
+  const std::uint32_t vert_size_xyz = sizeof(double) * 3;
 
   // iterate through each feature
-  for (uint part = 0; part < NumParts(); ++part) {
+  for (unsigned int part = 0; part < NumParts(); ++part) {
     switch (PrimType()) {
       case gstUnknown:
         break;
@@ -1680,10 +1681,10 @@ char* gstGeode::ToRaw(char* buf) const {
       case gstStreet:
       case gstPolygon:
         {
-          uint32* num = reinterpret_cast<uint32*>(tbuf);
+          std::uint32_t* num = reinterpret_cast<std::uint32_t*>(tbuf);
           *num = VertexCount(part);
-          tbuf += sizeof(uint32) * 2;
-          for (uint v = 0; v < VertexCount(part); ++v) {
+          tbuf += sizeof(std::uint32_t) * 2;
+          for (unsigned int v = 0; v < VertexCount(part); ++v) {
             double* pbuf = reinterpret_cast<double*>(tbuf);
             const gstVertex &vert = GetVertex(part, v);
             pbuf[0] = vert.x;
@@ -1698,10 +1699,10 @@ char* gstGeode::ToRaw(char* buf) const {
       case gstPolygon25D:
       case gstPolygon3D:
         {
-          uint32* num = reinterpret_cast<uint32*>(tbuf);
+          std::uint32_t* num = reinterpret_cast<std::uint32_t*>(tbuf);
           *num = VertexCount(part);
-          tbuf += sizeof(uint32) * 2;
-          for (uint v = 0; v < VertexCount(part); ++v) {
+          tbuf += sizeof(std::uint32_t) * 2;
+          for (unsigned int v = 0; v < VertexCount(part); ++v) {
             double* pbuf = reinterpret_cast<double*>(tbuf);
             const gstVertex &vert = GetVertex(part, v);
             pbuf[0] = vert.x;
@@ -1723,15 +1724,15 @@ char* gstGeode::ToRaw(char* buf) const {
   return buf;
 }
 
-void gstGeode::SetVertexes(const double* buf, uint32 count, bool is25D) {
+void gstGeode::SetVertexes(const double* buf, std::uint32_t count, bool is25D) {
   AddPart(count);
   if (!is25D) {
-    for (uint32 v = 0; v < count; ++v) {
+    for (std::uint32_t v = 0; v < count; ++v) {
       AddVertex(gstVertex(buf[0], buf[1]));
       buf += 2;
     }
   } else {
-    for (uint32 v = 0; v < count; ++v) {
+    for (std::uint32_t v = 0; v < count; ++v) {
       AddVertex(gstVertex(buf[0], buf[1], buf[2]));
       buf += 3;
     }
@@ -1772,7 +1773,7 @@ gstGeodeHandle gstGeodeImpl::FromRaw(const char* buf) {
         gstGeodeCollection *new_geode =
             static_cast<gstGeodeCollection*>(&(*new_geodeh));
         const char* fbuf = buf + sizeof(RecHeader);
-        for (uint p = 0; p < hdr->count; ++p) {
+        for (unsigned int p = 0; p < hdr->count; ++p) {
           gstGeodeHandle geode_part;
           fbuf = ReadPart(fbuf, &geode_part);
           if (fbuf && geode_part) {
@@ -1797,7 +1798,7 @@ bool gstGeode::IsClipped() const {
   if (clipped_ >= 0)
     return static_cast<bool>(clipped_);
 
-  for (uint i = 0; i < edge_flags_.size(); i++) {
+  for (unsigned int i = 0; i < edge_flags_.size(); i++) {
     if (kClipEdge == edge_flags_[i]) {
       clipped_ = 1;
       return true;
@@ -1821,9 +1822,9 @@ bool gstGeode::ComputePlaneEquation(gstVertex *normal,
   gstVertex a(GetVertex(0, 0));
 
   // Get 2nd point  from polygon outer cycle.
-  uint32 i = 1;
+  std::uint32_t i = 1;
   gstVertex b;
-  uint32 num_verts = VertexCount(0);
+  std::uint32_t num_verts = VertexCount(0);
   for ( ; i < num_verts; ++i) {
     const gstVertex &cur_v(GetVertex(0, i));
     const gstVertex vec = a - cur_v;
@@ -1873,11 +1874,11 @@ int gstGeode::RemoveCollinearVerts() {
     return num_verts;
   }
 
-  std::vector<uint> remove_verts;
+  std::vector< unsigned int>  remove_verts;
   gstVertex a = GetLastVertex(0);
   gstVertex b, c;
   int consecutive = 0;
-  for (uint v = 0; v < VertexCount(0) - 1; ++v) {
+  for (unsigned int v = 0; v < VertexCount(0) - 1; ++v) {
     b = GetVertex(0, v);
     c = GetVertex(0, v + 1);
     // keep every sixth consecutive collinear vertex
@@ -1899,7 +1900,7 @@ int gstGeode::RemoveCollinearVerts() {
   }
 
   if (remove_verts.size()) {
-    RemoveAtIndices<std::vector<uint>, std::vector<uint>::const_iterator,
+    RemoveAtIndices<std::vector< unsigned int> , std::vector< unsigned int> ::const_iterator,
                     gstGeodePart, gstGeodePart::iterator>(
       remove_verts, &parts_[0]);
   }

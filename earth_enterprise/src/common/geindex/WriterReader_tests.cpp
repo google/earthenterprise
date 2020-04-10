@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,11 +15,12 @@
 
 // Unit tests for geindex Writer and Reader and Traverser
 
+#include <cstdint>
 #include <math.h>
 #include <string>
 #include <vector>
 #include <iostream>
-#include <khTypes.h>
+#include <cstdint>
 #include <khGetopt.h>
 #include <khFileUtils.h>
 #include <khEndian.h>
@@ -43,7 +45,7 @@ class WriterReaderUnitTest : public testing::Test {
 
   static const std::string kPathBase;
   static bool full_test_;
-  static uint32 num_cache_levels_;
+  static std::uint32_t num_cache_levels_;
 
   typedef LoadedSingleEntryBucket<SimpleInsetEntry> TestLoadedEntryBucket;
   typedef TestLoadedEntryBucket::EntryType TestEntry;
@@ -56,16 +58,16 @@ class WriterReaderUnitTest : public testing::Test {
   // Hash routines - helpers to put actual data in the offset and size
   // slots that can be verified on read.
 
-  static uint64 HashOffset(QuadtreePath qt_path) {
+  static std::uint64_t HashOffset(QuadtreePath qt_path) {
     // The "hash" of the offset is actually the 64-bit path value.
     // Don't try this at home (i.e. in actual production code)
-    uint64 offset;
+    std::uint64_t offset;
     assert(sizeof(offset) == sizeof(qt_path));
     memcpy(&offset, &qt_path, sizeof(offset));
     return offset;
   }
 
-  static std::string OffsetHashToString(uint64 offset) {
+  static std::string OffsetHashToString(std::uint64_t offset) {
     // The "hash" of the offset is actually the 64-bit path value.
     // Don't try this at home (i.e. in actual production code)
     QuadtreePath qt_path;
@@ -74,8 +76,8 @@ class WriterReaderUnitTest : public testing::Test {
     return qt_path.IsValid() ? qt_path.AsString() : "INVALID";
   }
 
-  static uint32 HashSize(QuadtreePath qt_path) {
-    uint32 hash = uint32(qt_path.AsIndex(qt_path.Level()) & 0x7FFFFFFF)
+  static std::uint32_t HashSize(QuadtreePath qt_path) {
+    std::uint32_t hash = std::uint32_t(qt_path.AsIndex(qt_path.Level()) & 0x7FFFFFFF)
                   ^ 0x5A03C276
                   ^ qt_path.Level();
     return (hash != 0) ? hash : 0x7FFFFFFF;
@@ -100,13 +102,13 @@ class WriterReaderUnitTest : public testing::Test {
 
   static bool TestQTPath(QuadtreePath qt_path,
                          const ExternalDataAddress &dataAddress,
-                         uint32 packetfile,
-                         uint32 cache_level) {
+                         std::uint32_t packetfile,
+                         std::uint32_t cache_level) {
     // Test data for specified path
 
     bool result = true;
-    const uint64 test_offset = HashOffset(qt_path);
-    const uint32 test_size = HashSize(qt_path);
+    const std::uint64_t test_offset = HashOffset(qt_path);
+    const std::uint32_t test_size = HashSize(qt_path);
 
     if (dataAddress.fileOffset != test_offset
         || dataAddress.fileNum != packetfile
@@ -162,16 +164,16 @@ TEST_F(WriterReaderUnitTest, TestBasics) {
   const std::string index_path(kPathBase + "TestBasicsIndex");
   const std::string packet_path(kPathBase + "TestBasicsPacket");
 
-  uint32 packetfile;
-  const uint16 test_version = 104;
+  std::uint32_t packetfile;
+  const std::uint16_t test_version = 104;
   const QuadtreePath master_qt_path("202113321110033231003201");
 
   // Test writing and reading a single record for all possible path lengths
 
   for (size_t level = 0; level <= master_qt_path.Level(); ++level) {
     const QuadtreePath test_qt_path(master_qt_path, level);
-    const uint64 test_offset = HashOffset(test_qt_path);
-    const uint32 test_size = HashSize(test_qt_path);
+    const std::uint64_t test_offset = HashOffset(test_qt_path);
+    const std::uint32_t test_size = HashSize(test_qt_path);
 
     // Create a Writer
     {
@@ -304,8 +306,8 @@ TEST_F(WriterReaderUnitTest, TestRandomSample) {
   const std::string index_path(kPathBase + "TestRandomSampleIndex");
   const std::string packet_path(kPathBase + "TestRandomSamplePacket");
 
-  uint32 packetfile;
-  uint16 test_version = 5922;
+  std::uint32_t packetfile;
+  std::uint16_t test_version = 5922;
   SimpleInsetEntry::ReadKey test_version_key(test_version);
 
   // Write records
@@ -398,12 +400,12 @@ TEST_F(WriterReaderUnitTest, TestRandomSample) {
 // possible cache depths (1, 2, and 3).
 TEST_F(WriterReaderUnitTest, TestAllQTPaths) {
   bool result = true;
-  const uint32 kMaxPathDepth = 10;
+  const std::uint32_t kMaxPathDepth = 10;
   const std::string index_path(kPathBase + "TestAllQTPathsIndex");
   const std::string packet_path(kPathBase + "TestAllQTPathsPacket");
-  uint32 packetfile;
-  const uint16 test_version = 1600;
-  uint64 record_count = 0;
+  std::uint32_t packetfile;
+  const std::uint16_t test_version = 1600;
+  std::uint64_t record_count = 0;
 
   // Write the database
   {
@@ -418,8 +420,8 @@ TEST_F(WriterReaderUnitTest, TestAllQTPaths) {
     QuadtreePath qt_path;
     ReadBuffer read_buffer;
     do {
-      const uint64 test_offset = HashOffset(qt_path);
-      const uint32 test_size = HashSize(qt_path);
+      const std::uint64_t test_offset = HashOffset(qt_path);
+      const std::uint32_t test_size = HashSize(qt_path);
       SimpleInsetEntry test_entry(ExternalDataAddress(test_offset,
                                                          packetfile,
                                                          test_size),
@@ -440,7 +442,7 @@ TEST_F(WriterReaderUnitTest, TestAllQTPaths) {
 #ifndef SINGLE_THREAD
   // Read back the data using the traverser
   {
-    uint64 read_count = 0;
+    std::uint64_t read_count = 0;
     SimpleTestTraverser traverser("TestAllQTPaths_Traverser",
                                   file_pool_,
                                   index_path);
@@ -482,7 +484,7 @@ TEST_F(WriterReaderUnitTest, TestAllQTPaths) {
 
   // Read back and verify the database. If full_test == false, test at single
   // cache_level else test every possible cache level.
-  for (uint32 cache_level = (full_test_ ? 1 : num_cache_levels_);
+  for (std::uint32_t cache_level = (full_test_ ? 1 : num_cache_levels_);
        cache_level <= num_cache_levels_; ++cache_level) {
     SimpleTestReader reader(file_pool_,
                             index_path,
@@ -517,7 +519,7 @@ TEST_F(WriterReaderUnitTest, TestAllQTPaths) {
 const std::string WriterReaderUnitTest::kPathBase(
     "/tmp/tests/geindex_WriteRead_unittest_data/");
 bool WriterReaderUnitTest::full_test_ = false;
-uint32  WriterReaderUnitTest::num_cache_levels_ = geindex::kMaxLevelsCached;
+ std::uint32_t  WriterReaderUnitTest::num_cache_levels_ = geindex::kMaxLevelsCached;
 }
 
 namespace testing {
@@ -541,7 +543,7 @@ int main(int argc, char *argv[]) {
   options.flagOpt("full", geindex::WriterReaderUnitTest::full_test_);
   options.opt("num_cache_levels",
               geindex::WriterReaderUnitTest::num_cache_levels_,
-              &khGetopt::RangeValidator<uint32, 1, 3>);
+              &khGetopt::RangeValidator<std::uint32_t, 1, 3>);
   options.setExclusive("full", "num_cache_levels");
 
   if (testing::internal::g_help_flag || !options.processAll(argc, argv, argn) ||

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -185,7 +186,7 @@ class PublisherClient : public PublishHelper {
                       std::vector<std::string>* searchdef_contents);
 
   bool GarbageCollect(ServerType server_type,
-                      uint32* delete_count, uint64* delete_size);
+                      std::uint32_t* delete_count, std::uint64_t* delete_size);
 
   bool Cleanup(ServerType server_type, std::string *cleaned_portables_data);
 
