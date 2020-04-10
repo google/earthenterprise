@@ -61,7 +61,7 @@ class FuseConfig;
 inline void
 LatLonToRowCol(unsigned int lev,
                double lat, double lon,
-               uint32& row, uint32& col) {
+               std::uint32_t& row, std::uint32_t& col) {
   // clamp lat
   if (lat <= 0.25) {
     if (lev < 2) {

@@ -33,9 +33,9 @@ void ChildBucketAddr::Push(EndianWriteBuffer &buf) const {
 }
 
 void ChildBucketAddr::Pull(EndianReadBuffer &buf) {
-  buf >> *const_cast<uint64 *>(&offset)
-      >> *const_cast<uint32 *>(&childBucketsSize)
-      >> *const_cast<uint32 *>(&entryBucketsSize);
+  buf >> *const_cast<std::uint64_t *>(&offset)
+      >> *const_cast<std::uint32_t *>(&childBucketsSize)
+      >> *const_cast<std::uint32_t *>(&entryBucketsSize);
 }
 
 

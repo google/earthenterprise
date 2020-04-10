@@ -500,7 +500,7 @@ void gstTextureManager::recycleTexture(std::uint64_t addr) {
 
 // this is a callback, triggered by the gstCache object
 // it will get called when the requested object is not in the cache
-bool gstTextureManager::bindTile(uint& reuseID, const uint64& addr) {
+bool gstTextureManager::bindTile(unsigned int& reuseID, const std::uint64_t& addr) {
   // has this tile been loaded yet by our read thread?
   unsigned char* buf = memory_cache_->fetchAndPin(addr);
 
@@ -620,7 +620,7 @@ void gstTextureManager::readThreadFunc() {
 //
 // this is a callback, triggered by the tileExistanceCache
 // when the requested tile is no longer in the cache
-bool gstTextureManager::findTile(TileExistance* &reuse, const uint64& addr) {
+bool gstTextureManager::findTile(TileExistance* &reuse, const std::uint64_t& addr) {
   if (!reuse)
     reuse = new TileExistance;
 

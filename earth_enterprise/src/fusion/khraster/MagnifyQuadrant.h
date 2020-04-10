@@ -25,7 +25,7 @@
 // ****************************************************************************
 // ***  Given four pixels - how do I weight them to make another
 // ****************************************************************************
-template <uint weightLL, unsigned int weightLR, unsigned int weightUL, unsigned int weightUR>
+template <unsigned int weightLL, unsigned int weightLR, unsigned int weightUL, unsigned int weightUR>
 class PixelWeighting2By2
 {
  public:

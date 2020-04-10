@@ -77,18 +77,18 @@ protected:
 
     class StringStorage {
       private:
-        std::unordered_map<uint32_t, std::string> refFromKeyTable;
-        std::unordered_map<std::string, uint32_t> keyFromRefTable;
-        static uint32_t nextID;
+        std::unordered_map<std::uint32_t, std::string> refFromKeyTable;
+        std::unordered_map<std::string, std::uint32_t> keyFromRefTable;
+        static std::uint32_t nextID;
         mutable stringStorageRWLock mtx;
       public:
-        const std::string & RefFromKey(const uint32_t &key) {
+        const std::string & RefFromKey(const std::uint32_t &key) {
           stringStorageReadGuard lock(mtx);
           auto refIter = refFromKeyTable.find(key);
           assert(refIter != refFromKeyTable.end());
           return refIter->second;
         }
-        uint32_t KeyFromRef(const std::string &ref) {
+        std::uint32_t KeyFromRef(const std::string &ref) {
           stringStorageWriteGuard lock(mtx);
           auto keyIter = keyFromRefTable.find(ref);
           if (keyIter != keyFromRefTable.end()) {
@@ -96,16 +96,16 @@ protected:
           }
           else {
             // We've never seen this ref before, so make a new key
-            uint32_t key = nextID++;
-            refFromKeyTable.insert(std::pair<uint32_t, std::string>(key, ref));
-            keyFromRefTable.insert(std::pair<std::string, uint32_t>(ref, key));
+            std::uint32_t key = nextID++;
+            refFromKeyTable.insert(std::pair<std::uint32_t, std::string>(key, ref));
+            keyFromRefTable.insert(std::pair<std::string, std::uint32_t>(ref, key));
             return key;
           }
         }
         StringStorage(){
           stringStorageWriteGuard lock(mtx);
-          refFromKeyTable.insert(std::pair<uint32_t, std::string>(0, ""));
-          keyFromRefTable.insert(std::pair<std::string, uint32_t>("", 0));
+          refFromKeyTable.insert(std::pair<std::uint32_t, std::string>(0, ""));
+          keyFromRefTable.insert(std::pair<std::string, std::uint32_t>("", 0));
         }
         size_t size() const {
           stringStorageReadGuard lock(mtx);
@@ -114,7 +114,7 @@ protected:
     };
 
     static StringStorage strStore;
-    uint32_t key;
+    std::uint32_t key;
 
     friend std::ostream & operator<<(std::ostream &out, const SharedString & ref);
   public:
@@ -152,7 +152,7 @@ protected:
         return strStore.RefFromKey(key);
     }
 
-    uint32_t getKey() const {
+    std::uint32_t getKey() const {
        return key;
     }
 

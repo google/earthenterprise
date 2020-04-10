@@ -101,7 +101,7 @@ protected:
     std::uint32_t Read(FileBundleSegment& segment,
               void *out_buffer, size_t size, off64_t offset,
               std::uint64_t access_tick,
-              uint64& stats_bytes_read, uint64& stats_disk_accesses);
+              std::uint64_t& stats_bytes_read, std::uint64_t& stats_disk_accesses);
 
     std::uint64_t LastAccessTick() const { return last_access_tick_; }
     void SetLastAccessTick(std::uint64_t last_access_tick) {

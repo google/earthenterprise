@@ -24,7 +24,7 @@
 // ****************************************************************************
 // ***  Yanked from kbf.cpp before deleting it there
 // ****************************************************************************
-void BlistToRowCol(std::uint32_t level, unsigned char* blist, uint32& row, uint32& col) {
+void BlistToRowCol(std::uint32_t level, unsigned char* blist, std::uint32_t& row, std::uint32_t& col) {
   static const std::uint32_t rowbits[] = {0x00, 0x00, 0x01, 0x01};
   static const std::uint32_t colbits[] = {0x00, 0x01, 0x01, 0x00};
 

@@ -21,7 +21,7 @@
 
 #include <cstdint>
 
-template <uint tilewidth, unsigned int tileheight, class Handler>
+template <unsigned int tilewidth, unsigned int tileheight, class Handler>
 void ProcessNeighbors(std::uint32_t pos, Handler &h)
 {
   unsigned int row = pos / tilewidth;

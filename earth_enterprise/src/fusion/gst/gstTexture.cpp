@@ -92,23 +92,23 @@ class gstPYRTexture : public gstTextureImpl {
   typedef ImageObj<char>* ImageObjPtr;
 
   static bool loadMaskFromDisk_cb(void* obj, ImageObjPtr& data,
-                                  const uint64& id) {
+                                  const std::uint64_t& id) {
     return (reinterpret_cast<gstPYRTexture*>(obj))->loadMaskFromDisk(data, id);
   }
-  bool loadMaskFromDisk(ImageObjPtr& data, const uint64& id);
+  bool loadMaskFromDisk(ImageObjPtr& data, const std::uint64_t& id);
 
   static bool loadBaseFromDisk_cb(void* obj, ImageObjPtr& data,
-                                  const uint64& id) {
+                                  const std::uint64_t& id) {
     return (reinterpret_cast<gstPYRTexture*>(obj))->loadBaseFromDisk(data, id);
   }
-  bool loadBaseFromDisk(ImageObjPtr& data, const uint64& id);
+  bool loadBaseFromDisk(ImageObjPtr& data, const std::uint64_t& id);
 
   static bool loadHeightmapBaseFromDisk_cb(void* obj, ImageObjPtr& data,
-                                           const uint64& id) {
+                                           const std::uint64_t& id) {
     return (reinterpret_cast<gstPYRTexture*>(obj))->loadHeightmapBaseFromDisk(
         data, id);
   }
-  bool loadHeightmapBaseFromDisk(ImageObjPtr& data, const uint64& id);
+  bool loadHeightmapBaseFromDisk(ImageObjPtr& data, const std::uint64_t& id);
   bool IsMercatorImagery() const { return kip_->IsMercator(); }
 
  private:
@@ -348,7 +348,7 @@ void draw(unsigned char* rgb[], unsigned int dim, unsigned int x, unsigned int y
 }
 
 bool gstPYRTexture::loadHeightmapBaseFromDisk(ImageObjPtr& reuse,
-                                              const uint64& id) {
+                                              const std::uint64_t& id) {
   // load actual tile data into a temporary buf
   TexTile tile(id);
   if (!kip_->validLevel(tile.lev)) {
@@ -408,7 +408,7 @@ bool gstPYRTexture::loadHeightmapBaseFromDisk(ImageObjPtr& reuse,
 }
 
 
-bool gstPYRTexture::loadBaseFromDisk(ImageObjPtr& reuse, const uint64& id) {
+bool gstPYRTexture::loadBaseFromDisk(ImageObjPtr& reuse, const std::uint64_t& id) {
   if (!reuse) {
     ImgTile intile(RasterProductTileResolution, RasterProductTileResolution, 3);
     reuse = new ImageObj<char>(intile, Separate, LowerLeft);
@@ -432,7 +432,7 @@ bool gstPYRTexture::loadBaseFromDisk(ImageObjPtr& reuse, const uint64& id) {
   return true;
 }
 
-bool gstPYRTexture::loadMaskFromDisk(ImageObjPtr& reuse, const uint64& id) {
+bool gstPYRTexture::loadMaskFromDisk(ImageObjPtr& reuse, const std::uint64_t& id) {
   if (!kmp_) {
     // since we return false, we don't care about reuse
     return false;
