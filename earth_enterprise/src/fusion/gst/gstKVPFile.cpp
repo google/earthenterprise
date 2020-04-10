@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -251,7 +252,7 @@ gstStatus gstKVPFile::Close() {
 }
 
 
-gstBBox gstKVPFile::GetGeodeBox(uint32 idx) {
+gstBBox gstKVPFile::GetGeodeBox(std::uint32_t idx) {
   assert(index_map_.length() != 0);
   assert(idx < file_header_.numRecords);
 
@@ -259,7 +260,7 @@ gstBBox gstKVPFile::GetGeodeBox(uint32 idx) {
   return gstBBox(rpos.xmin, rpos.xmax, rpos.ymin, rpos.ymax);
 }
 
-gstGeodeHandle gstKVPFile::GetGeode(uint32 idx) {
+gstGeodeHandle gstKVPFile::GetGeode(std::uint32_t idx) {
   assert(index_map_.length() != 0);
   assert(idx < file_header_.numRecords);
 
@@ -388,7 +389,7 @@ gstStatus gstKVGeomFormat::CloseFile() {
 }
 
 
-gstGeodeHandle gstKVGeomFormat::GetFeatureImpl(uint32 layer, uint32 fid) {
+gstGeodeHandle gstKVGeomFormat::GetFeatureImpl(std::uint32_t layer, std::uint32_t fid) {
   // should be checked by gstSource before calling me
   assert(layer < NumLayers());
   assert(layer == 0);
@@ -397,7 +398,7 @@ gstGeodeHandle gstKVGeomFormat::GetFeatureImpl(uint32 layer, uint32 fid) {
   return kvp_file_->GetGeode(fid);
 }
 
-gstBBox gstKVGeomFormat::GetFeatureBoxImpl(uint32 layer, uint32 fid) {
+gstBBox gstKVGeomFormat::GetFeatureBoxImpl(std::uint32_t layer, std::uint32_t fid) {
   // should be checked by gstSource before calling me
   assert(layer < NumLayers());
   assert(layer == 0);
@@ -414,7 +415,7 @@ static gstJobStats::JobName KVGeomJobNames[] = {
 gstJobStats* geom_stats = new gstJobStats("KVGEOM FMT", KVGeomJobNames, 1);
 #endif
 
-gstRecordHandle gstKVGeomFormat::GetAttributeImpl(uint32 layer, uint32 fid) {
+gstRecordHandle gstKVGeomFormat::GetAttributeImpl(std::uint32_t layer, std::uint32_t fid) {
   // should be checked by gstSource before calling me
   assert(layer < NumLayers());
   assert(layer == 0);
@@ -491,7 +492,7 @@ gstStatus gstKVPFormat::OpenFile() {
 
   gstHeaderHandle hdr = gstHeaderImpl::Create();
   if (kvpasset.header.size()) {
-    for (uint f = 0; f < kvpasset.header.size(); ++f)
+    for (unsigned int f = 0; f < kvpasset.header.size(); ++f)
       hdr->addSpec(kvpasset.header[f].name, kvpasset.header[f].type);
   }
 
@@ -546,7 +547,7 @@ static gstJobStats::JobName KVPFormatJobNames[] = {
 gstJobStats* kvp_stats = new gstJobStats("KVP FMT", KVPFormatJobNames, 5);
 #endif
 
-gstRecordHandle gstKVPFormat::GetAttributeImpl(uint32 layer, uint32 fid) {
+gstRecordHandle gstKVPFormat::GetAttributeImpl(std::uint32_t layer, std::uint32_t fid) {
   // should be checked by gstSource before calling me
   assert(layer < NumLayers());
   assert(layer == 0);
@@ -554,7 +555,7 @@ gstRecordHandle gstKVPFormat::GetAttributeImpl(uint32 layer, uint32 fid) {
 
   JOBSTATS_SCOPED(kvp_stats, JOBSTATS_GETATTR);
 
-  uint32 true_fid;
+  std::uint32_t true_fid;
   int src = DetermineSource(fid, &true_fid);
   if (src == -1) {
     throw khException(kh::tr("Unable to determine source"));
@@ -563,7 +564,7 @@ gstRecordHandle gstKVPFormat::GetAttributeImpl(uint32 layer, uint32 fid) {
   return sources_[src]->GetAttributeOrThrow(0, true_fid);
 }
 
-gstGeodeHandle gstKVPFormat::GetFeatureImpl(uint32 layer, uint32 fid) {
+gstGeodeHandle gstKVPFormat::GetFeatureImpl(std::uint32_t layer, std::uint32_t fid) {
   // should be checked by gstSource before calling me
   assert(layer < NumLayers());
   assert(layer == 0);
@@ -571,7 +572,7 @@ gstGeodeHandle gstKVPFormat::GetFeatureImpl(uint32 layer, uint32 fid) {
 
   JOBSTATS_SCOPED(kvp_stats, JOBSTATS_GETFEATURE);
 
-  uint32 true_fid;
+  std::uint32_t true_fid;
   int src = DetermineSource(fid, &true_fid);
   if (src == -1) {
     throw khException(kh::tr("Unable to determine source"));
@@ -580,7 +581,7 @@ gstGeodeHandle gstKVPFormat::GetFeatureImpl(uint32 layer, uint32 fid) {
   return sources_[src]->GetFeatureOrThrow(0, true_fid, false);
 }
 
-gstBBox gstKVPFormat::GetFeatureBoxImpl(uint32 layer, uint32 fid) {
+gstBBox gstKVPFormat::GetFeatureBoxImpl(std::uint32_t layer, std::uint32_t fid) {
   // should be checked by gstSource before calling me
   assert(layer < NumLayers());
   assert(layer == 0);
@@ -588,7 +589,7 @@ gstBBox gstKVPFormat::GetFeatureBoxImpl(uint32 layer, uint32 fid) {
 
   JOBSTATS_SCOPED(kvp_stats, JOBSTATS_GETBOX);
 
-  uint32 true_fid;
+  std::uint32_t true_fid;
   int src = DetermineSource(fid, &true_fid);
   if (src == -1) {
     throw khException(kh::tr("Unable to determine source"));
@@ -599,7 +600,7 @@ gstBBox gstKVPFormat::GetFeatureBoxImpl(uint32 layer, uint32 fid) {
 
 // figure out which source this feature comes from and make
 // sure it is currently opened
-int gstKVPFormat::DetermineSource(uint32 feature_id, uint32* real_feature_id) {
+int gstKVPFormat::DetermineSource(std::uint32_t feature_id, std::uint32_t* real_feature_id) {
   JOBSTATS_SCOPED(kvp_stats, JOBSTATS_DETSRC);
   // sequential reading can avoid the lookup almost entirely
   if (last_source_id_ != -1 &&
@@ -610,11 +611,11 @@ int gstKVPFormat::DetermineSource(uint32 feature_id, uint32* real_feature_id) {
     return last_source_id_;
   }
 
-  std::map<int, uint32>::const_iterator upper_pos =
+  std::map<int, std::uint32_t>::const_iterator upper_pos =
       feature_map_.upper_bound(feature_id);
   if (upper_pos == feature_map_.end())
     return -1;
-  std::map<int, uint32>::const_iterator back_one = upper_pos;
+  std::map<int, std::uint32_t>::const_iterator back_one = upper_pos;
   --back_one;
   int source_id = upper_pos->second;
   if (!OpenSource(source_id))

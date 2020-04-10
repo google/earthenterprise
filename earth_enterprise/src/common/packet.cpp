@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,9 +34,9 @@ const size_t fname_len = 500;
 #endif
 
 #if _LP64
-#define offsetof(TYPE, MEMBER) (((uint64) &((TYPE *)(&khnull))->MEMBER) - (uint64)(&khnull))
+#define offsetof(TYPE, MEMBER) (((std::uint64_t) &((TYPE *)(&khnull))->MEMBER) - (std::uint64_t)(&khnull))
 #else
-#define offsetof(TYPE, MEMBER) (((uint32) &((TYPE *)(&khnull))->MEMBER) - (uint32)(&khnull))
+#define offsetof(TYPE, MEMBER) (((std::uint32_t) &((TYPE *)(&khnull))->MEMBER) - (std::uint32_t)(&khnull))
 #endif
 
 

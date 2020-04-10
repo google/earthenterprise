@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,7 +29,7 @@ PacketFileWriter::PacketFileWriter(geFilePool &file_pool,
                                    const std::string &path,
                                    bool overwrite,
                                    mode_t mode,
-                                   uint64 seg_break)
+                                   std::uint64_t seg_break)
     : FileBundleWriter(file_pool, path, overwrite, mode, seg_break),
       index_writer_(TransferOwnership(
                         new PacketIndexWriter(file_pool,
@@ -46,10 +47,10 @@ PacketFileWriter::~PacketFileWriter() {
 // at the end where the CRC32 will be stored.  Returns data position
 // as file bundle offset.
 
-uint64 PacketFileWriter::WriteAppendCRC(const QuadtreePath &qt_path,
+ std::uint64_t PacketFileWriter::WriteAppendCRC(const QuadtreePath &qt_path,
                                         void *buffer,
                                         size_t buffer_size,
-                                        uint32 index_extra) {
+                                        std::uint32_t index_extra) {
 
   AllocatedBlock allocation = AllocateAppend(qt_path, buffer_size);
   WriteAtCRC(qt_path, buffer, buffer_size, allocation, index_extra);
@@ -68,7 +69,7 @@ void PacketFileWriter::WriteAtCRC(const QuadtreePath &qt_path,
                                   void *buffer,
                                   size_t buffer_size,
                                   const AllocatedBlock &allocation,
-                                  uint32 index_extra) {
+                                  std::uint32_t index_extra) {
   assert(buffer_size == allocation.data_size_);
   FileBundleWriter::WriteAtCRC(allocation.data_pos_, buffer, buffer_size);
   index_writer_->WriteAt(allocation.index_pos_,
@@ -79,7 +80,7 @@ void PacketFileWriter::WriteAtCRC(const QuadtreePath &qt_path,
 
 void PacketFileWriter::WriteDuplicate(const QuadtreePath &qt_path,
                                       const AllocatedBlock &allocation,
-                                      uint32 index_extra) {
+                                      std::uint32_t index_extra) {
   index_writer_->WriteAppend(PacketIndexEntry(qt_path,
                                               allocation.data_pos_,
                                               allocation.data_size_,
@@ -103,7 +104,7 @@ PacketFilePackIndexer::PacketFilePackIndexer(geFilePool &file_pool,
                                              const std::string &path,
                                              bool overwrite,
                                              mode_t mode,
-                                             uint64 seg_break)
+                                             std::uint64_t seg_break)
     : data_pos_(0),
       data_reader_(file_pool, path, mode, seg_break),
       index_writer_(TransferOwnership(
@@ -120,8 +121,8 @@ PacketFilePackIndexer::~PacketFilePackIndexer() {
 
 // Read next record from the pack file and return position in bundle
 
-uint64 PacketFilePackIndexer::ReadNext(void *buffer, size_t read_len) {
-  uint64 bundle_pos;                    // position in bundle addressing
+ std::uint64_t PacketFilePackIndexer::ReadNext(void *buffer, size_t read_len) {
+  std::uint64_t bundle_pos;                    // position in bundle addressing
   {
     khLockGuard lock(modify_lock_);
 
@@ -135,10 +136,10 @@ uint64 PacketFilePackIndexer::ReadNext(void *buffer, size_t read_len) {
 
 // ReadAtLinear - read record at specified linear position.
 
-uint64 PacketFilePackIndexer::ReadAtLinear(uint64 linear_pos,
+ std::uint64_t PacketFilePackIndexer::ReadAtLinear(std::uint64_t linear_pos,
                                            void *buffer,
                                            size_t read_len) {
-  uint64 bundle_pos = data_reader_.LinearToBundlePosition(linear_pos);
+  std::uint64_t bundle_pos = data_reader_.LinearToBundlePosition(linear_pos);
   {
     khLockGuard lock(modify_lock_);
     data_pos_ = linear_pos + read_len;

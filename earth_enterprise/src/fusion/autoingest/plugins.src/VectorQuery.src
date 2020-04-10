@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -44,7 +45,7 @@ VectorQueryAssetVersionImplD::DoSubmitTask(void)
   task.AddInputs(inputs);
 
   // generate the output filenames
-  for (uint i = 0; i < config.filters.size(); ++i) {
+  for (unsigned int i = 0; i < config.filters.size(); ++i) {
     char fname[100];
     snprintf(fname, sizeof(fname), "selectlist.%02d", i);
     // TODO: - implement size estimate

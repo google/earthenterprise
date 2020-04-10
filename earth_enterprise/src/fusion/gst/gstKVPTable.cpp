@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -136,8 +137,8 @@ gstStatus gstKVPTable::ReadHeader() {
 
   char* tbuf = buf;
   for (int ii = 0; ii < file_header_.numFields; ++ii) {
-    uint32 type = *(reinterpret_cast<uint32*>(tbuf));
-    tbuf += sizeof(uint32);
+    std::uint32_t type = *(reinterpret_cast<std::uint32_t*>(tbuf));
+    tbuf += sizeof(std::uint32_t);
     char* name = tbuf;
     header_->addSpec(name, static_cast<int>(type));
     tbuf += strlenSafe(name) + 1;
@@ -175,7 +176,7 @@ bool gstKVPTable::ReadIndex() {
   return true;
 }
 
-gstRecordHandle gstKVPTable::Row(uint32 row) {
+gstRecordHandle gstKVPTable::Row(std::uint32_t row) {
   JOBSTATS_SCOPED(table_stats, JOBSTATS_GETROW);
 
   gstRecordHandle new_record;
@@ -242,8 +243,8 @@ void gstKVPTable::SetHeader(const gstHeaderHandle& hdr) {
   // compute size of header def block
   //
   int sz = 0;
-  for (uint ii = 0; ii < hdr->numColumns(); ++ii) {
-    sz += sizeof(uint32);
+  for (unsigned int ii = 0; ii < hdr->numColumns(); ++ii) {
+    sz += sizeof(std::uint32_t);
     sz += strlenSafe(hdr->Name(ii).utf8()) + 1;
   }
 
@@ -252,9 +253,9 @@ void gstKVPTable::SetHeader(const gstHeaderHandle& hdr) {
   //
   char buf[sz];
   char* tbuf = buf;
-  for (uint ii = 0; ii < hdr->numColumns(); ++ii) {
-    *(reinterpret_cast<uint32*>(tbuf)) = hdr->ftype(ii);
-    tbuf += sizeof(uint32);
+  for (unsigned int ii = 0; ii < hdr->numColumns(); ++ii) {
+    *(reinterpret_cast<std::uint32_t*>(tbuf)) = hdr->ftype(ii);
+    tbuf += sizeof(std::uint32_t);
     strcpySafe(tbuf, hdr->Name(ii).utf8());
     tbuf += strlenSafe(hdr->Name(ii).utf8()) + 1;
   }

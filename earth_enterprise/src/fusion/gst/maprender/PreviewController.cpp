@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -51,28 +52,28 @@ PreviewController::BuildChildren(SelectorVector &oldSelectors,
   // blow away our cache
   cache.clear();
 
-  uint numSubs = config.subLayers.size();
+  unsigned int numSubs = config.subLayers.size();
 
   // no extern context scripts for now
   const QStringList jsContextScripts;
 
-  validLevels = geMultiRange<uint32>();
+  validLevels = geMultiRange<std::uint32_t>();
   selectors.reserve(numSubs);
   preparers.reserve(numSubs);
   std::vector<workflow::PreviewStep<CombinerInputTile>*> combinerInputSteps;
   std::vector<khSharedHandle<CombinerInputTile> > combinerInputs;
   combinerInputs.reserve(numSubs);
 
-  for (uint s = 0; s < numSubs; ++s) {
+  for (unsigned int s = 0; s < numSubs; ++s) {
     // get the basic configuration to build the per-sublayer pieces
     MapSubLayerConfig &subConfig = config.subLayers[s];
     QueryConfig qconfig(subConfig, jsContextScripts);
-    std::vector<geMultiRange<uint32> > subValidLevels;
-    uint numRules = subConfig.display_rules.size();
+    std::vector<geMultiRange<std::uint32_t> > subValidLevels;
+    unsigned int numRules = subConfig.display_rules.size();
     subValidLevels.reserve(numRules);
-    for (uint i = 0; i < numRules; ++i) {
+    for (unsigned int i = 0; i < numRules; ++i) {
       subValidLevels.push_back(subConfig.display_rules[i].ValidLevels());
-      validLevels = geMultiRange<uint32>::Union(
+      validLevels = geMultiRange<std::uint32_t>::Union(
           validLevels, subConfig.display_rules[i].ValidLevels());
     }
     gstSharedSource source =
@@ -80,7 +81,7 @@ PreviewController::BuildChildren(SelectorVector &oldSelectors,
 
     // see if we can reuse an existing selector step
     bool found = false;
-    for (uint os = 0; os < oldSelectors.size(); ++os) {
+    for (unsigned int os = 0; os < oldSelectors.size(); ++os) {
       SelectorStepHandle old = oldSelectors[os];
 
       if (old && old->CanReuse(source, qconfig, subValidLevels)) {
@@ -132,16 +133,16 @@ PreviewController::BuildChildren(SelectorVector &oldSelectors,
 
 
 bool
-PreviewController::GetTile(uint64 addr, uchar *outBuf) {
+PreviewController::GetTile(std::uint64_t addr, unsigned char *outBuf) {
   // address of 256x256 requested
-  uint32 previewLevel = LEVFROMADDR(addr);
-  uint32 previewRow   = ROWFROMADDR(addr);
-  uint32 previewCol   = COLFROMADDR(addr);
+  std::uint32_t previewLevel = LEVFROMADDR(addr);
+  std::uint32_t previewRow   = ROWFROMADDR(addr);
+  std::uint32_t previewCol   = COLFROMADDR(addr);
 
   // address of larger tile to render
-  uint32 renderLevel = previewLevel;
-  uint32 renderRow   = previewRow >> addrShift;
-  uint32 renderCol   = previewCol >> addrShift;
+  std::uint32_t renderLevel = previewLevel;
+  std::uint32_t renderRow   = previewRow >> addrShift;
+  std::uint32_t renderCol   = previewCol >> addrShift;
 
   // Fetch the tile from cache
   QuadtreePath path(renderLevel, renderRow, renderCol);
@@ -164,7 +165,7 @@ PreviewController::GetTile(uint64 addr, uchar *outBuf) {
     } else {
 #if 0
       {
-        uint options = 0;
+        unsigned int options = 0;
 #if __BYTE_ORDER == __BIG_ENDIAN
         options = PNGOPT_SWAPALPHA;
 #else
@@ -191,25 +192,25 @@ PreviewController::GetTile(uint64 addr, uchar *outBuf) {
 
 
 
-  uint32 extractTileRow = previewRow & ((1<<addrShift) - 1);
-  uint32 extractTileCol = previewCol & ((1<<addrShift) - 1);
+  std::uint32_t extractTileRow = previewRow & ((1<<addrShift) - 1);
+  std::uint32_t extractTileCol = previewCol & ((1<<addrShift) - 1);
 
   // we're flipping the Y axis (invert the extract row)
   extractTileRow = ((1<<addrShift)-1) - extractTileRow;
 
   ExtractInterleavedSubBufferFlipY(
       reinterpret_cast<char*>(outBuf),
-      khExtents<uint32>(khOffset<uint32>(RowColOrder,
+      khExtents<std::uint32_t>(khOffset<std::uint32_t>(RowColOrder,
                                          extractTileRow * 256,
                                          extractTileCol * 256),
-                        khSize<uint32>(256, 256)),
+                        khSize<std::uint32_t>(256, 256)),
       found->pixelBuf,
-      khSize<uint32>(tilespace.tileSize, tilespace.tileSize),
+      khSize<std::uint32_t>(tilespace.tileSize, tilespace.tileSize),
       4 /* rgba, or argb, or somthing like that */);
   return true;
 }
 
-bool PreviewController::HasLevel(uint32 level) {
+bool PreviewController::HasLevel(std::uint32_t level) {
   return validLevels.Contains(level);
 }
 

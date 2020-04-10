@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w-
 #
 # Copyright 2017 Google Inc.
+# Copyright 2020 The Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -179,7 +180,7 @@ void ${name}AssetImplD::SerializeConfig(DOMElement *top) const
     AddConfig(top, config);
 }
 
-uint64 ${name}AssetImplD::GetHeapUsage() const {
+ std::uint64_t ${name}AssetImplD::GetHeapUsage() const {
     return ${name}AssetImpl::GetHeapUsage()
             + ::GetHeapUsage(config);
 }
@@ -470,7 +471,7 @@ void ${name}AssetVersionImplD::SerializeConfig(DOMElement *top) const
     AddConfig(top, config);
 }
 
-uint64 ${name}AssetVersionImplD::GetHeapUsage() const {
+ std::uint64_t ${name}AssetVersionImplD::GetHeapUsage() const {
     return ${name}AssetVersionImpl::GetHeapUsage()
             + ::GetHeapUsage(config);
 }

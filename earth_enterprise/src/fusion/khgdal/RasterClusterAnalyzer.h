@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +37,7 @@ class khVirtualRaster;
 //   individual inset BB in the cluster.
 class Cluster {
  public:
-  Cluster(const khExtents<uint32> &extent, const std::string &file)
+  Cluster(const khExtents<std::uint32_t> &extent, const std::string &file)
       : extents(extent),
         file_list(1, file),
         is_new(true),
@@ -56,11 +57,11 @@ class Cluster {
     return extents.connects(other.extents);
   }
 
-  uint64 Area() const {
+  std::uint64_t Area() const {
     return extents.width() * extents.height();
   }
 
-  uint64 InsetsArea() const {
+  std::uint64_t InsetsArea() const {
     return insets_area;
   }
 
@@ -82,13 +83,13 @@ class Cluster {
     return is_new;
   }
 
-  khExtents<uint32> extents;
+  khExtents<std::uint32_t> extents;
   std::vector<std::string> file_list;
   // Note: the is_new, is_updated flags are used in ClusterAnalyzer for
   // algorithm optimization.
   bool is_new;
   bool is_updated;
-  uint64 insets_area;
+  std::uint64_t insets_area;
 };
 
 // Class ClusterAnalyzer analyzes virtual raster for:
@@ -152,14 +153,14 @@ class ClusterAnalyzer {
   }
 
   // Calculates sum of insets areas based on information in clusters.
-  uint64 CalcRasterInsetsArea() const;
+  std::uint64_t CalcRasterInsetsArea() const;
 
   // Calculates virtual raster (mosaic) area based on information in clusters.
-  uint64 CalcRasterArea() const;
+  std::uint64_t CalcRasterArea() const;
 
   // Prints virtual raster info: sum of inset areas, raster area, their ratio.
-  void PrintRasterInfo(const uint64 raster_inset_area,
-                       const uint64 raster_area,
+  void PrintRasterInfo(const std::uint64_t raster_inset_area,
+                       const std::uint64_t raster_area,
                        const bool is_area_check) const;
 };
 

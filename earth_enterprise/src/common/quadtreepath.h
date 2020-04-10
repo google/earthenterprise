@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +21,16 @@
 
 #include <string>
 #include <khTypes.h>
+#include <cstdint>
 
 class EndianWriteBuffer;
 class EndianReadBuffer;
 
 namespace QuadtreePathConstants {
     namespace {
-        const uint32 kMaxLevel = 24;
-        const uint32 kStoreSize = sizeof(uint64);
-        const uint32 kChildCount = 4;
+        const std::uint32_t kMaxLevel = 24;
+        const std::uint32_t kStoreSize = sizeof(std::uint64_t);
+        const std::uint32_t kChildCount = 4;
     }
 }
 
@@ -44,16 +46,16 @@ namespace QuadtreePathConstants {
 
 class QuadtreePath {
  public:
-  static const uint32 kMaxLevel = QuadtreePathConstants::kMaxLevel;  // number of levels represented
-  static const uint32 kStoreSize = QuadtreePathConstants::kStoreSize;  // bytes required to store
-  static const uint32 kChildCount = QuadtreePathConstants::kChildCount;  // number of children at each level
+  static const std::uint32_t kMaxLevel = QuadtreePathConstants::kMaxLevel;  // number of levels represented
+  static const std::uint32_t kStoreSize = QuadtreePathConstants::kStoreSize;  // bytes required to store
+  static const std::uint32_t kChildCount = QuadtreePathConstants::kChildCount;  // number of children at each level
 
   QuadtreePath() : path_(0) {}
-  QuadtreePath(uint32 level, uint32 row, uint32 col);
-  QuadtreePath(uint32 level, const uchar blist[kMaxLevel]);
+  QuadtreePath(std::uint32_t level, std::uint32_t row, std::uint32_t col);
+  QuadtreePath(std::uint32_t level, const unsigned char blist[kMaxLevel]);
   QuadtreePath(const std::string &blist);
   // copy other path, but prune at given level
-  QuadtreePath(const QuadtreePath &other, uint32 level);
+  QuadtreePath(const QuadtreePath &other, std::uint32_t level);
 
   inline bool IsValid() const {         // level in range, no stray bits
     return Level() <= kMaxLevel
@@ -68,7 +70,7 @@ class QuadtreePath {
     return path_ != other.path_;
   }
 
-  uint64 GetGenerationSequence() const;
+  std::uint64_t GetGenerationSequence() const;
 
   // Test for paths in postorder (normal ordering is preorder).  False
   // if path1 == path2.
@@ -78,11 +80,11 @@ class QuadtreePath {
       && (path2.IsAncestorOf(path1) || path2 > path1);
   }
 
-  void GetLevelRowCol(uint32 *level, uint32 *row, uint32 *col) const;
-  inline uint32 Level() const { return path_ & kLevelMask; }
+  void GetLevelRowCol(std::uint32_t *level, std::uint32_t *row, std::uint32_t *col) const;
+  inline std::uint32_t Level() const { return path_ & kLevelMask; }
   QuadtreePath Parent() const;
-  QuadtreePath Child(uint32 child) const;
-  inline uint32 WhichChild() const {
+  QuadtreePath Child(std::uint32_t child) const;
+  inline std::uint32_t WhichChild() const {
     return (path_ >> (kTotalBits - Level()*kLevelBits)) & kLevelBitMask;
   }
   void Push(EndianWriteBuffer& buf) const;
@@ -94,7 +96,7 @@ class QuadtreePath {
 
   // Advance to next node in preorder, return false at end of nodes <=
   // specified max level.
-  bool Advance(uint32 max_level);
+  bool Advance(std::uint32_t max_level);
 
   // NOTE: this is inclusive (returns true if other is same path)
   bool IsAncestorOf(const QuadtreePath &other) const;
@@ -137,7 +139,7 @@ class QuadtreePath {
   // QuadtreePath("31").AsIndex(2) -> (binary) 1101 -> 13
   // QuadtreePath("1").AsIndex(1) -> (binary) 01 -> 1
   // QuadtreePath("").AsIndex(0) -> 0
-  inline uint64 AsIndex(uint32 level) const {
+  inline std::uint64_t AsIndex(std::uint32_t level) const {
     return (path_ >> (kTotalBits - level*kLevelBits));
   }
 
@@ -147,7 +149,7 @@ class QuadtreePath {
   // path[0] -> 2
   // path[1] -> 0
   // path[2] -> 1
-  uint operator[](uint32 position) const;
+  unsigned int operator[](std::uint32_t position) const;
 
   // *************************************************************************
   // ***  Quadrant routines
@@ -161,8 +163,8 @@ class QuadtreePath {
   // *************************************************************************
   // Gets offset for parent cells pixel_buffer(which is ordered from left to
   // right and then from bottom to top). Refer Minifytile.
-  static uint32 QuadToBufferOffset(uint quad, uint32 tileWidth,
-                                   uint32 tileHeight) {
+  static std::uint32_t QuadToBufferOffset(unsigned int quad, std::uint32_t tileWidth,
+                                   std::uint32_t tileHeight) {
     assert(quad < 4);
     switch (quad) {
       case 0:
@@ -186,8 +188,8 @@ class QuadtreePath {
   // find the tile in the next level (more detail) that maps to the
   // specified quad in range [0,3]
   // Better named MagnifyRowColToChildRowColForQuad.
-  static void MagnifyQuadAddr(uint32 inRow, uint32 inCol, uint inQuad,
-                              uint32 &outRow, uint32 &outCol)
+  static void MagnifyQuadAddr(std::uint32_t inRow, std::uint32_t inCol, unsigned int inQuad,
+                              std::uint32_t &outRow, std::uint32_t &outCol)
   {
     assert(inQuad < 4);
     switch(inQuad) {
@@ -211,27 +213,27 @@ class QuadtreePath {
   }
 
  private:
-  void FromBranchlist(uint32 level, const uchar blist[]);
-  QuadtreePath(uint64 path) : path_(path) { assert(IsValid()); }
-  static const uint32 kLevelBits = 2;       // bits per level in packed path_
-  static const uint64 kLevelBitMask = 0x03;
-  static const uint32 kTotalBits = 64;      // total storage bits
-  static const uint64 kPathMask = ~(~uint64(0) >> (kMaxLevel * kLevelBits));
-  static const uint64 kLevelMask = ~kPathMask;
-  inline uint64 PathBits() const { return path_ & kPathMask; }
-  inline uint64 PathMask(uint32 level) const {
+  void FromBranchlist(std::uint32_t level, const unsigned char blist[]);
+  QuadtreePath(std::uint64_t path) : path_(path) { assert(IsValid()); }
+  static const std::uint32_t kLevelBits = 2;       // bits per level in packed path_
+  static const std::uint64_t kLevelBitMask = 0x03;
+  static const std::uint32_t kTotalBits = 64;      // total storage bits
+  static const std::uint64_t kPathMask = ~(~std::uint64_t(0) >> (kMaxLevel * kLevelBits));
+  static const std::uint64_t kLevelMask = ~kPathMask;
+  inline std::uint64_t PathBits() const { return path_ & kPathMask; }
+  inline std::uint64_t PathMask(std::uint32_t level) const {
     return kPathMask << ((kMaxLevel - level) * kLevelBits);
   }
   // like PathBits(), but clamps to supplied level
-  inline uint64 PathBits(uint32 level) const { return path_ & PathMask(level);}
-  inline uint32 LevelBitsAtPos(uint32 position) const {
+  inline std::uint64_t PathBits(std::uint32_t level) const { return path_ & PathMask(level);}
+  inline std::uint32_t LevelBitsAtPos(std::uint32_t position) const {
     return (path_ >> (kTotalBits - (position+1)*kLevelBits)) & kLevelBitMask;
   }
 
   friend class QuadtreePathUnitTest;
   // This is the only data which should be stored in an instance of
   // this class
-  uint64 path_;
+  std::uint64_t path_;
 };
 
 #endif  // QUADTREEPATH_H__

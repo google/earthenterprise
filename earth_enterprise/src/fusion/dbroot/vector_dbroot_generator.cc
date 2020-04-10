@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -63,9 +64,9 @@ void VectorDbrootGenerator::Emit(geProtoDbroot::FileFormat output_format) {
 }
 
 namespace {
-uint32 ColorVecToABGR(const std::vector<uint> &vec) {
+ std::uint32_t ColorVecToABGR(const std::vector< unsigned int>  &vec) {
   // color vecs built internally by other fusion tools
-  // even though stored as uint, they are really uchar
+  // even though stored as unsigned int, they are really unsigned char
   return (((vec[3] & 0xff) << 24) |
           ((vec[2] & 0xff) << 16) |
           ((vec[1] & 0xff) <<  8) |
@@ -74,7 +75,7 @@ uint32 ColorVecToABGR(const std::vector<uint> &vec) {
 }  // anonymous namespace
 
 keyhole::dbroot::NestedFeatureProto* VectorDbrootGenerator::MakeProtoLayer(
-    int32 channel_id,
+    std::int32_t channel_id,
     const std::string &layer_name,
     const std::string &parent_name) {
 
@@ -106,7 +107,7 @@ keyhole::dbroot::NestedFeatureProto* VectorDbrootGenerator::MakeProtoLayer(
 
 void VectorDbrootGenerator::EmitNestedLayers(void) {
   // emit each layer
-  for (std::set<uint>::const_iterator layerIdx =
+  for (std::set< unsigned int> ::const_iterator layerIdx =
            vector_context_->used_layer_ids_.begin();
        layerIdx != vector_context_->used_layer_ids_.end(); ++layerIdx) {
     const LayerConfig *layer = &vector_context_->config_.layers[*layerIdx];
@@ -139,9 +140,9 @@ void VectorDbrootGenerator::EmitNestedLayers(void) {
         (const char*)localecfg.required_client_capabilities_.GetValue().utf8());
     std::string client_config_script_name(
         (const char*)localecfg.client_config_script_name_.GetValue().utf8());
-    int32 diorama_data_channel_base =
+    std::int32_t diorama_data_channel_base =
         localecfg.diorama_data_channel_base_.GetValue();
-    int32 diorama_replica_data_channel_base =
+    std::int32_t diorama_replica_data_channel_base =
         localecfg.diorama_replica_data_channel_base_.GetValue();
 
     // keep track of which icons and layers are used
@@ -222,7 +223,7 @@ QString CompactStyleName(const QString& name) {
 }
 
 void VectorDbrootGenerator::EmitStyleAttrs(void) {
-  for (std::set<uint>::const_iterator usedIndex =
+  for (std::set< unsigned int> ::const_iterator usedIndex =
            vector_context_->used_layer_ids_.begin();
        usedIndex != vector_context_->used_layer_ids_.end(); ++usedIndex) {
     const LayerConfig *layer = &vector_context_->config_.layers[*usedIndex];
@@ -233,7 +234,7 @@ void VectorDbrootGenerator::EmitStyleAttrs(void) {
       continue;
 
     // Figure out the provider for this layer
-    uint32 providerId = vector_context_->config_.layerProviderIds[*usedIndex];
+    std::uint32_t providerId = vector_context_->config_.layerProviderIds[*usedIndex];
     if (!vector_context_->GetProvider(providerId)) {
       providerId = 0;
     } else {
@@ -253,7 +254,7 @@ void VectorDbrootGenerator::EmitStyleAttrs(void) {
 
         std::string iconName;
         int icon_width = 32;
-        std::vector<uint> polyColor = style.polyColor;
+        std::vector< unsigned int>  polyColor = style.polyColor;
         if ( feature.featureType == VectorDefs::LineZ &&
             feature.drawAsRoads == true ) {
           if ( feature.roadLabelType == FeatureConfig::Shield ) {
@@ -275,7 +276,7 @@ void VectorDbrootGenerator::EmitStyleAttrs(void) {
           {
             // remember where we put these new styles so we can emit the
             // new stylemap later
-            int32 new_pos = outproto_.style_attribute_size();
+            std::int32_t new_pos = outproto_.style_attribute_size();
             // we only emit one style for lines/polys
             style_id_maps_.push_back(StyleIdMap(style.id,
                                                 new_pos /* normal */,
@@ -381,7 +382,7 @@ void VectorDbrootGenerator::EmitStyleAttrs(void) {
           {
             // remember where we put these new styles so we can emit the
             // new stylemap later
-            int32 new_pos = outproto_.style_attribute_size();
+            std::int32_t new_pos = outproto_.style_attribute_size();
             style_id_maps_.push_back(StyleIdMap(style.id,
                                                 new_pos   /* normal */,
                                                 new_pos+1 /* highlight */));
@@ -450,7 +451,7 @@ void VectorDbrootGenerator::EmitStyleMaps(void) {
 }
 
 void VectorDbrootGenerator::EmitLODs(void) {
-  for (std::set<uint>::const_iterator usedIndex =
+  for (std::set< unsigned int> ::const_iterator usedIndex =
            vector_context_->used_layer_ids_.begin();
        usedIndex != vector_context_->used_layer_ids_.end(); ++usedIndex) {
     const LayerConfig *layer = &vector_context_->config_.layers[*usedIndex];
@@ -471,7 +472,7 @@ void VectorDbrootGenerator::EmitLODs(void) {
       // frame-rate
       // also set the transition mode to pop off
       // this will help the client to avoid z-fighting
-      uint32 lodFlags = 0;
+      std::uint32_t lodFlags = 0;
       bool isPolygonZ = false;
       for (std::vector<DisplayRuleConfig>::const_iterator rule =
              layer->displayRules.begin();
@@ -506,8 +507,8 @@ void VectorDbrootGenerator::EmitLODs(void) {
         nested->set_feature_type(
             keyhole::dbroot::NestedFeatureProto::TYPE_POLYGON_Z);
       }
-      for (uint i = 0; i < lod.states.size(); ++i) {
-        int32 lod_level = lod.states[i];
+      for (unsigned int i = 0; i < lod.states.size(); ++i) {
+        std::int32_t lod_level = lod.states[i];
         if ((lod_level > 0) && (lod_level != 30)) {
           keyhole::dbroot::ZoomRangeProto* zoom_range =
               nested->mutable_layer()->add_zoom_range();

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,9 +59,9 @@ class FuseConfig;
 
 // Normalized lat/long (0.0 -> 1.0)
 inline void
-LatLonToRowCol(uint lev,
+LatLonToRowCol(unsigned int lev,
                double lat, double lon,
-               uint32& row, uint32& col) {
+               std::uint32_t& row, std::uint32_t& col) {
   // clamp lat
   if (lat <= 0.25) {
     if (lev < 2) {
@@ -75,7 +76,7 @@ LatLonToRowCol(uint lev,
       row = (0x1U << lev) - (0x1U << (lev - 2)) - 1;
     }
   } else {
-    row = static_cast<uint32>(lat * static_cast<double>(0x1U << lev));
+    row = static_cast<std::uint32_t>(lat * static_cast<double>(0x1U << lev));
   }
 
   // clamp lon
@@ -84,16 +85,16 @@ LatLonToRowCol(uint lev,
   } else if (lon >= 1.0) {
     col = (0x1U << lev) - 1;
   } else {
-    col = static_cast<uint32>(lon * static_cast<double>(0x1U << lev));
+    col = static_cast<std::uint32_t>(lon * static_cast<double>(0x1U << lev));
   }
 }
 
-inline khExtents<uint32> ExtentsForBoundingBox(gstBBox box, int lev) {
-  uint32 min_row, max_row, min_col, max_col;
+inline khExtents<std::uint32_t> ExtentsForBoundingBox(gstBBox box, int lev) {
+  std::uint32_t min_row, max_row, min_col, max_col;
   LatLonToRowCol(lev, box.s, box.w, min_row, min_col);
   LatLonToRowCol(lev, box.n, box.e, max_row, max_col);
 
-  return khExtents<uint32>(RowColOrder,
+  return khExtents<std::uint32_t>(RowColOrder,
                            min_row, max_row + 1,
                            min_col, max_col + 1);
 }
@@ -123,7 +124,7 @@ class gstLevelState {
     return &_states[0];
   }
 
-  uint size() const {
+  unsigned int size() const {
     return NUM_LEVELS;
   }
 
@@ -208,7 +209,7 @@ class gstLayer : public gstMemory {
   QStringList GetExternalContextScripts(void) const;
 
  private:
-  bool BuildRegion(const khExtents<uint32>& tiles, int level,
+  bool BuildRegion(const khExtents<std::uint32_t>& tiles, int level,
                    std::vector<BuildSet> &list,
                    bool* need_lod,
                    JSDisplayBundle &jsbundle);
@@ -254,8 +255,8 @@ class gstLayer : public gstMemory {
   gstSharedSource GetSharedSource(void) const;
   int       GetSourceLayerNum(void) const;
   gstHeaderHandle GetSourceAttr();
-  gstFilter* GetFilterById(uint id) const;
-  uint NumFilters(void) const;
+  gstFilter* GetFilterById(unsigned int id) const;
+  unsigned int NumFilters(void) const;
   void ApplyBoxCutter(const gstDrawState&, GeodeList&);
   void ApplyBox(const gstDrawState&, int);
   bool QueryComplete() const;
@@ -266,10 +267,10 @@ class gstLayer : public gstMemory {
   int Version() const { return version_; }
   void SetVersion(int v);
 
-  uint Id() const { return config.channelId; }
+  unsigned int Id() const { return config.channelId; }
 
-  uint SortId() const { return sort_id_; }
-  void SetSortId(uint i);
+  unsigned int SortId() const { return sort_id_; }
+  void SetSortId(unsigned int i);
 
   bool InitialState() const {
     return config.defaultLocale.is_checked_.GetValue();
@@ -298,8 +299,8 @@ class gstLayer : public gstMemory {
   std::string GetUuid() const { return config.asset_uuid_;}
   std::string GetAssetRef() const { return config.assetRef; }
   QString GetPath() const { return config.DefaultNameWithPath(); }
-  inline void IncrementSkipped(uint64 count) { node_count_skipped_ += count; }
-  inline void IncrementCovered(uint64 count) { node_count_covered_ += count; }
+  inline void IncrementSkipped(std::uint64_t count) { node_count_skipped_ += count; }
+  inline void IncrementCovered(std::uint64_t count) { node_count_covered_ += count; }
 
  private:
   friend class gstVectorProject;
@@ -311,7 +312,7 @@ class gstLayer : public gstMemory {
   gstSimplifier simplifier_;
   gstFeatureCuller culler_;
 
-  uint sort_id_;
+  unsigned int sort_id_;
 
   int version_;         // last build version number
 
@@ -329,11 +330,11 @@ class gstLayer : public gstMemory {
   // feature culling by Volume to fit packet size.
   int efficient_lod_;
 
-  uint64 node_count_total_;
-  uint64 node_count_done_;
-  uint64 node_count_covered_;
-  uint64 node_count_empty_;
-  uint64 node_count_skipped_;
+  std::uint64_t node_count_total_;
+  std::uint64_t node_count_done_;
+  std::uint64_t node_count_covered_;
+  std::uint64_t node_count_empty_;
+  std::uint64_t node_count_skipped_;
 };
 
 #endif  // GEO_EARTH_ENTERPRISE_SRC_FUSION_GST_GSTLAYER_H_

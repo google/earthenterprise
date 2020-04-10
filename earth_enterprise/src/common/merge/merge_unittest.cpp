@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -64,7 +65,7 @@ class MergeUnitTest : public UnitTest<MergeUnitTest> {
 
   bool SimpleNumbersTest() {
     const int num_sources = 10;
-    uint32 input_value_count = 0;
+    std::uint32_t input_value_count = 0;
 
     Merge<int> merge("NumbersMerge");
     int limit = num_sources*3;
@@ -81,7 +82,7 @@ class MergeUnitTest : public UnitTest<MergeUnitTest> {
       input_value_count += (limit - i + increment - 1)/increment;
     }
 
-    uint32 output_value_count = 0;
+    std::uint32_t output_value_count = 0;
     merge.Start();
     int prev = -1;
 

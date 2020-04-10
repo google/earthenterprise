@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,7 +14,8 @@
 // limitations under the License.
 
 
-#include <khTypes.h>
+#include <cstdint>
+
 #include <string.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -45,7 +47,7 @@ FileBundleWriter::FileBundleWriter(geFilePool &file_pool,
                                    const std::string &path,
                                    bool overwrite,
                                    mode_t mode,
-                                   uint64 segment_break)
+                                   std::uint64_t segment_break)
     : FileBundle(file_pool, path, segment_break),
       mode_(mode),
       wb_size_(0),
@@ -84,7 +86,7 @@ FileBundleWriter::FileBundleWriter(geFilePool &file_pool,
 FileBundleWriter::FileBundleWriter(geFilePool &file_pool,
                                    const std::string &path,
                                    mode_t mode,
-                                   uint64 segment_break)
+                                   std::uint64_t segment_break)
     : FileBundle(file_pool, path, segment_break),
       mode_(mode),
       wb_size_(0),
@@ -119,7 +121,7 @@ FileBundleUpdateWriter::FileBundleUpdateWriter(geFilePool &file_pool,
 FileBundlePackImport::FileBundlePackImport(geFilePool &file_pool,
                                            const std::string &path,
                                            mode_t mode,
-                                           uint64 segment_break)
+                                           std::uint64_t segment_break)
     : FileBundleWriter(file_pool, path, mode, segment_break) {
   // Get names of pack files
   std::vector<std::string> pack_names;
@@ -199,7 +201,7 @@ void FileBundleWriter::CreateSegment() {
          static_cast<long long unsigned>(SegmentCount() - 1), seg_name.c_str());
 }
 
-std::string FileBundleWriter::SegmentFileName(uint segment) {
+std::string FileBundleWriter::SegmentFileName(unsigned int segment) {
   return khMakeNumericFilename(kSegmentFilePrefix, segment,
                                kSegmentFileSuffixLength);
 }
@@ -232,7 +234,7 @@ void FileBundlePackImport::CreateSegment() {
 void FileBundleWriter::AllocateBlock(size_t block_size,
                                      FileBundleWriterSegment **segment,
                                      off_t *seg_position,
-                                     uint64 *bundle_position) {
+                                     std::uint64_t *bundle_position) {
   assert(block_size <= segment_break());
 
   khLockGuard lock(modify_lock_);
@@ -253,10 +255,10 @@ void FileBundleWriter::AllocateBlock(size_t block_size,
   *bundle_position = (SegmentCount() - 1) * segment_break() + *seg_position;
 }
 
-uint64 FileBundleWriter::AllocateAppend(size_t write_len) {
+ std::uint64_t FileBundleWriter::AllocateAppend(size_t write_len) {
   FileBundleWriterSegment *segment;     // segment to write into
   off_t seg_position;                   // position in segment file
-  uint64 bundle_position;
+  std::uint64_t bundle_position;
   AllocateBlock(write_len, &segment, &seg_position, &bundle_position);
 
   return bundle_position;
@@ -329,7 +331,7 @@ void FileBundleWriter::WriteToSegment(FileBundleWriterSegment *segment,
 // WriteAppend - write specified data at end of bundle.  Return
 // position of start of data in bundle.
 
-uint64 FileBundleWriter::WriteAppend(const void *buffer, size_t write_len) {
+ std::uint64_t FileBundleWriter::WriteAppend(const void *buffer, size_t write_len) {
   if (SegmentsEmpty()) {               // if bundle closed
     throw khSimpleException
     ("FileBundleWriter::WriteAppend: bundle already closed");
@@ -337,7 +339,7 @@ uint64 FileBundleWriter::WriteAppend(const void *buffer, size_t write_len) {
 
   FileBundleWriterSegment *segment;     // segment to write into
   off_t seg_position;                   // position in segment file
-  uint64 bundle_position;
+  std::uint64_t bundle_position;
   AllocateBlock(write_len, &segment, &seg_position, &bundle_position);
   WriteToSegment(segment, seg_position, buffer, write_len);
   return bundle_position;
@@ -349,12 +351,12 @@ uint64 FileBundleWriter::WriteAppend(const void *buffer, size_t write_len) {
 // of the new record is within the space already allocated, and does
 // not span a segment boundary.
 
-void FileBundleWriter::WriteAt(uint64 write_pos,
+void FileBundleWriter::WriteAt(std::uint64_t write_pos,
                                const void *buffer,
                                size_t write_len) {
   // Make sure position is completely within a valid segment
   FileBundleSegment *segment;
-  int32 seg_offset;
+  std::int32_t seg_offset;
   PositionToSegment(write_pos,
                     write_len,
                     FileBundleSegment::kWriterSegment,
@@ -373,14 +375,14 @@ void FileBundleWriter::WriteAt(uint64 write_pos,
 void FileBundleWriter::BufferCRC(void *buffer, size_t buffer_len) {
   assert(buffer_len > kCRCsize);
   size_t data_len = buffer_len - kCRCsize;
-  uint32 crc = HostToLittleEndian(Crc32(buffer, data_len));
+  std::uint32_t crc = HostToLittleEndian(Crc32(buffer, data_len));
   memcpy(static_cast<char*>(buffer) + data_len, &crc, kCRCsize);
 }
 
 // WriteAppendCRC - store CRC32 of data in last 4 bytes of buffer in
 // little endian format, then write data as in WriteAppend
 
-uint64 FileBundleWriter::WriteAppendCRC(void *buffer, size_t write_len) {
+ std::uint64_t FileBundleWriter::WriteAppendCRC(void *buffer, size_t write_len) {
   BufferCRC(buffer, write_len);
   return WriteAppend(buffer, write_len);
 }
@@ -388,7 +390,7 @@ uint64 FileBundleWriter::WriteAppendCRC(void *buffer, size_t write_len) {
 // WriteAtCRC - store CRC32 of data in last 4 bytes of buffer in
 // little endian format, then write data as in WriteAt
 
-void FileBundleWriter::WriteAtCRC(uint64 write_pos,
+void FileBundleWriter::WriteAtCRC(std::uint64_t write_pos,
                                   void *buffer,
                                   size_t write_len) {
   BufferCRC(buffer, write_len);

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -46,14 +47,14 @@
 
 static void ReadbackOutput(geFilePool &file_pool,
                            const std::string path,
-                           uint64 record_count) {
+                           std::uint64_t record_count) {
   PacketFileReader reader(file_pool, path);
 
   QuadtreePath last_qt_path;
   QuadtreePath qt_path;
   std::string buffer;
   size_t read_size;
-  uint64 read_count = 0;
+  std::uint64_t read_count = 0;
 
   while (0 != (read_size = reader.ReadNextCRC(&qt_path, buffer))) {
     if (qt_path < last_qt_path) {
@@ -110,8 +111,8 @@ int main(int argc, char *argv[]) {
   // Open the vector pack file set for conversion.
   std::string oldpackdir = argv[argc-2];
   FileBundlePackImport kbf_reader(file_pool, oldpackdir);
-  uint64 kbf_size = kbf_reader.data_size();
-  uint64 kbf_pos = 0;
+  std::uint64_t kbf_size = kbf_reader.data_size();
+  std::uint64_t kbf_pos = 0;
   notify(NFY_INFO, "gevectorpackupgrade: reading %llu bytes from %s",
          static_cast<unsigned long long>(kbf_size),
          kbf_reader.abs_path().c_str());
@@ -123,7 +124,7 @@ int main(int argc, char *argv[]) {
          writer.abs_path().c_str());
 
   // Read, compress, and write each record in the kbf file set
-  uint64 record_count = 0;
+  std::uint64_t record_count = 0;
   std::vector<char> compressed_buffer;
 
   while (kbf_pos < kbf_size) {

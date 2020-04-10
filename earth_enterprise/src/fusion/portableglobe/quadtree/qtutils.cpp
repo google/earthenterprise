@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@
 #include <string>
 #include <vector>
 #include "common/khTypes.h"
+#include <cstdint>
 #include "common/notify.h"
 
 namespace fusion_portableglobe {
@@ -38,9 +40,9 @@ void ConvertFlatToMercatorQtAddresses(
     std::string flat_qtaddress,
     std::vector<std::string>* mercator_qtaddresses) {
   // x, y, z correspond to their Maps query usage (column, row, and LOD).
-  uint32 x;
-  uint32 y;
-  uint32 z;
+  std::uint32_t x;
+  std::uint32_t y;
+  std::uint32_t z;
 
   ConvertFromQtNode(flat_qtaddress, &x, &y, &z);
   // Dimension of the grid is 2^z by 2^z.
@@ -57,10 +59,10 @@ void ConvertFlatToMercatorQtAddresses(
   // Find the corresponding y range on a Mercator map.
   // Be aggressive in inclusion, and allow unfound tiles
   // to just be ignored.
-  uint32 y_bottom = LatToYPos(min_lat, z, true);
-  uint32 y_top = LatToYPos(max_lat, z, true);
+  std::uint32_t y_bottom = LatToYPos(min_lat, z, true);
+  std::uint32_t y_top = LatToYPos(max_lat, z, true);
   // Add a Mercator quadtree address for each value of y.
-  for (uint32 y_next = y_bottom; y_next <= y_top; y_next++) {
+  for (std::uint32_t y_next = y_bottom; y_next <= y_top; y_next++) {
     mercator_qtaddresses->push_back(ConvertToQtNode(x, y_next, z));
   }
 }
@@ -70,12 +72,12 @@ void ConvertFlatToMercatorQtAddresses(
  * to the given latitude.
  * yPos is an integer in the range of [0, 2^z).
  */
-uint32 LatToYPos(double lat, uint32 z, bool is_mercator) {
+ std::uint32_t LatToYPos(double lat, std::uint32_t z, bool is_mercator) {
   double y;
   double min_y;
   double max_y;
-  uint32 y_off;
-  uint32 max_ypos = 1 << z;
+  std::uint32_t y_off;
+  std::uint32_t max_ypos = 1 << z;
 
   // y is inverted (montonic downwards)
   lat = -lat;
@@ -138,16 +140,16 @@ double MercatorYToLat(double y) {
  * y is a double in the range of (-pi, pi).
  * yPos is an integer in the range of [0, 2^z).
  */
-uint32 YToYPos(double y, uint32 z) {
+ std::uint32_t YToYPos(double y, std::uint32_t z) {
   // Use signed to check for underflow.
-  int32 max_ypos = 1 << z;
-  int32 ypos = max_ypos * ((y + PI) / (2.0 * PI));
+  std::int32_t max_ypos = 1 << z;
+  std::int32_t ypos = max_ypos * ((y + PI) / (2.0 * PI));
   if (ypos < 0) {
     return 0;
   } else if (ypos >= max_ypos) {
     return max_ypos - 1;
   } else {
-    return static_cast<uint32>(ypos);
+    return static_cast<std::uint32_t>(ypos);
   }
 }
 
@@ -169,12 +171,12 @@ double BisectLatitudes(double south, double north, bool is_mercator) {
  * Helper for converting from map space to qtnode address.
  * Return empty string if input is invalid.
  */
-std::string ConvertToQtNode(uint32 x, uint32 y, uint32 z) {
+std::string ConvertToQtNode(std::uint32_t x, std::uint32_t y, std::uint32_t z) {
   std::string qtnode = "0";
   // Half the width or height of the map coordinates at the target LOD.
   // I.e. the size of the top-level quadrants.
-  uint32  half_ndim = 1 << (z - 1);
-  for (uint32 i = 0; i < z; ++i) {
+  std::uint32_t  half_ndim = 1 << (z - 1);
+  for (std::uint32_t i = 0; i < z; ++i) {
      // Choose quadtree address char based on quadrant that x, y fall into.
     if ((y >= half_ndim) && (x < half_ndim)) {
       qtnode += "0";
@@ -209,7 +211,7 @@ std::string ConvertToQtNode(uint32 x, uint32 y, uint32 z) {
  * is an error.
  */
 void ConvertFromQtNode(
-    const std::string& qtnode, uint32* x, uint32* y, uint32* z) {
+    const std::string& qtnode, std::uint32_t* x, std::uint32_t* y, std::uint32_t* z) {
   const char* ptr = qtnode.c_str();
   *z = qtnode.size();
   if (*z == 0) {
@@ -232,8 +234,8 @@ void ConvertFromQtNode(
   *y = 0;
   // Half the width or height of the map coordinates at the target LOD.
   // I.e. the size of the top-level quadrants.
-  uint32 half_ndim = 1 << (*z - 1);
-  for (uint32 i = 0; i < *z; ++i) {
+  std::uint32_t half_ndim = 1 << (*z - 1);
+  for (std::uint32_t i = 0; i < *z; ++i) {
     switch (*++ptr) {
       case '0':
         *y += half_ndim;

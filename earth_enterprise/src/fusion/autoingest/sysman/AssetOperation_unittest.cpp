@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 The Open GEE Contributors
+ * Copyright 2020 The Open GEE Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,7 +77,7 @@ class MockVersion : public AssetVersionImpl {
     // Not used - only included to make MockVersion non-virtual
     string PluginName(void) const override { return string(); }
     void GetOutputFilenames(vector<string> &) const override {}
-    string GetOutputFilename(uint) const override { return string(); }
+    string GetOutputFilename(unsigned int) const override { return string(); }
 };
 
 class MockStorageManager : public StorageManagerInterface<AssetVersionImpl> {
@@ -271,7 +271,7 @@ TEST_F(AssetOperationTest, CancelBadVersion) {
 }
 
 TEST_F(AssetOperationTest, Progress) {
-  const uint32 TASKID = 123;
+  const std::uint32_t TASKID = 123;
   const time_t BEGIN_TIME = 456;
   const time_t PROGRESS_TIME = 789;
   const double PROGRESS = 10.1112;
@@ -286,7 +286,7 @@ TEST_F(AssetOperationTest, Progress) {
 }
 
 TEST_F(AssetOperationTest, ProgressWrongTaskId) {
-  const uint32 TASKID = 123;
+  const std::uint32_t TASKID = 123;
   const time_t BEGIN_TIME = 456;
   const time_t PROGRESS_TIME = 789;
   const double PROGRESS = 10.1112;
@@ -301,7 +301,7 @@ TEST_F(AssetOperationTest, ProgressWrongTaskId) {
 }
 
 TEST_F(AssetOperationTest, ProgressBadVersion) {
-  const uint32 TASKID = 123;
+  const std::uint32_t TASKID = 123;
   const time_t BEGIN_TIME = 456;
   const time_t PROGRESS_TIME = 789;
   const double PROGRESS = 10.1112;
@@ -317,7 +317,7 @@ TEST_F(AssetOperationTest, ProgressBadVersion) {
 }
 
 TEST_F(AssetOperationTest, Done) {
-  const uint32 TASKID = 123;
+  const std::uint32_t TASKID = 123;
   const time_t BEGIN_TIME = 456;
   const time_t END_TIME = 789;
   const vector<string> OUTFILES = {"x", "y", "z"};
@@ -334,7 +334,7 @@ TEST_F(AssetOperationTest, Done) {
 }
 
 TEST_F(AssetOperationTest, DoneWrongTaskId) {
-  const uint32 TASKID = 123;
+  const std::uint32_t TASKID = 123;
   const time_t BEGIN_TIME = 456;
   const time_t END_TIME = 789;
   const vector<string> OUTFILES = {"x", "y", "z"};
@@ -351,7 +351,7 @@ TEST_F(AssetOperationTest, DoneWrongTaskId) {
 }
 
 TEST_F(AssetOperationTest, DoneFailed) {
-  const uint32 TASKID = 123;
+  const std::uint32_t TASKID = 123;
   const time_t BEGIN_TIME = 456;
   const time_t END_TIME = 789;
   const vector<string> OUTFILES = {"x", "y", "z"};
@@ -368,7 +368,7 @@ TEST_F(AssetOperationTest, DoneFailed) {
 }
 
 TEST_F(AssetOperationTest, DoneBadVersion) {
-  const uint32 TASKID = 123;
+  const std::uint32_t TASKID = 123;
   const time_t BEGIN_TIME = 456;
   const time_t END_TIME = 789;
   const vector<string> OUTFILES = {"x", "y", "z"};

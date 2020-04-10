@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -128,12 +129,12 @@ class FilePackerTest : public testing::Test {
    * blist is easier to use to create a big ordered sequence of quadtree
    * paths for testing.
    */
-  void ConvertToQtPath(uint64 blist,
+  void ConvertToQtPath(std::uint64_t blist,
                        int level,
                        std::string* qtpath) {
     *qtpath = "0";
     for (int i = 0; i < level; ++i) {
-      uint64 next = (blist >> (62 - i * 2)) & 0x3;
+      std::uint64_t next = (blist >> (62 - i * 2)) & 0x3;
       switch (next) {
         case 0:
           *qtpath += "0";
@@ -158,7 +159,7 @@ class FilePackerTest : public testing::Test {
    * Write a packet file and its index.
    */
   void WritePacketFiles(std::string packet_directory, int num_packets) {
-    uint64 blist = 0x0000000000000000;
+    std::uint64_t blist = 0x0000000000000000;
     int num_packet_blocks = 25;
     // int header_size = 8;
     // int packet_size = num_packet_blocks * 256 + header_size;
@@ -235,7 +236,7 @@ class FilePackerTest : public testing::Test {
    * Set first byte.
    */
   void SetFirstByte(int value) {
-    uint16 first_byte;
+    std::uint16_t first_byte;
     char *ptr = const_cast<char *>(data_packet.c_str());
     first_byte = 0xff & value;
     *ptr = static_cast<char>(first_byte);

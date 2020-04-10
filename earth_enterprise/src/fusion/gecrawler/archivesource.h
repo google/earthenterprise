@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +21,8 @@
 
 #include <third_party/rsa_md5/crc32.h>
 #include <common/base/macros.h>
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "common/khEndian.h"
 #include "common/geFilePool.h"
 #include "common/quadtreepath.h"
@@ -75,7 +77,7 @@ class ArchiveBundleReader : public FileBundleReader {
     if (IsFinished())
       return;
 
-    uint32 packet_length = ReadPacketHeader(qt_ref);
+    std::uint32_t packet_length = ReadPacketHeader(qt_ref);
 
     // Read the rest of the packet
 
@@ -90,15 +92,15 @@ class ArchiveBundleReader : public FileBundleReader {
 
   inline bool IsFinished() const { return linear_position_ >= data_size(); }
 
-  inline uint64 Tell() const { return linear_position_; }
-  inline void Seek(uint64 new_position) { linear_position_ = new_position; }
+  inline std::uint64_t Tell() const { return linear_position_; }
+  inline void Seek(std::uint64_t new_position) { linear_position_ = new_position; }
 
  private:
-  uint64 linear_position_;
+  std::uint64_t linear_position_;
   LittleEndianReadBuffer le_buffer_;
 
-  uint32 ReadPacketHeader(qtpacket::KhQuadtreeDataReference *qt_ref) {
-    uint32 packet_length;
+  std::uint32_t ReadPacketHeader(qtpacket::KhQuadtreeDataReference *qt_ref) {
+    std::uint32_t packet_length;
     size_t header_size = sizeof(packet_length)
         + qtpacket::KhQuadtreeDataReference::kSerialSize
         + kCRC32Size;
@@ -188,7 +190,7 @@ bool ArchiveSource<T>::GetPacket(
     return false;
 
   while (!(*reader)->IsFinished()) {
-    uint64 saved_position = (*reader)->Tell();  // Save the current position.
+    std::uint64_t saved_position = (*reader)->Tell();  // Save the current position.
 
     qtpacket::KhQuadtreeDataReference archive_ref;
     (*reader)->ReadNext(&archive_ref, buffer);

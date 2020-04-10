@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,12 +35,12 @@ class DisplayRuleTile {
 
 class LayerTile {
  public:
-  inline LayerTile(uint count) : displayRules(count) { }
+  inline LayerTile(unsigned int count) : displayRules(count) { }
 
   std::vector<DisplayRuleTile> displayRules;
 
   void Reset(void) {
-    for (uint i = 0; i < displayRules.size(); ++i) {
+    for (unsigned int i = 0; i < displayRules.size(); ++i) {
       displayRules[i].Reset();
     }
   }
@@ -48,7 +49,7 @@ class LayerTile {
 
 class WorkflowOutputTile : public LayerTile {
  public:
-  inline WorkflowOutputTile(uint count) :
+  inline WorkflowOutputTile(unsigned int count) :
       LayerTile(count),
       path()
   { }

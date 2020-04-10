@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +17,7 @@
 #include "AvailId.h"
 
 // Note: like the STL classes, the range is [begin,end[
-AvailId::AvailId(uint32 begin, uint32 end) {
+AvailId::AvailId(std::uint32_t begin, std::uint32_t end) {
   if (begin > end)
     throw khException(kh::tr("AvailId: Internal error: Bad range"));
   size_ = end - begin;
@@ -29,13 +30,13 @@ AvailId::AvailId(uint32 begin, uint32 end) {
 #endif
 }
 
-uint32 AvailId::next(void) {
+ std::uint32_t AvailId::next(void) {
   if (!size_)
     throw khException(kh::tr("AvailId: All IDs exhausted"));
   assert(avail.back().first < avail.back().second);
 
   // get the next ID
-  uint32 next = avail.back().first++;
+  std::uint32_t next = avail.back().first++;
   --size_;
 
   // see if the range on the back is empty
@@ -51,7 +52,7 @@ uint32 AvailId::next(void) {
   return next;
 }
 
-void AvailId::exclude(uint32 id, bool throwException) {
+void AvailId::exclude(std::uint32_t id, bool throwException) {
   for (std::vector<Range>::iterator range = avail.begin();
        range != avail.end(); ++range) {
     if (id == range->first) {

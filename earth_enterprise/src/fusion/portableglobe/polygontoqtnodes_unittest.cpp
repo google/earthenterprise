@@ -30,8 +30,8 @@ namespace fusion_portableglobe {
 // Test class for Grid and Polygon.
 class PolygonToQtNodesTest : public testing::Test {
  public:
-  static std::vector<std::pair<int32, int32> > known_polygon;
-  static std::vector<std::pair<int32, int32> > degenerate_polygon;
+  static std::vector<std::pair<std::int32_t, std::int32_t> > known_polygon;
+  static std::vector<std::pair<std::int32_t, std::int32_t> > degenerate_polygon;
 
  protected:
   Grid* grid0_;
@@ -77,20 +77,20 @@ class PolygonToQtNodesTest : public testing::Test {
    */
   void InitKnownPolygonCoordinates() {
     known_polygon.clear();
-    known_polygon.push_back(std::pair<int32, int32>(0, 0));
-    known_polygon.push_back(std::pair<int32, int32>(0, 2));
-    known_polygon.push_back(std::pair<int32, int32>(0, 4));
-    known_polygon.push_back(std::pair<int32, int32>(2, 5));
-    known_polygon.push_back(std::pair<int32, int32>(3, 5));
-    known_polygon.push_back(std::pair<int32, int32>(7, 5));
-    known_polygon.push_back(std::pair<int32, int32>(6, 1));
-    known_polygon.push_back(std::pair<int32, int32>(5, 1));
-    known_polygon.push_back(std::pair<int32, int32>(5, 4));
-    known_polygon.push_back(std::pair<int32, int32>(1, 4));
-    known_polygon.push_back(std::pair<int32, int32>(1, 3));
-    known_polygon.push_back(std::pair<int32, int32>(2, 3));
-    known_polygon.push_back(std::pair<int32, int32>(3, 1));
-    known_polygon.push_back(std::pair<int32, int32>(0, 0));
+    known_polygon.push_back(std::pair<std::int32_t, std::int32_t>(0, 0));
+    known_polygon.push_back(std::pair<std::int32_t, std::int32_t>(0, 2));
+    known_polygon.push_back(std::pair<std::int32_t, std::int32_t>(0, 4));
+    known_polygon.push_back(std::pair<std::int32_t, std::int32_t>(2, 5));
+    known_polygon.push_back(std::pair<std::int32_t, std::int32_t>(3, 5));
+    known_polygon.push_back(std::pair<std::int32_t, std::int32_t>(7, 5));
+    known_polygon.push_back(std::pair<std::int32_t, std::int32_t>(6, 1));
+    known_polygon.push_back(std::pair<std::int32_t, std::int32_t>(5, 1));
+    known_polygon.push_back(std::pair<std::int32_t, std::int32_t>(5, 4));
+    known_polygon.push_back(std::pair<std::int32_t, std::int32_t>(1, 4));
+    known_polygon.push_back(std::pair<std::int32_t, std::int32_t>(1, 3));
+    known_polygon.push_back(std::pair<std::int32_t, std::int32_t>(2, 3));
+    known_polygon.push_back(std::pair<std::int32_t, std::int32_t>(3, 1));
+    known_polygon.push_back(std::pair<std::int32_t, std::int32_t>(0, 0));
   }
 
   /**
@@ -114,9 +114,9 @@ class PolygonToQtNodesTest : public testing::Test {
    */
   void InitDegeneratePolygonCoordinates() {
     degenerate_polygon.clear();
-    degenerate_polygon.push_back(std::pair<int32, int32>(0, 0));
-    degenerate_polygon.push_back(std::pair<int32, int32>(4, 4));
-    degenerate_polygon.push_back(std::pair<int32, int32>(0, 0));
+    degenerate_polygon.push_back(std::pair<std::int32_t, std::int32_t>(0, 0));
+    degenerate_polygon.push_back(std::pair<std::int32_t, std::int32_t>(4, 4));
+    degenerate_polygon.push_back(std::pair<std::int32_t, std::int32_t>(0, 0));
   }
 
   /**
@@ -124,9 +124,9 @@ class PolygonToQtNodesTest : public testing::Test {
    * give the south west corner. Vertex coordinates are
    * centered in the qtnodes.
    */
-  void InitLevelPolygon(const std::vector<std::pair<int32, int32> >& coords,
+  void InitLevelPolygon(const std::vector<std::pair<std::int32_t, std::int32_t> >& coords,
                         Polygon* polygon,
-                        int32 level,
+                        std::int32_t level,
                         const double west,
                         double south,
                         double offset) {
@@ -148,9 +148,9 @@ class PolygonToQtNodesTest : public testing::Test {
    * centered in the qtnodes.
    */
   void InitLevelMercatorPolygon(
-      const std::vector<std::pair<int32, int32> >& coords,
+      const std::vector<std::pair<std::int32_t, std::int32_t> >& coords,
       Polygon* polygon,
-      int32 level,
+      std::int32_t level,
       const double west,
       double south,
       double offset,
@@ -259,8 +259,8 @@ class PolygonToQtNodesTest : public testing::Test {
   }
 };
 
-std::vector<std::pair<int32, int32> > PolygonToQtNodesTest::known_polygon;
-std::vector<std::pair<int32, int32> > PolygonToQtNodesTest::degenerate_polygon;
+std::vector<std::pair<std::int32_t, std::int32_t> > PolygonToQtNodesTest::known_polygon;
+std::vector<std::pair<std::int32_t, std::int32_t> > PolygonToQtNodesTest::degenerate_polygon;
 
 
 // Tests reading in polygon from kml file.

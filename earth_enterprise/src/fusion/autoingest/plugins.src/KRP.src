@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -49,24 +50,24 @@ KRPAssetVersionImplD::DoSubmitTask(void)
   }
 
   // Estimate resultant product size
-  uint64 sizeEstimate = 0;
+  std::uint64_t sizeEstimate = 0;
   khGDALDataset srcDS(inputs[0]);
-  khSize<uint32> rasterSize = srcDS.normalizedRasterSize();
+  khSize<std::uint32_t> rasterSize = srcDS.normalizedRasterSize();
   if (type == AssetDefs::Imagery) {
     // the compression is normally 4x - 5x
-    sizeEstimate = ((uint64)rasterSize.width *
-                    (uint64)rasterSize.height *
+    sizeEstimate = ((std::uint64_t)rasterSize.width *
+                    (std::uint64_t)rasterSize.height *
                     3 * sizeof(char)) / 4;
 
   } else {
-    // the product could save as float or int16, we'll assume float
+    // the product could save as float or std::int16_t, we'll assume float
     // LZ compression will normally be about 2x
-    sizeEstimate = ((uint64)rasterSize.width *
-                    (uint64)rasterSize.height *
+    sizeEstimate = ((std::uint64_t)rasterSize.width *
+                    (std::uint64_t)rasterSize.height *
                     1 * sizeof(float)) / 2;
   }
   // give a slight margin of error
-  sizeEstimate = (uint64)(sizeEstimate * 1.25);
+  sizeEstimate = (std::uint64_t)(sizeEstimate * 1.25);
 
   task.AddOutput(type == AssetDefs::Imagery
                  ? WorkingFileRef("raster.kip")

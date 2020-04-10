@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -142,8 +143,8 @@ khExtents<double> khCutExtent::ConvertFromFlatToMercator(
 // ****************************************************************************
 // ***  khTilespace
 // ****************************************************************************
-khTilespaceBase::khTilespaceBase(uint tileSizeLog2_,
-                                 uint pixelsAtLevel0Log2_,
+khTilespaceBase::khTilespaceBase(unsigned int tileSizeLog2_,
+                                 unsigned int pixelsAtLevel0Log2_,
                                  TileOrientation orientation_,
                                  bool isvec) :
     tileSize(uint(pow(2, tileSizeLog2_))),
@@ -167,8 +168,8 @@ khTilespaceBase::khTilespaceBase(const khTilespaceBase& other)
 // ****************************************************************************
 // ***  khTilespace
 // ****************************************************************************
-khTilespace::khTilespace(uint tileSizeLog2_,
-                         uint pixelsAtLevel0Log2_,
+khTilespace::khTilespace(unsigned int tileSizeLog2_,
+                         unsigned int pixelsAtLevel0Log2_,
                          TileOrientation orientation_,
                          bool isvec,
                          ProjectionType proj_type,
@@ -187,8 +188,8 @@ khTilespace::khTilespace(const khTilespaceBase& other, ProjectionType proj_type,
                new MercatorProjection(pixelsAtLevel0) : NULL) {
 }
 
-khTilespaceFlat::khTilespaceFlat(uint tileSizeLog2_,
-                                 uint pixelsAtLevel0Log2_,
+khTilespaceFlat::khTilespaceFlat(unsigned int tileSizeLog2_,
+                                 unsigned int pixelsAtLevel0Log2_,
                                  TileOrientation orientation_,
                                  bool isvec) :
     khTilespace(tileSizeLog2_, pixelsAtLevel0Log2_, orientation_, isvec,
@@ -199,8 +200,8 @@ khTilespaceFlat::khTilespaceFlat(const khTilespaceBase& other)
   : khTilespace(other, FLAT_PROJECTION, false) {
 }
 
-khTilespaceMercator::khTilespaceMercator(uint tileSizeLog2_,
-                                         uint pixelsAtLevel0Log2_,
+khTilespaceMercator::khTilespaceMercator(unsigned int tileSizeLog2_,
+                                         unsigned int pixelsAtLevel0Log2_,
                                          TileOrientation orientation_,
                                          bool isvec)
   : khTilespace(tileSizeLog2_, pixelsAtLevel0Log2_, orientation_, isvec,
@@ -213,14 +214,14 @@ khTilespaceMercator::khTilespaceMercator(const khTilespaceBase& other)
 
 
 
-khExtents<uint32> khTilespace::WorldExtents(uint level) const {
+khExtents<std::uint32_t> khTilespace::WorldExtents(unsigned int level) const {
   // One beyond the last valid tile at this level;
-  uint32 endTile = MaxNumTiles(level);
+  std::uint32_t endTile = MaxNumTiles(level);
 
   // Number of blank rows at this level
-  uint32 emptyRows = NumEmptyRows(level);
+  std::uint32_t emptyRows = NumEmptyRows(level);
 
-  return khExtents<uint32>(RowColOrder,
+  return khExtents<std::uint32_t>(RowColOrder,
                            0       + emptyRows /* beginRow */,
                            endTile - emptyRows /* endRow */,
                            0                   /* beginCol */,
@@ -228,25 +229,25 @@ khExtents<uint32> khTilespace::WorldExtents(uint level) const {
 }
 
 
-khExtents<int64> khTilespaceFlat::WorldPixelExtents(uint level) const {
+khExtents<std::int64_t> khTilespaceFlat::WorldPixelExtents(unsigned int level) const {
   // One beyond the last valid tile at this level;
-  int64 endPixel = MaxNumPixels(level);
+  std::int64_t endPixel = MaxNumPixels(level);
 
   // Number of blank rows at this level
-  int64 emptyRows = NumEmptyPixels(level);
+  std::int64_t emptyRows = NumEmptyPixels(level);
 
-  return khExtents<int64>(RowColOrder,
+  return khExtents<std::int64_t>(RowColOrder,
                           0       + emptyRows  /* beginRow */,
                           endPixel - emptyRows /* endRow */,
                           0                    /* beginCol */,
                           endPixel             /* endCol */);
 }
 
-khExtents<int64>
-khTilespaceMercator::WorldPixelExtentsMercator(uint level) const {
+khExtents<std::int64_t>
+khTilespaceMercator::WorldPixelExtentsMercator(unsigned int level) const {
   // One beyond the last valid tile at this level;
-  int64 endPixel = MaxNumPixels(level);
-  return khExtents<int64>(RowColOrder,
+  std::int64_t endPixel = MaxNumPixels(level);
+  return khExtents<std::int64_t>(RowColOrder,
                           0        /* beginRow */,
                           endPixel /* endRow */,
                           0        /* beginCol */,
@@ -255,8 +256,8 @@ khTilespaceMercator::WorldPixelExtentsMercator(uint level) const {
 
 
 khLevelCoverage khTilespace::FromNormExtents(
-    const khExtents<double>& degExtents, uint fullresLevel,
-    uint targetLevel) const {
+    const khExtents<double>& degExtents, unsigned int fullresLevel,
+    unsigned int targetLevel) const {
   return khLevelCoverage::FromNormExtents(
       *this, IsMercator() ? khTilespace::MeterToNormExtents(degExtents)
                           : khTilespace::DegToNormExtents(degExtents),
@@ -265,7 +266,7 @@ khLevelCoverage khTilespace::FromNormExtents(
 
 
 khLevelCoverage khTilespace::FromNormExtentsWithOversizeFactor(
-      const khExtents<double>& degExtents, uint fullresLevel, uint targetLevel,
+      const khExtents<double>& degExtents, unsigned int fullresLevel, unsigned int targetLevel,
       double oversizeFactor) const {
   return khLevelCoverage::FromNormExtentsWithOversizeFactor(
       *this, IsMercator() ? khTilespace::MeterToNormExtents(degExtents)
@@ -292,8 +293,8 @@ bool khTilespace::IsExtentsWithinWorldBoundary(
 // ****************************************************************************
 khLevelCoverage::khLevelCoverage(const khTilespace &tilespace,
                                  const khExtents<double> &degExtents,
-                                 uint fullresLevel,
-                                 uint targetLevel) {
+                                 unsigned int fullresLevel,
+                                 unsigned int targetLevel) {
   khLevelCoverage tmp = tilespace.FromNormExtents(degExtents,
                                                   fullresLevel, targetLevel);
   level = tmp.level;
@@ -302,8 +303,8 @@ khLevelCoverage::khLevelCoverage(const khTilespace &tilespace,
 
 khLevelCoverage::khLevelCoverage(const khTilespace &tilespace,
                                  const khExtents<double> &degExtents,
-                                 uint fullresLevel,
-                                 uint targetLevel,
+                                 unsigned int fullresLevel,
+                                 unsigned int targetLevel,
                                  double oversizeFactor) {
   khLevelCoverage tmp = tilespace.FromNormExtentsWithOversizeFactor(
       degExtents, fullresLevel, targetLevel, oversizeFactor);
@@ -322,19 +323,19 @@ khLevelCoverage
 khLevelCoverage::FromNormExtentsWithOversizeFactor(
     const khTilespace &tilespace,
     khExtents<double> normExtents,
-    uint fullresLevel,
-    uint targetLevel,
+    unsigned int fullresLevel,
+    unsigned int targetLevel,
     double oversizeFactor) {
   // when converting from geo-space to tile space, we MUST
-  // clamp to avoid negative tile addresses (which wrap when stored in uint32)
+  // clamp to avoid negative tile addresses (which wrap when stored in std::uint32_t)
   khExtents<double> clampExtents(RowColOrder, 0.0, 1.0, 0.0, 1.0);
 
   khExtents<double> boundedExtents
     (khExtents<double>::Intersection(normExtents, clampExtents));
 
-  uint32 north, south, east, west;
+  std::uint32_t north, south, east, west;
 
-  const uint32 numTiles = tilespace.MaxNumTiles(fullresLevel);
+  const std::uint32_t numTiles = tilespace.MaxNumTiles(fullresLevel);
 
   if (tilespace.NeedStretchingForMercator()) {
     // calculate pixel boundaries
@@ -351,19 +352,19 @@ khLevelCoverage::FromNormExtentsWithOversizeFactor(
 
     // create an extents object with our pixel boundaries to facilitate adding
     // the oversize factor
-    khExtents<uint64> pixel_space(XYOrder, upper_left.X(), lower_right.X(),
+    khExtents<std::uint64_t> pixel_space(XYOrder, upper_left.X(), lower_right.X(),
                                   lower_right.Y(), upper_left.Y());
     pixel_space.alignBy(tilespace.tileSize);
-    north = static_cast<uint32>(pixel_space.north() / tilespace.tileSize);
-    south = static_cast<uint32>(pixel_space.south() / tilespace.tileSize);
-    east = static_cast<uint32>(pixel_space.east() / tilespace.tileSize);
-    west = static_cast<uint32>(pixel_space.west() / tilespace.tileSize);
+    north = static_cast<std::uint32_t>(pixel_space.north() / tilespace.tileSize);
+    south = static_cast<std::uint32_t>(pixel_space.south() / tilespace.tileSize);
+    east = static_cast<std::uint32_t>(pixel_space.east() / tilespace.tileSize);
+    west = static_cast<std::uint32_t>(pixel_space.west() / tilespace.tileSize);
   } else {
     // initialize with the fullres level & extents
-    north = static_cast<uint32>(ceil(boundedExtents.north() * numTiles)),
-    south = static_cast<uint32>(boundedExtents.south() * numTiles),
-    east = static_cast<uint32>(ceil(boundedExtents.east()  * numTiles)),
-    west = static_cast<uint32>(boundedExtents.west()  * numTiles);
+    north = static_cast<std::uint32_t>(ceil(boundedExtents.north() * numTiles)),
+    south = static_cast<std::uint32_t>(boundedExtents.south() * numTiles),
+    east = static_cast<std::uint32_t>(ceil(boundedExtents.east()  * numTiles)),
+    west = static_cast<std::uint32_t>(boundedExtents.west()  * numTiles);
   }
   // Refer gstGeoIndex.cpp gstGeoIndexImpl::Finalize; We may have already gone
   // to 3 levels down. Now if we don't add any extra tile, going to 3 level up
@@ -374,17 +375,17 @@ khLevelCoverage::FromNormExtentsWithOversizeFactor(
     // Stretch in width, delta_width = width * oversizeFactor
     // Stretch in width in each dir = delta_width / 2.0
     const double more_in_each_dir = oversizeFactor / 2.0;
-    uint32 more;
+    std::uint32_t more;
     // TODO: temporary solution. It is required conceptual solution
     // because the bounding box of point-feature is degenerate
     // (width and height equal 0).
-    uint32 delta = north - south;
+    std::uint32_t delta = north - south;
     if (0 == delta)
       ++delta;
 
-    more = static_cast<uint32>(ceil(more_in_each_dir * delta));
+    more = static_cast<std::uint32_t>(ceil(more_in_each_dir * delta));
     north += more;
-    // Since we use uint32 for south and west need to take care not to go
+    // Since we use std::uint32_t for south and west need to take care not to go
     // below 0 while oversizing.
     south = south < more ? 0 : south - more;
 
@@ -392,7 +393,7 @@ khLevelCoverage::FromNormExtentsWithOversizeFactor(
     if (0 == delta)
       ++delta;
 
-    more = static_cast<uint32>(ceil(more_in_each_dir * delta));
+    more = static_cast<std::uint32_t>(ceil(more_in_each_dir * delta));
     east += more;
     west = west < more ? 0 : west - more;
   }
@@ -412,7 +413,7 @@ khLevelCoverage::FromNormExtentsWithOversizeFactor(
   }
 
   khLevelCoverage cov(fullresLevel,
-                      khExtents<uint32>(NSEWOrder, north, south, east, west));
+                      khExtents<std::uint32_t>(NSEWOrder, north, south, east, west));
 
   // scale it to the target level
   if (targetLevel != fullresLevel) {
@@ -424,8 +425,8 @@ khLevelCoverage::FromNormExtentsWithOversizeFactor(
 khLevelCoverage
 khLevelCoverage::FromNormExtentsWithCrop(const khTilespace &tilespace,
                                          const khExtents<double> &normExtents,
-                                         uint fullresTileLevel,
-                                         uint targetLevel) {
+                                         unsigned int fullresTileLevel,
+                                         unsigned int targetLevel) {
   khLevelCoverage cov = FromNormExtents(tilespace, normExtents,
                                         fullresTileLevel, targetLevel);
   cov.cropToWorld(tilespace);
@@ -434,12 +435,12 @@ khLevelCoverage::FromNormExtentsWithCrop(const khTilespace &tilespace,
 
 
 khLevelCoverage
-khLevelCoverage::GetSubset(uint subsetThis, uint subsetTotal) const {
-  // By virtue of the range of uint, this check also ensures that
+khLevelCoverage::GetSubset(unsigned int subsetThis, unsigned int subsetTotal) const {
+  // By virtue of the range of unsigned int, this check also ensures that
   // subsetTotal != 0
   if (subsetThis >= subsetTotal) {
     notify(NFY_WARN, "Internal Error: Invalid subset specification");
-    return khLevelCoverage(level, khExtents<uint32>());
+    return khLevelCoverage(level, khExtents<std::uint32_t>());
   }
 
   // We make a subset by breaking up the columns
@@ -448,18 +449,18 @@ khLevelCoverage::GetSubset(uint subsetThis, uint subsetTotal) const {
     return *this;
   } else {
     assert(subsetTotal != 0);
-    uint32 numCols = extents.width();
-    uint32 colsPerSubset = (numCols + subsetTotal - 1) / subsetTotal;
-    uint32 beginCol = subsetThis * colsPerSubset;
-    uint32 endCol   = std::min((subsetThis+1) * colsPerSubset,
+    std::uint32_t numCols = extents.width();
+    std::uint32_t colsPerSubset = (numCols + subsetTotal - 1) / subsetTotal;
+    std::uint32_t beginCol = subsetThis * colsPerSubset;
+    std::uint32_t endCol   = std::min((subsetThis+1) * colsPerSubset,
                                extents.endCol());
     if (beginCol >= endCol) {
       // There's nothing left for this part to do. Just return an
       // empty coverage
-      return khLevelCoverage(level, khExtents<uint32>());
+      return khLevelCoverage(level, khExtents<std::uint32_t>());
     } else {
       return khLevelCoverage(level,
-                             khExtents<uint32>(RowColOrder,
+                             khExtents<std::uint32_t>(RowColOrder,
                                                extents.beginRow(),
                                                extents.endRow(),
                                                beginCol, endCol));
@@ -479,7 +480,7 @@ khLevelCoverage::UpperCoverage(const khTilespace &tilespace) const {
 
   // build a new level coverage around the answer
   return khLevelCoverage(level,
-                         khExtents<uint32>(RowColOrder,
+                         khExtents<std::uint32_t>(RowColOrder,
                                            upper.row,
                                            upper.row+1,
                                            extents.beginCol(),
@@ -498,7 +499,7 @@ khLevelCoverage::RightCoverage(const khTilespace &tilespace) const {
 
   // build a new level coverage around the answer
   return khLevelCoverage(level,
-                         khExtents<uint32>(RowColOrder,
+                         khExtents<std::uint32_t>(RowColOrder,
                                            extents.beginRow(),
                                            extents.endRow(),
                                            right.col,
@@ -517,7 +518,7 @@ khLevelCoverage::UpperRightCoverage(const khTilespace &tilespace) const {
 
   // build a new level coverage around the answer
   return khLevelCoverage(level,
-                         khExtents<uint32>(RowColOrder,
+                         khExtents<std::uint32_t>(RowColOrder,
                                            upperright.row,
                                            upperright.row+1,
                                            upperright.col,
@@ -531,7 +532,7 @@ khLevelCoverage::UpperRightCoverage(const khTilespace &tilespace) const {
 // ****************************************************************************
 khTileAddr
 khTileAddr::UpperAddr(const khTilespace &tilespace) const {
-  uint32 newRow;
+  std::uint32_t newRow;
   if (tilespace.WorldExtents(level).endRow()-1 > row) {
     newRow = row+1;
   } else {
@@ -542,7 +543,7 @@ khTileAddr::UpperAddr(const khTilespace &tilespace) const {
 
 khTileAddr
 khTileAddr::RightAddr(const khTilespace &tilespace) const {
-  uint32 newCol;
+  std::uint32_t newCol;
   if (tilespace.WorldExtents(level).endCol()-1 > col) {
     newCol = col+1;
   } else {
@@ -553,13 +554,13 @@ khTileAddr::RightAddr(const khTilespace &tilespace) const {
 
 khTileAddr
 khTileAddr::UpperRightAddr(const khTilespace &tilespace) const {
-  uint32 newRow;
+  std::uint32_t newRow;
   if (tilespace.WorldExtents(level).endRow()-1 > row) {
     newRow = row+1;
   } else {
     newRow = 0;
   }
-  uint32 newCol;
+  std::uint32_t newCol;
   if (tilespace.WorldExtents(level).endCol()-1 > col) {
     newCol = col+1;
   } else {

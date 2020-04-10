@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,19 +21,20 @@
 #define GEO_EARTH_ENTERPRISE_SRC_FUSION_GST_GSTCONSTANTS_H_
 
 #include <float.h>
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "common/khConstants.h"
 
 // namespace fusion_gst {
 
 // Minimal number of vertices in polyline.
-const uint kMinPolylineVertices = 2;
+const unsigned int kMinPolylineVertices = 2;
 
 // Minimal number of vertices in cycle of polygon.
-const uint kMinCycleVertices = 4;   // first vertex == last vertex;
+const unsigned int kMinCycleVertices = 4;   // first vertex == last vertex;
 
 // Max level at which we build presence mask for optimizing quads processing.
-const uint32 kMaxLevelForBuildPresenceMask = 14;
+const std::uint32_t kMaxLevelForBuildPresenceMask = 14;
 
 
 // Epsilon tolerance value to compare floating-point (double) values.

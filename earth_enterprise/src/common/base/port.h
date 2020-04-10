@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +29,7 @@
 #elif defined(OS_CYGWIN)
 #include <malloc.h>         // for memalign()
 #elif defined(ANDROID)
-#include "khTypes.h"        // for uint64 definition
+#include <cstdint>        // for uint64_t definition
 #endif
 
 #include "base/integral_types.h"
@@ -59,10 +60,6 @@
 // The following typedef is carefully considered, and should not cause
 //  any clashes
 #if !defined(__USE_MISC)
-#if !defined(HAVE_UINT)
-#define HAVE_UINT 1
-typedef unsigned int uint;
-#endif
 #if !defined(HAVE_USHORT)
 #define HAVE_USHORT 1
 typedef unsigned short ushort;
@@ -138,22 +135,22 @@ static inline uint16 bswap_16(uint16 x) {
   return ((x & 0xFF) << 8) | ((x & 0xFF00) >> 8);
 }
 #define bswap_16(x) bswap_16(x)
-static inline uint32 bswap_32(uint32 x) {
+static inline std::uint32_t bswap_32(std::uint32_t x) {
   return (((x & 0xFF) << 24) |
           ((x & 0xFF00) << 8) |
           ((x & 0xFF0000) >> 8) |
           ((x & 0xFF000000) >> 24));
 }
 #define bswap_32(x) bswap_32(x)
-static inline uint64 bswap_64(uint64 x) {
-  return (((x & GG_ULONGLONG(0xFF)) << 56) |
-          ((x & GG_ULONGLONG(0xFF00)) << 40) |
-          ((x & GG_ULONGLONG(0xFF0000)) << 24) |
-          ((x & GG_ULONGLONG(0xFF000000)) << 8) |
-          ((x & GG_ULONGLONG(0xFF00000000)) >> 8) |
-          ((x & GG_ULONGLONG(0xFF0000000000)) >> 24) |
-          ((x & GG_ULONGLONG(0xFF000000000000)) >> 40) |
-          ((x & GG_ULONGLONG(0xFF00000000000000)) >> 56));
+static inline std::uint64_t bswap_64(std::uint64_t x) {
+  return (((x & UINT64_C(0xFF)) << 56) |
+          ((x & UINT64_C(0xFF00)) << 40) |
+          ((x & UINT64_C(0xFF0000)) << 24) |
+          ((x & UINT64_C(0xFF000000)) << 8) |
+          ((x & UINT64_C(0xFF00000000)) >> 8) |
+          ((x & UINT64_C(0xFF0000000000)) >> 24) |
+          ((x & UINT64_C(0xFF000000000000)) >> 40) |
+          ((x & UINT64_C(0xFF00000000000000)) >> 56));
 }
 #define bswap_64(x) bswap_64(x)
 
@@ -958,7 +955,7 @@ inline int fpclassify_double(double x) {
 // bit_cast is avoided to simplify dependency and to create a code that is
 // easy to deploy in C code
 inline int fpclassify_float(float x) {
-  uint32 bitwise_representation;
+  std::uint32_t bitwise_representation;
   memcpy(&bitwise_representation, &x, 4);
   if ((bitwise_representation & 0x7f800000) == 0 &&
       (bitwise_representation & 0x007fffff) != 0)
@@ -1013,10 +1010,6 @@ typedef int pid_t;
 
 // From stat.h
 typedef unsigned int mode_t;
-
-// u_int16_t, int16_t don't exist in MSVC
-typedef unsigned short u_int16_t;
-typedef short int16_t;
 
 // ----- END VC++ STUBS & FAKE DEFINITIONS ----------------------------------
 
@@ -1087,13 +1080,13 @@ struct PortableHashBase { };
 // modern PowerPC hardware can also do unaligned integer loads and stores;
 // but note: the FPU still sends unaligned loads and stores to a trap handler!
 
-#define UNALIGNED_LOAD16(_p) (*reinterpret_cast<const uint16 *>(_p))
-#define UNALIGNED_LOAD32(_p) (*reinterpret_cast<const uint32 *>(_p))
-#define UNALIGNED_LOAD64(_p) (*reinterpret_cast<const uint64 *>(_p))
+#define UNALIGNED_LOAD16(_p) (*reinterpret_cast<const std::uint16_t *>(_p))
+#define UNALIGNED_LOAD32(_p) (*reinterpret_cast<const uint32_t *>(_p))
+#define UNALIGNED_LOAD64(_p) (*reinterpret_cast<const uint64_t *>(_p))
 
-#define UNALIGNED_STORE16(_p, _val) (*reinterpret_cast<uint16 *>(_p) = (_val))
-#define UNALIGNED_STORE32(_p, _val) (*reinterpret_cast<uint32 *>(_p) = (_val))
-#define UNALIGNED_STORE64(_p, _val) (*reinterpret_cast<uint64 *>(_p) = (_val))
+#define UNALIGNED_STORE16(_p, _val) (*reinterpret_cast<std::uint16_t *>(_p) = (_val))
+#define UNALIGNED_STORE32(_p, _val) (*reinterpret_cast<std::uint32_t *>(_p) = (_val))
+#define UNALIGNED_STORE64(_p, _val) (*reinterpret_cast<std::uint64_t *>(_p) = (_val))
 
 #elif defined(__arm__) && \
       !defined(__ARM_ARCH_5__) && \
@@ -1117,23 +1110,23 @@ struct PortableHashBase { };
 //
 // This is a mess, but there's not much we can do about it.
 
-#define UNALIGNED_LOAD16(_p) (*reinterpret_cast<const uint16 *>(_p))
-#define UNALIGNED_LOAD32(_p) (*reinterpret_cast<const uint32 *>(_p))
+#define UNALIGNED_LOAD16(_p) (*reinterpret_cast<const std::uint16_t *>(_p))
+#define UNALIGNED_LOAD32(_p) (*reinterpret_cast<const std::uint32_t *>(_p))
 
-#define UNALIGNED_STORE16(_p, _val) (*reinterpret_cast<uint16 *>(_p) = (_val))
-#define UNALIGNED_STORE32(_p, _val) (*reinterpret_cast<uint32 *>(_p) = (_val))
+#define UNALIGNED_STORE16(_p, _val) (*reinterpret_cast<std::uint16_t *>(_p) = (_val))
+#define UNALIGNED_STORE32(_p, _val) (*reinterpret_cast<std::uint32_t *>(_p) = (_val))
 
 // TODO: NEON supports unaligned 64-bit loads and stores.
 // See if that would be more efficient on platforms supporting it,
 // at least for copies.
 
-inline uint64 UNALIGNED_LOAD64(const void *p) {
-  uint64 t;
+inline std::uint64_t UNALIGNED_LOAD64(const void *p) {
+  std::uint64_t t;
   memcpy(&t, p, sizeof t);
   return t;
 }
 
-inline void UNALIGNED_STORE64(void *p, uint64 v) {
+inline void UNALIGNED_STORE64(void *p, std::uint64_t v) {
   memcpy(p, &v, sizeof v);
 }
 
@@ -1144,33 +1137,33 @@ inline void UNALIGNED_STORE64(void *p, uint64 v) {
 // These functions are provided for architectures that don't support
 // unaligned loads and stores.
 
-inline uint16 UNALIGNED_LOAD16(const void *p) {
-  uint16 t;
+inline std::uint16_t UNALIGNED_LOAD16(const void *p) {
+  std::uint16_t t;
   memcpy(&t, p, sizeof t);
   return t;
 }
 
-inline uint32 UNALIGNED_LOAD32(const void *p) {
-  uint32 t;
+inline std::uint32_t UNALIGNED_LOAD32(const void *p) {
+  std::uint32_t t;
   memcpy(&t, p, sizeof t);
   return t;
 }
 
-inline uint64 UNALIGNED_LOAD64(const void *p) {
-  uint64 t;
+inline std::uint64_t UNALIGNED_LOAD64(const void *p) {
+  std::uint64_t t;
   memcpy(&t, p, sizeof t);
   return t;
 }
 
-inline void UNALIGNED_STORE16(void *p, uint16 v) {
+inline void UNALIGNED_STORE16(void *p, std::uint16_t v) {
   memcpy(p, &v, sizeof v);
 }
 
-inline void UNALIGNED_STORE32(void *p, uint32 v) {
+inline void UNALIGNED_STORE32(void *p, std::uint32_t v) {
   memcpy(p, &v, sizeof v);
 }
 
-inline void UNALIGNED_STORE64(void *p, uint64 v) {
+inline void UNALIGNED_STORE64(void *p, std::uint64_t v) {
   memcpy(p, &v, sizeof v);
 }
 

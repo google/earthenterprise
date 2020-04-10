@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,7 +31,7 @@ class PacketLevelAssetVersionImplD {
   bool AttemptConvertFromOldLastGood(void);
   void MakeConvertTask(const AssetVersion &old);
  private:
-  uint64 EstimateOutputSize(bool is_mercator) const;
+  std::uint64_t EstimateOutputSize(bool is_mercator) const;
 };
 
 // ===== PacketLevelAssetD.cpp =====
@@ -91,7 +92,7 @@ void PacketLevelAssetVersionImplD::DoSubmitTask(void) {
   // Imagery packet.
   bool is_mercator = outdir.find(kMercatorImageryAssetSuffix + "/") !=
       std::string::npos;
-  uint64 sizeEstimate = EstimateOutputSize(is_mercator);
+  std::uint64_t sizeEstimate = EstimateOutputSize(is_mercator);
 
   task.AddOutput(outdir, sizeEstimate);
 
@@ -271,7 +272,7 @@ void PacketLevelAssetVersionImplD::MakeConvertTask(
   // Imagery packet.
   bool is_mercator = outdir.find(kMercatorImageryAssetSuffix + "/") !=
       std::string::npos;
-  uint64 sizeEstimate = EstimateOutputSize(is_mercator);
+  std::uint64_t sizeEstimate = EstimateOutputSize(is_mercator);
 
   task.AddOutput(outdir, sizeEstimate);
 
@@ -285,23 +286,23 @@ void PacketLevelAssetVersionImplD::MakeConvertTask(
 
 
 // Estimates resultant packetLevel size.
-uint64 PacketLevelAssetVersionImplD::EstimateOutputSize(bool is_mercator) const {
-  uint64 sizeEstimate = 0;
+ std::uint64_t PacketLevelAssetVersionImplD::EstimateOutputSize(bool is_mercator) const {
+  std::uint64_t sizeEstimate = 0;
 
   const khTilespaceBase &tilespace((type == AssetDefs::Imagery)
                                    ? ClientImageryTilespaceFlat
                                    : ClientTmeshTilespaceFlat);
-  uint64 rasterSize = static_cast<uint64>(config.coverage.extents.width()) *
-                      static_cast<uint64>(tilespace.tileSize) *
-                      static_cast<uint64>(config.coverage.extents.height()) *
-                      static_cast<uint64>(tilespace.tileSize);
+  std::uint64_t rasterSize = static_cast<std::uint64_t>(config.coverage.extents.width()) *
+                      static_cast<std::uint64_t>(tilespace.tileSize) *
+                      static_cast<std::uint64_t>(config.coverage.extents.height()) *
+                      static_cast<std::uint64_t>(tilespace.tileSize);
 
-  uint32 pixelSize = (type == AssetDefs::Imagery) ?
+  std::uint32_t pixelSize = (type == AssetDefs::Imagery) ?
       ImageryProductTile::NumComp * sizeof(ImageryProductTile::PixelType) :
       HeightmapFloat32ProductTile::NumComp *
       sizeof(HeightmapFloat32ProductTile::PixelType);
 
-  const uint32 alphaPixelSize = AlphaProductTile::NumComp *
+  const std::uint32_t alphaPixelSize = AlphaProductTile::NumComp *
       sizeof(AlphaProductTile::PixelType);
 
   if (type == AssetDefs::Imagery) {
@@ -312,7 +313,7 @@ uint64 PacketLevelAssetVersionImplD::EstimateOutputSize(bool is_mercator) const 
       // packet_data_size = (7/8  * sizeof_image_data) /
       // jpeg_compression_factor + (1/8 * sizeof_image_with_alpha_data) /
       // png_compression_rate;
-      sizeEstimate = static_cast<uint64>(
+      sizeEstimate = static_cast<std::uint64_t>(
           (rasterSize * pixelSize * 0.875) / kJpegCompressionRatio +
           (rasterSize * (pixelSize + alphaPixelSize) * 0.125) /
           kPngCompressionRatio);
@@ -322,13 +323,13 @@ uint64 PacketLevelAssetVersionImplD::EstimateOutputSize(bool is_mercator) const 
       // Assume 1/8 (0.125) of tiles have an alpha band.
       // packet_data_size = (sizeof_image_data / jpeg_compression_factor) +
       //      (1/8 * sizeof_image_alpha / png_compression_alpha_factor);
-      sizeEstimate = static_cast<uint64>(
+      sizeEstimate = static_cast<std::uint64_t>(
           (rasterSize * pixelSize) / kJpegCompressionRatio +
           (rasterSize * alphaPixelSize * 0.125) / kPngCompressionAlphaRatio);
     }
   } else {
     // tmeshes are a little smaller than their raster
-    sizeEstimate = static_cast<uint64>((rasterSize * pixelSize) * 0.80);
+    sizeEstimate = static_cast<std::uint64_t>((rasterSize * pixelSize) * 0.80);
   }
 
   // If we're caching the blends, let's take them into account too
@@ -337,10 +338,10 @@ uint64 PacketLevelAssetVersionImplD::EstimateOutputSize(bool is_mercator) const 
     // we use LZ compression for a 1/2 (0.5) reduction
 
     // blend data cache size
-    sizeEstimate += static_cast<uint64>((rasterSize * pixelSize) * 0.125 * 0.5);
+    sizeEstimate += static_cast<std::uint64_t>((rasterSize * pixelSize) * 0.125 * 0.5);
 
     // blend alpha cache size
-    sizeEstimate += static_cast<uint64>((rasterSize * alphaPixelSize) * 0.125 * 0.5);
+    sizeEstimate += static_cast<std::uint64_t>((rasterSize * alphaPixelSize) * 0.125 * 0.5);
   }
 
   return sizeEstimate;

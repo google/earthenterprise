@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -56,7 +57,7 @@ void PolygonCleaner::Run(gstGeodeHandle* const geodeh) {
       {
         gstGeodeCollection *multi_geode =
             static_cast<gstGeodeCollection*>(&(**geodeh));
-        for (uint p = 0; p < multi_geode->NumParts(); ++p) {
+        for (unsigned int p = 0; p < multi_geode->NumParts(); ++p) {
           gstGeodeHandle &cur_geodeh = multi_geode->GetGeode(p);
           ProcessPolygon(&cur_geodeh);
           if (cur_geodeh->IsEmpty()) {

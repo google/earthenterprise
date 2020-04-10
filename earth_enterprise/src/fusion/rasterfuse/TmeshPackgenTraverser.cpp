@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,16 +31,16 @@ namespace rasterfuse {
 ExtraPixelsImpl::ExtraPixelsImpl(
     const HeightmapFloat32ProductTile& productTile) {
   CopySubtile(leftPixels,
-              khOffset<uint32>(RowColOrder, 0, 0),
+              khOffset<std::uint32_t>(RowColOrder, 0, 0),
               productTile,
-              khExtents<uint32>(RowColOrder,
+              khExtents<std::uint32_t>(RowColOrder,
                                 0,
                                 HeightmapFloat32ProductTile::TileHeight,
                                 0, 1));
   CopySubtile(bottomPixels,
-              khOffset<uint32>(RowColOrder, 0, 0),
+              khOffset<std::uint32_t>(RowColOrder, 0, 0),
               productTile,
-              khExtents<uint32>(RowColOrder,
+              khExtents<std::uint32_t>(RowColOrder,
                                 0, 1,
                                 0,
                                 HeightmapFloat32ProductTile::TileWidth));
@@ -62,10 +63,10 @@ TmeshWorkItem::TmeshWorkItem(PacketFileWriter &_writer,
     decimate_(decimate),
     decimation_threshold_(decimation_threshold) {
 
-  uint ratio = RasterProductTilespaceBase.tileSize / sampleTilespace.tileSize;
-  uint totalPieces = ratio * ratio;
+  unsigned int ratio = RasterProductTilespaceBase.tileSize / sampleTilespace.tileSize;
+  unsigned int totalPieces = ratio * ratio;
   pieces.reserve(totalPieces);
-  for (uint i = 0; i < totalPieces; ++i) {
+  for (unsigned int i = 0; i < totalPieces; ++i) {
     pieces.push_back(new Piece());
   }
 }
@@ -74,9 +75,9 @@ TmeshWorkItem::TmeshWorkItem(PacketFileWriter &_writer,
 void TmeshWorkItem::DoWork(TmeshPrepItem *prep) {
   numPiecesUsed = 0;
 
-  for (uint32 row = prep->workCoverage.extents.beginRow();
+  for (std::uint32_t row = prep->workCoverage.extents.beginRow();
        row < prep->workCoverage.extents.endRow(); ++row) {
-    for (uint32 col = prep->workCoverage.extents.beginCol();
+    for (std::uint32_t col = prep->workCoverage.extents.beginCol();
          col < prep->workCoverage.extents.endCol(); ++col) {
       Piece *piece = pieces[numPiecesUsed++];
       piece->targetAddr = khTileAddr(prep->workCoverage.level,
@@ -84,13 +85,13 @@ void TmeshWorkItem::DoWork(TmeshPrepItem *prep) {
       piece->compressed.reset();
 
       // extract my piece of the bigger tile
-      uint32 subrow = row - prep->heightmapTileOrigin.row();
-      uint32 subcol = col - prep->heightmapTileOrigin.col();
+      std::uint32_t subrow = row - prep->heightmapTileOrigin.row();
+      std::uint32_t subcol = col - prep->heightmapTileOrigin.col();
       generator.Generate
         (prep->heightmapTile.bufs[0],
-         khSize<uint32>(ExpandedHeightmapTile::TileWidth,
+         khSize<std::uint32_t>(ExpandedHeightmapTile::TileWidth,
                         ExpandedHeightmapTile::TileHeight),
-         khOffset<uint32>(RowColOrder,
+         khOffset<std::uint32_t>(RowColOrder,
                           subrow * sampleTilespace.tileSize,
                           subcol * sampleTilespace.tileSize),
          piece->targetAddr,
@@ -104,7 +105,7 @@ void TmeshWorkItem::DoWork(TmeshPrepItem *prep) {
 }
 
 void TmeshWorkItem::DoWrite(khMTProgressMeter *progress) {
-  for (uint i = 0; i < numPiecesUsed; ++i) {
+  for (unsigned int i = 0; i < numPiecesUsed; ++i) {
     Piece* piece = pieces[i];
     writer.WriteAppendCRC(piece->targetAddr,
                           reinterpret_cast<char*>(piece->compressed.peek()),
@@ -122,9 +123,9 @@ void TmeshWorkItem::DoWrite(khMTProgressMeter *progress) {
 // ****************************************************************************
 namespace {
 
-static const khTilespace& BuildSampleTilespace(uint tileSize,
+static const khTilespace& BuildSampleTilespace(unsigned int tileSize,
                                                khTilespace* space) {
-  uint tileSizeLog2 = log2(tileSize);
+  unsigned int tileSizeLog2 = log2(tileSize);
   if (tileSizeLog2 == 0) {
     throw khException
       (kh::tr
@@ -175,7 +176,7 @@ TmeshPackgenTraverser::TmeshPackgenTraverser(
          decimate_ ? "with decimation" : "no decimation");
 }
 
-void TmeshPackgenTraverser::Traverse(uint numcpus) {
+void TmeshPackgenTraverser::Traverse(unsigned int numcpus) {
   SetNotCoveredTilesExist(false);
   int numWorkThreads = numcpus;
   DoTraverse(numWorkThreads);
@@ -243,7 +244,7 @@ ExtraPixels TmeshPackgenTraverser::CacheExtraPixels(
 
 ExtraPixels TmeshPackgenTraverser::FindMakeExtraPixels(
     const khTileAddr &productAddr) {
-  uint64 tileid = productAddr.Id();
+  std::uint64_t tileid = productAddr.Id();
   ExtraPixels found;
 
   if (extra_cache_.Find(tileid, found)) {
@@ -266,7 +267,7 @@ void TmeshPackgenTraverser::FillExtraUpperPixels(
   if (upperAddr.row == 0) {
     // we wrapped at the top of the world - just fill extra top
     // pixels with 0
-    uint32 pos = ExpandedHeightmapTile::BandPixelCount -
+    std::uint32_t pos = ExpandedHeightmapTile::BandPixelCount -
                  ExpandedHeightmapTile::TileWidth;
     memset(&heightmapTile.bufs[0][pos], 0,
            ExpandedHeightmapTile::TileWidth *
@@ -278,9 +279,9 @@ void TmeshPackgenTraverser::FillExtraUpperPixels(
 
     // copy the extra pixels into the PrepItem's buffer
     CopySubtile(heightmapTile,
-                khOffset<uint32>(RowColOrder, tile_space.tileSize, 0),
+                khOffset<std::uint32_t>(RowColOrder, tile_space.tileSize, 0),
                 extra->bottomPixels,
-                khExtents<uint32>(RowColOrder, 0, 1, 0, tile_space.tileSize));
+                khExtents<std::uint32_t>(RowColOrder, 0, 1, 0, tile_space.tileSize));
 
     if (releaseCacheEntry) {
       // Nobody else will need this cache entry. Go ahead and drop it
@@ -303,9 +304,9 @@ void TmeshPackgenTraverser::FillExtraRightPixels(
 
   // copy the extra pixels into the PrepItem's buffer
   CopySubtile(heightmapTile,
-              khOffset<uint32>(RowColOrder, 0, tile_space.tileSize),
+              khOffset<std::uint32_t>(RowColOrder, 0, tile_space.tileSize),
               extra->leftPixels,
-              khExtents<uint32>(RowColOrder, 0, tile_space.tileSize, 0, 1));
+              khExtents<std::uint32_t>(RowColOrder, 0, tile_space.tileSize, 0, 1));
 
   if (releaseCacheEntry) {
     // Nobody else will need this cache entry. Go ahead and drop it
@@ -335,7 +336,7 @@ void TmeshPackgenTraverser::FillExtraUpperRightPixel(
     extra_cache_.Remove(upperRightAddr.Id());
   }
 
-  uint32 pos = ExpandedHeightmapTile::BandPixelCount - 1;
+  std::uint32_t pos = ExpandedHeightmapTile::BandPixelCount - 1;
   heightmapTile.bufs[0][pos] = extraPixel;
 }
 
@@ -355,8 +356,8 @@ void TmeshPackgenTraverser::PrepAddr(const khTileAddr &productAddr) {
                             sample_tilespace_));
 
   // Intersect it with what we really want
-  khExtents<uint32> workExtents
-    (khExtents<uint32>::Intersection(thisTileCoverage.extents,
+  khExtents<std::uint32_t> workExtents
+    (khExtents<std::uint32_t>::Intersection(thisTileCoverage.extents,
                                      config.coverage.extents));
   bool needExtraPixelsOnTop   = (thisTileCoverage.extents.endRow() ==
                                  workExtents.endRow());
@@ -387,19 +388,19 @@ void TmeshPackgenTraverser::PrepAddr(const khTileAddr &productAddr) {
   // get the extra pixels, (not at 1024 col of 0-1024 tile, but at 512th col).
   if ((config.coverage.level == 4) && !needExtraPixelsOnRight &&
       (sample_tilespace_.tileSize == ClientTmeshTilespaceBase.tileSize)) {
-    const khExtents<uint32> world_extent = ClientTmeshTilespaceFlat.
+    const khExtents<std::uint32_t> world_extent = ClientTmeshTilespaceFlat.
         WorldExtents(config.coverage.level);
     // We can only do wrapping around antimeridian if we have world extents
     if (world_extent.beginX() == workExtents.beginX() &&
         world_extent.endX() == workExtents.endX()) {
-      const uint32 min_row = sample_tilespace_.tileSize * workExtents.beginY();
-      const uint32 max_row = sample_tilespace_.tileSize * workExtents.endY();
-      const uint32 min_col = sample_tilespace_.tileSize * workExtents.beginX();
-      const uint32 max_col = sample_tilespace_.tileSize * workExtents.endX();
+      const std::uint32_t min_row = sample_tilespace_.tileSize * workExtents.beginY();
+      const std::uint32_t max_row = sample_tilespace_.tileSize * workExtents.endY();
+      const std::uint32_t min_col = sample_tilespace_.tileSize * workExtents.beginX();
+      const std::uint32_t max_col = sample_tilespace_.tileSize * workExtents.endX();
       // Wrap 1st col pixels to 512th col
       CopySubtile(
-          read_product_tile_, khOffset<uint32>(RowColOrder, min_row, max_col),
-          read_product_tile_, khExtents<uint32>(RowColOrder, min_row, max_row,
+          read_product_tile_, khOffset<std::uint32_t>(RowColOrder, min_row, max_col),
+          read_product_tile_, khExtents<std::uint32_t>(RowColOrder, min_row, max_row,
                                              min_col, min_col + 1));
     }
   }
@@ -417,9 +418,9 @@ void TmeshPackgenTraverser::PrepAddr(const khTileAddr &productAddr) {
 
   // copy it into the PrepItem's oversized heightmap buf
   CopySubtile(prep->heightmapTile,
-              khOffset<uint32>(RowColOrder, 0, 0),
+              khOffset<std::uint32_t>(RowColOrder, 0, 0),
               read_product_tile_,
-              khExtents<uint32>(RowColOrder,
+              khExtents<std::uint32_t>(RowColOrder,
                                 0, tile_space.tileSize,
                                 0, tile_space.tileSize));
   // If needed fetch an extra row of pixels for the top

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +29,8 @@ class FileBundleSegment;
 // a queue of CacheBlocks (within a segment) which are sorted by LRU.
 //
 // example usage:
-// uint32 blocks_count = 5; // 5 blocks to be cached
-// uint32 block_size = 64 * 1024; // each cached block will be 64KB
+// std::uint32_t blocks_count = 5; // 5 blocks to be cached
+// std::uint32_t block_size = 64 * 1024; // each cached block will be 64KB
 // CachedReadAccessor accessor(blocks_count, block_size);
 // ...
 // FileBundleSegment segment;
@@ -58,10 +59,10 @@ protected:
   // offset within the segment.
   class CacheBlockAddress {
   public:
-    CacheBlockAddress(uint32 segment_id, uint32 offset) :
+    CacheBlockAddress(std::uint32_t segment_id, std::uint32_t offset) :
       segment_id_(segment_id), offset_(offset) {}
     // the start offset of the block
-    uint32 Offset() const { return offset_; }
+    std::uint32_t Offset() const { return offset_; }
 
     // Operator overloads
     bool operator<(const CacheBlockAddress& other) const {
@@ -78,8 +79,8 @@ protected:
       return (segment_id_ != other.segment_id_ || offset_ != other.offset_);
     }
   private:
-    uint32 segment_id_;
-    uint32 offset_;
+    std::uint32_t segment_id_;
+    std::uint32_t offset_;
   };
 
   // CacheBlock buffers the read data for a chunk of a segment.
@@ -87,7 +88,7 @@ protected:
   // can be sorted in LRU order.
   class CacheBlock {
   public:
-    CacheBlock(CacheBlockAddress address, uint32 block_size) :
+    CacheBlock(CacheBlockAddress address, std::uint32_t block_size) :
       address_(address), last_access_tick_(0),
       block_size_(block_size), initialized_(false)  {
     }
@@ -97,27 +98,27 @@ protected:
     // stats_bytes_read and stats_disk_accesses are incremented if a read from
     // disk is required (i.e., on first Read of a CacheBlock). These are
     // used to keep track of disk reads and accesses for stats purposes.
-    uint32 Read(FileBundleSegment& segment,
+    std::uint32_t Read(FileBundleSegment& segment,
               void *out_buffer, size_t size, off64_t offset,
-              uint64 access_tick,
-              uint64& stats_bytes_read, uint64& stats_disk_accesses);
+              std::uint64_t access_tick,
+              std::uint64_t& stats_bytes_read, std::uint64_t& stats_disk_accesses);
 
-    uint64 LastAccessTick() const { return last_access_tick_; }
-    void SetLastAccessTick(uint64 last_access_tick) {
+    std::uint64_t LastAccessTick() const { return last_access_tick_; }
+    void SetLastAccessTick(std::uint64_t last_access_tick) {
       last_access_tick_ = last_access_tick;
     }
 
   private:
     CacheBlockAddress address_;
-    uint64 last_access_tick_;
-    uint32 block_size_;
+    std::uint64_t last_access_tick_;
+    std::uint32_t block_size_;
     std::string buffer_;
     bool initialized_;
   };
   typedef std::map<CacheBlockAddress, CacheBlock*> CacheBlockMap;
 public:
   // max_blocks must be >= 2.
-  CachedReadAccessor(uint32 max_blocks, uint32 block_size);
+  CachedReadAccessor(std::uint32_t max_blocks, std::uint32_t block_size);
   ~CachedReadAccessor();
 
   // Read from a segment. This routine will use it's cache as much as possible
@@ -131,8 +132,8 @@ protected:
   // return the CacheBlockAddress for the given segment and offset.
   // Note: that CachedReadAccessor allocates CacheBlocks aligned with
   // block_size memory chunks.
-  CacheBlockAddress BlockAddress(uint32 segment_id, uint32 offset) const {
-    uint32 block_index = offset / block_size_;
+  CacheBlockAddress BlockAddress(std::uint32_t segment_id, std::uint32_t offset) const {
+    std::uint32_t block_index = offset / block_size_;
     return CacheBlockAddress(segment_id, block_index * block_size_);
   }
 
@@ -140,7 +141,7 @@ protected:
   // blocks if the request straddles a cacheblock boundary.
   // If a cache block does not exist in the cache, go ahead and add it.
   // Return the number of blocks overlapping the request.
-  uint32 FindBlocks(uint32 segment_id, uint32 size, uint32 offset,
+  std::uint32_t FindBlocks(std::uint32_t segment_id, std::uint32_t size, std::uint32_t offset,
                  CacheBlock** block_0, CacheBlock** block_1);
 
   // Return the CacheBlock pointer for the specified CacheBlockAddress.
@@ -152,8 +153,8 @@ protected:
   CacheBlock* AddCacheBlock(const CacheBlockAddress& address);
 
   // Basic Stats are kept which may be useful for debugging.
-  uint64 StatsBytesRead() const { return stats_bytes_read_; }
-  uint64 StatsDiskAccesses() const { return stats_disk_accesses_; }
+  std::uint64_t StatsBytesRead() const { return stats_bytes_read_; }
+  std::uint64_t StatsDiskAccesses() const { return stats_disk_accesses_; }
 private:
   // We track the blocks in a map (for easy random access).
   // For each removal, we just run through the list and pick the LRU CacheBlock
@@ -163,11 +164,11 @@ private:
   // will be much higher (roughly 2 orders of magnitude) in general than the
   // number of times a block is removed from memory.
   CacheBlockMap cache_blocks_map_;
-  uint32 max_blocks_count_;
-  uint32 block_size_;
-  uint64 access_tick_counter_;
-  uint64 stats_bytes_read_;
-  uint64 stats_disk_accesses_;
+  std::uint32_t max_blocks_count_;
+  std::uint32_t block_size_;
+  std::uint64_t access_tick_counter_;
+  std::uint64_t stats_bytes_read_;
+  std::uint64_t stats_disk_accesses_;
   DISALLOW_COPY_AND_ASSIGN(CachedReadAccessor);
 };
 

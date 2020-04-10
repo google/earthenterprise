@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +36,7 @@
 class ProdTileKey {
  private:
   const khRasterProductLevel *prodLevel;
-  uint64                      tileid;
+  std::uint64_t                      tileid;
 
  public:
   inline bool operator< (const ProdTileKey &o) const {
@@ -77,8 +78,8 @@ class CachingProductTileReader_ImageryAlpha
                 TileType &dstTile,
                 bool fillMissingWithZero = false);
 
-  CachingProductTileReader_ImageryAlpha(uint tileCacheSize,
-                                        uint readerCacheSize) :
+  CachingProductTileReader_ImageryAlpha(unsigned int tileCacheSize,
+                                        unsigned int readerCacheSize) :
       tileCache(tileCacheSize, "imagery alpha tile reader"),
       readerCache(readerCacheSize)
   { }
@@ -111,9 +112,9 @@ class CachingProductTileReader_Heightmap
   void FetchExtraPixels(const khRasterProductLevel *prodLev,
                         const khTileAddr &addr,
                         ExpandedTileType &dstTile,
-                        const khOffset<uint32> &dstOffset,
-                        const khExtents<uint32> &srcExtents,
-                        const khExtents<uint32> &fallbackExtents);
+                        const khOffset<std::uint32_t> &dstOffset,
+                        const khExtents<std::uint32_t> &srcExtents,
+                        const khExtents<std::uint32_t> &fallbackExtents);
 
   CachedTile FetchAndCacheProductTile(const khRasterProductLevel *prodLev,
                                       const khTileAddr &addr);
@@ -122,8 +123,8 @@ class CachingProductTileReader_Heightmap
                 const khTileAddr &addr,
                 TileType &dstTile, const bool is_mercator);
 
-  CachingProductTileReader_Heightmap(uint tileCacheSize,
-                                     uint readerCacheSize) :
+  CachingProductTileReader_Heightmap(unsigned int tileCacheSize,
+                                     unsigned int readerCacheSize) :
       tileCache(tileCacheSize, "height map tile reader"),
       readerCache(readerCacheSize)
   { }

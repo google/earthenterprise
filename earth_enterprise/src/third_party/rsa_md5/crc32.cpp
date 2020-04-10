@@ -20,9 +20,9 @@
 
 static CRC *crc = CRC::Default(32,0);   // just initialize once
 
-uint32 Crc32(const void *buffer, size_t buffer_len) {
-  uint64 lo, hi;                        // holders for CRC value
+std::uint32_t Crc32(const void *buffer, size_t buffer_len) {
+  std::uint64_t lo, hi;                        // holders for CRC value
   crc->Empty(&lo, &hi);                 // init to CRC of empty string
   crc->Extend(&lo, &hi, buffer, buffer_len);
-  return static_cast<uint32>(lo & 0xFFFFFFFF);
+  return static_cast<std::uint32_t>(lo & 0xFFFFFFFF);
 }

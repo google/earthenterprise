@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,12 +15,13 @@
 
 
 #include "khTypes.h"
+#include <cstdint>
 #include <string.h>
 #include <khSimpleException.h>
 
 struct StorageInfo {
   const char * const name;
-  uint              size;
+  unsigned int              size;
 };
 
 static const StorageInfo StorageInfo_[] = {
@@ -39,19 +41,19 @@ static const StorageInfo StorageInfo_[] = {
 const char *
 khTypes::StorageName(khTypes::StorageEnum s)
 {
-  return StorageInfo_[(uint)s].name;
+  return StorageInfo_[(unsigned int)s].name;
 }
 
 uint
 khTypes::StorageSize(khTypes::StorageEnum s)
 {
-  return StorageInfo_[(uint)s].size;
+  return StorageInfo_[(unsigned int)s].size;
 }
 
 khTypes::StorageEnum
 khTypes::StorageNameToEnum(const char *n)
 {
-  for (uint s = (uint)UInt8; s <= (uint)Float64; ++s) {
+  for (unsigned int s = (unsigned int)UInt8; s <= (unsigned int)Float64; ++s) {
     if (strcasecmp(n, StorageInfo_[s].name) == 0) {
       return (StorageEnum)s;
     }

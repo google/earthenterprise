@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -90,7 +91,8 @@
 #include "fusion/gst/gstGeode.h"
 
 #include "common/khRefCounter.h"
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "common/base/macros.h"
 
 namespace fusion_gst {
@@ -301,17 +303,17 @@ class PcHalfedge : public khRefCounter {
   }
 
   // Gets face number.
-  inline uint face_num() const {
+  inline unsigned int face_num() const {
     return face_num_;
   }
 
   // Gets cycle number.
-  inline uint cycle_num() const {
+  inline unsigned int cycle_num() const {
     return cycle_num_;
   }
 
   // Sets face attributes (face number, cycle number).
-  inline void SetFaceAttr(const uint _face_num, const uint _cycle_num) {
+  inline void SetFaceAttr(const unsigned int _face_num, const unsigned int _cycle_num) {
     assert(pair);
     face_num_ = pair->face_num_ = _face_num;
     cycle_num_ = pair->cycle_num_ = _cycle_num;
@@ -366,8 +368,8 @@ class PcHalfedge : public khRefCounter {
         inside_area_loc_(kInsideAreaLocNone),
         edge_type_(kNormalEdge),
         visited_(false),
-        face_num_(static_cast<uint>(-1)),
-        cycle_num_(static_cast<uint>(-1)) {
+        face_num_(static_cast< unsigned int> (-1)),
+        cycle_num_(static_cast< unsigned int> (-1)) {
   }
 
   explicit PcHalfedge(const gstVertex &_v)
@@ -379,8 +381,8 @@ class PcHalfedge : public khRefCounter {
         inside_area_loc_(kInsideAreaLocNone),
         edge_type_(kNormalEdge),
         visited_(false),
-        face_num_(static_cast<uint>(-1)),
-        cycle_num_(static_cast<uint>(-1)) {
+        face_num_(static_cast< unsigned int> (-1)),
+        cycle_num_(static_cast< unsigned int> (-1)) {
   }
 
   // Location of area inside the polygon;
@@ -397,10 +399,10 @@ class PcHalfedge : public khRefCounter {
   bool visited_;
 
   // Face number that halfedge belongs.
-  uint face_num_;
+  unsigned int face_num_;
 
   // Cycle/hole number that halfedge belongs.
-  uint cycle_num_;
+  unsigned int cycle_num_;
 
   DISALLOW_COPY_AND_ASSIGN(PcHalfedge);
 };
@@ -493,17 +495,17 @@ class PcFace {
   }
 
   // Gets number of cycles.
-  uint CyclesSize() const {
+  unsigned int CyclesSize() const {
     return cycles_.size();
   }
 
   // Gets cycle n.
-  const PcCycle& GetCycle(uint n) const {
+  const PcCycle& GetCycle(unsigned int n) const {
     assert(n < cycles_.size());
     return cycles_[n];
   }
 
-  PcCycle& GetCycle(uint n) {
+  PcCycle& GetCycle(unsigned int n) {
     assert(n < cycles_.size());
     return cycles_[n];
   }
@@ -532,7 +534,7 @@ class CycleAcceptor {
   }
 
   // Accepts geode part.
-  void Accept(const gstGeode *geode, uint part);
+  void Accept(const gstGeode *geode, unsigned int part);
 
  private:
   // Creates pair of halfedges based on begin/end points and inserts into
@@ -544,14 +546,14 @@ class CycleAcceptor {
 };
 
 template<class Container>
-void  CycleAcceptor<Container>::Accept(const gstGeode *geode, uint part) {
-  uint num_verts = geode->VertexCount(part);
+void  CycleAcceptor<Container>::Accept(const gstGeode *geode, unsigned int part) {
+  unsigned int num_verts = geode->VertexCount(part);
   if (num_verts < kMinCycleVertices) {
     notify(NFY_WARN, "Invalid polygon's cycle: skipped.\n");
     return;
   }
 
-  for (uint i = 0; i < (num_verts - 1); ++i) {
+  for (unsigned int i = 0; i < (num_verts - 1); ++i) {
     AddHalfedgePair(geode->GetVertex(part, i), geode->GetVertex(part, i + 1));
   }
 }
@@ -584,7 +586,7 @@ class SweepLineStatus {
              he->face_num(),
              p.second);
     } else {  // Right halfedge.
-      uint num_erased = static_cast<uint>(status_.erase(he->pair));
+      unsigned int num_erased = static_cast< unsigned int> (status_.erase(he->pair));
       notify(NFY_VERBOSE,
              "SweepLineStatus::Update() remove: "
              "(%.20f, %.20f)-(%.20f, %.20f) face num: %u, removed: %u",
@@ -597,7 +599,7 @@ class SweepLineStatus {
   // Gets previous of input edge from sweep line status.
   PcHalfedgeHandle PrevOfEdge(const PcHalfedgeHandle& he) const {
     notify(NFY_VERBOSE, "SweepLineStatus::PrevOfEdge(): status size(): %u",
-           static_cast<uint>(status_.size()));
+           static_cast< unsigned int> (status_.size()));
 
     if (!status_.empty()) {
       PcHalfedgeHandleSet::iterator lower = status_.lower_bound(he);
@@ -618,10 +620,10 @@ class SweepLineStatus {
     return PcHalfedgeHandle();
   }
 
-  int32 CountEdges(const PcHalfedgeHandle& he) const {
+  std::int32_t CountEdges(const PcHalfedgeHandle& he) const {
     notify(NFY_VERBOSE, "SweepLineStatus::CountEdges(): status size(): %u",
-           static_cast<uint>(status_.size()));
-    int32 count = 0;
+           static_cast< unsigned int> (status_.size()));
+    std::int32_t count = 0;
     for (PcHalfedgeHandleSet::iterator it = status_.begin();
          it != status_.end(); ++it) {
       ++count;
@@ -765,7 +767,7 @@ class PolygonBuilder {
   void AcceptPolygon(const gstGeode *geode);
 
   // Accepts a specified part of input polygon for processing.
-  inline void AcceptPolygonPart(const gstGeode *geode, const uint part) {
+  inline void AcceptPolygonPart(const gstGeode *geode, const unsigned int part) {
     out_halfedges_acceptor_.Accept(geode, part);
   }
 
@@ -795,7 +797,7 @@ class PolygonBuilder {
   void ReconstructPolygonAndSkipNotValidCycles();
 
   // Gets face number for halfedge based on sweep line status.
-  uint GetFaceNumber(const PcHalfedgeHandle &he,
+  unsigned int GetFaceNumber(const PcHalfedgeHandle &he,
                      PcHalfedgeHandle *const outer_he);
 
   // Connects inner cycle to outer one by introducing cut-edge.

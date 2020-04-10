@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,9 +34,9 @@ class gstProjectBase {
   void removeLayer(gstLayerBase* layer);
   void swapLayers(gstLayerBase* a, gstLayerBase* b);
 
-  uint numLayers() const { return layers_.size(); }
+  unsigned int numLayers() const { return layers_.size(); }
   void addLayer(gstLayerBase* layer);
-  void insertLayer(gstLayerBase* layer, uint pos);
+  void insertLayer(gstLayerBase* layer, unsigned int pos);
   gstLayerBase* getLayer(int id) { return layers_[id]; }
 
   void setModified(bool m = true);

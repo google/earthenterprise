@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -40,7 +41,7 @@ Layer<DisplayRuleConfig>::Layer
 
   // make a JS context (only if we really need it)
   bool hasPrepJS = false;
-  for (uint i = 0; i < drConfigs.size(); ++i) {
+  for (unsigned int i = 0; i < drConfigs.size(); ++i) {
     if (drConfigs[i].HasPrepJS()) {
       hasPrepJS = true;
       break;
@@ -52,7 +53,7 @@ Layer<DisplayRuleConfig>::Layer
 
   // make my child DisplayRules
   displayRules.reserve(drConfigs.size());
-  for (uint i = 0; i < drConfigs.size(); ++i) {
+  for (unsigned int i = 0; i < drConfigs.size(); ++i) {
     displayRules.push_back(new DisplayRuleType(source,
                                                srcHeader, jsCX,
                                                drConfigs[i]));
@@ -80,7 +81,7 @@ Layer<DisplayRuleConfig>::Prepare
   khTileAddr addr(path);
   khLevelCoverage cov(addr);
 
-  khExtents<uint64> pixels(RowColOrder,
+  khExtents<std::uint64_t> pixels(RowColOrder,
                            cov.extents.beginRow() * tilespace.tileSize,
                            cov.extents.endRow() * tilespace.tileSize,
                            cov.extents.beginCol() * tilespace.tileSize,
@@ -88,7 +89,7 @@ Layer<DisplayRuleConfig>::Prepare
 
   // Stretch in width, delta_width = width * oversizeFactor
   // Stretch in width in each dir = delta_width / 2.0
-  pixels.expandBy(static_cast<uint32>(tilespace.tileSize * oversizeFactor / 2));
+  pixels.expandBy(static_cast<std::uint32_t>(tilespace.tileSize * oversizeFactor / 2));
 
   double north, south, east, west;
 
@@ -114,7 +115,7 @@ Layer<DisplayRuleConfig>::Prepare
 
   // have all display rules Prepare themselves
   bool found = false;
-  for (uint i = 0; i < displayRules.size(); ++i) {
+  for (unsigned int i = 0; i < displayRules.size(); ++i) {
     if (displayRules[i]->Prepare(cut_box, path.Level(),
                                  out->displayRules[i],
                                  in.displayRules[i])) {

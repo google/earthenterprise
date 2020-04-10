@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -76,7 +77,7 @@ gstRecordHandle gstFeatureConfigs::DummyExpand() const {
 //   1 : custom height value
 gstRecordHandle gstFeatureConfigs::Expand(gstRecordHandle src_rec,
                                    JSDisplayBundle &jsbundle,
-                                   uint filterId) const {
+                                   unsigned int filterId) const {
   JOBSTATS_SCOPED(feature_stats, JOBSTATS_EXPAND);
   gstHeaderHandle src_hdr = src_rec->Header();
   gstRecordHandle new_rec = feature_header_->NewRecord();

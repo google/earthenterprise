@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +24,7 @@
 #include <time.h>
 #include <khAssert.h>
 #include <khTypes.h>
+#include <cstdint>
 
 inline int log2(int val)
 {
@@ -104,7 +106,7 @@ template <> struct CompileTimeLog2Checker<1> {
 };
 
 // Count milliseconds from midnight.
-inline int32 MillisecondsFromMidnight(const struct tm& time) {
+inline std::int32_t MillisecondsFromMidnight(const struct tm& time) {
   return ((time.tm_hour * 60 +  time.tm_min) * 60 +  time.tm_sec) * 1000;
 }
 

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -43,7 +44,7 @@ ProtoDbrootContext::ProtoDbrootContext(void) : testing_only_(false) {
   }
 }
 
-const gstProvider* ProtoDbrootContext::GetProvider(uint32 id) const {
+const gstProvider* ProtoDbrootContext::GetProvider(std::uint32_t id) const {
   ProviderMap::const_iterator found = provider_map_.find(id);
   return (found == provider_map_.end()) ? 0 : &found->second;
 }

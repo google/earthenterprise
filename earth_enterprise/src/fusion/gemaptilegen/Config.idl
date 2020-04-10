@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,9 +14,9 @@
 // limitations under the License.
 
 
+#include <cstdint>
 #include <string>
 #include <vector>
-#include <khTypes.h>
 #include <qstring.h>
 
 #include <autoingest/.idl/storage/MapSubLayerConfig.h>
@@ -41,7 +42,7 @@ class gemaptilegen::Config {
     QString     context_script_ = QString("");
   };
 
-  uint level_;
+  unsigned int level_;
   AssetDefs::Projection   projection_;
   std::vector<SubLayer> sub_layers_ = std::vector<gemaptilegen::Config::SubLayer>();
 

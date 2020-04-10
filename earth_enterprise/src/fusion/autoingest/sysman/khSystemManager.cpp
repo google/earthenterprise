@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -79,7 +80,7 @@ void systemrc_reload(int signum)
   notify(NFY_WARN, "Received SIGHUP, Reloading systemrc...");
   Systemrc systemrc;
   LoadSystemrc(systemrc,true);
-  uint32 logLevel = systemrc.logLevel;
+  std::uint32_t logLevel = systemrc.logLevel;
   notify(NFY_WARN, "system log level changed to: %s",
           khNotifyLevelToString(static_cast<khNotifyLevel>(logLevel)).c_str());
   setNotifyLevel(static_cast<khNotifyLevel>(logLevel));

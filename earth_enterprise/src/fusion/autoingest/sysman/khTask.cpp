@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -241,7 +242,7 @@ passthrough(const std::string &s)
 bool
 khTask::bindOutfiles(const std::vector<Reservation> &res)
 {
-  uint numOutputs = taskdef_.outputs.size();
+  unsigned int numOutputs = taskdef_.outputs.size();
   boundOutfiles.clear();
   boundOutfiles.reserve(numOutputs);
 #if 0 && defined(SUPPORT_TASK_RELOCATE)
@@ -249,7 +250,7 @@ khTask::bindOutfiles(const std::vector<Reservation> &res)
   relocatedOutfiles.reserve(numOutputs);
   relocateMap.clear();
 #endif
-  for (uint o = 0; o < numOutputs; ++o) {
+  for (unsigned int o = 0; o < numOutputs; ++o) {
     const TaskDef::Output &defout = taskdef_.outputs[o];
 #if 0 && defined(SUPPORT_TASK_RELOCATE)
     const TaskRequirements::Output &reqout = requirements.outputs[o];
@@ -310,24 +311,24 @@ khTask::buildCommands(std::vector<std::vector<std::string> > &outcmds,
     inputs.push_back(i->path);
   }
 
-  uint numcmds = taskdef_.commands.size();
+  unsigned int numcmds = taskdef_.commands.size();
 #if 0 && defined(SUPPORT_TASK_RELOCATE)
   outcmds.resize(numcmds + relocateMap.size());
 #else
   outcmds.resize(numcmds);
 #endif
-  for (uint cmdnum = 0; cmdnum < numcmds; ++cmdnum) {
+  for (unsigned int cmdnum = 0; cmdnum < numcmds; ++cmdnum) {
     std::vector<std::string> &outcmd(outcmds[cmdnum]);
 
     for (std::vector<std::string>::const_iterator arg =
            taskdef_.commands[cmdnum].begin();
          arg != taskdef_.commands[cmdnum].end(); ++arg) {
       if (arg->empty()) continue;
-      uint len = arg->size();
+      unsigned int len = arg->size();
       bool used = false;
       if ((*arg)[0] == '$') {
         const std::vector<std::string> *vec = 0;
-        uint i = 0;
+        unsigned int i = 0;
         if (StartsWith(*arg, "$OUTPUT")) {
           vec = &boundOutfiles;
           i = 7;
@@ -335,7 +336,7 @@ khTask::buildCommands(std::vector<std::vector<std::string> > &outcmds,
           vec = &inputs;
           i = 6;
         } else if (*arg == "$NUMCPU") {
-          uint numcpu = 0;
+          unsigned int numcpu = 0;
           for (std::vector<Reservation>::const_iterator r = res.begin();
                r != res.end(); ++r) {
             const CPUReservationImpl *cpuimpl =
@@ -358,7 +359,7 @@ khTask::buildCommands(std::vector<std::vector<std::string> > &outcmds,
             ++i;
             if ((i < len) && ((*arg)[i] == '[')) {
               ++i;
-              uint j = i;
+              unsigned int j = i;
               for (; j < len && ((*arg)[j] != ']'); ++j) ;
               if (j-i) {
                 index = atoi(arg->substr(i, j-i).c_str());
@@ -405,7 +406,7 @@ khTask::buildCommands(std::vector<std::vector<std::string> > &outcmds,
   } /* for cmdnum */
 
 #if 0 && defined(SUPPORT_TASK_RELOCATE)
-  uint cmdnum = numcmds;
+  unsigned int cmdnum = numcmds;
   for (std::map<std::string, std::string>::const_iterator
          reloc = relocateMap.begin();
        reloc != relocateMap.end(); ++reloc) {

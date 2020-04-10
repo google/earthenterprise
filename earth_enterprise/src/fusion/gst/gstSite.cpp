@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -81,7 +82,7 @@ gstVertex gstSite::Location(const gstGeodeHandle &feature) const {
 gstRecordHandle gstSite::Expand(gstRecordHandle srcrec,
                                 bool label_only,
                                 JSDisplayBundle &jsbundle,
-                                uint filterId) const {
+                                unsigned int filterId) const {
   gstHeaderHandle srchdr = srcrec->Header();
   gstRecordHandle new_rec = site_header_->NewRecord();
   bool setJSRec = false;

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +29,8 @@
 #include <string>
 #include "fusion/portableglobe/servers/fileunpacker/shared/glc_reader.h"
 #include "common/geFilePool.h"
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 
 class ApacheFdbReader : public GlcReader {
  public:
@@ -48,9 +50,9 @@ class ApacheFdbReader : public GlcReader {
    * @param size Size of data in bytes to read.
    * @return whether data was read.
    */
-  virtual bool Read(std::string* buffer, uint64 offset, uint64 size) const;
+  virtual bool Read(std::string* buffer, std::uint64_t offset, std::uint64_t size) const;
   virtual bool Read(
-      std::string* buffer, uint64 offset, uint64 size, request_rec* r) const;
+      std::string* buffer, std::uint64_t offset, std::uint64_t size, request_rec* r) const;
 
   /**
    * Reads data into given memory location from the given
@@ -60,13 +62,13 @@ class ApacheFdbReader : public GlcReader {
    * @param size Size of data to read.
    * @return whether data was read.
    */
-  virtual bool ReadData(void* ptr, uint64 offset, uint64 size) const;
+  virtual bool ReadData(void* ptr, std::uint64_t offset, std::uint64_t size) const;
 
   /**
    * Returns the size of the file or 0 if there is a problem with
    * the file.
    */
-  virtual uint64 Size() const;
+  virtual std::uint64_t Size() const;
 
   /**
    * Returns the 3-char suffix of the file being read.

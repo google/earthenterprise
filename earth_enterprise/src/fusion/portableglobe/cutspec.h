@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -182,15 +183,15 @@ class HiresTree {
 class CutSpec {
  public:
   CutSpec(const std::string& qt_node_file_name,
-          uint16 min_level,
-          uint16 default_level,
-          uint16 max_level);
+          std::uint16_t min_level,
+          std::uint16_t default_level,
+          std::uint16_t max_level);
 
   CutSpec(const std::string& qt_node_file_name,
           const std::string& exclusion_qt_node_file_name,
-          uint16 min_level,
-          uint16 default_level,
-          uint16 max_level);
+          std::uint16_t min_level,
+          std::uint16_t default_level,
+          std::uint16_t max_level);
 
   // KeepNode shoud be used on the quadtree, whereas KeepNode
   // AND ExcludeNode are used on the data packets with ExcludeNode
@@ -203,11 +204,11 @@ class CutSpec {
 
  private:
   // Level below which no assets are kept.
-  uint16 min_level_;
+  std::uint16_t min_level_;
   // Level at or below which all assets are kept.
-  uint16 default_level_;
+  std::uint16_t default_level_;
   // Level above which no assets are kept.
-  uint16 max_level_;
+  std::uint16_t max_level_;
   // Tree identifying quadtree nodes to keep.
   HiresTree hires_tree_;
   // Whether we are excluding any nodes.

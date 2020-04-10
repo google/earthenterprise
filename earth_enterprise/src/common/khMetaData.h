@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +44,7 @@ class khMetaData
   }
 
   // determine amount of memory used by members
-  uint64 GetHeapUsage() const {
+  std::uint64_t GetHeapUsage() const {
     return ::GetHeapUsage(map);
   }
 
@@ -73,7 +74,7 @@ class khMetaData
   }
 };
 
-inline uint64 GetHeapUsage(const khMetaData &metaData) {
+inline std::uint64_t GetHeapUsage(const khMetaData &metaData) {
   return metaData.GetHeapUsage();
 }
 

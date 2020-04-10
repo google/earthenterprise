@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +28,7 @@ namespace qtpathgen {
 
 class TestRecord {
  public:
-  TestRecord(QuadtreePath qt_path, uint64 position)
+  TestRecord(QuadtreePath qt_path, std::uint64_t position)
       : qt_path_(qt_path),
         position_(position) {
   }
@@ -35,8 +36,8 @@ class TestRecord {
   virtual ~TestRecord() {}
   QuadtreePath qt_path() const { return qt_path_; }
   void set_qt_path(QuadtreePath new_qt_path) { qt_path_ = new_qt_path; }
-  uint64 position() const { return position_; }
-  void set_position(uint64 new_position) { position_ = new_position; }
+  std::uint64_t position() const { return position_; }
+  void set_position(std::uint64_t new_position) { position_ = new_position; }
   virtual std::vector<char> *mutable_buffer() = 0;   // returns NULL if no buffer
   virtual size_t buffer_size() const = 0;
   virtual void set_buffer_size(size_t new_size) = 0;
@@ -46,7 +47,7 @@ class TestRecord {
   }
  private:
   QuadtreePath qt_path_;
-  uint64 position_;
+  std::uint64_t position_;
 };
 
 // TestDataRecord - has actual data storage
@@ -55,7 +56,7 @@ class TestDataRecord : public TestRecord {
  public:
   TestDataRecord(QuadtreePath qt_path,
                  size_t buffer_size,
-                 uint64 position = 0)
+                 std::uint64_t position = 0)
       : TestRecord(qt_path, position),
         buffer_(buffer_size) {
   }
@@ -76,7 +77,7 @@ class TestPositionRecord : public TestRecord {
  public:
   TestPositionRecord(QuadtreePath qt_path,
                  size_t buffer_size,
-                 uint64 position = 0)
+                 std::uint64_t position = 0)
       : TestRecord(qt_path, position),
         buffer_size_(buffer_size) {
   }
@@ -90,7 +91,7 @@ class TestPositionRecord : public TestRecord {
 };
 
 
-QuadtreePath HashPath(uint32 hash_val);
+QuadtreePath HashPath(std::uint32_t hash_val);
 
 // Generate a vector of records of random quadtree path.  If actual
 // vector type is TestDataRecord, generates random data with 0

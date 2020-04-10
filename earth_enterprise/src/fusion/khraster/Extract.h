@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,10 +27,10 @@
 // ***  anything else. Just extract the requested pixels.
 // ****************************************************************************
 void ExtractInterleavedSubBuffer(char *destBuf,
-                                 const khExtents<uint32> &targetPixelExtents,
+                                 const khExtents<std::uint32_t> &targetPixelExtents,
                                  const char *srcBuf,
-                                 const khSize<uint32> &srcRasterSize,
-                                 const uint pixelByteSize);
+                                 const khSize<std::uint32_t> &srcRasterSize,
+                                 const unsigned int pixelByteSize);
 
 // ****************************************************************************
 // ***  Routine to extract a sub buffer from an interleaved buffer
@@ -38,10 +39,10 @@ void ExtractInterleavedSubBuffer(char *destBuf,
 // ****************************************************************************
 void ExtractInterleavedSubBufferFlipY
 (char *destBuf,
- const khExtents<uint32> &targetPixelExtents,
+ const khExtents<std::uint32_t> &targetPixelExtents,
  const char *srcBuf,
- const khSize<uint32> &srcRasterSize,
- const uint pixelByteSize);
+ const khSize<std::uint32_t> &srcRasterSize,
+ const unsigned int pixelByteSize);
 
 
 #endif // FUSION_KHRASTER_EXTRACT_H__

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -66,7 +67,7 @@ bool IndexItem::operator<(const IndexItem& other) const {
  * Fills in values for an index item.
  * TODO: Derive btree and level values from a qt packet string.
  */
-void IndexItem::Fill(std::string qtpath, uint8 packet_type, uint16 channel) {
+void IndexItem::Fill(std::string qtpath, std::uint8_t packet_type, std::uint16_t channel) {
   level = qtpath.size() - 1;
   btree_high = 0x00000000;
   btree_low = 0x0000;
@@ -119,7 +120,7 @@ std::string IndexItem::QuadtreeAddress() const {
 // Constants associated with packetbundles.
 // Set really high so we never get more than one bundle
 // for single file package.
-const uint64 PacketBundle::kMaxFileSize = 0x7fffffffffffffffLLU;
+const std::uint64_t PacketBundle::kMaxFileSize = 0x7fffffffffffffffLLU;
 const std::string PacketBundle::kIndexFile = "index";
 const std::string PacketBundle::kPacketbundlePrefix = "pbundle_";
 const std::string PacketBundle::kDirectoryDelimiter = "/";
@@ -127,7 +128,7 @@ const std::string PacketBundle::kDirectoryDelimiter = "/";
 /**
  * Returns packetbundle file's name for the given file id.
  */
-std::string PacketBundle::PacketBundleFileName(uint16 file_id) const {
+std::string PacketBundle::PacketBundleFileName(std::uint16_t file_id) const {
   char str[8];
   snprintf(str, sizeof(str), "%04d", file_id);
   return directory_ + kDirectoryDelimiter + kPacketbundlePrefix + str;

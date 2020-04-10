@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,9 +30,9 @@
 template <class MagnifyWeighting, class TileType>
 static void
 MagnifyTile_ImageryAlpha(const khTileAddr &targetAddr,
-                         uint srcLevel,
+                         unsigned int srcLevel,
                          TileType* tiles[],
-                         uint startIndex)
+                         unsigned int startIndex)
 {
   while (srcLevel < targetAddr.level) {
     // Determine the magnification quad by mapping the
@@ -41,7 +42,7 @@ MagnifyTile_ImageryAlpha(const khTileAddr &targetAddr,
     // Then using even/odd addresses to determine
     // the quadrant:
     // SW:0  SE:1  NW:2  NE:3
-    uint quad = (tmpAddr.row & 0x1)*2 + (tmpAddr.col & 0x1);
+    unsigned int quad = (tmpAddr.row & 0x1)*2 + (tmpAddr.col & 0x1);
 
     MagnifyQuadrant_ImageryAlpha<MagnifyWeighting>
       (*tiles[(startIndex+1)%2], *tiles[startIndex], quad);

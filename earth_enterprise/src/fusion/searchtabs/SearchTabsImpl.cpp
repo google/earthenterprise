@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -47,8 +48,8 @@ void SearchTabDefinition::ApplyLabelOverrides(
   if (!overrides.label.isEmpty()) {
     label = overrides.label;
   }
-  uint count = std::min(fields.size(), overrides.fields.size());
-  for (uint i = 0; i < count; ++i) {
+  unsigned int count = std::min(fields.size(), overrides.fields.size());
+  for (unsigned int i = 0; i < count; ++i) {
     if (!overrides.fields[i].isEmpty()) {
       fields[i].label = overrides.fields[i];
     }
@@ -64,7 +65,7 @@ SearchTabLabelOverrides::SearchTabLabelOverrides(
     const SearchTabDefinition &def) {
   label = def.label;
   fields.resize(def.fields.size());
-  for (uint i = 0; i < def.fields.size(); ++i) {
+  for (unsigned int i = 0; i < def.fields.size(); ++i) {
     fields[i] = def.fields[i].label;
   }
 }

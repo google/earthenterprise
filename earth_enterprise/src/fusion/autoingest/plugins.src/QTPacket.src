@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -38,8 +39,8 @@
 namespace {
 
 void AddToProviderMap(const RasterProjectAssetVersion &proj,
-                      std::map<uint32,uint32> &map) {
-  for (uint i = 0; i < proj->inputs.size(); ++i) {
+                      std::map<std::uint32_t,std::uint32_t> &map) {
+  for (unsigned int i = 0; i < proj->inputs.size(); ++i) {
     RasterProductAssetVersion resource(proj->inputs[i]);
     if (resource->config.provider_id_ != 0) {
       map[resource->config.fuid_resource_] = resource->config.provider_id_;
@@ -85,7 +86,7 @@ QTPacketAssetVersionImplD::DoSubmitTask(void)
 
   // Add dated imagery info.
   geqtgen_config.dated_imagery_indexes_ = config.dated_imagery_indexes_;
-  for(uint i = 0; i < geqtgen_config.dated_imagery_indexes_.size(); ++i) {
+  for(unsigned int i = 0; i < geqtgen_config.dated_imagery_indexes_.size(); ++i) {
     DatedImageryIndexInfo& info = geqtgen_config.dated_imagery_indexes_[i];
     AssetVersion assetver(info.imagery_index_version_);
     info.imagery_index_version_ = assetver->GetOutputFilename(0);

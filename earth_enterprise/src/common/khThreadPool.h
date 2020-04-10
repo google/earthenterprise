@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,8 +82,8 @@ class khThreadPool {
 
   friend class poolThread;
 
-  const uint minAvail;
-  const uint maxAvail;
+  const unsigned int minAvail;
+  const unsigned int maxAvail;
   khMutex    mutex;
   std::vector<poolThread*> pool;
 
@@ -97,12 +98,12 @@ class khThreadPool {
   }
 
   void replenishPool(void) {
-    for (uint i = pool.size(); i < minAvail; ++i) {
+    for (unsigned int i = pool.size(); i < minAvail; ++i) {
       pool.push_back(poolThread::Create(*this));
     }
   }
 
-  khThreadPool(uint minAvail_, uint maxAvail_)
+  khThreadPool(unsigned int minAvail_, unsigned int maxAvail_)
       : minAvail(minAvail_), maxAvail(maxAvail_) {
     assert(minAvail <= maxAvail);
     khLockGuard guard(mutex);
@@ -116,7 +117,7 @@ class khThreadPool {
   ~khThreadPool();
 
  public:
-  static khThreadPool* Create(uint minAvail, uint maxAvail) {
+  static khThreadPool* Create(unsigned int minAvail, unsigned int maxAvail) {
     return new khThreadPool(minAvail, maxAvail);
   }
 

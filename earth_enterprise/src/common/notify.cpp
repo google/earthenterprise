@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -172,13 +173,13 @@ void setNotifyHandler(notifyFuncType handler, void* callData) {
 }
 
 
-void HexDump(FILE* out, const void* data, uint32 size) {
+void HexDump(FILE* out, const void* data, std::uint32_t size) {
   const char* buf = static_cast<const char*>(data);
-  uint32 i = 0;
+  std::uint32_t i = 0;
   while (i < size) {
-    static const uint maxrowlen = 20;
-    uint rowlen = std::min(maxrowlen, size - i);
-    uint j = 0;
+    static const unsigned int maxrowlen = 20;
+    unsigned int rowlen = std::min(maxrowlen, size - i);
+    unsigned int j = 0;
     while (j < rowlen) {
       fprintf(out, "%02x ", buf[i+j]);
       ++j;

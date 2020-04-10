@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,10 +13,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <cstdint>
+
 #include "DottedVersion.h"
 #include <stdlib.h>
 #include <khstl.h>
-#include <khTypes.h>
 
 
 DottedVersion::DottedVersion(const std::string &verstr) :
@@ -26,9 +28,9 @@ DottedVersion::DottedVersion(const std::string &verstr) :
 
 int DottedVersion::compare(const DottedVersion &o) const
 {
-  uint num_parts = std::min(parts_.size(), o.parts_.size());
+  unsigned int num_parts = std::min(parts_.size(), o.parts_.size());
 
-  for (uint i = 0; i < num_parts; ++i) {
+  for (unsigned int i = 0; i < num_parts; ++i) {
     std::string my_part = parts_[i];
     std::string o_part = o.parts_[i];
     bool my_alpha = std::isalpha(my_part[0]);
@@ -41,8 +43,8 @@ int DottedVersion::compare(const DottedVersion &o) const
           return 1;
         }
       } else {
-        uint64 my_i = atoll(my_part.c_str());
-        uint64 o_i = atoll(o_part.c_str());
+        std::uint64_t my_i = atoll(my_part.c_str());
+        std::uint64_t o_i = atoll(o_part.c_str());
         if (my_i < o_i) {
           return -1;
         } else if (my_i > o_i) {

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,7 +28,8 @@
 #include "common/khAbortedException.h"
 #include "common/khGetopt.h"
 #include "common/khSimpleException.h"
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "fusion/portableglobe/portablemapbuilder.h"
 
 void usage(const std::string &progn, const char *msg = 0, ...) {
@@ -96,8 +98,8 @@ int main(int argc, char **argv) {
 
     // Default indicates Cutter context.
     std::string additional_args = "&ct=c";
-    uint32 default_level = 7;
-    uint32 max_level = 24;
+    std::uint32_t default_level = 7;
+    std::uint32_t max_level = 24;
 
     khGetopt options;
     options.flagOpt("help", help);

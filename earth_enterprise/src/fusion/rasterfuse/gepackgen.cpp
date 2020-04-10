@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,7 +25,7 @@
 #include "common/khFileUtils.h"
 
 namespace {
-const uint32 kDefaultNumCPUs = 1;
+const std::uint32_t kDefaultNumCPUs = 1;
 const double defaultDecimationThreshold = 0.009;
 
 void usage(const std::string &progn, const char *msg = 0, ...) {
@@ -58,7 +59,7 @@ int main(int argc, char *argv[]) {
   std::string configFile;
   std::string output;
   double decimation_threshold = defaultDecimationThreshold;
-  uint32 numcpus = kDefaultNumCPUs;
+  std::uint32_t numcpus = kDefaultNumCPUs;
   bool imagery = false;
   bool terrain = false;
   khGetopt options;
@@ -68,7 +69,7 @@ int main(int argc, char *argv[]) {
   options.opt("output", output);
   options.opt("decimation", decimation_threshold);
   options.opt("numcpus", numcpus,
-              &khGetopt::RangeValidator<uint32, 1, kMaxNumJobsLimit_2>);
+              &khGetopt::RangeValidator<std::uint32_t, 1, kMaxNumJobsLimit_2>);
   options.flagOpt("imagery", imagery);
   options.flagOpt("terrain", terrain);
   options.setExclusive("imagery", "decimation");

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -154,12 +155,12 @@ void PolyMask::BuildMask() {
        mask_width_, mask_height_);
   }
   // Buffer for the actual mask being built
-  std::vector<uchar> mask_data(image_size);
+  std::vector<unsigned char> mask_data(image_size);
   // Data buffer for loading masks from files
-  std::vector<uchar> data_buffer(image_size);
+  std::vector<unsigned char> data_buffer(image_size);
 
   std::string file_name;
-  uchar threshold = 0x00;
+  unsigned char threshold = 0x00;
   for (size_t i = 0; i < commands_.size(); ++i) {
     switch (commands_[i]) {
       // Load the given mask as the basis upon which the new mask is created.
@@ -216,7 +217,7 @@ void PolyMask::BuildMask() {
 
       // Threshold the mask generated thus far.
       case THRESHOLD:
-        threshold = static_cast<uchar>(0xff & command_int_args_[int_arg_idx++]);
+        threshold = static_cast<unsigned char>(0xff & command_int_args_[int_arg_idx++]);
         if (!base_in_place) {
           notify(NFY_FATAL, "Base mask has not been created.");
         }
@@ -269,8 +270,8 @@ void PolyMask::BuildMask() {
 void PolyMask::BlendMasks(const BuildMaskCommand blend_type,
                           const std::string file_name,
                           const int feather,
-                          std::vector<uchar>* data_buffer,
-                          std::vector<uchar>* mask_data) {
+                          std::vector<unsigned char>* data_buffer,
+                          std::vector<unsigned char>* mask_data) {
   // ".kml", ".shp", or ".tif"
   // TODO: make suffixes case insensitive
   std::string suffix = file_name.substr(file_name.size() - 4);
@@ -319,7 +320,7 @@ void PolyMask::BlendMasks(const BuildMaskCommand blend_type,
 }
 
 // Fill buffer with the given value.
-void PolyMask::FillBuffer(std::vector<uchar>* buffer, uchar byte) {
+void PolyMask::FillBuffer(std::vector<unsigned char>* buffer, unsigned char byte) {
   for (size_t i = 0; i < buffer->size(); ++i) {
     (*buffer)[i] = byte;
   }
@@ -327,8 +328,8 @@ void PolyMask::FillBuffer(std::vector<uchar>* buffer, uchar byte) {
 
 // Apply logical operator to bytes from data and the given buffer and replaces
 // the byte in the buffer.
-void PolyMask::LogicalOpDataAndBuffer(const std::vector<uchar>& data,
-                                      std::vector<uchar>* buffer,
+void PolyMask::LogicalOpDataAndBuffer(const std::vector<unsigned char>& data,
+                                      std::vector<unsigned char>* buffer,
                                       BuildMaskCommand logic_op) {
   // Give warning or fail if bytes are not 0x00 or 0xff?
   switch (logic_op) {
@@ -353,8 +354,8 @@ void PolyMask::LogicalOpDataAndBuffer(const std::vector<uchar>& data,
 
 // Diff data and the given buffer. If the values are equal, set the pixel to
 // 0x00, otherwise, 0xff.
-void PolyMask::DiffDataAndBuffer(const std::vector<uchar>& data,
-                                 std::vector<uchar>* buffer) {
+void PolyMask::DiffDataAndBuffer(const std::vector<unsigned char>& data,
+                                 std::vector<unsigned char>* buffer) {
   for (size_t i = 0; i < buffer->size(); ++i) {
     if ((*buffer)[i] == data[i]) {
       (*buffer)[i] = 0x00;
@@ -365,15 +366,15 @@ void PolyMask::DiffDataAndBuffer(const std::vector<uchar>& data,
 }
 
 // Inverts image uchars by xor-ing them with 0xff.
-void PolyMask::InvertImage(std::vector<uchar>* image) {
+void PolyMask::InvertImage(std::vector<unsigned char>* image) {
   for (size_t i = 0; i < image->size(); ++i) {
     (*image)[i] ^= 0xff;
   }
 }
 
 // Threshold image.
-void PolyMask::ThresholdImage(std::vector<uchar>* image,
-                              const uchar threshold) {
+void PolyMask::ThresholdImage(std::vector<unsigned char>* image,
+                              const unsigned char threshold) {
   notify(NFY_NOTICE, "Threshold %d", static_cast<int>(threshold));
   for (size_t i = 0; i < image->size(); ++i) {
     if ((*image)[i] <= threshold) {
@@ -387,7 +388,7 @@ void PolyMask::ThresholdImage(std::vector<uchar>* image,
 // Loads mask data from given file. Data should be allocated to hold
 // width * height bytes.
 void PolyMask::LoadMask(const std::string mask_file,
-                               std::vector<uchar>* alpha_buffer,
+                               std::vector<unsigned char>* alpha_buffer,
                                const int width,
                                const int height) {
   GDALDataset *dataset = reinterpret_cast<GDALDataset*>(
@@ -406,11 +407,11 @@ void PolyMask::LoadMask(const std::string mask_file,
 
 // Saves the given alpha buffer to disk. Uses the object's mask width and
 // height and the object's destination mask file.
-void PolyMask::SaveMask(std::vector<uchar>* alpha_buffer,
+void PolyMask::SaveMask(std::vector<unsigned char>* alpha_buffer,
                         const int mask_width,
                         const int mask_height,
                         const khGeoExtents geo_extents) {
-  khSize<uint32> mask_size(mask_width, mask_height);
+  khSize<std::uint32_t> mask_size(mask_width, mask_height);
   const char* projection = mask_projection_.c_str();
   geImageWriter::WriteAlphaImage(mask_size,
                                  &((*alpha_buffer)[0]),
@@ -460,7 +461,7 @@ void PolyMask::ImageInfo(std::string image_file,
   } else {
     double geoTransform[6];
     if (dataset->GetGeoTransform(geoTransform) == CE_None) {
-      khSize<uint32> rasterSize(*width, *height);
+      khSize<std::uint32_t> rasterSize(*width, *height);
       *geo_extents = khGeoExtents(geoTransform, rasterSize);
     }
   }
@@ -496,7 +497,7 @@ void PolyMask::ImageInfo(std::string image_file,
 // Applies polygon in given file to the mask. If it is a positive mask, the
 // polygon is filled with 0x00s, otherwise it is filled with 0xffs.
 void  PolyMask::ApplyPolygon(const std::string& polygon_file,
-                             const uchar pixel_byte) {
+                             const unsigned char pixel_byte) {
   char system_command[2048];
 
   // Directory containing the .kml or .shp file.
@@ -563,7 +564,7 @@ void PolyMask::ConvertKmlToShpFile(const std::string polygon_kml_file,
 }
 
 // Feathers the mask edges using the in-memory featherer.
-void PolyMask::FeatherMask(const int feather, const uchar border) {
+void PolyMask::FeatherMask(const int feather, const unsigned char border) {
   // Don't waste time if there is no feathering to do
   if (feather == 0) {
     return;
@@ -583,7 +584,7 @@ void PolyMask::FeatherMask(const int feather, const uchar border) {
   GDALDataset *dataset = reinterpret_cast<GDALDataset*>(
       GDALOpen(output_file_.c_str(), GA_Update));
   GDALRasterBand *alpha_band = dataset->GetRasterBand(1);
-  std::vector<uchar> alpha_buffer(image_size);
+  std::vector<unsigned char> alpha_buffer(image_size);
 
   if (alpha_band->RasterIO(GF_Read, 0, 0,
                            mask_width_, mask_height_,
@@ -611,9 +612,9 @@ void PolyMask::FeatherMask(const int feather, const uchar border) {
 }
 
 // Feathers the mask edges using the in-memory featherer.
-void PolyMask::FeatherMaskData(std::vector<uchar>* mask_data,
+void PolyMask::FeatherMaskData(std::vector<unsigned char>* mask_data,
                                const int feather,
-                               const uchar border) {
+                               const unsigned char border) {
   // Don't waste time if there is no feathering to do
   if (feather == 0) {
     return;

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,8 +30,8 @@ namespace fusion_portableglobe {
  * for writing packets.
  */
 PacketBundleWriter::PacketBundleWriter(const std::string& directory,
-                                       uint64 max_file_size,
-                                       uint16 file_id)
+                                       std::uint64_t max_file_size,
+                                       std::uint16_t file_id)
     : PacketBundle(directory), packet_file_(&crc_calculator_),
       file_id_(file_id), max_file_size_(max_file_size),
       unpacker_(0), is_delta_(false) {
@@ -44,15 +45,15 @@ PacketBundleWriter::PacketBundleWriter(const std::string& directory,
 PacketBundleWriter::PacketBundleWriter(const std::string& directory,
                                        const std::string& base_file,
                                        bool is_qtp_bundle,
-                                       uint64 max_file_size,
-                                       uint16 file_id)
+                                       std::uint64_t max_file_size,
+                                       std::uint16_t file_id)
     : PacketBundle(directory), packet_file_(&crc_calculator_),
       file_id_(file_id), max_file_size_(max_file_size),
       unpacker_(new FileUnpacker(base_file.c_str())),
       is_qtp_bundle_(is_qtp_bundle), is_delta_(true),
       base_file_ptr_(base_file.c_str(), std::ios::in | std::ios::binary) {
   // Guesstimate max packet size as 15k.
-  uint32 khMaxPacketSize = 1024 * 15;
+  std::uint32_t khMaxPacketSize = 1024 * 15;
   packet_data_.reserve(khMaxPacketSize);
   Init();
 }
@@ -94,8 +95,8 @@ void PacketBundleWriter::Init() {
  * packetbundle is full, close it and start a new one.
  */
 bool PacketBundleWriter::AppendPacket(std::string qtpath,
-                                      uint8 packet_type,
-                                      uint16 channel,
+                                      std::uint8_t packet_type,
+                                      std::uint16_t channel,
                                       const char* const data,
                                       const size_t data_size) {
   if (is_delta_) {

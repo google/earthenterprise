@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -131,7 +132,7 @@ TextRenderer::MeasureText(const QString &text,
 
 QPixmap
 TextStyleToPixmap(const MapTextStyleConfig &config,
-                  const QColor &bgColor, uint overrideSize)
+                  const QColor &bgColor, unsigned int overrideSize)
 {
   // generate string to render
   QString weightLabel;
