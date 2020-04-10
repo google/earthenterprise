@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,7 +64,7 @@ class ImageryPrepItem {
   khOpacityMask::OpacityType opacity;    // Tile opacity
   DataTile         product_tile;         // Data tile
   AlphaTile        alpha_tile;           // Alpha tile
-  khOffset<uint32> product_tile_origin;  // in targetTilespace
+  khOffset<std::uint32_t> product_tile_origin;  // in targetTilespace
   khLevelCoverage  work_coverage;        // in targetTilespace
 
   inline ImageryPrepItem(void)
@@ -99,11 +100,11 @@ class ImageryWorkItemBase {
   const SpaceConfig &space_config_;
   PacketFileWriter* const writer;
   const AttributionByExtents &attributions;
-  std::vector<uchar> interleaved_buf;
-  std::vector<uchar> alpha_buf;
+  std::vector<unsigned char> interleaved_buf;
+  std::vector<unsigned char> alpha_buf;
 
   khDeletingVector<Piece> pieces;
-  uint num_pieces_used;
+  unsigned int num_pieces_used;
 };
 
 // Class ProtobufImageryWorkItem prepares packet in protobuf-format
@@ -142,7 +143,7 @@ class ProtobufImageryWorkItem : public ImageryWorkItemBase<TilesConfig> {
   void ExtractAndCompressAlphaPiece(typename BaseClass::Piece *piece,
                                     const std::string& date,
                                     const PrepItem *prep,
-                                    uint32 subrow, uint32 subcol);
+                                    std::uint32_t subrow, std::uint32_t subcol);
 };
 
 
@@ -215,7 +216,7 @@ class ImageryPackgenTraverser
                           const std::string &output);
 
   PrepItem* NewPrepItem(void);
-  void Traverse(uint numcpus);
+  void Traverse(unsigned int numcpus);
 
  protected:
   typedef typename BaseClass::WorkItem WorkItem;

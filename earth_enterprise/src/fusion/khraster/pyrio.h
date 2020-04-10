@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,10 +30,10 @@ class khRasterProduct;
 namespace pyrio {
 class Header {
  public:
-  uint formatVersion;                     // major*10 + minor
-  uint numComponents;                     // number of components
-  uint level;                             // level of pyramid (pixels)
-  khSize<uint32> levelSize;               // number of tiles in this file
+  unsigned int formatVersion;                     // major*10 + minor
+  unsigned int numComponents;                     // number of components
+  unsigned int level;                             // level of pyramid (pixels)
+  khSize<std::uint32_t> levelSize;               // number of tiles in this file
   khExtents<double> dataExtents;          // geographic extents of data,
                                           // may be either in degree or in meter
   khExtents<double> tileExtents;          // geographic extents of tiles
@@ -40,7 +41,7 @@ class Header {
   RasterProductStorage::RasterType rasterType;
   khTypes::StorageEnum componentType;     // datatype of each component
 
-  uint32 bandBufSize(void) const {
+  std::uint32_t bandBufSize(void) const {
     return khTypes::StorageSize(componentType) *
       RasterProductTileResolution *
       RasterProductTileResolution;
@@ -59,12 +60,12 @@ class Reader {
   khReadFileCloser pyrfile;
 
   // buffer for reading one band of data
-  mutable uint32 readBufSize;
-  mutable khDeleteGuard<uchar, ArrayDeleter> readBuf;
+  mutable std::uint32_t readBufSize;
+  mutable khDeleteGuard<unsigned char, ArrayDeleter> readBuf;
 
-  mutable khDeleteGuard<uchar, ArrayDeleter> convertBuf;
+  mutable khDeleteGuard<unsigned char, ArrayDeleter> convertBuf;
 
-  mutable khDeleteGuard<uchar, ArrayDeleter> flipBuf;
+  mutable khDeleteGuard<unsigned char, ArrayDeleter> flipBuf;
 
  public:
   Reader(const std::string &filename);
@@ -75,27 +76,27 @@ class Reader {
   // destBufs: where to write the pixels (assumed big enough)
   // bands:    which bands to read
   // numbands: how many enties in destBufs & bands
-  bool ReadBandBufs(uint32 row, uint32 col,
-                    uchar* destBufs[], uint bands[],
-                    uint numBands,
+  bool ReadBandBufs(std::uint32_t row, std::uint32_t col,
+                    unsigned char* destBufs[], unsigned int bands[],
+                    unsigned int numBands,
                     khTypes::StorageEnum destType,
                     bool flipTopToBottom = false) const;
 
 
   // convenience routines
-  inline bool ReadBandBuf(uint32 row, uint32 col, uint band,
-                          uchar* destBuf,
+  inline bool ReadBandBuf(std::uint32_t row, std::uint32_t col, unsigned int band,
+                          unsigned char* destBuf,
                           khTypes::StorageEnum destType,
                           bool flipTopToBottom = false) const {
     return ReadBandBufs(row, col, &destBuf, &band, 1,
                         destType, flipTopToBottom);
   }
-  inline bool ReadAllBandBufs(uint32 row, uint32 col,
-                              uchar* destBufs[],
+  inline bool ReadAllBandBufs(std::uint32_t row, std::uint32_t col,
+                              unsigned char* destBufs[],
                               khTypes::StorageEnum destType,
-                              const uint numBands,
+                              const unsigned int numBands,
                               bool flipTopToBottom = false) const {
-    uint bands[3] = { 0, 1, 2 };
+    unsigned int bands[3] = { 0, 1, 2 };
     return ReadBandBufs(row, col, destBufs, bands,
                         numBands, destType,
                         flipTopToBottom);
@@ -111,9 +112,9 @@ class Writer {
   off64_t runningOffset;
  public:
   Writer(const std::string &filename,
-         uint numComponents,
-         uint level,
-         const khSize<uint32> &levelSize,
+         unsigned int numComponents,
+         unsigned int level,
+         const khSize<std::uint32_t> &levelSize,
          const khExtents<double> &dataExtents,
          const khExtents<double> &tileExtents,
          CompressMode       compressMode,
@@ -126,7 +127,7 @@ class Writer {
   // Requests outside range will return false.
   // Data must match the type specified in the constructor
   template <class SrcTile>
-  bool WritePyrTile(uint32 row, uint32 col, const SrcTile &src);
+  bool WritePyrTile(std::uint32_t row, std::uint32_t col, const SrcTile &src);
 };
 
 // splits srcfile into pyramid basename and suffix
@@ -141,14 +142,14 @@ SplitPyramidName(const std::string &srcfile,
 std::string
 ComposePyramidName(const std::string &basename,
                    const std::string &suffix,
-                   uint level);
+                   unsigned int level);
 
 // returns the minimum and maximum levels for the specified pyramid
 // returns true if min & max could be found
 bool
 FindPyramidMinMax(const std::string &basename,
                   const std::string &suffix,
-                  uint &minRet, uint &maxRet);
+                  unsigned int &minRet, unsigned int &maxRet);
 
 // returns the level of the highest resolution pyramid that matches
 // the pyramid specified in srcfile.

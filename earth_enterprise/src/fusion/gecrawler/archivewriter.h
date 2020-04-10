@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +19,8 @@
 #ifndef FUSION_GECRAWLER_ARCHIVEWRITER_H__
 #define FUSION_GECRAWLER_ARCHIVEWRITER_H__
 
+#include <cstdint>
 #include <common/base/macros.h>
-#include <khTypes.h>
 #include <khEndian.h>
 #include <filebundle/filebundlewriter.h>
 

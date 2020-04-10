@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,47 +16,47 @@
 //
 // Unit tests for geSegmentedArray
 
+#include <cstdint>
 #include <geMultiRange.h>
 #include <UnitTest.h>
-#include <khTypes.h>
 
 
 class geMultiRangeTest : public UnitTest<geMultiRangeTest> {
  public:
 
   bool EmptyConstruction(void) {
-    geMultiRange<uint32> empty_range;
+    geMultiRange<std::uint32_t> empty_range;
     return (empty_range.AsString() == "");
   }
   bool SimpleConstruction(void) {
-    geMultiRange<uint32> range(4,8);
+    geMultiRange<std::uint32_t> range(4,8);
     return
       ((range.AsString() == "[4,8)") &&
-       (geMultiRange<uint32>(geRange<uint32>(5,10)).AsString() == "[5,11)") &&
-       (geMultiRange<uint32>(0, 24).AsString() == "[0,24)"));
+       (geMultiRange<std::uint32_t>(geRange<std::uint32_t>(5,10)).AsString() == "[5,11)") &&
+       (geMultiRange<std::uint32_t>(0, 24).AsString() == "[0,24)"));
   }
   bool Union(void) {
-    geMultiRange<uint32> empty_range;
-    geMultiRange<uint32> range_4_8(4,8);
-    geMultiRange<uint32> range_6_12(6,12);
-    geMultiRange<uint32> range_8_10(8,10);
-    geMultiRange<uint32> range_9_14(9,14);
+    geMultiRange<std::uint32_t> empty_range;
+    geMultiRange<std::uint32_t> range_4_8(4,8);
+    geMultiRange<std::uint32_t> range_6_12(6,12);
+    geMultiRange<std::uint32_t> range_8_10(8,10);
+    geMultiRange<std::uint32_t> range_9_14(9,14);
 
     return
-      ((geMultiRange<uint32>::Union(empty_range, range_4_8).AsString() ==
+      ((geMultiRange<std::uint32_t>::Union(empty_range, range_4_8).AsString() ==
         "[4,8)") &&
-       (geMultiRange<uint32>::Union(range_4_8, range_6_12).AsString() ==
+       (geMultiRange<std::uint32_t>::Union(range_4_8, range_6_12).AsString() ==
         "[4,12)") &&
-       (geMultiRange<uint32>::Union(range_4_8, range_8_10).AsString() ==
+       (geMultiRange<std::uint32_t>::Union(range_4_8, range_8_10).AsString() ==
         "[4,10)") &&
-       (geMultiRange<uint32>::Union(range_4_8, range_9_14).AsString() ==
+       (geMultiRange<std::uint32_t>::Union(range_4_8, range_9_14).AsString() ==
         "[4,8), [9,14)"));
   }
   bool Contains(void) {
-    geMultiRange<uint32> empty_range;
-    geMultiRange<uint32> range_4_8(4,8);
-    geMultiRange<uint32> range_9_14(9,14);
-    geMultiRange<uint32> multi_range = geMultiRange<uint32>::Union(range_4_8,
+    geMultiRange<std::uint32_t> empty_range;
+    geMultiRange<std::uint32_t> range_4_8(4,8);
+    geMultiRange<std::uint32_t> range_9_14(9,14);
+    geMultiRange<std::uint32_t> multi_range = geMultiRange<std::uint32_t>::Union(range_4_8,
                                                                    range_9_14);
 
     return (!empty_range.Contains(0) &&

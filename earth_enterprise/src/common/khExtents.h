@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,6 +52,7 @@ Description: This is the little sister to gstBBox4D.
 #include <vector>
 
 #include "common/khTypes.h"
+#include <cstdint>
 
 template <class T>
 class khExtents {
@@ -249,7 +251,7 @@ class khExtents {
     std::deque<khExtents> targets;
     targets.push_back(*this);
     for (Iter o = begin; o != end; ++o) {
-      uint numTargets = targets.size();
+      unsigned int numTargets = targets.size();
       if (numTargets == 0)
         break;
 
@@ -268,7 +270,7 @@ class khExtents {
       }
 
       bool check_identical = true;
-      for (uint t = 0; t < numTargets; ++t) {
+      for (unsigned int t = 0; t < numTargets; ++t) {
         khExtents target = targets.front();
         targets.pop_front();
         if (khExtents::Subtract(target, subtr, back_inserter(targets))) {

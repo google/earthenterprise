@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +19,13 @@
 #ifndef __ProcessNeighbors_h
 #define __ProcessNeighbors_h
 
-#include <khTypes.h>
+#include <cstdint>
 
-template <uint tilewidth, uint tileheight, class Handler>
-void ProcessNeighbors(uint32 pos, Handler &h)
+template <unsigned int tilewidth, unsigned int tileheight, class Handler>
+void ProcessNeighbors(std::uint32_t pos, Handler &h)
 {
-  uint row = pos / tilewidth;
-  uint col = pos % tilewidth;
+  unsigned int row = pos / tilewidth;
+  unsigned int col = pos % tilewidth;
   switch (row) {
     case 0:
       switch (col) {

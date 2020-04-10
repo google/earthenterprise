@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,7 +62,7 @@ class AssetDisplayHelper {
   }
 
   inline AssetKey        GetKey() const { return key_; }
-  inline uint            GetSortKey() const { return key_; }
+  inline unsigned int            GetSortKey() const { return key_; }
   inline AssetDefs::Type GetType()    const { return AssetType(key_); }
   inline std::string     GetSubType() const { return AssetSubType(key_); }
   inline QPixmap         GetPixmap()  const { return Pixmap(key_); }

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -51,7 +52,7 @@ void usage(const std::string& progn, const char *msg = 0, ...) {
 
 Compressor* jpg_compressor = NULL;
 khDeleteGuard<khRasterProduct> rp_rgb;
-uchar interleave_buffer[
+unsigned char interleave_buffer[
     RasterProductTileResolution * RasterProductTileResolution * 4];
 
 int main(int argc, char *argv[]) {
@@ -64,7 +65,7 @@ int main(int argc, char *argv[]) {
   int jpg_quality = 80;
   std::string out_dir;
   int tile_size = 256;
-  uint32 end_level = 0;
+  std::uint32_t end_level = 0;
   bool force = false;
 
   khGetopt options;
@@ -133,18 +134,18 @@ int main(int argc, char *argv[]) {
   khTilespace target_tile_space(tile_size_log2, tile_size_log2, StartUpperLeft,
                                 false, khTilespace::FLAT_PROJECTION, false);
 
-  uint32 begin_level = tile_size_log2;
+  std::uint32_t begin_level = tile_size_log2;
   if (begin_level < rp_rgb->minLevel()) {
     notify(NFY_WARN, "Unable to build missing levels for tile size %d",
            tile_size);
     begin_level = rp_rgb->minLevel();
   }
 
-  for (uint32 level = begin_level; level <= end_level; ++level) {
-    uint32 output_level = level - tile_size_log2;
+  for (std::uint32_t level = begin_level; level <= end_level; ++level) {
+    std::uint32_t output_level = level - tile_size_log2;
 
     // special-case level 0 & 1 to shift the black imagery
-    uint32 blank_offset = 0;
+    std::uint32_t blank_offset = 0;
     if (output_level == 0)
       blank_offset = tile_size >> 2;
     else if (output_level == 1)
@@ -185,16 +186,16 @@ int main(int argc, char *argv[]) {
             target_tile_space));
 
         // extract origin
-        khOffset<uint32> tile_origin = coverage.extents.origin();
+        khOffset<std::uint32_t> tile_origin = coverage.extents.origin();
         coverage.cropToWorld(target_tile_space);
 
         // special-case level 1 to handle the shift since it drops row 1
         if (output_level == 1)
-          coverage.extents = khExtents<uint32>(RowColOrder, 0, 1, 0, 2);
+          coverage.extents = khExtents<std::uint32_t>(RowColOrder, 0, 1, 0, 2);
 
-        for (uint32 sub_row = coverage.extents.beginRow();
+        for (std::uint32_t sub_row = coverage.extents.beginRow();
              sub_row < coverage.extents.endRow(); ++sub_row) {
-          for (uint32 sub_col = coverage.extents.beginCol();
+          for (std::uint32_t sub_col = coverage.extents.beginCol();
                sub_col < coverage.extents.endCol(); ++sub_col) {
 
             std::string image_path = level_path +
@@ -205,7 +206,7 @@ int main(int argc, char *argv[]) {
                 rgb_tile,
                 ((sub_row - tile_origin.row()) * tile_size) + blank_offset,
                 (sub_col - tile_origin.col()) * tile_size,
-                khSize<uint>(tile_size, tile_size),
+                khSize< unsigned int> (tile_size, tile_size),
                 StartUpperLeft, interleave_buffer);
 
             jpg_compressor->compress((char*)interleave_buffer);

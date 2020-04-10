@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,9 +38,9 @@ class gstFormat;
 //   (source:16) + (layer:16) + (feature#:32)
 //
 #define GEODE_ADDR(src, lyr, ftr) \
-    (  ((uint64)(ftr) & 0xffffffff)        | \
-      (((uint64)(lyr) & 0x0000ffff) << 32) | \
-      (((uint64)(src) & 0x0000ffff) << 48) )
+    (  ((std::uint64_t)(ftr) & 0xffffffff)        | \
+      (((std::uint64_t)(lyr) & 0x0000ffff) << 32) | \
+      (((std::uint64_t)(src) & 0x0000ffff) << 48) )
 
 #define ADDR2FTR(addr) int( 0xffffffff & (addr) )
 #define ADDR2LYR(addr) int( 0x0000ffff & ((addr) >> 32) )
@@ -47,7 +48,7 @@ class gstFormat;
 
 class UniqueFeatureId {
  public:
-  UniqueFeatureId(int s, uint32 l, uint32 f) :
+  UniqueFeatureId(int s, std::uint32_t l, std::uint32_t f) :
       source_id(s), layer_num(l), feature_id(f) {}
   UniqueFeatureId(const UniqueFeatureId& b) {
     source_id = b.source_id;
@@ -60,8 +61,8 @@ class UniqueFeatureId {
           feature_id == b.feature_id;
   }
   int source_id;
-  uint32 layer_num;
-  uint32 feature_id;
+  std::uint32_t layer_num;
+  std::uint32_t feature_id;
 };
 
 // ****************************************************************************
@@ -78,9 +79,9 @@ class gstSharedSourceImpl : public khRefCounter {
   gstSharedSourceImpl(const std::string &path_, const std::string &key_);
   ~gstSharedSourceImpl(void);
   int Id(void) const;
-  uint32 NumFeatures(uint32 layer) const;
-  gstRecordHandle GetAttributeOrThrow(uint32 layer, uint32 id);
-  const gstHeaderHandle& GetAttrDefs(uint32 layer) const;
+  std::uint32_t NumFeatures(std::uint32_t layer) const;
+  gstRecordHandle GetAttributeOrThrow(std::uint32_t layer, std::uint32_t id);
+  const gstHeaderHandle& GetAttrDefs(std::uint32_t layer) const;
   const char* name(void) const;
   gstFormat* Format(void) const;
   gstSource* GetRawSource(void) const;
@@ -96,8 +97,8 @@ class gstSourceManager : public gstMemory {
   // Since all vector-data cannot be kept in-memory and since there is a
   // localization of usage, we cache only a subset of vector-data. The size of
   // the cache depends on the following independent variables.
-  static const uint kGeodesCacheSize;
-  static const uint kRecordCacheSize;
+  static const unsigned int kGeodesCacheSize;
+  static const unsigned int kRecordCacheSize;
 
   static void init(int);
 
@@ -160,9 +161,9 @@ class gstSourceManager : public gstMemory {
   gstSource* PrivateGetSource(int id);
 
  private:
-  khCache<uint64, gstGeodeHandle> geode_cache_;
-  khCache<uint64, gstGeometryHandle> geometry_cache_;
-  khCache<uint64, gstRecordHandle> record_cache_;
+  khCache<std::uint64_t, gstGeodeHandle> geode_cache_;
+  khCache<std::uint64_t, gstGeometryHandle> geometry_cache_;
+  khCache<std::uint64_t, gstRecordHandle> record_cache_;
 
   khMutex mutex;
   std::vector<gstSource*> source_list_;

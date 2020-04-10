@@ -1,4 +1,4 @@
-// Copyright 2019 the Open GEE Contributors
+// Copyright 2020 the Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ khNoDestroyMutex mutex;
 khMutex syncMutex;
 khCondVar condvar;
 
-static void holdTheMutex(uint holdSeconds) {
+static void holdTheMutex(unsigned int holdSeconds) {
   khLockGuard lock(mutex);
   condvar.broadcast_all();
   sleep(holdSeconds);
@@ -41,7 +41,7 @@ typedef struct mutex_acquire_info {
   bool otherExceptionCaught = false;
 } mutex_acquire_info;
 
-void testMutexAcquire(mutex_acquire_info& info, uint timetowait) {
+void testMutexAcquire(mutex_acquire_info& info, unsigned int timetowait) {
   try {
     clock_gettime(CLOCK_REALTIME, &info.start);
     khLockGuard timedTryLock(mutex, timetowait);
@@ -59,7 +59,7 @@ void testMutexAcquire(mutex_acquire_info& info, uint timetowait) {
 
 // should acquire the mutex if nothing else is holding it
 TEST_F(ThreadUnitTest, timedMutex_normal) {
-  uint waittime = 5;
+  unsigned int waittime = 5;
   mutex_acquire_info info;
   testMutexAcquire(info, waittime);
   EXPECT_TRUE(info.acquired);
@@ -69,7 +69,7 @@ TEST_F(ThreadUnitTest, timedMutex_normal) {
 
 // should wait at least timeout time and then fail to create khLockGuard if mutex is already held
 TEST_F(ThreadUnitTest, timedMutex_timeout) {
-  uint waittime = 3; // seconds
+  unsigned int waittime = 3; // seconds
 
   mutex.Lock();
 
@@ -84,14 +84,14 @@ TEST_F(ThreadUnitTest, timedMutex_timeout) {
 }
 
 TEST_F(ThreadUnitTest, timedMutex_waitSuccess) {
-  uint holdTime = 4; // seconds
+  unsigned int holdTime = 4; // seconds
   khThread thread1(khFunctor<void>(std::ptr_fun(&holdTheMutex), holdTime));
   thread1.run();
   khLockGuard syncLock(syncMutex);
   condvar.wait(syncMutex); // wait until thread1 is holding the mutex;
 
   // allow slightly more time than the other thread is holding
-  uint waittime = holdTime+2;
+  unsigned int waittime = holdTime+2;
   mutex_acquire_info info;
   testMutexAcquire(info, waittime);
 

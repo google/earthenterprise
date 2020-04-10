@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -50,7 +51,7 @@ ScriptEditor::ScriptEditor(QWidget* parent,
 
   // Walk the recordHeader, add each field name to the field listBox and
   // figure out what test we're going to paste for each one.
-  for (uint f = 0; f < recordHeader->numColumns(); ++f) {
+  for (unsigned int f = 0; f < recordHeader->numColumns(); ++f) {
     QString name = recordHeader->Name(f);
     fieldsListBox->insertItem(name);
     if ((f < gstRecordJSContextImpl::MaxNumProperties) &&
@@ -216,8 +217,8 @@ void ScriptEditor::getValues() {
     }
 
     std::set<QString> unique;
-    uint found = 0;
-    uint count = 0;
+    unsigned int found = 0;
+    unsigned int count = 0;
     for (raw_source->ResetReadingOrThrow(0);
          !raw_source->IsReadingDone();
          raw_source->IncrementReadingOrThrow()) {

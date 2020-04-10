@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,8 +14,8 @@
 // limitations under the License.
 
 
+#include <cstdint>
 #include <gstGridUtils.h>
-#include <khTypes.h>
 
 double Grid::Step(int level) {
   return 1.0 / (0x01UL << level);

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -60,12 +61,12 @@ class PacketBundleTest : public testing::Test {
    * blist is easier to use to create a big ordered sequence of quadtree
    * paths for testing.
    */
-  void ConvertToQtPath(uint64 blist,
+  void ConvertToQtPath(std::uint64_t blist,
                        int level,
                        std::string* qtpath) {
     *qtpath = "0";
     for (int i = 0; i < level; ++i) {
-      uint64 next = (blist >> (62 - i * 2)) & 0x3;
+      std::uint64_t next = (blist >> (62 - i * 2)) & 0x3;
       switch (next) {
         case 0:
           *qtpath += "0";
@@ -89,24 +90,24 @@ class PacketBundleTest : public testing::Test {
   /**
    * Write and read known packets for a given bundle size.
    */
-  void BasicRWTest(uint64 max_file_size, bool multi_file) {
-    uint64 blist = 0x0000000000000000;
-    uint16 first_byte;
-    uint64 num_packets = 12000;
-    uint32 num_packet_blocks = 25;
-    uint32 packet_size = num_packet_blocks * 256;
+  void BasicRWTest(std::uint64_t max_file_size, bool multi_file) {
+    std::uint64_t blist = 0x0000000000000000;
+    std::uint16_t first_byte;
+    std::uint64_t num_packets = 12000;
+    std::uint32_t num_packet_blocks = 25;
+    std::uint32_t packet_size = num_packet_blocks * 256;
 
     std::string qtpath;
     {
       PacketBundleWriter writer(test_directory, max_file_size);
       std::string data;
-      for (uint64 j = 0; j < num_packet_blocks; ++j) {
-        for (uint32 i = 0; i < 256; ++i) {
+      for (std::uint64_t j = 0; j < num_packet_blocks; ++j) {
+        for (std::uint32_t i = 0; i < 256; ++i) {
           data += static_cast<char>(i);
         }
       }
 
-      for (uint64 i = 0; i < num_packets; ++i) {
+      for (std::uint64_t i = 0; i < num_packets; ++i) {
         char *ptr = const_cast<char *>(data.c_str());
         first_byte = 0xff & i;
         *ptr = static_cast<char>(first_byte);
@@ -118,8 +119,8 @@ class PacketBundleTest : public testing::Test {
 
     std::string index_file = test_directory + "/index";
     std::ifstream source(index_file.c_str());
-    uint64 index_size = khGetFileSizeOrThrow(index_file);
-    uint64 index_offset = 0;
+    std::uint64_t index_size = khGetFileSizeOrThrow(index_file);
+    std::uint64_t index_offset = 0;
     PacketBundleFinder finder(&source, index_offset, index_size);
 
     // Try last packet.
@@ -128,19 +129,19 @@ class PacketBundleTest : public testing::Test {
     std::string data;
     ConvertToQtPath(blist, 24, &qtpath);
     EXPECT_TRUE(reader.ReadPacket(qtpath, kImagePacket, 0, &data));
-    for (uint32 i = 0; i < data.size(); ++i) {
+    for (std::uint32_t i = 0; i < data.size(); ++i) {
       if (i == 0) {
         EXPECT_EQ(first_byte,
-                  static_cast<uint16>(data[i] & 0xff));
+                  static_cast<std::uint16_t>(data[i] & 0xff));
       } else {
-        EXPECT_EQ(static_cast<uint16>(i & 0xff),
-                  static_cast<uint16>(data[i] & 0xff));
+        EXPECT_EQ(static_cast<std::uint16_t>(i & 0xff),
+                  static_cast<std::uint16_t>(data[i] & 0xff));
       }
     }
 
     // Use find to get offset and size to read packet.
     IndexItem index_item;
-    uint64 last_offset;
+    std::uint64_t last_offset;
     index_item.Fill(qtpath, kImagePacket, 0);
     EXPECT_TRUE(finder.FindPacketInIndex(&index_item));
     if (!multi_file) {
@@ -155,12 +156,12 @@ class PacketBundleTest : public testing::Test {
                                   kImagePacket,
                                   0,
                                   &data));
-    for (uint32 i = 0; i < data.size(); ++i) {
+    for (std::uint32_t i = 0; i < data.size(); ++i) {
       if (i == 0) {
-        EXPECT_EQ(0x00, static_cast<uint16>(data[i] & 0xff));
+        EXPECT_EQ(0x00, static_cast<std::uint16_t>(data[i] & 0xff));
       } else {
-        EXPECT_EQ(static_cast<uint16>(i & 0xff),
-                  static_cast<uint16>(data[i] & 0xff));
+        EXPECT_EQ(static_cast<std::uint16_t>(i & 0xff),
+                  static_cast<std::uint16_t>(data[i] & 0xff));
       }
     }
 
@@ -168,7 +169,7 @@ class PacketBundleTest : public testing::Test {
     index_item.Fill(qtpath, kImagePacket, 0);
     EXPECT_TRUE(finder.FindPacketInIndex(&index_item));
     EXPECT_EQ(qtpath, index_item.QuadtreeAddress());
-    EXPECT_EQ(static_cast<uint64>(0), index_item.offset);
+    EXPECT_EQ(static_cast<std::uint64_t>(0), index_item.offset);
     EXPECT_EQ(data.size(), index_item.packet_size);
 
     // Try a few other packets ...
@@ -177,12 +178,12 @@ class PacketBundleTest : public testing::Test {
                                   kImagePacket,
                                   0,
                                   &data));
-    for (uint32 i = 0; i < data.size(); ++i) {
+    for (std::uint32_t i = 0; i < data.size(); ++i) {
       if (i == 0) {
-        EXPECT_EQ(0x07, static_cast<uint16>(data[i] & 0xff));
+        EXPECT_EQ(0x07, static_cast<std::uint16_t>(data[i] & 0xff));
       } else {
-        EXPECT_EQ(static_cast<uint16>(i & 0xff),
-                  static_cast<uint16>(data[i] & 0xff));
+        EXPECT_EQ(static_cast<std::uint16_t>(i & 0xff),
+                  static_cast<std::uint16_t>(data[i] & 0xff));
       }
     }
 
@@ -195,7 +196,7 @@ class PacketBundleTest : public testing::Test {
     if (!multi_file) {
       EXPECT_TRUE(index_item.offset < last_offset);
       // Should be on a packet boundary.
-      uint64 packet_num = index_item.offset / packet_size;
+      std::uint64_t packet_num = index_item.offset / packet_size;
       EXPECT_EQ(packet_num * packet_size, index_item.offset);
     }
 
@@ -204,12 +205,12 @@ class PacketBundleTest : public testing::Test {
                                   kImagePacket,
                                   0,
                                   &data));
-    for (uint32 i = 0; i < data.size(); ++i) {
+    for (std::uint32_t i = 0; i < data.size(); ++i) {
       if (i == 0) {
-        EXPECT_EQ(0x87, static_cast<uint16>(data[i] & 0xff));
+        EXPECT_EQ(0x87, static_cast<std::uint16_t>(data[i] & 0xff));
       } else {
-        EXPECT_EQ(static_cast<uint16>(i & 0xff),
-                  static_cast<uint16>(data[i] & 0xff));
+        EXPECT_EQ(static_cast<std::uint16_t>(i & 0xff),
+                  static_cast<std::uint16_t>(data[i] & 0xff));
       }
     }
 
@@ -222,7 +223,7 @@ class PacketBundleTest : public testing::Test {
     if (!multi_file) {
       EXPECT_TRUE(index_item.offset < last_offset);
       // Should be on a packet boundary.
-      uint64 packet_num = index_item.offset / packet_size;
+      std::uint64_t packet_num = index_item.offset / packet_size;
       EXPECT_EQ(packet_num * packet_size, index_item.offset);
     }
 
@@ -231,12 +232,12 @@ class PacketBundleTest : public testing::Test {
                                   kImagePacket,
                                   0,
                                   &data));
-    for (uint32 i = 0; i < data.size(); ++i) {
+    for (std::uint32_t i = 0; i < data.size(); ++i) {
       if (i == 0) {
-        EXPECT_EQ(0x91, static_cast<uint16>(data[i] & 0xff));
+        EXPECT_EQ(0x91, static_cast<std::uint16_t>(data[i] & 0xff));
       } else {
-        EXPECT_EQ(static_cast<uint16>(i & 0xff),
-                  static_cast<uint16>(data[i] & 0xff));
+        EXPECT_EQ(static_cast<std::uint16_t>(i & 0xff),
+                  static_cast<std::uint16_t>(data[i] & 0xff));
       }
     }
 
@@ -248,7 +249,7 @@ class PacketBundleTest : public testing::Test {
     if (!multi_file) {
       EXPECT_TRUE(index_item.offset < last_offset);
       // Should be on a packet boundary.
-      uint64 packet_num = index_item.offset / packet_size;
+      std::uint64_t packet_num = index_item.offset / packet_size;
       EXPECT_EQ(packet_num * packet_size, index_item.offset);
     }
 
@@ -277,15 +278,15 @@ class PacketBundleTest : public testing::Test {
   /**
    * Write and read known packets for a given bundle size.
    */
-  void DeltaRWTest(uint64 max_file_size) {
-    uint64 blist = 0x0000000000000000;
-    uint16 first_byte;
-    uint64 num_packets = 12000;
-    uint32 num_packet_blocks = 25;
+  void DeltaRWTest(std::uint64_t max_file_size) {
+    std::uint64_t blist = 0x0000000000000000;
+    std::uint16_t first_byte;
+    std::uint64_t num_packets = 12000;
+    std::uint32_t num_packet_blocks = 25;
 
     std::string data;
-    for (uint64 j = 0; j < num_packet_blocks; ++j) {
-      for (uint32 i = 0; i < 256; ++i) {
+    for (std::uint64_t j = 0; j < num_packet_blocks; ++j) {
+      for (std::uint32_t i = 0; i < 256; ++i) {
         data += static_cast<char>(i);
       }
     }
@@ -297,7 +298,7 @@ class PacketBundleTest : public testing::Test {
     {
       PacketBundleWriter writer(data_directory, max_file_size);
 
-      for (uint64 i = 0; i < num_packets; ++i) {
+      for (std::uint64_t i = 0; i < num_packets; ++i) {
         char *ptr = const_cast<char *>(data.c_str());
         first_byte = 0xff & i;
         *ptr = static_cast<char>(first_byte);
@@ -319,7 +320,7 @@ class PacketBundleTest : public testing::Test {
       std::ofstream fp(qtp_index_file.c_str());
       fp.write("This is a dummy file.\n", 22);
       fp.close();
-      uint32 prefix_len = test_directory.size();
+      std::uint32_t prefix_len = test_directory.size();
       fusion_portableglobe::FilePacker packer(glb_file,
                                               qtp_index_file,
                                               prefix_len);
@@ -334,8 +335,8 @@ class PacketBundleTest : public testing::Test {
     {
       PacketBundleWriter writer(
           delta_directory, glb_file, false, max_file_size);
-      uint32 write_cnt = 0;
-      for (uint64 i = 0; i < num_packets; ++i) {
+      std::uint32_t write_cnt = 0;
+      for (std::uint64_t i = 0; i < num_packets; ++i) {
         char *ptr = const_cast<char *>(data.c_str());
         first_byte = 0xff & i;
         *ptr = static_cast<char>(first_byte);
@@ -352,7 +353,7 @@ class PacketBundleTest : public testing::Test {
     PacketBundleReader data_reader(data_directory);
     PacketBundleReader delta_reader(delta_directory);
     blist = 0x0000000000000000;
-    for (uint64 i = 0; i < num_packets; ++i) {
+    for (std::uint64_t i = 0; i < num_packets; ++i) {
       first_byte = 0xff & i;
       ConvertToQtPath(blist, 24, &qtpath);
       --skip_count;
@@ -505,7 +506,7 @@ TEST_F(PacketBundleTest, TestMultiFilePacketBundleRW) {
 // Tests expected struct size(s). If we cross an 8 byte boundary, then the
 // structure size may differ on 32 bit machines.
 TEST_F(PacketBundleTest, TestClassSize) {
-  EXPECT_EQ(static_cast<uint32>(24), sizeof(IndexItem));
+  EXPECT_EQ(static_cast<std::uint32_t>(24), sizeof(IndexItem));
 }
 
 

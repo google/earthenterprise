@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +18,8 @@
 #include "fusion/gst/gstGeomUtils.h"
 #include "common/notify.h"
 #include "common/khTileAddr.h"
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 
 
 namespace {
@@ -86,7 +88,7 @@ void ConvertCycleTo(const fusion_gst::PcCycle &cycle,
   }
 
   geode->AddPart(8);  // TODO: number of vertexes;
-  uint vertex_counter = 0;
+  unsigned int vertex_counter = 0;
   while (cur_he != cycle.last_halfedge) {
     // Add vertex to geode part;
     const fusion_gst::PcVertex &v = cur_he->v;
@@ -169,7 +171,7 @@ void ComputeCycle(const fusion_gst::PcHalfedgeHandle &he,
     cycle->first_halfedge = first_he;
   }
 
-  uint32 count_verts = 0;
+  std::uint32_t count_verts = 0;
   do {
 #if 0
     notify(NFY_NOTICE,
@@ -320,7 +322,7 @@ void PcFace::ConvertTo(gstGeode *geode) const {
                  Int2Type<false>());  // is_inner_cycle is false;
 
   // Convert inner cycles;
-  for (uint part = 1; part < CyclesSize(); part++) {
+  for (unsigned int part = 1; part < CyclesSize(); part++) {
     ConvertCycleTo(GetCycle(part), geode,
                    Int2Type<true>());  // is_inner_cycle is true;
   }
@@ -398,7 +400,7 @@ void PolygonBuilder::AcceptPolygon(const gstGeode *geode) {
     return;
 
   // Accept data for further processing.
-  for (uint part = 0; part < geode->NumParts(); ++part) {
+  for (unsigned int part = 0; part < geode->NumParts(); ++part) {
     notify(NFY_VERBOSE, "number vertexes in geode part %d: %d", part,
            geode->VertexCount(part));
     out_halfedges_acceptor_.Accept(geode, part);
@@ -488,11 +490,11 @@ void PolygonBuilder::ReconstructPolygonAndSkipNotValidCycles() {
 
     if ((kDominatingLeft == cur_he->dominating) && (!cur_he->visited())) {
       PcHalfedgeHandle outer_he;
-      uint existing_face_num = GetFaceNumber(cur_he, &outer_he);
+      unsigned int existing_face_num = GetFaceNumber(cur_he, &outer_he);
 
       if (kInsideAreaLocAbove == cur_he->inside_area_loc()) {
         // New outer cycle.
-        if (static_cast<uint>(-1) != existing_face_num) {
+        if (static_cast< unsigned int> (-1) != existing_face_num) {
 #ifndef NDEBUG
           // Outer cycle inside another outer cycle.
           notify(NFY_WARN, "Invalid outer cycle (inside another one):"
@@ -519,7 +521,7 @@ void PolygonBuilder::ReconstructPolygonAndSkipNotValidCycles() {
 #endif
 
           // Skip invalid outer cycle.
-          cur_he->SetFaceAttr(static_cast<uint>(-1), static_cast<uint>(-1));
+          cur_he->SetFaceAttr(static_cast< unsigned int> (-1), static_cast< unsigned int> (-1));
           ComputeCycle(cur_he, NULL,        // NULL - do not create new cycle.
                        Int2Type<false>());  // is_inner_cycle is false.
         } else {
@@ -527,10 +529,10 @@ void PolygonBuilder::ReconstructPolygonAndSkipNotValidCycles() {
 
           // Create new face and new cycle.
           out_faces_.push_back(PcFace());
-          uint new_face_num = out_faces_.size() - 1;
+          unsigned int new_face_num = out_faces_.size() - 1;
           PcFace& cur_face = out_faces_[new_face_num];
           cur_face.AddCycle();
-          uint new_cycle_num = cur_face.CyclesSize() - 1;
+          unsigned int new_cycle_num = cur_face.CyclesSize() - 1;
           cur_he->SetFaceAttr(new_face_num, new_cycle_num);
           ComputeCycle(cur_he,
                        &(cur_face.GetLastCycle()),
@@ -545,7 +547,7 @@ void PolygonBuilder::ReconstructPolygonAndSkipNotValidCycles() {
 
         notify(NFY_VERBOSE, "existing_face_num: %u", existing_face_num);
 
-        if (static_cast<uint>(-1) != existing_face_num) {  // Valid cycle.
+        if (static_cast< unsigned int> (-1) != existing_face_num) {  // Valid cycle.
           if ((existing_face_num >= out_faces_.size()) ||
               (0 == out_faces_[existing_face_num].CyclesSize())) {
             notify(NFY_FATAL, "Invalid face number.");
@@ -561,7 +563,7 @@ void PolygonBuilder::ReconstructPolygonAndSkipNotValidCycles() {
             // Create new cycle in existing face - no holes cutting.
             PcFace& cur_face = out_faces_[existing_face_num];
             cur_face.AddCycle();
-            uint new_cycle_num = cur_face.CyclesSize() - 1;
+            unsigned int new_cycle_num = cur_face.CyclesSize() - 1;
             first_he->SetFaceAttr(existing_face_num, new_cycle_num);
             ComputeCycle(first_he,
                          &(cur_face.GetLastCycle()),
@@ -606,7 +608,7 @@ void PolygonBuilder::ReconstructPolygonAndSkipNotValidCycles() {
 #endif
 
           // Skip invalid inner cycle.
-          first_he->SetFaceAttr(static_cast<uint>(-1), static_cast<uint>(-1));
+          first_he->SetFaceAttr(static_cast< unsigned int> (-1), static_cast< unsigned int> (-1));
           ComputeCycle(first_he, NULL,     // NULL - do not create new cycle.
                        Int2Type<true>());  // is_inner_cycle is true.
         }
@@ -634,7 +636,7 @@ void PolygonBuilder::ReconstructPolygonAndSkipNotValidCycles() {
   notify(NFY_VERBOSE, "%s done.", __func__);
 }
 
-uint PolygonBuilder::GetFaceNumber(const PcHalfedgeHandle &he,
+ unsigned int PolygonBuilder::GetFaceNumber(const PcHalfedgeHandle &he,
                                    PcHalfedgeHandle *const outer_he) {
   notify(NFY_VERBOSE, "%s...", __func__);
   assert(outer_he != NULL);
@@ -884,18 +886,18 @@ void PolygonBuilder::ReconstructPolygon() {
 
     if ((kDominatingLeft == cur_he->dominating) && (!cur_he->visited())) {
       PcHalfedgeHandle outer_he;
-      uint existing_face_num = GetFaceNumber(cur_he, &outer_he);
+      unsigned int existing_face_num = GetFaceNumber(cur_he, &outer_he);
 
-      if (static_cast<uint>(-1) == existing_face_num) {
+      if (static_cast< unsigned int> (-1) == existing_face_num) {
         // New outer cycle.
         notify(NFY_VERBOSE, "Add outer cycle");
 
         // Create new face and new cycle.
         out_faces_.push_back(PcFace());
-        uint new_face_num = out_faces_.size() - 1;
+        unsigned int new_face_num = out_faces_.size() - 1;
         PcFace& cur_face = out_faces_[new_face_num];
         cur_face.AddCycle();
-        uint new_cycle_num = cur_face.CyclesSize() - 1;
+        unsigned int new_cycle_num = cur_face.CyclesSize() - 1;
         cur_he->SetFaceAttr(new_face_num, new_cycle_num);
         ComputeCycle(cur_he,
                      &(cur_face.GetLastCycle()),
@@ -923,7 +925,7 @@ void PolygonBuilder::ReconstructPolygon() {
           // Create new cycle in existing face - no holes cutting.
           PcFace& cur_face = out_faces_[existing_face_num];
           cur_face.AddCycle();
-          uint new_cycle_num = cur_face.CyclesSize() - 1;
+          unsigned int new_cycle_num = cur_face.CyclesSize() - 1;
           first_he->SetFaceAttr(existing_face_num, new_cycle_num);
           ComputeCycle(first_he,
                        &(cur_face.GetLastCycle()),

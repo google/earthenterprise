@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,13 +65,13 @@ class Defaultable {
     return ((useDefault == other.useDefault) &&
             (useDefault || (val == other.val)));
   }
-  uint64 GetHeapUsage() const {
+  std::uint64_t GetHeapUsage() const {
     return ::GetHeapUsage(val);
   }
 };
 
 template <class T>
-inline uint64 GetHeapUsage(const Defaultable<T> &obj) {
+inline std::uint64_t GetHeapUsage(const Defaultable<T> &obj) {
   return obj.GetHeapUsage();
 }
 

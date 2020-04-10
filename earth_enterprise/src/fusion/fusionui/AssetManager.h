@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -178,7 +179,7 @@ class AssetManager : public AssetManagerBase {
   void HandleNewWindow(AssetBase* asset_window);
   bool RestoreExisting(const std::string& asset_ref);
 
-  std::string GetProviderById(uint32 id);
+  std::string GetProviderById(std::uint32_t id);
 
   void RemoveToolBarIcons();
 
@@ -186,7 +187,7 @@ class AssetManager : public AssetManagerBase {
   int icon_grid_;
   int filter_type_;
   int filter_subtype_;
-  typedef std::map<uint32, std::string> ProviderMap;
+  typedef std::map<std::uint32_t, std::string> ProviderMap;
   ProviderMap provider_map_;
   PrefsConfig::ShowAssetManagerIconType asset_manager_icon_choice_;
   const PrefsConfig::ShowAssetManagerIconType asset_manager_icon_choice_orig_;

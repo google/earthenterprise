@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,7 +34,7 @@
 
 namespace {
 
-typedef std::pair<std::string, uint64> NameSizePair;
+typedef std::pair<std::string, std::uint64_t> NameSizePair;
 typedef std::map<std::string, NameSizePair> FileMap;
 typedef std::vector<std::pair<std::string, NameSizePair> > FileList;
 
@@ -128,7 +129,7 @@ void PopulateFileMap(geFilePool &file_pool,
     if (filelists) {
       filelists->resize(dbpaths->size());
     }
-    for (uint i = 0; i < dbpaths->size(); ++i) {
+    for (unsigned int i = 0; i < dbpaths->size(); ++i) {
       // Get the manifest object. May throw an exception.
       DbManifest dbmanifest(&(*dbpaths)[i]);
 
@@ -269,7 +270,7 @@ int main(int argc, char *argv[]) {
     PopulateFileMap(file_pool, &already_have, have_files, 0, "");
 
     // Figure out which of the files I really need to send.
-    uint64 totalsize = 0;
+    std::uint64_t totalsize = 0;
     FileList needed_files;
 
     for (const auto& maybe : send_files) {
@@ -280,8 +281,14 @@ int main(int argc, char *argv[]) {
     }
 
     // Now add the extra files.
+<<<<<<< HEAD
     for (const auto& extra : extrafiles) {
       uint64 fsize;
+=======
+    for (std::vector<std::string>::const_iterator extra = extrafiles.begin();
+         extra != extrafiles.end(); ++extra) {
+      std::uint64_t fsize;
+>>>>>>> upstream/master
       time_t ftime;
       if (!khGetFileInfo(extra, fsize, ftime)) {
         throw khErrnoException(kh::tr("Unable to get filesize for %1")
@@ -380,7 +387,7 @@ int main(int argc, char *argv[]) {
 
       // Add the filelists to each dbpath.
       notify(NFY_NOTICE, "Writing filelists");
-      for (uint s = 0; s < to_send.size(); ++s) {
+      for (unsigned int s = 0; s < to_send.size(); ++s) {
         std::string orig_flist = khComposePath(
             to_send[s], kDbManifestFilesListFile);
         std::string flist = khComposePath(output, orig_flist);

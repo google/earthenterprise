@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 The Open GEE Contributors
+ * Copyright 2020 The Open GEE Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 #ifndef _CACHE_SIZE_CALCULATIONS_H
 #define _CACHE_SIZE_CALCULATIONS_H
-#include "khTypes.h"
+#include <cstdint>
 #include <memory>
 #include <vector>
 #include <set>
@@ -27,40 +27,40 @@
 #include "SharedString.h"
 
 template<class T>
-inline uint64 GetSize(const T &obj);
+inline std::uint64_t GetSize(const T &obj);
 
 //determine amount of memory used by an object pointed to by a pointer
 template<class T>
-inline uint64 GetHeapUsage(const T* &ptr) {
-    uint64 ptrSize = (ptr ? GetSize(*ptr) : 0);
+inline std::uint64_t GetHeapUsage(const T* &ptr) {
+    std::uint64_t ptrSize = (ptr ? GetSize(*ptr) : 0);
     return ptrSize;
 }
 //determine amount of memory used by an object pointed to by a shared_ptr
 template<class T>
-inline uint64 GetHeapUsage(const std::shared_ptr<T> &shptr) {
-    uint64 shptrSize = (shptr ? GetSize(*shptr) : 0);
+inline std::uint64_t GetHeapUsage(const std::shared_ptr<T> &shptr) {
+    std::uint64_t shptrSize = (shptr ? GetSize(*shptr) : 0);
     return shptrSize;
 }
 //determine amount of memory used by a string
-inline uint64 GetHeapUsage(const std::string &str) {
-    uint64 strSize = (str.capacity() * sizeof(char));
+inline std::uint64_t GetHeapUsage(const std::string &str) {
+    std::uint64_t strSize = (str.capacity() * sizeof(char));
     return strSize;
 }
 // determine amount of memory used by a qstring
-inline uint64 GetHeapUsage(const QString &qstr) {
-    uint64 qstrSize = (qstr.capacity() * sizeof(char16_t));
+inline std::uint64_t GetHeapUsage(const QString &qstr) {
+    std::uint64_t qstrSize = (qstr.capacity() * sizeof(char16_t));
     return qstrSize;
 }
 // determine amount of memory used by a given object
 // returns 0 for all non specified objects
 template<class T>
-inline uint64 GetHeapUsage(const T &obj) {
+inline std::uint64_t GetHeapUsage(const T &obj) {
     return 0;
 }
 //determine amount of memory used by a map's contents
 template<class key, class val>
-inline uint64 GetHeapUsage(const std::map<key, val> &map) {
-    uint64 total = 0;
+inline std::uint64_t GetHeapUsage(const std::map<key, val> &map) {
+    std::uint64_t total = 0;
     for (const auto &kv : map) {
         total += GetHeapUsage(kv.first) + GetHeapUsage(kv.second);
     }
@@ -68,8 +68,8 @@ inline uint64 GetHeapUsage(const std::map<key, val> &map) {
 }
 // determine amount of memory used by a vector's contents
 template<class T>
-inline uint64 GetHeapUsage(const std::vector<T> &vec) {
-    uint64 total = 0;
+inline std::uint64_t GetHeapUsage(const std::vector<T> &vec) {
+    std::uint64_t total = 0;
     for(const auto &t : vec) {
       total += GetHeapUsage(t);
     }
@@ -77,8 +77,8 @@ inline uint64 GetHeapUsage(const std::vector<T> &vec) {
 }
 //determine amount of memory used by a set's contents
 template<class T>
-inline uint64 GetHeapUsage(const std::set<T> &set) {
-    uint64 total = 0;
+inline std::uint64_t GetHeapUsage(const std::set<T> &set) {
+    std::uint64_t total = 0;
     for (const auto &t : set) {
         total += GetHeapUsage(t);
     }
@@ -86,8 +86,8 @@ inline uint64 GetHeapUsage(const std::set<T> &set) {
 }
 //determine amount of memory used by a given object
 template<class T>
-inline uint64 GetSize(const T &obj) {
-    uint64 objSize = GetHeapUsage(obj);
+inline std::uint64_t GetSize(const T &obj) {
+    std::uint64_t objSize = GetHeapUsage(obj);
     return sizeof(obj) + objSize;
 }
 #endif

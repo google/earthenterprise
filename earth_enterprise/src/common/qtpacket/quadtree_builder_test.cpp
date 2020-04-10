@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -54,14 +55,14 @@ static const int kTestVectorChannel = 20;
 
 struct IndexRow {
   std::string quadset_path;
-  int32  subindex;
-  int32  layer_type;
-  int32  version;
-  int32  provider;
+  std::int32_t  subindex;
+  std::int32_t  layer_type;
+  std::int32_t  version;
+  std::int32_t  provider;
   bool   deleted;
   // Indicates which children are present in a 5-to-1 packed terrain
   // node (see magrathean.protodevel)
-  int32  terrain_presence_flags;
+  std::int32_t  terrain_presence_flags;
 };
 
 //
@@ -134,9 +135,9 @@ struct IndexRow {
 //     (TODO)
 // . = a node that should be generated
 
-static const int32 kNodeTypeImage = QuadtreePacketItem::kLayerImagery;
-static const int32 kNodeTypeTerrain = QuadtreePacketItem::kLayerTerrain;
-static const int32 kNodeTypeVector =
+static const std::int32_t kNodeTypeImage = QuadtreePacketItem::kLayerImagery;
+static const std::int32_t kNodeTypeTerrain = QuadtreePacketItem::kLayerTerrain;
+static const std::int32_t kNodeTypeVector =
   QuadtreePacketItem::kLayerVectorMin + kTestVectorChannel;
 
 class TestQuadtreeBuilderIndexSource
@@ -148,7 +149,7 @@ class TestQuadtreeBuilderIndexSource
     // Build sorted container of IndexRow nodes
     for (size_t i = 0; i < kDataCount; ++i) {
       const IndexRow &item = kIndexData[i];
-      uint64 quadset_num =
+      std::uint64_t quadset_num =
         QuadtreeNumbering::TraversalPathToGlobalNodeNumber(item.quadset_path);
       QuadtreePath item_path =
         QuadtreeNumbering::QuadsetAndSubindexToTraversalPath(quadset_num,
@@ -164,7 +165,7 @@ class TestQuadtreeBuilderIndexSource
       {                                 // protect scope of reference vars
         QuadtreePath item_path = index_data_.begin()->first;
         const IndexRow &item = index_data_.begin()->second;
-        uint64 quadset_num =
+        std::uint64_t quadset_num =
           QuadtreeNumbering::TraversalPathToGlobalNodeNumber(item.quadset_path);
 
         current_ = TransferOwnership(
@@ -235,8 +236,8 @@ const IndexRow TestQuadtreeBuilderIndexSource::kIndexData[kDataCount] = {
 //
 struct LayerTypeInfo {
   bool has_data;
-  int32 version;
-  int32 provider;
+  std::int32_t version;
+  std::int32_t provider;
 };
 
 struct QuadtreePacketInfo {
@@ -358,17 +359,17 @@ class QuadtreeBuilderUnitTest : public UnitTest<QuadtreeBuilderUnitTest> {
     // Test channel insertion.  Source channels are ordered to test
     // inserts at front, middle, and back.
     const size_t kCount = 10;
-    static const uint16 channel_src[kCount] = {
+    static const std::uint16_t channel_src[kCount] = {
       150, 155, 160, 140, 135, 170, 157, 158, 180, 130
     };
-    static const uint16 version_src[kCount] = {
+    static const std::uint16_t version_src[kCount] = {
       10150, 10155, 10160, 10140, 10135, 10170, 10157, 10158, 10180, 10130
     };
 
-    static const uint16 channel_expect[kCount] = {
+    static const std::uint16_t channel_expect[kCount] = {
       130, 135, 140, 150, 155, 157, 158, 160, 170, 180
     };
-    static const uint16 version_expect[kCount] = {
+    static const std::uint16_t version_expect[kCount] = {
       10130, 10135, 10140, 10150, 10155, 10157, 10158, 10160, 10170, 10180
     };
 
@@ -424,7 +425,7 @@ class QuadtreeBuilderUnitTest : public UnitTest<QuadtreeBuilderUnitTest> {
 
  private:
   void BuildExpectedRefs(const ExpectedQuadset *expected,
-                         const uint64 quadset_num,
+                         const std::uint64_t quadset_num,
                          KhQuadtreeDataReferenceGroup *ref_group) {
     // TODO: fill in correct versions, providers, channels
     for (int i = 0; i < expected->num_nodes; ++i) {
@@ -452,7 +453,7 @@ class QuadtreeBuilderUnitTest : public UnitTest<QuadtreeBuilderUnitTest> {
                                     terrain_info.provider));
       }
       if (vector_info.has_data) {
-        uint16 channel_id = 0;  // TODO: start recording this.
+        std::uint16_t channel_id = 0;  // TODO: start recording this.
         ref_group->vec_refs->push_back(
             KhQuadtreeDataReference(qt_path, vector_info.version,
                                     channel_id, vector_info.provider));
@@ -479,7 +480,7 @@ class QuadtreeBuilderUnitTest : public UnitTest<QuadtreeBuilderUnitTest> {
       }
       // Note: that format1 only supports 8 bit providers...must truncate
       // expected to match.
-      uint16 expected_provider = expected_refs[j].provider();
+      std::uint16_t expected_provider = expected_refs[j].provider();
       if (expect_8bit_providers) {
         expected_provider &= 0xff;
       }
@@ -487,7 +488,7 @@ class QuadtreeBuilderUnitTest : public UnitTest<QuadtreeBuilderUnitTest> {
     }
     if (errors) {
       for (size_t j = 0; j < expected_refs.size(); ++j ) {
-        uint16 expected_provider = expected_refs[j].provider();
+        std::uint16_t expected_provider = expected_refs[j].provider();
         if (expect_8bit_providers) {
           expected_provider &= 0xff;
         }
@@ -517,7 +518,7 @@ class QuadtreeBuilderUnitTest : public UnitTest<QuadtreeBuilderUnitTest> {
     for (size_t i = 0; i < kNumExpectedQuadsets; ++i) {
       const ExpectedQuadset *expected = &expected_quadsets[i];
 
-      const uint64 quadset_num
+      const std::uint64_t quadset_num
         = QuadtreeNumbering::TraversalPathToGlobalNodeNumber(
             expected->quadset_path);
 
@@ -662,7 +663,7 @@ printf("GetDataReferences\n");
     for (size_t i = 0; i < kNumExpectedQuadsets; ++i) {
       const ExpectedQuadset *expected = &expected_quadsets[i];
 
-      const uint64 quadset_num
+      const std::uint64_t quadset_num
         = QuadtreeNumbering::TraversalPathToGlobalNodeNumber(
             expected->quadset_path);
 

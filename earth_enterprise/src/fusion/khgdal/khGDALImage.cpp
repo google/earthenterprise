@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -40,7 +41,7 @@ khGDALImageImpl::khGDALImageImpl(const std::string &filename_) :
     throw khException(kh::tr("Unable to open %1").arg(filename.c_str()));
   }
 
-  khSize<uint32> rasterSize(dataset->GetRasterXSize(),
+  khSize<std::uint32_t> rasterSize(dataset->GetRasterXSize(),
                             dataset->GetRasterYSize());
 }
 

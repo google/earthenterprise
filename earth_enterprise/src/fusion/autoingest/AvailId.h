@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,9 +38,9 @@ Description: class to hand out IDs from possibly disjoint ranges. This will
 #endif
 
 class AvailId {
-  typedef std::pair<uint32, uint32> Range;
+  typedef std::pair<std::uint32_t, std::uint32_t> Range;
 
-  uint32 size_;
+  std::uint32_t size_;
   std::vector<Range> avail;
  public:
 #ifdef DEBUG_AVAILID
@@ -55,10 +56,10 @@ class AvailId {
 
 
   // Note: like the STL classes, the range is [begin,end[
-  AvailId(uint32 begin, uint32 end);
-  uint32 size(void) const { return size_; }
-  uint32 next(void);
-  void exclude(uint32 id, bool throwException=true);
+  AvailId(std::uint32_t begin, std::uint32_t end);
+  std::uint32_t size(void) const { return size_; }
+  std::uint32_t next(void);
+  void exclude(std::uint32_t id, bool throwException=true);
 };
 
 #endif /* __AvailId_h */

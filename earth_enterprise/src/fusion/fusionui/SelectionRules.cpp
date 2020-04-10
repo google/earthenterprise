@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -102,7 +103,7 @@ SelectionRules::SelectionRules(QWidget *parent,
   if (hdr->numColumns() != 0) {
     queryTab->setEnabled(true);
     QStringList fdesc;
-    for (uint ii = 0; ii < hdr->numColumns(); ++ii)
+    for (unsigned int ii = 0; ii < hdr->numColumns(); ++ii)
       fdesc.append(hdr->Name(ii));
     queryScroller->setFieldDesc(fdesc);
   } else {
@@ -124,11 +125,11 @@ SelectionRules::SelectionRules(QWidget *parent,
   }
 
   // Calculate the recommended build level from source.
-  uint32 maxResolutionLevel =
+  std::uint32_t maxResolutionLevel =
     layer->GetSource()->RecommendedMaxResolutionLevel();
-  uint32 minResolutionLevel =
+  std::uint32_t minResolutionLevel =
     layer->GetSource()->RecommendedMinResolutionLevel();
-  uint32 efficientResolutionLevel =
+  std::uint32_t efficientResolutionLevel =
     layer->GetSource()->RecommendedEfficientResolutionLevel();
   if (maxResolutionLevel > 0) {
     featureRecommendedResolutionLevelLabel->setText(kh::tr(
@@ -1047,7 +1048,7 @@ void SelectionRules::updateFeatureWidgets() {
   }
 }
 
-void SelectionRules::QColorToVector(QColor color, std::vector<uint>* vec) {
+void SelectionRules::QColorToVector(QColor color, std::vector< unsigned int> * vec) {
   QRgb rgb = color.rgb();
   vec->resize(4);
   (*vec)[0] = qRed(rgb);
@@ -1056,7 +1057,7 @@ void SelectionRules::QColorToVector(QColor color, std::vector<uint>* vec) {
   (*vec)[3] = qAlpha(rgb);
 }
 
-QColor SelectionRules::VectorToQColor(const std::vector<uint>& vec) {
+QColor SelectionRules::VectorToQColor(const std::vector< unsigned int> & vec) {
   QRgb rgba = (vec[3] << 24) |    // a
               (vec[0] << 16) |    // r
               (vec[1] << 8) |     // g

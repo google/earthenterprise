@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -77,7 +78,7 @@ class LineSegment {
   void set_start(int start) { start_ = start; }
   void set_end(int end) { end_ = end; }
 
-  uint start_, end_;
+  unsigned int start_, end_;
   double max_dist_;
   int max_v_;
 };
@@ -96,7 +97,7 @@ void LineSegment::Update(const gstGeode *geode) {
 
   const gstVertex& v1 = geode->GetVertex(0, start_);
   const gstVertex& v2 = geode->GetVertex(0, end_);
-  for ( uint i = start_ + 1; i != end_; ++i ) {
+  for ( unsigned int i = start_ + 1; i != end_; ++i ) {
     double dist = sqrt(geode->GetVertex(0, i).Distance(v1, v2));
     if (dist <= max_dist_) continue;
     max_dist_ = dist;
@@ -138,7 +139,7 @@ void LineSegment::Update(const gstGeode *geode) {
 
   max_v_ = start_ + 1;
   double best = geode->GetVertex(0, max_v_).Distance2D(midpoint);
-  for (uint i = start_ + 2; i != end_; ++i) {
+  for (unsigned int i = start_ + 2; i != end_; ++i) {
     double dist = geode->GetVertex(0, i).Distance2D(midpoint);
     if (dist < best) {
       best = dist;
@@ -243,7 +244,7 @@ double gstSimplifier::Simplify(gstGeodeHandle geodeh,
       {
         // Do not simplify polylines with kMinPolylineVertices vertices.
         if (geode->VertexCount(0) <= kMinPolylineVertices) {
-          for (uint i = 0; i < geode->VertexCount(0); ++i)
+          for (unsigned int i = 0; i < geode->VertexCount(0); ++i)
             log->push_back(i);
           return 0.0;  // No simplification done.
         }
@@ -265,7 +266,7 @@ double gstSimplifier::Simplify(gstGeodeHandle geodeh,
         // edge flag set - these edges lie on quad boundaries or they are
         // cutting hole edges, and will introduce cracks if changed. We also
         // have to preserve the edge from (VertexCount-1) to 0.
-        const std::vector<int8>& edge_flags = geode->EdgeFlags();
+        const std::vector<std::int8_t>& edge_flags = geode->EdgeFlags();
 
         if (geode->GetFirstVertex(0) != geode->GetLastVertex(0)) {
           geode->AddVertex(geode->GetFirstVertex(0));
@@ -276,14 +277,14 @@ double gstSimplifier::Simplify(gstGeodeHandle geodeh,
 
         // Do not simplify polygons with kMinCycleVertices vertices.
         if (geode->VertexCount(0) <= kMinCycleVertices) {
-          for (uint i = 0; i < geode->VertexCount(0); ++i)
+          for (unsigned int i = 0; i < geode->VertexCount(0); ++i)
             log->push_back(i);
           return 0.0;  // No simplification done.
         }
 
-        uint start = 0;
+        unsigned int start = 0;
         bool have_start = false;
-        for (uint i = 0; i < geode->VertexCount(0) - 1; ++i) {
+        for (unsigned int i = 0; i < geode->VertexCount(0) - 1; ++i) {
           if (kNormalEdge == edge_flags[i]) {
             if (!have_start) {
               start = i;
@@ -326,7 +327,7 @@ double gstSimplifier::Simplify(gstGeodeHandle geodeh,
       break;
 
     default:
-      for (uint i = 0; i < geode->VertexCount(0); ++i) {
+      for (unsigned int i = 0; i < geode->VertexCount(0); ++i) {
         log->push_back(i);
       }
       return 0.0;  // No simplification done.
@@ -337,7 +338,7 @@ double gstSimplifier::Simplify(gstGeodeHandle geodeh,
   // search all the time.
 
   int best = 0;
-  for (uint i = 1; i < segments.size(); ++i) {
+  for (unsigned int i = 1; i < segments.size(); ++i) {
     if (segments[i].max_dist() > segments[best].max_dist()) {
       best = i;
     }
@@ -389,7 +390,7 @@ double gstSimplifier::Simplify(gstGeodeHandle geodeh,
 
     // Find the next worst vertex.
     best = 0;
-    for (uint i = 1; i < segments.size(); ++i) {
+    for (unsigned int i = 1; i < segments.size(); ++i) {
       if (segments[i].max_dist() > segments[best].max_dist()) {
         best = i;
       }

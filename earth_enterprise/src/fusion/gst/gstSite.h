@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,15 +39,15 @@ class JSDisplayBundle;
 class gstSitePreviewConfig {
  public:
   IconConfig icon_;
-  std::vector<uint> normal_color_;
-  std::vector<uint> highlight_color_;
+  std::vector< unsigned int>  normal_color_;
+  std::vector< unsigned int>  highlight_color_;
 
   // used when building a gstSite when you only have a FuseSiteConfig
   // the values don't matter, since they will never be used
   gstSitePreviewConfig(void) :
       icon_(),
-      normal_color_(std::vector<uint>(4, 255)),
-      highlight_color_(std::vector<uint>(4, 255))
+      normal_color_(std::vector< unsigned int> (4, 255)),
+      highlight_color_(std::vector< unsigned int> (4, 255))
   { }
 
   explicit gstSitePreviewConfig(const SiteConfig &cfg) :
@@ -72,7 +73,7 @@ class gstSite {
   gstRecordHandle Expand(gstRecordHandle record,
                          bool label_only,
                          JSDisplayBundle &jsbundle,
-                         uint filterId) const;
+                         unsigned int filterId) const;
 
   // This is now const. No more setting here. No more config extraction either!
   const FuseSiteConfig config;

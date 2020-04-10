@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,11 +74,11 @@ public:
   // for time it enforces that hours <=23 and minutes <=59 and seconds <=59.
   // without throwing an exception. i.e., year 10000 will appear as 9999.
   // no checking for date validity (i.e., 2008-02-30) is performed.
-  void SetDate(uint32 year, uint32 month, uint32 day, uint32 hours,
-               uint32 minutes, uint32 seconds);
+  void SetDate(std::uint32_t year, std::uint32_t month, std::uint32_t day, std::uint32_t hours,
+               std::uint32_t minutes, std::uint32_t seconds);
 
   // For Vector asset resources as they don't support time granularity.
-  void SetDate(uint32 year, uint32 month, uint32 day);
+  void SetDate(std::uint32_t year, std::uint32_t month, std::uint32_t day);
 
   //  Set the GUI date widget from a string of from "YYYY*MM*DDThh*mm*ss"
   //  or "YYYY*MM*DD" for vector assets.

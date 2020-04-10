@@ -80,6 +80,17 @@ commonsources = [ '../third_party/rsa_md5/md5c.c',
                   'timeutils.cpp',
                   streaming_imagery[0]  # generated .cc file
                  ]
+
+# scons seems to have issues resolving dependencies of dependencies when 
+# the first file is generated (in this case the .cc file). Scons does
+# not seem to properly resolve the .cc file needs the .h file (also generated)
+# and there by this means the .so file needs the .h file too.
+# This can lead to build errors if the generated files are not created
+# soon enough. So adding dependencies explicitly
+streaming_imagery_basename = os.path.splitext(str(streaming_imagery[0]))[0]
+env.Depends(streaming_imagery_basename+'.os', streaming_imagery_basename+'.h')
+env.Depends(streaming_imagery_basename+'.os', streaming_imagery_basename+'.cc')
+
 # Check environment for png.h file
 conf = Configure(env)
 

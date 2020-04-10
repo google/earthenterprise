@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,25 +29,30 @@ class VectorDbrootGenerator : public ProtoDbrootGenerator {
   class LOD {
    public:
     QString name;
-    uint    channelId;
-    uint    lodFlags;
-    std::vector<uint> states;
+    unsigned int    channelId;
+    unsigned int    lodFlags;
+    std::vector< unsigned int>  states;
 
+<<<<<<< HEAD
     LOD(const std::string &name_, uint id, uint lodFlags_) :
         name(name_.c_str()),
+=======
+    LOD(const std::string &name_, unsigned int id, unsigned int lodFlags_) :
+        name(name_),
+>>>>>>> upstream/master
         channelId(id),
         lodFlags(lodFlags_) { }
   };
 
   class StyleIdMap {
    public:
-    int32   map_id_;
-    int32   normal_style_id_;
-    int32   highlight_style_id_;
+    std::int32_t   map_id_;
+    std::int32_t   normal_style_id_;
+    std::int32_t   highlight_style_id_;
 
-    StyleIdMap(int32 map_id,
-               int32 normal_style_id,
-               int32 highlight_style_id) :
+    StyleIdMap(std::int32_t map_id,
+               std::int32_t normal_style_id,
+               std::int32_t highlight_style_id) :
         map_id_(map_id),
         normal_style_id_(normal_style_id),
         highlight_style_id_(highlight_style_id) { }
@@ -61,7 +67,7 @@ class VectorDbrootGenerator : public ProtoDbrootGenerator {
   // used when building up nested proto structures from flat ones
   typedef std::map<std::string,
                    keyhole::dbroot::NestedFeatureProto*> NamedLayerMap;
-  typedef std::map<int32,
+  typedef std::map<std::int32_t,
                    keyhole::dbroot::NestedFeatureProto*> IdLayerMap;
   NamedLayerMap name_layer_map_;
   IdLayerMap    id_layer_map_;
@@ -75,7 +81,7 @@ class VectorDbrootGenerator : public ProtoDbrootGenerator {
   void EmitStyleMaps(void);
   void EmitLODs(void);
   keyhole::dbroot::NestedFeatureProto* MakeProtoLayer(
-      int32 channel_id,
+      std::int32_t channel_id,
       const std::string &layer_name,
       const std::string &parent_name);
 

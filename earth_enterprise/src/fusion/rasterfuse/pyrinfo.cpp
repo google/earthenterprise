@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +15,7 @@
 
 
 
-#include <khTypes.h>
+#include <cstdint>
 #include <khraster/pyrio.h>
 #include <notify.h>
 #include <khTileAddr.h>
@@ -78,7 +79,7 @@ int main(int argc, char *argv[])
          te.north(), te.south(), te.east(), te.west());
 
 
-  const uint32 bufSize =
+  const std::uint32_t bufSize =
     khTypes::StorageSize(hdr.componentType) *
     RasterProductTileResolution *
     RasterProductTileResolution;
@@ -86,10 +87,10 @@ int main(int argc, char *argv[])
   khFreeGuard red(malloc(bufSize));
   khFreeGuard green(malloc(bufSize));
   khFreeGuard blue(malloc(bufSize));
-  uchar* bufs[3] = {
-    (uchar*)red.ptr(),
-    (uchar*)green.ptr(),
-    (uchar*)blue.ptr()
+  unsigned char* bufs[3] = {
+    (unsigned char*)red.ptr(),
+    (unsigned char*)green.ptr(),
+    (unsigned char*)blue.ptr()
   };
   if (!reader->ReadAllBandBufs(0, 0, bufs, hdr.componentType,
                                hdr.numComponents)) {
@@ -109,7 +110,7 @@ void PrintToTiff(pyrio::Reader* reader,
   const khExtents<double> &te(hdr.tileExtents);
   const bool is_mercator = hdr.IsMercator();
 
-  const uint32 tile_size =
+  const std::uint32_t tile_size =
     khTypes::StorageSize(hdr.componentType) *
     RasterProductTileResolution *
     RasterProductTileResolution;
@@ -117,10 +118,10 @@ void PrintToTiff(pyrio::Reader* reader,
   khFreeGuard red(malloc(tile_size));
   khFreeGuard green(malloc(tile_size));
   khFreeGuard blue(malloc(tile_size));
-  uchar* bufs[3] = {
-    reinterpret_cast<uchar*>(red.ptr()),
-    reinterpret_cast<uchar*>(green.ptr()),
-    reinterpret_cast<uchar*>(blue.ptr())
+  unsigned char* bufs[3] = {
+    reinterpret_cast<unsigned char*>(red.ptr()),
+    reinterpret_cast<unsigned char*>(green.ptr()),
+    reinterpret_cast<unsigned char*>(blue.ptr())
   };
 
   // Read in the pixels, tile number is counted from bottom to top, so also the
@@ -129,10 +130,10 @@ void PrintToTiff(pyrio::Reader* reader,
                           hdr.levelSize.height;
   khFreeGuard big_buff(malloc(buf_size * hdr.numComponents));
 
-  uchar* big_buff_ptrs[3] = {
-    reinterpret_cast<uchar*>(big_buff.ptr()),
-    reinterpret_cast<uchar*>(big_buff.ptr()) + buf_size,
-    reinterpret_cast<uchar*>(big_buff.ptr()) + 2 * buf_size };
+  unsigned char* big_buff_ptrs[3] = {
+    reinterpret_cast<unsigned char*>(big_buff.ptr()),
+    reinterpret_cast<unsigned char*>(big_buff.ptr()) + buf_size,
+    reinterpret_cast<unsigned char*>(big_buff.ptr()) + 2 * buf_size };
   const size_t tile_row_size = khTypes::StorageSize(hdr.componentType) *
                         RasterProductTileResolution;
   const size_t big_row_size = tile_row_size *  hdr.levelSize.width;
@@ -169,7 +170,7 @@ void PrintToTiff(pyrio::Reader* reader,
         te.north(), te.south(), te.east(), te.west(),
         de.north(), de.south(), de.east(), de.west());
   }
-  khSize<uint32> const img_size(cut_width, cut_height);
+  khSize<std::uint32_t> const img_size(cut_width, cut_height);
 
   khGDALInit();
   GDALDriver* driver_ =
@@ -185,7 +186,7 @@ void PrintToTiff(pyrio::Reader* reader,
                                                img_size,
                                                hdr.componentType));
     bands.push_back(BandInfo(rasterBands.back(),
-                             khExtents<uint32>(khOffset<uint32>(XYOrder, 0, 0),
+                             khExtents<std::uint32_t>(khOffset<std::uint32_t>(XYOrder, 0, 0),
                                                img_size),
                              hdr.componentType));
   }

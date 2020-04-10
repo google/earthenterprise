@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +20,8 @@
 
 #include <math.h>
 #include <string>
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "common/khExtents.h"
 #include "common/khGeomUtils.h"
 #include "common/khMisc.h"
@@ -48,11 +50,11 @@
 //   (col:24) + (row:24) + (lev:5) + (sub:1) + (src:10)
 //
 #define TILEADDR(lev, row, col, sub, src) \
-    (  (static_cast<uint64>(src) & 0x0003ff)        | \
-      ((static_cast<uint64>(sub) & 0x000001) << 10) | \
-      ((static_cast<uint64>(lev) & 0x00001f) << 11) | \
-      ((static_cast<uint64>(row) & 0xffffff) << 16) | \
-      ((static_cast<uint64>(col) & 0xffffff) << 40) )
+    (  (static_cast<std::uint64_t>(src) & 0x0003ff)        | \
+      ((static_cast<std::uint64_t>(sub) & 0x000001) << 10) | \
+      ((static_cast<std::uint64_t>(lev) & 0x00001f) << 11) | \
+      ((static_cast<std::uint64_t>(row) & 0xffffff) << 16) | \
+      ((static_cast<std::uint64_t>(col) & 0xffffff) << 40) )
 
 #define SRCFROMADDR(addr) static_cast<int>(0x0003ff & (addr))
 #define SUBFROMADDR(addr) static_cast<int>(0x000001 & ((addr) >> 10))
@@ -64,7 +66,7 @@
 // which means the base texture, but we mark it with sub of 1 which means
 // alpha. The base texture never uses alpha, so this addr should never occur
 // in the wild.
-static const uint64 InvalidTileAddrHash = TILEADDR(0, 0, 0, 1, 0);
+static const std::uint64_t InvalidTileAddrHash = TILEADDR(0, 0, 0, 1, 0);
 
 
 // Don't change the values in this enum, they are stored in raster ff indexes
@@ -104,28 +106,28 @@ class khLevelCoverage;
 // ****************************************************************************
 class khTilespaceBase {
  public:
-  uint tileSize;  // in pixel unit
-  uint tileSizeLog2;
-  uint pixelsAtLevel0;
-  uint pixelsAtLevel0Log2;
+  unsigned int tileSize;  // in pixel unit
+  unsigned int tileSizeLog2;
+  unsigned int pixelsAtLevel0;
+  unsigned int pixelsAtLevel0Log2;
   TileOrientation orientation;
   bool isVector;
 
 
-  khTilespaceBase(uint tileSizeLog2_, uint pixelsAtLevel0Log2_,
+  khTilespaceBase(unsigned int tileSizeLog2_, unsigned int pixelsAtLevel0Log2_,
                   TileOrientation orientation_, bool isvec);
 
   inline bool IsVector(void) const { return isVector; }
 
   // returns lowest level where one tile covers entire world
-  inline uint SingleTileLevel(void) const {
+  inline unsigned int SingleTileLevel(void) const {
     return tileSizeLog2 - pixelsAtLevel0Log2;
   }
 
   // Maximum number of tiles on a given level. This number is valid for
   // both X & Y, but does NOT take into account empty tiles near the
   // poles.
-  inline uint32 MaxNumTiles(uint level) const {
+  inline std::uint32_t MaxNumTiles(unsigned int level) const {
     return ((level <= SingleTileLevel())
             ? 1U
             : (0x1U << (level - SingleTileLevel())));
@@ -135,7 +137,7 @@ class khTilespaceBase {
     return -pixelsAtLevel0Log2;
   }
 
-  inline int64 MaxNumPixels(uint level) const {
+  inline std::int64_t MaxNumPixels(unsigned int level) const {
     return ((static_cast<int>(level) <= SinglePixelLevel())
             ? 1LL
             : (0x1LL << (static_cast<int>(level) - SinglePixelLevel())));
@@ -144,13 +146,13 @@ class khTilespaceBase {
   // Return the normalized size of each pixel at the specified level
   // By normalized we mean the whole map is [0, 1.0] * [0, 1.0], i.e max
   // dimension in both x and y coordinates are 1.0 and min dimension is 0.0
-  inline double NormPixelSize(uint level) const {
-    uint pixels_at_this_thile_space_level = pixelsAtLevel0 * (0x1U << level);
+  inline double NormPixelSize(unsigned int level) const {
+    unsigned int pixels_at_this_thile_space_level = pixelsAtLevel0 * (0x1U << level);
     return 1.0 / pixels_at_this_thile_space_level;
   }
 
   // Return the normalized size of each tile at the specified level
-  inline double NormTileSize(uint level) const {
+  inline double NormTileSize(unsigned int level) const {
     if (pixelsAtLevel0 == tileSize) {
       // avoid any potential rounding errors - hand simplify
       return 1.0 / (0x1U << level);
@@ -241,7 +243,7 @@ class khTilespace : public khTilespaceBase {
   const ProjectionType projection_type;
   Projection* const projection;
 
-  khTilespace(uint tileSizeLog2_, uint pixelsAtLevel0Log2_,
+  khTilespace(unsigned int tileSizeLog2_, unsigned int pixelsAtLevel0Log2_,
               TileOrientation orientation_, bool isvec,
               ProjectionType proj_type,
               bool need_stretching_for_mercator);
@@ -255,7 +257,7 @@ class khTilespace : public khTilespaceBase {
   // Returns the number of rows that will be empty (both on top and on
   // bottom). This is because latitudes only span from -90 -> +90 while
   // longitudes span from -180 -> +180.
-  inline uint32 NumEmptyRows(uint level) const {
+  inline std::uint32_t NumEmptyRows(unsigned int level) const {
     if (projection_type == FLAT_PROJECTION) {
       return ((level < SingleTileLevel() + 2)
               ? 0U :
@@ -268,16 +270,16 @@ class khTilespace : public khTilespaceBase {
   // Return the tile extents that give full world coverage at the
   // specified level. Empty tiles due to latitude range restrictions (see
   // NumEmptyRows above) are not included.
-  khExtents<uint32> WorldExtents(uint level) const;
+  khExtents<std::uint32_t> WorldExtents(unsigned int level) const;
 
   // Helper method to create khLevelCoverage from khExtents
   khLevelCoverage FromNormExtents(const khExtents<double>& degExtents,
-                                  uint fullresLevel,
-                                  uint targetLevel) const;
+                                  unsigned int fullresLevel,
+                                  unsigned int targetLevel) const;
 
   // Helper method: create khLevelCoverage from khExtents with oversize factor.
   khLevelCoverage FromNormExtentsWithOversizeFactor(
-      const khExtents<double>& degExtents, uint fullresLevel, uint targetLevel,
+      const khExtents<double>& degExtents, unsigned int fullresLevel, unsigned int targetLevel,
       double oversizeFactor) const;
 
   // In case projection_type is MERCATOR_PROJECTION the extents are expected in
@@ -314,22 +316,22 @@ class TilespaceConfig {
            sizeof(typename AlphaTile::PixelType));
   }
 
-  inline uint32 RasterProductTileSize(void) const {
+  inline std::uint32_t RasterProductTileSize(void) const {
     return product_tilespace.tileSize;
   }
 
-  inline uint32 TargetTileSize(void) const {
+  inline std::uint32_t TargetTileSize(void) const {
     return target_tilespace.tileSize;
   }
 
-  inline uint32 TargetBufSize(void) const {
+  inline std::uint32_t TargetBufSize(void) const {
     return (target_tilespace.tileSize *
             target_tilespace.tileSize *
             DataTile::NumComp *
             sizeof(typename DataTile::PixelType));
   }
 
-  inline uint32 TargetAlphaBufSize(void) const {
+  inline std::uint32_t TargetAlphaBufSize(void) const {
     // if is_mercator return 4 channel buffer size.
     return (target_tilespace.tileSize *
             target_tilespace.tileSize *
@@ -338,19 +340,19 @@ class TilespaceConfig {
             sizeof(typename AlphaTile::PixelType));
   }
 
-  inline uint32 DataNumComp(void) const {
+  inline std::uint32_t DataNumComp(void) const {
     return DataTile::NumComp;
   }
 
-  inline uint32 DataPixelTypeSize(void) const {
+  inline std::uint32_t DataPixelTypeSize(void) const {
     return sizeof(typename DataTile::PixelType);
   }
 
-  inline uint32 AlphaNumComp(void) const {
+  inline std::uint32_t AlphaNumComp(void) const {
     return AlphaTile::NumComp;
   }
 
-  inline uint32 AlphaPixelTypeSize(void) const {
+  inline std::uint32_t AlphaPixelTypeSize(void) const {
     return sizeof(typename AlphaTile::PixelType);
   }
 
@@ -361,12 +363,12 @@ class TilespaceConfig {
 // Adds projection specific methods to  khTilespaceBase
 class khTilespaceFlat : public khTilespace {
  public:
-  khTilespaceFlat(uint tileSizeLog2_, uint pixelsAtLevel0Log2_,
+  khTilespaceFlat(unsigned int tileSizeLog2_, unsigned int pixelsAtLevel0Log2_,
                   TileOrientation orientation_, bool isvec);
 
   explicit khTilespaceFlat(const khTilespaceBase& other);
 
-  inline int64 NumEmptyPixels(uint level) const {
+  inline std::int64_t NumEmptyPixels(unsigned int level) const {
     return ((static_cast<int>(level) < SinglePixelLevel() + 2)
             ? 0LL :
             (0x1LL << (static_cast<int>(level) - SinglePixelLevel() - 2)));
@@ -375,18 +377,18 @@ class khTilespaceFlat : public khTilespace {
   // Return the tile extents that give full world coverage at the
   // specified level. Empty tiles due to latitude range restrictions (see
   // NumEmptyRows above) are not included.
-  khExtents<int64> WorldPixelExtents(uint level) const;
+  khExtents<std::int64_t> WorldPixelExtents(unsigned int level) const;
 
   // Return the degree size of each pixel at the specified level
-  inline double DegPixelSize(uint level) const {
-    uint pixels_at_this_thile_space_level = pixelsAtLevel0 * (0x1U << level);
+  inline double DegPixelSize(unsigned int level) const {
+    unsigned int pixels_at_this_thile_space_level = pixelsAtLevel0 * (0x1U << level);
     return 360.0 / pixels_at_this_thile_space_level;
   }
 
   // Return the level where this pixel size belongs. It will always "snapup"
   // the level.
-  inline uint LevelFromDegPixelSize(double degPixelSize) const {
-    uint level = 0;
+  inline unsigned int LevelFromDegPixelSize(double degPixelSize) const {
+    unsigned int level = 0;
     for (; level < NumFusionLevels; ++level) {
       if (degPixelSize >= DegPixelSize(level))
         break;
@@ -406,7 +408,7 @@ class khTilespaceFlat : public khTilespace {
 // Adds projection specific methods to  khTilespaceBase
 class khTilespaceMercator : public khTilespace {
  public:
-  khTilespaceMercator(uint tileSizeLog2_, uint pixelsAtLevel0Log2_,
+  khTilespaceMercator(unsigned int tileSizeLog2_, unsigned int pixelsAtLevel0Log2_,
                       TileOrientation orientation_, bool isvec);
 
   explicit khTilespaceMercator(const khTilespaceBase& other);
@@ -414,7 +416,7 @@ class khTilespaceMercator : public khTilespace {
   // Return the tile extents that give full world coverage at the specified
   // zoom level for mercator projection. Note that unlike Wjs84 map there is no
   // NumEmptyRows for mercator map as we need it square.
-  khExtents<int64> WorldPixelExtentsMercator(uint level) const;
+  khExtents<std::int64_t> WorldPixelExtentsMercator(unsigned int level) const;
 
   // For Mercator projection GdalWarp gives world map in a virtual meter unit
   // of 40075016.6855784 * 40075016.6855784 (considering latitude range of
@@ -422,16 +424,16 @@ class khTilespaceMercator : public khTilespace {
   // This method tries to find out pixel size in those virtual meter units when
   // zoom level is provided. Note: The meter unit is virtual because world is
   // by no means that big in y coordinate. Its just Mercator stretching.
-  inline double AveragePixelSizeInMercatorMeters(uint level) const {
-    uint pixels_at_this_thile_space_level = pixelsAtLevel0 * (0x1U << level);
+  inline double AveragePixelSizeInMercatorMeters(unsigned int level) const {
+    unsigned int pixels_at_this_thile_space_level = pixelsAtLevel0 * (0x1U << level);
     return (khGeomUtilsMercator::khEarthCircumference /
             pixels_at_this_thile_space_level);
   }
 
   // Return the level where this pixel size belongs. It will always "snapup"
   // the level.
-  inline uint LevelFromPixelSizeInMeters(double pixelSizeInMeters) const {
-    uint level = 0;
+  inline unsigned int LevelFromPixelSizeInMeters(double pixelSizeInMeters) const {
+    unsigned int level = 0;
     for (; level < NumFusionLevels; ++level) {
       if (pixelSizeInMeters >= AveragePixelSizeInMercatorMeters(level))
         break;
@@ -484,25 +486,25 @@ extern const khTilespace FusionMapMercatorTilespace;
 inline
 uint
 TranslateTileLevel(
-    const khTilespaceBase& from, uint level, const khTilespaceBase& to) {
+    const khTilespaceBase& from, unsigned int level, const khTilespaceBase& to) {
   return level + (static_cast<int>(from.pixelsAtLevel0Log2) -
                   static_cast<int>(to.pixelsAtLevel0Log2));
 }
 
 // Shorthand, convenience routines
-inline uint ProductToImageryLevel(uint prodLevel) {
+inline unsigned int ProductToImageryLevel(unsigned int prodLevel) {
   return TranslateTileLevel(RasterProductTilespaceBase, prodLevel,
                             ClientImageryTilespaceBase);
 }
-inline uint ImageryToProductLevel(uint imageryLevel) {
+inline unsigned int ImageryToProductLevel(unsigned int imageryLevel) {
   return TranslateTileLevel(ClientImageryTilespaceBase, imageryLevel,
                             RasterProductTilespaceBase);
 }
-inline uint ProductToTmeshLevel(uint prodLevel) {
+inline unsigned int ProductToTmeshLevel(unsigned int prodLevel) {
   return TranslateTileLevel(RasterProductTilespaceBase, prodLevel,
                             ClientTmeshTilespaceBase);
 }
-inline uint TmeshToProductLevel(uint tmeshLevel) {
+inline unsigned int TmeshToProductLevel(unsigned int tmeshLevel) {
   return TranslateTileLevel(ClientTmeshTilespaceBase, tmeshLevel,
                             RasterProductTilespaceBase);
 }
@@ -514,13 +516,13 @@ class khTileAddr;
 // ****************************************************************************
 class khLevelCoverage {
  public:
-  uint level;
-  khExtents<uint32> extents;
+  unsigned int level;
+  khExtents<std::uint32_t> extents;
 
   inline bool empty(void) const { return extents.empty(); }
-  inline uint64 NumTiles(void) const {
-    return static_cast<uint64>(extents.numRows()) *
-           static_cast<uint64>(extents.numCols());
+  inline std::uint64_t NumTiles(void) const {
+    return static_cast<std::uint64_t>(extents.numRows()) *
+           static_cast<std::uint64_t>(extents.numCols());
   }
 
   inline bool operator==(const khLevelCoverage& o) const {
@@ -538,7 +540,7 @@ class khLevelCoverage {
   explicit khLevelCoverage(const khTileAddr &addr);
 
   // build a coverage from low level pieces
-  inline khLevelCoverage(uint lev, const khExtents<uint32> &extents_) :
+  inline khLevelCoverage(unsigned int lev, const khExtents<std::uint32_t> &extents_) :
       level(lev), extents(extents_) { }
 
 
@@ -548,20 +550,20 @@ class khLevelCoverage {
   // to targetLevel.
   khLevelCoverage(const khTilespace& tilespace,
                   const khExtents<double>& degExtents,
-                  uint fullresTileLevel,
-                  uint targetLevel);
+                  unsigned int fullresTileLevel,
+                  unsigned int targetLevel);
 
   khLevelCoverage(const khTilespace& tilespace,
                   const khExtents<double>& degExtents,
-                  uint fullresTileLevel,
-                  uint targetLevel,
+                  unsigned int fullresTileLevel,
+                  unsigned int targetLevel,
                   double oversizeFactor);
 
   static inline khLevelCoverage FromNormExtents(
       const khTilespace& tilespace,
       const khExtents<double> &normExtents,
-      uint fullresTileLevel,
-      uint targetLevel) {
+      unsigned int fullresTileLevel,
+      unsigned int targetLevel) {
     return  FromNormExtentsWithOversizeFactor(tilespace, normExtents,
                                               fullresTileLevel, targetLevel,
                                               0.0 /* oversizeFactor */);
@@ -570,18 +572,18 @@ class khLevelCoverage {
   static khLevelCoverage FromNormExtentsWithOversizeFactor(
       const khTilespace& tilespace,
       khExtents<double> normExtents,
-      uint fullresTileLevel,
-      uint targetLevel,
+      unsigned int fullresTileLevel,
+      unsigned int targetLevel,
       double oversizeFactor);
 
   static khLevelCoverage FromNormExtentsWithCrop(
       const khTilespace& tilespace, const khExtents<double> &noExtents,
-      uint fullresTileLevel, uint targetLevel);
+      unsigned int fullresTileLevel, unsigned int targetLevel);
 
-  inline khLevelCoverage& minifyBy(uint numLevels) {
+  inline khLevelCoverage& minifyBy(unsigned int numLevels) {
     level -= numLevels;
-    uint pad = (0x1U << numLevels) - 1;
-    extents = khExtents<uint32>(XYOrder,
+    unsigned int pad = (0x1U << numLevels) - 1;
+    extents = khExtents<std::uint32_t>(XYOrder,
                                 extents.beginX()     >> numLevels,
                                 (extents.endX()+pad) >> numLevels,
                                 extents.beginY()     >> numLevels,
@@ -589,24 +591,24 @@ class khLevelCoverage {
     return *this;
   }
 
-  inline khLevelCoverage MinifiedBy(uint numLevels) const {
-    uint pad = (0x1U << numLevels) - 1;
+  inline khLevelCoverage MinifiedBy(unsigned int numLevels) const {
+    unsigned int pad = (0x1U << numLevels) - 1;
     return khLevelCoverage
       (level - numLevels,
-       khExtents<uint32>(XYOrder,
+       khExtents<std::uint32_t>(XYOrder,
                          extents.beginX()     >> numLevels,
                          (extents.endX()+pad) >> numLevels,
                          extents.beginY()     >> numLevels,
                          (extents.endY()+pad) >> numLevels));
   }
 
-  inline khLevelCoverage MinifiedToLevel(uint targetLevel) const {
+  inline khLevelCoverage MinifiedToLevel(unsigned int targetLevel) const {
     assert(targetLevel <= level);
     return MinifiedBy(level - targetLevel);
   }
-  inline khLevelCoverage& magnifyBy(uint numLevels) {
+  inline khLevelCoverage& magnifyBy(unsigned int numLevels) {
     level += numLevels;
-    extents = khExtents<uint32>(XYOrder,
+    extents = khExtents<std::uint32_t>(XYOrder,
                                 extents.beginX() << numLevels,
                                 extents.endX()   << numLevels,
                                 extents.beginY() << numLevels,
@@ -614,17 +616,17 @@ class khLevelCoverage {
     return *this;
   }
 
-  inline khLevelCoverage MagnifiedBy(uint numLevels) {
+  inline khLevelCoverage MagnifiedBy(unsigned int numLevels) {
     return khLevelCoverage
       (level + numLevels,
-        khExtents<uint32>(XYOrder,
+        khExtents<std::uint32_t>(XYOrder,
                           extents.beginX() << numLevels,
                           extents.endX()   << numLevels,
                           extents.beginY() << numLevels,
                           extents.endY()   << numLevels));
   }
 
-  inline khLevelCoverage& scaleToLevel(uint targetLevel) {
+  inline khLevelCoverage& scaleToLevel(unsigned int targetLevel) {
     if (level < targetLevel) {
       magnifyBy(targetLevel - level);
     } else if (level > targetLevel) {
@@ -633,13 +635,13 @@ class khLevelCoverage {
     return *this;
   }
 
-  inline khLevelCoverage& expandBy(uint32 num) {
+  inline khLevelCoverage& expandBy(std::uint32_t num) {
     extents.expandBy(num);
     return *this;
   }
 
-  inline khLevelCoverage& cropTo(const khExtents<uint32> &cropExtents) {
-    extents = khExtents<uint32>::Intersection(extents, cropExtents);
+  inline khLevelCoverage& cropTo(const khExtents<std::uint32_t> &cropExtents) {
+    extents = khExtents<std::uint32_t>::Intersection(extents, cropExtents);
     return *this;
   }
 
@@ -665,11 +667,11 @@ class khLevelCoverage {
     return khTilespaceBase::NormToMeterExtents(normExtents(tilespace));
   }
 
-  khLevelCoverage GetSubset(uint subsetThis, uint subsetTotal) const;
+  khLevelCoverage GetSubset(unsigned int subsetThis, unsigned int subsetTotal) const;
   khLevelCoverage UpperCoverage(const khTilespace &tilespace) const;
   khLevelCoverage RightCoverage(const khTilespace &tilespace) const;
   khLevelCoverage UpperRightCoverage(const khTilespace &tilespace) const;
-  uint64 GetHeapUsage() const {
+  std::uint64_t GetHeapUsage() const {
     return ::GetHeapUsage(extents);
   }
 };
@@ -701,7 +703,7 @@ TranslateLevelCoverage(const khTilespaceBase& from, const khLevelCoverage& cov,
                          tmp.extents);
 }
 
-inline uint64 GetHeapUsage(const khLevelCoverage &levelCoverage) {
+inline std::uint64_t GetHeapUsage(const khLevelCoverage &levelCoverage) {
   return levelCoverage.GetHeapUsage();
 }
 
@@ -711,9 +713,9 @@ inline uint64 GetHeapUsage(const khLevelCoverage &levelCoverage) {
 // ****************************************************************************
 class khTileAddr {
  public:
-  uint32 level;
-  uint32 row;
-  uint32 col;
+  std::uint32_t level;
+  std::uint32_t row;
+  std::uint32_t col;
 
  public:
   inline operator QuadtreePath(void) {
@@ -726,10 +728,10 @@ class khTileAddr {
             (col == o.col));
   }
 
-  inline explicit khTileAddr(uint64 id) :
+  inline explicit khTileAddr(std::uint64_t id) :
       level(LEVFROMADDR(id)), row(ROWFROMADDR(id)), col(COLFROMADDR(id)) { }
 
-  inline khTileAddr(uint32 level_, uint32 row_, uint32 col_) :
+  inline khTileAddr(std::uint32_t level_, std::uint32_t row_, std::uint32_t col_) :
       level(level_), row(row_), col(col_) { }
 
   inline explicit khTileAddr(const QuadtreePath &qt_path) {
@@ -745,34 +747,34 @@ class khTileAddr {
   // row and/or col will be 0 if wrapped at world boundary
   khTileAddr UpperRightAddr(const khTilespace &tilespace) const;
 
-  inline uint64 Id(uint sub = 0, uint src = 0) const {
+  inline std::uint64_t Id(unsigned int sub = 0, unsigned int src = 0) const {
     return TILEADDR(level, row, col, sub, src);
   }
 
-  inline void minifyBy(uint numLevels) {
+  inline void minifyBy(unsigned int numLevels) {
     level -= numLevels;
     row >>= numLevels;
     col >>= numLevels;
   }
 
-  inline khTileAddr MinifiedBy(uint numLevels) const {
+  inline khTileAddr MinifiedBy(unsigned int numLevels) const {
     return khTileAddr(level - numLevels,
                       row >> numLevels,
                       col >> numLevels);
   }
-  inline khTileAddr MinifiedToLevel(uint targetLevel) const {
+  inline khTileAddr MinifiedToLevel(unsigned int targetLevel) const {
     assert(targetLevel <= level);
     return MinifiedBy(level - targetLevel);
   }
-  inline khLevelCoverage MagnifiedBy(uint numLevels) const {
+  inline khLevelCoverage MagnifiedBy(unsigned int numLevels) const {
     return khLevelCoverage(level + numLevels,
-                           khExtents<uint32>(RowColOrder,
+                           khExtents<std::uint32_t>(RowColOrder,
                                              row     << numLevels,
                                              (row+1) << numLevels,
                                              col     << numLevels,
                                              (col+1) << numLevels));
   }
-  inline khLevelCoverage MagnifiedToLevel(uint targetLevel) const {
+  inline khLevelCoverage MagnifiedToLevel(unsigned int targetLevel) const {
     assert(targetLevel >= level);
     return MagnifiedBy(targetLevel - level);
   }
@@ -793,9 +795,9 @@ class khTileAddr {
 
   // children are numbered as follows:
   // 0=lower-left, 1=lower-right, 2=upper-left, 3=upper-right
-  inline khTileAddr QuadChild(uint child) const {
-    uint32 out_row = 0;
-    uint32 out_col = 0;
+  inline khTileAddr QuadChild(unsigned int child) const {
+    std::uint32_t out_row = 0;
+    std::uint32_t out_col = 0;
     QuadtreePath::MagnifyQuadAddr(row, col, child, out_row, out_col);
     return khTileAddr(level + 1, out_row, out_col);
   }
@@ -808,10 +810,10 @@ class khTileAddr {
 // ****************************************************************************
 // Translate Pixel extents (number of _pixels_ in width & height) to tile
 // extents (number of _tiles_ in width and height)
-inline khExtents<uint32>
-PixelExtentsToTileExtents(const khExtents<int64> &pixelExtents,
-                          uint tileResolution) {
-  return khExtents<uint32>(RowColOrder,
+inline khExtents<std::uint32_t>
+PixelExtentsToTileExtents(const khExtents<std::int64_t> &pixelExtents,
+                          unsigned int tileResolution) {
+  return khExtents<std::uint32_t>(RowColOrder,
                            pixelExtents.beginRow() / tileResolution,
                            (pixelExtents.endRow() + tileResolution - 1)
                            / tileResolution,
@@ -820,40 +822,40 @@ PixelExtentsToTileExtents(const khExtents<int64> &pixelExtents,
                            / tileResolution);
 }
 
-inline khExtents<int64>
-TileExtentsToPixelExtents(const khExtents<uint32> &tileExtents,
-                          uint tileResolution) {
-  return khExtents<int64>(
+inline khExtents<std::int64_t>
+TileExtentsToPixelExtents(const khExtents<std::uint32_t> &tileExtents,
+                          unsigned int tileResolution) {
+  return khExtents<std::int64_t>(
       RowColOrder,
-      static_cast<int64>(tileExtents.beginRow()) * tileResolution,
-      static_cast<int64>(tileExtents.endRow()) * tileResolution,
-      static_cast<int64>(tileExtents.beginCol()) * tileResolution,
-      static_cast<int64>(tileExtents.endCol()) * tileResolution);
+      static_cast<std::int64_t>(tileExtents.beginRow()) * tileResolution,
+      static_cast<std::int64_t>(tileExtents.endRow()) * tileResolution,
+      static_cast<std::int64_t>(tileExtents.beginCol()) * tileResolution,
+      static_cast<std::int64_t>(tileExtents.endCol()) * tileResolution);
 }
 
 // Translate Degree extents to a pixel raster size (number of _pixels_ in
 // width and height). This is NOT the same as making a khLevelCoverage from
 // these extents. That would give you _tile_ extents.
-inline khSize<uint64>
+inline khSize<std::uint64_t>
 DegExtentsToPixelLevelRasterSize(const khExtents<double> &degExtents,
-                                 uint lev) {
+                                 unsigned int lev) {
   double pixelsize = RasterProductTilespaceFlat.DegPixelSize(lev);
-  return khSize<uint64>(
-      static_cast<uint64>(degExtents.width()/pixelsize + 0.5),
-      static_cast<uint64>(degExtents.height()/pixelsize + 0.5));
+  return khSize<std::uint64_t>(
+      static_cast<std::uint64_t>(degExtents.width()/pixelsize + 0.5),
+      static_cast<std::uint64_t>(degExtents.height()/pixelsize + 0.5));
 }
 
 // Translate Degree extents to a pixel raster size (number of _pixels_ in
 // width and height). This is NOT the same as making a khLevelCoverage from
 // these extents. That would give you _tile_ extents.
-inline khSize<uint64>
+inline khSize<std::uint64_t>
 MeterExtentsToPixelLevelRasterSize(const khExtents<double> &meterExtents,
-                                   uint lev) {
+                                   unsigned int lev) {
   double pixelsize =
       RasterProductTilespaceMercator.AveragePixelSizeInMercatorMeters(lev);
-  return khSize<uint64>(
-      static_cast<uint64>(meterExtents.width()/pixelsize + 0.5),
-      static_cast<uint64>(meterExtents.height()/pixelsize + 0.5));
+  return khSize<std::uint64_t>(
+      static_cast<std::uint64_t>(meterExtents.width()/pixelsize + 0.5),
+      static_cast<std::uint64_t>(meterExtents.height()/pixelsize + 0.5));
 }
 
 inline const khTilespace& RasterProductTilespace(const bool is_mercator) {
@@ -888,10 +890,10 @@ int EfficientLOD(const double feature_diameter,
 // TODO: find a way to unify these definitions with those of the
 // khTilespace constants. They'll probably never change, but having them in
 // two places is just wrong!
-static const uint ImageryQuadnodeResolution   = 256;
-static const uint TmeshQuadnodeResolution     = 32;
-static const uint HeightmapTileSize           = 1024;
-static const uint RasterProductTileResolution = 1024;
+static const unsigned int ImageryQuadnodeResolution   = 256;
+static const unsigned int TmeshQuadnodeResolution     = 32;
+static const unsigned int HeightmapTileSize           = 1024;
+static const unsigned int RasterProductTileResolution = 1024;
 // The best resolution Fusion can handle is 0.0186 m (18.6 mm).
 static const float kWidthAtMaxResolution       = 0.0186;
 

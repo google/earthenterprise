@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -98,7 +99,7 @@ const std::string kDatedImageryChannelsFileName = "dated_imagery_channels";
 // The oldest date supported by GE client 4.4.
 const std::string kTimeMachineOldestDateString = "0001-01-01T00:00:00Z";
 // YearMonthDate integer derived from JpegDateComment.
-const int32 kTimeMachineOldestDateInt = 545;
+const std::int32_t kTimeMachineOldestDateInt = 545;
 // Hex string for kTimeMachineOldestDateInt.
 const std::string kTimeMachineOldestHexDateString = "221";
 
@@ -119,7 +120,7 @@ const std::string kDbVectorLayerConfigFile = "vectorlayerconfig.xml";
 
 const std::string kDbManifestFilesListFile = ".filelist";
 
-const uint kAvoidRemovingOverlappingRoadSegmentsAtOrHigherZoomLevel = 13;
+const unsigned int kAvoidRemovingOverlappingRoadSegmentsAtOrHigherZoomLevel = 13;
 
 const std::string kGedbBase = "gedb";
 const std::string kGedbAuxBase = "gedb_aux";
@@ -140,7 +141,7 @@ const std::string kPortableSearchUrl = "SearchServlet/ECV4Adapter";
 const std::string kDbrootKmlFileNameTemplate = "dbroot_kml_%03d.kml";
 const std::string kLinkedFileNameTemplate = "linked_%03d.%s";
 const std::string kPortableGlobeVersion = "0001GEEG";
-const uint32 kPortableGlobeIndexOffset = 20;
+const std::uint32_t kPortableGlobeIndexOffset = 20;
 
 //
 // this max has been around for a long time. It used to have to match the
@@ -148,9 +149,9 @@ const uint32 kPortableGlobeIndexOffset = 20;
 // gone, this is probably the only place that enforces the packet limit.
 // The client need to enforce these limits is gone. These are enforced in
 // Fusion here, just to make the client experience interactive.
-const uint32 kMaxPacketSize = 1024 * 1024;
-const uint32 kTargetPacketSize = kMaxPacketSize * 7 / 8;
-const uint32 kCompressedBufferSize = kMaxPacketSize * 2;
+const std::uint32_t kMaxPacketSize = 1024 * 1024;
+const std::uint32_t kTargetPacketSize = kMaxPacketSize * 7 / 8;
+const std::uint32_t kCompressedBufferSize = kMaxPacketSize * 2;
 
 // since only 0, 1, 2 & 3 are used in qt_path, '4' has been chosen while
 // bundling set of qt_paths to a single string.

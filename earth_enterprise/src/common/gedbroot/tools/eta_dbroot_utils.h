@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,8 +35,8 @@ class EtaReader {
   }
   const std::string GetString(const std::string& name,
                               const std::string& default_val) const;
-  int32 GetInt(const std::string& name, int32 default_val) const;
-  uint32 GetUInt(const std::string& name, uint32 default_val) const;
+  std::int32_t GetInt(const std::string& name, std::int32_t default_val) const;
+  std::uint32_t GetUInt(const std::string& name, std::uint32_t default_val) const;
   float GetFloat(const std::string& name, float default_val) const;
   bool GetBool(const std::string& name, bool default_val) const;
 

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -126,7 +127,7 @@ void usage(const char* msg = 0, ...) {
   exit(EXIT_FAILURE);
 }
 
-bool validateSources(const std::vector<std::string>& srclist, uint layer) {
+bool validateSources(const std::vector<std::string>& srclist, unsigned int layer) {
   notify(NFY_NOTICE, "Begin source validation phase.");
   if (srclist.size() == 0) {
     fprintf(stderr, "At least one source is required.");
@@ -230,7 +231,7 @@ class FeatureStatisticsCalculator {
       case gstStreet25D:
         // TODO: should be changed after support MultiPolyline
         // geometry type.
-        for (uint p = 0; p < geodeh->NumParts(); ++p) {
+        for (unsigned int p = 0; p < geodeh->NumParts(); ++p) {
           double cur_diameter = geodeh->BoundingBoxOfPart(p).Diameter();
           AcceptDiameter(cur_diameter);
         }
@@ -251,7 +252,7 @@ class FeatureStatisticsCalculator {
       case gstMultiPolygon:
       case gstMultiPolygon25D:
         {
-          for (uint p = 0; p < geodeh->NumParts(); ++p) {
+          for (unsigned int p = 0; p < geodeh->NumParts(); ++p) {
             double cur_diameter = geodeh->BoundingBoxOfPart(p).Diameter();
             AcceptDiameter(cur_diameter);
           }
@@ -437,7 +438,7 @@ int main(int argc, char** argv) {
 
     // Print the input file sizes for diagnostic log file info.
     std::vector<std::string> input_files;
-    for (uint i = 0; i < file_list.size(); ++i) {
+    for (unsigned int i = 0; i < file_list.size(); ++i) {
       input_files.push_back(file_list[i]);
     }
     khPrintFileSizes("Input File Sizes", input_files);
@@ -542,7 +543,7 @@ int main(int argc, char** argv) {
         hdr = src.GetAttrDefs(layer);
         if (hdr->numColumns() != 0) {
           have_attr = true;
-          for (uint r = 0; r < hdr->numColumns(); ++r) {
+          for (unsigned int r = 0; r < hdr->numColumns(); ++r) {
             kvpasset.header.push_back(gstKVPAsset::Record(hdr->Name(r),
                                                           hdr->ftype(r)));
           }
@@ -699,7 +700,7 @@ int main(int argc, char** argv) {
             assert(geode->PrimType() == gstMultiPolygon25D);
             const gstGeodeCollection *multi_geode =
                 static_cast<const gstGeodeCollection*>(&(*geode));
-            for (uint p = 0; p < multi_geode->NumParts(); ++p) {
+            for (unsigned int p = 0; p < multi_geode->NumParts(); ++p) {
               const gstGeodeHandle geode_parth = multi_geode->GetGeode(p);
               if (VerifyPolygon25DByArea(geode_parth,
                                          featurecount, max25d_area)) {

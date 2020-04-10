@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -86,7 +87,7 @@ void PacketIndexWriter::CreateIndexWriter(
   le_buffer << FixedLengthString(PacketFile::kSignature,
                                  PacketFile::kSignature.size())
             << PacketFile::kFormatVersion
-            << EncodeAs<uint16>(data_has_crc_);
+            << EncodeAs<std::uint16_t>(data_has_crc_);
   le_buffer << Crc32(le_buffer.data(), le_buffer.size());
   new_writer->Pwrite(le_buffer.data(), le_buffer.size(), 0);
 
@@ -101,7 +102,7 @@ void PacketIndexWriter::WriteAppend(const PacketIndexEntry &index_entry) {
 }
 
 
-uint64 PacketIndexWriter::AllocateAppend(const QuadtreePath &qt_path) {
+ std::uint64_t PacketIndexWriter::AllocateAppend(const QuadtreePath &qt_path) {
   // Update index progress
   off64_t index_write_pos;
   {
@@ -120,7 +121,7 @@ uint64 PacketIndexWriter::AllocateAppend(const QuadtreePath &qt_path) {
   return index_write_pos;
 }
 
-void   PacketIndexWriter::WriteAt(uint64 pos,
+void   PacketIndexWriter::WriteAt(std::uint64_t pos,
                                   const PacketIndexEntry &index_entry) {
   // Create buffer for index entry
   LittleEndianWriteBuffer le_buffer;
@@ -157,7 +158,7 @@ void PacketIndexWriter::UpdatePreorder(const QuadtreePath &new_path) {
 void PacketIndexWriter::UpdateLevelOrdered(const QuadtreePath &new_path,
                                            off64_t index_pos) {
   if (is_level_ordered_) {
-    uint32 level = new_path.Level();
+    std::uint32_t level = new_path.Level();
     SortedRegion &region = level_region_.at(level);
     if ((new_path.Level() == last_path_.Level())
         ? (new_path < last_path_)
@@ -328,7 +329,7 @@ class PacketIndexWriter::SortedRegionMergeSource
   bool valid_;
   std::string index_path_;
   khDeleteGuard<PacketIndexReader> index_reader_;
-  uint32 remaining_;                    // remaining records
+  std::uint32_t remaining_;                    // remaining records
   PacketIndexEntry current_;
 
   DISALLOW_COPY_AND_ASSIGN(SortedRegionMergeSource);

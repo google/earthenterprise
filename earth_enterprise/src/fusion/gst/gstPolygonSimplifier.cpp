@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -37,20 +38,20 @@
 
 namespace fusion_gst {
 
-int64 PolygonSimplifier::ComputeHashKey(const gstVertex &v) const {
-  int64 key = 0;
-  key = static_cast<int64>((v.x - _gridExtents.min.x)/_res.x) &
+std::int64_t PolygonSimplifier::ComputeHashKey(const gstVertex &v) const {
+  std::int64_t key = 0;
+  key = static_cast<std::int64_t>((v.x - _gridExtents.min.x)/_res.x) &
       0x0000ffff;
-  key |= (static_cast<int64>((v.y - _gridExtents.min.y)/_res.y) &
+  key |= (static_cast<std::int64_t>((v.y - _gridExtents.min.y)/_res.y) &
           0x0000ffff) << 16;
-  key |= (static_cast<int64>((v.z - _gridExtents.min.z)/_res.z) &
+  key |= (static_cast<std::int64_t>((v.z - _gridExtents.min.z)/_res.z) &
           0x0000ffff) << 32;
   return key;
 }
 
 
 void PolygonSimplifier::ComputeRepVertex(const gstVertex &v) {
-  int64 key = ComputeHashKey(v);
+  std::int64_t key = ComputeHashKey(v);
   psRepVertex& rep = _repVerts[key];
   rep.v.x = ((rep.v.x * rep.numPoints) + v.x) / (rep.numPoints + 1);
   rep.v.y = ((rep.v.y * rep.numPoints) + v.y) / (rep.numPoints + 1);
@@ -60,12 +61,12 @@ void PolygonSimplifier::ComputeRepVertex(const gstVertex &v) {
 
 
 void PolygonSimplifier::ReducePolygon(psPolygon &polygon) const {
-  uint i;
+  unsigned int i;
   for (i = 0; i < polygon.v.size(); ++i) {
     //        if (polygon.internalVertex[i] == true)
     //            continue;
-    int64 key = ComputeHashKey(polygon.v[i]);
-    std::map<int64, psRepVertex>::const_iterator it = _repVerts.find(key);
+    std::int64_t key = ComputeHashKey(polygon.v[i]);
+    std::map<std::int64_t, psRepVertex>::const_iterator it = _repVerts.find(key);
     if (it != _repVerts.end()) {
       polygon.v[i] = it->second.v;
     } else {
@@ -80,7 +81,7 @@ void PolygonSimplifier::ReducePolygon(psPolygon &polygon) const {
   copyVerts.push_back(polygon.v[0]);
   copyFlags.push_back(polygon.internalVertex[0]);
 
-  uint j = 0;
+  unsigned int j = 0;
   for (i = 1; i < polygon.v.size(); ++i) {
     if (copyVerts[j] != polygon.v[i]) {
       copyVerts.push_back(polygon.v[i]);
@@ -104,9 +105,9 @@ bool PolygonSimplifier::AreCongruent(const psPolygon& a,
   if (a.v.size() != b.v.size())
     return false;
 
-  for (uint i = 0; i < a.v.size(); i++) {
+  for (unsigned int i = 0; i < a.v.size(); i++) {
     bool match = false;
-    for (uint j = 0; j < b.v.size(); j++) {
+    for (unsigned int j = 0; j < b.v.size(); j++) {
       if (a.v[i] == b.v[j]) {
         match = true;
         break;
@@ -122,11 +123,11 @@ bool PolygonSimplifier::AreCongruent(const psPolygon& a,
 
 void PolygonSimplifier::ReducePolygons(std::vector<psPolygon>& polygons) {
   // populate the hash table with representative vertices
-  uint i;
+  unsigned int i;
   for (i = 0; i < polygons.size(); i++) {
     std::vector<gstVertex>& verts = polygons[i].v;
 
-    for (uint j = 0; j < verts.size(); j++) {
+    for (unsigned int j = 0; j < verts.size(); j++) {
       ComputeRepVertex(verts[j]);
     }
   }
@@ -157,7 +158,7 @@ void PolygonSimplifier::ReducePolygons(std::vector<psPolygon>& polygons) {
 
     copyPolys.push_back(polygons[i]);
 
-    for (uint j = (i + 1); j < polygons.size(); ++j) {
+    for (unsigned int j = (i + 1); j < polygons.size(); ++j) {
       if (deletes[j])
         continue;
 
@@ -185,8 +186,8 @@ bool PolygonSimplifier::MergeCoplanar(psPolygon& a, psPolygon& b) {
     if (eqnA == eqnB*(-1))
       reverse(b.v.begin(), b.v.end());
 
-    uint i = 0;
-    uint j = 0;
+    unsigned int i = 0;
+    unsigned int j = 0;
     while ((i < (a.v.size() - 1)) && !adjacent) {
       j = 0;
       while ((j < (b.v.size()-1)) && !adjacent) {
@@ -219,7 +220,7 @@ bool PolygonSimplifier::MergeCoplanar(psPolygon& a, psPolygon& b) {
 
 void PolygonSimplifier::MergeCoplanarPolygons(
     std::vector<psPolygon>& polygons) {
-  uint i;
+  unsigned int i;
   for (i = 0; i < polygons.size(); i++) {
     if (polygons[i].v.size() >= 3) {
       // TODO: check for returned value.
@@ -238,7 +239,7 @@ void PolygonSimplifier::MergeCoplanarPolygons(
       continue;
 
     newPolys.push_back(polygons[i]);
-    for (uint j = (i + 1); j < polygons.size(); j++) {
+    for (unsigned int j = (i + 1); j < polygons.size(); j++) {
       if (deletes[j])
         continue;
 
@@ -253,7 +254,7 @@ void PolygonSimplifier::MergeCoplanarPolygons(
 void PolygonSimplifier::Decimate(std::vector<psPolygon>& polygons,
                                  int numCells) {
   // compute the grid extents for the entire surface
-  for (uint i = 0; i < polygons.size(); i++) {
+  for (unsigned int i = 0; i < polygons.size(); i++) {
     _gridExtents.grow(polygons[i].bbox());
   }
 

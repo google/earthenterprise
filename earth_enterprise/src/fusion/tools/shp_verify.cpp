@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -46,7 +47,7 @@ void usage(const char *msg = 0, ...) {
 }
 
 std::string kInvalidType("Invalid");
-std::string ShapeType(uint32 type) {
+std::string ShapeType(std::uint32_t type) {
   switch (type) {
     case  0: return "Null Shape";
     case  1: return "Point";
@@ -68,10 +69,10 @@ std::string ShapeType(uint32 type) {
 
 const int kBoundsStringCount = 8;
 struct MainFileHeader {
-  uint32 file_code;
-  uint32 file_length;
-  uint32 version;
-  uint32 shape_type;
+  std::uint32_t file_code;
+  std::uint32_t file_length;
+  std::uint32_t version;
+  std::uint32_t shape_type;
   double bounds[kBoundsStringCount];
 };
 
@@ -97,7 +98,7 @@ MainFileHeader VerifyMainFileHeader(char* buf, const std::string& path,
            header.file_code);
 
   // verify unused bytes are zero
-  uint32 unused;
+  std::uint32_t unused;
   for (int i = 0; i < 5; ++i) {
     be_buf >> unused;
     if (unused != 0)
@@ -110,7 +111,7 @@ MainFileHeader VerifyMainFileHeader(char* buf, const std::string& path,
   header.file_length <<= 1;  // length is in 16-bit words, convert to bytes
   if (verbose)
     printf("%s File Length: %u\n", type.c_str(), header.file_length);
-  uint64 actual_size;
+  std::uint64_t actual_size;
   time_t mtime;
   if (!khGetFileInfo(path, actual_size, mtime))
     usage("Unable to stat file: %s", path.c_str());
@@ -211,18 +212,18 @@ int main(int argc, char** argv) {
   char rec_hdr[8];
   std::string rec_buf;
   char shx_rec[8];
-  uint32 expected_rec_id = 1;
-  uint32 shp_rec_pos = 100;
+  std::uint32_t expected_rec_id = 1;
+  std::uint32_t shp_rec_pos = 100;
   while (khReadAll(shp_fd, &rec_hdr, 8)) {
     BigEndianReadBuffer be_buf(rec_hdr, 8);
-    uint32 rec_num;
+    std::uint32_t rec_num;
     be_buf >> rec_num;
     if (rec_num != expected_rec_id) {
       printf("ERROR! Expecting record # %d, but got # %d\n",
              expected_rec_id, rec_num);
     }
 
-    uint32 content_length;
+    std::uint32_t content_length;
     be_buf >> content_length;
     content_length <<= 1;  // measured in 16-bit words, convert to bytes
 
@@ -233,7 +234,7 @@ int main(int argc, char** argv) {
       exit(-1);
     }
 
-    uint32 type = *((const uint32*)rec_buf.data());
+    std::uint32_t type = *((const std::uint32_t*)rec_buf.data());
 
     if (verbose) {
       printf("Record Number: %d, Content Length: %u, Type: %u (%s)\n",
@@ -253,7 +254,7 @@ int main(int argc, char** argv) {
     }
 
     BigEndianReadBuffer shx_be_buf(shx_rec, 8);
-    uint32 shx_offset;
+    std::uint32_t shx_offset;
     shx_be_buf >> shx_offset;
     shx_offset <<= 1;
     if (shx_offset != shp_rec_pos) {
@@ -261,7 +262,7 @@ int main(int argc, char** argv) {
              shp_rec_pos, shx_offset);
     }
 
-    uint32 shx_content_length;
+    std::uint32_t shx_content_length;
     shx_be_buf >> shx_content_length;
     shx_content_length <<= 1;
     if (shx_content_length != content_length) {

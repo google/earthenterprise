@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +48,7 @@ class gstGeoIndexImpl : public khRefCounter {
                                 const gstSharedSource &source,
                                 const khTilespace &tilespace,
                                 const double oversize_factor,
-                                const uint target_level);
+                                const unsigned int target_level);
 
   void Reset();
 
@@ -109,21 +110,21 @@ class gstGeoIndexImpl : public khRefCounter {
   }
 
 
-  inline uint MaxLevel(void) const { return coverage_.level; }
-  gstGeoIndexHandle SplitCell(uint32 row, uint32 col,
+  inline unsigned int MaxLevel(void) const { return coverage_.level; }
+  gstGeoIndexHandle SplitCell(std::uint32_t row, std::uint32_t col,
                               const khLevelCoverage &targetCov);
 
-  typedef std::deque<uint> FeatureBucket;
+  typedef std::deque< unsigned int>  FeatureBucket;
   typedef FeatureBucket::iterator FeatureBucketIterator;
   typedef FeatureBucket::const_iterator FeatureBucketConstIterator;
 
-  const FeatureBucket* GetBucket(uint32 row, uint32 col) const;
-  void PopulateBucket(const khExtents<uint32> &extents,
+  const FeatureBucket* GetBucket(std::uint32_t row, std::uint32_t col) const;
+  void PopulateBucket(const khExtents<std::uint32_t> &extents,
                       FeatureBucket *bucket) const;
 
-  void GetFeatureIdsFromBucket(uint32 row, uint32 col,
+  void GetFeatureIdsFromBucket(std::uint32_t row, std::uint32_t col,
                                std::vector<int> &ids) const;
-  void GetFeatureIdsFromBuckets(const khExtents<uint32> &extents,
+  void GetFeatureIdsFromBuckets(const khExtents<std::uint32_t> &extents,
                                 std::vector<int> &ids) const;
 
   struct FeatureHandle {
@@ -153,11 +154,11 @@ class gstGeoIndexImpl : public khRefCounter {
       feature_handles_.push_back(x);
     }
 
-    inline const FeatureHandle& operator[](uint n) const {
+    inline const FeatureHandle& operator[](unsigned int n) const {
       return feature_handles_[n];
     }
 
-    inline FeatureHandle& operator[](uint n) {
+    inline FeatureHandle& operator[](unsigned int n) {
       return feature_handles_[n];
     }
 
@@ -187,7 +188,7 @@ class gstGeoIndexImpl : public khRefCounter {
                   const gstSharedSource &source,
                   const khTilespace &tilespace,
                   const double oversize_factor,
-                  const uint target_level);
+                  const unsigned int target_level);
 
   void Init();
 
@@ -197,14 +198,14 @@ class gstGeoIndexImpl : public khRefCounter {
   // Adds a feature index and it's corresponding bounding box.
   // It's used in SplitCell() to create a new Index and fill it with features
   // based on an existing Index.
-  void InsertIndex(uint idx);
+  void InsertIndex(unsigned int idx);
 
   const khTilespace& tilespace_;
   const double oversize_factor_;
 
   FeatureGrid grid_;
   FeatureListHandle box_list_;
-  typedef std::deque<uint32> BoxIndexList;
+  typedef std::deque<std::uint32_t> BoxIndexList;
   BoxIndexList box_index_list_;
 
   gstBBox bounding_box_;
@@ -215,7 +216,7 @@ class gstGeoIndexImpl : public khRefCounter {
   // It is built/updated while fusing every level and used for optimization
   // of processing of completely covered tiles.
   khDeleteGuard<khCoverageMask> coverage_mask_;
-  const uint target_level_;
+  const unsigned int target_level_;
 
   DISALLOW_COPY_AND_ASSIGN(gstGeoIndexImpl);
 };

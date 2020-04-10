@@ -15,7 +15,7 @@
 
 #include "geGuiProgress.h"
 
-bool geGuiProgress::incrementTotal(int64 val) {
+bool geGuiProgress::incrementTotal(std::int64_t val) {
   khLockGuard lock(mutex_);
   if (canceled_)
     return false;
@@ -23,7 +23,7 @@ bool geGuiProgress::incrementTotal(int64 val) {
   return true;
 }
 
-bool geGuiProgress::incrementDone(int64 val) {
+bool geGuiProgress::incrementDone(std::int64_t val) {
   khLockGuard lock(mutex_);
   if (canceled_)
     return false;
@@ -36,12 +36,12 @@ void geGuiProgress::setCanceled() {
   canceled_ = true;
 }
 
-int64 geGuiProgress::total() {
+std::int64_t geGuiProgress::total() {
   khLockGuard lock(mutex_);
   return total_;
 }
 
-int64 geGuiProgress::done() {
+std::int64_t geGuiProgress::done() {
   khLockGuard lock(mutex_);
   return done_;
 }

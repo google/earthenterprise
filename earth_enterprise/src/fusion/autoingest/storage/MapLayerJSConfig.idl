@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -34,8 +35,8 @@ class MapLayerJSConfig {
 
     Type        type_ = MapLayerJSConfig::Layer::UndefinedType;
     Projection  projection_ = MapLayerJSConfig::Layer::UndefinedProjection;
-    uint        channel_id_ = uint(0);
-    uint        index_version_ = uint(0);
+    unsigned int        channel_id_ = uint(0);
+    unsigned int        index_version_ = uint(0);
     LayerLegend legend_ = LayerLegend();
 
 #pragma GenerateIsUpToDate

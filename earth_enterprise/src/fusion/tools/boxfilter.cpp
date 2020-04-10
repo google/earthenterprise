@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -54,11 +55,11 @@ BoxFilterTiledImage::BoxFilterTiledImage(int image_width, int image_height,
 
 BoxFilterTiledImage::~BoxFilterTiledImage() {
   if (!single_tile_mode_)
-    for (uint i = 0; i < cached_tiles_.size(); ++i)
+    for (unsigned int i = 0; i < cached_tiles_.size(); ++i)
       delete [] cached_tiles_[i];
 }
 
-void BoxFilterTiledImage::SingleImageTile(uchar *image) {
+void BoxFilterTiledImage::SingleImageTile(unsigned char *image) {
   if (tile_width_ != image_width_ || tile_height_ != image_height_ ||
       cached_tiles_[0] != NULL)
     notify(NFY_FATAL, "BoxFilterTiledImage: bad single-tile parameters");
@@ -67,8 +68,8 @@ void BoxFilterTiledImage::SingleImageTile(uchar *image) {
   single_tile_mode_ = true;
 }
 
-const uchar *BoxFilterTiledImage::GetImageTile(int tile_x, int tile_y,
-                                               uchar border) {
+const unsigned char *BoxFilterTiledImage::GetImageTile(int tile_x, int tile_y,
+                                               unsigned char border) {
   notify(NFY_VERBOSE, "Get tile %d %d\n", tile_x, tile_y);
   if (tile_x < num_tiles_x_ && tile_y < num_tiles_y_) {
     // Re-use slots so if ntilesx<=2, don't load tiles more than once.
@@ -81,7 +82,7 @@ const uchar *BoxFilterTiledImage::GetImageTile(int tile_x, int tile_y,
                "BoxFilterTiledImage: tile cache miss in single-tile mode");
       cached_tile_ids_[slot] = this_tile_id;
       if (cached_tiles_[slot] == NULL)
-        cached_tiles_[slot] = new uchar[tile_width_ * tile_height_];
+        cached_tiles_[slot] = new unsigned char[tile_width_ * tile_height_];
       LoadImageTile(tile_x, tile_y, cached_tiles_[slot]);
 
       // Fill borders of tile if needed.
@@ -109,7 +110,7 @@ const uchar *BoxFilterTiledImage::GetImageTile(int tile_x, int tile_y,
 // calculation will just wrap around the horizontal band which is set to 0,
 // so the extra elements will have no effect.
 inline void ComputeLeftSAT(int **elem,  // pointer to element in SAT table
-                           uchar value,  // corresponding image value
+                           unsigned char value,  // corresponding image value
                            int prev_row_offset) {  // offset to previous row elem
   **elem =
       + *(*elem + prev_row_offset)
@@ -120,7 +121,7 @@ inline void ComputeLeftSAT(int **elem,  // pointer to element in SAT table
 // Computes a single SAT element given current values and an offset to
 // the previous row of values in the table.
 inline void ComputeSAT(int *elem,  // pointer to element in SAT table
-                       uchar value,  // corresponding image value
+                       unsigned char value,  // corresponding image value
                        int prev_row_offset) {  // offset to previous row elem
   *elem = - *(elem + prev_row_offset - 1) + *(elem + prev_row_offset)
           + *(elem - 1)                   + value;
@@ -130,7 +131,7 @@ inline void ComputeSAT(int *elem,  // pointer to element in SAT table
 // value, moving ptrs forward.
 inline void ComputeSATSpanValue(int **psat,   // ptr to first SAT element
                                 int length,   // length of the span
-                                uchar value,  // constant image value (border)
+                                unsigned char value,  // constant image value (border)
                                 int prev_row_offset) {
   for (int *psat_end = (*psat) + length; (*psat) < psat_end; ++(*psat))
     ComputeSAT((*psat), value, prev_row_offset);
@@ -140,7 +141,7 @@ inline void ComputeSATSpanValue(int **psat,   // ptr to first SAT element
 // input values, moving ptrs forward.
 inline void ComputeSATSpanValues(int **psat,  // ptr to first SAT element
                                  int length,  // length of the span
-                                 const uchar **values,  // ptr to image values
+                                 const unsigned char **values,  // ptr to image values
                                  int prev_row_offset) {
   for (int *psat_end = (*psat) + length; (*psat) < psat_end;
        ++(*psat), ++(*values))
@@ -153,10 +154,10 @@ inline void ComputeSATSpanValues(int **psat,  // ptr to first SAT element
 // computed from the border value.  The remaining box_halfw elements are
 // computed from the image.
 inline void ComputeLeftSATSpan(int **psat,  // ptr to the row in the SAT
-                               uchar border,  // border vlaue
+                               unsigned char border,  // border vlaue
                                int prev_row_offset,  // offset to the prev row
                                int box_halfw,  // (width of box -1) / 2
-                               const uchar **pimg) {  // ptr to image row
+                               const unsigned char **pimg) {  // ptr to image row
   // Compute the far left value
   ComputeLeftSAT(psat, border, prev_row_offset);
   // Compute the padding outside the image
@@ -199,7 +200,7 @@ inline void ComputeLeftSATSpan(int **psat,  // ptr to the row in the SAT
 // give the right result for a box filter footprint.
 
 void BoxFilterTiledImage::BoxFilter(int box_width, int box_height,
-                                    uchar border) {
+                                    unsigned char border) {
   // Check params
   if (box_width <= 0 || box_width % 2 == 0 ||
       box_height <= 0 || box_height % 2 == 0)
@@ -225,19 +226,19 @@ void BoxFilterTiledImage::BoxFilter(int box_width, int box_height,
   khDeleteGuard<int, ArrayDeleter> sat_vband(
     TransferOwnership(new int[box_width * (tile_height_ + box_height)]));
   int sat_prevrow = 0;
-  khDeleteGuard<uchar, ArrayDeleter> border_row(
-    TransferOwnership(new uchar[tile_width_]));
+  khDeleteGuard<unsigned char, ArrayDeleter> border_row(
+    TransferOwnership(new unsigned char[tile_width_]));
   memset(&border_row[0], border, tile_width_);
 
   // In single-tile mode, we compute the output image in place of the
   // input image to save the double memory.
-  khDeleteGuard<uchar, ArrayDeleter> output_tile_buffer;
-  uchar *output_tile;
+  khDeleteGuard<unsigned char, ArrayDeleter> output_tile_buffer;
+  unsigned char *output_tile;
   if (single_tile_mode_) {
     output_tile = cached_tiles_[0];
   } else {
     output_tile_buffer =
-      TransferOwnership(new uchar[tile_width_ * tile_height_]);
+      TransferOwnership(new unsigned char[tile_width_ * tile_height_]);
     output_tile = output_tile_buffer;
   }
 
@@ -246,7 +247,7 @@ void BoxFilterTiledImage::BoxFilter(int box_width, int box_height,
     for (int tile_col = 0; tile_col < num_tiles_x_; ++tile_col) {
       // The image tiles start out non-valid until we get past the
       // border or previously-computed values.
-      const uchar *left_tile = NULL, *right_tile = NULL;
+      const unsigned char *left_tile = NULL, *right_tile = NULL;
       int max_row_in_tile = box_halfh + 1;  // forces tile load when we get here
       int loaded_tile_row = tile_row - 1;
 
@@ -294,8 +295,8 @@ void BoxFilterTiledImage::BoxFilter(int box_width, int box_height,
         // inside original image tiles corresponding to current SAT
         // row.  When the image data is outside the image, use border
         // values instead.
-        const uchar *pimg = 0;  // pointer to image data
-        const uchar *r_tile_row = 0;  // pointer to row in right image tile
+        const unsigned char *pimg = 0;  // pointer to image data
+        const unsigned char *r_tile_row = 0;  // pointer to row in right image tile
         if (row < box_halfh + 1) {
           // Image data is in the border.
           pimg = r_tile_row = border_row;
@@ -378,7 +379,7 @@ void BoxFilterTiledImage::BoxFilter(int box_width, int box_height,
           // Get top-left corner of filter box in SAT.
           int *sat_topleft = (&sat_hband[0] + tile_col * tile_width_ +
                               hband_w * ((srow - box_height) % hband_h));
-          uchar *f = &output_tile[0] + (row - box_height) * tile_width_;
+          unsigned char *f = &output_tile[0] + (row - box_height) * tile_width_;
           int *psat_end = psat + tile_width_ - box_halfw;
           // First time through loop does left image tile; second time
           // does right tile

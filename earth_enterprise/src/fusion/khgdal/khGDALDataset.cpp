@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -34,7 +35,7 @@
 
 static khGeoExtents
 ReadDotGeoFile(const std::string &filename,
-               const khSize<uint32> &rasterSize);
+               const khSize<std::uint32_t> &rasterSize);
 
 
 // ****************************************************************************
@@ -72,7 +73,7 @@ khGDALDatasetImpl::khGDALDatasetImpl(const std::string &filename_,
       throw khException(kh::tr("Unable to open"));
     }
 
-    khSize<uint32> rasterSize(dataset->GetRasterXSize(),
+    khSize<std::uint32_t> rasterSize(dataset->GetRasterXSize(),
                               dataset->GetRasterYSize());
 
     std::string  srs;
@@ -267,7 +268,7 @@ khGDALDatasetImpl::EnsureKeyholeNormalizedInfo(void)
     }
 
     // someplace to put the results before they are aligned and cropped
-    khSize<uint32> tmpRasterSize;
+    khSize<std::uint32_t> tmpRasterSize;
     khGeoExtents   tmpGeoExtents;
 
     // See if it's already in keyhole standard format. That's a WGS84
@@ -284,10 +285,10 @@ khGDALDatasetImpl::EnsureKeyholeNormalizedInfo(void)
       // to find the top level
       double pixelWidth   = geoExtents.absPixelWidth();
       double pixelHeight  = geoExtents.absPixelHeight();
-      uint widthTopLevel  = IsMercator() ?
+      unsigned int widthTopLevel  = IsMercator() ?
         RasterProductTilespaceMercator.LevelFromPixelSizeInMeters(pixelWidth) :
         RasterProductTilespaceFlat.LevelFromDegPixelSize(pixelWidth);
-      uint heightTopLevel = IsMercator() ?
+      unsigned int heightTopLevel = IsMercator() ?
         RasterProductTilespaceMercator.LevelFromPixelSizeInMeters(pixelHeight) :
         RasterProductTilespaceFlat.LevelFromDegPixelSize(pixelHeight);
 
@@ -306,7 +307,7 @@ khGDALDatasetImpl::EnsureKeyholeNormalizedInfo(void)
                               normTopLevel /* fullresLevel */,
                               normTopLevel /* targetLevel */,
                               IsMercator());
-      khSize<uint32> expandedRasterSize(tileCov.extents.width() *
+      khSize<std::uint32_t> expandedRasterSize(tileCov.extents.width() *
                                         RasterProductTileResolution,
                                         tileCov.extents.height() *
                                         RasterProductTileResolution);
@@ -424,9 +425,9 @@ void
 khGDALDatasetImpl::ComputeReprojectSnapupExtents(GDALDataset *srcDS,
                                                  const std::string &srcSRS,
                                                  const std::string &dstSRS,
-                                                 khSize<uint32> &rasterSize,
+                                                 khSize<std::uint32_t> &rasterSize,
                                                  khGeoExtents   &geoExtents,
-                                                 uint           &level,
+                                                 unsigned int           &level,
                                                  const bool is_mercator)
 {
   if (!is_mercator) {
@@ -481,7 +482,7 @@ khGDALDatasetImpl::ComputeReprojectSnapupExtents(GDALDataset *srcDS,
     geoTransform[5] = -pixelSize;
 
     notify(NFY_DEBUG, "Snapped up size (wh) %d,%d", numPixels, numLines);
-    rasterSize = khSize<uint32>(numPixels /* width */,
+    rasterSize = khSize<std::uint32_t>(numPixels /* width */,
                                 numLines  /* height */);
     geoExtents = khGeoExtents(geoTransform, rasterSize);
   } else {  // Destination dataset has mercator projection.
@@ -583,7 +584,7 @@ khGDALDatasetImpl::ComputeReprojectSnapupExtents(GDALDataset *srcDS,
 
     notify(NFY_DEBUG, "Snapped up size (wh) %d,%d, level %u\n",
            widthInPxl, heightInPxl, level);
-    rasterSize = khSize<uint32>(widthInPxl, heightInPxl);
+    rasterSize = khSize<std::uint32_t>(widthInPxl, heightInPxl);
     geoExtents = khGeoExtents(geoTransform, rasterSize);
   }
 }
@@ -591,8 +592,8 @@ khGDALDatasetImpl::ComputeReprojectSnapupExtents(GDALDataset *srcDS,
 
 // TODO: Add a unit test case.
 void
-khGDALDatasetImpl::AlignAndCropExtents(const uint normTopLevel,
-                                       const khSize<uint32> &inRasterSize,
+khGDALDatasetImpl::AlignAndCropExtents(const unsigned int normTopLevel,
+                                       const khSize<std::uint32_t> &inRasterSize,
                                        const khGeoExtents   &inGeoExtents,
                                        bool is_mercator)
 {
@@ -603,21 +604,21 @@ khGDALDatasetImpl::AlignAndCropExtents(const uint normTopLevel,
     const double offset = 360.0 / 2.0;
 
     // align w/ pixels on our level
-    int64 beginXPixel =
-      int64((inGeoExtents.extents().beginX() + halfPixelSize + offset) /
+    std::int64_t beginXPixel =
+      std::int64_t((inGeoExtents.extents().beginX() + halfPixelSize + offset) /
             pixelSize);
-    int64 beginYPixel =
-      int64((inGeoExtents.extents().beginY() + halfPixelSize + offset) /
+    std::int64_t beginYPixel =
+      std::int64_t((inGeoExtents.extents().beginY() + halfPixelSize + offset) /
             pixelSize);
 
     // full pixels extents at this level - can have negative values
     // if origGeoExtents.west() < 180.0
-    alignedPixelExtents = khExtents<int64>(
-        khOffset<int64>(XYOrder, beginXPixel, beginYPixel),
-        khSize<int64>(inRasterSize.width, inRasterSize.height));
+    alignedPixelExtents = khExtents<std::int64_t>(
+        khOffset<std::int64_t>(XYOrder, beginXPixel, beginYPixel),
+        khSize<std::int64_t>(inRasterSize.width, inRasterSize.height));
 
     // intersect with world extents
-    croppedPixelExtents = khExtents<int64>(khExtents<int64>::Intersection(
+    croppedPixelExtents = khExtents<std::int64_t>(khExtents<std::int64_t>::Intersection(
         alignedPixelExtents,
         RasterProductTilespaceFlat.WorldPixelExtents(normTopLevel)));
 
@@ -634,21 +635,21 @@ khGDALDatasetImpl::AlignAndCropExtents(const uint normTopLevel,
             normTopLevel);
     // align w/ pixels on our level
     const double offset = khGeomUtilsMercator::khEarthCircumference / 2.0;
-    int64 beginXPixel = static_cast<int64>(
+    std::int64_t beginXPixel = static_cast<std::int64_t>(
         0.5 +  // For rounding rather than default floor
         ((inGeoExtents.extents().beginX() + offset) / pixelSize));
-    int64 beginYPixel = static_cast<int64>(
+    std::int64_t beginYPixel = static_cast<std::int64_t>(
         0.5 +  // For rounding rather than default floor
         ((inGeoExtents.extents().beginY() + offset) / pixelSize));
 
     // full pixels extents at this level - can have negative values
     // if origGeoExtents.west() < 180.0
-    alignedPixelExtents = khExtents<int64>(
-        khOffset<int64>(XYOrder, beginXPixel, beginYPixel),
-        khSize<int64>(inRasterSize.width, inRasterSize.height));
+    alignedPixelExtents = khExtents<std::int64_t>(
+        khOffset<std::int64_t>(XYOrder, beginXPixel, beginYPixel),
+        khSize<std::int64_t>(inRasterSize.width, inRasterSize.height));
 
     // interset with world extents
-    croppedPixelExtents = khExtents<int64>(khExtents<int64>::Intersection(
+    croppedPixelExtents = khExtents<std::int64_t>(khExtents<std::int64_t>::Intersection(
         alignedPixelExtents,
         RasterProductTilespaceMercator.WorldPixelExtentsMercator(
             normTopLevel)));
@@ -695,7 +696,7 @@ khGDALDataset::khGDALDataset(const std::string &filename,
 static
 khGeoExtents
 ReadDotGeoFile(const std::string &filename,
-               const khSize<uint32> &rasterSize)
+               const khSize<std::uint32_t> &rasterSize)
 {
   FILE *geofile;
   if((geofile = fopen(filename.c_str(), "r"))) {

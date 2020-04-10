@@ -25,14 +25,14 @@
 #include "common/packetcompress.h"
 
 namespace {
-const uint32 kOldMagic = 0x4e876494;
+const std::uint32_t kOldMagic = 0x4e876494;
 
 // Struct from old ETA DBroot code.
 struct etDbaseRootHeader {
-  uint32 rootMagic;
+  std::uint32_t rootMagic;
   unsigned char qtTypeVersion;
   // Padding char added by compiler.
-  uint16 qtDataVersion;
+  std::uint16_t qtDataVersion;
 };
 }  // anonymous namespace
 
@@ -44,7 +44,7 @@ bool EtaDbroot::IsEtaDbroot(const std::string &content,
       return false;
     }
     std::string eta_magic_buffer = content.substr(0, sizeof(kOldMagic));
-    if (kOldMagic == *reinterpret_cast<uint32*>(&eta_magic_buffer[0])) {
+    if (kOldMagic == *reinterpret_cast<std::uint32_t*>(&eta_magic_buffer[0])) {
       return true;
     }
   }
@@ -58,7 +58,7 @@ bool EtaDbroot::IsEtaDbroot(const std::string &content,
 }
 
 bool EtaDbroot::DecodeBinary(const std::string &binary,
-                             std::string *text, uint16 *epoch) {
+                             std::string *text, std::uint16_t *epoch) {
   if (!IsEtaDbroot(binary, kExpectBinary)) {
     return false;
   }

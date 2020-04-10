@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +19,9 @@
 #ifndef FUSION_KHRASTER_ATTRIBUTIONBYEXTENTS_H__
 #define FUSION_KHRASTER_ATTRIBUTIONBYEXTENTS_H__
 
+#include <cstdint>
 #include <string>
 #include <vector>
-#include <khTypes.h>
 #include <khExtents.h>
 #include <khTileAddr.h>
 
@@ -28,12 +29,12 @@
 class AttributionByExtents {
   class Inset {
    public:
-    uint32            max_level_;
+    std::uint32_t            max_level_;
     khExtents<double> deg_extents_;
-    uint32            inset_id_;
+    std::uint32_t            inset_id_;
     std::string       acquisition_date_;
 
-    Inset(const std::string &rppath, uint32 id, const std::string &acquisitionDate);
+    Inset(const std::string &rppath, std::uint32_t id, const std::string &acquisitionDate);
   };
 
   // will we ordered low-res to high-res
@@ -42,13 +43,13 @@ class AttributionByExtents {
 public:
   AttributionByExtents(void) { }
 
-  void AddInset(const std::string &rppath, uint32 id, const std::string &acquisitionDate) {
+  void AddInset(const std::string &rppath, std::uint32_t id, const std::string &acquisitionDate) {
     insets.push_back(Inset(rppath, id, acquisitionDate));
   }
 
   // Return the inset id for the most significant inset for the
   // specified tile.
-  uint32 GetInsetId(const khTileAddr &addr) const;
+  std::uint32_t GetInsetId(const khTileAddr &addr) const;
 
   // Return the acquisition date for the most significant inset for the
   // specified tile.
@@ -57,7 +58,7 @@ public:
 private:
   // Internal utility to find the inset within insets that occupies the most
   // area in the specified tile.
-  uint32 GetInternalInsetIndex(const khTileAddr &addr) const;
+  std::uint32_t GetInternalInsetIndex(const khTileAddr &addr) const;
 };
 
 #endif // FUSION_KHRASTER_ATTRIBUTIONBYEXTENTS_H__

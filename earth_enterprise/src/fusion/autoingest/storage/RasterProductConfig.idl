@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,8 +14,8 @@
 // limitations under the License.
 
 
+#include <cstdint>
 #include <string>
-#include <khTypes.h>
 #include <khMetaData.h>
 #include <autoingest/.idl/storage/AssetDefs.h>
 #include <autoingest/.idl/storage/MaskgenConfig.h>
@@ -46,7 +47,7 @@ class RasterProductConfig {
   bool clampNonnegative = new:false, load:true;
 
   // for maskgen
-  deprecated uint feather = uint(100);  // no longer used
+  deprecated unsigned int feather = uint(100);  // no longer used
   deprecated MaskgenConfig::Mode maskmode = MaskgenConfig::Mask; // no longer used
   // my own
   bool nomask = false;
@@ -59,10 +60,10 @@ class RasterProductConfig {
   // for maskgen
   MaskgenConfig maskgenConfig = MaskgenConfig();
   // for mosaic
-  uint mosaicFillTolerance = uint(0);
+  unsigned int mosaicFillTolerance = uint(0);
 
-  uint32      fuid_resource_ = uint32(0);
-  uint32      provider_id_   = uint32(0);
+  std::uint32_t      fuid_resource_ = std::uint32_t(0);
+  std::uint32_t      provider_id_   = std::uint32_t(0);
 
   bool useMercatorProjection = new:false, load:false;
   double north_boundary = new:90.0, load:90.0;

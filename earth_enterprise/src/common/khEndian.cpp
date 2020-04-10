@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,12 +20,12 @@
 // ****************************************************************************
 // ***  EndianWriteBuffer
 // ****************************************************************************
-void EndianWriteBuffer::rawwrite(const void *src, uint len) {
+void EndianWriteBuffer::rawwrite(const void *src, unsigned int len) {
   size_type new_position = PrepareToStore(len);
   buf.replace(position_, len, (const char *)src, len);
   position_ = new_position;
 }
-void EndianWriteBuffer::pad(uint len, char pad) {
+void EndianWriteBuffer::pad(unsigned int len, char pad) {
   size_type new_position = PrepareToStore(len);
   buf.replace(position_, len, len, pad);
   position_ = new_position;
@@ -38,7 +39,7 @@ void EndianWriteBuffer::push(const std::string &s) {
     rawwrite(s.data(), found+1);
   }
 }
-EndianWriteBuffer::EndianWriteBuffer(Endianness bufEndianness, uint reserve) :
+EndianWriteBuffer::EndianWriteBuffer(Endianness bufEndianness, unsigned int reserve) :
     bufferEndianness(bufEndianness),
     position_(0) {
   if (reserve) {
@@ -59,7 +60,7 @@ EndianReadBuffer::EndianReadBuffer(Endianness bufEndianness,
     next_(0)
 { }
 EndianReadBuffer::EndianReadBuffer(Endianness bufEndianness,
-                                   uint reserve_size) :
+                                   unsigned int reserve_size) :
     std::string(), bufferEndianness(bufEndianness),
     next_(0)
 {
@@ -121,9 +122,9 @@ EndianReadBuffer::size_type EndianReadBuffer::Seek(size_type new_pos) {
 }
 
 void EndianReadBuffer::CheckCRC(size_type size, const char *msg) {
-  size_type checkSize = size - sizeof(uint32);
-  uint32 calcCRC = Crc32(CurrPtr(), checkSize);
-  uint32 storedCRC;
+  size_type checkSize = size - sizeof(std::uint32_t);
+  std::uint32_t calcCRC = Crc32(CurrPtr(), checkSize);
+  std::uint32_t storedCRC;
   if (bufferEndianness == LittleEndian) {
     FromLittleEndianBuffer(&storedCRC, CurrPtr() + checkSize);
   } else {

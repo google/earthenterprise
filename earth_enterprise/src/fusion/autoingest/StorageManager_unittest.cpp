@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 The Open GEE Contributors
+ * Copyright 2020 The Open GEE Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ class TestItem : public StorageManaged, public TestItemStorage {
   }
 
   // determine amount of memory used by TestItem
-  uint64 GetHeapUsage() const{
+  std::uint64_t GetHeapUsage() const{
     return ::GetHeapUsage(nextValue)
     + ::GetHeapUsage(fileName)
     + ::GetHeapUsage(isValidRef)
@@ -77,7 +77,7 @@ class TestItem : public StorageManaged, public TestItemStorage {
   }
 };
 
-inline uint64 GetHeapUsage(const TestItem &obj) {
+inline std::uint64_t GetHeapUsage(const TestItem &obj) {
   return obj.GetHeapUsage();
 }
 
@@ -226,8 +226,8 @@ TEST_F(StorageManagerTest, PurgeCacheBasedOnMemoryUtilizationLegacy) {
   // the limit and determines if the cache memory usage reflects the size
   // of the items in cache.
   size_t i;
-  uint64 cacheItemSize = 0;
-  uint64 memoryLimit = 0;
+  std::uint64_t cacheItemSize = 0;
+  std::uint64_t memoryLimit = 0;
   for(i = 0; i < CACHE_SIZE + 2; ++i) {
     stringstream s;
     s << "asset" << i;
@@ -448,8 +448,8 @@ TEST_F(StorageManagerTest, PurgeCacheBasedOnMemoryUtilization) {
   // the limit and determines if the cache memory usage reflects the size
   // of the items in cache.
   size_t i;
-  uint64 cacheItemSize = 0;
-  uint64 memoryLimit = 0;
+  std::uint64_t cacheItemSize = 0;
+  std::uint64_t memoryLimit = 0;
   for(i = 0; i < CACHE_SIZE + 2; ++i) {
     stringstream s;
     s << "asset" << i;

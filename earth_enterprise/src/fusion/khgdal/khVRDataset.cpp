@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -38,8 +39,8 @@ class khVRRasterBand : public GDALRasterBand
  public:
   khVRRasterBand(GDALDataset          *dataset,
                  int                   gdalBandNum,
-                 const khSize<uint32> &rastersize,
-                 const khSize<uint32> &blocksize,
+                 const khSize<std::uint32_t> &rastersize,
+                 const khSize<std::uint32_t> &blocksize,
                  GDALDataType          gdalDatatype,
                  GDALColorInterp       colorInterp_,
                  const khTransferGuard<GDALColorTable> &ctbl_,
@@ -139,7 +140,7 @@ khVRDataset<LUTType>::khVRDataset(const khVirtualRaster &virtraster) :
   FetchDataset(virtraster.inputTiles[0].file);
 
   // process my band information
-  for (uint b = 0; b < (uint)nBands; ++b) {
+  for (unsigned int b = 0; b < (unsigned int)nBands; ++b) {
     const khVirtualRaster::OutputBand &bandDef(virtraster.outputBands[b]);
     defaultLuts[b] = TransferOwnership(new LUTType(bandDef.defaultLut));
 
@@ -194,18 +195,18 @@ khVRDataset<LUTType>::khVRDataset(const khVirtualRaster &virtraster) :
          virtraster.inputTiles.begin();
        tileDef < virtraster.inputTiles.end(); ++tileDef) {
 
-    khOffset<uint32>
+    khOffset<std::uint32_t>
       tileOrigin(XYOrder,
-                 uint32(((tileDef->origin.x() - virtraster.origin.x()) /
+                 std::uint32_t(((tileDef->origin.x() - virtraster.origin.x()) /
                          virtraster.pixelsize.width) + 0.5),
-                 uint32(((tileDef->origin.y() - virtraster.origin.y()) /
+                 std::uint32_t(((tileDef->origin.y() - virtraster.origin.y()) /
                          virtraster.pixelsize.height) + 0.5));
-    khExtents<uint32> pixelExtents(tileOrigin,
+    khExtents<std::uint32_t> pixelExtents(tileOrigin,
                                    tileDef->rastersize);
 
 
     std::vector<khSharedHandle<LUTType > > tileLuts(defaultLuts);
-    for (uint b = 0;
+    for (unsigned int b = 0;
          (b < tileDef->bandLUTs.size()) && (b < tileLuts.size());
          ++b) {
       if (!tileDef->bandLUTs[b].empty()) {
@@ -217,11 +218,11 @@ khVRDataset<LUTType>::khVRDataset(const khVirtualRaster &virtraster) :
   }
 
   // check to see if tiles overlap
-  uint numTiles = tiles.size();
+  unsigned int numTiles = tiles.size();
   intersectsOthers.resize(0);
   intersectsOthers.resize(numTiles, false);
-  for (uint i = 0; i < numTiles; ++i) {
-    for (uint j = i+1; j <numTiles; ++j) {
+  for (unsigned int i = 0; i < numTiles; ++i) {
+    for (unsigned int j = i+1; j <numTiles; ++j) {
       if (tiles[i].extents.intersects(tiles[j].extents)) {
         intersectsOthers[i] = true;
         intersectsOthers[j] = true;
@@ -237,51 +238,51 @@ void
 khVRDataset<LUTType>::TypedContribute
 (const khGDALBuffer   &destBuffer,
  const khGDALBuffer   &srcBuffer,
- const khSize<uint32> &rasterSize,
+ const khSize<std::uint32_t> &rasterSize,
  const std::vector<khSharedHandle<LUTType> > &bandLuts,
  const khGDALBuffer *alphaBuffer)
 {
   typedef InPixelType Src;
   typedef InPixelDiffType SrcDiff;
 
-  const uint numDestBands = destBuffer.bands.size();
-  const uint numSrcBands  = srcBuffer.bands.size();
+  const unsigned int numDestBands = destBuffer.bands.size();
+  const unsigned int numSrcBands  = srcBuffer.bands.size();
 
 #ifndef NDEBUG
   assert(khTypes::Helper<Src>::Storage == srcBuffer.pixelType);
   if (checkFill) {
     // in the checkFill case, the srcBuffer must contain all my bands
     // in order.
-    assert(numSrcBands == (uint)nBands);
-    for (uint b = 0; b < (uint)nBands; ++b) {
+    assert(numSrcBands == (unsigned int)nBands);
+    for (unsigned int b = 0; b < (unsigned int)nBands; ++b) {
       assert(srcBuffer.bands[b] == b);
     }
   } else {
     // in the non-checkFill case, the srcBuffer must contain all the
     // destBands, in order.
     assert(numDestBands == numSrcBands);
-    for (uint b = 0; b < numDestBands; ++b) {
+    for (unsigned int b = 0; b < numDestBands; ++b) {
       assert(srcBuffer.bands[b] == destBuffer.bands[b]);
     }
   }
 #endif
 
   if (alphaBuffer) {
-    for (uint destBand = 0; destBand < numDestBands; ++destBand) {
-      uint srcBand = destBand;  // srcBand exactly match the destBand
+    for (unsigned int destBand = 0; destBand < numDestBands; ++destBand) {
+      unsigned int srcBand = destBand;  // srcBand exactly match the destBand
       // the lutBand matches the orig band that the srcBand maps to.
-      uint lutBand = srcBuffer.bands[srcBand];
+      unsigned int lutBand = srcBuffer.bands[srcBand];
       Src  *srcBandBuf  = ((Src*)srcBuffer.buf) +
                           srcBand * srcBuffer.bandStep;
       Dest *destBandBuf =  ((Dest*)destBuffer.buf) +
                            destBand * destBuffer.bandStep;
-      uint8 *alphaBuf  = (uint8*)alphaBuffer->buf;
+      std::uint8_t *alphaBuf  = (std::uint8_t*)alphaBuffer->buf;
 
-      for (uint32 line = 0; line < rasterSize.height; ++line) {
+      for (std::uint32_t line = 0; line < rasterSize.height; ++line) {
         Src  *src = srcBandBuf;
         Dest *dest = destBandBuf;
-        uint8 *alpha = alphaBuf;
-        for (uint32 pixel = 0; pixel < rasterSize.width; ++pixel) {
+        std::uint8_t *alpha = alphaBuf;
+        for (std::uint32_t pixel = 0; pixel < rasterSize.width; ++pixel) {
           float a = (float)(*alpha) / 255.f;
           *dest = ClampRange<Dest>((*dest) * (1.f - a) +
                                    (*bandLuts[lutBand])[*src] * a);
@@ -295,12 +296,12 @@ khVRDataset<LUTType>::TypedContribute
       }
     }
   } else {
-    for (uint32 line = 0; line < rasterSize.height; ++line) {
+    for (std::uint32_t line = 0; line < rasterSize.height; ++line) {
       Src  *sLineBuf  = ((Src*)srcBuffer.buf) +
                         line * srcBuffer.lineStep;
       Dest *dLineBuf  = ((Dest*)destBuffer.buf) +
                         line * destBuffer.lineStep;
-      for (uint32 pixel = 0; pixel < rasterSize.width; ++pixel) {
+      for (std::uint32_t pixel = 0; pixel < rasterSize.width; ++pixel) {
         Src  *sPixelBuf = sLineBuf + pixel * srcBuffer.pixelStep;
         Dest *dPixelBuf = dLineBuf + pixel * destBuffer.pixelStep;
 
@@ -310,7 +311,7 @@ khVRDataset<LUTType>::TypedContribute
         bool exceeds_tolerance = false;
         if (checkFill) { // removed at compile tile
           // we're guaranteed that the srcBands are ordered
-          for (uint srcBand = 0; srcBand < numSrcBands; ++srcBand) {
+          for (unsigned int srcBand = 0; srcBand < numSrcBands; ++srcBand) {
             Src *src  = sPixelBuf + srcBand * srcBuffer.bandStep;
             SrcDiff diff =
               SrcDiff(*src) - SrcDiff(inFillValues[srcBand]);
@@ -326,11 +327,11 @@ khVRDataset<LUTType>::TypedContribute
         // checkFill check removed at compile time. Will reduce to
         // either "if (1)" or "exceeds_tolerance"
         if (!checkFill || exceeds_tolerance) {
-          for (uint destBand = 0; destBand < numDestBands; ++destBand) {
+          for (unsigned int destBand = 0; destBand < numDestBands; ++destBand) {
             Dest *dest = dPixelBuf + destBand * destBuffer.bandStep;
 
-            uint srcBand;
-            uint lutBand;
+            unsigned int srcBand;
+            unsigned int lutBand;
             if (checkFill) { // removed at compile time
               // srcBands exactly match real bands - figure out which
               // one the dest maps it to
@@ -366,29 +367,29 @@ void
 khVRDataset<LUTType>::Contribute
 (const khGDALBuffer   &destBuffer,
  const khGDALBuffer   &srcBuffer,
- const khSize<uint32> &rasterSize,
+ const khSize<std::uint32_t> &rasterSize,
  const std::vector<khSharedHandle<LUTType> > &bandLuts,
  const khGDALBuffer *alphaBuffer)
 {
   switch (destBuffer.pixelType) {
     case khTypes::UInt8:
-      TypedContribute<checkFill, uint8>(destBuffer, srcBuffer,
+      TypedContribute<checkFill, std::uint8_t>(destBuffer, srcBuffer,
                                         rasterSize, bandLuts, alphaBuffer);
       break;
     case khTypes::UInt16:
-      TypedContribute<checkFill, uint16>(destBuffer, srcBuffer,
+      TypedContribute<checkFill, std::uint16_t>(destBuffer, srcBuffer,
                                          rasterSize, bandLuts, alphaBuffer);
       break;
     case khTypes::Int16:
-      TypedContribute<checkFill, int16>(destBuffer, srcBuffer,
+      TypedContribute<checkFill, std::int16_t>(destBuffer, srcBuffer,
                                         rasterSize, bandLuts, alphaBuffer);
       break;
     case khTypes::UInt32:
-      TypedContribute<checkFill, uint32>(destBuffer, srcBuffer,
+      TypedContribute<checkFill, std::uint32_t>(destBuffer, srcBuffer,
                                          rasterSize, bandLuts, alphaBuffer);
       break;
     case khTypes::Int32:
-      TypedContribute<checkFill, int32>(destBuffer, srcBuffer,
+      TypedContribute<checkFill, std::int32_t>(destBuffer, srcBuffer,
                                         rasterSize, bandLuts, alphaBuffer);
       break;
     case khTypes::Float32:
@@ -444,16 +445,16 @@ khVRDataset<LUTType>::IRasterIO(GDALRWFlag eRWFlag,
     }
 
     // build my list of bands - we know the bands passed to us are valid
-    std::vector<uint> destBands(nBandCount);
-    for (uint b = 0; b < (uint)nBandCount; ++b) {
+    std::vector< unsigned int>  destBands(nBandCount);
+    for (unsigned int b = 0; b < (unsigned int)nBandCount; ++b) {
       destBands[b] = panBandMap[b]-1;
     }
 
     // convert 'Space' parameters (char based) to Step (pixel based)
-    uint destPixelSize = khTypes::StorageSize(destType);
-    int64 destPixelStep = nPixelSpace / destPixelSize;
-    int64 destLineStep  = nLineSpace  / destPixelSize;
-    int64 destBandStep  = nBandSpace  / destPixelSize;
+    unsigned int destPixelSize = khTypes::StorageSize(destType);
+    std::int64_t destPixelStep = nPixelSpace / destPixelSize;
+    std::int64_t destLineStep  = nLineSpace  / destPixelSize;
+    std::int64_t destBandStep  = nBandSpace  / destPixelSize;
 
 
     // package up all the information about the dest buffer
@@ -461,21 +462,21 @@ khVRDataset<LUTType>::IRasterIO(GDALRWFlag eRWFlag,
                             destPixelStep, destLineStep, destBandStep);
 
     // fill the buffers with the fill values
-    destBuffer.Fill(khSize<uint32>(nXSize, nYSize), outFillValues);
+    destBuffer.Fill(khSize<std::uint32_t>(nXSize, nYSize), outFillValues);
 
 
     nXOff += cropOrigin.x();
     nYOff += cropOrigin.y();
-    const khExtents<uint32> readExtents(XYOrder,
+    const khExtents<std::uint32_t> readExtents(XYOrder,
                                         nXOff, nXOff + nXSize,
                                         nYOff, nYOff + nYSize);
 
-    uint numTiles = 0;
-    std::vector<khExtents<uint32> > tileIExtents;
-    for (uint ti = 0; ti < tiles.size(); ++ti) {
+    unsigned int numTiles = 0;
+    std::vector<khExtents<std::uint32_t> > tileIExtents;
+    for (unsigned int ti = 0; ti < tiles.size(); ++ti) {
 
-      khExtents<uint32> intersection
-        (khExtents<uint32>::Intersection(readExtents,
+      khExtents<std::uint32_t> intersection
+        (khExtents<std::uint32_t>::Intersection(readExtents,
                                          tiles[ti].extents));
       if (intersection.empty()) {
         continue;
@@ -484,8 +485,8 @@ khVRDataset<LUTType>::IRasterIO(GDALRWFlag eRWFlag,
 
       bool needComposite = false;
       if (intersectsOthers[ti]) {
-        for (uint ii = 0; ii < tileIExtents.size(); ++ii)
-          if (!khExtents<uint32>::Intersection(
+        for (unsigned int ii = 0; ii < tileIExtents.size(); ++ii)
+          if (!khExtents<std::uint32_t>::Intersection(
                   intersection, tileIExtents[ii]).empty()) {
             needComposite = true;
             break;
@@ -493,12 +494,12 @@ khVRDataset<LUTType>::IRasterIO(GDALRWFlag eRWFlag,
         tileIExtents.push_back(intersection);
       }
 
-      khOffset<uint32> readOffset(XYOrder,
+      khOffset<std::uint32_t> readOffset(XYOrder,
                                   intersection.beginX() -
                                   readExtents.beginX(),
                                   intersection.beginY() -
                                   readExtents.beginY());
-      khOffset<uint32> tileOffset(XYOrder,
+      khOffset<std::uint32_t> tileOffset(XYOrder,
                                   intersection.beginX() -
                                   tiles[ti].extents.beginX(),
                                   intersection.beginY() -
@@ -516,7 +517,7 @@ khVRDataset<LUTType>::IRasterIO(GDALRWFlag eRWFlag,
       if (LUTType::IsIdentity && !needComposite) {
         CPLErr err = tileDestBuffer.Read
                      (tileDS,
-                      khExtents<uint32>(tileOffset, intersection.size()));
+                      khExtents<std::uint32_t>(tileOffset, intersection.size()));
         if (err != CE_None) {
           CPLError(err, CPLE_AppDefined,
                    "Error reading virtual raster tile %s",
@@ -533,12 +534,12 @@ khVRDataset<LUTType>::IRasterIO(GDALRWFlag eRWFlag,
         khTypes::Helper<InPixelType>::Storage;
 
       // figure out which bands we need to read
-      std::vector<uint> readBands;
+      std::vector< unsigned int>  readBands;
       if (needComposite && !tileDS.getMaskDS()) {
         // must read all bands, not just those requested
         // since compositing will be based on 3-channel color matching
         readBands.resize(nBands);
-        for (uint i = 0; i < (uint)nBands; ++i) {
+        for (unsigned int i = 0; i < (unsigned int)nBands; ++i) {
           readBands[i] = i;
         }
       } else {
@@ -547,7 +548,7 @@ khVRDataset<LUTType>::IRasterIO(GDALRWFlag eRWFlag,
       }
 
       // reserve enough read buffer space for the intersection
-      const uint readPixelSize = khTypes::StorageSize(readType);
+      const unsigned int readPixelSize = khTypes::StorageSize(readType);
       readBuf.reserve(intersection.width() *
                       intersection.height() *
                       readPixelSize *
@@ -563,7 +564,7 @@ khVRDataset<LUTType>::IRasterIO(GDALRWFlag eRWFlag,
       // read into our readBuffer
       CPLErr err = readBuffer.Read
                    (tileDS.get(),
-                    khExtents<uint32>(tileOffset, intersection.size()));
+                    khExtents<std::uint32_t>(tileOffset, intersection.size()));
       if (err != CE_None) {
         CPLError(err, CPLE_AppDefined,
                  "Error reading virtual raster tile %s",
@@ -582,10 +583,10 @@ khVRDataset<LUTType>::IRasterIO(GDALRWFlag eRWFlag,
       } else {
         int alphaOffs = intersection.width() * intersection.height() *
                         readPixelSize * readBands.size();
-        std::vector<uint> alphaband(1);
+        std::vector< unsigned int>  alphaband(1);
         alphaband[0] = 0;
         // package up all the information about the alpha buffer
-        khGDALBuffer alphaBuffer(khTypes::Helper<uint8>::Storage,
+        khGDALBuffer alphaBuffer(khTypes::Helper<std::uint8_t>::Storage,
                                  alphaband,
                                  &readBuf[0] + alphaOffs,
                                  1,                    /* pixelStep */
@@ -595,7 +596,7 @@ khVRDataset<LUTType>::IRasterIO(GDALRWFlag eRWFlag,
 
         // read into our alphaBuffer
         CPLErr err = alphaBuffer.Read
-                     (tileDS.getMaskDS(), khExtents<uint32>(
+                     (tileDS.getMaskDS(), khExtents<std::uint32_t>(
                          tileOffset, intersection.size()));
         if (err != CE_None) {
           CPLError(err, CPLE_AppDefined,
@@ -633,11 +634,11 @@ CreateLUTKHVRDataset(khTypes::StorageEnum outType,
 {
   switch (outType) {
     case khTypes::UInt8:
-      return new khVRDataset<khLUT<In, uint8> >(virtraster);
+      return new khVRDataset<khLUT<In, std::uint8_t> >(virtraster);
     case khTypes::UInt16:
-      return new khVRDataset<khLUT<In, uint16> >(virtraster);
+      return new khVRDataset<khLUT<In, std::uint16_t> >(virtraster);
     case khTypes::UInt32:
-      return new khVRDataset<khLUT<In, uint32> >(virtraster);
+      return new khVRDataset<khLUT<In, std::uint32_t> >(virtraster);
     default:
       throw khException(kh::tr("Unsupported LUT output band type %1")
                         .arg(khTypes::StorageName(outType)));
@@ -680,11 +681,11 @@ CreateKHVRDataset(const khVirtualRaster &virtraster)
     if (virtraster.outputBands[0].defaultLut.size()) {
       switch (inType) {
         case khTypes::UInt8:
-          return CreateLUTKHVRDataset<uint8>(outType, virtraster);
+          return CreateLUTKHVRDataset<std::uint8_t>(outType, virtraster);
         case khTypes::UInt16:
-          return CreateLUTKHVRDataset<uint16>(outType, virtraster);
+          return CreateLUTKHVRDataset<std::uint16_t>(outType, virtraster);
         case khTypes::Int16:
-          return CreateLUTKHVRDataset<int16>(outType, virtraster);
+          return CreateLUTKHVRDataset<std::int16_t>(outType, virtraster);
         default:
           break;
       }
@@ -693,15 +694,15 @@ CreateKHVRDataset(const khVirtualRaster &virtraster)
     } else {
       switch (outType) {
         case khTypes::UInt8:
-          return new khVRDataset<khIdentityLUT<uint8> >(virtraster);
+          return new khVRDataset<khIdentityLUT<std::uint8_t> >(virtraster);
         case khTypes::UInt16:
-          return new khVRDataset<khIdentityLUT<uint16> >(virtraster);
+          return new khVRDataset<khIdentityLUT<std::uint16_t> >(virtraster);
         case khTypes::Int16:
-          return new khVRDataset<khIdentityLUT<int16> >(virtraster);
+          return new khVRDataset<khIdentityLUT<std::int16_t> >(virtraster);
         case khTypes::UInt32:
-          return new khVRDataset<khIdentityLUT<uint32> >(virtraster);
+          return new khVRDataset<khIdentityLUT<std::uint32_t> >(virtraster);
         case khTypes::Int32:
-          return new khVRDataset<khIdentityLUT<int32> >(virtraster);
+          return new khVRDataset<khIdentityLUT<std::int32_t> >(virtraster);
         case khTypes::Float32:
           return new khVRDataset<khIdentityLUT<float32> >(virtraster);
         case khTypes::Float64:
@@ -814,8 +815,8 @@ GDALRegister_KHVR()
 // ****************************************************************************
 khVRRasterBand::khVRRasterBand(GDALDataset          *dataset,
                                int                   gdalBandNum,
-                               const khSize<uint32> &rastersize,
-                               const khSize<uint32> &blocksize,
+                               const khSize<std::uint32_t> &rastersize,
+                               const khSize<std::uint32_t> &blocksize,
                                GDALDataType          gdalDatatype,
                                GDALColorInterp       colorInterp_,
                                const khTransferGuard<GDALColorTable> &ctbl_,

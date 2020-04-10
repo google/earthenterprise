@@ -139,7 +139,7 @@ class MockVersion : public AssetVersionImpl {
     // Not used - only included to make MockVersion non-virtual
     string PluginName(void) const override { return string(); }
     void GetOutputFilenames(vector<string> &) const override {}
-    string GetOutputFilename(uint) const override { return string(); }
+    string GetOutputFilename(unsigned int) const override { return string(); }
 };
 
 class MockStorageManager : public StorageManagerInterface<AssetVersionImpl> {
@@ -772,7 +772,7 @@ TEST(SetStateTest, SetStateNoWaiting) {
   });
 }
 
-void UpdateWaiting(MockStorageManager & sm, StateUpdater & updater, AssetKey ref, AssetDefs::State oldState, uint32 numWaitingFor = 2) {
+void UpdateWaiting(MockStorageManager & sm, StateUpdater & updater, AssetKey ref, AssetDefs::State oldState, std::uint32_t numWaitingFor = 2) {
   auto version = sm.Get(fix(ref));
   updater.UpdateWaitingAssets(version, oldState, {numWaitingFor, numWaitingFor});
 }

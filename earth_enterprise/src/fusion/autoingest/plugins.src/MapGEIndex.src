@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -48,8 +49,8 @@ MapGEIndexAssetImplD::ReuseOldPacketVers(
     MapGEIndexConfig &newconfig) const
 {
   // make a map of my newconfig layervers so the hit check can be faster
-  std::map<uint, MapGEIndexConfig::Layer*> layermap;
-  for (uint i = 0; i < newconfig.layers_.size(); ++i) {
+  std::map<unsigned int, MapGEIndexConfig::Layer*> layermap;
+  for (unsigned int i = 0; i < newconfig.layers_.size(); ++i) {
     layermap.insert(std::make_pair
                     (newconfig.layers_[i].channel_id_,
                      &newconfig.layers_[i]));
@@ -57,11 +58,11 @@ MapGEIndexAssetImplD::ReuseOldPacketVers(
 
   // now walk back the previous AssetVersions and find the index versions
   // that we can reuse
-  for (uint v = 0; v < versions.size(); ++v) {
+  for (unsigned int v = 0; v < versions.size(); ++v) {
     MapGEIndexAssetVersion prev(versions[v]);
     if (prev->config.index_version_ <= newconfig.index_version_) {
-      for (uint i = 0; i < prev->config.layers_.size(); ++i) {
-        std::map<uint, MapGEIndexConfig::Layer*>::iterator found
+      for (unsigned int i = 0; i < prev->config.layers_.size(); ++i) {
+        std::map<unsigned int, MapGEIndexConfig::Layer*>::iterator found
           = layermap.find(prev->config.layers_[i].channel_id_);
         if (found != layermap.end()) {
           // We found a layer with the same id
@@ -97,8 +98,8 @@ MapGEIndexAssetVersionImplD::DoSubmitTask(void)
   // ************************************************
   geindexgen::UnifiedConfig geindex_config;
 
-  for (uint i = 0; i < config.layers_.size(); ++i) {
-    for (uint j = 0; j < config.layers_[i].levels_.size(); ++j) {
+  for (unsigned int i = 0; i < config.layers_.size(); ++i) {
+    for (unsigned int j = 0; j < config.layers_[i].levels_.size(); ++j) {
       AssetVersion assetver(config.layers_[i].levels_[j].verref_);
       std::string packetdir = assetver->GetOutputFilename(0);
 

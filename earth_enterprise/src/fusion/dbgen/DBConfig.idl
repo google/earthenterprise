@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,10 +13,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
+#include <cstdint>
 #include <string>
 #include <vector>
-#include <khTypes.h>
 #include <searchtabs/.idl/SearchTabs.h>
 
 #cppquote
@@ -33,7 +33,7 @@ class DbHeader
   std::vector<SearchTabDefinition> search_tabs_ = std::vector<SearchTabDefinition>();
   std::vector<std::string> poi_file_paths_ = std::vector<std::string>();
   std::vector<std::string> icons_dirs_ = std::vector<std::string>();
-  uint database_version_ = uint(0);
+  unsigned int database_version_ = uint(0);
   DbType db_type_ = DbHeader::TYPE_GEDB;
   bool use_google_imagery_ = false;
   bool is_mercator_ = false;
@@ -74,12 +74,12 @@ bool DbHeader::LoadAndResolvePaths(const std::string& gedb_path,
     return false;
   }
   *prefix = db_prefix_from_xml_header.substr(0, pos);
-  for (uint i = 0; i < toc_paths_.size(); ++i) {
+  for (unsigned int i = 0; i < toc_paths_.size(); ++i) {
     CheckAndResolvePath(gedb_path, toc_paths_[i]);
   }
-  for (uint i = 0; i < poi_file_paths_.size(); ++i)
+  for (unsigned int i = 0; i < poi_file_paths_.size(); ++i)
     CheckAndResolvePath(gedb_path, poi_file_paths_[i]);
-  for (uint i = 0; i < icons_dirs_.size(); ++i) {
+  for (unsigned int i = 0; i < icons_dirs_.size(); ++i) {
     CheckAndResolvePath(gedb_path, icons_dirs_[i]);
   }
 
@@ -97,7 +97,7 @@ class GEDBGenConfig {
   // TODO: deprecate search_tabs_ attribute.
   std::vector<SearchTabDefinition> search_tabs_;
   std::vector<std::string> poi_file_paths_;
-  uint database_version_;
+  unsigned int database_version_;
   deprecated bool search_tabs_enabled_ = true;
   // fusion_version_ never really used here.
   deprecated std::string fusion_version_ = std::string("");
@@ -115,7 +115,7 @@ class MapDBGenConfig {
   // TODO: deprecate search_tabs_ attribute.
   std::vector<SearchTabDefinition> search_tabs_;
   std::vector<std::string> poi_file_paths_;
-  uint database_version_;
+  unsigned int database_version_;
   deprecated bool search_tabs_enabled_ = true;
   bool use_google_imagery_ = false;
   bool is_mercator_ = false;

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +19,7 @@
 #ifndef KHSRC_COMMON_PROJECTION_H__
 #define KHSRC_COMMON_PROJECTION_H__
 
-#include <khTypes.h>
+#include <cstdint>
 #include <khTileAddrConsts.h>
 
 // Utility to calculates the integral zoom level for Google Maps that most
@@ -59,7 +60,7 @@ class Projection {
   // POD for 2D x/y pair
   class Point {
    public:
-    Point(uint64 x, uint64 y) : x_(x), y_(y) {}
+    Point(std::uint64_t x, std::uint64_t y) : x_(x), y_(y) {}
     Point(const Point& that) : x_(that.X()), y_(that.Y()) {}
 
     bool operator==(const Point& that) const {
@@ -69,20 +70,20 @@ class Projection {
       return x_ != that.X() || y_ != that.Y();
     }
 
-    uint64 X() const { return x_; }
-    uint64 Y() const { return y_; }
+    std::uint64_t X() const { return x_; }
+    std::uint64_t Y() const { return y_; }
 
    private:
     Point& operator=(const Point&);
 
-    uint64 x_;
-    uint64 y_;
+    std::uint64_t x_;
+    std::uint64_t y_;
   };
 
-  Projection(uint tilesize) : tile_size_(tilesize) {}
+  Projection(unsigned int tilesize) : tile_size_(tilesize) {}
   virtual ~Projection() {}
 
-  uint TileSize() const { return tile_size_; }
+  unsigned int TileSize() const { return tile_size_; }
   Point FromNormLatLngToPixel(const LatLng& latLng, int zoom) const;
 
   virtual Point FromLatLngToPixel(const LatLng& latLng, int zoom) const = 0;
@@ -93,7 +94,7 @@ class Projection {
   Projection(const Projection&);
   Projection& operator=(const Projection&);
 
-  uint tile_size_;
+  unsigned int tile_size_;
 };
 
 class MercatorProjection : public Projection {
@@ -126,8 +127,8 @@ class MercatorProjection : public Projection {
 
   double pixels_per_lon_degree_[Max2DClientLevel + 1];
   double pixels_per_lon_radian_[Max2DClientLevel + 1];
-  uint64 pixel_origin_[Max2DClientLevel + 1];        // center of pixels space
-  uint64 pixels_range_[Max2DClientLevel + 1];        // size of pixel space
+  std::uint64_t pixel_origin_[Max2DClientLevel + 1];        // center of pixels space
+  std::uint64_t pixels_range_[Max2DClientLevel + 1];        // size of pixel space
 };
 
 #endif  // !KHSRC_COMMON_PROJECTION_H__

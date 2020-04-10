@@ -47,7 +47,7 @@ DbRootV2Converter::DbRootV2Converter(geProtoDbroot *dbroot_proto)
 DbRootV2Converter::~DbRootV2Converter() {}
 
 bool DbRootV2Converter::ParseETADbRoot(const string& contents,
-                                       const int32 epoch) {
+                                       const std::int32_t epoch) {
   EtaDocument eta_doc;
   eta_doc.ParseFromString(contents);
   eta_utils::ParseProviders(eta_doc, dbroot_v2_proto_);
@@ -80,19 +80,19 @@ void DbRootV2Converter::AddTranslationTable() {
   }
 }
 
-int32 DbRootV2Converter::BuildTranslatedStringId(const string& str) {
+std::int32_t DbRootV2Converter::BuildTranslatedStringId(const string& str) {
   StringToIdMap::iterator it = string_entries_.find(str);
   if (it != string_entries_.end()) {
     return it->second;
   }
-  int32 new_index = last_id_++;
+  std::int32_t new_index = last_id_++;
   string_entries_.insert(std::make_pair(str, new_index));
   return new_index;
 }
 
 void DbRootV2Converter::AddStringToProto(const string& str,
                                          dbroot::StringIdOrValueProto* proto) {
-  uint32 id = BuildTranslatedStringId(str);
+  std::uint32_t id = BuildTranslatedStringId(str);
   CHECK(!proto->has_value());
   proto->set_string_id(id);
 }
@@ -107,7 +107,7 @@ void DbRootV2Converter::AddStringToProto(const string& str,
 //                   name is not empty.
 //  id_layer_map_: Entry added for (channel_id, return value).
 dbroot::NestedFeatureProto* DbRootV2Converter::NewLayer(
-    int32 channel_id,
+    std::int32_t channel_id,
     const string& layer_name,
     const string& parent_name) {
   dbroot::NestedFeatureProto* new_layer = NULL;
@@ -196,7 +196,7 @@ void DbRootV2Converter::ParseETANestedFeatures(const EtaDocument& eta_doc) {
       dbroot_v2_proto_->set_terrain_present(true);
     } else {
       string parent_name = reader.GetString("parentName", "");
-      int32 channel_id = reader.GetInt("channelId", -1);
+      std::int32_t channel_id = reader.GetInt("channelId", -1);
 
       dbroot::NestedFeatureProto* nested = NewLayer(channel_id,
                                                     layer_name,
@@ -280,13 +280,13 @@ void DbRootV2Converter::ParseETAChannelLODs(const EtaDocument& eta_doc) {
              eta_lod->name().c_str(), eta_lod->num_children());
       continue;
     }
-    int32 channel_id = reader.GetInt("channelIndex", -1);
+    std::int32_t channel_id = reader.GetInt("channelIndex", -1);
     dbroot::NestedFeatureProto* nested = GetNestedFeatureById(channel_id);
     if (!nested) {
       notify(NFY_WARN, "could not find layer id %d", channel_id);
       continue;
     }
-    int32 lod_flags = reader.GetInt("lodFlags", 0);
+    std::int32_t lod_flags = reader.GetInt("lodFlags", 0);
 
     static const int kPolygonFlag = 0x7;
     if (lod_flags == kPolygonFlag) {
@@ -314,7 +314,7 @@ void DbRootV2Converter::ParseETAChannelLODs(const EtaDocument& eta_doc) {
 }
 
 dbroot::NestedFeatureProto* DbRootV2Converter::GetNestedFeatureById(
-    int32 channel_id) {
+    std::int32_t channel_id) {
   IdLayerMap::iterator found = id_layer_map_.find(channel_id);
   if (found != id_layer_map_.end())
     return found->second;

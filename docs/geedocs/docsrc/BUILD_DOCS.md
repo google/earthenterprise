@@ -8,10 +8,10 @@ source files and then generate HTML using Sphinx.
 
 To build the documentation, the following packages (and versions) need to be installed :
 
-    python 2.7
+    python 3
     git 1.8+
-    python-pip
-    python packages: sphinx(1.7.5), GitPython(1.0.1), sphinxprettysearchresults(0.3.5)
+    python3-pip
+    python 3 packages: sphinx(1.7.5), GitPython(1.0.1), sphinxprettysearchresults(0.3.5)
 
 ## Documentation Organization
 

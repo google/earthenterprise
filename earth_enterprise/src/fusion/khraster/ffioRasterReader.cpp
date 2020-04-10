@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -92,9 +93,9 @@ ffio::raster::Reader<OutTile>::Reader(const std::string &ffdir) :
 template <class OutTile>
 bool
 ffio::raster::Reader<OutTile>::ReadTile(const std::string &filename,
-                                        uint64 fileOffset, uint32 dataLen,
+                                        std::uint64_t fileOffset, std::uint32_t dataLen,
                                         OutTile &destTile) const {
-  const uint32 srcBufSize = OutTile::TotalPixelCount *
+  const std::uint32_t srcBufSize = OutTile::TotalPixelCount *
                             khTypes::StorageSize(datatype);
 
 
@@ -110,7 +111,7 @@ ffio::raster::Reader<OutTile>::ReadTile(const std::string &filename,
     }
 
     return ffreader.ReadBlock(filename, fileOffset, dataLen,
-                              (uchar*)destTile.bufs[0]);
+                              (unsigned char*)destTile.bufs[0]);
   }
 
   // ***** read the raw data from the ff *****
@@ -121,13 +122,13 @@ ffio::raster::Reader<OutTile>::ReadTile(const std::string &filename,
   }
 
   // ***** uncompress if we have too *****
-  uchar *uncompressedBuf;
-  uint32 uncompressedSize;
+  unsigned char *uncompressedBuf;
+  std::uint32_t uncompressedSize;
   if (decompressor) {
     if ((OutTile::Storage == datatype) &&
         (OutTile::NumComp == 1)) {
       // we can uncompress directly into our destTile
-      uncompressedBuf = (uchar*)destTile.bufs[0];
+      uncompressedBuf = (unsigned char*)destTile.bufs[0];
     } else {
       tmpBuf.resize(srcBufSize);
       uncompressedBuf = &tmpBuf[0];
@@ -153,10 +154,10 @@ ffio::raster::Reader<OutTile>::ReadTile(const std::string &filename,
   if ((OutTile::Storage == datatype) &&
       (OutTile::NumComp == 1)) {
     // we already have our answer where we want it, just return
-    assert(uncompressedBuf == (uchar*)destTile.bufs[0]);
+    assert(uncompressedBuf == (unsigned char*)destTile.bufs[0]);
     return true;
   }
-  assert(uncompressedBuf != (uchar*)destTile.bufs[0]);
+  assert(uncompressedBuf != (unsigned char*)destTile.bufs[0]);
 
 
   // ***** massage the data into the format we want *****
@@ -186,8 +187,8 @@ bool
 ffio::raster::Reader<OutTile>::FindReadTile(const khTileAddr &addr,
                                             OutTile &destTile) const {
   std::string filename;
-  uint64 fileOffset = 0;
-  uint32 dataLen = 0;
+  std::uint64_t fileOffset = 0;
+  std::uint32_t dataLen = 0;
   if (FindTile(addr, filename, fileOffset, dataLen)) {
     return ReadTile(filename, fileOffset, dataLen, destTile);
   } else {

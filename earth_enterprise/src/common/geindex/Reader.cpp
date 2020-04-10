@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,7 +27,7 @@ namespace geindex {
 
 // Define the maximum levels permitted in the cache
 
-const uint32 kMaxLevelsCached = 3;
+const std::uint32_t kMaxLevelsCached = 3;
 
 namespace readerimpl {
 
@@ -44,8 +45,8 @@ class ChildBucketCache {
  public:
   class Bucket {
    public:
-    uint32 childAddrIndexes[kChildAddrsPerBucket];
-    uint32 entryAddrIndexes[kChildAddrsPerBucket];
+    std::uint32_t childAddrIndexes[kChildAddrsPerBucket];
+    std::uint32_t entryAddrIndexes[kChildAddrsPerBucket];
 
     Bucket(void) {
       std::uninitialized_fill(&childAddrIndexes[0],
@@ -59,7 +60,7 @@ class ChildBucketCache {
   
   ~ChildBucketCache() {}
 
-  static khTransferGuard<ChildBucketCache> Create(uint numLevelsCached) {
+  static khTransferGuard<ChildBucketCache> Create(unsigned int numLevelsCached) {
     assert(numLevelsCached > 0);
     assert(numLevelsCached <= kMaxLevelsCached);
     return TransferOwnership(new ChildBucketCache(numLevelsCached));
@@ -78,22 +79,22 @@ class ChildBucketCache {
  private:
   // compute these at compile time since we need to use them a lot
   // RAM size limitations mean we can never cache more than 3 levels
-  static const uint32 TotalBucketCountByMaxLevel[kMaxLevelsCached];
+  static const std::uint32_t TotalBucketCountByMaxLevel[kMaxLevelsCached];
 
   // Since BucketPath can be of bucket_level [0, NumBucketLevelsCached-1]
   // and NumBucketLevelsCached <= kMaxLevelsCached(i.e 3), bucket_level in [0,2]
   // i.e path_level in [0,8] i.e path_bits in [0,16] i.e path_as_index [0,2^16]
-  static uint32 Hash(const BucketPath &path) {
-    uint bucket_level = path.BucketLevel();
+  static std::uint32_t Hash(const BucketPath &path) {
+    unsigned int bucket_level = path.BucketLevel();
     if (bucket_level == 0) {
       return 0;
     }
     return (
         TotalBucketCountByMaxLevel[bucket_level-1] +  // index upto prior level
-        static_cast<uint32>(path.AsIndex(path.Level())));
+        static_cast<std::uint32_t>(path.AsIndex(path.Level())));
   }
 
-  const uint kNumLevelsCached;
+  const unsigned int kNumLevelsCached;
   // The hash table to buckets, the hashing takes the BucketPath and converts to
   // index. The BucketPath can be of bucket_level [0, NumBucketLevelsCached-1]
   // maps from BucketPath to index to childBuckets where the bucket is stored.
@@ -102,7 +103,7 @@ class ChildBucketCache {
   geSegmentedArray<ChildBucketAddr> childAddrs;
   geSegmentedArray<EntryBucketAddr> entryAddrs;
 
-  ChildBucketCache(uint numLevelsCached)
+  ChildBucketCache(unsigned int numLevelsCached)
       : kNumLevelsCached(numLevelsCached),
         // -1 as indexing starts from 0 where as numLevelsCached starts from 1
         bucket_path_to_index_map(TotalBucketCountByMaxLevel[numLevelsCached-1],
@@ -125,7 +126,7 @@ class ChildBucketCache {
 
 // compute these at compile time since we need to use them a lot
 // RAM size limitations mean we can never cache more than 3 levels
-const uint32 ChildBucketCache::TotalBucketCountByMaxLevel[kMaxLevelsCached] = {
+const std::uint32_t ChildBucketCache::TotalBucketCountByMaxLevel[kMaxLevelsCached] = {
   1,                  // numLevelsCached == 1, only 1 bucket
   1 + 256,            // numLevelsCached == 2, 1 + 4 ^ kQuadLevelsPerBucket
   1 + 256 + 256*256   // same logic as above, note that each quad level is 2 bit
@@ -142,9 +143,9 @@ ChildBucketAddr ChildBucketCache::GetChildBucketAddr
   // Or it may be for one if it's children.
   // But it must have at least kQuadLevelsPerBucket levels
   assert(subaddr.Level() >= kQuadLevelsPerBucket);
-  uint pos = subaddr.AsIndex(kQuadLevelsPerBucket);
+  unsigned int pos = subaddr.AsIndex(kQuadLevelsPerBucket);
 
-  uint32 index = childBuckets[childId].childAddrIndexes[pos];
+  std::uint32_t index = childBuckets[childId].childAddrIndexes[pos];
   if (index != kInvalidAddrIndex) {
     return childAddrs[index];
   }
@@ -159,10 +160,10 @@ EntryBucketAddr ChildBucketCache::GetEntryBucketAddr
   // The subaddr must have exactly kQuadLevelsPerBucket levels, otherwise
   // This function should have been called on a different Bucket
   assert(subaddr.Level() == kQuadLevelsPerBucket);
-  uint pos = subaddr.AsIndex(kQuadLevelsPerBucket);
+  unsigned int pos = subaddr.AsIndex(kQuadLevelsPerBucket);
 
   // 0 is a sentinel that means it has no Addr
-  uint32 index = childBuckets[childId].entryAddrIndexes[pos];
+  std::uint32_t index = childBuckets[childId].entryAddrIndexes[pos];
   if (index != kInvalidAddrIndex) {
     return entryAddrs[index];
   }
@@ -170,13 +171,13 @@ EntryBucketAddr ChildBucketCache::GetEntryBucketAddr
 }
 
 ChildBucketId ChildBucketCache::Find(const BucketPath &addr) {
-  uint32 pos = Hash(addr);
+  std::uint32_t pos = Hash(addr);
   assert(pos < bucket_path_to_index_map.size());
   return bucket_path_to_index_map[pos];
 }
 
 void ChildBucketCache::MarkBucketNonExistent(const BucketPath &addr) {
-  uint32 pos = Hash(addr);
+  std::uint32_t pos = Hash(addr);
   assert(pos < bucket_path_to_index_map.size());
   // Make sure it's still "unknown" when we mark it as non-existent
   assert(bucket_path_to_index_map[pos] == kUnknownBucket);
@@ -188,7 +189,7 @@ ChildBucketId ChildBucketCache::FillBucket(const BucketPath &addr,
                                            const LoadedChildBucket &loadBucket)
 {
   Bucket newBucket;
-  for (uint i = 0; i < kChildAddrsPerBucket; ++i) {
+  for (unsigned int i = 0; i < kChildAddrsPerBucket; ++i) {
     if (loadBucket.childAddrs[i]) {
       newBucket.childAddrIndexes[i] = childAddrs.size();
       childAddrs.push_back(loadBucket.childAddrs[i]);
@@ -203,7 +204,7 @@ ChildBucketId ChildBucketCache::FillBucket(const BucketPath &addr,
   // add the new bucket into the appropriate slot
   const ChildBucketId newId = childBuckets.size();
   childBuckets.push_back(newBucket);
-  uint32 pos = Hash(addr);
+  std::uint32_t pos = Hash(addr);
   assert(pos < bucket_path_to_index_map.size());
   // Make sure it's still "unknown" when we mark it as non-existent
   assert(bucket_path_to_index_map[pos] == kUnknownBucket);
@@ -223,7 +224,7 @@ ReaderBase::~ReaderBase(void) {
 }
 
 ReaderBase::ReaderBase(geFilePool &filepool_, const std::string &filename,
-                       uint numBucketLevelsCached) :
+                       unsigned int numBucketLevelsCached) :
     NumBucketLevelsCached(numBucketLevelsCached),
     bundleReader(TransferOwnership(new IndexBundleReader(filepool_,
                                                          filename))),
@@ -448,7 +449,7 @@ EntryBucketAddr ReaderBase::LoadChildBucketToGetEntryAddr
 }
 
 PacketFileReaderBase*
-ReaderBase::GetPacketFileReader(uint32 fileNum)
+ReaderBase::GetPacketFileReader(std::uint32_t fileNum)
 {
   khLockGuard lock(packetfileMutex);
   if (fileNum >= packetFileReaders.size()) {
@@ -483,7 +484,7 @@ void ReaderBase::LoadExternalData(const ExternalDataAddress &addr,
     ->ReadAtCRC(addr.fileOffset, buf, addr.size);
 }
 
-uint32 ReaderBase::GetPacketExtra(uint32 packetfile_num) {
+ std::uint32_t ReaderBase::GetPacketExtra(std::uint32_t packetfile_num) {
   return bundleReader->header.GetPacketExtra(packetfile_num);
 }
 

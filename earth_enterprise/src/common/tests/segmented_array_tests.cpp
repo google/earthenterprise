@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,19 +22,19 @@
 
 class CountingClass {
  public:
-  static uint count;
+  static unsigned int count;
 
   CountingClass(void) { ++count; }
   CountingClass(const CountingClass &) { ++count; }
   ~CountingClass(void) { --count; }
 };
-uint CountingClass::count = 0;
+unsigned int CountingClass::count = 0;
 
 
 class geSegmentedArrayTest : public UnitTest<geSegmentedArrayTest> {
  public:
 
-  bool Harness(bool (geSegmentedArrayTest::*testFunc)(uint, uint)) {
+  bool Harness(bool (geSegmentedArrayTest::*testFunc)(unsigned int, unsigned int)) {
     return 
       // segment size 1
       (this->*testFunc)(0, 0) &&
@@ -76,11 +77,11 @@ class geSegmentedArrayTest : public UnitTest<geSegmentedArrayTest> {
       (this->*testFunc)(10, 10000);
   }
 
-  bool BasicSegmentationSub(uint segSizeLog2, uint iterations) {
-    geSegmentedArray<uint> array(segSizeLog2);
+  bool BasicSegmentationSub(unsigned int segSizeLog2, unsigned int iterations) {
+    geSegmentedArray< unsigned int>  array(segSizeLog2);
 
     // push_back test
-    for (uint i = 0; i < iterations; ++i) {
+    for (unsigned int i = 0; i < iterations; ++i) {
       array.push_back(i);
     }
 
@@ -90,23 +91,23 @@ class geSegmentedArrayTest : public UnitTest<geSegmentedArrayTest> {
       fprintf(stderr,
               "BasicSegmentation(%u, %u): Bad size %u != %u\n",
               segSizeLog2, iterations,
-              (uint)array.size(), iterations);
+              (unsigned int)array.size(), iterations);
       return false;
     }
 
     // num segments test
-    uint expectedSegmentCount =
+    unsigned int expectedSegmentCount =
       (iterations + array.kSegmentSize - 1)/array.kSegmentSize;
     if (array.segments.size() != expectedSegmentCount) {
       fprintf(stderr,
               "BasicSegmentation(%u, %u): Bad number of segments %u != %u\n",
               segSizeLog2, iterations,
-              (uint)array.segments.size(), expectedSegmentCount);
+              (unsigned int)array.segments.size(), expectedSegmentCount);
       return false;
     }
 
     // value fetch test
-    for (uint i = 0; i < iterations; ++i) {
+    for (unsigned int i = 0; i < iterations; ++i) {
       if (array[i] != i) {
         fprintf(stderr,
                 "BasicSegmentation(%u, %u): Bad push_back value [%u] == %u\n",
@@ -117,10 +118,10 @@ class geSegmentedArrayTest : public UnitTest<geSegmentedArrayTest> {
     }
 
     // value set test
-    for (uint i = 0; i < iterations; ++i) {
+    for (unsigned int i = 0; i < iterations; ++i) {
       array[i] = iterations - i;
     }
-    for (uint i = 0; i < iterations; ++i) {
+    for (unsigned int i = 0; i < iterations; ++i) {
       if (array[i] != iterations - i) {
         fprintf(stderr,
                 "BasicSegmentation(%u, %u): Bad set value [%u] == %u\n",
@@ -138,13 +139,13 @@ class geSegmentedArrayTest : public UnitTest<geSegmentedArrayTest> {
 
 
 
-  bool ConstructDestroySub(uint segSizeLog2, uint iterations) {
+  bool ConstructDestroySub(unsigned int segSizeLog2, unsigned int iterations) {
     CountingClass::count = 0;
 
     {
       geSegmentedArray<CountingClass> array(segSizeLog2);
 
-      for (uint i = 0; i < iterations; ++i) {
+      for (unsigned int i = 0; i < iterations; ++i) {
         array.push_back(CountingClass());
       }
 

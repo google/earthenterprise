@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -87,7 +88,7 @@ LayerConfig LayerGroupProperties::GetConfig() {
   layer_config_.isVisible = isVisibleCheck->isChecked();
   layer_config_.isExpandable = isExpandableCheck->isEnabled() &&
                                isExpandableCheck->isChecked();
-  layer_config_.channelId = static_cast<uint>(idSpinBox->value());
+  layer_config_.channelId = static_cast< unsigned int> (idSpinBox->value());
   layer_config_.asset_uuid_ = uuidEdit->text().ascii();
 
   return layer_config_;

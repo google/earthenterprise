@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,8 +14,8 @@
 // limitations under the License.
 
 
+#include <cstdint>
 #include <string>
-#include <khTypes.h>
 #include <autoingest/.idl/storage/AssetDefs.h>
 #requiresgetheapusage
 
@@ -27,12 +28,12 @@ class MaskgenConfig {
 #pragma NoVoidConstructor
   enum Mode { Unset, Mask, Prep, Preview }; // Unset needed for backwards
   // compatibility w/ old configs
-  uint feather;
+  unsigned int feather;
   Mode mode;
   int  band = 0;
   int  fillvalue = -1;      // -1 -> use corner colors
-  uint threshold = uint(0);
-  uint holesize  = uint(0); // 0 -> don't check for holes
+  unsigned int threshold = uint(0);
+  unsigned int holesize  = uint(0); // 0 -> don't check for holes
   bool whitefill = false;   // do extra checks to find AirPhoto type white
                             // blocks near edge of fill.
   // For terrain, a comma-separated list of values and ranges to be masked out.
@@ -43,7 +44,7 @@ class MaskgenConfig {
 
 #hquote
   void SetTypeDefaults(AssetDefs::Type type);
-  void SetFromOldValues(Mode oldmode, uint oldfeather);
+  void SetFromOldValues(Mode oldmode, unsigned int oldfeather);
   MaskgenConfig(AssetDefs::Type type) {
     SetTypeDefaults(type);
   }
@@ -83,7 +84,7 @@ void MaskgenConfig::SetTypeDefaults(AssetDefs::Type type) {
   }
 }
 
-void MaskgenConfig::SetFromOldValues(Mode oldmode, uint oldfeather) {
+void MaskgenConfig::SetFromOldValues(Mode oldmode, unsigned int oldfeather) {
   mode      =  oldmode;
   feather   =  oldfeather;
   band      =  1; // green

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 The Open GEE Contributors
+ * Copyright 2020 The Open GEE Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,11 @@ class TestItem : public TestItemStorage {
     static int nextValue;
     static string loadFile;
     int val;
+<<<<<<< HEAD
+=======
+    time_t timestamp; 
+    std::uint64_t filesize;
+>>>>>>> upstream/master
     string name;
     TestItem() : val(nextValue++), name("TestItem") {}
     static AssetPointerType<TestItem> Load(const string & filename) {
@@ -57,6 +62,27 @@ class TestXMLException : public XMLException {
     }
 };
 
+<<<<<<< HEAD
+=======
+// Define a TestItem-specific version of GetFileInfo for testing
+static std::uint64_t getFileInfoSize;
+static time_t getFileInfoTime;
+static bool getFileInfoReturnValue;
+template<>
+bool GetFileInfo<TestItem>(const std::string &fname, std::uint64_t &size, time_t &mtime) {
+  size = getFileInfoSize;
+  mtime = getFileInfoTime;
+  return getFileInfoReturnValue;
+}
+
+// Define a TestItem-specific version of ReadXMLDocument for testing
+static std::unique_ptr<GEDocument> geDocPtr = nullptr;
+template<>
+std::unique_ptr<GEDocument> ReadXMLDocument<TestItem>(const std::string &filename) {
+  return std::move(geDocPtr);
+}
+
+>>>>>>> upstream/master
 // We throw various exceptions from this function to test exception handling.
 enum ExceptionType {XML, DOM, STD, OTHER, NONE};
 static ExceptionType exceptionToThrow;

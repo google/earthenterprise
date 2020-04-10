@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,8 +65,8 @@ class gstSelector : public gstMemory {
   int layer() const { return layer_; }
   bool HasAttrib(void) const;
 
-  gstRecordHandle getPickRecord(uint id);
-  gstGeodeHandle getPickGeode(uint id);
+  gstRecordHandle getPickRecord(unsigned int id);
+  gstGeodeHandle getPickGeode(unsigned int id);
 
   void deselect(int* rows, int count, bool selected);
 
@@ -88,7 +89,7 @@ class gstSelector : public gstMemory {
     khProgressMeter *logProgress);
 
   bool queryComplete(void) const { return query_complete_; }
-  uint32 NumSrcFeatures(void) const;
+  std::uint32_t NumSrcFeatures(void) const;
   double AverageSrcFeatureDiameter() const;
 
   void drawFeatures(int* max_count, const gstDrawState&);
@@ -127,25 +128,25 @@ class gstSelector : public gstMemory {
                          JSDisplayBundle &jsbundle,
                          bool is_mercator_preview);
 
-  void ReduceRoads(const bool remove_overlapping_segments, uint32 level,
+  void ReduceRoads(const bool remove_overlapping_segments, std::uint32_t level,
                    gstFeatureSet *fset);
   void ReducePolylines(gstFeatureSet *fset);
   void ReducePolygons(gstFeatureSet *fset);
 
   // make static to allow outside objects to use this function
   static int RemoveOverlappingSegments(GeodeList* glist, int level);
-  static uint RemoveEmptyFeatures(GeodeList* geode_list,
+  static unsigned int RemoveEmptyFeatures(GeodeList* geode_list,
                                   RecordList* record_list,
-                                  uint min_vertex_count);
+                                  unsigned int min_vertex_count);
 
   // Remove duplicate sites from the given site set.  Duplicate sites
   // have the same name and position and reside in the same layer.
   static int RemoveDuplicateSites(VertexList* vlist_ptr,
                                   RecordList* rlist_ptr);
 
-  uint NumFilters() const { return uint(filters_.size()); }
-  gstFilter* GetFilter(uint idx) const {
-    return idx < static_cast<uint>(filters_.size())
+  unsigned int NumFilters() const { return uint(filters_.size()); }
+  gstFilter* GetFilter(unsigned int idx) const {
+    return idx < static_cast< unsigned int> (filters_.size())
       ? filters_[idx] : NULL;
   }
 
@@ -157,8 +158,8 @@ class gstSelector : public gstMemory {
   const SelectList& sortColumnOrThrow(int col, bool ascending);
 
   void DumpBuildStats();
-  void UpdateSimplifyStats(uint features_removed,
-                           uint vertices_removed,
+  void UpdateSimplifyStats(unsigned int features_removed,
+                           unsigned int vertices_removed,
                            double max_error);
 
  private:
@@ -189,17 +190,17 @@ class gstSelector : public gstMemory {
 
   // collect some statistics when building
   struct BuildStats {
-    uint64 total_features;
-    uint64 total_vertexes;
-    uint64 join_count;
-    uint64 duplicate_features;
-    uint64 overlap_count;
-    uint64 reduced_features;
-    uint64 reduced_vertexes;
-    uint64 culled_features;
-    uint64 culled_vertexes;
+    std::uint64_t total_features;
+    std::uint64_t total_vertexes;
+    std::uint64_t join_count;
+    std::uint64_t duplicate_features;
+    std::uint64_t overlap_count;
+    std::uint64_t reduced_features;
+    std::uint64_t reduced_vertexes;
+    std::uint64_t culled_features;
+    std::uint64_t culled_vertexes;
     double max_simplify_error;
-    uint64 duplicate_sites;
+    std::uint64_t duplicate_sites;
 
     BuildStats() { Reset(); }
     void Reset() {

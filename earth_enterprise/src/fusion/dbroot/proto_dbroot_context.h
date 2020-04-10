@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +29,8 @@
 
 #include <set>
 #include <map>
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "fusion/autoingest/.idl/gstProvider.h"
 #include "fusion/autoingest/.idl/Locale.h"
 #include "fusion/autoingest/.idl/storage/IconReference.h"
@@ -37,7 +39,7 @@ class ProtoDbrootContext {
   friend class Test_dbrootgen;
 
  private:
-  typedef std::map<uint32, gstProvider> ProviderMap;
+  typedef std::map<std::uint32_t, gstProvider> ProviderMap;
   typedef std::set<IconReference>       UsedIconSet;
 
  public:
@@ -45,7 +47,7 @@ class ProtoDbrootContext {
 
   ProtoDbrootContext(void);
   explicit ProtoDbrootContext(TestingFlagType testing_flag);
-  const gstProvider* GetProvider(uint32 id) const;
+  const gstProvider* GetProvider(std::uint32_t id) const;
 
   // Add icon references to the various context sets.
   // An IconReference in fusion references an image stack (single image

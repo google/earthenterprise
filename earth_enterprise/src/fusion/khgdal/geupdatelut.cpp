@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -86,7 +87,7 @@ main(int argc, char *argv[])
       notify(NFY_FATAL, "Unable to open lut file %s",
              lutfilename.c_str());
     }
-    uint numbands;
+    unsigned int numbands;
     in >> numbands;
     if (!in) {
       notify(NFY_FATAL, "Unable to interpret lut file %s",
@@ -96,7 +97,7 @@ main(int argc, char *argv[])
       notify(NFY_FATAL, "Incompatible LUT has %u bands. Imagery has %u.",
              numbands, static_cast<unsigned>(virtraster.outputBands.size()));
     }
-    for (uint b = 0; b < numbands; ++b) {
+    for (unsigned int b = 0; b < numbands; ++b) {
       khVirtualRaster::OutputBand &band = virtraster.outputBands[b];
       GDALDataType intype  = GDTFromName(band.inDatatype);
       // for now the presence of a LUT implies an output type of
@@ -105,13 +106,13 @@ main(int argc, char *argv[])
       band.outDatatype = GDALGetDataTypeName(outtype);
       switch (intype) {
         case GDT_Byte:
-          ParseAndStoreLUT<uchar>(in, outtype, band.defaultLut);
+          ParseAndStoreLUT<unsigned char>(in, outtype, band.defaultLut);
           break;
         case GDT_UInt16:
-          ParseAndStoreLUT<uint16>(in, outtype, band.defaultLut);
+          ParseAndStoreLUT<std::uint16_t>(in, outtype, band.defaultLut);
           break;
         case GDT_Int16:
-          ParseAndStoreLUT<int16>(in, outtype, band.defaultLut);
+          ParseAndStoreLUT<std::int16_t>(in, outtype, band.defaultLut);
           break;
         default:
           notify(NFY_FATAL,

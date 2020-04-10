@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,6 +34,7 @@
 #include <ctype.h>
 
 #include <algorithm>
+#include <cstdint>
 #include <map>
 #include <numeric>
 #include <set>
@@ -41,7 +43,6 @@
 
 #include "khraster/khRasterProduct.h"
 #include "notify.h"
-#include "khTypes.h"
 #include "khGetopt.h"
 #include "khgdal/khgdal.h"
 #include "khgdal/khGeoExtents.h"
@@ -96,8 +97,8 @@ class GDALMaskFloodFill : public TiledFloodFill {
                        tolerance,
                        hole_size),
         alpha_(alpha),
-        image_tile_(new uchar[tile_width * tile_height]),
-        mask_tile_(new uchar[tile_width * tile_height]),
+        image_tile_(new unsigned char[tile_width * tile_height]),
+        mask_tile_(new unsigned char[tile_width * tile_height]),
         last_tile_read_(-1),
         opacities_(num_tiles_x_ * num_tiles_y_, kNotTouched) {}
 
@@ -137,7 +138,7 @@ class GDALMaskFloodFill : public TiledFloodFill {
     }
   }
 
-  virtual uchar *LoadMaskTile(int tile_x, int tile_y, double *old_opacity) {
+  virtual unsigned char *LoadMaskTile(int tile_x, int tile_y, double *old_opacity) {
     double &tile_opacity = opacities_[tile_x + tile_y * num_tiles_x_];
     if (tile_opacity == kNotTouched) {
       tile_opacity = kNotFilled;
@@ -181,8 +182,8 @@ class GDALMaskFloodFill : public TiledFloodFill {
 
  protected:
   GDALRasterBand *alpha_;
-  uchar *image_tile_;
-  uchar *mask_tile_;
+  unsigned char *image_tile_;
+  unsigned char *mask_tile_;
   int last_tile_read_;  // used to ensure that the saved tile is same as read
   std::vector<double> opacities_;
 };
@@ -194,8 +195,8 @@ class GDALMaskFloodFill : public TiledFloodFill {
 class FloodFillRPImagery : public GDALMaskFloodFill {
  public:
   FloodFillRPImagery(const khRasterProductLevel &rp_level,
-                     uint mask_band,
-                     khExtents<uint32> extents,
+                     unsigned int mask_band,
+                     khExtents<std::uint32_t> extents,
                      GDALRasterBand *alpha,
                      int image_width, int image_height,
                      int tile_width, int tile_height,
@@ -236,8 +237,8 @@ class FloodFillRPImagery : public GDALMaskFloodFill {
     DoFloodFill();
   }
 
-  virtual const uchar *LoadImageTile(int tile_x, int tile_y) {
-    khExtents<uint32> tileExtents(
+  virtual const unsigned char *LoadImageTile(int tile_x, int tile_y) {
+    khExtents<std::uint32_t> tileExtents(
         XYOrder,
         extents_.beginX() + tile_x * tile_width_,
         extents_.beginX() + (tile_x+1) * tile_width_,
@@ -256,8 +257,8 @@ class FloodFillRPImagery : public GDALMaskFloodFill {
   }
  private:
   const khRasterProductLevel &rp_level_;
-  uint band_;
-  khExtents<uint32> extents_;
+  unsigned int band_;
+  khExtents<std::uint32_t> extents_;
 };
 
 
@@ -265,10 +266,10 @@ class FloodFillRPImagery : public GDALMaskFloodFill {
 // FloodFillRPTerrain for tiled flooding and main() for in-memory flooding.
 void ReadTerrainToBuffer(const khRasterProductLevel &rp_level,
                          const int terrain_band,
-                         const khExtents<uint32> &extract_extents,
+                         const khExtents<std::uint32_t> &extract_extents,
                          float *terrain_buffer) {
-  uchar *read_buffers[] = {reinterpret_cast<uchar *>(&terrain_buffer[0])};
-  uint read_bands[] = {static_cast<uint>(terrain_band)};
+  unsigned char *read_buffers[] = {reinterpret_cast<uchar *>(&terrain_buffer[0])};
+  unsigned int read_bands[] = {static_cast< unsigned int> (terrain_band)};
   // Read terrain data into memory.
   rp_level.ReadImageIntoBufs(extract_extents, read_buffers, read_bands,
                              1 /* numbands */, khTypes::Float32);
@@ -280,21 +281,21 @@ void ReadTerrainToBuffer(const khRasterProductLevel &rp_level,
 typedef std::pair<float, float> Interval;
 typedef std::vector<Interval> FillRangeSet;
 
-// Convert the float terrain data to a uchar image in image_buffer.  All terrain
+// Convert the float terrain data to a unsigned char image in image_buffer.  All terrain
 // "pixels" that are in ranges in fill_values are 0 and all other pixels are
 // 255. Used by both class FloodFillRPTerrain for tiled flooding and main() for
 // in-memory flooding.
 void ConvertTerrainToImage(const float *terrain_buffer,
                            const int width, const int height,
                            const FillRangeSet &fill_values,
-                           uchar *image_buffer) {
-  // Convert to uchar data, converting to 0 when the pixel may be filled and 255
+                           unsigned char *image_buffer) {
+  // Convert to unsigned char data, converting to 0 when the pixel may be filled and 255
   // when it should not be filled.
   for (int x = 0; x < width; ++x)
     for (int y = 0; y < height; ++y) {
       float elev = terrain_buffer[y * width + x];
       char pixel_value = 255;
-      for (uint i = 0; i < fill_values.size(); ++i)
+      for (unsigned int i = 0; i < fill_values.size(); ++i)
         if (elev >= fill_values[i].first &&
             elev <= fill_values[i].second) {
           pixel_value = 0;
@@ -305,13 +306,13 @@ void ConvertTerrainToImage(const float *terrain_buffer,
 }
 
 // FloodFillTerrain provides out-of-memory flood filling for terrain input. It
-// performs the correct transformations from terrain input to the uchar images
+// performs the correct transformations from terrain input to the unsigned char images
 // filled by the base class.
 class FloodFillRPTerrain : public GDALMaskFloodFill {
  public:
   FloodFillRPTerrain(const khRasterProductLevel &rp_level,
                      int terrain_band,
-                     khExtents<uint32> extents,
+                     khExtents<std::uint32_t> extents,
                      GDALRasterBand *alpha,
                      int image_width, int image_height,
                      int tile_width, int tile_height,
@@ -350,7 +351,7 @@ class FloodFillRPTerrain : public GDALMaskFloodFill {
       fill_values_.push_back(Interval(elev - tolerance, elev + tolerance));
     }
 
-    // Fill all 0-valued pixels in the uchar images returned from
+    // Fill all 0-valued pixels in the unsigned char images returned from
     // ConvertTerrainToImage().
     AddFillValue(0);
 
@@ -360,7 +361,7 @@ class FloodFillRPTerrain : public GDALMaskFloodFill {
 
   // Read the given tile of terrain data into the buffer.
   void ReadTerrainTile(int tile_x, int tile_y, float *terrain_buffer) {
-    khExtents<uint32> tile_extents(
+    khExtents<std::uint32_t> tile_extents(
         XYOrder,
         extents_.beginX() + tile_x * tile_width_,
         extents_.beginX() + (tile_x+1) * tile_width_,
@@ -374,9 +375,9 @@ class FloodFillRPTerrain : public GDALMaskFloodFill {
     ReadTerrainToBuffer(rp_level_, band_, tile_extents, terrain_buffer);
   }
 
-  // Read the given tile of terrain data, and convert to a uchar image with the
+  // Read the given tile of terrain data, and convert to a unsigned char image with the
   // appropriate fill values.
-  virtual const uchar *LoadImageTile(int tile_x, int tile_y) {
+  virtual const unsigned char *LoadImageTile(int tile_x, int tile_y) {
     khDeleteGuard<float, ArrayDeleter> terrain_buffer(
       TransferOwnership(new float[tile_width_ * tile_height_]));
     ReadTerrainTile(tile_x, tile_y, terrain_buffer);
@@ -387,7 +388,7 @@ class FloodFillRPTerrain : public GDALMaskFloodFill {
  private:
   const khRasterProductLevel &rp_level_;
   int band_;
-  khExtents<uint32> extents_;
+  khExtents<std::uint32_t> extents_;
   FillRangeSet fill_values_;
 };
 
@@ -454,7 +455,7 @@ void ParseFillValues(std::string fill_string, FillRangeSet *fill_values) {
   using std::string;
   std::vector<string> ranges;
   TokenizeString(fill_string, ranges, ",");
-  for (uint i = 0; i < ranges.size(); ++i) {
+  for (unsigned int i = 0; i < ranges.size(); ++i) {
     const string &range = ranges[i];
     string::size_type colon_i = range.find_first_of(":");
     if (colon_i == string::npos) {
@@ -499,14 +500,14 @@ int main(int argc, char *argv[]) {
     bool help = false;
     Mode mode = MASK_MODE;
     bool debug = false;
-    uint max_size = kDefaultMaxMaskSize;
-    uint max_size_in_memory = kDefaultMaxInMemorySize;
+    unsigned int max_size = kDefaultMaxMaskSize;
+    unsigned int max_size_in_memory = kDefaultMaxInMemorySize;
     // if fill_value not given, use corner color.
     int fill_value = TiledFloodFill::kNoFillValueSpecified;
-    uint tolerance = 0;
-    uint feather_radius = 0;
-    uint band = 1;
-    uint hole_size = 0;
+    unsigned int tolerance = 0;
+    unsigned int feather_radius = 0;
+    unsigned int band = 1;
+    unsigned int hole_size = 0;
     bool show_formats = 0;
     bool fill_white = false;
     std::string oformat("GTiff");
@@ -601,7 +602,7 @@ int main(int argc, char *argv[]) {
       // This is necessary to optimize the mask generation for the single
       // interval case.
       fill_value = static_cast<int>(fill_values[0].first);
-      tolerance = static_cast<uint>(fill_values[0].second - fill_value);
+      tolerance = static_cast< unsigned int> (fill_values[0].second - fill_value);
     }
 
     // load the output driver
@@ -640,9 +641,9 @@ int main(int argc, char *argv[]) {
            ToString(rp->componentType()).c_str());
 
     // Automatically adjust level for generating alpha mask.
-    uint extract_level = rp->maxLevel();  // maxLevel() guaranteed > 0
+    unsigned int extract_level = rp->maxLevel();  // maxLevel() guaranteed > 0
     bool is_mercator = rp->projectionType() == khTilespace::MERCATOR_PROJECTION;
-    khSize<uint64> checkSize = is_mercator ?
+    khSize<std::uint64_t> checkSize = is_mercator ?
         MeterExtentsToPixelLevelRasterSize(rp->degOrMeterExtents(),
                                            extract_level) :
         DegExtentsToPixelLevelRasterSize(rp->degOrMeterExtents(),
@@ -710,16 +711,16 @@ int main(int argc, char *argv[]) {
         RasterProductTilespaceMercator.AveragePixelSizeInMercatorMeters(
             extract_level) :
         RasterProductTilespaceFlat.DegPixelSize(extract_level);
-    khOffset<uint32>
+    khOffset<std::uint32_t>
       extractOffset(XYOrder,
-                    static_cast<uint32>(((rp->degOrMeterExtents().beginX() -
+                    static_cast<std::uint32_t>(((rp->degOrMeterExtents().beginX() -
                                           degTileExtents.beginX()) / pixelsize)
                                         + 0.5),
-                    static_cast<uint32>(((rp->degOrMeterExtents().beginY() -
+                    static_cast<std::uint32_t>(((rp->degOrMeterExtents().beginY() -
                                           degTileExtents.beginY()) / pixelsize)
                                         + 0.5));
-    khSize<uint32> extract_size(checkSize.width, checkSize.height);
-    khExtents<uint32>extract_extents(extractOffset, extract_size);
+    khSize<std::uint32_t> extract_size(checkSize.width, checkSize.height);
+    khExtents<std::uint32_t>extract_extents(extractOffset, extract_size);
     notify(NFY_NOTICE, "output image offset, pixels: (xy) %u, %u",
            extract_extents.beginX(), extract_extents.beginY());
     notify(NFY_NOTICE, "output image size, pixels: (wh) %u, %u",
@@ -732,9 +733,9 @@ int main(int argc, char *argv[]) {
     }
 
     // GTiff gets very slow to write to when >4G. Warn the user in this case.
-    if ((static_cast<int64>(extract_extents.width()) *
-         static_cast<int64>(extract_extents.height())) >
-        std::numeric_limits<uint32>::max() / 4 &&
+    if ((static_cast<std::int64_t>(extract_extents.width()) *
+         static_cast<std::int64_t>(extract_extents.height())) >
+        std::numeric_limits<std::uint32_t>::max() / 4 &&
         oformat == "GTiff")
       notify(NFY_WARN, "Output format GTiff is slow for large masks."
              " Consider \"-oformat HFA\".");
@@ -774,10 +775,10 @@ int main(int argc, char *argv[]) {
     } else {
       if (in_memory) {
         // Extract band for alpha generation
-        khDeleteGuard<uchar, ArrayDeleter> read_alpha_buf(
-          TransferOwnership(new uchar[extract_size.width*extract_size.height]));
+        khDeleteGuard<unsigned char, ArrayDeleter> read_alpha_buf(
+          TransferOwnership(new unsigned char[extract_size.width*extract_size.height]));
         if (rp->type() == khRasterProduct::Heightmap) {
-          // If the image is a heightmap, convert it to a uchar image where
+          // If the image is a heightmap, convert it to a unsigned char image where
           // all maskable pixels are 0 and non-maskable pixels are 255. Then
           // floodfill 0-valued pixels in the image.
           int width = extract_extents.width();
@@ -801,8 +802,8 @@ int main(int argc, char *argv[]) {
           fill_value = 0;
           tolerance = 0;
         } else {
-          uchar *readBufs[]  = {&read_alpha_buf[0]};
-          uint   readBands[] = {band};
+          unsigned char *readBufs[]  = {&read_alpha_buf[0]};
+          unsigned int   readBands[] = {band};
           // will succeed or throw trying
           rp->level(extract_level).ReadImageIntoBufs(extract_extents,
                                                      readBufs, readBands,
@@ -811,10 +812,10 @@ int main(int argc, char *argv[]) {
         }
 
         // Calculate alpha mask.
-        khDeleteGuard<uchar, ArrayDeleter> calc_alpha_buf;
-        uchar *alpha_buf = NULL;
+        khDeleteGuard<unsigned char, ArrayDeleter> calc_alpha_buf;
+        unsigned char *alpha_buf = NULL;
         if (mode != PREP_MODE) {
-          calc_alpha_buf = TransferOwnership(new uchar[extract_size.width *
+          calc_alpha_buf = TransferOwnership(new unsigned char[extract_size.width *
                                                        extract_size.height]);
           notify(NFY_NOTICE, "Flood filling image in memory");
           InMemoryFloodFill maskgen(read_alpha_buf, calc_alpha_buf,

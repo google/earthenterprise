@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -191,8 +192,8 @@ class FeatureEditor : public FeatureEditorBase {
   bool editing_vertex_;
   FeatureItem* current_feature_item_;
   gstGeodeHandle current_geode_;
-  uint current_geode_subpart_;
-  uint current_geode_vertex_;
+  unsigned int current_geode_subpart_;
+  unsigned int current_geode_vertex_;
   gstVertex modified_vertex_;
 
   gstGeodeHandle geode_copy_buffer_;

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +44,7 @@ void Get2VersionedElement(khxml::DOMElement *parent,
                          tagname);
   }
 
-  uint version = 0;
+  unsigned int version = 0;
   GetAttributeOrDefault(elem, VersionAttrName, version, uint(0));
 
   switch (version) {
@@ -74,7 +75,7 @@ void Get3VersionedElement(khxml::DOMElement *parent,
                          tagname);
   }
 
-  uint version = 0;
+  unsigned int version = 0;
   GetAttributeOrDefault(elem, VersionAttrName, version, uint(0));
 
   switch (version) {
@@ -101,7 +102,7 @@ void Get3VersionedElement(khxml::DOMElement *parent,
 
 template <class T>
 void AddVersionedElement(khxml::DOMElement *parent, const std::string &tagname,
-                         uint version, const T &value)
+                         unsigned int version, const T &value)
 {
   khxml::DOMElement* elem =
     parent->getOwnerDocument()->createElement(ToXMLStr(tagname));

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -238,7 +239,7 @@ void WarnAboutPendingTasks(void) {
   if (taskfiles.size() > 0) {
     fprintf(stderr, "***** WARNING *****\n");
     fprintf(stderr, "Found tasks pending from before a software upgrade:\n");
-    for (uint i = 0; i < taskfiles.size(); ++i) {
+    for (unsigned int i = 0; i < taskfiles.size(); ++i) {
       std::string target;
       if (khReadSymlink(taskfiles[i], target)) {
         fprintf(stderr, "    %s\n", target.c_str());
@@ -249,7 +250,7 @@ void WarnAboutPendingTasks(void) {
             "You will need to cancel and then resume these tasks.\n"
             "If Fusion is unable to complete any of these tasks, make a small change\n"
             "in the corresponding asset and build it again.\n\n");
-    for (uint i = 0; i < taskfiles.size(); ++i) {
+    for (unsigned int i = 0; i < taskfiles.size(); ++i) {
       (void)khUnlink(taskfiles[i]);
     }
   }

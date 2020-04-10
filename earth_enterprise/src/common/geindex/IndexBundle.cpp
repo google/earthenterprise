@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -133,7 +134,7 @@ std::string Header::ContentDesc(
   file_pool.ReadSimpleFileWithCRC(HeaderPath(index_path), buf);
 
   std::string skip_magic;
-  uint16 fileFormatVersion;
+  std::uint16_t fileFormatVersion;
   buf >> FixedLengthString(skip_magic, kMagic.size())
       >> fileFormatVersion;
 
@@ -142,9 +143,9 @@ std::string Header::ContentDesc(
     ChildBucketAddr rootChildAddr;
     EntryBucketAddr rootEntryAddr;
     bool            slotsAreSingle;
-    uint64          wastedSpace;
+    std::uint64_t          wastedSpace;
     std::vector<std::string> packetfiles;
-    std::vector<uint32>      packetfile_extras;
+    std::vector<std::uint32_t>      packetfile_extras;
     buf >> rootChildAddr
         >> rootEntryAddr
         >> slotsAreSingle
@@ -218,7 +219,7 @@ std::string Header::HeaderPath(const std::string &indexPath) {
   return khComposePath(indexPath, kHeaderFilename);
 }
 
-uint32 Header::AddPacketFile(const std::string &packetfile) {
+ std::uint32_t Header::AddPacketFile(const std::string &packetfile) {
   if (khIsAbspath(packetfile)) {
     packetfiles.push_back(packetfile);
   } else {
@@ -231,7 +232,7 @@ uint32 Header::AddPacketFile(const std::string &packetfile) {
 }
 
 void Header::RemovePacketFile(const std::string &packetfile) {
-  for (uint i = 0; i < packetfiles.size(); ++i) {
+  for (unsigned int i = 0; i < packetfiles.size(); ++i) {
     if (packetfiles[i] == packetfile) {
       packetfiles[i] = std::string();
       packetfile_extras[i] = 0;
@@ -240,7 +241,7 @@ void Header::RemovePacketFile(const std::string &packetfile) {
   }
 }
 
-std::string Header::GetPacketFile(uint32 packetfile_num) const {
+std::string Header::GetPacketFile(std::uint32_t packetfile_num) const {
   std::string packetfile = packetfiles[packetfile_num];
 
   if (packetfile.empty()) {
@@ -263,7 +264,7 @@ void Header::AppendManifest(geFilePool& file_pool,
   ManifestEntry* entry = &manifest.back();
   entry->orig_path = orig_header;
   std::string* curr_header_path = &entry->current_path;
-  uint64* curr_size = &entry->data_size;
+  std::uint64_t* curr_size = &entry->data_size;
   if (was_relative_paths_ == false) {
     LittleEndianWriteBuffer buf;
     buf << (*this);
@@ -310,7 +311,7 @@ IndexBundle::IndexBundle(const khTransferGuard<FileBundle> &fileBundle_,
 IndexBundle::~IndexBundle(void) {
 }
 
-std::string IndexBundle::GetPacketFile(uint32 idx) const {
+std::string IndexBundle::GetPacketFile(std::uint32_t idx) const {
   return header.GetPacketFile(idx);
 }
 

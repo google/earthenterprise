@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,9 +40,9 @@ CachingProductTileReader_ImageryAlpha<TileType_, MagnifyWeighting>
   // The later processing costs (blending, merging, compressing) likely
   // dwarf the costs of the magnify.
 
-  uint readLevel = prodLev->levelnum();
+  unsigned int readLevel = prodLev->levelnum();
   assert(readLevel <= targetAddr.level);
-  uint numMagnify = targetAddr.level - readLevel;
+  unsigned int numMagnify = targetAddr.level - readLevel;
 
   // translate coords from targetLevel to readLevel
   khTileAddr readAddr(targetAddr.MinifiedBy(numMagnify));
@@ -51,7 +52,7 @@ CachingProductTileReader_ImageryAlpha<TileType_, MagnifyWeighting>
     &dstTile,
     &tmpTile
   };
-  uint tileIndex = (numMagnify % 2) ? 1 : 0;
+  unsigned int tileIndex = (numMagnify % 2) ? 1 : 0;
 
   ProdTileKey key(prodLev, readAddr);
   khRefGuard<CachedProductTileImpl<TileType> > found;

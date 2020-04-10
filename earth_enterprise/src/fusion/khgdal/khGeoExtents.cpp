@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -38,7 +39,7 @@ MakeGeoTransform(double startX, double deltaX,
 // ***  khGeoExtents
 // ****************************************************************************
 khGeoExtents::khGeoExtents(const khExtents<double> &extents__,
-                           const khSize<uint32> &rasterSize,
+                           const khSize<std::uint32_t> &rasterSize,
                            bool topToBottom) :
     extents_(extents__)
 {
@@ -57,12 +58,12 @@ khGeoExtents::khGeoExtents(const khExtents<double> &extents__,
   }
 }
 
-khSize<uint32> khGeoExtents::boundToExtent(const khExtents<double>& extent) {
+khSize<std::uint32_t> khGeoExtents::boundToExtent(const khExtents<double>& extent) {
   const khExtents<double> new_extent =
       khExtents<double>::Intersection(extents_, extent);
   const double pixel_width = absPixelWidth();
   const double pixel_height = absPixelHeight();
-  const khSize<uint32> raster_size((new_extent.width() / pixel_width + 0.5),
+  const khSize<std::uint32_t> raster_size((new_extent.width() / pixel_width + 0.5),
                                    (new_extent.height() / pixel_height + 0.5));
 
   if (new_extent != extents_) {
@@ -104,7 +105,7 @@ khGeoExtents::khGeoExtents(const khExtents<double> &extents__,
 
 khGeoExtents::khGeoExtents(const khOffset<double> &origin,
                            double pixelSize,
-                           const khSize<uint32> &rasterSize,
+                           const khSize<std::uint32_t> &rasterSize,
                            bool topToBottom) :
     extents_(origin,
              khSize<double>(rasterSize.width * pixelSize,
@@ -121,7 +122,7 @@ khGeoExtents::khGeoExtents(const khOffset<double> &origin,
 }
 
 
-khGeoExtents::khGeoExtents(const khExtents<int64> &pixelExtents,
+khGeoExtents::khGeoExtents(const khExtents<std::int64_t> &pixelExtents,
                            double pixelSize,
                            bool topToBottom,
                            double offset) :
@@ -141,7 +142,7 @@ khGeoExtents::khGeoExtents(const khExtents<int64> &pixelExtents,
                    geoTransform_);
 }
 
-khGeoExtents::khGeoExtents(uint level,
+khGeoExtents::khGeoExtents(unsigned int level,
                            const khExtents<double> &extents__,
                            bool topToBottom, bool is_mercator) :
     extents_(extents__)
@@ -158,7 +159,7 @@ khGeoExtents::khGeoExtents(uint level,
 
 
 khGeoExtents::khGeoExtents(double geoTransform__[6],
-                           const khSize<uint32> &rasterSize)
+                           const khSize<std::uint32_t> &rasterSize)
 {
   if ((rasterSize.width == 0) || (rasterSize.height == 0)) {
     extents_ = khExtents<double>();

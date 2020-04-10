@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -45,7 +46,7 @@ void DisplayRuleBase::CreateBinders(std::vector<FieldBinderDef> &defs,
                                khDeletingVector<Binder> *binders,
                                const QString &context) {
   binders->reserve(defs.size());
-  for (uint i = 0; i < defs.size(); ++i) {
+  for (unsigned int i = 0; i < defs.size(); ++i) {
     defs[i].errorContext = context + defs[i].errorContext;
     switch (defs[i].fieldGen.mode) {
       case FieldGenerator::RecordFormatter:
@@ -61,14 +62,14 @@ void DisplayRuleBase::CreateBinders(std::vector<FieldBinderDef> &defs,
 gstHeaderHandle DisplayRuleBase::CreateBoundHeader(
     const std::vector<FieldBinderDef> &defs) {
   gstHeaderHandle header = gstHeaderImpl::Create();
-  for (uint i = 0; i < defs.size(); ++i) {
+  for (unsigned int i = 0; i < defs.size(); ++i) {
     header->addSpec(defs[i].fieldName, defs[i].fieldType);
   }
   return header;
 }
 
 bool DisplayRuleBase::Prepare(const gstBBox &cutBox,
-                              uint level,
+                              unsigned int level,
                               FeatureTile *featureOut,
                               SiteTile *siteOut,
                               const vectorquery::DisplayRuleTile &in) {
@@ -89,7 +90,7 @@ bool DisplayRuleBase::Prepare(const gstBBox &cutBox,
   fusion_gst::BoxCutter box_cutter(cutBox, false);  // cut_holes is false.
 
   // ***** process each selected feature
-  for (uint i = 0; i < in.selectedIds.size(); ++i) {
+  for (unsigned int i = 0; i < in.selectedIds.size(); ++i) {
     int featureId = in.selectedIds[i];
 
     // --- load geometry from disk
@@ -143,7 +144,7 @@ bool DisplayRuleBase::Prepare(const gstBBox &cutBox,
       if (haveSite && siteBinders.size()) {
         assert(siteOut);
         boundSiteRec = siteBoundHeader->NewRecord();
-        for (uint i = 0; i < siteBinders.size(); ++i) {
+        for (unsigned int i = 0; i < siteBinders.size(); ++i) {
           siteBinders[i]->Bind(boundSiteRec, srcRec, i);
         }
       }
@@ -152,7 +153,7 @@ bool DisplayRuleBase::Prepare(const gstBBox &cutBox,
       if (haveFeature && featureBinders.size()) {
         assert(featureOut);
         boundFeatureRec = featureBoundHeader->NewRecord();
-        for (uint i = 0; i < featureBinders.size(); ++i) {
+        for (unsigned int i = 0; i < featureBinders.size(); ++i) {
           featureBinders[i]->Bind(boundFeatureRec, srcRec, i);
         }
       }
@@ -320,7 +321,7 @@ void DisplayRuleBase::ConvertFeatureType(gstGeodeHandle &geode) {
                          (featureDisplayType).ascii()));
 }
 
-void DisplayRuleBase::ReduceFeatures(uint level, FeatureTile *tile) {
+void DisplayRuleBase::ReduceFeatures(unsigned int level, FeatureTile *tile) {
   switch (featureReduceMethod) {
     case VectorDefs::ReduceFeatureNone:
       // do nothing
@@ -362,7 +363,7 @@ void DisplayRuleBase::ReducePolylines(FeatureTile *tile) {
 }
 
 void DisplayRuleBase::ReduceRoads(bool remove_overlapping_segments,
-                                  uint32 level, FeatureTile *tile) {
+                                  std::uint32_t level, FeatureTile *tile) {
   //
   // sort all features by name
   //
@@ -377,7 +378,7 @@ void DisplayRuleBase::ReduceRoads(bool remove_overlapping_segments,
     // RemoveDuplicatesAndJoinNeighborsAtDegreeTwoVertices
     if (*boundRec) {
       assert(featureKeyFieldNum >= 0 &&
-             featureKeyFieldNum < static_cast<int32>((*boundRec)->NumFields()));
+             featureKeyFieldNum < static_cast<std::int32_t>((*boundRec)->NumFields()));
       name_map[(*boundRec)->Field(featureKeyFieldNum)->ValueAsUnicode()]
           .push_back(*geode);
     } else {
@@ -423,8 +424,8 @@ void DisplayRuleBase::ReducePolygons(FeatureTile *tile) {
 template<class T>
 void DisplayRuleBase::RemoveDuplicateSegmentsAndJoinSegments(
     const T& glist) {
-  uint64 num_duplicates = 0;
-  uint64 num_joined = 0;
+  std::uint64_t num_duplicates = 0;
+  std::uint64_t num_joined = 0;
   PolylineJoiner<T>::RemoveDuplicatesAndJoinNeighborsAtDegreeTwoVertices(
       glist, &num_duplicates, &num_joined);
 }

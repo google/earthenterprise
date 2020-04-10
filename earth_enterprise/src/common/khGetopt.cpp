@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -74,13 +75,13 @@ khGetopt::processAll(int argc, char *argv[], int &argn) throw()
 
   // generate the option structures for getopt_long_only
   struct option options[opts.size()+1];
-  for (uint i = 0; i < opts.size(); ++i) {
+  for (unsigned int i = 0; i < opts.size(); ++i) {
     options[i].name    = opts[i]->name.c_str();
     options[i].has_arg = opts[i]->hasarg;
     options[i].flag    = 0;
     options[i].val     = 0; // set all of them to 0, we'll use longindex
   }
-  uint numopt = opts.size();
+  unsigned int numopt = opts.size();
   options[numopt].name    = 0;
   options[numopt].has_arg = 0;
   options[numopt].flag    = 0;
@@ -144,13 +145,13 @@ khGetopt::processOptionsOnly(int argc, char *argv[], const char *&nextarg)
 
   // generate the option structures for getopt_long_only
   struct option options[opts.size()+1];
-  for (uint i = 0; i < opts.size(); ++i) {
+  for (unsigned int i = 0; i < opts.size(); ++i) {
     options[i].name    = opts[i]->name.c_str();
     options[i].has_arg = opts[i]->hasarg;
     options[i].flag    = 0;
     options[i].val     = 0;
   }
-  uint numopt = opts.size();
+  unsigned int numopt = opts.size();
   options[numopt].name    = 0;
   options[numopt].has_arg = 0;
   options[numopt].flag    = 0;
@@ -259,7 +260,7 @@ bool khGetopt::CheckConstraints(void) {
   for (std::vector<Constraint>::const_iterator constraint =
          constraints_.begin(); constraint != constraints_.end();
        ++constraint) {
-    uint count = 0;
+    unsigned int count = 0;
     for (std::set<std::string>::const_iterator name = constraint->set_.begin();
          name != constraint->set_.end(); ++name) {
       if (used_options_.find(*name) != used_options_.end()) {

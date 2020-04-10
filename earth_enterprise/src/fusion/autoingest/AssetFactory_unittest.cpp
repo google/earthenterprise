@@ -72,7 +72,7 @@ class MockAssetConfig
 public:
     int8_t ID;
     bool upToDate;
-    MockAssetConfig(int8 _ID = -1) : ID(_ID), upToDate(true) {}
+    MockAssetConfig(std::int8_t _ID = -1) : ID(_ID), upToDate(true) {}
     bool operator==(const MockAssetConfig& other) const { return ID == other.ID; }
     bool operator==(uint8_t _ID) { return ID == _ID; }
     void operator=(const MockAssetConfig& other) { ID = other.ID; }
