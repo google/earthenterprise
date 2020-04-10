@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -77,7 +78,7 @@ main(int argc, char *argv[]) {
     if (argn == argc) {
       usage(progname, "No volumes specified");
     } else {
-      uint numbad = 0;
+      unsigned int numbad = 0;
       while (argn < argc) {
         std::string vol(argv[argn]);
         if (theVolumeManager.GetVolumeDef(vol) == 0) {
@@ -150,7 +151,7 @@ FindSources(const std::string &assetroot,
            khstrerror(errno).c_str());
   }
 
-  uint numchecked = 0;
+  unsigned int numchecked = 0;
   char buf[1024];
   while (fgets(buf, sizeof(buf), findPipe)) {
     std::string dir(TrimTrailingWhite(buf));

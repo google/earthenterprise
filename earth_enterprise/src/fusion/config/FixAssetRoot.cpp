@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,7 +31,7 @@
 
 
 namespace {
-void FixDirPerms(const std::string &fname, uint mode) {
+void FixDirPerms(const std::string &fname, unsigned int mode) {
   struct stat64 sb;
   if (::stat64(fname.c_str(), &sb) == 0) {
     if (sb.st_mode != mode) {
@@ -47,7 +48,7 @@ void FixDirPerms(const std::string &fname, uint mode) {
     khChmod(fname, mode);
   }
 }
-void FixFilePerms(const std::string &fname, uint mode) {
+void FixFilePerms(const std::string &fname, unsigned int mode) {
   struct stat64 sb;
   if (::stat64(fname.c_str(), &sb) == 0) {
     if (sb.st_mode != mode) {

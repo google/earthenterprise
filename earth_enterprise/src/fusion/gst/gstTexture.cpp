@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -38,7 +39,7 @@ khTileAddr
 TranslateImageryToProductAddr(const khTileAddr &inTileAddr) {
   assert(ClientImageryTilespaceBase.tileSize <=
          RasterProductTilespaceBase.tileSize);
-  uint32 ratio = RasterProductTilespaceBase.tileSize /
+  std::uint32_t ratio = RasterProductTilespaceBase.tileSize /
                  ClientImageryTilespaceBase.tileSize;
 
   return khTileAddr(ImageryToProductLevel(inTileAddr.level),
@@ -49,7 +50,7 @@ TranslateImageryToProductAddr(const khTileAddr &inTileAddr) {
 
 // Flip image vertically
 // NOTE: must be even number of lines (ie. not 255)
-void FlipImageVertically(uchar* buff, int w, int h, int c) {
+void FlipImageVertically(unsigned char* buff, int w, int h, int c) {
   const int line_sz = w * c;
   const int half_h = h >> 1;
   std::string tmp;
@@ -62,15 +63,15 @@ void FlipImageVertically(uchar* buff, int w, int h, int c) {
 }
 
 // confirm buffer is a valid JPG image
-bool IsValidJPG(const uchar* buff) {
-  const uchar jfifhdrA[] = { 0xff, 0xd8, 0xff, 0xe0 };
-  const uchar jfifhdrB[] = { 'J', 'F', 'I', 'F' };
+bool IsValidJPG(const unsigned char* buff) {
+  const unsigned char jfifhdrA[] = { 0xff, 0xd8, 0xff, 0xe0 };
+  const unsigned char jfifhdrB[] = { 'J', 'F', 'I', 'F' };
   return memcmp(jfifhdrA, buff, 4) == 0 && memcmp(jfifhdrB, buff + 6, 4) == 0;
 }
 
 // confirm buffer is a valid PNG image
-bool IsValidPNG(const uchar* buff) {
-  const uchar pnghdr[] = { 'P', 'N', 'G'};
+bool IsValidPNG(const unsigned char* buff) {
+  const unsigned char pnghdr[] = { 'P', 'N', 'G'};
   return memcmp(pnghdr, buff + 1, 3) == 0;
 }
 
@@ -85,8 +86,8 @@ class gstPYRTexture : public gstTextureImpl {
   virtual ~gstPYRTexture();
 
   // inherited from gstTextureImpl
-  virtual bool Load(uint64 addr, uchar *obuff);
-  virtual void Find(TileExistance *te, uint64 addr);
+  virtual bool Load(std::uint64_t addr, unsigned char *obuff);
+  virtual void Find(TileExistance *te, std::uint64_t addr);
 
   typedef ImageObj<char>* ImageObjPtr;
 
@@ -111,14 +112,14 @@ class gstPYRTexture : public gstTextureImpl {
   bool IsMercatorImagery() const { return kip_->IsMercator(); }
 
  private:
-  typedef gstCache<ImageObjPtr, uint64> MemoryCache;
+  typedef gstCache<ImageObjPtr, std::uint64_t> MemoryCache;
   MemoryCache* mask_memory_cache_;
   MemoryCache* base_memory_cache_;
 
   khDeleteGuard<khRasterProduct> kip_;
   khDeleteGuard<khRasterProduct> kmp_;
 
-  gstImageLut<int16, uchar> contrast_lut_;
+  gstImageLut<std::int16_t, unsigned char> contrast_lut_;
 };
 
 gstTextureGuard NewPYRTexture(
@@ -195,8 +196,8 @@ gstPYRTexture::gstPYRTexture(
   //
   if (heightmap) {
     // find level that has the most coverage, but is only 1 row x 1 col
-    uint32 lev = kip_->minLevel();
-    for (uint32 tlev = lev; tlev <= kip_->maxLevel(); ++tlev) {
+    std::uint32_t lev = kip_->minLevel();
+    for (std::uint32_t tlev = lev; tlev <= kip_->maxLevel(); ++tlev) {
       if (kip_->level(tlev).tileExtents().numRows() == 1 &&
           kip_->level(tlev).tileExtents().numCols() == 1) {
         lev = tlev;
@@ -217,7 +218,7 @@ gstPYRTexture::gstPYRTexture(
         break;
       case khTypes::Float32:
         {
-          // read float32 and cast it to int16
+          // read float32 and cast it to std::int16_t
           HeightmapFloat32ProductTile float32Tile;
           ok = mylevel.ReadTile(mylevel.tileExtents().beginRow(),
                                 mylevel.tileExtents().beginCol(),
@@ -237,8 +238,8 @@ gstPYRTexture::gstPYRTexture(
       notify(NFY_WARN,
              "Failed to read tile from heightmap. Preview will not be scaled");
     } else {
-      const uint32 maxbuf = HeightmapInt16ProductTile::BandPixelCount;
-      gstImageStats<int16> stats(maxbuf, int16Tile.bufs[0]);
+      const std::uint32_t maxbuf = HeightmapInt16ProductTile::BandPixelCount;
+      gstImageStats<std::int16_t> stats(maxbuf, int16Tile.bufs[0]);
       contrast_lut_.setEqualize(stats);
     }
   }
@@ -252,7 +253,7 @@ gstPYRTexture::~gstPYRTexture() {
   delete mask_memory_cache_;
 }
 
-void gstPYRTexture::Find(TileExistance* tile_existance, uint64 addr) {
+void gstPYRTexture::Find(TileExistance* tile_existance, std::uint64_t addr) {
   TexTile tile(addr);
 
   // figure out if we're looking for an imagery or alpha tile
@@ -289,7 +290,7 @@ void gstPYRTexture::Find(TileExistance* tile_existance, uint64 addr) {
 
 
 // Only called from gstTextureManager read thread
-bool gstPYRTexture::Load(uint64 addr, uchar* obuff) {
+bool gstPYRTexture::Load(std::uint64_t addr, unsigned char* obuff) {
   TexTile tile(addr);
 
   // figure out if we're looking for an imagery or alpha tile
@@ -304,7 +305,7 @@ bool gstPYRTexture::Load(uint64 addr, uchar* obuff) {
     if (rp->validLevel(prodAddr.level) &&
         rp->level(prodAddr.level).tileExtents().
         ContainsRowCol(prodAddr.row, prodAddr.col)) {
-      uint64 naddr = TILEADDR(prodAddr.level,
+      std::uint64_t naddr = TILEADDR(prodAddr.level,
                               prodAddr.row,
                               prodAddr.col,
                               tile.alpha(), tile.src);
@@ -316,9 +317,9 @@ bool gstPYRTexture::Load(uint64 addr, uchar* obuff) {
         // find the offset of the imagery tile w/in the rasterproduct tile
         assert(RasterProductTileResolution % ImageryQuadnodeResolution == 0);
         assert(RasterProductTileResolution >= ImageryQuadnodeResolution);
-        uint ratio = RasterProductTileResolution / ImageryQuadnodeResolution;
-        uint y = tile.row % ratio;
-        uint x = tile.col % ratio;
+        unsigned int ratio = RasterProductTileResolution / ImageryQuadnodeResolution;
+        unsigned int y = tile.row % ratio;
+        unsigned int x = tile.col % ratio;
 
         // finally copy the pixels we're looking for
         imgtile->getTile(x * ImageryQuadnodeResolution,
@@ -338,11 +339,11 @@ bool gstPYRTexture::Load(uint64 addr, uchar* obuff) {
   return true;
 }
 
-void draw(uchar* rgb[], uint dim, uint x, uint y, uint val[]) {
+void draw(unsigned char* rgb[], unsigned int dim, unsigned int x, unsigned int y, unsigned int val[]) {
   if (x > dim - 1 || y > dim - 1)
     return;
 
-  for (uint c = 0; c < 3; ++c)
+  for (unsigned int c = 0; c < 3; ++c)
     rgb[c][(y * dim) + x] = val[c];
 }
 
@@ -365,7 +366,7 @@ bool gstPYRTexture::loadHeightmapBaseFromDisk(ImageObjPtr& reuse,
       break;
     case khTypes::Float32:
       {
-        // read float32 and cast it to int16
+        // read float32 and cast it to std::int16_t
         HeightmapFloat32ProductTile float32Tile;
         ok = mylevel.ReadTile(tile.row,
                               tile.col,
@@ -390,13 +391,13 @@ bool gstPYRTexture::loadHeightmapBaseFromDisk(ImageObjPtr& reuse,
     ImgTile intile(RasterProductTileResolution, RasterProductTileResolution, 3);
     reuse = new ImageObj<char>(intile, Separate, LowerLeft);
   }
-  uchar* red   = reinterpret_cast<uchar*>(reuse->getData(0));
-  uchar* green = reinterpret_cast<uchar*>(reuse->getData(1));
-  uchar* blue  = reinterpret_cast<uchar*>(reuse->getData(2));
+  unsigned char* red   = reinterpret_cast<unsigned char*>(reuse->getData(0));
+  unsigned char* green = reinterpret_cast<unsigned char*>(reuse->getData(1));
+  unsigned char* blue  = reinterpret_cast<unsigned char*>(reuse->getData(2));
 
   // assemble one channel
-  const uint32 maxbuf = HeightmapInt16ProductTile::BandPixelCount;
-  for (uint texel = 0; texel < maxbuf; ++texel) {
+  const std::uint32_t maxbuf = HeightmapInt16ProductTile::BandPixelCount;
+  for (unsigned int texel = 0; texel < maxbuf; ++texel) {
     red[texel] = contrast_lut_.getVal(int16Tile.bufs[0][texel]);
   }
   // and copy the rest
@@ -412,10 +413,10 @@ bool gstPYRTexture::loadBaseFromDisk(ImageObjPtr& reuse, const uint64& id) {
     ImgTile intile(RasterProductTileResolution, RasterProductTileResolution, 3);
     reuse = new ImageObj<char>(intile, Separate, LowerLeft);
   }
-  uchar* destBufs[3] = {
-    reinterpret_cast<uchar*>(reuse->getData(0)),
-    reinterpret_cast<uchar*>(reuse->getData(1)),
-    reinterpret_cast<uchar*>(reuse->getData(2)),
+  unsigned char* destBufs[3] = {
+    reinterpret_cast<unsigned char*>(reuse->getData(0)),
+    reinterpret_cast<unsigned char*>(reuse->getData(1)),
+    reinterpret_cast<unsigned char*>(reuse->getData(2)),
   };
 
   TexTile tile(id);
@@ -446,8 +447,8 @@ bool gstPYRTexture::loadMaskFromDisk(ImageObjPtr& reuse, const uint64& id) {
   reuse = new ImageObj<char>(intile, Separate, LowerLeft);
 
   // read tile as band-separate
-  uchar* destBufs[1] = {
-    reinterpret_cast<uchar*>(reuse->getData(0))
+  unsigned char* destBufs[1] = {
+    reinterpret_cast<unsigned char*>(reuse->getData(0))
   };
   TexTile tile(id);
 
@@ -474,8 +475,8 @@ class gstMapTexture : public gstTextureImpl {
   virtual ~gstMapTexture();
 
   // inherited from gstTextureImpl
-  virtual bool Load(uint64 addr, uchar* obuff);
-  virtual void Find(TileExistance* te, uint64 addr);
+  virtual bool Load(std::uint64_t addr, unsigned char* obuff);
+  virtual void Find(TileExistance* te, std::uint64_t addr);
 
  private:
   khDeleteGuard<maprender::PreviewController> preview_controller_;
@@ -527,10 +528,10 @@ gstMapTexture::gstMapTexture(const MapLayerConfig& layerConfig,
 gstMapTexture::~gstMapTexture() {
 }
 
-bool gstMapTexture::Load(uint64 addr, uchar* obuff) {
+bool gstMapTexture::Load(std::uint64_t addr, unsigned char* obuff) {
   try {
-    khDeleteGuard<uchar, ArrayDeleter> tmpBuf(TransferOwnership
-                                              (new uchar[256 * 256 * 4]));
+    khDeleteGuard<unsigned char, ArrayDeleter> tmpBuf(TransferOwnership
+                                              (new unsigned char[256 * 256 * 4]));
 
     preview_controller_->GetTile(addr, &tmpBuf[0]);
 
@@ -538,14 +539,14 @@ bool gstMapTexture::Load(uint64 addr, uchar* obuff) {
     // Big Endian - ARGB
     if (SUBFROMADDR(addr)) {
       // alpha
-      uchar *in = &tmpBuf[0];
-      for (uint i = 0; i < 256 * 256; ++i) {
+      unsigned char *in = &tmpBuf[0];
+      for (unsigned int i = 0; i < 256 * 256; ++i) {
         *obuff++ = in[0];
         in += 4;
       }
     } else {
-      uchar *in = &tmpBuf[0];
-      for (uint i = 0; i < 256 * 256; ++i) {
+      unsigned char *in = &tmpBuf[0];
+      for (unsigned int i = 0; i < 256 * 256; ++i) {
         *obuff++ = in[1];
         *obuff++ = in[2];
         *obuff++ = in[3];
@@ -556,14 +557,14 @@ bool gstMapTexture::Load(uint64 addr, uchar* obuff) {
     // Little Endian - BGRA
     if (SUBFROMADDR(addr)) {
       // alpha
-      uchar *in = &tmpBuf[0];
-      for (uint i = 0; i < 256 * 256; ++i) {
+      unsigned char *in = &tmpBuf[0];
+      for (unsigned int i = 0; i < 256 * 256; ++i) {
         *obuff++ = in[3];
         in += 4;
       }
     } else {
-      uchar *in = &tmpBuf[0];
-      for (uint i = 0; i < 256 * 256; ++i) {
+      unsigned char *in = &tmpBuf[0];
+      for (unsigned int i = 0; i < 256 * 256; ++i) {
         *obuff++ = in[2];
         *obuff++ = in[1];
         *obuff++ = in[0];
@@ -581,7 +582,7 @@ bool gstMapTexture::Load(uint64 addr, uchar* obuff) {
   return true;
 }
 
-void gstMapTexture::Find(TileExistance* te, uint64 addr) {
+void gstMapTexture::Find(TileExistance* te, std::uint64_t addr) {
   // tile always exists
   if (preview_controller_->HasLevel(LEVFROMADDR(addr))) {
     te->bestAvailable = addr;
@@ -600,8 +601,8 @@ class gstHTTPTexture : public gstTextureImpl {
   virtual ~gstHTTPTexture();
 
   // inherited from gstTextureImpl
-  virtual bool Load(uint64 addr, uchar* obuff);
-  virtual void Find(TileExistance* te, uint64 addr);
+  virtual bool Load(std::uint64_t addr, unsigned char* obuff);
+  virtual void Find(TileExistance* te, std::uint64_t addr);
 
  private:
   gstEarthStream earth_stream_;
@@ -625,7 +626,7 @@ gstHTTPTexture::gstHTTPTexture(const std::string& server)
 gstHTTPTexture::~gstHTTPTexture() {
 }
 
-void gstHTTPTexture::Find(TileExistance* tile_existance, uint64 addr) {
+void gstHTTPTexture::Find(TileExistance* tile_existance, std::uint64_t addr) {
   TexTile tex_tile(addr);
 
   // don't support alpha
@@ -647,7 +648,7 @@ void gstHTTPTexture::Find(TileExistance* tile_existance, uint64 addr) {
   tile_existance->bestAvailable = tex_tile.addr();
 }
 
-bool gstHTTPTexture::Load(uint64 addr, uchar* obuff) {
+bool gstHTTPTexture::Load(std::uint64_t addr, unsigned char* obuff) {
   TexTile tex_tile(addr);
   gstQuadAddress quad_addr(tex_tile.lev, tex_tile.row, tex_tile.col);
   return earth_stream_.GetImage(quad_addr, reinterpret_cast<char*>(obuff));
@@ -663,8 +664,8 @@ class gstGEIndexTexture : public gstTextureImpl {
   virtual ~gstGEIndexTexture() {}
 
   // inherited from gstTextureImpl
-  virtual bool Load(uint64 addr, uchar* obuff);
-  virtual void Find(TileExistance* te, uint64 addr);
+  virtual bool Load(std::uint64_t addr, unsigned char* obuff);
+  virtual void Find(TileExistance* te, std::uint64_t addr);
 
  private:
   khDeleteGuard<geindex::BlendReader> reader_;
@@ -701,7 +702,7 @@ gstGEIndexTexture::gstGEIndexTexture(const std::string& path)
   }
 }
 
-void gstGEIndexTexture::Find(TileExistance* te, uint64 addr) {
+void gstGEIndexTexture::Find(TileExistance* te, std::uint64_t addr) {
   TexTile tex_tile(addr);
 
   // GE Index doesn't support alpha
@@ -730,22 +731,22 @@ void gstGEIndexTexture::Find(TileExistance* te, uint64 addr) {
   te->bestAvailable = tex_tile.addr();
 }
 
-bool gstGEIndexTexture::Load(uint64 addr, uchar* obuff) {
+bool gstGEIndexTexture::Load(std::uint64_t addr, unsigned char* obuff) {
   TexTile tile(addr);
 
   try {
     const bool size_only = false;
-    reader_->GetData(QuadtreePath(static_cast<uint64>(tile.lev),
-                                  static_cast<uint64>(tile.row),
-                                  static_cast<uint64>(tile.col)),
+    reader_->GetData(QuadtreePath(static_cast<std::uint64_t>(tile.lev),
+                                  static_cast<std::uint64_t>(tile.row),
+                                  static_cast<std::uint64_t>(tile.col)),
                      geindex::BlendEntry::ReadKey(), read_buf_, size_only);
 
     // Do quick check for a valid 2d jpeg.
-    if (IsValidJPG(reinterpret_cast<const uchar*>(&read_buf_[0]))) {
+    if (IsValidJPG(reinterpret_cast<const unsigned char*>(&read_buf_[0]))) {
       compressor_->decompress(reinterpret_cast<char*>(&read_buf_[0]),
                               cellSize(),
                               reinterpret_cast<char*>(obuff));
-    } else if (IsValidPNG(reinterpret_cast<const uchar*>(&read_buf_[0]))) {
+    } else if (IsValidPNG(reinterpret_cast<const unsigned char*>(&read_buf_[0]))) {
       // Create blank (gray) tile.
       memset(obuff, 128, 256 * 256 * 3);
       notify(NFY_WARN, "Png decompression not yet supported, using blank.");
@@ -756,7 +757,7 @@ bool gstGEIndexTexture::Load(uint64 addr, uchar* obuff) {
       if (packet_.HasImageData()) {
         const std::string &image_data = packet_.ImageData();
 
-        if (!IsValidJPG(reinterpret_cast<const uchar*>(&image_data[0]))) {
+        if (!IsValidJPG(reinterpret_cast<const unsigned char*>(&image_data[0]))) {
           notify(NFY_WARN,
                  "buffer read from GE Index doesn't contain a valid JPG image,"
                  " skipping!");
@@ -804,8 +805,8 @@ class gstGEDBTexture : public gstTextureImpl {
   virtual ~gstGEDBTexture() {}
 
   // inherited from gstTextureImpl
-  virtual bool Load(uint64 addr, uchar* obuff);
-  virtual void Find(TileExistance* te, uint64 addr);
+  virtual bool Load(std::uint64_t addr, unsigned char* obuff);
+  virtual void Find(TileExistance* te, std::uint64_t addr);
 
  private:
   khDeleteGuard<geindex::UnifiedReader> reader_;
@@ -849,7 +850,7 @@ gstGEDBTexture::gstGEDBTexture(const std::string& path)
                                  2 /* num bucket levels cached */));
 }
 
-void gstGEDBTexture::Find(TileExistance* te, uint64 addr) {
+void gstGEDBTexture::Find(TileExistance* te, std::uint64_t addr) {
   TexTile tex_tile(addr);
 
   // GEDB doesn't support alpha
@@ -883,14 +884,14 @@ void gstGEDBTexture::Find(TileExistance* te, uint64 addr) {
   te->bestAvailable = tex_tile.addr();
 }
 
-bool gstGEDBTexture::Load(uint64 addr, uchar* obuff) {
+bool gstGEDBTexture::Load(std::uint64_t addr, unsigned char* obuff) {
   TexTile tile(addr);
 
   try {
     const bool size_only = false;
-    reader_->GetData(QuadtreePath(static_cast<uint64>(tile.lev),
-                                  static_cast<uint64>(tile.row),
-                                  static_cast<uint64>(tile.col)),
+    reader_->GetData(QuadtreePath(static_cast<std::uint64_t>(tile.lev),
+                                  static_cast<std::uint64_t>(tile.row),
+                                  static_cast<std::uint64_t>(tile.col)),
                      geindex::TypedEntry::ReadKey(
                          0 /* version */,
                          kGEImageryChannelId,
@@ -899,7 +900,7 @@ bool gstGEDBTexture::Load(uint64 addr, uchar* obuff) {
                      read_buf_,
                      size_only);
 
-    if (!IsValidJPG(reinterpret_cast<uchar*>(&read_buf_[0]))) {
+    if (!IsValidJPG(reinterpret_cast<unsigned char*>(&read_buf_[0]))) {
       notify(NFY_WARN,
              "GEDB buffer doesn't contain a valid JPG image, skipping!");
       return false;
@@ -919,9 +920,9 @@ bool gstGEDBTexture::Load(uint64 addr, uchar* obuff) {
   return false;
 }
 
-void xyToBlist(uint xbits, uint ybits, int blevel, uchar blist[32]) {
-  uint32 right, top;
-  int32 order[][2] = {{0, 3}, {1, 2}};
+void xyToBlist(unsigned int xbits, unsigned int ybits, int blevel, unsigned char blist[32]) {
+  std::uint32_t right, top;
+  std::int32_t order[][2] = {{0, 3}, {1, 2}};
 
   for (int j = 0; j < blevel; ++j) {
     right = xbits & (0x1U << (blevel - j - 1));

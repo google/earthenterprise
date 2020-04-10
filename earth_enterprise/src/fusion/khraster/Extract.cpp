@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,19 +26,19 @@
 // ****************************************************************************
 void
 ExtractInterleavedSubBuffer(char *destBuf,
-                            const khExtents<uint32> &targetPixelExtents,
+                            const khExtents<std::uint32_t> &targetPixelExtents,
                             const char *srcBuf,
-                            const khSize<uint32> &srcRasterSize,
-                            const uint pixelByteSize)
+                            const khSize<std::uint32_t> &srcRasterSize,
+                            const unsigned int pixelByteSize)
 {
-  uint32 srcRowByteSize  = srcRasterSize.width * pixelByteSize;
-  uint32 destRowByteSize = targetPixelExtents.width() * pixelByteSize;
+  std::uint32_t srcRowByteSize  = srcRasterSize.width * pixelByteSize;
+  std::uint32_t destRowByteSize = targetPixelExtents.width() * pixelByteSize;
 
-  uint32 srcOffset = ((targetPixelExtents.beginRow() * srcRowByteSize) +
+  std::uint32_t srcOffset = ((targetPixelExtents.beginRow() * srcRowByteSize) +
                       (targetPixelExtents.beginCol() * pixelByteSize));
-  uint32 destOffset = 0;
+  std::uint32_t destOffset = 0;
 
-  for (uint32 i = 0; i < targetPixelExtents.numRows(); ++i) {
+  for (std::uint32_t i = 0; i < targetPixelExtents.numRows(); ++i) {
     memcpy(&destBuf[destOffset], &srcBuf[srcOffset], destRowByteSize);
     destOffset += destRowByteSize;
     srcOffset  += srcRowByteSize;
@@ -52,19 +53,19 @@ ExtractInterleavedSubBuffer(char *destBuf,
 // ****************************************************************************
 void
 ExtractInterleavedSubBufferFlipY(char *destBuf,
-                                 const khExtents<uint32> &targetPixelExtents,
+                                 const khExtents<std::uint32_t> &targetPixelExtents,
                                  const char *srcBuf,
-                                 const khSize<uint32> &srcRasterSize,
-                                 const uint pixelByteSize)
+                                 const khSize<std::uint32_t> &srcRasterSize,
+                                 const unsigned int pixelByteSize)
 {
-  uint32 srcRowByteSize  = srcRasterSize.width * pixelByteSize;
-  uint32 destRowByteSize = targetPixelExtents.width() * pixelByteSize;
+  std::uint32_t srcRowByteSize  = srcRasterSize.width * pixelByteSize;
+  std::uint32_t destRowByteSize = targetPixelExtents.width() * pixelByteSize;
 
-  uint32 srcOffset = ((targetPixelExtents.beginRow() * srcRowByteSize) +
+  std::uint32_t srcOffset = ((targetPixelExtents.beginRow() * srcRowByteSize) +
                       (targetPixelExtents.beginCol() * pixelByteSize));
-  uint32 destOffset = (targetPixelExtents.numRows()-1) * destRowByteSize;
+  std::uint32_t destOffset = (targetPixelExtents.numRows()-1) * destRowByteSize;
 
-  for (uint32 i = 0; i < targetPixelExtents.numRows(); ++i) {
+  for (std::uint32_t i = 0; i < targetPixelExtents.numRows(); ++i) {
     memcpy(&destBuf[destOffset], &srcBuf[srcOffset], destRowByteSize);
     destOffset -= destRowByteSize;
     srcOffset  += srcRowByteSize;

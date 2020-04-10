@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,7 +67,7 @@ PackgenTraverser<Config>::PackgenTraverser(
 }
 
 template <class Config>
-void PackgenTraverser<Config>::DoTraverse(uint numWorkThreads) {
+void PackgenTraverser<Config>::DoTraverse(unsigned int numWorkThreads) {
   if (numWorkThreads == 0) {
     throw khException(kh::tr("No work threads. Cannot proceed."));
   }
@@ -117,22 +118,22 @@ void PackgenTraverser<Config>::DoTraverse(uint numWorkThreads) {
   // Seed the prep queue with twice the number as we have work threads.
   // This means the PrepLoop will work until he has the next PrepItem
   // for each WorkLoop ready to go
-  uint numPrepItems = numWorkThreads*2;
-  for (uint i = 0; i < numPrepItems; ++i) {
+  unsigned int numPrepItems = numWorkThreads*2;
+  for (unsigned int i = 0; i < numPrepItems; ++i) {
     prepEmpty.push(NewPrepItem());
   }
 
   // Seed the work queue with twice the number as we have work threads.
   // This means the WorkLoop can always have one while the write loop
   // has another to stream to disk.
-  uint numWorkItems = numWorkThreads*2;
-  for (uint i = 0; i < numWorkItems; ++i) {
+  unsigned int numWorkItems = numWorkThreads*2;
+  for (unsigned int i = 0; i < numWorkItems; ++i) {
     workEmpty.push(NewWorkItem());
   }
 
   // start the work threads
   khThread* workThreads[numWorkThreads];
-  for (uint i = 0; i < numWorkThreads; ++i) {
+  for (unsigned int i = 0; i < numWorkThreads; ++i) {
     khFunctor<void> func =
       khFunctor<void>(std::mem_fun(&PackgenTraverser::WorkLoop), this);
     workThreads[i] = new khThread(func);
@@ -141,8 +142,8 @@ void PackgenTraverser<Config>::DoTraverse(uint numWorkThreads) {
 
   progress = TransferOwnership(
       new ProgressMeter(
-          static_cast<uint64>(config.coverage.extents.width()) *
-          static_cast<uint64>(config.coverage.extents.height())));
+          static_cast<std::uint64_t>(config.coverage.extents.width()) *
+          static_cast<std::uint64_t>(config.coverage.extents.height())));
 
   // start the writer thread
   khFunctor<void> func =
@@ -156,12 +157,12 @@ void PackgenTraverser<Config>::DoTraverse(uint numWorkThreads) {
   // all tiles have been submitted to the work threads. Signal them to
   // exit once they've finished. Each one will pull one of these sentinal
   // entries out of the queue and then exit
-  for (uint i = 0; i < numWorkThreads; ++i) {
+  for (unsigned int i = 0; i < numWorkThreads; ++i) {
     prepFull.push(0);
   }
 
   // wait for each of the work threads, join with them and clean them up
-  for (uint i = 0; i < numWorkThreads; ++i) {
+  for (unsigned int i = 0; i < numWorkThreads; ++i) {
     workThreads[i]->join();
     delete workThreads[i];
   }
@@ -171,11 +172,11 @@ void PackgenTraverser<Config>::DoTraverse(uint numWorkThreads) {
   writeThread.join();
 
   // cleanup
-  for (uint i = 0; i < numPrepItems; ++i) {
+  for (unsigned int i = 0; i < numPrepItems; ++i) {
     PrepItem* prep = prepEmpty.pop();
     delete prep;
   }
-  for (uint i = 0; i < numWorkItems; ++i) {
+  for (unsigned int i = 0; i < numWorkItems; ++i) {
     WorkItem* work = workEmpty.pop();
     delete work;
   }

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -37,10 +38,10 @@ class SegmentEnd {
   SegmentEnd() : id_(UINT_MAX) {}
 
   // Create a SegmentEnd from SegmentEndId
-  explicit SegmentEnd(uint32 id) : id_(id) {}
+  explicit SegmentEnd(std::uint32_t id) : id_(id) {}
 
   // Create a SegmentEnd from SegmentId and is_last (first/last) information.
-  SegmentEnd(uint32 seg_id, bool is_last) :
+  SegmentEnd(std::uint32_t seg_id, bool is_last) :
       id_((seg_id << 1) + (is_last ? 1 : 0)) {}
 
   const SegmentEnd& operator=(const SegmentEnd& other) {
@@ -54,10 +55,10 @@ class SegmentEnd {
   }
 
   // Get SegmentEndId
-  uint32 SegmentEndId() const { return id_; }
+  std::uint32_t SegmentEndId() const { return id_; }
 
   // Get SegmentId
-  const uint32 SegmentId() const {
+  const std::uint32_t SegmentId() const {
     return (id_ >> 1U);
   }
 
@@ -90,7 +91,7 @@ class SegmentEnd {
     return id_ != other.id_;
   }
 
-  const uint32 id_;
+  const std::uint32_t id_;
 };
 
 
@@ -101,11 +102,11 @@ class SegmentEndExt : public SegmentEnd {
  public:
   SegmentEndExt() {}
 
-  explicit SegmentEndExt(uint32 id, const gstVertex& v)
+  explicit SegmentEndExt(std::uint32_t id, const gstVertex& v)
       : SegmentEnd(id), x_(v.x), y_(v.y) {
   }
 
-  SegmentEndExt(uint32 seg_id, bool is_last, const gstVertex& v)
+  SegmentEndExt(std::uint32_t seg_id, bool is_last, const gstVertex& v)
       : SegmentEnd(seg_id, is_last), x_(v.x), y_(v.y) {
   }
 
@@ -145,17 +146,17 @@ class SegmentEndExt : public SegmentEnd {
         // We set this to NULL to imply that this SegmentEndExt can be ignored
         // due to being an end point of a removed polyline (cyclic/duplicate).
         gstGeodeImpl* polyline_;
-        uint32 tmp_other_ends_index_;
+        std::uint32_t tmp_other_ends_index_;
       };
       union {
         // partners_index_ is the index to the only other SegmentEndExt having
         // same geometric location. i.e partners_index_ is only for degree 2
         // vertices. Otherwise it is set to  NO_PARTNER.
-        uint32 partners_index_;   // set this to NO_PARTNER for no partner
-        uint32 ends_at_index_;    // this is used to point to the end point of
+        std::uint32_t partners_index_;   // set this to NO_PARTNER for no partner
+        std::uint32_t ends_at_index_;    // this is used to point to the end point of
                                   // set of segment-ends on current vertex.
       };
-      uint32 other_ends_index_;
+      std::uint32_t other_ends_index_;
     };
   };
 };
@@ -171,7 +172,7 @@ template<class T> PolylineJoiner<T>::PolylineJoiner(const T& glist)
 
 template<class T>
 void PolylineJoiner<T>::RemoveDuplicatesAndJoinNeighborsAtDegreeTwoVertices(
-    const T& glist, uint64* num_duplicates, uint64* num_joined) {
+    const T& glist, std::uint64_t* num_duplicates, std::uint64_t* num_joined) {
   PolylineJoiner joiner(glist);
   joiner.Join();
   assert(JoinableVertexCount(glist) == 0);
@@ -195,10 +196,10 @@ void PolylineJoiner<T>::Join() {
 
 
 template<class T>
-uint32 PolylineJoiner<T>::InitializeSegmentEnds() {
-  uint32 num_ends = 0;
-  const uint32 g_end = polyline_vector_.size();
-  for (uint32 g = 0; g < g_end; ++g) {
+ std::uint32_t PolylineJoiner<T>::InitializeSegmentEnds() {
+  std::uint32_t num_ends = 0;
+  const std::uint32_t g_end = polyline_vector_.size();
+  for (std::uint32_t g = 0; g < g_end; ++g) {
     // NOTE: Here we check geode for correctness for PolylineJoiner.
     // Below we just cast it to gstGeode by static_cast without
     // checking the type.
@@ -236,7 +237,7 @@ void PolylineJoiner<T>::RemoveDuplicatesAndCyclesAndFindMergePartners() {
   // Find duplicates, cycles and partners for all degree 2 vertices
   // work on sets of segment ends on same vertex, as we reuse ends_at_index_
   // for partners_index_ (for this set) while working on a set.
-  for (uint32 i = 0, end_index_for_set_i; i < segment_ends_size_;
+  for (std::uint32_t i = 0, end_index_for_set_i; i < segment_ends_size_;
        i = end_index_for_set_i) {
     end_index_for_set_i = segment_ends_[i].ends_at_index_;
     RemoveCyclesSetEdgesAndInitializePartners(i);
@@ -261,7 +262,7 @@ void PolylineJoiner<T>::RemoveDuplicatesAndCyclesAndFindMergePartners() {
 // the union.
 template<class T>
 void PolylineJoiner<T>::FindSegmentEndSetsOnSameVertex() {
-  for (uint32 i = 0, end_index_for_set_i; i < segment_ends_size_;) {
+  for (std::uint32_t i = 0, end_index_for_set_i; i < segment_ends_size_;) {
     const SegmentEndExt& this_end = segment_ends_[i];
     for (end_index_for_set_i = i + 1; end_index_for_set_i < segment_ends_size_;
          ++end_index_for_set_i) {
@@ -282,14 +283,14 @@ template<class T>
 void PolylineJoiner<T>::SetOtherEndIndex() {
   // set the tmp_other_ends_index_ field, since we have used reserve we
   // can use segment_ends_ vector as an array indexed on SegmentEndId.
-  for (uint32 i = 0; i < segment_ends_size_; ++i) {
+  for (std::uint32_t i = 0; i < segment_ends_size_; ++i) {
     segment_ends_[
         segment_ends_[i].OtherEnd().SegmentEndId()].tmp_other_ends_index_ = i;
   }
 
   // set the other_ends_index_ field so that we can get other ends index from
   // the current SegmentEndExt, without one extra array indexing.
-  for (uint32 i = 0; i < segment_ends_size_; ++i) {
+  for (std::uint32_t i = 0; i < segment_ends_size_; ++i) {
     segment_ends_[i].other_ends_index_ = segment_ends_[
         segment_ends_[i].SegmentEndId()].tmp_other_ends_index_;
   }
@@ -300,8 +301,8 @@ void PolylineJoiner<T>::SetOtherEndIndex() {
 // remove cycles, set polyline_ and initialize partners_ field. As a result the
 // ends_at_index_ for this set will no longer be valid.
 template<class T>
-void PolylineJoiner<T>::RemoveCyclesSetEdgesAndInitializePartners(uint32 i) {
-  const uint32 end_index_for_set_i = segment_ends_[i].ends_at_index_;
+void PolylineJoiner<T>::RemoveCyclesSetEdgesAndInitializePartners(std::uint32_t i) {
+  const std::uint32_t end_index_for_set_i = segment_ends_[i].ends_at_index_;
   for (; i < end_index_for_set_i; ++i) {
     SegmentEndExt& this_end = segment_ends_[i];
     if (i < this_end.other_ends_index_) {  // check for left ends only
@@ -326,16 +327,16 @@ void PolylineJoiner<T>::RemoveCyclesSetEdgesAndInitializePartners(uint32 i) {
 // other. Each such partner set represents a join oppertunity.
 template<class T>
 void PolylineJoiner<T>::RemoveDuplicatesAndSetPartnersIfAnyAtThisVertex(
-    uint32 i, const uint32 end_index_for_set_i) {
-  const uint32 partner1 = i;
+    std::uint32_t i, const std::uint32_t end_index_for_set_i) {
+  const std::uint32_t partner1 = i;
   // For finding degree-two vertices(i.e single partner segment ends),
   // initialize partner to 0. On first finding a partner, set that as partner,
   // on second and subsequent finding of partners set that to NO_PARTNER.
-  uint32 partner2 = 0;  // Note that 0 is not a good value for partner2
+  std::uint32_t partner2 = 0;  // Note that 0 is not a good value for partner2
   // If there is a cycle on this vertex, then no merging at this vertex
   // because we need two labels for the two segments joining at vertex more than
   // degree two, so that labels are unambiguous.
-  for (uint32 j = i + 1; j < end_index_for_set_i; ++j) {
+  for (std::uint32_t j = i + 1; j < end_index_for_set_i; ++j) {
     // As duplicates have not yet been removed, for left ends, polyline_ == NULL
     // means cycle. (For right ends duplicates have been removed at
     // corresponding left ends and the right end copies left end polyline_,
@@ -351,7 +352,7 @@ void PolylineJoiner<T>::RemoveDuplicatesAndSetPartnersIfAnyAtThisVertex(
     const SegmentEndExt& this_end = segment_ends_[i];
     if (end_index_for_set_i <= this_end.other_ends_index_) {
       // duplicates are removed at left end only
-      for (uint32 n = i + 1; n < end_index_for_set_i; ++n) {
+      for (std::uint32_t n = i + 1; n < end_index_for_set_i; ++n) {
         SegmentEndExt& next_end = segment_ends_[n];
         // if other end is not to right it is to left and next_end is
         // right end and should be ignored. Else if NULL already deleted.
@@ -361,7 +362,7 @@ void PolylineJoiner<T>::RemoveDuplicatesAndSetPartnersIfAnyAtThisVertex(
             segment_ends_[next_end.other_ends_index_].ends_at_index_) {
           continue;  // ignore right edges and non-same rt point
         }
-        const uint32 this_num_vertices =
+        const std::uint32_t this_num_vertices =
             this_end.polyline_->TotalVertexCount();
         bool is_equal = (this_num_vertices ==
                          next_end.polyline_->TotalVertexCount());
@@ -400,7 +401,7 @@ void PolylineJoiner<T>::RemoveDuplicatesAndSetPartnersIfAnyAtThisVertex(
 
 template<class T>
 int PolylineJoiner<T>::AssertSanity() {
-  for (uint32 i = 0; i < segment_ends_size_; ++i) {
+  for (std::uint32_t i = 0; i < segment_ends_size_; ++i) {
     assert(segment_ends_[segment_ends_[i].other_ends_index_].SegmentId() ==
            segment_ends_[i].SegmentId());
     if (segment_ends_[i].polyline_ == NULL) {
@@ -409,7 +410,7 @@ int PolylineJoiner<T>::AssertSanity() {
              segment_ends_[segment_ends_[i].other_ends_index_].partners_index_);
     } else {
       if (segment_ends_[i].partners_index_ != NO_PARTNER) {
-        uint32 j = segment_ends_[i].partners_index_;
+        std::uint32_t j = segment_ends_[i].partners_index_;
         assert(segment_ends_[j].partners_index_ == i);
 
         const gstGeode *geode_i = static_cast<const gstGeode*>(
@@ -434,7 +435,7 @@ int PolylineJoiner<T>::AssertSanity() {
 
 template<class T>
 void PolylineJoiner<T>::MergeAtDegreeTwoVerticesForNonCycles() {
-  for (uint32 i = 0; i < segment_ends_size_; ++i) {
+  for (std::uint32_t i = 0; i < segment_ends_size_; ++i) {
     SegmentEndExt& curr_end = segment_ends_[i];
     // A non-cyclic chain starts from a degree 1 vertex having a degree 2
     // vertex on the other end of the edge.
@@ -449,7 +450,7 @@ void PolylineJoiner<T>::MergeAtDegreeTwoVerticesForNonCycles() {
 
 template<class T>
 void PolylineJoiner<T>::MergeAtDegreeTwoVerticesForCycles() {
-  for (uint32 i = 0; i < segment_ends_size_; ++i) {
+  for (std::uint32_t i = 0; i < segment_ends_size_; ++i) {
     SegmentEndExt& curr_end = segment_ends_[i];
     // Once non-cyclic chains have been removed a cyclic chain starts from a
     // degree 2 vertex on the other end of the edge.
@@ -466,7 +467,7 @@ void PolylineJoiner<T>::MergeAtDegreeTwoVerticesForCycles() {
 template<class T>
 void PolylineJoiner<T>::MergeThisChainAtDegreeTwoVertices(
     SegmentEndExt* curr_end) {
-  uint32* other_ends_partner_index =
+  std::uint32_t* other_ends_partner_index =
       &segment_ends_[curr_end->other_ends_index_].partners_index_;
   gstGeode* const seg = static_cast<gstGeode* const>(curr_end->polyline_);
   bool join_at_segs_last = curr_end->IsFirst();
@@ -497,12 +498,12 @@ void PolylineJoiner<T>::MergeThisChainAtDegreeTwoVertices(
 // Returns how many more join opportunities are available. Used for validation
 // of JoinSegments result (in non-release modes only).
 template<class T>
-uint PolylineJoiner<T>::JoinableVertexCount(const T& glist) {
-  uint ret_val = 0;
+unsigned int PolylineJoiner<T>::JoinableVertexCount(const T& glist) {
+  unsigned int ret_val = 0;
   std::map<gstVertex, std::set<SegmentEnd>,
       fusion_gst::XYLexicographicLess<gstVertex> > endpoints;
 
-  for (uint g = 0; g < glist.size(); ++g) {
+  for (unsigned int g = 0; g < glist.size(); ++g) {
     const gstGeodeHandle &geodeh = glist.at(g);
     if (geodeh->FlatPrimType() != gstPolyLine &&
         geodeh->FlatPrimType() != gstStreet &&

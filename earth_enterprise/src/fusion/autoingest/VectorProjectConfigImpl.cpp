@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -36,7 +37,7 @@ VectorProjectConfig::GetAvailChannelIds(void) const
   }
   // now exclude ExpertChannelIds if not already excluded
   // also make sure that we dont generate an exception
-  uint32 expertId;
+  std::uint32_t expertId;
   for (expertId=ExpertBeginChannelId(); expertId<BeginChannelId(); expertId++) {
     avail.exclude(expertId, false);
   }
@@ -48,7 +49,7 @@ VectorProjectConfig::GetAvailChannelIds(void) const
 AvailId
 VectorProjectConfig::GetAvailStyleIds(void) const
 {
-  std::vector<uint32> have;
+  std::vector<std::uint32_t> have;
   AvailId avail(BeginStyleId(), EndStyleId());
 
   // find the Ids I already have and exclude them from the list
@@ -177,7 +178,7 @@ VectorProjectConfig::AddLayer(const LayerConfig &layer)
   // first make sure we have the necessary parent folders
   EnsureFolderExists(layer.legend);
 
-  uint num = 1;
+  unsigned int num = 1;
   bool again;
   QString checkname;
   do {

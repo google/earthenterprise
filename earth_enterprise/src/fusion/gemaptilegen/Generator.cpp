@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -34,9 +35,9 @@ namespace {
 // To print a png file for debugging.
 // Usage: WritePngFileDebug(&context.render_tile_.pixelBuf[0],
 //          task_config_.fusion_tilespace_.tileSize, item->qt_path_.AsString())
-void WritePngFileDebug(char* pixel_buffer, uint tile_size,
+void WritePngFileDebug(char* pixel_buffer, unsigned int tile_size,
                        const std::string& file_prefix) {
-  uint options = 0;
+  unsigned int options = 0;
 #if __BYTE_ORDER == __BIG_ENDIAN
   options = PNGOPT_SWAPALPHA;
 #else
@@ -72,11 +73,11 @@ namespace gemaptilegen {
 // for each 4 bytes: byte0 -> Blue, byte1 -> Green, byte2 -> Red, byte3-> Alpha
 class AlphaMultiplicationUndoer {
  public:
-  static void UndoAlphaPremultiplication(uint8* chunk);
-  static inline void UndoAlphaPremultiplicationForPixel(uint8* bgra_color);
+  static void UndoAlphaPremultiplication(std::uint8_t* chunk);
+  static inline void UndoAlphaPremultiplicationForPixel(std::uint8_t* bgra_color);
 
  private:
-  AlphaMultiplicationUndoer() : lookup_table_(256, std::vector<uint8>(256, 0)) {
+  AlphaMultiplicationUndoer() : lookup_table_(256, std::vector<std::uint8_t>(256, 0)) {
     // For alpha == 0, need to store 0, look up table is initialized to 0.
     // So nothing needs to be done in look up table, for alpha = 0
     const int MaxAlpha = 255;
@@ -89,7 +90,7 @@ class AlphaMultiplicationUndoer {
         if (un_premultiplied > MaxRGB) {
           un_premultiplied = MaxRGB;
         }
-        lookup_table_[alpha][value] = (uint8)(un_premultiplied);
+        lookup_table_[alpha][value] = (std::uint8_t)(un_premultiplied);
       }
     }
     // For alpha == 255, return value as it is
@@ -102,7 +103,7 @@ class AlphaMultiplicationUndoer {
   // In this 2 dimensional vector first dimension is indexed on alpha and 2nd
   // dimension is indexed on pot multiplied value. Content is original value
   // (before alpha multiplication).
-  std::vector<std::vector<uint8> > lookup_table_;
+  std::vector<std::vector<std::uint8_t> > lookup_table_;
   static const AlphaMultiplicationUndoer single_instance_for_lut;
 };
 
@@ -117,11 +118,11 @@ class CompressorJob {
   static bool IsAllPixelsSame(char* tile_start_in_super_tile_buf) {
     // Since we know that tile keeps a set of 4 bytes (BGRA) it is faster to
     // compare in 4 byte chunks.
-    const uint32* tile_buf32 = reinterpret_cast<const uint32*>(
+    const std::uint32_t* tile_buf32 = reinterpret_cast<const std::uint32_t*>(
         tile_start_in_super_tile_buf);
-    const uint32* const tile_buf32_end = tile_buf32 +
+    const std::uint32_t* const tile_buf32_end = tile_buf32 +
                                          HeightInPxl() * SuperTileWidthInPxl();
-    for (const uint32 first_point_color = *tile_buf32;
+    for (const std::uint32_t first_point_color = *tile_buf32;
          IsArrayOfIdenticalElements(tile_buf32, WidthInPxl()) &&
          (tile_buf32 += SuperTileWidthInPxl()) < tile_buf32_end;) {
       if (first_point_color != *tile_buf32) {
@@ -170,7 +171,7 @@ class CompressorJob {
 
   static size_t NumTilesPerSuperTile()  { return num_tiles_per_super_tile_;}
 
-  static const uint png_byte_order_option_;
+  static const unsigned int png_byte_order_option_;
 
  private:
   static size_t width_;
@@ -189,7 +190,7 @@ class CompressorJob {
   const CompressorJob& operator = (const CompressorJob& other);
 };
 
-const uint CompressorJob::png_byte_order_option_ =
+const unsigned int CompressorJob::png_byte_order_option_ =
 #if __BYTE_ORDER == __BIG_ENDIAN
     PNGOPT_SWAPALPHA;
 #else
@@ -208,11 +209,11 @@ size_t CompressorJob::super_tile_area_;
 size_t CompressorJob::super_tile_byte_size_;
 size_t CompressorJob::num_tiles_per_super_tile_;
 
-void AlphaMultiplicationUndoer::UndoAlphaPremultiplication(uint8* chunk) {
-  uint8* const end = chunk +
+void AlphaMultiplicationUndoer::UndoAlphaPremultiplication(std::uint8_t* chunk) {
+  std::uint8_t* const end = chunk +
       CompressorJob::HeightInPxl() * CompressorJob::SuperTileWidthInBytes();
   for ( ; chunk < end; chunk += CompressorJob::SuperTileWidthInBytes() ) {
-    for (uint8 *four_byte_color = chunk,
+    for (std::uint8_t *four_byte_color = chunk,
          *chunk_end = chunk + CompressorJob::WidthInBytes();
          four_byte_color < chunk_end; four_byte_color += 4) {
       UndoAlphaPremultiplicationForPixel(four_byte_color);
@@ -221,14 +222,14 @@ void AlphaMultiplicationUndoer::UndoAlphaPremultiplication(uint8* chunk) {
 }
 
 void AlphaMultiplicationUndoer::UndoAlphaPremultiplicationForPixel(
-    uint8 *bgra_color) {
-  const uint32 alpha = bgra_color[3];
+    std::uint8_t *bgra_color) {
+  const std::uint32_t alpha = bgra_color[3];
   // Optimize since most points are black or white
   if (alpha == 0 || alpha == 0xff) {
     // leave the color values as it is
     return;
   } else {
-    const std::vector<uint8>& lookup_table_for_this_alpha =
+    const std::vector<std::uint8_t>& lookup_table_for_this_alpha =
         single_instance_for_lut.lookup_table_[alpha];
     *bgra_color = lookup_table_for_this_alpha[*bgra_color];  // B
     ++bgra_color;
@@ -253,7 +254,7 @@ class CompressorOutput {
   // Constructor for a single-pixel tile.
   CompressorOutput(size_t serial, QuadtreePath qt_path, const char color[4])
     : serial_(serial), qt_path_(qt_path),
-      color_(*(reinterpret_cast<const uint32*>(color))),
+      color_(*(reinterpret_cast<const std::uint32_t*>(color))),
       data_len_(0), buf_size_(0) {}
 
   // Constructor for a job to update serial_expected.
@@ -271,8 +272,8 @@ class CompressorOutput {
   const size_t serial_;         // use this to serialize write on qt_path order
   const QuadtreePath qt_path_;  // For write bundle indexing
   // single color
-  const uint32 color_;
-  const uint32 data_len_;       // size of the data in the compressor,
+  const std::uint32_t color_;
+  const std::uint32_t data_len_;       // size of the data in the compressor,
                                 // 0 for single pixel tile.
                                 // UINT_MAX for serial updating job.
   const size_t buf_size_;       // size of the buffer including CRC bytes
@@ -317,7 +318,7 @@ RenderContext::RenderContext(const khTilespace &fusion_tilespace,
 
 class RenderItem {
  public:
-  explicit RenderItem(uint max_in_tiles)
+  explicit RenderItem(unsigned int max_in_tiles)
       : serial_(0), bytes_sent_to_write_(0) {
     in_tiles_.reserve(max_in_tiles);
   }
@@ -336,7 +337,7 @@ class RenderItem {
   size_t bytes_sent_to_write_;
 
   void Release(void) {
-    for (uint i = 0; i < in_tiles_.size(); ++i) {
+    for (unsigned int i = 0; i < in_tiles_.size(); ++i) {
       delete in_tiles_[i];
     }
     in_tiles_.clear();
@@ -356,7 +357,7 @@ class PreparerMergeSource : public MergeSource<Generator::MergeEntry> {
  public:
   PreparerMergeSource(const std::string      &debug_desc,
                       Generator::Preparer    &preparer,
-                      uint32                  input_batch_size,
+                      std::uint32_t                  input_batch_size,
                       int                     layer_no) :
       MergeSource<Generator::MergeEntry>(debug_desc),
       in_puller_(input_batch_size, preparer.OutputQueue()),
@@ -408,14 +409,14 @@ class PreparerMergeSource : public MergeSource<Generator::MergeEntry> {
 struct WriteArguments {
   Generator::WriteQueue* const write_packet_queue;
   PacketFileWriter* const writer;
-  const uint32 write_buffer_size;
-  uint64* const write_count_ptr;
+  const std::uint32_t write_buffer_size;
+  std::uint64_t* const write_count_ptr;
   mttypes::Semaphore* const write_buffer_control;
 
   WriteArguments(Generator::WriteQueue* write_packet_queue,
                  PacketFileWriter* writer,
-                 uint32 write_buffer_size,
-                 uint64* write_count_ptr,
+                 std::uint32_t write_buffer_size,
+                 std::uint64_t* write_count_ptr,
                  mttypes::Semaphore* write_buffer_control)
       : write_packet_queue(write_packet_queue),
         writer(writer),
@@ -429,8 +430,8 @@ struct WriteArguments {
 // ***  Command thread loop for writer
 // ****************************************************************************
 void CommandLoopForWriter(const WriteArguments arg) {
-  typedef std::map<uint32, PacketFileWriter::AllocatedBlock> LonleyPixelMap;
-  typedef std::map<uint32, PacketFileWriter::AllocatedBlock>::iterator
+  typedef std::map<std::uint32_t, PacketFileWriter::AllocatedBlock> LonleyPixelMap;
+  typedef std::map<std::uint32_t, PacketFileWriter::AllocatedBlock>::iterator
       LonleyPixelMapIterator;
   LonleyPixelMap lonley_pixels;
 
@@ -444,8 +445,8 @@ void CommandLoopForWriter(const WriteArguments arg) {
                                     // from our larger buffer.
                                     CompressorJob::SuperTileWidthInPxl(),
                                     0))));
-  uint64 write_count = 0;
-  uint32 bytes_written = 0;
+  std::uint64_t write_count = 0;
+  std::uint32_t bytes_written = 0;
   // This queue is to serialize writes based on quad tree path. This avoids the
   // need for costly resorting by file bundle writer.
   std::priority_queue<CompressorOutputPtr> backup_allocate_jobs;
@@ -560,7 +561,7 @@ void Generator::MergeLoop(mttypes::Semaphore* write_buffer_control) {
   // create and populate a Merger
   Merge<MergeEntry> merger("Prepare Merger");
   bool need_merging = false;
-  for (uint i = 0; i < sublayer_preparers_.size(); ++i) {
+  for (unsigned int i = 0; i < sublayer_preparers_.size(); ++i) {
     PreparerMergeSource* ptr = new PreparerMergeSource(
                 "Prepare Source",
                 *sublayer_preparers_[i],
@@ -576,7 +577,7 @@ void Generator::MergeLoop(mttypes::Semaphore* write_buffer_control) {
 
   if (need_merging) {
     merger.Start();
-    uint32 bytes_sent_to_write(0);
+    std::uint32_t bytes_sent_to_write(0);
     size_t serial = 0;
     RenderQueue::PullHandle next;
 
@@ -621,7 +622,7 @@ void Generator::MergeLoop(mttypes::Semaphore* write_buffer_control) {
     merger.Close();
   }
 
-  for (uint32 i = 1; i < task_config_.num_render_threads_; ++i) {
+  for (std::uint32_t i = 1; i < task_config_.num_render_threads_; ++i) {
     render_queue_.Push(NULL);  // A way to drain n-1 threads
   }
   render_queue_.PushDone();
@@ -672,7 +673,7 @@ void Generator::RenderLoop(char* pixel_buffer) {
       //                   item->qt_path_.AsString());
 
       // figure out which target tiles we will make from this fusion tile
-      uint32 level, src_row, src_col;
+      std::uint32_t level, src_row, src_col;
       item->qt_path_.GetLevelRowCol(&level, &src_row, &src_col);
 
       khLevelCoverage todo_cov =
@@ -684,24 +685,24 @@ void Generator::RenderLoop(char* pixel_buffer) {
 
       // Get the origin and size before cropping. We'll need them to extract the
       // sub-tiles from our fusion tile
-      khExtents<uint32> tileExtents = todo_cov.extents;
+      khExtents<std::uint32_t> tileExtents = todo_cov.extents;
 
       // intersect the todo coverage with the target coverage
       todo_cov.cropTo(target_coverage_.extents);
 
-      for (uint32 tile_row = todo_cov.extents.beginRow();
+      for (std::uint32_t tile_row = todo_cov.extents.beginRow();
            tile_row < todo_cov.extents.endRow(); ++tile_row) {
-        uint32 extract_tile_row = tile_row - tileExtents.beginRow();
+        std::uint32_t extract_tile_row = tile_row - tileExtents.beginRow();
         // our output rows are numbered bottom to top, but the tile is rendered
         // top to bottom
         extract_tile_row = tileExtents.height() - 1 - extract_tile_row;
 
-        for (uint32 tile_col = todo_cov.extents.beginCol();
+        for (std::uint32_t tile_col = todo_cov.extents.beginCol();
              tile_col < todo_cov.extents.endCol(); ++tile_col) {
-          uint32 extract_tile_col = tile_col - tileExtents.beginCol();
+          std::uint32_t extract_tile_col = tile_col - tileExtents.beginCol();
 
           // determine the pixel offset of the extract tile in our bigger tile
-          uint32 offset = (extract_tile_row * CompressorJob::HeightInPxl()
+          std::uint32_t offset = (extract_tile_row * CompressorJob::HeightInPxl()
                            * CompressorJob::SuperTileWidthInBytes()) +
                           extract_tile_col * CompressorJob::WidthInBytes();
           char* tile_buf = pixel_buffer + offset;
@@ -709,7 +710,7 @@ void Generator::RenderLoop(char* pixel_buffer) {
           bool is_single_color = CompressorJob::IsAllPixelsSame(tile_buf);
           CompressorOutput* compress_pack = NULL;
           if (is_single_color) {
-            const unsigned char* ptr = reinterpret_cast<const uchar*>(tile_buf);
+            const unsigned char* ptr = reinterpret_cast<const unsigned char*>(tile_buf);
             const geColor color(geColor::BGRA, ptr[0], ptr[1], ptr[2], ptr[3]);
             if (color.IsTransparent()) {
               continue;  // transparent tile ignore
@@ -718,12 +719,12 @@ void Generator::RenderLoop(char* pixel_buffer) {
             // Process only first BGRA tuple that is then used to set color for
             // the whole tile.
             AlphaMultiplicationUndoer::UndoAlphaPremultiplicationForPixel(
-                reinterpret_cast<uint8*>(tile_buf));
+                reinterpret_cast<std::uint8_t*>(tile_buf));
             compress_pack = new CompressorOutput(serial, out_path, tile_buf);
           } else {
             // Un-multiplies the alpha value because PNG is stored with alpha.
             AlphaMultiplicationUndoer::UndoAlphaPremultiplication(
-                reinterpret_cast<uint8*>(tile_buf));
+                reinterpret_cast<std::uint8_t*>(tile_buf));
             compressor->compress(tile_buf);
             compress_pack = new CompressorOutput(serial, out_path, compressor);
             item->bytes_sent_to_write_ += compress_pack->buf_size_;
@@ -773,7 +774,7 @@ Generator::Generator(geFilePool &file_pool, const std::string &outdir,
                              - write_buffer_size_ - index_buffer_size_),
     writer_(file_pool, outdir),
     task_config_(task_config),
-    target_coverage_(config.level_, khExtents<uint32>()),
+    target_coverage_(config.level_, khExtents<std::uint32_t>()),
     write_packet_queue_(),
     render_queue_(),
     free_render_item_queue_(),
@@ -794,7 +795,7 @@ Generator::Generator(geFilePool &file_pool, const std::string &outdir,
 
   // Seed the free_render_item_queue_
   render_items_deleter_.reserve(task_config_.num_render_threads_ * 2);
-  for (uint i = 0; i < task_config_.num_render_threads_ * 2; ++i) {
+  for (unsigned int i = 0; i < task_config_.num_render_threads_ * 2; ++i) {
     // Maximum in_tiles is same as number of sublayers (one in_tile from each)
     RenderItem* ptr = new RenderItem(config.sub_layers_.size());
     free_render_item_queue_.Push(ptr);
@@ -804,7 +805,7 @@ Generator::Generator(geFilePool &file_pool, const std::string &outdir,
   // build the per-sublayer data structures
   // while we're at it, populate the target_coverage_ and fusion_coverage_
   sublayer_preparers_.reserve(config.sub_layers_.size());
-  for (uint sl = 0; sl < config.sub_layers_.size(); ++sl) {
+  for (unsigned int sl = 0; sl < config.sub_layers_.size(); ++sl) {
     const gemaptilegen::Config::SubLayer& sublayer = config.sub_layers_[sl];
 
     std::vector<std::string> select_files;
@@ -812,7 +813,7 @@ Generator::Generator(geFilePool &file_pool, const std::string &outdir,
     std::vector<MapDisplayRuleConfig> display_rules;
     display_rules.reserve(sublayer.display_rules_.size());
     std::string messages;
-    for (uint dr = 0; dr < sublayer.display_rules_.size(); ++dr) {
+    for (unsigned int dr = 0; dr < sublayer.display_rules_.size(); ++dr) {
       const gemaptilegen::Config::DisplayRule& disprule =
           sublayer.display_rules_[dr];
       {
@@ -911,7 +912,7 @@ Generator::~Generator(void) {
 }
 
 void Generator::Run(void) {
-  uint64 write_count = 0;
+  std::uint64_t write_count = 0;
   khTimer_t start_time = khTimer::tick();
   khDeleteGuard<char, ArrayDeleter> buffer(TransferOwnership(
                      new char[CompressorJob::SuperTileAreaInBytes() *
@@ -948,7 +949,7 @@ void Generator::Run(void) {
     // It in turn writes to allocator queue.
     // create the render threads
     khDeletingVector<mttypes::ManagedThread> render_threads;
-    for (uint i = 0; i < task_config_.num_render_threads_; ++i) {
+    for (unsigned int i = 0; i < task_config_.num_render_threads_; ++i) {
       char* pixel_buffer = &buffer[0] +
                            CompressorJob::SuperTileAreaInBytes() * i;
       render_threads.push_back(
@@ -967,7 +968,7 @@ void Generator::Run(void) {
     // allocator.
     // create selector threads
     khDeletingVector<mttypes::ManagedThread> selector_threads;
-    for (uint i = 0; i < sublayer_selectors_.size(); ++i) {
+    for (unsigned int i = 0; i < sublayer_selectors_.size(); ++i) {
       selector_threads.push_back(
           TransferOwnership(
               new mttypes::ManagedThread(
@@ -980,7 +981,7 @@ void Generator::Run(void) {
 
     // create preparer threads
     khDeletingVector<mttypes::ManagedThread> preparer_threads;
-    for (uint i = 0; i < sublayer_preparers_.size(); ++i) {
+    for (unsigned int i = 0; i < sublayer_preparers_.size(); ++i) {
       preparer_threads.push_back(
           TransferOwnership(
               new mttypes::ManagedThread(

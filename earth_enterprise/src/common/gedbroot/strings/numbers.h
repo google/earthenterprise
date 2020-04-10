@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,6 +21,7 @@
 
 #include <string>
 #include "common/khTypes.h"
+#include <cstdint>
 
 //// START DOXYGEN NumbersFunctions grouping
 ///* @defgroup NumbersFunctions
@@ -28,26 +30,26 @@
 
 // ----------------------------------------------------------------------
 // ParseLeadingInt32Value
-//    A simple parser for int32 values. Returns the parsed value
+//    A simple parser for std::int32_t values. Returns the parsed value
 //    if a valid integer is found; else returns deflt. It does not
 //    check if str is entirely consumed.
 //    This cannot handle decimal numbers with leading 0s, since they will be
 //    treated as octal.  If you know it's decimal, use ParseLeadingDec32Value.
 // --------------------------------------------------------------------
-int32 ParseLeadingInt32Value(const char* str, int32 deflt);
-inline int32 ParseLeadingInt32Value(const std::string& str, int32 deflt) {
+std::int32_t ParseLeadingInt32Value(const char* str, std::int32_t deflt);
+inline std::int32_t ParseLeadingInt32Value(const std::string& str, std::int32_t deflt) {
   return ParseLeadingInt32Value(str.c_str(), deflt);
 }
 
 // ParseLeadingUInt32Value
-//    A simple parser for uint32 values. Returns the parsed value
+//    A simple parser for std::uint32_t values. Returns the parsed value
 //    if a valid integer is found; else returns deflt. It does not
 //    check if str is entirely consumed.
 //    This cannot handle decimal numbers with leading 0s, since they will be
 //    treated as octal.  If you know it's decimal, use ParseLeadingUDec32Value.
 // --------------------------------------------------------------------
-uint32 ParseLeadingUInt32Value(const char* str, uint32 deflt);
-inline uint32 ParseLeadingUInt32Value(const std::string& str, uint32 deflt) {
+ std::uint32_t ParseLeadingUInt32Value(const char* str, std::uint32_t deflt);
+inline std::uint32_t ParseLeadingUInt32Value(const std::string& str, std::uint32_t deflt) {
   return ParseLeadingUInt32Value(str.c_str(), deflt);
 }
 

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -78,7 +79,7 @@ namespace {
 }
 
 int ServerdbReader::CheckLevel(const geindex::TypedEntry::ReadKey &read_key,
-                               uint32 level, uint32 row, uint32 col) {
+                               std::uint32_t level, std::uint32_t row, std::uint32_t col) {
   if (level > MaxClientLevel) return 2;
   ServerdbReader::ReadBuffer buf;
   row = InvertRow(level, row);
@@ -213,16 +214,16 @@ ServerdbReader::ServerdbReader(geFilePool& file_pool,
     file_pool.ReadStringFile(date_channel_map_file_name, &buf);
     std::vector<std::string> tokens;
     const std::string kDelimiters(" =\n");
-    uint32 max_tokens = 1000000;  // arbitrary limit. If this is exceeded
+    std::uint32_t max_tokens = 1000000;  // arbitrary limit. If this is exceeded
                                   // we will have other memory issues.
     TokenizeString(buf, tokens, kDelimiters, max_tokens);
 
-    for (uint i = 0; i < tokens.size(); i += 2) {
+    for (unsigned int i = 0; i < tokens.size(); i += 2) {
       if (i + 1 >= tokens.size() || tokens[i].empty() || tokens[i+1].empty())
         break;  // invalid line, ignore.
 
       const std::string& date_tag = tokens[i];
-      uint32 channel_id = std::atoi(tokens[i+1].c_str());
+      std::uint32_t channel_id = std::atoi(tokens[i+1].c_str());
 
       std::string date_time_hex;
       std::string date_hex;
@@ -259,10 +260,10 @@ ServerdbReader::~ServerdbReader() {
     delete index_reader_;
 }
 
-// Tries to parse a uint32 from the given string. If there is junk after the
+// Tries to parse a std::uint32_t from the given string. If there is junk after the
 // int, we expect this not to fail and for atoi to just return the initial int
 // from the string. If there is no legal value, 0 is returned.
-void ServerdbReader::GetUint32Arg(const std::string& str, uint32* arg) const {
+void ServerdbReader::GetUint32Arg(const std::string& str, std::uint32_t* arg) const {
   *arg = 0;
   // Empty string is interpreted as 0.
   if (str.empty()) {
@@ -275,7 +276,7 @@ void ServerdbReader::GetUint32Arg(const std::string& str, uint32* arg) const {
     ++str_ptr;
   }
 
-  // Convert to a uint if the value is a plausible integer, otherwise return 0.
+  // Convert to a unsigned int if the value is a plausible integer, otherwise return 0.
   if ((*str_ptr >= '0') && (*str_ptr <= '9')) {
     *arg = atoi(str_ptr);
   }
@@ -332,13 +333,13 @@ const MimeType ServerdbReader::GetData(
     try {
       // Check for time machine layers, ImageryGE Only
       std::string date_tag = arg_map["date"];
-      uint32 channel;
+      std::uint32_t channel;
       GetUint32Arg(arg_map["channel"], &channel);
       if (has_timemachine_layer_ &&
           !date_tag.empty() &&
           request == "ImageryGE") {
         // Get the channel id for this imagery layer.
-        std::map<std::string, uint32>::const_iterator iter =
+        std::map<std::string, std::uint32_t>::const_iterator iter =
           date_to_channel_map_.find(date_tag);
         if (iter == date_to_channel_map_.end()) {
           channel = kGEImageryChannelId;  // Default to default imagery layer.
@@ -348,13 +349,13 @@ const MimeType ServerdbReader::GetData(
       }
       // Get format parameter (Imagery*Maps* requests).
       const std::string& format = arg_map["format"];
-      uint32 version;
+      std::uint32_t version;
       GetUint32Arg(arg_map["version"], &version);
-      uint32 level;
+      std::uint32_t level;
       GetUint32Arg(arg_map["level"], &level);
-      uint32 row;
+      std::uint32_t row;
       GetUint32Arg(arg_map["row"], &row);
-      uint32 col;
+      std::uint32_t col;
       GetUint32Arg(arg_map["col"], &col);
       std::string blist = arg_map["blist"];
       if ((blist.empty()) || (blist.back() != kQuadTreePathSeparator)) {
@@ -365,7 +366,7 @@ const MimeType ServerdbReader::GetData(
         // Note: Special processing for cutter when it requests more than one
         // quadtree packet. It is only for 3D Fusion databases.
         PackedString str;
-        uint64 total_size = 0;
+        std::uint64_t total_size = 0;
         for (size_t start = 0; start < blist.length(); ) {
           size_t last = blist.find_first_of(kQuadTreePathSeparator, start);
           buf.SetValue("");
@@ -378,7 +379,7 @@ const MimeType ServerdbReader::GetData(
             // and since we need to cover all requests packed in the blist too.
           }
           if (size_only) {
-            uint64 size = 0;
+            std::uint64_t size = 0;
             StringToNumber(buf, &size);
             total_size += size;
           } else {
@@ -475,11 +476,11 @@ const MimeType ServerdbReader::GetData(
 const MimeType ServerdbReader::GetPacket(
     const std::string& request,
     const std::string& blist,
-    uint32 level,
-    uint32 row,
-    uint32 col,
-    uint32 version,
-    uint32 channel,
+    std::uint32_t level,
+    std::uint32_t row,
+    std::uint32_t col,
+    std::uint32_t version,
+    std::uint32_t channel,
     ReadBuffer& buf,
     const bool size_only,
     const std::string& format,
@@ -594,8 +595,8 @@ const MimeType ServerdbReader::GetPacket(
 }
 
 void ServerdbReader::GetNearestAncestorData(const QuadtreePath& qpath,
-                                            uint32 version,
-                                            uint32 channel,
+                                            std::uint32_t version,
+                                            std::uint32_t channel,
                                             ReadBuffer* buf,
                                             QuadtreePath *qpath_parent) {
   bool version_matters = version != 0;
@@ -611,8 +612,8 @@ void ServerdbReader::GetNearestAncestorData(const QuadtreePath& qpath,
 
 const MimeType ServerdbReader::GetResampledImageryMapsTile(
     const QuadtreePath& qpath,
-    uint32 version,
-    uint32 channel,
+    std::uint32_t version,
+    std::uint32_t channel,
     ReadBuffer* buf,
     const bool report_in_source_format,
     const std::string& format,
@@ -720,15 +721,15 @@ const std::string& ServerdbReader::GetLocaleKey(
   // that we have available. Best means that it is either an exact match
   // (prefered) or the largest number of "pieces" match. If there are
   // multiple dbRoot that are "best", we take the first one we find:
-  uint32 maxNumberOfMatchingPieces = 0;
+  std::uint32_t maxNumberOfMatchingPieces = 0;
   ServerdbConfig::Map::const_iterator bestMatchingDbroot =
     map.find(kDefaultLocaleSuffix);
   std::map<std::string, std::string>::const_iterator iter;
   for (iter = map.begin(); iter != map.end(); ++iter) {
     std::vector<std::string> tokens;
     TokenizeString(UpperCaseString(iter->first), tokens, kLocaleSeparators);
-    uint32 numberOfMatchingPieces = 0;
-    for (uint32 i = 0; i < requestTokens.size(); ++i) {
+    std::uint32_t numberOfMatchingPieces = 0;
+    for (std::uint32_t i = 0; i < requestTokens.size(); ++i) {
       if (i >= tokens.size()) {
         break;
       }
@@ -780,6 +781,6 @@ void ServerdbReader::GetIcon(const std::string& icon_path, ReadBuffer& buf,
 }
 
 
-uint32 ServerdbReader::InvertRow(uint32 level, uint32 row) {
+ std::uint32_t ServerdbReader::InvertRow(std::uint32_t level, std::uint32_t row) {
   return (1 << level) - row - 1;
 }

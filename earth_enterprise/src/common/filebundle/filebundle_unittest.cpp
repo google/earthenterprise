@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -52,7 +53,7 @@ class FileBundleUnitTest : public UnitTest<FileBundleUnitTest> {
   bool TestBasics() {
     static const std::string kTestString("This is a test string for TestBasics");
     static const std::string kBundleName(kPathBase + "TestBasics");
-    uint64 location = 0;
+    std::uint64_t location = 0;
 
     fprintf(stderr, "Running TestBasics()\n");
 
@@ -159,7 +160,7 @@ class FileBundleUnitTest : public UnitTest<FileBundleUnitTest> {
 
   struct RandomRecord {
    public:
-    RandomRecord(char *buffer_, size_t buffer_size_, uint64 position_)
+    RandomRecord(char *buffer_, size_t buffer_size_, std::uint64_t position_)
         : buffer(buffer_),
           buffer_size(buffer_size_),
           position(position_) {
@@ -167,13 +168,13 @@ class FileBundleUnitTest : public UnitTest<FileBundleUnitTest> {
 
     char *buffer;
     size_t buffer_size;
-    uint64 position;
+    std::uint64_t position;
   };
 
-  uint64 WriteRandomRecords(FileBundleWriter &writer,
+  std::uint64_t WriteRandomRecords(FileBundleWriter &writer,
                             std::vector<RandomRecord> &records,
                             int buffer_count) {
-    uint64 total_size = 0;
+    std::uint64_t total_size = 0;
     for (int i = 0; i < buffer_count; ++i) {
       const size_t buffer_size = FileBundle::kCRCsize + 1 + static_cast<size_t>
                                  ((static_cast<float>(rand())
@@ -231,7 +232,7 @@ class FileBundleUnitTest : public UnitTest<FileBundleUnitTest> {
 
   bool TestRandom(bool buffer_writes, const std::string &bundlename) {
     const int kBufferCount = 2000;
-    const uint64 kSegmentBreak = 1024*1024;
+    const std::uint64_t kSegmentBreak = 1024*1024;
     const size_t kWriteBufferSize = 100*1024;
 
     std::string abs_path;
@@ -248,7 +249,7 @@ class FileBundleUnitTest : public UnitTest<FileBundleUnitTest> {
 
     std::vector<RandomRecord> records;
     records.reserve(kBufferCount);
-    uint64 total_data_size = 0;
+    std::uint64_t total_data_size = 0;
 
     // Generate and write buffers
     {
@@ -459,7 +460,7 @@ class FileBundleUnitTest : public UnitTest<FileBundleUnitTest> {
     // Set these constants so that we write more than one segment, and
     // so that the bad CRC record will be in the second segment at a
     // non-zero offset
-    const uint64 kSegmentBreak = 2 * kMaxBuffer + 10;
+    const std::uint64_t kSegmentBreak = 2 * kMaxBuffer + 10;
     const int kRecordCount = 4;
     std::vector<FileBundleAddr> record_addrs;
 

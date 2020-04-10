@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +19,7 @@
 #ifndef _NOTIFY_H
 #define _NOTIFY_H
 
-#include <khTypes.h>
+#include <cstdint>
 #include <stdarg.h>
 #include <stdio.h>
 #include <string>
@@ -47,7 +48,7 @@ extern khNotifyLevel getNotifyLevel();
 extern std::string khNotifyLevelToString(khNotifyLevel);
 extern khNotifyLevel stringTokhNotifyLevel(const std::string&);
 extern void setNotifyLevel(khNotifyLevel);
-extern void HexDump(FILE *, const void *, uint32);
+extern void HexDump(FILE *, const void *, std::uint32_t);
 extern std::string khstrerror(int err);
 extern std::string GetNotifyPrefixValue(khNotifyLevel severity, const std::string& notify_prefix);
 

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +24,8 @@
 #include <string>
 #include <vector>
 
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "common/khExtents.h"
 
 class GDALRasterBand;
@@ -35,11 +37,11 @@ class khRasterProductLevel;
 class BandInfo {
  public:
   GDALRasterBand *hostBand;
-  khExtents<uint32> extract_extents_;
+  khExtents<std::uint32_t> extract_extents_;
   khTypes::StorageEnum datatype;
 
   BandInfo(GDALRasterBand *band,
-           const khExtents<uint32> &extents,
+           const khExtents<std::uint32_t> &extents,
            khTypes::StorageEnum type);
 };
 
@@ -47,7 +49,7 @@ class geImageWriter {
  public:
   static void
   ExtractLevelImage(const khRasterProductLevel &prodLevel,
-                    const khExtents<uint32> &extract_extents,
+                    const khExtents<std::uint32_t> &extract_extents,
                     GDALDriver *driver,
                     const std::string &output,
                     const khGeoExtents &outputGeoExtents,
@@ -56,8 +58,8 @@ class geImageWriter {
 
   static void
   WriteImageryPreview(const khRasterProductLevel &prodLevel,
-                      const khExtents<uint32> &extract_extents,
-                      uchar *alphaBuf,
+                      const khExtents<std::uint32_t> &extract_extents,
+                      unsigned char *alphaBuf,
                       GDALDriver *driver,
                       const std::string &output,
                       const khGeoExtents &outputGeoExtents,
@@ -66,8 +68,8 @@ class geImageWriter {
 
   static void
   WriteHeightmapPreview(const khRasterProductLevel &prodLevel,
-                        const khExtents<uint32> &extract_extents,
-                        uchar *alphaBuf,
+                        const khExtents<std::uint32_t> &extract_extents,
+                        unsigned char *alphaBuf,
                         GDALDriver *driver,
                         const std::string &output,
                         const khGeoExtents &outputGeoExtents,
@@ -75,8 +77,8 @@ class geImageWriter {
                         char **output_options);
 
   static void
-  WriteAlphaImage(const khSize<uint32> &extract_size,
-                  uchar *alphaBuf,
+  WriteAlphaImage(const khSize<std::uint32_t> &extract_size,
+                  unsigned char *alphaBuf,
                   GDALDriver *driver,
                   const std::string &output,
                   const khGeoExtents &outputGeoExtents,
@@ -84,8 +86,8 @@ class geImageWriter {
                   char **output_options);
 
   static void
-  WriteAlphaImage(const khSize<uint32> &extract_size,
-                  uchar *alphaBuf,
+  WriteAlphaImage(const khSize<std::uint32_t> &extract_size,
+                  unsigned char *alphaBuf,
                   GDALDriver *driver,
                   const std::string &output,
                   const khGeoExtents &outputGeoExtents,
@@ -93,7 +95,7 @@ class geImageWriter {
                   char **output_options);
 
   static void
-  CopyAndWriteImage(const khSize<uint32>& rasterSize,
+  CopyAndWriteImage(const khSize<std::uint32_t>& rasterSize,
                     const std::vector<BandInfo> &bands,
                     GDALDriver *driver,
                     const std::string &output,
@@ -102,7 +104,7 @@ class geImageWriter {
                     char **output_options);
 
   static void
-  CopyAndWriteImage(const khSize<uint32>& rasterSize,
+  CopyAndWriteImage(const khSize<std::uint32_t>& rasterSize,
                     const std::vector<BandInfo> &bands,
                     GDALDriver *driver,
                     const std::string &output,

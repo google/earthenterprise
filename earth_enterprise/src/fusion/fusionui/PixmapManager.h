@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,8 +33,8 @@ class ColorBox {
     kOutlineColorId = 1
   };
 
-  static QPixmap Pixmap(uint fill_r, uint fill_g, uint fill_b,
-                        uint outline_r, uint outline_g, uint outline_b);
+  static QPixmap Pixmap(unsigned int fill_r, unsigned int fill_g, unsigned int fill_b,
+                        unsigned int outline_r, unsigned int outline_g, unsigned int outline_b);
   static QColor FillColor(const QPixmap& pix);
   static QColor OutlineColor(const QPixmap& pix);
 };

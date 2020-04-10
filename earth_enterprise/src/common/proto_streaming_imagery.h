@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +24,8 @@
 
 #include <string>
 
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "protobuf/streaming_imagery.pb.h"
 
 
@@ -177,13 +179,13 @@ class geProtobufPacketBuilder {
   ~geProtobufPacketBuilder(void);
 
   // Sets data image.
-  inline void SetImageData(const char *data, uint32 size) {
+  inline void SetImageData(const char *data, std::uint32_t size) {
     packet_.SetImageType(keyhole::EarthImageryPacket::JPEG);
     packet_.SetImageData(data, size);
   }
 
   // Sets alpha image.
-  inline void SetImageAlpha(const char *data, uint32 size) {
+  inline void SetImageAlpha(const char *data, std::uint32_t size) {
     packet_.SetAlphaType(keyhole::EarthImageryPacket::PNG);
     packet_.SetImageAlpha(data, size);
   }
@@ -192,7 +194,7 @@ class geProtobufPacketBuilder {
   // EarthImageryPacket.
   // @param packet_data returned pointer to protobuf packet;
   // @param packet_size returned size of protobuf packet;
-  void Build(char **packet_data, uint *packet_size);
+  void Build(char **packet_data, unsigned int *packet_size);
 
  private:
   std::string packet_buf_;

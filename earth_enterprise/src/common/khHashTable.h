@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,7 +80,7 @@ class khHashTable
 
   int length() { return _numElements; }
 
-  uint hash(const TypeID &id) const
+  unsigned int hash(const TypeID &id) const
   {
     return (id % _hashPrime) & _hashMask;
   }
@@ -203,7 +204,7 @@ class khHashTable
  private:
   HashItem **_table;
   int _size;
-  uint _hashMask;
+  unsigned int _hashMask;
   int _hashPrime;
   int _numElements;
   static const int primeNumbers[];

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,7 +31,7 @@
 
 std::string GetSupportedEncodings(void) {
   std::vector<std::string> encodings;
-  uint longest = 0;
+  unsigned int longest = 0;
 
   // fetch QT's supported encodings & sort them alphbetically
   QTextCodec *codec;
@@ -43,13 +44,13 @@ std::string GetSupportedEncodings(void) {
 
   // build a string with them arranged into a nice grid
   std::string retstr;
-  uint numcols = 73 / (longest + 1);
-  uint numrows = ((encodings.size() + numcols - 1) / numcols);
+  unsigned int numcols = 73 / (longest + 1);
+  unsigned int numrows = ((encodings.size() + numcols - 1) / numcols);
 
-  for (uint r = 0; r < numrows; ++r) {
+  for (unsigned int r = 0; r < numrows; ++r) {
     retstr += "      ";
-    for (uint c = 0; c < numcols; ++c) {
-      uint i = c * numrows + r;
+    for (unsigned int c = 0; c < numcols; ++c) {
+      unsigned int i = c * numrows + r;
       if (i < encodings.size()) {
         retstr += encodings[i] +
                   std::string(1+longest-encodings[i].size(), ' ');
@@ -189,7 +190,7 @@ main(int argc, char *argv[]) {
       if (!providers.Load()) {
         notify(NFY_FATAL, "Unable to load provider list");
       }
-      for (uint i = 0 ; i < providers.items.size(); ++i) {
+      for (unsigned int i = 0 ; i < providers.items.size(); ++i) {
         if (providers.items[i].key == providerkey) {
           req.config.provider_id_ = providers.items[i].id;
         }

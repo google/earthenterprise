@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,7 +80,7 @@ class AssetImpl : public AssetStorage, public StorageManaged {
   const SharedString & GetRef(void) const { return name; }
 
   // determine amount of memory used by an AssetImpl
-  virtual uint64 GetHeapUsage() const {
+  virtual std::uint64_t GetHeapUsage() const {
     return ::GetHeapUsage(name)
     + ::GetHeapUsage(type)
     + ::GetHeapUsage(subtype)
@@ -142,7 +143,7 @@ Asset::Valid(void) const
   }
 }
 
-inline uint64 GetHeapUsage(const AssetImpl &asset) {
+inline std::uint64_t GetHeapUsage(const AssetImpl &asset) {
   return asset.GetHeapUsage();
 }
 

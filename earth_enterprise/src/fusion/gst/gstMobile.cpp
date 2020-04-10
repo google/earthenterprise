@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,7 +26,7 @@
 
 
 bool MobileBlockImpl::init_gfx_ = false;
-uint MobileBlockImpl::ramp_texture_id_ = 0;
+unsigned int MobileBlockImpl::ramp_texture_id_ = 0;
 //uint MobileBlockImpl::road_texture_id_ = 0;
 
 MobileBlockHandle MobileBlockImpl::Create(const khTileAddr& addr, int sg,
@@ -48,7 +49,7 @@ void MobileBlockImpl::InitGfx() {
   const int kMaxVal = 255;
   const float kRampStep = static_cast<float>(kMaxVal) /
                           static_cast<float>((kRampSize >> 1) - 1);
-  uint8 tex_buff[kRampSize];
+  std::uint8_t tex_buff[kRampSize];
   for (int i = 0; i < (kRampSize >> 1); ++i) {
     tex_buff[i] = static_cast<int>((i * kRampStep) + 0.5);
     tex_buff[kRampSize - i - 1] = tex_buff[i];
@@ -156,8 +157,8 @@ void MobileBlockImpl::Draw(const gstDrawState& state,
   glBlendFunc(blend_modes.src_factor, blend_modes.dest_factor);
   glLineWidth(2);
   glPointSize(3);
-  uint off = 0;
-  for (std::vector<uint>::const_iterator it = counts_.begin();
+  unsigned int off = 0;
+  for (std::vector< unsigned int> ::const_iterator it = counts_.begin();
        it != counts_.end(); ++it) {
     glVertexPointer(2, GL_SHORT, 0, &vertexes_[off]);
     glColor4f(0.0, 0.8, 0.8, 0.8);
@@ -213,7 +214,7 @@ bool MobileBlockImpl::AddGeometry(const gstGeodeHandle geode) {
   //
 
   vertexes_.reserve(geode->VertexCount(0));
-  for (uint v = 0; v < geode->VertexCount(0); ++v) {
+  for (unsigned int v = 0; v < geode->VertexCount(0); ++v) {
     const gstVertex& vert = geode->GetVertex(0, v);
     vertexes_.push_back(SnapVertexToLattice(origin_x, origin_y, scale,
                                             gstVert2D(vert.x, vert.y)));
@@ -229,7 +230,7 @@ bool MobileBlockImpl::AddGeometry(const gstGeodeHandle geode) {
   gstVert2D prev_v1;
   gstVert2D prev_v2;
   gstVert2D prev_v3;
-  for (uint n = 0; n < geode->VertexCount(0) - 1; ++n) {
+  for (unsigned int n = 0; n < geode->VertexCount(0) - 1; ++n) {
     const gstVert2D a(geode->GetVertex(0, n).x, geode->GetVertex(0, n).y);
     const gstVert2D b(geode->GetVertex(0, n + 1).x, geode->GetVertex(0, n + 1).y);
 
@@ -328,17 +329,17 @@ void MobileBlockImpl::ReduceGeometry(std::list<MobileVertex>* snap_verts) {
   } while (before_size != after_size);
 }
 
-uint32 MobileBlockImpl::ExportSize() const {
-  uint32 size = 0;
+ std::uint32_t MobileBlockImpl::ExportSize() const {
+  std::uint32_t size = 0;
 
   // primitive type
-  size += sizeof(uint16);
+  size += sizeof(std::uint16_t);
 
   // number of prims
-  size += sizeof(uint16);
+  size += sizeof(std::uint16_t);
 
   // length of each prim
-  size += counts_.size() * sizeof(uint16);
+  size += counts_.size() * sizeof(std::uint16_t);
 
   // vertex data
   size += vertexes_.size() * sizeof(MobileVertex);
@@ -346,29 +347,29 @@ uint32 MobileBlockImpl::ExportSize() const {
   return size;
 }
 
-uint32 MobileBlockImpl::ExportRaw(char* buff) const {
+ std::uint32_t MobileBlockImpl::ExportRaw(char* buff) const {
   char* orig_buff = buff;
 
   // primitive type
-  uint16* prim_type = reinterpret_cast<uint16*>(buff);
+  std::uint16_t* prim_type = reinterpret_cast<std::uint16_t*>(buff);
   *prim_type = Roads;
-  buff += sizeof(uint16);
+  buff += sizeof(std::uint16_t);
 
   // number of prims
-  uint16* num_parts = reinterpret_cast<uint16*>(buff);
-  *num_parts = static_cast<uint16>(counts_.size());
-  buff += sizeof(uint16);
+  std::uint16_t* num_parts = reinterpret_cast<std::uint16_t*>(buff);
+  *num_parts = static_cast<std::uint16_t>(counts_.size());
+  buff += sizeof(std::uint16_t);
 
   // length of each prim
-  uint16* counts = reinterpret_cast<uint16*>(buff);
-  for (uint p = 0; p < counts_.size(); ++p) {
+  std::uint16_t* counts = reinterpret_cast<std::uint16_t*>(buff);
+  for (unsigned int p = 0; p < counts_.size(); ++p) {
     counts[p] = counts_[p];
   }
-  buff += sizeof(uint16) * counts_.size();
+  buff += sizeof(std::uint16_t) * counts_.size();
 
   // vertex data
   MobileVertex* verts = reinterpret_cast<MobileVertex*>(buff);
-  for (uint v = 0; v < vertexes_.size(); ++v)
+  for (unsigned int v = 0; v < vertexes_.size(); ++v)
     verts[v] = vertexes_[v];
   buff += sizeof(MobileVertex) * vertexes_.size();
 
@@ -383,23 +384,23 @@ MobileBlockHandle MobileBlockImpl::FromRaw(const khTileAddr& addr,
   //const char* tmp_buff = buff;
 
   // primitive type
-  const uint16* prim_type = reinterpret_cast<const uint16*>(buff);
+  const std::uint16_t* prim_type = reinterpret_cast<const std::uint16_t*>(buff);
   new_block->prim_type_ = *prim_type;
-  buff += sizeof(uint16);
+  buff += sizeof(std::uint16_t);
 
   // number of prims
-  const uint16* num_parts = reinterpret_cast<const uint16*>(buff);
+  const std::uint16_t* num_parts = reinterpret_cast<const std::uint16_t*>(buff);
   new_block->counts_.reserve(*num_parts);
-  buff += sizeof(uint16);
+  buff += sizeof(std::uint16_t);
 
   // length of each prim
   int total_length = 0;
-  const uint16* counts = reinterpret_cast<const uint16*>(buff);
-  for (uint p = 0; p < *num_parts; ++p) {
+  const std::uint16_t* counts = reinterpret_cast<const std::uint16_t*>(buff);
+  for (unsigned int p = 0; p < *num_parts; ++p) {
     new_block->counts_.push_back(counts[p]);
     total_length += counts[p];
   }
-  buff += sizeof(uint16) * (*num_parts);
+  buff += sizeof(std::uint16_t) * (*num_parts);
 
   // vertex data
   new_block->vertexes_.reserve(total_length);

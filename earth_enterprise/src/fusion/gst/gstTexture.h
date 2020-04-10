@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,8 +50,8 @@ class gstTextureImpl : public khMTRefCounter {
  protected:
   friend class gstTextureManager;
 
-  virtual bool Load(uint64 addr, uchar *obuff) = 0;
-  virtual void Find(TileExistance *te, uint64 addr) = 0;
+  virtual bool Load(std::uint64_t addr, unsigned char *obuff) = 0;
+  virtual void Find(TileExistance *te, std::uint64_t addr) = 0;
   // This base virtual function sets default to false. When the derived
   // gstTextureImpl, is a mercator imagery, it will override this virtual method
   // to return false.
@@ -84,18 +85,18 @@ gstTextureGuard NewGEIndexTexture(const std::string& path);
 
 gstTextureGuard NewGEDBTexture(const std::string& path);
 
-void xyToBlist(uint xbits, uint ybits, int blevel, uchar blist[32]);
+void xyToBlist(unsigned int xbits, unsigned int ybits, int blevel, unsigned char blist[32]);
 
 // -----------------------------------------------------------------------------
 
 struct TileExistance {
-  uint64 bestAvailable;
+  std::uint64_t bestAvailable;
 };
 
 
 class TexTile {
  public:
-  TexTile(int l, uint r, uint c)
+  TexTile(int l, unsigned int r, unsigned int c)
       : s0(0),
         s1(1),
         t0(0),
@@ -109,7 +110,7 @@ class TexTile {
         t_(0) {
     src = alpha_ = 0;
   }
-  TexTile(uint64 a)
+  TexTile(std::uint64_t a)
     : s0(0), s1(1), t0(0), t1(1),
       step_(1), bit_(0), s_(0), t_(0) {
     addr(a);
@@ -154,8 +155,8 @@ class TexTile {
     return lev;
   }
 
-  uint64 addr() const { return TILEADDR(lev, row, col, alpha_, src); }
-  void addr(uint64 a) {
+  std::uint64_t addr() const { return TILEADDR(lev, row, col, alpha_, src); }
+  void addr(std::uint64_t a) {
     lev = LEVFROMADDR(a);
     row = ROWFROMADDR(a);
     col = COLFROMADDR(a);
@@ -172,18 +173,18 @@ class TexTile {
 
   double s0, s1, t0, t1;
   double xx, yy, grid;
-  uint lev;
-  uint row, col;
-  uint src;
+  unsigned int lev;
+  unsigned int row, col;
+  unsigned int src;
 
-  uint alpha() const { return alpha_; }
+  unsigned int alpha() const { return alpha_; }
 
  private:
-  uint alpha_;
+  unsigned int alpha_;
   double step_;
-  uint bit_;
-  uint s_;
-  uint t_;
+  unsigned int bit_;
+  unsigned int s_;
+  unsigned int t_;
 };
 
 #endif  // !KHSRC_FUSION_GST_GSTTEXTURE_H__

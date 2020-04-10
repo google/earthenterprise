@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,16 +13,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
+#include <cstdint>
 #include <string>
-#include <khTypes.h>
 #requiresgetheapusage
 
 // ****************************************************************************
 // ***  CombinedTerrain
 // ****************************************************************************
 class CombinedTerrainConfig {
-  IsUpToDateIgnore uint index_version_;
+  IsUpToDateIgnore unsigned int index_version_;
 
   // Note: Basic rule for #version: "If the low level tool ever
   // changes to produce different output from the same config record, then

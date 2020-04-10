@@ -1219,8 +1219,7 @@ void FeatureEditor::AddFeaturesFromSource(gstSource* source) {
   } catch (const SoftErrorPolicy::TooManyException &e) {
     QString error(kh::tr("Too many bad features"));
     for (unsigned int i = 0; i < e.errors_.size(); ++i) {
-      error += "\n";
-      error + e.errors_[i].c_str();
+      error += "\n" + e.errors_[i].c_str();
     }
     QMessageBox::critical(this, kh::tr("Error"),
                           kh::tr("Error while importing") +
@@ -1343,6 +1342,61 @@ void FeatureEditor::BoxCut() {
     }
   }
 }
+
+#if 0
+void FeatureEditor::MobileConvert() {
+  mobile_blocks_.clear();
+
+  std::vector<FeatureItem*> select_list;
+  GetSelectList(&select_list);
+  if (select_list.size() == 0)
+    return;
+
+  for (std::vector<FeatureItem*>::iterator it = select_list.begin();
+       it != select_list.end(); ++it) {
+    const gstGeodeHandle& geode = (*it)->Geode();;
+    const gstBBox& box = geode->BoundingBox();
+
+    khLevelCoverage lc(ClientImageryTilespace,
+                       NormToDegExtents(khExtents<double>(NSEWOrder, box.n, box.s,
+                                                          box.e, box.w)),
+                       mobile_level_spin->value(),
+                       mobile_level_spin->value());
+
+    // cut up geode for each block that it intersects
+    for (unsigned int row = lc.extents.beginY(); row < lc.extents.endY(); ++row) {
+      for (unsigned int col = lc.extents.beginX(); col < lc.extents.endX(); ++col) {
+        MobileBlockHandle eb = MobileBlockImpl::Create(
+            khTileAddr(mobile_level_spin->value(), row, col),
+            snap_grid_spin->value(),
+            width_edit->text().toDouble());
+        if (geode->TotalVertexCount() < 2) {
+          continue;
+        }
+        GeodeList pieces;
+        geode->BoxCut(eb->GetBoundingBox(), &pieces);
+        gstSelector::JoinSegments(&pieces);
+
+        if (pieces.size() > 0) {
+          bool success = false;
+          for (GeodeList it = pieces.begin();
+               it != pieces.end(); ++it) {
+            // gstSelector::joinSegments will leave zero-length geodes
+            // for all that were merged into other segments, skip these
+            if (((*it)->TotalVertexCount()) != 0) {
+              if (eb->AddGeometry(*it))
+                success = true;
+            }
+          }
+          if (success)
+            mobile_blocks_.push_back(eb);
+        }
+      }
+    }
+  }
+  emit RedrawPreview();
+}
+#endif
 
 void FeatureEditor::CheckAll() {
   QCheckListItem* item = static_cast<QCheckListItem*>(feature_listview->firstChild());

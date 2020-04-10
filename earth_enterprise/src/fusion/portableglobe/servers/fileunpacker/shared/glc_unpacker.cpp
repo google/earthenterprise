@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,7 +26,6 @@
 #include "./file_package.h"
 #include "./file_unpacker.h"
 #include "./glc_reader.h"
-#include "./khTypes.h"
 
 const char* LAYER_INFO = "earth/layer_info.txt";
 // Types for layers
@@ -35,8 +35,8 @@ const char* VECTOR_LAYER_TYPE = "VECTOR";
 const char* MAP_LAYER_TYPE = "MAP";
 
 // GEE identifying bytes in all glxs.
-const uint32 GEE_ID = 0x47454547;
-const uint64 GEE_ID_OFFSET = 8;
+const std::uint32_t GEE_ID = 0x47454547;
+const std::uint64_t GEE_ID_OFFSET = 8;
 
 /**
  * Constructor. Load the index to all of the files and
@@ -56,8 +56,8 @@ GlcUnpacker::GlcUnpacker(const GlcReader& glc_reader,
   length_ = glc_reader_.Size();
 
   // Check file is a GEE file first.
-  uint32 id;
-  int64 offset = length_ - GEE_ID_OFFSET;
+  std::uint32_t id;
+  std::int64_t offset = length_ - GEE_ID_OFFSET;
   if (!glc_reader_.ReadData(&id, offset, sizeof(id))) {
     std::cerr << "Unable to read file id." << std::endl;
     return;
@@ -71,8 +71,8 @@ GlcUnpacker::GlcUnpacker(const GlcReader& glc_reader,
 
   // Get offset to index.
   offset = length_ - Package::kIndexOffsetOffset;
-  uint32 num_files = 0;
-  int64 index_offset;
+  std::uint32_t num_files = 0;
+  std::int64_t index_offset;
   if (!glc_reader_.ReadData(
       &index_offset, offset, Package::kIndexOffsetSize)) {
     std::cerr << "Unable to read file offset." << std::endl;
@@ -94,9 +94,9 @@ GlcUnpacker::GlcUnpacker(const GlcReader& glc_reader,
   // Read in the index entries.
   std::string path;
   PackageFileLoc file_loc;
-  for (uint32 i = 0; i < num_files; ++i) {
+  for (std::uint32_t i = 0; i < num_files; ++i) {
     // Read in the relative path of the index entry.
-    uint16 path_len;
+    std::uint16_t path_len;
     if (!Read(&path_len, sizeof(path_len))) {
       std::cerr << "Unable to read file name length." << std::endl;
       return;
@@ -231,7 +231,7 @@ void GlcUnpacker::SetUpLayerUnpackers(bool files_only) {
 /**
  * Helper for reading in consecutive fields from the glc file.
  */
-bool GlcUnpacker::Read(void* data, uint64 size) {
+bool GlcUnpacker::Read(void* data, std::uint64_t size) {
   if (glc_reader_.ReadData(data, reader_offset_, size)) {
     reader_offset_ += size;
     return true;
@@ -547,13 +547,13 @@ std::string GlcUnpacker::ExtractDateFromInfo() {
 /**
  * Calculates a crc for the info data.
  */
-uint32 GlcUnpacker::InfoCrc() {
-  uint32 crc = 0;
+ std::uint32_t GlcUnpacker::InfoCrc() {
+  std::uint32_t crc = 0;
   unsigned char* ptr = reinterpret_cast<unsigned char*>(&info_[0]);
-  for (uint32 i = 0; i < info_.size(); ++i) {
+  for (std::uint32_t i = 0; i < info_.size(); ++i) {
     // Use the full bit space by shifting to one of the
     // four byte boundaries.
-    uint32 value = *ptr++ << ((i & 3) * 8);
+    std::uint32_t value = *ptr++ << ((i & 3) * 8);
     crc += value;
   }
   return crc;

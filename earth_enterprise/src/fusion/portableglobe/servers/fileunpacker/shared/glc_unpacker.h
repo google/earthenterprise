@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -232,7 +233,7 @@ private:
   /**
    * Helper for reading in consecutive fields from the glc file.
    */
-  bool Read(void* data, uint64 size);
+  bool Read(void* data, std::uint64_t size);
 
   /**
    * Helper for reading creation date for glc file
@@ -243,10 +244,10 @@ private:
   /**
    * Helper for creating a crc from info data.
    */
-  uint32 InfoCrc();
+  std::uint32_t InfoCrc();
 
   // Length of full packed file.
-  uint64 length_;
+  std::uint64_t length_;
   std::string info_;
   std::string id_;
 
@@ -271,7 +272,7 @@ private:
   // Whether file contains 3d data.
   bool is_3d_;
   // Offset for consecutive reads from the reader.
-  uint64 reader_offset_;
+  std::uint64_t reader_offset_;
 };
 
 #endif  // GEO_EARTH_ENTERPRISE_SRC_FUSION_PORTABLEGLOBE_SERVERS_FILEUNPACKER_SHARED_GLC_UNPACKER_H_

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -94,12 +95,12 @@ class WidgetControllerManager : public QObject {
   { }
 
   void SyncToConfig(void) {
-    for (uint i = 0; i < controllers.size(); ++i) {
+    for (unsigned int i = 0; i < controllers.size(); ++i) {
       controllers[i]->SyncToConfig();
     }
   }
   void SyncToWidgets(void) {
-    for (uint i = 0; i < controllers.size(); ++i) {
+    for (unsigned int i = 0; i < controllers.size(); ++i) {
       controllers[i]->DoSyncToWidgets();
     }
   }
@@ -516,7 +517,7 @@ class EnumStackController : public ComboController {
   virtual void SyncToWidgetsImpl(void) {
     intConfig = static_cast<int>(*config);
     ComboController::DoSyncToWidgets();
-    for (uint i = 0; i < subManagers.size(); ++i) {
+    for (unsigned int i = 0; i < subManagers.size(); ++i) {
       subManagers[i]->SyncToWidgets();
     }
     stack->raiseWidget(intConfig);
@@ -536,7 +537,7 @@ class EnumStackController : public ComboController {
   {
     subManagerOwner.reserve(contents_.size());
     subManagers.reserve(contents_.size());
-    for (uint i = 0; i < contents_.size(); ++i) {
+    for (unsigned int i = 0; i < contents_.size(); ++i) {
       subManagerOwner.push_back(
           new WidgetControllerManager(this->PopupParent()));
       connect(subManagerOwner.back(), SIGNAL(widgetChanged()),

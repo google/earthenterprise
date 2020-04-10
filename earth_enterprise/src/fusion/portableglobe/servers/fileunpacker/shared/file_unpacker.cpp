@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,7 +23,6 @@
 #include <iostream>  // NOLINT(readability/streams)
 #include <map>
 #include <string>
-#include "./khTypes.h"
 #include "./file_package.h"
 #include "./glc_reader.h"
 #include "./packetbundle_finder.h"
@@ -34,7 +34,7 @@ const char* const GLB_DBROOT_PREFIX = "dbroot/dbroot_localhost_";
  * packets in the package file.
  */
 FileUnpacker::FileUnpacker(
-    const GlcReader& glc_reader, uint64 offset, uint64 size)
+    const GlcReader& glc_reader, std::uint64_t offset, std::uint64_t size)
     : glc_reader_(glc_reader),
       base_offset_(offset),
       base_size_(size),
@@ -47,13 +47,13 @@ FileUnpacker::FileUnpacker(
   // TODO: Double-check version number is correct.
 
   // Get offset to the index
-  uint64 index_offset_loc =
+  std::uint64_t index_offset_loc =
       base_offset_ + base_size_ - Package::kIndexOffsetOffset;
   glc_reader_.ReadData(
       &reader_offset_, index_offset_loc, Package::kIndexOffsetSize);
 
   // Read in the index header.
-  uint32 num_files;
+  std::uint32_t num_files;
   reader_offset_ += base_offset_;
   if (!Read(&num_files, sizeof(num_files))) {
     std::cerr << "Unable to read number of files." << std::endl;
@@ -63,9 +63,9 @@ FileUnpacker::FileUnpacker(
   // Read in the index entries.
   std::string path;
   PackageFileLoc file_loc;
-  for (uint32 i = 0; i < num_files; ++i) {
+  for (std::uint32_t i = 0; i < num_files; ++i) {
     // Read in the relative path of the index entry.
-    uint16 path_len;
+    std::uint16_t path_len;
     if (!Read(&path_len, sizeof(path_len))) {
       std::cerr << "Unable to read file name size." << std::endl;
       return;
@@ -217,7 +217,7 @@ FileUnpacker::~FileUnpacker() {
 /**
  * Helper for reading in consecutive fields from the glc file.
  */
-bool FileUnpacker::Read(void* data, uint64 size) {
+bool FileUnpacker::Read(void* data, std::uint64_t size) {
   if (glc_reader_.ReadData(data, reader_offset_, size)) {
     reader_offset_ += size;
     return true;
@@ -250,7 +250,7 @@ bool FileUnpacker::FindDataPacket(const char* qtpath,
       return false;
     }
 
-    uint64 offset = data_packet_file_loc_[index_item.file_id].Offset();
+    std::uint64_t offset = data_packet_file_loc_[index_item.file_id].Offset();
     // Add offset to base address.
     offset += index_item.offset;
     data_loc->Set(offset, index_item.packet_size);
@@ -284,7 +284,7 @@ bool FileUnpacker::FindMapDataPacket(const char* qtpath,
       return false;
     }
 
-    uint64 offset = mapdata_packet_file_loc_[index_item.file_id].Offset();
+    std::uint64_t offset = mapdata_packet_file_loc_[index_item.file_id].Offset();
     // Add offset to base address.
     offset += index_item.offset;
     data_loc->Set(offset, index_item.packet_size);
@@ -315,7 +315,7 @@ bool FileUnpacker::FindQtpPacket(const char* qtpath,
   }
 
   // Get base address of packets.
-  uint64 offset = qtp_packet_file_loc_.Offset();
+  std::uint64_t offset = qtp_packet_file_loc_.Offset();
 
   IndexItem index_item;
   std::string qtpath_str = qtpath;

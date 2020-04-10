@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +52,7 @@ class Writer {
 
   enum WriteMode { FullIndexMode, DeltaIndexMode };
   Writer(geFilePool &filePool, const std::string &fname, WriteMode mode,
-         const std::string &desc, uint32 num_write_buffers = 1);
+         const std::string &desc, std::uint32_t num_write_buffers = 1);
   ~Writer(void);
 
   // It is the caller's responsibility to manager the threads that process
@@ -73,10 +74,10 @@ class Writer {
   void Delete(const QuadtreePath &pos, const Entry &entry,
               ReadBuffer &tmpReadBuf);
 
-  uint32 AddExternalPacketFile(const std::string &packetfile);
+  std::uint32_t AddExternalPacketFile(const std::string &packetfile);
   void   RemovePacketFile(const std::string &packetfile);
-  void   SetPacketExtra(uint32 packetfile_num, uint32 extra);
-  uint32 GetPacketExtra(uint32 packetfile_num) const;
+  void   SetPacketExtra(std::uint32_t packetfile_num, std::uint32_t extra);
+  std::uint32_t GetPacketExtra(std::uint32_t packetfile_num) const;
  private:
   khDeleteGuard<IndexBundleWriter> bundleWriter;
 

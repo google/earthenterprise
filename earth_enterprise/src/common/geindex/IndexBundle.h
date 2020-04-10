@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,13 +45,13 @@ class Header {
  public:
   static const std::string kHeaderFilename;
   static const std::string kMagic;
-  static const uint16      kCurrFileFormatVersion = 2;
+  static const std::uint16_t      kCurrFileFormatVersion = 2;
 
-  uint16          fileFormatVersion;
+  std::uint16_t          fileFormatVersion;
   ChildBucketAddr rootChildAddr;
   EntryBucketAddr rootEntryAddr;
   bool            slotsAreSingle;
-  uint64          wastedSpace;
+  std::uint64_t          wastedSpace;
   std::string     contentDesc;
 
   Header(const std::string &desc, const std::string &index_path,
@@ -63,23 +64,23 @@ class Header {
 
   void Push(EndianWriteBuffer &buf) const;
 
-  uint32 AddPacketFile(const std::string &packetfile);
+  std::uint32_t AddPacketFile(const std::string &packetfile);
 
   void   RemovePacketFile(const std::string &packetfile);
 
   // NOTE: The packetfile list can be sparse when working with a delta
   // index. If GetPacketFile() returns an empty string for a supplied
   // index, that packetfile has been removed from the index.
-  inline uint32 PacketFileCount(void) const { return packetfiles.size(); }
+  inline std::uint32_t PacketFileCount(void) const { return packetfiles.size(); }
 
-  std::string GetPacketFile(uint32 packetfile_num) const;
+  std::string GetPacketFile(std::uint32_t packetfile_num) const;
 
-  inline void SetPacketExtra(uint32 packetfile_num, uint32 extra) {
+  inline void SetPacketExtra(std::uint32_t packetfile_num, std::uint32_t extra) {
     assert(packetfile_num < packetfile_extras.size());
     packetfile_extras[packetfile_num] = extra;
   }
 
-  inline uint32 GetPacketExtra(uint32 packetfile_num) const {
+  inline std::uint32_t GetPacketExtra(std::uint32_t packetfile_num) const {
     assert(packetfile_num < packetfile_extras.size());
     return packetfile_extras[packetfile_num];
   }
@@ -103,9 +104,9 @@ class Header {
  private:
   // The file names are always absolute without a trailing "/" for directories
   std::vector<std::string> packetfiles;
-  std::vector<uint32>      packetfile_extras;
+  std::vector<std::uint32_t>      packetfile_extras;
   const std::string        index_path_;
-  uint32                   header_size_;
+  std::uint32_t                   header_size_;
 
   void Pull(EndianReadBuffer &buf, const std::string &prefix);
 };
@@ -126,8 +127,8 @@ class IndexBundle {
   // NOTE: The packetfile list can be sparse when working with a delta
   // index. If GetPacketFile() returns an empty string for a supplied
   // index, that packetfile has been removed fromt he index.
-  inline uint32 PacketFileCount(void) const { return header.PacketFileCount();}
-  std::string GetPacketFile(uint32 packetfile_num) const;
+  inline std::uint32_t PacketFileCount(void) const { return header.PacketFileCount();}
+  std::string GetPacketFile(std::uint32_t packetfile_num) const;
   void AppendManifest(std::vector<ManifestEntry> &manifest,
                       const std::string& tmp_dir) const;
 

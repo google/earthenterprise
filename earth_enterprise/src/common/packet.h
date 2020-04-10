@@ -1,6 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
- * Copyright 2020 The Open GEE Contributors.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -188,14 +188,14 @@ struct etVec3d
 struct etDataPacket_BASE32
 {
   etDataHeader packetHeader;
-
+    
   std::uint32_t metaHeader;
-
+    
   std::uint32_t packetBuffer;
   int packetBufferSize;
-
+  
   std::uint32_t dataInstances;
-
+    
   std::uint32_t dataBuffer;
   int maxDataBufferSize;
 
@@ -233,13 +233,13 @@ struct etDataPacket
 
 #ifdef FORCE_BASE32
   std::uint32_t metaHeader_OFFSET;
-#else
+#else       
   void * metaHeader;
 #endif
 
 #ifdef FORCE_BASE32
   std::uint32_t packetBuffer_OFFSET;
-#else
+#else       
   char* packetBuffer;
 #endif
   int packetBufferSize;
@@ -247,7 +247,7 @@ struct etDataPacket
 #ifdef FORCE_BASE32
   std::uint32_t dataInstances_OFFSET;
   std::uint32_t dataBuffer_OFFSET;
-#else
+#else       
   char * dataInstances;
   char * dataBuffer;
 #endif
@@ -287,7 +287,7 @@ struct etDataPacket
 #ifdef FORCE_BASE32
   std::uint32_t flatdirfp_OFFSET;
   std::uint32_t flatdatafp_OFFSET;
-#else
+#else       
   static FILE * flatdirfp;
   static FILE * flatdatafp;
 #endif

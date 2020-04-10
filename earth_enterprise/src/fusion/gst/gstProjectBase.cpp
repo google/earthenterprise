@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -42,7 +43,7 @@ void gstProjectBase::addLayer(gstLayerBase* layer) {
   setModified();
 }
 
-void gstProjectBase::insertLayer(gstLayerBase* layer, uint pos) {
+void gstProjectBase::insertLayer(gstLayerBase* layer, unsigned int pos) {
   std::vector<gstLayerBase*>::iterator renumber =
     layers_.insert(layers_.begin() + pos, layer);
   for (; renumber != layers_.end(); ++renumber, ++pos)
@@ -68,7 +69,7 @@ void gstProjectBase::swapLayers(gstLayerBase* a, gstLayerBase* b) {
   layers_[a->sortID()] = b;
   layers_[b->sortID()] = a;
 
-  uint tmp = a->sortID();
+  unsigned int tmp = a->sortID();
   a->sortID(b->sortID());
   b->sortID(tmp);
 

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -128,7 +129,7 @@ class ImageExistanceImpl : public khRefCounter {
   }
 
   // determine amount of memory used by ImageExistanceImpl
-  uint64 GetSize() {
+  std::uint64_t GetSize() {
     return sizeof(versions_);
   }
 
@@ -348,8 +349,8 @@ void ImageRequest::Init() {
   // decrypt the buffer
   etEncoder::DecodeWithDefaultKey(GetBuffer(), GetBufferSize());
   // validate the jpeg header
-  const uchar jfifhdrA[] = { 0xff, 0xd8, 0xff, 0xe0 };
-  const uchar jfifhdrB[] = { 'J', 'F', 'I', 'F' };
+  const unsigned char jfifhdrA[] = { 0xff, 0xd8, 0xff, 0xe0 };
+  const unsigned char jfifhdrB[] = { 'J', 'F', 'I', 'F' };
   if (GetBufferSize()<10 ||
       memcmp(jfifhdrA, GetBuffer(), 4) != 0 ||
       memcmp(jfifhdrB, GetBuffer() + 6, 4) != 0) {
@@ -534,7 +535,7 @@ bool gstEarthStream::GetQuadTreeFormat2Packet(
 
 bool gstEarthStream::GetRawImagePacket(
     const QuadtreePath &qt_path,
-    const uint16 version,
+    const std::uint16_t version,
     const keyhole::JpegCommentDate& jpeg_date,
     std::string *raw_packet) {
   assert(raw_packet);
@@ -553,7 +554,7 @@ bool gstEarthStream::GetRawImagePacket(
 
 bool gstEarthStream::GetRawTerrainPacket(
     const QuadtreePath &qt_path,
-    const uint16 version,
+    const std::uint16_t version,
     std::string *raw_packet) {
   assert(raw_packet);
   std::ostringstream url;
@@ -563,8 +564,8 @@ bool gstEarthStream::GetRawTerrainPacket(
 
 bool gstEarthStream::GetRawVectorPacket(
     const QuadtreePath &qt_path,
-    const uint16 channel,
-    const uint16 version,
+    const std::uint16_t channel,
+    const std::uint16_t version,
     std::string *raw_packet) {
   assert(raw_packet);
   std::ostringstream url;

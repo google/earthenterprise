@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -94,7 +95,7 @@ khResourceManager::Init(void)
   {
       Systemrc systemrc;
       LoadSystemrc(systemrc);
-      uint32 logLevel = systemrc.logLevel;
+      std::uint32_t logLevel = systemrc.logLevel;
       notify(NFY_WARN, "system log level changed to: %s",
              khNotifyLevelToString(static_cast<khNotifyLevel>(logLevel)).c_str());
       setNotifyLevel(static_cast<khNotifyLevel>(logLevel));
@@ -118,7 +119,7 @@ khResourceManager::Init(void)
     std::string child = statedir + "/" + dname;
 
     if (khSymlinkExists(child)) {
-      uint32 taskid = 0;
+      std::uint32_t taskid = 0;
       FromString(khDropExtension(dname), taskid);
       if (taskid == 0) {
         notify(NFY_FATAL, "Unrecognized task symlink %s",
@@ -296,7 +297,7 @@ Reservation
 khResourceManager::MakeVolumeReservation(const std::string &assetPath,
                                          const std::string &volume,
                                          const std::string &path,
-                                         uint64 size)
+                                         std::uint64_t size)
 {
   Volume *vol = GetVolume(volume);
   if (vol && vol->MakeReservation(path, size)) {
@@ -334,7 +335,7 @@ Reservation
 khResourceManager::MakeCPUReservation(khResourceProviderProxy *provider,
                                       const TaskRequirements::CPU &req)
 {
-  uint num = std::min(provider->AvailCPUs(), req.maxNumCPU);
+  unsigned int num = std::min(provider->AvailCPUs(), req.maxNumCPU);
   if (num >= req.minNumCPU) {
 
     provider->usedCPUs += num;
@@ -349,7 +350,7 @@ khResourceManager::MakeCPUReservation(khResourceProviderProxy *provider,
 
 
 void
-khResourceManager::ReleaseCPUReservation(const std::string &host, uint num)
+khResourceManager::ReleaseCPUReservation(const std::string &host, unsigned int num)
 {
   Providers::iterator found = providers.find(host);
   if (found != providers.end()) {
@@ -522,7 +523,7 @@ khResourceManager::MakeFixedVolumeReservations(khTask *task,
 
   // Try to make all the output reservations for the outputs with fixed
   // volumes
-  for (uint i = 0; i < taskdef.outputs.size(); ++i) {
+  for (unsigned int i = 0; i < taskdef.outputs.size(); ++i) {
     const TaskDef::Output *defo          = &taskdef.outputs[i];
     const TaskRequirements::Output *reqo = &req.outputs[i];
     if (reqo->volume != "*anytmp*") {
@@ -620,7 +621,7 @@ khResourceManager::ProviderCanSatisfy(khTask *task,
   reservations.push_back(cpures);
 
   // try to make reservations for outputs with volumes set to *anytmp*
-  for (uint o = 0; o < taskdef.outputs.size(); ++o) {
+  for (unsigned int o = 0; o < taskdef.outputs.size(); ++o) {
     const TaskDef::Output *defo          = &taskdef.outputs[o];
     const TaskRequirements::Output *reqo = &req.outputs[o];
     if (reqo->volume == "*anytmp*") {
@@ -637,7 +638,7 @@ khResourceManager::ProviderCanSatisfy(khTask *task,
 
       // prune and order tmpVolumes based on inputs that must be or
       // prefer to be on a different volume
-      for (uint i = 0; i < req.inputs.size(); ++i) {
+      for (unsigned int i = 0; i < req.inputs.size(); ++i) {
         const TaskRequirements::Input *reqi = &req.inputs[i];
 
         // sone inputs don't have volumes (namely URI's)
@@ -784,7 +785,7 @@ khResourceManager::NotifyTaskDone(const TaskDoneMsg &doneMsg)
 // ****************************************************************************
 bool
 khResourceManager::Volume::MakeReservation(const std::string &path,
-                                           uint64 size) {
+                                           std::uint64_t size) {
   if (!provider->ConnectionLost() && (avail > size)) {
     Reservations::const_iterator found =
       reservations.find(path);

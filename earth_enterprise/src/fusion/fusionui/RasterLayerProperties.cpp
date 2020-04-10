@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,7 +26,7 @@
 RasterLayerProperties::RasterLayerProperties( QWidget* parent, const InsetStackItem &cfg, AssetDefs::Type type )
     : RasterLayerPropertiesBase( parent, 0, false, 0 )
 {
-  uint startlevel = 0;
+  unsigned int startlevel = 0;
   if ( type == AssetDefs::Imagery ) {
     fromPixel = ProductToImageryLevel;
     toPixel = ImageryToProductLevel;
@@ -43,8 +44,8 @@ RasterLayerProperties::RasterLayerProperties( QWidget* parent, const InsetStackI
   // 'override' max is the level we want to use regardless of the
   //   inset's max level
 
-  uint insetmin = 0;
-  uint insetmax = 0;
+  unsigned int insetmin = 0;
+  unsigned int insetmax = 0;
   GetMinMaxLevels(cfg.dataAsset, insetmin, insetmax);
 
   maxLevelLabel->setText( QString( "%1" ).arg( fromPixel( insetmax ) ) );
@@ -81,8 +82,8 @@ InsetStackItem RasterLayerProperties::getConfig() const
 
   cfg.dataAsset = assetNameLabel->text().latin1();
 
-  uint insetmin = 0;
-  uint insetmax = 0;
+  unsigned int insetmin = 0;
+  unsigned int insetmax = 0;
   GetMinMaxLevels(cfg.dataAsset, insetmin, insetmax);
 
   cfg.overridemax = toPixel( overrideMaxSpin->value() );

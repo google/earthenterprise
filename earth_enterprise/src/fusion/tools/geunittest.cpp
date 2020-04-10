@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -218,8 +219,8 @@ void TestSelector() {
     d->AddVertex(v0);
     glist.push_back(dh);
 
-    uint64 num_duplicates = 0;
-    uint64 num_joined = 0;
+    std::uint64_t num_duplicates = 0;
+    std::uint64_t num_joined = 0;
     vectorprep::PolylineJoiner<GeodeList>::
         RemoveDuplicatesAndJoinNeighborsAtDegreeTwoVertices(
             glist, &num_duplicates, &num_joined);
@@ -263,8 +264,8 @@ void TestSelector() {
       glist.push_back(ah);
       backup_glist.push_back(ah->Duplicate());
     }
-    uint64 num_duplicates = 0;
-    uint64 num_joined = 0;
+    std::uint64_t num_duplicates = 0;
+    std::uint64_t num_joined = 0;
     vectorprep::PolylineJoiner<GeodeList>::
         RemoveDuplicatesAndJoinNeighborsAtDegreeTwoVertices(
             glist, &num_duplicates, &num_joined);
@@ -634,8 +635,8 @@ void TestSelector() {
 void TestMercatorProjection() {
 #ifndef NDEBUG
   // use tilesize = 256 to test against maps javascript values
-  const uint tile_size = 256;
-  const uint num_levels = 4;
+  const unsigned int tile_size = 256;
+  const unsigned int num_levels = 4;
 
   // boundaries of each row
   // from south to north
@@ -649,8 +650,8 @@ void TestMercatorProjection() {
 
   // validate lat/lng -> pixel
   MercatorProjection* proj = new MercatorProjection(tile_size);
-  for (uint lev = 0; lev < num_levels; ++lev) {
-    for (uint d = 0; d <= (1U << lev); ++d) {
+  for (unsigned int lev = 0; lev < num_levels; ++lev) {
+    for (unsigned int d = 0; d <= (1U << lev); ++d) {
       Projection::Point p = proj->FromLatLngToPixel(Projection::LatLng(lats_per_level[lev][d], 0),lev);
       assert(p.X() == (tile_size << lev) >> 1U);
       assert(p.Y() == d * tile_size);
@@ -658,7 +659,7 @@ void TestMercatorProjection() {
   }
 
   // validate pixel -> lat/lng
-  for (uint lev = 0; lev < num_levels; ++lev) {
+  for (unsigned int lev = 0; lev < num_levels; ++lev) {
     double step = 360.0 / static_cast<double>(0x01UL << lev);
     for (int x = 0; x <= 1 << lev; ++x) {
       for (int y = 0; y <= 1 << lev; ++y) {

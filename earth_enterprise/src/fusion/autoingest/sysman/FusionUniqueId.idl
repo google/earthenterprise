@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,14 +14,14 @@
 // limitations under the License.
 
 
-#include <khTypes.h>
+#include <cstdint>
 #include <map>
 #include <string>
 
 
 class FusionUniqueId {
   enum Category { Channel, Resource };
-  typedef std::map<FusionUniqueId::Category, uint32> IdMap;
+  typedef std::map<FusionUniqueId::Category, std::uint32_t> IdMap;
 
   IdMap next_ids;
 
@@ -28,10 +29,10 @@ class FusionUniqueId {
 
 #hquote
   // stay away from low numbers that are often used for sentinals
-  static const uint32 FirstId = 1000;
+  static const std::uint32_t FirstId = 1000;
 
   static void Init(const std::string &assetroot);
-  static uint32 Get(Category category);
+  static std::uint32_t Get(Category category);
 
   // used only by configure tools
   static void TouchNew(const std::string &assetroot);
@@ -49,10 +50,10 @@ class FusionUniqueId {
 
   FusionUniqueId::IdMap FusionUniqueId::ID_MAP;
   
-  uint32
+  std::uint32_t
   FusionUniqueId::Get(Category category)
   {
-    uint id;
+    unsigned int id;
     // see if we need to bootstrap this category
     if (ID_MAP.find(category) == ID_MAP.end()) {
       id = FirstId;
@@ -93,7 +94,7 @@ class FusionUniqueId {
     std::string filename = geAssetRoot::Filename(assetroot,
                                                  geAssetRoot::UniqueIdFile);
 
-    uint64 size;
+    std::uint64_t size;
     time_t mtime;
     if (!khGetFileInfo(filename, size, mtime)) {
       throw khException(msg

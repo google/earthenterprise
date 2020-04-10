@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -47,8 +48,8 @@ usage(const char *prog, const char *msg = 0, ...)
           "      --scaleOffset:     Value to add to each pixel (default 0.0)\n"
           "      --scaleFactor:     Value to multiple each pixel by (default 1.0)\n"
           "      --type <typename>: Output datatype\n"
-          "                         uint8,  int8, uint16, int16,\n"
-          "                         uint32, int32, float32, float64\n"
+          "                         std::uint8_t,  std::int8_t, std::uint16_t, std::int16_t,\n"
+          "                         std::uint32_t, std::int32_t, float32, float64\n"
           "      --band <bandnum>:  Band number (1 based) to include. Can be\n"
           "                         specified multiple tiles. (e.g. -b 3 -b 2 -b 1)\n"
           "                         will reverse the bands\n",
@@ -74,13 +75,13 @@ main(int argc, char *argv[])
     // process commandline options
     int argn;
     bool help = false;
-    uint split = 1;
-    uint index = 0;
+    unsigned int split = 1;
+    unsigned int index = 0;
     std::string typestr;
     double scaleOffset = 0.0;
     double scaleFactor = 1.0;
-    std::vector<uint> usebands;
-    uint overlap = 0;
+    std::vector< unsigned int>  usebands;
+    unsigned int overlap = 0;
     std::string fillstr;
     std::string lutfile;
     khGetopt options;
@@ -132,8 +133,8 @@ main(int argc, char *argv[])
     khGDALDataset srcDS(input);
 
     // check size & bands
-    khSize<uint32> rasterSize = srcDS.rasterSize();
-    uint numbands = srcDS->GetRasterCount();
+    khSize<std::uint32_t> rasterSize = srcDS.rasterSize();
+    unsigned int numbands = srcDS->GetRasterCount();
     if (numbands == 0) {
       notify(NFY_FATAL, "No bands");
     }
@@ -166,11 +167,11 @@ main(int argc, char *argv[])
 
 
     if (usebands.empty()) {
-      for (uint i = 1; i <= numbands; ++i) {
+      for (unsigned int i = 1; i <= numbands; ++i) {
         usebands.push_back(i);
       }
     } else {
-      for (uint i = 0; i < usebands.size(); ++i) {
+      for (unsigned int i = 0; i < usebands.size(); ++i) {
         if ((usebands[i] < 1) || (usebands[i] > numbands)) {
           notify(NFY_FATAL,
                  "Invalid band %u. Valid range is %u -> %u",
@@ -210,19 +211,19 @@ main(int argc, char *argv[])
     bool needKHVR = ((split > 1) || lutfile.size());
 
     // write output (splitting as necessary)
-    uint32 outWidthStep  = (uint32)ceil((double)rasterSize.width / split);
-    uint32 outHeightStep = (uint32)ceil((double)rasterSize.height / split);
-    uint32 outWidth      = outWidthStep + overlap;
-    uint32 outHeight     = outHeightStep + overlap;
+    std::uint32_t outWidthStep  = (std::uint32_t)ceil((double)rasterSize.width / split);
+    std::uint32_t outHeightStep = (std::uint32_t)ceil((double)rasterSize.height / split);
+    std::uint32_t outWidth      = outWidthStep + overlap;
+    std::uint32_t outHeight     = outHeightStep + overlap;
     std::string base = khDropExtension(output);
     std::string ext  = khExtension(output);
     std::vector<std::string> files;
-    for (uint row = 0; row < split; ++row) {
-      uint yoff = row * outHeightStep;
-      uint ysize = std::min(outHeight, rasterSize.height - yoff);
-      for (uint col = 0; col < split; ++col) {
-        uint xoff = col * outWidthStep;
-        uint xsize = std::min(outWidth, rasterSize.width - xoff);
+    for (unsigned int row = 0; row < split; ++row) {
+      unsigned int yoff = row * outHeightStep;
+      unsigned int ysize = std::min(outHeight, rasterSize.height - yoff);
+      for (unsigned int col = 0; col < split; ++col) {
+        unsigned int xoff = col * outWidthStep;
+        unsigned int xsize = std::min(outWidth, rasterSize.width - xoff);
 
         char buf[256];
         snprintf(buf, 256, ".r%02uc%02u", row, col);
@@ -253,7 +254,7 @@ main(int argc, char *argv[])
 
         vDS->SetMetadata(srcDS->GetMetadata());
 
-        for (uint b = 0; b < usebands.size(); ++b) {
+        for (unsigned int b = 0; b < usebands.size(); ++b) {
           GDALRasterBand *srcBand =
             srcDS->GetRasterBand(usebands[b]);
           vDS->AddBand(GDTFromStorageEnum(outType));

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -38,10 +39,10 @@ class DatabaseAssetVersionImpl {
 
 namespace {
 
-uint kUnifiedIndexChildPos    = 0;
-uint kGEDBChildPos            = 1;
-uint kQTPacketChildPos        = 2;
-uint kCombinedTerrainChildPos = 3;  // optional
+unsigned int kUnifiedIndexChildPos    = 0;
+unsigned int kGEDBChildPos            = 1;
+unsigned int kQTPacketChildPos        = 2;
+unsigned int kCombinedTerrainChildPos = 3;  // optional
 
 }
 
@@ -56,7 +57,7 @@ DatabaseAssetVersionImpl::GetImageryProjectAssetVersion(void) const
 VectorProjectAssetVersion
 DatabaseAssetVersionImpl::GetVectorProjectAssetVersion(void) const
 {
-  uint next = 0;
+  unsigned int next = 0;
   if (!config.imageryProject.empty())
     ++next;
 
@@ -69,7 +70,7 @@ DatabaseAssetVersionImpl::GetVectorProjectAssetVersion(void) const
 RasterProjectAssetVersion
 DatabaseAssetVersionImpl::GetTerrainProjectAssetVersion(void) const
 {
-  uint next = 0;
+  unsigned int next = 0;
   if (!config.imageryProject.empty())
     ++next;
   if (!config.vectorProject.empty())
@@ -131,7 +132,7 @@ class DatabaseAssetImplD {
 
   void IncrementIndexVersion(void) {
     config.indexVersion = (config.indexVersion + 1) %
-                          std::numeric_limits<uint32>::max();
+                          std::numeric_limits<std::uint32_t>::max();
     if (config.indexVersion == 0) {
       config.indexVersion = 1;
     }
@@ -218,7 +219,7 @@ private:
 #ifdef CREATE_SUBSAMPLED_TERRAIN
 namespace {
 
-uint kSSTerrainChildPos       = 4;  // optional
+unsigned int kSSTerrainChildPos       = 4;  // optional
 
 }
 #endif
@@ -373,7 +374,7 @@ DatabaseAssetVersionImplD::DelayedBuildChildren(void)
   RasterProjectAssetVersionD terrain_project;
   VectorProjectAssetVersionD vector_project;
   std::vector<DatedImageryIndexInfo> dated_imagery_indexes;
-  uint next = 0;
+  unsigned int next = 0;
   if (!config.imageryProject.empty()) {
     imagery_project = inputs[next++];
   }
@@ -390,7 +391,7 @@ DatabaseAssetVersionImplD::DelayedBuildChildren(void)
     // We'll collect information for each imagery project
     // in a vector for use within this method.
     // we need a unique channel id for each imagery project
-    uint32 unique_channel_id = 1000; // choose a number much higher than
+    std::uint32_t unique_channel_id = 1000; // choose a number much higher than
                                      // reserved channel id's.
     // Find Max Channel ID among the layers.
     if (vector_project) {
@@ -406,7 +407,7 @@ DatabaseAssetVersionImplD::DelayedBuildChildren(void)
     // Validate that all timemachine imagery resources have a valid date.
     // Throw exception and warning if not.
     std::string missing_dates;
-    for(uint i = 0; i < dated_imagery_indexes.size(); ++i) {
+    for(unsigned int i = 0; i < dated_imagery_indexes.size(); ++i) {
       const DatedImageryIndexInfo& info = dated_imagery_indexes[i];
       if (info.date_string_ == kUnknownDate) {
         missing_dates += "\n\t" + info.imagery_index_version_;
@@ -566,7 +567,7 @@ DatabaseAssetVersionImplD::CreateQTPacket(
   }
 
   if (!dated_imagery_indexes.empty()) {
-    for(uint i = 0; i < dated_imagery_indexes.size(); ++i) {
+    for(unsigned int i = 0; i < dated_imagery_indexes.size(); ++i) {
       // Add the DatedImageryIndexInfo for this project to the QTPacketConfig.
       qtpacket_config.dated_imagery_indexes_.push_back(
                                              dated_imagery_indexes[i]);
@@ -612,7 +613,7 @@ DatabaseAssetVersionImplD::CreateUnifiedIndex(
   }
 
   if (!dated_imagery_indexes.empty()) {
-    for(uint i = 0; i < dated_imagery_indexes.size(); ++i) {
+    for(unsigned int i = 0; i < dated_imagery_indexes.size(); ++i) {
       AssetVersion subindex(imagery_project->GetDatedImageryAssetVersion(i));
       index_input_versions.push_back(subindex);
       index_input_verrefs.push_back(subindex.Ref());
@@ -747,17 +748,17 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
 #endif
 
     // Load (simple) info about the imagery project's insets
-    uint maxClientImageryLevel = 0;
+    unsigned int maxClientImageryLevel = 0;
     std::vector<SimpleInsetInfo<RasterProductAssetVersion> > imageryInsets;
     imagery_project->LoadSimpleInsetInfo(ClientTmeshTilespaceFlat,
                                         imageryInsets,
                                         maxClientImageryLevel);
 
     // get the range of levels that we may need to supersample
-    const uint beginSSLevel = StartTmeshLevel;
+    const unsigned int beginSSLevel = StartTmeshLevel;
     // "1 +" since endSSLevel is "one beyond" max
     // std::max since delta sould be negative
-    const uint endSSLevel = 1 + (uint)std::max((int)maxClientImageryLevel +
+    const unsigned int endSSLevel = 1 + (unsigned int)std::max((int)maxClientImageryLevel +
                                                kImageryToSSClientLevelDelta,
                                                (int)beginSSLevel);
 
@@ -771,8 +772,12 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
     terrain_project->LoadInsetInfo(ClientTmeshTilespaceFlat,
                                   beginSSLevel, endSSLevel,
                                   terrainInsets);
-    const uint beginMinifyLevel  = StartTmeshLevel;
-    const uint endMinifyLevel    = terrainInsets[0].effectiveMaxLevel;
+    const unsigned int beginMinifyLevel  = (MiscConfig::Instance().UseMinification
+                                    ? StartTmeshLevel
+                                    : 0);
+    const unsigned int endMinifyLevel    = (MiscConfig::Instance().UseMinification
+                                    ? terrainInsets[0].effectiveMaxLevel
+                                    : 0);
 
 #ifdef DEBUG_SS_DECISIONS
     notify(NFY_NOTICE, "  beginMinifyLevel = %u", beginMinifyLevel);
@@ -789,7 +794,7 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
 
 #ifdef DEBUG_SS_DECISIONS
     notify(NFY_NOTICE, "Info about terrain project");
-    for (uint i = 0; i < terrainGenInfo.size(); ++i) {
+    for (unsigned int i = 0; i < terrainGenInfo.size(); ++i) {
       notify(NFY_NOTICE, "   %s: %u -> %u",
              terrainGenInfo[i].assetname.c_str(),
              terrainGenInfo[i].coverage.beginLevel(),
@@ -799,7 +804,7 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
 
     // Load the PacketLevel children ref from the finished terrain version
     // They may be used for minified levels.
-    for (uint i = 0; i < terrainGenInfo.size(); ++i) {
+    for (unsigned int i = 0; i < terrainGenInfo.size(); ++i) {
       if (!terrainInsets[i].alphaRPFile.empty() &&
           terrainGenInfo[i].coverage.numLevels()) {
         AssetVersion packgen(terrainGenInfo[i].assetname);
@@ -810,7 +815,7 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
 
 #ifdef DEBUG_SS_DECISIONS
     notify(NFY_NOTICE, "Info about imagery project");
-    for (uint i = 0; i < imageryInsets.size(); ++i) {
+    for (unsigned int i = 0; i < imageryInsets.size(); ++i) {
       notify(NFY_NOTICE, "   %s: %u",
              imageryInsets[i].combinedrp_.Ref().c_str(),
              imageryInsets[i].effectiveMaxLevel);
@@ -828,7 +833,7 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
 
 #ifdef DEBUG_SS_DECISIONS
     notify(NFY_NOTICE, "Before Narrow");
-    for (uint i = 0; i < ssGenInfo.size(); ++i) {
+    for (unsigned int i = 0; i < ssGenInfo.size(); ++i) {
       notify(NFY_NOTICE, "   %s: %u -> %u",
              imageryInsets[i].combinedrp_.Ref().c_str(),
              ssGenInfo[i].coverage.beginLevel(),
@@ -839,15 +844,15 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
 
     // Narrow the SS work by what the terrain project
     // has already done
-    uint numTerrain = terrainGenInfo.size();
-    for (uint i = 0; i < ssGenInfo.size(); ++i) {
+    unsigned int numTerrain = terrainGenInfo.size();
+    for (unsigned int i = 0; i < ssGenInfo.size(); ++i) {
       ssGenInfo[i].NarrowCoverage(&terrainGenInfo[0],
                                   &terrainGenInfo[numTerrain]);
     }
 
 #ifdef DEBUG_SS_DECISIONS
     notify(NFY_NOTICE, "After Narrow");
-    for (uint i = 0; i < ssGenInfo.size(); ++i) {
+    for (unsigned int i = 0; i < ssGenInfo.size(); ++i) {
       notify(NFY_NOTICE, "   %s: %u -> %u",
              imageryInsets[i].combinedrp_.Ref().c_str(),
              ssGenInfo[i].coverage.beginLevel(),
@@ -860,7 +865,7 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
     // routines want pointers.
     std::vector<const InsetInfo<RasterProductAssetVersion>*> terrainInsetPtrs;
     terrainInsetPtrs.reserve(terrainInsets.size());
-    for (uint i = 0; i < terrainInsets.size(); ++i) {
+    for (unsigned int i = 0; i < terrainInsets.size(); ++i) {
       terrainInsetPtrs.push_back(&terrainInsets[i]);
     }
 
@@ -869,14 +874,14 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
     std::vector<AssetVersion> packgenvers;
     packgenkids.reserve(imageryInsets.size());
     packgenvers.reserve(imageryInsets.size());
-    for (uint i = 0; i < ssGenInfo.size(); ++i) {
+    for (unsigned int i = 0; i < ssGenInfo.size(); ++i) {
       // Check if I even need to do any packet generation at all
       if (ssGenInfo[i].coverage.numLevels() == 0)
         continue;
 
 
       // Determine which terrain insets intersect this coverage area.
-      std::vector<uint> neededIndexes;
+      std::vector< unsigned int>  neededIndexes;
       neededIndexes.reserve(numTerrain);
       FindNeededTerrainInsets(ssGenInfo[i].coverage,
                               terrainInsetPtrs, numTerrain,
@@ -891,10 +896,12 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
         continue;
 
       // calculate the level range that will be minified
-      uint effectiveBeginMinifyLevel =
-        std::max(ssGenInfo[i].coverage.beginLevel(), beginMinifyLevel);
-      uint effectiveEndMinifyLevel =
-        std::min(ssGenInfo[i].coverage.endLevel(), endMinifyLevel);
+      unsigned int effectiveBeginMinifyLevel = (MiscConfig::Instance().UseMinification
+                                        ? std::max(ssGenInfo[i].coverage.beginLevel(), beginMinifyLevel)
+                                        : 0);
+      unsigned int effectiveEndMinifyLevel = (MiscConfig::Instance().UseMinification
+                                      ? std::min(ssGenInfo[i].coverage.endLevel(), endMinifyLevel)
+                                      : 0);
 
       // Build a PacketGenConfig
       PacketGenConfig packetGenConfig;
@@ -907,7 +914,7 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
       packetGenConfig.beginSkipTransparentLevel = 100; /* never skip */
       packetGenConfig.useOpaqueTopInsetInsteadOfMerge = false;
       packetGenConfig.insets.reserve(neededIndexes.size());
-      for (std::vector<uint>::const_iterator idx = neededIndexes.begin();
+      for (std::vector< unsigned int> ::const_iterator idx = neededIndexes.begin();
            idx != neededIndexes.end(); ++idx) {
 
 
@@ -938,7 +945,7 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
       PacketGenExtraUpdateArg<RasterProductAssetVersion> extraArg;
       extraArg.insetInfo.reserve(neededIndexes.size());
       extraArg.genInfo.reserve(neededIndexes.size());
-      for (std::vector<uint>::const_iterator idx = neededIndexes.begin();
+      for (std::vector< unsigned int> ::const_iterator idx = neededIndexes.begin();
            idx != neededIndexes.end(); ++idx) {
         extraArg.insetInfo.push_back(&terrainInsets[*idx]);
         extraArg.genInfo.push_back(&terrainGenInfo[*idx]);
@@ -972,7 +979,7 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
         terrain_project->GetGEIndexVersion()->config.index_version_;
 
       //  figure out the packetvers for the geindex
-      uint indexVer = geindexConfig.index_version_;
+      unsigned int indexVer = geindexConfig.index_version_;
       std::string geindexAssetName
         (RasterGEIndexFactory::SubAssetName(asset_ref_string,
                                             AssetDefs::Database,

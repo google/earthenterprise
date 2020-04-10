@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,14 +23,14 @@
 #include <functional>
 
 #include "common/khInsetCoverage.h"
-#include "common/khTypes.h"
+#include <cstdint>
 
 
 namespace {
-inline uint64 TILEADDRKEY(uint32 lev, uint32 row, uint32 col) {
-  return ( (static_cast<uint64>(row) & 0xffffff)         |
-           ((static_cast<uint64>(col) & 0xffffff) << 24) |
-           ((static_cast<uint64>(lev) & 0x00001f) << 48));
+inline std::uint64_t TILEADDRKEY(std::uint32_t lev, std::uint32_t row, std::uint32_t col) {
+  return ( (static_cast<std::uint64_t>(row) & 0xffffff)         |
+           ((static_cast<std::uint64_t>(col) & 0xffffff) << 24) |
+           ((static_cast<std::uint64_t>(lev) & 0x00001f) << 48));
 }
 }
 
@@ -38,7 +39,7 @@ khCoverageMask::khCoverageMask(const khInsetCoverage &coverage,
                                bool set_covered)
     : begin_level_(coverage.beginLevel()),
       end_level_(coverage.endLevel()) {
-  for (uint i = begin_level_; i < end_level_; ++i) {
+  for (unsigned int i = begin_level_; i < end_level_; ++i) {
     levels_[i] = TransferOwnership(
         new khLevelPresenceMask(i, coverage.levelExtents(i), set_covered));
   }
@@ -47,19 +48,19 @@ khCoverageMask::khCoverageMask(const khInsetCoverage &coverage,
 khCoverageMask::khCoverageMask(const khCoverageMask &o)
     : begin_level_(o.begin_level_),
       end_level_(o.end_level_) {
-  for (uint i = begin_level_; i < end_level_; ++i) {
+  for (unsigned int i = begin_level_; i < end_level_; ++i) {
     levels_[i] = TransferOwnership(new khLevelPresenceMask(*o.levels_[i]));
   }
 }
 
 khCoverageMask& khCoverageMask::operator=(const khCoverageMask &o) {
   if (&o != this) {
-    for (uint i = begin_level_; i < end_level_; ++i) {
+    for (unsigned int i = begin_level_; i < end_level_; ++i) {
       levels_[i].clear();
     }
     begin_level_ = o.begin_level_;
     end_level_   = o.end_level_;
-    for (uint i = begin_level_; i < end_level_; ++i) {
+    for (unsigned int i = begin_level_; i < end_level_; ++i) {
       levels_[i] = TransferOwnership(new khLevelPresenceMask(*o.levels_[i]));
     }
   }
@@ -71,21 +72,21 @@ void khCoverageMask::PopulateCoverage(khInsetCoverage *cov) const {
   if (NumLevels() == 0)
     return;
 
-  std::vector<khExtents<uint32> > extentsList;
+  std::vector<khExtents<std::uint32_t> > extentsList;
   extentsList.reserve(NumLevels());
-  for (uint i = begin_level_; i < end_level_; ++i) {
+  for (unsigned int i = begin_level_; i < end_level_; ++i) {
     extentsList.push_back(levels_[i]->extents);
   }
 
   *cov = khInsetCoverage(begin_level_, end_level_, extentsList);
 }
 
-khExtents<uint32> khCoverageMask::LevelTileExtents(uint lev) const {
+khExtents<std::uint32_t> khCoverageMask::LevelTileExtents(unsigned int lev) const {
   assert(lev < NumFusionLevels);
   if (levels_[lev]) {
     return levels_[lev]->extents;
   } else {
-    return khExtents<uint32>();
+    return khExtents<std::uint32_t>();
   }
 }
 

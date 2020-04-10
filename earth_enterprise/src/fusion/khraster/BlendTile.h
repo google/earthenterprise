@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,12 +35,12 @@ File:        BlendTile.h
 // ***  foreach band
 // ***     dest[band][pos] += src[band][pos] * normAlpha
 // ****************************************************************************
-template <class T, uint numcomp> class AlphaModulator { };
+template <class T, unsigned int numcomp> class AlphaModulator { };
 template <class T>
 class AlphaModulator<T, 1> {
  public:
   inline static void Modulate(T *const dest[], const T *const src[],
-                              uint32 pos, double normAlpha) {
+                              std::uint32_t pos, double normAlpha) {
     dest[0][pos] += khCalcHelper<T>::Scale(src[0][pos], normAlpha);
   }
 };
@@ -47,7 +48,7 @@ template <class T>
 class AlphaModulator<T, 3> {
  public:
   inline static void Modulate(T *const dest[], const T *const src[],
-                              uint32 pos, double normAlpha) {
+                              std::uint32_t pos, double normAlpha) {
     dest[0][pos] += khCalcHelper<T>::Scale(src[0][pos], normAlpha);
     dest[1][pos] += khCalcHelper<T>::Scale(src[1][pos], normAlpha);
     dest[2][pos] += khCalcHelper<T>::Scale(src[2][pos], normAlpha);
@@ -62,12 +63,12 @@ class AlphaModulator<T, 3> {
 // ***  foreach band
 // ***     dest[band][pos] += src[band] * normAlpha
 // ****************************************************************************
-template <class T, uint numcomp> class AltAlphaModulator { };
+template <class T, unsigned int numcomp> class AltAlphaModulator { };
 template <class T>
 class AltAlphaModulator<T, 1> {
  public:
   inline static void Modulate(T *const dest[], const T src[],
-                              uint32 pos, double normAlpha) {
+                              std::uint32_t pos, double normAlpha) {
     dest[0][pos] += khCalcHelper<T>::Scale(src[0], normAlpha);
   }
 };
@@ -75,7 +76,7 @@ template <class T>
 class AltAlphaModulator<T, 3> {
  public:
   inline static void Modulate(T *const dest[], const T src[],
-                              uint32 pos, double normAlpha) {
+                              std::uint32_t pos, double normAlpha) {
     dest[0][pos] += khCalcHelper<T>::Scale(src[0], normAlpha);
     dest[1][pos] += khCalcHelper<T>::Scale(src[1], normAlpha);
     dest[2][pos] += khCalcHelper<T>::Scale(src[2], normAlpha);
@@ -88,12 +89,12 @@ class AltAlphaModulator<T, 3> {
 // ***  foreach band
 // ***     dest[band][pos] = src[band][pos] * normAlpha
 // ****************************************************************************
-template <class T, uint numcomp> class AlphaApplier { };
+template <class T, unsigned int numcomp> class AlphaApplier { };
 template <class T>
 class AlphaApplier<T, 1> {
  public:
   inline static void Apply(T *const dest[], const T *const src[],
-                           uint32 pos, double normAlpha) {
+                           std::uint32_t pos, double normAlpha) {
     dest[0][pos] = khCalcHelper<T>::Scale(src[0][pos], normAlpha);
   }
 };
@@ -101,7 +102,7 @@ template <class T>
 class AlphaApplier<T, 3> {
  public:
   inline static void Apply(T *const dest[], const T *const src[],
-                           uint32 pos, double normAlpha) {
+                           std::uint32_t pos, double normAlpha) {
     dest[0][pos] = khCalcHelper<T>::Scale(src[0][pos], normAlpha);
     dest[1][pos] = khCalcHelper<T>::Scale(src[1][pos], normAlpha);
     dest[2][pos] = khCalcHelper<T>::Scale(src[2][pos], normAlpha);
@@ -117,12 +118,12 @@ class AlphaApplier<T, 3> {
 // ***  foreach band
 // ***     dest[band][pos] = src[band] * normAlpha
 // ****************************************************************************
-template <class T, uint numcomp> class AltAlphaApplier { };
+template <class T, unsigned int numcomp> class AltAlphaApplier { };
 template <class T>
 class AltAlphaApplier<T, 1> {
  public:
   inline static void Apply(T *const dest[], const T src[],
-                           uint32 pos, double normAlpha) {
+                           std::uint32_t pos, double normAlpha) {
     dest[0][pos] = khCalcHelper<T>::Scale(src[0], normAlpha);
   }
 };
@@ -130,7 +131,7 @@ template <class T>
 class AltAlphaApplier<T, 3> {
  public:
   inline static void Apply(T *const dest[], const T src[],
-                           uint32 pos, double normAlpha) {
+                           std::uint32_t pos, double normAlpha) {
     dest[0][pos] = khCalcHelper<T>::Scale(src[0], normAlpha);
     dest[1][pos] = khCalcHelper<T>::Scale(src[1], normAlpha);
     dest[2][pos] = khCalcHelper<T>::Scale(src[2], normAlpha);
@@ -147,21 +148,21 @@ template <class TileType>
 class BleedingAlphaBase_ {
  public:
   typedef khCalcHelper<typename TileType::PixelType> DataCalcHelper;
-  typedef khCalcHelper<uchar> AlphaCalcHelper;
+  typedef khCalcHelper<unsigned char> AlphaCalcHelper;
 
   const TileType &dataTile;
-  const uchar *alphaBuf;
-  uint count;
+  const unsigned char *alphaBuf;
+  unsigned int count;
   typename AlphaCalcHelper::AccumType alphaAccum;
   typename DataCalcHelper::AccumType  bandAccum[TileType::NumComp];
 
-  uchar alphaAverage;
+  unsigned char alphaAverage;
   typename TileType::PixelType bandAverage[TileType::NumComp];
 
-  inline BleedingAlphaBase_(const TileType &dt, const uchar *ab) :
+  inline BleedingAlphaBase_(const TileType &dt, const unsigned char *ab) :
       dataTile(dt), alphaBuf(ab) { }
 };
-template <class T, uint tilesize>
+template <class T, unsigned int tilesize>
 class BleedingAlphaNeighborAverager<khRasterTile<T, tilesize, tilesize, 1> >
     : public BleedingAlphaBase_<khRasterTile<T, tilesize, tilesize, 1> > {
  public:
@@ -169,7 +170,7 @@ class BleedingAlphaNeighborAverager<khRasterTile<T, tilesize, tilesize, 1> >
   typedef BleedingAlphaBase_<TileType> Base;
 
 
-  inline BleedingAlphaNeighborAverager(const TileType &dt, const uchar *ab) :
+  inline BleedingAlphaNeighborAverager(const TileType &dt, const unsigned char *ab) :
       Base(dt, ab) {
   }
   inline void Reset(void) {
@@ -185,7 +186,7 @@ class BleedingAlphaNeighborAverager<khRasterTile<T, tilesize, tilesize, 1> >
       Base::DataCalcHelper::Average(this->bandAccum[0],
                                     this->count);
   }
-  inline void handle(uint32 pos) {
+  inline void handle(std::uint32_t pos) {
     typedef typename Base::DataCalcHelper::AccumType  DataAccumType;
     typedef typename Base::AlphaCalcHelper::AccumType AlphaAccumType;
     if (this->alphaBuf[pos] != 0) {
@@ -195,14 +196,14 @@ class BleedingAlphaNeighborAverager<khRasterTile<T, tilesize, tilesize, 1> >
     }
   }
 };
-template <class T, uint tilesize>
+template <class T, unsigned int tilesize>
 class BleedingAlphaNeighborAverager<khRasterTile<T, tilesize, tilesize, 3> >
     : public BleedingAlphaBase_<khRasterTile<T, tilesize, tilesize, 3> > {
  public:
   typedef khRasterTile<T, tilesize, tilesize, 3> TileType;
   typedef BleedingAlphaBase_<TileType> Base;
 
-  inline BleedingAlphaNeighborAverager(const TileType &dt, const uchar *ab) :
+  inline BleedingAlphaNeighborAverager(const TileType &dt, const unsigned char *ab) :
       Base(dt, ab) {
   }
   inline void Reset(void) {
@@ -225,7 +226,7 @@ class BleedingAlphaNeighborAverager<khRasterTile<T, tilesize, tilesize, 3> >
       Base::DataCalcHelper::Average(this->bandAccum[2],
                                     this->count);
   }
-  inline void handle(uint32 pos) {
+  inline void handle(std::uint32_t pos) {
     typedef typename Base::DataCalcHelper::AccumType  DataAccumType;
     typedef typename Base::AlphaCalcHelper::AccumType AlphaAccumType;
 
@@ -249,11 +250,11 @@ class BleedingAlphaNeighborAverager<khRasterTile<T, tilesize, tilesize, 3> >
 template <class TileType>
 inline void
 BlendTerminalTile(TileType *accumData,
-                  uchar accumAlpha[],
+                  unsigned char accumAlpha[],
                   const TileType &otherData) {
   // this is called only when we know the tile is opaque, so we always apply
   // the remainder of the alpha
-  for (uint32 i = 0; i < TileType::BandPixelCount; ++i) {
+  for (std::uint32_t i = 0; i < TileType::BandPixelCount; ++i) {
     double normBalanceAlpha = (255 - accumAlpha[i]) / 255.0;
     AlphaModulator<typename TileType::PixelType,
       TileType::NumComp>::Modulate(accumData->bufs,
@@ -270,12 +271,12 @@ BlendTerminalTile(TileType *accumData,
 template <class TileType>
 inline void
 BlendTileAndSaturateAlpha(TileType *accumData,
-                          uchar accumAlpha[],
+                          unsigned char accumAlpha[],
                           const TileType &otherData,
-                          const uchar otherAlpha[]) {
+                          const unsigned char otherAlpha[]) {
   BleedingAlphaNeighborAverager<TileType> averager(otherData, otherAlpha);
 
-  for (uint32 i = 0; i < TileType::BandPixelCount; ++i) {
+  for (std::uint32_t i = 0; i < TileType::BandPixelCount; ++i) {
     if (accumAlpha[i] == 255) {  // This pixel is opaque for anymore blending
       continue;
     }
@@ -293,7 +294,7 @@ BlendTileAndSaturateAlpha(TileType *accumData,
       averager.CalcAverage();
 
 #ifdef CHIKAIS_BLEND
-      uchar effectiveAlpha = std::min((uchar)(255-accumAlpha[i]),
+      unsigned char effectiveAlpha = std::min((unsigned char)(255-accumAlpha[i]),
                                       averager.alphaAverage);
       accumAlpha[i] += effectiveAlpha;
       double normApplyAlpha = effectiveAlpha / 255.0;
@@ -310,7 +311,7 @@ BlendTileAndSaturateAlpha(TileType *accumData,
       // add the fraction that I just applied back into the accumAlpha
       double newAccumAlpha = 0.5 + (averager.alphaAverage * normBalanceAlpha) +
                              accumAlpha[i];
-      accumAlpha[i] = (newAccumAlpha > 255) ? 255 : (uchar)newAccumAlpha;
+      accumAlpha[i] = (newAccumAlpha > 255) ? 255 : (unsigned char)newAccumAlpha;
 #endif
       AltAlphaModulator<typename TileType::PixelType,
         TileType::NumComp>::Modulate(accumData->bufs,
@@ -320,7 +321,7 @@ BlendTileAndSaturateAlpha(TileType *accumData,
 
     } else {
 #ifdef CHIKAIS_BLEND
-      uchar effectiveAlpha = std::min((uchar)(255-accumAlpha[i]),
+      unsigned char effectiveAlpha = std::min((unsigned char)(255-accumAlpha[i]),
                                       otherAlpha[i]);
       accumAlpha[i] += effectiveAlpha;
       double normApplyAlpha = effectiveAlpha / 255.0;
@@ -337,7 +338,7 @@ BlendTileAndSaturateAlpha(TileType *accumData,
       // add the fraction that I just applied back into the accumAlpha
       double newAccumAlpha = 0.5 + (otherAlpha[i] * normBalanceAlpha) +
                              accumAlpha[i];
-      accumAlpha[i] = (newAccumAlpha > 255) ? 255 : (uchar)newAccumAlpha;
+      accumAlpha[i] = (newAccumAlpha > 255) ? 255 : (unsigned char)newAccumAlpha;
 #endif
       AlphaModulator<typename TileType::PixelType,
         TileType::NumComp>::Modulate(accumData->bufs,
@@ -354,12 +355,12 @@ BlendTileAndSaturateAlpha(TileType *accumData,
 template <class TileType>
 inline void
 ApplyAlpha(TileType *destTile,
-           uchar destABuf[],
+           unsigned char destABuf[],
            const TileType& srcTile,
-           const uchar srcABuf[]) {
+           const unsigned char srcABuf[]) {
   BleedingAlphaNeighborAverager<TileType> averager(srcTile, srcABuf);
 
-  for (uint32 i = 0; i < TileType::BandPixelCount; ++i) {
+  for (std::uint32_t i = 0; i < TileType::BandPixelCount; ++i) {
     if (srcABuf[i] == 0) {
       // Special Case
       // we need to bleed the edge of the blend out

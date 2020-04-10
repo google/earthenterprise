@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,8 +35,8 @@
 // ***
 // ***  ----- sample usage -----
 // ***  geBuffer<char> buf(2048);   // initially size it to 2K
-// ***  for (uint i = 0; i < numtiles; ++i) {
-// ***    uint32 tileSize = GetTileSize(i);
+// ***  for (unsigned int i = 0; i < numtiles; ++i) {
+// ***    std::uint32_t tileSize = GetTileSize(i);
 // ***    buf.destructive_resize(tileSize);
 // ***    file.Pread(buf, tileSize, GetTileOffset(i));
 // ***    Tile tile(buf, tileSize);

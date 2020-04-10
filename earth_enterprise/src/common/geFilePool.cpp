@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -325,7 +326,7 @@ void FileReferenceImpl::Close(void) {
 // ***  geFilePool
 // ****************************************************************************
 namespace {
-uint CalcMaxFds(int requested) {
+unsigned int CalcMaxFds(int requested) {
   assert(requested != 0);
   int systemMax = khMaxOpenFiles();
   if (requested > 0) {
@@ -390,7 +391,7 @@ void geFilePool::WriteStringFile(const std::string &fname,
   WriteSimpleFile(fname, buf.data(), buf.size(), createMask);
 }
 void geFilePool::ReadStringFile(const std::string &fname, std::string *buf) {
-  uint64 size = 0;
+  std::uint64_t size = 0;
   time_t mtime;
   if (!khGetFileInfo(fname, size, mtime)) {
     throw khSimpleException("No such file ") << fname;
@@ -404,7 +405,7 @@ void geFilePool::WriteSimpleFileWithCRC(const std::string &fname,
                                         EndianWriteBuffer &buf,
                                         mode_t createMask) {
   // grow the buffer to make room for the CRC
-  buf << uint32(0);
+  buf << std::uint32_t(0);
 
   // do the write
   Writer writer(Writer::WriteOnly, Writer::Truncate, *this, fname, createMask);
@@ -415,7 +416,7 @@ void geFilePool::WriteSimpleFileWithCRC(const std::string &fname,
 void geFilePool::ReadSimpleFileWithCRC(const std::string &fname,
                                        EndianReadBuffer &buf) {
   // get the filesize
-  uint64 size = 0;
+  std::uint64_t size = 0;
   time_t mtime;
   if (!khGetFileInfo(fname, size, mtime)) {
     throw khSimpleException("No such file ") << fname;
@@ -430,7 +431,7 @@ void geFilePool::ReadSimpleFileWithCRC(const std::string &fname,
   reader.PreadCRC(&buf[0], size, 0);
 
   // prune the CRC
-  buf.resize(size - sizeof(uint32));
+  buf.resize(size - sizeof(std::uint32_t));
 }
 
 LockingFileReference geFilePool::GetFileReference(const std::string &fname,
@@ -518,7 +519,7 @@ geFilePool::Reader::~Reader(void) {
   // nothing to do, fileref's destructor takes care of it for me
 }
 
-uint64 geFilePool::Reader::Filesize(void) const {
+ std::uint64_t geFilePool::Reader::Filesize(void) const {
   return fileref->Filesize();
 }
 
@@ -534,9 +535,9 @@ void geFilePool::Reader::Pread(std::string &buffer, size_t size,
 
 void geFilePool::Reader::PreadCRC(void *buffer, size_t size, off64_t offset) {
   Pread(buffer, size, offset);
-  size_t data_len = size - sizeof(uint32);
-  uint32 computed_crc = Crc32(buffer, data_len);
-  uint32 file_crc;
+  size_t data_len = size - sizeof(std::uint32_t);
+  std::uint32_t computed_crc = Crc32(buffer, data_len);
+  std::uint32_t file_crc;
   FromLittleEndianBuffer(&file_crc,
                          reinterpret_cast<char*>(buffer) + data_len);
   if (computed_crc != file_crc) {
@@ -616,7 +617,7 @@ void geFilePool::Writer::Pwrite(const void *buffer, size_t size,
 }
 
 void geFilePool::Writer::PwriteCRC(void *buffer, size_t size, off64_t offset) {
-  size_t data_len = size - sizeof(uint32);
+  size_t data_len = size - sizeof(std::uint32_t);
   ToLittleEndianBuffer(static_cast<char*>(buffer) + data_len,
                        Crc32(buffer, data_len));
   Pwrite(buffer, size, offset);
@@ -643,9 +644,9 @@ void geFilePool::Writer::Pread(std::string &buffer, size_t size,
 void geFilePool::Writer::PreadCRC(void *buffer, size_t size, off64_t offset)
 {
   Pread(buffer, size, offset);
-  size_t data_len = size - sizeof(uint32);
-  uint32 computed_crc = Crc32(buffer, data_len);
-  uint32 file_crc;
+  size_t data_len = size - sizeof(std::uint32_t);
+  std::uint32_t computed_crc = Crc32(buffer, data_len);
+  std::uint32_t file_crc;
   FromLittleEndianBuffer(&file_crc,
                          reinterpret_cast<char*>(buffer) + data_len);
   if (computed_crc != file_crc) {

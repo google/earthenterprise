@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,15 +13,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <cstdint>
 #include <string>
-#include <khTypes.h>
 #requiresgetheapusage
 
 class InsetStackItem {
   std::string dataAsset;
-  uint maxlevel;                // the maximum level to use in the blend
+  unsigned int maxlevel;                // the maximum level to use in the blend
   // (NOT the dataAsset's maxlevel)
-  uint overridemax = uint(0);   // 0 -> no override
-  deprecated uint peergroup = uint(0);     // no longer used
+  unsigned int overridemax = uint(0);   // 0 -> no override
+  deprecated unsigned int peergroup = uint(0);     // no longer used
 #pragma GenerateIsUpToDate
 };

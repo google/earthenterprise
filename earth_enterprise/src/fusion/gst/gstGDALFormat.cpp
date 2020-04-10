@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -66,7 +67,7 @@ gstStatus gstGDALFormat::OpenFile() {
   return GST_OPEN_FAIL;
 }
 
-gstGeodeHandle gstGDALFormat::GetFeatureImpl(uint32 layer, uint32 fidx) {
+gstGeodeHandle gstGDALFormat::GetFeatureImpl(std::uint32_t layer, std::uint32_t fidx) {
   // should be checked by gstSource before calling me
   assert(layer < NumLayers());
   assert(layer == 0);
@@ -75,7 +76,7 @@ gstGeodeHandle gstGDALFormat::GetFeatureImpl(uint32 layer, uint32 fidx) {
   return gstGeodeImpl::Create(coord_box_);
 }
 
-gstRecordHandle gstGDALFormat::GetAttributeImpl(uint32, uint32) {
+gstRecordHandle gstGDALFormat::GetAttributeImpl(std::uint32_t, std::uint32_t) {
   throw khException(kh::tr("No attributes available"));
 }
 

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -160,7 +161,7 @@ ThematicFilter::ThematicFilter(QWidget* parent,
 
 void ThematicFilter::Init() {
   if (record_header_->numColumns() != 0) {
-    for (uint col = 0; col < record_header_->numColumns(); ++col)
+    for (unsigned int col = 0; col < record_header_->numColumns(); ++col)
       field_names_box->insertItem(record_header_->Name(col));
   }
 
@@ -333,7 +334,7 @@ void ThematicFilter::ComputeStatistics(int field) {
     progress.setMinimumDuration(2000);
 
     Histogram histogram;
-    uint count = 0;
+    unsigned int count = 0;
     for (source_->ResetReadingOrThrow(src_layer_num_);
          !source_->IsReadingDone();
          source_->IncrementReadingOrThrow()) {

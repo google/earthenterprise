@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -50,8 +51,8 @@ RasterGEIndexAssetImplD::ReuseOldPacketVers(
 {
   // make a map of my newconfig packetvers so the hit check can be faster
   std::map<std::string, uint*> packetmap;
-  for (uint i = 0; i < newconfig.packet_insets_.size(); ++i) {
-    for (uint j = 0; j < newconfig.packet_insets_[i].levels_.size(); ++j) {
+  for (unsigned int i = 0; i < newconfig.packet_insets_.size(); ++i) {
+    for (unsigned int j = 0; j < newconfig.packet_insets_[i].levels_.size(); ++j) {
       packetmap.insert(make_pair
                        (newconfig.packet_insets_[i].levels_[j]
                         .packet_level_verref_,
@@ -62,13 +63,13 @@ RasterGEIndexAssetImplD::ReuseOldPacketVers(
 
   // now walk back the previous AssetVersions and find the index versions
   // that we can reuse
-  for (uint i = 0; i < versions.size(); ++i) {
+  for (unsigned int i = 0; i < versions.size(); ++i) {
     AssetVersion prevbase(versions[i]);
     if (prevbase->subtype == "RasterKHDB") {
       // This is an old one, use the old structures to check for version reuse
       RasterKHDBAssetVersion prev(versions[i]);
       if (prev->config.indexVersion <= newconfig.index_version_) {
-        for (uint i = 0; i < prev->config.fusevers.size(); ++i) {
+        for (unsigned int i = 0; i < prev->config.fusevers.size(); ++i) {
           std::map<std::string, uint*>::iterator found
             = packetmap.find(prev->config.fusevers[i].fuseAsset);
           if (found != packetmap.end()) {
@@ -88,8 +89,8 @@ RasterGEIndexAssetImplD::ReuseOldPacketVers(
       // This is an new one, use the new structures to check for version reuse
       RasterGEIndexAssetVersion prev(versions[i]);
       if (prev->config.index_version_ <= newconfig.index_version_) {
-        for (uint i = 0; i < prev->config.packet_insets_.size(); ++i) {
-          for (uint j = 0; j < prev->config.packet_insets_[i].levels_.size();
+        for (unsigned int i = 0; i < prev->config.packet_insets_.size(); ++i) {
+          for (unsigned int j = 0; j < prev->config.packet_insets_[i].levels_.size();
                ++j) {
             std::map<std::string, uint*>::iterator found
               = packetmap.find(prev->config.packet_insets_[i].levels_[j]
@@ -131,11 +132,11 @@ RasterGEIndexAssetVersionImplD::DoSubmitTask(void)
   // ************************************************
   geindexgen::BlendStack geindex_stack;
   geindex_stack.insets_.reserve(config.packet_insets_.size());
-  for (uint i = 0; i < config.packet_insets_.size(); ++i) {
+  for (unsigned int i = 0; i < config.packet_insets_.size(); ++i) {
     geindex_stack.insets_.push_back(geindexgen::BlendStack::Inset());
     geindex_stack.insets_.back().levels_.reserve(
         config.packet_insets_[i].levels_.size());
-    for (uint j = 0; j < config.packet_insets_[i].levels_.size(); ++j) {
+    for (unsigned int j = 0; j < config.packet_insets_[i].levels_.size(); ++j) {
       AssetVersion assetver(config.packet_insets_[i].levels_[j]
                             .packet_level_verref_);
       std::string packetdir = assetver->GetOutputFilename(0);

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -47,8 +48,8 @@ static const char* const colorbox_xpm[] = {
   "********************"
 };
 
-QPixmap ColorBox::Pixmap(uint fill_r, uint fill_g, uint fill_b,
-                         uint outline_r, uint outline_g, uint outline_b) {
+QPixmap ColorBox::Pixmap(unsigned int fill_r, unsigned int fill_g, unsigned int fill_b,
+                         unsigned int outline_r, unsigned int outline_g, unsigned int outline_b) {
   QImage box(colorbox_xpm);
   box.setColor(kFillColorId, qRgb(fill_r, fill_g, fill_b));
   box.setColor(kOutlineColorId, qRgb(outline_r, outline_g, outline_b));

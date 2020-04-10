@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +18,12 @@
 #ifndef GEO_EARTH_ENTERPRISE_SRC_FUSION_KHGDAL_KHGDALDATASET_H_
 #define GEO_EARTH_ENTERPRISE_SRC_FUSION_KHGDAL_KHGDALDATASET_H_
 
+#include <cstdint>
 #include <khGeomUtils.h>
 #include <khGuard.h>
 #include <string>
 #include <gdal_priv.h>
 #include "khGeoExtents.h"
-#include <khTypes.h>
 #include <khRefCounter.h>
 #include <ogr_spatialref.h>
 #include <notify.h>
@@ -77,15 +78,15 @@ class khGDALDatasetImpl : public khRefCounter
   OGRSpatialReference        ogrSRS;
 
   bool haveNormalized;
-  uint             normTopLevel;
+  unsigned int             normTopLevel;
 
   // snapped to level and aligned with that level's pixels
-  khExtents<int64> alignedPixelExtents;
+  khExtents<std::int64_t> alignedPixelExtents;
   khGeoExtents     alignedGeoExtents;
 
   // aligned extents cropped to world - when the outside world
   // sees as my normalized extents
-  khExtents<int64> croppedPixelExtents;
+  khExtents<std::int64_t> croppedPixelExtents;
   khGeoExtents     croppedGeoExtents;
 
   bool           needReproject;
@@ -93,8 +94,8 @@ class khGDALDatasetImpl : public khRefCounter
 
   khTilespace::ProjectionType projectionType;
 
-  inline khSize<uint32> rasterSize(void) const {
-    return khSize<uint32>(dataset->GetRasterXSize(),
+  inline khSize<std::uint32_t> rasterSize(void) const {
+    return khSize<std::uint32_t>(dataset->GetRasterXSize(),
                           dataset->GetRasterYSize());
   }
 
@@ -115,14 +116,14 @@ class khGDALDatasetImpl : public khRefCounter
   ComputeReprojectSnapupExtents(GDALDataset *srcDS,
                                 const std::string &srcSRS,
                                 const std::string &dstSRS,
-                                khSize<uint32> &rasterSize,
+                                khSize<std::uint32_t> &rasterSize,
                                 khGeoExtents &geoExtents,
-                                uint         &level,
+                                unsigned int         &level,
                                 const bool   is_mercator);
 
   void
-  AlignAndCropExtents(const uint normTopLevel,
-                      const khSize<uint32> &inRasterSize,
+  AlignAndCropExtents(const unsigned int normTopLevel,
+                      const khSize<std::uint32_t> &inRasterSize,
                       const khGeoExtents   &inGeoExtents,
                       bool is_mercator);
 
@@ -161,7 +162,7 @@ class khGDALDataset
   inline const khGeoExtents& geoExtents(void) const {
     return impl->geoExtents;
   }
-  inline khSize<uint32> rasterSize(void) const {
+  inline khSize<std::uint32_t> rasterSize(void) const {
     return impl->rasterSize();
   }
   inline const OGRSpatialReference& ogrSRS(void) const {
@@ -169,22 +170,22 @@ class khGDALDataset
   }
 
   // ALL THESE WILL THROW ON ERROR
-  inline const khExtents<int64>& alignedPixelExtents(void) const {
+  inline const khExtents<std::int64_t>& alignedPixelExtents(void) const {
     impl->EnsureKeyholeNormalizedInfo();
     return impl->alignedPixelExtents;
   }
-  inline const khExtents<int64>& croppedPixelExtents(void) const {
+  inline const khExtents<std::int64_t>& croppedPixelExtents(void) const {
     impl->EnsureKeyholeNormalizedInfo();
     return impl->croppedPixelExtents;
   }
-  inline khSize<uint32> alignedRasterSize(void) const {
+  inline khSize<std::uint32_t> alignedRasterSize(void) const {
     impl->EnsureKeyholeNormalizedInfo();
-    return khSize<uint32>(impl->alignedPixelExtents.width(),
+    return khSize<std::uint32_t>(impl->alignedPixelExtents.width(),
                           impl->alignedPixelExtents.height());
   }
-  inline khSize<uint32> croppedRasterSize(void) const {
+  inline khSize<std::uint32_t> croppedRasterSize(void) const {
     impl->EnsureKeyholeNormalizedInfo();
-    return khSize<uint32>(impl->croppedPixelExtents.width(),
+    return khSize<std::uint32_t>(impl->croppedPixelExtents.width(),
                           impl->croppedPixelExtents.height());
   }
 
@@ -197,11 +198,11 @@ class khGDALDataset
     return impl->croppedGeoExtents;
   }
 
-  inline uint normalizedTopLevel(void) const {
+  inline unsigned int normalizedTopLevel(void) const {
     impl->EnsureKeyholeNormalizedInfo();
     return impl->normTopLevel;
   }
-  inline khSize<uint32> normalizedRasterSize(void) const {
+  inline khSize<std::uint32_t> normalizedRasterSize(void) const {
     return croppedRasterSize();
   }
   inline const khGeoExtents&   normalizedGeoExtents(void) const {

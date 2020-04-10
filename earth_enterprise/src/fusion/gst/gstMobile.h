@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +26,7 @@
 #include <gstGeode.h>
 
 const int kBlockLatticeRes = 65536;
-typedef uint16 MobileScalar;
+typedef std::uint16_t MobileScalar;
 typedef Vert2<MobileScalar> MobileVertex;
 
 // ----------------------------------------------------------------------------
@@ -66,14 +67,14 @@ class MobileBlockImpl : public khRefCounter {
   int Col() const { return addr_.col; }
 
   // converting to and from a raw memory buffer
-  uint32 ExportSize() const;
-  uint32 ExportRaw(char* buff) const;
+  std::uint32_t ExportSize() const;
+  std::uint32_t ExportRaw(char* buff) const;
   static MobileBlockHandle FromRaw(const khTileAddr& addr, const char* buf);
 
   // only initialize once for all blocks
   static bool init_gfx_;
-  static uint ramp_texture_id_;
-  //static uint road_texture_id_;
+  static unsigned int ramp_texture_id_;
+  //static unsigned int road_texture_id_;
 
  private:
   friend class khRefGuard<MobileBlockImpl>;
@@ -91,7 +92,7 @@ class MobileBlockImpl : public khRefCounter {
 
   int prim_type_;
   std::vector<MobileVertex> vertexes_;
-  std::vector<uint> counts_;
+  std::vector< unsigned int>  counts_;
 };
 
 #endif // !KHSRC_FUSION_GST_GSTMOBILE_H__

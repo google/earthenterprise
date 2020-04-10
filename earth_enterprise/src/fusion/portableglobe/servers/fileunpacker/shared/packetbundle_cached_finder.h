@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +41,7 @@ class GlcReader;
 class PacketBundleFinder : public PacketBundle {
  public:
   PacketBundleFinder(
-      const GlcReader& glc_reader, uint64 index_offset, uint64 index_size);
+      const GlcReader& glc_reader, std::uint64_t index_offset, std::uint64_t index_size);
 
   /**
    * Find the index in the index file. Set index item fields if it
@@ -55,9 +56,9 @@ class PacketBundleFinder : public PacketBundle {
  private:
   static const int MAX_CACHE_SIZE;
   const GlcReader& glc_reader_;
-  uint64 index_offset_;
-  uint64 index_size_;
-  uint64 num_index_items_;
+  std::uint64_t index_offset_;
+  std::uint64_t index_size_;
+  std::uint64_t num_index_items_;
 
   // The cache uses a very simple idea: if you are looking at a particular region,
   // most of your binary search through the packet index will be indentical to what
@@ -71,7 +72,7 @@ class PacketBundleFinder : public PacketBundle {
   // The cache is not thread safe. Using the cache in a multi-threaded context
   // might not be very useful since it defeats the local neighborhood idea if
   // lots of people are looking at different parts of the globe at the same time.
-  std::vector<uint64> index_cache_location_;
+  std::vector<std::uint64_t> index_cache_location_;
   std::vector<IndexItem> index_cache_;
 };
 

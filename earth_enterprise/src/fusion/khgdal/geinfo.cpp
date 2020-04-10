@@ -199,7 +199,7 @@ int main( int argc, char ** argv )
             } else {
               printf("\n");
             }
-            for (uint i = 0; i < segment_list.size(); ++i) {
+            for (unsigned int i = 0; i < segment_list.size(); ++i) {
               printf("   %s", segment_list[i].c_str());
               if (!orig_list[i].empty() && (filename != orig_list[i])) {
                 printf(" -> %s\n", orig_list[i].c_str());
@@ -273,7 +273,7 @@ int main( int argc, char ** argv )
             } else {
               printf("\n");
             }
-            for (uint i = 0; i < segment_list.size(); ++i) {
+            for (unsigned int i = 0; i < segment_list.size(); ++i) {
               printf("   %s", segment_list[i].c_str());
               if (!orig_list[i].empty() && (filename != orig_list[i])) {
                 printf(" -> %s\n", orig_list[i].c_str());
@@ -283,7 +283,7 @@ int main( int argc, char ** argv )
             }
           }
           printf("Packetfiles:\n");
-          for (uint i = 0; i < header.PacketFileCount(); ++i) {
+          for (unsigned int i = 0; i < header.PacketFileCount(); ++i) {
             std::string packetfile = header.GetPacketFile(i);
             if (packetfile.empty()) {
               printf("\t%d:<unused>\n", i);
@@ -371,7 +371,7 @@ int main( int argc, char ** argv )
           fprintf(stderr, "addr,type,channel,version,file,offset,size,insetId\n");
           do {
             const TraverserBase::MergeType &slot = traverser->Current();
-            for (uint i = 0; i < slot.size(); ++i) {
+            for (unsigned int i = 0; i < slot.size(); ++i) {
                 printf("%s,%s,%u,%u,%u,%llu,%u,%u\n",
                        slot.qt_path().AsString().c_str(),
                        ToString(slot[i].type).c_str(),
@@ -396,7 +396,7 @@ int main( int argc, char ** argv )
         printf( "Extents (NSEW): %.17f, %.17f, %.17f, %.17f\n",
                 rp->degOrMeterNorth(), rp->degOrMeterSouth(),
                 rp->degOrMeterEast(), rp->degOrMeterWest());
-        for (uint i = rp->minLevel(); i <= rp->maxLevel(); ++i) {
+        for (unsigned int i = rp->minLevel(); i <= rp->maxLevel(); ++i) {
           khRasterProduct::Level &level(rp->level(i));
           printf( "Level Tile Extents %2u: (xywh) %u, %u, %u, %u\n", i,
                   level.tileExtents().beginX(),
@@ -405,7 +405,7 @@ int main( int argc, char ** argv )
                   level.tileExtents().height());
         }
 #if 0
-        for (uint i = rp->minLevel(); i <= rp->maxLevel(); ++i) {
+        for (unsigned int i = rp->minLevel(); i <= rp->maxLevel(); ++i) {
           khRasterProduct::Level &level(rp->level(i));
           printf( "Level Extents %u: %.12f,%.12f,%.12f,%.12f\n", i,
                   level.degTileNorth(), level.degTileSouth(),
@@ -447,7 +447,7 @@ int main( int argc, char ** argv )
   /* -------------------------------------------------------------------- */
   /*      Gather (AND SAVE) the common stuff                              */
   /* -------------------------------------------------------------------- */
-  khSize<uint32> rasterSize(dataset->GetRasterXSize(),
+  khSize<std::uint32_t> rasterSize(dataset->GetRasterXSize(),
                             dataset->GetRasterYSize());
 
   /* -------------------------------------------------------------------- */
@@ -504,9 +504,9 @@ int main( int argc, char ** argv )
   printf("Keyhole Normalized {\n");
   if (khDS) {
     try {
-      khSize<uint32> rasterSize = khDS.normalizedRasterSize();
+      khSize<std::uint32_t> rasterSize = khDS.normalizedRasterSize();
       khGeoExtents   geoExtents = khDS.normalizedGeoExtents();
-      uint           toplevel   = khDS.normalizedTopLevel();
+      unsigned int           toplevel   = khDS.normalizedTopLevel();
       printf("     Raster Size: %d,%d\n",
              rasterSize.width, rasterSize.height);
       printf("     Extents:     (ns) %.12f,%.12f\n"

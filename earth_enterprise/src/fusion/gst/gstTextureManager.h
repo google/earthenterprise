@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -97,7 +98,7 @@ class gstTextureManager {
   void GetOverlayList(const TexTile& tile, std::vector<gstTextureGuard>&,
                       const bool is_mercator_preview);
   int prepareTexture(TexTile& tile, const gstTextureGuard &tex);
-  void recycleTexture(uint64 addr);
+  void recycleTexture(std::uint64_t addr);
 
   int renderUnfinished() { return render_unfinished_; }
   void resetFrame();
@@ -107,25 +108,25 @@ class gstTextureManager {
   void toggleBaseTexture();
 
  private:
-  typedef gstCache< uint, uint64 > TextureCache;
+  typedef gstCache< unsigned int, std::uint64_t > TextureCache;
   TextureCache* base_texture_cache_;
   TextureCache* overlay_RGB_texture_cache_;
   TextureCache* overlay_alpha_texture_cache_;
 
-  static bool bindTile_cb(void *obj, uint &data, const uint64 &id) {
+  static bool bindTile_cb(void *obj, unsigned int &data, const std::uint64_t &id) {
     return reinterpret_cast<gstTextureManager*>(obj)->bindTile(data, id);
   }
   bool bindTile(uint& data, const uint64& id);
 
-  typedef gstCache<TileExistance*, uint64> TileExistanceCache;
+  typedef gstCache<TileExistance*, std::uint64_t> TileExistanceCache;
   TileExistanceCache* tile_existance_cache_;
-  static bool findTile_cb(void *obj, TileExistance *&data, const uint64 &id) {
+  static bool findTile_cb(void *obj, TileExistance *&data, const std::uint64_t &id) {
     return reinterpret_cast<gstTextureManager*>(obj)->findTile(data, id);
   }
-  bool findTile(TileExistance *&data, const uint64 &id);
+  bool findTile(TileExistance *&data, const std::uint64_t &id);
 
-  uint getNextTexID() { return ++current_tex_id_; }
-  uint getCurrTexID() { return current_tex_id_; }
+  unsigned int getNextTexID() { return ++current_tex_id_; }
+  unsigned int getCurrTexID() { return current_tex_id_; }
 
   gstTextureGuard FindTexture(int id);
 
@@ -135,22 +136,22 @@ class gstTextureManager {
 
   void readThreadFunc();
   ReadThread readThread;
-  khMTQueue<uint64> readQueue;
+  khMTQueue<std::uint64_t> readQueue;
   khMutex readWorkerMutex;
 
   int texture_number_;
 
   gstHistogram* texture_cache_histogram_;
 
-  typedef gstThreadCache<uchar*, uint64> MemoryCache;
+  typedef gstThreadCache<unsigned char*, std::uint64_t> MemoryCache;
   MemoryCache* memory_cache_;
 
-  std::map<uint, gstTextureGuard> texture_map_;
+  std::map<unsigned int, gstTextureGuard> texture_map_;
   khMutex textureMapMutex;
 
-  uint current_tex_id_;  // internal ID of texture, always increasing, no re-use
+  unsigned int current_tex_id_;  // internal ID of texture, always increasing, no re-use
 
-  uint requested_level_;
+  unsigned int requested_level_;
 };
 
 // -----------------------------------------------------------------------------
@@ -169,8 +170,8 @@ class gstTEXFormat : public gstFormat {
  private:
   FORWARD_ALL_SEQUENTIAL_ACCESS_TO_BASE;
 
-  virtual gstGeodeHandle GetFeatureImpl(uint32 layer, uint32 id);
-  virtual gstRecordHandle GetAttributeImpl(uint32 layer, uint32 id);
+  virtual gstGeodeHandle GetFeatureImpl(std::uint32_t layer, std::uint32_t id);
+  virtual gstRecordHandle GetAttributeImpl(std::uint32_t layer, std::uint32_t id);
   FORWARD_GETFEATUREBOX_TO_BASE;
 
 

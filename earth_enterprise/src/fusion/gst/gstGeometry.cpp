@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -142,7 +143,7 @@ void gstGeometryImpl::Init(const gstGeodeHandle &geodeh) {
       {
         const gstGeodeCollection *multi_geode =
             static_cast<const gstGeodeCollection*>(&(*geodeh));
-        for (uint p = 0; p < multi_geode->NumParts(); ++p) {
+        for (unsigned int p = 0; p < multi_geode->NumParts(); ++p) {
           const gstGeode *geode =
               static_cast<const gstGeode*>(&(*multi_geode->GetGeode(p)));
           ConvertGeode(geode, dx, dy, f_error_x, f_error_y);
@@ -161,9 +162,9 @@ void gstGeometryImpl::ConvertGeode(const gstGeode *geode,
                                    const float f_error_x,
                                    const float f_error_y) {
   // convert global geode vertexes to local point vertexes
-  for (uint p = 0; p < geode->NumParts(); ++p) {
+  for (unsigned int p = 0; p < geode->NumParts(); ++p) {
     lengths_.push_back(geode->VertexCount(p));
-    for (uint v = 0; v < geode->VertexCount(p); ++v) {
+    for (unsigned int v = 0; v < geode->VertexCount(p); ++v) {
       const gstVertex& vert = geode->GetVertex(p, v);
       points_.push_back(Point(static_cast<float>(vert.x - dx) + f_error_x,
                               static_cast<float>(vert.y - dy) + f_error_y));
@@ -209,8 +210,8 @@ void gstGeometryImpl::Draw(
       glColor4fv(clr);
 
       TessPoly tess_poly;
-      uint addr = 0;
-      for (std::vector<uint>::const_iterator it = lengths_.begin(); it
+      unsigned int addr = 0;
+      for (std::vector< unsigned int> ::const_iterator it = lengths_.begin(); it
           != lengths_.end(); ++it) {
         tess_poly.AddContour(&points_[addr], *it);
         addr += *it;
@@ -233,11 +234,11 @@ void gstGeometryImpl::Draw(
       // iterate through each subpart
       // Note: GL_VERTEX_ARRAY causes problems with 64-bit SLES10.
       // Use glBegin/glEnd until problem is understood.
-      uint addr = 0;
-      for (std::vector<uint>::const_iterator it = lengths_.begin(); it
+      unsigned int addr = 0;
+      for (std::vector< unsigned int> ::const_iterator it = lengths_.begin(); it
           != lengths_.end(); ++it) {
         glBegin(GL_LINE_STRIP);
-        for (uint j = 0; j < *it; ++j) {
+        for (unsigned int j = 0; j < *it; ++j) {
           glVertex2f(points_[addr + j].x, points_[addr + j].y);
         }
         glEnd();

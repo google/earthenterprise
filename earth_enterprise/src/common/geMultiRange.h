@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +48,7 @@ class geMultiRange {
 
   bool operator==(const geMultiRange &o) const {
     if (ranges.size() == o.ranges.size()) {
-      for (uint i = 0; i < ranges.size(); ++i) {
+      for (unsigned int i = 0; i < ranges.size(); ++i) {
         if ((ranges[i].begin != o.ranges[i].begin) ||
             (ranges[i].end != o.ranges[i].end)) {
           return false;
@@ -61,7 +62,7 @@ class geMultiRange {
 
   std::string AsString(void) {
     std::ostringstream out;
-    for (uint i = 0; i < ranges.size(); ++i) {
+    for (unsigned int i = 0; i < ranges.size(); ++i) {
       if (i > 0) {
         out << ", ";
       }

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -90,7 +91,7 @@ RecordFilter::TryApply(const gstRecordHandle &rec,
         have_match = false;
       } else {
         // select rule and rec needs to be tested
-        for (uint ii = 0; ii < selectRules.size(); ++ii) {
+        for (unsigned int ii = 0; ii < selectRules.size(); ++ii) {
           gstSelectRule* rule = selectRules[ii];
           if (rule->eval(rec)) {
             have_match = true;
@@ -148,7 +149,7 @@ RecordFilter::ReadQueryResultsFile(const std::string& path,
   return geoIndex->ReadFile(path, source);
 }
 
-uint32
+std::uint32_t
 RecordFilter::Intersect(const gstBBox& b, std::vector<int>* match_list) {
   geoIndex->Intersect(b, match_list);
   return match_list->size();
@@ -161,7 +162,7 @@ RecordFilter::Intersect(const gstBBox& b, std::vector<int>* match_list) {
 PreviewSelector::PreviewSelector
 (const gstSharedSource &source_,
  const QueryConfig &config_,
- const std::vector<geMultiRange<uint32> > &validLevels_,
+ const std::vector<geMultiRange<std::uint32_t> > &validLevels_,
  const khTilespace &tilespace_,
  double oversizeFactor_) :
     config(config_),
@@ -171,7 +172,7 @@ PreviewSelector::PreviewSelector
     oversizeFactor(oversizeFactor_)
 {
   filters.reserve(config.filters.size());
-  for (uint f = 0; f < config.filters.size(); ++f) {
+  for (unsigned int f = 0; f < config.filters.size(); ++f) {
     filters.push_back(new RecordFilter(config.filters[f]));
   }
 }
@@ -184,7 +185,7 @@ PreviewSelector::ApplyQueries(gstProgress &guiProgress,
 
   // figure out if we have JS expressions for any of our filters
   bool wantJS = false;
-  for (uint f = 0; f < filters.size(); ++f) {
+  for (unsigned int f = 0; f < filters.size(); ++f) {
     if (config.filters[f].HasJS()) {
       wantJS = true;
       break;
@@ -192,7 +193,7 @@ PreviewSelector::ApplyQueries(gstProgress &guiProgress,
   }
 
   // Reset the filters
-  for (uint f = 0; f < filters.size(); ++f) {
+  for (unsigned int f = 0; f < filters.size(); ++f) {
     filters[f]->Reset();
   }
 
@@ -223,7 +224,7 @@ PreviewSelector::ApplyQueries(gstProgress &guiProgress,
         contextScripts.append(config.contextScript);
       }
       cx = gstRecordJSContextImpl::Create(recordHeader, contextScripts);
-      for (uint f = 0; f < filters.size(); ++f) {
+      for (unsigned int f = 0; f < filters.size(); ++f) {
         if (config.filters[f].match == FilterConfig::JSExpression) {
           matchScripts[f] = cx->CompileScript(config.filters[f].matchScript,
                                               QString("Filter Expression %1")
@@ -260,7 +261,7 @@ PreviewSelector::ApplyQueries(gstProgress &guiProgress,
       cx->SetRecord(recordHandle);
     }
 
-    for (uint f = 0; f < filters.size(); ++f) {
+    for (unsigned int f = 0; f < filters.size(); ++f) {
       bool match =
         filters[f]->TryApply(recordHandle,
                              UniqueFeatureId(source->Id(), 0, fnum),
@@ -279,7 +280,7 @@ PreviewSelector::ApplyQueries(gstProgress &guiProgress,
   guiProgress.SetVal(100);
 
   // after queries are complete, rebuild geoindex
-  for (uint f = 0; f < filters.size(); ++f) {
+  for (unsigned int f = 0; f < filters.size(); ++f) {
     filters[f]->Finalize();
   }
 }
@@ -290,7 +291,7 @@ PreviewSelector::Fetch(WorkflowOutputTile *out) {
   assert(filters.size() == out->displayRules.size());
 
   // populate normTargetExtents for this tile
-  uint32 level, row, col;
+  std::uint32_t level, row, col;
   out->path.GetLevelRowCol(&level, &row, &col);
 
   khExtents<double> norm_extents =
@@ -301,8 +302,8 @@ PreviewSelector::Fetch(WorkflowOutputTile *out) {
                             norm_extents.north());
 
   // Ask each of my filters to intersect with the target extents
-  uint32 count = 0;
-  for (uint f = 0; f < filters.size(); ++f) {
+  std::uint32_t count = 0;
+  for (unsigned int f = 0; f < filters.size(); ++f) {
     if (validLevels[f].Contains(level)) {
       count += filters[f]->Intersect(normTargetExtents,
                                      &out->displayRules[f].selectedIds);

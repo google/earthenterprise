@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -34,8 +35,8 @@ class MercatorMapDatabaseAssetVersionImpl {
 
 namespace {
 
-uint kUnifiedIndexChildPos    = 0;
-uint kMapDBChildPos            = 1;
+unsigned int kUnifiedIndexChildPos    = 0;
+unsigned int kMapDBChildPos            = 1;
 
 }
 
@@ -73,7 +74,7 @@ class MercatorMapDatabaseAssetImplD {
 
   void IncrementIndexVersion(void) {
     config.indexVersion = (config.indexVersion + 1) %
-                          std::numeric_limits<uint32>::max();
+                          std::numeric_limits<std::uint32_t>::max();
     if (config.indexVersion == 0) {
       config.indexVersion = 1;
     }
@@ -247,7 +248,7 @@ MercatorMapDatabaseAssetVersionImplD::DelayedBuildChildren(void)
   RasterProjectAssetVersionD rasterProject;
   ProjectedMapProjectAssetVersionD mapProject;
 
-  uint next = 0;
+  unsigned int next = 0;
   bool is_mercator_imagery_project = false;
 
   if (!config.imageryProject.empty()) {

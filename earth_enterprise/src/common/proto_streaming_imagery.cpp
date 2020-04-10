@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -50,7 +51,7 @@ geProtobufPacketBuilder::geProtobufPacketBuilder(size_t _data_size)
 geProtobufPacketBuilder::~geProtobufPacketBuilder() {
 }
 
-void geProtobufPacketBuilder::Build(char **packet_data, uint *packet_size) {
+void geProtobufPacketBuilder::Build(char **packet_data, unsigned int *packet_size) {
   // Serialize EarthImagery packet.
   bool serialized = packet_.SerializeToArray(
       &packet_buf_[0], packet_buf_.capacity());
@@ -60,7 +61,7 @@ void geProtobufPacketBuilder::Build(char **packet_data, uint *packet_size) {
   size_t serialized_size = packet_.GetCachedSize();
 
   // packet_buf should have at least kCRC32Size bytes available on the end.
-  uint32 pack_size = serialized_size + kCRC32Size;
+  std::uint32_t pack_size = serialized_size + kCRC32Size;
 
   if ((!serialized) || (pack_size > packet_buf_.capacity())) {
     // Note: can't be reached but just to be sure.

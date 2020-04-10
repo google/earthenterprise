@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -67,7 +68,7 @@ void
 VectorProjectAssetVersionImpl::GetPOIFiles(std::vector<std::string> &out) const
 {
   // skip index and dbroot, the rest are our layer children
-  for (uint i = 2; i < children.size(); ++i) {
+  for (unsigned int i = 2; i < children.size(); ++i) {
     VectorLayerAssetVersion layer(children[i]);
     std::string poifile = layer->GetPOIFile();
     if (!poifile.empty()) {
@@ -440,7 +441,7 @@ VectorProjectAssetVersionImplD::UpdateChildren(void)
   std::vector<MutableAssetVersionD> layers;
   std::vector<SharedString> vecfuses;
   std::vector<AssetVersion> vecfusevers;
-  std::map<uint, AssetVersion> vecfusemap;
+  std::map<unsigned int, AssetVersion> vecfusemap;
 
   vecfuses.reserve(config.layers.size());
   vecfusevers.reserve(config.layers.size());
@@ -453,13 +454,13 @@ VectorProjectAssetVersionImplD::UpdateChildren(void)
 
   std::vector<LayerConfig> usedLayers;
   usedLayers.reserve(config.layers.size());
-  std::vector<uint32> usedProviderIds;
+  std::vector<std::uint32_t> usedProviderIds;
   usedProviderIds.reserve(config.layers.size());
 
   // ******************************
   // create my layers
   // ******************************
-  uint i = 0;
+  unsigned int i = 0;
   for (std::vector<LayerConfig>::const_iterator layerConfig
          = config.layers.begin();
        layerConfig != config.layers.end(); ++layerConfig) {
@@ -485,7 +486,7 @@ VectorProjectAssetVersionImplD::UpdateChildren(void)
 
     // give them each their input vector product and their piece
     // of the config
-    uint channelId = layerConfig->channelId;
+    unsigned int channelId = layerConfig->channelId;
     VectorProductAssetVersion kvp(guard->inputvers[i++]);
     usedProviderIds.push_back(kvp->config.provider_id_);
 
@@ -538,7 +539,7 @@ VectorProjectAssetVersionImplD::UpdateChildren(void)
     std::vector<AssetVersion> geindexinputvers;
     geindexinputs.reserve(vecfusemap.size());
     geindexinputvers.reserve(vecfusemap.size());
-    for (std::map<uint, AssetVersion>::const_iterator pair
+    for (std::map<unsigned int, AssetVersion>::const_iterator pair
            = vecfusemap.begin();
          pair != vecfusemap.end(); ++pair) {
       geindexinputs.push_back(pair->second->GetRef());
@@ -567,7 +568,7 @@ VectorProjectAssetVersionImplD::UpdateChildren(void)
 
     // Empty out the meta from the layer config. We don't want changes there
     // to trigger a new dbroot
-    for (uint i = 0; i < dbrootConfig.layers.size(); ++i) {
+    for (unsigned int i = 0; i < dbrootConfig.layers.size(); ++i) {
       dbrootConfig.layers[i].meta = khMetaData();
     }
 

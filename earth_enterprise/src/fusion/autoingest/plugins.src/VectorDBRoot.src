@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -38,7 +39,7 @@ VectorDBRootAssetVersionImplD::DoSubmitTask(void)
   std::vector<std::string> fuseLODFiles;
   fuseLODFiles.reserve(config.layers.size());
   {
-    uint i = 0;
+    unsigned int i = 0;
     for (std::vector<LayerConfig>::const_iterator layer
            = config.layers.begin();
          layer != config.layers.end(); ++layer) {

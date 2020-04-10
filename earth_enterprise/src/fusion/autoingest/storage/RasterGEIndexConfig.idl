@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,10 +15,10 @@
 
 //
 
+#include <cstdint>
 #include <string>
 #include <vector>
 #include <map>
-#include <khTypes.h>
 #requiresgetheapusage
 
 // ****************************************************************************
@@ -27,7 +28,7 @@ class RasterPacketLevelVersion {
   // cannot pre-bind this to a packetfile output name, since this config
   // gets built before all the packetlevels are completed
   std::string packet_level_verref_;
-  uint index_version_;
+  unsigned int index_version_;
 #pragma GenerateIsUpToDate
 };
 class RasterPacketInset {
@@ -36,7 +37,7 @@ class RasterPacketInset {
 }
 class RasterGEIndexConfig {
   std::string db_name_;
-  IsUpToDateIgnore uint index_version_;
+  IsUpToDateIgnore unsigned int index_version_;
   std::vector<RasterPacketInset> packet_insets_;
   std::string date_string_ = std::string("");
 #pragma GenerateIsUpToDate

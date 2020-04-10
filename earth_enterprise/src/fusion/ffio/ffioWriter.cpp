@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -51,7 +52,7 @@ ffio::Writer::OpenNextFile(void)
 
 ffio::Writer::Writer(Type type,
                      const std::string &outdir_,
-                     uint64 splitSize_)
+                     std::uint64_t splitSize_)
     : outdir(outdir_),
       splitSize(splitSize_),
       totalOffset(0),
@@ -69,7 +70,7 @@ ffio::Writer::Writer(Type type,
 
 
 void
-ffio::Writer::WritePacket(char *buf, uint32 buflen, uint32 bufsize,
+ffio::Writer::WritePacket(char *buf, std::uint32_t buflen, std::uint32_t bufsize,
                           const khTileAddr &addr)
 {
   FFRecHeader hdr(buflen, addr.level, addr.col, addr.row);
@@ -120,7 +121,7 @@ ffio::Writer::WritePacket(char *buf, uint32 buflen, uint32 bufsize,
   if (fillNeeded) {
     // make a zero filled buffer that is as big as any padding we will
     // ever need
-    static std::vector<uchar> fillbuf(FFRecHeader::paddedLen(1));
+    static std::vector<unsigned char> fillbuf(FFRecHeader::paddedLen(1));
     assert(fillNeeded < fillbuf.size());
     if (!khWriteAll(fileHandle.fd(), &fillbuf[0], fillNeeded)) {
       throw khErrnoException
@@ -141,7 +142,7 @@ ffio::Writer::WritePacket(char *buf, uint32 buflen, uint32 bufsize,
 ffio::GridIndexedWriter::GridIndexedWriter(Type type,
                                            const std::string &outdir_,
                                            const khInsetCoverage &coverage,
-                                           uint64 splitSize_,
+                                           std::uint64_t splitSize_,
                                            void* littleEndianTypeData) :
     ffio::Writer(type, outdir_, splitSize_),
     index(type, ffio::IndexFilename(outdir),
@@ -152,7 +153,7 @@ ffio::GridIndexedWriter::GridIndexedWriter(Type type,
 
 
 void
-ffio::GridIndexedWriter::WritePacket(char *buf, uint32 buflen, uint32 bufsize,
+ffio::GridIndexedWriter::WritePacket(char *buf, std::uint32_t buflen, std::uint32_t bufsize,
                                      const khTileAddr& addr)
 {
   FFRecHeader hdr(buflen, addr.level, addr.col, addr.row);

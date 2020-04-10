@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -83,7 +84,7 @@ gstStatus gstKHMFormat::CloseFile() {
   return GST_OKAY;
 }
 
-gstGeodeHandle gstKHMFormat::GetFeatureImpl(uint32 layer, uint32 fidx) {
+gstGeodeHandle gstKHMFormat::GetFeatureImpl(std::uint32_t layer, std::uint32_t fidx) {
   // should be checked by gstSource before calling me
   assert(layer < NumLayers());
   assert(fidx < NumFeatures(layer));
@@ -99,7 +100,7 @@ gstGeodeHandle gstKHMFormat::GetFeatureImpl(uint32 layer, uint32 fidx) {
   return gstGeodeHandle();
 }
 
-gstRecordHandle gstKHMFormat::GetAttributeImpl(uint32 layer, uint32 fidx) {
+gstRecordHandle gstKHMFormat::GetAttributeImpl(std::uint32_t layer, std::uint32_t fidx) {
   // should be checked by gstSource before calling me
   assert(layer < NumLayers());
   assert(fidx < NumFeatures(layer));

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,7 +23,7 @@
 // ****************************************************************************
 // ***  CPUReservationImpl
 // ****************************************************************************
-CPUReservationImpl::CPUReservationImpl(const std::string &host_, uint n) :
+CPUReservationImpl::CPUReservationImpl(const std::string &host_, unsigned int n) :
     host(host_), num_(n) {
 
   // theResourceManager already incremented the host's usedCPUs

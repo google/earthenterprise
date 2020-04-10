@@ -14,13 +14,82 @@ class AssetSerializerInterface {
     virtual ~AssetSerializerInterface() = default;
 };
 
+/*
+* GetFileInfo and ReadXMLDocument were added as function templates to allow
+* them to be overridden in unit tests. The versions here should be used for
+* all asset types during normal operation.
+*/
+template<class AssetType>
+bool GetFileInfo(const std::string &fname, std::uint64_t &size, time_t &mtime) {
+  return khGetFileInfo(fname, size, mtime);
+}
+
+template<class AssetType>
+std::unique_ptr<GEDocument> ReadXMLDocument(const std::string &filename) {
+  return ReadDocument(filename);
+}
+
 template<class AssetType>
 class AssetSerializerLocalXML : public AssetSerializerInterface<AssetType>
 {
   public:
     virtual AssetPointerType<AssetType> Load(const std::string &boundref)
     {
-      return AssetType::Load(boundref);
+      std::string filename = AssetType::XMLFilename(boundref);
+      AssetPointerType<AssetType> result;
+      time_t timestamp = 0;
+      std::uint64_t filesize = 0;
+
+      if (GetFileInfo<AssetType>(filename, filesize, timestamp) && (filesize > 0)) {
+        std::unique_ptr<GEDocument> doc = ReadXMLDocument<AssetType>(filename);
+        if (doc) {
+          try {
+            khxml::DOMElement *top = doc->getDocumentElement();
+            if (!top)
+              throw khException(kh::tr("No document element"));
+            std::string tagname = FromXMLStr(top->getTagName());
+            result = AssetFactory::CreateNewFromDOM<AssetType>(tagname,top);
+            if (nullptr == result) {
+              AssetThrowPolicy::WarnOrThrow
+                (kh::tr("Unknown asset type '%1' while parsing %2")
+                .arg(ToQString(tagname), ToQString(filename)));
+            }
+          } catch (const std::exception &e) {
+            AssetThrowPolicy::WarnOrThrow
+              (kh::tr("Error loading %1: %2")
+              .arg(ToQString(filename), QString::fromUtf8(e.what())));
+          } catch (...) {
+            AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to load ")
+                  + filename);
+          }
+        } else {
+          AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to read ")
+                + filename);
+        }
+      } else {
+        AssetThrowPolicy::WarnOrThrow(kh::tr("No such file: ") + filename);
+      }
+
+      if (!result) {
+        notify(NFY_DEBUG, "Creating placeholder for bad asset %s",
+          boundref.c_str());
+        // Since AssetType may be pure virtual, we will create an asset of its
+        // "placeholder" type instead.
+        result = AssetFactory::CreateNewInvalid<AssetType>(
+          AssetType::GetPlaceholderAssetRegistryKey(), boundref
+        );
+      }
+
+      // Store the timestamp so the cache can check it later
+      if (result) {
+        // NOTE: In the case where GetFileInfo succeeded but the contents of
+        // the file were invalid, result->timestamp will still contain the
+        // timestamp of the original, invalid file.
+        result->timestamp = timestamp;
+        result->filesize  = filesize;
+      }
+
+      return result;
     }
 
     virtual bool Save(AssetPointerType<AssetType> asset, std::string filename){
