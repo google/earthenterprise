@@ -27,7 +27,7 @@
 namespace gedbroot {
 
 void CreateTimemachineDbroot(const std::string& dbroot_filename,
-                             const uint database_version,
+                             const unsigned int database_version,
                              const std::string& template_filename) {
   khDeleteGuard<geProtoDbroot> timemachine_dbroot;
   if (template_filename.length() > 0 && khExists(template_filename)) {

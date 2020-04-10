@@ -83,7 +83,7 @@ class kbfFile {
   bool open(const char *filename, int mode);
   int eof();
   void close();
-  bool read(kbfFileHeader& hdr, char* buff, std::uint32_t buffsz, int32& fpos);
+  bool read(kbfFileHeader& hdr, char* buff, std::uint32_t buffsz, std::int32_t& fpos);
  private:
   void resetposition();
   FILE* fp;

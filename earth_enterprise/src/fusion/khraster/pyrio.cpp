@@ -70,14 +70,14 @@ struct Header {
 
 
   // valid for formatMajorVersion >= 1
-  uint32& endianCheck(void)   { return iparams[0]; }
-  uint32& numCols(void)       { return iparams[1]; }
-  uint32& numRows(void)       { return iparams[2]; }
-  uint32& level(void)         { return iparams[3]; }
-  uint32& tilesize(void)      { return iparams[4]; }
-  uint32& compression(void)   { return iparams[5]; } // CompressMode enum
-  uint32& numComponents(void) { return iparams[6]; }
-  uint32& componentSize(void) { return iparams[7]; }
+  std::uint32_t& endianCheck(void)   { return iparams[0]; }
+  std::uint32_t& numCols(void)       { return iparams[1]; }
+  std::uint32_t& numRows(void)       { return iparams[2]; }
+  std::uint32_t& level(void)         { return iparams[3]; }
+  std::uint32_t& tilesize(void)      { return iparams[4]; }
+  std::uint32_t& compression(void)   { return iparams[5]; } // CompressMode enum
+  std::uint32_t& numComponents(void) { return iparams[6]; }
+  std::uint32_t& componentSize(void) { return iparams[7]; }
 
   double& dataNorth(void)     { return dparams[0]; }
   double& dataSouth(void)     { return dparams[1]; }
@@ -89,8 +89,8 @@ struct Header {
   double& tileWest(void)      { return dparams[7]; }
 
   // valid for formatMajorVersion >= 2
-  uint32& rasterType(void)    { return iparams[8]; } // khRasterProduct::RasterType
-  uint32& componentType(void) { return iparams[9]; } // khTypes::StorageEnum
+  std::uint32_t& rasterType(void)    { return iparams[8]; } // khRasterProduct::RasterType
+  std::uint32_t& componentType(void) { return iparams[9]; } // khTypes::StorageEnum
 
 
   inline void LittleEndianToHost(void) {

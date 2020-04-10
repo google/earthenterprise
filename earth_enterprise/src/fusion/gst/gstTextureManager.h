@@ -116,7 +116,7 @@ class gstTextureManager {
   static bool bindTile_cb(void *obj, unsigned int &data, const std::uint64_t &id) {
     return reinterpret_cast<gstTextureManager*>(obj)->bindTile(data, id);
   }
-  bool bindTile(uint& data, const uint64& id);
+  bool bindTile(unsigned int& data, const std::uint64_t& id);
 
   typedef gstCache<TileExistance*, std::uint64_t> TileExistanceCache;
   TileExistanceCache* tile_existance_cache_;
