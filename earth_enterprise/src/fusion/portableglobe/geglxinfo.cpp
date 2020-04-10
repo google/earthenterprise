@@ -830,7 +830,7 @@ int main(int argc, char **argv) {
     if (extract_packets) {
       int layer_idx = 1000;
       if (!layer_idx_str.empty()) {
-        sscanf(layer_idx_str.c_str(), "%u", &layer_idx);
+        sscanf(layer_idx_str.c_str(), "%d", &layer_idx);
       }
       uint64 start_idx = 0;
       if (!start_idx_str.empty()) {
@@ -873,7 +873,7 @@ int main(int argc, char **argv) {
       }
 
       if (!packet_channel.empty()) {
-        sscanf(packet_channel.c_str(), "%u", &channel);
+        sscanf(packet_channel.c_str(), "%d", &channel);
       }
 
       // Find the packet.

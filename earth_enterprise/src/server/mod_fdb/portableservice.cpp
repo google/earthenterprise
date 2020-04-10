@@ -454,7 +454,7 @@ void PortableService::DoStatus(std::string* data) {
   std::map<std::string, std::vector<std::string> > portable_to_targets;
   GetPortableToTargetsMap(&portable_to_targets);
   char str[256];
-  snprintf(str, sizeof(str), "%lu", portable_to_targets.size());
+  snprintf(str, sizeof(str), "%lu", static_cast<unsigned long>(portable_to_targets.size()));
   data->append("<h4>Glx(s) serving on Target(s) (");
   data->append(str);
   data->append("):</h4>");
