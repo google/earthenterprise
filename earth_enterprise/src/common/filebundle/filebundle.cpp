@@ -216,7 +216,7 @@ void FileBundle::LoadHeaderFile() {
           "FileBundleReader: corrupt header, segment break is 0")
             << " in " << HeaderPath();
     }
-    *const_cast<uint64 *>(&segment_break_) = break_value;
+    *const_cast<std::uint64_t *>(&segment_break_) = break_value;
 
     // Extract orig abs path for header file
 

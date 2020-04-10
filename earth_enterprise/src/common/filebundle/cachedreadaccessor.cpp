@@ -157,7 +157,7 @@ CachedReadAccessor::AddCacheBlock(const CacheBlockAddress& address) {
  std::uint32_t CachedReadAccessor::CacheBlock::Read(FileBundleSegment& segment,
           void *out_buffer, size_t size, off64_t offset,
           std::uint64_t access_tick,
-          uint64& stats_bytes_read, uint64& stats_disk_accesses) {
+          std::uint64_t& stats_bytes_read, std::uint64_t& stats_disk_accesses) {
   last_access_tick_ = access_tick; // keep track of our last read access.
 
   // Check that requested size is within the bounds of this block.

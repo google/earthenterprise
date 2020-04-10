@@ -20,7 +20,7 @@
 
 #include <cstdint>
 
-template <uint a, unsigned int r, unsigned int g, unsigned int b>
+template <unsigned int a, unsigned int r, unsigned int g, unsigned int b>
 inline void UndoAlphaPremultiply(unsigned char *raw_buf, unsigned int numBytes) {
   for (unsigned int i = 0; i < numBytes; i+=4) {
     unsigned char * const pixel = &raw_buf[i];

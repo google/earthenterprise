@@ -48,7 +48,7 @@ class JpegCommentDate;
 // ============================================================================
 class JpegCommentDate {
  public:
-  typedef uint32 YearMonthDayKey;  // year,month,day = leadingbits,4bits,5bits.
+  typedef std::uint32_t YearMonthDayKey;  // year,month,day = leadingbits,4bits,5bits.
 
   static const int kMinimumYear;
   static const int kMaximumYear;
