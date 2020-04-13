@@ -47,7 +47,7 @@ swig_env['CPPFLAGS'] += ['-fPIC']  # Needed for 64-bit compilation.
 swig_env['CPPFLAGS'] += ['-I%s' % swig_env['python_include']]
 swig_env.Append(SWIGFLAGS = ['-python', '-c++'])
 
-libgepublishmanagerhelper = swig_env.SharedLibrary('gepublishmanagerhelper',
+libgepublishmanagerhelper = swig_env.sharedLib('gepublishmanagerhelper',
                                                ['gepublishmanagerhelper.cpp', 'gepublishmanagerhelper.i'],
                                                LIBS=['geutil', 'dbmanifest', 'gecommon'])
 
