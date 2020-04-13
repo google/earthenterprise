@@ -114,15 +114,11 @@ LayerProperties::LayerProperties(QWidget* parent, const LayerConfig& config,
 LayerConfig LayerProperties::GetConfig() {
   SyncToConfig();
 
-<<<<<<< HEAD
-  layer_config_.channelId = static_cast<uint>(idSpinBox->value());
+
+  layer_config_.channelId = static_cast<unsigned int>(idSpinBox->value());
   layer_config_.asset_uuid_ = uuidEdit->text().toUtf8().constData();
-  layer_config_.preserveTextLevel = static_cast<uint>(
-=======
-  layer_config_.channelId = static_cast< unsigned int> (idSpinBox->value());
-  layer_config_.asset_uuid_ = uuidEdit->text().ascii();
-  layer_config_.preserveTextLevel = static_cast< unsigned int> (
->>>>>>> upstream/master
+  layer_config_.preserveTextLevel = static_cast<unsigned int>(
+
       preserveTextSpin->value());
   layer_config_.isVisible = isVisibleCheck->isChecked();
 
@@ -209,14 +205,9 @@ QStringList LayerProperties::AvailableAttributes() {
   QStringList remaining_fields;
   const gstHeaderHandle &record_header = layer_->GetSourceAttr();
   if (record_header && record_header->numColumns() != 0) {
-<<<<<<< HEAD
-    for (uint col = 0; col < record_header->numColumns(); ++col) {
-      if (existing_fields.find(record_header->Name(col)) == existing_fields.end())
-=======
+
     for (unsigned int col = 0; col < record_header->numColumns(); ++col) {
-      if (existing_fields.find(record_header->Name(col)) ==
-          existing_fields.end())
->>>>>>> upstream/master
+      if (existing_fields.find(record_header->Name(col)) == existing_fields.end())
         remaining_fields.append(record_header->Name(col));
     }
   }

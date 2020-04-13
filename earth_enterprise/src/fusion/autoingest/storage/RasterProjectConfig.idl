@@ -100,13 +100,8 @@ class RasterProjectConfig {
   RasterProjectConfig(AssetDefs::Type t)
      : indexVersion(uint(1)),
      insets(std::vector<InsetStackItem>()),
-<<<<<<< HEAD
-     legend((t == AssetDefs::Imagery) ? kImageryType.c_str() : kTerrainType.c_str(), true),
-     fuid_channel_(uint32(0)),
-=======
      legend((t == AssetDefs::Imagery) ? kImageryType : kTerrainType, true),
      fuid_channel_(std::uint32_t(0)),
->>>>>>> upstream/master
      asset_uuid_(std::string()),
      is_timemachine_project_(false),
      is_overlay_terrain_project_(false),

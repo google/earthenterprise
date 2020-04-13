@@ -14,8 +14,6 @@ class AssetSerializerInterface {
     virtual ~AssetSerializerInterface() = default;
 };
 
-<<<<<<< HEAD
-=======
 /*
 * GetFileInfo and ReadXMLDocument were added as function templates to allow
 * them to be overridden in unit tests. The versions here should be used for
@@ -31,16 +29,12 @@ std::unique_ptr<GEDocument> ReadXMLDocument(const std::string &filename) {
   return ReadDocument(filename);
 }
 
->>>>>>> upstream/master
 template<class AssetType>
 class AssetSerializerLocalXML : public AssetSerializerInterface<AssetType>
 {
   public:
     virtual AssetPointerType<AssetType> Load(const std::string &boundref)
     {
-<<<<<<< HEAD
-      return AssetType::Load(boundref);
-=======
       std::string filename = AssetType::XMLFilename(boundref);
       AssetPointerType<AssetType> result;
       time_t timestamp = 0;
@@ -96,7 +90,6 @@ class AssetSerializerLocalXML : public AssetSerializerInterface<AssetType>
       }
 
       return result;
->>>>>>> upstream/master
     }
 
     virtual bool Save(AssetPointerType<AssetType> asset, std::string filename){

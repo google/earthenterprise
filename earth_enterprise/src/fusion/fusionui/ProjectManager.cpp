@@ -198,16 +198,10 @@ class LayerGroupItem : public QCheckListItem {
 };
 
 
-
-<<<<<<< HEAD
 FilterItem::FilterItem(Q3ListViewItem* parent, gstFilter* filter)
     : Q3ListViewItem(parent), filter_id_(filter->Id()) {
-  std::vector<uint> fill_rgba, outline_rgba;
-=======
-FilterItem::FilterItem(QListViewItem* parent, gstFilter* filter)
-    : QListViewItem(parent), filter_id_(filter->Id()) {
-  std::vector< unsigned int>  fill_rgba, outline_rgba;
->>>>>>> upstream/master
+  std::vector<unsigned int> fill_rgba, outline_rgba;
+
   fill_rgba.resize(4, 255);
   outline_rgba.resize(4, 255);
 

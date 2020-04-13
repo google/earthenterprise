@@ -58,14 +58,8 @@ LayerConfig::ApplyTemplate(const LayerConfig &templateConfig,
 
 bool LayerConfig::ValidateIconPresence(QString* message) const
 {
-<<<<<<< HEAD
-  uint orig_msg_length = message->length();
-  for (const auto& disp : displayRules) {
-=======
   unsigned int orig_msg_length = message->length();
-  for (std::vector<DisplayRuleConfig>::const_iterator disp = displayRules.begin();
-       disp != displayRules.end(); ++disp) {
->>>>>>> upstream/master
+  for (const auto& disp : displayRules) {
     // only check external icon paths
     if (disp.site.style.icon.type == IconReference::External) {
       std::string path = khEnsureExtension(

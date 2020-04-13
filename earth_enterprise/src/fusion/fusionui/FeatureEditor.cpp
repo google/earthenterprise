@@ -1217,14 +1217,10 @@ void FeatureEditor::AddFeaturesFromSource(gstSource* source) {
 
   } catch (const SoftErrorPolicy::TooManyException &e) {
     QString error(kh::tr("Too many bad features"));
-<<<<<<< HEAD
-    for (uint i = 0; i < e.errors_.size(); ++i) {
+    for (unsigned int i = 0; i < e.errors_.size(); ++i) {
       error += "\n";
       error += e.errors_[i].c_str();
-=======
-    for (unsigned int i = 0; i < e.errors_.size(); ++i) {
-      error += "\n" + e.errors_[i];
->>>>>>> upstream/master
+
     }
     QMessageBox::critical(this, kh::tr("Error"),
                           kh::tr("Error while importing") +
@@ -1348,8 +1344,6 @@ void FeatureEditor::BoxCut() {
   }
 }
 
-<<<<<<< HEAD
-=======
 #if 0
 void FeatureEditor::MobileConvert() {
   mobile_blocks_.clear();
@@ -1404,7 +1398,6 @@ void FeatureEditor::MobileConvert() {
   emit RedrawPreview();
 }
 #endif
->>>>>>> upstream/master
 
 void FeatureEditor::CheckAll() {
   QCheckListItem* item = static_cast<QCheckListItem*>(feature_listview->firstChild());

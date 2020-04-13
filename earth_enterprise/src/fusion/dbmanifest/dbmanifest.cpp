@@ -661,11 +661,7 @@ bool DbManifest::GetDbrootsAndServerConfig(
     const std::string ith_icon_dir = Prefixed(fusion_config_.icons_dirs_[i]);
     QDir dir(ith_icon_dir.c_str());
     QStringList list = dir.entryList(QDir::Files);
-<<<<<<< HEAD
-    for (auto j = 0; j < list.size(); ++j) {
-=======
     for (unsigned int j = 0; j < list.size(); ++j) {
->>>>>>> upstream/master
       // We are merging icons from 3 different sources. Avoid duplicate entries.
       const std::string icon_entry = kIconsDir
                                    + std::string(list[j].toUtf8().constData());
@@ -799,11 +795,7 @@ bool DbManifest::GetLayerDefsAndServerConfig(
     const std::string ith_icon_dir = Prefixed(fusion_config_.icons_dirs_[i]);
     QDir dir(ith_icon_dir.c_str());
     QStringList list = dir.entryList(QDir::Files);
-<<<<<<< HEAD
-    for (auto j = 0; j < list.size(); ++j) {
-=======
     for (unsigned int j = 0; j < list.size(); ++j) {
->>>>>>> upstream/master
       // We are merging icons from different sources. Avoid duplicate entries.
       const std::string icon_entry = kIconsDir
                                    + std::string(list[j].toUtf8().constData());

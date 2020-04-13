@@ -33,13 +33,8 @@ class VectorDbrootGenerator : public ProtoDbrootGenerator {
     unsigned int    lodFlags;
     std::vector< unsigned int>  states;
 
-<<<<<<< HEAD
-    LOD(const std::string &name_, uint id, uint lodFlags_) :
-        name(name_.c_str()),
-=======
     LOD(const std::string &name_, unsigned int id, unsigned int lodFlags_) :
         name(name_),
->>>>>>> upstream/master
         channelId(id),
         lodFlags(lodFlags_) { }
   };

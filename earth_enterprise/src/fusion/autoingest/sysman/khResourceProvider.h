@@ -29,7 +29,7 @@ class khResourceManagerProxy;
 
 class khResourceProvider
 {
-
+ protected:
   class Job {
    public:
     std::uint32_t jobid;
@@ -37,18 +37,13 @@ class khResourceProvider
     pid_t  pid;
     time_t beginTime;
 
-<<<<<<< HEAD
-
-    Job(uint32 jobid) : jobid(jobid), logfile(0), pid(0), beginTime(0) { }
-  };
-=======
     Job(std::uint32_t jobid) : jobid(jobid), logfile(0), pid(0), beginTime(0) { }
   };
   using JobIter = std::vector<Job>::iterator;
 
   void JobLoop(StartJobMsg start, const unsigned int cmdTries, const unsigned int sleepBetweenTriesSec); // pass by value because thread func
->>>>>>> upstream/master
 
+ private:
   // routines implemented in khResourceProviderDispatch.cpp
   void DispatchNotify(const FusionConnection::RecvPacket &);
   void DispatchRequest(const FusionConnection::RecvPacket &, std::string &replyPayload);
@@ -85,11 +80,6 @@ class khResourceProvider
 
   // ***** stuff for handling jobs *****
   khThreadPool     *jobThreads;
-<<<<<<< HEAD
-  void JobLoop(StartJobMsg start); // pass by value because thread func
-  bool ExecCmdline(Job *job, const std::vector<std::string> &cmdline);
-  void SendProgress(uint32 jobid, double progress, time_t progressTime);
-=======
   bool RunCmd(
       JobIter & job,
       std::uint32_t jobid,
@@ -114,13 +104,12 @@ class khResourceProvider
                                 bool* success, bool* coredump, int* signum);
   virtual void WaitForPid(pid_t waitfor, bool &success, bool &coredump,
                           int &signum);
->>>>>>> upstream/master
 #if 0
   void ReadProgress(int readfd, std::uint32_t jobid);
 #endif
-  void DeleteJob(std::vector<Job>::iterator which,
-                 bool success = false,
-                 time_t beginTime = 0, time_t endTime = 0);
+  virtual void DeleteJob(JobIter which,
+                         bool success = false,
+                         time_t beginTime = 0, time_t endTime = 0);
 
   // ***** stuff for CheckVolumeAvailLoop *****
   void CheckVolumeAvailLoop(void);
@@ -135,12 +124,8 @@ class khResourceProvider
   VolResMap volResMap;
 
 
-<<<<<<< HEAD
-  Job* FindJobById(uint32 jobid, std::vector<Job>::iterator &found);
-=======
   virtual JobIter FindJobById(std::uint32_t jobid);
   virtual inline bool Valid(JobIter job) const { return job != jobs.end(); }
->>>>>>> upstream/master
   bool WantExit(void) {
     khLockGuard lock(mutex);
     return wantexit;

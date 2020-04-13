@@ -60,13 +60,8 @@ class VectorAssetWidget : public VectorAssetWidgetBase,
 
   Q3FileDialog* FileDialog();
 
-<<<<<<< HEAD
   Q3FileDialog* file_dialog_;
-  std::vector<uint32> provider_id_list_;
-=======
-  QFileDialog* file_dialog_;
   std::vector<std::uint32_t> provider_id_list_;
->>>>>>> upstream/master
   int last_conv_index_;
   qt_fusion::QDateWrapper* acquisition_date_wrapper_;
 };

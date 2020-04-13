@@ -67,14 +67,10 @@ class RasterAssetWidget : public RasterAssetWidgetBase {
   AssetDefs::Type AssetType() const { return asset_type_; }
   virtual AssetBase* GetAssetBase() const = 0;
 
-  AssetDefs::Type asset_type_;
-<<<<<<< HEAD
+  AssetDefs::Type asset_type_;s
   Q3FileDialog* file_dialog_;
-  std::vector<uint32> provider_id_list_;
-=======
-  QFileDialog* file_dialog_;
   std::vector<std::uint32_t> provider_id_list_;
->>>>>>> upstream/master
+
   int last_conv_index_;
   int last_mosaic_fill_index_;
   qt_fusion::QDateWrapper* acquisition_date_wrapper_;

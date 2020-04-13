@@ -65,12 +65,9 @@ class StorageManager : public StorageManagerInterface<AssetType> {
 
     StorageManager(unsigned int cacheSize,
                    bool limitByMemory,
-<<<<<<< HEAD
                    uint64 maxMemory,
-=======
                    std::uint64_t maxMemory,
                    float prunePercent,
->>>>>>> upstream/master
                    const std::string & type,
                    SerializerPtr serializer) :
         assetType(type),
@@ -81,12 +78,8 @@ class StorageManager : public StorageManagerInterface<AssetType> {
     }
     StorageManager(unsigned int cacheSize,
                    bool limitByMemory,
-<<<<<<< HEAD
-                   uint64 maxMemory,
-=======
                    std::uint64_t maxMemory,
                    float prunePercent,
->>>>>>> upstream/master
                    const std::string & type) :
         StorageManager(cacheSize, limitByMemory, maxMemory, type,
                        SerializerPtr(new AssetSerializerLocalXML<AssetType>())) {}

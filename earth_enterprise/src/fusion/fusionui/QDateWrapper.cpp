@@ -148,31 +148,18 @@ std::string QDateWrapper::GetDate() const {
   std::string month_string = month_edit_->text().toUtf8().constData();
   std::string day_string = day_edit_->text().toUtf8().constData();
 
-<<<<<<< HEAD
-  uint32 year = std::stoi(year_string);
-  uint32 month = std::stoi(month_string);
-  uint32 day = std::stoi(day_string);
+  std::uint32_t year = std::stoi(year_string);
+  std::uint32_t month = std::stoi(month_string);
+  std::uint32_t day = std::stoi(day_string);
 
   if (TimeIncluded()) {  //  Raster asset widget.
     std::string hours_string = hours_edit_->text().toUtf8().constData();
     std::string minutes_string = minutes_edit_->text().toUtf8().constData();
     std::string seconds_string = seconds_edit_->text().toUtf8().constData();
-    uint32 hours = std::stoi(hours_string);
-    uint32 minutes = std::stoi(minutes_string);
-    uint32 seconds = std::stoi(seconds_string);
-=======
-  std::uint32_t year = atoi(year_string.c_str());
-  std::uint32_t month = atoi(month_string.c_str());
-  std::uint32_t day = atoi(day_string.c_str());
+    std::uint32_t hours = std::stoi(hours_string);
+    std::uint32_t minutes = std::stoi(minutes_string);
+    std::uint32_t seconds = std::stoi(seconds_string);
 
-  if (TimeIncluded()) {  //  Raster asset widget.
-    std::string hours_string = hours_edit_->text().latin1();
-    std::string minutes_string = minutes_edit_->text().latin1();
-    std::string seconds_string = seconds_edit_->text().latin1();
-    std::uint32_t hours = atoi(hours_string.c_str());
-    std::uint32_t minutes = atoi(minutes_string.c_str());
-    std::uint32_t seconds = atoi(seconds_string.c_str());
->>>>>>> upstream/master
     char datetimebuffer[kDateTimeStringBufferLength];
     snprintf(datetimebuffer, kDateTimeStringBufferLength,
              "%04d-%02d-%02dT%02d:%02d:%02dZ", year,

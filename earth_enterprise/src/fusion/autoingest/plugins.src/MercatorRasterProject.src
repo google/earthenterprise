@@ -230,11 +230,7 @@ void MercatorRasterProjectAssetImplD::AddInsets(
     }
 
     // figure out what its levels should be
-<<<<<<< HEAD
-    uint effectivemax = ComputeEffectiveMaxLevel(item);
-=======
     unsigned int effectivemax = ComputeEffectiveMaxLevel(*item);
->>>>>>> upstream/master
 
     // walk backwards until we find where to insert it
     std::vector<InsetStackItem>::reverse_iterator where;
@@ -312,19 +308,10 @@ bool MercatorRasterProjectAssetImplD::NeedStackUpdate(void) const {
 void MercatorRasterProjectAssetImplD::UpdateStack(void) {
   // see if the effective maxlevel has changed for anything in inset stack
   bool changed = false;
-<<<<<<< HEAD
   for (auto& inset : config.insets) {
     uint effectivemax = ComputeEffectiveMaxLevel(inset);
     if (effectivemax != inset.maxlevel) {
       inset.maxlevel = effectivemax;
-=======
-  for (std::vector<InsetStackItem>::iterator inset =
-         config.insets.begin(); inset != config.insets.end(); ++inset) {
-
-    unsigned int effectivemax = ComputeEffectiveMaxLevel(*inset);
-    if (effectivemax != inset->maxlevel) {
-      inset->maxlevel = effectivemax;
->>>>>>> upstream/master
       changed = true;
     }
   }
@@ -835,17 +822,12 @@ void MercatorRasterProjectAssetVersionImplD::LoadInsetInfoForIndexing(
   // resolution inset can be minified instead of blended. This increases
   // speed, reduces grey line artifacts around insets, and generally
   // increases low res image quality.
-<<<<<<< HEAD
-  const uint beginMinifyLevel  = beginProjectLevel;
-  const uint endMinifyLevel    = inset_infos[0].effectiveMaxLevel;
-=======
   const unsigned int beginMinifyLevel  = (MiscConfig::Instance().UseMinification
                                         ? beginProjectLevel
                                         : 0);
   const unsigned int endMinifyLevel    = (MiscConfig::Instance().UseMinification
                                         ? inset_infos[0].effectiveMaxLevel
                                         : 0);
->>>>>>> upstream/master
 
   // Calc the info about what work to do
   std::vector<PacketGenInfo> genInfo;
@@ -960,19 +942,12 @@ void MercatorRasterProjectAssetVersionImplD::LoadInsetInfoForIndexing(
 
 
     // calculate the level range that will be minified
-<<<<<<< HEAD
-    uint effectiveBeginMinifyLevel =
-      std::max(genInfo[i].coverage.beginLevel(), beginMinifyLevel);
-    uint effectiveEndMinifyLevel =
-      std::min(genInfo[i].coverage.endLevel(), endMinifyLevel);
-=======
     unsigned int effectiveBeginMinifyLevel = (MiscConfig::Instance().UseMinification
                                       ? std::max(genInfo[i].coverage.beginLevel(), beginMinifyLevel)
                                       : 0);
     unsigned int effectiveEndMinifyLevel = (MiscConfig::Instance().UseMinification
                                     ? std::min(genInfo[i].coverage.endLevel(), endMinifyLevel)
                                     : 0);
->>>>>>> upstream/master
 
     // Build a PacketGenConfig
     PacketGenConfig packetGenConfig;

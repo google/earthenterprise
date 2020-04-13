@@ -62,13 +62,8 @@ CombinedRPAssetVersionImpl::GetExtents(void) const
 uint
 CombinedRPAssetVersionImpl::GetMaxLevel(void) const
 {
-<<<<<<< HEAD
-  uint prodMaxLevel = 0;
-  FromString(meta.GetValue("maxlevel").toUtf8().constData(), prodMaxLevel);
-=======
   unsigned int prodMaxLevel = 0;
-  FromString(meta.GetValue("maxlevel"), prodMaxLevel);
->>>>>>> upstream/master
+  FromString(meta.GetValue("maxlevel").toUtf8().constData(), prodMaxLevel);
   if (!prodMaxLevel) {
     std::string msg = kh::tr("Unable to get maxlevel for ").toUtf8().constData();
     msg += GetRef();

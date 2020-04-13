@@ -134,14 +134,9 @@ Grid::Grid(const double west_origin, const double south_origin)
     polygon_north_boundary_(south_origin) {
   // Pre-calculate number of quadtree nodes in each dimension at each level.
   // Dimension size = 2 ^ level
-<<<<<<< HEAD
-  level_dim_sizes_.resize(MAX_LEVEL);
-  for (uint32 level = 0; level < MAX_LEVEL; ++level) {
-=======
   // Valid levels are 0 through 24 
   level_dim_sizes_.resize(MAX_LEVEL + 1);
   for (std::uint32_t level = 0; level <= MAX_LEVEL; ++level) {
->>>>>>> upstream/master
     level_dim_sizes_[level] = static_cast<double>(1L << level);
   }
 }

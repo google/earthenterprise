@@ -102,26 +102,15 @@ TextStyle::TextStyle(QWidget *parent,
   }
 
   // populate font combo with valid values from fontlist
-<<<<<<< HEAD
   base->font_combo->clear();
   for (uint i = 0; i < fonts.size(); ++i) {
     base->font_combo->insertItem(fonts[i].name);
-=======
-  font_combo->clear();
-  for (unsigned int i = 0; i < fonts.size(); ++i) {
-    font_combo->insertItem(fonts[i].name);
->>>>>>> upstream/master
   }
   base->font_combo->setEnabled(true);
 
   // Create the standard widget controllers
-<<<<<<< HEAD
   ColorButtonController::Create(manager, base->color_button, &config.color);
-  SpinBoxController<uint>::Create(manager, base->size_spin, &config.size, 6, 100);
-=======
-  ColorButtonController::Create(manager, color_button, &config.color);
-  SpinBoxController< unsigned int> ::Create(manager, size_spin, &config.size, 6, 100);
->>>>>>> upstream/master
+  SpinBoxController<unsigned int>::Create(manager, base->size_spin, &config.size, 6, 100);
   {
     WidgetControllerManager *boxManager =
       CheckableController<QGroupBox>::Create(manager, base->outline_button_group,
@@ -147,15 +136,9 @@ TextStyle::TextStyle(QWidget *parent,
 
   if (orig_text_styles.Load()) {
     std::set<maprender::FontInfo> missing_fonts;
-<<<<<<< HEAD
+
     for (const auto& it : orig_text_styles.configs) {
       if (it.first > kMaxSavedStyles)
-=======
-    for (std::map<unsigned int, MapTextStyleConfig>::iterator it =
-         orig_text_styles.configs.begin();
-         it != orig_text_styles.configs.end(); ++it) {
-      if (it->first > kMaxSavedStyles)
->>>>>>> upstream/master
         continue;
       haveSave[it.first] = true;
       savedConfigs[it.first] = it.second;

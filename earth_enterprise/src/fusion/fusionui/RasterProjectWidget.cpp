@@ -45,19 +45,12 @@ using QPopupMenu = Q3PopupMenu;
 // ****************************************************************************
 class RasterLayerItem : public LayerItemBase {
  public:
-<<<<<<< HEAD
+
   RasterLayerItem(Q3ListView* parent, const InsetStackItem& cfg,
                   const std::string& date_string, uint level_diff,
                   bool is_mercator);
   RasterLayerItem(Q3ListView* parent, const QString& asset_path,
                   uint level_diff, bool is_mercator);
-=======
-  RasterLayerItem(QListView* parent, const InsetStackItem& cfg,
-                  const std::string& date_string, unsigned int level_diff,
-                  bool is_mercator);
-  RasterLayerItem(QListView* parent, const QString& asset_path,
-                  unsigned int level_diff, bool is_mercator);
->>>>>>> upstream/master
 
   // Inherited from Q3ListViewItem
   virtual QString text(int col) const;
@@ -143,13 +136,8 @@ RasterLayerItem::RasterLayerItem(Q3ListView* parent, const InsetStackItem& cfg,
   InitBBox();
 }
 
-<<<<<<< HEAD
 RasterLayerItem::RasterLayerItem(Q3ListView* parent, const QString& asset_path,
                                  uint level_diff, bool is_mercator)
-=======
-RasterLayerItem::RasterLayerItem(QListView* parent, const QString& asset_path,
-                                 unsigned int level_diff, bool is_mercator)
->>>>>>> upstream/master
   : LayerItemBase(parent),
     level_diff_(level_diff),
     is_mercator_(is_mercator) {

@@ -347,11 +347,7 @@ pyrio::Reader::Reader(const std::string &filename) :
       break;
     case CompressJPEG:
       if (header_.componentType != khTypes::UInt8) {
-<<<<<<< HEAD
         throw khException(kh::tr("Error reading %1: JPEG compression with non uint8 pixel type").arg(filename.c_str()));
-=======
-        throw khException(kh::tr("Error reading %1: JPEG compression with non std::uint8_t pixel type").arg(filename));
->>>>>>> upstream/master
       }
       compressor = TransferOwnership(
           new JPEGCompressor(RasterProductTileResolution,
@@ -594,11 +590,7 @@ pyrio::Writer::Writer(const std::string &filename,
 {
   if (compressMode == CompressJPEG &&
       componentType != khTypes::UInt8) {
-<<<<<<< HEAD
     throw khException(kh::tr("Error writing %1: JPEG compression with non uint8 pixel type").arg(filename.c_str()));
-=======
-    throw khException(kh::tr("Error writing %1: JPEG compression with non std::uint8_t pixel type").arg(filename));
->>>>>>> upstream/master
   }
 
   header.numComponents  = numComponents;

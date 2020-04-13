@@ -35,11 +35,8 @@ class TestItem : public TestItemStorage {
     static int nextValue;
     static string loadFile;
     int val;
-<<<<<<< HEAD
-=======
     time_t timestamp; 
     std::uint64_t filesize;
->>>>>>> upstream/master
     string name;
     TestItem() : val(nextValue++), name("TestItem") {}
     static AssetPointerType<TestItem> Load(const string & filename) {
@@ -62,8 +59,6 @@ class TestXMLException : public XMLException {
     }
 };
 
-<<<<<<< HEAD
-=======
 // Define a TestItem-specific version of GetFileInfo for testing
 static std::uint64_t getFileInfoSize;
 static time_t getFileInfoTime;
@@ -82,7 +77,6 @@ std::unique_ptr<GEDocument> ReadXMLDocument<TestItem>(const std::string &filenam
   return std::move(geDocPtr);
 }
 
->>>>>>> upstream/master
 // We throw various exceptions from this function to test exception handling.
 enum ExceptionType {XML, DOM, STD, OTHER, NONE};
 static ExceptionType exceptionToThrow;

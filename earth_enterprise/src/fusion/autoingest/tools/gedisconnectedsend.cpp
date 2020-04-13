@@ -281,14 +281,8 @@ int main(int argc, char *argv[]) {
     }
 
     // Now add the extra files.
-<<<<<<< HEAD
     for (const auto& extra : extrafiles) {
-      uint64 fsize;
-=======
-    for (std::vector<std::string>::const_iterator extra = extrafiles.begin();
-         extra != extrafiles.end(); ++extra) {
       std::uint64_t fsize;
->>>>>>> upstream/master
       time_t ftime;
       if (!khGetFileInfo(extra, fsize, ftime)) {
         throw khErrnoException(kh::tr("Unable to get filesize for %1")

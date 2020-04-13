@@ -772,17 +772,12 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
     terrain_project->LoadInsetInfo(ClientTmeshTilespaceFlat,
                                   beginSSLevel, endSSLevel,
                                   terrainInsets);
-<<<<<<< HEAD
-    const uint beginMinifyLevel  = StartTmeshLevel;
-    const uint endMinifyLevel    = terrainInsets[0].effectiveMaxLevel;
-=======
     const unsigned int beginMinifyLevel  = (MiscConfig::Instance().UseMinification
                                     ? StartTmeshLevel
                                     : 0);
     const unsigned int endMinifyLevel    = (MiscConfig::Instance().UseMinification
                                     ? terrainInsets[0].effectiveMaxLevel
                                     : 0);
->>>>>>> upstream/master
 
 #ifdef DEBUG_SS_DECISIONS
     notify(NFY_NOTICE, "  beginMinifyLevel = %u", beginMinifyLevel);
@@ -901,19 +896,12 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
         continue;
 
       // calculate the level range that will be minified
-<<<<<<< HEAD
-      uint effectiveBeginMinifyLevel =
-        std::max(ssGenInfo[i].coverage.beginLevel(), beginMinifyLevel);
-      uint effectiveEndMinifyLevel =
-        std::min(ssGenInfo[i].coverage.endLevel(), endMinifyLevel);
-=======
       unsigned int effectiveBeginMinifyLevel = (MiscConfig::Instance().UseMinification
                                         ? std::max(ssGenInfo[i].coverage.beginLevel(), beginMinifyLevel)
                                         : 0);
       unsigned int effectiveEndMinifyLevel = (MiscConfig::Instance().UseMinification
                                       ? std::min(ssGenInfo[i].coverage.endLevel(), endMinifyLevel)
                                       : 0);
->>>>>>> upstream/master
 
       // Build a PacketGenConfig
       PacketGenConfig packetGenConfig;
