@@ -67,7 +67,7 @@ bool EtaDbroot::DecodeBinary(const std::string &binary,
   size_t data_offset = sizeof(etDbaseRootHeader) +
       etEncoder::kDefaultKey.size();
   if (binary.size() < data_offset) {
-    khSimpleException("Truncated dbroot: ") << binary.size() << " < " <<
+    throw khSimpleException("Truncated dbroot: ") << binary.size() << " < " <<
         data_offset;
   }
 
@@ -77,7 +77,7 @@ bool EtaDbroot::DecodeBinary(const std::string &binary,
   key_buffer.append(binary, sizeof(etDbaseRootHeader),
                     etEncoder::kDefaultKey.size());
   if (key_buffer != etEncoder::kDefaultKey) {
-    khSimpleException("Corrupted dbroot: Key has unexpected value.");
+    throw khSimpleException("Corrupted dbroot: Key has unexpected value.");
   }
 
   // Read the header and see if it is a valid binary dbroot file.
@@ -92,7 +92,7 @@ bool EtaDbroot::DecodeBinary(const std::string &binary,
   // That's just the way the file format works.
   memcpy(&header.rootMagic, binary.data(), sizeof(header.rootMagic));
   if (header.rootMagic != kOldMagic) {
-    khSimpleException("Corrupted dbroot: Bad magic.");
+    throw khSimpleException("Corrupted dbroot: Bad magic.");
   }
   *epoch = header.qtDataVersion;
 
