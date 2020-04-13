@@ -38,6 +38,10 @@ class FileUnpacker {
  public:
   FileUnpacker(const GlcReader& glc_reader, uint64 offset, uint64 size);
   ~FileUnpacker();
+  FileUnpacker(const FileUnpacker&) = delete;
+  FileUnpacker(FileUnpacker&&) = delete;
+  FileUnpacker& operator=(const FileUnpacker&) = delete;
+  FileUnpacker& operator=(FileUnpacker&&) = delete;
 
   /**
    * Find data packet and set offset and size for the packet. Data packets can
