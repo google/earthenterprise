@@ -84,8 +84,7 @@ bool EtaDbroot::DecodeBinary(const std::string &binary,
   std::string header_buffer;
   header_buffer.append(binary, 0, sizeof(etDbaseRootHeader));
   // Decrypt the entire header
-  etEncoder::Decode(&header_buffer[0], header_buffer.size(),
-                    key_buffer.data(), key_buffer.size());
+  etEncoder::DecodeWithDefaultKey(&header_buffer[0], header_buffer.size());
   etDbaseRootHeader header;
   memcpy(&header, header_buffer.data(), sizeof(etDbaseRootHeader));
   // now restore the originally unencrypted magic from the file
@@ -102,8 +101,7 @@ bool EtaDbroot::DecodeBinary(const std::string &binary,
     // Decrypt the post portion of the dbroot.
     std::string decodeBuf;
     decodeBuf.append(binary, data_offset, data_size);
-    etEncoder::Decode(&decodeBuf[0], data_size,
-                      key_buffer.data(), key_buffer.size());
+    etEncoder::DecodeWithDefaultKey(&decodeBuf[0], data_size);
 
     // Try to decompress the data portion. If it fails then we assume that the
     // dbroot is uncompressed.

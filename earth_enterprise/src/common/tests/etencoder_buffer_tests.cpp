@@ -38,7 +38,14 @@ int main() {
     auto key = GetByteArray(klen);
     for(uint32_t dlen = 0; dlen < DATA_LENGTHS; ++dlen) {
       auto data = GetByteArray(dlen);
-      etEncoder::Encode(data.get(), dlen, key.get(), klen);
+      try {
+        etEncoder::Encode(data.get(), dlen, key.get(), klen);
+      }
+      catch (...) {
+        // Ignore the exception - this means that Encode detected and handled
+        // the error, so the test passes.
+      }
+      
     }
   }
   return 0;
