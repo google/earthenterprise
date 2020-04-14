@@ -15,7 +15,6 @@
 // Modern implementation of old Keyhole Crypt method.
 
 #include "common/etencoder.h"
-#include "common/khSimpleException.h"
 
 namespace etEncoder {
 
@@ -110,9 +109,8 @@ const std::string kDefaultKey(
 
 
 void Encode(void* data, uint32 datalen, const void* key, uint32 keylen) {
-  if (keylen < 24 || keylen % 8 != 0) {
-    throw khSimpleException("Encryption keys must be at least 24 bytes long "
-        "and must be a multiple of 8 bytes long.");
+  if (keylen % 8 != 0) {
+    throw khSimpleException("Encryption keys must be a multiple of 8 bytes long.");
   }
 
   uint8* outdata = static_cast<uint8*>(data);

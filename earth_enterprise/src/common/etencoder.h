@@ -20,6 +20,7 @@
 #define GEO_EARTH_ENTERPRISE_SRC_COMMON_ETENCODER_H_
 
 #include <string>
+#include "common/khSimpleException.h"
 #include "common/khTypes.h"
 
 namespace etEncoder {
