@@ -40,6 +40,24 @@ TEST(ProtoDbroot, ReadText) {
   ASSERT_TRUE(dbroot.IsValid());
 }
 
+TEST(ProtoDbroot, ReadTextInvalid) {
+  // Try to read an encoded dbroot as a text dbroot to trigger an error
+  ASSERT_THROW(geProtoDbroot dbroot("fusion/testdata/dbroot/proto/dbroot.v5p.encoded.DEFAULT", geProtoDbroot::kTextFormat),
+      khSimpleException);
+}
+
+TEST(ProtoDbroot, ReadDecodedInvalid) {
+  // Try to read an encoded dbroot as a decoded dbroot to trigger an error
+  ASSERT_THROW(geProtoDbroot dbroot("fusion/testdata/dbroot/proto/dbroot.v5p.encoded.DEFAULT", geProtoDbroot::kProtoFormat),
+      khSimpleException);
+}
+
+TEST(ProtoDbroot, ReadEncodedInvalid) {
+  // Try to read a decoded dbroot as an encoded dbroot to trigger an error
+  ASSERT_THROW(geProtoDbroot dbroot("fusion/testdata/dbroot/proto/dbroot.v5p.decoded.DEFAULT", geProtoDbroot::kEncodedFormat),
+      khSimpleException);
+}
+
 int main(int argc, char** argv) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
