@@ -17,9 +17,9 @@
 #include "proto_dbroot.h"
 #include "common/khSimpleException.h"
 
-// Test various error conditions when loading proto dbroots. Since we're
-// validating the logic for loading the dbroots, we don't worry too much about
-// the contents.
+// Test various error and non-error conditions when loading proto dbroots.
+// Since we're validating the logic for loading the dbroots, we don't worry too
+// much about the contents.
 
 TEST(ProtoDbroot, InvalidFile) {
   ASSERT_THROW(geProtoDbroot dbroot("notafile", geProtoDbroot::kProtoFormat), khSimpleErrnoException);
@@ -56,6 +56,12 @@ TEST(ProtoDbroot, ReadEncodedInvalid) {
   // Try to read a decoded dbroot as an encoded dbroot to trigger an error
   ASSERT_THROW(geProtoDbroot dbroot("fusion/testdata/dbroot/proto/dbroot.v5p.decoded.DEFAULT", geProtoDbroot::kEncodedFormat),
       khSimpleException);
+}
+
+TEST(ProtoDbroot, DiffKey) {
+  // This dbroot was encoded with a non-default key
+  geProtoDbroot dbroot("fusion/testdata/dbroot/proto/dbroot.v5p.diffkey.DEFAULT", geProtoDbroot::kEncodedFormat);
+  ASSERT_TRUE(dbroot.IsValid());
 }
 
 int main(int argc, char** argv) {
