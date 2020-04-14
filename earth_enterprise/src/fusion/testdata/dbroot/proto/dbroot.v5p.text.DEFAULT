@@ -1,0 +1,14 @@
+imagery_present: true
+terrain_present: false
+end_snippet {
+  disable_authentication: true
+  sky_database_is_available: false
+  client_options {
+    use_extended_copyright_ids: false
+    show_2d_maps_icon: false
+  }
+}
+database_version {
+  quadtree_version: 4
+}
+proto_imagery: true
