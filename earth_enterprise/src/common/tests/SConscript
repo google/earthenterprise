@@ -51,7 +51,7 @@ map(lambda test: env.test(test, [test + '.cc'],
      ])
 
 # Compile this test with address sanitizer to detect buffer overflows
-asan = env.Copy()
+asan = env.Clone()
 asan_flags = ['-fsanitize=address', '-fno-omit-frame-pointer', '-fno-common']
 asan.Append(test_extra_cppflags = asan_flags)
 asan.Append(test_linkflags = asan_flags)
