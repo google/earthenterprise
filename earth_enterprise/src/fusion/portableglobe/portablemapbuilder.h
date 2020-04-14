@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,9 +42,9 @@ class LayerInfo {
     const std::string channel;
     const std::string version;
     // Same channel as above but in integer form.
-    uint32 channel_num;
+    std::uint32_t channel_num;
     // Type converted to integer form.
-    uint32 type_id;
+    std::uint32_t type_id;
 
     /**
      * Constructor
@@ -77,20 +78,20 @@ class PortableMapBuilder {
   static const size_t      kBundleSizeForPacketQuery;
 
   // Used to accumulate size during a "no write" run.
-  uint64 total_size;
-  uint64 num_image_packets;
-  uint64 num_terrain_packets;
-  uint64 num_vector_packets;
-  uint64 image_size;
-  uint64 terrain_size;
-  uint64 vector_size;
+  std::uint64_t total_size;
+  std::uint64_t num_image_packets;
+  std::uint64_t num_terrain_packets;
+  std::uint64_t num_vector_packets;
+  std::uint64_t image_size;
+  std::uint64_t terrain_size;
+  std::uint64_t vector_size;
 
   /**
    * Production constructor.
    */
   PortableMapBuilder(const std::string& source,
-                     uint16 default_level,
-                     uint16 max_level,
+                     std::uint16_t default_level,
+                     std::uint16_t max_level,
                      const std::string& hires_qt_nodes_file,
                      const std::string& map_directory,
                      const std::string& additional_args,
@@ -116,7 +117,7 @@ class PortableMapBuilder {
   bool KeepNode(const std::string& qtpath) const;
 
  private:
-  static const uint16 kMaxPacketDepth;
+  static const std::uint16_t kMaxPacketDepth;
 
   void AddWriter(PacketType packet_type,
                  PacketBundleWriter* writer);
@@ -125,9 +126,9 @@ class PortableMapBuilder {
                    std::string qtpath, std::string data);
 
   void GetLevelRowCol(const std::string& qtpath_str,
-                      uint32* level,
-                      uint32* col,
-                      uint32* row);
+                      std::uint32_t* level,
+                      std::uint32_t* col,
+                      std::uint32_t* row);
 
   friend class PortableMapBuilderTest_TestJsExtract_Test;
   std::string ExtractValue(const std::string& str,
@@ -135,23 +136,23 @@ class PortableMapBuilder {
   void ParseServerDefs(const std::string& json);
 
   bool WriteMapPackets(const std::string& qtpath_str,
-                       uint32 level,
-                       uint32 col,
-                       uint32 row);
+                       std::uint32_t level,
+                       std::uint32_t col,
+                       std::uint32_t row);
 
   bool WriteImagePacket(const std::string& qtpath,
                         const std::string&  channel,
                         const std::string&  version,
-                        uint32 level,
-                        uint32 col,
-                        uint32 row);
+                        std::uint32_t level,
+                        std::uint32_t col,
+                        std::uint32_t row);
 
   bool WriteVectorPacket(const std::string& qtpath,
                          const std::string& channel,
                          const std::string& version,
-                         uint32 level,
-                         uint32 col,
-                         uint32 row);
+                         std::uint32_t level,
+                         std::uint32_t col,
+                         std::uint32_t row);
 
   void AddWriter(const std::string& sub_directory);
 
@@ -160,9 +161,9 @@ class PortableMapBuilder {
   // Main directory that contains all portable globe data.
   std::string map_directory_;
   // Level at or below which all assets are kept.
-  uint16 default_level_;
+  std::uint16_t default_level_;
   // Level above which no assets are kept.
-  uint16 max_level_;
+  std::uint16_t max_level_;
   // Url to master globe server.
   const std::string source_;
   // Additional args to be appended to each query.

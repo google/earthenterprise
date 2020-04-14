@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -222,9 +223,9 @@ int FusionDbService::ProcessFusionDbRequest(
       arg_map["col"] = arg_map["x"];
       arg_map["row"] = arg_map["y"];
       arg_map["level"] = arg_map["z"];
-      uint32 x = atoi(arg_map["x"].c_str());
-      uint32 y = atoi(arg_map["y"].c_str());
-      uint32 z = atoi(arg_map["z"].c_str());
+      std::uint32_t x = atoi(arg_map["x"].c_str());
+      std::uint32_t y = atoi(arg_map["y"].c_str());
+      std::uint32_t z = atoi(arg_map["z"].c_str());
       if (z > QuadtreePath::kMaxLevel) {
         ap_log_rerror(APLOG_MARK, APLOG_WARNING, 0, r,
                       "Zoom level exceeds maximum allowed value.");
@@ -310,7 +311,7 @@ void FusionDbService::DoStatus(std::string* data) {
   std::map<std::string, std::vector<std::string> > fusiondb_to_targets;
   GetFusionDbToTargetsMap(&fusiondb_to_targets);
   char str[256];
-  snprintf(str, sizeof(str), "%lu", fusiondb_to_targets.size());
+  snprintf(str, sizeof(str), "%lu", static_cast<unsigned long>(fusiondb_to_targets.size()));
   data->append("<h4>Fusion DB(s) serving on Target(s) (");
   data->append(str);
   data->append("):</h4>");

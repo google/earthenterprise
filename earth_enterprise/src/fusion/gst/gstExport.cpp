@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -41,7 +42,7 @@
 #include <packetfile/packetfilewriter.h>
 #include <packetcompress.h>
 
-static const uint MAX_URL_LENGTH = 1024;
+static const unsigned int MAX_URL_LENGTH = 1024;
 
 // -----------------------------------------------------------------------------
 
@@ -133,7 +134,7 @@ int gstPacketFileExporter::BuildPacket(const gstQuadAddress& addr,
         etStreetPacket* pak = new etStreetPacket;
         allpaks.append(pak);
         pak->initUTF8(set.glist.size());
-        for (uint g = 0; g < set.glist.size(); ++g) {
+        for (unsigned int g = 0; g < set.glist.size(); ++g) {
           if (!AddStreet(pak->getPtr(g), set.glist[g], set.rlist[g],
                          set.feature_configs))
             goto abortpacket;
@@ -143,7 +144,7 @@ int gstPacketFileExporter::BuildPacket(const gstQuadAddress& addr,
         etPolyLinePacket* pak = new etPolyLinePacket;
         allpaks.append(pak);
         pak->init(set.glist.size());
-        for (uint g = 0; g < set.glist.size(); ++g) {
+        for (unsigned int g = 0; g < set.glist.size(); ++g) {
           if (!AddPolyline(pak->getPtr(g), set.glist[g], set.rlist[g],
                            set.feature_configs))
             goto abortpacket;
@@ -156,7 +157,7 @@ int gstPacketFileExporter::BuildPacket(const gstQuadAddress& addr,
       etPolygonPacket* pak = new etPolygonPacket;
       allpaks.append(pak);
       pak->init(set.glist.size());
-      for (uint g = 0; g < set.glist.size(); ++g) {
+      for (unsigned int g = 0; g < set.glist.size(); ++g) {
         if (!AddPolygon(pak->getPtr(g), set.glist[g], set.rlist[g],
                         set.feature_configs))
           goto abortpacket;
@@ -174,7 +175,7 @@ int gstPacketFileExporter::BuildPacket(const gstQuadAddress& addr,
     etLandmarkPacket* pak = new etLandmarkPacket;
     allpaks.append(pak);
     pak->init(set.vlist.size());
-    for (uint g = 0; g < set.vlist.size(); ++g) {
+    for (unsigned int g = 0; g < set.vlist.size(); ++g) {
       if (!AddLandmark(pak->getPtr(g), set.vlist[g], set.rlist[g], set.site))
         goto abortpacket;
     }
@@ -185,7 +186,7 @@ int gstPacketFileExporter::BuildPacket(const gstQuadAddress& addr,
   lump_pak_->init(allpaks.length());
 
   // collect all the individual packets
-  for (uint pk = 0; pk < allpaks.length(); ++pk)
+  for (unsigned int pk = 0; pk < allpaks.length(); ++pk)
     memcpy(lump_pak_->getPtr(pk), allpaks[pk], sizeof(etDataPacket));
 
   lump_pak_->pointerToOffset();
@@ -194,7 +195,7 @@ int gstPacketFileExporter::BuildPacket(const gstQuadAddress& addr,
   pakFail = false;
 
 abortpacket:
-  for (uint pk = 0; pk < allpaks.length(); ++pk)
+  for (unsigned int pk = 0; pk < allpaks.length(); ++pk)
     delete allpaks[pk];
 
   //
@@ -262,7 +263,7 @@ bool gstPacketFileExporter::AddStreet(etStreetPacketData* pakdata,
     }
   }
 
-  for (uint pt = 0; pt < geode->VertexCount(0); ++pt) {
+  for (unsigned int pt = 0; pt < geode->VertexCount(0); ++pt) {
     const gstVertex& vert = geode->GetVertex(0, pt);
     pakdata->localPt[pt].elem[0] = vert.x * 2. - 1.;
     pakdata->localPt[pt].elem[1] = vert.y * 2. - 1.;
@@ -333,7 +334,7 @@ bool gstPacketFileExporter::AddPolyline(etPolyLinePacketData* pakdata,
     }
   }
 
-  for (uint pt = 0; pt < geode->VertexCount(0); ++pt) {
+  for (unsigned int pt = 0; pt < geode->VertexCount(0); ++pt) {
     const gstVertex& vert = geode->GetVertex(0, pt);
     pakdata->localPt[pt].elem[0] = vert.x * 2. - 1.;
     pakdata->localPt[pt].elem[1] = vert.y * 2. - 1.;
@@ -412,7 +413,7 @@ bool gstPacketFileExporter::AddPolygon(etPolygonPacketData* pakdata,
     }
   }
 
-  for (uint pt = 0; pt < geode->VertexCount(0); ++pt) {
+  for (unsigned int pt = 0; pt < geode->VertexCount(0); ++pt) {
     const gstVertex& vert = geode->GetVertex(0, pt);
     pakdata->localPt[pt].elem[0] = vert.x * 2. - 1.;
     pakdata->localPt[pt].elem[1] = vert.y * 2. - 1.;
@@ -429,10 +430,10 @@ bool gstPacketFileExporter::AddPolygon(etPolygonPacketData* pakdata,
 
   pakdata->numEdgeFlags = geode->VertexCount(0);
 
-  const std::vector<int8>& flags = geode->EdgeFlags();
+  const std::vector<std::int8_t>& flags = geode->EdgeFlags();
   pakdata->edgeFlags = static_cast<bool*>(mem_pool_.Allocate(
                                               pakdata->numEdgeFlags * sizeof(bool)));
-  for (uint i = 0; i < pakdata->numEdgeFlags; ++i) {
+  for (unsigned int i = 0; i < pakdata->numEdgeFlags; ++i) {
     pakdata->edgeFlags[i] = (flags[i] != kNormalEdge);
   }
 
@@ -546,7 +547,7 @@ bool gstPacketFileExporter::AddLandmark(etLandmarkPacketData* pakdata,
 
 
 bool gstPacketFileExporter::Save() {
-  uint32 actualSize = lump_pak_->save(write_buffer_, kMaxPacketSize);
+  std::uint32_t actualSize = lump_pak_->save(write_buffer_, kMaxPacketSize);
 
   notify(NFY_DEBUG, "Saving quad packet size:%d level:%u row:%u col:%u",
          actualSize, pak_addr_.level(), pak_addr_.row(), pak_addr_.col());

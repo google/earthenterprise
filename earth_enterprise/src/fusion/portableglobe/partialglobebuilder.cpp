@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,7 +31,8 @@
 #include "common/khEndian.h"
 #include "common/khFileUtils.h"
 #include "common/khStringUtils.h"
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "common/notify.h"
 #include "common/packetcompress.h"
 #include "common/qtpacket/quadtreepacket.h"
@@ -47,8 +49,8 @@
 namespace fusion_portableglobe {
 
 // Names of subdirectories within the portable globe.
-const uint16 PortableGlobeBuilder::kMaxPacketDepth = 7;  // 4 levels / packet
-const uint16 PortableGlobeBuilder::kMaxPacketLevel = 4;  // 4 levels / packet
+const std::uint16_t PortableGlobeBuilder::kMaxPacketDepth = 7;  // 4 levels / packet
+const std::uint16_t PortableGlobeBuilder::kMaxPacketLevel = 4;  // 4 levels / packet
 const std::string PortableGlobeBuilder::kDataDirectory = "/data";
 const std::string PortableGlobeBuilder::kImageryDirectory = "/img";
 const std::string PortableGlobeBuilder::kTerrainDirectory = "/ter";
@@ -68,26 +70,26 @@ const size_t      PortableGlobeBuilder::kBundleSizeForSizeQuery = 8000;
 // (concatenation of lot of QT packets) should be reasonable.
 const size_t      PortableGlobeBuilder::kBundleSizeForPacketQuery = 256;
 // Estimate: 100,000 / GB.
-const uint32  PortableGlobeBuilder::kImageryPacketsPerMark = 200000;
+const std::uint32_t  PortableGlobeBuilder::kImageryPacketsPerMark = 200000;
 
 /**
  * Constructor.
  */
 PortableGlobeBuilder::PortableGlobeBuilder(
     const std::string& source,
-    uint16 default_level,
-    uint16 min_level,
-    uint16 max_level,
+    std::uint16_t default_level,
+    std::uint16_t min_level,
+    std::uint16_t max_level,
     const std::string& hires_qt_nodes_file,
     const std::string& dbroot_file,
     const std::string& globe_directory,
     const std::string& additional_args,
     const std::string& qtpacket_version,
-    uint16 min_imagery_version,
+    std::uint16_t min_imagery_version,
     bool no_write,
     bool use_post,
     const std::string& data_type,
-    uint32 imagery_packets_per_mark)
+    std::uint32_t imagery_packets_per_mark)
     : globe_directory_(globe_directory),
     default_level_(default_level),
     min_level_(min_level),
@@ -124,7 +126,7 @@ PortableGlobeBuilder::PortableGlobeBuilder(
   qtpacket_.resize(kMaxPacketDepth);
   qtnode_index_.resize(kMaxPacketDepth);
 
-  for (uint16 i = 0; i < kMaxPacketDepth; ++i) {
+  for (std::uint16_t i = 0; i < kMaxPacketDepth; ++i) {
     qtpacket_[i] = new qtpacket::KhQuadTreePacket16();
   }
 
@@ -145,8 +147,8 @@ PortableGlobeBuilder::PortableGlobeBuilder(
  * Test constructor. Doesn't connect to an actual source.
  */
 PortableGlobeBuilder::PortableGlobeBuilder(
-    uint16 default_level,
-    uint16 max_level,
+    std::uint16_t default_level,
+    std::uint16_t max_level,
     const std::string& hires_qt_nodes_file)
     : default_level_(default_level),
     max_level_(max_level),
@@ -168,7 +170,7 @@ PortableGlobeBuilder::PortableGlobeBuilder(
 
   qtpacket_.resize(kMaxPacketDepth);
   qtnode_index_.resize(kMaxPacketDepth);
-  for (uint16 i = 0; i < kMaxPacketDepth; ++i) {
+  for (std::uint16_t i = 0; i < kMaxPacketDepth; ++i) {
     qtpacket_[i] = NULL;
   }
 }
@@ -185,7 +187,7 @@ PortableGlobeBuilder::~PortableGlobeBuilder() {
     delete hires_tree_;
   }
 
-  for (uint16 i = 0; i < kMaxPacketDepth; ++i) {
+  for (std::uint16_t i = 0; i < kMaxPacketDepth; ++i) {
     if (qtpacket_[i] != NULL) {
       delete qtpacket_[i];
     }
@@ -335,8 +337,8 @@ void PortableGlobeBuilder::BuildVectorQuadtree() {
  */
 void PortableGlobeBuilder::ShowQuadtreePacket(
     const std::string& qtpath,
-    uint16 packet_level,
-    uint16 packet_depth,
+    std::uint16_t packet_level,
+    std::uint16_t packet_depth,
     PacketBundleReader& qt_reader) {
 
   qtpacket::KhQuadTreeQuantum16* node =
@@ -409,7 +411,7 @@ void PortableGlobeBuilder::ShowQuadtree(std::string path) {
  *   /data/p0005/pbundle_0005
  *   /data/p0005/pbundle_0005.crc
  */
-void PortableGlobeBuilder::BuildPartialGlobe(uint32 file_index,
+void PortableGlobeBuilder::BuildPartialGlobe(std::uint32_t file_index,
                                              const std::string& partial_start,
                                              const std::string& partial_end,
                                              bool create_delta,
@@ -557,7 +559,7 @@ void PortableGlobeBuilder::DownloadQtPacketBunch(
  * Download quadtree packet from the server.
  */
 bool PortableGlobeBuilder::DownloadQtPacket(const std::string& packet_qtpath,
-                                            uint16 packet_depth) {
+                                            std::uint16_t packet_depth) {
   std::string compressed_data;
   compressed_data.reserve(1024 * 256);
 
@@ -590,7 +592,7 @@ bool PortableGlobeBuilder::DownloadQtPacket(const std::string& packet_qtpath,
  * parsed, we don't need to check KeepNode.
  */
 bool PortableGlobeBuilder::LoadQtPacket(const std::string& packet_qtpath,
-                                        uint16 packet_depth,
+                                        std::uint16_t packet_depth,
                                         PacketBundleReader& qt_reader) {
   std::string compressed_data;
   compressed_data.reserve(1024 * 256);
@@ -624,14 +626,14 @@ bool PortableGlobeBuilder::LoadQtPacket(const std::string& packet_qtpath,
  * routine recursively.
  */
 void PortableGlobeBuilder::PruneQtPacket(const std::string& packet_qtpath,
-                                         const uint16 packet_depth) {
+                                         const std::uint16_t packet_depth) {
   qtnode_index_[packet_depth] = 0;
   std::vector<std::string> child_packets;
 
   // Update all of nodes in the quadtree packet depending on whether they
   // were specified to be filtered out.
 
-  const uint64 last_total_size = total_size;
+  const std::uint64_t last_total_size = total_size;
 
   // Level 0 quadtree packet is only 3 levels deep.
   if (packet_qtpath == "") {
@@ -679,7 +681,7 @@ void PortableGlobeBuilder::PruneQtPacket(const std::string& packet_qtpath,
  * pruned.
  */
 bool PortableGlobeBuilder::KeepNode(const std::string& qtpath) const {
-  uint16 level = qtpath.size();
+  std::uint16_t level = qtpath.size();
 
   // If we are at or below the default level, keep everything.
   if (level <= default_level_) {
@@ -699,11 +701,11 @@ bool PortableGlobeBuilder::KeepNode(const std::string& qtpath) const {
 namespace {
 // Assumes level < 4
 // Counts number of children under current node upto level 4
-uint32 CountChildren(qtpacket::KhQuadTreePacket16* packet,
-                     uint32 index,
-                     uint16 level) {
-  const uint32 orig_index = index;
-  uint16 to_do[13];  // worst case to do, we are at level4 (4+3+3+3)
+ std::uint32_t CountChildren(qtpacket::KhQuadTreePacket16* packet,
+                     std::uint32_t index,
+                     std::uint16_t level) {
+  const std::uint32_t orig_index = index;
+  std::uint16_t to_do[13];  // worst case to do, we are at level4 (4+3+3+3)
   int to_do_index = 0;
   to_do[to_do_index] = level;
   ++to_do_index;
@@ -739,8 +741,8 @@ uint32 CountChildren(qtpacket::KhQuadTreePacket16* packet,
  */
 bool PortableGlobeBuilder::BuildMercatorDataTree(
     const std::string& qtpath,
-    uint16 packet_level,
-    uint16 packet_depth,
+    std::uint16_t packet_level,
+    std::uint16_t packet_depth,
     PacketBundleReader& qt_reader) {
 
   qtpacket::KhQuadTreeQuantum16* node =
@@ -862,7 +864,7 @@ void PortableGlobeBuilder::BuildQuadtreePackets(
   }
 
   int start_level = 0;
-  uint16 len = address.size() + 1;
+  std::uint16_t len = address.size() + 1;
   if (len == 1) {
     // Special case for first level (only 3 levels instead of 4).
     len--;
@@ -970,8 +972,8 @@ void PortableGlobeBuilder::AddMercatorNode(const std::string& qtpath) {
  */
 void PortableGlobeBuilder::ProcessDataInQtPacketNodes(
     const std::string& qtpath,
-    uint16 packet_level,
-    uint16 packet_depth,
+    std::uint16_t packet_level,
+    std::uint16_t packet_depth,
     const std::string& begin_qtpath,
     const std::string& end_qtpath,
     PacketBundleReader& qt_reader) {
@@ -984,7 +986,7 @@ void PortableGlobeBuilder::ProcessDataInQtPacketNodes(
   }
 
   if (qtnode_index_[packet_depth]
-      >= static_cast<uint16>(
+      >= static_cast<std::uint16_t>(
       qtpacket_[packet_depth]->packet_header().num_instances)) {
     notify(NFY_WARN, "Index extended beyond number of instances.\n");
     return;
@@ -1079,8 +1081,8 @@ void PortableGlobeBuilder::ProcessDataInQtPacketNodes(
 void PortableGlobeBuilder::OutputQtAddressesInQtPacketNodes(
     std::ofstream* fp_out,
     const std::string& qtpath,
-    uint16 packet_level,
-    uint16 packet_depth,
+    std::uint16_t packet_level,
+    std::uint16_t packet_depth,
     const std::string& begin_qtpath,
     const std::string& end_qtpath,
     PacketBundleReader& qt_reader) {
@@ -1094,7 +1096,7 @@ void PortableGlobeBuilder::OutputQtAddressesInQtPacketNodes(
   }
 
   if (qtnode_index_[packet_depth]
-      >= static_cast<uint16>(
+      >= static_cast<std::uint16_t>(
       qtpacket_[packet_depth]->packet_header().num_instances)) {
     notify(NFY_WARN, "Index extended beyond number of instances.\n");
     return;
@@ -1171,10 +1173,10 @@ void PortableGlobeBuilder::OutputQtAddressesInQtPacketNodes(
  */
 void PortableGlobeBuilder::PruneQtPacketNodes(
     const std::string& qtpath,
-    uint16 packet_level,
-    uint16 packet_depth,
+    std::uint16_t packet_level,
+    std::uint16_t packet_depth,
     std::vector<std::string>* child_packets) {
-  if (qtnode_index_[packet_depth] >= static_cast<uint16>(
+  if (qtnode_index_[packet_depth] >= static_cast<std::uint16_t>(
       qtpacket_[packet_depth]->packet_header().num_instances)) {
     notify(NFY_WARN, "Index extended beyond number of instances.\n");
     return;
@@ -1293,7 +1295,7 @@ void PortableGlobeBuilder::PruneQtPacketNodes(
  * Create directory if needed and create packet writer.
  */
 void PortableGlobeBuilder::AddWriter(const std::string& sub_directory,
-                                     uint32 file_id,
+                                     std::uint32_t file_id,
                                      bool create_delta,
                                      bool is_qtp_bundle,
                                      const std::string& base_glb) {
@@ -1322,13 +1324,13 @@ void PortableGlobeBuilder::DeleteWriter() {
  * Get size of packet normally returned by url. Url should already encode
  * the size request (&size=1).
  */
-uint64 PortableGlobeBuilder::GetPacketSize(const std::string& url) {
+ std::uint64_t PortableGlobeBuilder::GetPacketSize(const std::string& url) {
   std::string raw_packet;
 
   server_->GetRawPacket(url, &raw_packet, false);
   if (!raw_packet.empty()) {
     std::istringstream buffer(raw_packet);
-    uint64 size;
+    std::uint64_t size;
     buffer >> size;
     return size;
   } else {
@@ -1347,7 +1349,7 @@ RequestBundlerForPacketSize<T>::RequestBundlerForPacketSize(
 
 template< typename T >
 void RequestBundlerForPacketSize<T>::GetPacketsSize(
-    const std::string& qt_path, uint32 version, uint32 channel) {
+    const std::string& qt_path, std::uint32_t version, std::uint32_t channel) {
   Bundle::iterator i = bundle_.find(std::make_pair(channel, version));
   if (i == bundle_.end()) {
     i = bundle_.insert(std::make_pair(std::make_pair(channel, version),
@@ -1374,8 +1376,8 @@ void RequestBundlerForPacketSize<T>::GetPacketsSize(
 template< typename T >
 void RequestBundlerForPacketSize<T>::FlushCache() {
   for (Bundle::iterator i = bundle_.begin(); i != bundle_.end(); ++i) {
-    uint32 channel = i->first.first;
-    uint32 version = i->first.second;
+    std::uint32_t channel = i->first.first;
+    std::uint32_t version = i->first.second;
     QtPathBundle& paths = i->second;
     if (paths.second != 0) {
       (caller_->*callback_)(paths.first, paths.second, version, channel);
@@ -1389,19 +1391,19 @@ void RequestBundlerForPacketSize<T>::FlushCache() {
 // Ignores 3rd param channel
 // TODO: Switch to POST if we start using.
 void PortableGlobeBuilder::GetImagePacketsSize(
-    const std::string& paths, size_t num_paths, uint32 version, uint32) {
+    const std::string& paths, size_t num_paths, std::uint32_t version, std::uint32_t) {
   num_image_packets += num_paths;
   std::string url = source_ + "/query?request=ImageryGE&blist=" + paths +
                     "&channel=0&version=" + NumberToString(version) + "&size=1"
                     + additional_args_;
-  uint64 size = GetPacketSize(url);
+  std::uint64_t size = GetPacketSize(url);
   image_size += size;
   total_size += size;
 }
 
 
 void PortableGlobeBuilder::GetImagePacket(
-    const std::string& qtpath, uint32 version, std::string* raw_packet) {
+    const std::string& qtpath, std::uint32_t version, std::string* raw_packet) {
   std::string url = source_ + "/query";
   std::string args = "request=ImageryGE&blist=" + qtpath +
                      "&channel=0&version=" + NumberToString(version) +
@@ -1415,7 +1417,7 @@ void PortableGlobeBuilder::GetImagePacket(
  * image packet bundle.
  */
 void PortableGlobeBuilder::WriteImagePacket(const std::string& qtpath,
-                                            uint32 version) {
+                                            std::uint32_t version) {
   num_image_packets += 1;
   write_cache_->WriteImagePacket(qtpath, version);
 }
@@ -1424,19 +1426,19 @@ void PortableGlobeBuilder::WriteImagePacket(const std::string& qtpath,
 // Ignores 3rd param channel
 // TODO: Switch to POST if we start using.
 void PortableGlobeBuilder::GetTerrainPacketsSize(
-    const std::string& paths, size_t num_paths, uint32 version, uint32) {
+    const std::string& paths, size_t num_paths, std::uint32_t version, std::uint32_t) {
   num_terrain_packets += num_paths;
   std::string url = source_ + "/query?request=Terrain&blist=" + paths +
                     "&channel=2&version=" + NumberToString(version) + "&size=1"
                     + additional_args_;
-  uint64 size = GetPacketSize(url);
+  std::uint64_t size = GetPacketSize(url);
   terrain_size += size;
   total_size += size;
 }
 
 
 void PortableGlobeBuilder::GetTerrainPacket(
-    const std::string& qtpath, uint32 version, std::string* raw_packet) {
+    const std::string& qtpath, std::uint32_t version, std::string* raw_packet) {
   std::string url = source_ + "/query";
   std::string args = "request=Terrain&blist=" + qtpath +
                      "&channel=2&version=" + NumberToString(version) +
@@ -1450,7 +1452,7 @@ void PortableGlobeBuilder::GetTerrainPacket(
  * terrain packet bundle.
  */
 void PortableGlobeBuilder::WriteTerrainPacket(const std::string& qtpath,
-                                              uint32 version) {
+                                              std::uint32_t version) {
   num_terrain_packets += 1;
   write_cache_->WriteTerrainPacket(qtpath, version);
 }
@@ -1459,20 +1461,20 @@ void PortableGlobeBuilder::WriteTerrainPacket(const std::string& qtpath,
 // TODO: Switch to POST if we start using.
 void PortableGlobeBuilder::GetVectorPacketsSize(const std::string& paths,
                                                 size_t num_paths,
-                                                uint32 version,
-                                                uint32 channel) {
+                                                std::uint32_t version,
+                                                std::uint32_t channel) {
   num_vector_packets += num_paths;
   std::string url = source_ + "/query?request=VectorGE&blist=" + paths +
                     "&channel=" + NumberToString(channel) + "&version=" +
                     NumberToString(version) + "&size=1" + additional_args_;
-  uint64 size = GetPacketSize(url);
+  std::uint64_t size = GetPacketSize(url);
   vector_size += size;
   total_size += size;
 }
 
 
 void PortableGlobeBuilder::GetVectorPacket(
-    const std::string& qtpath, uint32 channel, uint32 version,
+    const std::string& qtpath, std::uint32_t channel, std::uint32_t version,
     std::string* raw_packet) {
   std::string url = source_ + "/query";
   std::string args = "request=VectorGE&blist=" + qtpath +
@@ -1486,8 +1488,8 @@ void PortableGlobeBuilder::GetVectorPacket(
  * terrain packet bundle.
  */
 void PortableGlobeBuilder::WriteVectorPacket(const std::string& qtpath,
-                                             uint32 channel,
-                                             uint32 version) {
+                                             std::uint32_t channel,
+                                             std::uint32_t version) {
   num_vector_packets += 1;
   write_cache_->WriteVectorPacket(qtpath, channel, version);
 }
@@ -1536,7 +1538,7 @@ void PortableGlobeBuilder::WriteDbRootPacket(PacketType packet_type) {
  * Write the updated quadtree packet to the packet bundle.
  */
 void PortableGlobeBuilder::WriteQtPacket(const std::string& qtpath,
-                                         uint16 packet_depth) {
+                                         std::uint16_t packet_depth) {
   WriteQtPacket(qtpath, *qtpacket_[packet_depth]);
 }
 

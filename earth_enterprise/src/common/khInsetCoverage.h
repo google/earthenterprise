@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,28 +38,28 @@
 // ****************************************************************************
 class khInsetCoverage {
  public:
-  inline uint beginLevel(void) const { return beginLevel_; }
-  inline uint endLevel(void)   const { return endLevel_; }
-  inline uint numLevels(void)  const { return endLevel() - beginLevel(); }
-  inline uint numVLvls(void)  const { return vec0Level; }
-  inline bool hasLevel(uint lev) const {
+  inline unsigned int beginLevel(void) const { return beginLevel_; }
+  inline unsigned int endLevel(void)   const { return endLevel_; }
+  inline unsigned int numLevels(void)  const { return endLevel() - beginLevel(); }
+  inline unsigned int numVLvls(void)  const { return vec0Level; }
+  inline bool hasLevel(unsigned int lev) const {
     return ((lev >= beginLevel()) && (lev < endLevel()));
   }
-  inline bool intersectsLevels(uint bLevel, uint eLevel) const {
+  inline bool intersectsLevels(unsigned int bLevel, unsigned int eLevel) const {
     return (std::min(eLevel, endLevel()) > std::max(bLevel, beginLevel()));
   }
   inline bool hasTile(const khTileAddr &addr) const {
     return (hasLevel(addr.level) &&
             extentsRef(addr.level).ContainsRowCol(addr.row, addr.col));
   }
-  inline const khExtents<uint32>& levelExtents(uint lev) const {
+  inline const khExtents<std::uint32_t>& levelExtents(unsigned int lev) const {
     return extentsRef(lev);
   }
-  inline khLevelCoverage levelCoverage(uint lev) const {
+  inline khLevelCoverage levelCoverage(unsigned int lev) const {
     return khLevelCoverage(lev, extentsRef(lev));
   }
 
-  khInsetCoverage GetSubset(uint subsetThis, uint subsetTotal) const;
+  khInsetCoverage GetSubset(unsigned int subsetThis, unsigned int subsetTotal) const;
 
   // Narrow this coverage based on the range of other coverages supplied.
   // This is used to reduce work that we know will be redone later.
@@ -66,15 +67,15 @@ class khInsetCoverage {
   bool Narrow(CovIter begin, CovIter end);
 
   // used only for serializing to XML
-  const std::vector<khExtents<uint32> >
+  const std::vector<khExtents<std::uint32_t> >
   RawExtentsVec(void) const {
     if (numLevels()) {
       khInsetCoverage *self = const_cast<khInsetCoverage*>(this);
-      return std::vector<khExtents<uint32> >
+      return std::vector<khExtents<std::uint32_t> >
         (&self->extentsVec[vecIndex(beginLevel())],
          &self->extentsVec[vecIndex(endLevel())]);
     } else {
-      return std::vector<khExtents<uint32> >();
+      return std::vector<khExtents<std::uint32_t> >();
     }
   }
 
@@ -83,7 +84,7 @@ class khInsetCoverage {
         (endLevel()   != o.endLevel())) {
       return false;
     }
-    for (uint lev = beginLevel(); lev < endLevel(); ++lev) {
+    for (unsigned int lev = beginLevel(); lev < endLevel(); ++lev) {
       if (levelExtents(lev) != o.levelExtents(lev)) {
         return false;
       }
@@ -92,40 +93,40 @@ class khInsetCoverage {
   }
 
  private:
-  uint   vec0Level;   /* level of extents in first vector slot */
+  unsigned int   vec0Level;   /* level of extents in first vector slot */
 
-  uint   beginLevel_; /* first valid level */
+  unsigned int   beginLevel_; /* first valid level */
   /* This will be the same as vec0Level unless the
      coverage has been narrowed with a call to Narrow */
 
-  uint   endLevel_;   /* one beyond last valid level */
+  unsigned int   endLevel_;   /* one beyond last valid level */
 
   khExtents<double> degree_extents_;
 
-  std::vector<khExtents<uint32> > extentsVec;
+  std::vector<khExtents<std::uint32_t> > extentsVec;
 
-  inline uint vecIndex(uint lev) const { return lev - vec0Level; }
-  inline khExtents<uint32>& extentsRef(uint lev) {
+  inline unsigned int vecIndex(unsigned int lev) const { return lev - vec0Level; }
+  inline khExtents<std::uint32_t>& extentsRef(unsigned int lev) {
     return extentsVec[vecIndex(lev)];
   }
-  inline const khExtents<uint32>& extentsRef(uint lev) const {
+  inline const khExtents<std::uint32_t>& extentsRef(unsigned int lev) const {
     return extentsVec[vecIndex(lev)];
   }
 
   // called from constructors to populate levels
   void PopulateLevels(const khTilespace &tilespace,
                       const khLevelCoverage &maxCov,
-                      uint stepOutSize,
-                      uint paddingSize);
+                      unsigned int stepOutSize,
+                      unsigned int paddingSize);
   void PopulateLevels(const khTilespace &tilespace,
-                      uint fullresTileLevel,
-                      uint stepOutSize,
-                      uint paddingSize);
+                      unsigned int fullresTileLevel,
+                      unsigned int stepOutSize,
+                      unsigned int paddingSize);
   void PopulateLevels(const khExtents<double> &normExtents,
                       const khTilespace &tilespace,
-                      uint fullresTileLevel,
-                      uint stepOutSize,
-                      uint paddingSize);
+                      unsigned int fullresTileLevel,
+                      unsigned int stepOutSize,
+                      unsigned int paddingSize);
 
  public:
   inline const khExtents<double>& degreeExtents() const {
@@ -137,31 +138,31 @@ class khInsetCoverage {
   khInsetCoverage(const khLevelCoverage &levCov);
 
   // Build an inset coverage from a group of extents
-  khInsetCoverage(uint beginCoverageLevel,
-                  uint endCoverageLevel,
-                  const std::vector<khExtents<uint32> > &extentsList);
+  khInsetCoverage(unsigned int beginCoverageLevel,
+                  unsigned int endCoverageLevel,
+                  const std::vector<khExtents<std::uint32_t> > &extentsList);
 
   // Build an inset coverage from degree extents
   khInsetCoverage(const khTilespace &tilespace,
                   const khExtents<double> &degExtents,
-                  uint fullresTileLevel,
-                  uint beginCoverageLevel,
-                  uint endCoverageLevel);
+                  unsigned int fullresTileLevel,
+                  unsigned int beginCoverageLevel,
+                  unsigned int endCoverageLevel);
 
   // Build an inset coverage from nomalized extents
   // NOTE: order of extents and tilespace are reversed to distinguish
   // from constructor with degExtents
   khInsetCoverage(const khExtents<double> &normExtents,
                   const khTilespace &tilespace,
-                  uint fullresTileLevel,
-                  uint beginCoverageLevel,
-                  uint endCoverageLevel);
+                  unsigned int fullresTileLevel,
+                  unsigned int beginCoverageLevel,
+                  unsigned int endCoverageLevel);
 
   // Build an inset coverage from khLevelCoverage & level range
   khInsetCoverage(const khTilespace &tilespace,
                   const khLevelCoverage &levCov,
-                  uint beginCoverageLevel,
-                  uint endCoverageLevel /* one beyond */);
+                  unsigned int beginCoverageLevel,
+                  unsigned int endCoverageLevel /* one beyond */);
 
   // Build an inset coverage from degree extents
   // stepOutSize is cummulative. Subsequent layer minifications
@@ -172,13 +173,13 @@ class khInsetCoverage {
   // a padding, but the code doesn't prevent it.
   khInsetCoverage(const khTilespace &tilespace,
                   const khExtents<double> &degExtents,
-                  uint fullresTileLevel,
-                  uint beginCoverageLevel,
-                  uint endCoverageLevel /* one beyond */,
-                  uint stepOutSize,
-                  uint paddingSize);
+                  unsigned int fullresTileLevel,
+                  unsigned int beginCoverageLevel,
+                  unsigned int endCoverageLevel /* one beyond */,
+                  unsigned int stepOutSize,
+                  unsigned int paddingSize);
 
-  uint64 GetHeapUsage() const {
+  std::uint64_t GetHeapUsage() const {
     return ::GetHeapUsage(degree_extents_)
             + ::GetHeapUsage(extentsVec);
   }
@@ -190,9 +191,9 @@ template <class CovIter>
 class ExtentsIterator {
   CovIter cIter;  // current
   CovIter eIter;  // end
-  uint level;
+  unsigned int level;
  public:
-  inline ExtentsIterator(CovIter c, CovIter e, uint l) :
+  inline ExtentsIterator(CovIter c, CovIter e, unsigned int l) :
       cIter(c), eIter(e), level(l) {
 
     // make sure our first one is valid
@@ -205,10 +206,10 @@ class ExtentsIterator {
     return &cIter->degreeExtents();
   }
 
-  inline const khExtents<uint32>* operator->(void) const {
+  inline const khExtents<std::uint32_t>* operator->(void) const {
     return &cIter->levelExtents(level);
   }
-  inline const khExtents<uint32>& operator*(void) const {
+  inline const khExtents<std::uint32_t>& operator*(void) const {
     return *operator->();
   }
 
@@ -249,7 +250,7 @@ khInsetCoverage::Narrow(CovIter beginOthers, CovIter endOthers)
 
   // check each level (from lowres to highres) - stop when the others
   // don't completely cover this one.
-  uint level = beginLevel();
+  unsigned int level = beginLevel();
   while (level < endLevel()) {
     if (levelExtents(level).CoveredBy(ExtentsIterator<CovIter>
                                       (beginOthers, endOthers, level),
@@ -270,7 +271,7 @@ khInsetCoverage::Narrow(CovIter beginOthers, CovIter endOthers)
   return false;
 }
 
-inline uint64 GetHeapUsage(const khInsetCoverage &insetCoverage) {
+inline std::uint64_t GetHeapUsage(const khInsetCoverage &insetCoverage) {
   return insetCoverage.GetHeapUsage();
 }
 

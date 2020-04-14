@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -108,7 +109,7 @@ std::string khComposeTimePath(const struct tm& time) {
 
   // Maintain the compatiability with older version: if milliseconds is 0,
   // then don't use the folder representing milliseconds.
-  uint32 msFromMidnight = MillisecondsFromMidnight(time);
+  std::uint32_t msFromMidnight = MillisecondsFromMidnight(time);
   if (msFromMidnight) {
     ss << sep << msFromMidnight;
   }
@@ -301,9 +302,9 @@ khRelativePath(const std::string &absfrom, const std::string &absto)
 
   // find the common prefix. This will also take care of the leading
   // empty string in both that came from the leading '/' in the filenames
-  uint fromLen = from.size();
-  uint toLen   = to.size();
-  uint prefixLen = 0;
+  unsigned int fromLen = from.size();
+  unsigned int toLen   = to.size();
+  unsigned int prefixLen = 0;
   while ((prefixLen < fromLen) && (prefixLen < toLen) &&
          (from[prefixLen] == to[prefixLen])) {
     ++prefixLen;
@@ -311,19 +312,19 @@ khRelativePath(const std::string &absfrom, const std::string &absto)
 
   // figure out how much space to reserve ( no sense thrashing memory )
   std::string relpath;
-  uint numback = fromLen - prefixLen;
-  uint rellen = numback * 3;
-  for (uint i = prefixLen; i < toLen; ++i) {
+  unsigned int numback = fromLen - prefixLen;
+  unsigned int rellen = numback * 3;
+  for (unsigned int i = prefixLen; i < toLen; ++i) {
     rellen += to[i].size() + 1;
   }
   relpath.reserve(rellen);
 
   // build the relpath
   // if both paths were the same, relpath will end up empty (which is ok)
-  for (uint i = 0; i < numback; ++i) {
+  for (unsigned int i = 0; i < numback; ++i) {
     relpath += "../";
   }
-  for (uint i = prefixLen; i < toLen; ++i) {
+  for (unsigned int i = prefixLen; i < toLen; ++i) {
     relpath += to[i];
     relpath += '/';
   }
@@ -423,8 +424,8 @@ void khFindBasenamesInDir(const std::string &dirname,
   closedir(dir);
 }
 
-uint32 khCountFilesInDir(const std::string &dirname) {
-  uint32 count = 0;
+ std::uint32_t khCountFilesInDir(const std::string &dirname) {
+  std::uint32_t count = 0;
   DIR *dir = opendir(dirname.c_str());
   if (dir) {
     struct dirent64 *entry;
@@ -840,7 +841,7 @@ khGetNumericFilenames(const std::string &pattern,
   }
   khDIRCloser closer(dir);
 
-  std::map<uint, std::string> files;
+  std::map<unsigned int, std::string> files;
   struct dirent64 *entry;
   while ((entry = readdir64(dir))) {
     std::string fname(entry->d_name);
@@ -857,7 +858,7 @@ khGetNumericFilenames(const std::string &pattern,
   }
 
   // copy the full filenames to the out vector
-  for (std::map<uint, std::string>::const_iterator f = files.begin();
+  for (std::map<unsigned int, std::string>::const_iterator f = files.begin();
        f != files.end(); ++f) {
     out.push_back(dirname + "/" + f->second);
   }
@@ -881,7 +882,7 @@ khGetFilenamesMatchingPattern(const std::string& prefix,
   }
   khDIRCloser closer(dir);
 
-  std::map<uint, std::string> files;
+  std::map<unsigned int, std::string> files;
   struct dirent64 *entry;
   while ((entry = readdir64(dir))) {
     std::string fname(entry->d_name);
@@ -906,7 +907,7 @@ void khGetBasenamesMatchingPattern(const std::string &dirname,
   }
   khDIRCloser closer(dir);
 
-  std::map<uint, std::string> files;
+  std::map<unsigned int, std::string> files;
   struct dirent64 *entry;
   while ((entry = readdir64(dir))) {
     std::string fname(entry->d_name);
@@ -918,7 +919,7 @@ void khGetBasenamesMatchingPattern(const std::string &dirname,
 }
 
 std::string
-khMakeNumericFilename(const std::string &base, uint64 num, uint numPlaces)
+khMakeNumericFilename(const std::string &base, std::uint64_t num, unsigned int numPlaces)
 {
   std::ostringstream out;
   out << base << '.' << std::setw(numPlaces) << std::setfill('0') << num;
@@ -939,7 +940,7 @@ khIsURI(const std::string &filename)
     return false;
 
   // skip rest of chars that are valid in a URI scheme
-  uint i = 1;
+  unsigned int i = 1;
   for (; ((i < filename.size()) &&
           (isalpha(filename[i]) ||
            isdigit(filename[i]) ||
@@ -993,7 +994,7 @@ khLink(const std::string &oldpath, const std::string &newpath, bool silent)
 
 
 
-uint64 khGetFileSizeOrThrow(const std::string &fname) {
+ std::uint64_t khGetFileSizeOrThrow(const std::string &fname) {
   struct stat64 sb;
   if (stat64(fname.c_str(), &sb) != 0) {
     throw khSimpleErrnoException("Unable to get file size for ")
@@ -1003,7 +1004,7 @@ uint64 khGetFileSizeOrThrow(const std::string &fname) {
 }
 
 bool
-khGetFileInfo(const std::string &fname, uint64 &size, time_t &mtime)
+khGetFileInfo(const std::string &fname, std::uint64_t &size, time_t &mtime)
 {
   struct stat64 sb;
   if (stat64(fname.c_str(), &sb) == 0) {
@@ -1016,7 +1017,7 @@ khGetFileInfo(const std::string &fname, uint64 &size, time_t &mtime)
 }
 
 bool
-khGetFileInfo(const int fd, uint64 &size, time_t &mtime) {
+khGetFileInfo(const int fd, std::uint64_t &size, time_t &mtime) {
   struct stat64 sb;
   if (fstat64(fd, &sb) == 0) {
     size = sb.st_size;
@@ -1027,9 +1028,9 @@ khGetFileInfo(const int fd, uint64 &size, time_t &mtime) {
   }
 }
 
-uint64
+std::uint64_t
 khDiskUsage(const std::string& path) {
-  uint64 size = 0;
+  std::uint64_t size = 0;
   struct stat64 sb;
   if (stat64(path.c_str(), &sb) == 0) {
     size += sb.st_size;
@@ -1052,16 +1053,16 @@ khDiskUsage(const std::string& path) {
   return size;
 }
 
-uint32 khDiskUsage32(const std::string& path) {
-  uint64 size = khDiskUsage(path);
-  return static_cast<uint32>(size);
+ std::uint32_t khDiskUsage32(const std::string& path) {
+  std::uint64_t size = khDiskUsage(path);
+  return static_cast<std::uint32_t>(size);
 }
 
 // Given an input "size" of bytes create a double precision value for the
 // size, a suffix and precision for printing sizes of the form
 // 1.X GB, 1.X MB, 1.X KB, 1.X bytes most appropriate to the size.
 void
-DiskSizeFormatted(uint64 size, double* size_double, std::string* size_suffix,
+DiskSizeFormatted(std::uint64_t size, double* size_double, std::string* size_suffix,
                   uint* precision) {
   *size_double = static_cast<double>(size);
   *size_suffix = "";
@@ -1087,16 +1088,16 @@ DiskSizeFormatted(uint64 size, double* size_double, std::string* size_suffix,
 void
 khPrintFileSizes(const std::string& title, std::vector<std::string> paths) {
   // Set the iostream formatters.
-  uint original_precision = std::cout.precision();
-  uint precision = 0;
+  unsigned int original_precision = std::cout.precision();
+  unsigned int precision = 0;
   std::cout << title << std::endl;
   std::string size_suffix("");
-  uint64 total_size = 0;
+  std::uint64_t total_size = 0;
   double size_double;
-  for (uint i = 0; i < paths.size(); ++i) {
+  for (unsigned int i = 0; i < paths.size(); ++i) {
     if (paths[i].empty())
       continue;  // skip empty paths
-    uint64 size = khDiskUsage(paths[i]);
+    std::uint64_t size = khDiskUsage(paths[i]);
     total_size += size;
     if (size > 0) {
       DiskSizeFormatted(size, &size_double, &size_suffix, &precision);
@@ -1120,7 +1121,7 @@ khPrintFileSizes(const std::string& title, std::vector<std::string> paths) {
 }
 
 bool
-khGetFilesystemFreeSpace(const std::string &path, uint64 &free)
+khGetFilesystemFreeSpace(const std::string &path, std::uint64_t &free)
 {
 #ifdef ENABLE_GFS_HACKS
   if (IsGFSPath(path)) {
@@ -1163,18 +1164,18 @@ khGetOverflowFilenames(const std::string &filename,
 }
 
 
-uint32
+std::uint32_t
 khMaxOpenFiles(void)
 {
-  uint fileLimit = 256;
+  unsigned int fileLimit = 256;
   struct rlimit limit;
   if (getrlimit(RLIMIT_NOFILE, &limit) < 0) {
     notify(NFY_WARN, "Unable to determine open file limit, assuming %u",
            fileLimit);
   } else {
     if ((limit.rlim_cur == RLIM_INFINITY) ||
-        (limit.rlim_cur > std::numeric_limits<uint32>::max())) {
-      fileLimit = std::numeric_limits<uint32>::max();
+        (limit.rlim_cur > std::numeric_limits<std::uint32_t>::max())) {
+      fileLimit = std::numeric_limits<std::uint32_t>::max();
     } else {
       fileLimit = limit.rlim_cur;
     }
@@ -1271,7 +1272,7 @@ khPwriteAll(int fd, const void *buf, size_t count, off64_t offset)
 }
 
 void
-WaitIfFileIsTooNew(const std::string &filename, uint delaySec)
+WaitIfFileIsTooNew(const std::string &filename, unsigned int delaySec)
 {
   if (delaySec == 0) return;
 
@@ -1287,7 +1288,7 @@ WaitIfFileIsTooNew(const std::string &filename, uint delaySec)
   }
 #endif
 
-  uint64 fileSize;
+  std::uint64_t fileSize;
   time_t mtime;
   if (!khGetFileInfo(filename, fileSize, mtime)) {
     throw khSimpleErrnoException("Unable to get modification time for ")
@@ -1465,10 +1466,10 @@ khFilesTransaction::Commit(void)
 bool
 khAppendFile(const std::string &srcFilename,
              const std::string &destFilename,
-             uint64 &offsetReturn)
+             std::uint64_t &offsetReturn)
 {
-  uint64 srcSize = 0;
-  uint64 destSize = 0;
+  std::uint64_t srcSize = 0;
+  std::uint64_t destSize = 0;
   time_t mtime;
 
   // get the src file ready
@@ -1505,10 +1506,10 @@ khAppendFile(const std::string &srcFilename,
   }
 
 
-  static const uint32 bufsize = 1024 * 1024;
+  static const std::uint32_t bufsize = 1024 * 1024;
   khDeleteGuard<char, ArrayDeleter> buf(TransferOwnership(new char[bufsize]));
   while (srcSize) {
-    uint32 readSize = (uint32)std::min((uint64)bufsize, srcSize);
+    std::uint32_t readSize = (std::uint32_t)std::min((std::uint64_t)bufsize, srcSize);
     if (!khReadAll(srcfile.fd(), &*buf, readSize)) {
       notify(NFY_WARN, "Unable to read %d bytes from %s: %s",
              readSize, srcFilename.c_str(),
@@ -1555,7 +1556,7 @@ bool
 khCopyFile(const std::string &srcFilename,
            const std::string &destFilename)
 {
-  uint64 srcSize = 0;
+  std::uint64_t srcSize = 0;
   time_t mtime;
 
   // get the src file ready
@@ -1594,7 +1595,7 @@ khCopyFile(const std::string &srcFilename,
 
 bool khCopyOpenFile(const int srcFd, const char* const srcFname,
                     const int dstFd, const char* const dstFname) {
-  uint64 srcSize = 0;
+  std::uint64_t srcSize = 0;
   time_t mtime;
 
   // Check src file
@@ -1687,13 +1688,13 @@ khMakeEmptyFile(const std::string &destFilename)
 
 
 bool
-khFillFile(int fd, char fill, uint64 size)
+khFillFile(int fd, char fill, std::uint64_t size)
 {
-  static const uint32 bufsize = 1024 * 1024;
+  static const std::uint32_t bufsize = 1024 * 1024;
   khDeleteGuard<char, ArrayDeleter> buf(TransferOwnership(new char[bufsize]));
   memset(&*buf, fill, bufsize);
   while (size) {
-    uint32 writeSize = (uint32)std::min((uint64)bufsize, size);
+    std::uint32_t writeSize = (std::uint32_t)std::min((std::uint64_t)bufsize, size);
     if (!khWriteAll(fd, &*buf, writeSize)) {
       notify(NFY_WARN, "Unable to write %d bytes: %s",
              writeSize, khstrerror(errno).c_str());
@@ -1712,11 +1713,11 @@ khWriteStringToFile(const std::string &filename, const std::string &str)
 
 bool
 khReadStringFromFile(const std::string &filename, std::string &str,
-                     uint64 limit)
+                     std::uint64_t limit)
 {
   // str.resize() can throw an exception. guard against it.
   try {
-    uint64 size = 0;
+    std::uint64_t size = 0;
     time_t mtime;
     if (!khGetFileInfo(filename, size, mtime)) {
       // don't warn because file does not exist
@@ -1909,7 +1910,7 @@ std::string khFindFileInPath(const std::string &file) {
       std::vector<std::string> dirs;
       split(path, ":", back_inserter(dirs));
 
-      for (uint i = 0; i < dirs.size(); ++i) {
+      for (unsigned int i = 0; i < dirs.size(); ++i) {
         std::string path = khComposePath(dirs[i], file);
         if (khExists(path)) {
           return path;
@@ -2162,7 +2163,7 @@ std::string khGetStreamPrefix(const std::string& file_path) {
 bool khFilesEqual(const std::string &filename_1,
                   const std::string &filename_2) {
   // check file existence and sizes before anything else
-  uint64 size_1, size_2;
+  std::uint64_t size_1, size_2;
   time_t mtime_1, mtime_2;
   if (!khGetFileInfo(filename_1, size_1, mtime_1)) {
     notify(NFY_WARN, "Unable to get file info for %s: %s",

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,9 +14,9 @@
 // limitations under the License.
 //
 
+#include <cstdint>
 #include <string>
 #include <vector>
-#include <khTypes.h>
 #include <khExtents.h>
 
 class khMosaic
@@ -24,13 +25,13 @@ class khMosaic
   {
     std::string      file;
     khOffset<double> origin;
-    khSize<uint32>   rastersize;
+    khSize<std::uint32_t>   rastersize;
   };
   class Band
   {
     std::string    datatype;
     std::string    colorinterp;
-    khSize<uint32> blocksize;
+    khSize<std::uint32_t> blocksize;
     std::string    fillValue   = std::string(); // empty -> no fill
     std::string    noDataValue = std::string(); // empty -> no nodata value
   };
@@ -38,7 +39,7 @@ class khMosaic
   std::string       srs;
   khOffset<double>  origin;
   khSize<double>    pixelsize;
-  khSize<uint32>    rastersize;
+  khSize<std::uint32_t>    rastersize;
   std::vector<Band> bands;
   std::vector<Tile> tiles;
 
@@ -49,12 +50,12 @@ class PrepData {
   class PrepDataBand {
     std::string    datatype;
     std::string    colorinterp;
-    khSize<uint32> blocksize;
+    khSize<std::uint32_t> blocksize;
     std::string    nodata_value = std::string();  // empty -> no nodata value
   };
   class PrepDataTile {
     std::string       path;
-    khSize<uint32>    raster_size;
+    khSize<std::uint32_t>    raster_size;
     khExtents<double> extents;
     khSize<double>    pixel_size;
   };
@@ -72,13 +73,13 @@ class khVirtualRaster
   std::string       srs;
   khOffset<double>  origin;
   khSize<double>    pixelsize;
-  khSize<uint32>    rastersize;
+  khSize<std::uint32_t>    rastersize;
 
   class OutputBand
   {
     // info provided to outside world
     std::string     outDatatype;
-    khSize<uint32>  outBlocksize;
+    khSize<std::uint32_t>  outBlocksize;
     std::string     colorinterp;
     std::string     noDataValue = std::string(); // empty ->no nodata value
     // used internally
@@ -95,7 +96,7 @@ class khVirtualRaster
   {
     std::string      file;
     khOffset<double> origin;
-    khSize<uint32>   rastersize;
+    khSize<std::uint32_t>   rastersize;
     // empty bandLUTs -> use default from OutputBand
     std::vector<std::string> bandLUTs = std::vector<std::string>();
 
@@ -104,7 +105,7 @@ class khVirtualRaster
   std::vector<InputTile> inputTiles;
 
   std::string fillTolerance = std::string();
-  khExtents<uint32> cropExtents = khExtents<uint32>(); // empty() -> afterload will fill
+  khExtents<std::uint32_t> cropExtents = khExtents<std::uint32_t>(); // empty() -> afterload will fill
 
 
 #pragma LoadAndSave
@@ -114,7 +115,7 @@ class khVirtualRaster
   khVirtualRaster(const khMosaic &o);
   void AfterLoad(void) {
     if (cropExtents.empty()) {
-      cropExtents = khExtents<uint32>(khOffset<uint32>(XYOrder, 0, 0),
+      cropExtents = khExtents<std::uint32_t>(khOffset<std::uint32_t>(XYOrder, 0, 0),
                                       rastersize);
     }
   }
@@ -147,7 +148,7 @@ class khVirtualRaster
                                      t->origin,
                                      t->rastersize));
     }
-    cropExtents = khExtents<uint32>(khOffset<uint32>(XYOrder, 0, 0),
+    cropExtents = khExtents<std::uint32_t>(khOffset<std::uint32_t>(XYOrder, 0, 0),
                                     rastersize);
   }
 #/cppquote

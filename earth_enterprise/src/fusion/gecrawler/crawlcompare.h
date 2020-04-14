@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,13 +74,13 @@ class CounterSet {
     ++counters_.at(packet_type);
     ++total_;
   }
-  inline uint64 Get(CrawlerSourceBase::PacketType packet_type) const {
+  inline std::uint64_t Get(CrawlerSourceBase::PacketType packet_type) const {
     return counters_.at(packet_type);
   }
-  inline uint64 GetTotal() const { return total_; }
+  inline std::uint64_t GetTotal() const { return total_; }
  private:
-  std::vector<uint64> counters_;
-  uint64 total_;
+  std::vector<std::uint64_t> counters_;
+  std::uint64_t total_;
   DISALLOW_COPY_AND_ASSIGN(CounterSet);
 };
 

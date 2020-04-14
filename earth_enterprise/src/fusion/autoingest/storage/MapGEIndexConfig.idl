@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,9 +14,9 @@
 // limitations under the License.
 
 
+#include <cstdint>
 #include <string>
 #include <vector>
-#include <khTypes.h>
 #include <geindex/Entries.h>
 #requiresgetheapusage
 
@@ -30,15 +31,15 @@ class MapGEIndexConfig {
 #pragma GenerateIsUpToDate
   };
   class Layer {
-    uint channel_id_;
-    uint32 index_version_;
+    unsigned int channel_id_;
+    std::uint32_t index_version_;
     geindex::TypedEntry::TypeEnum type_ = geindex::TypedEntry::VectorMapsRaster;
     std::vector<Level> levels_ = std::vector<MapGEIndexConfig::Level>();
 	  std::string date_string_ = std::string();  // Format expected: "YYYY-MM-DD"
 #pragma GenerateIsUpToDate
   };
   std::string db_name_;
-  IsUpToDateIgnore uint32 index_version_;
+  IsUpToDateIgnore std::uint32_t index_version_;
   std::vector<Layer> layers_;
 
 #pragma GenerateIsUpToDate

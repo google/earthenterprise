@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,8 +28,8 @@ const double kEpsilonZ = 1.0e-5;
 const std::string kLinePrefix = "\n      ";
 
 struct OffsetSize {
-  int32 offset;
-  uint32 size;
+  std::int32_t offset;
+  std::uint32_t size;
 };
 
 inline bool IsAlmostEqual(double a, double b, double epsilon) {
@@ -350,7 +351,7 @@ bool CompareVectorPackets(std::string *buffer_a,
   id_size numInstances = std::min(drawable_pak_a.packetHeader.numInstances,
                                   drawable_pak_b.packetHeader.numInstances);
 
-  for ( uint jj = 0; jj < numInstances; ++jj ) {
+  for ( unsigned int jj = 0; jj < numInstances; ++jj ) {
     etDataPacket* pak_a = drawable_pak_a.getPtr( jj );
     etDataPacket* pak_b = drawable_pak_b.getPtr( jj );
     if ( !CompareDataHeaders(pak_a->packetHeader,
@@ -362,7 +363,7 @@ bool CompareVectorPackets(std::string *buffer_a,
         case TYPE_POLYLINEPACKET:
           ((etPolyLinePacket*)pak_a)->offsetToPointer();
           ((etPolyLinePacket*)pak_b)->offsetToPointer();
-          for ( uint ii = 0; ii < pak_a->packetHeader.numInstances; ++ii )
+          for ( unsigned int ii = 0; ii < pak_a->packetHeader.numInstances; ++ii )
             if ( !ComparePolyLinePackets(((etPolyLinePacket*)pak_a)->getPtr(ii),
                                          ((etPolyLinePacket*)pak_b)->getPtr(ii),
                                          snippet)) {
@@ -372,7 +373,7 @@ bool CompareVectorPackets(std::string *buffer_a,
         case TYPE_STREETPACKET_UTF8:
           ((etStreetPacket*)pak_a)->offsetToPointer();
           ((etStreetPacket*)pak_b)->offsetToPointer();
-          for ( uint ii = 0; ii < pak_a->packetHeader.numInstances; ++ii )
+          for ( unsigned int ii = 0; ii < pak_a->packetHeader.numInstances; ++ii )
             if ( !CompareStreetPackets(((etStreetPacket*)pak_a)->getPtr(ii),
                                        ((etStreetPacket*)pak_b)->getPtr(ii),
                                        snippet)) {
@@ -382,7 +383,7 @@ bool CompareVectorPackets(std::string *buffer_a,
         case TYPE_LANDMARK:
           ((etLandmarkPacket*)pak_a)->offsetToPointer();
           ((etLandmarkPacket*)pak_b)->offsetToPointer();
-          for ( uint ii = 0; ii < pak_a->packetHeader.numInstances; ++ii )
+          for ( unsigned int ii = 0; ii < pak_a->packetHeader.numInstances; ++ii )
             if (!CompareLandmarkPackets(((etLandmarkPacket*)pak_a)->getPtr(ii),
                                         ((etLandmarkPacket*)pak_b)->getPtr(ii),
                                         snippet)) {
@@ -392,7 +393,7 @@ bool CompareVectorPackets(std::string *buffer_a,
         case TYPE_POLYGONPACKET:
           ((etPolygonPacket*)pak_a)->offsetToPointer();
           ((etPolygonPacket*)pak_b)->offsetToPointer();
-          for ( uint ii = 0; ii < pak_a->packetHeader.numInstances; ++ii )
+          for ( unsigned int ii = 0; ii < pak_a->packetHeader.numInstances; ++ii )
             if (!ComparePolygonPackets(((etPolygonPacket*)pak_a)->getPtr(ii),
                                        ((etPolygonPacket*)pak_b)->getPtr(ii),
                                        snippet)) {

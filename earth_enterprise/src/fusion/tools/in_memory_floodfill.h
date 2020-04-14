@@ -25,7 +25,7 @@
 // the other arguments.
 class InMemoryFloodFill : public TiledFloodFill {
  public:
-  InMemoryFloodFill(const uchar *image, uchar *alpha,
+  InMemoryFloodFill(const unsigned char *image, unsigned char *alpha,
                     int image_width, int image_height,
                     int fill_value, int tolerance, bool fill_white,
                     int hole_size)
@@ -53,8 +53,8 @@ class InMemoryFloodFill : public TiledFloodFill {
     memset(alpha, kNotFilled, image_width_ * image_height_);
   }
   virtual ~InMemoryFloodFill() {}
-  virtual const uchar *LoadImageTile(int tile_x, int tile_y) {return image_;}
-  virtual uchar *LoadMaskTile(int tile_x, int tile_y, double *old_opacity) {
+  virtual const unsigned char *LoadImageTile(int tile_x, int tile_y) {return image_;}
+  virtual unsigned char *LoadMaskTile(int tile_x, int tile_y, double *old_opacity) {
     *old_opacity = opacity_;
     return alpha_;
   }
@@ -63,8 +63,8 @@ class InMemoryFloodFill : public TiledFloodFill {
   }
 
  protected:
-  const uchar *image_;
-  uchar *alpha_;
+  const unsigned char *image_;
+  unsigned char *alpha_;
   double opacity_;
 };
 

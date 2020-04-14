@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,7 +20,7 @@
 #include "cachedreadaccessor.h"
 #include "khSimpleException.h"
 
-CachedReadAccessor::CachedReadAccessor(uint32 max_blocks, uint32 block_size)
+CachedReadAccessor::CachedReadAccessor(std::uint32_t max_blocks, std::uint32_t block_size)
  : max_blocks_count_(max_blocks), block_size_(block_size),
    access_tick_counter_(0),
    stats_bytes_read_(0),
@@ -67,7 +68,7 @@ void CachedReadAccessor::Pread(FileBundleSegment& segment,
   CacheBlock* block_1 = NULL;
   FindBlocks(segment.id(), size, offset, &block_0, &block_1);
   assert(block_0);
-  uint32 read_count =
+  std::uint32_t read_count =
     block_0->Read(segment, buffer, size, offset, access_tick_counter_++,
                   stats_bytes_read_, stats_disk_accesses_);
   if (block_1) {
@@ -79,9 +80,9 @@ void CachedReadAccessor::Pread(FileBundleSegment& segment,
   }
 }
 
-uint32 CachedReadAccessor::FindBlocks(uint32 segment_id,
-                                      uint32 size,
-                                      uint32 offset,
+ std::uint32_t CachedReadAccessor::FindBlocks(std::uint32_t segment_id,
+                                      std::uint32_t size,
+                                      std::uint32_t offset,
                                       CacheBlock** block_0,
                                       CacheBlock** block_1) {
   // 2 cases:
@@ -91,7 +92,7 @@ uint32 CachedReadAccessor::FindBlocks(uint32 segment_id,
   *block_0 = GetCacheBlock(address_0);
 
   // Check if we straddle 2 blocks.
-  uint32 next_block_offset = address_0.Offset() + block_size_;
+  std::uint32_t next_block_offset = address_0.Offset() + block_size_;
   bool straddles_blocks = offset + size > next_block_offset;
   if (straddles_blocks) { // both blocks returned
     CacheBlockAddress address_1(segment_id, next_block_offset);
@@ -129,7 +130,7 @@ CachedReadAccessor::AddCacheBlock(const CacheBlockAddress& address) {
   if (max_blocks_count_ == cache_blocks_map_.size()) {
     // Identify the Least Recently Used block and remove it from our cache.
     CachedReadAccessor::CacheBlockMap::iterator iter = cache_blocks_map_.begin();
-    uint64 least_access_tick = ULONG_LONG_MAX;
+    std::uint64_t least_access_tick = ULONG_LONG_MAX;
     CachedReadAccessor::CacheBlockMap::iterator block_iter_to_remove =
       cache_blocks_map_.begin();
     for(; iter != cache_blocks_map_.end(); ++iter) {
@@ -153,18 +154,18 @@ CachedReadAccessor::AddCacheBlock(const CacheBlockAddress& address) {
   return block;
 }
 
-uint32 CachedReadAccessor::CacheBlock::Read(FileBundleSegment& segment,
+ std::uint32_t CachedReadAccessor::CacheBlock::Read(FileBundleSegment& segment,
           void *out_buffer, size_t size, off64_t offset,
-          uint64 access_tick,
-          uint64& stats_bytes_read, uint64& stats_disk_accesses) {
+          std::uint64_t access_tick,
+          std::uint64_t& stats_bytes_read, std::uint64_t& stats_disk_accesses) {
   last_access_tick_ = access_tick; // keep track of our last read access.
 
   // Check that requested size is within the bounds of this block.
   if (!initialized_) {
     // Must read the whole contents of this cache block from the segment.
-    uint32 segment_remainder = segment.data_size() - address_.Offset();
+    std::uint32_t segment_remainder = segment.data_size() - address_.Offset();
     assert(address_.Offset() < segment.data_size());
-    uint32 request_size = std::min(block_size_, segment_remainder);
+    std::uint32_t request_size = std::min(block_size_, segment_remainder);
     // We're going to read directly into our buffer_
     buffer_.resize(request_size);
     void* cache_buffer = const_cast<char*>(buffer_.data());
@@ -177,12 +178,12 @@ uint32 CachedReadAccessor::CacheBlock::Read(FileBundleSegment& segment,
   // At this point the requested data should be in buffer_,
   // need to copy it out.
   // Remember, this CacheBlock starts at address_.Offset()
-  uint32 cache_buffer_offset = offset - address_.Offset();
+  std::uint32_t cache_buffer_offset = offset - address_.Offset();
   void* cache_buffer = const_cast<char*>(buffer_.data() + cache_buffer_offset);
   // Need to catch case where request extends beyond this CacheBlock.
   assert(cache_buffer_offset < buffer_.size());
-  uint32 request_bytes_in_cache_block = buffer_.size() - cache_buffer_offset;
-  uint32 read_count = std::min(static_cast<uint32>(size),
+  std::uint32_t request_bytes_in_cache_block = buffer_.size() - cache_buffer_offset;
+  std::uint32_t read_count = std::min(static_cast<std::uint32_t>(size),
                                request_bytes_in_cache_block);
   memcpy(out_buffer, cache_buffer, read_count);
   return read_count;

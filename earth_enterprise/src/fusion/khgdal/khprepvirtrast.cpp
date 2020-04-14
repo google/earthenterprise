@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -104,7 +105,7 @@ class ColorTable
       return false;
     if ((int)entries.size() != o.GetColorEntryCount())
       return false;
-    for (uint i = 0; i < entries.size(); ++i) {
+    for (unsigned int i = 0; i < entries.size(); ++i) {
       if (entries[i] != *o.GetColorEntry(i))
         return false;
     }
@@ -126,14 +127,14 @@ bool prep_process(
   std::string tolerancestr,
   std::string lutfilename,
   std::vector<std::string> fill,
-  khExtents<uint32> cropExtents
+  khExtents<std::uint32_t> cropExtents
 ) {
   khGDALInit();
 
   // Create and load our Prep Data object, and do some sanity checks on it
   PrepData prep;
   prep.Load(input);
-  uint numTiles = prep.tiles.size(); // used here and in tile loop below
+  unsigned int numTiles = prep.tiles.size(); // used here and in tile loop below
   if (numTiles == 0) {
    notify(NFY_FATAL, "No tiles to raster");
   }
@@ -172,7 +173,7 @@ bool prep_process(
         notify(NFY_FATAL, "Unable to open lut file %s",
                lutfilename.c_str());
       }
-      uint numbands;
+      unsigned int numbands;
       in >> numbands;
       if (!in) {
         notify(NFY_FATAL, "Unable to interpret lut file %s",
@@ -182,7 +183,7 @@ bool prep_process(
         notify(NFY_FATAL, "Incompatible LUT has %u bands. Imagery has %u.",
                numbands, static_cast<unsigned>(virtraster.outputBands.size()));
       }
-      for (uint b = 0; b < numbands; ++b) {
+      for (unsigned int b = 0; b < numbands; ++b) {
         khVirtualRaster::OutputBand &band = virtraster.outputBands[b];
         GDALDataType intype  = GDTFromName(band.inDatatype);
         // for now the presence of a LUT implies an output type of
@@ -191,13 +192,13 @@ bool prep_process(
         band.outDatatype = GDALGetDataTypeName(outtype);
         switch (intype) {
           case GDT_Byte:
-            ParseAndStoreLUT<uchar>(in, outtype, band.defaultLut);
+            ParseAndStoreLUT<unsigned char>(in, outtype, band.defaultLut);
             break;
           case GDT_UInt16:
-            ParseAndStoreLUT<uint16>(in, outtype, band.defaultLut);
+            ParseAndStoreLUT<std::uint16_t>(in, outtype, band.defaultLut);
             break;
           case GDT_Int16:
-            ParseAndStoreLUT<int16>(in, outtype, band.defaultLut);
+            ParseAndStoreLUT<std::int16_t>(in, outtype, band.defaultLut);
             break;
           default:
             notify(NFY_FATAL,
@@ -251,8 +252,8 @@ bool prep_process(
   // do the summary calculations
   double dX = virtraster.pixelsize.width;
   double dY = virtraster.pixelsize.height;
-  uint32 sizeX = (uint32)((mosaicExtents.width()  / fabs(dX)) + 0.5);
-  uint32 sizeY = (uint32)((mosaicExtents.height() / fabs(dY)) + 0.5);
+  std::uint32_t sizeX = (std::uint32_t)((mosaicExtents.width()  / fabs(dX)) + 0.5);
+  std::uint32_t sizeY = (std::uint32_t)((mosaicExtents.height() / fabs(dY)) + 0.5);
   notify(NFY_INFO, "overall size = %6u x %6u",
            (unsigned int)sizeX, (unsigned int)sizeY);
 
@@ -262,15 +263,15 @@ bool prep_process(
     (dX > 0) ? mosaicExtents.beginX() : mosaicExtents.endX(),
     (dY > 0) ? mosaicExtents.beginY() : mosaicExtents.endY()
   );
-  virtraster.rastersize = khSize<uint32>(sizeX, sizeY);
+  virtraster.rastersize = khSize<std::uint32_t>(sizeX, sizeY);
 
   // crop extents if provided
   if (!cropExtents.empty()) {
-    khExtents<uint32> total(
-      khOffset<uint32>(XYOrder, 0,0),
+    khExtents<std::uint32_t> total(
+      khOffset<std::uint32_t>(XYOrder, 0,0),
       virtraster.rastersize
     );
-    khExtents<uint32> intersection = khExtents<uint32>::Intersection(
+    khExtents<std::uint32_t> intersection = khExtents<std::uint32_t>::Intersection(
       total,
       cropExtents
     );
@@ -340,23 +341,23 @@ int main(int argc, char *argv[]) {
   if (fillstr.size()) {
     split(fillstr, ",", back_inserter(fill));
   }
-  khExtents<uint32> cropExtents;
+  khExtents<std::uint32_t> cropExtents;
   if (!cropstr.empty()) {
     std::vector<std::string> cropstrs;
     split(cropstr, ",", back_inserter(cropstrs));
     if (cropstrs.size() != 4) {
       usage(progname, "--crop must specify 4 values");
     }
-    uint32 x = 0;
-    uint32 y = 0;
-    uint32 w = 0;
-    uint32 h = 0;
+    std::uint32_t x = 0;
+    std::uint32_t y = 0;
+    std::uint32_t w = 0;
+    std::uint32_t h = 0;
     FromString(cropstrs[0], x);
     FromString(cropstrs[1], y);
     FromString(cropstrs[2], w);
     FromString(cropstrs[3], h);
-    cropExtents = khExtents<uint32>(khOffset<uint32>(XYOrder, x, y),
-                                    khSize<uint32>(w, h));
+    cropExtents = khExtents<std::uint32_t>(khOffset<std::uint32_t>(XYOrder, x, y),
+                                    khSize<std::uint32_t>(w, h));
   }
 
   // get the source files

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -39,8 +40,8 @@ Projection::Point Projection::FromNormLatLngToPixel(const LatLng& norm_latLng,
 MercatorProjection::MercatorProjection(int pixels_at_level_0)
   : Projection(pixels_at_level_0) {
   // First zoom level is a single tile
-  uint64 pixels = pixels_at_level_0;
-  for (uint level = 0; level <= Max2DClientLevel; ++level) {
+  std::uint64_t pixels = pixels_at_level_0;
+  for (unsigned int level = 0; level <= Max2DClientLevel; ++level) {
     pixels_per_lon_degree_[level] = static_cast<double>(pixels) / 360.0;
     pixels_per_lon_radian_[level] = static_cast<double>(pixels) / (2 * M_PI);
 
@@ -54,17 +55,17 @@ MercatorProjection::MercatorProjection(int pixels_at_level_0)
 Projection::Point MercatorProjection::FromLatLngToPixel(const LatLng& latLng, int zoom) const {
   const double latitude_in_deg = Clamp(latLng.Lat(),
       -khGeomUtilsMercator::khMaxLatitude, khGeomUtilsMercator::khMaxLatitude);
-  uint64 origin = pixel_origin_[zoom];
-  uint64 x = static_cast<uint64>(round(static_cast<double>(origin) + latLng.Lng() *
+  std::uint64_t origin = pixel_origin_[zoom];
+  std::uint64_t x = static_cast<std::uint64_t>(round(static_cast<double>(origin) + latLng.Lng() *
        static_cast<double>(pixels_per_lon_degree_[zoom])));
   double siny = Clamp(sin(DegreesToRadians(latitude_in_deg)), -0.9999, 0.9999);
-  uint64 y = static_cast<uint64>(round(static_cast<double>(origin) + 0.5 * log((1 + siny) /
+  std::uint64_t y = static_cast<std::uint64_t>(round(static_cast<double>(origin) + 0.5 * log((1 + siny) /
        (1 - siny)) * -static_cast<double>(pixels_per_lon_radian_[zoom])));
   return Point(x, pixels_range_[zoom] - y);  // lower-left origin
 }
 
 Projection::LatLng MercatorProjection::FromPixelToLatLng(const Point& pixel, int zoom) const {
-  uint64 origin = pixel_origin_[zoom];
+  std::uint64_t origin = pixel_origin_[zoom];
   double lng = (static_cast<double>(pixel.X()) - static_cast<double>(origin)) /
      pixels_per_lon_degree_[zoom];
   double lat_radians = (static_cast<double>(pixel.Y()) - origin) /

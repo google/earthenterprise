@@ -15,7 +15,7 @@ namespace std {
 %template(ManifestEntryVector) vector<ManifestEntry>;
 }
 
-// Include the header file with above prototypes.
+// Include header file with the above prototypes.
 %include common/ManifestEntry.h
 %include fusion/gepublish/gepublishmanagerhelper.h
 

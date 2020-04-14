@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -192,7 +193,7 @@ void CopyFilelistNewNames(std::vector<std::string> &filelist,
 void CopyGEDB(geFilePool &file_pool,
               const std::string &outdir, const std::string &newname,
               const std::string &oldpath) {
-  static uint indexcount = 0;
+  static unsigned int indexcount = 0;
   static StringMap iconmap;
   static StringMap packetmap;
   static StringMap poimap;

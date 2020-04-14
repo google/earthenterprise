@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -41,7 +42,7 @@ namespace rasterfuse {
 // ***  MergeInset
 // ****************************************************************************
 template <class DataTile>
-MergeInset<DataTile>::MergeInset(uint magnify_level,
+MergeInset<DataTile>::MergeInset(unsigned int magnify_level,
                                  const std::string &dataRPFile,
                                  const std::string &alphaRPFile,
                                  const std::string &cached_blend_file,
@@ -61,7 +62,7 @@ MergeInset<DataTile>::MergeInset(uint magnify_level,
 
 
 template<class DataTile>
-void MergeInset<DataTile>::InitRasterProducts(uint magnify_level,
+void MergeInset<DataTile>::InitRasterProducts(unsigned int magnify_level,
                                              const std::string &dataRPFile,
                                              const std::string &alphaRPFile) {
   if (dataRPFile.size()) {
@@ -112,7 +113,7 @@ void MergeInset<DataTile>::InitRasterProducts(uint magnify_level,
 
 template<class DataTile>
 void MergeInset<DataTile>::InitCachedBlendReaders(
-    uint magnify_level,
+    unsigned int magnify_level,
     const std::string &data_rp_file,
     const std::string &cached_blend_file,
     const std::string &cached_blend_alpha_file) {
@@ -131,9 +132,9 @@ void MergeInset<DataTile>::InitCachedBlendReaders(
     // coverage for "Filling"-insets based on extents of Terrain "Overlay"-
     // insets.
     if (dataRP && dataRP->type() == khRasterProduct::Imagery) {
-      khExtents<uint32> cachedExtents
+      khExtents<std::uint32_t> cachedExtents
         (cached_blend_reader->levelCoverage(magnify_level).extents);
-      khExtents<uint32> prodExtents(magnifyCoverage.extents);
+      khExtents<std::uint32_t> prodExtents(magnifyCoverage.extents);
 
       if (!cachedExtents.contains(prodExtents)) {
         notify(NFY_WARN,
@@ -245,7 +246,7 @@ bool RasterMerger<CachingDataReader>::GetInsetTile(
 // ****************************************************************************
 template <class CachingDataReader>
 RasterMerger<CachingDataReader>::RasterMerger(
-    uint targetLevel,
+    unsigned int targetLevel,
     const std::vector<PacketLevelConfig::Inset> &insets_,
     const std::string &burnDataRPFile,
     const std::string &burnAlphaRPFile):
@@ -273,7 +274,7 @@ RasterMerger<CachingDataReader>::RasterMerger(
   }
 
   insets.reserve(insets_.size());
-  uint i = insets_.size();
+  unsigned int i = insets_.size();
   // Note: The input insets may or may not have dataRP entries
   // Also there may or may not be burnDataRPFile. For imagery dataRP is must.
   // So to know whether mercator or not we try to find mercator anywhere
@@ -375,10 +376,10 @@ khOpacityMask::OpacityType RasterMerger<CachingDataReader>::Load(
   class Quad {
    public:
     bool done;
-    uint32 srcRow;
-    uint32 srcCol;
+    std::uint32_t srcRow;
+    std::uint32_t srcCol;
 
-    Quad(uint32 row, uint32 col, uint q)
+    Quad(std::uint32_t row, std::uint32_t col, unsigned int q)
         : done(false) {
       QuadtreePath::MagnifyQuadAddr(row, col, q, srcRow, srcCol);
     }
@@ -388,14 +389,14 @@ khOpacityMask::OpacityType RasterMerger<CachingDataReader>::Load(
     Quad(targetAddr.row, targetAddr.col, 2),
     Quad(targetAddr.row, targetAddr.col, 3)
   };
-  uint numQuadsDone = 0;
+  unsigned int numQuadsDone = 0;
 
   // NOTE: index 0 of mergestack is the top of the stack
-  for (uint i = 0; i < insets.size(); ++i) {
+  for (unsigned int i = 0; i < insets.size(); ++i) {
     MergeInset<DataTile> *inset(insets[i]);
 
     // make our debug number reflect the reverse order
-    uint debugNum = insets.size() - i - 1;
+    unsigned int debugNum = insets.size() - i - 1;
 
     // see if this inset intersects the srcCoverage
     if (!inset->magnifyCoverage.extents.intersects(srcCoverage.extents)) {
@@ -404,7 +405,7 @@ khOpacityMask::OpacityType RasterMerger<CachingDataReader>::Load(
     }
 
     bool contributed = false;
-    for (uint q = 0; q < 4; ++q) {
+    for (unsigned int q = 0; q < 4; ++q) {
       if (!quads[q].done) {
         khTileAddr srcAddr(srcCoverage.level,
                            quads[q].srcRow, quads[q].srcCol);
@@ -469,7 +470,7 @@ khOpacityMask::OpacityType RasterMerger<CachingDataReader>::Load(
 
   // 0 < numQuadsDone < 4
   *blend_status = NoDataBlended;
-  for (uint q = 0; q < 4; ++q) {
+  for (unsigned int q = 0; q < 4; ++q) {
     if (!quads[q].done) {
       khTileAddr srcAddr(srcCoverage.level,
                          quads[q].srcRow, quads[q].srcCol);

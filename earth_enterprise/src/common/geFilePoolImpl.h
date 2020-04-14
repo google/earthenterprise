@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,7 +65,7 @@ class FileReferenceImpl : public khMTRefCounter {
   int    closeError;
   int    openFlags;
   mode_t createMask;
-  uint64 cachedFilesize;
+  std::uint64_t cachedFilesize;
 
   class ChangingGuard {
     FileReferenceImpl* fileref;
@@ -93,7 +94,7 @@ class FileReferenceImpl : public khMTRefCounter {
   static inline bool IsWriter(int flags) { return ((flags & O_WRONLY) ||
                                                    (flags & O_RDWR)); }
   inline bool IsWriter(void) const { return IsWriter(openFlags); }
-  inline uint64 Filesize(void) const { return cachedFilesize;}
+  inline std::uint64_t Filesize(void) const { return cachedFilesize;}
 };
 typedef khRefGuard<FileReferenceImpl> FileReference;
 

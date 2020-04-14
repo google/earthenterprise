@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +18,7 @@
 #ifndef __khGeoExtents_h
 #define __khGeoExtents_h
 
-#include <khTypes.h>
+#include <cstdint>
 #include <khExtents.h>
 #include <cmath>
 #include "khgdal.h"
@@ -73,24 +74,24 @@ class khGeoExtents
     memset(geoTransform_, 0, sizeof(geoTransform_));
   }
   khGeoExtents(const khExtents<double> &extents__,
-               const khSize<uint32> &rasterSize,
+               const khSize<std::uint32_t> &rasterSize,
                bool topToBottom = true);
   khGeoExtents(const khExtents<double> &extents__,
                double pixelSize,
                bool topToBottom = true);
   khGeoExtents(const khOffset<double> &origin,
                double pixelSize,
-               const khSize<uint32> &rasterSize,
+               const khSize<std::uint32_t> &rasterSize,
                bool topToBottom = true);
-  khGeoExtents(uint level,
+  khGeoExtents(unsigned int level,
                const khExtents<double> &extents__,
                bool topToBottom,
                bool is_mercator);
-  khGeoExtents(double geoTransform__[6], const khSize<uint32> &rasterSize);
-  khGeoExtents(const khExtents<int64> &pixelExtents,
+  khGeoExtents(double geoTransform__[6], const khSize<std::uint32_t> &rasterSize);
+  khGeoExtents(const khExtents<std::int64_t> &pixelExtents,
                double pixelSize,
                bool topToBottom, double offset);
-  khSize<uint32> boundToExtent(const khExtents<double>& extent);
+  khSize<std::uint32_t> boundToExtent(const khExtents<double>& extent);
 };
 
 

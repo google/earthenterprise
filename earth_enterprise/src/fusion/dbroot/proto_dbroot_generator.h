@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +28,8 @@
 #include <map>
 #include <string>
 #include <qstring.h>  // NOLINT
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "common/gedbroot/proto_dbroot.h"
 
 class ProtoDbrootContext;
@@ -40,8 +42,8 @@ class StringIdOrValueProto;
 
 class ProtoDbrootGenerator {
  private:
-  typedef std::set<uint32>              UsedProviderSet;
-  typedef std::map<std::string, uint32> UsedStringMap;
+  typedef std::set<std::uint32_t>              UsedProviderSet;
+  typedef std::map<std::string, std::uint32_t> UsedStringMap;
 
 
  protected:
@@ -67,7 +69,7 @@ class ProtoDbrootGenerator {
   void WriteProtobuf(geProtoDbroot::FileFormat output_format);
 
   // Mark the supplied provider id as being used by this dbroot.
-  void AddProvider(uint32 id) { used_provider_ids_.insert(id); }
+  void AddProvider(std::uint32_t id) { used_provider_ids_.insert(id); }
 
  private:
   // called internally before writing

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +19,11 @@
 #ifndef _image_h_
 #define _image_h_
 
+#include <cstdint>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
-#include <khTypes.h>
 
 
 template < class Type > class Tile3D 
@@ -35,7 +36,7 @@ template < class Type > class Tile3D
   Type x, y, c;
 };
 
-typedef Tile3D< uint32 > ImgTile;
+typedef Tile3D< std::uint32_t > ImgTile;
 
 enum ImgOrder {
   Interleaved,
@@ -64,14 +65,14 @@ template < class Type > class ImageObj
     }
     // allocate buffer pointers
     _buffers = new Type*[_tile.c];
-    for (uint i = 0; i < _tile.c; ++i) {
+    for (unsigned int i = 0; i < _tile.c; ++i) {
       _buffers[i] = new Type[_tile.x * _tile.y];
     }
   }
 
   ~ImageObj()
   {
-    for (uint i = 0; i < _tile.c; ++i) {
+    for (unsigned int i = 0; i < _tile.c; ++i) {
       delete [] _buffers[i];
     }
     delete [] _buffers;
@@ -85,7 +86,7 @@ template < class Type > class ImageObj
 
   inline char *getData( int chan ) { return (char*)_buffers[ chan ]; }
 
-  void getTile( uint32 x, uint32 y, uint32 w, uint32 h, Type *outbuf, 
+  void getTile( std::uint32_t x, std::uint32_t y, std::uint32_t w, std::uint32_t h, Type *outbuf, 
                 ImgOrder ord = Interleaved, ImgOrientation ori = UpperLeft )
   {
     assert(w && h);
@@ -99,11 +100,11 @@ template < class Type > class ImageObj
 
       if ( _orientation == LowerLeft && ori == UpperLeft ) {
 
-        for ( uint32 sy = y + h - 1; sy >= y; sy-- ) {
+        for ( std::uint32_t sy = y + h - 1; sy >= y; sy-- ) {
           row = _buffers[ sy * _tile.x * _tile.c ];
-          for ( uint32 sx = x; sx < x + w; sx++ ) {
+          for ( std::uint32_t sx = x; sx < x + w; sx++ ) {
             col = &row[ sx * _tile.c ];
-            for ( uint c = 0; c < _tile.c; c++ ) {
+            for ( unsigned int c = 0; c < _tile.c; c++ ) {
               *outbuf = col[ c ];
               outbuf++;
             }
@@ -117,11 +118,11 @@ template < class Type > class ImageObj
         // we're not going to use this right now anyway...
       } else if ( _orientation == UpperLeft && ori == UpperLeft ) {
 
-        for ( uint32 sy = y; sy < y + h; sy++ ) {
+        for ( std::uint32_t sy = y; sy < y + h; sy++ ) {
           row = _buffers[ sy * _tile.x * _tile.c ];
-          for ( uint32 sx = x; sx < x + w; sx++ ) {
+          for ( std::uint32_t sx = x; sx < x + w; sx++ ) {
             col = &row[ sx * _tile.c ];
-            for ( uint c = 0; c < _tile.c; c++ ) {
+            for ( unsigned int c = 0; c < _tile.c; c++ ) {
               *outbuf = col[ c ];
               outbuf++;
             }
@@ -138,11 +139,11 @@ template < class Type > class ImageObj
 
         if ( _orientation == LowerLeft && ori == UpperLeft ) {
 
-          for ( uint32 sy = y + h - 1; sy >= y; sy-- ) {
+          for ( std::uint32_t sy = y + h - 1; sy >= y; sy-- ) {
             rowoff = sy * _tile.x;
-            for ( uint32 sx = x; sx < x + w; sx++ ) {
+            for ( std::uint32_t sx = x; sx < x + w; sx++ ) {
               coloff = rowoff + sx;
-              for ( uint c = 0; c < _tile.c; c++ ) {
+              for ( unsigned int c = 0; c < _tile.c; c++ ) {
                 *outbuf = _buffers[ c ][ coloff ];
                 outbuf++;
               }
@@ -153,11 +154,11 @@ template < class Type > class ImageObj
 
         } else if ( _orientation == LowerLeft && ori == LowerLeft ) {
 
-          for ( uint32 sy = y ; sy < y + h; sy++ ) {
+          for ( std::uint32_t sy = y ; sy < y + h; sy++ ) {
             rowoff = sy * _tile.x;
-            for ( uint32 sx = x; sx < x + w; sx++ ) {
+            for ( std::uint32_t sx = x; sx < x + w; sx++ ) {
               coloff = rowoff + sx;
-              for ( uint c = 0; c < _tile.c; c++ ) {
+              for ( unsigned int c = 0; c < _tile.c; c++ ) {
                 *outbuf = _buffers[ c ][ coloff ];
                 outbuf++;
               }

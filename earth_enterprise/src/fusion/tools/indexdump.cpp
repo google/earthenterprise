@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -45,9 +46,9 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
   exit(1);
 }
 
-const uint32 kInvalidInt = std::numeric_limits<uint32>::max();
+const std::uint32_t kInvalidInt = std::numeric_limits<std::uint32_t>::max();
 
-uint32 ValidateAndInvertRow(uint32 level, uint32 row, uint32 col, char* cmd) {
+ std::uint32_t ValidateAndInvertRow(std::uint32_t level, std::uint32_t row, std::uint32_t col, char* cmd) {
   if (level == kInvalidInt || row == kInvalidInt || col == kInvalidInt)
     usage(cmd, "must specify level, row & col with ImageryMaps");
   return (1 << level) - row - 1;
@@ -62,11 +63,11 @@ int main(int argc, char** argv) {
     khGetopt options;
     bool help = false;
     std::string blist;
-    uint32 channel = 1;
-    uint32 version = 1;
-    uint32 level = kInvalidInt;
-    uint32 row = kInvalidInt;
-    uint32 col = kInvalidInt;
+    std::uint32_t channel = 1;
+    std::uint32_t version = 1;
+    std::uint32_t level = kInvalidInt;
+    std::uint32_t row = kInvalidInt;
+    std::uint32_t col = kInvalidInt;
     std::string request;
     bool dump_manifest = false;
 

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,7 +30,7 @@ TEST_F(AssetDefsExtraTest, ValidateAssetName) {
   EXPECT_TRUE(AssetDefs::ValidateAssetName(good_name));
 
   std::string invalid_characters("&%'\" \\*=+~`?<>;:");
-  for(uint i = 0; i < invalid_characters.size(); ++i) {
+  for(unsigned int i = 0; i < invalid_characters.size(); ++i) {
     std::string bad_name = "whatswronghere";
     bad_name.push_back(invalid_characters[i]);  // now something's wrong
     EXPECT_FALSE(AssetDefs::ValidateAssetName(bad_name));

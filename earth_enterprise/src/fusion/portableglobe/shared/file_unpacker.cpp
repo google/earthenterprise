@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -45,13 +46,13 @@ FileUnpacker::FileUnpacker(const char* package_file) {
   // Get offset to the index
   source_.open(package_file, std::ios::binary);
   source_.seekg(length_ - Package::kIndexOffsetOffset, std::ios::beg);
-  uint64 index_offset;
+  std::uint64_t index_offset;
   source_.read(reinterpret_cast<char*>(&index_offset),
                Package::kIndexOffsetSize);
 
   // Read in the index header.
   source_.seekg(index_offset, std::ios::beg);
-  uint32 num_files;
+  std::uint32_t num_files;
   source_.read(reinterpret_cast<char*>(&num_files), 4);
 
   std::map<std::string, PackageFileLoc>::iterator it;
@@ -59,9 +60,9 @@ FileUnpacker::FileUnpacker(const char* package_file) {
   // Read in the index entries.
   std::string path;
   PackageFileLoc file_loc;
-  for (uint32 i = 0; i < num_files; ++i) {
+  for (std::uint32_t i = 0; i < num_files; ++i) {
     // Read in the relative path of the index entry.
-    uint16 path_len;
+    std::uint16_t path_len;
     source_.read(reinterpret_cast<char*>(&path_len),
                  sizeof(path_len));
     path.resize(path_len);
@@ -275,6 +276,7 @@ const char* FileUnpacker::IndexFile(int idx) {
  * following:
  *   Portable Globe
  *   Copyright 2011 Google Inc. All Rights Reserved.
+ *   Copyright 2020 The Open GEE Contributors
  *   2012-02-24 01:26:07 GMT
  */
 std::string FileUnpacker::ExtractDateFromInfo() const {
@@ -290,13 +292,13 @@ std::string FileUnpacker::ExtractDateFromInfo() const {
 /**
  * Calculates a crc for the info data.
  */
-uint32 FileUnpacker::InfoCrc() const {
-  uint32 crc = 0;
+ std::uint32_t FileUnpacker::InfoCrc() const {
+  std::uint32_t crc = 0;
   const unsigned char* ptr = reinterpret_cast<const unsigned char*>(&info_[0]);
-  for (uint32 i = 0; i < info_.size(); ++i) {
+  for (std::uint32_t i = 0; i < info_.size(); ++i) {
     // Use the full bit space by shifting to one of the
     // four byte boundaries.
-    uint32 value = *ptr++ << ((i & 3) * 8);
+    std::uint32_t value = *ptr++ << ((i & 3) * 8);
     crc += value;
   }
   return crc;

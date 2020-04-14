@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,11 +23,11 @@
 
 namespace qt_fusion {
 
-static const uint32 kDateStringLength = 10;
-static const uint32 kDateStringBufferLength = kDateStringLength + 1;
+static const std::uint32_t kDateStringLength = 10;
+static const std::uint32_t kDateStringBufferLength = kDateStringLength + 1;
 
-static const uint32 kDateTimeStringLength = 20;
-static const uint32 kDateTimeStringBufferLength = kDateTimeStringLength + 1;
+static const std::uint32_t kDateTimeStringLength = 20;
+static const std::uint32_t kDateTimeStringBufferLength = kDateTimeStringLength + 1;
 
 bool QDateWrapper::TimeIncluded() const {
   return hours_edit_ && minutes_edit_ && seconds_edit_;
@@ -50,8 +51,8 @@ void QDateWrapper::SetDateValidators(QObject* parent) {
   }
 }
 
-void QDateWrapper::SetDate(uint32 year, uint32 month, uint32 day,
-                           uint32 hours, uint32 minutes, uint32 seconds) {
+void QDateWrapper::SetDate(std::uint32_t year, std::uint32_t month, std::uint32_t day,
+                           std::uint32_t hours, std::uint32_t minutes, std::uint32_t seconds) {
   //  enforce some basics
   //  note we allow 0 for all 6 fields
   //  Note: no promise to validate specific dates.
@@ -82,7 +83,7 @@ void QDateWrapper::SetDate(uint32 year, uint32 month, uint32 day,
   }
 }
 
-void QDateWrapper::SetDate(uint32 year, uint32 month, uint32 day) {
+void QDateWrapper::SetDate(std::uint32_t year, std::uint32_t month, std::uint32_t day) {
   //  enforce some basics
   //  note we allow 0 for all 3 fields
   //  mainly used for terrain and vector assets
@@ -102,12 +103,12 @@ void QDateWrapper::SetDate(uint32 year, uint32 month, uint32 day) {
 //  where * is any single character separator.
 //  If any part of the date is invalid, we set it to 0000-00-00T00:00:00.
 void QDateWrapper::SetDate(const std::string& date) {
-  uint32 year = 0;
-  uint32 month = 0;
-  uint32 day = 0;
-  uint32 hours = 0;
-  uint32 minutes = 0;
-  uint32 seconds = 0;
+  std::uint32_t year = 0;
+  std::uint32_t month = 0;
+  std::uint32_t day = 0;
+  std::uint32_t hours = 0;
+  std::uint32_t minutes = 0;
+  std::uint32_t seconds = 0;
 
   if (date.size() >= 10) {
     std::string year_string = date.substr(0, 4);
@@ -147,17 +148,17 @@ std::string QDateWrapper::GetDate() const {
   std::string month_string = month_edit_->text().latin1();
   std::string day_string = day_edit_->text().latin1();
 
-  uint32 year = atoi(year_string.c_str());
-  uint32 month = atoi(month_string.c_str());
-  uint32 day = atoi(day_string.c_str());
+  std::uint32_t year = atoi(year_string.c_str());
+  std::uint32_t month = atoi(month_string.c_str());
+  std::uint32_t day = atoi(day_string.c_str());
 
   if (TimeIncluded()) {  //  Raster asset widget.
     std::string hours_string = hours_edit_->text().latin1();
     std::string minutes_string = minutes_edit_->text().latin1();
     std::string seconds_string = seconds_edit_->text().latin1();
-    uint32 hours = atoi(hours_string.c_str());
-    uint32 minutes = atoi(minutes_string.c_str());
-    uint32 seconds = atoi(seconds_string.c_str());
+    std::uint32_t hours = atoi(hours_string.c_str());
+    std::uint32_t minutes = atoi(minutes_string.c_str());
+    std::uint32_t seconds = atoi(seconds_string.c_str());
     char datetimebuffer[kDateTimeStringBufferLength];
     snprintf(datetimebuffer, kDateTimeStringBufferLength,
              "%04d-%02d-%02dT%02d:%02d:%02dZ", year,

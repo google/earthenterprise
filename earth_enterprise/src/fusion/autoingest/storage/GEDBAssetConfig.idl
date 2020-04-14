@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,9 +14,9 @@
 // limitations under the License.
 
 
+#include <cstdint>
 #include <string>
 #include <vector>
-#include <khTypes.h>
 #include <searchtabs/.idl/SearchTabs.h>
 #requiresgetheapusage
 
@@ -30,7 +31,7 @@ class GEDBAssetConfig {
   std::string terrain_project_;
   // TODO: deprecate search_tabs_.
   std::vector<SearchTabDefinition> search_tabs_;
-  uint database_version_;
+  unsigned int database_version_;
   deprecated bool search_tabs_enabled_ = true;
   deprecated std::string fusion_version_ = std::string();
 

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,7 +28,7 @@ namespace geindexgen {
 template <class IndexEntry>
 PacketReader<IndexEntry>::PacketReader(
     geFilePool &file_pool, const std::string &packetfile,
-    uint32 file_number, uint32 version, uint32 channel, Operation op) :
+    std::uint32_t file_number, std::uint32_t version, std::uint32_t channel, Operation op) :
     packet_filename_(packetfile),
     reader_(TransferOwnership(
                 new PacketIndexReader(
@@ -48,15 +49,15 @@ PacketReader<IndexEntry>::~PacketReader(void)
 
 
 template <class IndexEntry>
-uint32 PacketReader<IndexEntry>::ReadNextN(MergeEntry *entries, uint32 count,
+ std::uint32_t PacketReader<IndexEntry>::ReadNextN(MergeEntry *entries, std::uint32_t count,
                                            LittleEndianReadBuffer &buffer) {
   PacketIndexEntry packet_entries[count];
-  uint32 num_read = reader_->ReadNextN(packet_entries, count, buffer);
+  std::uint32_t num_read = reader_->ReadNextN(packet_entries, count, buffer);
   if (num_read == 0) {
     throw khException("Internal Error: PacketReader::ReadNextN failed");
   }
 
-  for (uint i = 0; i < num_read; ++i) {
+  for (unsigned int i = 0; i < num_read; ++i) {
     AssignMergeEntry(entries[i], packet_entries[i]);
   }
 
@@ -65,7 +66,7 @@ uint32 PacketReader<IndexEntry>::ReadNextN(MergeEntry *entries, uint32 count,
 
 
 template <class IndexEntry>
-uint64 PacketReader<IndexEntry>::NumPackets(void) const {
+ std::uint64_t PacketReader<IndexEntry>::NumPackets(void) const {
   return reader_->NumPackets();
 }
 

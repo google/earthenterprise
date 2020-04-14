@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +37,8 @@ class khTask
 
   // information about the task
   std::string              verref_;
-  uint32                   taskid_;
-  int32                    priority_;
+  std::uint32_t                   taskid_;
+  std::int32_t                    priority_;
   TaskDef                  taskdef_;
   TaskRequirements         requirements;
   std::vector<std::string> boundOutfiles;
@@ -91,8 +92,8 @@ class khTask
 
   // accessors
   std::string     verref(void) const throw() { return verref_; }
-  uint32          taskid(void) const throw() { return taskid_; }
-  int32         priority(void) const throw() { return priority_; }
+  std::uint32_t          taskid(void) const throw() { return taskid_; }
+  std::int32_t         priority(void) const throw() { return priority_; }
   const TaskDef &taskdef(void) const throw() { return taskdef_; }
   time_t      submitTime(void) const throw() { return submitTime_;}
   time_t      beginTime(void) const throw()  { return beginTime_;}

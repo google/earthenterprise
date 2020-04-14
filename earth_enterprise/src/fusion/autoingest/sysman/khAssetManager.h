@@ -91,7 +91,7 @@ class khAssetManager : public khAssetManagerInterface
                                         AssetDefs::State state) override;
   virtual void NotifyVersionProgress(const SharedString &ref, double progress) override;
   void SubmitTask(const SharedString &verref, const TaskDef &taskdef,
-                  int32 priority = 0);
+                  std::int32_t priority = 0);
   void DeleteTask(const std::string &verref);
   void DeleteFile(const std::string &path) {
     pendingFileDeletes.push_back(path);

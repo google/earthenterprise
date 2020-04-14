@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +32,7 @@ typedef khRefGuard<gstRecordJSContextImpl> gstRecordJSContext;
 
 class gstRecordJSContextImpl : public khRefCounter {
  public:
-  static const uint MaxNumProperties;
+  static const unsigned int MaxNumProperties;
 
   static gstRecordJSContext Create(const gstHeaderHandle &header,
                                    const QStringList &contextScripts,

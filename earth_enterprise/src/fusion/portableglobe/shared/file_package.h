@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,13 +50,13 @@ namespace fusion_portableglobe {
 class PackageFileLoc {
  public:
   PackageFileLoc() { }
-  PackageFileLoc(uint64 offset, uint64 size)
+  PackageFileLoc(std::uint64_t offset, std::uint64_t size)
       : offset_(offset), size_(size) { }
-  uint64 Offset() const { return offset_; }
-  uint64 Size() const { return size_; }
+  std::uint64_t Offset() const { return offset_; }
+  std::uint64_t Size() const { return size_; }
  private:
-  uint64 offset_;
-  uint64 size_;
+  std::uint64_t offset_;
+  std::uint64_t size_;
 };
 
 /**
@@ -96,13 +97,13 @@ class Package {
   /**
    * Calculate crc for the given file.
    */
-  static uint32 CalculateCrc(std::string file_path,
-                             uint64 bytes_at_end_to_discard = kCrcSize);
+  static std::uint32_t CalculateCrc(std::string file_path,
+                             std::uint64_t bytes_at_end_to_discard = kCrcSize);
 
   /**
    * Read crc for given file from the file.
    */
-  static uint32 ReadCrc(std::string file_path);
+  static std::uint32_t ReadCrc(std::string file_path);
 
   /**
    * Read version string from the file.
@@ -112,7 +113,7 @@ class Package {
   /**
    * Returns size of file.
    */
-  static uint64 FileSize(std::string file_path);
+  static std::uint64_t FileSize(std::string file_path);
 };
 
 // We know that CRC calculator calculates in chunks of 4 bytes and ignores the
@@ -130,13 +131,13 @@ class IncrementalCrcCalculator {
  public:
   IncrementalCrcCalculator();
   void CalculateCrc(const char* buffer, size_t buffer_size);
-  uint32 GetCrc() const { return crc_; }
+  std::uint32_t GetCrc() const { return crc_; }
   std::string GetRemainingBytes() const { return remaining_bytes_; }
-  void SetCrc(uint32 crc) { crc_ = crc; }
+  void SetCrc(std::uint32_t crc) { crc_ = crc; }
   void SetRemainingBytes(const std::string str) { remaining_bytes_ = str; }
  private:
   std::string remaining_bytes_;
-  uint32 crc_;
+  std::uint32_t crc_;
 };
 
 }  // namespace fusion_portableglobe

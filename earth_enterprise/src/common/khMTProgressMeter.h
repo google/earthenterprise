@@ -31,19 +31,19 @@ class khMTProgressMeter {
   khMutex         lock;
 
  public:
-  khMTProgressMeter(int64 totalSteps, const QString &desc_ = "tiles")
+  khMTProgressMeter(std::int64_t totalSteps, const QString &desc_ = "tiles")
       : impl(totalSteps, desc_)
   { }
 
-  inline void incrementDone(int64 delta = 1) {
+  inline void incrementDone(std::int64_t delta = 1) {
     khLockGuard guard(lock);
     impl.incrementDone(delta);
   }
-  inline void incrementSkipped(int64 delta = 1) {
+  inline void incrementSkipped(std::int64_t delta = 1) {
     khLockGuard guard(lock);
     impl.incrementSkipped(delta);
   }
-  inline void incrementTotal(int64 delta) {
+  inline void incrementTotal(std::int64_t delta) {
     khLockGuard guard(lock);
     impl.incrementTotal(delta);
   }

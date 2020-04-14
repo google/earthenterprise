@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,14 +20,14 @@
 
 CPLErr
 khGDALBuffer::Read(GDALDataset *srcDS,
-                   const khExtents<uint32> &srcExtents)
+                   const khExtents<std::uint32_t> &srcExtents)
 {
   // convert some of my args to GDAL format
   std::vector<int> gdalBands(bands.size());
-  for (uint b = 0; b < bands.size(); ++b) {
+  for (unsigned int b = 0; b < bands.size(); ++b) {
     gdalBands[b] = bands[b]+1;
   }
-  uint pixelSize = khTypes::StorageSize(pixelType);
+  unsigned int pixelSize = khTypes::StorageSize(pixelType);
   GSpacing nPixelSpace = pixelStep * pixelSize;
   GSpacing nLineSpace  = lineStep  * pixelSize;
   GSpacing nBandSpace  = bandStep  * pixelSize;

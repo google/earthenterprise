@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,8 +28,8 @@ PacketFileAdaptingTraverserBase<TypedBucket>::PacketFileAdaptingTraverserBase(
     geFilePool &file_pool,
     const std::string &merge_source_name,
     TypedEntry::TypeEnum type,
-    uint32 version,
-    uint32 channel,
+    std::uint32_t version,
+    std::uint32_t channel,
     const std::string packetfile) :
     AdaptingTraverserBase<TypedBucket>(merge_source_name, type),
     packet_index_reader_(

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -36,9 +37,9 @@ class PrefsConfig {
 
   bool warnOnBadGfxMode = true;
 
-  std::vector<uint> selectOutlineColor = std::vector<uint>(4, 255);
-  std::vector<uint> selectFillColor = std::vector<uint>(4, 0);
-  uint selectOutlineLineWidth = 1U;
+  std::vector< unsigned int>  selectOutlineColor = std::vector< unsigned int> (4, 255);
+  std::vector< unsigned int>  selectFillColor = std::vector< unsigned int> (4, 0);
+  unsigned int selectOutlineLineWidth = 1U;
 
   QString backgroundImageryProject = QString("");
   QString backgroundImageryProjectMercator = QString("");

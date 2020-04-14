@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -67,9 +68,9 @@ int main(int argc, char **argv) {
     std::string outdir;
     std::string stackfilename;
     std::string delta;
-    uint batch_size = geindexgen::kDefaultMergeSessionSize;
-    uint queue_size = 500;
-    uint num_writer_threads = 2;
+    unsigned int batch_size = geindexgen::kDefaultMergeSessionSize;
+    unsigned int queue_size = 500;
+    unsigned int num_writer_threads = 2;
 
     // QTPacket is invalid sentinal
     geindex::TypedEntry::TypeEnum type =

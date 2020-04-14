@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -135,7 +136,7 @@ Grid::Grid(const double west_origin, const double south_origin)
   // Dimension size = 2 ^ level
   // Valid levels are 0 through 24 
   level_dim_sizes_.resize(MAX_LEVEL + 1);
-  for (uint32 level = 0; level <= MAX_LEVEL; ++level) {
+  for (std::uint32_t level = 0; level <= MAX_LEVEL; ++level) {
     level_dim_sizes_[level] = static_cast<double>(1L << level);
   }
 }
@@ -266,7 +267,7 @@ void Grid::CalculateQuadtreeNodesForPolygon(int max_level,
 
   // Calculate east offset for qt node resolution at max level.
   // Add 1 to move to the east side of the last qt node.
-  int32 east_offset = ceil(
+  std::int32_t east_offset = ceil(
       (polygon_east_boundary_ - west_origin_) * qtnodes_per_degree_);
   // Set quadtree east boundary to nearest qtnode boundary at max level.
   east_boundary_ = static_cast<double>(east_offset) / qtnodes_per_degree_
@@ -274,14 +275,14 @@ void Grid::CalculateQuadtreeNodesForPolygon(int max_level,
 
   // Calculate north offset for qt node resolution at max level.
   // Add 1 to move to the north side of the last qt node.
-  int32 north_offset = ceil(
+  std::int32_t north_offset = ceil(
       (polygon_north_boundary_ - south_origin_ + 90.0) * qtnodes_per_degree_);
   // Set quadtree north boundary to nearest qtnode boundary at max level.
   north_boundary_ = static_cast<double>(north_offset) / qtnodes_per_degree_
       + south_origin_ - 90.0;
 
   // Calculate south offset for qt node resolution at max level.
-  int32 south_offset = floor(
+  std::int32_t south_offset = floor(
       (polygon_south_boundary_ - south_origin_ + 90.0) * qtnodes_per_degree_);
   // Set quadtree south boundary to nearest qtnode boundary at max level.
   south_boundary_ = static_cast<double>(south_offset) / qtnodes_per_degree_
@@ -420,7 +421,7 @@ bool Grid::OutputQuadtreeNodesOverlappingPolygon(const std::string& base_path,
 
   // If one or more is not in the polygon, then output the addresses of the
   // ones that are in the polygon because we are as low as we can go.
-  // TODO: Consider outputting int64 qtpaths instead.
+  // TODO: Consider outputting std::int64_t qtpaths instead.
   if (node0) {
     out << path + '0' << std::endl;
   }
@@ -447,12 +448,12 @@ bool Grid::OutputQuadtreeNodesOverlappingPolygon(const std::string& base_path,
  * the stored adjusted column crossings.
  */
 bool Grid::IsLocationInPolygon(double x, double y) {
-  int32 row;
-  int32 col;
+  std::int32_t row;
+  std::int32_t col;
   ConvertToLevelCoordinates(x, y, &col, &row);
 
   // Double check, but shouldn't be possible.
-  if ((col < 0) || (col >= static_cast<int32>(col_crossings_.size()))) {
+  if ((col < 0) || (col >= static_cast<std::int32_t>(col_crossings_.size()))) {
     return false;
   }
 
@@ -576,8 +577,8 @@ void Grid::ConvertToLocal(Vertex* point) {
  */
 void Grid::ConvertToLevelCoordinates(double x,
                                      double y,
-                                     int32* col,
-                                     int32* row) {
+                                     std::int32_t* col,
+                                     std::int32_t* row) {
   double y_norm;
   if (is_mercator_) {
     // Get y in radians and convert to degrees.
@@ -585,10 +586,10 @@ void Grid::ConvertToLevelCoordinates(double x,
   } else {
     y_norm = y;
   }
-  *row = static_cast<int32>(floor(
+  *row = static_cast<std::int32_t>(floor(
       (y_norm - south_origin_ + 90.0)
       * qtnodes_per_degree_));
-  *col = static_cast<int32>(floor(
+  *col = static_cast<std::int32_t>(floor(
       (x - west_boundary_) * qtnodes_per_degree_));
 }
 
@@ -598,8 +599,8 @@ void Grid::ConvertToLevelCoordinates(double x,
 void Grid::CalculateColCrossings() {
   // Initialize the vertices for the polygon perimeter.
   std::vector<Vertex>* vertices = polygon->Vertices();
-  int32 col;
-  int32 row;
+  std::int32_t col;
+  std::int32_t row;
   ConvertToLevelCoordinates(
       (*vertices)[0].x_, (*vertices)[0].y_, &col, &row);
   StartPolygon(col, row);
@@ -635,7 +636,7 @@ void Grid::AddSpansToColCrossings() {
     }
 
     for (size_t j = 0; j < col_crossings_[i].size(); ++j) {
-      int32 crossing = col_crossings_[i][j];
+      std::int32_t crossing = col_crossings_[i][j];
       for (size_t k = 0; k < col_spans_[i].size(); ++k) {
         // Look for a crossing touching a span.
         if ((crossing >= col_spans_[i][k].start - 1) &&
@@ -670,7 +671,7 @@ void Grid::AddSpansToColCrossings() {
 /**
  * Initializes variables for traversing the perimeter of the polygon.
  */
-void Grid::StartPolygon(const int32 start_col, const int32 start_row) {
+void Grid::StartPolygon(const std::int32_t start_col, const std::int32_t start_row) {
   first_dx_ = 0;
   last_dx_ = 0;
 
@@ -694,10 +695,10 @@ void Grid::StartPolygon(const int32 start_col, const int32 start_row) {
  * differ slightly from what you would get using absolute coordinates.
  * However, values should never differ by more than one "pixel."
  */
-void Grid::NextPolygonEdge(const int32 dest_col, const int32 dest_row) {
+void Grid::NextPolygonEdge(const std::int32_t dest_col, const std::int32_t dest_row) {
   double dx = static_cast<double>(dest_col - current_col_);
   double dy = static_cast<double>(dest_row - current_row_);
-  int32 step = 1;
+  std::int32_t step = 1;
 
   double x = static_cast<double>(current_col_);
   double y = static_cast<double>(current_row_);
@@ -753,8 +754,8 @@ void Grid::NextPolygonEdge(const int32 dest_col, const int32 dest_row) {
       step = -1;
     }
 
-    int32 last_row0 = current_row_;
-    int32 last_col0 = current_col_;
+    std::int32_t last_row0 = current_row_;
+    std::int32_t last_col0 = current_col_;
     while (true) {
       AddColCrossing(current_col_, current_row_);
       if (current_row_ == dest_row) {
@@ -828,7 +829,7 @@ void Grid::ShowColSpans() {
  * Adds a column crossing for the last column and row if the column changed.
  * Keeps track of what the last column and row were.
  */
-void Grid::AddColCrossing(const int32 col, const int32 row) {
+void Grid::AddColCrossing(const std::int32_t col, const std::int32_t row) {
   // If we have changed columns, mark a crossing in the last column.
   if (last_col_ != col) {
     // If moving in same direction, add row once.
@@ -867,7 +868,7 @@ void Grid::AddColCrossing(const int32 col, const int32 row) {
  * Adds a vertical span. If a span extends the previous span (i.e. because
  * a vertex was reached within a longer span), combines the two spans together.
  */
-void Grid::AddSpan(const int32 col, const int32 row0, const int32 row1) {
+void Grid::AddSpan(const std::int32_t col, const std::int32_t row0, const std::int32_t row1) {
   Span span;
 
   if (row0 < row1) {

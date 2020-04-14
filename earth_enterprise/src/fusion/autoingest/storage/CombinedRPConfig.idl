@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,8 +14,8 @@
 // limitations under the License.
 
 
+#include <cstdint>
 #include <string>
-#include <khTypes.h>
 #include <khMetaData.h>
 #include <autoingest/.idl/storage/MaskgenConfig.h>
 #include <autoingest/.idl/storage/MosaicConfig.h>
@@ -39,7 +40,7 @@ class RasterProductConfig;
 class CombinedRPConfig {
   enum MaskMode { NoMask, HaveMask, AutoMask };
 
-  uint32        fuid_resource_ = uint32(0);
+  std::uint32_t        fuid_resource_ = std::uint32_t(0);
   MaskMode          mask_mode_ = CombinedRPConfig::AutoMask;
   bool      source_is_product_ = false;
   bool              need_khvr_ = false;
@@ -50,11 +51,11 @@ class CombinedRPConfig {
 #pragma GenerateIsUpToDate
 
 #hquote
-  CombinedRPConfig(uint32 num_sources, const RasterProductConfig &rpconfig);
+  CombinedRPConfig(std::uint32_t num_sources, const RasterProductConfig &rpconfig);
 #/hquote
 
 #cppquote
-CombinedRPConfig::CombinedRPConfig(uint32 num_sources,
+CombinedRPConfig::CombinedRPConfig(std::uint32_t num_sources,
                                    const RasterProductConfig &rpc) {
   fuid_resource_ = rpc.fuid_resource_;
   mask_mode_ = rpc.nomask ? NoMask : (rpc.havemask ? HaveMask : AutoMask);

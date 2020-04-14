@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,7 +33,7 @@
 #include <khraster/khRasterProduct.h>
 
 
-uint64
+std::uint64_t
 GetMaskSizeEstimate(const std::string &maskfile,
                     const std::string &datafile)
 {
@@ -68,11 +69,11 @@ GetMaskSizeEstimate(const std::string &maskfile,
   }
 
 
-  khSize<uint32> rasterSize = srcDS.normalizedRasterSize();
+  khSize<std::uint32_t> rasterSize = srcDS.normalizedRasterSize();
   // LZ compression will normally be about 10x or more. we'll assume 2x
-  return ((uint64)rasterSize.width *
-          (uint64)rasterSize.height *
-          1 * sizeof(uchar)) / 2;
+  return ((std::uint64_t)rasterSize.width *
+          (std::uint64_t)rasterSize.height *
+          1 * sizeof(unsigned char)) / 2;
 
 
 }
@@ -91,7 +92,7 @@ KRMPAssetVersionImplD::DoSubmitTask(void)
   }
 
   // Estimate resultant product size
-  uint64 sizeEstimate = 0;
+  std::uint64_t sizeEstimate = 0;
   sizeEstimate = GetMaskSizeEstimate(inputs[1], inputs[0]);
 
   task.AddOutput(WorkingFileRef("mask.kmp"),

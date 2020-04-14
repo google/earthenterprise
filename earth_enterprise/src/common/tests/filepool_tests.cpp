@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -162,14 +163,14 @@ class geFilePoolUnitTest : public UnitTest<geFilePoolUnitTest> {
       }
 
       {
-        uint64 size;
+        std::uint64_t size;
         time_t mtime;
         if (!khGetFileInfo(tmpfile.name(), size, mtime)) {
           fprintf(stderr,
                   "Unable to get filesize during TestOffsetWriteRead\n");
           return false;
         }
-        if (int64(size) != int64(offset + testdata.size())) {
+        if (std::int64_t(size) != std::int64_t(offset + testdata.size())) {
           fprintf(stderr,
                   "File is wrong size during TestOffsetWriteRead: "
                   "%lld != %lld\n",
@@ -230,7 +231,7 @@ class geFilePoolUnitTest : public UnitTest<geFilePoolUnitTest> {
     std::string testdata1("01234567890");
     std::string testdata2("3333333333333333333");
     std::string testdata3("76876876786876");
-    uint fdlimit = 2;
+    unsigned int fdlimit = 2;
     geFilePool theFilePool(fdlimit);
 
     if (!khWriteStringToFile(tmpfile1.name(), testdata1)) {
@@ -260,7 +261,7 @@ class geFilePoolUnitTest : public UnitTest<geFilePoolUnitTest> {
     std::string readString4;
     readString4.resize(testdata1.size());
     try {
-      for (uint i = 0 ; i < 100 ; ++i) {
+      for (unsigned int i = 0 ; i < 100 ; ++i) {
         reader1.Pread(&readString1[0], testdata1.size(), 0);
         reader2.Pread(&readString2[0], testdata2.size(), 0);
         reader3.Pread(&readString3[0], testdata3.size(), 0);
@@ -299,7 +300,7 @@ class geFilePoolUnitTest : public UnitTest<geFilePoolUnitTest> {
     khTmpFileGuard tmpfile2;// makes a tmpfile and deletes it when we leave
     std::string testdata1("01234567890");
     std::string testdata2("3333333333333333333");
-    uint fdlimit = 1;
+    unsigned int fdlimit = 1;
     geFilePool theFilePool(fdlimit);
 
     if (!khWriteStringToFile(tmpfile1.name(), testdata1)) {
@@ -319,7 +320,7 @@ class geFilePoolUnitTest : public UnitTest<geFilePoolUnitTest> {
     std::string readString3;
     readString3.resize(testdata1.size());
     try {
-      for (uint i = 0 ; i < 100 ; ++i) {
+      for (unsigned int i = 0 ; i < 100 ; ++i) {
         geFilePool::Reader reader1(theFilePool, tmpfile1.name());
         reader1.Pread(&readString1[0], testdata1.size(), 0);
         geFilePool::Reader reader2(theFilePool, tmpfile2.name());
@@ -387,7 +388,7 @@ class geFilePoolUnitTest : public UnitTest<geFilePoolUnitTest> {
   bool TestWriteFdLimit() {
     khTmpFileGuard tmpfile1;// makes a tmpfile and deletes it when we leave
     khTmpFileGuard tmpfile2;// makes a tmpfile and deletes it when we leave
-    uint fdlimit = 1;
+    unsigned int fdlimit = 1;
     geFilePool theFilePool(fdlimit);
 
     try {
@@ -419,7 +420,7 @@ class geFilePoolUnitTest : public UnitTest<geFilePoolUnitTest> {
   static void ThreadRead1(geFilePool *pool,
                          const std::string &fname) {
     try {
-      uint32 size = 1024UL*1024UL*100UL;
+      std::uint32_t size = 1024UL*1024UL*100UL;
       std::vector<char> buf(size);
 
       fprintf(stderr, "\tThreadRead1: Creating reader ...\n");
@@ -434,7 +435,7 @@ class geFilePoolUnitTest : public UnitTest<geFilePoolUnitTest> {
   static void ThreadRead2(geFilePool *pool,
                          const std::string &fname) {
     try {
-      uint32 size = 1024UL*1024UL*100UL;
+      std::uint32_t size = 1024UL*1024UL*100UL;
       std::vector<char> buf(size);
 
       fprintf(stderr, "\tThreadRead2: Creating reader ...\n");
@@ -448,9 +449,9 @@ class geFilePoolUnitTest : public UnitTest<geFilePoolUnitTest> {
   }
 
   bool TestThreadedReadFdLimit() {
-    uint fdlimit = 1;
+    unsigned int fdlimit = 1;
     geFilePool theFilePool(fdlimit);
-    uint32 size = 1024UL*1024UL*100UL;
+    std::uint32_t size = 1024UL*1024UL*100UL;
     khTmpFileGuard tmpfile1;// makes a tmpfile and deletes it when we leave
     khTmpFileGuard tmpfile2;// makes a tmpfile and deletes it when we leave
     {
@@ -578,7 +579,7 @@ class geFilePoolUnitTest : public UnitTest<geFilePoolUnitTest> {
     // This test sets the operating system file limit to a low value,
     // and then opens more files than the limit to make sure we're
     // observing it.
-    uint32 open_fd_count = khCountFilesInDir("/proc/self/fd");
+    std::uint32_t open_fd_count = khCountFilesInDir("/proc/self/fd");
     if (open_fd_count == 0) {
       notify(NFY_WARN,
              "TestOSFdLimit: khCountFilesInDir(\"/proc/self/fd\") returned 0");

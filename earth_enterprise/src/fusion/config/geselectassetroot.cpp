@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -140,7 +141,7 @@ void SelectAssetRoot(const AssetRootStatus &status,
                      const std::string &username,
                      const std::string &groupname,
                      Role role,
-                     uint32 numcpus,
+                     std::uint32_t numcpus,
                      bool noprompt) {
   // This will throw an exception if the systemrc file does not exist.
   Systemrc systemrc;
@@ -227,7 +228,7 @@ int main(int argc, char *argv[]) {
     std::string username = Systemrc::FusionUsername();
     std::string groupname = Systemrc::UserGroupname();
     Role role    = RoleMaster;
-    uint32 numcpus = CommandlineNumCPUsDefault();
+    std::uint32_t numcpus = CommandlineNumCPUsDefault();
     int argn;
     bool noprompt = false;
 
@@ -241,7 +242,7 @@ int main(int argc, char *argv[]) {
                           "master", RoleMaster,
                           "slave",  RoleSlave));
     options.opt("numcpus", numcpus,
-                &khGetopt::RangeValidator<uint32, 1, kMaxNumJobsLimit>);
+                &khGetopt::RangeValidator<std::uint32_t, 1, kMaxNumJobsLimit>);
 
     options.setExclusiveRequired("lock", "unlock", "assetroot");
 

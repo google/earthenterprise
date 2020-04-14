@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,15 +25,15 @@
 // ****************************************************************************
 // ***  Given four pixels - how do I weight them to make another
 // ****************************************************************************
-template <uint weightLL, uint weightLR, uint weightUL, uint weightUR>
+template <unsigned int weightLL, unsigned int weightLR, unsigned int weightUL, unsigned int weightUR>
 class PixelWeighting2By2
 {
  public:
-  static const uint WeightLL = weightLL;
-  static const uint WeightLR = weightLR;
-  static const uint WeightUL = weightUL;
-  static const uint WeightUR = weightUR;
-  static const uint TotalWeight = WeightLL + WeightLR + WeightUL + WeightUR;
+  static const unsigned int WeightLL = weightLL;
+  static const unsigned int WeightLR = weightLR;
+  static const unsigned int WeightUL = weightUL;
+  static const unsigned int WeightUR = weightUR;
+  static const unsigned int TotalWeight = WeightLL + WeightLR + WeightUL + WeightUR;
 };
 
 // ****************************************************************************
@@ -44,7 +45,7 @@ class PixelWeighting2By2
 // ***  magnification.  All of this should be inlined away, resulting in a
 // ***  loop as effient as if it had been hand coded.
 // ****************************************************************************
-template <class T, class PixelWeighting, uint numcomp>
+template <class T, class PixelWeighting, unsigned int numcomp>
 class WeightedPixelAverager { };
 
 // specialized for numcomp == 1
@@ -53,12 +54,12 @@ class WeightedPixelAverager<T, PixelWeighting, 1>
 {
  public:
   inline static void Average(T *const dest[],
-                             uint32 to,
+                             std::uint32_t to,
                              const T *const src[],
-                             uint32 from1,
-                             uint32 from2,
-                             uint32 from3,
-                             uint32 from4) {
+                             std::uint32_t from1,
+                             std::uint32_t from2,
+                             std::uint32_t from3,
+                             std::uint32_t from4) {
     typedef typename khCalcHelper<T>::AccumType AccumType;
     dest[0][to] =
       (T) ((((AccumType)src[0][from1] * PixelWeighting::WeightLL) +
@@ -75,12 +76,12 @@ class WeightedPixelAverager<T, PixelWeighting, 3>
 {
  public:
   inline static void Average(T *const dest[],
-                             uint32 to,
+                             std::uint32_t to,
                              const T *const src[],
-                             uint32 from1,
-                             uint32 from2,
-                             uint32 from3,
-                             uint32 from4) {
+                             std::uint32_t from1,
+                             std::uint32_t from2,
+                             std::uint32_t from3,
+                             std::uint32_t from4) {
     typedef typename khCalcHelper<T>::AccumType AccumType;
     dest[0][to] =
       (T) ((((AccumType)src[0][from1] * PixelWeighting::WeightLL) +
@@ -191,7 +192,7 @@ ImageryMagnifyWeighting;
 template <class MagnifyWeighting, class TileType>
 void
 MagnifyQuadrant_ImageryAlpha(TileType &destTile,
-                             const TileType &srcTile, uint quad)
+                             const TileType &srcTile, unsigned int quad)
 {
 
   // use 'quad' to determine the offsets into the source tile
@@ -199,34 +200,34 @@ MagnifyQuadrant_ImageryAlpha(TileType &destTile,
   //                    1 : miny, maxx
   //                    2 : maxy, minx
   //                    3 : maxy, maxx
-  const uint beginSrcX = (quad & 0x1) ? TileType::TileWidth/2 : 0;
-  const uint endSrcX   = beginSrcX + TileType::TileWidth/2;
-  const uint beginSrcY = (quad & 0x2) ? TileType::TileHeight/2 : 0;
-  const uint endSrcY   = beginSrcY + TileType::TileHeight/2;
+  const unsigned int beginSrcX = (quad & 0x1) ? TileType::TileWidth/2 : 0;
+  const unsigned int endSrcX   = beginSrcX + TileType::TileWidth/2;
+  const unsigned int beginSrcY = (quad & 0x2) ? TileType::TileHeight/2 : 0;
+  const unsigned int endSrcY   = beginSrcY + TileType::TileHeight/2;
 
   // offset variables that represent where we write the results
-  uint32 to0 = 0;
-  uint32 to1 = TileType::TileWidth;
+  std::uint32_t to0 = 0;
+  std::uint32_t to1 = TileType::TileWidth;
 
   // traverse each row in the source quadrant
-  for (uint srcY = beginSrcY; srcY < endSrcY; ++srcY) {
+  for (unsigned int srcY = beginSrcY; srcY < endSrcY; ++srcY) {
     // calculate the buffer offset for the 3 source rows we'll use
-    uint32 thisOffY = srcY*TileType::TileWidth;
-    uint32 prevOffY = (srcY==0)
+    std::uint32_t thisOffY = srcY*TileType::TileWidth;
+    std::uint32_t prevOffY = (srcY==0)
                       ? thisOffY  // clamp bottom
                       : thisOffY-TileType::TileWidth;
-    uint32 nextOffY = (srcY==TileType::TileHeight-1)
+    std::uint32_t nextOffY = (srcY==TileType::TileHeight-1)
                       ? thisOffY  // clamp top
                       : thisOffY+TileType::TileWidth;
 
     // traverse each column in the source quadrant
-    for (uint srcX = beginSrcX; srcX < endSrcX; ++srcX) {
+    for (unsigned int srcX = beginSrcX; srcX < endSrcX; ++srcX) {
       // calculate the buffer offset for the 3 source columns we'll use
-      uint32 thisOffX   = srcX;
-      uint32 prevOffX = (srcX==0)
+      std::uint32_t thisOffX   = srcX;
+      std::uint32_t prevOffX = (srcX==0)
                         ? thisOffX  // clamp left
                         : thisOffX-1;
-      uint32 nextOffX = (srcX==TileType::TileWidth-1)
+      std::uint32_t nextOffX = (srcX==TileType::TileWidth-1)
                         ? thisOffX  // clamp right
                         : thisOffX+1;
 

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -35,7 +36,7 @@ TileResampler::TileResampler(int tile_width, int num_channels, bool is_png)
   if (is_png_) {
     // Note: We don't want to handle endian-ness here since we do not need to
     // unpack RGBA tuples.
-    const uint png_byte_order_option = 0;
+    const unsigned int png_byte_order_option = 0;
     compressor_ = NewPNGCompressor(
         tile_width_, tile_width_, num_channels_, png_byte_order_option);
   } else {
@@ -65,7 +66,7 @@ bool TileResampler::ResampleTileInBuffer(
   if (ResampleTileHelper(input_buffer, count, qpath_parent, qpath_child)) {
     // Compress the tile and copy it into our buffer.
     char* result_buffer = static_cast<char*>(&(result_buffer_[0]));
-    uint32 count_compressed = compressor_->compress(result_buffer);
+    std::uint32_t count_compressed = compressor_->compress(result_buffer);
 
     // Copy the compressed result back into the read buffer.
     buffer->SetValueFromBuffer(compressor_->data(), count_compressed);
@@ -84,7 +85,7 @@ bool TileResampler::ResampleTileInString(
   if (ResampleTileHelper(input_buffer, count, qpath_parent, qpath_child)) {
     // Compress the tile and copy it into our buffer.
     char* result_buffer = static_cast<char*>(&(result_buffer_[0]));
-    uint32 count_compressed = compressor_->compress(result_buffer);
+    std::uint32_t count_compressed = compressor_->compress(result_buffer);
 
     // Copy the compressed result back into the read buffer.
     buffer->assign(compressor_->data(), count_compressed);
@@ -120,11 +121,11 @@ bool TileResampler::ResampleTileHelper(char* input_buffer,
     }
   }
 
-  uint32 count_raw = compressor_->decompress(input_buffer, count, raw_buffer);
+  std::uint32_t count_raw = compressor_->decompress(input_buffer, count, raw_buffer);
 
   // Make sure the raw byte count is correct.
-  if ((count_raw != static_cast<uint32>(raw_buffer_.size())) ||
-      (count_raw != static_cast<uint32>(result_buffer_.size()))) {
+  if ((count_raw != static_cast<std::uint32_t>(raw_buffer_.size())) ||
+      (count_raw != static_cast<std::uint32_t>(result_buffer_.size()))) {
     return false;  // Our assumption is wrong about tile size, return false.
   }
 

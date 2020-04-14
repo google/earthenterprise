@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +47,7 @@ class QuadExporterBase {
   khProgressMeter *progress;
 
   // all the parallel arrays below have this same size
-  const uint numSets;
+  const unsigned int numSets;
 
   // Holds information about which filters contribute to the target level
   // Note: this is a ref to a single vector that get's modified/restored
@@ -89,8 +90,8 @@ class QuadExporterBase {
   // This is called from inside tight loops. Mark it as inline and leave it
   // in the header with the hopes that the compiler is realy smart enough to
   // inline it.
-  inline void TryToClearSets(uint32 row, uint32 col) {
-    for (uint i = 0; i < numSets; ++i) {
+  inline void TryToClearSets(std::uint32_t row, std::uint32_t col) {
+    for (unsigned int i = 0; i < numSets; ++i) {
       if (useSets[i]) {
         if ((cov.level > kMaxLevelForBuildPresenceMask ||
              (*buildset_indexes_)[i]->GetEstimatedPresence(
@@ -116,7 +117,7 @@ class QuadExporterBase {
   void RestoreCleared(void);
 
  public:
-  inline bool Contains(uint32 row, uint32 col) {
+  inline bool Contains(std::uint32_t row, std::uint32_t col) {
     return cov.extents.ContainsRowCol(row, col);
   }
   virtual ~QuadExporterBase(void) { }
@@ -127,7 +128,7 @@ class QuadExporterBase {
                    bool *need_lod,
                    const khLevelCoverage &c);
 
-  virtual bool ExportQuad(uint32 row, uint32 col) = 0;
+  virtual bool ExportQuad(std::uint32_t row, std::uint32_t col) = 0;
 };
 
 
@@ -149,8 +150,8 @@ class MinifiedQuadExporter : public QuadExporterBase {
   // This is called from inside tight loops. Mark it as inline and leave it
   // in the header with the hopes that the compiler is realy smart enough to
   // inline it.
-  inline void TryToSplitSets(uint32 row, uint32 col) {
-    for (uint i = 0; i < numSets; ++i) {
+  inline void TryToSplitSets(std::uint32_t row, std::uint32_t col) {
+    for (unsigned int i = 0; i < numSets; ++i) {
       if (useSets[i]) {
         if (cov.level == buildSets[i].geoIndex->MaxLevel()) {
           SplitSet(i, row, col);
@@ -159,7 +160,7 @@ class MinifiedQuadExporter : public QuadExporterBase {
     }
   }
 
-  void SplitSet(uint i, uint32 row, uint32 col);
+  void SplitSet(unsigned int i, std::uint32_t row, std::uint32_t col);
   void RestoreSplit(void);
 
  public:
@@ -167,7 +168,7 @@ class MinifiedQuadExporter : public QuadExporterBase {
                        const khLevelCoverage &c,
                        const khLevelCoverage &target_cov);
 
-  virtual bool ExportQuad(uint32 row, uint32 col);
+  virtual bool ExportQuad(std::uint32_t row, std::uint32_t col);
 };
 
 
@@ -175,7 +176,7 @@ class FullResQuadExporterPreStorage {
  public:
   std::vector<bool> use_sets;
 
-  explicit FullResQuadExporterPreStorage(uint numSets)
+  explicit FullResQuadExporterPreStorage(unsigned int numSets)
       : use_sets(numSets, true) { }
 };
 class FullResQuadExporter : private FullResQuadExporterPreStorage,
@@ -196,7 +197,7 @@ class FullResQuadExporter : private FullResQuadExporterPreStorage,
                       const khLevelCoverage &c,
                       JSDisplayBundle &jsbundle_);
 
-  virtual bool ExportQuad(uint32 row, uint32 col);
+  virtual bool ExportQuad(std::uint32_t row, std::uint32_t col);
 };
 
 

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@
 #include <string>
 #include <vector>
 #include "common/khTypes.h"
+#include <cstdint>
 
 namespace fusion_portableglobe {
 
@@ -210,26 +212,26 @@ class Grid {
   // which quadtree nodes are to be defined at.
 
   // Max level itself.
-  int32 max_level_;
+  std::int32_t max_level_;
   // Number of quadtree nodes in horizontal and vertical directions.
   double dim_size_;
   // Number of quadtree nodes per degree of latitude or longitude.
   double qtnodes_per_degree_;
   // Offset to polygon bounding box starting column.
-  int32 col_offset_;
+  std::int32_t col_offset_;
 
   // Values associated with determining the nodes that the polygon
   // overlaps.
 
   // Previous row where an overlapping quadtree node was detected.
-  int32 last_row_;
+  std::int32_t last_row_;
   // Previous column where an overlapping quadtree node was detected.
-  int32 last_col_;
+  std::int32_t last_col_;
 
   // Current row where an overlapping quadtree node is being processed.
-  int32 current_row_;
+  std::int32_t current_row_;
   // Current column where an overlapping quadtree node is being processed.
-  int32 current_col_;
+  std::int32_t current_col_;
 
   // Flag indicating that algorithm has moved to a new column.
   bool col_change_;
@@ -247,13 +249,13 @@ class Grid {
 
   // Struct used to store vertical spans of quadtree nodes.
   struct Span {
-    int32 start;
-    int32 end;
+    std::int32_t start;
+    std::int32_t end;
   };
 
   // Vector indexed by column giving a vector of rows where
   // the polygon perimeter crosses that column.
-  std::vector<std::vector<int32> > col_crossings_;
+  std::vector<std::vector<std::int32_t> > col_crossings_;
 
   // Because crossings are specified by a single row value, we
   // must also keep track of vertical spans of quadtree nodes within a
@@ -281,8 +283,8 @@ class Grid {
    */
   void ConvertToLevelCoordinates(double x,
                                  double y,
-                                 int32* col,
-                                 int32* row);
+                                 std::int32_t* col,
+                                 std::int32_t* row);
 
   /**
    * Calculates all of the column crossings for the polygon perimeter.
@@ -321,7 +323,7 @@ class Grid {
    * Initializes parameters for traversing the perimeter of the polygon to
    * determine column crossings.
    */
-  void StartPolygon(const int32 col, const int32 row);
+  void StartPolygon(const std::int32_t col, const std::int32_t row);
 
   /**
    * Processes next perimeter edge while traversing the perimeter of the
@@ -329,7 +331,7 @@ class Grid {
    * will be called before this called 2 or more times. EndPolygon should
    * be called after the final edge.
    */
-  void NextPolygonEdge(const int32 dest_col, const int32 dest_row);
+  void NextPolygonEdge(const std::int32_t dest_col, const std::int32_t dest_row);
 
   /**
    * Does final processing for traversing the perimeter of the polygon to
@@ -340,13 +342,13 @@ class Grid {
   /**
    * Adds a column crossing for the given column at the given row.
    */
-  void AddColCrossing(const int32 col, const int32 row);
+  void AddColCrossing(const std::int32_t col, const std::int32_t row);
 
   /**
    * Adds a vertical span for the given column between the two
    * given rows inclusive.
    */
-  void AddSpan(const int32 col, const int32 row0, const int32 row1);
+  void AddSpan(const std::int32_t col, const std::int32_t row0, const std::int32_t row1);
 };
 
 }  // namespace fusion_portableglobe

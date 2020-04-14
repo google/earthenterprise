@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,27 +61,27 @@ class PolylineJoiner {
   // This is the only public method available to callers. Returns number of
   // duplicate segments removed as well as number of segments joined.
   static void RemoveDuplicatesAndJoinNeighborsAtDegreeTwoVertices(
-      const T& glist, uint64* num_duplicates, uint64* num_joined);
+      const T& glist, std::uint64_t* num_duplicates, std::uint64_t* num_joined);
 
  private:
   // Returns how many more join opportunities are available. Used for validation
   // of JoinSegments result (in non-release modes only).
-  static uint JoinableVertexCount(const T& glist);
+  static unsigned int JoinableVertexCount(const T& glist);
 
 
   PolylineJoiner(const T& glist);
 
   void Join();
 
-  uint32 InitializeSegmentEnds();
+  std::uint32_t InitializeSegmentEnds();
 
   // Remove duplicates and find merge partners at degree two vertices only
   void RemoveDuplicatesAndCyclesAndFindMergePartners();
   void FindSegmentEndSetsOnSameVertex();
   void SetOtherEndIndex();
-  void RemoveCyclesSetEdgesAndInitializePartners(uint32 i);
+  void RemoveCyclesSetEdgesAndInitializePartners(std::uint32_t i);
   void RemoveDuplicatesAndSetPartnersIfAnyAtThisVertex(
-      uint32 i, const uint32 end_index_for_set_i);
+      std::uint32_t i, const std::uint32_t end_index_for_set_i);
 
   // Checks that the polyline_ and partners_index_ fields in SegmentEndExt are
   // set correctly.partners_index_partners_index_
@@ -92,7 +93,7 @@ class PolylineJoiner {
 
   const T& polyline_vector_;         // input vector of segments.
   // Some entries in polyline_vector_ may be empty edges to start with.
-  const uint32 num_edge_ends_;               // number of segments *2
+  const std::uint32_t num_edge_ends_;               // number of segments *2
   std::deque<SegmentEndExt> segment_ends_;  // the SegmentEndExt array for
   // sorting. SegmentEnd is simply an identifier representing a edge end (e.g
   // first and last points of i' th edge in polyline_vector_ are SegmentEnds
@@ -100,13 +101,13 @@ class PolylineJoiner {
   // avoiding the need of reaccessing polyline_vector_ and thus making sorting
   // faster. Later on after sorting is done this field is reused to keep
   // various other data needed in join process.
-  const uint32 segment_ends_size_;           // number of non-empty segments * 2
+  const std::uint32_t segment_ends_size_;           // number of non-empty segments * 2
   // This buffer is used to pass "the list of edges to sort" to Join method.
   // To avoid memory fragmentation and for runtime purposes it is reserved to
   // the size of polyline_vector_.
   std::deque<std::pair<gstGeodeImpl*, bool> > segments_to_join_buffer_;
-  uint64 num_duplicates_;
-  uint64 num_joined_;
+  std::uint64_t num_duplicates_;
+  std::uint64_t num_joined_;
 };
 
 }  // end vectorprep

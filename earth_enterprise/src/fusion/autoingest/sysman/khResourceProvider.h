@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,16 +32,16 @@ class khResourceProvider
  protected:
   class Job {
    public:
-    uint32 jobid;
+    std::uint32_t jobid;
     FILE*  logfile;
     pid_t  pid;
     time_t beginTime;
 
-    Job(uint32 jobid) : jobid(jobid), logfile(0), pid(0), beginTime(0) { }
+    Job(std::uint32_t jobid) : jobid(jobid), logfile(0), pid(0), beginTime(0) { }
   };
   using JobIter = std::vector<Job>::iterator;
 
-  void JobLoop(StartJobMsg start, const uint cmdTries, const uint sleepBetweenTriesSec); // pass by value because thread func
+  void JobLoop(StartJobMsg start, const unsigned int cmdTries, const unsigned int sleepBetweenTriesSec); // pass by value because thread func
 
  private:
   // routines implemented in khResourceProviderDispatch.cpp
@@ -81,7 +82,7 @@ class khResourceProvider
   khThreadPool     *jobThreads;
   bool RunCmd(
       JobIter & job,
-      uint32 jobid,
+      std::uint32_t jobid,
       const std::vector<std::string> & command,
       time_t cmdtime,
       time_t & endtime,
@@ -95,16 +96,16 @@ class khResourceProvider
       bool success,
       time_t cmdtime,
       time_t endtime);
-  virtual void LogRetry(JobIter job, uint tries, uint totalTries, uint sleepBetweenTries);
-  virtual void LogTotalTime(JobIter job, uint32 elapsed);
+  virtual void LogRetry(JobIter job, unsigned int tries, unsigned int totalTries, unsigned int sleepBetweenTries);
+  virtual void LogTotalTime(JobIter job, std::uint32_t elapsed);
   virtual bool ExecCmdline(JobIter job, const std::vector<std::string> &cmdline);
-  virtual void SendProgress(uint32 jobid, double progress, time_t progressTime);
+  virtual void SendProgress(std::uint32_t jobid, double progress, time_t progressTime);
   virtual void GetProcessStatus(pid_t pid, std::string* status_string,
                                 bool* success, bool* coredump, int* signum);
   virtual void WaitForPid(pid_t waitfor, bool &success, bool &coredump,
                           int &signum);
 #if 0
-  void ReadProgress(int readfd, uint32 jobid);
+  void ReadProgress(int readfd, std::uint32_t jobid);
 #endif
   virtual void DeleteJob(JobIter which,
                          bool success = false,
@@ -123,7 +124,7 @@ class khResourceProvider
   VolResMap volResMap;
 
 
-  virtual JobIter FindJobById(uint32 jobid);
+  virtual JobIter FindJobById(std::uint32_t jobid);
   virtual inline bool Valid(JobIter job) const { return job != jobs.end(); }
   bool WantExit(void) {
     khLockGuard lock(mutex);

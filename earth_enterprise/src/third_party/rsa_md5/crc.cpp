@@ -51,14 +51,14 @@ static const int SMALL_BITS = 8;
                     // multiplication.
 static const char zeroes[1 << SMALL_BITS] = { 0 };  // an array of zeroes
 
-static const uint8 *zero_ptr = 0;   // The 0 pointer---used for alignment
+static const std::uint8_t *zero_ptr = 0;   // The 0 pointer---used for alignment
 
 // Used to fetch a correctly-aligned 32-bit word in correct byte-order
-static inline uint32 WORD(const uint8 *p) {
+static inline std::uint32_t WORD(const std::uint8_t *p) {
 #if __BYTE_ORDER == __LITTLE_ENDIAN
-  return *reinterpret_cast<const uint32 *>(p);
+  return *reinterpret_cast<const std::uint32_t *>(p);
 #else
-  uint32 x = *reinterpret_cast<const uint32 *>(p);
+  std::uint32_t x = *reinterpret_cast<const std::uint32_t *>(p);
   return (x >> 24) | (x << 24) | ((x >> 8) & 0xff00) | ((x & 0xff00) << 8);
 #endif
 }
@@ -72,8 +72,8 @@ CRC::~CRC() {}
 CRC::CRC() {}
 
 struct CRC_pair {             // Used to represent a 128-bit value
-  uint64 lo;
-  uint64 hi;
+  std::uint64_t lo;
+  std::uint64_t hi;
 };
 
 class CRCImpl : public CRC {    // Implemention of the abstract class CRC
@@ -82,17 +82,17 @@ class CRCImpl : public CRC {    // Implemention of the abstract class CRC
   virtual ~CRCImpl() { CHECK(!this->is_default_); };
 
   // The internal version of CRC::New().
-  static CRCImpl *NewInternal(uint64 lo, uint64 hi,
+  static CRCImpl *NewInternal(std::uint64_t lo, std::uint64_t hi,
                               int degree, size_t roll_length);
 
-  virtual void Empty(uint64 *lo, uint64 *hi) const;
+  virtual void Empty(std::uint64_t *lo, std::uint64_t *hi) const;
 
   bool is_default_;       // This CRC is one of the default CRCs
   CRCImpl *next_;          // next entry in cache
   size_t roll_length_;    // length of window in rolling CRC
   int degree_;            // bits in the CRC
-  uint64 poly_lo_;        // The CRC of the empty string, low part
-  uint64 poly_hi_;        // The CRC of the empty string, high part
+  std::uint64_t poly_lo_;        // The CRC of the empty string, low part
+  std::uint64_t poly_hi_;        // The CRC of the empty string, high part
 
  private:
   DISALLOW_COPY_AND_ASSIGN(CRCImpl);
@@ -104,17 +104,17 @@ class CRC32 : public CRCImpl {
   CRC32() {}
   virtual ~CRC32() {}
 
-  virtual void Extend(uint64 *lo, uint64 *hi,
+  virtual void Extend(std::uint64_t *lo, std::uint64_t *hi,
                       const void *bytes, size_t length) const;
-  virtual void ExtendByZeroes(uint64 *lo, uint64 *hi, size_t length) const;
-  virtual void Roll(uint64 *lo, uint64 *hi, uint8 o_byte, uint8 i_byte) const;
+  virtual void ExtendByZeroes(std::uint64_t *lo, std::uint64_t *hi, size_t length) const;
+  virtual void Roll(std::uint64_t *lo, std::uint64_t *hi, std::uint8_t o_byte, std::uint8_t i_byte) const;
 
-  uint32 table0_[256];  // table of byte extensions
-  uint32 table1_[256];  // table of byte extensions, shifted by 1 byte
-  uint32 table2_[256];  // table of byte extensions, shifted by 2 bytes
-  uint32 table3_[256];  // table of byte extensions, shifted by 3 bytes
-  uint32 roll_[256];    // table of byte roll values
-  uint32 zeroes_[256];  // table of zero extensions
+  std::uint32_t table0_[256];  // table of byte extensions
+  std::uint32_t table1_[256];  // table of byte extensions, shifted by 1 byte
+  std::uint32_t table2_[256];  // table of byte extensions, shifted by 2 bytes
+  std::uint32_t table3_[256];  // table of byte extensions, shifted by 3 bytes
+  std::uint32_t roll_[256];    // table of byte roll values
+  std::uint32_t zeroes_[256];  // table of zero extensions
 
  private:
   DISALLOW_COPY_AND_ASSIGN(CRC32);
@@ -126,17 +126,17 @@ class CRC64 : public CRCImpl {
   CRC64() {};
   virtual ~CRC64() {};
 
-  virtual void Extend(uint64 *lo, uint64 *hi,
+  virtual void Extend(std::uint64_t *lo, std::uint64_t *hi,
                       const void *bytes, size_t length) const;
-  virtual void ExtendByZeroes(uint64 *lo, uint64 *hi, size_t length) const;
-  virtual void Roll(uint64 *lo, uint64 *hi, uint8 o_byte, uint8 i_byte) const;
+  virtual void ExtendByZeroes(std::uint64_t *lo, std::uint64_t *hi, size_t length) const;
+  virtual void Roll(std::uint64_t *lo, std::uint64_t *hi, std::uint8_t o_byte, std::uint8_t i_byte) const;
 
-  uint64 table0_[256];  // table of byte extensions
-  uint64 table1_[256];  // table of byte extensions, shifted by 1 byte
-  uint64 table2_[256];  // table of byte extensions, shifted by 2 bytes
-  uint64 table3_[256];  // table of byte extensions, shifted by 3 bytes
-  uint64 roll_[256];    // table of byte roll values
-  uint64 zeroes_[256];  // table of zero extensions
+  std::uint64_t table0_[256];  // table of byte extensions
+  std::uint64_t table1_[256];  // table of byte extensions, shifted by 1 byte
+  std::uint64_t table2_[256];  // table of byte extensions, shifted by 2 bytes
+  std::uint64_t table3_[256];  // table of byte extensions, shifted by 3 bytes
+  std::uint64_t roll_[256];    // table of byte roll values
+  std::uint64_t zeroes_[256];  // table of zero extensions
 
  private:
   DISALLOW_COPY_AND_ASSIGN(CRC64);
@@ -148,10 +148,10 @@ class CRC128 : public CRCImpl {
   CRC128() {};
   virtual ~CRC128() {};
 
-  virtual void Extend(uint64 *lo, uint64 *hi,
+  virtual void Extend(std::uint64_t *lo, std::uint64_t *hi,
                       const void *bytes, size_t length) const;
-  virtual void ExtendByZeroes(uint64 *lo, uint64 *hi, size_t length) const;
-  virtual void Roll(uint64 *lo, uint64 *hi, uint8 o_byte, uint8 i_byte) const;
+  virtual void ExtendByZeroes(std::uint64_t *lo, std::uint64_t *hi, size_t length) const;
+  virtual void Roll(std::uint64_t *lo, std::uint64_t *hi, std::uint8_t o_byte, std::uint8_t i_byte) const;
 
   struct CRC_pair table0_[256]; // table of byte extensions
   struct CRC_pair table1_[256]; // table of byte extensions, shifted by 1 byte
@@ -164,8 +164,8 @@ class CRC128 : public CRCImpl {
   DISALLOW_COPY_AND_ASSIGN(CRC128);
 };
 
-static const uint64 UINT64_ZERO = 0;    // a 64-bit zero
-static const uint64 UINT64_ONE = 1;     // a 64-bit 1
+static const std::uint64_t UINT64_ZERO = 0;    // a 64-bit zero
+static const std::uint64_t UINT64_ONE = 1;     // a 64-bit 1
 
 // The B() macro sets the bit corresponding to X**(_x) in the polynomial
 #define B(_x) (UINT64_ONE << ((_x) < 64?(63-(_x)):(127-(_x))))
@@ -749,12 +749,12 @@ CRC *CRC::Default(int degree, size_t roll_length) {
 }
 
 // The "constructor" for a CRC with an arbitrary polynomial.
-CRC *CRC::New(uint64 lo, uint64 hi, int degree, size_t roll_length) {
+CRC *CRC::New(std::uint64_t lo, std::uint64_t hi, int degree, size_t roll_length) {
   return CRCImpl::NewInternal(lo, hi, degree, roll_length);
 }
 
 // Internal version of the "constructor".
-CRCImpl *CRCImpl::NewInternal(uint64 lo, uint64 hi,
+CRCImpl *CRCImpl::NewInternal(std::uint64_t lo, std::uint64_t hi,
                               int degree, size_t roll_length) {
   CHECK(8 <= degree && degree <= 128);  // precondition
   CHECK(lo != 0 || hi != 0);            // precondition
@@ -852,7 +852,7 @@ CRCImpl *CRCImpl::NewInternal(uint64 lo, uint64 hi,
   // Entry is generated by calling ExtendByZeroes() twice using
   // half the length from the previous entry.
   int j = 0;
-  for (uint64 inc_len = (1 << SMALL_BITS); inc_len != 0; inc_len <<= 2) {
+  for (std::uint64_t inc_len = (1 << SMALL_BITS); inc_len != 0; inc_len <<= 2) {
     result->Empty(&lo, &hi);
     for (int k = 0; k != 3; k++) {
       result->ExtendByZeroes(&lo, &hi, inc_len >> 1);
@@ -891,7 +891,7 @@ CRCImpl *CRCImpl::NewInternal(uint64 lo, uint64 hi,
   // of the empty string that's been pushed one byte too far,
   // and roll in the CRC of the empty string in the correct place again.
   result->Empty(&lo, &hi);
-  const uint8 x = 0x80;
+  const std::uint8_t x = 0x80;
   result->Extend(&lo, &hi, &x, 1);
   result->ExtendByZeroes(&lo, &hi, roll_length);
   for (int i = 0; i != 256; i++) {
@@ -920,7 +920,7 @@ CRCImpl *CRCImpl::NewInternal(uint64 lo, uint64 hi,
 }
 
 // The CRC of the empty string is always the CRC polynomial itself.
-void CRCImpl::Empty(uint64 *lo, uint64 *hi) const {
+void CRCImpl::Empty(std::uint64_t *lo, std::uint64_t *hi) const {
   *lo = this->poly_lo_;
   *hi = this->poly_hi_;
 }
@@ -928,20 +928,20 @@ void CRCImpl::Empty(uint64 *lo, uint64 *hi) const {
 
 // The 128-bit implementation
 
-void CRC128::Extend(uint64 *lo, uint64 *hi, const void *bytes, size_t length)
+void CRC128::Extend(std::uint64_t *lo, std::uint64_t *hi, const void *bytes, size_t length)
                       const {
-  const uint8 *p = static_cast<const uint8 *>(bytes);
-  const uint8 *e = p + length;
+  const std::uint8_t *p = static_cast<const std::uint8_t *>(bytes);
+  const std::uint8_t *e = p + length;
   union {
-    uint64 x64;
-    uint32 x32[2];
+    std::uint64_t x64;
+    std::uint32_t x32[2];
   } l, h;
   l.x64 = *lo;
   h.x64 = *hi;
   if (false) {      // this code works, but isn't an optimization
                     // on pentium 4.  It may be on Opteron...
     // point x at MIN(first 4-byte aligned byte in string, end of string)
-    const uint8 *x = p + ((zero_ptr - p) & 3);
+    const std::uint8_t *x = p + ((zero_ptr - p) & 3);
     if (x > e) {
       x = e;
     }
@@ -962,7 +962,7 @@ void CRC128::Extend(uint64 *lo, uint64 *hi, const void *bytes, size_t length)
     x = e - ((e - zero_ptr) & 3);
     // Process bytes 4 at a time
     while (p < x) {
-      uint32 c = l.x32[LO] ^ WORD(p);
+      std::uint32_t c = l.x32[LO] ^ WORD(p);
       p += 4;
       l.x32[LO] = l.x32[HI];
       l.x32[HI] = h.x32[LO];
@@ -995,7 +995,7 @@ void CRC128::Extend(uint64 *lo, uint64 *hi, const void *bytes, size_t length)
   *hi = h.x64;
 }
 
-void CRC128::ExtendByZeroes(uint64 *lo, uint64 *hi, size_t length) const {
+void CRC128::ExtendByZeroes(std::uint64_t *lo, std::uint64_t *hi, size_t length) const {
   // Process the low order SMALL_BITS of the length by simply
   // using Extend() on an array of bytes that are zero.
   int small_part = (length & ((1 << SMALL_BITS)-1));
@@ -1004,11 +1004,11 @@ void CRC128::ExtendByZeroes(uint64 *lo, uint64 *hi, size_t length) const {
   }
   length >>= SMALL_BITS;
   if (length != 0) {              // if the length was at least 2**SMALL_BITS
-    uint64 l = *lo;
-    uint64 h = *hi;
-    uint64 onebit = 1;
-    uint64 poly_lo = this->poly_lo_;
-    uint64 poly_hi = this->poly_hi_;
+    std::uint64_t l = *lo;
+    std::uint64_t h = *hi;
+    std::uint64_t onebit = 1;
+    std::uint64_t poly_lo = this->poly_lo_;
+    std::uint64_t poly_hi = this->poly_hi_;
     onebit <<= this->degree_ - 65;
     // For each pair of bits in length
     // (after the low-oder bits have been removed)
@@ -1019,11 +1019,11 @@ void CRC128::ExtendByZeroes(uint64 *lo, uint64 *hi, size_t length) const {
       int c = length & 3;       // pick next two bits
       if (c != 0) {             // if they are not zero,
                                 // multiply by entry in table
-        uint64 m_lo = this->zeroes_[c+i-1].lo;
-        uint64 m_hi = this->zeroes_[c+i-1].hi;
-        uint64 result_lo = 0;
-        uint64 result_hi = 0;
-        for (uint64 one = onebit; one != 0; one >>= 1) {  // high half
+        std::uint64_t m_lo = this->zeroes_[c+i-1].lo;
+        std::uint64_t m_hi = this->zeroes_[c+i-1].hi;
+        std::uint64_t result_lo = 0;
+        std::uint64_t result_hi = 0;
+        for (std::uint64_t one = onebit; one != 0; one >>= 1) {  // high half
           if ((h & one) != 0) {
             result_lo ^= m_lo;
             result_hi ^= m_hi;
@@ -1038,7 +1038,7 @@ void CRC128::ExtendByZeroes(uint64 *lo, uint64 *hi, size_t length) const {
         }
         onebit = 1;
         onebit <<= 63;
-        for (uint64 one = onebit; one != 0; one >>= 1) {  // low half
+        for (std::uint64_t one = onebit; one != 0; one >>= 1) {  // low half
           if ((l & one) != 0) {
             result_lo ^= m_lo;
             result_hi ^= m_hi;
@@ -1060,9 +1060,9 @@ void CRC128::ExtendByZeroes(uint64 *lo, uint64 *hi, size_t length) const {
   }
 }
 
-void CRC128::Roll(uint64 *lo, uint64 *hi, uint8 o_byte, uint8 i_byte) const {
-  uint64 l = *lo;
-  uint64 h = *hi;
+void CRC128::Roll(std::uint64_t *lo, std::uint64_t *hi, std::uint8_t o_byte, std::uint8_t i_byte) const {
+  std::uint64_t l = *lo;
+  std::uint64_t h = *hi;
   int c = (l & 0xff) ^ i_byte;
   // Roll in i_byte and out o_byte
   *lo = this->table0_[c].lo ^ (l >> 8) ^ (h << 56) ^ this->roll_[o_byte].lo;
@@ -1072,20 +1072,20 @@ void CRC128::Roll(uint64 *lo, uint64 *hi, uint8 o_byte, uint8 i_byte) const {
 
 //  The 64-bit implementation
 
-void CRC64::Extend(uint64 *lo, uint64 *hi, const void *bytes, size_t length)
+void CRC64::Extend(std::uint64_t *lo, std::uint64_t *hi, const void *bytes, size_t length)
                       const {
-  const uint8 *p = static_cast<const uint8 *>(bytes);
-  const uint8 *e = p + length;
+  const std::uint8_t *p = static_cast<const std::uint8_t *>(bytes);
+  const std::uint8_t *e = p + length;
   union {
-    uint64 x64;
-    uint32 x32[2];
+    std::uint64_t x64;
+    std::uint32_t x32[2];
   } l;
   l.x64 = *lo;
   // point x at MIN(first 4-byte aligned byte in string, end of string)
   // HACK: This variable is declared "volatile" in order to prevent
   // gcc from putting in a register.  The code runs significantly
   // slower if volatile is removed.
-  const uint8 *volatile x = p + ((zero_ptr - p) & 3);
+  const std::uint8_t *volatile x = p + ((zero_ptr - p) & 3);
   if (x > e) {
     x = e;
   }
@@ -1101,7 +1101,7 @@ void CRC64::Extend(uint64 *lo, uint64 *hi, const void *bytes, size_t length)
   x = e - ((e - zero_ptr) & 3);
   // Process bytes 4 at a time
   while (p < x) {
-    uint32 c = l.x32[LO] ^ WORD(p);
+    std::uint32_t c = l.x32[LO] ^ WORD(p);
     p += 4;
     l.x32[LO] = l.x32[HI];
     l.x32[HI] = 0;
@@ -1121,7 +1121,7 @@ void CRC64::Extend(uint64 *lo, uint64 *hi, const void *bytes, size_t length)
   *lo = l.x64;
 }
 
-void CRC64::ExtendByZeroes(uint64 *lo, uint64 *hi, size_t length) const {
+void CRC64::ExtendByZeroes(std::uint64_t *lo, std::uint64_t *hi, size_t length) const {
   // Process the low order SMALL_BITS of the length by simply
   // using Extend() on an array of bytes that are zero.
   int small_part = (length & ((1 << SMALL_BITS)-1));
@@ -1130,8 +1130,8 @@ void CRC64::ExtendByZeroes(uint64 *lo, uint64 *hi, size_t length) const {
   }
   length >>= SMALL_BITS;
   if (length != 0) {          // if the length was at least 2**SMALL_BITS
-    uint64 l = *lo;
-    uint64 onebit = 1;
+    std::uint64_t l = *lo;
+    std::uint64_t onebit = 1;
     onebit <<= this->degree_ - 1;
     // For each pair of bits in length
     // (after the low-oder bits have been removed)
@@ -1142,9 +1142,9 @@ void CRC64::ExtendByZeroes(uint64 *lo, uint64 *hi, size_t length) const {
       int c = length & 3;       // pick next two bits
       if (c != 0) {             // if they are not zero,
                                 // multiply by entry in table
-        uint64 m = this->zeroes_[c+i-1];
-        uint64 result = 0;
-        for (uint64 one = onebit; one != 0; one >>= 1) {
+        std::uint64_t m = this->zeroes_[c+i-1];
+        std::uint64_t result = 0;
+        for (std::uint64_t one = onebit; one != 0; one >>= 1) {
           if ((l & one) != 0) {
             result ^= m;
           }
@@ -1161,8 +1161,8 @@ void CRC64::ExtendByZeroes(uint64 *lo, uint64 *hi, size_t length) const {
   }
 }
 
-void CRC64::Roll(uint64 *lo, uint64 *hi, uint8 o_byte, uint8 i_byte) const {
-  uint64 l = *lo;
+void CRC64::Roll(std::uint64_t *lo, std::uint64_t *hi, std::uint8_t o_byte, std::uint8_t i_byte) const {
+  std::uint64_t l = *lo;
   // Roll in i_byte and out o_byte
   *lo = this->table0_[(l & 0xff) ^ i_byte] ^ (l >> 8) ^ this->roll_[o_byte];
 }
@@ -1170,16 +1170,16 @@ void CRC64::Roll(uint64 *lo, uint64 *hi, uint8 o_byte, uint8 i_byte) const {
 
 //  The 32-bit implementation
 
-void CRC32::Extend(uint64 *lo, uint64 *hi, const void *bytes, size_t length)
+void CRC32::Extend(std::uint64_t *lo, std::uint64_t *hi, const void *bytes, size_t length)
                       const {
-  const uint8 *p = static_cast<const uint8 *>(bytes);
-  const uint8 *e = p + length;
-  uint32 l = *lo;
+  const std::uint8_t *p = static_cast<const std::uint8_t *>(bytes);
+  const std::uint8_t *e = p + length;
+  std::uint32_t l = *lo;
 
   if (kNeedAlignedLoads) {
     // point x at first 4-byte aligned byte in string. this might be passed the
     // end of the string.
-    const uint8 *x = p + ((zero_ptr - p) & 3);
+    const std::uint8_t *x = p + ((zero_ptr - p) & 3);
     if (x <= e) {
       // Process bytes until finished or p is 4-byte aligned
       while (p != x) {
@@ -1191,7 +1191,7 @@ void CRC32::Extend(uint64 *lo, uint64 *hi, const void *bytes, size_t length)
 
   // Process bytes 4 at a time
   while ((p + 4) <= e) {
-    uint32 c = l ^ WORD(p);
+    std::uint32_t c = l ^ WORD(p);
     p += 4;
     l = this->table3_[c & 0xff] ^
         this->table2_[(c >> 8) & 0xff] ^
@@ -1207,7 +1207,7 @@ void CRC32::Extend(uint64 *lo, uint64 *hi, const void *bytes, size_t length)
   *lo = l;
 }
 
-void CRC32::ExtendByZeroes(uint64 *lo, uint64 *hi, size_t length) const {
+void CRC32::ExtendByZeroes(std::uint64_t *lo, std::uint64_t *hi, size_t length) const {
   // Process the low order SMALL_BITS of the length by simply
   // using Extend() on an array of bytes that are zero.
   int small_part = (length & ((1 << SMALL_BITS)-1));
@@ -1216,8 +1216,8 @@ void CRC32::ExtendByZeroes(uint64 *lo, uint64 *hi, size_t length) const {
   }
   length >>= SMALL_BITS;
   if (length != 0) {          // if the length was at least 2**SMALL_BITS
-    uint32 l = *lo;
-    uint32 onebit = 1;
+    std::uint32_t l = *lo;
+    std::uint32_t onebit = 1;
     onebit <<= this->degree_ - 1;
     // For each pair of bits in length
     // (after the low-oder bits have been removed)
@@ -1228,9 +1228,9 @@ void CRC32::ExtendByZeroes(uint64 *lo, uint64 *hi, size_t length) const {
       int c = length & 3;       // pick next two bits
       if (c != 0) {             // if they are not zero,
                                 // multiply by entry in table
-        uint32 m = this->zeroes_[c+i-1];
-        uint32 result = 0;
-        for (uint32 one = onebit; one != 0; one >>= 1) {
+        std::uint32_t m = this->zeroes_[c+i-1];
+        std::uint32_t result = 0;
+        for (std::uint32_t one = onebit; one != 0; one >>= 1) {
           if ((l & one) != 0) {
             result ^= m;
           }
@@ -1247,8 +1247,8 @@ void CRC32::ExtendByZeroes(uint64 *lo, uint64 *hi, size_t length) const {
   }
 }
 
-void CRC32::Roll(uint64 *lo, uint64 *hi, uint8 o_byte, uint8 i_byte) const {
-  uint32 l = *lo;
+void CRC32::Roll(std::uint64_t *lo, std::uint64_t *hi, std::uint8_t o_byte, std::uint8_t i_byte) const {
+  std::uint32_t l = *lo;
   // Roll in i_byte and out o_byte
   *lo = this->table0_[(l & 0xff) ^ i_byte] ^ (l >> 8) ^ this->roll_[o_byte];
 }

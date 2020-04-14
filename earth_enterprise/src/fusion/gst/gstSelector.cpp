@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -120,7 +121,7 @@ void gstSelector::SetConfig(const LayerConfig &newlcfg, bool &keptQueries,
   // if necessary, grab ahold of all geoindexes from the filters
   std::vector<gstGeoIndexHandle> keepGeoIndex;
   if (keepQueries) {
-    for (uint f = 0; f < NumFilters(); ++f) {
+    for (unsigned int f = 0; f < NumFilters(); ++f) {
       gstGeoIndexHandle index = GetFilter(f)->GetGeoIndex();
       if (!index) {
         notify(NFY_WARN, "Get %d: null geo index", f);
@@ -158,7 +159,7 @@ gstSource* gstSelector::getSource() const {
   return theSourceManager->GetSource(source_id_);
 }
 
-gstRecordHandle gstSelector::getPickRecord(uint id) {
+gstRecordHandle gstSelector::getPickRecord(unsigned int id) {
   // we don't have to worry about GetFeature failing since we are pulling
   // from our pick_list and it can only get into the pick_list if it has a
   // valid feature
@@ -172,7 +173,7 @@ gstRecordHandle gstSelector::getPickRecord(uint id) {
   return gstRecordHandle();
 }
 
-gstGeodeHandle gstSelector::getPickGeode(uint id) {
+gstGeodeHandle gstSelector::getPickGeode(unsigned int id) {
   // we don't have to worry about GetFeature failing since we are pulling
   // from our pick_list and it can only get into the pick_list if it has a
   // valid feature
@@ -194,7 +195,7 @@ void gstSelector::applyBox(const gstDrawState& state, int mode) {
   // only pick from active features by
   // stepping through each filter and look for matches
   //
-  for (uint f = 0; f < NumFilters(); ++f) {
+  for (unsigned int f = 0; f < NumFilters(); ++f) {
     // skip if not visible
     if (!GetFilter(f)->IsVisible(state))
       continue;
@@ -253,7 +254,7 @@ void gstSelector::applyBoxCutter(const gstDrawState& state,
   // Further use it many times.
   fusion_gst::BoxCutter box_cutter(state.select, false);  // cut_holes is false.
 
-  for (uint f = 0; f < NumFilters(); ++f) {
+  for (unsigned int f = 0; f < NumFilters(); ++f) {
     if (!GetFilter(f)->IsVisible(state))
       continue;
 
@@ -283,8 +284,8 @@ void gstSelector::applyBoxCutter(const gstDrawState& state,
   }
 }
 
-void gstSelector::UpdateSimplifyStats(uint features_removed,
-                                      uint vertexes_removed,
+void gstSelector::UpdateSimplifyStats(unsigned int features_removed,
+                                      unsigned int vertexes_removed,
                                       double max_error) {
   build_stats.culled_features += features_removed;
   build_stats.culled_vertexes += vertexes_removed;
@@ -665,7 +666,7 @@ void gstSelector::ReducePolylines(gstFeatureSet *fset) {
 }
 
 void gstSelector::ReduceRoads(const bool remove_overlapping_segments,
-                              uint32 level,
+                              std::uint32_t level,
                               gstFeatureSet *fset) {
   JOBSTATS_SCOPED(prep_stats, JOBSTATS_REDUCEROADS);
   JOBSTATS_BEGIN(prep_stats, JOBSTATS_SORTROADS);
@@ -684,8 +685,8 @@ void gstSelector::ReduceRoads(const bool remove_overlapping_segments,
   //
   for (std::map<QString, GeodeList>::iterator nameset =
          name_map.begin(); nameset != name_map.end(); ++nameset) {
-    uint64 num_duplicates = 0;
-    uint64 num_joined = 0;
+    std::uint64_t num_duplicates = 0;
+    std::uint64_t num_joined = 0;
     vectorprep::PolylineJoiner<GeodeList>::
         RemoveDuplicatesAndJoinNeighborsAtDegreeTwoVertices(
             nameset->second, &num_duplicates, &num_joined);
@@ -719,10 +720,10 @@ void gstSelector::ReduceRoads(const bool remove_overlapping_segments,
 // 1. make copies of geodes and records
 // 2. clear out original lists
 // 3. copy back valid features
-uint gstSelector::RemoveEmptyFeatures(
+unsigned int gstSelector::RemoveEmptyFeatures(
     GeodeList* geode_list,
     RecordList* record_list,
-    uint min_vertex_count) {
+    unsigned int min_vertex_count) {
   JOBSTATS_SCOPED(prep_stats, JOBSTATS_REMOVEINVAL);
   if (geode_list->size() > record_list->size()) {
     geode_list->resize(record_list->size());
@@ -901,7 +902,7 @@ bool gstSelector::PrepareSites(const gstQuadAddress& quad_address,
     fprintf(stderr, "QUAD:%u,%u,%u:%d:",
             quad_address.level(), quad_address.row(), quad_address.col(),
             filter_id);
-    for (uint i = 0; i < hits.size(); ++i) {
+    for (unsigned int i = 0; i < hits.size(); ++i) {
       fprintf(stderr, "%u,", hits[i]);
     }
     fprintf(stderr, "\n");
@@ -1037,7 +1038,7 @@ int gstSelector::RemoveDuplicateSites(VertexList* vlist_ptr,
     VertexList& vlist = *vlist_ptr;
     RecordList& rlist = *rlist_ptr;
     std::set<std::pair<gstVertex, GstValueHandle> > existing_position_names;
-    for (uint i = 0; i < vlist.size(); ++i) {
+    for (unsigned int i = 0; i < vlist.size(); ++i) {
       const bool is_new_position_name = existing_position_names.insert(
           std::make_pair(vlist[i], GstValueHandle(rlist[i]->Field(0)))).second;
       if (!is_new_position_name) {  // This tuple (vertex, name) is not unique
@@ -1078,7 +1079,7 @@ void gstSelector::deselect(int* rows, int count, bool selected) {
 #endif
 }
 
-uint32 gstSelector::NumSrcFeatures(void) const {
+ std::uint32_t gstSelector::NumSrcFeatures(void) const {
   return getSource()->NumFeatures(layer_);
 }
 
@@ -1107,7 +1108,7 @@ void gstSelector::ThrowingApplyQueries(gstProgress* guiProgress,
 
   // figure out if we have JS expressions for any of our filters
   bool wantJS = false;
-  for (uint f = 0; f < config.filters.size(); ++f) {
+  for (unsigned int f = 0; f < config.filters.size(); ++f) {
     if (config.filters[f].match == FilterConfig::JSExpression) {
       wantJS = true;
       break;
@@ -1115,7 +1116,7 @@ void gstSelector::ThrowingApplyQueries(gstProgress* guiProgress,
   }
 
   // always initialize filter matches first
-  for (uint f = 0; f < NumFilters(); ++f)
+  for (unsigned int f = 0; f < NumFilters(); ++f)
     GetFilter(f)->Reset();
 
   // picklist cannot be valid if there are no filters!
@@ -1153,7 +1154,7 @@ void gstSelector::ThrowingApplyQueries(gstProgress* guiProgress,
         contextScripts.append(config.contextScript);
       }
       cx = gstRecordJSContextImpl::Create(recordHeader, contextScripts);
-      for (uint f = 0; f < config.filters.size(); ++f) {
+      for (unsigned int f = 0; f < config.filters.size(); ++f) {
         if (config.filters[f].match == FilterConfig::JSExpression) {
           matchScripts[f] = cx->CompileScript(config.filters[f].matchScript,
                                               QString("Filter Expression %1")
@@ -1206,7 +1207,7 @@ void gstSelector::ThrowingApplyQueries(gstProgress* guiProgress,
       cx->SetRecord(recordHandle);
     }
 
-    for (uint f = 0; f < NumFilters(); ++f) {
+    for (unsigned int f = 0; f < NumFilters(); ++f) {
       bool match = false;
       GetFilter(f)->ThrowingTryApply(recordHandle,
                                      UniqueFeatureId(source_id_, layer_, fnum),
@@ -1252,7 +1253,7 @@ void gstSelector::ThrowingApplyQueries(gstProgress* guiProgress,
     guiProgress->SetVal(100);
 
   // after queries are complete, rebuild geoindex
-  for (uint f = 0; f < NumFilters(); ++f)
+  for (unsigned int f = 0; f < NumFilters(); ++f)
     GetFilter(f)->Finalize();
 
   query_complete_ = true;
@@ -1293,7 +1294,7 @@ class FilterInfo {
  public:
   std::vector<int> selections_;
   gstBBox box_;
-  uint select_count_;
+  unsigned int select_count_;
   std::string path_;
   FILE* file_;
   FilterInfo() : select_count_(0), file_(NULL) {}
@@ -1315,7 +1316,7 @@ void gstSelector::CreateSelectionListFilesBatch(
 
   // figure out if we have JS expressions for any of our filters
   bool wantJS = false;
-  for (uint filter_index = 0;
+  for (unsigned int filter_index = 0;
        filter_index < config.filters.size(); ++filter_index) {
     if (config.filters[filter_index].match == FilterConfig::JSExpression) {
       wantJS = true;
@@ -1324,7 +1325,7 @@ void gstSelector::CreateSelectionListFilesBatch(
   }
 
   // always initialize filter matches first
-  for (uint filter_index = 0; filter_index < NumFilters(); ++filter_index)
+  for (unsigned int filter_index = 0; filter_index < NumFilters(); ++filter_index)
     GetFilter(filter_index)->Reset();
 
   // picklist cannot be valid if there are no filters!
@@ -1369,7 +1370,7 @@ void gstSelector::CreateSelectionListFilesBatch(
       }
       record_js_context =
           gstRecordJSContextImpl::Create(recordHeader, contextScripts);
-      for (uint filter_index = 0;
+      for (unsigned int filter_index = 0;
            filter_index < config.filters.size(); ++filter_index) {
         if (config.filters[filter_index].match == FilterConfig::JSExpression) {
           matchScripts[filter_index] =
@@ -1441,7 +1442,7 @@ void gstSelector::CreateSelectionListFilesBatch(
   static const gstBBox kMaxDomain(0.0, 1.0, 0.25, 0.75);
 
   // Create and open the filter result files.
-  for (uint filter_index = 0; filter_index < NumFilters(); ++filter_index) {
+  for (unsigned int filter_index = 0; filter_index < NumFilters(); ++filter_index) {
     FilterInfo& filter_info = filters[filter_index];
 
     // space for ".00" + NULL
@@ -1478,7 +1479,7 @@ void gstSelector::CreateSelectionListFilesBatch(
 
   // Reserve the space beforehand!
   features.reserve(kBatchCount);
-  for (uint filter_index = 0; filter_index < NumFilters(); ++filter_index) {
+  for (unsigned int filter_index = 0; filter_index < NumFilters(); ++filter_index) {
     filters[filter_index].selections_.reserve(kBatchCount);
   }
 
@@ -1497,7 +1498,7 @@ void gstSelector::CreateSelectionListFilesBatch(
 
     // Clear the "Batch" vectors.
     features.clear();
-    for (uint filter_index = 0; filter_index < NumFilters(); ++filter_index) {
+    for (unsigned int filter_index = 0; filter_index < NumFilters(); ++filter_index) {
       filters[filter_index].selections_.clear();
     }
 
@@ -1540,7 +1541,7 @@ void gstSelector::CreateSelectionListFilesBatch(
     // Process each geode in this batch.
     // Note: there may be less than "current_batch_count" features at this
     // point since invalid features have been stripped out.
-    for (uint i = 0; i < features.size(); ++i) {
+    for (unsigned int i = 0; i < features.size(); ++i) {
       UniqueFeatureId& unique_feature_id = features[i].id_;
       gstRecordHandle recordHandle = features[i].record_;
 
@@ -1548,7 +1549,7 @@ void gstSelector::CreateSelectionListFilesBatch(
         record_js_context->SetRecord(recordHandle);
       }
 
-      for (uint filter_index = 0; filter_index < NumFilters(); ++filter_index) {
+      for (unsigned int filter_index = 0; filter_index < NumFilters(); ++filter_index) {
         FilterInfo& filter_info = filters[filter_index];
         bool has_match = GetFilter(filter_index)->ThrowingTryHasMatch(
             recordHandle, unique_feature_id, record_js_context,
@@ -1566,7 +1567,7 @@ void gstSelector::CreateSelectionListFilesBatch(
     }
 
     // Append all filter_selections so far to the appropriate filter file.
-    for (uint filter_index = 0; filter_index < NumFilters(); ++filter_index) {
+    for (unsigned int filter_index = 0; filter_index < NumFilters(); ++filter_index) {
       FilterInfo& filter_info = filters[filter_index];
       std::vector<int>& filter_selection = filter_info.selections_;
 
@@ -1577,7 +1578,7 @@ void gstSelector::CreateSelectionListFilesBatch(
       // indices. Use a preallocated string buffer to buffer up into a
       // single write call.
       feature_id_buffer.clear();
-      for (uint i = 0; i < filter_selection.size(); ++i) {
+      for (unsigned int i = 0; i < filter_selection.size(); ++i) {
         feature_id_buffer.append(Itoa(filter_selection[i]));
         feature_id_buffer.append(1, newline);
       }
@@ -1619,7 +1620,7 @@ void gstSelector::CreateSelectionListFilesBatch(
   }
 
   // Prepend the extents to the selection files.
-  for (uint filter_index = 0; filter_index < NumFilters(); ++filter_index) {
+  for (unsigned int filter_index = 0; filter_index < NumFilters(); ++filter_index) {
     FilterInfo& filter_info = filters[filter_index];
     FILE* file = filter_info.file_;
 
@@ -1659,7 +1660,7 @@ void gstSelector::CreateSelectionListFilesBatch(
 
 
 void gstSelector::drawFeatures(int* max_count, const gstDrawState& state) {
-  for (uint f = 0; f < NumFilters(); ++f) {
+  for (unsigned int f = 0; f < NumFilters(); ++f) {
     gstFilter* filter = GetFilter(f);
 
     if (!filter->IsVisible(state))
@@ -1680,7 +1681,7 @@ void gstSelector::drawSelectedFeatures(const gstDrawState& state) {
   // for features that are already in our picklist. And since we're drawing
   // we cannot open a dialog anyway
   try {
-    for (uint fnum = 0; fnum < pick_list_.size(); ++fnum) {
+    for (unsigned int fnum = 0; fnum < pick_list_.size(); ++fnum) {
       gstGeodeHandle geode
         = theSourceManager->GetFeatureOrThrow(
             UniqueFeatureId(source_id_, layer_, pick_list_[fnum]),
@@ -1763,12 +1764,12 @@ const SelectList& gstSelector::sortColumnOrThrow(int col, bool ascending) {
   khDeleteGuard<SortItem, ArrayDeleter> deleter(TransferOwnership(items));
 
   if (col == 0) {
-    for (uint n = 0; n < pick_list_.size(); ++n) {
+    for (unsigned int n = 0; n < pick_list_.size(); ++n) {
       items[n].set(pick_list_[n]);
     }
     qsort(items, pick_list_.size(), sizeof(SortItem), cmpIndexes);
   } else {
-    for (uint n = 0; n < pick_list_.size(); ++n) {
+    for (unsigned int n = 0; n < pick_list_.size(); ++n) {
       gstRecordHandle src_rec = theSourceManager->GetAttributeOrThrow(
           UniqueFeatureId(source_id_, layer_, pick_list_[n]));
       items[n].set(pick_list_[n], src_rec->Field(col - 1));
@@ -1781,12 +1782,12 @@ const SelectList& gstSelector::sortColumnOrThrow(int col, bool ascending) {
   sorted.reserve(pick_list_.size());
 
   if (ascending) {
-    for (uint n = 0; n < pick_list_.size(); ++n) {
+    for (unsigned int n = 0; n < pick_list_.size(); ++n) {
       sorted.push_back(items[n].getIndex());
     }
   } else {
-    uint sz = pick_list_.size();
-    for (uint n = 0; n < pick_list_.size(); ++n) {
+    unsigned int sz = pick_list_.size();
+    for (unsigned int n = 0; n < pick_list_.size(); ++n) {
       sorted.push_back(items[sz - n - 1].getIndex());
     }
   }

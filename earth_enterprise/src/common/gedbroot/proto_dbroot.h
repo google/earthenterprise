@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +26,7 @@
 #include <string>
 #include <map>
 #include "common/khTypes.h"
+#include <cstdint>
 #include "protobuf/dbroot_v2.pb.h"
 
 
@@ -33,7 +35,7 @@ class geProtoDbroot : public keyhole::dbroot::DbRootProto {
   enum FileFormat {kTextFormat, kProtoFormat, kEncodedFormat};
 
  private:
-  typedef std::map<uint32, keyhole::dbroot::StringEntryProto*> StringTable;
+  typedef std::map<std::uint32_t, keyhole::dbroot::StringEntryProto*> StringTable;
 
  public:
   geProtoDbroot();
@@ -44,13 +46,13 @@ class geProtoDbroot : public keyhole::dbroot::DbRootProto {
   void Combine(const std::string &filename, FileFormat input_format);
   std::string ToTextString(void) const;
   std::string ToEncodedString(void) const;
-  void AddUniversalFusionConfig(uint32 epoch);
+  void AddUniversalFusionConfig(std::uint32_t epoch);
 
   bool HasContents() const;
   bool IsValid(bool expect_epoch = true) const;
 
   // Throws exception if id isn't found
-  keyhole::dbroot::StringEntryProto* GetTranslationEntryById(int32 id);
+  keyhole::dbroot::StringEntryProto* GetTranslationEntryById(std::int32_t id);
 
  private:
   // populated on demand to efficiently implement GetTranslationEntryById

@@ -31,7 +31,7 @@ class BoxFilterTestFixture : public AveragingBoxFilter {
  public:
   BoxFilterTestFixture(int image_width, int image_height,
                        int tile_width, int tile_height,
-                       const uchar *image)
+                       const unsigned char *image)
       : AveragingBoxFilter(image_width, image_height, tile_width, tile_height),
         orig_image_(image, image + image_width * image_height),
         filt_image_(image_width * image_height, 0) {
@@ -63,7 +63,7 @@ class BoxFilterTestFixture : public AveragingBoxFilter {
 
   // This function wraps BoxFilter() so that we can count tile loads
   // to make sure they're not excessive.
-  void TestBoxFilter(int box_width, int box_height, uchar border_value) {
+  void TestBoxFilter(int box_width, int box_height, unsigned char border_value) {
     tile_load_count_ = 0;
     BoxFilter(box_width, box_height, border_value);
   }
@@ -75,8 +75,8 @@ class BoxFilterTestFixture : public AveragingBoxFilter {
   }
 
   int tile_load_count_;       // how many tiles have been loaded
-  vector<uchar> orig_image_;  // the full-size input image
-  vector<uchar> filt_image_;  // the filtered output image
+  vector<unsigned char> orig_image_;  // the full-size input image
+  vector<unsigned char> filt_image_;  // the filtered output image
 };
 
 
@@ -89,7 +89,7 @@ class BoxFilterUnitTest : public UnitTest<BoxFilterUnitTest> {
   }
 
   // Helper function to print arrays for debugging.
-  void printArray(const uchar *a, const int size_x, const int size_y) {
+  void printArray(const unsigned char *a, const int size_x, const int size_y) {
     for (int y = 0; y < size_y; ++y) {
       for (int x = 0; x < size_x; ++x)
         fprintf(stderr, "%4d", a[y*size_x + x]);
@@ -97,31 +97,31 @@ class BoxFilterUnitTest : public UnitTest<BoxFilterUnitTest> {
     }
   }
 
-  void printArray(const vector<uchar> &a, int size_x, int size_y) {
+  void printArray(const vector<unsigned char> &a, int size_x, int size_y) {
     printArray(&a[0], size_x, size_y);
   }
 
   // First test BoxFilterTestFixture test class.
   bool ImageStorageTest() {
-    uchar img_data[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+    unsigned char img_data[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
     BoxFilterTestFixture t(4, 4, 2, 2, img_data);
 
-    vector<uchar> tile(4, 0);
+    vector<unsigned char> tile(4, 0);
     t.LoadImageTile(0, 0, &tile[0]);
-    uchar expect1[] = {1, 2, 5, 6};
-    EXPECT_TRUE((tile) == (vector<uchar>(expect1, expect1+4)));
+    unsigned char expect1[] = {1, 2, 5, 6};
+    EXPECT_TRUE((tile) == (vector<unsigned char>(expect1, expect1+4)));
 
     t.LoadImageTile(1, 0, &tile[0]);
-    uchar expect2[] = {3, 4, 7, 8};
-    EXPECT_TRUE((tile) == (vector<uchar>(expect2, expect2+4)));
+    unsigned char expect2[] = {3, 4, 7, 8};
+    EXPECT_TRUE((tile) == (vector<unsigned char>(expect2, expect2+4)));
 
     t.LoadImageTile(0, 1, &tile[0]);
-    uchar expect3[] = {9, 10, 13, 14};
-    EXPECT_TRUE((tile) == (vector<uchar>(expect3, expect3+4)));
+    unsigned char expect3[] = {9, 10, 13, 14};
+    EXPECT_TRUE((tile) == (vector<unsigned char>(expect3, expect3+4)));
 
     t.LoadImageTile(1, 1, &tile[0]);
-    uchar expect4[] = {11, 12, 15, 16};
-    EXPECT_TRUE((tile) == (vector<uchar>(expect4, expect4+4)));
+    unsigned char expect4[] = {11, 12, 15, 16};
+    EXPECT_TRUE((tile) == (vector<unsigned char>(expect4, expect4+4)));
 
     return true;
   }
@@ -130,8 +130,8 @@ class BoxFilterUnitTest : public UnitTest<BoxFilterUnitTest> {
 
   // Single-value input should yield unchanged output.
   bool BlankTest() {
-    for (uchar val = 0; val < 200; val += 50) {
-      vector<uchar> image = vector<uchar>(36, val);
+    for (unsigned char val = 0; val < 200; val += 50) {
+      vector<unsigned char> image = vector<unsigned char>(36, val);
 
       for (int tile_width = 2; tile_width < 8; ++tile_width)
         for (int tile_height = 2; tile_height < 8; ++tile_height)
@@ -140,7 +140,7 @@ class BoxFilterUnitTest : public UnitTest<BoxFilterUnitTest> {
                  box_height += 2) {
               BoxFilterTestFixture t(6, 6, tile_width, tile_height, &image[0]);
               t.TestBoxFilter(box_width, box_height, val);
-              EXPECT_TRUE((t.filt_image_) == (vector<uchar>(36, val)));
+              EXPECT_TRUE((t.filt_image_) == (vector<unsigned char>(36, val)));
               if (!t.TileLoadCountOK()) {
                 fprintf(stderr, "FAILURE: too many tiles loaded %d\n",
                         t.tile_load_count_);
@@ -169,13 +169,13 @@ class BoxFilterUnitTest : public UnitTest<BoxFilterUnitTest> {
       int box_height = 1 + 2 * RandomInt(0, image_height / 2 + 5);
       int box_area = box_width * box_height;
       int border = RandomInt(0, 255);
-      vector<uchar> image_orig(image_width * image_height, 0);
+      vector<unsigned char> image_orig(image_width * image_height, 0);
       for (int x = 0; x < image_width; ++x)
         for (int y = 0; y < image_height; ++y)
           image_orig[y*image_width + x] = RandomInt(0, 255);
 
       // Calculate filtered image the slow way.
-      vector<uchar> expected(image_width * image_height, 0);
+      vector<unsigned char> expected(image_width * image_height, 0);
       for (int x = 0; x < image_width; ++x)
         for (int y = 0; y < image_height; ++y) {
           int sum = 0;
@@ -194,7 +194,7 @@ class BoxFilterUnitTest : public UnitTest<BoxFilterUnitTest> {
       for (int it2 = 0; it2 < kIterations2; ++it2) {
         // Copy the image because the single-tile-mode modifies it in
         // place.
-        vector<uchar> image = image_orig;
+        vector<unsigned char> image = image_orig;
         int tile_width = RandomInt(std::max(box_width/2 + 1, 2), image_width+5);
         int tile_height = RandomInt(3, image_height + 5);
         if (RandomInt(0, 10) == 0) {   // Sometimes we test single-tile mode.

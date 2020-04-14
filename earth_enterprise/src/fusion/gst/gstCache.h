@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +46,7 @@ class gstCache {
     ~CacheItem() {
       --CacheItemCount;
       // cannot delete data_ here as it is a template type
-      // and could very well be a built-in type such as uint64
+      // and could very well be a built-in type such as std::uint64_t
       // delete data_;
     }
 

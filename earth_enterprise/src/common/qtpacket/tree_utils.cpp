@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -70,7 +71,7 @@ int TreeNumbering::TraversalPathToInorder(const QuadtreePath path) const {
   assert(static_cast<int>(path.Level()) < depth_);
 
   int index = 0;
-  for (uint32 i = 0; i < path.Level(); ++i) {
+  for (std::uint32_t i = 0; i < path.Level(); ++i) {
     assert(path[i] < QuadtreePath::kChildCount);
 
     index += 1 + path[i] * NodesAtLevels(depth_ - i - 1);

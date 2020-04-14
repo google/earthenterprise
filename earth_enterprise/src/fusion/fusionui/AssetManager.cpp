@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -494,7 +495,7 @@ void ServeAssistant::Perform() {
 
 AssetManager* AssetManager::self = NULL;
 
-std::string AssetManager::GetProviderById(uint32 id) {
+std::string AssetManager::GetProviderById(std::uint32_t id) {
   ProviderMap::const_iterator found = provider_map_.find(id);
   if (found != provider_map_.end()) {
     return found->second;
@@ -513,7 +514,7 @@ AssetManager::AssetManager(QWidget* parent)
   {
     gstProviderSet providers;
     if (providers.Load()) {
-      for (uint i = 0; i < providers.items.size(); ++i) {
+      for (unsigned int i = 0; i < providers.items.size(); ++i) {
         provider_map_[providers.items[i].id] = providers.items[i].key;
       }
     }
@@ -1865,7 +1866,7 @@ void AssetManager::UpdateTableView(const gstAssetFolder& folder) {
   assetTableView->setUpdatesEnabled(false);
 
   int rowcount = 0;
-  for (uint row = 0; row < items.size(); ++row) {
+  for (unsigned int row = 0; row < items.size(); ++row) {
     gstAssetHandle handle = items[row];
     Asset asset = handle->getAsset();
 
@@ -1974,7 +1975,7 @@ void AssetManager::UpdateIconView(const gstAssetFolder& folder) {
   if (items.size() == 0)
     return;
 
-  for (uint id = 0; id < items.size(); ++id) {
+  for (unsigned int id = 0; id < items.size(); ++id) {
     gstAssetHandle item = items[id];
     Asset asset = item->getAsset();
 

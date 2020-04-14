@@ -24,11 +24,11 @@
 class geConsoleProgress : public geProgress
 {
  public:
-  geConsoleProgress(int64 total, const QString& desc = "tiles")
+  geConsoleProgress(std::int64_t total, const QString& desc = "tiles")
   : progress_meter_(total, desc) { }
 
-  bool incrementTotal(int64 val);
-  bool incrementDone(int64 val);
+  bool incrementTotal(std::int64_t val);
+  bool incrementDone(std::int64_t val);
 
  private:
   khProgressMeter progress_meter_;

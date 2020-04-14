@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,12 +19,12 @@
 namespace vectorquery {
 
 
-FuseSelector::FuseSelector(uint level, const std::string &product_path,
+FuseSelector::FuseSelector(unsigned int level, const std::string &product_path,
                            const std::vector<std::string> &select_files,
                            const khTilespace &tilespace,
                            double oversize_factor,
-                           const uint32 in_queue_seed_size,
-                           const uint32 out_queue_batch_size,
+                           const std::uint32_t in_queue_seed_size,
+                           const std::uint32_t out_queue_batch_size,
                            const std::string& progress_meter_prefix) :
     FilterGeoIndexManager(level,
                           theSourceManager->GetSharedSource(product_path),
@@ -33,7 +34,7 @@ FuseSelector::FuseSelector(uint level, const std::string &product_path,
     out_queue_(),
     out_queue_pusher_(out_queue_batch_size, out_queue_)
 {
-  for (uint i = 0; i < in_queue_seed_size; ++i) {
+  for (unsigned int i = 0; i < in_queue_seed_size; ++i) {
     in_queue_.Push(new WorkflowOutputTile(select_files.size()));
   }
 }

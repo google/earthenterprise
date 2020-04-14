@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,8 +25,8 @@
 
 #include <khgdal/.idl/khVirtualRaster.h>
 
-const uint DefaultOverlap = 300;
-const uint MaxSplit = 100;
+const unsigned int DefaultOverlap = 300;
+const unsigned int MaxSplit = 100;
 
 void
 usage(const std::string &progn, const char *msg = 0, ...)
@@ -66,16 +67,16 @@ main(int argc, char *argv[])
   bool help = false;
   bool quiet = false;
   std::string input;
-  uint rows    = 0;
-  uint cols    = 0;
-  uint overlap = DefaultOverlap;
+  unsigned int rows    = 0;
+  unsigned int cols    = 0;
+  unsigned int overlap = DefaultOverlap;
   khGetopt options;
   options.helpOpt(help);
   options.flagOpt("quiet", quiet);
   options.opt("rows", rows,
-              &khGetopt::RangeValidator<uint, 1, MaxSplit>);
+              &khGetopt::RangeValidator<unsigned int, 1, MaxSplit>);
   options.opt("cols", cols,
-              &khGetopt::RangeValidator<uint, 1, MaxSplit>);
+              &khGetopt::RangeValidator<unsigned int, 1, MaxSplit>);
   options.opt("overlap", overlap);
   options.setRequired("rows", "cols");
 
@@ -99,39 +100,39 @@ main(int argc, char *argv[])
              input.c_str());
     }
 
-    uint32 nominalwidth =
-      (uint32)ceil((double)virtraster.cropExtents.width() / cols);
-    uint32 nominalheight =
-      (uint32)ceil((double)virtraster.cropExtents.height() / rows);
+    std::uint32_t nominalwidth =
+      (std::uint32_t)ceil((double)virtraster.cropExtents.width() / cols);
+    std::uint32_t nominalheight =
+      (std::uint32_t)ceil((double)virtraster.cropExtents.height() / rows);
     if ((overlap >= nominalwidth) || (overlap >= nominalheight)) {
       notify(NFY_FATAL, "Overlap too big for resulting split size");
     }
 
 
-    uint numgroups = 0;
+    unsigned int numgroups = 0;
 
     // compute pixel extents of khvr tiles
-    std::vector<khExtents<uint32> > tileExtents;
+    std::vector<khExtents<std::uint32_t> > tileExtents;
     tileExtents.reserve(virtraster.inputTiles.size());
     for (std::vector<khVirtualRaster::InputTile>::const_iterator tileDef =
            virtraster.inputTiles.begin();
          tileDef < virtraster.inputTiles.end(); ++tileDef) {
 
-      khOffset<uint32>
+      khOffset<std::uint32_t>
         tileOrigin(XYOrder,
-                   uint32(((tileDef->origin.x() -
+                   std::uint32_t(((tileDef->origin.x() -
                             virtraster.origin.x()) /
                            virtraster.pixelsize.width) + 0.5),
-                   uint32(((tileDef->origin.y() -
+                   std::uint32_t(((tileDef->origin.y() -
                             virtraster.origin.y()) /
                            virtraster.pixelsize.height) + 0.5));
-      tileExtents.push_back(khExtents<uint32>(tileOrigin,
+      tileExtents.push_back(khExtents<std::uint32_t>(tileOrigin,
                                               tileDef->rastersize));
     }
 
     // process each of the split pieces
-    for (uint32 r = 0; r < rows; ++r) {
-      uint32 y, height;
+    for (std::uint32_t r = 0; r < rows; ++r) {
+      std::uint32_t y, height;
       if (r == 0) {
         y = virtraster.cropExtents.beginY();
         // "+ overlap - (overlap / 2)" to deal with odd overlap
@@ -150,8 +151,8 @@ main(int argc, char *argv[])
         height = virtraster.cropExtents.endY() - y;
       }
 
-      for (uint32 c = 0; c < cols; ++c) {
-        uint32 x, width;
+      for (std::uint32_t c = 0; c < cols; ++c) {
+        std::uint32_t x, width;
         if (c == 0) {
           x = virtraster.cropExtents.beginX();
           // "+ overlap - (overlap / 2)" to deal with odd overlap
@@ -170,16 +171,16 @@ main(int argc, char *argv[])
           width = virtraster.cropExtents.endX() - x;
         }
 
-        khExtents<uint32> piecePixelExtents
-          (khOffset<uint32>(XYOrder, x, y),
-           khSize<uint32>(width, height));
+        khExtents<std::uint32_t> piecePixelExtents
+          (khOffset<std::uint32_t>(XYOrder, x, y),
+           khSize<std::uint32_t>(width, height));
 
 
         // see if any tiles intersect with this piece
-        std::vector<uint> found;
+        std::vector< unsigned int>  found;
         found.reserve(tileExtents.size());
-        khExtents<uint32> coveredExtents;
-        for (uint i = 0; i < tileExtents.size(); ++i) {
+        khExtents<std::uint32_t> coveredExtents;
+        for (unsigned int i = 0; i < tileExtents.size(); ++i) {
           if (tileExtents[i].intersects(piecePixelExtents)) {
             coveredExtents.grow(tileExtents[i]);
             found.push_back(i);
@@ -188,14 +189,14 @@ main(int argc, char *argv[])
 
         // make a new khvr
         if (found.size()) {
-          khExtents<uint32> saveExtents =
-            khExtents<uint32>::Intersection
+          khExtents<std::uint32_t> saveExtents =
+            khExtents<std::uint32_t>::Intersection
             (coveredExtents, piecePixelExtents);
           khVirtualRaster copy = virtraster;
           copy.cropExtents = saveExtents;
           copy.inputTiles.clear();
           copy.inputTiles.reserve(found.size());
-          for (std::vector<uint>::const_iterator i = found.begin();
+          for (std::vector< unsigned int> ::const_iterator i = found.begin();
                i != found.end(); ++i) {
             copy.inputTiles.push_back(virtraster.inputTiles[*i]);
           }
