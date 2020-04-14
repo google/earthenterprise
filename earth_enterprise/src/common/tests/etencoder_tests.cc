@@ -45,6 +45,7 @@ std::string OnKey     = std::string(32, '\xff');
 std::string MixedKey  = std::string(32, '\x36');
 std::string RandomKey =
     std::string("qsdfjhsdfjhskjfhkjhsdf kljhsdfjkhsdfjkhs");
+std::string InvalidLengthKey = std::string(5, '\x00');
 
 TEST_F(Test_crypt, EmptyOffKey) {
   std::string data;
@@ -128,6 +129,10 @@ TEST_F(Test_crypt, TenXData) {
 TEST_F(Test_crypt, FifteenXPlus3Data) {
   std::string data(MixedKey.size()*15+3, '\xa6');
   RunBasic(data, MixedKey, std::string(MixedKey.size()*15+3, '\x90'));
+}
+TEST_F(Test_crypt, InvalidLengthKey) {
+  std::string data(100, '\x00');
+  ASSERT_THROW(RunBasic(data, InvalidLengthKey, ""), khSimpleException);
 }
 
 

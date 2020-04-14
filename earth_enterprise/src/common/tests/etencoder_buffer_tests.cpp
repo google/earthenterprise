@@ -34,18 +34,13 @@ unique_ptr<uint8_t[]> GetByteArray(uint32_t length) {
 int main() {
   const uint32_t KEY_LENGTHS = 100;
   const uint32_t DATA_LENGTHS = 100;
-  for(uint32_t klen = 0; klen < KEY_LENGTHS; ++klen) {
+  // Key lengths must be divisible by 8. etencoder_tests.cc checks invalid key
+  // lengths.
+  for(uint32_t klen = 0; klen < KEY_LENGTHS; klen += 8) {
     auto key = GetByteArray(klen);
     for(uint32_t dlen = 0; dlen < DATA_LENGTHS; ++dlen) {
       auto data = GetByteArray(dlen);
-      try {
-        etEncoder::Encode(data.get(), dlen, key.get(), klen);
-      }
-      catch (...) {
-        // Ignore the exception - this means that Encode detected and handled
-        // the error, so the test passes.
-      }
-      
+      etEncoder::Encode(data.get(), dlen, key.get(), klen);
     }
   }
   return 0;
