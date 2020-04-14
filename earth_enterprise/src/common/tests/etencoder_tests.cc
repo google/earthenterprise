@@ -134,6 +134,11 @@ TEST_F(Test_crypt, InvalidLengthKey) {
   std::string data(100, '\x00');
   ASSERT_THROW(RunBasic(data, InvalidLengthKey, ""), khSimpleException);
 }
+TEST_F(Test_crypt, ShortKey) {
+  std::string ShortKey(MixedKey, 0, 8);
+  std::string data(ShortKey.size() * 2.5, '\xa6');
+  RunBasic(data, ShortKey, std::string(ShortKey.size() * 2.5, '\x90'));
+}
 
 
 int main(int argc, char *argv[]) {
