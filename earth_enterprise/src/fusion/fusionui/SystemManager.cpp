@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -111,8 +112,8 @@ SystemManager::hide()
 void
 SystemManager::assetsChanged(const AssetChanges &changes)
 {
-  static const uint maxitems = 1000;
-  uint count = activityList->count() + changes.items.size();
+  static const unsigned int maxitems = 1000;
+  unsigned int count = activityList->count() + changes.items.size();
 
   activityList->setUpdatesEnabled(false);
 

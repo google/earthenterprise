@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,19 +18,19 @@
 #include <khException.h>
 
 khInsetCoverage
-khInsetCoverage::GetSubset(uint subsetThis, uint subsetTotal) const
+khInsetCoverage::GetSubset(unsigned int subsetThis, unsigned int subsetTotal) const
 {
-  // By virtue of the range of uint, this check also ensures that
+  // By virtue of the range of unsigned int, this check also ensures that
   // subsetTotal != 0
   if (subsetThis >= subsetTotal) {
     notify(NFY_WARN, "Internal Error: Invalid subset specification");
     return khInsetCoverage();
   }
 
-  std::vector<khExtents<uint32> > newExtents;
+  std::vector<khExtents<std::uint32_t> > newExtents;
   newExtents.reserve(numLevels());
 
-  for (uint level = beginLevel(); level < endLevel(); ++level) {
+  for (unsigned int level = beginLevel(); level < endLevel(); ++level) {
     newExtents.push_back(levelCoverage(level)
                          .GetSubset(subsetThis, subsetTotal)
                          .extents);
@@ -49,9 +50,9 @@ khInsetCoverage::khInsetCoverage(const khLevelCoverage &levCov) :
 }
 
 // Build an inset coverage from a group of extents
-khInsetCoverage::khInsetCoverage(uint beginCoverageLevel,
-                                 uint endCoverageLevel,
-                                 const std::vector<khExtents<uint32> > &extentsList)
+khInsetCoverage::khInsetCoverage(unsigned int beginCoverageLevel,
+                                 unsigned int endCoverageLevel,
+                                 const std::vector<khExtents<std::uint32_t> > &extentsList)
     : vec0Level(beginCoverageLevel),
       beginLevel_(beginCoverageLevel),
       endLevel_(endCoverageLevel),
@@ -66,8 +67,8 @@ khInsetCoverage::khInsetCoverage(uint beginCoverageLevel,
 void
 khInsetCoverage::PopulateLevels(const khTilespace &tilespace,
                                 const khLevelCoverage &levCov,
-                                uint stepOutSize,
-                                uint paddingSize)
+                                unsigned int stepOutSize,
+                                unsigned int paddingSize)
 {
   if (beginLevel() >= endLevel()) {
     // we don't want any levels, so just return now
@@ -122,9 +123,9 @@ khInsetCoverage::PopulateLevels(const khTilespace &tilespace,
 
 void
 khInsetCoverage::PopulateLevels(const khTilespace &tilespace,
-                                uint fullresTileLevel,
-                                uint stepOutSize,
-                                uint paddingSize)
+                                unsigned int fullresTileLevel,
+                                unsigned int stepOutSize,
+                                unsigned int paddingSize)
 {
   if (beginLevel() >= endLevel()) {
     // we don't want any levels, so just return now
@@ -148,9 +149,9 @@ khInsetCoverage::PopulateLevels(const khTilespace &tilespace,
 void
 khInsetCoverage::PopulateLevels(const khExtents<double> &normExtents,
                                 const khTilespace &tilespace,
-                                uint fullresTileLevel,
-                                uint stepOutSize,
-                                uint paddingSize)
+                                unsigned int fullresTileLevel,
+                                unsigned int stepOutSize,
+                                unsigned int paddingSize)
 {
   if (beginLevel() >= endLevel()) {
     // we don't want any levels, so just return now
@@ -175,9 +176,9 @@ khInsetCoverage::PopulateLevels(const khExtents<double> &normExtents,
 // Build an inset coverage from degree extents
 khInsetCoverage::khInsetCoverage(const khTilespace &tilespace,
                                  const khExtents<double> &degExtents,
-                                 uint fullresTileLevel,
-                                 uint beginCoverageLevel,
-                                 uint endCoverageLevel) :
+                                 unsigned int fullresTileLevel,
+                                 unsigned int beginCoverageLevel,
+                                 unsigned int endCoverageLevel) :
     vec0Level(beginCoverageLevel),
     beginLevel_(beginCoverageLevel),
     endLevel_(endCoverageLevel),
@@ -191,9 +192,9 @@ khInsetCoverage::khInsetCoverage(const khTilespace &tilespace,
 
 khInsetCoverage::khInsetCoverage(const khExtents<double> &normExtents,
                                  const khTilespace &tilespace,
-                                 uint fullresTileLevel,
-                                 uint beginCoverageLevel,
-                                 uint endCoverageLevel) :
+                                 unsigned int fullresTileLevel,
+                                 unsigned int beginCoverageLevel,
+                                 unsigned int endCoverageLevel) :
     vec0Level(beginCoverageLevel),
     beginLevel_(beginCoverageLevel),
     endLevel_(endCoverageLevel)
@@ -208,11 +209,11 @@ khInsetCoverage::khInsetCoverage(const khExtents<double> &normExtents,
 // Build an inset coverage from degree extents (w/ stepout and padding)
 khInsetCoverage::khInsetCoverage(const khTilespace &tilespace,
                                  const khExtents<double> &degExtents,
-                                 uint fullresTileLevel,
-                                 uint beginCoverageLevel,
-                                 uint endCoverageLevel,
-                                 uint stepOutSize,
-                                 uint paddingSize) :
+                                 unsigned int fullresTileLevel,
+                                 unsigned int beginCoverageLevel,
+                                 unsigned int endCoverageLevel,
+                                 unsigned int stepOutSize,
+                                 unsigned int paddingSize) :
     vec0Level(beginCoverageLevel),
     beginLevel_(beginCoverageLevel),
     endLevel_(endCoverageLevel),
@@ -228,8 +229,8 @@ khInsetCoverage::khInsetCoverage(const khTilespace &tilespace,
 // Build an inset coverage from khLevelCoverage & level range
 khInsetCoverage::khInsetCoverage(const khTilespace &tilespace,
                                  const khLevelCoverage &levCov,
-                                 uint beginCoverageLevel,
-                                 uint endCoverageLevel) :
+                                 unsigned int beginCoverageLevel,
+                                 unsigned int endCoverageLevel) :
     vec0Level(beginCoverageLevel),
     beginLevel_(beginCoverageLevel),
     endLevel_(endCoverageLevel)

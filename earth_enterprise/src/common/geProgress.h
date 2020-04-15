@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +20,14 @@
 #define COMMON_GEPROGRESS_H_
 
 #include "khTypes.h"
+#include <cstdint>
 
 class geProgress
 {
  public:
   virtual ~geProgress() { }
-  virtual bool incrementTotal(int64 val) = 0;
-  virtual bool incrementDone(int64 val) = 0;
+  virtual bool incrementTotal(std::int64_t val) = 0;
+  virtual bool incrementDone(std::int64_t val) = 0;
 };
 
 #endif /* COMMON_GEPROGRESS_H_ */

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -146,17 +147,17 @@ void QuadtreeNumbering::PrecomputeSubindexToLevelXY() {
   }
 }
 
-uint64 QuadtreeNumbering::TraversalPathToGlobalNodeNumber(QuadtreePath path) {
-  uint64 num = 0;
-  for (uint i = 0; i < path.Level(); ++i)
+ std::uint64_t QuadtreeNumbering::TraversalPathToGlobalNodeNumber(QuadtreePath path) {
+  std::uint64_t num = 0;
+  for (unsigned int i = 0; i < path.Level(); ++i)
     num = (num * 4) + path[i] + 1;
   return num;
 }
 
-QuadtreePath QuadtreeNumbering::GlobalNodeNumberToTraversalPath(uint64 num) {
+QuadtreePath QuadtreeNumbering::GlobalNodeNumberToTraversalPath(std::uint64_t num) {
   QuadtreePath path;
   while (num > 0) {
-    uchar blist = (num - 1) & 3;
+    unsigned char blist = (num - 1) & 3;
     path = QuadtreePath(1, &blist) + path;
     num = (num - 1) / 4;
   }
@@ -164,7 +165,7 @@ QuadtreePath QuadtreeNumbering::GlobalNodeNumberToTraversalPath(uint64 num) {
 }
 
 QuadtreePath
-QuadtreeNumbering::QuadsetAndSubindexToTraversalPath(uint64 quadset_num,
+QuadtreeNumbering::QuadsetAndSubindexToTraversalPath(std::uint64_t quadset_num,
                                                      int subindex) {
   if (quadset_num == 0)
     return root_numbering.SubindexToTraversalPath(subindex);
@@ -176,7 +177,7 @@ QuadtreeNumbering::QuadsetAndSubindexToTraversalPath(uint64 quadset_num,
 
 void
 QuadtreeNumbering::TraversalPathToQuadsetAndSubindex(QuadtreePath path,
-                                                     uint64 *quadset_num,
+                                                     std::uint64_t *quadset_num,
                                                      int *subindex) {
   if (static_cast<int>(path.Level()) < root_numbering.depth()) {
     *quadset_num = 0;
@@ -194,20 +195,20 @@ QuadtreeNumbering::TraversalPathToQuadsetAndSubindex(QuadtreePath path,
 
 // Determine if path level corresponds to the (real or virtual) root
 // node of a quadset
-bool QuadtreeNumbering::IsQuadsetRootLevel(uint32 level) {
+bool QuadtreeNumbering::IsQuadsetRootLevel(std::uint32_t level) {
   return
     (level == 0)
     || ((level >= kRootDepth - 1)
         && ((level - (kRootDepth - 1)) % (kDefaultDepth - 1) == 0));
 }
 
-void QuadtreeNumbering::QuadsetAndSubindexToLevelRowColumn(uint64 quadset_num,
+void QuadtreeNumbering::QuadsetAndSubindexToLevelRowColumn(std::uint64_t quadset_num,
                                                            int subindex,
                                                            int *level,
                                                            int *row, int *col) {
   //  TraversalPathToLevelRowColumn(
   QuadtreePath path = QuadsetAndSubindexToTraversalPath(quadset_num, subindex);
-  uint32 ulevel, urow, ucol;
+  std::uint32_t ulevel, urow, ucol;
   path.GetLevelRowCol(&ulevel, &urow, &ucol);
   *level = ulevel;
   *row = urow;
@@ -216,14 +217,14 @@ void QuadtreeNumbering::QuadsetAndSubindexToLevelRowColumn(uint64 quadset_num,
 
 
 // Return the number of nodes (subindex values) in a quadset
-int QuadtreeNumbering::NumNodes(uint64 quadset_num) {
+int QuadtreeNumbering::NumNodes(std::uint64_t quadset_num) {
   return (quadset_num == 0)
                        ? root_numbering.num_nodes()
                        : default_numbering.num_nodes();
 }
 
 // Convert subindex to inorder numbering for a specified quadset
-int QuadtreeNumbering::QuadsetAndSubindexToInorder(uint64 quadset_num,
+int QuadtreeNumbering::QuadsetAndSubindexToInorder(std::uint64_t quadset_num,
                                                    int subindex) {
   return (quadset_num == 0)
                        ? root_numbering.SubindexToInorder(subindex)
@@ -232,7 +233,7 @@ int QuadtreeNumbering::QuadsetAndSubindexToInorder(uint64 quadset_num,
 
 // Get numbering for given quadset
 const
-QuadtreeNumbering &QuadtreeNumbering::Numbering(uint64 quadset_num) {
+QuadtreeNumbering &QuadtreeNumbering::Numbering(std::uint64_t quadset_num) {
   return (quadset_num == 0)
                        ? root_numbering
                        : default_numbering;
@@ -244,7 +245,7 @@ std::string QuadtreeNumbering::LevelRowColumnToMapsTraversalPath(int level,
                                                             int row, int col) {
   QuadtreePath path(level, row, col);
   std::string str = "t";
-  for (uint32 i = 0; i < path.Level(); ++i)
+  for (std::uint32_t i = 0; i < path.Level(); ++i)
     str.push_back('t' - path[i]);
   return str;
 }
@@ -255,10 +256,10 @@ QuadtreeNumbering::MapsTraversalPathToLevelRowColumn(const std::string &path,
                                                      int *row, int *col) {
   QuadtreePath path0based;
   // Maps quadtree paths are reversed (t = 0, q = 3)
-  for (uint32 i = 1; i < path.size(); ++i)
+  for (std::uint32_t i = 1; i < path.size(); ++i)
     path0based = path0based.Child('t' - path[i]);
   //  TraversalPathToLevelRowColumn(path0based, level, row, col);
-  uint32 ulevel, urow, ucol;
+  std::uint32_t ulevel, urow, ucol;
   path0based.GetLevelRowCol(&ulevel, &urow, &ucol);
   *level = ulevel;
   *row = urow;

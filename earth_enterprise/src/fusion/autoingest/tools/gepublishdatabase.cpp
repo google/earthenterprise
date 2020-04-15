@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -113,7 +114,7 @@ bool GetServerCombination(ServerCombination *server_combination,
     return server_found;
   }
 
-  for (uint i = 0; i < sc_set.combinations.size() && !server_found; ++i) {
+  for (unsigned int i = 0; i < sc_set.combinations.size() && !server_found; ++i) {
     if (*server == sc_set.combinations[i].nickname) {
       if (sc_set.combinations[i].type == ctype) {
         *server_combination = sc_set.combinations[i];
@@ -172,7 +173,7 @@ main(int argc, char *argv[]) {
                                          db_names, db_pretty_names, host_names)) {
         fprintf(stdout, "%d database(s) registered on %s\n",
                         (int)db_pretty_names.size(), serverurl.c_str());
-        for (uint i = 0; i < db_pretty_names.size(); ++i) {
+        for (unsigned int i = 0; i < db_pretty_names.size(); ++i) {
           fprintf(stdout, "\n\tDatabase: %s\n\tFusion Host:%s\n",
                           db_pretty_names[i].c_str(), host_names[i].c_str());
         }
@@ -191,7 +192,7 @@ main(int argc, char *argv[]) {
             vs_names, db_names, db_pretty_names, host_names)) {
         fprintf(stdout, "%d database(s) published on %s\n",
                         (int)db_pretty_names.size(), serverurl.c_str());
-        for (uint i = 0; i < vs_names.size(); ++i) {
+        for (unsigned int i = 0; i < vs_names.size(); ++i) {
           fprintf(stdout, "\nVirtual Server: %s\n\tDatabase: %s\n\tFusion Host: %s\n",
                   vs_names[i].c_str(), db_pretty_names[i].c_str(), host_names[i].c_str());
         }

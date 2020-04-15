@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,10 +14,10 @@
 // limitations under the License.
 
 
+#include <cstdint>
 #include <vector>
 #include <khConstants.h>
 #include <khTileAddrConsts.h>
-#include <khTypes.h>
 #include <khMetaData.h>
 #include <autoingest/.idl/storage/InsetStackItem.h>
 #include <autoingest/.idl/storage/LayerLegend.h>
@@ -32,10 +33,10 @@
 
 
 class RasterProjectConfig {
-  IsUpToDateIgnore uint indexVersion = uint(1);
+  IsUpToDateIgnore unsigned int indexVersion = uint(1);
   std::vector<InsetStackItem> insets = std::vector<InsetStackItem>();
   LayerLegend legend = LayerLegend();
-  uint32      fuid_channel_ = uint32(0);
+  std::uint32_t      fuid_channel_ = std::uint32_t(0);
   std::string asset_uuid_ = std::string();
   bool is_timemachine_project_ = false;
 
@@ -67,11 +68,11 @@ class RasterProjectConfig {
   // their base level.
   // Resources with base level < min_level are used as "Filling"-resources,
   // >= min_level - as "Overlay"-resources. It is used only in "overlay"-mode.
-  uint32 overlay_terrain_resources_min_level_ = uint32(MaxTmeshLevel/2);
+  std::uint32_t overlay_terrain_resources_min_level_ = std::uint32_t(MaxTmeshLevel/2);
 
   // Start level for build "overlay" terrain project. It is used only in
   // "overlay"-mode.
-  uint32 overlay_terrain_start_level_ = uint32(StartTmeshLevel);
+  std::uint32_t overlay_terrain_start_level_ = std::uint32_t(StartTmeshLevel);
 
 
   // Note: Basic rule for #version: "If the low level tool ever
@@ -100,12 +101,12 @@ class RasterProjectConfig {
      : indexVersion(uint(1)),
      insets(std::vector<InsetStackItem>()),
      legend((t == AssetDefs::Imagery) ? kImageryType : kTerrainType, true),
-     fuid_channel_(uint32(0)),
+     fuid_channel_(std::uint32_t(0)),
      asset_uuid_(std::string()),
      is_timemachine_project_(false),
      is_overlay_terrain_project_(false),
-     overlay_terrain_resources_min_level_(uint32(MaxTmeshLevel/2)),
-     overlay_terrain_start_level_(uint32(StartTmeshLevel)),
+     overlay_terrain_resources_min_level_(std::uint32_t(MaxTmeshLevel/2)),
+     overlay_terrain_start_level_(std::uint32_t(StartTmeshLevel)),
      idl_version(0) {
   }
 
@@ -180,8 +181,8 @@ class RasterProjectEditRequest {
 class RasterProjectModifyRequest {
   class Item {
     std::string dataAsset;
-    uint overridemax;   // 0 -> no override
-    uint peergroup;     // 0 -> not in a peer group
+    unsigned int overridemax;   // 0 -> no override
+    unsigned int peergroup;     // 0 -> not in a peer group
   };
 
   std::string assetname;
@@ -191,8 +192,8 @@ class RasterProjectModifyRequest {
   bool disable_timemachine;
   bool enable_terrain_overlay;
   bool disable_terrain_overlay;
-  uint overlay_terrain_start_level;
-  uint overlay_terrain_resources_min_level;
+  unsigned int overlay_terrain_start_level;
+  unsigned int overlay_terrain_resources_min_level;
 #pragma StrLoadAndSave
 #hquote
   RasterProjectModifyRequest(AssetDefs::Type t)

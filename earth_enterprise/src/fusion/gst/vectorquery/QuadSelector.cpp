@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -41,7 +42,7 @@ QuadSelectorBase::QuadSelectorBase(khProgressMeter *progress,
 }
 
 void QuadSelectorBase::RestoreCleared(void) {
-  for (uint i = 0; i < num_filters_; ++i) {
+  for (unsigned int i = 0; i < num_filters_; ++i) {
     if (cleared_set_[i]) {
       cleared_set_[i] = false;
       use_set_[i] = true;
@@ -53,7 +54,7 @@ void QuadSelectorBase::RestoreCleared(void) {
 // ****************************************************************************
 // ***  MinifiedQuadSelector
 // ****************************************************************************
-void MinifiedQuadSelector::SelectQuad(uint32 row, uint32 col) {
+void MinifiedQuadSelector::SelectQuad(std::uint32_t row, std::uint32_t col) {
   assert(Contains(row, col));
 
   TryToClearSets(row, col);
@@ -73,13 +74,13 @@ void MinifiedQuadSelector::SelectQuad(uint32 row, uint32 col) {
       khTileAddr(cov_.level, row, col).MagnifiedToLevel(target_cov_.level);
 
     // interset that with the targetCoverage (what we really want to do)
-    khExtents<uint32> skip_extents =
-      khExtents<uint32>::Intersection(this_target_cov.extents,
+    khExtents<std::uint32_t> skip_extents =
+      khExtents<std::uint32_t>::Intersection(this_target_cov.extents,
                                       target_cov_.extents);
 
     // now we know how many we're going to skip
-    uint64 numSkipped = uint64(skip_extents.numRows()) *
-                        uint64(skip_extents.numCols());
+    std::uint64_t numSkipped = std::uint64_t(skip_extents.numRows()) *
+                        std::uint64_t(skip_extents.numCols());
 
     progress_->incrementDone(numSkipped);
 #if 0
@@ -95,10 +96,10 @@ void MinifiedQuadSelector::SelectQuad(uint32 row, uint32 col) {
     TryToSplitSets(row, col);
 
     // for each of the four source tiles / quadrants
-    for(uint quad = 0; quad < 4; ++quad) {
+    for(unsigned int quad = 0; quad < 4; ++quad) {
       // magnify the dest row/col/quad to get row/col for the next level
-      uint32 nextRow = 0;
-      uint32 nextCol = 0;
+      std::uint32_t nextRow = 0;
+      std::uint32_t nextCol = 0;
       QuadtreePath::MagnifyQuadAddr(row, col, quad, nextRow, nextCol);
 
       // check if quad exists the next row down
@@ -136,7 +137,7 @@ MinifiedQuadSelector::MinifiedQuadSelector(QuadSelectorBase *next,
 {
 }
 
-void MinifiedQuadSelector::SplitSet(uint i, uint32 row, uint32 col) {
+void MinifiedQuadSelector::SplitSet(unsigned int i, std::uint32_t row, std::uint32_t col) {
   something_split_ = true;
   split_set_[i] = filters_[i].geo_index_;
   filters_[i].geo_index_ = filters_[i].geo_index_->SplitCell(row, col,
@@ -144,7 +145,7 @@ void MinifiedQuadSelector::SplitSet(uint i, uint32 row, uint32 col) {
 }
 
 void MinifiedQuadSelector::RestoreSplit(void) {
-  for (uint i = 0; i < num_filters_; ++i) {
+  for (unsigned int i = 0; i < num_filters_; ++i) {
     if (split_set_[i]) {
       // restore the one I split
       filters_[i].geo_index_ = split_set_[i];
@@ -159,7 +160,7 @@ void MinifiedQuadSelector::RestoreSplit(void) {
 // ****************************************************************************
 // ***  FullResQuadSelector
 // ****************************************************************************
-void FullResQuadSelector::SelectQuad(uint32 row, uint32 col) {
+void FullResQuadSelector::SelectQuad(std::uint32_t row, std::uint32_t col) {
   assert(Contains(row, col));
 
   TryToClearSets(row, col);
@@ -179,8 +180,8 @@ void FullResQuadSelector::SelectQuad(uint32 row, uint32 col) {
     out_tile->path = qpath;
 
     // populate this output tile
-    uint32 numids = 0;
-    for (uint i = 0; i < num_filters_; ++i) {
+    std::uint32_t numids = 0;
+    for (unsigned int i = 0; i < num_filters_; ++i) {
       if (use_set_[i]) {
         FilterGeoIndex &filter = filters_[i];
 
@@ -197,8 +198,8 @@ void FullResQuadSelector::SelectQuad(uint32 row, uint32 col) {
             khTileAddr(cov_.level, row, col).
             MagnifiedToLevel(filter.geo_index_->GetCoverage().level);
 
-          khExtents<uint32> to_check =
-            khExtents<uint32>::Intersection(
+          khExtents<std::uint32_t> to_check =
+            khExtents<std::uint32_t>::Intersection(
                 export_cov.extents, filter.geo_index_->GetCoverage().extents);
 
           filter.geo_index_->GetFeatureIdsFromBuckets(

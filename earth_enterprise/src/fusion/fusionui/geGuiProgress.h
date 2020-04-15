@@ -24,18 +24,18 @@
 class geGuiProgress : public geProgress
 {
  public:
-  geGuiProgress(int64 total)
+  geGuiProgress(std::int64_t total)
   : total_(total), done_(0), canceled_(false) { }
 
-  bool incrementTotal(int64 val);
-  bool incrementDone(int64 val);
+  bool incrementTotal(std::int64_t val);
+  bool incrementDone(std::int64_t val);
   void setCanceled();
-  int64 total();
-  int64 done();
+  std::int64_t total();
+  std::int64_t done();
 
  private:
-  int64 total_;
-  int64 done_;
+  std::int64_t total_;
+  std::int64_t done_;
   khMutex mutex_;
   bool canceled_;
 };

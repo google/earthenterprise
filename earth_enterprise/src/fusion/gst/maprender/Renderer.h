@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,8 +46,8 @@ class RendererOutputTile {
   khDeleteGuard<SkCanvas> canvas;
   const bool owns_buffer_;
 
-  explicit RendererOutputTile(uint32 rasterSize);
-  RendererOutputTile(uint32 rasterSize, char* buffer);
+  explicit RendererOutputTile(std::uint32_t rasterSize);
+  RendererOutputTile(std::uint32_t rasterSize, char* buffer);
   ~RendererOutputTile(void);
 
  private:

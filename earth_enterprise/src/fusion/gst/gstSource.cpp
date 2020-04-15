@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -128,11 +129,11 @@ bool gstSource::SetCodec(const QString& codec) {
 }
 
 
-uint32 gstSource::NumLayers() const {
-  return static_cast<uint32>(LayerDefs().size());
+ std::uint32_t gstSource::NumLayers() const {
+  return static_cast<std::uint32_t>(LayerDefs().size());
 }
 
-uint32 gstSource::NumFeatures(uint32 layer) const {
+ std::uint32_t gstSource::NumFeatures(std::uint32_t layer) const {
   if (!Opened()) {
     notify(NFY_WARN, "source must be opened first!");
     return 0;
@@ -147,7 +148,7 @@ uint32 gstSource::NumFeatures(uint32 layer) const {
   return LayerDefs()[layer].NumFeatures();
 }
 
-double gstSource::AverageFeatureDiameter(uint32 layer) const {
+double gstSource::AverageFeatureDiameter(std::uint32_t layer) const {
   if (!Opened()) {
     notify(NFY_WARN, "source must be opened first!");
     return 0;
@@ -161,33 +162,33 @@ double gstSource::AverageFeatureDiameter(uint32 layer) const {
   return LayerDefs()[layer].AverageFeatureDiameter();
 }
 
-uint32 gstSource::RecommendedMaxResolutionLevel() const {
+ std::uint32_t gstSource::RecommendedMaxResolutionLevel() const {
   if (!Opened()) {
     notify(NFY_WARN, "source must be opened first!");
     return 0;
   }
-  uint32 maxResolutionLevel = 0;
-  for (uint32 i = 0; i < NumLayers(); i++) {
+  std::uint32_t maxResolutionLevel = 0;
+  for (std::uint32_t i = 0; i < NumLayers(); i++) {
     maxResolutionLevel = std::max(
       maxResolutionLevel, LayerDefs()[i].MaxResolutionLevel());
   }
   return maxResolutionLevel;
 }
 
-uint32 gstSource::RecommendedMinResolutionLevel() const {
+ std::uint32_t gstSource::RecommendedMinResolutionLevel() const {
   if (!Opened()) {
     notify(NFY_WARN, "source must be opened first!");
     return 0;
   }
-  uint32 minResolutionLevel = 0;
-  for (uint32 i = 0; i < NumLayers(); i++) {
+  std::uint32_t minResolutionLevel = 0;
+  for (std::uint32_t i = 0; i < NumLayers(); i++) {
     minResolutionLevel = std::min(
       minResolutionLevel, LayerDefs()[i].MinResolutionLevel());
   }
   return minResolutionLevel;
 }
 
-uint32 gstSource::RecommendedEfficientResolutionLevel() const {
+ std::uint32_t gstSource::RecommendedEfficientResolutionLevel() const {
   if (!Opened()) {
     notify(NFY_WARN, "source must be opened first!");
     return 0;
@@ -195,11 +196,11 @@ uint32 gstSource::RecommendedEfficientResolutionLevel() const {
   if (!NumLayers()) {
     return 0;
   }
-  uint32 efficientResolutionLevel = 0;
-  for (uint32 i = 0; i < NumLayers(); i++) {
+  std::uint32_t efficientResolutionLevel = 0;
+  for (std::uint32_t i = 0; i < NumLayers(); i++) {
     efficientResolutionLevel += LayerDefs()[i].EfficientResolutionLevel();
   }
-  return static_cast<uint32>(static_cast<double>(efficientResolutionLevel)
+  return static_cast<std::uint32_t>(static_cast<double>(efficientResolutionLevel)
                              / NumLayers() + 0.5);
 }
 
@@ -207,14 +208,14 @@ uint32 gstSource::RecommendedEfficientResolutionLevel() const {
 #if 0
 gstBBox gstSource::BoundingBox() {
   gstBBox all;
-  for (uint layer = 0; layer < NumLayers(); ++layer)
+  for (unsigned int layer = 0; layer < NumLayers(); ++layer)
     all.Grow(BoundingBox(layer));
   return all;
 }
 #endif
 
 
-gstBBox gstSource::BoundingBox(uint32 layer) {
+gstBBox gstSource::BoundingBox(std::uint32_t layer) {
   if (!Opened()) {
     notify(NFY_WARN, "can't retrieve box from un-opened source %s", name());
     return gstBBox::empty;
@@ -269,7 +270,7 @@ gstBBox gstSource::BoundingBox(uint32 layer) {
   return ldef.BoundingBox();
 }
 
-void gstSource::ResetReadingOrThrow(uint32 layer) {
+void gstSource::ResetReadingOrThrow(std::uint32_t layer) {
   if (!Opened()) {
     throw khException(kh::tr("Source not open: %1").arg(name()));
   } else if (layer >= NumLayers()) {
@@ -410,7 +411,7 @@ bool gstSource::IsReadingDone(void) {
 }
 
 
-gstGeodeHandle gstSource::GetFeatureOrThrow(uint32 layer, uint32 id,
+gstGeodeHandle gstSource::GetFeatureOrThrow(std::uint32_t layer, std::uint32_t id,
                                             bool is_mercator_preview) {
   if (!Opened()) {
     throw khException(kh::tr("Source not open: %1").arg(name()));
@@ -455,7 +456,7 @@ gstGeodeHandle gstSource::GetFeatureOrThrow(uint32 layer, uint32 id,
   return gstGeodeHandle();
 }
 
-gstBBox gstSource::GetFeatureBoxOrThrow(uint32 layer, uint32 id) {
+gstBBox gstSource::GetFeatureBoxOrThrow(std::uint32_t layer, std::uint32_t id) {
   if (!Opened()) {
     throw khException(kh::tr("Source not open: %1").arg(name()));
   } else if (layer >= NumLayers()) {
@@ -490,7 +491,7 @@ gstBBox gstSource::GetFeatureBoxOrThrow(uint32 layer, uint32 id) {
   return gstBBox();
 }
 
-gstRecordHandle gstSource::GetAttributeOrThrow(uint32 layer, uint32 id) {
+gstRecordHandle gstSource::GetAttributeOrThrow(std::uint32_t layer, std::uint32_t id) {
   if (!Opened()) {
     throw khException(kh::tr("Source not open: %1").arg(name()));
   } else if (layer >= NumLayers()) {
@@ -532,10 +533,10 @@ gstRecordHandle gstSource::GetAttributeOrThrow(uint32 layer, uint32 id) {
   return gstRecordHandle();
 }
 
-const gstHeaderHandle& gstSource::GetAttrDefs(uint32 layer) const {
+const gstHeaderHandle& gstSource::GetAttrDefs(std::uint32_t layer) const {
   return LayerDefs()[layer].AttrDefs();
 }
 
-gstPrimType gstSource::GetPrimType(uint32 layer) const {
+gstPrimType gstSource::GetPrimType(std::uint32_t layer) const {
   return LayerDefs()[layer].Type();
 }

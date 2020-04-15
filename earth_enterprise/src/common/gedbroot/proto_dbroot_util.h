@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +21,12 @@
 #define GEO_EARTH_ENTERPRISE_SRC_COMMON_GEDBROOT_PROTO_DBROOT_UTIL_H_
 
 #include <string>
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 
 namespace gedbroot {
   void CreateTimemachineDbroot(const std::string& dbroot_filename,
-                               const uint database_version,
+                               const unsigned int database_version,
                                const std::string& template_filename = "");
 
   // Takes contents and parses it as a dbroot and gets information about

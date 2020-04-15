@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -126,7 +127,7 @@ bool PortableService::UnregisterPortable(
 //    <prefix>/<string>/<suffix> - returns false and undefined.
 // Returns whether layer_index appears to be present.
 bool PortableService::ParseLayerIndex(const std::string& path,
-                                      uint suffix_index,
+                                      unsigned int suffix_index,
                                       std::string* layer_id_str) {
   *layer_id_str = path.substr(0, suffix_index);
   size_t layer_id_index = layer_id_str->rfind("/");
@@ -424,7 +425,7 @@ int PortableService::DoPortableStatus(request_rec* r,
   data.append("<b>Globe: <i>");
   data.append(unpacker_manager_.GetPortablePath(target_path));
   data.append("</i></b>");
-  uint64 size = reader->Size();
+  std::uint64_t size = reader->Size();
   const char* units = "MB";
   float sizef = size;
   if (size < 100000000) {
@@ -454,7 +455,7 @@ void PortableService::DoStatus(std::string* data) {
   std::map<std::string, std::vector<std::string> > portable_to_targets;
   GetPortableToTargetsMap(&portable_to_targets);
   char str[256];
-  snprintf(str, sizeof(str), "%lu", portable_to_targets.size());
+  snprintf(str, sizeof(str), "%lu", static_cast<unsigned long>(portable_to_targets.size()));
   data->append("<h4>Glx(s) serving on Target(s) (");
   data->append(str);
   data->append("):</h4>");
@@ -702,10 +703,10 @@ int PortableService::DoQuery(request_rec* r,
 
   std::string data;
   //   int x, y, z, channel;
-  uint32 x = 0;
-  uint32 y = 0;
-  uint32 z = 0;
-  uint32 channel = 0;
+  std::uint32_t x = 0;
+  std::uint32_t y = 0;
+  std::uint32_t z = 0;
+  std::uint32_t channel = 0;
   std::string qtnode = "0";
 
   if ((arg_map["request"] == "ImageryMaps") ||

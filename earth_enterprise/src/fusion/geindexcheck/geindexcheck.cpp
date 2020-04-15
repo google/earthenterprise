@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -117,7 +118,7 @@ int main(int argc, char **argv) {
   std::string index_path;
   std::string database_name;
   int verbose = NFY_PROGRESS;
-  uint32 progress = 100000;
+  std::uint32_t progress = 100000;
 
   Mode mode = kModeIndex;
   std::map<std::string, Mode> mode_map;
@@ -267,8 +268,8 @@ int main(int argc, char **argv) {
 
   // Read all the index locations
 
-  uint64 location_count = 0;
-  uint64 entry_count = 0;
+  std::uint64_t location_count = 0;
+  std::uint64_t entry_count = 0;
   while (traverser->Active()) {
     ++location_count;
     entry_count += traverser->CurrentEntryCount();

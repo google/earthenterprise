@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,7 +22,7 @@
 // file.  PacketFileReaderPool provides a compact token that can be
 // used to access the appropriate packet file.
 
-#include <khTypes.h>
+#include <cstdint>
 #include <third_party/rsa_md5/crc32.h>
 #include <packetfile/packetfilereader.h>
 #include <packetfile/packetfilereaderpool.h>
@@ -48,7 +49,7 @@ PacketFileReaderPool::PacketFileReaderPool(const std::string &pool_name,
 PacketFileReaderToken PacketFileReaderPool::Add(
     const std::string &packet_file_name) {
   assert(names_.size() == readers_.size());
-  uint32 packet_file_index = readers_.size();
+  std::uint32_t packet_file_index = readers_.size();
   names_.push_back(packet_file_name);
   PacketFileReaderBase* reader = new PacketFileReaderBase(file_pool_,
                                                           packet_file_name);

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -43,10 +44,10 @@
 class RasterLayerItem : public LayerItemBase {
  public:
   RasterLayerItem(QListView* parent, const InsetStackItem& cfg,
-                  const std::string& date_string, uint level_diff,
+                  const std::string& date_string, unsigned int level_diff,
                   bool is_mercator);
   RasterLayerItem(QListView* parent, const QString& asset_path,
-                  uint level_diff, bool is_mercator);
+                  unsigned int level_diff, bool is_mercator);
 
   // Inherited from QListViewItem
   virtual QString text(int col) const;
@@ -71,14 +72,14 @@ class RasterLayerItem : public LayerItemBase {
   bool CanMoveDown(bool newer_imagery_first) const;
 
   InsetStackItem& GetConfig() { return config_; }
-  uint MaxLevel() const { return config_.maxlevel; }
+  unsigned int MaxLevel() const { return config_.maxlevel; }
   std::string Date() const { return date_string_; }
   void AdjustLevel(bool newer_imagery_first);
   void Draw(const gstDrawState& state);
   const gstBBox& BBox() const { return bbox_; }
 
  private:
-  inline uint ProductToDisplayLevel(uint product_level) const {
+  inline unsigned int ProductToDisplayLevel(unsigned int product_level) const {
     return product_level - level_diff_;
   }
   void InitMetaData();
@@ -86,14 +87,14 @@ class RasterLayerItem : public LayerItemBase {
 
   InsetStackItem config_;
   std::string date_string_;  // The Acquisition Date in "YYYY-MM-DD" format.
-  uint level_diff_;
+  unsigned int level_diff_;
   gstBBox bbox_;
   const bool is_mercator_;
 };
 
 namespace {
 
-static uint CalcLayerDiff(AssetDefs::Type asset_type) {
+static unsigned int CalcLayerDiff(AssetDefs::Type asset_type) {
   switch (asset_type) {
     case AssetDefs::Imagery:
       return ImageryToProductLevel(0);
@@ -123,7 +124,7 @@ static std::string GetAcquisitionDate(const std::string &asset_path,
 
 RasterLayerItem::RasterLayerItem(QListView* parent, const InsetStackItem& cfg,
                                  const std::string& date_string,
-                                 uint level_diff, bool is_mercator)
+                                 unsigned int level_diff, bool is_mercator)
   : LayerItemBase(parent),
     config_(cfg),
     date_string_(date_string),
@@ -133,7 +134,7 @@ RasterLayerItem::RasterLayerItem(QListView* parent, const InsetStackItem& cfg,
 }
 
 RasterLayerItem::RasterLayerItem(QListView* parent, const QString& asset_path,
-                                 uint level_diff, bool is_mercator)
+                                 unsigned int level_diff, bool is_mercator)
   : LayerItemBase(parent),
     level_diff_(level_diff),
     is_mercator_(is_mercator) {
@@ -429,10 +430,10 @@ void RasterProjectWidget::ContextMenu(QListViewItem* item,
 
   khDeleteGuard<QPopupMenu> maxoverride_menu;
   InsetStackItem& cfg = image_layer_item->GetConfig();
-  uint insetmin = 0;
-  uint insetmax = 0;
+  unsigned int insetmin = 0;
+  unsigned int insetmax = 0;
   GetMinMaxLevels(cfg.dataAsset, insetmin, insetmax);
-  uint current_level = (cfg.overridemax == 0) ? insetmax : cfg.overridemax;
+  unsigned int current_level = (cfg.overridemax == 0) ? insetmax : cfg.overridemax;
   LevelSlider* overridemax_level_slider = new LevelSlider(
       1, static_cast<int>(ProductToDisplayLevel(insetmax)),
       static_cast<int>(ProductToDisplayLevel(current_level)), this);
@@ -483,7 +484,7 @@ void RasterProjectWidget::ContextMenu(QListViewItem* item,
       // the menu_id is not valid for this option because
       // it is actually a sub-menu
       cfg.maxlevel = DisplayToProductLevel(
-          (uint)overridemax_level_slider->Value());
+          (unsigned int)overridemax_level_slider->Value());
 
       if (cfg.maxlevel == insetmax) {
         cfg.overridemax = 0;
@@ -581,7 +582,7 @@ bool RasterProjectWidget::CheckForValidDates(const std::string& resource) {
   }
 
   std::string missing_dates;
-  for (uint i = 0; i < resources.size(); ++i) {
+  for (unsigned int i = 0; i < resources.size(); ++i) {
     const std::string& resource_i = resources[i];
     std::string date_string = GetAcquisitionDate(resource_i, is_mercator_);
 

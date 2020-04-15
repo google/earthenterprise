@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,8 +14,8 @@
 // limitations under the License.
 
 
+#include <cstdint>
 #include <string>
-#include <khTypes.h>
 #include <searchtabs/.idl/SearchTabs.h>
 #requiresgetheapusage
 
@@ -25,7 +26,7 @@
 class SearchTabReference
 {
   std::string project_ref_; // empty if references a tab from the tab manager
-  uint32  tab_id_ = uint32(0);
+  std::uint32_t  tab_id_ = std::uint32_t(0);
 
 #hquote
   // defined in autoingest/SearchTabReferenceImpl.cpp

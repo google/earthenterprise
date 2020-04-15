@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -72,7 +73,7 @@ static void ReadbackOutput(geFilePool &file_pool,
   // path matches the index.
   QuadtreePath last_qt_path;
   PacketIndexEntry index_entry;
-  uint64 readback_count = 0;
+  std::uint64_t readback_count = 0;
 
   while (index_reader.ReadNext(&index_entry)) {
     if (index_entry.qt_path() < last_qt_path) {
@@ -159,19 +160,19 @@ int main(int argc, char *argv[]) {
     ffio::IndexReader pack_idx(ffio::IndexFilename(indexer.abs_path()));
 
     // count how many index entries we need to process
-    uint64 num_entries = 0;
+    std::uint64_t num_entries = 0;
     for (size_t level = 0; level < pack_idx.levelvec.size(); ++level) {
       const ffio::IndexReader::LevelInfo &level_info =
         pack_idx.levelvec[level];
-      for (uint32 row = level_info.extents.beginRow();
+      for (std::uint32_t row = level_info.extents.beginRow();
            row < level_info.extents.endRow();
            ++row ) {
         num_entries += level_info.extents.width();
       }
     }
 
-    uint64 indexed_size = 0;              // amount of data indexed
-    uint64 indexed_records = 0;           // number of records indexed
+    std::uint64_t indexed_size = 0;              // amount of data indexed
+    std::uint64_t indexed_records = 0;           // number of records indexed
 
     {
       // add scope to control lifetime of progress object (and thereby the
@@ -182,14 +183,14 @@ int main(int argc, char *argv[]) {
       for (size_t level = 0; level < pack_idx.levelvec.size(); ++level) {
         const ffio::IndexReader::LevelInfo &level_info =
           pack_idx.levelvec[level];
-        for (uint32 row = level_info.extents.beginRow();
+        for (std::uint32_t row = level_info.extents.beginRow();
              row < level_info.extents.endRow();
              ++row ) {
-          for (uint32 col = level_info.extents.beginCol();
+          for (std::uint32_t col = level_info.extents.beginCol();
                col < level_info.extents.endCol();
                ++col ) {
-            uint64 linear_offset;
-            uint32 record_size;
+            std::uint64_t linear_offset;
+            std::uint32_t record_size;
             if (level_info.FindTile(row, col, linear_offset, record_size)) {
               QuadtreePath qt_path(level_info.level, row, col);
               indexer.WriteAppendIndex

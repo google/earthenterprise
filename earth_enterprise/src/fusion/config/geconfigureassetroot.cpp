@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -419,7 +420,7 @@ void RepairExistingAssetRoot(const AssetRootStatus &status, bool noprompt) {
 void listCurrentVolumes(VolumeDefList *const voldefs, std::vector<std::string> volnames) {
     printf("\nCurrent Volume Definitions:\n");
     printf("--- name: netpath,localpath,isTmp ---\n");
-    uint i = 0;
+    unsigned int i = 0;
     for (std::vector<std::string>::const_iterator vn = volnames.begin();
          vn != volnames.end(); ++vn, ++i) {
       printf("%d)  %s: %s,%s,%s\n",

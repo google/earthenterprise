@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +45,7 @@ template <class ItemType> class QuadsetItem {
   ~QuadsetItem() {}
 
   inline const QuadtreePath &qt_path() const { return qt_path_; }
-  inline uint64 quadset_num() const { return quadset_num_; }
+  inline std::uint64_t quadset_num() const { return quadset_num_; }
   inline int subindex() const { return subindex_; }
   inline const ItemType &item() const { return item_; }
   bool operator>(const QuadsetItem<ItemType> &other) const {
@@ -52,7 +53,7 @@ template <class ItemType> class QuadsetItem {
   }
  private:
   QuadtreePath qt_path_;                // path to packet itself
-  uint64 quadset_num_;                  // containing quadset
+  std::uint64_t quadset_num_;                  // containing quadset
   int subindex_;
   ItemType item_;
 };
@@ -68,7 +69,7 @@ template <class ItemType> class QuadsetGroup {
   // subindex
   typedef std::vector<ItemType> NodeContents;
 
-  explicit QuadsetGroup(uint64 quadset_num)
+  explicit QuadsetGroup(std::uint64_t quadset_num)
       : quadset_num_(quadset_num),
         num_nodes_(QuadtreeNumbering::NumNodes(quadset_num)),
         qt_root_(
@@ -85,7 +86,7 @@ template <class ItemType> class QuadsetGroup {
   inline size_t size() const { return nodes_.size(); }
   inline const QuadtreePath &qt_root() const { return qt_root_; }
   inline const QuadtreePath &qt_last() const { return qt_last_; }
-  inline uint64 quadset_num() const { return quadset_num_; }
+  inline std::uint64_t quadset_num() const { return quadset_num_; }
 
   void Add(const QuadsetItem<ItemType> &new_node) {
     assert(new_node.quadset_num() == quadset_num_);
@@ -134,7 +135,7 @@ template <class ItemType> class QuadsetGroup {
     return other > *this;
   }
  private:
-  uint64 quadset_num_;
+  std::uint64_t quadset_num_;
   int num_nodes_;
   const QuadtreePath qt_root_;          // path to root of quadset
   const QuadtreePath qt_last_;          // path to last possible node (postorder)

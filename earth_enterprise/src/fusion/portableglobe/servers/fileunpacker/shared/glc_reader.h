@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +24,6 @@
 
 #include <fstream>  // NOLINT(readability/streams)
 #include <string>
-#include "./khTypes.h"
 
 class GlcReader {
  public:
@@ -42,7 +42,7 @@ class GlcReader {
    * @param size Size of data in bytes to read.
    * @return whether data was read.
    */
-  virtual bool Read(std::string* buffer, uint64 offset, uint64 size) const = 0;
+  virtual bool Read(std::string* buffer, std::uint64_t offset, std::uint64_t size) const = 0;
 
   /**
    * Reads data into given memory location from the given
@@ -52,13 +52,13 @@ class GlcReader {
    * @param size Size of data to read.
    * @return whether data was read.
    */
-  virtual bool ReadData(void* ptr, uint64 offset, uint64 size) const = 0;
+  virtual bool ReadData(void* ptr, std::uint64_t offset, std::uint64_t size) const = 0;
 
   /**
    * Returns the size of the file or 0 if there is a problem with
    * the file.
    */
-  virtual uint64 Size() const = 0;
+  virtual std::uint64_t Size() const = 0;
 
   /**
    * Returns the 3-char suffix of the file being read.

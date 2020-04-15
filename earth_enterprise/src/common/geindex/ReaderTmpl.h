@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -143,21 +144,21 @@ bool Reader<Entry>::GetEntrySingle(BucketEntrySlotType slot,
                                    Entry *entryReturn,
                                    ReadBuffer &buf) {
 
-  uint32 entrySize = Entry::VersionedSize(fileFormatVersion);
-  uint16 numSlots;
+  std::uint32_t entrySize = Entry::VersionedSize(fileFormatVersion);
+  std::uint16_t numSlots;
   buf >> numSlots;
 
   // Single entries are stored in one of two ways
   if (ShouldStoreSinglesSparsely(entrySize, numSlots)) {
     // -- sparsely populated --
-    // uint16 numSlots;
+    // std::uint16_t numSlots;
     // BucketChildSlotType [numSlots]
     // { Entry for first  slot}
     // { Entry for second slot}
     // { Entry for third  slot}
 
-    uint16 skipEntryCount = 0;
-    for (uint16 i = 0; i < numSlots; ++i) {
+    std::uint16_t skipEntryCount = 0;
+    for (std::uint16_t i = 0; i < numSlots; ++i) {
       BucketChildSlotType currSlot;
       buf >> currSlot;
       if (currSlot != slot) {
@@ -175,7 +176,7 @@ bool Reader<Entry>::GetEntrySingle(BucketEntrySlotType slot,
     }
   } else {
     // -- fully populated --
-    // uint16 numSlots;
+    // std::uint16_t numSlots;
     // Entry[kEntrySlotsPerBucket]
 
     // skip the entries for the slots before me
@@ -198,21 +199,21 @@ bool Reader<Entry>::GetEntryMultiple(BucketEntrySlotType slot,
                                      Entry *entryReturn,
                                      ReadBuffer &buf) {
 
-  uint32 entrySize = Entry::VersionedSize(fileFormatVersion);
+  std::uint32_t entrySize = Entry::VersionedSize(fileFormatVersion);
 
   // Stored as
-  // uint16 numSlots;
-  // { BucketChildSlotType slot; uint16 count; } [numSlots]
+  // std::uint16_t numSlots;
+  // { BucketChildSlotType slot; std::uint16_t count; } [numSlots]
   // { entries for first  slot }
   // { entries for second slot }
   // { entries for third  slot }
 
-  uint16 numSlots;
+  std::uint16_t numSlots;
   buf >> numSlots;
-  uint32 skipEntryCount = 0;
-  for (uint16 i = 0; i < numSlots; ++i) {
+  std::uint32_t skipEntryCount = 0;
+  for (std::uint16_t i = 0; i < numSlots; ++i) {
     BucketChildSlotType currSlot;
-    uint16 count;
+    std::uint16_t count;
     buf >> currSlot >> count;
     if (currSlot != slot) {
       // not the slot we want

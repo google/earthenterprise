@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -264,7 +265,7 @@ int main(int argc, char* argv[]) {
     json_dependency_files.push_back(
       FilePair(imagery_config_file, kDbImageryLayerConfigFile));
 
-    for (uint i = 0; i < json_dependency_files.size(); ++i) {
+    for (unsigned int i = 0; i < json_dependency_files.size(); ++i) {
       std::string source = json_dependency_files[i].first;
       std::string dest = khComposePath(output_path,
                                        json_dependency_files[i].second);

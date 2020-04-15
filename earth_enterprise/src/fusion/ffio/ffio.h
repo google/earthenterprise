@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +22,11 @@ File:        ffio.h
 #ifndef __ffio_h
 #define __ffio_h
 
+#include <cstdint>
 #include <string>
 #include <vector>
 #include <assert.h>
 #include <khConstants.h>
-#include <khTypes.h>
 #include <khExtents.h>
 #include <khTileAddr.h>
 

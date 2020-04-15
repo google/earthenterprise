@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,25 +41,33 @@ class khGDALReader
   // convert/clamp as necessary
   // Will throw if can't read
   template <class SrcPixelType, class TileType>
-  void TypedRead(const khExtents<uint32> &readExtents, bool topToBottom,
-                 TileType &tile, const khOffset<uint32> &tileOffset);
+  void TypedRead(const khExtents<std::uint32_t> &readExtents, bool topToBottom,
+                 TileType &tile, const khOffset<std::uint32_t> &tileOffset);
+  // virtual so it can be overridden by unit tests
+  virtual void GetNoDataFromSrc(double & no_data, int & nodata_exists);
+
  protected:
   khGDALDataset     srcDS;
-  uint              numBands;
+  unsigned int              numBands;
   std::vector<int>  gdalBandIndexes;
   GDALDataType      gdalDatatype;
   khTypes::StorageEnum storage;
   bool              topToBottom;
+  bool              no_data_set;
+  double            sanitized_no_data;
 
-  uint paletteSize;
+  unsigned int paletteSize;
   const GDALColorEntry *palette;
 
-  std::vector<uchar> rawReadBuf;
+  std::vector<unsigned char> rawReadBuf;
+
+  // Protected so it can be called from unit tests
+  template <class SrcPixelType> SrcPixelType GetNoDataOrZero();
 
   // reads numBands worth of gdalDatatype pixels into rawReadBuf
   // assumes rawReadBuf has already been sized appropriately
   // will succeed or throw
-  virtual void FetchPixels(const khExtents<uint32> &srcExtents) = 0;
+  virtual void FetchPixels(const khExtents<std::uint32_t> &srcExtents) = 0;
 
  public:
   inline khTypes::StorageEnum componentType(void) const { return storage; }
@@ -68,39 +77,39 @@ class khGDALReader
   // empty bandIndexes means take numbands in order 0,1,...
   // Note: these band numbers are 0 based, not 1 based like that HORRID
   // gdal API.
-  khGDALReader(const khGDALDataset &srcDS, uint numbands);
+  khGDALReader(const khGDALDataset &srcDS, unsigned int numbands);
 
   // read readExtents from src, place results in tile at the offset
   // specified. If src doesn't match TileType::PixelType then
   // convert/clamp as necessary
   // Will throw if can't read
   template <class TileType>
-  inline void Read(const khExtents<uint32> &readExtents, bool topToBottom,
-                   TileType &tile, const khOffset<uint32> &tileOffset)
+  inline void Read(const khExtents<std::uint32_t> &readExtents, bool topToBottom,
+                   TileType &tile, const khOffset<std::uint32_t> &tileOffset)
   {
     switch (storage) {
       case khTypes::UInt8:
-        TypedRead<uint8, TileType>(readExtents, topToBottom,
+        TypedRead<std::uint8_t, TileType>(readExtents, topToBottom,
                                    tile, tileOffset);
         break;
       case khTypes::Int8:
-        TypedRead<int8, TileType>(readExtents, topToBottom,
+        TypedRead<std::int8_t, TileType>(readExtents, topToBottom,
                                   tile, tileOffset);
         break;
       case khTypes::UInt16:
-        TypedRead<uint16, TileType>(readExtents, topToBottom,
+        TypedRead<std::uint16_t, TileType>(readExtents, topToBottom,
                                     tile, tileOffset);
         break;
       case khTypes::Int16:
-        TypedRead<int16, TileType>(readExtents, topToBottom,
+        TypedRead<std::int16_t, TileType>(readExtents, topToBottom,
                                    tile, tileOffset);
         break;
       case khTypes::UInt32:
-        TypedRead<uint32, TileType>(readExtents, topToBottom,
+        TypedRead<std::uint32_t, TileType>(readExtents, topToBottom,
                                     tile, tileOffset);
         break;
       case khTypes::Int32:
-        TypedRead<int32, TileType>(readExtents, topToBottom,
+        TypedRead<std::int32_t, TileType>(readExtents, topToBottom,
                                    tile, tileOffset);
         break;
       case khTypes::Float32:
@@ -126,13 +135,13 @@ class khGDALSimpleReader : public khGDALReader
 {
  protected:
   // implement for my base class
-  virtual void FetchPixels(const khExtents<uint32> &srcExtents);
+  virtual void FetchPixels(const khExtents<std::uint32_t> &srcExtents);
 
  public:
   // empty bandIndexes means take numbands in order 0,1,...
   // Note: these band numbers are 0 based, not 1 based like that HORRID
   // gdal API.
-  khGDALSimpleReader(const khGDALDataset &srcDS, uint numbands)
+  khGDALSimpleReader(const khGDALDataset &srcDS, unsigned int numbands)
       : khGDALReader(srcDS, numbands)
   {
   }
@@ -182,7 +191,7 @@ class khGDALWarpingReader : public khGDALReader
 
  protected:
   // implement for my base class
-  virtual void FetchPixels(const khExtents<uint32> &srcExtents);
+  virtual void FetchPixels(const khExtents<std::uint32_t> &srcExtents);
 
  public:
   // empty bandIndexes means take numbands in order 0,1,...
@@ -194,7 +203,7 @@ class khGDALWarpingReader : public khGDALReader
   // destination images. If it is NULL that means abscence of noData parameter.
   khGDALWarpingReader(const khGDALDataset &srcDS,
                       GDALResampleAlg resampleAlg,
-                      uint numbands,
+                      unsigned int numbands,
                       double transformErrorThreshold =
                       0.125 /* from gdal_warp.c */,
                       khTilespace::ProjectionType projectionType =

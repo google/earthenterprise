@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,11 +28,11 @@ class LevelRasterBand : public GDALRasterBand
 {
   const khRasterProductLevel *prodLevel;
   khTypes::StorageEnum extractType;
-  uint extractBand;
+  unsigned int extractBand;
 
  public:
   LevelRasterBand(GDALDataset *ds, int gdalBand,
-                  uint extractBand_,
+                  unsigned int extractBand_,
                   const khRasterProductLevel &plev,
                   khTypes::StorageEnum type);
 

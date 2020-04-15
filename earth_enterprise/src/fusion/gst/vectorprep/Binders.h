@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +34,7 @@ class Binder {
   Binder(const FieldBinderDef &def_) : def(def_) { }
   virtual ~Binder(void) { }
 
-  virtual void Bind(gstRecordHandle &out, gstRecordHandle &in, uint pos) = 0;
+  virtual void Bind(gstRecordHandle &out, gstRecordHandle &in, unsigned int pos) = 0;
 };
 
 class RecordFormatterBinder : public Binder {
@@ -47,7 +48,7 @@ class RecordFormatterBinder : public Binder {
   }
   virtual ~RecordFormatterBinder(void) { }
 
-  virtual void Bind(gstRecordHandle &out, gstRecordHandle &in, uint pos) {
+  virtual void Bind(gstRecordHandle &out, gstRecordHandle &in, unsigned int pos) {
     out->Field(pos)->set(formatter.out(in));
   }
 };
@@ -67,7 +68,7 @@ class JSBinder : public Binder {
   }
   virtual ~JSBinder(void) { }
 
-  virtual void Bind(gstRecordHandle &out, gstRecordHandle &in, uint pos) {
+  virtual void Bind(gstRecordHandle &out, gstRecordHandle &in, unsigned int pos) {
     if (!def.fieldGen.empty()) {
       cx->SetRecord(in);
       cx->ExecuteScript(script, *out->Field(pos));

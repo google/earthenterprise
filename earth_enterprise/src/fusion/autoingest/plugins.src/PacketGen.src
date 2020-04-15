@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -50,12 +51,12 @@ template <typename ProductAssetVersion>
 void PacketGenAssetVersionImplD::UpdateChildren(
     const PacketGenExtraUpdateArg<ProductAssetVersion> &extra) {
   std::string assetRef = GetAssetRef();
-  uint numLevels = config.coverage.numLevels();
+  unsigned int numLevels = config.coverage.numLevels();
   if (numLevels == 0) {
     throw khException(kh::tr("Internal Error: No levels to build"));
   }
 
-  uint numInsets = extra.insetInfo.size();
+  unsigned int numInsets = extra.insetInfo.size();
   if (numInsets == 0) {
     throw khException(kh::tr("Internal Error: No insets"));
   }
@@ -66,13 +67,13 @@ void PacketGenAssetVersionImplD::UpdateChildren(
   // Create my children giving them each a different level
   // Go from end to begin so we can use the results from one level to make
   // the next lower resolution level
-  uint level = config.coverage.endLevel();
+  unsigned int level = config.coverage.endLevel();
   while (level > config.coverage.beginLevel()) {
     --level;
 
     // Determine which insets intersect us at this level
     const khLevelCoverage levCov(config.coverage.levelCoverage(level));
-    std::vector<uint> neededIndexes;
+    std::vector< unsigned int>  neededIndexes;
 
     neededIndexes.reserve(numInsets);
     auto gencov = khInsetCoverage(levCov);
@@ -106,7 +107,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
         packetLevelConfig.decimate   = true;
         packetLevelConfig.sampleSize = TmeshQuadnodeResolution;
       } else {
-        uint diff = level - config.beginSimplifyLevel;
+        unsigned int diff = level - config.beginSimplifyLevel;
         switch (diff) {
           case 0:
             // decimate from 16x16 samples (4 @ 9x9 tmeshes)
@@ -180,7 +181,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
         ((level > config.beginMinifyLevel) &&
          (level <= config.endMinifyLevel));
 
-      const uint minifySrcLevel = level + 1;
+      const unsigned int minifySrcLevel = level + 1;
 
       // for attribution we care about everybody
       packetLevelConfig.attributions.reserve(neededIndexes.size() + 1);
@@ -197,7 +198,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
 
       // for insets we only care about those that have done work at
       // minifySrcLevel
-      std::vector<uint> mergeIndexes;
+      std::vector< unsigned int>  mergeIndexes;
       mergeIndexes.reserve(neededIndexes.size());
 
       for (const auto& idx : neededIndexes) {
@@ -309,7 +310,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
     snprintf(subname, sizeof(subname), "packlevel%02d", level);
     MutableAssetVersionD packLevelVer =
       AssetFactory::ReuseOrMakeAndUpdateSubAsset
-        <MutablePacketLevelAssetVersionD, PacketLevelConfig, PacketLevelAssetVersionD>
+        <MutablePacketLevelAssetVersionD, PacketLevelConfig, PacketLevelAssetVersionD, AssetVersion>
       (assetRef,
        type,
        subname,

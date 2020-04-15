@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -34,7 +35,7 @@ LabelFormat::LabelFormat(QWidget* parent, const gstHeaderHandle &record_header,
   if (record_header) {
     if (record_header->numColumns() != 0) {
       insert_field_combo->insertItem(InsertFieldTxt);
-      for (uint col = 0; col < record_header->numColumns(); ++col)
+      for (unsigned int col = 0; col < record_header->numColumns(); ++col)
         insert_field_combo->insertItem(record_header->Name(col));
     } else {
       insert_field_combo->setEnabled(false);

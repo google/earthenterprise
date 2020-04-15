@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,9 +14,9 @@
 // limitations under the License.
 
 
+#include <cstdint>
 #include <string>
 #include <vector>
-#include <khTypes.h>
 #include <khInsetCoverage.h>
 #requiresgetheapusage
 
@@ -35,13 +36,13 @@ class PacketGenConfig {
 
   std::vector<Inset> insets;
   khInsetCoverage coverage;
-  uint            beginMinifyLevel;
-  uint            endMinifyLevel;
+  unsigned int            beginMinifyLevel;
+  unsigned int            endMinifyLevel;
   bool            cacheRaster;
 
   // > maxlevel -> don't simplify
-  uint            beginSimplifyLevel = uint(100);
-  uint            beginSkipTransparentLevel = uint(100);
+  unsigned int            beginSimplifyLevel = uint(100);
+  unsigned int            beginSkipTransparentLevel = uint(100);
 
   // if the top inset has opaque tiles at the target level, use them
   // instead of merging.

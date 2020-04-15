@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 The Open GEE Contributors
+ * Copyright 2020 The Open GEE Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ using namespace std;
 vector<AssetDefs::State> states = { AssetDefs::New, AssetDefs::Waiting, AssetDefs::Blocked, AssetDefs::Queued, AssetDefs::InProgress, AssetDefs::Failed, AssetDefs::Succeeded, AssetDefs::Canceled, AssetDefs::Offline, AssetDefs::Bad };
 
 istream &operator>>(istream & input, AssetDefs::State & state) {
-  uint stateInt;
+  unsigned int stateInt;
   input >> stateInt;
   state = static_cast<AssetDefs::State>(stateInt);
   return input;
@@ -166,7 +166,7 @@ class TestLeafAssetVersionImplD : public LeafAssetVersionImplD {
     // Not used - only included to make MockVersion non-virtual
     string PluginName(void) const override { return string(); }
     void GetOutputFilenames(vector<string> &) const override {}
-    string GetOutputFilename(uint) const override { return string(); }
+    string GetOutputFilename(unsigned int) const override { return string(); }
     virtual void DoSubmitTask() {}
 };
 
@@ -196,7 +196,7 @@ class TestCompositeAssetVersionImplD : public CompositeAssetVersionImplD {
       // Not used - only included to make MockVersion non-virtual
     string PluginName(void) const override { return string(); }
     void GetOutputFilenames(vector<string> &) const override {}
-    string GetOutputFilename(uint) const override { return string(); }
+    string GetOutputFilename(unsigned int) const override { return string(); }
 };
 
 bool TestCompositeAssetVersionImplD::hasChildren = false;

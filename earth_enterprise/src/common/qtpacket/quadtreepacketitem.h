@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +20,8 @@
 #define COMMON_QTPACKET_QUADTREEPACKETITEM_H__
 
 #include <string>
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 
 namespace qtpacket {
 
@@ -29,29 +31,29 @@ namespace qtpacket {
 
 class QuadtreePacketItem {
  public:
-  QuadtreePacketItem(int32 layer_id,
-                     int32 version,
-                     int32 copyright,
+  QuadtreePacketItem(std::int32_t layer_id,
+                     std::int32_t version,
+                     std::int32_t copyright,
                      const std::string& date_string)
       : layer_id_(layer_id),
         version_(version),
         copyright_(copyright),
         date_string_(date_string) {
   }
-  inline int32 layer_id() const { return layer_id_; }
-  inline int32 version() const { return version_; }
-  inline int32 copyright() const { return copyright_; }
+  inline std::int32_t layer_id() const { return layer_id_; }
+  inline std::int32_t version() const { return version_; }
+  inline std::int32_t copyright() const { return copyright_; }
   inline std::string date_string() const { return date_string_; }
 
-  static const int32 kLayerImagery = 1;
-  static const int32 kLayerTerrain = 2;
-  static const int32 kLayerVectorMin = 3;
-  static const int32 kLayerDatedImagery = 4;
+  static const std::int32_t kLayerImagery = 1;
+  static const std::int32_t kLayerTerrain = 2;
+  static const std::int32_t kLayerVectorMin = 3;
+  static const std::int32_t kLayerDatedImagery = 4;
 
  private:
-  int32 layer_id_;
-  int32 version_;
-  int32 copyright_;
+  std::int32_t layer_id_;
+  std::int32_t version_;
+  std::int32_t copyright_;
   std::string date_string_;  // only needed for imagery currently.
 };
 

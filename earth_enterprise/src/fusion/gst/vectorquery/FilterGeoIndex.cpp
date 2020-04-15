@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,7 +25,7 @@ namespace vectorquery {
 
 
 FilterGeoIndexManager::FilterGeoIndexManager(
-    uint level, const gstSharedSource &source,
+    unsigned int level, const gstSharedSource &source,
     const std::vector<std::string> &select_files,
     const khTilespace &tilespace, double oversize_factor,
     const std::string& progress_meter_prefix) :
@@ -37,8 +38,8 @@ FilterGeoIndexManager::FilterGeoIndexManager(
     progress_meter_prefix_(progress_meter_prefix)
 {
 
-  for (uint i = 0; i < select_files.size(); ++i) {
-    uint64 size;
+  for (unsigned int i = 0; i < select_files.size(); ++i) {
+    std::uint64_t size;
     time_t mtime;
     if ((khGetFileInfo(select_files[i], size, mtime)) && (size > 0)) {
       gstGeoIndexHandle geo_index = gstGeoIndexImpl::Load(
@@ -81,7 +82,7 @@ void FilterGeoIndexManager::DoSelection(void) {
                                                 target_coverage));
 
     // build all the minified levels up to level 0
-    // use int (instead of uint) to avoid wrap at 0
+    // use int (instead of unsigned int) to avoid wrap at 0
     for (int lev = level_ - 1; lev >= 0; --lev) {
       selectors.push_back(new MinifiedQuadSelector
                           (selectors.back(),

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +45,7 @@ class IndexWriter {
   class LevelInfo : public khLevelCoverage {
    public:
     IndexStorage::TileRecord *tiles;
-    uint32 totalStoredTiles;
+    std::uint32_t totalStoredTiles;
 
     LevelInfo(const khLevelCoverage &def,
               IndexStorage::TileRecord *tiles_) :
@@ -53,11 +54,11 @@ class IndexWriter {
         totalStoredTiles(0)
     { }
 
-    IndexStorage::TileRecord *TileRec(uint32 row, uint32 col) const;
+    IndexStorage::TileRecord *TileRec(std::uint32_t row, std::uint32_t col) const;
     // Will throw if invalid addr
-    void AddTile(uint32 row, uint32 col,
-                 uint64 dataOffset,
-                 uint32 dataLen);
+    void AddTile(std::uint32_t row, std::uint32_t col,
+                 std::uint64_t dataOffset,
+                 std::uint32_t dataLen);
   };
 
 
@@ -67,15 +68,15 @@ class IndexWriter {
   geLocalBufferWriteFile proxyFile;
   void* filebuf;
   khMunmapGuard munmapGuard; // must be after proxyFile for destruction
-  uint64 totalFFSize;
-  uint32 totalIndexSize;
-  uint32 totalStoredTiles;
+  std::uint64_t totalFFSize;
+  std::uint32_t totalIndexSize;
+  std::uint32_t totalStoredTiles;
 
   std::vector<LevelInfo> levelvec;
   LevelInfo* levels[NumFusionLevels];
 
  public:
-  inline uint32 TotalTilesWritten(void) const {
+  inline std::uint32_t TotalTilesWritten(void) const {
     return totalStoredTiles;
   }
 
@@ -86,7 +87,7 @@ class IndexWriter {
               void* littleEndianTypeData = 0);
   ~IndexWriter(void);
   // Will throw if invalid addr
-  void AddTile(const khTileAddr &addr, uint32 dataLen, uint32 recordLen);
+  void AddTile(const khTileAddr &addr, std::uint32_t dataLen, std::uint32_t recordLen);
 };
 
 class IndexReader {
@@ -102,10 +103,10 @@ class IndexReader {
     { }
 
 
-    const IndexStorage::TileRecord *TileRec(uint32 row, uint32 col) const;
-    bool HasRowCol(uint32 row, uint32 col) const;
-    bool FindTile(uint32 row, uint32 col,
-                  uint64 &fileOffset, uint32 &dataLen) const;
+    const IndexStorage::TileRecord *TileRec(std::uint32_t row, std::uint32_t col) const;
+    bool HasRowCol(std::uint32_t row, std::uint32_t col) const;
+    bool FindTile(std::uint32_t row, std::uint32_t col,
+                  std::uint64_t &fileOffset, std::uint32_t &dataLen) const;
   };
   std::vector<LevelInfo> levelvec;
   LevelInfo* levels[NumFusionLevels];
@@ -115,14 +116,14 @@ class IndexReader {
   khReadFileCloser fileHandle;
   void* filebuf;
   khMunmapGuard munmapGuard; // must be after fileHandle for destruction
-  uint64 totalFFSize;
-  uint32 totalIndexSize;
-  uint32 totalStoredTiles;
+  std::uint64_t totalFFSize;
+  std::uint32_t totalIndexSize;
+  std::uint32_t totalStoredTiles;
 
   IndexReader(const std::string &filename);
   ~IndexReader(void);
   bool FindTile(const khTileAddr &addr,
-                uint64 &fileOffset, uint32 &dataLen);
+                std::uint64_t &fileOffset, std::uint32_t &dataLen);
 
   void DumpRecords(const LevelInfo *level) const;
 

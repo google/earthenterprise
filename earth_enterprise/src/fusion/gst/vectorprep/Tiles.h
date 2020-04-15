@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -110,13 +111,13 @@ class LayerTile {
 
   LayerTile(const std::vector<DisplayRuleConfig> &drConfigs) {
     displayRules.reserve(drConfigs.size());
-    for (uint i = 0; i < drConfigs.size(); ++i) {
+    for (unsigned int i = 0; i < drConfigs.size(); ++i) {
       displayRules.push_back(new DisplayRuleTileType(drConfigs[i]));
     }
   }
 
   void Reset(void) {
-    for (uint i = 0; i < displayRules.size(); ++i) {
+    for (unsigned int i = 0; i < displayRules.size(); ++i) {
       displayRules[i]->Reset();
     }
   }

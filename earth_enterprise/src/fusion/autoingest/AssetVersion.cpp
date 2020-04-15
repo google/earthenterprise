@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,7 +33,7 @@ AssetVersionImpl::WorkingDir(const AssetVersionRef &ref)
   // this routine assumes a bound version versionRef if it is not bound
   // (i.e no version= or version=current) the resulting workingDir will
   // point to '<path>/ver000/' which shouldn't exists
-  uint vernum = 0;
+  unsigned int vernum = 0;
   FromString(boundref.Version(), vernum);
   std::ostringstream out;
   out << "ver" << std::setw(3) << std::setfill('0') << vernum;
@@ -66,7 +67,7 @@ CompositeAssetVersionImpl::GetOutputFilenames(std::vector<std::string> &out) con
 
 
 std::string
-CompositeAssetVersionImpl::GetOutputFilename(uint i) const
+CompositeAssetVersionImpl::GetOutputFilename(unsigned int i) const
 {
   // We only have outputs when we are succeeded, bad or offline
   if (state & (AssetDefs::Succeeded | AssetDefs::Bad | AssetDefs::Offline)) {

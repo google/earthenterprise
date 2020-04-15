@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,13 +20,13 @@
 namespace mttypes {
 
 
-Semaphore::Semaphore(uint32 avail) :
+Semaphore::Semaphore(std::uint32_t avail) :
     WaitBase(),
     avail_(avail)
 {
 }
 
-void Semaphore::Acquire(uint32 num) {
+void Semaphore::Acquire(std::uint32_t num) {
   LockGuard lock(this);
   while (1) {
     if (LockedOKToAcquire()) {
@@ -39,7 +40,7 @@ void Semaphore::Acquire(uint32 num) {
   }
 }
 
-void Semaphore::Release(uint32 num) {
+void Semaphore::Release(std::uint32_t num) {
   LockGuard lock(this);
   avail_ += num;
   if (LockedOKToAcquire()) {

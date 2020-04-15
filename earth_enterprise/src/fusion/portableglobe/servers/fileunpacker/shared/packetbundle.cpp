@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,11 +16,10 @@
 
 #include <iostream>  // NOLINT(readability/streams)
 #include <string>
-#include "./khTypes.h"
 #include "./packetbundle.h"
 
-const uint8 IndexItem::kIgnoreChannelAndType = 255;
-const uint8 IndexItem::kMaxLevel = 24;
+const std::uint8_t IndexItem::kIgnoreChannelAndType = 255;
+const std::uint8_t IndexItem::kMaxLevel = 24;
 
 /**
  * Equality operator for index items. Necessary for finding the index
@@ -76,7 +76,7 @@ void IndexItem::SetLookupInfo(const IndexItem& other) {
  * TODO: Derive btree and level values from a qt packet string.
  */
 void IndexItem::Fill(
-    const std::string& qtpath, uint8 packet_type, uint16 channel) {
+    const std::string& qtpath, std::uint8_t packet_type, std::uint16_t channel) {
   level = qtpath.size() - 1;
   // Not much we can do with the current structure except ignore the rest of
   // the string.
@@ -108,7 +108,7 @@ void IndexItem::Fill(
 // Constants associated with packetbundles.
 // Set really high so we never get more than one bundle
 // for single file package.
-const uint64 PacketBundle::kMaxFileSize = 0x7fffffffffffffffLLU;
+const std::uint64_t PacketBundle::kMaxFileSize = 0x7fffffffffffffffLLU;
 const std::string PacketBundle::kIndexFile = "index";
 const std::string PacketBundle::kPacketbundlePrefix = "pbundle_";
 const std::string PacketBundle::kDirectoryDelimiter = "/";
@@ -116,7 +116,7 @@ const std::string PacketBundle::kDirectoryDelimiter = "/";
 /**
  * Returns packetbundle file's name for the given file id.
  */
-std::string PacketBundle::PacketBundleFileName(uint16 file_id) const {
+std::string PacketBundle::PacketBundleFileName(std::uint16_t file_id) const {
   char str[8];
   snprintf(str, sizeof(str), "%04d", file_id);
   return directory_ + kDirectoryDelimiter + kPacketbundlePrefix + str;

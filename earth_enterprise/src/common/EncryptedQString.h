@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +31,7 @@ class EncryptedQString : public QString {
   inline EncryptedQString(QChar ch) : QString(ch) { }
   inline EncryptedQString(const QString &s) : QString(s) { }
   inline EncryptedQString(const QByteArray &ba) : QString(ba) { }
-  inline EncryptedQString(const QChar *unicode, uint length) :
+  inline EncryptedQString(const QChar *unicode, unsigned int length) :
       QString(unicode, length ) { }
   inline EncryptedQString(const char *str) : QString(str) { }
   inline EncryptedQString(const std::string &str) : QString(str) { }

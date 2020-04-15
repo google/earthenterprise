@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +39,7 @@ namespace qtpacket {
 // with input type ItemType.  QuadsetGather is a MergeSource with type
 // QuadsetGroup<ItemType>.  The ItemType class must have a data
 // accessor called qt_path() which returns a const QuadtreePath object
-// reference, and a quadset_num() accessor which returns a uint64
+// reference, and a quadset_num() accessor which returns a std::uint64_t
 // quadset number.
 
 template <class ItemType> class QuadsetGather
@@ -72,11 +73,11 @@ template <class ItemType> class QuadsetGather
         return true;
 
       // Create or add to QuadsetGroup containing input
-      uint64 quadset_num;
+      std::uint64_t quadset_num;
       int subindex;
       QuadtreeNumbering::TraversalPathToQuadsetAndSubindex(
           current_path, &quadset_num, &subindex);
-      uint32 qslevel = QuadsetLevel(current_path);
+      std::uint32_t qslevel = QuadsetLevel(current_path);
       assert(qslevel < items_.size());
 
       if (!items_[qslevel]) {
@@ -113,8 +114,8 @@ template <class ItemType> class QuadsetGather
     }
   }
  private:
-  static const uint32 kLevelsPerQuadset = 4;
-  static const uint32 kMaxQuadsetLevel
+  static const std::uint32_t kLevelsPerQuadset = 4;
+  static const std::uint32_t kMaxQuadsetLevel
   = QuadtreePath::kMaxLevel / kLevelsPerQuadset;
 
   // Compute the level of the quadset to which an item belongs. Note
@@ -123,7 +124,7 @@ template <class ItemType> class QuadsetGather
   // results. The path of a QuadsetGather object is actually the path
   // to the phantom root node, which resides in the parent, one level
   // less.
-  inline uint32 QuadsetLevel(const QuadtreePath &qt_path) {
+  inline std::uint32_t QuadsetLevel(const QuadtreePath &qt_path) {
     return qt_path.Level() / kLevelsPerQuadset;
   }
 
@@ -160,9 +161,9 @@ template <class ItemType> class QuadsetGather
     QuadtreePath parent_path(qt_path);
     while (parent_path.Level() > 0) {
       parent_path = parent_path.Parent();
-      uint32 quadset_level = QuadsetLevel(parent_path);
+      std::uint32_t quadset_level = QuadsetLevel(parent_path);
 
-      uint64 quadset_num;
+      std::uint64_t quadset_num;
       int subindex;
       QuadtreeNumbering::TraversalPathToQuadsetAndSubindex(
           parent_path, &quadset_num, &subindex);

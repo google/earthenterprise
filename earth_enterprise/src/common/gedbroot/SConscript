@@ -15,6 +15,7 @@
 
 #-*- Python -*-
 Import('env')
+import os
 
 dbroot_v2 = env.ProtocolBuffer(
     '#/keyhole/proto/dbroot/dbroot_v2.proto');
@@ -35,6 +36,17 @@ gedbroot = env.sharedLib('gedbroot',
                                'geprotobuf',
                                'qt-mt',
                                ])
+
+# scons seems to have issues resolving dependencies of dependencies when 
+# the first file is generated (in this case the .cc file). Scons does
+# not seem to properly resolve the .cc file needs the .h file (also generated)
+# and there by this means the .so file needs the .h file too.
+# This can lead to build errors if the generated files are not created
+# soon enough. So adding dependencies explicitly
+dbroot_v2_basename = os.path.splitext(str(dbroot_v2[0]))[0]
+env.Depends(dbroot_v2_basename+'.os', dbroot_v2_basename+'.h')
+env.Depends(dbroot_v2_basename+'.os', dbroot_v2_basename+'.cc')
+
 env.install('common_lib', [gedbroot])
 
 # we want to be careful and make sure we depend on only the minimal set of

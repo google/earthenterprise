@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,8 +14,8 @@
 // limitations under the License.
 
 
+#include <cstdint>
 #include <string>
-#include <khTypes.h>
 #include <khMetaData.h>
 #include <autoingest/.idl/storage/SourceConfig.h>
 #requiresgetheapusage
@@ -27,13 +28,13 @@ class VectorProductConfig {
   // character encoding of source
   std::string encoding = std::string();
   // which layer of source to grab
-  uint layer = uint(0);
+  unsigned int layer = uint(0);
   double scale = 1.0;
   bool force3D = false;
   bool force2D = false;
   bool ignore_bad_features_ = false;
 
-  uint32 provider_id_   = uint32(0);
+  std::uint32_t provider_id_   = std::uint32_t(0);
   double north_boundary = new:90.0, load:90.0;
   double south_boundary = new:-90.0, load:-90.0;
   double east_boundary = new:180.0, load:180.0;

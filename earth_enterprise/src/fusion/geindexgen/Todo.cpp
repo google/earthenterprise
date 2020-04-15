@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,17 +34,17 @@ BlendTodo::BlendTodo(geindex::BlendWriter &writer, geFilePool &file_pool,
 {
   fprintf(stdout, "Calculating work to be done ... ");
   fflush(stdout);
-  for (uint i = 0; i < stack.insets_.size(); ++i) {
-    for (uint j = 0; j < stack.insets_[i].levels_.size(); ++j) {
+  for (unsigned int i = 0; i < stack.insets_.size(); ++i) {
+    for (unsigned int j = 0; j < stack.insets_[i].levels_.size(); ++j) {
       const std::string &packet_filename =
         stack.insets_[i].levels_[j].packetfile_;
-      uint64 packet_count = PacketIndexReader::NumPackets(
+      std::uint64_t packet_count = PacketIndexReader::NumPackets(
           PacketFile::IndexFilename(packet_filename));
 
       // degenerate case w/ no packets. Just skip it.
       if (packet_count == 0) continue;
 
-      uint32 file_num = writer.AddExternalPacketFile(packet_filename);
+      std::uint32_t file_num = writer.AddExternalPacketFile(packet_filename);
 
       // extra defaults to 0. We add 1 so our stack order is distinct from
       // the default. It probably doesn't matter anyway, but it keeps things
@@ -74,15 +75,15 @@ VectorTodo::VectorTodo(geindex::VectorWriter &writer, geFilePool &file_pool,
 {
   fprintf(stdout, "Calculating work to be done ... ");
   fflush(stdout);
-  for (uint i = 0; i < stack.layers_.size(); ++i) {
+  for (unsigned int i = 0; i < stack.layers_.size(); ++i) {
     const std::string &packet_filename = stack.layers_[i].packetfile_;
-    uint64 packet_count = PacketIndexReader::NumPackets(
+    std::uint64_t packet_count = PacketIndexReader::NumPackets(
         PacketFile::IndexFilename(packet_filename));
 
     // degenerate case w/ no packets. Just skip it.
     if (packet_count == 0) continue;
 
-    uint32 file_num = writer.AddExternalPacketFile(packet_filename);
+    std::uint32_t file_num = writer.AddExternalPacketFile(packet_filename);
     readers_.push_back(
         TransferOwnership(
             new VectorPacketReader(file_pool, packet_filename, file_num,

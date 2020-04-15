@@ -83,7 +83,7 @@
 <li><a class="reference internal" href="#connect-gee-portable"><span class="std std-ref">Connect using GEE Portable</span></a></li>
 <li><a class="reference internal" href="#connect-using-geec"><span class="std std-ref">Connect using the Google Earth EC</span></a></li>
 <li><a class="reference internal" href="#connect-using-google-earth-plugin"><span class="std std-ref">Connect using the Google Earth Plug-in</span></a></li>
-<li><a class="reference internal" href="#get-info-about-globe-map"><span class="std std-ref">Get info about your globe or map</span></a></li>
+<li><a class="reference internal" href="#get-info-about-globe-map"><span class="std std-ref">Get info about your map</span></a></li>
 <li><a class="reference internal" href="#change-configuration-options"><span class="std std-ref">Change your configuration options</span></a></li>
 </ul>
 <p class="rubric" id="introduction-portable">Introduction to Google Earth Enterprise Portable</p>
@@ -304,8 +304,9 @@ After it launches, open a browser and navigate to
 <code class="docutils literal notranslate"><span class="pre">http://localhost:9335</span></code> (using any
 custom port or hostname you may have configured). Click the
 <img alt="Portable folder icon" src="../../images/portable_folder_icon.png" /> <strong>Folder</strong> (outlined in red), then select the
-globe or map you want to view. You can view only one globe or
-map at a time.</p>
+map you want to view. You can view only one map at a time.
+Portable globes cannot be viewed with a web browser. Use
+Google Earth Enterprise Client to view globes.</p>
 <p>Globes and maps that are broadcast on your local network might
 require an access key. If prompted, enter the key to view the
 globe or map. You can obtain the key from the person who is
@@ -316,24 +317,20 @@ prompted for a server address, enter <code class="docutils literal notranslate">
 you changed the default port in <code class="docutils literal notranslate"><span class="pre">portable.cfg</span></code>, use the new
 port value instead.</p>
 <p class="rubric" id="connect-using-google-earth-plugin">Connect using the Google Earth Plug-in</p>
-<p>GEE Portable comes with preconfigured HTML pages called
-<code class="docutils literal notranslate"><span class="pre">hello_earth.html</span></code> and <code class="docutils literal notranslate"><span class="pre">hello_maps.html</span></code> that display your
-globe or map using the Google Earth API or Google Map API. Note
-that the <code class="docutils literal notranslate"><span class="pre">hello_earth.html</span></code> sample uses the deprecated Google
-Earth Plug-in.</p>
+<p>GEE Portable comes with a preconfigured HTML page called
+<code class="docutils literal notranslate"><span class="pre">hello_maps.html</span></code> that displays your map using the <code class="docutils literal notranslate"><span class="pre">Google</span> <span class="pre">Maps</span> <span class="pre">API</span></code>.</p>
 <p>If you wish to make your own custom application, start by making
 a copy of either of these files and then add your own edits.</p>
 <p>To access either of the files, enter the URL in your browser:</p>
 <div class="line-block">
-<div class="line"><code class="docutils literal notranslate"><span class="pre">http://localhost:9335/local/preview/developers/hello_earth.html</span></code></div>
 <div class="line"><code class="docutils literal notranslate"><span class="pre">http://localhost:9335/local/preview/developers/hello_maps.html</span></code></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Although it is possible to configure GEE Portable to
-display multiple globes or maps at the same time, this is not
+display multiple maps at the same time, this is not
 recommended or supported. The additional configuration requires
-you to build the globe or map to reference a specific port
+you to build the map to reference a specific port
 number, which means you would have to rebuild it if you wanted
 to re-use it for any other ports.</p>
 </div>
@@ -341,10 +338,10 @@ to re-use it for any other ports.</p>
 <p>Click the <img alt="Portable folder icon" src="../../images/portable_folder_icon.png" /> <strong>Folder</strong> (outlined in red) to view a
 list of the globes and maps you can access. Each globe or map is
 listed with its file name, description, creation date, and size.</p>
-<p>Select a globe or map, then click the <img alt="Portable menu icon" src="../../images/portable_menu_icon.png" /> <strong>Menu</strong>
+<p>Select a map, then click the <img alt="Portable menu icon" src="../../images/portable_menu_icon.png" /> <strong>Menu</strong>
 (outlined in red) then select <strong>Show layer list</strong> to see
-all the layers for that globe or map. You can use the list to
-select the layers you want the globe or map to display. To hide
+all the layers for that map. You can use the list to
+select the layers you want the map to display. To hide
 the layer list, click the <strong>Menu</strong>, then select <strong>Hide layer
 list</strong>.
 |</p>

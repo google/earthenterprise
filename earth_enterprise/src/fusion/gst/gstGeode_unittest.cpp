@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -39,7 +40,7 @@ class gstGeodeTest : public testing::Test {
   // Wrapper to test protected method: gstGeodeImpl::IsConvex().
   // geode is the handle to the geode
   // part_index: is the part of the geode to be tested.
-  static bool gstGeode_IsConvex(const gstGeodeHandle& geode, uint part_index) {
+  static bool gstGeode_IsConvex(const gstGeodeHandle& geode, unsigned int part_index) {
     return static_cast<gstGeode*>(&(*geode))->IsConvex(part_index);
   }
 
@@ -58,7 +59,7 @@ class gstGeodeTest : public testing::Test {
 // append_first_vertex_to_end: copy the first vertex to the end (to tie the
 //                             polygon into a loop if necessary).
 gstGeodeHandle CreateGeode(const std::vector<gstVertex>& vertex_list,
-                           uint start_index,
+                           unsigned int start_index,
                            bool append_first_vertex_to_end) {
   gstGeodeHandle geodeh = gstGeodeImpl::Create(gstPolygon);
 
@@ -68,7 +69,7 @@ gstGeodeHandle CreateGeode(const std::vector<gstVertex>& vertex_list,
     return geodeh;
 
   // Add vertices starting with the current start_index.
-  for (uint i = start_index; i < vertex_list.size(); ++i) {
+  for (unsigned int i = start_index; i < vertex_list.size(); ++i) {
     geode->AddVertex(vertex_list[i]);
   }
   // Continue from the beginning.
@@ -123,7 +124,7 @@ void CheckCenterAndCentroid(const gstGeodeHandle& geodeh,
   // Create the fresh geode using the first polygon (assuming only 1).
   // Copy the vertex list out to create the new geode.
   std::vector<gstVertex> vertex_list;
-  for (uint i = 0; i < geode->VertexCount(0); ++i) {
+  for (unsigned int i = 0; i < geode->VertexCount(0); ++i) {
     vertex_list.push_back(geode->GetVertex(0, i));
   }
   gstGeodeHandle fresh_geode = CreateGeode(vertex_list, 0,
@@ -200,7 +201,7 @@ TEST_F(gstGeodeTest, TestVertexModification) {
 
     const gstBBox& box = geode->BoundingBox();
     gstBBox expected_box;
-    for (uint i = 0; i < vertex_list.size(); ++i) {
+    for (unsigned int i = 0; i < vertex_list.size(); ++i) {
       geode->AddVertex(vertex_list[i]);
       expected_box.Grow(vertex_list[i]);
       CheckGeodeData(geodeh, box, expected_box, "AddVertex");
@@ -214,7 +215,7 @@ TEST_F(gstGeodeTest, TestVertexModification) {
 
     const gstBBox& box = geode->BoundingBox();
     gstBBox expected_box;
-    for (uint i = 0; i < vertex_list.size(); ++i) {
+    for (unsigned int i = 0; i < vertex_list.size(); ++i) {
       geode->AddVertexToPart0(vertex_list[i]);
       expected_box.Grow(vertex_list[i]);
       CheckGeodeData(geodeh, box, expected_box, "AddVertexToPart0");
@@ -246,7 +247,7 @@ TEST_F(gstGeodeTest, TestVertexModification) {
     gstGeode *geode = static_cast<gstGeode*>(&(*geodeh));
 
     const gstBBox& box = geode->BoundingBox();
-    for (uint i = 0; i < vertex_list.size(); ++i) {
+    for (unsigned int i = 0; i < vertex_list.size(); ++i) {
       geode->AddVertex(vertex_list[i]);
     }
     geode->DeleteVertex(part, 2);
@@ -279,7 +280,7 @@ TEST_F(gstGeodeTest, TestVertexModification) {
     gstGeode *geode = static_cast<gstGeode*>(&(*geodeh));
 
     const gstBBox& box = geode->BoundingBox();
-    for (uint i = 0; i < vertex_list.size(); ++i) {
+    for (unsigned int i = 0; i < vertex_list.size(); ++i) {
       geode->AddVertex(vertex_list[i]);
     }
     geode->ModifyVertex(part, 2, v1);
@@ -297,7 +298,7 @@ TEST_F(gstGeodeTest, TestVertexModification) {
     gstGeode *geode = static_cast<gstGeode*>(&(*geodeh));
 
     const gstBBox& box = geode->BoundingBox();
-    for (uint i = 0; i < vertex_list.size(); ++i) {
+    for (unsigned int i = 0; i < vertex_list.size(); ++i) {
       geode->AddVertex(vertex_list[i]);
     }
     geode->ModifyVertex(part, 3, gstVertex(0.6, 0.4));
@@ -314,7 +315,7 @@ TEST_F(gstGeodeTest, TestVertexModification) {
     gstGeodeHandle geodeh = gstGeodeImpl::Create(gstPolygon);
     gstGeode *geode = static_cast<gstGeode*>(&(*geodeh));
 
-    for (uint i = 0; i < vertex_list.size(); ++i) {
+    for (unsigned int i = 0; i < vertex_list.size(); ++i) {
       geode->AddVertex(vertex_list[i]);
     }
     gstVertex vnew(-2, -2);  // Expand in the opposite direction so v3 is not
@@ -348,7 +349,7 @@ void CheckGeodeConvexityBasic(bool expected_convexity_result,
                                std::vector<gstVertex>& vertex_list,
                                const std::string& message) {
   // Run the test with a different starting index for the geode vertices.
-  for (uint start_index = 0; start_index < vertex_list.size(); ++start_index) {
+  for (unsigned int start_index = 0; start_index < vertex_list.size(); ++start_index) {
     gstGeodeHandle geode = CreateGeode(vertex_list, start_index, true);
     EXPECT_EQ(expected_convexity_result,
               gstGeodeTest::gstGeode_IsConvex(geode, 0)) << message;
@@ -454,7 +455,7 @@ void CheckGeodeCenterBasic(const gstVertex& expected_center,
                             std::vector<gstVertex>& vertex_list,
                             const std::string& message) {
   // Run the test with a different starting index for the geode vertices.
-  for (uint start_index = 0; start_index < vertex_list.size(); ++start_index) {
+  for (unsigned int start_index = 0; start_index < vertex_list.size(); ++start_index) {
     gstGeodeHandle geode = CreateGeode(vertex_list, start_index, true);
     EXPECT_EQ(expected_center,
               gstGeodeTest::gstGeode_Center(geode)) << message;
@@ -560,7 +561,7 @@ std::vector<gstVertex> TranslateAndScaleVertexList(
        const std::vector<gstVertex>& vertex_list,
        double scale, double x_translation, double y_translation) {
   std::vector<gstVertex> ouput_vertex_list;
-  for(uint i = 0; i < vertex_list.size(); ++i) {
+  for(unsigned int i = 0; i < vertex_list.size(); ++i) {
     ouput_vertex_list.push_back(TranslateAndScaleVertex(vertex_list[i],
                                                         scale, x_translation,
                                                         y_translation));
@@ -597,7 +598,7 @@ void CheckGeodeCentroidPrecision(const gstVertex& expected_centroid,
   translations.push_back(gstVertex(100,200));
 
   // Run the test with a different starting index for the geode vertices.
-  for (uint i = 0; i < scales.size(); ++i) {
+  for (unsigned int i = 0; i < scales.size(); ++i) {
     std::vector<gstVertex> scaled_vertex_list =
       TranslateAndScaleVertexList(vertex_list,
                                   scales[i],

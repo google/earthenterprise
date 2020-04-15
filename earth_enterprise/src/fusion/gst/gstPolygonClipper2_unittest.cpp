@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -129,7 +130,7 @@ void CheckPolygonClipping(const gstGeodeHandle &geode,
 
 #if REPORT_POLYGON
   notify(NFY_NOTICE, "number of pieces: %Zu", pieces.size());
-  for (uint i = 0; i < pieces.size(); ++i) {
+  for (unsigned int i = 0; i < pieces.size(); ++i) {
     const gstGeode* piece =
         static_cast<const gstGeode*>(&(*pieces[i]));
     notify(NFY_NOTICE, "piece[%u] degenerate: %d", i, piece->IsDegenerate());
@@ -137,10 +138,10 @@ void CheckPolygonClipping(const gstGeodeHandle &geode,
       continue;
 
     assert(piece->NumParts() == 1);
-    const std::vector<int8>& edge_flags = piece->EdgeFlags();
+    const std::vector<std::int8_t>& edge_flags = piece->EdgeFlags();
     assert(edge_flags.size() == piece->VertexCount(0));
 
-    for (uint j = 0; j < piece->VertexCount(0) ; ++j) {
+    for (unsigned int j = 0; j < piece->VertexCount(0) ; ++j) {
       const gstVertex &pt = piece->GetVertex(0, j);
       notify(NFY_NOTICE, "pt[%u]: %f, %f, is_internal: %d, edge flag: %d",
              j,
@@ -152,7 +153,7 @@ void CheckPolygonClipping(const gstGeodeHandle &geode,
   }
 
   notify(NFY_NOTICE, "number of expected geodes: %Zu", expected_geodes.size());
-  for (uint i = 0; i < expected_geodes.size(); ++i) {
+  for (unsigned int i = 0; i < expected_geodes.size(); ++i) {
     const gstGeode* exp_geode =
         static_cast<const gstGeode*>(&(*expected_geodes[i]));
     notify(NFY_NOTICE, "exp_geode[%u] degenerate: %d",
@@ -161,10 +162,10 @@ void CheckPolygonClipping(const gstGeodeHandle &geode,
       continue;
 
     assert(exp_geode->NumParts() == 1);
-    const std::vector<int8>& edge_flags = exp_geode->EdgeFlags();
+    const std::vector<std::int8_t>& edge_flags = exp_geode->EdgeFlags();
     assert(edge_flags.size() == exp_geode->VertexCount(0));
 
-    for (uint j = 0; j < exp_geode->VertexCount(0) ; ++j) {
+    for (unsigned int j = 0; j < exp_geode->VertexCount(0) ; ++j) {
       const gstVertex &pt = exp_geode->GetVertex(0, j);
       notify(NFY_NOTICE, "exp_pt[%u]: %f, %f, is_internal: %d, edge flag: %d",
              j,
@@ -178,9 +179,9 @@ void CheckPolygonClipping(const gstGeodeHandle &geode,
 
   EXPECT_EQ(expected_geodes.size(), pieces.size()) << message;
 
-  for (uint i = 0; (i < expected_geodes.size()) && (i <  pieces.size()); ++i) {
-    EXPECT_EQ(expected_geodes[i]->NumParts(), (uint)1) << message;
-    EXPECT_EQ(pieces[i]->NumParts(), (uint)1) << message;
+  for (unsigned int i = 0; (i < expected_geodes.size()) && (i <  pieces.size()); ++i) {
+    EXPECT_EQ(expected_geodes[i]->NumParts(), (unsigned int)1) << message;
+    EXPECT_EQ(pieces[i]->NumParts(), (unsigned int)1) << message;
 
     EXPECT_EQ(expected_geodes[i]->TotalVertexCount(),
               pieces[i]->TotalVertexCount()) << message;
@@ -190,13 +191,13 @@ void CheckPolygonClipping(const gstGeodeHandle &geode,
     const gstGeode* piece =
         static_cast<const gstGeode*>(&(*pieces[i]));
 
-    const std::vector<int8>& piece_edge_flags = piece->EdgeFlags();
-    const std::vector<int8>& exp_geode_edge_flags = exp_geode->EdgeFlags();
+    const std::vector<std::int8_t>& piece_edge_flags = piece->EdgeFlags();
+    const std::vector<std::int8_t>& exp_geode_edge_flags = exp_geode->EdgeFlags();
     ASSERT_EQ(piece_edge_flags.size(), piece->VertexCount(0)) << message;
     ASSERT_EQ(exp_geode_edge_flags.size(),
               exp_geode->VertexCount(0)) << message;
 
-    for (uint j = 0; (j < exp_geode->VertexCount(0)) &&
+    for (unsigned int j = 0; (j < exp_geode->VertexCount(0)) &&
              (j < piece->VertexCount(0)) ; ++j) {
       const gstVertex &expected_pt = exp_geode->GetVertex(0, j);
       const gstVertex &pt = piece->GetVertex(0, j);

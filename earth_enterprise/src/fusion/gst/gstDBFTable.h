@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,40 +23,40 @@
 
 // must be exactly 32 bytes long
 struct DBF_FileHeader {
-  uchar Version[1];
-  uchar Date[3];
-  uchar RecordNum[4];
-  uchar HeaderLength[2];
-  uchar RecordLength[2];
-  uchar Reserved[20];
+  unsigned char Version[1];
+  unsigned char Date[3];
+  unsigned char RecordNum[4];
+  unsigned char HeaderLength[2];
+  unsigned char RecordLength[2];
+  unsigned char Reserved[20];
 };
 
 struct DBF_FileHeader_i {
   int Version;
-  uint Year;
-  uint Month;
-  uint Day;
-  uint RecordNum;
-  uint16 HeaderLength;
-  uint16 RecordLength;
+  unsigned int Year;
+  unsigned int Month;
+  unsigned int Day;
+  unsigned int RecordNum;
+  std::uint16_t HeaderLength;
+  std::uint16_t RecordLength;
 };
 
 // must be exactly 32 bytes long
 struct DBF_FieldDescriptor {
   char Name[11];
-  uchar Type[1];
-  uchar Offset[4];
-  uchar Length[1];
-  uchar DecimalCount[1];
-  uchar Reserved[14];
+  unsigned char Type[1];
+  unsigned char Offset[4];
+  unsigned char Length[1];
+  unsigned char DecimalCount[1];
+  unsigned char Reserved[14];
 };
 
 struct DBF_FieldDescriptor_i {
   char Name[12];
-  uint32 Type;
-  uint32 Offset;
-  uint16 Length;
-  uint16 DecimalCount;
+  std::uint32_t Type;
+  std::uint32_t Offset;
+  std::uint16_t Length;
+  std::uint16_t DecimalCount;
 };
 
 
@@ -68,7 +69,7 @@ class gstDBFTable : public gstTable {
   gstStatus Open(gstReadMode m);
   gstStatus Close();
 
-  gstRecordHandle Row(uint32 r);
+  gstRecordHandle Row(std::uint32_t r);
 
   gstStatus ReadHeader();
   gstStatus ReadFieldDescriptors();

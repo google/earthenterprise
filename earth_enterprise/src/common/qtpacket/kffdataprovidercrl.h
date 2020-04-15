@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,16 +22,16 @@
 #ifndef COMMON_QTPACKET_KFFDATAPROVIDERCRL_H__
 #define COMMON_QTPACKET_KFFDATAPROVIDERCRL_H__
 
-#include <khTypes.h>
+#include <cstdint>
 
 namespace qtpacket {
 
 struct KffDataProviderCRL {
-  uint8 provider_id;
-  uint8 level;
+  std::uint8_t provider_id;
+  std::uint8_t level;
 
   // Not used.
-  uint8 byte_padding[6];
+  std::uint8_t byte_padding[6];
 
   // Order - west, east, south, north
   // Normalized in lat-long space coordinates

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,10 +16,10 @@
 
 // Unit tests for IndexManifest
 
+#include <cstdint>
 #include <string>
 #include <vector>
 #include <iostream>
-#include <khTypes.h>
 #include <khEndian.h>
 #include <khFileUtils.h>
 #include <packetfile/packetfilewriter.h>
@@ -98,7 +99,7 @@ class IndexManifestUnitTest : public UnitTest<IndexManifestUnitTest> {
 
   bool TestManifestWithServerPrefix(const std::string &server_prefix) {
     bool result = true;
-    const uint16 kVersion(1);
+    const std::uint16_t kVersion(1);
     const std::string index_path(kPathBase + "TestManifest/index/");
     const std::string header_path(Header::HeaderPath(index_path));
     const std::string bundle_hdr(index_path + FileBundle::kHeaderFileName);
@@ -129,16 +130,16 @@ class IndexManifestUnitTest : public UnitTest<IndexManifestUnitTest> {
         PacketFileWriter pf_writer(file_pool_, *pfile);
 
         // Add packetfile to index
-        uint32 packetfile =  writer.AddExternalPacketFile(*pfile);
+        std::uint32_t packetfile =  writer.AddExternalPacketFile(*pfile);
         notify(NFY_VERBOSE,
                "TestManifest: added packet file %u: %s",
                static_cast<unsigned int>(packetfile),
                pfile->c_str());
 
         // Write dummy data to packetfile
-        uint32 dummy_data[2];
+        std::uint32_t dummy_data[2];
         pf_path.Advance(QuadtreePath::kMaxLevel);
-        uint64 offset =
+        std::uint64_t offset =
           pf_writer.WriteAppendCRC(pf_path, dummy_data, sizeof(dummy_data));
         notify(NFY_VERBOSE,
                "TestManifest: wrote record at path (%s), "

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,8 +66,8 @@ class KHJSContextImpl : public khMTRefCounter {
   void ExecuteScript(const KHJSScript &script);
   void ExecuteScript(const KHJSScript &script, bool &ret);
   void ExecuteScript(const KHJSScript &script, QString &ret);
-  void ExecuteScript(const KHJSScript &script, int32 &ret);
-  void ExecuteScript(const KHJSScript &script, uint32 &ret);
+  void ExecuteScript(const KHJSScript &script, std::int32_t &ret);
+  void ExecuteScript(const KHJSScript &script, std::uint32_t &ret);
   void ExecuteScript(const KHJSScript &script, float64 &ret);
 
   QString pendingErrorMsg;
@@ -81,7 +82,7 @@ class KHJSContextImpl : public khMTRefCounter {
 
   // accessable only via KHJSContextUser
   struct JSContext *cx_;
-  uint32 branchCallbackCount;
+  std::uint32_t branchCallbackCount;
 };
 
 

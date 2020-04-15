@@ -40,7 +40,7 @@ const float Featherer::kFeatherRatio =
     1.0 / (2.0 - kFeatherPRatio) / 2.0;
 
 
-inline uchar NonlinearFilter(int ksum, float normalize_factor) {
+inline unsigned char NonlinearFilter(int ksum, float normalize_factor) {
   // from old gemaskgen: feather only inside the mask (do not expand)
   // see also: constructor
   int kvalue =
@@ -51,9 +51,9 @@ inline uchar NonlinearFilter(int ksum, float normalize_factor) {
 }
 
 
-InMemoryFeatherer::InMemoryFeatherer(uchar *image, int image_width,
+InMemoryFeatherer::InMemoryFeatherer(unsigned char *image, int image_width,
                                      int image_height, int feather_radius,
-                                     uchar border_value)
+                                     unsigned char border_value)
     : BoxFilterTiledImage(image_width, image_height,
                           image_width, image_height),
       image_(image) {
@@ -67,23 +67,23 @@ InMemoryFeatherer::InMemoryFeatherer(uchar *image, int image_width,
   BoxFilter(box_width, box_width, border_value);
 }
 
-void InMemoryFeatherer::LoadImageTile(int tile_x, int tile_y, uchar *image) {
+void InMemoryFeatherer::LoadImageTile(int tile_x, int tile_y, unsigned char *image) {
   notify(NFY_FATAL, "should never get here");
 }
 
 void InMemoryFeatherer::SaveFilteredTile(int tile_x, int tile_y,
-                                         const uchar *image) {
+                                         const unsigned char *image) {
   if (!tile_x && !tile_y && image != image_)
     memcpy(image_, image, image_width_ * image_height_);
 }
 
-void InMemoryFeatherer::Filter(int ksum, uchar *pixel) const {
+void InMemoryFeatherer::Filter(int ksum, unsigned char *pixel) const {
   *pixel = std::min(*pixel, NonlinearFilter(ksum, normalize_factor_));
 }
 
 
 Featherer::Featherer(GDALRasterBand *poBand, int block_w, int block_h,
-                       int feather_radius, uchar border_value)
+                       int feather_radius, unsigned char border_value)
     : BoxFilterTiledImage(poBand->GetXSize(),
                           poBand->GetYSize(),
                           block_w, block_h),
@@ -98,7 +98,7 @@ Featherer::Featherer(GDALRasterBand *poBand, int block_w, int block_h,
   BoxFilter(box_width, box_width, border_value);
 }
 
-void Featherer::LoadImageTile(int tile_x, int tile_y, uchar *image) {
+void Featherer::LoadImageTile(int tile_x, int tile_y, unsigned char *image) {
   int xsz = std::min(tile_width_, image_width_ - tile_x * tile_width_),
       ysz = std::min(tile_height_, image_height_ - tile_y * tile_height_);
   if (poBand_->RasterIO(GF_Read, tile_x * tile_width_, tile_y * tile_height_,
@@ -110,12 +110,12 @@ void Featherer::LoadImageTile(int tile_x, int tile_y, uchar *image) {
            tile_x, tile_y);
 }
 
-void Featherer::SaveFilteredTile(int tile_x, int tile_y, const uchar *image) {
+void Featherer::SaveFilteredTile(int tile_x, int tile_y, const unsigned char *image) {
   int xsz = std::min(tile_width_, image_width_ - tile_x * tile_width_),
       ysz = std::min(tile_height_, image_height_ - tile_y * tile_height_);
   if (poBand_->RasterIO(GF_Write, tile_x * tile_width_, tile_y * tile_height_,
                         xsz, ysz,
-                        const_cast<uchar *>(image),
+                        const_cast<unsigned char *>(image),
                         xsz, ysz,
                         GDT_Byte, 0, tile_width_) == CE_Failure)
     notify(NFY_FATAL, "Could not save feathered tile %d, %d.",
@@ -125,6 +125,6 @@ void Featherer::SaveFilteredTile(int tile_x, int tile_y, const uchar *image) {
 // Override boxfilter's standard Filter function. Never increase the alpha
 // value of a pixel: doing so could allow NoData values to be blended in,
 // causing terrain spikes for example.
-void Featherer::Filter(int ksum, uchar *pixel) const {
+void Featherer::Filter(int ksum, unsigned char *pixel) const {
   *pixel = std::min(*pixel, NonlinearFilter(ksum, normalize_factor_));
 }

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +43,7 @@ class khArray
   // constructors
   khArray() { _init( 2, 2 ); }
 
-  khArray( uint s, uint g = 10 ) { _init( s, g ); }
+  khArray( unsigned int s, unsigned int g = 10 ) { _init( s, g ); }
   khArray( const khArray& that ) { _init( that ); }
 
   ~khArray() { free( _array ); }
@@ -50,7 +51,7 @@ class khArray
  private:
 
   // Private Initialization (only called by constructors)
-  khArray& _init( uint s, uint g = 10 )
+  khArray& _init( unsigned int s, unsigned int g = 10 )
   { 
     _length = 0; 
     _size = s; 
@@ -75,7 +76,7 @@ class khArray
 
   // Public Initialization 
   // This allows objects to re-init their arrays 
-  khArray& init( uint s, uint g = 10 ) 
+  khArray& init( unsigned int s, unsigned int g = 10 ) 
   { 
     _length = 0; 
     _size = s; 
@@ -96,7 +97,7 @@ class khArray
     return *this; 
   }
 
-  khArray& init( uint s, Type *a )
+  khArray& init( unsigned int s, Type *a )
   {
     _length = _size = s;
     free( _array );
@@ -109,9 +110,9 @@ class khArray
   // Copying
   khArray& operator=( const khArray& a ) { init( a ); return *this; }
 
-  Type &operator[]( uint idx ) const { return _array[ idx ]; }
+  Type &operator[]( unsigned int idx ) const { return _array[ idx ]; }
 
-  Type get( uint idx ) const { return _array[ idx ]; }
+  Type get( unsigned int idx ) const { return _array[ idx ]; }
 
   void append(Type a)
   {
@@ -126,12 +127,12 @@ class khArray
     _array[_length - 1] = a;
   }
 
-  void insert( const khArray &a, uint pos )
+  void insert( const khArray &a, unsigned int pos )
   {
     if ( a.length() == 0 )
       return;
 
-    uint move = _length - pos;
+    unsigned int move = _length - pos;
 
     _length += a.length();
     if ( _length > _size ) {
@@ -139,20 +140,20 @@ class khArray
       _array = ( Type* )realloc( _array, _size * sizeof( Type ) );
       assert( _array != NULL );
     }
-    for ( uint end = _length - 1; move; end--, move-- )
+    for ( unsigned int end = _length - 1; move; end--, move-- )
       _array[ end ] = _array[ end - a.length() ];
 
     move = 0;
-    for ( uint begin = pos; begin < pos + a.length(); begin++, move++ )
+    for ( unsigned int begin = pos; begin < pos + a.length(); begin++, move++ )
       _array[ begin ] = a.array()[ move ];
   }
     
   void append( const khArray &a ) { insert( a, _length ); }
 
   // same as above, but incoming array is reversed
-  void insertReverse( khArray &a, uint pos )
+  void insertReverse( khArray &a, unsigned int pos )
   {
-    uint move = _length - pos;
+    unsigned int move = _length - pos;
 
     _length += a.length();
     if ( _length > _size ) {
@@ -160,15 +161,15 @@ class khArray
       _array = ( Type* )realloc( _array, _size * sizeof( Type ) );
       assert( _array != NULL );
     }
-    for ( uint end = _length - 1; move; end--, move-- )
+    for ( unsigned int end = _length - 1; move; end--, move-- )
       _array[ end ] = _array[ end - a.length() ];
 
     move = a.length() - 1;
-    for ( uint begin = pos; begin < pos + a.length(); begin++, move-- )
+    for ( unsigned int begin = pos; begin < pos + a.length(); begin++, move-- )
       _array[ begin ] = a.array()[ move ];
   }
 
-  void insert( Type a, uint p )
+  void insert( Type a, unsigned int p )
   {
     _length++;
     if ( _length > _size ) {
@@ -177,7 +178,7 @@ class khArray
       assert( _array != NULL );
     }
 
-    for ( uint end = _length - 1; end > p; end-- )
+    for ( unsigned int end = _length - 1; end > p; end-- )
       _array[ end ] = _array[ end - 1 ];
 
     _array[ p ] = a;
@@ -185,8 +186,8 @@ class khArray
 
   void swap( Type a, Type b )
   {
-    uint posa;
-    uint posb;
+    unsigned int posa;
+    unsigned int posb;
 
     if ( findIndex( a, posa ) && findIndex( b, posb ) ) {
       Type tmp = _array[ posa ];
@@ -195,7 +196,7 @@ class khArray
     }
   }
 
-  Type removeIndex( uint pos )
+  Type removeIndex( unsigned int pos )
   {
     if ( pos < _length ) {
       Type ret = _array[ pos ];
@@ -209,7 +210,7 @@ class khArray
 
   Type remove( Type a ) 
   { 
-    uint id;
+    unsigned int id;
     if ( findIndex( a, id ) )
       return removeIndex( id );
     return Type();
@@ -224,9 +225,9 @@ class khArray
   }
 
 
-  bool findIndex( Type a, uint &id ) const
+  bool findIndex( Type a, unsigned int &id ) const
   {
-    for ( uint id = 0; id < _length; ++id )
+    for ( unsigned int id = 0; id < _length; ++id )
       if ( _array[ id ] == a )
         return true;
     return false;
@@ -235,7 +236,7 @@ class khArray
   // supplied list must be in same order as this
   void removeList(khArray& a)
   {
-    uint skip = 0;
+    unsigned int skip = 0;
     Type *loc = _array;
     while ( ( loc + skip ) < ( _array + _length ) ) {
       if ( skip >= a.length() || *( loc + skip ) != a[ skip ] ) {
@@ -249,7 +250,7 @@ class khArray
     _length -= a.length();
   }
 
-  void removeToEnd( uint pos )
+  void removeToEnd( unsigned int pos )
   {
     if (pos < _length)
       _length = pos + 1;
@@ -259,21 +260,21 @@ class khArray
   Type tail() const { return _length > 0 ? _array[ _length - 1 ] : ( Type )NULL; }
   Type* array() const { return _array; }
 
-  uint length() const { return _length; }
-  uint size() const { return _size; }
+  unsigned int length() const { return _length; }
+  unsigned int size() const { return _size; }
 
-  void growSize( uint g ) { _growSize = g; }
-  uint growSize() const { return _growSize; }
+  void growSize( unsigned int g ) { _growSize = g; }
+  unsigned int growSize() const { return _growSize; }
 
  private:
   Type *_array;
-  uint _length;
-  uint _size;
+  unsigned int _length;
+  unsigned int _size;
 
   // Amount to grow array when more space is needed
   // Copy operator should not copy this. Only the contructor
   // sets it, or explicetly by growSize()
-  uint _growSize;
+  unsigned int _growSize;
 };
 
 #endif //!_khArray_h_

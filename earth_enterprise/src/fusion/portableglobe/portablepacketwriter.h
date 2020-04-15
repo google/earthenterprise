@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,27 +41,27 @@ namespace fusion_portableglobe {
 class PortableBuilder {
  public:
   virtual void GetImagePacket(
-    const std::string& qtpath, uint32 version, std::string* raw_packet) = 0;
+    const std::string& qtpath, std::uint32_t version, std::string* raw_packet) = 0;
 
   virtual void GetVectorPacket(
-    const std::string& qtpath, uint32 channel, uint32 version,
+    const std::string& qtpath, std::uint32_t channel, std::uint32_t version,
     std::string* raw_packet) = 0;
 
   // Does nothing by default.
   virtual void GetTerrainPacket(
-    const std::string& qtpath, uint32 version, std::string* raw_packet) = 0;
+    const std::string& qtpath, std::uint32_t version, std::string* raw_packet) = 0;
 };
 
 
 // Each WriteRequest is a request for a packet that gets buffered
 class WriteRequest {
  public:
-  uint32 version_;
-  uint32 channel_;
+  std::uint32_t version_;
+  std::uint32_t channel_;
   PacketType packet_type_;      // kImagePacket/kTerrainPacket/kVectorPacket
   std::string qt_path_;         // This stores qt_path
   std::pair<const char*, size_t> request_result_;  // This stores result packet
-  WriteRequest(uint32 version, uint32 channel, PacketType packet_type,
+  WriteRequest(std::uint32_t version, std::uint32_t channel, PacketType packet_type,
                const std::string& qt_path)
       : version_(version), channel_(channel), packet_type_(packet_type),
         qt_path_(qt_path) {}
@@ -98,25 +99,25 @@ class RequestBundlerForPacket : public mttypes::WaitBaseManager {
   // first -> concatenated paths, second -> result vector
   typedef std::pair< std::string, std::vector<WriteRequest*> > RequestBundle;
   // first -> version, second -> the request_bundle for that
-  typedef std::map< uint32, RequestBundle > ImageryBundle;
-  typedef std::map< uint32, RequestBundle > TerrainBundle;
+  typedef std::map< std::uint32_t, RequestBundle > ImageryBundle;
+  typedef std::map< std::uint32_t, RequestBundle > TerrainBundle;
   // first -> {channel, version}, second -> the request_bundle for that
-  typedef std::map< std::pair<uint32, uint32>, RequestBundle > VectorBundle;
+  typedef std::map< std::pair<std::uint32_t, std::uint32_t>, RequestBundle > VectorBundle;
 
   RequestBundlerForPacket(int bunch_size, PortableBuilder* builder,
                           PacketBundleWriter* writer, bool is_multi_thread,
-                          uint32 batch_size);
+                          std::uint32_t batch_size);
 
   ~RequestBundlerForPacket();
 
   void AddToCache(const WriteRequest& request);
 
-  void WriteImagePacket(const std::string& qtpath, uint32 version);
+  void WriteImagePacket(const std::string& qtpath, std::uint32_t version);
 
-  void WriteTerrainPacket(const std::string& qtpath, uint32 version);
+  void WriteTerrainPacket(const std::string& qtpath, std::uint32_t version);
 
   void WriteVectorPacket(
-      const std::string& qtpath, uint32 channel, uint32 version);
+      const std::string& qtpath, std::uint32_t channel, std::uint32_t version);
 
   void FlushCache();
 
@@ -134,7 +135,7 @@ class RequestBundlerForPacket : public mttypes::WaitBaseManager {
   PortableBuilder* const caller_;
   PacketBundleWriter* const writer_;
   bool const is_multi_thread_;
-  const uint32 batch_size_;
+  const std::uint32_t batch_size_;
   khDeletingVector<Cache> cache_deleter_;
   std::string raw_packet_;
   khDeletingVector<mttypes::ManagedThread> thread_deleter_;

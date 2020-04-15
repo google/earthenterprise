@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +18,7 @@
 #include "SoftErrorPolicy.h"
 
 
-SoftErrorPolicy::SoftErrorPolicy(uint max_soft_before_fatal) :
+SoftErrorPolicy::SoftErrorPolicy(unsigned int max_soft_before_fatal) :
     max_soft_before_fatal_(max_soft_before_fatal)
 {
   assert(max_soft_before_fatal_ < 100);

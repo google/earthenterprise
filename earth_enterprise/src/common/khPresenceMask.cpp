@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -37,12 +38,12 @@ class PresenceHeader {
   static const char themagic[];
 
   char   magic[22];
-  uint8  presenceFormatVersion;
-  uint8  numLevels;
-  uint32 totalFileSize;
-  uint32 unused1;
+  std::uint8_t  presenceFormatVersion;
+  std::uint8_t  numLevels;
+  std::uint32_t totalFileSize;
+  std::uint32_t unused1;
 
-  PresenceHeader(uint8 numLevels, uint32 totalSize);
+  PresenceHeader(std::uint8_t numLevels, std::uint32_t totalSize);
   void LittleEndianToHost(void);
   // just another name for code clarity
   inline void HostToLittleEndian(void) { LittleEndianToHost(); }
@@ -59,7 +60,7 @@ COMPILE_TIME_CHECK(sizeof(PresenceHeader::themagic)-1 ==
                    InvalidMagicSize);
 
 
-PresenceHeader::PresenceHeader(uint8 numLevels_, uint32 totalSize)
+PresenceHeader::PresenceHeader(std::uint8_t numLevels_, std::uint32_t totalSize)
     : presenceFormatVersion(1),
       numLevels(numLevels_),
       totalFileSize(totalSize),
@@ -81,18 +82,18 @@ PresenceHeader::LittleEndianToHost(void) {
 // to be exactly 32 bytes long.
 class PresenceLevelRecord {
  public:
-  uint32 presenceBufferOffset;
-  uint32 presenceBufferSize;
-  uint32 startRow;
-  uint32 startCol;
-  uint32 numRows;
-  uint32 numCols;
-  uint8  levelNum;
-  uint8  unused1;             // == 0
-  uint16 unused2;             // == 0
-  uint32 unused3;             // == 0
+  std::uint32_t presenceBufferOffset;
+  std::uint32_t presenceBufferSize;
+  std::uint32_t startRow;
+  std::uint32_t startCol;
+  std::uint32_t numRows;
+  std::uint32_t numCols;
+  std::uint8_t  levelNum;
+  std::uint8_t  unused1;             // == 0
+  std::uint16_t unused2;             // == 0
+  std::uint32_t unused3;             // == 0
 
-  PresenceLevelRecord(uint32 presenceBufferOffset_,
+  PresenceLevelRecord(std::uint32_t presenceBufferOffset_,
                       const khLevelPresenceMask &level);
   void LittleEndianToHost(void);
   // just another name for code clarity
@@ -102,7 +103,7 @@ COMPILE_TIME_CHECK(sizeof(PresenceLevelRecord) == 32,
                    BadPresenceLevelRecordSize);
 
 
-PresenceLevelRecord::PresenceLevelRecord(uint32 presenceBufferOffset_,
+PresenceLevelRecord::PresenceLevelRecord(std::uint32_t presenceBufferOffset_,
                                          const khLevelPresenceMask &level) :
     presenceBufferOffset(presenceBufferOffset_),
     presenceBufferSize(level.BufferSize()),
@@ -143,7 +144,7 @@ khPresenceMask::khPresenceMask(const khInsetCoverage &coverage,
     : numLevels(coverage.numLevels()),
       beginLevel(coverage.beginLevel()),
       endLevel(coverage.endLevel()) {
-  for (uint i = beginLevel; i < endLevel; ++i) {
+  for (unsigned int i = beginLevel; i < endLevel; ++i) {
     levels[i] = TransferOwnership(
         new khLevelPresenceMask(i, coverage.levelExtents(i), set_present));
   }
@@ -153,20 +154,20 @@ khPresenceMask::khPresenceMask(const khPresenceMask &o)
     : numLevels(o.numLevels),
       beginLevel(o.beginLevel),
       endLevel(o.endLevel) {
-  for (uint i = beginLevel; i < endLevel; ++i) {
+  for (unsigned int i = beginLevel; i < endLevel; ++i) {
     levels[i] = TransferOwnership(new khLevelPresenceMask(*o.levels[i]));
   }
 }
 
 khPresenceMask& khPresenceMask::operator=(const khPresenceMask &o) {
   if (&o != this) {
-    for (uint i = beginLevel; i < endLevel; ++i) {
+    for (unsigned int i = beginLevel; i < endLevel; ++i) {
       levels[i].clear();
     }
     numLevels  = o.numLevels;
     beginLevel = o.beginLevel;
     endLevel   = o.endLevel;
-    for (uint i = beginLevel; i < endLevel; ++i) {
+    for (unsigned int i = beginLevel; i < endLevel; ++i) {
       levels[i] = TransferOwnership(new khLevelPresenceMask(*o.levels[i]));
     }
   }
@@ -179,7 +180,7 @@ khPresenceMask::khPresenceMask(const std::string &filename)
     : numLevels(0),
       beginLevel(MaxFusionLevel),  // opposites ends so we can
       endLevel(0) {                // load the real values
-  uint64 fileSize;
+  std::uint64_t fileSize;
   time_t mtime;
   if (!khGetFileInfo(filename, fileSize, mtime)) {
     throw khErrnoException(
@@ -232,7 +233,7 @@ khPresenceMask::khPresenceMask(const std::string &filename)
   numLevels = header.numLevels;
 
   // mmap the entire index
-  uchar *filebuf = static_cast<uchar*>(mmap(0, header.totalFileSize, PROT_READ,
+  unsigned char *filebuf = static_cast<unsigned char*>(mmap(0, header.totalFileSize, PROT_READ,
                                             MAP_PRIVATE, fileHandle.fd(), 0));
   if (filebuf == MAP_FAILED) {
     throw khErrnoException(kh::tr("Unable to mmap %1").arg(filename));
@@ -242,7 +243,7 @@ khPresenceMask::khPresenceMask(const std::string &filename)
 
   PresenceLevelRecord *recs =
       reinterpret_cast<PresenceLevelRecord*>(filebuf + sizeof(PresenceHeader));
-  for (uint i = 0; i < header.numLevels; ++i) {
+  for (unsigned int i = 0; i < header.numLevels; ++i) {
     PresenceLevelRecord rec = recs[i];
     rec.LittleEndianToHost();
 
@@ -281,7 +282,7 @@ khPresenceMask::khPresenceMask(const std::string &filename)
       TransferOwnership(
           new khLevelPresenceMask
           (rec.levelNum,
-           khExtents<uint32>(RowColOrder,
+           khExtents<std::uint32_t>(RowColOrder,
                              rec.startRow,
                              rec.startRow + rec.numRows,
                              rec.startCol,
@@ -309,21 +310,21 @@ void khPresenceMask::PopulateCoverage(khInsetCoverage &cov) const {
   if (numLevels == 0)
     return;
 
-  std::vector<khExtents<uint32> > extentsList;
+  std::vector<khExtents<std::uint32_t> > extentsList;
   extentsList.reserve(numLevels);
-  for (uint i = beginLevel; i < endLevel; ++i) {
+  for (unsigned int i = beginLevel; i < endLevel; ++i) {
     extentsList.push_back(levels[i]->extents);
   }
 
   cov = khInsetCoverage(beginLevel, endLevel, extentsList);
 }
 
-khExtents<uint32> khPresenceMask::levelTileExtents(uint lev) const {
+khExtents<std::uint32_t> khPresenceMask::levelTileExtents(unsigned int lev) const {
   assert(lev < NumFusionLevels);
   if (levels[lev]) {
     return levels[lev]->extents;
   } else {
-    return khExtents<uint32>();
+    return khExtents<std::uint32_t>();
   }
 }
 
@@ -356,11 +357,11 @@ bool khPresenceMask::GetEstimatedPresence(const khTileAddr &addr) const {
     // reach down to beginLevel and traverse all tiles there
     // stop as soon as we find a hit
     khLevelCoverage minCoverage(addr.MagnifiedToLevel(beginLevel));
-    khExtents<uint32> tocheck =
-      khExtents<uint32>::Intersection(minCoverage.extents,
+    khExtents<std::uint32_t> tocheck =
+      khExtents<std::uint32_t>::Intersection(minCoverage.extents,
                                       levels[beginLevel]->extents);
-    for (uint32 row = tocheck.beginRow(); row < tocheck.endRow(); ++row) {
-      for (uint32 col = tocheck.beginCol(); col < tocheck.endCol(); ++col) {
+    for (std::uint32_t row = tocheck.beginRow(); row < tocheck.endRow(); ++row) {
+      for (std::uint32_t col = tocheck.beginCol(); col < tocheck.endCol(); ++col) {
         if (levels[beginLevel]->GetPresence(row, col)) {
           return true;
         }
@@ -373,14 +374,14 @@ bool khPresenceMask::GetEstimatedPresence(const khTileAddr &addr) const {
 // ****************************************************************************
 // ***  khPresenceMaskWriter
 // ****************************************************************************
-uint32 khPresenceMaskWriter::DataOffset(void) {
+ std::uint32_t khPresenceMaskWriter::DataOffset(void) {
   return (sizeof(PresenceHeader) +
           presence.numLevels * sizeof(PresenceLevelRecord));
 }
 
-uint32 khPresenceMaskWriter::TotalFileSize(void) {
-  uint32 totalFileSize = DataOffset();
-  for (uint i = 0; i < NumFusionLevels; ++i) {
+ std::uint32_t khPresenceMaskWriter::TotalFileSize(void) {
+  std::uint32_t totalFileSize = DataOffset();
+  for (unsigned int i = 0; i < NumFusionLevels; ++i) {
     if (presence.levels[i]) {
       totalFileSize += presence.levels[i]->BufferSize();
     }
@@ -395,7 +396,7 @@ khPresenceMaskWriter::khPresenceMaskWriter(const std::string &filename,
       munmapper() {
   // Go ahead and open/pre-size the file now. That way we can catch any
   // filesystem problems early
-  const uint32 totalFileSize = TotalFileSize();
+  const std::uint32_t totalFileSize = TotalFileSize();
 
   // Open file, mmap it, and zero it out
   (void) ::umask(000);
@@ -404,7 +405,7 @@ khPresenceMaskWriter::khPresenceMaskWriter(const std::string &filename,
 
   // presize & fill w/ 0's
   khFillFile(fd, 0, totalFileSize);
-  uchar *filebuf = static_cast<uchar*>(
+  unsigned char *filebuf = static_cast<unsigned char*>(
       mmap(0, totalFileSize, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0));
   if (filebuf == MAP_FAILED) {
     throw khErrnoException(kh::tr("Unable to mmap %1").arg(filename));
@@ -418,10 +419,10 @@ khPresenceMaskWriter::khPresenceMaskWriter(const std::string &filename,
 
 
 khPresenceMaskWriter::~khPresenceMaskWriter(void) {
-  uint32 presenceBufferOffset = DataOffset();
-  uint32 totalFileSize        = TotalFileSize();
+  std::uint32_t presenceBufferOffset = DataOffset();
+  std::uint32_t totalFileSize        = TotalFileSize();
 
-  uchar *filebuf = static_cast<uchar*>(munmapper.buffer());
+  unsigned char *filebuf = static_cast<unsigned char*>(munmapper.buffer());
 
   // write header
   PresenceHeader *header =
@@ -430,7 +431,7 @@ khPresenceMaskWriter::~khPresenceMaskWriter(void) {
 
   PresenceLevelRecord *lrec =
       reinterpret_cast<PresenceLevelRecord*>(header + 1);
-  for (uint i = 0; i < NumFusionLevels; ++i) {
+  for (unsigned int i = 0; i < NumFusionLevels; ++i) {
     if (presence.levels[i]) {
       // write the level header rec
       (void) new(lrec) PresenceLevelRecord(presenceBufferOffset,

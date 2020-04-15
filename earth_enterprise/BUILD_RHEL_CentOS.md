@@ -51,8 +51,6 @@ sudo subscription-manager repos --enable=rhel-server-dts2-6-rpms
 sudo subscription-manager repos --enable=rhel-6-server-optional-rpms
 sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
 sudo yum install -y https://repo.ius.io/ius-release-el6.rpm
-
-
 ```
 
 ## Install Git
@@ -92,14 +90,14 @@ For all versions of CentOS and RHEL, install the standard development/build tool
 
 ```bash
 sudo yum install -y ant bzip2 doxygen gcc-c++ patch swig tar \
-                    python python-argparse python-lxml python-setuptools
+                    python python-argparse python2-defusedxml python-setuptools
 ```
 
 ### For RHEL6 and Centos 6
 
 ```bash
 sudo yum install -y ant bzip2 doxygen gcc-c++ patch swig tar \
-                    python27 python-argparse python27-lxml python27-setuptools
+                    python27 python-argparse python2-defusedxml python27-setuptools
 ```
 
 Also install the devtoolset toolchain.
@@ -150,7 +148,7 @@ sudo yum install -y \
   libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel pcre pcre-devel \
   proj-devel python27 \
-  python27-pip python27-devel python27-lxml python27-setuptools python-unittest2 \
+  python27-pip python27-devel python27-setuptools python-unittest2 \
   python-devel rpm-build rpmrebuild rsync scons shunit2 \
   xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
 ```

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +37,7 @@ class geSegmentedArray : private Alloc {
 
   // Segment size specified as log2 to ensure
   // segment num/ sub addr can be computed using bit shifts and masks
-  geSegmentedArray(uint SegmentSizeLog2_);
+  geSegmentedArray(unsigned int SegmentSizeLog2_);
   ~geSegmentedArray(void);
 
   inline T& operator[](size_type index) {
@@ -74,9 +75,9 @@ class geSegmentedArray : private Alloc {
   };
   friend class DeallocGuard;
 
-  const uint kSegmentSizeLog2;
+  const unsigned int kSegmentSizeLog2;
   const size_type kSegmentSize;
-  const uint kSegmentRemainderMask;
+  const unsigned int kSegmentRemainderMask;
 
   std::vector<T*> segments;
   size_type count;
@@ -86,7 +87,7 @@ class geSegmentedArray : private Alloc {
 
 
 template <class T, class Alloc>
-geSegmentedArray<T, Alloc>::geSegmentedArray(uint SegmentSizeLog2_) :
+geSegmentedArray<T, Alloc>::geSegmentedArray(unsigned int SegmentSizeLog2_) :
     kSegmentSizeLog2(SegmentSizeLog2_),
     kSegmentSize(1U<<kSegmentSizeLog2),
     kSegmentRemainderMask(kSegmentSize - 1),

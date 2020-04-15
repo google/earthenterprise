@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,7 +29,7 @@
 class CombinedRPAssetVersionImpl {
  public:
   khExtents<double> GetExtents(void) const;
-  uint              GetMaxLevel(void) const;
+  unsigned int              GetMaxLevel(void) const;
   std::string       PreviewRef(void) const;
 };
 
@@ -61,7 +62,7 @@ CombinedRPAssetVersionImpl::GetExtents(void) const
 uint
 CombinedRPAssetVersionImpl::GetMaxLevel(void) const
 {
-  uint prodMaxLevel = 0;
+  unsigned int prodMaxLevel = 0;
   FromString(meta.GetValue("maxlevel"), prodMaxLevel);
   if (!prodMaxLevel) {
     throw khException(kh::tr("Unable to get maxlevel for ")
@@ -180,7 +181,7 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
     if (config.need_khvr_) {
       source =
         AssetFactory::ReuseOrMakeAndUpdateSubAsset
-        <MutableMosaicAssetVersionD, MosaicConfig, MosaicAssetVersionD>
+        <MutableMosaicAssetVersionD, MosaicConfig, MosaicAssetVersionD, AssetVersion>
                (assetRef,
                 type,
                 "mosaic",
@@ -193,7 +194,7 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
     // tell my raster child about the new source & have it update itself
     MutableKRPAssetVersionD krp2 =
       AssetFactory::ReuseOrMakeAndUpdateSubAsset
-      <MutableKRPAssetVersionD, KRPConfig, KRPAssetVersionD>
+      <MutableKRPAssetVersionD, KRPConfig, KRPAssetVersionD, AssetVersion>
       (assetRef,
        type,
        "product",
@@ -224,7 +225,7 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
       } else {
         krmp =
           AssetFactory::ReuseOrMakeAndUpdateSubAsset
-          <MutableKRMPAssetVersionD, KRMPConfig, KRMPAssetVersionD>
+          <MutableKRMPAssetVersionD, KRMPConfig, KRMPAssetVersionD, AssetVersion>
           (assetRef,
            type,
            "maskproduct",
@@ -241,7 +242,7 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
       // tell my maskgen child about the new raster, have it update
       AssetVersion maskgen =
         AssetFactory::ReuseOrMakeAndUpdateSubAsset
-        <MutableMaskgenAssetVersionD, MaskgenConfig, MaskgenAssetVersionD>
+        <MutableMaskgenAssetVersionD, MaskgenConfig, MaskgenAssetVersionD, AssetVersion>
         (assetRef,
          type,
          "maskgen",
@@ -253,7 +254,7 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
       // tell my KRMP child about the new raster & mask
       MutableAssetVersionD krmp =
         AssetFactory::ReuseOrMakeAndUpdateSubAsset
-        <MutableKRMPAssetVersionD, KRMPConfig, KRMPAssetVersionD>
+        <MutableKRMPAssetVersionD, KRMPConfig, KRMPAssetVersionD, AssetVersion>
         (assetRef,
          type,
          "maskproduct",

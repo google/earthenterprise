@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,7 +24,7 @@ namespace geindex {
 // ****************************************************************************
 // ***  BundleFreePool
 // ****************************************************************************
-BundleFreePool::BundleFreePool(uint32 minBlockSize) :
+BundleFreePool::BundleFreePool(std::uint32_t minBlockSize) :
     kMinBlockSize(minBlockSize),
     totalFreeSpace(0),
     wastedSpace(0)
@@ -42,7 +43,7 @@ void BundleFreePool::Add(const BundleAddr &addr) {
   }
 }
 
-BundleAddr BundleFreePool::Get(uint32 size) {
+BundleAddr BundleFreePool::Get(std::uint32_t size) {
   BundleAddr freeAddr;
 
   // seach free pool for a block to satisfy this request
@@ -79,7 +80,7 @@ IndexBundleWriter::IndexBundleWriter(geFilePool &filePool_,
                                      bool deltaMode,
                                      const std::string &desc,
                                      bool slotsAreSingle,
-                                     uint32 num_write_buffers) :
+                                     std::uint32_t num_write_buffers) :
     IndexBundle(TransferOwnership
                 (deltaMode ? new FileBundleUpdateWriter(filePool_, fname_) :
                  new FileBundleWriter(filePool_, fname_)),
@@ -91,7 +92,7 @@ IndexBundleWriter::IndexBundleWriter(geFilePool &filePool_,
 {
 #ifndef SINGLE_THREAD
   delayed_write_queue_ = 0;
-  for (uint i = 0; i < num_write_buffers; ++i) {
+  for (unsigned int i = 0; i < num_write_buffers; ++i) {
     buffer_cache_.Push(TransferOwnership(
                            new LittleEndianWriteBuffer(8096)));
   }
@@ -133,7 +134,7 @@ void IndexBundleWriter::ReturnWriteBuffer(CachedBuffer buf) {
 }
 
 BundleAddr IndexBundleWriter::GetNewAddr(const BundleAddr &prevAddr,
-                                         uint32 newSize) {
+                                         std::uint32_t newSize) {
   bool prevWritable = prevAddr && 
                       bundleWriter.IsWriteable(prevAddr.Offset());
   if (!newSize) {
@@ -157,7 +158,7 @@ BundleAddr IndexBundleWriter::GetNewAddr(const BundleAddr &prevAddr,
         freePool.Add(prevAddr);
       }
       if (!(newAddr = freePool.Get(newSize))) {
-        uint64 offset = bundleWriter.AllocateAppend(newSize);
+        std::uint64_t offset = bundleWriter.AllocateAppend(newSize);
         newAddr = BundleAddr(offset, newSize);
       }
     }

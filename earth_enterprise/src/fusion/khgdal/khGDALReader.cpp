@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,15 +21,17 @@
 // ****************************************************************************
 // ***  khGDALReader
 // ****************************************************************************
-khGDALReader::khGDALReader(const khGDALDataset &srcDS_, uint numbands)
+khGDALReader::khGDALReader(const khGDALDataset &srcDS_, unsigned int numbands)
   : srcDS(srcDS_),
     numBands(numbands),
     gdalDatatype(srcDS->GetRasterBand(1)->GetRasterDataType()),
     topToBottom(srcDS.normalizedGeoExtents().topToBottom()),
+    no_data_set(false),
+    sanitized_no_data(0),
     paletteSize(0),
     palette(0)
 {
-  uint gdalRasterCount = srcDS->GetRasterCount();
+  unsigned int gdalRasterCount = srcDS->GetRasterCount();
   if (numBands == 0) {
     throw khException
       (kh::tr("Internal Error: khGDALReader has no bands"));
@@ -48,15 +51,15 @@ khGDALReader::khGDALReader(const khGDALDataset &srcDS_, uint numbands)
 
   // populate list of gdal bands
   gdalBandIndexes.resize(numBands);
-  const uint num_orig_bands = srcDS->GetRasterCount();
+  const unsigned int num_orig_bands = srcDS->GetRasterCount();
   if (numBands == 1 || numBands == num_orig_bands) {
     // In both these cases none of the bands need to be dropped.
-    for (uint i = 0; i < numBands; ++i) {
+    for (unsigned int i = 0; i < numBands; ++i) {
       gdalBandIndexes[i] = i+1;
     }
   } else if (num_orig_bands == 4 && numBands == 3) {  // 4 band images
     // Ignore if only one alpha band or 4th band if none is alpha band
-    for (uint i = 0, j = 0, num_alpha = 0; i < num_orig_bands;) {
+    for (unsigned int i = 0, j = 0, num_alpha = 0; i < num_orig_bands;) {
       ++i;
       if (srcDS->GetRasterBand(i)->GetColorInterpretation() == GCI_AlphaBand) {
         if (++num_alpha > 1) {
@@ -83,7 +86,7 @@ khGDALReader::khGDALReader(const khGDALDataset &srcDS_, uint numbands)
     if (!ctbl) {
       throw khException(kh::tr("Unable to get color table"));
     }
-    paletteSize = (uint)ctbl->GetColorEntryCount();
+    paletteSize = (unsigned int)ctbl->GetColorEntryCount();
     palette = ctbl->GetColorEntry(0);
     if (!paletteSize || !palette) {
       throw khException(kh::tr("Unable to get color table"));
@@ -91,12 +94,15 @@ khGDALReader::khGDALReader(const khGDALDataset &srcDS_, uint numbands)
   }
 }
 
+void khGDALReader::GetNoDataFromSrc(double & no_data, int & nodata_exists) {
+  no_data = srcDS->GetRasterBand(1)->GetNoDataValue(&nodata_exists);
+}
 
 // ****************************************************************************
 // ***  khGDALSimpleReader
 // ****************************************************************************
 void
-khGDALSimpleReader::FetchPixels(const khExtents<uint32> &srcExtents)
+khGDALSimpleReader::FetchPixels(const khExtents<std::uint32_t> &srcExtents)
 {
   if (srcDS->RasterIO(GF_Read,
                       srcExtents.beginX(), srcExtents.beginY(),
@@ -153,7 +159,7 @@ SnapTransformFunc( void *pTransformArg, int bDstToSrc,
 
 khGDALWarpingReader::khGDALWarpingReader(const khGDALDataset &srcDS,
                                          GDALResampleAlg resampleAlg,
-                                         uint numbands,
+                                         unsigned int numbands,
                                          double transformErrorThreshold,
                                          khTilespace::ProjectionType projType,
                                          const double* noData)
@@ -253,7 +259,7 @@ khGDALWarpingReader::khGDALWarpingReader(const khGDALDataset &srcDS,
   options->nBandCount = numBands;
   options->panSrcBands = (int *)CPLMalloc(sizeof(int) * numBands);
   options->panDstBands = (int *)CPLMalloc(sizeof(int) * numBands);
-  for (uint i = 0; i < numBands; ++i) {
+  for (unsigned int i = 0; i < numBands; ++i) {
     options->panSrcBands[i] = gdalBandIndexes[i];
     options->panDstBands[i] = gdalBandIndexes[i];
   }
@@ -273,7 +279,7 @@ khGDALWarpingReader::khGDALWarpingReader(const khGDALDataset &srcDS,
       options->padfDstNoDataImag = (double *)
                     CPLMalloc(sizeof(double) * options->nBandCount);
     }
-    for (uint i = 0; i < numBands; ++i) {
+    for (unsigned int i = 0; i < numBands; ++i) {
       options->padfSrcNoDataImag[i] = 0.0;
       options->padfDstNoDataImag[i] = 0.0;
       options->padfSrcNoDataReal[i] = *noData;
@@ -289,7 +295,7 @@ khGDALWarpingReader::khGDALWarpingReader(const khGDALDataset &srcDS,
 
 
 void
-khGDALWarpingReader::FetchPixels(const khExtents<uint32> &srcExtents)
+khGDALWarpingReader::FetchPixels(const khExtents<std::uint32_t> &srcExtents)
 {
   if (warpOperation.WarpRegionToBuffer(srcExtents.beginX(),
                                        srcExtents.beginY(),

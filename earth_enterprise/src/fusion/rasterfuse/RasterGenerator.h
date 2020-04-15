@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +36,7 @@ class ImageInfo
   khTypes::StorageEnum        componentType;
   khTypes::StorageEnum        srcComponentType;
   GDALResampleAlg             resampleAlg;
-  uint                        numbands;
+  unsigned int                        numbands;
   // NoData value is taken from srcDS for heightmaps if present, otherwise 0.
   // Final value is still 0 for imagery and masks; for heightmaps it is scaled
   // and clamped as the data will be.
@@ -47,7 +48,7 @@ class ImageInfo
   const khTilespace::ProjectionType projectionType;
 
   // my tile extents. row/col are level wide
-  khExtents<uint32> tileExtents;
+  khExtents<std::uint32_t> tileExtents;
  private:
   // private and unimplemented, it's illegal to copy an ImageInfo
   ImageInfo(const ImageInfo&);
@@ -55,15 +56,15 @@ class ImageInfo
 
   void ComputeTileExtents(void);
  public:
-  inline uint toplevel(void) const { return srcDS.normalizedTopLevel(); }
-  inline uint numComponents(void) const { return numbands; }
+  inline unsigned int toplevel(void) const { return srcDS.normalizedTopLevel(); }
+  inline unsigned int numComponents(void) const { return numbands; }
   inline khExtents<double> degExtents(void) const {
     return srcDS.normalizedGeoExtents().extents();
   }
-  inline const khExtents<int64> alignedPixelExtents(void) const {
+  inline const khExtents<std::int64_t> alignedPixelExtents(void) const {
     return srcDS.alignedPixelExtents();
   }
-  inline const khExtents<int64> croppedPixelExtents(void) const {
+  inline const khExtents<std::int64_t> croppedPixelExtents(void) const {
     return srcDS.croppedPixelExtents();
   }
 

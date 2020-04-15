@@ -194,7 +194,7 @@ std::string geProtoDbroot::ToEncodedString(void) const {
   return encrypted.SerializeAsString();
 }
 
-void geProtoDbroot::AddUniversalFusionConfig(uint32 epoch) {
+void geProtoDbroot::AddUniversalFusionConfig(std::uint32_t epoch) {
   // setup some basic stuff all fusion dbroots need
   mutable_database_version()->set_quadtree_version(epoch);
   keyhole::dbroot::EndSnippetProto *end_snippet = mutable_end_snippet();
@@ -208,7 +208,7 @@ void geProtoDbroot::AddUniversalFusionConfig(uint32 epoch) {
 
 
 keyhole::dbroot::StringEntryProto* geProtoDbroot::GetTranslationEntryById(
-    int32 id) {
+    std::int32_t id) {
   if (cached_string_table_.size() !=
       static_cast<size_t>(translation_entry_size())) {
     cached_string_table_.clear();

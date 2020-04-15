@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +25,8 @@
 #include <string>
 #include <vector>
 #include "common/geFilePool.h"
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 
 // Third party http_request.h
 class request_rec;

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +19,8 @@
 #define GEO_EARTH_ENTERPRISE_SRC_FUSION_AUTOINGEST_ASSETHANDLE_H_
 
 #include <string>
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "common/SharedString.h"
 #include "StorageManager.h"
 
@@ -62,10 +64,10 @@ class AssetHandle_ : public AssetHandleInterface<Impl_> {
   virtual bool isMutable() const { return false; }
 
  public:
-  static inline uint32 CacheSize(void) { return storageManager().CacheSize(); }
-  static inline uint32 CacheCapacity(void) { return storageManager().CacheCapacity(); }
-  static inline uint32 DirtySize(void) { return storageManager().DirtySize(); }
-  static uint64 CacheMemoryUse(void) { return storageManager().CacheMemoryUse(); }
+  static inline std::uint32_t CacheSize(void) { return storageManager().CacheSize(); }
+  static inline std::uint32_t CacheCapacity(void) { return storageManager().CacheCapacity(); }
+  static inline std::uint32_t DirtySize(void) { return storageManager().DirtySize(); }
+  static std::uint64_t CacheMemoryUse(void) { return storageManager().CacheMemoryUse(); }
 
   virtual bool Valid(const HandleType &) const { return true; }
 
@@ -139,9 +141,6 @@ class DerivedAssetHandle_ : public virtual Base_ {
   typedef typename Base::HandleType HandleType;
 
  public:
-  virtual HandleType Load(const std::string &boundref) const {
-    return HandleType(Impl::Load(boundref));
-  }
 
   virtual bool Valid(const HandleType & entry) const { 
     // we have to check if it maps to Impl* since somebody

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,6 +55,7 @@
 
 #include <common/base/macros.h>
 #include "khTypes.h"
+#include <cstdint>
 
 
 class BoxFilterTiledImage {
@@ -66,28 +68,28 @@ class BoxFilterTiledImage {
   // SingleImageTile avoids the copying and extra memory of tiles. The
   // output image is computed in place, and SaveFilteredTile() is
   // still called.  The class will not delete the image.
-  void SingleImageTile(uchar *image);
+  void SingleImageTile(unsigned char *image);
 
   // Box filters the image.  box_width and box_height must be odd.
   // tile_width must be >= box_width/2.
-  void BoxFilter(int box_width, int box_height, uchar border_value);
+  void BoxFilter(int box_width, int box_height, unsigned char border_value);
 
  protected:
   // Called by base impl GetTile to load image tiles from store.
   virtual void LoadImageTile(int tile_x, int tile_y,
-                             uchar *image_tile) = 0;
+                             unsigned char *image_tile) = 0;
 
   // Called by BoxFilter() to save filtered image tiles. Define in
   // derived class to save tiles.  Function should not delete the
   // output_tile.
   virtual void SaveFilteredTile(int tile_x, int tile_y,
-                                const uchar *output_tile) = 0;
+                                const unsigned char *output_tile) = 0;
 
   // Given the sum of pixels in the box and a pointer to the destination pixel,
   // set the pixel to its final value. A derived class might want to handle
   // differently, for example for non-linear response or to avoid raising any
   // values.
-  virtual void Filter(int box_sum, uchar *pixel) const = 0;
+  virtual void Filter(int box_sum, unsigned char *pixel) const = 0;
 
   int image_width_, image_height_;  // full image size
   int tile_width_, tile_height_;    // size of each tile
@@ -99,11 +101,11 @@ class BoxFilterTiledImage {
   // memory and calls LoadImageTile() on cache miss.  Returns NULL if
   // tile is outside image bounds.  border value is used to fill in
   // extra pixels in case of unfilled edge tiles.
-  virtual const uchar *GetImageTile(int tile_x, int tile_y,
-                                    uchar border);
+  virtual const unsigned char *GetImageTile(int tile_x, int tile_y,
+                                    unsigned char border);
 
   bool single_tile_mode_;              // true iff SingleImageTile() was called
-  std::vector<uchar *> cached_tiles_;  // 4 tiles cached
+  std::vector<unsigned char *> cached_tiles_;  // 4 tiles cached
   std::vector<int> cached_tile_ids_;   // Holds cache id of each tile in tile_
 
   // Disallow copying: do not define these
@@ -124,7 +126,7 @@ class AveragingBoxFilter : public BoxFilterTiledImage {
 
  protected:
   // Sets the pixel to be the average of the pixel values in the box.
-  virtual void Filter(int box_sum, uchar *pixel) const {
+  virtual void Filter(int box_sum, unsigned char *pixel) const {
     *pixel = box_sum / box_area_;
   }
  private:

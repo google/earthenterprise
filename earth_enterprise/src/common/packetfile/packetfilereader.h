@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,13 +62,13 @@ class PacketFileReaderBase : protected FileBundleReader {
   // a FileBundle.
   // For a quadtree traversal, perhaps use max_blocks=10, block_size=5MB.
   // max_blocks must be >= 2.
-  void EnableReadCache(uint32 max_blocks, uint32 block_size);
+  void EnableReadCache(std::uint32_t max_blocks, std::uint32_t block_size);
 
   // Read a specific block, check CRC if it exists.  Resulting buffer
   // will have CRC striped off.  The second form reads the data into a
   // string buffer without modifying the buffer size (buffer must be
   // large enough to receive data).
-  size_t ReadAtCRC(uint64 read_pos, std::string &buffer,
+  size_t ReadAtCRC(std::uint64_t read_pos, std::string &buffer,
                    size_t read_len) const {
     if (IsCRCEnabled()) {
       return FileBundleReader::ReadAtCRC(read_pos, &buffer, read_len);
@@ -77,7 +78,7 @@ class PacketFileReaderBase : protected FileBundleReader {
     }
   }
 
-  size_t ReadAtCRC(uint64 read_pos,
+  size_t ReadAtCRC(std::uint64_t read_pos,
                    std::string &buffer,
                    size_t offset,
                    size_t read_len) const {

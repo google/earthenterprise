@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -289,9 +290,9 @@ void HiresTree::Show() const {
  * stores cut limits.
  */
 CutSpec::CutSpec(const std::string& qt_node_file_name,
-                 uint16 min_level,
-                 uint16 default_level,
-                 uint16 max_level)
+                 std::uint16_t min_level,
+                 std::uint16_t default_level,
+                 std::uint16_t max_level)
     : min_level_(min_level),
       default_level_(default_level),
       max_level_(max_level),
@@ -307,9 +308,9 @@ CutSpec::CutSpec(const std::string& qt_node_file_name,
  */
 CutSpec::CutSpec(const std::string& qt_node_file_name,
                  const std::string& exclusion_qt_node_file_name,
-                 uint16 min_level,
-                 uint16 default_level,
-                 uint16 max_level)
+                 std::uint16_t min_level,
+                 std::uint16_t default_level,
+                 std::uint16_t max_level)
     : min_level_(min_level),
       default_level_(default_level),
       max_level_(max_level),
@@ -326,7 +327,7 @@ CutSpec::CutSpec(const std::string& qt_node_file_name,
  * pruned.
  */
 bool CutSpec::KeepNode(const std::string& qtpath) const {
-  uint16 level = qtpath.size();
+  std::uint16_t level = qtpath.size();
 
   // If we are below the min level, keep nothing.
   if (level < min_level_) {

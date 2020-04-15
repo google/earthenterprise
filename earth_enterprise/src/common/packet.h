@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,7 +68,7 @@ enum {
 char * generateFileName(int level);
 
 #ifdef FORCE_BASE32
-typedef uint32 id_size;
+typedef std::uint32_t id_size;
 #else
 typedef unsigned long id_size;
 #endif
@@ -187,22 +188,22 @@ struct etDataPacket_BASE32
 {
   etDataHeader packetHeader;
     
-  uint32 metaHeader;
+  std::uint32_t metaHeader;
     
-  uint32 packetBuffer;
+  std::uint32_t packetBuffer;
   int packetBufferSize;
   
-  uint32 dataInstances;
+  std::uint32_t dataInstances;
     
-  uint32 dataBuffer;
+  std::uint32_t dataBuffer;
   int maxDataBufferSize;
      
   //Flat File Concurrent Save
   static char flatbasename[500];
   static char flatdirname[500];
   static char flatdataname[500];
-  static uint32 flatdirfp;
-  static uint32 flatdatafp;
+  static std::uint32_t flatdirfp;
+  static std::uint32_t flatdatafp;
   static long datafilesize;
   static int flatmode;
  private:
@@ -230,21 +231,21 @@ struct etDataPacket
   etDataHeader packetHeader;
 
 #ifdef FORCE_BASE32
-  uint32 metaHeader_OFFSET;
+  std::uint32_t metaHeader_OFFSET;
 #else       
   void * metaHeader;
 #endif
     
 #ifdef FORCE_BASE32
-  uint32 packetBuffer_OFFSET;
+  std::uint32_t packetBuffer_OFFSET;
 #else       
   char* packetBuffer;
 #endif
   int packetBufferSize;
   
 #ifdef FORCE_BASE32
-  uint32 dataInstances_OFFSET;
-  uint32 dataBuffer_OFFSET;
+  std::uint32_t dataInstances_OFFSET;
+  std::uint32_t dataBuffer_OFFSET;
 #else       
   char * dataInstances;
   char * dataBuffer;
@@ -283,8 +284,8 @@ struct etDataPacket
   static char flatdirname[500];
   static char flatdataname[500];
 #ifdef FORCE_BASE32
-  uint32 flatdirfp_OFFSET;
-  uint32 flatdatafp_OFFSET;
+  std::uint32_t flatdirfp_OFFSET;
+  std::uint32_t flatdatafp_OFFSET;
 #else       
   static FILE * flatdirfp;
   static FILE * flatdatafp;
@@ -361,13 +362,13 @@ struct etDataPacket
 
   void movetooffset()
   {
-    dataInstances_OFFSET = (uint64)dataInstances;
-    dataBuffer_OFFSET = (uint64)dataBuffer;
+    dataInstances_OFFSET = (std::uint64_t)dataInstances;
+    dataBuffer_OFFSET = (std::uint64_t)dataBuffer;
   };
 
   void movefromoffset()
   {
-    uint64 num;
+    std::uint64_t num;
     num = dataInstances_OFFSET;
     dataInstances = (char *)num;
     num = dataBuffer_OFFSET;
@@ -449,14 +450,14 @@ struct etPointerTranslator
 #ifdef FORCE_BASE32
 struct etStreetPacketData_BASE32
 {
-  uint32           name;
+  std::uint32_t           name;
   int          texId_deprecated;
   ushort       numPt;
   ushort       bitFlags;
 #ifdef VECTOR_COMPRESSION
-  uint32 localPt;
+  std::uint32_t localPt;
 #else
-  uint32 localPt;
+  std::uint32_t localPt;
 #endif
 
   int          style;
@@ -468,7 +469,7 @@ struct etStreetPacketData_BASE32
 struct etStreetPacketData
 {
 #ifdef FORCE_BASE32
-  uint32           name_OFFSET;
+  std::uint32_t           name_OFFSET;
 #else
   etString     name;
 #endif
@@ -477,9 +478,9 @@ struct etStreetPacketData
   ushort       bitFlags;
 #ifdef FORCE_BASE32
 #ifdef VECTOR_COMPRESSION
-  uint32 localPt_OFFSET;
+  std::uint32_t localPt_OFFSET;
 #else
-  uint32 localPt_OFFSET;
+  std::uint32_t localPt_OFFSET;
 #endif
 #else
 #ifdef VECTOR_COMPRESSION
@@ -516,13 +517,13 @@ struct etStreetPacketData
 #ifdef FORCE_BASE32     
   void movetooffset()
   {
-    localPt_OFFSET = (uint64)localPt;
-    name_OFFSET = (uint64)name.string;
+    localPt_OFFSET = (std::uint64_t)localPt;
+    name_OFFSET = (std::uint64_t)name.string;
   };
 
   void movefromoffset()
   {
-    uint64 num;
+    std::uint64_t num;
     num = localPt_OFFSET;
 #ifdef VECTOR_COMPRESSION
     localPt = (etVec3us *)num;
@@ -632,15 +633,15 @@ struct etStreetPacket : public etDataPacket
 #ifdef FORCE_BASE32
 struct etPolyLinePacketData_BASE32
 {
-  uint32           name;
+  std::uint32_t           name;
   int          texId;
   ushort       numPt;
   ushort       bitFlags;
     
 #ifdef VECTOR_COMPRESSION
-  uint32 localPt;
+  std::uint32_t localPt;
 #else
-  uint32 localPt;
+  std::uint32_t localPt;
 #endif
 
   int          style;
@@ -652,7 +653,7 @@ struct etPolyLinePacketData_BASE32
 struct etPolyLinePacketData
 {
 #ifdef FORCE_BASE32
-  uint32           name_OFFSET;
+  std::uint32_t           name_OFFSET;
 #else
   etString     name;
 #endif
@@ -662,9 +663,9 @@ struct etPolyLinePacketData
     
 #ifdef FORCE_BASE32
 #ifdef VECTOR_COMPRESSION
-  uint32 localPt_OFFSET;
+  std::uint32_t localPt_OFFSET;
 #else
-  uint32 localPt_OFFSET;
+  std::uint32_t localPt_OFFSET;
 #endif
 #else
 #ifdef VECTOR_COMPRESSION
@@ -700,13 +701,13 @@ struct etPolyLinePacketData
 #ifdef FORCE_BASE32     
   void movetooffset()
   {
-    localPt_OFFSET = (uint64)localPt;
-    name_OFFSET = (uint64)name.string;
+    localPt_OFFSET = (std::uint64_t)localPt;
+    name_OFFSET = (std::uint64_t)name.string;
   };
 
   void movefromoffset()
   {
-    uint64 num;
+    std::uint64_t num;
     num = localPt_OFFSET;
 #ifdef VECTOR_COMPRESSION
     localPt = (etVec3us *)num;
@@ -812,15 +813,15 @@ struct etPolyLinePacket : public etDataPacket
 
 #ifdef FORCE_BASE32
 struct etAreaPacketData_BASE32 {
-  uint32           name;
+  std::uint32_t           name;
   int          texId;
   ushort       numPt;
   ushort       bitFlags;
 
 #ifdef VECTOR_COMPRESSION
-  uint32 localPt;
+  std::uint32_t localPt;
 #else
-  uint32 localPt;
+  std::uint32_t localPt;
 #endif
 
   int          style;
@@ -831,7 +832,7 @@ struct etAreaPacketData_BASE32 {
 
 struct etAreaPacketData {
 #ifdef FORCE_BASE32
-  uint32           name_OFFSET;
+  std::uint32_t           name_OFFSET;
 #else
   etString     name;
 #endif
@@ -841,9 +842,9 @@ struct etAreaPacketData {
 
 #ifdef FORCE_BASE32
 #ifdef VECTOR_COMPRESSION
-  uint32 localPt_OFFSET;
+  std::uint32_t localPt_OFFSET;
 #else
-  uint32 localPt_OFFSET;
+  std::uint32_t localPt_OFFSET;
 #endif
 #else
 #ifdef VECTOR_COMPRESSION
@@ -878,12 +879,12 @@ struct etAreaPacketData {
 
 #ifdef FORCE_BASE32
   void movetooffset() {
-    localPt_OFFSET = reinterpret_cast<uint64>(localPt);
-    name_OFFSET = reinterpret_cast<uint64>(name.string);
+    localPt_OFFSET = reinterpret_cast<std::uint64_t>(localPt);
+    name_OFFSET = reinterpret_cast<std::uint64_t>(name.string);
   };
 
   void movefromoffset() {
-    uint64 num;
+    std::uint64_t num;
     num = localPt_OFFSET;
 #ifdef VECTOR_COMPRESSION
     localPt = reinterpret_cast<etVec3us *>(num);
@@ -983,24 +984,24 @@ struct etAreaPacket : public etDataPacket {
 
 #ifdef FORCE_BASE32
 struct etSitePacketData_BASE32 {
-  uint32           name;
+  std::uint32_t           name;
   int          texId;
   ushort       numPt;
   ushort       bitFlags;
 
 #ifdef VECTOR_COMPRESSION
-  uint32 localPt;
+  std::uint32_t localPt;
 #else
-  uint32 localPt;
+  std::uint32_t localPt;
 #endif
 
-  uint32 html;
+  std::uint32_t html;
 
   int          style;
 
 #ifdef NEWSITESTUFF
-  uint32 address;
-  uint32 phone;
+  std::uint32_t address;
+  std::uint32_t phone;
 #endif
  private:
   DISALLOW_COPY_AND_ASSIGN(etSitePacketData_BASE32);
@@ -1009,7 +1010,7 @@ struct etSitePacketData_BASE32 {
 
 struct etSitePacketData {
 #ifdef FORCE_BASE32
-  uint32           name_OFFSET;
+  std::uint32_t           name_OFFSET;
 #else
   etString     name;
 #endif
@@ -1019,11 +1020,11 @@ struct etSitePacketData {
 
 #ifdef FORCE_BASE32
 #ifdef VECTOR_COMPRESSION
-  uint32 localPt_OFFSET;
+  std::uint32_t localPt_OFFSET;
 #else
-  uint32 localPt_OFFSET;
+  std::uint32_t localPt_OFFSET;
 #endif
-  uint32      html_OFFSET;
+  std::uint32_t      html_OFFSET;
 #else
 #ifdef VECTOR_COMPRESSION
   etVec3us    *localPt;
@@ -1038,8 +1039,8 @@ struct etSitePacketData {
 
 #ifdef FORCE_BASE32
 #ifdef NEWSITESTUFF
-  uint32 address_OFFSET;
-  uint32 phone_OFFSET;
+  std::uint32_t address_OFFSET;
+  std::uint32_t phone_OFFSET;
 #endif
 #else
 #ifdef NEWSITESTUFF
@@ -1074,15 +1075,15 @@ struct etSitePacketData {
 
 #ifdef FORCE_BASE32
   void movetooffset() {
-    name_OFFSET = reinterpret_cast<uint64>(name.string);
-    localPt_OFFSET = reinterpret_cast<uint64>(localPt);
-    html_OFFSET = reinterpret_cast<uint64>(html);
-    address_OFFSET = reinterpret_cast<uint64>(address);
-    phone_OFFSET = reinterpret_cast<uint64>(phone);
+    name_OFFSET = reinterpret_cast<std::uint64_t>(name.string);
+    localPt_OFFSET = reinterpret_cast<std::uint64_t>(localPt);
+    html_OFFSET = reinterpret_cast<std::uint64_t>(html);
+    address_OFFSET = reinterpret_cast<std::uint64_t>(address);
+    phone_OFFSET = reinterpret_cast<std::uint64_t>(phone);
   };
 
   void movefromoffset() {
-    uint64 num;
+    std::uint64_t num;
     num = localPt_OFFSET;
 #ifdef VECTOR_COMPRESSION
     localPt = reinterpret_cast<etVec3us *>(num);
@@ -1196,24 +1197,24 @@ struct etSitePacket : public etDataPacket {
 
 #ifdef FORCE_BASE32
 struct etLandmarkPacketData_BASE32 {
-  uint32           name;
+  std::uint32_t           name;
   ushort       numPt;
   ushort           bitFlags;
 
 #ifdef VECTOR_COMPRESSION
-  uint32 localPt;
+  std::uint32_t localPt;
 #else
-  uint32 localPt;
+  std::uint32_t localPt;
 #endif
 
 
   /***********NEW VARIABLES FOR Landmark***********/
 
-  uint32 iconName_deprecated;
+  std::uint32_t iconName_deprecated;
   int style;
-  uint32 description;
+  std::uint32_t description;
   int referenceType;
-  uint32 reference;
+  std::uint32_t reference;
   int referenceSize;
  private:
   DISALLOW_COPY_AND_ASSIGN(etLandmarkPacketData_BASE32);
@@ -1222,7 +1223,7 @@ struct etLandmarkPacketData_BASE32 {
 
 struct etLandmarkPacketData {
 #ifdef FORCE_BASE32
-  uint32           name_OFFSET;
+  std::uint32_t           name_OFFSET;
 #else
   etString     name;
 #endif
@@ -1231,9 +1232,9 @@ struct etLandmarkPacketData {
 
 #ifdef FORCE_BASE32
 #ifdef VECTOR_COMPRESSION
-  uint32 localPt_OFFSET;
+  std::uint32_t localPt_OFFSET;
 #else
-  uint32 localPt_OFFSET;
+  std::uint32_t localPt_OFFSET;
 #endif
 #else
 #ifdef VECTOR_COMPRESSION
@@ -1247,7 +1248,7 @@ struct etLandmarkPacketData {
   /***********NEW VARIABLES FOR Landmark***********/
 
 #ifdef FORCE_BASE32
-  uint32 iconName_deprecated_OFFSET;
+  std::uint32_t iconName_deprecated_OFFSET;
 #else
   const char * iconName_deprecated;
 #endif
@@ -1255,13 +1256,13 @@ struct etLandmarkPacketData {
   int style;
 
 #ifdef FORCE_BASE32
-  uint32 description_OFFSET;
+  std::uint32_t description_OFFSET;
 #else
   const char * description;
 #endif
   int referenceType;
 #ifdef FORCE_BASE32
-  uint32 reference_OFFSET;
+  std::uint32_t reference_OFFSET;
 #else
   unsigned char * reference;
 #endif
@@ -1295,15 +1296,15 @@ struct etLandmarkPacketData {
 
 #ifdef FORCE_BASE32
   void movetooffset() {
-    name_OFFSET = reinterpret_cast<uint64>(name.string);
-    localPt_OFFSET = reinterpret_cast<uint64>(localPt);
-    iconName_deprecated_OFFSET = reinterpret_cast<uint64>(iconName_deprecated);
-    description_OFFSET = reinterpret_cast<uint64>(description);
-    reference_OFFSET = reinterpret_cast<uint64>(reference);
+    name_OFFSET = reinterpret_cast<std::uint64_t>(name.string);
+    localPt_OFFSET = reinterpret_cast<std::uint64_t>(localPt);
+    iconName_deprecated_OFFSET = reinterpret_cast<std::uint64_t>(iconName_deprecated);
+    description_OFFSET = reinterpret_cast<std::uint64_t>(description);
+    reference_OFFSET = reinterpret_cast<std::uint64_t>(reference);
   };
 
   void movefromoffset() {
-    uint64 num;
+    std::uint64_t num;
     num = localPt_OFFSET;
 #ifdef VECTOR_COMPRESSION
     localPt = reinterpret_cast<etVec3us *>(num);
@@ -1411,22 +1412,22 @@ struct etLandmarkPacket : public etDataPacket {
 
 #ifdef FORCE_BASE32
 struct etPolygonPacketData_BASE32 {
-  uint32           name;
+  std::uint32_t           name;
   int          reserved1;
   ushort       numPt;
   ushort       bitFlags;
   ushort           numEdgeFlags;
 
 #ifdef VECTOR_COMPRESSION
-  uint32 localPt;
+  std::uint32_t localPt;
 #else
-  uint32 localPt;
+  std::uint32_t localPt;
 #endif
 
 #ifdef VECTOR_COMPRESSION
-  uint32 edgeFlags;
+  std::uint32_t edgeFlags;
 #else
-  uint32 edgeFlags;
+  std::uint32_t edgeFlags;
 #endif
 
   int          style;
@@ -1437,7 +1438,7 @@ struct etPolygonPacketData_BASE32 {
 
 struct etPolygonPacketData {
 #ifdef FORCE_BASE32
-  uint32           name_OFFSET;
+  std::uint32_t           name_OFFSET;
 #else
   etString     name;
 #endif
@@ -1448,9 +1449,9 @@ struct etPolygonPacketData {
 
 #ifdef FORCE_BASE32
 #ifdef VECTOR_COMPRESSION
-  uint32 localPt_OFFSET;
+  std::uint32_t localPt_OFFSET;
 #else
-  uint32 localPt_OFFSET;
+  std::uint32_t localPt_OFFSET;
 #endif
 #else
 #ifdef VECTOR_COMPRESSION
@@ -1462,9 +1463,9 @@ struct etPolygonPacketData {
 
 #ifdef FORCE_BASE32
 #ifdef VECTOR_COMPRESSION
-  uint32 edgeFlags_OFFSET;
+  std::uint32_t edgeFlags_OFFSET;
 #else
-  uint32 edgeFlags_OFFSET;
+  std::uint32_t edgeFlags_OFFSET;
 #endif
 #else
 #ifdef VECTOR_COMPRESSION
@@ -1511,13 +1512,13 @@ struct etPolygonPacketData {
 
 #ifdef FORCE_BASE32
   void movetooffset() {
-    localPt_OFFSET = reinterpret_cast<uint64>(localPt);
-    name_OFFSET = reinterpret_cast<uint64>(name.string);
-    edgeFlags_OFFSET = reinterpret_cast<uint64>(edgeFlags);
+    localPt_OFFSET = reinterpret_cast<std::uint64_t>(localPt);
+    name_OFFSET = reinterpret_cast<std::uint64_t>(name.string);
+    edgeFlags_OFFSET = reinterpret_cast<std::uint64_t>(edgeFlags);
   };
 
   void movefromoffset() {
-    uint64 num;
+    std::uint64_t num;
     num = localPt_OFFSET;
 #ifdef VECTOR_COMPRESSION
     localPt = (etVec3us *)num;

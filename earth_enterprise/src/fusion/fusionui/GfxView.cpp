@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -625,7 +626,7 @@ void GfxView::paintGL() {
     double line;
     for (line = snapBox.w - state_.frust.w;
          line <= snapBox.e - state_.frust.w; line += grid) {
-      uint col = uint((line + state_.frust.w) / grid + 0.5);
+      unsigned int col = uint((line + state_.frust.w) / grid + 0.5);
       if (col % 4 == 0)
         glColor3f(1, 0, 0);
       else
@@ -637,7 +638,7 @@ void GfxView::paintGL() {
     // draw latitude lines
     for (line = snapBox.s - state_.frust.s;
          line <= snapBox.n - state_.frust.s; line += grid) {
-      uint row = uint((line + state_.frust.s) / grid + 0.5);
+      unsigned int row = uint((line + state_.frust.s) / grid + 0.5);
       if (row % 4 == 0)
         glColor3f(1, 0, 0);
       else
@@ -1152,8 +1153,8 @@ void GfxView::drawGridLines(double xx, double yy, double grid, int lev) {
 }
 
 void GfxView::drawTileAddress(double xx, double yy, double grid, int lev) {
-  uint row = (uint)((yy) / grid);
-  uint col = (uint)((xx) / grid);
+  unsigned int row = (unsigned int)((yy) / grid);
+  unsigned int col = (unsigned int)((xx) / grid);
 
   glColor3f(1.0, 1.0, .2);
   char txt[512];
@@ -1161,7 +1162,7 @@ void GfxView::drawTileAddress(double xx, double yy, double grid, int lev) {
   double line = (grid * .1);
   double south = yy -  state_.frust.s + line;
 
-  uchar blist[32];
+  unsigned char blist[32];
   char child[] = "0123";
   xyToBlist(col, row, lev, blist);
   for (int l = 0; l < lev; l++)
@@ -1212,8 +1213,8 @@ void GfxView::drawTileMessages(TexTile & /* tile */) {
   if (status != GST_OKAY)
     return;
 
-  uint row = (uint)((tile.yy) / tile.grid);
-  uint col = (uint)((tile.xx) / tile.grid);
+  unsigned int row = (unsigned int)((tile.yy) / tile.grid);
+  unsigned int col = (unsigned int)((tile.xx) / tile.grid);
 
   glColor3f(1.0, 1.0, .2);
   char txt[512];

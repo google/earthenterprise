@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,28 +16,28 @@
 
 // Test helpers for tests needing ordered or random quadtree paths
 
+#include <cstdint>
 #include <stdlib.h>
-#include <khTypes.h>
 #include <quadtreepath.h>
 
 namespace qtpathgen {
 
-QuadtreePath HashPath(uint32 hash_val) {
+QuadtreePath HashPath(std::uint32_t hash_val) {
   // Generate a unique, reproducible, somewhat randomly ordered
   // quadtree path from hash_val
-  const uint32 kHash1 = 0xA36535A6;
-  const uint32 kHash2 = 0xF0A52BE1; 
+  const std::uint32_t kHash1 = 0xA36535A6;
+  const std::uint32_t kHash2 = 0xF0A52BE1; 
 
-  uchar blist[QuadtreePath::kMaxLevel];
-  uint32 bits = hash_val ^ kHash1;
-  uint32 level = 16;
-  int32 extra_levels = bits & 0x07;
-  for (uint32 i = 0; i < level; ++i) {
+  unsigned char blist[QuadtreePath::kMaxLevel];
+  std::uint32_t bits = hash_val ^ kHash1;
+  std::uint32_t level = 16;
+  std::int32_t extra_levels = bits & 0x07;
+  for (std::uint32_t i = 0; i < level; ++i) {
     blist[i] = bits & 0x03;
     bits = bits >> 2;
   }
 
-  uint32 bits2 = hash_val ^ kHash2;
+  std::uint32_t bits2 = hash_val ^ kHash2;
   while (extra_levels-- > 0) {
     blist[level++] = bits2 & 0x03;
     bits2 = bits2 >> 2;

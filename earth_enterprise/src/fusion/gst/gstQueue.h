@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +34,7 @@ class gstQueue {
    * \brief constructor sets queue size
    * \param siz Maximum size of queue
    */
-  gstQueue( uint sz )
+  gstQueue( unsigned int sz )
   {
     _elements = new khArray<Type>( sz );
     _curItem = 0;
@@ -78,7 +79,7 @@ class gstQueue {
 
  private:
   khArray<Type> *_elements;
-  uint _curItem;
+  unsigned int _curItem;
 };
 
 /*!

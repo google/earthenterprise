@@ -17,7 +17,6 @@
 #include "fusion/autoingest/Asset.h"
 #include "fusion/autoingest/AssetVersion.h"
 
-
 std::string AssetImpl::GetLastGoodVersionRef(void) const {
   for (VersionList::const_iterator i = versions.begin();
        i != versions.end(); ++i) {

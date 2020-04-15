@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,11 +29,11 @@ class FuseSelector : public FilterGeoIndexManager {
   typedef mttypes::Queue<WorkflowOutputTile*> QueueType;
   typedef mttypes::BatchingQueuePusher<WorkflowOutputTile*> QueuePusherType;
 
-  FuseSelector(uint level, const std::string &product_path,
+  FuseSelector(unsigned int level, const std::string &product_path,
                const std::vector<std::string> &select_files,
                const khTilespace &tilespace, double oversize_factor,
-               const uint32 in_queue_seed_size,
-               const uint32 out_queue_batch_size,
+               const std::uint32_t in_queue_seed_size,
+               const std::uint32_t out_queue_batch_size,
                const std::string& progress_meter_prefix);
 
   virtual WorkflowOutputTile* GetEmptyOutputTile(void);

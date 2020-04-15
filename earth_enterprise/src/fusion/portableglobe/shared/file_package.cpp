@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -37,7 +38,7 @@ IncrementalCrcCalculator::IncrementalCrcCalculator() : crc_(0) {
 
 void IncrementalCrcCalculator::CalculateCrc(const char* buffer,
                                             size_t buffer_size) {
-  uint32 next_word;
+  std::uint32_t next_word;
   if (remaining_bytes_.size() != 0) {
     int i = remaining_bytes_.size();
     for (; i < Package::kCrcSize && buffer_size != 0;
@@ -73,21 +74,21 @@ void IncrementalCrcCalculator::CalculateCrc(const char* buffer,
 /**
  * Calculate 4-byte crc for the file.
  */
-uint32 Package::CalculateCrc(std::string file_path,
-                             uint64 bytes_at_end_to_discard) {
+ std::uint32_t Package::CalculateCrc(std::string file_path,
+                             std::uint64_t bytes_at_end_to_discard) {
   // Get length of file.
-  uint64 length = FileSize(file_path);
+  std::uint64_t length = FileSize(file_path);
   if (!length) {
     return 0;
   }
 
   // Don't read crc or (length % 4) last bytes.
   // The last few bytes are part of the version and will be checked separately.
-  uint64 num_of_reads = (length - bytes_at_end_to_discard) / kCrcSize;
-  uint32 crc = 0;
-  uint32 next_word;
+  std::uint64_t num_of_reads = (length - bytes_at_end_to_discard) / kCrcSize;
+  std::uint32_t crc = 0;
+  std::uint32_t next_word;
   std::ifstream fp_in(file_path.c_str(), std::ios::binary);
-  for (uint64 i = 0; i < num_of_reads; ++i) {
+  for (std::uint64_t i = 0; i < num_of_reads; ++i) {
     fp_in.read(reinterpret_cast<char*>(&next_word), kCrcSize);
     crc ^= next_word;
   }
@@ -98,15 +99,15 @@ uint32 Package::CalculateCrc(std::string file_path,
 /**
  * Read 4-byte crc (last 4 bytes) from the file.
  */
-uint32 Package::ReadCrc(std::string file_path) {
+ std::uint32_t Package::ReadCrc(std::string file_path) {
   // Get length of file.
-  uint64 length = FileSize(file_path);
+  std::uint64_t length = FileSize(file_path);
   if (!length) {
     return 0;
   }
 
   // Crc is last 4 bytes.
-  uint32 crc = 0;
+  std::uint32_t crc = 0;
   std::ifstream fp_in(file_path.c_str(), std::ios::binary);
   fp_in.seekg(length - kCrcOffset);
   fp_in.read(reinterpret_cast<char*>(&crc), kCrcSize);
@@ -118,7 +119,7 @@ uint32 Package::ReadCrc(std::string file_path) {
  */
 std::string Package::ReadVersion(std::string file_path) {
   // Get length of file.
-  uint64 length = FileSize(file_path);
+  std::uint64_t length = FileSize(file_path);
   if (!length) {
     return "no file";
   }
@@ -135,10 +136,10 @@ std::string Package::ReadVersion(std::string file_path) {
 /**
  * Get file length.
  */
-uint64 Package::FileSize(std::string file_path) {
+ std::uint64_t Package::FileSize(std::string file_path) {
   // Get length of file.
   std::ifstream fp_in(file_path.c_str());
-  uint64 length = 0;
+  std::uint64_t length = 0;
   if (fp_in) {
     fp_in.seekg(0L, std::ios::end);
     length = fp_in.tellg();

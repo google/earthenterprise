@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -116,7 +117,7 @@ void FdbService::ParseUrlArgs(const std::string& arg_str,
   TokenizeString(arg_str, tokens, "&");
   std::string name;
   std::string value;
-  for (uint i = 0; i < tokens.size(); ++i) {
+  for (unsigned int i = 0; i < tokens.size(); ++i) {
     const std::string& token = tokens[i];
     size_t pos = token.find("=");
     if (pos == std::string::npos) {
@@ -268,9 +269,9 @@ int FdbService::DoAddCutSpec(request_rec* r,
     BuildQtnodesFile(qtnodes_file, arg_map["qtnodes"]);
 
     // Get the integer arguments.
-    uint16 min_level;
-    uint16 default_level;
-    uint16 max_level;
+    std::uint16_t min_level;
+    std::uint16_t default_level;
+    std::uint16_t max_level;
     StringToNumber(arg_map["min_level"], &min_level);
     StringToNumber(arg_map["default_level"], &default_level);
     StringToNumber(arg_map["max_level"], &max_level);

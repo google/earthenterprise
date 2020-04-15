@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,31 +14,31 @@
 // limitations under the License.
 
 
+#include <cstdint>
 #include <string>
 #include <vector>
-#include <khTypes.h>
 #include <khMetaData.h>
 #requiresgetheapusage
 
 class KMLProjectConfig {
   class LayerItem {
     std::string assetRef = std::string();
-    uint channelId = uint(0);
+    unsigned int channelId = uint(0);
     //Defaultable<LayerLegend> legend = Defaultable<LayerLegend>();
     bool skipLayer = false;
 
 #pragma GenerateIsUpToDate
   };
 
-  IsUpToDateIgnore uint indexVersion = uint(1);
+  IsUpToDateIgnore unsigned int indexVersion = uint(1);
   std::vector<LayerItem> layers = std::vector<KMLProjectConfig::LayerItem>();
 
 #pragma GenerateIsUpToDate
 
 #hquote
  private:
-  static const uint BeginChannelId = 1;
-  static const uint EndChannelId = USHRT_MAX;
+  static const unsigned int BeginChannelId = 1;
+  static const unsigned int EndChannelId = USHRT_MAX;
 
  public:
   //AvailId GetAvailChannelIds(void) const;

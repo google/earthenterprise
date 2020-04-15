@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,7 +64,7 @@ class khProgressMeter;
  ***      khRasterProduct &rp(*rptr);
  ***      notify(NFY_DEBUG, "minLevel = %d, maxLevel = %d",
  ***             rp.minLevel(), rp.maxLevel());
- ***      for (uint i = rp.minLevel(); i <= rp.maxLevel(); ++i) {
+ ***      for (unsigned int i = rp.minLevel(); i <= rp.maxLevel(); ++i) {
  ***        notify(NFY_DEBUG, "Level %d has %d x %d tiles",
  ***               i, rp[i].xNumTiles(), rp[i].yNumTiles());
  ***      }
@@ -77,7 +78,7 @@ class khProgressMeter;
  ***       khRasterProduct::Open(filename, khRasterType::Imagery, 8, 25,
  ***                             khExtents<double>(NSEWOrder, north, souuth, east, west));
  ***    if (rp) {
- ***      for (uint i = rp->minLevel(); i <= rp->maxLevel(); ++i) {
+ ***      for (unsigned int i = rp->minLevel(); i <= rp->maxLevel(); ++i) {
  ***        khRasterProduct::Level &level(rp->level(i));
  ***        level.OpenReader();
  ***        for (...) {
@@ -108,8 +109,8 @@ class khRasterProduct : private RasterProductStorage
                               khTypes::StorageEnum componentType,
                               const std::string &filename,
                               khTilespace::ProjectionType projectionType,
-                              uint minLevel,
-                              uint maxLevel,
+                              unsigned int minLevel,
+                              unsigned int maxLevel,
                               const khExtents<double> &degOrMeterExtents);
 
   static khTransferGuard<khRasterProduct>Open(const std::string &filename,
@@ -129,7 +130,7 @@ class khRasterProduct : private RasterProductStorage
       const std::string &filename,
       const std::string &basename,
       const std::string &suffix,
-      uint startLevel, bool reminify,
+      unsigned int startLevel, bool reminify,
       bool copy, bool link,
       bool skipOpacity);
 
@@ -138,16 +139,16 @@ class khRasterProduct : private RasterProductStorage
     return (const RasterProductStorage&)*this;
   }
 
-  static uint DefaultStartLevel(RasterType type);
+  static unsigned int DefaultStartLevel(RasterType type);
 
   template <class TileType>
-  void MinifyRemainingLevels(uint firstMinifyLevel,
+  void MinifyRemainingLevels(unsigned int firstMinifyLevel,
                              khProgressMeter *progress = 0);
   template <class TileType>
-  void MinifyLevel(uint newLevel, khProgressMeter &progress);
+  void MinifyLevel(unsigned int newLevel, khProgressMeter &progress);
 
   template <class TileType, class Averager>
-  void MakeTileFromLevel(uint32 destRow, uint32 destCol,
+  void MakeTileFromLevel(std::uint32_t destRow, std::uint32_t destCol,
                          Level &srcLevel,
                          TileType &srcTile,
                          TileType &destTile,
@@ -165,7 +166,7 @@ class khRasterProduct : private RasterProductStorage
   // ***** Accessor Functions *****
   inline const std::string &name(void) const { return filename_; }
   inline RasterType type(void) const { return type_; }
-  inline uint numComponents(void) const { return numComponents_; }
+  inline unsigned int numComponents(void) const { return numComponents_; }
   inline khTypes::StorageEnum componentType(void) const { return componentType_; }
   inline khTilespace::ProjectionType projectionType(void) const {
     if (projectionType_ == RasterProductStorage::Flat) {
@@ -178,17 +179,17 @@ class khRasterProduct : private RasterProductStorage
   bool IsMercator() const {
     return projectionType_ == RasterProductStorage::Mercator;
   }
-  inline uint componentSize(void) const { return khTypes::StorageSize(componentType_); }
-  inline uint realMinLevel(void) const { return minLevel_; }
-  inline uint realMaxLevel(void) const { return maxLevel_; }
+  inline unsigned int componentSize(void) const { return khTypes::StorageSize(componentType_); }
+  inline unsigned int realMinLevel(void) const { return minLevel_; }
+  inline unsigned int realMaxLevel(void) const { return maxLevel_; }
 
   // old heightmap products had too many levels of minification
   // these routines were added to ease the burdon on the rest of
   // the code
-  uint effectiveMinLevel(void) const;
-  inline uint effectiveMaxLevel(void) const { return realMaxLevel(); }
-  inline uint minLevel(void) const { return effectiveMinLevel(); }
-  inline uint maxLevel(void) const { return effectiveMaxLevel(); }
+  unsigned int effectiveMinLevel(void) const;
+  inline unsigned int effectiveMaxLevel(void) const { return realMaxLevel(); }
+  inline unsigned int minLevel(void) const { return effectiveMinLevel(); }
+  inline unsigned int maxLevel(void) const { return effectiveMaxLevel(); }
   inline double degOrMeterNorth(void) const
       { return degExtents_.north(); }
   inline double degOrMeterSouth(void) const
@@ -200,30 +201,30 @@ class khRasterProduct : private RasterProductStorage
   inline const khExtents<double>& degOrMeterExtents(void) const
       {return degExtents_;}
 
-  inline khLevelCoverage levelCoverage(uint level) const {
+  inline khLevelCoverage levelCoverage(unsigned int level) const {
     return khLevelCoverage(RasterProductTilespace(IsMercator()),
         degOrMeterExtents(), realMaxLevel(), level /* targetlevel */);
   }
 
-  uint64 CalcNumTiles(uint beginLevel, uint endLevel) const;
-  inline uint64 CalcNumTiles(void) const {
+  std::uint64_t CalcNumTiles(unsigned int beginLevel, unsigned int endLevel) const;
+  inline std::uint64_t CalcNumTiles(void) const {
     return CalcNumTiles(minLevel(), maxLevel()+1);
   }
 
 
   // No runtime range checking!
-  inline const Level& level(uint lev) const {
+  inline const Level& level(unsigned int lev) const {
     assert(validLevel(lev));
     return *levels__[lev-minLevel_];
   }
-  inline Level& level(uint lev) {
+  inline Level& level(unsigned int lev) {
     assert(validLevel(lev));
     return *levels__[lev-minLevel_];
   }
-  inline const Level& operator[](uint lev) const { return level(lev);}
-  inline Level& operator[](uint lev) { return level(lev);}
+  inline const Level& operator[](unsigned int lev) const { return level(lev);}
+  inline Level& operator[](unsigned int lev) { return level(lev);}
 
-  inline bool validLevel(uint lev) const {
+  inline bool validLevel(unsigned int lev) const {
     return ((lev >= minLevel()) && (lev <= maxLevel()));
   }
 
@@ -257,7 +258,7 @@ class khRasterProduct : private RasterProductStorage
   khRasterProduct(const khRasterProduct &);
   khRasterProduct &operator=(const khRasterProduct &);
 
-  std::string LevelName(uint levelNum) const;
+  std::string LevelName(unsigned int levelNum) const;
   static std::string HeaderName(const std::string &filename);
   std::string OpacityMaskName(void) const;
 };

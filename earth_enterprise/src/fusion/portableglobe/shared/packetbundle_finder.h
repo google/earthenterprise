@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,8 +42,8 @@ class PacketBundleFinder : public PacketBundle {
  public:
   PacketBundleFinder() { }
   PacketBundleFinder(std::ifstream* source,
-                     uint64 index_offset,
-                     uint64 index_size);
+                     std::uint64_t index_offset,
+                     std::uint64_t index_size);
 
   /**
    * Find the index in the index file. Set index item fields if it
@@ -55,10 +56,10 @@ class PacketBundleFinder : public PacketBundle {
 
  private:
   std::ifstream* source_;
-  uint64 index_offset_;
-  uint64 index_size_;
+  std::uint64_t index_offset_;
+  std::uint64_t index_size_;
 
-  uint64 num_index_items_;
+  std::uint64_t num_index_items_;
   std::vector<IndexItem> index_cache_;
 };
 

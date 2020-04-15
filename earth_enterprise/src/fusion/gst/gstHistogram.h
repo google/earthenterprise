@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +23,9 @@
 
 class gstHistogram {
  public:
-  gstHistogram(uint s)
+  gstHistogram(unsigned int s)
       : size_(1 << log2up(s)), hash_mask_(size_ -1) {
-    bins_ = new uint32[size_];
+    bins_ = new std::uint32_t[size_];
     clear();
   }
   ~gstHistogram() {
@@ -33,29 +34,29 @@ class gstHistogram {
   gstHistogram(const gstHistogram&) = delete;
   gstHistogram(gstHistogram&&) = delete;
 
-  uint hash(uint id) const { return id & hash_mask_; }
+  unsigned int hash(unsigned int id) const { return id & hash_mask_; }
 
   void clear() {
-    memset(&bins_[0], 0, size_ * sizeof(uint32));
+    memset(&bins_[0], 0, size_ * sizeof(std::uint32_t));
     max_ = 0;
   }
 
-  uint32 operator[](int idx) { return bins_[idx]; }
-  uint32 max() const { return max_; }
+  std::uint32_t operator[](int idx) { return bins_[idx]; }
+  std::uint32_t max() const { return max_; }
   int size() const { return size_; }
 
-  void add(uint id) {
-    uint idx = hash(id);
+  void add(unsigned int id) {
+    unsigned int idx = hash(id);
     bins_[idx]++;
     if (bins_[idx] > max_)
       max_ = bins_[idx];
   }
 
  private:
-  uint32* bins_;
-  uint32 max_;
-  const uint size_;
-  const uint hash_mask_;
+  std::uint32_t* bins_;
+  std::uint32_t max_;
+  const unsigned int size_;
+  const unsigned int hash_mask_;
 };
 
 #endif  // !KHSRC_FUSION_GST_GSTHISTOGRAM_H__

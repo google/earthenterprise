@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -208,7 +209,7 @@ ChildBucketAddr ChildBucket<EntryBucket>::Close(
 template <class EntryBucket>
 Writer<EntryBucket>::Writer(geFilePool &filePool, const std::string &fname,
                             WriteMode mode, const std::string &desc,
-                            uint32 num_write_buffers) :
+                            std::uint32_t num_write_buffers) :
     bundleWriter(TransferOwnership(
                      new IndexBundleWriter(filePool, fname,
                                            (mode==DeltaIndexMode), desc,
@@ -293,7 +294,7 @@ void Writer<EntryBucket>::Put(const QuadtreePath &pos,
 }
 
 template <class EntryBucket>
-uint32 Writer<EntryBucket>::AddExternalPacketFile(
+ std::uint32_t Writer<EntryBucket>::AddExternalPacketFile(
     const std::string &packetfile) {
   return bundleWriter->header.AddPacketFile(packetfile);
 }
@@ -304,12 +305,12 @@ void Writer<EntryBucket>::RemovePacketFile(const std::string &packetfile) {
 }
 
 template <class EntryBucket>
-void Writer<EntryBucket>::SetPacketExtra(uint32 packetfile_num, uint32 extra) {
+void Writer<EntryBucket>::SetPacketExtra(std::uint32_t packetfile_num, std::uint32_t extra) {
   bundleWriter->header.SetPacketExtra(packetfile_num, extra);
 }
 
 template <class EntryBucket>
-uint32 Writer<EntryBucket>::GetPacketExtra(uint32 packetfile_num) const {
+ std::uint32_t Writer<EntryBucket>::GetPacketExtra(std::uint32_t packetfile_num) const {
   return bundleWriter->header.GetPacketExtra(packetfile_num);
 }
 

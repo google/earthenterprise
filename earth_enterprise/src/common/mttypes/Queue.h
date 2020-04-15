@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -108,7 +109,7 @@ class Queue : public WaitBase {
 
   template <class Container>
   void BatchedReleaseAndPull(Container &return_queue,
-                             uint32 num,
+                             std::uint32_t num,
                              Container &pulled_queue,
                              bool want_backref) {
     assert(num > 0);
@@ -128,10 +129,10 @@ class Queue : public WaitBase {
     while (1) {
       if (LockedOKToPull()) {
         // see how many are available
-        uint32 avail = 0;
+        std::uint32_t avail = 0;
         bool must_return = false;
-        uint32 tocheck = std::min(num, uint32(queue_.size()));
-        for (uint i = 0; i < tocheck; ++i) {
+        std::uint32_t tocheck = std::min(num, std::uint32_t(queue_.size()));
+        for (unsigned int i = 0; i < tocheck; ++i) {
           if (queue_[i].WantDrain()) {
             avail = i;
             if ((pending_count_ == 0) && (avail == 0)) {
@@ -151,7 +152,7 @@ class Queue : public WaitBase {
 
         // if the number available satisfies my request
         if (must_return || (avail == num)) {
-          for (uint i = 0; i < avail; ++i) {
+          for (unsigned int i = 0; i < avail; ++i) {
             Item &item = queue_.front();
             if (item.IsDone()) {
               // push an empty handle for Done, and don't consume it
@@ -259,7 +260,7 @@ class Queue : public WaitBase {
   typedef std::deque<Item> QueueImpl;
   QueueImpl queue_;
   bool      done_pushed_;
-  uint32    pending_count_;
+  std::uint32_t    pending_count_;
 
   friend class PullHandleImpl;
   void ReleasePullHandle(PullHandleImpl *himpl) {
@@ -287,7 +288,7 @@ class BatchingQueuePusher {
   typedef Queue<T> QueueType;
   typedef typename Queue<T>::Item       Item;
 
-  BatchingQueuePusher(uint32 batch_size, Queue<T> &queue) :
+  BatchingQueuePusher(std::uint32_t batch_size, Queue<T> &queue) :
       batch_size_(batch_size),
       queue_(queue)
   {
@@ -318,7 +319,7 @@ class BatchingQueuePusher {
   }
 
  private:
-  uint32 batch_size_;
+  std::uint32_t batch_size_;
   std::deque<Item>  batch_queue_;
   Queue<T> &queue_;
 };
@@ -336,7 +337,7 @@ class BatchingQueuePuller {
  public:
   typedef typename Queue<T>::PullHandle PullHandle;
 
-  BatchingQueuePuller(uint32 batch_size, Queue<T> &queue) :
+  BatchingQueuePuller(std::uint32_t batch_size, Queue<T> &queue) :
       batch_size_(batch_size),
       queue_(queue),
       want_backref_(false)
@@ -344,7 +345,7 @@ class BatchingQueuePuller {
     assert(batch_size_ > 0);
   }
 
-  void ReleaseOldAndPull(PullHandle &h, uint32 batch_override = 0) {
+  void ReleaseOldAndPull(PullHandle &h, std::uint32_t batch_override = 0) {
     if (h && h->HasBackref()) {
       return_queue_.push_back(h);
     }
@@ -365,7 +366,7 @@ class BatchingQueuePuller {
   }
 
  private:
-  uint32 batch_size_;
+  std::uint32_t batch_size_;
   std::deque<PullHandle>  pulled_queue_;
   std::deque<PullHandle>  return_queue_;
   Queue<T> &queue_;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Open GEE Contributors
+ * Copyright 2020 Open GEE Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,9 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <cstdint>
 #include "common/base/macros.h"
-#include "common/khTypes.h"
+#include <cstdint>
 #include "fusion/portableglobe/shared/packetbundle.h"
 
 namespace fusion_portableglobe {
@@ -32,18 +33,18 @@ namespace fusion_portableglobe {
 */
 struct channel_info {
   // Channel ID and type
-  uint16_t channel_id = UINT16_MAX;
+  std::uint16_t channel_id = UINT16_MAX;
   PacketType type;
 
   // Map tile bounding box
-  uint32_t top = 0;
-  uint32_t bottom = UINT32_MAX;
-  uint32_t left = UINT32_MAX;
-  uint32_t right = 0;
+  std::uint32_t top = 0;
+  std::uint32_t bottom = UINT32_MAX;
+  std::uint32_t left = UINT32_MAX;
+  std::uint32_t right = 0;
 
   // Zoom levels where this channel is available
-  uint32_t min_level = UINT32_MAX;
-  uint32_t max_level = 0;
+  std::uint32_t min_level = UINT32_MAX;
+  std::uint32_t max_level = 0;
 
   /**
      Default constructor that creates an empty bounds, where
@@ -67,11 +68,11 @@ struct channel_info {
      @param column
      @param level
   */
-  channel_info(uint16_t channel_id,
+  channel_info(std::uint16_t channel_id,
                PacketType type,
-               uint32_t row,
-               uint32_t column,
-               uint32_t level) :
+               std::uint32_t row,
+               std::uint32_t column,
+               std::uint32_t level) :
     channel_id(channel_id),
     type(type),
     top(row), bottom(row),
@@ -101,7 +102,7 @@ public:
      @param type    The packet type of the channel.
      @param qtpath  The quadtree address to update.
   */
-  void update(uint16_t channel, PacketType type, const std::string& qtpath);
+  void update(std::uint16_t channel, PacketType type, const std::string& qtpath);
 
   /**
      Write current boundary information to the specified JSON file.
@@ -114,13 +115,13 @@ public:
      Throws a khSimpleException if the channel isn't found.
      @param channel_id
   */
-  const channel_info& channel(uint16_t channel_id) const;
+  const channel_info& channel(std::uint16_t channel_id) const;
 
 
 private:
 
   // Minimum and maximum zoom level and channel for imagery, terrain, and vector data
-  std::map<uint16_t, channel_info> channels;
+  std::map<std::uint16_t, channel_info> channels;
 
   DISALLOW_COPY_AND_ASSIGN(BoundsTracker);
 };

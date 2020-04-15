@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@
 
 #include "khGDALReader.h"
 #include "ReadHelpers.h"
+#include <limits>
 
 
 // ****************************************************************************
@@ -27,50 +29,49 @@
 
 template <class SrcPixelType, class TileType>
 void
-khGDALReader::TypedRead(const khExtents<uint32> &srcExtents, bool topToBottom,
-                        TileType &tile, const khOffset<uint32> &tileOffset)
+khGDALReader::TypedRead(const khExtents<std::uint32_t> &srcExtents, bool topToBottom,
+                        TileType &tile, const khOffset<std::uint32_t> &tileOffset)
 {
   assert(storage == khTypes::Helper<SrcPixelType>::Storage);
+  // Make sure SrcPixelType has a min and max
+  assert(std::numeric_limits<SrcPixelType>::is_specialized);
 
   if (topToBottom != this->topToBottom) {
     throw khException(kh::tr("topToBottom doesn't match dataset"));
   }
 
   // prep buffer
-  const uint pixelsPerBand = srcExtents.width() * srcExtents.height();
-  const uint bandSize = (pixelsPerBand * sizeof(SrcPixelType));
+  const unsigned int pixelsPerBand = srcExtents.width() * srcExtents.height();
+  const unsigned int bandSize = (pixelsPerBand * sizeof(SrcPixelType));
   rawReadBuf.reserve(numBands * bandSize);
-  // Fill buffer with 0 (or NoData if it exists)
-  int nodata_exists = 0;
-  SrcPixelType no_data =
-      static_cast<SrcPixelType>(
-          srcDS->GetRasterBand(1)->GetNoDataValue(&nodata_exists));
-  if (!nodata_exists)
-    no_data = 0;
-  for (uint i = 0; i < pixelsPerBand * numBands; ++i)
+
+  // Fill buffer with NoData or zero
+  SrcPixelType no_data = GetNoDataOrZero<SrcPixelType>();
+  for (unsigned int i = 0; i < pixelsPerBand * numBands; ++i) {
     ((SrcPixelType *) (&rawReadBuf[0]))[i] = no_data;
+  }
 
   // read pixels from all bands into rawReadBuf
   FetchPixels(srcExtents);
 
-  const uint32 width  = srcExtents.width();
-  const uint32 height = srcExtents.height();
-  const uint32 rowOff = tileOffset.row();
-  const uint32 colOff = tileOffset.col();
+  const std::uint32_t width  = srcExtents.width();
+  const std::uint32_t height = srcExtents.height();
+  const std::uint32_t rowOff = tileOffset.row();
+  const std::uint32_t colOff = tileOffset.col();
   if (palette) {
     SrcPixelType *bandBuf = (SrcPixelType*)&rawReadBuf[0];
-    for (uint row = 0; row < height; ++row) {
-      const uint32 rbase = (topToBottom ? (height - row - 1) : row)
+    for (unsigned int row = 0; row < height; ++row) {
+      const std::uint32_t rbase = (topToBottom ? (height - row - 1) : row)
                            * width;
-      const uint32 tbase = ((row + rowOff) *
+      const std::uint32_t tbase = ((row + rowOff) *
                             TileType::TileWidth) + colOff;
-      for (uint col = 0; col < width; ++col) {
-        uint32 rpos = rbase + col;
-        uint32 tpos = tbase + col;
-        if ((uint)bandBuf[rpos] < paletteSize) {
+      for (unsigned int col = 0; col < width; ++col) {
+        std::uint32_t rpos = rbase + col;
+        std::uint32_t tpos = tbase + col;
+        if ((unsigned int)bandBuf[rpos] < paletteSize) {
           PaletteAssigner<typename TileType::PixelType,
             TileType::NumComp>::Assign
-            (tile.bufs, tpos, palette[(uint)bandBuf[rpos]]);
+            (tile.bufs, tpos, palette[(unsigned int)bandBuf[rpos]]);
         } else {
           ZeroAssigner<typename TileType::PixelType,
             TileType::NumComp>::Assign(tile.bufs, tpos);
@@ -82,17 +83,17 @@ khGDALReader::TypedRead(const khExtents<uint32> &srcExtents, bool topToBottom,
 
     // copy the read bands into the tile, flipping and clamping as
     // necessary
-    for (uint b = 0; b < numBands; ++b) {
+    for (unsigned int b = 0; b < numBands; ++b) {
       SrcPixelType *bandBuf =
         (SrcPixelType*)(&rawReadBuf[0] + b * bandSize);
-      for (uint row = 0; row < height; ++row) {
-        const uint32 rbase = (topToBottom ? (height - row - 1) : row)
+      for (unsigned int row = 0; row < height; ++row) {
+        const std::uint32_t rbase = (topToBottom ? (height - row - 1) : row)
                              * width;
-        const uint32 tbase = ((row + rowOff) *
+        const std::uint32_t tbase = ((row + rowOff) *
                               TileType::TileWidth) + colOff;
-        for (uint col = 0; col < width; ++col) {
-          uint32 rpos = rbase + col;
-          uint32 tpos = tbase + col;
+        for (unsigned int col = 0; col < width; ++col) {
+          std::uint32_t rpos = rbase + col;
+          std::uint32_t tpos = tbase + col;
           tile.bufs[b][tpos] =
             ClampRange<typename TileType::PixelType>
             (bandBuf[rpos]);
@@ -101,11 +102,41 @@ khGDALReader::TypedRead(const khExtents<uint32> &srcExtents, bool topToBottom,
     }
 
     // replicate bands if necessary
-    for (uint b = numBands; b < TileType::NumComp; ++b) {
+    for (unsigned int b = numBands; b < TileType::NumComp; ++b) {
       notify(NFY_DEBUG, "     replicating band %d", b);
       memcpy(tile.bufs[b], tile.bufs[0], TileType::BandBufSize);
     }
   }
+}
+
+template <class SrcPixelType>
+SrcPixelType khGDALReader::GetNoDataOrZero() {
+  if (!no_data_set) {
+    double no_data;
+    int nodata_exists;
+    GetNoDataFromSrc(no_data, nodata_exists);
+    if (nodata_exists) {
+      // Check that nodata fits in the pixel type
+      SrcPixelType pixelMin = std::numeric_limits<SrcPixelType>::lowest();
+      SrcPixelType pixelMax = std::numeric_limits<SrcPixelType>::max();
+      if (no_data >= pixelMin && no_data <= pixelMax) {
+        sanitized_no_data = no_data;
+      }
+      else {
+        notify(NFY_WARN, "Ignoring NoData (%.2f) because it is too large for the pixel type.", no_data);
+      }
+    }
+
+    if (sanitized_no_data != 0) {
+      notify(NFY_NOTICE, "Using non-zero NoData (%.2f). If Fusion produces black regions "
+                         "around this image, consider creating your own mask and disabling "
+                         "Auto Masking for this resource.", no_data);
+    }
+
+    no_data_set = true;
+  }
+
+  return static_cast<SrcPixelType>(sanitized_no_data);
 }
 
 

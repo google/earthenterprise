@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@
 #include <ogr_spatialref.h>
 #include "common/notify.h"
 #include "common/khTypes.h"
+#include <cstdint>
 
 
 // ****************************************************************************
@@ -32,9 +34,9 @@
 // ****************************************************************************
 class CPLStrGuard
 {
-  // private and unimplemented - it would be a waste to copy the strings
-  CPLStrGuard(const CPLStrGuard &o);
-  CPLStrGuard& operator=(const CPLStrGuard &o);
+  // it would be a waste to copy the strings
+  CPLStrGuard(const CPLStrGuard &o) = delete;
+  CPLStrGuard& operator=(const CPLStrGuard &o) = delete;
 
   char *str;
  public:
@@ -56,7 +58,7 @@ class CPLStrGuard
 // ****************************************************************************
 // ***  Misc GDAL wrappers - to simplify API
 // ****************************************************************************
-extern void khGDALInit(uint32 cacheMax = 400 * 1024 * 1024);
+extern void khGDALInit(std::uint32_t cacheMax = 400 * 1024 * 1024);
 extern GDALDataType GDTFromStorageEnum(khTypes::StorageEnum storage);
 extern GDALDataType GDTFromName(const std::string &name);
 extern GDALColorInterp GCIFromName(const std::string &name);
@@ -86,7 +88,7 @@ bool IsMercator(const char* projectionReference);
 // the meter unit that gdal corresponds to the given degree lat-long.
 void ConvertToGdalMeterForMercator(double* latitude, double* longitude);
 
-extern bool CompatiblePixelSizes(double ps1, double ps2, uint32 rasterSize);
+extern bool CompatiblePixelSizes(double ps1, double ps2, std::uint32_t rasterSize);
 
 
 extern void PrintGDALCreateFormats(FILE *out, const char *prefix);
@@ -103,13 +105,13 @@ std::string GetWKT(const OGRSpatialReference &ogrSRS);
 // ****************************************************************************
 class BufferRasterBand : public GDALRasterBand
 {
-  const uchar* buf;
-  const uint32 pixelSize;
+  const unsigned char* buf;
+  const std::uint32_t pixelSize;
 
  public:
   BufferRasterBand(GDALDataset *ds, int gdalBand,
-                   const uchar *const buf_,
-                   const khSize<uint32> &rasterSize,
+                   const unsigned char *const buf_,
+                   const khSize<std::uint32_t> &rasterSize,
                    khTypes::StorageEnum extractType);
 
   virtual CPLErr IReadBlock(int x, int y, void *destBuf);

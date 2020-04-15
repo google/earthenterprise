@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,10 +20,10 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <iostream>
+#include <cstdint>
 #include <string>
 #include <vector>
 #include <iostream>
-#include <khTypes.h>
 #include <khFileUtils.h>
 #include <khGuard.h>
 #include <khGetopt.h>
@@ -376,12 +377,12 @@ class PacketFileUnitTest : public UnitTest<PacketFileUnitTest> {
   enum WriteMode { kAppend, kAt, kDuplicate };
 
   bool TestRandom(const std::string &packet_file_name,
-                  uint32 record_count,
+                  std::uint32_t record_count,
                   size_t sort_buffer_size,
                   WriteMode write_mode,
                   bool sort_records = false)
     {
-    const uint64 kSegmentBreak = 1024*1024;
+    const std::uint64_t kSegmentBreak = 1024*1024;
   
     if (0 > chdir(kPathBase.c_str())) {
       throw khSimpleException("TestRandom: chdir failed for ") << kPathBase;
@@ -430,7 +431,7 @@ class PacketFileUnitTest : public UnitTest<PacketFileUnitTest> {
       ReadRandomRecords(reader, records);
     }
 
-    uint64 num_packets = PacketIndexReader::NumPackets(
+    std::uint64_t num_packets = PacketIndexReader::NumPackets(
         PacketFile::IndexFilename(packet_file_name));
     if (num_packets != record_count) {
       throw khSimpleException("TestRandom: NumPackets returned ")
@@ -443,7 +444,7 @@ class PacketFileUnitTest : public UnitTest<PacketFileUnitTest> {
   // Test writing random records, already sorted
   bool TestRandomSorted() {
     notify(NFY_DEBUG, "TestRandomSorted started");
-    const uint32 kRecordCount = 1000;
+    const std::uint32_t kRecordCount = 1000;
     return TestRandom("relative/Sorted",
                       kRecordCount,
                       1024 * 1024,
@@ -454,7 +455,7 @@ class PacketFileUnitTest : public UnitTest<PacketFileUnitTest> {
   // Test writing random records, using WriteAtCRC
   bool TestRandomWriteAt() {
     notify(NFY_DEBUG, "TestRandomWriteAt started");
-    const uint32 kRecordCount = 1000;
+    const std::uint32_t kRecordCount = 1000;
     return TestRandom("relative/WriteAt",
                       kRecordCount,
                       1024 * 1024,
@@ -465,7 +466,7 @@ class PacketFileUnitTest : public UnitTest<PacketFileUnitTest> {
   // Test writing duplicates
   bool TestWriteDuplicate() {
     notify(NFY_DEBUG, "TestWriteDuplicate started");
-    const uint32 kRecordCount = 1000;
+    const std::uint32_t kRecordCount = 1000;
     return TestRandom("relative/WriteDup",
                       kRecordCount,
                       1024 * 1024,
@@ -476,7 +477,7 @@ class PacketFileUnitTest : public UnitTest<PacketFileUnitTest> {
   // Test writing random records, with sort but not merge
   bool TestRandomSortInMemory() {
     notify(NFY_DEBUG, "TestRandomSortInMemory started");
-    const uint32 kRecordCount = 2000;
+    const std::uint32_t kRecordCount = 2000;
     return TestRandom("relative/SortInMemory",
                       kRecordCount,
                       kRecordCount * PacketIndexEntry::kStoreSize * 11/10,
@@ -486,7 +487,7 @@ class PacketFileUnitTest : public UnitTest<PacketFileUnitTest> {
   // Test writing random records, multi-region sort with merge
   bool TestRandomSortAndMerge() {
     notify(NFY_DEBUG, "TestRandomSortAndMerge started");
-    const uint32 kRecordCount = 2100;
+    const std::uint32_t kRecordCount = 2100;
     return TestRandom("relative/SortInMemory",
                       kRecordCount,
                       kRecordCount * PacketIndexEntry::kStoreSize / 8,
@@ -495,7 +496,7 @@ class PacketFileUnitTest : public UnitTest<PacketFileUnitTest> {
 
   // NextInLevel - return next node at same level in quadtree, update
   // binary blist
-  QuadtreePath NextInLevel(uint32 level, uchar blist[]) {
+  QuadtreePath NextInLevel(std::uint32_t level, unsigned char blist[]) {
     assert(level <= QuadtreePath::kMaxLevel);
     QuadtreePath previous(level, blist);
     int i = level - 1;
@@ -504,7 +505,7 @@ class PacketFileUnitTest : public UnitTest<PacketFileUnitTest> {
     }
     if (i < 0) throw khSimpleException("NextInLevel: no more nodes at level");
     ++blist[i];
-    for (uint32 j = i+1; j < level; ++j) {
+    for (std::uint32_t j = i+1; j < level; ++j) {
       blist[j] = 0;
     }
     QuadtreePath result(level, blist);
@@ -513,12 +514,12 @@ class PacketFileUnitTest : public UnitTest<PacketFileUnitTest> {
   }
 
   // Write sequential records at the same level
-  void WriteLevel(PacketFileWriter &writer, uint32 level, uint32 count) {
+  void WriteLevel(PacketFileWriter &writer, std::uint32_t level, std::uint32_t count) {
     assert(level <= QuadtreePath::kMaxLevel);
-    uchar blist[QuadtreePath::kMaxLevel];
+    unsigned char blist[QuadtreePath::kMaxLevel];
     memset(blist, 0, sizeof(blist));
     // Generate a random path for the level that's not too near the end
-    for (uint32 i = 0; i < level; ++i) {
+    for (std::uint32_t i = 0; i < level; ++i) {
       blist[i] = (rand() >> 5) & 0x01;
     }
 
@@ -537,7 +538,7 @@ class PacketFileUnitTest : public UnitTest<PacketFileUnitTest> {
   bool TestSortedLevels() {
     notify(NFY_DEBUG, "TestSortedLevels started");
     const std::string kPacketFileName(kPathBase + "TestSortedLevels");
-    uint32 record_count = 0;
+    std::uint32_t record_count = 0;
     {
       PacketFileWriter writer(file_pool_, kPacketFileName);
       
@@ -552,7 +553,7 @@ class PacketFileUnitTest : public UnitTest<PacketFileUnitTest> {
 
       QuadtreePath last_path;
       std::string buffer;
-      for (uint32 i = 0; i < record_count; ++i) {
+      for (std::uint32_t i = 0; i < record_count; ++i) {
         QuadtreePath read_path;
         size_t read_size =
           reader.ReadNextCRC(&read_path, buffer);

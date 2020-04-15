@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,7 +26,7 @@
 #include <packetfile/packetfilereader.h>
 
 
-uint32 numMeshes[MaxTmeshLevel+1];
+ std::uint32_t numMeshes[MaxTmeshLevel+1];
 
 
 void usage(void) {
@@ -60,14 +61,14 @@ struct MeshHeader {
 
 
 void HandleMesh(const QuadtreePath &qtpath, const std::string &rawbuf) {
-  static uint numRecs = 0;
-  uint32 level, row, col;
+  static unsigned int numRecs = 0;
+  std::uint32_t level, row, col;
   qtpath.GetLevelRowCol(&level, &row, &col);
   printf("%05d) node:%u,%u,%u\n",
          numRecs++, level, col, row);
   if (!beBrief) {
-    uint32 len = rawbuf.size();
-    uint32 count = 0;
+    std::uint32_t len = rawbuf.size();
+    std::uint32_t count = 0;
     LittleEndianReadBuffer buf(&rawbuf[0], len);
     typedef LittleEndianReadBuffer::size_type size_type;
     while (len) {
@@ -171,16 +172,16 @@ int main(int argc, char *argv[]) {
     }
 
     if (showSummary) {
-      uint MinWithMeshes = MaxTmeshLevel+1;
-      uint MaxWithMeshes = 0;
-      for (uint i = StartTmeshLevel; i <= MaxTmeshLevel; ++i) {
+      unsigned int MinWithMeshes = MaxTmeshLevel+1;
+      unsigned int MaxWithMeshes = 0;
+      for (unsigned int i = StartTmeshLevel; i <= MaxTmeshLevel; ++i) {
         if (numMeshes[i]) {
           if (i < MinWithMeshes) MinWithMeshes = i;
           if (i > MaxWithMeshes) MaxWithMeshes = i;
         }
       }
 
-      for (uint i = MinWithMeshes; i <= MaxWithMeshes; ++i) {
+      for (unsigned int i = MinWithMeshes; i <= MaxWithMeshes; ++i) {
         fprintf(stderr, "level %d: %u meshes\n", i, numMeshes[i]);
       }
     }

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -70,19 +71,19 @@ int main(int argc, char **argv)
     bool help = false;
     options.flagOpt("help", help);
     options.flagOpt("?", help);
-    uint maxLevel = 0;
+    unsigned int maxLevel = 0;
     options.opt("maxLevel", maxLevel);
-    uint pixelCovSize = 0;
+    unsigned int pixelCovSize = 0;
     options.opt("pixelCovSize", pixelCovSize);
     double lat = 0.0;
     options.opt("lat", lat);
     double lon = 0.0;
     options.opt("lon", lon);
-    uint minLevel = 0;
+    unsigned int minLevel = 0;
     options.opt("minLevel", minLevel);
-    uint stepOut = 0;
+    unsigned int stepOut = 0;
     options.opt("stepOut", stepOut);
-    uint tileSize = 256;
+    unsigned int tileSize = 256;
     options.opt("tileSize", tileSize);
 
     if (!options.processAll(argc, argv, argn))
@@ -107,7 +108,7 @@ int main(int argc, char **argv)
     if (minLevel >= 32) {
       usage(progname, "minLevel must be < 32");
     }
-    uint tileSizeLog2 = log2(tileSize);
+    unsigned int tileSizeLog2 = log2(tileSize);
     if (tileSizeLog2 == 0) {
       usage(progname, "tileSize must be a power of 2");
     }
@@ -152,15 +153,15 @@ int main(int argc, char **argv)
                              stepOut,
                              0 /* padding size */);
 
-    uint32 totalTiles = 0;
+    std::uint32_t totalTiles = 0;
     printf("Lev: #tiles: tile extents (rcwh): deg extents (nsew)\n");
-    for (uint lev = coverage.beginLevel();
+    for (unsigned int lev = coverage.beginLevel();
          lev < coverage.endLevel(); ++lev) {
-      const khExtents<uint32>& levExtents(coverage.levelExtents(lev));
+      const khExtents<std::uint32_t>& levExtents(coverage.levelExtents(lev));
       khExtents<double> degExtents(coverage.levelCoverage(lev)
                                    .degExtents(tilespace));
 
-      uint32 numTiles = levExtents.numRows() * levExtents.numCols();
+      std::uint32_t numTiles = levExtents.numRows() * levExtents.numCols();
       totalTiles += numTiles;
       printf("%u:%u:%u,%u,%u,%u:%.12f,%.12f,%.12f,%.12f\n",
              lev, numTiles,

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,12 +46,12 @@ class PacketReader {
   };
 
   inline std::string Name(void) const  { return packet_filename_; }
-  uint64 NumPackets(void) const;
+  std::uint64_t NumPackets(void) const;
   void Close(void);
-  uint32 ReadNextN(MergeEntry *entries, uint32 count,
+  std::uint32_t ReadNextN(MergeEntry *entries, std::uint32_t count,
                    LittleEndianReadBuffer &buffer);
   PacketReader(geFilePool &file_pool, const std::string &packetfile,
-               uint32 file_number, uint32 version, uint32 channel,
+               std::uint32_t file_number, std::uint32_t version, std::uint32_t channel,
                Operation op);
   virtual ~PacketReader(void);
 
@@ -60,9 +61,9 @@ class PacketReader {
 
   std::string packet_filename_;
   khDeleteGuard<PacketIndexReader> reader_;
-  uint32      file_number_;
-  uint32      version_;
-  uint32      channel_;
+  std::uint32_t      file_number_;
+  std::uint32_t      version_;
+  std::uint32_t      channel_;
   Operation   op_;
 
   DISALLOW_COPY_AND_ASSIGN(PacketReader);
@@ -72,7 +73,7 @@ class PacketReader {
 class BlendPacketReader : public PacketReader<geindex::BlendEntry> {
  public:
   BlendPacketReader(geFilePool &file_pool, const std::string &packetfile,
-                    uint32 file_number, uint32 version,
+                    std::uint32_t file_number, std::uint32_t version,
                     Operation op)
       : PacketReader<geindex::BlendEntry>(file_pool, packetfile, file_number,
                                            version, 0 /* unused channel id */,
@@ -88,7 +89,7 @@ class BlendPacketReader : public PacketReader<geindex::BlendEntry> {
 class VectorPacketReader : public PacketReader<geindex::VectorEntry> {
  public:
   VectorPacketReader(geFilePool &file_pool, const std::string &packetfile,
-                     uint32 file_number, uint32 version, uint32 channel,
+                     std::uint32_t file_number, std::uint32_t version, std::uint32_t channel,
                      Operation op)
       : PacketReader<geindex::VectorEntry>(file_pool, packetfile, file_number,
                                            version, channel, op)
