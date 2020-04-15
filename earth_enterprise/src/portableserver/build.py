@@ -234,7 +234,7 @@ class Builder(object):
             "w:gz")
         try:
             archive.add(
-                os.path.dirname(self.package_dir),
+                os.path.abspath(self.package_dir),
                 os.path.basename(self.package_dir))
         finally:
             archive.close()
@@ -245,7 +245,7 @@ class Builder(object):
         shutil.make_archive(
             os.path.join(self.build_dir, self.zip_package_name),
             'zip',
-            os.path.dirname(self.package_dir),
+            os.path.abspath(self.package_dir),
             os.path.basename(self.package_dir))
 
 
