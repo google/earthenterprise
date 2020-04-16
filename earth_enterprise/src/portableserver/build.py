@@ -238,8 +238,7 @@ class Builder(object):
         try:
             archive.add(
                 os.path.dirname(self.package_dir),
-                os.path.basename(self.package_dir),
-                filter=lambda x: None if x.name in [)
+                os.path.basename(self.package_dir))
         finally:
             archive.close()
 
