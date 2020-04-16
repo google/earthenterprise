@@ -207,6 +207,9 @@ class Builder(object):
         ]
         copy_from_dir_to_dir(dist_dir, self.server_dir, entries=entries,
             exclude_entries=exclude_entries)
+        
+        # Delete fileunpacker build directory so it is not packaged.
+        remove_directory(task_build_dir)
 
     def obtain_sample_globes(self):
         """Copies tutorial globe and map cuts to <data/>."""
@@ -234,8 +237,9 @@ class Builder(object):
             "w:gz")
         try:
             archive.add(
-                os.path.abspath(self.package_dir),
-                os.path.basename(self.package_dir))
+                os.path.dirname(self.package_dir),
+                os.path.basename(self.package_dir),
+                filter=lambda x: None if x.name in [)
         finally:
             archive.close()
 
@@ -245,7 +249,7 @@ class Builder(object):
         shutil.make_archive(
             os.path.join(self.build_dir, self.zip_package_name),
             'zip',
-            os.path.abspath(self.package_dir),
+            os.path.dirname(self.package_dir),
             os.path.basename(self.package_dir))
 
 
