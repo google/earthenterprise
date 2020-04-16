@@ -23,6 +23,7 @@ num_cpu = GetOption('num_jobs')
 
 current_dir = Dir('.').abspath
 build_root = '%s/%s' % (current_dir, swig_version)
+install_root = '%s/install' % current_dir
 
 swig_source = File('#/../third_party/swig/%s.tar.gz' %
                       swig_version).abspath
@@ -50,7 +51,7 @@ swig_configure = swig_env.Command(
         '%s ./configure --with-python=%s --prefix=%s\n'
         'touch %s' % (build_root,
                       swig_env['ENV']['mod_env'],
-                      swig_env['python_bin'], root_dir,
+                      swig_env['python_bin'], install_root,
                       swig_target))])
 
 # [4] Build
@@ -63,7 +64,7 @@ swig_build = swig_env.Command(
         'touch %s' % (build_root, swig_env['ENV']['mod_env'], num_cpu,
                       swig_target))])
 
-# [5] Install swig for build
+# [5] Create swig master installer
 swig_target = '%s/.install' % current_dir
 swig_install = swig_env.Command(
     swig_target, swig_build,
@@ -74,7 +75,17 @@ swig_install = swig_env.Command(
                       swig_env['ENV']['mod_env'],
                       swig_target))])
 
-Default(swig_install)
+# [6] Install these into various directories as required for build
+swig_target = '%s/.install_for_build' % current_dir
+swig_install_build = swig_env.Command(
+    swig_target, swig_install,
+    [swig_env.rsync_cmd % ('%s/bin/*' % install_root,
+                              '%s' % Dir(swig_env.exportdirs['bin']).abspath),
+     swig_env.rsync_cmd % ('%s/share/*' % install_root,
+                              '%s' % Dir(swig_env.exportdirs['share']).abspath),
+     Touch('$TARGET')])
+
+Default(swig_install_build)
 swig_env.ExecuteOnClean('rm -rf %s' % current_dir)
 
-Return('swig_extract swig_install')
+Return('swig_extract swig_install_build')
