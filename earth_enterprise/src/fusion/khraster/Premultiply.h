@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +18,16 @@
 #ifndef FUSION_KHRASTER_PREMULTIPLY_H__
 #define FUSION_KHRASTER_PREMULTIPLY_H__
 
-#include <khTypes.h>
+#include <cstdint>
 
-template <uint a, uint r, uint g, uint b>
-inline void UndoAlphaPremultiply(uchar *raw_buf, uint numBytes) {
-  for (uint i = 0; i < numBytes; i+=4) {
-    uchar * const pixel = &raw_buf[i];
+template <unsigned int a, unsigned int r, unsigned int g, unsigned int b>
+inline void UndoAlphaPremultiply(unsigned char *raw_buf, unsigned int numBytes) {
+  for (unsigned int i = 0; i < numBytes; i+=4) {
+    unsigned char * const pixel = &raw_buf[i];
     if (pixel[a] == 0) {
       pixel[r] = pixel[g] = pixel[b] = 0;
     } else {
-      uint s = (uint(255) << 16) / pixel[a];
+      unsigned int s = (uint(255) << 16) / pixel[a];
       pixel[r] = (pixel[r] * s + (1<<15)) >> 16;
       pixel[g] = (pixel[g] * s + (1<<15)) >> 16;
       pixel[b] = (pixel[b] * s + (1<<15)) >> 16;
@@ -34,11 +35,11 @@ inline void UndoAlphaPremultiply(uchar *raw_buf, uint numBytes) {
   }
 }
 
-inline void UndoAlphaPremultiplyARGB(uint *raw_buf, uint numPixels) {
+inline void UndoAlphaPremultiplyARGB(unsigned int *raw_buf, unsigned int numPixels) {
 #if __BYTE_ORDER == __BIG_ENDIAN
-  UndoAlphaPremultiply<0,1,2,3>((uchar*)raw_buf, numPixels*4);
+  UndoAlphaPremultiply<0,1,2,3>((unsigned char*)raw_buf, numPixels*4);
 #else
-  UndoAlphaPremultiply<3,2,1,0>((uchar*)raw_buf, numPixels*4);
+  UndoAlphaPremultiply<3,2,1,0>((unsigned char*)raw_buf, numPixels*4);
 #endif
 }
 

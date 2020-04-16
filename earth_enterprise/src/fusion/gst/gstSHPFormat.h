@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,22 +46,22 @@ class gstSHPFormat : public gstFormat {
   virtual gstStatus OpenFile();
   virtual gstStatus CloseFile();
 
-  virtual gstGeode* GetFeature(uint32, uint32);
-  virtual gstRecordHandle GetAttribute(uint32, uint32);
+  virtual gstGeode* GetFeature(std::uint32_t, std::uint32_t);
+  virtual gstRecordHandle GetAttribute(std::uint32_t, std::uint32_t);
 
   virtual const char* FormatName() { return "ESRI SHP Shapefile"; }
 
  private:
-  typedef gstGeode *(gstSHPFormat::*ShapeParseFunc)(uchar *a);
-  gstGeode* parsePoint(uchar *a);
-  gstGeode* parsePolyLine(uchar *a);
-  gstGeode* parsePolygon(uchar *a);
+  typedef gstGeode *(gstSHPFormat::*ShapeParseFunc)(unsigned char *a);
+  gstGeode* parsePoint(unsigned char *a);
+  gstGeode* parsePolyLine(unsigned char *a);
+  gstGeode* parsePolygon(unsigned char *a);
 
   SHP_FileHeader_i* readFileHeader(FILE *f);
   SHP_RecHeader_i* readRecHeader(FILE *f);
 
   bool _bigEndian;
-  uint _numRecords;
+  unsigned int _numRecords;
 
   int _subparts;
 
@@ -114,15 +115,15 @@ enum {
 };
 
 struct SHP_FileHeader_i {
-  int32 FileCode;               // Big Endian
-  int32 Unused0;                // Big Endian
-  int32 Unused1;                // Big Endian
-  int32 Unused2;                // Big Endian
-  int32 Unused3;                // Big Endian
-  int32 Unused4;                // Big Endian
-  int32 FileLength;             // Big Endian
-  int32 Version;                // Little Endian
-  int32 ShapeType;              // Little Endian
+  std::int32_t FileCode;               // Big Endian
+  std::int32_t Unused0;                // Big Endian
+  std::int32_t Unused1;                // Big Endian
+  std::int32_t Unused2;                // Big Endian
+  std::int32_t Unused3;                // Big Endian
+  std::int32_t Unused4;                // Big Endian
+  std::int32_t FileLength;             // Big Endian
+  std::int32_t Version;                // Little Endian
+  std::int32_t ShapeType;              // Little Endian
   double BBox_Xmin;             // Little Endian
   double BBox_Ymin;             // Little Endian
   double BBox_Xmax;             // Little Endian
@@ -139,13 +140,13 @@ enum {
 };
 
 struct SHX_RecHeader_i {
-  int32 Offset;         // Big Endian
-  int32 RecSize;                // Big Endian
+  std::int32_t Offset;         // Big Endian
+  std::int32_t RecSize;                // Big Endian
 };
 
 struct SHP_RecHeader_i {
-  int32 RecordNumber;           // Big Endian
-  int32 ContentLength;          // Big Endian
+  std::int32_t RecordNumber;           // Big Endian
+  std::int32_t ContentLength;          // Big Endian
 };
 
 struct SHP_Point_Rec {
@@ -155,30 +156,30 @@ struct SHP_Point_Rec {
 
 struct SHP_MultiPoint_Rec {
   double Box[4];                // Xmin, Ymin, Xmax, Ymax
-  int32 NumPoints;
+  std::int32_t NumPoints;
 };
 
 struct SHP_PolyLine_Rec {
   double Box[4];
-  int32 NumParts;               // Number of Parts
-  int32 NumPoints;              // Total number of Points
-  int32 *Parts;         // Index to First Point in Part
+  std::int32_t NumParts;               // Number of Parts
+  std::int32_t NumPoints;              // Total number of Points
+  std::int32_t *Parts;         // Index to First Point in Part
   SHP_Point_Rec *Points;        // Points for All Parts
 };
 
 struct SHP_Polygon_Rec {
   double Box[4];
-  int32 NumParts;               // Number of Parts
-  int32 NumPoints;              // Total number of Points
-  int32 *Parts;         // Index to First Point in Part
+  std::int32_t NumParts;               // Number of Parts
+  std::int32_t NumPoints;              // Total number of Points
+  std::int32_t *Parts;         // Index to First Point in Part
   SHP_Point_Rec *Points;        // Points for All Parts
 };
 
 struct SHP_PolygonZ_Rec {
   double Box[4];
-  int32 NumParts;               // Number of Parts
-  int32 NumPoints;              // Total number of Points
-  int32 *Parts;         // Index to First Point in Part
+  std::int32_t NumParts;               // Number of Parts
+  std::int32_t NumPoints;              // Total number of Points
+  std::int32_t *Parts;         // Index to First Point in Part
   SHP_Point_Rec *Points;        // Points for All Parts
   double *ZRange;
   double *ZNumPoints;

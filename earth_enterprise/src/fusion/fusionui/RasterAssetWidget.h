@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,7 +69,7 @@ class RasterAssetWidget : public RasterAssetWidgetBase {
 
   AssetDefs::Type asset_type_;
   QFileDialog* file_dialog_;
-  std::vector<uint32> provider_id_list_;
+  std::vector<std::uint32_t> provider_id_list_;
   int last_conv_index_;
   int last_mosaic_fill_index_;
   qt_fusion::QDateWrapper* acquisition_date_wrapper_;

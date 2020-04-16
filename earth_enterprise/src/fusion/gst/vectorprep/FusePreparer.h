@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,7 +70,7 @@ class FusePreparer {
   FusePreparer(vectorquery::FuseSelector &selector,
                const std::vector<DisplayRuleConfig> &disprule_configs,
                const QStringList &js_context_scripts,
-               uint32 semaphore_count);
+               std::uint32_t semaphore_count);
 
   mttypes::Semaphore& OutputSemaphore(void) { return out_semaphore_; }
   OutQueueType&       OutputQueue(void)     { return out_queue_; }

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +26,7 @@
 #include <utility>
 #include <vector>
 #include "common/khTypes.h"
+#include <cstdint>
 
 extern const char* const kISO_8601_DateTimeFormatString;
 
@@ -164,8 +166,8 @@ std::string FindValueInVariableFile(const std::string& filename,
 // Take the substring of string_value defined by the start_index and size and
 // convert the value to an integer.
 // If it can't be converted, return the default_result
-int32 ParseDec32Value(const std::string& value, uint32 start_index,
-                             size_t size, int32 default_result);
+std::int32_t ParseDec32Value(const std::string& value, std::uint32_t start_index,
+                             size_t size, std::int32_t default_result);
 
 // Returns whether all in the array ptr have same value. Assumes that T has a
 // '==', '=' and ~ operator (which gives different but reversible data).

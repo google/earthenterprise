@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -67,7 +68,7 @@ void GeometryChecker::Run(gstGeodeHandle* const geodeh) {
       {
         gstGeodeCollection *multi_geode =
             static_cast<gstGeodeCollection*>(&(**geodeh));
-        for (uint p = 0; p < multi_geode->NumParts(); ) {
+        for (unsigned int p = 0; p < multi_geode->NumParts(); ) {
           gstGeodeHandle &cur_geodeh = multi_geode->GetGeode(p);
           ProcessPolygon(&cur_geodeh);
           if (cur_geodeh->IsEmpty()) {
@@ -86,7 +87,7 @@ void GeometryChecker::Run(gstGeodeHandle* const geodeh) {
       {
         gstGeodeCollection *multi_geode =
             static_cast<gstGeodeCollection*>(&(**geodeh));
-        for (uint p = 0; p < multi_geode->NumParts(); ) {
+        for (unsigned int p = 0; p < multi_geode->NumParts(); ) {
           gstGeodeHandle &cur_geodeh = multi_geode->GetGeode(p);
           ProcessPolygon3D(&cur_geodeh);
           if (cur_geodeh->IsEmpty()) {
@@ -162,9 +163,9 @@ void GeometryChecker::ProcessPolygon3D(gstGeodeHandle* const geodeh) {
   // Convert to 2D-polygon.
   gstGeodeHandle geodeh_2d = gstGeodeImpl::Create(gstPolygon);
   gstGeode *geode_2d = static_cast<gstGeode*>(&(*geodeh_2d));
-  for (uint part = 0; part < geode->NumParts(); ++part) {
+  for (unsigned int part = 0; part < geode->NumParts(); ++part) {
     geode_2d->AddPart(geode->VertexCount(part));
-    for (uint v = 0; v < geode->VertexCount(part); ++v) {
+    for (unsigned int v = 0; v < geode->VertexCount(part); ++v) {
       const gstVertex &vert = geode->GetVertex(part, v);
       if (!normal.z && swapX) {  // TODO: optimize.
         geode_2d->AddVertex(gstVertex(vert.z, vert.y, .0));
@@ -182,8 +183,8 @@ void GeometryChecker::ProcessPolygon3D(gstGeodeHandle* const geodeh) {
   // Convert back from processed 2D-polygon to 3D-polygon.
   geodeh_2d->ChangePrimType(gstPolygon3D);
   geode_2d = static_cast<gstGeode*>(&(*geodeh_2d));
-  for (uint part = 0; part < geode_2d->NumParts(); ++part) {
-    for (uint i = 0; i < geode_2d->VertexCount(part); ++i) {
+  for (unsigned int part = 0; part < geode_2d->NumParts(); ++part) {
+    for (unsigned int i = 0; i < geode_2d->VertexCount(part); ++i) {
       const gstVertex &vert = geode_2d->GetVertex(part, i);
 
       if (!normal.z && swapX) {  // TODO: optimize
@@ -218,8 +219,8 @@ void GeometryChecker::RemoveCoincidentVertices(
   gstGeode* new_geode = static_cast<gstGeode*>(&(*new_geodeh));
 
   gstGeode* geode = static_cast<gstGeode*>(&(**geodeh));
-  for (uint part = 0; part < geode->NumParts(); ++part) {
-    uint num_verts = geode->VertexCount(part);
+  for (unsigned int part = 0; part < geode->NumParts(); ++part) {
+    unsigned int num_verts = geode->VertexCount(part);
 
     // check for min number of vertices in cycle.
     if (num_verts < kMinCycleVertices) {
@@ -236,7 +237,7 @@ void GeometryChecker::RemoveCoincidentVertices(
     // remove coincident vertices.
     gstVertex pt1 = geode->GetFirstVertex(part);
     new_geode->AddVertex(pt1);
-    for (uint v = 1; v < num_verts; ++v) {
+    for (unsigned int v = 1; v < num_verts; ++v) {
       gstVertex pt2 = geode->GetVertex(part, v);
       if (!IsIdenticalXY(pt1, pt2)) {
         new_geode->AddVertex(pt2);
@@ -286,7 +287,7 @@ void GeometryChecker::RemoveSpikes(gstGeodeHandle* const geodeh) const {
 
   gstGeode *geode = static_cast<gstGeode*>(&(**geodeh));
 
-  for (uint part = 0; part < geode->NumParts(); ++part) {
+  for (unsigned int part = 0; part < geode->NumParts(); ++part) {
 #ifndef NDEBUG
     gstVertex tmp_pt = geode->GetVertex(part, 0);
 #endif
@@ -319,7 +320,7 @@ void GeometryChecker::RemoveSpikes(gstGeodeHandle* const geodeh) const {
     } else {  // accept processed part.
       new_geode->AddPart(res_part.size());
       // TODO: AddVertex(begin, end);
-      for (uint v = 0; v < res_part.size(); ++v) {
+      for (unsigned int v = 0; v < res_part.size(); ++v) {
         new_geode->AddVertex(res_part[v]);
       }
     }
@@ -330,10 +331,10 @@ void GeometryChecker::RemoveSpikes(gstGeodeHandle* const geodeh) const {
 }
 
 void GeometryChecker::RemoveSpikesInPart(const gstGeode &geode,
-                                         uint part,
+                                         unsigned int part,
                                          gstGeodePart *res_part) const {
   assert(res_part);
-  uint num_verts = geode.VertexCount(part);
+  unsigned int num_verts = geode.VertexCount(part);
 
   if (num_verts < kMinCycleVertices) {
     return;
@@ -343,7 +344,7 @@ void GeometryChecker::RemoveSpikesInPart(const gstGeode &geode,
 
   cur_part.clear();
   cur_part.reserve(num_verts);
-  for (uint v = 0; v < geode.VertexCount(part); ++v) {
+  for (unsigned int v = 0; v < geode.VertexCount(part); ++v) {
     cur_part.push_back(geode.GetVertex(part, v));
   }
 
@@ -354,7 +355,7 @@ void GeometryChecker::RemoveSpikesInPart(const gstGeode &geode,
   gstVertex pt1 = cur_part[num_verts - 2];
   gstVertex pt2 = cur_part[0];
   gstVertex pt3;
-  for (uint v = 0; v < num_verts - 1; ) {
+  for (unsigned int v = 0; v < num_verts - 1; ) {
     pt3 = (v < num_verts - 2) ? cur_part[v + 1] : new_part[0];
 
     if (!IsSpike(pt1, pt2, pt3)) {
@@ -416,9 +417,9 @@ void GeometryChecker::CheckForSelfIntersection(
   gstGeode *new_geode = static_cast<gstGeode*>(&(*new_geodeh));
 
   gstGeode *geode = static_cast<gstGeode*>(&(**geodeh));
-  uint new_cur_p;
-  for (uint part = 0; part < geode->NumParts(); ++part) {
-    uint num_verts = geode->VertexCount(part);
+  unsigned int new_cur_p;
+  for (unsigned int part = 0; part < geode->NumParts(); ++part) {
+    unsigned int num_verts = geode->VertexCount(part);
 
     if (num_verts < kMinCycleVertices) {
       notify(NFY_WARN, "Degenerate inner cycle: skipped.");
@@ -438,7 +439,7 @@ void GeometryChecker::CheckForSelfIntersection(
     gstVertex pt3;
     gstVertex pt4;
 
-    for (uint v = 0; v < num_verts - 1; ++v) {
+    for (unsigned int v = 0; v < num_verts - 1; ++v) {
       pt3 = (v + 1 < (num_verts - 1)) ? geode->GetVertex(part, (v + 1)) :
           new_geode->GetVertex(new_cur_p, (v + 1 - (num_verts - 1)));
       pt4 = (v + 2 < (num_verts - 1)) ?
@@ -504,7 +505,7 @@ void GeometryChecker::CheckAndFixCycleOrientation(
   }
 
   gstGeode *geode = static_cast<gstGeode*>(&(**geodeh));
-  for (uint part = 0; part < geode->NumParts(); ++part) {
+  for (unsigned int part = 0; part < geode->NumParts(); ++part) {
     if (geode->VertexCount(part) < kMinCycleVertices) {
       // Invalidity of outer cycle is checked above in IsDegenerate().
       assert(part > 0);
@@ -527,13 +528,13 @@ void GeometryChecker::CheckAndFixCycleOrientation(
 }
 
 CycleOrientation GeometryChecker::CalcCycleOrientation(
-    gstGeode* const geode, uint part) const {
+    gstGeode* const geode, unsigned int part) const {
   // Calculate min vertex (it is most left lower one).
   gstVertex minv = geode->GetFirstVertex(part);
-  uint minv_idx = 0;
-  uint num_verts = geode->VertexCount(part);
+  unsigned int minv_idx = 0;
+  unsigned int num_verts = geode->VertexCount(part);
   assert(num_verts != 0);
-  for (uint v = 1; v < (num_verts - 1); ++v) {
+  for (unsigned int v = 1; v < (num_verts - 1); ++v) {
     const gstVertex &cur_v = geode->GetVertex(part, v);
     // Note: Here, the check should be w/o tolerance because
     // we need absolute most left-lower point.

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +48,7 @@ class CrcWrappingOfstream : public std::ofstream {
     std::ofstream fp_out;
     std::string side_file_for_crc = file_name_ + kCrcFileExtension;
     fp_out.open(side_file_for_crc.c_str(), std::ios::out);
-    uint32 crc = crc_calculator_.GetCrc();
+    std::uint32_t crc = crc_calculator_.GetCrc();
     fp_out.write(reinterpret_cast<const char*>(&crc), sizeof(crc));
     fp_out.close();
   }
@@ -92,10 +93,10 @@ class FilePacker {
 
  private:
   // Offset to add to all index entries. 0 for standalone file.
-  uint64 addendum_offset_;
+  std::uint64_t addendum_offset_;
   // Whether file is an addendum (rather than standalone)
   bool is_addendum_;
-  uint64 write_pos_;
+  std::uint64_t write_pos_;
   CrcWrappingOfstream fp_out_;
   std::string file_path_;
   IncrementalCrcCalculator crc_calculator_;

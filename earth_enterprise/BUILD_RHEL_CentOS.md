@@ -89,13 +89,13 @@ sudo yum install -y git-lfs
 For all versions of CentOS and RHEL, install the standard development/build tools:
 
 ```bash
-sudo yum install -y ant bzip2 doxygen gcc-c++ patch python-argparse python-lxml python-setuptools tar
+sudo yum install -y ant bzip2 doxygen gcc-c++ patch python python-argparse python-defusedxml python-setuptools tar
 ```
 
 ### For RHEL6 and Centos 6
 
 ```bash
-sudo yum install -y ant bzip2 doxygen gcc-c++ patch tar python27 python-argparse python27-lxml python27-setuptools
+sudo yum install -y ant bzip2 doxygen gcc-c++ patch tar python27 python-argparse python27-defusedxml python27-setuptools
 ```
 
 Also install the devtoolset toolchain.
@@ -146,7 +146,7 @@ sudo yum install -y \
   libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel pcre pcre-devel \
   proj-devel python27 \
-  python27-pip python27-devel python27-lxml python27-setuptools python-unittest2 \
+  python27-pip python27-devel python27-setuptools python-unittest2 \
   python-devel rpm-build rpmrebuild rsync scons shunit2 \
   xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
 ```

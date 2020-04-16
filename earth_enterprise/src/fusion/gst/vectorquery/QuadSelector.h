@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +33,7 @@ class QuadSelectorBase
   khProgressMeter *progress_;
 
   // all the parallel arrays below have this same size
-  const uint num_filters_;
+  const unsigned int num_filters_;
 
   // holds information about whcih filters contribute to the target level
   // NOTE: this is a ref to a single vector that get's modified/restored
@@ -64,8 +65,8 @@ class QuadSelectorBase
   // This is called from inside tight loops. Mark it as inline and leave it
   // in the header with the hopes that the compiler is realy smart enough to
   // inline it.
-  inline void TryToClearSets(uint32 row, uint32 col) {
-    for (uint i = 0; i < num_filters_; ++i) {
+  inline void TryToClearSets(std::uint32_t row, std::uint32_t col) {
+    for (unsigned int i = 0; i < num_filters_; ++i) {
       if (use_set_[i]) {
         if (filters_[i].geo_index_->
             GetEstimatedPresence(khTileAddr(cov_.level, row, col))) {
@@ -83,7 +84,7 @@ class QuadSelectorBase
   void RestoreCleared(void);
 
  public:
-  inline bool Contains(uint32 row, uint32 col) {
+  inline bool Contains(std::uint32_t row, std::uint32_t col) {
     return cov_.extents.ContainsRowCol(row, col);
   }
   virtual ~QuadSelectorBase(void) { }
@@ -92,7 +93,7 @@ class QuadSelectorBase
                    std::vector<bool> &use_set,
                    const khLevelCoverage &cov);
 
-  virtual void SelectQuad(uint32 row, uint32 col) = 0;
+  virtual void SelectQuad(std::uint32_t row, std::uint32_t col) = 0;
 };
 
 
@@ -115,8 +116,8 @@ class MinifiedQuadSelector : public QuadSelectorBase
   // This is called from inside tight loops. Mark it as inline and leave it
   // in the header with the hopes that the compiler is realy smart enough to
   // inline it.
-  inline void TryToSplitSets(uint32 row, uint32 col) {
-    for (uint i = 0; i < num_filters_; ++i) {
+  inline void TryToSplitSets(std::uint32_t row, std::uint32_t col) {
+    for (unsigned int i = 0; i < num_filters_; ++i) {
       if (use_set_[i]) {
         if (cov_.level == filters_[i].geo_index_->MaxLevel()) {
           SplitSet(i, row, col);
@@ -125,7 +126,7 @@ class MinifiedQuadSelector : public QuadSelectorBase
     }
   }
 
-  void SplitSet(uint i, uint32 row, uint32 col);
+  void SplitSet(unsigned int i, std::uint32_t row, std::uint32_t col);
   void RestoreSplit(void);
 
  public:
@@ -133,7 +134,7 @@ class MinifiedQuadSelector : public QuadSelectorBase
                        const khLevelCoverage &cov,
                        const khLevelCoverage &target_cov);
 
-  virtual void SelectQuad(uint32 row, uint32 col);
+  virtual void SelectQuad(std::uint32_t row, std::uint32_t col);
 };
 
 
@@ -143,7 +144,7 @@ class FullResQuadSelectorPreStorage {
  public:
   std::vector<bool> use_set_storage_;
 
-  FullResQuadSelectorPreStorage(uint num_filters)
+  FullResQuadSelectorPreStorage(unsigned int num_filters)
       : use_set_storage_(num_filters, true) { }
 };
 class FullResQuadSelector : private FullResQuadSelectorPreStorage,
@@ -155,7 +156,7 @@ class FullResQuadSelector : private FullResQuadSelectorPreStorage,
                       std::vector<FilterGeoIndex> &filters,
                       const khLevelCoverage &cov);
 
-  virtual void SelectQuad(uint32 row, uint32 col);
+  virtual void SelectQuad(std::uint32_t row, std::uint32_t col);
 
  private:
   FilterGeoIndexManager &manager_;

@@ -23,7 +23,7 @@ class MockReader : public khGDALReader {
   public:
     double no_data_val;
     int nodata_exists_val;
-    uint num_gets;
+    unsigned int num_gets;
     MockReader(double no_data, int nodata_exists) :
         khGDALReader(dataset, 3), // Values don't matter; just making the constructor happy
         no_data_val(no_data), nodata_exists_val(nodata_exists), num_gets(0) { }
@@ -41,18 +41,18 @@ class MockReader : public khGDALReader {
     }
 
     // Override abstract functions so we can instantiate the class
-    virtual void FetchPixels(const khExtents<uint32> &srcExtents) override {}
+    virtual void FetchPixels(const khExtents<std::uint32_t> &srcExtents) override {}
 };
 
 TEST(khGDALReaderTest, NoDataDoesntExist) {
   MockReader reader(255, false);
-  int8 nodata = reader.CallGetNoDataOrZero<int8>();
+  std::int8_t nodata = reader.CallGetNoDataOrZero<std::int8_t>();
   ASSERT_EQ(0, nodata);
 }
 
 TEST(khGDALReaderTest, NoDataZero) {
   MockReader reader(0, true);
-  uint32 nodata = reader.CallGetNoDataOrZero<uint32>();
+  std::uint32_t nodata = reader.CallGetNoDataOrZero<std::uint32_t>();
   ASSERT_EQ(0, nodata);
 }
 
@@ -64,13 +64,13 @@ TEST(khGDALReaderTest, NoDataNonZero) {
 
 TEST(khGDALReaderTest, NoDataTooBigPositive) {
   MockReader reader(256, true);
-  uint8 nodata = reader.CallGetNoDataOrZero<uint8>();
+  std::uint8_t nodata = reader.CallGetNoDataOrZero<std::uint8_t>();
   ASSERT_EQ(0, nodata);
 }
 
 TEST(khGDALReaderTest, NoDataTooBigNegative) {
   MockReader reader(-100000, true);
-  int16 nodata = reader.CallGetNoDataOrZero<int16>();
+  std::int16_t nodata = reader.CallGetNoDataOrZero<std::int16_t>();
   ASSERT_EQ(0, nodata);
 }
 

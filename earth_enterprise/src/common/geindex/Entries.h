@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +20,8 @@
 #ifndef COMMON_GEINDEX_ENTRIES_H__
 #define COMMON_GEINDEX_ENTRIES_H__
 
-#include <khTypes.h>
+#include <cstdint>
+
 #include "shared.h"
 
 class EndianReadBuffer;
@@ -32,7 +34,7 @@ class EndianWriteBuffer;
 // ***  Every entry must contain at least the following:
 // ***  - ExternalDataAddress dataAddress - This actually references the
 // ***    external data packet on disk.
-// ***  - uint32 version
+// ***  - std::uint32_t version
 // ***  - ReadKey class and a ReadMatches() function
 // ***  - If more than one entry can exist in a Quadnode, a WriteMatches()
 // ***    function must also exist.
@@ -45,14 +47,14 @@ namespace geindex {
 class IndexBundle;
 
 
-bool ShouldStoreSinglesSparsely(uint32 entrySize, uint16 numSlots);
+bool ShouldStoreSinglesSparsely(std::uint32_t entrySize, std::uint16_t numSlots);
 
 
 class ExternalDataAddress {
  public:
   inline ExternalDataAddress(void) : fileOffset(0), fileNum(0), size(0) { }
-  inline ExternalDataAddress(uint64 fileOffset_, uint32 fileNum_,
-                             uint32 size_) :
+  inline ExternalDataAddress(std::uint64_t fileOffset_, std::uint32_t fileNum_,
+                             std::uint32_t size_) :
       fileOffset(fileOffset_), fileNum(fileNum_), size(size_) { }
   inline operator bool(void) const { return size != 0; }
   inline bool operator==(const ExternalDataAddress &o) const {
@@ -66,13 +68,13 @@ class ExternalDataAddress {
 
   void Push(EndianWriteBuffer &buf) const;
   void Pull(EndianReadBuffer &buf);
-  static inline uint32 Size(void) {
-    return (sizeof(uint64) + sizeof(uint32) + sizeof(uint32));
+  static inline std::uint32_t Size(void) {
+    return (sizeof(std::uint64_t) + sizeof(std::uint32_t) + sizeof(std::uint32_t));
   }
 
-  uint64 fileOffset; // offset w/in the packetfile
-  uint32 fileNum;    // which packetfile in IndexBundle::Header::packetfiles
-  uint32 size;       // size of the block
+  std::uint64_t fileOffset; // offset w/in the packetfile
+  std::uint32_t fileNum;    // which packetfile in IndexBundle::Header::packetfiles
+  std::uint32_t size;       // size of the block
 };
 
 
@@ -92,8 +94,8 @@ class SimpleInsetEntry {
  public:
   class ReadKey {
    public:
-    uint32 version;
-    ReadKey(uint32 version_) : version(version_) { }
+    std::uint32_t version;
+    ReadKey(std::uint32_t version_) : version(version_) { }
   };
   inline bool ReadMatches(const ReadKey &key) {
     return (version == key.version);
@@ -101,20 +103,20 @@ class SimpleInsetEntry {
   inline bool WriteMatches(const SimpleInsetEntry &key) { return true; }
 
   SimpleInsetEntry(void) : dataAddress(), version(), insetId() { }
-  SimpleInsetEntry(ExternalDataAddress dataAddress_, uint32 version_,
-                      uint32 insetId_) :
+  SimpleInsetEntry(ExternalDataAddress dataAddress_, std::uint32_t version_,
+                      std::uint32_t insetId_) :
       dataAddress(dataAddress_), version(version_),
       insetId(insetId_)
   { }
   void Push(EndianWriteBuffer &buf) const;
-  void VersionedPull(EndianReadBuffer &buf, uint16 fileFormatVersion);
-  static inline uint32 VersionedSize(uint16) {
-    return (ExternalDataAddress::Size() + sizeof(uint32) + sizeof(uint32));
+  void VersionedPull(EndianReadBuffer &buf, std::uint16_t fileFormatVersion);
+  static inline std::uint32_t VersionedSize(std::uint16_t) {
+    return (ExternalDataAddress::Size() + sizeof(std::uint32_t) + sizeof(std::uint32_t));
   }
 
   ExternalDataAddress dataAddress;
-  uint32 version;
-  uint32 insetId;
+  std::uint32_t version;
+  std::uint32_t insetId;
 };
 
 // ****************************************************************************
@@ -141,20 +143,20 @@ class BlendEntry {
   }
 
   BlendEntry(void) : dataAddress(), version(), insetId() { }
-  BlendEntry(ExternalDataAddress dataAddress_, uint32 version_,
-             uint32 insetId_) :
+  BlendEntry(ExternalDataAddress dataAddress_, std::uint32_t version_,
+             std::uint32_t insetId_) :
       dataAddress(dataAddress_), version(version_),
       insetId(insetId_)
   { }
   void Push(EndianWriteBuffer &buf) const;
-  void VersionedPull(EndianReadBuffer &buf, uint16 fileFormatVersion);
-  static inline uint32 VersionedSize(uint16) {
-    return (ExternalDataAddress::Size() + sizeof(uint32) + sizeof(uint32));
+  void VersionedPull(EndianReadBuffer &buf, std::uint16_t fileFormatVersion);
+  static inline std::uint32_t VersionedSize(std::uint16_t) {
+    return (ExternalDataAddress::Size() + sizeof(std::uint32_t) + sizeof(std::uint32_t));
   }
 
   ExternalDataAddress dataAddress;
-  uint32 version;
-  uint32 insetId;
+  std::uint32_t version;
+  std::uint32_t insetId;
 };
 
 // ****************************************************************************
@@ -173,19 +175,19 @@ class ChannelledEntry {
   ChannelledEntry(void) : dataAddress(), version(),
                           channel() { }
   ChannelledEntry(ExternalDataAddress dataAddress_,
-                  uint32 version_, uint32 channel_) :
+                  std::uint32_t version_, std::uint32_t channel_) :
       dataAddress(dataAddress_), version(version_),
       channel(channel_) { }
   void Push(EndianWriteBuffer &buf) const;
-  void VersionedPull(EndianReadBuffer &buf, uint16 fileFormatVersion);
-  static inline uint32 VersionedSize(uint16) {
-    return (ExternalDataAddress::Size() + sizeof(uint32) + sizeof(uint32) +
-            sizeof(uint32));
+  void VersionedPull(EndianReadBuffer &buf, std::uint16_t fileFormatVersion);
+  static inline std::uint32_t VersionedSize(std::uint16_t) {
+    return (ExternalDataAddress::Size() + sizeof(std::uint32_t) + sizeof(std::uint32_t) +
+            sizeof(std::uint32_t));
   }
 
   ExternalDataAddress dataAddress;
-  uint32      version;
-  uint32      channel;
+  std::uint32_t      version;
+  std::uint32_t      channel;
 };
 
 
@@ -209,11 +211,11 @@ class TypedEntry {
 
   class ReadKey {
    public:
-    uint32   version;
-    uint32   channel;
+    std::uint32_t   version;
+    std::uint32_t   channel;
     TypeEnum type;
     bool     version_matters;
-    ReadKey(uint32 version_, uint32 channel_, TypeEnum type_,
+    ReadKey(std::uint32_t version_, std::uint32_t channel_, TypeEnum type_,
             bool version_matters_ = true) :
         version(version_), channel(channel_), type(type_),
         version_matters(version_matters_)
@@ -228,8 +230,8 @@ class TypedEntry {
   }
 
   TypedEntry(void) : dataAddress(), version(), channel(), type() { }
-  TypedEntry(ExternalDataAddress dataAddress_, uint32 version_,
-             uint32 channel_, TypeEnum type_) :
+  TypedEntry(ExternalDataAddress dataAddress_, std::uint32_t version_,
+             std::uint32_t channel_, TypeEnum type_) :
       dataAddress(dataAddress_), version(version_),
       channel(channel_), type(type_) { }
 
@@ -237,7 +239,7 @@ class TypedEntry {
   TypedEntry(const SimpleInsetEntry &o, TypeEnum type_) :
       dataAddress(o.dataAddress), version(o.version), channel(),
       type(type_) { }
-  TypedEntry(const BlendEntry &o, TypeEnum type_, uint32 channel_ = 0) :
+  TypedEntry(const BlendEntry &o, TypeEnum type_, std::uint32_t channel_ = 0) :
       dataAddress(o.dataAddress), version(o.version), channel(channel_),
       type(type_) { }
   TypedEntry(const ChannelledEntry &o, TypeEnum type_) :
@@ -245,16 +247,16 @@ class TypedEntry {
       type(type_) { }
 
   void Push(EndianWriteBuffer &buf) const;
-  void VersionedPull(EndianReadBuffer &buf, uint16 fileFormatVersion);
-  static inline uint32 VersionedSize(uint16) {
-    return (ExternalDataAddress::Size() + sizeof(uint32) + sizeof(uint32) +
-            sizeof(uint8));
+  void VersionedPull(EndianReadBuffer &buf, std::uint16_t fileFormatVersion);
+  static inline std::uint32_t VersionedSize(std::uint16_t) {
+    return (ExternalDataAddress::Size() + sizeof(std::uint32_t) + sizeof(std::uint32_t) +
+            sizeof(std::uint8_t));
   }
 
 
   ExternalDataAddress dataAddress;
-  uint32      version;
-  uint32      channel;
+  std::uint32_t      version;
+  std::uint32_t      channel;
   TypeEnum    type;
 };
 
@@ -274,8 +276,8 @@ class AllInfoEntry {
 
   AllInfoEntry(void) : dataAddress(), version(), channel(),
                        insetId(), type() { }
-  AllInfoEntry(ExternalDataAddress dataAddress_, uint32 version_,
-                     uint32 channel_, uint32 insetId_,
+  AllInfoEntry(ExternalDataAddress dataAddress_, std::uint32_t version_,
+                     std::uint32_t channel_, std::uint32_t insetId_,
                      TypedEntry::TypeEnum type_) :
       dataAddress(dataAddress_), version(version_),
       channel(channel_), insetId(insetId_), type(type_) { }
@@ -284,7 +286,7 @@ class AllInfoEntry {
       dataAddress(o.dataAddress), version(o.version), channel(),
       insetId(o.insetId), type(type_) { }
   AllInfoEntry(const BlendEntry &o, TypedEntry::TypeEnum type_,
-             uint32 channel_) :
+             std::uint32_t channel_) :
       dataAddress(o.dataAddress), version(o.version), channel(channel_),
       insetId(o.insetId), type(type_) { }
   AllInfoEntry(const ChannelledEntry &o, TypedEntry::TypeEnum type_) :
@@ -299,9 +301,9 @@ class AllInfoEntry {
   }
 
   ExternalDataAddress  dataAddress;
-  uint32               version;
-  uint32               channel;
-  uint32               insetId;
+  std::uint32_t               version;
+  std::uint32_t               channel;
+  std::uint32_t               insetId;
   TypedEntry::TypeEnum type;
 };
 
@@ -331,10 +333,10 @@ class LoadedSingleEntryBucket {
   LoadedSingleEntryBucket(const EntryBucketAddr &addr, IndexBundle &bundle,
                           EndianReadBuffer &tmpBuf);
 
-  uint16 CountSlots(void) const;
+  std::uint16_t CountSlots(void) const;
   void Put(BucketEntrySlotType slot, const Entry &newEntry);
   void Push(EndianWriteBuffer &buf) const;
-  void VersionedPull(EndianReadBuffer &buf, uint fileFormatVersion);
+  void VersionedPull(EndianReadBuffer &buf, unsigned int fileFormatVersion);
   inline const SlotStorageType &EntrySlot(BucketEntrySlotType index) const {
     assert(index < kEntrySlotsPerBucket);
     return entry_slots[index];
@@ -348,11 +350,11 @@ class LoadedSingleEntryBucket {
   SlotStorageType entry_slots[kEntrySlotsPerBucket];
 
  private:
-  void PushSparse(EndianWriteBuffer &buf, uint16 numSlots) const;
-  void PushFull(EndianWriteBuffer &buf, uint16 numSlots) const;
-  void PullSparse(EndianReadBuffer &buf, uint16 numSlots,
-                  uint fileFormatVersion);
-  void PullFull(EndianReadBuffer &buf, uint fileFormatVersion);
+  void PushSparse(EndianWriteBuffer &buf, std::uint16_t numSlots) const;
+  void PushFull(EndianWriteBuffer &buf, std::uint16_t numSlots) const;
+  void PullSparse(EndianReadBuffer &buf, std::uint16_t numSlots,
+                  unsigned int fileFormatVersion);
+  void PullFull(EndianReadBuffer &buf, unsigned int fileFormatVersion);
 };
 
 // ****************************************************************************
@@ -373,10 +375,10 @@ class LoadedMultipleEntryBucket {
   LoadedMultipleEntryBucket(const EntryBucketAddr &addr, IndexBundle &bundle,
                             EndianReadBuffer &tmpBuf);
 
-  uint16 CountSlots(void) const;
+  std::uint16_t CountSlots(void) const;
   void Put(BucketEntrySlotType slot, const Entry &newEntry);
   void Push(EndianWriteBuffer &buf) const;
-  void VersionedPull(EndianReadBuffer &buf, uint fileFormatVersion);
+  void VersionedPull(EndianReadBuffer &buf, unsigned int fileFormatVersion);
   inline const SlotStorageType &EntrySlot(BucketEntrySlotType index) const {
     assert(index < kEntrySlotsPerBucket);
     return entry_slots[index];
@@ -420,8 +422,8 @@ template <class TypedSlot, class Entry, class Helper>
 void PopulateTypedSlot(TypedSlot *typed_slot,
                        TypedEntry::TypeEnum type,
                        const Entry &entry, Helper *,
-                       uint32 /* ignored channelid */,
-                       uint32 /* ignored version */)
+                       std::uint32_t /* ignored channelid */,
+                       std::uint32_t /* ignored version */)
 {
   typedef typename TypedSlot::value_type TypedEntryType;
 
@@ -434,13 +436,13 @@ template <class TypedSlot, class Entry, class Helper>
 void PopulateTypedSlot(TypedSlot *typed_slot,
                        TypedEntry::TypeEnum type,
                        const std::vector<Entry> &entries, Helper *,
-                       uint32 /* ignored channelid */,
-                       uint32 /* ignored version */)
+                       std::uint32_t /* ignored channelid */,
+                       std::uint32_t /* ignored version */)
 {
   typedef typename TypedSlot::value_type TypedEntryType;
 
   typed_slot->clear();
-  for (uint i = 0; i < entries.size(); ++i) {
+  for (unsigned int i = 0; i < entries.size(); ++i) {
     typed_slot->push_back(TypedEntryType(entries[i], type));
   }
 }
@@ -450,13 +452,13 @@ template <class TypedSlot, class Helper>
 void PopulateTypedSlot(TypedSlot *typed_slot,
                        TypedEntry::TypeEnum type,
                        const std::vector<TypedEntry> &entries, Helper *,
-                       uint32 /* ignored channelid */,
-                       uint32 /* ignored version */)
+                       std::uint32_t /* ignored channelid */,
+                       std::uint32_t /* ignored version */)
 {
   typedef typename TypedSlot::value_type TypedEntryType;
 
   typed_slot->clear();
-  for (uint i = 0; i < entries.size(); ++i) {
+  for (unsigned int i = 0; i < entries.size(); ++i) {
     typed_slot->push_back(TypedEntryType(entries[i]));
   }
 }
@@ -468,18 +470,18 @@ template <class TypedSlot, class Helper>
 void PopulateTypedSlot(TypedSlot *typed_slot,
                        TypedEntry::TypeEnum type,
                        const std::vector<BlendEntry> &entries, Helper *helper,
-                       uint32 channel_id,
-                       uint32 version)
+                       std::uint32_t channel_id,
+                       std::uint32_t version)
 {
   typedef typename TypedSlot::value_type TypedEntryType;
 
   typed_slot->clear();
 
   // figure out which one we want
-  uint want = 0;
-  uint32 pos = 0;
-  for (uint i = 0; i < entries.size(); ++i) {
-    uint32 newpos = helper->GetPacketExtra(entries[i].dataAddress.fileNum);
+  unsigned int want = 0;
+  std::uint32_t pos = 0;
+  for (unsigned int i = 0; i < entries.size(); ++i) {
+    std::uint32_t newpos = helper->GetPacketExtra(entries[i].dataAddress.fileNum);
     if (newpos > pos) {
       pos = newpos;
       want = i;
@@ -507,13 +509,13 @@ void PopulateTypedSlot(TypedSlot *typed_slot,
 template <class Entry, class Helper>
 bool FindMatchingEntryInMultiSlot(const typename Entry::ReadKey &key,
                                   Entry *entryReturn,
-                                  const uint fileFormatVersion,
+                                  const unsigned int fileFormatVersion,
                                   EndianReadBuffer &buf,
-                                  uint16 entry_count,
+                                  std::uint16_t entry_count,
                                   Helper *)
 {
   // loop through entries in buffer looking for a match
-  for (uint16 j = 0; j < entry_count; ++j) {
+  for (std::uint16_t j = 0; j < entry_count; ++j) {
     entryReturn->VersionedPull(buf, fileFormatVersion);
     if (entryReturn->ReadMatches(key)) {
       return true;
@@ -526,20 +528,20 @@ bool FindMatchingEntryInMultiSlot(const typename Entry::ReadKey &key,
 template <class Helper>
 bool FindMatchingEntryInMultiSlot(const typename BlendEntry::ReadKey &key,
                                   BlendEntry *entryReturn,
-                                  const uint fileFormatVersion,
+                                  const unsigned int fileFormatVersion,
                                   EndianReadBuffer &buf,
-                                  uint16 entry_count,
+                                  std::uint16_t entry_count,
                                   Helper *helper)
 {
   BlendEntry tmp;
-  uint32 pos = 0; // pos are stored+1 in the ExtraData, so 0 is guaranteed to
+  std::uint32_t pos = 0; // pos are stored+1 in the ExtraData, so 0 is guaranteed to
                   // be smaller than even the inset on the bottom of the stack
 
   // loop through all entries in buffer looking for the one with the largest
   // stack position (stored in the index ExtraData by file number)
-  for (uint16 j = 0; j < entry_count; ++j) {
+  for (std::uint16_t j = 0; j < entry_count; ++j) {
     tmp.VersionedPull(buf, fileFormatVersion);
-    uint32 newpos = helper->GetPacketExtra(tmp.dataAddress.fileNum);
+    std::uint32_t newpos = helper->GetPacketExtra(tmp.dataAddress.fileNum);
     if (newpos > pos) {
       pos = newpos;
       *entryReturn = tmp;

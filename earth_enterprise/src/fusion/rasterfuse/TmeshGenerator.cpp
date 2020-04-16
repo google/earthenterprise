@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -52,10 +53,10 @@ const double NegativeElevationFactor = -pow(2, kNegativeElevationExponentBias);
 // ****************************************************************************
 void
 TmeshGenerator::Generate(float *srcSamples,
-                         const khSize<uint32> &srcSamplesSize,
-                         const khOffset<uint32> &wantOffset,
+                         const khSize<std::uint32_t> &srcSamplesSize,
+                         const khOffset<std::uint32_t> &wantOffset,
                          const khTileAddr &tmeshAddr,
-                         etArray<uchar> &compressed,
+                         etArray<unsigned char> &compressed,
                          const size_t reserve_size,
                          bool decimate,
                          double decimation_threshold
@@ -72,8 +73,8 @@ TmeshGenerator::Generate(float *srcSamples,
   // make one time. NOTE: This is separate from the fact that the server
   // sends clusters of tmesh tiles to the client.
   // These size variables represent the size of each quad.
-  const uint SizeX = (sampleTilespace.tileSize  / 2 + 1);
-  const uint SizeY = (sampleTilespace.tileSize / 2 + 1);
+  const unsigned int SizeX = (sampleTilespace.tileSize  / 2 + 1);
+  const unsigned int SizeY = (sampleTilespace.tileSize / 2 + 1);
   elev.resize(SizeX * SizeY);
 
   // Error thresholds for decimation - set these to 0 to skip decimation
@@ -89,8 +90,8 @@ TmeshGenerator::Generate(float *srcSamples,
   // calculate position of this quadnode WRT the larger heightmap tile.
   // xoff and yoff are in units of samples, and represent the offset
   // into the larger heightmap from the origin of this quadnode's region
-  int32 xoff = wantOffset.x();
-  int32 yoff = wantOffset.y();
+  std::int32_t xoff = wantOffset.x();
+  std::int32_t yoff = wantOffset.y();
 
 #ifdef DEBUG_GENERATE_TRAVERSAL
   notify(NFY_DEBUG, "yoff = %u, xoff = %u", yoff, xoff);
@@ -101,10 +102,10 @@ TmeshGenerator::Generate(float *srcSamples,
   double stepy = deg_per_pixel;
 
   // level wide pixel offset to tile
-  uint64 tilePixelOffsetX = uint64(tmeshAddr.col) *
-                            uint64(sampleTilespace.tileSize);
-  uint64 tilePixelOffsetY = uint64(tmeshAddr.row) *
-                            uint64(sampleTilespace.tileSize);
+  std::uint64_t tilePixelOffsetX = std::uint64_t(tmeshAddr.col) *
+                            std::uint64_t(sampleTilespace.tileSize);
+  std::uint64_t tilePixelOffsetY = std::uint64_t(tmeshAddr.row) *
+                            std::uint64_t(sampleTilespace.tileSize);
 
   // Loop to traverse each quad.
   // ** WARNING **: This quad order is different from the quad order used
@@ -116,14 +117,14 @@ TmeshGenerator::Generate(float *srcSamples,
   //   (quad==1)   ==>   my = 0, mx = 1
   //   (quad==2)   ==>   my = 1, mx = 1
   //   (quad==3)   ==>   my = 1, mx = 0
-  for (uint quad = 0; quad < 4; ++quad) {
-    uint my = quad / 2;
-    uint mx = ((quad + my) % 2);
+  for (unsigned int quad = 0; quad < 4; ++quad) {
+    unsigned int my = quad / 2;
+    unsigned int mx = ((quad + my) % 2);
 
-    uint quadOffX = mx * (SizeX-1);
-    uint quadOffY = my * (SizeY-1);
-    uint quadSampleX = xoff + quadOffX;
-    uint quadSampleY = yoff + quadOffY;
+    unsigned int quadOffX = mx * (SizeX-1);
+    unsigned int quadOffY = my * (SizeY-1);
+    unsigned int quadSampleX = xoff + quadOffX;
+    unsigned int quadSampleY = yoff + quadOffY;
 
 #ifdef DEBUG_GENERATE_TRAVERSAL
     notify(NFY_DEBUG, "    quad (rc) %u,%u; sample (rc) %u,%u; pos = %u",
@@ -140,11 +141,11 @@ TmeshGenerator::Generate(float *srcSamples,
 
     // ***** Generate the vertices *****
     int index = 0;
-    for (uint verty = 0; verty < SizeY; ++verty) {
-      for (uint vertx = 0; vertx < SizeX; ++vertx, ++index) {
-        uint sampley = quadSampleY + verty;
-        uint samplex = quadSampleX + vertx;
-        uint samplePos = (sampley * srcSamplesSize.width) + samplex;
+    for (unsigned int verty = 0; verty < SizeY; ++verty) {
+      for (unsigned int vertx = 0; vertx < SizeX; ++vertx, ++index) {
+        unsigned int sampley = quadSampleY + verty;
+        unsigned int samplex = quadSampleX + vertx;
+        unsigned int samplePos = (sampley * srcSamplesSize.width) + samplex;
         float height = srcSamples[samplePos];
 
         // convert height in meters to planet radii
@@ -216,8 +217,8 @@ TmeshGenerator::Generate(float *srcSamples,
     //
     // We traverse "one less" in each direction because each iteration
     // reaches "one more" up and right.
-    for (uint row = 0; row < SizeY - 1; ++row) {
-      for (uint col = 0; col < SizeX - 1; ++col) {
+    for (unsigned int row = 0; row < SizeY - 1; ++row) {
+      for (unsigned int col = 0; col < SizeX - 1; ++col) {
         int p1 = row * SizeX + col;
         int p2 = p1 + 1;
         int p4 = p1 + SizeX;

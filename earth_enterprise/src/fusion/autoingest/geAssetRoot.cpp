@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -39,7 +40,7 @@ const WantPerms special_dirs[] = {
     {".userdata",  0777},
     {".privatedb", 0700}
 };
-const uint num_special_dirs = sizeof(special_dirs)/sizeof(special_dirs[0]);
+const unsigned int num_special_dirs = sizeof(special_dirs)/sizeof(special_dirs[0]);
 
 std::string Dirname(const std::string& assetroot, SpecialDir dir) {
   return khComposePath(assetroot, special_dirs[dir].name_);
@@ -59,7 +60,7 @@ const WantPerms special_files[] = {
   {".privatedb/FusionUniqueId.xml", 0600},
   {".state/.active",                0644}
 };
-const uint num_special_files = sizeof(special_files)/sizeof(special_files[0]);
+const unsigned int num_special_files = sizeof(special_files)/sizeof(special_files[0]);
 
 std::string Filename(const std::string& assetroot, SpecialFile file) {
   return khComposePath(assetroot, special_files[file].name_);

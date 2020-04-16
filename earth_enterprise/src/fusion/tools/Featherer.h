@@ -33,16 +33,16 @@ class Featherer : public BoxFilterTiledImage {
   static const float kFeatherRatio;
 
   Featherer(GDALRasterBand* poBand, int block_w, int block_h,
-             int feather_radius, uchar border_value);
+             int feather_radius, unsigned char border_value);
   virtual ~Featherer() {}
 
-  virtual void LoadImageTile(int tile_x, int tile_y, uchar* image);
-  virtual void SaveFilteredTile(int tile_x, int tile_y, const uchar* image);
+  virtual void LoadImageTile(int tile_x, int tile_y, unsigned char* image);
+  virtual void SaveFilteredTile(int tile_x, int tile_y, const unsigned char* image);
 
   // Override boxfilter's standard Filter function. Never increase the alpha
   // value of a pixel: doing so could allow NoData values to be blended in,
   // causing terrain spikes for example.
-  virtual void Filter(int ksum, uchar *pixel) const;
+  virtual void Filter(int ksum, unsigned char *pixel) const;
 
  private:
   GDALRasterBand *poBand_;
@@ -52,16 +52,16 @@ class Featherer : public BoxFilterTiledImage {
 
 class InMemoryFeatherer : public BoxFilterTiledImage {
  public:
-  InMemoryFeatherer(uchar *image, int image_width, int image_height,
-                     int feather_radius, uchar border_value);
+  InMemoryFeatherer(unsigned char *image, int image_width, int image_height,
+                     int feather_radius, unsigned char border_value);
   virtual ~InMemoryFeatherer() {}
 
-  virtual void LoadImageTile(int tile_x, int tile_y, uchar *image);
-  virtual void SaveFilteredTile(int tile_x, int tile_y, const uchar *image);
-  virtual void Filter(int ksum, uchar *pixel) const;
+  virtual void LoadImageTile(int tile_x, int tile_y, unsigned char *image);
+  virtual void SaveFilteredTile(int tile_x, int tile_y, const unsigned char *image);
+  virtual void Filter(int ksum, unsigned char *pixel) const;
 
  private:
-  uchar *image_;
+  unsigned char *image_;
   float normalize_factor_;  // for sum of box area pixels, normalizes to 0-1
 };
 

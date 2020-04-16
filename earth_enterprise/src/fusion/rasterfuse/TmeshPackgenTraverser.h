@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +45,7 @@ class ExtraPixelsImpl : public khRefCounter {
   ExtraHeightmapRow bottomPixels;
 
   // determine amount of memory used by ExtraPixelsImpl
-  uint64 GetSize() {
+  std::uint64_t GetSize() {
     return sizeof(leftPixels)
     + sizeof(bottomPixels);
   }
@@ -58,7 +59,7 @@ typedef khRefGuard<ExtraPixelsImpl> ExtraPixels;
 class TmeshPrepItem {
  public:
   ExpandedHeightmapTile heightmapTile;
-  khOffset<uint32>      heightmapTileOrigin;  // in targetTilespace
+  khOffset<std::uint32_t>      heightmapTileOrigin;  // in targetTilespace
   khLevelCoverage       workCoverage;         // in targetTilespace
 
   inline TmeshPrepItem(void) { }
@@ -73,13 +74,13 @@ class TmeshWorkItem {
   class Piece {
    public:
     khTileAddr targetAddr;
-    etArray<uchar> compressed;
+    etArray<unsigned char> compressed;
 
     Piece(void) : targetAddr(0, 0, 0), compressed() { }
   };
   const khTilespaceFlat &sampleTilespace;
   khDeletingVector<Piece> pieces;
-  uint numPiecesUsed;
+  unsigned int numPiecesUsed;
   TmeshGenerator generator;
   bool decimate_;
   double decimation_threshold_;
@@ -107,7 +108,7 @@ class TmeshPackgenBaseConfig {
 
 
 class TmeshPackgenTraverser : public PackgenTraverser<TmeshPackgenBaseConfig> {
-  typedef khCache<uint64, ExtraPixels> ExtraPixelCache;
+  typedef khCache<std::uint64_t, ExtraPixels> ExtraPixelCache;
 
  public:
   TmeshPackgenTraverser(const PacketLevelConfig &config,
@@ -119,7 +120,7 @@ class TmeshPackgenTraverser : public PackgenTraverser<TmeshPackgenBaseConfig> {
   virtual TmeshPrepItem* NewPrepItem(void);
   virtual TmeshWorkItem* NewWorkItem(void);
 
-  void Traverse(uint numcpus);
+  void Traverse(unsigned int numcpus);
 
  protected:
   typedef PackgenTraverser<TmeshPackgenBaseConfig> BaseClass;

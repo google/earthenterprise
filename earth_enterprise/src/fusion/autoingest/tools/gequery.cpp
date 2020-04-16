@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -62,8 +63,8 @@ void usage(const char *prog, const char *msg = 0, ...) {
 typedef std::set<std::string> SeenSet;
 static
 void DisplayVersionDependencies(const AssetVersion &version,
-                                uint indent,
-                                uint maxdepth,
+                                unsigned int indent,
+                                unsigned int maxdepth,
                                 SeenSet &seen,
                                 const std::string &prefix);
 static
@@ -88,7 +89,7 @@ int main(int argc, char *argv[]) {
     bool showlog      = false;
     bool taillog      = false;
     bool didsomething = false;
-    uint maxdepth     = uint(-1);
+    unsigned int maxdepth     = uint(-1);
     bool showblockers = false;
     bool rasterprojprog = false;
     bool reloadconfig = false;
@@ -131,7 +132,7 @@ int main(int argc, char *argv[]) {
     if (!lrc.empty()) {
       std::vector<std::string> parts;
       split(lrc, ",", back_inserter(parts));
-      uint level, row, col;
+      unsigned int level, row, col;
       if (parts.size() == 3) {
         FromString(parts[0], level);
         FromString(parts[1], row);
@@ -146,7 +147,7 @@ int main(int argc, char *argv[]) {
 
     if (!quadpath.empty()) {
       QuadtreePath qpath(quadpath);
-      uint32 level, row, col;
+      std::uint32_t level, row, col;
       qpath.GetLevelRowCol(&level, &row, &col);
       printf("%s = %u,%u,%u\n", qpath.AsString().c_str(), level, row, col);
       exit(0);
@@ -265,8 +266,8 @@ int main(int argc, char *argv[]) {
 
 static
 void DisplayVersionDependencies(const AssetVersion &version,
-                                uint indent,
-                                uint maxdepth,
+                                unsigned int indent,
+                                unsigned int maxdepth,
                                 SeenSet &seen,
                                 const std::string &prefix) {
   if (indent > maxdepth) return;

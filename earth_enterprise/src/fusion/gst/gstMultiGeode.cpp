@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -56,12 +57,12 @@ void gstGeodeCollection::ChangePrimType(gstPrimType new_type,
     // of polyline.
     gstGeodeHandle new_gh = gstGeodeImpl::Create(new_type);
     gstGeode *new_g = static_cast<gstGeode*>(&*(new_gh));
-    for (uint p = 0; p < NumParts(); ++p) {
+    for (unsigned int p = 0; p < NumParts(); ++p) {
       const gstGeodeHandle &geodeh = GetGeode(p);
-      for (uint pp = 0; pp < geodeh->NumParts(); ++pp) {
+      for (unsigned int pp = 0; pp < geodeh->NumParts(); ++pp) {
         const gstGeode *geode = static_cast<const gstGeode*>(&(*geodeh));
         new_g->AddPart(geode->VertexCount(pp));
-        for (uint v = 0; v < geode->VertexCount(pp); ++v) {
+        for (unsigned int v = 0; v < geode->VertexCount(pp); ++v) {
           new_g->AddVertex(geode->GetVertex(pp, v));
         }
       }
@@ -72,11 +73,11 @@ void gstGeodeCollection::ChangePrimType(gstPrimType new_type,
     }
   } else {
     if (gstPolygon == new_type) {
-      prim_type_ = static_cast<int8>(gstMultiPolygon);
+      prim_type_ = static_cast<std::int8_t>(gstMultiPolygon);
     } else if (gstPolygon25D == new_type) {
-      prim_type_ = static_cast<int8>(gstMultiPolygon25D);
+      prim_type_ = static_cast<std::int8_t>(gstMultiPolygon25D);
     } else if (gstPolygon3D == new_type) {
-      prim_type_ = static_cast<int8>(gstMultiPolygon3D);
+      prim_type_ = static_cast<std::int8_t>(gstMultiPolygon3D);
     } else {
       notify(NFY_FATAL,
              "Invalid feature \"to-\" primary type in conversion.");
@@ -111,12 +112,12 @@ bool gstGeodeCollection::IsDegenerate() const {
   return true;
 }
 
-uint gstGeodeCollection::NumParts() const {
+unsigned int gstGeodeCollection::NumParts() const {
   return geodes_.size();
 }
 
-uint gstGeodeCollection::TotalVertexCount() const {
-  uint total = 0;
+unsigned int gstGeodeCollection::TotalVertexCount() const {
+  unsigned int total = 0;
   for (GeodeList::const_iterator it = geodes_.begin();
        it != geodes_.end(); ++it) {
     total += (*it)->TotalVertexCount();
@@ -129,7 +130,7 @@ void gstGeodeCollection::Clear() {
   geodes_.clear();
 }
 
-gstBBox gstGeodeCollection::BoundingBoxOfPart(uint part) const {
+gstBBox gstGeodeCollection::BoundingBoxOfPart(unsigned int part) const {
   assert(part < NumParts());
   // First parameter of BoundingBoxOfPart() is 0 (index of polygon's outer
   // cycle);
@@ -158,7 +159,7 @@ bool gstGeodeCollection::Equals(const gstGeodeHandle &bh,
 }
 
 // Computes center of mass and area for specified part.
-int gstGeodeCollection::Centroid(uint part,
+int gstGeodeCollection::Centroid(unsigned int part,
                                  double *x, double *y, double *area) const {
   assert(part < NumParts());
   // First parameter of Centroid() is 0 (index of polygon's outer cycle);
@@ -166,7 +167,7 @@ int gstGeodeCollection::Centroid(uint part,
 }
 
 gstVertex gstGeodeCollection::GetPointInPolygon(
-    uint part, const gstVertex &centroid) const {
+    unsigned int part, const gstVertex &centroid) const {
   assert(part < NumParts());
   // First parameter of GetPointInPolygon() is 0 (index of polygon's outer
   // cycle);
@@ -185,7 +186,7 @@ gstVertex gstGeodeCollection::Center() const {
   gstVertex centroid_of_largest_part;
 
   // Calculate largest part (polygon) in multi-geode.
-  for (uint p = 0; p < NumParts(); ++p) {
+  for (unsigned int p = 0; p < NumParts(); ++p) {
     // First parameter of Centroid() is 0 (index of polygon's outer cycle);
     if (geodes_[p]->Centroid(0, &x, &y, &area) == 0) {
       if (fabs(area) > largest_area) {
@@ -208,7 +209,7 @@ gstVertex gstGeodeCollection::Center() const {
 }
 
 
-uint gstGeodeCollection::Flatten(GeodeList* pieces) const {
+unsigned int gstGeodeCollection::Flatten(GeodeList* pieces) const {
   for (GeodeList::const_iterator it = geodes_.begin();
        it != geodes_.end(); ++it) {
     (*it)->Flatten(pieces);
@@ -256,7 +257,7 @@ bool gstGeodeCollection::Intersect(const gstBBox& b, uint* part) const {
     *part = 0;
 
   bool is_intersecting = false;
-  uint cur_part = 0;
+  unsigned int cur_part = 0;
   for (GeodeList::const_iterator it = geodes_.begin();
        it != geodes_.end(); ++it, ++cur_part) {
     if ((*it)->Intersect(b, NULL)) {
@@ -270,8 +271,8 @@ bool gstGeodeCollection::Intersect(const gstBBox& b, uint* part) const {
   return is_intersecting;
 }
 
-uint32 gstGeodeCollection::RawSize() const {
-  uint32 size = sizeof(RecHeader);
+ std::uint32_t gstGeodeCollection::RawSize() const {
+  std::uint32_t size = sizeof(RecHeader);
 
   for (GeodeList::const_iterator it = geodes_.begin();
            it != geodes_.end(); ++it) {

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,11 +39,11 @@ class Reader {
   class FileInfo {
    public:
     std::string filename;
-    uint64 beginOffset;
-    uint64 endOffset;   // one beyond
+    std::uint64_t beginOffset;
+    std::uint64_t endOffset;   // one beyond
 
     FileInfo(const std::string fname,
-             uint64 boff, uint64 eoff)
+             std::uint64_t boff, std::uint64_t eoff)
         : filename(fname), beginOffset(boff), endOffset(eoff) { }
   };
   std::vector<FileInfo> files;
@@ -71,13 +72,13 @@ class Reader {
   void Close(void) const;
 
   bool FindTile(const khTileAddr &addr,
-                uint32 &fileIndex, uint64 &fileOffset,
-                uint32 &dataLen) const;
+                std::uint32_t &fileIndex, std::uint64_t &fileOffset,
+                std::uint32_t &dataLen) const;
 
   inline bool FindTile(const khTileAddr& addr,
-                       std::string &filename, uint64 &fileOffset,
-                       uint32 &dataLen) const {
-    uint32 fileIndex = 0;
+                       std::string &filename, std::uint64_t &fileOffset,
+                       std::uint32_t &dataLen) const {
+    std::uint32_t fileIndex = 0;
     if (FindTile(addr, fileIndex, fileOffset, dataLen)) {
       filename = files[fileIndex].filename;
       return true;
@@ -87,14 +88,14 @@ class Reader {
   }
 
   // low level read - used if you already have the result from FindTile
-  uint32 ReadBlock(const std::string &filename,
-                   uint64 fileOffset, uint32 dataLen,
-                   uchar *buf) const;
+  std::uint32_t ReadBlock(const std::string &filename,
+                   std::uint64_t fileOffset, std::uint32_t dataLen,
+                   unsigned char *buf) const;
 
   // Find & read tile into buf. buf will grow if necessary to hold the
   // results. Will return 0 if unable to load the tile.
-  uint32 FindReadBlock(const khTileAddr &addr,
-                       std::vector<uchar> &buf) const;
+  std::uint32_t FindReadBlock(const khTileAddr &addr,
+                       std::vector<unsigned char> &buf) const;
 
   inline void PopulateCoverage(khInsetCoverage &cov) const {
     presenceMask.PopulateCoverage(cov);

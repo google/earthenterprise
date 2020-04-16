@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,18 +32,18 @@ namespace geindex {
 
 class BundleFreePool {
  public:
-  BundleFreePool(uint32 minBlockSize = 32);
+  BundleFreePool(std::uint32_t minBlockSize = 32);
 
   void Add(const BundleAddr &addr);
-  BundleAddr Get(uint32 size);
-  inline uint64 TotalFreeSpace(void) const { return totalFreeSpace; }
-  inline uint64 TotalWastedSpace(void) const { return wastedSpace; }
+  BundleAddr Get(std::uint32_t size);
+  inline std::uint64_t TotalFreeSpace(void) const { return totalFreeSpace; }
+  inline std::uint64_t TotalWastedSpace(void) const { return wastedSpace; }
 
  private:
-  const uint32 kMinBlockSize;
+  const std::uint32_t kMinBlockSize;
 
-  uint64 totalFreeSpace;
-  uint64 wastedSpace;
+  std::uint64_t totalFreeSpace;
+  std::uint64_t wastedSpace;
 };
 
 
@@ -60,7 +61,7 @@ class IndexBundleWriter : public IndexBundle {
   IndexBundleWriter(geFilePool &filePool, const std::string &fname,
                     bool deltaMode, const std::string &desc,
                     bool slotsAreSingle,
-                    uint32 num_write_buffers);
+                    std::uint32_t num_write_buffers);
   ~IndexBundleWriter(void);
 
   // caller's responsibility to make sure CRC is already added as necessary
@@ -93,7 +94,7 @@ class IndexBundleWriter : public IndexBundle {
 
  private:
   void WriteAndReturn(const BundleAddr &addr, CachedBuffer buf);
-  BundleAddr GetNewAddr(const BundleAddr &preAddr, uint32 newSize);
+  BundleAddr GetNewAddr(const BundleAddr &preAddr, std::uint32_t newSize);
 
   FileBundleWriter &bundleWriter;
   BundleFreePool freePool;

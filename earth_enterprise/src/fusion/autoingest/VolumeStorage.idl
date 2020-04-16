@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,10 +13,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <cstdint>
 #include <string>
 #include <map>
 #include <vector>
-#include <khTypes.h>
 
 class VolumeDefList
 {
@@ -26,7 +27,7 @@ class VolumeDefList
     std::string localpath;
     // Note: The reserveSpace is 100 Mb which is the minimum amount of disk
     // space that will be left over once the asset is built.
-    uint64      reserveSpace = (uint64)100000000;  // 100MB
+    std::uint64_t      reserveSpace = (std::uint64_t)100000000;  // 100MB
     bool        isTmp = false;
   };
 
@@ -61,28 +62,28 @@ class VolumeReservations
 {
   class Item {
     std::string path;
-    uint64      size;
+    std::uint64_t      size;
   };
   std::string       name;
-  uint32            serial;
+  std::uint32_t            serial;
   std::vector<Item> items;
 
 #pragma LoadAndSave
 #pragma StrLoadAndSave
 #hquote
-  VolumeReservations(const std::string &n, uint32 s) :
+  VolumeReservations(const std::string &n, std::uint32_t s) :
       name(n), serial(s) { }
-  VolumeReservations(const std::string &n, uint32 s,
-                     const std::map<std::string, uint64> &mapitems) :
+  VolumeReservations(const std::string &n, std::uint32_t s,
+                     const std::map<std::string, std::uint64_t> &mapitems) :
       name(n), serial(s)
   {
-    for (std::map<std::string, uint64>::const_iterator e =
+    for (std::map<std::string, std::uint64_t>::const_iterator e =
            mapitems.begin();
          e != mapitems.end(); ++e) {
       items.push_back(Item(e->first, e->second));
     }
   }
-  void FillMap(std::map<std::string, uint64> &mapitems) {
+  void FillMap(std::map<std::string, std::uint64_t> &mapitems) {
     for (std::vector<Item>::const_iterator i = items.begin();
          i != items.end(); ++i) {
       mapitems[i->path] = i->size;
@@ -94,7 +95,7 @@ class VolumeReservations
 class VolumeAvailMsg
 {
   std::string volname;
-  uint32      serial;
-  uint64      avail;
+  std::uint32_t      serial;
+  std::uint64_t      avail;
 #pragma StrLoadAndSave
 }

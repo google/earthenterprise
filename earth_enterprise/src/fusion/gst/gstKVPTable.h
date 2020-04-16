@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,19 +25,19 @@
 class gstKVPTable : public gstTable {
  public:
   struct FileHeader {
-    uint32 magic;
-    uint32 version;
-    uint32 numRecords;
-    int32 numFields;
-    int32 fieldDefsSize;
-    int32 filler;
-    int64 indexOffset;
+    std::uint32_t magic;
+    std::uint32_t version;
+    std::uint32_t numRecords;
+    std::int32_t numFields;
+    std::int32_t fieldDefsSize;
+    std::int32_t filler;
+    std::int64_t indexOffset;
   };
 
   struct RecordPos {
-    int64 offset;
-    uint32 size;
-    uint32 filler;
+    std::int64_t offset;
+    std::uint32_t size;
+    std::uint32_t filler;
   };
 
   gstKVPTable(const char*);
@@ -45,7 +46,7 @@ class gstKVPTable : public gstTable {
   gstStatus Open(gstReadMode);
   gstStatus Close();
 
-  gstRecordHandle Row(uint32 r);
+  gstRecordHandle Row(std::uint32_t r);
 
   gstStatus AddRecord(const gstRecordHandle rec);
 

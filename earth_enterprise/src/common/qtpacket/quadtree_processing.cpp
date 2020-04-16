@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,15 +34,15 @@ namespace qtpacket {
 // DatedTileInfo is a local struct for passing around the basic info
 // related to a DatedImagery tile.
 struct DatedTileInfo {
-  int32 date_int_;  // Year-Month-Day.
-  int32 time_int_;  // Milliseconds after midnight.
-  int32 epoch_;
-  int32 provider_;
+  std::int32_t date_int_;  // Year-Month-Day.
+  std::int32_t time_int_;  // Milliseconds after midnight.
+  std::int32_t epoch_;
+  std::int32_t provider_;
 
   DatedTileInfo() {}
 
   // Initialization given date and time.
-  DatedTileInfo(int32 date, int32 time, int32 epoch, int32 provider)
+  DatedTileInfo(std::int32_t date, std::int32_t time, std::int32_t epoch, std::int32_t provider)
       : date_int_(date),
         time_int_(time),
         epoch_(epoch),
@@ -49,7 +50,7 @@ struct DatedTileInfo {
   }
 
   // Initialization given a time string.
-  DatedTileInfo(const std::string& date, int32 epoch, int32 provider)
+  DatedTileInfo(const std::string& date, std::int32_t epoch, std::int32_t provider)
       : date_int_(keyhole::kUnknownJpegCommentDate.AsYearMonthDayKey()),
         time_int_(0),
         epoch_(epoch),
@@ -70,13 +71,13 @@ struct DatedTileInfo {
 // Add a DatedImagery info to a Format2 quadtree node.
 static void AddDatesToNode(const std::map<std::string, DatedTileInfo>&
                            dated_tiles,
-                           int32 epoch,
+                           std::int32_t epoch,
                            const std::string& shared_tile_date,
                            keyhole::QuadtreeNode* node);
 
 // InsertChannel - insert a new channel entry in ascending channel order
-void InsertChannel(uint16 channel,
-                   uint16 version,
+void InsertChannel(std::uint16_t channel,
+                   std::uint16_t version,
                    KhQuadTreeQuantum16 *node) {
   assert(node);
   for (size_t i = 0; i < node->channel_type.size(); ++i) {
@@ -132,8 +133,8 @@ void ComputeQuadtreePacketFormat1(
 
       // Iterate over channels, recording the highest version number
       // for each one.
-      std::vector<uint16> &channel_type = node->channel_type;
-      std::vector<uint16> &channel_version = node->channel_version;
+      std::vector<std::uint16_t> &channel_type = node->channel_type;
+      std::vector<std::uint16_t> &channel_version = node->channel_version;
       int image_data_provider = 0;
       int terrain_data_provider = 0;
       for (size_t j = 0; j < contents.size(); ++j) {
@@ -141,14 +142,14 @@ void ComputeQuadtreePacketFormat1(
         switch (item.layer_id()) {
           case QuadtreePacketItem::kLayerImagery:
             node->image_version = std::max(node->image_version,
-                                           static_cast<uint16>(item.version()));
+                                           static_cast<std::uint16_t>(item.version()));
             image_data_provider = item.copyright();
             break;
 
           case QuadtreePacketItem::kLayerTerrain:
             node->terrain_version =
               std::max(node->terrain_version,
-                       static_cast<uint16>(item.version()));
+                       static_cast<std::uint16_t>(item.version()));
             terrain_data_provider = item.copyright();
             break;
 
@@ -166,7 +167,7 @@ void ComputeQuadtreePacketFormat1(
                   == item.layer_id() - QuadtreePacketItem::kLayerVectorMin) {
                 channel_version[k] =
                   std::max(channel_version[k],
-                           static_cast<uint16>(item.version()));
+                           static_cast<std::uint16_t>(item.version()));
                 found = true;
                 break;
               }
@@ -289,8 +290,8 @@ void ComputeQuadtreePacketFormat2(
       // Also add each layer to the node as we walk through it and collect
       // up our flags for the types of data in this node.
       google::protobuf::uint32 node_flags = 0;
-      std::vector<uint16> channel_types;
-      std::vector<uint16> channel_versions;
+      std::vector<std::uint16_t> channel_types;
+      std::vector<std::uint16_t> channel_versions;
       // Collect info on the dated imagery.
       std::map<std::string, DatedTileInfo> dated_tiles;
       std::string shared_tile_date;  // date of main imagery layer.
@@ -353,13 +354,13 @@ void ComputeQuadtreePacketFormat2(
               bool found = false;
               // The layer channel type ids in the packets start at 3 for this
               // purpose (seems like trouble but that's what it is).
-              uint16 item_channel_id =
+              std::uint16_t item_channel_id =
                 item.layer_id() - QuadtreePacketItem::kLayerVectorMin;
               for (size_t k = 0; k < channel_types.size(); ++k)
                 if (channel_types[k] == item_channel_id) {
                   channel_versions[k] =
                     std::max(channel_versions[k],
-                             static_cast<uint16>(item.version()));
+                             static_cast<std::uint16_t>(item.version()));
                   found = true;
                   break;
                 }
@@ -417,7 +418,7 @@ void ComputeQuadtreePacketFormat2(
 }
 
 void AddDatesToNode(const std::map<std::string, DatedTileInfo>& dated_tiles,
-                    int32 epoch,
+                    std::int32_t epoch,
                     const std::string& shared_tile_date,
                     keyhole::QuadtreeNode* node) {
   // Since the current imagery layer is part of the dated_tiles

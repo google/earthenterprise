@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +31,7 @@
 // ***  efficient code inside the tight extract loop.
 // ***    These calls will be completely inlined.
 // ****************************************************************************
-template <class T, uint numcomp>
+template <class T, unsigned int numcomp>
 class PixelInterleaver { };
 
 // specialized for numcomp == 1
@@ -38,7 +39,7 @@ template <class T>
 class PixelInterleaver<T, 1> {
  public:
   inline static void Interleave(T *destbuf, const T *const src[],
-                                uint32 pos) {
+                                std::uint32_t pos) {
     destbuf[0] = src[0][pos];
   }
 };
@@ -48,7 +49,7 @@ template <class T>
 class PixelInterleaver<T, 3> {
  public:
   inline static void Interleave(T *destbuf, const T *const src[],
-                                uint32 pos) {
+                                std::uint32_t pos) {
     destbuf[0] = src[0][pos];
     destbuf[1] = src[1][pos];
     destbuf[2] = src[2][pos];
@@ -60,7 +61,7 @@ template <class T>
 class PixelInterleaver<T, 4> {
  public:
   inline static void Interleave(T *destbuf, const T *const src[],
-                                uint32 pos) {
+                                std::uint32_t pos) {
     destbuf[0] = src[0][pos];
     destbuf[1] = src[1][pos];
     destbuf[2] = src[2][pos];
@@ -68,7 +69,7 @@ class PixelInterleaver<T, 4> {
   }
 };
 
-template <class T, class U, uint numcomp>
+template <class T, class U, unsigned int numcomp>
 class PixelSeparator { };
 
 // specialized for numcomp == 1
@@ -76,7 +77,7 @@ template <class T, class U>
 class PixelSeparator<T, U, 1> {
  public:
   inline static void Separate(T *const dest[], const U *srcbuf,
-                              uint32 pos) {
+                              std::uint32_t pos) {
     dest[0][pos] = ClampRange<T>(srcbuf[0]);
   }
 };
@@ -86,7 +87,7 @@ template <class T, class U>
 class PixelSeparator<T, U, 3> {
  public:
   inline static void Separate(T *const dest[], const U *srcbuf,
-                              uint32 pos) {
+                              std::uint32_t pos) {
     dest[0][pos] = ClampRange<T>(srcbuf[0]);
     dest[1][pos] = ClampRange<T>(srcbuf[1]);
     dest[2][pos] = ClampRange<T>(srcbuf[2]);
@@ -98,7 +99,7 @@ template <class T, class U>
 class PixelSeparator<T, U, 4> {
  public:
   inline static void Separate(T *const dest[], const U *srcbuf,
-                              uint32 pos) {
+                              std::uint32_t pos) {
     dest[0][pos] = ClampRange<T>(srcbuf[0]);
     dest[1][pos] = ClampRange<T>(srcbuf[1]);
     dest[2][pos] = ClampRange<T>(srcbuf[2]);
@@ -117,22 +118,22 @@ class PixelSeparator<T, U, 4> {
 template <class SrcTile>
 inline void
 ExtractAndInterleave(const SrcTile &src,
-                     uint beginRow, uint beginCol,
-                     const khSize<uint> &outTileSize,
+                     unsigned int beginRow, unsigned int beginCol,
+                     const khSize< unsigned int>  &outTileSize,
                      TileOrientation outOri,
                      typename SrcTile::PixelType* outbuf,
-                     uint32 outbuf_step = SrcTile::NumComp) {
+                     std::uint32_t outbuf_step = SrcTile::NumComp) {
   typedef PixelInterleaver<typename SrcTile::PixelType, SrcTile::NumComp>
     Interleaver;
 
   switch (outOri) {
     case StartUpperLeft:
-      for (uint32 sy = beginRow + outTileSize.height - 1; sy >= beginRow;
+      for (std::uint32_t sy = beginRow + outTileSize.height - 1; sy >= beginRow;
            --sy) {
-        uint32 rowoff = sy * SrcTile::TileWidth;
-        for (uint32 sx = beginCol; sx < beginCol + outTileSize.width;
+        std::uint32_t rowoff = sy * SrcTile::TileWidth;
+        for (std::uint32_t sx = beginCol; sx < beginCol + outTileSize.width;
              ++sx) {
-          uint32 coloff = rowoff + sx;
+          std::uint32_t coloff = rowoff + sx;
           Interleaver::Interleave(outbuf, src.bufs, coloff);
           outbuf += outbuf_step;
         }
@@ -141,12 +142,12 @@ ExtractAndInterleave(const SrcTile &src,
       }
       break;
     case StartLowerLeft:
-      for (uint32 sy = beginRow ; sy < beginRow + outTileSize.height;
+      for (std::uint32_t sy = beginRow ; sy < beginRow + outTileSize.height;
            ++sy) {
-        uint32 rowoff = sy * SrcTile::TileWidth;
-        for (uint32 sx = beginCol; sx < beginCol + outTileSize.width;
+        std::uint32_t rowoff = sy * SrcTile::TileWidth;
+        for (std::uint32_t sx = beginCol; sx < beginCol + outTileSize.width;
              ++sx) {
-          uint32 coloff = rowoff + sx;
+          std::uint32_t coloff = rowoff + sx;
           Interleaver::Interleave(outbuf, src.bufs, coloff);
           outbuf += outbuf_step;
         }
@@ -173,10 +174,10 @@ SeparateComponents(DestTile &dest,
 
   switch (srcOri) {
     case StartUpperLeft:
-      for (uint32 sy = DestTile::TileHeight - 1; sy >= 0; --sy) {
-        uint32 rowoff = sy * DestTile::TileWidth;
-        for (uint32 sx = 0; sx < DestTile::TileWidth; ++sx) {
-          uint32 coloff = rowoff + sx;
+      for (std::uint32_t sy = DestTile::TileHeight - 1; sy >= 0; --sy) {
+        std::uint32_t rowoff = sy * DestTile::TileWidth;
+        for (std::uint32_t sx = 0; sx < DestTile::TileWidth; ++sx) {
+          std::uint32_t coloff = rowoff + sx;
           Separator::Separate(dest.bufs, srcbuf, coloff);
           srcbuf += DestTile::NumComp;
         }
@@ -185,10 +186,10 @@ SeparateComponents(DestTile &dest,
       }
       break;
     case StartLowerLeft:
-      for (uint32 sy = 0 ; sy < DestTile::TileHeight; ++sy) {
-        uint32 rowoff = sy * DestTile::TileWidth;
-        for (uint32 sx = 0; sx < DestTile::TileWidth; sx++) {
-          uint32 coloff = rowoff + sx;
+      for (std::uint32_t sy = 0 ; sy < DestTile::TileHeight; ++sy) {
+        std::uint32_t rowoff = sy * DestTile::TileWidth;
+        for (std::uint32_t sx = 0; sx < DestTile::TileWidth; sx++) {
+          std::uint32_t coloff = rowoff + sx;
           Separator::Separate(dest.bufs, srcbuf, coloff);
           srcbuf += DestTile::NumComp;
         }
@@ -204,28 +205,28 @@ SeparateComponents(DestTile &dest, const void *srcbuf,
                    khTypes::StorageEnum srcType) {
   switch (srcType) {
     case khTypes::UInt8:
-      SeparateComponents(dest, (const uint8 *)srcbuf, srcOri);
+      SeparateComponents(dest, (const std::uint8_t *)srcbuf, srcOri);
       break;
     case khTypes::Int8:
-      SeparateComponents(dest, (const int8 *)srcbuf, srcOri);
+      SeparateComponents(dest, (const std::int8_t *)srcbuf, srcOri);
       break;
     case khTypes::UInt16:
-      SeparateComponents(dest, (const uint16 *)srcbuf, srcOri);
+      SeparateComponents(dest, (const std::uint16_t *)srcbuf, srcOri);
       break;
     case khTypes::Int16:
-      SeparateComponents(dest, (const int16 *)srcbuf, srcOri);
+      SeparateComponents(dest, (const std::int16_t *)srcbuf, srcOri);
       break;
     case khTypes::UInt32:
-      SeparateComponents(dest, (const uint32 *)srcbuf, srcOri);
+      SeparateComponents(dest, (const std::uint32_t *)srcbuf, srcOri);
       break;
     case khTypes::Int32:
-      SeparateComponents(dest, (const int32 *)srcbuf, srcOri);
+      SeparateComponents(dest, (const std::int32_t *)srcbuf, srcOri);
       break;
     case khTypes::UInt64:
-      SeparateComponents(dest, (const uint64 *)srcbuf, srcOri);
+      SeparateComponents(dest, (const std::uint64_t *)srcbuf, srcOri);
       break;
     case khTypes::Int64:
-      SeparateComponents(dest, (const int64 *)srcbuf, srcOri);
+      SeparateComponents(dest, (const std::int64_t *)srcbuf, srcOri);
       break;
     case khTypes::Float32:
       SeparateComponents(dest, (const float32 *)srcbuf, srcOri);

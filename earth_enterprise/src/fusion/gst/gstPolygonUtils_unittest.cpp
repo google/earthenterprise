@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -260,7 +261,7 @@ void CheckCrossings(
                                                           &crossings);
     ASSERT_EQ(expected_crossings.size(), crossings.size()) << message;
 
-    for (uint i = 0; i < crossings.size(); ++i) {
+    for (unsigned int i = 0; i < crossings.size(); ++i) {
       ASSERT_EQ(expected_crossings[i], crossings[i]) << message;
     }
 
@@ -280,7 +281,7 @@ void CheckCrossings(
     // Test VerticalOverlap using transposed vertices.
     // transpose the coordinates
     std::vector<gstVertex> vertex_list_transposed(vertex_list.size());
-    for (uint i = 0; i < vertex_list.size(); ++i) {
+    for (unsigned int i = 0; i < vertex_list.size(); ++i) {
       const gstVertex& vertex = vertex_list[i];
       vertex_list_transposed[i] = gstVertex(vertex.y, vertex.x);
     }
@@ -363,12 +364,12 @@ TEST_F(gstPolygonUtilsTest, TestComputeCrossings) {
   }
   { // Sawtooth : we'll create a sawtooth with three teeth.
     std::vector<gstVertex> vertex_list;
-    uint tooth_count = 3;
+    unsigned int tooth_count = 3;
     double tooth_width = 4.0;
     vertex_list.push_back(gstVertex(0.0, 0.0));
     double x_coordinate = tooth_count * tooth_width;
     vertex_list.push_back(gstVertex(tooth_count * tooth_width, 0.0));
-    for (uint i = 0; i < tooth_count; ++i) {
+    for (unsigned int i = 0; i < tooth_count; ++i) {
       x_coordinate -= tooth_width/2.0;
       vertex_list.push_back(gstVertex(x_coordinate, 2.0));  // peak
       x_coordinate -= tooth_width/2.0;
@@ -377,7 +378,7 @@ TEST_F(gstPolygonUtilsTest, TestComputeCrossings) {
     vertex_list.push_back(vertex_list[0]);
 
     std::vector<gstPolygonUtils::PolygonCrossing> expected_crossings;
-    for (uint i = 0; i < tooth_count; ++i) {
+    for (unsigned int i = 0; i < tooth_count; ++i) {
       double crossing_coordinate = i * tooth_width + tooth_width/4.0;
       expected_crossings.push_back(
          gstPolygonUtils::PolygonCrossing(crossing_coordinate,
@@ -507,15 +508,15 @@ void CheckPolygonConvexityBasic(bool expected_convexity_result,
                                 std::vector<gstVertex>& vertex_list,
                                 const std::string& message) {
   // Run the test with a different starting index for the geode vertices.
-  for (uint start_index = 0; start_index < vertex_list.size(); ++start_index) {
+  for (unsigned int start_index = 0; start_index < vertex_list.size(); ++start_index) {
     std::vector<gstVertex> vertex_list_rotated;
     // Add vertices starting with the current start_index.
-    for (uint i = start_index; i < vertex_list.size(); ++i) {
+    for (unsigned int i = start_index; i < vertex_list.size(); ++i) {
       vertex_list_rotated.push_back(vertex_list[i]);
     }
     // Continue from the beginning.
     // If append_first_vertex_to_end, then we repeat the start index'th vertex.
-    for (uint i = 0; i <= start_index; ++i) {
+    for (unsigned int i = 0; i <= start_index; ++i) {
       vertex_list_rotated.push_back(vertex_list[i]);
     }
 

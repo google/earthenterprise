@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -50,14 +51,14 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
 
 void PopulateFilenumTranslations(
     geindex::UnifiedWriter &writer,
-    std::map<std::string, uint32> &unified_filemap,
-    std::vector<uint32> &filenums,
+    std::map<std::string, std::uint32_t> &unified_filemap,
+    std::vector<std::uint32_t> &filenums,
     khProgressMeter &progress_meter,
     const geindex::IndexBundleReader &index_bundle_reader);
 void PopulatePacketfileFilenumTranslations(
     geindex::UnifiedWriter &writer,
-    std::map<std::string, uint32> &unified_filemap,
-    std::vector<uint32> &filenums,
+    std::map<std::string, std::uint32_t> &unified_filemap,
+    std::vector<std::uint32_t> &filenums,
     khProgressMeter &progress_meter,
     const std::string &packetfile);
 
@@ -123,7 +124,7 @@ int main(int argc, char **argv) {
 
     // pre-populate this for delta index operations
     // leave empty for new indexes
-    std::map<std::string, uint32> unified_filemap;
+    std::map<std::string, std::uint32_t> unified_filemap;
 
     // progress meter - will need to be modified a bit when
     // incremental updates are implemented (TODO: mikegoss)
@@ -131,14 +132,14 @@ int main(int argc, char **argv) {
 
     // will be filled in with the mapping from old file numbers to new
     // file numbers
-    std::vector<std::vector<uint32> > translated_filenums;
+    std::vector<std::vector<std::uint32_t> > translated_filenums;
     translated_filenums.resize(config.indexes_.size());
-    std::map<std::string, uint32> dated_imagery_channels_map;
+    std::map<std::string, std::uint32_t> dated_imagery_channels_map;
 
     typedef geindex::AdaptingTraverserBase<geindex::UnifiedBucket>::MergeEntry MergeEntryType;
     typedef Merge<MergeEntryType> MergeType;
     MergeType merger("UnifiedIndex Merger");
-    uint source_id = 0;
+    unsigned int source_id = 0;
     for (std::vector<geindexgen::UnifiedConfig::Entry>::const_iterator
            entry = config.indexes_.begin(); entry != config.indexes_.end();
          ++entry, ++source_id) {
@@ -328,8 +329,8 @@ int main(int argc, char **argv) {
     merger.Start();
     do {
       const MergeEntryType &slot = merger.Current();
-      uint source_id = merger.CurrentSourceId();
-      for (uint i = 0; i < slot.size(); ++i) {
+      unsigned int source_id = merger.CurrentSourceId();
+      for (unsigned int i = 0; i < slot.size(); ++i) {
         geindex::TypedEntry entry = slot[i];
         entry.dataAddress.fileNum =
           translated_filenums[source_id][entry.dataAddress.fileNum];
@@ -349,7 +350,7 @@ int main(int argc, char **argv) {
       notify(NFY_DEBUG, "Writing Dated Imagery channels to:\n  %s",
              dated_channels_file_name.c_str());
       FILE* fp  = fopen(dated_channels_file_name.c_str(), "w");
-      std::map<std::string, uint32>::const_iterator iter =
+      std::map<std::string, std::uint32_t>::const_iterator iter =
         dated_imagery_channels_map.begin();
       for (; iter != dated_imagery_channels_map.end(); ++iter) {
         fprintf(fp, "%s %d\n", iter->first.c_str(), iter->second);
@@ -375,17 +376,17 @@ int main(int argc, char **argv) {
 
 void PopulateFilenumTranslations(
     geindex::UnifiedWriter &writer,
-    std::map<std::string, uint32> &unified_filemap,
-    std::vector<uint32> &filenums,
+    std::map<std::string, std::uint32_t> &unified_filemap,
+    std::vector<std::uint32_t> &filenums,
     khProgressMeter &progress_meter,
     const geindex::IndexBundleReader &index_bundle_reader)
 {
   filenums.resize(index_bundle_reader.PacketFileCount());
-  for (uint i = 0; i < index_bundle_reader.PacketFileCount(); ++i) {
+  for (unsigned int i = 0; i < index_bundle_reader.PacketFileCount(); ++i) {
     std::string packetfile = index_bundle_reader.GetPacketFile(i);
     // skip empty ones - results of delta indexing
     if (!packetfile.empty()) {
-      std::map<std::string, uint32>::const_iterator found =
+      std::map<std::string, std::uint32_t>::const_iterator found =
         unified_filemap.find(packetfile);
       if (found != unified_filemap.end()) {
         filenums[i] = found->second;
@@ -403,13 +404,13 @@ void PopulateFilenumTranslations(
 
 void PopulatePacketfileFilenumTranslations(
     geindex::UnifiedWriter &writer,
-    std::map<std::string, uint32> &unified_filemap,
-    std::vector<uint32> &filenums,
+    std::map<std::string, std::uint32_t> &unified_filemap,
+    std::vector<std::uint32_t> &filenums,
     khProgressMeter &progress_meter,
     const std::string &packetfile)
 {
   filenums.resize(1);
-  std::map<std::string, uint32>::const_iterator found =
+  std::map<std::string, std::uint32_t>::const_iterator found =
     unified_filemap.find(packetfile);
   if (found != unified_filemap.end()) {
     filenums[0] = found->second;

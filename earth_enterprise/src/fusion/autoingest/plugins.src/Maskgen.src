@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -38,7 +39,7 @@ MaskgenAssetVersionImplD::DoSubmitTask(void)
 
   // sizeEstimate - we use --maxsize 16000 so estimate w/ 18000
   // just to be safe
-  uint64 sizeEstimate = 18000 * 18000 * 1 * sizeof(char);
+  std::uint64_t sizeEstimate = 18000 * 18000 * 1 * sizeof(char);
   task.AddOutput(WorkingFileRef("mask.tif"),
                  sizeEstimate); // size estimate
 

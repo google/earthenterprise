@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,8 +39,8 @@
 // ****************************************************************************
 class VectorDbrootContext : public ProtoDbrootContext {
  public:
-  typedef std::map<QString, uint> GroupMap;
-  typedef std::map<QString, uint>::const_iterator GroupMapConstIterator;
+  typedef std::map<QString,  unsigned int>  GroupMap;
+  typedef std::map<QString,  unsigned int> ::const_iterator GroupMapConstIterator;
   typedef std::map<IconReference, int> IconWidthMap;
 
  private:
@@ -57,7 +58,7 @@ class VectorDbrootContext : public ProtoDbrootContext {
  public:
   DBRootGenConfig       config_;
   GroupMap              groupMap;
-  std::set<uint>        used_layer_ids_;
+  std::set< unsigned int>         used_layer_ids_;
   mutable IconWidthMap  icon_width_map_;
 };
 

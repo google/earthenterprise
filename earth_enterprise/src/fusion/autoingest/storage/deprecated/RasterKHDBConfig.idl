@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,21 +13,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <cstdint>
 #include <string>
 #include <vector>
-#include <khTypes.h>
 #requiresgetheapusage
 
 class FuseVersion {
   std::string fuseAsset;
-  uint version;
+  unsigned int version;
 
 #pragma GenerateOperatorLessThan
 #pragma GenerateIsUpToDate
 };
 class RasterKHDBConfig {
   std::string dbname;
-  IsUpToDateIgnore uint indexVersion;
+  IsUpToDateIgnore unsigned int indexVersion;
   std::vector<FuseVersion> fusevers;
 #pragma GenerateIsUpToDate
 };

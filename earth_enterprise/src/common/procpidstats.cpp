@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -189,14 +190,14 @@ void ProcPidStats::LoadStats() {
 
   int buffer_count = 0;
   char buffer[256];
-  uint value_count = static_cast<uint>(POLICY) + 2; // Note: should be +1 but
+  unsigned int value_count = static_cast< unsigned int> (POLICY) + 2; // Note: should be +1 but
   // it turns out there's 42 fields in Ubuntu even though only 41 are documented.
   values_.reserve(value_count);
   while(true) {
-    char c = fgetc(fp);
+    int c = fgetc(fp);
     bool done = (c == EOF);
 
-    if (c == ' ' || done) { // End current value
+    if (static_cast<char>(c) == ' ' || done) { // End current value
       buffer[buffer_count] = 0;
       std::string buffer_str(buffer);
       if (!buffer_str.empty()) {
@@ -205,7 +206,7 @@ void ProcPidStats::LoadStats() {
       }
       buffer_count = 0;
     } else {
-      buffer[buffer_count] = c;
+      buffer[buffer_count] = static_cast<char>(c);
       buffer_count++;
     }
     // Stop when end of file reached.
@@ -235,7 +236,7 @@ void ProcPidStats::LoadStats() {
 
 // Return the statistic for the specified key.
 std::string ProcPidStats::GetStat(Keys key) const {
-  return values_[static_cast<uint>(key)];
+  return values_[static_cast< unsigned int> (key)];
 }
 
 // Return the statistic for the specified key.
@@ -243,7 +244,7 @@ std::string ProcPidStats::GetStat(Keys key) const {
 // string.
 long ProcPidStats::GetIntegerStat(Keys key) const {
   assert(key != TCOMM);
-  const std::string& string_value = values_[static_cast<uint>(key)];
+  const std::string& string_value = values_[static_cast< unsigned int> (key)];
   long value = strtol(string_value.c_str(), NULL, 10);
   return value;
 }

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -35,8 +36,8 @@ const int WRITEBUFFERSIZE = 8192;
 const std::string gstKMLFormat::ZKMLFILE = "doc.kml";
 const std::string gstKMLFormat::TMPDIR = khTmpDirPath();
 
-const uint kMinKMLPolylineVertices = 2;
-const uint kMinKMLPolygonCycleVertices = 4;   // first vertex == last vertex;
+const unsigned int kMinKMLPolylineVertices = 2;
+const unsigned int kMinKMLPolygonCycleVertices = 4;   // first vertex == last vertex;
 
 gstKMLFormat::gstKMLFormat(const char *n)
     : gstFormat(n),
@@ -88,17 +89,17 @@ void gstKMLFormat::GetElementsByTagName(khxml::DOMNode* parent,
 //  }
 
 void gstKMLFormat::ParseKml(khxml::DOMNode* root) {
-  const uint kNameIdx = 0;
-  const uint kDescIdx = 1;
-  const uint kLookatIdx = 2;
+  const unsigned int kNameIdx = 0;
+  const unsigned int kDescIdx = 1;
+  const unsigned int kLookatIdx = 2;
   khDOMElemList placemarkList[3];
   gstKmlGeomType tags[3] = {kKmlPoint, kKmlLineString, kKmlPolygon};
   GetElementsByTagName(root, "Point", placemarkList[0]);
   GetElementsByTagName(root, "LineString", placemarkList[1]);
   GetElementsByTagName(root, "Polygon", placemarkList[2]);
 
-  uint max_size = 0;
-  for (uint p = 0; p < 3; p++) {
+  unsigned int max_size = 0;
+  for (unsigned int p = 0; p < 3; p++) {
     khDOMElemList& placemarks = placemarkList[p];
     gstKmlGeomType type = tags[p];
 
@@ -108,7 +109,7 @@ void gstKMLFormat::ParseKml(khxml::DOMNode* root) {
       type_ = type;
     }
 
-    for (uint i = 0; i < placemarks.size(); i++) {
+    for (unsigned int i = 0; i < placemarks.size(); i++) {
       gstGeodeHandle geode;
       gstRecordHandle record = header_->NewRecord();
       ExtractFeature(type, placemarks[i], geode);
@@ -128,12 +129,12 @@ void gstKMLFormat::ParseKml(khxml::DOMNode* root) {
         }
         if (khxml::DOMElement* el_lookAt
             = GetFirstNamedChild(parent, "LookAt")) {
-          const uint kTagsSize = 5;
+          const unsigned int kTagsSize = 5;
           const QString tags[kTagsSize] = {"longitude", "latitude",
                                      "range", "tilt", "heading"};
           QString lookat;
           QString delimeter = "";
-          for (uint j = 0; j < kTagsSize; ++j) {
+          for (unsigned int j = 0; j < kTagsSize; ++j) {
             if (khxml::DOMElement* el_tag
                 = GetFirstNamedChild(el_lookAt, tags[j])) {
               QString tag_data;
@@ -282,14 +283,14 @@ bool gstKMLFormat::ExtractCoordinates(khxml::DOMElement* elem,
       std::vector<std::string> xyz_tokens;
       TokenizeString(xyz_str, xyz_tokens, " \n\t");
       verts.reserve(xyz_tokens.size());
-      for (uint i = 0; i < xyz_tokens.size(); i++) {
+      for (unsigned int i = 0; i < xyz_tokens.size(); i++) {
         gstVertex v;
         std::vector<std::string> xyz;
         TokenizeString(xyz_tokens[i], xyz, ",");
         if (xyz.size() > 1) {
-          const uint kXIdx = 0;
-          const uint kYIdx = 1;
-          const uint kZIdx = 2;
+          const unsigned int kXIdx = 0;
+          const unsigned int kYIdx = 1;
+          const unsigned int kZIdx = 2;
           char *end_ptr;
           v.x = ::strtod(xyz[kXIdx].c_str(), &end_ptr);
           v.y = ::strtod(xyz[kYIdx].c_str(), &end_ptr);
@@ -360,7 +361,7 @@ void gstKMLFormat::AddPoint(khxml::DOMElement* elem,
 
   gstGeode *geode = static_cast<gstGeode*>(&(*geodeh));
 
-  for (uint i = 0; i < verts.size(); i++) {
+  for (unsigned int i = 0; i < verts.size(); i++) {
     // NOTE: Each part of point feature contains exactly one point.
     // See gstGeode::ToRaw(). So we add part here.
     // TODO: refactor - use one part for all points?!
@@ -388,7 +389,7 @@ void gstKMLFormat::AddLineString(khxml::DOMElement* elem,
   gstGeode *geode = static_cast<gstGeode*>(&(*geodeh));
   geode->AddPart(verts.size());
 
-  for (uint i = 0; i < verts.size(); i++) {
+  for (unsigned int i = 0; i < verts.size(); i++) {
     geode->AddVertex(verts[i]);
   }
 }
@@ -410,7 +411,7 @@ void gstKMLFormat::AddPolygon(khxml::DOMElement* elem,
       if (geodeh && (!geodeh->IsEmpty())) {
         // Get inner boundaries.
         khDOMElemList inners = GetChildrenByTagName(elem, "innerBoundaryIs");
-        for (uint i = 0; i < inners.size(); i++) {
+        for (unsigned int i = 0; i < inners.size(); i++) {
           if (khxml::DOMElement* linearRing
               = GetFirstNamedChild(inners[i], "LinearRing")) {
             gstVertexVector verts;
@@ -440,7 +441,7 @@ void gstKMLFormat::AddOuterBoundary(const gstVertexVector& verts,
 
   // The <coordinates> in KML polygon must be specified in counterclockwise
   // order.
-  for (uint i = 0; i < verts.size(); i++) {
+  for (unsigned int i = 0; i < verts.size(); i++) {
     geode->AddVertex(verts[i]);
   }
 }
@@ -464,7 +465,7 @@ void gstKMLFormat::AddInnerBoundary(const gstVertexVector& verts,
   }
 }
 
-gstGeodeHandle gstKMLFormat::GetFeatureImpl(uint32 layer, uint32 fidx) {
+gstGeodeHandle gstKMLFormat::GetFeatureImpl(std::uint32_t layer, std::uint32_t fidx) {
   // should be checked by gstSource before calling me
   assert(layer < NumLayers());
   assert(0 == layer);
@@ -473,7 +474,7 @@ gstGeodeHandle gstKMLFormat::GetFeatureImpl(uint32 layer, uint32 fidx) {
   return geodes_[fidx]->Duplicate();
 }
 
-gstRecordHandle gstKMLFormat::GetAttributeImpl(uint32 layer, uint32 fidx) {
+gstRecordHandle gstKMLFormat::GetAttributeImpl(std::uint32_t layer, std::uint32_t fidx) {
   // should be checked by gstSource before calling me
   assert(layer < NumLayers());
   assert(0 == layer);

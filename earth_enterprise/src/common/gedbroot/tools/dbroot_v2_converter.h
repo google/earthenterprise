@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -31,19 +32,19 @@ class DbRootV2Converter {
   virtual ~DbRootV2Converter();
 
   // Fills internal DbRootV2 proto from contents in ETA format.
-  bool ParseETADbRoot(const std::string& contents, const int32 epoch);
+  bool ParseETADbRoot(const std::string& contents, const std::int32_t epoch);
 
  private:
   void AddTranslationTable();
 
   // Adds string in map to translation table, or returns existing Id for string.
-  int32 BuildTranslatedStringId(const std::string& str);
+  std::int32_t BuildTranslatedStringId(const std::string& str);
 
   // Utility function that converts a string into a StringIdOrValue proto.
   void AddStringToProto(const std::string& str,
                         dbroot::StringIdOrValueProto* proto);
 
-  dbroot::NestedFeatureProto* NewLayer(int32 channel_id,
+  dbroot::NestedFeatureProto* NewLayer(std::int32_t channel_id,
                                        const std::string& layer_name,
                                        const std::string& parent_name);
 
@@ -51,7 +52,7 @@ class DbRootV2Converter {
   void ParseETANestedFeatures(const EtaDocument& eta_doc);
   void ParseETAChannelLODs(const EtaDocument& eta_doc);
 
-  dbroot::NestedFeatureProto* GetNestedFeatureById(int32 channel_id);
+  dbroot::NestedFeatureProto* GetNestedFeatureById(std::int32_t channel_id);
   void MaybeAddRequirements(const std::string& required_vram,
                             const std::string& required_version,
                             const std::string& probability,
@@ -62,7 +63,7 @@ class DbRootV2Converter {
   geProtoDbroot *const dbroot_v2_proto_;
 
   // Map that holds all translated string entries.
-  typedef std::tr1::unordered_map<std::string, uint32> StringToIdMap;
+  typedef std::tr1::unordered_map<std::string, std::uint32_t> StringToIdMap;
   StringToIdMap string_entries_;
 
   // Map that associates a name (not stored in proto bufs any more) to a layer.
@@ -75,7 +76,7 @@ class DbRootV2Converter {
   IdLayerMap id_layer_map_;       // All layers with an id.
 
   // Counter we increment to assign new ids to each new string.
-  uint32 last_id_;
+  std::uint32_t last_id_;
 };
 
 }  // namespace keyhole

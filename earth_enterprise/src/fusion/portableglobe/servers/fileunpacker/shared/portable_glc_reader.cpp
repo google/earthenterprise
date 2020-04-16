@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,7 +24,6 @@
 #include <stdio.h>
 #include <iostream>  // NOLINT(readability/streams)
 #include <string>
-#include "./khTypes.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -88,7 +88,7 @@ bool PortableGlcReader::IsOpen() const {
  * Reads data into string buffer. Resizes the string first.
  */
 bool PortableGlcReader::Read(
-    std::string* buffer, uint64 offset, uint64 size) const {
+    std::string* buffer, std::uint64_t offset, std::uint64_t size) const {
   buffer->resize(size);
   return ReadData(&(*buffer)[0], offset, size);
 }
@@ -98,7 +98,7 @@ bool PortableGlcReader::Read(
  * Not thread safe.
  */
 bool PortableGlcReader::ReadData(
-    void* buffer, uint64 offset, uint64 size) const {
+    void* buffer, std::uint64_t offset, std::uint64_t size) const {
   if (!glc_file_) {
     return false;
   }
@@ -116,7 +116,7 @@ bool PortableGlcReader::ReadData(
  * Returns the size of the file or 0 if there is a problem with
  * the file.
  */
-uint64 PortableGlcReader::Size() const {
+ std::uint64_t PortableGlcReader::Size() const {
   return glc_file_size_;
 }
 

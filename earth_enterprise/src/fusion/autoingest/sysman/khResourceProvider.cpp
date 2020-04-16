@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -58,7 +59,7 @@ khResourceProvider theResourceProvider;
 // ***  FindJobBy* routines
 // ****************************************************************************
 khResourceProvider::JobIter
-khResourceProvider::FindJobById(uint32 jobid)
+khResourceProvider::FindJobById(std::uint32_t jobid)
 {
   return std::find_if(jobs.begin(), jobs.end(),
                       mem_var_pred_ref<std::equal_to>(&Job::jobid, jobid));
@@ -91,7 +92,7 @@ khResourceProvider::SignalLoop(void)
 
   // kill all running jobs
   // give the processes 2 tries (2 sec each) before killing w/ SIGKILL
-  uint numtries = 0;
+  unsigned int numtries = 0;
   while (jobs.size()) {
     ++numtries;
     bool dokill = numtries > 2;
@@ -134,12 +135,12 @@ khResourceProvider::Run(void)
 
   if (getenv("KH_NFY_LEVEL") == NULL)
   {
-       uint32 logLevel = systemrc.logLevel;
+       std::uint32_t logLevel = systemrc.logLevel;
        notify(NFY_NOTICE,"system log level: %s",
          khNotifyLevelToString(static_cast<khNotifyLevel>(logLevel)).c_str());
        setNotifyLevel(static_cast<khNotifyLevel>(logLevel));
   }
-  uint32 numCPUs = systemrc.maxjobs;
+  std::uint32_t numCPUs = systemrc.maxjobs;
   PERF_CONF_LOGGING( "rprovider_config_numcpus", "numcpus", numCPUs  );
   notify(NFY_WARN, "khResourceProvider: systemrc.maxjobs =  %d",  numCPUs  );
   // start the SignalLoop thread - listens for SIGINT & SIGTERM
@@ -389,7 +390,7 @@ khResourceProvider::PruneLoop(void)
 // ***  ProgressLoop
 // ****************************************************************************
 void
-khResourceProvider::SendProgress(uint32 jobid, double progress,
+khResourceProvider::SendProgress(std::uint32_t jobid, double progress,
                                  time_t progressTime) {
   khLockGuard lock(mutex);
   JobIter job = FindJobById(jobid);
@@ -408,7 +409,7 @@ khResourceProvider::SendProgress(uint32 jobid, double progress,
 
 #if 0
 void
-khResourceProvider::ReadProgress(int readfd, uint32 jobid)
+khResourceProvider::ReadProgress(int readfd, std::uint32_t jobid)
 {
   double progress = 0.0;
 
@@ -450,7 +451,7 @@ khResourceProvider::CheckVolumeAvailLoop(void)
       const VolumeReservations &volres = c->second;
       const VolumeDefList::VolumeDef* voldef =
         theVolumeManager.GetVolumeDef(volname);
-      uint64 avail = 0;
+      std::uint64_t avail = 0;
 
       if (voldef) {
         // calculate filesystem free space (minus reserve)
@@ -461,7 +462,7 @@ khResourceProvider::CheckVolumeAvailLoop(void)
         for (std::vector<VolumeReservations::Item>::const_iterator res =
                volres.items.begin();
              res != volres.items.end(); ++res) {
-          uint64 ressize = res->size;
+          std::uint64_t ressize = res->size;
 
           // don't bother to calculate the used size if the
           // ressize wasn't set
@@ -469,7 +470,7 @@ khResourceProvider::CheckVolumeAvailLoop(void)
 #if 0
             std::string respath =
               voldef->localpath + "/" + res->path;
-            uint64 used = khGetUsedSpace(respath);
+            std::uint64_t used = khGetUsedSpace(respath);
             ressize -= std::min(ressize, used);
 #endif
           }
@@ -500,8 +501,8 @@ khResourceProvider::StartJob(const StartJobMsg &start)
   jobs.push_back(Job(start.jobid));
 
   // start the job thread
-  uint cmdTries = std::max(MiscConfig::Instance().TriesPerCommand, uint(1)); // Have to try at least once
-  uint sleepBetweenTriesSec = MiscConfig::Instance().SleepBetweenCommandTriesSec;
+  unsigned int cmdTries = std::max(MiscConfig::Instance().TriesPerCommand, uint(1)); // Have to try at least once
+  unsigned int sleepBetweenTriesSec = MiscConfig::Instance().SleepBetweenCommandTriesSec;
   jobThreads->run
     (khFunctor<void>(std::mem_fun(&khResourceProvider::JobLoop),
                      this, start, cmdTries, sleepBetweenTriesSec));
@@ -620,9 +621,9 @@ khResourceProvider::ExecCmdline(JobIter job,
 }
 
 void
-khResourceProvider::JobLoop(StartJobMsg start, const uint cmdTries, const uint sleepBetweenTriesSec)
+khResourceProvider::JobLoop(StartJobMsg start, const unsigned int cmdTries, const unsigned int sleepBetweenTriesSec)
 {
-  const uint32 jobid = start.jobid;
+  const std::uint32_t jobid = start.jobid;
   time_t endtime = 0;
   bool success = false;
   bool logTotalTime = false;
@@ -635,7 +636,7 @@ khResourceProvider::JobLoop(StartJobMsg start, const uint cmdTries, const uint s
     return;
   }
 
-  for (uint cmdnum = 0; cmdnum < start.commands.size(); ++cmdnum) {
+  for (unsigned int cmdnum = 0; cmdnum < start.commands.size(); ++cmdnum) {
     // Write out the overall time if we run more than one command
     logTotalTime = (cmdnum > 0);
 
@@ -649,7 +650,7 @@ khResourceProvider::JobLoop(StartJobMsg start, const uint cmdTries, const uint s
     }
 
     success = false;
-    for (uint tries = 0; tries < cmdTries && !success; ++tries) {
+    for (unsigned int tries = 0; tries < cmdTries && !success; ++tries) {
       if (tries > 0) {
         // Write out the overall time if we run a command more than once.
         logTotalTime = true;
@@ -685,7 +686,7 @@ khResourceProvider::JobLoop(StartJobMsg start, const uint cmdTries, const uint s
 bool
 khResourceProvider::RunCmd(
     JobIter & job,
-    uint32 jobid,
+    std::uint32_t jobid,
     const std::vector<std::string> & command,
     time_t cmdtime,
     time_t & endtime,
@@ -794,7 +795,7 @@ khResourceProvider::LogCmdResults(
 
   fprintf(job->logfile, "ENDTIME: %s\n",
           GetFormattedTimeString(endtime).c_str());
-  uint32 elapsed = endtime - cmdtime;
+  std::uint32_t elapsed = endtime - cmdtime;
   fprintf(job->logfile, "ELAPSEDTIME: %s\n",
           GetFormattedElapsedTimeString(elapsed).c_str());
   if (success) {
@@ -807,14 +808,14 @@ khResourceProvider::LogCmdResults(
 }
 
 void
-khResourceProvider::LogRetry(JobIter job, uint tries, uint totalTries, uint sleepBetweenTries) {
+khResourceProvider::LogRetry(JobIter job, unsigned int tries, unsigned int totalTries, unsigned int sleepBetweenTries) {
   fprintf(job->logfile, "\nRETRYING FAILED COMMAND after %d seconds, try %d of %d\n",
           sleepBetweenTries, tries + 1, totalTries);
   fflush(job->logfile);
 }
 
 void
-khResourceProvider::LogTotalTime(JobIter job, uint32 elapsed) {
+khResourceProvider::LogTotalTime(JobIter job, std::uint32_t elapsed) {
   fprintf(job->logfile, "\nTOTAL ELAPSEDTIME: %s\n",
           GetFormattedElapsedTimeString(elapsed).c_str());
 }
@@ -869,7 +870,7 @@ namespace {
 bool
 khRenameToUnique(const std::string &oldname, std::string &retname)
 {
-  static uint counter = 0;
+  static unsigned int counter = 0;
   char buf[100];
   snprintf(buf, sizeof(buf), ".%d.%d.%u",
            static_cast<int>(time(0)), static_cast<int>(khPid()), ++counter);
@@ -965,7 +966,7 @@ khResourceProvider::CleanJobsAndVolumes(bool sigkill)
   // the mutex must be locked
   assert(!mutex.trylock());
 
-  uint i = 0;
+  unsigned int i = 0;
   while (i < jobs.size()) {
     Job *j = &jobs[i];
     if (j->pid > 0) {

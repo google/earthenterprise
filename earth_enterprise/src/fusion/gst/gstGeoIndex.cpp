@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,7 +31,7 @@ gstGeoIndexHandle gstGeoIndexImpl::Load(const std::string &select_file,
                                         const gstSharedSource &source,
                                         const khTilespace &tilespace,
                                         const double oversize_factor,
-                                        const uint target_level) {
+                                        const unsigned int target_level) {
   return khRefGuardFromNew(new gstGeoIndexImpl(select_file, source, tilespace,
                                                oversize_factor, target_level));
 }
@@ -69,7 +70,7 @@ gstGeoIndexImpl::gstGeoIndexImpl(const std::string &select_file,
                                  const gstSharedSource &source,
                                  const khTilespace &tilespace,
                                  const double oversize_factor,
-                                 const uint target_level)
+                                 const unsigned int target_level)
     : tilespace_(tilespace),
       oversize_factor_(oversize_factor),
       grid_(),
@@ -112,7 +113,7 @@ void gstGeoIndexImpl::Insert(int feature_id, const gstBBox& bounding_box) {
 }
 
 // Each insert adds a single feature index and it's corresponding bounding box.
-void gstGeoIndexImpl::InsertIndex(uint idx) {
+void gstGeoIndexImpl::InsertIndex(unsigned int idx) {
   assert(box_list_);
   box_index_list_.push_back(idx);
   bounding_box_.Grow((*box_list_)[idx].bounding_box);
@@ -129,10 +130,10 @@ void gstGeoIndexImpl::Finalize(void) {
     // pick a new size for the grid based on how many objects
     // figure that the shapes are perfectly distributed geographically
     // then we would put 100 features in each bucket
-    uint32 size = static_cast<uint32>(sqrt(box_index_list_.size()) * 0.1);
-    uint64 targetTotal = size * size;
-    uint64 minTotal = 100;
-    uint64 maxTotal = 1000000;
+    std::uint32_t size = static_cast<std::uint32_t>(sqrt(box_index_list_.size()) * 0.1);
+    std::uint64_t targetTotal = size * size;
+    std::uint64_t minTotal = 100;
+    std::uint64_t maxTotal = 1000000;
 
     // now find the largest level that has fewer tiles than our max
     khExtents<double> normExtents(NSEWOrder,
@@ -178,8 +179,8 @@ void gstGeoIndexImpl::Finalize(void) {
         notify(NFY_DEBUG, "saving level %u", tmpCov.level);
         coverage_ = tmpCov;
       } else {
-        uint64 myDiff = targetTotal - tmpCov.NumTiles();
-        uint64 prevDiff = coverage_.NumTiles() - targetTotal;
+        std::uint64_t myDiff = targetTotal - tmpCov.NumTiles();
+        std::uint64_t prevDiff = coverage_.NumTiles() - targetTotal;
         if (myDiff < prevDiff) {
           notify(NFY_DEBUG, "Chose level %u: %Zu over %Zu (target %Zu)",
                  tmpCov.level,
@@ -259,18 +260,18 @@ void gstGeoIndexImpl::Finalize(void) {
        coverage_.level, coverage_.level, oversize_factor_);
 
     // intersect this features coverage with the total coverage for the index
-    khExtents<uint32> tiles =
-      khExtents<uint32>::Intersection(coverage_.extents, thisCov.extents);
+    khExtents<std::uint32_t> tiles =
+      khExtents<std::uint32_t>::Intersection(coverage_.extents, thisCov.extents);
 
     // put this id into every grid cell that it touches
     {
-      uint32 row     = tiles.beginRow();
-      uint32 gridRow = row - coverage_.extents.beginRow();
+      std::uint32_t row     = tiles.beginRow();
+      std::uint32_t gridRow = row - coverage_.extents.beginRow();
       for (; row < tiles.endRow(); ++row, ++gridRow) {
-        uint32 col     = tiles.beginCol();
-        uint32 gridCol = col - coverage_.extents.beginCol();
+        std::uint32_t col     = tiles.beginCol();
+        std::uint32_t gridCol = col - coverage_.extents.beginCol();
         for (; col < tiles.endCol(); ++col, ++gridCol) {
-          uint pos = (gridRow * coverage_.extents.numCols()) + gridCol;
+          unsigned int pos = (gridRow * coverage_.extents.numCols()) + gridCol;
 
           // add it to the appropriate bucket
           grid_[pos].push_back(*it);
@@ -307,17 +308,17 @@ void gstGeoIndexImpl::Intersect(const gstBBox& bbox,
   // since we intersected the geo extents this intersection is probably
   // redundant. But we'd hate to have float rouding cause us to
   // index off the end of an array somewhere. :-)
-  khExtents<uint32> tiles =
-    khExtents<uint32>::Intersection(coverage_.extents, thisCov.extents);
+  khExtents<std::uint32_t> tiles =
+    khExtents<std::uint32_t>::Intersection(coverage_.extents, thisCov.extents);
 
   // covert level-wide extents to be index wide extents
   tiles.makeRelativeTo(coverage_.extents.origin());
 
   // put all feature ids in a set so we don't get duplicates
   std::set<int> set;
-  for (uint row = tiles.beginRow(); row < tiles.endRow(); ++row) {
-    for (uint col = tiles.beginCol(); col < tiles.endCol(); ++col) {
-      uint pos = (row * coverage_.extents.numCols()) + col;
+  for (unsigned int row = tiles.beginRow(); row < tiles.endRow(); ++row) {
+    for (unsigned int col = tiles.beginCol(); col < tiles.endCol(); ++col) {
+      unsigned int pos = (row * coverage_.extents.numCols()) + col;
       for (FeatureBucketIterator it = grid_[pos].begin();
            it != grid_[pos].end(); ++it) {
         const FeatureHandle& feature_handle = (*box_list_)[*it];
@@ -359,7 +360,7 @@ namespace {
 // Assumption: tilespace is in pixel coordinate where as box is in normalized
 // coordinate.
 void ExpandBbox(gstBBox* box_in_norm, const double oversize_factor,
-                const uint level, const khTilespace& tilespace) {
+                const unsigned int level, const khTilespace& tilespace) {
   // Stretch in width, delta_width = width * oversizeFactor
   // Stretch in width in each dir = delta_width / 2.0
   const double expand_pixel = tilespace.tileSize * (oversize_factor / 2.0);
@@ -462,19 +463,19 @@ bool gstGeoIndexImpl::WriteFile(const std::string& path) {
 
 namespace {
 
-const uint SplitStepSize = 3;
+const unsigned int SplitStepSize = 3;
 
 }
 
-gstGeoIndexHandle gstGeoIndexImpl::SplitCell(uint32 row, uint32 col,
+gstGeoIndexHandle gstGeoIndexImpl::SplitCell(std::uint32_t row, std::uint32_t col,
                                              const khLevelCoverage &targetCov) {
   assert(coverage_.level < targetCov.level);
   assert(coverage_.extents.ContainsRowCol(row, col));
 
   // choose level to split to. Try to go SplitStepSize levels. But stop
   // earlier if we hit the target level
-  uint splitLevel = 0;
-  uint levelDiff = targetCov.level - coverage_.level;
+  unsigned int splitLevel = 0;
+  unsigned int levelDiff = targetCov.level - coverage_.level;
   if (levelDiff <= SplitStepSize) {
     // We're close to the target level. Split on the target level
     splitLevel = targetCov.level;
@@ -490,8 +491,8 @@ gstGeoIndexHandle gstGeoIndexImpl::SplitCell(uint32 row, uint32 col,
   khLevelCoverage targetSplitCov = targetCov.MinifiedToLevel(splitLevel);
 
   // intersect the two
-  khExtents<uint32> splitExtents =
-      khExtents<uint32>::Intersection(mySplitCov.extents,
+  khExtents<std::uint32_t> splitExtents =
+      khExtents<std::uint32_t>::Intersection(mySplitCov.extents,
                                       targetSplitCov.extents);
 
   // make a new index supplying the coverage we want
@@ -503,9 +504,9 @@ gstGeoIndexHandle gstGeoIndexImpl::SplitCell(uint32 row, uint32 col,
   newIndex->box_list_ = box_list_;
 
   // walk my grid cell and add all the FeatureHandles into the new index
-  uint32 gridRow = row - coverage_.extents.beginRow();
-  uint32 gridCol = col - coverage_.extents.beginCol();
-  uint pos = (gridRow * coverage_.extents.numCols()) + gridCol;
+  std::uint32_t gridRow = row - coverage_.extents.beginRow();
+  std::uint32_t gridCol = col - coverage_.extents.beginCol();
+  unsigned int pos = (gridRow * coverage_.extents.numCols()) + gridCol;
   for (FeatureBucketIterator it = grid_[pos].begin();
        it != grid_[pos].end(); ++it) {
     newIndex->InsertIndex(*it);
@@ -520,24 +521,24 @@ gstGeoIndexHandle gstGeoIndexImpl::SplitCell(uint32 row, uint32 col,
 
 
 const gstGeoIndexImpl::FeatureBucket*
-gstGeoIndexImpl::GetBucket(uint32 row, uint32 col) const {
-  uint32 gridRow = row - coverage_.extents.beginRow();
-  uint32 gridCol = col - coverage_.extents.beginCol();
-  uint pos = (gridRow * coverage_.extents.numCols()) + gridCol;
+gstGeoIndexImpl::GetBucket(std::uint32_t row, std::uint32_t col) const {
+  std::uint32_t gridRow = row - coverage_.extents.beginRow();
+  std::uint32_t gridCol = col - coverage_.extents.beginCol();
+  unsigned int pos = (gridRow * coverage_.extents.numCols()) + gridCol;
   return &grid_[pos];
 }
 
-void gstGeoIndexImpl::PopulateBucket(const khExtents<uint32> &extents,
+void gstGeoIndexImpl::PopulateBucket(const khExtents<std::uint32_t> &extents,
                                      FeatureBucket *bucket) const {
   std::set<int> set;
 
-  uint32 row     = extents.beginRow();
-  uint32 gridRow = row - coverage_.extents.beginRow();
+  std::uint32_t row     = extents.beginRow();
+  std::uint32_t gridRow = row - coverage_.extents.beginRow();
   for (; row < extents.endRow(); ++row, ++gridRow) {
-    uint32 col     = extents.beginCol();
-    uint32 gridCol = col - coverage_.extents.beginCol();
+    std::uint32_t col     = extents.beginCol();
+    std::uint32_t gridCol = col - coverage_.extents.beginCol();
     for (; col < extents.endCol(); ++col, ++gridCol) {
-      uint pos = (gridRow * coverage_.extents.numCols()) + gridCol;
+      unsigned int pos = (gridRow * coverage_.extents.numCols()) + gridCol;
       for (FeatureBucketConstIterator it = grid_[pos].begin();
            it != grid_[pos].end(); ++it) {
         set.insert(*it);
@@ -547,12 +548,12 @@ void gstGeoIndexImpl::PopulateBucket(const khExtents<uint32> &extents,
   std::copy(set.begin(), set.end(), back_inserter(*bucket));
 }
 
-void gstGeoIndexImpl::GetFeatureIdsFromBucket(uint32 row, uint32 col,
+void gstGeoIndexImpl::GetFeatureIdsFromBucket(std::uint32_t row, std::uint32_t col,
                                               std::vector<int> &ids) const {
   // find the desired bucket
-  uint32 gridRow = row - coverage_.extents.beginRow();
-  uint32 gridCol = col - coverage_.extents.beginCol();
-  uint pos = (gridRow * coverage_.extents.numCols()) + gridCol;
+  std::uint32_t gridRow = row - coverage_.extents.beginRow();
+  std::uint32_t gridCol = col - coverage_.extents.beginCol();
+  unsigned int pos = (gridRow * coverage_.extents.numCols()) + gridCol;
   const gstGeoIndexImpl::FeatureBucket &bucket = grid_[pos];
 
   // copy the ids out of the bucket and into the vector
@@ -563,18 +564,18 @@ void gstGeoIndexImpl::GetFeatureIdsFromBucket(uint32 row, uint32 col,
   }
 }
 
-void gstGeoIndexImpl::GetFeatureIdsFromBuckets(const khExtents<uint32> &extents,
+void gstGeoIndexImpl::GetFeatureIdsFromBuckets(const khExtents<std::uint32_t> &extents,
                                                std::vector<int> &ids) const {
   std::set<int> set;
 
-  uint32 row     = extents.beginRow();
-  uint32 gridRow = row - coverage_.extents.beginRow();
-  uint32 count = 0;
+  std::uint32_t row     = extents.beginRow();
+  std::uint32_t gridRow = row - coverage_.extents.beginRow();
+  std::uint32_t count = 0;
   for (; row < extents.endRow(); ++row, ++gridRow) {
-    uint32 col     = extents.beginCol();
-    uint32 gridCol = col - coverage_.extents.beginCol();
+    std::uint32_t col     = extents.beginCol();
+    std::uint32_t gridCol = col - coverage_.extents.beginCol();
     for (; col < extents.endCol(); ++col, ++gridCol) {
-      uint pos = (gridRow * coverage_.extents.numCols()) + gridCol;
+      unsigned int pos = (gridRow * coverage_.extents.numCols()) + gridCol;
       count += grid_[pos].size();
       for (FeatureBucketConstIterator it = grid_[pos].begin();
            it != grid_[pos].end(); ++it) {

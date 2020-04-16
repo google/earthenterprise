@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +22,11 @@
 
 
 #include <string>
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 
-static const uint32 kMaxNumJobsLimit = 128;
-static const uint32 kMaxNumJobsLimit_2 = kMaxNumJobsLimit / 2;
+static const std::uint32_t kMaxNumJobsLimit = 128;
+static const std::uint32_t kMaxNumJobsLimit_2 = kMaxNumJobsLimit / 2;
 
 class Systemrc;
 class VolumeDefList;
@@ -44,7 +46,7 @@ std::string ValidateHostReadyForConfig(void);
 void LoadSystemrc(Systemrc &systemrc, bool override_cache = false);
 // Command-line defaults for asset root and maxjobs.
 std::string CommandlineAssetRootDefault(void);
-uint CommandlineNumCPUsDefault(void);
+ unsigned int CommandlineNumCPUsDefault(void);
 
 void LoadVolumesOrThrow(const std::string &assetroot, VolumeDefList &volumes);
 void SaveVolumesOrThrow(const std::string &assetroot,
@@ -58,6 +60,6 @@ void SwitchToUser(const std::string username,
 
 // Returns max number of concurrent jobs which defaults to min of the values:
 // number of CPUs or maximum allowable number of concurrent jobs.
-uint32 GetMaxNumJobs();
+ std::uint32_t GetMaxNumJobs();
 
 #endif  // GEO_EARTH_ENTERPRISE_SRC_FUSION_CONFIG_GEFCONFIGUTIL_H_

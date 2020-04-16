@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,29 +46,29 @@ class TaskConfig {
  public:
   const khTilespace& fusion_tilespace_;
 
-  uint32 selector_input_seed_size_;
+  std::uint32_t selector_input_seed_size_;
 
   // must be smaller than input_seed_size
-  uint32 selector_output_batch_size_;
+  std::uint32_t selector_output_batch_size_;
 
-  uint32 preparer_semaphore_count_;
+  std::uint32_t preparer_semaphore_count_;
 
   // must be less than preparer_semaphore_count_
-  uint32 merge_source_input_batch_size_;
+  std::uint32_t merge_source_input_batch_size_;
 
-  uint32 merger_output_batch_size_;
+  std::uint32_t merger_output_batch_size_;
 
-  uint32 num_map_tiles_from_each_fusion_tile_;
+  std::uint32_t num_map_tiles_from_each_fusion_tile_;
 
   // must be 1 for now!
   // Need re-syncronization logic before we can make multiple render threads
-  uint32 num_render_threads_;
+  std::uint32_t num_render_threads_;
 
   // sent directly to png compressor.  must be 0-9
   int png_compression_level_;
 
   TaskConfig(const khTilespace &fusion_tilespace, int pnglevel,
-             uint32 num_cpus) :
+             std::uint32_t num_cpus) :
       fusion_tilespace_(fusion_tilespace),
       png_compression_level_(pnglevel) {
     selector_input_seed_size_   = 10;
@@ -84,7 +85,7 @@ class TaskConfig {
 
     // number of 256*256 pixel map subtiles from one Fusion supertile (which is
     // 2048*2048)
-    const uint32 larger_by =
+    const std::uint32_t larger_by =
         fusion_tilespace_.tileSize / ClientMapFlatTilespace.tileSize;
     num_map_tiles_from_each_fusion_tile_ = larger_by * larger_by;
 
@@ -146,14 +147,14 @@ class Generator : public mttypes::WaitBaseManager {
   // Need to suspend both renderer and compressors if write queue is too
   // big (> max_bytes_sent_to_write) and resume when write queue comes back to
   // normal (i.e <= max_bytes_sent_to_write).
-  const uint32 write_buffer_size_;  // size of write_buffer for bundle writer
-  const uint32 index_buffer_size_;  // size of index_buffer for bundle writer
+  const std::uint32_t write_buffer_size_;  // size of write_buffer for bundle writer
+  const std::uint32_t index_buffer_size_;  // size of index_buffer for bundle writer
   // max size of buffer at which other jobs are suspended to avoid write
   // swamping, e.g memory overflow of buffer
   // Note that this buffer size is bytes_sent_to_write_ + write_buffer_size_ +
   // index_buffer_size
-  const uint32 max_buff_size_to_suspend_others_;
-  const uint32 max_bytes_sent_to_write_;  // maximum that can be sent to write
+  const std::uint32_t max_buff_size_to_suspend_others_;
+  const std::uint32_t max_bytes_sent_to_write_;  // maximum that can be sent to write
 
   PacketFileWriter writer_;
   const TaskConfig task_config_;

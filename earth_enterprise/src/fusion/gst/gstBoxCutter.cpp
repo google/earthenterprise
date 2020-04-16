@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -46,7 +47,7 @@ void BoxCutter::SetClipRect(const gstBBox &_box) {
   polygon_clipper_.SetClipRect(box_);
 }
 
-uint BoxCutter::Run(const gstGeodeHandle &geodeh,
+unsigned int BoxCutter::Run(const gstGeodeHandle &geodeh,
                     GeodeList &pieces,
                     bool *completely_covered) {
   pieces.clear();
@@ -118,7 +119,7 @@ uint BoxCutter::Run(const gstGeodeHandle &geodeh,
       {
         const gstGeodeCollection *multi_geode =
             static_cast<const gstGeodeCollection*>(&(*geodeh));
-        for (uint p = 0; p < multi_geode->NumParts(); ++p) {
+        for (unsigned int p = 0; p < multi_geode->NumParts(); ++p) {
           bool _completely_covered = false;
           const gstGeodeHandle geode_parth = multi_geode->GetGeode(p);
           if (geode_parth->NumParts() > 1) {
@@ -140,7 +141,7 @@ uint BoxCutter::Run(const gstGeodeHandle &geodeh,
       {
         const gstGeodeCollection *multi_geode =
             static_cast<const gstGeodeCollection*>(&(*geodeh));
-        for (uint p = 0; p < multi_geode->NumParts(); ++p) {
+        for (unsigned int p = 0; p < multi_geode->NumParts(); ++p) {
           const gstGeode *geode =
               static_cast<const gstGeode*>(&(*multi_geode->GetGeode(p)));
 #ifdef HYBRID_BOX_CUT_ON
@@ -158,7 +159,7 @@ uint BoxCutter::Run(const gstGeodeHandle &geodeh,
       }
       break;
   }
-  notify(NFY_DEBUG, "number of pieces: %u", static_cast<uint>(pieces.size()));
+  notify(NFY_DEBUG, "number of pieces: %u", static_cast< unsigned int> (pieces.size()));
 
 #ifndef NDEBUG
   for (size_t i = 0; i < pieces.size(); ++i) {
@@ -177,8 +178,8 @@ void BoxCutter::ClipLines(const gstGeode *geode,
 
   // Iterate across all segments, one at a time
   // and attempt to cut out a piece that fits into the supplied box.
-  for (uint p = 0; p < geode->NumParts(); ++p) {
-    for (uint v = 0; v < geode->VertexCount(p) - 1; ++v) {
+  for (unsigned int p = 0; p < geode->NumParts(); ++p) {
+    for (unsigned int v = 0; v < geode->VertexCount(p) - 1; ++v) {
       gstVertex v0 = geode->GetVertex(p, v);
       gstVertex v1 = geode->GetVertex(p, v + 1);
 
@@ -284,9 +285,9 @@ void BoxCutter::ClipPolygon3D(const gstGeode *geode,
 
   gstGeode *geode2D = static_cast<gstGeode*>(&(*geode2Dh));
 
-  for (uint part = 0; part < geode->NumParts(); ++part) {
+  for (unsigned int part = 0; part < geode->NumParts(); ++part) {
     geode2D->AddPart(geode->VertexCount(part));
-    for (uint v = 0; v < geode->VertexCount(part); ++v) {
+    for (unsigned int v = 0; v < geode->VertexCount(part); ++v) {
       const gstVertex &vert = geode->GetVertex(part, v);
       if (!normal.z && swapX) {  // TODO: optimize.
         geode2D->AddVertex(gstVertex(vert.z, vert.y, .0));
@@ -307,14 +308,14 @@ void BoxCutter::ClipPolygon3D(const gstGeode *geode,
   polygon_clipper_.Run(geode2Dh, &new_pieces, completely_covered);
 
   // Compute the 3rd component from the plane equation.
-  for (uint p = 0; p < new_pieces.size(); ++p) {
+  for (unsigned int p = 0; p < new_pieces.size(); ++p) {
     gstGeodeHandle &new_geodeh = new_pieces[p];
 
     gstGeode *new_geode = static_cast<gstGeode*>(&(*new_geodeh));
 
     assert(new_geode->NumParts() == 1);
 
-    for (uint i = 0; i < new_geode->VertexCount(0); ++i) {
+    for (unsigned int i = 0; i < new_geode->VertexCount(0); ++i) {
       const gstVertex &vert = new_geode->GetVertex(0, i);
 
       if (!normal.z && swapX) {  // TODO: optimize

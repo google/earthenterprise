@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -58,7 +59,7 @@ VectorGEIndexAssetVersionImplD::DoSubmitTask(void)
   // *****************************************
   // figure out the packvers for this version
   // *****************************************
-  uint indexVer = config.index_version_;
+  unsigned int indexVer = config.index_version_;
   bool tryReuse = true;
   if (indexVer == 0) {
     // zero is a sentinal value that means we've wrapped and
@@ -80,11 +81,11 @@ VectorGEIndexAssetVersionImplD::DoSubmitTask(void)
     // get the channelIds by grocking my input refs - they are guaranteed
     // to contain their channelId /layer(\d+)packet.kva$/
     std::string assetref = AssetVersionRef(input).AssetRef();
-    uint assetreflen = assetref.size();
-    uint suffixlen = 10; // strlen("packet.kva");
+    unsigned int assetreflen = assetref.size();
+    unsigned int suffixlen = 10; // strlen("packet.kva");
     // start just before the prefix
-    uint channelEnd = std::max(0, int(assetreflen) - int(suffixlen));
-    uint channelBegin = channelEnd;
+    unsigned int channelEnd = std::max(0, int(assetreflen) - int(suffixlen));
+    unsigned int channelBegin = channelEnd;
     // walk back to find all the digits
     while (channelBegin && isdigit(assetref[channelBegin-1])) {
       --channelBegin;
@@ -94,11 +95,11 @@ VectorGEIndexAssetVersionImplD::DoSubmitTask(void)
     while ((channelBegin < channelEnd) && (assetref[channelBegin] == '0')){
       ++channelBegin;
     }
-    uint channelLen = channelEnd - channelBegin;
+    unsigned int channelLen = channelEnd - channelBegin;
     if (!channelLen) {
       throw khException(kh::tr("Can't find channelId for ") + assetref);
     }
-    uint channelId=atoi(assetref.substr(channelBegin, channelLen).c_str());
+    unsigned int channelId=atoi(assetref.substr(channelBegin, channelLen).c_str());
 
 
     packvers.push_back(VectorPacketVersion(input, channelId, indexVer));
@@ -113,15 +114,15 @@ VectorGEIndexAssetVersionImplD::DoSubmitTask(void)
     // make a map of the channelId we still need to check
     // packvers won't change size anymore so it's safe to store
     // pointers to its elements
-    typedef std::map<uint, VectorPacketVersion*> CheckMap;
+    typedef std::map<unsigned int, VectorPacketVersion*> CheckMap;
     CheckMap tocheck;
-    for (uint i = 0; i < packvers.size(); ++i) {
+    for (unsigned int i = 0; i < packvers.size(); ++i) {
       tocheck.insert(std::make_pair(packvers[i].channel_id_, &packvers[i]));
     }
 
     // now walk back the previous AssetVersions to see if we can
     // find a better index version to use for our VectorPacketVersions
-    for (uint i = 1; i < asset->versions.size(); ++i) {
+    for (unsigned int i = 1; i < asset->versions.size(); ++i) {
       AssetVersion prevbase(asset->versions[i]);
       if (prevbase->subtype == "VectorKHDB") {
         VectorKHDBAssetVersion prev(asset->versions[i]);
@@ -202,7 +203,7 @@ VectorGEIndexAssetVersionImplD::DoSubmitTask(void)
   // ************************************************
   geindexgen::VectorStack geindex_stack_;
   geindex_stack_.layers_.reserve(config.packet_vers_.size());
-  for (uint i = 0; i < config.packet_vers_.size(); ++i) {
+  for (unsigned int i = 0; i < config.packet_vers_.size(); ++i) {
     AssetVersion assetver(config.packet_vers_[i].packet_verref_);
     geindex_stack_.layers_.push_back(
         geindexgen::VectorStack::Layer(

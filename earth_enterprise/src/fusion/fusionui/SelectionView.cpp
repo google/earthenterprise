@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -87,7 +88,7 @@ void SelectionView::configure(gstSelector* selector) {
     selectionTable->setNumCols(attrib->numColumns());
   }
 
-  for (uint ii = 0; ii < attrib->numColumns(); ++ii)
+  for (unsigned int ii = 0; ii < attrib->numColumns(); ++ii)
     header->setLabel(col++, attrib->Name(ii));
 
   // adjust column widths
@@ -231,7 +232,7 @@ void SelectionView::SaveColumns(int pick_col) {
     // single column which is the feature id
     //
     if (pick_col == 0 && showid) {
-      for (uint row = 0; row < flist.size(); ++row) {
+      for (unsigned int row = 0; row < flist.size(); ++row) {
         out << flist[row] << "\n";
       }
 
@@ -241,7 +242,7 @@ void SelectionView::SaveColumns(int pick_col) {
     } else if (pick_col != -1) {
       if (selector_->HasAttrib()) {
         int col = showid ? pick_col - 1 : pick_col;
-        for (uint row = 0; row < flist.size(); ++row) {
+        for (unsigned int row = 0; row < flist.size(); ++row) {
           gstRecordHandle rec = selector_->getPickRecord(row);
           out << rec->Field(col)->ValueAsCSV().c_str() << "\n";
         }
@@ -255,7 +256,7 @@ void SelectionView::SaveColumns(int pick_col) {
       int startcol = 0;
       int endcol = src->GetAttrDefs(selector_->layer())->numColumns();
 
-      for (uint row = 0; row < flist.size(); ++row) {
+      for (unsigned int row = 0; row < flist.size(); ++row) {
         bool need_sep = false;
 
         if (showid) {
@@ -311,7 +312,7 @@ void SelectionView::ExportSelectedFeatures() {
   kdb.SetHeader(attrib);
 
   const SelectList& flist = selector_->pickList();
-  for (uint row = 0; row < flist.size(); ++row) {
+  for (unsigned int row = 0; row < flist.size(); ++row) {
     gstGeodeHandle geode = selector_->getPickGeode(row);
     if (kvp.AddGeode(geode) != GST_OKAY) {
       notify(NFY_WARN, "Unable to add feature geometry %d", row);

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -54,11 +55,11 @@ ImageryWorkItemBase<TilesConfig>::ImageryWorkItemBase(
       alpha_buf(space_config_.TargetAlphaBufSize()),
       pieces(),
       num_pieces_used(0) {
-  uint ratio = space_config_.RasterProductTileSize() /
+  unsigned int ratio = space_config_.RasterProductTileSize() /
                space_config_.TargetTileSize();
-  uint totalPieces = ratio * ratio;
+  unsigned int totalPieces = ratio * ratio;
   pieces.reserve(totalPieces);
-  for (uint i = 0; i < totalPieces; ++i) {
+  for (unsigned int i = 0; i < totalPieces; ++i) {
     pieces.push_back(new Piece(space_config_));
   }
 }
@@ -119,22 +120,22 @@ ProtobufImageryWorkItem<TilesConfig>::ProtobufImageryWorkItem(
 template <class TilesConfig>
 void ProtobufImageryWorkItem<TilesConfig>::DoWork(PrepItem *prep) {
   num_pieces_used = 0;
-  for (uint32 row = prep->work_coverage.extents.beginRow();
+  for (std::uint32_t row = prep->work_coverage.extents.beginRow();
        row < prep->work_coverage.extents.endRow(); ++row) {
-    for (uint32 col = prep->work_coverage.extents.beginCol();
+    for (std::uint32_t col = prep->work_coverage.extents.beginCol();
          col < prep->work_coverage.extents.endCol(); ++col) {
       typename BaseClass::Piece *piece = pieces[num_pieces_used++];
       piece->target_addr = khTileAddr(prep->work_coverage.level,
                                       row, col);
       // extract my piece of the bigger tile
-      const uint32 subrow = row - prep->product_tile_origin.row();
-      const uint32 subcol = col - prep->product_tile_origin.col();
-      const uint32 tile_size = space_config_.TargetTileSize();
+      const std::uint32_t subrow = row - prep->product_tile_origin.row();
+      const std::uint32_t subcol = col - prep->product_tile_origin.col();
+      const std::uint32_t tile_size = space_config_.TargetTileSize();
 
       ExtractAndInterleave(
           prep->product_tile,
           subrow * tile_size, subcol * tile_size,
-          khSize<uint>(tile_size, tile_size),
+          khSize< unsigned int> (tile_size, tile_size),
           space_config_.target_tilespace.orientation,
           (typename DataTile::PixelType*)&interleaved_buf[0]);
 
@@ -160,11 +161,11 @@ void ProtobufImageryWorkItem<TilesConfig>::DoWork(PrepItem *prep) {
           // Note: The orientation (LowerLeft/UpperLeft) of raster data in
           // product tile is not important since we symmetrically fill north
           // and south areas of alpha product tile.
-          khExtents<uint32> extents(
-              khOffset<uint32>(RowColOrder,
+          khExtents<std::uint32_t> extents(
+              khOffset<std::uint32_t>(RowColOrder,
                                subrow * tile_size + subrow * (tile_size >> 1),
                                subcol * tile_size),
-              khSize<uint>(tile_size, tile_size >> 1));
+              khSize< unsigned int> (tile_size, tile_size >> 1));
           prep->alpha_tile.FillExtentWithZeros(extents);
 
           // Set opacity to Amalgam since half of tile is transparent, while
@@ -180,7 +181,7 @@ void ProtobufImageryWorkItem<TilesConfig>::DoWork(PrepItem *prep) {
 template <class TilesConfig>
 void ProtobufImageryWorkItem<TilesConfig>::DoWrite(
     khMTProgressMeter *progress) {
-  for (uint i = 0; i < num_pieces_used; ++i) {
+  for (unsigned int i = 0; i < num_pieces_used; ++i) {
     typename BaseClass::Piece* piece = pieces[i];
 
     // Set image data.
@@ -195,11 +196,11 @@ void ProtobufImageryWorkItem<TilesConfig>::DoWrite(
 
     // Build packet.
     char *packet_buf;
-    uint32 packet_size;
+    std::uint32_t packet_size;
     packet_builder.Build(&packet_buf, &packet_size);
 
     // Write packet.
-    uint32 inset_id = attributions.GetInsetId(piece->target_addr);
+    std::uint32_t inset_id = attributions.GetInsetId(piece->target_addr);
     writer->WriteAppendCRC(piece->target_addr,
                            packet_buf,
                            packet_size,
@@ -212,13 +213,13 @@ template <class TilesConfig>
 void ProtobufImageryWorkItem<TilesConfig>::ExtractAndCompressAlphaPiece(
     typename BaseClass::Piece *piece,
     const std::string& date,
-    const PrepItem *prep, uint32 subrow, uint32 subcol) {
-  const uint32 tile_size = space_config_.TargetTileSize();
+    const PrepItem *prep, std::uint32_t subrow, std::uint32_t subcol) {
+  const std::uint32_t tile_size = space_config_.TargetTileSize();
   // Extract my piece of bigger alpha tile.
   ExtractAndInterleave(
       prep->alpha_tile,
       subrow * tile_size, subcol * tile_size,
-      khSize<uint>(tile_size, tile_size),
+      khSize< unsigned int> (tile_size, tile_size),
       space_config_.target_tilespace.orientation,
       (typename AlphaTile::PixelType*)&alpha_buf[0]);
 
@@ -246,17 +247,17 @@ void MercatorImageryWorkItem<TilesConfig>::DoWork(PrepItem *prep) {
   //  jpeg-packet for "opaque"-tiles(no alpha).
   //  4-channel png for other tiles(with alpha).
   num_pieces_used = 0;
-  for (uint32 row = prep->work_coverage.extents.beginRow();
+  for (std::uint32_t row = prep->work_coverage.extents.beginRow();
        row < prep->work_coverage.extents.endRow(); ++row) {
-    for (uint32 col = prep->work_coverage.extents.beginCol();
+    for (std::uint32_t col = prep->work_coverage.extents.beginCol();
          col < prep->work_coverage.extents.endCol(); ++col) {
       typename BaseClass::Piece *piece = pieces[num_pieces_used++];
       piece->target_addr = khTileAddr(prep->work_coverage.level,
                                       row, col);
       // extract my piece of the bigger tile
-      uint32 subrow = row - prep->product_tile_origin.row();
-      uint32 subcol = col - prep->product_tile_origin.col();
-      uint32 tile_size = space_config_.TargetTileSize();
+      std::uint32_t subrow = row - prep->product_tile_origin.row();
+      std::uint32_t subcol = col - prep->product_tile_origin.col();
+      std::uint32_t tile_size = space_config_.TargetTileSize();
 
       piece->opacity = prep->opacity;
 
@@ -268,7 +269,7 @@ void MercatorImageryWorkItem<TilesConfig>::DoWork(PrepItem *prep) {
         ExtractAndInterleave(
             prep->product_tile,
             subrow * tile_size, subcol * tile_size,
-            khSize<uint>(tile_size, tile_size),
+            khSize< unsigned int> (tile_size, tile_size),
             space_config_.target_tilespace.orientation,
             (typename DataTile::PixelType*)&interleaved_buf[0]);
 
@@ -285,13 +286,13 @@ void MercatorImageryWorkItem<TilesConfig>::DoWork(PrepItem *prep) {
         // Add the acquisition date here.
         piece->compressor_alpha->SetAcquisitionDate(date);
 
-        const uint32 alpha_pos = DataTile::NumComp;
-        const uint32 step = DataTile::NumComp + AlphaTile::NumComp;
+        const std::uint32_t alpha_pos = DataTile::NumComp;
+        const std::uint32_t step = DataTile::NumComp + AlphaTile::NumComp;
         // Extract my piece of bigger data tile.
         ExtractAndInterleave(
             prep->product_tile,
             subrow * tile_size, subcol * tile_size,
-            khSize<uint>(tile_size, tile_size),
+            khSize< unsigned int> (tile_size, tile_size),
             space_config_.target_tilespace.orientation,
             (typename DataTile::PixelType*)&alpha_buf[0],
             step);
@@ -300,7 +301,7 @@ void MercatorImageryWorkItem<TilesConfig>::DoWork(PrepItem *prep) {
         ExtractAndInterleave(
             prep->alpha_tile,
             subrow * tile_size, subcol * tile_size,
-            khSize<uint>(tile_size, tile_size),
+            khSize< unsigned int> (tile_size, tile_size),
             space_config_.target_tilespace.orientation,
             (typename AlphaTile::PixelType*)&alpha_buf[alpha_pos],
             step);
@@ -318,10 +319,10 @@ void MercatorImageryWorkItem<TilesConfig>::DoWork(PrepItem *prep) {
 template <class TilesConfig>
 void MercatorImageryWorkItem<TilesConfig>::DoWrite(
     khMTProgressMeter *progress) {
-  for (uint i = 0; i < num_pieces_used; ++i) {
+  for (unsigned int i = 0; i < num_pieces_used; ++i) {
     typename BaseClass::Piece* piece = pieces[i];
 
-    uint32 inset_id = attributions.GetInsetId(piece->target_addr);
+    std::uint32_t inset_id = attributions.GetInsetId(piece->target_addr);
     if (khOpacityMask::Opaque == piece->opacity) {  // Tile is opaque.
       // compressor will have left at least kCRC32Size bytes available
       // on the end
@@ -383,8 +384,8 @@ void ImageryPackgenTraverser<Config>::PrepAddr(const khTileAddr &productAddr) {
                             item_space_config_.target_tilespace));
 
   // Intersect it with what we really want
-  khExtents<uint32> workExtents
-    (khExtents<uint32>::Intersection(thisTileCoverage.extents,
+  khExtents<std::uint32_t> workExtents
+    (khExtents<std::uint32_t>::Intersection(thisTileCoverage.extents,
                                      config.coverage.extents));
 
   if (prep->opacity == khOpacityMask::Transparent) {
@@ -392,8 +393,8 @@ void ImageryPackgenTraverser<Config>::PrepAddr(const khTileAddr &productAddr) {
     // to skip transparent tiles.
 
     // figure how many we're skipping
-    int64 numSkipped = static_cast<int64>(workExtents.width()) *
-                       static_cast<int64>(workExtents.height());
+    std::int64_t numSkipped = static_cast<std::int64_t>(workExtents.width()) *
+                       static_cast<std::int64_t>(workExtents.height());
     progress->incrementSkipped(numSkipped);
 
     prepEmpty.push(prep);
@@ -422,7 +423,7 @@ void ImageryPackgenTraverser<Config>::PrepLoop(void) {
 }
 
 template <class Config>
-void ImageryPackgenTraverser<Config>::Traverse(uint numcpus) {
+void ImageryPackgenTraverser<Config>::Traverse(unsigned int numcpus) {
   DoTraverse(numcpus);
   writer_.Close();
 }

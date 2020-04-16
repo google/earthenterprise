@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,7 +22,8 @@
 #include "common/khEndian.h"
 #include "common/khFileUtils.h"
 #include "common/khStringUtils.h"
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "fusion/portableglobe/shared/packetbundle.h"
 #include "fusion/portableglobe/shared/packetbundle_reader.h"
 #include "fusion/portableglobe/shared/packetbundle_writer.h"
@@ -34,7 +36,7 @@ RequestBundlerForPacket::RequestBundlerForPacket(
     int bunch_size,
     PortableBuilder* builder,
     PacketBundleWriter* writer, bool is_multi_thread,
-    uint32 batch_size)
+    std::uint32_t batch_size)
     : bunch_size_(bunch_size), caller_(builder), writer_(writer),
       is_multi_thread_(is_multi_thread),
       batch_size_(batch_size),
@@ -92,12 +94,12 @@ void RequestBundlerForPacket::AddToCache(const WriteRequest& request) {
 }
 
 void RequestBundlerForPacket::WriteImagePacket(
-    const std::string& qtpath, uint32 version) {
+    const std::string& qtpath, std::uint32_t version) {
   AddToCache(WriteRequest(version, kGEImageryChannelId, kImagePacket, qtpath));
 }
 
 void RequestBundlerForPacket::WriteTerrainPacket(
-    const std::string& qtpath, uint32 version) {
+    const std::string& qtpath, std::uint32_t version) {
   // Mismatch between kGETerrainChannelId (2)
   // and Portable channel (1) :P
   // TODO: Rectify terrain channel ids.
@@ -106,7 +108,7 @@ void RequestBundlerForPacket::WriteTerrainPacket(
 }
 
 void RequestBundlerForPacket::WriteVectorPacket(
-    const std::string& qtpath, uint32 channel, uint32 version) {
+    const std::string& qtpath, std::uint32_t channel, std::uint32_t version) {
   AddToCache(WriteRequest(version, channel, kVectorPacket, qtpath));
 }
 
@@ -139,7 +141,7 @@ void RequestBundlerForPacket::FlushCache() {
   // For each imagery version seen in this cache_ of requests,
   // make a bundle query and get results.
   for (ImageryBundle::iterator i = ib.begin(); i != ib.end(); ++i) {
-    uint32 version = i->first;
+    std::uint32_t version = i->first;
     RequestBundle& b = i->second;
     caller_->GetImagePacket(b.first, version, &raw_packet_);
     std::string* raw_packet = cache_->CopyRawPacketBuffer(raw_packet_);
@@ -152,7 +154,7 @@ void RequestBundlerForPacket::FlushCache() {
   // For each terrain version seen in this cache_ of requests,
   // make a bundle query and get results.
   for (TerrainBundle::iterator i = tb.begin(); i != tb.end(); ++i) {
-    uint32 version = i->first;
+    std::uint32_t version = i->first;
     RequestBundle& b = i->second;
     caller_->GetTerrainPacket(b.first, version, &raw_packet_);
     std::string* raw_packet = cache_->CopyRawPacketBuffer(raw_packet_);
@@ -165,8 +167,8 @@ void RequestBundlerForPacket::FlushCache() {
   // For each vector {channel, version} seen in this cache_ of requests,
   // make a bundle query and get results.
   for (VectorBundle::iterator i = vb.begin(); i != vb.end(); ++i) {
-    uint32 channel = i->first.first;
-    uint32 version = i->first.second;
+    std::uint32_t channel = i->first.first;
+    std::uint32_t version = i->first.second;
     RequestBundle& b = i->second;
     caller_->GetVectorPacket(b.first, channel, version, &raw_packet_);
     std::string* raw_packet = cache_->CopyRawPacketBuffer(raw_packet_);

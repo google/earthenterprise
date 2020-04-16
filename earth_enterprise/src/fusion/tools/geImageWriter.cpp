@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -42,7 +43,8 @@
 #include "common/khGetopt.h"
 #include "common/khProgressMeter.h"
 #include "common/khStringUtils.h"
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "fusion/khgdal/khgdal.h"
 #include "fusion/khgdal/khGeoExtents.h"
 #include "fusion/khgdal/khGDALDataset.h"
@@ -50,14 +52,14 @@
 #include "khraster/LevelRasterBand.h"
 
 BandInfo::BandInfo(GDALRasterBand *band,
-                   const khExtents<uint32> &extents,
+                   const khExtents<std::uint32_t> &extents,
                    khTypes::StorageEnum type)
     : hostBand(band),
       extract_extents_(extents),
       datatype(type) {
 }
 
-void geImageWriter::CopyAndWriteImage(const khSize<uint32>& rasterSize,
+void geImageWriter::CopyAndWriteImage(const khSize<std::uint32_t>& rasterSize,
                                       const std::vector<BandInfo> &bands,
                                       GDALDriver *driver,
                                       const std::string &output,
@@ -70,7 +72,7 @@ void geImageWriter::CopyAndWriteImage(const khSize<uint32>& rasterSize,
                     projection, output_options);
 }
 
-void geImageWriter::CopyAndWriteImage(const khSize<uint32>& rasterSize,
+void geImageWriter::CopyAndWriteImage(const khSize<std::uint32_t>& rasterSize,
                                       const std::vector<BandInfo> &bands,
                                       GDALDriver *driver,
                                       const std::string &output,
@@ -91,7 +93,7 @@ void geImageWriter::CopyAndWriteImage(const khSize<uint32>& rasterSize,
   virtDataset->SetGeoTransform(const_cast<double*>(
       outputGeoExtents.geoTransform()));
 
-  for (uint b = 0; b < bands.size(); ++b) {
+  for (unsigned int b = 0; b < bands.size(); ++b) {
     GDALDataType gdalDatatype = GDTFromStorageEnum(bands[b].datatype);
     virtDataset->AddBand(gdalDatatype, 0);
     VRTSourcedRasterBand* vrtBand =
@@ -119,7 +121,7 @@ void geImageWriter::CopyAndWriteImage(const khSize<uint32>& rasterSize,
 
 
 void geImageWriter::ExtractLevelImage(const khRasterProductLevel &prodLevel,
-                                      const khExtents<uint32> &extract_extents,
+                                      const khExtents<std::uint32_t> &extract_extents,
                                       GDALDriver *driver,
                                       const std::string &output,
                                       const khGeoExtents &outputGeoExtents,
@@ -130,7 +132,7 @@ void geImageWriter::ExtractLevelImage(const khRasterProductLevel &prodLevel,
   // Build the BandInfo structures
   khDeletingVector<GDALRasterBand> rasterBands;
   std::vector<BandInfo> bands;
-  for (uint b = 0; b < prodLevel.numComponents(); ++b) {
+  for (unsigned int b = 0; b < prodLevel.numComponents(); ++b) {
     // Set GDAL band number to 0 since it is free-standing raster band
     // (there is no owner, referenced dataset is set to NULL).
     rasterBands.push_back(new LevelRasterBand(NULL, /* dataset */
@@ -140,8 +142,8 @@ void geImageWriter::ExtractLevelImage(const khRasterProductLevel &prodLevel,
                                               prodLevel.componentType()));
     bands.push_back
       (BandInfo(rasterBands[b],
-                khExtents<uint32>
-                (khOffset<uint32>(XYOrder,
+                khExtents<std::uint32_t>
+                (khOffset<std::uint32_t>(XYOrder,
                                   extract_extents.beginX(),
                                   (prodLevel.tileExtents().numRows() *
                                    RasterProductTileResolution) -
@@ -158,8 +160,8 @@ void geImageWriter::ExtractLevelImage(const khRasterProductLevel &prodLevel,
 
 void geImageWriter::WriteImageryPreview(
     const khRasterProductLevel &prodLevel,
-    const khExtents<uint32> &extract_extents,
-    uchar *alphaBuf,
+    const khExtents<std::uint32_t> &extract_extents,
+    unsigned char *alphaBuf,
     GDALDriver *driver,
     const std::string &output,
     const khGeoExtents &outputGeoExtents,
@@ -170,7 +172,7 @@ void geImageWriter::WriteImageryPreview(
   // Build the BandInfo structures
   khDeletingVector<GDALRasterBand> rasterBands;
   std::vector<BandInfo> bands;
-  for (uint b = 0; b < prodLevel.numComponents(); ++b) {
+  for (unsigned int b = 0; b < prodLevel.numComponents(); ++b) {
     // Set GDAL band number to 0 since it is free-standing raster band
     // (there is no owner, referenced dataset is set to NULL).
     rasterBands.push_back(new LevelRasterBand(NULL, /* dataset */
@@ -180,8 +182,8 @@ void geImageWriter::WriteImageryPreview(
                                               khTypes::UInt8));
     bands.push_back
       (BandInfo(rasterBands.back(),
-                khExtents<uint32>
-                (khOffset<uint32>(XYOrder,
+                khExtents<std::uint32_t>
+                (khOffset<std::uint32_t>(XYOrder,
                                   extract_extents.beginX(),
                                   (prodLevel.tileExtents().numRows() *
                                    RasterProductTileResolution) -
@@ -199,7 +201,7 @@ void geImageWriter::WriteImageryPreview(
                                              extract_extents.size(),
                                              khTypes::UInt8));
   bands.push_back(BandInfo(rasterBands.back(),
-                           khExtents<uint32>(khOffset<uint32>(XYOrder, 0, 0),
+                           khExtents<std::uint32_t>(khOffset<std::uint32_t>(XYOrder, 0, 0),
                                              extract_extents.size()),
                            khTypes::UInt8));
 
@@ -211,8 +213,8 @@ void geImageWriter::WriteImageryPreview(
 
 void geImageWriter::WriteHeightmapPreview(
     const khRasterProductLevel &prodLevel,
-    const khExtents<uint32> &extract_extents,
-    uchar *alphaBuf,
+    const khExtents<std::uint32_t> &extract_extents,
+    unsigned char *alphaBuf,
     GDALDriver *driver,
     const std::string &output,
     const khGeoExtents &outputGeoExtents,
@@ -223,7 +225,7 @@ void geImageWriter::WriteHeightmapPreview(
   // Build the BandInfo structures
   khDeletingVector<GDALRasterBand> rasterBands;
   std::vector<BandInfo> bands;
-  for (uint b = 0; b < 3; ++b) {
+  for (unsigned int b = 0; b < 3; ++b) {
     // Set GDAL band number to 0 since it is free-standing raster band
     // (there is no owner, referenced dataset is set to NULL).
     rasterBands.push_back(new LevelRasterBand(NULL, /* dataset */
@@ -233,8 +235,8 @@ void geImageWriter::WriteHeightmapPreview(
                                               khTypes::UInt8));
     bands.push_back
       (BandInfo(rasterBands.back(),
-                khExtents<uint32>
-                (khOffset<uint32>(XYOrder,
+                khExtents<std::uint32_t>
+                (khOffset<std::uint32_t>(XYOrder,
                                   extract_extents.beginX(),
                                   (prodLevel.tileExtents().numRows() *
                                    RasterProductTileResolution) -
@@ -252,7 +254,7 @@ void geImageWriter::WriteHeightmapPreview(
                                              extract_extents.size(),
                                              khTypes::UInt8));
   bands.push_back(BandInfo(rasterBands.back(),
-                           khExtents<uint32>(khOffset<uint32>(XYOrder, 0, 0),
+                           khExtents<std::uint32_t>(khOffset<std::uint32_t>(XYOrder, 0, 0),
                                              extract_extents.size()),
                            khTypes::UInt8));
 
@@ -261,8 +263,8 @@ void geImageWriter::WriteHeightmapPreview(
       is_mercator, output_options);
 }
 
-void geImageWriter::WriteAlphaImage(const khSize<uint32> &extract_size,
-                                    uchar *alphaBuf,
+void geImageWriter::WriteAlphaImage(const khSize<std::uint32_t> &extract_size,
+                                    unsigned char *alphaBuf,
                                     GDALDriver *driver,
                                     const std::string &output,
                                     const khGeoExtents &outputGeoExtents,
@@ -274,8 +276,8 @@ void geImageWriter::WriteAlphaImage(const khSize<uint32> &extract_size,
                   projection, output_options);
 }
 
-void geImageWriter::WriteAlphaImage(const khSize<uint32> &extract_size,
-                                    uchar *alphaBuf,
+void geImageWriter::WriteAlphaImage(const khSize<std::uint32_t> &extract_size,
+                                    unsigned char *alphaBuf,
                                     GDALDriver *driver,
                                     const std::string &output,
                                     const khGeoExtents &outputGeoExtents,
@@ -296,7 +298,7 @@ void geImageWriter::WriteAlphaImage(const khSize<uint32> &extract_size,
                                              khTypes::UInt8));
 
   bands.push_back(BandInfo(rasterBands.back(),
-                           khExtents<uint32>(khOffset<uint32>(XYOrder, 0, 0),
+                           khExtents<std::uint32_t>(khOffset<std::uint32_t>(XYOrder, 0, 0),
                                              extract_size),
                            khTypes::UInt8));
 

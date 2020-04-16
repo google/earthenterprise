@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +40,7 @@ class AssetVersionRef {
   operator std::string() const;
 
   AssetVersionRef(const std::string &assetRef_, const std::string &version_);
-  AssetVersionRef(const std::string &assetRef_, uint vernum);
+  AssetVersionRef(const std::string &assetRef_, unsigned int vernum);
 
   std::string Bind(void) const;
   static std::string Bind(const AssetVersionRef &o) { return o.Bind(); }

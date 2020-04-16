@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -47,7 +48,7 @@ void geCapabilitiesGuard::AdjustCapabilities(cap_flag_value_t action) {
   typedef void (*CompatibleFuncType)(cap_t);
   khCallGuard<cap_t> free_cap_guard(CompatibleFuncType(cap_free), cap);
 
-  for (uint i = 0; i < caplist_.size(); ++i) {
+  for (unsigned int i = 0; i < caplist_.size(); ++i) {
     if (cap_set_flag(cap, CAP_EFFECTIVE, 1, &caplist_[i], action) == -1) {
       throw khErrnoException(kh::tr("Unable to set capability value (%1)")
                              .arg(caplist_[i]));

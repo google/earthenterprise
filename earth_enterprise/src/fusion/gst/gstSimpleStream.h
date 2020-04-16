@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +24,7 @@
 
 #include <string>
 
-typedef uint16 ImageVersion;
+typedef std::uint16_t ImageVersion;
 
 class Request;
 class RawPacketRequest;

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -116,7 +117,7 @@ void gstSRSDefs::init() {
     Category& spcs_nad83 = srsDefs[srsDefs.size() - 1];
 
     char name[100];
-    for (uint r = 0; r < spcsTable.NumRows(); ++r) {
+    for (unsigned int r = 0; r < spcsTable.NumRows(); ++r) {
       gstRecordHandle rec = spcsTable.Row(r);
       snprintf(name, 100, "%s %s (%d)", rec->Field(1)->ValueAsString().c_str(),
               rec->Field(2)->ValueAsString().c_str(),

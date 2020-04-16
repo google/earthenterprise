@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -106,12 +107,12 @@ const in_port_t
 FusionConnection::khResourceProviderPort = 13033 /* 2085 */;
 
 static const char * const ProtocolMagic = "Keyhole Fusion Wire Protocol";
-static const uint MagicLen = 28;
+static const unsigned int MagicLen = 28;
 
 
 // Do not change.
 // TODO: - add a COMPILE_TILE_ASSERT (see examples in ffio/ffioIndex.cpp)
-static const uint HeaderSize = 72;
+static const unsigned int HeaderSize = 72;
 
 
 std::string
@@ -242,15 +243,15 @@ FusionConnection::ReceiveMsg(RecvPacket &recvPacket, int timeout)
   }
   BigEndianReadBuffer bebuf(buf, HeaderSize);
   bebuf.Skip(MagicLen);
-  uint8 protover;
+  std::uint8_t protover;
   bebuf >> protover;
   if (protover != 1) {
     notify(NFY_WARN, "Unsupported protocol version (%d).", protover);
     errno = EPROTONOSUPPORT;
     throw SocketException(kh::no_tr("ReceiveMsg"));
   }
-  uint32 payloadLen;
-  uint8  msgType;
+  std::uint32_t payloadLen;
+  std::uint8_t  msgType;
   bebuf >> recvPacket.serial
         >> payloadLen
         >> msgType
@@ -260,7 +261,7 @@ FusionConnection::ReceiveMsg(RecvPacket &recvPacket, int timeout)
         >> recvPacket.reserved2;
   recvPacket.msgType   = (MsgType)msgType;
   while (payloadLen > 0) {
-    uint32 toread = std::min((size_t)payloadLen, sizeof(buf));
+    std::uint32_t toread = std::min((size_t)payloadLen, sizeof(buf));
     // will throw exception if unable to recv it all
     recvall(buf, toread, 0 /* flags */, timeout);
     recvPacket.payload.append(buf, toread);
@@ -281,10 +282,10 @@ FusionConnection::Send(const RecvPacket &recvPack, int timeout)
   BigEndianWriteBuffer buf;
 
   buf.rawwrite(ProtocolMagic, MagicLen);
-  buf.push(uint8(1));  // version
+  buf.push(std::uint8_t(1));  // version
   buf.push(recvPack.serial);
-  buf.push(uint32(recvPack.payload.size()));
-  buf.push(uint8(recvPack.msgType));
+  buf.push(std::uint32_t(recvPack.payload.size()));
+  buf.push(std::uint8_t(recvPack.msgType));
   buf.rawwrite(recvPack.rawcmdname, sizeof(recvPack.rawcmdname));
   buf.push(recvPack.reserved1);
   buf.push(recvPack.reserved2);
@@ -340,18 +341,18 @@ FusionConnection::TryNoArgRegister(const std::string &cmdname,
 void
 FusionConnection::RecvPacket::Dump(const std::string &header) const
 {
-  //      uint32  serial;
+  //      std::uint32_t  serial;
   //      MsgType msgType;
   //      char    rawcmdname[32];
-  //      uint8   reserved1;
-  //      uint8   reserved2;
+  //      std::uint8_t   reserved1;
+  //      std::uint8_t   reserved2;
   //      std::string payload;
 
   fprintf(stderr, "========== %s ==========\n", header.c_str());
   fprintf(stderr, "serial = %d\n", serial);
   fprintf(stderr, "msgType = %d\n", msgType);
   fprintf(stderr, "rawcmdname = ");
-  for (uint i = 0; i < sizeof(rawcmdname); ++i) {
+  for (unsigned int i = 0; i < sizeof(rawcmdname); ++i) {
     if (rawcmdname[i] == 0) {
       fprintf(stderr, "\\0");
     } else {

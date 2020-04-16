@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,23 +13,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
+#include <cstdint>
 #include <string>
-#include <khTypes.h>
 
 class NextTaskId {
-  uint32 id;
+  std::uint32_t id;
 
 #pragma LoadAndSave
 
 #hquote
   static std::string Filename(void);
   static void Load(void);
-  static uint32 Get(void);
+  static std::uint32_t Get(void);
  private:
-  static uint32 nextTaskId;
-  static const uint32 saveStep;
-  static const uint32 rollSize;
+  static std::uint32_t nextTaskId;
+  static const std::uint32_t saveStep;
+  static const std::uint32_t rollSize;
 #/hquote
 
 
@@ -37,9 +37,9 @@ class NextTaskId {
 #include <autoingest/geAssetRoot.h>
 #include <khFileUtils.h>
 
-  uint32 NextTaskId::nextTaskId = 0;
-  const uint32 NextTaskId::saveStep = 1000;
-  const uint32 NextTaskId::rollSize = 1000000;  // even multiple of saveStep
+  std::uint32_t NextTaskId::nextTaskId = 0;
+  const std::uint32_t NextTaskId::saveStep = 1000;
+  const std::uint32_t NextTaskId::rollSize = 1000000;  // even multiple of saveStep
 
   std::string NextTaskId::Filename(void) {
     return khComposePath(geAssetRoot::Dirname(AssetDefs::AssetRoot(),
@@ -47,10 +47,10 @@ class NextTaskId {
                          "NextTaskId.xml");
   }
 
-  uint32
+  std::uint32_t
   NextTaskId::Get(void)
   {
-    uint32 id = nextTaskId++;
+    std::uint32_t id = nextTaskId++;
 
     // wrap the taskid at one million
     // (just to keep the numbers small enough for people to deal with)

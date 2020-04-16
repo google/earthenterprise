@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,11 +14,11 @@
 // limitations under the License.
 
 
+#include <cstdint>
 #include <string>
 #include <qstring.h>
 #include <vector>
 #include <set>
-#include <khTypes.h>
 #include "LayerLegend.h"
 #requiresgetheapusage
 
@@ -32,13 +33,13 @@
 class RasterDBRootAssetConfig {
   class Layer {
     LayerLegend legend_;
-    uint32      channel_id_;
+    std::uint32_t      channel_id_;
     std::string asset_uuid_ = std::string();
 #pragma GenerateIsUpToDate
   };
 
   std::vector<RasterDBRootAssetConfig::Layer> layers_;
-  std::set<uint32> used_provider_ids_;
+  std::set<std::uint32_t> used_provider_ids_;
 
   // To force rebuilds, increment this version.
   // When incrementing this version, you should also increment the
@@ -56,11 +57,11 @@ class RasterDBRootGenConfig {
 
   class Layer {
     LayerLegend legend_;
-    uint32      channel_id_;
+    std::uint32_t      channel_id_;
     std::string asset_uuid_ = std::string();
   };
   std::vector<RasterDBRootGenConfig::Layer> layers_;
-  std::set<uint32>                          used_provider_ids_;
+  std::set<std::uint32_t>                          used_provider_ids_;
 
 #pragma LoadAndSave
 };

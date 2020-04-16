@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,30 +32,30 @@ class Writer {
   // Set to 0 to disable splitting the ff's
   //   - but only do that after the khdb index format has been
   // enhanced to deal w/ 64bit file offsets
-  static const uint64 DefaultSplitSize = 1000 * 1024 * 1024;
+  static const std::uint64_t DefaultSplitSize = 1000 * 1024 * 1024;
 
   ~Writer(void) { }
   Writer(Type type,
          const std::string &outdir_,
-         uint64 splitSize_ = DefaultSplitSize);
+         std::uint64_t splitSize_ = DefaultSplitSize);
 
   // Will throw if unsuccessful
-  void WritePacket(char *buf, uint32 buflen, uint32 bufsize,
+  void WritePacket(char *buf, std::uint32_t buflen, std::uint32_t bufsize,
                    const khTileAddr &addr);
 
-  inline uint32 TotalTilesWritten(void) const {
+  inline std::uint32_t TotalTilesWritten(void) const {
     return totalTilesWritten;
   }
 
  protected:
   std::string outdir;
-  uint64 splitSize;
+  std::uint64_t splitSize;
 
-  uint64 totalOffset;  // offset into (logical) single flatfile
-  uint64 fileOffset;       // offset into current flatfile
+  std::uint64_t totalOffset;  // offset into (logical) single flatfile
+  std::uint64_t fileOffset;       // offset into current flatfile
   int nextfilenum;         // which subfile to open next
   khWriteFileCloser fileHandle; // currently open file
-  uint32 totalTilesWritten;
+  std::uint32_t totalTilesWritten;
 
   // Will throw if unsuccessful
   void OpenNextFile(void);
@@ -68,15 +69,15 @@ class GridIndexedWriter : protected Writer {
   GridIndexedWriter(Type type,
                     const std::string &outdir_,
                     const khInsetCoverage &coverage,
-                    uint64 splitSize_ = DefaultSplitSize,
+                    std::uint64_t splitSize_ = DefaultSplitSize,
                     void* littleEndianTypeData = 0);
 
   // Will throw if unsuccessful
-  void WritePacket(char *buf, uint32 buflen, uint32 bufsize,
+  void WritePacket(char *buf, std::uint32_t buflen, std::uint32_t bufsize,
                    const khTileAddr &addr);
 
   // define this here, since my users can't see my base class
-  inline uint32 TotalTilesWritten(void) const {
+  inline std::uint32_t TotalTilesWritten(void) const {
     return totalTilesWritten;
   }
 

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +46,7 @@ class VectorGeneratorDef {
   typedef VectorTodo            Todo;
 };
 
-static const uint kDefaultMergeSessionSize = 500;
+static const unsigned int kDefaultMergeSessionSize = 500;
 
 template <class Def>
 class Generator : public mttypes::WaitBaseManager {
@@ -64,11 +65,11 @@ class Generator : public mttypes::WaitBaseManager {
 
  public:
   Generator(geFilePool &file_pool, const std::string &outdir,
-            uint merge_session_size,
-            uint queue_size,
+            unsigned int merge_session_size,
+            unsigned int queue_size,
             Stack &stack,
             geindex::TypedEntry::TypeEnum desc,
-            uint num_writer_threads);
+            unsigned int num_writer_threads);
   void DoIndexing(void);
 
  private:
@@ -81,12 +82,12 @@ class Generator : public mttypes::WaitBaseManager {
 
   Writer             writer_;
   Todo               todo_;
-  const uint         merge_session_size_;
+  const unsigned int         merge_session_size_;
   MergeSemaphore     merge_semaphore_;
   CommandQueue       index_command_queue_;
   CommandQueue       writer_command_queue_;
   khProgressMeter    *progress_;
-  const uint         num_writer_threads_;
+  const unsigned int         num_writer_threads_;
 
   typename Writer::ReadBuffer  tmp_read_buf;
 };

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -173,7 +174,7 @@ std::string ReplaceString(const std::string& input,
     return input;  // No occurrences, return the input string.
   }
   std::string result;
-  uint replace_string_length = replace_string.size();
+  unsigned int replace_string_length = replace_string.size();
   while (std::string::npos != pos) {
     // Copy the characters from the previous search to the beginning
     // of the replace_string occurrence.
@@ -222,10 +223,10 @@ std::string Itoa(T x) {
 }
 
 // explicit instantiation
-template std::string Itoa(int32 x);
-template std::string Itoa(uint32 x);
-template std::string Itoa(int64 x);
-template std::string Itoa(uint64 x);
+template std::string Itoa(std::int32_t x);
+template std::string Itoa(std::uint32_t x);
+template std::string Itoa(std::int64_t x);
+template std::string Itoa(std::uint64_t x);
 
 std::string DoubleToString(double x) {
   std::ostringstream stream;
@@ -301,7 +302,7 @@ bool TimeToHexString(const std::string& input,
   std::string date_hex_ = jpeg_date.GetHexString();
 
   // Build time hex code
-  int32 milliSeconds = MillisecondsFromMidnight(time);
+  std::int32_t milliSeconds = MillisecondsFromMidnight(time);
   char buf[8];
   snprintf(buf, sizeof(buf), "%x", milliSeconds);
   std::string time_hex_ = std::string(buf);
@@ -420,18 +421,18 @@ std::string FindValueInVariableFile(const std::string& filename,
 }
 
 
-int32 ParseDec32Value(const std::string& string_value, uint32 start_index,
-                             size_t size, int32 default_result) {
+std::int32_t ParseDec32Value(const std::string& string_value, std::uint32_t start_index,
+                             size_t size, std::int32_t default_result) {
   std::string substring = string_value.substr(start_index, size);
   if (substring.empty()) {
   }
   char *error = NULL;
-  int64 value = strtoll(substring.c_str(), &error, 10);
-  // Limit long values to int32 min/max.  Needed for lp64; no-op on 32 bits.
-  if (value > std::numeric_limits<int32>::max()) {
-    value = std::numeric_limits<int32>::max();
-  } else if (value < std::numeric_limits<int32>::min()) {
-    value = std::numeric_limits<int32>::min();
+  std::int64_t value = strtoll(substring.c_str(), &error, 10);
+  // Limit long values to std::int32_t min/max.  Needed for lp64; no-op on 32 bits.
+  if (value > std::numeric_limits<std::int32_t>::max()) {
+    value = std::numeric_limits<std::int32_t>::max();
+  } else if (value < std::numeric_limits<std::int32_t>::min()) {
+    value = std::numeric_limits<std::int32_t>::min();
   }
   // Check if there was no number to convert.
   return (error == substring.c_str()) ? default_result : value;

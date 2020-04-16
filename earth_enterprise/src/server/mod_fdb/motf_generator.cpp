@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -549,9 +550,9 @@ int GetUpsampledTiles(const MotfParams &motf_params,
                             (scaleup * y_pc_north + scaleup - 1))));
   int tnum = 0;
 
-  uint32 channel;
+  std::uint32_t channel;
   reader->GetUint32Arg((*arg_map)["channel"], &channel);
-  uint32 version;
+  std::uint32_t version;
   reader->GetUint32Arg((*arg_map)["version"], &version);
   bool VERSION_MATTERS = true;
   geindex::TypedEntry::ReadKey read_key(version, channel,
@@ -573,9 +574,9 @@ int GetUpsampledTiles(const MotfParams &motf_params,
       nexttile.yoff = kMotfTileSize - tile_north_pixup;
       nexttile.ysize = tile_north_pixup;
 
-      int levelok = reader->CheckLevel(read_key, static_cast<uint32>(z_up),
-                                       static_cast<uint32>(nexttile.y_up),
-                                       static_cast<uint32>(nexttile.x_up));
+      int levelok = reader->CheckLevel(read_key, static_cast<std::uint32_t>(z_up),
+                                       static_cast<std::uint32_t>(nexttile.y_up),
+                                       static_cast<std::uint32_t>(nexttile.x_up));
       nexttile.dataflag = levelok;
       if (levelok == 2) {
         return 0;
@@ -596,9 +597,9 @@ int GetUpsampledTiles(const MotfParams &motf_params,
         nexttile.ysize = kMotfTileSize;
         // Test Level.
 
-        int levelok = reader->CheckLevel(read_key, static_cast<uint32>(z_up),
-                                         static_cast<uint32>(nexttile.y_up),
-                                         static_cast<uint32>(nexttile.x_up));
+        int levelok = reader->CheckLevel(read_key, static_cast<std::uint32_t>(z_up),
+                                         static_cast<std::uint32_t>(nexttile.y_up),
+                                         static_cast<std::uint32_t>(nexttile.x_up));
         nexttile.dataflag = levelok;
         if (levelok == 2) {
           return 0;
@@ -625,9 +626,9 @@ int GetUpsampledTiles(const MotfParams &motf_params,
         nexttile.ysize = kMotfTileSize - tile_south_pixup;
         // Test Level.
 
-        int levelok = reader->CheckLevel(read_key, static_cast<uint32>(z_up),
-                                         static_cast<uint32>(nexttile.y_up),
-                                         static_cast<uint32>(nexttile.x_up));
+        int levelok = reader->CheckLevel(read_key, static_cast<std::uint32_t>(z_up),
+                                         static_cast<std::uint32_t>(nexttile.y_up),
+                                         static_cast<std::uint32_t>(nexttile.x_up));
         nexttile.dataflag = levelok;
         if (levelok == 2) {
           return 0;
@@ -642,9 +643,9 @@ int GetUpsampledTiles(const MotfParams &motf_params,
     // tiles have not been found and levelup has been reduced to 0).
     nexttile.y_up = tilenorthup;
     nexttile.x_up = scaleup * xmotf;
-    int levelok = reader->CheckLevel(read_key, static_cast<uint32>(z_up),
-                                     static_cast<uint32>(nexttile.y_up),
-                                     static_cast<uint32>(nexttile.x_up));
+    int levelok = reader->CheckLevel(read_key, static_cast<std::uint32_t>(z_up),
+                                     static_cast<std::uint32_t>(nexttile.y_up),
+                                     static_cast<std::uint32_t>(nexttile.x_up));
     bool is_cutter = ((*arg_map)["ct"] == "c");
     // If ancestor data exists below requested level(levelok=2) and cutter is
     // enabled do not attempt resampling. MotF will then return HTTP_NOT_FOUND.
@@ -665,9 +666,9 @@ int GetUpsampledTiles(const MotfParams &motf_params,
       upsampled_tiles->push_back(nexttile);
       nexttile.y_up = nexttile.y_up + 1;
       nexttile.x_up = nexttile.x_up;
-      int levelok = reader->CheckLevel(read_key, static_cast<uint32>(z_up),
-                                       static_cast<uint32>(nexttile.y_up),
-                                       static_cast<uint32>(nexttile.x_up));
+      int levelok = reader->CheckLevel(read_key, static_cast<std::uint32_t>(z_up),
+                                       static_cast<std::uint32_t>(nexttile.y_up),
+                                       static_cast<std::uint32_t>(nexttile.x_up));
       if (levelok == 2 && is_cutter) {
         return 0;
       }

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +18,8 @@
 #ifndef __khGDALBuffer_h
 #define __khGDALBuffer_h
 
+#include <cstdint>
 #include <vector>
-#include <khTypes.h>
 #include <khExtents.h>
 #include <khException.h>
 #include <khCalcHelper.h>
@@ -33,14 +34,14 @@ class GDALDataset;
 class khGDALBuffer {
  public:
   khTypes::StorageEnum pixelType;
-  std::vector<uint>    bands;
+  std::vector< unsigned int>     bands;
   void*                buf;
-  int64                pixelStep;  // in pixelSize steps
-  int64                lineStep;   // in pixelSize steps
-  int64                bandStep;   // in pixelSize steps
+  std::int64_t                pixelStep;  // in pixelSize steps
+  std::int64_t                lineStep;   // in pixelSize steps
+  std::int64_t                bandStep;   // in pixelSize steps
 
   khGDALBuffer(khTypes::StorageEnum pixType,
-               const std::vector<uint> &bands_,
+               const std::vector< unsigned int>  &bands_,
                void* dataBuf,
                int pixelStep_,
                int lineStep_,
@@ -55,7 +56,7 @@ class khGDALBuffer {
   }
 
   // construct from an offset inside another GDALBuffer
-  khGDALBuffer(const khGDALBuffer &o, const khOffset<uint32> &offset) :
+  khGDALBuffer(const khGDALBuffer &o, const khOffset<std::uint32_t> &offset) :
       pixelType(o.pixelType),
       bands(o.bands),
       buf(o.buf),
@@ -63,46 +64,46 @@ class khGDALBuffer {
       lineStep(o.lineStep),
       bandStep(o.bandStep)
   {
-    uint pixelSize = khTypes::StorageSize(pixelType);
-    buf = ((uchar*)buf) +
+    unsigned int pixelSize = khTypes::StorageSize(pixelType);
+    buf = ((unsigned char*)buf) +
           offset.y() * lineStep * pixelSize +
           offset.x() * pixelStep * pixelSize;
   }
 
 
-  CPLErr Read(GDALDataset *srcDS, const khExtents<uint32> &srcExtents);
+  CPLErr Read(GDALDataset *srcDS, const khExtents<std::uint32_t> &srcExtents);
 
   template <class FillType>
-  void Fill(const khSize<uint32> &rasterSize,
+  void Fill(const khSize<std::uint32_t> &rasterSize,
             const std::vector<FillType> &bandFillValues);
 
  private:
   template <class FillType, class DestType>
-  void TypedFill(const khSize<uint32> &rasterSize,
+  void TypedFill(const khSize<std::uint32_t> &rasterSize,
                  const std::vector<FillType> &bandFillValues);
 };
 
 
 template <class FillType>
 void
-khGDALBuffer::Fill(const khSize<uint32> &rasterSize,
+khGDALBuffer::Fill(const khSize<std::uint32_t> &rasterSize,
                    const std::vector<FillType> &bandFillValues)
 {
   switch (pixelType) {
     case khTypes::UInt8:
-      TypedFill<FillType, uint8>(rasterSize, bandFillValues);
+      TypedFill<FillType, std::uint8_t>(rasterSize, bandFillValues);
       break;
     case khTypes::UInt16:
-      TypedFill<FillType, uint16>(rasterSize, bandFillValues);
+      TypedFill<FillType, std::uint16_t>(rasterSize, bandFillValues);
       break;
     case khTypes::Int16:
-      TypedFill<FillType, int16>(rasterSize, bandFillValues);
+      TypedFill<FillType, std::int16_t>(rasterSize, bandFillValues);
       break;
     case khTypes::UInt32:
-      TypedFill<FillType, uint32>(rasterSize, bandFillValues);
+      TypedFill<FillType, std::uint32_t>(rasterSize, bandFillValues);
       break;
     case khTypes::Int32:
-      TypedFill<FillType, int32>(rasterSize, bandFillValues);
+      TypedFill<FillType, std::int32_t>(rasterSize, bandFillValues);
       break;
     case khTypes::Float32:
       TypedFill<FillType, float32>(rasterSize, bandFillValues);
@@ -118,16 +119,16 @@ khGDALBuffer::Fill(const khSize<uint32> &rasterSize,
 
 template <class FillType, class DestType>
 void
-khGDALBuffer::TypedFill(const khSize<uint32> &rasterSize,
+khGDALBuffer::TypedFill(const khSize<std::uint32_t> &rasterSize,
                         const std::vector<FillType> &bandFillValues)
 {
-  for (uint band = 0; band < bands.size(); ++band) {
+  for (unsigned int band = 0; band < bands.size(); ++band) {
     DestType fillVal =
       ClampRange<DestType>(bandFillValues[bands[band]]);
     DestType *bandBuf = ((DestType*)buf) + band * bandStep;
 
     if ((sizeof(DestType) == 1) && (pixelStep == 1) &&
-        (std::abs(lineStep) == static_cast<int64>(rasterSize.width))) {
+        (std::abs(lineStep) == static_cast<std::int64_t>(rasterSize.width))) {
       // special case, packed bytes
       if (lineStep > 0) {
         memset(bandBuf, (int)fillVal,
@@ -137,9 +138,9 @@ khGDALBuffer::TypedFill(const khSize<uint32> &rasterSize,
                (int)fillVal, rasterSize.width * rasterSize.height);
       }
     } else {
-      for (uint line = 0; line < rasterSize.height; ++line) {
+      for (unsigned int line = 0; line < rasterSize.height; ++line) {
         DestType *lineBuf = bandBuf + line * lineStep;
-        for (uint pixel = 0; pixel < rasterSize.width; ++pixel) {
+        for (unsigned int pixel = 0; pixel < rasterSize.width; ++pixel) {
           lineBuf[pixel * pixelStep] = fillVal;
         }
       }

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,8 +49,8 @@ class khMutexBase {
   void Unlock(void);
   bool trylock(void) { return TryLock(); }
   bool TryLock(void);
-  bool timedTryLock(uint secToWait) { return TimedTryLock(secToWait); }
-  bool TimedTryLock(uint secToWait);
+  bool timedTryLock(unsigned int secToWait) { return TimedTryLock(secToWait); }
+  bool TimedTryLock(unsigned int secToWait);
 };
 #define KH_MUTEX_BASE_INITIALIZER {PTHREAD_MUTEX_INITIALIZER}
 #define kH_MUTEX_BASE_RECURSIVE {PTHREAD_MUTEX_RECURSIVE}
@@ -90,7 +91,7 @@ class khLockGuard {
   khLockGuard(khMutexBase &mutex_) : mutex(mutex_) {
     mutex.Lock();
   }
-  khLockGuard(khMutexBase &mutex_, uint waitTime) : mutex(mutex_) {
+  khLockGuard(khMutexBase &mutex_, unsigned int waitTime) : mutex(mutex_) {
     if (!mutex.TimedTryLock(waitTime)) {
       std::string errMsg = "Failed to acquire mutex within " + std::to_string(waitTime) +  " seconds";
       throw khTimedMutexException(errMsg);

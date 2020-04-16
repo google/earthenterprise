@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,10 +13,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <cstdint>
 #include <string>
 #include <vector>
 #include <map>
-#include <khTypes.h>
 #include <autoingest/.idl/storage/DatedImageryIndexInfo.h>
 #include <autoingest/.idl/storage/DatedImageryIndexInfo_impl.h>
 
@@ -24,14 +25,14 @@
 #/cppquote
 
 class geqtgen::Config {
-  uint        index_version_;
+  unsigned int        index_version_;
   std::string imagery_index_;
   std::string terrain_index_;
   std::string vector_index_;
-  uint        terrain_packet_version_ = uint(0);
+  unsigned int        terrain_packet_version_ = uint(0);
 
-  typedef std::map<uint32,uint32> ProviderMap;
-  std::map<uint32,uint32> inset_provider_map_ = geqtgen::Config::ProviderMap();
+  typedef std::map<std::uint32_t,std::uint32_t> ProviderMap;
+  std::map<std::uint32_t,std::uint32_t> inset_provider_map_ = geqtgen::Config::ProviderMap();
 
   // Acquisition date of the imagery project.
   std::string imagery_date_string_ = std::string();

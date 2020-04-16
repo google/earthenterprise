@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,7 +24,7 @@
 
 #include <string>
 #include "common/base/macros.h"
-#include "common/khTypes.h"
+#include <cstdint>
 
 namespace keyhole {
 
@@ -47,7 +48,7 @@ class JpegCommentDate;
 // ============================================================================
 class JpegCommentDate {
  public:
-  typedef uint32 YearMonthDayKey;  // year,month,day = leadingbits,4bits,5bits.
+  typedef std::uint32_t YearMonthDayKey;  // year,month,day = leadingbits,4bits,5bits.
 
   static const int kMinimumYear;
   static const int kMaximumYear;

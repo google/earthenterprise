@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -34,7 +35,7 @@ namespace rasterfuse {
 // ****************************************************************************
 // ***  BlendInset
 // ****************************************************************************
-BlendInset::BlendInset(uint targetLevel,
+BlendInset::BlendInset(unsigned int targetLevel,
                        const std::string &dataFile,
                        const std::string &alphaFile)
     : dataRP(khRasterProduct::Open(dataFile)),
@@ -86,7 +87,7 @@ BlendInset::BlendInset(uint targetLevel,
 // ****************************************************************************
 template <class CachingDataReader>
 RasterBlender<CachingDataReader>::RasterBlender(
-    uint level,
+    unsigned int level,
     const std::vector<PacketLevelConfig::Inset> &_insets,
     bool _skip_transparent, const bool _is_mercator):
     skip_transparent_(_skip_transparent),
@@ -100,7 +101,7 @@ RasterBlender<CachingDataReader>::RasterBlender(
   }
 
   insets_.reserve(_insets.size());
-  uint i = _insets.size();
+  unsigned int i = _insets.size();
   while (i > 0) {
     --i;
     insets_.push_back(new BlendInset(level, _insets[i].dataRP,
@@ -129,7 +130,7 @@ RasterBlender<CachingDataReader>::Load(const khTileAddr &target_addr,
   // ********************************************************
   // *** Blend each item from stack into the destination tile
   // ********************************************************
-  for (uint i = 0; i < insets_.size(); ++i) {
+  for (unsigned int i = 0; i < insets_.size(); ++i) {
     const BlendInset *inset(insets_[i]);
 
     std::string debugName = inset->dataLevel->product()->name();

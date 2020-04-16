@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,9 +33,9 @@ std::ostream& operator<<(std::ostream& os, const gstGeodeHandle &geodeh) {
   assert(!IsMultiGeodeType((*geodeh).PrimType()));
   const gstGeode *geode = static_cast<const gstGeode*>(&(*geodeh));
   os << "Geode:" << std::endl;
-  for (uint p = 0; p < geode->NumParts(); ++p) {
+  for (unsigned int p = 0; p < geode->NumParts(); ++p) {
     os << "part:" << p << std::endl;
-    for (uint v = 0; v < geode->VertexCount(p); ++v) {
+    for (unsigned int v = 0; v < geode->VertexCount(p); ++v) {
       os << geode->GetVertex(p, v);
     }
   }
@@ -64,9 +65,9 @@ void CompareSingleGeodes(const gstGeodeHandle &geodeh,
   EXPECT_EQ(expected_geode->TotalVertexCount(), geode->TotalVertexCount()) <<
       message;
 
-  for (uint part = 0; part < expected_geode->NumParts() &&
+  for (unsigned int part = 0; part < expected_geode->NumParts() &&
            part < geode->NumParts(); ++part) {
-    for (uint v = 0; v < expected_geode->VertexCount(part) &&
+    for (unsigned int v = 0; v < expected_geode->VertexCount(part) &&
              v < geode->VertexCount(part) ; ++v) {
       const gstVertex &expected_pt = expected_geode->GetVertex(part, v);
       const gstVertex &pt = geode->GetVertex(part, v);
@@ -94,7 +95,7 @@ void CompareMultiGeodes(const gstGeodeHandle &geodeh,
   const gstMultiPoly *expected_multi_geode =
       static_cast<const gstMultiPoly*>(&(*expected_geodeh));
 
-  for (uint part = 0; part < expected_multi_geode->NumParts() &&
+  for (unsigned int part = 0; part < expected_multi_geode->NumParts() &&
            part < multi_geode->NumParts(); ++part) {
     const gstGeodeHandle &geodeh_p = multi_geode->GetGeode(part);
     const gstGeodeHandle &expected_geodeh_p =
@@ -112,7 +113,7 @@ void TestUtils::PrintGeode(const gstGeodeHandle &geodeh) {
   if (IsMultiGeodeType((*geodeh).PrimType())) {
     const gstMultiPoly *multi_geode =
         static_cast<const gstMultiPoly*>(&(*geodeh));
-    for (uint part = 0; part < multi_geode->NumParts(); ++part) {
+    for (unsigned int part = 0; part < multi_geode->NumParts(); ++part) {
       const gstGeodeHandle &geodeh_p = multi_geode->GetGeode(part);
       std::cout << geodeh_p << std::endl;
     }

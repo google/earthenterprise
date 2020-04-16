@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,22 +13,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
+#include <cstdint>
 #include <string>
 #include <vector>
 #include <map>
-#include <khTypes.h>
 
 class geindexgen::BlendStack {
   class Level {
     std::string packetfile_;
-    uint32 index_version_;
+    std::uint32_t index_version_;
   };
   class Inset {
     std::vector<Level> levels_;
   };
 
-  typedef std::map<uint32,uint32> ProviderMap;
+  typedef std::map<std::uint32_t,std::uint32_t> ProviderMap;
 
   std::vector<Inset> insets_;
 

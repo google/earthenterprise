@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -187,7 +188,7 @@ gstStatus gstGDTFormat::CloseFile() {
   return GST_OKAY;
 }
 
-gstGeodeHandle gstGDTFormat::GetFeatureImpl(uint32 layer, uint32 fidx) {
+gstGeodeHandle gstGDTFormat::GetFeatureImpl(std::uint32_t layer, std::uint32_t fidx) {
   // should be checked by gstSource before calling me
   assert(layer < NumLayers());
   assert(layer == 0);
@@ -200,7 +201,7 @@ gstGeodeHandle gstGDTFormat::GetFeatureImpl(uint32 layer, uint32 fidx) {
   return new_geode;
 }
 
-gstRecordHandle gstGDTFormat::GetAttributeImpl(uint32 layer, uint32 fidx) {
+gstRecordHandle gstGDTFormat::GetAttributeImpl(std::uint32_t layer, std::uint32_t fidx) {
   // should be checked by gstSource before calling me
   assert(layer < NumLayers());
   assert(layer == 0);
@@ -224,7 +225,7 @@ bool gstGDTFormat::Parse() {
   // by GDT ID for later correlation with primary file
   //
   if (secondary_def_.table) {
-    for (uint r = 0; r < secondary_def_.table->NumRows(); ++r) {
+    for (unsigned int r = 0; r < secondary_def_.table->NumRows(); ++r) {
       attrib = secondary_def_.table->Row(r);
       if (!attrib) {
         notify(NFY_WARN, "Problems reading row %d from GDT file: %s",
@@ -258,7 +259,7 @@ bool gstGDTFormat::Parse() {
           }
 
           gstGeode* geode = static_cast<gstGeode*>(&(*geodeh));
-          for (uint ii = 0; ii < secondary_def_.geoFields.size(); ++ii) {
+          for (unsigned int ii = 0; ii < secondary_def_.geoFields.size(); ++ii) {
             GeoField gf = secondary_def_.geoFields[ii];
             fx = attrib->Field(gf.x)->ValueAsDouble();
             fy = attrib->Field(gf.y)->ValueAsDouble();
@@ -284,7 +285,7 @@ bool gstGDTFormat::Parse() {
   // now read the primary file and if a secondary file exists look up the
   // feature id in the hash table to see if we need to add a new feature
   // or augment the existing feature
-  for (uint r = 0; r < primary_def_.table->NumRows(); ++r) {
+  for (unsigned int r = 0; r < primary_def_.table->NumRows(); ++r) {
     attrib = primary_def_.table->Row(r);
     if (!attrib) {
       notify(NFY_WARN, "Problems reading row %d from GDT file", r);
@@ -320,7 +321,7 @@ bool gstGDTFormat::Parse() {
         }
 
         gstGeode* geode = static_cast<gstGeode*>(&(*geodeh));
-        for (uint ii = 0; ii < primary_def_.geoFields.size(); ++ii) {
+        for (unsigned int ii = 0; ii < primary_def_.geoFields.size(); ++ii) {
           GeoField gf = primary_def_.geoFields[ii];
           fx = attrib->Field(gf.x)->ValueAsDouble();
           fy = attrib->Field(gf.y)->ValueAsDouble();

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -85,7 +86,7 @@ void IndexManifest::GetManifest(geFilePool &filePool,
   index_reader.AppendManifest(manifest, tmp_dir);
 
   // Append manifests of all packetfile bundles.
-  for (uint p = 0 ; p < index_reader.PacketFileCount(); ++p) {
+  for (unsigned int p = 0 ; p < index_reader.PacketFileCount(); ++p) {
     std::string packetfile = index_reader.GetPacketFile(p);
     if (packetfile.empty()) {
       continue;

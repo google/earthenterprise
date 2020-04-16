@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -100,7 +101,7 @@ int main(int argc, char *argv[]) {
   if (esri) {
     fprintf(stderr, "doing esri\n");
 
-    uint64 size;
+    std::uint64_t size;
     time_t mtime;
     if (!khGetFileInfo(esri, size, mtime)) {
       notify(NFY_FATAL, "Unable to stat %s", esri);
@@ -111,17 +112,17 @@ int main(int argc, char *argv[]) {
       notify(NFY_FATAL, "Unable to open %s", esri);
     }
     ssize_t numread = read(fd, buf, size);
-    if ((uint64)numread != size) {
+    if ((std::uint64_t)numread != size) {
       notify(NFY_FATAL, "Unable to read %s", esri);
     }
     close(fd);
     buf[size-1] = '\n';
 
     // break the buffer into lines
-    const uint maxlines = 1024;
+    const unsigned int maxlines = 1024;
     char *lines[maxlines+1];
-    uint numlines = 1;
-    uint pos = 0;
+    unsigned int numlines = 1;
+    unsigned int pos = 0;
     lines[0] = &buf[pos];
     while ((pos < size+1) && (numlines < maxlines)) {
       if (buf[pos] == '\n') {
@@ -133,7 +134,7 @@ int main(int argc, char *argv[]) {
     lines[numlines] = 0;
 
 
-    for (uint i = 0; i < numlines; ++i) {
+    for (unsigned int i = 0; i < numlines; ++i) {
       if (lines[i] == 0) break;
       printf("%s\n", lines[i]);
     }
@@ -151,7 +152,7 @@ int main(int argc, char *argv[]) {
   }
   ssize_t wktlen = strlen(wkt);
 
-  printf("----- wktlen = %d -----\n", wktlen);
+  printf("----- wktlen = %lu -----\n", static_cast<unsigned long>(wktlen));
   printf("----- wkt = %s -----\n", wkt);
 
   khEnsureParentDir(out);

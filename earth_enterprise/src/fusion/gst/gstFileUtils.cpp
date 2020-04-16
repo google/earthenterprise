@@ -251,7 +251,7 @@ gstFileIO::~gstFileIO() {
     delete [] buffer_;
 }
 
-gstStatus gstFileIO::write(int64 pos) {
+gstStatus gstFileIO::write(std::int64_t pos) {
   if (status_ != GST_OKAY)
     return status_;
 
@@ -262,7 +262,7 @@ gstStatus gstFileIO::write(int64 pos) {
   return status_;
 }
 
-gstStatus gstFileIO::read(int64 pos) {
+gstStatus gstFileIO::read(std::int64_t pos) {
   if (status_ != GST_OKAY)
     return status_;
 

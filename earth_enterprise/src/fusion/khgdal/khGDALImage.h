@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +18,10 @@
 #ifndef __khGDALImage_h
 #define __khGDALImage_h
 
+#include <cstdint>
 #include <string>
 #include <gdal_priv.h>
 #include <khGuard.h>
-#include <khTypes.h>
 #include <khRefCounter.h>
 #include <notify.h>
 
@@ -46,8 +47,8 @@ class khGDALImageImpl : public khRefCounter
   std::string filename;
   khDeleteGuard<GDALDataset> dataset;
 
-  inline khSize<uint32> rasterSize(void) const {
-    return khSize<uint32>(dataset->GetRasterXSize(),
+  inline khSize<std::uint32_t> rasterSize(void) const {
+    return khSize<std::uint32_t>(dataset->GetRasterXSize(),
                           dataset->GetRasterYSize());
   }
 
@@ -71,7 +72,7 @@ class khGDALImage
 
   // extended keyhole routines
   inline const std::string& filename(void) const { return impl->filename; }
-  inline khSize<uint32> rasterSize(void) const {
+  inline khSize<std::uint32_t> rasterSize(void) const {
     return impl->rasterSize();
   }
 

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -53,7 +54,7 @@ class Test_khFilesEqual : public testing::Test {
 
     // just a large number that's not an even multiple of the 1024 * 512
     // sized buffer used by khFilesEqual
-    const uint64 common_size = 1024 * 612 + 34;
+    const std::uint64_t common_size = 1024 * 612 + 34;
     EXPECT_TRUE(khFillFile(file_1.fd(), 'w', common_size));
     EXPECT_TRUE(khFillFile(file_2.fd(), 'w', common_size));
     EXPECT_TRUE(khFillFile(file_1.fd(), '1', 10));

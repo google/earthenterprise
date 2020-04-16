@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +37,8 @@
 #include <string>
 #include <vector>
 #include <keyhole/jpeg_comment_date.h>
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "common/khGuard.h"
 #include "common/khEndian.h"
 #include "common/quadtreepath.h"
@@ -56,17 +58,17 @@ class CollectorFormat2;
 // shipped over the network to client.
 class KhDataHeader {
  public:
-  uint32 magic_id;
-  uint32 data_type_id;
-  uint32 version;
-  int32 num_instances;
-  int32 data_instance_size;
-  int32 data_buffer_offset;
-  int32 data_buffer_size;
-  int32 meta_buffer_size;
+  std::uint32_t magic_id;
+  std::uint32_t data_type_id;
+  std::uint32_t version;
+  std::int32_t num_instances;
+  std::int32_t data_instance_size;
+  std::int32_t data_buffer_offset;
+  std::int32_t data_buffer_size;
+  std::int32_t meta_buffer_size;
 
   void Push(EndianWriteBuffer &buf,
-            int32 databuffersize) const;
+            std::int32_t databuffersize) const;
   void Pull(EndianReadBuffer &buf);
 };
 
@@ -82,9 +84,9 @@ class KhQuadtreeDataReference {
           jpeg_date_() {
   }
   KhQuadtreeDataReference(const QuadtreePath &qt_path,
-                          uint16 version,
-                          uint16 channel,
-                          uint16 provider)
+                          std::uint16_t version,
+                          std::uint16_t channel,
+                          std::uint16_t provider)
       : qt_path_(qt_path),
         version_(version),
         channel_(channel),
@@ -92,9 +94,9 @@ class KhQuadtreeDataReference {
         jpeg_date_() {
   }
   KhQuadtreeDataReference(const QuadtreePath &qt_path,
-                          uint16 version,
-                          uint16 channel,
-                          uint16 provider,
+                          std::uint16_t version,
+                          std::uint16_t channel,
+                          std::uint16_t provider,
                           const keyhole::JpegCommentDate& jpeg_date)
       : qt_path_(qt_path),
         version_(version),
@@ -103,9 +105,9 @@ class KhQuadtreeDataReference {
         jpeg_date_(jpeg_date) {
   }
   inline QuadtreePath qt_path() const { return qt_path_; }
-  inline uint16 version() const { return version_; }
-  inline uint16 channel() const { return channel_; }
-  inline uint16 provider() const { return provider_; }
+  inline std::uint16_t version() const { return version_; }
+  inline std::uint16_t channel() const { return channel_; }
+  inline std::uint16_t provider() const { return provider_; }
   inline const keyhole::JpegCommentDate& jpeg_date() const {
     return jpeg_date_;
   }
@@ -115,9 +117,9 @@ class KhQuadtreeDataReference {
   }
 
   inline void set_qt_path(const QuadtreePath &qt_path) { qt_path_ = qt_path; }
-  inline void set_version(uint16 version) { version_ = version; }
-  inline void set_channel(uint16 channel) { channel_ = channel; }
-  inline void set_provider(uint16 provider) { provider_ = provider; }
+  inline void set_version(std::uint16_t version) { version_ = version; }
+  inline void set_channel(std::uint16_t channel) { channel_ = channel; }
+  inline void set_provider(std::uint16_t provider) { provider_ = provider; }
 
   inline bool operator==(const KhQuadtreeDataReference &other) const {
     return qt_path_ == other.qt_path_
@@ -135,12 +137,12 @@ class KhQuadtreeDataReference {
   void Push(EndianWriteBuffer &buffer) const; // serializer
   void Pull(EndianReadBuffer &input);   // de-serializer
 
-  static const size_t kSerialSize = sizeof(QuadtreePath) + 3 * sizeof(uint16);
+  static const size_t kSerialSize = sizeof(QuadtreePath) + 3 * sizeof(std::uint16_t);
  private:
   QuadtreePath qt_path_;                // path to the data
-  uint16 version_;
-  uint16 channel_;                      // zero for non-vector
-  uint16 provider_;
+  std::uint16_t version_;
+  std::uint16_t channel_;                      // zero for non-vector
+  std::uint16_t provider_;
   keyhole::JpegCommentDate jpeg_date_;
 };
 
@@ -187,7 +189,7 @@ class KhDataPacket {
  public:
   // Save header and databuffer to a buffer and advances buffer pointer.
   // No size validation here. Caller needs to do it.
-  void SaveHeader(EndianWriteBuffer &buffer, int32 databuffersize) const;
+  void SaveHeader(EndianWriteBuffer &buffer, std::int32_t databuffersize) const;
 
   // accessors
   const KhDataHeader& packet_header() const { return packet_header_; }
@@ -238,7 +240,7 @@ class KhDataPacket {
 // Helper structure to store data information in quadnodes.
 struct KhQuadTreeBTG {
   // This is actually a bitfield.
-  uint8 children;
+  std::uint8_t children;
 
   KhQuadTreeBTG() { children = 0; }
 
@@ -273,7 +275,7 @@ struct KhQuadTreeBTG {
   void SetTerrainBit()   { children |= bytemaskBTG[7]; }
   void ClearTerrainBit() { children &= ~bytemaskBTG[7]; }
 
-  static const uint8 bytemaskBTG[];
+  static const std::uint8_t bytemaskBTG[];
 };
 
 class ChannelInfo;
@@ -286,27 +288,27 @@ struct KhQuadTreeQuantum16 {
 
   KhQuadTreeBTG children;
 
-  uint16 cnode_version;  // cachenode version
-  uint16 image_version;
-  uint16 terrain_version;
+  std::uint16_t cnode_version;  // cachenode version
+  std::uint16_t image_version;
+  std::uint16_t terrain_version;
 
   // channel information.
   // channel_type and channel_version will be empty
   // if we don't have any channels.
-  std::vector<uint16> channel_type;
-  std::vector<uint16> channel_version;
+  std::vector<std::uint16_t> channel_type;
+  std::vector<std::uint16_t> channel_version;
   inline size_t num_channels() const {
     assert(channel_type.size() == channel_version.size());
     return channel_type.size();
   }
 
   // image neighbors info.
-  uint8 image_neighbors[kImageNeighborCount];
+  std::uint8_t image_neighbors[kImageNeighborCount];
 
   // Data provider info.
   // Terrain data provider does not seem to be used.
-  uint8 image_data_provider;
-  uint8 terrain_data_provider;
+  std::uint8_t image_data_provider;
+  std::uint8_t terrain_data_provider;
 
   // Make default ctor public - datapacket needs it to call vector ctor.
   // Use one of the Init() functions to intialize the structure
@@ -447,7 +449,7 @@ class KhQuadTreeNodeProtoBuf {
   bool GetChildBit(int i) const;
 
   // Return the 4 bit flags representing the quadtree child occupancy bits.
-  int32 GetChildFlags() const;
+  std::int32_t GetChildFlags() const;
 
   // Return a pointer to the first layer of the specified type from the
   // node's layer list. Asserts if none found.
@@ -462,9 +464,9 @@ class KhQuadTreeNodeProtoBuf {
   // Return a readable string describing the quadtree node (matches the output
   // of the KhQuadTreeQuantum16 class).
   void ToString(std::ostringstream* str,
-                const int32 node_index,
+                const std::int32_t node_index,
                 const QuadtreePath &qt_path,
-                const int32 subindex) const;
+                const std::int32_t subindex) const;
 
   // Return true if a layer of the specified type exists in this node.
   bool HasLayerOfType(keyhole::QuadtreeLayer::LayerType layer_type) const;
@@ -591,10 +593,10 @@ class SerializedKhQuadTreePacket16 {
 struct KffCopyrightMap {
   // Store info for all 4 levels in qtp.
   // We store the providerId for each node at each level.
-  uint8 level00;
-  uint8 level01[4];
-  uint8 level02[4][4];
-  uint8 level03[4][4][4];
+  std::uint8_t level00;
+  std::uint8_t level01[4];
+  std::uint8_t level02[4][4];
+  std::uint8_t level03[4][4][4];
 
 
   bool CreateMap(const QuadtreePath& pos,

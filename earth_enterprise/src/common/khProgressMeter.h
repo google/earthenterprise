@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +17,7 @@
 
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +41,7 @@
 #include <qdatetime.h>
 #include <deque>
 #include "khTypes.h"
+#include <cstdint>
 
 namespace std {
   template<class T>
@@ -52,21 +55,21 @@ class khProgressMeter
 {
   class IntervalStats {
    public:
-    int64 totalCount;
-    int64 doneCount;
-    int64 skippedCount;
-    int64 elapsedMS;
+    std::int64_t totalCount;
+    std::int64_t doneCount;
+    std::int64_t skippedCount;
+    std::int64_t elapsedMS;
 
-    inline int64 processedCount(void) const {
+    inline std::int64_t processedCount(void) const {
       return doneCount + skippedCount;
     }
     inline double progressFraction(void) const {
       return double(processedCount()) / double(totalCount);
     }
 
-    IntervalStats(int64 total,
-                  int64 done = 0, int64 skipped = 0,
-                  int64 elapsed = 0) :
+    IntervalStats(std::int64_t total,
+                  std::int64_t done = 0, std::int64_t skipped = 0,
+                  std::int64_t elapsed = 0) :
         totalCount(total),
         doneCount(done),
         skippedCount(skipped),
@@ -79,12 +82,12 @@ class khProgressMeter
   khProgressMeter(const khProgressMeter&);
   khProgressMeter& operator=(const khProgressMeter &);
  public:
-  khProgressMeter( int64 totalSteps, const QString &desc_ = "tiles", const std::string& progress_meter_prefix = "");
+  khProgressMeter( std::int64_t totalSteps, const QString &desc_ = "tiles", const std::string& progress_meter_prefix = "");
   ~khProgressMeter(void);
 
-  inline void incrementDone(int64 delta = 1);
-  inline void incrementSkipped(int64 delta = 1);
-  inline void incrementTotal(int64 delta);
+  inline void incrementDone(std::int64_t delta = 1);
+  inline void incrementSkipped(std::int64_t delta = 1);
+  inline void incrementTotal(std::int64_t delta);
 
   // convenience for backward compatibility
   inline void increment(void) { incrementDone(1); }
@@ -94,7 +97,7 @@ class khProgressMeter
   void finalize(void);
 
   // just a little utility, for myself and others
-  static QString msToString( int64 ms );
+  static QString msToString( std::int64_t ms );
  private:
   QString desc;
 
@@ -106,12 +109,12 @@ class khProgressMeter
   // If you want a running average over 3 intervals, the deque will actually
   // contain up to 4 records. The 1st entry gives you the starting numbers
   // for the remaining intervals.
-  static const uint NumRunningAverageIntervals = 5;
+  static const unsigned int NumRunningAverageIntervals = 5;
   std::deque<IntervalStats> intervals;
   const IntervalStats& prevStats(void) const { return intervals.back(); }
 
 
-  int64 countUntilNextCheck;
+  std::int64_t countUntilNextCheck;
   QTime timer;
   bool finalized;
   const std::string progress_meter_prefix_;
@@ -128,7 +131,7 @@ class khProgressMeter
 };
 
 
-inline void khProgressMeter::incrementDone(int64 delta) {
+inline void khProgressMeter::incrementDone(std::int64_t delta) {
   overallStats.doneCount += delta;
   countUntilNextCheck -= std::abs(delta);
   if (countUntilNextCheck <= 0) {
@@ -136,7 +139,7 @@ inline void khProgressMeter::incrementDone(int64 delta) {
   }
 }
 
-inline void khProgressMeter::incrementSkipped(int64 delta) {
+inline void khProgressMeter::incrementSkipped(std::int64_t delta) {
   overallStats.skippedCount += delta;
   countUntilNextCheck -= std::abs(delta);
   if (countUntilNextCheck <= 0) {
@@ -144,7 +147,7 @@ inline void khProgressMeter::incrementSkipped(int64 delta) {
   }
 }
 
-inline void khProgressMeter::incrementTotal(int64 delta) {
+inline void khProgressMeter::incrementTotal(std::int64_t delta) {
   overallStats.totalCount += delta;
   countUntilNextCheck -= std::abs(delta);
   if (countUntilNextCheck <= 0) {
