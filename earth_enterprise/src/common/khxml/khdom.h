@@ -28,8 +28,8 @@
 #include <map>
 #include <memory>
 
-#include <qstring.h>
-#include <qcolor.h>
+#include <Qt/qstring.h>
+#include <Qt/qcolor.h>
 #include <xercesc/dom/DOM.hpp>
 
 #include "common/khTypes.h"
@@ -103,7 +103,7 @@ void
 ToElement(khxml::DOMElement *elem, const QString &value)
 {
   elem->appendChild(
-      elem->getOwnerDocument()->createTextNode((const XMLCh*)value.ucs2()));
+      elem->getOwnerDocument()->createTextNode((const XMLCh*)value.utf16()));
 }
 
 inline
@@ -112,11 +112,11 @@ ToElement(khxml::DOMElement *elem, const EncryptedQString &value)
 {
   elem->setAttribute(ToXMLStr("method"), ToXMLStr("simple"));
   QString tmp = value;
-  for (uint i = 0; i < tmp.length(); ++i) {
+  for (int i = 0; i < tmp.length(); ++i) {
     tmp[i] = tmp[i].unicode() + 13;
   }
   elem->appendChild(
-      elem->getOwnerDocument()->createCDATASection((const XMLCh*)tmp.ucs2()));
+      elem->getOwnerDocument()->createCDATASection((const XMLCh*)tmp.utf16()));
 }
 
 template <class T>
@@ -204,7 +204,7 @@ void
 AddAttribute(khxml::DOMElement *elem, const std::string &attrname,
              const QString &value)
 {
-  elem->setAttribute(ToXMLStr(attrname), (const XMLCh*)value.ucs2());
+  elem->setAttribute(ToXMLStr(attrname), (const XMLCh*)value.utf16());
 }
 
 inline
@@ -258,7 +258,7 @@ AddUTF8Element(khxml::DOMElement *parent,
 {
   khxml::DOMElement* elem =
     parent->getOwnerDocument()->createElement
-    ((const XMLCh*)tagname.ucs2());
+    ((const XMLCh*)tagname.utf16());
   ToElement(elem, value);
   parent->appendChild(elem);
   return elem;
@@ -707,7 +707,7 @@ inline
 void
 FromAttribute(khxml::DOMAttr *attr, QString &val)
 {
-  val = QString::fromUcs2(attr->getValue());
+  val = QString::fromUtf16(attr->getValue());
 }
 
 inline
@@ -728,7 +728,7 @@ GetTextAndCDATA(khxml::DOMElement *elem)
         (node->getNodeType() == khxml::DOMNode::CDATA_SECTION_NODE)) {
       khxml::DOMCharacterData* data = static_cast<khxml::DOMCharacterData*>(node);
       if (data->getLength() > 0) {
-        result.append(QString::fromUcs2(data->getData()));
+        result.append(QString::fromUtf16(data->getData()));
       }
     }
     node = node->getNextSibling();
@@ -799,7 +799,7 @@ FromElement(khxml::DOMElement *elem, QString &val)
     val = "";
     val.squeeze();
   } else {
-    val = QString::fromUcs2((static_cast<khxml::DOMText*>(valNode))->getData());
+    val = QString::fromUtf16((static_cast<khxml::DOMText*>(valNode))->getData());
   }
 }
 
@@ -823,11 +823,11 @@ FromElement(khxml::DOMElement *elem, EncryptedQString &val)
       khxml::DOMCharacterData* data = static_cast<khxml::DOMCharacterData*>(node);;
       if (data->getLength() > 0) {
         if (method == "plaintext") {
-          val = QString::fromUcs2(data->getData());
+          val = QString::fromUtf16(data->getData());
           return;
         } else if (method == "simple") {
-          QString tmp = QString::fromUcs2(data->getData());
-          for (uint i = 0; i < tmp.length(); ++i) {
+          QString tmp = QString::fromUtf16(data->getData());
+          for (int i = 0; i < tmp.length(); ++i) {
             tmp[i] = tmp[i].unicode() - 13;
           }
           val = tmp;
@@ -1018,7 +1018,7 @@ FromXMLStrForMap(const XMLCh *xmlch) {
 template<>
 inline QString
 FromXMLStrForMap(const XMLCh *xmlch) {
-  return QString::fromUcs2(xmlch);
+  return QString::fromUtf16(xmlch);
 }
 
 template<>

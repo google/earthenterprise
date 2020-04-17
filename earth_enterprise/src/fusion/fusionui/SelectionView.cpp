@@ -15,14 +15,15 @@
 
 #include <vector>
 
-#include <qtable.h>
-#include <qpopupmenu.h>
-#include <qcursor.h>
-#include <qmessagebox.h>
-#include <qfiledialog.h>
-#include <qapplication.h>
-#include <qclipboard.h>
 
+#include <Qt/q3table.h>
+#include <Qt/q3popupmenu.h>
+#include <Qt/qcursor.h>
+#include <Qt/qmessagebox.h>
+#include <Qt/qfiledialog.h>
+#include <Qt/qapplication.h>
+#include <Qt/qclipboard.h>
+#include <Qt/q3header.h>
 #include <khFileUtils.h>
 #include <gstFilter.h>
 #include <gstSelector.h>
@@ -32,14 +33,17 @@
 #include <gstSourceManager.h>
 #include <gstKVPFile.h>
 #include <gstKVPTable.h>
-
+#include <Qt/qiodevice.h>
 #include "Preferences.h"
 #include "SelectionView.h"
 #include "DataViewTable.h"
 #include "ObjectDetail.h"
 #include "GfxView.h"
+#include <Qt/qtextstream.h>
+using QHeader = Q3Header;
+using QPopupMenu = Q3PopupMenu;
 
-SelectionView::SelectionView(QWidget* parent, const char* name, WFlags fl)
+SelectionView::SelectionView(QWidget* parent, const char* name, Qt::WFlags fl)
     : SelectionViewBase(parent, name, fl) {
   connect(selectionTable, SIGNAL(contextMenuRequested(int, int, const QPoint&)),
           this, SLOT(openContextMenu(int, int, const QPoint&)));
@@ -82,7 +86,7 @@ void SelectionView::configure(gstSelector* selector) {
   int col = 0;
   if (Preferences::getConfig().dataViewShowFID) {
     selectionTable->setNumCols(attrib->numColumns() + 1);
-    header->setLabel(col++, tr("Feature ID"));
+    header->setLabel(col++, kh::tr("Feature ID"));
   } else {
     selectionTable->setNumCols(attrib->numColumns());
   }
@@ -214,8 +218,8 @@ void SelectionView::SaveColumns(int pick_col) {
   //
   if (!fname.isEmpty()) {
     QFile f(fname);
-    if (!f.open(IO_WriteOnly)) {
-      QMessageBox::critical(this, tr("Fusion"), tr("Unable to open file"));
+    if (!f.open(QIODevice::WriteOnly)) {
+      QMessageBox::critical(this, kh::tr("Fusion"), kh::tr("Unable to open file"));
       return;
     }
 
@@ -294,7 +298,7 @@ void SelectionView::ExportSelectedFeatures() {
   if (fname.isEmpty())
     return;
 
-  std::string kvp_name = khEnsureExtension(fname.latin1(), ".kvgeom");
+  std::string kvp_name = khEnsureExtension(fname.toUtf8().constData(), ".kvgeom");
   gstKVPFile kvp(kvp_name.c_str());
   if (kvp.OpenForWrite() != GST_OKAY) {
     notify(NFY_WARN, "Unable to open feature file %s", kvp_name.c_str());
@@ -329,7 +333,7 @@ void SelectionView::ExportSelectedFeatures() {
 }
 
 SelectionViewDocker::SelectionViewDocker(Place p, QWidget* parent,
-                                         const char* n, WFlags f, bool)
+                                         const char* n, Qt::WFlags f, bool)
     : QDockWindow(p, parent, n, f) {
   setResizeEnabled(true);
   setCloseMode(QDockWindow::Always);

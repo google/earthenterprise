@@ -96,7 +96,9 @@ VectorGEIndexAssetVersionImplD::DoSubmitTask(void)
     }
     uint channelLen = channelEnd - channelBegin;
     if (!channelLen) {
-      throw khException(kh::tr("Can't find channelId for ") + assetref);
+      std::string msg { kh::tr("Can't find channelId for ").toUtf8().constData() };
+      msg += assetref;
+      throw khException(msg.c_str());
     }
     uint channelId=atoi(assetref.substr(channelBegin, channelLen).c_str());
 
@@ -212,7 +214,7 @@ VectorGEIndexAssetVersionImplD::DoSubmitTask(void)
   }
   std::string stackfile = WorkingFilename("stackfile"); // fully bound name
   if (!geindex_stack_.Save(stackfile)) {
-    throw khException(kh::tr("Unable to save %1").arg(stackfile));
+    throw khException(kh::tr("Unable to save %1").arg(stackfile.c_str()));
   }
 
 

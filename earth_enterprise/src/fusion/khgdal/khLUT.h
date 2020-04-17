@@ -183,7 +183,7 @@ class khLUT
       Parse(in);
     } else {
       throw khException(kh::tr("Unrecognized LUT definition \"%1\"")
-                        .arg(lutdef));
+                        .arg(lutdef.c_str()));
     }
   }
 

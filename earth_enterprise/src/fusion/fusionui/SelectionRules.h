@@ -18,8 +18,7 @@
 #ifndef GEO_EARTH_ENTERPRISE_SRC_FUSION_FUSIONUI_SELECTIONRULES_H_
 #define GEO_EARTH_ENTERPRISE_SRC_FUSION_FUSIONUI_SELECTIONRULES_H_
 
-#include <qlistbox.h>
-#include <qspinbox.h>
+#include <Qt/qspinbox.h>
 #include "fusion/gst/gstRecord.h"
 #include "fusion/gst/gstIconManager.h"
 #include "autoingest/.idl/storage/LayerConfig.h"

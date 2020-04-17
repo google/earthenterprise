@@ -271,26 +271,24 @@ int main(int argc, char *argv[]) {
     // Figure out which of the files I really need to send.
     uint64 totalsize = 0;
     FileList needed_files;
-    for (FileMap::const_iterator maybe = send_files.begin();
-         maybe != send_files.end(); ++maybe) {
-      if (have_files.find(maybe->first) == have_files.end()) {
-        totalsize += maybe->second.second;
-        needed_files.push_back(*maybe);
+
+    for (const auto& maybe : send_files) {
+      if (have_files.find(maybe.first) == have_files.end()) {
+        totalsize += maybe.second.second;
+        needed_files.push_back(maybe);
       }
     }
 
     // Now add the extra files.
-    for (std::vector<std::string>::const_iterator extra = extrafiles.begin();
-         extra != extrafiles.end(); ++extra) {
+    for (const auto& extra : extrafiles) {
       uint64 fsize;
       time_t ftime;
-      if (!khGetFileInfo(*extra, fsize, ftime)) {
+      if (!khGetFileInfo(extra, fsize, ftime)) {
         throw khErrnoException(kh::tr("Unable to get filesize for %1")
-                               .arg(*extra));
+                               .arg(extra.c_str()));
       }
       totalsize += fsize;
-      needed_files.push_back(std::make_pair(*extra,
-                                            std::make_pair(*extra, fsize)));
+      needed_files.push_back(std::make_pair(extra, std::make_pair(extra, fsize)));
     }
 
     if (needed_files.size()) {

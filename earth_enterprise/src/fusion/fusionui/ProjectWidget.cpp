@@ -14,26 +14,24 @@
 
 
 #include "fusion/fusionui/ProjectWidget.h"
-
-#include <qpushbutton.h>
-#include <qlistview.h>
-#include <qcheckbox.h>
-#include <qgroupbox.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qspinbox.h>
-
+#include <Qt/qpushbutton.h>
+#include <Qt/qlistview.h>
+#include <Qt/qcheckbox.h>
+#include <Qt/qgroupbox.h>
+#include <Qt/qlayout.h>
+#include <Qt/qlabel.h>
+#include <Qt/qlineedit.h>
+#include <Qt/qspinbox.h>
 #include "fusion/fusionui/LayerItemBase.h"
 #include "fusion/fusionui/ProjectLayerView.h"
-
 #include "common/khTileAddrConsts.h"
 
 ProjectWidget::ProjectWidget(QWidget* parent)
     : ProjectWidgetBase(parent),
       start_level_validator_(StartTmeshLevel, MaxTmeshLevel) {
   // Set overlay_terrain_start_level_spinbox.
-  overlay_terrain_start_level_spinbox->setValidator(&start_level_validator_);
+  // Qt4 accepts integer values by defaul
+  //overlay_terrain_start_level_spinbox->setValidator(&start_level_validator_);
 
   HideUuid();
   HideTimeMachineCheckbox();
@@ -110,7 +108,7 @@ void ProjectWidget::MoveLayerDown() {
 }
 
 void ProjectWidget::SelectLayer() {
-  QListViewItem* item = layer_listview->selectedItem();
+  Q3ListViewItem* item = layer_listview->selectedItem();
   LayerItemBase* layer_item = static_cast<LayerItemBase*>(item);
   if (layer_item) {
     delete_layer_btn->setEnabled(true);
@@ -151,10 +149,10 @@ void ProjectWidget::SetTimeMachineCheckboxState(bool state) {
   is_timemachine_checkbox->setChecked(state);
   if (state) {
     timemachine_pixmap->setPixmap(
-                                QPixmap::fromMimeSource("timemachine-on.png"));
+                                QPixmap("timemachine-on.png"));
   } else {
     timemachine_pixmap->setPixmap(
-                                QPixmap::fromMimeSource("timemachine-off.png"));
+                                QPixmap("timemachine-off.png"));
   }
 }
 
@@ -244,6 +242,6 @@ void ProjectWidget::SetGenericCheckboxText(const QString& text) {
 }
 
 void ProjectWidget::ContextMenu(
-    QListViewItem* item, const QPoint& pt, int col) {
+    Q3ListViewItem* item, const QPoint& pt, int col) {
   // do nothing, let derived classes override
 }

@@ -50,7 +50,7 @@ void RebuildVersion(const SharedString & ref, MiscConfig::GraphOpsType graphOps)
       }
     }
 
-    stateUpdater->SetAndPropagateState(ref, AssetDefs::New, AssetDefs::CanRebuild);
+    stateUpdater->SetStateForRefAndDependents(ref, AssetDefs::New, AssetDefs::CanRebuild);
   }
   else {
     MutableAssetVersionD version(ref);
@@ -80,7 +80,7 @@ void CancelVersion(const SharedString & ref, MiscConfig::GraphOpsType graphOps) 
       }
     }
 
-    stateUpdater->SetAndPropagateState(ref, AssetDefs::Canceled, AssetDefs::NotFinished);
+    stateUpdater->SetStateForRefAndDependents(ref, AssetDefs::Canceled, AssetDefs::NotFinished);
   }
   else {
     MutableAssetVersionD version(ref);

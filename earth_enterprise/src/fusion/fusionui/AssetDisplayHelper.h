@@ -19,9 +19,10 @@
 #define GEO_EARTH_ENTERPRISE_SRC_FUSION_FUSIONUI_ASSETDISPLAYHELPER_H_
 
 #include <string>
-#include <qimage.h>
+#include <Qt/qimage.h>
 
 #include <autoingest/.idl/storage/AssetDefs.h>
+#include <Qt/qpixmap.h>
 
 class AssetDisplayHelper {
  public:

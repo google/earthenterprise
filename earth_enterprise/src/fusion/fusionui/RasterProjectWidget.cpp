@@ -15,9 +15,9 @@
 //
 
 #include "fusion/fusionui/RasterProjectWidget.h"
-
+#include <memory>
 #include <string>
-
+#include <array>
 #include "fusion/fusionui/LayerItemBase.h"
 #include "fusion/fusionui/ProjectLayerView.h"
 #include "fusion/fusionui/AssetChooser.h"
@@ -32,23 +32,25 @@
 #include "fusion/autoingest/plugins/MercatorRasterProductAsset.h"
 #include "fusion/autoingest/plugins/RasterProductAsset.h"
 
-#include <qpopupmenu.h>
-#include <qheader.h>
-#include <qlineedit.h>
-#include <qmessagebox.h>
+#include <Qt/q3popupmenu.h>
+#include <Qt/qmenu.h>
+#include <Qt/q3header.h>
+#include <Qt/qlineedit.h>
+#include <Qt/qmessagebox.h>
 
+using QPopupMenu = Q3PopupMenu;
 // ****************************************************************************
 // ***  RasterLayerItem
 // ****************************************************************************
 class RasterLayerItem : public LayerItemBase {
  public:
-  RasterLayerItem(QListView* parent, const InsetStackItem& cfg,
+  RasterLayerItem(Q3ListView* parent, const InsetStackItem& cfg,
                   const std::string& date_string, uint level_diff,
                   bool is_mercator);
-  RasterLayerItem(QListView* parent, const QString& asset_path,
+  RasterLayerItem(Q3ListView* parent, const QString& asset_path,
                   uint level_diff, bool is_mercator);
 
-  // Inherited from QListViewItem
+  // Inherited from Q3ListViewItem
   virtual QString text(int col) const;
 
   // Inherited from LayerItemBase
@@ -121,7 +123,7 @@ static std::string GetAcquisitionDate(const std::string &asset_path,
 }  // namespace
 
 
-RasterLayerItem::RasterLayerItem(QListView* parent, const InsetStackItem& cfg,
+RasterLayerItem::RasterLayerItem(Q3ListView* parent, const InsetStackItem& cfg,
                                  const std::string& date_string,
                                  uint level_diff, bool is_mercator)
   : LayerItemBase(parent),
@@ -132,12 +134,12 @@ RasterLayerItem::RasterLayerItem(QListView* parent, const InsetStackItem& cfg,
   InitBBox();
 }
 
-RasterLayerItem::RasterLayerItem(QListView* parent, const QString& asset_path,
+RasterLayerItem::RasterLayerItem(Q3ListView* parent, const QString& asset_path,
                                  uint level_diff, bool is_mercator)
   : LayerItemBase(parent),
     level_diff_(level_diff),
     is_mercator_(is_mercator) {
-  config_.dataAsset = asset_path;
+  config_.dataAsset = asset_path.toUtf8().constData();
 
   InitMetaData();
   InitBBox();
@@ -220,7 +222,7 @@ QString RasterLayerItem::text(int col) const {
           config_.overridemax));
     }
 
-    return QString(shortAssetName(config_.dataAsset)) + level;
+    return QString(shortAssetName(config_.dataAsset.c_str())) + level;
   } else {
     return QString();
   }
@@ -312,9 +314,9 @@ RasterProjectWidget::RasterProjectWidget(QWidget *parent,
     ListView()->removeColumn(0);
   }
   ListView()->header()->hide();
-  ListView()->setResizeMode(QListView::AllColumns);
+  ListView()->setResizeMode(Q3ListView::AllColumns);
   ListView()->EnableAssetDrops(asset_type, sub_type_.c_str());
-  SetGenericCheckboxText(tr("Preview"));
+  SetGenericCheckboxText(kh::tr("Preview"));
 
   // UUID is currently only exposed to Internal Expert users.
   if (Preferences::GoogleInternal) {
@@ -350,9 +352,9 @@ void RasterProjectWidget::Prefill(const RasterProjectEditRequest &req) {
   // but this is taken care of by hiding this edit box from them.
   // Here let's make sure something gets recorded when the edit is sent.
   if (cfg.asset_uuid_ == "") {
-    uuid_edit->setText(create_uuid_string());
+    uuid_edit->setText(create_uuid_string().c_str());
   } else {
-    uuid_edit->setText(cfg.asset_uuid_);
+    uuid_edit->setText(cfg.asset_uuid_.c_str());
   }
 
   if (cfg.is_timemachine_project_ && CheckForValidDates())
@@ -410,7 +412,7 @@ void RasterProjectWidget::AssembleEditRequest(
 
   // assemble layers
   request->config.insets.clear();
-  QListViewItem* item = ListView()->lastItem();
+  Q3ListViewItem* item = ListView()->lastItem();
   while (item) {
     RasterLayerItem* image_layer_item =
       static_cast<RasterLayerItem*>(item);
@@ -419,7 +421,7 @@ void RasterProjectWidget::AssembleEditRequest(
   }
 }
 
-void RasterProjectWidget::ContextMenu(QListViewItem* item,
+void RasterProjectWidget::ContextMenu(Q3ListViewItem* item,
                                        const QPoint& pos, int) {
   RasterLayerItem* image_layer_item = static_cast<RasterLayerItem*>(item);
   if (!image_layer_item)
@@ -437,20 +439,21 @@ void RasterProjectWidget::ContextMenu(QListViewItem* item,
       1, static_cast<int>(ProductToDisplayLevel(insetmax)),
       static_cast<int>(ProductToDisplayLevel(current_level)), this);
 
-  QPopupMenu menu(this);
-  menu.insertItem(tr("&Zoom to Layer"), ZOOM_TO_LAYER);
-  int id = menu.insertItem(tr("Move Layer &Up"), MOVE_UP);
+  QPopupMenu menu(dynamic_cast<QWidget*>(this));
+  menu.insertItem(kh::tr("&Zoom to Layer"), ZOOM_TO_LAYER);
+  int id = menu.insertItem(kh::tr("Move Layer &Up"), MOVE_UP);
 
   if (!image_layer_item->CanMoveUp())
     menu.setItemEnabled(id, false);
 
-  id = menu.insertItem(tr("Move Layer &Down"), MOVE_DOWN);
+  id = menu.insertItem(kh::tr("Move Layer &Down"), MOVE_DOWN);
   if (!image_layer_item->CanMoveDown())
     menu.setItemEnabled(id, false);
   menu.insertSeparator();
   maxoverride_menu = TransferOwnership(new QPopupMenu());
-  maxoverride_menu->insertItem(overridemax_level_slider);
-  menu.insertItem(tr("Adjust Max Level Override"),
+  // should be defined through QT3_SUPPORT... ?
+  maxoverride_menu->insertItem(QString(), overridemax_level_slider,0);
+  menu.insertItem(kh::tr("Adjust Max Level Override"),
                   (QPopupMenu*)maxoverride_menu);
 
   int menu_id = menu.exec(pos);
@@ -511,7 +514,7 @@ LayerItemBase* RasterProjectWidget::NewLayerItem() {
     return NULL;
 
   // Check that the layer has a valid acquisition date if timemachine is active.
-  if (GetTimeMachineCheckboxState() && !CheckForValidDates(newpath))
+  if (GetTimeMachineCheckboxState() && !CheckForValidDates(newpath.toUtf8().constData()))
     return NULL;
   return NewLayerItem(newpath);
 }
@@ -521,10 +524,10 @@ LayerItemBase* RasterProjectWidget::NewLayerItem(const QString& assetref) {
   ListView()->setFocus();
 
   // check to make sure we don't already have this one
-  QListViewItem* list_item = ListView()->firstChild();
+  Q3ListViewItem* list_item = ListView()->firstChild();
   while (list_item) {
     RasterLayerItem* layer_item = static_cast<RasterLayerItem*>(list_item);
-    if (layer_item->GetConfig().dataAsset == assetref) {
+    if (layer_item->GetConfig().dataAsset == assetref.toUtf8().constData()) {
       QMessageBox::critical(
           this, "Error" ,
           kh::tr("'%1' already exists in this project")
@@ -536,7 +539,7 @@ LayerItemBase* RasterProjectWidget::NewLayerItem(const QString& assetref) {
   }
 
   // Check that the layer has a valid acquisition date if timemachine is active.
-  if (GetTimeMachineCheckboxState() && !CheckForValidDates(assetref))
+  if (GetTimeMachineCheckboxState() && !CheckForValidDates(assetref.toUtf8().constData()))
     return 0;
 
   RasterLayerItem* item = new RasterLayerItem(ListView(), assetref, level_diff_,
@@ -570,7 +573,7 @@ bool RasterProjectWidget::CheckForValidDates(const std::string& resource) {
   std::vector<std::string> resources;
   if (resource.empty()) {
     // check to make sure we don't already have this one
-    QListViewItem* list_item = ListView()->firstChild();
+    Q3ListViewItem* list_item = ListView()->firstChild();
     while (list_item) {
       RasterLayerItem* layer_item = static_cast<RasterLayerItem*>(list_item);
       resources.push_back(layer_item->GetConfig().dataAsset);
@@ -601,7 +604,7 @@ bool RasterProjectWidget::CheckForValidDates(const std::string& resource) {
                   "Imagery resources in time machine projects are required to "
                   "have valid acquisition dates.\n"
                   "The following imagery resource(s) do not have acquisition "
-                  "dates specified:%1.\n").arg(missing_dates),
+                  "dates specified:%1.\n").arg(missing_dates.c_str()),
               "OK", 0, 0, 0);
     return false;
   }
@@ -616,8 +619,8 @@ void RasterProjectWidget::TimeMachineCheckboxToggled(bool state) {
 }
 
 void RasterProjectWidget::DrawFeatures(const gstDrawState& state) {
-  QListViewItem* item = ListView()->firstChild();
-  QListViewItem* selected_item = ListView()->selectedItem();
+  Q3ListViewItem* item = ListView()->firstChild();
+  Q3ListViewItem* selected_item = ListView()->selectedItem();
   while (item) {
     RasterLayerItem* image_layer_item = static_cast<RasterLayerItem*>(item);
     if (image_layer_item == selected_item) {

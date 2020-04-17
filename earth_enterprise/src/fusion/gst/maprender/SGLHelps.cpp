@@ -141,12 +141,12 @@ bool FontInfo::CheckTextStyleSanity(MapTextStyleConfig* config,
     style = SkTypeface::kItalic;
   else if (config->weight == MapTextStyleConfig::BoldItalic)
     style = SkTypeface::kBoldItalic;
-  const FontInfo font_info(config->font, style);
+  const FontInfo font_info(config->font.toUtf8().constData(), style);
   if (font_map_.count(font_info) != 0) {
     return true;
   }
   missing_fonts->insert(font_info);
-  config->font = QString(kDefaultFont);
+  config->font = QString(kDefaultFont.c_str());
   config->weight = MapTextStyleConfig::Regular;
   return false;
 }

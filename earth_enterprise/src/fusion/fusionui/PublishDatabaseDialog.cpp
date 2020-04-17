@@ -31,8 +31,8 @@ PublishDatabaseDialog::PublishDatabaseDialog(
     const std::vector<QString>& nicknames)
     : PublishDatabaseDialogBase(parent, 0, false, 0) {
 
-  std::string database_name = shortAssetName(asset->GetRef().toString());
-  db_name_label->setText(database_name);
+  std::string database_name = shortAssetName(asset->GetRef().toString().c_str());
+  db_name_label->setText(database_name.c_str());
 
   std::vector<QString>::const_iterator nickname = nicknames.begin();
   for (; nickname != nicknames.end(); ++nickname) {
@@ -68,7 +68,7 @@ PublishDatabaseDialog::PublishDatabaseDialog(
     valid_versions_.push_back(*version);
     QString item = QString("%1:").arg(asset_version->version);
     item += "    " + asset_version->meta.GetValue("createdtime");
-    item += "  " + asset_version->PrettyState();
+    item += "  " + QString(asset_version->PrettyState().c_str());
     version_combo->insertItem(item);
   }
 
@@ -107,6 +107,6 @@ std::string PublishDatabaseDialog::GetSelectedVersion() {
 }
 
 std::string PublishDatabaseDialog::GetTargetPath() {
-  return target_path_edit->text();
+  return target_path_edit->text().toUtf8().constData();
 }
 

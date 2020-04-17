@@ -149,32 +149,6 @@ class PublishManagerHelper(stream_manager.StreamManager):
         PublishManagerHelper.TARGET_PATH_TEMPL.format(
             db_publish_path, target_path))
 
-  def IsDefaultDatabase(self, publish_context_id):
-    """
-    Checks whether the passed-in database is the default database or not. When
-    upgrading from older releases such as 5.1.2, the publish_context_table may
-    not have an entry for a published database, so we have to perform two
-    queries: one to get the list of databases and one to check if each database
-    is the default. It would simplify things somewhat to move the ec_default_db
-    field to the target_table database so that we can get all the data we want
-    with a single query. However, this would make the upgrade code more
-    complicated because we would have to manage 3 schemas: one from before we
-    added ec_default_db and two with the ec_default_db in different places.
-    This method seems to be the simplest overall option even though it requires
-    multiple queries.
-    """
-    if publish_context_id != 0: # Ensure the publish_context_id is valid
-      query_string = ("""
-          SELECT publish_context_table.ec_default_db
-          FROM publish_context_table
-          WHERE publish_context_table.publish_context_id = %s AND
-          publish_context_table.ec_default_db = TRUE
-          """)
-      results = self.DbQuery(query_string, (publish_context_id,))
-      if results:
-        return True
-    return False
-
   def HandleQueryRequest(self, request, response):
     """Handles query requests.
 
@@ -251,13 +225,13 @@ class PublishManagerHelper(stream_manager.StreamManager):
             virtual_host_table.virtual_host_name,
             virtual_host_table.virtual_host_url,
             virtual_host_table.virtual_host_ssl,
-            target_table.target_path, target_table.serve_wms,
-            target_db_table.publish_context_id
-          FROM target_table, target_db_table, db_table, virtual_host_table
+            target_table.target_path, target_table.serve_wms, publish_context_table.ec_default_db
+          FROM target_table, target_db_table, db_table, virtual_host_table, publish_context_table
           WHERE target_table.target_path = %s AND
             target_table.target_id = target_db_table.target_id AND
             target_db_table.db_id = db_table.db_id AND
-            target_db_table.virtual_host_id = virtual_host_table.virtual_host_id
+            target_db_table.virtual_host_id = virtual_host_table.virtual_host_id AND
+            publish_context_table.publish_context_id = target_db_table.publish_context_id
           """)
 
       results = self.DbQuery(query_string, (norm_target_path,))
@@ -266,8 +240,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
         assert isinstance(results, list) and len(results) == 1
         (r_host_name, r_db_path, r_db_name, r_db_timestamp, r_db_size,
          r_virtual_host_name, r_virtual_host_url, r_virtual_host_ssl,
-         r_target_path, r_serve_wms, publish_context_id) = results[0]
-        r_default_database = self.IsDefaultDatabase(publish_context_id)
+         r_target_path, r_serve_wms, r_default_database) = results[0]
 
         db_info = basic_types.DbInfo()
         # TODO: make re-factoring - implement some Set function
@@ -645,12 +618,13 @@ class PublishManagerHelper(stream_manager.StreamManager):
     target_details = {}
     query_string = ("""SELECT db_table.host_name, db_table.db_name,
               virtual_host_table.virtual_host_name, target_table.serve_wms
-              FROM target_table, target_db_table, db_table, virtual_host_table
+              FROM target_table, target_db_table, db_table, virtual_host_table, publish_context_table
               WHERE target_table.target_path = %s AND
               target_table.target_id = target_db_table.target_id AND
               target_db_table.db_id = db_table.db_id AND
               target_db_table.virtual_host_id =
-              virtual_host_table.virtual_host_id""")
+              virtual_host_table.virtual_host_id AND
+              publish_context_table.publish_context_id = target_db_table.publish_context_id""")
 
     result = self.DbQuery(query_string, (target_path,))
 
@@ -1481,19 +1455,18 @@ class PublishManagerHelper(stream_manager.StreamManager):
     query_db_target = (
         "SELECT target_db_table.db_id,"
         " virtual_host_table.virtual_host_name,"
-        " target_table.target_path, target_table.serve_wms,"
-        " target_db_table.publish_context_id"
-        " FROM target_db_table, target_table, virtual_host_table"
+        " target_table.target_path, target_table.serve_wms, publish_context_table.ec_default_db"
+        " FROM target_db_table, target_table, virtual_host_table, publish_context_table"
         " WHERE target_table.target_id = target_db_table.target_id AND"
-        " virtual_host_table.virtual_host_id = target_db_table.virtual_host_id")
+        " virtual_host_table.virtual_host_id = target_db_table.virtual_host_id AND"
+        " publish_context_table.publish_context_id = target_db_table.publish_context_id")
     results = self.DbQuery(query_db_target)
 
     # Build a dictionary.
     db_to_publish_info_dct = dict(
         (db_id, []) for (db_id, unused_vh_name, unused_target_path,
                          unused_serve_wms, unused_default_db) in results)
-    for db_id, vh_name, target_path, serve_wms, publish_context_id in results:
-      default_database = self.IsDefaultDatabase(publish_context_id)
+    for db_id, vh_name, target_path, serve_wms, default_database in results:
       db_to_publish_info_dct[db_id].append(
           (vh_name, target_path, serve_wms, default_database))
 

@@ -663,7 +663,7 @@ CreateKHVRDataset(const khVirtualRaster &virtraster)
     khTypes::StorageEnum outType;
     if (!StorageEnumFromGDT(gdalOutType, outType)) {
       throw khException(kh::tr("Unsupported input band type %1 %2")
-                        .arg(outtypestr));
+                        .arg(outtypestr.c_str()));
     }
     std::string intypestr = virtraster.outputBands[0].inDatatype.empty()
                             ? outtypestr : virtraster.outputBands[0].inDatatype;
@@ -671,7 +671,7 @@ CreateKHVRDataset(const khVirtualRaster &virtraster)
     khTypes::StorageEnum inType;
     if (!StorageEnumFromGDT(gdalInType, inType)) {
       throw khException(kh::tr("Unsupported output band type %1")
-                        .arg(intypestr));
+                        .arg(intypestr.c_str()));
     }
 
     // if any tiles have a lut there will be a default lut. The lut will
@@ -689,7 +689,7 @@ CreateKHVRDataset(const khVirtualRaster &virtraster)
           break;
       }
       throw khException(kh::tr("Unsupported LUT input band type %1")
-                        .arg(intypestr));
+                        .arg(intypestr.c_str()));
     } else {
       switch (outType) {
         case khTypes::UInt8:
@@ -709,7 +709,7 @@ CreateKHVRDataset(const khVirtualRaster &virtraster)
         default:
           throw khException
             (kh::tr("Internal Error: Unhandled output band type %1")
-             .arg(outtypestr));
+             .arg(outtypestr.c_str()));
       }
     }
   } catch (const std::exception &e) {

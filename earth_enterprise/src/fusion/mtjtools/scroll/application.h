@@ -17,6 +17,9 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
+//#include <qobject.h>
+#include <QObject>
+//#include <qobject.h>
 #include <qmainwindow.h>
 #include "imageview.h"
 

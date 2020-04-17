@@ -22,14 +22,20 @@
 #include <vector>
 #include <set>
 #include <map>
-
-#include <qlistview.h>
-#include <qiconview.h>
-#include <qstringlist.h>
-#include <qaction.h>
-#include <qthread.h>
-#include <qtimer.h>
-
+#include <Qt/qobjectdefs.h>
+//#include <Qt/qlistview.h>
+#include <Qt/q3iconview.h>
+using QIconViewItem = Q3IconViewItem;
+#include <Qt/qstringlist.h>
+#include <Qt/qaction.h>
+#include <Qt/qthread.h>
+#include <Qt/qtimer.h>
+#include <Qt/q3popupmenu.h>
+using QPopupMenu = Q3PopupMenu;
+#include <Qt/q3listview.h>
+//using QListView = Q3ListView;
+using QListViewItem = Q3ListViewItem;
+#include <Qt/qobject.h>
 #include "fusion/autoingest/.idl/storage/AssetDefs.h"
 #include "fusion/fusionui/.idl/layoutpersist.h"
 #include "fusion/fusionui/.ui/assetmanagerbase.h"
@@ -45,7 +51,6 @@ class AssetChanges;
 class geGuiProgress;
 class geGuiAuth;
 class PublisherClient;
-
 class QProgressDialog;
 
 class AssetAction : public QAction {
@@ -188,7 +193,8 @@ class AssetManager : public AssetManagerBase {
 };
 
 // Thread classes for serving pushing and publishing.
-class ServeThread : public QObject, public QThread {
+class ServeThread : /*public QObject,*/ public QThread {
+  //Q_OBJECT already present in QThread
   Q_OBJECT
 
  public:

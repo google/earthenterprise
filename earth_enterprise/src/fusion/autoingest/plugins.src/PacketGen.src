@@ -80,12 +80,8 @@ void PacketGenAssetVersionImplD::UpdateChildren(
         type,
         extra.insetInfo,
         numInsets,
-        (MiscConfig::Instance().UseMinification
-         ? config.beginMinifyLevel
-         : 0),
-        (MiscConfig::Instance().UseMinification
-         ? config.endMinifyLevel
-         : 0),
+        config.beginMinifyLevel,
+        config.endMinifyLevel,
         level);
     extra.calc->setEnvelope(env);
     neededIndexes = std::move(extra.calc->GetOverlapForLevel(gencov));
@@ -154,7 +150,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
                                     inset.alphaRPFile,
                                     SharedString(), /* cached blend */
                                     SharedString()  /* cached blend alpha */));
-        std::string acquisitionDate = inset.resource_->GetAcquisitionDate();
+        std::string acquisitionDate = inset.resource_->GetAcquisitionDate();//.toStdString();
 
         packetLevelConfig.attributions.push_back
           (PacketLevelConfig::Attribution(
@@ -186,7 +182,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       packetLevelConfig.attributions.reserve(neededIndexes.size() + 1);
       for (const auto& idx : neededIndexes) {
         const InsetInfo<ProductAssetVersion> &inset(*extra.insetInfo[idx]);
-        std::string acquisitionDate = inset.resource_->GetAcquisitionDate();
+        std::string acquisitionDate = inset.resource_->GetAcquisitionDate();//.toStdString();
         packetLevelConfig.attributions.push_back
           (PacketLevelConfig::Attribution(
               inset.dataRPFile,
@@ -309,7 +305,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
     snprintf(subname, sizeof(subname), "packlevel%02d", level);
     MutableAssetVersionD packLevelVer =
       AssetFactory::ReuseOrMakeAndUpdateSubAsset
-        <MutablePacketLevelAssetVersionD, PacketLevelConfig, PacketLevelAssetVersionD, AssetVersion>
+        <MutablePacketLevelAssetVersionD, PacketLevelConfig, PacketLevelAssetVersionD>
       (assetRef,
        type,
        subname,

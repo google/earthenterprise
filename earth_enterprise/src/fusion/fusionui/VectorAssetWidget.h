@@ -20,12 +20,14 @@
 
 #include "fusionui/.ui/vectorassetwidgetbase.h"
 #include "fusion/fusionui/AssetWidgetBase.h"
+#include <Qt/q3filedialog.h>
+#include "common/khTypes.h"
+
 
 namespace qt_fusion {
   class QDateWrapper;
 }
 class AssetBase;
-class QFileDialog;
 class QStringList;
 class VectorProductImportRequest;
 
@@ -55,9 +57,9 @@ class VectorAssetWidget : public VectorAssetWidgetBase,
   void SetDoNotFixInvalidGeometriesCheck(const bool val);
   bool GetDoNotFixInvalidGeometriesCheck() const;
 
-  QFileDialog* FileDialog();
+  Q3FileDialog* FileDialog();
 
-  QFileDialog* file_dialog_;
+  Q3FileDialog* file_dialog_;
   std::vector<uint32> provider_id_list_;
   int last_conv_index_;
   qt_fusion::QDateWrapper* acquisition_date_wrapper_;

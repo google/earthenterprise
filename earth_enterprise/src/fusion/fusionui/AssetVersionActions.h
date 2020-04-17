@@ -28,8 +28,9 @@ For history see CVS log (cvs log AssetVersionActions.h -or- Emacs Ctrl-xvl).
 
 #include <qaction.h>
 #include <qobject.h>
-#include <qpopupmenu.h>
-
+#include <Qt/q3popupmenu.h>
+//#include <qpopupmenu.h>
+using QPopupMenu = Q3PopupMenu;
 class AssetVersionActions : public QObject
 {
   Q_OBJECT

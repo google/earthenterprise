@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-#include <qframe.h>
-#include <qlayout.h>
-#include <qdatetimeedit.h>
-#include <qpopupmenu.h>
-#include <qlabel.h>
-#include <qmessagebox.h>
+#include <cstdlib>
+#include <Qt/qframe.h>
+#include <Qt/qlayout.h>
+#include <Qt/qdatetimeedit.h>
+#include <Qt/qlabel.h>
+#include <Qt/qmessagebox.h>
 
 #include "AssetProperties.h"
 #include "AssetVersionProperties.h"
@@ -27,21 +26,22 @@
 #include <autoingest/AssetVersion.h>
 #include <autoingest/khAssetManagerProxy.h>
 
-
 #define COL_VER 0
 #define COL_CREATETIME 1
 #define COL_STATE 2
-AssetVersionItem::AssetVersionItem( QListView *parent, const AssetVersion &ver )
-    : QListViewItem( parent, QString( "%1" ).arg( ver->version ),
+AssetVersionItem::AssetVersionItem( Q3ListView *parent, const AssetVersion &ver )
+    : Q3ListViewItem( parent, QString( "%1" ).arg( ver->version ),
                      ver->meta.GetValue("createdtime"),
-                     ver->PrettyState() ),
-      AssetWatcher(ver->GetRef())
+                     ver->PrettyState().c_str() ),
+      AssetWatcher(ver->GetRef().toString())
 {
 }
 
-int AssetVersionItem::compare( QListViewItem *item, int, bool ) const
+int AssetVersionItem::compare( Q3ListViewItem *item, int, bool ) const
 {
-  return atoi( text( 0 ).latin1() ) - atoi( item->text( 0 ).latin1() );
+  int lhs = std::stoi(std::string(text(0).toUtf8().constData()));
+  int rhs = std::stoi(std::string(item->text(0).toUtf8().constData()));
+  return lhs - rhs;
 }
 
 void AssetVersionItem::paintCell( QPainter *p, const QColorGroup &cg,
@@ -50,16 +50,16 @@ void AssetVersionItem::paintCell( QPainter *p, const QColorGroup &cg,
   QColorGroup ncg = cg;
 
   if ( column == 2 )
-    ncg = AssetManager::GetStateDrawStyle( text( column ), p, cg );
+    ncg = AssetManager::GetStateDrawStyle(text(column).toUtf8().constData(), p, cg);
 
-  QListViewItem::paintCell( p, ncg, column, width, alignment );
+  Q3ListViewItem::paintCell( p, ncg, column, width, alignment );
 }
 
 void
 AssetVersionItem::changed(void)
 {
   AssetVersion ver(ref);
-  setText( COL_STATE, ver->PrettyState() );
+  setText( COL_STATE, ver->PrettyState().c_str() );
 }
 
 // ------------------------------------------------------------------------
@@ -70,12 +70,12 @@ AssetProperties::AssetProperties( QWidget* parent, const gstAssetHandle &handle 
   versionsList->setSorting( 0, false );
 
   Asset asset = handle->getAsset();
-  nameLabel->setText( shortAssetName( handle->getName() ) );
-  typeLabel->setText( ToString( asset->type ) );
-  subTypeLabel->setText( asset->PrettySubtype() );
+  nameLabel->setText( shortAssetName( handle->getName().toUtf8().constData() ) );
+  typeLabel->setText( ToString( asset->type ).c_str() );
+  subTypeLabel->setText( asset->PrettySubtype().c_str() );
 
-  connect( versionsList, SIGNAL( contextMenuRequested( QListViewItem *, const QPoint &, int ) ),
-           this, SLOT( rmbClicked( QListViewItem *, const QPoint &, int ) ) );
+  connect( versionsList, SIGNAL( contextMenuRequested( Q3ListViewItem *, const QPoint &, int ) ),
+           this, SLOT( rmbClicked( Q3ListViewItem *, const QPoint &, int ) ) );
 
 
   refresh();
@@ -104,7 +104,7 @@ void AssetProperties::refresh()
 }
 
 
-void AssetProperties::selectVersion( QListViewItem *item )
+void AssetProperties::selectVersion( Q3ListViewItem *item )
 {
   if ( item ) {
     AssetVersionItem *ver = ( AssetVersionItem* )item;
@@ -114,7 +114,7 @@ void AssetProperties::selectVersion( QListViewItem *item )
 
 
 void
-AssetProperties::rmbClicked( QListViewItem *item,
+AssetProperties::rmbClicked( Q3ListViewItem *item,
                              const QPoint &pos, int )
 {
   AssetVersionItem *verItem = dynamic_cast<AssetVersionItem*>(item);
@@ -125,7 +125,7 @@ AssetProperties::rmbClicked( QListViewItem *item,
   QPopupMenu menu( this );
   if (actions.Contribute(&menu))
     menu.insertSeparator();
-  menu.insertItem( tr( "Version Properties" ), VERSION_PROPERTIES );
+  menu.insertItem( QObject::tr( "Version Properties" ), VERSION_PROPERTIES );
 
   int selection = menu.exec(pos);
   switch (selection) {

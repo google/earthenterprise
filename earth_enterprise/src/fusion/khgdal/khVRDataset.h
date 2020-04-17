@@ -99,7 +99,7 @@ class khVRDataset : public GDALDataset
       //(GDALDataset*)GDALOpen(filename.c_str(), GA_ReadOnly)) {
       if (!dataset.get()) {
         throw khException(kh::tr("Unable to load tile %1")
-                          .arg(filename));
+                          .arg(filename.c_str()));
       }
     }
     CacheNode(const CacheNode &o)

@@ -23,7 +23,7 @@
 
 class Publisher : public PublisherBase {
  public:
-  Publisher(QWidget* parent, bool modal, WFlags flags);
+  Publisher(QWidget* parent, bool modal, Qt::WFlags flags);
 
   // inherited from QDialog
   virtual void accept();

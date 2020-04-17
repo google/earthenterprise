@@ -25,6 +25,6 @@ ConfigObj = env.SharedObject('.idl/Config.cpp')
 geqtgen = env.executable('geqtgen',
                          ['geqtgen.cpp',
                           ConfigObj ],
-                         LIBS=['geautoingest', 'geindex_rw', 'gexml', 'geqtpacket', 'gesearchtabs', 'geutil', 'geindex_r', 'gecommon', 'qt-mt', 'xerces-c'])
+                         LIBS=['geautoingest', 'geindex_rw', 'gexml', 'geqtpacket', 'gesearchtabs', 'geutil', 'geindex_r', 'gecommon', 'QtCore', 'QtGui', 'xerces-c'])
 
 env.install('fusion_bin', [geqtgen])

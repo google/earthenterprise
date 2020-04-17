@@ -14,18 +14,19 @@
 
 
 #include "fusion/fusionui/ObjectDetail.h"
-
-#include <qlabel.h>
-#include <qtable.h>
-#include <qheader.h>
-
+#include "khException.h"
+#include <Qt/qlabel.h>
+#include <Qt/q3table.h>
+#include <Qt/q3header.h>
+#include <Qt/qlistview.h>
+#include <Qt/q3listview.h>
 #include "fusion/fusionui/Preferences.h"
 
 #include "fusion/fusionui/GfxView.h"
 #include "fusion/gst/gstFeature.h"
 
 #include "fusion/gst/gstTypes.h"
-
+using QListViewItem = Q3ListViewItem;
 namespace {
 
 template<typename ParentView>
@@ -68,11 +69,11 @@ ObjectDetail::VertexItem::VertexItem(QListViewItem* parent,
 
 ObjectDetail::ObjectDetail(QWidget* parent, uint id, gstGeodeHandle geode,
                            gstRecordHandle attrib)
-    : ObjectDetailBase(parent , 0, false, WDestructiveClose),
+    : ObjectDetailBase(parent , 0, false, static_cast<Qt::WindowFlags>(Qt::WA_DeleteOnClose)),
       geode_handle_(geode),
       drawVertex(false) {
   setCaption(QString("Feature %1 Detail").arg(id));
-  featureTypeLabel->setText(PrettyPrimType(geode_handle_->PrimType()));
+  featureTypeLabel->setText(PrettyPrimType(geode_handle_->PrimType()).c_str());
   featurePartsLabel->setText(QString::number(geode_handle_->NumParts()));
   featureVertexesLabel->setText(
       QString::number(geode_handle_->TotalVertexCount()));
@@ -99,7 +100,7 @@ ObjectDetail::ObjectDetail(QWidget* parent, uint id, gstGeodeHandle geode,
   //
   vertexListView->setSorting(-1);       // disable sorting
   if (Preferences::GlobalEnableAll)
-    vertexListView->header()->setLabel(1, tr("X, Y"));
+    vertexListView->header()->setLabel(1, kh::tr("X, Y"));
 
   if (geode_handle_->PrimType() == gstMultiPolygon ||
       geode_handle_->PrimType() == gstMultiPolygon25D ||

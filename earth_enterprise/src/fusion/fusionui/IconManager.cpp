@@ -12,27 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-#include <qapplication.h>
-#include <qpainter.h>
-#include <qstringlist.h>
-#include <qpixmap.h>
-#include <qimage.h>
-#include <qiconview.h>
-#include <qmessagebox.h>
-
+#include <Qt/qobjectdefs.h>
+#include <Qt/qapplication.h>
+#include <Qt/qpainter.h>
+#include <Qt/qstringlist.h>
+#include <Qt/qpixmap.h>
+#include <Qt/qimage.h>
+#include <Qt/q3iconview.h>
+#include <Qt/qicon.h>
+#include <Qt/qmessagebox.h>
+#include <Qt/qpalette.h>
 #include "IconManager.h"
 #include "PixmapManager.h"
 #include "Preferences.h"
-
+#include "khException.h"
 #include <gstIconManager.h>
 #include <gstFileUtils.h>
 #include <khFileUtils.h>
 #include <fusionui/.idl/filehistory.h>
+#include <Qt/q3scrollview.h>
+using QScrollView = Q3ScrollView;
+using QIconViewItem  =  Q3IconViewItem;
 
 PixmapView::PixmapView(QWidget* parent)
     : QScrollView(parent) {
-  viewport()->setBackgroundMode(PaletteBase);
+  viewport()->setBackgroundMode(Qt::PaletteBase);
 }
 
 void PixmapView::setPixmap(const QPixmap& pix) {
@@ -46,7 +50,7 @@ void PixmapView::drawContents(QPainter* p, int cx, int cy, int cw, int ch) {
   p->drawPixmap(0, 0, pixmap);
 }
 
-void PixmapView::previewUrl(const QUrl& u) {
+void PixmapView::previewUrl(const Q3Url& u) {
   if (u.isLocalFile()) {
     QString path = u.path();
     QPixmap pix(path);
@@ -60,7 +64,7 @@ void PixmapView::previewUrl(const QUrl& u) {
 
 // -----------------------------------------------------------------------------
 
-IconManager::IconManager(QWidget* parent, bool modal, WFlags flags)
+IconManager::IconManager(QWidget* parent, bool modal, Qt::WFlags flags)
   : IconManagerBase(parent, 0, modal, flags) {
 }
 
@@ -81,8 +85,8 @@ void IconManager::addIcon() {
     return;
 
   for (QStringList::Iterator it = pixmaps.begin(); it != pixmaps.end(); ++it) {
-    gstFileInfo fi((*it).latin1());
-    if (theIconManager->AddIcon((*it).latin1())) {
+    gstFileInfo fi((*it).toUtf8().constData());
+    if (theIconManager->AddIcon((*it).toUtf8().constData())) {
       thePixmapManager->updateExternal();
       QPixmap newpix = thePixmapManager->GetPixmap(
           gstIcon(fi.baseName(), IconReference::External),
@@ -90,12 +94,12 @@ void IconManager::addIcon() {
       new QIconViewItem(masterIconView, fi.baseName(), newpix);
     } else {
       QMessageBox::warning(this, "Fusion",
-                           tr("Problem adding custom icon.\n\n"
+                           kh::tr("Problem adding custom icon.\n\n"
                                "Source %1 must:\n\n"
                                "-  either be RGBA or Palatte-Index type\n"
                                "-  have a file type of PNG\n"
                                "-  have a unique file name").arg(fi.name()),
-                           tr("OK"), 0, 0, 1);
+                           kh::tr("OK"), 0, 0, 1);
     }
   }
   masterIconView->sort();  // Always sort after adding icons.
@@ -108,10 +112,10 @@ void IconManager::deleteIcon() {
     return;
 
   if (QMessageBox::warning(this, "Fusion",
-      tr("Are you sure you want to permanently delete icon \"%1\"")
+      kh::tr("Are you sure you want to permanently delete icon \"%1\"")
           .arg(currIcon->text()),
-      tr("Yes"), tr("Cancel"), 0, 1, 1) == 0) {
-    if (theIconManager->DeleteIcon(currIcon->text().latin1())) {
+      kh::tr("Yes"), kh::tr("Cancel"), 0, 1, 1) == 0) {
+    if (theIconManager->DeleteIcon(currIcon->text().toUtf8().constData())) {
       masterIconView->takeItem(currIcon);
       delete currIcon;
     }
@@ -121,25 +125,25 @@ void IconManager::deleteIcon() {
 QStringList IconManager::ChoosePixmaps(QWidget *parent) {
   QString filter("PNG-Pixmaps (*.png *.PNG)");
 
-  QFileDialog fd(QString::null, filter, parent, 0, true);
-  fd.setMode(QFileDialog::ExistingFiles);
+  Q3FileDialog fd(QString::null, filter, parent, 0, true);
+  fd.setMode(Q3FileDialog::ExistingFiles);
   fd.setContentsPreviewEnabled(true);
   PixmapView* pw = new PixmapView(&fd);
   fd.setContentsPreview(pw, pw);
-  fd.setViewMode(QFileDialog::List);
-  fd.setPreviewMode(QFileDialog::Contents);
+  fd.setViewMode(Q3FileDialog::List);
+  fd.setPreviewMode(Q3FileDialog::Contents);
   fd.setCaption(qApp->translate("qChoosePixmap", "Choose Images..."));
 
   IconManagerHistory history;
-  if (khExists(Preferences::filepath("iconmanager.xml").latin1())) {
-    if (history.Load(Preferences::filepath("iconmanager.xml").latin1())) {
+  if (khExists(Preferences::filepath("iconmanager.xml").toUtf8().constData())) {
+    if (history.Load(Preferences::filepath("iconmanager.xml").toUtf8().constData())) {
       fd.setDir(history.lastdir);
     }
   }
 
   if (fd.exec() == QDialog::Accepted) {
     history.lastdir = fd.dirPath();
-    history.Save(Preferences::filepath("iconmanager.xml").latin1());
+    history.Save(Preferences::filepath("iconmanager.xml").toUtf8().constData());
     return fd.selectedFiles();
   } else {
     return QStringList();

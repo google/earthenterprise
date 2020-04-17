@@ -38,7 +38,7 @@ class CombinedRPAssetVersionImpl {
 khExtents<double>
 CombinedRPAssetVersionImpl::GetExtents(void) const
 {
-  std::string extents = meta.GetValue("extents");
+  std::string extents = meta.GetValue("extents").toUtf8().constData();
   std::vector<std::string> coords;
   // split out coords (N,S,E,W)
   split(extents, ",", back_inserter(coords));
@@ -52,9 +52,9 @@ CombinedRPAssetVersionImpl::GetExtents(void) const
 
     return khExtents<double>(NSEWOrder, N, S, E, W);
   }
-
-  throw khException(kh::tr("Unable to get extents for ")
-                    + GetRef());
+  std::string msg { kh::tr("Unable to get extents for ").toUtf8().constData() };
+  msg += GetRef();
+  throw khException(msg);
 }
 
 
@@ -62,10 +62,11 @@ uint
 CombinedRPAssetVersionImpl::GetMaxLevel(void) const
 {
   uint prodMaxLevel = 0;
-  FromString(meta.GetValue("maxlevel"), prodMaxLevel);
+  FromString(meta.GetValue("maxlevel").toUtf8().constData(), prodMaxLevel);
   if (!prodMaxLevel) {
-    throw khException(kh::tr("Unable to get maxlevel for ")
-                      + GetRef());
+    std::string msg = kh::tr("Unable to get maxlevel for ").toUtf8().constData();
+    msg += GetRef();
+    throw khException(msg);
   }
   return prodMaxLevel;
 }
@@ -180,7 +181,7 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
     if (config.need_khvr_) {
       source =
         AssetFactory::ReuseOrMakeAndUpdateSubAsset
-        <MutableMosaicAssetVersionD, MosaicConfig, MosaicAssetVersionD, AssetVersion>
+        <MutableMosaicAssetVersionD, MosaicConfig, MosaicAssetVersionD>
                (assetRef,
                 type,
                 "mosaic",
@@ -193,7 +194,7 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
     // tell my raster child about the new source & have it update itself
     MutableKRPAssetVersionD krp2 =
       AssetFactory::ReuseOrMakeAndUpdateSubAsset
-      <MutableKRPAssetVersionD, KRPConfig, KRPAssetVersionD, AssetVersion>
+      <MutableKRPAssetVersionD, KRPConfig, KRPAssetVersionD>
       (assetRef,
        type,
        "product",
@@ -224,7 +225,7 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
       } else {
         krmp =
           AssetFactory::ReuseOrMakeAndUpdateSubAsset
-          <MutableKRMPAssetVersionD, KRMPConfig, KRMPAssetVersionD, AssetVersion>
+          <MutableKRMPAssetVersionD, KRMPConfig, KRMPAssetVersionD>
           (assetRef,
            type,
            "maskproduct",
@@ -241,7 +242,7 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
       // tell my maskgen child about the new raster, have it update
       AssetVersion maskgen =
         AssetFactory::ReuseOrMakeAndUpdateSubAsset
-        <MutableMaskgenAssetVersionD, MaskgenConfig, MaskgenAssetVersionD, AssetVersion>
+        <MutableMaskgenAssetVersionD, MaskgenConfig, MaskgenAssetVersionD>
         (assetRef,
          type,
          "maskgen",
@@ -253,7 +254,7 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
       // tell my KRMP child about the new raster & mask
       MutableAssetVersionD krmp =
         AssetFactory::ReuseOrMakeAndUpdateSubAsset
-        <MutableKRMPAssetVersionD, KRMPConfig, KRMPAssetVersionD, AssetVersion>
+        <MutableKRMPAssetVersionD, KRMPConfig, KRMPAssetVersionD>
         (assetRef,
          type,
          "maskproduct",

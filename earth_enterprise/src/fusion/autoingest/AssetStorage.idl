@@ -150,7 +150,7 @@ class AssetVersionStorage {
 #include <khFileUtils.h>
   std::string
   AssetVersionStorage::PreviewFilename(void) const {
-    std::string preview = meta.GetValue("preview");
+    std::string preview = meta.GetValue("preview").toUtf8().constData();
     if (preview.size()) {
       std::string path = AssetDefs::AssetPathToFilename(preview);
       if (khExists(path)) {

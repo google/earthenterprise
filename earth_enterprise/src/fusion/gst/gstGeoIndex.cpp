@@ -391,7 +391,7 @@ void gstGeoIndexImpl::ThrowingReadFile(const std::string& path,
   FILE* select_fp = ::fopen(path.c_str(), "r");
   if (select_fp == NULL) {
     throw khErrnoException(kh::tr("Unable to open query results file %1")
-                           .arg(path));
+                           .arg(path.c_str()));
   }
   khFILECloser closer(select_fp);
 

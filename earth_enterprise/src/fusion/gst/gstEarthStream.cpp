@@ -18,7 +18,7 @@
 #include <sstream>
 #include <khMTTypes.h>
 #include <kbf.h>
-
+#include <Qt/q3cstring.h>
 #include <khRefCounter.h>
 #include <khCache.h>
 #include <khException.h>
@@ -326,7 +326,9 @@ void Request::WriteData(void* buffer, size_t size) {
     return;
 
   size_t prev_size = stream_.size();
-  if (!stream_.resize(prev_size + size))
+  stream_.resize(prev_size + size);
+  size_t new_size = stream_.size();
+  if (new_size == 0 || new_size == prev_size)
     return;
 
   memcpy(stream_.data() + prev_size, buffer, size);
@@ -465,7 +467,7 @@ gstEarthStream::gstEarthStream(const std::string& server)
     DbRootRequest request(image_request_handle_, url);
     request.Start();
     if (!request.GetStatus()) {
-      throw khException(kh::tr("Unable to open HTTP database: %1").arg(server));
+      throw khException(kh::tr("Unable to open HTTP database: %1").arg(server.c_str()));
     }
   }
 }

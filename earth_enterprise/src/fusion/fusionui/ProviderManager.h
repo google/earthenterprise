@@ -25,7 +25,7 @@ class gstProvider;
 
 class ProviderManager : public ProviderManagerBase {
  public:
-  ProviderManager(QWidget* parent, bool modal, WFlags flags);
+  ProviderManager(QWidget* parent, bool modal, Qt::WFlags flags);
 
   // inherited from QDialog
   virtual void accept();

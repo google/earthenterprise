@@ -154,8 +154,8 @@ bool AssetRootStatus::AssetRootNeedsRepair(void) const {
 std::string AssetRootStatus::FromHostString(void) const {
   bool is_master = (thishost_ == master_host_);
   return is_master
-    ? QString("")
-    : kh::tr(" from %1").arg(master_host_);
+    ? QString("").toUtf8().constData()
+    : kh::tr(" from %1").arg(master_host_.c_str()).toUtf8().constData();
 }
 
 void AssetRootStatus::ThrowAssetRootNeedsRepair(void) const {
@@ -164,9 +164,9 @@ void AssetRootStatus::ThrowAssetRootNeedsRepair(void) const {
 "You must run the following command%2:\n"
 "  geconfigureassetroot --repair --assetroot %3\n");
   throw khException(repair_msg
-                    .arg(assetroot_)
-                    .arg(FromHostString())
-                    .arg(assetroot_)
+                    .arg(assetroot_.c_str())
+                    .arg(FromHostString().c_str())
+                    .arg(assetroot_.c_str())
                     );
 }
 
@@ -179,11 +179,11 @@ void AssetRootStatus::ThrowAssetRootNeedsUpgrade(void) const {
 "  geupgradeassetroot --assetroot %6\n");
   throw khException(root_upgrade_msg
                     .arg(GEE_VERSION)
-                    .arg(assetroot_)
-                    .arg(version_)
-                    .arg(assetroot_)
-                    .arg(FromHostString())
-                    .arg(assetroot_)
+                    .arg(assetroot_.c_str())
+                    .arg(version_.c_str())
+                    .arg(assetroot_.c_str())
+                    .arg(FromHostString().c_str())
+                    .arg(assetroot_.c_str())
                     );
 
 }
@@ -196,10 +196,10 @@ void AssetRootStatus::ThrowSoftwareNeedsUpgrade(void) const {
 "the fusion software on this machine to version %5.\n");
   throw khException(software_upgrade_msg
                     .arg(GEE_VERSION)
-                    .arg(assetroot_)
-                    .arg(version_)
-                    .arg(assetroot_)
-                    .arg(version_)
+                    .arg(assetroot_.c_str())
+                    .arg(version_.c_str())
+                    .arg(assetroot_.c_str())
+                    .arg(version_.c_str())
                     );
 }
 
@@ -228,17 +228,17 @@ AssetRootStatus::ValidateForDaemonCheck(void) const {
 
   if (!dir_exists_) {
     throw khException(not_root_msg
-                      .arg(assetroot_)
+                      .arg(assetroot_.c_str())
                       .arg(kh::tr("doesn't exist"))
-                      .arg(assetroot_)
+                      .arg(assetroot_.c_str())
                       );
   }
 
   if (!has_volumes_) {
     throw khException(not_root_msg
-                      .arg(assetroot_)
+                      .arg(assetroot_.c_str())
                       .arg(kh::tr("isn't a valid asset root"))
-                      .arg(assetroot_)
+                      .arg(assetroot_.c_str())
                       );
   }
 

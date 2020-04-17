@@ -183,7 +183,7 @@ gstSharedSource gstSourceManager::GetSharedAssetSource(
   if (!found) {
     Asset asset(assetRef);
     if (!asset) {
-      throw khException(kh::tr("No such asset: '%1'").arg(assetRef));
+      throw khException(kh::tr("No such asset: '%1'").arg(assetRef.c_str()));
     }
     AssetVersion ver(asset->GetLastGoodVersionRef());
     std::string productName;
@@ -191,7 +191,7 @@ gstSharedSource gstSourceManager::GetSharedAssetSource(
       productName = ver->GetOutputFilename(0);
     } else {
       throw khException(kh::tr("Asset '%1' doesn't have a good version")
-                        .arg(assetRef));
+                        .arg(assetRef.c_str()));
     }
 
     found = khRefGuardFromNew(new gstSharedSourceImpl(productName, assetRef));
@@ -250,7 +250,7 @@ gstSharedSourceImpl::gstSharedSourceImpl(const std::string &path_,
 {
   source = new gstSource(path.c_str());
   if (source->Open() != GST_OKAY) {
-    throw khException(kh::tr("Unable to open '%1'").arg(path));
+    throw khException(kh::tr("Unable to open '%1'").arg(path.c_str()));
   }
   sourceId = theSourceManager->AddSource(source);
   source->unref(); // now owned by source manager

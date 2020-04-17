@@ -446,7 +446,7 @@ gstStatus gstKVPFormat::OpenFile() {
   if (configName.endsWith(QString(".kvp")))
     configName = configName + "/";
   if (configName.endsWith(QString(".kvp/")))
-    configName = configName + kHeaderXmlFile;
+    configName = configName + kHeaderXmlFile.c_str();
 
   gstKVPAsset kvpasset;
   if (!kvpasset.Load(configName.latin1())) {

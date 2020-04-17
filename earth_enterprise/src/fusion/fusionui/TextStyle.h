@@ -18,14 +18,19 @@
 
 #ifndef FUSION_FUSIONUI_TEXTSTYLE_H__
 #define FUSION_FUSIONUI_TEXTSTYLE_H__
-
-#include "textstylebase.h"
-#include <qpixmap.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
+#include <Qt/qobjectdefs.h>
+#include <Qt/qglobal.h>
+#include <Qt/qobject.h>
+#include <Qt/qpixmap.h>
+#include <Qt/qlabel.h>
+#include <Qt/qpushbutton.h>
+#include <memory>
 #include <autoingest/.idl/storage/MapSubLayerConfig.h>
 #include <autoingest/.idl/MapTextStyle.h>
 #include "WidgetControllers.h"
+#include <Qt/qwidget.h>
+#include "textstylebase.h"
+#include <Qt/qsharedpointer.h>
 
 class FontDef {
  public:
@@ -41,13 +46,15 @@ namespace maprender {
   class FontInfo;
 }
 
-class TextStyle : public TextStyleBase {
+class TextStyleBase;
+class TextStyle : public QWidget {
   Q_OBJECT
 
  public:
+  QSharedPointer<TextStyleBase> base;
   TextStyle(QWidget *parent,
             const MapTextStyleConfig &config_);
-  virtual ~TextStyle(void);
+  virtual ~TextStyle(void) = default;
   const MapTextStyleConfig& Config(void) const { return config; }
 
   // from QDialog
@@ -71,7 +78,7 @@ class TextStyle : public TextStyleBase {
   void UpdateWeightCombo(int fontPos);
   void UpdateFontCombos(void);
 
-  static const uint kMaxSavedStyles = 10;
+  static const unsigned int kMaxSavedStyles = 10;
   MapTextStyleConfig config;
   std::vector<FontDef> fonts;
   std::vector<bool> haveSave;
@@ -110,49 +117,6 @@ class TextStyleButtonController : public WidgetController
   QPushButton *button;
   MapTextStyleConfig *config;
   MapTextStyleConfig  workingConfig;
-};
-
-
-// ****************************************************************************
-// ***  Preview Label
-// ****************************************************************************
-class TextPreviewLabel : public QLabel {
-  Q_OBJECT
-
- public:
-  TextPreviewLabel(QWidget* parent, const char* name);
-
-  // inherited from QWidget
-  // support drag
-  virtual void mousePressEvent(QMouseEvent* event);
-  virtual void mouseMoveEvent(QMouseEvent* event);
-
-  void UpdateConfig(const MapTextStyleConfig& config);
- 
- private:
-  bool dragging_;
-  MapTextStyleConfig config_;
-};
-
-
-// ****************************************************************************
-// ***  Style Save Button
-// ****************************************************************************
-
-class StyleSaveButton : public QPushButton {
-  Q_OBJECT
-
- public:
-  StyleSaveButton(QWidget* parent, const char* name);
-
-  // inherited from QWidget
-  // support drop
-  virtual void dragEnterEvent(QDragEnterEvent* event);
-  virtual void dropEvent(QDropEvent* event);
-  virtual void dragLeaveEvent(QDragLeaveEvent* event);
-
- signals:
-  void StyleChanged(QWidget* btn);
 };
 
 #endif // FUSION_FUSIONUI_TEXTSTYLE_H__

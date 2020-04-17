@@ -19,11 +19,12 @@
 #ifndef FUSION_FUSIONUI_WIDGETCONTROLLERS_H__
 #define FUSION_FUSIONUI_WIDGETCONTROLLERS_H__
 
-#include <qobject.h>
+#include <Qt/qobjectdefs.h>
+#include <Qt/qobject.h>
 #include <khGuard.h>
 #include <geRange.h>
-#include <qcombobox.h>
-#include <qwidgetstack.h>
+#include <Qt/qcombobox.h>
+#include <Qt/q3widgetstack.h>
 #include <khMetaData.h>
 #include <gstSite.h>
 
@@ -35,6 +36,7 @@ class QGroupBox;
 class MapShieldConfig;
 
 class WidgetControllerManager;
+using QWidgetStack = Q3WidgetStack;
 
 // ****************************************************************************
 // ***  WidgetController
@@ -335,7 +337,7 @@ class RangeSpinControllerBase : public WidgetController {
  protected slots:
   void MinChanged(int);
   void MaxChanged(int);
-  
+
  protected:
   virtual void SyncToWidgetsImpl(void) = 0;
   RangeSpinControllerBase(WidgetControllerManager &manager,

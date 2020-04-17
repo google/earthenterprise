@@ -259,6 +259,9 @@
         <slot>accept()</slot>
     </connection>
 </connections>
+<includes>
+    <include location="global" impldecl="in declaration">Qt/qobjectdefs.h</include>
+</includes>
 <pixmapinproject/>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

@@ -200,18 +200,23 @@ else:
     python_home = '/usr'
 
 # setup platform specific operations
+is_os_ubuntu = False
 is_min_ubuntu = True
 # /etc/issue was the previous method of checking Ubuntu release version
 # however, some flavors of Ubuntu e.g. MATE, have used varying formats
 # using ilsb_release, subprocess and re is more readable than awk parsing also
 try:
+  vstring=subprocess.check_output('lsb_release -i',shell=True)
+  system=re.split('[\t\.\n]',vstring)
+  if system[1] == "Ubuntu":
+    is_os_ubuntu = True
   vstring=subprocess.check_output('lsb_release -r',shell=True)
   arr=re.split('[\t\.\n]',vstring)
   major=int(arr[1])
   minor=int(arr[2])
   el_ver = ''
-  if arr[1] < 12:
-    print 'Unknown Ubuntu version, minimum required version is 12.04.'
+  if arr[1] < 16:
+    print 'Unknown Ubuntu version, minimum required version is 16.04.'
     Exit(1)
     is_min_ubuntu = False
 # lsb_release is not present, must be RHEL or CentOS, move on
@@ -240,7 +245,11 @@ if sys.platform[0:5] == 'linux':
     warnflags += ['-Wno-parentheses']
   cppflags = ['-D_LARGEFILE64_SOURCE', '-DQT_THREAD_SUPPORT',
               '-DQT_NO_ASCII_CAST', '-DQT_CLEAN_NAMESPACE', '-D_REENTRANT',
-              '-DGUNIT_NO_GOOGLE3']
+              '-DGUNIT_NO_GOOGLE3', '-DQT3_SUPPORT', '-DQT_NO_TRANSLATION','-DQDOC']
+  if is_os_ubuntu:
+    cppflags += ['-I/usr/include/qt4/Qt3Support', '-I/usr/include/qt4/QtCore', '-I/usr/include/qt4/QtGui', '-I/usr/include/qt4']
+  else:
+    cppflags += ['-I/usr/include/Qt3Support', '-I/usr/include/QtCore', '-I/usr/include/QtGui']
 
   # set any architecture specific specific flags
   if re.compile('i.86').match(march):
@@ -290,12 +299,11 @@ if gprof:
 rpathlink_dirs = [Dir(exportdirs['lib']).abspath]
 # SetUID binaries don't use RPATH's containing '$ORIGIN' (since that would be
 # exploitable).  Use absolute paths to library install locations instead:
-rpath_dirs = ["'$$ORIGIN/../qt/lib'",
+rpath_dirs = ["/usr/lib64/qt4",
               "'$$ORIGIN/../lib64'",
               "'$$ORIGIN/../lib'",
               '%s/lib64' % optdir,
-              '%s/lib' % optdir,
-              '%s/qt/lib' % optdir]
+              '%s/lib' % optdir]
 
 # Binaries for unit tests, and other tests don't reside in the `bin` directory
 # where other executables go.  Instead, they are put in `bin/tests`.  So, the
@@ -561,14 +569,19 @@ if home: env['ENV']['HOME'] = str(home)
 
 # setup QTDIR & friends
 # always use our Qt
-qtdir = exportdir
-qtdir_lib = '%s/lib' % exportdir
+if is_os_ubuntu:
+  qtdir = "/usr"
+else:
+  qtdir = "/usr/lib64/qt4"
+
+qtdir_lib = "/usr/lib64/qt4"
+#qtdir_lib = '%s/lib' % exportdir
 env['ENV']['QTDIR'] = str(qtdir)
 env['QTDIR'] = str(qtdir)
-env['QTINCDIR'] = qtdir+'/include'
-env['QTLIBDIR'] = qtdir+'/lib'
+env['QTINCDIR'] = '/usr/include/Qt'
+env['QTLIBDIR'] = '/usr/lib64/qt4'
 env['MOC'] = qtdir+'/bin/moc'
-env['UIC'] = qtdir+'/bin/uic'
+env['UIC'] = qtdir+'/bin/uic3'
 env['LRELEASE'] = qtdir+'/bin/lrelease'
 
 env['KHIDL'] = File('#common/khxml/khidl.pl')

@@ -30,10 +30,9 @@ VectorProjectConfig::GetAvailChannelIds(void) const
   AvailId avail(ExpertBeginChannelId(), EndChannelId());
 
   // find the Ids I already have and exclude them from the list
-  for (std::vector<LayerConfig>::const_iterator layerConfig = layers.begin();
-       layerConfig != layers.end(); ++layerConfig) {
-    if (layerConfig->channelId)
-      avail.exclude(layerConfig->channelId);
+  for (const auto& layerConfig : layers) {
+    if (layerConfig.channelId)
+      avail.exclude(layerConfig.channelId);
   }
   // now exclude ExpertChannelIds if not already excluded
   // also make sure that we dont generate an exception
@@ -53,20 +52,16 @@ VectorProjectConfig::GetAvailStyleIds(void) const
   AvailId avail(BeginStyleId(), EndStyleId());
 
   // find the Ids I already have and exclude them from the list
-  for (std::vector<LayerConfig>::const_iterator layerConfig
-         = layers.begin();
-       layerConfig != layers.end(); ++layerConfig) {
+  for (const auto& layerConfig : layers) {
     // skip if it's not a streamed layer
-    if (!layerConfig->IsStreamedLayer())
+    if (!layerConfig.IsStreamedLayer())
       continue;
 
-    for (std::vector<DisplayRuleConfig>::const_iterator disp
-           = layerConfig->displayRules.begin();
-         disp != layerConfig->displayRules.end(); ++disp) {
-      if (disp->feature.style.id)
-        avail.exclude(disp->feature.style.id);
-      if (disp->site.style.id)
-        avail.exclude(disp->site.style.id);
+    for (const auto& disp : layerConfig.displayRules) {
+      if (disp.feature.style.id)
+        avail.exclude(disp.feature.style.id);
+      if (disp.site.style.id)
+        avail.exclude(disp.site.style.id);
     }
   }
 
@@ -83,22 +78,18 @@ VectorProjectConfig::AssignChannelIdsIfZero(void)
   AvailId avail = GetAvailChannelIds();
 
   if (!RuntimeOptions::GoogleInternal()) {
-    for (std::vector<LayerConfig>::iterator layerConfig
-           = layers.begin();
-         layerConfig != layers.end(); ++layerConfig) {
-      if (layerConfig->channelId == 0) {
-        layerConfig->channelId = avail.next();
+    for (auto& layerConfig : layers) {
+      if (layerConfig.channelId == 0) {
+        layerConfig.channelId = avail.next();
       }
     }
   } else {
     // Google-internal vector processing workflow requires that all channel
     // ids be manually assigned so if we find a '0' channel id it's an error
     QStringList bad_layers;
-    for (std::vector<LayerConfig>::iterator layerConfig
-           = layers.begin();
-         layerConfig != layers.end(); ++layerConfig) {
-      if (layerConfig->channelId == 0) {
-        bad_layers.push_back(layerConfig->DefaultNameWithPath());
+    for (auto& layerConfig : layers) {
+      if (layerConfig.channelId == 0) {
+        bad_layers.push_back(layerConfig.DefaultNameWithPath());
       }
     }
     if (bad_layers.size() > 0) {
@@ -130,22 +121,18 @@ VectorProjectConfig::AssignStyleIdsIfZero(void)
 {
   AvailId avail = GetAvailStyleIds();
 
-  for (std::vector<LayerConfig>::iterator layerConfig
-         = layers.begin();
-       layerConfig != layers.end(); ++layerConfig) {
+  for (auto& layerConfig : layers) {
     // skip if it's not a streamed layer
-    if (!layerConfig->IsStreamedLayer())
+    if (!layerConfig.IsStreamedLayer())
       continue;
 
-    for (std::vector<DisplayRuleConfig>::iterator disp
-           = layerConfig->displayRules.begin();
-         disp != layerConfig->displayRules.end(); ++disp) {
-      if ((disp->feature.enabled()) &&
-          disp->feature.style.id == 0)
-        disp->feature.style.id = avail.next();
-      if (disp->site.enabled &&
-          disp->site.style.id == 0)
-        disp->site.style.id = avail.next();
+    for(auto& disp : layerConfig.displayRules) {
+      if ((disp.feature.enabled()) &&
+          disp.feature.style.id == 0)
+        disp.feature.style.id = avail.next();
+      if (disp.site.enabled &&
+          disp.site.style.id == 0)
+        disp.site.style.id = avail.next();
     }
   }
 }
@@ -156,10 +143,9 @@ VectorProjectConfig::EnsureFolderExists(const QString &folder) {
   if (folder.isEmpty()) return;
 
   // see if we can find a match
-  for (std::vector<LayerConfig>::const_iterator l = layers.begin();
-       l != layers.end(); ++l) {
-    if (l->DefaultNameWithPath() == folder) {
-      if (l->IsFolder()) {
+  for (const auto& l : layers) {
+    if (l.DefaultNameWithPath() == folder) {
+      if (l.IsFolder()) {
         // we found the folder we're looking for
         return;
       } else {
@@ -180,7 +166,7 @@ VectorProjectConfig::EnsureFolderExists(const QString &folder) {
   newLayer.legend = parent;
   newLayer.defaultLocale.name_ = folder.section(delim, -1);
   newLayer.defaultLocale.icon_ = IconReference(IconReference::Internal,
-                                               kDefaultIconName);
+                                               kDefaultIconName.c_str());
   layers.push_back(newLayer);
 }
 
@@ -200,10 +186,10 @@ VectorProjectConfig::AddLayer(const LayerConfig &layer)
                 layer.defaultLocale.name_.GetValue() +
                 " (" + ToQString(num) + ")" :
                 layer.defaultLocale.name_.GetValue();
-    for (std::vector<LayerConfig>::const_iterator l = layers.begin();
-         l != layers.end(); ++l) {
-      if (l->defaultLocale.name_.GetValue() == checkname &&
-          l->legend == layer.legend) {
+
+    for (const auto& l : layers) {
+      if (l.defaultLocale.name_.GetValue() == checkname &&
+          l.legend == layer.legend) {
         ++num;
         again = true;
         break;
@@ -241,7 +227,7 @@ VectorProjectConfig::AfterLoad(const VectorProjectConfig::DeprecatedMembers &)
   bool roadsAdded = false;
   bool bordersAdded = false;
   for (std::vector<LayerConfig>::iterator l = layers.begin();
-       l != layers.end(); ++l) {
+         l != layers.end(); ++l) {
     if (l->defaultLocale.name_.GetValue() == "roads")
       roadsAdded = true;
     if (l->defaultLocale.name_.GetValue() == "borders")
@@ -252,7 +238,7 @@ VectorProjectConfig::AfterLoad(const VectorProjectConfig::DeprecatedMembers &)
       roads.defaultLocale.name_ = "roads";
       roads.channelId = 0;
       roads.defaultLocale.icon_=
-        IconReference(IconReference::Internal, kDefaultIconName);
+        IconReference(IconReference::Internal, kDefaultIconName.c_str());
       l = layers.insert(l, roads);
       ++l;
       roadsAdded = true;
@@ -262,7 +248,7 @@ VectorProjectConfig::AfterLoad(const VectorProjectConfig::DeprecatedMembers &)
       borders.defaultLocale.name_ = "borders";
       borders.channelId = 0;
       borders.defaultLocale.icon_ =
-        IconReference(IconReference::Internal, kDefaultIconName);
+        IconReference(IconReference::Internal, kDefaultIconName.c_str());
       l = layers.insert(l, borders);
       ++l;
       bordersAdded = true;
@@ -273,9 +259,8 @@ VectorProjectConfig::AfterLoad(const VectorProjectConfig::DeprecatedMembers &)
 bool
 VectorProjectConfig::HasJS(void) const
 {
-  for (std::vector<LayerConfig>::const_iterator l = layers.begin();
-       l != layers.end(); ++l) {
-    if (l->HasJS())
+  for(const auto& l : layers) {
+    if (l.HasJS())
       return true;
   }
   return false;
@@ -284,9 +269,8 @@ VectorProjectConfig::HasJS(void) const
 bool
 VectorProjectConfig::HasSearchFields(void) const
 {
-  for (std::vector<LayerConfig>::const_iterator l = layers.begin();
-       l != layers.end(); ++l) {
-    if (l->HasSearchFields())
+  for (const auto& l : layers) {
+    if (l.HasSearchFields())
       return true;
   }
   return false;

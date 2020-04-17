@@ -146,7 +146,7 @@ RasterGEIndexAssetVersionImplD::DoSubmitTask(void)
   }
   std::string stackfile = WorkingFilename("stackfile"); // fully bound name
   if (!geindex_stack.Save(stackfile)) {
-    throw khException(kh::tr("Unable to save %1").arg(stackfile));
+    throw khException(kh::tr("Unable to save %1").arg(stackfile.c_str()));
   }
 
 

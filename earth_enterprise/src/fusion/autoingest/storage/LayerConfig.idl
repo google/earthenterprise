@@ -440,7 +440,7 @@ class SiteConfig {
         popupText = depmembers.addr + QString("<BR>\n") + depmembers.url;
       }
       style.icon.type = depmembers.icon.type;
-      style.icon.href = QString(depmembers.icon_depmembers.name);
+      style.icon.href = QString(depmembers.icon_depmembers.name.c_str());
       style.label.label = depmembers.label;
       style.label.normalColor = depmembers.style_depmembers.rgba;
       style.label.highlightColor = depmembers.style_depmembers.rgba;

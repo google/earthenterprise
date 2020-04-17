@@ -99,7 +99,7 @@ class RasterProjectConfig {
   RasterProjectConfig(AssetDefs::Type t)
      : indexVersion(uint(1)),
      insets(std::vector<InsetStackItem>()),
-     legend((t == AssetDefs::Imagery) ? kImageryType : kTerrainType, true),
+     legend((t == AssetDefs::Imagery) ? kImageryType.c_str() : kTerrainType.c_str(), true),
      fuid_channel_(uint32(0)),
      asset_uuid_(std::string()),
      is_timemachine_project_(false),
@@ -124,9 +124,9 @@ void RasterProjectConfig::AfterLoad(
   if (legend.defaultLocale.name.GetValue().isEmpty() && (insets.size() > 0)){
     if (EndsWith(insets[0].dataAsset,
             AssetDefs::FileExtension(AssetDefs::Terrain, kProductSubtype))) {
-      legend.defaultLocale = LegendLocale(kTerrainType, true);
+      legend.defaultLocale = LegendLocale(kTerrainType.c_str(), true);
     } else {
-      legend.defaultLocale = LegendLocale(kImageryType, true);
+      legend.defaultLocale = LegendLocale(kImageryType.c_str(), true);
     }
   }
   // Do not assign the UUID if we don't have one already (i.e., upgrading from pre-3.0.1).

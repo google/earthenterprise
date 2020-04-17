@@ -110,7 +110,7 @@ main(int argc, char **argv)
     std::set<IconReference> used_icons;
 
     // emit the default layers.js
-    EmitLayersJSFile(config, outdir, kDefaultLocaleSuffix, used_icons);
+    EmitLayersJSFile(config, outdir, kDefaultLocaleSuffix.c_str(), used_icons);
 
     // emit localized layer.js files
     for (std::vector<QString>::const_iterator locale =
@@ -149,7 +149,8 @@ void EmitImageryLayer(FILE* fp, const LegendLocale &legend_locale,
                       std::set<IconReference> &used_icons)
 {
   used_icons.insert(legend_locale.icon.GetValue());
-  QString icon_name("icons/" + legend_locale.icon.GetValue().LegendHref());
+  QString icon_name("icons/");
+  icon_name += legend_locale.icon.GetValue().LegendHref().c_str();
 
   fprintf(fp, "tile_layer_defs.push(\n");
   fprintf(fp, "{\n");
@@ -177,7 +178,8 @@ void EmitVectorRasterLayer(FILE* fp, const LegendLocale &legend_locale,
                            std::set<IconReference> &used_icons)
 {
   used_icons.insert(legend_locale.icon.GetValue());
-  QString icon_name("icons/" + legend_locale.icon.GetValue().LegendHref());
+  QString icon_name("icons/");
+  icon_name += legend_locale.icon.GetValue().LegendHref().c_str();
 
   fprintf(fp, "tile_layer_defs.push(\n");
   fprintf(fp, "{\n");
@@ -212,7 +214,7 @@ void EmitLayersJSFile(const MapLayerJSConfig &config,
   FILE* fp = ::fopen(outfile.c_str(), "w");
   if (!fp) {
     throw khErrnoException(kh::tr("Unable to open %1 for writing")
-                           .arg(outfile));
+                           .arg(outfile.c_str()));
   }
   khFILECloser closer(fp);
 
@@ -221,7 +223,7 @@ void EmitLayersJSFile(const MapLayerJSConfig &config,
 
   for (LayerIterator layer = config.layers_.begin();
        layer != config.layers_.end(); ++layer) {
-    LegendLocale legend_locale = (locale == kDefaultLocaleSuffix)
+    LegendLocale legend_locale = (locale == kDefaultLocaleSuffix.c_str())
                                  ? layer->legend_.defaultLocale
                                  : layer->legend_.GetLegendLocale(locale);
     switch (layer->type_) {

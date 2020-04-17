@@ -16,25 +16,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <qpainter.h>
-#include <qinputdialog.h>
-#include <qcombobox.h>
-#include <qstatusbar.h>
-#include <qapplication.h>
-#include <qlayout.h>
-#include <qlcdnumber.h>
-#include <qspinbox.h>
-#include <qvbox.h>
-#include <qdockwindow.h>
-#include <qmessagebox.h>
-#include <qpopupmenu.h>
-#include <qmenubar.h>
-#include <qlabel.h>
-#include <qprogressbar.h>
-#include <qdragobject.h>
-#include <qpushbutton.h>
-#include <qfile.h>
-#include <qtextstream.h>
+#include <Qt/qpainter.h>
+#include <Qt/qinputdialog.h>
+#include <Qt/qcombobox.h>
+#include <Qt/qstatusbar.h>
+#include <Qt/qapplication.h>
+#include <Qt/qlayout.h>
+#include <Qt/qlcdnumber.h>
+#include <Qt/qspinbox.h>
+#include <Qt/q3vbox.h>
+#include <Qt/q3dockwindow.h>
+using QDockWindow = Q3DockWindow;
+#include <Qt/qmessagebox.h>
+#include <Qt/q3popupmenu.h>
+using QPopupMenu = Q3PopupMenu;
+#include <Qt/qmenubar.h>
+#include <Qt/qlabel.h>
+#include <Qt/qprogressbar.h>
+#include <Qt/q3dragobject.h>
+#include <Qt/qpushbutton.h>
+#include <Qt/qfile.h>
+#include <Qt/qtextstream.h>
+#include <Qt/q3mimefactory.h>
+using QMimeSourceFactory = Q3MimeSourceFactory;
+#include <Qt/q3dragobject.h>
+using QImageDrag = Q3ImageDrag;
 
 #include <builddate.h>
 #include "fusion/fusionversion.h"
@@ -89,7 +95,7 @@ void NameAction::ChangeText(const QString& text) {
 // globally visible structures
 MainWindow* MainWindow::self = 0;
 
-MainWindow::MainWindow(QWidget* parent, const char* name, WFlags fl)
+MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags fl)
     : MainWindowBase(parent, name, fl),
       placemark_manager_(),
       project_manager_docker_(),
@@ -109,7 +115,7 @@ void MainWindow::Init() {
   //
   // set all global values here...
   //
-  setCaption(QString(GetFusionProductName()) + Preferences::CaptionText());
+  setCaption(QString(GetFusionProductName().c_str()) + Preferences::CaptionText());
 
   asset_manager_ = NULL;
   feature_editor_ = NULL;
@@ -122,8 +128,9 @@ void MainWindow::Init() {
   statusBar()->addWidget(lat_lon_, 0, true);
 
   busy_progress_bar_ = new QProgressBar(statusBar());
-  busy_progress_bar_->setPercentageVisible(FALSE);
-  busy_progress_bar_->setTotalSteps(10);
+  busy_progress_bar_->setTextVisible(FALSE);
+  busy_progress_bar_->setMinimum(0);
+  busy_progress_bar_->setMaximum(10);
   busy_progress_bar_->setFixedWidth(150);
   statusBar()->addWidget(busy_progress_bar_, 0, true);
   busy_progress_max_ = 10;
@@ -239,7 +246,6 @@ void MainWindow::Init() {
   previewProjection->setCurrentItem(
       Preferences::getConfig().isMercatorPreview ? 1 : 0);
 }
-
 MainWindow::~MainWindow() {
   delete project_manager_docker_;
   delete selection_view_docker_;
@@ -257,7 +263,7 @@ void MainWindow::previewProjectionActivated(int choice) {
   if (is_mercator_preview != Preferences::getConfig().isMercatorPreview) {
     Preferences::getConfig().isMercatorPreview = is_mercator_preview;
     GfxView::SetIsMercatorPreview(Preferences::getConfig().isMercatorPreview);
-    Preferences::getConfig().Save(Preferences::filepath("preferences.xml"));
+    Preferences::getConfig().Save(Preferences::filepath("preferences.xml").toUtf8().constData());
     updateImageLayers();  // Read the background texture (for this projection).
     {  // Adjust the frustum so that the center of map is same lat-lon
       gstBBox& frust = gfxview->state()->frust;
@@ -278,10 +284,10 @@ void MainWindow::previewProjectionActivated(int choice) {
 
 void MainWindow::launchHelpManual() {
   // find manual
-  QString doc = khComposePath(
+  QString doc(khComposePath(
       kGESharePath,
-      "doc/manual/index.html");
-  if (!khExists(doc.latin1())) {
+      "doc/manual/index.html").c_str());
+  if (!khExists(doc.toUtf8().constData())) {
     QMessageBox::critical(
         this, "Error",
         tr("Unable to find manual. Please re-install fusion to correct this."),
@@ -296,7 +302,7 @@ void MainWindow::launchHelpManual() {
   mpath << "/usr/bin/google-chrome";
 
   for (QStringList::Iterator it = mpath.begin(); it != mpath.end(); ++it) {
-    if (khExists(*it)) {
+    if (khExists(it->toUtf8().constData())) {
       browser = *it;
       break;
     }
@@ -396,7 +402,7 @@ class TextureWarning : public QMessageBox {
                     QMessageBox::NoButton, parent, 0, false) {
     // must set this flag here because the base QWidget will
     // not honor it if modal is not true
-    setWFlags(WDestructiveClose);
+    setWindowFlags(static_cast<Qt::WindowFlags>(Qt::WA_DeleteOnClose));
   }
 };
 
@@ -602,7 +608,8 @@ void MainWindow::drawstats(int frame, double tex, double geom) {
 
 void MainWindow::busyProgress(int val) {
   if (val == 0) {
-    busy_progress_bar_->setProgress(0);
+    //busy_progress_bar_->setProgress(0);
+    busy_progress_bar_->setValue(0);
     busy_progress_max_ = 10;
     return;
   }
@@ -616,5 +623,6 @@ void MainWindow::busyProgress(int val) {
   if (percent < 1)  // always draw something!
     percent = 1;
 
-  busy_progress_bar_->setProgress(percent);
+  //busy_progress_bar_->setProgress(percent);
+  busy_progress_bar_->setValue(0);
 }

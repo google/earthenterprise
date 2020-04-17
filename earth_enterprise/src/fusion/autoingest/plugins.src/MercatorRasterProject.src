@@ -215,24 +215,21 @@ void MercatorRasterProjectAssetImplD::AddInsets(
     const std::vector<RasterProjectModifyRequest::Item> &items) {
   // make a set of those that I already have
   std::set<std::string> have;
-  for (std::vector<InsetStackItem>::const_iterator inset =
-         config.insets.begin();
-       inset != config.insets.end(); ++inset) {
-    have.insert(inset->dataAsset);
+
+  for (const auto& inset : config.insets) {
+    have.insert(inset.dataAsset);
   }
 
   // process each of the items to add
-  for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
-         items.begin();
-       item != items.end(); ++item) {
+  for (const auto& item : items) {
     // error if there's anything I already have
-    if (have.find(item->dataAsset) != have.end()) {
+    if (have.find(item.dataAsset) != have.end()) {
       throw khException(kh::tr("Project already has inset '%1'")
-                        .arg(item->dataAsset));
+                        .arg(item.dataAsset.c_str()));
     }
 
     // figure out what its levels should be
-    uint effectivemax = ComputeEffectiveMaxLevel(*item);
+    uint effectivemax = ComputeEffectiveMaxLevel(item);
 
     // walk backwards until we find where to insert it
     std::vector<InsetStackItem>::reverse_iterator where;
@@ -246,12 +243,12 @@ void MercatorRasterProjectAssetImplD::AddInsets(
     // Remember: since 'where' is a reverse iterator, 'where.base()' is
     // one after 'where' (in the forward sense). Since insert is insert
     // before, where.base is exactly what we want.
-    config.insets.insert(where.base(), InsetStackItem(item->dataAsset,
+    config.insets.insert(where.base(), InsetStackItem(item.dataAsset,
                                                       effectivemax,
-                                                      item->overridemax));
+                                                      item.overridemax));
 
     // update my "have" set so I won't try to add the same one again
-    have.insert(item->dataAsset);
+    have.insert(item.dataAsset);
   }
 
   SyncInputRefs();
@@ -261,10 +258,8 @@ void MercatorRasterProjectAssetImplD::AddInsets(
 void MercatorRasterProjectAssetImplD::SyncInputRefs(void) {
   // update my inputs based on which layers have assetRefs
   inputs.clear();
-  for (std::vector<InsetStackItem>::const_iterator inset
-         = config.insets.begin();
-       inset != config.insets.end(); ++inset) {
-    inputs.push_back(inset->dataAsset);
+   for (const auto& inset : config.insets) {
+    inputs.push_back(inset.dataAsset);
   }
 }
 
@@ -312,12 +307,10 @@ bool MercatorRasterProjectAssetImplD::NeedStackUpdate(void) const {
 void MercatorRasterProjectAssetImplD::UpdateStack(void) {
   // see if the effective maxlevel has changed for anything in inset stack
   bool changed = false;
-  for (std::vector<InsetStackItem>::iterator inset =
-         config.insets.begin(); inset != config.insets.end(); ++inset) {
-
-    uint effectivemax = ComputeEffectiveMaxLevel(*inset);
-    if (effectivemax != inset->maxlevel) {
-      inset->maxlevel = effectivemax;
+  for (auto& inset : config.insets) {
+    uint effectivemax = ComputeEffectiveMaxLevel(inset);
+    if (effectivemax != inset.maxlevel) {
+      inset.maxlevel = effectivemax;
       changed = true;
     }
   }
@@ -352,10 +345,8 @@ void MercatorRasterProjectAssetImplD::UpdateStack(void) {
 void MercatorRasterProjectAssetImplD::HandleEditRequest(
     const RasterProjectEditRequest &req) {
   // Make sure the assetRef's are valid.
-  for (std::vector<InsetStackItem>::const_iterator inset
-         = req.config.insets.begin();
-       inset != req.config.insets.end(); ++inset) {
-    ValidateRefForInput<MercatorRasterProductAssetVersionD>(inset->dataAsset);
+  for (const auto& inset : req.config.insets) {
+    ValidateRefForInput<MercatorRasterProductAssetVersionD>(inset.dataAsset);
   }
 
   // Find/make our target project.
@@ -415,10 +406,8 @@ void MercatorRasterProjectAssetImplD::HandleEditRequest(
 void MercatorRasterProjectAssetImplD::HandleNewRequest(
     const RasterProjectModifyRequest &req) {
   // verify the assets before I create anything
-  for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
-         req.items.begin();
-       item != req.items.end(); ++item) {
-    ValidateRefForInput<MercatorRasterProductAssetVersionD>(item->dataAsset);
+  for (const auto& item : req.items) {
+    ValidateRefForInput<MercatorRasterProductAssetVersionD>(item.dataAsset);
   }
 
   // normalize the supplied asset name
@@ -447,10 +436,8 @@ void MercatorRasterProjectAssetImplD::HandleNewRequest(
 void MercatorRasterProjectAssetImplD::HandleModifyRequest(
     const RasterProjectModifyRequest &req) {
   // verify the assets before I do anything else
-  for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
-         req.items.begin();
-       item != req.items.end(); ++item) {
-    ValidateRefForInput<MercatorRasterProductAssetVersionD>(item->dataAsset);
+  for (const auto& item : req.items) {
+    ValidateRefForInput<MercatorRasterProductAssetVersionD>(item.dataAsset);
   }
 
   // find it and make the change
@@ -470,10 +457,8 @@ void MercatorRasterProjectAssetImplD::HandleModifyRequest(
 void MercatorRasterProjectAssetImplD::HandleAddToRequest(
     const RasterProjectModifyRequest &req) {
   // verify the assets before I do anything else
-  for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
-         req.items.begin();
-       item != req.items.end(); ++item) {
-    ValidateRefForInput<MercatorRasterProductAssetVersionD>(item->dataAsset);
+  for (const auto& item : req.items) {
+    ValidateRefForInput<MercatorRasterProductAssetVersionD>(item.dataAsset);
   }
 
   // find it and make the change
@@ -504,17 +489,16 @@ void MercatorRasterProjectAssetImplD::HandleDropFromRequest(
 
   // check for valid asset refs
   std::set<std::string> todrop;
-  for (std::vector<std::string>::const_iterator r =
-         req.productRefs.begin(); r != req.productRefs.end(); ++r) {
+  for (const auto& r : req.productRefs) {
     if (std::find_if(project->config.insets.begin(),
                      project->config.insets.end(),
                      mem_var_pred_ref<std::equal_to>
-                     (&InsetStackItem::dataAsset, *r)) ==
+                     (&InsetStackItem::dataAsset, r)) ==
         project->config.insets.end()) {
       throw khException(kh::tr("Project doesn't have inset '%1'")
-                        .arg(*r));
+                        .arg(r.c_str()));
     } else {
-      todrop.insert(*r);
+      todrop.insert(r);
     }
 
   }
@@ -559,7 +543,7 @@ void MercatorRasterProjectAssetVersionImplD::UpdateChildren(void) {
 
   if (numInsets == 0) {
     throw khException(kh::tr("No insets defined for project %1.\n"
-                             "Cannot build").arg(GetRef().toString()));
+                             "Cannot build").arg(GetRef().toString().c_str()));
   }
 }
 
@@ -635,19 +619,19 @@ void MercatorRasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
   const uint numInsets = inputs.size();
   if (numInsets == 0) {
     throw khException(kh::tr("No insets defined for project %1.\n"
-                             "Cannot build").arg(GetRef().toString()));
+                             "Cannot build").arg(GetRef().toString().c_str()));
   }
 
   // sanity check in case the previous logic to ensure a valid channel id
   // fails
   if (config.fuid_channel_ == 0) {
     throw khException(kh::tr("Internal Error: No channel id for %1")
-                      .arg(GetRef().toString()));
+                      .arg(GetRef().toString().c_str()));
   }
 
   if (config.asset_uuid_ == "") {
     throw khException(kh::tr("Internal Error: No UUID for %1")
-                      .arg(GetRef().toString()));
+                      .arg(GetRef().toString().c_str()));
   }
 
 
@@ -801,12 +785,9 @@ void MercatorRasterProjectAssetVersionImplD::LoadInsetInfoForIndexing(
   // make an array of all the resource version refs
   // this is needed by the DBRoot generator
   // while we're at it makes the map of fuid -> provider id for the indexer
-  for (std::vector<InsetInfo<
-      MercatorRasterProductAssetVersion> >::const_iterator i =
-          inset_infos->begin();
-       i != inset_infos->end(); ++i) {
-    if (i->resource_->config.provider_id_ != 0) {
-      used_provider_ids->insert(i->resource_->config.provider_id_);
+  for (const auto& i : *inset_infos) {
+    if (i.resource_->config.provider_id_ != 0) {
+      used_provider_ids->insert(i.resource_->config.provider_id_);
     }
   }
 }
@@ -820,7 +801,7 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
   if (numInsets == 0) {
     throw khException(kh::tr("Attempt to build index with too few "
                              "insets for project: %1.\n"
-                             "Cannot build").arg(GetRef().toString()));
+                             "Cannot build").arg(GetRef().toString().c_str()));
   }
 
   const auto last_iter = inset_infos.rbegin();
@@ -840,12 +821,8 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
   // resolution inset can be minified instead of blended. This increases
   // speed, reduces grey line artifacts around insets, and generally
   // increases low res image quality.
-  const uint beginMinifyLevel  = (MiscConfig::Instance().UseMinification
-                                        ? beginProjectLevel
-                                        : 0);
-  const uint endMinifyLevel    = (MiscConfig::Instance().UseMinification
-                                        ? inset_infos[0].effectiveMaxLevel
-                                        : 0);
+  const uint beginMinifyLevel  = beginProjectLevel;
+  const uint endMinifyLevel    = inset_infos[0].effectiveMaxLevel;
 
   // Calc the info about what work to do
   std::vector<PacketGenInfo> genInfo;
@@ -960,12 +937,10 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
 
 
     // calculate the level range that will be minified
-    uint effectiveBeginMinifyLevel = (MiscConfig::Instance().UseMinification
-                                      ? std::max(genInfo[i].coverage.beginLevel(), beginMinifyLevel)
-                                      : 0);
-    uint effectiveEndMinifyLevel = (MiscConfig::Instance().UseMinification
-                                    ? std::min(genInfo[i].coverage.endLevel(), endMinifyLevel)
-                                    : 0);
+    uint effectiveBeginMinifyLevel =
+      std::max(genInfo[i].coverage.beginLevel(), beginMinifyLevel);
+    uint effectiveEndMinifyLevel =
+      std::min(genInfo[i].coverage.endLevel(), endMinifyLevel);
 
     // Build a PacketGenConfig
     PacketGenConfig packetGenConfig;

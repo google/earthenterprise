@@ -84,7 +84,7 @@ std::string ReadVersion(const std::string &assetroot) {
 void WriteVersion(const std::string &assetroot) {
   const std::string filename = Filename(assetroot, VersionFile);
   if (!khWriteStringToFile(filename, GEE_VERSION)) {
-    throw khException(kh::tr("Unable to write %1").arg(filename));
+    throw khException(kh::tr("Unable to write %1").arg(filename.c_str()));
   }
   khChmod(filename, FilePerms(VersionFile));
 }
@@ -101,9 +101,9 @@ void AssertVersion(const std::string &assetroot) {
 "This machine is running fusion software version %1.\n"
 "%2 is configured to use version %3.\n"
 "Unable to proceed.")
-                      .arg(fusionVer)
-                      .arg(assetroot)
-                      .arg(version));
+                      .arg(fusionVer.c_str())
+                      .arg(assetroot.c_str())
+                      .arg(version.c_str()));
   }
 }
 

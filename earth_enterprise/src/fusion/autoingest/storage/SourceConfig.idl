@@ -54,14 +54,15 @@ class SourceConfig {
         AddURI(s);
       } else {
         switch (AddFile(s)) {
+          case FileOK: break;
           case NonVolume:
             throw khException
-              (s + kh::tr(" doesn't reside on a known volume."));
+              (s + kh::tr(" doesn't reside on a known volume.").toStdString());
           case CantStat:
-            throw khErrnoException
-              (kh::tr("Unable to get file information for ") + s);
-          case FileOK:
+            throw khErrnoException(std::string(std::string(kh::tr("Unable to get file information for ")
+                                               .toUtf8().constData())+s).c_str());
             break;
+          default: break;
         }
       }
     }

@@ -78,7 +78,7 @@ env.install('common_lib', [geindex_r, geindex_rw])
 env.test('WriterReader_tests',
          'WriterReader_tests.cpp',
          LIBS=['getests', 'geindex_r', 'geindex_rw', 'geutil', 'gecommon',
-               'qt-mt', 'gtest'])
+               'QtGui', 'QtCore', 'gtest'])
 
 env.test('WriterReader_tests__port',
          [
@@ -94,4 +94,4 @@ single_thread_env.test('filebundle_unittest__port',
 
 env.test('IndexManifest_unittest',
                'IndexManifest_unittest.cpp',
-               LIBS=['getests', 'geindex_r', 'geindex_rw', 'geutil', 'gecommon', 'qt-mt', 'png12'])
+               LIBS=['getests', 'geindex_r', 'geindex_rw', 'geutil', 'gecommon', 'QtGui', 'QtCore', 'png12'])

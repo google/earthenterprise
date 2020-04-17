@@ -24,6 +24,7 @@
 #include <errno.h>
 // for khstrerror
 #include <notify.h>
+#include <Qt/qbytearray.h>
 
 // ****************************************************************************
 // ***  khSimpleException
@@ -60,6 +61,13 @@ class khSimpleException : public std::exception
     return *this;
   }
 
+  inline khSimpleException operator<<(const QByteArray& q)
+  {
+      std::ostringstream out;
+      out << q.constData();
+      msg += out.str();
+      return *this;
+  }
 };
 
 // ****************************************************************************

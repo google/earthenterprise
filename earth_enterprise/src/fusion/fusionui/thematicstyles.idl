@@ -14,13 +14,15 @@
 
 
 #include <vector>
+#include <string>
+
 
 class ColorElement
 {
-  uint red;
-  uint green;
-  uint blue;
-  uint alpha;
+  unsigned int red;
+  unsigned int green;
+  unsigned int blue;
+  unsigned int alpha;
 };
 
 class ColorGroups

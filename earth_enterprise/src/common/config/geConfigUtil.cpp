@@ -78,7 +78,7 @@ std::string GetAndValidateHostname(void) {
         kh::tr(
             "This machine's hostname (%1) does not map to an IP address.\n",
             "Please use the system utilities to reconfigure the hostname.")
-        .arg(hostname));
+        .arg(hostname.c_str()));
   }
 
   return hostname;

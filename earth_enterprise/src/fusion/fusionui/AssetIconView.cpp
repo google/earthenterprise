@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc.
+﻿// Copyright 2017 Google Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,13 +13,17 @@
 // limitations under the License.
 
 
-#include <qimage.h>
-#include <qstringlist.h>
+#include <Qt/qimage.h>
+#include <Qt/qstringlist.h>
 #include <assert.h>
-
-
+#include <Qt/qabstractbutton.h>
+#include <Qt/q3mimefactory.h>
 #include "AssetIconView.h"
 #include "AssetDrag.h"
+#include <QtCore/qglobal.h>
+
+using QMimeSourceFactory = Q3MimeSourceFactory;
+using QImageDrag = Q3ImageDrag;
 
 // -----------------------------------------------------------------------------
 
@@ -43,13 +47,13 @@ AssetIcon::AssetIcon(QIconView* parent, gstAssetHandle handle, int initsz)
     defaultImage = new QImage(uic_load_pixmap("preview_default.png").
                               convertToImage());
 
-  setText(shortAssetName(handle->getName()));
+  setText(shortAssetName(handle->getName().toUtf8().constData()));
 
   QImage img;
   AssetVersion ver(handle->getAsset()->CurrVersionRef());
   if (ver) {
     std::string previewpath = ver->PreviewFilename();
-    if (previewpath.size() && img.load(previewpath)) {
+    if (previewpath.size() && img.load(previewpath.c_str())) {
       image_ = new QImage(img);
     } else {
       image_ = defaultImage;
@@ -66,16 +70,16 @@ AssetIcon::~AssetIcon() {
     delete image_;
 }
 
-
 void AssetIcon::resize(int sz) {
-  setPixmap(image_->scale(sz, sz, QImage::ScaleMin));
+  QPixmap pix = QPixmap::fromImage(image_->scaled(sz, sz, Qt::KeepAspectRatio));
+  setPixmap(pix);
   setPixmapRect(QRect(0, 0, sz, sz));
   calcRect();
 }
 
 // -----------------------------------------------------------------------------
 
-AssetIconView::AssetIconView(QWidget* parent, const char* name, WFlags f)
+AssetIconView::AssetIconView(QWidget* parent, const char* name, Qt::WFlags f)
     : QIconView(parent, name, f) {
   setItemsMovable(false);
 }
@@ -85,6 +89,7 @@ void AssetIconView::startDrag() {
   assert(icon != NULL);
 
   AssetDrag* ad = new AssetDrag(this, icon->getAssetHandle()->getAsset());
-  ad->setPixmap(icon->image()->scale(64, 64, QImage::ScaleMin));
+  QPixmap pix = QPixmap::fromImage(icon->image()->scaled(64, 64, Qt::KeepAspectRatio));
+  ad->setPixmap(pix);
   ad->dragCopy();
 }

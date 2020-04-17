@@ -307,7 +307,7 @@ void gstLayer::QueryThread() {
           error += "\n";
           error += QString::fromUtf8(soft_errors.Errors()[i].c_str());
         }
-        query_progress_->SetWarning(error);
+        query_progress_->SetWarning(error.toUtf8().constData());
       }
     } catch(const SoftErrorPolicy::TooManyException &e) {
       std::vector<std::string> errors;
@@ -741,7 +741,7 @@ bool gstLayer::ExportStreamPackets(geFilePool &file_pool,
              node_count_skipped_);
     }
     exporter_->Close();
-    return build_set_manager.DumpLODTable(QDir(pub_dir).filePath("lodtable"));
+    return build_set_manager.DumpLODTable(QDir(pub_dir.c_str()).filePath("lodtable"));
   } catch(const std::exception &e) {
     notify(NFY_WARN, "Error during export: %s", e.what());
   } catch(...) {

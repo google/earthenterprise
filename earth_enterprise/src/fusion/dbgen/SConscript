@@ -25,12 +25,12 @@ gedbgen = env.executable('gedbgen',
                          ['gedbgen.cpp', DBConfigObj],
                          LIBS=['geprotorootgen', 'geautoingest', 'gesearchtabs',
                                'gexml', 'gedbroot', 'geiconutil', 'geutil', 'gecommon',
-                               'dbmanifest', 'qt-mt', 'xerces-c'])
+                               'dbmanifest', 'QtCore', 'QtGui', 'xerces-c'])
 
 mapdbgen = env.executable('mapdbgen',
                           ['mapdbgen.cpp', DBConfigObj],
                           LIBS=['geautoingest', 'gesearchtabs',
                                 'gexml', 'geutil', 'gecommon',
-                                'dbmanifest', 'qt-mt', 'xerces-c'])
+                                'dbmanifest', 'QtCore', 'QtGui', 'xerces-c'])
 
 env.install('fusion_bin', [gedbgen, mapdbgen])
