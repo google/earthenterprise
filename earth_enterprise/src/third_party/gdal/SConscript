@@ -34,12 +34,12 @@ gdal_version = 'gdal-2.1.2'
 # Check if MrSID decoding library is installed and get the decoding SDK path
 mrSIDLibName = 'libltidsdk.so'
 mrSIDDSDKPath = ""
-findLibraryCommand = "/sbin/ldconfig -p | grep %s | tr ' ' '\n' | grep /" %mrSIDLibName
+findLibraryCommand = "/sbin/ldconfig -p | grep -E '%s$' | tr ' ' '\n' | grep /" %mrSIDLibName
 mrSIDlibraryFullPath=subprocess.check_output(findLibraryCommand, shell=True)
 if mrSIDlibraryFullPath:
    print "mrSID library was found. GDAL will be built with mrSID raster format support: ", mrSIDlibraryFullPath
    getFolderCommand = "dirname %s" %mrSIDlibraryFullPath
-   mrSIDLibraryPath=subprocess.check_output(getFolderCommand, shell=True).read()
+   mrSIDLibraryPath=subprocess.check_output(getFolderCommand, shell=True)
    mrSIDDSDKPath = os.path.normpath(os.path.join(mrSIDLibraryPath, os.pardir))
    print "mrSID Decoding SDK path is: ", mrSIDDSDKPath
 
