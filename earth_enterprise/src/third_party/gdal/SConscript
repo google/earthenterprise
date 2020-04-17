@@ -27,6 +27,7 @@
 
 Import('third_party_env')
 import os
+import subprocess
 
 gdal_version = 'gdal-2.1.2'
 
@@ -34,11 +35,11 @@ gdal_version = 'gdal-2.1.2'
 mrSIDLibName = 'libltidsdk.so'
 mrSIDDSDKPath = ""
 findLibraryCommand = "/sbin/ldconfig -p | grep %s | tr ' ' '\n' | grep /" %mrSIDLibName
-mrSIDlibraryFullPath=os.popen(findLibraryCommand).read()
+mrSIDlibraryFullPath=subprocess.check_output(findLibraryCommand, shell=True)
 if mrSIDlibraryFullPath:
    print "mrSID library was found. GDAL will be built with mrSID raster format support: ", mrSIDlibraryFullPath
    getFolderCommand = "dirname %s" %mrSIDlibraryFullPath
-   mrSIDLibraryPath=os.popen(getFolderCommand).read()
+   mrSIDLibraryPath=subprocess.check_output(getFolderCommand, shell=True).read()
    mrSIDDSDKPath = os.path.normpath(os.path.join(mrSIDLibraryPath, os.pardir))
    print "mrSID Decoding SDK path is: ", mrSIDDSDKPath
 
