@@ -177,7 +177,7 @@ env.copyfile(inst_common_dir('.'), './src/version.txt')
 
 # Copy the tutorial to the install staging directory if it exists.
 stage_tutorial_cmds = {'stage_tutorial': [
-    'cd tutorial; if [ -d FusionTutorial ]; then scons -j%d installdir="%s"; else echo "Skipping tutorial; no tutorial files found."; fi' % (num_jobs, installdir)
+    'cd tutorial; if [ -d FusionTutorial ]; then python2.7 /usr/bin/scons -j%d installdir="%s"; else echo "Skipping tutorial; no tutorial files found."; fi' % (num_jobs, installdir)
 ]}
 stage_tutorial = env.PhonyTargets(**stage_tutorial_cmds)
 env.Depends(stage_tutorial, stage_data)
