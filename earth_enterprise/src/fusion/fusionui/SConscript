@@ -27,8 +27,7 @@ SConscript('site-icons/SConscript')
 # so add command line options to suppress those warnings
 env = env.Clone()
 env.Append( CXXFLAGS = ['-Wno-unused-function', '-Wno-unused-value',
-                        '-DQT3_SUPPORT',
-                        '-DQDOC','-DQ_DECLARE_TR_FUNCTIONS'],
+                        '-DQT3_SUPPORT', '-DQDOC'],
             CPPPATH = ['#fusion/fusionui',
                        Dir('.ui')],              # for generated files
             LINKFLAGS=['-L/usr/lib/x86_64-linux-gnu'],
@@ -343,11 +342,11 @@ fusion = env.executable('fusion', objs + qtobjs + idlobjs)
 env.install('fusion_bin', fusion)
 
 # Define a custom action function for building qt translations
-def buildtrans(env, target, source):
-    cmd = '%s %s -qm %s' % ( env['LRELEASE'], str(source[0].name),
-                             str(target.name) )
-    print cmd, '\n'
-    return os.system(cmd)
+#def buildtrans(env, target, source):
+#    cmd = '%s %s -qm %s' % ( env['LRELEASE'], str(source[0].name),
+#                             str(target.name) )
+#    print cmd, '\n'
+#    return os.system(cmd)
 
 # jptrans = env.Command('fusion_jp.qm',
 #                       ['fusion.pro', 'fusion_jp.ts'],
