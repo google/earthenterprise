@@ -34,7 +34,6 @@ env.install('server_lib', [glb])
 portable_glc_reader_sobj = env.SharedObject('portable_glc_reader.cpp')
 
 swig_env = env.DeepCopy()
-swig_env['STATIC_AND_SHARED_OBJECTS_ARE_THE_SAME']=1
 cc_flags = swig_env['CCFLAGS']
 cc_flags.remove('-Werror')
 swig_env['CCFLAGS'] = cc_flags
@@ -43,7 +42,7 @@ root_dir = Dir(swig_env.exportdirs['root']).abspath
 swig_env['CPPFLAGS'] += ['-I%s' % swig_env['python_include']]
 swig_env.Append(SWIGFLAGS = ['-python', '-c++'])
 
-libglc_unpacker = swig_env.SharedLibrary('libglc_unpacker',
+libglc_unpacker = swig_env.sharedLib('libglc_unpacker',
                                      ['libglc_unpacker.i', portable_glc_reader_sobj],
                                      LIBS=['glb'])
 

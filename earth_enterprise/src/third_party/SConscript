@@ -61,12 +61,7 @@ if third_party_env['bundle_3rd_libs']:
       'skia',
       'pyyaml',
       'defusedxml',
-      'swig',
       'qt4'
-  ]
-elif third_party_env['portable_3rd_libs']:
-  third_party_libs = [
-    'swig'
   ]
 else:
   third_party_libs = [
@@ -90,7 +85,6 @@ else:
       'skia',
       'pyyaml',
       'defusedxml',
-      'swig',
       'qt4'
   ]
 
