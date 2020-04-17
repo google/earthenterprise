@@ -38,7 +38,7 @@ class GlcReader;
 class FileUnpacker {
  public:
   FileUnpacker(const GlcReader& glc_reader, std::uint64_t offset, std::uint64_t size);
-  FileUnpacker() = default;
+  FileUnpacker() = delete;
   ~FileUnpacker();
   FileUnpacker(const FileUnpacker&) = delete;
   FileUnpacker(FileUnpacker&&) = delete;
