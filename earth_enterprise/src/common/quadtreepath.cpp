@@ -21,11 +21,10 @@
 
 #include "khEndian.h"
 #include "quadtreepath.h"
-#include <khAssert.h>
 #include <khTileAddrConsts.h>
 
-COMPILE_TIME_CHECK(QuadtreePath::kMaxLevel >= MaxClientLevel,
-                   InvalidQuadtreePathkMaxLevel);
+static_assert(QuadtreePath::kMaxLevel >= MaxClientLevel,
+                   "Invalid Quadtree Path kMax Level");
 
 const std::uint32_t QuadtreePath::kMaxLevel;
 const std::uint32_t QuadtreePath::kStoreSize;

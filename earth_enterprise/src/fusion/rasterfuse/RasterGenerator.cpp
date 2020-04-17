@@ -884,10 +884,10 @@ void
 RasterGenerator::MakeLevels(const ImageInfo &imageInfo)
 {
   typedef typename TileType::PixelType PixelType;
-  COMPILE_TIME_ASSERT(TileType::TileWidth == RasterProductTileResolution,
-                      IncompatibleTileWidth);
-  COMPILE_TIME_ASSERT(TileType::TileHeight == RasterProductTileResolution,
-                      IncompatibleTileHeight);
+  static_assert(TileType::TileWidth == RasterProductTileResolution,
+                      "Incompatible Tile Width");
+  static_assert(TileType::TileHeight == RasterProductTileResolution,
+                      "Incompatible Tile Height");
   assert(outRP->numComponents() == TileType::NumComp);
   assert(outRP->componentType() == TileType::Storage);
 
@@ -965,10 +965,10 @@ void
 RasterGenerator::Extract(const khRasterProduct *inRP,
                          const khLevelCoverage &extractCov)
 {
-  COMPILE_TIME_ASSERT(TileType::TileWidth == RasterProductTileResolution,
-                      IncompatibleTileWidth);
-  COMPILE_TIME_ASSERT(TileType::TileHeight == RasterProductTileResolution,
-                      IncompatibleTileHeight);
+  static_assert(TileType::TileWidth == RasterProductTileResolution,
+                      "Incompatible Tile Width");
+  static_assert(TileType::TileHeight == RasterProductTileResolution,
+                      "Incompatible Tile Height");
   assert(inRP->numComponents() == TileType::NumComp);
   assert(inRP->numComponents() == outRP->numComponents());
   assert(inRP->componentType() == TileType::Storage);

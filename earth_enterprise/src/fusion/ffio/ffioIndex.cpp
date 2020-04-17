@@ -113,7 +113,7 @@ class Header {
   // should only be used by index reader
   Header(void) { }
 };
-COMPILE_TIME_CHECK(sizeof(Header) == 64, BadFFIOIndexHeaderSize);
+static_assert(sizeof(Header) == 64, "Bad FF IO Index Header Size");
 
 // Don't re-arrange this class. It's carefully sized and packed
 // to be exactly 32 bytes long.
@@ -138,7 +138,7 @@ class LevelRecord {
   // just another name for code clarity
   inline void HostToLittleEndian(void) { LittleEndianToHost(); }
 };
-COMPILE_TIME_CHECK(sizeof(LevelRecord) == 32, BadFFIOIndexLevelRecordSize);
+static_assert(sizeof(LevelRecord) == 32, "Bad FF IO Index Level Record Size");
 
 // Don't re-arrange this class. It's carefully sized and packed
 // to be exactly 16 bytes long.
@@ -153,16 +153,16 @@ class TileRecord {
   // just another name for code clarity
   inline void HostToLittleEndian(void) { LittleEndianToHost(); }
 };
-COMPILE_TIME_CHECK(sizeof(TileRecord) == 16, BadFFIOIndexTileRecordSize);
+static_assert(sizeof(TileRecord) == 16, "Bad FF IO Index Tile Record Size");
 } // namespace IndexStorage
 } // namespace ffio
 
 
 const char
 ffio::IndexStorage::Header::themagic[] = "Keyhole Flatfile Index";
-COMPILE_TIME_CHECK(sizeof(ffio::IndexStorage::Header::themagic)-1 ==
+static_assert(sizeof(ffio::IndexStorage::Header::themagic)-1 ==
                    sizeof(ffio::IndexStorage::Header().magic),
-                   InvalidMagicSize)
+                   "Invalid Magic Size");
 
     ffio::IndexStorage::Header::Header(std::uint32_t totalIndexSize_,
                                        ffio::Type type_,
@@ -474,8 +474,8 @@ ffio::IndexReader::IndexReader(const std::string &filename)
     totalFFSize      = header.totalFFSize;
     totalIndexSize   = header.totalIndexSize;
     totalStoredTiles = header.totalStoredTiles;
-    COMPILE_TIME_ASSERT(sizeof(typeData) == sizeof(header.typeData),
-                        InvalidTypeDataSize);
+    static_assert(sizeof(typeData) == sizeof(header.typeData),
+                        "Invalid Type Data Size");
     memcpy(typeData, header.typeData, sizeof(typeData));
   } else {
     throw khException(kh::tr
