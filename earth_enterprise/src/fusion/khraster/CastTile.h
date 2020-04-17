@@ -20,7 +20,6 @@
 #define __CastTile_h
 
 #include "khRasterTile.h"
-#include <khAssert.h>
 #include <khCalcHelper.h>
 
 // ****************************************************************************
@@ -67,10 +66,10 @@ template <class DestTile, class SrcTile>
 inline void
 CastTile(DestTile &dest, const SrcTile &src)
 {
-  COMPILE_TIME_ASSERT(DestTile::TileWidth == SrcTile::TileWidth,
-                      IncompatibleTileWidth);
-  COMPILE_TIME_ASSERT(DestTile::TileHeight == SrcTile::TileHeight,
-                      IncompatibleTileHeight);
+  static_assert(DestTile::TileWidth == SrcTile::TileWidth,
+                      "Incompatible Tile Width");
+  static_assert(DestTile::TileHeight == SrcTile::TileHeight,
+                      "Incompatible Tile Height");
 
   for (std::uint32_t i = 0; i < DestTile::BandPixelCount; ++i) {
     PixelCaster<
@@ -253,8 +252,8 @@ inline void
 CopySubtile(DestTile &dest, const khOffset<std::uint32_t> &destOffset,
             const SrcTile &src, const khExtents<std::uint32_t> &srcExtents)
 {
-  COMPILE_TIME_ASSERT(DestTile::NumComp == SrcTile::NumComp,
-                      IncompatibleNumBands);
+  static_assert(DestTile::NumComp == SrcTile::NumComp,
+                      "Incompatible Num Bands");
 
   // get write extents from destOffset and src size
   // intersect it with the valid extents of the dest tile

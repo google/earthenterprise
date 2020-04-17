@@ -426,10 +426,10 @@ khRasterProduct::MakeTileFromLevel(std::uint32_t destRow, std::uint32_t destCol,
                                    TileType &destTile,
                                    Averager averager)
 {
-  COMPILE_TIME_ASSERT(TileType::TileWidth == RasterProductTileResolution,
-                      InvalidTileWidth);
-  COMPILE_TIME_ASSERT(TileType::TileHeight == RasterProductTileResolution,
-                      InvalidTileHeight);
+  static_assert(TileType::TileWidth == RasterProductTileResolution,
+                      "Invalid Tile Width");
+  static_assert(TileType::TileHeight == RasterProductTileResolution,
+                      "Invalid Tile Height");
   assert(TileType::NumComp == numComponents());
   assert(TileType::Storage == componentType());
 

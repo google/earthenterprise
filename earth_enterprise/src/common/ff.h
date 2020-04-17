@@ -20,8 +20,6 @@
 
 #include <cstdint>
 
-#include <khAssert.h>
-
 // ****************************************************************************
 // ***  flat file header structure
 // ****************************************************************************
@@ -52,7 +50,7 @@ class FFRecHeader {
   // just another name for code clarity
   inline void HostToBigEndian(void) { BigEndianToHost(); }
 };
-COMPILE_TIME_CHECK(sizeof(FFRecHeader) == 32, BadFFRecHeaderSize);
+static_assert(sizeof(FFRecHeader) == 32, "Bad FF Rec Header Size");
 
 
 // ****************************************************************************

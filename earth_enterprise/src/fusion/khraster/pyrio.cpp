@@ -130,9 +130,9 @@ bool Header::IsMercator() const {
 const char
 pyrio::IndexStorage::Header::themagic[] = "Keyhole Pyramid  1.1";
 // sizeof(thmagic) will include space for the null terminator
-COMPILE_TIME_CHECK(sizeof(pyrio::IndexStorage::Header::themagic)-1 ==
+static_assert(sizeof(pyrio::IndexStorage::Header::themagic)-1 ==
                    sizeof(pyrio::IndexStorage::Header().magic),
-                   InvalidMagicSize)
+                   "Invalid Magic Size");
 
 
     bool
@@ -640,10 +640,10 @@ template <class SrcTile>
 bool
 pyrio::Writer::WritePyrTile(std::uint32_t row, std::uint32_t col, const SrcTile &src)
 {
-  COMPILE_TIME_ASSERT(SrcTile::TileWidth == RasterProductTileResolution,
-                      InvalidTileWidth);
-  COMPILE_TIME_ASSERT(SrcTile::TileHeight == RasterProductTileResolution,
-                      InvalidTileHeight);
+  static_assert(SrcTile::TileWidth == RasterProductTileResolution,
+                      "Invalid Tile Width");
+  static_assert(SrcTile::TileHeight == RasterProductTileResolution,
+                      "Invalid Tile Height");
   assert(SrcTile::NumComp == header.numComponents ||
          src.IsMonoChromatic() && header.numComponents == 1);
   assert(SrcTile::Storage == header.componentType);

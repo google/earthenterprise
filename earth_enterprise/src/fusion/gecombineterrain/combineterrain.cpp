@@ -24,13 +24,12 @@
 // (in the output packet file) merged terrain packets.
 
 #include <third_party/rsa_md5/crc32.h>
-#include <khAssert.h>
 #include <qtpacket/quadtree_utils.h>
 #include "combineterrain.h"
 #include "common/performancelogger.h"
 
-COMPILE_TIME_CHECK(qtpacket::QuadtreeNumbering::kDefaultDepth == 5,
-                   Quadset_packet_depth_is_not_5);
+static_assert(qtpacket::QuadtreeNumbering::kDefaultDepth == 5,
+                   "Quadset packet depth is not 5");
 
 namespace geterrain {
 
