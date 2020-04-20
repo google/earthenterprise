@@ -35,6 +35,7 @@ gdal_version = 'gdal-2.1.2'
 try:
   mrSIDLibName = 'libltidsdk.so'
   findLibraryCommand = "/sbin/ldconfig -p | grep %s | tr ' ' '\n' | grep /" %mrSIDLibName
+  # There may be multiple MrSID paths, so take the first one
   mrSIDlibraryFullPath = subprocess.check_output(findLibraryCommand, shell=True).splitlines()[0]
   print "mrSID library was found. GDAL will be built with mrSID raster format support: ", mrSIDlibraryFullPath
   # Go up two directories
