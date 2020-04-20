@@ -54,7 +54,9 @@ getranslate = env.executable('getranslate', 'getranslate.cpp',
 gereproject = env.executable('gereproject', 'gereproject.cpp',
                              LIBS=['gegdal', 'geutil', 'gdal', 'geos'])
 
-khgdal_test = env.test('khgdal_test', ['khgdal_test.cpp'], LIBS=['gegdal', 'gecommon', 'geos'])
+khgdal_test = env.test('khgdal_test',
+    ['khgdal_test.cpp'],
+    LIBS=['gegdal', 'gecommon', 'geos', 'gtest'])
 
 khGDALReader_unittest = env.test('khGDALReader_unittest',
     ['khGDALReader_unittest.cpp'],
