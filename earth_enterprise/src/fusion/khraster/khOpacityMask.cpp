@@ -19,7 +19,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#include "common/khAssert.h"
 #include "common/khEndian.h"
 #include "common/geFileUtils.h"
 #include "common/khFileUtils.h"
@@ -98,13 +97,13 @@ class OpacityHeader {
   // sould only be used when reading from file
   OpacityHeader() { }
 };
-COMPILE_TIME_CHECK(sizeof(OpacityHeader) == 32, BadOpacityHeaderSize);
+static_assert(sizeof(OpacityHeader) == 32, "Bad Opacity Header Size");
 
 const char
 OpacityHeader::themagic[] = "Keyhole Opacity Mask";
-COMPILE_TIME_CHECK(sizeof(OpacityHeader::themagic)-1 ==
+static_assert(sizeof(OpacityHeader::themagic)-1 ==
                    sizeof(OpacityHeader().magic),
-                   InvalidMagicSize);
+                   "Invalid Magic Size");
 
 
 OpacityHeader::OpacityHeader(std::uint8_t numLevels_, std::uint32_t totalSize)
@@ -148,8 +147,8 @@ class OpacityLevelRecord {
   // just another name for code clarity
   inline void HostToLittleEndian(void) { LittleEndianToHost(); }
 };
-COMPILE_TIME_CHECK(sizeof(OpacityLevelRecord) == 32,
-                   BadOpacityLevelRecordSize);
+static_assert(sizeof(OpacityLevelRecord) == 32,
+                   "Bad Opacity Level Record Size");
 
 OpacityLevelRecord::OpacityLevelRecord(std::uint32_t opacityBufferOffset_,
                                        const khOpacityMask::Level &level)

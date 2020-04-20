@@ -212,10 +212,10 @@ template <class SrcTile>
 bool
 khRasterProductLevel::WriteTile(std::uint32_t row, std::uint32_t col, const SrcTile &src)
 {
-  COMPILE_TIME_ASSERT(SrcTile::TileWidth == RasterProductTileResolution,
-                      IncompatibleTileWidth);
-  COMPILE_TIME_ASSERT(SrcTile::TileHeight == RasterProductTileResolution,
-                      IncompatibleTileHeight);
+  static_assert(SrcTile::TileWidth == RasterProductTileResolution,
+                      "Incompatible Tile Width");
+  static_assert(SrcTile::TileHeight == RasterProductTileResolution,
+                      "Incompatible Tile Height");
   assert(SrcTile::NumComp == numComponents());
   assert(SrcTile::Storage == componentType());
 

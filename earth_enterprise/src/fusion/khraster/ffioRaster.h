@@ -136,7 +136,7 @@ class IndexTypeData {
   // used only by Reader
   IndexTypeData(void) { }
 };
-COMPILE_TIME_CHECK(sizeof(IndexTypeData) == 16, BadIndexTypeDataSize);
+static_assert(sizeof(IndexTypeData) == 16, "Bad Index Type Data Size");
 
 
 }  // namespace ffio::Raster

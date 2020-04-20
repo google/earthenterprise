@@ -16,15 +16,14 @@
 
 #include "ffioRasterReader.h"
 #include <khException.h>
-#include <khAssert.h>
 #include "CastTile.h"
 #include "Interleave.h"
 
 template <class OutTile>
 ffio::raster::Reader<OutTile>::Reader(const std::string &ffdir) :
     ffreader(ffdir) {
-  COMPILE_TIME_ASSERT(OutTile::TileWidth == OutTile::TileHeight,
-                      NonSquareTile);
+  static_assert(OutTile::TileWidth == OutTile::TileHeight,
+                      "Non Square Tile");
 
   if (ffreader.type() != ffio::Raster) {
     throw khException(kh::tr("%1 is not a raster ff").arg(ffdir));
@@ -32,9 +31,9 @@ ffio::raster::Reader<OutTile>::Reader(const std::string &ffdir) :
 
   // fetch and verify the raster specific data store in the index
   IndexTypeData typeData;
-  COMPILE_TIME_ASSERT(sizeof(typeData) ==
+  static_assert(sizeof(typeData) ==
                       sizeof(ffio::IndexReader("").typeData),
-                      InvalidTypeDataSize);
+                      "Invalid Type Data Size");
   memcpy(&typeData, ffreader.typeData(), sizeof(typeData));
   typeData.LittleEndianToHost();
   if (OutTile::TileWidth != typeData.tilesize) {
