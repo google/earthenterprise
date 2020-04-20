@@ -20,6 +20,8 @@
 #include "khgdal.h"
 #include <khGeomUtils.h>
 
+#include <dlfcn.h>
+
 // We round upto an integral meter and then compare
 bool NearlyEqual(double gold, double other) {
   return ( static_cast<int>(gold + 0.5) == static_cast<int>(other + 0.5) );
@@ -90,6 +92,36 @@ TEST(khGdalTest, ConvertToGdalMeterForMercator) {
             << "Longitude mismatch: expected " << lon_expected << ", got " << lon_converted;
       }
     }
+  }
+}
+
+class DLWrapper {
+ private:
+  void * handle;
+ public:
+  DLWrapper(const char * filename, int flags) {
+    handle = dlopen(filename, flags);
+  }
+  ~DLWrapper() {
+    if(IsLoaded()) {
+      dlclose(handle);
+    }
+  }
+  bool IsLoaded() {
+    return handle;
+  }
+};
+
+TEST(khGdalTest, CheckMrSID) {
+  // Only run this test if the MrSID library is available
+  DLWrapper mrsid("libltidsdk.so", RTLD_NOW);
+  if (mrsid.IsLoaded()) {
+    khGDALInit();
+    auto manager = GetGDALDriverManager();
+
+    // Verify that the MrSID driver is available
+    auto driver = manager->GetDriverByName("MrSID");
+    ASSERT_NE(driver, nullptr) << "Could not load MrSID driver";
   }
 }
 
