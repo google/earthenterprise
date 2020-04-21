@@ -151,7 +151,7 @@ void Encode(void* data, std::uint32_t datalen, const void* key, std::uint32_t ke
 
   /* now the remaining 1 to 7 bytes */
   if (dp < dpend) {
-    if (kp >= kpend) {
+    while (kp >= kpend) {
       // rotate the key one last time (if necessary)
       off = (off + 8) % 24;
       kp = kpstart + off;
