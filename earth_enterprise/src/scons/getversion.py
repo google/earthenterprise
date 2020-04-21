@@ -85,16 +85,16 @@ def _GitVersionNameAndBuildNumber():
         if not branchName:
             # we are a detached head not on a release tag so just treat
             # the the first part of the raw describe as the release name
-            # added the b to the build number to signal this is not a releasable build
-            return _GetCommitRawDescription().split('-')[0], "b{0}-{1}".format(_GitCommitCount(), open_gee_version.get_commit_hash_from_tag('HEAD'))
+            # append '.beta' to the build number to signal this is not a tested build
+            return _GetCommitRawDescription().split('-')[0], "{0}.beta-{1}".format(_GitCommitCount(), open_gee_version.get_commit_hash_from_tag('HEAD'))
         else:
             # Get the version name from the branch name
             if _IsReleaseBranch(branchName):
                 tailTag = _GetReleaseTailTag(branchName)
                 return _GetReleaseVersionName(branchName), '{0}.{1}'.format(_GitBranchedCommitCount(tailTag), _GitCommitCount('HEAD', tailTag))
             else:
-                # added the b to the build number to signal this is not a releasable build
-                return _GetCommitRawDescription().split('-')[0],  "b{0}-{1}".format(_GitCommitCount(), _sanitizeBranchName(branchName))
+                # append '.beta' to the build number to signal this is not a tested build
+                return _GetCommitRawDescription().split('-')[0],  "{0}.beta-{1}".format(_GitCommitCount(), _sanitizeBranchName(branchName))
 
 
 def _GitBranchedCommitCount(tailTag):
