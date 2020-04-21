@@ -207,6 +207,9 @@ class Builder(object):
         ]
         copy_from_dir_to_dir(dist_dir, self.server_dir, entries=entries,
             exclude_entries=exclude_entries)
+        
+        # Delete fileunpacker build directory so it is not packaged.
+        remove_directory(task_build_dir)
 
     def obtain_sample_globes(self):
         """Copies tutorial globe and map cuts to <data/>."""
