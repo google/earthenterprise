@@ -22,7 +22,6 @@
 
 #include <math.h>
 #include <time.h>
-#include <khAssert.h>
 #include <khTypes.h>
 #include <cstdint>
 
@@ -94,10 +93,10 @@ struct CompileTimeIsPowerOf2Checker<0> {
 template <unsigned long long num>
 struct CompileTimeLog2Checker {
   // will generate compile time error for numbers that are not power of two
-  COMPILE_TIME_CHECK(CompileTimeIsPowerOf2(num), NotAPowerOf2);
+  static_assert(CompileTimeIsPowerOf2(num), "Not A Power Of 2");
 
   // Simplified algorithm since:
-  // 1) The above COMPILE_TIME_CHECK guarantees that it's a power of two
+  // 1) The above static_assert guarantees that it's a power of two
   // 2) The specializations below handles the case for '1'
   enum { result = 1 + CompileTimeLog2Checker<(num>>1)>::result };
 };

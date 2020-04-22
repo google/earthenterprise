@@ -147,10 +147,10 @@ template <class DestTile>
 inline bool
 khRasterProductLevel::ReadTile(std::uint32_t row, std::uint32_t col, DestTile &dest) const
 {
-  COMPILE_TIME_ASSERT(DestTile::TileWidth == RasterProductTileResolution,
-                      IncompatibleTileWidth);
-  COMPILE_TIME_ASSERT(DestTile::TileHeight == RasterProductTileResolution,
-                      IncompatibleTileHeight);
+  static_assert(DestTile::TileWidth == RasterProductTileResolution,
+                      "Incompatible Tile Width");
+  static_assert(DestTile::TileHeight == RasterProductTileResolution,
+                      "Incompatible Tile Height");
   if (DestTile::NumComp != numComponents()) {
     notify(NFY_WARN, "Internal Error: Invalid number of bands: %u != %u",
            DestTile::NumComp, numComponents());

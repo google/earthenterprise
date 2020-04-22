@@ -17,7 +17,6 @@
 
 #include "shared.h"
 #include <khEndian.h>
-#include <khAssert.h>
 #include <third_party/rsa_md5/crc32.h>
 #include "IndexBundleReader.h"
 

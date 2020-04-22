@@ -48,8 +48,8 @@ ffio::raster::Writer<TileType>::Writer(
 
   // populate and set our type specific index data header
   {
-    COMPILE_TIME_ASSERT(TileType::TileWidth == TileType::TileHeight,
-                        NonSquareTile);
+    static_assert(TileType::TileWidth == TileType::TileHeight,
+                        "Non Square Tile");
     IndexTypeData typeData(subtype,
                            TileType::TileWidth,
                            TileType::NumComp,
@@ -123,8 +123,8 @@ ffio::raster::Writer<TileType>::MakeCompressor(void) {
 template <class TileType>
 void ffio::raster::Writer<TileType>::WriteTile(const khTileAddr &addr,
                                                const TileType &tile) {
-  COMPILE_TIME_ASSERT(TileType::TileWidth == TileType::TileHeight,
-                      NonSquareTile);
+  static_assert(TileType::TileWidth == TileType::TileHeight,
+                      "Non Square Tile");
 
   // interleave the tile before writing - for now all ffio files of more
   // than one band must be interleaved

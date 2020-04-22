@@ -22,7 +22,6 @@
 #include <fcntl.h>
 
 #include "common/khInsetCoverage.h"
-#include "common/khAssert.h"
 #include "common/khEndian.h"
 #include "common/khFileUtils.h"
 #include "common/khException.h"
@@ -51,13 +50,13 @@ class PresenceHeader {
   // sould only be used when reading from file
   PresenceHeader() { }
 };
-COMPILE_TIME_CHECK(sizeof(PresenceHeader) == 32, BadPresenceHeaderSize);
+static_assert(sizeof(PresenceHeader) == 32, "Bad Presence Header Size");
 
 const char
 PresenceHeader::themagic[] = "Keyhole Presence Mask";
-COMPILE_TIME_CHECK(sizeof(PresenceHeader::themagic)-1 ==
+static_assert(sizeof(PresenceHeader::themagic)-1 ==
                    sizeof(PresenceHeader().magic),
-                   InvalidMagicSize);
+                   "Invalid Magic Size");
 
 
 PresenceHeader::PresenceHeader(std::uint8_t numLevels_, std::uint32_t totalSize)
@@ -99,8 +98,8 @@ class PresenceLevelRecord {
   // just another name for code clarity
   inline void HostToLittleEndian(void) { LittleEndianToHost(); }
 };
-COMPILE_TIME_CHECK(sizeof(PresenceLevelRecord) == 32,
-                   BadPresenceLevelRecordSize);
+static_assert(sizeof(PresenceLevelRecord) == 32,
+                   "Bad Presence Level Record Size");
 
 
 PresenceLevelRecord::PresenceLevelRecord(std::uint32_t presenceBufferOffset_,
