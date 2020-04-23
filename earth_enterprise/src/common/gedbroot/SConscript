@@ -120,3 +120,6 @@ env.install('tools_bin', [gedbrootgoogleurlremover])
 
 env.installAs('fusion_share', 'postamble.v5.base', 'template', 'dbroot')
 
+env.test('proto_dbroot_unittest',
+    ['proto_dbroot_unittest.cpp'],
+    LIBS=['gedbroot', 'gtest'])

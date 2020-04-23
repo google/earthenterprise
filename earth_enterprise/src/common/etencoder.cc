@@ -110,7 +110,11 @@ const std::string kDefaultKey(
 
 
 void Encode(void* data, std::uint32_t datalen, const void* key, std::uint32_t keylen) {
-  std::uint8_t* outdata = static_cast<std::uint8_t*>(data);
+  if (keylen % 8 != 0) {
+    throw khSimpleException("Encryption keys must be a multiple of 8 bytes long.");
+  }
+
+  std:uint8_t* outdata = static_cast<std::uint8_t*>(data);
 
   std::uint8_t* dp = static_cast<std::uint8_t*>(data);
   std::uint8_t* dpend = dp + datalen;

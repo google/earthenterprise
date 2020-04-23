@@ -60,10 +60,15 @@ geProtoDbroot::geProtoDbroot(const std::string &filename,
       }
 
       // decode in place in the proto buffer
-      etEncoder::Decode(&(*encrypted.mutable_dbroot_data())[0],
-                        encrypted.dbroot_data().size(),
-                        encrypted.encryption_data().data(),
-                        encrypted.encryption_data().size());
+      try {
+        etEncoder::Decode(&(*encrypted.mutable_dbroot_data())[0],
+                          encrypted.dbroot_data().size(),
+                          encrypted.encryption_data().data(),
+                          encrypted.encryption_data().size());
+      }
+      catch (khSimpleException e) {
+        throw khSimpleException("Error decoding dbroot: ") << e.what();
+      }
 
       // uncompress
       LittleEndianReadBuffer uncompressed;
