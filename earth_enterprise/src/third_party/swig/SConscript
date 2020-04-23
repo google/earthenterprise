@@ -77,4 +77,4 @@ swig_install = swig_env.Command(
 Default(swig_install)
 swig_env.ExecuteOnClean('rm -rf %s' % current_dir)
 
-Return('swig_extract swig_install_build')
+Return('swig_extract swig_install')
