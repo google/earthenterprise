@@ -81,7 +81,6 @@ class Builder(object):
         self.build_dir = build_dir
         self.source_dir = source_dir
         self.platform = platform
-
         self.base_version = None
         self.build_date = None
         self.version_string = None
@@ -194,7 +193,7 @@ class Builder(object):
         import build_and_test
         sys.path = old_path
 
-        build_and_test.main(['build_and_test.py', self.platform])
+        build_and_test.main(['build_and_test.py', self.platform, self.source_dir])
 
         # Copy library to package directory:
         exclude_entries = ['test.py', 'util.py']

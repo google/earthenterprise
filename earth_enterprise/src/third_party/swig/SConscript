@@ -1,0 +1,80 @@
+#-*- Python -*-
+#
+# Copyright 2020 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+
+Import('third_party_env')
+swig_version = 'swig-4.0.1'
+
+num_cpu = GetOption('num_jobs')
+
+current_dir = Dir('.').abspath
+build_root = '%s/%s' % (current_dir, swig_version)
+
+swig_source = File('#/../third_party/swig/%s.tar.gz' %
+                      swig_version).abspath
+
+swig_env = third_party_env.DeepCopy()
+root_dir = Dir(swig_env.exportdirs['root']).abspath
+
+# [1] Extract swig
+swig_target = '%s/.extract' % current_dir
+swig_extract = swig_env.Command(
+    swig_target, swig_source,
+    [swig_env.MultiCommand(
+        'mkdir -p %s\n'
+        'cd %s\n'
+        'tar xzf %s\n'
+        'touch %s' % (
+            current_dir, current_dir, swig_source, swig_target))])
+
+# [3] Configure swig
+swig_target = '%s/.configure' % current_dir
+swig_configure = swig_env.Command(
+    swig_target, swig_extract,
+    [swig_env.MultiCommand(
+        'cd %s\n'
+        '%s ./configure --with-python=%s --prefix=%s\n'
+        'touch %s' % (build_root,
+                      swig_env['ENV']['mod_env'],
+                      swig_env['python_bin'], root_dir,
+                      swig_target))])
+
+# [4] Build
+swig_target = '%s/.build' % current_dir
+swig_build = swig_env.Command(
+    swig_target, swig_configure,
+    [swig_env.MultiCommand(
+        'cd %s\n'
+        '%smake -j%d\n'
+        'touch %s' % (build_root, swig_env['ENV']['mod_env'], num_cpu,
+                      swig_target))])
+
+# [5] Install swig for build
+swig_target = '%s/.install' % current_dir
+swig_install = swig_env.Command(
+    swig_target, swig_build,
+    [swig_env.MultiCommand(
+        'cd %s\n'
+        '%smake install\n'
+        'touch %s' % (build_root,
+                      swig_env['ENV']['mod_env'],
+                      swig_target))])
+
+Default(swig_install)
+swig_env.ExecuteOnClean('rm -rf %s' % current_dir)
+
+Return('swig_extract swig_install')
