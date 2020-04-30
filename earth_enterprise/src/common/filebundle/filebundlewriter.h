@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +52,7 @@ class FileBundleWriterSegment;
 
 class FileBundleWriter : public FileBundle {
  public:
-  static const uint64 kDefaultSegmentBreak = 1024 * 1024 * 1024;
+  static const std::uint64_t kDefaultSegmentBreak = 1024 * 1024 * 1024;
   static const mode_t kDefaultMode = S_IRUSR | S_IWUSR | S_IXUSR
     | S_IRGRP | S_IWGRP | S_IXGRP | S_IROTH | S_IWOTH | S_IXOTH;
   static const mode_t kExecuteMode = S_IXUSR | S_IXGRP | S_IXOTH;
@@ -60,22 +61,22 @@ class FileBundleWriter : public FileBundle {
                    const std::string &path,
                    bool overwrite = true,
                    mode_t mode = kDefaultMode,
-                   uint64 segment_break = kDefaultSegmentBreak);
+                   std::uint64_t segment_break = kDefaultSegmentBreak);
   virtual ~FileBundleWriter();
 
   // allocates space for a later call to WriteAt
-  uint64 AllocateAppend(size_t write_len);
+  std::uint64_t AllocateAppend(size_t write_len);
 
-  uint64 WriteAppend(const void *buffer, size_t write_len);
-  virtual void WriteAt(uint64 write_pos, const void *buffer, size_t write_len);
+  std::uint64_t WriteAppend(const void *buffer, size_t write_len);
+  virtual void WriteAt(std::uint64_t write_pos, const void *buffer, size_t write_len);
   void WriteAt(const FileBundleAddr &address, const void *buffer) {
     WriteAt(address.Offset(), buffer, address.Size());
   }
   // CRC versions of Write and WriteAt will overwrite last 4
   // (kCRCsize) bytes in buffer with CRC of previous bytes.  Buffer
   // should be 4 bytes larger than actual data.
-  virtual uint64 WriteAppendCRC(void *buffer, size_t write_len);
-  virtual void WriteAtCRC(uint64 write_pos, void *buffer, size_t write_len);
+  virtual std::uint64_t WriteAppendCRC(void *buffer, size_t write_len);
+  virtual void WriteAtCRC(std::uint64_t write_pos, void *buffer, size_t write_len);
   void WriteAtCRC(const FileBundleAddr &address, void *buffer) {
     WriteAtCRC(address.Offset(), buffer, address.Size());
   }
@@ -91,13 +92,13 @@ class FileBundleWriter : public FileBundle {
   void FlushWriteBuffer();
 
   // Returns a filename like bundle.abcd, abcd being digits
-  static std::string SegmentFileName(uint segment);
+  static std::string SegmentFileName(unsigned int segment);
 
  protected:
   FileBundleWriter(geFilePool &file_pool, // for use by update writer only
                    const std::string &path,
                    mode_t mode,
-                   uint64 segment_break);
+                   std::uint64_t segment_break);
   virtual void CreateSegment();
   khMutex &modify_lock() { return modify_lock_; }
  private:
@@ -125,7 +126,7 @@ class FileBundleWriter : public FileBundle {
   void AllocateBlock(size_t block_size,
                      FileBundleWriterSegment **segment,
                      off_t *seg_position,
-                     uint64 *bundle_position);
+                     std::uint64_t *bundle_position);
   void SaveHeaderFile();
   void SaveHeaderFileWithLock();
   DISALLOW_COPY_AND_ASSIGN(FileBundleWriter);
@@ -159,7 +160,7 @@ class FileBundlePackImport : public FileBundleWriter {
   FileBundlePackImport(geFilePool &file_pool,
                        const std::string &path,
                        mode_t mode = kDefaultMode,
-                       uint64 segment_break = 1024 * 1024 * 1024);
+                       std::uint64_t segment_break = 1024 * 1024 * 1024);
   virtual void CreateSegment();
   virtual void CloseNoUpdate();         // don't write header file
  private:

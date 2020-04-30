@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +21,7 @@
 #include <stdarg.h>
 #include <vector>
 #include <string>
+#include <cstdint>
 
 #include "common/khTypes.h"
 #include "common/notify.h"
@@ -46,13 +48,13 @@ typedef int (*gstItemGetFunc)(void *data, int tag, ...);
 typedef std::vector<int> SelectList;
 typedef std::vector<int>::iterator SelectListIterator;
 
-typedef uint32 gstFormatType;
-typedef uint32 gstClassType;
+typedef std::uint32_t gstFormatType;
+typedef std::uint32_t gstClassType;
 
 struct gstFormatDesc {
   int tag;
   char *tagStr;
-  uint32 flags;
+  std::uint32_t flags;
   char *label;
   char *verbose;
   void *spec;

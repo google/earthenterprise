@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,7 +72,7 @@ class TextStyle : public TextStyleBase {
   void UpdateWeightCombo(int fontPos);
   void UpdateFontCombos(void);
 
-  static const uint kMaxSavedStyles = 10;
+  static const unsigned int kMaxSavedStyles = 10;
   MapTextStyleConfig config;
   std::vector<FontDef> fonts;
   std::vector<bool> haveSave;

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -116,7 +117,7 @@ bool AssetDefs::ValidateAssetName(const std::string& name) {
   // for the character validity tests.
   // Need to check for invalid characters, except a version identifier suffix
   // which is valid as an assetname.
-  uint length_to_check = name.size();
+  unsigned int length_to_check = name.size();
   const std::string kVersionSuffix = "?version=";
   std::size_t pos = name.find(kVersionSuffix);
   if (pos != std::string::npos) {
@@ -124,7 +125,7 @@ bool AssetDefs::ValidateAssetName(const std::string& name) {
                             // for invalid characters.
     // Check all characters beyond the "=" character...they must be numerals.
     bool found_numeral = false;
-    for(uint i = length_to_check + kVersionSuffix.size();
+    for(unsigned int i = length_to_check + kVersionSuffix.size();
         i < name.size(); ++i) {
       char c = name[i];
       if (c < '0' || c > '9') {
@@ -139,7 +140,7 @@ bool AssetDefs::ValidateAssetName(const std::string& name) {
   }
 
   const std::string kInvalidAssetNameCharacters("&%'\" \\*=+~`?<>;:");
-  for(uint i = 0; i < length_to_check; ++i) {
+  for(unsigned int i = 0; i < length_to_check; ++i) {
     if (kInvalidAssetNameCharacters.find(name[i]) != std::string::npos) {
       return false;
     }

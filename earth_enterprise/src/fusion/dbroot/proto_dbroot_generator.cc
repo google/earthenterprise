@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -36,7 +37,7 @@ void ProtoDbrootGenerator::SetProtoStringId(
     const std::string &string_to_set) {
   if (map_strings_to_ids_) {
     UsedStringMap::const_iterator found = used_strings_.find(string_to_set);
-    uint32 id;
+    std::uint32_t id;
     if (found != used_strings_.end()) {
       id = found->second;
     } else {
@@ -100,7 +101,7 @@ void ProtoDbrootGenerator::AddStringTranslations(void) {
 }
 
 void ProtoDbrootGenerator::AddUsedProviders(void) {
-  for (std::set<uint32>::const_iterator id = used_provider_ids_.begin();
+  for (std::set<std::uint32_t>::const_iterator id = used_provider_ids_.begin();
        id != used_provider_ids_.end(); ++id) {
     const gstProvider *provider = context_.GetProvider(*id);
     if (provider) {

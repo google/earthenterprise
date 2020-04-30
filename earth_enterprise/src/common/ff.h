@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,40 +18,39 @@
 #ifndef _ff_h_
 #define _ff_h_
 
-#include <khTypes.h>
-#include <khAssert.h>
+#include <cstdint>
 
 // ****************************************************************************
 // ***  flat file header structure
 // ****************************************************************************
 class FFRecHeader {
-  uint32  len_,           // length of the compressed data in bytes
+  std::uint32_t  len_,           // length of the compressed data in bytes
     level_,         // quadnode level 
     x_, y_,         // tile address
     vers_;          // tile version
-  uint32  padding[3];     // pad to 32 byte boundary
+  std::uint32_t  padding[3];     // pad to 32 byte boundary
 
  public:
-  FFRecHeader(uint32 len__, uint32 level__, uint32 x__, uint32 y__,
-              uint32 vers__ = 0)
+  FFRecHeader(std::uint32_t len__, std::uint32_t level__, std::uint32_t x__, std::uint32_t y__,
+              std::uint32_t vers__ = 0)
       : len_(len__), level_(level__), x_(x__), y_(y__), vers_(vers__) {
     // zero fill padding to facilitate binary diffs of flat files
     padding[0] = 0;
     padding[1] = 0;
     padding[2] = 0;
   }
-  inline uint32  len()   const { return len_; }
-  inline uint32  level() const { return level_; }
-  inline uint32  x()     const { return x_; }
-  inline uint32  y()     const { return y_; }
-  inline uint32  vers()  const { return vers_; }
-  inline static uint32  paddedLen(uint32 l) { return (l + 31) & ~31; }
-  inline uint32  paddedLen(void) const { return paddedLen(len_); }
+  inline std::uint32_t  len()   const { return len_; }
+  inline std::uint32_t  level() const { return level_; }
+  inline std::uint32_t  x()     const { return x_; }
+  inline std::uint32_t  y()     const { return y_; }
+  inline std::uint32_t  vers()  const { return vers_; }
+  inline static std::uint32_t  paddedLen(std::uint32_t l) { return (l + 31) & ~31; }
+  inline std::uint32_t  paddedLen(void) const { return paddedLen(len_); }
   void BigEndianToHost(void);
   // just another name for code clarity
   inline void HostToBigEndian(void) { BigEndianToHost(); }
 };
-COMPILE_TIME_CHECK(sizeof(FFRecHeader) == 32, BadFFRecHeaderSize);
+static_assert(sizeof(FFRecHeader) == 32, "Bad FF Rec Header Size");
 
 
 // ****************************************************************************
@@ -66,7 +66,7 @@ int ff_read(const char *_ffpath, ffReadCallbackFunc callback,
 // ***  Misc flat file routines
 // ****************************************************************************
 // returns approx number of entries
-uint64 ff_estimate_numentries(const char *ffpath);
+ std::uint64_t ff_estimate_numentries(const char *ffpath);
 
 
 

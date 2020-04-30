@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +20,10 @@
 #define __khSpawn_h
 
 #include <sys/types.h>
+#include <cstdint>
 #include <vector>
 #include <string>
 #include <sstream>
-#include <khTypes.h>
 #include <khstrconv.h>
 
 

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,10 +70,10 @@ class BoxCutter {
   // by polygon.
   //
   // @return number of output geodes.
-  uint Run(const gstGeodeHandle &geode,
+  unsigned int Run(const gstGeodeHandle &geode,
            GeodeList &pieces, bool *completely_covered);
 
-  inline uint Run(const gstGeodeHandle &geodeh, GeodeList &pieces) {
+  inline unsigned int Run(const gstGeodeHandle &geodeh, GeodeList &pieces) {
     bool completely_covered = false;
     return Run(geodeh, pieces, &completely_covered);
   }

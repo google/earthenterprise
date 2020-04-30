@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -109,7 +110,7 @@ gstStatus gstTXTTable::LoadIndex() {
   std::string index_file = khReplaceExtension(name(), kIndexExtension);
   if (!khExists(index_file))
     return GST_OPEN_FAIL;
-  uint64 size;
+  std::uint64_t size;
   time_t mtime;
   if (!khGetFileInfo(name(), size, mtime)) {
     return GST_OPEN_FAIL;
@@ -202,7 +203,7 @@ gstStatus gstTXTTable::BuildIndex() {
     while ((pos = FindNextChar('\n', pos, buf + bytes_read)) != NULL) {
       if (skip_rows_ == 0) {
         // skip any totally blank line
-        uint size = record_index_.size();
+        unsigned int size = record_index_.size();
         if (size && record_index_[size - 1] == line_start - 1) {
           record_index_[size - 1] = line_start;
         } else {
@@ -244,7 +245,7 @@ gstStatus gstTXTTable::BuildIndex() {
 
   CloseFileCatcher fdcatch(indexfd);
 
-  uint64 size;
+  std::uint64_t size;
   time_t mtime;
   if (!khGetFileInfo(name(), size, mtime)) {
     return (status_ = GST_WRITE_FAIL);
@@ -273,7 +274,7 @@ gstStatus gstTXTTable::BuildIndex() {
 }
 
 
-bool gstTXTTable::Readline(uint32 row) {
+bool gstTXTTable::Readline(std::uint32_t row) {
   if (status_ != GST_OKAY)
     return -1;
 
@@ -322,7 +323,7 @@ bool gstTXTTable::Readline(uint32 row) {
 // read a single record(row) from the file and format it into
 // the provided gstRecord(rec)
 //
-gstRecordHandle gstTXTTable::Row(uint32 row) {
+gstRecordHandle gstTXTTable::Row(std::uint32_t row) {
   if (!Readline(row)) {
     status_ = GST_READ_FAIL;
     return gstRecordHandle();
@@ -337,7 +338,7 @@ gstRecordHandle gstTXTTable::Row(uint32 row) {
     return gstRecordHandle();
   }
 
-  uint field = 0;
+  unsigned int field = 0;
   if (file_type_ == Delimited) {
     gstRecordHandle new_rec = NewRecord();
     while (end > buff && isspace(*(end - 1)))
@@ -404,7 +405,7 @@ gstRecordHandle gstTXTTable::Row(uint32 row) {
     gstRecordHandle new_rec = NewRecord();
     gstHeaderHandle hdr = GetHeader();
     char* pos = &buff[0];
-    for (uint ii = 0; ii < hdr->numColumns(); ++ii) {
+    for (unsigned int ii = 0; ii < hdr->numColumns(); ++ii) {
       new_rec->Field(ii)->set(reinterpret_cast<char*>(pos), hdr->length(ii));
       if (hdr->mult(ii) != 0)
         *(new_rec->Field(ii)) *= gstValue(hdr->mult(ii));

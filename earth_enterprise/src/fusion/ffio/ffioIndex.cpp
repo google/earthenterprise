@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -88,23 +89,23 @@ class Header {
   static const char themagic[];
 
   char   magic[23];
-  uint8  indexFormatVersion;
-  uint64 totalFFSize;
-  uint32 totalIndexSize;
-  uint32 totalStoredTiles;
-  uint8  type;                // ffio::Type
-  uint8  numLevels;
-  uint8  unused1;             // == 0
-  uint8  unused2;             // == 0
-  uint32 unused3;             // == 0
+  std::uint8_t  indexFormatVersion;
+  std::uint64_t totalFFSize;
+  std::uint32_t totalIndexSize;
+  std::uint32_t totalStoredTiles;
+  std::uint8_t  type;                // ffio::Type
+  std::uint8_t  numLevels;
+  std::uint8_t  unused1;             // == 0
+  std::uint8_t  unused2;             // == 0
+  std::uint32_t unused3;             // == 0
   char   typeData[16];    // used by various type specializations
 
-  Header(uint32 totalIndexSize_,
+  Header(std::uint32_t totalIndexSize_,
          ffio::Type type_,
-         uint   numLevels_,
+         unsigned int   numLevels_,
          void* littleEndianTypeData,
-         uint64 totalFFSize_,
-         uint32 totalStoredtiles_);
+         std::uint64_t totalFFSize_,
+         std::uint32_t totalStoredtiles_);
   void LittleEndianToHost(void);
   // just another name for code clarity
   inline void HostToLittleEndian(void) { LittleEndianToHost(); }
@@ -112,63 +113,63 @@ class Header {
   // should only be used by index reader
   Header(void) { }
 };
-COMPILE_TIME_CHECK(sizeof(Header) == 64, BadFFIOIndexHeaderSize);
+static_assert(sizeof(Header) == 64, "Bad FF IO Index Header Size");
 
 // Don't re-arrange this class. It's carefully sized and packed
 // to be exactly 32 bytes long.
 class LevelRecord {
  public:
-  uint32 tileRecordsOffset;
-  uint32 totalStoredTiles;
-  uint32 startRow;
-  uint32 startCol;
-  uint32 numRows;
-  uint32 numCols;
-  uint8  levelNum;
-  uint8  unused1;             // == 0
-  uint16 unused2;             // == 0
-  uint32 unused3;             // == 0
+  std::uint32_t tileRecordsOffset;
+  std::uint32_t totalStoredTiles;
+  std::uint32_t startRow;
+  std::uint32_t startCol;
+  std::uint32_t numRows;
+  std::uint32_t numCols;
+  std::uint8_t  levelNum;
+  std::uint8_t  unused1;             // == 0
+  std::uint16_t unused2;             // == 0
+  std::uint32_t unused3;             // == 0
 
-  LevelRecord(uint32 tileRecordsOffset_,
-              const khExtents<uint32> &tileExtents,
-              uint   levelNum_,
-              uint32 totalStoredTiles_);
+  LevelRecord(std::uint32_t tileRecordsOffset_,
+              const khExtents<std::uint32_t> &tileExtents,
+              unsigned int   levelNum_,
+              std::uint32_t totalStoredTiles_);
   void LittleEndianToHost(void);
   // just another name for code clarity
   inline void HostToLittleEndian(void) { LittleEndianToHost(); }
 };
-COMPILE_TIME_CHECK(sizeof(LevelRecord) == 32, BadFFIOIndexLevelRecordSize);
+static_assert(sizeof(LevelRecord) == 32, "Bad FF IO Index Level Record Size");
 
 // Don't re-arrange this class. It's carefully sized and packed
 // to be exactly 16 bytes long.
 class TileRecord {
  public:
-  uint64 dataOffset;
-  uint32 dataLen;
-  uint32 unused1;             // == 0
+  std::uint64_t dataOffset;
+  std::uint32_t dataLen;
+  std::uint32_t unused1;             // == 0
 
-  TileRecord(uint64 dataOffset_, uint32 dataLen_);
+  TileRecord(std::uint64_t dataOffset_, std::uint32_t dataLen_);
   void LittleEndianToHost(void);
   // just another name for code clarity
   inline void HostToLittleEndian(void) { LittleEndianToHost(); }
 };
-COMPILE_TIME_CHECK(sizeof(TileRecord) == 16, BadFFIOIndexTileRecordSize);
+static_assert(sizeof(TileRecord) == 16, "Bad FF IO Index Tile Record Size");
 } // namespace IndexStorage
 } // namespace ffio
 
 
 const char
 ffio::IndexStorage::Header::themagic[] = "Keyhole Flatfile Index";
-COMPILE_TIME_CHECK(sizeof(ffio::IndexStorage::Header::themagic)-1 ==
+static_assert(sizeof(ffio::IndexStorage::Header::themagic)-1 ==
                    sizeof(ffio::IndexStorage::Header().magic),
-                   InvalidMagicSize)
+                   "Invalid Magic Size");
 
-    ffio::IndexStorage::Header::Header(uint32 totalIndexSize_,
+    ffio::IndexStorage::Header::Header(std::uint32_t totalIndexSize_,
                                        ffio::Type type_,
-                                       uint   numLevels_,
+                                       unsigned int   numLevels_,
                                        void* littleEndianTypeData,
-                                       uint64 totalFFSize_,
-                                       uint32 totalStoredTiles_) :
+                                       std::uint64_t totalFFSize_,
+                                       std::uint32_t totalStoredTiles_) :
         indexFormatVersion(1),
         totalFFSize(totalFFSize_),
         totalIndexSize(totalIndexSize_),
@@ -205,10 +206,10 @@ ffio::IndexStorage::Header::LittleEndianToHost(void) {
 
 
 ffio::IndexStorage::LevelRecord::LevelRecord
-(uint32 tileRecordsOffset_,
- const khExtents<uint32> &tileExtents,
- uint   levelNum_,
- uint32 totalStoredTiles_) :
+(std::uint32_t tileRecordsOffset_,
+ const khExtents<std::uint32_t> &tileExtents,
+unsigned int   levelNum_,
+ std::uint32_t totalStoredTiles_) :
     tileRecordsOffset(tileRecordsOffset_),
     totalStoredTiles(totalStoredTiles_),
     startRow(tileExtents.beginRow()),
@@ -240,8 +241,8 @@ ffio::IndexStorage::LevelRecord::LittleEndianToHost(void) {
 }
 
 
-ffio::IndexStorage::TileRecord::TileRecord(uint64 dataOffset_,
-                                           uint32 dataLen_) :
+ffio::IndexStorage::TileRecord::TileRecord(std::uint64_t dataOffset_,
+                                           std::uint32_t dataLen_) :
     dataOffset(dataOffset_),
     dataLen(dataLen_),
     unused1(0)
@@ -267,9 +268,9 @@ ffio::IndexStorage::TileRecord::LittleEndianToHost(void) {
 // Fills in TileRecord, updates count
 // Will throw if invalid addr
 void
-ffio::IndexWriter::LevelInfo::AddTile(uint32 row, uint32 col,
-                                      uint64 dataOffset,
-                                      uint32 dataLen)
+ffio::IndexWriter::LevelInfo::AddTile(std::uint32_t row, std::uint32_t col,
+                                      std::uint64_t dataOffset,
+                                      std::uint32_t dataLen)
 {
   if (!extents.ContainsRowCol(row, col)) {
     throw khException(kh::tr("Internal Error: Invalid row/col"));
@@ -285,7 +286,7 @@ ffio::IndexWriter::LevelInfo::AddTile(uint32 row, uint32 col,
 }
 
 ffio::IndexStorage::TileRecord *
-ffio::IndexWriter::LevelInfo::TileRec(uint32 row, uint32 col) const
+ffio::IndexWriter::LevelInfo::TileRec(std::uint32_t row, std::uint32_t col) const
 {
   return tiles +
     ((row - extents.beginRow()) * extents.width()) +
@@ -312,12 +313,12 @@ ffio::IndexWriter::IndexWriter(Type type_,
   totalIndexSize = sizeof(ffio::IndexStorage::Header) +
                    coverage.numLevels() * sizeof(ffio::IndexStorage::LevelRecord);
 
-  for (uint lev = coverage.beginLevel(); lev < coverage.endLevel(); ++lev) {
-    const khExtents<uint32> &levExtents(coverage.levelExtents(lev));
+  for (unsigned int lev = coverage.beginLevel(); lev < coverage.endLevel(); ++lev) {
+    const khExtents<std::uint32_t> &levExtents(coverage.levelExtents(lev));
     assert(levExtents.width());
     assert(levExtents.height());
 #ifndef NDEBUG
-    uint32 endpos = (0x1U << lev);
+    std::uint32_t endpos = (0x1U << lev);
 #endif
     assert(levExtents.beginRow() < endpos);
     assert(levExtents.beginCol() < endpos);
@@ -346,17 +347,17 @@ ffio::IndexWriter::IndexWriter(Type type_,
 
 
   // populate levels
-  uint32 tmpSize = sizeof(ffio::IndexStorage::Header) +
+  std::uint32_t tmpSize = sizeof(ffio::IndexStorage::Header) +
                    coverage.numLevels() * sizeof(ffio::IndexStorage::LevelRecord);
   memset(levels, 0, sizeof(levels));
   levelvec.reserve(coverage.numLevels());
-  for (uint lev = coverage.beginLevel(); lev < coverage.endLevel(); ++lev) {
+  for (unsigned int lev = coverage.beginLevel(); lev < coverage.endLevel(); ++lev) {
     khLevelCoverage levCov(coverage.levelCoverage(lev));
     assert(lev <= MaxFusionLevel);
     levelvec.push_back
       (LevelInfo
        (levCov,
-        (ffio::IndexStorage::TileRecord*)(((uchar*)filebuf)+tmpSize)));
+        (ffio::IndexStorage::TileRecord*)(((unsigned char*)filebuf)+tmpSize)));
     // safe to store the address to an element in the vector since
     // we pre-sized the vector
     levels[lev] = &levelvec[levelvec.size()-1];
@@ -429,7 +430,7 @@ ffio::IndexWriter::~IndexWriter(void)
 // Will throw if invalid addr
 void
 ffio::IndexWriter::AddTile(const khTileAddr &addr,
-                           uint32 dataLen, uint32 recordLen)
+                           std::uint32_t dataLen, std::uint32_t recordLen)
 {
   assert(addr.level <= MaxFusionLevel);
   assert(levels[addr.level]);
@@ -473,8 +474,8 @@ ffio::IndexReader::IndexReader(const std::string &filename)
     totalFFSize      = header.totalFFSize;
     totalIndexSize   = header.totalIndexSize;
     totalStoredTiles = header.totalStoredTiles;
-    COMPILE_TIME_ASSERT(sizeof(typeData) == sizeof(header.typeData),
-                        InvalidTypeDataSize);
+    static_assert(sizeof(typeData) == sizeof(header.typeData),
+                        "Invalid Type Data Size");
     memcpy(typeData, header.typeData, sizeof(typeData));
   } else {
     throw khException(kh::tr
@@ -504,7 +505,7 @@ ffio::IndexReader::IndexReader(const std::string &filename)
     (IndexStorage::LevelRecord*)((char*)filebuf +
                                  sizeof(IndexStorage::Header));
 
-  for (uint i = 0; i < header.numLevels; ++i) {
+  for (unsigned int i = 0; i < header.numLevels; ++i) {
     IndexStorage::LevelRecord rec = recs[i];
     rec.LittleEndianToHost();
 #if 0
@@ -534,7 +535,7 @@ ffio::IndexReader::IndexReader(const std::string &filename)
     levelvec.push_back
       (LevelInfo(khLevelCoverage
                  (rec.levelNum,
-                  khExtents<uint32>(RowColOrder,
+                  khExtents<std::uint32_t>(RowColOrder,
                                     rec.startRow,
                                     rec.startRow + rec.numRows,
                                     rec.startCol,
@@ -557,7 +558,7 @@ ffio::IndexReader::~IndexReader(void)
 
 bool
 ffio::IndexReader::FindTile(const khTileAddr &addr,
-                            uint64 &fileOffset, uint32 &dataLen)
+                            std::uint64_t &fileOffset, std::uint32_t &dataLen)
 {
   assert(addr.level <= MaxFusionLevel);
   return (levels[addr.level] &&
@@ -571,17 +572,17 @@ ffio::IndexReader::PopulateCoverage(khInsetCoverage &cov) const
   if (levelvec.empty())
     return;
 
-  uint beginLevel = levelvec.front().level;
-  uint endLevel   = levelvec.back().level + 1;
+  unsigned int beginLevel = levelvec.front().level;
+  unsigned int endLevel   = levelvec.back().level + 1;
 
   if (levelvec.size() != endLevel - beginLevel) {
     throw khException
       (kh::tr("Internal Error: misordered levels in ffio::IndexReader"));
   }
 
-  std::vector<khExtents<uint32> > extentsList;
+  std::vector<khExtents<std::uint32_t> > extentsList;
   extentsList.reserve(levelvec.size());
-  for (uint i = 0; i < levelvec.size(); ++i) {
+  for (unsigned int i = 0; i < levelvec.size(); ++i) {
     extentsList.push_back(levelvec[i].extents);
   }
 
@@ -591,9 +592,9 @@ ffio::IndexReader::PopulateCoverage(khInsetCoverage &cov) const
 void
 ffio::IndexReader::DumpRecords(const LevelInfo *level) const
 {
-  for (uint32 row = level->extents.beginRow();
+  for (std::uint32_t row = level->extents.beginRow();
        row < level->extents.endRow(); ++row) {
-    for (uint32 col = level->extents.beginCol();
+    for (std::uint32_t col = level->extents.beginCol();
          col < level->extents.endCol(); ++col) {
       const IndexStorage::TileRecord *tile =
         level->TileRec(row, col);
@@ -614,7 +615,7 @@ ffio::IndexReader::DumpRecords(const LevelInfo *level) const
 // ***  ffio::IndexReader::LevelInfo
 // ****************************************************************************
 const ffio::IndexStorage::TileRecord *
-ffio::IndexReader::LevelInfo::TileRec(uint32 row, uint32 col) const
+ffio::IndexReader::LevelInfo::TileRec(std::uint32_t row, std::uint32_t col) const
 {
   return tilerecs +
     ((row - extents.beginRow()) * extents.width()) +
@@ -622,8 +623,8 @@ ffio::IndexReader::LevelInfo::TileRec(uint32 row, uint32 col) const
 }
 
 bool
-ffio::IndexReader::LevelInfo::FindTile(uint32 row, uint32 col,
-                                       uint64 &fileOffset, uint32 &dataLen) const
+ffio::IndexReader::LevelInfo::FindTile(std::uint32_t row, std::uint32_t col,
+                                       std::uint64_t &fileOffset, std::uint32_t &dataLen) const
 {
   if (extents.ContainsRowCol(row, col)) {
     const IndexStorage::TileRecord *tile = TileRec(row, col);
@@ -644,7 +645,7 @@ ffio::IndexReader::LevelInfo::FindTile(uint32 row, uint32 col,
 
 
 bool
-ffio::IndexReader::LevelInfo::HasRowCol(uint32 row, uint32 col) const
+ffio::IndexReader::LevelInfo::HasRowCol(std::uint32_t row, std::uint32_t col) const
 {
   if (extents.ContainsRowCol(row, col)) {
     const IndexStorage::TileRecord *tile = TileRec(row, col);

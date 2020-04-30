@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -36,7 +37,7 @@ void SearchTabWidget::Set(const std::vector<SearchTabReference> &refs) {
     delete w;
   }
 
-  for (uint i = 0; i < refs.size(); ++i) {
+  for (unsigned int i = 0; i < refs.size(); ++i) {
     try {
       SearchTabDefinition def = refs[i].Bind();
       InsertTab(def.label, refs[i]);
@@ -57,7 +58,7 @@ void SearchTabWidget::ProjectsChanged(
     SearchTabDetails *details = dynamic_cast<SearchTabDetails*>(page(i));
     if (!details->ref_.project_ref_.empty()) {
       bool found = false;
-      for (uint p = 0; p < projects_.size(); ++p) {
+      for (unsigned int p = 0; p < projects_.size(); ++p) {
         if (details->ref_.project_ref_ == projects_[p]) {
           found = true;
           break;
@@ -104,7 +105,7 @@ void SearchTabWidget::AddTab() {
   {
     SearchTabSet search_tab_set;
     search_tab_set.Load();
-    for (uint i = 0; i < search_tab_set.tabs_.size(); ++i) {
+    for (unsigned int i = 0; i < search_tab_set.tabs_.size(); ++i) {
       const SearchTabSet::Tab& tab = search_tab_set.tabs_[i];
       tab_refs.push_back(
           std::make_pair(tab.definition_.label,
@@ -114,7 +115,7 @@ void SearchTabWidget::AddTab() {
 
   // Add the ones that come from my projects - but only those that
   // actually are valid to specify
-  for (uint i = 0; i < projects_.size(); ++i) {
+  for (unsigned int i = 0; i < projects_.size(); ++i) {
     try {
       SearchTabReference ref(projects_[i]);
       SearchTabDefinition def = ref.Bind();
@@ -127,7 +128,7 @@ void SearchTabWidget::AddTab() {
   }
 
   QPopupMenu menu;
-  for (uint i = 0; i < tab_refs.size(); ++i) {
+  for (unsigned int i = 0; i < tab_refs.size(); ++i) {
     menu.insertItem(tab_refs[i].first, i);
   }
 

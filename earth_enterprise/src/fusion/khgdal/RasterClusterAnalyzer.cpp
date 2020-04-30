@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,7 +23,7 @@
 
 // Cluster.
 void Cluster::Print() const {
-  uint64 area = Area();
+  std::uint64_t area = Area();
   notify(NFY_NOTICE, "  Sum of inset areas: %zu", InsetsArea());
   notify(NFY_NOTICE, "  Cluster area: %zu", area);
   if (area != 0) {
@@ -224,8 +225,8 @@ void ClusterAnalyzer::CalcAssetAreas(const khVirtualRaster &virtraster,
   double dX = virtraster.pixelsize.width;
   double dY = virtraster.pixelsize.height;
   const khTilespace& tilespace = RasterProductTilespace(is_mercator);
-  uint64 sum_inset_area = 0;
-  khExtents<uint32> mosaic_extent;
+  std::uint64_t sum_inset_area = 0;
+  khExtents<std::uint32_t> mosaic_extent;
   for (size_t i = 0; i < num_insets; ++i) {
     const khVirtualRaster::InputTile& input_tile = virtraster.inputTiles[i];
     khOffset<double> offset = input_tile.origin;
@@ -243,18 +244,18 @@ void ClusterAnalyzer::CalcAssetAreas(const khVirtualRaster &virtraster,
                      khCutExtent::ConvertFromFlatToMercator(deg_extent) :
                      deg_extent,
                      toplevel, toplevel);
-    const khExtents<uint32>& extent = cov_toplevel.extents;
+    const khExtents<std::uint32_t>& extent = cov_toplevel.extents;
     mosaic_extent.grow(extent);
     sum_inset_area += extent.width() * extent.height();
   }
 
-  uint64 mosaic_area = mosaic_extent.width() * mosaic_extent.height();
+  std::uint64_t mosaic_area = mosaic_extent.width() * mosaic_extent.height();
   const bool is_area_check = true;
   PrintRasterInfo(sum_inset_area, mosaic_area, is_area_check);
 }
 
-uint64 ClusterAnalyzer::CalcRasterInsetsArea() const {
-  uint64 sum_insets_area = 0;
+ std::uint64_t ClusterAnalyzer::CalcRasterInsetsArea() const {
+  std::uint64_t sum_insets_area = 0;
   for (ClusterList::const_iterator it = clusters_.begin();
        it != clusters_.end(); ++it) {
     sum_insets_area += it->InsetsArea();
@@ -262,8 +263,8 @@ uint64 ClusterAnalyzer::CalcRasterInsetsArea() const {
   return sum_insets_area;
 }
 
-uint64 ClusterAnalyzer::CalcRasterArea() const {
-  khExtents<uint32> extents;
+ std::uint64_t ClusterAnalyzer::CalcRasterArea() const {
+  khExtents<std::uint32_t> extents;
   for (ClusterList::const_iterator it = clusters_.begin();
        it != clusters_.end(); ++it) {
     extents.grow(it->extents);
@@ -271,8 +272,8 @@ uint64 ClusterAnalyzer::CalcRasterArea() const {
   return extents.width()*extents.height();
 }
 
-void ClusterAnalyzer::PrintRasterInfo(const uint64 raster_inset_area,
-                                      const uint64 raster_area,
+void ClusterAnalyzer::PrintRasterInfo(const std::uint64_t raster_inset_area,
+                                      const std::uint64_t raster_area,
                                       const bool is_area_check) const {
   notify(NFY_NOTICE, "Sum of inset areas: %zu", raster_inset_area);
   notify(NFY_NOTICE, "Virtual raster area: %zu", raster_area);

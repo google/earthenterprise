@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -85,7 +86,7 @@ gstStatus gstRegistry::parse() {
   while ((tag = nextLine()) != nullptr) {
     ++line_num;
 
-    uint32 varType = gstTagString;
+    std::uint32_t varType = gstTagString;
 
     // skip leading white space
     while (*tag && isspace(*tag))
@@ -212,13 +213,13 @@ error:
   return GST_READ_FAIL;
 }
 
-void gstRegistry::setVal(const char* tag, const char *val, uint32 type) {
+void gstRegistry::setVal(const char* tag, const char *val, std::uint32_t type) {
   gstValue* tagp = locateTag(tag, 1, type);
   assert(tagp != nullptr);
   tagp->set(val);
 }
 
-uint gstRegistry::numGroups(const char *tag, ...) {
+unsigned int gstRegistry::numGroups(const char *tag, ...) {
   char tagbuf[512];
 
   va_list args;
@@ -230,7 +231,7 @@ uint gstRegistry::numGroups(const char *tag, ...) {
   return grp ? grp->numGroups() : -1;
 }
 
-uint gstRegistry::numTags(const char *tag, ...) {
+unsigned int gstRegistry::numTags(const char *tag, ...) {
   char tagbuf[512];
 
   va_list args;
@@ -253,7 +254,7 @@ uint gstRegistry::numTags(const char *tag, ...) {
 // White space is not skipped, but considered part
 //    of the tag path
 
-gstValue *gstRegistry::locateTag(const char *tag, int create, uint32 type) {
+gstValue *gstRegistry::locateTag(const char *tag, int create, std::uint32_t type) {
   if (tag == nullptr || strlen(tag) == 0)
     return nullptr;
 

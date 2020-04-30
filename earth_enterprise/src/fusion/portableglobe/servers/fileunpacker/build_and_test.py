@@ -45,6 +45,14 @@ import opengee.environ
 import opengee.version
 
 
+def build_swig(source_dir):
+    opengee_build_dir = os.path.join(source_dir, 'NATIVE-REL-x86_64')
+    swig_builder = subprocess.Popen('python2.7 /usr/bin/scons -j1 release=1 portable_3rd_libs=1 build', 
+                                    shell=True, cwd=os.path.join(source_dir, "../"), env=os.environ.copy())
+    if swig_builder.wait() != 0:
+      raise ValueError('Swig build failed!')
+    
+    opengee.environ.env_prepend_path('PATH', os.path.join(opengee_build_dir, 'bin'), if_present='move')
 
 def configure_c_compiler(os_dir):
   if os_dir != 'Linux':
@@ -70,7 +78,7 @@ def configure_c_compiler(os_dir):
       raise ValueError('Version of g++ ({0}) is below minimum (4.8)!'.format(
           '.'.join(version)))
 
-def BuildLibrary(os_dir, ignore_results):
+def BuildLibrary(os_dir, ignore_results, source_dir):
   """Returns whether able to build file unpacker library."""
   try:
     os.mkdir("dist")
@@ -91,6 +99,8 @@ def BuildLibrary(os_dir, ignore_results):
     archData = platform.architecture(pathToLib)
     if archData[0] == "64bit":
       specialDefs = "-DMS_WIN64"
+  elif os_dir == "Linux":
+    build_swig(source_dir)
 
   os.chdir("dist")
   fp = open("../%s/build_lib" % os_dir)
@@ -129,18 +139,21 @@ def RunTests():
 
 def main(argv):
   """Main for build and test."""
-  if (len(argv) != 2 or
-      argv[1].lower() not in ["mac", "windows", "linux"]):
-    print "Usage: build_and_test.py <OS_target>"
+  print(argv)
+  if ((len(argv) < 2 or argv[1].lower() not in ["mac", "windows", "linux"]) or
+      (len(argv) < 3 and arv[1].lower() == "linux")):
+    print "Usage: build_and_test.py <OS_target> <source_dir>"
     print
     print "<OS_target> can be Mac, Windows, or Linux"
+    print "<source_dir> is only needed for Linux"
     return
 
   os.chdir(os.path.dirname(os.path.realpath(__file__)))
   os_dir = "%s%s" % (argv[1][0:1].upper(), argv[1][1:].lower())
+
   print "Build and test file unpacker library for %s Portable Server." % os_dir
 
-  if BuildLibrary(os_dir, argv[1].lower()=="windows"):
+  if BuildLibrary(os_dir, argv[1].lower()=="windows", argv[2]):
     print "Library built."
     RunTests()
   else:

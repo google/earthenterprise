@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -191,7 +192,7 @@ QStringList MapAssetItem::FieldDescriptors() {
     header_ = Source()->GetAttrDefs(0);
   }
   QStringList field_desc;
-  for (uint col = 0; col < header_->numColumns(); ++col)
+  for (unsigned int col = 0; col < header_->numColumns(); ++col)
     field_desc.append(header_->Name(col));
   return field_desc;
 }
@@ -295,7 +296,7 @@ void MapLayerWidget::PopulateSearchFields(const MapSubLayerConfig& config) {
   fields_table->setColumnStretchable(1, true);
   fields_table->setNumRows(0);
 
-  for (uint row = 0; row < config.searchFields.size(); ++row) {
+  for (unsigned int row = 0; row < config.searchFields.size(); ++row) {
     fields_table->setNumRows(row + 1);
     fields_table->setText(row, 0, config.searchFields[row].name);
     fields_table->setText(row, 1,
@@ -372,7 +373,7 @@ void MapLayerWidget::UpdateAvailableSearchAttributes(QString assetRef) {
   QStringList cols;
   const gstHeaderHandle &record_header = src->GetAttrDefs(0);
   if (record_header && record_header->numColumns() != 0) {
-    for (uint col = 0; col < record_header->numColumns(); ++col) {
+    for (unsigned int col = 0; col < record_header->numColumns(); ++col) {
       if (!SubLayerHasSearchField( record_header->Name(col)))
         cols.push_back(record_header->Name(col));
     }
@@ -1018,10 +1019,10 @@ void MapLayerWidget::SelectFilter(MapFilterItem* item) {
                                    &workingDisplayRule.site.label.text,
                                    item->Source(), QStringList(),
                                    "Label");
-  RangeSpinController<uint32>::Create(
+  RangeSpinController<std::uint32_t>::Create(
       labelManager, label_minlevel, label_maxlevel,
       &workingDisplayRule.site.label.levelRange,
-      geRange<uint32>(0U, MaxClientLevel));
+      geRange<std::uint32_t>(0U, MaxClientLevel));
   TextStyleButtonController::Create(labelManager, label_style,
                                     &workingDisplayRule.site.label.textStyle);
 
@@ -1034,10 +1035,10 @@ void MapLayerWidget::SelectFilter(MapFilterItem* item) {
       lineManager, &mapLabelConfig.hasOutlineLabel, false);
   ConstSetterController<bool>::Create(
       lineManager, &workingDisplayRule.site.label.enabled, false);
-  RangeSpinController<uint32>::Create(
+  RangeSpinController<std::uint32_t>::Create(
       lineManager, line_minlevel, line_maxlevel,
       &workingDisplayRule.feature.levelRange,
-      geRange<uint32>(0U, MaxClientLevel));
+      geRange<std::uint32_t>(0U, MaxClientLevel));
   ColorButtonController::Create(lineManager, line_color,
                                 &workingDisplayRule.feature.stroke_color);
   FloatEditController::Create(lineManager, line_thickness,
@@ -1061,10 +1062,10 @@ void MapLayerWidget::SelectFilter(MapFilterItem* item) {
                                      &workingDisplayRule.feature.label.text,
                                      item->Source(), QStringList(),
                                      "Label");
-    RangeSpinController<uint32>::Create(
+    RangeSpinController<std::uint32_t>::Create(
         *boxManager, line_label_minlevel, line_label_maxlevel,
         &workingDisplayRule.feature.label.levelRange,
-        geRange<uint32>(0U, MaxClientLevel));
+        geRange<std::uint32_t>(0U, MaxClientLevel));
     TextStyleButtonController::Create(
         *boxManager, line_label_style,
         &workingDisplayRule.feature.label.textStyle);
@@ -1095,10 +1096,10 @@ void MapLayerWidget::SelectFilter(MapFilterItem* item) {
     SpinBoxController<int>::Create(*boxManager, bottom_margin,
                                    &mapFeatureConfig.shield.bottom_margin_,
                                    MinDisplayMarginPxl, MaxDisplayMarginPxl);
-    RangeSpinController<uint32>::Create(
+    RangeSpinController<std::uint32_t>::Create(
         *boxManager, line_shield_minlevel, line_shield_maxlevel,
         &workingDisplayRule.feature.shield.levelRange,
-        geRange<uint32>(0U, MaxClientLevel));
+        geRange<std::uint32_t>(0U, MaxClientLevel));
     TextStyleButtonController::Create(
         *boxManager, line_shield_style,
         &workingDisplayRule.feature.shield.textStyle);
@@ -1122,10 +1123,10 @@ void MapLayerWidget::SelectFilter(MapFilterItem* item) {
       polygonManager, &mapLabelConfig.hasOutlineLabel, false);
   ConstSetterController<bool>::Create(
       polygonManager, &workingDisplayRule.feature.shield.enabled, false);
-  RangeSpinController<uint32>::Create(
+  RangeSpinController<std::uint32_t>::Create(
       polygonManager, poly_minlevel, poly_maxlevel,
       &workingDisplayRule.feature.levelRange,
-      geRange<uint32>(0U, MaxClientLevel));
+      geRange<std::uint32_t>(0U, MaxClientLevel));
   ComboContents polyMode;
   polyMode.push_back(
       std::make_pair(static_cast<int>(VectorDefs::FillAndOutline),
@@ -1160,10 +1161,10 @@ void MapLayerWidget::SelectFilter(MapFilterItem* item) {
                                      &workingDisplayRule.site.label.text,
                                      item->Source(), QStringList(),
                                      "Centered Label");
-    RangeSpinController<uint32>::Create(
+    RangeSpinController<std::uint32_t>::Create(
         *boxManager, poly_clabel_minlevel, poly_clabel_maxlevel,
         &workingDisplayRule.site.label.levelRange,
-        geRange<uint32>(0U, MaxClientLevel));
+        geRange<std::uint32_t>(0U, MaxClientLevel));
     TextStyleButtonController::Create(
         *boxManager, poly_clabel_style,
         &workingDisplayRule.site.label.textStyle);
@@ -1185,10 +1186,10 @@ void MapLayerWidget::SelectFilter(MapFilterItem* item) {
                                      &workingDisplayRule.feature.label.text,
                                      item->Source(), QStringList(),
                                      "Outline Label");
-    RangeSpinController<uint32>::Create(
+    RangeSpinController<std::uint32_t>::Create(
         *boxManager, poly_olabel_minlevel, poly_olabel_maxlevel,
         &workingDisplayRule.feature.label.levelRange,
-        geRange<uint32>(0U, MaxClientLevel));
+        geRange<std::uint32_t>(0U, MaxClientLevel));
     TextStyleButtonController::Create(
         *boxManager, poly_olabel_style,
         &workingDisplayRule.feature.label.textStyle);
@@ -1202,9 +1203,9 @@ void MapLayerWidget::SelectFilter(MapFilterItem* item) {
   ConstSetterController<bool>::Create(
       pointManager, &mapFeatureConfig.shield.enabled, true);
   // The visibility levels input; Point tab -> Visibility .. Through fields
-  RangeSpinController<uint32>::Create(
+  RangeSpinController<std::uint32_t>::Create(
       pointManager, point_minlevel, point_maxlevel,
-      &mapLabelConfig.levelRange, geRange<uint32>(0U, MaxClientLevel));
+      &mapLabelConfig.levelRange, geRange<std::uint32_t>(0U, MaxClientLevel));
 
   {  // The point rendering shape input; Marker Type
     ComboContents pointMarker;

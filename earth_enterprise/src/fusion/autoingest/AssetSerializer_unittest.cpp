@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 The Open GEE Contributors
+ * Copyright 2020 The Open GEE Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ class TestItem : public TestItemStorage {
     static bool newInvalidCalled;
     int val;
     time_t timestamp; 
-    uint64 filesize;
+    std::uint64_t filesize;
     string name;
     TestItem() : val(nextValue++), name("TestItem") {}
     string GetName() const {
@@ -73,11 +73,11 @@ class TestXMLException : public XMLException {
 };
 
 // Define a TestItem-specific version of GetFileInfo for testing
-static uint64 getFileInfoSize;
+static std::uint64_t getFileInfoSize;
 static time_t getFileInfoTime;
 static bool getFileInfoReturnValue;
 template<>
-bool GetFileInfo<TestItem>(const std::string &fname, uint64 &size, time_t &mtime) {
+bool GetFileInfo<TestItem>(const std::string &fname, std::uint64_t &size, time_t &mtime) {
   size = getFileInfoSize;
   mtime = getFileInfoTime;
   return getFileInfoReturnValue;

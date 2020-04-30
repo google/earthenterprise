@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,8 +35,8 @@ class ServerdbReader {
   //   1 - requested tile exists in database;
   //   2 - requested tile is not available but there is tile at lower
   //       resolution level covering requested one.
-  int CheckLevel(const geindex::TypedEntry::ReadKey &read_key, uint32 level,
-                 uint32 row, uint32 col);
+  int CheckLevel(const geindex::TypedEntry::ReadKey &read_key, std::uint32_t level,
+                 std::uint32_t row, std::uint32_t col);
 
   // serverdb_path is a path to Fusion database.
   // num_cache_levels is number of cache levels.
@@ -46,13 +47,13 @@ class ServerdbReader {
                  bool enable_cutting);
   ~ServerdbReader();
 
-  // Tries to parse a uint32 from the given string. If there is junk after the
+  // Tries to parse a std::uint32_t from the given string. If there is junk after the
   // int, we expect this not to fail and for atoi to just return the initial int
   // from the string.
-  // Returns 0 in *arg if uint cannot be parsed from the string.
-  // str: The string from which the uint will be parsed.
-  // arg: Pointer that will receive uint if it is successfully parsed.
-  void GetUint32Arg(const std::string& str, uint32* arg) const;
+  // Returns 0 in *arg if unsigned int cannot be parsed from the string.
+  // str: The string from which the unsigned int will be parsed.
+  // arg: Pointer that will receive unsigned int if it is successfully parsed.
+  void GetUint32Arg(const std::string& str, std::uint32_t* arg) const;
 
   // Throws an exception if any character that could be used to try to execute
   // code from a Javascript var declaration is in the name string. Intended
@@ -92,11 +93,11 @@ class ServerdbReader {
   //
   const MimeType GetPacket(const std::string& request,
                            const std::string& blist,
-                           uint32 level,
-                           uint32 row,
-                           uint32 col,
-                           uint32 version,
-                           uint32 channel,
+                           std::uint32_t level,
+                           std::uint32_t row,
+                           std::uint32_t col,
+                           std::uint32_t version,
+                           std::uint32_t channel,
                            ReadBuffer& buf,
                            const bool size_only,
                            const std::string& format = std::string(),
@@ -128,8 +129,8 @@ class ServerdbReader {
   // Note: For Maps Imagery, we want to resample from the closest parent tile
   // in the quadtree if we have a missing tile.
   const MimeType GetResampledImageryMapsTile(const QuadtreePath& qpath,
-                                             uint32 version,
-                                             uint32 channel,
+                                             std::uint32_t version,
+                                             std::uint32_t channel,
                                              ReadBuffer* const buf,
                                              const bool report_in_source_format,
                                              const std::string& format,
@@ -141,12 +142,12 @@ class ServerdbReader {
   // buf - Output buffer
   // qpath_parent - quadtree path of tile loaded to output buffer.
   void GetNearestAncestorData(const QuadtreePath& qpath,
-                              uint32 version,
-                              uint32 channel,
+                              std::uint32_t version,
+                              std::uint32_t channel,
                               ReadBuffer* const buf,
                               QuadtreePath *qpath_parent);
 
-  uint32 InvertRow(uint32 level, uint32 row);
+  std::uint32_t InvertRow(std::uint32_t level, std::uint32_t row);
 
   const std::string serverdb_path_;
   ServerdbConfig config_;
@@ -157,7 +158,7 @@ class ServerdbReader {
   geindex::UnifiedReader* index_reader_;
   std::string searchtabs_js_;
   bool has_timemachine_layer_;
-  std::map<std::string, uint32> date_to_channel_map_;  // Map of date string
+  std::map<std::string, std::uint32_t> date_to_channel_map_;  // Map of date string
                                                        // values to channel id
                                                        // for time machine
                                                        // layers.

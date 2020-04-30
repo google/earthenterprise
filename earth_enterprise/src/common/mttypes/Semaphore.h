@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,15 +26,15 @@ namespace mttypes {
 
 class Semaphore : public WaitBase {
  public:
-  Semaphore(uint32 avail);
+  Semaphore(std::uint32_t avail);
 
-  void Acquire(uint32 num = 1);
-  void Release(uint32 num = 1);
+  void Acquire(std::uint32_t num = 1);
+  void Release(std::uint32_t num = 1);
 
  private:
   bool LockedOKToAcquire(void) const;
 
-  uint32 avail_;
+  std::uint32_t avail_;
   bool   done_;
 };
 
@@ -47,7 +48,7 @@ class Semaphore : public WaitBase {
 // ****************************************************************************
 class BatchingSemaphoreAcquirer {
  public:
-  BatchingSemaphoreAcquirer(Semaphore &semaphore, uint32 batch_size) :
+  BatchingSemaphoreAcquirer(Semaphore &semaphore, std::uint32_t batch_size) :
       semaphore_(semaphore),
       batch_size_(batch_size),
       num_left_(0)
@@ -69,8 +70,8 @@ class BatchingSemaphoreAcquirer {
 
  private:
   Semaphore &semaphore_;
-  const uint32 batch_size_;
-  uint32 num_left_;
+  const std::uint32_t batch_size_;
+  std::uint32_t num_left_;
 };
 
 

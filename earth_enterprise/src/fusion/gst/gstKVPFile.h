@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,9 +36,9 @@ class gstKVPTable;
 class gstKVPFile : public gstMemory {
  public:
   struct FileHeaderV1 {
-    uint32 magic;
-    uint32 version;
-    uint32 numRecords;
+    std::uint32_t magic;
+    std::uint32_t version;
+    std::uint32_t numRecords;
     double xmin;
     double ymin;
     double xmax;
@@ -45,10 +46,10 @@ class gstKVPFile : public gstMemory {
   };
 
   struct FileHeaderV2 {
-    uint32 magic;
-    uint32 version;
-    uint32 numRecords;
-    uint32 primType;     // geometric primitive type for all records
+    std::uint32_t magic;
+    std::uint32_t version;
+    std::uint32_t numRecords;
+    std::uint32_t primType;     // geometric primitive type for all records
     double xmin;
     double ymin;
     double xmax;
@@ -56,9 +57,9 @@ class gstKVPFile : public gstMemory {
   };
 
   struct RecordPos {
-    int64 offset;
-    uint32 size;
-    uint32 filler;
+    std::int64_t offset;
+    std::uint32_t size;
+    std::uint32_t filler;
     double xmin;
     double ymin;
     double xmax;
@@ -77,12 +78,12 @@ class gstKVPFile : public gstMemory {
   gstStatus Close();
 
   // geode conversion routines
-  gstGeodeHandle GetGeode(uint32 id);
+  gstGeodeHandle GetGeode(std::uint32_t id);
   gstStatus AddGeode(gstGeodeHandle g);
 
-  gstBBox GetGeodeBox(uint32 id);
+  gstBBox GetGeodeBox(std::uint32_t id);
 
-  uint32 NumRecords() const { return file_header_.numRecords; }
+  std::uint32_t NumRecords() const { return file_header_.numRecords; }
 
   const gstBBox& BoundingBox() const { return bounding_box_; }
 
@@ -130,9 +131,9 @@ class gstKVGeomFormat : public gstFormat {
  private:
   FORWARD_ALL_SEQUENTIAL_ACCESS_TO_BASE;
 
-  virtual gstGeodeHandle GetFeatureImpl(uint32 layer, uint32 id);
-  virtual gstRecordHandle GetAttributeImpl(uint32 layer, uint32 id);
-  virtual gstBBox GetFeatureBoxImpl(uint32 layer, uint32 fid);
+  virtual gstGeodeHandle GetFeatureImpl(std::uint32_t layer, std::uint32_t id);
+  virtual gstRecordHandle GetAttributeImpl(std::uint32_t layer, std::uint32_t id);
+  virtual gstBBox GetFeatureBoxImpl(std::uint32_t layer, std::uint32_t fid);
 
  private:
   gstKVPFile* kvp_file_;
@@ -154,22 +155,22 @@ class gstKVPFormat : public gstFormat {
  private:
   FORWARD_ALL_SEQUENTIAL_ACCESS_TO_BASE;
 
-  virtual gstGeodeHandle GetFeatureImpl(uint32 layer, uint32 id);
-  virtual gstRecordHandle GetAttributeImpl(uint32 layer, uint32 id);
-  virtual gstBBox GetFeatureBoxImpl(uint32 layer, uint32 fid);
+  virtual gstGeodeHandle GetFeatureImpl(std::uint32_t layer, std::uint32_t id);
+  virtual gstRecordHandle GetAttributeImpl(std::uint32_t layer, std::uint32_t id);
+  virtual gstBBox GetFeatureBoxImpl(std::uint32_t layer, std::uint32_t fid);
 
   bool OpenSource(int id);
   bool CheckOpenSource(int id);
-  int DetermineSource(uint32 fid, uint32* true_fid);
+  int DetermineSource(std::uint32_t fid, std::uint32_t* true_fid);
 
   std::vector<gstSource*> sources_;
-  std::vector<uint32> feature_counts_;
-  std::map<int, uint32> feature_map_;
+  std::vector<std::uint32_t> feature_counts_;
+  std::map<int, std::uint32_t> feature_map_;
 
   int opened_source_;
   int last_source_id_;
-  uint32 last_range_start_;
-  uint32 last_range_end_;
+  std::uint32_t last_range_start_;
+  std::uint32_t last_range_end_;
 };
 
 #endif  // !KHSRC_FUSION_GST_GSTKVPFILE_H__

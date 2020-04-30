@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -52,8 +53,8 @@ int main(int argc, char *argv[]) {
   // process commandline options
   int argn;
   bool help = false;
-  uint level = 0;
-  uint reflevel = 0;
+  unsigned int level = 0;
+  unsigned int reflevel = 0;
   int br = -1;
   int er = -1;
   int bc = -1;
@@ -116,7 +117,7 @@ int main(int argc, char *argv[]) {
   if (er < 0) er = reflev.tileExtents().endRow();
   if (bc < 0) bc = reflev.tileExtents().beginCol();
   if (ec < 0) ec = reflev.tileExtents().endCol();
-  khExtents<uint32> refextents(RowColOrder, br, er, bc, ec);
+  khExtents<std::uint32_t> refextents(RowColOrder, br, er, bc, ec);
   if (refextents.empty() || !reflev.tileExtents().contains(refextents)) {
     notify(NFY_FATAL,
            "Bad row/col. Valid rows: %u -> %u. Valid cols: %u -> %u",

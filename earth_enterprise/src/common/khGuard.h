@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +27,7 @@
 #include <vector>
 #include <assert.h>
 #include <khTypes.h>
+#include <cstdint>
 #include "notify.h"
 #include <cerrno>
 
@@ -248,7 +250,7 @@ class khDeletingVector : private std::vector<T*>
   }
   void Transfer(khDeletingVector &other) {
     other.reserve(other.size() + size());
-    for (uint i = 0; i < size(); ++i) {
+    for (unsigned int i = 0; i < size(); ++i) {
       other.push_back(Take(i));
     }
     resize(0);

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +18,10 @@
 #ifndef GEO_EARTH_ENTERPRISE_SRC_FUSION_GST_GSTPOLYGONSIMPLIFIER_H_
 #define GEO_EARTH_ENTERPRISE_SRC_FUSION_GST_GSTPOLYGONSIMPLIFIER_H_
 
+#include <cstdint>
 #include <map>
 #include <vector>
 
-#include <khTypes.h>
 #include "fusion/gst/gstVertex.h"
 
 // #include "common.h"
@@ -90,7 +91,7 @@ struct psPolygon {
 
   psBBox bbox() {
     psBBox box;
-    for (uint i = 0; i < v.size(); i++)
+    for (unsigned int i = 0; i < v.size(); i++)
       box.grow(psBBox(v[i], v[i]));
 
     return box;
@@ -131,7 +132,7 @@ class PolygonSimplifier {
   void Decimate(std::vector<psPolygon>& polygons, int numCells);
 
  private:
-  int64 ComputeHashKey(const gstVertex &v) const;
+  std::int64_t ComputeHashKey(const gstVertex &v) const;
 
   void ComputeRepVertex(const gstVertex &v);
 
@@ -150,7 +151,7 @@ class PolygonSimplifier {
  private:
   psBBox _gridExtents;
   gstVertex _res;
-  std::map<int64, psRepVertex> _repVerts;
+  std::map<std::int64_t, psRepVertex> _repVerts;
 };
 
 }  // namespace fusion_gst

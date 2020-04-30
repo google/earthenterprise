@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,7 +21,7 @@
 #include <khTileAddr.h>
 #include <common/khConstants.h>
 
-AttributionByExtents::Inset::Inset(const std::string &rppath, uint32 id, const std::string &acquisitionDate) :
+AttributionByExtents::Inset::Inset(const std::string &rppath, std::uint32_t id, const std::string &acquisitionDate) :
     inset_id_(id)
 {
   khDeleteGuard<khRasterProduct> rp(khRasterProduct::Open(rppath));
@@ -36,18 +37,18 @@ AttributionByExtents::Inset::Inset(const std::string &rppath, uint32 id, const s
   }
 }
 
-uint32 AttributionByExtents::GetInternalInsetIndex(const khTileAddr &addr)
+ std::uint32_t AttributionByExtents::GetInternalInsetIndex(const khTileAddr &addr)
 const {
-  uint32 maxid = 0;
-  uint32 maxlevel = 0;
+  std::uint32_t maxid = 0;
+  std::uint32_t maxlevel = 0;
   double maxarea = 0.0;
 
   khExtents<double> tile_extents = addr.degExtents(ClientImageryTilespaceBase);
   double tile_area = tile_extents.width() * tile_extents.height();
 
   // Traverse the insets from highest resolution to lowest resolution
-  for (uint j = 0; j < insets.size(); ++j) {
-    uint idx = insets.size()-j-1;
+  for (unsigned int j = 0; j < insets.size(); ++j) {
+    unsigned int idx = insets.size()-j-1;
 
     // If there is a higher res inset w/ at least 33% coverage
     // give it ownership of the tile
@@ -76,8 +77,8 @@ const {
 
   return maxid;
 }
-uint32 AttributionByExtents::GetInsetId(const khTileAddr &addr) const {
-  uint32 max_index = GetInternalInsetIndex(addr);
+ std::uint32_t AttributionByExtents::GetInsetId(const khTileAddr &addr) const {
+  std::uint32_t max_index = GetInternalInsetIndex(addr);
   if (max_index < insets.size()) {
     return insets[max_index].inset_id_;
   }
@@ -88,7 +89,7 @@ uint32 AttributionByExtents::GetInsetId(const khTileAddr &addr) const {
 // specified tile.
 const std::string& AttributionByExtents::GetAcquisitionDate(
   const khTileAddr &addr) const {
-  uint32 max_index = GetInternalInsetIndex(addr);
+  std::uint32_t max_index = GetInternalInsetIndex(addr);
 
   if (max_index < insets.size()) {
     return insets[max_index].acquisition_date_;

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,8 +38,8 @@ class JSDisplayBundle;
 class gstFeaturePreviewConfig {
  public:
   double line_width_;
-  std::vector<uint> line_color_;
-  std::vector<uint> poly_color_;
+  std::vector< unsigned int>  line_color_;
+  std::vector< unsigned int>  poly_color_;
   VectorDefs::PolygonDrawMode polygon_draw_mode_;
   VectorDefs::FeatureDisplayType feature_display_type_;
 
@@ -46,8 +47,8 @@ class gstFeaturePreviewConfig {
   // the values don't matter, since they will never be used
   gstFeaturePreviewConfig(void) :
       line_width_(1.0),
-      line_color_(std::vector<uint>(4, 255)),
-      poly_color_(std::vector<uint>(4, 255)),
+      line_color_(std::vector< unsigned int> (4, 255)),
+      poly_color_(std::vector< unsigned int> (4, 255)),
       polygon_draw_mode_(VectorDefs::FillAndOutline),
       feature_display_type_(VectorDefs::PointZ)
   { }
@@ -94,7 +95,7 @@ class gstFeatureConfigs {
   bool AttributeExpansionNeeded() const;
   gstRecordHandle Expand(gstRecordHandle rec,
                          JSDisplayBundle &jsbundle,
-                         uint filterId) const;
+                         unsigned int filterId) const;
   gstRecordHandle DummyExpand() const;
 
   // This is now const. No more setting here. No more config extraction either!

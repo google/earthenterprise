@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -54,13 +55,13 @@ khRasterProductLevel::OpenReader(void) const
 }
 
 bool
-khRasterProductLevel::ReadTileBandIntoBuf(uint32 row, uint32 col,
-                                          uint band, uchar* destBuf,
+khRasterProductLevel::ReadTileBandIntoBuf(std::uint32_t row, std::uint32_t col,
+                                          unsigned int band, unsigned char* destBuf,
                                           khTypes::StorageEnum destType,
-                                          uint bufsize,
+                                          unsigned int bufsize,
                                           bool flipTopToBottom) const
 {
-  const uint32 CalcBufSize = (RasterProductTileResolution *
+  const std::uint32_t CalcBufSize = (RasterProductTileResolution *
                               RasterProductTileResolution *
                               khTypes::StorageSize(destType));
   if (bufsize < CalcBufSize) {
@@ -82,10 +83,10 @@ khRasterProductLevel::ReadTileBandIntoBuf(uint32 row, uint32 col,
 
 
 void
-khRasterProductLevel::ReadImageIntoBufs(const khExtents<uint32> &destExtents,
-                                        uchar *destBufs[],
-                                        uint   bands[],
-                                        uint   numbands,
+khRasterProductLevel::ReadImageIntoBufs(const khExtents<std::uint32_t> &destExtents,
+                                        unsigned char *destBufs[],
+                                        unsigned int   bands[],
+                                        unsigned int   numbands,
                                         khTypes::StorageEnum destType) const
 {
   if (!reader && !OpenReader()) {
@@ -93,30 +94,30 @@ khRasterProductLevel::ReadImageIntoBufs(const khExtents<uint32> &destExtents,
   }
 
   // allocate buffers for tile data
-  uint32 BandSize = (RasterProductTileResolution *
+  std::uint32_t BandSize = (RasterProductTileResolution *
                      RasterProductTileResolution *
                      khTypes::StorageSize(destType));
-  khDeleteGuard<uchar, ArrayDeleter> bufguards[numbands];
-  uchar* readBufs[numbands];
-  for (uint b = 0; b < numbands; ++b) {
-    bufguards[b] = TransferOwnership(readBufs[b] = new uchar[BandSize]);
+  khDeleteGuard<unsigned char, ArrayDeleter> bufguards[numbands];
+  unsigned char* readBufs[numbands];
+  for (unsigned int b = 0; b < numbands; ++b) {
+    bufguards[b] = TransferOwnership(readBufs[b] = new unsigned char[BandSize]);
   }
 
   // compute list of tiles to read
-  khExtents<uint32> tileExtents
+  khExtents<std::uint32_t> tileExtents
     (PixelExtentsToTileExtents
-     (khExtents<int64>(XYOrder,
+     (khExtents<std::int64_t>(XYOrder,
                        destExtents.beginX(),
                        destExtents.endX(),
                        destExtents.beginY(),
                        destExtents.endY()),
       RasterProductTileResolution));
 
-  const uint PixelSize = khTypes::StorageSize(destType);
+  const unsigned int PixelSize = khTypes::StorageSize(destType);
 
-  for (uint row = tileExtents.beginRow();
+  for (unsigned int row = tileExtents.beginRow();
        row < tileExtents.endRow(); ++row) {
-    for (uint col = tileExtents.beginCol();
+    for (unsigned int col = tileExtents.beginCol();
          col < tileExtents.endCol(); ++col) {
 
       if (!reader->ReadBandBufs(row, col, readBufs, bands, numbands,
@@ -126,42 +127,42 @@ khRasterProductLevel::ReadImageIntoBufs(const khExtents<uint32> &destExtents,
       }
 
       // compute pixel intersection with this tile
-      khOffset<uint32> thisOrigin(RowColOrder,
+      khOffset<std::uint32_t> thisOrigin(RowColOrder,
                                   row * RasterProductTileResolution,
                                   col * RasterProductTileResolution);
-      khExtents<uint32>
+      khExtents<std::uint32_t>
         thisExtents(thisOrigin,
-                    khSize<uint32>(RasterProductTileResolution,
+                    khSize<std::uint32_t>(RasterProductTileResolution,
                                    RasterProductTileResolution));
-      khExtents<uint32>
-        wantExtents(khExtents<uint32>::Intersection(destExtents,
+      khExtents<std::uint32_t>
+        wantExtents(khExtents<std::uint32_t>::Intersection(destExtents,
                                                     thisExtents));
 
       // calculate offset into the dest buffer
-      uint32 destOffsetX = wantExtents.beginX() - destExtents.beginX();
-      uint32 destOffsetY = wantExtents.beginY() - destExtents.beginY();
+      std::uint32_t destOffsetX = wantExtents.beginX() - destExtents.beginX();
+      std::uint32_t destOffsetY = wantExtents.beginY() - destExtents.beginY();
 
       // Finally, let's actually move the data
-      uint32 beginWantY = wantExtents.beginY() - thisOrigin.y();
-      uint32 endWantY   = wantExtents.endY() - thisOrigin.y();
-      uint32 srcx       = wantExtents.beginX() - thisOrigin.x();
-      uint32 wantLineSize  = wantExtents.width() * PixelSize;
-      uint32 numLines = 0;
-      for (uint32 srcy = beginWantY; srcy < endWantY;
+      std::uint32_t beginWantY = wantExtents.beginY() - thisOrigin.y();
+      std::uint32_t endWantY   = wantExtents.endY() - thisOrigin.y();
+      std::uint32_t srcx       = wantExtents.beginX() - thisOrigin.x();
+      std::uint32_t wantLineSize  = wantExtents.width() * PixelSize;
+      std::uint32_t numLines = 0;
+      for (std::uint32_t srcy = beginWantY; srcy < endWantY;
            ++srcy, ++numLines) {
-        uint32 desty = destOffsetY + numLines;
-        uint32 destx = destOffsetX;
+        std::uint32_t desty = destOffsetY + numLines;
+        std::uint32_t destx = destOffsetX;
 
         // we want the result image to be top -> bottom
         // so invert the desty
         desty = destExtents.height() - desty - 1;
 
-        for (uint b = 0; b < numbands; ++b) {
+        for (unsigned int b = 0; b < numbands; ++b) {
           // Compute the buffer addresses
-          uchar *srcPtr = readBufs[b] +
+          unsigned char *srcPtr = readBufs[b] +
                           (((srcy * RasterProductTileResolution) + srcx) *
                            PixelSize);
-          uchar *destPtr = destBufs[b] +
+          unsigned char *destPtr = destBufs[b] +
                            (((desty*destExtents.width()) + destx) *
                             PixelSize);
 
@@ -209,12 +210,12 @@ khRasterProductLevel::OpenWriter(const bool is_monochromatic) const
 
 template <class SrcTile>
 bool
-khRasterProductLevel::WriteTile(uint32 row, uint32 col, const SrcTile &src)
+khRasterProductLevel::WriteTile(std::uint32_t row, std::uint32_t col, const SrcTile &src)
 {
-  COMPILE_TIME_ASSERT(SrcTile::TileWidth == RasterProductTileResolution,
-                      IncompatibleTileWidth);
-  COMPILE_TIME_ASSERT(SrcTile::TileHeight == RasterProductTileResolution,
-                      IncompatibleTileHeight);
+  static_assert(SrcTile::TileWidth == RasterProductTileResolution,
+                      "Incompatible Tile Width");
+  static_assert(SrcTile::TileHeight == RasterProductTileResolution,
+                      "Incompatible Tile Height");
   assert(SrcTile::NumComp == numComponents());
   assert(SrcTile::Storage == componentType());
 
@@ -238,13 +239,13 @@ khRasterProductLevel::WriteTile(uint32 row, uint32 col, const SrcTile &src)
 // ****************************************************************************
 template bool
 khRasterProductLevel::WriteTile<AlphaProductTile>
-(uint32 row, uint32 col, const AlphaProductTile &src);
+(std::uint32_t row, std::uint32_t col, const AlphaProductTile &src);
 template bool
 khRasterProductLevel::WriteTile<ImageryProductTile>
-(uint32 row, uint32 col, const ImageryProductTile &src);
+(std::uint32_t row, std::uint32_t col, const ImageryProductTile &src);
 template bool
 khRasterProductLevel::WriteTile<HeightmapInt16ProductTile>
-(uint32 row, uint32 col, const HeightmapInt16ProductTile &src);
+(std::uint32_t row, std::uint32_t col, const HeightmapInt16ProductTile &src);
 template bool
 khRasterProductLevel::WriteTile<HeightmapFloat32ProductTile>
-(uint32 row, uint32 col, const HeightmapFloat32ProductTile &src);
+(std::uint32_t row, std::uint32_t col, const HeightmapFloat32ProductTile &src);

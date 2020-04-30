@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -53,12 +54,12 @@ void PortableDeltaBuilder::DisplayDeltaQtNodes() {
   std::ifstream index;
   PacketBundleSource src(delta_directory_);
 
-  uint64 src_index_size =  src.SourceIndexSize();
+  std::uint64_t src_index_size =  src.SourceIndexSize();
   notify(NFY_INFO, "Size: %Zu", src_index_size);
   index.open(src.SourceIndexFileName().c_str(), std::ios::binary);
 
   IndexItem index_item;
-  for (uint64 i = 0; i < src_index_size; ++i) {
+  for (std::uint64_t i = 0; i < src_index_size; ++i) {
     index.read(reinterpret_cast<char*>(&index_item), sizeof(IndexItem));
     notify(NFY_INFO, "%s", index_item.QuadtreeAddress().c_str());
   }
@@ -141,7 +142,7 @@ bool PortableDeltaBuilder::IsLatestPacketDifferent(
  * original glb and the latest glb.
  */
 void PortableDeltaBuilder::BuildDeltaGlobe() {
-  uint32 MAX_BUFFER_SIZE = 1024 * 20;
+  std::uint32_t MAX_BUFFER_SIZE = 1024 * 20;
   std::string original_buffer;
   std::string latest_buffer;
   std::string qtpath;
@@ -164,8 +165,8 @@ void PortableDeltaBuilder::BuildDeltaGlobe() {
   IndexItem original_index_item;
   IndexItem latest_index_item;
 
-  uint64 latest_index_size_ =  latest_.SourceIndexSize();
-  uint64 original_index_size_ =  original_.SourceIndexSize();
+  std::uint64_t latest_index_size_ =  latest_.SourceIndexSize();
+  std::uint64_t original_index_size_ =  original_.SourceIndexSize();
 
   std::string delta_data_directory = delta_directory_ + "/data";
   PacketBundleWriter writer(
@@ -174,14 +175,14 @@ void PortableDeltaBuilder::BuildDeltaGlobe() {
   original_index.open(
       original_.SourceIndexFileName().c_str(), std::ios::binary);
   latest_index.open(latest_.SourceIndexFileName().c_str(), std::ios::binary);
-  uint16 last_file_id = 0xffff;
+  std::uint16_t last_file_id = 0xffff;
   original_index.read(
       reinterpret_cast<char*>(&original_index_item), sizeof(IndexItem));
   bool has_more_original_data = true;
-  for (uint64 i = 0; i < latest_index_size_; ++i) {
+  for (std::uint64_t i = 0; i < latest_index_size_; ++i) {
     latest_index.read(
         reinterpret_cast<char*>(&latest_index_item), sizeof(IndexItem));
-    uint16 file_id = latest_index_item.file_id;
+    std::uint16_t file_id = latest_index_item.file_id;
     if (file_id != last_file_id) {
       notify(NFY_INFO, "file id: %u", file_id);
       last_file_id = file_id;

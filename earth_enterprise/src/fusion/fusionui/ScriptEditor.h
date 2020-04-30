@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,7 +61,7 @@ class ScriptEditor : public ScriptEditorBase {
   gstHeaderHandle recordHeader;
   int currField;
   QStringList contextScripts;
-  typedef std::map<uint, QStringList*> ValueCache;
+  typedef std::map<unsigned int, QStringList*> ValueCache;
   ValueCache cachedValues;
   std::vector<QString> insertFieldText;
 };

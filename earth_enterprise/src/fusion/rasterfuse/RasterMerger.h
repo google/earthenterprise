@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +36,7 @@ class MergeInset {
   // all the instantiation of RasterMerger as friends.
   template <class CachingDataReader> friend class RasterMerger;
 
-  MergeInset(uint magnify_level,
+  MergeInset(unsigned int magnify_level,
              const std::string &dataRPFile,
              const std::string &alphaRPFile,
              const std::string &cached_blend_file,
@@ -46,11 +47,11 @@ class MergeInset {
             (alphaRP && alphaRP->IsMercator()));
   }
 
-  void InitRasterProducts(uint magnify_level,
+  void InitRasterProducts(unsigned int magnify_level,
                           const std::string &dataRPFile,
                           const std::string &alphaRPFile);
 
-  void InitCachedBlendReaders(uint magnify_level,
+  void InitCachedBlendReaders(unsigned int magnify_level,
                               const std::string &data_rp_file,
                               const std::string &cached_blend_file,
                               const std::string &cached_blend_alpha_file);
@@ -106,7 +107,7 @@ class RasterMerger : public TileLoader<typename CachingDataReader::TileType> {
                     AlphaProductTile *dst_alpha_tile);
 
  public:
-  RasterMerger(uint targetLevel,
+  RasterMerger(unsigned int targetLevel,
                const std::vector<PacketLevelConfig::Inset> &insets_,
                const std::string &burnDataRPFile,
                const std::string &burnAlphaRPFile);

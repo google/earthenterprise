@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -72,8 +73,8 @@ int ff_read(const char *ffpath, ffReadCallbackFunc callback, void *userData)
 
   off64_t ffoff = 0;          // current offset into flatfile
 
-  uint64 recnum = 0;
-  uint64 winnum = 0;
+  std::uint64_t recnum = 0;
+  std::uint64_t winnum = 0;
 
   void* mapAddr = 0;
   while (ffoff < sb.st_size) {
@@ -81,7 +82,7 @@ int ff_read(const char *ffpath, ffReadCallbackFunc callback, void *userData)
     assert((ffoff & 31) == 0);
 
 #if __ia64__
-    uint64 ffpgoff = ffoff & pageMask;
+    std::uint64_t ffpgoff = ffoff & pageMask;
     size_t ffwin;           // end of the current window
     ffwin = ffpgoff + windowSize;
     if ((int)ffwin > sb.st_size)
@@ -169,7 +170,7 @@ int ff_read(const char *ffpath, ffReadCallbackFunc callback, void *userData)
 
 struct EstimateCallbackData {
   int num;
-  uint32 totalSize;
+  std::uint32_t totalSize;
   EstimateCallbackData(void) : num(0), totalSize(0) { }
 };
 
@@ -185,7 +186,7 @@ EstimateCallback(const FFRecHeader *head, void * /* data */, void *userData)
   return (cbData->num < 11);
 }
 
-uint64 ff_estimate_numentries(const char *ffpath) 
+ std::uint64_t ff_estimate_numentries(const char *ffpath) 
 {
   // get the total size of the file
   int fffd = open(ffpath, O_RDONLY | O_LARGEFILE);
@@ -204,5 +205,5 @@ uint64 ff_estimate_numentries(const char *ffpath)
   double averageSize = (double)estimate.totalSize / (double)estimate.num;
 
   // estimate by dividing the total file size by the average record size
-  return (uint64)((double)sb.st_size / averageSize);
+  return (std::uint64_t)((double)sb.st_size / averageSize);
 }

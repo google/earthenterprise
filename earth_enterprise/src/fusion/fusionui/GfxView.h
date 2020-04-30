@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -199,7 +200,7 @@ class GfxView : public QGLWidget {
     None = 3
   };
 
-  uint32 alpha_mode_;
+  std::uint32_t alpha_mode_;
 
   double tex_stat_[STAT_FRAME];
   double geom_stat_[STAT_FRAME];

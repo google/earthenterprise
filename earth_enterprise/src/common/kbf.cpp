@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -63,8 +64,8 @@ void kbfFile::close() {
 // read a record header, and optionally the record itself
 // depending on buffersize.  0 = header only, non-0 = header and record
 //
-bool kbfFile::read(kbfFileHeader& header, char* buffer, uint32 buffersize,
-                   int32 &fileposition) {
+bool kbfFile::read(kbfFileHeader& header, char* buffer, std::uint32_t buffersize,
+                   std::int32_t &fileposition) {
   if (fp == NULL)
     return false;
 

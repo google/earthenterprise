@@ -31,7 +31,7 @@ class Writer : public GridIndexedWriter {
 
   // Instantiated only if WriteTile called. If only the lower level
   // WritePacket is called, these remain as stubs.
-  std::vector<uchar> interleaveBuffer;
+  std::vector<unsigned char> interleaveBuffer;
   khDeleteGuard<Compressor> compressor;
 
   typedef typename TileType::PixelType PixelType;

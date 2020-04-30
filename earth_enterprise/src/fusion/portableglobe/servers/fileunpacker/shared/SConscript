@@ -35,6 +35,7 @@ env.install('server_lib', [glb])
 portable_glc_reader_sobj = env.SharedObject('portable_glc_reader.cpp')
 
 swig_env = env.DeepCopy()
+swig_env['STATIC_AND_SHARED_OBJECTS_ARE_THE_SAME']=1
 cc_flags = swig_env['CCFLAGS']
 cc_flags.remove('-Werror')
 swig_env['CCFLAGS'] = cc_flags

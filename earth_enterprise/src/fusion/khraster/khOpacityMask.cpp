@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,7 +19,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#include "common/khAssert.h"
 #include "common/khEndian.h"
 #include "common/geFileUtils.h"
 #include "common/khFileUtils.h"
@@ -29,27 +29,27 @@
 // ****************************************************************************
 // ***  khOpacityMask::Level
 // ****************************************************************************
-khOpacityMask::Level::Level(uint lev, const khExtents<uint32> &extents)
+khOpacityMask::Level::Level(unsigned int lev, const khExtents<std::uint32_t> &extents)
     : khLevelCoverage(lev, extents),
-      buf(TransferOwnership(new uchar[BufferSize()])) {
+      buf(TransferOwnership(new unsigned char[BufferSize()])) {
   memset(&buf[0], 0, BufferSize());
 }
 
-khOpacityMask::Level::Level(uint lev, const khExtents<uint32> &extents,
-                            uchar *src)
+khOpacityMask::Level::Level(unsigned int lev, const khExtents<std::uint32_t> &extents,
+                            unsigned char *src)
     : khLevelCoverage(lev, extents),
-      buf(TransferOwnership(new uchar[BufferSize()])) {
+      buf(TransferOwnership(new unsigned char[BufferSize()])) {
   memcpy(&buf[0], src, BufferSize());
 }
 
 khOpacityMask::OpacityType khOpacityMask::Level::GetOpacity(
-    uint32 row, uint32 col) const {
+    std::uint32_t row, std::uint32_t col) const {
   if (extents.ContainsRowCol(row, col)) {
-    uint32 r = row - extents.beginRow();
-    uint32 c = col - extents.beginCol();
-    uint32 tilePos = r * extents.numCols() + c;
-    uint32 byteNum = tilePos / 4;
-    uint32 byteOffset = (tilePos % 4) * 2;
+    std::uint32_t r = row - extents.beginRow();
+    std::uint32_t c = col - extents.beginCol();
+    std::uint32_t tilePos = r * extents.numCols() + c;
+    std::uint32_t byteNum = tilePos / 4;
+    std::uint32_t byteOffset = (tilePos % 4) * 2;
 
     assert(byteNum < BufferSize());
     return (OpacityType)((buf[byteNum] >> byteOffset) & 0x3);
@@ -59,17 +59,17 @@ khOpacityMask::OpacityType khOpacityMask::Level::GetOpacity(
 }
 
 void khOpacityMask::Level::SetOpacity(
-    uint32 row, uint32 col, OpacityType opacity) {
-  uint32 r = row - extents.beginRow();
-  uint32 c = col - extents.beginCol();
-  uint32 tilePos = r * extents.numCols() + c;
-  uint32 byteNum = tilePos / 4;
-  uint32 byteOffset = (tilePos % 4) * 2;
+    std::uint32_t row, std::uint32_t col, OpacityType opacity) {
+  std::uint32_t r = row - extents.beginRow();
+  std::uint32_t c = col - extents.beginCol();
+  std::uint32_t tilePos = r * extents.numCols() + c;
+  std::uint32_t byteNum = tilePos / 4;
+  std::uint32_t byteOffset = (tilePos % 4) * 2;
 
   assert(byteNum < BufferSize());
   buf[byteNum] =
     (buf[byteNum] & ~(0x3 << byteOffset)) |  // strip out old value
-    (((uchar)opacity & 0x3) << byteOffset);  // 'or' in new value
+    (((unsigned char)opacity & 0x3) << byteOffset);  // 'or' in new value
 }
 
 
@@ -83,13 +83,13 @@ class OpacityHeader {
   static const char themagic[];
 
   char   magic[21];
-  uint8  opacityFormatVersion;
-  uint8  numLevels;
-  uint8  unused1;
-  uint32 totalFileSize;
-  uint32 unused2;
+  std::uint8_t  opacityFormatVersion;
+  std::uint8_t  numLevels;
+  std::uint8_t  unused1;
+  std::uint32_t totalFileSize;
+  std::uint32_t unused2;
 
-  OpacityHeader(uint8 numLevels, uint32 totalSize);
+  OpacityHeader(std::uint8_t numLevels, std::uint32_t totalSize);
   void LittleEndianToHost(void);
   // just another name for code clarity
   inline void HostToLittleEndian(void) { LittleEndianToHost(); }
@@ -97,16 +97,16 @@ class OpacityHeader {
   // sould only be used when reading from file
   OpacityHeader() { }
 };
-COMPILE_TIME_CHECK(sizeof(OpacityHeader) == 32, BadOpacityHeaderSize);
+static_assert(sizeof(OpacityHeader) == 32, "Bad Opacity Header Size");
 
 const char
 OpacityHeader::themagic[] = "Keyhole Opacity Mask";
-COMPILE_TIME_CHECK(sizeof(OpacityHeader::themagic)-1 ==
+static_assert(sizeof(OpacityHeader::themagic)-1 ==
                    sizeof(OpacityHeader().magic),
-                   InvalidMagicSize);
+                   "Invalid Magic Size");
 
 
-OpacityHeader::OpacityHeader(uint8 numLevels_, uint32 totalSize)
+OpacityHeader::OpacityHeader(std::uint8_t numLevels_, std::uint32_t totalSize)
     : opacityFormatVersion(1),
       numLevels(numLevels_),
       unused1(0),
@@ -130,27 +130,27 @@ OpacityHeader::LittleEndianToHost(void) {
 // to be exactly 32 bytes long.
 class OpacityLevelRecord {
  public:
-  uint32 opacityBufferOffset;
-  uint32 opacityBufferSize;
-  uint32 startRow;
-  uint32 startCol;
-  uint32 numRows;
-  uint32 numCols;
-  uint8  levelNum;
-  uint8  unused1;             // == 0
-  uint16 unused2;             // == 0
-  uint32 unused3;             // == 0
+  std::uint32_t opacityBufferOffset;
+  std::uint32_t opacityBufferSize;
+  std::uint32_t startRow;
+  std::uint32_t startCol;
+  std::uint32_t numRows;
+  std::uint32_t numCols;
+  std::uint8_t  levelNum;
+  std::uint8_t  unused1;             // == 0
+  std::uint16_t unused2;             // == 0
+  std::uint32_t unused3;             // == 0
 
-  OpacityLevelRecord(uint32 opacityBufferOffset_,
+  OpacityLevelRecord(std::uint32_t opacityBufferOffset_,
                      const khOpacityMask::Level &level);
   void LittleEndianToHost(void);
   // just another name for code clarity
   inline void HostToLittleEndian(void) { LittleEndianToHost(); }
 };
-COMPILE_TIME_CHECK(sizeof(OpacityLevelRecord) == 32,
-                   BadOpacityLevelRecordSize);
+static_assert(sizeof(OpacityLevelRecord) == 32,
+                   "Bad Opacity Level Record Size");
 
-OpacityLevelRecord::OpacityLevelRecord(uint32 opacityBufferOffset_,
+OpacityLevelRecord::OpacityLevelRecord(std::uint32_t opacityBufferOffset_,
                                        const khOpacityMask::Level &level)
     : opacityBufferOffset(opacityBufferOffset_),
       opacityBufferSize(level.BufferSize()),
@@ -189,7 +189,7 @@ khOpacityMask::khOpacityMask(const khInsetCoverage &coverage)
     : numLevels(coverage.numLevels()),
       beginLevel(coverage.beginLevel()),
       endLevel(coverage.endLevel()) {
-  for (uint i = beginLevel; i < endLevel; ++i) {
+  for (unsigned int i = beginLevel; i < endLevel; ++i) {
     levels[i] = TransferOwnership(new Level(i, coverage.levelExtents(i)));
   }
 }
@@ -203,7 +203,7 @@ khOpacityMask::khOpacityMask(const std::string &filename)
   // Let's wait until the file is at least a little bit cool. :-)
   WaitIfFileIsTooNew(filename, MiscConfig::Instance().NFSVisibilityDelay);
 
-  uint64 fileSize;
+  std::uint64_t fileSize;
   time_t mtime;
   if (!khGetFileInfo(filename, fileSize, mtime)) {
     throw khErrnoException(
@@ -256,8 +256,8 @@ khOpacityMask::khOpacityMask(const std::string &filename)
   numLevels = header.numLevels;
 
   // mmap the entire index
-  uchar *filebuf =
-      reinterpret_cast<uchar*>(mmap(0, header.totalFileSize, PROT_READ,
+  unsigned char *filebuf =
+      reinterpret_cast<unsigned char*>(mmap(0, header.totalFileSize, PROT_READ,
                                     MAP_PRIVATE, fileHandle.fd(), 0));
   if (filebuf == MAP_FAILED) {
     throw khErrnoException(kh::tr("Unable to mmap %1").arg(filename));
@@ -267,7 +267,7 @@ khOpacityMask::khOpacityMask(const std::string &filename)
 
   OpacityLevelRecord *recs =
       reinterpret_cast<OpacityLevelRecord*>(filebuf + sizeof(OpacityHeader));
-  for (uint i = 0; i < header.numLevels; ++i) {
+  for (unsigned int i = 0; i < header.numLevels; ++i) {
     OpacityLevelRecord rec = recs[i];
     rec.LittleEndianToHost();
 
@@ -303,7 +303,7 @@ khOpacityMask::khOpacityMask(const std::string &filename)
 
     levels[rec.levelNum] = TransferOwnership(
         new Level(rec.levelNum,
-                  khExtents<uint32>(RowColOrder,
+                  khExtents<std::uint32_t>(RowColOrder,
                                     rec.startRow,
                                     rec.startRow + rec.numRows,
                                     rec.startCol,
@@ -329,10 +329,10 @@ khOpacityMask::khOpacityMask(const std::string &filename)
 
 void khOpacityMask::Save(const std::string &filename) {
   // calculate totalFileSize
-  uint32 opacityBufferOffset = sizeof(OpacityHeader) +
+  std::uint32_t opacityBufferOffset = sizeof(OpacityHeader) +
                                numLevels * sizeof(OpacityLevelRecord);
-  uint32 totalFileSize = opacityBufferOffset;
-  for (uint i = 0; i < NumFusionLevels; ++i) {
+  std::uint32_t totalFileSize = opacityBufferOffset;
+  for (unsigned int i = 0; i < NumFusionLevels; ++i) {
     if (levels[i]) {
       totalFileSize += levels[i]->BufferSize();
     }
@@ -347,8 +347,8 @@ void khOpacityMask::Save(const std::string &filename) {
 
   // presize & fill w/ 0's
   khFillFile(fd, 0, totalFileSize);
-  uchar *filebuf =
-      reinterpret_cast<uchar*>(mmap(0, totalFileSize, PROT_READ|PROT_WRITE,
+  unsigned char *filebuf =
+      reinterpret_cast<unsigned char*>(mmap(0, totalFileSize, PROT_READ|PROT_WRITE,
                                     MAP_SHARED, fd, 0));
   if (filebuf == MAP_FAILED) {
     throw khErrnoException(kh::tr("Unable to mmap %1").arg(filename));
@@ -362,7 +362,7 @@ void khOpacityMask::Save(const std::string &filename) {
   header->HostToLittleEndian();
 
   OpacityLevelRecord *lrec = reinterpret_cast<OpacityLevelRecord*>(header+1);
-  for (uint i = 0; i < NumFusionLevels; ++i) {
+  for (unsigned int i = 0; i < NumFusionLevels; ++i) {
     if (levels[i]) {
       // write the level header rec
       (void) new(lrec) OpacityLevelRecord(opacityBufferOffset,
@@ -385,11 +385,11 @@ void khOpacityMask::Save(const std::string &filename) {
 
 
 khOpacityMask::OpacityType ComputeOpacity(const AlphaProductTile &tile) {
-  uchar sample = tile.bufs[0][0];
+  unsigned char sample = tile.bufs[0][0];
   if ((sample != 0) && (sample != 255)) {
     return khOpacityMask::Amalgam;
   }
-  for (uint pos = 0; pos < AlphaProductTile::BandPixelCount; ++pos) {
+  for (unsigned int pos = 0; pos < AlphaProductTile::BandPixelCount; ++pos) {
     if (tile.bufs[0][pos] != sample)
       return khOpacityMask::Amalgam;
   }
@@ -397,14 +397,14 @@ khOpacityMask::OpacityType ComputeOpacity(const AlphaProductTile &tile) {
 }
 
 khOpacityMask::OpacityType ComputeOpacity(const AlphaProductTile &tile,
-                                          const khExtents<uint32>& extents) {
-  uchar sample = tile.bufs[0][(extents.beginRow() * AlphaProductTile::TileWidth)
+                                          const khExtents<std::uint32_t>& extents) {
+  unsigned char sample = tile.bufs[0][(extents.beginRow() * AlphaProductTile::TileWidth)
                                + extents.beginCol()];
   if ((sample != 0) && (sample != 255)) {
     return khOpacityMask::Amalgam;
   }
-  for (uint32 row = extents.beginRow(); row < extents.endRow(); ++row) {
-    for (uint32 col = extents.beginCol(); col < extents.endCol(); ++col) {
+  for (std::uint32_t row = extents.beginRow(); row < extents.endRow(); ++row) {
+    for (std::uint32_t col = extents.beginCol(); col < extents.endCol(); ++col) {
       if (tile.bufs[0][(row * AlphaProductTile::TileWidth) + col] != sample)
         return khOpacityMask::Amalgam;
     }
@@ -432,9 +432,9 @@ khOpacityMask::OpacityType khOpacityMask::GetOpacity(
       // save ourselves the trouble, just return now ...
       if (minOpacity == Amalgam)
         return Amalgam;
-      for (uint minRow = minCoverage.extents.beginRow();
+      for (unsigned int minRow = minCoverage.extents.beginRow();
            minRow < minCoverage.extents.endRow(); ++minRow) {
-        for (uint minCol = minCoverage.extents.beginCol();
+        for (unsigned int minCol = minCoverage.extents.beginCol();
              minCol < minCoverage.extents.endCol(); ++minCol) {
           if (levels[beginLevel]->GetOpacity(minRow, minCol)
               != minOpacity)

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +37,7 @@ class BlendInset {
   const khRasterProductLevel *dataLevel;
   const khRasterProductLevel *alphaLevel;
 
-  BlendInset(uint targetLevel,
+  BlendInset(unsigned int targetLevel,
              const std::string &dataFile,
              const std::string &alphaFile);
 };
@@ -63,7 +64,7 @@ class RasterBlender : public TileLoader<typename CachingDataReader::TileType> {
   const bool is_mercator_;
 
  public:
-  RasterBlender(uint level,
+  RasterBlender(unsigned int level,
                 const std::vector<PacketLevelConfig::Inset> &_insets,
                 bool _skip_transparent, const bool _is_mercator);
 

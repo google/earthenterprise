@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -40,7 +41,7 @@ Publisher::Publisher(QWidget* parent, bool modal, WFlags flags)
                           tr("OK"), 0, 0, 0);
   }
 
-  for (uint row = 0; row < server_combination_set_.combinations.size(); ++row) {
+  for (unsigned int row = 0; row < server_combination_set_.combinations.size(); ++row) {
     SetRow(row, server_combination_set_.combinations[row]);
   }
 

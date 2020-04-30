@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +19,8 @@
 #ifndef kbf_H
 #define kbf_H
 
+#include <cstdint>
 #include <string.h>
-#include <khTypes.h>
 #include <khGuard.h>
 #include <khEndian.h>
 
@@ -31,13 +32,13 @@
 #define MAGIC_3 132
 
 struct kbfFileHeader {
-  uint16 channel;
-  uint16 version;
-  uint32 size;
+  std::uint16_t channel;
+  std::uint16_t version;
+  std::uint32_t size;
 
-  uchar level;
-  uchar magicId[3];
-  uchar branchlist[32];
+  unsigned char level;
+  unsigned char magicId[3];
+  unsigned char branchlist[32];
 
   void init() {
     memset(this, 0, sizeof(kbfFileHeader));
@@ -51,8 +52,8 @@ struct kbfFileHeader {
     init();
   }
 
-  kbfFileHeader(uint16 chan, uint16 ver,
-                uchar lev, uchar *blist, uint32 buffsz) {
+  kbfFileHeader(std::uint16_t chan, std::uint16_t ver,
+                unsigned char lev, unsigned char *blist, std::uint32_t buffsz) {
     init();
     channel = chan;
     version = ver;
@@ -82,7 +83,7 @@ class kbfFile {
   bool open(const char *filename, int mode);
   int eof();
   void close();
-  bool read(kbfFileHeader& hdr, char* buff, uint32 buffsz, int32& fpos);
+  bool read(kbfFileHeader& hdr, char* buff, std::uint32_t buffsz, std::int32_t& fpos);
  private:
   void resetposition();
   FILE* fp;

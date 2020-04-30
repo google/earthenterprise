@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +18,7 @@
 // A wrapper around zlib compress api.
 // Retrofitted back to Fusion by Mike Goss.
 //
-#include <khTypes.h>
+#include <cstdint>
 #include <zlib.h>
 #include <khSimpleException.h>
 #include <khEndian.h>
@@ -35,8 +36,8 @@ const size_t kPacketCompressHdrSize = 8;
 static const size_t kLargeBlockSize = 1 << 17;  // 128k
 
 // Magic ids
-const uint32 kPktMagic = 0x7468deadu;
-const uint32 kPktMagicSwap = 0xadde6874u;
+const std::uint32_t kPktMagic = 0x7468deadu;
+const std::uint32_t kPktMagicSwap = 0xadde6874u;
 
 namespace {
 
@@ -44,7 +45,7 @@ namespace {
 
 bool GetDecompressBufferSize(const void*buf, size_t buflen,
                              size_t *dbuf_size) {
-  const uint32* lbuf = reinterpret_cast<const uint32*>(buf);
+  const std::uint32_t* lbuf = reinterpret_cast<const std::uint32_t*>(buf);
 
   // Check for header validity
   if (buflen < kPacketCompressHdrSize
@@ -127,7 +128,7 @@ bool KhPktCompressWithBuffer(const void* pkt, size_t pktlen,
   }
 
   // add compressed packet header
-  uint32* lbuf = reinterpret_cast<uint32*>(tbuf);
+  std::uint32_t* lbuf = reinterpret_cast<std::uint32_t*>(tbuf);
   lbuf[0] = kPktMagic;
   lbuf[1] = pktlen;
   tbuflen += kPacketCompressHdrSize;

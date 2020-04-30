@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +24,7 @@
 
 #include <iostream>  // NOLINT(readability/streams)
 #include <string>
+#include <cstdint>
 #include "common/khTypes.h"
 #include "fusion/portableglobe/shared/packetbundle.h"
 
@@ -36,7 +38,7 @@ class PacketBundleSource : public PacketBundle {
   /**
    * Returns packetbundle file's name for the given file id.
    */
-  std::string SourcePacketBundleFileName(uint16 file_id) const {
+  std::string SourcePacketBundleFileName(std::uint16_t file_id) const {
     return PacketBundleFileName(file_id);
   }
 
@@ -50,12 +52,12 @@ class PacketBundleSource : public PacketBundle {
   /**
    * Returns number of packets referenced in index.
    */
-  uint64 SourceIndexSize() const {
+  std::uint64_t SourceIndexSize() const {
     std::ifstream fp;
 
     fp.open(SourceIndexFileName().c_str(), std::ios::binary);
     fp.seekg(0, std::ios::end);
-    int64 file_size = fp.tellg();
+    std::int64_t file_size = fp.tellg();
     if (file_size < 0) {
       return 0;
     }

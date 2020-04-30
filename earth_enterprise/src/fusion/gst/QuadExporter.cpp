@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -49,7 +50,7 @@ QuadExporterBase::QuadExporterBase(
 }
 
 void QuadExporterBase::RestoreCleared(void) {
-  for (uint i = 0; i < numSets; ++i) {
+  for (unsigned int i = 0; i < numSets; ++i) {
     if (clearedSet[i]) {
       clearedSet[i] = false;
       useSets[i] = true;
@@ -61,7 +62,7 @@ void QuadExporterBase::RestoreCleared(void) {
 // ****************************************************************************
 // ***  MinifiedQuadExporter
 // ****************************************************************************
-bool MinifiedQuadExporter::ExportQuad(uint32 row, uint32 col) {
+bool MinifiedQuadExporter::ExportQuad(std::uint32_t row, std::uint32_t col) {
   assert(Contains(row, col));
 
   TryToClearSets(row, col);
@@ -76,13 +77,13 @@ bool MinifiedQuadExporter::ExportQuad(uint32 row, uint32 col) {
       khTileAddr(cov.level, row, col).MagnifiedToLevel(targetCov.level);
 
     // intersect that with the targetCoverage (what we really want to do)
-    khExtents<uint32> skipExtents =
-      khExtents<uint32>::Intersection(thisTargetCov.extents,
+    khExtents<std::uint32_t> skipExtents =
+      khExtents<std::uint32_t>::Intersection(thisTargetCov.extents,
                                       targetCov.extents);
 
     // now we know how many we're going to skip
-    uint64 numSkipped = static_cast<uint64>(skipExtents.numRows()) *
-                        static_cast<uint64>(skipExtents.numCols());
+    std::uint64_t numSkipped = static_cast<std::uint64_t>(skipExtents.numRows()) *
+                        static_cast<std::uint64_t>(skipExtents.numCols());
 
     progress->incrementDone(numSkipped);
     layer->IncrementSkipped(numSkipped);
@@ -94,10 +95,10 @@ bool MinifiedQuadExporter::ExportQuad(uint32 row, uint32 col) {
     TryToSplitSets(row, col);
 
     // for each of the four source tiles / quadrants
-    for (uint quad = 0; quad < 4; ++quad) {
+    for (unsigned int quad = 0; quad < 4; ++quad) {
       // magnify the dest row/col/quad to get row/col for the next level
-      uint32 nextRow = 0;
-      uint32 nextCol = 0;
+      std::uint32_t nextRow = 0;
+      std::uint32_t nextCol = 0;
       QuadtreePath::MagnifyQuadAddr(row, col, quad, nextRow, nextCol);
 
       // check if quad exists the next row down
@@ -137,7 +138,7 @@ MinifiedQuadExporter::MinifiedQuadExporter(QuadExporterBase *_next,
       next_(_next) {
 }
 
-void MinifiedQuadExporter::SplitSet(uint i, uint32 row, uint32 col) {
+void MinifiedQuadExporter::SplitSet(unsigned int i, std::uint32_t row, std::uint32_t col) {
   somethingSplit = true;
   splitSet[i] = buildSets[i].geoIndex;
   buildSets[i].geoIndex = buildSets[i].geoIndex->SplitCell(row, col,
@@ -145,7 +146,7 @@ void MinifiedQuadExporter::SplitSet(uint i, uint32 row, uint32 col) {
 }
 
 void MinifiedQuadExporter::RestoreSplit(void) {
-  for (uint i = 0; i < numSets; ++i) {
+  for (unsigned int i = 0; i < numSets; ++i) {
     if (splitSet[i]) {
       // restore the one I split
       buildSets[i].geoIndex = splitSet[i];
@@ -160,7 +161,7 @@ void MinifiedQuadExporter::RestoreSplit(void) {
 // ****************************************************************************
 // ***  FullResQuadExporter
 // ****************************************************************************
-bool FullResQuadExporter::ExportQuad(uint32 row, uint32 col) {
+bool FullResQuadExporter::ExportQuad(std::uint32_t row, std::uint32_t col) {
   assert(Contains(row, col));
 
   TryToClearSets(row, col);

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,10 +41,10 @@ class BlendTodo {
   BlendTodo(geindex::BlendWriter &writer, geFilePool &file_pool,
             const BlendStack &stack);
 
-  inline uint64 TotalTileVisits(void) const { return total_tile_visits_; }
+  inline std::uint64_t TotalTileVisits(void) const { return total_tile_visits_; }
 
  private:
-  uint64 total_tile_visits_;
+  std::uint64_t total_tile_visits_;
 };
 
 
@@ -60,10 +61,10 @@ class VectorTodo {
   VectorTodo(geindex::VectorWriter &writer, geFilePool &file_pool,
              const VectorStack &stack);
 
-  inline uint64 TotalTileVisits(void) const { return total_tile_visits_; }
+  inline std::uint64_t TotalTileVisits(void) const { return total_tile_visits_; }
 
  private:
-  uint64 total_tile_visits_;
+  std::uint64_t total_tile_visits_;
 };
 
 

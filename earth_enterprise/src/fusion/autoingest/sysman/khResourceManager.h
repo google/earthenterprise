@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,21 +38,21 @@ class khResourceManager : public khVolumeManager
   friend class khSystemManager;
 
   class Volume {
-    typedef std::map<std::string, uint64> Reservations;
+    typedef std::map<std::string, std::uint64_t> Reservations;
 
     std::string  name;
-    uint32       serial;
-    uint64       avail;
+    std::uint32_t       serial;
+    std::uint64_t       avail;
     Reservations reservations;
     khResourceProviderProxy *provider;
    public:
-    uint32 serialnum(void) const { return serial; }
+    std::uint32_t serialnum(void) const { return serial; }
 
     std::string ReservationFilename(void) const;
-    bool MakeReservation(const std::string &path, uint64 size);
+    bool MakeReservation(const std::string &path, std::uint64_t size);
     void ReleaseReservation(const std::string &path);
     void CleanReservation(const std::string &path);
-    void SetAvail(uint64 a) {
+    void SetAvail(std::uint64_t a) {
       avail = a;
     }
 
@@ -144,7 +145,7 @@ class khResourceManager : public khVolumeManager
   Providers          providers;
   TaskWaitingQueue   taskWaitingQueue;
   khCondVar          activateCondVar;
-  uint32             numActivateBlockers;
+  std::uint32_t             numActivateBlockers;
 
  public:
   // Various accessor routines - need to hold mutex
@@ -165,7 +166,7 @@ class khResourceManager : public khVolumeManager
   Reservation MakeVolumeReservation(const std::string &assetPath,
                                     const std::string &volume,
                                     const std::string &path,
-                                    uint64 size);
+                                    std::uint64_t size);
   void ReleaseVolumeReservation(const std::string &volume,
                                 const std::string &path);
   void CleanVolumeReservation(const std::string &volume,
@@ -173,7 +174,7 @@ class khResourceManager : public khVolumeManager
 
   Reservation MakeCPUReservation(khResourceProviderProxy *provider,
                                  const TaskRequirements::CPU &req);
-  void ReleaseCPUReservation(const std::string &host, uint num);
+  void ReleaseCPUReservation(const std::string &host, unsigned int num);
   void SetVolumeAvail(const VolumeAvailMsg &msg);
 
 

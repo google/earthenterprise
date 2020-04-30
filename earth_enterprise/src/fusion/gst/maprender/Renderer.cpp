@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -31,7 +32,7 @@ namespace maprender {
 // ****************************************************************************
 // ***  RendererOutputTile
 // ****************************************************************************
-RendererOutputTile::RendererOutputTile(uint32 rasterSize)
+RendererOutputTile::RendererOutputTile(std::uint32_t rasterSize)
     : pixelBuf(TransferOwnership(new char[rasterSize*rasterSize*4])),
       bitmap(TransferOwnership(new SkBitmap())),
       canvas(), owns_buffer_(true) {
@@ -48,7 +49,7 @@ RendererOutputTile::RendererOutputTile(uint32 rasterSize)
 // ****************************************************************************
 // ***  RendererOutputTile
 // ****************************************************************************
-RendererOutputTile::RendererOutputTile(uint32 rasterSize, char* buffer)
+RendererOutputTile::RendererOutputTile(std::uint32_t rasterSize, char* buffer)
     : pixelBuf(TransferOwnership(buffer)),
       bitmap(TransferOwnership(new SkBitmap())),
       canvas(), owns_buffer_(false) {
@@ -89,15 +90,15 @@ bool Renderer::Process(OutTile *out, const InTile &in) {
 
   // Draw all feature paths first
 
-  for (uint sub = 0; sub < in.subLayers.size(); ++sub) {
+  for (unsigned int sub = 0; sub < in.subLayers.size(); ++sub) {
     const SubLayer* subLayer = in.subLayers[sub];
-    for (uint d = 0; d < subLayer->displayRules.size(); ++d) {
+    for (unsigned int d = 0; d < subLayer->displayRules.size(); ++d) {
       const DisplayRule* displayRule = subLayer->displayRules[d];
 
       // Feature
       {
         const Feature& feature = displayRule->feature;
-        for (uint g = 0; g < feature.paths.size(); ++g) {
+        for (unsigned int g = 0; g < feature.paths.size(); ++g) {
           switch (feature.config.displayType) {
             case VectorDefs::PointZ:
               // nothing to do - in fact we shouldn't ever get here
@@ -124,21 +125,21 @@ bool Renderer::Process(OutTile *out, const InTile &in) {
   // Render the labels after all the paths have been rendered.  This
   // prevents the paths from drawing on top of the labels.
 
-  for (uint sub = 0; sub < in.subLayers.size(); ++sub) {
+  for (unsigned int sub = 0; sub < in.subLayers.size(); ++sub) {
     const SubLayer* subLayer = in.subLayers[sub];
-    for (uint d = 0; d < subLayer->displayRules.size(); ++d) {
+    for (unsigned int d = 0; d < subLayer->displayRules.size(); ++d) {
       const DisplayRule* displayRule = subLayer->displayRules[d];
 
       // Feature
       {
         const Feature& feature = displayRule->feature;
         is_empty = is_empty && (feature.labels.size() == 0);
-        for (uint l = 0; l < feature.labels.size(); ++l) {
+        for (unsigned int l = 0; l < feature.labels.size(); ++l) {
           RenderFeatureLabel(*out->canvas, feature.config.label,
                              feature.labels[l]);
         }
         is_empty = is_empty && (feature.shields.size() == 0);
-        for (uint s = 0; s < feature.shields.size(); ++s) {
+        for (unsigned int s = 0; s < feature.shields.size(); ++s) {
           RenderFeatureShield(*out->canvas, feature.config.shield,
                               feature.shields[s]);
         }
@@ -156,7 +157,7 @@ bool Renderer::Process(OutTile *out, const InTile &in) {
           const MapSiteConfig& siteConfig = site.config;
           PointRenderer pointRenderer(featureConfig);
           is_empty = is_empty && (site.labels.size() == 0);
-          for (uint l = 0; l < site.labels.size(); ++l) {
+          for (unsigned int l = 0; l < site.labels.size(); ++l) {
             SkPoint point = site.labels[l].point;
             if (featureConfig.isPointLabelEnabled) {  // center label enabled
               pointRenderer.SetCenterLabel(site.labels[l].boundText);
@@ -175,7 +176,7 @@ bool Renderer::Process(OutTile *out, const InTile &in) {
             }
           }
         } else {
-          for (uint l = 0; l < site.labels.size(); ++l) {
+          for (unsigned int l = 0; l < site.labels.size(); ++l) {
             if (site.labels[l].visible) {
               is_empty = false;
               RenderSiteLabel(*out->canvas, site.config.label.textStyle,
@@ -244,7 +245,7 @@ bool Renderer::RenderFeaturePolygon(SkCanvas &canvas,
   pakdata->edgeFlags =
       static_cast<bool*>(mem_pool_.Allocate(pakdata->numEdgeFlags *
                                             sizeof(bool)));
-  for (uint i = 0; i < pakdata->numEdgeFlags; ++i) {
+  for (unsigned int i = 0; i < pakdata->numEdgeFlags; ++i) {
     pakdata->edgeFlags[i] = flags[i];
   }
 #endif
@@ -316,7 +317,7 @@ void Renderer::RenderFeatureShield(SkCanvas &canvas,
         SkImageDecoder::DecodeFile(ref.SourcePath().c_str(), &icon);
   }
 
-  for (uint i = 0; i < shield.points.size(); ++i) {
+  for (unsigned int i = 0; i < shield.points.size(); ++i) {
     if (bitmap_shields) {
       RenderIcon(canvas, icon, shield.icon_bounds[i]);
     } else {

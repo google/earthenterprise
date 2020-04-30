@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +19,8 @@
 #define GEO_EARTH_ENTERPRISE_SRC_FUSION_KHRASTER_FFIORASTER_H_
 
 #include "common/khConstants.h"
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "common/compressor.h"
 #include "common/khEndian.h"
 #include "fusion/khraster/khRasterTile.h"
@@ -66,7 +68,7 @@ inline const khTilespaceBase& TilespaceFromSubtype(Subtype stype) {
 // TODO: these functions are not used.
 # if 0
 
-inline uint NumCompFromSubtype(Subtype stype) {
+inline unsigned int NumCompFromSubtype(Subtype stype) {
   switch (stype) {
     case Imagery:
     case ImageryCached:
@@ -95,27 +97,27 @@ inline TileOrientation TileOrientationFromSubtype(Subtype stype) {
 // to be exactly 16 bytes long.
 class IndexTypeData {
  public:
-  uint16 tilesize;
-  uint8  numcomp;
-  uint8  datatype;    /* khTypes::Storage enum */
-  uint8  orientation; /* TileOrientation enum */
-  uint8  compression; /* CompressionMode enum */
-  uint8  subtype;     /* ffio::Raster::Subtype enum */
-  uint8  unused1;
-  uint64 unused2;
+  std::uint16_t tilesize;
+  std::uint8_t  numcomp;
+  std::uint8_t  datatype;    /* khTypes::Storage enum */
+  std::uint8_t  orientation; /* TileOrientation enum */
+  std::uint8_t  compression; /* CompressionMode enum */
+  std::uint8_t  subtype;     /* ffio::Raster::Subtype enum */
+  std::uint8_t  unused1;
+  std::uint64_t unused2;
 
   IndexTypeData(ffio::raster::Subtype  subtype_,
-                uint16                 tilesize_,
-                uint8                  numcomp_,
+                std::uint16_t                 tilesize_,
+                std::uint8_t                  numcomp_,
                 khTypes::StorageEnum   datatype_,
                 TileOrientation        orientation_,
                 CompressMode           compression_) :
       tilesize(tilesize_),
       numcomp(numcomp_),
-      datatype((uint8)datatype_),
-      orientation((uint8)orientation_),
-      compression((uint8)compression_),
-      subtype((uint8)subtype_),
+      datatype((std::uint8_t)datatype_),
+      orientation((std::uint8_t)orientation_),
+      compression((std::uint8_t)compression_),
+      subtype((std::uint8_t)subtype_),
       unused1(0),
       unused2(0) { }
   void LittleEndianToHost(void) {
@@ -134,7 +136,7 @@ class IndexTypeData {
   // used only by Reader
   IndexTypeData(void) { }
 };
-COMPILE_TIME_CHECK(sizeof(IndexTypeData) == 16, BadIndexTypeDataSize);
+static_assert(sizeof(IndexTypeData) == 16, "Bad Index Type Data Size");
 
 
 }  // namespace ffio::Raster

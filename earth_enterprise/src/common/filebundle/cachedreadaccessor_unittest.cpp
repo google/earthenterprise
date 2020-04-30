@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -52,7 +53,7 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
     path_base_ = "/tmp/tests/cachedreadaccessor_unittest_data/";
     test_buffer_ = new char[file_bundle_size_];
     char next_char = 0;
-    for(uint32 i = 0; i < file_bundle_size_; ++i) {
+    for(std::uint32_t i = 0; i < file_bundle_size_; ++i) {
       test_buffer_[i] = next_char++;
     }
     bundle_name_ = path_base_ + "TestBasics";
@@ -69,8 +70,8 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
   }
 
   // Maintain Test bundle info for all the tests.
-  uint32 file_bundle_size_;
-  uint32 segment_size_;
+  std::uint32_t file_bundle_size_;
+  std::uint32_t segment_size_;
   std::string path_base_;
   std::string bundle_name_;
   char* test_buffer_;
@@ -87,11 +88,11 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
 
     // Write record with CRC
     // must only create one segment.
-    uint64 location = writer.WriteAppendCRC(test_buffer_, file_bundle_size_);
+    std::uint64_t location = writer.WriteAppendCRC(test_buffer_, file_bundle_size_);
     (void)location;
     header_path_ = writer.HeaderPath();
-    uint32 segment_count = writer.SegmentCount();
-    for(uint32 i = 0; i < segment_count; ++i) {
+    std::uint32_t segment_count = writer.SegmentCount();
+    for(std::uint32_t i = 0; i < segment_count; ++i) {
       std::string filename = writer.abs_path() + writer.Segment(i)->name();
       segment_names_.push_back(filename);
     }
@@ -101,9 +102,9 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
   }
 
   // Utility for comparing buffers nicely
-  bool TestBuffer(char* actual, char* expected, uint32 size,
+  bool TestBuffer(char* actual, char* expected, std::uint32_t size,
                   std::string prefix) {
-    for(uint32 i = 0; i < size; ++i) {
+    for(std::uint32_t i = 0; i < size; ++i) {
       if (actual[i] != expected[i]) {
         std::cerr << "FAILED [" << prefix <<
           "]: character missmatch at index " << i <<
@@ -118,26 +119,26 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
   // Test the CachedReadAccessor Pread() method.
   // This is the main method exposed by CachedReadAccessor.
   bool TestCachedReadAccessorPreadPerformance() {
-    uint32 segment_id = 0;
+    std::uint32_t segment_id = 0;
     // Read request that is contained in 1 block.
     FileBundleReaderSegment segment(file_pool_,
                                     path_base_,
                                     segment_names_[segment_id],
                                     segment_names_[segment_id],
                                     segment_id);
-    uint32 request_count = 1500; // typical 1500B for some Fusion packets.
-    uint32 best_mb_per_sec = 0;
-    uint32 best_kilobytes = 0;
-    for(uint32 bytes = 1 << 14; bytes < 1 << 22; bytes <<= 1) {
-      uint32 kilobytes = bytes / 1024;
+    std::uint32_t request_count = 1500; // typical 1500B for some Fusion packets.
+    std::uint32_t best_mb_per_sec = 0;
+    std::uint32_t best_kilobytes = 0;
+    for(std::uint32_t bytes = 1 << 14; bytes < 1 << 22; bytes <<= 1) {
+      std::uint32_t kilobytes = bytes / 1024;
       std::string prefix = "Cached read 2x " + Itoa(kilobytes) + "KB";
-      uint32 mb_per_sec = TestReadAll(segment, request_count, 2, bytes, prefix);
+      std::uint32_t mb_per_sec = TestReadAll(segment, request_count, 2, bytes, prefix);
       if (mb_per_sec > best_mb_per_sec) {
         best_mb_per_sec = mb_per_sec;
         best_kilobytes = kilobytes;
       }
     }
-    uint32 uncached_mb_per_sec = TestReadAll(segment, request_count, 0, 0,
+    std::uint32_t uncached_mb_per_sec = TestReadAll(segment, request_count, 0, 0,
                 std::string("Uncached read"));
     if (best_mb_per_sec > uncached_mb_per_sec) {
       std::cerr << "Cached is optimal " << best_mb_per_sec <<
@@ -153,10 +154,10 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
 
   // Utility for running timings of reads of the filebundle segment with
   // different caching.
-  uint32 TestReadAll(FileBundleReaderSegment& segment,
-                   uint32 request_count,
-                   uint32 max_blocks,
-                   uint32 block_size,
+  std::uint32_t TestReadAll(FileBundleReaderSegment& segment,
+                   std::uint32_t request_count,
+                   std::uint32_t max_blocks,
+                   std::uint32_t block_size,
                    std::string prefix) {
     std::string buffer;
     buffer.reserve(block_size);
@@ -166,12 +167,12 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
     // Test Read uncached of entire filebundle
     CachedReadAccessor accessor(max_blocks < 2 ? 2 : max_blocks, block_size);
     khTimer_t begin = khTimer::tick();
-    uint32 read_count = 0;
-    uint32 packet_count = 0;
-    uint64 stats_bytes_read = 0;
-    uint64 stats_disk_accesses = 0;
-    for(uint32 offset = 0; offset < file_bundle_size_; offset += request_count) {
-      uint32 size = std::min(request_count, file_bundle_size_ - offset);
+    std::uint32_t read_count = 0;
+    std::uint32_t packet_count = 0;
+    std::uint64_t stats_bytes_read = 0;
+    std::uint64_t stats_disk_accesses = 0;
+    for(std::uint32_t offset = 0; offset < file_bundle_size_; offset += request_count) {
+      std::uint32_t size = std::min(request_count, file_bundle_size_ - offset);
       if (max_blocks == 0) { // No cache...read via the segment directly.
         segment.Pread(out_buffer, size, offset);
         stats_bytes_read += size;
@@ -184,7 +185,7 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
       packet_count++;
     }
     khTimer_t end = khTimer::tick();
-    uint32 megabytes_per_second = static_cast<uint32>(read_count /
+    std::uint32_t megabytes_per_second = static_cast<std::uint32_t>(read_count /
       (khTimer::delta_s(begin, end) * 1000000));
     std::cerr << prefix << ": " << request_count << " bytes per packet " <<
       packet_count << " packets " <<
@@ -194,14 +195,14 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
       stats_bytes_read = accessor.StatsBytesRead();
       stats_disk_accesses = accessor.StatsDiskAccesses();
     }
-    uint64 chunk_sizes = block_size;
+    std::uint64_t chunk_sizes = block_size;
     if (max_blocks < 2) {
       chunk_sizes = request_count;
     }
-    uint64 desired_disk_accesses = (file_bundle_size_ + chunk_sizes - 1) / chunk_sizes;
-    TestAssertEquals(stats_bytes_read, static_cast<uint64>(file_bundle_size_));
+    std::uint64_t desired_disk_accesses = (file_bundle_size_ + chunk_sizes - 1) / chunk_sizes;
+    TestAssertEquals(stats_bytes_read, static_cast<std::uint64_t>(file_bundle_size_));
     TestAssertEquals(stats_disk_accesses,
-                     static_cast<uint64>(desired_disk_accesses));
+                     static_cast<std::uint64_t>(desired_disk_accesses));
 
     std::cerr << "Read " << stats_bytes_read << " bytes from disk in " <<
       stats_disk_accesses << " reads" << std::endl;
@@ -212,14 +213,14 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
   // Test the CachedReadAccessor Pread() method.
   // This is the main method exposed by CachedReadAccessor.
   bool TestCachedReadAccessorPread() {
-    uint32 offset = 13;
-    uint32 segment_id = 0;
-    uint32 block_size = file_bundle_size_ / 4;
+    std::uint32_t offset = 13;
+    std::uint32_t segment_id = 0;
+    std::uint32_t block_size = file_bundle_size_ / 4;
     CachedReadAccessor accessor(2, block_size);
 
     // Test Read
     // Read request that is contained in 1 block.
-    uint32 request_count = block_size - offset - 10;
+    std::uint32_t request_count = block_size - offset - 10;
     FileBundleReaderSegment segment(file_pool_,
                                     path_base_,
                                     segment_names_[segment_id],
@@ -278,18 +279,18 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
   // Test the CachedReadAccessor utility methods BlockAddress(),
   // AddCacheBlock(), GetCacheBlock() and FindBlocks().
   bool TestCachedReadAccessorBasics() {
-    uint32 offset = 13;
-    uint32 segment_id = 0;
-    uint32 block_size = file_bundle_size_ / 4;
-    uint64 access_tick = 1033;
+    std::uint32_t offset = 13;
+    std::uint32_t segment_id = 0;
+    std::uint32_t block_size = file_bundle_size_ / 4;
+    std::uint64_t access_tick = 1033;
 
     CachedReadAccessor accessor(2, block_size);
 
     // Test BlockAddress
     CachedReadAccessor::CacheBlockAddress address1 =
       accessor.BlockAddress(segment_id, offset);
-    TestAssertEquals(address1.Offset(), static_cast<uint32>(0));
-    uint32 n = 7;
+    TestAssertEquals(address1.Offset(), static_cast<std::uint32_t>(0));
+    std::uint32_t n = 7;
     CachedReadAccessor::CacheBlockAddress address2 =
       accessor.BlockAddress(segment_id, offset + n * block_size);
     TestAssertEquals(address2.Offset(), n * block_size);
@@ -309,7 +310,7 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
     TestAssertEquals(block2, block2_b);
     TestAssert(block1 != block2);
     block2->SetLastAccessTick(access_tick+1);
-    uint64 block1_access_tick = block1->LastAccessTick();
+    std::uint64_t block1_access_tick = block1->LastAccessTick();
 
     // Ok, we have block1 and block2
     // Now we try to get block3, should force one of the cached blocks out of
@@ -338,17 +339,17 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
     // Test FindBlocks
     // case 1: request spans a single block
     // case 2: request spans two blocks
-    uint32 in_block_offset = 33;
+    std::uint32_t in_block_offset = 33;
     offset = block_size + in_block_offset;
     address1 = accessor.BlockAddress(segment_id, offset);
     address2 = accessor.BlockAddress(segment_id, offset + block_size);
 
     // test these cases when not cached and then again when cached.
-    uint32 request_size = block_size - 2 * in_block_offset;
+    std::uint32_t request_size = block_size - 2 * in_block_offset;
     // set request size to guarantee to be within 1 block.
-    uint32 blocks_returned = accessor.FindBlocks(segment_id, request_size, offset,
+    std::uint32_t blocks_returned = accessor.FindBlocks(segment_id, request_size, offset,
                                         &block1, &block2);
-    TestAssertEquals(blocks_returned, static_cast<uint32>(1));
+    TestAssertEquals(blocks_returned, static_cast<std::uint32_t>(1));
     TestAssert(block2 == NULL);
     TestAssert(block1 != NULL);
     block1->SetLastAccessTick(access_tick++); // Make sure it stays in the cache.
@@ -358,7 +359,7 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
                                         request_size - 3 * in_block_offset,
                                         offset + in_block_offset,
                                         &block1_b, &block2);
-    TestAssertEquals(blocks_returned, static_cast<uint32>(1));
+    TestAssertEquals(blocks_returned, static_cast<std::uint32_t>(1));
     TestAssert(block2 == NULL);
     TestAssert(block1 == block1_b);
 
@@ -366,7 +367,7 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
     request_size = block_size - in_block_offset / 2;
     blocks_returned = accessor.FindBlocks(segment_id, request_size, offset,
                                         &block1_b, &block2);
-    TestAssertEquals(blocks_returned, static_cast<uint32>(2));
+    TestAssertEquals(blocks_returned, static_cast<std::uint32_t>(2));
     TestAssert(block2 != NULL); // Make sure it stays in the cache.
     block2->SetLastAccessTick(access_tick++);
     TestAssert(block1 == block1_b);
@@ -376,7 +377,7 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
                                         request_size,
                                         offset + in_block_offset,
                                         &block1_b, &block2_b);
-    TestAssertEquals(blocks_returned, static_cast<uint32>(2));
+    TestAssertEquals(blocks_returned, static_cast<std::uint32_t>(2));
     TestAssert(block2 == block2_b);
     TestAssert(block1 == block1_b);
     return true;
@@ -384,11 +385,11 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
 
   // Test the CacheBlock utility object Read() and LastAccessTick().
   bool TestCacheBlock() {
-    uint32 offset = 13;
-    uint32 segment_id = 0;
-    uint32 block_size = file_bundle_size_ / 4;
+    std::uint32_t offset = 13;
+    std::uint32_t segment_id = 0;
+    std::uint32_t block_size = file_bundle_size_ / 4;
     CachedReadAccessor::CacheBlockAddress address1(segment_id, 0);
-    uint64 access_tick = 1033;
+    std::uint64_t access_tick = 1033;
     CachedReadAccessor::CacheBlock block1(address1, block_size);
 
     // Check the initial access tick
@@ -398,7 +399,7 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
 
     // Test Read
     // Read request that is contained in 1 block.
-    uint32 request_count = block_size - offset - 10;
+    std::uint32_t request_count = block_size - offset - 10;
     FileBundleReaderSegment segment(file_pool_,
                                     path_base_,
                                     segment_names_[segment_id],
@@ -410,14 +411,14 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
     char* out_buffer = const_cast<char*>(buffer.data());
 
     // Test read within non-cached (uninitialized) block
-    uint64 stats_bytes_read = 0;
-    uint64 stats_disk_accesses = 0;
-    uint32 read_count =
+    std::uint64_t stats_bytes_read = 0;
+    std::uint64_t stats_disk_accesses = 0;
+    std::uint32_t read_count =
       block1.Read(segment, out_buffer, request_count, offset, access_tick++,
                   stats_bytes_read, stats_disk_accesses);
     TestAssert(block1.LastAccessTick() + 1 == access_tick);
-    TestAssertEquals(stats_bytes_read, static_cast<uint64>(block_size));
-    TestAssertEquals(stats_disk_accesses, static_cast<uint64>(1));
+    TestAssertEquals(stats_bytes_read, static_cast<std::uint64_t>(block_size));
+    TestAssertEquals(stats_disk_accesses, static_cast<std::uint64_t>(1));
     TestAssertEquals(request_count, read_count);
     char* expected = test_buffer_ + offset;
     if (!TestBuffer(out_buffer, expected, read_count,
@@ -431,8 +432,8 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
     read_count =
       block1.Read(segment, out_buffer, request_count, offset, access_tick++,
                   stats_bytes_read, stats_disk_accesses);
-    TestAssertEquals(stats_bytes_read, static_cast<uint64>(block_size));
-    TestAssertEquals(stats_disk_accesses, static_cast<uint64>(1));
+    TestAssertEquals(stats_bytes_read, static_cast<std::uint64_t>(block_size));
+    TestAssertEquals(stats_disk_accesses, static_cast<std::uint64_t>(1));
     TestAssertEquals(request_count, read_count);
     expected = test_buffer_ + offset;
     if (!TestBuffer(out_buffer, expected, read_count,
@@ -446,14 +447,14 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
     request_count = 200;
     buffer.resize(request_count);
 
-    uint32 expected_read_count = 133;
+    std::uint32_t expected_read_count = 133;
     offset = block_size - expected_read_count;
     // Read from a non-cached block
     read_count =
       block1.Read(segment, out_buffer, request_count, offset, access_tick++,
                   stats_bytes_read, stats_disk_accesses);
-    TestAssertEquals(stats_bytes_read, static_cast<uint64>(2*block_size));
-    TestAssertEquals(stats_disk_accesses, static_cast<uint64>(2));
+    TestAssertEquals(stats_bytes_read, static_cast<std::uint64_t>(2*block_size));
+    TestAssertEquals(stats_disk_accesses, static_cast<std::uint64_t>(2));
     TestAssertEquals(expected_read_count, read_count);
     expected = test_buffer_ + offset;
     if (!TestBuffer(out_buffer, expected, read_count,
@@ -476,8 +477,8 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
   // Test CacheBlockAddress Utility class, mostly that constructor and
   // comparison operators are properly defined.
   bool TestCacheBlockAddress() {
-    uint32 offset = 100;
-    uint32 segment_id = 1010;
+    std::uint32_t offset = 100;
+    std::uint32_t segment_id = 1010;
     CachedReadAccessor::CacheBlockAddress address1(segment_id, offset);
     TestAssertEquals(offset, address1.Offset());
 

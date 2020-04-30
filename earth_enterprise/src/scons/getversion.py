@@ -85,16 +85,16 @@ def _GitVersionNameAndBuildNumber():
         if not branchName:
             # we are a detached head not on a release tag so just treat
             # the the first part of the raw describe as the release name
-            # added the b to the build number to signal this is not a releasable build
-            return _GetCommitRawDescription().split('-')[0], "b{0}-{1}".format(_GitCommitCount(), open_gee_version.get_commit_hash_from_tag('HEAD'))
+            # append '.beta' to the build number to signal this is not a tested build
+            return _GetCommitRawDescription().split('-')[0], "{0}.beta-{1}".format(_GitCommitCount(), open_gee_version.get_commit_hash_from_tag('HEAD'))
         else:
             # Get the version name from the branch name
             if _IsReleaseBranch(branchName):
                 tailTag = _GetReleaseTailTag(branchName)
                 return _GetReleaseVersionName(branchName), '{0}.{1}'.format(_GitBranchedCommitCount(tailTag), _GitCommitCount('HEAD', tailTag))
             else:
-                # added the b to the build number to signal this is not a releasable build
-                return _GetCommitRawDescription().split('-')[0],  "b{0}-{1}".format(_GitCommitCount(), _sanitizeBranchName(branchName))
+                # append '.beta' to the build number to signal this is not a tested build
+                return _GetCommitRawDescription().split('-')[0],  "{0}.beta-{1}".format(_GitCommitCount(), _sanitizeBranchName(branchName))
 
 
 def _GitBranchedCommitCount(tailTag):
@@ -384,11 +384,15 @@ def main():
     parser.add_argument("-l", "--long", action="store_true", help="Output long format of version string")
     args = parser.parse_args()
 
-    print open_gee_version.get_long() if args.long else open_gee_version.get_short()
+    sys.stdout.write(open_gee_version.get_long() if args.long else open_gee_version.get_short())
+    sys.stdout.write('\n')
+    sys.stdout.flush()
 
     warning_message = open_gee_version.get_warning_message()
     if warning_message is not None:
-        print >> sys.stderr, warning_message
+        sys.stderr.write(warning_message)
+        sys.stderr.write('\n')
+        sys.stderr.flush()
 
 
 __all__ = ['open_gee_version']

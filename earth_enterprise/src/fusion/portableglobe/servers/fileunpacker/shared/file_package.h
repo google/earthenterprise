@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +41,6 @@
 #define GEO_EARTH_ENTERPRISE_SRC_FUSION_PORTABLEGLOBE_SERVERS_FILEUNPACKER_SHARED_FILE_PACKAGE_H_
 
 #include <string>
-#include "./khTypes.h"
 #include "./glc_reader.h"
 
 /**
@@ -50,7 +50,7 @@
 class PackageFileLoc {
  public:
   PackageFileLoc() { }
-  PackageFileLoc(int64 offset, uint64 size)
+  PackageFileLoc(std::int64_t offset, std::uint64_t size)
       : offset_(offset), size_(size) { }
 
   // Normalize negative offset by the filesize. I.e. use it as a negative
@@ -60,7 +60,7 @@ class PackageFileLoc {
   // glms in a glc, and then small updates could be added repeatedly using
   // negative offsets to the updated data, without having to worry how many
   // updates might have been added to the glc previously.
-  void NormalizeNegativeOffset(uint64 file_size) {
+  void NormalizeNegativeOffset(std::uint64_t file_size) {
     if (offset_ < 0) {
       offset_ += file_size;
     }
@@ -68,14 +68,14 @@ class PackageFileLoc {
 
   // Add base offset to offset. Useful for access files within files,
   // such as a glb stored within a glc.
-  void AddBaseToOffset(uint64 base) { offset_ += base; }
-  void Set(int64 offset, uint64 size) {
+  void AddBaseToOffset(std::uint64_t base) { offset_ += base; }
+  void Set(std::int64_t offset, std::uint64_t size) {
      offset_ = offset;
      size_ = size;
   }
 
-  int64 Offset() const { return offset_; }
-  uint64 Size() const { return size_; }
+  std::int64_t Offset() const { return offset_; }
+  std::uint64_t Size() const { return size_; }
 
   // For Swig and accessing values via Python.
   int LowOffset() { return (offset_ & 0x000000000ffffffff); }
@@ -84,8 +84,8 @@ class PackageFileLoc {
   int HighSize() { return ((size_ >> 32) & 0x000000000ffffffff); }
 
  private:
-  int64 offset_;
-  uint64 size_;
+  std::int64_t offset_;
+  std::uint64_t size_;
 };
 
 /**
@@ -126,12 +126,12 @@ class Package {
   /**
    * Calculate crc for the given file.
    */
-  static uint32 CalculateCrc(const GlcReader& glc_reader);
+  static std::uint32_t CalculateCrc(const GlcReader& glc_reader);
 
   /**
    * Read crc for given file from the file.
    */
-  static uint32 ReadCrc(const GlcReader& glc_reader);
+  static std::uint32_t ReadCrc(const GlcReader& glc_reader);
 
   /**
    * Read version string from the file.

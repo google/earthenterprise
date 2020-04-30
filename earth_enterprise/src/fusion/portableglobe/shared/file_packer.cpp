@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -39,7 +40,7 @@ size_t GetCrc(std::string file_name, IncrementalCrcCalculator* crc_calculator) {
 
   std::string crc_file = file_name + kCrcFileExtension;
   bool crc_found = false;
-  uint32 crc = 0;
+  std::uint32_t crc = 0;
   // [1] Check if crc file exists, if so then use that.
   if (khExists(crc_file)) {
     std::ifstream fp_in(crc_file.c_str(), std::ios::binary);
@@ -143,7 +144,7 @@ FilePacker::~FilePacker() {
  */
 void FilePacker::AddFile(const std::string& path, size_t prefix_len) {
   // Get length of file.
-  uint64 length = khGetFileSizeOrThrow(path);
+  std::uint64_t length = khGetFileSizeOrThrow(path);
 
   std::ifstream fp_in(path.c_str(), std::ios::binary);
   if (!fp_in) {
@@ -152,7 +153,7 @@ void FilePacker::AddFile(const std::string& path, size_t prefix_len) {
 
   // Append file to end of package file.
   char buffer[4096];
-  uint64 bytes_remaining = length;
+  std::uint64_t bytes_remaining = length;
   size_t buffer_size = 4096;
   while (bytes_remaining > 0) {
     if (bytes_remaining < buffer_size) {
@@ -194,14 +195,14 @@ void FilePacker::AddAllFiles(const std::string& path, size_t prefix_len) {
  * Adds the index to the end of the package.
  */
 void FilePacker::AddIndexToPackage() {
-  uint64 index_offset = addendum_offset_ + write_pos_;
+  std::uint64_t index_offset = addendum_offset_ + write_pos_;
 
   // Save all of the files in the index.
-  uint32 num_files = index_.size();
+  std::uint32_t num_files = index_.size();
   fp_out_.write(reinterpret_cast<char*>(&num_files), 4);
   for (size_t i = 0; i < num_files; ++i) {
     std::string path = index_[i].Path();
-    uint16 path_len = path.size();
+    std::uint16_t path_len = path.size();
     fp_out_.write(reinterpret_cast<char*>(&path_len),
                   sizeof(path_len));
     fp_out_.write(&path[0], path_len);
@@ -229,7 +230,7 @@ void FilePacker::AddVersionToPackage() {
  */
 void FilePacker::AddCrcToPackage() {
   // Save crc.
-  const uint32 crc = crc_calculator_.GetCrc();
+  const std::uint32_t crc = crc_calculator_.GetCrc();
   fp_out_.write(reinterpret_cast<const char*>(&crc), 4);
   fp_out_.close();
 }

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -215,7 +216,7 @@ main(int argc, char *argv[]) {
       if (!providers.Load()) {
         notify(NFY_FATAL, "Unable to load provider list");
       }
-      for (uint i = 0 ; i < providers.items.size(); ++i) {
+      for (unsigned int i = 0 ; i < providers.items.size(); ++i) {
         if (providers.items[i].key == providerkey) {
           req.config.provider_id_ = providers.items[i].id;
         }

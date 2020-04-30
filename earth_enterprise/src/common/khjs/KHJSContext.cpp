@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -253,7 +254,7 @@ KHJSContextImpl::ExecuteScript(const KHJSScript &script, QString &ret)
 
 
 void
-KHJSContextImpl::ExecuteScript(const KHJSScript &script, int32 &ret)
+KHJSContextImpl::ExecuteScript(const KHJSScript &script, std::int32_t &ret)
 {
   // Give this thread permission to execute in the context
   JSContextUser jsuser(khRefGuardFromThis());
@@ -263,7 +264,7 @@ KHJSContextImpl::ExecuteScript(const KHJSScript &script, int32 &ret)
 }
 
 void
-KHJSContextImpl::ExecuteScript(const KHJSScript &script, uint32 &ret)
+KHJSContextImpl::ExecuteScript(const KHJSScript &script, std::uint32_t &ret)
 {
   // Give this thread permission to execute in the context
   JSContextUser jsuser(khRefGuardFromThis());

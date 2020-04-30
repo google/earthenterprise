@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,8 +49,8 @@ class PacketBundleReader : public PacketBundle {
    * @param data String in which the packet is returned.
    */
   bool ReadPacket(const std::string qtpath,
-                  uint8 packet_type,
-                  uint16 channel,
+                  std::uint8_t packet_type,
+                  std::uint16_t channel,
                   std::string* data);
 
   /**
@@ -70,8 +71,8 @@ class PacketBundleReader : public PacketBundle {
    */
   bool BruteForceFindPacketInIndexForDebug(IndexItem* index_item);
 
-  static const uint32 MAX_INDEX_ITEMS_;
-  uint32 num_index_items_;
+  static const std::uint32_t MAX_INDEX_ITEMS_;
+  std::uint32_t num_index_items_;
   std::vector<IndexItem> index_cache_;
 };
 

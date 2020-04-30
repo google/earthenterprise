@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,10 +31,10 @@
 // Constants
 const size_t FileBundle::kCRCsize = kCRC32Size;
 const std::string FileBundle::kHeaderSignature("FileBundleHeader");
-const uint32 FileBundle::kFormatVersion = 0x00000002;
+const std::uint32_t FileBundle::kFormatVersion = 0x00000002;
 const std::string FileBundle::kHeaderFileName("bundle.hdr");
-const uint32 FileBundle::kSegmentFileSuffixLength = 4;
-const uint32 FileBundle::kSegmentFileCountMax = 10000;
+const std::uint32_t FileBundle::kSegmentFileSuffixLength = 4;
+const std::uint32_t FileBundle::kSegmentFileCountMax = 10000;
 
 
 // FileBundleSegment
@@ -42,7 +43,7 @@ const uint32 FileBundle::kSegmentFileCountMax = 10000;
 
 FileBundleSegment::FileBundleSegment(const std::string &filename,
                                      const std::string &orig_abs_path,
-                                     uint32 id)
+                                     std::uint32_t id)
     : name_(filename),
       orig_abs_path_(orig_abs_path),
       data_size_(0), id_(id) {
@@ -53,7 +54,7 @@ FileBundleReaderSegment::FileBundleReaderSegment(
     const std::string &abs_path,
     const std::string &filename,
     const std::string &orig_abs_path,
-    uint32 id)
+    std::uint32_t id)
     : FileBundleSegment(filename, orig_abs_path, id),
       reader_(TransferOwnership(new geFilePool::Reader(
                                     file_pool, khIsAbspath(filename)
@@ -65,7 +66,7 @@ FileBundleWriterSegment::FileBundleWriterSegment(
     geFilePool &file_pool,
     const std::string &abs_path,
     const std::string &filename,
-    uint32 id,
+    std::uint32_t id,
     mode_t mode)
     : FileBundleSegment(filename, abs_path, id),
       writer_(TransferOwnership(
@@ -110,7 +111,7 @@ void FileBundleWriterSegment::Pwrite(const void *buffer, size_t size,
 
 FileBundle::FileBundle(geFilePool & file_pool,
                        const std::string &path,
-                       uint64 segment_break)
+                       std::uint64_t segment_break)
     : file_pool_(file_pool),
       abs_path_(khNormalizeDir(khAbspath(path))),
       segment_break_(segment_break),
@@ -124,7 +125,7 @@ FileBundle::FileBundle(geFilePool & file_pool,
 
 FileBundle::FileBundle(geFilePool & file_pool,
                        const std::string &path,
-                       uint64 segment_break,
+                       std::uint64_t segment_break,
                        const std::string &prefix)
     : file_pool_(file_pool),
       abs_path_(khNormalizeDir(khAbspath(path))),
@@ -144,7 +145,7 @@ void FileBundle::CleanupCachedReadAccessor() {
   cached_read_accessor_.clear();
 }
 
-void FileBundle::EnableReadCache(uint32 max_blocks, uint32 block_size) {
+void FileBundle::EnableReadCache(std::uint32_t max_blocks, std::uint32_t block_size) {
   CleanupCachedReadAccessor();
   // Don't enable read cache for less than 2 blocks.
   if (max_blocks >= 2) {
@@ -182,9 +183,9 @@ void FileBundle::LoadHeaderFile() {
     }
 
     // Check CRC of header
-    uint32 computed_crc = Crc32(buffer.data(), buffer.size() - kCRCsize);
+    std::uint32_t computed_crc = Crc32(buffer.data(), buffer.size() - kCRCsize);
     std::string::size_type after_sig = buffer.Seek(buffer.size() - kCRCsize);
-    uint32 loaded_crc;
+    std::uint32_t loaded_crc;
     buffer.Pull(&loaded_crc);
     if (computed_crc != loaded_crc) {
       throw khSimpleException("FileBundleReader: corrupt header, bad CRC: ")
@@ -194,28 +195,28 @@ void FileBundle::LoadHeaderFile() {
     buffer.Seek(after_sig);                   // restore position
 
     // Extract numeric data values
-    uint32 format_version;
+    std::uint32_t format_version;
     buffer.Pull(&format_version);
     if (format_version != kFormatVersion) {
       throw khSimpleException("FileBundleReader: unknown header version ")
         << format_version << " in " << HeaderPath();
     }
 
-    uint32 segment_count;
+    std::uint32_t segment_count;
     buffer.Pull(&segment_count);
     if (segment_count == 0  ||  segment_count > kSegmentFileCountMax) {
       throw khSimpleException("FileBundleReader: corrupt header segment count ")
         << segment_count << " in " << HeaderPath();
     }
 
-    uint64 break_value;
+    std::uint64_t break_value;
     buffer.Pull(&break_value);
     if (break_value == 0) {
       throw khSimpleException(
           "FileBundleReader: corrupt header, segment break is 0")
             << " in " << HeaderPath();
     }
-    *const_cast<uint64 *>(&segment_break_) = break_value;
+    *const_cast<std::uint64_t *>(&segment_break_) = break_value;
 
     // Extract orig abs path for header file
 
@@ -237,7 +238,7 @@ void FileBundle::LoadHeaderFile() {
 
     ReserveSegments(segment_count);
 
-    for (uint32 i = 0; i < segment_count; ++i) {
+    for (std::uint32_t i = 0; i < segment_count; ++i) {
       // Copy the zero-terminated file name to a string
       std::string orig_abs_path;
       buffer.Pull(&orig_abs_path);
@@ -264,7 +265,7 @@ void FileBundle::LoadHeaderFile() {
         file_name = khRelativePath(abs_path_, file_name);
         was_relative_paths_ = false;
       }
-      uint32 segment_size;
+      std::uint32_t segment_size;
       buffer.Pull(&segment_size);
 
       // Add to segment table
@@ -327,7 +328,7 @@ void FileBundle::BuildHeaderWriteBuffer(EndianWriteBuffer &buffer) const {
   buffer << FixedLengthString(kHeaderSignature, kHeaderSignature.size());
 
   buffer.push(kFormatVersion);
-  buffer.push(static_cast<uint32>(SegmentCount()));
+  buffer.push(static_cast<std::uint32_t>(SegmentCount()));
   buffer.push(segment_break());
   // Convert all absolute paths to relative paths w.r.t abs_path_
   buffer.push(hdr_orig_abs_path_.empty() ? hdr_orig_abs_path_
@@ -352,13 +353,13 @@ void FileBundle::BuildHeaderWriteBuffer(EndianWriteBuffer &buffer) const {
 // segment boundary).  Output is pointer to segment, and offset within
 // segment.
 
-void FileBundle::PositionToSegment(uint64 bundle_pos,
+void FileBundle::PositionToSegment(std::uint64_t bundle_pos,
                                    size_t buffer_len,
                                    FileBundleSegment::Type seg_type,
                                    FileBundleSegment **segment,
-                                   int32 *segment_offset) const {
-  uint64 seg_number = bundle_pos / segment_break();
-  uint64 seg_offset = bundle_pos % segment_break();
+                                   std::int32_t *segment_offset) const {
+  std::uint64_t seg_number = bundle_pos / segment_break();
+  std::uint64_t seg_offset = bundle_pos % segment_break();
 
   // Make sure position is completely within a valid segment
   if (seg_number >= SegmentCount()
@@ -380,9 +381,9 @@ void FileBundle::PositionToSegment(uint64 bundle_pos,
 
 // IsWriteable - determine if specified position is within an
 // existing, writeable segment
-bool FileBundle::IsWriteable(uint64 bundle_pos) const {
-  uint64 seg_number = bundle_pos / segment_break();
-  uint64 seg_offset = bundle_pos % segment_break();
+bool FileBundle::IsWriteable(std::uint64_t bundle_pos) const {
+  std::uint64_t seg_number = bundle_pos / segment_break();
+  std::uint64_t seg_offset = bundle_pos % segment_break();
   return seg_number < SegmentCount()
     && Segment(seg_number)->SegmentType() == FileBundleSegment::kWriterSegment
     && seg_offset < Segment(seg_number)->data_size();
@@ -393,8 +394,8 @@ bool FileBundle::IsWriteable(uint64 bundle_pos) const {
 // addresses are multiples of segment break).  Throws exception if
 // invalid position.
 
-uint64 FileBundle::LinearToBundlePosition(uint64 linear_position) const {
-  uint64 remainder = linear_position;
+ std::uint64_t FileBundle::LinearToBundlePosition(std::uint64_t linear_position) const {
+  std::uint64_t remainder = linear_position;
   size_t seg = 0;
   while (seg < segment_.size()  &&  remainder >= Segment(seg)->data_size()) {
     remainder -= Segment(seg)->data_size();
@@ -411,10 +412,10 @@ uint64 FileBundle::LinearToBundlePosition(uint64 linear_position) const {
 // ReadAt - read data at specified position in segment.  Throws
 // exception if error.
 
-void FileBundle::ReadAt(uint64 read_pos, void *buffer, size_t read_len) const {
+void FileBundle::ReadAt(std::uint64_t read_pos, void *buffer, size_t read_len) const {
   // Make sure position is completely within a valid segment
   FileBundleSegment *segment;
-  int32 seg_offset;
+  std::int32_t seg_offset;
   PositionToSegment(read_pos,
                     read_len,
                     FileBundleSegment::kAnySegment,
@@ -434,7 +435,7 @@ void FileBundle::ReadAt(uint64 read_pos, void *buffer, size_t read_len) const {
   }
 }
 
-void FileBundle::ReadAtCRC(uint64 read_pos, void *buffer,
+void FileBundle::ReadAtCRC(std::uint64_t read_pos, void *buffer,
                            size_t read_len) const {
   if (read_len <= kCRCsize) {
     throw khSimpleException
@@ -444,8 +445,8 @@ void FileBundle::ReadAtCRC(uint64 read_pos, void *buffer,
   ReadAt(read_pos, buffer, read_len);
 
   size_t data_len = read_len - kCRCsize;
-  uint32 computed_crc = Crc32(buffer, data_len);
-  uint32 file_crc;
+  std::uint32_t computed_crc = Crc32(buffer, data_len);
+  std::uint32_t file_crc;
   memcpy(&file_crc,
          reinterpret_cast<char*>(buffer) + data_len,
          sizeof(file_crc));
@@ -453,7 +454,7 @@ void FileBundle::ReadAtCRC(uint64 read_pos, void *buffer,
   if (computed_crc != file_crc) {
     // Get file name from segment for error report
     FileBundleSegment *segment;
-    int32 seg_offset;
+    std::int32_t seg_offset;
     PositionToSegment(read_pos,
                       read_len,
                       FileBundleSegment::kAnySegment,
@@ -507,7 +508,7 @@ void FileBundle::AppendManifest(std::vector<ManifestEntry> &manifest,
   entry->orig_path = hdr_orig_abs_path().empty() ? header_path :
       hdr_orig_abs_path() + kHeaderFileName;
   std::string* curr_header_path = &entry->current_path;
-  uint64* curr_size = &entry->data_size;
+  std::uint64_t* curr_size = &entry->data_size;
   // Note: We need to give the size exactly as it will look like when we finally
   // transfer, not what it is now. This is required as we match file sizes along
   // with file name while doing the delta transfer.
@@ -546,8 +547,8 @@ void FileBundle::AppendManifest(std::vector<ManifestEntry> &manifest,
 
 void FileBundle::ClearOrigPaths(void) {
   hdr_orig_abs_path_.clear();
-  uint segment_count = SegmentCount();
-  for (uint i = 0; i < segment_count; ++i) {
+  unsigned int segment_count = SegmentCount();
+  for (unsigned int i = 0; i < segment_count; ++i) {
     Segment(i)->clear_orig_abs_path();
   }
 }

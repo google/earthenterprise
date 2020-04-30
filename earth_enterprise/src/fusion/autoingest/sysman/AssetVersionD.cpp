@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -192,17 +193,17 @@ AssetVersionImplD::AddInputAssetRefs(const std::vector<SharedString> &inputs_)
 
 AssetDefs::State
 AssetVersionImplD::StateByInputs(bool *blockersAreOffline,
-                                 uint32 *numWaiting) const
+                                 std::uint32_t *numWaiting) const
 {
   // load my input versions (only if they aren't already loaded)
   InputVersionGuard guard(this);
 
 
   // find out how my inputs are doing
-  uint numinputs = inputs.size();
-  uint numgood = 0;
-  uint numblocking = 0;
-  uint numoffline = 0;
+  unsigned int numinputs = inputs.size();
+  unsigned int numgood = 0;
+  unsigned int numblocking = 0;
+  unsigned int numoffline = 0;
   for (std::vector<AssetVersion>::const_iterator i =
          guard->inputvers.begin();
        i != guard->inputvers.end(); ++i) {
@@ -1121,11 +1122,11 @@ CompositeAssetVersionImplD::ComputeState(void) const
 
 
   // find out how my children are doing
-  uint numkids = children.size();
-  uint numgood = 0;
-  uint numblocking = 0;
-  uint numinprog = 0;
-  uint numfailed = 0;
+  unsigned int numkids = children.size();
+  unsigned int numgood = 0;
+  unsigned int numblocking = 0;
+  unsigned int numinprog = 0;
+  unsigned int numfailed = 0;
   for (const auto &c : children) {
     AssetVersion child(c);
     if (child) {

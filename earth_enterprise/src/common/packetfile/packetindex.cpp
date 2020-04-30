@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -39,7 +40,7 @@ void PacketIndexEntry::Pull(EndianReadBuffer& buf) {
       >> position_
       >> record_size_
       >> extra_;
-  buf.Skip(sizeof(uint32)); // stored crc
+  buf.Skip(sizeof(std::uint32_t)); // stored crc
 }
 
 // Push - store to endian buffer with CRC
@@ -83,7 +84,7 @@ PacketIndexReader::PacketIndexReader(geFilePool &file_pool,
       << index_path;
   }
 
-  uint16 format_version;
+  std::uint16_t format_version;
   buffer >> format_version;
   if (format_version != PacketFile::kFormatVersion) {
     throw khSimpleException("PacketIndexReader: expected version ")
@@ -91,8 +92,8 @@ PacketIndexReader::PacketIndexReader(geFilePool &file_pool,
       << format_version << " in " << index_path;
   }
 
-  buffer >> DecodeAs<uint16>(data_has_crc_);
-  buffer.Skip(sizeof(uint32)); // stored crc
+  buffer >> DecodeAs<std::uint16_t>(data_has_crc_);
+  buffer.Skip(sizeof(std::uint32_t)); // stored crc
 }
 
 // PacketIndexReader::Seek - set position for ReadNext
@@ -133,10 +134,10 @@ bool PacketIndexReader::ReadNext(PacketIndexEntry *entry) {
   return true;
 }
 
-uint32 PacketIndexReader::ReadNextN(PacketIndexEntry *entries, uint32 count,
+ std::uint32_t PacketIndexReader::ReadNextN(PacketIndexEntry *entries, std::uint32_t count,
                                     LittleEndianReadBuffer &buffer) {
   off64_t read_pos;
-  uint64 num_left;
+  std::uint64_t num_left;
   {
     khLockGuard lock(modify_lock_);
     num_left = (file_size_ - index_pos_) / PacketIndexEntry::kStoreSize;
@@ -149,7 +150,7 @@ uint32 PacketIndexReader::ReadNextN(PacketIndexEntry *entries, uint32 count,
 
   buffer.Seek(0);
   index_reader_->Pread(buffer, count * PacketIndexEntry::kStoreSize, read_pos);
-  for (uint32 i = 0; i < count; ++i) {
+  for (std::uint32_t i = 0; i < count; ++i) {
     try {
       buffer >> entries[i];
     }
@@ -166,13 +167,13 @@ uint32 PacketIndexReader::ReadNextN(PacketIndexEntry *entries, uint32 count,
   return count;
 }
 
-uint64 PacketIndexReader::NumPackets(void) const {
+ std::uint64_t PacketIndexReader::NumPackets(void) const {
   return (Filesize() - PacketFile::kIndexHeaderSize) /
     PacketIndexEntry::kStoreSize;
 }
 
-uint64 PacketIndexReader::NumPackets(const std::string &index_path) {
-  uint64 file_size;
+ std::uint64_t PacketIndexReader::NumPackets(const std::string &index_path) {
+  std::uint64_t file_size;
   time_t mtime;
   if (khGetFileInfo(index_path, file_size, mtime)) {
     return (file_size - PacketFile::kIndexHeaderSize) /

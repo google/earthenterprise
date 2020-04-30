@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,44 +20,8 @@
 #define GEO_EARTH_ENTERPRISE_SRC_COMMON_KHTYPES_H_
 
 #include <assert.h>
+#include <cstdint>
 
-#if defined(__sgi)
-#include <sys/types.h>
-typedef uint16_t                        uint16;
-typedef int16_t                         int16;
-typedef uint32_t                        uint32;
-typedef int32_t                         int32;
-typedef uint64_t                        uint64;
-typedef int64_t                         int64;
-#elif defined(__linux__)
-#include <sys/types.h>
-typedef u_int16_t                       uint16;
-typedef int16_t                         int16;
-typedef u_int32_t                       uint32;
-typedef int32_t                         int32;
-typedef u_int64_t                       uint64;
-typedef int64_t                         int64;
-#if     !defined(TRUE) || ((TRUE) != 1)
-#undef TRUE
-#define TRUE    (1)
-#endif
-#if     !defined(FALSE) || ((FALSE) != 0)
-#undef FALSE
-#define FALSE   (0)
-#endif
-#elif defined(_WIN32)
-typedef unsigned short                  uint16;
-typedef short                           int16;
-typedef unsigned long                   uint32;
-typedef long                            int32;
-typedef unsigned __int64                uint64;
-typedef __int64                         int64;
-typedef unsigned short                  ushort;
-#endif
-
-typedef unsigned char                   uchar;
-typedef unsigned char                   uint8;
-typedef signed char                     int8;
 typedef float                           float32;
 typedef double                          float64;
 
@@ -76,13 +41,13 @@ class PointerAsUIntImpl;
 template <>
 class PointerAsUIntImpl<4> {
  public:
-  typedef uint32 Type;
+  typedef std::uint32_t Type;
 };
 
 template <>
 class PointerAsUIntImpl<8> {
  public:
-  typedef uint64 Type;
+  typedef std::int64_t Type;
 };
 
 typedef PointerAsUIntImpl<sizeof(char*)>::Type ptr_uint_t;
@@ -167,7 +132,7 @@ enum StorageEnum {
 };
 
 extern const char *StorageName(StorageEnum s);
-extern uint StorageSize(StorageEnum s);
+extern unsigned int StorageSize(StorageEnum s);
 extern StorageEnum StorageNameToEnum(const char *n);
 
 // Helper - used to map type to enum
@@ -179,14 +144,14 @@ template <class T> class Helper { };
       typedef type_ Type;                             \
       static const StorageEnum Storage = enum_;       \
     };
-DefineHelper(uint8,   UInt8);
-DefineHelper(int8,    Int8);
-DefineHelper(uint16,  UInt16);
-DefineHelper(int16,   Int16);
-DefineHelper(uint32,  UInt32);
-DefineHelper(int32,   Int32);
-DefineHelper(uint64,  UInt64);
-DefineHelper(int64,   Int64);
+DefineHelper(std::uint8_t,   UInt8);
+DefineHelper(std::int8_t,    Int8);
+DefineHelper(std::uint16_t,  UInt16);
+DefineHelper(std::int16_t,   Int16);
+DefineHelper(std::uint32_t,  UInt32);
+DefineHelper(std::int32_t,   Int32);
+DefineHelper(std::uint64_t,  UInt64);
+DefineHelper(std::int64_t,   Int64);
 DefineHelper(float32, Float32);
 DefineHelper(float64, Float64);
 };  // namespace khTypes

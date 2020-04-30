@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -77,8 +78,8 @@ class MyTraverser : public AssetTraverser {
     }
   }
 
-  uint32 max_channel_id_;
-  uint32 max_resource_id_;
+  std::uint32_t max_channel_id_;
+  std::uint32_t max_resource_id_;
 };
 
 } // namespace

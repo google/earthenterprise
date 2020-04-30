@@ -27,21 +27,24 @@
 
 Import('third_party_env')
 import os
+import subprocess
 
 gdal_version = 'gdal-2.1.2'
 
 # Check if MrSID decoding library is installed and get the decoding SDK path
-mrSIDLibName = 'libltidsdk.so'
-mrSIDDSDKPath = ""
-findLibraryCommand = "/sbin/ldconfig -p | grep %s | tr ' ' '\n' | grep /" %mrSIDLibName
-mrSIDlibraryFullPath=os.popen(findLibraryCommand).read()
-if mrSIDlibraryFullPath:
-   print "mrSID library was found. GDAL will be built with mrSID raster format support: ", mrSIDlibraryFullPath
-   getFolderCommand = "dirname %s" %mrSIDlibraryFullPath
-   mrSIDLibraryPath=os.popen(getFolderCommand).read()
-   mrSIDDSDKPath = os.path.normpath(os.path.join(mrSIDLibraryPath, os.pardir))
-   print "mrSID Decoding SDK path is: ", mrSIDDSDKPath
-
+try:
+  mrSIDLibName = 'libltidsdk.so'
+  findLibraryCommand = "/sbin/ldconfig -p | grep %s | tr ' ' '\n' | grep /" %mrSIDLibName
+  # There may be multiple MrSID paths, so take the first one
+  mrSIDlibraryFullPath = subprocess.check_output(findLibraryCommand, shell=True).splitlines()[0]
+  print "mrSID library was found. GDAL will be built with mrSID raster format support: ", mrSIDlibraryFullPath
+  # Go up two directories
+  mrSIDDSDKPath = os.path.dirname(os.path.dirname(mrSIDlibraryFullPath))
+  print "mrSID Decoding SDK path is: ", mrSIDDSDKPath
+  assert os.path.isdir(mrSIDDSDKPath), "The mrSID Decoding SDK path is invalid"
+except subprocess.CalledProcessError:
+  # We couldn't find the MrSID library
+  mrSIDDSDKPath = ""
 
 make_cmd_cpu = 'make -j%d' % GetOption('num_jobs')
 

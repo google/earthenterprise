@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +24,8 @@
 #include "common/khTileAddr.h"
 #include "common/geFileUtils.h"
 #include "common/khGuard.h"
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 
 class khInsetCoverage;
 
@@ -60,7 +62,7 @@ class khPresenceMask {
   bool GetEstimatedPresence(const khTileAddr &addr) const;
 
   // Set presence for all elements of specified level.
-  void SetPresence(uint lev, bool set_present) {
+  void SetPresence(unsigned int lev, bool set_present) {
     assert(levels[lev]);
     levels[lev]->SetPresence(set_present);
   }
@@ -80,15 +82,15 @@ class khPresenceMask {
   // fill in coverage object with my coverage
   void PopulateCoverage(khInsetCoverage &cov) const;
 
-  bool ValidLevel(uint level) const {
+  bool ValidLevel(unsigned int level) const {
     return ((level >= beginLevel) && (level < endLevel));
   }
-  khExtents<uint32> levelTileExtents(uint level) const;
+  khExtents<std::uint32_t> levelTileExtents(unsigned int level) const;
 
 
-  uint numLevels;
-  uint beginLevel;
-  uint endLevel;
+  unsigned int numLevels;
+  unsigned int beginLevel;
+  unsigned int endLevel;
   khDeleteGuard<khLevelPresenceMask> levels[NumFusionLevels];
 };  // class PresenceMask
 
@@ -104,8 +106,8 @@ class khPresenceMaskWriter {
   geLocalBufferWriteFile proxyFile;
   khMunmapGuard munmapper;
 
-  uint32 DataOffset(void);
-  uint32 TotalFileSize(void);
+  std::uint32_t DataOffset(void);
+  std::uint32_t TotalFileSize(void);
 
  public:
   khPresenceMaskWriter(const std::string &filename,

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -47,8 +48,8 @@ ffio::raster::Writer<TileType>::Writer(
 
   // populate and set our type specific index data header
   {
-    COMPILE_TIME_ASSERT(TileType::TileWidth == TileType::TileHeight,
-                        NonSquareTile);
+    static_assert(TileType::TileWidth == TileType::TileHeight,
+                        "Non Square Tile");
     IndexTypeData typeData(subtype,
                            TileType::TileWidth,
                            TileType::NumComp,
@@ -122,23 +123,23 @@ ffio::raster::Writer<TileType>::MakeCompressor(void) {
 template <class TileType>
 void ffio::raster::Writer<TileType>::WriteTile(const khTileAddr &addr,
                                                const TileType &tile) {
-  COMPILE_TIME_ASSERT(TileType::TileWidth == TileType::TileHeight,
-                      NonSquareTile);
+  static_assert(TileType::TileWidth == TileType::TileHeight,
+                      "Non Square Tile");
 
   // interleave the tile before writing - for now all ffio files of more
   // than one band must be interleaved
-  uchar *buf;
+  unsigned char *buf;
   if ((tilespace.orientation != StartLowerLeft) ||
       (TileType::NumComp > 1)) {
     interleaveBuffer.resize(TileType::TotalBufSize);
     ExtractAndInterleave(tile, 0, 0,
-                         khSize<uint>(TileType::TileWidth,
+                         khSize< unsigned int> (TileType::TileWidth,
                                       TileType::TileHeight),
                          tilespace.orientation,
                          (typename TileType::PixelType*)&interleaveBuffer[0]);
     buf = &interleaveBuffer[0];
   } else {
-    buf = reinterpret_cast<uchar*>(tile.bufs[0]);
+    buf = reinterpret_cast<unsigned char*>(tile.bufs[0]);
   }
 
   // make a compressor if we need it

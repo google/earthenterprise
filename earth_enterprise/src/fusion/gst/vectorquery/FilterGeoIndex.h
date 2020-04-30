@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,18 +32,18 @@ namespace vectorquery {
 
 class FilterGeoIndex {
  public:
-  FilterGeoIndex(uint filter_id, gstGeoIndexHandle geo_index) :
+  FilterGeoIndex(unsigned int filter_id, gstGeoIndexHandle geo_index) :
       filter_id_(filter_id),
       geo_index_(geo_index)
   { }
 
-  uint filter_id_;
+  unsigned int filter_id_;
   gstGeoIndexHandle geo_index_;
 };
 
 class FilterGeoIndexManager {
  public:
-  FilterGeoIndexManager(uint level, const gstSharedSource &source,
+  FilterGeoIndexManager(unsigned int level, const gstSharedSource &source,
                         const std::vector<std::string> &select_files,
                         const khTilespace &tilespace, double oversize_factor,
                         const std::string& progress_meter_prefix);
@@ -62,7 +63,7 @@ class FilterGeoIndexManager {
  private:
   const khTilespace&          tilespace_;
   const double                oversize_factor_;
-  uint                        level_;
+  unsigned int                        level_;
   gstBBox                     bbox_;
   std::vector<FilterGeoIndex> filter_indexes_;
   gstSharedSource             source_;
