@@ -19,7 +19,7 @@
 #include <string>
 #include <gtest/gtest.h>
 #include "common/etencoder.h"
-
+#include "common/khSimpleException.h"
 
 class Test_crypt : public testing::Test {
  protected:
