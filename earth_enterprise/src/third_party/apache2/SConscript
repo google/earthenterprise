@@ -153,7 +153,7 @@ install_root_opt = '%s/opt/google/gehttpd' % install_root
 install_root_doc = '%s/opt/google/share/doc/packages/%s' % (
     install_root, apache_ge_version)
 to_prune_http = ['man', 'error', 'bin/htdbm',
-                 'bin/httxt2dbm', 'bin/logresolve', 'bin/rotatelogs',
+                 'bin/httxt2dbm', 'bin/logresolve',
                  'htdocs/apache_pb.png', 'htdocs/apache_pb22.gif',
                  'htdocs/apache_pb22.png', 'htdocs/apache_pb22_ani.gif',
                  'htdocs/apache_pb.gif', 'htdocs/index.html'
