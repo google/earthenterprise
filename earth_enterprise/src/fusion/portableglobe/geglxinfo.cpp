@@ -352,7 +352,7 @@ void printVectorPacket(const LittleEndianReadBuffer& buffer, std::ostringstream&
         const char *name_str =
           pChildPacketDataBuffer + pVectorPacketData->name_OFFSET + sizeof(etPattern);
         const char *desc_str =
-          pChildPacketDataBuffer + pVectorPacketData->description_OFFSET + sizeof(etPattern);
+          pChildPacketDataBuffer + pVectorPacketData->description_OFFSET;
 
         s << "      name_str: " << name_str << std::endl;
         s << "      desc_str: " << desc_str << std::endl;
