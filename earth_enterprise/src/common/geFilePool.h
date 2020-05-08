@@ -21,6 +21,7 @@
 #include "geFilePoolImpl.h"
 #include <khLRUMap.h>
 #include "common/base/macros.h"
+#include <memory>
 
 class EndianWriteBuffer;
 class EndianReadBuffer;
@@ -64,6 +65,44 @@ class EndianReadBuffer;
 // ***  reader.Pread(...);
 // ***  reader.PRead(...);
 // ****************************************************************************
+
+class AbstractFileAccessor {
+public:
+  virtual int Open(const std::string &fname, int flags, mode_t createMask) = 0;
+  virtual int FsyncAndClose(AbstractFileIdentifier* aFI) = 0;
+  virtual int Close(AbstractFileIdentifier* aFI) = 0;
+  virtual bool PreadAll(AbstractFileIdentifier* aFI, void* buffer, size_t size, off64_t offset) = 0;
+  virtual bool PwriteAll(AbstractFileIdentifier* aFI, const void* buffer, size_t size, off64_t offset) = 0;
+};
+
+class POSIXFileAccessor: public AbstractFileAccessor {
+public:
+  int Open(const std::string &fname, int flags, mode_t createMask) { return khOpen(fname, flags, createMask); }
+  int FsyncAndClose(AbstractFileIdentifier* pID) override { return khFsyncAndClose(pID->getAsFD()); }
+  int Close(AbstractFileIdentifier* pID) override { return khClose(pID->getAsFD()); }
+  bool PreadAll(AbstractFileIdentifier* pID, void* buffer, size_t size, off64_t offset) {
+    return khPreadAll(pID->getAsFD(), buffer, size, offset);
+  }
+  bool PwriteAll(AbstractFileIdentifier* pID, const void* buffer, size_t size, off64_t offset) {
+    return khPwriteAll(pID->getAsFD(), buffer, size, offset);
+  }
+};
+
+//class S3FileAccessor: public AbstractFileAccessor {};
+
+namespace FileAccessorFactory {
+  static AbstractFileAccessor* getAccessor(const std::string &fname) {
+    return new POSIXFileAccessor();
+  }
+
+  static AbstractFileAccessor* getAccessor(AbstractFileIdentifier* aID) {
+    if ( typeid(*aID) == typeid(POSIXIdentifier*) ) {
+      return new POSIXFileAccessor();
+    }
+    return NULL;
+  }
+}
+
 class geFilePool {
  public:
   class Reader {

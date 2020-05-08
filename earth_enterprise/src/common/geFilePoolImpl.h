@@ -20,18 +20,53 @@
 
 #include <khMTTypes.h>
 #include <fcntl.h>
+#include <string>
 
 class geFilePool;
 
+class AbstractFileIdentifier {
+public:
+  virtual bool isValid() { return false; }
+  virtual int getAsFD() { return -1; }
+  virtual std::string getAsS3Object() { return ""; }
+  virtual void invalidate() {};
+};
+
+class POSIXIdentifier: public AbstractFileIdentifier {
+  int fd;
+public:
+  POSIXIdentifier(int i = -1) : fd{ i } {}
+  bool isValid() override { return fd != -1; }
+  void invalidate() override { fd = -1; }
+  int getAsFD() override { return fd; }
+};
+
+class S3Identifier: public AbstractFileIdentifier {
+  std::string s3_object;
+public:
+  S3Identifier(std::string s = "") : s3_object{ s } {}
+  bool isValid() override { return !s3_object.empty(); }
+  void invalidate() override { s3_object = ""; }
+  std::string getAsS3Object() override { return s3_object; }
+};
+
+namespace FileIdentifierFactory {
+  static AbstractFileIdentifier* getIdentifier(int i) {
+    return new POSIXIdentifier{i};
+  }
+  static AbstractFileIdentifier* getIdentifier(std::string s) {
+    return new S3Identifier{s};
+  }
+}
 
 class FileReservationImpl : public khMTRefCounter {
   bool isWriter;
-  int fd;
+  AbstractFileIdentifier* fid;
  public:
-  int Fd(void) const { return fd; }
-  FileReservationImpl(void) : isWriter(false), fd(-1) { }
+  AbstractFileIdentifier* Fid(void) const { return fid; }
+  FileReservationImpl(void) : isWriter(false) { }
   ~FileReservationImpl(void) {
-    assert(fd == -1);
+    assert(!(fid->isValid()));
     isWriter = false;
   }
 
