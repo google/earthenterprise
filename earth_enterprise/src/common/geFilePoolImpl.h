@@ -20,18 +20,40 @@
 
 #include <khMTTypes.h>
 #include <fcntl.h>
+#include <string>
 
 class geFilePool;
 
+class AbstractFileIdentifier {
+public:
+  virtual bool isValid() { return false; }
+  virtual int getAsFD() { return -1; }
+  virtual void invalidate() {};
+};
+
+class POSIXIdentifier: public AbstractFileIdentifier {
+  int fd;
+public:
+  POSIXIdentifier(int i = -1) : fd{ i } {}
+  bool isValid() override { return fd != -1; }
+  void invalidate() override { fd = -1; }
+  int getAsFD() override { return fd; }
+};
+
+namespace FileIdentifierFactory {
+  static AbstractFileIdentifier* getIdentifier(int i) {
+    return new POSIXIdentifier{i};
+  }
+}
 
 class FileReservationImpl : public khMTRefCounter {
   bool isWriter;
-  int fd;
+  AbstractFileIdentifier* fid;
  public:
-  int Fd(void) const { return fd; }
-  FileReservationImpl(void) : isWriter(false), fd(-1) { }
+  AbstractFileIdentifier* Fid(void) const { return fid; }
+  FileReservationImpl(void) : isWriter(false) { }
   ~FileReservationImpl(void) {
-    assert(fd == -1);
+    assert(!(fid->isValid()));
     isWriter = false;
   }
 
