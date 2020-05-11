@@ -44,6 +44,15 @@ bool POSIXFileAccessor::PwriteAll(AbstractFileIdentifier* pID, const void* buffe
 }
 
 // ****************************************************************************
+// ***  FileIdentifierFactory
+// ****************************************************************************
+namespace FileIdentifierFactory {
+  static AbstractFileIdentifier* getIdentifier(int i) {
+    return new POSIXIdentifier{i};
+  }
+}
+
+// ****************************************************************************
 // ***  FileAccessorFactory
 // ****************************************************************************
 namespace FileAccessorFactory {

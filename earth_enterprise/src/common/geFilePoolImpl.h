@@ -40,12 +40,6 @@ public:
   int getAsFD() override { return fd; }
 };
 
-namespace FileIdentifierFactory {
-  static AbstractFileIdentifier* getIdentifier(int i) {
-    return new POSIXIdentifier{i};
-  }
-}
-
 class FileReservationImpl : public khMTRefCounter {
   bool isWriter;
   AbstractFileIdentifier* fid;
