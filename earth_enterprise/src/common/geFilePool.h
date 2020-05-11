@@ -76,29 +76,12 @@ public:
 
 class POSIXFileAccessor: public AbstractFileAccessor {
 public:
-  int Open(const std::string &fname, int flags, mode_t createMask) { return khOpen(fname, flags, createMask); }
-  int FsyncAndClose(AbstractFileIdentifier* pID) override { return khFsyncAndClose(pID->getAsFD()); }
-  int Close(AbstractFileIdentifier* pID) override { return khClose(pID->getAsFD()); }
-  bool PreadAll(AbstractFileIdentifier* pID, void* buffer, size_t size, off64_t offset) {
-    return khPreadAll(pID->getAsFD(), buffer, size, offset);
-  }
-  bool PwriteAll(AbstractFileIdentifier* pID, const void* buffer, size_t size, off64_t offset) {
-    return khPwriteAll(pID->getAsFD(), buffer, size, offset);
-  }
+  int Open(const std::string &fname, int flags, mode_t createMask);
+  int FsyncAndClose(AbstractFileIdentifier* pID) override;
+  int Close(AbstractFileIdentifier* pID) override;
+  bool PreadAll(AbstractFileIdentifier* pID, void* buffer, size_t size, off64_t offset);
+  bool PwriteAll(AbstractFileIdentifier* pID, const void* buffer, size_t size, off64_t offset);
 };
-
-namespace FileAccessorFactory {
-  static AbstractFileAccessor* getAccessor(const std::string &fname) {
-    return new POSIXFileAccessor();
-  }
-
-  static AbstractFileAccessor* getAccessor(AbstractFileIdentifier* aID) {
-    if ( typeid(*aID) == typeid(POSIXIdentifier*) ) {
-      return new POSIXFileAccessor();
-    }
-    return NULL;
-  }
-}
 
 class geFilePool {
  public:

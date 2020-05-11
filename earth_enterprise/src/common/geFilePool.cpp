@@ -21,6 +21,45 @@
 #include <khEndian.h>
 
 // ****************************************************************************
+// ***  POSIXFileAcessor
+// ****************************************************************************
+int POSIXFileAccessor::Open(const std::string &fname, int flags, mode_t createMask) {
+  return khOpen(fname, flags, createMask);
+}
+
+int POSIXFileAccessor::FsyncAndClose(AbstractFileIdentifier* pID) {
+  return khFsyncAndClose(pID->getAsFD());
+}
+
+int POSIXFileAccessor::Close(AbstractFileIdentifier* pID) {
+  return khClose(pID->getAsFD());
+}
+
+bool POSIXFileAccessor::PreadAll(AbstractFileIdentifier* pID, void* buffer, size_t size, off64_t offset) {
+  return khPreadAll(pID->getAsFD(), buffer, size, offset);
+}
+
+bool POSIXFileAccessor::PwriteAll(AbstractFileIdentifier* pID, const void* buffer, size_t size, off64_t offset) {
+  return khPwriteAll(pID->getAsFD(), buffer, size, offset);
+}
+
+// ****************************************************************************
+// ***  FileAccessorFactory
+// ****************************************************************************
+namespace FileAccessorFactory {
+  static AbstractFileAccessor* getAccessor(const std::string &fname) {
+    return new POSIXFileAccessor();
+  }
+
+  static AbstractFileAccessor* getAccessor(AbstractFileIdentifier* aID) {
+    if ( typeid(*aID) == typeid(POSIXIdentifier*) ) {
+      return new POSIXFileAccessor();
+    }
+    return NULL;
+  }
+}
+
+// ****************************************************************************
 // ***  FileReservationImpl
 // ****************************************************************************
 bool FileReservationImpl::UnlockAndClose_(geFilePool &pool) {
