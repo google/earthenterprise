@@ -28,7 +28,6 @@ class AbstractFileIdentifier {
 public:
   virtual bool isValid() { return false; }
   virtual int getAsFD() { return -1; }
-  virtual std::string getAsS3Object() { return ""; }
   virtual void invalidate() {};
 };
 
@@ -41,21 +40,9 @@ public:
   int getAsFD() override { return fd; }
 };
 
-class S3Identifier: public AbstractFileIdentifier {
-  std::string s3_object;
-public:
-  S3Identifier(std::string s = "") : s3_object{ s } {}
-  bool isValid() override { return !s3_object.empty(); }
-  void invalidate() override { s3_object = ""; }
-  std::string getAsS3Object() override { return s3_object; }
-};
-
 namespace FileIdentifierFactory {
   static AbstractFileIdentifier* getIdentifier(int i) {
     return new POSIXIdentifier{i};
-  }
-  static AbstractFileIdentifier* getIdentifier(std::string s) {
-    return new S3Identifier{s};
   }
 }
 

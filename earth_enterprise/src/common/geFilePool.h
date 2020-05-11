@@ -88,8 +88,6 @@ public:
   }
 };
 
-//class S3FileAccessor: public AbstractFileAccessor {};
-
 namespace FileAccessorFactory {
   static AbstractFileAccessor* getAccessor(const std::string &fname) {
     return new POSIXFileAccessor();
