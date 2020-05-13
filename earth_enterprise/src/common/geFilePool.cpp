@@ -19,6 +19,7 @@
 #include <khSimpleException.h>
 #include <third_party/rsa_md5/crc32.h>
 #include <khEndian.h>
+#include <typeinfo>
 
 // ****************************************************************************
 // ***  POSIXFileAcessor
@@ -61,7 +62,7 @@ namespace FileAccessorFactory {
   }
 
   static AbstractFileAccessor* getAccessor(AbstractFileIdentifier* aID) {
-    if ( typeid(*aID) == typeid(POSIXIdentifier*) ) {
+    if ( typeid(*aID) == typeid(POSIXIdentifier) ) {
       return new POSIXFileAccessor();
     }
     return NULL;
