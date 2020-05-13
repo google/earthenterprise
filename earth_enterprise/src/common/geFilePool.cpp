@@ -19,7 +19,6 @@
 #include <khSimpleException.h>
 #include <third_party/rsa_md5/crc32.h>
 #include <khEndian.h>
-#include <typeinfo>
 
 // ****************************************************************************
 // ***  POSIXFileAcessor
