@@ -68,19 +68,19 @@ class EndianReadBuffer;
 class AbstractFileAccessor {
 public:
   virtual int Open(const std::string &fname, int flags, mode_t createMask) = 0;
-  virtual int FsyncAndClose(AbstractFileIdentifier* aFI) = 0;
-  virtual int Close(AbstractFileIdentifier* aFI) = 0;
-  virtual bool PreadAll(AbstractFileIdentifier* aFI, void* buffer, size_t size, off64_t offset) = 0;
-  virtual bool PwriteAll(AbstractFileIdentifier* aFI, const void* buffer, size_t size, off64_t offset) = 0;
+  virtual int FsyncAndClose(std::shared_ptr<AbstractFileIdentifier> aFI) = 0;
+  virtual int Close(std::shared_ptr<AbstractFileIdentifier> aFI) = 0;
+  virtual bool PreadAll(std::shared_ptr<AbstractFileIdentifier> aFI, void* buffer, size_t size, off64_t offset) = 0;
+  virtual bool PwriteAll(std::shared_ptr<AbstractFileIdentifier> aFI, const void* buffer, size_t size, off64_t offset) = 0;
 };
 
 class POSIXFileAccessor: public AbstractFileAccessor {
 public:
   int Open(const std::string &fname, int flags, mode_t createMask);
-  int FsyncAndClose(AbstractFileIdentifier* pID) override;
-  int Close(AbstractFileIdentifier* pID) override;
-  bool PreadAll(AbstractFileIdentifier* pID, void* buffer, size_t size, off64_t offset);
-  bool PwriteAll(AbstractFileIdentifier* pID, const void* buffer, size_t size, off64_t offset);
+  int FsyncAndClose(std::shared_ptr<AbstractFileIdentifier> pID) override;
+  int Close(std::shared_ptr<AbstractFileIdentifier> pID) override;
+  bool PreadAll(std::shared_ptr<AbstractFileIdentifier> pID, void* buffer, size_t size, off64_t offset);
+  bool PwriteAll(std::shared_ptr<AbstractFileIdentifier> pID, const void* buffer, size_t size, off64_t offset);
 };
 
 class geFilePool {

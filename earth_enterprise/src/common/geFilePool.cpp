@@ -27,19 +27,19 @@ int POSIXFileAccessor::Open(const std::string &fname, int flags, mode_t createMa
   return khOpen(fname, flags, createMask);
 }
 
-int POSIXFileAccessor::FsyncAndClose(AbstractFileIdentifier* pID) {
+int POSIXFileAccessor::FsyncAndClose(std::shared_ptr<AbstractFileIdentifier> pID) {
   return khFsyncAndClose(pID->getAsFD());
 }
 
-int POSIXFileAccessor::Close(AbstractFileIdentifier* pID) {
+int POSIXFileAccessor::Close(std::shared_ptr<AbstractFileIdentifier> pID) {
   return khClose(pID->getAsFD());
 }
 
-bool POSIXFileAccessor::PreadAll(AbstractFileIdentifier* pID, void* buffer, size_t size, off64_t offset) {
+bool POSIXFileAccessor::PreadAll(std::shared_ptr<AbstractFileIdentifier> pID, void* buffer, size_t size, off64_t offset) {
   return khPreadAll(pID->getAsFD(), buffer, size, offset);
 }
 
-bool POSIXFileAccessor::PwriteAll(AbstractFileIdentifier* pID, const void* buffer, size_t size, off64_t offset) {
+bool POSIXFileAccessor::PwriteAll(std::shared_ptr<AbstractFileIdentifier> pID, const void* buffer, size_t size, off64_t offset) {
   return khPwriteAll(pID->getAsFD(), buffer, size, offset);
 }
 
@@ -47,8 +47,8 @@ bool POSIXFileAccessor::PwriteAll(AbstractFileIdentifier* pID, const void* buffe
 // ***  FileIdentifierFactory
 // ****************************************************************************
 namespace FileIdentifierFactory {
-  static AbstractFileIdentifier* getIdentifier(int i) {
-    return new POSIXIdentifier{i};
+  static std::shared_ptr<AbstractFileIdentifier> getIdentifier(int i) {
+    return std::make_shared<AbstractFileIdentifier>(i);
   }
 }
 
@@ -56,15 +56,15 @@ namespace FileIdentifierFactory {
 // ***  FileAccessorFactory
 // ****************************************************************************
 namespace FileAccessorFactory {
-  static AbstractFileAccessor* getAccessor(const std::string &fname) {
-    return new POSIXFileAccessor();
+  static std::shared_ptr<AbstractFileAccessor> getAccessor(const std::string &fname) {
+    return std::make_shared<POSIXFileAccessor>();
   }
 
-  static AbstractFileAccessor* getAccessor(AbstractFileIdentifier* aID) {
+  static std::shared_ptr<AbstractFileAccessor> getAccessor(std::shared_ptr<AbstractFileIdentifier> aID) {
     if ( typeid(*aID) == typeid(POSIXIdentifier) ) {
-      return new POSIXFileAccessor();
+      return std::make_shared<POSIXFileAccessor>();
     }
-    return NULL;
+    return nullptr;
   }
 }
 

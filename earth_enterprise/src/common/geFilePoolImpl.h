@@ -21,6 +21,7 @@
 #include <khMTTypes.h>
 #include <fcntl.h>
 #include <string>
+#include <memory>
 
 class geFilePool;
 
@@ -42,9 +43,9 @@ public:
 
 class FileReservationImpl : public khMTRefCounter {
   bool isWriter;
-  AbstractFileIdentifier* fid;
+  std::shared_ptr<AbstractFileIdentifier> fid;
  public:
-  AbstractFileIdentifier* Fid(void) const { return fid; }
+  std::shared_ptr<AbstractFileIdentifier> Fid(void) const { return fid; }
   FileReservationImpl(void) : isWriter(false) { }
   ~FileReservationImpl(void) {
     assert(!(fid->isValid()));
