@@ -48,7 +48,7 @@ bool POSIXFileAccessor::PwriteAll(std::shared_ptr<AbstractFileIdentifier> pID, c
 // ****************************************************************************
 namespace FileIdentifierFactory {
   static std::shared_ptr<AbstractFileIdentifier> getIdentifier(int i) {
-    return std::make_shared<AbstractFileIdentifier>(i);
+    return std::make_shared<POSIXFileIdentifier>(i);
   }
 }
 
@@ -61,7 +61,7 @@ namespace FileAccessorFactory {
   }
 
   static std::shared_ptr<AbstractFileAccessor> getAccessor(std::shared_ptr<AbstractFileIdentifier> aID) {
-    if ( typeid(*aID) == typeid(POSIXIdentifier) ) {
+    if ( typeid(*aID) == typeid(POSIXFileIdentifier) ) {
       return std::make_shared<POSIXFileAccessor>();
     }
     return nullptr;

@@ -32,10 +32,10 @@ public:
   virtual void invalidate() {};
 };
 
-class POSIXIdentifier: public AbstractFileIdentifier {
+class POSIXFileIdentifier: public AbstractFileIdentifier {
   int fd;
 public:
-  POSIXIdentifier(int i = -1) : fd{ i } {}
+  POSIXFileIdentifier(int i = -1) : fd{ i } {}
   bool isValid() override { return fd != -1; }
   void invalidate() override { fd = -1; }
   int getAsFD() override { return fd; }
