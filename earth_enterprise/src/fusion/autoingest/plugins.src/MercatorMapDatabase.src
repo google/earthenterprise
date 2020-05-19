@@ -140,7 +140,7 @@ void MercatorMapDatabaseAssetImplD::PopulateInputs(
                                     "ProjectedProject");
 
     MutableProjectedMapProjectAssetD proj_asset =
-      AssetFactory::FindMake<ProjectedMapProjectType>
+      FindMake<ProjectedMapProjectType>
          (projected_proj_name,
           makevec<SharedString>(config.mapProject),
           khMetaData(),
@@ -162,7 +162,7 @@ MercatorMapDatabaseAssetImplD::HandleEditRequest(const MapDatabaseEditRequest &r
                                   kMercatorMapDatabaseSubtype);
 
 
-  (void) AssetFactory::FindMake<MercatorMapDatabaseType>
+  (void) FindMake<MercatorMapDatabaseType>
          (dbname, inputs, req.meta, req.config);
 }
 
@@ -179,7 +179,7 @@ MercatorMapDatabaseAssetImplD::HandleNewRequest(const MapDatabaseEditRequest &re
                                   kMercatorMapDatabaseSubtype);
 
 
-  (void) AssetFactory::MakeNew<MercatorMapDatabaseType>(dbname,
+  (void) MakeNew<MercatorMapDatabaseType>(dbname,
                                      inputs,
                                      req.meta,
                                      req.config);
@@ -200,7 +200,7 @@ MercatorMapDatabaseAssetImplD::HandleModifyRequest(const MapDatabaseEditRequest 
 
 
   // find and modify the DB
-  (void) AssetFactory::FindAndModify<MercatorMapDatabaseType>
+  (void) FindAndModify<MercatorMapDatabaseType>
                                           (dbname,
                                            inputs,
                                            req.meta,
@@ -307,7 +307,7 @@ MercatorMapDatabaseAssetVersionImplD::DelayedBuildChildren(void)
     }
 
     unified_index =
-      AssetFactory::FindMakeAndUpdate<UnifiedIndexType>(
+      FindMakeAndUpdate<UnifiedIndexType>(
           unified_index_asset_name,
           index_input_verrefs,
           khMetaData(),
@@ -345,7 +345,7 @@ MercatorMapDatabaseAssetVersionImplD::DelayedBuildChildren(void)
                                   GEE_VERSION);
     // update the mapdb asset
     mapdb =
-      AssetFactory::FindMakeAndUpdate<MapDBType>(
+      FindMakeAndUpdate<MapDBType>(
           mapdb_asset_name,
           mapdb_input_verrefs,
           khMetaData(),

@@ -396,7 +396,7 @@ void MercatorRasterProjectAssetImplD::HandleEditRequest(
   } else {
     // It is a "Save" or "SaveAs" edit request when creating a new asset.
     assert(req.config.indexVersion == 1);
-    project = AssetFactory::Make<MercatorRasterProjectType>(projname, inputs,
+    project = Make<MercatorRasterProjectType>(projname, inputs,
                                                  req.meta, req.config);
   }
 
@@ -434,7 +434,7 @@ void MercatorRasterProjectAssetImplD::HandleNewRequest(
     // make it
     RasterProjectConfig projConfig(req.type);
     MutableMercatorRasterProjectAssetD project =
-      AssetFactory::Make<MercatorRasterProjectType>(projname,
+      Make<MercatorRasterProjectType>(projname,
                                  std::vector<SharedString>(),
                                  khMetaData(),
                                  projConfig);
@@ -713,7 +713,7 @@ void MercatorRasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
   dbrootConfig.used_provider_ids_ = used_provider_ids;
 
   MutableAssetVersionD dbroot =
-    AssetFactory::FindMakeAndUpdateSubAsset<RasterDBRootType>
+    FindMakeAndUpdateSubAsset<RasterDBRootType>
                  (assetRef,
                   type,
                   "dbroot",
@@ -740,7 +740,7 @@ void MercatorRasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
             geindex_version,
             config.legend));
     MutableAssetVersionD layerjs =
-      AssetFactory::FindMakeAndUpdate<MapLayerJSType>
+      FindMakeAndUpdate<MapLayerJSType>
                         (layerJSAssetName,
                          std::vector<SharedString>(),
                          khMetaData(),
@@ -1014,7 +1014,7 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
 
       // reuse or make a new PacketGenAssetVersion
       MutableAssetVersionD packgen =
-        AssetFactory::ReuseOrMakeAndUpdate<PacketGenType>(genInfo[i].assetname,
+        ReuseOrMakeAndUpdate<PacketGenType>(genInfo[i].assetname,
                                                type,
                                                khMetaData(),
                                                packetGenConfig,
@@ -1119,7 +1119,7 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
     }
   }
   MutableRasterGEIndexAssetVersionD geindex =
-    AssetFactory::FindMakeAndUpdate<RasterGEIndexType>
+    FindMakeAndUpdate<RasterGEIndexType>
                          (geindexAssetName,
                           type,
                           packgenkids,

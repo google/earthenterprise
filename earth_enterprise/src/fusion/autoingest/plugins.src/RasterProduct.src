@@ -262,7 +262,7 @@ RasterProductAssetImplD::HandleImportRequest(
     asset->Modify(std::vector<SharedString>(), req.meta, product_config);
   } else {
     // It is a "Save" or "SaveAs" request when creating a new asset.
-    asset = AssetFactory::Make<RasterProductType>(assetname, req.type,
+    asset = Make<RasterProductType>(assetname, req.type,
                                        std::vector<SharedString>(),
                                        req.meta, req.config);
   }
@@ -284,7 +284,7 @@ RasterProductAssetImplD::HandleImportRequest(
 
   // Get our source asset.
   MutableAssetVersionD source =
-      AssetFactory::ReuseOrMakeAndUpdateSubAsset<SourceType>(asset->GetRef(),
+      ReuseOrMakeAndUpdateSubAsset<SourceType>(asset->GetRef(),
                                                   asset->type,
                                                   "source",
                                                   khMetaData(),
@@ -329,7 +329,7 @@ RasterProductAssetImplD::HandleImportRequest(
     SourceConfig sourceConfig;
     sourceConfig.AddFile(maskfile);
     MutableAssetVersionD masksource =
-        AssetFactory::ReuseOrMakeAndUpdateSubAsset<SourceType>(asset->GetRef(),
+        ReuseOrMakeAndUpdateSubAsset<SourceType>(asset->GetRef(),
                                                     asset->type,
                                                     "masksource",
                                                     khMetaData(),
@@ -385,7 +385,7 @@ RasterProductAssetVersionImplD::UpdateChildren(void)
   uint32 num_sources = srcfiles.size();
 
   MutableCombinedRPAssetVersionD crp =
-    AssetFactory::FindMakeAndUpdateSubAsset<CombinedRPType>
+    FindMakeAndUpdateSubAsset<CombinedRPType>
                   (assetRef,
                    type,
                    kCombinedRPSubtype,

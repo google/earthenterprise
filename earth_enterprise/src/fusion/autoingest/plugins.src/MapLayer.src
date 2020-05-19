@@ -101,7 +101,7 @@ MapLayerAssetImplD::HandleEditRequest(const MapLayerEditRequest &req)
     maplayer->Modify(productrefs, req.meta, layer_config);
   } else {
     // It is a "Save" or "SaveAs" edit request when creating a new asset.
-    maplayer = AssetFactory::Make<MapLayerType>(assetname,
+    maplayer = Make<MapLayerType>(assetname,
                                      productrefs,
                                      req.meta,
                                      req.config);
@@ -159,7 +159,7 @@ MapLayerAssetVersionImplD::UpdateChildren(void)
     char queryname[32];
     snprintf(queryname, sizeof(queryname), "query%02u", sl);
     MutableAssetVersionD query_version =
-      AssetFactory::FindMakeAndUpdateSubAsset<VectorQueryType>
+      FindMakeAndUpdateSubAsset<VectorQueryType>
                    (assetRef,
                     queryname,
                     makevec1<SharedString>(guard->inputvers[sl]->GetRef()),
@@ -186,7 +186,7 @@ MapLayerAssetVersionImplD::UpdateChildren(void)
   if (numberOfSearchFields > 0) {
     MapPOIAssetConfig poiconfig(all_search_fields);
     MutableAssetVersionD poi =
-      AssetFactory::FindMakeAndUpdateSubAsset<MapPOIType>
+      FindMakeAndUpdateSubAsset<MapPOIType>
                     (assetRef,
                      "poi",
                      queryRefs,

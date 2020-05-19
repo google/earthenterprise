@@ -74,7 +74,7 @@ VectorLayerAssetVersionImplD::UpdateChildren(void)
 
   // ********** VectorQueryAsset child **********
   MutableAssetVersionD query =
-    AssetFactory::FindMakeAndUpdateSubAsset<VectorQueryType>
+    FindMakeAndUpdateSubAsset<VectorQueryType>
     (assetRef,
     "query",
      makevec1<SharedString>(source->GetRef()),
@@ -89,7 +89,7 @@ VectorLayerAssetVersionImplD::UpdateChildren(void)
   std::string fusename=khReplaceExtension(khBasename(assetRef),"packet");
   // Update my fuse child
   MutableAssetVersionD fuse =
-    AssetFactory::FindMakeAndUpdateSubAsset<VectorFuseType>
+    FindMakeAndUpdateSubAsset<VectorFuseType>
                   (assetRef,
                    fusename,
                    makevec2<SharedString>
@@ -114,7 +114,7 @@ VectorLayerAssetVersionImplD::UpdateChildren(void)
   // ********** VectorPOIAsset child **********
   if (!config.poi_config_.empty()) {
     MutableAssetVersionD poi =
-      AssetFactory::FindMakeAndUpdateSubAsset<VectorPOIType>
+      FindMakeAndUpdateSubAsset<VectorPOIType>
                     (assetRef,
                      "poi",
                      makevec2<SharedString>(source->GetRef(), query->GetRef()),

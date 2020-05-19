@@ -85,7 +85,7 @@ print $fh <<EOF;
 #include <khxml/khdom.h>
 #include <AssetThrowPolicy.h>
 #include "AssetOperation.h"
-#include <fusion/autoingest/Asset.h>
+#include <fusion/autoingest/AssetFactory.h>
 using namespace khxml;
 using namespace AssetFactory;
 EOF

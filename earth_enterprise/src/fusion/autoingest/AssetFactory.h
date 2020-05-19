@@ -282,7 +282,7 @@ namespace AssetFactory
         }
         asset->Modify( meta_, config_);
     } else {
-        asset = AssetFactory::Make<AssetType>(ref_, type_, meta_, config_);
+        asset = Make<AssetType>(ref_, type_, meta_, config_);
     }
     bool needed = false;
     return asset->MyUpdate(needed);
@@ -324,7 +324,7 @@ namespace AssetFactory
         }
         asset->Modify(inputs_, meta_, config_);
     } else {
-        asset = AssetFactory::Make<AssetType>(ref_, type_, inputs_, meta_, config_);
+        asset = Make<AssetType>(ref_, type_, inputs_, meta_, config_);
     }
     bool needed = false;
     return asset->MyUpdate(needed, cachedinputs_);
@@ -357,7 +357,7 @@ namespace AssetFactory
         }
         asset->Modify(meta_, config_);
     } else {
-        asset = AssetFactory::Make<AssetType>(ref_, type_, meta_, config_);
+        asset = Make<AssetType>(ref_, type_, meta_, config_);
     }
     bool needed = false;
     return asset->MyUpdate(needed, extra);

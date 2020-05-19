@@ -473,7 +473,7 @@ void RasterProjectAssetImplD::HandleEditRequest(
   } else {
     // It is a "Save" or "SaveAs" edit request when creating a new asset.
     assert(req.config.indexVersion == 1);
-    project = AssetFactory::Make<RasterProjectType>(projname, req.type, inputs,
+    project = Make<RasterProjectType>(projname, req.type, inputs,
                                          req.meta, req.config);
   }
 
@@ -527,7 +527,7 @@ void RasterProjectAssetImplD::HandleNewRequest(
     // make it
     RasterProjectConfig projConfig(req.type);
     MutableRasterProjectAssetD project =
-      AssetFactory::Make<RasterProjectType>(projname,
+      Make<RasterProjectType>(projname,
                                  req.type,
                                  std::vector<SharedString>(),
                                  khMetaData(),
@@ -903,7 +903,7 @@ void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
   dbrootConfig.used_provider_ids_ = used_provider_ids;
 
   MutableAssetVersionD dbroot =
-    AssetFactory::FindMakeAndUpdateSubAsset<RasterDBRootType>
+    FindMakeAndUpdateSubAsset<RasterDBRootType>
                   (assetRef,
                    type,
                    "dbroot",
@@ -930,7 +930,7 @@ void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
             geindex_version,
             config.legend));
     MutableAssetVersionD layerjs =
-      AssetFactory::FindMakeAndUpdate<MapLayerJSType>
+      FindMakeAndUpdate<MapLayerJSType>
           (layerJSAssetName,
            std::vector<SharedString>(),
            khMetaData(),
@@ -1156,7 +1156,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     }
 
     MutableAssetVersionD packgen =
-      AssetFactory::ReuseOrMakeAndUpdate<PacketGenType>(genInfo[i].assetname,
+      ReuseOrMakeAndUpdate<PacketGenType>(genInfo[i].assetname,
                                             type,
                                             khMetaData(),
                                             packetGenConfig,
@@ -1341,7 +1341,7 @@ uint32 RasterProjectAssetVersionImplD::MakeIndexSubAsset(
     }
   }
   MutableRasterGEIndexAssetVersionD geindex =
-    AssetFactory::FindMakeAndUpdate<RasterGEIndexType>
+    FindMakeAndUpdate<RasterGEIndexType>
          (geindexAssetName, type,
           packgenkids,
           khMetaData(),

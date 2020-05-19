@@ -124,7 +124,7 @@ void MapDatabaseAssetImplD::PopulateInputs(const MapDatabaseConfig &config,
                                     "ProjectedProject");
 
     MutableProjectedMapProjectAssetD proj_asset =
-      AssetFactory::FindMake<ProjectedMapProjectType>
+      FindMake<ProjectedMapProjectType>
           (projected_proj_name,
            makevec<SharedString>(config.mapProject),
            khMetaData(),
@@ -146,7 +146,7 @@ MapDatabaseAssetImplD::HandleEditRequest(const MapDatabaseEditRequest &req)
                                   kMapDatabaseSubtype);
 
 
-  (void) AssetFactory::FindMake<MapDatabaseType>(dbname, inputs, req.meta, req.config);
+  (void) FindMake<MapDatabaseType>(dbname, inputs, req.meta, req.config);
 }
 
 void
@@ -161,7 +161,7 @@ MapDatabaseAssetImplD::HandleNewRequest(const MapDatabaseEditRequest &req)
     AssetDefs::NormalizeAssetName(req.assetname, AssetDefs::Database,
                                   kMapDatabaseSubtype);
 
-  (void) AssetFactory::MakeNew<MapDatabaseType>(dbname,
+  (void) MakeNew<MapDatabaseType>(dbname,
                                      inputs,
                                      req.meta,
                                      req.config);
@@ -181,7 +181,7 @@ MapDatabaseAssetImplD::HandleModifyRequest(const MapDatabaseEditRequest &req)
                                   kMapDatabaseSubtype);
 
   // find and modify the DB
-  (void) AssetFactory::FindAndModify<MapDatabaseType>(dbname,
+  (void) FindAndModify<MapDatabaseType>(dbname,
                                            inputs,
                                            req.meta,
                                            req.config);
@@ -269,7 +269,7 @@ MapDatabaseAssetVersionImplD::DelayedBuildChildren(void)
     }
 
     unified_index =
-      AssetFactory::FindMakeAndUpdate<UnifiedIndexType>(
+      FindMakeAndUpdate<UnifiedIndexType>(
           unified_index_asset_name,
           index_input_verrefs,
           khMetaData(),
@@ -305,7 +305,7 @@ MapDatabaseAssetVersionImplD::DelayedBuildChildren(void)
                                   GEE_VERSION);
     // update the mapdb asset
     mapdb =
-      AssetFactory::FindMakeAndUpdate<MapDBType>(
+      FindMakeAndUpdate<MapDBType>(
           mapdb_asset_name,
           mapdb_input_verrefs,
           khMetaData(),
