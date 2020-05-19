@@ -521,25 +521,94 @@ TEST_F(AssetFactoryTest, SevenParameterReuseOrMakeAndUpdateSubAsset)
     EXPECT_EQ(AssetDefs::New, handle.impl->state);
   }
 
-}
+    {
+    // Test with 2 offline versions and make sure neither is used
 
-TEST_F(AssetFactoryTest, ReuseFourParams) {
-  // Previous version matches
-  MockAssetImpl::testSubTypeToUseForStringConstructor = EXPECTED_SUBTYPE;
+    resetStaticMockVariables();
+    MockAssetImpl::testSubTypeToUseForStringConstructor = EXPECTED_SUBTYPE;
+    MockAssetImpl::mockVersions = {"reuse-parent/base.kia?version=1", "reuse-parent/base.kia?version=2"};
+    MockAssetVersionImpl::mockState = AssetDefs::Offline;
 
-  MutableMockAssetVersionD handle =
-    ReuseOrMakeAndUpdate
-    <MockType>
-    ("reuse-parent/base.kia",
-      AssetDefs::Imagery,
-      testMeta,
-      testConfig0);
+    MutableMockAssetVersionD
+      handle =
+      ReuseOrMakeAndUpdateSubAsset
+      <MockType>
+      (
+       "reuse-parent",    // const std::string& parentName,
+       AssetDefs::Imagery, // AssetDefs::Type type_,
+       "base",      // const std::string& baseName ,
+       versionedInputs,
+       testMeta,    // const khMetaData& meta_,
+       testConfig0, // const ConfigType& config_)
+       cachedInputs
+       );
+    EXPECT_TRUE(handle->updated);
+    EXPECT_EQ("reuse-parent/base.kia?version=3", handle.impl->name.toString());
+    EXPECT_EQ(testMeta, handle.impl->meta);
+    EXPECT_EQ(AssetDefs::Imagery, handle.impl->type);
+    EXPECT_EQ(AssetDefs::Offline, handle.impl->state);
+    // Since this version was just created it shouldn't be marked permanent
+    EXPECT_FALSE(handle.impl->permanent);
+  }
 
-  EXPECT_TRUE(handle->updated);
-  EXPECT_EQ("reuse-parent/base.kia?version=1", handle.impl->name.toString());
-  EXPECT_EQ(testMeta, handle.impl->meta);
-  EXPECT_EQ(AssetDefs::Imagery, handle.impl->type);
-  EXPECT_EQ(AssetDefs::New, handle.impl->state);
+  {
+    // Two previous versions, and version constructor throws
+
+    resetStaticMockVariables();
+    MockAssetImpl::testSubTypeToUseForStringConstructor = EXPECTED_SUBTYPE;
+    MockAssetImpl::mockVersions = {"reuse-parent/base.kia?version=1", "reuse-parent/base.kia?version=2"};
+    MockAssetVersionImpl::mockState = AssetDefs::Offline;
+    MockAssetVersionImpl::throwInConstructor = true;
+
+    MutableMockAssetVersionD
+      handle =
+      ReuseOrMakeAndUpdateSubAsset
+      <MockType>
+      (
+       "reuse-parent",    // const std::string& parentName,
+       AssetDefs::Imagery, // AssetDefs::Type type_,
+       "base",      // const std::string& baseName ,
+       versionedInputs,
+       testMeta,    // const khMetaData& meta_,
+       testConfig0, // const ConfigType& config_)
+       cachedInputs
+       );
+    EXPECT_TRUE(handle->updated);
+    EXPECT_EQ("reuse-parent/base.kia?version=3", handle.impl->name.toString());
+    EXPECT_EQ(testMeta, handle.impl->meta);
+    EXPECT_EQ(AssetDefs::Imagery, handle.impl->type);
+    EXPECT_EQ(AssetDefs::Offline, handle.impl->state);
+    // Since this version was just created it shouldn't be marked permanent
+    EXPECT_FALSE(handle.impl->permanent);
+  }
+
+  {
+    // One previous version that matches
+
+    resetStaticMockVariables();
+    MockAssetImpl::testSubTypeToUseForStringConstructor = EXPECTED_SUBTYPE;
+    MockAssetImpl::mockVersions = {"reuse-parent/base.kia?version=1"};
+
+    MutableMockAssetVersionD
+      handle =
+      ReuseOrMakeAndUpdateSubAsset
+      <MockType>
+      (
+       "reuse-parent",    // const std::string& parentName,
+       AssetDefs::Imagery, // AssetDefs::Type type_,
+       "base",      // const std::string& baseName ,
+       vector<SharedString>(),
+       testMeta,    // const khMetaData& meta_,
+       testConfig0, // const ConfigType& config_)
+       cachedInputs
+       );
+    EXPECT_FALSE(handle->updated);
+    EXPECT_EQ("reuse-parent/base.kia?version=1", handle.impl->name.toString());
+    EXPECT_EQ(testMeta, handle.impl->meta);
+    EXPECT_EQ(AssetDefs::Imagery, handle.impl->type);
+    EXPECT_EQ(AssetDefs::New, handle.impl->state);
+    EXPECT_TRUE(handle.impl->permanent);
+  }
 }
 
 TEST_F(AssetFactoryTest, ReuseFourParamsNoPrevious) {
@@ -559,8 +628,8 @@ TEST_F(AssetFactoryTest, ReuseFourParamsNoPrevious) {
   EXPECT_EQ(AssetDefs::New, handle.impl->state);
 }
 
-TEST_F(AssetFactoryTest, ReuseFiveParams) {
-  // Previous version matches
+TEST_F(AssetFactoryTest, ReuseFiveParamsNoVersions) {
+  // No previous versions
   MockAssetImpl::testSubTypeToUseForStringConstructor = EXPECTED_SUBTYPE;
 
   MutableMockAssetVersionD handle =
@@ -592,6 +661,51 @@ TEST_F(AssetFactoryTest, ReuseFiveParamsNoPrevious) {
 
   EXPECT_TRUE(handle->updated);
   EXPECT_EQ("reuse-parent/base.kia?version=1", handle.impl->name.toString());
+  EXPECT_EQ(testMeta, handle.impl->meta);
+  EXPECT_EQ(AssetDefs::Imagery, handle.impl->type);
+  EXPECT_EQ(AssetDefs::New, handle.impl->state);
+}
+
+TEST_F(AssetFactoryTest, ReuseFiveParamsVersionMatches) {
+  // Previous version matches
+  MockAssetImpl::testSubTypeToUseForStringConstructor = EXPECTED_SUBTYPE;
+  MockAssetImpl::mockVersions = {"reuse-parent/base.kia?version=2"};
+
+  MutableMockAssetVersionD handle =
+    ReuseOrMakeAndUpdate
+    <MockType>
+    ("reuse-parent/base.kia",
+      AssetDefs::Imagery,
+      testMeta,
+      testConfig0,
+      MockExtraArgs());
+
+  EXPECT_FALSE(handle->updated);
+  EXPECT_TRUE(handle.impl->permanent);
+  EXPECT_EQ("reuse-parent/base.kia?version=2", handle.impl->name.toString());
+  EXPECT_EQ(testMeta, handle.impl->meta);
+  EXPECT_EQ(AssetDefs::Imagery, handle.impl->type);
+  EXPECT_EQ(AssetDefs::New, handle.impl->state);
+}
+
+TEST_F(AssetFactoryTest, ReuseFiveParamsVersionThrows) {
+  // Version constructor throws
+  MockAssetImpl::testSubTypeToUseForStringConstructor = EXPECTED_SUBTYPE;
+  MockAssetImpl::mockVersions = {"reuse-parent/base.kia?version=1"};
+  MockAssetVersionImpl::throwInConstructor = true;
+
+  MutableMockAssetVersionD handle =
+    ReuseOrMakeAndUpdate
+    <MockType>
+    ("reuse-parent/base.kia",
+      AssetDefs::Imagery,
+      testMeta,
+      testConfig0,
+      MockExtraArgs());
+
+  EXPECT_TRUE(handle->updated);
+  EXPECT_FALSE(handle.impl->permanent);
+  EXPECT_EQ("reuse-parent/base.kia?version=2", handle.impl->name.toString());
   EXPECT_EQ(testMeta, handle.impl->meta);
   EXPECT_EQ(AssetDefs::Imagery, handle.impl->type);
   EXPECT_EQ(AssetDefs::New, handle.impl->state);
