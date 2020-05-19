@@ -284,7 +284,7 @@ RasterProductAssetImplD::HandleImportRequest(
 
   // Get our source asset.
   MutableAssetVersionD source =
-      SourceFactory::ReuseOrMakeAndUpdateSubAsset(asset->GetRef(),
+      AssetFactory::ReuseOrMakeAndUpdateSubAsset<SourceType>(asset->GetRef(),
                                                   asset->type,
                                                   "source",
                                                   khMetaData(),
@@ -329,7 +329,7 @@ RasterProductAssetImplD::HandleImportRequest(
     SourceConfig sourceConfig;
     sourceConfig.AddFile(maskfile);
     MutableAssetVersionD masksource =
-        SourceFactory::ReuseOrMakeAndUpdateSubAsset(asset->GetRef(),
+        AssetFactory::ReuseOrMakeAndUpdateSubAsset<SourceType>(asset->GetRef(),
                                                     asset->type,
                                                     "masksource",
                                                     khMetaData(),

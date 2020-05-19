@@ -300,34 +300,6 @@ public:
     SubAssetName(const std::string &parentAssetRef
                  $formaltypearg,
                  const std::string &basename);
-EOF
-
-if ($withreuse) {
-
-    print $fh <<EOF;
-    $template
-    static typename ${name}Type::MutableVersionD
-    ReuseOrMakeAndUpdate(const std::string &ref_ $formaltypearg,
-                         $formalinputarg
-                         const khMetaData &meta_,
-                         const typename ${name}Type::Config& config_
-                         $formalcachedinputarg
-                         $formalExtraUpdateArg);
-
-    $template
-    static typename ${name}Type::MutableVersionD
-    ReuseOrMakeAndUpdateSubAsset(const std::string &parentAssetRef
-                                 $formaltypearg,
-                                 const std::string &basename,
-                                 $formalinputarg
-                                 const khMetaData &meta_,
-                                 const typename ${name}Type::Config& config_
-                                 $formalcachedinputarg
-                                 $formalExtraUpdateArg);
-EOF
-}
-
-print $fh <<EOF;
 };
 
 #endif /* __$hprot */

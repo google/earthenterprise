@@ -257,6 +257,142 @@ namespace AssetFactory
   }
 
   template <class AssetType>
+  typename AssetType::MutableVersionD ReuseOrMakeAndUpdate(
+      const std::string &ref_,
+      AssetDefs::Type type_,
+      const khMetaData &meta_,
+      const typename AssetType::Config& config_)
+  {
+    typename AssetType::MutableAssetD asset = Find<AssetType>(ref_, type_);
+    if (asset) {
+        for (const auto& v : asset->versions) {
+            try {
+              typename AssetType::VersionD version(v);
+              version.LoadAsTemporary();
+              if ((version->state != AssetDefs::Offline) &&
+                  (version->inputs.empty()) &&
+                  config_.IsUpToDate(version->config)) {
+                version.MakePermanent();
+                return version;
+              }
+           }
+           catch (...) {
+             notify(NFY_WARN, "ReuseOrMakeAndUpdate could not reuse a version." );
+           }
+        }
+        asset->Modify( meta_, config_);
+    } else {
+        asset = AssetFactory::Make<AssetType>(ref_, type_, meta_, config_);
+    }
+    bool needed = false;
+    return asset->MyUpdate(needed);
+  }
+
+  template <class AssetType, class CachedInputType>
+  typename AssetType::MutableVersionD ReuseOrMakeAndUpdate(
+        const std::string &ref_,
+        AssetDefs::Type type_,
+        const std::vector<SharedString>& inputs_,
+        const khMetaData &meta_,
+        const typename AssetType::Config& config_,
+        const std::vector<CachedInputType>& cachedinputs_)
+  {
+    // make a copy since actualinputarg is macro substituted, so begin() &
+    // end() could be called on different temporary objects
+    std::vector<SharedString> inputarg = inputs_;
+    // bind my input versions refs
+    std::vector<SharedString> boundInputs;
+    boundInputs.reserve(inputarg.size());
+    std::transform(inputarg.begin(), inputarg.end(), back_inserter(boundInputs),
+                   ptr_fun(&AssetVersionRef::Bind));
+    typename AssetType::MutableAssetD asset = Find<AssetType>(ref_, type_);
+    if (asset) {
+        for (const auto& v : asset->versions) {
+            try {
+              typename AssetType::VersionD version(v);
+              version.LoadAsTemporary();
+              if ((version->state != AssetDefs::Offline) &&
+                  (version->inputs == boundInputs) &&
+                  config_.IsUpToDate(version->config)) {
+                version.MakePermanent();
+                return version;
+              }
+           }
+           catch (...) {
+             notify(NFY_WARN, "ReuseOrMakeAndUpdate could not reuse a version." );
+           }
+        }
+        asset->Modify(inputs_, meta_, config_);
+    } else {
+        asset = AssetFactory::Make<AssetType>(ref_, type_, inputs_, meta_, config_);
+    }
+    bool needed = false;
+    return asset->MyUpdate(needed, cachedinputs_);
+  }
+
+  template <class AssetType, class Extras>
+  typename AssetType::MutableVersionD ReuseOrMakeAndUpdate(
+        const std::string &ref_,
+        AssetDefs::Type type_,
+        const khMetaData &meta_,
+        const typename AssetType::Config& config_,
+        const Extras &extra)
+  {
+    typename AssetType::MutableAssetD asset = Find<AssetType>(ref_, type_);
+    if (asset) {
+        for (const auto& v : asset->versions) {
+            try {
+              typename AssetType::VersionD version(v);
+              version.LoadAsTemporary();
+              if ((version->state != AssetDefs::Offline) &&
+                  (version->inputs.empty()) &&
+                  config_.IsUpToDate(version->config)) {
+                version.MakePermanent();
+                return version;
+              }
+           }
+           catch (...) {
+             notify(NFY_WARN, "ReuseOrMakeAndUpdate could not reuse a version." );
+           }
+        }
+        asset->Modify(meta_, config_);
+    } else {
+        asset = AssetFactory::Make<AssetType>(ref_, type_, meta_, config_);
+    }
+    bool needed = false;
+    return asset->MyUpdate(needed, extra);
+  }
+
+  template <class AssetType>
+  typename AssetType::MutableVersionD ReuseOrMakeAndUpdateSubAsset(
+        const std::string &parentAssetRef,
+        AssetDefs::Type type_,
+        const std::string &basename,
+        const khMetaData &meta_,
+        const typename AssetType::Config& config_)
+  {
+    auto ref_ =  AssetDefs::SubAssetName(
+        parentAssetRef, basename, type_, AssetType::SUBTYPE);
+    return ReuseOrMakeAndUpdate<AssetType>(ref_, type_, meta_, config_);
+  }
+
+  template <class AssetType, class CachedInputType>
+  typename AssetType::MutableVersionD ReuseOrMakeAndUpdateSubAsset(
+        const std::string &parentAssetRef,
+        AssetDefs::Type type_,
+        const std::string &basename,
+        const std::vector<SharedString>& inputs_,
+        const khMetaData &meta_,
+        const typename AssetType::Config& config_,
+        const std::vector<CachedInputType>& cachedinputs_)
+  {
+    auto ref_ = AssetDefs::SubAssetName(
+        parentAssetRef, basename, type_, AssetType::SUBTYPE);
+    return ReuseOrMakeAndUpdate<AssetType>(
+        ref_, type_, inputs_, meta_, config_, cachedinputs_);
+  }
+
+  template <class AssetType>
   typename AssetType::MutableAssetD FindAndModify(const std::string& ref_,
                                               const std::vector<SharedString>& inputs_,
                                               const khMetaData& meta_,
