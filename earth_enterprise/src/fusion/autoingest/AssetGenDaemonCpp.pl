@@ -103,10 +103,8 @@ print $fh <<EOF;
 // ****************************************************************************
 $config{"AssetD.cpp"}
 
-const AssetDefs::Type ${name}AssetImplD::EXPECTED_TYPE = $typeorinvalid;
-const AssetDefs::Type ${name}AssetVersionImplD::EXPECTED_TYPE = $typeorinvalid;
-const std::string ${name}AssetImplD::EXPECTED_SUBTYPE = "$subtype";
-const std::string ${name}AssetVersionImplD::EXPECTED_SUBTYPE = "$subtype";
+const AssetDefs::Type ${name}Type::TYPE = $typeorinvalid;
+const std::string ${name}Type::SUBTYPE = "$subtype";
 
 // ****************************************************************************
 // ***  ${name}Factory - Auto generated
@@ -132,12 +130,12 @@ print $fh <<EOF;
 // some assets, which makes databases bigger. We'll need to fix that issue
 // if we decide to move these functions in the future.
 $template
-Mutable${name}AssetVersionD
+typename ${name}Type::MutableVersionD
 ${name}Factory::ReuseOrMakeAndUpdate(
         const std::string &ref_ $formaltypearg,
         $formalinputarg
         const khMetaData &meta_,
-        const $config& config_
+        const typename ${name}Type::Config& config_
         $formalcachedinputarg
         $formalExtraUpdateArg)
 {
@@ -149,11 +147,11 @@ ${name}Factory::ReuseOrMakeAndUpdate(
     boundInputs.reserve(inputarg.size());
     std::transform(inputarg.begin(), inputarg.end(), back_inserter(boundInputs),
                    ptr_fun(&AssetVersionRef::Bind));
-    Mutable${name}AssetD asset = Find<${name}AssetD>(ref_, $typeref);
+    typename ${name}Type::MutableAssetD asset = Find<${name}Type>(ref_, $typeref);
     if (asset) {
         for (const auto& v : asset->versions) {
             try {
-              ${name}AssetVersionD version(v);
+              typename ${name}Type::VersionD version(v);
               // Load an asset version without caching since we may not need it
               // (offline, obsolete and so on).
               version.LoadAsTemporary();
@@ -171,7 +169,7 @@ ${name}Factory::ReuseOrMakeAndUpdate(
         }
         asset->Modify($forwardinputarg meta_, config_);
     } else {
-        asset = AssetFactory::Make<Mutable${name}AssetD, $config>(ref_ $forwardtypearg,
+        asset = AssetFactory::Make<${name}Type>(ref_ $forwardtypearg,
                                                 $forwardinputarg
                                                 meta_, config_);
     }
@@ -181,14 +179,14 @@ ${name}Factory::ReuseOrMakeAndUpdate(
 }
 
 $template
-Mutable${name}AssetVersionD
+typename ${name}Type::MutableVersionD
 ${name}Factory::ReuseOrMakeAndUpdateSubAsset(
         const std::string &parentAssetRef
         $formaltypearg,
         const std::string &basename,
         $formalinputarg
         const khMetaData &meta_,
-        const $config& config_
+        const typename ${name}Type::Config& config_
         $formalcachedinputarg
         $formalExtraUpdateArg)
 {

@@ -248,7 +248,7 @@ MercatorRasterProductAssetImplD::HandleImportRequest(
   // Modified FindMake to preserve fuid_resource_.
   // The inputs are empty for now. We'll fill them in below.
   MutableMercatorRasterProductAssetD asset =
-    Find<MercatorRasterProductAssetD>(assetname);
+    Find<MercatorRasterProductType>(assetname);
   if (asset) {
     // It is a regular (editing the same asset) or "SaveAs" re-writing request.
     // If this request is going to set the fuid_resource to 0, restore from
@@ -262,7 +262,7 @@ MercatorRasterProductAssetImplD::HandleImportRequest(
     asset->Modify(std::vector<SharedString>(), req.meta, product_config);
   } else {
     // It is a "Save" or "SaveAs" request when creating a new asset.
-    asset = AssetFactory::Make<MutableMercatorRasterProductAssetD, RasterProductConfig>(assetname,
+    asset = AssetFactory::Make<MercatorRasterProductType>(assetname,
                                                std::vector<SharedString>(),
                                                req.meta, req.config);
   }
@@ -385,7 +385,7 @@ MercatorRasterProductAssetVersionImplD::UpdateChildren(void)
   uint32 num_sources = srcfiles.size();
 
   MutableCombinedRPAssetVersionD crp =
-    AssetFactory::FindMakeAndUpdateSubAsset<MutableCombinedRPAssetVersionD, AssetVersion>
+    AssetFactory::FindMakeAndUpdateSubAsset<CombinedRPType>
                  (assetRef,
                   type,
                   kCombinedRPSubtype,

@@ -67,7 +67,7 @@ MapProjectAssetImplD::HandleEditRequest(const MapProjectEditRequest &req)
          = req.config.layers.begin();
        layer != req.config.layers.end(); ++layer) {
     if (!layer->skipLayer) {
-      ValidateRefForInput<MapLayerAssetVersionD>(layer->assetRef);
+      ValidateRefForInput<MapLayerType>(layer->assetRef);
     }
   }
 
@@ -80,7 +80,7 @@ MapProjectAssetImplD::HandleEditRequest(const MapProjectEditRequest &req)
   std::vector<SharedString> inputs;
 
   MutableMapProjectAssetD project =
-    AssetFactory::FindMake<MutableMapProjectAssetD>(projname, inputs, req.meta, req.config);
+    AssetFactory::FindMake<MapProjectType>(projname, inputs, req.meta, req.config);
 
   project->SyncInputRefs();
 }
@@ -92,4 +92,3 @@ MapProjectAssetVersionImplD::UpdateChildren(void)
 {
   // no children to add
 }
-

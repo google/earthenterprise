@@ -73,7 +73,7 @@ MapLayerAssetImplD::HandleEditRequest(const MapLayerEditRequest &req)
   std::vector<SharedString> productrefs;
   productrefs.reserve(req.config.subLayers.size());
   for (uint s = 0; s < req.config.subLayers.size(); ++s) {
-    ValidateRefForInput<VectorProductAssetVersionD>(req.config.subLayers[s].asset_ref);
+    ValidateRefForInput<VectorProductType>(req.config.subLayers[s].asset_ref);
     productrefs.push_back(req.config.subLayers[s].asset_ref);
   }
 
@@ -86,7 +86,7 @@ MapLayerAssetImplD::HandleEditRequest(const MapLayerEditRequest &req)
 
   // Custom FindMake:
   // We need to make sure we don't clobber an existing fuid_channel.
-  MutableMapLayerAssetD maplayer = Find<MapLayerAssetD>(assetname);
+  MutableMapLayerAssetD maplayer = Find<MapLayerType>(assetname);
 
   if (maplayer) {
     // It is a regular (editing the same asset) or "SaveAs" re-writing edit
@@ -101,7 +101,7 @@ MapLayerAssetImplD::HandleEditRequest(const MapLayerEditRequest &req)
     maplayer->Modify(productrefs, req.meta, layer_config);
   } else {
     // It is a "Save" or "SaveAs" edit request when creating a new asset.
-    maplayer = AssetFactory::Make<MutableMapLayerAssetD, MapLayerConfig>(assetname,
+    maplayer = AssetFactory::Make<MapLayerType>(assetname,
                                      productrefs,
                                      req.meta,
                                      req.config);
@@ -159,7 +159,7 @@ MapLayerAssetVersionImplD::UpdateChildren(void)
     char queryname[32];
     snprintf(queryname, sizeof(queryname), "query%02u", sl);
     MutableAssetVersionD query_version =
-      AssetFactory::FindMakeAndUpdateSubAsset<MutableVectorQueryAssetVersionD, AssetVersion>
+      AssetFactory::FindMakeAndUpdateSubAsset<VectorQueryType>
                    (assetRef,
                     queryname,
                     makevec1<SharedString>(guard->inputvers[sl]->GetRef()),
@@ -186,7 +186,7 @@ MapLayerAssetVersionImplD::UpdateChildren(void)
   if (numberOfSearchFields > 0) {
     MapPOIAssetConfig poiconfig(all_search_fields);
     MutableAssetVersionD poi =
-      AssetFactory::FindMakeAndUpdateSubAsset<MutableMapPOIAssetVersionD, AssetVersion>
+      AssetFactory::FindMakeAndUpdateSubAsset<MapPOIType>
                     (assetRef,
                      "poi",
                      queryRefs,

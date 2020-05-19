@@ -90,7 +90,7 @@ VectorProductAssetImplD::HandleImportRequest(const VectorProductImportRequest &r
 
   // find/make our target asset
   MutableVectorProductAssetD asset =
-    AssetFactory::FindMake<MutableVectorProductAssetD>
+    AssetFactory::FindMake<VectorProductType>
         (assetname,
          std::vector<SharedString>(),
          req.meta,

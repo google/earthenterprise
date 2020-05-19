@@ -248,7 +248,7 @@ RasterProductAssetImplD::HandleImportRequest(
   // Modified FindMake to preserve fuid_resource_
   // inputs are empty for now. We'll fill them in below.
   MutableRasterProductAssetD asset =
-    Find<RasterProductAssetD>(assetname, req.type);
+    Find<RasterProductType>(assetname, req.type);
 
   if (asset) {
     // It is a regular (editing the same asset) or "SaveAs" re-writing request.
@@ -262,7 +262,7 @@ RasterProductAssetImplD::HandleImportRequest(
     asset->Modify(std::vector<SharedString>(), req.meta, product_config);
   } else {
     // It is a "Save" or "SaveAs" request when creating a new asset.
-    asset = AssetFactory::Make<MutableRasterProductAssetD, RasterProductConfig>(assetname, req.type,
+    asset = AssetFactory::Make<RasterProductType>(assetname, req.type,
                                        std::vector<SharedString>(),
                                        req.meta, req.config);
   }
@@ -385,7 +385,7 @@ RasterProductAssetVersionImplD::UpdateChildren(void)
   uint32 num_sources = srcfiles.size();
 
   MutableCombinedRPAssetVersionD crp =
-    AssetFactory::FindMakeAndUpdateSubAsset<MutableCombinedRPAssetVersionD, AssetVersion>
+    AssetFactory::FindMakeAndUpdateSubAsset<CombinedRPType>
                   (assetRef,
                    type,
                    kCombinedRPSubtype,

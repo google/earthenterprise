@@ -21,9 +21,15 @@
 #include <common/khMetaData.h>
 #include "AssetVersionRef.h"
 #include "AssetRegistry.h"
+#include "autoingest/.idl/AssetStorage.h"
 
 // The goal of this namspace is to have a single place in the code where all
 // asset creation is handled.
+
+// Except for CreateNewFromDOM and CreateNewInvalid, you should pass
+// <Name>Type as the template parameter (e.g, PacketGenType). That type
+// references all the necessary related types that the templates below may
+// need to use.
 namespace AssetFactory
 {
   template<class AssetType>
@@ -49,210 +55,181 @@ namespace AssetFactory
       return nullptr;
   }
 
-  template<class AssetType>
-  AssetType Find(const std::string & ref, const AssetDefs::Type & type)
+  template<class FindType>
+  static FindType Find(const std::string & ref, const AssetDefs::Type & type, const std::string & subtype)
   {
     assert(type != AssetDefs::Invalid);
-    const std::string subtype = AssetType::Impl::EXPECTED_SUBTYPE;
     try {
-      AssetType asset(ref);
+      typename FindType::BBase asset(ref);
       if (asset &&
           (asset->type == type) &&
           (asset->subtype == subtype)) {
-          return asset;
+          return FindType(ref);
       }
     } catch (...) {
         // do nothing - don't even generate any warnings
     }
-    return AssetType();
+    return FindType();
   }
 
   template<class AssetType>
-  AssetType Find(const std::string & ref) {
-    return Find<AssetType>(ref, AssetType::Impl::EXPECTED_TYPE);
+  inline typename AssetType::AssetD Find(const std::string & ref, const AssetDefs::Type & type) {
+    return Find<typename AssetType::AssetD>(ref, type, AssetType::SUBTYPE);
   }
 
-  template<class VersionType>
+  template<class AssetType>
+  inline typename AssetType::AssetD Find(const std::string & ref) {
+    return Find<typename AssetType::AssetD>(ref, AssetType::TYPE, AssetType::SUBTYPE);
+  }
+
+  template<class AssetType>
+  inline typename AssetType::VersionD FindVersion(const std::string & ref, const AssetDefs::Type & type) {
+    return Find<typename AssetType::VersionD>(ref, type, AssetType::SUBTYPE);
+  }
+
+  template<class AssetType>
   void ValidateRefForInput(const std::string & ref, const AssetDefs::Type & type)
   {
     assert(type != AssetDefs::Invalid);
-    using AssetType = typename VersionType::Impl::AssetType;
-    const std::string subtype = VersionType::Impl::EXPECTED_SUBTYPE;
     if (AssetVersionRef(ref).Version() == "current") {
-      AssetType asset = Find<AssetType>(ref, type);
+      typename AssetType::Asset asset = Find<AssetType>(ref, type);
       if (!asset) {
         throw std::invalid_argument(
-            "No such " + ToString(type) + " " + subtype + " asset: " + ref);
+            "No such " + ToString(type) + " " + AssetType::SUBTYPE + " asset: " + ref);
       }
     } else {
-      VersionType version = Find<VersionType>(ref, type);
+      typename AssetType::VersionD version = FindVersion<AssetType>(ref, type);
       if (!version) {
         throw std::invalid_argument(
-            "No such " + ToString(type) + " " + subtype + " asset version: " +
+            "No such " + ToString(type) + " " + AssetType::SUBTYPE + " asset version: " +
             ref);
       }
     }
-  }  
-  
-  template<class VersionType>
-  void ValidateRefForInput(const std::string & ref) {
-    return ValidateRefForInput<VersionType>(ref, VersionType::Impl::EXPECTED_TYPE);
   }
 
-  template<class MutableDerivedAssetHandleType, class ConfigType>
-  MutableDerivedAssetHandleType Make( const std::string &ref_,
+  template<class AssetType>
+  inline void ValidateRefForInput(const std::string & ref) {
+    return ValidateRefForInput<AssetType>(ref, AssetType::TYPE);
+  }
+
+  template<class AssetType>
+  typename AssetType::MutableAssetD Make(const std::string &ref_,
                                       AssetDefs::Type type_,
                                       const khMetaData &meta,
-                                      const ConfigType &config)
+                                      const typename AssetType::Config &config)
   {
-    using Impl = typename MutableDerivedAssetHandleType::Impl;
-    using AssetStorageType = typename Impl::Base;
-    return MutableDerivedAssetHandleType(std::make_shared<Impl>
-                                        (AssetStorageType::MakeStorage(
-                                        ref_, type_, 
-                                        Impl::EXPECTED_SUBTYPE,
-                                        std::vector<SharedString>(), meta),
-                                        config));
+    return typename AssetType::MutableAssetD(
+        std::make_shared<typename AssetType::AssetImplD>
+            (AssetStorage::MakeStorage(
+                ref_, type_, 
+                AssetType::SUBTYPE,
+                std::vector<SharedString>(), meta),
+                config));
   }
 
-  template<class MutableDerivedAssetHandleType, class ConfigType>
-  MutableDerivedAssetHandleType Make( const std::string &ref_,
+  template<class AssetType>
+  typename AssetType::MutableAssetD Make(const std::string &ref_,
                                       AssetDefs::Type type_,
                                       const std::vector<SharedString>& inputs_,
                                       const khMetaData &meta,
-                                      const ConfigType &config)
+                                      const typename AssetType::Config &config)
   {
-    using Impl = typename MutableDerivedAssetHandleType::Impl;
-    using AssetStorageType = typename Impl::Base;
-    return MutableDerivedAssetHandleType(std::make_shared<Impl>
-                                        (AssetStorageType::MakeStorage(
-                                        ref_, type_,
-                                        Impl::EXPECTED_SUBTYPE,
-                                        inputs_, meta),
-                                        config));
+    return typename AssetType::MutableAssetD(
+        std::make_shared<typename AssetType::AssetImplD>
+            (AssetStorage::MakeStorage(
+                ref_, type_,
+                AssetType::SUBTYPE,
+                inputs_, meta),
+                config));
   }
 
-  template<class MutableDerivedAssetHandleType, class ConfigType>
-  MutableDerivedAssetHandleType Make( const std::string &ref_,
+  template<class AssetType>
+  typename AssetType::MutableAssetD Make(const std::string &ref_,
                                       const std::vector<SharedString>& inputs_,
                                       const khMetaData &meta,
-                                      const ConfigType &config)
+                                      const typename AssetType::Config &config)
   {
-    using Impl = typename MutableDerivedAssetHandleType::Impl;
-    using AssetStorageType = typename Impl::Base;
-    return MutableDerivedAssetHandleType(std::make_shared<Impl>
-                                        (AssetStorageType::MakeStorage(
-                                        ref_, Impl::EXPECTED_TYPE,
-                                        Impl::EXPECTED_SUBTYPE,
-                                        inputs_, meta),
-                                        config));
+    return typename AssetType::MutableAssetD(
+        std::make_shared<typename AssetType::AssetImplD>
+            (AssetStorage::MakeStorage(
+                ref_, AssetType::TYPE,
+                AssetType::SUBTYPE,
+                inputs_, meta),
+                config));
   }
 
-  template<class MutableDerivedAssetHandleType, class ConfigType>
-  MutableDerivedAssetHandleType FindMake(const std::string& ref_,
-                                          AssetDefs::Type type_,
-                                          const khMetaData& meta_,
-                                          const ConfigType& config_)
-  {
-      MutableDerivedAssetHandleType asset = Find<MutableDerivedAssetHandleType>(ref_, type_);
-      if (asset)
-      {
-          asset->Modify(meta_, config_);
-          return asset;
-      }
-      return Make<MutableDerivedAssetHandleType, ConfigType>(ref_, type_, meta_, config_);
-  }
-
-  template<class MutableDerivedAssetHandleType, class ConfigType>
-  MutableDerivedAssetHandleType FindMake(const std::string& ref_,
+  template<class AssetType>
+  typename AssetType::MutableAssetD FindMake(const std::string& ref_,
                                           AssetDefs::Type type_,
                                           const std::vector<SharedString>& inputs_,
                                           const khMetaData& meta_,
-                                          const ConfigType& config_)
+                                          const typename AssetType::Config& config_)
   {
-      MutableDerivedAssetHandleType asset = Find<MutableDerivedAssetHandleType>(ref_, type_);
+      typename AssetType::MutableAssetD asset = Find<AssetType>(ref_, type_);
       if (asset)
       {
           asset->Modify(inputs_, meta_, config_);
           return asset;
       }
-      return Make<MutableDerivedAssetHandleType, ConfigType>(ref_, type_, inputs_, meta_, config_);
+      return Make<AssetType>(ref_, type_, inputs_, meta_, config_);
   }
 
-  template <class MutableDerivedAssetHandleType, class ConfigType>
-  MutableDerivedAssetHandleType FindMake(const std::string& ref_,
+  template<class AssetType>
+  typename AssetType::MutableAssetD FindMake(const std::string& ref_,
                                           const std::vector<SharedString>& inputs_,
                                           const khMetaData& meta_,
-                                          const ConfigType& config_)
+                                          const typename AssetType::Config& config_)
   {
-     MutableDerivedAssetHandleType asset = Find<MutableDerivedAssetHandleType>(ref_);
+     typename AssetType::MutableAssetD asset = Find<AssetType>(ref_);
      if (asset)
      {
          asset->Modify(inputs_, meta_, config_);
          return asset;
      }
-     return Make<MutableDerivedAssetHandleType, ConfigType> (ref_, inputs_, meta_, config_);
+     return Make<AssetType> (ref_, inputs_, meta_, config_);
   }
 
-  template <class MutableDerivedVersionHandleType, class Version, class ConfigType>
-  MutableDerivedVersionHandleType FindMakeAndUpdate(const std::string& ref_,
+  template <class AssetType>
+  typename AssetType::MutableVersionD FindMakeAndUpdate(const std::string& ref_,
                                                   const AssetDefs::Type type_,
                                                   const std::vector<SharedString>& inputs_,
                                                   const khMetaData& meta_,
-                                                  const ConfigType& config_,
-                                                  const std::vector<Version>& cachedinputs_)
+                                                  const typename AssetType::Config& config_,
+                                                  const std::vector<typename AssetType::Version::Base>& cachedinputs_)
   {
-      using AssetHandleType = typename MutableDerivedVersionHandleType::Impl::MutableAssetType;
-      auto asset = FindMake<AssetHandleType>
+      auto asset = FindMake<AssetType>
               (ref_, type_, inputs_, meta_, config_);
       bool needed = false;
       return asset->MyUpdate(needed, cachedinputs_);
   }
 
-
-  template <class MutableDerivedVersionHandleType, class Version, class ConfigType>
-  MutableDerivedVersionHandleType FindMakeAndUpdate(const std::string& ref_,
+  template <class AssetType>
+  typename AssetType::MutableVersionD FindMakeAndUpdate(const std::string& ref_,
                                                   const std::vector<SharedString>& inputs_,
                                                   const khMetaData& meta_,
-                                                  const ConfigType& config_,
-                                                  const std::vector<Version>& cachedinputs_ )
+                                                  const typename AssetType::Config& config_,
+                                                  const std::vector<typename AssetType::Version::Base>& cachedinputs_ )
   {
-      using AssetHandleType = typename MutableDerivedVersionHandleType::Impl::MutableAssetType;
-      auto asset = FindMake<AssetHandleType>
+      auto asset = FindMake<AssetType>
               (ref_, inputs_, meta_, config_);
-
       bool needed = false;
       return asset->MyUpdate(needed, cachedinputs_);
   }
 
-  template <class MutableDerivedVersionHandleType, class Version, class ConfigType>
-  MutableDerivedVersionHandleType FindMakeAndUpdate(const std::string& ref_,
-                                                  AssetDefs::Type type_,
-                                                  const khMetaData& meta_,
-                                                  const ConfigType& config_)
-  {
-      using AssetHandleType = typename MutableDerivedVersionHandleType::Impl::MutableAssetType;
-      auto asset = FindMake<AssetHandleType>
-              (ref_, type_, meta_, config_);
-      bool needed = false;
-      return asset->MyUpdate(needed);
-  }
-
-  template <class MutableDerivedVersionHandleType, class Version, class ConfigType>
-  MutableDerivedVersionHandleType FindMakeAndUpdateSubAsset(const std::string& parentAssetRef,
+  template <class AssetType>
+  typename AssetType::MutableVersionD FindMakeAndUpdateSubAsset(const std::string& parentAssetRef,
                                                             AssetDefs::Type type_,
                                                             const std::string& basename,
                                                             const std::vector<SharedString>& inputs_,
                                                             const khMetaData &meta_,
-                                                            const ConfigType& config_,
-                                                            const std::vector<Version>& cachedinputs_)
+                                                            const typename AssetType::Config& config_,
+                                                            const std::vector<typename AssetType::Version::Base>& cachedinputs_)
   {
-      using Impl = typename MutableDerivedVersionHandleType::Impl;
       auto ref_ = AssetDefs::SubAssetName(parentAssetRef,
                                           basename,
                                           type_,
-                                          Impl::EXPECTED_SUBTYPE);
-      return FindMakeAndUpdate<MutableDerivedVersionHandleType, Version, ConfigType>
+                                          AssetType::SUBTYPE);
+      return FindMakeAndUpdate<AssetType>
               (ref_,
                type_,
                inputs_,
@@ -261,18 +238,17 @@ namespace AssetFactory
                cachedinputs_);
   }
 
-  template <class MutableDerivedVersionHandleType, class Version, class ConfigType>
-  MutableDerivedVersionHandleType FindMakeAndUpdateSubAsset(const std::string& parentAssetRef,
+  template <class AssetType>
+  typename AssetType::MutableVersionD FindMakeAndUpdateSubAsset(const std::string& parentAssetRef,
                                                             const std::string& basename,
                                                             const std::vector<SharedString>& inputs_,
                                                             const khMetaData& meta_,
-                                                            const ConfigType& config,
-                                                            const std::vector<Version>& cachedinputs_)
+                                                            const typename AssetType::Config& config,
+                                                            const std::vector<typename AssetType::Version::Base>& cachedinputs_)
   {
-      using Impl = typename MutableDerivedVersionHandleType::Impl;
       auto ref_ = AssetDefs::SubAssetName(parentAssetRef, basename,
-                                          Impl::EXPECTED_TYPE, Impl::EXPECTED_SUBTYPE);
-      return FindMakeAndUpdate<MutableDerivedVersionHandleType, Version, ConfigType>
+                                          AssetType::TYPE, AssetType::SUBTYPE);
+      return FindMakeAndUpdate<AssetType>
              (ref_,
               inputs_,
               meta_,
@@ -280,71 +256,35 @@ namespace AssetFactory
               cachedinputs_);
   }
 
-  template <class MutableDerivedAssetHandleType, class ConfigType>
-  MutableDerivedAssetHandleType FindAndModify(const std::string& ref_,
+  template <class AssetType>
+  typename AssetType::MutableAssetD FindAndModify(const std::string& ref_,
                                               const std::vector<SharedString>& inputs_,
                                               const khMetaData& meta_,
-                                              const ConfigType& config_)
+                                              const typename AssetType::Config& config_)
   {
-      using Impl = typename MutableDerivedAssetHandleType::Impl;
-      MutableDerivedAssetHandleType asset = Find<MutableDerivedAssetHandleType>(ref_);
+      typename AssetType::MutableAssetD asset = Find<AssetType>(ref_);
       if (asset)
       {
           asset->Modify(inputs_, meta_, config_);
           return asset;
       }
       throw khException(kh::tr("%1 '%2' does not exist")
-                        .arg(Impl::EXPECTED_SUBTYPE).arg(ref_));
+                        .arg(AssetType::SUBTYPE).arg(ref_));
   }
 
-  template <class MutableDerivedAssetHandleType, class ConfigType>
-  MutableDerivedAssetHandleType FindAndModify(const std::string& ref_,
-                                              AssetDefs::Type type_,
-                                              const std::vector<SharedString>& inputs_,
-                                              const khMetaData& meta_,
-                                              const ConfigType& config_)
-  {
-      using Impl = typename MutableDerivedAssetHandleType::Impl;
-      MutableDerivedAssetHandleType asset = Find<MutableDerivedAssetHandleType>(ref_, type_);
-      if (asset)
-      {
-          asset->Modify(inputs_, meta_, config_);
-          return asset;
-      }
-      throw khException(kh::tr("%1 '%2' does not exist")
-                        .arg(Impl::EXPECTED_SUBTYPE).arg(ref_));
-  }
-
-  template <class MutableDerivedAssetHandleType, class ConfigType>
-  MutableDerivedAssetHandleType FindAndModify(const std::string& ref_,
-                                              AssetDefs::Type type_,
-                                              const khMetaData& meta_,
-                                              const ConfigType& config_)
-  {
-      using Impl = typename MutableDerivedAssetHandleType::Impl;
-      MutableDerivedAssetHandleType asset = Find<MutableDerivedAssetHandleType>(ref_, type_);
-      if (asset)
-      {
-          asset->Modify(meta_, config_);
-          return asset;
-      }
-      throw khException(kh::tr("%1 '%2' does not exist")
-                        .arg(Impl::EXPECTED_SUBTYPE).arg(ref_));
-  }
-
-  template<class MutableDerivedAssetHandleType, class ConfigType>
-  MutableDerivedAssetHandleType MakeNew( const std::string &ref_,
+  template<class AssetType>
+  typename AssetType::MutableAssetD MakeNew( const std::string &ref_,
                 const std::vector<SharedString>& inputs_,
                 const khMetaData &meta,
-                const ConfigType &config)
+                const typename AssetType::Config &config)
   {
-    using Impl = typename MutableDerivedAssetHandleType::Impl;
-    MutableDerivedAssetHandleType asset = Find<MutableDerivedAssetHandleType>(ref_);
+    typename AssetType::MutableAssetD asset = Find<AssetType>(ref_);
     if (asset) {
         throw khException(kh::tr("%1 '%2' already exists")
-                          .arg(Impl::EXPECTED_SUBTYPE).arg(ref_));
+                          .arg(AssetType::SUBTYPE).arg(ref_));
     } else {
-        return Make<MutableDerivedAssetHandleType, ConfigType>(ref_, inputs_, meta, config);
+        return Make<AssetType>
+                   (ref_, inputs_, meta, config);
     }
   }
 }
