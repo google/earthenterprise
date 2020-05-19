@@ -169,6 +169,12 @@ template<class AssetType>
 inline void
 StorageManager<AssetType>::AddNew(const AssetKey & key, const PointerType & value) {
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
+#ifndef NDEBUG
+  // Make sure we're not adding something that already exists. This is compiled
+  // out for release builds.
+  PointerType findVal;
+  assert(!cache.Find(key, findVal));
+#endif
   cache.Add(key, value, DetermineIfPrune());
   // New assets are automatically dirty
   dirtyMap.emplace(key, value);
@@ -178,7 +184,15 @@ template<class AssetType>
 inline void
 StorageManager<AssetType>::AddExisting(const AssetKey & key, const PointerType & value) {
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
-  cache.Add(key, value, DetermineIfPrune());
+  PointerType existingVal;
+  if (!cache.Find(key, existingVal)) {
+    cache.Add(key, value, DetermineIfPrune());
+  }
+  else {
+    // If it's already there and we're replacing it with something else then
+    // something has gone wrong.
+    assert(value == existingVal);
+  }
 }
 
 // This is the "legacy" Get function used by the AssetHandle_ class (see
@@ -227,6 +241,7 @@ StorageManager<AssetType>::Get(
       // The file has changed on disk.
 
       // Drop the current entry from the cache.
+      assert(dirtyMap.find(key) == dirtyMap.end()); // Make sure it's not dirty - that's an error
       cache.Remove(key, false);  // Don't prune, the Add() will.
 
       // Will succeed, generate stub, or throw exception.
@@ -280,6 +295,7 @@ StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & ref) {
       // The file has changed on disk.
 
       // Drop the current entry from the cache.
+      assert(dirtyMap.find(key) == dirtyMap.end()); // Make sure it's not dirty - that's an error
       cache.Remove(key, false);  // Don't prune, the Add() will.
 
       // Will succeed, generate stub, or throw exception.
