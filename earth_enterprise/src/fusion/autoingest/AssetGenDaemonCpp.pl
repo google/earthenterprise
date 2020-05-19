@@ -85,7 +85,7 @@ print $fh <<EOF;
 #include <khxml/khdom.h>
 #include <AssetThrowPolicy.h>
 #include "AssetOperation.h"
-#include <fusion/autoingest/AssetFactory.h>
+#include <fusion/autoingest/Asset.h>
 using namespace khxml;
 using namespace AssetFactory;
 EOF
@@ -123,6 +123,86 @@ ${name}Factory::SubAssetName(
 
 EOF
 
+if ($withreuse) {	
+
+print $fh <<EOF;
+
+// ReuseOrMakeAndUpdate and ReuseOrMakeAndUpdateSubasset should be moved to
+// AssetFactory. However, when we do that, we end up building extra versions of
+// some assets, which makes databases bigger. We'll need to fix that issue
+// if we decide to move these functions in the future.
+$template
+Mutable${name}AssetVersionD
+${name}Factory::ReuseOrMakeAndUpdate(
+        const std::string &ref_ $formaltypearg,
+        $formalinputarg
+        const khMetaData &meta_,
+        const $config& config_
+        $formalcachedinputarg
+        $formalExtraUpdateArg)
+{
+    // make a copy since actualinputarg is macro substituted, so begin() &
+    // end() could be called on different temporary objects
+    std::vector<SharedString> inputarg = $actualinputarg;
+    // bind my input versions refs
+    std::vector<SharedString> boundInputs;
+    boundInputs.reserve(inputarg.size());
+    std::transform(inputarg.begin(), inputarg.end(), back_inserter(boundInputs),
+                   ptr_fun(&AssetVersionRef::Bind));
+    Mutable${name}AssetD asset = Find<${name}AssetD>(ref_, $typeref);
+    if (asset) {
+        for (const auto& v : asset->versions) {
+            try {
+              ${name}AssetVersionD version(v);
+              // Load an asset version without caching since we may not need it
+              // (offline, obsolete and so on).
+              version.LoadAsTemporary();
+              if ((version->state != AssetDefs::Offline) &&
+                  (version->inputs == boundInputs) &&
+                  config_.IsUpToDate(version->config)) {
+                version.MakePermanent();
+                return version;
+              } else {
+                version.NoLongerNeeded();
+              }
+           }
+           catch (...) {
+             notify(NFY_WARN,
+                    "${name}: ReuseOrMakeAndUpdate could not reuse a version." );
+           }
+        }
+        asset->Modify($forwardinputarg meta_, config_);
+    } else {
+        asset = AssetFactory::Make<Mutable${name}AssetD, $config>(ref_ $forwardtypearg,
+                                                $forwardinputarg
+                                                meta_, config_);
+    }
+    bool needed = false;
+    return asset->MyUpdate(needed $forwardcachedinputarg
+                           $forwardExtraUpdateArg);
+}
+
+$template
+Mutable${name}AssetVersionD
+${name}Factory::ReuseOrMakeAndUpdateSubAsset(
+        const std::string &parentAssetRef
+        $formaltypearg,
+        const std::string &basename,
+        $formalinputarg
+        const khMetaData &meta_,
+        const $config& config_
+        $formalcachedinputarg
+        $formalExtraUpdateArg)
+{
+    return ReuseOrMakeAndUpdate(
+        AssetDefs::SubAssetName(parentAssetRef, basename,
+                                $actualtypearg, "$subtype")
+        $forwardtypearg, $forwardinputarg
+        meta_, config_  $forwardcachedinputarg
+        $forwardExtraUpdateArg);
+}
+EOF
+}
 
 print $fh <<EOF;
 // ****************************************************************************
@@ -495,7 +575,6 @@ if (@ConfigHistory == 1) {
 }
 print $fh "  }\n";
 print $fh "} // anonymous namespace\n\n";
-
 
 
 close($fh);

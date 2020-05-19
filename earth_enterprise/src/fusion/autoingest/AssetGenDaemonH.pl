@@ -296,6 +296,31 @@ public:
                  const std::string &basename);
 EOF
 
+if ($withreuse) {
+
+    print $fh <<EOF;
+    $template
+    static Mutable${name}AssetVersionD
+    ReuseOrMakeAndUpdate(const std::string &ref_ $formaltypearg,
+                         $formalinputarg
+                         const khMetaData &meta_,
+                         const $config& config_
+                         $formalcachedinputarg
+                         $formalExtraUpdateArg);
+
+    $template
+    static Mutable${name}AssetVersionD
+    ReuseOrMakeAndUpdateSubAsset(const std::string &parentAssetRef
+                                 $formaltypearg,
+                                 const std::string &basename,
+                                 $formalinputarg
+                                 const khMetaData &meta_,
+                                 const $config& config_
+                                 $formalcachedinputarg
+                                 $formalExtraUpdateArg);
+EOF
+}
+
 print $fh <<EOF;
 };
 

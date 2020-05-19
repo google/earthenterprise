@@ -1155,18 +1155,13 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
       extraArg.genInfo.push_back(&genInfo[idx]);
     }
 
-      MutableAssetVersionD packgen =
-        AssetFactory::ReuseOrMakeAndUpdate
-        <MutablePacketGenAssetVersionD,
-        PacketGenConfig, PacketGenAssetVersionD,
-        PacketGenExtraUpdateArg<RasterProductAssetVersion>>
-        (genInfo[i].assetname,
-         type,
-         khMetaData(),
-         packetGenConfig,
-         extraArg);
+    MutableAssetVersionD packgen =
+      PacketGenFactory::ReuseOrMakeAndUpdate(genInfo[i].assetname,
+                                            type,
+                                            khMetaData(),
+                                            packetGenConfig,
+                                            extraArg);
 
-    
     if (packetGenConfig.cacheRaster) {
       // Extract the PacketLevel children from the new version and store
       // them in my genInfo. My later children will use these to help
