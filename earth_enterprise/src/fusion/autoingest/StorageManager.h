@@ -94,7 +94,6 @@ class StorageManager : public StorageManagerInterface<AssetType> {
     inline uint64 GetCacheItemSize(const AssetKey & key);
     inline void AddNew(const AssetKey &, const PointerType &);
     inline void AddExisting(const AssetKey &, const PointerType &);
-    inline void NoLongerNeeded(const AssetKey &, bool = true);
     inline void SetPrunePercent(const float & percent);
     inline bool DetermineIfPrune();
     void Abort();
@@ -180,13 +179,6 @@ inline void
 StorageManager<AssetType>::AddExisting(const AssetKey & key, const PointerType & value) {
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
   cache.Add(key, value, DetermineIfPrune());
-}
-
-template<class AssetType>
-inline void
-StorageManager<AssetType>::NoLongerNeeded(const AssetKey & key, bool prune) {
-  std::lock_guard<std::recursive_mutex> lock(storageMutex);
-  cache.Remove(key, (DetermineIfPrune() && prune));
 }
 
 // This is the "legacy" Get function used by the AssetHandle_ class (see
@@ -373,4 +365,3 @@ bool StorageManager<AssetType>::DetermineIfPrune() {
 }
 
 #endif // STORAGEMANAGER_H
-

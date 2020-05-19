@@ -69,10 +69,6 @@ class AssetHandle_ : public AssetHandleInterface<Impl_> {
 
   virtual bool Valid(const HandleType &) const { return true; }
 
-  inline void NoLongerNeeded() {
-    storageManager().NoLongerNeeded(Ref());
-  }
-
   // Only used by Version variant.
   // Loads asset without keeping it in the storage manager
   inline void LoadAsTemporary() const {

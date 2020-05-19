@@ -40,8 +40,6 @@ class AddToAssetCache_Tester : public opengee::mem_usage::RasterProjectFunctionT
         // Cause the reference to be resolved by loading the XML:
         asset_ref_character_count += asset->GetRef().toString().length();
 
-        asset.NoLongerNeeded();
-
         // Keep processing operations:
         return false;
     }

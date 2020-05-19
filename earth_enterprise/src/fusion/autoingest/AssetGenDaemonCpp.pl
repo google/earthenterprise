@@ -162,8 +162,6 @@ ${name}Factory::ReuseOrMakeAndUpdate(
                   config_.IsUpToDate(version->config)) {
                 version.MakePermanent();
                 return version;
-              } else {
-                version.NoLongerNeeded();
               }
            }
            catch (...) {

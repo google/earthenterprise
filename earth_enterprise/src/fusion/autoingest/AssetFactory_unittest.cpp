@@ -199,10 +199,6 @@ public:
     permanent = false;
     versions.push_back(v);
   }
-  void NoLongerNeeded() {
-    impl->needed = false;
-    ++MockVersionDType::NOT_NEEDED_COUNT;
-  }
   void LoadAsTemporary() {
     MockAssetStorage storage = MockAssetStorage::MakeStorage(EXPECTED_REF,
                                                              EXPECTED_TYPE,
