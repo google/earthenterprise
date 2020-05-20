@@ -209,6 +209,7 @@ class geFilePool {
   mutable unsigned int maxFdsUsed;
   mutable khMutex mutex;
   khCondVar condvar;
+  std::shared_ptr<AbstractFileAccessor> aFA;
 
   LockingFileReference GetFileReference(const std::string &fname,
                                         int createFlags, mode_t createMask);
