@@ -43,12 +43,12 @@ public:
 
 class FileReservationImpl : public khMTRefCounter {
   bool isWriter;
-  std::shared_ptr<AbstractFileIdentifier> fid;
+  AbstractFileIdentifier fid;
  public:
-  std::shared_ptr<AbstractFileIdentifier> Fid(void) const { return fid; }
+  AbstractFileIdentifier Fid(void) const { return fid; }
   FileReservationImpl(void) : isWriter(false) { }
   ~FileReservationImpl(void) {
-    assert(!(fid->isValid()));
+    assert(!(fid.isValid()));
     isWriter = false;
   }
 
