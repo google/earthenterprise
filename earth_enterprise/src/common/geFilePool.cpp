@@ -77,7 +77,8 @@ bool FileReservationImpl::UnlockAndClose_(geFilePool &pool) {
     int result = 0;
     {
       khUnlockGuard unlock(pool.mutex);
-      result = isWriter ? pool.aFA->FsyncAndClose(Fid()) : pool.aFA->Close(Fid());
+      std::shared_ptr<AbstractFileAccessor> aFA = FileAccessorFactory::getAccessor(Fid());
+      result = isWriter ? aFA->FsyncAndClose(Fid()) : aFA->Close(Fid());
       fid->invalidate();
     }
     pool.ReduceFdCount_locked();
@@ -97,8 +98,8 @@ bool FileReservationImpl::UnlockAndOpen_(geFilePool &pool,
                                  // our invariant numFdsUsed_ < maxNumFds
   {
     khUnlockGuard unlock(pool.mutex);
-    pool.aFA = FileAccessorFactory::getAccessor(fname);
-    fid = FileIdentifierFactory::getIdentifier(pool.aFA->Open(fname, flags, createMask));
+    std::shared_ptr<AbstractFileAccessor> aFA = FileAccessorFactory::getAccessor(fname);
+    fid = FileIdentifierFactory::getIdentifier(aFA->Open(fname, flags, createMask));
   }
   if (!fid->isValid()) {
     notify(NFY_DEBUG, "FileReservationImpl::UnlockAndOpen_ failure: "
@@ -389,7 +390,7 @@ unsigned int CalcMaxFds(int requested) {
 geFilePool::geFilePool(int maxNumFds_) :
     maxNumFds(CalcMaxFds(maxNumFds_)),
     numFdsUsed(0), maxFdsUsed(0),
-    mutex(), condvar(), aFA()
+    mutex(), condvar()
 {
   notify(NFY_DEBUG, "Creating geFilePool: maxNumFds: %d\n", maxNumFds);
 }
