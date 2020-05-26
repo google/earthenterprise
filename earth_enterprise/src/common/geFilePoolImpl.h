@@ -28,8 +28,13 @@ class geFilePool;
 class AbstractFileIdentifier {
 public:
   virtual bool isValid() { return false; }
-  virtual int getAsFD() { return -1; }
   virtual void invalidate() {};
+  virtual int getAsFD() { return -1; }
+
+  virtual int FsyncAndClose() = 0;
+  virtual int Close() = 0;
+  virtual bool PreadAll(void* buffer, size_t size, off64_t offset) = 0;
+  virtual bool PwriteAll(const void* buffer, size_t size, off64_t offset) = 0;
 };
 
 class POSIXFileIdentifier: public AbstractFileIdentifier {
@@ -39,13 +44,18 @@ public:
   bool isValid() override { return fd != -1; }
   void invalidate() override { fd = -1; }
   int getAsFD() override { return fd; }
+
+  int FsyncAndClose() override;
+  int Close() override;
+  bool PreadAll(void* buffer, size_t size, off64_t offset) override;
+  bool PwriteAll(const void* buffer, size_t size, off64_t offset) override;
 };
 
 class FileReservationImpl : public khMTRefCounter {
   bool isWriter;
-  AbstractFileIdentifier fid;
+  std::unique_ptr<AbstractFileIdentifier> fid;
  public:
-  AbstractFileIdentifier Fid(void) const { return fid; }
+  std::unique_ptr<AbstractFileIdentifier> Fid(void) const { return fid; }
   FileReservationImpl(void) : isWriter(false) { }
   ~FileReservationImpl(void) {
     assert(!(fid.isValid()));
