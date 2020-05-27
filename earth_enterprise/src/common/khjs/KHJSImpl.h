@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@
 // Thin wrapper around the spidermonkey public api header
 // It defines all of the necessary CPP macros and then includes the original
 // jsapi.h
+#include <cstdint>
 #include <gejsapi.h>
 #include <qstring.h>
 #include <qstringlist.h>
@@ -81,8 +83,8 @@ class JSContextUser {
   void ExecuteScript(JSScript *script, jsval *rval);
   bool    ValueToBoolean(jsval v);
   QString ValueToString(jsval val);
-  int32   ValueToInt32(jsval v);
-  uint32  ValueToUint32(jsval v);
+  std::int32_t   ValueToInt32(jsval v);
+  std::uint32_t  ValueToUint32(jsval v);
   float64 ValueToFloat64(jsval v);
   inline QString MakeErrorMessage(const QString &header) {
     return MakeJSContextErrorMessage(rawcx, header);
@@ -90,7 +92,7 @@ class JSContextUser {
   void throwError(const QString &header);
   void FindGlobalFunctionNames(QStringList &fnames);
   void DefineReadOnlyPropertyWithTinyId(JSObject *obj, const QString &name,
-                                        int8 tinyid, JSPropertyOp getter);
+                                        std::int8_t tinyid, JSPropertyOp getter);
   void AddNamedGlobalObject(const QString &name, JSObject *obj);
   void DeleteNamedGlobalObject(const QString &name);
   void MaybeGC(void);
