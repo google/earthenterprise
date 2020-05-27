@@ -1,5 +1,5 @@
 // Copyright 2017 Google Inc.
-// Copyright 2020 The Open GEE Contributors.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -134,7 +134,7 @@ bool PacketIndexReader::ReadNext(PacketIndexEntry *entry) {
   return true;
 }
 
-std::uint32_t PacketIndexReader::ReadNextN(PacketIndexEntry *entries, std::uint32_t count,
+ std::uint32_t PacketIndexReader::ReadNextN(PacketIndexEntry *entries, std::uint32_t count,
                                     LittleEndianReadBuffer &buffer) {
   off64_t read_pos;
   std::uint64_t num_left;
@@ -167,12 +167,12 @@ std::uint32_t PacketIndexReader::ReadNextN(PacketIndexEntry *entries, std::uint3
   return count;
 }
 
-std::uint64_t PacketIndexReader::NumPackets(void) const {
+ std::uint64_t PacketIndexReader::NumPackets(void) const {
   return (Filesize() - PacketFile::kIndexHeaderSize) /
     PacketIndexEntry::kStoreSize;
 }
 
-std::uint64_t PacketIndexReader::NumPackets(const std::string &index_path) {
+ std::uint64_t PacketIndexReader::NumPackets(const std::string &index_path) {
   std::uint64_t file_size;
   time_t mtime;
   if (khGetFileInfo(index_path, file_size, mtime)) {

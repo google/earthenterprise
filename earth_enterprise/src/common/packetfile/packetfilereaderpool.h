@@ -1,6 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
- * Copyright 2020 The Open GEE Contributors.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,10 +27,9 @@
 #ifndef COMMON_PACKETFILE_PACKETFILEREADERPOOL_H__
 #define COMMON_PACKETFILE_PACKETFILEREADERPOOL_H__
 
+#include <cstdint>
 #include <string>
 #include <vector>
-#include <cstdint>
-#include <khTypes.h>
 #include <khGuard.h>
 #include <packetfile/packetfilereader.h>
 

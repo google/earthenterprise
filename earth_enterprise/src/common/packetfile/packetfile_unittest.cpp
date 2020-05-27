@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,10 +20,10 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <iostream>
+#include <cstdint>
 #include <string>
 #include <vector>
 #include <iostream>
-#include <cstdint>
 #include <khFileUtils.h>
 #include <khGuard.h>
 #include <khGetopt.h>
@@ -138,7 +139,7 @@ class PacketFileUnitTest : public UnitTest<PacketFileUnitTest> {
     return true;
   }
 
-
+  
   // TestIndexCRC - test CRC checking of index header and entries
 
   bool TestIndexCRC() {
@@ -296,7 +297,7 @@ class PacketFileUnitTest : public UnitTest<PacketFileUnitTest> {
   {
     const int kDuplicateInterval = 7;
     const int kSourceDivisor = 10;
-
+    
     qtpathgen::BuildRandomRecords(records, record_count, kMaxBuffer);
 
     std::vector<PacketFileWriter::AllocatedBlock> allocations;
@@ -364,7 +365,7 @@ class PacketFileUnitTest : public UnitTest<PacketFileUnitTest> {
       }
       if (0 != memcmp(file_buffer, record->buffer_ptr(), read_size)) {
         throw khSimpleException("ReadRandomRecords: read data mismatch");
-      }
+      }     
     }
   }
 
@@ -382,7 +383,7 @@ class PacketFileUnitTest : public UnitTest<PacketFileUnitTest> {
                   bool sort_records = false)
     {
     const std::uint64_t kSegmentBreak = 1024*1024;
-
+  
     if (0 > chdir(kPathBase.c_str())) {
       throw khSimpleException("TestRandom: chdir failed for ") << kPathBase;
     }
@@ -393,7 +394,7 @@ class PacketFileUnitTest : public UnitTest<PacketFileUnitTest> {
     // Generate and write buffers
     {
       notify(NFY_VERBOSE, "TestRandom: writing records");
-
+      
       PacketFileWriter writer(file_pool_,
                               packet_file_name,
                               true,
@@ -425,7 +426,7 @@ class PacketFileUnitTest : public UnitTest<PacketFileUnitTest> {
     // Read  buffers in order
     {
       notify(NFY_VERBOSE, "TestRandom: reading records");
-
+      
       PacketFileReader reader(file_pool_, packet_file_name);
       ReadRandomRecords(reader, records);
     }
@@ -495,7 +496,7 @@ class PacketFileUnitTest : public UnitTest<PacketFileUnitTest> {
 
   // NextInLevel - return next node at same level in quadtree, update
   // binary blist
-  QuadtreePath NextInLevel(std::uint32_t level, std::uint8_t blist[]) {
+  QuadtreePath NextInLevel(std::uint32_t level, unsigned char blist[]) {
     assert(level <= QuadtreePath::kMaxLevel);
     QuadtreePath previous(level, blist);
     int i = level - 1;
@@ -515,7 +516,7 @@ class PacketFileUnitTest : public UnitTest<PacketFileUnitTest> {
   // Write sequential records at the same level
   void WriteLevel(PacketFileWriter &writer, std::uint32_t level, std::uint32_t count) {
     assert(level <= QuadtreePath::kMaxLevel);
-    std::uint8_t blist[QuadtreePath::kMaxLevel];
+    unsigned char blist[QuadtreePath::kMaxLevel];
     memset(blist, 0, sizeof(blist));
     // Generate a random path for the level that's not too near the end
     for (std::uint32_t i = 0; i < level; ++i) {
@@ -540,7 +541,7 @@ class PacketFileUnitTest : public UnitTest<PacketFileUnitTest> {
     std::uint32_t record_count = 0;
     {
       PacketFileWriter writer(file_pool_, kPacketFileName);
-
+      
       WriteLevel(writer, 17, 200); record_count += 200;
       WriteLevel(writer, 14, 100); record_count += 100;
       WriteLevel(writer, 16, 300); record_count += 300;

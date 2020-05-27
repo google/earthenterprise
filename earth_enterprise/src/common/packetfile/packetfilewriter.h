@@ -1,6 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
- * Copyright 2020 The Open GEE Contributors.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ class PacketFileWriter : private FileBundleWriter {
   class AllocatedBlock {
    public:
     // need to expose copy constructor so a copy can be held for later
-    // use by PacketFileWriter::WriteDuplicate()
+    // use by PacketFileWriter::WriteDuplicate() 
     inline AllocatedBlock(const AllocatedBlock& that) :
       data_pos_(that.data_pos_), index_pos_(that.index_pos_), data_size_(that.data_size_) {}
    private:

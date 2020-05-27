@@ -1,5 +1,5 @@
 // Copyright 2017 Google Inc.
-// Copyright 2020 The Open GEE Contributors.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -102,7 +102,7 @@ void PacketIndexWriter::WriteAppend(const PacketIndexEntry &index_entry) {
 }
 
 
-std::uint64_t PacketIndexWriter::AllocateAppend(const QuadtreePath &qt_path) {
+ std::uint64_t PacketIndexWriter::AllocateAppend(const QuadtreePath &qt_path) {
   // Update index progress
   off64_t index_write_pos;
   {

@@ -1,5 +1,5 @@
 // Copyright 2017 Google Inc.
-// Copyright 2020 The Open GEE Contributors.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ PacketFileWriter::~PacketFileWriter() {
 // at the end where the CRC32 will be stored.  Returns data position
 // as file bundle offset.
 
-std::uint64_t PacketFileWriter::WriteAppendCRC(const QuadtreePath &qt_path,
+ std::uint64_t PacketFileWriter::WriteAppendCRC(const QuadtreePath &qt_path,
                                         void *buffer,
                                         size_t buffer_size,
                                         std::uint32_t index_extra) {
@@ -121,7 +121,7 @@ PacketFilePackIndexer::~PacketFilePackIndexer() {
 
 // Read next record from the pack file and return position in bundle
 
-std::uint64_t PacketFilePackIndexer::ReadNext(void *buffer, size_t read_len) {
+ std::uint64_t PacketFilePackIndexer::ReadNext(void *buffer, size_t read_len) {
   std::uint64_t bundle_pos;                    // position in bundle addressing
   {
     khLockGuard lock(modify_lock_);
@@ -136,7 +136,7 @@ std::uint64_t PacketFilePackIndexer::ReadNext(void *buffer, size_t read_len) {
 
 // ReadAtLinear - read record at specified linear position.
 
-std::uint64_t PacketFilePackIndexer::ReadAtLinear(std::uint64_t linear_pos,
+ std::uint64_t PacketFilePackIndexer::ReadAtLinear(std::uint64_t linear_pos,
                                            void *buffer,
                                            size_t read_len) {
   std::uint64_t bundle_pos = data_reader_.LinearToBundlePosition(linear_pos);
