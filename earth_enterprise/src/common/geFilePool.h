@@ -72,7 +72,7 @@ public:
     static FileAccessor fileAccessor;
     return fileAccessor;
   }
-  int Open(const std::string &fname, int flags, mode_t createMask) = 0;
+  int Open(const std::string &fname, int flags, mode_t createMask);
 };
 
 class geFilePool {
