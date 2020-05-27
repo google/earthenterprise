@@ -120,6 +120,7 @@ class MainWindow : public MainWindowBase {
 
  private:
   void saveScreenLayout();
+  QString getManualPath();
 
   PlacemarkManager* placemark_manager_;
 
