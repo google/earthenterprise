@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +28,7 @@
 
 #include <common/khTypes.h>
 #include <string>
+#include <cstdint>
 
 // PacketFile - internal namespace to define some constants common to
 // reader and writer
@@ -34,7 +36,7 @@
 namespace PacketFile {
   extern const std::string kIndexBase;
   extern const std::string kSignature;
-  extern const uint16 kFormatVersion;
+  extern const std::uint16_t kFormatVersion;
   extern const size_t kIndexHeaderSize;
   extern bool  IsPacketFile(const std::string &path);
   extern std::string IndexFilename(const std::string &path);
