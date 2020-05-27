@@ -882,7 +882,17 @@ if (project.hasProperty('buildOpenGee')) {
     openGeeFusionDeb.dependsOn stageOpenGeeInstall
 }
 
-task openGeeExtraRpm(type: GeeRpm, dependsOn: openGeeServerCoreInitScripts) {
+task openGeeExtraInitScripts(type: Copy, dependsOn: openGeeSharedFiles) {
+    from(file('opengee-extra/src'))
+    into "${buildDir}/opengee-extra"
+
+    CopySpecTemplates.expand(delegate, [
+            'openGeeVersion': ospackage.version,
+            'project': project
+        ])
+}
+
+task openGeeExtraRpm(type: GeeRpm, dependsOn: openGeeExtraInitScripts) {
     mustRunAfter stageOpenGeeInstall
 
     packageName = 'opengee-extra'
@@ -901,6 +911,8 @@ task openGeeExtraRpm(type: GeeRpm, dependsOn: openGeeServerCoreInitScripts) {
 
     autoFindRequiresFilter = rpmCapabilityFilter
     requiresCommandFilter = rpmCommandFilter
+
+    postInstall = file("${buildDir}/opengee-extra/post-install.sh")
 
     // -----------------------------------------------------------------------
     // PostGIS Extras
@@ -931,6 +943,13 @@ task openGeeExtraRpm(type: GeeRpm, dependsOn: openGeeServerCoreInitScripts) {
         into packageInstallRootDir
         include '**/ldap.conf.default'
     }
+
+    filesMatching(
+        '/opt/google/share/searchexample/searchexample'
+    ) {
+        it.mode = 0755
+    }
+
 
     // -----------------------------------------------------------------------
     // Server Extras
