@@ -32,7 +32,7 @@ int FileAccessor::Open(const std::string &fname, int flags, mode_t createMask) {
 // ****************************************************************************
 namespace FileIdentifierFactory {
   static std::unique_ptr<AbstractFileIdentifier> getIdentifier(int i) {
-    return std::make_unique<POSIXFileIdentifier>(i);
+    return std::unique_ptr<POSIXFileIdentifier>{new POSIXFileIdentifier{i}};
   }
 }
 
