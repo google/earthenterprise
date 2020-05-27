@@ -55,7 +55,7 @@ class FileReservationImpl : public khMTRefCounter {
   bool isWriter;
   std::unique_ptr<AbstractFileIdentifier> fid;
  public:
-  std::unique_ptr<AbstractFileIdentifier> Fid(void) const { return fid; }
+  AbstractFileIdentifier *Fid(void) const { return fid.get(); }
   FileReservationImpl(void) : isWriter(false) { }
   ~FileReservationImpl(void) {
     assert(!(fid.isValid()));
