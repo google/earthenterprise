@@ -184,18 +184,7 @@ final_assetroot_configuration()
         "$BASEINSTALLDIR_OPT/bin/geselectassetroot" --role slave --assetroot "$ASSET_ROOT"
     else
         "$BASEINSTALLDIR_OPT/bin/geselectassetroot" --assetroot "$ASSET_ROOT"
-
-        RET_VAL=0
-
-        "$BASEINSTALLDIR_OPT/bin/geconfigureassetroot" --addvolume \
-            "opt:$BASEINSTALLDIR_OPT/share/tutorials" --noprompt --nochown || RET_VAL=$?
-        if [ "$RET_VAL" -eq "255" ]; then
-            cat <<END
-The geconfigureassetroot utility has failed while attempting
-to add the volume 'opt:$BASEINSTALLDIR_OPT/share/tutorials'.
-This is probably because a volume named 'opt' already exists.
-END
-        fi
+      add_fusion_tutorial_volume
     fi
 }
 

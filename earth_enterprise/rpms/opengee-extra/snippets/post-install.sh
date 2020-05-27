@@ -18,8 +18,13 @@ umask 002
 
 main_postinstall()
 {
-    # Install the SearchExample Database
     install_searchexample_database
+
+    if [ -f "/etc/init.d/gefusion" ]; then
+      service gefusion stop
+      add_fusion_tutorial_volume
+      service gefusion start
+    fi
 }
 
 main_postinstall $@

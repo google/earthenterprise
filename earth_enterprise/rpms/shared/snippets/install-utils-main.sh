@@ -8,11 +8,12 @@ PGSQL_DATA="/var/opt/google/pgsql/data"
 PGSQL_LOGS="/var/opt/google/pgsql/logs"
 PGSQL_PROGRAM="/opt/google/bin/pg_ctl"
 
-SEARCH_EX_SCRIPT=/opt/google/share/searchexample/searchexample
+SEARCH_EX_SCRIPT="/opt/google/share/searchexample/searchexample"
 
 # Derived directories:
 SYSTEMRC="$BASEINSTALLDIR_ETC/systemrc"
 MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB=1048576
+FUSION_TUTORIAL_DIR="$BASEINSTALLDIR_OPT/share/tutorials"
 
 # Configuration values:
 ASSET_ROOT="/gevol/assets"
