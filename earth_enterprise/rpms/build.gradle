@@ -589,6 +589,7 @@ task openGeeServerCoreRpm(type: GeeRpm, dependsOn: openGeeServerCoreInitScripts)
         exclude '**/original'
         exclude '**/ExampleSearch.conf'
         exclude '**/doc'
+        exclude '**/mod_wsgi-ge-extra.conf'
 
         into new File(packageInstallRootDir, 'opt')
     }
@@ -963,6 +964,7 @@ task openGeeExtraRpm(type: GeeRpm, dependsOn: openGeeExtraInitScripts) {
         include '**/original/**'
         include '**/ExampleSearch.conf'
         include '**/doc/**'
+        include '**/mod_wsgi-ge-extra.conf'
 
         into new File(packageInstallRootDir, 'opt')
     }
@@ -987,6 +989,12 @@ task openGeeExtraRpm(type: GeeRpm, dependsOn: openGeeExtraInitScripts) {
 
     from(stagedInstallDir_tutorial) {
         into packageInstallRootDir
+    }
+
+    filesMatching(
+        '/opt/google/share/tutorials/fusion/download_tutorial.sh'
+    ) {
+        it.mode = 0755
     }
 }
 
