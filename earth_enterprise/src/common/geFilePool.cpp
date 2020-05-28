@@ -48,7 +48,7 @@ bool POSIXFileAccessor::PwriteAll(const void* buffer, size_t size, off64_t offse
 // ****************************************************************************
 namespace FileAccessorFactory {
   static std::unique_ptr<AbstractFileAccessor> getAccessor(const std::string &fname, int flags, mode_t createMask) {
-    notify(NFY_WARN, "Filename: %s", fname);
+    notify(NFY_WARN, "Filename: %s", fname.c_str());
     if (fname.rfind("/gevol/src/", 0) == 0) {
       std::unique_ptr<AbstractFileAccessor> pFA = std::unique_ptr<POSIXFileAccessor>{new POSIXFileAccessor{}};
       pFA->setFD(pFA->Open(fname, flags, createMask));
