@@ -18,13 +18,15 @@ umask 002
 
 main_postinstall()
 {
-    install_searchexample_database
-    service geserver restart
+    if [ -f "/etc/init.d/geserver" ]; then
+        install_searchexample_database
+        service geserver restart
+    fi
 
     if [ -f "/etc/init.d/gefusion" ]; then
-      service gefusion stop
-      add_fusion_tutorial_volume
-      service gefusion start
+        service gefusion stop
+        add_fusion_tutorial_volume
+        service gefusion start
     fi
 }
 
