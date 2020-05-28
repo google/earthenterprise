@@ -19,6 +19,7 @@ umask 002
 main_postinstall()
 {
     install_searchexample_database
+    service geserver restart
 
     if [ -f "/etc/init.d/gefusion" ]; then
       service gefusion stop
