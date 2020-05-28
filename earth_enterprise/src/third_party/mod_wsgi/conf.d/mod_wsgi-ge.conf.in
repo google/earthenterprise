@@ -12,7 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-LoadModule wsgi_module modules/mod_wsgi.so
+<IfModule !wsgi_module>
+    # Load the WSGI module if it hasn't been loaded yet
+    LoadModule wsgi_module modules/mod_wsgi.so
+</IfModule>
 
 <IfModule wsgi_module>
     WSGIRestrictEmbedded On

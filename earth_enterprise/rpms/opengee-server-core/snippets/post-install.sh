@@ -145,8 +145,11 @@ fix_postinstall_filepermissions()
     # Tutorial and Share
     find /opt/google/share -type d -exec chmod 755 {} \;
     find /opt/google/share -type f -exec chmod 644 {} \;
-    if [[ -f "${SEARCH_EX_SCRIPT}" ]]; then
+    if [ -f "${SEARCH_EX_SCRIPT}" ]; then
       chmod 0755 "${SEARCH_EX_SCRIPT}"
+    fi
+    if [ -f /opt/google/share/tutorials/fusion/download_tutorial.sh ]; then
+      chmod ugo+x /opt/google/share/tutorials/fusion/download_tutorial.sh
     fi
     chmod ugo+x /opt/google/share/geplaces/geplaces
     chmod ugo+x /opt/google/share/support/geecheck/geecheck.pl

@@ -16,10 +16,18 @@
 
 umask 002
 
+SQLDIR=/opt/google/share/opengee-server/sql
+
 main_postinstall()
 {
     if [ -f "/etc/init.d/geserver" ]; then
         install_searchexample_database
+
+        # Set up the ExampleSearch plugin. The opengee-server-core RPM does
+        # this by calling geresetpgdb, but there's no need to do a full reset
+        # here.
+       "$BASEINSTALLDIR_OPT/bin/psql" -q -d gesearch geuser -f "$SQLDIR/examplesearch.sql"
+
         service geserver restart
     fi
 
