@@ -21,39 +21,42 @@
 #include <khEndian.h>
 
 // ****************************************************************************
-// ***  FileAccessor
+// ***  POSIXFileAccessor
 // ****************************************************************************
-int FileAccessor::Open(const std::string &fname, int flags, mode_t createMask) {
+int POSIXFileAccessor::Open(const std::string &fname, int flags, mode_t createMask) {
   return khOpen(fname, flags, createMask);
 }
 
-// ****************************************************************************
-// ***  FileIdentifierFactory
-// ****************************************************************************
-namespace FileIdentifierFactory {
-  static std::unique_ptr<AbstractFileIdentifier> getIdentifier(int i) {
-    return std::unique_ptr<POSIXFileIdentifier>{new POSIXFileIdentifier{i}};
-  }
-}
-
-// ****************************************************************************
-// ***  POSIXFileIdentifier
-// ****************************************************************************
-
-int POSIXFileIdentifier::FsyncAndClose() {
+int POSIXFileAccessor::FsyncAndClose() {
   return khFsyncAndClose(this->getAsFD());
 }
 
-int POSIXFileIdentifier::Close() {
+int POSIXFileAccessor::Close() {
   return khClose(this->getAsFD());
 }
 
-bool POSIXFileIdentifier::PreadAll(void* buffer, size_t size, off64_t offset) {
+bool POSIXFileAccessor::PreadAll(void* buffer, size_t size, off64_t offset) {
   return khPreadAll(this->getAsFD(), buffer, size, offset);
 }
 
-bool POSIXFileIdentifier::PwriteAll(const void* buffer, size_t size, off64_t offset) {
+bool POSIXFileAccessor::PwriteAll(const void* buffer, size_t size, off64_t offset) {
   return khPwriteAll(this->getAsFD(), buffer, size, offset);
+}
+
+// ****************************************************************************
+// ***  FileAccessorFactory
+// ****************************************************************************
+namespace FileAccessorFactory {
+  static std::unique_ptr<AbstractFileAccessor> getAccessor(const std::string &fname, int flags, mode_t createMask) {
+    notify(NFY_WARN, "Filename: %s", fname);
+    if (fname.rfind("/gevol/src/", 0) == 0) {
+      std::unique_ptr<AbstractFileAccessor> pFA = std::unique_ptr<POSIXFileAccessor>{new POSIXFileAccessor{}};
+      pFA->setFD(pFA->Open(fname, flags, createMask));
+      return pFA;
+    }
+    
+    return nullptr;
+  }
 }
 
 // ****************************************************************************
@@ -61,12 +64,12 @@ bool POSIXFileIdentifier::PwriteAll(const void* buffer, size_t size, off64_t off
 // ****************************************************************************
 bool FileReservationImpl::UnlockAndClose_(geFilePool &pool) {
   // run when pool.mutex IS locked
-  if (fid->isValid()) {
+  if (aFA->isValid()) {
     int result = 0;
     {
       khUnlockGuard unlock(pool.mutex);
-      result = isWriter ? fid->FsyncAndClose() : fid->Close();
-      fid->invalidate();
+      result = isWriter ? aFA->FsyncAndClose() : aFA->Close();
+      aFA->invalidate();
     }
     pool.ReduceFdCount_locked();
     return (result != -1);
@@ -85,16 +88,16 @@ bool FileReservationImpl::UnlockAndOpen_(geFilePool &pool,
                                  // our invariant numFdsUsed_ < maxNumFds
   {
     khUnlockGuard unlock(pool.mutex);
-    fid = FileIdentifierFactory::getIdentifier(pool.fa.Open(fname, flags, createMask));
+    aFA = FileAccessorFactory::getAccessor(fname, flags, createMask);
   }
-  if (!fid->isValid()) {
+  if (!aFA->isValid()) {
     notify(NFY_DEBUG, "FileReservationImpl::UnlockAndOpen_ failure: "
            "%u file: %s flags: %d mask: %x, errno: %d\n",
            pool.MaxFdsUsed(), fname.c_str(),flags, createMask, errno);
     // If we failed, back off the count.
     pool.ReduceFdCount_locked();
   }
-  return (fid->isValid());
+  return (aFA->isValid());
 }
 
 // ****************************************************************************
@@ -291,7 +294,7 @@ void FileReferenceImpl::Dump_locked(void) {
 
   fprintf(stderr, "%s: refcount=%d ", fname.c_str(), refcount());
   if (reservation) {
-    fprintf(stderr, "fd=%d ", reservation->Fid()->getAsFD());
+    fprintf(stderr, "fd=%d ", reservation->AFA()->getAsFD());
   }
   if (operationPending) {
     fprintf(stderr, "pending ");
@@ -310,7 +313,7 @@ void FileReferenceImpl::Pread(void *buffer, size_t size, off64_t offset) {
     throw khSimpleException("FileReferenceImpl::Pread: NULL tmpres");
   }
 
-  if (!tmpres->Fid()->PreadAll(buffer, size, offset)) {
+  if (!tmpres->AFA()->PreadAll(buffer, size, offset)) {
     throw khSimpleErrnoException()
       << "Unable to read " << size << " bytes from offset "
       << offset << " in " << fname;
@@ -326,7 +329,7 @@ void FileReferenceImpl::Pwrite(const void *buffer, size_t size,
     throw khSimpleException("FileReferenceImpl::Pwrite: NULL tmpres");
   }
 
-  if (!tmpres->Fid()->PwriteAll(buffer, size, offset)) {
+  if (!tmpres->AFA()->PwriteAll(buffer, size, offset)) {
     throw khSimpleErrnoException()
       << "Unable to write " << size << " bytes to offset "
       << offset << " in " << fname;
@@ -376,7 +379,7 @@ unsigned int CalcMaxFds(int requested) {
 geFilePool::geFilePool(int maxNumFds_) :
     maxNumFds(CalcMaxFds(maxNumFds_)),
     numFdsUsed(0), maxFdsUsed(0),
-    mutex(), condvar(), fa(fa.getFileAccessor())
+    mutex(), condvar()
 {
   notify(NFY_DEBUG, "Creating geFilePool: maxNumFds: %d\n", maxNumFds);
 }

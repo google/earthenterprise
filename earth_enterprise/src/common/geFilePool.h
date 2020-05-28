@@ -65,16 +65,6 @@ class EndianReadBuffer;
 // ***  reader.PRead(...);
 // ****************************************************************************
 
-class FileAccessor {
-  FileAccessor() {};
-public:
-  static FileAccessor getFileAccessor () {
-    static FileAccessor fileAccessor;
-    return fileAccessor;
-  }
-  int Open(const std::string &fname, int flags, mode_t createMask);
-};
-
 class geFilePool {
  public:
   class Reader {
@@ -201,7 +191,6 @@ class geFilePool {
   mutable unsigned int maxFdsUsed;
   mutable khMutex mutex;
   khCondVar condvar;
-  FileAccessor fa;
 
   LockingFileReference GetFileReference(const std::string &fname,
                                         int createFlags, mode_t createMask);

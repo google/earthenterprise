@@ -25,26 +25,30 @@
 
 class geFilePool;
 
-class AbstractFileIdentifier {
+class AbstractFileAccessor {
 public:
   virtual bool isValid() { return false; }
   virtual void invalidate() {};
+  virtual void setFD(int i) {};
   virtual int getAsFD() { return -1; }
 
+  virtual int Open(const std::string &fname, int flags, mode_t createMask) = 0;
   virtual int FsyncAndClose() = 0;
   virtual int Close() = 0;
   virtual bool PreadAll(void* buffer, size_t size, off64_t offset) = 0;
   virtual bool PwriteAll(const void* buffer, size_t size, off64_t offset) = 0;
 };
 
-class POSIXFileIdentifier: public AbstractFileIdentifier {
-  int fd;
+class POSIXFileAccessor: public AbstractFileAccessor {
+  int fileDescriptor;
 public:
-  POSIXFileIdentifier(int i = -1) : fd{ i } {}
-  bool isValid() override { return fd != -1; }
-  void invalidate() override { fd = -1; }
-  int getAsFD() override { return fd; }
+  POSIXFileAccessor(int i = -1) : fileDescriptor{ i } {}
+  bool isValid() override { return fileDescriptor != -1; }
+  void invalidate() override { fileDescriptor = -1; }
+  void setFD(int i) override { fileDescriptor = i; }
+  int getAsFD() override { return fileDescriptor; }
 
+  int Open(const std::string &fname, int flags, mode_t createMask) override;
   int FsyncAndClose() override;
   int Close() override;
   bool PreadAll(void* buffer, size_t size, off64_t offset) override;
@@ -53,12 +57,12 @@ public:
 
 class FileReservationImpl : public khMTRefCounter {
   bool isWriter;
-  std::unique_ptr<AbstractFileIdentifier> fid;
+  std::unique_ptr<AbstractFileAccessor> aFA;
  public:
-  AbstractFileIdentifier *Fid(void) const { return fid.get(); }
+  AbstractFileIdentifier *AFA(void) const { return aFA.get(); }
   FileReservationImpl(void) : isWriter(false) { }
   ~FileReservationImpl(void) {
-    assert(!(fid.isValid()));
+    assert(!(aFA->isValid()));
     isWriter = false;
   }
 
