@@ -228,15 +228,15 @@ void DatabaseAssetImplD::ConstructInputsFromRequest(
                             std::vector<SharedString>* inputs) {
   // make sure the project asset_ref_string's are valid
   if (!req.config.imageryProject.empty()) {
-    ValidateRefForInput<RasterProjectAssetVersionD>(req.config.imageryProject, AssetDefs::Imagery);
+    ValidateRefForInput<RasterProjectType>(req.config.imageryProject, AssetDefs::Imagery);
     inputs->push_back(req.config.imageryProject);
   }
   if (!req.config.vectorProject.empty()) {
-    ValidateRefForInput<VectorProjectAssetVersionD>(req.config.vectorProject);
+    ValidateRefForInput<VectorProjectType>(req.config.vectorProject);
     inputs->push_back(req.config.vectorProject);
   }
   if (!req.config.terrainProject.empty()) {
-    ValidateRefForInput<RasterProjectAssetVersionD>(req.config.terrainProject, AssetDefs::Terrain);
+    ValidateRefForInput<RasterProjectType>(req.config.terrainProject, AssetDefs::Terrain);
     inputs->push_back(req.config.terrainProject);
   }
 }
@@ -255,7 +255,7 @@ DatabaseAssetImplD::HandleEditRequest(const DatabaseEditRequest &req)
 
   // custom FindMake - modified to set/preserve indexVersion
   DatabaseConfig dbConfig = req.config;
-  MutableDatabaseAssetD db = Find<DatabaseAssetD>(dbname);
+  MutableDatabaseAssetD db = Find<DatabaseType>(dbname);
   if (db) {
     // we must preserve the indexVersion sine the GUI doesn't/can't
     // we really should split this VectrProjectConfig into two pieces
@@ -263,7 +263,7 @@ DatabaseAssetImplD::HandleEditRequest(const DatabaseEditRequest &req)
     db->Modify(inputs, req.meta, dbConfig);
   } else {
     dbConfig.indexVersion = 1;
-    db = AssetFactory::Make<MutableDatabaseAssetD, DatabaseConfig>(dbname, inputs, req.meta, dbConfig);
+    db = Make<DatabaseType>(dbname, inputs, req.meta, dbConfig);
   }
 
   if (!db) {
@@ -285,13 +285,13 @@ DatabaseAssetImplD::HandleNewRequest(const DatabaseEditRequest &req)
     AssetDefs::NormalizeAssetName(req.assetname,
                                   AssetDefs::Database, kDatabaseSubtype);
 
-  if (Find<DatabaseAssetD>(dbname)) {
+  if (Find<DatabaseType>(dbname)) {
     throw khException(kh::tr("Database '%1' already exists")
                       .arg(ToQString(dbname)));
   } else {
     DatabaseConfig dbConfig = req.config;
     dbConfig.indexVersion = 1;
-    AssetFactory::FindMake<MutableDatabaseAssetD>(dbname, inputs, req.meta, dbConfig);
+    FindMake<DatabaseType>(dbname, inputs, req.meta, dbConfig);
   }
 }
 
@@ -311,7 +311,7 @@ DatabaseAssetImplD::HandleModifyRequest(const DatabaseEditRequest &req)
 
   // find and modify the DB
   MutableDatabaseAssetD db;
-  if (db = Find<DatabaseAssetD>(dbname)) {
+  if (db = Find<DatabaseType>(dbname)) {
     // we must preserve the indexVersion
     DatabaseConfig dbConfig = req.config;
     dbConfig.indexVersion = db->config.indexVersion;
@@ -500,7 +500,7 @@ DatabaseAssetVersionImplD::CreateCombinedTerrain(
 #ifdef CREATE_SUBSAMPLED_TERRAIN
     if (ssindex) {
       combined_terrain =
-        AssetFactory::FindMakeAndUpdate<MutableCombinedTerrainAssetVersionD, AssetVersion>(
+        FindMakeAndUpdate<CombinedTerrainType>(
             combinedTerrainAssetName,
             makevec2<SharedString>(terrainIndex->GetRef(), ssindex->GetRef()),
             khMetaData(),
@@ -509,7 +509,7 @@ DatabaseAssetVersionImplD::CreateCombinedTerrain(
     } else {
 #endif
       combined_terrain =
-        AssetFactory::FindMakeAndUpdate<MutableCombinedTerrainAssetVersionD, AssetVersion>(
+        FindMakeAndUpdate<CombinedTerrainType>(
             combinedTerrainAssetName,
             makevec1<SharedString>(terrainIndex->GetRef()),
             khMetaData(),
@@ -573,7 +573,7 @@ DatabaseAssetVersionImplD::CreateQTPacket(
     }
   }
 
-  return AssetFactory::FindMakeAndUpdate<MutableQTPacketAssetVersionD, AssetVersion>(
+  return FindMakeAndUpdate<QTPacketType>(
         qtpacket_asset_name,
         input_verrefs,
         khMetaData(),
@@ -670,7 +670,7 @@ DatabaseAssetVersionImplD::CreateUnifiedIndex(
                         0 /* unused channel id */,
                         "" /* unused date_string */));
 
-  return AssetFactory::FindMakeAndUpdate<MutableUnifiedIndexAssetVersionD, AssetVersion>(
+  return FindMakeAndUpdate<UnifiedIndexType>(
         unified_index_asset_name,
         index_input_verrefs,
         khMetaData(),
@@ -710,7 +710,7 @@ DatabaseAssetVersionImplD::CreateGedbAsset(
                               config.indexVersion);
 
   // update the gedb asset
-  return AssetFactory::FindMakeAndUpdate<MutableGEDBAssetVersionD, AssetVersion>(
+  return FindMakeAndUpdate<GEDBType>(
         gedb_asset_name,
         input_verrefs,
         khMetaData(),
@@ -952,10 +952,7 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
 
       // ruse or make a new RasterBlendAssetVersion
       MutableAssetVersionD packgen =
-        AssetFactory::ReuseOrMakeAndUpdate
-        <MutablePacketGenAssetVersionD,
-         packetGenConfig, PacketGenAssetVersionD,
-         PacketGenExtraUpdateArg<RasterProductAssetVersion>>
+        ReuseOrMakeAndUpdate<PacketGenType>
         (ssGenInfo[i].assetname,
          AssetDefs::Terrain,
          khMetaData(),
@@ -1009,7 +1006,7 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
       }
 
       ssindex =
-        Asset::FindMakeAndUpdate<MutableRasterGEIndexAssetVersionD, AssetVersion>(geindexAssetName,
+        FindMakeAndUpdate<RasterGEIndexType>(geindexAssetName,
                                                 AssetDefs::Database,
                                                 packgenkids,
                                                 khMetaData(),

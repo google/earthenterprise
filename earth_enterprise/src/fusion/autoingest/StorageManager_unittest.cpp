@@ -255,18 +255,15 @@ TEST_F(StorageManagerTest, PurgeCacheWithHandlesLegacy) {
       ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
     }
   }
-  
+
   // Now that we no longer have handles items can be removed from the cache.
-  // Remove an item but don't purge the cache
-  storageManager.NoLongerNeeded("asset0", false);
-  ASSERT_EQ(storageManager.CacheSize(), CACHE_SIZE+2) << "Unexpected number of items in cache";
-  ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
-  
-  // Remove an item and do purge the cache
-  storageManager.NoLongerNeeded("asset1");
+  // Add another asset and make sure the cache is purged.
+  Get<TestHandle>(storageManager, "asset999", false, true, false);
   ASSERT_EQ(storageManager.CacheSize(), CACHE_SIZE) << "Unexpected number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
-  storageManager.NoLongerNeeded("asset1");
+
+  // Add another item and make sure the cache is purged again.
+  Get<TestHandle>(storageManager, "asset998", false, true, false);
   ASSERT_EQ(storageManager.CacheSize(), CACHE_SIZE) << "Unexpected number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
 }
@@ -477,18 +474,15 @@ TEST_F(StorageManagerTest, PurgeCacheWithHandles) {
       ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
     }
   }
-  
+
   // Now that we no longer have handles items can be removed from the cache.
-  // Remove an item but don't purge the cache
-  storageManager.NoLongerNeeded("asset0", false);
-  ASSERT_EQ(storageManager.CacheSize(), CACHE_SIZE+2) << "Unexpected number of items in cache";
-  ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
-  
-  // Remove an item and do purge the cache
-  storageManager.NoLongerNeeded("asset1");
+  // Add another asset and make sure the cache is purged.
+  storageManager.Get("asset999");
   ASSERT_EQ(storageManager.CacheSize(), CACHE_SIZE) << "Unexpected number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
-  storageManager.NoLongerNeeded("asset1");
+
+// Add another item and make sure the cache is purged again.
+  storageManager.Get("asset998");
   ASSERT_EQ(storageManager.CacheSize(), CACHE_SIZE) << "Unexpected number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
 }
@@ -603,8 +597,8 @@ TEST_F(StorageManagerTest, PruneLimiting) {
   // Make sure DetermineIfPrune() returns true since the size of the dirty map is now less than half the size of the cache.
   ASSERT_EQ(storageManager.DetermineIfPrune(), true) << "Storage manager has determined wrong choice for pruning cache";
 
-  // Remove an item from the cache and make sure cache is pruned as well.
-  storageManager.NoLongerNeeded("anotherItem0");
+  // Add an item to the cache and make sure cache is pruned as well.
+  storageManager.Get("anotherItem999");
   ASSERT_EQ(storageManager.CacheSize(), CACHE_SIZE) << "Unexpected number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has unexpected item in dirty map";
 }

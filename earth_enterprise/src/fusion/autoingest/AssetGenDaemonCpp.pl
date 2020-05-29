@@ -103,10 +103,8 @@ print $fh <<EOF;
 // ****************************************************************************
 $config{"AssetD.cpp"}
 
-const AssetDefs::Type ${name}AssetImplD::EXPECTED_TYPE = $typeorinvalid;
-const AssetDefs::Type ${name}AssetVersionImplD::EXPECTED_TYPE = $typeorinvalid;
-const std::string ${name}AssetImplD::EXPECTED_SUBTYPE = "$subtype";
-const std::string ${name}AssetVersionImplD::EXPECTED_SUBTYPE = "$subtype";
+const AssetDefs::Type ${name}Type::TYPE = $typeorinvalid;
+const std::string ${name}Type::SUBTYPE = "$subtype";
 
 // ****************************************************************************
 // ***  ${name}Factory - Auto generated
@@ -122,7 +120,6 @@ ${name}Factory::SubAssetName(
 }
 
 EOF
-
 
 print $fh <<EOF;
 // ****************************************************************************
@@ -495,7 +492,6 @@ if (@ConfigHistory == 1) {
 }
 print $fh "  }\n";
 print $fh "} // anonymous namespace\n\n";
-
 
 
 close($fh);
