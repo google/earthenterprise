@@ -64,7 +64,6 @@ class EndianReadBuffer;
 // ***  reader.Pread(...);
 // ***  reader.PRead(...);
 // ****************************************************************************
-
 class geFilePool {
  public:
   class Reader {
