@@ -90,7 +90,7 @@ single_thread_env.test('filebundle_unittest__port',
          [
           '../filebundle/filebundle_unittest__port.cpp',
          ],
-         LIBS=['filebundle__port'])
+         LIBS=['filebundle__port', 'gecommon'])
 
 env.test('IndexManifest_unittest',
                'IndexManifest_unittest.cpp',
