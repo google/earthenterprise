@@ -47,7 +47,7 @@ class TestItem : public TestItemStorage {
       return name;
     }
     void SerializeConfig(khxml::DOMElement*) const {}
-    static std::string XMLFilename(const std::string &boundref) {
+    static std::string Filename(const std::string &boundref) {
       return xmlFilename;
     }
     static std::shared_ptr<TestItem> NewFromDOM(void *e) {
