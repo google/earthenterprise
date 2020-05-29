@@ -590,7 +590,7 @@ task openGeeServerCoreRpm(type: GeeRpm, dependsOn: openGeeServerCoreInitScripts)
         exclude '**/ExampleSearch.conf'
         exclude '**/doc'
         exclude '**/mod_wsgi-ge-extra.conf'
-        exclude '**/examplesearch.sql'
+        exclude '**/examplesearch*.sql'
 
         into new File(packageInstallRootDir, 'opt')
     }
@@ -915,6 +915,7 @@ task openGeeExtraRpm(type: GeeRpm, dependsOn: openGeeExtraInitScripts) {
     requiresCommandFilter = rpmCommandFilter
 
     postInstall = file("${buildDir}/opengee-extra/post-install.sh")
+    preUninstall = file("${buildDir}/opengee-extra/pre-uninstall.sh")
 
     // -----------------------------------------------------------------------
     // PostGIS Extras
@@ -966,7 +967,7 @@ task openGeeExtraRpm(type: GeeRpm, dependsOn: openGeeExtraInitScripts) {
         include '**/ExampleSearch.conf'
         include '**/doc/**'
         include '**/mod_wsgi-ge-extra.conf'
-        include '**/examplesearch.sql'
+        include '**/examplesearch*.sql'
 
         into new File(packageInstallRootDir, 'opt')
     }

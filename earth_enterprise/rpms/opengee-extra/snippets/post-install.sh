@@ -16,8 +16,6 @@
 
 umask 002
 
-SQLDIR=/opt/google/share/opengee-server/sql
-
 main_postinstall()
 {
     if [ -f "/etc/init.d/geserver" ]; then

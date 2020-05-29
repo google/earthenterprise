@@ -14,6 +14,7 @@ SEARCH_EX_SCRIPT="/opt/google/share/searchexample/searchexample"
 SYSTEMRC="$BASEINSTALLDIR_ETC/systemrc"
 MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB=1048576
 FUSION_TUTORIAL_DIR="$BASEINSTALLDIR_OPT/share/tutorials"
+SQLDIR="$BASEINSTALLDIR_OPT/share/opengee-server/sql"
 
 # Configuration values:
 ASSET_ROOT="/gevol/assets"
