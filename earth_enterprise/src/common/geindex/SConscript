@@ -82,10 +82,9 @@ env.test('WriterReader_tests',
 
 env.test('WriterReader_tests__port',
          [
-          'WriterReader_tests__port.cpp',
-          'FileAccessor.cpp'
+          'WriterReader_tests__port.cpp'
          ],
-         LIBS=['filebundle__port', 'getests', 'gtest'])
+         LIBS=['filebundle__port', 'getests', 'gtest', 'FileAccessor.cpp'])
 
 single_thread_env.test('filebundle_unittest__port',
          [
