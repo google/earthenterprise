@@ -60,7 +60,7 @@ class FileReservationImpl : public khMTRefCounter {
   std::unique_ptr<AbstractFileAccessor> aFA;
  public:
   AbstractFileAccessor *AFA(void) const { return aFA.get(); }
-  FileReservationImpl(void) : isWriter(false) { }
+  FileReservationImpl(void) : isWriter(false) aFA(std::unique_ptr<POSIXFileAccessor>(new POSIXFileAccessor())) { }
   ~FileReservationImpl(void) {
     assert(!(aFA->isValid()));
     isWriter = false;
