@@ -4,6 +4,7 @@
 
 class AbstractFileAccessor {
 public:
+  static std::unique_ptr<AbstractFileAccessor> getAccessor(const std::string &fname, int flags, mode_t createMask);
   virtual bool isValid() { return false; }
   virtual void invalidate() {};
   virtual void setFD(int i) {};
@@ -31,7 +32,3 @@ public:
   bool PreadAll(void* buffer, size_t size, off64_t offset) override;
   bool PwriteAll(const void* buffer, size_t size, off64_t offset) override;
 };
-
-namespace FileAccessorFactory {
-  static std::unique_ptr<AbstractFileAccessor> getAccessor(const std::string &fname, int flags, mode_t createMask);
-}

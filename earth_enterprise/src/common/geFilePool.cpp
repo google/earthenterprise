@@ -48,7 +48,7 @@ bool FileReservationImpl::UnlockAndOpen_(geFilePool &pool,
                                  // our invariant numFdsUsed_ < maxNumFds
   {
     khUnlockGuard unlock(pool.mutex);
-    aFA = FileAccessorFactory::getAccessor(fname, flags, createMask);
+    aFA = AbstractFileAccessor::getAccessor(fname, flags, createMask);
   }
   if (!aFA->isValid()) {
     notify(NFY_DEBUG, "FileReservationImpl::UnlockAndOpen_ failure: "
