@@ -124,11 +124,6 @@ class ${name}AssetVersionImplD :
     friend class ${name}AssetImplD;
     friend class DerivedAssetHandleD_<${name}AssetVersion, AssetVersionD, ${name}AssetVersionImplD>;
 public:
-    using AssetType = DerivedAssetHandleD_<${name}Asset, AssetD, ${name}AssetImplD>;
-    using MutableAssetType = MutableDerivedAssetHandleD_<AssetType, MutableAssetD>;
-
-
-
     virtual std::string GetName() const;
     virtual void SerializeConfig(khxml::DOMElement*) const;
     virtual std::uint64_t GetHeapUsage() const override;
@@ -162,9 +157,6 @@ print $fh <<EOF;
           ${base}AssetVersionImpl(),
           ${name}AssetVersionImpl(config_),
           ${base}AssetVersionImplD() { }
-
-    static const AssetDefs::Type EXPECTED_TYPE;
-    static const std::string EXPECTED_SUBTYPE;
 
 $extra{"${name}AssetVersionImplD"}
 
@@ -284,6 +276,20 @@ EOF
 
 print $fh <<EOF;
 
+// Convenience class that ties together related types
+struct ${name}Type {
+  using Asset = ${name}Asset;
+  using Version = ${name}AssetVersion;
+  using AssetD = ${name}AssetD;
+  using VersionD = ${name}AssetVersionD;
+  using MutableAssetD = Mutable${name}AssetD;
+  using MutableVersionD = Mutable${name}AssetVersionD;
+  using AssetImplD = ${name}AssetImplD;
+  using Config = ${config};
+
+  static const AssetDefs::Type TYPE;
+  static const std::string SUBTYPE;
+};
 
 // ****************************************************************************
 // ***  ${name}Factory
@@ -295,12 +301,7 @@ public:
     SubAssetName(const std::string &parentAssetRef
                  $formaltypearg,
                  const std::string &basename);
-EOF
-
-print $fh <<EOF;
 };
-
-
 
 #endif /* __$hprot */
 EOF

@@ -47,6 +47,17 @@ class TestItem : public TestItemStorage {
       return name;
     }
     void SerializeConfig(khxml::DOMElement*) const {}
+    static std::string Filename(const std::string &boundref) {
+      return xmlFilename;
+    }
+    static std::shared_ptr<TestItem> NewFromDOM(void *e) {
+      return std::make_shared<TestItem>();
+    }
+    static std::shared_ptr<TestItem> NewInvalid(const std::string &ref) {
+      newInvalidCalled = true;
+      return std::make_shared<TestItem>();
+    }
+    static std::string GetPlaceholderAssetRegistryKey() { return "TestItemAsset"; }
 };
 
 int TestItem::nextValue;

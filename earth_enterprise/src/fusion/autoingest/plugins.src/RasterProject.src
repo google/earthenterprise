@@ -427,7 +427,7 @@ void RasterProjectAssetImplD::HandleEditRequest(
   for (std::vector<InsetStackItem>::const_iterator inset =
            req.config.insets.begin();
        inset != req.config.insets.end(); ++inset) {
-    ValidateRefForInput<RasterProductAssetVersionD>(inset->dataAsset, req.type);
+    ValidateRefForInput<RasterProductType>(inset->dataAsset, req.type);
   }
 
   // Find/make our target project.
@@ -441,7 +441,7 @@ void RasterProjectAssetImplD::HandleEditRequest(
 
   // Custom FindMake - modified to set/preserve indexVersion & fuid_channel_.
   MutableRasterProjectAssetD project =
-      Find<RasterProjectAssetD>(projname, req.type);
+      Find<RasterProjectType>(projname, req.type);
   if (project) {
     // It is a regular (editing the same asset) or "SaveAs" re-writing edit
     // request.
@@ -474,7 +474,7 @@ void RasterProjectAssetImplD::HandleEditRequest(
   } else {
     // It is a "Save" or "SaveAs" edit request when creating a new asset.
     assert(req.config.indexVersion == 1);
-    project = AssetFactory::Make<MutableRasterProjectAssetD, RasterProjectConfig>(projname, req.type, inputs,
+    project = Make<RasterProjectType>(projname, req.type, inputs,
                                          req.meta, req.config);
   }
 
@@ -513,7 +513,7 @@ void RasterProjectAssetImplD::HandleNewRequest(
   for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
          req.items.begin();
        item != req.items.end(); ++item) {
-    ValidateRefForInput<RasterProductAssetVersionD>(item->dataAsset, req.type);
+    ValidateRefForInput<RasterProductType>(item->dataAsset, req.type);
   }
 
   // normalize the supplied asset name
@@ -521,14 +521,14 @@ void RasterProjectAssetImplD::HandleNewRequest(
     AssetDefs::NormalizeAssetName(req.assetname, req.type, kProjectSubtype);
 
 
-  if (Find<RasterProjectAssetD>(projname, req.type)) {
+  if (Find<RasterProjectType>(projname, req.type)) {
     throw khException(kh::tr("%1 project %2 already exists")
                       .arg(ToQString(req.type), ToQString(projname)));
   } else {
     // make it
     RasterProjectConfig projConfig(req.type);
     MutableRasterProjectAssetD project =
-      AssetFactory::Make<MutableRasterProjectAssetD, RasterProjectConfig>(projname,
+      Make<RasterProjectType>(projname,
                                  req.type,
                                  std::vector<SharedString>(),
                                  khMetaData(),
@@ -563,12 +563,12 @@ void RasterProjectAssetImplD::HandleModifyRequest(
   for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
          req.items.begin();
        item != req.items.end(); ++item) {
-    ValidateRefForInput<RasterProductAssetVersionD>(item->dataAsset, req.type);
+    ValidateRefForInput<RasterProductType>(item->dataAsset, req.type);
   }
 
   // find it and make the change
   MutableRasterProjectAssetD project;
-  if ((project = Find<RasterProjectAssetD>(req.assetname, req.type))) {
+  if ((project = Find<RasterProjectType>(req.assetname, req.type))) {
     // blow away old insets
     project->config.insets.clear();
     // define new ones
@@ -617,12 +617,12 @@ void RasterProjectAssetImplD::HandleAddToRequest(
   for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
          req.items.begin();
        item != req.items.end(); ++item) {
-    ValidateRefForInput<RasterProductAssetVersionD>(item->dataAsset, req.type);
+    ValidateRefForInput<RasterProductType>(item->dataAsset, req.type);
   }
 
   // find it and make the change
   MutableRasterProjectAssetD project;
-  if ((project = Find<RasterProjectAssetD>(req.assetname, req.type))) {
+  if ((project = Find<RasterProjectType>(req.assetname, req.type))) {
     // make sure my existing insets are still in order before adding more
     // a new version of a product asset could invalidate
     // my stacking order
@@ -672,7 +672,7 @@ void RasterProjectAssetImplD::HandleDropFromRequest(
     const RasterProjectDropFromRequest &req) {
   // find the project
   MutableRasterProjectAssetD project;
-  if (!(project = Find<RasterProjectAssetD>(req.assetname, req.type))) {
+  if (!(project = Find<RasterProjectType>(req.assetname, req.type))) {
     throw khException(kh::tr("No %1 project named %2")
                       .arg(ToQString(req.type), ToQString(req.assetname)));
   }
@@ -903,7 +903,7 @@ void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
   dbrootConfig.used_provider_ids_ = used_provider_ids;
 
   MutableAssetVersionD dbroot =
-    AssetFactory::FindMakeAndUpdateSubAsset<MutableRasterDBRootAssetVersionD, AssetVersion>
+    FindMakeAndUpdateSubAsset<RasterDBRootType>
                   (assetRef,
                    type,
                    "dbroot",
@@ -930,7 +930,7 @@ void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
             geindex_version,
             config.legend));
     MutableAssetVersionD layerjs =
-      AssetFactory::FindMakeAndUpdate<MutableMapLayerJSAssetVersionD, AssetVersion>
+      FindMakeAndUpdate<MapLayerJSType>
           (layerJSAssetName,
            std::vector<SharedString>(),
            khMetaData(),
@@ -1155,18 +1155,13 @@ void RasterProjectAssetVersionImplD::FilterInsetInfosByDate(
       extraArg.genInfo.push_back(&genInfo[idx]);
     }
 
-      MutableAssetVersionD packgen =
-        AssetFactory::ReuseOrMakeAndUpdate
-        <MutablePacketGenAssetVersionD,
-        PacketGenConfig, PacketGenAssetVersionD,
-        PacketGenExtraUpdateArg<RasterProductAssetVersion>>
-        (genInfo[i].assetname,
-         type,
-         khMetaData(),
-         packetGenConfig,
-         extraArg);
+    MutableAssetVersionD packgen =
+      ReuseOrMakeAndUpdate<PacketGenType>(genInfo[i].assetname,
+                                            type,
+                                            khMetaData(),
+                                            packetGenConfig,
+                                            extraArg);
 
-    
     if (packetGenConfig.cacheRaster) {
       // Extract the PacketLevel children from the new version and store
       // them in my genInfo. My later children will use these to help
@@ -1346,7 +1341,7 @@ void RasterProjectAssetVersionImplD::CalcLevelsToSkipTransparentTiles(
     }
   }
   MutableRasterGEIndexAssetVersionD geindex =
-    AssetFactory::FindMakeAndUpdate<MutableRasterGEIndexAssetVersionD, AssetVersion>
+    FindMakeAndUpdate<RasterGEIndexType>
          (geindexAssetName, type,
           packgenkids,
           khMetaData(),

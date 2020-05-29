@@ -35,7 +35,7 @@ class AssetSerializerLocalXML : public AssetSerializerInterface<AssetType>
   public:
     virtual AssetPointerType<AssetType> Load(const std::string &boundref)
     {
-      std::string filename = AssetType::XMLFilename(boundref);
+      std::string filename = AssetType::Filename(boundref);
       AssetPointerType<AssetType> result;
       time_t timestamp = 0;
       std::uint64_t filesize = 0;
