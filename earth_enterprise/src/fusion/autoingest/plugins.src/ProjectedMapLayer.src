@@ -165,7 +165,7 @@ ProjectedMapLayerAssetVersionImplD::UpdateChildren(void)
 
 
       MutableAssetVersionD levelver =
-        AssetFactory::FindMakeAndUpdateSubAsset<MutableMapLayerLevelAssetVersionD, AssetVersion>
+        FindMakeAndUpdateSubAsset<MapLayerLevelType>
                      (assetRef,
                       levelname,
                       inputrefs,
