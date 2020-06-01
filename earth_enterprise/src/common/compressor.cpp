@@ -24,7 +24,7 @@
 #include <libpng16/png.h>
 #endif
 
-#ifdef USING LIBPNG15
+#ifdef USING_LIBPNG15
 #include <libpng15/png.h>
 #endif
 
