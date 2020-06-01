@@ -24,7 +24,7 @@ bool POSIXFileAccessor::PwriteAll(const void* buffer, size_t size, off64_t offse
 }
 
 std::unique_ptr<AbstractFileAccessor> AbstractFileAccessor::getAccessor(const std::string &fname, int flags, mode_t createMask) {
-  notify(NFY_WARN, "Filename: %s", fname.c_str());
+  //notify(NFY_WARN, "Filename: %s", fname.c_str());
   if (fname.rfind("/gevol", 0) == 0 || fname.rfind("/tmp", 0) == 0) {
     std::unique_ptr<AbstractFileAccessor> pFA = std::unique_ptr<POSIXFileAccessor>(new POSIXFileAccessor());
     pFA->setFD(pFA->Open(fname, flags, createMask));
