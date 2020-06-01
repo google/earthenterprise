@@ -293,7 +293,8 @@ if el_ver == "el8":
                 '-Wno-error=catch-value',
                 '-Wno-error=format-truncation',
                 '-Wno-error=class-memaccess',
-                '-Wno-error=memset-elt-size']
+                '-Wno-error=memset-elt-size',
+                '-Werror=address']
 
 # Determine libpng version based on el version
 if el_ver == "el8":
