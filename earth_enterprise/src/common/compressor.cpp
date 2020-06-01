@@ -928,9 +928,9 @@ void png_write_func(png_structp png_ptr,
         ((required/(buffer->first.capacity())) + 1) * buffer->first.capacity();
     const std::string backup(&(buffer->first[0]), size);
     buffer->first.reserve(new_capacity);
-    memcpy(&((const_cast<char*>)buffer->first.c_str()[0]), &(backup[0]), size);
+    memcpy(&(const_cast<char*>(buffer->first.c_str())[0]), &(backup[0]), size);
   }
-  memcpy(&((const_cast<char*>)buffer->first.c_str()[size]), data, length);
+  memcpy(&(const_cast<char*>(buffer->first.c_str())[size]), data, length);
   buffer->second += length;
 }
 
