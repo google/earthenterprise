@@ -92,7 +92,7 @@ lpaths = ' '.join(map(lambda i: '-L%s' % i, env['rpathlink_dirs']))
 lflags = ' '.join(third_party_env['LINKFLAGS'])
 
 # If we are on el8 we need to add tirpc
-if el_ver == "el8":
+if 'el8' in os.uname()[2]:
   cflags += ' -I/usr/include/tirpc'
   lflags += ' -ltirpc'
 

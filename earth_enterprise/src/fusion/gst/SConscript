@@ -118,7 +118,7 @@ simple_earthstream_sources = [
         'gstSimpleStream.cpp',
         ]
 
-if el_ver == 'el8':
+if env['el_ver'] == 'el8':
   png_ver = 'png16'
 else:
   png_ver = 'png15'

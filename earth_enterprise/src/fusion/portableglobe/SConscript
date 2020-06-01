@@ -40,7 +40,7 @@ cutspeclib_sources = ['cutspec.cpp']
 cutspec = env.sharedLib('cutspec', cutspeclib_sources, LIBS=['gecommon'])
 env.install('common_lib', [cutspec])
 
-if el_ver == 'el8':
+if env['el_ver'] == 'el8':
   png_ver = 'png16'
 else:
   png_ver = 'png15'

@@ -94,7 +94,7 @@ env.Depends(streaming_imagery_basename+'.os', streaming_imagery_basename+'.cc')
 # Check environment for png.h file
 conf = Configure(env)
 
-if el_ver == 'el8':
+if env['el_ver'] == 'el8':
   png_ver = 'png16'
 else:
   png_ver = 'png15'

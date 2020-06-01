@@ -134,7 +134,7 @@ cxx_flags.remove('-Werror')
 # http://www.microhowto.info/howto/building_a_shared_library_using_gcc.html#idp25536
 cxx_flags.append('-fPIC')
 
-if el_ver == 'el8':
+if 'el8' in os.uname()[2]:
   png_ver = 'libpng16'
 else:
   png_ver = 'libpng15'

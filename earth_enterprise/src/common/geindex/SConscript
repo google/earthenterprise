@@ -60,7 +60,7 @@ file_bundle_port_sources = [
   'shared.os'
 ]
 
-if el_ver == 'el8':
+if env['el_ver'] == 'el8':
   png_ver = 'png16'
 else:
   png_ver = 'png15'
