@@ -176,7 +176,7 @@ check_prereq_software()
     check_prereq_software_retval=1
   fi
 
-  if ! software_check "$script_name" "python2.[67]" "python[2]?-2.[67].*"; then
+  if ! software_check "$script_name" "python2.[67]" "python[2]-2.[67].*"; then
     check_prereq_software_retval=1
   fi
 
