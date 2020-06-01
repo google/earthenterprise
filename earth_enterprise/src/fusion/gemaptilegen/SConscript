@@ -22,11 +22,16 @@ env.UpdateCppflagsForSkia()
 
 env.idl(['Config.idl'])
 
+if el_ver == 'el8':
+  png_ver = 'png16'
+else:
+  png_ver = 'png15'
+
 ConfigObj = env.SharedObject('.idl/Config.cpp')
 
 gemaptilegen = env.executable('gemaptilegen',
                             ['gemaptilegen.cpp', 'Generator.cpp',
                              ConfigObj],
-                            LIBS=['gegst', 'sgl', 'gif', 'gefconfigutil', 'png12', 'jpeg', 'freetype', 'xerces-c', 'geautoingest', 'gexml', 'QtCore', 'QtGui', 'gecommon', 'geutil', 'geos'])
+                            LIBS=['gegst', 'sgl', 'gif', 'gefconfigutil', png_ver, 'jpeg', 'freetype', 'xerces-c', 'geautoingest', 'gexml', 'QtCore', 'QtGui', 'gecommon', 'geutil', 'geos'])
 
 env.install('fusion_bin', [gemaptilegen])

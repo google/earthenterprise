@@ -15,11 +15,18 @@
 
 #include <string.h>
 #include <math.h>
-#include <libpng12/png.h>
 #include <utility>
 #include "compressor.h"
 #include <common/khConstants.h>
 #include <common/khStringUtils.h>
+
+#ifdef USING_LIBPNG16
+#include <libpng16/png.h>
+#endif
+
+#ifdef USING LIBPNG15
+#include <libpng15/png.h>
+#endif
 
 // After introducing date comments into jpeg headers, our
 // decompressor gives us the following warning, which we want to detect and

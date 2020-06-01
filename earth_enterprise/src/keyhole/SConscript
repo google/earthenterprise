@@ -29,6 +29,11 @@ cpps = [
   'jpeg_comment_date.cc',
 ]
 
+if el_ver == 'el8':
+  png_ver = 'png16'
+else:
+  png_ver = 'png15'
+
 objects = map(lambda f: env.StaticObject(f), cpps)
 keyholeutils = env.staticLib('keyholeutils', objects)
 
@@ -36,4 +41,4 @@ keyholeutils = env.staticLib('keyholeutils', objects)
 SConscript('earth_client_protobuf/SConscript', exports='env')
 
 env.test('jpeg_comments_dates_unittest', 'jpeg_comment_date_unittest.cpp',
-         LIBS=[keyholeutils, 'gecommon', 'gtest', 'png12'])
+         LIBS=[keyholeutils, 'gecommon', 'gtest', png_ver])

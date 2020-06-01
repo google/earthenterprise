@@ -294,6 +294,12 @@ if el_ver == "el8":
                 '-Wno-error=format-truncation',
                 '-Wno-error=class-memaccess']
 
+# Determine libpng version based on el version
+if el_ver == "el8":
+  cppflags += ['-DUSING_LIBPNG16']
+else:
+  cppflags += ['-DUSING_LIBPNG15']
+
 if max_num_jobs_coeff:
   cppflags += ['-DKH_MAX_NUM_JOBS_COEFF=%s' % max_num_jobs_coeff]
 
