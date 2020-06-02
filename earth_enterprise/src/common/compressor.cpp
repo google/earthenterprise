@@ -15,11 +15,18 @@
 
 #include <string.h>
 #include <math.h>
-#include <libpng12/png.h>
 #include <utility>
 #include "compressor.h"
 #include <common/khConstants.h>
 #include <common/khStringUtils.h>
+
+#if defined USING_LIBPNG16
+#include <libpng16/png.h>
+#elif defined USING_LIBPNG15
+#include <libpng15/png.h>
+#else
+#include <libpng12/png.h>
+#endif
 
 // After introducing date comments into jpeg headers, our
 // decompressor gives us the following warning, which we want to detect and
@@ -921,9 +928,9 @@ void png_write_func(png_structp png_ptr,
         ((required/(buffer->first.capacity())) + 1) * buffer->first.capacity();
     const std::string backup(&(buffer->first[0]), size);
     buffer->first.reserve(new_capacity);
-    memcpy(&(buffer->first[0]), &(backup[0]), size);
+    memcpy(&(const_cast<char*>(buffer->first.c_str())[0]), &(backup[0]), size);
   }
-  memcpy(&(buffer->first[size]), data, length);
+  memcpy(&(const_cast<char*>(buffer->first.c_str())[size]), data, length);
   buffer->second += length;
 }
 

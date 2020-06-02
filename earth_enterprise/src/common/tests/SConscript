@@ -19,8 +19,13 @@ import os
 
 env.Append(LIBPATH = ['/usr/lib/', '/usr/lib64'])
 
+if env['el_ver'] == 'el8':
+  png_ver = 'png16'
+else:
+  png_ver = 'png15'
+
 map(lambda test: env.test(test, [test + '.cpp'],
-                          LIBS=['gecommon', 'geutil', 'png12']),
+                          LIBS=['gecommon', 'geutil', png_ver]),
     ['simpleexception_unittest',
      'endian_tests',
      'segmented_array_tests',
@@ -32,21 +37,21 @@ map(lambda test: env.test(test, [test + '.cpp'],
 
 
 map(lambda test: env.test(test, [test + '.cpp'],
-                          LIBS=['geutil', 'png12']),
+                          LIBS=['geutil', png_ver]),
     ['multirange_tests',
      'dottedversion_tests',
      ])
 
 
 map(lambda test: env.test(test, [test + '.cpp'],
-                          LIBS=['gecommon', 'geutil', 'gtest', 'png12']),
+                          LIBS=['gecommon', 'geutil', 'gtest', png_ver]),
     ['khStringUtils_test',
      'khfileutils_tests',
      'khMisc_tests',
      ])
 
 map(lambda test: env.test(test, [test + '.cc'],
-                          LIBS=['gecommon', 'geutil', 'gtest', 'png12']),
+                          LIBS=['gecommon', 'geutil', 'gtest', png_ver]),
     ['etencoder_tests',
      ])
 
