@@ -20,12 +20,12 @@
 #include <common/khConstants.h>
 #include <common/khStringUtils.h>
 
-#ifdef USING_LIBPNG16
+#if defined USING_LIBPNG16
 #include <libpng16/png.h>
-#endif
-
-#ifdef USING_LIBPNG15
+#elif defined USING_LIBPNG15
 #include <libpng15/png.h>
+#else
+#include <libpng12/png.h>
 #endif
 
 // After introducing date comments into jpeg headers, our
