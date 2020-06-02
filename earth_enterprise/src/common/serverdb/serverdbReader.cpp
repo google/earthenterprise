@@ -29,7 +29,6 @@
 #include "common/proto_streaming_imagery.h"
 #include "common/geGdalUtils.h"
 #include "common/generic_utils.h"
-#include "FileAccessor.h"
 
 // TODO this code is from fusion/JsUtils and needs to be refactored to remove code duplication.
 namespace {
