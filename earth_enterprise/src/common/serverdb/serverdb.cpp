@@ -20,10 +20,10 @@
 
 #include "common/khGuard.h"
 #include "common/khStringUtils.h"
-#include "common/khFileUtils.h"
 #include "common/notify.h"
 #include "common/khConstants.h"
 #include "common/serverdb/serverdb.h"
+#include "FileAccessor.h"
 
 namespace {
 const std::string kDbType = "<db_type>";
@@ -36,22 +36,22 @@ const std::string kDelim = "|";
 }  // end namespace
 
 bool ServerdbConfig::Load(std::string config_file) {
-  FILE* fp = fopen(config_file.c_str(), "r");
-  if (fp == NULL) {
+  std::unique_ptr<AbstractFileAccessor> aFA = AbstractFileAccessor::getAccessor(config_file);
+  aFA->Open(config_file.c_str(), "r");
+  if (!aFA->isValid()) {
     notify(NFY_WARN, "Unable to open ServerDB config file %s",
            config_file.c_str());
     return false;
   }
-  khFILECloser closer(fp);  // guarantee the file will get closed
 
   // Set the default db type to gedb.
   db_type = TYPE_GEDB;
 
-  while (!feof(fp)) {
+  while (!aFA->feof()) {
     const int kTempBufSize = 8192;
     char buf[kTempBufSize];
     buf[0] = 0;
-    fgets(buf, kTempBufSize, fp);
+    aFA->fgets(buf, kTempBufSize);
     std::string line(buf);
     CleanString(&line, "\r\n");
     std::vector<std::string> tokens;
@@ -93,35 +93,35 @@ bool ServerdbConfig::Load(std::string config_file) {
 
 
 bool ServerdbConfig::Save(std::string config_file) {
-  FILE* fp = fopen(config_file.c_str(), "w");
-  if (fp == NULL) {
+  std::unique_ptr<AbstractFileAccessor> aFA = AbstractFileAccessor::getAccessor(config_file);
+  aFA->Open(config_file.c_str(), "w");
+  if (!aFA->isValid()) {
     notify(NFY_WARN, "Unable to save ServerDB config file %s",
            config_file.c_str());
     return false;
   }
-  khFILECloser closer(fp);
 
-  fprintf(fp, "%s%s%d\n", kDbType.c_str(), kDelim.c_str(), db_type);
+  fprintf(aFA->getFP(), "%s%s%d\n", kDbType.c_str(), kDelim.c_str(), db_type);
   const std::string relative_index_path = khGetDbSuffix(
       index_path, kUnifiedIndexKey);
-  fprintf(fp, "%s%s%s\n", kIndexPath.c_str(), kDelim.c_str(),
+  fprintf(aFA->getFP(), "%s%s%s\n", kIndexPath.c_str(), kDelim.c_str(),
           relative_index_path.c_str());
   Map::const_iterator it = toc_paths.begin();
   for (; it != toc_paths.end(); ++it)
-    fprintf(fp, "%s%s%s%s%s\n", kTocPath.c_str(), kDelim.c_str(),
+    fprintf(aFA->getFP(), "%s%s%s%s%s\n", kTocPath.c_str(), kDelim.c_str(),
                 it->first.c_str(), kDelim.c_str(), it->second.c_str());
 
   std::vector<std::string>::const_iterator icon = icons.begin();
   for (; icon != icons.end(); ++icon)
-    fprintf(fp, "%s%s%s\n", kIcon.c_str(), kDelim.c_str(), icon->c_str());
+    fprintf(aFA->getFP(), "%s%s%s\n", kIcon.c_str(), kDelim.c_str(), icon->c_str());
 
-  fprintf(fp, "%s%s%s\n", kSearchTabsPathTag.c_str(), kDelim.c_str(),
+  fprintf(aFA->getFP(), "%s%s%s\n", kSearchTabsPathTag.c_str(), kDelim.c_str(),
                           searchtabs_path.c_str());
 
   // Output the json paths.
   it = json_paths.begin();
   for (; it != json_paths.end(); ++it)
-    fprintf(fp, "%s%s%s%s%s\n", kJsonPath.c_str(), kDelim.c_str(),
+    fprintf(aFA->getFP(), "%s%s%s%s%s\n", kJsonPath.c_str(), kDelim.c_str(),
                 it->first.c_str(), kDelim.c_str(), it->second.c_str());
 
   return true;

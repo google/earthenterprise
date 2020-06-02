@@ -27,7 +27,6 @@
 #include "common/etencoder.h"
 #include "common/geFilePool.h"
 #include "common/khConstants.h"
-#include "common/khFileUtils.h"
 #include "common/khStringUtils.h"
 #include "common/quadtreepath.h"
 #include "common/serverdb/serverdbReader.h"
@@ -40,6 +39,7 @@
 #include "server/mod_fdb/unpackermanager.h"
 #include "server/mod_fdb/apache_fdb_reader.h"
 #include "common/geGdalUtils.h"
+#include "FileAccessor.h"
 
 #ifdef APLOG_USE_MODULE
 APLOG_USE_MODULE(fdb);
@@ -206,8 +206,7 @@ int FusionDbService::ProcessFusionDbRequest(
     }
 
     std::string content;
-      
-    if (!khReadStringFromFile(path, content)) {
+    if (!AbstractFileAccessor::getAccessor(path)->ReadStringFromFile(path, content)) {
       ap_log_rerror(APLOG_MARK, APLOG_WARNING, 0, r,
                     "Database file %s not found.",
                     path.c_str());

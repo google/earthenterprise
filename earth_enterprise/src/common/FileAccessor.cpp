@@ -4,32 +4,57 @@
 // ***  POSIXFileAccessor
 // ****************************************************************************
 int POSIXFileAccessor::Open(const std::string &fname, int flags, mode_t createMask) {
-  return khOpen(fname, flags, createMask);
+  int result = khOpen(fname, flags, createMask);
+  fileDescriptor = result;
+  return result;
+}
+
+void POSIXFileAccessor::Open(const char *fname, const char *mode) {
+  fp = ::fopen(fname, mode);
 }
 
 int POSIXFileAccessor::FsyncAndClose() {
-  return khFsyncAndClose(this->getAsFD());
+  int result = khFsyncAndClose(fileDescriptor);
+  this->invalidate();
+  return result;
 }
 
 int POSIXFileAccessor::Close() {
-  return khClose(this->getAsFD());
+  int result = 0;
+  if (fileDescriptor != -1) {
+    result = khClose(fileDescriptor);
+  }
+  else {
+    result = ::fclose(fp);
+  }
+  this->invalidate();
+  return result;
 }
 
 bool POSIXFileAccessor::PreadAll(void* buffer, size_t size, off64_t offset) {
-  return khPreadAll(this->getAsFD(), buffer, size, offset);
+  return khPreadAll(fileDescriptor, buffer, size, offset);
 }
 
 bool POSIXFileAccessor::PwriteAll(const void* buffer, size_t size, off64_t offset) {
-  return khPwriteAll(this->getAsFD(), buffer, size, offset);
+  return khPwriteAll(fileDescriptor, buffer, size, offset);
 }
 
-std::unique_ptr<AbstractFileAccessor> AbstractFileAccessor::getAccessor(const std::string &fname, int flags, mode_t createMask) {
-  //notify(NFY_WARN, "Filename: %s", fname.c_str());
-  if (fname.rfind("/gevol", 0) == 0 || fname.rfind("/tmp", 0) == 0) {
-    std::unique_ptr<AbstractFileAccessor> pFA = std::unique_ptr<POSIXFileAccessor>(new POSIXFileAccessor());
-    pFA->setFD(pFA->Open(fname, flags, createMask));
-    return pFA;
-  }
-  
-  return nullptr;
+bool POSIXFileAccessor::ReadStringFromFile(const std::string &filename, std::string &str, std::uint64_t limit) {
+  return khReadStringFromFile(filename, str, limit);
+}
+
+bool POSIXFileAccessor::Exists(const std::string &filename) {
+  return khExists(filename);
+}
+
+int POSIXFileAccessor::feof() {
+  return ::feof(fp);
+}
+
+void POSIXFileAccessor::fgets(char *buf, int bufsize) {
+  ::fgets(buf, bufsize, fp);
+}
+
+std::unique_ptr<AbstractFileAccessor> AbstractFileAccessor::getAccessor(const std::string &fname) {
+  return std::unique_ptr<POSIXFileAccessor>(new POSIXFileAccessor());
 }

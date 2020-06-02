@@ -29,7 +29,6 @@ bool FileReservationImpl::UnlockAndClose_(geFilePool &pool) {
     {
       khUnlockGuard unlock(pool.mutex);
       result = isWriter ? aFA->FsyncAndClose() : aFA->Close();
-      aFA->invalidate();
     }
     pool.ReduceFdCount_locked();
     return (result != -1);
@@ -48,7 +47,8 @@ bool FileReservationImpl::UnlockAndOpen_(geFilePool &pool,
                                  // our invariant numFdsUsed_ < maxNumFds
   {
     khUnlockGuard unlock(pool.mutex);
-    aFA = AbstractFileAccessor::getAccessor(fname, flags, createMask);
+    aFA = AbstractFileAccessor::getAccessor(fname);
+    aFA->Open(fname, flags, createMask);
   }
   if (!aFA->isValid()) {
     notify(NFY_DEBUG, "FileReservationImpl::UnlockAndOpen_ failure: "
@@ -254,7 +254,7 @@ void FileReferenceImpl::Dump_locked(void) {
 
   fprintf(stderr, "%s: refcount=%d ", fname.c_str(), refcount());
   if (reservation) {
-    fprintf(stderr, "fd=%d ", reservation->AFA()->getAsFD());
+    fprintf(stderr, "fd=%d ", reservation->AFA()->getFD());
   }
   if (operationPending) {
     fprintf(stderr, "pending ");
