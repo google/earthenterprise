@@ -176,10 +176,7 @@ el_ver = ''
 if os.path.isfile('/etc/redhat-release') and not os.path.isfile('/etc/os-release'):
   el_ver = 'el6'
 else:
-  if 'el8' in os.uname()[2]:
-    el_ver = 'el8'
-  else:
-    el_ver = 'el7'
+  el_ver = 'el7'
 
 
 if bundle_3rd_libs:
@@ -280,28 +277,11 @@ else:
 # warning so we can continue to build on ancient operating systems.
 warnflags += ['-Wno-error=cpp']
 
-# TODO: remove this and fix all places where we see these warnings.
+# TODO: remove this and fix all places where we see this warnings.
 if native_cc:
   warnflags += ['-Wno-error=unused-result',
                 '-Wno-error=unused-local-typedefs',
                 '-Wno-error=unused-but-set-variable']
-
-# TODO: remove this and fix all places where we see these warnings.
-if el_ver == "el8":
-  warnflags += ['-Wno-error=misleading-indentation',
-                '-Wno-error=terminate',
-                '-Wno-error=catch-value',
-                '-Wno-error=format-truncation',
-                '-Wno-error=class-memaccess',
-                '-Wno-error=memset-elt-size',
-                '-Wno-error=address',
-                '-Wno-error=unused-local-typedefs']
-
-# Determine libpng version based on el version
-if el_ver == "el8":
-  cppflags += ['-DUSING_LIBPNG16']
-else:
-  cppflags += ['-DUSING_LIBPNG15']
 
 if max_num_jobs_coeff:
   cppflags += ['-DKH_MAX_NUM_JOBS_COEFF=%s' % max_num_jobs_coeff]
