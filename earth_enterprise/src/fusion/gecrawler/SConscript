@@ -19,6 +19,11 @@ import os
 env = env.Clone()
 env.UpdateCppflagsForSkia()
 
+if env['el_ver'] == 'el8':
+  png_ver = 'png16'
+else:
+  png_ver = 'png15'
+
 sources = [ 'crawlersource.cpp',
             'archivesource.cpp',
             'archivewriter.cpp',
@@ -40,11 +45,11 @@ env.install('tools_lib', [gecrawllib])
 gecrawler = env.executable('gecrawler',
                            ['gecrawler.cpp',
                             ],
-                            LIBS=['gegst', 'sgl', 'gif', 'png12', 'jpeg', 'freetype', 'gecrawllib', 'geutil', 'gecommon', 'geqtpacket', 'geos', 'GL'])
+                            LIBS=['gegst', 'sgl', 'gif', png_ver, 'jpeg', 'freetype', 'gecrawllib', 'geutil', 'gecommon', 'geqtpacket', 'geos', 'GL'])
 
 geqtpdump = env.executable('geqtpdump',
                            ['geqtpdump.cpp',
                             ],
-                           LIBS=['gegst', 'sgl', 'gif', 'png12', 'jpeg', 'freetype', 'gecrawllib', 'geutil', 'gecommon', 'geqtpacket', 'geos', 'GL'])
+                           LIBS=['gegst', 'sgl', 'gif', png_ver, 'jpeg', 'freetype', 'gecrawllib', 'geutil', 'gecommon', 'geqtpacket', 'geos', 'GL'])
 
 env.install('tools_bin', [gecrawler,geqtpdump])
