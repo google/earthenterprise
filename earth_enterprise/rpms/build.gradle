@@ -641,7 +641,6 @@ task openGeeServerCoreDeb (type: GeeDeb, dependsOn: openGeeServerCoreInitScripts
     obsoletes('opengee-server', "5.3.4.1", LESS | EQUAL)
 
     requires('opengee-common', ospackage.version, GREATER | EQUAL)
-    requiresPre('opengee-common', ospackage.version, GREATER | EQUAL)
     requires('opengee-postgis', '2.3.9', GREATER | EQUAL)
     conflicts('opengee-postgis', '2.0', LESS )
     conflicts('opengee-postgis', '2.4', GREATER | EQUAL)
