@@ -22,11 +22,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
-#ifndef min
-#define min(a,b) ((a) < (b) ? (a) : (b))
-#endif
-
 //////////////////////////////////////////////////////////////////////////////
 // Function used to reset the remaining valid vertices for a second decimation
 // loop.

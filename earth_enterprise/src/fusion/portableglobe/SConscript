@@ -40,12 +40,17 @@ cutspeclib_sources = ['cutspec.cpp']
 cutspec = env.sharedLib('cutspec', cutspeclib_sources, LIBS=['gecommon'])
 env.install('common_lib', [cutspec])
 
+if env['el_ver'] == 'el8':
+  png_ver = 'png16'
+else:
+  png_ver = 'png15'
+
 gepartialglobebuilder = env.executable(
     'gepartialglobebuilder',
     ['gepartialglobebuilder.cpp', 'partialglobebuilder.cpp',
      portablepacketwriter],
     LIBS=['sharedportablelib', 'gesimpleearthstream',
-          'sgl', 'gif', 'png12', 'jpeg',
+          'sgl', 'gif', png_ver, 'jpeg',
           'freetype', 'geutil', 'gecommon', 'cutspec',
           'geqtpacket', 'geos', 'qtutils'])
 
@@ -58,14 +63,14 @@ gedeltabuilder = env.executable(
     'gedeltabuilder',
     ['gedeltabuilder.cpp', deltabuilder, portablepacketwriter],
     LIBS=['sharedportablelib', 'gesimpleearthstream',
-          'sgl', 'gif', 'png12', 'jpeg',
+          'sgl', 'gif', png_ver, 'jpeg',
           'freetype', 'geutil', 'gecommon', 'geqtpacket', 'geos'])
 
 geportableglobebuilder = env.executable(
     'geportableglobebuilder',
     ['geportableglobebuilder.cpp', portableglobebuilder, portablepacketwriter],
     LIBS=['sharedportablelib', 'gesimpleearthstream',
-          'sgl', 'gif', 'png12', 'jpeg',
+          'sgl', 'gif', png_ver, 'jpeg',
           'freetype', 'geutil', 'gecommon', 'geqtpacket', 'geos', 'qtutils'])
 
 gecreatemetadbroot = env.executable(
@@ -78,7 +83,7 @@ geportablemapbuilder = env.executable(
     ['geportablemapbuilder.cpp', portablemapbuilder,
      portableglobebuilder, portablepacketwriter],
     LIBS=['sharedportablelib', 'gesimpleearthstream',
-          'sgl', 'gif', 'png12', 'jpeg',
+          'sgl', 'gif', png_ver, 'jpeg',
           'freetype', 'geutil', 'gecommon', 'geqtpacket', 'geos', 'qtutils'])
 
 geportableglobepacker = env.executable(
