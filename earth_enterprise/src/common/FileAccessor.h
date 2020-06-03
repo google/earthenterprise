@@ -4,6 +4,7 @@
 
 class AbstractFileAccessor {
 public:
+  virtual ~AbstractFileAccessor() = default;
   static std::unique_ptr<AbstractFileAccessor> getAccessor(const std::string &fname);
   virtual bool isValid() = 0;
   virtual void invalidate() = 0;
