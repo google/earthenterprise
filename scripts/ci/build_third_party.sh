@@ -45,7 +45,7 @@ esac
 set -x
 cd earth_enterprise/src
 if [ -f $HOME/cache/third_party$CPP_STD.tgz ]; then
-    tar xf $HOME/cache/third_party$CPP_STD.tgz;
+   tar xf $HOME/cache/third_party$CPP_STD.tgz;
 fi
 
 python2.7 /usr/bin/scons -j3 $BUILD_TYPE=1 cpp_standard=gnu++$CPP_STD third_party > build.log
