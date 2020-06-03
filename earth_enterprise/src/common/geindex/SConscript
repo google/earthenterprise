@@ -60,10 +60,10 @@ file_bundle_port_sources = [
   'shared.os'
 ]
 
-if env['el_ver'] == 'el8':
-  png_ver = 'png16'
-else:
-  png_ver = 'png15'
+#if env['el_ver'] == 'el8':
+#  env['png_ver'] = 'png16'
+#else:
+#  env['png_ver'] = 'png15'
 
 geindex_r = env.sharedLib('geindex_r', readsources,
                           LIBS=['gecommon'])
@@ -98,4 +98,4 @@ single_thread_env.test('filebundle_unittest__port',
 
 env.test('IndexManifest_unittest',
                'IndexManifest_unittest.cpp',
-               LIBS=['getests', 'geindex_r', 'geindex_rw', 'geutil', 'gecommon', 'QtGui', 'QtCore', png_ver])
+               LIBS=['getests', 'geindex_r', 'geindex_rw', 'geutil', 'gecommon', 'QtGui', 'QtCore', env['png_ver']])

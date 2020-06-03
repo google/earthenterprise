@@ -17,13 +17,13 @@
 
 Import('env')
 
-if env['el_ver'] == 'el8':
-  png_ver = 'png16'
-else:
-  png_ver = 'png15'
+#if env['el_ver'] == 'el8':
+#  env['png_ver'] = 'png16'
+#else:
+#  env['png_ver'] = 'png15'
 
 gexml = env.sharedLib('gexml', ['khxml.cpp'],
-                      LIBS=['geutil', 'xerces-c', png_ver])
+                      LIBS=['geutil', 'xerces-c', env['png_ver']])
 
 env.install('common_lib', [gexml])
 
@@ -42,5 +42,5 @@ env.test('idl_tests',
 
 env.test('khxml_unittest',
          'khxml_unittest.cpp',
-         LIBS=['geutil', 'xerces-c', png_ver, 'QtGui', 'QtCore',
+         LIBS=['geutil', 'xerces-c', env['png_ver'], 'QtGui', 'QtCore',
                'gexml', 'gecommon', 'gtest'])

@@ -171,17 +171,6 @@ exportdirs = {
     'bin': exportdir+'/bin/',
 }
 
-
-el_ver = ''
-if os.path.isfile('/etc/redhat-release') and not os.path.isfile('/etc/os-release'):
-  el_ver = 'el6'
-else:
-  if 'el8' in os.uname()[2]:
-    el_ver = 'el8'
-  else:
-    el_ver = 'el7'
-
-
 if bundle_3rd_libs:
   python_version = '2.7.5'
   python_major_version = '2.7'
@@ -246,7 +235,7 @@ if sys.platform[0:5] == 'linux':
   # TODO: Remove this and correct all places where we see this warning.
   if is_min_ubuntu:
     warnflags += ['-Wno-parentheses']
-  cppflags = ['-D_LARGEFILE64_SOURCE', '-DQT_THREAD_SUPPORT',
+  cppflags += ['-D_LARGEFILE64_SOURCE', '-DQT_THREAD_SUPPORT',
               '-DQT_NO_ASCII_CAST', '-DQT_CLEAN_NAMESPACE', '-D_REENTRANT',
               '-DGUNIT_NO_GOOGLE3', '-DQT3_SUPPORT', '-DQT_NO_TRANSLATION','-DQDOC']
   if is_os_ubuntu:
@@ -298,10 +287,27 @@ if el_ver == "el8":
                 '-Wno-error=unused-local-typedefs']
 
 # Determine libpng version based on el version
-if el_ver == "el8":
+'''if el_ver == "el8":
   cppflags += ['-DUSING_LIBPNG16']
 else:
   cppflags += ['-DUSING_LIBPNG15']
+'''
+el_ver = ''
+if os.path.isfile('/etc/redhat-release') and not os.path.isfile('/etc/os-release'):
+  el_ver = 'el6'
+else:
+  if 'el8' in os.uname()[2]:
+    el_ver = 'el8'
+  else:
+    el_ver = 'el7'
+
+png_ver=''
+if os.path.isfile('/usr/include/libpng15'):
+  png_ver = 'png15'
+  cppflags += ['-DUSING_LIBPNG15']
+elif os.path.isfile('/usr/include/libpng16'):
+  png_ver = 'png16'
+  cppflags += ['-DUSING_LIBPNG16']
 
 if max_num_jobs_coeff:
   cppflags += ['-DKH_MAX_NUM_JOBS_COEFF=%s' % max_num_jobs_coeff]
