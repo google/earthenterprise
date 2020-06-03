@@ -1029,7 +1029,7 @@ task openGeeExtraDeb(type: GeeDeb, dependsOn: openGeeExtraInitScripts) {
     packageName = openGeeExtraRpm.packageName
     version = ospackage.version
     release = ospackage.release
-    user = openGeeExtraRpm..user
+    user = openGeeExtraRpm.user
     permissionGroup = openGeeExtraRpm.permissionGroup
     packageGroup = openGeeExtraRpm.packageGroup
     summary = openGeeExtraRpm.summary
