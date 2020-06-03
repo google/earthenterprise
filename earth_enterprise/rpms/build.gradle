@@ -524,6 +524,9 @@ task openGeeServerCoreRpm(type: GeeRpm, dependsOn: openGeeServerCoreInitScripts)
     autoFindProvides = true
     autoFindRequires = true
 
+    // This replaces the opengee-server package from 5.3.4.1 and before
+    obsoletes('opengee-server', "5.3.4.1", LESS | EQUAL)
+
     requires('opengee-common', ospackage.version, GREATER | EQUAL)
     requiresPre('opengee-common', ospackage.version, GREATER | EQUAL)
     requires('opengee-postgis', '2.3.9', GREATER | EQUAL)
@@ -745,6 +748,9 @@ built from raster, vector, and location properties data.
     type = BINARY
     autoFindProvides = true
     autoFindRequires = true
+
+    // This replaces the opengee-fusion package from 5.3.4.1 and before
+    obsoletes('opengee-fusion', "5.3.4.1", LESS | EQUAL)
 
     requires('opengee-common', ospackage.version, GREATER | EQUAL)
     requires('proj-devel') /* This dependency is not being picked up automatically by GeeRpm task */
