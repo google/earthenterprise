@@ -1,6 +1,14 @@
 diff -uNr httpd.orig/httpd-2.4.39/docs/conf/httpd.conf.in httpd-2.4.39/docs/conf/httpd.conf.in 
 --- httpd.orig/httpd-2.4.39/docs/conf/httpd.conf.in     2016-08-16 17:12:07.000000000 -0600
 +++ httpd-2.4.39/docs/conf/httpd.conf.in        2019-06-18 11:51:12.664018750 -0600
+@@ -247,6 +247,7 @@
+     # directives as to Alias.
+     #
+     ScriptAlias /cgi-bin/ "@exp_cgidir@/"
++    Alias /error_handler "/opt/google/gehttpd/cgi-bin/"
+ 
+ </IfModule>
+ 
 @@ -266,6 +266,8 @@
      AllowOverride None
      Options None

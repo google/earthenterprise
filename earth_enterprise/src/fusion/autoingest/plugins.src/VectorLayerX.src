@@ -50,7 +50,7 @@ VectorLayerXAssetImplD::HandleEditRequest(const VectorLayerXEditRequest &req)
 {
   // Validate our input (Make sure it's a VectorProduct)
   // make sure the vprod asset_ref is valid
-  ValidateRefForInput<VectorProductAssetVersionD>(req.config.vectorResource);
+  ValidateRefForInput<VectorProductType>(req.config.vectorResource);
   std::vector<SharedString> productrefs;
   productrefs.push_back(req.config.vectorResource);
 
@@ -62,7 +62,7 @@ VectorLayerXAssetImplD::HandleEditRequest(const VectorLayerXEditRequest &req)
 
   // Custom FindMake
   // We need to make sure we don't clobber an existing fuid_channel
-  MutableVectorLayerXAssetD vectorlayer = Find<VectorLayerXAssetD>(assetname);
+  MutableVectorLayerXAssetD vectorlayer = Find<VectorLayerXType>(assetname);
 
   if (vectorlayer) {
     // It is a regular (editing the same asset) or "SaveAs" re-writing edit
@@ -79,7 +79,7 @@ VectorLayerXAssetImplD::HandleEditRequest(const VectorLayerXEditRequest &req)
     vectorlayer->Modify(productrefs, req.meta, layer_config);
   } else {
     // It is a "Save" or "SaveAs" edit request when creating a new asset.
-    vectorlayer = AssetFactory::Make<MutableVectorLayerXAssetD, VectorLayerXConfig>(assetname,
+    vectorlayer = Make<VectorLayerXType>(assetname,
                                             productrefs,
                                             req.meta,
                                             req.config);
