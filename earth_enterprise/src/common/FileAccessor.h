@@ -8,7 +8,6 @@ public:
   virtual bool isValid() = 0;
   virtual void invalidate() = 0;
   virtual int getFD() = 0;
-  virtual FILE* getFP() = 0;
   virtual int Open(const std::string &fname, int flags, mode_t createMask = 0666) = 0;
   virtual void Open(const char *fname, const char *mode) = 0;
   virtual int FsyncAndClose() = 0;
@@ -19,6 +18,7 @@ public:
   virtual bool Exists(const std::string &filename) = 0;
   virtual int feof() = 0;
   virtual void fgets(char *buf, int bufsize) = 0;
+  virtual void fprintf(const char * __restrict format, ...) = 0;
 };
 
 class POSIXFileAccessor: public AbstractFileAccessor {
@@ -38,7 +38,6 @@ public:
     fp = NULL;
   }
   int getFD() override { return fileDescriptor; }
-  FILE* getFP() override { return fp; }
   int Open(const std::string &fname, int flags, mode_t createMask = 0666) override;
   void Open(const char *fname, const char *mode) override;
   int FsyncAndClose() override;
@@ -49,4 +48,7 @@ public:
   bool Exists(const std::string &filename) override;
   int feof() override;
   void fgets(char *buf, int bufsize) override;
+  inline void fprintf(const char * __restrict format, ...) override {
+    ::fprintf(fp, format, __va_arg_pack());
+  }
 };

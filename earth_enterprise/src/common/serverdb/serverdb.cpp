@@ -101,27 +101,27 @@ bool ServerdbConfig::Save(std::string config_file) {
     return false;
   }
 
-  fprintf(aFA->getFP(), "%s%s%d\n", kDbType.c_str(), kDelim.c_str(), db_type);
+  aFA->fprintf("%s%s%d\n", kDbType.c_str(), kDelim.c_str(), db_type);
   const std::string relative_index_path = khGetDbSuffix(
       index_path, kUnifiedIndexKey);
-  fprintf(aFA->getFP(), "%s%s%s\n", kIndexPath.c_str(), kDelim.c_str(),
+  aFA->fprintf("%s%s%s\n", kIndexPath.c_str(), kDelim.c_str(),
           relative_index_path.c_str());
   Map::const_iterator it = toc_paths.begin();
   for (; it != toc_paths.end(); ++it)
-    fprintf(aFA->getFP(), "%s%s%s%s%s\n", kTocPath.c_str(), kDelim.c_str(),
+    aFA->fprintf("%s%s%s%s%s\n", kTocPath.c_str(), kDelim.c_str(),
                 it->first.c_str(), kDelim.c_str(), it->second.c_str());
 
   std::vector<std::string>::const_iterator icon = icons.begin();
   for (; icon != icons.end(); ++icon)
-    fprintf(aFA->getFP(), "%s%s%s\n", kIcon.c_str(), kDelim.c_str(), icon->c_str());
+    aFA->fprintf("%s%s%s\n", kIcon.c_str(), kDelim.c_str(), icon->c_str());
 
-  fprintf(aFA->getFP(), "%s%s%s\n", kSearchTabsPathTag.c_str(), kDelim.c_str(),
+  aFA->fprintf("%s%s%s\n", kSearchTabsPathTag.c_str(), kDelim.c_str(),
                           searchtabs_path.c_str());
 
   // Output the json paths.
   it = json_paths.begin();
   for (; it != json_paths.end(); ++it)
-    fprintf(aFA->getFP(), "%s%s%s%s%s\n", kJsonPath.c_str(), kDelim.c_str(),
+    aFA->fprintf("%s%s%s%s%s\n", kJsonPath.c_str(), kDelim.c_str(),
                 it->first.c_str(), kDelim.c_str(), it->second.c_str());
 
   return true;
