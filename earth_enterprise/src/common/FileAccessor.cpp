@@ -10,7 +10,7 @@ std::unique_ptr<AbstractFileAccessor> AbstractFileAccessor::getAccessor(const st
 int POSIXFileAccessor::Open(const std::string &fname, const char *mode, int flags, mode_t createMask) {
   int result;
   if (mode) {
-    if (mode == "w") {
+    if (strcmp(mode, "w") == 0) {
       result = khOpenForWrite(fname, createMask);
     }
     else {
