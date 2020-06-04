@@ -37,7 +37,7 @@ const std::string kDelim = "|";
 
 bool ServerdbConfig::Load(std::string config_file) {
   std::unique_ptr<AbstractFileAccessor> aFA = AbstractFileAccessor::getAccessor(config_file);
-  aFA->Open(config_file.c_str(), "r");
+  aFA->Open(config_file, "r");
   if (!aFA->isValid()) {
     notify(NFY_WARN, "Unable to open ServerDB config file %s",
            config_file.c_str());
@@ -94,7 +94,7 @@ bool ServerdbConfig::Load(std::string config_file) {
 
 bool ServerdbConfig::Save(std::string config_file) {
   std::unique_ptr<AbstractFileAccessor> aFA = AbstractFileAccessor::getAccessor(config_file);
-  aFA->Open(config_file.c_str(), "w");
+  aFA->Open(config_file, "w");
   if (!aFA->isValid()) {
     notify(NFY_WARN, "Unable to save ServerDB config file %s",
            config_file.c_str());
