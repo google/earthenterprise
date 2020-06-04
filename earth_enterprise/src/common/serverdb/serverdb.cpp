@@ -47,11 +47,12 @@ bool ServerdbConfig::Load(std::string config_file) {
   // Set the default db type to gedb.
   db_type = TYPE_GEDB;
 
-  while (!aFA->feof()) {
+  int notEOF = 1;
+  while (notEOF) {
     const int kTempBufSize = 8192;
     char buf[kTempBufSize];
     buf[0] = 0;
-    aFA->fgets(buf, kTempBufSize);
+    notEOF = aFA->fgets(buf, sizeof(buf));
     std::string line(buf);
     CleanString(&line, "\r\n");
     std::vector<std::string> tokens;

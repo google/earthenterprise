@@ -1,10 +1,25 @@
 #include "FileAccessor.h"
 
+std::unique_ptr<AbstractFileAccessor> AbstractFileAccessor::getAccessor(const std::string &fname) {
+  return std::unique_ptr<POSIXFileAccessor>(new POSIXFileAccessor());
+}
+
 // ****************************************************************************
 // ***  POSIXFileAccessor
 // ****************************************************************************
-int POSIXFileAccessor::Open(const std::string &fname, int flags, mode_t createMask) {
-  int result = khOpen(fname, flags, createMask);
+int POSIXFileAccessor::Open(const std::string &fname, const char *mode, int flags, mode_t createMask) {
+  int result;
+  if (mode) {
+    if (mode == "w") {
+      result = khOpenForWrite(fname, createMask);
+    }
+    else {
+      result = khOpenForRead(fname);
+    }
+  }
+  else {
+    result = khOpen(fname, flags, createMask);
+  }
   fileDescriptor = result;
   return result;
 }
@@ -37,6 +52,13 @@ bool POSIXFileAccessor::Exists(const std::string &filename) {
   return khExists(filename);
 }
 
-std::unique_ptr<AbstractFileAccessor> AbstractFileAccessor::getAccessor(const std::string &fname) {
-  return std::unique_ptr<POSIXFileAccessor>(new POSIXFileAccessor());
+int POSIXFileAccessor::fgets(void *buf, size_t bufsize) {
+  return read(fileDescriptor, buf, bufsize);
+}
+
+void POSIXFileAccessor::fprintf(const char *format, ...) {
+  va_list arguments;
+  va_start(arguments, format);
+  ::dprintf(fileDescriptor, format, arguments);
+  va_end(arguments);
 }
