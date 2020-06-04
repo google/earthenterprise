@@ -48,7 +48,7 @@ bool FileReservationImpl::UnlockAndOpen_(geFilePool &pool,
   {
     khUnlockGuard unlock(pool.mutex);
     aFA = AbstractFileAccessor::getAccessor(fname);
-    aFA->Open(fname, flags, createMask);
+    aFA->Open(fname, nullptr, flags, createMask);
   }
   if (!aFA->isValid()) {
     notify(NFY_DEBUG, "FileReservationImpl::UnlockAndOpen_ failure: "
