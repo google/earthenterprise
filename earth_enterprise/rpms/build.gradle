@@ -534,6 +534,11 @@ task openGeeServerCoreRpm(type: GeeRpm, dependsOn: openGeeServerCoreInitScripts)
     // This replaces the opengee-server package from 5.3.4.1 and before
     obsoletes('opengee-server', "5.3.4.1", LESS | EQUAL)
 
+    // State that this provides opengee-server in case other software depends
+    // on it. The actual opengee-server RPM is a convenience RPM for a full
+    // install.
+    provides('opengee-server', ospackage.version)
+
     requires('opengee-common', ospackage.version, GREATER | EQUAL)
     requiresPre('opengee-common', ospackage.version, GREATER | EQUAL)
     requires('opengee-postgis', '2.3.9', GREATER | EQUAL)
