@@ -55,11 +55,17 @@ bool POSIXFileAccessor::Exists(const std::string &filename) {
 bool POSIXFileAccessor::GetLinesFromFile(std::vector<std::string> &lines, const size_t bufsize) {
   char buf[bufsize];
   buf[0] = 0;
+  std::string content;
 
   try {
-    read(fileDescriptor, buf, bufsize);
+    ssize_t bytesRead = read(fileDescriptor, buf, bufsize -1);
 
-    std::string content(buf);
+    while (bytesRead > 0) {
+      buf[bytesRead] = 0;
+	    content += buf;	
+	    bytesRead = read(fileDescriptor, buf, bufsize -1);
+    }
+
     TokenizeString(content, lines, "\n");
 
     for (auto it = std::begin(lines); it != std::end(lines); ++it) {
