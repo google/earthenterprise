@@ -1093,7 +1093,7 @@ GenerateStructors(io::Printer* printer) {
 
   printer->Print(
     "const $classname$& $classname$::default_instance() {\n"
-    "  if (default_instance_ == NULL) $adddescriptorsname$();"
+    "  if (default_instance_ == NULL) { $adddescriptorsname$(); }"
     "  return *default_instance_;\n"
     "}\n"
     "\n"

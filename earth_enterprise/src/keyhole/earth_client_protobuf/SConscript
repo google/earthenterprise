@@ -28,9 +28,9 @@ for i in proto_files:
   proto_out = env.ProtocolBuffer(i)
   proto_inputs.append(proto_out[0]) # Only compile the cc files.
 
-env['CPPFLAGS'] += [
-  '-Wfatal-errors'
-  ]
+#env['CPPFLAGS'] += [
+#  '-Wfatal-errors'
+#  ]
 
 # Compile the cc files and add them to the "proto.a" lib.
 objects = map(lambda f: env.StaticObject(f), proto_inputs)

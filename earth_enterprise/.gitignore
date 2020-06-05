@@ -9,3 +9,16 @@
 
 # compiled python
 /**/*.pyc
+
+# no tarballs
+/**/*.tar.gz
+
+# no images
+/**/*.tif
+/**/*.png
+
+# no globes or pyramids
+/**/*.glb
+/**/*.glc
+/**/*.glm
+/**/*.pyr
