@@ -67,8 +67,8 @@ bool POSIXFileAccessor::GetLinesFromFile(std::vector<std::string> &lines, const 
 
     TokenizeString(content, lines, "\n");
 
-    for (auto it = std::begin(lines); it != std::end(lines); ++it) {
-      CleanString(&(*it), "\r\n");
+    for (auto &it : lines) {
+      CleanString(&it, "\r\n");
     }
 
     return true;

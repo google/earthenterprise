@@ -53,9 +53,9 @@ bool ServerdbConfig::Load(std::string config_file) {
     return false;
   }
 
-  for (auto it = std::begin(lines); it != std::end(lines); ++it) {
+  for (const auto &it : lines) {
     std::vector<std::string> tokens;
-    TokenizeString(*it, tokens, kDelim, 3);
+    TokenizeString(it, tokens, kDelim, 3);
     if (tokens.size() < 2)
       continue;
 
