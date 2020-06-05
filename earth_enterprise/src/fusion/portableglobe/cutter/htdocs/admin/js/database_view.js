@@ -853,11 +853,7 @@ gees.admin.databaseView = {
       },
 
       determineWmsOptions: function(item) {
-        if (gees.tools.is2dDatabase(item)) {
           gees.dom.show('WmsOption');
-        } else {
-          gees.dom.hide('WmsOption');
-        }
       },
 
       determinePoiOptions: function(itemHasPoi) {
