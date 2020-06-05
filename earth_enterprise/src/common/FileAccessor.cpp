@@ -61,8 +61,8 @@ bool POSIXFileAccessor::GetLinesFromFile(std::vector<std::string> &lines, const 
 
     while (bytesRead > 0) {
       buf[bytesRead] = 0;
-	    content += buf;	
-	    bytesRead = read(fileDescriptor, buf, bufsize -1);
+      content += buf;
+      bytesRead = read(fileDescriptor, buf, bufsize -1);
     }
 
     TokenizeString(content, lines, "\n");
