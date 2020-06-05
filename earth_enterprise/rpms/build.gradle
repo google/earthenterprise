@@ -265,7 +265,6 @@ task openGeePostGisRpm(type: GeeRpm) {
 
     from (stagedInstallDir_postgis_opt) {
         into new File(packageInstallRootDir, 'opt')
-        exclude '**/doc'
     }
 
     from (new File(stagedInstallDir_server_opt, 'google/lib')) {
@@ -298,7 +297,6 @@ task openGeePostGisDeb(type: GeeDeb) {
 
     from (stagedInstallDir_postgis_opt) {
         into new File(packageInstallRootDir, 'opt')
-        exclude '**/doc'
     }
 
     from (new File(stagedInstallDir_server_opt, 'google/lib')) {
@@ -308,7 +306,6 @@ task openGeePostGisDeb(type: GeeDeb) {
         into packageInstallLibDir
     }
 }
-
 
 if (project.hasProperty('buildOpenGee')) {
     openGeePostGisRpm.dependsOn stageOpenGeeInstall
@@ -943,15 +940,6 @@ task openGeeExtraRpm(type: GeeRpm, dependsOn: openGeeExtraInitScripts) {
 
     postInstall = file("${buildDir}/opengee-extra/post-install.sh")
     preUninstall = file("${buildDir}/opengee-extra/pre-uninstall.sh")
-
-    // -----------------------------------------------------------------------
-    // PostGIS Extras
-    // -----------------------------------------------------------------------
-
-    from (stagedInstallDir_postgis_opt) {
-        into new File(packageInstallRootDir, 'opt')
-        include '**/doc/**'
-    }
 
     // -----------------------------------------------------------------------
     // Common Extras
