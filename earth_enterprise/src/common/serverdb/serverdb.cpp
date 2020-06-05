@@ -48,7 +48,7 @@ bool ServerdbConfig::Load(std::string config_file) {
 
   std::vector<std::string> lines;
   if (!aFA->GetLinesFromFile(lines, 8192)) {
-    notify(NFY_WARN, "Unable to get lines from config file %s",
+    notify(NFY_WARN, "Unable to get lines from ServerDB config file %s",
           config_file.c_str());
     return false;
   }
