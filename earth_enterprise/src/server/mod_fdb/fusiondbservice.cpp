@@ -27,7 +27,6 @@
 #include "common/etencoder.h"
 #include "common/geFilePool.h"
 #include "common/khConstants.h"
-#include "common/khStringUtils.h"
 #include "common/quadtreepath.h"
 #include "common/serverdb/serverdbReader.h"
 #include "common/serverdb/map_tile_utils.h"

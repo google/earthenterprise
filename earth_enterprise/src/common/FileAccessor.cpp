@@ -52,8 +52,20 @@ bool POSIXFileAccessor::Exists(const std::string &filename) {
   return khExists(filename);
 }
 
-int POSIXFileAccessor::fgets(void *buf, size_t bufsize) {
-  return read(fileDescriptor, buf, bufsize);
+std::vector<std::string> POSIXFileAccessor::ProcessFile(const std::string &filename) {
+  std::ifstream file(filename);
+  std::string line;
+  std::vector<std::string> lines;
+
+  while (std::getline(file, line)) {
+    if (line.size() > 0) {
+      CleanString(&line, "\r\n");
+      lines.push_back(line);
+    }
+  }
+
+  file.close();
+  return lines;
 }
 
 void POSIXFileAccessor::fprintf(const char *format, ...) {

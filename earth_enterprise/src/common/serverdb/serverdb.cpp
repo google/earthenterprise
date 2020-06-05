@@ -19,7 +19,6 @@
 #include <stdio.h>
 
 #include "common/khGuard.h"
-#include "common/khStringUtils.h"
 #include "common/notify.h"
 #include "common/khConstants.h"
 #include "common/serverdb/serverdb.h"
@@ -47,16 +46,11 @@ bool ServerdbConfig::Load(std::string config_file) {
   // Set the default db type to gedb.
   db_type = TYPE_GEDB;
 
-  int notEOF = 1;
-  while (notEOF) {
-    const int kTempBufSize = 8192;
-    char buf[kTempBufSize];
-    buf[0] = 0;
-    notEOF = aFA->fgets(buf, sizeof(buf));
-    std::string line(buf);
-    CleanString(&line, "\r\n");
+  std::vector<std::string> lines = aFA->ProcessFile(config_file);
+
+  for (auto it = std::begin(lines); it != std::end(lines); ++it) {
     std::vector<std::string> tokens;
-    TokenizeString(line, tokens, kDelim, 3);
+    TokenizeString(*it, tokens, kDelim, 3);
     if (tokens.size() < 2)
       continue;
 
