@@ -46,7 +46,12 @@ bool ServerdbConfig::Load(std::string config_file) {
   // Set the default db type to gedb.
   db_type = TYPE_GEDB;
 
-  std::vector<std::string> lines = aFA->ProcessFile(config_file);
+  std::vector<std::string> lines;
+  if (!aFA->GetLinesFromFile(lines, 8192)) {
+    notify(NFY_WARN, "Unable to get lines from config file %s",
+          config_file.c_str());
+    return false;
+  }
 
   for (auto it = std::begin(lines); it != std::end(lines); ++it) {
     std::vector<std::string> tokens;
