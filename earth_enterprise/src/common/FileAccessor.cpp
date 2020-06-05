@@ -7,7 +7,7 @@ std::unique_ptr<AbstractFileAccessor> AbstractFileAccessor::getAccessor(const st
 // ****************************************************************************
 // ***  POSIXFileAccessor
 // ****************************************************************************
-int POSIXFileAccessor::Open(const std::string &fname, const char *mode, int flags, mode_t createMask) {
+void POSIXFileAccessor::Open(const std::string &fname, const char *mode, int flags, mode_t createMask) {
   int result;
   if (mode) {
     if (strcmp(mode, "w") == 0) {
@@ -21,7 +21,6 @@ int POSIXFileAccessor::Open(const std::string &fname, const char *mode, int flag
     result = khOpen(fname, flags, createMask);
   }
   fileDescriptor = result;
-  return result;
 }
 
 int POSIXFileAccessor::FsyncAndClose() {

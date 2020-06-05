@@ -11,7 +11,7 @@ public:
   virtual bool isValid() = 0;
   virtual void invalidate() = 0;
   virtual int getFD() = 0;
-  virtual int Open(const std::string &fname, const char *mode = nullptr, int flags = 00, mode_t createMask = 0666) = 0;
+  virtual void Open(const std::string &fname, const char *mode = nullptr, int flags = 00, mode_t createMask = 0666) = 0;
   virtual int FsyncAndClose() = 0;
   virtual int Close() = 0;
   virtual bool PreadAll(void* buffer, size_t size, off64_t offset) = 0;
@@ -35,7 +35,7 @@ public:
   bool isValid() override { return fileDescriptor != -1; }
   void invalidate() override { fileDescriptor = -1; }
   int getFD() override { return fileDescriptor; }
-  int Open(const std::string &fname, const char *mode = nullptr, int flags = 00, mode_t createMask = 0666) override;
+  void Open(const std::string &fname, const char *mode = nullptr, int flags = 00, mode_t createMask = 0666) override;
   int FsyncAndClose() override;
   int Close() override;
   bool PreadAll(void* buffer, size_t size, off64_t offset) override;
