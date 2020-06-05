@@ -36,18 +36,12 @@ const std::string kDelim = "|";
 
 bool ServerdbConfig::Load(std::string config_file) {
   std::unique_ptr<AbstractFileAccessor> aFA = AbstractFileAccessor::getAccessor(config_file);
-  aFA->Open(config_file, "r");
-  if (!aFA->isValid()) {
-    notify(NFY_WARN, "Unable to open ServerDB config file %s",
-           config_file.c_str());
-    return false;
-  }
 
   // Set the default db type to gedb.
   db_type = TYPE_GEDB;
 
   std::vector<std::string> lines;
-  if (!aFA->GetLinesFromFile(lines, 8192)) {
+  if (!aFA->GetLinesFromFile(lines, config_file)) {
     notify(NFY_WARN, "Unable to get lines from ServerDB config file %s",
           config_file.c_str());
     return false;
