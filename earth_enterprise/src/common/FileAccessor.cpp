@@ -82,6 +82,6 @@ bool POSIXFileAccessor::GetLinesFromFile(std::vector<std::string> &lines, const 
 void POSIXFileAccessor::fprintf(const char *format, ...) {
   va_list arguments;
   va_start(arguments, format);
-  ::dprintf(fileDescriptor, format, arguments);
+  ::vdprintf(fileDescriptor, format, arguments);
   va_end(arguments);
 }
