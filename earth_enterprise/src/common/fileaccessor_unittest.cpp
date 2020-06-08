@@ -14,3 +14,9 @@ TEST(FileAccessorTest, validate_lines_from_file) {
     aFA->Close();
     assert (aFA->Close() == -1);
 }
+
+int main(int argc, char** argv)
+{
+    testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
