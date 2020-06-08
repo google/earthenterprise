@@ -35,7 +35,7 @@
 
 namespace {
 
-const int ChangeDirEventId  = static_cast<int>(QEvent::User);
+const int ChangeDirEventId  = static_cast<int>(QEvent::registerEventType());
 
 class ChangeDirEvent : public QCustomEvent {
  public:
@@ -264,7 +264,7 @@ void AssetChooser::keyPressEvent(QKeyEvent* e) {
   }
 }
 
-void AssetChooser::customEvent(QCustomEvent *e) {
+void AssetChooser::customEvent(QEvent *e) {
   // Make sure this is really an event that we sent.
   switch (static_cast<int>(e->type())) {
     case ChangeDirEventId: {
