@@ -2315,7 +2315,7 @@ QString ProjectManager::CleanupDropText(const QString &text) {
   return modstr;
 }
 
-void ProjectManager::customEvent(QCustomEvent *e) {
+void ProjectManager::customEvent(QEvent *e) {
   int filterId = 0;
   Q3ListViewItem *listItem = 0;
 

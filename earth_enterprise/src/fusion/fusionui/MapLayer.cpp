@@ -609,7 +609,7 @@ QString MapLayerWidget::RuleName(const QString& caption,
   return text;
 }
 
-void MapLayerWidget::customEvent(QCustomEvent* e) {
+void MapLayerWidget::customEvent(QEvent* e) {
   QListViewItem *listItem = 0;
 
   // Make sure this is really an event that we sent.
