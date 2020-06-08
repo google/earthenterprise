@@ -853,7 +853,7 @@ gees.admin.databaseView = {
       },
 
       determineWmsOptions: function(item) {
-        if (gees.tools.isPortableDb) {
+        if (gees.tools.isPortableDb(item) && gees.tools.is3dDatabase(item)) {
           gees.dom.hide('WmsOption');
         } else {
           gees.dom.show('WmsOption');
