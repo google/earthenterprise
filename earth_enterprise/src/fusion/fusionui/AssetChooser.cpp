@@ -35,7 +35,7 @@
 
 namespace {
 
-const int ChangeDirEventId  = static_cast<int>(QEvent::registerEventType());
+int ChangeDirEventId  = int(QEvent::registerEventType());
 
 class ChangeDirEvent : public QCustomEvent {
  public:
@@ -266,7 +266,7 @@ void AssetChooser::keyPressEvent(QKeyEvent* e) {
 
 void AssetChooser::customEvent(QEvent *e) {
   // Make sure this is really an event that we sent.
-  switch (static_cast<int>(e->type())) {
+  switch (int(e->type())) {
     case ChangeDirEventId: {
       ChangeDirEvent* cdEvent = dynamic_cast<ChangeDirEvent*>(e);
       iconView->clearSelection();
