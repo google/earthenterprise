@@ -852,6 +852,7 @@ gees.admin.databaseView = {
         this.determinePoiOptions(item.has_poi);
       },
 
+      // Hide the Serve WMS radio option for 3d Portable databases
       determineWmsOptions: function(item) {
         if (gees.tools.isPortableDb(item) && gees.tools.is3dDatabase(item)) {
           gees.dom.hide('WmsOption');
