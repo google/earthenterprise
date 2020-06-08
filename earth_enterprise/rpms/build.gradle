@@ -424,6 +424,7 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
         exclude '**/Readme.txt'
         exclude '**/gehttpd/examples'
         exclude 'google/lib/openjpeg-2.3' // Contains makefiles - not needed for production
+        exclude '**/protobuf/internal/*test*.py'
     }
 
     from (stagedInstallDir_common_user_magic) {
@@ -603,6 +604,7 @@ task openGeeServerCoreRpm(type: GeeRpm, dependsOn: openGeeServerCoreInitScripts)
         exclude '**/doc'
         exclude '**/mod_wsgi-ge-extra.conf'
         exclude '**/examplesearch*.sql'
+        exclude '**/readme.txt'
 
         into new File(packageInstallRootDir, 'opt')
     }
@@ -983,6 +985,7 @@ task openGeeExtraRpm(type: GeeRpm, dependsOn: openGeeExtraInitScripts) {
         include '**/doc/**'
         include '**/mod_wsgi-ge-extra.conf'
         include '**/examplesearch*.sql'
+        include '**/readme.txt'
 
         into new File(packageInstallRootDir, 'opt')
     }
