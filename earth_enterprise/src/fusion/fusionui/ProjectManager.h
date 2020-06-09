@@ -164,7 +164,7 @@ class ProjectManager : public Q3ListView {
   void selectionChanged(Q3ListViewItem* item);
 
   // from QWidget
-  virtual void customEvent(QEvent*);
+  virtual void customEvent(QEvent*) final;
  private:
   void DrawEditBuffer(const gstDrawState& state);
   GeodeList edit_buffer_;

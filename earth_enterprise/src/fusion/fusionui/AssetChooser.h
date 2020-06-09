@@ -72,7 +72,7 @@ class AssetChooser : public AssetChooserBase {
 
   // from QWidget
   virtual void keyPressEvent(QKeyEvent* e);
-  virtual void customEvent(QEvent *e);
+  virtual void customEvent(QEvent *e) final;
 
   // from QDialog
   virtual void accept();

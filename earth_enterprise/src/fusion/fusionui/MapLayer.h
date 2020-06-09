@@ -117,7 +117,7 @@ class MapLayerWidget : public MapLayerWidgetBase,
   void UpdateButtons(QListViewItem* item);
   virtual void CurrentItemChanged(QListViewItem* item);
 
-  virtual void customEvent(QEvent *e);
+  virtual void customEvent(QEvent *e) final;
 
   bool SubLayerHasSearchField(QString field);
 
