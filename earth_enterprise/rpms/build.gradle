@@ -291,8 +291,6 @@ task openGeePostGisDeb(type: GeeDeb) {
     type = BINARY
 
     requires('opengee-common', ospackage.version, GREATER | EQUAL)
-    // The code in GeeRpm decides that this RPM should depend on proj, but
-    // it actually depends on proj-devel.
     requires('proj-devel')
 
     from (stagedInstallDir_postgis_opt) {
@@ -419,6 +417,8 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
 
     from (stagedInstallDir_common_opt) {
         into new File(packageInstallRootDir, 'opt')
+
+        // Included in opengee-extra
         exclude '**/doc'
         exclude '**/man'
         exclude '**/Readme.txt'
@@ -429,6 +429,8 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
 
     from (stagedInstallDir_common_user_magic) {
         into packageInstallRootDir
+
+        // Included in opengee-extra
         exclude '**/ldap.conf.default'
     }
 
@@ -479,15 +481,20 @@ task openGeeCommonDeb (type: GeeDeb, dependsOn: openGeeCommonInitScripts) {
 
     from (stagedInstallDir_common_opt) {
         into new File(packageInstallRootDir, 'opt')
+
+        // Included in opengee-extra
         exclude '**/doc'
         exclude '**/man'
         exclude '**/Readme.txt'
         exclude '**/gehttpd/examples'
         exclude 'google/lib/openjpeg-2.3' // Contains makefiles - not needed for production
+        exclude '**/protobuf/internal/*test*.py'
     }
 
     from (stagedInstallDir_common_user_magic) {
         into packageInstallRootDir
+
+        // Included in opengee-extra
         exclude '**/ldap.conf.default'
     }
 
@@ -595,6 +602,7 @@ task openGeeServerCoreRpm(type: GeeRpm, dependsOn: openGeeServerCoreInitScripts)
         // libpq is in the opengee-postgis package:
         exclude 'google/lib/libpq.*'
 
+        // Included in opengee-extra
         exclude '**/manual'
         exclude '**/search/plugin/example*'
         exclude '**/search/plugin/custom*'
@@ -699,6 +707,7 @@ task openGeeServerCoreDeb (type: GeeDeb, dependsOn: openGeeServerCoreInitScripts
         // libpq is in the opengee-postgis package:
         exclude 'google/lib/libpq.*'
 
+        // Included in opengee-extra
         exclude '**/manual'
         exclude '**/search/plugin/example*'
         exclude '**/search/plugin/custom*'
@@ -708,6 +717,7 @@ task openGeeServerCoreDeb (type: GeeDeb, dependsOn: openGeeServerCoreInitScripts
         exclude '**/doc'
         exclude '**/mod_wsgi-ge-extra.conf'
         exclude '**/examplesearch*.sql'
+        exclude '**/readme.txt'
 
         into new File(packageInstallRootDir, 'opt')
     }
@@ -815,6 +825,8 @@ built from raster, vector, and location properties data.
 
     from(stagedInstallDir_fusion) {
         into packageInstallRootDir
+
+        // Included in opengee-extra
         exclude '**/doc'
         exclude '**/taskrules'
     }
@@ -887,6 +899,8 @@ task openGeeFusionCoreDeb (type: GeeDeb, dependsOn: openGeeFusionCoreInitScripts
 
     from(stagedInstallDir_fusion) {
         into packageInstallRootDir
+
+        // Included in opengee-extra
         exclude '**/doc'
         exclude '**/taskrules'
     }
@@ -1037,15 +1051,6 @@ task openGeeExtraDeb(type: GeeDeb, dependsOn: openGeeExtraInitScripts) {
     preUninstallFile file("${buildDir}/opengee-extra/pre-uninstall.sh")
 
     // -----------------------------------------------------------------------
-    // PostGIS Extras
-    // -----------------------------------------------------------------------
-
-    from (stagedInstallDir_postgis_opt) {
-        into new File(packageInstallRootDir, 'opt')
-        include '**/doc/**'
-    }
-
-    // -----------------------------------------------------------------------
     // Common Extras
     // -----------------------------------------------------------------------
 
@@ -1087,6 +1092,7 @@ task openGeeExtraDeb(type: GeeDeb, dependsOn: openGeeExtraInitScripts) {
         include '**/doc/**'
         include '**/mod_wsgi-ge-extra.conf'
         include '**/examplesearch*.sql'
+        include '**/readme.txt'
 
         into new File(packageInstallRootDir, 'opt')
     }
@@ -1125,6 +1131,7 @@ if (project.hasProperty('buildOpenGee')) {
     openGeeExtraDeb.dependsOn stageOpenGeeInstall
 }
 
+// Convenience package that installs opengee-server-core + opengee-extra
 task openGeeServerRpm (type: GeeRpm) {
     mustRunAfter stageOpenGeeInstall
 
@@ -1172,6 +1179,7 @@ if (project.hasProperty('buildOpenGee')) {
     openGeeServerDeb.dependsOn stageOpenGeeInstall
 }
 
+// Convenience package that installs opengee-fusion-core + opengee-extra
 task openGeeFusionRpm (type: GeeRpm) {
     mustRunAfter stageOpenGeeInstall
 
