@@ -6,13 +6,43 @@ using namespace testing;
 
 TEST(FileAccessorTest, validate_lines_from_file) {
     string filename = "/tmp/TestFile.txt";
+    string testdata = "This is a test string.\nThis is another test string.\r\n";
     vector<string> lines;
     unique_ptr<AbstractFileAccessor> aFA = AbstractFileAccessor::getAccessor(filename);
 
     aFA->Open(filename, "w");
-    assert (aFA->getFD() != -1);
+    aFA->PwriteAll(testdata.data(), testdata.size(), 0);
     aFA->Close();
-    assert (aFA->Close() == -1);
+
+    aFA->GetLinesFromFile(lines, filename);
+    EXPECT_EQ(lines.size(), 2);
+    EXPECT_EQ(lines.at(0), "This is a test string.");
+    EXPECT_EQ(lines.at(1), "This is another test string.");
+
+    for (const auto &it : lines) {
+        EXPECT_EQ(it.find_first_of("\n\r"), string::npos);
+    }
+
+    remove(filename.c_str());
+}
+
+TEST(FileAccessorTest, validate_printf) {
+    string filename = "/tmp/TestFile.txt";
+    string formatstring = "%s%s%d\n";
+    vector<string> lines;
+    unique_ptr<AbstractFileAccessor> aFA = AbstractFileAccessor::getAccessor(filename);
+
+    aFA->Open(filename, "w");
+    aFA->fprintf(formatstring.c_str(), "This is a test string.\n", "This is another test string.\n", 0);
+    aFA->Close();
+
+    aFA->GetLinesFromFile(lines, filename);
+    EXPECT_EQ(lines.size(), 3);
+    EXPECT_EQ(lines.at(0), "This is a test string.");
+    EXPECT_EQ(lines.at(1), "This is another test string.");
+    EXPECT_EQ(lines.at(2), "0");
+
+    remove(filename.c_str());
 }
 
 int main(int argc, char** argv)
