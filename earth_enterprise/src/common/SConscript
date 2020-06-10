@@ -210,7 +210,11 @@ env.test('khconfigparser_unittest',
 
 env.test('sharedstring_unittest',
          'sharedstring_unittest.cpp',
-          LIBS=['geutil', 'gtest','gecommon'])
+          LIBS=['geutil', 'gtest', 'gecommon'])
+
+env.test('FileAccessorPluginLoader_unittest',
+         'FileAccessorPluginLoader_unittest.cpp',
+          LIBS=['libdl', 'boost_filesystem', 'boost_system', 'geutil', 'gtest', 'gecommon'])
 
 env.test('fileaccessor_unittest',
          'fileaccessor_unittest.cpp',
