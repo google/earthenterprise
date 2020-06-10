@@ -181,7 +181,6 @@ else:
   else:
     el_ver = 'el7'
 
-
 if bundle_3rd_libs:
   python_version = '2.7.5'
   python_major_version = '2.7'
@@ -286,22 +285,24 @@ if native_cc:
                 '-Wno-error=unused-local-typedefs',
                 '-Wno-error=unused-but-set-variable']
 
-# TODO: remove this and fix all places where we see these warnings.
-if el_ver == "el8":
-  warnflags += ['-Wno-error=misleading-indentation',
-                '-Wno-error=terminate',
-                '-Wno-error=catch-value',
-                '-Wno-error=format-truncation',
-                '-Wno-error=class-memaccess',
-                '-Wno-error=memset-elt-size',
-                '-Wno-error=address',
-                '-Wno-error=unused-local-typedefs']
+warnflags += ['-Wno-error=misleading-indentation',
+              '-Wno-error=terminate',
+              '-Wno-error=format-truncation',
+              '-Wno-error=memset-elt-size',
+              '-Wno-error=address',
+              '-Wno-error=unused-local-typedefs']
+if el_ver == 'el8':
+  warnflags += ['-Wno-error=catch-value',
+                '-Wno-error=class-memaccess']
 
-# Determine libpng version based on el version
-if el_ver == "el8":
-  cppflags += ['-DUSING_LIBPNG16']
-else:
+
+# Determine libpng
+if os.path.isdir('/usr/include/libpng15'):
+  png_ver = 'png15'
   cppflags += ['-DUSING_LIBPNG15']
+elif os.path.isdir('/usr/include/libpng16'):
+  png_ver = 'png16'
+  cppflags += ['-DUSING_LIBPNG16']
 
 if max_num_jobs_coeff:
   cppflags += ['-DKH_MAX_NUM_JOBS_COEFF=%s' % max_num_jobs_coeff]
@@ -535,7 +536,8 @@ env = khEnvironment(
     python_version=python_version,
     python_major_version=python_major_version,
     python_home=python_home,
-    el_ver=el_ver
+    el_ver=el_ver,
+    png_ver=png_ver
 )
 
 env.get_open_gee_version().backup_file = "version.txt"
