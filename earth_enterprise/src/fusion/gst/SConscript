@@ -118,6 +118,11 @@ simple_earthstream_sources = [
         'gstSimpleStream.cpp',
         ]
 
+if env['el_ver'] == 'el8':
+  png_ver = 'png16'
+else:
+  png_ver = 'png15'
+
 gegst = env.sharedLib('gegst', sources,
                       LIBS=['geautoingest', 'dbmanifest', 'geraster',
                             'gegdal', 'gejs', 'sgl', 'gif',
@@ -135,10 +140,10 @@ gstunittest = env.sharedLib('gstunittest',
                              LIBS=['gtest', 'gegst', 'gecommon'])
 
 env.test('gstGeode_unittest', 'gstGeode_unittest.cpp',
-         LIBS=['gegst', 'gtest', 'sgl', 'gif', 'png12', 'jpeg', 'freetype', 'geos',
+         LIBS=['gegst', 'gtest', 'sgl', 'gif', png_ver, 'jpeg', 'freetype', 'geos',
                'geutil', 'gecommon'])
 env.test('gstPolygonUtils_unittest', 'gstPolygonUtils_unittest.cpp',
-         LIBS=['gegst', 'gtest', 'sgl', 'gif', 'png12', 'jpeg', 'freetype', 'geos'])
+         LIBS=['gegst', 'gtest', 'sgl', 'gif', png_ver, 'jpeg', 'freetype', 'geos'])
 
 env.test('gstGeomUtils_unittest', 'gstGeomUtils_unittest.cpp',
          LIBS=['gstunittest', 'gegst', 'gtest'])

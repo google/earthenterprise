@@ -708,7 +708,7 @@ inline
 void
 FromAttribute(khxml::DOMAttr *attr, QString &val)
 {
-  val = QString::fromUtf16(attr->getValue());
+  val = QString::fromUtf16((const ushort*)attr->getValue());
 }
 
 inline
@@ -729,7 +729,7 @@ GetTextAndCDATA(khxml::DOMElement *elem)
         (node->getNodeType() == khxml::DOMNode::CDATA_SECTION_NODE)) {
       khxml::DOMCharacterData* data = static_cast<khxml::DOMCharacterData*>(node);
       if (data->getLength() > 0) {
-        result.append(QString::fromUtf16(data->getData()));
+        result.append(QString::fromUtf16((const ushort*)data->getData()));
       }
     }
     node = node->getNextSibling();
@@ -800,7 +800,7 @@ FromElement(khxml::DOMElement *elem, QString &val)
     val = "";
     val.squeeze();
   } else {
-    val = QString::fromUtf16((static_cast<khxml::DOMText*>(valNode))->getData());
+    val = QString::fromUtf16((const ushort*)(static_cast<khxml::DOMText*>(valNode))->getData());
   }
 }
 
@@ -824,10 +824,10 @@ FromElement(khxml::DOMElement *elem, EncryptedQString &val)
       khxml::DOMCharacterData* data = static_cast<khxml::DOMCharacterData*>(node);;
       if (data->getLength() > 0) {
         if (method == "plaintext") {
-          val = QString::fromUtf16(data->getData());
+          val = QString::fromUtf16((const ushort*)data->getData());
           return;
         } else if (method == "simple") {
-          QString tmp = QString::fromUtf16(data->getData());
+          QString tmp = QString::fromUtf16((const ushort*)data->getData());
           for (auto i = 0; i < tmp.length(); ++i) {
             tmp[i] = tmp[i].unicode() - 13;
           }
@@ -1019,7 +1019,7 @@ FromXMLStrForMap(const XMLCh *xmlch) {
 template<>
 inline QString
 FromXMLStrForMap(const XMLCh *xmlch) {
-  return QString::fromUtf16(xmlch);
+  return QString::fromUtf16((const ushort*)xmlch);
 }
 
 template<>
