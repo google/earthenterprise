@@ -23,7 +23,6 @@ Import('env')
 local_env = env.Clone()
 flags = local_env['CXXFLAGS']
 flags.remove('-Werror') # lots of unsigned/signed comparisons
-flags.append('-Wfatal-errors')
 flags.append('-I../..')
 flags.append('-Igoogle/protobuf')
 

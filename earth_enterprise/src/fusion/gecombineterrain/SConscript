@@ -17,18 +17,13 @@
 
 Import('env')
 
-if env['el_ver'] == 'el8':
-  png_ver = 'png16'
-else:
-  png_ver = 'png15'
-
 gecombineterrain = env.executable('gecombineterrain',
                                   ['gecombineterrain.cpp',
                                    'combineterrain.cpp',
                                    ],
                                   LIBS=['geindex_rw', 'gefconfigutil', 'gecommon', 'geutil',
                                   'geconfigutil', 'gexml', 'geqtpacket',
-                                  'gegst', 'sgl', 'gif', png_ver, 'jpeg', 'freetype',
+                                  'gegst', 'sgl', 'gif', env['png_ver'], 'jpeg', 'freetype',
                                   'QtCore', 'QtGui', 'geindex_r', 'geos', 'genet'])
 
 env.install('fusion_bin', [gecombineterrain])
