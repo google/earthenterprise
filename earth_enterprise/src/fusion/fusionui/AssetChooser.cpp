@@ -35,7 +35,7 @@
 
 namespace {
 
-const int ChangeDirEventId  = static_cast<int>(QEvent::User);
+int ChangeDirEventId  = int(QEvent::registerEventType());
 
 class ChangeDirEvent : public QCustomEvent {
  public:
@@ -264,15 +264,12 @@ void AssetChooser::keyPressEvent(QKeyEvent* e) {
   }
 }
 
-void AssetChooser::customEvent(QCustomEvent *e) {
+void AssetChooser::customEvent(QEvent *e) {
   // Make sure this is really an event that we sent.
-  switch (static_cast<int>(e->type())) {
-    case ChangeDirEventId: {
-      ChangeDirEvent* cdEvent = dynamic_cast<ChangeDirEvent*>(e);
-      iconView->clearSelection();
-      updateView(cdEvent->folder_);
-      break;
-    }
+  if (int(e->type()) == ChangeDirEventId) {
+    ChangeDirEvent* cdEvent = dynamic_cast<ChangeDirEvent*>(e);
+    iconView->clearSelection();
+    updateView(cdEvent->folder_);
   }
 }
 

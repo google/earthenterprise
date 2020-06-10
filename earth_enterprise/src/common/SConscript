@@ -94,20 +94,15 @@ env.Depends(streaming_imagery_basename+'.os', streaming_imagery_basename+'.cc')
 # Check environment for png.h file
 conf = Configure(env)
 
-if env['el_ver'] == 'el8':
-  png_ver = 'png16'
-else:
-  png_ver = 'png15'
-
-if not conf.CheckCHeader("lib" + png_ver + "/png.h"):
-    print ("lib" + png_ver + "  must be installed!")
+if env['png_ver'] == '':
+    print("libpng >= 1.5 must be installed!")
     Exit(1)
 
 env = conf.Finish()
 
 # TODO: consider to move geGdalUtils to khgdal?!
 gecommon = env.sharedLib('gecommon', commonsources,
-                         LIBS = ['keyholeutils', 'geprotobuf', 'z', 'jpeg', png_ver, 'gdal'])
+                         LIBS = ['keyholeutils', 'geprotobuf', 'z', 'jpeg', env['png_ver'], 'gdal'])
 
 utilsources = [
     'ff.cpp',
