@@ -37,7 +37,7 @@ ProjectDocker::ProjectDocker(Place p, QWidget* parent, const char* name)
 }
 
 void ProjectDocker::selectBox(const gstDrawState& draw_state,
-                              Qt::KeyboardModifier btn_state) {
+                              Qt::ButtonState btn_state) {
   preview_->selectBox(draw_state, btn_state);
 }
 
