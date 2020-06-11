@@ -176,7 +176,7 @@ check_prereq_software()
     check_prereq_software_retval=1
   fi
 
-  if ! software_check "$script_name" "python2.[67]" "python[2]-2.[67].*"; then
+  if ! software_check "$script_name" "python2.[67]" "python[2]*-2.[67].*"; then
     check_prereq_software_retval=1
   fi
 
@@ -455,7 +455,7 @@ copy_files_to_target()
   if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf "$TMPINSTALLDIR/server/opt/google/lib" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  
+
   if [ -f "$BASEINSTALLDIR_OPT/gehttpd/conf.d/.htpasswd" ]
   then
     # Preserve Admin Console password
