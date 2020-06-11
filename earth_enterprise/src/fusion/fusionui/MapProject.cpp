@@ -146,9 +146,9 @@ void MapProjectWidget::Prefill(const MapProjectEditRequest &req) {
     ListView()->SelectItem(first);
   }
 
-  connect(ListView(), SIGNAL(doubleClicked(QListViewItem*,
+  connect(ListView(), SIGNAL(doubleClicked(Q3ListViewItem*,
                                            const QPoint&, int)),
-          this, SLOT(ModifyItem(QListViewItem*, const QPoint&, int)));
+          this, SLOT(ModifyItem(Q3ListViewItem*, const QPoint&, int)));
 }
 
 void MapProjectWidget::AssembleEditRequest(MapProjectEditRequest *request) {
