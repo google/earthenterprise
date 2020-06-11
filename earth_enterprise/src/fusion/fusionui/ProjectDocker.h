@@ -34,7 +34,7 @@ class ProjectDocker : public QDockWindow {
   ProjectManager* Preview() const { return preview_; }
 
  protected slots:
-  void selectBox(const gstDrawState& s, Qt::KeyboardModifier bs);
+  void selectBox(const gstDrawState& s, Qt::ButtonState bs);
 
   void enableAllLayers();
   void disableAllLayers();
