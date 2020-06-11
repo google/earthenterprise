@@ -137,9 +137,9 @@ class AssetManager : public AssetManagerBase {
   virtual void ToolbarChooserComboActivated(int choice);
 
  public slots:
-  void rmbClicked(QListViewItem* item, const QPoint& pos, int);
+  void rmbClicked(Q3ListViewItem* item, const QPoint& pos, int);
   void tableAssetMenu(int row, int col, const QPoint& mouse_pos);
-  void iconAssetMenu(QIconViewItem* item, const QPoint& mouse_pos);
+  void iconAssetMenu(Q3IconViewItem* item, const QPoint& mouse_pos);
   void doubleClicked(int row, int col, int btn, const QPoint& mouse_pos);
   void assetsChanged(const AssetChanges& a);
   void CurrentAssetChanged(int row, int col);
