@@ -116,7 +116,7 @@
                         </sizepolicy>
                     </property>
                     <property name="pixmap">
-                        <pixmap>vector_project.png</pixmap>
+                        <pixmap>:/vector_project.png</pixmap>
                     </property>
                     <property name="scaledContents">
                         <bool>true</bool>
@@ -138,7 +138,7 @@
                         <string></string>
                     </property>
                     <property name="pixmap">
-                        <pixmap>filenew</pixmap>
+                        <pixmap>:/filenew</pixmap>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Select Vector Project</string>
@@ -160,7 +160,7 @@
                         <string></string>
                     </property>
                     <property name="pixmap">
-                        <pixmap>delete.png</pixmap>
+                        <pixmap>:/delete.png</pixmap>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Remove Vector Project</string>
@@ -284,7 +284,7 @@
                         <string></string>
                     </property>
                     <property name="pixmap">
-                        <pixmap>editdelete.png</pixmap>
+                        <pixmap>:/editdelete.png</pixmap>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Remove Imagery Project</string>
@@ -306,7 +306,7 @@
                         <string></string>
                     </property>
                     <property name="pixmap">
-                        <pixmap>editdelete.png</pixmap>
+                        <pixmap>:/editdelete.png</pixmap>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Remove Terrain Project</string>
@@ -328,7 +328,7 @@
                         <string></string>
                     </property>
                     <property name="pixmap">
-                        <pixmap>filenew</pixmap>
+                        <pixmap>:/filenew</pixmap>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Select Terrain Project</string>
@@ -350,7 +350,7 @@
                         <string></string>
                     </property>
                     <property name="pixmap">
-                        <pixmap>filenew</pixmap>
+                        <pixmap>:/filenew</pixmap>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Select Imagery Project</string>
@@ -369,7 +369,7 @@
                         </sizepolicy>
                     </property>
                     <property name="pixmap">
-                        <pixmap>terrain_project.png</pixmap>
+                        <pixmap>:/terrain_project.png</pixmap>
                     </property>
                     <property name="scaledContents">
                         <bool>true</bool>
@@ -388,7 +388,7 @@
                         </sizepolicy>
                     </property>
                     <property name="pixmap">
-                        <pixmap>imagery_project.png</pixmap>
+                        <pixmap>:/imagery_project.png</pixmap>
                     </property>
                     <property name="scaledContents">
                         <bool>true</bool>

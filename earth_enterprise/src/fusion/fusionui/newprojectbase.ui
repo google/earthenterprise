@@ -200,7 +200,7 @@
                         <cstring>PixmapLabel1</cstring>
                     </property>
                     <property name="pixmap">
-                        <pixmap>keyhole_logo.png</pixmap>
+                        <pixmap>:/keyhole_logo.png</pixmap>
                     </property>
                     <property name="scaledContents">
                         <bool>true</bool>
@@ -286,7 +286,7 @@
                         <string></string>
                     </property>
                     <property name="pixmap">
-                        <pixmap>fileopen_1.png</pixmap>
+                        <pixmap>:/fileopen_1.png</pixmap>
                     </property>
                 </widget>
                 <widget class="QLineEdit" row="2" column="1">
@@ -314,7 +314,7 @@
                         <string></string>
                     </property>
                     <property name="pixmap">
-                        <pixmap>fileopen_1.png</pixmap>
+                        <pixmap>:/fileopen_1.png</pixmap>
                     </property>
                 </widget>
                 <widget class="QLineEdit" row="1" column="1">

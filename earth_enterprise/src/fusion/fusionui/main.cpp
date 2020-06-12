@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #include <sys/prctl.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -44,6 +43,9 @@
 #include "common/geInstallPaths.h"
 #include "common/khFileUtils.h"
 #include "common/khGetopt.h"
+
+// generated rcc -name resources -namespace resources.qrc >resources.cpp
+#include "images/resources.cpp"
 
 // pre-qt3.1 workaround
 // #ifndef WStyle_Splash
@@ -131,6 +133,7 @@ int main(int argc, char** argv) {
   // must always create QApplication before initializing gst library
   //
   QApplication a(argc, argv);
+  Q_INIT_RESOURCE(resources);
 
   //
   // confirm opengl support

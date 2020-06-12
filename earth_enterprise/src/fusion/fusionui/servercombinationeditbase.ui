@@ -249,7 +249,7 @@
                     <string></string>
                 </property>
                 <property name="pixmap">
-                    <pixmap>fileopen_1.png</pixmap>
+                    <pixmap>:/fileopen_1.png</pixmap>
                 </property>
             </widget>
         </widget>

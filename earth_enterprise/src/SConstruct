@@ -602,6 +602,7 @@ env['QTINCDIR'] = '/usr/include/Qt'
 env['QTLIBDIR'] = '/usr/lib64/qt4'
 env['MOC'] = qtdir+'/bin/moc'
 env['UIC'] = qtdir+'/bin/uic3'
+env['RCC'] = qtdir+'/bin/rcc'
 env['LRELEASE'] = qtdir+'/bin/lrelease'
 
 env['KHIDL'] = File('#common/khxml/khidl.pl')

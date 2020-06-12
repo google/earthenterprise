@@ -494,7 +494,7 @@
             <cstring>fileNewAction</cstring>
         </property>
         <property name="iconSet">
-            <iconset>filenew</iconset>
+            <iconset>:/filenew</iconset>
         </property>
         <property name="text">
             <string>New Asset</string>
@@ -511,7 +511,7 @@
             <cstring>newVectorResourceAction</cstring>
         </property>
         <property name="iconSet">
-            <iconset>vector_asset.png</iconset>
+            <iconset>:/vector_asset.png</iconset>
         </property>
         <property name="text">
             <string>New Vector Resource</string>
@@ -522,7 +522,7 @@
             <cstring>newImageryResourceAction</cstring>
         </property>
         <property name="iconSet">
-            <iconset>imagery_asset.png</iconset>
+            <iconset>:/imagery_asset.png</iconset>
         </property>
         <property name="text">
             <string>New Imagery Resource</string>
@@ -536,7 +536,7 @@
             <cstring>newTerrainResourceAction</cstring>
         </property>
         <property name="iconSet">
-            <iconset>terrain_asset.png</iconset>
+            <iconset>:/terrain_asset.png</iconset>
         </property>
         <property name="text">
             <string>New Terrain Resource</string>
@@ -547,7 +547,7 @@
             <cstring>newVectorProjectAction</cstring>
         </property>
         <property name="iconSet">
-            <iconset>vector_project.png</iconset>
+            <iconset>:/vector_project.png</iconset>
         </property>
         <property name="text">
             <string>New Vector Project</string>
@@ -558,7 +558,7 @@
             <cstring>newImageryProjectAction</cstring>
         </property>
         <property name="iconSet">
-            <iconset>imagery_project.png</iconset>
+            <iconset>:/imagery_project.png</iconset>
         </property>
         <property name="text">
             <string>New Imagery Project</string>
@@ -569,7 +569,7 @@
             <cstring>newTerrainProjectAction</cstring>
         </property>
         <property name="iconSet">
-            <iconset>terrain_project.png</iconset>
+            <iconset>:/terrain_project.png</iconset>
         </property>
         <property name="text">
             <string>New Terrain Project</string>
@@ -580,7 +580,7 @@
             <cstring>newMapLayerAction</cstring>
         </property>
         <property name="iconSet">
-            <iconset>map_layer.png</iconset>
+            <iconset>:/map_layer.png</iconset>
         </property>
         <property name="text">
             <string>New Map Layer</string>
@@ -591,7 +591,7 @@
             <cstring>newMapProjectAction</cstring>
         </property>
         <property name="iconSet">
-            <iconset>map_project.png</iconset>
+            <iconset>:/map_project.png</iconset>
         </property>
         <property name="text">
             <string>New Map Project</string>
@@ -602,7 +602,7 @@
             <cstring>newDatabaseAction</cstring>
         </property>
         <property name="iconSet">
-            <iconset>database.png</iconset>
+            <iconset>:/database.png</iconset>
         </property>
         <property name="text">
             <string>New Earth (3D) Database</string>
@@ -635,7 +635,7 @@
             <cstring>newMapDatabaseAction</cstring>
         </property>
         <property name="iconSet">
-            <iconset>map_database.png</iconset>
+            <iconset>:/map_database.png</iconset>
         </property>
         <property name="text">
             <string>New Map (Flat Projection) Database</string>
@@ -654,7 +654,7 @@
             <cstring>newImageryResourceMercatorAction</cstring>
         </property>
         <property name="iconSet">
-            <iconset>imagery_asset_mercator.png</iconset>
+            <iconset>:/imagery_asset_mercator.png</iconset>
         </property>
         <property name="text">
             <string>New Mercator Imagery Resource</string>
@@ -665,7 +665,7 @@
             <cstring>newImageryProjectMercatorAction</cstring>
         </property>
         <property name="iconSet">
-            <iconset>imagery_project_mercator.png</iconset>
+            <iconset>:/imagery_project_mercator.png</iconset>
         </property>
         <property name="text">
             <string>New Mercator Imagery Project</string>
@@ -676,7 +676,7 @@
             <cstring>newMapDatabaseMercatorAction</cstring>
         </property>
         <property name="iconSet">
-            <iconset>map_database_mercator.png</iconset>
+            <iconset>:/map_database_mercator.png</iconset>
         </property>
         <property name="text">
             <string>New Mercator Map Database</string>

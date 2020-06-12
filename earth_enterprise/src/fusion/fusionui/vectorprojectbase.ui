@@ -161,7 +161,7 @@
                         <string></string>
                     </property>
                     <property name="pixmap">
-                        <pixmap>filenew</pixmap>
+                        <pixmap>:/filenew</pixmap>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -172,7 +172,7 @@
                         <string></string>
                     </property>
                     <property name="pixmap">
-                        <pixmap>folder_new.png</pixmap>
+                        <pixmap>:/folder_new.png</pixmap>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -183,7 +183,7 @@
                         <string></string>
                     </property>
                     <property name="pixmap">
-                        <pixmap>editdelete.png</pixmap>
+                        <pixmap>:/editdelete.png</pixmap>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -194,7 +194,7 @@
                         <string></string>
                     </property>
                     <property name="pixmap">
-                        <pixmap>up.png</pixmap>
+                        <pixmap>:/up.png</pixmap>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -205,7 +205,7 @@
                         <string></string>
                     </property>
                     <property name="pixmap">
-                        <pixmap>down.png</pixmap>
+                        <pixmap>:/down.png</pixmap>
                     </property>
                 </widget>
                 <spacer>

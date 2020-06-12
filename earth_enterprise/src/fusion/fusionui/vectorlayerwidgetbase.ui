@@ -78,7 +78,7 @@
                         </sizepolicy>
                     </property>
                     <property name="pixmap">
-                        <pixmap>vector_asset.png</pixmap>
+                        <pixmap>:/vector_asset.png</pixmap>
                     </property>
                     <property name="scaledContents">
                         <bool>true</bool>
@@ -116,7 +116,7 @@
                         <string></string>
                     </property>
                     <property name="pixmap">
-                        <pixmap>filenew</pixmap>
+                        <pixmap>:/filenew</pixmap>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Select Vector Project</string>

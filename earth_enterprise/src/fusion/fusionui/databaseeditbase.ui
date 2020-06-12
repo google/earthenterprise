@@ -376,7 +376,7 @@
                                 </sizepolicy>
                             </property>
                             <property name="pixmap">
-                                <pixmap>terrain_project.png</pixmap>
+                                <pixmap>:/terrain_project.png</pixmap>
                             </property>
                             <property name="scaledContents">
                                 <bool>true</bool>
@@ -395,7 +395,7 @@
                                 </sizepolicy>
                             </property>
                             <property name="pixmap">
-                                <pixmap>imagery_project.png</pixmap>
+                                <pixmap>:/imagery_project.png</pixmap>
                             </property>
                             <property name="scaledContents">
                                 <bool>true</bool>
@@ -477,7 +477,7 @@
                                 </sizepolicy>
                             </property>
                             <property name="pixmap">
-                                <pixmap>vector_project.png</pixmap>
+                                <pixmap>:/vector_project.png</pixmap>
                             </property>
                             <property name="scaledContents">
                                 <bool>true</bool>

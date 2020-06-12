@@ -119,7 +119,7 @@
                                 <cstring>pixmapLabel1</cstring>
                             </property>
                             <property name="pixmap">
-                                <pixmap>google_earth_logo.png</pixmap>
+                                <pixmap>:/google_earth_logo.png</pixmap>
                             </property>
                             <property name="scaledContents">
                                 <bool>false</bool>

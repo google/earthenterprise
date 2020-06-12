@@ -88,7 +88,7 @@
                         <string></string>
                     </property>
                     <property name="pixmap">
-                        <pixmap>delete.png</pixmap>
+                        <pixmap>:/delete.png</pixmap>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Delete LUT File</string>
@@ -277,7 +277,7 @@
                         <string></string>
                     </property>
                     <property name="pixmap">
-                        <pixmap>filenew</pixmap>
+                        <pixmap>:/filenew</pixmap>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Choose LUT File</string>

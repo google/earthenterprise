@@ -219,7 +219,7 @@
                                                 <string></string>
                                             </property>
                                             <property name="pixmap">
-                                                <pixmap>filenew</pixmap>
+                                                <pixmap>:/filenew</pixmap>
                                             </property>
                                             <property name="toolTip" stdset="0">
                                                 <string>New Rule</string>
@@ -253,7 +253,7 @@
                                                 <string></string>
                                             </property>
                                             <property name="pixmap">
-                                                <pixmap>editdelete.png</pixmap>
+                                                <pixmap>:/editdelete.png</pixmap>
                                             </property>
                                             <property name="toolTip" stdset="0">
                                                 <string>Delete Rule</string>
@@ -287,7 +287,7 @@
                                                 <string></string>
                                             </property>
                                             <property name="pixmap">
-                                                <pixmap>editcopy</pixmap>
+                                                <pixmap>:/editcopy</pixmap>
                                             </property>
                                             <property name="toolTip" stdset="0">
                                                 <string>Copy Rule</string>
@@ -321,7 +321,7 @@
                                                 <string></string>
                                             </property>
                                             <property name="pixmap">
-                                                <pixmap>up.png</pixmap>
+                                                <pixmap>:/up.png</pixmap>
                                             </property>
                                             <property name="toolTip" stdset="0">
                                                 <string>Move Rule Up</string>
@@ -355,7 +355,7 @@
                                                 <string></string>
                                             </property>
                                             <property name="pixmap">
-                                                <pixmap>down.png</pixmap>
+                                                <pixmap>:/down.png</pixmap>
                                             </property>
                                             <property name="toolTip" stdset="0">
                                                 <string>Move Rule Down</string>
@@ -3779,7 +3779,7 @@
                                             <string></string>
                                         </property>
                                         <property name="pixmap">
-                                            <pixmap>filenew</pixmap>
+                                            <pixmap>:/filenew</pixmap>
                                         </property>
                                         <property name="toolTip" stdset="0">
                                             <string>Add Search Field</string>
@@ -3810,7 +3810,7 @@
                                             <string></string>
                                         </property>
                                         <property name="pixmap">
-                                            <pixmap>editdelete.png</pixmap>
+                                            <pixmap>:/editdelete.png</pixmap>
                                         </property>
                                         <property name="toolTip" stdset="0">
                                             <string>Remove Search Field</string>
@@ -3841,7 +3841,7 @@
                                             <string></string>
                                         </property>
                                         <property name="pixmap">
-                                            <pixmap>up.png</pixmap>
+                                            <pixmap>:/up.png</pixmap>
                                         </property>
                                         <property name="toolTip" stdset="0">
                                             <string>Move Search Field Up</string>
@@ -3872,7 +3872,7 @@
                                             <string></string>
                                         </property>
                                         <property name="pixmap">
-                                            <pixmap>down.png</pixmap>
+                                            <pixmap>:/down.png</pixmap>
                                         </property>
                                         <property name="toolTip" stdset="0">
                                             <string>Move Search Field Down</string>

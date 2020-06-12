@@ -166,7 +166,7 @@
                 <string></string>
             </property>
             <property name="pixmap">
-                <pixmap>cdtoparent.xpm</pixmap>
+                <pixmap>:/cdtoparent.xpm</pixmap>
             </property>
         </widget>
         <widget class="QPushButton" row="0" column="4">
@@ -185,7 +185,7 @@
                 <string></string>
             </property>
             <property name="pixmap">
-                <pixmap>newfolder.xpm</pixmap>
+                <pixmap>:/newfolder.xpm</pixmap>
             </property>
         </widget>
         <widget class="QIconView" row="1" column="0" rowspan="1" colspan="5">
