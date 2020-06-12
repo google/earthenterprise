@@ -130,8 +130,9 @@ int main(int argc, char** argv) {
   //
   // must always create QApplication before initializing gst library
   //
+#ifndef a
   QApplication a(argc, argv);
-
+#endif
   //
   // confirm opengl support
   //
@@ -234,8 +235,12 @@ int main(int argc, char** argv) {
 
     // first event is really slow for some unknown reason
     // so process it now before taking the splash screen away
-    a.processEvents(QEventLoop::ExcludeUserInputEvents, 10);
-    w->show();
+    try {
+      a.processEvents(QEventLoop::ExcludeUserInputEvents, 10);
+      w->show();
+    } catch(const std::exception& e) {
+        notify(NFY_WARN, "Caught exception: %s", e.what());
+    }
 
     if (splash) {
       splash->finish(w);
