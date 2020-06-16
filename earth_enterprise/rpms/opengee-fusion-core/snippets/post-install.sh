@@ -184,7 +184,7 @@ final_assetroot_configuration()
         "$BASEINSTALLDIR_OPT/bin/geselectassetroot" --role slave --assetroot "$ASSET_ROOT"
     else
         "$BASEINSTALLDIR_OPT/bin/geselectassetroot" --assetroot "$ASSET_ROOT"
-      add_fusion_tutorial_volume
+         add_fusion_tutorial_volume
     fi
 }
 
