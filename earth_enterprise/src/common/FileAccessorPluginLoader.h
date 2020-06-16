@@ -20,27 +20,18 @@
 #include <dlfcn.h>
 #include <mutex>
 #include <boost/filesystem.hpp>
+#include "FileAccessorInterface.h"
 
-class FileAccessorInterface {
-public:
-    virtual int GetSomething() = 0;
-};
-
-class FileAccessorFactoryInterface {
-// NOTE: Is this an unnecessary layer? Should it be replaced by a function
-// in the plugin module? One good thing is that it prevents you from having to
-// make repeated dlsym calls.
-public:
-    virtual FileAccessorInterface* GetAccessor(const std::string &fileName) = 0;
-};
+const std::string pluginDir = "/opt/google/plugin/fileaccessor/";
 
 void ScanPluginDirectory(std::vector<std::string> &files) {
-    boost::filesystem::path p("/opt/google/plugin/fileaccessor");
+    boost::filesystem::path p(pluginDir);
     boost::filesystem::directory_iterator start(p);
     boost::filesystem::directory_iterator end;
     std::transform(start, end, std::back_inserter(files), 
         [](const boost::filesystem::directory_entry& entry) {
-            return entry.path().leaf().string(); });
+            return pluginDir + entry.path().leaf().string(); });
+    printf("Finished scanning directory. Found %zu files.\n", files.size());
 }
 
 typedef FileAccessorFactoryInterface* (*get_factory_t)();
@@ -92,15 +83,24 @@ public:
         std::vector<std::string> files;
         ScanPluginDirectory(files);
         for (auto s : files) {
-            FileAccessorPluginLoader::PluginHandle handle = dlopen(s.c_str(), RTLD_LAZY);
+            printf("%s\n", s.c_str());
+            FileAccessorPluginLoader::PluginHandle handle = dlopen(s.c_str(), RTLD_NOW);
+            //printf("Opened the plugin. Handle is %X\n", (void*)handle);
+            std::cout << "Opened the plugin Handle is " << handle << "\n";
             if (handle){
                 get_factory_t get_factory = reinterpret_cast<get_factory_t>(dlsym(handle, "get_factory_v1"));
                 FileAccessorFactoryInterface *pFactory = get_factory();
                 if(pFactory){
+                    std::cout << "Got a factory from the plugin. Pointer value is \n" << pFactory << "\n";
                     factories.push_back({handle,pFactory});
                 }
-                else
+                else{
+                    printf("Did not get a factory. Closing the handle...\n");
                     dlclose(handle);
+                }
+            }
+            else {
+                std::cout << "Couldn't open plugin: " << dlerror() << "\n";
             }
         }
     }

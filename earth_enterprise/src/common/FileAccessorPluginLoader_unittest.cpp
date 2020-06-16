@@ -88,6 +88,14 @@ TEST(FAPluginLoaderTest, get_multiple_accessors){
    ASSERT_EQ(pAccessor->GetSomething(), 5432);
 }
 
+// TEST(FAPluginLoaderTest, load_plugins_from_disk){
+//    FileAccessorPluginLoader pluginLoader(nullptr, nullptr);
+//    FileAccessorInterface *pAccessor = pluginLoader.GetAccessor("9876file");
+
+//    EXPECT_TRUE(pAccessor != nullptr);
+//    ASSERT_EQ(pAccessor->GetSomething(), 9876);
+// }
+
 // TEST(FAPluginLoaderTest, test_boost_filesystem) {
 //    std::vector<std::string> files;
 
