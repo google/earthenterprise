@@ -1,0 +1,25 @@
+
+Unable to make reservation
+
+-[ Error message ]-
+
+"Not enough disk space to make reservation for output files. Task
+<task_name>: unable to make reservation <volume>/<path>:<size>"
+
+-[ Description ]-
+
+Fusion was unable to allocate space for the output files before
+building the resource. This error is typically a result of
+insufficient disk space for the Fusion output files, although it might
+be the result of some other I/O problem on the volume.
+
+-[ Resolution ]-
+
+Run "df -h" to see if you have space left on the asset root partition.
+If you are low on space, use "geserveradmin" to delete some of the old
+databases that have been published to the server and then run
+"garbagecollect" to clean up the old data. You can also use the
+"geclean" command to remove the asset version, and "geserveradmin
+--deletedb" to remove published databases. You should also verify
+ownership and permissions on the asset root and check that mount
+points are intact.

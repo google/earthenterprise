@@ -1,0 +1,39 @@
+
+Cutter tool system information
+
+When using the Portable Globe Cutter tool:
+
+Building a portable globe is CPU and disk I/O intensive and can impact
+GEE Server operation for the duration of the build.
+
+You can implement user authentication for the GEE Portable Globe
+Cutter web page with standard Apache web server user authentication.
+By default, the Cutter web page is accessible to all users who create
+their own globes.
+
+The portable globe cutting service is disabled after you install GEE
+Server software. You must manually enable the Cutter tool:  In GEE
+5.0: gecutter enable  In earlier versions: geserveradmin
+--enable_cutter
+
+The Cutter tool writes temporary files to the globes/.globe_builder
+folder. These temporary files are removed following successful globe
+cutting operations. However, if the globe cutting operations are
+interrupted, files might be left in the globes/.globe_builder folder.
+You can manually remove the leftover files.
+
+Stopping the GEE Server during a cut might result in cut that is not
+fully formed.
+
+Globe cutting operations can sometimes be interrupted, resulting in
+"runaway" globe cutting processes that an administrator must manually
+halt at the operating system level. See Manually halt the cutter
+process.
+
+The Cutter web tool is incompatible with load-balanced configurations,
+and should only be operated on a machine that end users can access
+directly. This can be a production machine with GEE Server software
+that is hosting a 3D globe, or a development machine that has GEE
+Server software installed. You can serve portable globes (.glb files)
+that have already been created from load-balanced GEE Servers or any
+web server.

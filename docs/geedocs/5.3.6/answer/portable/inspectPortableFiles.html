@@ -1,0 +1,255 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Inspecting portable files &#8212; Google Earth Enterprise 5.3.6 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Custom folders" href="customFolders.html" />
+    <link rel="prev" title="Hello Maps! code sample" href="helloMapsSample.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="customFolders.html" title="Custom folders"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="helloMapsSample.html" title="Hello Maps! code sample"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../portable.html" accesskey="U">Portable</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="helloMapsSample.html"
+                        title="previous chapter">Hello Maps! code sample</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="customFolders.html"
+                        title="next chapter">Custom folders</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp10.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp10.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="inspecting-portable-files">
+<h1>Inspecting portable files<a class="headerlink" href="#inspecting-portable-files" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>The <code class="docutils literal notranslate"><span class="pre">geglxinfo</span></code> command provides different tools to analyze the
+composition of .glm, .glb, and .glc portable files. For example,
+you can determine the files included in a portable, extract those
+files, and test whether the portable file appears to be valid.</p>
+<p class="rubric">geglxinfo</p>
+<p><code class="docutils literal notranslate"><span class="pre">geglxinfo</span> <span class="pre">[--glx</span> <span class="pre">glb_file_path]</span></code></p>
+<p class="rubric">Purpose</p>
+<p>To inspect the .glc, .glb, .glm, or .glc files, the <code class="docutils literal notranslate"><span class="pre">geglxinfo</span></code>
+tool analyzes the composition and provides valuable information
+when you need to troubleshoot any issues that may arise when
+serving your portable files.</p>
+<p class="rubric">Examples</p>
+<p><strong>Valid file check</strong></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ geglxinfo --glx NaturalView-US.glm --is_gee
+IsGee: 1
+</pre></div>
+</div>
+<p><strong>Get file timestamp</strong></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ geglxinfo --glx tutorial_3d.glc --extract_file earth/info.txt --output
+/tmp/info.txt
+$ cat /tmp/info.txt
+Portable Globe
+Copyright 2013 Google Inc. All Rights Reserved.
+2014-01-15 16:03:15 GMT
+
+2014-01-15 08:03:15
+Globe description: Simple container for tutorial glb with gray marble backdrop.
+2014-01-15 08:03:15
+Executing: /opt/google/bin/gecreatemetadbroot --output=&quot;/tmp/cutter/glc_20598_1389801795.111116/metadbroot&quot; --layers=&quot;/tmp/cutter/glc_20598_1389801795.111116/earth/dbroot_layer_info.txt&quot;  --has_base_imagery
+
+2014-01-15 08:03:15
+SUCCESS
+2014-01-15 08:03:15
+Executing: /opt/google/bin/geportableglcpacker --layer_info=&quot;/tmp/cutter/glc_20598_1389801795.111116/earth/layer_info.txt&quot; --output=&quot;/tmp/cutter/glc_20598_1389801795.111116/temp.glc&quot; --make_copy``
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p>You can use the timestamp information if you need to determine
+which version of GEE was used to create your portable globes or
+map. This information can be useful if you use the new feature
+in GEE 5.x that lets you cut globes and maps from existing
+portable files that have been built using GEE 5.x only. See
+<a class="reference internal" href="../geeServerAdmin/createPortableGlobesMaps.html"><span class="doc">Create Portable Globes and Maps</span></a>.</p>
+<p>If you attempt to cut a portable file that was created using
+GEE 4.x, the cutting process will fail. However, you can serve
+portable files created using previous versions.</p>
+<p class="last">To determine which version of GEE was used to create a portable
+file, use <code class="docutils literal notranslate"><span class="pre">geglxinfo</span></code> or view the timestamp information for
+served globes or maps via
+<code class="docutils literal notranslate"><span class="pre">http://localhost:9335/earth/info.txt</span></code> on a local Portable
+Server, or <code class="docutils literal notranslate"><span class="pre">http://&lt;server&gt;/&lt;mount_point&gt;/earth/info.txt</span></code> on
+Earth Server.</p>
+</div>
+<p><strong>Check CRC</strong></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ geglxinfo --glx NaturalView-US.glm --check_crc
+
+File crc: 0x7e6fbbfc
+Calculated crc :0x7e6fbbfc
+Good crc!
+</pre></div>
+</div>
+<p><strong>List files</strong></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ geglxinfo --glx NaturalView-US.glm --list_files
+
+Index has 11 files.
+0: earth/earth_local.html
+offset: 233330751
+size: 1731
+1: earth/info.txt
+offset: 233332482
+size: 1849
+2: earth/polygon.kml
+offset: 233334331
+size: 124947
+3: icons/541_l.png
+offset: 233463282
+size: 363
+4: icons/773_l.png
+offset: 233463645
+size: 226
+5: icons/shield1_l.png
+offset: 233462733
+size: 549
+6: mapdata/index
+offset: 226176927
+size: 7153824
+7: mapdata/pbundle_0000
+offset: 0
+size: 226176927
+8: maps/map.json
+offset: 233461561
+size: 1172
+9: maps/map_v3.html
+offset: 233459278
+size: 2283
+10: search_db/gepoi_14
+offset: 233463871
+size: 250
+</pre></div>
+</div>
+<p><strong>Number of packets</strong></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ geglxinfo --glx NaturalView-US.glm --number_of_packets
+298076 packets
+</pre></div>
+</div>
+<p class="rubric">geglxinfo commands</p>
+<p><code class="docutils literal notranslate"><span class="pre">--is_gee</span></code></p>
+<p><em>Optional</em>. Checks whether the .glx file appears to be a valid
+globe or map. Returns a value of 1 is globe is valid; 0 if found
+to have errors. Use this validity check before testing your globe
+using <code class="docutils literal notranslate"><span class="pre">--crc</span></code>, especially on larger files, as it will catch
+almost all integrity issues.</p>
+<p><code class="docutils literal notranslate"><span class="pre">--glx</span> <span class="pre">glb_file_path</span></code></p>
+<p>The path and file name of the portable globe or map that you want
+to analyze.</p>
+<p><code class="docutils literal notranslate"><span class="pre">--list_files</span></code></p>
+<p><em>Optional</em>. Lists all of the files in the .glx.</p>
+<p><code class="docutils literal notranslate"><span class="pre">--id</span></code></p>
+<p><em>Optional</em>. Unused.</p>
+<p><code class="docutils literal notranslate"><span class="pre">--check_crc</span></code></p>
+<p><em>Optional</em>. Checks the crc of the .glx.</p>
+<p><code class="docutils literal notranslate"><span class="pre">--extract_file</span> <span class="pre">relative_file_path</span></code></p>
+<p><em>Optional</em>. File to be extracted from the .glx. Use this option
+when you want to extract a .glm or .glb layer from one .glc in
+order to add it to a second .glc file.</p>
+<p><code class="docutils literal notranslate"><span class="pre">--extract_all_files</span></code></p>
+<p><em>Optional</em>. Extract all files from the .glx. Use this option when
+you want to extract .glm or .glb layers from one .glc in order to
+add them to a second .glc file.</p>
+<p><code class="docutils literal notranslate"><span class="pre">--number_of_packets</span></code></p>
+<p><em>Optional</em>. Returns the number of data packets in the .glx.</p>
+<p><code class="docutils literal notranslate"><span class="pre">--extract_packet</span> <span class="pre">quadtree_address</span></code></p>
+<p><em>Optional</em>. Extracts a packet at a given quadtree address, for
+example, 310.</p>
+<p><code class="docutils literal notranslate"><span class="pre">--extract_packets</span></code></p>
+<p><em>Optional</em>. Extract all packets from a portable file. Can be used
+with start_idx and end_idx parameters, and the layer_idx parameter
+if it is a .glc.</p>
+<p><code class="docutils literal notranslate"><span class="pre">--packet_type</span> <span class="pre">type_string</span></code></p>
+<p><em>Optional</em>. Type of packet to extract:
+<code class="docutils literal notranslate"><span class="pre">dbroot,</span> <span class="pre">qtp,</span> <span class="pre">img,</span> <span class="pre">ter,</span> <span class="pre">or</span> <span class="pre">vec</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">--packet_channel</span> <span class="pre">channel_int</span></code></p>
+<p><em>Optional</em>. Channel of packet to extract.</p>
+<p><code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">dest_file_path</span></code></p>
+<p><em>Optional</em>. Destination file path where extracted file(s) should
+be written.</p>
+<p>See <a class="reference internal" href="../geeServerAdmin/settingsPage.html"><span class="doc">Settings</span></a> to learn about globe
+assembly and disassembly tools in the GEE Server Admin console.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="customFolders.html" title="Custom folders"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="helloMapsSample.html" title="Hello Maps! code sample"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../portable.html" >Portable</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
