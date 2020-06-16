@@ -57,7 +57,8 @@ file_bundle_port_sources = [
   'IndexManifest.os',
   'Reader.os',
   'Writer.os',
-  'shared.os'
+  'shared.os',
+  '../FileAccessor.os'
 ]
 
 geindex_r = env.sharedLib('geindex_r', readsources,

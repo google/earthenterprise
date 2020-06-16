@@ -15,7 +15,6 @@
 
 
 #include "geFilePool.h"
-#include <khFileUtils.h>
 #include <khSimpleException.h>
 #include <third_party/rsa_md5/crc32.h>
 #include <khEndian.h>
@@ -25,12 +24,11 @@
 // ****************************************************************************
 bool FileReservationImpl::UnlockAndClose_(geFilePool &pool) {
   // run when pool.mutex IS locked
-  if (fd != -1) {
+  if (aFA->isValid()) {
     int result = 0;
     {
       khUnlockGuard unlock(pool.mutex);
-      result = isWriter ? khFsyncAndClose(fd) : khClose(fd);
-      fd = -1;
+      result = isWriter ? aFA->FsyncAndClose() : aFA->Close();
     }
     pool.ReduceFdCount_locked();
     return (result != -1);
@@ -49,16 +47,17 @@ bool FileReservationImpl::UnlockAndOpen_(geFilePool &pool,
                                  // our invariant numFdsUsed_ < maxNumFds
   {
     khUnlockGuard unlock(pool.mutex);
-    fd = khOpen(fname, flags, createMask);
+    aFA = AbstractFileAccessor::getAccessor(fname);
+    aFA->Open(fname, nullptr, flags, createMask);
   }
-  if (fd < 0) {
+  if (!aFA->isValid()) {
     notify(NFY_DEBUG, "FileReservationImpl::UnlockAndOpen_ failure: "
            "%u file: %s flags: %d mask: %x, errno: %d\n",
            pool.MaxFdsUsed(), fname.c_str(),flags, createMask, errno);
     // If we failed, back off the count.
     pool.ReduceFdCount_locked();
   }
-  return (fd != -1);
+  return (aFA->isValid());
 }
 
 // ****************************************************************************
@@ -255,7 +254,7 @@ void FileReferenceImpl::Dump_locked(void) {
 
   fprintf(stderr, "%s: refcount=%d ", fname.c_str(), refcount());
   if (reservation) {
-    fprintf(stderr, "fd=%d ", reservation->Fd() );
+    fprintf(stderr, "fd=%d ", reservation->AFA()->getFD());
   }
   if (operationPending) {
     fprintf(stderr, "pending ");
@@ -274,7 +273,7 @@ void FileReferenceImpl::Pread(void *buffer, size_t size, off64_t offset) {
     throw khSimpleException("FileReferenceImpl::Pread: NULL tmpres");
   }
 
-  if (!khPreadAll(tmpres->Fd(), buffer, size, offset)) {
+  if (!tmpres->AFA()->PreadAll(buffer, size, offset)) {
     throw khSimpleErrnoException()
       << "Unable to read " << size << " bytes from offset "
       << offset << " in " << fname;
@@ -290,7 +289,7 @@ void FileReferenceImpl::Pwrite(const void *buffer, size_t size,
     throw khSimpleException("FileReferenceImpl::Pwrite: NULL tmpres");
   }
 
-  if (!khPwriteAll(tmpres->Fd(), buffer, size, offset)) {
+  if (!tmpres->AFA()->PwriteAll(buffer, size, offset)) {
     throw khSimpleErrnoException()
       << "Unable to write " << size << " bytes to offset "
       << offset << " in " << fname;
