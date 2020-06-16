@@ -954,6 +954,11 @@ task openGeeExtraRpm(type: GeeRpm, dependsOn: openGeeExtraInitScripts) {
     autoFindRequiresFilter = rpmCapabilityFilter
     requiresCommandFilter = rpmCommandFilter
 
+    // This package contains files that were in opengee-server and
+    // opengee-fusion in versions 5.3.4.1 and before.
+    conflicts('opengee-server', "5.3.4.1", LESS | EQUAL)
+    conflicts('opengee-fusion', "5.3.4.1", LESS | EQUAL)
+
     postInstall = file("${buildDir}/opengee-extra/post-install.sh")
     preUninstall = file("${buildDir}/opengee-extra/pre-uninstall.sh")
 
@@ -1046,6 +1051,11 @@ task openGeeExtraDeb(type: GeeDeb, dependsOn: openGeeExtraInitScripts) {
     packageDescription = openGeeExtraRpm.packageDescription
     license = openGeeExtraRpm.license
     url = openGeeExtraRpm.url
+
+    // This package contains files that were in opengee-server and
+    // opengee-fusion in versions 5.3.4.1 and before.
+    conflicts('opengee-server', "5.3.4.1", LESS | EQUAL)
+    conflicts('opengee-fusion', "5.3.4.1", LESS | EQUAL)
 
     postInstallFile file("${buildDir}/opengee-extra/post-install.sh")
     preUninstallFile file("${buildDir}/opengee-extra/pre-uninstall.sh")
