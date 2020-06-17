@@ -1,0 +1,23 @@
+
+Clearing the Google Earth EC cache
+
+If you have signed in to a database on GEE Server with Google Earth EC
+previously, you may be unable to sign in again to the same database.
+An effective way of resolving this issue is to sign out of your
+server, clear your cache, and log back in.
+
+-[ To clear your cache (On Windows and Linux): ]-
+
+Select File > Server Sign Out.
+
+Select Tools > Options > Cache.
+
+Select Delete cache file (only when logged out).
+
+-[ To clear your cache (On Mac OS X): ]-
+
+Select File > Server Sign Out.
+
+Select Google Earth EC > Preferences > Cache.
+
+Select Delete cache file (only when logged out).

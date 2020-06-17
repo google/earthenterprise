@@ -1,0 +1,17 @@
+
+Uninstalling Google Earth Enterprise
+
+Open GEE provides command line uninstall scripts. To uninstall Google
+Earth Enterprise Fusion and Server:
+
+Open a terminal window on your Linux workstation.
+
+Log in as root.
+
+Stop Google Earth Enterprise processes, if you have a previous version
+installed and it is running:  /etc/init.d/gefusion stop
+/etc/init.d/geserver stop
+
+Navigate to the installation location (/opt/google/install).
+
+Run the scripts uninstall_server.sh and uninstall_fusion.sh.
