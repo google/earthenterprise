@@ -64,7 +64,7 @@ main_preinstall()
 	show_intro
 
 	# Root/Sudo check
-	if [ "$EUID" != "0" ]; then 
+	if [ "$EUID" != "0" ]; then
 		show_need_root
 		exit 1
 	fi
@@ -77,7 +77,7 @@ main_preinstall()
 	fi
 
 	# Argument check
-	if ! parse_arguments "$@"; then		
+	if ! parse_arguments "$@"; then
 		exit 1
 	fi
 
@@ -119,7 +119,7 @@ main_preinstall()
 	if ! check_bad_hostname; then
 		exit 1
 	fi
-    
+
 	if ! check_mismatched_hostname; then
 		exit 1
 	fi
@@ -147,8 +147,8 @@ main_install()
 
 	# add group if it does not exist
 	if [ -z "$GROUP_EXISTS" ]; then
-		groupadd -r $GROUPNAME &> /dev/null 
-		NEW_GEGROUP=true 
+		groupadd -r $GROUPNAME &> /dev/null
+		NEW_GEGROUP=true
 	fi
 
 	# add user if it does not exist
@@ -178,7 +178,7 @@ main_postinstall()
     fi
 
     setup_fusion_daemon
-	
+
 	# store fusion version
 	echo $LONG_VERSION > $BASEINSTALLDIR_ETC/fusion_version
 
@@ -207,7 +207,7 @@ main_postinstall()
 #-----------------------------------------------------------------
 
 show_intro()
-{	
+{
 	echo -e "\nWelcome to the $GEEF $LONG_VERSION installer."
 }
 
@@ -217,7 +217,7 @@ show_help()
 	echo -e "\t\t-g gegroup -nobk -hnf -nostart]\n"
 
 	echo -e "-h \t\tHelp - display this help screen"
-	echo -e "-dir \t\tTemp Install Directory - specify the temporary install directory. Default is [$TMPINSTALLDIR]."	
+	echo -e "-dir \t\tTemp Install Directory - specify the temporary install directory. Default is [$TMPINSTALLDIR]."
 	echo -e "-u \t\tFusion User Name - the user name to use for Fusion. Default is [$GEFUSIONUSER_NAME]. \n\t\tNote: this is only used for new installations."
 	echo -e "-g \t\tUser Group Name - the group name to use for the Fusion user. Default is [$GROUPNAME]. \n\t\tNote: this is only used for new installations."
 	echo -e "-ar \t\tAsset Root Name - the name of the asset root volume.  Default is [$ASSET_ROOT]. \n\t\tNote: this is only used for new installations. Specify absolute paths only."
@@ -225,13 +225,13 @@ show_help()
 	echo -e "-nobk \t\tNo Backup - do not backup the current fusion setup. Default is to backup \n\t\tthe setup before installing."
     echo -e "-nostart \tDo Not Start Fusion - after install, do not start the Fusion daemon.  Default is to start the daemon."
 	echo -e "-hnf \t\tHostname Force - force the installer to continue installing with a bad \n\t\thostname. Bad hostname values are [${BADHOSTNAMELIST[*]}]."
-	echo -e "-hnmf \t\tHostname Mismatch Force - force the installer to continue installing with a \n\t\tmismatched hostname.\n" 	
+	echo -e "-hnmf \t\tHostname Mismatch Force - force the installer to continue installing with a \n\t\tmismatched hostname.\n"
 }
 
 show_fusion_running_message()
 {
 	echo -e "\n$GEEF has active running processes."
-	echo -e "To use this installer to upgrade, you must stop all fusion services.\n"	
+	echo -e "To use this installer to upgrade, you must stop all fusion services.\n"
 }
 
 load_systemrc_config()
@@ -253,7 +253,7 @@ check_prereq_software()
 		check_prereq_software_retval=1
 	fi
 
-	if ! software_check "$script_name" "python2.[67]" "python[2]-2.[67].*"; then
+	if ! software_check "$script_name" "python2.[67]" "python[2]*-2.[67].*"; then
 		check_prereq_software_retval=1
 	fi
 
@@ -290,7 +290,7 @@ show_invalid_assetroot_name()
 (
 	echo -e "\nThe following characters are no longer allowed in GEE Fusion Assets:"
 	echo -e "& % \' \" * = + ~ \` ? < > : ; and the space character.\n"
-	
+
 	echo -e "Assets with these names will no longer be usable in GEE Fusion and will generate"
 	echo -e "an appropriate error message.\n"
 
@@ -314,7 +314,7 @@ is_valid_custom_directory()
 {
 	# Standard function that tests a string to see if it passes the "valid" alphanumeric for asset root/source volume.
 	# For simplicity -- we limit to letters, numbers and underscores.
-	# Regular expression: 
+	# Regular expression:
 	regex="^/([a-zA-Z0-9_]+/{0,1})+$"
 
 	if [ ! -z "$1" ] && [[ $1 =~ $regex ]]; then
@@ -351,11 +351,11 @@ parse_arguments()
 				break
 				;;
 			-nobk)
-				BACKUPFUSION=false				
+				BACKUPFUSION=false
 				;;
 			-hnf)
 				BADHOSTNAMEOVERRIDE=true;
-				;;			
+				;;
 			-hnmf)
 				MISMATCHHOSTNAMEOVERRIDE=true
 				;;
@@ -369,7 +369,7 @@ parse_arguments()
 					else
 						show_no_tmp_dir_message $1
 						parse_arguments_retval=-1
-						break		
+						break
 					fi
 					;;
 			-ar)
@@ -388,12 +388,12 @@ parse_arguments()
 						echo -e "letters, numbers and the underscore characters for the asset root name. The asset root cannot"
 						echo -e "start with a number or underscore."
 						parse_arguments_retval=1
-						break		
+						break
 					fi
 				fi
 				;;
             -sv)
-                
+
                 if [ $IS_NEWINSTALL == false ]; then
 					echo -e "\nYou cannot modify the source volume using the installer because Fusion is already installed on this server."
 					parse_arguments_retval=1
@@ -409,7 +409,7 @@ parse_arguments()
 						echo -e "letters, numbers and the underscore characters for the source volume name. The source volume cannot"
 						echo -e "start with a number or underscore."
 						parse_arguments_retval=1
-						break		
+						break
 					fi
 				fi
                 ;;
@@ -425,13 +425,13 @@ parse_arguments()
 					break
 				else
 					shift
-				
+
 					if is_valid_alphanumeric ${1// }; then
 						GEFUSIONUSER_NAME=${1// }
 					else
 						echo -e "\nThe fusion user name you specified is not valid. Valid characters are upper/lowercase letters, "
 						echo -e "numbers, dashes and the underscore characters. The user name cannot start with a number or dash."
-						parse_arguments_retval=1					
+						parse_arguments_retval=1
 						break
 					fi
 				fi
@@ -448,14 +448,14 @@ parse_arguments()
 					break
 				else
 					shift
-				
+
 					if is_valid_alphanumeric ${1// }; then
 						GROUPNAME=${1// }
 					else
 						echo -e "\nThe fusion group name you specified is not valid. Valid characters are upper/lowercase letters, "
 						echo -e "numbers, dashes and the underscore characters. The group name cannot start with a number or dash."
 						parse_arguments_retval=1
-						break			
+						break
 					fi
 				fi
 				;;
@@ -466,12 +466,12 @@ parse_arguments()
 				break
 				;;
 		esac
-	
+
 		if [ $# -gt 0 ]
 		then
 		    shift
 		fi
-	done	
+	done
 
     # final check -- make sure that the asset root and source volume are not the same
     if [ "$ASSET_ROOT" == "$SOURCE_VOLUME" ]; then
@@ -490,13 +490,13 @@ parse_arguments()
         echo -e "----------------"
         echo -e "Selected Fusion User: \t\t\t\t$GEFUSIONUSER_NAME"
 	    echo -e "Selected Fusion User Group: \t\t\t$GROUPNAME"
-    
+
         # START WORK HERE
         if ! prompt_to_quit "X (Exit) the installer and use the default username - C (Continue) to use the username that you have specified."; then
             parse_arguments_retval=1
         fi
     fi
-	
+
 	return $parse_arguments_retval;
 }
 
@@ -523,14 +523,14 @@ prompt_install_confirmation()
 	echo -e "Fusion User: \t\t$GEFUSIONUSER_NAME"
 	echo -e "Fusion User Group: \t$GROUPNAME"
     echo -e "Disk Space:\n"
-	
+
 	# display disk space
 	df -h | grep -v -E "^none"
 
 	echo ""
 
 	if ! prompt_to_quit "X (Exit) the installer and cancel the installation - C (Continue) to install/upgrade."; then
-		return 1	
+		return 1
 	else
         echo -e "\nProceeding with installation..."
 		return 0
@@ -554,19 +554,19 @@ backup_fusion()
 	# copy log files.
 	mkdir -p $BACKUP_DIR/log
 
-	if [ -f "$GENERAL_LOG/gesystemmanager.log" ]; then 
+	if [ -f "$GENERAL_LOG/gesystemmanager.log" ]; then
 		cp -f $GENERAL_LOG/gesystemmanager.log $BACKUP_DIR/log
 	fi
 
-	if [ -f "$GENERAL_LOG/geresourceprovider.log" ]; then 
+	if [ -f "$GENERAL_LOG/geresourceprovider.log" ]; then
 		cp -f $GENERAL_LOG/geresourceprovider.log $BACKUP_DIR/log
 	fi
 
-	if [ -d "$BASEINSTALLDIR_ETC/openldap" ]; then 
+	if [ -d "$BASEINSTALLDIR_ETC/openldap" ]; then
 		cp -rf $BASEINSTALLDIR_ETC/openldap $BACKUP_DIR
 	fi
 
-	if [ -f "$SYSTEMRC" ]; then 
+	if [ -f "$SYSTEMRC" ]; then
 		cp -f $SYSTEMRC $BACKUP_DIR
 	fi
 
@@ -608,13 +608,13 @@ copy_files_to_target()
 	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -rf $TMPINSTALLDIR/common/opt/google/share $BASEINSTALLDIR_OPT
 	if [ $? -ne 0 ]; then error_on_copy=1; fi
-	
+
 	# copy "lib*" vs "*" because "cp *" will skip dir 'pkgconfig' and return error
 	cp -rf $TMPINSTALLDIR/common/opt/google/gepython $BASEINSTALLDIR_OPT
 	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -rf $TMPINSTALLDIR/manual/opt/google/share/doc/manual/ $BASEINSTALLDIR_OPT/share/doc
 	if [ $? -ne 0 ]; then error_on_copy=1; fi
-	
+
 	cp -f $TMPINSTALLDIR/fusion/etc/profile.d/ge-fusion.csh $BININSTALLPROFILEDIR
 	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -f $TMPINSTALLDIR/fusion/etc/profile.d/ge-fusion.sh $BININSTALLPROFILEDIR
@@ -689,7 +689,7 @@ setup_fusion_daemon()
 	test -f $CHKCONFIG && $CHKCONFIG --add gefusion
 	test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE -f gefusion remove
 	test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE gefusion start 90 2 3 4 5 . stop 10 0 1 6 .
-	
+
 	printf "Fusion daemon setup ... Done\n"
 }
 
@@ -705,7 +705,7 @@ create_system_main_directories()
 }
 
 compare_asset_root_publishvolume()
-{    
+{
     local compare_assetroot_publishvolume_retval=0
 
     if [ -f "$BASEINSTALLDIR_OPT/gehttpd/conf.d/stream_space" ]; then
@@ -714,7 +714,7 @@ compare_asset_root_publishvolume()
         if [ -d "$ASSET_ROOT" ] && [ -d "$PUBLISH_ROOT_VOLUME" ]; then
             VOL_ASSETROOT=$(df $ASSET_ROOT | grep -v ^Filesystem | grep -Eo '^[^ ]+')
             VOL_PUBLISHED_ROOT_VOLUME=$(df $PUBLISH_ROOT_VOLUME | grep -v ^Filesystem | grep -Eo '^[^ ]+')
-            
+
             if [ "$VOL_ASSETROOT" != "$VOL_PUBLISHED_ROOT_VOLUME" ]; then
                 echo -e "\nYou have selected different volumes for 'Publish Root' and 'Asset Root'."
                 echo -e "\nAsset Root: \t\t$ASSET_ROOT"
@@ -727,8 +727,8 @@ compare_asset_root_publishvolume()
 
                 if ! prompt_to_quit "X (Exit) the installer and change the asset root location - C (Continue) to use the asset root that you have specified."; then
                     compare_assetroot_publishvolume_retval=1
-                fi                
-            fi   
+                fi
+            fi
         fi
 	fi
 
@@ -740,7 +740,7 @@ check_asset_root_volume_size()
     local check_asset_root_volume_size_retval=0
 
     ASSET_ROOT_VOLUME_SIZE=$(df --output=avail $ASSET_ROOT | grep -v Avail)
-    
+
     if [[ $ASSET_ROOT_VOLUME_SIZE -lt MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB ]]; then
         MIN_ASSET_ROOT_VOLUME_SIZE_IN_GB=$(expr $MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB / 1024 / 1024)
 
@@ -820,7 +820,7 @@ install_or_upgrade_asset_root()
     else
         # upgrade asset root -- if this is a master
         if [ $IS_SLAVE == false ]; then
-            # TODO: Verify this logic -- this is what is defined in the installer documentation, but need confirmation            
+            # TODO: Verify this logic -- this is what is defined in the installer documentation, but need confirmation
             if [ $NEW_GEGROUP == true ] || [ $NEW_GEFUSIONUSER == true ]; then
                 NOCHOWN=""
                 UPGRADE_MESSAGE="\nThe upgrade will fix permissions for the asset root and source volume. This may take a while.\n"
@@ -834,17 +834,17 @@ install_or_upgrade_asset_root()
 			echo -e "Consider backing up your asset root. $GEEF will warn you when"
             echo -e "attempting to run with a non-upgraded asset root."
             echo -e "$UPGRADE_MESSAGE"
-                
+
             if ! prompt_to_quit "X (Exit) the installer and backup your asset root - C (Continue) to upgrade the asset root."; then
                 install_or_upgrade_asset_root_retval=1
 			else
 				# Note: we don't want to do the recursive chown on the asset root unless absolutely necessary
             	$BASEINSTALLDIR_OPT/bin/geconfigureassetroot --fixmasterhost --noprompt  $NOCHOWN --assetroot $ASSET_ROOT
-            	$BASEINSTALLDIR_OPT/bin/geupgradeassetroot --noprompt $NOCHOWN --assetroot $ASSET_ROOT   
+            	$BASEINSTALLDIR_OPT/bin/geupgradeassetroot --noprompt $NOCHOWN --assetroot $ASSET_ROOT
 
 				chown -R $GEFUSIONUSER_NAME:$GROUPNAME $ASSET_ROOT
             fi
-        fi  
+        fi
     fi
 
     return $install_or_upgrade_asset_root_retval
@@ -852,7 +852,7 @@ install_or_upgrade_asset_root()
 
 fix_postinstall_filepermissions()
 {
-    # Run    
+    # Run
     chmod 775 $BASEINSTALLDIR_OPT/run
     chmod 775 $BASEINSTALLDIR_VAR/run
     chown $ROOT_USERNAME:$GROUPNAME $BASEINSTALLDIR_OPT/run
@@ -876,7 +876,7 @@ fix_postinstall_filepermissions()
     chmod -R 755 $BASEINSTALLDIR_OPT/lib
     chmod -R 555 $BASEINSTALLDIR_OPT/bin
     chmod 755 $BASEINSTALLDIR_OPT
-    
+
     # suid enabled
     chmod +s $BASEINSTALLDIR_OPT/bin/geserveradmin
     chmod 755 $BASEINSTALLDIR_ETC/openldap

@@ -1,5 +1,6 @@
 #-*- Python -*-
 #
+# Copyright 2020 the Open GEE Contributors.
 # Copyright 2017 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -604,6 +605,7 @@ env['QTINCDIR'] = '/usr/include/Qt'
 env['QTLIBDIR'] = '/usr/lib64/qt4'
 env['MOC'] = qtdir+'/bin/moc'
 env['UIC'] = qtdir+'/bin/uic3'
+env['RCC'] = qtdir+'/bin/rcc'
 env['LRELEASE'] = qtdir+'/bin/lrelease'
 
 env['KHIDL'] = File('#common/khxml/khidl.pl')

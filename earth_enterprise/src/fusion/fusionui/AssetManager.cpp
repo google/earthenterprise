@@ -1,3 +1,4 @@
+// Copyright 2020 the Open GEE Contributors.
 // Copyright 2017 Google Inc.
 // Copyright 2020 OpenGEE Contributors
 //
@@ -102,7 +103,7 @@ using QMimeSourceFactory = Q3MimeSourceFactory;
 
 namespace {
 
-const char* folder_closed_xpm[]={
+const char* const folder_closed_xpm[]={
   "16 16 9 1",
   "g c #808080",
   "b c #c0c000",
@@ -130,7 +131,7 @@ const char* folder_closed_xpm[]={
   ".........##f#b##",
   "...........####." };
 
-const char* folder_open_xpm[]={
+const char* const folder_open_xpm[]={
   "16 16 11 1",
   "# c #000000",
   "g c #c0c0c0",
