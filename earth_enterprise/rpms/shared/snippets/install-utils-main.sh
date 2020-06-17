@@ -4,9 +4,17 @@ BASEINSTALLDIR_OPT="/opt/google"
 BASEINSTALLDIR_ETC="/etc/opt/google"
 BASEINSTALLDIR_VAR="/var/opt/google"
 
+PGSQL_DATA="/var/opt/google/pgsql/data"
+PGSQL_LOGS="/var/opt/google/pgsql/logs"
+PGSQL_PROGRAM="/opt/google/bin/pg_ctl"
+
+SEARCH_EX_SCRIPT="/opt/google/share/searchexample/searchexample"
+
 # Derived directories:
 SYSTEMRC="$BASEINSTALLDIR_ETC/systemrc"
 MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB=1048576
+FUSION_TUTORIAL_DIR="$BASEINSTALLDIR_OPT/share/tutorials"
+SQLDIR="$BASEINSTALLDIR_OPT/share/opengee-server/sql"
 
 # Configuration values:
 ASSET_ROOT="/gevol/assets"
@@ -79,4 +87,16 @@ xml_file_get_xpath()
     echo "cat $XPATH" | xmllint --noent --nocdata --shell "$FILE" |
     # Skip the first and the last line:
         tail -n +2 | head -n -1
+}
+
+run_as_user()
+{
+    local use_su=`su $1 -c 'echo -n 1' 2> /dev/null  || echo -n 0`
+    if [ "$use_su" -eq 1 ] ; then
+        >&2 echo "cd / ;su $1 -c \"$2\""
+        ( cd / ;su $1 -c "$2" )
+    else
+        >&2 echo "cd / ;sudo -u $1 $2"
+        ( cd / ;sudo -u $1 $2 )
+    fi
 }

@@ -12,7 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-LoadModule wsgi_module modules/mod_wsgi.so
+<IfModule !wsgi_module>
+    # Load the WSGI module if it hasn't been loaded yet
+    LoadModule wsgi_module modules/mod_wsgi.so
+</IfModule>
 
 <IfModule wsgi_module>
     WSGIRestrictEmbedded On
@@ -45,13 +48,8 @@ LoadModule wsgi_module modules/mod_wsgi.so
     WSGIScriptAlias /gesearch/CoordinateSearch /opt/google/gehttpd/wsgi-bin/search/plugin/coordinate_search_app.py process-group=ge_search_serve
     # --Handles Federated search requests.
     WSGIScriptAlias /gesearch/FederatedSearch /opt/google/gehttpd/wsgi-bin/search/plugin/federated_search_app.py process-group=ge_search_serve
-    # --Handles Example search requests.
-    WSGIScriptAlias /gesearch/ExampleSearch /opt/google/gehttpd/wsgi-bin/search/plugin/example_search_app.py process-group=ge_search_serve
     # --Handles POI search requests.
     WSGIScriptAlias /POISearch /opt/google/gehttpd/wsgi-bin/search/plugin/poi_search_app.py process-group=ge_search_serve
-
-    # --Handles Custom POI search requests.
-    WSGIScriptAlias /gesearch/CustomPOISearch /opt/google/gehttpd/wsgi-bin/search/plugin/custom_POI_search_app.py process-group=ge_search_serve
 
     # --Handles Google Search requests.
     WSGIScriptAlias /gesearch/SearchGoogle /opt/google/gehttpd/wsgi-bin/search/plugin/search_google_app.py process-group=ge_search_serve
