@@ -20,90 +20,32 @@
 #include <dlfcn.h>
 #include <mutex>
 #include <boost/filesystem.hpp>
-#include "FileAccessorInterface.h"
+#include "FileAccessor.h"
 
-const std::string pluginDir = "/opt/google/plugin/fileaccessor/";
+class FileAccessorFactory {
+friend class FileAccessorPluginLoader;
+protected:
+    virtual AbstractFileAccessor* GetAccessor(const std::string &fileName) = 0;
+};
 
-void ScanPluginDirectory(std::vector<std::string> &files) {
-    boost::filesystem::path p(pluginDir);
-    boost::filesystem::directory_iterator start(p);
-    boost::filesystem::directory_iterator end;
-    std::transform(start, end, std::back_inserter(files), 
-        [](const boost::filesystem::directory_entry& entry) {
-            return pluginDir + entry.path().leaf().string(); });
-    printf("Finished scanning directory. Found %zu files.\n", files.size());
-}
-
-typedef FileAccessorFactoryInterface* (*get_factory_t)();
+typedef FileAccessorFactory* (*get_factory_t)();
 
 class FileAccessorPluginLoader {
 public:
     using PluginHandle = void*;
-    using PluginFactory = std::pair<PluginHandle,FileAccessorFactoryInterface*>;
+    using PluginFactory = std::pair<PluginHandle,FileAccessorFactory*>;
     using LoadPluginFunc = std::function<void(std::vector<PluginFactory> &)>;
     using UnloadPluginFunc = std::function<void(PluginHandle)>;
 
-    FileAccessorPluginLoader(LoadPluginFunc LoadImpl = nullptr, UnloadPluginFunc UnloadImpl = nullptr) {
-        loadPluginFunc = LoadImpl ? LoadImpl : DefaultLoadPluginsImpl;
-        unloadPluginFunc = UnloadImpl ? UnloadImpl : [](PluginHandle handle){dlclose(handle);};
-    }
+    ~FileAccessorPluginLoader();
+    void LoadPlugins();
+    std::unique_ptr<AbstractFileAccessor> GetAccessor(std::string file_path);
 
-    ~FileAccessorPluginLoader() {
-        for (auto factory : factories)
-            unloadPluginFunc(factory.first);
-    }
+    static void DefaultLoadPluginsImpl (std::vector<PluginFactory> &factories);
+    static FileAccessorPluginLoader& Get();
 
-    void LoadPlugins() {
-        std::lock_guard<std::mutex> lock(loadMutex);
-        if (loaded)
-            return;
-
-        loadPluginFunc(factories);
-        
-        loaded = true;
-    }
-
-    FileAccessorInterface* GetAccessor(std::string file_path) {
-        // Even though LoadPlugins checks `loaded`, check here to avoid incurring
-        // the cost of the lock every time someone asks for a file accessor.
-        if (!loaded)
-            LoadPlugins();
-
-        for(PluginFactory f : factories){
-            FileAccessorInterface *pAccessor = f.second->GetAccessor(file_path);
-            if (pAccessor) {
-                return pAccessor;
-            }
-        }
-
-        return nullptr; // Return POSIX accessor by default?
-    }
-
-    static void DefaultLoadPluginsImpl (std::vector<PluginFactory> &factories) {
-        std::vector<std::string> files;
-        ScanPluginDirectory(files);
-        for (auto s : files) {
-            printf("%s\n", s.c_str());
-            FileAccessorPluginLoader::PluginHandle handle = dlopen(s.c_str(), RTLD_NOW);
-            //printf("Opened the plugin. Handle is %X\n", (void*)handle);
-            std::cout << "Opened the plugin Handle is " << handle << "\n";
-            if (handle){
-                get_factory_t get_factory = reinterpret_cast<get_factory_t>(dlsym(handle, "get_factory_v1"));
-                FileAccessorFactoryInterface *pFactory = get_factory();
-                if(pFactory){
-                    std::cout << "Got a factory from the plugin. Pointer value is \n" << pFactory << "\n";
-                    factories.push_back({handle,pFactory});
-                }
-                else{
-                    printf("Did not get a factory. Closing the handle...\n");
-                    dlclose(handle);
-                }
-            }
-            else {
-                std::cout << "Couldn't open plugin: " << dlerror() << "\n";
-            }
-        }
-    }
+protected:
+    FileAccessorPluginLoader(LoadPluginFunc LoadImpl = nullptr, UnloadPluginFunc UnloadImpl = nullptr);
 
 private:
     bool loaded = false;
@@ -112,7 +54,5 @@ private:
     LoadPluginFunc loadPluginFunc;
     UnloadPluginFunc unloadPluginFunc;
 };
-
-
 
 #endif // COMMON_FILEACCESSORPLUGINLOADER_H_

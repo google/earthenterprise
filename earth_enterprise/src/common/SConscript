@@ -79,6 +79,8 @@ commonsources = [ '../third_party/rsa_md5/md5c.c',
                   'performancelogger.cpp',
                   'timeutils.cpp',
                   'FileAccessor.cpp',
+                  'POSIXFileAccessor.cpp',
+                  'FileAccessorPluginLoader.cpp',
                   streaming_imagery[0]  # generated .cc file
                  ]
 
@@ -103,7 +105,7 @@ env = conf.Finish()
 
 # TODO: consider to move geGdalUtils to khgdal?!
 gecommon = env.sharedLib('gecommon', commonsources,
-                         LIBS = ['keyholeutils', 'geprotobuf', 'z', 'jpeg', 'png12', 'gdal'])
+                         LIBS = ['keyholeutils', 'geprotobuf', 'z', 'jpeg', 'png12', 'gdal', 'libdl', 'boost_filesystem', 'boost_system'])
 
 utilsources = [
     'ff.cpp',
