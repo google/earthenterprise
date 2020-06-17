@@ -20,7 +20,6 @@
 #include <memory>
 #include <khFileUtils.h>
 #include "khStringUtils.h"
-#include "AbstractFileAccessor.h"
 
 class AbstractFileAccessor {
 public:
