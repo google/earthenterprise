@@ -147,6 +147,11 @@ void MainWindow::Init() {
   updatePlaceMarks();
   updateImageLayers();
 
+  // enable the help menu item if docs are installed
+  if (!getManualPath().isEmpty()) {
+    helpmanual->setVisible(TRUE);
+  }
+
   // handle drop events
   connect(gfxview, SIGNAL(dropFile(const QString&)),
           this, SLOT(fileDragOpen(const QString&)));
@@ -276,15 +281,25 @@ void MainWindow::previewProjectionActivated(int choice) {
   }
 }
 
-void MainWindow::launchHelpManual() {
-  // find manual
+QString MainWindow::getManualPath() {
   QString doc = khComposePath(
       kGESharePath,
       "doc/manual/index.html");
   if (!khExists(doc.latin1())) {
+    return QString();
+  }
+  else {
+    return doc;
+  }
+}
+
+void MainWindow::launchHelpManual() {
+  // find manual
+  QString doc = getManualPath();
+  if (doc.isEmpty()) {
     QMessageBox::critical(
         this, "Error",
-        tr("Unable to find manual. Please re-install fusion to correct this."),
+        tr("Unable to find manual."),
         tr("OK"), 0, 0, 0);
     return;
   }

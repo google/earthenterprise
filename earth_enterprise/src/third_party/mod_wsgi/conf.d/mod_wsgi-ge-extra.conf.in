@@ -1,0 +1,25 @@
+# Copyright 2020 The Open GEE Contributors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+<IfModule !wsgi_module>
+    # Load the WSGI module if it hasn't been loaded yet
+    LoadModule wsgi_module modules/mod_wsgi.so
+</IfModule>
+
+<IfModule wsgi_module>
+    # --Handles Example search requests.
+    WSGIScriptAlias /gesearch/ExampleSearch /opt/google/gehttpd/wsgi-bin/search/plugin/example_search_app.py process-group=ge_search_serve
+    # --Handles Custom POI search requests.
+    WSGIScriptAlias /gesearch/CustomPOISearch /opt/google/gehttpd/wsgi-bin/search/plugin/custom_POI_search_app.py process-group=ge_search_serve
+</IfModule>
