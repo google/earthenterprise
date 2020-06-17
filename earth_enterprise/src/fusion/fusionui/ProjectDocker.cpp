@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc.
+// Copyright 2017-2020 Google Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ ProjectDocker::ProjectDocker(Place p, QWidget* parent, const char* name)
 }
 
 void ProjectDocker::selectBox(const gstDrawState& draw_state,
-                              Qt::KeyboardModifier btn_state) {
+                              Qt::ButtonState btn_state) {
   preview_->selectBox(draw_state, btn_state);
 }
 

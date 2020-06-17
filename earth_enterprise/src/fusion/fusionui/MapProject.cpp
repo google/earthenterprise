@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc.
+// Copyright 2017-2020 Google Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -146,9 +146,9 @@ void MapProjectWidget::Prefill(const MapProjectEditRequest &req) {
     ListView()->SelectItem(first);
   }
 
-  connect(ListView(), SIGNAL(doubleClicked(QListViewItem*,
+  connect(ListView(), SIGNAL(doubleClicked(Q3ListViewItem*,
                                            const QPoint&, int)),
-          this, SLOT(ModifyItem(QListViewItem*, const QPoint&, int)));
+          this, SLOT(ModifyItem(Q3ListViewItem*, const QPoint&, int)));
 }
 
 void MapProjectWidget::AssembleEditRequest(MapProjectEditRequest *request) {

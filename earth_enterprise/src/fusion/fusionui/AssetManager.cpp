@@ -524,8 +524,8 @@ AssetManager::AssetManager(QWidget* parent)
   }
 
   connect(categories,
-          SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
-          this, SLOT(rmbClicked(QListViewItem*, const QPoint&, int)));
+          SIGNAL(contextMenuRequested(Q3ListViewItem*, const QPoint&, int)),
+          this, SLOT(rmbClicked(Q3ListViewItem*, const QPoint&, int)));
 
   connect(assetTabWidget, SIGNAL(currentChanged(QWidget*)),
           this, SLOT(selectFolder()));
@@ -537,8 +537,8 @@ AssetManager::AssetManager(QWidget* parent)
           this, SLOT(tableAssetMenu(int, int, const QPoint&)));
 
   connect(assetIconView,
-          SIGNAL(contextMenuRequested(QIconViewItem*, const QPoint&)),
-          this, SLOT(iconAssetMenu(QIconViewItem*, const QPoint&)));
+          SIGNAL(contextMenuRequested(Q3IconViewItem*, const QPoint&)),
+          this, SLOT(iconAssetMenu(Q3IconViewItem*, const QPoint&)));
 
   connect(assetTableView, SIGNAL(currentChanged(int, int)),
           this, SLOT(CurrentAssetChanged(int, int)));

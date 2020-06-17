@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Google Inc.
+ * Copyright 2017-2020 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ class ProjectDocker : public QDockWindow {
   ProjectManager* Preview() const { return preview_; }
 
  protected slots:
-  void selectBox(const gstDrawState& s, Qt::KeyboardModifier bs);
+  void selectBox(const gstDrawState& s, Qt::ButtonState bs);
 
   void enableAllLayers();
   void disableAllLayers();
