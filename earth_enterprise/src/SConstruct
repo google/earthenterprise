@@ -286,15 +286,15 @@ if native_cc:
                 '-Wno-error=unused-local-typedefs',
                 '-Wno-error=unused-but-set-variable']
 
-warnflags += ['-Wno-error=misleading-indentation',
+if el_ver == 'el8':
+  warnflags += ['-Wno-error=misleading-indentation',
               '-Wno-error=terminate',
               '-Wno-error=format-truncation',
               '-Wno-error=memset-elt-size',
               '-Wno-error=address',
-              '-Wno-error=unused-local-typedefs']
-if el_ver == 'el8':
-  warnflags += ['-Wno-error=catch-value',
-                '-Wno-error=class-memaccess']
+              '-Wno-error=unused-local-typedefs',
+              '-Wno-error=catch-value',
+              '-Wno-error=class-memaccess']
 
 
 # Determine libpng
