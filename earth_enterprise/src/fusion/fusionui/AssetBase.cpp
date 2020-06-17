@@ -1,3 +1,4 @@
+// Copyright 2020 the Open GEE Contributors.
 // Copyright 2017 Google Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -59,18 +60,18 @@ AssetBase::AssetBase(QWidget* parent)
 
   // actions
   save_action_ = new QAction(this);
-  save_action_->setIconSet(QIconSet(QPixmap("filesave.png")));
+  save_action_->setIconSet(QIconSet(QPixmap(":/filesave.png")));
   saveas_action_ = new QAction(this);
-  saveas_action_->setIconSet(QIconSet(QPixmap("filesaveas.png")));
+  saveas_action_->setIconSet(QIconSet(QPixmap(":/filesaveas.png")));
   build_action_ = new QAction(this);
   //  build_action_->setIconSet(QIconSet(QPixmap::fromMimeSource("notes.png")));
   savebuild_action_ = new QAction(this);
   close_action_ = new QAction(this);
-  close_action_->setIconSet(QIconSet(QPixmap("fileclose.png")));
+  close_action_->setIconSet(QIconSet(QPixmap(":/fileclose.png")));
   hidden_action_ = new QAction(this);
   hidden_action_->setToggleAction(true);
   notes_action_ = new QAction(this);
-  notes_action_->setIconSet(QIconSet(QPixmap("notes.png")));
+  notes_action_->setIconSet(QIconSet(QPixmap(":/notes.png")));
 
   // menubar
   menu_bar_ = new QMenuBar(this);

@@ -1,5 +1,6 @@
 # -*- Python -*-
 #
+# Copyright 2020 the Open GEE Contributors.
 # Copyright 2017 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +23,7 @@ env = env.Clone()
 env.UpdateCppflagsForSkia()
 
 SConscript('site-icons/SConscript')
+SConscript('images/SConscript')
 
 # Qt (moc & uic) generates code with unused functions and unused values
 # so add command line options to suppress those warnings
@@ -257,11 +259,11 @@ images = [
   'images/editcopy',
   'images/editpaste',
   'images/searchfind',
-  'grids.xpm',
-  'select.xpm',
-  'zoombox.xpm',
-  'zoomdrag.xpm',
-  'hand.xpm',
+  'images/grids.xpm',
+  'images/select.xpm',
+  'images/zoombox.xpm',
+  'images/zoomdrag.xpm',
+  'images/hand.xpm',
   'images/project_open.png',
   'images/project_new.png',
   'images/lock.png',
@@ -285,7 +287,7 @@ images = [
   'images/right.png',
   'images/project_save.png',
   'images/stop.png',
-  'type_image.xpm',
+  'images/type_image.xpm',
   'images/type_vector.xpm',
   'images/type_terrain.xpm',
   'images/preview_default.png',
