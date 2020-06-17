@@ -131,9 +131,8 @@ int main(int argc, char** argv) {
   //
   // must always create QApplication before initializing gst library
   //
-#ifndef a
   QApplication a(argc, argv);
-#endif
+ 
   //
   // confirm opengl support
   //
