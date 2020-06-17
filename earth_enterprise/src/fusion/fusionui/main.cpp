@@ -1,3 +1,4 @@
+// Copyright 2020 the Open GEE Contributors.
 // Copyright 2017 Google Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,7 +12,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 
 #include <sys/prctl.h>
 #include <sys/types.h>
@@ -44,6 +44,9 @@
 #include "common/geInstallPaths.h"
 #include "common/khFileUtils.h"
 #include "common/khGetopt.h"
+
+// generated rcc -name resources -namespace resources.qrc >resources.cpp
+#include "images/resources.cpp"
 
 // pre-qt3.1 workaround
 // #ifndef WStyle_Splash
@@ -131,6 +134,7 @@ int main(int argc, char** argv) {
   // must always create QApplication before initializing gst library
   //
   QApplication a(argc, argv);
+  Q_INIT_RESOURCE(resources);
 
   //
   // confirm opengl support

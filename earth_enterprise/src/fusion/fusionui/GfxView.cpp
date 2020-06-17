@@ -1,3 +1,4 @@
+// Copyright 2020 the Open GEE Contributors.
 // Copyright 2017 Google Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -901,7 +902,7 @@ void GfxView::drawTextures(const gstBBox &box, double grid, int level) {
   // This ensures that we don't leave any non-relevant
   // tiles in our read queue beyond one frame
   //
-  texture_manager_->resetFrame();
+  //texture_manager_->resetFrame();
 
   // draw longitude lines
   for (double xx = box.w; xx < box.e; xx += grid) {
