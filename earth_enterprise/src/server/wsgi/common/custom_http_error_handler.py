@@ -20,7 +20,7 @@ import io
 
 It is intended to use with the ErrorDocument directive to supersede a
 default error handler. The default error handler returns a query string
-in response which may potentially make  the Server vulnerable - an attacker
+in response which may potentially make the Server vulnerable - an attacker
 may be able to cause arbitrary HTML code to be executed in a user's browser
 within security context of the affected site.
 """
@@ -70,3 +70,4 @@ def main():
 
 if __name__ == "main":
   main()
+  
