@@ -57,6 +57,11 @@
     # Handles WMS serving requests.
     WSGIDaemonProcess ge_wms_serve processes=10 threads=15 display-name=%{GROUP} python-path=/opt/google/gepython/Python-@PYTHON_VERSION@/lib/python@PYTHON_MAJOR_VERSION@/site-packages:/opt/google/gehttpd/wsgi-bin home=/tmp
     WSGIScriptAlias /wms /opt/google/gehttpd/wsgi-bin/wms/ogc/service/wms_request_app.wsgi process-group=ge_wms_serve
+
+    # Handles error status codes.
+    WSGIDaemonProcess ge_error_handler processes=1 threads=10 display-name=%{GROUP} python-path=/opt/google/gepython/Python-2.7.5/lib/python2.7/site-packages:/opt/google/gehttpd/wsgi-bin home=/tmp
+    WSGIProcessGroup ge_error_handler
+    WSGIScriptAlias /error_handler /opt/google/gehttpd/wsgi-bin/common/custom_http_error_handler.py process-group=ge_error_handler
 </IfModule>
 
 
