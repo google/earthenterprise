@@ -30,7 +30,6 @@ Troubleshoot push/publishing issues
       -  :doc:`../geeServerAdmin/publishDatabasesPortables`
       -  :doc:`../fusionAdministration/publishDBWithDiscPublishing`
 
-      .. index:: Troubleshoot Push Issues
       .. rubric:: Troubleshoot Push Issues
 
       Errors in the push operation may occur when Fusion fails to copy
@@ -252,7 +251,6 @@ Troubleshoot push/publishing issues
       #. To perform garbage collecting for deleted databases (stream):
          ``geserveradmin --stream_server_url http://earth.int --garbagecollect``
 
-      .. index:: Troubleshoot Publishing Issues
       .. rubric:: Troubleshoot Publishing Issues
          :name: troubleshoot-publishing-issues
 
@@ -293,7 +291,6 @@ Troubleshoot push/publishing issues
 
             Instead of using <code>geserveradmin --adddb/pushdb</code> commands, you can push the database directly from Fusion. See :doc:`../fusionAdministration/pushAndPublishDB`.
 
-      .. index:: Troubleshoot Disconnected Publishing Issues
       .. rubric:: Disconnected publishing issues
 
       If you publish a disconnected database and it fails when you
@@ -313,7 +310,6 @@ Troubleshoot push/publishing issues
       If you are having push or publishing issues, there are several log
       files you can review for errors.
 
-      .. index:: Troubleshoot Push and Publish issues - log files
       .. list-table::
          :widths: 50 50
          :header-rows: 1
