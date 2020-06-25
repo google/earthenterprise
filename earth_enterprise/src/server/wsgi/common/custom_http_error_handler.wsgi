@@ -1,0 +1,1 @@
+from common.custom_http_error_handler import application
