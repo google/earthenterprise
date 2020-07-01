@@ -24,23 +24,12 @@
 using namespace std;
 using namespace AssetFactory;
 
-// This file tests the template functions in StorageManager.h that are not
-// directly a part of the storage manager class. These tests are separate from
-// the other storage manager tests to keep the test size manageable and for
-// easier compliation.
-
-class MockAssetImpl {
-  public:
-    static AssetDefs::Type EXPECTED_TYPE;
-    static string EXPECTED_SUBTYPE;
-};
-
-AssetDefs::Type MockAssetImpl::EXPECTED_TYPE;
-string MockAssetImpl::EXPECTED_SUBTYPE;
+// This tests some of the simpler functions in AssetFactory using a simpler
+// setup than AssetFactory_unittest.cpp, but the tests are more thorough.
 
 class MockAsset {
   public:
-    using Impl = MockAssetImpl;
+    using BBase = MockAsset;
 
     static bool BOOL_VALUE;
     static AssetDefs::Type USE_TYPE;
@@ -58,19 +47,10 @@ class MockAsset {
     MockAsset * operator->() { return this; }
 };
 
-class MockVersionImpl {
-  public:
-    using AssetType = MockAsset;
-    static AssetDefs::Type EXPECTED_TYPE;
-    static string EXPECTED_SUBTYPE;
-};
-
-AssetDefs::Type MockVersionImpl::EXPECTED_TYPE;
-string MockVersionImpl::EXPECTED_SUBTYPE;
-
 class MockVersion : public MockAsset {
   public:
-    using Impl = MockVersionImpl;
+    using BBase = MockAsset;
+
     MockVersion() = default;
     MockVersion(const std::string & ref) : MockAsset(ref) {}
 };
@@ -79,28 +59,38 @@ bool MockAsset::BOOL_VALUE;
 AssetDefs::Type MockAsset::USE_TYPE;
 string MockAsset::USE_SUBTYPE;
 
+struct MockType {
+  using Asset = MockAsset;
+  using AssetD = MockAsset;
+  using VersionD = MockVersion;
+
+  static AssetDefs::Type TYPE;
+  static string SUBTYPE;
+};
+
+AssetDefs::Type MockType::TYPE;
+string MockType::SUBTYPE;
+
 class AssetFactoryTest : public testing::Test {
   public:
     AssetFactoryTest() {
       // Reset the static variables
-      MockAssetImpl::EXPECTED_TYPE = AssetDefs::Terrain;
-      MockAssetImpl::EXPECTED_SUBTYPE = "Product";
-      MockVersionImpl::EXPECTED_TYPE = MockAssetImpl::EXPECTED_TYPE;
-      MockVersionImpl::EXPECTED_SUBTYPE = MockAssetImpl::EXPECTED_SUBTYPE;
+      MockType::TYPE = AssetDefs::Terrain;
+      MockType::SUBTYPE = "Product";
       MockAsset::BOOL_VALUE = true;
-      MockAsset::USE_TYPE = MockAssetImpl::EXPECTED_TYPE;
-      MockAsset::USE_SUBTYPE = MockAssetImpl::EXPECTED_SUBTYPE;
+      MockAsset::USE_TYPE = MockType::TYPE;
+      MockAsset::USE_SUBTYPE = MockType::SUBTYPE;
     }
 };
 
 void testFindFailure() {
-  auto asset = Find<MockAsset>("test_ref");
+  auto asset = Find<MockType>("test_ref");
   ASSERT_EQ(asset.ref, "");
 }
 
 void testFindSuccess() {
   string testRef = "test_ref";
-  auto asset = Find<MockAsset>(testRef);
+  auto asset = Find<MockType>(testRef);
   ASSERT_EQ(asset.ref, testRef);
 }
 
@@ -112,8 +102,8 @@ TEST_F(AssetFactoryTest, FindNoTypePass) {
 // in release builds.
 #ifndef NDEBUG
 TEST_F(AssetFactoryTest, FindNoTypeInvalid) {
-  MockAssetImpl::EXPECTED_TYPE = AssetDefs::Invalid;
-  ASSERT_DEATH(Find<MockAsset>("blank"), ".*");
+  MockType::TYPE = AssetDefs::Invalid;
+  ASSERT_DEATH(Find<MockType>("blank"), ".*");
 }
 #endif
 
@@ -124,7 +114,7 @@ TEST_F(AssetFactoryTest, FindAssetFalse) {
 
 #ifndef NDEBUG
 TEST_F(AssetFactoryTest, FindInvalidType) {
-  ASSERT_DEATH(Find<MockAsset>("blank", AssetDefs::Invalid), ".*");
+  ASSERT_DEATH(Find<MockType>("blank", AssetDefs::Invalid), ".*");
 }
 #endif
 
@@ -134,7 +124,7 @@ TEST_F(AssetFactoryTest, FindWrongType) {
 }
 
 TEST_F(AssetFactoryTest, FindWrongTypePassedIn) {
-  auto asset = Find<MockAsset>("test_ref", AssetDefs::Map);
+  auto asset = Find<MockType>("test_ref", AssetDefs::Map);
   ASSERT_EQ(asset.ref, "");
 }
 
@@ -148,33 +138,33 @@ TEST_F(AssetFactoryTest, FindWrongSubtype) {
 
 #ifndef NDEBUG
 TEST_F(AssetFactoryTest, ValidateNoTypeInvalid) {
-  MockVersionImpl::EXPECTED_TYPE = AssetDefs::Invalid;
-  ASSERT_DEATH(ValidateRefForInput<MockVersion>("blank?version=1"), ".*");
+  MockType::TYPE = AssetDefs::Invalid;
+  ASSERT_DEATH(ValidateRefForInput<MockType>("blank?version=1"), ".*");
 }
 #endif
 
 #ifndef NDEBUG
 TEST_F(AssetFactoryTest, ValidateInvalidType) {
-  ASSERT_DEATH(ValidateRefForInput<MockVersion>("blank?version=1", AssetDefs::Invalid), ".*");
+  ASSERT_DEATH(ValidateRefForInput<MockType>("blank?version=1", AssetDefs::Invalid), ".*");
 }
 #endif
 
 TEST_F(AssetFactoryTest, ValidateCurrentVersionPass) {
-  ValidateRefForInput<MockVersion>("blank?version=current");
+  ValidateRefForInput<MockType>("blank?version=current");
 }
 
 TEST_F(AssetFactoryTest, ValidateCurrentVersionFail) {
   MockAsset::BOOL_VALUE = false;
-  ASSERT_THROW(ValidateRefForInput<MockVersion>("blank?version=current"), std::invalid_argument);
+  ASSERT_THROW(ValidateRefForInput<MockType>("blank?version=current"), std::invalid_argument);
 }
 
 TEST_F(AssetFactoryTest, ValidateNonCurrentVersionPass) {
-  ValidateRefForInput<MockVersion>("blank?version=1");
+  ValidateRefForInput<MockType>("blank?version=1");
 }
 
 TEST_F(AssetFactoryTest, ValidateNonCurrentVersionFail) {
   MockAsset::BOOL_VALUE = false;
-  ASSERT_THROW(ValidateRefForInput<MockVersion>("blank?version=1"), std::invalid_argument);
+  ASSERT_THROW(ValidateRefForInput<MockType>("blank?version=1"), std::invalid_argument);
 }
 
 int main(int argc, char **argv) {

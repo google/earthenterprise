@@ -309,10 +309,8 @@ void PacketGenAssetVersionImplD::UpdateChildren(
     char subname[32];
     snprintf(subname, sizeof(subname), "packlevel%02d", level);
     MutableAssetVersionD packLevelVer =
-      AssetFactory::ReuseOrMakeAndUpdateSubAsset
-        <MutablePacketLevelAssetVersionD, PacketLevelConfig, PacketLevelAssetVersionD, AssetVersion>
-      (assetRef,
-       type,
+      ReuseOrMakeAndUpdateSubAsset<PacketLevelType>
+      (assetRef, type,
        subname,
        levInputs,
        khMetaData(),
@@ -330,4 +328,3 @@ template PacketGenAssetVersionD
 PacketGenAssetImplD::MyUpdate<RasterProductAssetVersion>(bool &needed, const PacketGenExtraUpdateArg<RasterProductAssetVersion> &extra) const;
 template PacketGenAssetVersionD
 PacketGenAssetImplD::MyUpdate<MercatorRasterProductAssetVersion>(bool &needed, const PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion> &extra) const;
-

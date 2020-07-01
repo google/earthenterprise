@@ -1,0 +1,31 @@
+
+Download documentation for GEE 5.x
+
+The majority of Google Earth Enterprise help content is now maintained
+in our
+
+online documentation
+
+, which means you can easily use search to find answers to your
+questions or browse through our articles. You can also access
+documentation offline from a Fusion or GEE Server installation:
+
+In Fusion, click Help > Contents
+
+In GEE Server, click the Settings icon gear icon > Documentation
+
+If you need to access the documentation offline, you can copy or clone
+the GEE git repo at
+
+https://github.com/google/earthenterprise
+
+. The documentation is under the folder
+"earthenterprise/earth_enterprise/docs/landing_page/manual/".
+
+-[ Learn more ]-
+
+Installation tips
+
+Install Google Earth Enterprise
+
+Open GEE Wiki

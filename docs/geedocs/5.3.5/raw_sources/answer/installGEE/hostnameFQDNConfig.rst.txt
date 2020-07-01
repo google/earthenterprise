@@ -37,7 +37,7 @@ Hostname and Fully Qualified Domain Name Configuration
       the server will be listening on. This should be the first line of
       the file:
 
-      ``127.0.0.1  myserver.mydomainname.com myserver localhost``
+      ``127.0.1.1  myserver.mydomainname.com myserver localhost``
 
       If GEE is not using DNS other clients that connect to the server
       non-locally would need to have the same static mapping set up in

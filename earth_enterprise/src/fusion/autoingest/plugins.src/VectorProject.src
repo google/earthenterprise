@@ -194,7 +194,7 @@ VectorProjectAssetImplD::HandleEditRequest(const VectorProjectEditRequest &req)
     if (!layerConfig->IsStreamedLayer())
       continue;
 
-    ValidateRefForInput<VectorProductAssetVersionD>(layerConfig->assetRef);
+    ValidateRefForInput<VectorProductType>(layerConfig->assetRef);
   }
 
   // Find/make our target project.
@@ -207,7 +207,7 @@ VectorProjectAssetImplD::HandleEditRequest(const VectorProjectEditRequest &req)
 
   // Custom FindMake - modified to set/preserve indexVersion and IDs.
 
-  MutableVectorProjectAssetD project = Find<VectorProjectAssetD>(projname);
+  MutableVectorProjectAssetD project = Find<VectorProjectType>(projname);
   if (project) {
     // We must preserve the indexVersion since the GUI doesn't/can't.
     // TODO: We really should split this VectorProjectConfig into two pieces.
@@ -230,7 +230,7 @@ VectorProjectAssetImplD::HandleEditRequest(const VectorProjectEditRequest &req)
   } else {
     // It is a "Save" or "SaveAs" edit request when creating a new asset.
     assert(req.config.indexVersion == 1);
-    project = AssetFactory::Make<MutableVectorProjectAssetD, VectorProjectConfig>(projname, inputs,
+    project = Make<VectorProjectType>(projname, inputs,
                                          req.meta, req.config);
   }
 
@@ -263,7 +263,7 @@ VectorProjectAssetImplD::HandleNewRequest(const VectorProjectNewRequest &req)
         req.items.begin();
       item != req.items.end(); ++item) {
 
-    ValidateRefForInput<VectorProductAssetVersionD>(item->productRef);
+    ValidateRefForInput<VectorProductType>(item->productRef);
   }
 
   // normalize the supplied asset name
@@ -271,7 +271,7 @@ VectorProjectAssetImplD::HandleNewRequest(const VectorProjectNewRequest &req)
     AssetDefs::NormalizeAssetName(req.assetname,
                                   AssetDefs::Vector, kProjectSubtype);
 
-  if (Find<VectorProjectAssetD>(projname)) {
+  if (Find<VectorProjectType>(projname)) {
     throw khException(kh::tr("Vector project %1 already exists")
                       .arg(ToQString(projname)));
   } else {
@@ -280,7 +280,7 @@ VectorProjectAssetImplD::HandleNewRequest(const VectorProjectNewRequest &req)
                                    1,   // indexVersion
                                    std::vector<LayerConfig>());
     MutableVectorProjectAssetD project =
-      AssetFactory::Make<MutableVectorProjectAssetD, VectorProjectConfig>(projname,
+      Make<VectorProjectType>(projname,
                                  std::vector<SharedString>(),
                                  khMetaData(),
                                  projConfig);
@@ -301,12 +301,12 @@ VectorProjectAssetImplD::HandleModifyRequest(const VectorProjectModifyRequest &r
         req.items.begin();
       item != req.items.end(); ++item) {
 
-    ValidateRefForInput<VectorProductAssetVersionD>(item->productRef);
+    ValidateRefForInput<VectorProductType>(item->productRef);
   }
 
   // find it and make the change
   MutableVectorProjectAssetD project;
-  if ((project = Find<VectorProjectAssetD>(req.assetname))) {
+  if ((project = Find<VectorProjectType>(req.assetname))) {
     // blow away old layers
     project->config.layers.clear();
     // define new ones
@@ -329,12 +329,12 @@ VectorProjectAssetImplD::HandleAddToRequest(const VectorProjectModifyRequest &re
         req.items.begin();
       item != req.items.end(); ++item) {
 
-    ValidateRefForInput<VectorProductAssetVersionD>(item->productRef);
+    ValidateRefForInput<VectorProductType>(item->productRef);
   }
 
   // find it and make the change
   MutableVectorProjectAssetD project;
-  if ((project = Find<VectorProjectAssetD>(req.assetname))) {
+  if ((project = Find<VectorProjectType>(req.assetname))) {
     // add the new ones
     project->AddLayers(req.items);
   } else {
@@ -352,7 +352,7 @@ VectorProjectAssetImplD::HandleDropFromRequest(const VectorProjectDropFromReques
 {
   // find the project
   MutableVectorProjectAssetD project;
-  if (!(project = Find<VectorProjectAssetD>(req.assetname))) {
+  if (!(project = Find<VectorProjectType>(req.assetname))) {
     throw khException(kh::tr("No Vector project named %1")
                       .arg(ToQString(req.assetname)));
   }
@@ -492,7 +492,7 @@ VectorProjectAssetVersionImplD::UpdateChildren(void)
     snprintf(layername, sizeof(layername), "layer%03d", channelId);
 
     MutableAssetVersionD layer =
-      AssetFactory::FindMakeAndUpdateSubAsset<MutableVectorLayerAssetVersionD, AssetVersion>
+      FindMakeAndUpdateSubAsset<VectorLayerType>
                     (assetRef,
                      layername,
                      makevec1<SharedString>(kvp->GetRef()),
@@ -544,7 +544,7 @@ VectorProjectAssetVersionImplD::UpdateChildren(void)
 
     // make it my first child
     MutableAssetVersionD geindex =
-      AssetFactory::FindMakeAndUpdateSubAsset<MutableVectorGEIndexAssetVersionD, AssetVersion>
+      FindMakeAndUpdateSubAsset<VectorGEIndexType>
                     (assetRef,
                     "geindex",
                     geindexinputs,
@@ -574,7 +574,7 @@ VectorProjectAssetVersionImplD::UpdateChildren(void)
     // is how mine are listed. That way a reorder of the layers will force
     // a new dbRoot
     MutableAssetVersionD dbroot =
-      AssetFactory::FindMakeAndUpdateSubAsset<MutableVectorDBRootAssetVersionD, AssetVersion>
+      FindMakeAndUpdateSubAsset<VectorDBRootType>
                            (assetRef,
                            "dbroot",
                            vecfuses,

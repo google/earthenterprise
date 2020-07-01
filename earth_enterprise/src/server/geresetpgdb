@@ -294,7 +294,10 @@ elif [ "$type" != "backup" ]; then
 
   "$BINDIR/createdb" --owner=geuser -U geuser gesearch
   "$BINDIR/psql" -q -d gesearch geuser -f "$SQLDIR/gesearch_tables.sql"
-  
+  if [ -f "$SQLDIR/examplesearch.sql" ]; then
+    "$BINDIR/psql" -q -d gesearch geuser -f "$SQLDIR/examplesearch.sql"
+  fi
+
   "$BINDIR/createdb" -U geuser --owner=geuser gepoi
   "$BINDIR/psql" -U geuser -d gepoi -c "CREATE EXTENSION postgis"
 
@@ -331,6 +334,9 @@ if [ "$type" == "upgrade" -o "$type" == "restore" ]; then
 
   # Update tables/records of gesearch databases.
   "$BINDIR/psql" -q -d gesearch geuser -f "$SQLDIR/gesearch_tables.sql"
+  if [ -f "$SQLDIR/examplesearch.sql" ]; then
+    "$BINDIR/psql" -q -d gesearch geuser -f "$SQLDIR/examplesearch.sql"
+  fi
 
   # Update tables/records of gestream databases.
   "$BINDIR/psql" -q -d gestream geuser -f "$SQLDIR/gestream_tables.sql"

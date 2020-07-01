@@ -97,25 +97,31 @@ int main(int argc, char* argv[]) {
   if (cleaned_output_fname.empty()) {
     cleaned_output_fname = fname_dbroot + ".cleaned";
   }
-  geProtoDbroot dbroot(fname_dbroot, geProtoDbroot::kEncodedFormat);
+  bool dbroot_is_valid = false;
+  try {
+    geProtoDbroot dbroot(fname_dbroot, geProtoDbroot::kEncodedFormat);
 
-  bool dbroot_is_valid = dbroot.IsInitialized();
-  if (!dbroot_is_valid) {
-    notify(NFY_FATAL,
-           "Given proto dbroot is invalid; refusing to touch it further");
-    // Diagnose
-    dbroot.CheckInitialized();
-  } else {
-    if (want_debug) {
-      dbroot.Write(fname_dbroot + ".before.txt", geProtoDbroot::kTextFormat);
+    dbroot_is_valid = dbroot.IsInitialized();
+    if (!dbroot_is_valid) {
+      notify(NFY_FATAL,
+            "Given proto dbroot is invalid; refusing to touch it further");
+      // Diagnose
+      dbroot.CheckInitialized();
+    } else {
+      if (want_debug) {
+        dbroot.Write(fname_dbroot + ".before.txt", geProtoDbroot::kTextFormat);
+      }
+
+      dbroot_is_valid = RemoveUnwantedGoogleUrls(&dbroot);
+      dbroot.Write(cleaned_output_fname, geProtoDbroot::kEncodedFormat);
+
+      if (want_debug) {
+        dbroot.Write(cleaned_output_fname + ".txt", geProtoDbroot::kTextFormat);
+      }
     }
-
-    dbroot_is_valid = RemoveUnwantedGoogleUrls(&dbroot);
-    dbroot.Write(cleaned_output_fname, geProtoDbroot::kEncodedFormat);
-
-    if (want_debug) {
-      dbroot.Write(cleaned_output_fname + ".txt", geProtoDbroot::kTextFormat);
-    }
+  }
+  catch (khSimpleException e) {
+    notify(NFY_WARN, "%s", e.what());
   }
 
   google::protobuf::ShutdownProtobufLibrary();

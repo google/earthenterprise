@@ -1,0 +1,13 @@
+
+Sign in to GEE Server Admin console
+
+To access the GEE Server Admin console for managing and publishing
+maps and globes:
+
+Go to myserver.mydomainname.com/admin, replacing myserver and
+mydomainname with your server and domain.
+
+Sign in with the default credentials:  Username: geapacheuser
+Password: geeadmin  To reset the username and password: sudo
+/opt/google/gehttpd/bin/htpasswd -c
+/opt/google/gehttpd/conf.d/.htpasswd geapacheuser

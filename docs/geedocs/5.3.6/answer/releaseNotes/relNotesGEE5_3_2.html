@@ -1,0 +1,450 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Release notes: Open GEE 5.3.2 &#8212; Google Earth Enterprise 5.3.6 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Release notes: Open GEE 5.3.1" href="relNotesGEE5_3_1.html" />
+    <link rel="prev" title="Release notes: Open GEE 5.3.3" href="relNotesGEE5_3_3.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="relNotesGEE5_3_1.html" title="Release notes: Open GEE 5.3.1"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="relNotesGEE5_3_3.html" title="Release notes: Open GEE 5.3.3"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../releaseNotes.html" accesskey="U">Release notes</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="relNotesGEE5_3_3.html"
+                        title="previous chapter">Release notes: Open GEE 5.3.3</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="relNotesGEE5_3_1.html"
+                        title="next chapter">Release notes: Open GEE 5.3.1</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp11.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp11.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="release-notes-open-gee-5-3-2">
+<h1>Release notes: Open GEE 5.3.2<a class="headerlink" href="#release-notes-open-gee-5-3-2" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p class="rubric">New Features</p>
+<p><strong>Documentation overhaul</strong>. All documentation was migrated to
+Sphinx format, making it easier to edit and maintain. User
+documentation file names were also migrated from number-based naming
+convention to self-explanatory descriptive titles. New documentation
+format also offers a search capability that was not possible before.</p>
+<p><strong>KML validation in cutter</strong>. Basic validation is now performed
+on KML that is pasted into the cutter tool.</p>
+<p><strong>Memory and performance improvements</strong>. This version of Open GEE
+includes several optimizations for performance and memory utilization.</p>
+<p><strong>Multithreaded builds</strong>. Parts of imagery project builds can now run
+on multiple threads. See <a class="reference internal" href="../fusionAdministration/confTaskRulesForFusionPerf.html"><span class="doc">Configure Fusion performance</span></a>.</p>
+<p><strong>Improved resume operation</strong>. The resume operation has been rewritten to
+improve performance. See <a class="reference internal" href="../fusionAdministration/confTaskRulesForFusionPerf.html"><span class="doc">Configure Fusion performance</span></a>.</p>
+<p><strong>Specify cache sizes in bytes</strong>. The sizes of the asset and asset version caches can
+now be specified in bytes. See <a class="reference internal" href="../fusionAdministration/confTaskRulesForFusionPerf.html"><span class="doc">Configure Fusion performance</span></a>.</p>
+<p class="rubric">Supported Platforms</p>
+<p>The Open GEE 5.3.2 release is supported on 64-bit versions of the
+following operating systems:</p>
+<ul class="simple">
+<li>Red Hat Enterprise Linux version 6.x and 7.x, including the
+most recent security patches</li>
+<li>CentOS 6.x and 7.x</li>
+<li>Ubuntu 16.04 LTS</li>
+</ul>
+<p>Ubuntu 14.04 will no longer be supported due to its recent end of life.</p>
+<p>Google Earth Enterprise 5.3.2 is compatible with Google Earth
+Enterprise Client (EC) version 7.1.5 and above.</p>
+<p class="rubric">Updated Libraries</p>
+<p>Open GEE 5.3.2 includes some library updates:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Library</th>
+<th class="head">Version</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Apache</td>
+<td>2.4</td>
+</tr>
+<tr class="row-odd"><td>PostgreSQL</td>
+<td>9.6.15</td>
+</tr>
+<tr class="row-even"><td>PostGIS</td>
+<td>2.3.9</td>
+</tr>
+</tbody>
+</table>
+<p>To upgrade from Open GEE 5.2.0, do NOT uninstall it. We recommend
+that you upgrade Open GEE 5.2.0 by simply installing Open GEE
+5.3.2. Installing Open GEE 5.3.2 on top of Open GEE 5.2.0 will
+ensure that your PostgreSQL databases are backed up and upgraded
+correctly to the new PostgreSQL version used by Open GEE 5.3.2.</p>
+<p class="rubric">Resolved Issues</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="11%" />
+<col width="32%" />
+<col width="58%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Number</th>
+<th class="head">Description</th>
+<th class="head">Resolution</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>1132</td>
+<td>GEE Server doesn’t always determine the correct hostname</td>
+<td>Updated the virtual hosts URL to use <code class="docutils literal notranslate"><span class="pre">hostname</span></code> if <code class="docutils literal notranslate"><span class="pre">getfqdn()</span></code> doesn’t return a good hostname.
+Also added documentation for setting up the system to aid in avoiding this problem.</td>
+</tr>
+<tr class="row-odd"><td>1281</td>
+<td>Quitting 32-bit Windows portable server in Windows 7 via Internet Explorer does not work</td>
+<td>IE appears to perform aggressive caching, which was preventing the GET request to cmd=quit
+from making it to the server. Changing the command to be a POST request prevents this.</td>
+</tr>
+<tr class="row-even"><td>1376</td>
+<td>Portable Globe Cutter fails the last step when using HTTPS</td>
+<td>Used the advanced configuration to set a URL that will be used when cutter tries to make an openurl call.</td>
+</tr>
+<tr class="row-odd"><td>1398</td>
+<td>System Manager crash</td>
+<td>Fixed the crash’s underlying cause.</td>
+</tr>
+<tr class="row-even"><td>1401</td>
+<td>No notification when System Manager Asset Cache size is exceeded causing performance issues</td>
+<td>Added a logging record when System Manager Asset Cache size is exceeded.</td>
+</tr>
+<tr class="row-odd"><td>1404</td>
+<td>WMS fails when using HTTPS</td>
+<td>Skipped the internal Certificate Verification.</td>
+</tr>
+<tr class="row-even"><td>1420</td>
+<td>Build should honor JAVA_HOME when creating rpm packages</td>
+<td>Honored JAVA_HOME</td>
+</tr>
+<tr class="row-odd"><td>1447</td>
+<td>Compiling error when using scons cache</td>
+<td>Fixed compiling error when using scons cache</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Known Issues</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="11%" />
+<col width="32%" />
+<col width="58%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Number</th>
+<th class="head">Description</th>
+<th class="head">Resolution</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>4</td>
+<td>Google basemap fails to load in 2D Mercator Maps</td>
+<td>Obtain a valid Google Maps API key and include it in <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/maps/maps_google.html</span></code>.</td>
+</tr>
+<tr class="row-odd"><td>8</td>
+<td>Ensure GEE Portable Cutter Job Completes</td>
+<td>No current work around.</td>
+</tr>
+<tr class="row-even"><td>9</td>
+<td>Improve FileUnpacker Handling of Invalid Files</td>
+<td>No current work around.</td>
+</tr>
+<tr class="row-odd"><td>20</td>
+<td>Simplify build process for portable builds on MacOS</td>
+<td>Building and running Portable Server on MacOS should be possible with minimal changes.</td>
+</tr>
+<tr class="row-even"><td>34</td>
+<td>Scons build creates temporary directories named “0”</td>
+<td>No current work around.</td>
+</tr>
+<tr class="row-odd"><td>126</td>
+<td>The Fusion installer creates a backup on the first run</td>
+<td>No current work around. The created backup can be deleted.</td>
+</tr>
+<tr class="row-even"><td>190</td>
+<td>Hostname mismatch check in installers doesn’t work as expected</td>
+<td>No current work around.</td>
+</tr>
+<tr class="row-odd"><td>193</td>
+<td>Updated docs are not copied if the <code class="docutils literal notranslate"><span class="pre">/tmp/fusion_os_install</span></code> directory already exists</td>
+<td>Delete <code class="docutils literal notranslate"><span class="pre">/tmp/fusion_os_install</span></code> at the beginning of the stage_install build process.</td>
+</tr>
+<tr class="row-even"><td>201</td>
+<td>Some tiles are displayed incorrectly in the Enterprise Client when terrain is enabled</td>
+<td>No current work around.</td>
+</tr>
+<tr class="row-odd"><td>202</td>
+<td>Icons are not displayed on vector layers in the Enterprise Client</td>
+<td>No current work around. It is not clear if this is an error in GEE or in the Enterprise Client.</td>
+</tr>
+<tr class="row-even"><td>203</td>
+<td>Some vector layer options are not saved</td>
+<td>No current work around.</td>
+</tr>
+<tr class="row-odd"><td>221</td>
+<td>The asset manager may display that a job is “Queued” when in fact the job is “Blocked”</td>
+<td>No current work around.</td>
+</tr>
+<tr class="row-even"><td>234</td>
+<td>Geserver raises error executing apache_logs.pyc</td>
+<td>No current work around.</td>
+</tr>
+<tr class="row-odd"><td>254</td>
+<td>Automasking fails for images stored with UTM projection</td>
+<td>Use GDAL to convert the images to a different projection before ingesting them into Fusion.</td>
+</tr>
+<tr class="row-even"><td>269</td>
+<td>gevectorimport doesn’t crop features</td>
+<td>Use GDAL/OGR to crop vector dataset before importing them using Fusion.</td>
+</tr>
+<tr class="row-odd"><td>295</td>
+<td>Fix buffer overflows and leaks in unit tests</td>
+<td>No current work around.</td>
+</tr>
+<tr class="row-even"><td>309</td>
+<td>Check for the FusionConnection before new asset is populated</td>
+<td>Make sure that gefusion service is started.</td>
+</tr>
+<tr class="row-odd"><td>320</td>
+<td>The Portable Server web page uses obsolete REST calls</td>
+<td>Do not use the buttons on the Portable Server web interface for adding remote servers or broadcasting to remote servers as these features are no longer supported.</td>
+</tr>
+<tr class="row-even"><td>326</td>
+<td>Libraries may be loaded from the wrong directory</td>
+<td>Delete any library versions that should not be loaded or use LD_LIBRARY_PATH to load libraries from
+<code class="docutils literal notranslate"><span class="pre">/opt/google/lib</span></code>.</td>
+</tr>
+<tr class="row-odd"><td>340</td>
+<td>GE Fusion Terrain is black</td>
+<td>No current work around.</td>
+</tr>
+<tr class="row-even"><td>342</td>
+<td>Fusion crashes when opening an unsupported file type</td>
+<td>Re-open Fusion and avoid opening unsupported file types.</td>
+</tr>
+<tr class="row-odd"><td>343</td>
+<td>gefusion: File -&gt;open-&gt;*.kiasset*,*.ktasset*,*.kip does not work</td>
+<td>kip is not a supported format. Void opening files with .kip extension.</td>
+</tr>
+<tr class="row-even"><td>380</td>
+<td>Provider field in resource-view is blank</td>
+<td>Open the individual resource to see the provider.</td>
+</tr>
+<tr class="row-odd"><td>401</td>
+<td>GEE commands are not in the path for sudo.</td>
+<td>Specify the full path when running commands or add <code class="docutils literal notranslate"><span class="pre">/opt/google/bin</span></code> to the path for all users, including the super user.</td>
+</tr>
+<tr class="row-even"><td>402</td>
+<td>Provider manager window locked to main window.</td>
+<td>No current work around.</td>
+</tr>
+<tr class="row-odd"><td>403</td>
+<td>Missing Close button on system manager window in RHEL 7</td>
+<td>Right-click the title bar and select Close.</td>
+</tr>
+<tr class="row-even"><td>404</td>
+<td>Opaque polygons in preview.</td>
+<td>No current work around.</td>
+</tr>
+<tr class="row-odd"><td>405</td>
+<td>Vector layer preview not cleared in some situations</td>
+<td>Reset the preview window to the correct state by either clicking on it or previewing another vector layer.</td>
+</tr>
+<tr class="row-even"><td>407</td>
+<td>Corrupt data warning when starting Fusion</td>
+<td>No current work around but Fusion loads and runs correctly.</td>
+</tr>
+<tr class="row-odd"><td>419</td>
+<td>Fix Fusion Graphics Acceleration in Ubuntu 14 Docker Container Hosted on Ubuntu 16</td>
+<td>No current work around.</td>
+</tr>
+<tr class="row-even"><td>437</td>
+<td>Rebooting VM while it is building resources results in a corrupted XML</td>
+<td>No current work around.</td>
+</tr>
+<tr class="row-odd"><td>439</td>
+<td>Uninstalling Fusion without stopping it results in unexpected error message</td>
+<td>Ignore that error message.</td>
+</tr>
+<tr class="row-even"><td>440</td>
+<td>Fuzzy imagery in historical imagery tests.</td>
+<td>No current work around.</td>
+</tr>
+<tr class="row-odd"><td>442</td>
+<td>Multiple database pushes after upgrade don’t report a warning</td>
+<td>No current work around.</td>
+</tr>
+<tr class="row-even"><td>444</td>
+<td>Fusion installer does not upgrade the asset root on RHEL 7</td>
+<td>Upgrade the asset root manually by running the command that is printed when you try to start the Fusion service.</td>
+</tr>
+<tr class="row-odd"><td>445</td>
+<td>Path to tutorial source volume in gee_test instructions is different from path used in installers</td>
+<td>Use <code class="docutils literal notranslate"><span class="pre">/opt/google/share/tutorials</span></code>.</td>
+</tr>
+<tr class="row-even"><td>448</td>
+<td>Out of Memory issues</td>
+<td>Use a system that has more than 4GB RAM.</td>
+</tr>
+<tr class="row-odd"><td>453</td>
+<td>Improve `check_server_processes_running` detection for uninstall</td>
+<td>No current work around.</td>
+</tr>
+<tr class="row-even"><td>456</td>
+<td>Inconsistent behavior of vector layers after upgrade</td>
+<td>No current work around.</td>
+</tr>
+<tr class="row-odd"><td>460</td>
+<td>Possibility of seg fault in QDateWrapper</td>
+<td>No current work around.</td>
+</tr>
+<tr class="row-even"><td>474</td>
+<td>Running gee_check on some supported platforms reports that the platform is not supported</td>
+<td>You can ignore the failed test if using a supported platform (Ubuntu 14.04, Ubuntu 16.04, RHEL 7, and CentOS 7).</td>
+</tr>
+<tr class="row-odd"><td>477</td>
+<td>‘service geserver stop/start/restart’ doesn’t work on Ubuntu 16.04 without a reboot</td>
+<td>Reboot and try again.</td>
+</tr>
+<tr class="row-even"><td>487</td>
+<td>gdal - python utilities do not recognize osgeo module</td>
+<td>Install <code class="docutils literal notranslate"><span class="pre">python-gdal</span></code>.</td>
+</tr>
+<tr class="row-odd"><td>507</td>
+<td>Volume host is reported unavailable if `hostname` doesn’t match volume host</td>
+<td>Set the host values in <code class="docutils literal notranslate"><span class="pre">/gevol/assets/.config/volumes.xml</span></code> to the FQDN and restart the Fusion service.</td>
+</tr>
+<tr class="row-even"><td>557</td>
+<td>WMS service problem with ‘width’ &amp; ‘height’ &amp; ‘bbox’</td>
+<td>No current work around.</td>
+</tr>
+<tr class="row-odd"><td>569</td>
+<td>geserver service installation and uninstallation issues</td>
+<td>Before uninstalling geserver verify if it’s running or not.</td>
+</tr>
+<tr class="row-even"><td>590</td>
+<td>Maps API Javascript Files Not Found</td>
+<td>No current work around.</td>
+</tr>
+<tr class="row-odd"><td>594</td>
+<td>Save errors only reported for the first image</td>
+<td>Close the form in question and try again.</td>
+</tr>
+<tr class="row-even"><td>640</td>
+<td>Save button disabled in ‘Map Layer’ creation dialog when an error encountered</td>
+<td>Close the resource form and open it again to make the save option available again.</td>
+</tr>
+<tr class="row-odd"><td>651</td>
+<td>Release executables and libraries depend on gtest</td>
+<td>Follow current build instructions that requires <code class="docutils literal notranslate"><span class="pre">gtest</span></code> to be installed.</td>
+</tr>
+<tr class="row-even"><td>669</td>
+<td>Missing repo in RHEL 7 build instructions</td>
+<td>Enable <code class="docutils literal notranslate"><span class="pre">rhel-7-server-optional-rpms</span></code> and <code class="docutils literal notranslate"><span class="pre">rhel-7-server-optional-source-rpms</span></code> repos.</td>
+</tr>
+<tr class="row-odd"><td>686</td>
+<td>Scons fails to detect libpng library on CentOS 6</td>
+<td>Ensure that a default <code class="docutils literal notranslate"><span class="pre">g++</span></code> compiler is installed.</td>
+</tr>
+<tr class="row-even"><td>700</td>
+<td>Add EL6/EL7 check to RPMs</td>
+<td>Make sure that RPMS are installed on same EL version that they were produced for.</td>
+</tr>
+<tr class="row-odd"><td>788</td>
+<td>Search fails after transferring and publishing a database using disconnected send from the command line</td>
+<td>Re-publish the database from the web interface.</td>
+</tr>
+<tr class="row-even"><td>825</td>
+<td>Geserver fails to startup fully due to conflicting protobuf library</td>
+<td>Run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">uninstall</span> <span class="pre">protobuf</span></code> to uninstall the protobuf library installed by pip.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="relNotesGEE5_3_1.html" title="Release notes: Open GEE 5.3.1"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="relNotesGEE5_3_3.html" title="Release notes: Open GEE 5.3.3"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../releaseNotes.html" >Release notes</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

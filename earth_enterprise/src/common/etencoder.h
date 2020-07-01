@@ -22,6 +22,8 @@
 
 #include <string>
 #include <cstdint>
+#include "common/khSimpleException.h"
+#include "common/khTypes.h"
 
 namespace etEncoder {
 

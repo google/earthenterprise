@@ -245,7 +245,7 @@ class MutableDerivedAssetHandleD_ : public DerivedBase_, public MutableBase_
   //    Only this leaf-most daemon handle can be constructed from
   // the raw Impl. Rather than give all the base classes constructors
   // that could be mistakenly used, this one will just do all the work
-  // iteself
+  // itself
   //    This is public because the various {name}Factory classes must
   // invoke this constructor and there is no way to declare it a friend
   // here since we can't list the name

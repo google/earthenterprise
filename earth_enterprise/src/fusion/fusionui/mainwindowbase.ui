@@ -107,7 +107,6 @@
     </item>
     <item text="&amp;Help" name="help_menu">
         <action name="helpmanual"/>
-        <separator/>
         <action name="helpAction"/>
     </item>
 </menubar>
@@ -878,6 +877,9 @@
         </property>
         <property name="menuText">
             <string>&amp;Contents</string>
+        </property>
+        <property name="visible">
+            <bool>false</bool>
         </property>
     </action>
     <action>

@@ -1,0 +1,3 @@
+<%= new File("${project.buildDir}/shared/install-utils.sh").text %>
+<%= new File("${project.buildDir}/shared/fusiontutorial.sh").text %>
+<%= new File(thisTemplateFile.parent, '../snippets/post-install.sh').text %>
