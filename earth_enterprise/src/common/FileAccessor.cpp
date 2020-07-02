@@ -16,7 +16,6 @@
 #include "FileAccessorPluginLoader.h"
 
 std::unique_ptr<AbstractFileAccessor> AbstractFileAccessor::getAccessor(const std::string &fname) {
-  //return std::unique_ptr<POSIXFileAccessor>(new POSIXFileAccessor());
   return FileAccessorPluginLoader::Get().GetAccessor(fname);
 }
 
