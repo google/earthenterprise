@@ -22,30 +22,25 @@
 #include <boost/filesystem.hpp>
 #include "FileAccessor.h"
 
-class FileAccessorFactory {
-friend class FileAccessorPluginLoader;
-protected:
-    virtual AbstractFileAccessor* GetAccessor(const std::string &fileName) = 0;
-};
-
 typedef FileAccessorFactory* (*get_factory_t)();
 
 class FileAccessorPluginLoader {
 public:
     using PluginHandle = void*;
     using PluginFactory = std::pair<PluginHandle,FileAccessorFactory*>;
-    using LoadPluginFunc = std::function<void(std::vector<PluginFactory> &)>;
+    using LoadPluginFunc = std::function<void(const std::string&,std::vector<PluginFactory> &)>;
     using UnloadPluginFunc = std::function<void(PluginHandle)>;
 
-    ~FileAccessorPluginLoader();
+    virtual ~FileAccessorPluginLoader();
     void LoadPlugins();
     std::unique_ptr<AbstractFileAccessor> GetAccessor(std::string file_path);
 
-    static void DefaultLoadPluginsImpl (std::vector<PluginFactory> &factories);
+    static void DefaultLoadPluginsImpl (const std::string &pluginDirectory, std::vector<PluginFactory> &factories);
     static FileAccessorPluginLoader& Get();
 
 protected:
-    FileAccessorPluginLoader(LoadPluginFunc LoadImpl = nullptr, UnloadPluginFunc UnloadImpl = nullptr);
+    FileAccessorPluginLoader(LoadPluginFunc LoadImpl = nullptr, UnloadPluginFunc UnloadImpl = nullptr, 
+        std::string pluginDirectory = "/opt/google/plugin/fileaccessor/");
 
 private:
     bool loaded = false;
@@ -53,6 +48,7 @@ private:
     std::mutex loadMutex;
     LoadPluginFunc loadPluginFunc;
     UnloadPluginFunc unloadPluginFunc;
+    const std::string pluginDir;
 };
 
 #endif // COMMON_FILEACCESSORPLUGINLOADER_H_

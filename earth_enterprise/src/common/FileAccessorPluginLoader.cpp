@@ -14,15 +14,20 @@
 
 #include "FileAccessorPluginLoader.h"
 #include "POSIXFileAccessor.h"
+#include "notify.h"
 
-const std::string pluginDir = "/opt/google/plugin/fileaccessor/";
-
-void ScanPluginDirectory(std::vector<std::string> &files) {
+void ScanPluginDirectory(const std::string &pluginDir, std::vector<std::string> &files) {
     boost::filesystem::path p(pluginDir);
-    boost::filesystem::directory_iterator start(p);
+    boost::system::error_code errorCode;
+    boost::filesystem::directory_iterator start(p, errorCode);
+    if (errorCode.value() != 0){
+        notify(NFY_WARN, "Unable to scan file accessor plugin directory, %s. %s.", pluginDir.c_str(), errorCode.message().c_str());
+        return;
+    }
+
     boost::filesystem::directory_iterator end;
     std::transform(start, end, std::back_inserter(files), 
-        [](const boost::filesystem::directory_entry& entry) {
+        [pluginDir](const boost::filesystem::directory_entry& entry) {
             return pluginDir + entry.path().leaf().string(); });
 }
 
@@ -31,24 +36,13 @@ FileAccessorPluginLoader& FileAccessorPluginLoader::Get() {
     return loader;
 }
 
-class POSIXFileAccessorFactory: public FileAccessorFactory {
-    friend FileAccessorPluginLoader;
-protected:
-    virtual AbstractFileAccessor* GetAccessor(const std::string &fileName) {
-        if (fileName[0] == '/')
-            return new POSIXFileAccessor();
-        return nullptr;
-    }
-};
-
-static POSIXFileAccessorFactory posixFactory;
-void FileAccessorPluginLoader::DefaultLoadPluginsImpl (std::vector<PluginFactory> &factories) {
-    factories.push_back({(void*)0, &posixFactory});
+void FileAccessorPluginLoader::DefaultLoadPluginsImpl (const std::string &pluginDirectory, std::vector<PluginFactory> &factories) {
+    assert(factories.size() == 0);
+    
     std::vector<std::string> files;
-    ScanPluginDirectory(files);
+    ScanPluginDirectory(pluginDirectory, files);
     for (auto s : files) {
         FileAccessorPluginLoader::PluginHandle handle = dlopen(s.c_str(), RTLD_NOW);
-        std::cout << "Opened the plugin Handle is " << handle << "\n";
         if (handle){
             get_factory_t get_factory = reinterpret_cast<get_factory_t>(dlsym(handle, "get_factory_v1"));
             FileAccessorFactory *pFactory = get_factory();
@@ -60,25 +54,22 @@ void FileAccessorPluginLoader::DefaultLoadPluginsImpl (std::vector<PluginFactory
             }
         }
         else {
-            std::cout << "Couldn't open plugin: " << dlerror() << "\n";
+            notify(NFY_WARN, "Unable to open file accessor plugin %s: %s", s.c_str(), dlerror());
         }
     }
 }
 
-FileAccessorPluginLoader::FileAccessorPluginLoader(LoadPluginFunc LoadImpl /*= nullptr*/, UnloadPluginFunc UnloadImpl /*= nullptr*/) {
+FileAccessorPluginLoader::FileAccessorPluginLoader(
+        LoadPluginFunc LoadImpl /*= nullptr*/, 
+        UnloadPluginFunc UnloadImpl /*= nullptr*/, 
+        std::string pluginDirectory /*= "/opt/google/plugin/fileaccessor/"*/
+        ):
+        pluginDir(pluginDirectory) {
     loadPluginFunc = LoadImpl ? LoadImpl : DefaultLoadPluginsImpl;
     unloadPluginFunc = UnloadImpl ? UnloadImpl : [](PluginHandle handle){dlclose(handle);};
 }
 
 FileAccessorPluginLoader::~FileAccessorPluginLoader() {
-    // First, remove the default POSIX 
-    //PluginFactory posixDefault({(void*)0, &posixFactory});
-    auto it = std::find(factories.begin(), factories.end(), PluginFactory({(void*)0, &posixFactory})/*posixDefault*/);
-    assert(it != factories.end());
-    if(it != factories.end())
-        factories.erase(it);
-
-    // Now close all of the other factories
     for (auto factory : factories)
         unloadPluginFunc(factory.first);
 }
@@ -88,8 +79,8 @@ void FileAccessorPluginLoader::LoadPlugins() {
     if (loaded)
         return;
 
-    loadPluginFunc(factories);
-    
+    loadPluginFunc(pluginDir, factories);
+
     loaded = true;
 }
 
@@ -106,5 +97,7 @@ std::unique_ptr<AbstractFileAccessor> FileAccessorPluginLoader::GetAccessor(std:
         }
     }
 
-    return nullptr; // Return POSIX accessor by default?
+    // If there are no plugins loaded or a suitable one was not found, then
+    // assume this is a POSIX file path.
+    return std::unique_ptr<AbstractFileAccessor>(new POSIXFileAccessor);
 }

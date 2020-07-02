@@ -39,4 +39,12 @@ public:
   virtual void fprintf(const char *format, ...) = 0;
 };
 
+class FileAccessorFactory {
+  friend class FileAccessorPluginLoader;
+protected:
+  // This returns a raw pointer and should only ever be called by
+  // FileAccessorPluginLoader who will then own it.
+  virtual AbstractFileAccessor* GetAccessor(const std::string &fileName) = 0;
+};
+
 #endif //COMMON_FILEACCESSOR_H
