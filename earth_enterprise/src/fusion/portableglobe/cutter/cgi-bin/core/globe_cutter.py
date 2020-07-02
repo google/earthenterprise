@@ -49,7 +49,7 @@ class GlobeCutter(object):
           search_tabs = fp.read()
       fp.close()
     except:
-      pass
+      print ("No search tabs found.")
 
     return search_tabs
 
