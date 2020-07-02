@@ -1,7 +1,7 @@
 #!/usr/bin/env python2.7
 #
 # Copyright 2017 Google Inc.
-# Copyright 2019 Open GEE Contributors
+# Copyright 2020 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -375,7 +375,7 @@ class GlobeBuilder(object):
           context = ssl.create_default_context()
           context.check_hostname = False
           context.verify_mode = ssl.CERT_NONE
-        with closing(urllib2.urlopen(url)) as fp:
+        with closing(urllib2.urlopen(url, context=context)) as fp:
           http_status_code = fp.getcode()
           response_data = fp.read()
 
