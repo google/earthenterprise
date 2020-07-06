@@ -64,7 +64,11 @@ void PacketLevelAssetVersionImplD::DoSubmitTask(void) {
       std::string blendAlphaFile =
         AssetVersion(inset->packetAlphaLevel)->GetOutputFilename(0) +
         "/cache_alpha.pack";
-      inset->packetAlphaLevel = blendAlphaFile;
+      if (khExists(blendAlphaFile)) {
+        inset->packetAlphaLevel = blendAlphaFile;
+      } else {
+        inset->packetAlphaLevel = kEmptyString;
+      }
     }
   }
   std::string configfile = WorkingFilename("config.xml");
@@ -185,14 +189,14 @@ bool PacketLevelAssetVersionImplD::AttemptConvertFromOldLastGood(void) {
     // original packetAlphaLevel name when checking to see if I can find a
     // match for upgrading.
     if (!inset->packetAlphaLevel.empty()) {
-      std::string upgraded_from =
-        AssetVersion(inset->packetAlphaLevel)->WorkingFilename("upgradedfrom");
-      if (khExists(upgraded_from)) {
-        std::string oldver;
-        if (khReadStringFromFile(upgraded_from, oldver)) {
-          inset->packetAlphaLevel = oldver;
+        std::string upgraded_from =
+          AssetVersion(inset->packetAlphaLevel)->WorkingFilename("upgradedfrom");
+        if (khExists(upgraded_from)) {
+          std::string oldver;
+          if (khReadStringFromFile(upgraded_from, oldver)) {
+            inset->packetAlphaLevel = oldver;
+          }
         }
-      }
     }
   }
 

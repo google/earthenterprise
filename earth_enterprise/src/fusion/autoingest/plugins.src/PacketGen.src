@@ -257,9 +257,15 @@ void PacketGenAssetVersionImplD::UpdateChildren(
           levInputVers[inputs_idx+1] = blendVer;
           const std::string cache_alpha_path =
               blendVer->GetOutputFilename(0) + "/cache_alpha.pack";
-          if (khExists(cache_alpha_path)) {
+           // if blendVer->GetOutputFilename(0) is empty, this Asset still 
+            // doesn't has an output file, so the path doesn't exist and it's going 
+            // to be built. So we mark it as exists
+            // TODO: ensure this is true
+          if (blendVer->GetOutputFilename(0).empty() 
+                  || khExists(cache_alpha_path)) {
             cached_blend_alpha = blendVer.Ref();
           }
+          cached_blend_alpha = blendVer.Ref();
           cached_blend = blendVer.Ref();
         }
         packetLevelConfig.insets[merge_idx] =
@@ -287,9 +293,16 @@ void PacketGenAssetVersionImplD::UpdateChildren(
         // blend directory exists for the asset since in GEE-5.x we need to
         // pick up the GEE-4.x Imagery/Terrain Projects (the PacketLevel
         // assets) that have no alpha blend cached.
+
         const std::string cache_alpha_path =
             prevLevelVer->GetOutputFilename(0) + "/cache_alpha.pack";
-        const bool cache_alpha_exist = khExists(cache_alpha_path);
+        // if prevLevelVer->GetOutputFilename(0) is empty, this Asset still 
+        // doesn't has an output file, so the path doesn't exist and it's going 
+        // to be built. So we mark it as exists
+        // TODO: ensure this is true
+        const bool cache_alpha_exist = 
+            prevLevelVer->GetOutputFilename(0).empty() 
+                || khExists(cache_alpha_path);
 
         packetLevelConfig.insets.push_back
           (PacketLevelConfig::Inset(
