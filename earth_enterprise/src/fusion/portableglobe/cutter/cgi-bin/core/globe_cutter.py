@@ -1,6 +1,7 @@
 #!/usr/bin/env python2.7
 #
 # Copyright 2017 Google Inc.
+# Copyright 2020 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,7 +19,8 @@
 """Module implementing core cutting functionality."""
 
 import json
-import urllib
+import ssl
+import urllib2
 
 from core import search_tab_template
 
@@ -41,10 +43,13 @@ class GlobeCutter(object):
     """
     search_tabs = ""
     url = "%s/search_json" % source
-    fp = urllib.urlopen(url)
-    if fp.getcode() == 200:
-      search_tabs = fp.read()
-    fp.close()
+    try:
+      fp = urllib2.urlopen(url, context=ssl._create_unverified_context())
+      if fp.getcode() == 200:
+          search_tabs = fp.read()
+      fp.close()
+    except:
+      print ("No search tabs found.")
 
     return search_tabs
 

@@ -28,7 +28,6 @@ apache_patches = [
                  'apache-ge-enablemanual.patch',
                  'apache-ge-htdocsallowoverride.patch',
                  'apache-ge-httpd.conf.in-cgi-bin_admin.patch',
-                 'apache-ge-httpd.conf.in-handle_http_errors.patch',
                  'apache-ge-httpd-ssl.conf.in-include_location_ssl.patch',
                  'apache-ge-httpd-ssl.conf.in.patch',
                  'apache-ge-configure.patch'
