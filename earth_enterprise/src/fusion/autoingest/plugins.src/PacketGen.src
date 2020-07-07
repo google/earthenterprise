@@ -260,12 +260,10 @@ void PacketGenAssetVersionImplD::UpdateChildren(
            // if blendVer->GetOutputFilename(0) is empty, this Asset still 
             // doesn't has an output file, so the path doesn't exist and it's going 
             // to be built. So we mark it as exists
-            // TODO: ensure this is true
           if (blendVer->GetOutputFilename(0).empty() 
                   || khExists(cache_alpha_path)) {
             cached_blend_alpha = blendVer.Ref();
           }
-          cached_blend_alpha = blendVer.Ref();
           cached_blend = blendVer.Ref();
         }
         packetLevelConfig.insets[merge_idx] =
@@ -299,7 +297,6 @@ void PacketGenAssetVersionImplD::UpdateChildren(
         // if prevLevelVer->GetOutputFilename(0) is empty, this Asset still 
         // doesn't has an output file, so the path doesn't exist and it's going 
         // to be built. So we mark it as exists
-        // TODO: ensure this is true
         const bool cache_alpha_exist = 
             prevLevelVer->GetOutputFilename(0).empty() 
                 || khExists(cache_alpha_path);
