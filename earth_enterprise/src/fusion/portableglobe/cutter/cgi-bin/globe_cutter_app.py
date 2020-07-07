@@ -1,7 +1,7 @@
 #!/usr/bin/env python2.7
 #
 # Copyright 2017 Google Inc.
-# Copyright 2019 Open GEE Contributors
+# Copyright 2020 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -35,7 +35,8 @@ import urllib
 import urllib2
 from contextlib import closing
 
-from lxml import etree
+import defusedxml.ElementTree as etree
+import xml.etree.ElementTree as etree2
 
 from common import form_wrap
 from common import postgres_manager_wrap
@@ -204,7 +205,7 @@ class GlobeBuilder(object):
     with open(self.polygon_file, "w") as fp:
       if polygon:
         # Check XML validity and standardize representation
-        xml = etree.ElementTree(etree.fromstring(polygon))
+        xml = etree2.ElementTree(etree.fromstring(polygon))
         xml.write(fp, xml_declaration=True, encoding='UTF-8')
         self.Status("Saved polygon to %s" % self.polygon_file)
       else:
