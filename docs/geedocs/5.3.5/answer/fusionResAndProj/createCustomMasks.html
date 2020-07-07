@@ -2,25 +2,27 @@
 
 <!doctype html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create custom masks &#8212; Google Earth Enterprise 5.3.5 documentation</title>
-    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
-    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../static/jquery.js"></script>
-    <script type="text/javascript" src="../../static/underscore.js"></script>
-    <script type="text/javascript" src="../../static/doctools.js"></script>
-    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Manage mosaics with virtual rasters" href="manageMosaicsWithVirtualRasters.html" />
     <link rel="prev" title="Google Maps raster background" href="googleMapsRasterBg.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
-    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <script src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -36,140 +38,127 @@
           <a href="googleMapsRasterBg.html" title="Google Maps raster background"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" accesskey="U">Fusion Resources and Projects</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" accesskey="U">Fusion Resources and Projects</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Create custom masks</a></li> 
       </ul>
-    </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="googleMapsRasterBg.html"
-                        title="previous chapter">Google Maps raster background</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="manageMosaicsWithVirtualRasters.html"
-                        title="next chapter">Manage mosaics with virtual rasters</a></p>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp2.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp2.png" style="width: 130px; height: 44px;" /></a></p>
+  <p><a class="reference internal" href="../../_images/googlelogo_color_260x88dp2.png"><img alt="Google logo" src="../../_images/googlelogo_color_260x88dp2.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="create-custom-masks">
 <h1>Create custom masks<a class="headerlink" href="#create-custom-masks" title="Permalink to this headline">¶</a></h1>
 <div class="docutils container">
 <div class="content docutils container">
 <p class="rubric">Table of Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#getting-started"><span class="std std-ref">Getting started</span></a></li>
-<li><a class="reference internal" href="#how-use-guide"><span class="std std-ref">How to use this guide</span></a></li>
-<li><a class="reference internal" href="#what-gepolymaskgen"><span class="std std-ref">What is gepolymaskgen?</span></a></li>
-<li><a class="reference internal" href="#what-gemaskgen"><span class="std std-ref">What is gemaskgen?</span></a></li>
-<li><a class="reference internal" href="#useful-info-gepolymaskgen"><span class="std std-ref">Useful information about gepolymaskgen</span></a></li>
-<li><a class="reference internal" href="#useful-info-gemaskgen"><span class="std std-ref">Useful information about gemaskgen</span></a></li>
-<li><a class="reference internal" href="#when-use-gepolymaskgen"><span class="std std-ref">When to use gepolymaskgen</span></a></li>
-<li><a class="reference internal" href="#when-use-gemaskgen"><span class="std std-ref">When to use gemaskgen</span></a></li>
-<li><a class="reference internal" href="#recommended-tools-mask-filters"><span class="std std-ref">Recommended tools for creating custom mask
-files</span></a></li>
-<li><a class="reference internal" href="#gepolymaskgen-command-usage"><span class="std std-ref">gepolymaskgen command usage</span></a></li>
-<li><a class="reference internal" href="#example-use-cases-commands"><span class="std std-ref">Example use cases and commands to build custom
-masks</span></a><ul>
-<li><a class="reference internal" href="#imagery-no-fill-pixels"><span class="std std-ref">Case 1: Create custom masks for imagery which has no fill
+<li><p><a class="reference internal" href="#getting-started"><span class="std std-ref">Getting started</span></a></p></li>
+<li><p><a class="reference internal" href="#how-use-guide"><span class="std std-ref">How to use this guide</span></a></p></li>
+<li><p><a class="reference internal" href="#what-gepolymaskgen"><span class="std std-ref">What is gepolymaskgen?</span></a></p></li>
+<li><p><a class="reference internal" href="#what-gemaskgen"><span class="std std-ref">What is gemaskgen?</span></a></p></li>
+<li><p><a class="reference internal" href="#useful-info-gepolymaskgen"><span class="std std-ref">Useful information about gepolymaskgen</span></a></p></li>
+<li><p><a class="reference internal" href="#useful-info-gemaskgen"><span class="std std-ref">Useful information about gemaskgen</span></a></p></li>
+<li><p><a class="reference internal" href="#when-use-gepolymaskgen"><span class="std std-ref">When to use gepolymaskgen</span></a></p></li>
+<li><p><a class="reference internal" href="#when-use-gemaskgen"><span class="std std-ref">When to use gemaskgen</span></a></p></li>
+<li><p><a class="reference internal" href="#recommended-tools-mask-filters"><span class="std std-ref">Recommended tools for creating custom mask
+files</span></a></p></li>
+<li><p><a class="reference internal" href="#gepolymaskgen-command-usage"><span class="std std-ref">gepolymaskgen command usage</span></a></p></li>
+<li><p><a class="reference internal" href="#example-use-cases-commands"><span class="std std-ref">Example use cases and commands to build custom
+masks</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#imagery-no-fill-pixels"><span class="std std-ref">Case 1: Create custom masks for imagery which has no fill
 pixels (usable imagery goes to the
-edges)</span></a><ul>
-<li><a class="reference internal" href="#edge-match-no-feather"><span class="std std-ref">Example A: Creating an edge-matched mask with no
-feather</span></a></li>
-<li><a class="reference internal" href="#edge-mask-fixed-feather"><span class="std std-ref">Example B: Creating an edge-matched mask with a fixed
-value feather</span></a></li>
+edges)</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#edge-match-no-feather"><span class="std std-ref">Example A: Creating an edge-matched mask with no
+feather</span></a></p></li>
+<li><p><a class="reference internal" href="#edge-mask-fixed-feather"><span class="std std-ref">Example B: Creating an edge-matched mask with a fixed
+value feather</span></a></p></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#custom-mask-islands"><span class="std std-ref">Case 2: Create custom masks for
-islands</span></a><ul>
-<li><a class="reference internal" href="#island-masks-into-land"><span class="std std-ref">Example A: Create a custom edge-matched mask for an
-island that masks into the land</span></a></li>
-<li><a class="reference internal" href="#island-masks-into-water"><span class="std std-ref">Example B: Create a custom edge-matched mask for an
-island that masks into the water</span></a></li>
+<li><p><a class="reference internal" href="#custom-mask-islands"><span class="std std-ref">Case 2: Create custom masks for
+islands</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#island-masks-into-land"><span class="std std-ref">Example A: Create a custom edge-matched mask for an
+island that masks into the land</span></a></p></li>
+<li><p><a class="reference internal" href="#island-masks-into-water"><span class="std std-ref">Example B: Create a custom edge-matched mask for an
+island that masks into the water</span></a></p></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#masks-coastline-shared-edges"><span class="std std-ref">Case 3: Create custom masks with coastlines and shared
-edges with other imagery resources</span></a><ul>
-<li><a class="reference internal" href="#coastline-external-edges-same-values"><span class="std std-ref">Example A: Create an edge-matched custom mask that
+<li><p><a class="reference internal" href="#masks-coastline-shared-edges"><span class="std std-ref">Case 3: Create custom masks with coastlines and shared
+edges with other imagery resources</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#coastline-external-edges-same-values"><span class="std std-ref">Example A: Create an edge-matched custom mask that
 feathers coastlines and external edges with the same
-feather value</span></a></li>
-<li><a class="reference internal" href="#feathered-coastlines-external-edges"><span class="std std-ref">Example B: Create an edge-matched custom mask with
+feather value</span></a></p></li>
+<li><p><a class="reference internal" href="#feathered-coastlines-external-edges"><span class="std std-ref">Example B: Create an edge-matched custom mask with
 feathered coastlines and feathered external
-edges</span></a></li>
-<li><a class="reference internal" href="#feathered-internal-coastline-no-edge"><span class="std std-ref">Example C: Feathered internal coastline and no-feather
-external edge</span></a></li>
+edges</span></a></p></li>
+<li><p><a class="reference internal" href="#feathered-internal-coastline-no-edge"><span class="std std-ref">Example C: Feathered internal coastline and no-feather
+external edge</span></a></p></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#masking-out-sections-large-image"><span class="std std-ref">Case 4: Masking out sections within an image
-resource</span></a><ul>
-<li><a class="reference internal" href="#feathered-edge-masking-missing-internal-imagery-one-step"><span class="std std-ref">Example A: Creating an edge-matched mask with a
+<li><p><a class="reference internal" href="#masking-out-sections-large-image"><span class="std std-ref">Case 4: Masking out sections within an image
+resource</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#feathered-edge-masking-missing-internal-imagery-one-step"><span class="std std-ref">Example A: Creating an edge-matched mask with a
 feathered edge and masking missing internal imagery in
-one step</span></a></li>
-<li><a class="reference internal" href="#feathered-edge-masking-missing-internal-imagery-two-step"><span class="std std-ref">Example B: Creating an edge-matched mask with a
+one step</span></a></p></li>
+<li><p><a class="reference internal" href="#feathered-edge-masking-missing-internal-imagery-two-step"><span class="std std-ref">Example B: Creating an edge-matched mask with a
 feathered edge and masking missing internal imagery in
-two steps</span></a></li>
+two steps</span></a></p></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#custom-masks-gemaskgen-gepolymaskgen"><span class="std std-ref">Case 5: Building custom masks with both gemaskgen and
-gepolymaskgen</span></a></li>
+<li><p><a class="reference internal" href="#custom-masks-gemaskgen-gepolymaskgen"><span class="std std-ref">Case 5: Building custom masks with both gemaskgen and
+gepolymaskgen</span></a></p></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#importing-custom-masks-imagery-terrain-gee-fusion"><span class="std std-ref">Appendix A: Importing custom masks with imagery and terrain
+<li><p><a class="reference internal" href="#importing-custom-masks-imagery-terrain-gee-fusion"><span class="std std-ref">Appendix A: Importing custom masks with imagery and terrain
 resources in Google Earth Enterprise Fusion
-Pro</span></a><ul>
-<li><a class="reference internal" href="#enable-havemask-new-image-resource"><span class="std std-ref">Example 1: Enable havemask mode in the Fusion GUI for a new
-image resource</span></a></li>
-<li><a class="reference internal" href="#enable-havemask-command-line-new-image-resource"><span class="std std-ref">Example 2: Enable havemask mode by command line for a new
-image resource</span></a></li>
-<li><a class="reference internal" href="#enable-havemask-existing-image-resource"><span class="std std-ref">Example 3: Enable havemask mode in the Fusion GUI for an
-existing image resource</span></a></li>
-<li><a class="reference internal" href="#enable-havemask-command-line-existing-image-resource"><span class="std std-ref">Example 4: Enable havemask mode by command line for an
-existing image resource</span></a></li>
+Pro</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#enable-havemask-new-image-resource"><span class="std std-ref">Example 1: Enable havemask mode in the Fusion GUI for a new
+image resource</span></a></p></li>
+<li><p><a class="reference internal" href="#enable-havemask-command-line-new-image-resource"><span class="std std-ref">Example 2: Enable havemask mode by command line for a new
+image resource</span></a></p></li>
+<li><p><a class="reference internal" href="#enable-havemask-existing-image-resource"><span class="std std-ref">Example 3: Enable havemask mode in the Fusion GUI for an
+existing image resource</span></a></p></li>
+<li><p><a class="reference internal" href="#enable-havemask-command-line-existing-image-resource"><span class="std std-ref">Example 4: Enable havemask mode by command line for an
+existing image resource</span></a></p></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#locating-mask-files-format-data-asset-root"><span class="std std-ref">Appendix B: Locating mask files and Fusion format data in an
-Asset Root</span></a><ul>
-<li><a class="reference internal" href="#locate-fusion-format-imagery-mask-files-image-resource"><span class="std std-ref">Example 1: Locate the Fusion format imagery (.kip) and mask
-(.kmp) files of an image resource</span></a></li>
-<li><a class="reference internal" href="#locate-mask-file-built-automask-fusion-build"><span class="std std-ref">Example 2: Locate a mask.tif file automatically built by
+<li><p><a class="reference internal" href="#locating-mask-files-format-data-asset-root"><span class="std std-ref">Appendix B: Locating mask files and Fusion format data in an
+Asset Root</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#locate-fusion-format-imagery-mask-files-image-resource"><span class="std std-ref">Example 1: Locate the Fusion format imagery (.kip) and mask
+(.kmp) files of an image resource</span></a></p></li>
+<li><p><a class="reference internal" href="#locate-mask-file-built-automask-fusion-build"><span class="std std-ref">Example 2: Locate a mask.tif file automatically built by
 the automask feature of a Fusion resource
-build</span></a></li>
-<li><a class="reference internal" href="#locate-mask-file-fusion-format-file-building-mask-product"><span class="std std-ref">Example 3: Locate the mask.tif file and Fusion format .kip
+build</span></a></p></li>
+<li><p><a class="reference internal" href="#locate-mask-file-fusion-format-file-building-mask-product"><span class="std std-ref">Example 3: Locate the mask.tif file and Fusion format .kip
 file utilized for building the Fusion format .kmp (mask
-product)</span></a></li>
+product)</span></a></p></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#determining-source-file-raster-size-geinfo"><span class="std std-ref">Appendix C: Determining source file raster size with
-geinfo</span></a><ul>
-<li><a class="reference internal" href="#maximum-suggested-raster-dimensions-source-files-gepolymaskgen"><span class="std std-ref">Maximum suggested raster dimensions for source files used
-as gepolymaskgen –base_image files</span></a></li>
-<li><a class="reference internal" href="#square-shaped-rasters"><span class="std std-ref">Square-shaped rasters</span></a></li>
-<li><a class="reference internal" href="#rectangular-sharped-rasters"><span class="std std-ref">Rectangular-shaped rasters</span></a></li>
+<li><p><a class="reference internal" href="#determining-source-file-raster-size-geinfo"><span class="std std-ref">Appendix C: Determining source file raster size with
+geinfo</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#maximum-suggested-raster-dimensions-source-files-gepolymaskgen"><span class="std std-ref">Maximum suggested raster dimensions for source files used
+as gepolymaskgen –base_image files</span></a></p></li>
+<li><p><a class="reference internal" href="#square-shaped-rasters"><span class="std std-ref">Square-shaped rasters</span></a></p></li>
+<li><p><a class="reference internal" href="#rectangular-sharped-rasters"><span class="std std-ref">Rectangular-shaped rasters</span></a></p></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#building-high-resolution-mask-files-gemaskgen"><span class="std std-ref">Appendix D: Building high resolution mask files with
-gemaskgen</span></a></li>
-<li><a class="reference internal" href="#using-photo-editing-app-augment-custom-app"><span class="std std-ref">Appendix E: Using a Photo Editing application to augment a
-custom mask</span></a></li>
-<li><a class="reference internal" href="#building-custom-masks-large-source-imagery"><span class="std std-ref">Appendix F: Building custom masks for large source
-imagery</span></a></li>
-<li><a class="reference internal" href="#gepolymaskgen-help-menu"><span class="std std-ref">Appendix G: Gepolymaskgen help menu</span></a></li>
+<li><p><a class="reference internal" href="#building-high-resolution-mask-files-gemaskgen"><span class="std std-ref">Appendix D: Building high resolution mask files with
+gemaskgen</span></a></p></li>
+<li><p><a class="reference internal" href="#using-photo-editing-app-augment-custom-app"><span class="std std-ref">Appendix E: Using a Photo Editing application to augment a
+custom mask</span></a></p></li>
+<li><p><a class="reference internal" href="#building-custom-masks-large-source-imagery"><span class="std std-ref">Appendix F: Building custom masks for large source
+imagery</span></a></p></li>
+<li><p><a class="reference internal" href="#gepolymaskgen-help-menu"><span class="std std-ref">Appendix G: Gepolymaskgen help menu</span></a></p></li>
 </ul>
 <p class="rubric" id="getting-started">Getting started</p>
 <p>A new masking tool is now available with Google Earth Enterprise
@@ -228,49 +217,52 @@ imagery is feathered based on the user-specified feather value (in
 pixels). The new GEE Fusion Pro imagery or terrain resource is
 comprised of both the imported source data and the computed mask
 file as demonstrated in the graphic below.</p>
-<p><img alt="Masked imagery diagram" src="../../images/image10.jpg" /></p>
+<p><img alt="Masked imagery diagram" src="../../_images/image10.jpg" /></p>
 <p class="rubric" id="useful-info-gepolymaskgen">Useful information about gepolymaskgen</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> is a single-threaded low-level GEE Fusion
+<li><p><code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> is a single-threaded low-level GEE Fusion
 command-line tool that may be manually invoked for building
-custom mask files for imagery or terrain data sets</li>
-<li>Operationally, <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> is CPU-intensive and <em>very</em>
-RAM-intensive.<ul>
-<li>At least 16GB free RAM must be available on the machine to
-safely build custom masks with <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code>.</li>
+custom mask files for imagery or terrain data sets</p></li>
+<li><p>Operationally, <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> is CPU-intensive and <em>very</em>
+RAM-intensive.</p>
+<ul>
+<li><p>At least 16GB free RAM must be available on the machine to
+safely build custom masks with <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code>.</p></li>
 </ul>
 </li>
-<li>All mask files built by <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> will be written out
-in <code class="docutils literal notranslate"><span class="pre">GeoTIFF</span></code> format.</li>
-<li>Mask files will be written with complementary geographic
-coordinates and projection to the source data.<ul>
-<li>All mask files, KML polygons, vector source files, and
+<li><p>All mask files built by <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> will be written out
+in <code class="docutils literal notranslate"><span class="pre">GeoTIFF</span></code> format.</p></li>
+<li><p>Mask files will be written with complementary geographic
+coordinates and projection to the source data.</p>
+<ul>
+<li><p>All mask files, KML polygons, vector source files, and
 source imagery should be in the same projection for building
-custom masks.</li>
-<li>Masks may be built for resources in Plate-Carre projection
-(EPSG:4326) or Mercator projection (EPSG:3857).</li>
+custom masks.</p></li>
+<li><p>Masks may be built for resources in Plate-Carre projection
+(EPSG:4326) or Mercator projection (EPSG:3857).</p></li>
 </ul>
 </li>
-<li><code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> can build a mask for one source file or many
+<li><p><code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> can build a mask for one source file or many
 source files that are described with a <code class="docutils literal notranslate"><span class="pre">khvr</span></code> virtual raster
-text file.</li>
-<li>Mask files built by <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> will use 255 to show
-imagery and 0 to hide imagery.<ul>
-<li>All new masks start as an image file with all pixels of
-value 0 - all imagery will be masked.</li>
-<li>Areas to hide (to be masked) will be set to pixel value 0.</li>
-<li>The <code class="docutils literal notranslate"><span class="pre">--or_mask</span></code> masking operator will, typically, show
-more imagery for an area in the final mask.</li>
-<li>The <code class="docutils literal notranslate"><span class="pre">--and_neg_mask</span></code> masking operator will, typically,
-hide more imagery for an area in the final mask.</li>
+text file.</p></li>
+<li><p>Mask files built by <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> will use 255 to show
+imagery and 0 to hide imagery.</p>
+<ul>
+<li><p>All new masks start as an image file with all pixels of
+value 0 - all imagery will be masked.</p></li>
+<li><p>Areas to hide (to be masked) will be set to pixel value 0.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">--or_mask</span></code> masking operator will, typically, show
+more imagery for an area in the final mask.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">--and_neg_mask</span></code> masking operator will, typically,
+hide more imagery for an area in the final mask.</p></li>
 </ul>
 </li>
-<li>The final mask is built by subtracting and adding desired areas
-to hide or view by a sequence of operators.</li>
+<li><p>The final mask is built by subtracting and adding desired areas
+to hide or view by a sequence of operators.</p></li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">It is easy to create very high resolution masks with
+<p class="admonition-title">Note</p>
+<p>It is easy to create very high resolution masks with
 <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code>, to the point of pixel-by-pixel matching for
 the source imagery. Please check the overall raster size of
 your source imagery before creating a custom mask with
@@ -281,81 +273,84 @@ on calculating the overall size of a mask file.</p>
 </div>
 <p class="rubric" id="useful-info-gemaskgen">Useful information about gemaskgen</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">gemaskgen</span></code> is a single-threaded low-level Fusion tool which
+<li><p><code class="docutils literal notranslate"><span class="pre">gemaskgen</span></code> is a single-threaded low-level Fusion tool which
 is automatically called during image and terrain resource
-builds after the source imagery or terrain is imported.</li>
-<li>All mask files computed by <code class="docutils literal notranslate"><span class="pre">gemaskgen</span></code> will be written out in
-<code class="docutils literal notranslate"><span class="pre">GeoTIFF</span></code> format.</li>
-<li><code class="docutils literal notranslate"><span class="pre">gemaskgen</span></code> scans through an imported imagery or terrain
-resource to:<ul>
-<li>identify the pixel value of each corner pixel, and</li>
-<li>erode inward into the image to mask out all pixels that have
-the same pixel value as the corner pixels.</li>
+builds after the source imagery or terrain is imported.</p></li>
+<li><p>All mask files computed by <code class="docutils literal notranslate"><span class="pre">gemaskgen</span></code> will be written out in
+<code class="docutils literal notranslate"><span class="pre">GeoTIFF</span></code> format.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gemaskgen</span></code> scans through an imported imagery or terrain
+resource to:</p>
+<ul>
+<li><p>identify the pixel value of each corner pixel, and</p></li>
+<li><p>erode inward into the image to mask out all pixels that have
+the same pixel value as the corner pixels.</p></li>
 </ul>
 </li>
-<li><code class="docutils literal notranslate"><span class="pre">gemaskgen</span></code> will, by default, create an output mask file
-which is no more than 16,000 pixels on any one side.<ul>
-<li>This can lead to low-resolution masks for high resolution
-data.</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gemaskgen</span></code> will, by default, create an output mask file
+which is no more than 16,000 pixels on any one side.</p>
+<ul>
+<li><p>This can lead to low-resolution masks for high resolution
+data.</p></li>
 </ul>
 </li>
-<li>Masks may be manually created by invoking <code class="docutils literal notranslate"><span class="pre">gemaskgen</span></code>
-directly!<ul>
-<li>Masks larger than 16,000 pixels may be created for large
-imagery resources with the <code class="docutils literal notranslate"><span class="pre">--maxsize</span></code>option.</li>
-<li>Please see <a class="reference internal" href="#building-high-resolution-mask-files-gemaskgen"><span class="std std-ref">Appendix D</span></a> for additional
-details.</li>
+<li><p>Masks may be manually created by invoking <code class="docutils literal notranslate"><span class="pre">gemaskgen</span></code>
+directly!</p>
+<ul>
+<li><p>Masks larger than 16,000 pixels may be created for large
+imagery resources with the <code class="docutils literal notranslate"><span class="pre">--maxsize</span></code>option.</p></li>
+<li><p>Please see <a class="reference internal" href="#building-high-resolution-mask-files-gemaskgen"><span class="std std-ref">Appendix D</span></a> for additional
+details.</p></li>
 </ul>
 </li>
 </ul>
 <p class="rubric" id="comparison-of-the-gemaskgen-and-gepolymaskgen">Comparison of the gemaskgen and gepolymaskgen</p>
-<table border="1" class="colwidths-given docutils">
+<table class="colwidths-given docutils align-default">
 <colgroup>
-<col width="50%" />
-<col width="25%" />
-<col width="25%" />
+<col style="width: 50%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Capability</th>
-<th class="head"><code class="docutils literal notranslate"><span class="pre">gemaskgen</span></code></th>
-<th class="head"><code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code></th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Capability</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">gemaskgen</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code></p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>Reads Fusion format imagery (.kip) and terrain (.ktp)</td>
-<td>Yes</td>
-<td>No</td>
+<tbody>
+<tr class="row-even"><td><p>Reads Fusion format imagery (.kip) and terrain (.ktp)</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
 </tr>
-<tr class="row-odd"><td>Part of image resource import process</td>
-<td>Yes, for automask mode</td>
-<td>No</td>
+<tr class="row-odd"><td><p>Part of image resource import process</p></td>
+<td><p>Yes, for automask mode</p></td>
+<td><p>No</p></td>
 </tr>
-<tr class="row-even"><td>Can read source file images including:
+<tr class="row-even"><td><p>Can read source file images including:
 <code class="docutils literal notranslate"><span class="pre">khvrs;</span></code>
 <code class="docutils literal notranslate"><span class="pre">GeoTIFFs;</span></code>
-<code class="docutils literal notranslate"><span class="pre">JPEG2000</span></code></td>
-<td>No, can only read Fusion imagery and terrain resource formats</td>
-<td>Yes</td>
+<code class="docutils literal notranslate"><span class="pre">JPEG2000</span></code></p></td>
+<td><p>No, can only read Fusion imagery and terrain resource formats</p></td>
+<td><p>Yes</p></td>
 </tr>
-<tr class="row-odd"><td>Can automatically identify and mask Fill Data automatically within imagery resource (holes)</td>
-<td>Yes</td>
-<td>No, but may be manually removed with KML polygons</td>
+<tr class="row-odd"><td><p>Can automatically identify and mask Fill Data automatically within imagery resource (holes)</p></td>
+<td><p>Yes</p></td>
+<td><p>No, but may be manually removed with KML polygons</p></td>
 </tr>
-<tr class="row-even"><td>Can feather a specified amount of pixels from the edge of the image, irrespective of the imagery pixel values</td>
-<td>No</td>
-<td>Yes</td>
+<tr class="row-even"><td><p>Can feather a specified amount of pixels from the edge of the image, irrespective of the imagery pixel values</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
 </tr>
-<tr class="row-odd"><td>Capable of creating high-resolution mask files</td>
-<td>Yes, manually possible</td>
-<td>Yes - depends on raster dimensions of input source file</td>
+<tr class="row-odd"><td><p>Capable of creating high-resolution mask files</p></td>
+<td><p>Yes, manually possible</p></td>
+<td><p>Yes - depends on raster dimensions of input source file</p></td>
 </tr>
-<tr class="row-even"><td>Can automatically distinguish Fill Data from usable imagery by pixel values</td>
-<td>Yes</td>
-<td>No</td>
+<tr class="row-even"><td><p>Can automatically distinguish Fill Data from usable imagery by pixel values</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
 </tr>
-<tr class="row-odd"><td>Can mask out arbitrary polygonal shapes within the image resource</td>
-<td>No</td>
-<td>Yes</td>
+<tr class="row-odd"><td><p>Can mask out arbitrary polygonal shapes within the image resource</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
 </tr>
 </tbody>
 </table>
@@ -377,23 +372,23 @@ instructions on how <code class="docutils literal notranslate"><span class="pre"
 masks for large image resources.</p>
 <p class="rubric" id="recommended-tools-mask-filters">Recommended tools for creating custom mask files</p>
 <ul class="simple">
-<li>A server or workstation with minimum 16GB RAM to build the
-custom masks. More RAM is better!</li>
-<li>Global coastlines as polygons for coastline masking. <em>Make
-certain these are polygons and not lines</em>.</li>
-<li>A GIS application, such as QGIS, to view source imagery
+<li><p>A server or workstation with minimum 16GB RAM to build the
+custom masks. More RAM is better!</p></li>
+<li><p>Global coastlines as polygons for coastline masking. <em>Make
+certain these are polygons and not lines</em>.</p></li>
+<li><p>A GIS application, such as QGIS, to view source imagery
 datasets. This is helpful in determining if usable imagery is
 surrounded by fill data, reprojecting the source imagery, or
-combining multiple source files into one image.</li>
-<li>A copy of Google Earth EC to connect to and view 3D databases
+combining multiple source files into one image.</p></li>
+<li><p>A copy of Google Earth EC to connect to and view 3D databases
 built with the custom masks for QA testing. Google Earth can
 also be used in the masking process by creating KML polygons
-for additional areas that are to be masked from view.</li>
-<li>A photo editing application such as Adobe Photoshop, GIMP, or
+for additional areas that are to be masked from view.</p></li>
+<li><p>A photo editing application such as Adobe Photoshop, GIMP, or
 similar, to view the custom mask files after <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code>
 builds, or to make modifications to the mask file such as
 unmasking water bodies or exposing more visible water from a
-coastline.</li>
+coastline.</p></li>
 </ul>
 <p class="rubric" id="gepolymaskgen-command-usage">gepolymaskgen command usage</p>
 <p><code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> has a few command line parameters to specify the
@@ -404,26 +399,26 @@ the mask edges as needed, and then writing out the resulting mask.
 Here are the main <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> options:</p>
 <p><code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code></p>
 <ol class="arabic">
-<li><p class="first"><strong>Specify which file to reference for creating the mask, or
+<li><p><strong>Specify which file to reference for creating the mask, or
 which existing mask file to load:</strong></p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">--base_image</span></code>: specifies a source file that will be
+<li><p><code class="docutils literal notranslate"><span class="pre">--base_image</span></code>: specifies a source file that will be
 used for overall raster dimensions, geographic coordinates,
 and projection information. May be a <code class="docutils literal notranslate"><span class="pre">GeoTIFF</span></code>,
 <code class="docutils literal notranslate"><span class="pre">JPEG2000</span></code>, or <code class="docutils literal notranslate"><span class="pre">KHVR</span></code> file. Each <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code>
 invocation may only include either one <code class="docutils literal notranslate"><span class="pre">--base_image</span></code> or
-one <code class="docutils literal notranslate"><span class="pre">--base_mask</span></code> for masking operations.</li>
-<li><code class="docutils literal notranslate"><span class="pre">--base_mask</span></code>: specifies a mask file to read in for
+one <code class="docutils literal notranslate"><span class="pre">--base_mask</span></code> for masking operations.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--base_mask</span></code>: specifies a mask file to read in for
 further mask processing. The specified file may be a
 <code class="docutils literal notranslate"><span class="pre">GeoTIFF</span></code>. Each <code class="docutils literal notranslate"><span class="pre">gepolymaskgeninvocation</span></code> may only
 include either one <code class="docutils literal notranslate"><span class="pre">--base_image</span></code> or one
-<code class="docutils literal notranslate"><span class="pre">--base_mask</span></code>for masking operations.</li>
+<code class="docutils literal notranslate"><span class="pre">--base_mask</span></code>for masking operations.</p></li>
 </ul>
 </li>
-<li><p class="first"><strong>Modify the mask file by changing what is masked and
+<li><p><strong>Modify the mask file by changing what is masked and
 feathering:</strong></p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">--feather</span></code>: directs <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> to create a
+<li><p><code class="docutils literal notranslate"><span class="pre">--feather</span></code>: directs <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> to create a
 feather along a masked edge by the specified number of
 pixels. Either positive or negative values may be specified
 with <code class="docutils literal notranslate"><span class="pre">--feather</span></code> to expand or contract the feathered edge
@@ -437,13 +432,13 @@ has on the mask. The <code class="docutils literal notranslate"><span class="pre
 the <code class="docutils literal notranslate"><span class="pre">--base_image</span></code>, <code class="docutils literal notranslate"><span class="pre">--base_mask</span></code>, <code class="docutils literal notranslate"><span class="pre">--and_neg_mask</span></code>,
 and <code class="docutils literal notranslate"><span class="pre">--or_mask</span></code> mask options; however, only one
 <code class="docutils literal notranslate"><span class="pre">--feather</span></code> option may be specified for each operator. The
-default feather value for <code class="docutils literal notranslate"><span class="pre">--feather</span></code> is set to 0 pixels.</li>
-<li><code class="docutils literal notranslate"><span class="pre">--feather_border</span></code>: used in conjunction only with
+default feather value for <code class="docutils literal notranslate"><span class="pre">--feather</span></code> is set to 0 pixels.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--feather_border</span></code>: used in conjunction only with
 <code class="docutils literal notranslate"><span class="pre">--feather</span></code>. Directs <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> to apply a
 feather to the extent of the mask file with the same
 feathering values specified with the <code class="docutils literal notranslate"><span class="pre">--feather</span></code> option.
-The <code class="docutils literal notranslate"><span class="pre">--feather_border</span></code> option is off by default.</li>
-<li><code class="docutils literal notranslate"><span class="pre">--invert</span></code>: directs <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> to invert a
+The <code class="docutils literal notranslate"><span class="pre">--feather_border</span></code> option is off by default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--invert</span></code>: directs <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> to invert a
 specified mask from its original values to the opposite. In
 almost all cases, this involves swapping pixel values from 0
 to 255 or 255 to 0, depending on whether the
@@ -453,8 +448,8 @@ a mask affects the <code class="docutils literal notranslate"><span class="pre">
 expanding or contracting mask feathering at the specified mask
 edges. The <code class="docutils literal notranslate"><span class="pre">--invert</span></code> option may be combined with
 <code class="docutils literal notranslate"><span class="pre">--base_image</span></code>, <code class="docutils literal notranslate"><span class="pre">--base_mask</span></code>, <code class="docutils literal notranslate"><span class="pre">--and_neg_mask</span></code>,
-<code class="docutils literal notranslate"><span class="pre">--or_mask</span></code>, or <code class="docutils literal notranslate"><span class="pre">--output_mask</span></code>.</li>
-<li><code class="docutils literal notranslate"><span class="pre">--and_neg_mask</span></code>: directs <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> to remove
+<code class="docutils literal notranslate"><span class="pre">--or_mask</span></code>, or <code class="docutils literal notranslate"><span class="pre">--output_mask</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--and_neg_mask</span></code>: directs <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> to remove
 a specified area from view (i.e. subtracting, or masking).
 May be combined with the<code class="docutils literal notranslate"><span class="pre">--feather</span></code> and
 <code class="docutils literal notranslate"><span class="pre">--feather_border</span></code> options to build a feathered edge along
@@ -462,8 +457,8 @@ masked areas. Multiple <code class="docutils literal notranslate"><span class="p
 combined in one <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> sequence as necessary for
 complex mask builds. It is also possible for a
 <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code>sequence to include
-both<code class="docutils literal notranslate"><span class="pre">--and_neg_mask</span></code> and <code class="docutils literal notranslate"><span class="pre">--or_mask</span></code> operations.</li>
-<li><code class="docutils literal notranslate"><span class="pre">--or_mask</span></code>: directs <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> to add a
+both<code class="docutils literal notranslate"><span class="pre">--and_neg_mask</span></code> and <code class="docutils literal notranslate"><span class="pre">--or_mask</span></code> operations.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--or_mask</span></code>: directs <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> to add a
 specified area into view (i.e. adding, or “unmasking”). May
 be combined with the <code class="docutils literal notranslate"><span class="pre">--feather</span></code> and <code class="docutils literal notranslate"><span class="pre">--feather_border</span></code>
 options to build a feathered edge along masked areas.
@@ -471,12 +466,12 @@ Multiple<code class="docutils literal notranslate"><span class="pre">--or_mask</
 <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> sequence, as necessary, for complex mask
 builds. It is also possible for a <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> sequence
 to include both <code class="docutils literal notranslate"><span class="pre">--and_neg_mask</span></code> and
-<code class="docutils literal notranslate"><span class="pre">--or_mask</span></code>operations.</li>
+<code class="docutils literal notranslate"><span class="pre">--or_mask</span></code>operations.</p></li>
 </ul>
 </li>
-<li><p class="first"><strong>Specify the output mask</strong></p>
+<li><p><strong>Specify the output mask</strong></p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">--output_mask</span></code>: the folder path location and file name
+<li><p><code class="docutils literal notranslate"><span class="pre">--output_mask</span></code>: the folder path location and file name
 <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> is to write the finished mask file. The
 completed mask file to import with GEE Fusion Pro must have
 the same file name as the source file with a <code class="docutils literal notranslate"><span class="pre">-mask.tif</span></code>
@@ -484,7 +479,7 @@ extension. For example, if the source file is
 <code class="docutils literal notranslate"><span class="pre">brazil-squareimage-nofill.tif</span></code> the mask file must be
 named <code class="docutils literal notranslate"><span class="pre">brazil-squareimage-nofill-mask.tif</span></code>. Only one
 <code class="docutils literal notranslate"><span class="pre">--output_mask</span></code> may be specified per
-<code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code>operation.</li>
+<code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code>operation.</p></li>
 </ul>
 <p>As an example, this <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> invocation will create a
 zero-feather mask file that edge-matches source data:</p>
@@ -509,7 +504,7 @@ Conversely, if all pixels were value 0 (black), the image would
 be fully hidden from view.</p>
 <p class="rubric" id="an-edge-matched-zero-feather-mask-file-built-by-gepolymaskgen-as-viewed-in-the-gimp-photo-editing-tool">An edge-matched, zero-feather mask file built by
 gepolymaskgen as viewed in the GIMP photo editing tool:</p>
-<p><img alt="Hidden masked diagram" src="../../images/image24.jpg" /></p>
+<p><img alt="Hidden masked diagram" src="../../_images/image24.jpg" /></p>
 <p>All custom mask files can be built with the different
 <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> masking operators in various combinations to
 add or subtract shapes from a mask so only the desired imagery
@@ -563,19 +558,19 @@ that includes several source images which include all usable
 imagery and no fill.</p>
 <p class="rubric">Location of image mosaic as seen with virtual raster
 file:</p>
-<p><img alt="Brazil Imagery mosaic diagram" src="../../images/image29.jpg" /></p>
+<p><img alt="Brazil Imagery mosaic diagram" src="../../_images/image29.jpg" /></p>
 <p class="rubric" id="close-up-of-imagery-resource-imported-into-fusion">Close up of imagery resource imported into Fusion:</p>
-<p><img alt="Brazil Imagery Fusion import" src="../../images/image40.jpg" /></p>
+<p><img alt="Brazil Imagery Fusion import" src="../../_images/image40.jpg" /></p>
 <p>Since we know the source imagery does not contain fill data, we can
 create a custom mask based on the <code class="docutils literal notranslate"><span class="pre">khvr</span></code> virtual mosaic
 description file, then include this for import into Fusion. For
 this process, <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> will need to know:</p>
 <ol class="arabic simple">
-<li>The base image to create the mask file from (including location
-and raster dimensions)</li>
-<li>What feather to apply to the image</li>
-<li>If the image border is to be feathered (yes)</li>
-<li>What to name the output image</li>
+<li><p>The base image to create the mask file from (including location
+and raster dimensions)</p></li>
+<li><p>What feather to apply to the image</p></li>
+<li><p>If the image border is to be feathered (yes)</p></li>
+<li><p>What to name the output image</p></li>
 </ol>
 <p>Due to how <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> works, we will have to invert the
 output mask so the image edge is masked out instead of masking out
@@ -621,10 +616,10 @@ will display all usable imagery in the areas of white pixels.</p>
 <p class="rubric">View of the built mask file within the GIMP photo
 editing tool with edge-to-edge display of all imagery pixels
 for the source file:</p>
-<p><img alt="hidden masked diagram" src="../../images/image24.jpg" /></p>
+<p><img alt="hidden masked diagram" src="../../_images/image24.jpg" /></p>
 <p class="rubric">View of the image resource after import into Fusion
 Pro with the custom mask:</p>
-<p><img alt="Fusion Pro with custom mask" src="../../images/image00.jpg" /></p>
+<p><img alt="Fusion Pro with custom mask" src="../../_images/image00.jpg" /></p>
 <p>Once the mask file is built by <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code>, the source
 imagery may be imported into Fusion Pro by enabling the
 <code class="docutils literal notranslate"><span class="pre">havemask</span></code> masking mode in the Fusion GUI or specifying the
@@ -680,10 +675,10 @@ with a feathered edge 100 pixels from the edge inwards into the
 image resource.</p>
 <p class="rubric">Resulting mask file from gepolymaskgen seen in the
 GIMP photo editing tool:</p>
-<p><img alt="gepolymaskgen in gimp photo editor" src="../../images/image31.jpg" /></p>
+<p><img alt="gepolymaskgen in gimp photo editor" src="../../_images/image31.jpg" /></p>
 <p class="rubric">The image resource now has a 100-pixel feather after
 Fusion import:</p>
-<p><img alt="image with 100-pixel feather in Fusion" src="../../images/image21.jpg" /></p>
+<p><img alt="image with 100-pixel feather in Fusion" src="../../_images/image21.jpg" /></p>
 <p>Once the mask file is built by <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code>, the source
 imagery may be imported into Fusion Pro by enabling the
 <code class="docutils literal notranslate"><span class="pre">havemask</span></code> masking mode in the Fusion GUI or specifying the
@@ -702,7 +697,7 @@ seen in the imagery project but all imagery from the coastline
 away from the island to the edge of the imagery is to be masked
 from view.</p>
 <p class="rubric" id="fusion-preview-window">Fusion Preview window:</p>
-<p><img alt="Fusion preview window" src="../../images/image02.jpg" /></p>
+<p><img alt="Fusion preview window" src="../../_images/image02.jpg" /></p>
 <p>The Fusion Preview window above displays the overall dimensions
 and source file extents for four images creating an imagery mosaic
 for the island of Oahu, Hawaii, USA. A virtual raster description
@@ -711,20 +706,20 @@ into the Fusion Preview window.</p>
 <p class="rubric">Importing the source imagery into Fusion Pro creates
 an image resource with imagery for the island and water
 (automask used):</p>
-<p><img alt="Island and water automask in Fusion" src="../../images/image11.jpg" /></p>
+<p><img alt="Island and water automask in Fusion" src="../../_images/image11.jpg" /></p>
 <p>Four <code class="docutils literal notranslate"><span class="pre">JPEG2000</span></code> images were grouped into one virtual mosaic for
 the image resource and a <code class="docutils literal notranslate"><span class="pre">khvr</span></code> mosaic description file was
 built with <code class="docutils literal notranslate"><span class="pre">gevirtualraster</span></code>. To create the custom mask we need
 to:</p>
 <ol class="arabic simple">
-<li>Direct <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> to use the source <code class="docutils literal notranslate"><span class="pre">khvr</span></code> file as the
+<li><p>Direct <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> to use the source <code class="docutils literal notranslate"><span class="pre">khvr</span></code> file as the
 base image to set the custom mask the same raster size and
-fully masks all imagery from view;</li>
-<li>Clip out the island of Oahu with a set of vector polygons so
-the island imagery will be visible;</li>
-<li>Feather along the specified polygon coastlines to facilitate
-smooth blending with other image resources (feather = 100);</li>
-<li>Write out the custom mask file.</li>
+fully masks all imagery from view;</p></li>
+<li><p>Clip out the island of Oahu with a set of vector polygons so
+the island imagery will be visible;</p></li>
+<li><p>Feather along the specified polygon coastlines to facilitate
+smooth blending with other image resources (feather = 100);</p></li>
+<li><p>Write out the custom mask file.</p></li>
 </ol>
 <p>Two examples will be included for this case demonstrating the
 effect of positive and negative feather values for feathering
@@ -771,11 +766,11 @@ Screenshots of the output mask and resulting Fusion image resource
 may be seen below.</p>
 <p class="rubric">View of the mask with a 100 pixel feather as seen in
 the GIMP photo editor:</p>
-<p><img alt="Mask with 100 pixel feather in GIMP" src="../../images/image09.jpg" /></p>
+<p><img alt="Mask with 100 pixel feather in GIMP" src="../../_images/image09.jpg" /></p>
 <p class="rubric">View of the Oahu, Hawaii, USA imagery in Fusion
 Preview after importing the custom mask with the image
 resource:</p>
-<p><img alt="Custom" src="../../images/image33.jpg" /></p>
+<p><img alt="Custom" src="../../_images/image33.jpg" /></p>
 <p>The custom mask file may now be imported into Fusion Pro with the
 source imagery by enabling the <code class="docutils literal notranslate"><span class="pre">havemask</span></code> masking mode in the
 Fusion Pro Resource Editor or by specifying the
@@ -826,11 +821,11 @@ Screenshots of the output mask and resulting Fusion image resource
 may be seen below.</p>
 <p class="rubric">View of the mask file with a -100 pixel feather as
 seen in the GIMP photo editor:</p>
-<p><img alt="Mask file of Oahu Hawaii in GIMP" src="../../images/image34.jpg" /></p>
+<p><img alt="Mask file of Oahu Hawaii in GIMP" src="../../_images/image34.jpg" /></p>
 <p class="rubric">View of the Oahu, Hawaii, USA imagery in Fusion
 Preview after importing the custom mask with the image
 resource:</p>
-<p><img alt="Oahu Hawaii in Fusion Preview" src="../../images/image28.jpg" /></p>
+<p><img alt="Oahu Hawaii in Fusion Preview" src="../../_images/image28.jpg" /></p>
 <p>The custom mask file may now be imported into Fusion Pro with the
 source imagery by enabling the <code class="docutils literal notranslate"><span class="pre">havemask</span></code> masking mode in the
 Fusion Pro Resource Editor or by specifying the
@@ -848,7 +843,7 @@ coastline and the external edges of the mask. We will first see the
 imagery we will be working with in this example.</p>
 <p class="rubric">View from the Fusion Preview GUI with imagery for
 California, USA along the coastline:</p>
-<p><img alt="Fusiin Preview GUI in California" src="../../images/image41.jpg" /></p>
+<p><img alt="Fusiin Preview GUI in California" src="../../_images/image41.jpg" /></p>
 <p>Forty-two source files of 15-meter imagery have been grouped into
 one virtual raster to build a new imagery resource. The source
 images along the interior of California fully contain usable
@@ -857,11 +852,11 @@ Pacific Ocean includes water. The goal will be to mask the water
 from view while displaying imagery for the land. The workflow will
 be as follows:</p>
 <ol class="arabic simple">
-<li>Create the overall mask for the image</li>
-<li>Apply a set of coastal polygons to demarcate the coastline</li>
-<li>Feather the coastline and apply the feather to the mask border
-as well</li>
-<li>Write out the mask file</li>
+<li><p>Create the overall mask for the image</p></li>
+<li><p>Apply a set of coastal polygons to demarcate the coastline</p></li>
+<li><p>Feather the coastline and apply the feather to the mask border
+as well</p></li>
+<li><p>Write out the mask file</p></li>
 </ol>
 <p>In this case, we will create three different types of masks with
 coastline data - one where the coastlines and edges have the same
@@ -920,10 +915,10 @@ resulting image resource after the mask is applied are available
 below.</p>
 <p class="rubric">View of the mask file built in Example A as seen in
 the GIMP photo editing tool:</p>
-<p><img alt="Example A mask file in GIMP" src="../../images/image13.jpg" /></p>
+<p><img alt="Example A mask file in GIMP" src="../../_images/image13.jpg" /></p>
 <p class="rubric">View of the imagery resource within the Fusion Preview
 window after the custom mask is imported:</p>
-<p><img alt="Finished image after custom mask import" src="../../images/image05.jpg" /></p>
+<p><img alt="Finished image after custom mask import" src="../../_images/image05.jpg" /></p>
 <p>The custom mask file may now be imported into Fusion Pro with the
 source imagery by enabling the <code class="docutils literal notranslate"><span class="pre">havemask</span></code> masking mode in the
 Fusion Pro Resource Editor or by specifying the
@@ -947,29 +942,29 @@ border for the overall image, one for the coastlines - and then
 one operation to merge the mask files together.</p>
 <p>The <strong>command templates</strong> are as follows:</p>
 <ol class="arabic">
-<li><p class="first"><strong>Create a ‘picture frame’ mask for the overall image:</strong></p>
+<li><p><strong>Create a ‘picture frame’ mask for the overall image:</strong></p>
 <p><code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span> <span class="pre">--feather</span> <span class="pre">-100</span> <span class="pre">--feather_border</span> <span class="pre">1</span> <span class="pre">--base_image</span> <span class="pre">source_image.tif</span> <span class="pre">--output_mask</span> <span class="pre">borderfeather-mask.tif</span></code></p>
 </li>
-<li><p class="first"><strong>Create a coastline mask:</strong></p>
+<li><p><strong>Create a coastline mask:</strong></p>
 <p><code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span> <span class="pre">--base_image</span> <span class="pre">source_image.tif</span> <span class="pre">--feather</span> <span class="pre">-300</span> <span class="pre">--or_mask</span> <span class="pre">world_coastlines_4326.shp</span> <span class="pre">--output</span> <span class="pre">coastline-mask.tif</span></code></p>
 </li>
-<li><p class="first"><strong>Merge the two masks together into the final mask:</strong></p>
+<li><p><strong>Merge the two masks together into the final mask:</strong></p>
 <p><code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span> <span class="pre">--base_mask</span> <span class="pre">coastline-mask.tif</span> <span class="pre">--and_neg_mask</span> <span class="pre">borderfeather-mask.tif</span> <span class="pre">--output_mask</span> <span class="pre">source_image-mask.tif</span></code></p>
 </li>
 </ol>
 <p>Screen shots of each mask file generated by the three steps are
 included below as a reference.</p>
 <p class="rubric">Picture frame border mask:</p>
-<p><img alt="picture frame border mask" src="../../images/image30.jpg" /></p>
+<p><img alt="picture frame border mask" src="../../_images/image30.jpg" /></p>
 <p class="rubric">Coastline mask:</p>
-<p><img alt="Example A mask file in GIMP" src="../../images/image13.jpg" /></p>
+<p><img alt="Example A mask file in GIMP" src="../../_images/image13.jpg" /></p>
 <p class="rubric">Finished, merged mask of coastline and border feather:</p>
-<p><img alt="finished mask of coastline and border feather" src="../../images/image07.jpg" /></p>
+<p><img alt="finished mask of coastline and border feather" src="../../_images/image07.jpg" /></p>
 <p>Console output for building these masks are included below for
 reference along with the time to build and output file sizes for
 each of the three masks.</p>
 <ol class="arabic">
-<li><p class="first"><strong>Create a ‘picture frame’ mask for the overall image:</strong></p>
+<li><p><strong>Create a ‘picture frame’ mask for the overall image:</strong></p>
 <p><code class="docutils literal notranslate"><span class="pre">jcain&#64;machine123:/gevol-local/src/gepolymaskgen-howto$</span> <span class="pre">time</span> <span class="pre">gepolymaskgen</span> <span class="pre">--feather</span> <span class="pre">-100</span> <span class="pre">--feather_border</span> <span class="pre">1</span> <span class="pre">--base_image</span> <span class="pre">glandsat_15m_california_bay_area.khvr</span> <span class="pre">--output_mask</span> <span class="pre">california_borderfeather-mask.tif</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">Fusion</span> <span class="pre">Notice:</span> <span class="pre">Feather</span> <span class="pre">-100</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">Fusion</span> <span class="pre">Notice:</span> <span class="pre">Feather</span> <span class="pre">border</span> <span class="pre">1</span></code></p>
@@ -994,7 +989,7 @@ each of the three masks.</p>
 <p><code class="docutils literal notranslate"><span class="pre">sys</span> <span class="pre">0m4.300s</span></code></p>
 <p>The resulting mask file is approximately 1 GB in file size.</p>
 </li>
-<li><p class="first"><strong>Create a coastline mask:</strong></p>
+<li><p><strong>Create a coastline mask:</strong></p>
 <p><code class="docutils literal notranslate"><span class="pre">jcain&#64;machine123:/gevol-local/src/gepolymaskgen-howto$</span> <span class="pre">time</span> <span class="pre">gepolymaskgen</span> <span class="pre">--base_image</span> <span class="pre">glandsat_15m_california_bay_area.khvr</span> <span class="pre">--feather</span> <span class="pre">-300</span> <span class="pre">--or_mask</span> <span class="pre">world_coastlines_4326.shp</span> <span class="pre">--output</span> <span class="pre">california_coastline-mask.tif</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">Fusion</span> <span class="pre">Notice:</span> <span class="pre">Base</span> <span class="pre">image:</span> <span class="pre">glandsat_15m_california_bay_area.khvr</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">Fusion</span> <span class="pre">Notice:</span> <span class="pre">glandsat_15m_california_bay_area.khvr</span> <span class="pre">width:</span> <span class="pre">35840</span> <span class="pre">height:</span> <span class="pre">30720</span></code></p>
@@ -1022,7 +1017,7 @@ each of the three masks.</p>
 <p><code class="docutils literal notranslate"><span class="pre">sys</span> <span class="pre">0m15.340s</span></code></p>
 <p>The resulting mask file is approximately 1 GB in file size.</p>
 </li>
-<li><p class="first"><strong>Merge the two masks together into the final mask:</strong></p>
+<li><p><strong>Merge the two masks together into the final mask:</strong></p>
 <p><code class="docutils literal notranslate"><span class="pre">jcain&#64;machine123:/gevol-local/src/gepolymaskgen-howto$</span> <span class="pre">time</span> <span class="pre">gepolymaskgen</span> <span class="pre">--base_mask</span> <span class="pre">california_coastline-mask.tif</span> <span class="pre">--and_neg_mask</span> <span class="pre">california_borderfeather-mask.tif</span> <span class="pre">--output_mask</span> <span class="pre">glandsat_15m_california_bay_area-mask.tif</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">Fusion</span> <span class="pre">Notice:</span> <span class="pre">Base</span> <span class="pre">mask:</span> <span class="pre">california_coastline-mask.tif</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">Fusion</span> <span class="pre">Notice:</span> <span class="pre">california_coastline-mask.tif</span> <span class="pre">width:</span> <span class="pre">35840</span> <span class="pre">height:</span> <span class="pre">30720</span></code></p>
@@ -1042,10 +1037,10 @@ each of the three masks.</p>
 <p>The resulting mask file is approximately 1 GB in file size.</p>
 <p class="rubric">View of finished mask file feathering the
 coastlines and external edges of the image resource:</p>
-<p><img alt="finished mask of coastline and border feather" src="../../images/image07.jpg" /></p>
+<p><img alt="finished mask of coastline and border feather" src="../../_images/image07.jpg" /></p>
 <p class="rubric">View of finished image resource after importing
 custom mask:</p>
-<p><img alt="Finished image after custom mask import" src="../../images/image05.jpg" /></p>
+<p><img alt="Finished image after custom mask import" src="../../_images/image05.jpg" /></p>
 <p>The custom mask file may now be imported into Fusion Pro with
 the source imagery by enabling the <code class="docutils literal notranslate"><span class="pre">havemask</span></code> masking mode in
 the Fusion Pro Resource Editor or by specifying the
@@ -1104,10 +1099,10 @@ reference:</p>
 <p>The resulting mask will be approximately 1 GB in file size.</p>
 <p class="rubric">View of the finished mask within the GIMP photo
 editing tool:</p>
-<p><img alt="finished mask in GIMP" src="../../images/image32.jpg" /></p>
+<p><img alt="finished mask in GIMP" src="../../_images/image32.jpg" /></p>
 <p class="rubric">View of the imagery resource within the Fusion Preview
 window after importing the custom mask:</p>
-<p><img alt="Fusion preview window with custom mark import" src="../../images/image43.jpg" /></p>
+<p><img alt="Fusion preview window with custom mark import" src="../../_images/image43.jpg" /></p>
 <p>The custom mask file may now be imported into Fusion Pro with the
 source imagery by enabling the <code class="docutils literal notranslate"><span class="pre">havemask</span></code> masking mode in the
 Fusion Pro Resource Editor or by specifying the
@@ -1131,31 +1126,31 @@ created in Google Earth. Let’s first see a screenshot of imagery
 used for this example.</p>
 <p class="rubric" id="view-of-image-resource-in-fusion-preview-after-import-with-the-automask-tool">View of image resource in Fusion Preview after import
 with the automask tool:</p>
-<p><img alt="image in Fusion with automask" src="../../images/image16.jpg" /></p>
+<p><img alt="image in Fusion with automask" src="../../_images/image16.jpg" /></p>
 <p>Boundaries for the imported source files (<code class="docutils literal notranslate"><span class="pre">khvr</span></code>) are overlaid
 on the image for reference.</p>
 <p>The workflow for this example is different from the others since
 we need a <code class="docutils literal notranslate"><span class="pre">KML</span></code> file to specify which area in the image to
 remove from view. The general workflow will be:</p>
 <ol class="arabic simple">
-<li>Import the imagery into GEE Fusion Pro and build into an
-imagery project.</li>
-<li>Build and publish the imagery into a flyable 3D database.</li>
-<li>View the 3D database with Google Earth EC to QA the data.</li>
-<li>Draw an enclosed polygon in Google Earth EC that would mask the
-missing area of imagery from view.</li>
-<li>Build the custom mask with <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> to correctly
-feather the imagery edges and mask the missing imagery.</li>
-<li>Import the custom mask with the image resource.</li>
+<li><p>Import the imagery into GEE Fusion Pro and build into an
+imagery project.</p></li>
+<li><p>Build and publish the imagery into a flyable 3D database.</p></li>
+<li><p>View the 3D database with Google Earth EC to QA the data.</p></li>
+<li><p>Draw an enclosed polygon in Google Earth EC that would mask the
+missing area of imagery from view.</p></li>
+<li><p>Build the custom mask with <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> to correctly
+feather the imagery edges and mask the missing imagery.</p></li>
+<li><p>Import the custom mask with the image resource.</p></li>
 </ol>
 <p>Examples of what the imagery resource looks like as viewed in
 Google Earth EC are included below.</p>
 <p class="rubric">This image demonstrates how the image resource appears
 with the area of missing imagery:</p>
-<p><img alt="Missing imagery in GEEC" src="../../images/image23.jpg" /></p>
+<p><img alt="Missing imagery in GEEC" src="../../_images/image23.jpg" /></p>
 <p class="rubric">This image is a screenshot after a polygon was drawn
 over the entire area of missing imagery:</p>
-<p><img alt="Polygon on mising imagery" src="../../images/image03.jpg" /></p>
+<p><img alt="Polygon on mising imagery" src="../../_images/image03.jpg" /></p>
 <p>The polygon area was set to 50% opacity in order to show the
 polygon fully covers the area of missing imagery with a little
 overlap into the usable imagery. This polygon will be stored in
@@ -1163,15 +1158,15 @@ the <strong>Places</strong> panel of Google Earth EC and must be saved out from
 Google Earth as an independent <code class="docutils literal notranslate"><span class="pre">KML</span></code> file that can then be
 utilized with <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code>.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Additional information about creating polygons within
+<p class="admonition-title">Note</p>
+<p>Additional information about creating polygons within
 Google Earth is also freely available with the Google Earth
 Outreach tutorials, directly accessible at
 <a class="reference external" href="http://earth.google.com/outreach/tutorial_annotate.html#addpolygons">http://earth.google.com/outreach/tutorial_annotate.html#addpolygons</a>.</p>
 </div>
 <div class="admonition tip">
-<p class="first admonition-title">Tip</p>
-<p class="last">Each polygon correction should be saved out as a
+<p class="admonition-title">Tip</p>
+<p>Each polygon correction should be saved out as a
 <code class="docutils literal notranslate"><span class="pre">KML</span></code> file directly (four polygons saved to four separate
 <code class="docutils literal notranslate"><span class="pre">KML</span></code> files) as these will be separate mask operations within
 <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code>.</p>
@@ -1229,12 +1224,12 @@ Screenshots of the finished mask and the resulting image resource
 are included below.</p>
 <p class="rubric">Custom mask which masks missing interior imagery with
 feathered edge as viewed in the GIMP photo editing tool:</p>
-<p><img alt="Custom mask with missing imagery in GIMP" src="../../images/image08.jpg" /></p>
+<p><img alt="Custom mask with missing imagery in GIMP" src="../../_images/image08.jpg" /></p>
 <p class="rubric">Resulting image resource built by Fusion after the
 custom mask is imported. Lower resolution imagery from the
 resource under the 15-meter imagery will be visible from the
 internal area masked from view:</p>
-<p><img alt="Image in Fusion after custom mask import" src="../../images/image22.jpg" /></p>
+<p><img alt="Image in Fusion after custom mask import" src="../../_images/image22.jpg" /></p>
 <p>The custom mask file may now be imported into Fusion Pro with the
 source imagery by enabling the <code class="docutils literal notranslate"><span class="pre">havemask</span></code> masking mode in the
 Fusion Pro Resource Editor or by specifying the
@@ -1243,8 +1238,8 @@ Fusion Pro Resource Editor or by specifying the
 information about enabling the <code class="docutils literal notranslate"><span class="pre">havemask</span></code> mask mode for an image
 resource.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This mask file could also be created in two steps as
+<p class="admonition-title">Note</p>
+<p>This mask file could also be created in two steps as
 well - the first step to create the base mask file (<strong>picture
 frame</strong>) that provides a feathered edge for the overall image,
 and the second step to apply the internal mask with the
@@ -1261,10 +1256,10 @@ image (<code class="docutils literal notranslate"><span class="pre">--base_image
 the mask built in the first step.</p>
 <p>The <strong>command templates</strong> to create the mask are:</p>
 <ol class="arabic">
-<li><p class="first"><strong>Create the edge mask (picture frame):</strong></p>
+<li><p><strong>Create the edge mask (picture frame):</strong></p>
 <p><code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span> <span class="pre">--feather</span> <span class="pre">-100</span> <span class="pre">--feather_border</span> <span class="pre">1</span> <span class="pre">--base_image</span> <span class="pre">source_imagery.khvr</span> <span class="pre">--invert</span> <span class="pre">--output_mask</span> <span class="pre">source_imagery-basemask.tif</span></code></p>
 </li>
-<li><p class="first"><strong>Mask the area of missing imagery from the mask built in the
+<li><p><strong>Mask the area of missing imagery from the mask built in the
 previous step:</strong></p>
 <p><code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span> <span class="pre">--base_mask</span> <span class="pre">source_imagery-basemask.tif</span> <span class="pre">--feather</span> <span class="pre">50</span> <span class="pre">--and_neg_mask</span> <span class="pre">missing-imagery-area.kml</span> <span class="pre">--output_mask</span> <span class="pre">source_imagery-mask.tif</span></code></p>
 </li>
@@ -1272,7 +1267,7 @@ previous step:</strong></p>
 <p>Console output for creating the mask file in one step is as
 follows:</p>
 <ol class="arabic">
-<li><p class="first"><strong>Create the edge mask (picture frame):</strong></p>
+<li><p><strong>Create the edge mask (picture frame):</strong></p>
 <p><code class="docutils literal notranslate"><span class="pre">jcain&#64;machine123:/gevol-local/src/gepolymaskgen-howto$</span> <span class="pre">time</span> <span class="pre">gepolymaskgen</span> <span class="pre">--feather</span> <span class="pre">-100</span> <span class="pre">--feather_border</span> <span class="pre">1</span> <span class="pre">--base_image</span> <span class="pre">glandsat_15m_bhutan_missing_imagery.khvr</span> <span class="pre">--invert</span> <span class="pre">--output_mask</span> <span class="pre">glandsat_15m_bhutan_missing_imagery-basemask.tif</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">Fusion</span> <span class="pre">Notice:</span> <span class="pre">Feather</span> <span class="pre">-100</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">Fusion</span> <span class="pre">Notice:</span> <span class="pre">Feather</span> <span class="pre">border</span> <span class="pre">1</span></code></p>
@@ -1300,9 +1295,9 @@ follows:</p>
 <p>The resulting mask will be approximately 900 MB in filesize.</p>
 <p class="rubric" id="gepolymaskgen-viewed-gimp">Edge mask created with gepolymaskgen as viewed in
 the GIMP photo editing tool:</p>
-<p><img alt="gepolymaskgen Edge mask in GIMP" src="../../images/image06.jpg" /></p>
+<p><img alt="gepolymaskgen Edge mask in GIMP" src="../../_images/image06.jpg" /></p>
 </li>
-<li><p class="first"><strong>Mask the area of missing imagery from the mask built in the
+<li><p><strong>Mask the area of missing imagery from the mask built in the
 previous step:</strong></p>
 <p><code class="docutils literal notranslate"><span class="pre">jcain&#64;machine123:/gevol-local/src/gepolymaskgen-howto$</span> <span class="pre">time</span> <span class="pre">gepolymaskgen</span> <span class="pre">--base_mask</span> <span class="pre">glandsat_15m_bhutan_missing_imagery-basemask.tif</span> <span class="pre">--feather</span> <span class="pre">50</span> <span class="pre">--and_neg_mask</span> <span class="pre">bhutan.kml</span> <span class="pre">--output_mask</span> <span class="pre">glandsat_15m_bhutan_missing_imagery-mask.tif</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">Fusion</span> <span class="pre">Notice:</span> <span class="pre">Base</span> <span class="pre">mask:</span> <span class="pre">glandsat_15m_bhutan_missing_imagery-basemask.tif</span></code></p>
@@ -1336,7 +1331,7 @@ filesize.</p>
 <p class="rubric">Merged mask built with gepolymaskgen with feathered
 edge and internal image masking for area of missing imagery
 as viewed in the GIMP photo editing tool:</p>
-<p><img alt="gepolymaskgen merged mask in GIMP" src="../../images/image08.jpg" /></p>
+<p><img alt="gepolymaskgen merged mask in GIMP" src="../../_images/image08.jpg" /></p>
 <p>The custom mask file may now be imported into Fusion Pro with
 the source imagery by enabling the <code class="docutils literal notranslate"><span class="pre">havemask</span></code> masking mode in
 the Fusion Pro Resource Editor or by specifying the
@@ -1357,13 +1352,13 @@ the Google Earth Enterprise Fusion Pro Tutorial is a good example
 <p class="rubric">Screenshot of the usgsLanSat.tif source file imported
 into Fusion Pro viewed with no mask. Note the areas of fill
 data surrounding the imagery:</p>
-<p><img alt="usgsLanSat.tif in Fusion pro with no mask" src="../../images/image19.jpg" /></p>
+<p><img alt="usgsLanSat.tif in Fusion pro with no mask" src="../../_images/image19.jpg" /></p>
 <p class="rubric">Screenshot of the usgsLanSat.tif imagery after being
 imported into Fusion Pro with a mask automatically computed:</p>
-<p><img alt="usgsLanSat.tif in Fusion pro with a mask" src="../../images/image15.jpg" /></p>
+<p><img alt="usgsLanSat.tif in Fusion pro with a mask" src="../../_images/image15.jpg" /></p>
 <p class="rubric">Screenshot of the imported SFBayAreaLanSat image
 resource in Fusion after the custom mask is created:</p>
-<p><img alt="SFBayAreaLanSat image in fusion with custom mask" src="../../images/image12.jpg" /></p>
+<p><img alt="SFBayAreaLanSat image in fusion with custom mask" src="../../_images/image12.jpg" /></p>
 <p>Here, the Fusion Pro automask function is needed to build a mask
 for the source imagery to mask all Fill Data; however, the imagery
 also includes imagery for the water which should be, ideally,
@@ -1379,30 +1374,30 @@ Appendixes <a class="reference internal" href="#locating-mask-files-format-data-
 <code class="docutils literal notranslate"><span class="pre">gemaskgen</span></code>.</p>
 <p>The workflow to accomplish this custom mask will be:</p>
 <ol class="arabic simple">
-<li>Import the source imagery as a Fusion Pro image resource</li>
-<li>Use the mask file built during the image resource import as the
-base mask for <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code></li>
-<li>Mask the imagery to the coastline and write out the new mask</li>
-<li>Enable the <code class="docutils literal notranslate"><span class="pre">havemask</span></code> mask mode for the image resource to
-import the custom mask</li>
+<li><p>Import the source imagery as a Fusion Pro image resource</p></li>
+<li><p>Use the mask file built during the image resource import as the
+base mask for <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code></p></li>
+<li><p>Mask the imagery to the coastline and write out the new mask</p></li>
+<li><p>Enable the <code class="docutils literal notranslate"><span class="pre">havemask</span></code> mask mode for the image resource to
+import the custom mask</p></li>
 </ol>
 <p>The <strong>command templates</strong> for building this custom mask will be:</p>
 <ol class="arabic">
-<li><p class="first"><strong>Locate the mask computed during the image resource build:</strong></p>
+<li><p><strong>Locate the mask computed during the image resource build:</strong></p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gequery --outfiles
 Resources/Imagery/YourImageResource.kiasset/maskgen.kia
 /gevol/assets/Resources/Imagery/YourImageResource.kiasset/maskgen.kia/ver001/mask.tif
 </pre></div>
 </div>
 </li>
-<li><p class="first"><strong>Create an inverted version of the mask:</strong></p>
+<li><p><strong>Create an inverted version of the mask:</strong></p>
 <p><code class="docutils literal notranslate"><span class="pre">/gevol/assets/Resources/Imagery/YourImageResource.kiasset/maskgen.kia/ver001/mask.tif</span> <span class="pre">--invert</span> <span class="pre">--output_mask</span> <span class="pre">/gevol/src/path/to/source/imagery-basemaskinverted.tif</span></code></p>
 </li>
-<li><p class="first"><strong>Create a coastline mask using the mask as a base image:</strong></p>
+<li><p><strong>Create a coastline mask using the mask as a base image:</strong></p>
 <p><code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span> <span class="pre">--base_image</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">/gevol/src/path/to/source/imagery-basemaskinverted.tif</span> <span class="pre">--invert</span> <span class="pre">--feather</span> <span class="pre">100</span> <span class="pre">--and_neg_mask</span> <span class="pre">/gevol/src/coastlines.shp</span> <span class="pre">--output_mask</span> <span class="pre">/gevol/src/path/to/source/imagery-coastlinesinverted.tif</span></code></p>
 </li>
-<li><p class="first"><strong>Merge the two mask files to the final custom mask:</strong></p>
+<li><p><strong>Merge the two mask files to the final custom mask:</strong></p>
 <p><code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span> <span class="pre">--base_mask</span> <span class="pre">/gevol/src/path/to/source/imagery-basemaskinverted.tif</span> <span class="pre">--invert</span> <span class="pre">--and_neg_mask</span> <span class="pre">/gevol/src/path/to/source/imagery-coastlinesinverted.tif</span> <span class="pre">--output_mask</span> <span class="pre">/gevol/src/path/to/source/imagery-mask.tif</span></code></p>
 <p>The resulting <code class="docutils literal notranslate"><span class="pre">imagery-mask.tif</span></code> custom mask may then be
 imported with the source imagery and applied to the image
@@ -1415,16 +1410,16 @@ the coastlines with <code class="docutils literal notranslate"><span class="pre"
 imagery resource built during the Google Earth Enterprise Fusion
 Tutorial.</p>
 <ol class="arabic">
-<li><p class="first"><strong>Locate the computed mask file built when SFBayAreaLanSat
+<li><p><strong>Locate the computed mask file built when SFBayAreaLanSat
 built by gemaskgen</strong></p>
 <p><code class="docutils literal notranslate"><span class="pre">jcain&#64;machine123:/gevol-local/gepolymaskgen$</span> <span class="pre">gequery</span> <span class="pre">--infiles</span> <span class="pre">Resources/Imagery/SFBayAreaLanSat.kiasset/maskproduct.kia</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">/gevol-local/gepolymaskgen/Resources/Imagery/SFBayAreaLanSat.kiasset/product.kia/ver001/raster.kip</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">/gevol-local/gepolymaskgen/Resources/Imagery/SFBayAreaLanSat.kiasset/maskgen.kia/ver002/mask.tif</span></code></p>
 </li>
-<li><p class="first"><strong>Create a custom mask with gepolymaskgen using the gemaskgen base
+<li><p><strong>Create a custom mask with gepolymaskgen using the gemaskgen base
 mask and mask to the coastlines (three steps)</strong></p>
 <ol class="loweralpha simple">
-<li>Invert the mask file built during the Fusion Pro import:</li>
+<li><p>Invert the mask file built during the Fusion Pro import:</p></li>
 </ol>
 <p><code class="docutils literal notranslate"><span class="pre">jcain&#64;machine123:/gevol-local/gepolymaskgen$</span> <span class="pre">sudo</span></code><strong>``/opt/google/bin/gepolymaskgen –base_mask /gevol-local/gepolymaskgen/Resources/Imagery/SFBayAreaLanSat.kiasset/maskgen.kia/ver002/mask.tif –invert –output_mask /opt/google/share/tutorials/fusion/Imagery/usgsLanSat-invertbasemask.tif``</strong></p>
 <p><code class="docutils literal notranslate"><span class="pre">Fusion</span> <span class="pre">Notice:</span> <span class="pre">Base</span> <span class="pre">mask:</span> <span class="pre">/gevol-local/gepolymaskgen/Resources/Imagery/SFBayAreaLanSat.kiasset/maskgen.kia/ver002/mask.tif</span></code></p>
@@ -1439,7 +1434,7 @@ mask and mask to the coastlines (three steps)</strong></p>
 <p><code class="docutils literal notranslate"><span class="pre">Fusion</span> <span class="pre">Notice:</span> <span class="pre">Saving</span> <span class="pre">mask</span> <span class="pre">to</span> <span class="pre">/opt/google/share/tutorials/fusion/Imagery/usgsLanSat-invertbasemask.tif.</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">Fusion</span> <span class="pre">Notice:</span> <span class="pre">Writing</span> <span class="pre">alpha</span> <span class="pre">file</span> <span class="pre">/opt/google/share/tutorials/fusion/Imagery/usgsLanSat-invertbasemask.tif</span></code></p>
 <ol class="loweralpha simple" start="2">
-<li>Create a second mask file with the coastlines, inverted:</li>
+<li><p>Create a second mask file with the coastlines, inverted:</p></li>
 </ol>
 <p><code class="docutils literal notranslate"><span class="pre">jcain&#64;machine123:/gevol-local/gepolymaskgen$</span> <span class="pre">sudo</span></code><strong>``/opt/google/bin/gepolymaskgen –base_image /gevol-local/gepolymaskgen/Resources/Imagery/SFBayAreaLanSat.kiasset/maskgen.kia/ver002/mask.tif –invert –feather 50 –and_neg_mask /gevol-local/src/gepolymaskgen-howto/world_coastlines_4326.shp –output_mask /opt/google/share/tutorials/fusion/Imagery/usgsLanSat-invertcoastmask.tif``</strong></p>
 <p><code class="docutils literal notranslate"><span class="pre">Fusion</span> <span class="pre">Notice:</span> <span class="pre">Base</span> <span class="pre">image:</span> <span class="pre">/gevol-local/gepolymaskgen/Resources/Imagery/SFBayAreaLanSat.kiasset/maskgen.kia/ver002/mask.tif</span></code></p>
@@ -1466,7 +1461,7 @@ mask and mask to the coastlines (three steps)</strong></p>
 <p><code class="docutils literal notranslate"><span class="pre">Fusion</span> <span class="pre">Notice:</span> <span class="pre">Saving</span> <span class="pre">mask</span> <span class="pre">to</span> <span class="pre">/opt/google/share/tutorials/fusion/Imagery/usgsLanSat-invertcoastmask.tif.</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">Fusion</span> <span class="pre">Notice:</span> <span class="pre">Writing</span> <span class="pre">alpha</span> <span class="pre">file</span> <span class="pre">/opt/google/share/tutorials/fusion/Imagery/usgsLanSat-invertcoastmask.tif</span></code></p>
 <ol class="loweralpha simple" start="3">
-<li>Construct the final mask by merging the two mask files:</li>
+<li><p>Construct the final mask by merging the two mask files:</p></li>
 </ol>
 <p><code class="docutils literal notranslate"><span class="pre">jcain&#64;machine123:/gevol-local/gepolymaskgen$</span> <span class="pre">sudo</span></code><strong>``/opt/google/bin/gepolymaskgen –base_mask /opt/google/share/tutorials/fusion/Imagery/usgsLanSat-invertbasemask.tif –invert –and_neg_mask /opt/google/share/tutorials/fusion/Imagery/usgsLanSat-invertcoastmask.tif –output_mask /opt/google/share/tutorials/fusion/Imagery/usgsLanSat-mask.tif``</strong></p>
 <p><code class="docutils literal notranslate"><span class="pre">Fusion</span> <span class="pre">Notice:</span> <span class="pre">Base</span> <span class="pre">mask:</span> <span class="pre">/opt/google/share/tutorials/fusion/Imagery/usgsLanSat-invertbasemask.tif</span></code></p>
@@ -1490,13 +1485,13 @@ included below for reference. Each mask file is approximately 50 MB
 in file size.</p>
 <p class="rubric">Mask computed by gemaskgen during SFBayAreaLanSat
 image resource import:</p>
-<p><img alt="mask by gemaskgen during SFBayAreaLanSat import" src="../../images/image18.jpg" /></p>
+<p><img alt="mask by gemaskgen during SFBayAreaLanSat import" src="../../_images/image18.jpg" /></p>
 <p class="rubric">Step A: Inverted base mask:</p>
-<p><img alt="Inverted base mask" src="../../images/image25.jpg" /></p>
+<p><img alt="Inverted base mask" src="../../_images/image25.jpg" /></p>
 <p class="rubric">Step B: Inverted coastlines mask:</p>
-<p><img alt="Inverted coastlines mask" src="../../images/image20.jpg" /></p>
+<p><img alt="Inverted coastlines mask" src="../../_images/image20.jpg" /></p>
 <p class="rubric">Step C: Merged, finished custom mask:</p>
-<p><img alt="merged custom mask" src="../../images/image01.jpg" /></p>
+<p><img alt="merged custom mask" src="../../_images/image01.jpg" /></p>
 <p>The custom mask may now be imported into Google Earth Enterprise
 Fusion Pro with the image resource by enabling the <code class="docutils literal notranslate"><span class="pre">havemask</span></code>
 mask mode.</p>
@@ -1504,7 +1499,7 @@ mask mode.</p>
 about importing the new custom mask with an image resource.</p>
 <p class="rubric">A screenshot of the SFBayAreaLanSat image resource
 with the custom mask is viewable below:</p>
-<p><img alt="SFBayAreaLanSat image with custom mask" src="../../images/image12.jpg" /></p>
+<p><img alt="SFBayAreaLanSat image with custom mask" src="../../_images/image12.jpg" /></p>
 <p>This example workflow utilized the mask file automatically
 computed by Fusion Pro during the image resource import. By
 default, the mask files created by <code class="docutils literal notranslate"><span class="pre">gemaskgen</span></code> will typically be
@@ -1537,129 +1532,114 @@ on the command line.</p>
 <p class="rubric" id="enable-havemask-new-image-resource">Example 1: Enable havemask mode in the Fusion GUI for
 a new image resource</p>
 <ol class="arabic">
-<li><p class="first">Move the custom mask file to the same folder as the source file
-for the image.</p>
-</li>
-<li><p class="first">Rename the custom mask file to be the same file name as the
+<li><p>Move the custom mask file to the same folder as the source file
+for the image.</p></li>
+<li><p>Rename the custom mask file to be the same file name as the
 source image file with a <code class="docutils literal notranslate"><span class="pre">-mask.tif</span></code> extension.</p>
 <p>For example, if the <code class="docutils literal notranslate"><span class="pre">/gevol/src/imagery/example.tif</span></code> is the
 source file, then the custom mask must be:</p>
 <p><code class="docutils literal notranslate"><span class="pre">/gevol/src/imagery/example-mask.tif</span></code></p>
 </li>
-<li><p class="first">Load the Fusion GUI Asset Manager:</p>
-<p><img alt="Fusion GUI Asset Manager" src="../../images/image14.jpg" /></p>
+<li><p>Load the Fusion GUI Asset Manager:</p>
+<p><img alt="Fusion GUI Asset Manager" src="../../_images/image14.jpg" /></p>
 </li>
-<li><p class="first">Start a new image resource and specify the source file,
-provider, and acquisition date.</p>
-</li>
-<li><p class="first">Set the <strong>Mask Type</strong> to Have Mask from the <strong>Mask Options</strong> drop-down
+<li><p>Start a new image resource and specify the source file,
+provider, and acquisition date.</p></li>
+<li><p>Set the <strong>Mask Type</strong> to Have Mask from the <strong>Mask Options</strong> drop-down
 menu.</p>
-<p><img alt="Mask Options drop down menu" src="../../images/image17.jpg" /></p>
+<p><img alt="Mask Options drop down menu" src="../../_images/image17.jpg" /></p>
 </li>
-<li><p class="first">Save the image resource, specifying the location and name for
-the new image resource.</p>
-</li>
-<li><p class="first">Build the image resource.</p>
-</li>
-<li><p class="first">Once complete, load the newly built Fusion image resource into
+<li><p>Save the image resource, specifying the location and name for
+the new image resource.</p></li>
+<li><p>Build the image resource.</p></li>
+<li><p>Once complete, load the newly built Fusion image resource into
 the Preview window to view the results. Proceed building the
 image resource into an imagery project if the custom mask is
 satisfactory, or continue working on the custom mask and repeat
-the import process until satisfied with the custom mask.</p>
-</li>
+the import process until satisfied with the custom mask.</p></li>
 </ol>
 <p class="rubric" id="enable-havemask-command-line-new-image-resource">Example 2: Enable havemask mode by command line for a
 new image resource</p>
 <ol class="arabic">
-<li><p class="first">Move the custom mask file to the same folder as the source file
-for the image.</p>
-</li>
-<li><p class="first">Rename the custom mask file to be the same file name as the
+<li><p>Move the custom mask file to the same folder as the source file
+for the image.</p></li>
+<li><p>Rename the custom mask file to be the same file name as the
 source image file with a <code class="docutils literal notranslate"><span class="pre">-mask.tif</span></code> extension.</p>
 <p>For example, if the <code class="docutils literal notranslate"><span class="pre">/gevol/src/imagery/example.tif</span></code> is the
 source file, then the custom mask must be:</p>
 <p><code class="docutils literal notranslate"><span class="pre">/gevol/src/imagery/example-mask.tif</span></code></p>
 </li>
-<li><p class="first">On the command line, enter:</p>
+<li><p>On the command line, enter:</p>
 <p><code class="docutils literal notranslate"><span class="pre">genewimageryresource</span> <span class="pre">--havemask</span> <span class="pre">--sourcedate</span> <span class="pre">'0000-00-00'</span> <span class="pre">--provider</span> <span class="pre">'USGS'</span> <span class="pre">-o</span> <span class="pre">Resources/Imagery/Example-Imagery</span> <span class="pre">/gevol/src/imagery/example.tif</span></code></p>
 <p>replacing the provider, sourcedate and resource name to suit
 the imagery being imported.</p>
 </li>
-<li><p class="first">Build the image resource by entering:</p>
+<li><p>Build the image resource by entering:</p>
 <p><code class="docutils literal notranslate"><span class="pre">gebuild</span> <span class="pre">Resources/Imagery/Example-Imagery</span></code>on the command
 line.</p>
 </li>
-<li><p class="first">Once the image resource build is complete, load the newly built
+<li><p>Once the image resource build is complete, load the newly built
 Fusion image resource into the Preview window to view the
 results. Proceed building the image resource into an imagery
 project if the custom mask is satisfactory, or continue working
 on the custom mask and repeat the import process until
-satisfied with the custom mask.</p>
-</li>
+satisfied with the custom mask.</p></li>
 </ol>
 <p class="rubric" id="enable-havemask-existing-image-resource">Example 3: Enable havemask mode in the Fusion GUI for
 an existing image resource</p>
 <ol class="arabic">
-<li><p class="first">Move the custom mask file to the same folder as the source file
-for the image.</p>
-</li>
-<li><p class="first">Rename the custom mask file to be the same file name as the
+<li><p>Move the custom mask file to the same folder as the source file
+for the image.</p></li>
+<li><p>Rename the custom mask file to be the same file name as the
 source image file with a <code class="docutils literal notranslate"><span class="pre">-mask.tif</span></code> extension.</p>
 <p>For example, if the <code class="docutils literal notranslate"><span class="pre">/gevol/src/imagery/example.tif</span></code> is the source
 file, then the custom mask must be:</p>
 <p><code class="docutils literal notranslate"><span class="pre">/gevol/src/imagery/example-mask.tif</span></code></p>
 </li>
-<li><p class="first">Load the Fusion GUI Asset Manager:</p>
-<p><img alt="Fusion GUI Asset Manager" src="../../images/image14.jpg" /></p>
+<li><p>Load the Fusion GUI Asset Manager:</p>
+<p><img alt="Fusion GUI Asset Manager" src="../../_images/image14.jpg" /></p>
 </li>
-<li><p class="first">Double-click the image resource to which the
+<li><p>Double-click the image resource to which the
 custom mask will be applied, or right-click the image.
-resource and select <strong>Modify</strong></p>
-</li>
-<li><p class="first">When the Resource Editor loads, change the <strong>Mask Type</strong> to Have
+resource and select <strong>Modify</strong></p></li>
+<li><p>When the Resource Editor loads, change the <strong>Mask Type</strong> to Have
 Mask from the <strong>Mask Options</strong> drop-down menu.</p>
-<p><img alt="Mask Options drop down menu" src="../../images/image17.jpg" /></p>
+<p><img alt="Mask Options drop down menu" src="../../_images/image17.jpg" /></p>
 </li>
-<li><p class="first">Save the image resource.</p>
-</li>
-<li><p class="first">Build the image resource.</p>
-</li>
-<li><p class="first">Once the image resource build is complete, load the newly built
+<li><p>Save the image resource.</p></li>
+<li><p>Build the image resource.</p></li>
+<li><p>Once the image resource build is complete, load the newly built
 Fusion image resource into the Preview window to view the
 results. Proceed building the image resource into an imagery
 project if the custom mask is satisfactory, or continue working
 on the custom mask and repeat the import process until
-satisfied with the custom mask.</p>
-</li>
+satisfied with the custom mask.</p></li>
 </ol>
 <p class="rubric" id="enable-havemask-command-line-existing-image-resource">Example 4: Enable havemask mode by command line for an
 existing image resource</p>
 <ol class="arabic">
-<li><p class="first">Move the custom mask file to the same folder as the source file
-for the image.</p>
-</li>
-<li><p class="first">Rename the custom mask file to be the same file name as the
+<li><p>Move the custom mask file to the same folder as the source file
+for the image.</p></li>
+<li><p>Rename the custom mask file to be the same file name as the
 source image file with a <code class="docutils literal notranslate"><span class="pre">-mask.tif</span></code> extension.</p>
 <p>For example, if the <code class="docutils literal notranslate"><span class="pre">/gevol/src/imagery/example.tif</span></code> is the source
 file, then the custom mask must be:</p>
 <p><code class="docutils literal notranslate"><span class="pre">/gevol/src/imagery/example-mask.tif</span></code></p>
 </li>
-<li><p class="first">On the command line, enter:</p>
+<li><p>On the command line, enter:</p>
 <p><code class="docutils literal notranslate"><span class="pre">gemodifyimageryresource</span> <span class="pre">--havemask</span> <span class="pre">--sourcedate</span> <span class="pre">'0000-00-00'</span> <span class="pre">--provider</span> <span class="pre">'USGS'</span> <span class="pre">-o</span> <span class="pre">Resources/Imagery/Example-Imagery</span> <span class="pre">/gevol/src/imagery/example.tif</span></code></p>
 <p>replacing the provider, sourcedate and resource name to suit
 the imagery being imported.</p>
 </li>
-<li><p class="first">Build the image resource by entering
+<li><p>Build the image resource by entering
 <code class="docutils literal notranslate"><span class="pre">gebuild</span> <span class="pre">Resources/Imagery/Example-Imagery</span></code>on the command
-line.</p>
-</li>
-<li><p class="first">Once the image resource build is complete, load the newly built
+line.</p></li>
+<li><p>Once the image resource build is complete, load the newly built
 Fusion image resource into the Preview window to view the
 results. Proceed building the image resource into an imagery
 project if the custom mask is satisfactory, or continue working
 on the custom mask and repeat the import process until
-satisfied with the custom mask.</p>
-</li>
+satisfied with the custom mask.</p></li>
 </ol>
 <p class="rubric" id="locating-mask-files-format-data-asset-root">Appendix B: Locating mask files and Fusion format data
 in an Asset Root</p>
@@ -1766,12 +1746,12 @@ geinfo</p>
 <code class="docutils literal notranslate"><span class="pre">geinfo</span></code> capable of reporting metadata about source imagery and
 terrain files, including:</p>
 <ul class="simple">
-<li>Overall raster dimensions</li>
-<li>Pixel resolution</li>
-<li>Geographic location of the data</li>
-<li>Native projection or geographic coordinate system</li>
-<li>Number of bands in the file</li>
-<li>Band format (ex: 8-bit, 16-bit)</li>
+<li><p>Overall raster dimensions</p></li>
+<li><p>Pixel resolution</p></li>
+<li><p>Geographic location of the data</p></li>
+<li><p>Native projection or geographic coordinate system</p></li>
+<li><p>Number of bands in the file</p></li>
+<li><p>Band format (ex: 8-bit, 16-bit)</p></li>
 </ul>
 <p><code class="docutils literal notranslate"><span class="pre">geinfo</span></code> is able to read the same raster source formats that can
 be imported as Fusion image resources, including <code class="docutils literal notranslate"><span class="pre">khvr</span></code> (virtual
@@ -1794,14 +1774,16 @@ are listed near the top for quick reference.</p>
 <p><code class="docutils literal notranslate"><span class="pre">Raster</span> <span class="pre">Size:</span> <span class="pre">35840,30720</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">Extents:</span>&#160;&#160;&#160;&#160; <span class="pre">(ns)</span> <span class="pre">38.496093750000,35.859375000000</span></code></p>
 <blockquote>
-<div><code class="docutils literal notranslate"><span class="pre">(ew)</span> <span class="pre">-121.113281250000,-124.189453125000</span></code></div></blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">(ew)</span> <span class="pre">-121.113281250000,-124.189453125000</span></code></p>
+</div></blockquote>
 <p><code class="docutils literal notranslate"><span class="pre">Pixel</span> <span class="pre">Size:</span>&#160; <span class="pre">(xy)</span> <span class="pre">0.000085830688,-0.000085830688</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">Keyhole</span> <span class="pre">Normalized</span> <span class="pre">{</span></code></p>
 <blockquote>
 <div><p><code class="docutils literal notranslate"><span class="pre">Raster</span> <span class="pre">Size:</span> <span class="pre">35840,30720</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">Extents:</span>&#160;&#160;&#160;&#160; <span class="pre">(ns)</span> <span class="pre">38.496093750000,35.859375000000</span></code></p>
 <blockquote>
-<div><code class="docutils literal notranslate"><span class="pre">(ew)</span> <span class="pre">-121.113281250000,-124.189453125000</span></code></div></blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">(ew)</span> <span class="pre">-121.113281250000,-124.189453125000</span></code></p>
+</div></blockquote>
 </div></blockquote>
 <p><code class="docutils literal notranslate"><span class="pre">Pixel</span> <span class="pre">Size:</span>&#160; <span class="pre">(xy)</span> <span class="pre">0.000085830688,-0.000085830688</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">Top</span> <span class="pre">level:</span>&#160;&#160; <span class="pre">22</span></code></p>
@@ -1813,7 +1795,8 @@ are listed near the top for quick reference.</p>
 <blockquote>
 <div><p><code class="docutils literal notranslate"><span class="pre">SPHEROID[&quot;WGS</span> <span class="pre">84&quot;,6378137,298.257223563,</span></code></p>
 <blockquote>
-<div><code class="docutils literal notranslate"><span class="pre">AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],</span></code></div></blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],</span></code></p>
+</div></blockquote>
 <p><code class="docutils literal notranslate"><span class="pre">AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],</span></code></p>
 </div></blockquote>
 <p><code class="docutils literal notranslate"><span class="pre">PRIMEM[&quot;Greenwich&quot;,0],</span></code></p>
@@ -1828,13 +1811,16 @@ are listed near the top for quick reference.</p>
 <p><code class="docutils literal notranslate"><span class="pre">Center</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">(-122.6513672,</span>&#160; <span class="pre">37.1777344)</span> <span class="pre">(122d39'4.92&quot;W,</span> <span class="pre">37d10'39.84&quot;N)</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">Band</span> <span class="pre">1</span> <span class="pre">Block=2048x200</span> <span class="pre">Type=Byte,</span> <span class="pre">ColorInterp=Red</span></code></p>
 <blockquote>
-<div><code class="docutils literal notranslate"><span class="pre">NoData</span> <span class="pre">Value=0</span></code></div></blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">NoData</span> <span class="pre">Value=0</span></code></p>
+</div></blockquote>
 <p><code class="docutils literal notranslate"><span class="pre">Band</span> <span class="pre">2</span> <span class="pre">Block=2048x200</span> <span class="pre">Type=Byte,</span> <span class="pre">ColorInterp=Green</span></code></p>
 <blockquote>
-<div><code class="docutils literal notranslate"><span class="pre">NoData</span> <span class="pre">Value=0</span></code></div></blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">NoData</span> <span class="pre">Value=0</span></code></p>
+</div></blockquote>
 <p><code class="docutils literal notranslate"><span class="pre">Band</span> <span class="pre">3</span> <span class="pre">Block=2048x200</span> <span class="pre">Type=Byte,</span> <span class="pre">ColorInterp=Blue</span></code></p>
 <blockquote>
-<div><code class="docutils literal notranslate"><span class="pre">NoData</span> <span class="pre">Value=0</span></code></div></blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">NoData</span> <span class="pre">Value=0</span></code></p>
+</div></blockquote>
 <p><code class="docutils literal notranslate"><span class="pre">Band</span> <span class="pre">4</span> <span class="pre">Block=2048x200</span> <span class="pre">Type=Byte,</span> <span class="pre">ColorInterp=Alpha</span></code></p>
 <p>Multiplying the raster dimensions together (<code class="docutils literal notranslate"><span class="pre">35840</span> <span class="pre">x</span> <span class="pre">30720</span></code>)
 results in 1,101,004,800 which means a 1 GB (approximate) mask file
@@ -1861,10 +1847,10 @@ D</span></a>.</p>
 varies by the amount of the longest side. Some suggested
 dimensions are included below for reference.</p>
 <ul class="simple">
-<li>55,000 x 30,000</li>
-<li>60,000 x 35,000</li>
-<li>65,000 x 30,000</li>
-<li>70,000 x 27,000</li>
+<li><p>55,000 x 30,000</p></li>
+<li><p>60,000 x 35,000</p></li>
+<li><p>65,000 x 30,000</p></li>
+<li><p>70,000 x 27,000</p></li>
 </ul>
 <p>A substitute base image or mask file should be created if the
 source imagery is larger than these recommended dimensions, or if
@@ -1899,10 +1885,10 @@ Manager. To access the log file, load the Asset Manager and
 right-click on the desired image resource. Select  <strong>Current
 Version Properties</strong>,  then expand the <code class="docutils literal notranslate"><span class="pre">CHILD.KRMP</span></code> item
 until the <code class="docutils literal notranslate"><span class="pre">Maskgen.kia&amp;</span></code> entry is visible.</p>
-<p><img alt="maskgen version properties" src="../../images/image44.jpg" /></p>
+<p><img alt="maskgen version properties" src="../../_images/image44.jpg" /></p>
 <p>Click the logfile icon to the right of the
 <code class="docutils literal notranslate"><span class="pre">Maskgen.kia</span></code> entry to open the logfile.</p>
-<p><img alt="Maskgen Logfile diagram" src="../../images/image26.jpg" /></p>
+<p><img alt="Maskgen Logfile diagram" src="../../_images/image26.jpg" /></p>
 <p>The <code class="docutils literal notranslate"><span class="pre">gemaskgen</span></code> command executed by Fusion Pro during the image
 resource build is visible at the top of the log file on the line
 starting with <code class="docutils literal notranslate"><span class="pre">COMMAND</span></code>. This command may be utilized as a
@@ -1942,9 +1928,9 @@ mask masks out the San Francisco Bay which makes the
 low-resolution BlueMarble imagery visible (green).</p>
 <p class="rubric">SFBayAreaLanSat image resource as completed in Example
 Case 5:</p>
-<p><img alt="SFBayAreaLanSat image with custom mask" src="../../images/image12.jpg" /></p>
+<p><img alt="SFBayAreaLanSat image with custom mask" src="../../_images/image12.jpg" /></p>
 <p class="rubric">SFBayAreaLanSat image resource with automasking only:</p>
-<p><img alt="SFBayAreaLanSat image with automask" src="../../images/image27.jpg" /></p>
+<p><img alt="SFBayAreaLanSat image with automask" src="../../_images/image27.jpg" /></p>
 <p>One solution for this case is to manually modify the finished
 custom mask with a photo editing tool such as GIMP or Adobe
 Photoshop to alter the mask to show more or less imagery
@@ -1955,40 +1941,37 @@ image resource while still masking imagery to the California
 Coastline. Here is the workflow for manually modifying the mask
 file for the SFBayAreaLanSat image resource:</p>
 <ol class="arabic">
-<li><p class="first">Load the <code class="docutils literal notranslate"><span class="pre">usgsLanSat-mask.tif</span></code> mask file created from the <a class="reference internal" href="#custom-masks-gemaskgen-gepolymaskgen"><span class="std std-ref">Case 5
+<li><p>Load the <code class="docutils literal notranslate"><span class="pre">usgsLanSat-mask.tif</span></code> mask file created from the <a class="reference internal" href="#custom-masks-gemaskgen-gepolymaskgen"><span class="std std-ref">Case 5
 Example</span></a> into the photo editing
 application.</p>
-<p><img alt="merged custom mask" src="../../images/image01.jpg" /></p>
+<p><img alt="merged custom mask" src="../../_images/image01.jpg" /></p>
 </li>
-<li><p class="first">Select the paintbrush tool and set to paint with white
+<li><p>Select the paintbrush tool and set to paint with white
 fill(255). The pixel width, opacity, and feather value of the
-brush needed will vary for each mask.</p>
-</li>
-<li><p class="first">Brush out the entire San Francisco Bay to remove the bay
+brush needed will vary for each mask.</p></li>
+<li><p>Brush out the entire San Francisco Bay to remove the bay
 coastline mask.</p>
-<p><img alt="bay coastline mark removed" src="../../images/image04.jpg" /></p>
+<p><img alt="bay coastline mark removed" src="../../_images/image04.jpg" /></p>
 </li>
-<li><p class="first">Save the updated mask file to the same folder location as the
+<li><p>Save the updated mask file to the same folder location as the
 <code class="docutils literal notranslate"><span class="pre">usgsLanSat.tif</span></code> source image file for the SFBayAreaLanSat
 image
-resource<code class="docutils literal notranslate"><span class="pre">-</span> <span class="pre">/opt/google/share/tutorials/fusion/Imagery</span></code>.</p>
-</li>
-<li><p class="first">Modify the SFBayAreaLanSat image resource to enable the
+resource<code class="docutils literal notranslate"><span class="pre">-</span> <span class="pre">/opt/google/share/tutorials/fusion/Imagery</span></code>.</p></li>
+<li><p>Modify the SFBayAreaLanSat image resource to enable the
 <code class="docutils literal notranslate"><span class="pre">HaveMask</span></code> mask mode.</p>
 <p>Please see <a class="reference internal" href="#importing-custom-masks-imagery-terrain-gee-fusion"><span class="std std-ref">Appendix A</span></a>, Examples <a class="reference internal" href="#enable-havemask-existing-image-resource"><span class="std std-ref">3</span></a> and <a class="reference internal" href="#enable-havemask-command-line-existing-image-resource"><span class="std std-ref">4</span></a> for
 further details.</p>
 </li>
-<li><p class="first">Build the image resource to import the updated mask file.</p>
-</li>
-<li><p class="first">Load the SFBayAreaLanSat image resource into the Fusion Pro
+<li><p>Build the image resource to import the updated mask file.</p></li>
+<li><p>Load the SFBayAreaLanSat image resource into the Fusion Pro
 Preview.</p>
 <p class="rubric">usgsLanSat mask after mask updates to show the
 imagery for the San Francisco Bay:</p>
-<p><img alt="san francisco bay with usgsLanSat mask" src="../../images/image12.jpg" /></p>
+<p><img alt="san francisco bay with usgsLanSat mask" src="../../_images/image12.jpg" /></p>
 </li>
 </ol>
 <p class="rubric">usgsLanSat mask before mask edits:</p>
-<p><img alt="usgsLanSat before mask" src="../../images/image27.jpg" /></p>
+<p><img alt="usgsLanSat before mask" src="../../_images/image27.jpg" /></p>
 <p class="rubric" id="building-custom-masks-large-source-imagery">Appendix F: Building custom masks for large source
 imagery</p>
 <p>This is a special section intended for use when working with
@@ -2012,30 +1995,30 @@ generated and added after import.</p>
 pixels on one side or more than 2,000,000,000 total pixels with
 <code class="docutils literal notranslate"><span class="pre">geinfo</span></code> (See <a class="reference internal" href="#determining-source-file-raster-size-geinfo"><span class="std std-ref">Appendix C</span></a>);</p>
 <ol class="arabic simple">
-<li>Import the image resource with Fusion Pro.</li>
-<li>View the finished image resource in the Fusion Pro window to
+<li><p>Import the image resource with Fusion Pro.</p></li>
+<li><p>View the finished image resource in the Fusion Pro window to
 determine what type of masking may be needed so an appropriate
-example case may be referenced.</li>
-<li>Find the full paths to the imported Fusion-format <code class="docutils literal notranslate"><span class="pre">kip</span></code>
+example case may be referenced.</p></li>
+<li><p>Find the full paths to the imported Fusion-format <code class="docutils literal notranslate"><span class="pre">kip</span></code>
 folder for the imagery with the <code class="docutils literal notranslate"><span class="pre">gequery</span> <span class="pre">--outfiles</span> <span class="pre">command</span></code>
 (See <a class="reference internal" href="#locating-mask-files-format-data-asset-root"><span class="std std-ref">Appendix B</span></a>, <a class="reference internal" href="#locate-fusion-format-imagery-mask-files-image-resource"><span class="std std-ref">Example
-1</span></a>).</li>
-<li>Generate a stand-in base mask file with <code class="docutils literal notranslate"><span class="pre">gemaskgen</span></code> that
+1</span></a>).</p></li>
+<li><p>Generate a stand-in base mask file with <code class="docutils literal notranslate"><span class="pre">gemaskgen</span></code> that
 will construct an image less than 2,000,000,000 total pixels
 (See <a class="reference internal" href="#building-high-resolution-mask-files-gemaskgen"><span class="std std-ref">Appendix D</span></a> for creating the mask
 and <a class="reference internal" href="#determining-source-file-raster-size-geinfo"><span class="std std-ref">Appendix C</span></a> for recommended mask
-sizes).</li>
-<li>Construct a custom mask with <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> referencing the
+sizes).</p></li>
+<li><p>Construct a custom mask with <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> referencing the
 <strong>stand-in</strong> image from the <a class="reference internal" href="#custom-masks-gemaskgen-gepolymaskgen"><span class="std std-ref">Case 5 Example</span></a>
 as the <code class="docutils literal notranslate"><span class="pre">--base_image</span></code>. Reference one of the five example
-cases for additional steps in constructing the custom mask.</li>
-<li>Update the image resource configuration to enable <code class="docutils literal notranslate"><span class="pre">havemask</span></code>
+cases for additional steps in constructing the custom mask.</p></li>
+<li><p>Update the image resource configuration to enable <code class="docutils literal notranslate"><span class="pre">havemask</span></code>
 mode so the custom mask will be imported and applied to the
 image resource (See <a class="reference internal" href="#importing-custom-masks-imagery-terrain-gee-fusion"><span class="std std-ref">Appendix A</span></a>, Examples
-<a class="reference internal" href="#enable-havemask-existing-image-resource"><span class="std std-ref">3</span></a> and <a class="reference internal" href="#enable-havemask-command-line-existing-image-resource"><span class="std std-ref">4</span></a>).</li>
-<li>Build the image resource to commit the change and import the
+<a class="reference internal" href="#enable-havemask-existing-image-resource"><span class="std std-ref">3</span></a> and <a class="reference internal" href="#enable-havemask-command-line-existing-image-resource"><span class="std std-ref">4</span></a>).</p></li>
+<li><p>Build the image resource to commit the change and import the
 new custom mask, then view the image resource in the Fusion
-Preview window.</li>
+Preview window.</p></li>
 </ol>
 <p class="rubric" id="gepolymaskgen-help-menu">Appendix G: gepolymaskgen help menu</p>
 <p>A full copy of the help contents for <code class="docutils literal notranslate"><span class="pre">gepolymaskgen</span></code> is
@@ -2188,7 +2171,28 @@ Please note that ordering of arguments is important; they are applied in the ord
 </div>
 
 
+            <div class="clearer"></div>
           </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="googleMapsRasterBg.html"
+                        title="previous chapter">Google Maps raster background</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="manageMosaicsWithVirtualRasters.html"
+                        title="next chapter">Manage mosaics with virtual rasters</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -2206,12 +2210,13 @@ Please note that ordering of arguments is important; they are applied in the ord
           <a href="googleMapsRasterBg.html" title="Google Maps raster background"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" >Fusion Resources and Projects</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" >Fusion Resources and Projects</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Create custom masks</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Open GEE Contributors.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.1.
     </div>
   </body>
 </html>

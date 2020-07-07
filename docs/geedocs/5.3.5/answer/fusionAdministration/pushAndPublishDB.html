@@ -2,25 +2,27 @@
 
 <!doctype html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Push and publish databases &#8212; Google Earth Enterprise 5.3.5 documentation</title>
-    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
-    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../static/jquery.js"></script>
-    <script type="text/javascript" src="../../static/underscore.js"></script>
-    <script type="text/javascript" src="../../static/doctools.js"></script>
-    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Publish databases using disconnected publishing" href="publishDBWithDiscPublishing.html" />
     <link rel="prev" title="Configure your data locations" href="confDataLocation.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
-    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <script src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -36,38 +38,17 @@
           <a href="confDataLocation.html" title="Configure your data locations"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" accesskey="U">Fusion Administration</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" accesskey="U">Fusion Administration</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Push and publish databases</a></li> 
       </ul>
-    </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="confDataLocation.html"
-                        title="previous chapter">Configure your data locations</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="publishDBWithDiscPublishing.html"
-                        title="next chapter">Publish databases using disconnected publishing</a></p>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
+  <p><a class="reference internal" href="../../_images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../_images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="push-and-publish-databases">
 <h1>Push and publish databases<a class="headerlink" href="#push-and-publish-databases" title="Permalink to this headline">¶</a></h1>
 <div class="docutils container">
@@ -86,10 +67,10 @@ performed on Google Earth Enterprise server.</p>
 <p>Along with the GUI of both Fusion and GEE Server, you have the
 option of using the command line to push and publish databases.</p>
 <ul class="simple">
-<li><a class="reference internal" href="#push-databases"><span class="std std-ref">Push databases</span></a></li>
-<li><a class="reference internal" href="#publish-databases"><span class="std std-ref">Publish databases</span></a></li>
-<li><a class="reference internal" href="#unpublish-databases"><span class="std std-ref">Unpublish databases</span></a></li>
-<li><a class="reference internal" href="#using-command-line"><span class="std std-ref">Using the command line</span></a></li>
+<li><p><a class="reference internal" href="#push-databases"><span class="std std-ref">Push databases</span></a></p></li>
+<li><p><a class="reference internal" href="#publish-databases"><span class="std std-ref">Publish databases</span></a></p></li>
+<li><p><a class="reference internal" href="#unpublish-databases"><span class="std std-ref">Unpublish databases</span></a></p></li>
+<li><p><a class="reference internal" href="#using-command-line"><span class="std std-ref">Using the command line</span></a></p></li>
 </ul>
 <p class="rubric" id="push-databases">Push Databases</p>
 <p>After you define and build your database , you <em>push</em> your
@@ -98,34 +79,31 @@ appear on the Databases page of the Google Earth Enterprise Server
 Admin console, from which you can then publish them.</p>
 <p class="rubric" id="to-push-a-database">To push a database:</p>
 <ol class="arabic">
-<li><p class="first">Select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu. The Asset Manager
-appears.</p>
-</li>
-<li><p class="first">Navigate to the database that you want to publish.</p>
-</li>
-<li><p class="first">Right-click the name of the database, and select <strong>Push</strong> from the
+<li><p>Select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu. The Asset Manager
+appears.</p></li>
+<li><p>Navigate to the database that you want to publish.</p></li>
+<li><p>Right-click the name of the database, and select <strong>Push</strong> from the
 context menu.</p>
 <div class="admonition tip">
-<p class="first admonition-title">Tip</p>
-<p class="last">If the Push option is not available, it may be because the
+<p class="admonition-title">Tip</p>
+<p>If the Push option is not available, it may be because the
 database is still building.</p>
 </div>
 </li>
-<li><p class="first">The Push Database dialog appears.</p>
-<p><img alt="Push Database Dialog" src="../../images/dbasePush-full.png" /></p>
+<li><p>The Push Database dialog appears.</p>
+<p><img alt="Push Database Dialog" src="../../_images/dbasePush-full.png" /></p>
 <p>Select the server that you want to publish to from the <strong>Server
 Associations</strong> drop-down list. The most recent version of the
 selected database is the default selection on the <strong>Version</strong>
 drop-down list.</p>
 </li>
-<li><p class="first">Click <strong>Push</strong>. Google Earth Enterprise Fusion pushes the
+<li><p>Click <strong>Push</strong>. Google Earth Enterprise Fusion pushes the
 database to Google Earth Enterprise Server, and displays a
-success message when it is done.</p>
-</li>
+success message when it is done.</p></li>
 </ol>
 <div class="admonition tip">
-<p class="first admonition-title">Tip</p>
-<p class="last">If you get an error message, contact your Google Earth
+<p class="admonition-title">Tip</p>
+<p>If you get an error message, contact your Google Earth
 Enterprise Server administrator for help, or check
 Troubleshooting Push issues for more information.</p>
 </div>
@@ -137,32 +115,31 @@ Earth plugin (deprecated) for 3D databases or with the Google Maps
 API for 2D databases.</p>
 <p class="rubric">To publish a database:</p>
 <ol class="arabic">
-<li><p class="first">Access the Google Earth Enterprise Server Admin console in a
+<li><p>Access the Google Earth Enterprise Server Admin console in a
 browser window by going to <em>myserver.mydomainname</em>.com/admin,
 replacing <em>myserver</em> and <em>mydomainname</em> with your server and
-domain.</p>
-</li>
-<li><p class="first">Sign in with the default credentials or the username and
+domain.</p></li>
+<li><p>Sign in with the default credentials or the username and
 password assigned to you:</p>
 <ul class="simple">
-<li>Default username: <em>geapacheuser</em></li>
-<li>Default password: <em>geeadmin</em></li>
+<li><p>Default username: <em>geapacheuser</em></p></li>
+<li><p>Default password: <em>geeadmin</em></p></li>
 </ul>
 <div class="admonition tip">
-<p class="first admonition-title">Tip</p>
-<p class="last">If you do not know your username and password, contact your
+<p class="admonition-title">Tip</p>
+<p>If you do not know your username and password, contact your
 Google Earth Enterprise Server System Administrator.</p>
 </div>
 </li>
-<li><p class="first">Click <strong>Databases</strong> to display the list of databases pushed to
+<li><p>Click <strong>Databases</strong> to display the list of databases pushed to
 GEE Server.</p>
 <p>The list of databases appears <em>alphabetically</em>. Reverse the
-order by clicking the arrows at the top of the list: <img alt="GEE Server Database Page" src="../../images/databasesListOrder.png" /></p>
+order by clicking the arrows at the top of the list: <img alt="GEE Server Database Page" src="../../_images/databasesListOrder.png" /></p>
 <p>Your most recently pushed database is added to the list.</p>
-<p><img alt="Database list sort arrows" src="../../images/databaseServerList.png" /></p>
+<p><img alt="Database list sort arrows" src="../../_images/databaseServerList.png" /></p>
 <div class="admonition tip">
-<p class="first admonition-title">Tip</p>
-<p class="last">The <strong>Databases</strong> page displays ten pushed databases per
+<p class="admonition-title">Tip</p>
+<p>The <strong>Databases</strong> page displays ten pushed databases per
 page so you may need to click the right arrow in the
 top-right corner of the window to see the next page of
 databases if your database is added to a longer list. To
@@ -174,29 +151,25 @@ Note that this action merely removes the database from GEE Server
 and does not delete the database.</p>
 </div>
 </li>
-<li><p class="first">Check the box next to your pushed database. The <strong>Publish</strong>
+<li><p>Check the box next to your pushed database. The <strong>Publish</strong>
 button appears.</p>
-<p><img alt="GEE Server Publish dialog" src="../../images/Publishdialog.png" /></p>
+<p><img alt="GEE Server Publish dialog" src="../../_images/Publishdialog.png" /></p>
 </li>
-<li><p class="first">Specify a <strong>Publish point</strong>, which is where you access the
+<li><p>Specify a <strong>Publish point</strong>, which is where you access the
 database or portable. For example, if you specify
 <em>sanfrancisco</em>, it will be accessible from
-<em>myserver.mydomainname</em>.com/<em>sanfrancisco</em>.</p>
-</li>
-<li><p class="first">Specify the following options:</p>
+<em>myserver.mydomainname</em>.com/<em>sanfrancisco</em>.</p></li>
+<li><p>Specify the following options:</p>
 <ul class="simple">
-<li><strong>POI Search</strong> (Fusion databases with search data only)</li>
-<li><strong>Search Tabs</strong> (Fusion databases only)</li>
-<li><strong>Snippet profile</strong> (Fusion 3D databases only)</li>
+<li><p><strong>POI Search</strong> (Fusion databases with search data only)</p></li>
+<li><p><strong>Search Tabs</strong> (Fusion databases only)</p></li>
+<li><p><strong>Snippet profile</strong> (Fusion 3D databases only)</p></li>
 </ul>
 </li>
-<li><p class="first">Select a <strong>Virtual host</strong>.</p>
-</li>
-<li><p class="first">Optionally enable <strong>Serve WMS</strong>.</p>
-</li>
-<li><p class="first">Click the <strong>Publish</strong> button. The <strong>Databases</strong> page updates to indicate
-the published status of your database.</p>
-</li>
+<li><p>Select a <strong>Virtual host</strong>.</p></li>
+<li><p>Optionally enable <strong>Serve WMS</strong>.</p></li>
+<li><p>Click the <strong>Publish</strong> button. The <strong>Databases</strong> page updates to indicate
+the published status of your database.</p></li>
 </ol>
 <p class="rubric" id="unpublish-databases">Unpublish databases</p>
 <p>If you no longer want to make a database available on
@@ -207,30 +180,27 @@ profile, simply unpublish your database and republish using the
 new settings you want.</p>
 <p class="rubric" id="to-unpublish-a-published-database">To unpublish a published database:</p>
 <ol class="arabic">
-<li><p class="first">Access the Google Earth Enterprise Server Admin console in a
+<li><p>Access the Google Earth Enterprise Server Admin console in a
 browser window by going to <em>myserver.mydomainname</em>.com/admin,
 replacing <em>myserver</em> and <em>mydomainname</em> with your server and
-domain.</p>
-</li>
-<li><p class="first">Sign in with the default credentials or the username and
+domain.</p></li>
+<li><p>Sign in with the default credentials or the username and
 password assigned to you:</p>
 <ul class="simple">
-<li>Default username: <em>geapacheuser</em></li>
-<li>Default password: <em>geeadmin</em></li>
+<li><p>Default username: <em>geapacheuser</em></p></li>
+<li><p>Default password: <em>geeadmin</em></p></li>
 </ul>
 <div class="admonition tip">
-<p class="first admonition-title">Tip</p>
-<p class="last">If you do not know your username and password, contact your
+<p class="admonition-title">Tip</p>
+<p>If you do not know your username and password, contact your
 Google Earth Enterprise Server System Administrator.</p>
 </div>
 </li>
-<li><p class="first">Click <strong>Databases</strong> to display the list of databases pushed to
-GEE Server.</p>
-</li>
-<li><p class="first">Check the box next to the database that you want to unpublish.
-The <strong>Unpublish</strong> button appears above the list of databases.</p>
-</li>
-<li><p class="first">Click the <strong>Unpublish</strong> button to unpublish a database from its publish
+<li><p>Click <strong>Databases</strong> to display the list of databases pushed to
+GEE Server.</p></li>
+<li><p>Check the box next to the database that you want to unpublish.
+The <strong>Unpublish</strong> button appears above the list of databases.</p></li>
+<li><p>Click the <strong>Unpublish</strong> button to unpublish a database from its publish
 point.</p>
 <p>You can now either remove the database (i.e., unpush an
 unpublished database), or you can republish to a different
@@ -239,31 +209,30 @@ publish point using a different virtual host, for example.</p>
 </ol>
 <p class="rubric" id="to-remove-an-unpublished-database-from-gee-server">To remove an unpublished database from GEE Server:</p>
 <ol class="arabic">
-<li><p class="first">From the <strong>Databases</strong> page of GEE Server, check the box next to
+<li><p>From the <strong>Databases</strong> page of GEE Server, check the box next to
 the database that you want to remove. The <strong>Remove</strong> button
-appears above the list of databases.</p>
-</li>
-<li><p class="first">Click the <strong>Remove</strong> button to remove the database from GEE Server.</p>
+appears above the list of databases.</p></li>
+<li><p>Click the <strong>Remove</strong> button to remove the database from GEE Server.</p>
 <div class="admonition tip">
-<p class="first admonition-title">Tip</p>
-<p class="last">Removing a database does not <em>delete</em> it. Remove reverses
+<p class="admonition-title">Tip</p>
+<p>Removing a database does not <em>delete</em> it. Remove reverses
 the <em>push</em> process so that the database is no longer pushed
 to GEE Server.</p>
 </div>
 </li>
-<li><p class="first">The checked database is removed from the list.</p>
+<li><p>The checked database is removed from the list.</p>
 <p>To restore the removed database, push it again from Fusion. See
 <a class="reference internal" href="#push-databases"><span class="std std-ref">Push databases</span></a>.</p>
 </li>
 </ol>
 <p class="rubric">Learn more</p>
 <ul class="simple">
-<li><a class="reference internal" href="../geeServerAdmin/publishDefaultDatabase.html"><span class="doc">Publish default database</span></a></li>
-<li><a class="reference internal" href="../geeServerAdmin/createSearchTabs.html"><span class="doc">Create Search tabs</span></a></li>
-<li><a class="reference internal" href="../geeServerAdmin/manageSnippetProfiles.html"><span class="doc">Manage snippet profiles</span></a></li>
-<li><a class="reference internal" href="../geeServerAdmin/manageVirtualHosts.html"><span class="doc">Manage virtual hosts</span></a></li>
-<li><a class="reference internal" href="../geeServerAdmin/makeWMSRequests.html"><span class="doc">Make Web Map Service (WMS) requests</span></a></li>
-<li><a class="reference internal" href="../googleEarthEnterpriseClient/whatisEC.html"><span class="doc">What is Google Earth Enterprise Client (EC)?</span></a></li>
+<li><p><a class="reference internal" href="../geeServerAdmin/publishDefaultDatabase.html"><span class="doc">Publish default database</span></a></p></li>
+<li><p><a class="reference internal" href="../geeServerAdmin/createSearchTabs.html"><span class="doc">Create Search tabs</span></a></p></li>
+<li><p><a class="reference internal" href="../geeServerAdmin/manageSnippetProfiles.html"><span class="doc">Manage snippet profiles</span></a></p></li>
+<li><p><a class="reference internal" href="../geeServerAdmin/manageVirtualHosts.html"><span class="doc">Manage virtual hosts</span></a></p></li>
+<li><p><a class="reference internal" href="../geeServerAdmin/makeWMSRequests.html"><span class="doc">Make Web Map Service (WMS) requests</span></a></p></li>
+<li><p><a class="reference internal" href="../googleEarthEnterpriseClient/whatisEC.html"><span class="doc">What is Google Earth Enterprise Client (EC)?</span></a></p></li>
 </ul>
 <p class="rubric" id="using-command-line">Publish using the command line</p>
 <p>The procedure to publish a database using the command line
@@ -275,12 +244,12 @@ you will need to identify the full path and name of the database to
 publish.</p>
 <p class="rubric" id="to-publish-a-database-using-the-command-line">To publish a database using the command line:</p>
 <ol class="arabic">
-<li><p class="first">Query GEE Server for virtual stream servers and write down
+<li><p>Query GEE Server for virtual stream servers and write down
 which virtual server you want to publish to. You can skip this
 step if you are using default servers only.</p>
 <p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--stream_server_url</span> <span class="pre">http://myserver.org</span> <span class="pre">--server_type</span> <span class="pre">stream</span> <span class="pre">--listvhs</span></code></p>
 </li>
-<li><p class="first">Get the full folder path for the database to publish:</p>
+<li><p>Get the full folder path for the database to publish:</p>
 <p><code class="docutils literal notranslate"><span class="pre">gequery</span> <span class="pre">--outfiles</span> <span class="pre">Databases/NameOf3DDatabase.kdatabase</span></code> for
 3D</p>
 <p>For 3D databases, look for the path ending in <code class="docutils literal notranslate"><span class="pre">gedb</span></code>.</p>
@@ -288,22 +257,22 @@ step if you are using default servers only.</p>
 for 2D</p>
 <p>For 2D databases, look for the path ending in <code class="docutils literal notranslate"><span class="pre">mapdb</span></code>.</p>
 </li>
-<li><p class="first">Add the database to register it with GEE Server. In this
+<li><p>Add the database to register it with GEE Server. In this
 example, you will publish a 2D database, using the full folder path
 as discovered in the previous steps. You will use
 <code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--adddb</span> <span class="pre">db_name</span></code> to register the database.</p>
 <p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--stream_server_url</span> <span class="pre">http://myserver.org</span> <span class="pre">--adddb</span> <span class="pre">/gevol/assets/Databases/Nameof2DDatabase.kmmdatabase/mapdb.kda/ver001/mapdb/</span></code></p>
 </li>
-<li><p class="first">Push the database to GEE Server using
+<li><p>Push the database to GEE Server using
 <code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--pushdb</span> <span class="pre">db_name</span></code>. For example:</p>
 <p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--stream_server_url</span> <span class="pre">http://myserver.org</span> <span class="pre">--pushdb</span> <span class="pre">/gevol/assets/Databases/Name</span> <span class="pre">of</span> <span class="pre">2DDatabase.kmmdatabase/mapdb.kda/ver001/mapdb/</span></code></p>
 </li>
-<li><p class="first">Publish the database to GEE Server using
+<li><p>Publish the database to GEE Server using
 <code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--publishdb</span> <span class="pre">db_name</span> <span class="pre">--targetpath</span> <span class="pre">target_path</span></code>.
 For example:</p>
 <p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--publishdb</span> <span class="pre">/gevol/assets/Databases/SFMapDatabase.kmmdatabase/mapdb.kda/ver001/mapdb/</span> <span class="pre">--targetpath</span> <span class="pre">http://myserver.org</span></code></p>
 </li>
-<li><p class="first">Publish the database to GEE Server, specifying it as the
+<li><p>Publish the database to GEE Server, specifying it as the
 default globe for GEEC, using
 <code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--publishdb</span> <span class="pre">db_name</span> <span class="pre">--targetpath</span> <span class="pre">target_path</span> <span class="pre">--setecdefault</span></code>.
 For example:</p>
@@ -316,7 +285,28 @@ For example:</p>
 </div>
 
 
+            <div class="clearer"></div>
           </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="confDataLocation.html"
+                        title="previous chapter">Configure your data locations</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="publishDBWithDiscPublishing.html"
+                        title="next chapter">Publish databases using disconnected publishing</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -334,12 +324,13 @@ For example:</p>
           <a href="confDataLocation.html" title="Configure your data locations"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" >Fusion Administration</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" >Fusion Administration</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Push and publish databases</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Open GEE Contributors.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.1.
     </div>
   </body>
 </html>
