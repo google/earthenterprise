@@ -38,15 +38,13 @@ Release notes: Open GEE 5.3.5
       .. rubric:: Resolved Issues
 
       .. list-table::
-         :widths: 10 30 55
+         :widths: 10 85
          :header-rows: 1
 
          * - Number
            - Description
-           - Resolution
-         * - 9999
-           - Add description
-           - Add resolution
+         * - 1778
+           - Databases published with SSL virtual hosts fail to cut
 
       .. rubric:: Known Issues
 
