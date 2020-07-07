@@ -258,7 +258,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
           const std::string cache_alpha_path =
               blendVer->GetOutputFilename(0) + "/cache_alpha.pack";
            // if blendVer->GetOutputFilename(0) is empty, this Asset still 
-            // doesn't has an output file, so the path doesn't exist and it's going 
+            // doesn't has an output file, so the path doesn't exist but it's going 
             // to be built. So we mark it as exists
           if (blendVer->GetOutputFilename(0).empty() 
                   || khExists(cache_alpha_path)) {
@@ -295,7 +295,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
         const std::string cache_alpha_path =
             prevLevelVer->GetOutputFilename(0) + "/cache_alpha.pack";
         // if prevLevelVer->GetOutputFilename(0) is empty, this Asset still 
-        // doesn't has an output file, so the path doesn't exist and it's going 
+        // doesn't has an output file, so the path doesn't exist but it's going 
         // to be built. So we mark it as exists
         const bool cache_alpha_exist = 
             prevLevelVer->GetOutputFilename(0).empty() 
