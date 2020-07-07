@@ -2,27 +2,25 @@
 
 <!doctype html>
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Back up Fusion servers &#8212; Google Earth Enterprise 5.3.5 documentation</title>
-    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
-    <script src="../../_static/bizstyle.js"></script>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Manage Fusion disk space" href="manageFusionDiskSpace.html" />
     <link rel="prev" title="Backing up your data" href="backupData.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
-    <script src="_static/css3-mediaqueries.js"></script>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -38,17 +36,38 @@
           <a href="backupData.html" title="Backing up your data"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" accesskey="U">Fusion Administration</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Back up Fusion servers</a></li> 
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" accesskey="U">Fusion Administration</a> &#187;</li> 
       </ul>
-    </div>  
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="backupData.html"
+                        title="previous chapter">Backing up your data</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="manageFusionDiskSpace.html"
+                        title="next chapter">Manage Fusion disk space</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <p><a class="reference internal" href="../../_images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../_images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="back-up-fusion-servers">
 <h1>Back up Fusion servers<a class="headerlink" href="#back-up-fusion-servers" title="Permalink to this headline">¶</a></h1>
 <div class="docutils container">
@@ -65,10 +84,10 @@ instead.</p>
 rules exactly the way you want them, so you should back them up each time you modify a vector layer.</p>
 <p>To back up display rules:</p>
 <ol class="arabic simple">
-<li><p>In the Vector Layer dialog box, select <strong>Export as a
-Template</strong>.</p></li>
-<li><p>Save the display rules on a volume different from the source
-volume and the asset root.</p></li>
+<li>In the Vector Layer dialog box, select <strong>Export as a
+Template</strong>.</li>
+<li>Save the display rules on a volume different from the source
+volume and the asset root.</li>
 </ol>
 <p class="rubric" id="critical-fusion-files">Critical Fusion files</p>
 <p>If you have backups of the files listed below, you can rebuild
@@ -77,43 +96,44 @@ take a lot of CPU time, but should go smoothly with a minimum of
 administrator time.</p>
 <p>The files that are critical to restoring your Fusion server are:</p>
 <ul class="simple">
-<li><p><strong>Your original source files</strong>. These are typically stored on a
+<li><strong>Your original source files</strong>. These are typically stored on a
 network shared drive or on portable USB disks, depending on the
 environment. Make sure that you can find and reload your
-original source files.</p></li>
-<li><p><strong>The XML files that Fusion generates during its processing</strong>.
+original source files.</li>
+<li><strong>The XML files that Fusion generates during its processing</strong>.
 These are critical because they contain the display rules for
 the vector data, the rules for building resources and projects,
-and other critical settings.</p></li>
-<li><p><strong>All the files under /opt/google/gehttpd in the cgi-bin, conf
+and other critical settings.</li>
+<li><strong>All the files under /opt/google/gehttpd in the cgi-bin, conf
 conf.d, and htdocs directory</strong>. These files contain any
 user-customized scripts or web pages, and the definitions of
-any virtual servers you created on the Fusion server.</p></li>
-<li><p><strong>The files in the .config and .userdata directories under the
+any virtual servers you created on the Fusion server.</li>
+<li><strong>The files in the .config and .userdata directories under the
 asset root</strong>. These contain custom icons and provider
 information as well as some basic Fusion configuration
-settings.</p></li>
+settings.</li>
 </ul>
 <p class="rubric">Backing up</p>
 <p>The steps below show you how to back up your critical files. When
 you run these commands, replace the asset root and backup
 locations with the locations of your own asset root and backups.</p>
 <ol class="arabic">
-<li><p>Make sure that you can locate and reload all the source data
-files if needed.</p></li>
-<li><p>Create a directory to hold the backup files:</p>
+<li><p class="first">Make sure that you can locate and reload all the source data
+files if needed.</p>
+</li>
+<li><p class="first">Create a directory to hold the backup files:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir -p /data/backup/assets
 mkdir -p /data/backup/gehttpd
 </pre></div>
 </div>
 </li>
-<li><p>Back up the gehttpd files:</p>
+<li><p class="first">Back up the gehttpd files:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /opt/google/gehttpd
 rsync -r htdocs cgi-bin conf conf.d /data/backup/gehttpd
 </pre></div>
 </div>
 </li>
-<li><p>Back up the XML files and config files to a safe place on a
+<li><p class="first">Back up the XML files and config files to a safe place on a
 disk that is not part of the asset root or source directories:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /gevol/assets
 rsync -r .config .userdata /data/backup/assets/
@@ -122,7 +142,7 @@ rsync --files-from<span class="o">=</span>FileList.txt /gevol/assets /data/backu
 </pre></div>
 </div>
 </li>
-<li><p>(Optional.) Store a compressed backup of the files somewhere
+<li><p class="first">(Optional.) Store a compressed backup of the files somewhere
 else:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tar czf /home/backups/GevolXmlBackup.tgz /data/backups
 </pre></div>
@@ -131,9 +151,10 @@ else:</p>
 </ol>
 <p class="rubric">Restoring imagery and terrain</p>
 <ol class="arabic">
-<li><p>Make sure that the Fusion software is installed correctly and
-is running.</p></li>
-<li><p>Configure your asset root to be consistent with your old asset
+<li><p class="first">Make sure that the Fusion software is installed correctly and
+is running.</p>
+</li>
+<li><p class="first">Configure your asset root to be consistent with your old asset
 root. If you are not sure about this, manually run commands
 like:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geconfigureassetroot --new --assetroot /gevol/assets
@@ -141,14 +162,16 @@ geselectassetroot --assetroot /gevol/assets
 </pre></div>
 </div>
 </li>
-<li><p>Restore the backed-up XML and configuration files to their
-original location in the asset root.</p></li>
-<li><p>Restore the source files to their original location on the
+<li><p class="first">Restore the backed-up XML and configuration files to their
+original location in the asset root.</p>
+</li>
+<li><p class="first">Restore the source files to their original location on the
 Fusion server. If you cannot remember the directory they were
 in, just place them on the Fusion server in the source
 directory you specified in the Fusion volume definitions
-(<code class="docutils literal notranslate"><span class="pre">/gevol/src</span></code> by default).</p></li>
-<li><p>Use the <code class="docutils literal notranslate"><span class="pre">gequery</span></code> command and shell scripting to make sure
+(<code class="docutils literal notranslate"><span class="pre">/gevol/src</span></code> by default).</p>
+</li>
+<li><p class="first">Use the <code class="docutils literal notranslate"><span class="pre">gequery</span></code> command and shell scripting to make sure
 your source files are in the right place. If the files are not
 found, find them and copy them to the right place. Below is an
 example of a script for reporting where all your imagery source
@@ -171,7 +194,7 @@ Example script:</p>
 </pre></div>
 </div>
 </li>
-<li><p>After all the files are in place, generate a series of commands
+<li><p class="first">After all the files are in place, generate a series of commands
 to rebuild the resources. For example:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /gevol/assets
 <span class="k">for</span> resource in <span class="sb">`</span>find . -type d -name <span class="s2">&quot;*.kiasset&quot;</span> <span class="p">|</span> sed <span class="s1">&#39;s/.kiasset//&#39;</span><span class="sb">`</span>
@@ -184,13 +207,14 @@ to rebuild the resources. For example:</p>
 </pre></div>
 </div>
 </li>
-<li><p>There is a <code class="docutils literal notranslate"><span class="pre">khasset.xml</span></code> file under each <code class="docutils literal notranslate"><span class="pre">.kiasset</span></code>
+<li><p class="first">There is a <code class="docutils literal notranslate"><span class="pre">khasset.xml</span></code> file under each <code class="docutils literal notranslate"><span class="pre">.kiasset</span></code>
 directory that contains information about the mask tolerance,
 feathering, white fill, and provider for each imagery and
 terrain resource. You can use scripting to extract this
 information from each resource and add it to the
 <code class="docutils literal notranslate"><span class="pre">genewimageryresource</span></code> command to apply the correct settings
-for each resource.</p></li>
+for each resource.</p>
+</li>
 </ol>
 <p class="rubric">Restoring vectors</p>
 <p>The vector restore process is different from the imagery and
@@ -348,28 +372,7 @@ rebuild the entire vector project.</p>
 </div>
 
 
-            <div class="clearer"></div>
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="backupData.html"
-                        title="previous chapter">Backing up your data</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="manageFusionDiskSpace.html"
-                        title="next chapter">Manage Fusion disk space</a></p>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -387,13 +390,12 @@ rebuild the entire vector project.</p>
           <a href="backupData.html" title="Backing up your data"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" >Fusion Administration</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Back up Fusion servers</a></li> 
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" >Fusion Administration</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Open GEE Contributors.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

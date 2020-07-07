@@ -2,27 +2,25 @@
 
 <!doctype html>
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Configure Fusion performance &#8212; Google Earth Enterprise 5.3.5 documentation</title>
-    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
-    <script src="../../_static/bizstyle.js"></script>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Benchmarking outcomes for applying task rules" href="benchMarkOutcomesForTaskRule.html" />
     <link rel="prev" title="Dynamically adjusting logging levels" href="dynamicLogLevelSetting.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
-    <script src="_static/css3-mediaqueries.js"></script>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -38,17 +36,38 @@
           <a href="dynamicLogLevelSetting.html" title="Dynamically adjusting logging levels"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" accesskey="U">Fusion Administration</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Configure Fusion performance</a></li> 
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" accesskey="U">Fusion Administration</a> &#187;</li> 
       </ul>
-    </div>  
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="dynamicLogLevelSetting.html"
+                        title="previous chapter">Dynamically adjusting logging levels</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="benchMarkOutcomesForTaskRule.html"
+                        title="next chapter">Benchmarking outcomes for applying task rules</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <p><a class="reference internal" href="../../_images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../_images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="configure-fusion-performance">
 <h1>Configure Fusion performance<a class="headerlink" href="#configure-fusion-performance" title="Permalink to this headline">¶</a></h1>
 <div class="docutils container">
@@ -61,10 +80,10 @@ as you implement a task rule, it customizes how specific processes
 in Fusion operate. In other words, you cannot apply task rules to
 individual assets or projects.</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#set-number-cpus"><span class="std std-ref">Set the number of CPUs assigned to Fusion
-processing</span></a></p></li>
-<li><p><a class="reference internal" href="#task-rule-types"><span class="std std-ref">Task rule types</span></a></p></li>
-<li><p><a class="reference internal" href="#implement-task-rules"><span class="std std-ref">Implement task rules</span></a></p></li>
+<li><a class="reference internal" href="#set-number-cpus"><span class="std std-ref">Set the number of CPUs assigned to Fusion
+processing</span></a></li>
+<li><a class="reference internal" href="#task-rule-types"><span class="std std-ref">Task rule types</span></a></li>
+<li><a class="reference internal" href="#implement-task-rules"><span class="std std-ref">Implement task rules</span></a></li>
 </ul>
 <p class="rubric" id="set-number-cpus">Set the number of CPUs assigned to Fusion processing</p>
 <p>As some of the task rules described here rely on setting the
@@ -85,42 +104,42 @@ enabling/disabling multithreading, and by specifying output
 locations (KRP/KRMP), as shown in the following table.</p>
 <p class="rubric" id="id1"><span id="task-rule-types"></span>Task rule types</p>
 <div class="docutils container">
-<table class="docutils align-default">
+<table border="1" class="docutils">
 <colgroup>
-<col style="width: 12%" />
-<col style="width: 9%" />
-<col style="width: 79%" />
+<col width="12%" />
+<col width="9%" />
+<col width="79%" />
 </colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Task rule type</p></th>
-<th class="head"><p>Task rule</p></th>
-<th class="head"><p>Description</p></th>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Task rule type</th>
+<th class="head">Task rule</th>
+<th class="head">Description</th>
 </tr>
 </thead>
-<tbody>
-<tr class="row-even"><td><p>Enable/Disable Multithreading</p></td>
-<td><p><strong>ImageryPacketLevel</strong></p></td>
-<td><p>Makes imagery project builds faster by assigning multiple CPUs to each task.</p></td>
+<tbody valign="top">
+<tr class="row-even"><td>Enable/Disable Multithreading</td>
+<td><strong>ImageryPacketLevel</strong></td>
+<td>Makes imagery project builds faster by assigning multiple CPUs to each task.</td>
 </tr>
-<tr class="row-odd"><td><p>Enable/Disable Multithreading</p></td>
-<td><p><strong>TerrainPacketLevel</strong></p></td>
-<td><p>Makes terrain project builds faster by assigning multiple CPUs to each task.</p></td>
+<tr class="row-odd"><td>Enable/Disable Multithreading</td>
+<td><strong>TerrainPacketLevel</strong></td>
+<td>Makes terrain project builds faster by assigning multiple CPUs to each task.</td>
 </tr>
-<tr class="row-even"><td><p>Enable/Disable Multithreading</p></td>
-<td><p><strong>CombinedTerrain</strong></p></td>
-<td><p>Makes 3D database builds faster by assigning multiple CPUs to terrain completion tasks.</p></td>
+<tr class="row-even"><td>Enable/Disable Multithreading</td>
+<td><strong>CombinedTerrain</strong></td>
+<td>Makes 3D database builds faster by assigning multiple CPUs to terrain completion tasks.</td>
 </tr>
-<tr class="row-odd"><td><p>Enable/Disable Multithreading</p></td>
-<td><p><strong>MapLayerLevel</strong></p></td>
-<td><p>Makes 2D database builds faster by assigning multiple CPUs to each task.</p></td>
+<tr class="row-odd"><td>Enable/Disable Multithreading</td>
+<td><strong>MapLayerLevel</strong></td>
+<td>Makes 2D database builds faster by assigning multiple CPUs to each task.</td>
 </tr>
-<tr class="row-even"><td><p>Specify output locations</p></td>
-<td><p><strong>KRP</strong></p></td>
-<td><p>Lets you specify the location where image resources will be written by Fusion for better storage management.</p></td>
+<tr class="row-even"><td>Specify output locations</td>
+<td><strong>KRP</strong></td>
+<td>Lets you specify the location where image resources will be written by Fusion for better storage management.</td>
 </tr>
-<tr class="row-odd"><td><p>Specify output locations</p></td>
-<td><p><strong>KRMP</strong></p></td>
-<td><p>Lets you specify the location where mask files will be written by Fusion for better storage management. Note that the same storage volume must be specified for the KRMP as the KRP.</p></td>
+<tr class="row-odd"><td>Specify output locations</td>
+<td><strong>KRMP</strong></td>
+<td>Lets you specify the location where mask files will be written by Fusion for better storage management. Note that the same storage volume must be specified for the KRMP as the KRP.</td>
 </tr>
 </tbody>
 </table>
@@ -130,35 +149,42 @@ locations (KRP/KRMP), as shown in the following table.</p>
 <p class="rubric" id="implement-task-rules">Implement task rules</p>
 <p>To implement a task rule:</p>
 <ol class="arabic">
-<li><p>Make sure you have superuser privileges, i.e., root or sudo
-access.</p></li>
-<li><p>Create the task rule using the XML sample code shown below for
-each rule.</p></li>
-<li><p>Depending on the rule you want to use, name the task rule:</p>
+<li><p class="first">Make sure you have superuser privileges, i.e., root or sudo
+access.</p>
+</li>
+<li><p class="first">Create the task rule using the XML sample code shown below for
+each rule.</p>
+</li>
+<li><p class="first">Depending on the rule you want to use, name the task rule:</p>
 <ul class="simple">
-<li><p><strong>ImageryPacketLevel.taskrule</strong></p></li>
-<li><p><strong>TerrainPacketLevel.taskrule</strong></p></li>
-<li><p><strong>CombinedTerrain.taskrule</strong></p></li>
-<li><p><strong>MapLayerLevel.taskrule</strong></p></li>
-<li><p><strong>KRP.taskrule</strong></p></li>
-<li><p><strong>KRMP.taskrule</strong></p></li>
+<li><strong>ImageryPacketLevel.taskrule</strong></li>
+<li><strong>TerrainPacketLevel.taskrule</strong></li>
+<li><strong>CombinedTerrain.taskrule</strong></li>
+<li><strong>MapLayerLevel.taskrule</strong></li>
+<li><strong>KRP.taskrule</strong></li>
+<li><strong>KRMP.taskrule</strong></li>
 </ul>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Fusion uses these names when the tasks run, so
+<p class="first admonition-title">Note</p>
+<p class="last">Fusion uses these names when the tasks run, so
 do not change them.</p>
 </div>
 </li>
-<li><p>For the KRP and KRMP task rules, define the volumes you want
+<li><p class="first">For the KRP and KRMP task rules, define the volumes you want
 Fusion to write files to. See <a class="reference external" href="#defining_volumes">Defining
-volumes</a>.</p></li>
-<li><p>Set file permissions to read-only for all (<code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">444</span></code>).</p></li>
-<li><p>Set file ownership to the <code class="docutils literal notranslate"><span class="pre">gefusionuser</span></code> user account and
-<code class="docutils literal notranslate"><span class="pre">gegroup</span></code> group (<code class="docutils literal notranslate"><span class="pre">chown</span> <span class="pre">gefusionuser:gegroup</span></code>).</p></li>
-<li><p>Place the task rule files in the asset root’s <code class="docutils literal notranslate"><span class="pre">.config</span></code>
-directory.</p></li>
-<li><p>Restart the system manager using the <code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span></code>
-<strong>``stop``</strong> and <strong>``start``</strong> commands.</p></li>
+volumes</a>.</p>
+</li>
+<li><p class="first">Set file permissions to read-only for all (<code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">444</span></code>).</p>
+</li>
+<li><p class="first">Set file ownership to the <code class="docutils literal notranslate"><span class="pre">gefusionuser</span></code> user account and
+<code class="docutils literal notranslate"><span class="pre">gegroup</span></code> group (<code class="docutils literal notranslate"><span class="pre">chown</span> <span class="pre">gefusionuser:gegroup</span></code>).</p>
+</li>
+<li><p class="first">Place the task rule files in the asset root’s <code class="docutils literal notranslate"><span class="pre">.config</span></code>
+directory.</p>
+</li>
+<li><p class="first">Restart the system manager using the <code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span></code>
+<strong>``stop``</strong> and <strong>``start``</strong> commands.</p>
+</li>
 </ol>
 <p class="rubric">ImageryPacketLevel task rule</p>
 <p>During a project build, Fusion will have multiple concurrent
@@ -168,8 +194,8 @@ assigned for each imagery project process. For example, with eight
 CPUs assigned for Fusion, with two CPUs per imagery project task,
 you can have four concurrent imagery project tasks.</p>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Assigning more than two CPUs for each imagery project
+<p class="first admonition-title">Note</p>
+<p class="last">Assigning more than two CPUs for each imagery project
 task does not necessarily speed up processing, so you should
 keep the <code class="docutils literal notranslate"><span class="pre">maxNumCPU</span></code> value at 2.</p>
 </div>
@@ -329,30 +355,30 @@ the locations after applying the KMP and KRMP task rules. In this
 example, the asset root is <code class="docutils literal notranslate"><span class="pre">/gevol/assets</span></code>, the volume you have
 created is <code class="docutils literal notranslate"><span class="pre">products</span></code>, and you have built an asset called
 <code class="docutils literal notranslate"><span class="pre">TestImage</span></code> in the imagery subdirectory.</p>
-<table class="docutils align-default">
+<table border="1" class="docutils">
 <colgroup>
-<col style="width: 6%" />
-<col style="width: 13%" />
-<col style="width: 51%" />
-<col style="width: 31%" />
+<col width="6%" />
+<col width="13%" />
+<col width="51%" />
+<col width="31%" />
 </colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Task rule</p></th>
-<th class="head"><p>File type</p></th>
-<th class="head"><p>Default location</p></th>
-<th class="head"><p>Location with task rule</p></th>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Task rule</th>
+<th class="head">File type</th>
+<th class="head">Default location</th>
+<th class="head">Location with task rule</th>
 </tr>
 </thead>
-<tbody>
-<tr class="row-even"><td><p>KMP</p></td>
-<td><p>large imagery files</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">/gevol/assets/imagery/TestImage.kiasset/products.kia/ver001/raster.kip</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">/gevol/products/imagery/</span> <span class="pre">TestImage-001.kip</span></code></p></td>
+<tbody valign="top">
+<tr class="row-even"><td>KMP</td>
+<td>large imagery files</td>
+<td><code class="docutils literal notranslate"><span class="pre">/gevol/assets/imagery/TestImage.kiasset/products.kia/ver001/raster.kip</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">/gevol/products/imagery/</span> <span class="pre">TestImage-001.kip</span></code></td>
 </tr>
-<tr class="row-odd"><td><p>KRMP</p></td>
-<td><p>smaller mask files</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">/gevol/assets/imagery/TestImage.kiasset/maskproducts.kia/ver001/mask.kmp</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">/gevol/products/imagery/TestImage-001.kmp</span></code></p></td>
+<tr class="row-odd"><td>KRMP</td>
+<td>smaller mask files</td>
+<td><code class="docutils literal notranslate"><span class="pre">/gevol/assets/imagery/TestImage.kiasset/maskproducts.kia/ver001/mask.kmp</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">/gevol/products/imagery/TestImage-001.kmp</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -436,22 +462,22 @@ operations. These updates are experimental and may contain bugs,
 and in some cases may reduce performance compared to previous versions
 of Fusion. <code class="docutils literal notranslate"><span class="pre">GraphOperations</span></code> can be set to the following values:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">NO_GRAPH_OPS</span></code> or <code class="docutils literal notranslate"><span class="pre">0</span></code>: use the legacy version of all operations</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">FAST_GRAPH_OPS</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code>: use new operations that are likely to
-improve performance</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">ALL_GRAPH_OPS</span></code> or <code class="docutils literal notranslate"><span class="pre">2</span></code>: use all new operations regardless of
-performance impact</p></li>
+<li><code class="docutils literal notranslate"><span class="pre">NO_GRAPH_OPS</span></code> or <code class="docutils literal notranslate"><span class="pre">0</span></code>: use the legacy version of all operations</li>
+<li><code class="docutils literal notranslate"><span class="pre">FAST_GRAPH_OPS</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code>: use new operations that are likely to
+improve performance</li>
+<li><code class="docutils literal notranslate"><span class="pre">ALL_GRAPH_OPS</span></code> or <code class="docutils literal notranslate"><span class="pre">2</span></code>: use all new operations regardless of
+performance impact</li>
 </ul>
 <p class="rubric" id="use-minification">Use Minification</p>
 <p>Included in <code class="docutils literal notranslate"><span class="pre">/gevol/assets/.config/misc.xml</span></code> is a <code class="docutils literal notranslate"><span class="pre">UseMinification</span></code>
 option that controls how data for imagery and terrain zoom levels are
 generated.  <code class="docutils literal notranslate"><span class="pre">UseMinification</span></code> can be set to the following values:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: Imagery and terrain for each zoom level are generated by
-minifying the level below it, where possible.  This is the default.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code>: Imagery and terrain for each zoom level are generated from the
+<li><code class="docutils literal notranslate"><span class="pre">1</span></code>: Imagery and terrain for each zoom level are generated by
+minifying the level below it, where possible.  This is the default.</li>
+<li><code class="docutils literal notranslate"><span class="pre">0</span></code>: Imagery and terrain for each zoom level are generated from the
 original source data.  This reduces dependencies between levels and
-may improve performance in some situations.</p></li>
+may improve performance in some situations.</li>
 </ul>
 <p class="rubric" id="retry-failed-tasks">Retry Failed tasks</p>
 <p>Users can configure Fusion to retry tasks that fail, which allows Fusion
@@ -460,42 +486,21 @@ This feature is disabled by default.
 To enable it, set the following parameters in
 <code class="docutils literal notranslate"><span class="pre">/gevol/assets/.config/misc.xml</span></code>:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">TriesPerCommand</span></code>: the maximum number of times that Fusion will
-try to execute each command. Must be at least 1. Default: 1.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">SleepBetweenCommandTriesSec</span></code>: the number of seconds to pause before
-retrying a failed command. Must be at least 0. Default: 0.</p></li>
+<li><code class="docutils literal notranslate"><span class="pre">TriesPerCommand</span></code>: the maximum number of times that Fusion will
+try to execute each command. Must be at least 1. Default: 1.</li>
+<li><code class="docutils literal notranslate"><span class="pre">SleepBetweenCommandTriesSec</span></code>: the number of seconds to pause before
+retrying a failed command. Must be at least 0. Default: 0.</li>
 </ul>
 <p class="rubric">Learn more</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="benchMarkOutcomesForTaskRule.html"><span class="doc">Benchmarking outcomes for applying task rules</span></a></p></li>
+<li><a class="reference internal" href="benchMarkOutcomesForTaskRule.html"><span class="doc">Benchmarking outcomes for applying task rules</span></a></li>
 </ul>
 </div>
 </div>
 </div>
 
 
-            <div class="clearer"></div>
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="dynamicLogLevelSetting.html"
-                        title="previous chapter">Dynamically adjusting logging levels</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="benchMarkOutcomesForTaskRule.html"
-                        title="next chapter">Benchmarking outcomes for applying task rules</a></p>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -513,13 +518,12 @@ retrying a failed command. Must be at least 0. Default: 0.</p></li>
           <a href="dynamicLogLevelSetting.html" title="Dynamically adjusting logging levels"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" >Fusion Administration</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Configure Fusion performance</a></li> 
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" >Fusion Administration</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Open GEE Contributors.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>
