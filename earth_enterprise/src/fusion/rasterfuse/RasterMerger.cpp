@@ -216,7 +216,7 @@ bool RasterMerger<CachingDataReader>::GetInsetTile(
     } else {  // Tile is opaque (alpha is not cached for opaque tiles).
               // UPDATE (2020-07-07): This is not always true since if 
               // inset->cached_blend_alpha_reader is nullptr (for example
-              // when the alpha cache doesn't exists) it's does not necessarily 
+              // when the alpha cache doesn't exist) it does not necessarily 
               // mean this tile is opaque.
       // Fill alpha mask with 1's.
       dst_alpha_tile->Fill(
