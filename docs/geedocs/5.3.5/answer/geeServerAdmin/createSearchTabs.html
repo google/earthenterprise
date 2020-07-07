@@ -2,27 +2,25 @@
 
 <!doctype html>
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Create Search tabs &#8212; Google Earth Enterprise 5.3.5 documentation</title>
-    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
-    <script src="../../_static/bizstyle.js"></script>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Add custom search services" href="addCustomSearchServices.html" />
     <link rel="prev" title="Search your POI vector data or map layer data" href="searchPOIVectorMapLayerData.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
-    <script src="_static/css3-mediaqueries.js"></script>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -38,17 +36,38 @@
           <a href="searchPOIVectorMapLayerData.html" title="Search your POI vector data or map layer data"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" accesskey="U">GEE Server administration</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Create Search tabs</a></li> 
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" accesskey="U">GEE Server administration</a> &#187;</li> 
       </ul>
-    </div>  
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="searchPOIVectorMapLayerData.html"
+                        title="previous chapter">Search your POI vector data or map layer data</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="addCustomSearchServices.html"
+                        title="next chapter">Add custom search services</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <p><a class="reference internal" href="../../_images/googlelogo_color_260x88dp4.png"><img alt="Google logo" src="../../_images/googlelogo_color_260x88dp4.png" style="width: 130px; height: 44px;" /></a></p>
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp4.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp4.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="create-search-tabs">
 <h1>Create Search tabs<a class="headerlink" href="#create-search-tabs" title="Permalink to this headline">¶</a></h1>
 <div class="docutils container">
@@ -58,12 +77,12 @@ you query GEE Server using Google Earth Enterprise Client (EC) or
 a Google Map (<a class="reference external" href="http://maps.google.com/">http://maps.google.com/</a>).</p>
 <p>Search tabs allow Google Earth EC or Google Maps users to:</p>
 <ul class="simple">
-<li><p>Replace the standard search tabs in Google Earth EC.</p></li>
-<li><p>Search 2D or 3D databases created with Google Earth Enterprise
-Fusion.</p></li>
-<li><p>Access other databases not related to Google Earth Enterprise
-Fusion (such as geocoders, Google Search Appliance, and so on).</p></li>
-<li><p>Access external search servers (such as a real estate search).</p></li>
+<li>Replace the standard search tabs in Google Earth EC.</li>
+<li>Search 2D or 3D databases created with Google Earth Enterprise
+Fusion.</li>
+<li>Access other databases not related to Google Earth Enterprise
+Fusion (such as geocoders, Google Search Appliance, and so on).</li>
+<li>Access external search servers (such as a real estate search).</li>
 </ul>
 <p>For example, if you have a database of property locations that
 contains specific information that your users need, you can create
@@ -84,25 +103,29 @@ page. See <a class="reference internal" href="publishDatabasesPortables.html"><s
 <p class="rubric">Define a new search tab</p>
 <p>To define a new search tab:</p>
 <ol class="arabic">
-<li><p>In the <a class="reference internal" href="signInAdminConsole.html"><span class="doc">GEE Server Admin console</span></a>,
-click <strong>Search tabs</strong>.</p></li>
-<li><p>Click <strong>Create</strong> <strong>new</strong>. The Create Search Definition dialog appears.</p>
-<p><img alt="Create Search Definition dialog" src="../../_images/serverCreateSearchDefinition1.png" /></p>
+<li><p class="first">In the <a class="reference internal" href="signInAdminConsole.html"><span class="doc">GEE Server Admin console</span></a>,
+click <strong>Search tabs</strong>.</p>
 </li>
-<li><p>Enter a unique <strong>Name</strong> for your search tab.</p></li>
-<li><p>Enter a <strong>Label</strong> that will display as the name of the search tab in the client.</p></li>
-<li><p>Provide a <strong>URL</strong>.</p></li>
-<li><p>If you want to reference a Google Earth Enterprise Server plug-in for the
+<li><p class="first">Click <strong>Create</strong> <strong>new</strong>. The Create Search Definition dialog appears.</p>
+<p><img alt="Create Search Definition dialog" src="../../images/serverCreateSearchDefinition1.png" /></p>
+</li>
+<li><p class="first">Enter a unique <strong>Name</strong> for your search tab.</p>
+</li>
+<li><p class="first">Enter a <strong>Label</strong> that will display as the name of the search tab in the client.</p>
+</li>
+<li><p class="first">Provide a <strong>URL</strong>.</p>
+</li>
+<li><p class="first">If you want to reference a Google Earth Enterprise Server plug-in for the
 search tab, enter the name of the plug-in. The following plug-ins are available:</p>
 <ul class="simple">
-<li><p>POISearch</p></li>
-<li><p>/gesearch/FederatedSearch</p></li>
-<li><p>/gesearch/CoordinateSearch</p></li>
-<li><p>/gesearch/PlacesSearch</p></li>
-<li><p>/gesearch/ExampleSearch</p></li>
+<li>POISearch</li>
+<li>/gesearch/FederatedSearch</li>
+<li>/gesearch/CoordinateSearch</li>
+<li>/gesearch/PlacesSearch</li>
+<li>/gesearch/ExampleSearch</li>
 </ul>
 </li>
-<li><p>Optionally provide additional query parameters.
+<li><p class="first">Optionally provide additional query parameters.
 The syntax is <strong>key1=value1&amp;key2;=value2</strong>. For example,
 <strong>flyToFirstElement=true&amp;displayKeys;=location</strong> flies to
 the first element of your search results and displays the
@@ -111,27 +134,29 @@ understand and respond to these key/value pairs, so you must
 be very familiar with your search application to use this
 field.</p>
 <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Any web service, servlet, or web application
+<p class="first admonition-title">Warning</p>
+<p class="last">Any web service, servlet, or web application
 you configure the search tabs to query must return valid KML
 to Google Earth EC. For Google Maps, it must return valid
 JavaScript in the specified structure.</p>
 </div>
 </li>
-<li><p>Optionally provide additional config parameters.
+<li><p class="first">Optionally provide additional config parameters.
 Specify the following field parameters:</p>
 <ol class="loweralpha simple">
-<li><p><strong>Label</strong>: Label of the search box.</p></li>
-<li><p><strong>Suggestion</strong>: Suggestion to the user of what to search for.</p></li>
-<li><p><strong>Key</strong>: The parameter name that the value in the text
-box will be assigned when the search is submitted.</p></li>
+<li><strong>Label</strong>: Label of the search box.</li>
+<li><strong>Suggestion</strong>: Suggestion to the user of what to search for.</li>
+<li><strong>Key</strong>: The parameter name that the value in the text
+box will be assigned when the search is submitted.</li>
 </ol>
 </li>
-<li><p>Optionally click <strong>add field</strong> to add another set of search
-field parameters.</p></li>
-<li><p>Click <strong>Save</strong>.</p></li>
+<li><p class="first">Optionally click <strong>add field</strong> to add another set of search
+field parameters.</p>
+</li>
+<li><p class="first">Click <strong>Save</strong>.</p>
+</li>
 </ol>
-<p><img alt="Create Search Definition dialog Full" src="../../_images/serverCreateSearchDefinition-full.png" /></p>
+<p><img alt="Create Search Definition dialog Full" src="../../images/serverCreateSearchDefinition-full.png" /></p>
 <p>The search tab is ready for you to add to your database. See
 <a class="reference internal" href="publishDatabasesPortables.html"><span class="doc">Publish databases and portables</span></a> for details.</p>
 <p class="rubric">Customize search tab style in Google Earth EC</p>
@@ -143,16 +168,20 @@ that appears. The changes you make are then included in the
 database at the time you publish.</p>
 <p>To customize the style and elements of a search tab:</p>
 <ol class="arabic">
-<li><p>Make a backup copy of
+<li><p class="first">Make a backup copy of
 <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/earth/supplemental_ui.html</span></code>
-and open your renamed file for edit.</p></li>
-<li><p>In the HTML code, update the style and display elements
-to customize your search form.</p></li>
-<li><p>Save the HTML file with the name you want to use for your
+and open your renamed file for edit.</p>
+</li>
+<li><p class="first">In the HTML code, update the style and display elements
+to customize your search form.</p>
+</li>
+<li><p class="first">Save the HTML file with the name you want to use for your
 search tabs, e.g.,
-<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/earth/search_supplemental_ui_MySearchTab.html</span></code>.</p></li>
-<li><p>Publish your database with the selected search tab(s).</p></li>
-<li><p>View your database in Google Earth EC.</p>
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/earth/search_supplemental_ui_MySearchTab.html</span></code>.</p>
+</li>
+<li><p class="first">Publish your database with the selected search tab(s).</p>
+</li>
+<li><p class="first">View your database in Google Earth EC.</p>
 <p>Search tabs now appear with the style and element
 settings that you customized.</p>
 </li>
@@ -162,28 +191,7 @@ settings that you customized.</p>
 </div>
 
 
-            <div class="clearer"></div>
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="searchPOIVectorMapLayerData.html"
-                        title="previous chapter">Search your POI vector data or map layer data</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="addCustomSearchServices.html"
-                        title="next chapter">Add custom search services</a></p>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -201,13 +209,12 @@ settings that you customized.</p>
           <a href="searchPOIVectorMapLayerData.html" title="Search your POI vector data or map layer data"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" >GEE Server administration</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Create Search tabs</a></li> 
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" >GEE Server administration</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Open GEE Contributors.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

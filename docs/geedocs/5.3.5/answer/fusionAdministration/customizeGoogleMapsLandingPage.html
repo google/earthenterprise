@@ -2,27 +2,25 @@
 
 <!doctype html>
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Customize your Google Maps landing page &#8212; Google Earth Enterprise 5.3.5 documentation</title>
-    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
-    <script src="../../_static/bizstyle.js"></script>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Monitor system processes" href="monitorSystemProcess.html" />
     <link rel="prev" title="Configure fonts for the Text Style dialog" href="confTextStyleDialogFont.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
-    <script src="_static/css3-mediaqueries.js"></script>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -38,17 +36,38 @@
           <a href="confTextStyleDialogFont.html" title="Configure fonts for the Text Style dialog"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" accesskey="U">Fusion Administration</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Customize your Google Maps landing page</a></li> 
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" accesskey="U">Fusion Administration</a> &#187;</li> 
       </ul>
-    </div>  
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="confTextStyleDialogFont.html"
+                        title="previous chapter">Configure fonts for the Text Style dialog</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="monitorSystemProcess.html"
+                        title="next chapter">Monitor system processes</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <p><a class="reference internal" href="../../_images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../_images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="customize-your-google-maps-landing-page">
 <h1>Customize your Google Maps landing page<a class="headerlink" href="#customize-your-google-maps-landing-page" title="Permalink to this headline">¶</a></h1>
 <div class="docutils container">
@@ -88,24 +107,27 @@ key for the Google Maps API, there is no problem (regardless of
 your platform), since your server contacts Google’s servers for
 functions that are not supported in the browser.</p>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The following procedure assumes that you have received
+<p class="first admonition-title">Note</p>
+<p class="last">The following procedure assumes that you have received
 an email from Google that contains your license key for the Google
 Maps API.</p>
 </div>
 <p class="rubric" id="to-configure-your-google-maps-api-license-key">To configure your Google Maps API license key:</p>
 <ol class="arabic">
-<li><p>Open <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/maps/maps_google.html</span></code>.</p></li>
-<li><p>Locate the following line in the script:</p>
+<li><p class="first">Open <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/maps/maps_google.html</span></code>.</p>
+</li>
+<li><p class="first">Locate the following line in the script:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">script</span> <span class="n">src</span><span class="o">=</span><span class="s2">&quot;http://maps.google.com/maps?file=api&amp;v=2&amp;key=abcdefg&quot;</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span><span class="o">&gt;&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 </li>
-<li><p>Replace the <code class="docutils literal notranslate"><span class="pre">key</span></code> placeholder (‘<code class="docutils literal notranslate"><span class="pre">abcdefg</span></code>’) with your
+<li><p class="first">Replace the <code class="docutils literal notranslate"><span class="pre">key</span></code> placeholder (‘<code class="docutils literal notranslate"><span class="pre">abcdefg</span></code>’) with your
 Google Maps API license key. Your key is contained in an email
-sent from Google.</p></li>
-<li><p>Save the <code class="docutils literal notranslate"><span class="pre">maps_google.html</span></code> file.</p></li>
-<li><p>Restart the Google Earth Enterprise Server (as root):</p>
+sent from Google.</p>
+</li>
+<li><p class="first">Save the <code class="docutils literal notranslate"><span class="pre">maps_google.html</span></code> file.</p>
+</li>
+<li><p class="first">Restart the Google Earth Enterprise Server (as root):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">geserver</span> <span class="n">restart</span>
 </pre></div>
 </div>
@@ -116,28 +138,7 @@ sent from Google.</p></li>
 </div>
 
 
-            <div class="clearer"></div>
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="confTextStyleDialogFont.html"
-                        title="previous chapter">Configure fonts for the Text Style dialog</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="monitorSystemProcess.html"
-                        title="next chapter">Monitor system processes</a></p>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -155,13 +156,12 @@ sent from Google.</p></li>
           <a href="confTextStyleDialogFont.html" title="Configure fonts for the Text Style dialog"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" >Fusion Administration</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Customize your Google Maps landing page</a></li> 
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" >Fusion Administration</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Open GEE Contributors.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

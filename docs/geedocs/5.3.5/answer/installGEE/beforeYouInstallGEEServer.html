@@ -2,27 +2,25 @@
 
 <!doctype html>
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Before you install GEE Server &#8212; Google Earth Enterprise 5.3.5 documentation</title>
-    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
-    <script src="../../_static/bizstyle.js"></script>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Installing GEE Server" href="installGEEServer.html" />
     <link rel="prev" title="System Requirements for GEE Server" href="sysReqGEEServer.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
-    <script src="_static/css3-mediaqueries.js"></script>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -38,17 +36,38 @@
           <a href="sysReqGEEServer.html" title="System Requirements for GEE Server"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../installGEE.html" accesskey="U">Install Google Earth Enterprise</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Before you install GEE Server</a></li> 
+          <li class="nav-item nav-item-1"><a href="../installGEE.html" accesskey="U">Install Google Earth Enterprise</a> &#187;</li> 
       </ul>
-    </div>  
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="sysReqGEEServer.html"
+                        title="previous chapter">System Requirements for GEE Server</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="installGEEServer.html"
+                        title="next chapter">Installing GEE Server</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <p><a class="reference internal" href="../../_images/googlelogo_color_260x88dp8.png"><img alt="Google logo" src="../../_images/googlelogo_color_260x88dp8.png" style="width: 130px; height: 44px;" /></a></p>
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp8.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp8.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="before-you-install-gee-server">
 <h1>Before you install GEE Server<a class="headerlink" href="#before-you-install-gee-server" title="Permalink to this headline">¶</a></h1>
 <div class="docutils container">
@@ -68,7 +87,7 @@ Server, you will not be able to publish to the GEE Server database.</p>
 <p class="rubric">Configuring Your Host Volumes</p>
 <p>The best practices for naming your host volumes are:</p>
 <ul class="simple">
-<li><p><strong>Network naming convention</strong>. You should use a network naming
+<li><strong>Network naming convention</strong>. You should use a network naming
 convention for any new volume that hosts Fusion or source data,
 whether it is initially part of a network or not, because you
 will almost certainly migrate to a network-based configuration
@@ -77,8 +96,8 @@ to resolve the locations of source files and related Fusion
 data, so changing the host volume name or path invalidates
 Fusion data. On a single workstation setup, the local and
 network paths are identical, but on a network-based
-configuration they are not.</p></li>
-<li><p><strong>/gevol</strong>. You should use /<code class="docutils literal notranslate"><span class="pre">gevol</span></code> as your volume naming
+configuration they are not.</li>
+<li><strong>/gevol</strong>. You should use /<code class="docutils literal notranslate"><span class="pre">gevol</span></code> as your volume naming
 convention because it is unlikely to conflict with standard
 Linux volume definitions. Linux systems frequently use either
 <code class="docutils literal notranslate"><span class="pre">/vol(*)</span></code> or <code class="docutils literal notranslate"><span class="pre">/</span></code><code class="docutils literal notranslate"><span class="pre">data(*)</span></code> as the local volume
@@ -94,7 +113,7 @@ definition. (See <a class="reference internal" href="beforeYouInstallGEE.html#pl
 more information about the asset root.) You can avoid this
 conflict by using a unique naming convention for all volumes
 on your network (such as /<code class="docutils literal notranslate"><span class="pre">vol1</span></code>… /<code class="docutils literal notranslate"><span class="pre">vol</span></code><em>n</em>), but
-/<code class="docutils literal notranslate"><span class="pre">gevol</span></code> is a good choice because it is descriptive.</p></li>
+/<code class="docutils literal notranslate"><span class="pre">gevol</span></code> is a good choice because it is descriptive.</li>
 </ul>
 <p class="rubric">Configuring Multiple Storage Devices</p>
 <p>GEE Server and the Fusion asset root, source volumes, and publish
@@ -113,25 +132,25 @@ asset volumes.</p>
 <p>When configuring a Linux workstation, it is best practice to use
 the following mount point naming conventions:</p>
 <ul>
-<li><p><strong>Single volume</strong></p>
+<li><p class="first"><strong>Single volume</strong></p>
 <p>Mount the single drive to slash (/). All data
 (<code class="docutils literal notranslate"><span class="pre">/gevol/assets</span></code>, <code class="docutils literal notranslate"><span class="pre">/gevol/src</span></code>, and
 <code class="docutils literal notranslate"><span class="pre">/gevol/published_dbs</span></code>) resides on that drive with the local
 path defined using the /<code class="docutils literal notranslate"><span class="pre">gevol</span></code> naming convention.</p>
 </li>
-<li><p><strong>Two volumes - a small system volume and a larger data
+<li><p class="first"><strong>Two volumes - a small system volume and a larger data
 volume</strong></p>
 <p>Mount the small system drive to slash (<code class="docutils literal notranslate"><span class="pre">/</span></code>). Mount the larger
 data drive to <code class="docutils literal notranslate"><span class="pre">/gevol/</span></code>. Source and asset data volumes can
 then be defined as <code class="docutils literal notranslate"><span class="pre">/gevol/assets</span></code> and <code class="docutils literal notranslate"><span class="pre">/gevol/src</span></code>.</p>
 </li>
-<li><p><strong>Three volumes - a small system volume and two larger data
+<li><p class="first"><strong>Three volumes - a small system volume and two larger data
 volumes</strong></p>
 <p>Mount the small system drive to slash (<code class="docutils literal notranslate"><span class="pre">/</span></code>). Mount the first
 large data drive to <code class="docutils literal notranslate"><span class="pre">/gevol/assets</span></code>. Mount the second large
 data drive to <code class="docutils literal notranslate"><span class="pre">/gevol/src</span></code>.</p>
 </li>
-<li><p><strong>More than three volumes</strong></p>
+<li><p class="first"><strong>More than three volumes</strong></p>
 <p>There are several strategies for storing very large data sets.
 Fusion can read from and write to multiple volumes. For more
 information, you can request help on our <a class="reference external" href="http://slack.opengee.org/">Slack
@@ -183,9 +202,9 @@ or one of the many commercially available systems.</p>
 <p>If you use a centralized network authentication system, you must
 add the following users to your authentication system’s user list:</p>
 <ul class="simple">
-<li><p><strong>gefusionuser</strong></p></li>
-<li><p><strong>geapacheuser</strong></p></li>
-<li><p><strong>gepguser</strong></p></li>
+<li><strong>gefusionuser</strong></li>
+<li><strong>geapacheuser</strong></li>
+<li><strong>gepguser</strong></li>
 </ul>
 <p>The primary group for all of these users is <strong>gegroup</strong>.</p>
 <p>If you are in a multi-user environment in which multiple
@@ -207,56 +226,35 @@ and group names.</p>
 guidelines below.</p>
 <p><strong>Development machine</strong>:</p>
 <ul class="simple">
-<li><p>Install both Fusion and GEE Server on the server machine that
+<li>Install both Fusion and GEE Server on the server machine that
 you want to use to import your source GIS data and create
 flyable 3D and 2D databases. A system in this configuration is
 typically called the “development machine” since its primary
 task is to build flyable databases and only a small number of
-users will view the flyable data for quality assurance testing.</p></li>
-<li><p>Install the Fusion tutorial files on the “development machine”
+users will view the flyable data for quality assurance testing.</li>
+<li>Install the Fusion tutorial files on the “development machine”
 for users who are new to Fusion or to this version of Fusion.
-You can also use the Fusion tutorial files to test publishing.</p></li>
+You can also use the Fusion tutorial files to test publishing.</li>
 </ul>
 <p><strong>Production machine</strong>:</p>
 <ul class="simple">
-<li><p>Install only the GEE Server on the server machine that hosts
+<li>Install only the GEE Server on the server machine that hosts
 flyable 3D and 2D databases. All authorized end-users will
 connect to this system – typically referred to as the
 “production machine” – to view the flyable databases. This
 machine must be accessible through the network from the
-development machine in order to publish databases.</p></li>
-<li><p>Users who will not have direct network access to their
+development machine in order to publish databases.</li>
+<li>Users who will not have direct network access to their
 production machines, or users who plan to update remote systems
 with external hard drives, must also install the “Disconnected
-Publishing Add-on” for additional tools.</p></li>
+Publishing Add-on” for additional tools.</li>
 </ul>
 </div>
 </div>
 </div>
 
 
-            <div class="clearer"></div>
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="sysReqGEEServer.html"
-                        title="previous chapter">System Requirements for GEE Server</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="installGEEServer.html"
-                        title="next chapter">Installing GEE Server</a></p>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -274,13 +272,12 @@ Publishing Add-on” for additional tools.</p></li>
           <a href="sysReqGEEServer.html" title="System Requirements for GEE Server"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../installGEE.html" >Install Google Earth Enterprise</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Before you install GEE Server</a></li> 
+          <li class="nav-item nav-item-1"><a href="../installGEE.html" >Install Google Earth Enterprise</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Open GEE Contributors.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>
