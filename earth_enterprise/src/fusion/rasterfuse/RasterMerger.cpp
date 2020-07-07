@@ -214,10 +214,11 @@ bool RasterMerger<CachingDataReader>::GetInsetTile(
       ffio_alpha_reader_cache_.ReadTile(inset->cached_blend_alpha_reader, addr,
                                         *dst_alpha_tile);
     } else {  // Tile is opaque (alpha is not cached for opaque tiles).
-              // UPDATE (2020-07-07): This is not always true since if 
+              // TODO: (2020-07-07): Is this always true? what if 
               // inset->cached_blend_alpha_reader is nullptr (for example
-              // when the alpha cache doesn't exist) it does not necessarily 
-              // mean this tile is opaque.
+              // when the alpha cache doesn't exist) does it necessarily 
+              // mean this tile is opaque? Was alpha supported in versions
+              // prior to 5?
       // Fill alpha mask with 1's.
       dst_alpha_tile->Fill(
           std::numeric_limits<AlphaProductTile::PixelType>::max());
