@@ -206,7 +206,7 @@ class GlobeBuilder(object):
       if polygon:
         # Check XML validity and standardize representation
         xml = etree2.ElementTree(etree.fromstring(polygon))
-        xml.write(fp, xml_declaration=True, encoding='UTF-8')
+        xml.write(fp, xml_declaration=True, encoding='UTF-8', default_namespace='http://www.opengis.net/kml/2.2')
         self.Status("Saved polygon to %s" % self.polygon_file)
       else:
         self.Status("Created empty polygon file %s" % self.polygon_file)
