@@ -2,25 +2,27 @@
 
 <!doctype html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Fusion disk space &#8212; Google Earth Enterprise 5.3.5 documentation</title>
-    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
-    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../static/jquery.js"></script>
-    <script type="text/javascript" src="../../static/underscore.js"></script>
-    <script type="text/javascript" src="../../static/doctools.js"></script>
-    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Relocate your asset root" href="relocateAssetRoot.html" />
     <link rel="prev" title="Back up Fusion servers" href="backupFusionServers.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
-    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <script src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -36,38 +38,17 @@
           <a href="backupFusionServers.html" title="Back up Fusion servers"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" accesskey="U">Fusion Administration</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" accesskey="U">Fusion Administration</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Manage Fusion disk space</a></li> 
       </ul>
-    </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="backupFusionServers.html"
-                        title="previous chapter">Back up Fusion servers</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="relocateAssetRoot.html"
-                        title="next chapter">Relocate your asset root</a></p>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
+  <p><a class="reference internal" href="../../_images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../_images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="manage-fusion-disk-space">
 <h1>Manage Fusion disk space<a class="headerlink" href="#manage-fusion-disk-space" title="Permalink to this headline">¶</a></h1>
 <div class="docutils container">
@@ -93,25 +74,25 @@ configuration files in the asset root and large pyramid files in
 auxiliary storage. Besides creating space in your asset root,
 there are other advantages to moving your pyramid files:</p>
 <ul class="simple">
-<li>You can share assets across Fusion installations, or copy
-assets from one system to another.</li>
-<li>You can create assets on stand-alone computers and copy them to
-the grid later.</li>
-<li>You can manage disk space more easily. Because pyramid files do
+<li><p>You can share assets across Fusion installations, or copy
+assets from one system to another.</p></li>
+<li><p>You can create assets on stand-alone computers and copy them to
+the grid later.</p></li>
+<li><p>You can manage disk space more easily. Because pyramid files do
 not grow or shrink, you can keep filling a volume with the
-pyramid files until it is full, then add another volume.</li>
-<li>You can store metadata (like the security level, the date the
+pyramid files until it is full, then add another volume.</p></li>
+<li><p>You can store metadata (like the security level, the date the
 source file was acquired, the bounding box, the resolution, the
 sensor type, and any other relevant data) with each pyramid
 directory. If you want to use the metadata in a new imagery
 project, it is more easily accessible than if it is buried in
-the asset tree.</li>
+the asset tree.</p></li>
 </ul>
 <p class="rubric">Moving pyramid files</p>
 <p>There are a few different ways to move pyramid files out of an
 asset root that is filling up:</p>
 <ul>
-<li><p class="first">Move files out of the asset root and create symbolic links to
+<li><p>Move files out of the asset root and create symbolic links to
 the files. To do this, copy the entire <code class="docutils literal notranslate"><span class="pre">raster.kip</span></code>
 directory to a different location and then symbolically link
 <code class="docutils literal notranslate"><span class="pre">raster.kip</span></code> to the new location with the <code class="docutils literal notranslate"><span class="pre">ln</span> <span class="pre">-s</span></code>
@@ -124,13 +105,11 @@ relief to a full asset root. However, extensive use of symbolic
 links can increase the potential risk of Fusion or publish
 errors, and is not good administrative practice.</p>
 </li>
-<li><p class="first">Set up KRP and KRMP <a class="reference internal" href="confTaskRulesForFusionPerf.html#configure-task-rules"><span class="std std-ref">task rules</span></a> to
+<li><p>Set up KRP and KRMP <a class="reference internal" href="confTaskRulesForFusionPerf.html#configure-task-rules"><span class="std std-ref">task rules</span></a> to
 direct Fusion to write the pyramid files to a different storage
-location instead of to the asset root.</p>
-</li>
-<li><p class="first">Copy the pyramid files from the asset root and to other
-storage, then recreate the asset. See the instructions below.</p>
-</li>
+location instead of to the asset root.</p></li>
+<li><p>Copy the pyramid files from the asset root and to other
+storage, then recreate the asset. See the instructions below.</p></li>
 </ul>
 <p class="rubric">To copy the pyramid files and recreate the asset:</p>
 <p>After the <code class="docutils literal notranslate"><span class="pre">raster.kip</span></code> and <code class="docutils literal notranslate"><span class="pre">mask.kmp</span></code> directories are created
@@ -140,17 +119,16 @@ There are other files in the asset directory, but they are
 auxiliary and not needed. The basic strategy for managing disk
 space is:</p>
 <ol class="arabic">
-<li><p class="first">Locate the asset to be moved. It will be in a directory with a
-<code class="docutils literal notranslate"><span class="pre">.kiasset</span></code> extension.</p>
-</li>
-<li><p class="first">Locate the <code class="docutils literal notranslate"><span class="pre">raster.kip</span></code> and the <code class="docutils literal notranslate"><span class="pre">mask.kmp</span></code> directories
+<li><p>Locate the asset to be moved. It will be in a directory with a
+<code class="docutils literal notranslate"><span class="pre">.kiasset</span></code> extension.</p></li>
+<li><p>Locate the <code class="docutils literal notranslate"><span class="pre">raster.kip</span></code> and the <code class="docutils literal notranslate"><span class="pre">mask.kmp</span></code> directories
 under the asset directory:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>find <span class="nv">$asset</span>.kiasset -type d -name raster.kip
 find <span class="nv">$asset</span>.kiasset -type d -name mask.kmp
 </pre></div>
 </div>
 </li>
-<li><p class="first">Copy the <code class="docutils literal notranslate"><span class="pre">raster.kip</span></code> and <code class="docutils literal notranslate"><span class="pre">mask.kmp</span></code> directories to the
+<li><p>Copy the <code class="docutils literal notranslate"><span class="pre">raster.kip</span></code> and <code class="docutils literal notranslate"><span class="pre">mask.kmp</span></code> directories to the
 auxiliary storage volume:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp -av <span class="nv">$kip</span> <span class="nv">$new_location</span>/<span class="nv">$asset</span>.kip
 cp -av <span class="nv">$kmp</span> <span class="nv">$new_location</span>/<span class="nv">$asset</span>.kmp
@@ -163,13 +141,12 @@ the server as NFS file systems, and those cannot be nested. For
 example, NFS does not allow <code class="docutils literal notranslate"><span class="pre">Volume1</span></code> and <code class="docutils literal notranslate"><span class="pre">Volume2</span></code> to be
 mounted as <code class="docutils literal notranslate"><span class="pre">/Volume1/Volume2</span></code>.</p>
 </li>
-<li><p class="first">Rename the <code class="docutils literal notranslate"><span class="pre">raster.kip</span></code> and <code class="docutils literal notranslate"><span class="pre">mask.kmp</span></code> files so that they
+<li><p>Rename the <code class="docutils literal notranslate"><span class="pre">raster.kip</span></code> and <code class="docutils literal notranslate"><span class="pre">mask.kmp</span></code> files so that they
 have the same name. The name should be descriptive of the
 asset. For example, if the asset is <code class="docutils literal notranslate"><span class="pre">EastChicago.kiasset</span></code>,
 the directories should be called <code class="docutils literal notranslate"><span class="pre">EastChicago.kip</span></code> and
-<code class="docutils literal notranslate"><span class="pre">EastChicago.kmp</span></code>.</p>
-</li>
-<li><p class="first">Modify the imagery asset with the <code class="docutils literal notranslate"><span class="pre">gemodifyimageryasset</span></code>
+<code class="docutils literal notranslate"><span class="pre">EastChicago.kmp</span></code>.</p></li>
+<li><p>Modify the imagery asset with the <code class="docutils literal notranslate"><span class="pre">gemodifyimageryasset</span></code>
 command, using the same name that the asset was originally
 created with:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gemodifyimageryasset -o imagery/EastChicago -havemask /gevol/newvolume/imagery/EastChicago.kip
@@ -179,7 +156,7 @@ created with:</p>
 see <em>Importing Preprocessed Resources</em> in the Google Earth
 Enterprise Reference Guide.</p>
 </li>
-<li><p class="first">Rebuild the imagery project and any database that contains the
+<li><p>Rebuild the imagery project and any database that contains the
 imagery project:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gebuild imagery/EastChicago
 </pre></div>
@@ -188,17 +165,17 @@ imagery project:</p>
 complete in seconds, because the heavy processing took place
 when the pyramid files were generated.</p>
 </li>
-<li><p class="first">Clean the imagery projects and databases using the Fusion UI:</p>
+<li><p>Clean the imagery projects and databases using the Fusion UI:</p>
 <ol class="loweralpha simple">
-<li>From the <strong>Asset Manager</strong>, right-click the project or
-database and select <strong>Asset Versions</strong>.</li>
-<li>Right-click the previous version and select <strong>Clean</strong>.
+<li><p>From the <strong>Asset Manager</strong>, right-click the project or
+database and select <strong>Asset Versions</strong>.</p></li>
+<li><p>Right-click the previous version and select <strong>Clean</strong>.
 Cleaning the project and database also cleans all the
 assets, removing the pyramid files from the asset root and
-freeing up quite a bit of space.</li>
-<li>Verify that each of the assets that were modified were
+freeing up quite a bit of space.</p></li>
+<li><p>Verify that each of the assets that were modified were
 cleaned, and that the pyramid files were removed from the
-asset root.</li>
+asset root.</p></li>
 </ol>
 </li>
 </ol>
@@ -247,7 +224,28 @@ asset.</p>
 </div>
 
 
+            <div class="clearer"></div>
           </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="backupFusionServers.html"
+                        title="previous chapter">Back up Fusion servers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="relocateAssetRoot.html"
+                        title="next chapter">Relocate your asset root</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -265,12 +263,13 @@ asset.</p>
           <a href="backupFusionServers.html" title="Back up Fusion servers"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" >Fusion Administration</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" >Fusion Administration</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Manage Fusion disk space</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Open GEE Contributors.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.1.
     </div>
   </body>
 </html>

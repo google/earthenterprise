@@ -2,25 +2,27 @@
 
 <!doctype html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Map buttons &#8212; Google Earth Enterprise 5.3.5 documentation</title>
-    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
-    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../static/jquery.js"></script>
-    <script type="text/javascript" src="../../static/underscore.js"></script>
-    <script type="text/javascript" src="../../static/doctools.js"></script>
-    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="stylesheet" href="../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Create terrain overlays" href="createTerrainOverlays.html" />
     <link rel="prev" title="Map projections" href="mapProjections.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
-    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <script src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -36,38 +38,17 @@
           <a href="mapProjections.html" title="Map projections"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" accesskey="U">Fusion Resources and Projects</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" accesskey="U">Fusion Resources and Projects</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Map buttons</a></li> 
       </ul>
-    </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="mapProjections.html"
-                        title="previous chapter">Map projections</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="createTerrainOverlays.html"
-                        title="next chapter">Create terrain overlays</a></p>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp2.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp2.png" style="width: 130px; height: 44px;" /></a></p>
+  <p><a class="reference internal" href="../../_images/googlelogo_color_260x88dp2.png"><img alt="Google logo" src="../../_images/googlelogo_color_260x88dp2.png" style="width: 130px; height: 44px;" /></a></p>
 <div class="section" id="map-buttons">
 <h1>Map buttons<a class="headerlink" href="#map-buttons" title="Permalink to this headline">¶</a></h1>
 <div class="docutils container">
@@ -79,7 +60,7 @@ However, this procedure is not compatible with Maps API 3.x.</p>
 you build with Fusion and host on a GEE 2D virtual server. In the
 example below, the left panel shows map layers that are published
 with the database.</p>
-<p><img alt="Default HTML interface" src="../../images/2972222_default_interface.jpg" /></p>
+<p><img alt="Default HTML interface" src="../../_images/2972222_default_interface.jpg" /></p>
 <p>Data courtesy of <a class="reference external" href="http://thematicmapping.org/">Thematic Mapping.org,</a></p>
 <p>The default interface does not include layer buttons like the
 “Maps, Satellite, Hybrid” buttons in Google Maps. However, you can
@@ -87,7 +68,7 @@ do some HTML and JavaScript editing to display Maps, Imagery, and
 Hybrid layer buttons that are similar. The example map below
 displays a <strong>Maps</strong> button for its two map layers and an
 <strong>Imagery</strong> button for its imagery layer.</p>
-<p><img alt="HTML interface with buttons" src="../../images/2972267_interface_buttons.jpg" /></p>
+<p><img alt="HTML interface with buttons" src="../../_images/2972267_interface_buttons.jpg" /></p>
 <p>Data courtesy of <a class="reference external" href="http://thematicmapping.org/">Thematic Mapping.org,</a></p>
 <p>To create buttons like this, associate the <strong>Maps</strong>, <strong>Imagery</strong>,
 and <strong>Hybrid</strong> (<strong>Show Labels</strong>) buttons with map types that you
@@ -97,25 +78,24 @@ that can be called directly. However, in GEE you need to use
 the map and imagery layers are different for each map.</p>
 <p class="rubric">To define map types in GEE:</p>
 <ol class="arabic">
-<li><p class="first">Use <code class="docutils literal notranslate"><span class="pre">GFusionTileLayer</span></code> to define a new tile layer for each
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">GFusionTileLayer</span></code> to define a new tile layer for each
 map or imagery layer. <code class="docutils literal notranslate"><span class="pre">GFusionTileLayer</span></code> can directly
 reference the array where the map and imagery layers are
-stored.</p>
-</li>
-<li><p class="first">Pass these two constructors to the <code class="docutils literal notranslate"><span class="pre">GFusionTileLayer</span></code> class:</p>
+stored.</p></li>
+<li><p>Pass these two constructors to the <code class="docutils literal notranslate"><span class="pre">GFusionTileLayer</span></code> class:</p>
 <ul class="simple">
-<li>The URL of the hosting server.</li>
-<li>The layer definition. The definition includes information
+<li><p>The URL of the hosting server.</p></li>
+<li><p>The layer definition. The definition includes information
 like the version of the tiles, the channel ID number, and
-whether the tiles are in PNG format.</li>
+whether the tiles are in PNG format.</p></li>
 </ul>
 </li>
-<li><p class="first">Specify which layer in the <code class="docutils literal notranslate"><span class="pre">geeServerDefs</span></code> array to select
+<li><p>Specify which layer in the <code class="docutils literal notranslate"><span class="pre">geeServerDefs</span></code> array to select
 for each <code class="docutils literal notranslate"><span class="pre">GFusionTileLayer</span></code> object.</p>
 <ul class="simple">
-<li>The imagery layer is layer 0.</li>
-<li>The maps layer is layer 1.</li>
-<li>The hybrid (Show Labels) layer is layer 2.</li>
+<li><p>The imagery layer is layer 0.</p></li>
+<li><p>The maps layer is layer 1.</p></li>
+<li><p>The hybrid (Show Labels) layer is layer 2.</p></li>
 </ul>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>var imagery_map_layer = new GFusionTileLayer(geeServerDefs.serverUrl, geeServerDefs.layers[0]);
 var painted_map_layer = new GFusionTileLayer(geeServerDefs.serverUrl, geeServerDefs.layers[1]);
@@ -127,18 +107,18 @@ about map and imagery layers directly from a web browser by
 using a URL in this format:
 <code class="docutils literal notranslate"><span class="pre">http://yourserver.org/virtual-server-name/query?request=Json&amp;vars=geeServerDefs</span></code>.
 Responses will look like the image below:</p>
-<p><img alt="GEE server definitions" src="../../images/2972270_server_definitions.jpg" /></p>
+<p><img alt="GEE server definitions" src="../../_images/2972270_server_definitions.jpg" /></p>
 <p>This data can also be returned by using the optional <code class="docutils literal notranslate"><span class="pre">v</span></code>
 parameter.</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">v=1</span></code> returns the data in the format shown in the image above.</li>
-<li><code class="docutils literal notranslate"><span class="pre">v=2</span></code> returns the data in the JSON format.</li>
-<li>A query without the <code class="docutils literal notranslate"><span class="pre">v</span></code> parameter acts as <code class="docutils literal notranslate"><span class="pre">v=1</span></code>.</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">v=1</span></code> returns the data in the format shown in the image above.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">v=2</span></code> returns the data in the JSON format.</p></li>
+<li><p>A query without the <code class="docutils literal notranslate"><span class="pre">v</span></code> parameter acts as <code class="docutils literal notranslate"><span class="pre">v=1</span></code>.</p></li>
 </ul>
 <p>An example of a query using the <code class="docutils literal notranslate"><span class="pre">v</span></code> parameter:
 <code class="docutils literal notranslate"><span class="pre">http://&lt;GEE</span> <span class="pre">earth</span> <span class="pre">server&gt;/&lt;database_publish_point&gt;/query?request=Json&amp;v=2</span></code></p>
 </li>
-<li><p class="first">Associate layers with buttons by using the <code class="docutils literal notranslate"><span class="pre">GMapType</span></code> class
+<li><p>Associate layers with buttons by using the <code class="docutils literal notranslate"><span class="pre">GMapType</span></code> class
 to define a map type for each of the <code class="docutils literal notranslate"><span class="pre">GTileLayer</span></code> objects.
 See the example below:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>var painted_map_type = new GMapType([painted_map_layer],new LatLngProjection(MAX_ZOOM_LEVEL),&quot;Maps&quot;);
@@ -147,7 +127,7 @@ var labels_map_type = new GMapType([imagery_map_layer, labels_layer],new LatLngP
 </pre></div>
 </div>
 </li>
-<li><p class="first">Use the <code class="docutils literal notranslate"><span class="pre">.addMapControl()</span></code> method to add each map type and
+<li><p>Use the <code class="docutils literal notranslate"><span class="pre">.addMapControl()</span></code> method to add each map type and
 its associated button to the map:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>map.addMapType(painted_map_type);
 map.addMapType(imagery_map_type);
@@ -155,21 +135,18 @@ map.addMapType(labels_map_type);
 </pre></div>
 </div>
 </li>
-<li><p class="first">Remove the predefined Google Maps map types below so that the
+<li><p>Remove the predefined Google Maps map types below so that the
 buttons display correctly:</p>
-<dl class="docutils">
-<dt><code class="docutils literal notranslate"><span class="pre">map.removeMapType(G_SATELLITE_MAP);</span></code> // Remove the default</dt>
-<dd><p class="first last">Satellite Map Type button</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">map.removeMapType(G_SATELLITE_MAP);</span></code> // Remove the default</dt><dd><p>Satellite Map Type button</p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">map.removeMapType(G_HYBRID_MAP);</span></code> // Remove the default</dt>
-<dd><p class="first last">Hybrid Map Type button</p>
+<dt><code class="docutils literal notranslate"><span class="pre">map.removeMapType(G_HYBRID_MAP);</span></code> // Remove the default</dt><dd><p>Hybrid Map Type button</p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">map.removeMapType(G_NORMAL_MAP);</span></code> // Remove the default</dt>
-<dd><p class="first last">Map Type button</p>
+<dt><code class="docutils literal notranslate"><span class="pre">map.removeMapType(G_NORMAL_MAP);</span></code> // Remove the default</dt><dd><p>Map Type button</p>
 </dd>
 </dl>
 </li>
-<li><p class="first">Add controls (like the zoom bar, the navigation bar, an
+<li><p>Add controls (like the zoom bar, the navigation bar, an
 overview map, and zooming options) to the map:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>map.addControl(new GSmallMapControl());
 map.addControl(new GOverviewMapControl());
@@ -183,19 +160,19 @@ map.enableContinuousZoom();
 <p class="rubric" id="display-a-drop-down-menu-instead-of-buttons">Display a drop-down menu instead of buttons</p>
 <p>You can show a drop-down menu for the map layers instead of the
 side-by-side buttons, as shown below.</p>
-<table border="1" class="colwidths-given docutils">
+<table class="colwidths-given docutils align-default">
 <colgroup>
-<col width="25%" />
-<col width="75%" />
+<col style="width: 25%" />
+<col style="width: 75%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Standard map type buttons</th>
-<th class="head">Drop-down menu for map types</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Standard map type buttons</p></th>
+<th class="head"><p>Drop-down menu for map types</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><img alt="Map buttons" src="../../images/2972268_map_buttons.jpg" /></td>
-<td><img alt="Menu buttons" src="../../images/2972269_menu_buttons.jpg" /></td>
+<tbody>
+<tr class="row-even"><td><p><img alt="Map buttons" src="../../_images/2972268_map_buttons.jpg" /></p></td>
+<td><p><img alt="Menu buttons" src="../../_images/2972269_menu_buttons.jpg" /></p></td>
 </tr>
 </tbody>
 </table>
@@ -252,33 +229,54 @@ from the <a class="reference external" href="https://groups.google.com/group/goo
 The maps and hybrid (Show Labels) map layers were built from
 three different datasets:</p>
 <ul class="simple">
-<li>Global borders (filled and outlined) in the maps and hybrid
+<li><p>Global borders (filled and outlined) in the maps and hybrid
 layers were created from the the Thematic Mapping World Borders
 dataset, available under a Creative Commons license at
-<a class="reference external" href="http://thematicmapping.org/downloads/world_borders.php">http://thematicmapping.org/downloads/world_borders.ph</a></li>
-<li>USA state boundaries in the maps and hybrid layers were created
+<a class="reference external" href="http://thematicmapping.org/downloads/world_borders.php">http://thematicmapping.org/downloads/world_borders.ph</a></p></li>
+<li><p>USA state boundaries in the maps and hybrid layers were created
 from the USA State borders vector data hosted by the National
 Atlas of the USA (now called the National Map). You can
-download state boundaries from <a class="reference external" href="https://nationalmap.gov/small_scale/atlasftp.html">https://nationalmap.gov/small_scale/atlasftp.html</a>.</li>
-<li>The background water that is visible in the maps layer was
+download state boundaries from <a class="reference external" href="https://nationalmap.gov/small_scale/atlasftp.html">https://nationalmap.gov/small_scale/atlasftp.html</a>.</p></li>
+<li><p>The background water that is visible in the maps layer was
 created with a global KML file. You can obtain the KML water
 file from the <a class="reference external" href="https://groups.google.com/group/google-earth-enterprise">Google Earth Enterprise</a> Google Group
-Files section.</li>
+Files section.</p></li>
 </ul>
 <p class="rubric">Imagery data</p>
 <p>Imagery for the globe was built from two different sources:</p>
 <ul class="simple">
-<li>BlueMarble 500-meter global imagery (combined surface and
-bathymetric imagery) was used as the backdrop for the image.</li>
-<li>A reduced resolution (120-meter) version of imagery from the
-Premium Globe dataset was used for land imagery.</li>
+<li><p>BlueMarble 500-meter global imagery (combined surface and
+bathymetric imagery) was used as the backdrop for the image.</p></li>
+<li><p>A reduced resolution (120-meter) version of imagery from the
+Premium Globe dataset was used for land imagery.</p></li>
 </ul>
 </div>
 </div>
 </div>
 
 
+            <div class="clearer"></div>
           </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="mapProjections.html"
+                        title="previous chapter">Map projections</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="createTerrainOverlays.html"
+                        title="next chapter">Create terrain overlays</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -296,12 +294,13 @@ Premium Globe dataset was used for land imagery.</li>
           <a href="mapProjections.html" title="Map projections"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.5 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" >Fusion Resources and Projects</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" >Fusion Resources and Projects</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Map buttons</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Open GEE Contributors.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.1.
     </div>
   </body>
 </html>

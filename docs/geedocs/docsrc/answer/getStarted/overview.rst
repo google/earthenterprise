@@ -8,8 +8,6 @@ Overview
 
    .. container:: content
 
-      .. index:: About Google Earth Enterprise
-
       Google Earth Enterprise (GEE) enables you to store and process
       terabytes of imagery, terrain, and vector data on your own server
       infrastructure, and publish globes and maps securely for your
