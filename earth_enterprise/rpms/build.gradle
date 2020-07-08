@@ -508,9 +508,9 @@ if (project.hasProperty('buildOpenGee')) {
     openGeeCommonDeb.dependsOn stageOpenGeeInstall
 }
 
-task openGeeServerCoreInitScripts(type: Copy, dependsOn: openGeeSharedFiles) {
-    from(file('opengee-server-core/src'))
-    into "${buildDir}/opengee-server-core"
+task openGeeServerInitScripts(type: Copy, dependsOn: openGeeSharedFiles) {
+    from(file('opengee-server/src'))
+    into "${buildDir}/opengee-server"
 
     CopySpecTemplates.expand(delegate, [
             'openGeeVersion': ospackage.version,
@@ -519,10 +519,10 @@ task openGeeServerCoreInitScripts(type: Copy, dependsOn: openGeeSharedFiles) {
         ])
 }
 
-task openGeeServerCoreRpm(type: GeeRpm, dependsOn: openGeeServerCoreInitScripts) {
+task openGeeServerRpm(type: GeeRpm, dependsOn: openGeeServerInitScripts) {
     mustRunAfter stageOpenGeeInstall
 
-    packageName = 'opengee-server-core'
+    packageName = 'opengee-server'
     version = ospackage.version
     release = ospackage.release
     user = 'root'
@@ -535,14 +535,6 @@ task openGeeServerCoreRpm(type: GeeRpm, dependsOn: openGeeServerCoreInitScripts)
     url = 'https://github.com/google/earthenterprise'
     autoFindProvides = true
     autoFindRequires = true
-
-    // This replaces the opengee-server package from 5.3.4.1 and before
-    obsoletes('opengee-server', "5.3.4.1", LESS | EQUAL)
-
-    // State that this provides opengee-server in case other software depends
-    // on it. The actual opengee-server RPM is a convenience RPM for a full
-    // install.
-    provides('opengee-server', ospackage.version)
 
     requires('opengee-common', ospackage.version, GREATER | EQUAL)
     requiresPre('opengee-common', ospackage.version, GREATER | EQUAL)
@@ -568,10 +560,10 @@ task openGeeServerCoreRpm(type: GeeRpm, dependsOn: openGeeServerCoreInitScripts)
 
     // Don't specify install scripts as single files.  It doesn't work for
     // RPMs:
-    preInstall = file("${buildDir}/opengee-server-core/pre-install.sh")
-    postInstall = file("${buildDir}/opengee-server-core/post-install.sh")
-    preUninstall = file("${buildDir}/opengee-server-core/pre-uninstall.sh")
-    postUninstall = file("${buildDir}/opengee-server-core/post-uninstall.sh")
+    preInstall = file("${buildDir}/opengee-server/pre-install.sh")
+    postInstall = file("${buildDir}/opengee-server/post-install.sh")
+    preUninstall = file("${buildDir}/opengee-server/pre-uninstall.sh")
+    postUninstall = file("${buildDir}/opengee-server/post-uninstall.sh")
 
     directory('/opt/google/install', 0700)
     directory('/opt/google/gehttpd/logs', 0755)
@@ -635,22 +627,19 @@ task openGeeServerCoreRpm(type: GeeRpm, dependsOn: openGeeServerCoreInitScripts)
     link('/opt/google/run', '/var/opt/google/run')
 }
 
-task openGeeServerCoreDeb (type: GeeDeb, dependsOn: openGeeServerCoreInitScripts) {
+task openGeeServerDeb (type: GeeDeb, dependsOn: openGeeServerInitScripts) {
     mustRunAfter stageOpenGeeInstall
 
-    packageName = openGeeServerCoreRpm.packageName
+    packageName = openGeeServerRpm.packageName
     version = ospackage.version
     release = ospackage.release
-    user = openGeeServerCoreRpm.user
-    permissionGroup = openGeeServerCoreRpm.permissionGroup
+    user = openGeeServerRpm.user
+    permissionGroup = openGeeServerRpm.permissionGroup
     packageGroup = 'misc'
-    summary = openGeeServerCoreRpm.summary
-    packageDescription = openGeeServerCoreRpm.packageDescription
-    license = openGeeServerCoreRpm.license
-    url = openGeeServerCoreRpm.url
-
-    // This replaces the opengee-server package from 5.3.4.1 and before
-    obsoletes('opengee-server', "5.3.4.1", LESS | EQUAL)
+    summary = openGeeServerRpm.summary
+    packageDescription = openGeeServerRpm.packageDescription
+    license = openGeeServerRpm.license
+    url = openGeeServerRpm.url
 
     requires('opengee-common', ospackage.version, GREATER | EQUAL)
     requires('opengee-postgis', '2.3.9', GREATER | EQUAL)
@@ -673,10 +662,10 @@ task openGeeServerCoreDeb (type: GeeDeb, dependsOn: openGeeServerCoreInitScripts
     // Specify a single file for each install script.  Otherwise, OSPackage
     // wraps the code in extra statements that, e.g., only run the
     // post-install script on a new install, and not on upgrade:
-    preInstallFile file("${buildDir}/opengee-server-core/pre-install.sh")
-    postInstallFile file("${buildDir}/opengee-server-core/post-install.sh")
-    preUninstallFile file("${buildDir}/opengee-server-core/pre-uninstall.sh")
-    postUninstallFile file("${buildDir}/opengee-server-core/post-uninstall.sh")
+    preInstallFile file("${buildDir}/opengee-server/pre-install.sh")
+    postInstallFile file("${buildDir}/opengee-server/post-install.sh")
+    preUninstallFile file("${buildDir}/opengee-server/pre-uninstall.sh")
+    postUninstallFile file("${buildDir}/opengee-server/post-uninstall.sh")
 
     directory('/opt/google/install', 0700)
     directory('/opt/google/gehttpd/logs', 0755)
@@ -741,14 +730,14 @@ task openGeeServerCoreDeb (type: GeeDeb, dependsOn: openGeeServerCoreInitScripts
 }
 
 if (project.hasProperty('buildOpenGee')) {
-    openGeeServerCoreRpm.dependsOn stageOpenGeeInstall
-    openGeeServerCoreDeb.dependsOn stageOpenGeeInstall
+    openGeeServerRpm.dependsOn stageOpenGeeInstall
+    openGeeServerDeb.dependsOn stageOpenGeeInstall
 }
 
 
-task openGeeFusionCoreInitScripts(type: Copy, dependsOn: openGeeSharedFiles) {
-    from(file('opengee-fusion-core/src'))
-    into "${buildDir}/opengee-fusion-core"
+task openGeeFusionInitScripts(type: Copy, dependsOn: openGeeSharedFiles) {
+    from(file('opengee-fusion/src'))
+    into "${buildDir}/opengee-fusion"
 
     CopySpecTemplates.expand(delegate, [
             'openGeeVersion': ospackage.version,
@@ -757,10 +746,10 @@ task openGeeFusionCoreInitScripts(type: Copy, dependsOn: openGeeSharedFiles) {
 }
 
 
-task openGeeFusionCoreRpm (type: GeeRpm, dependsOn: openGeeFusionCoreInitScripts) {
+task openGeeFusionRpm (type: GeeRpm, dependsOn: openGeeFusionInitScripts) {
     mustRunAfter stageOpenGeeInstall
 
-    packageName = 'opengee-fusion-core'
+    packageName = 'opengee-fusion'
     version = ospackage.version
     release = ospackage.release
     user = 'root'
@@ -779,9 +768,6 @@ built from raster, vector, and location properties data.
     autoFindProvides = true
     autoFindRequires = true
 
-    // This replaces the opengee-fusion package from 5.3.4.1 and before
-    obsoletes('opengee-fusion', "5.3.4.1", LESS | EQUAL)
-
     requires('opengee-common', ospackage.version, GREATER | EQUAL)
     requires('proj-devel') /* This dependency is not being picked up automatically by GeeRpm task */
     requires('/etc/rc.d/init.d/functions')
@@ -797,10 +783,10 @@ built from raster, vector, and location properties data.
 
     // Don't specify install scripts as single files.  It doesn't work for
     // RPMs:
-    preInstall = file("${buildDir}/opengee-fusion-core/pre-install.sh")
-    postInstall = file("${buildDir}/opengee-fusion-core/post-install.sh")
-    preUninstall = file("${buildDir}/opengee-fusion-core/pre-uninstall.sh")
-    postUninstall = file("${buildDir}/opengee-fusion-core/post-uninstall.sh")
+    preInstall = file("${buildDir}/opengee-fusion/pre-install.sh")
+    postInstall = file("${buildDir}/opengee-fusion/post-install.sh")
+    preUninstall = file("${buildDir}/opengee-fusion/pre-uninstall.sh")
+    postUninstall = file("${buildDir}/opengee-fusion/post-uninstall.sh")
 
     directory('/var/opt/google/run', 0775)
     directory('/var/opt/google/log', 0775)
@@ -831,7 +817,7 @@ built from raster, vector, and location properties data.
         exclude '**/taskrules'
     }
 
-    from(file('opengee-fusion-core/src/install')) {
+    from(file('opengee-fusion/src/install')) {
         into packageInstallRootDir
 
         CopySpecTemplates.expand(delegate, [
@@ -845,36 +831,32 @@ built from raster, vector, and location properties data.
     link('/opt/google/run', '/var/opt/google/run')
 }
 
-task openGeeFusionCoreDeb (type: GeeDeb, dependsOn: openGeeFusionCoreInitScripts) {
+task openGeeFusionDeb (type: GeeDeb, dependsOn: openGeeFusionInitScripts) {
     mustRunAfter stageOpenGeeInstall
 
-    packageName = openGeeFusionCoreRpm.packageName
+    packageName = openGeeFusionRpm.packageName
     version = ospackage.version
     release = ospackage.release
-    user = openGeeFusionCoreRpm.user
-    permissionGroup = openGeeFusionCoreRpm.permissionGroup
+    user = openGeeFusionRpm.user
+    permissionGroup = openGeeFusionRpm.permissionGroup
     packageGroup = 'misc'
-    summary = openGeeFusionCoreRpm.summary
-    packageDescription = openGeeFusionCoreRpm.packageDescription
-    license = openGeeFusionCoreRpm.license
-    url = openGeeFusionCoreRpm.url
+    summary = openGeeFusionRpm.summary
+    packageDescription = openGeeFusionRpm.packageDescription
+    license = openGeeFusionRpm.license
+    url = openGeeFusionRpm.url
     type = BINARY
-
-    // This replaces the opengee-fusion package from 5.3.4.1 and before
-    obsoletes('opengee-fusion', "5.3.4.1", LESS | EQUAL)
 
     requires('opengee-common', ospackage.version, GREATER | EQUAL)
     requires('dpkg')
     requires('lsb-base')
 
-
     // Specify a single file for each install script.  Otherwise, OSPackage
     // wraps the code in extra statements that, e.g., only run the
     // post-install script on a new install, and not on upgrade:
-    preInstallFile file("${buildDir}/opengee-fusion-core/pre-install.sh")
-    postInstallFile file("${buildDir}/opengee-fusion-core/post-install.sh")
-    preUninstallFile file("${buildDir}/opengee-fusion-core/pre-uninstall.sh")
-    postUninstallFile file("${buildDir}/opengee-fusion-core/post-uninstall.sh")
+    preInstallFile file("${buildDir}/opengee-fusion/pre-install.sh")
+    postInstallFile file("${buildDir}/opengee-fusion/post-install.sh")
+    preUninstallFile file("${buildDir}/opengee-fusion/pre-uninstall.sh")
+    postUninstallFile file("${buildDir}/opengee-fusion/post-uninstall.sh")
 
     directory('/var/opt/google/run', 0775)
     directory('/var/opt/google/log', 0775)
@@ -905,7 +887,7 @@ task openGeeFusionCoreDeb (type: GeeDeb, dependsOn: openGeeFusionCoreInitScripts
         exclude '**/taskrules'
     }
 
-    from(file('opengee-fusion-core/src/install')) {
+    from(file('opengee-fusion/src/install')) {
         into packageInstallRootDir
 
         CopySpecTemplates.expand(delegate, [
@@ -920,8 +902,8 @@ task openGeeFusionCoreDeb (type: GeeDeb, dependsOn: openGeeFusionCoreInitScripts
 }
 
 if (project.hasProperty('buildOpenGee')) {
-    openGeeFusionCoreRpm.dependsOn stageOpenGeeInstall
-    openGeeFusionCoreDeb.dependsOn stageOpenGeeInstall
+    openGeeFusionRpm.dependsOn stageOpenGeeInstall
+    openGeeFusionDeb.dependsOn stageOpenGeeInstall
 }
 
 task openGeeExtraInitScripts(type: Copy, dependsOn: openGeeSharedFiles) {
@@ -1141,11 +1123,11 @@ if (project.hasProperty('buildOpenGee')) {
     openGeeExtraDeb.dependsOn stageOpenGeeInstall
 }
 
-// Convenience package that installs opengee-server-core + opengee-extra
-task openGeeServerRpm (type: GeeRpm) {
+// Convenience package that installs opengee-server + opengee-extra
+task openGeeFullServerRpm (type: GeeRpm) {
     mustRunAfter stageOpenGeeInstall
 
-    packageName = 'opengee-server'
+    packageName = 'opengee-full-server'
     version = ospackage.version
     release = ospackage.release
     user = 'root'
@@ -1161,39 +1143,39 @@ task openGeeServerRpm (type: GeeRpm) {
     autoFindProvides = true
     autoFindRequires = true
 
-    requires('opengee-server-core', ospackage.version, GREATER | EQUAL)
+    requires('opengee-server', ospackage.version, GREATER | EQUAL)
     requires('opengee-extra', ospackage.version, GREATER | EQUAL)
 }
 
-task openGeeServerDeb (type: GeeDeb) {
+task openGeeFullServerDeb (type: GeeDeb) {
     mustRunAfter stageOpenGeeInstall
 
-    packageName = openGeeServerRpm.packageName
+    packageName = openGeeFullServerRpm.packageName
     version = ospackage.version
     release = ospackage.release
-    user = openGeeServerRpm.user
-    permissionGroup = openGeeServerRpm.permissionGroup
-    packageGroup = openGeeServerRpm.packageGroup
-    summary = openGeeServerRpm.summary
-    packageDescription = openGeeServerRpm.packageDescription
-    license = openGeeServerRpm.license
-    url = openGeeServerRpm.url
+    user = openGeeFullServerRpm.user
+    permissionGroup = openGeeFullServerRpm.permissionGroup
+    packageGroup = openGeeFullServerRpm.packageGroup
+    summary = openGeeFullServerRpm.summary
+    packageDescription = openGeeFullServerRpm.packageDescription
+    license = openGeeFullServerRpm.license
+    url = openGeeFullServerRpm.url
     type = BINARY
 
-    requires('opengee-server-core', ospackage.version, GREATER | EQUAL)
+    requires('opengee-server', ospackage.version, GREATER | EQUAL)
     requires('opengee-extra', ospackage.version, GREATER | EQUAL)
 }
 
 if (project.hasProperty('buildOpenGee')) {
-    openGeeServerRpm.dependsOn stageOpenGeeInstall
-    openGeeServerDeb.dependsOn stageOpenGeeInstall
+    openGeeFullServerRpm.dependsOn stageOpenGeeInstall
+    openGeeFullServerDeb.dependsOn stageOpenGeeInstall
 }
 
-// Convenience package that installs opengee-fusion-core + opengee-extra
-task openGeeFusionRpm (type: GeeRpm) {
+// Convenience package that installs opengee-fusion + opengee-extra
+task openGeeFullFusionRpm (type: GeeRpm) {
     mustRunAfter stageOpenGeeInstall
 
-    packageName = 'opengee-fusion'
+    packageName = 'opengee-full-fusion'
     version = ospackage.version
     release = ospackage.release
     user = 'root'
@@ -1208,45 +1190,45 @@ task openGeeFusionRpm (type: GeeRpm) {
     autoFindProvides = true
     autoFindRequires = true
 
-    requires('opengee-fusion-core', ospackage.version, GREATER | EQUAL)
+    requires('opengee-fusion', ospackage.version, GREATER | EQUAL)
     requires('opengee-extra', ospackage.version, GREATER | EQUAL)
 }
 
-task openGeeFusionDeb (type: GeeDeb) {
+task openGeeFullFusionDeb (type: GeeDeb) {
     mustRunAfter stageOpenGeeInstall
 
-    packageName = openGeeFusionRpm.packageName
+    packageName = openGeeFullFusionRpm.packageName
     version = ospackage.version
     release = ospackage.release
-    user = openGeeFusionRpm.user
-    permissionGroup = openGeeFusionRpm.permissionGroup
-    packageGroup = openGeeFusionRpm.packageGroup
-    summary = openGeeFusionRpm.summary
-    packageDescription = openGeeFusionRpm.packageDescription
-    license = openGeeFusionRpm.license
-    url = openGeeFusionRpm.url
+    user = openGeeFullFusionRpm.user
+    permissionGroup = openGeeFullFusionRpm.permissionGroup
+    packageGroup = openGeeFullFusionRpm.packageGroup
+    summary = openGeeFullFusionRpm.summary
+    packageDescription = openGeeFullFusionRpm.packageDescription
+    license = openGeeFullFusionRpm.license
+    url = openGeeFullFusionRpm.url
     type = BINARY
 
-    requires('opengee-fusion-core', ospackage.version, GREATER | EQUAL)
+    requires('opengee-fusion', ospackage.version, GREATER | EQUAL)
     requires('opengee-extra', ospackage.version, GREATER | EQUAL)
 }
 
 if (project.hasProperty('buildOpenGee')) {
-    openGeeFusionRpm.dependsOn stageOpenGeeInstall
-    openGeeFusionDeb.dependsOn stageOpenGeeInstall
+    openGeeFullFusionRpm.dependsOn stageOpenGeeInstall
+    openGeeFullFusionDeb.dependsOn stageOpenGeeInstall
 }
 
 task openGeeRpms(
     dependsOn: [
-        'openGeeServerCoreRpm', 'openGeeServerRpm',
-        'openGeeFusionCoreRpm', 'openGeeFusionRpm',
+        'openGeeServerRpm', 'openGeeFullServerRpm',
+        'openGeeFusionRpm', 'openGeeFullFusionRpm',
         'openGeeCommonRpm', 'openGeePostGisRpm', 'openGeeExtraRpm'
     ])
 
 task openGeeDebs(
     dependsOn: [
-        'openGeeServerCoreDeb', 'openGeeServerDeb',
-        'openGeeFusionCoreDeb', 'openGeeFusionDeb',
+        'openGeeServerDeb', 'openGeeFullServerDeb',
+        'openGeeFusionDeb', 'openGeeFullFusionDeb',
         'openGeeCommonDeb', 'openGeePostGisDeb', 'openGeeExtraDeb'
     ])
 
