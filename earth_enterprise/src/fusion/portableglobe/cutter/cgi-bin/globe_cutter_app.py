@@ -208,8 +208,14 @@ class GlobeBuilder(object):
     with open(self.polygon_file, "w") as fp:
       if polygon:
         # Check XML validity and standardize representation
-        xml = etree2.ElementTree(etree.fromstring(polygon))
-        xml.write(fp, xml_declaration=True, encoding='UTF-8', default_namespace=DEFAULT_KML_NAMESPACE)
+        contents = etree.fromstring(polygon)
+        # empty namespace will just contain the string "kml"
+        # otherwise, it will be in the format "{<schema>}kml"
+        ns = DEFAULT_KML_NAMESPACE
+        if len(contents.tag) > 3:
+          ns = contents.tag[1:len(contents.tag)-4]  
+        xml = etree2.ElementTree(contents))
+        xml.write(fp, xml_declaration=True, encoding='UTF-8', default_namespace=ns)
         self.Status("Saved polygon to %s" % self.polygon_file)
       else:
         self.Status("Created empty polygon file %s" % self.polygon_file)
