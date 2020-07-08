@@ -214,7 +214,7 @@ class GlobeBuilder(object):
         ns = DEFAULT_KML_NAMESPACE
         if len(contents.tag) > 3:
           ns = contents.tag[1:len(contents.tag)-4]  
-        xml = etree2.ElementTree(contents))
+        xml = etree2.ElementTree(contents)
         xml.write(fp, xml_declaration=True, encoding='UTF-8', default_namespace=ns)
         self.Status("Saved polygon to %s" % self.polygon_file)
       else:
