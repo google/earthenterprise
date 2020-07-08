@@ -255,12 +255,15 @@ void PacketGenAssetVersionImplD::UpdateChildren(
           // assets) that have no alpha blend cached.
           levInputs[inputs_idx+1] = blendVer.Ref();
           levInputVers[inputs_idx+1] = blendVer;
+          const std::string output_file_name = blendVer->GetOutputFilename(0);
           const std::string cache_alpha_path =
-              blendVer->GetOutputFilename(0) + "/cache_alpha.pack";
-           // if blendVer->GetOutputFilename(0) is empty, this Asset still 
-            // doesn't has an output file, so the path doesn't exist but it's going 
-            // to be built. So we mark it as exists
-          if (blendVer->GetOutputFilename(0).empty() 
+              output_file_name + "/cache_alpha.pack";
+          // if output_file_name is empty, this Asset still 
+          // doesn't has an output file (this is a new asset), so the path 
+          // doesn't exist. But since in our version alpha cache is going
+          // to be used (according to above comment), we assume that it's 
+          // going to be there when it would be needed.
+          if (output_file_name.empty() 
                   || khExists(cache_alpha_path)) {
             cached_blend_alpha = blendVer.Ref();
           }
@@ -291,14 +294,18 @@ void PacketGenAssetVersionImplD::UpdateChildren(
         // blend directory exists for the asset since in GEE-5.x we need to
         // pick up the GEE-4.x Imagery/Terrain Projects (the PacketLevel
         // assets) that have no alpha blend cached.
-
+        const std::string output_file_name = prevLevelVer->GetOutputFilename(0);
         const std::string cache_alpha_path =
-            prevLevelVer->GetOutputFilename(0) + "/cache_alpha.pack";
-        // if prevLevelVer->GetOutputFilename(0) is empty, this Asset still 
-        // doesn't has an output file, so the path doesn't exist but it's going 
-        // to be built. So we mark it as exists
+            output_file_name + "/cache_alpha.pack";
+        
+        // if output_file_name is empty, this Asset still 
+        // doesn't has an output file (this is a new assetversion), so the path 
+        // doesn't exist. But since in our version alpha cache is going
+        // to be used (according to above comments), we assume that it's 
+        // going to be there when it would be needed (and config.cacheRaster 
+        // tells us that this packetgen has alpha).
         const bool cache_alpha_exist = 
-            prevLevelVer->GetOutputFilename(0).empty() 
+            output_file_name.empty() 
                 || khExists(cache_alpha_path);
 
         packetLevelConfig.insets.push_back
