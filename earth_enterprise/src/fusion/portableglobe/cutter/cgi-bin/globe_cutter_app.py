@@ -106,6 +106,9 @@ METADATA_FILE_TEMPLATE = "%s/%%s/earth/metadata.json" % GLOBE_ENV_DIR_TEMPLATE
 # Disk space minimum in MB before we start sending warnings.
 DISK_SPACE_WARNING_THRESHOLD = 1000.0
 
+# Default KML namespace
+DEFAULT_KML_NAMESPACE = 'http://www.opengis.net/kml/2.2'
+
 class OsCommandError(Exception):
   """Thrown if os command fails."""
   pass
@@ -206,7 +209,7 @@ class GlobeBuilder(object):
       if polygon:
         # Check XML validity and standardize representation
         xml = etree2.ElementTree(etree.fromstring(polygon))
-        xml.write(fp, xml_declaration=True, encoding='UTF-8')
+        xml.write(fp, xml_declaration=True, encoding='UTF-8', default_namespace=DEFAULT_KML_NAMESPACE)
         self.Status("Saved polygon to %s" % self.polygon_file)
       else:
         self.Status("Created empty polygon file %s" % self.polygon_file)
