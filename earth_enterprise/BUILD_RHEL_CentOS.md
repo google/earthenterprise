@@ -58,21 +58,30 @@ sudo yum install -y https://repo.ius.io/ius-release-el6.rpm
 It's recommended to install a recent version of Git from the [IUS repositories](https://ius.io),
 but the older RedHat or Centos packages can also be used.
 
+### RHEL 6 and CentOS 6
+
 ```bash
-# To install Git 2.16 on RHEL 6 and Centos 6
 sudo yum install -y https://repo.ius.io/ius-release-el6.rpm
-sudo yum install -y git216
+sudo yum install -y git222
+```
 
+### RHEL 7 and CentOS 7
 
-# To install Git 2.16 on RHEL 7 and CentOS 7
+```bash
 sudo yum install -y https://repo.ius.io/ius-release-el7.rpm
-sudo yum install -y git216
+sudo yum install -y git222
+```
 
-# To install the system default version:
+### (Optional) System default version - all platforms
+
+Instead of installing git from the IUS repositories you can use the system
+default version. This version of git is older than the IUS version.
+
+```bash
 sudo yum install -y git
 ```
 
-## Install Git LFS
+## Install Git LFS - all platforms
 
 OpenGEE uses Git LFS to store large binary files.  To install Git LFS, use the following commands:
 
@@ -85,14 +94,14 @@ sudo yum install -y git-lfs
 ## GCC 4.8
 
 
-### RHEL 7 And Centos 7
+### RHEL 7 And CentOS 7
 For all versions of CentOS and RHEL, install the standard development/build tools:
 
 ```bash
 sudo yum install -y ant bzip2 doxygen gcc-c++ patch python python-argparse python-defusedxml python-setuptools tar
 ```
 
-### For RHEL6 and Centos 6
+### RHEL6 and Centos 6
 
 ```bash
 sudo yum install -y ant bzip2 doxygen gcc-c++ patch tar python27 python-argparse python27-defusedxml python27-setuptools
@@ -119,7 +128,7 @@ __NOTE:__ If you are upgrading from GEE 5.1.3 or earlier, you must run this step
 _after_ uninstalling older versions of GEE. Otherwise, some of the
 prerequisites will be missing and the build will fail.
 
-### CentOS 7 and RHEL 7
+### RHEL 7 and CentOS 7
 
 Execute:
 
@@ -135,7 +144,8 @@ sudo yum install -y \
   xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
 ```
 
-### CentOS 6 and RHEL 6
+###  RHEL 6 and CentOS 6
+
 Execute:
 
 ```bash
@@ -156,7 +166,7 @@ experimenting with the `--skip-broken` parameter.
 
 ## GTest 1.8
 
-### CentOS 7 and RHEL 7
+###  RHEL 7 and CentOS 7
 
 GTest is included in the EPEL and RHEL Extra Repositories. Install the RPM with:
 
@@ -164,7 +174,7 @@ GTest is included in the EPEL and RHEL Extra Repositories. Install the RPM with:
 sudo yum install -y gtest-devel
 ```
 
-### CentOS 6 and RHEL 6
+### RHEL 6 and CentOS 6
 
 You will need to compile, package, and install an updated version of GTest as an
 RPM for RHEL6. This build process also depends on GCC 4.8, as does
@@ -191,12 +201,13 @@ Install the RPM:
 ```bash
 sudo yum install -y ./build/RPMS/x86_64/gtest-devtoolset2-1.8.0-1.x86_64.rpm
 ```
+
 ## shunit2
 
 shunit2 is used for unit testing shell scripts in the GEE repository.
 It is currently used only for testing package-building scripts.
 
-### CentOS 7 and RHEL 7
+### RHEL 7 and CentOS 7
 
 The EPEL repositories for RHEL and CentOS 7 do not include shunit2.
 If you want to run these tests on one of these platforms, you must install
@@ -207,18 +218,17 @@ To do so run the following:
 sudo yum install -y http://download-ib01.fedoraproject.org/pub/epel/6/x86_64/Packages/s/shunit2-2.1.6-3.el6.noarch.rpm
 ```
 
-### CentOS 6 and RHEL 6
+### RHEL 6 and CentOS 6
 
 shunit2 was installed in a previous step.
 
-
 ## Install Python 2.7 Packages
 
-### CentOS 7 and RHEL 7
+### RHEL 7 and CentOS 7
 
 Python 2.7 is installed as a system default, so no additional packages are needed.
 
-### CentOS 6 and RHEL 6
+### RHEL 6 and CentOS 6
 
 ```bash
 sudo pip2.7 install gitpython
@@ -356,4 +366,3 @@ Reboot and then confirm that fips has been enabled
 $ cat /proc/sys/crypto/fips_enabled
 1
 ```
-
