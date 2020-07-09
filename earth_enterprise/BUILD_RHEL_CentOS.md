@@ -62,14 +62,14 @@ but the older RedHat or Centos packages can also be used.
 
 ```bash
 sudo yum install -y https://repo.ius.io/ius-release-el6.rpm
-sudo yum install -y git222
+sudo yum install -y git224
 ```
 
 ### RHEL 7 and CentOS 7
 
 ```bash
 sudo yum install -y https://repo.ius.io/ius-release-el7.rpm
-sudo yum install -y git222
+sudo yum install -y git224
 ```
 
 ### (Optional) System default version - all platforms
