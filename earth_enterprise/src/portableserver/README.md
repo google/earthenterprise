@@ -140,7 +140,8 @@ C:\swigwin-3.0.12;C:\Python27;C:\MinGW\bin;C:\Program Files\ . . .
 
 Run
 
-    python earthenterprise\earth_enterprise\src\portableserver\build.py
+    cd earthenterprise\earth_enterprise\src\portableserver
+    python build.py
 
 The build script will produce a compressed archive with a name that looks like `earthenterprise\earth_enterprise\src\portableserver\build\portableserver-windows-5.1.3-20170412.zip`. The build date part of the file name will change depending on the day you build.
 
@@ -148,7 +149,8 @@ You can install the built Portable Server from this Zip archive.
 
 To clean build files, run 
 
-    python earthenterprise\earth_enterprise\src\portableserver\build.py --clean
+    cd earthenterprise\earth_enterprise\src\portableserver
+    python build.py --clean
 
 
 ## Installing on Windows
