@@ -1,0 +1,9 @@
+
+Before you Configure Google Earth Enterprise Fusion
+
+Before you use many of the Google Earth Enterprise Fusion
+configuration tools, you must stop the system manager and then start
+it after you change the configuration. To stop/start the system
+manager, enter:
+
+"/etc/init.d/gefusion [stop | start | restart]"
