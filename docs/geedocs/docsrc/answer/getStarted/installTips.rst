@@ -8,7 +8,6 @@ Installation tips
 
    .. container:: content
 
-      .. index:: Installation Tips
       .. rubric:: Before installation
          :name: before-installation
 
