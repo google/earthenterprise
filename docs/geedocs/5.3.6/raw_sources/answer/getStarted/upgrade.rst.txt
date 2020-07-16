@@ -8,8 +8,6 @@ Upgrade to GEE 5.x
 
    .. container:: content
 
-      .. index:: Upgrade Google Earth Enterprise
-
       You can upgrade to Google Earth Enterprise 5.x from versions 4.0.0
       through 4.4.1.
 
