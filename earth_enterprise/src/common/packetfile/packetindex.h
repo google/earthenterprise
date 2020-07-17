@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,8 +35,8 @@ class EndianWriteBuffer;
 class PacketIndexEntry {
  public:
   // Size of buffer to store in disk format (including CRC32)
-  static const size_t kStoreSize = QuadtreePath::kStoreSize + sizeof(uint64)
-      + sizeof(uint32) + sizeof(uint32) + sizeof(uint32);
+  static const size_t kStoreSize = QuadtreePath::kStoreSize + sizeof(std::uint64_t)
+      + sizeof(std::uint32_t) + sizeof(std::uint32_t) + sizeof(std::uint32_t);
 
   // Constructors - the first constructor expects a little-endian
   // buffer in the format created by Push. Throws exception if bad data.
@@ -43,9 +44,9 @@ class PacketIndexEntry {
     Pull(*buffer);
   }
   PacketIndexEntry(const QuadtreePath &qt_path,
-                   const uint64 position,
-                   const uint32 record_size,
-                   const uint32 extra = 0)
+                   const std::uint64_t position,
+                   const std::uint32_t record_size,
+                   const std::uint32_t extra = 0)
       : qt_path_(qt_path),
         position_(position),
         record_size_(record_size),
@@ -76,17 +77,17 @@ class PacketIndexEntry {
 
   QuadtreePath qt_path() const { return qt_path_; }
   void set_qt_path(QuadtreePath new_path) { qt_path_ = new_path; }
-  uint64 position() const { return position_; }
-  void set_position(uint64 new_pos) { position_ = new_pos; }
-  uint32 record_size() const { return record_size_; }
-  void set_record_size(uint32 new_size) { record_size_ = new_size; }
-  uint32 extra() const { return extra_; }
-  void set_extra(uint32 new_extra) { extra_ = new_extra; }
+  std::uint64_t position() const { return position_; }
+  void set_position(std::uint64_t new_pos) { position_ = new_pos; }
+  std::uint32_t record_size() const { return record_size_; }
+  void set_record_size(std::uint32_t new_size) { record_size_ = new_size; }
+  std::uint32_t extra() const { return extra_; }
+  void set_extra(std::uint32_t new_extra) { extra_ = new_extra; }
  private:
   QuadtreePath qt_path_;                // path to this record
-  uint64 position_;                     // pos of record in file bundle
-  uint32 record_size_;                  // size of data (incl. CRC)
-  uint32 extra_;                        // extra id (not used by all)
+  std::uint64_t position_;                     // pos of record in file bundle
+  std::uint32_t record_size_;                  // size of data (incl. CRC)
+  std::uint32_t extra_;                        // extra id (not used by all)
 };
 
 
@@ -105,12 +106,12 @@ class PacketIndexReader {
   bool data_has_crc() const { return data_has_crc_; }
   const std::string &file_path() const { return file_path_; }
   bool ReadNext(PacketIndexEntry *entry);
-  uint32 ReadNextN(PacketIndexEntry *entries, uint32 count,
+  std::uint32_t ReadNextN(PacketIndexEntry *entries, std::uint32_t count,
                    LittleEndianReadBuffer &buffer);
   off64_t Filesize() const { return file_size_; }
   void Seek(off64_t position);
-  uint64 NumPackets(void) const;
-  static uint64 NumPackets(const std::string &index_path);
+  std::uint64_t NumPackets(void) const;
+  static std::uint64_t NumPackets(const std::string &index_path);
  private:
   std::string file_path_;               // path to index
   off64_t index_pos_;                   // position for next read

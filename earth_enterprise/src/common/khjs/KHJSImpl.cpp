@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -94,14 +95,14 @@ bool JSContextUser::ValueToBoolean(jsval v) {
   return b;
 }
 
-int32 JSContextUser::ValueToInt32(jsval v) {
-  int32 i = 0;
+std::int32_t JSContextUser::ValueToInt32(jsval v) {
+  std::int32_t i = 0;
   (void)JS_ValueToECMAInt32(rawcx, v, &i);
   return i;
 }
 
-uint32 JSContextUser::ValueToUint32(jsval v) {
-  uint32 u = 0;
+std::uint32_t JSContextUser::ValueToUint32(jsval v) {
+  std::uint32_t u = 0;
   (void)JS_ValueToECMAUint32(rawcx, v, &u);
   return u;
 }
@@ -170,7 +171,7 @@ void JSContextUser::FindGlobalFunctionNames(QStringList &fnames) {
 }
 
 void JSContextUser::DefineReadOnlyPropertyWithTinyId
-(JSObject *obj, const QString &name, int8 tinyid, JSPropertyOp getter)
+(JSObject *obj, const QString &name, std::int8_t tinyid, JSPropertyOp getter)
 {
   if (!JS_DefineUCPropertyWithTinyId(rawcx, obj,
                                      name.ucs2(), name.length(),
@@ -237,7 +238,7 @@ JSObject* JSLocalRootScopeGuard::CompileScript(const QString &scriptText,
     // extract the error msg first in case JS_DestroyScript changes it
     QString msg =
       jsuser.MakeErrorMessage(kh::tr("Unable to wrap script in object"));
-      
+
     // nobody else owns the script yet, so we need to clean it up
     (void)JS_DestroyScript(jsuser.rawcx, script);
 

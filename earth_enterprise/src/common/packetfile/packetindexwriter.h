@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,11 +62,11 @@ class PacketIndexWriter {
   void WriteAppend(const PacketIndexEntry &index_entry);
 
   // "split-writing" - allocation separate from blocking disk I/O
-  uint64 AllocateAppend(const QuadtreePath &qt_path);
-  void   WriteAt(uint64 pos, const PacketIndexEntry &index_entry);
+  std::uint64_t AllocateAppend(const QuadtreePath &qt_path);
+  void   WriteAt(std::uint64_t pos, const PacketIndexEntry &index_entry);
 
   void Close(size_t max_sort_buffer = kDefaultMaxSortBuffer);
-  uint64 entry_count() const { return entry_count_; }
+  std::uint64_t entry_count() const { return entry_count_; }
   off64_t index_pos() const { return index_pos_; }
  private:
   // SortedRegion structure to keep track of contiguous areas in index
@@ -73,11 +74,11 @@ class PacketIndexWriter {
   struct SortedRegion {
    public:
     SortedRegion() : position(0), count(0) {}
-    SortedRegion(off64_t position_, uint32 count_)
+    SortedRegion(off64_t position_, std::uint32_t count_)
         : position(position_),
           count(count_) {}
     off64_t position;                   // position in index file
-    uint32 count;                       // number of records in region
+    std::uint32_t count;                       // number of records in region
   };
   class SortedRegionMergeSource;
 
@@ -89,7 +90,7 @@ class PacketIndexWriter {
 
   khDeleteGuard<geFilePool::Writer> index_writer_;
   off64_t index_pos_;                   // position in index for next write
-  uint64 entry_count_;
+  std::uint64_t entry_count_;
 
   khMutex modify_lock_;
 

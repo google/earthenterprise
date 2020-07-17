@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -39,10 +40,10 @@ const std::string PacketFileReaderBase::kIndexBase = "packetindex";
 namespace PacketFile {
   const std::string kIndexBase = PacketFileReaderBase::kIndexBase;
   const std::string kSignature("PktIndex");
-  const uint16 kFormatVersion = 1;
+  const std::uint16_t kFormatVersion = 1;
   const size_t kIndexHeaderSize(
     kSignature.size() + sizeof(kFormatVersion)
-    + sizeof(uint16) + sizeof(uint32));
+    + sizeof(std::uint16_t) + sizeof(std::uint32_t));
 
 bool IsPacketFile(const std::string &path) {
   std::string indexpath = khComposePath(path, kIndexBase);
@@ -145,7 +146,7 @@ size_t PacketFileReader::ReadNextCRC(QuadtreePath *qt_path,
 }
 
 void PacketFileReaderBase::EnableReadCache(
-    uint32 max_blocks, uint32 block_size) {
+    std::uint32_t max_blocks, std::uint32_t block_size) {
   // Only enable caching if a minimum of 2 blocks are set.
   if (max_blocks >= 2) {
     FileBundleReader::EnableReadCache(max_blocks, block_size);
