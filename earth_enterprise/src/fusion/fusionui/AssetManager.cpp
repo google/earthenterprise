@@ -1277,7 +1277,7 @@ void AssetManager::PushDatabase(const gstAssetHandle& handle) {
         qApp->processEvents();
     }
   }
- 
+
   if (progress_dialog.wasCanceled()) {
     QMessageBox::critical(this, "Push Interrupted",
                           tr("Push Interrupted"), 0, 0, 0);
