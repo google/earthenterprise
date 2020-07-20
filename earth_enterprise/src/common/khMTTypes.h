@@ -20,6 +20,7 @@
 
 #include "khThread.h"
 #include "khGuard.h"
+#include <cstdint>
 #include <queue>
 #include <deque>
 #include <set>
