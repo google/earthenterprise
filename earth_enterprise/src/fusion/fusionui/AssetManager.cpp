@@ -478,7 +478,7 @@ void ServeAssistant::Stop() {
 }
 
 void ServeAssistant::SetCanceled() {
-  //progress_->setCanceled();
+  progress_->setCanceled();
 }
 
 void ServeAssistant::Perform() {
@@ -642,6 +642,7 @@ void AssetManager::HandleNewWindow(AssetBase* asset_window) {
                             asset_window->AssetSubtype());
   AssetAction* action = new AssetAction(this, asset_window);
   action->addTo(Window);
+  sleep(60);
   asset_window->setIcon(helper.GetPixmap());
   asset_window->move(QCursor::pos());
   asset_window->show();
@@ -1264,7 +1265,7 @@ void AssetManager::PushDatabase(const gstAssetHandle& handle) {
     QObject::connect(&progress_dialog, SIGNAL(canceled()),
                      &push_assistant, SLOT(SetCanceled()));
     QObject::connect(&push_thread, SIGNAL(sfinished()), &push_assistant, SLOT(Stop()));
-    QObject::connect(&push_thread, SIGNAL(sfinished()), qApp, SLOT(&QObject::deleteLater));
+    QObject::connect(&push_thread, SIGNAL(sfinished()), qApp, SLOT(QObject::deleteLater()));
     //QObject::connect(&push_thread, SIGNAL(static_cast<void(QThread::*)()>(&QThread::finished)), &push_thread, SLOT(&QThread::quit), Qt::DirectConnection);
     //FIXME
     //QObject::connect(&push_thread, QThread::finished, &push_thread, &QThread::quit, Qt::DirectConnection);
@@ -1273,9 +1274,11 @@ void AssetManager::PushDatabase(const gstAssetHandle& handle) {
     push_assistant.Start();
     progress_dialog.show();
 
-    qApp->exec();
+    while (push_thread.isRunning()) {
+        qApp->processEvents();
+    }
   }
-
+  
   if (progress_dialog.wasCanceled()) {
     QMessageBox::critical(this, "Push Interrupted",
                           tr("Push Interrupted"), 0, 0, 0);
