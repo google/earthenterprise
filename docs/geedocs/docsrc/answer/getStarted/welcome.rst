@@ -7,8 +7,6 @@ Welcome to Google Earth Enterprise
 
    .. container:: content
 
-      .. index:: Welcome to Google Earth Enterprise
-
       Be sure to read :doc:`../installGEE/sysReqFusionGEEServer` before you begin.
 
       -  If you need to install or access the documentation offline, see
