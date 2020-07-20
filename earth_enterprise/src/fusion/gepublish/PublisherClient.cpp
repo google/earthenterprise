@@ -625,6 +625,7 @@ bool PublisherClient::PushDatabase(const std::string& db_name) {
   notify(NFY_DEBUG, "Push Database Contacted SEARCH_SERVER");
 
   std::string norm_db_name = NormalizeDbName(db_name);
+
   // Sync Stream and Search data for specified database.
   return SyncDatabase(norm_db_name);
 }
