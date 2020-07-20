@@ -656,7 +656,7 @@ bool PublisherClient::SyncDatabase(const std::string& db_name) {
       return false;
     }
     notify(NFY_DEBUG, "Created gepublish tempdir");
-    sleep(10);
+
     // Create a guard object that ensures that the temporary directory gets
     // deleted automatically when we return.
     khCallGuard<const std::string&, bool> prune_guard(khPruneDir, tmpdir);
@@ -666,7 +666,7 @@ bool PublisherClient::SyncDatabase(const std::string& db_name) {
     db_manifest.GetPushManifest(file_pool, &manifest_entries,
                                 &manifest_entries, tmpdir, publish_prefix);
     notify(NFY_DEBUG, "GetPushManifest");
-    sleep(10);
+
     // chmod all the temporary files to 0755 so that the publisher servlet
     // can access it just in case the user's umask disables access to all
     // completely.
@@ -686,7 +686,7 @@ bool PublisherClient::SyncDatabase(const std::string& db_name) {
       return false;
     }
     notify(NFY_DEBUG, "SyncFiles(STREAM_SERVER) done.");
-    sleep(10);
+
     // Transfer search data (POI files), create POI tables.
     notify(NFY_DEBUG, "SyncFiles(SEARCH_SERVER)...");
     if (!SyncFiles(SEARCH_SERVER, args, manifest_entries, tmpdir)) {
@@ -695,7 +695,7 @@ bool PublisherClient::SyncDatabase(const std::string& db_name) {
     }
     notify(NFY_DEBUG, "SyncFiles(SEARCH_SERVER) done.");
     notify(NFY_DEBUG, "-----------------SyncDatabase successful\n.");
-    sleep(10);
+
     return true;
   } catch(const std::exception &e) {
     AppendErrMsg(e.what());

@@ -1265,7 +1265,7 @@ void AssetManager::PushDatabase(const gstAssetHandle& handle) {
     QObject::connect(&progress_dialog, SIGNAL(canceled()),
                      &push_assistant, SLOT(SetCanceled()));
     QObject::connect(&push_thread, SIGNAL(sfinished()), &push_assistant, SLOT(Stop()));
-    QObject::connect(&push_thread, SIGNAL(sfinished()), qApp, SLOT(QObject::deleteLater()));
+    QObject::connect(&push_thread, SIGNAL(sfinished()), qApp, SLOT(QObject::deleteLater));
     //QObject::connect(&push_thread, SIGNAL(static_cast<void(QThread::*)()>(&QThread::finished)), &push_thread, SLOT(&QThread::quit), Qt::DirectConnection);
     //FIXME
     //QObject::connect(&push_thread, QThread::finished, &push_thread, &QThread::quit, Qt::DirectConnection);
@@ -1405,8 +1405,10 @@ void AssetManager::PublishDatabase(const gstAssetHandle& handle) {
     publish_thread.start();
     publish_assistant.Start();
     progress_dialog.show();
-
-    qApp->exec();
+ 
+    while (publish_thread.isRunning()) {
+        qApp->processEvents();
+    } 
   }
 
   if (progress_dialog.wasCanceled()) {
