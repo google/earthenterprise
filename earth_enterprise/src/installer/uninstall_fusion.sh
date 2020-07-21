@@ -112,6 +112,7 @@ main_uninstall()
     remove_user
     remove_group
     show_final_success_message
+    systemctl daemon-reexec
 }
 
 #-----------------------------------------------------------------

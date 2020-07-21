@@ -105,6 +105,7 @@ main_uninstall()
   change_publish_root_ownership
   remove_users_groups
   show_final_success_message
+  systemctl daemon-reexec
 }
 
 show_help()
