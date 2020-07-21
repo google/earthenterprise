@@ -61,7 +61,7 @@ def IsFusionInstalled():
 
 def IsGeeServerInstalled():
   """Check if GEE Server is installed."""
-  gee_server_start_script = '/etc/init.d/gefusion'
+  gee_server_start_script = '/etc/init.d/geserver'
   return os.path.exists(gee_server_start_script)
 
 

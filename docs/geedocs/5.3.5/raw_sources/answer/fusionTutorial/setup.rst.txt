@@ -38,7 +38,6 @@ Setting Up the Tutorial
       -  :ref:`Define Source Providers <DefineSrcProv>`
       -  :ref:`Define Resource Paths <DefineResPath>`
 
-      .. index:: Tutorial Asset Root
       .. _SelectAssetRoot:
       .. rubric:: Select the Tutorial Asset Root
 
@@ -93,7 +92,6 @@ Setting Up the Tutorial
          ``/etc/init.d/gefusion start``
 
 
-      .. index:: Launch Google Earth Enterprise Fusion
       .. _LaunchFusion:
       .. rubric:: Launch Google Earth Enterprise Fusion
 
@@ -105,7 +103,6 @@ Setting Up the Tutorial
       graphical user interface (GUI) appears.
 
 
-      .. index:: Asset Navigation Tree
       .. _AssetNavTree:
       .. rubric:: Build the Asset Navigation Tree
 
@@ -163,7 +160,6 @@ Setting Up the Tutorial
          the top right corner.
 
 
-      .. index:: Source Providers
       .. _DefineSrcProv:
       .. rubric:: Define Source Providers
 
@@ -229,7 +225,6 @@ Setting Up the Tutorial
          |Provider Manager Full|
       #. Click **OK** to close the Provider Manager.
 
-      .. index:: Resource Paths
       .. _DefineResPath:
       .. rubric:: Define Resource Paths
 

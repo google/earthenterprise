@@ -525,6 +525,16 @@ gees.admin = {
     });
   },
 
+  getDocStatus: function() {
+    // Show documentation link if docs are installed
+    $.ajax({
+      url: GEE_BASE_URL + '/shared_assets/docs/manual/',
+      success: function(e) {
+        gees.dom.show('DocumentationItem');
+      }
+    });
+  },
+
   setAdminDefaults: function() {
     // Status globals for UI.
     this.cutterStatus = 'On';
@@ -532,6 +542,8 @@ gees.admin = {
     this.mode = this.modes.database;
     // Determine if cutter is enabled or disabled.
     this.getCutterStatus();
+    // Determine if docs are installed
+    this.getDocStatus();
     return this;
   },
 

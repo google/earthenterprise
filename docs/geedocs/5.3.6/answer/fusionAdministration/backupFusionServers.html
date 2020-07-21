@@ -1,0 +1,401 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Back up Fusion servers &#8212; Google Earth Enterprise 5.3.6 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Manage Fusion disk space" href="manageFusionDiskSpace.html" />
+    <link rel="prev" title="Backing up your data" href="backupData.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="manageFusionDiskSpace.html" title="Manage Fusion disk space"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="backupData.html" title="Backing up your data"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" accesskey="U">Fusion Administration</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="backupData.html"
+                        title="previous chapter">Backing up your data</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="manageFusionDiskSpace.html"
+                        title="next chapter">Manage Fusion disk space</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="back-up-fusion-servers">
+<h1>Back up Fusion servers<a class="headerlink" href="#back-up-fusion-servers" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>The Fusion server typically stores multiple terabytes of source
+data and intermediate assets. If you have a tape backup system or
+enough disk space, you should perform a full back up of the server
+any time a new database is built or a significant amount of new
+data is processed. If you do not have enough resources to do this,
+you can back up only critical files and display rules
+instead.</p>
+<p class="rubric">Display rules</p>
+<p>Typically, you will spend quite a bit of time defining display
+rules exactly the way you want them, so you should back them up each time you modify a vector layer.</p>
+<p>To back up display rules:</p>
+<ol class="arabic simple">
+<li>In the Vector Layer dialog box, select <strong>Export as a
+Template</strong>.</li>
+<li>Save the display rules on a volume different from the source
+volume and the asset root.</li>
+</ol>
+<p class="rubric" id="critical-fusion-files">Critical Fusion files</p>
+<p>If you have backups of the files listed below, you can rebuild
+your database with some patience and scripting. The rebuild will
+take a lot of CPU time, but should go smoothly with a minimum of
+administrator time.</p>
+<p>The files that are critical to restoring your Fusion server are:</p>
+<ul class="simple">
+<li><strong>Your original source files</strong>. These are typically stored on a
+network shared drive or on portable USB disks, depending on the
+environment. Make sure that you can find and reload your
+original source files.</li>
+<li><strong>The XML files that Fusion generates during its processing</strong>.
+These are critical because they contain the display rules for
+the vector data, the rules for building resources and projects,
+and other critical settings.</li>
+<li><strong>All the files under /opt/google/gehttpd in the cgi-bin, conf
+conf.d, and htdocs directory</strong>. These files contain any
+user-customized scripts or web pages, and the definitions of
+any virtual servers you created on the Fusion server.</li>
+<li><strong>The files in the .config and .userdata directories under the
+asset root</strong>. These contain custom icons and provider
+information as well as some basic Fusion configuration
+settings.</li>
+</ul>
+<p class="rubric">Backing up</p>
+<p>The steps below show you how to back up your critical files. When
+you run these commands, replace the asset root and backup
+locations with the locations of your own asset root and backups.</p>
+<ol class="arabic">
+<li><p class="first">Make sure that you can locate and reload all the source data
+files if needed.</p>
+</li>
+<li><p class="first">Create a directory to hold the backup files:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir -p /data/backup/assets
+mkdir -p /data/backup/gehttpd
+</pre></div>
+</div>
+</li>
+<li><p class="first">Back up the gehttpd files:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /opt/google/gehttpd
+rsync -r htdocs cgi-bin conf conf.d /data/backup/gehttpd
+</pre></div>
+</div>
+</li>
+<li><p class="first">Back up the XML files and config files to a safe place on a
+disk that is not part of the asset root or source directories:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /gevol/assets
+rsync -r .config .userdata /data/backup/assets/
+find . -name <span class="s2">&quot;*.xml&quot;</span> &gt; FileList.txt
+rsync --files-from<span class="o">=</span>FileList.txt /gevol/assets /data/backup/assets/
+</pre></div>
+</div>
+</li>
+<li><p class="first">(Optional.) Store a compressed backup of the files somewhere
+else:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tar czf /home/backups/GevolXmlBackup.tgz /data/backups
+</pre></div>
+</div>
+</li>
+</ol>
+<p class="rubric">Restoring imagery and terrain</p>
+<ol class="arabic">
+<li><p class="first">Make sure that the Fusion software is installed correctly and
+is running.</p>
+</li>
+<li><p class="first">Configure your asset root to be consistent with your old asset
+root. If you are not sure about this, manually run commands
+like:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geconfigureassetroot --new --assetroot /gevol/assets
+geselectassetroot --assetroot /gevol/assets
+</pre></div>
+</div>
+</li>
+<li><p class="first">Restore the backed-up XML and configuration files to their
+original location in the asset root.</p>
+</li>
+<li><p class="first">Restore the source files to their original location on the
+Fusion server. If you cannot remember the directory they were
+in, just place them on the Fusion server in the source
+directory you specified in the Fusion volume definitions
+(<code class="docutils literal notranslate"><span class="pre">/gevol/src</span></code> by default).</p>
+</li>
+<li><p class="first">Use the <code class="docutils literal notranslate"><span class="pre">gequery</span></code> command and shell scripting to make sure
+your source files are in the right place. If the files are not
+found, find them and copy them to the right place. Below is an
+example of a script for reporting where all your imagery source
+files should be located. You can use the same script for
+terrain resources if you change <code class="docutils literal notranslate"><span class="pre">kiasset</span></code> to <code class="docutils literal notranslate"><span class="pre">ktasset</span></code>.
+Example script:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /gevol/assets
+<span class="k">for</span> resource in <span class="sb">`</span>find . -type d -name <span class="s2">&quot;*.kiasset&quot;</span><span class="sb">`</span>
+<span class="k">do</span>
+   <span class="k">for</span> file in <span class="sb">`</span>gequery --infiles <span class="nv">$resource</span><span class="sb">`</span>
+   <span class="k">do</span>
+      <span class="k">if</span> <span class="o">[</span> ! -f <span class="nv">$file</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">[</span> ! -d <span class="nv">$file</span> <span class="o">]</span>
+      <span class="k">then</span>
+            <span class="nb">echo</span> <span class="s2">&quot;Can not find </span><span class="nv">$file</span><span class="s2">&quot;</span>
+      <span class="k">else</span>
+            <span class="nb">echo</span> <span class="s2">&quot;Found </span><span class="nv">$file</span><span class="s2">&quot;</span>
+      <span class="k">fi</span>
+   <span class="k">done</span>
+<span class="k">done</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">After all the files are in place, generate a series of commands
+to rebuild the resources. For example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /gevol/assets
+<span class="k">for</span> resource in <span class="sb">`</span>find . -type d -name <span class="s2">&quot;*.kiasset&quot;</span> <span class="p">|</span> sed <span class="s1">&#39;s/.kiasset//&#39;</span><span class="sb">`</span>
+<span class="k">do</span>
+    gequery --infiles <span class="nv">$resource</span> &gt; filelist
+    genewimageryresource -o <span class="nv">$resource</span> --filelist filelist
+    sleep <span class="m">1</span>
+    gebuild <span class="nv">$resource</span>
+<span class="k">done</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">There is a <code class="docutils literal notranslate"><span class="pre">khasset.xml</span></code> file under each <code class="docutils literal notranslate"><span class="pre">.kiasset</span></code>
+directory that contains information about the mask tolerance,
+feathering, white fill, and provider for each imagery and
+terrain resource. You can use scripting to extract this
+information from each resource and add it to the
+<code class="docutils literal notranslate"><span class="pre">genewimageryresource</span></code> command to apply the correct settings
+for each resource.</p>
+</li>
+</ol>
+<p class="rubric">Restoring vectors</p>
+<p>The vector restore process is different from the imagery and
+terrain process because of the display rules that each vector
+layer has. These display rules take a very long time to configure,
+and typically the Fusion administrator has not saved the display
+rules as a template. Without the XML files, the vector project can
+take many hours to recreate. Fortunately, all the display rules
+for each vector layer are contained in a single file called
+<code class="docutils literal notranslate"><span class="pre">khasset.xml</span></code>. This file is under the vector project’s main
+directory, and is included in the backup script listed above. The
+<code class="docutils literal notranslate"><span class="pre">restore_vector_project.pl</span></code> file below reads the khasset.xml
+file, and creates the commands and display templates necessary to
+rebuild the entire vector project.</p>
+<p class="rubric" id="restore-vector-project-pl">restore_vector_project.pl</p>
+<div class="highlight-perl notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/perl</span>
+<span class="c1">#</span>
+<span class="c1"># Do you want to back up your vector project or duplicate it as a new project?</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># This script generates the instructions and files necessary to completely rebuild your</span>
+<span class="c1"># vector project. It reads your current vector project and extracts the display rules</span>
+<span class="c1"># and determines which raw data files were used to create your resources. The results</span>
+<span class="c1"># of running this script is a series of four new scripts called Step_One thru Step_Four</span>
+<span class="c1"># Running the resulting four scripts in order rebuilds your vector project as it was before.</span>
+
+<span class="k">use</span> <span class="nn">File::Path</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">File::Copy</span><span class="p">;</span>
+
+<span class="c1"># Read in the vector project to be backed up and the directory to</span>
+<span class="c1"># write the scripts and files to.</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$#ARGV</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">){</span> <span class="n">usage</span><span class="p">();</span> <span class="nb">exit</span><span class="p">;</span> <span class="p">}</span>
+<span class="nv">$vector_project</span> <span class="o">=</span> <span class="nv">$ARGV</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="nv">$output_dir</span> <span class="o">=</span> <span class="nv">$ARGV</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span> <span class="nb">chomp</span><span class="p">(</span> <span class="nv">$output_dir</span> <span class="p">);</span>
+
+<span class="nv">$assetroot</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">get_assetroot</span><span class="p">();</span>
+<span class="nb">chomp</span><span class="p">(</span> <span class="nv">$assetroot</span> <span class="p">);</span>
+<span class="k">print</span> <span class="s">&quot;Using Asset Root $assetroot \n&quot;</span><span class="p">;</span>
+
+<span class="nb">open</span><span class="p">(</span><span class="n">StepOne</span><span class="p">,</span>  <span class="s">&quot;&gt;$output_dir/Step_One_Create_Resources.sh&quot;</span><span class="p">);</span>
+<span class="nb">open</span><span class="p">(</span><span class="n">StepTwo</span><span class="p">,</span>  <span class="s">&quot;&gt;$output_dir/Step_Two_Build_Resources.sh&quot;</span><span class="p">);</span>
+<span class="nb">open</span><span class="p">(</span><span class="n">StepThree</span><span class="p">,</span><span class="s">&quot;&gt;$output_dir/Step_Three_Create_Project.sh&quot;</span><span class="p">);</span>
+<span class="k">print</span> <span class="n">StepThree</span> <span class="s">&quot;genewvectorproject -o $vector_project\n&quot;</span><span class="p">;</span>
+<span class="nb">close</span><span class="p">(</span><span class="n">StepThree</span><span class="p">);</span>
+<span class="nb">open</span><span class="p">(</span><span class="n">StepFour</span><span class="p">,</span> <span class="s">&quot;&gt;$output_dir/Step_Four_Add_Resources.sh&quot;</span><span class="p">);</span>
+
+<span class="c1"># Locate the khasset.xml file for this project.</span>
+<span class="nv">$khasset</span> <span class="o">=</span> <span class="s">&quot;$assetroot/$vector_project.kvproject/khasset.xml&quot;</span><span class="p">;</span>
+
+<span class="nb">open</span><span class="p">(</span><span class="n">IN</span><span class="p">,</span> <span class="s">&quot;$khasset&quot;</span><span class="p">)</span> <span class="o">||</span> <span class="nb">die</span> <span class="s">&quot;Can&#39;t open $khasset&quot;</span><span class="p">;</span>
+
+<span class="c1"># Read in all of the header info on the khasset file and ignore it</span>
+<span class="k">while</span><span class="p">(</span><span class="sr">&lt;IN&gt;</span><span class="p">){</span> <span class="k">last</span> <span class="k">if</span> <span class="nv">$_</span> <span class="o">!~</span> <span class="sr">/&lt;layers&gt;/</span><span class="p">;</span> <span class="p">}</span>
+
+
+<span class="c1"># Keep reading the khasset file and parse out the information for each individual</span>
+<span class="c1"># layer.</span>
+
+<span class="k">while</span><span class="p">(</span><span class="sr">&lt;IN&gt;</span><span class="p">){</span>
+   <span class="k">my</span><span class="p">(</span><span class="nv">@current_layer</span><span class="p">);</span>
+
+   <span class="k">if</span> <span class="p">(</span><span class="nv">$_</span> <span class="o">=~</span><span class="sr"> /&lt;layer&gt;/</span><span class="p">){</span> <span class="c1"># Found a new layer</span>
+      <span class="nv">$_</span> <span class="o">=</span> <span class="sr">&lt;IN&gt;</span><span class="p">;</span>
+      <span class="k">while</span> <span class="p">(</span><span class="nv">$_</span> <span class="o">!~</span> <span class="sr">/&lt;\/layer&gt;/</span><span class="p">){</span> <span class="c1"># Read all of the data on this layer</span>
+            <span class="nb">push</span><span class="p">(</span><span class="nv">@current_layer</span><span class="p">,</span> <span class="nv">$_</span><span class="p">);</span>
+            <span class="nv">$_</span> <span class="o">=</span> <span class="sr">&lt;IN&gt;</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="c1"># Extract the important naming information from this layer including</span>
+      <span class="c1"># the name of the layer, and the resource that was used for this layer.</span>
+      <span class="c1"># The legend corresponds to the folder that contains the layer</span>
+
+      <span class="nv">$assetref</span> <span class="o">=</span> <span class="n">get_value</span><span class="p">(</span> <span class="nb">grep</span><span class="p">(</span><span class="sr">/assetRef/</span><span class="p">,</span> <span class="nv">@current_layer</span><span class="p">));</span>
+      <span class="nv">$assetname</span> <span class="o">=</span> <span class="n">get_value</span><span class="p">(</span><span class="nb">grep</span><span class="p">(</span><span class="sr">/name useDefault/</span><span class="p">,</span> <span class="nv">@current_layer</span><span class="p">));</span>
+      <span class="nv">$assetname</span> <span class="o">=~</span> <span class="sr">s/ /_/g</span><span class="p">;</span>
+      <span class="nv">$assetname</span> <span class="o">=~</span> <span class="sr">s/\W/_/g</span><span class="p">;</span>
+      <span class="nv">$legend</span>   <span class="o">=</span> <span class="n">get_value</span><span class="p">(</span> <span class="nb">grep</span><span class="p">(</span><span class="sr">/&lt;legend&gt;/</span><span class="p">,</span> <span class="nv">@current_layer</span><span class="p">));</span>
+      <span class="nv">$legend</span> <span class="o">=~</span> <span class="sr">s/\|/\//g</span><span class="p">;</span>
+      <span class="nv">$legend</span> <span class="o">=~</span> <span class="sr">s/ /_/g</span><span class="p">;</span>
+
+      <span class="c1"># Store all of the display rules in subdirectories that correspond to the</span>
+      <span class="c1"># structure of the folders that the layers are grouped in. This way, duplicate</span>
+      <span class="c1"># layer names will not overwrite eachother</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="o">-</span><span class="n">d</span> <span class="s">&quot;$output_dir/$legend&quot;</span><span class="p">){</span><span class="n">mkpath</span><span class="p">(</span><span class="s">&quot;$output_dir/$legend&quot;</span><span class="p">)};</span>
+
+      <span class="c1"># Begin writing each display rule to its own &quot;.khdsp&quot; file and simultaneously create</span>
+      <span class="c1"># the instructions for building the resource and adding the resource to the project</span>
+      <span class="c1"># using the correct &quot;.khdsp&quot; template.</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="nb">length</span><span class="p">(</span><span class="nv">$assetref</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">){</span> <span class="c1"># Not just a folder</span>
+
+            <span class="nb">open</span><span class="p">(</span><span class="n">OUT</span><span class="p">,</span> <span class="s">&quot;&gt;$output_dir/$legend/$assetname.khdsp&quot;</span><span class="p">)</span> <span class="o">||</span>
+               <span class="nb">die</span> <span class="s">&quot;Cant open $output_dir/$legend/$assetname.khdsp&quot;</span><span class="p">;</span>
+            <span class="k">print</span> <span class="n">OUT</span> <span class="s">&#39;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot; ?&gt;&#39;</span> <span class="o">.</span> <span class="s">&quot;\n&quot;</span><span class="p">;</span>
+            <span class="k">print</span> <span class="n">OUT</span> <span class="s">&quot;&lt;LayerConfig&gt;\n&quot;</span><span class="p">;</span>
+            <span class="k">print</span> <span class="n">OUT</span> <span class="nv">@current_layer</span><span class="p">;</span>
+            <span class="k">print</span> <span class="n">OUT</span> <span class="s">&quot;&lt;/LayerConfig&gt;\n&quot;</span><span class="p">;</span>
+            <span class="nb">close</span><span class="p">(</span> <span class="n">OUT</span> <span class="p">);</span>
+
+            <span class="nv">$raw_files</span> <span class="o">=</span> <span class="sb">`gequery --infiles &quot;$assetref&quot;`</span><span class="p">;</span>
+            <span class="nv">$raw_files</span> <span class="o">=~</span> <span class="sr">s/\n/ /g</span><span class="p">;</span>
+            <span class="k">print</span> <span class="n">StepOne</span> <span class="s">&quot;genewvectorresource -o $assetref $raw_files\n&quot;</span><span class="p">;</span>
+            <span class="k">print</span> <span class="n">StepTwo</span> <span class="s">&quot;gebuild $assetref\n&quot;</span><span class="p">;</span>
+            <span class="k">print</span> <span class="n">StepFour</span> <span class="s">&quot;geaddtovectorproject -o $vector_project --template $output_dir/$legend/$assetname.khdsp $assetref\n&quot;</span><span class="p">;</span>
+
+      <span class="p">}</span>
+      <span class="nb">undef</span> <span class="nv">@current_layer</span><span class="p">;</span>
+   <span class="p">}</span>
+   <span class="k">last</span> <span class="k">if</span> <span class="nv">$_</span> <span class="o">=~</span><span class="sr"> /&lt;\/layers&gt;/</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">copy</span><span class="p">(</span> <span class="nv">$khasset</span><span class="p">,</span> <span class="nv">$output_dir</span><span class="p">);</span>
+
+<span class="nb">close</span><span class="p">(</span><span class="n">IN</span><span class="p">);</span> <span class="nb">close</span><span class="p">(</span><span class="n">OUT</span><span class="p">);</span>
+<span class="nb">close</span><span class="p">(</span><span class="n">StepOne</span><span class="p">);</span>
+<span class="nb">close</span><span class="p">(</span><span class="n">StepTwo</span><span class="p">);</span>
+<span class="nb">close</span><span class="p">(</span><span class="n">StepThree</span><span class="p">);</span>
+<span class="nb">close</span><span class="p">(</span><span class="n">StepFour</span><span class="p">);</span>
+
+<span class="k">sub</span> <span class="nf">get_assetroot</span><span class="p">(){</span>
+   <span class="nb">open</span><span class="p">(</span><span class="n">IN</span><span class="p">,</span> <span class="s">&quot;/opt/google/etc/systemrc&quot;</span><span class="p">)</span> <span class="o">||</span>
+   <span class="nb">open</span><span class="p">(</span><span class="n">IN</span><span class="p">,</span> <span class="s">&quot;/usr/keyhole/etc/systemrc&quot;</span><span class="p">)</span> <span class="o">||</span>
+   <span class="nb">die</span> <span class="s">&quot;Can not open /opt/google/etc/systemrc or /usr/keyhole/etc/systemrc\n&quot;</span><span class="p">;</span>
+   <span class="nv">@sysrc</span> <span class="o">=</span> <span class="sr">&lt;IN&gt;</span><span class="p">;</span>
+   <span class="nv">$assetroot</span><span class="o">=&amp;</span><span class="n">get_value</span><span class="p">(</span><span class="nb">grep</span><span class="p">(</span><span class="sr">/assetroot/</span><span class="p">,</span> <span class="nv">@sysrc</span><span class="p">));</span>
+   <span class="k">return</span> <span class="nv">$assetroot</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">sub</span> <span class="nf">get_value</span><span class="p">(){</span>
+   <span class="nv">$string</span><span class="o">=</span><span class="nb">shift</span><span class="p">(</span><span class="nv">@_</span><span class="p">);</span>
+   <span class="nv">$string</span> <span class="o">=~</span> <span class="sr">s/\s*&lt;[^&lt;&gt;]*&gt;//</span><span class="p">;</span>
+   <span class="nv">$string</span> <span class="o">=~</span> <span class="sr">s/&lt;.*//</span><span class="p">;</span>
+   <span class="nb">chomp</span><span class="p">(</span><span class="nv">$string</span><span class="p">);</span>
+   <span class="k">return</span> <span class="nv">$string</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">sub</span> <span class="nf">usage</span><span class="p">(){</span>
+<span class="k">print</span><span class="s">&lt;&lt;</span><span class="dl">EndOfUsage</span><span class="s"></span>
+
+<span class="s">rebuild_vector_layer.pl vector_project output_dir</span>
+
+<span class="s">where:</span>
+<span class="s">   vector_project is the name of your vector project relative to the asset</span>
+<span class="s">   root - for example, MyProjects/MyVectors</span>
+
+<span class="s">   output_dir is the directory for putting all of the output from this script.</span>
+<span class="s">   This needs to be an absolute directory path like /home/mydir/vectors</span>
+
+<span class="dl">EndOfUsage</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="manageFusionDiskSpace.html" title="Manage Fusion disk space"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="backupData.html" title="Backing up your data"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" >Fusion Administration</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
