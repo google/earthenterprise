@@ -32,4 +32,5 @@ remove_users_and_groups()
 # (See <https://wiki.debian.org/MaintainerScripts>.)
 if [ "$1" = "0" ] || [ "$1" = "purge" ] ; then
     remove_users_and_groups
+    systemctl daemon-reexec
 fi
