@@ -222,5 +222,20 @@ env.test('fileaccessor_unittest',
          'fileaccessor_unittest.cpp',
          LIBS=['geutil', 'gtest', 'gecommon'])
 
+env.testPluginLib('FileAccessorTestPlugin.so',
+                           'FileAccessorTestPlugin.cpp',
+                           'file_accessor',
+                           'valid')
+
+env.testPluginLib('FileAccessorInvalidTestPlugin.so',
+                           'FileAccessorInvalidTestPlugin.cpp',
+                           'file_accessor',
+                           'invalid')
+
+env.testPluginLib('FileAccessorExecutableTest',
+                  'FileAccessorExecutableTest.cpp',
+                  'file_accessor',
+                  'executable')
+
 env.install('common_lib', [gecommon])
 env.install('common_lib', [geutil])

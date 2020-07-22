@@ -43,20 +43,22 @@ void FileAccessorPluginLoader::DefaultLoadPluginsImpl (const std::string &plugin
     ScanPluginDirectory(pluginDirectory, files);
     for (auto s : files) {
         FileAccessorPluginLoader::PluginHandle handle = dlopen(s.c_str(), RTLD_NOW);
-        const std::string getFactoryFunctionName = "get_factory_v1";
         if (handle){
+            const std::string getFactoryFunctionName = "get_factory_v1";
             get_factory_t get_factory = reinterpret_cast<get_factory_t>(dlsym(handle, getFactoryFunctionName.c_str()));
-            FileAccessorFactory *pFactory = get_factory();
+            FileAccessorFactory *pFactory = get_factory != nullptr ? get_factory() : nullptr;
             if(pFactory){
                 factories.push_back({handle,pFactory});
             }
             else{
+                // 's' was a valid shared library, but did not provide the required function
                 dlclose(handle);
                 notify(NFY_WARN, "File accessor plugin %s does not implement the expected function %s", s.c_str(), getFactoryFunctionName.c_str());
             }
         }
         else {
-            notify(NFY_WARN, "Unable to open file accessor plugin %s: %s", s.c_str(), dlerror());
+            // 's' was something other than a shared library
+            notify(NFY_WARN, "Unable to open file accessor plugin %s", dlerror());
         }
     }
 }
