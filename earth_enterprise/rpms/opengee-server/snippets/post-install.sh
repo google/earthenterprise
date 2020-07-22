@@ -71,8 +71,8 @@ main_postinstall()
     service geserver start
 
     #12) Turn off examplesearch (will be turned on by Extra, if installed).
-    echo "$BASEINSTALLDIR_OPT/bin/psql -q -d gesearch geuser -f $SQLDIR/examplesearch_delete.sql"
-    "$BASEINSTALLDIR_OPT/bin/psql" -q -d gesearch geuser -f "$SQLDIR/examplesearch_delete.sql"
+    echo "$BASEINSTALLDIR_OPT/bin/psql -q -d gesearch geuser -f $SQLDIR/examplesearch_2delete.sql"
+    "$BASEINSTALLDIR_OPT/bin/psql" -q -d gesearch geuser -f "$SQLDIR/examplesearch_2delete.sql"
     
 }
 
