@@ -43,14 +43,16 @@ void FileAccessorPluginLoader::DefaultLoadPluginsImpl (const std::string &plugin
     ScanPluginDirectory(pluginDirectory, files);
     for (auto s : files) {
         FileAccessorPluginLoader::PluginHandle handle = dlopen(s.c_str(), RTLD_NOW);
+        const std::string getFactoryFunctionName = "get_factory_v1";
         if (handle){
-            get_factory_t get_factory = reinterpret_cast<get_factory_t>(dlsym(handle, "get_factory_v1"));
+            get_factory_t get_factory = reinterpret_cast<get_factory_t>(dlsym(handle, getFactoryFunctionName.c_str()));
             FileAccessorFactory *pFactory = get_factory();
             if(pFactory){
                 factories.push_back({handle,pFactory});
             }
             else{
                 dlclose(handle);
+                notify(NFY_WARN, "File accessor plugin %s does not implement the expected function %s", s.c_str(), getFactoryFunctionName.c_str());
             }
         }
         else {
@@ -99,5 +101,5 @@ std::unique_ptr<AbstractFileAccessor> FileAccessorPluginLoader::GetAccessor(std:
 
     // If there are no plugins loaded or a suitable one was not found, then
     // assume this is a POSIX file path.
-    return std::unique_ptr<AbstractFileAccessor>(new POSIXFileAccessor);
+    return std::unique_ptr<AbstractFileAccessor>(new POSIXFileAccessor());
 }
