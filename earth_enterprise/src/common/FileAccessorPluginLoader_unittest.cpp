@@ -109,49 +109,21 @@ void UnloadPluginsTestFunc (FileAccessorPluginLoader::PluginHandle handle) {
 
 
 //
-// Test plugin loaders
+// Test plugin loader
 //
 class TestPluginLoader: public FileAccessorPluginLoader {
 public:
-  TestPluginLoader(FileAccessorPluginLoader::LoadPluginFunc LoadImpl): FileAccessorPluginLoader(LoadImpl, UnloadPluginsTestFunc) {}
-};
-
-class TestPluginLoader_InvalidPluginDir: public FileAccessorPluginLoader {
-public:
-  // Passing in nullptr for the load/unload functions ensures that it will attempt
-  // to scan the directory for plugins.
-  TestPluginLoader_InvalidPluginDir(): FileAccessorPluginLoader(nullptr, nullptr, "/zzzz/thisisnot/areal/path/zzzz") {}
-};
-
-class TestPluginLoader_NoValidPlugins: public FileAccessorPluginLoader {
-public:
-  // Passing in nullptr for the load/unload functions ensures that it will 
-  // scan the directory for plugins. Passing in a current directory which
-  // contains a shared library that does not have the required function.
-  TestPluginLoader_NoValidPlugins(): FileAccessorPluginLoader(nullptr, nullptr, "./plugins/file_accessor/invalid/") {}
-};
-
-class TestPluginLoader_ValidTestPlugin: public FileAccessorPluginLoader {
-public:
-  // Passing in nullptr for the load/unload functions ensures that it will 
-  // scan the directory for plugins. Passing in a current directory which
-  // contains a valid accessor plugin.
-  TestPluginLoader_ValidTestPlugin(): FileAccessorPluginLoader(nullptr, nullptr, "./plugins/file_accessor/valid/") {}
-};
-
-class TestPluginLoader_NonSharedLibrary: public FileAccessorPluginLoader {
-public:
-  // Passing in nullptr for the load/unload functions ensures that it will 
-  // scan the directory for plugins. Passing in a directory which contains
-  // an executable (not a shared libary).
-  TestPluginLoader_NonSharedLibrary(): FileAccessorPluginLoader(nullptr, nullptr, "./plugins/file_accessor/executable/") {}
+  TestPluginLoader(FileAccessorPluginLoader::LoadPluginFunc LoadImpl = nullptr,
+                   FileAccessorPluginLoader::UnloadPluginFunc UnloadImpl = nullptr,
+                   std::string PluginFolderLocation = "/opt/google/plugin/fileaccessor/")
+    : FileAccessorPluginLoader(LoadImpl, UnloadImpl, PluginFolderLocation) {}
 };
 
 //
 // Tests
 //
 TEST(FAPluginLoaderTest, get_multiple_accessors){
-  TestPluginLoader pluginLoader(LoadPluginsTestFunc);
+  TestPluginLoader pluginLoader(LoadPluginsTestFunc, UnloadPluginsTestFunc);
   std::unique_ptr<AbstractFileAccessor> pAccessor = pluginLoader.GetAccessor("9876file");
 
   EXPECT_TRUE(pAccessor != nullptr);
@@ -164,7 +136,7 @@ TEST(FAPluginLoaderTest, get_multiple_accessors){
 }
 
 TEST(FAPluginLoaderTest, get_default_accessor){
-  TestPluginLoader pluginLoader(Load_NO_PluginsTestFunc);
+  TestPluginLoader pluginLoader(Load_NO_PluginsTestFunc, nullptr);
   std::unique_ptr<AbstractFileAccessor> pAccessor = pluginLoader.GetAccessor("9876file");
 
 
@@ -173,15 +145,17 @@ TEST(FAPluginLoaderTest, get_default_accessor){
 }
 
 TEST(FAPluginLoaderTest, nonexistent_plugin_path){
-  TestPluginLoader_InvalidPluginDir pluginLoader;
+  // Passing in nullptr for the load/unload functions ensures that it will attempt
+  // to scan the directory for plugins.
+  TestPluginLoader pluginLoader(nullptr, nullptr, "/zzzz/thisisnot/areal/path/zzzz");
   std::unique_ptr<AbstractFileAccessor> pAccessor = pluginLoader.GetAccessor("notarealfilename.txt");
 
   EXPECT_TRUE(pAccessor != nullptr);
   ASSERT_EQ(pAccessor->getFD(), -1);
 }
 
-TEST(FAPluginLoaderTest, path_with_no_plugins){
-  TestPluginLoader_NoValidPlugins pluginLoader;
+TEST(FAPluginLoaderTest, path_with_invalid_plugin){
+  TestPluginLoader pluginLoader(nullptr, nullptr, "./plugins/file_accessor/invalid/");
   std::unique_ptr<AbstractFileAccessor> pAccessor = pluginLoader.GetAccessor("notarealfilename.txt");
 
   EXPECT_TRUE(pAccessor != nullptr);
@@ -189,7 +163,7 @@ TEST(FAPluginLoaderTest, path_with_no_plugins){
 }
 
 TEST(FAPluginLoaderTest, valid_test_plugin){
-  TestPluginLoader_ValidTestPlugin pluginLoader;
+  TestPluginLoader pluginLoader(nullptr, nullptr, "./plugins/file_accessor/valid/");
   std::unique_ptr<AbstractFileAccessor> pAccessor = pluginLoader.GetAccessor("9999file");
 
   EXPECT_TRUE(pAccessor != nullptr);
@@ -197,7 +171,7 @@ TEST(FAPluginLoaderTest, valid_test_plugin){
 }
 
 TEST(FAPluginLoaderTest, load_executable_not_shared_library){
-  TestPluginLoader_NonSharedLibrary pluginLoader;
+  TestPluginLoader pluginLoader(nullptr, nullptr, "./plugins/file_accessor/executable/");
   std::unique_ptr<AbstractFileAccessor> pAccessor = pluginLoader.GetAccessor("9999file");
 
   EXPECT_TRUE(pAccessor != nullptr);
