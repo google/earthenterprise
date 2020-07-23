@@ -28,6 +28,7 @@ import sys
 sys.path += ['scons']
 from khEnvironment import khEnvironment
 import getversion
+import commands
 
 # Add the OpenGEE Python libraries to the module search path:
 opengee_lib_path = os.path.join('lib', 'python')
@@ -280,22 +281,29 @@ else:
 # warning so we can continue to build on ancient operating systems.
 warnflags += ['-Wno-error=cpp']
 
+gpp_ver = commands.getstatusoutput('g++ -v')
+gpp_maj = int(gpp_ver[1][gpp_ver[1].find('gcc version') + 12])
+
 # TODO: remove this and fix all places where we see these warnings.
 if native_cc:
   warnflags += ['-Wno-error=unused-result',
                 '-Wno-error=unused-local-typedefs',
                 '-Wno-error=unused-but-set-variable']
 
-warnflags += ['-Wno-error=misleading-indentation',
-              '-Wno-error=terminate',
-              '-Wno-error=format-truncation',
-              '-Wno-error=memset-elt-size',
-              '-Wno-error=address',
+warnflags += ['-Wno-error=address',
               '-Wno-error=unused-local-typedefs']
-if el_ver == 'el8':
+
+if gpp_maj >= 6:
+  warnflags += ['-Wno-error=misleading-indentation',
+                '-Wno-error=terminate']
+
+if gpp_maj >= 7:
+  warnflags += ['-Wno-error=format-truncation',
+                '-Wno-error=memset-elt-size']
+
+if gpp_maj >= 8:
   warnflags += ['-Wno-error=catch-value',
                 '-Wno-error=class-memaccess']
-
 
 # Determine libpng
 if os.path.isdir('/usr/include/libpng15'):
