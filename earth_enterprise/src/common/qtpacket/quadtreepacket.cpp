@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,15 +34,15 @@ namespace qtpacket {
 
 // Moved these out of KhDataPacket class since they're independant
 // of the template type.
-static const uint32 kKeyholeMagicId = 32301;
+static const std::uint32_t kKeyholeMagicId = 32301;
 
 // Filler bytes used when serializing data packets.
-static const uint8 kByteFiller = 0;
-static const uint16 kWordFiller = 0;
+static const std::uint8_t kByteFiller = 0;
+static const std::uint16_t kWordFiller = 0;
 // no need for a 4-byte filler yet. If we need an odd size
 // such as 5 padding bytes, use a char array of 0's.
 
-const uint8 KhQuadTreeBTG::bytemaskBTG[] = {
+const std::uint8_t KhQuadTreeBTG::bytemaskBTG[] = {
   0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80
 };
 
@@ -124,7 +125,7 @@ void KhQuadtreeDataReference::Pull(EndianReadBuffer &input) {
 // KhDataheader
 //
 void KhDataHeader::Push(EndianWriteBuffer &buf,
-                        int32 databuffersize) const {
+                        std::int32_t databuffersize) const {
   assert(magic_id == kKeyholeMagicId);
   buf << magic_id
       << data_type_id
@@ -208,7 +209,7 @@ void KhDataPacket<T>::Clear() {
 // Save the datapacket header (client expects little endian)
 template <class T>
 void KhDataPacket<T>::SaveHeader(EndianWriteBuffer &buffer,
-                                 int32 databuffersize) const {
+                                 std::int32_t databuffersize) const {
   packet_header_.Push(buffer, databuffersize);
 }
 
@@ -220,7 +221,7 @@ template class KhDataPacket<KhQuadTreeQuantum16>;
 // If number of vectors per quadtree packet grows dramatically,
 // it could be worth using a hash_map.
 class ChannelInfo {
-  typedef std::pair<uint16, uint16> TypeVersion;
+  typedef std::pair<std::uint16_t, std::uint16_t> TypeVersion;
  public:
   // Start with 0 channels. More often than not,
   // we're building a quadnode for imagery or terrain db,
@@ -232,7 +233,7 @@ class ChannelInfo {
   // Store a channel type and version.
   // Look for a channel with same type, and replace version if found.
   // Otherwise, simply create a new entry and add it to our list.
-  void StoreVersion(uint16 type, uint16 version) {
+  void StoreVersion(std::uint16_t type, std::uint16_t version) {
     // cannot use find.
     for (std::vector<TypeVersion>::iterator p = channels_.begin();
          p != channels_.end();
@@ -249,10 +250,10 @@ class ChannelInfo {
 
   // Accessors
   int num_channels() const { return channels_.size(); }
-  uint16 channel_type(int i) const {
+  std::uint16_t channel_type(int i) const {
     return channels_[i].first;
   }
-  uint16 channel_version(int i) const {
+  std::uint16_t channel_version(int i) const {
     return channels_[i].second;
   }
 
@@ -264,7 +265,7 @@ class ChannelInfo {
   // A vector should provide reasonably quick lookup,
   // as long as the number of entries is relatively small
   // I tried with a sparse_hash_table, it's actually a bit slower.
-  std::vector<std::pair<uint16, uint16> > channels_;
+  std::vector<std::pair<std::uint16_t, std::uint16_t> > channels_;
 
   // Don't copy this structure.
   DISALLOW_COPY_AND_ASSIGN(ChannelInfo);
@@ -321,11 +322,11 @@ void KhQuadTreePacket16::Push(EndianWriteBuffer &buffer) const {
   for (int i = 0; i < packet_header().num_instances; i++) {
     const KhQuadTreeQuantum16* quantum = GetPtr(i);
 
-    int32 type_offset = 0;
-    int32 version_offset = 0;
+    std::int32_t type_offset = 0;
+    std::int32_t version_offset = 0;
 
     // Skip this part if we don't have any channels.
-    uint16 num_channels = quantum->channel_type.size();
+    std::uint16_t num_channels = quantum->channel_type.size();
     if (num_channels != 0) {
       assert(num_channels == quantum->channel_version.size());
 
@@ -333,7 +334,7 @@ void KhQuadTreePacket16::Push(EndianWriteBuffer &buffer) const {
       // We need to write the data buffer part first, since
       // we need the offsets in the data instance.
       // Validate data buffer size.
-      databuffersize += 2 * (num_channels * sizeof(uint16));
+      databuffersize += 2 * (num_channels * sizeof(std::uint16_t));
 
       // Write channel types to data buffer - save the offset
       type_offset = buffer.CurrPos() - databuffer_base;
@@ -464,21 +465,21 @@ void KhQuadTreePacket16::Pull(EndianReadBuffer &input) {
 
     input >> quantum->children.children;
 
-    uint8 junk8;                        // filler for 2 byte alignment
+    std::uint8_t junk8;                        // filler for 2 byte alignment
     input >> junk8;
 
     input >> quantum->cnode_version;
     input >> quantum->image_version;
     input >> quantum->terrain_version;
 
-    uint16 num_channels;
+    std::uint16_t num_channels;
     input >> num_channels;
 
-    uint16 junk16;                      // fill to 4 byte boundary
+    std::uint16_t junk16;                      // fill to 4 byte boundary
     input >> junk16;
-    int32 type_offset;
+    std::int32_t type_offset;
     input >> type_offset;
-    int32 version_offset;
+    std::int32_t version_offset;
     input >> version_offset;
 
     input.rawread(quantum->image_neighbors,
@@ -498,10 +499,10 @@ void KhQuadTreePacket16::Pull(EndianReadBuffer &input) {
         channel_type_buf(
             input.NewBuffer(
                 input.data() + header.data_buffer_offset + type_offset,
-                sizeof(uint16) * num_channels));
+                sizeof(std::uint16_t) * num_channels));
       quantum->channel_type.resize(num_channels);
 
-      for (uint16 j = 0; j < num_channels; ++j) {
+      for (std::uint16_t j = 0; j < num_channels; ++j) {
         *channel_type_buf >> quantum->channel_type[j];
       }
 
@@ -509,10 +510,10 @@ void KhQuadTreePacket16::Pull(EndianReadBuffer &input) {
         channel_version_buf(
             input.NewBuffer(
                 input.data() + header.data_buffer_offset + version_offset,
-                sizeof(uint16) * num_channels));
+                sizeof(std::uint16_t) * num_channels));
       quantum->channel_version.resize(num_channels);
 
-      for (uint16 j = 0; j < num_channels; ++j) {
+      for (std::uint16_t j = 0; j < num_channels; ++j) {
         *channel_version_buf >> quantum->channel_version[j];
       }
     } else {
@@ -568,9 +569,9 @@ void KhQuadTreeQuantum16::ToString(std::ostringstream &str,
       << "  s" << subindex
       << " \"" << qt_path.AsString() << "\""
       << "  iv = " << image_version
-      << ", ip = " << (uint16)image_data_provider
+      << ", ip = " << (std::uint16_t)image_data_provider
       << ", tv = " << terrain_version
-      << ", tp = " << (uint16)terrain_data_provider
+      << ", tp = " << (std::uint16_t)terrain_data_provider
       << ", c = "  << cnode_version
       << ", flags = 0x" << std::hex
       << static_cast<unsigned>(children.children) << std::dec
@@ -590,8 +591,8 @@ void KhQuadTreeQuantum16::ToString(std::ostringstream &str,
   }
   str << ")" << std::endl;
 
-  uint16 num_channels = channel_type.size();
-  for (uint16 j = 0; j < num_channels; ++j) {
+  std::uint16_t num_channels = channel_type.size();
+  for (std::uint16_t j = 0; j < num_channels; ++j) {
     str << "    V" << j << ": layer = " << channel_type[j]
         << ", version = " << channel_version[j] << std::endl;
   }
@@ -659,8 +660,8 @@ void KhQuadTreeQuantum16::GetDataReferences(
                                 terrain_data_provider));
   }
   if (references->vec_refs && children.GetDrawableBit()) {
-    uint16 num_channels = channel_type.size();
-    for (uint16 j = 0; j < num_channels; ++j) {
+    std::uint16_t num_channels = channel_type.size();
+    for (std::uint16_t j = 0; j < num_channels; ++j) {
       references->vec_refs->push_back(
           KhQuadtreeDataReference(qt_path,
                                   channel_version[j],
@@ -963,7 +964,7 @@ void KhQuadTreePacketProtoBuf::Pull(EndianReadBuffer& input) {
 std::string KhQuadTreePacketProtoBuf::ToString(bool root_node,
                                                bool detailed_info) const {
   std::ostringstream stream;
-  uint node_count = proto_buffer_.sparsequadtreenode_size();
+  unsigned int node_count = proto_buffer_.sparsequadtreenode_size();
   if (detailed_info) {  // Separate the summary from details.
     stream <<
       "------------------------------------------------------------------"
@@ -976,7 +977,7 @@ std::string KhQuadTreePacketProtoBuf::ToString(bool root_node,
   std::set<std::string> imagery_dates;  // Collect the set of imagery dates
                                         // in this node if any.
 
-  for (uint node_index = 0; node_index < node_count; ++node_index) {
+  for (unsigned int node_index = 0; node_index < node_count; ++node_index) {
     const keyhole::QuadtreePacket_SparseQuadtreeNode& sparse_node =
       proto_buffer_.sparsequadtreenode(node_index);
     KhQuadTreeNodeProtoBuf* node = GetNode(node_index);
@@ -1009,8 +1010,8 @@ std::string KhQuadTreePacketProtoBuf::ToString(bool root_node,
 
 bool KhQuadTreePacketProtoBuf::HasLayerOfType(
   keyhole::QuadtreeLayer::LayerType layer_type) const {
-  uint node_count = proto_buffer_.sparsequadtreenode_size();
-  for (uint i = 0; i < node_count; ++i) {
+  unsigned int node_count = proto_buffer_.sparsequadtreenode_size();
+  for (unsigned int i = 0; i < node_count; ++i) {
     KhQuadTreeNodeProtoBuf* node = GetNode(i);
     if (node->HasLayerOfType(layer_type)) {
       return true;
@@ -1023,26 +1024,26 @@ bool KhQuadTreePacketProtoBuf::HasLayerOfType(
 // KhQuadTreeNodeProtoBuf
 // Simple utilities to wrap keyhole::QuadtreeNode
 bool KhQuadTreeNodeProtoBuf::GetImageBit() const {
-  int32 flags = node_.flags();
+  std::int32_t flags = node_.flags();
   return flags & (1 << keyhole::QuadtreeNode::NODE_FLAGS_IMAGE_BIT);
 }
 bool KhQuadTreeNodeProtoBuf::GetTerrainBit() const {
-  int32 flags = node_.flags();
+  std::int32_t flags = node_.flags();
   return flags & (1 << keyhole::QuadtreeNode::NODE_FLAGS_TERRAIN_BIT);
 }
 bool KhQuadTreeNodeProtoBuf::GetDrawableBit() const {
-  int32 flags = node_.flags();
+  std::int32_t flags = node_.flags();
   return flags & (1 << keyhole::QuadtreeNode::NODE_FLAGS_DRAWABLE_BIT);
 }
 bool KhQuadTreeNodeProtoBuf::GetCacheNodeBit() const {
-  int32 flags = node_.flags();
+  std::int32_t flags = node_.flags();
   return flags & (1 << keyhole::QuadtreeNode::NODE_FLAGS_CACHE_BIT);
 }
 bool KhQuadTreeNodeProtoBuf::GetChildBit(int i) const {
-  int32 flags = node_.flags();
+  std::int32_t flags = node_.flags();
   return flags & (1 << i);
 }
-int32 KhQuadTreeNodeProtoBuf::GetChildFlags() const {
+std::int32_t KhQuadTreeNodeProtoBuf::GetChildFlags() const {
   return node_.flags() & 0xf;
 }
 
@@ -1092,14 +1093,14 @@ const {
 
 // ToString() - convert node contents to printable string
 void KhQuadTreeNodeProtoBuf::ToString(std::ostringstream* str,
-                                   const int32 node_index,
+                                   const std::int32_t node_index,
                                    const QuadtreePath &qt_path,
-                                   const int32 subindex) const {
+                                   const std::int32_t subindex) const {
   const keyhole::QuadtreeNode& proto_buf_node = proto_buf();
-  uint32 image_version = 0;
-  uint32 image_data_provider = 0;
-  uint32 terrain_version = 0;
-  uint32 terrain_data_provider = 0;
+  std::uint32_t image_version = 0;
+  std::uint32_t image_data_provider = 0;
+  std::uint32_t terrain_version = 0;
+  std::uint32_t terrain_data_provider = 0;
   for (int i = 0; i < proto_buf_node.layer_size(); ++i) {
     const keyhole::QuadtreeLayer& layer = proto_buf_node.layer(i);
     if (layer.type() == keyhole::QuadtreeLayer::LAYER_TYPE_IMAGERY) {
@@ -1138,8 +1139,8 @@ void KhQuadTreeNodeProtoBuf::ToString(std::ostringstream* str,
   *str << ")" << std::endl;
 
   // Print out the Vector layer info
-  uint32 num_channels = proto_buf_node.channel_size();
-  for (uint32 i = 0; i < num_channels; ++i) {
+  std::uint32_t num_channels = proto_buf_node.channel_size();
+  for (std::uint32_t i = 0; i < num_channels; ++i) {
     const keyhole::QuadtreeChannel& channel = proto_buf_node.channel(i);
     *str << "    V" << i << ": layer = " << channel.type()
         << ", version = " << channel.channel_epoch() << std::endl;
@@ -1203,7 +1204,7 @@ bool KffCopyrightMap::CreateMap(const QuadtreePath& pos,
   if (!dataProviderList || !dataProviderListLen)
     return false;
 
-  uint32 i, j;
+  std::uint32_t i, j;
   double lowerleft[2];
 
   lowerleft[0] = -180.0;

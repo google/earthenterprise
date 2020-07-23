@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +24,10 @@
 #ifndef COMMON_QTPACKET_QUADTREE_PROCESSING_H__
 #define COMMON_QTPACKET_QUADTREE_PROCESSING_H__
 
+#include <cstdint>
 #include <string>
 #include <vector>
 #include <common/base/macros.h>
-#include <khTypes.h>
 #include <khGuard.h>
 #include <khEndian.h>
 #include <qtpacket/quadsetitem.h>
@@ -69,8 +70,8 @@ void ComputeQuadtreePacketFormat2(
 // Helper routine for ComputeQuadtreePacket (defined here to allow access
 // by tests)
 
-void InsertChannel(uint16 channel,
-                   uint16 version,
+void InsertChannel(std::uint16_t channel,
+                   std::uint16_t version,
                    KhQuadTreeQuantum16 *node);
 
 }  // namespace qtpacket

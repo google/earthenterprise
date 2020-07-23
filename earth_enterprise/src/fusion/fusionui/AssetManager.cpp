@@ -478,7 +478,7 @@ void ServeAssistant::Stop() {
 }
 
 void ServeAssistant::SetCanceled() {
-  //progress_->setCanceled();
+  progress_->setCanceled();
 }
 
 void ServeAssistant::Perform() {
@@ -1264,7 +1264,7 @@ void AssetManager::PushDatabase(const gstAssetHandle& handle) {
     QObject::connect(&progress_dialog, SIGNAL(canceled()),
                      &push_assistant, SLOT(SetCanceled()));
     QObject::connect(&push_thread, SIGNAL(sfinished()), &push_assistant, SLOT(Stop()));
-    QObject::connect(&push_thread, SIGNAL(sfinished()), qApp, SLOT(&QObject::deleteLater));
+    QObject::connect(&push_thread, SIGNAL(sfinished()), &push_thread, SLOT(deleteLater()));
     //QObject::connect(&push_thread, SIGNAL(static_cast<void(QThread::*)()>(&QThread::finished)), &push_thread, SLOT(&QThread::quit), Qt::DirectConnection);
     //FIXME
     //QObject::connect(&push_thread, QThread::finished, &push_thread, &QThread::quit, Qt::DirectConnection);
@@ -1273,7 +1273,9 @@ void AssetManager::PushDatabase(const gstAssetHandle& handle) {
     push_assistant.Start();
     progress_dialog.show();
 
-    qApp->exec();
+    while (push_thread.isRunning()) {
+        qApp->processEvents();
+    }
   }
 
   if (progress_dialog.wasCanceled()) {
@@ -1395,15 +1397,17 @@ void AssetManager::PublishDatabase(const gstAssetHandle& handle) {
                      &publish_assistant, SLOT(SetCanceled()));
     QObject::connect(
         &publish_thread, SIGNAL(sfinished()), &publish_assistant, SLOT(Stop()));
-    QObject::connect(&publish_thread, SIGNAL(sfinished()), qApp, SLOT(&QObject::deleteLater));
+    QObject::connect(&publish_thread, SIGNAL(sfinished()), &publish_thread, SLOT(deleteLater()));
     //FIXME
     //connect(&publish_thread, static_cast<void(QThread::*)()>(&QThread::finished), &publish_thread, &QThread::quit);
 
     publish_thread.start();
     publish_assistant.Start();
     progress_dialog.show();
-
-    qApp->exec();
+ 
+    while (publish_thread.isRunning()) {
+        qApp->processEvents();
+    } 
   }
 
   if (progress_dialog.wasCanceled()) {

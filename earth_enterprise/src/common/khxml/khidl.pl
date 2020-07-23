@@ -43,7 +43,7 @@ sub usage
         "\n"
 }
 
-my %AtomicTypes = (		   
+my %AtomicTypes = (
 		   'bool'      => 1,
 		   'float'     => 1,
 		   'double'    => 1,
@@ -225,6 +225,7 @@ if (defined $impl_hfile) {
 
 EOH
     # include some basic xml headers
+    print $fh "#include <cstdint>\n";
     print $fh "#include <khxml/khxml.h>\n";
     if ($writeMethod eq 'DOM' || $readMethod eq 'DOM') {
         print $fh "#include <xercesc/dom/DOM.hpp>\n";
@@ -280,7 +281,7 @@ if (defined $cppfile) {
     print $fh "#include \"$impl_hfile\"\n";
     print $fh "\n";
     print $fh "using namespace khxml;\n\n";
-    
+
     if (length($cppquote)) {
         print $fh $cppquote;
         print $fh "\n";
@@ -387,7 +388,7 @@ sub ParseClass
     } else {
         $namespace =~ s/::$//;
     }
-    
+
     die "Expected 'class NAME': found '$line'\n"
 	unless defined($name);
 
@@ -558,7 +559,7 @@ sub ParseClass
                     $loaddefault =~ s/\s+$//;
                 }
 	    }
-	    
+
             {
                 my @exclusive = ('xmlattr', 'xmlbody', 'xmlchild');
                 my $count = 0;
@@ -666,9 +667,8 @@ sub EmitMemberReader
     my ($member, $fh, $prefix, $obj) = @_;
     my $mname  = $member->{name};
     my $mtname = $member->{tagname};
-    
+
     if (defined($member->{loaddefault})) {
-        print $fh, "// hello world 1";
         if ($member->{xmlattr}) {
             print $fh $prefix, "GetAttributeOrDefault(elem, \"$mtname\", $obj.$mname, $member->{loaddefault});\n";
         } elsif ($member->{xmlbody}) {
@@ -688,7 +688,6 @@ sub EmitMemberReader
             print $fh $prefix, "GetElementOrDefault(elem, \"$mtname\", $obj.$mname, $temp);\n";
         }
     } else {
-        print $fh, "//hello world 2";
         if ($member->{xmlattr}) {
             print $fh $prefix, "GetAttribute(elem, \"$mtname\", $obj.$mname);\n";
         } elsif ($member->{xmlbody}) {
@@ -998,7 +997,7 @@ sub DumpClass
 		    }
 		}
 		print $fh " { }\n";
-	    }    
+	    }
 	}
 
 	if (exists $class->{constructor}) {
@@ -1046,7 +1045,7 @@ sub DumpClass
 		join(', ', @{$class->{base}{constructor}{argnames}}), ")";
 		print $fh ",\n" if $numMembers;
 	    }
-	    
+
 	    for ($i = 0; $i < $numMembers; ++$i) {
 		my $member = $class->{members}[$i];
 		print $fh $pad, $indent, $indent, "$member->{name}($member->{name}_)";
@@ -1055,7 +1054,7 @@ sub DumpClass
 	    print $fh " { }\n";
 	}
     }
-    
+
     # comparison operator
     {
 	print $fh $pad, $indent, "bool operator== (const $class->{name} &o) const\n";
@@ -1163,7 +1162,7 @@ sub DumpClass
         my $haveFirst = 0;
         my $curr = 1;
         my $size = @{$class->{members}};
-        print $fh $pad, $indent, "uint64 GetHeapUsage() const {\n";
+        print $fh $pad, $indent, "std::uint64_t GetHeapUsage() const {\n";
         foreach my $member (@{$class->{members}}) {
             if ($curr == $size) {
                 if ($haveFirst) {
@@ -1287,7 +1286,7 @@ sub JavaDumpClass
         if (defined $warn) {
           print $fh $pad, $indent, "\@SuppressWarnings(\"unchecked\")\n";
         }
-        if (defined $member->{newdefault}) { 
+        if (defined $member->{newdefault}) {
           my $default = JavaDefaultVal($member->{newdefault}, $class);
           print $fh $pad, $indent, "public $type $member->{name} = $default;\n";
         } else {
@@ -1316,7 +1315,7 @@ sub JavaDumpClass
 		    }
 		}
 		print $fh $pad, $indent, "}\n\n";
-	    }    
+	    }
 	}
 
 	if (exists $class->{constructor}) {
@@ -1359,7 +1358,7 @@ sub JavaDumpClass
 		join(', ', @{$class->{base}{constructor}{argnames}}), ")";
 		print $fh ",\n" if $numMembers;
 	    }
-	    
+
 	    for ($i = 0; $i < $numMembers; ++$i) {
 		my $member = $class->{members}[$i];
 		print $fh $pad, $indent, $indent, "this.$member->{name} = $member->{name};\n";
@@ -1371,7 +1370,7 @@ sub JavaDumpClass
 
 	}
     }
-    
+
     print $fh $pad, "}\n\n";
 }
 
@@ -1393,7 +1392,7 @@ sub DumpGlobalClassHelpers
         print $fh "}\n\n";
     }
     if ($RequiresGetHeapUsage) {
-        print $fh "inline uint64 GetHeapUsage(const $class->{qualname} &obj) {\n";
+        print $fh "inline std::uint64_t GetHeapUsage(const $class->{qualname} &obj) {\n";
         print $fh $indent, "return obj.GetHeapUsage();\n";
         print $fh "}\n\n";
     }
@@ -1441,7 +1440,7 @@ sub EmitDOMWriter
 
     my $DOM_classname = "$class->{qualname}_DOM";
     $DOM_classname =~ s/::/_/g;
-    
+
 
     print $fh "class $DOM_classname : public $class->{qualname} {\n";
     print $fh $indent, "public:\n";
@@ -1507,7 +1506,7 @@ sub EmitDOMWriter
 		print $fh $indent, "return ";
 		$haveFirst = 1;
 	    }
-	    
+
 	    if (defined($member->{ignoreif})) {
                 print $fh "(($member->{ignoreif}) ||\n";
                 print $fh $indent, "        ::IsUpToDate($member->{name}, o.$member->{name}))";
@@ -1539,7 +1538,7 @@ sub EmitDOMWriter
 	    print $fh $indent, "if (!$class->{base}{qualname}::IsUpToDate(o)) {\n";
             print $fh $indent, "  notify(NFY_WARN, \"$name IsUpToDate: base out of date\");\n";
             print $fh $indent, "  return false;\n";
-            
+
             print $fh $indent, "}\n"
 	}
 
@@ -1597,7 +1596,6 @@ sub EmitDOMWriter
 bool
 $class->{qualname}::Save(const std::string &file) const throw()
 {
-    //std::unique_ptr<GEDocument>
     auto doc = CreateEmptyDocument("$class->{TagName}");
     if (!doc) {
         notify(NFY_WARN, "Unable to create empty document: $class->{TagName}");
@@ -1761,7 +1759,7 @@ sub EmitDOMReader
 	print $fh "{\n";
     } else {
 	print $fh "void\n";
-        print $fh "FromElement(DOMElement *elem, $class->{qualname} &self)\n";
+  print $fh "FromElement(DOMElement *elem, $class->{qualname} &self)\n";
 	print $fh "{\n";
     }
 
