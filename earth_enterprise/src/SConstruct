@@ -182,6 +182,10 @@ else:
   else:
     el_ver = 'el7'
 
+native_gcc7 = False
+if os.path.isfile('/usr/bin/gcc-7') and not os.path.isfile('/etc/redhat-release'):
+  native_gcc7 = True
+
 if bundle_3rd_libs:
   python_version = '2.7.5'
   python_major_version = '2.7'
@@ -285,6 +289,13 @@ if native_cc:
   warnflags += ['-Wno-error=unused-result',
                 '-Wno-error=unused-local-typedefs',
                 '-Wno-error=unused-but-set-variable']
+
+if native_gcc7:
+   warnflags += ['-Wno-error=misleading-indentation',
+              '-Wno-error=terminate',
+              '-Wno-error=format-truncation',
+              '-Wno-error=memset-elt-size',
+              '-Wno-error=address']
 
 if el_ver == 'el8':
   warnflags += ['-Wno-error=misleading-indentation',
