@@ -12,6 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/*
+* The purpose of this file is to produce, as part of the build, a shared library
+* that can be loaded by `dlopen` and that implements the function that the
+* FileAccessorPluginLoader requires. 
+* The resulting shared libary is used only by the unit tests.
+*/
 #include "FileAccessor.h"
 
 class TestFileAccessor: public AbstractFileAccessor {
@@ -29,11 +35,9 @@ public:
   virtual bool GetLinesFromFile(std::vector<std::string> &lines, const std::string &filename) {return false;}
   virtual void fprintf(const char *format, ...) {}
 
+  // getFD is used by the unit tests to verify which accessor they have
   virtual int getFD() {return 9999;}
 };
-
-// Using a static variable here for this dummy. The real thing may return a new object.
-static TestFileAccessor accessor;
 
 class TestFileAccessorFactory: public FileAccessorFactory {
 public:

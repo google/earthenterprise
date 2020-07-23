@@ -12,6 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/*
+* The purpose of this file is to produce, as part of the build, a shared library
+* that can be loaded by `dlopen` but that does not contain the function that
+* the FileAccessorPluginLoader requires. 
+* The resulting shared libary is used only by the unit tests.
+*/
 extern "C" {
   int add_numbers () {return 1 + 2;}
 }

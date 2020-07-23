@@ -12,6 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/*
+* The purpose of this file is to produce, as part of the build, an executable
+* file that the plugin loader unit tests can attempt, and fail, to load.
+*/
 int main(void) {
     // Just do something basic and safe
     int x = 1;

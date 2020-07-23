@@ -30,11 +30,11 @@ using namespace testing;
         Custom functions, passed into the plugin loader, that handle
         populating/depopulating the plugin loader's vector of file accessor
         factories.
-    - Test plugin loaders:
+    - Test plugin loader:
         FileAccessorPluginLoader is normally a singleton created by a call to
         FileAccessorPluginLoader::Get(). As such, the constructor is protected.
-        In order to pass custom values into the constructor, test plugin loaders
-        inherit from FileAccessorPluginLoader.
+        In order to pass custom values into the constructor, the test plugin
+        loader inherits from FileAccessorPluginLoader.
 */
 
 
@@ -172,7 +172,7 @@ TEST(FAPluginLoaderTest, valid_test_plugin){
 
 TEST(FAPluginLoaderTest, load_executable_not_shared_library){
   TestPluginLoader pluginLoader(nullptr, nullptr, "./plugins/file_accessor/executable/");
-  std::unique_ptr<AbstractFileAccessor> pAccessor = pluginLoader.GetAccessor("9999file");
+  std::unique_ptr<AbstractFileAccessor> pAccessor = pluginLoader.GetAccessor("notarealfilename.txt");
 
   EXPECT_TRUE(pAccessor != nullptr);
   ASSERT_EQ(pAccessor->getFD(), -1);

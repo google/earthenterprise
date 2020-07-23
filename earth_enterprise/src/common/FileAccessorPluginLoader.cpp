@@ -74,8 +74,9 @@ FileAccessorPluginLoader::FileAccessorPluginLoader(
 }
 
 FileAccessorPluginLoader::~FileAccessorPluginLoader() {
-    for (auto factory : factories)
+    for (auto factory : factories){
         unloadPluginFunc(factory.first);
+    }
 }
 
 void FileAccessorPluginLoader::LoadPlugins() {
