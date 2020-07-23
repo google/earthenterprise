@@ -64,9 +64,9 @@ void FileAccessorPluginLoader::DefaultLoadPluginsImpl (const std::string &plugin
 }
 
 FileAccessorPluginLoader::FileAccessorPluginLoader(
-        LoadPluginFunc LoadImpl /*= nullptr*/, 
-        UnloadPluginFunc UnloadImpl /*= nullptr*/, 
-        std::string pluginDirectory /*= "/opt/google/plugin/fileaccessor/"*/
+        LoadPluginFunc LoadImpl,      // default: nullptr
+        UnloadPluginFunc UnloadImpl,  // default: nullptr
+        std::string pluginDirectory   // default: "/opt/google/plugin/fileaccessor/"
         ):
         pluginDir(pluginDirectory) {
     loadPluginFunc = LoadImpl ? LoadImpl : DefaultLoadPluginsImpl;
