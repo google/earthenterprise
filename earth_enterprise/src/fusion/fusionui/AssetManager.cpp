@@ -364,10 +364,9 @@ QString AssetAction::Name() const {
 }
 
 AssetAction* AssetAction::FindAsset(const QString& txt) {
-  for (std::vector<AssetAction*>::iterator it = all_actions.begin();
-       it != all_actions.end(); ++it) {
-    if ((*it)->Name() == txt)
-      return *it;
+  for (const auto& it : all_actions) {
+    if (it->Name() == txt)
+      return it;
   }
   return NULL;
 }
@@ -1750,14 +1749,14 @@ void AssetManager::UpdateTableItem(int row, gstAssetHandle handle,
                             new AssetTableItem(assetTableView, handle));
   }
 
-  // now set teh rest of the columns
+  // now set the rest of the columns
   int col = 1;
   std::string category = asset->PrettySubtype();
   if (category == kMercatorProductSubtype) {
     category = kResourceSubtype;
   }
   assetTableView->setText(row, col++, category.c_str());
-
+  notify(NFY_WARN,"AssetManager, check asset name: %s", category.c_str());
   {
     std::string providerstr;
     if ((asset->subtype == kProductSubtype) &&
@@ -1876,16 +1875,16 @@ void AssetManager::UpdateTableView(const gstAssetFolder& folder) {
   assetTableView->setUpdatesEnabled(false);
 
   int rowcount = 0;
-  for (uint row = 0; row < items.size(); ++row) {
-    gstAssetHandle handle = items[row];
+  //for (uint row = 0; row < items.size(); ++row) {
+  for (const auto& item : items) {
+    gstAssetHandle handle = item;
     Asset asset = handle->getAsset();
 
     if (!IsAssetVisible(asset))
       continue;
 
     assetTableView->setNumRows(rowcount + 1);
-    UpdateTableItem(rowcount, handle, asset);
-    ++rowcount;
+    UpdateTableItem(rowcount++, handle, asset);
   }
 
   assetTableView->sortColumn(1, true, true);
