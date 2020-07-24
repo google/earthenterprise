@@ -93,7 +93,7 @@ void usage(const char *prog, const char *msg = 0, ...) {
      "  --removevolume <volume_name>\n"
      "    [--assetroot <dir>]       Remove a volume with the given name.\n"
      "\n",
-     prog, CommandlineAssetRootDefault().c_str(), Systemrc::UserGroupname());
+     prog, CommandlineAssetRootDefault().c_str(), Systemrc::UserGroupname().c_str());
   exit(1);
 }
 

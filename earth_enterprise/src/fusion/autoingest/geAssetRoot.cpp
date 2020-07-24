@@ -49,7 +49,7 @@ const WantPerms secure_special_dirs[] = {
     {".state",     0755},
     {".userdata",  0775},
     {".privatedb", 0700}
-}
+};
 
 const unsigned int num_special_dirs = sizeof(special_dirs)/sizeof(special_dirs[0]);
 
@@ -61,9 +61,9 @@ int DirPerms(SpecialDir dir) {
   return special_dirs[dir].perms_;
 }
 
-int SecureDirPerms(SpecialDir dir {
+int SecureDirPerms(SpecialDir dir) {
   return secure_special_dirs[dir].perms_;
-})
+}
 
 // ****************************************************************************
 // ***  Special Files

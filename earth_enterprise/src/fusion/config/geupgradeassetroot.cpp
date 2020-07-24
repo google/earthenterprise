@@ -63,8 +63,12 @@ usage(const char* prog, const char* msg = 0, ...) {
      "  --groupname <name>:  Group membership of Fusion user (default gegroup)\n"
      "  --nochown :          do not attempt to fix privileges\n"
      "  --noprompt:          do not prompt for more information, returns -1\n"
-     "                       to indicate an error if command fails or has insufficient arguments\n",
-     prog, CommandlineAssetRootDefault().c_str());
+     "                       to indicate an error if command fails or has insufficient arguments\n"
+     "  --secure                    Removes world read and write permissions.\n"
+     "                              This option will cause users to require\n"
+     "                              the %s group to utilize the full\n"
+     "                              capabilities of the Fusion UI",
+     prog, CommandlineAssetRootDefault().c_str(), Systemrc::UserGroupname().c_str());
   exit(1);
 }
 
@@ -79,6 +83,7 @@ main(int argc, char *argv[]) {
     std::string groupname = Systemrc::UserGroupname();
     bool noprompt = false;
     bool nochown = false;
+    bool secure = false;
 
     khGetopt options;
     options.helpOpt(help);
@@ -87,6 +92,7 @@ main(int argc, char *argv[]) {
     options.opt("groupname", groupname);
     options.opt("noprompt", noprompt);
     options.opt("nochown", nochown);
+    options.opt("secure", secure);
 
     if (!options.processAll(argc, argv, argn) || help) {
       usage(argv[0]);
@@ -111,7 +117,7 @@ main(int argc, char *argv[]) {
     AssetDefs::OverrideAssetRoot(status.assetroot_);
 
     // do the actual upgrade
-    UpgradeAssetRoot(status.version_);
+    UpgradeAssetRoot(status.version_, secure);
 
 
   } catch (const std::exception &e) {
@@ -183,10 +189,10 @@ void ValidateAssetRootForUpgrade(const AssetRootStatus &status, bool noprompt,
 }
 
 
-void UpgradeAssetRoot(const DottedVersion &version) {
+void UpgradeAssetRoot(const DottedVersion &version, bool secure) {
 
   // Since we're upgrading, go ahead and fix perms on special files
-  FixSpecialPerms(AssetDefs::AssetRoot());
+  FixSpecialPerms(AssetDefs::AssetRoot(), secure);
 
   WarnAboutPendingTasks();
 
