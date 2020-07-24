@@ -38,6 +38,7 @@ enum SpecialDir {
 };
 extern std::string Dirname(const std::string& assetroot, SpecialDir dir);
 extern int DirPerms(SpecialDir dir);
+extern int SecureDirPerms(SpecialDir dir);
 
 
 // ****************************************************************************
