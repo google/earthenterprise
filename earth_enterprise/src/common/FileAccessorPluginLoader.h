@@ -31,12 +31,10 @@ public:
     using LoadPluginFunc = std::function<void(const std::string&,std::vector<PluginFactory> &)>;
     using UnloadPluginFunc = std::function<void(PluginHandle)>;
 
-    virtual ~FileAccessorPluginLoader();
-    void LoadPlugins();
-    std::unique_ptr<AbstractFileAccessor> GetAccessor(std::string file_path);
-
-    static void DefaultLoadPluginsImpl (const std::string &pluginDirectory, std::vector<PluginFactory> &factories);
     static FileAccessorPluginLoader& Get();
+
+    virtual ~FileAccessorPluginLoader();
+    std::unique_ptr<AbstractFileAccessor> GetAccessor(std::string file_path);
 
 protected:
     FileAccessorPluginLoader(LoadPluginFunc LoadImpl = nullptr, UnloadPluginFunc UnloadImpl = nullptr, 
@@ -49,6 +47,9 @@ private:
     LoadPluginFunc loadPluginFunc;
     UnloadPluginFunc unloadPluginFunc;
     const std::string pluginDir;
+
+    void LoadPlugins();
+    static void DefaultLoadPluginsImpl (const std::string &pluginDirectory, std::vector<PluginFactory> &factories);
 };
 
 #endif // COMMON_FILEACCESSORPLUGINLOADER_H_

@@ -46,7 +46,7 @@ void FileAccessorPluginLoader::DefaultLoadPluginsImpl (const std::string &plugin
         if (handle){
             const std::string getFactoryFunctionName = "get_factory_v1";
             get_factory_t get_factory = reinterpret_cast<get_factory_t>(dlsym(handle, getFactoryFunctionName.c_str()));
-            FileAccessorFactory *pFactory = get_factory != nullptr ? get_factory() : nullptr;
+            FileAccessorFactory *pFactory = (get_factory != nullptr ? get_factory() : nullptr);
             if(pFactory){
                 factories.push_back({handle,pFactory});
             }
