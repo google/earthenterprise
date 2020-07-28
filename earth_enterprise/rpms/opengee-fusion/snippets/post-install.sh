@@ -124,6 +124,7 @@ create_systemrc()
   <locked>0</locked>
   <fusionUsername>$GEFUSIONUSER</fusionUsername>
   <userGroupname>$GEGROUP</userGroupname>
+  <guiGroupname>$GEGUIGROUP</guiGroupname>
 </Systemrc>
 END
 }

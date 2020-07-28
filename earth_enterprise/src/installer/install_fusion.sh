@@ -792,6 +792,7 @@ create_systemrc()
   <locked>0</locked>
   <fusionUsername>$GEFUSIONUSER_NAME</fusionUsername>
   <userGroupname>$GROUPNAME</userGroupname>
+  <guiGroupname>$GEGUIGROUP</guiGroupname>
 </Systemrc>" > $SYSTEMRC
 }
 

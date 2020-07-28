@@ -36,6 +36,7 @@ extern void PromptUserAndFixOwnership(const std::string &assetroot, bool nopromp
 // returns true if it had to chown any of the dirs
 extern bool MakeSpecialDirs(const std::string &assetroot,
                             const geUserId &fusion_user,
+                            const geUserId &gui_user,
                             bool secure);
 
 #endif // FUSION_CONFIG_FIXASSETROOT_H__

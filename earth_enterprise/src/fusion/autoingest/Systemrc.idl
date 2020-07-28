@@ -24,6 +24,7 @@ class Systemrc {
   bool        locked           = false;
   std::string fusionUsername   = std::string("gefusionuser");
   std::string userGroupname    = std::string("gegroup");
+  std::string guiGroupname     = std::string("gegui");
   unsigned int        logLevel         = uint(2);
 
   deprecated std::string defaultImageryIndex  = std::string();
@@ -53,11 +54,13 @@ public:
   static void OverrideUserAndGroupVars(void);
   static const std::string& FusionUsername(void);
   static const std::string& UserGroupname(void);
+  static const std::string& GuiGroupname(void);
 
  private:
   static std::string sAssetRoot;
   static std::string sFusionUsername;
   static std::string sUserGroupname;
+  static std::string sGuiGroupname;
 
 #/hquote
 
@@ -68,6 +71,7 @@ public:
   std::string Systemrc::sAssetRoot;
   std::string Systemrc::sFusionUsername;
   std::string Systemrc::sUserGroupname;
+  std::string Systemrc::sGuiGroupname;
 
 
   std::string Systemrc::Filename(void) {
@@ -136,6 +140,7 @@ public:
     }
     sFusionUsername = systemrc.fusionUsername;
     sUserGroupname = systemrc.userGroupname;
+    sGuiGroupname = systemrc.guiGroupname;
   }
 
   const std::string &
@@ -152,6 +157,14 @@ public:
       OverrideUserAndGroupVars();
     }
     return sUserGroupname;
+  }
+
+  const std::string &
+  Systemrc::GuiGroupname(void) {
+    if (sGuiGroupname.empty()) {
+      OverrideUserAndGroupVars();
+    }
+    return sGuiGroupname;
   }
 
 #/cppquote

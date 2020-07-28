@@ -97,17 +97,24 @@ void PromptUserAndFixOwnership(const std::string &assetroot, bool noprompt) {
 "Some key files in %1 have incorrect user and/or group ownership.\n"
 "This is likely due to an upgrade from and earlier version of\n"
 "Google Earth Fusion which wrote files as keyhole:users.\n"
-"This version of Google Earth Fusion writes files as %2:%3.\n"
+"This version of Google Earth Fusion writes files as %2:%3 and %4:5.\n"
 "\n"
-"This tool will now run the following command:\n"
-"    chown -R %4:%5 %6\n"
+"This tool will now run the following commands:\n"
+"    chown -R %6:%7 %8\n"
+"    chown %9:%10 %11 %12\n"
 "Depending on the size of your asset root, this could take a while.\n")
                 .arg(assetroot)
                 .arg(Systemrc::FusionUsername())
-                 .arg(Systemrc::UserGroupname())
+                .arg(Systemrc::UserGroupname())
+                .arg(Systemrc::FusionUsername())
+                .arg(Systemrc::GuiGroupname())
                 .arg(Systemrc::FusionUsername())
                 .arg(Systemrc::UserGroupname())
                 .arg(assetroot)
+                .arg(Systemrc::FusionUsername())
+                .arg(Systemrc::GuiGroupname())
+                .arg(assetroot + "/.userdata")
+                .arg(assetroot + "/.userdata")
                 ;
 
   if (!noprompt) {
@@ -133,6 +140,14 @@ void PromptUserAndFixOwnership(const std::string &assetroot, bool noprompt) {
           << tochown;
   if (!cmdline.System(CmdLine::SpawnAsRealUser)) {
     throw khException(kh::tr("Unable to change ownership of asset root"));
+  }
+
+  cmdline << "chown"
+          << Systemrc::FusionUsername() + ":" + Systemrc::GuiGroupname()
+          << tochown + "/.userdata";
+          << tochown + "/.config"
+  if (!cmdline.System(CmdLine::SpawnAsRealUser)) {
+    throw khException(kh::tr("Unable to change ownership of configuration files in the asset root"));
   }
 }
 
@@ -187,6 +202,7 @@ MakeDirWithAttrs(const std::string &dirname, mode_t mode, const geUserId &user)
 
 bool MakeSpecialDirs(const std::string &assetroot,
                      const geUserId &fusion_user,
+                     const geUserId &gui_user,
                      bool secure) {
   bool user_changed = false;
 
@@ -200,17 +216,21 @@ bool MakeSpecialDirs(const std::string &assetroot,
   for (geAssetRoot::SpecialDir dir = geAssetRoot::FirstSpecialDir;
        dir <= geAssetRoot::LastSpecialDir;
        dir = geAssetRoot::SpecialDir(int(dir)+1)) {
+    geUserId user = fusion_user;
+    if (dir == 1 || dir == 3) {
+      geUserId user = gui_user;
+    }
     if (secure) {
       if (MakeDirWithAttrs(geAssetRoot::Dirname(assetroot, dir),
                           geAssetRoot::SecureDirPerms(dir),
-                          fusion_user)) {
+                          user)) {
         user_changed = true;
       }
     }
     else {
       if (MakeDirWithAttrs(geAssetRoot::Dirname(assetroot, dir),
                           geAssetRoot::DirPerms(dir),
-                          fusion_user)) {
+                          user)) {
         user_changed = true;
       }
     }

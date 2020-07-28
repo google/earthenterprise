@@ -93,7 +93,7 @@ void usage(const char *prog, const char *msg = 0, ...) {
      "  --removevolume <volume_name>\n"
      "    [--assetroot <dir>]       Remove a volume with the given name.\n"
      "\n",
-     prog, CommandlineAssetRootDefault().c_str(), Systemrc::UserGroupname().c_str());
+     prog, CommandlineAssetRootDefault().c_str(), Systemrc::GuiGroupname().c_str());
   exit(1);
 }
 
@@ -104,6 +104,7 @@ void MakeNewAssetRoot(const AssetRootStatus &status,
                       const std::string &srcvol,
                       const std::string &username,
                       const std::string &groupname,
+                      const std::string &guigroupname,
                       bool noprompt,
                       bool secure);
 void RepairExistingAssetRoot(const AssetRootStatus &status,
@@ -133,6 +134,7 @@ int main(int argc, char *argv[]) {
     std::string assetroot = CommandlineAssetRootDefault();
     std::string username = Systemrc::FusionUsername();
     std::string groupname = Systemrc::UserGroupname();
+    std::string guigroupname = Systemrc::GuiGroupname();
     std::string srcvol;
     std::string addvolume;
     std::string removevolume;
@@ -193,7 +195,7 @@ int main(int argc, char *argv[]) {
 
     if (create) {
       printf("Making new assetroot ....\n");
-      MakeNewAssetRoot(status, srcvol, username, groupname, noprompt, secure);
+      MakeNewAssetRoot(status, srcvol, username, groupname, guigroupname, noprompt, secure);
       if (!noprompt && !editvolumes &&
           geprompt::confirm(kh::tr(
                                 "Would you like to add more volumes"),
@@ -330,9 +332,11 @@ void MakeNewAssetRoot(const AssetRootStatus &status,
                       const std::string &in_srcvol,
                       const std::string &username,
                       const std::string &groupname,
+                      const std::string &guigroupname,
                       bool noprompt,
                       bool secure) {
   geUserId fusion_user(username, groupname);
+  geUserId gui_user(username, guigroupname);
 
   // escalate my permissions and try to create the assetroot
   {
@@ -342,7 +346,7 @@ void MakeNewAssetRoot(const AssetRootStatus &status,
         CAP_CHOWN,            // let me chown files
         CAP_FOWNER);          // let me chmod files I dont own
 
-    if (MakeSpecialDirs(status.assetroot_, fusion_user, secure)) {
+    if (MakeSpecialDirs(status.assetroot_, fusion_user, gui_user, secure)) {
       // we had to chown some of them. There might be more too.
       // Let's just chown the whole tree right now
       PromptUserAndFixOwnership(status.assetroot_, noprompt);
