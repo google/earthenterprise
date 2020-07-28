@@ -28,7 +28,7 @@ void ScanPluginDirectory(const std::string &pluginDir, std::vector<std::string> 
     boost::filesystem::directory_iterator end;
     std::transform(start, end, std::back_inserter(files), 
         [pluginDir](const boost::filesystem::directory_entry& entry) {
-            return pluginDir + entry.path().leaf().string(); });
+            return pluginDir + entry.path().leaf().c_str(); });
 }
 
 FileAccessorPluginLoader& FileAccessorPluginLoader::Get() {
