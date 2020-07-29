@@ -27,6 +27,7 @@ SCRIPTDIR=`dirname $0`
 ASSET_ROOT=""
 GEFUSIONUSER_NAME=""
 GROUPNAME=""
+GEGUIGROUP=""
 
 # script arguments
 BACKUPFUSION=true
@@ -79,6 +80,7 @@ main_preuninstall()
     fi
 
     GROUP_EXISTS=$(getent group $GROUPNAME)
+    GUI_GROUP_EXISTS=$(getent group $GEGUIGROUP)
     USERNAME_EXISTS=$(getent passwd $GEFUSIONUSER_NAME)
 
     if [ -f "$BININSTALLROOTDIR/geserver" ]; then
@@ -215,6 +217,7 @@ load_systemrc_config()
         ASSET_ROOT=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/assetroot/text()")
 	GEFUSIONUSER_NAME=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/fusionUsername/text()")
 	GROUPNAME=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/userGroupname/text()")
+    GEGUIGROUP=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/guiGroupname/text()")
     else
         load_systemrc_config_retval=1
         echo -e "\nThe system configuration file [$SYSTEMRC] could not be found on your system."
@@ -276,11 +279,12 @@ pause()
 verify_systemrc_config_values()
 {
     # now let's make sure that the config values read from systemrc each contain data
-    if [ -z "$ASSET_ROOT" ] || [ -z "$GEFUSIONUSER_NAME" ] || [ -z "$GROUPNAME" ]; then
+    if [ -z "$ASSET_ROOT" ] || [ -z "$GEFUSIONUSER_NAME" ] || [ -z "$GROUPNAME" ] || [ -z "$GEGUIGROUP"]; then
         echo -e "\nThe [$SYSTEMRC] configuration file contains invalid data."
         echo -e "\nAsset Root: \t\t$ASSET_ROOT"
         echo -e "Fusion User: \t$GEFUSIONUSER_NAME"
         echo -e "Fusion Group: \t\t$GROUPNAME"
+        echo -e "Fusion GUI Group: \t\t$GEGUIGROUP"
         echo -e "\nThe uninstaller requires a system configuration file with valid data."
         echo -e "Exiting the uninstaller.\n"
         return 1
@@ -304,6 +308,7 @@ prompt_uninstall_confirmation()
     local backupStringValue=""
     local deleteUserValue=""
     local deleteGroupValue=""
+    local deleteGuiGroupValue=""
 
     if [ $BACKUPFUSION == true ]; then
 		backupStringValue="YES"
@@ -319,23 +324,43 @@ prompt_uninstall_confirmation()
 
     if [ $DELETE_FUSION_GROUP == true ]; then
         deleteGroupValue="YES - Delete fusion group [$GROUPNAME]"
+        deleteGuiGroupValue="YES - Delete fusion GUI group [$GEGUIGROUP]"
     else
         deleteGroupValue="NO"
+    fi
+
+    if [ $DELETE_FUSION_GUI_GROUP == true ]; then
+        deleteGuiGroupValue="YES - Delete fusion GUI group [$GEGUIGROUP]"
+    else
+        deleteGuiGroupValue="NO"
     fi
 
     echo -e "\nYou have chosen to uninstall $GEEF with the following settings:\n"
 	echo -e "Backup Fusion: \t\t$backupStringValue"
 	echo -e "Delete Fusion User: \t$deleteUserValue"
 	echo -e "Delete Fusion Group: \t$deleteGroupValue\n"
+    echo -e "Delete Fusion GUI Group: \t$deleteGuiGroupValue\n"
 
-    if [ $DELETE_FUSION_USER == true ] && [ $DELETE_FUSION_GROUP == true ]; then
+    if [ $DELETE_FUSION_USER == true ] && [ $DELETE_FUSION_GROUP == true ] && [ $DELETE_FUSION_GUI_GROUP == true ]; then
+        echo -e "You have chosen to remove the fusion groups and user."
+        echo -e "Note: this may take some time to change ownership of the asset and source volumes to \"$ROOT_USERNAME\".\n"
+    elif [ $DELETE_FUSION_USER == true ] && [ $DELETE_FUSION_GROUP == true ]; then
         echo -e "You have chosen to remove the fusion group and user."
+        echo -e "Note: this may take some time to change ownership of the asset and source volumes to \"$ROOT_USERNAME\".\n"
+    elif [ $DELETE_FUSION_USER == true ] && [ $DELETE_FUSION_GUI_GROUP == true ]; then
+        echo -e "You have chosen to remove the fusion gui group and fusion user."
+        echo -e "Note: this may take some time to change ownership of the asset and source volumes to \"$ROOT_USERNAME\".\n"
+    elif [ $DELETE_FUSION_GUI_GROUP == true ] && [ $DELETE_FUSION_GROUP == true ]; then
+        echo -e "You have chosen to remove the fusion group and fusion gui group."
         echo -e "Note: this may take some time to change ownership of the asset and source volumes to \"$ROOT_USERNAME\".\n"
     elif [ $DELETE_FUSION_USER == true ]; then
         echo -e "You have chosen to remove the fusion user."
         echo -e "Note: this may take some time to change ownership of the asset and source volumes to \"$ROOT_USERNAME\".\n"
     elif [ $DELETE_FUSION_GROUP == true ]; then
         echo -e "You have chosen to remove the fusion group."
+        echo -e "Note: this may take some time to change ownership of the asset and source volumes to \"$ROOT_USERNAME\".\n"
+    elif [ $DELETE_FUSION_GUI_GROUP == true ]; then
+        echo -e "You have chosen to remove the fusion gui group."
         echo -e "Note: this may take some time to change ownership of the asset and source volumes to \"$ROOT_USERNAME\".\n"
     fi
     
@@ -372,6 +397,14 @@ remove_group()
     if [ $DELETE_FUSION_GROUP == true ] && [ ! -z "$GROUP_EXISTS" ]; then
         echo -e "\nDelete group $GROUPNAME"
         groupdel $GROUPNAME
+    fi
+}
+
+remove_gui_group()
+{
+    if [ $DELETE_FUSION_GUI_GROUP == true ] && [ ! -z "$GUI_GROUP_EXISTS" ]; then
+        echo -e "\nDelete group $GEGUIGROUP"
+        groupdel $GEGUIGROUP
     fi
 }
 

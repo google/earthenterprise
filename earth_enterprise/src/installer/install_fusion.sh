@@ -241,6 +241,7 @@ load_systemrc_config()
 		ASSET_ROOT=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/assetroot/text()")
 		GEFUSIONUSER_NAME=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/fusionUsername/text()")
 		GROUPNAME=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/userGroupname/text()")
+		GEGUIGROUP=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/guiGroupname/text()")
 	fi
 }
 
