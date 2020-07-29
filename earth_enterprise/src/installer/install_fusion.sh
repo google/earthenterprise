@@ -30,8 +30,10 @@ ASSET_ROOT="/gevol/assets"
 SOURCE_VOLUME="/gevol/src"
 DEFAULTGEFUSIONUSER_NAME="gefusionuser"
 DEFAULTGROUPNAME="gegroup"
+DEFAULTGUIGROUPNAME="gegui"
 GEFUSIONUSER_NAME=$DEFAULTGEFUSIONUSER_NAME
 GROUPNAME=$DEFAULTGROUPNAME
+GEGUIGROUP=$DEFAULTGUIGROUPNAME
 GEPGUSER_NAME="gepguser"
 GEAPACHEUSER_NAME="geapacheuser"
 
@@ -144,6 +146,13 @@ main_install()
 {
 	GROUP_EXISTS=$(getent group $GROUPNAME)
 	USERNAME_EXISTS=$(getent passwd $GEFUSIONUSER_NAME)
+	GEGUIGROUP_EXISTS=$(getent group $GEGUIGROUP)
+
+	# add gui group if it does not exist
+	if [ -z "$GEGUIGROUP_EXISTS" ]; then
+		groupadd -r $GEGUIGROUP &> /dev/null 
+		NEW_GEGROUP=true 
+	fi
 
 	# add group if it does not exist
 	if [ -z "$GROUP_EXISTS" ]; then
@@ -159,6 +168,7 @@ main_install()
 	else
 		# user already exists -- update primary group
 		usermod -g $GROUPNAME $GEFUSIONUSER_NAME
+		usermod -a -G $GEGUIGROUP $GEFUSIONUSER_NAME
 	fi
 
 	copy_files_to_target
@@ -220,6 +230,7 @@ show_help()
 	echo -e "-dir \t\tTemp Install Directory - specify the temporary install directory. Default is [$TMPINSTALLDIR]."	
 	echo -e "-u \t\tFusion User Name - the user name to use for Fusion. Default is [$GEFUSIONUSER_NAME]. \n\t\tNote: this is only used for new installations."
 	echo -e "-g \t\tUser Group Name - the group name to use for the Fusion user. Default is [$GROUPNAME]. \n\t\tNote: this is only used for new installations."
+	echo -e "-ggui \t\tGUI Group Name - the group name to use for the Fusion GUI users. Default is [$GEGUIGROUP]. \n\t\tNote: this is only used for new installations."
 	echo -e "-ar \t\tAsset Root Name - the name of the asset root volume.  Default is [$ASSET_ROOT]. \n\t\tNote: this is only used for new installations. Specify absolute paths only."
     echo -e "-sv \t\tSource Volume Name - the name of the source volume.  Default is [$SOURCE_VOLUME]. \n\t\tNote: this is only used for new installations. Specify absolute paths only."
 	echo -e "-nobk \t\tNo Backup - do not backup the current fusion setup. Default is to backup \n\t\tthe setup before installing."
@@ -460,6 +471,29 @@ parse_arguments()
 					fi
 				fi
 				;;
+			-ggui)
+                show_usergroup_recommendation=true
+
+				if [ $IS_NEWINSTALL == false ]; then
+					echo -e "\nYou cannot modify the fusion gui user group using the installer because Fusion is already installed on this server."
+					parse_arguments_retval=1
+					# Don't show the User Group dialog since it is invalid to change the fusion
+					# username once fusion is installed on the server
+					show_user_group_recommendation=false
+					break
+				else
+					shift
+				
+					if is_valid_alphanumeric ${1// }; then
+						GEGUIGROUP=${1// }
+					else
+						echo -e "\nThe fusion gui group name you specified is not valid. Valid characters are upper/lowercase letters, "
+						echo -e "numbers, dashes and the underscore characters. The gui group name cannot start with a number or dash."
+						parse_arguments_retval=1
+						break			
+					fi
+				fi
+				;;
 			*)
 				echo -e "\nArgument Error: $1 is not a valid argument."
 				show_help
@@ -488,9 +522,12 @@ parse_arguments()
         echo -e "\nIt is strongly recommended that you use the default values for the fusion username and group."
         echo -e "\nDefault Fusion User: \t\t\t\t$DEFAULTGEFUSIONUSER_NAME"
 	    echo -e "Default Fusion User Group: \t\t\t$DEFAULTGROUPNAME"
+		echo -e "Default Fusion GUI User Group: \t\t\t$DEFAULTGUIGROUPNAME"
         echo -e "----------------"
         echo -e "Selected Fusion User: \t\t\t\t$GEFUSIONUSER_NAME"
 	    echo -e "Selected Fusion User Group: \t\t\t$GROUPNAME"
+		echo -e "Selected Fusion GUI User Group: \t\t\t$GEGUIGROUP"
+
     
         # START WORK HERE
         if ! prompt_to_quit "X (Exit) the installer and use the default username - C (Continue) to use the username that you have specified."; then
@@ -523,6 +560,7 @@ prompt_install_confirmation()
     echo -e "Source Volume: \t\t$SOURCE_VOLUME"
 	echo -e "Fusion User: \t\t$GEFUSIONUSER_NAME"
 	echo -e "Fusion User Group: \t$GROUPNAME"
+	echo -e "Fusion GUI User Group: \t$GEGUIGROUP"
     echo -e "Disk Space:\n"
 	
 	# display disk space
@@ -692,7 +730,7 @@ setup_fusion_daemon()
 	printf "Setting up the Fusion daemon...\n"
 
     # Create a new file ‘/etc/init.d/gevars.sh’ and add the below lines.
-    echo -e "GEAPACHEUSER=$GEAPACHEUSER_NAME\nGEPGUSER=$GEPGUSER_NAME\nGEFUSIONUSER=$GEFUSIONUSER_NAME\nGEGROUP=$GROUPNAME" > $BININSTALLROOTDIR/gevars.sh
+    echo -e "GEAPACHEUSER=$GEAPACHEUSER_NAME\nGEPGUSER=$GEPGUSER_NAME\nGEFUSIONUSER=$GEFUSIONUSER_NAME\nGEGROUP=$GROUPNAME\nGEGUIGROUP=$GEGUIGROUP" > $BININSTALLROOTDIR/gevars.sh
 
 	test -f $CHKCONFIG && $CHKCONFIG --add gefusion
 	test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE -f gefusion remove
@@ -824,7 +862,7 @@ install_or_upgrade_asset_root()
             install_or_upgrade_asset_root_retval=1
         else
             $BASEINSTALLDIR_OPT/bin/geconfigureassetroot --new --noprompt --assetroot $ASSET_ROOT --srcvol $SOURCE_VOLUME
-            chown -R $GEFUSIONUSER_NAME:$GROUPNAME $ASSET_ROOT
+            # chown -R $GEFUSIONUSER_NAME:$GROUPNAME $ASSET_ROOT
         fi
     else
         # upgrade asset root -- if this is a master
@@ -851,7 +889,7 @@ install_or_upgrade_asset_root()
             	$BASEINSTALLDIR_OPT/bin/geconfigureassetroot --fixmasterhost --noprompt  $NOCHOWN --assetroot $ASSET_ROOT
             	$BASEINSTALLDIR_OPT/bin/geupgradeassetroot --noprompt $NOCHOWN --assetroot $ASSET_ROOT   
 
-				chown -R $GEFUSIONUSER_NAME:$GROUPNAME $ASSET_ROOT
+				# chown -R $GEFUSIONUSER_NAME:$GROUPNAME $ASSET_ROOT
             fi
         fi  
     fi

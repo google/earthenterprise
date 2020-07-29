@@ -144,8 +144,8 @@ void PromptUserAndFixOwnership(const std::string &assetroot, bool noprompt) {
 
   cmdline << "chown"
           << Systemrc::FusionUsername() + ":" + Systemrc::GuiGroupname()
-          << tochown + "/.userdata";
-          << tochown + "/.config"
+          << tochown + "/.userdata"
+          << tochown + "/.config";
   if (!cmdline.System(CmdLine::SpawnAsRealUser)) {
     throw khException(kh::tr("Unable to change ownership of configuration files in the asset root"));
   }
