@@ -8,8 +8,6 @@ Download documentation for GEE 5.x
 
    .. container:: content
 
-      .. index:: Download Documentation
-
       The majority of Google Earth Enterprise help content is now
       maintained in our `online
       documentation <http://www.opengee.org/geedocs/>`_, which

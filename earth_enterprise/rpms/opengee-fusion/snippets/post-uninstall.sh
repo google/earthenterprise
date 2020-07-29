@@ -15,17 +15,14 @@
 # limitations under the License.
 
 
-#-----------------------------------------------------------------
-# Main Functions
-#-----------------------------------------------------------------
-main_postuninstall()
+remove_users_and_groups()
 {
-    echo "OpenGEE users $GEAPACHEUSER and $GEPGUSER may be removed once associated data files are purged."
+    echo "OpenGEE user $GEFUSIONUSER may be removed once associated data files are purged."
 }
 
 
 #-----------------------------------------------------------------
-# Post-Uninstall Main
+# Main Function
 #-----------------------------------------------------------------
 
 # On Red Hat the first argument to install scripts is "the number of versions
@@ -34,5 +31,6 @@ main_postuninstall()
 #     On Debian systems the first parameter is "upgrade", "remove" or "purge".
 # (See <https://wiki.debian.org/MaintainerScripts>.)
 if [ "$1" = "0" ] || [ "$1" = "purge" ] ; then
-    main_postuninstall $@
+    remove_users_and_groups
+    if [ `command -v systemctl` ]; then systemctl daemon-reexec; fi
 fi
