@@ -1,0 +1,143 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Creating a File Accessor Plugin &#8212; Google Earth Enterprise 5.3.6 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Troubleshooting and error messages" href="../troubleshooting.html" />
+    <link rel="prev" title="Google Maps API v3 for GEE" href="googleMapsAPIV3ForGEE.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../troubleshooting.html" title="Troubleshooting and error messages"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="googleMapsAPIV3ForGEE.html" title="Google Maps API v3 for GEE"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../developers.html" accesskey="U">Developers</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="googleMapsAPIV3ForGEE.html"
+                        title="previous chapter">Google Maps API v3 for GEE</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../troubleshooting.html"
+                        title="next chapter">Troubleshooting and error messages</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="creating-a-file-accessor-plugin">
+<h1>Creating a File Accessor Plugin<a class="headerlink" href="#creating-a-file-accessor-plugin" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p class="rubric">Experimental</p>
+<p>Please note that this functionality is currently experimental. Creating
+and using a plugin is not guaranteed to work as expected at this time.</p>
+<p class="rubric">Description</p>
+<p>GEE Server implements a plugin system for file accessors. That is, plugins
+can be implemented that provide the ability to read from different types
+of file systems, either local or remote. The default POSIX accessor is
+built in, but additional plugins can be loaded at runtime.</p>
+<p class="rubric">How to Implement a Plugin</p>
+<p>A file accessor plugin needs 3 components. The first is a function called
+<code class="docutils literal notranslate"><span class="pre">get_factory_v1</span></code> that returns a <code class="docutils literal notranslate"><span class="pre">FileAccessorFactory</span></code> pointer. The
+signature should be as follows:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">FileAccessorFactory</span><span class="o">*</span> <span class="nf">get_factory_v1</span> <span class="p">();</span>
+</pre></div>
+</div>
+<p>The second component is a factory class that inherits from
+<code class="docutils literal notranslate"><span class="pre">FileAccessorFactory</span></code> and overrides the following method:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">virtual</span> <span class="n">AbstractFileAccessor</span><span class="o">*</span> <span class="nf">GetAccessor</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">fileName</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The final component is a class that derives from <code class="docutils literal notranslate"><span class="pre">AbstractFileAccessor</span></code>
+and overrides all of the pure virtual methods. See FileAccessor.h for the
+complete interface.</p>
+<p class="rubric">Example</p>
+<p>To see a barebones sample implementation, look at
+<code class="docutils literal notranslate"><span class="pre">earthenterprise/earth_enterprise/src/common/test_plugins/FileAccessorTestPlugin.cpp</span></code>.</p>
+<p class="rubric">Additional Information</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">get_factory_v1</span></code> should be exported as <code class="docutils literal notranslate"><span class="pre">extern</span> <span class="pre">&quot;C&quot;</span></code> to avoid C++
+name mangling.</li>
+<li>Plugins need to be built with the same version of the C++ compiler that
+is used to build Open GEE to ensure compatibility.</li>
+<li>Plugins should be built as shared libraries (.so)</li>
+<li>Once built, plugins can be placed in <code class="docutils literal notranslate"><span class="pre">/opt/google/plugin/fileaccessor/</span></code>
+prior to running GEE Server. If a plugin fails to load, see the error
+log for more information.</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../troubleshooting.html" title="Troubleshooting and error messages"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="googleMapsAPIV3ForGEE.html" title="Google Maps API v3 for GEE"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../developers.html" >Developers</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
