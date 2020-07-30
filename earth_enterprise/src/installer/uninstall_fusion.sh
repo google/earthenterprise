@@ -338,9 +338,9 @@ prompt_uninstall_confirmation()
     fi
 
     echo -e "\nYou have chosen to uninstall $GEEF with the following settings:\n"
-	echo -e "Backup Fusion: \t\t$backupStringValue"
-	echo -e "Delete Fusion User: \t$deleteUserValue"
-	echo -e "Delete Fusion Group: \t$deleteGroupValue"
+	echo -e "Backup Fusion: \t\t\t$backupStringValue"
+	echo -e "Delete Fusion User: \t\t$deleteUserValue"
+	echo -e "Delete Fusion Group: \t\t$deleteGroupValue"
     echo -e "Delete Fusion GUI Group: \t$deleteGuiGroupValue\n"
 
     if [ $DELETE_FUSION_USER == true ] && [ $DELETE_FUSION_GROUP == true ] && [ $DELETE_FUSION_GUI_GROUP == true ]; then
