@@ -134,7 +134,7 @@ void PromptUserAndFixOwnership(const std::string &assetroot, bool noprompt) {
 
   // do the chown
   CmdLine gegroup_chown;
-  gegroup_chwon << "chown"
+  gegroup_chown << "chown"
           << "-R"
           << Systemrc::FusionUsername() + ":" + Systemrc::UserGroupname()
           << tochown;
