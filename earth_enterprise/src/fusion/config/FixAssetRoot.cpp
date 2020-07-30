@@ -103,13 +103,9 @@ void PromptUserAndFixOwnership(const std::string &assetroot, bool noprompt) {
 "    chown -R %2:%3 %1\n"
 "    chown %2:%4 %5 %6\n"
 "Depending on the size of your asset root, this could take a while.\n")
-                .arg(assetroot)
-                .arg(Systemrc::FusionUsername())
-                .arg(Systemrc::UserGroupname())
-                .arg(Systemrc::GuiGroupname())
-                .arg(assetroot + "/.userdata")
-                .arg(assetroot + "/.config")
-                ;
+                .arg(assetroot, Systemrc::FusionUsername(), Systemrc::UserGroupname(), 
+                     Systemrc::GuiGroupname(), assetroot + "/.userdata", 
+                     assetroot + "/.config");
 
   if (!noprompt) {
     // confirm with user that it's OK to chown
