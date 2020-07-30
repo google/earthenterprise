@@ -97,7 +97,7 @@ void PromptUserAndFixOwnership(const std::string &assetroot, bool noprompt) {
 "Some key files in %1 have incorrect user and/or group ownership.\n"
 "This is likely due to an upgrade from and earlier version of\n"
 "Google Earth Fusion which wrote files as keyhole:users.\n"
-"This version of Google Earth Fusion writes files as %2:%3 and %4:5.\n"
+"This version of Google Earth Fusion writes files as %2:%3 and %4:%5.\n"
 "\n"
 "This tool will now run the following commands:\n"
 "    chown -R %6:%7 %8\n"
@@ -133,20 +133,21 @@ void PromptUserAndFixOwnership(const std::string &assetroot, bool noprompt) {
 
 
   // do the chown
-  CmdLine cmdline;
-  cmdline << "chown"
+  CmdLine gegroup_chown;
+  gegroup_chwon << "chown"
           << "-R"
           << Systemrc::FusionUsername() + ":" + Systemrc::UserGroupname()
           << tochown;
-  if (!cmdline.System(CmdLine::SpawnAsRealUser)) {
+  if (!gegroup_chown.System(CmdLine::SpawnAsRealUser)) {
     throw khException(kh::tr("Unable to change ownership of asset root"));
   }
 
-  cmdline << "chown"
+  CmdLine gegui_chown;
+  gegui_chown << "chown"
           << Systemrc::FusionUsername() + ":" + Systemrc::GuiGroupname()
           << tochown + "/.userdata"
           << tochown + "/.config";
-  if (!cmdline.System(CmdLine::SpawnAsRealUser)) {
+  if (!gegui_chown.System(CmdLine::SpawnAsRealUser)) {
     throw khException(kh::tr("Unable to change ownership of configuration files in the asset root"));
   }
 }
