@@ -1803,7 +1803,6 @@ void AssetManager::UpdateTableItem(int row, gstAssetHandle handle,
 
     if (aname != std::string(assetTableView->GetItem(i)->text().toUtf8().constData()))
     {
-
         assetTableView->GetItem(i)->setText(aname.c_str());
     }
   }
