@@ -560,7 +560,7 @@ class khEnvironment(Environment):
     instdir = self.fs.Dir(subdir, self.installdirs[dest])
     if not SCons.Util.is_List(target):
       target = [target]
-    self.Install(instdir, target)
+    return self.Install(instdir, target)
 
   def installAs(self, dest, src, newname, subdir=''):
     instdir = self.fs.Dir(subdir, self.installdirs[dest])
