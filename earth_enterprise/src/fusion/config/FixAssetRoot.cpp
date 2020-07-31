@@ -218,8 +218,8 @@ bool MakeSpecialDirs(const std::string &assetroot,
        dir = geAssetRoot::SpecialDir(int(dir)+1)) {
     geUserId user = fusion_user;
     // Check if the directory is either .userdata or .config
-    if (dir == geAssetRoot::SpecialDir::ConfigDir || dir == geAssetRoot::SpecialDir::UserDataDir) {
-      user = gui_user;
+    if (dir == geAssetRoot::SpecialDir::FirstSpecialDir || dir == geAssetRoot::SpecialDir::UserDataDir) {
+      geUserId user = gui_user;
     }
     if (secure) {
       if (MakeDirWithAttrs(geAssetRoot::Dirname(assetroot, dir),
