@@ -928,6 +928,9 @@ fix_postinstall_filepermissions()
     chmod +s $BASEINSTALLDIR_OPT/bin/geserveradmin
     chmod -R 755 $BASEINSTALLDIR_OPT/qt
     chmod 755 $BASEINSTALLDIR_ETC/openldap
+	
+	# sgid enabled
+	chmod g+s $BASEINSTALLDIR_OPT/bin/fusion_install_
 
     # Share
     find $BASEINSTALLDIR_OPT/share -type d -exec chmod 755 {} \;

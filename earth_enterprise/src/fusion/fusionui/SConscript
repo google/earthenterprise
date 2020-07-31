@@ -336,8 +336,7 @@ idlobjs = map(lambda f: env.SharedObject(f),
               map(lambda n: '.idl/'+n+'.cpp', idlfiles))
 
 fusion = env.executable('fusion', objs + qtobjs + idlobjs)
-dest = env.install('fusion_bin', fusion)
-AddPostAction(dest, Chmod(str(dest), 2555))
+env.install('fusion_bin', fusion)
 
 # Define a custom action function for building qt translations
 def buildtrans(env, target, source):
