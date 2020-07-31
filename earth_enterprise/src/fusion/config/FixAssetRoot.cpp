@@ -109,8 +109,7 @@ void PromptUserAndFixOwnership(const std::string &assetroot, bool noprompt) {
 "This tool will now run the following commands:\n"
 "    chown -R %1:%2 %3\n"
 "    chown %4:%5 %6 %7\n"
-"Depending on the size of your asset root, this could take a while.\n"
-"\n")
+"Depending on the size of your asset root, this could take a while.\n")
                 .arg(Systemrc::FusionUsername())
                 .arg(Systemrc::UserGroupname())
                 .arg(assetroot)
