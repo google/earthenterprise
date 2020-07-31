@@ -11,7 +11,7 @@ The application suite consists of three core components:
 * Fusion - imports and _fuses_ imagery, vector and terrain source data in to a
   single flyable 3D globe or 2D map.
 * Server - Apache or Tornado-based server which hosts the private globes built
-  by Fusion.
+  by Fusion.  
 * Client - the Google Earth Enterprise Client (EC) and Google Maps Javascript
   API V3 used to view 3D globes and 2D maps, respectively.
 
