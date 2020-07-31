@@ -891,7 +891,7 @@ fix_postinstall_filepermissions()
 
     #sgid enabled
     chmod g+s $BASEINSTALLDIR_OPT/bin/fusion
-	chmod $ROOT_USERNAME:$GROUPNAME $BASEINSTALLDIR_OPT/bin/fusion
+    chmod $ROOT_USERNAME:$GROUPNAME $BASEINSTALLDIR_OPT/bin/fusion
 
     # Share
     find $BASEINSTALLDIR_OPT/share -type d -exec chmod 755 {} \;
