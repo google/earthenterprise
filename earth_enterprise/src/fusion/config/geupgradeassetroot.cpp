@@ -36,7 +36,7 @@
 void ValidateAssetRootForUpgrade(const AssetRootStatus &status, bool noprompt,
                                  bool nochown);
 void WarnAboutPendingTasks(void);
-void UpgradeAssetRoot(const DottedVersion &version, bool secure);
+void UpgradeAssetRoot(const DottedVersion &version);
 void UpgradeFrom2_4_X(void);
 void UpgradeFrom2_5_X(const DottedVersion &version);
 void UpgradeFrom3_0_X(const DottedVersion &version);
