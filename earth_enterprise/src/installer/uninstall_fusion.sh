@@ -33,7 +33,6 @@ GEGUIGROUP=""
 BACKUPFUSION=true
 DELETE_FUSION_USER=true
 DELETE_FUSION_GROUP=true
-DELETE_FUSION_GUI_GROUP=true
 
 BACKUP_DIR="$BASEINSTALLDIR_VAR/fusion-backups/$(date +%Y_%m_%d.%H%M%S)"
 CONFIG_VOLUME=""
@@ -114,7 +113,6 @@ main_uninstall()
     remove_links
     remove_user
     remove_group
-    remove_gui_group
     show_final_success_message
 }
 
@@ -281,7 +279,7 @@ pause()
 verify_systemrc_config_values()
 {
     # now let's make sure that the config values read from systemrc each contain data
-    if [ -z "$ASSET_ROOT" ] || [ -z "$GEFUSIONUSER_NAME" ] || [ -z "$GROUPNAME" ] || [ -z "$GEGUIGROUP" ]; then
+    if [ -z "$ASSET_ROOT" ] || [ -z "$GEFUSIONUSER_NAME" ] || [ -z "$GROUPNAME" ] || [ -z "$GEGUIGROUP"]; then
         echo -e "\nThe [$SYSTEMRC] configuration file contains invalid data."
         echo -e "\nAsset Root: \t\t$ASSET_ROOT"
         echo -e "Fusion User: \t$GEFUSIONUSER_NAME"
