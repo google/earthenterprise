@@ -890,8 +890,8 @@ fix_postinstall_filepermissions()
     chmod 755 $BASEINSTALLDIR_ETC/openldap
 
     #sgid enabled
-    chmod g+s $BASEINSTALLDIR_OPT/bin/fusion
     chown $ROOT_USERNAME:$GROUPNAME $BASEINSTALLDIR_OPT/bin/fusion
+    chmod g+s $BASEINSTALLDIR_OPT/bin/fusion
 
     # Share
     find $BASEINSTALLDIR_OPT/share -type d -exec chmod 755 {} \;
