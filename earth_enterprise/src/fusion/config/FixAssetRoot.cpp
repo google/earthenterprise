@@ -95,30 +95,26 @@ void FixSpecialPerms(const std::string &assetroot, bool secure) {
 void PromptUserAndFixOwnership(const std::string &assetroot, bool noprompt) {
   QString msg = kh::tr(
 "Some key files in %1 have incorrect user and/or group ownership.\n"
+                .arg(assetroot) +
 "This is likely due to an upgrade from and earlier version of\n"
 "Google Earth Fusion which wrote files as keyhole:users.\n"
-"This version of Google Earth Fusion writes files as %2:%3 and %4:%5.\n"
-"\n")
-                .arg(assetroot)
+"This version of Google Earth Fusion writes files as %1:%2 and %3:%4.\n"
                 .arg(Systemrc::FusionUsername())
                 .arg(Systemrc::UserGroupname())
                 .arg(Systemrc::FusionUsername())
-                .arg(Systemrc::GuiGroupname())
-                ;
-  msg += kh::tr(
+                .arg(Systemrc::GuiGroupname()) +
+"\n"
 "This tool will now run the following commands:\n"
 "    chown -R %1:%2 %3\n"
-"    chown %4:%5 %6 %7\n"
-"Depending on the size of your asset root, this could take a while.\n")
                 .arg(Systemrc::FusionUsername())
                 .arg(Systemrc::UserGroupname())
-                .arg(assetroot)
+                .arg(assetroot) +
+"    chown %2:%4 %5 %6\n"
                 .arg(Systemrc::FusionUsername())
                 .arg(Systemrc::GuiGroupname())
                 .arg(assetroot + "/.userdata")
-                .arg(assetroot + "/.config")
-                ;
-
+                .arg(assetroot + "/.config") +
+"Depending on the size of your asset root, this could take a while.\n");
   if (!noprompt) {
     // confirm with user that it's OK to chown
     fprintf(stderr, "%s", (const char *)msg.utf8());
