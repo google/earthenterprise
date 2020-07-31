@@ -97,18 +97,24 @@ void PromptUserAndFixOwnership(const std::string &assetroot, bool noprompt) {
 "Some key files in %1 have incorrect user and/or group ownership.\n"
 "This is likely due to an upgrade from and earlier version of\n"
 "Google Earth Fusion which wrote files as keyhole:users.\n"
-"This version of Google Earth Fusion writes files as %2:%3 and %2:%4.\n"
+"This version of Google Earth Fusion writes files as %2:%3 and %4:%5.\n"
 "\n"
 "This tool will now run the following commands:\n"
-"    chown -R %2:%3 %1\n"
-"    chown %2:%4 %5 %6\n"
+"    chown -R %6:%7 %8\n"
+"    chown %9:%10 %11 %12\n"
 "Depending on the size of your asset root, this could take a while.\n")
                 .arg(assetroot)
                 .arg(Systemrc::FusionUsername())
                 .arg(Systemrc::UserGroupname())
+                .arg(Systemrc::FusionUsername())
+                .arg(Systemrc::GuiGroupname())
+                .arg(Systemrc::FusionUsername())
+                .arg(Systemrc::UserGroupname())
+                .arg(assetroot)
+                .arg(Systemrc::FusionUsername())
                 .arg(Systemrc::GuiGroupname())
                 .arg(assetroot + "/.userdata")
-                .arg(assetroot + "/.config")
+                .arg(assetroot + "/.userdata")
                 ;
 
   if (!noprompt) {
