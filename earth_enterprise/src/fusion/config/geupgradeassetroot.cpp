@@ -64,7 +64,7 @@ usage(const char* prog, const char* msg = 0, ...) {
      "  --nochown :          do not attempt to fix privileges\n"
      "  --noprompt:          do not prompt for more information, returns -1\n"
      "                       to indicate an error if command fails or has insufficient arguments\n"
-     "  --secure             Removes world read and write permissions.\n"
+     "  --secure             Removes world read and write permissions.\n",
      prog, CommandlineAssetRootDefault().c_str());
   exit(1);
 }
