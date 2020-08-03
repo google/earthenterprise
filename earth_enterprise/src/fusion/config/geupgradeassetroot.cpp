@@ -65,7 +65,7 @@ usage(const char* prog, const char* msg = 0, ...) {
      "  --noprompt:          do not prompt for more information, returns -1\n"
      "                       to indicate an error if command fails or has insufficient arguments\n"
      "  --secure             Removes world read and write permissions.\n"
-     prog, CommandlineAssetRootDefault().c_str(), Systemrc::UserGroupname().c_str());
+     prog, CommandlineAssetRootDefault().c_str());
   exit(1);
 }
 
