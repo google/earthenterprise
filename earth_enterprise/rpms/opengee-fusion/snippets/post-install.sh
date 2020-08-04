@@ -202,7 +202,7 @@ fix_file_permissions()
     chmod -R 555 "$BASEINSTALLDIR_OPT/bin"
 
     #sgid enabled
-    chown "root:$GROUPNAME" "$BASEINSTALLDIR_OPT/bin/fusion"
+    chown "root:$GEGROUP" "$BASEINSTALLDIR_OPT/bin/fusion"
     chmod g+s "$BASEINSTALLDIR_OPT/bin/fusion"
 }
 
