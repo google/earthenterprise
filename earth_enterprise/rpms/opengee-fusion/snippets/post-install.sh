@@ -199,10 +199,11 @@ fix_file_permissions()
 {
     chown "root:$GEGROUP" "$BASEINSTALLDIR_VAR/run"
     chown "root:$GEGROUP" "$BASEINSTALLDIR_VAR/log"
+    chmod -R 555 "$BASEINSTALLDIR_OPT/bin"
 
     #sgid enabled
-    chown $ROOT_USERNAME:$GROUPNAME $BASEINSTALLDIR_OPT/bin/fusion
-    chmod g+s $BASEINSTALLDIR_OPT/bin/fusion
+    chown "root:$GROUPNAME" "$BASEINSTALLDIR_OPT/bin/fusion"
+    chmod g+s "$BASEINSTALLDIR_OPT/bin/fusion"
 }
 
 #-----------------------------------------------------------------
