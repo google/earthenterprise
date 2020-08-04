@@ -49,9 +49,8 @@ main_postinstall()
     compare_asset_root_publishvolume
 
     setup_fusion_daemon
-
-    chown "root:$GEGROUP" "$BASEINSTALLDIR_VAR/run"
-    chown "root:$GEGROUP" "$BASEINSTALLDIR_VAR/log"
+    
+    fix_file_permissions
 
     check_fusion_master_or_slave
 
@@ -194,6 +193,16 @@ final_fusion_service_configuration()
       echo "Warning: chcon labeling failed. SELinux is probably not enabled"
 
     service gefusion start
+}
+
+fix_file_permissions()
+{
+    chown "root:$GEGROUP" "$BASEINSTALLDIR_VAR/run"
+    chown "root:$GEGROUP" "$BASEINSTALLDIR_VAR/log"
+
+    #sgid enabled
+    chown $ROOT_USERNAME:$GROUPNAME $BASEINSTALLDIR_OPT/bin/fusion
+    chmod g+s $BASEINSTALLDIR_OPT/bin/fusion
 }
 
 #-----------------------------------------------------------------
