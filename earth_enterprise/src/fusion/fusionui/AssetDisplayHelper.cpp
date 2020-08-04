@@ -161,7 +161,8 @@ QPixmap AssetDisplayHelper::Pixmap(AssetKey key) {
 }
 
 QString AssetDisplayHelper::PrettyName(AssetKey key)  {
-  static QString name_pairs[] = {
+  static const std::array<QString, 17> name_pairs
+  {{
     QObject::tr("folder"),
     QObject::tr("Vector Resource"),
     QObject::tr("Vector Layer"),
@@ -179,7 +180,7 @@ QString AssetDisplayHelper::PrettyName(AssetKey key)  {
     QObject::tr("Mercator Map Database"),
     QObject::tr("KML Project"),
     QObject::tr("Failed")
-  };
+  }};
 
   return name_pairs[static_cast<uint>(key)];
 }

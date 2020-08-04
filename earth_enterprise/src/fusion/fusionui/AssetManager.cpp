@@ -364,10 +364,9 @@ QString AssetAction::Name() const {
 }
 
 AssetAction* AssetAction::FindAsset(const QString& txt) {
-  for (std::vector<AssetAction*>::iterator it = all_actions.begin();
-       it != all_actions.end(); ++it) {
-    if ((*it)->Name() == txt)
-      return *it;
+  for (const auto& it : all_actions) {
+    if (it->Name() == txt)
+      return it;
   }
   return NULL;
 }
@@ -1745,12 +1744,13 @@ void AssetManager::UpdateTableItem(int row, gstAssetHandle handle,
   // If we're doing an assetsChanged update, the AssetTableItem can stay
   // the same.
   QTableItem *prev = assetTableView->item(row, 0);
+
   if (!prev) {
-    assetTableView->setItem(row, 0,
-                            new AssetTableItem(assetTableView, handle));
+    AssetTableItem* ati = new AssetTableItem(assetTableView, handle);
+    assetTableView->setItem(row, 0, ati);
   }
 
-  // now set teh rest of the columns
+  // now set the rest of the columns
   int col = 1;
   std::string category = asset->PrettySubtype();
   if (category == kMercatorProductSubtype) {
@@ -1792,20 +1792,33 @@ void AssetManager::UpdateTableItem(int row, gstAssetHandle handle,
                             new AssetStateItem(assetTableView, "None"));
   }
   assetTableView->adjustRow(row);
-}
 
+  for (int i = 0; i < assetTableView->numRows(); ++i) {
+      std::string aname {
+        assetTableView->GetItem(i)->GetAssetHandle()
+        ->getAsset()->GetRef().toString().c_str() };
+
+    int bpos = aname.rfind('/') + 1, epos = aname.rfind('.');
+    aname = aname.substr(bpos,epos-bpos);
+
+    if (aname != std::string(assetTableView->GetItem(i)->text().toUtf8().constData()))
+    {
+        assetTableView->GetItem(i)->setText(aname.c_str());
+    }
+  }
+}
 
 void AssetManager::TrackChangesInTableView(
     const gstAssetFolder &folder, const std::set<std::string> &changed) {
   // process each changed assetRef
-  for (std::set<std::string>::const_iterator ref = changed.begin();
-       ref != changed.end(); ++ref) {
-    QString baseRef = khBasename(*ref).c_str();
-    bool found = false;
 
+  // one
+  for (const auto& ref : changed) {
+    QString baseRef = khBasename(ref).c_str();
+    bool found = false;
     // try to find a match in the existing items
     for (int row = 0; row < assetTableView->numRows(); ++row) {
-      AssetTableItem* item = (AssetTableItem*)assetTableView->item(row, 0);
+      AssetTableItem* item = assetTableView->GetItem(row);
       gstAssetHandle handle = item->GetAssetHandle();
       if (handle->getName() == baseRef) {
         found = true;
@@ -1813,7 +1826,7 @@ void AssetManager::TrackChangesInTableView(
         // Will refetch record from disk if it has changed
         // NOTE: Using NFS on linux can cause a race here. The system
         // manager writes the record and then sends me a message. I look at
-        // the file on disk but it hasn;t changed yet. :-(
+        // the file on disk but it hasn't changed yet. :-(
         Asset asset = handle->getAsset();
 
         if (!IsAssetVisible(asset)) {
@@ -1859,6 +1872,7 @@ void AssetManager::UpdateTableView(const gstAssetFolder& folder) {
   assetTableView->setNumCols(5);
   QHeader* header = assetTableView->horizontalHeader();
   int col = 0;
+
   header->setLabel(col++, tr("Asset Name"));
   header->setLabel(col++, tr("Category"));
   header->setLabel(col++, tr("Provider"));
@@ -1870,22 +1884,24 @@ void AssetManager::UpdateTableView(const gstAssetFolder& folder) {
 
   std::vector<gstAssetHandle> items = folder.getAssetHandles();
 
-  if (items.size() == 0)
+  if (items.empty()) {
     return;
+  }
 
   assetTableView->setUpdatesEnabled(false);
 
   int rowcount = 0;
-  for (uint row = 0; row < items.size(); ++row) {
-    gstAssetHandle handle = items[row];
-    Asset asset = handle->getAsset();
 
-    if (!IsAssetVisible(asset))
+  for (const auto& item : items) {
+    gstAssetHandle handle = item;
+    Asset asset = handle->getAsset();
+    bool visible = IsAssetVisible(asset);
+
+    if (!visible)
       continue;
 
     assetTableView->setNumRows(rowcount + 1);
-    UpdateTableItem(rowcount, handle, asset);
-    ++rowcount;
+    UpdateTableItem(rowcount++, handle, asset);
   }
 
   assetTableView->sortColumn(1, true, true);
@@ -1982,11 +1998,10 @@ void AssetManager::UpdateIconView(const gstAssetFolder& folder) {
 
   std::vector<gstAssetHandle> items = folder.getAssetHandles();
 
-  if (items.size() == 0)
+  if (items.empty())
     return;
 
-  for (uint id = 0; id < items.size(); ++id) {
-    gstAssetHandle item = items[id];
+  for (const auto& item : items) {
     Asset asset = item->getAsset();
 
     if (IsAssetVisible(asset))
