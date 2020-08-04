@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2018 The Open GEE Contributors
+# Copyright 2018-2020 The Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -49,9 +49,8 @@ main_postinstall()
     compare_asset_root_publishvolume
 
     setup_fusion_daemon
-
-    chown "root:$GEGROUP" "$BASEINSTALLDIR_VAR/run"
-    chown "root:$GEGROUP" "$BASEINSTALLDIR_VAR/log"
+    
+    fix_file_permissions
 
     check_fusion_master_or_slave
 
@@ -194,6 +193,17 @@ final_fusion_service_configuration()
       echo "Warning: chcon labeling failed. SELinux is probably not enabled"
 
     service gefusion start
+}
+
+fix_file_permissions()
+{
+    chown "root:$GEGROUP" "$BASEINSTALLDIR_VAR/run"
+    chown "root:$GEGROUP" "$BASEINSTALLDIR_VAR/log"
+    chmod -R 555 "$BASEINSTALLDIR_OPT/bin"
+
+    #sgid enabled
+    chown "root:$GEGROUP" "$BASEINSTALLDIR_OPT/bin/fusion"
+    chmod g+s "$BASEINSTALLDIR_OPT/bin/fusion"
 }
 
 #-----------------------------------------------------------------
