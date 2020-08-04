@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Copyright 2017 Google Inc.
-# Copyright 2018-2019 Open GEE Contributors
+# Copyright 2018-2020 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -880,6 +880,10 @@ fix_postinstall_filepermissions()
     # suid enabled
     chmod +s $BASEINSTALLDIR_OPT/bin/geserveradmin
     chmod 755 $BASEINSTALLDIR_ETC/openldap
+
+    #sgid enabled
+    chown $ROOT_USERNAME:$GROUPNAME $BASEINSTALLDIR_OPT/bin/fusion
+    chmod g+s $BASEINSTALLDIR_OPT/bin/fusion
 
     # Share
     find $BASEINSTALLDIR_OPT/share -type d -exec chmod 755 {} \;

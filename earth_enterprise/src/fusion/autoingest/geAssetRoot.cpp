@@ -32,7 +32,8 @@ struct WantPerms {
 // ***  Special Directories
 // ****************************************************************************
 
-// must be in same order as SpecialDirs enum
+// Both special dirs structs must be in same order as SpecialDirs enum
+// These are the standard permissions
 const WantPerms special_dirs[] = {
     {"",           0755},
     {".config",    0777},
@@ -40,13 +41,28 @@ const WantPerms special_dirs[] = {
     {".userdata",  0777},
     {".privatedb", 0700}
 };
+
+// These are the secure permissions
+const WantPerms secure_special_dirs[] = {
+    {"",           0755},
+    {".config",    0775},
+    {".state",     0755},
+    {".userdata",  0775},
+    {".privatedb", 0700}
+};
+
 const unsigned int num_special_dirs = sizeof(special_dirs)/sizeof(special_dirs[0]);
 
 std::string Dirname(const std::string& assetroot, SpecialDir dir) {
   return khComposePath(assetroot, special_dirs[dir].name_);
 }
+
 int DirPerms(SpecialDir dir) {
   return special_dirs[dir].perms_;
+}
+
+int SecureDirPerms(SpecialDir dir) {
+  return secure_special_dirs[dir].perms_;
 }
 
 // ****************************************************************************
