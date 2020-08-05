@@ -79,7 +79,10 @@ and using a plugin is not guaranteed to work as expected at this time.</p>
 <p>GEE Server implements a plugin system for file accessors. That is, plugins
 can be implemented that provide the ability to read from different types
 of file systems, either local or remote. The default POSIX accessor is
-built in, but additional plugins can be loaded at runtime.</p>
+built in, but additional plugins can be loaded at runtime.
+Currently, file accessors are only used when serving data, not when
+building, pushing, and publishing. In those cases, the standard file
+system functions are used to read and write data.</p>
 <p class="rubric">How to Implement a Plugin</p>
 <p>A file accessor plugin needs 3 components. The first is a function called
 <code class="docutils literal notranslate"><span class="pre">get_factory_v1</span></code> that returns a <code class="docutils literal notranslate"><span class="pre">FileAccessorFactory</span></code> pointer. The

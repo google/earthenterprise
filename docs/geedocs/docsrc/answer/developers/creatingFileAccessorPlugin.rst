@@ -19,6 +19,9 @@ Creating a File Accessor Plugin
       can be implemented that provide the ability to read from different types
       of file systems, either local or remote. The default POSIX accessor is
       built in, but additional plugins can be loaded at runtime.
+      Currently, file accessors are only used when serving data, not when
+      building, pushing, and publishing. In those cases, the standard file
+      system functions are used to read and write data.
 
       .. rubric:: How to Implement a Plugin
 
