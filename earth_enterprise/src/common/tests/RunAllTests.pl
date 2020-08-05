@@ -28,7 +28,7 @@ use warnings;
 my $OSLABEL = "";
 
 #set to 1 to include stdout output for non-error tests
-my $VERBOSE = 1;
+my $VERBOSE = 0;
 
 # List tests that should be skipped here:
 my %DISABLE_TESTS;
