@@ -7,3 +7,4 @@ Developers
 
    developers/addPythonLibToGEPython
    developers/googleMapsAPIV3ForGEE
+   developers/creatingFileAccessorPlugin.rst

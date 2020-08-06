@@ -58,7 +58,9 @@ file_bundle_port_sources = [
   'Reader.os',
   'Writer.os',
   'shared.os',
-  '../FileAccessor.os'
+  '../FileAccessor.os',
+  '../POSIXFileAccessor.os',
+  '../FileAccessorPluginLoader.os'
 ]
 
 geindex_r = env.sharedLib('geindex_r', readsources,
@@ -84,13 +86,13 @@ env.test('WriterReader_tests__port',
          [
           'WriterReader_tests__port.cpp'
          ],
-         LIBS=['filebundle__port', 'getests', 'gtest'])
+         LIBS=['filebundle__port', 'getests', 'gtest', 'libdl', 'boost_filesystem', 'boost_system'])
 
 single_thread_env.test('filebundle_unittest__port',
          [
           '../filebundle/filebundle_unittest__port.cpp',
          ],
-         LIBS=['filebundle__port'])
+         LIBS=['filebundle__port', 'libdl', 'boost_filesystem', 'boost_system'])
 
 env.test('IndexManifest_unittest',
                'IndexManifest_unittest.cpp',
