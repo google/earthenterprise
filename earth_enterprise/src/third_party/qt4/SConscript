@@ -23,7 +23,7 @@ qt_tarball =               'qt-everywhere-opensource-src-4.8.7'
 
 make_cmd_cpu = 'make -j%d' % GetOption('num_jobs')
 
-ge_version = gdal_version.replace(              'qt',               'qt-ge')
+ge_version = qt_version.replace('qt', 'qt-ge')
 
 current_dir = Dir('.').abspath
 build_root = '%s/%s' % (current_dir, qt_version)
