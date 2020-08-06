@@ -18,8 +18,7 @@
 Import('third_party_env')
 import os
 
-qt_version =               'qt-4.8.7'
-qt_tarball =               'qt-everywhere-opensource-src-4.8.7'
+qt_version = 'qt-everywhere-opensource-src-4.8.7'
 
 make_cmd_cpu = 'make -j%d' % GetOption('num_jobs')
 
@@ -27,8 +26,8 @@ ge_version = qt_version.replace('qt', 'qt-ge')
 
 current_dir = Dir('.').abspath
 build_root = '%s/%s' % (current_dir, qt_version)
-qt_source = File('#/../../earth_enterprise/third_party/qt/%s.tar.gz'
-                   % qt_tarball).abspath
+qt_source = File('#/../../earth_enterprise/third_party/qt4/%s.tar.gz'
+                   % qt_version).abspath
 
 
 qt_env = third_party_env.DeepCopy()
