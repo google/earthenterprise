@@ -89,7 +89,7 @@ if GetOption('clean'):
 
 # [1] Extract qt
 qt_target = '%s/.extract' % current_dir
-qt_extract = gdal_env.Command(
+qt_extract = qt_env.Command(
     qt_target, [qt_source],
     [qt_env.MultiCommand(
         'mkdir -p %s\n'
@@ -99,8 +99,8 @@ qt_extract = gdal_env.Command(
 
 
 # [2] Patch qt
-qt_target = '%s/.patch_gdal' % current_dir
-qt_patch = gdal_env.Command(
+qt_target = '%s/.patch_qt' % current_dir
+qt_patch = qt_env.Command(
     qt_target,
     qt_extract + map(qt_env.GetBuildPath, qt_patches),
     [qt_env.MultiCommand(
@@ -148,7 +148,7 @@ make_cmd = 'make LD_SHARED="%s"' % (ld)
 install_root = '%s/install' % current_dir
 other_dir = '%s/share/doc/packages/%s' % (install_root, ge_version)
 qt_target = '%s/.install' % current_dir
-qt_install = gdal_env.Command(
+qt_install = qt_env.Command(
     qt_target, qt_build,
     [qt_env.MultiCommand(
         'cd %s\n'
