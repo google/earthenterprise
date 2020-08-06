@@ -118,12 +118,13 @@ qt_target = '%s/.configure_qt' % current_dir
 configure_cmd = (
 'cd %s\n'
 '%s./configure -v -confirm-license -opensource -optimized-qmake -fast '
-'--prefix=%s -platform %{platform} -release -shared -cups -fontconfig -largefile -gtkstyle '
+'--prefix=%s -release -shared -cups -fontconfig -largefile -gtkstyle '
 '-phonon -phonon-backend -no-pch -no-javascript-jit -sm -stl -system-libmng -system-libpng '
 '-system-libjpeg -system-libtiff -system-zlib -xinput -xcursor -xfixes -xinerama '
 '-xshape -xrandr -xrender -xkb -glib -icu -no-openssl -xmlpatterns -no-dbus'
 '-graphicssystem raster -no-webkit -no-sql-ibase -no-sql-mysql -no-sql-psql '
-'-no-sql-odbc -no-sql-sqlite -no-sql-tds\n' % (
+'-no-sql-odbc -no-sql-sqlite -no-sql-tds\n'
+'touch %s' % (
 build_root, qt_env['ENV']['mod_env'], optdir, qt_target))
 
 qt_configure = qt_env.Command(
