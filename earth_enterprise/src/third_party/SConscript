@@ -59,7 +59,8 @@ if third_party_env['bundle_3rd_libs']:
       'PIL',
       'skia',
       'pyyaml',
-      'defusedxml'
+      'defusedxml',
+      'qt4'
   ]
 else:
   third_party_libs = [
@@ -81,7 +82,8 @@ else:
       'PIL',
       'skia',
       'pyyaml',
-      'defusedxml'
+      'defusedxml',
+      'qt4'
   ]
 
 
