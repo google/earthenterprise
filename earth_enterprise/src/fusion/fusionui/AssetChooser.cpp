@@ -83,7 +83,14 @@ class AssetItem : public QIconViewItem {
 
 AssetItem::AssetItem(QIconView* parent, gstAssetHandle handle)
     : QIconViewItem(parent), assetHandle(handle) {
-  setText(shortAssetName(handle->getName().toUtf8().constData()));
+
+  auto name = handle->getName().toStdString();
+  auto pos = name.rfind('.');
+  if (pos != std::string::npos)
+  {
+      name = name.substr(0,pos);
+  }
+  setText(name.c_str());
 
   Asset asset = handle->getAsset();
   AssetDisplayHelper a(asset->type, asset->subtype);
@@ -94,7 +101,7 @@ AssetItem::AssetItem(QIconView* parent, gstAssetHandle handle)
 }  // namespace
 
 // -----------------------------------------------------------------------------
-
+/////////////////////////////// OPEN RESOURCE
 AssetChooser::AssetChooser(QWidget* parent, AssetChooser::Mode m,
                            AssetDefs::Type t, const std::string& st)
     : AssetChooserBase(parent, 0, false, 0), mode_(m),
@@ -284,8 +291,14 @@ void AssetChooser::accept() {
       AssetItem* assetItem = dynamic_cast<AssetItem*>(item);
       // If name doesn't match with current item name, then reset item
       // pointer to initiate searching of item by name below.
+      auto gname = getName();
+      auto san1 = shortAssetName(assetItem->getAssetHandle()->getName().toUtf8().constData()),
+           san2 = shortAssetName(assetItem->getAssetHandle()->getName().toStdString().c_str());
+      notify(NFY_WARN, "gname %s san1 %s san2 %s",
+             gname.toStdString().c_str(), san1, san2);
       if (assetItem != NULL &&
-          getName() != shortAssetName(assetItem->getAssetHandle()->getName().toUtf8().constData())) {
+          gname != san2) {
+
         item = NULL;
       }
     }
@@ -297,7 +310,10 @@ void AssetChooser::accept() {
 
     AssetItem* assetItem = dynamic_cast<AssetItem*>(item);
     if (assetItem != NULL) {
-      nameEdit->setText(shortAssetName(assetItem->getAssetHandle()->getName().toUtf8().constData()));
+        std::string temp { shortAssetName(assetItem->getAssetHandle()->getName()
+                                          .toStdString().c_str()) }; //.toUtf8().constData()) };
+      notify(NFY_WARN, "assetItem != NULL : temp %s", temp.c_str());
+      nameEdit->setText(temp.c_str());
       gstAssetHandle asset_handle = assetItem->getAssetHandle();
       Asset asset = asset_handle->getAsset();
       type_ = asset->type;
@@ -330,13 +346,13 @@ void AssetChooser::accept() {
   } else {
     // Validate whether this asset exists and has compatible asset type.
       std::string ref { fullpath.toUtf8().constData() };
-    if (!Asset(ref)) {
-      QMessageBox::critical(
-          this, "Error",
-          tr("The specified asset \"") + getName() + tr("\" does not exist."),
-          tr("OK"), QString::null, QString::null, 0);
-      return;
-    }
+      if (!Asset(ref)) {
+        QMessageBox::critical(
+            this, "Error",
+            tr("The specified asset \"") + getName() + tr("\" does not exist."),
+            tr("OK"), QString::null, QString::null, 0);
+        return;
+      }
 
     if (!IsCompatibleAsset()) {
       QMessageBox::critical(this, "Error",
@@ -392,6 +408,10 @@ bool AssetChooser::IsCompatibleAsset() const {
 }
 
 QString AssetChooser::getName() const {
+  /*auto temp = nameEdit->text();
+  auto cstr = temp.toStdString();
+  notify(NFY_WARN, "AssetChooser::getName() : temp %s cstr %s",
+         temp.toUtf8().constData(), cstr.c_str());*/
   return nameEdit->text();
 }
 
@@ -466,6 +486,7 @@ void AssetChooser::NewDirectory() {
 }
 
 void AssetChooser::updateView(const gstAssetFolder& folder) {
+
   current_folder_ = folder;
   if (folder.name() == theAssetManager->getAssetRoot().name()) {
     cdtoparentBtn->setEnabled(false);
@@ -488,10 +509,10 @@ void AssetChooser::updateView(const gstAssetFolder& folder) {
   // now add all assets
   //
   std::vector<gstAssetHandle> items = folder.getAssetHandles();
-  for (std::vector<gstAssetHandle>::iterator it = items.begin();
-       it != items.end(); ++it) {
-    if (matchFilter(*it))
-      (void)new AssetItem(iconView, *it);
+
+  for (auto& it : items) {
+    if (matchFilter(it))
+      (void)new AssetItem(iconView, it);
   }
 
   //

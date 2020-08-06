@@ -99,6 +99,7 @@ using QMimeSourceFactory = Q3MimeSourceFactory;
 #include "fusion/gst/gstRegistry.h"
 #include "fusion/fusionversion.h"
 #include "common/notify.h"
+#include <array>
 
 namespace {
 
@@ -300,21 +301,24 @@ bool DatabaseHasValidVersion(const Asset &asset) {
 
 // -----------------------------------------------------------------------------
 
-const AssetDefs::Type TypeSet[] = {
+const std::array<AssetDefs::Type,6> TypeSet =
+{{
   AssetDefs::Invalid,
   AssetDefs::Vector,
   AssetDefs::Imagery,
   AssetDefs::Terrain,
   AssetDefs::Map,
   AssetDefs::Database
-};
-const std::string SubTypeSet[] = {
+}};
+
+const std::array<std::string,5> SubTypeSet =
+{{
   "",
   kResourceSubtype,
   kLayer,
   kProjectSubtype,
   kDatabaseSubtype
-};
+}};
 
 // -----------------------------------------------------------------------------
 
@@ -1711,7 +1715,6 @@ QListViewItem* AssetManager::OpenFolder(const QString& folder) {
   }
 
   categories->setSelected(item, true);
-
   return item;
 }
 
