@@ -105,6 +105,18 @@ Upgrade to GEE 5.x
 
       #. Start ``gefusion`` and ``geserver``.
 
+      .. rubric:: Issues on upgrading
+
+      #. If you have previously published databases that use ExampleSearch and
+         are upgrading to 5.3.5, you must install opengee-extra. Otherwise,
+         ExampleSearch will stop working.
+      #. If you are upgrading from 5.3.4.1 or before to 5.3.5 and do not install
+         opengee-extra, ExampleSearch will still show up in the search tabs page
+         of the admin console but it will not work (due to a bug). This is fixed
+         in 5.3.6 and beyond.
+      #. None of this applies if you use the shell scripts to upgrade rather than
+         RPMs.
+
       .. rubric:: After you upgrade
 
       .. rubric:: After upgrading:

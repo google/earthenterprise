@@ -603,7 +603,8 @@ task openGeeServerRpm(type: GeeRpm, dependsOn: openGeeServerInitScripts) {
         exclude '**/ExampleSearch.conf'
         exclude '**/doc'
         exclude '**/mod_wsgi-ge-extra.conf'
-        exclude '**/examplesearch*.sql'
+        exclude '**/examplesearch.sql'
+        exclude '**/examplesearch_delete.sql'
         exclude '**/readme.txt'
 
         into new File(packageInstallRootDir, 'opt')
@@ -705,7 +706,8 @@ task openGeeServerDeb (type: GeeDeb, dependsOn: openGeeServerInitScripts) {
         exclude '**/ExampleSearch.conf'
         exclude '**/doc'
         exclude '**/mod_wsgi-ge-extra.conf'
-        exclude '**/examplesearch*.sql'
+        exclude '**/examplesearch.sql'
+        exclude '**/examplesearch_delete.sql'
         exclude '**/readme.txt'
 
         into new File(packageInstallRootDir, 'opt')
@@ -985,7 +987,8 @@ task openGeeExtraRpm(type: GeeRpm, dependsOn: openGeeExtraInitScripts) {
         include '**/ExampleSearch.conf'
         include '**/doc/**'
         include '**/mod_wsgi-ge-extra.conf'
-        include '**/examplesearch*.sql'
+        include '**/examplesearch.sql'
+        include '**/examplesearch_delete.sql'
         include '**/readme.txt'
 
         into new File(packageInstallRootDir, 'opt')
@@ -1083,7 +1086,8 @@ task openGeeExtraDeb(type: GeeDeb, dependsOn: openGeeExtraInitScripts) {
         include '**/ExampleSearch.conf'
         include '**/doc/**'
         include '**/mod_wsgi-ge-extra.conf'
-        include '**/examplesearch*.sql'
+        include '**/examplesearch.sql'
+        include '**/examplesearch_delete.sql'
         include '**/readme.txt'
 
         into new File(packageInstallRootDir, 'opt')
