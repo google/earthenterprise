@@ -79,6 +79,8 @@ commonsources = [ '../third_party/rsa_md5/md5c.c',
                   'performancelogger.cpp',
                   'timeutils.cpp',
                   'FileAccessor.cpp',
+                  'POSIXFileAccessor.cpp',
+                  'FileAccessorPluginLoader.cpp',
                   streaming_imagery[0]  # generated .cc file
                  ]
 
@@ -103,7 +105,7 @@ env = conf.Finish()
 
 # TODO: consider to move geGdalUtils to khgdal?!
 gecommon = env.sharedLib('gecommon', commonsources,
-                         LIBS = ['keyholeutils', 'geprotobuf', 'z', 'jpeg', 'png12', 'gdal'])
+                         LIBS = ['keyholeutils', 'geprotobuf', 'z', 'jpeg', 'png12', 'gdal', 'libdl', 'boost_filesystem', 'boost_system'])
 
 utilsources = [
     'ff.cpp',
@@ -210,11 +212,30 @@ env.test('khconfigparser_unittest',
 
 env.test('sharedstring_unittest',
          'sharedstring_unittest.cpp',
-          LIBS=['geutil', 'gtest','gecommon'])
+          LIBS=['geutil', 'gtest', 'gecommon'])
+
+env.test('FileAccessorPluginLoader_unittest',
+         'FileAccessorPluginLoader_unittest.cpp',
+          LIBS=['libdl', 'boost_filesystem', 'boost_system', 'geutil', 'gtest', 'gecommon'])
 
 env.test('fileaccessor_unittest',
          'fileaccessor_unittest.cpp',
          LIBS=['geutil', 'gtest', 'gecommon'])
+
+env.testPluginLib('FileAccessorTestPlugin.so',
+                           'test_plugins/FileAccessorTestPlugin.cpp',
+                           'file_accessor',
+                           'valid')
+
+env.testPluginLib('FileAccessorInvalidTestPlugin.so',
+                           'test_plugins/FileAccessorInvalidTestPlugin.cpp',
+                           'file_accessor',
+                           'invalid')
+
+env.testPluginLib('FileAccessorExecutableTest',
+                  'test_plugins/FileAccessorExecutableTest.cpp',
+                  'file_accessor',
+                  'executable')
 
 env.install('common_lib', [gecommon])
 env.install('common_lib', [geutil])

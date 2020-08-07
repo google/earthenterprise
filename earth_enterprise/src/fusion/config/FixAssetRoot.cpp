@@ -63,12 +63,22 @@ void FixFilePerms(const std::string &fname, unsigned int mode) {
 
 
 
-void FixSpecialPerms(const std::string &assetroot) {
-  for (geAssetRoot::SpecialDir dir = geAssetRoot::FirstSpecialDir;
-       dir <= geAssetRoot::LastSpecialDir;
-       dir = geAssetRoot::SpecialDir(int(dir)+1)) {
-    FixDirPerms(geAssetRoot::Dirname(assetroot, dir),
-                geAssetRoot::DirPerms(dir));
+void FixSpecialPerms(const std::string &assetroot, bool secure) {
+  if (secure) {
+    for (geAssetRoot::SpecialDir dir = geAssetRoot::FirstSpecialDir;
+        dir <= geAssetRoot::LastSpecialDir;
+        dir = geAssetRoot::SpecialDir(int(dir)+1)) {
+      FixDirPerms(geAssetRoot::Dirname(assetroot, dir),
+                  geAssetRoot::SecureDirPerms(dir));
+    }
+  }
+  else {
+    for (geAssetRoot::SpecialDir dir = geAssetRoot::FirstSpecialDir;
+        dir <= geAssetRoot::LastSpecialDir;
+        dir = geAssetRoot::SpecialDir(int(dir)+1)) {
+      FixDirPerms(geAssetRoot::Dirname(assetroot, dir),
+                  geAssetRoot::DirPerms(dir));
+    }
   }
   for (geAssetRoot::SpecialFile file = geAssetRoot::FirstSpecialFile;
        file <= geAssetRoot::LastSpecialFile;
@@ -176,7 +186,8 @@ MakeDirWithAttrs(const std::string &dirname, mode_t mode, const geUserId &user)
 
 
 bool MakeSpecialDirs(const std::string &assetroot,
-                     const geUserId &fusion_user) {
+                     const geUserId &fusion_user,
+                     bool secure) {
   bool user_changed = false;
 
   // make any parents of the asset root w/ more restrictive permissisons
@@ -189,10 +200,19 @@ bool MakeSpecialDirs(const std::string &assetroot,
   for (geAssetRoot::SpecialDir dir = geAssetRoot::FirstSpecialDir;
        dir <= geAssetRoot::LastSpecialDir;
        dir = geAssetRoot::SpecialDir(int(dir)+1)) {
-    if (MakeDirWithAttrs(geAssetRoot::Dirname(assetroot, dir),
-                         geAssetRoot::DirPerms(dir),
-                         fusion_user)) {
-      user_changed = true;
+    if (secure) {
+      if (MakeDirWithAttrs(geAssetRoot::Dirname(assetroot, dir),
+                          geAssetRoot::SecureDirPerms(dir),
+                          fusion_user)) {
+        user_changed = true;
+      }
+    }
+    else {
+      if (MakeDirWithAttrs(geAssetRoot::Dirname(assetroot, dir),
+                          geAssetRoot::DirPerms(dir),
+                          fusion_user)) {
+        user_changed = true;
+      }
     }
   }
 
