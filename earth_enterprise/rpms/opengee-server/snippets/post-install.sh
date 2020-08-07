@@ -69,6 +69,7 @@ main_postinstall()
 
     #11) done!
     service geserver start
+
 }
 
 #-----------------------------------------------------------------
@@ -209,8 +210,15 @@ install_search_databases()
     # c) Install SearchExample Database
     install_searchexample_database
 
-    # d) Stop the PSQL Server
-    echo "# d) Stop the PSQL Server"
+    # d) Turn off examplesearch (will be turned on by Extra, if installed).
+    #  If 'Extra' already installed, don't delete
+    if [ ! -f "$SQLDIR/examplesearch_delete.sql" ]; then
+        echo "# d) Turn off examplesearch"
+        "$BASEINSTALLDIR_OPT/bin/psql" -q -d gesearch geuser -f "$SQLDIR/examplesearch_2delete.sql"
+    fi
+
+    # e) Stop the PSQL Server
+    echo "# e) Stop the PSQL Server"
     run_as_user "$GEPGUSER" "$PGSQL_PROGRAM -D $PGSQL_DATA stop"
 }
 
