@@ -296,13 +296,11 @@ void AssetChooser::accept() {
                          ->getName().toUtf8().constData()) } ,
                   san2 { shortAssetName(assetItem->getAssetHandle()
                          ->getName().toStdString().c_str()) };
-      notify(NFY_WARN, "gname %s san1 %s san2 %s",
-             gname.toStdString().c_str(), san1.c_str(), san2.c_str());
+
       if (san1 == san2)
       {
           gname.clear();
           gname = QString(san2.c_str());
-          notify(NFY_WARN, "setting gname %s", gname.toStdString().c_str());
       }
       if (assetItem != NULL && gname != san2.c_str()) {
 
@@ -318,8 +316,7 @@ void AssetChooser::accept() {
     AssetItem* assetItem = dynamic_cast<AssetItem*>(item);
     if (assetItem != NULL) {
         std::string temp { shortAssetName(assetItem->getAssetHandle()->getName()
-                                          .toStdString().c_str()) }; //.toUtf8().constData()) };
-      notify(NFY_WARN, "assetItem != NULL : temp %s", temp.c_str());
+                                          .toStdString().c_str()) };
       nameEdit->setText(temp.c_str());
       gstAssetHandle asset_handle = assetItem->getAssetHandle();
       Asset asset = asset_handle->getAsset();
@@ -415,10 +412,6 @@ bool AssetChooser::IsCompatibleAsset() const {
 }
 
 QString AssetChooser::getName() const {
-  /*auto temp = nameEdit->text();
-  auto cstr = temp.toStdString();
-  notify(NFY_WARN, "AssetChooser::getName() : temp %s cstr %s",
-         temp.toUtf8().constData(), cstr.c_str());*/
   return nameEdit->text();
 }
 
@@ -429,7 +422,9 @@ const gstAssetFolder& AssetChooser::getFolder() const {
 void AssetChooser::selectItem(QIconViewItem* item) {
   AssetItem* assetItem = dynamic_cast<AssetItem*>(item);
   if (assetItem != NULL) {
-    nameEdit->setText(shortAssetName(assetItem->getAssetHandle()->getName().toUtf8().constData()));
+    std::string aname { assetItem->getAssetHandle()->getName().toStdString() },
+     sname { shortAssetName(aname.c_str()) };
+    nameEdit->setText(sname.c_str());
   }
 }
 

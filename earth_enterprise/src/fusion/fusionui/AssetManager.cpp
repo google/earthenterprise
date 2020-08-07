@@ -1611,7 +1611,7 @@ void AssetManager::assetsChanged(const AssetChanges& changes) {
   }
 
   // convert it to std::string only once for speed
-  std::string curr = currpath.toUtf8().constData();
+  std::string curr = currpath.toStdString();
 
   // check to see if any of the changes are in this directory
   std::set<std::string> changedHere;
