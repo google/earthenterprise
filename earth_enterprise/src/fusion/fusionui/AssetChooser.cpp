@@ -292,12 +292,19 @@ void AssetChooser::accept() {
       // If name doesn't match with current item name, then reset item
       // pointer to initiate searching of item by name below.
       auto gname = getName();
-      auto san1 = shortAssetName(assetItem->getAssetHandle()->getName().toUtf8().constData()),
-           san2 = shortAssetName(assetItem->getAssetHandle()->getName().toStdString().c_str());
+      std::string san1 { shortAssetName(assetItem->getAssetHandle()
+                         ->getName().toUtf8().constData()) } ,
+                  san2 { shortAssetName(assetItem->getAssetHandle()
+                         ->getName().toStdString().c_str()) };
       notify(NFY_WARN, "gname %s san1 %s san2 %s",
-             gname.toStdString().c_str(), san1, san2);
-      if (assetItem != NULL &&
-          gname != san2) {
+             gname.toStdString().c_str(), san1.c_str(), san2.c_str());
+      if (san1 == san2)
+      {
+          gname.clear();
+          gname = QString(san2.c_str());
+          notify(NFY_WARN, "setting gname %s", gname.toStdString().c_str());
+      }
+      if (assetItem != NULL && gname != san2.c_str()) {
 
         item = NULL;
       }
@@ -307,7 +314,7 @@ void AssetChooser::accept() {
       // Note: means that name have been edited and we try to find item by name.
       item = iconView->findItem(getName(), QKeySequence::ExactMatch);
     }
-
+    // here
     AssetItem* assetItem = dynamic_cast<AssetItem*>(item);
     if (assetItem != NULL) {
         std::string temp { shortAssetName(assetItem->getAssetHandle()->getName()
