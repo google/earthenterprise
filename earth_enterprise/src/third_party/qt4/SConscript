@@ -111,7 +111,7 @@ qt_patch = qt_env.Command(
                       '\n'.join(map(lambda i: 'patch -g0 -p1 -s < %s' % (
                           qt_env.GetBuildPath(i)), qt_patches) + 
                           map(lambda i: 'patch -g0 -p0 -s < %s' % (
-                          qt_env.GetBuildPath(i)), qt_patches_p0))
+                          qt_env.GetBuildPath(i)), qt_patches_p0)),
                       qt_target))])
 
 
