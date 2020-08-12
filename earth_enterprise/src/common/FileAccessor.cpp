@@ -38,3 +38,4 @@ bool AbstractFileAccessor::GetLinesFromFile(std::vector<std::string> &lines, con
     return false;
   }
 }
+
