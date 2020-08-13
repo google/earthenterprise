@@ -208,6 +208,8 @@ bool AssetBase::Save() {
   }
   SetSaveError(true);
   SetLastSaveError(true);
+  AssetManager::self->refresh();
+  AssetManager::self->selectFolder();
   return false;
 }
 
@@ -264,6 +266,8 @@ void AssetBase::Close() {
         break;
     }
   }
+  AssetManager::self->selectFolder();
+  AssetManager::self->refresh();
   delete this;
 }
 
@@ -285,10 +289,7 @@ void AssetBase::InstallMainWidget() {
 
 void AssetBase::SetName(const QString& text) {
   asset_path_ = text;
-  std::string pretty_name { AssetPrettyName().toStdString() };
-  std::string short_name { shortAssetName(text.toUtf8().constData()) };
-
-  setCaption(QString(pretty_name.c_str()) + " : " + short_name.c_str());
+  setCaption(AssetPrettyName() + " : " + shortAssetName(text.toUtf8().constData()));
   emit NameChanged(text);
 }
 
@@ -373,7 +374,12 @@ void AssetBase::AboutToHideFileMenu() {
   saveas_action_->setEnabled(!save_error_);
   build_action_->setEnabled(true);
   savebuild_action_->setEnabled(!save_error_);
+  //AssetManager::selectFolder();
+  //AssetManager::refresh();
+  //AssetManager::self->refresh();
+  AssetManager::self->selectFolder();
 }
+ 
 
 void AssetBase::SetErrorMsg(const QString& text, bool red) {
   if (text.isEmpty()) {

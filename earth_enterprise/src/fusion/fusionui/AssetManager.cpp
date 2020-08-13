@@ -364,9 +364,10 @@ QString AssetAction::Name() const {
 }
 
 AssetAction* AssetAction::FindAsset(const QString& txt) {
-  for (const auto& it : all_actions) {
-    if (it->Name() == txt)
-      return it;
+  for (std::vector<AssetAction*>::iterator it = all_actions.begin();
+       it != all_actions.end(); ++it) {
+    if ((*it)->Name() == txt)
+      return *it;
   }
   return NULL;
 }
@@ -512,7 +513,7 @@ AssetManager::AssetManager(QWidget* parent)
       filter_subtype_(0),
       asset_manager_icon_choice_orig_(
           Preferences::getConfig().assetManagerIconChoice) {
-  RemoveToolBarIcons();  // Icons will be set at Show
+  //RemoveToolBarIcons();  // Icons will be set at Show
   {
     gstProviderSet providers;
     if (providers.Load()) {
@@ -588,12 +589,12 @@ AssetManager::AssetManager(QWidget* parent)
   self = this;
 
   // disable some buttons in LT Mode
-  if (GetFusionProductType() == FusionLT) {
-    newImageryResourceAction->removeFrom(Toolbar);
-    newTerrainResourceAction->removeFrom(Toolbar);
-    newImageryProjectAction->removeFrom(Toolbar);
-    newTerrainProjectAction->removeFrom(Toolbar);
-  }
+  //if (GetFusionProductType() == FusionLT) {
+    //newImageryResourceAction->removeFrom(Toolbar);
+    //newTerrainResourceAction->removeFrom(Toolbar);
+    //newImageryProjectAction->removeFrom(Toolbar);
+    //newTerrainProjectAction->removeFrom(Toolbar);
+  //}
   toolbar_chooser_combo->setCurrentItem(asset_manager_icon_choice_orig_);
 }
 
@@ -644,6 +645,7 @@ void AssetManager::HandleNewWindow(AssetBase* asset_window) {
   asset_window->setIcon(helper.GetPixmap());
   asset_window->move(QCursor::pos());
   asset_window->show();
+  refresh();
 }
 
 bool AssetManager::RestoreExisting(const std::string& asset_ref) {
@@ -723,54 +725,68 @@ void AssetManager::CreateNewAsset() {
       // do nothing
       break;
   }
+  //selectFolder();
+  refresh();
 }
 
 void AssetManager::NewVectorAsset() {
   HandleNewWindow(new VectorAsset(this));
+  selectFolder();
 }
 
 void AssetManager::NewVectorLayer() {
   HandleNewWindow(new VectorLayer(this));
+  selectFolder();
 }
 
 void AssetManager::NewVectorProject() {
   HandleNewWindow(new VectorProject(this));
+  selectFolder();
 }
 
 void AssetManager::NewImageryAsset() {
   HandleNewWindow(new ImageryAsset(this));
+  selectFolder();
 }
 
 void AssetManager::NewMercatorImageryAsset() {
   HandleNewWindow(new MercatorImageryAsset(this));
+  selectFolder();
 }
 
 void AssetManager::NewImageryProject() {
   HandleNewWindow(new ImageryProject(this));
+  selectFolder();
 }
 
 void AssetManager::NewMercatorImageryProject() {
   HandleNewWindow(new MercatorImageryProject(this));
+  selectFolder();
 }
 
 void AssetManager::NewTerrainAsset() {
   HandleNewWindow(new TerrainAsset(this));
+  selectFolder();
 }
 
 void AssetManager::NewTerrainProject() {
   HandleNewWindow(new TerrainProject(this));
+  selectFolder();
 }
 
 void AssetManager::NewMapLayer() {
   HandleNewWindow(new MapLayer(this));
+  selectFolder();
 }
 
 void AssetManager::NewMapProject() {
   HandleNewWindow(new MapProject(this));
+  selectFolder();
 }
 
 void AssetManager::NewMapDatabase() {
   HandleNewWindow(new MapDatabase(this));
+  selectFolder();
 }
 
 void AssetManager::ToolbarChooserComboActivated(int choice) {
@@ -812,7 +828,7 @@ void AssetManager::resizeEvent(QResizeEvent* event) {
 void AssetManager::RemoveToolBarIcons() {
   newVectorResourceAction->removeFrom(Toolbar);
   newVectorProjectAction->removeFrom(Toolbar);
-  newImageryResourceAction->removeFrom(Toolbar);
+  //newImageryResourceAction->removeFrom(Toolbar);
   newImageryProjectAction->removeFrom(Toolbar);
   newTerrainResourceAction->removeFrom(Toolbar);
   newTerrainProjectAction->removeFrom(Toolbar);
@@ -866,9 +882,13 @@ void AssetManager::show() {
             SLOT(assetsChanged(const AssetChanges&)));
     RedrawTree(true);
   }
+  else { 
+    RedrawTree(false);
+  }
   HideIcons();
   ShowIcons();
   AssetManagerBase::show();
+  refresh();
 }
 
 void AssetManager::HideIcons() {
@@ -876,7 +896,7 @@ void AssetManager::HideIcons() {
     case PrefsConfig::ShowEarthIcons:
       newVectorResourceAction->removeFrom(Toolbar);
       newVectorProjectAction->removeFrom(Toolbar);
-      newImageryResourceAction->removeFrom(Toolbar);
+      //newImageryResourceAction->removeFrom(Toolbar);
       newImageryProjectAction->removeFrom(Toolbar);
       newTerrainResourceAction->removeFrom(Toolbar);
       newTerrainProjectAction->removeFrom(Toolbar);
@@ -892,7 +912,7 @@ void AssetManager::HideIcons() {
       break;
     case PrefsConfig::ShowWjs84MapIcons:
       newVectorResourceAction->removeFrom(Toolbar);
-      newImageryResourceAction->removeFrom(Toolbar);
+      //newImageryResourceAction->removeFrom(Toolbar);
       newImageryProjectAction->removeFrom(Toolbar);
       newMapLayerAction->removeFrom(Toolbar);
       newMapProjectAction->removeFrom(Toolbar);
@@ -1573,7 +1593,9 @@ void AssetManager::ModifyAsset(const gstAssetHandle& handle) {
 
   if (asset_window) {
     HandleNewWindow(asset_window);
+    selectFolder();
   }
+  refresh();
 }
 
 void AssetManager::refresh() {
@@ -1689,6 +1711,7 @@ void AssetManager::NewFolder(const QString& folder_name) {
   }
 
   categories->setSelected(new_folder, true);
+  refresh();
 }
 
 
@@ -1736,6 +1759,7 @@ void AssetManager::selectFolder() {
   } else {
     UpdateIconView(folder);
   }
+  //refresh();
 }
 
 void AssetManager::UpdateTableItem(int row, gstAssetHandle handle,
@@ -1744,13 +1768,12 @@ void AssetManager::UpdateTableItem(int row, gstAssetHandle handle,
   // If we're doing an assetsChanged update, the AssetTableItem can stay
   // the same.
   QTableItem *prev = assetTableView->item(row, 0);
-
   if (!prev) {
-    AssetTableItem* ati = new AssetTableItem(assetTableView, handle);
-    assetTableView->setItem(row, 0, ati);
+    assetTableView->setItem(row, 0,
+                            new AssetTableItem(assetTableView, handle));
   }
 
-  // now set the rest of the columns
+  // now set teh rest of the columns
   int col = 1;
   std::string category = asset->PrettySubtype();
   if (category == kMercatorProductSubtype) {
@@ -1792,33 +1815,20 @@ void AssetManager::UpdateTableItem(int row, gstAssetHandle handle,
                             new AssetStateItem(assetTableView, "None"));
   }
   assetTableView->adjustRow(row);
-
-  for (int i = 0; i < assetTableView->numRows(); ++i) {
-      std::string aname {
-        assetTableView->GetItem(i)->GetAssetHandle()
-        ->getAsset()->GetRef().toString().c_str() };
-
-    int bpos = aname.rfind('/') + 1, epos = aname.rfind('.');
-    aname = aname.substr(bpos,epos-bpos);
-
-    if (aname != std::string(assetTableView->GetItem(i)->text().toUtf8().constData()))
-    {
-        assetTableView->GetItem(i)->setText(aname.c_str());
-    }
-  }
 }
+
 
 void AssetManager::TrackChangesInTableView(
     const gstAssetFolder &folder, const std::set<std::string> &changed) {
   // process each changed assetRef
-
-  // one
-  for (const auto& ref : changed) {
-    QString baseRef = khBasename(ref).c_str();
+  for (std::set<std::string>::const_iterator ref = changed.begin();
+       ref != changed.end(); ++ref) {
+    QString baseRef = khBasename(*ref).c_str();
     bool found = false;
+
     // try to find a match in the existing items
     for (int row = 0; row < assetTableView->numRows(); ++row) {
-      AssetTableItem* item = assetTableView->GetItem(row);
+      AssetTableItem* item = (AssetTableItem*)assetTableView->item(row, 0);
       gstAssetHandle handle = item->GetAssetHandle();
       if (handle->getName() == baseRef) {
         found = true;
@@ -1826,7 +1836,7 @@ void AssetManager::TrackChangesInTableView(
         // Will refetch record from disk if it has changed
         // NOTE: Using NFS on linux can cause a race here. The system
         // manager writes the record and then sends me a message. I look at
-        // the file on disk but it hasn't changed yet. :-(
+        // the file on disk but it hasn;t changed yet. :-(
         Asset asset = handle->getAsset();
 
         if (!IsAssetVisible(asset)) {
@@ -1872,7 +1882,6 @@ void AssetManager::UpdateTableView(const gstAssetFolder& folder) {
   assetTableView->setNumCols(5);
   QHeader* header = assetTableView->horizontalHeader();
   int col = 0;
-
   header->setLabel(col++, tr("Asset Name"));
   header->setLabel(col++, tr("Category"));
   header->setLabel(col++, tr("Provider"));
@@ -1884,24 +1893,22 @@ void AssetManager::UpdateTableView(const gstAssetFolder& folder) {
 
   std::vector<gstAssetHandle> items = folder.getAssetHandles();
 
-  if (items.empty()) {
+  if (items.size() == 0)
     return;
-  }
 
   assetTableView->setUpdatesEnabled(false);
 
   int rowcount = 0;
-
-  for (const auto& item : items) {
-    gstAssetHandle handle = item;
+  for (uint row = 0; row < items.size(); ++row) {
+    gstAssetHandle handle = items[row];
     Asset asset = handle->getAsset();
-    bool visible = IsAssetVisible(asset);
 
-    if (!visible)
+    if (!IsAssetVisible(asset))
       continue;
 
     assetTableView->setNumRows(rowcount + 1);
-    UpdateTableItem(rowcount++, handle, asset);
+    UpdateTableItem(rowcount, handle, asset);
+    ++rowcount;
   }
 
   assetTableView->sortColumn(1, true, true);
@@ -1998,10 +2005,11 @@ void AssetManager::UpdateIconView(const gstAssetFolder& folder) {
 
   std::vector<gstAssetHandle> items = folder.getAssetHandles();
 
-  if (items.empty())
+  if (items.size() == 0)
     return;
 
-  for (const auto& item : items) {
+  for (uint id = 0; id < items.size(); ++id) {
+    gstAssetHandle item = items[id];
     Asset asset = item->getAsset();
 
     if (IsAssetVisible(asset))
