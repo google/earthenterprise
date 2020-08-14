@@ -512,7 +512,7 @@ AssetManager::AssetManager(QWidget* parent)
       filter_subtype_(0),
       asset_manager_icon_choice_orig_(
           Preferences::getConfig().assetManagerIconChoice) {
-  //RemoveToolBarIcons();  // Icons will be set at Show
+  //RemoveToolBarIcons(); //Don't call this here
   {
     gstProviderSet providers;
     if (providers.Load()) {
@@ -644,7 +644,7 @@ void AssetManager::HandleNewWindow(AssetBase* asset_window) {
   asset_window->setIcon(helper.GetPixmap());
   asset_window->move(QCursor::pos());
   asset_window->show();
-  refresh();
+  //refresh();
 }
 
 bool AssetManager::RestoreExisting(const std::string& asset_ref) {
@@ -1045,14 +1045,19 @@ void AssetManager::ShowAssetMenu(const gstAssetHandle& asset_handle,
   switch (menu.exec(mouse_pos)) {
     case BUILD_ASSET:
       BuildAsset(asset_handle);
+      //AssetManager::self->selectFolder();
+      //AssetManager::self->refresh();
+      refresh();
       break;
 
     case CANCEL_ASSET:
       CancelAsset(asset_handle);
+      refresh();
       break;
 
     case MODIFY_ASSET:
       ModifyAsset(asset_handle);
+      refresh();
       break;
 
     case ASSET_PROPERTIES:
@@ -1065,10 +1070,12 @@ void AssetManager::ShowAssetMenu(const gstAssetHandle& asset_handle,
 
     case PUSH_DB:
       PushDatabase(asset_handle);
+      refresh();
       break;
 
     case PUBLISH_DB:
       PublishDatabase(asset_handle);
+      refresh();
       break;
   }
 }
@@ -1574,9 +1581,9 @@ void AssetManager::ModifyAsset(const gstAssetHandle& handle) {
 
   if (asset_window) {
     HandleNewWindow(asset_window);
-    selectFolder();
+    //selectFolder();
   }
-  refresh();
+  //refresh();
 }
 
 void AssetManager::refresh() {
@@ -1692,7 +1699,7 @@ void AssetManager::NewFolder(const QString& folder_name) {
   }
 
   categories->setSelected(new_folder, true);
-  refresh();
+  //refresh();
 }
 
 
