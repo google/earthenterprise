@@ -60,8 +60,9 @@ class AssetImpl : public AssetStorage, public StorageManaged {
   static std::shared_ptr<AssetImpl> Load(const std::string &boundref);
 
   virtual std::string GetName() const { // Returns the name of the asset, e.g., "CombinedRPAsset"
-    assert(false);
-    return "";
+    /*assert(false);
+    return "";*/
+    return this->GetRef().toString();
   }
 
   // Note for future development: It would be good to change SerializeConfig to something like
