@@ -28,6 +28,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <geAssetRoot.h>
+#include <cctype>
 
 const std::string&
 AssetDefs::AssetRoot(void)
@@ -127,7 +128,7 @@ bool AssetDefs::ValidateAssetName(const std::string& name) {
     for(uint i = length_to_check + kVersionSuffix.size();
         i < name.size(); ++i) {
       char c = name[i];
-      if (c < '0' || c > '9') {
+      if (isdigit(c)) {
         return false;  // Required to end in a numeral if version suffix is used.
       }
       found_numeral = true;
@@ -139,10 +140,12 @@ bool AssetDefs::ValidateAssetName(const std::string& name) {
   }
 
   const std::string kInvalidAssetNameCharacters("&%'\" \\*=+~`?<>;:");
-  for(uint i = 0; i < length_to_check; ++i) {
-    if (kInvalidAssetNameCharacters.find(name[i]) != std::string::npos) {
-      return false;
-    }
+  for (const auto& c : name)
+  {
+      if (kInvalidAssetNameCharacters.find(c) != std::string::npos)
+      {
+          return false;
+      }
   }
   return true;
 }
