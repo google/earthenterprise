@@ -37,7 +37,6 @@ public:
   bool PwriteAll(const void* buffer, size_t size, off64_t offset) override;
   bool ReadStringFromFile(const std::string &filename, std::string &str, std::uint64_t limit = 0) override;
   bool Exists(const std::string &filename) override;
-  bool GetLinesFromFile(std::vector<std::string> &lines, const std::string &filename) override;
   void fprintf(const char *format, ...) override;
 };
 

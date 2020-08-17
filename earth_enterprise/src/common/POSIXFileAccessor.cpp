@@ -62,26 +62,6 @@ bool POSIXFileAccessor::Exists(const std::string &filename) {
   return khExists(filename);
 }
 
-bool POSIXFileAccessor::GetLinesFromFile(std::vector<std::string> &lines, const std::string &filename) {
-  std::string content;
-
-  try {
-    this->ReadStringFromFile(filename, content);
-
-    TokenizeString(content, lines, "\n");
-
-    for (auto &it : lines) {
-      CleanString(&it, "\r\n");
-    }
-
-    return true;
-  }
-
-  catch (...) {
-    return false;
-  }
-}
-
 void POSIXFileAccessor::fprintf(const char *format, ...) {
   va_list arguments;
   va_start(arguments, format);
