@@ -119,13 +119,13 @@ qt_target = '%s/.configure_qt' % current_dir
 
 configure_cmd = (
 'cd %s\n'
-'%s./configure -v -confirm-license -opensource -optimized-qmake -fast '
-'--prefix=%s -release -shared -cups -fontconfig -largefile -gtkstyle '
-'-phonon -phonon-backend -no-pch -no-javascript-jit -sm -stl -system-libmng -system-libpng '
+'%s./configure -v -confirm-license -opensource -optimized-qmake -no-fast '
+'--prefix=%s -release -shared -no-cups -fontconfig -largefile -gtkstyle '
+'-no-phonon -no-phonon-backend -no-pch -no-javascript-jit -sm -stl -system-libmng -system-libpng '
 '-system-libjpeg -system-libtiff -system-zlib -xinput -xcursor -xfixes -xinerama '
-'-xshape -xrandr -xrender -xkb -glib -icu -no-openssl -xmlpatterns -no-dbus'
+'-xshape -xrandr -xrender -xkb -glib -icu -no-openssl -xmlpatterns -no-dbus '
 '-graphicssystem raster -no-webkit -no-sql-ibase -no-sql-mysql -no-sql-psql '
-'-no-sql-odbc -no-sql-sqlite -no-sql-tds\n'
+'-no-sql-odbc -no-sql-sqlite -no-sql-tds -nomake demos -nomake examples -nomake tools\n'
 'touch %s' % (
 build_root, qt_env['ENV']['mod_env'], optdir, qt_target))
 
@@ -142,7 +142,6 @@ qt_build = qt_env.Command(
     [qt_env.MultiCommand(
         'cd %s\n'
         '%s%s\n'
-        'make docs\n'
         'touch %s' % (build_root, qt_env['ENV']['mod_env'], make_cmd,
                       qt_target))])
 
@@ -155,25 +154,26 @@ qt_install = qt_env.Command(
     qt_target, qt_build,
     [qt_env.MultiCommand(
         'cd %s\n'
-        '%s %s prefix=%s install install-docs install-man\n'
+        '%s %s INSTALL_ROOT=%s install\n'
         'mkdir -p %s\n'
-        'cp -pr VERSION NEWS LICENSE.TXT %s\n'
+        'cp -pr LICENSE.* %s\n'
         'touch %s' % (
             build_root, qt_env['ENV']['mod_env'], make_cmd, install_root,
             other_dir, other_dir, qt_target))])
 
 # [11] Install these into various directories as required for build
 qt_target = '%s/.install_for_build' % current_dir
+final_install_root = install_root + "/opt/google"
 qt_install_build = qt_env.Command(
     qt_target, [qt_install ],
     [qt_env.rsync_cmd % (
-        '%s/bin/' % install_root,
+        '%s/bin/' % final_install_root,
         '%s/' % Dir(qt_env.exportdirs['bin']).abspath),
      qt_env.rsync_cmd % (
-         '%s/include/' % install_root,
+         '%s/include/' % final_install_root,
          '%s/include/' % Dir(qt_env.exportdirs['root']).abspath),
      qt_env.rsync_cmd % (
-         '%s/lib/' % install_root,
+         '%s/lib/' % final_install_root,
          '%s/' % Dir(qt_env.exportdirs['lib']).abspath),
      Touch('$TARGET')])
 Default(qt_install_build)
@@ -181,7 +181,7 @@ Default(qt_install_build)
 if 'install' in COMMAND_LINE_TARGETS:
   # Copies qt tools to /opt/google/bin folder.
   qt_env.InstallFileOrDir(
-      '%s/bin/' % install_root,
+      '%s/bin/' % final_install_root,
       '%s/opt/google/bin' % qt_env.installdirs['common_root'],
       qt_install_build, 'install')
 
@@ -190,25 +190,13 @@ if 'install' in COMMAND_LINE_TARGETS:
       'install', [qt_install_build],
       [qt_env.rsync_excl_cmd %(
           'python%s' % qt_env['python_major_version'],
-          '%s/lib/' % install_root,
+          '%s/lib/' % final_install_root,
           '%s/opt/google/lib' % qt_env.installdirs['common_root'])])
 
   # copy qt docs to /opt/google/share folder.
   qt_env.InstallFileOrDir(
-      '%s/share/' % install_root,
+      '%s/share/' % final_install_root,
       '%s/opt/google/share/' % qt_env.installdirs['common_root'],
-      qt_install_build, 'install')
-
-  qt_env.InstallFileOrDir(
-      '%s/doc' % install_root,
-      '%s/opt/google/share/doc/packages/%s' % (
-          qt_env.installdirs['common_root'], ge_version),
-      qt_install_build, 'install')
-
-  qt_env.InstallFileOrDir(
-      '%s/man' % install_root,
-      '%s/opt/google/share/doc/packages/%s' % (
-          qt_env.installdirs['common_root'], ge_version),
       qt_install_build, 'install')
 
 Return('qt_extract qt_install_build')
