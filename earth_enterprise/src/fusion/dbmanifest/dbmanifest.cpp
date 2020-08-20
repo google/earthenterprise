@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -107,7 +108,7 @@ DbManifest::DbManifest(std::string* db_path)
     is_time_machine_enabled_(false) {
   Init(db_path);
 }
-    
+
 void DbManifest::Init(std::string* db_path) {
   if (!khIsAbspath(db_path_)) {
     throw khSimpleException("'")
@@ -227,7 +228,7 @@ void DbManifest::GetPushManifest(geFilePool &file_pool,
 
   // Get the icon files from the icon dirs listed in GedbFusionConfig.
   std::vector<std::string> icons;
-  for (uint i = 0; i < fusion_config_.icons_dirs_.size(); ++i) {
+  for (unsigned int i = 0; i < fusion_config_.icons_dirs_.size(); ++i) {
     khFindFilesInDir(
         Prefixed(fusion_config_.icons_dirs_[i]), icons, ".png");
   }
@@ -304,7 +305,7 @@ void DbManifest::GetManifest(geFilePool &file_pool,
     (*GetIndextManifest_)(file_pool, fusion_config_.index_path_,
                                         *stream_manifest, tmp_dir, "", "");
     notify(NFY_DEBUG, "Processing %ld POI files with empty prefix", fusion_config_.poi_file_paths_.size());
-    for (uint i = 0; i < fusion_config_.poi_file_paths_.size(); ++i) {
+    for (unsigned int i = 0; i < fusion_config_.poi_file_paths_.size(); ++i) {
       const std::string poi_file = fusion_config_.poi_file_paths_[i];
       if (!khExists(poi_file)) {
         notify(NFY_WARN, "Missing POI file '%s'.", poi_file.c_str());
@@ -318,7 +319,7 @@ void DbManifest::GetManifest(geFilePool &file_pool,
     }
     // These file paths are listed directly in the GedbFusionConfig.
     // Used for creating dbroot.
-    for (uint i = 0; i < fusion_config_.toc_paths_.size(); ++i) {
+    for (unsigned int i = 0; i < fusion_config_.toc_paths_.size(); ++i) {
       const std::string& orig = fusion_config_.toc_paths_[i];
       stream_manifest->push_back(ManifestEntry(orig));
     }
@@ -345,7 +346,7 @@ void DbManifest::GetManifest(geFilePool &file_pool,
 
     notify(NFY_DEBUG, "Processing %ld POI files with prefix", fusion_config_.poi_file_paths_.size());
     // The *.poi file paths are in the GedbFusionConfig.
-    for (uint i = 0; i < fusion_config_.poi_file_paths_.size(); ++i) {
+    for (unsigned int i = 0; i < fusion_config_.poi_file_paths_.size(); ++i) {
       const std::string& orig = fusion_config_.poi_file_paths_[i];
       const std::string prefixed = Prefixed(orig);
       std::string curr = prefixed;
@@ -365,7 +366,7 @@ void DbManifest::GetManifest(geFilePool &file_pool,
 
     // These file paths are listed directly in the GedbFusionConfig.
     // Used for creating dbroot.
-    for (uint i = 0; i < fusion_config_.toc_paths_.size(); ++i) {
+    for (unsigned int i = 0; i < fusion_config_.toc_paths_.size(); ++i) {
       const std::string& orig = fusion_config_.toc_paths_[i];
       stream_manifest->push_back(ManifestEntry(orig, Prefixed(orig)));
     }
@@ -393,12 +394,12 @@ void DbManifest::GetPoiDataFiles(ManifestEntry* stream_manifest_entry,
               notify(NFY_WARN,
                     "No data files defined for POI file %s", poi_file.c_str());
             }
-            for (uint i = 0; i < data_files.size(); ++i) {
+            for (unsigned int i = 0; i < data_files.size(); ++i) {
 
               const std::string& org_data_file = data_files[i];
               const std::string prefixed_data_file = Prefixed(org_data_file);
               std::string cur_data_file = prefixed_data_file;
-              
+
               if (!khExists(cur_data_file) && !search_prefix_.empty()) {  // a published DB
                 cur_data_file = search_prefix_ + org_data_file;
               }
@@ -521,7 +522,7 @@ void DbManifest::GetDisconnectedManifest(geFilePool& file_pool,
   if (fusion_config_.icons_dirs_.size()) {
     // Get the icon files from the icon dirs listed in GedbFusionConfig.
     std::vector<std::string> icons;
-    for (uint i = 0; i < fusion_config_.icons_dirs_.size(); ++i) {
+    for (unsigned int i = 0; i < fusion_config_.icons_dirs_.size(); ++i) {
       khFindFilesInDir(
           Prefixed(fusion_config_.icons_dirs_[i]), icons, ".png");
     }
@@ -572,7 +573,7 @@ bool DbManifest::GetDbrootsAndServerConfig(
   for (size_t i = 0; i < fusion_config_.toc_paths_.size(); ++i) {
     const std::string toc_local = Prefixed(fusion_config_.toc_paths_[i]);
     notify(NFY_DEBUG, "Reading dbroot file: %s = ", toc_local.c_str());
-    
+
     std::string base_name = khBasename(toc_local);
     std::string binary_dbroot_name;
     std::string suffix;
@@ -656,7 +657,7 @@ bool DbManifest::GetDbrootsAndServerConfig(
 
   // Add icons dir entries.
   std::set<std::string> icon_set;
-  for (uint i = 0; i < fusion_config_.icons_dirs_.size(); ++i) {
+  for (unsigned int i = 0; i < fusion_config_.icons_dirs_.size(); ++i) {
     const std::string ith_icon_dir = Prefixed(fusion_config_.icons_dirs_[i]);
     QDir dir(ith_icon_dir.c_str());
     QStringList list = dir.entryList(QDir::Files);
@@ -790,7 +791,7 @@ bool DbManifest::GetLayerDefsAndServerConfig(
 
   // Add icons dir entries.
   std::set<std::string> icon_set;
-  for (uint i = 0; i < fusion_config_.icons_dirs_.size(); ++i) {
+  for (unsigned int i = 0; i < fusion_config_.icons_dirs_.size(); ++i) {
     const std::string ith_icon_dir = Prefixed(fusion_config_.icons_dirs_[i]);
     QDir dir(ith_icon_dir.c_str());
     QStringList list = dir.entryList(QDir::Files);
