@@ -34,6 +34,7 @@ public:
   virtual bool Exists(const std::string &filename) {return false;}
   virtual bool GetLinesFromFile(std::vector<std::string> &lines, const std::string &filename) {return false;}
   virtual void fprintf(const char *format, ...) {}
+  virtual bool GetFileInfo(const std::string &fname, std::uint64_t &size, time_t &mtime) { return false; }
 
   // getFD is used by the unit tests to verify which accessor they have
   virtual int getFD() {return 9999;}

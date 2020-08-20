@@ -15,6 +15,9 @@
 #include <gtest/gtest.h>
 #include "FileAccessor.h"
 
+#include <thread>
+#include <chrono>
+
 using namespace std;
 using namespace testing;
 
@@ -58,6 +61,50 @@ TEST(FileAccessorTest, validate_printf) {
 
     remove(filename.c_str());
 }
+
+TEST(FileAccessorTest, validate_getfileinfo) {
+    string filename = "/tmp/TestFile.txt";
+
+    time_t timeBeforeCreation = std::time(nullptr);
+
+    // Without a sleep here the difference between file creation time, modification
+    // time, and closing time would be too small to measure using time_t
+    auto sleepTime = std::chrono::seconds(1);
+    std::this_thread::sleep_for(sleepTime);
+
+    unique_ptr<AbstractFileAccessor> aFA = AbstractFileAccessor::getAccessor(filename);
+
+    const size_t fileSize = 200;
+    string theData = string(fileSize, 'X');
+
+    aFA->Open(filename, "w");
+    aFA->PwriteAll(theData.data(), fileSize, 0);
+    aFA->Close();
+
+    // Without a sleep here, the difference between file creation time, modification
+    // time, and closing time would be too small to measure
+    std::this_thread::sleep_for(sleepTime);
+
+    time_t timeAfterClose = std::time(nullptr);
+
+    uint64_t size = 0;
+    time_t mtime = 0;
+    
+    bool result = aFA->GetFileInfo(filename, size, mtime);
+    double creationToModification = std::difftime(mtime, timeBeforeCreation);
+    double modificationToClose = std::difftime(timeAfterClose, mtime);
+    std::cout << "\n\ncreationToModification = " << creationToModification <<
+        " modificationToClose = " << modificationToClose << "\n\n";
+    EXPECT_TRUE(result);
+    EXPECT_EQ(size, fileSize);
+
+    // Check that the modification time is after the creation time, but before
+    // the close time.
+    EXPECT_TRUE(creationToModification > 0.0);
+    EXPECT_TRUE(modificationToClose > 0.0);
+    remove(filename.c_str());
+}
+
 
 int main(int argc, char** argv)
 {
