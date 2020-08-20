@@ -38,6 +38,7 @@ public:
   bool ReadStringFromFile(const std::string &filename, std::string &str, std::uint64_t limit = 0) override;
   bool Exists(const std::string &filename) override;
   void fprintf(const char *format, ...) override;
+  bool GetFileInfo(const std::string &fname, std::uint64_t &size, time_t &mtime) override;
 };
 
 #endif //COMMON_POSIXFILEACCESSOR_H

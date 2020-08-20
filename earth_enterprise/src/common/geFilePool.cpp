@@ -108,7 +108,8 @@ FileReferenceImpl::FileReferenceImpl(geFilePool &pool_,
 
   if (!IsWriter()) {
     time_t mtime;
-    if (!khGetFileInfo(fname, cachedFilesize, mtime)) {
+    auto afa = AbstractFileAccessor::getAccessor(fname);
+    if (!afa->GetFileInfo(fname, cachedFilesize, mtime)) {
       throw khSimpleException("No such file ") << fname;
     }
   }
@@ -392,7 +393,8 @@ void geFilePool::WriteStringFile(const std::string &fname,
 void geFilePool::ReadStringFile(const std::string &fname, std::string *buf) {
   std::uint64_t size = 0;
   time_t mtime;
-  if (!khGetFileInfo(fname, size, mtime)) {
+  auto afa = AbstractFileAccessor::getAccessor(fname);
+  if (!afa->GetFileInfo(fname, size, mtime)) {
     throw khSimpleException("No such file ") << fname;
   }
 
@@ -417,7 +419,8 @@ void geFilePool::ReadSimpleFileWithCRC(const std::string &fname,
   // get the filesize
   std::uint64_t size = 0;
   time_t mtime;
-  if (!khGetFileInfo(fname, size, mtime)) {
+  auto afa = AbstractFileAccessor::getAccessor(fname);
+  if (!afa->GetFileInfo(fname, size, mtime)) {
     throw khSimpleException("No such file ") << fname;
   }
 

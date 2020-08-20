@@ -68,3 +68,7 @@ void POSIXFileAccessor::fprintf(const char *format, ...) {
   ::vdprintf(fileDescriptor, format, arguments);
   va_end(arguments);
 }
+
+bool POSIXFileAccessor::GetFileInfo(const std::string &fname, std::uint64_t &size, time_t &mtime) {
+    return khGetFileInfo(fname, size, mtime);
+}

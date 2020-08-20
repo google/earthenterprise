@@ -38,6 +38,7 @@ public:
   virtual bool Exists(const std::string &filename) = 0;
   virtual bool GetLinesFromFile(std::vector<std::string> &lines, const std::string &filename);
   virtual void fprintf(const char *format, ...) = 0;
+  virtual bool GetFileInfo(const std::string &fname, std::uint64_t &size, time_t &mtime) = 0;
 };
 
 class FileAccessorFactory {
