@@ -172,6 +172,9 @@ qt_install_build = qt_env.Command(
          '%s/include/' % final_install_root,
          '%s/include/' % Dir(qt_env.exportdirs['root']).abspath),
      qt_env.rsync_cmd % (
+         '%s/q3porting.xml' % final_install_root,
+         '%s/' % Dir(qt_env.exportdirs['root']).abspath),
+     qt_env.rsync_cmd % (
          '%s/lib/' % final_install_root,
          '%s/' % Dir(qt_env.exportdirs['lib']).abspath),
      Touch('$TARGET')])
