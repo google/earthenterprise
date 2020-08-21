@@ -1,4 +1,5 @@
-﻿// Copyright 2017 Google Inc.
+// Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,7 +29,7 @@ LocaleManager::LocaleManager(QWidget* parent, bool modal, Qt::WFlags flags)
   locale_table->setColumnStretchable(0, true);
 
   localeset_.Load();
-  for (uint row = 0; row < localeset_.supportedLocales.size(); ++row) {
+  for (unsigned int row = 0; row < localeset_.supportedLocales.size(); ++row) {
     locale_table->setNumRows(row + 1);
     locale_table->setText(row, 0, localeset_.supportedLocales[row]);
     locale_table->adjustRow(row);

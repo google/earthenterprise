@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -69,7 +70,7 @@ LayerProperties::LayerProperties(QWidget* parent, const LayerConfig& config,
   fields_table->verticalHeader()->hide();
   fields_table->setLeftMargin(0);
   // fields_table->setColumnStretchable(1, true);
-  for (uint row = 0; row < config.searchFields.size(); ++row) {
+  for (unsigned int row = 0; row < config.searchFields.size(); ++row) {
     fields_table->setNumRows(row + 1);
     fields_table->setText(row, 0, config.searchFields[row].name);
     fields_table->setText(row, 1,
@@ -113,9 +114,9 @@ LayerProperties::LayerProperties(QWidget* parent, const LayerConfig& config,
 LayerConfig LayerProperties::GetConfig() {
   SyncToConfig();
 
-  layer_config_.channelId = static_cast<uint>(idSpinBox->value());
-  layer_config_.asset_uuid_ = uuidEdit->text().toUtf8().constData();
-  layer_config_.preserveTextLevel = static_cast<uint>(
+  layer_config_.channelId = static_cast< unsigned int> (idSpinBox->value());
+  layer_config_.asset_uuid_ = uuidEdit->text().ascii();
+  layer_config_.preserveTextLevel = static_cast< unsigned int> (
       preserveTextSpin->value());
   layer_config_.isVisible = isVisibleCheck->isChecked();
 
@@ -202,8 +203,9 @@ QStringList LayerProperties::AvailableAttributes() {
   QStringList remaining_fields;
   const gstHeaderHandle &record_header = layer_->GetSourceAttr();
   if (record_header && record_header->numColumns() != 0) {
-    for (uint col = 0; col < record_header->numColumns(); ++col) {
-      if (existing_fields.find(record_header->Name(col)) == existing_fields.end())
+    for (unsigned int col = 0; col < record_header->numColumns(); ++col) {
+      if (existing_fields.find(record_header->Name(col)) ==
+          existing_fields.end())
         remaining_fields.append(record_header->Name(col));
     }
   }

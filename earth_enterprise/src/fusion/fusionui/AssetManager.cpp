@@ -1,5 +1,6 @@
 // Copyright 2020 the Open GEE Contributors.
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -501,7 +502,7 @@ void ServeAssistant::Perform() {
 
 AssetManager* AssetManager::self = NULL;
 
-std::string AssetManager::GetProviderById(uint32 id) {
+std::string AssetManager::GetProviderById(std::uint32_t id) {
   ProviderMap::const_iterator found = provider_map_.find(id);
   if (found != provider_map_.end()) {
     return found->second;
@@ -520,7 +521,7 @@ AssetManager::AssetManager(QWidget* parent)
   {
     gstProviderSet providers;
     if (providers.Load()) {
-      for (uint i = 0; i < providers.items.size(); ++i) {
+      for (unsigned int i = 0; i < providers.items.size(); ++i) {
         provider_map_[providers.items[i].id] = providers.items[i].key;
       }
     }
@@ -1407,10 +1408,10 @@ void AssetManager::PublishDatabase(const gstAssetHandle& handle) {
     publish_thread.start();
     publish_assistant.Start();
     progress_dialog.show();
- 
+
     while (publish_thread.isRunning()) {
         qApp->processEvents();
-    } 
+    }
   }
 
   if (progress_dialog.wasCanceled()) {

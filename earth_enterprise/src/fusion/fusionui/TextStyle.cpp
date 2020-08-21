@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -102,14 +103,14 @@ TextStyle::TextStyle(QWidget *parent,
 
   // populate font combo with valid values from fontlist
   base->font_combo->clear();
-  for (uint i = 0; i < fonts.size(); ++i) {
+  for (unsigned int i = 0; i < fonts.size(); ++i) {
     base->font_combo->insertItem(fonts[i].name);
   }
   base->font_combo->setEnabled(true);
 
   // Create the standard widget controllers
   ColorButtonController::Create(manager, base->color_button, &config.color);
-  SpinBoxController<uint>::Create(manager, base->size_spin, &config.size, 6, 100);
+  SpinBoxController< unsigned int>::Create(manager, base->size_spin, &config.size, 6, 100);
   {
     WidgetControllerManager *boxManager =
       CheckableController<QGroupBox>::Create(manager, base->outline_button_group,
@@ -165,7 +166,7 @@ TextStyle::TextStyle(QWidget *parent,
 
 void TextStyle::accept() {
   MapTextStyleSet new_text_styles;
-  for (uint i = 0; i < kMaxSavedStyles; ++i) {
+  for (unsigned int i = 0; i < kMaxSavedStyles; ++i) {
     if (haveSave[i]) {
       new_text_styles.configs[i] = savedConfigs[i];
     }
@@ -221,7 +222,7 @@ TextStyle::UpdateWeightCombo(int fontPos)
   // populate the style (weight) combo
   base->style_combo->clear();
   int weightPos = 0;
-  for (uint i = 0 ; i < fonts[fontPos].weights.size(); ++i) {
+  for (unsigned int i = 0 ; i < fonts[fontPos].weights.size(); ++i) {
     if (fonts[fontPos].weights[i] == config.weight) {
       weightPos = i;
     }
@@ -240,7 +241,7 @@ void
 TextStyle::UpdateFontCombos(void)
 {
   // Find which font is specified in the config
-  uint pos = 0;
+  unsigned int pos = 0;
   for (; pos < fonts.size(); ++pos) {
     if (config.font == fonts[pos].name)
       break;
