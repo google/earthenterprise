@@ -63,7 +63,6 @@ qt_patches = ['qt-4.8-poll.patch',
               'qt-everywhere-opensource-src-4.8.6-QTBUG-22829.patch',
               'qt-everywhere-opensource-src-4.8.6-QTBUG-37380.patch',
               'qt-everywhere-opensource-src-4.8.6-s390.patch',
-              'qt-everywhere-opensource-src-4.8.6-system-clucene.patch',
               'qt-everywhere-opensource-src-4.8.6-systemtrayicon.patch',
               'qt-everywhere-opensource-src-4.8.7-alsa-1.1.patch',
               'qt-everywhere-opensource-src-4.8.7-crash-in-qppmhandler.patch',
@@ -120,12 +119,12 @@ qt_target = '%s/.configure_qt' % current_dir
 configure_cmd = (
 'cd %s\n'
 '%s./configure -v -confirm-license -opensource -optimized-qmake -no-fast '
-'--prefix=%s -release -shared -no-cups -fontconfig -largefile -gtkstyle '
+'--prefix=%s -release -shared -no-cups -fontconfig -largefile -gtkstyle -qt3support '
 '-no-phonon -no-phonon-backend -no-pch -no-javascript-jit -sm -stl -system-libmng -system-libpng '
 '-system-libjpeg -system-libtiff -system-zlib -xinput -xcursor -xfixes -xinerama '
 '-xshape -xrandr -xrender -xkb -glib -icu -no-openssl -xmlpatterns -no-dbus '
 '-graphicssystem raster -no-webkit -no-sql-ibase -no-sql-mysql -no-sql-psql '
-'-no-sql-odbc -no-sql-sqlite -no-sql-tds -nomake demos -nomake examples -nomake tools\n'
+'-no-sql-odbc -no-sql-sqlite -no-sql-tds -nomake demos -nomake examples\n'
 'touch %s' % (
 build_root, qt_env['ENV']['mod_env'], optdir, qt_target))
 
