@@ -1,0 +1,164 @@
+#-*- Python -*-
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+Import('third_party_env')
+
+mod_wsgi_version='mod_wsgi-4.5.14'
+mod_wsgi_ge_version = mod_wsgi_version.replace('mod_wsgi', 'mod_wsgi-ge')
+
+num_cpu = GetOption('num_jobs')
+
+current_dir = Dir('.').abspath
+build_root = '%s/%s' % (current_dir, mod_wsgi_version)
+install_root = '%s/install' % current_dir
+install_root_opt = '%s/opt/google' % install_root
+
+mod_wsgi_source = File('#/../../earth_enterprise/third_party/mod_wsgi/%s.tar.gz' %
+                       mod_wsgi_version).abspath
+
+mod_wsgi_env = third_party_env.DeepCopy()
+root_dir = Dir(mod_wsgi_env.exportdirs['root']).abspath
+
+# [1] Extract mod_wsgi
+mod_wsgi_target = '%s/.extract_mod_wsgi' % current_dir
+mod_wsgi_extract = mod_wsgi_env.Command(
+    mod_wsgi_target, mod_wsgi_source,
+    [mod_wsgi_env.MultiCommand(
+        'mkdir -p %s\n'
+        'cd %s\n'
+        'tar xzf %s\n'
+        'touch %s' % (current_dir, current_dir, mod_wsgi_source,
+                      mod_wsgi_target))])
+
+if third_party_env['is_min_ubuntu'] and not third_party_env['native_cc']:
+  env_opt = 'ac_cv_prog_cc_c99=no'
+else:
+  env_opt = ''
+
+if mod_wsgi_env['release'] or mod_wsgi_env['optimize']:
+  config_opt = ''
+else:
+  config_opt = ''
+
+# [2] Configure mod_wsgi
+mod_wsgi_target = '%s/.configure' % current_dir
+if mod_wsgi_env['bundle_3rd_libs']:
+  configure_cmd = (
+   'cd %s\n'
+    '%s%s ./configure %s --with-apxs=%s/bin/apxs '
+    '--with-python=%s '
+    'LD_RUN_PATH=/opt/google/gepython/Python-%s/lib '
+    'CFLAGS="-I%s"\n'
+    'LDFLAGS="-L%s/lib/python%s -Wl,-rpath,/opt/google/gepython/Python-%s/lib"\n'
+    'touch %s' % (build_root,
+                  mod_wsgi_env['ENV']['mod_env'], env_opt, config_opt, root_dir,
+                  mod_wsgi_env['python_bin'],
+                  mod_wsgi_env['python_version'],
+                  mod_wsgi_env['python_include'],
+                  root_dir, mod_wsgi_env['python_major_version'], mod_wsgi_env['python_version'],
+                  mod_wsgi_target))
+else:
+  if mod_wsgi_env['el_ver'] == 'el6':
+    configure_cmd = (
+      'cd %s\n'
+      '%s%s ./configure %s --with-apxs=%s/bin/apxs '
+      '--with-python=%s '
+      'LD_RUN_PATH=/opt/google/gepython/Python-%s/lib '
+      'CFLAGS="-I%s"\n'
+      'LDFLAGS="-L%s/lib/python%s -Wl,-rpath,/opt/google/gepython/Python-%s/lib"\n'
+      'touch %s' % (build_root,
+                    mod_wsgi_env['ENV']['mod_env'], env_opt, config_opt, root_dir,
+                    mod_wsgi_env['python_bin'],
+                    mod_wsgi_env['python_version'],
+                    mod_wsgi_env['python_include'],
+                    root_dir, mod_wsgi_env['python_major_version'], mod_wsgi_env['python_version'],
+                    mod_wsgi_target))
+  else:
+    configure_cmd = (
+      'cd %s\n'
+      '%s%s ./configure %s --with-apxs=%s/bin/apxs '
+      'touch %s' % (build_root,
+                    mod_wsgi_env['ENV']['mod_env'], env_opt, config_opt, root_dir,
+                    mod_wsgi_target))
+
+
+
+mod_wsgi_configure = mod_wsgi_env.Command(
+    mod_wsgi_target, mod_wsgi_extract,
+    [mod_wsgi_env.MultiCommand(configure_cmd)])
+
+# [3] Build mod_wsgi
+mod_wsgi_target = '%s/.build' % current_dir
+mod_wsgi_build = mod_wsgi_env.Command(
+    mod_wsgi_target, mod_wsgi_configure,
+    [mod_wsgi_env.MultiCommand(
+        'cd %s\n'
+        '%smake -j%d\n'
+        'touch %s' % (build_root, mod_wsgi_env['ENV']['mod_env'],
+                      num_cpu, mod_wsgi_target))])
+
+# [4] Create mod_wsgi master installer
+install_root_opt = '%s/opt/google' % install_root
+install_root_doc = '%s/opt/google/share/doc/packages/%s' % (
+    install_root, mod_wsgi_ge_version)
+
+mod_wsgi_target = '%s/.install' % current_dir
+mod_wsgi_conf_dir = Dir('#third_party/mod_wsgi/conf.d').abspath
+mod_wsgi_conf = 'mod_wsgi-ge.conf'
+mod_wsgi_extra_conf = 'mod_wsgi-ge-extra.conf'
+
+source_conf = '%s/%s.in' % (mod_wsgi_conf_dir, mod_wsgi_conf)
+target_conf = '%s/gehttpd/conf.d/%s' % (install_root_opt, mod_wsgi_conf)
+source_extra_conf = '%s/%s.in' % (mod_wsgi_conf_dir, mod_wsgi_extra_conf)
+target_extra_conf = '%s/gehttpd/conf.d/%s' % (install_root_opt, mod_wsgi_extra_conf)
+mod_wsgi_install = mod_wsgi_env.Command(
+    mod_wsgi_target, mod_wsgi_build,
+    [mod_wsgi_env.MultiCommand('\n'.join([
+        'rm -rf %s/gehttpd/modules %s' % (install_root_opt, install_root_doc),
+        'cd %s' % build_root,
+        'mkdir -p %s/gehttpd/modules' % install_root_opt,
+        'cp src/server/.libs/mod_wsgi.so %s/gehttpd/modules/mod_wsgi.so' % install_root_opt,
+        'mkdir -p %s' % install_root_doc,
+        'cp -pr README.rst LICENSE %s' % install_root_doc,
+        'mkdir -p %s/gehttpd/conf.d' % install_root_opt,
+        'install -m755 %s %s' % (source_conf, target_conf),
+        "sed -i -e 's/@PYTHON_VERSION@/%s/' -e 's/@PYTHON_MAJOR_VERSION@/%s/' %s" % (mod_wsgi_env['python_version'], mod_wsgi_env['python_major_version'], target_conf),
+        "sed -i -e 's&@PYTHON_HOME_DIR@&%s&' %s" % (mod_wsgi_env['python_home'], target_conf),
+        'install -m755 %s %s' % (source_extra_conf, target_extra_conf),
+        'touch %s' % mod_wsgi_target]))])
+
+# [5] Install these into various directories as required for build
+# Note: install_build target does nothing.
+mod_wsgi_target = '%s/.install_for_build' % current_dir
+mod_wsgi_install_build = mod_wsgi_env.Command(
+    mod_wsgi_target, mod_wsgi_install,
+    [Touch('$TARGET')])
+
+
+Default(mod_wsgi_install_build)
+mod_wsgi_env.ExecuteOnClean('rm -rf %s' % current_dir)
+
+
+if 'install' in COMMAND_LINE_TARGETS:
+  server_root = mod_wsgi_env.installdirs['server_root']
+  mod_wsgi_env.InstallFileOrDir(
+      '%s/opt/' % install_root,
+      '%s/opt/' % server_root,
+      mod_wsgi_install_build, 'install_apache')
+
+
+Return('mod_wsgi_extract mod_wsgi_install_build')

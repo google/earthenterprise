@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -31,7 +32,7 @@ LayerConfig::ApplyTemplate(const LayerConfig &templateConfig,
   // legend
 
   if (applyDisplayRules) {
-    std::deque<uint32> oldStyleIds;
+    std::deque<std::uint32_t> oldStyleIds;
     SaveOldStyleIds(oldStyleIds);
     lodForce                = templateConfig.lodForce;
     displayRules            = templateConfig.displayRules;
@@ -57,7 +58,7 @@ LayerConfig::ApplyTemplate(const LayerConfig &templateConfig,
 
 bool LayerConfig::ValidateIconPresence(QString* message) const
 {
-  uint orig_msg_length = message->length();
+  unsigned int orig_msg_length = message->length();
   for (const auto& disp : displayRules) {
     // only check external icon paths
     if (disp.site.style.icon.type == IconReference::External) {
@@ -263,7 +264,7 @@ LayerConfig::AssignStyleIds(AvailId &avail)
 }
 
 void
-LayerConfig::SaveOldStyleIds(std::deque<uint32> &old)
+LayerConfig::SaveOldStyleIds(std::deque<std::uint32_t> &old)
 {
   for (auto& disp : displayRules) {
     if (disp.feature.enabled() && (disp.feature.style.id != 0)) {
@@ -276,7 +277,7 @@ LayerConfig::SaveOldStyleIds(std::deque<uint32> &old)
 }
 
 void
-LayerConfig::TryRestoreOldStyleIds(std::deque<uint32> &old)
+LayerConfig::TryRestoreOldStyleIds(std::deque<std::uint32_t> &old)
 {
 
   for (auto& disp : displayRules) {
