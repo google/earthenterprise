@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -107,7 +108,7 @@ class DbManifest {
   void GetDbFilesList(geFilePool &file_pool,
                       std::vector<std::string> *file_list);
 
-  uint GetDbType() const { return uint(fusion_config_.db_type_); }
+  unsigned int GetDbType() const { return uint(fusion_config_.db_type_); }
 
   bool IsMapDb() const;
 
