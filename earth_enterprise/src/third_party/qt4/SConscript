@@ -112,6 +112,47 @@ qt_patch = qt_env.Command(
                           qt_env.GetBuildPath(i)), qt_patches_p0)),
                       qt_target))])
 
+# [6.1] Configure qt tools
+qt_tools_target = '%s/.configure_qt_tools' % current_dir
+
+configure_cmd = (
+'cd %s\n'
+'%s./configure -v -confirm-license -opensource -optimized-qmake -no-fast '
+'--prefix=%s -release -shared -no-cups -fontconfig -largefile -gtkstyle -qt3support '
+'-no-phonon -no-phonon-backend -no-pch -no-javascript-jit -sm -stl -system-libmng -system-libpng '
+'-system-libjpeg -system-libtiff -system-zlib -xinput -xcursor -xfixes -xinerama '
+'-xshape -xrandr -xrender -xkb -glib -icu -no-openssl -xmlpatterns -no-dbus '
+'-graphicssystem raster -no-webkit -no-sql-ibase -no-sql-mysql -no-sql-psql '
+'-no-sql-odbc -no-sql-sqlite -no-sql-tds -nomake demos -nomake examples\n'
+'touch %s' % (
+build_root, qt_env['ENV']['mod_env'], Dir(qt_env.exportdirs['root']).abspath, qt_target))
+
+qt_configure = qt_env.Command(
+    qt_target, [qt_extract, qt_patch],
+    [qt_env.MultiCommand(configure_cmd)])
+
+# [6.2] Build qt tools
+ld = '%s -shared' % qt_env['ENV']['CXX']
+make_cmd = '%s tools LD_SHARED="%s"' % (make_cmd_cpu, ld)
+qt_target = '%s/.build_qt_tools' % current_dir
+qt_build = qt_env.Command(
+    qt_target, qt_configure,
+    [qt_env.MultiCommand(
+        'cd %s\n'
+        '%s%s\n'
+        'touch %s' % (build_root, qt_env['ENV']['mod_env'], make_cmd,
+                      qt_target))])
+
+# [6.3] Install qt tools for build
+make_cmd = 'make LD_SHARED="%s"' % (ld)
+qt_target = '%s/.install_qt_tools' % current_dir
+qt_install = qt_env.Command(
+    qt_target, qt_build,
+    [qt_env.MultiCommand(
+        'cd %s\n'
+        '%s %s install\n'
+        'touch %s' % (
+            build_root, qt_env['ENV']['mod_env'], make_cmd, install_root, qt_target))])
 
 # [7] Configure qt
 qt_target = '%s/.configure_qt' % current_dir
@@ -124,7 +165,7 @@ configure_cmd = (
 '-system-libjpeg -system-libtiff -system-zlib -xinput -xcursor -xfixes -xinerama '
 '-xshape -xrandr -xrender -xkb -glib -icu -no-openssl -xmlpatterns -no-dbus '
 '-graphicssystem raster -no-webkit -no-sql-ibase -no-sql-mysql -no-sql-psql '
-'-no-sql-odbc -no-sql-sqlite -no-sql-tds -nomake demos -nomake examples\n'
+'-no-sql-odbc -no-sql-sqlite -no-sql-tds -nomake demos -nomake examples -nomake tools\n'
 'touch %s' % (
 build_root, qt_env['ENV']['mod_env'], optdir, qt_target))
 
@@ -166,17 +207,8 @@ final_install_root = install_root + "/opt/google"
 qt_install_build = qt_env.Command(
     qt_target, [qt_install ],
     [qt_env.rsync_cmd % (
-        '%s/bin/' % final_install_root,
+        '%s/*' % final_install_root,
         '%s/' % Dir(qt_env.exportdirs['bin']).abspath),
-     qt_env.rsync_cmd % (
-         '%s/include/' % final_install_root,
-         '%s/include/' % Dir(qt_env.exportdirs['root']).abspath),
-     qt_env.rsync_cmd % (
-         '%s/q3porting.xml' % final_install_root,
-         '%s/' % Dir(qt_env.exportdirs['root']).abspath),
-     qt_env.rsync_cmd % (
-         '%s/lib/' % final_install_root,
-         '%s/' % Dir(qt_env.exportdirs['lib']).abspath),
      Touch('$TARGET')])
 Default(qt_install_build)
 
