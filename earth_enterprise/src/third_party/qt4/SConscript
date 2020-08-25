@@ -25,7 +25,9 @@ make_cmd_cpu = 'make -j%d' % GetOption('num_jobs')
 ge_version = qt_version.replace('qt', 'qt-ge')
 
 current_dir = Dir('.').abspath
+tools_current_dir = Dir('./qt_tools').abspath
 build_root = '%s/%s' % (current_dir, qt_version)
+tools_build_root = '%s/%s' % (tools_current_dir, qt_version)
 qt_source = File('#/../../earth_enterprise/third_party/qt4/%s.tar.gz'
                    % qt_version).abspath
 
@@ -86,7 +88,7 @@ qt_patches_p0 = ['qt-everywhere-opensource-src-4.8.6-QTBUG-34614.patch',
 if GetOption('clean'):
   qt_env.Execute('rm -rf %s' % current_dir)
 
-# [1] Extract qt for tools
+# [0.1] Extract qt for tools
 qt_target = '%s/.extract_tools' % current_dir
 qt_extract_tools = qt_env.Command(
     qt_target, [qt_source],
@@ -94,25 +96,25 @@ qt_extract_tools = qt_env.Command(
         'mkdir -p %s\n'
         'cd %s\n'
         'tar xzf %s\n'
-        'touch %s'% (current_dir, current_dir, qt_source, qt_target))])
+        'touch %s'% (tools_current_dir, tools_current_dir, qt_source, qt_target))])
 
 
-# [2] Patch qt for tools
+# [0.2] Patch qt for tools
 qt_target = '%s/.patch_qt_tools' % current_dir
 qt_patch_tools = qt_env.Command(
     qt_target,
-    qt_extract + map(qt_env.GetBuildPath, qt_patches),
+    qt_extract_tools + map(qt_env.GetBuildPath, qt_patches),
     [qt_env.MultiCommand(
         'cd %s\n'
         '%s\n'
-        'touch %s' % (build_root,
+        'touch %s' % (tools_build_root,
                       '\n'.join(map(lambda i: 'patch -g0 -p1 -s < %s' % (
                           qt_env.GetBuildPath(i)), qt_patches) + 
                           map(lambda i: 'patch -g0 -p0 -s < %s' % (
                           qt_env.GetBuildPath(i)), qt_patches_p0)),
                       qt_target))])
 
-# [6.1] Configure qt tools
+# [0.7] Configure qt tools
 qt_target = '%s/.configure_qt_tools' % current_dir
 
 configure_cmd = (
@@ -125,13 +127,13 @@ configure_cmd = (
 '-graphicssystem raster -no-webkit -no-sql-ibase -no-sql-mysql -no-sql-psql '
 '-no-sql-odbc -no-sql-sqlite -no-sql-tds -nomake demos -nomake examples\n'
 'touch %s' % (
-build_root, qt_env['ENV']['mod_env'], Dir(qt_env.exportdirs['root']).abspath, qt_target))
+tools_build_root, qt_env['ENV']['mod_env'], Dir(qt_env.exportdirs['root']).abspath, qt_target))
 
 qt_configure_tools = qt_env.Command(
     qt_target, [qt_extract_tools, qt_patch_tools],
     [qt_env.MultiCommand(configure_cmd)])
 
-# [6.2] Build qt tools
+# [0.8] Build qt tools
 ld = '%s -shared' % qt_env['ENV']['CXX']
 make_cmd = '%s tools LD_SHARED="%s"' % (make_cmd_cpu, ld)
 qt_target = '%s/.build_qt_tools' % current_dir
@@ -140,10 +142,10 @@ qt_build_tools = qt_env.Command(
     [qt_env.MultiCommand(
         'cd %s\n'
         '%s%s\n'
-        'touch %s' % (build_root, qt_env['ENV']['mod_env'], make_cmd,
+        'touch %s' % (tools_build_root, qt_env['ENV']['mod_env'], make_cmd,
                       qt_target))])
 
-# [6.3] Install qt tools for build
+# [0.11] Install qt tools for build
 make_cmd = 'make LD_SHARED="%s"' % (ld)
 qt_target = '%s/.install_qt_tools' % current_dir
 qt_install_tools = qt_env.Command(
@@ -152,10 +154,9 @@ qt_install_tools = qt_env.Command(
         'cd %s\n'
         '%s %s install\n'
         'cd %s\n'
-        'rm -r %s\n'
         'touch %s' % (
-            build_root, qt_env['ENV']['mod_env'], make_cmd, 
-            current_dir, build_root, qt_target))])
+            tools_build_root, qt_env['ENV']['mod_env'], make_cmd, 
+            tools_current_dir, qt_target))])
 
 # [1] Extract qt
 qt_target = '%s/.extract' % current_dir
@@ -237,7 +238,7 @@ qt_install_build = qt_env.Command(
     qt_target, [qt_install ],
     [qt_env.rsync_cmd % (
         '%s/*' % final_install_root,
-        '%s/' % Dir(qt_env.exportdirs['bin']).abspath),
+        '%s/' % Dir(qt_env.exportdirs['root']).abspath),
      Touch('$TARGET')])
 Default(qt_install_build)
 
