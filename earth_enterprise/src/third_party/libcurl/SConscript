@@ -66,7 +66,7 @@ libcurl_configure = libcurl_env.Command(
         ('cd {build_root_escaped}\n'
          'export LD_LIBRARY_PATH={build_lib_dir_escaped}\n'
          '{mod_env}{env_opt} ./configure --prefix={opt_dir_escaped} '
-            '--with-ssl --without-ca-bundle '
+            '--with-ssl={opt_dir_escaped} '
             '--without-zlib --without-libidn --without-krb4 --without-gnutls '
             '--enable-shared --disable-static {config_opt}\n'
          'touch {libcurl_target_escaped}'
