@@ -88,7 +88,7 @@ if GetOption('clean'):
 
 # [1] Extract qt for tools
 qt_target = '%s/.extract_tools' % current_dir
-qt_extract = qt_env.Command(
+qt_extract_tools = qt_env.Command(
     qt_target, [qt_source],
     [qt_env.MultiCommand(
         'mkdir -p %s\n'
@@ -99,7 +99,7 @@ qt_extract = qt_env.Command(
 
 # [2] Patch qt for tools
 qt_target = '%s/.patch_qt_tools' % current_dir
-qt_patch = qt_env.Command(
+qt_patch_tools = qt_env.Command(
     qt_target,
     qt_extract + map(qt_env.GetBuildPath, qt_patches),
     [qt_env.MultiCommand(
@@ -127,16 +127,16 @@ configure_cmd = (
 'touch %s' % (
 build_root, qt_env['ENV']['mod_env'], Dir(qt_env.exportdirs['root']).abspath, qt_target))
 
-qt_configure = qt_env.Command(
-    qt_target, [qt_extract, qt_patch],
+qt_configure_tools = qt_env.Command(
+    qt_target, [qt_extract_tools, qt_patch_tools],
     [qt_env.MultiCommand(configure_cmd)])
 
 # [6.2] Build qt tools
 ld = '%s -shared' % qt_env['ENV']['CXX']
 make_cmd = '%s tools LD_SHARED="%s"' % (make_cmd_cpu, ld)
 qt_target = '%s/.build_qt_tools' % current_dir
-qt_build = qt_env.Command(
-    qt_target, qt_configure,
+qt_build_tools = qt_env.Command(
+    qt_target, qt_configure_tools,
     [qt_env.MultiCommand(
         'cd %s\n'
         '%s%s\n'
@@ -146,8 +146,8 @@ qt_build = qt_env.Command(
 # [6.3] Install qt tools for build
 make_cmd = 'make LD_SHARED="%s"' % (ld)
 qt_target = '%s/.install_qt_tools' % current_dir
-qt_install = qt_env.Command(
-    qt_target, qt_build,
+qt_install_tools = qt_env.Command(
+    qt_target, qt_build_tools,
     [qt_env.MultiCommand(
         'cd %s\n'
         '%s %s install\n'
@@ -199,7 +199,7 @@ configure_cmd = (
 build_root, qt_env['ENV']['mod_env'], optdir, qt_target))
 
 qt_configure = qt_env.Command(
-    qt_target, [qt_extract, qt_patch],
+    qt_target, [qt_install_tools, qt_extract, qt_patch],
     [qt_env.MultiCommand(configure_cmd)])
 
 # [8] Build qt
