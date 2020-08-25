@@ -68,8 +68,7 @@ CFLAGS='%{optflags}' CXXFLAGS='%{optflags}' ./configure \
     --prefix=%{_prefix} \
     --mandir=%_mandir \
     --libdir=%{_libdir} \
-    --without-ssl \
-    --without-ca-bundle \
+    --with-ssl=%{_prefix} \
     --without-zlib \
     --without-libidn \
     --without-krb4 \
