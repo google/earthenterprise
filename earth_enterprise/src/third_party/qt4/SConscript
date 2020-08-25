@@ -151,10 +151,11 @@ qt_install = qt_env.Command(
     [qt_env.MultiCommand(
         'cd %s\n'
         '%s %s install\n'
-        'rm -r %s/%s'
+        'cd %s\n'
+        'rm -r %s\n'
         'touch %s' % (
             build_root, qt_env['ENV']['mod_env'], make_cmd, 
-            current_dir, qt_source, qt_target))])
+            current_dir, build_root, qt_target))])
 
 # [1] Extract qt
 qt_target = '%s/.extract' % current_dir
