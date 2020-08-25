@@ -30,9 +30,6 @@ Release notes: Open GEE 5.3.5
 
       .. rubric:: New Features
 
-      **New feature here**.
-      New feature description goes here.
-
       In 5.3.5, we moved documentation, examples, and tutorials into a
       separate RPM called opengee-extra. This mainly includes the
       documentation, ExampleSearch, and Fusion Tutorial files.  You
