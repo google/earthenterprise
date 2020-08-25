@@ -81,6 +81,7 @@ using QMimeSourceFactory = Q3MimeSourceFactory;
 #include <Qt/q3dragobject.h>
 #include <autoingest/.idl/storage/VectorProjectConfig.h>
 #include <third_party/rfc_uuid/uuid.h>
+#include "AssetManager.h"
 
 using QImageDrag = Q3ImageDrag;
 using QScrollView = Q3ScrollView;
@@ -382,6 +383,7 @@ void LayerItem::stateChange(bool state) {
   myProjectManager()->forcePreviewRedraw();
   setOn(state);
   listView()->repaint();
+  AssetManager::self->refresh();
 }
 
 void LayerItem::UpdateFilters() {
@@ -1673,9 +1675,12 @@ class QueryThread : public QThread {
   }
 };
 
+
 bool ProjectManager::applyQueries(gstLayer* layer) {
-  if (layer->QueryComplete())
+  if (layer->QueryComplete()) {
+    AssetManager::self->refresh();
     return true;
+  }
 
   QProgressDialog progress_dialog(tr("Please wait while applying queries..."),
                                   tr("Cancel"), 0, 100);
@@ -1714,6 +1719,7 @@ bool ProjectManager::applyQueries(gstLayer* layer) {
            QString::fromUtf8(query_progress.Warning().c_str()),
            tr("OK"), 0, 0, 0);
       }
+      AssetManager::self->refresh();
       return true;
     case gstProgress::Failed: {
       // compose a single QString message from (possibly) multiple
@@ -1728,6 +1734,7 @@ bool ProjectManager::applyQueries(gstLayer* layer) {
       }
       QMessageBox::critical(this, "Error", error_message,
                             tr("OK"), 0, 0, 0);
+      AssetManager::self->refresh();
       return false;
     }
   }
@@ -1760,6 +1767,7 @@ void ProjectManager::RefreshLayerList(bool setLegends,
     project_->layers_.push_back(layer);
     ++it;
   }
+  AssetManager::self->refresh();
 }
 
 
