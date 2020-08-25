@@ -86,8 +86,8 @@ qt_patches_p0 = ['qt-everywhere-opensource-src-4.8.6-QTBUG-34614.patch',
 if GetOption('clean'):
   qt_env.Execute('rm -rf %s' % current_dir)
 
-# [1] Extract qt
-qt_target = '%s/.extract' % current_dir
+# [1] Extract qt for tools
+qt_target = '%s/.extract_tools' % current_dir
 qt_extract = qt_env.Command(
     qt_target, [qt_source],
     [qt_env.MultiCommand(
@@ -97,8 +97,8 @@ qt_extract = qt_env.Command(
         'touch %s'% (current_dir, current_dir, qt_source, qt_target))])
 
 
-# [2] Patch qt
-qt_target = '%s/.patch_qt' % current_dir
+# [2] Patch qt for tools
+qt_target = '%s/.patch_qt_tools' % current_dir
 qt_patch = qt_env.Command(
     qt_target,
     qt_extract + map(qt_env.GetBuildPath, qt_patches),
@@ -113,7 +113,7 @@ qt_patch = qt_env.Command(
                       qt_target))])
 
 # [6.1] Configure qt tools
-qt_tools_target = '%s/.configure_qt_tools' % current_dir
+qt_target = '%s/.configure_qt_tools' % current_dir
 
 configure_cmd = (
 'cd %s\n'
@@ -151,8 +151,36 @@ qt_install = qt_env.Command(
     [qt_env.MultiCommand(
         'cd %s\n'
         '%s %s install\n'
+        'rm -r %s/%s'
         'touch %s' % (
-            build_root, qt_env['ENV']['mod_env'], make_cmd, install_root, qt_target))])
+            build_root, qt_env['ENV']['mod_env'], make_cmd, 
+            current_dir, qt_source, qt_target))])
+
+# [1] Extract qt
+qt_target = '%s/.extract' % current_dir
+qt_extract = qt_env.Command(
+    qt_target, [qt_source],
+    [qt_env.MultiCommand(
+        'mkdir -p %s\n'
+        'cd %s\n'
+        'tar xzf %s\n'
+        'touch %s'% (current_dir, current_dir, qt_source, qt_target))])
+
+
+# [2] Patch qt
+qt_target = '%s/.patch_qt' % current_dir
+qt_patch = qt_env.Command(
+    qt_target,
+    qt_extract + map(qt_env.GetBuildPath, qt_patches),
+    [qt_env.MultiCommand(
+        'cd %s\n'
+        '%s\n'
+        'touch %s' % (build_root,
+                      '\n'.join(map(lambda i: 'patch -g0 -p1 -s < %s' % (
+                          qt_env.GetBuildPath(i)), qt_patches) + 
+                          map(lambda i: 'patch -g0 -p0 -s < %s' % (
+                          qt_env.GetBuildPath(i)), qt_patches_p0)),
+                      qt_target))])
 
 # [7] Configure qt
 qt_target = '%s/.configure_qt' % current_dir
