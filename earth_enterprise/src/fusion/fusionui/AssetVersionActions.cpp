@@ -25,6 +25,7 @@ For history see CVS log (cvs log AssetVersionActions.cpp -or- Emacs Ctrl-xvl).
 #include <autoingest/AssetVersion.h>
 #include <autoingest/khAssetManagerProxy.h>
 
+
 AssetVersionActions::AssetVersionActions(QWidget *parent_,
                                          const std::string &ref) :
     parent(parent_),
@@ -101,7 +102,6 @@ AssetVersionActions::rebuild(void)
                            error,
                            QMessageBox::tr( "OK" ), 0, 0, 0 );
   }
-
 }
 
 void
@@ -135,7 +135,6 @@ AssetVersionActions::clean(void)
                              QMessageBox::tr( "OK" ), 0, 0, 0 );
     }
   }
-
 }
 
 void
@@ -147,7 +146,6 @@ AssetVersionActions::setbad(void)
                            error,
                            QMessageBox::tr( "OK" ), 0, 0, 0 );
   }
-
 }
 
 void
@@ -159,6 +157,5 @@ AssetVersionActions::clearbad(void)
                            error,
                            QMessageBox::tr( "OK" ), 0, 0, 0 );
   }
-
 }
 
