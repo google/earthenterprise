@@ -208,6 +208,8 @@ bool AssetBase::Save() {
   }
   SetSaveError(true);
   SetLastSaveError(true);
+  AssetManager::self->selectFolder();
+  AssetManager::self->refresh();
   return false;
 }
 
@@ -264,6 +266,8 @@ void AssetBase::Close() {
         break;
     }
   }
+  AssetManager::self->selectFolder();
+  AssetManager::self->refresh();
   delete this;
 }
 
@@ -285,7 +289,10 @@ void AssetBase::InstallMainWidget() {
 
 void AssetBase::SetName(const QString& text) {
   asset_path_ = text;
-  setCaption(AssetPrettyName() + " : " + shortAssetName(text.toUtf8().constData()));
+  std::string pretty_name { AssetPrettyName().toStdString() };
+  std::string short_name { shortAssetName(text.toUtf8().constData()) };
+
+  setCaption(QString(pretty_name.c_str()) + " : " + short_name.c_str());
   emit NameChanged(text);
 }
 
@@ -332,6 +339,8 @@ void AssetBase::Build(void) {
   bool needed = false;;
   bool success = khAssetManagerProxy::BuildAsset((const char*)Name().utf8(),
                                                  needed, error);
+  AssetManager::self->selectFolder();
+  AssetManager::self->refresh();
   if (success && !needed) {
     error = kh::tr("Nothing to do. Already up to date.");
     success = false;
@@ -371,6 +380,7 @@ void AssetBase::AboutToHideFileMenu() {
   build_action_->setEnabled(true);
   savebuild_action_->setEnabled(!save_error_);
 }
+ 
 
 void AssetBase::SetErrorMsg(const QString& text, bool red) {
   if (text.isEmpty()) {

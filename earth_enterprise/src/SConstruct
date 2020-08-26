@@ -304,7 +304,7 @@ if gpp_maj >= 8:
   warnflags += ['-Wno-error=catch-value',
                 '-Wno-error=class-memaccess',
                 '-Wno-error=unused-parameter']
-
+  
 # Determine libpng
 if os.path.isdir('/usr/include/libpng15'):
   png_ver = 'png15'
@@ -546,7 +546,8 @@ env = khEnvironment(
     python_major_version=python_major_version,
     python_home=python_home,
     el_ver=el_ver,
-    png_ver=png_ver
+    png_ver=png_ver,
+    freetype_ver="freetype-2.10.0"
 )
 
 env.get_open_gee_version().backup_file = "version.txt"

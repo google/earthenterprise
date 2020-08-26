@@ -563,6 +563,7 @@ void MainWindow::manageLocales() {
 void MainWindow::assetManager() {
   asset_manager_->showNormal();
   asset_manager_->raise();
+  asset_manager_->refresh();
 }
 
 void MainWindow::ShowFeatureEditor() {

@@ -83,7 +83,14 @@ class AssetItem : public QIconViewItem {
 
 AssetItem::AssetItem(QIconView* parent, gstAssetHandle handle)
     : QIconViewItem(parent), assetHandle(handle) {
-  setText(shortAssetName(handle->getName().toUtf8().constData()));
+
+  auto name = handle->getName().toStdString();
+  auto pos = name.rfind('.');
+  if (pos != std::string::npos)
+  {
+      name = name.substr(0,pos);
+  }
+  setText(name.c_str());
 
   Asset asset = handle->getAsset();
   AssetDisplayHelper a(asset->type, asset->subtype);
@@ -94,7 +101,7 @@ AssetItem::AssetItem(QIconView* parent, gstAssetHandle handle)
 }  // namespace
 
 // -----------------------------------------------------------------------------
-
+/////////////////////////////// OPEN RESOURCE
 AssetChooser::AssetChooser(QWidget* parent, AssetChooser::Mode m,
                            AssetDefs::Type t, const std::string& st)
     : AssetChooserBase(parent, 0, false, 0), mode_(m),
@@ -284,8 +291,19 @@ void AssetChooser::accept() {
       AssetItem* assetItem = dynamic_cast<AssetItem*>(item);
       // If name doesn't match with current item name, then reset item
       // pointer to initiate searching of item by name below.
-      if (assetItem != NULL &&
-          getName() != shortAssetName(assetItem->getAssetHandle()->getName().toUtf8().constData())) {
+      auto gname = getName();
+      std::string san1 { shortAssetName(assetItem->getAssetHandle()
+                         ->getName().toUtf8().constData()) } ,
+                  san2 { shortAssetName(assetItem->getAssetHandle()
+                         ->getName().toStdString().c_str()) };
+
+      if (san1 == san2)
+      {
+          gname.clear();
+          gname = QString(san2.c_str());
+      }
+      if (assetItem != NULL && gname != san2.c_str()) {
+
         item = NULL;
       }
     }
@@ -294,10 +312,12 @@ void AssetChooser::accept() {
       // Note: means that name have been edited and we try to find item by name.
       item = iconView->findItem(getName(), QKeySequence::ExactMatch);
     }
-
+    // here
     AssetItem* assetItem = dynamic_cast<AssetItem*>(item);
     if (assetItem != NULL) {
-      nameEdit->setText(shortAssetName(assetItem->getAssetHandle()->getName().toUtf8().constData()));
+        std::string temp { shortAssetName(assetItem->getAssetHandle()->getName()
+                                          .toStdString().c_str()) };
+      nameEdit->setText(temp.c_str());
       gstAssetHandle asset_handle = assetItem->getAssetHandle();
       Asset asset = asset_handle->getAsset();
       type_ = asset->type;
@@ -330,13 +350,13 @@ void AssetChooser::accept() {
   } else {
     // Validate whether this asset exists and has compatible asset type.
       std::string ref { fullpath.toUtf8().constData() };
-    if (!Asset(ref)) {
-      QMessageBox::critical(
-          this, "Error",
-          tr("The specified asset \"") + getName() + tr("\" does not exist."),
-          tr("OK"), QString::null, QString::null, 0);
-      return;
-    }
+      if (!Asset(ref)) {
+        QMessageBox::critical(
+            this, "Error",
+            tr("The specified asset \"") + getName() + tr("\" does not exist."),
+            tr("OK"), QString::null, QString::null, 0);
+        return;
+      }
 
     if (!IsCompatibleAsset()) {
       QMessageBox::critical(this, "Error",
@@ -402,7 +422,9 @@ const gstAssetFolder& AssetChooser::getFolder() const {
 void AssetChooser::selectItem(QIconViewItem* item) {
   AssetItem* assetItem = dynamic_cast<AssetItem*>(item);
   if (assetItem != NULL) {
-    nameEdit->setText(shortAssetName(assetItem->getAssetHandle()->getName().toUtf8().constData()));
+    std::string aname { assetItem->getAssetHandle()->getName().toStdString() },
+     sname { shortAssetName(aname.c_str()) };
+    nameEdit->setText(sname.c_str());
   }
 }
 
@@ -466,6 +488,7 @@ void AssetChooser::NewDirectory() {
 }
 
 void AssetChooser::updateView(const gstAssetFolder& folder) {
+
   current_folder_ = folder;
   if (folder.name() == theAssetManager->getAssetRoot().name()) {
     cdtoparentBtn->setEnabled(false);
@@ -488,10 +511,10 @@ void AssetChooser::updateView(const gstAssetFolder& folder) {
   // now add all assets
   //
   std::vector<gstAssetHandle> items = folder.getAssetHandles();
-  for (std::vector<gstAssetHandle>::iterator it = items.begin();
-       it != items.end(); ++it) {
-    if (matchFilter(*it))
-      (void)new AssetItem(iconView, *it);
+
+  for (auto& it : items) {
+    if (matchFilter(it))
+      (void)new AssetItem(iconView, it);
   }
 
   //

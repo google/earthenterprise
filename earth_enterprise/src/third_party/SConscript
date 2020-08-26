@@ -26,6 +26,7 @@ third_party_env = env.Clone()
 # The order is important as n'th one has no dependency on anything after it
 if third_party_env['bundle_3rd_libs']:
   third_party_libs = [
+      'freetype',
       'date',
       'gtest',
       'libjs',
@@ -64,6 +65,7 @@ if third_party_env['bundle_3rd_libs']:
   ]
 else:
   third_party_libs = [
+      'freetype',
       'date',
       'gtest',
       'libjs',
@@ -98,6 +100,7 @@ if 'el8' in os.uname()[2]:
   cflags += ' -I/usr/include/tirpc'
   lflags += ' -ltirpc'
 
+#cflags += ' -I%s/include/freetype2' % Dir('.').abspath
 our_lib = '-L%s' % Dir(env.exportdirs['lib']).abspath
 lpaths = lpaths.replace(our_lib, '')
 lpaths = lpaths.replace('-L/opt/google/lib64/compatibility', '')
