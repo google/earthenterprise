@@ -16,6 +16,7 @@
 
 # NOTE: requires xmllint from libxml2-utils
 
+umask 002
 
 #------------------------------------------------------------------------------
 # Definitions
