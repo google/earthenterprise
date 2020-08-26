@@ -184,7 +184,7 @@ if 'install' in COMMAND_LINE_TARGETS:
 
   # copy qt docs to /opt/google/share folder.
   qt_env.InstallFileOrDir(
-      '%s/share/' % final_install_root,
+      '%s/share/' % install_root,
       '%s/opt/google/share/' % qt_env.installdirs['common_root'],
       qt_install_build, 'install')
 
