@@ -546,7 +546,8 @@ env = khEnvironment(
     python_major_version=python_major_version,
     python_home=python_home,
     el_ver=el_ver,
-    png_ver=png_ver
+    png_ver=png_ver,
+    freetype_ver="freetype-2.10.0"
 )
 
 env.get_open_gee_version().backup_file = "version.txt"
