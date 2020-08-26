@@ -20,18 +20,19 @@
 
 #include <khMTTypes.h>
 #include <fcntl.h>
+#include "FileAccessor.h"
+#include "POSIXFileAccessor.h"
 
 class geFilePool;
 
-
 class FileReservationImpl : public khMTRefCounter {
   bool isWriter;
-  int fd;
+  std::unique_ptr<AbstractFileAccessor> aFA;
  public:
-  int Fd(void) const { return fd; }
-  FileReservationImpl(void) : isWriter(false), fd(-1) { }
+  AbstractFileAccessor *AFA(void) const { return aFA.get(); }
+  FileReservationImpl(void) : isWriter(false), aFA(new POSIXFileAccessor()) { }
   ~FileReservationImpl(void) {
-    assert(fd == -1);
+    assert(!(aFA->isValid()));
     isWriter = false;
   }
 

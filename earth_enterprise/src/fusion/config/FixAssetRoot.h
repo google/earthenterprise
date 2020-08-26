@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +25,7 @@
 class geUserId;
 
 
-extern void FixSpecialPerms(const std::string &assetroot);
+extern void FixSpecialPerms(const std::string &assetroot, bool secure);
 
 // will throw if user doesn't confirm
 extern void PromptUserAndFixOwnership(const std::string &assetroot, bool noprompt);
@@ -35,6 +36,7 @@ extern void PromptUserAndFixOwnership(const std::string &assetroot, bool nopromp
 // correct owner and permissions
 // returns true if it had to chown any of the dirs
 extern bool MakeSpecialDirs(const std::string &assetroot,
-                            const geUserId &fusion_user);
+                            const geUserId &fusion_user,
+                            bool secure);
 
 #endif // FUSION_CONFIG_FIXASSETROOT_H__
