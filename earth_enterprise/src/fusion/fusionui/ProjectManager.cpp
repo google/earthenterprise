@@ -81,7 +81,6 @@ using QMimeSourceFactory = Q3MimeSourceFactory;
 #include <Qt/q3dragobject.h>
 #include <autoingest/.idl/storage/VectorProjectConfig.h>
 #include <third_party/rfc_uuid/uuid.h>
-#include "AssetManager.h"
 
 using QImageDrag = Q3ImageDrag;
 using QScrollView = Q3ScrollView;
@@ -1673,7 +1672,6 @@ class QueryThread : public QThread {
     layer->QueryThread();
   }
 };
-
 
 bool ProjectManager::applyQueries(gstLayer* layer) {
   if (layer->QueryComplete())
