@@ -1,4 +1,3 @@
-// Copyright 2020 the Open GEE Contributors.
 // Copyright 2017 Google Inc.
 // Copyright 2020 The Open GEE Contributors
 //

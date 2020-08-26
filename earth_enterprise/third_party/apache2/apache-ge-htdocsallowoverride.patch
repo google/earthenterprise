@@ -1,0 +1,44 @@
+--- httpd-2.2.27.orig/docs/conf/httpd.conf.in	2012-02-06 08:54:24.000000000 -0800
++++ httpd-2.2.27/docs/conf/httpd.conf.in	2014-06-16 17:05:54.913499965 -0700
+@@ -143,14 +143,16 @@
+     # http://httpd.apache.org/docs/2.4/mod/core.html#options
+     # for more information.
+     #
+-    Options Indexes FollowSymLinks
++    # Note (GEE Server): The Options directive is commented out.
++    # The DocumentRoot inherits the Options from  <Directory />.
++#    Options Indexes FollowSymLinks
+ 
+     #
+     # AllowOverride controls what directives may be placed in .htaccess files.
+     # It can be "All", "None", or any combination of the keywords:
+     #   AllowOverride FileInfo AuthConfig Limit
+     #
+-    AllowOverride None
++    AllowOverride AuthConfig FileInfo Options
+ 
+     #
+     # Controls who can get stuff from this server.
+@@ -160,6 +162,22 @@
+ 
+ </Directory>
+ 
++# Set up Admin directory for Earth Server.
++# Add basic password protection.
++# Note that this does not protect the actual api calls.
++# To change the default password, run:
++#  sudo /opt/google/gehttpd/bin/htpasswd -c .htpasswd geapacheuser
++<Directory "/opt/google/gehttpd/htdocs/admin">
++    AuthUserFile /opt/google/gehttpd/conf.d/.htpasswd
++    AuthGroupFile /dev/null
++    AuthName "Earth Server admin pages"
++    AuthType Basic
++
++    <Limit GET>
++    require valid-user
++    </Limit>
++</Directory>
++
+ #
+ # DirectoryIndex: sets the file that Apache will serve if a directory
+ # is requested.

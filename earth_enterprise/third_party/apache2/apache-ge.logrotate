@@ -1,0 +1,7 @@
+/opt/google/gehttpd/logs/error_log /opt/google/gehttpd/logs/access_log /opt/google/gehttpd/logs/referer_log /opt/google/gehttpd/logs/agent_log {
+    missingok
+    sharedscripts
+    postrotate
+	/opt/google/gehttpd/bin/apachectl restart >/dev/null 2>/dev/null || true
+    endscript
+}

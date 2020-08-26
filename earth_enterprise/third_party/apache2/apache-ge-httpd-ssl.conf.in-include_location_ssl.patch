@@ -1,0 +1,14 @@
+diff -uNr httpd-2.2.27.orig/docs/conf/extra/httpd-ssl.conf.in httpd-2.2.27/docs/conf/extra/httpd-ssl.conf.in
+--- httpd-2.2.27.orig/docs/conf/extra/httpd-ssl.conf.in	2013-11-11 06:00:57.000000000 -0800
++++ httpd-2.2.27/docs/conf/extra/httpd-ssl.conf.in	2014-07-28 18:12:35.816610712 -0700
+@@ -287,4 +287,10 @@
+ CustomLog "@exp_logfiledir@/ssl_request_log" \
+           "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
+ 
++# Include fdb.location with common rewrite rules.
++Include conf.d/virtual_servers/fdb.location
++
++# Include all SSL location-based virtual servers.
++IncludeOptional conf.d/virtual_servers/*.location_ssl
++
+ </VirtualHost>                                  
