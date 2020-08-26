@@ -24,7 +24,6 @@ For history see CVS log (cvs log AssetVersionActions.cpp -or- Emacs Ctrl-xvl).
 #include <qmessagebox.h>
 #include <autoingest/AssetVersion.h>
 #include <autoingest/khAssetManagerProxy.h>
-#include "AssetManager.h"
 
 AssetVersionActions::AssetVersionActions(QWidget *parent_,
                                          const std::string &ref) :
@@ -102,8 +101,6 @@ AssetVersionActions::rebuild(void)
                            error,
                            QMessageBox::tr( "OK" ), 0, 0, 0 );
   }
-  AssetManager::self->selectFolder();
-  AssetManager::self->refresh();
 
 }
 
@@ -138,8 +135,6 @@ AssetVersionActions::clean(void)
                              QMessageBox::tr( "OK" ), 0, 0, 0 );
     }
   }
-  AssetManager::self->selectFolder();
-  AssetManager::self->refresh();
 
 }
 
@@ -152,8 +147,6 @@ AssetVersionActions::setbad(void)
                            error,
                            QMessageBox::tr( "OK" ), 0, 0, 0 );
   }
-  AssetManager::self->selectFolder();
-  AssetManager::self->refresh();
 
 }
 
@@ -167,7 +160,5 @@ AssetVersionActions::clearbad(void)
                            QMessageBox::tr( "OK" ), 0, 0, 0 );
   }
 
-  AssetManager::self->selectFolder();
-  AssetManager::self->refresh();
 }
 
