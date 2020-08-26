@@ -128,8 +128,8 @@ Execute:
 ```bash
 sudo yum install -y \
   bison-devel boost-devel cmake daemonize freeglut-devel \
-  gdbm-devel geos-devel giflib-devel GitPython \
-  libcap-devel libmng-devel libpng12-devel libX11-devel libXcursor-devel \
+  gdbm-devel geos-devel giflib-devel glib2-devel GitPython gtk2-devel \
+  libcap-devel libicu-devel libmng-devel libpng12-devel libtiff-devel libX11-devel libXcursor-devel \
   libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel \
   perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-devel \
