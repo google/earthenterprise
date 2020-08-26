@@ -36,7 +36,7 @@ qt_env = third_party_env.DeepCopy()
 
 cc_flags = qt_env['CCFLAGS']
 cc_flags.remove('-Werror')
-qt_env['CCFLAGS'] = cc_flags
+qt_env['CCFLAGS'] = cc_flags + ['-fpermissive']
 
 optdir = qt_env['optdir']
 root_dir = Dir(qt_env.exportdirs['root']).abspath
