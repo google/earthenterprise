@@ -28,6 +28,14 @@ Release notes: Open GEE 5.3.5
       ensure that your PostgreSQL databases are backed up and upgraded
       correctly to the new PostgreSQL version used by Open GEE 5.3.5.
 
+      .. rubric:: New Features
+
+      In 5.3.5, we moved documentation, examples, and tutorials into a
+      separate RPM called opengee-extra. This mainly includes the
+      documentation, ExampleSearch, and Fusion Tutorial files.  You
+      can choose whether to install opengee-extra depending on if you
+      need those items.
+
       .. rubric:: Resolved Issues
 
       .. list-table::
