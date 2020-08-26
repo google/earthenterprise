@@ -644,7 +644,6 @@ void AssetManager::HandleNewWindow(AssetBase* asset_window) {
   asset_window->setIcon(helper.GetPixmap());
   asset_window->move(QCursor::pos());
   asset_window->show();
-  //refresh();
 }
 
 bool AssetManager::RestoreExisting(const std::string& asset_ref) {
@@ -1581,9 +1580,7 @@ void AssetManager::ModifyAsset(const gstAssetHandle& handle) {
 
   if (asset_window) {
     HandleNewWindow(asset_window);
-    //selectFolder();
   }
-  //refresh();
 }
 
 void AssetManager::refresh() {
@@ -1699,7 +1696,6 @@ void AssetManager::NewFolder(const QString& folder_name) {
   }
 
   categories->setSelected(new_folder, true);
-  //refresh();
 }
 
 
