@@ -250,10 +250,9 @@ if sys.platform[0:5] == 'linux':
   cppflags = ['-D_LARGEFILE64_SOURCE', '-DQT_THREAD_SUPPORT',
               '-DQT_NO_ASCII_CAST', '-DQT_CLEAN_NAMESPACE', '-D_REENTRANT',
               '-DGUNIT_NO_GOOGLE3', '-DQT3_SUPPORT', '-DQT_NO_TRANSLATION','-DQDOC']
-  if is_os_ubuntu:
-    cppflags += ['-I/usr/include/qt4/Qt3Support', '-I/usr/include/qt4/QtCore', '-I/usr/include/qt4/QtGui', '-I/usr/include/qt4']
-  else:
-    cppflags += ['-I/usr/include/Qt3Support', '-I/usr/include/QtCore', '-I/usr/include/QtGui']
+
+  # Include flags for our bundled copy of qt4
+  cppflags += ['-I%s/include/Qt3Support' % exportdir, '-I%s/include/QtCore' % exportdir, '-I%s/include/QtGui' % exportdir]
 
   # set any architecture specific specific flags
   if re.compile('i.86').match(march):
@@ -303,8 +302,9 @@ if gpp_maj >= 7:
 
 if gpp_maj >= 8:
   warnflags += ['-Wno-error=catch-value',
-                '-Wno-error=class-memaccess']
-
+                '-Wno-error=class-memaccess',
+                '-Wno-error=unused-parameter']
+  
 # Determine libpng
 if os.path.isdir('/usr/include/libpng15'):
   png_ver = 'png15'
@@ -601,17 +601,12 @@ if home: env['ENV']['HOME'] = str(home)
 
 # setup QTDIR & friends
 # always use our Qt
-if is_os_ubuntu:
-  qtdir = "/usr"
-else:
-  qtdir = "/usr/lib64/qt4"
+qtdir = exportdir
 
-qtdir_lib = "/usr/lib64/qt4"
-#qtdir_lib = '%s/lib' % exportdir
 env['ENV']['QTDIR'] = str(qtdir)
 env['QTDIR'] = str(qtdir)
-env['QTINCDIR'] = '/usr/include/Qt'
-env['QTLIBDIR'] = '/usr/lib64/qt4'
+env['QTINCDIR'] = qtdir+'/include/Qt'
+env['QTLIBDIR'] = qtdir+'/lib'
 env['MOC'] = qtdir+'/bin/moc'
 env['UIC'] = qtdir+'/bin/uic3'
 env['RCC'] = qtdir+'/bin/rcc'

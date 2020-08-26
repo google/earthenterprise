@@ -17,4 +17,4 @@
 Import('env')
 import os
 
-os.system('rcc -name resources -namespace -o resources.cpp resources.qrc')
+os.system(env['RCC'] + ' -name resources -namespace -o resources.cpp resources.qrc')
