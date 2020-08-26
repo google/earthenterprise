@@ -208,6 +208,8 @@ bool AssetBase::Save() {
   }
   SetSaveError(true);
   SetLastSaveError(true);
+  AssetManager::self->selectFolder();
+  AssetManager::self->refresh();
   return false;
 }
 
@@ -264,6 +266,8 @@ void AssetBase::Close() {
         break;
     }
   }
+  AssetManager::self->selectFolder();
+  AssetManager::self->refresh();
   delete this;
 }
 
@@ -335,6 +339,8 @@ void AssetBase::Build(void) {
   bool needed = false;;
   bool success = khAssetManagerProxy::BuildAsset((const char*)Name().utf8(),
                                                  needed, error);
+  AssetManager::self->selectFolder();
+  AssetManager::self->refresh();
   if (success && !needed) {
     error = kh::tr("Nothing to do. Already up to date.");
     success = false;
@@ -374,6 +380,7 @@ void AssetBase::AboutToHideFileMenu() {
   build_action_->setEnabled(true);
   savebuild_action_->setEnabled(!save_error_);
 }
+ 
 
 void AssetBase::SetErrorMsg(const QString& text, bool red) {
   if (text.isEmpty()) {
