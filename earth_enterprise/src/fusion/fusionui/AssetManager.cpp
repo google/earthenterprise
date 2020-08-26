@@ -1044,8 +1044,6 @@ void AssetManager::ShowAssetMenu(const gstAssetHandle& asset_handle,
   switch (menu.exec(mouse_pos)) {
     case BUILD_ASSET:
       BuildAsset(asset_handle);
-      //AssetManager::self->selectFolder();
-      //AssetManager::self->refresh();
       refresh();
       break;
 
