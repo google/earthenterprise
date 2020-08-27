@@ -119,9 +119,12 @@ install_root_doc = '%s/opt/google/share/doc/packages/%s' % (
 mod_wsgi_target = '%s/.install' % current_dir
 mod_wsgi_conf_dir = Dir('#third_party/mod_wsgi/conf.d').abspath
 mod_wsgi_conf = 'mod_wsgi-ge.conf'
+mod_wsgi_extra_conf = 'mod_wsgi-ge-extra.conf'
 
 source_conf = '%s/%s.in' % (mod_wsgi_conf_dir, mod_wsgi_conf)
 target_conf = '%s/gehttpd/conf.d/%s' % (install_root_opt, mod_wsgi_conf)
+source_extra_conf = '%s/%s.in' % (mod_wsgi_conf_dir, mod_wsgi_extra_conf)
+target_extra_conf = '%s/gehttpd/conf.d/%s' % (install_root_opt, mod_wsgi_extra_conf)
 mod_wsgi_install = mod_wsgi_env.Command(
     mod_wsgi_target, mod_wsgi_build,
     [mod_wsgi_env.MultiCommand('\n'.join([
@@ -135,6 +138,7 @@ mod_wsgi_install = mod_wsgi_env.Command(
         'install -m755 %s %s' % (source_conf, target_conf),
         "sed -i -e 's/@PYTHON_VERSION@/%s/' -e 's/@PYTHON_MAJOR_VERSION@/%s/' %s" % (mod_wsgi_env['python_version'], mod_wsgi_env['python_major_version'], target_conf),
         "sed -i -e 's&@PYTHON_HOME_DIR@&%s&' %s" % (mod_wsgi_env['python_home'], target_conf),
+        'install -m755 %s %s' % (source_extra_conf, target_extra_conf),
         'touch %s' % mod_wsgi_target]))])
 
 # [5] Install these into various directories as required for build
