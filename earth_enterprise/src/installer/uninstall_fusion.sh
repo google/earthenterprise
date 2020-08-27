@@ -111,7 +111,6 @@ main_uninstall()
     remove_links
     remove_user
     remove_group
-    if [ `command -v systemctl` ]; then systemctl daemon-reexec; fi
     show_final_success_message
 }
 
