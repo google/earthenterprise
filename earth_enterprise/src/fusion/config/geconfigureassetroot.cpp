@@ -67,7 +67,6 @@ void usage(const char *prog, const char *msg = 0, ...) {
      "                              command fails or has insufficient\n"
      "                              arguments.\n"
      "  --nochown                   Do not attempt to fix privileges.\n"
-     "  --secure                    Removes world read and write permissions.\n"
      "When creating a new asset root, additional options are available:\n"
      "  --srcvol <dir>              Path to source volume.\n"
      "\n"
@@ -101,11 +100,8 @@ void MakeNewAssetRoot(const AssetRootStatus &status,
                       const std::string &srcvol,
                       const std::string &username,
                       const std::string &groupname,
-                      bool noprompt,
-                      bool secure);
-void RepairExistingAssetRoot(const AssetRootStatus &status,
-                             bool noprompt,
-                             bool secure);
+                      bool noprompt);
+void RepairExistingAssetRoot(const AssetRootStatus &status, bool noprompt);
 void AddVolume(const AssetRootStatus &status,
                const std::string &volume_name, const std::string &volume_dir);
 void RemoveVolume(const AssetRootStatus &status, const std::string &volume_name);
@@ -126,7 +122,6 @@ int main(int argc, char *argv[]) {
     bool repair      = false;
     bool fixmasterhost = false;
     bool listvolumes = false;
-    bool secure = false;
     std::string assetroot = CommandlineAssetRootDefault();
     std::string username = Systemrc::FusionUsername();
     std::string groupname = Systemrc::UserGroupname();
@@ -149,7 +144,6 @@ int main(int argc, char *argv[]) {
     options.opt("listvolumes", listvolumes);
     options.opt("noprompt", noprompt);
     options.opt("nochown", nochown);
-    options.opt("secure", secure);
     options.setExclusiveRequired(makeset(std::string("new"),
                                          std::string("repair"),
                                          std::string("editvolumes"),
@@ -190,7 +184,7 @@ int main(int argc, char *argv[]) {
 
     if (create) {
       printf("Making new assetroot ....\n");
-      MakeNewAssetRoot(status, srcvol, username, groupname, noprompt, secure);
+      MakeNewAssetRoot(status, srcvol, username, groupname, noprompt);
       if (!noprompt && !editvolumes &&
           geprompt::confirm(kh::tr(
                                 "Would you like to add more volumes"),
@@ -200,7 +194,7 @@ int main(int argc, char *argv[]) {
     }
     // don't make an if-ladder here. We need to run multiple sometimes
     if (repair) {
-      RepairExistingAssetRoot(status, noprompt, secure);
+      RepairExistingAssetRoot(status, noprompt);
     }
     if (editvolumes) {
       EditVolumes(status);
@@ -327,8 +321,7 @@ void MakeNewAssetRoot(const AssetRootStatus &status,
                       const std::string &in_srcvol,
                       const std::string &username,
                       const std::string &groupname,
-                      bool noprompt,
-                      bool secure) {
+                      bool noprompt) {
   geUserId fusion_user(username, groupname);
 
   // escalate my permissions and try to create the assetroot
@@ -339,7 +332,7 @@ void MakeNewAssetRoot(const AssetRootStatus &status,
         CAP_CHOWN,            // let me chown files
         CAP_FOWNER);          // let me chmod files I dont own
 
-    if (MakeSpecialDirs(status.assetroot_, fusion_user, secure)) {
+    if (MakeSpecialDirs(status.assetroot_, fusion_user)) {
       // we had to chown some of them. There might be more too.
       // Let's just chown the whole tree right now
       PromptUserAndFixOwnership(status.assetroot_, noprompt);
@@ -409,11 +402,9 @@ void MakeNewAssetRoot(const AssetRootStatus &status,
 }
 
 
-void RepairExistingAssetRoot(const AssetRootStatus &status,
-                             bool noprompt,
-                             bool secure) {
+void RepairExistingAssetRoot(const AssetRootStatus &status, bool noprompt) {
   // fix perms on special files
-  FixSpecialPerms(status.assetroot_, secure);
+  FixSpecialPerms(status.assetroot_);
 
   if (!status.AssetRootNeedsUpgrade() && !status.unique_ids_ok_) {
     // if we have to upgrade, don't try to fix the ids yet.

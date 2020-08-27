@@ -1,6 +1,5 @@
 /*
  * Copyright 2017 Google Inc.
- * Copyright 2020 The Open GEE Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +38,6 @@ enum SpecialDir {
 };
 extern std::string Dirname(const std::string& assetroot, SpecialDir dir);
 extern int DirPerms(SpecialDir dir);
-extern int SecureDirPerms(SpecialDir dir);
 
 
 // ****************************************************************************

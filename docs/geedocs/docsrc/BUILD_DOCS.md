@@ -11,7 +11,7 @@ To build the documentation, the following packages (and versions) need to be ins
     python 3
     git 1.8+
     python3-pip
-    python 3 packages: sphinx(1.7.5), GitPython(1.0.1), gitdb2(<3.0.2), sphinxprettysearchresults(0.3.5)
+    python 3 packages: sphinx(1.7.5), GitPython(1.0.1), sphinxprettysearchresults(0.3.5)
 
 ## Documentation Organization
 

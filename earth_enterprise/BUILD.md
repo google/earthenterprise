@@ -6,19 +6,20 @@ __NOTE:__ If you want to build, install, or run Portable server, see the
 Building is currently supported for 64-bit versions of Ubuntu 16.04 LTS,
 RHEL 6, RHEL 7, CentOS 6, and CentOS 7.
 
-## GEE Build Prerequisites - all platforms
+## GEE 5.3.4 Build Prerequisites (all platforms)
 
-1. Setup required tools and dependencies. Different operating systems have different means to setup up these dependencies.
-Please follow the instructions in either the [Redhat and CentOS Setup Instructions](./BUILD_RHEL_CentOS.md)
-or the [Ubuntu Setup Instructions](./BUILD_Ubuntu.md). Open GEE
-requires specific versions of some build tools, as noted below. If you follow
-the instructions linked above, these required versions will be installed.
+1. Setup required Tools and Dependencies:
 
     * git 1.8.4+  __NOTE:__ git 1.7.1+ will build GEE but may miscalculate product version
     * git lfs
     * gcc 4.8.x
     * scons 2.0.x
     * python 2.6.x or python 2.7.x. __Python 3.0+ is not supported.__
+
+Different operating systems have different means to setup up these dependencies.
+For Linux build environments, see either the [Redhat and Centos Setup Instructions](./BUILD_RHEL_CentOS.md)
+or the [Ubuntu Setup Instructions](./BUILD_Ubuntu.md) for those specific
+platforms on how to setup the dependencies, tools, and compilers.
 
 2. Clone the _earthenterprise_ repository in your build environment:
 
@@ -41,7 +42,7 @@ the instructions linked above, these required versions will be installed.
         git lfs pull
         ```
 
-3. Build Earth Enterprise Fusion and Server. In the build instructions below, the scons commands for building Open GEE
+3. In the build instructions below, the scons commands for building GEE/Fusion
     have the following options:
 
     * `internal=1`: Build using non-optimized code, best for development and
@@ -68,14 +69,14 @@ the instructions linked above, these required versions will be installed.
         the configuration to run again, otherwise the scons build may complain
         about missing libraries
 
-    Run the following commands to build Open GEE:
+4. Build Earth Enterprise Fusion and Server:
 
     ```bash
     cd earthenterprise/earth_enterprise
     python2.7 /usr/bin/scons -j8 release=1 build
     ```
 
-4. Run unit tests (note: that the `REL` part of the path will vary if you use
+5. Run unit tests (note: that the `REL` part of the path will vary if you use
     `internal=1` or `optimize=1` instead of `release=1` or the full path may be
     something completly different if you used `build_folder`):
 
