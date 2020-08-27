@@ -129,7 +129,7 @@ configure_cmd = (
 '-system-libjpeg -system-libtiff -system-zlib -xinput -xcursor -xfixes -xinerama '
 '-xshape -xrandr -xrender -xkb -glib -icu -no-openssl -xmlpatterns -no-dbus '
 '-graphicssystem raster -no-webkit -no-sql-ibase -no-sql-mysql -no-sql-psql '
-'-no-sql-odbc -no-sql-sqlite -no-sql-tds -no-script -no-scripttools -nomake demos -nomake examples\n'
+'-no-sql-db2 -no-sql-tds -no-sql-oci -no-sql-sqlite -no-sql-sqlite2 -no-sql-odbc -no-sql-sqlite -no-sql-tds -no-script -no-scripttools -nomake demos -nomake examples\n'
 'touch %s' % (
 build_root, qt_env['ENV']['mod_env'], root_dir, qt_target))
 
