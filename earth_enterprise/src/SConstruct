@@ -304,7 +304,7 @@ if gpp_maj >= 8:
   warnflags += ['-Wno-error=catch-value',
                 '-Wno-error=class-memaccess',
                 '-Wno-error=unused-parameter']
-  
+
 # Determine libpng
 if os.path.isdir('/usr/include/libpng15'):
   png_ver = 'png15'
@@ -312,6 +312,10 @@ if os.path.isdir('/usr/include/libpng15'):
 elif os.path.isdir('/usr/include/libpng16'):
   png_ver = 'png16'
   cppflags += ['-DUSING_LIBPNG16']
+else:
+  png_ver = 'png12'
+  cppflags += ['-DPNG_SKIP_SETJMP_CHECK']
+
 
 if max_num_jobs_coeff:
   cppflags += ['-DKH_MAX_NUM_JOBS_COEFF=%s' % max_num_jobs_coeff]
