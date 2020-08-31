@@ -22,6 +22,29 @@
 #include "common/khEndian.h"
 #include "common/packetcompress.h"
 #include "common/etencoder.h"
+#include "common/FileAccessor.h"
+
+#include <cstdio>
+#include <sys/stat.h>
+
+std::string writeLocal(const std::string & filename) {
+  std::unique_ptr<AbstractFileAccessor> aFA(AbstractFileAccessor::getAccessor(filename));
+  std::string tempFileName = std::tmpnam(nullptr);
+  std::uint64_t size;
+  time_t mtime;
+  if (!aFA->GetFileInfo(filename, size, mtime)) {
+    throw khSimpleErrnoException("Can't get info about ") << filename;
+  }
+  std::string buf;
+  buf.resize(size);
+  aFA->Open(filename.c_str(), nullptr, O_LARGEFILE | O_RDONLY);
+  aFA->PreadAll(&buf[0], size, 0);
+  auto fd = ::open(tempFileName.c_str(), O_LARGEFILE | O_WRONLY | O_CREAT | O_TRUNC, 0644);
+  ::write(fd, &buf[0], size);
+  ::close(fd);
+  return tempFileName;
+}
+
 
 geProtoDbroot::geProtoDbroot(void) {
   // define in .cc to reduce linker dependencies
@@ -29,10 +52,11 @@ geProtoDbroot::geProtoDbroot(void) {
 
 geProtoDbroot::geProtoDbroot(const std::string &filename,
                              FileFormat input_format) {
+  std::string localFileName = writeLocal(filename);
   // open the filename and setup a protobuf input stream
-  khReadFileCloser closer(::open(filename.c_str(), O_LARGEFILE | O_RDONLY));
+  khReadFileCloser closer(::open(localFileName.c_str(), O_LARGEFILE | O_RDONLY));
   if (!closer.valid()) {
-    throw khSimpleErrnoException("Unable to open ") << filename;
+    throw khSimpleErrnoException("Unable to open ") << filename << " (temp file " << localFileName << ")";
   }
   google::protobuf::io::FileInputStream stream(closer.fd());
 
