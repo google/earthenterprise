@@ -1,5 +1,4 @@
 // Copyright 2017 Google Inc.
-// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,10 +19,11 @@
 #include <stdio.h>
 
 #include "common/khGuard.h"
+#include "common/khStringUtils.h"
+#include "common/khFileUtils.h"
 #include "common/notify.h"
 #include "common/khConstants.h"
 #include "common/serverdb/serverdb.h"
-#include "FileAccessor.h"
 
 namespace {
 const std::string kDbType = "<db_type>";
@@ -36,21 +36,26 @@ const std::string kDelim = "|";
 }  // end namespace
 
 bool ServerdbConfig::Load(std::string config_file) {
-  std::unique_ptr<AbstractFileAccessor> aFA = AbstractFileAccessor::getAccessor(config_file);
+  FILE* fp = fopen(config_file.c_str(), "r");
+  if (fp == NULL) {
+    notify(NFY_WARN, "Unable to open ServerDB config file %s",
+           config_file.c_str());
+    return false;
+  }
+  khFILECloser closer(fp);  // guarantee the file will get closed
 
   // Set the default db type to gedb.
   db_type = TYPE_GEDB;
 
-  std::vector<std::string> lines;
-  if (!aFA->GetLinesFromFile(lines, config_file)) {
-    notify(NFY_WARN, "Unable to get lines from ServerDB config file %s",
-          config_file.c_str());
-    return false;
-  }
-
-  for (const auto &it : lines) {
+  while (!feof(fp)) {
+    const int kTempBufSize = 8192;
+    char buf[kTempBufSize];
+    buf[0] = 0;
+    fgets(buf, kTempBufSize, fp);
+    std::string line(buf);
+    CleanString(&line, "\r\n");
     std::vector<std::string> tokens;
-    TokenizeString(it, tokens, kDelim, 3);
+    TokenizeString(line, tokens, kDelim, 3);
     if (tokens.size() < 2)
       continue;
 
@@ -88,35 +93,35 @@ bool ServerdbConfig::Load(std::string config_file) {
 
 
 bool ServerdbConfig::Save(std::string config_file) {
-  std::unique_ptr<AbstractFileAccessor> aFA = AbstractFileAccessor::getAccessor(config_file);
-  aFA->Open(config_file, "w");
-  if (!aFA->isValid()) {
+  FILE* fp = fopen(config_file.c_str(), "w");
+  if (fp == NULL) {
     notify(NFY_WARN, "Unable to save ServerDB config file %s",
            config_file.c_str());
     return false;
   }
+  khFILECloser closer(fp);
 
-  aFA->fprintf("%s%s%d\n", kDbType.c_str(), kDelim.c_str(), db_type);
+  fprintf(fp, "%s%s%d\n", kDbType.c_str(), kDelim.c_str(), db_type);
   const std::string relative_index_path = khGetDbSuffix(
       index_path, kUnifiedIndexKey);
-  aFA->fprintf("%s%s%s\n", kIndexPath.c_str(), kDelim.c_str(),
+  fprintf(fp, "%s%s%s\n", kIndexPath.c_str(), kDelim.c_str(),
           relative_index_path.c_str());
   Map::const_iterator it = toc_paths.begin();
   for (; it != toc_paths.end(); ++it)
-    aFA->fprintf("%s%s%s%s%s\n", kTocPath.c_str(), kDelim.c_str(),
+    fprintf(fp, "%s%s%s%s%s\n", kTocPath.c_str(), kDelim.c_str(),
                 it->first.c_str(), kDelim.c_str(), it->second.c_str());
 
   std::vector<std::string>::const_iterator icon = icons.begin();
   for (; icon != icons.end(); ++icon)
-    aFA->fprintf("%s%s%s\n", kIcon.c_str(), kDelim.c_str(), icon->c_str());
+    fprintf(fp, "%s%s%s\n", kIcon.c_str(), kDelim.c_str(), icon->c_str());
 
-  aFA->fprintf("%s%s%s\n", kSearchTabsPathTag.c_str(), kDelim.c_str(),
+  fprintf(fp, "%s%s%s\n", kSearchTabsPathTag.c_str(), kDelim.c_str(),
                           searchtabs_path.c_str());
 
   // Output the json paths.
   it = json_paths.begin();
   for (; it != json_paths.end(); ++it)
-    aFA->fprintf("%s%s%s%s%s\n", kJsonPath.c_str(), kDelim.c_str(),
+    fprintf(fp, "%s%s%s%s%s\n", kJsonPath.c_str(), kDelim.c_str(),
                 it->first.c_str(), kDelim.c_str(), it->second.c_str());
 
   return true;

@@ -78,7 +78,6 @@ commonsources = [ '../third_party/rsa_md5/md5c.c',
                   'proto_streaming_imagery.cpp',
                   'performancelogger.cpp',
                   'timeutils.cpp',
-                  'FileAccessor.cpp',
                   streaming_imagery[0]  # generated .cc file
                  ]
 
@@ -211,10 +210,6 @@ env.test('khconfigparser_unittest',
 env.test('sharedstring_unittest',
          'sharedstring_unittest.cpp',
           LIBS=['geutil', 'gtest','gecommon'])
-
-env.test('fileaccessor_unittest',
-         'fileaccessor_unittest.cpp',
-         LIBS=['geutil', 'gtest', 'gecommon'])
 
 env.install('common_lib', [gecommon])
 env.install('common_lib', [geutil])
