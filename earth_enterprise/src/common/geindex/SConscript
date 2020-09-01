@@ -58,9 +58,7 @@ file_bundle_port_sources = [
   'Reader.os',
   'Writer.os',
   'shared.os',
-  '../FileAccessor.os',
-  '../POSIXFileAccessor.os',
-  '../FileAccessorPluginLoader.os'
+  '../FileAccessor.os'
 ]
 
 
@@ -87,13 +85,13 @@ env.test('WriterReader_tests__port',
          [
           'WriterReader_tests__port.cpp'
          ],
-         LIBS=['filebundle__port', 'getests', 'gtest', 'libdl', 'boost_filesystem', 'boost_system'])
+         LIBS=['filebundle__port', 'getests', 'gtest'])
 
 single_thread_env.test('filebundle_unittest__port',
          [
           '../filebundle/filebundle_unittest__port.cpp',
          ],
-         LIBS=['filebundle__port', 'libdl', 'boost_filesystem', 'boost_system'])
+         LIBS=['filebundle__port'])
 
 env.test('IndexManifest_unittest',
                'IndexManifest_unittest.cpp',

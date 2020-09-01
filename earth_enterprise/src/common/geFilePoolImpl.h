@@ -21,7 +21,6 @@
 #include <khMTTypes.h>
 #include <fcntl.h>
 #include "FileAccessor.h"
-#include "POSIXFileAccessor.h"
 
 class geFilePool;
 
