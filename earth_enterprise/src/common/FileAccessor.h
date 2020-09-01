@@ -23,7 +23,6 @@
 
 class AbstractFileAccessor {
 public:
-  AbstractFileAccessor() {}
   virtual ~AbstractFileAccessor() = default;
   static std::unique_ptr<AbstractFileAccessor> getAccessor(const std::string &fname);
   virtual bool isValid() = 0;
@@ -36,7 +35,7 @@ public:
   virtual bool PwriteAll(const void* buffer, size_t size, off64_t offset) = 0;
   virtual bool ReadStringFromFile(const std::string &filename, std::string &str, std::uint64_t limit = 0) = 0;
   virtual bool Exists(const std::string &filename) = 0;
-  virtual bool GetLinesFromFile(std::vector<std::string> &lines, const std::string &filename);
+  virtual bool GetLinesFromFile(std::vector<std::string> &lines, const std::string &filename) = 0;
   virtual void fprintf(const char *format, ...) = 0;
 };
 

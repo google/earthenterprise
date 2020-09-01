@@ -19,22 +19,3 @@ std::unique_ptr<AbstractFileAccessor> AbstractFileAccessor::getAccessor(const st
   return FileAccessorPluginLoader::Get().GetAccessor(fname);
 }
 
-bool AbstractFileAccessor::GetLinesFromFile(std::vector<std::string> &lines, const std::string &filename) {
-  std::string content;
-
-  try {
-    this->ReadStringFromFile(filename, content);
-
-    TokenizeString(content, lines, "\n");
-
-    for (auto &it : lines) {
-      CleanString(&it, "\r\n");
-    }
-
-    return true;
-  }
-
-  catch (...) {
-    return false;
-  }
-}
