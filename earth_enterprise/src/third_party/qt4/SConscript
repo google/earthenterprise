@@ -42,6 +42,7 @@ optdir = qt_env['optdir']
 root_dir = Dir(qt_env.exportdirs['root']).abspath
 qt_patches = ['qt-4.8-poll.patch',
               'qt-aarch64.patch',
+              'itemview-static-cast.patch',
               'qt-cupsEnumDests.patch',
               'qt-everywhere-opensource-src-4.6.2-cups.patch',
               'qt-everywhere-opensource-src-4.6.3-glib_eventloop_nullcheck.patch',
