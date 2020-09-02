@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -140,7 +141,7 @@ class FilterItem : public Q3ListViewItem {
 
  private:
   gstFilter* GetFilter() const;
-  uint filter_id_;
+  unsigned int filter_id_;
 };
 
 // -----------------------------------------------------------------------------
@@ -200,7 +201,7 @@ class LayerGroupItem : public QCheckListItem {
 
 FilterItem::FilterItem(Q3ListViewItem* parent, gstFilter* filter)
     : Q3ListViewItem(parent), filter_id_(filter->Id()) {
-  std::vector<uint> fill_rgba, outline_rgba;
+  std::vector< unsigned int> fill_rgba, outline_rgba;
   fill_rgba.resize(4, 255);
   outline_rgba.resize(4, 255);
 
@@ -391,7 +392,7 @@ void LayerItem::UpdateFilters() {
   }
 
   if (!layer_->isGroup()) {
-    for (uint kk = 0; kk < layer_->NumFilters(); ++kk) {
+    for (unsigned int kk = 0; kk < layer_->NumFilters(); ++kk) {
       gstFilter* filter = layer_->GetFilterById(kk);
       new FilterItem(this, filter);
     }
@@ -598,7 +599,7 @@ void ProjectManager::forcePreviewRedraw() {
   emit redrawPreview();
 }
 
-uint ProjectManager::numLayers() {
+unsigned int ProjectManager::numLayers() {
   return project_->layers_.size();
 }
 
@@ -717,7 +718,7 @@ ProjectManager::MakeDefaultLayerConfig(const QString &name,
     feature.style.altitudeMode = StyleConfig::Relative;
   }
   QColor rnd = getRandomColor();
-  feature.style.lineColor = makevec4<uint>(rnd.red(), rnd.green(),
+  feature.style.lineColor = makevec4< unsigned int> (rnd.red(), rnd.green(),
                                            rnd.blue(), 255);
 
   // Initialize site config based on primitive type expected for this layer
@@ -1387,7 +1388,7 @@ void ProjectManager::moveLayerUp(Q3ListViewItem* item) {
   if (next != 0) {
     gstLayer* nextLayer = extractLayer(next);
     gstLayer* thisLayer = extractLayer(item);
-    uint tempSortId = nextLayer->SortId();
+    unsigned int tempSortId = nextLayer->SortId();
     nextLayer->SetSortId(thisLayer->SortId());
     thisLayer->SetSortId(tempSortId);
 
@@ -1407,7 +1408,7 @@ void ProjectManager::moveLayerDown(Q3ListViewItem* item) {
   if (item->nextSibling() != 0) {
     gstLayer* nextLayer = extractLayer(item->nextSibling());
     gstLayer* thisLayer = extractLayer(item);
-    uint tempSortId = nextLayer->SortId();
+    unsigned int tempSortId = nextLayer->SortId();
     nextLayer->SetSortId(thisLayer->SortId());
     thisLayer->SetSortId(tempSortId);
     item->moveItem(item->nextSibling());
@@ -1461,8 +1462,8 @@ void ProjectManager::addLayers(const char* src, const char* codec) {
   if (new_source == NULL)
     return;
 
-  uint numLayers = new_source->NumLayers();
-  for (uint i = 0; i < numLayers; ++i) {
+  unsigned int numLayers = new_source->NumLayers();
+  for (unsigned int i = 0; i < numLayers; ++i) {
     gstFileInfo finfo(new_source->name());
     QString layername = finfo.baseName();
     if (numLayers != 1)
@@ -1720,7 +1721,7 @@ bool ProjectManager::applyQueries(gstLayer* layer) {
       // error strings
       QString error_message;
       std::vector<std::string> errors = query_progress.Errors();
-      for (uint i = 0; i < errors.size(); ++i) {
+      for (unsigned int i = 0; i < errors.size(); ++i) {
         if (i != 0) {
           error_message += "\n";
         }
@@ -1847,14 +1848,14 @@ void ProjectManager::DrawLabels(QPainter* painter, const gstDrawState& state) {
   QFont label_font("Times", 16);
   QFontMetrics label_font_metrics(label_font);
 
-  for (uint ii = 0; ii < project_->layers_.size(); ++ii) {
+  for (unsigned int ii = 0; ii < project_->layers_.size(); ++ii) {
     gstLayer* layer = project_->layers_[ii];
     if (!layer->Enabled())
       continue;
 
     std::vector<gstSiteSet> site_sets;
     layer->GetSiteLabels(state, &site_sets);
-    for (uint s = 0; s < site_sets.size(); ++s) {
+    for (unsigned int s = 0; s < site_sets.size(); ++s) {
       const gstSite* site = site_sets[s].site;
 
       if (!site->config.enabled)
@@ -1866,7 +1867,7 @@ void ProjectManager::DrawLabels(QPainter* painter, const gstDrawState& state) {
         continue;
       }
 
-      for (uint n = 0; n < site_sets[s].vlist.size(); ++n) {
+      for (unsigned int n = 0; n < site_sets[s].vlist.size(); ++n) {
         gstValue* label = site_sets[s].rlist[n]->Field(0);
 
         double x = (site_sets[s].vlist[n].x - state.frust.w) /
@@ -1875,7 +1876,7 @@ void ProjectManager::DrawLabels(QPainter* painter, const gstDrawState& state) {
                    state.Scale();
 
         if (!label->IsEmpty()) {
-          const std::vector<uint>& rgba = site->preview_config.normal_color_;
+          const std::vector< unsigned int> & rgba = site->preview_config.normal_color_;
           QColor color(qRgba(rgba[0], rgba[1], rgba[2], rgba[3]));
           painter->setPen(color);
           painter->setFont(label_font);
@@ -1910,7 +1911,7 @@ void ProjectManager::DrawFeatures(const gstDrawState& state) {
   const int kMaxCount = 200000;
   int max_count = kMaxCount;
 
-  for (uint ii = 0; ii < project_->layers_.size(); ++ii) {
+  for (unsigned int ii = 0; ii < project_->layers_.size(); ++ii) {
     gstLayer* layer = project_->layers_[ii];
     if (layer->Enabled()) {
       layer->DrawFeatures(&max_count, state, false);
@@ -2080,7 +2081,7 @@ void ProjectManager::UpdateWidgets() {
 
   QMap<QString, LayerGroupItem*> groupMap;
 
-  for (uint ii = 0; ii < project_->layers_.size(); ++ii) {
+  for (unsigned int ii = 0; ii < project_->layers_.size(); ++ii) {
     gstLayer* layer = project_->layers_[ii];
 
     if (layer->isGroup()) {
@@ -2389,7 +2390,7 @@ void ProjectManager::removeAllLayers(void) {
   }
 
   clear();
-  for (uint ii = 0; ii < project_->layers_.size(); ++ii) {
+  for (unsigned int ii = 0; ii < project_->layers_.size(); ++ii) {
     project_->layers_[ii]->unref();
   }
   RefreshLayerList(true, true);

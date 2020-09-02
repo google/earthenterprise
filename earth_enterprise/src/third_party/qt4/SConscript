@@ -42,6 +42,7 @@ optdir = qt_env['optdir']
 root_dir = Dir(qt_env.exportdirs['root']).abspath
 qt_patches = ['qt-4.8-poll.patch',
               'qt-aarch64.patch',
+              'itemview-static-cast.patch',
               'qt-cupsEnumDests.patch',
               'qt-everywhere-opensource-src-4.6.2-cups.patch',
               'qt-everywhere-opensource-src-4.6.3-glib_eventloop_nullcheck.patch',
@@ -113,7 +114,7 @@ qt_patch = qt_env.Command(
         '%s\n'
         'touch %s' % (build_root,
                       '\n'.join(map(lambda i: 'patch -g0 -p1 -s < %s' % (
-                          qt_env.GetBuildPath(i)), qt_patches) + 
+                          qt_env.GetBuildPath(i)), qt_patches) +
                           map(lambda i: 'patch -g0 -p0 -s < %s' % (
                           qt_env.GetBuildPath(i)), qt_patches_p0)),
                       qt_target))])
@@ -129,7 +130,7 @@ configure_cmd = (
 '-system-libjpeg -system-libtiff -system-zlib -xinput -xcursor -xfixes -xinerama '
 '-xshape -xrandr -xrender -xkb -glib -icu -no-openssl -xmlpatterns -no-dbus '
 '-graphicssystem raster -no-webkit -no-sql-ibase -no-sql-mysql -no-sql-psql '
-'-no-sql-odbc -no-sql-sqlite -no-sql-tds -no-script -no-scripttools -no-nomake demos -nomake examples\n'
+'-no-sql-db2 -no-sql-tds -no-sql-oci -no-sql-sqlite -no-sql-sqlite2 -no-sql-odbc -no-sql-sqlite -no-sql-tds -no-script -no-scripttools -nomake demos -nomake examples\n'
 'touch %s' % (
 build_root, qt_env['ENV']['mod_env'], root_dir, qt_target))
 
@@ -162,7 +163,7 @@ qt_install = qt_env.Command(
         'mkdir -p %s\n'
         'cp -pr LICENSE.* %s\n'
         'touch %s' % (
-            build_root, qt_env['ENV']['mod_env'], make_cmd, 
+            build_root, qt_env['ENV']['mod_env'], make_cmd,
             install_root, other_dir, other_dir, qt_target))])
 
 # [11] Install these into various directories as required for build
