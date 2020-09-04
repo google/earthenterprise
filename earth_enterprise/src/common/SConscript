@@ -78,9 +78,6 @@ commonsources = [ '../third_party/rsa_md5/md5c.c',
                   'proto_streaming_imagery.cpp',
                   'performancelogger.cpp',
                   'timeutils.cpp',
-                  'FileAccessor.cpp',
-                  'POSIXFileAccessor.cpp',
-                  'FileAccessorPluginLoader.cpp',
                   streaming_imagery[0]  # generated .cc file
                  ]
 
@@ -212,30 +209,7 @@ env.test('khconfigparser_unittest',
 
 env.test('sharedstring_unittest',
          'sharedstring_unittest.cpp',
-          LIBS=['geutil', 'gtest', 'gecommon'])
-
-env.test('FileAccessorPluginLoader_unittest',
-         'FileAccessorPluginLoader_unittest.cpp',
-          LIBS=['libdl', 'boost_filesystem', 'boost_system', 'geutil', 'gtest', 'gecommon'])
-
-env.test('fileaccessor_unittest',
-         'fileaccessor_unittest.cpp',
-         LIBS=['geutil', 'gtest', 'gecommon'])
-
-env.testPluginLib('FileAccessorTestPlugin.so',
-                           'test_plugins/FileAccessorTestPlugin.cpp',
-                           'file_accessor',
-                           'valid')
-
-env.testPluginLib('FileAccessorInvalidTestPlugin.so',
-                           'test_plugins/FileAccessorInvalidTestPlugin.cpp',
-                           'file_accessor',
-                           'invalid')
-
-env.testPluginLib('FileAccessorExecutableTest',
-                  'test_plugins/FileAccessorExecutableTest.cpp',
-                  'file_accessor',
-                  'executable')
+          LIBS=['geutil', 'gtest','gecommon'])
 
 env.install('common_lib', [gecommon])
 env.install('common_lib', [geutil])
