@@ -489,22 +489,6 @@ class khEnvironment(Environment):
     self.Default(self.alias(target_src_node, ret))
     return ret
 
-  def testPluginLib(self, target, source, plugin_type, plugin_sub_type):
-    # path to the target in the srcdir (not builddir)
-    target_src_node = self.arg2nodes(target)[0].srcnode()
-
-    base = os.path.basename(target)
-    newtarget = os.path.join(self.exportdirs['bin'], 'tests', 'plugins', plugin_type, plugin_sub_type, base)
-    args = (newtarget, source)
-
-    if plugin_sub_type == 'executable':
-      ret = self.Program(*args)  
-    else:
-      ret = self.SharedLibrary(*args)
-
-    self.Default(self.alias(target_src_node, ret))
-    return ret
-
   def executable(self, target, source, **kw):
     # path to the target in the srcdir (not builddir)
     target_src_node = self.arg2nodes(target)[0].srcnode()
