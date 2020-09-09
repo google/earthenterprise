@@ -255,15 +255,15 @@ void SetFusionHost(PublisherClient* client,
 void DisableCutter() {
   int ret_status =
     system("cd /opt/google/bin; "
-           "chmod -x gepolygontoqtnodes; "
-           "chmod -x gekmlgrabber; "
-           "chmod -x geportableglobebuilder; "
-           "chmod -x geportableglobepacker; "
+           "chmod a-x gepolygontoqtnodes; "
+           "chmod a-x gekmlgrabber; "
+           "chmod a-x geportableglobebuilder; "
+           "chmod a-x geportableglobepacker; "
            "cd /opt/google/gehttpd/cgi-bin; "
-           "chmod -r globe_cutter_app.py; "
+           "chmod a-r globe_cutter_app.py; "
            "cd /opt/google/gehttpd/htdocs; "
-           "chmod -r cutter/*.html; "
-           "chmod -R -r cutter/js; ");
+           "chmod a-r cutter/*.html; "
+           "chmod -R a-r cutter/js; ");
   exit(ret_status);
 }
 
@@ -272,15 +272,15 @@ void EnableCutter() {
   // be available.
   int ret_status =
     system("cd /opt/google/bin; "
-           "chmod +x gepolygontoqtnodes; "
-           "chmod +x gekmlgrabber; "
-           "chmod +x geportableglobebuilder; "
-           "chmod +x geportableglobepacker; "
+           "chmod a+x gepolygontoqtnodes; "
+           "chmod a+x gekmlgrabber; "
+           "chmod a+x geportableglobebuilder; "
+           "chmod a+x geportableglobepacker; "
            "cd /opt/google/gehttpd/cgi-bin; "
-           "chmod +r globe_cutter_app.py; "
+           "chmod a+r globe_cutter_app.py; "
            "cd /opt/google/gehttpd/htdocs; "
-           "chmod +r cutter/*.html; "
-           "chmod -R +r cutter/js; ");
+           "chmod a+r cutter/*.html; "
+           "chmod -R a+r cutter/js; ");
   exit(ret_status);
 }
 
