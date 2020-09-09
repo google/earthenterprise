@@ -39,7 +39,6 @@ The application suite consists of three core components:
 * [Release Notes](https://www.opengee.org/geedocs/5.3.2/answer/releaseNotes/relNotesGEE5_3_2.html)
 * [Release Documentation](https://www.opengee.org/geedocs/5.3.2/)
 
-
 ## More information
 
 * [Open GEE website](https://www.opengee.org)
