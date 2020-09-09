@@ -35,4 +35,5 @@ main_postuninstall()
 # (See <https://wiki.debian.org/MaintainerScripts>.)
 if [ "$1" = "0" ] || [ "$1" = "purge" ] ; then
     main_postuninstall $@
+    if [ `command -v systemctl` ]; then systemctl daemon-reexec; fi
 fi

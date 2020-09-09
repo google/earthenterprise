@@ -592,11 +592,6 @@ var gees = {
         window.open(url, '', 'titlebar=no,toolbar=no,width=750,height=700');
       },
 
-      // Launch apache logs in a new window.
-      apacheLogs: function() {
-        this.newWindow('/admin/apache_logs.html');
-      },
-
       // Launch glc assembly in a new window.
       glcAssembly: function() {
         this.newWindow('/cutter/glc_assembly.html');

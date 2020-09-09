@@ -114,6 +114,7 @@ Upgrade to GEE 5.x
          opengee-extra, ExampleSearch will still show up in the search tabs page
          of the admin console but it will not work (due to a bug). This is fixed
          in 5.3.5.1 and beyond.
+
       #. None of this applies if you use the shell scripts to upgrade rather than
          RPMs.
 
