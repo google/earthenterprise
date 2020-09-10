@@ -51,6 +51,7 @@ apply plugin: "nebula.ospackage"
 
 import org.opengee.shell.GeeCommandLine
 import org.opengee.io.CopySpecTemplates
+import groovy.json.JsonSlurper
 
 def stagedInstall_path =
     project.hasProperty('stageInstallPath') ? project.stageInstallPath : '/tmp/fusion_os_install'
@@ -125,6 +126,7 @@ def getOsPackageBuildFromOpenGeeVersionFile(file) {
 
 
 def stagedInstallDir = new File(stagedInstall_path)
+def vendorOverrides = new File(stagedInstallDir, 'vendor_packaging_overrides.json')
 def stagedInstallDir_common_opt = new File(stagedInstallDir, 'common/opt')
 def stagedInstallDir_common_user_magic =
     new File(stagedInstallDir, 'common/user_magic')
@@ -263,6 +265,22 @@ task openGeePostGisRpm(type: GeeRpm) {
     // it actually depends on proj-devel.
     requires('proj-devel')
 
+    if (vendorOverrides.exists()) {
+        def jsonSlurper = new JsonSlurper()
+        def vendorOverridesObj = jsonSlurper.parseText("${vendorOverrides.text}")
+        def dependenciesObj = vendorOverridesObj.dependencies
+        if (dependenciesObj) {
+            def postgisDependenciesObj = dependenciesObj.postgis
+            if (postgisDependenciesObj) {
+                postgisDependenciesObj.each { dependencyObj ->
+                    // flag values defined here: https://github.com/craigwblake/redline/blob/master/src/main/java/org/redline_rpm/header/Flags.java
+                    int flags = dependencyObj.flags
+                    requires("${dependencyObj.name}", "${dependencyObj.version}", flags)
+                }
+            }
+        }
+    }
+
     from (stagedInstallDir_postgis_opt) {
         into new File(packageInstallRootDir, 'opt')
     }
@@ -292,6 +310,22 @@ task openGeePostGisDeb(type: GeeDeb) {
 
     requires('opengee-common', ospackage.version, GREATER | EQUAL)
     requires('proj-devel')
+
+    if (vendorOverrides.exists()) {
+        def jsonSlurper = new JsonSlurper()
+        def vendorOverridesObj = jsonSlurper.parseText("${vendorOverrides.text}")
+        def dependenciesObj = vendorOverridesObj.dependencies
+        if (dependenciesObj) {
+            def postgisDependenciesObj = dependenciesObj.postgis
+            if (postgisDependenciesObj) {
+                postgisDependenciesObj.each { dependencyObj ->
+                    // flag values defined here: https://github.com/craigwblake/redline/blob/master/src/main/java/org/redline_rpm/header/Flags.java
+                    int flags = dependencyObj.flags
+                    requires("${dependencyObj.name}", "${dependencyObj.version}", flags)
+                }
+            }
+        }
+    }
 
     from (stagedInstallDir_postgis_opt) {
         into new File(packageInstallRootDir, 'opt')
@@ -401,6 +435,22 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
         requires('python27-lxml')
     }
 
+    if (vendorOverrides.exists()) {
+        def jsonSlurper = new JsonSlurper()
+        def vendorOverridesObj = jsonSlurper.parseText("${vendorOverrides.text}")
+        def dependenciesObj = vendorOverridesObj.dependencies
+        if (dependenciesObj) {
+            def commonDependenciesObj = dependenciesObj.common
+            if (commonDependenciesObj) {
+                commonDependenciesObj.each { dependencyObj ->
+                    // flag values defined here: https://github.com/craigwblake/redline/blob/master/src/main/java/org/redline_rpm/header/Flags.java
+                    int flags = dependencyObj.flags
+                    requires("${dependencyObj.name}", "${dependencyObj.version}", flags)
+                }
+            }
+        }
+    }
+
     requiresCommands(packageSharedCommands +
         ['cat', 'cut', 'getent', 'grep'])
 
@@ -469,6 +519,22 @@ task openGeeCommonDeb (type: GeeDeb, dependsOn: openGeeCommonInitScripts) {
     requires('python-psycopg2')
     requires('python-setuptools')
     requires('python2.7')
+
+    if (vendorOverrides.exists()) {
+        def jsonSlurper = new JsonSlurper()
+        def vendorOverridesObj = jsonSlurper.parseText("${vendorOverrides.text}")
+        def dependenciesObj = vendorOverridesObj.dependencies
+        if (dependenciesObj) {
+            def commonDependenciesObj = dependenciesObj.common
+            if (commonDependenciesObj) {
+                commonDependenciesObj.each { dependencyObj ->
+                    // flag values defined here: https://github.com/craigwblake/redline/blob/master/src/main/java/org/redline_rpm/header/Flags.java
+                    int flags = dependencyObj.flags
+                    requires("${dependencyObj.name}", "${dependencyObj.version}", flags)
+                }
+            }
+        }
+    }
 
     // Use single files for install scripts.  Othewrise, OS Package wraps the
     // code in extra statements.
@@ -557,6 +623,22 @@ task openGeeServerRpm(type: GeeRpm, dependsOn: openGeeServerInitScripts) {
 
     autoFindRequiresFilter = rpmCapabilityFilter
     requiresCommandFilter = rpmCommandFilter
+
+    if (vendorOverrides.exists()) {
+        def jsonSlurper = new JsonSlurper()
+        def vendorOverridesObj = jsonSlurper.parseText("${vendorOverrides.text}")
+        def dependenciesObj = vendorOverridesObj.dependencies
+        if (dependenciesObj) {
+            def serverDependenciesObj = dependenciesObj.server
+            if (serverDependenciesObj) {
+                serverDependenciesObj.each { dependencyObj ->
+                    // flag values defined here: https://github.com/craigwblake/redline/blob/master/src/main/java/org/redline_rpm/header/Flags.java
+                    int flags = dependencyObj.flags
+                    requires("${dependencyObj.name}", "${dependencyObj.version}", flags)
+                }
+            }
+        }
+    }
 
     // Don't specify install scripts as single files.  It doesn't work for
     // RPMs:
@@ -659,6 +741,22 @@ task openGeeServerDeb (type: GeeDeb, dependsOn: openGeeServerInitScripts) {
             'sed', 'su', 'sudo'
         ]
     )
+
+    if (vendorOverrides.exists()) {
+        def jsonSlurper = new JsonSlurper()
+        def vendorOverridesObj = jsonSlurper.parseText("${vendorOverrides.text}")
+        def dependenciesObj = vendorOverridesObj.dependencies
+        if (dependenciesObj) {
+            def serverDependenciesObj = dependenciesObj.server
+            if (serverDependenciesObj) {
+                serverDependenciesObj.each { dependencyObj ->
+                    // flag values defined here: https://github.com/craigwblake/redline/blob/master/src/main/java/org/redline_rpm/header/Flags.java
+                    int flags = dependencyObj.flags
+                    requires("${dependencyObj.name}", "${dependencyObj.version}", flags)
+                }
+            }
+        }
+    }
 
     // Specify a single file for each install script.  Otherwise, OSPackage
     // wraps the code in extra statements that, e.g., only run the
@@ -783,6 +881,22 @@ built from raster, vector, and location properties data.
         ]
     )
 
+    if (vendorOverrides.exists()) {
+        def jsonSlurper = new JsonSlurper()
+        def vendorOverridesObj = jsonSlurper.parseText("${vendorOverrides.text}")
+        def dependenciesObj = vendorOverridesObj.dependencies
+        if (dependenciesObj) {
+            def fusionDependenciesObj = dependenciesObj.fusion
+            if (fusionDependenciesObj) {
+                fusionDependenciesObj.each { dependencyObj ->
+                    // flag values defined here: https://github.com/craigwblake/redline/blob/master/src/main/java/org/redline_rpm/header/Flags.java
+                    int flags = dependencyObj.flags
+                    requires("${dependencyObj.name}", "${dependencyObj.version}", flags)
+                }
+            }
+        }
+    }
+
     // Don't specify install scripts as single files.  It doesn't work for
     // RPMs:
     preInstall = file("${buildDir}/opengee-fusion/pre-install.sh")
@@ -851,6 +965,22 @@ task openGeeFusionDeb (type: GeeDeb, dependsOn: openGeeFusionInitScripts) {
     requires('opengee-common', ospackage.version, GREATER | EQUAL)
     requires('dpkg')
     requires('lsb-base')
+
+    if (vendorOverrides.exists()) {
+        def jsonSlurper = new JsonSlurper()
+        def vendorOverridesObj = jsonSlurper.parseText("${vendorOverrides.text}")
+        def dependenciesObj = vendorOverridesObj.dependencies
+        if (dependenciesObj) {
+            def fusionDependenciesObj = dependenciesObj.fusion
+            if (fusionDependenciesObj) {
+                fusionDependenciesObj.each { dependencyObj ->
+                    // flag values defined here: https://github.com/craigwblake/redline/blob/master/src/main/java/org/redline_rpm/header/Flags.java
+                    int flags = dependencyObj.flags
+                    requires("${dependencyObj.name}", "${dependencyObj.version}", flags)
+                }
+            }
+        }
+    }
 
     // Specify a single file for each install script.  Otherwise, OSPackage
     // wraps the code in extra statements that, e.g., only run the
@@ -937,6 +1067,22 @@ task openGeeExtraRpm(type: GeeRpm, dependsOn: openGeeExtraInitScripts) {
 
     autoFindRequiresFilter = rpmCapabilityFilter
     requiresCommandFilter = rpmCommandFilter
+
+    if (vendorOverrides.exists()) {
+        def jsonSlurper = new JsonSlurper()
+        def vendorOverridesObj = jsonSlurper.parseText("${vendorOverrides.text}")
+        def dependenciesObj = vendorOverridesObj.dependencies
+        if (dependenciesObj) {
+            def extraDependenciesObj = dependenciesObj.extra
+            if (extraDependenciesObj) {
+                extraDependenciesObj.each { dependencyObj ->
+                    // flag values defined here: https://github.com/craigwblake/redline/blob/master/src/main/java/org/redline_rpm/header/Flags.java
+                    int flags = dependencyObj.flags
+                    requires("${dependencyObj.name}", "${dependencyObj.version}", flags)
+                }
+            }
+        }
+    }
 
     // This package contains files that were in opengee-server and
     // opengee-fusion in versions 5.3.4.1 and before.
@@ -1041,6 +1187,22 @@ task openGeeExtraDeb(type: GeeDeb, dependsOn: openGeeExtraInitScripts) {
     // opengee-fusion in versions 5.3.4.1 and before.
     conflicts('opengee-server', "5.3.4.1", LESS | EQUAL)
     conflicts('opengee-fusion', "5.3.4.1", LESS | EQUAL)
+
+    if (vendorOverrides.exists()) {
+        def jsonSlurper = new JsonSlurper()
+        def vendorOverridesObj = jsonSlurper.parseText("${vendorOverrides.text}")
+        def dependenciesObj = vendorOverridesObj.dependencies
+        if (dependenciesObj) {
+            def extraDependenciesObj = dependenciesObj.extra
+            if (extraDependenciesObj) {
+                extraDependenciesObj.each { dependencyObj ->
+                    // flag values defined here: https://github.com/craigwblake/redline/blob/master/src/main/java/org/redline_rpm/header/Flags.java
+                    int flags = dependencyObj.flags
+                    requires("${dependencyObj.name}", "${dependencyObj.version}", flags)
+                }
+            }
+        }
+    }
 
     postInstallFile file("${buildDir}/opengee-extra/post-install.sh")
     preUninstallFile file("${buildDir}/opengee-extra/pre-uninstall.sh")
@@ -1149,6 +1311,22 @@ task openGeeFullServerRpm (type: GeeRpm) {
 
     requires('opengee-server', ospackage.version, GREATER | EQUAL)
     requires('opengee-extra', ospackage.version, GREATER | EQUAL)
+
+    if (vendorOverrides.exists()) {
+        def jsonSlurper = new JsonSlurper()
+        def vendorOverridesObj = jsonSlurper.parseText("${vendorOverrides.text}")
+        def dependenciesObj = vendorOverridesObj.dependencies
+        if (dependenciesObj) {
+            def fullserverDependenciesObj = dependenciesObj.fullserver
+            if (fullserverDependenciesObj) {
+                fullserverDependenciesObj.each { dependencyObj ->
+                    // flag values defined here: https://github.com/craigwblake/redline/blob/master/src/main/java/org/redline_rpm/header/Flags.java
+                    int flags = dependencyObj.flags
+                    requires("${dependencyObj.name}", "${dependencyObj.version}", flags)
+                }
+            }
+        }
+    }
 }
 
 task openGeeFullServerDeb (type: GeeDeb) {
@@ -1168,6 +1346,22 @@ task openGeeFullServerDeb (type: GeeDeb) {
 
     requires('opengee-server', ospackage.version, GREATER | EQUAL)
     requires('opengee-extra', ospackage.version, GREATER | EQUAL)
+
+    if (vendorOverrides.exists()) {
+        def jsonSlurper = new JsonSlurper()
+        def vendorOverridesObj = jsonSlurper.parseText("${vendorOverrides.text}")
+        def dependenciesObj = vendorOverridesObj.dependencies
+        if (dependenciesObj) {
+            def fullserverDependenciesObj = dependenciesObj.fullserver
+            if (fullserverDependenciesObj) {
+                fullserverDependenciesObj.each { dependencyObj ->
+                    // flag values defined here: https://github.com/craigwblake/redline/blob/master/src/main/java/org/redline_rpm/header/Flags.java
+                    int flags = dependencyObj.flags
+                    requires("${dependencyObj.name}", "${dependencyObj.version}", flags)
+                }
+            }
+        }
+    }
 }
 
 if (project.hasProperty('buildOpenGee')) {
@@ -1196,6 +1390,22 @@ task openGeeFullFusionRpm (type: GeeRpm) {
 
     requires('opengee-fusion', ospackage.version, GREATER | EQUAL)
     requires('opengee-extra', ospackage.version, GREATER | EQUAL)
+
+    if (vendorOverrides.exists()) {
+        def jsonSlurper = new JsonSlurper()
+        def vendorOverridesObj = jsonSlurper.parseText("${vendorOverrides.text}")
+        def dependenciesObj = vendorOverridesObj.dependencies
+        if (dependenciesObj) {
+            def fullfusionDependenciesObj = dependenciesObj.fullfusion
+            if (fullfusionDependenciesObj) {
+                fullfusionDependenciesObj.each { dependencyObj ->
+                    // flag values defined here: https://github.com/craigwblake/redline/blob/master/src/main/java/org/redline_rpm/header/Flags.java
+                    int flags = dependencyObj.flags
+                    requires("${dependencyObj.name}", "${dependencyObj.version}", flags)
+                }
+            }
+        }
+    }
 }
 
 task openGeeFullFusionDeb (type: GeeDeb) {
@@ -1215,6 +1425,22 @@ task openGeeFullFusionDeb (type: GeeDeb) {
 
     requires('opengee-fusion', ospackage.version, GREATER | EQUAL)
     requires('opengee-extra', ospackage.version, GREATER | EQUAL)
+
+    if (vendorOverrides.exists()) {
+        def jsonSlurper = new JsonSlurper()
+        def vendorOverridesObj = jsonSlurper.parseText("${vendorOverrides.text}")
+        def dependenciesObj = vendorOverridesObj.dependencies
+        if (dependenciesObj) {
+            def fullfusionDependenciesObj = dependenciesObj.fullfusion
+            if (fullfusionDependenciesObj) {
+                fullfusionDependenciesObj.each { dependencyObj ->
+                    // flag values defined here: https://github.com/craigwblake/redline/blob/master/src/main/java/org/redline_rpm/header/Flags.java
+                    int flags = dependencyObj.flags
+                    requires("${dependencyObj.name}", "${dependencyObj.version}", flags)
+                }
+            }
+        }
+    }
 }
 
 if (project.hasProperty('buildOpenGee')) {
