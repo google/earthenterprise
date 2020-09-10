@@ -903,6 +903,10 @@
     <tabstop>clamp_elev_check</tabstop>
     <tabstop>lutfile_chooser_btn</tabstop>
     <tabstop>lutfile_delete_btn</tabstop>
+    <tabstop>south_boundary</tabstop>
+    <tabstop>north_boundary</tabstop>
+    <tabstop>west_boundary</tabstop>
+    <tabstop>east_boundary</tabstop>
     <tabstop>source_list</tabstop>
     <tabstop>add_src_btn</tabstop>
     <tabstop>delete_src_btn</tabstop>
