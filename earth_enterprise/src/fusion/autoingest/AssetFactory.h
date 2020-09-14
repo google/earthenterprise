@@ -422,8 +422,6 @@ namespace AssetFactory
         return Make<AssetType>
                    (ref_, inputs_, meta, config);
     }
-
-    return Make<MutableDerivedAssetHandleType, ConfigType>(ref_, inputs_, meta, config);
   }
 }
 
