@@ -48,6 +48,7 @@ class AssetImpl : public AssetStorage, public StorageManaged {
   AssetImpl& operator=(const AssetImpl&&) = delete;
   public:
     using Base = AssetStorage;
+    static std::string GetPlaceholderAssetRegistryKey() { return "SourceAssetVersion"; }
 
  protected:
   // used by my intermediate derived classes since their calls to
