@@ -66,7 +66,7 @@ class AssetSerializerLocalXML : public AssetSerializerInterface<AssetType>
           }
         } else {
           AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to read ")
-                + filename._cstr());
+                + filename.c_str());
         }
       } else {
         AssetThrowPolicy::WarnOrThrow(kh::tr("No such file: ") + filename.c_str());
