@@ -405,7 +405,7 @@ namespace AssetFactory
           return asset;
       }
       throw khException(kh::tr("%1 '%2' does not exist")
-                        .arg(AssetType::SUBTYPE).arg(ref_));
+                        .arg(AssetType::SUBTYPE).arg(ref_.c_str()));
   }
 
   template<class AssetType>
@@ -417,7 +417,7 @@ namespace AssetFactory
     typename AssetType::MutableAssetD asset = Find<AssetType>(ref_);
     if (asset) {
         throw khException(kh::tr("%1 '%2' already exists")
-                          .arg(AssetType::SUBTYPE).arg(ref_));
+                          .arg(AssetType::SUBTYPE).arg(ref_.c_str()));
     } else {
         return Make<AssetType>
                    (ref_, inputs_, meta, config);
