@@ -114,6 +114,7 @@ class StorageManager : public StorageManagerInterface<AssetType> {
     const SerializerPtr serializer;
     CacheType cache;
     std::map<AssetKey, PointerType> dirtyMap;
+    float prunePercent;
 
     StorageManager(const StorageManager &) = delete;
     StorageManager& operator=(const StorageManager &) = delete;
