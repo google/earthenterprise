@@ -80,7 +80,7 @@ class StorageManager : public StorageManagerInterface<AssetType> {
                    std::uint64_t maxMemory,
                    float prunePercent,
                    const std::string & type) :
-        StorageManager(cacheSize, limitByMemory, maxMemory, type,
+        StorageManager(cacheSize, limitByMemory, maxMemory, prunePercent, type,
                        SerializerPtr(new AssetSerializerLocalXML<AssetType>())) {}
     ~StorageManager() = default;
 
