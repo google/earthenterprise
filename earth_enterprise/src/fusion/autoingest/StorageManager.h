@@ -367,4 +367,14 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
   return true;
 }
 
+template<class AssetType>
+void StorageManager<AssetType>::SetPrunePercent(const float & percent) {
+  std::lock_guard<std::recursive_mutex> lock(storageMutex);
+  prunePercent = percent;
+}
+
+template<class AssetType>
+bool StorageManager<AssetType>::DetermineIfPrune() {
+  return (DirtySize() <= (CacheSize() * (prunePercent / 100)));
+
 #endif // STORAGEMANAGER_H
