@@ -125,7 +125,7 @@ class StorageManagerTest : public testing::Test {
  protected:
   StorageManager<TestItem> storageManager;
  public:
-  StorageManagerTest() : storageManager(CACHE_SIZE, false, 0, "test", unique_ptr<TestSerializer>(new TestSerializer())) {
+  StorageManagerTest() : storageManager(CACHE_SIZE, false, 0, 100, "test", unique_ptr<TestSerializer>(new TestSerializer())) {
     // Reset the static variables in TestItem
     TestItem::nextValue = 1;
     TestItem::fileName = "/dev/null"; // A file that exists
