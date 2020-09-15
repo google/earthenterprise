@@ -57,7 +57,6 @@ print $fh <<EOF;
 using namespace khxml;
 #include <autoingest/AssetThrowPolicy.h>
 #include <khGuard.h>
-#include <std.h>
 EOF
 
 foreach my $plugin (@plugins) {
