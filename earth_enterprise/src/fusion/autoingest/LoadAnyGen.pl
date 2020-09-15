@@ -81,7 +81,7 @@ AssetImpl::Load(const std::string &boundref)
     std::string filename = AssetImpl::XMLFilename(boundref);
     std::shared_ptr<AssetImpl> result;
     time_t timestamp = 0;
-    uint64 filesize = 0;
+    unsigned long long filesize = 0;
 
     if (khGetFileInfo(filename, filesize, timestamp) && (filesize > 0)) {
 	    std::unique_ptr<GEDocument> doc = ReadDocument(filename);
@@ -154,7 +154,7 @@ AssetVersionImpl::Load(const std::string &boundref)
     std::string filename = AssetVersionImpl::XMLFilename(boundref);
     std::shared_ptr<AssetVersionImpl> result;
     time_t timestamp = 0;
-    uint64 filesize = 0;
+    unsigned long long filesize = 0;
 
     if (khGetFileInfo(filename, filesize, timestamp) && (filesize > 0)) {
 	    std::unique_ptr<GEDocument> doc = ReadDocument(filename);
