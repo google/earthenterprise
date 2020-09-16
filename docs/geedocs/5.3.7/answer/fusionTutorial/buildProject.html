@@ -1,0 +1,777 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Defining and Building Projects &#8212; Google Earth Enterprise 5.3.7 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Defining and Building Databases" href="buildDatabase.html" />
+    <link rel="prev" title="Defining and Building Resources" href="buildResource.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="buildDatabase.html" title="Defining and Building Databases"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="buildResource.html" title="Defining and Building Resources"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionTutorial.html" accesskey="U">Fusion Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="buildResource.html"
+                        title="previous chapter">Defining and Building Resources</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="buildDatabase.html"
+                        title="next chapter">Defining and Building Databases</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp3.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp3.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="defining-and-building-projects">
+<h1>Defining and Building Projects<a class="headerlink" href="#defining-and-building-projects" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>The following exercises guide you through defining and building
+imagery, terrain, and vector projects using the resources you
+created in the previous lesson.</p>
+<ul class="simple">
+<li><a class="reference internal" href="#define-imagery-project"><span class="std std-ref">Define an Imagery Project</span></a><ul>
+<li><a class="reference internal" href="#add-resources-to-imagery-project"><span class="std std-ref">Add Resources to an Imagery Project</span></a></li>
+<li><a class="reference internal" href="#build-an-imagery-project"><span class="std std-ref">Build an Imagery Project</span></a></li>
+<li><a class="reference internal" href="#preview-an-imagery-project"><span class="std std-ref">Preview an Imagery Project</span></a></li>
+<li><a class="reference internal" href="#specify-an-imagery-project-as-basemap"><span class="std std-ref">Specify an Imagery Project as Your Base Map</span></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#define-terrain-project"><span class="std std-ref">Define a Terrain Project</span></a><ul>
+<li><a class="reference internal" href="#add-resource-to-terrain-project"><span class="std std-ref">Add Resources to a Terrain Project</span></a></li>
+<li><a class="reference internal" href="#build-terrain-project"><span class="std std-ref">Build a Terrain Project</span></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#define-vector-project"><span class="std std-ref">Define a Vector Project</span></a><ul>
+<li><a class="reference internal" href="#add-resources-to-vector-project"><span class="std std-ref">Add Resources to a Vector Project</span></a></li>
+<li><a class="reference internal" href="#conf-layer-prop-vector-project"><span class="std std-ref">Configuring Layer Properties for a Vector Project</span></a></li>
+<li><a class="reference internal" href="#conf-display-rules-for-vector-project"><span class="std std-ref">Configure Display Rules for a Vector Project</span></a><ul>
+<li><a class="reference internal" href="#conf-select-all-rule"><span class="std std-ref">Configure the Default Select All Rule</span></a></li>
+<li><a class="reference internal" href="#disp-rules-for-major-freeways"><span class="std std-ref">Display Rules for Major Freeways</span></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#build-vector-project"><span class="std std-ref">Build a Vector Project</span></a></li>
+</ul>
+</li>
+</ul>
+<p class="rubric" id="define-imagery-project">Define an Imagery Project</p>
+<p>If you intend to use your own imagery data, it makes sense to
+define and build the imagery project before adding vector data.
+That way, you can use the imagery project as the base image map in
+the Preview pane in Google Earth Enterprise Fusion when you
+develop your vector project, making it easier to visualize how
+your vector data will appear over your actual imagery.</p>
+<p class="rubric" id="add-resources-to-imagery-project">Add Resources to an Imagery Project</p>
+<p>Although you can change the display order of imagery and terrain
+resources within a project, the order is ultimately determined by
+the resolution of the source files. That is, lower-resolution
+insets are automatically ordered below higher-resolution insets.
+So in reality, you can change the order of resources with the same
+resolution only.</p>
+<p>The following example shows a number of imagery resources in a
+project ordered by resolution. The resolution of each resource
+appears in parentheses after the resource name.</p>
+<p>The order in which the imagery or terrain resource data appears in
+the Imagery and Terrain Project Editors is the same as the
+stacking order of the insets in Google Earth EC. That is,
+higher-resolution insets appear above lower-resolution insets, so
+that viewing preference is given to the higher-quality imagery.
+The stacking order of same-resolution insets follows the order you
+define in the project. The following graphic illustrates this
+concept.</p>
+<p><img alt="Imagery Resources Ordered by Resolution" src="../../images/imageryLevels.png" /></p>
+<p class="rubric">To add resources to an imagery project:</p>
+<ol class="arabic">
+<li><p class="first">Select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu. The Asset Manager
+appears.</p>
+</li>
+<li><p class="first">Click <img alt="Imagery Project Icon" src="../../images/iconProjImagery.png" /> on the toolbar. The Imagery
+Project Editor appears.</p>
+<p><img alt="Imagery Project Editor" src="../../images/imageryProjEditor.png" /></p>
+</li>
+<li><p class="first">Click <img alt="New Resource Icon" src="../../images/icon_new1.gif" />. The Open dialog appears.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Resources/Imagery</span></code> folder.</p>
+</li>
+<li><p class="first">Select <strong>BlueMarble</strong>, and click <strong>Open</strong>. The BlueMarble
+resource appears in the Imagery Project Editor.</p>
+</li>
+<li><p class="first">Repeat steps 3 through 5 for each of the following resources:</p>
+<ul class="simple">
+<li><strong>SFBayAreaLanSat</strong></li>
+<li><strong>i3_15Meter</strong></li>
+<li><strong>SFHighResInset</strong></li>
+</ul>
+<p>The resources appear in order by resolution, with the higher
+resolution imagery at the top of the list.</p>
+<p><img alt="Imagery Project Editor: list of resources" src="../../images/imageryProjEditor-full2.png" /></p>
+</li>
+<li><p class="first">Select <strong>File &gt; Save</strong>.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Imagery</span></code>folder.</p>
+</li>
+<li><p class="first">Enter <strong>SFBayArea</strong> as the name of your project, and click
+<strong>Save</strong>. The new project appears in the Asset Manager when you
+select <strong>ASSET_ROOT/Projects/Imagery</strong> in the asset navigation
+tree.</p>
+</li>
+</ol>
+<p class="rubric" id="build-an-imagery-project">Build an Imagery Project</p>
+<p>As with resources, you do not have to build projects right away.
+You can define several projects and then build them all, or you
+can wait until you include them in a database and build the entire
+data hierarchy at the same time. However, in this lesson, you
+will build the imagery project right away, so you can use it as a base
+map in the Preview pane.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It could take up to 10 minutes for the project to
+build. Do this exercise when you can spend some time away from
+your computer while the project builds.</p>
+</div>
+<ol class="arabic">
+<li><p class="first">In the Asset Manager, navigate to
+<strong>ASSET_ROOT/Projects/Imagery</strong> in the asset navigation tree.</p>
+</li>
+<li><p class="first">Right-click <strong>SFBayArea</strong> and select <strong>Build</strong> from the context
+menu.</p>
+<p>The status of the project immediately changes to <strong>Queued</strong> and
+then <strong>In Progress</strong>. (The status may change so rapidly
+that it appears to change directly to <strong>In Progress</strong>.)</p>
+</li>
+</ol>
+<p>As with building imagery resources, you can view the progress of
+the build by double-clicking the Current Version or Current State
+column for the project. The Version Properties dialog displays the
+most recent version of that project. You can expand the version
+tree to view the status of the build in real time by clicking the
++ signs.</p>
+<p>When the status of the imagery project build is <strong>Succeeded</strong>, go
+on to the next exercise.</p>
+<p class="rubric" id="preview-an-imagery-project">Preview an Imagery Project</p>
+<p>You can preview an imagery project after you build it.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Only bounding boxes appear in the Preview pane, not
+the actual imagery.</p>
+</div>
+<p class="rubric">To preview an imagery project:</p>
+<ol class="arabic">
+<li><p class="first">Double-click the name of the imagery project you built in the
+last exercise, <strong>SFBayArea</strong>. The Imagery Project Editor for
+that project opens.</p>
+</li>
+<li><p class="first">Check the box next to <strong>Preview</strong> above the list of source
+files, and then switch to the main Google Earth Enterprise
+Fusion window.</p>
+<p>Bounding boxes indicate the extents of each of the individual
+imagery resources. The largest bounding box is around the
+entire Earth, which is the BlueMarble imagery. (You might have
+to zoom out a bit to see it.) The other three bounding boxes
+are in the San Francisco Bay Area. You can zoom in to see them.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The name of the project does not appear in the
+Preview List pane. When you close the Imagery Project Editor
+or uncheck the box next to <strong>Preview</strong>, the bounding boxes
+disappear. You can reset the view by pressing <strong>Ctrl+R</strong>.</p>
+</div>
+<p><img alt="Project Preview" src="../../images/previewProject.png" /></p>
+</li>
+</ol>
+<p class="rubric" id="specify-an-imagery-project-as-basemap">Specify an Imagery Project as Your Base Map</p>
+<p>When the imagery project build is done, you can specify it as your
+base map.</p>
+<p class="rubric">To specify an imagery project as your base map:</p>
+<ol class="arabic">
+<li><p class="first">Select <strong>Preferences</strong> from the <strong>Edit</strong> menu. The Preferences
+dialog appears.</p>
+</li>
+<li><p class="first">Under Background Imagery, select <strong>Imagery Project</strong> from the
+drop-down list.</p>
+</li>
+<li><p class="first">Click <img alt="Project Browser Icon" src="../../images/iconProjBrowser.png" /> to the right of the drop-down
+list. The Open dialog appears.</p>
+</li>
+<li><p class="first">Navigate to <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Imagery</span></code>, and select
+<strong>SFBayArea</strong>.</p>
+<p>The full path within the tutorial asset root appears to the
+right of the drop-down list.</p>
+<p><img alt="Imagery Project Preferences" src="../../images/prefsImageryProject-full.png" /></p>
+</li>
+<li><p class="first">Click the <strong>OK</strong> button. The Preview pane displays the specified imagery.
+The specified imagery will remain the background imagery until
+you change it to another image or return it to the default
+imagery in the Preferences dialog.</p>
+</li>
+</ol>
+<p class="rubric" id="define-terrain-project">Define a Terrain Project</p>
+<p>The terrain project for this tutorial is very simple. It includes
+one of the resources you built in the previous lesson.</p>
+<p class="rubric" id="add-resource-to-terrain-project">Add a Resource to a Terrain Project</p>
+<p>The following procedure provides the steps to add resources to a
+terrain project.</p>
+<p class="rubric">To add resources to a terrain project:</p>
+<ol class="arabic">
+<li><p class="first">Select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu. The Asset Manager
+appears.</p>
+</li>
+<li><p class="first">Click <img alt="Terrain Project Icon" src="../../images/iconProjTerrain.png" /> on the toolbar. The <strong>Terrain
+Project</strong> editor appears.</p>
+</li>
+<li><p class="first">Click <img alt="New Icon" src="../../images/icon_new1.gif" />. The Open dialog appears.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Resources/Terrain</span></code> folder.</p>
+</li>
+<li><p class="first">Select <strong>SFTerrain</strong>, and click <strong>Open</strong>. The SFTerrain
+resource appears in the Terrain Project Editor.</p>
+</li>
+<li><p class="first">Check the box next to <strong>Preview</strong>.</p>
+</li>
+<li><p class="first">Right-click the name of the resource, and select <strong>Zoom to
+Layer</strong> from the context menu.</p>
+<p>The Preview pane zooms in to the bounding box that indicates
+the extent of the terrain resource.</p>
+<p><img alt="Terrain Project Preview" src="../../images/terrainProjPreview.png" /></p>
+</li>
+<li><p class="first">Uncheck the box next to <strong>Preview</strong>.</p>
+</li>
+<li><p class="first">Click <img alt="New Icon" src="../../images/icon_new1.gif" />. The Open dialog appears.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Resources/Terrain</span></code> folder.</p>
+</li>
+<li><p class="first">Select <strong>WorldTopography</strong>, and click <strong>Open</strong>. The
+WorldTopography resource appears in the Terrain Project Editor.</p>
+</li>
+</ol>
+<p><img alt="Terrain Project Editor" src="../../images/terrainProjEditor-full.png" /></p>
+<ol class="arabic simple">
+<li>In the Terrain Project Editor, select <strong>File &gt; Save</strong>.</li>
+<li>Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Terrain</span></code>folder.</li>
+<li>Enter <strong>SFTerrain</strong> as the name of your project, and click <strong>Save</strong>.
+The new project appears in the Asset Manager when you select
+<strong>ASSET_ROOT/Projects/Terrain</strong> in the asset navigation tree.</li>
+</ol>
+<p class="rubric" id="build-terrain-project">Build a Terrain Project</p>
+<p>As with the imagery project, in this exercise, you build the
+terrain project right away.</p>
+<ol class="arabic">
+<li><p class="first">In the Asset Manager, right-click <strong>SF Terrain</strong>.</p>
+</li>
+<li><p class="first">Select <strong>Build</strong> from the context menu.</p>
+<p>The status of the project immediately changes to <strong>Queued</strong> and
+then <strong>In Progress</strong>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It could take a while for this project to build,
+depending on the speed of your workstation.</p>
+</div>
+</li>
+</ol>
+<p>When the status of the terrain project build is <strong>Succeeded</strong>, go
+on to the next exercise.</p>
+<p class="rubric" id="define-vector-project">Define a Vector Project</p>
+<p>The following exercises cover how to define, configure, and build
+a vector project using the resources you created in the previous
+lesson.</p>
+<p>You spend the majority of your time in Google Earth Enterprise
+Fusion configuring display rules for vector projects, determining
+how they look in Google Earth EC. Using the data in your vector
+source files, you can designate specific data for a variety of
+display purposes, such as road labels, features lines, and icons
+at viewing altitudes that are most appropriate for each feature.
+For example:</p>
+<p><img alt="Road Display Example" src="../../images/tutRoadDisplay.png" /></p>
+<p class="rubric" id="add-resources-to-vector-project">Add Resources to a Vector Project</p>
+<p>Before specifying the display rules for this vector project, you
+must add the resource you created in <a class="reference internal" href="buildResource.html"><span class="doc">Defining and Building
+Resources</span></a>.</p>
+<p class="rubric">To add resources to a vector project:</p>
+<ol class="arabic">
+<li><p class="first">Select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu. The Asset Manager
+appears.</p>
+</li>
+<li><p class="first">Click <img alt="Vector Project Icon" src="../../images/iconProjVector.png" /> on the toolbar. The Vector Project
+Editor appears.</p>
+<p><img alt="Vector Project Editor" src="../../images/vectorProjEditor.png" /></p>
+</li>
+<li><p class="first">Click <img alt="New Icon" src="../../images/icon_new1.gif" />. The Open dialog appears.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Resources/Vector</span></code> folder.</p>
+</li>
+<li><p class="first">Select <strong>CAHighways</strong>, and click <strong>Open</strong>. The CAHighways
+resource appears in the Vector Project Editor.</p>
+</li>
+<li><p class="first">Repeat steps 3 through 5 to add <strong>USPopulation</strong> to the
+project. Notice that a check box appears next to each
+resource/layer in the project.</p>
+</li>
+<li><p class="first">Check the box next to <strong>CAHighways</strong>.</p>
+</li>
+<li><p class="first">Right-click <strong>CAHighways</strong>, and select <strong>Zoom to Layer</strong> from
+the context menu.</p>
+<p>The roads in the CAHighways resource appear in the Preview
+pane.</p>
+<p><img alt="Vector Project Preview1" src="../../images/previewVectorProject1.png" /></p>
+</li>
+<li><p class="first">Check the box next to <strong>USPopulation</strong>, switch to the Preview
+pane, and zoom out a bit.</p>
+<p>Since this resource contains US census data by county, the
+outlines of counties across the US appear in the Preview pane
+as well as the roads in California.</p>
+<p><img alt="Vector Project Preview2" src="../../images/previewVectorProject2.png" /></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The name of the project does not appear in the
+Preview List pane. When you close the Vector Project Editor
+or uncheck the boxes next to the resources, the vector data
+disappears. You can reset the view, if desired, by pressing
+<strong>Ctrl+R</strong>.</p>
+</div>
+</li>
+<li><p class="first">In the Vector Project Editor, click
+<strong>USPopulation</strong>, and click <img alt="Delete Icon" src="../../images/iconDelete.png" /> to remove the US
+Population resource from the project. A message prompts you to
+confirm the deletion.</p>
+</li>
+<li><p class="first">Click the <strong>OK</strong> button. The <strong>USPopulation</strong> resource disappears.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Removing the resource from the project does not
+delete the resource. The resource remains intact and
+available for use by other projects. It is simply not part of
+this particular project any longer.</p>
+</div>
+</li>
+<li><p class="first">Select <strong>File &gt; Save</strong>.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Vector</span></code>folder.</p>
+</li>
+<li><p class="first">Enter <strong>CARoads</strong> as the name of your project, and click
+<strong>Save</strong>. The new project appears in the Asset Manager when you
+select <strong>ASSET_ROOT/Projects/Vector</strong> in the asset navigation
+tree.</p>
+</li>
+</ol>
+<p>Now you are ready to begin configuring the vector layer.</p>
+<p class="rubric" id="conf-layer-prop-vector-project">Configuring Layer Properties for a Vector Project</p>
+<p>This exercise covers how to configure layer properties for your
+vector project. Layer properties determine a number of aspects of
+how your data appears and is accessed in Google Earth EC.</p>
+<p class="rubric">To configure layer properties:</p>
+<ol class="arabic">
+<li><p class="first">In the Asset Manager, double-click <strong>CARoads</strong> in the
+<code class="docutils literal notranslate"><span class="pre">/ASSET_ROOT/Projects/Vector</span></code> folder. The Vector Project
+Editor appears and displays the resource you added in the
+previous lesson.</p>
+</li>
+<li><p class="first">Right-click <strong>CAHighways</strong>, and select <strong>Layer Properties</strong>
+from the context menu. The Layer Properties dialog appears.</p>
+<p><img alt="Vector Layer Properties dialog" src="../../images/vectorLayerProp.png" /></p>
+</li>
+<li><p class="first">Click <strong>Off</strong> next to Initial State to change it to <strong>On</strong>.
+Changing the initial state to <strong>On</strong> results in the CAHighways
+layer being automatically checked (turned on) in Google Earth
+EC.</p>
+</li>
+<li><p class="first">Click the blank field next to <strong>LookAt</strong>. The Open dialog
+appears.</p>
+</li>
+<li><p class="first">Navigate to <code class="docutils literal notranslate"><span class="pre">/opt/google/share/tutorials/fusion/KML</span></code>, select
+<code class="docutils literal notranslate"><span class="pre">San</span> <span class="pre">Francisco</span> <span class="pre">View</span> <span class="pre">Oblique.kmz</span></code>, and click <strong>Open</strong>.</p>
+<p>When you specify a KML/KMZ file in this field, Google Earth EC
+users can fly directly to the specified camera view by
+double-clicking the layer.</p>
+<p>The latitude and longitude of the selected KMZ file appear in
+the LookAt field. (You can only see the beginning of the
+latitude unless you expand the default column width.)</p>
+<p><img alt="Vector Layer Properties dialog with settings" src="../../images/vectorLayerProp-full.png" /></p>
+</li>
+<li><p class="first">Click the <strong>OK</strong> button. You return to the Vector Project Editor.</p>
+</li>
+<li><p class="first">Select <strong>File &gt; Save</strong>. Google Earth Enterprise Fusion saves
+the vector project with the same name.</p>
+</li>
+</ol>
+<p class="rubric" id="conf-display-rules-for-vector-project">Configure Display Rules for a Vector Project</p>
+<p>This exercise covers how to specify display rules for your vector
+project. Display rules determine how your data looks in Google
+Earth EC.</p>
+<p>Each resource in a project is known as a <em>layer</em>. Each layer can
+have one set of display rules. Each display rule includes feature
+and label formatting that you specify and one or more filters for
+the selected layer. The filters for each display rule determine
+which data in the layer to apply that formatting to. For example,
+in this exercise, you will work with road data that includes major and
+minor highways. You might want the major highways to appear as
+blue lines and the minor highways as yellow lines. To accomplish
+that, you create two display rules for the layer–one for major
+highways and one for minor highways. The filter(s) for each rule
+determine which data are affected by that rule’s formatting
+specifications.</p>
+<p>In this exercise, you create and modify a number of display rules
+for the CAHighways layer, so Google Earth EC displays the road
+information at the desired display levels with appropriate labels
+and formatting to distinguish between major freeways and other
+roads.</p>
+<p>A key part of knowing how to configure display rules for vector
+data requires familiarity with the data fields in the source data.
+You can find information about the CAHighways layer of your vector
+project at this website:</p>
+<p><a class="reference external" href="https://nationalmap.gov/small_scale/mld/roadtrl.html">https://nationalmap.gov/small_scale/mld/roadtrl.html</a></p>
+<p class="rubric">To configure a vector layer:</p>
+<ol class="arabic">
+<li><p class="first">In the Vector Project Editor, right-click <strong>CAHighways</strong>, and
+select <strong>Configure Display Rules</strong> from the context menu.</p>
+<p>The Display Rules dialog appears with the Feature tab in the
+foreground and the <strong>default select all</strong> rule highlighted.</p>
+</li>
+</ol>
+<p>When you first create a vector project, the default display
+rule–<strong>default select all–</strong>is the only rule listed for each
+layer. The filter for the default rule has no matching criteria,
+so it matches all data. This rule is considered the <em>catch-all</em>
+rule. It is designed to catch all of the data that does not match
+any other rules you create.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Google Earth Enterprise Fusion executes the display
+rules sequentially, based on the order in which they are listed
+on the Rules list. So you should always make the <strong>default
+select all</strong> rule the last one on the list.</p>
+</div>
+<p>First, Google Earth Enterprise Fusion attempts to match the filter
+specified for the first rule to the data in the resource. Then it
+applies the formatting specified for that rule to any matching
+data.</p>
+<p>Next, it attempts to match the filter specified for the second
+rule to the remaining data in the resource (that is, data not
+selected for the first filter). It applies the formatting
+specified for that rule to any matching data.</p>
+<p>Then, it applies the formatting you specify for the <strong>default
+select all</strong> rule (or the default formatting, if you do not change
+it) to any data that does not match the previous rules on the
+list, if any. This ensures that all vector data for the layer is
+displayed.</p>
+<p class="rubric" id="conf-select-all-rule">Configure the Default Select All Rule</p>
+<p>In this part of the exercise, you define the <strong>default select
+all</strong> rule. This rule applies to all of the surface streets that
+are left after the highways and freeways are covered by other
+rules. You define the additional rules for highways and freeways
+later in this exercise, because they are based on this default
+rule.</p>
+<p class="rubric">To define the default select all rule:</p>
+<ol class="arabic">
+<li><p class="first">Specify the geometry characteristics of the lines:</p>
+<ol class="loweralpha simple">
+<li>For <strong>Draw Features As</strong>, select <strong>Lines</strong>.</li>
+<li>For <strong>Visibility</strong>, set the lower end of the range to <strong>9</strong>, and
+the upper end of the range to <strong>18</strong>.</li>
+<li>For <strong>Maximum Simplification Error</strong>, accept the default
+setting, <strong>0.5</strong>.</li>
+<li>For <strong>Maximum Resolution Level</strong>, select <strong>18</strong>. This sets
+visibility level and the point where the Google Earth
+Enterprise Fusion stops building the resource.</li>
+</ol>
+</li>
+<li><p class="first">Check the box next to <strong>Draw As Roads</strong>, and specify the
+options related to road labels:</p>
+<ol class="loweralpha">
+<li><p class="first">For <strong>Road Label Type</strong>, accept the default setting, <strong>Label</strong>.</p>
+</li>
+<li><p class="first">Under <strong>Draw Style</strong>, for <strong>Line Color</strong>, set it to bright red.</p>
+</li>
+<li><p class="first">For <strong>Line Width</strong>, enter <strong>2.0</strong>.</p>
+</li>
+<li><p class="first">For <strong>Elevation/Height Mode</strong>, accept the default setting,
+<strong>Clamp to Ground</strong>.</p>
+<p>These settings display the roads as red lines when Google
+Earth EC is zoomed in fairly close.</p>
+</li>
+</ol>
+</li>
+<li><p class="first">In the <strong>Road Label</strong> section on the right:</p>
+<ol class="loweralpha">
+<li><p class="first">Click the empty text field. The Label Format dialog appears.
+This option allows you to specify the text that appears on
+the label.</p>
+</li>
+<li><p class="first">Click the Insert Field drop-down list to display the names
+of all of the fields in your source data.</p>
+</li>
+<li><p class="first">Select <strong>NAME</strong> from the list. The string «<strong>NAME</strong>»
+appears in the text field.</p>
+</li>
+<li><p class="first">Click <strong>OK</strong>. The string «<strong>NAME</strong>» appears in the Text
+field. The Display Rule dialog shows all of your selections.
+These settings result in Google Earth EC displaying the
+value of the NAME column for each road in your source data.</p>
+<p><img alt="Display Rules Start" src="../../images/displayRuleStart.png" /></p>
+</li>
+<li><p class="first">Click the <strong>OK</strong> button to save your display rule.</p>
+</li>
+</ol>
+</li>
+<li><p class="first">Verify that the display rule does what you intend:</p>
+<ol class="loweralpha">
+<li><p class="first">Ensure that nothing is listed in the Preview List pane. If
+one or more assets are listed, right-click any asset, and
+select <strong>Remove All Layers</strong> from the context menu; then
+click <strong>OK</strong> to confirm the removal.</p>
+</li>
+<li><p class="first">In the Vector Project Editor, check the box next to
+<strong>CAHighways</strong>.</p>
+</li>
+<li><p class="first">Right-click <strong>CAHighways</strong>, and select <strong>Zoom to Layer</strong>
+from the context menu.</p>
+<p>No roads appear because your display level is approximately
+7, and you set the visibility level to between <strong>9</strong> and
+<strong>18</strong> in the Display Rules dialog.</p>
+</li>
+<li><p class="first">Zoom in to a display level of just over <strong>9</strong>. Red lines
+appear for the roads in the Preview pane.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Labels for vector projects do not appear in the
+Preview pane.</p>
+</div>
+</li>
+<li><p class="first">Zoom out to a display level less than <strong>9</strong>. The roads
+disappear from the Preview pane.</p>
+</li>
+</ol>
+</li>
+<li><p class="first">Save the vector project by selecting <strong>Save</strong> from the <strong>File</strong>
+menu in the Vector Project Editor.</p>
+<p>This saves the project with the same name. If you want to save
+a project you create outside this tutorial with a different
+name, you can select <strong>Save As</strong> from the <strong>File</strong> menu, and follow
+the instructions in <a class="reference external" href="#34579">Add Resources to a Vector
+Project</a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Whenever you modify display rules or filters for
+your data, it is a good idea to save the project.</p>
+</div>
+</li>
+</ol>
+<p class="rubric" id="disp-rules-for-major-freeways">Display Rules for Major Freeways</p>
+<p>This exercise guides you through creating the display rules
+necessary to achieve the desired appearance for the major freeways
+in the San Francisco Bay Area. When you finish this exercise, you
+should have a good understanding of the use of filters in managing
+complex data.</p>
+<p>When setting display rules for vector data, it is critical that
+you are familiar with the source data you are working with and
+have an understanding of the fields used to classify different
+types of vector data. In the source data for this tutorial, the
+FEATURE column sorts the roads and highways into the following
+types:</p>
+<ul class="simple">
+<li>Principal Highway</li>
+<li>Other Through Highway</li>
+<li>Other Highway</li>
+<li>Limited Access Highway</li>
+</ul>
+<p>In this exercise, you create a second filter and use the FEATURE
+column values to distinguish the limited access highways (major
+freeways) from other types of highways and roads, and then display
+them appropriately.</p>
+<p class="rubric">To define a display rule for major freeways:</p>
+<ol class="arabic">
+<li><p class="first">In the Vector Project Editor, right-click <strong>CAHighways</strong>, and
+select <strong>Configure Display Rules</strong> from the context menu.</p>
+<p>The Display Rules dialog appears with the Feature tab in the
+foreground and the <strong>default select all</strong> rule highlighted.</p>
+</li>
+<li><p class="first">Click <img alt="New Icon" src="../../images/icon_new1.gif" /> at the bottom-left of the dialog. The New Rule
+dialog appears.</p>
+</li>
+<li><p class="first">Enter <strong>Major Freeways</strong> in the <strong>New Rule Name</strong> field, and click
+<strong>OK</strong>. The new rule name appears on the Rules list below the
+<strong>default select all</strong> rule.</p>
+<p><img alt="New Display Rule" src="../../images/displayRulesNew.png" /></p>
+</li>
+<li><p class="first">Click <img alt="Up Arrow" src="../../images/arrowUp.gif" /> to move the new rule up, so it appears before
+the <strong>default select all</strong> rule.</p>
+<p>Because Google Earth Enterprise Fusion applies display rules in
+the order in which they appear on this list, the MajorFreeways
+rule must appear before the <em>catch-all</em> rule (<strong>default select
+all</strong>), which covers all data not covered by other rules.</p>
+<p><img alt="New2 Display Rules" src="../../images/displayRulesNew2.png" /></p>
+</li>
+<li><p class="first">On the Feature tab, specify the geometry characteristics for
+the Major Freeways rule:</p>
+<ol class="loweralpha simple">
+<li>For <strong>Draw Features As</strong>, select <strong>Lines</strong>.</li>
+<li>For <strong>Visibility</strong>, set the low end of the range to <strong>9</strong> and
+the high end of the range to <strong>18</strong>.</li>
+<li>For <strong>Maximum Simplification Error</strong>, accept the default
+setting, <strong>0.5</strong>.</li>
+</ol>
+</li>
+<li><p class="first">Check the box next to <strong>Draw as Roads</strong> (if it is not already
+checked).</p>
+<ol class="loweralpha">
+<li><p class="first">For <strong>Road Label Type</strong>, select <strong>Shield</strong>.</p>
+</li>
+<li><p class="first">Under <strong>Draw Style</strong>, for <strong>Line Color</strong>, set it to royal blue.</p>
+</li>
+<li><p class="first">For <strong>Line Width</strong>, enter <strong>3.0</strong>.</p>
+</li>
+<li><p class="first">Under <strong>Elevation/Height</strong>, for <strong>Mode</strong>, accept the default,
+<strong>Clamp to Ground</strong>.</p>
+<p>These settings display the roads as thick blue lines when
+Google Earth EC is zoomed in fairly close.</p>
+</li>
+</ol>
+</li>
+<li><p class="first">In the <strong>Road Label</strong> section, accept the current settings.</p>
+</li>
+<li><p class="first">In the <strong>Road Shield</strong> section on the right, click the button next
+to <strong>Icon</strong>. The Icons dialog appears.</p>
+<p><img alt="Icons Dialog" src="../../images/iconsDialogShield.png" /></p>
+</li>
+<li><p class="first">Scroll down, and select <strong>shield1</strong>, and click <strong>OK</strong>.</p>
+<p>The Display Rule dialog shows all of your selections.</p>
+</li>
+<li><p class="first">Click the <strong>Filter</strong> tab, and specify the filter for the Major
+Freeways rule:</p>
+<ol class="loweralpha">
+<li><p class="first">Accept the default selection, <strong>Match all of the
+following</strong>, at the top of the tab.</p>
+</li>
+<li><p class="first">Click <strong>More</strong> at the bottom of the tab.</p>
+<p>Two drop-down lists and a text box appear on the list of
+filters.</p>
+</li>
+<li><p class="first">Select <strong>FEATURE</strong> from the left drop-down list.</p>
+</li>
+<li><p class="first">Select <strong>equals</strong> from the other drop-down list.</p>
+</li>
+<li><p class="first">Enter <strong>Limited Access Highway</strong> in the text field.</p>
+<p>The Filter tab shows your selections.</p>
+<p><img alt="Display Rules Filter Tab" src="../../images/displayRuleFilter.png" /></p>
+</li>
+<li><p class="first">Click the <strong>OK</strong> button to save your changes to the display rule.</p>
+<p>When this data is displayed in Google Earth EC, this filter
+causes the display settings on the Feature tab to be applied
+only to the road segments in your source data with the value
+<strong>Limited Access Highway</strong> in their FEATURE column.</p>
+</li>
+</ol>
+</li>
+<li><p class="first">Verify that both filters and rules are working correctly:</p>
+<ol class="loweralpha">
+<li><p class="first">In the Vector Project Editor, check the box next to
+<strong>CAHighways</strong>, if it is not already checked.</p>
+</li>
+<li><p class="first">Zoom in to a display level between <strong>9</strong> and <strong>18</strong>, if
+necessary.</p>
+<p>Both thin red roads and thicker blue roads appear in the
+Preview pane. The thicker blue roads are the roads defined
+in the <strong>MajorFreeways</strong> filter, and the thinner red roads are
+the rest of the roads in the source data, which are defined
+by the <strong>default select all</strong> filter.</p>
+<p><img alt="Filtered Data Preview" src="../../images/previewFilteredData.png" /></p>
+</li>
+</ol>
+</li>
+<li><p class="first">Save the vector project by selecting <strong>Save</strong> from the <strong>File</strong>
+menu in the Vector Project Editor.</p>
+<p>This saves the project with the same name.</p>
+</li>
+</ol>
+<p class="rubric" id="build-vector-project">Build a Vector Project</p>
+<p>As with imagery and terrain projects, in this exercise, you build
+the vector project as soon as you finish configuring display
+rules.</p>
+<ol class="arabic">
+<li><p class="first">In the Asset Manager, right-click <strong>CARoads</strong>.</p>
+</li>
+<li><p class="first">Select <strong>Build</strong> from the context menu.</p>
+<p>The status of the project immediately changes to <strong>Queued</strong> and
+then <strong>In Progress</strong>.</p>
+</li>
+</ol>
+<p>When the status of the vector project build is <strong>Succeeded</strong>,
+close the Asset Manager by clicking the close box (<strong>X</strong>), and go
+on to the <a class="reference internal" href="buildDatabase.html"><span class="doc">next lesson</span></a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="buildDatabase.html" title="Defining and Building Databases"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="buildResource.html" title="Defining and Building Resources"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionTutorial.html" >Fusion Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

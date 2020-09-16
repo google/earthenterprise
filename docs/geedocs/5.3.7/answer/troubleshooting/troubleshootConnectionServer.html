@@ -1,0 +1,164 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Troubleshoot connection to GEE Server &#8212; Google Earth Enterprise 5.3.7 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Conflicts in plugins" href="conflictsInPlugins.html" />
+    <link rel="prev" title="Imagery or terrain gaps" href="imageryTerrainGaps.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="conflictsInPlugins.html" title="Conflicts in plugins"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="imageryTerrainGaps.html" title="Imagery or terrain gaps"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../troubleshooting.html" accesskey="U">Troubleshooting and error messages</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="imageryTerrainGaps.html"
+                        title="previous chapter">Imagery or terrain gaps</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="conflictsInPlugins.html"
+                        title="next chapter">Conflicts in plugins</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp12.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp12.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="troubleshoot-connection-to-gee-server">
+<h1>Troubleshoot connection to GEE Server<a class="headerlink" href="#troubleshoot-connection-to-gee-server" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>If the Google Earth EC is unable to connect to your GEE Server, you will
+see the error, “Google Earth failed to connect to database”:</p>
+<p>To resolve this issue, try these troubleshooting steps:</p>
+<ol class="arabic">
+<li><p class="first">Make sure the <strong>Server URL</strong> (<code class="docutils literal notranslate"><span class="pre">http://hostname/path</span></code>) is
+correct in the “Google Earth - Select Server” dialog box, which
+appears when you start EC:</p>
+<ul class="simple">
+<li>The hostname should match the fully qualified domain name of
+your GEE Server.</li>
+<li>The path in the URL should match the <strong>Publish Point</strong> shown
+in the GEE Server UI. This path indicates the location where
+the database was published.</li>
+</ul>
+</li>
+<li><p class="first">Look for client EC requests in the GEE Server logs:</p>
+<ol class="loweralpha">
+<li><p class="first">Open a terminal window on the GEE Server.</p>
+</li>
+<li><p class="first">Type the command
+<code class="docutils literal notranslate"><span class="pre">tail</span> <span class="pre">-f</span> <span class="pre">/opt/google/gehttpd/logs/access_log</span></code></p>
+</li>
+<li><p class="first">Start EC and try connecting to your GEE Server.</p>
+<p>In the terminal window, you should see time-stamped access
+requests in the logs from the client, starting with a GET
+request for the <code class="docutils literal notranslate"><span class="pre">dbRoot</span></code> file, followed by <code class="docutils literal notranslate"><span class="pre">flatfile</span></code>
+requests—for example:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>192.168.1.199 - - [08/Feb/2016:09:10:25 -0800] &quot;GET /3d/dbRoot.v5?hl=en&amp;gl=us&amp;output=proto&amp;cv=7.1.5.1557&amp;ct=ec HTTP/1.1&quot; 200 4512 &quot;-&quot; &quot;GoogleEarth/7.1.5.1557(Windows;Microsoft Windows (6.2.9200.0);en;kml:2.2;client:EC;type:default)&quot; 192.168.1.199 - - [08/Feb/2016:09:10:27 -0800] &quot;GET /3d/dbRoot.v5?db=tm&amp;hl=en&amp;gl=us&amp;output=proto&amp;cv=7.1.5.1557&amp;ct=ec HTTP/1.1&quot; 200 1161 &quot;-&quot; &quot;GoogleEarth/7.1.5.1557(Windows;Microsoft Windows (6.2.9200.0);en;kml:2.2;client:EC;type:default)&quot;
+
+192.168.1.199 - - [08/Feb/2016:09:10:27 -0800] &quot;GET /3d/flatfile?lf-0-icons/help_l.png&amp;h=32 HTTP/1.1&quot; 200 426 &quot;-&quot; &quot;GoogleEarth/7.1.5.1557(Windows;Microsoft Windows (6.2.9200.0);en;kml:2.2;client:EC;type:default)&quot;
+</pre></div>
+</div>
+<p>​If no new entries appear in the logs, then EC was unable to
+establish a connection to the GEE Server. This may be due to
+a network or firewall problem, as described in the next
+step.</p>
+</li>
+</ol>
+</li>
+<li><p class="first">Verify network connectivity from EC to the GEE Server:</p>
+<ul class="simple">
+<li>The firewall on the host might be blocking outbound
+connections - check your firewall. Also, you can use
+tools such as Wireshark or
+<a class="reference external" href="http://www.telerik.com/fiddler">Fiddler</a> to capture HTTP
+traffic on your computer and confirm that EC is sending
+requests to the GEE Server.</li>
+<li>The firewall on the GEE Server might be blocking inbound
+connections from external hosts on port 80. Check whether
+firewalls like <code class="docutils literal notranslate"><span class="pre">iptables</span></code> are enabled on the server and
+are configured with packet-filtering rules.</li>
+<li>Network or web proxies might be causing connection issues.
+Consult your network administrator.</li>
+<li>Use tools such as <code class="docutils literal notranslate"><span class="pre">ping</span></code> or <code class="docutils literal notranslate"><span class="pre">traceroute</span></code> on the client
+machine to diagnose connectivity issues.</li>
+</ul>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="conflictsInPlugins.html" title="Conflicts in plugins"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="imageryTerrainGaps.html" title="Imagery or terrain gaps"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../troubleshooting.html" >Troubleshooting and error messages</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

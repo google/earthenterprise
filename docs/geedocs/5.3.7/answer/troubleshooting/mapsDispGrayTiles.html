@@ -1,0 +1,136 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Maps display grey tiles &#8212; Google Earth Enterprise 5.3.7 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Imagery or terrain gaps" href="imageryTerrainGaps.html" />
+    <link rel="prev" title="Unsupported 3D geometry files" href="unsupported3DGeoFiles.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="imageryTerrainGaps.html" title="Imagery or terrain gaps"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="unsupported3DGeoFiles.html" title="Unsupported 3D geometry files"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../troubleshooting.html" accesskey="U">Troubleshooting and error messages</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="unsupported3DGeoFiles.html"
+                        title="previous chapter">Unsupported 3D geometry files</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="imageryTerrainGaps.html"
+                        title="next chapter">Imagery or terrain gaps</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp12.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp12.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="maps-display-grey-tiles">
+<h1>Maps display grey tiles<a class="headerlink" href="#maps-display-grey-tiles" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>Publishing issues (such as 2D browser-based maps that display grey
+tiles or no imagery) can indicate a hostname error. For example,
+accidentally setting the hostname to <code class="docutils literal notranslate"><span class="pre">localhost.localdomain</span></code>
+instead of <code class="docutils literal notranslate"><span class="pre">myserver.com</span></code>.</p>
+<p>To verify the hostname:</p>
+<p>Query the Fusion 2D map configuration directly from the web
+browser:</p>
+<p><code class="docutils literal notranslate"><span class="pre">http://myserver.com/mymaps/query?request=LayerDefs</span></code></p>
+<p>A response that includes a line like the example below indicates
+that GEE is directing users to your local host instead of the
+publishing server.</p>
+<p><code class="docutils literal notranslate"><span class="pre">var</span> <span class="pre">stream_url</span> <span class="pre">=</span> <span class="pre">&quot;http://localhost.localdomain/default_map&quot;;</span></code></p>
+<p>To correct the hostname:</p>
+<ol class="arabic simple">
+<li>Query <code class="docutils literal notranslate"><span class="pre">hostname</span> <span class="pre">-f</span></code> on the server, and verify that the path
+to the hostname can be resolved. (In other words, verify that
+users can access the URL.)</li>
+<li>To correct the hostname for all assets on your server, run
+<code class="docutils literal notranslate"><span class="pre">geconfigureassetroot</span> <span class="pre">--fixmasterhost</span></code>.</li>
+<li>Republish the database to the virtual server.</li>
+<li>Verify that the URL displays the map correctly.</li>
+</ol>
+<p>If the URL does not display your map at all, run
+<code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--publisheddbs</span></code> on your Fusion machine to verify
+that you published the database to the correct virtual server. If
+you don’t see <code class="docutils literal notranslate"><span class="pre">http://myserver.com/mymaps</span></code> listed with the
+database you want to publish, then republish the database.</p>
+<p>To further diagnose the issue, review the
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/logs/error_log</span></code> or run the
+<a class="reference internal" href="fusionDiagnostics.html"><span class="doc">geecheck</span></a> script.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="imageryTerrainGaps.html" title="Imagery or terrain gaps"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="unsupported3DGeoFiles.html" title="Unsupported 3D geometry files"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../troubleshooting.html" >Troubleshooting and error messages</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

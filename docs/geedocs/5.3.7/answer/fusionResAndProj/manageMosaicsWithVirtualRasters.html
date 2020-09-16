@@ -1,0 +1,321 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Manage mosaics with virtual rasters &#8212; Google Earth Enterprise 5.3.7 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Map projection types in GEE 5.1.0" href="mapProjectTypesInGEE5.1.0.html" />
+    <link rel="prev" title="Create custom masks" href="createCustomMasks.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="mapProjectTypesInGEE5.1.0.html" title="Map projection types in GEE 5.1.0"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="createCustomMasks.html" title="Create custom masks"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" accesskey="U">Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="createCustomMasks.html"
+                        title="previous chapter">Create custom masks</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="mapProjectTypesInGEE5.1.0.html"
+                        title="next chapter">Map projection types in GEE 5.1.0</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp2.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp2.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="manage-mosaics-with-virtual-rasters">
+<h1>Manage mosaics with virtual rasters<a class="headerlink" href="#manage-mosaics-with-virtual-rasters" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>When you have large datasets of imagery or terrain resources,
+importing them into Fusion can be inefficient and lead to gaps
+between data tiles. GEE provides a tool, <code class="docutils literal notranslate"><span class="pre">gevirtualraster</span></code>,
+which is ideal for grouping blocks (or subsets) of contiguous
+imagery or terrain and creating a <em>virtual mosaic</em> from them.</p>
+<p>In the following example, this SRTM 90meter terrain dataset has
+over 14,476 source files.</p>
+<p><img alt="Virtual raster mosaic example" src="../../images/virtual_raster_mosaic_example.png" /></p>
+<p>This example of a large set of terrain data presents three
+potential ways to import all large datasets of source files:</p>
+<ul class="simple">
+<li>Create one resource for all source .tif tiles. This data
+processing is inefficient as Fusion must fill all missing data
+between source terrain tiles (oceans).</li>
+<li>Create one terrain resource per .tif file (14,476 in total).
+This data processing is inefficient and introduces feather gaps
+between terrain resources due to no overlap between source
+files.</li>
+<li>Group the 14,476 files into virtual mosaics enabling you to
+select which files are grouped into mosaics.</li>
+</ul>
+<p>The most efficient method of grouping tiles into virtual mosaics
+is to use <code class="docutils literal notranslate"><span class="pre">gevirtualraster</span></code>, a command line tool that lets you
+access the tile groups directly, making your mosaic management
+very flexible. <code class="docutils literal notranslate"><span class="pre">Gevirtualraster</span></code> validates that each source file
+has geographic coordinates and that all files are consistent
+projections, number of bands, and band formats.</p>
+<p class="rubric">Overview</p>
+<p>A <em>virtual mosaic</em> or virtual raster file is a simple text file
+that describes a mosaic of peer raster files with the following
+elements:</p>
+<ul class="simple">
+<li>Projection parameters (all peers with same projection)</li>
+<li>Coordinate location of the overall raster (sum of parts)</li>
+<li>Pixel dimensions</li>
+<li>Band count and format (3 x 8 bit vs. 1 x 8 bit)</li>
+<li>File path of all included source files</li>
+</ul>
+<p>Fusion can display the virtual raster file in <strong>Preview</strong> for
+simple visualization.</p>
+<p>Fusion can also use the virtual raster file as source.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">Gevirtualraster</span></code> is necessary if you are creating
+a custom mask file for the imagery or terrain resource as there
+is a software requirement of one source file for one custom
+mask file. See <a class="reference internal" href="createCustomMasks.html"><span class="doc">Create custom masks</span></a>.</p>
+</div>
+<p class="rubric">Example Usage</p>
+<p>This end-to-end example uses <code class="docutils literal notranslate"><span class="pre">gevirtualraster</span></code> to create a new
+Fusion resource from a set of 800+ contiguous imagery resources
+(jpeg2000) with consistent pixel size, projection, etc.</p>
+<ol class="arabic">
+<li><p class="first">List the jpeg2000 files that are to be used for the virtual
+mosaic:</p>
+<p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">ls</span> <span class="pre">-l</span> <span class="pre">*.tif</span> <span class="pre">|</span> <span class="pre">wc</span> <span class="pre">-l</span></code></p>
+<p>863</p>
+</li>
+<li><p class="first">Create a virtual raster file, specifiying the fill value to be
+used for the mosaic (<code class="docutils literal notranslate"><span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0</span> <span class="pre">=</span> <span class="pre">black</span></code>), the name of the file to
+be generated (<code class="docutils literal notranslate"><span class="pre">my_virtualmosaic_20140624_1.khvr</span></code>), and include
+all of the <code class="docutils literal notranslate"><span class="pre">.tif</span></code> files in the current folder as input.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ gevirtualraster --fill 0,0,0 --tolerance 3 -o my_virtualmosaic_20140624_1.khvr *.tif
+</pre></div>
+</div>
+</li>
+<li><p class="first">Import the virtual raster imagery file into Fusion, specifying the
+resource type, the virtual raster file to import and the output
+resource file, <code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">my_virtualmosaic_20140624.kip</span></code>.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ gerasterimport --imagery my_virtualmosaic_20140624_1.khvr -o my_virtualmosaic_20140624.kip
+</pre></div>
+</div>
+</li>
+<li><p class="first">Create a mask for the imagery resource, specifying band, fill,
+tolerance and feather values, the imagery resource file and
+the name of the mask created.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ gemaskgen --mask --band 1 --fill 0 --tolerance 3 --feather 100
+  my_virtualmosaic_20140624_1.kip my_virtualmosaic_20140624_1-mask.tif
+</pre></div>
+</div>
+</li>
+<li><p class="first">Import the generated alpha mask, creating a <code class="docutils literal notranslate"><span class="pre">.kmp</span></code> folder.
+Corresponding <code class="docutils literal notranslate"><span class="pre">.kip</span></code> and <code class="docutils literal notranslate"><span class="pre">.kmp</span></code> folders should be stored in
+the same directory.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ gerasterimport --alphamask my_virtualmosaic_20140624_1-mask.tif --imagery
+  my_virtualmosaic_20140624_1.kip --output my_virtualmosaic_20140624_1.kmp
+</pre></div>
+</div>
+</li>
+<li><p class="first">Define a new imagery resource.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ genewimageryresource -o Resources/Imagery/candid_my_virtualmosaic_20140624_1
+  /gevol/src/candid/my_virtualmosaic_20140624_1/my_virtualmosaic_20140624_1.kip
+</pre></div>
+</div>
+</li>
+<li><p class="first">Build the new imagery resource.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ gebuild Resources/Imagery/candid_my_virtualmosaic_20140624_1
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">For more information about using virtual mosaics, see <a class="reference internal" href="../fusionTutorial/createImageryMosaic.html"><span class="doc">Create
+virtual mosaics</span></a>.</p>
+</div>
+<p class="rubric">Creating a virtual raster from a file list</p>
+<p>You can create a virtual raster of all source files stored in a
+test file using the <code class="docutils literal notranslate"><span class="pre">gevirtualraster</span> <span class="pre">--filelist</span></code> option:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ gevirtualraster --fill 0,0,0 -o /gevol/src/imagery/example/example-mosaic-list.khvr
+  --filelist /gevol/src/imagery/example/source-files.txt
+</pre></div>
+</div>
+<p>The file list must include one column of file names and the full
+path of each source file must be included in the file list.</p>
+<p class="rubric">gevirtualraster command line options</p>
+<p>Various options are available to facilitate the creation of
+virtual raster files, including specifying the band values to be
+used as fill, tolerance values for the fill, and a file list of
+the source imagery or terrain files.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ gevirtualraster [--crop pixelx,pixely,pixelx,pixelh] [--fill a,b,...] [--src override_srs]
+  [--tolerance num] [--validate] -o output.khvr {sourcefile ... | --filelist file}
+</pre></div>
+</div>
+<p class="rubric" id="example">Example</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ gevirtualraster --fill 0,0,0 -o /gevol/src/imagery/usa/XX/new_location/all_files.khvr
+  /gevol/src/imagery/usa/XX/new_location/*.tif
+</pre></div>
+</div>
+<p class="rubric" id="parameters">Parameters</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">--crop</span> <span class="pre">pixelx,pixely,pixelx,pixelh</span></code></td>
+<td><em>Optional</em>. Crop the image to the specified pixel extents.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--fill</span> <span class="pre">a,b,...</span></code></td>
+<td><em>Optional</em>. Specify band values to use as fill.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">--src</span> <span class="pre">override_srs</span></code></td>
+<td><em>Optional</em>. Specify the SRS.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--tolerance</span> <span class="pre">num</span></code></td>
+<td><em>Optional</em>. Specify the tolerance to be applied to the fill. The default is 0.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">--validate</span></code></td>
+<td><em>Optional</em>. Validate the inputs and exit.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">-o</span> <span class="pre">output.khvr</span></code></td>
+<td><em>Required</em>. Specify the name of the output file, which must have the <code class="docutils literal notranslate"><span class="pre">.khvr</span></code> extension.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">sourcefile</span></code></td>
+<td><em>Required</em>. Specify the path and file name of the source file for the resource. You can
+reference any network-available source file as this value. (Optional if you specify <code class="docutils literal notranslate"><span class="pre">--filelist</span></code> file.)</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--filelist</span> <span class="pre">file</span></code></td>
+<td><em>Optional</em>. Specify the path and file name of a file that contains a list of source files that you
+want to include in the resource. You can use this option, list files individually, or use a combination of the two.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Splitting large virtual raster mosaics</p>
+<p>If you create larger virtual raster mosaics, you may want to split
+them into smaller subsets. You can use the <code class="docutils literal notranslate"><span class="pre">gesplitkhvr</span></code> command
+line tool to automatically split large <code class="docutils literal notranslate"><span class="pre">.khvr</span></code> mosaics into
+subsets by specifying the number of rows and columns.</p>
+<p><code class="docutils literal notranslate"><span class="pre">gesplitkhvr</span> <span class="pre">[--rows</span> <span class="pre">num]</span> <span class="pre">[--cols</span> <span class="pre">num]</span> <span class="pre">[--overlap</span> <span class="pre">num]</span> <span class="pre">[--quiet]</span> <span class="pre">input.khvr</span></code></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">gesplitkhvr</span></code> command creates two or more source files from
+a large imagery or terrain source file to reduce the size of each
+source file to under 80 GB in raw size. (Raw size = number of
+pixels width * number of pixels height * 3.) This tool produces
+a grid of image files designated as rows and columns.</p>
+<p class="rubric" id="example-1">Example</p>
+<p><code class="docutils literal notranslate"><span class="pre">gesplitkhvr</span> <span class="pre">--rows</span> <span class="pre">4</span> <span class="pre">--cols</span> <span class="pre">4</span> <span class="pre">--overlap</span> <span class="pre">10</span> <span class="pre">image_file.khvr</span></code></p>
+<p class="rubric">Parameters</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">--rows</span> <span class="pre">num</span></code></td>
+<td><em>Required</em>. Specify the number of resulting image files across.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--cols</span> <span class="pre">num</span></code></td>
+<td><em>Required</em>. Specify the number of resulting image files high.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">--overlap</span> <span class="pre">num</span></code></td>
+<td><em>Optional</em>. Specify the number of pixels of overlap between the resulting images. The default is 300.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">--quiet</span></code></td>
+<td><em>Optional</em>. Do not display the progress messages in the terminal window.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">input.khvr</span></code></td>
+<td><em>Required</em>. Specify the name of the input file. It must be a <code class="docutils literal notranslate"><span class="pre">.khvr</span></code> file.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Learn more</p>
+<p><a class="reference internal" href="../fusionTutorial/createImageryMosaic.html"><span class="doc">Create virtual mosaics</span></a>
+<a class="reference internal" href="../fusionTutorial/segmentLargeImageryFiles.html"><span class="doc">Segmenting Large Imagery Files</span></a>
+<a class="reference internal" href="createCustomMasks.html"><span class="doc">Create custom masks</span></a></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="mapProjectTypesInGEE5.1.0.html" title="Map projection types in GEE 5.1.0"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="createCustomMasks.html" title="Create custom masks"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" >Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,172 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Installation tips &#8212; Google Earth Enterprise 5.3.7 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Fusion Tutorial" href="../fusionTutorial.html" />
+    <link rel="prev" title="Download documentation for GEE 5.x" href="download.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../fusionTutorial.html" title="Fusion Tutorial"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="download.html" title="Download documentation for GEE 5.x"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../getStarted.html" accesskey="U">Get Started</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="download.html"
+                        title="previous chapter">Download documentation for GEE 5.x</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../fusionTutorial.html"
+                        title="next chapter">Fusion Tutorial</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp6.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp6.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="installation-tips">
+<h1>Installation tips<a class="headerlink" href="#installation-tips" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p class="rubric" id="before-installation">Before installation</p>
+<ul class="simple">
+<li>With your development team, plan where you will place your
+asset root and publish root.</li>
+<li>Make sure you have enough disk space in your resource locations
+to build and publish your databases.</li>
+<li>Do not use a portable USB disk for the asset root or publish
+root because they are prone to I/O errors when reading or
+writing to the drive.</li>
+<li>Disable any auxiliary security, such as sudo blocks or sticky
+bits, before you install and use GEE.</li>
+<li>To install and administer GEE, log in as root or create a
+profile with root-level privileges.</li>
+<li>Create a user-level profile for using Fusion and publishing to
+the GEE Server.</li>
+</ul>
+<p class="rubric" id="during-installation">During installation</p>
+<ul class="simple">
+<li>Make sure that you run both the Fusion and GEE Server
+installers, and that both are at the same version number.</li>
+<li>When prompted during installation, choose <strong>Upgrade your asset
+root</strong>. This ensures that the resources will work with the
+version you are installing.</li>
+<li>The GEE Server installer allows you to customize users and
+groups. Most use cases do not require user and group
+customizations – for your initial installation, use the
+default settings.</li>
+</ul>
+<p class="rubric" id="after-installation">After installation</p>
+<ul class="simple">
+<li>After installing, switch over to your user profile; i.e.,
+<code class="docutils literal notranslate"><span class="pre">geeuser</span></code>. Publishing or building resources under
+the root profile can create various permissions issues that
+will cause further issues later.</li>
+<li>Go to <code class="docutils literal notranslate"><span class="pre">/opt/google/share/support</span></code>, copy the <code class="docutils literal notranslate"><span class="pre">GEEcheck</span></code> folder
+to your system’s <code class="docutils literal notranslate"><span class="pre">/tmp/</span></code> folder, and then run the <code class="docutils literal notranslate"><span class="pre">GEEcheck</span></code>
+diagnostic script on your system. Review the output <code class="docutils literal notranslate"><span class="pre">.txt</span></code>
+file for any post-install errors.</li>
+<li>Do not modify the <code class="docutils literal notranslate"><span class="pre">default_ge</span></code>, <code class="docutils literal notranslate"><span class="pre">default_map</span></code>, or
+<code class="docutils literal notranslate"><span class="pre">default_search</span></code> stream servers. If you need to change a
+configuration for a virtual server, create a new one from the
+example files at <code class="docutils literal notranslate"><span class="pre">/opt/google/share/gehttp/examples</span></code>.</li>
+<li>Complete the GEE tutorial and create the sample database for
+testing. It is fast to create, process, publish, and modify. If
+you plan to enable authentication on your installation, first
+make sure that everything is installed correctly by using the
+tutorial database. After you have verified the functionality of
+the entire suite (Fusion, GEE Server, and client) using the
+tutorial settings, enabling authentication should go smoothly.</li>
+<li>GEE Server is designed to have direct communications to the
+client. DNS must be configured correctly for it to send data
+and receive requests. If you are using a DNS configuration that
+entails an Internal/External designation for the same GEE
+machine, test with the internal configuration to ensure all
+aspects are functioning correctly, and then add external
+addressing settings.</li>
+<li>If you have chosen to automatically start daemons after
+installation, you should see the services starting up and
+you will be returned to the command prompt. If there is an error,
+contact GEE Support.</li>
+</ul>
+<p class="rubric" id="learn-more-i">Learn more</p>
+<ul class="simple">
+<li><a class="reference internal" href="../installGEE/installOverviewGEE.html"><span class="doc">Install Google Earth Enterprise</span></a></li>
+<li><a class="reference internal" href="../installGEE/wikiGEE.html"><span class="doc">Open GEE Wiki</span></a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../fusionTutorial.html" title="Fusion Tutorial"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="download.html" title="Download documentation for GEE 5.x"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../getStarted.html" >Get Started</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

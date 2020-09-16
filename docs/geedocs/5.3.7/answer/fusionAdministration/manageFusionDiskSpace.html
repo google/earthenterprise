@@ -1,0 +1,276 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Manage Fusion disk space &#8212; Google Earth Enterprise 5.3.7 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Relocate your asset root" href="relocateAssetRoot.html" />
+    <link rel="prev" title="Back up Fusion servers" href="backupFusionServers.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="relocateAssetRoot.html" title="Relocate your asset root"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="backupFusionServers.html" title="Back up Fusion servers"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" accesskey="U">Fusion Administration</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="backupFusionServers.html"
+                        title="previous chapter">Back up Fusion servers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="relocateAssetRoot.html"
+                        title="next chapter">Relocate your asset root</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="manage-fusion-disk-space">
+<h1>Manage Fusion disk space<a class="headerlink" href="#manage-fusion-disk-space" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>Fusion writes all assets, projects, and databases to the asset
+root directory (typically named <code class="docutils literal notranslate"><span class="pre">/gevol/assets</span></code>). As a result,
+the asset root can fill up quickly.</p>
+<p>You can put source data, such as raw images, in a different
+directory like <code class="docutils literal notranslate"><span class="pre">/gevol/src</span></code>, but the asset root can still fill
+up from processing source files. Cleaning assets, projects, and
+databases helps reduce the disk use in the asset root, but
+eventually the volume will fill up completely.</p>
+<p>A good way to create free space in your asset root is to move your
+pyramid files to auxiliary storage. When you create and build a
+new imagery asset, pyramid (<code class="docutils literal notranslate"><span class="pre">.pyr</span></code>) files are also created, and
+are saved to the <code class="docutils literal notranslate"><span class="pre">raster.kip</span></code> and <code class="docutils literal notranslate"><span class="pre">mask.kmp</span></code> directories.
+Google delivers most of its data to customers in pyramid format.
+The pyramid files must always be available to the Fusion server,
+but after they are built, they do not change size. That makes them
+good candidates for moving to a separate storage location.</p>
+<p>The result of moving the <code class="docutils literal notranslate"><span class="pre">.pyr</span></code> files is an asset that stores
+configuration files in the asset root and large pyramid files in
+auxiliary storage. Besides creating space in your asset root,
+there are other advantages to moving your pyramid files:</p>
+<ul class="simple">
+<li>You can share assets across Fusion installations, or copy
+assets from one system to another.</li>
+<li>You can create assets on stand-alone computers and copy them to
+the grid later.</li>
+<li>You can manage disk space more easily. Because pyramid files do
+not grow or shrink, you can keep filling a volume with the
+pyramid files until it is full, then add another volume.</li>
+<li>You can store metadata (like the security level, the date the
+source file was acquired, the bounding box, the resolution, the
+sensor type, and any other relevant data) with each pyramid
+directory. If you want to use the metadata in a new imagery
+project, it is more easily accessible than if it is buried in
+the asset tree.</li>
+</ul>
+<p class="rubric">Moving pyramid files</p>
+<p>There are a few different ways to move pyramid files out of an
+asset root that is filling up:</p>
+<ul>
+<li><p class="first">Move files out of the asset root and create symbolic links to
+the files. To do this, copy the entire <code class="docutils literal notranslate"><span class="pre">raster.kip</span></code>
+directory to a different location and then symbolically link
+<code class="docutils literal notranslate"><span class="pre">raster.kip</span></code> to the new location with the <code class="docutils literal notranslate"><span class="pre">ln</span> <span class="pre">-s</span></code>
+command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ln -s /path/to/new/raster.kip
+</pre></div>
+</div>
+<p>This option is expedient and can provide significant short-term
+relief to a full asset root. However, extensive use of symbolic
+links can increase the potential risk of Fusion or publish
+errors, and is not good administrative practice.</p>
+</li>
+<li><p class="first">Set up KRP and KRMP <a class="reference internal" href="confTaskRulesForFusionPerf.html#configure-task-rules"><span class="std std-ref">task rules</span></a> to
+direct Fusion to write the pyramid files to a different storage
+location instead of to the asset root.</p>
+</li>
+<li><p class="first">Copy the pyramid files from the asset root and to other
+storage, then recreate the asset. See the instructions below.</p>
+</li>
+</ul>
+<p class="rubric">To copy the pyramid files and recreate the asset:</p>
+<p>After the <code class="docutils literal notranslate"><span class="pre">raster.kip</span></code> and <code class="docutils literal notranslate"><span class="pre">mask.kmp</span></code> directories are created
+and the asset is finished building, all of the information needed
+to copy and reuse the asset is inside these two directories.
+There are other files in the asset directory, but they are
+auxiliary and not needed. The basic strategy for managing disk
+space is:</p>
+<ol class="arabic">
+<li><p class="first">Locate the asset to be moved. It will be in a directory with a
+<code class="docutils literal notranslate"><span class="pre">.kiasset</span></code> extension.</p>
+</li>
+<li><p class="first">Locate the <code class="docutils literal notranslate"><span class="pre">raster.kip</span></code> and the <code class="docutils literal notranslate"><span class="pre">mask.kmp</span></code> directories
+under the asset directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>find <span class="nv">$asset</span>.kiasset -type d -name raster.kip
+find <span class="nv">$asset</span>.kiasset -type d -name mask.kmp
+</pre></div>
+</div>
+</li>
+<li><p class="first">Copy the <code class="docutils literal notranslate"><span class="pre">raster.kip</span></code> and <code class="docutils literal notranslate"><span class="pre">mask.kmp</span></code> directories to the
+auxiliary storage volume:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp -av <span class="nv">$kip</span> <span class="nv">$new_location</span>/<span class="nv">$asset</span>.kip
+cp -av <span class="nv">$kmp</span> <span class="nv">$new_location</span>/<span class="nv">$asset</span>.kmp
+</pre></div>
+</div>
+<p><strong>Note</strong>: The auxiliary storage volume must be a defined Fusion
+volume. You can define the new volume with the
+<code class="docutils literal notranslate"><span class="pre">geconfigurefusionvolume</span></code> command. Volumes are presented to
+the server as NFS file systems, and those cannot be nested. For
+example, NFS does not allow <code class="docutils literal notranslate"><span class="pre">Volume1</span></code> and <code class="docutils literal notranslate"><span class="pre">Volume2</span></code> to be
+mounted as <code class="docutils literal notranslate"><span class="pre">/Volume1/Volume2</span></code>.</p>
+</li>
+<li><p class="first">Rename the <code class="docutils literal notranslate"><span class="pre">raster.kip</span></code> and <code class="docutils literal notranslate"><span class="pre">mask.kmp</span></code> files so that they
+have the same name. The name should be descriptive of the
+asset. For example, if the asset is <code class="docutils literal notranslate"><span class="pre">EastChicago.kiasset</span></code>,
+the directories should be called <code class="docutils literal notranslate"><span class="pre">EastChicago.kip</span></code> and
+<code class="docutils literal notranslate"><span class="pre">EastChicago.kmp</span></code>.</p>
+</li>
+<li><p class="first">Modify the imagery asset with the <code class="docutils literal notranslate"><span class="pre">gemodifyimageryasset</span></code>
+command, using the same name that the asset was originally
+created with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gemodifyimageryasset -o imagery/EastChicago -havemask /gevol/newvolume/imagery/EastChicago.kip
+</pre></div>
+</div>
+<p>For more details about the commands to recreate the assets,
+see <em>Importing Preprocessed Resources</em> in the Google Earth
+Enterprise Reference Guide.</p>
+</li>
+<li><p class="first">Rebuild the imagery project and any database that contains the
+imagery project:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gebuild imagery/EastChicago
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">gemodifyimageryasset</span></code> and <code class="docutils literal notranslate"><span class="pre">gebuild</span></code> commands will
+complete in seconds, because the heavy processing took place
+when the pyramid files were generated.</p>
+</li>
+<li><p class="first">Clean the imagery projects and databases using the Fusion UI:</p>
+<ol class="loweralpha simple">
+<li>From the <strong>Asset Manager</strong>, right-click the project or
+database and select <strong>Asset Versions</strong>.</li>
+<li>Right-click the previous version and select <strong>Clean</strong>.
+Cleaning the project and database also cleans all the
+assets, removing the pyramid files from the asset root and
+freeing up quite a bit of space.</li>
+<li>Verify that each of the assets that were modified were
+cleaned, and that the pyramid files were removed from the
+asset root.</li>
+</ol>
+</li>
+</ol>
+<p><strong>Note</strong>: The asset expects the pyramid files to remain in the
+same location you specified in the <code class="docutils literal notranslate"><span class="pre">gemodifyimageryasset</span></code>
+command. Do not move the pyramid files to a new location after
+you have copied them and then modified, built, and cleaned the
+asset.</p>
+<p class="rubric" id="example-script">Example script</p>
+<p>The example below copies all the pyramid files from
+<code class="docutils literal notranslate"><span class="pre">/gevol/assets/imagery</span></code> to <code class="docutils literal notranslate"><span class="pre">/gevol/volume1</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># The commands are echoed to the terminal so you can review them before executing.</span>
+<span class="c1"># To enable the commands, uncomment the following line:</span>
+<span class="c1"># do_command=true</span>
+
+<span class="nv">asset_root</span><span class="o">=</span>/gevol/assets
+<span class="nv">asset_directory</span><span class="o">=</span>Resources/Imagery
+<span class="nv">new_location</span><span class="o">=</span>/gevol/volume1
+
+<span class="nb">cd</span> <span class="nv">$asset_root</span>/<span class="nv">$asset_directory</span>
+<span class="k">for</span> asset in <span class="sb">`</span>ls <span class="p">|</span> grep kiasset <span class="p">|</span> sed <span class="s1">&#39;s/\.kiasset//&#39;</span><span class="sb">`</span>
+<span class="k">do</span>
+   <span class="c1"># Find the raster.kip and mask.kmp under the asset directory</span>
+   <span class="nv">kip</span><span class="o">=</span><span class="sb">`</span>find <span class="nv">$asset</span>.kiasset -type d -name raster.kip<span class="sb">`</span>
+   <span class="nv">kmp</span><span class="o">=</span><span class="sb">`</span>find <span class="nv">$asset</span>.kiasset -type d -name mask.kmp<span class="sb">`</span>
+
+   <span class="c1"># Copy the raster and mask directories to the new volume</span>
+   <span class="nb">echo</span> <span class="s2">&quot;cp -av </span><span class="nv">$kip</span><span class="s2"> </span><span class="nv">$new_location</span><span class="s2">/</span><span class="nv">$asset</span><span class="s2">.kip&quot;</span>
+   <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="nv">$do_command</span><span class="s2">&quot;</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span> cp -av <span class="nv">$kip</span> <span class="nv">$new_location</span>/<span class="nv">$asset</span>.kip<span class="p">;</span> <span class="k">fi</span>
+   <span class="nb">echo</span> <span class="s2">&quot;cp -av </span><span class="nv">$kmp</span><span class="s2"> </span><span class="nv">$new_location</span><span class="s2">/</span><span class="nv">$asset</span><span class="s2">.kmp&quot;</span>
+   <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="nv">$do_command</span><span class="s2">&quot;</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span> cp -av <span class="nv">$kmp</span> <span class="nv">$new_location</span>/<span class="nv">$asset</span>.kmp<span class="p">;</span> <span class="k">fi</span>
+
+   <span class="c1"># modify and build each of the imagery assets</span>
+   <span class="nb">echo</span> <span class="s2">&quot;gemodifyimageryresource --havemask -o </span><span class="nv">$asset_directory</span><span class="s2">/</span><span class="nv">$asset</span><span class="s2"> </span><span class="nv">$new_location</span><span class="s2">/</span><span class="nv">$asset</span><span class="s2">.kip&quot;</span>
+   <span class="c1">#if [ &quot;$do_command&quot; == &quot;true&quot; ]; then gemodifyimageryresource --havemask -o $asset_directory/$asset $new_location/$asset.kip; fi</span>
+   <span class="nb">echo</span> <span class="s2">&quot;gebuild </span><span class="nv">$asset_directory</span><span class="s2">/</span><span class="nv">$asset</span><span class="s2">&quot;</span>
+   <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="nv">$do_command</span><span class="s2">&quot;</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span> gebuild <span class="nv">$asset_directory</span>/<span class="nv">$asset</span><span class="p">;</span> <span class="k">fi</span>
+<span class="k">done</span>
+
+<span class="c1"># Rebuild, then clean the imagery project and the database,</span>
+<span class="c1"># then verify that all the assets were cleaned.</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="relocateAssetRoot.html" title="Relocate your asset root"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="backupFusionServers.html" title="Back up Fusion servers"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" >Fusion Administration</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

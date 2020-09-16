@@ -1,0 +1,171 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Custom folders &#8212; Google Earth Enterprise 5.3.7 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Cutter tool system information" href="cutterToolSysInfo.html" />
+    <link rel="prev" title="Inspecting portable files" href="inspectPortableFiles.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="cutterToolSysInfo.html" title="Cutter tool system information"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="inspectPortableFiles.html" title="Inspecting portable files"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../portable.html" accesskey="U">Portable</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="inspectPortableFiles.html"
+                        title="previous chapter">Inspecting portable files</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="cutterToolSysInfo.html"
+                        title="next chapter">Cutter tool system information</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp10.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp10.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="custom-folders">
+<h1>Custom folders<a class="headerlink" href="#custom-folders" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>By default, GEE Portable stores cut globes in the Apache Document
+root of the GEE Server at
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/cutter/globes</span></code>. However, you can
+move the portable globes folder to a custom location. You might
+want to do this, for example, if this path is within a volume with
+limited storage space and you have space available in a separate
+volume.</p>
+<p class="rubric">Before you begin</p>
+<ul class="simple">
+<li>Install and configure GEE Server on the machine that will
+support users who create portable globes.</li>
+<li>Identify the path to your globes folder. This can be the same
+mount point for external storage of source data or the GEE
+Server Publish Root.</li>
+<li>Gain access to an account with root-level privileges.</li>
+</ul>
+<p class="rubric">To create a custom globes folder:</p>
+<ol class="arabic">
+<li><p class="first">Make sure that no globe cutting operations are in progress.
+Creating a custom folder makes modifications directly to the
+folder where portable globes are hosted and can interfere with
+any ongoing globe cutting operations.</p>
+</li>
+<li><p class="first">Stop the GEE Server service:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo /etc/init.d/geserver stop
+</pre></div>
+</div>
+</li>
+<li><p class="first">Use either of the methods below to set up your custom folder:</p>
+<ul>
+<li><p class="first">Create a new folder:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir /gevol/src/globes
+</pre></div>
+</div>
+</li>
+<li><p class="first">Move the original folder to a storage volume:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mv /opt/google/gehttpd/htdocs/cutter/globes /gevol/src/globes
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p class="first">Create a symbolic link from the custom folder to the original
+folder location:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ln -sf /gevol/src/globes /opt/google/gehttpd/htdocs/cutter/globes
+</pre></div>
+</div>
+</li>
+<li><p class="first">Change ownership of the custom folder to
+<code class="docutils literal notranslate"><span class="pre">geapacheuser:gegroup</span></code> and change permissions to 755
+(rwxr-wr-w):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chown -R geapacheuser:gegroup /gevol/src/globes
+chmod -R <span class="m">755</span> /gevol/src/globes
+</pre></div>
+</div>
+</li>
+<li><p class="first">Start the GEE Server service.</p>
+</li>
+<li><p class="first">To test that globe cutting works, load the GEE Globe Cutting
+web page and either create a new portable globe or test with an
+existing globe. If you have an existing globe, click <strong>List
+globes and maps directory</strong> in the GEE Globe Cutting web page
+and make sure that your globe appears there.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="cutterToolSysInfo.html" title="Cutter tool system information"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="inspectPortableFiles.html" title="Inspecting portable files"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../portable.html" >Portable</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

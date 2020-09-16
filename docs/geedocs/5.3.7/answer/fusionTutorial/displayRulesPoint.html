@@ -1,0 +1,432 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Configuring Display Rules for Point Data &#8212; Google Earth Enterprise 5.3.7 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Configuring Display Rules for Polygon Data" href="displayRulesPolygon.html" />
+    <link rel="prev" title="Pushing, Publishing, and Viewing a Database" href="pushPublishView.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="displayRulesPolygon.html" title="Configuring Display Rules for Polygon Data"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pushPublishView.html" title="Pushing, Publishing, and Viewing a Database"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionTutorial.html" accesskey="U">Fusion Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pushPublishView.html"
+                        title="previous chapter">Pushing, Publishing, and Viewing a Database</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="displayRulesPolygon.html"
+                        title="next chapter">Configuring Display Rules for Polygon Data</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp3.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp3.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="configuring-display-rules-for-point-data">
+<h1>Configuring Display Rules for Point Data<a class="headerlink" href="#configuring-display-rules-for-point-data" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>Point data can provide useful information about points of interest
+(POIs) around the globe or even in your home town. Google Earth
+Enterprise Fusion allows you to configure the display rules for
+point data to distinguish different types of information. This
+lesson guides you through the process of graphically
+distinguishing the popular places in California using display
+rules.</p>
+<ul class="simple">
+<li><a class="reference internal" href="#define-vector-product3"><span class="std std-ref">Define, Configure, and Build a Vector Project</span></a></li>
+<li><a class="reference internal" href="#define-and-build-imagery-project"><span class="std std-ref">Define and Build an Imagery Project</span></a></li>
+<li><a class="reference internal" href="#define-point-database"><span class="std std-ref">Define, Build, Push, and Publish a Database for the Point Data</span></a></li>
+<li><a class="reference internal" href="#view-database-geec-1"><span class="std std-ref">View Your Database in Google Earth EC</span></a></li>
+</ul>
+<p class="rubric" id="define-configure-and-build-a-vector-project"><span id="define-vector-product3"></span>Define, Configure, and Build a Vector Project</p>
+<p>This exercise walks you through the process of defining,
+configuring, and building a vector project using a resource you
+created in <a class="reference internal" href="buildResource.html"><span class="doc">Defining and Building Resources</span></a>.</p>
+<p class="rubric" id="to-define-and-build-a-vector-project-and-configure-display-rules-for-points">To define and build a vector project and configure
+display rules for points:</p>
+<ol class="arabic">
+<li><p class="first">Select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu.</p>
+<p>The Asset Manager appears.</p>
+</li>
+<li><p class="first">Click <img alt="Vector Project Icon" src="../../images/iconProjVector.png" /> on the toolbar. The Vector Project
+Editor appears.</p>
+</li>
+<li><p class="first">Click <img alt="New Icon" src="../../images/icon_new1.gif" />. The Open dialog appears.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Resources/Vector</span></code> folder.</p>
+</li>
+<li><p class="first">Select <strong>CA_POIs</strong> (a resource that you built in <a class="reference internal" href="buildResource.html"><span class="doc">Defining and Building Resources</span></a>), and click
+<strong>Open</strong>. The CA_POIs resource appears in the Vector Project
+Editor.</p>
+<p><img alt="CA_POIs Resource" src="../../images/pointsProjEditor-full.png" /></p>
+</li>
+<li><p class="first">Right-click <strong>CA_POIs</strong> and select <strong>Configure Display Rules</strong>
+from the context menu.
+The Display Rules dialog appears with the Feature tab in the
+foreground and the <strong>default select all</strong> rule highlighted.</p>
+</li>
+<li><p class="first">Specify the geometry characteristics of the POIs:</p>
+<ol class="loweralpha">
+<li><p class="first">For <strong>Draw Features As</strong>, select <strong>Points</strong>.</p>
+</li>
+<li><p class="first">For <strong>Simplification Method</strong>, select <strong>Representative Subset Per
+Tile</strong>.</p>
+</li>
+<li><p class="first">For <strong>Choose</strong>, accept the default, <strong>50</strong>% points.</p>
+</li>
+<li><p class="first">For <strong>Min Points</strong>, enter <strong>50</strong>.</p>
+</li>
+<li><p class="first">For <strong>Max Points</strong>, enter <strong>200</strong>.</p>
+</li>
+<li><p class="first">Check the box next to <strong>Suppress Duplicate Points</strong>.</p>
+</li>
+<li><p class="first">Under <strong>Elevation/Height</strong>, set Mode to <strong>Clamp to Ground.</strong></p>
+</li>
+<li><p class="first">On the right side of the dialog, check the box next to <strong>Draw Label</strong>.</p>
+</li>
+<li><p class="first">For <strong>Visibility</strong>, accept the default range, <strong>5</strong> through <strong>24</strong>.</p>
+</li>
+<li><p class="first">Do not make any changes under <strong>Label Properties</strong>.</p>
+<p>This area allows you to specify the content and appearance of a
+text label for each POI. However, there are so many POIs in
+California that the view in Google Earth EC would be too crowded.</p>
+</li>
+</ol>
+</li>
+<li><p class="first">Check the box next to <strong>Draw Icon</strong> and then:</p>
+<ol class="loweralpha">
+<li><p class="first">Click the icon pair. The Icons dialog appears.</p>
+<p><a class="reference internal" href="../../images/iconsDia.png"><img alt="Icons Dialog" src="../../images/iconsDia.png" style="width: 256px; height: 213px;" /></a></p>
+</li>
+<li><p class="first">Scroll down, if necessary, and select <strong>blue_star</strong>, and click
+<strong>OK</strong>.</p>
+<p>A yellow star appears next to <strong>Highlight</strong>, and a blue star
+appears next to <strong>Normal</strong>. The result of this setting is that
+Google Earth EC displays a blue star for each POI, and when you
+mouse over the star (highlight it), it turns yellow.</p>
+</li>
+<li><p class="first">For both <strong>Highlight</strong> and <strong>Normal</strong>, accept the default color, white.</p>
+</li>
+<li><p class="first">For <strong>Highlight</strong>, accept the default scale, <strong>1</strong>.</p>
+</li>
+<li><p class="first">For <strong>Normal</strong>, change the scale to <strong>0.89</strong>.</p>
+<p>The result of these settings is that when you mouse over a
+star, Google Earth EC displays the yellow (highlighted) star a
+little larger than the blue star.</p>
+</li>
+</ol>
+</li>
+<li><p class="first">In the <strong>Balloon</strong> section, select <strong>Text</strong>, and then click the empty
+text field. The Label Format dialog appears.</p>
+<ol class="loweralpha">
+<li><p class="first">Select <strong>COUNTY</strong> from the <strong>Insert Field</strong> drop-down list.</p>
+<p>«<strong>COUNTY</strong>» appears in the text box under <strong>Popup Text</strong>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You can use some basic HTML tags to format the
+Label text, if desired.</p>
+</div>
+</li>
+<li><p class="first">To the left of «<strong>COUNTY</strong>» enter <strong>&lt;b&gt;</strong>.</p>
+</li>
+<li><p class="first">To the right of «<strong>COUNTY</strong>» enter <strong>&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;</strong>.</p>
+</li>
+<li><p class="first">Press <strong>Enter</strong>. Adding this HTML code formats the name of the county
+as bold, followed by two line breaks to separate it from the text that
+follows (next step).</p>
+</li>
+</ol>
+</li>
+<li><p class="first">Select <strong>NAME</strong> from the <strong>Insert Field</strong> drop-down list.
+«<strong>NAME</strong>» appears on the next line of the text box.</p>
+<ol class="loweralpha simple">
+<li>To the right of «<strong>NAME</strong>» enter <strong>&lt;br/&gt;&lt;br/&gt;</strong>.</li>
+<li>Press <strong>Enter</strong>.</li>
+</ol>
+</li>
+<li><p class="first">On the next line, enter <strong>Latitude:</strong>, and then select
+<strong>LATITUDE</strong> from the <strong>Insert Field</strong> drop-down menu.</p>
+<ol class="loweralpha simple">
+<li>To the right of «<strong>LATITUDE</strong>» enter <strong>&lt;br/&gt;&lt;br/&gt;</strong>.</li>
+<li>Press <strong>Enter</strong>.</li>
+</ol>
+</li>
+<li><p class="first">On the next line, enter <strong>Longitude:</strong> , and then select
+<strong>LONGITUDE</strong> from the <strong>Insert Field</strong> drop-down menu.</p>
+<p><img alt="image5" src="../../images/pointsDisplayRules_LabelFormat.png" /></p>
+</li>
+<li><p class="first">Click the <strong>OK</strong> button.</p>
+</li>
+<li><p class="first">For <strong>Style</strong>, select <strong>Default</strong> from the drop-down list.</p>
+</li>
+<li><p class="first">Check the box next to <strong>Directions</strong> to include <strong>“To here”</strong> and
+<strong>“From here”</strong> links in the description balloon in Google Earth EC.</p>
+</li>
+<li><p class="first">Click the <strong>Text Color</strong> button, and select a medium blue.</p>
+</li>
+<li><p class="first">Click the <strong>Background Color</strong> button, and select a light yellow.</p>
+</li>
+<li><p class="first">Click the <strong>OK</strong> button. You return to the Vector Project Editor.</p>
+</li>
+<li><p class="first">Select <strong>File &gt; Save</strong>. The Save dialog appears.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Vector</span></code>folder.</p>
+</li>
+<li><p class="first">Enter <strong>CA_POIs</strong> as the name of your project, and click <strong>Save</strong>.</p>
+<p>The new project appears in the Asset Manager when you select
+<strong>ASSET_ROOT/Projects/Vector</strong> in the asset navigation tree.</p>
+</li>
+<li><p class="first">Right-click <strong>CA_POIs</strong>, and select <strong>Build</strong> from the context
+menu. Google Earth Enterprise Fusion builds the project.</p>
+</li>
+</ol>
+<p class="rubric" id="define-and-build-an-imagery-project"><span id="define-and-build-imagery-project"></span>Define and Build an Imagery Project</p>
+<p>Although you can build and publish a database that includes a
+vector project only, you cannot connect directly to your server
+with Google Earth EC to view that data unless your database also
+includes an imagery project. If you publish a database that
+includes a vector project only, you must use the <strong>Add Database</strong>
+command on the <strong>File</strong> menu in Google Earth EC to add the database to
+the base imagery after logging in to <code class="docutils literal notranslate"><span class="pre">kh.google.com</span></code> or
+another server that serves a database that includes imagery.</p>
+<p>This exercise walks you through the process of defining and
+building an imagery project using a resource you created in
+<a class="reference internal" href="buildResource.html"><span class="doc">Defining and Building Resources</span></a>.
+Since the focus of this lesson is on polygon display rules, it is
+not desirable to spend a lot of time building a large imagery
+project. So this exercise walks you through creating a small and
+simple imagery project.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you have already completed this exercise in
+<a class="reference internal" href="displayRulesPolygon.html"><span class="doc">Configuring Display Rules for Polygon Data</span></a>, skip this exercise and move
+on to <a class="reference internal" href="#define-point-database"><span class="std std-ref">Define, Build, Push, and Publish a Database for the
+Point Data</span></a>.</p>
+</div>
+<p class="rubric" id="to-define-and-build-an-imagery-project">To define and build an imagery project:</p>
+<ol class="arabic">
+<li><p class="first">In the Asset Manager, click <img alt="Imagery Project Icon" src="../../images/iconProjImagery.png" /> on the
+toolbar. The Imagery Project Editor appears.</p>
+<p><a class="reference internal" href="../../images/imageryProjEditor.png"><img alt="Imagery Project Editor" src="../../images/imageryProjEditor.png" style="width: 450px; height: 461px;" /></a></p>
+</li>
+<li><p class="first">Click <img alt="New Icon" src="../../images/icon_new1.gif" />.</p>
+<p>The Open dialog appears.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Resources/Imagery</span></code> folder.</p>
+</li>
+<li><div class="first line-block">
+<div class="line">Select <strong>BlueMarble</strong>, and click <strong>Open</strong>.</div>
+</div>
+<p>The BlueMarble resource appears in the Imagery Project Editor.</p>
+</li>
+<li><p class="first">Select <strong>File &gt; Save</strong>.</p>
+<p>The Save dialog appears.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Imagery</span></code> folder.</p>
+</li>
+<li><p class="first">Enter <strong>BlueMarble</strong> as the name of your project, and click
+<strong>Save</strong>.</p>
+<p>The new project appears in the Asset Manager when you select
+<strong>ASSET_ROOT/Projects/Imagery</strong> in the asset navigation tree.</p>
+</li>
+<li><p class="first">Right-click <strong>BlueMarble</strong>, and select <strong>Build</strong> from the
+context menu.</p>
+<p>Google Earth Enterprise Fusion builds the project.</p>
+</li>
+</ol>
+<p class="rubric" id="define-build-push-and-publish-a-database-for-the-point-data"><span id="define-point-database"></span>Define, Build, Push, and Publish a Database for the
+Point Data</p>
+<p>This exercise walks you through the process of defining, building,
+pushing, and publishing a database using the projects you created
+in the previous exercise.</p>
+<p class="rubric" id="to-define-build-and-push-a-database">To define, build, and push a database:</p>
+<ol class="arabic">
+<li><p class="first">Click <img alt="Database Icon" src="../../images/iconDatabase.png" /> on the toolbar. The Database Editor
+appears with no projects selected.</p>
+</li>
+<li><p class="first">Click <img alt="New Icon" src="../../images/icon_new1.gif" /> next to Vector Project. The Open dialog
+appears.</p>
+</li>
+<li><p class="first">Navigate to <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Vector</span></code>.</p>
+</li>
+<li><p class="first">Select the <strong>CA_POIs</strong> project and click <strong>Open</strong>. The CA_POIs
+project appears in the Database Editor next to Vector Project.</p>
+</li>
+<li><p class="first">Repeat steps <strong>2</strong> through <strong>4</strong> to add <strong>BlueMarble</strong> as the
+imagery project.</p>
+<p>You do not need to add a terrain project for this exercise.
+Both projects appear on the list.</p>
+</li>
+<li><p class="first">Select <strong>File &gt; Save</strong>.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Databases</span></code> folder.</p>
+</li>
+<li><p class="first">Enter <strong>CA_POIs</strong> for the name of your database, and click
+<strong>Save</strong>. The name of the database appears on the right when
+you select the <code class="docutils literal notranslate"><span class="pre">/ASSET_ROOT/Databases</span></code> folder in the asset
+navigation tree.</p>
+</li>
+<li><p class="first">Right-click <strong>CA_POIs</strong>, and select <strong>Build</strong> from the context
+menu. Google Earth Enterprise Fusion builds the database.</p>
+</li>
+<li><p class="first">Right-click <strong>CA_POIs</strong>, and select <strong>Push</strong> from the context
+menu. The Push Database dialog appears.</p>
+</li>
+<li><p class="first">Select the server association on the <strong>Server Associations</strong>
+drop-down list. The most recent version of the selected
+database is the default selection on the <strong>Version</strong> drop-down
+list.</p>
+</li>
+<li><p class="first">Click the <strong>Push</strong> button. Google Earth Enterprise Fusion runs the process
+of pushing the database to the Google Earth Enterprise Server,
+and displays a success message when it is done.</p>
+</li>
+</ol>
+<p class="rubric" id="publish-a-database">To publish a database:</p>
+<ol class="arabic">
+<li><p class="first">Access the Google Earth Enterprise Server Admin console in a
+browser window by going to <em>myserver.mydomainname</em>.com/admin,
+replacing <em>myserver</em> and <em>mydomainname</em> with your server and
+domain.</p>
+</li>
+<li><p class="first">Sign in with the default credentials:</p>
+<ul class="simple">
+<li>Username: geapacheuser</li>
+<li>Password: geeadmin</li>
+</ul>
+</li>
+<li><p class="first">Click <strong>Databases</strong> to display the list of databases pushed to
+the server.</p>
+</li>
+<li><p class="first">Check the box next to the database you want to publish. The
+<strong>Publish</strong> button on the Databases page appears.</p>
+<p><img alt="GEE Server Database Publish" src="../../images/publishDatabase2_CA_POIs.png" /></p>
+</li>
+<li><p class="first">Click <strong>Publish</strong>. The Publish dialog appears.</p>
+</li>
+<li><p class="first">Specify a <strong>Publish point</strong>, where the database will be accessible
+from. For example, if you specify CA_POIs-v001, it will be
+accessible from <em>myserver.mydomainname</em>.com/CA_POIs-v001.</p>
+<p>To learn more about the options available in the Publish
+dialog, see</p>
+<ul class="simple">
+<li><a class="reference internal" href="../geeServerAdmin/publishDefaultDatabase.html"><span class="doc">Default database</span></a></li>
+<li><a class="reference internal" href="../geeServerAdmin/createSearchTabs.html"><span class="doc">Search Tabs</span></a></li>
+<li><a class="reference internal" href="../geeServerAdmin/manageSnippetProfiles.html"><span class="doc">Snippet profiles</span></a></li>
+<li><a class="reference internal" href="../geeServerAdmin/makeWMSRequests.html"><span class="doc">WMS</span></a></li>
+</ul>
+</li>
+<li><p class="first">Click the <strong>Publish</strong> button. The Databases page updates to indicate the
+published status of your database.</p>
+<p><img alt="GEE Server Database Published List" src="../../images/publishDatabase3_CA_POIs.png" /></p>
+</li>
+</ol>
+<p class="rubric" id="view-your-database-in-google-earth-ec"><span id="view-database-geec-1"></span>View Your Database in Google Earth EC</p>
+<p>This exercise walks you through the process of viewing your
+database in Google Earth EC.</p>
+<p class="rubric" id="to-view-your-database">To view your database:</p>
+<ol class="arabic">
+<li><p class="first">Launch Google Earth EC. The Select Server dialog appears.</p>
+</li>
+<li><p class="first">Enter or select the host name or IP address of your server in
+the <strong>Server</strong> field, and specify the <strong>Publish point</strong> that you
+selected when you published your map database. For example, if
+you specify CA_POIs-v001, it will be accessible from
+<em>myserver.mydomainname</em>.com/CA_POIs-v001.</p>
+</li>
+<li><p class="first">Click the <strong>Sign In</strong> button.</p>
+</li>
+<li><p class="first">Zoom in to the west coast of the US.</p>
+<p>When you zoom in enough, Google Earth EC displays blue stars
+all over California. The closer you zoom in, the more spread
+out the stars are and the more stars you can see. When you
+mouse over a star, it turns yellow. When you click a star, a
+description balloon displays the information you specified in
+the format you defined in the Display Rules dialog.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you cannot see the vector data, make sure the
+check box next to <strong>CA_POIs</strong> in the Layers panel is
+checked.</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="displayRulesPolygon.html" title="Configuring Display Rules for Polygon Data"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pushPublishView.html" title="Pushing, Publishing, and Viewing a Database"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionTutorial.html" >Fusion Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

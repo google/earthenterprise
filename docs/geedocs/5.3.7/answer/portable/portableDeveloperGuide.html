@@ -1,0 +1,311 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Portable Developer Guide &#8212; Google Earth Enterprise 5.3.7 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Hello Earth! code sample" href="helloEarthSample.html" />
+    <link rel="prev" title="Portable Globe and Server 5.2" href="portableGlobeServer5_2.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="helloEarthSample.html" title="Hello Earth! code sample"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="portableGlobeServer5_2.html" title="Portable Globe and Server 5.2"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../portable.html" accesskey="U">Portable</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="portableGlobeServer5_2.html"
+                        title="previous chapter">Portable Globe and Server 5.2</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="helloEarthSample.html"
+                        title="next chapter">Hello Earth! code sample</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp10.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp10.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="portable-developer-guide">
+<h1>Portable Developer Guide<a class="headerlink" href="#portable-developer-guide" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p class="rubric">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#introduction-portable-developer"><span class="std std-ref">Introduction</span></a></li>
+<li><a class="reference internal" href="#useful-resources-portable-developer"><span class="std std-ref">Useful resources</span></a></li>
+<li><a class="reference internal" href="#hello-maps"><span class="std std-ref">Hello Maps!</span></a></li>
+<li><a class="reference internal" href="#hello-earth"><span class="std std-ref">Hello Earth!</span></a></li>
+<li><a class="reference internal" href="#json-documents"><span class="std std-ref">JSON documents</span></a></li>
+<li><a class="reference internal" href="#polygon-kml-document"><span class="std std-ref">Polygon KML document</span></a></li>
+</ul>
+<p class="rubric" id="introduction-portable-developer">Introduction</p>
+<p>You can customize or extend GEE Portable, or create applications
+that work with it.</p>
+<p>To help you get started, Google provides two <code class="docutils literal notranslate"><span class="pre">Hello</span> <span class="pre">World!</span></code>
+files that you can copy and use as templates. These files
+(<code class="docutils literal notranslate"><span class="pre">Hello_Maps.html</span></code> for 2D maps and <code class="docutils literal notranslate"><span class="pre">Hello_Earth.html</span></code> for 3D
+globes) call the required scripts, load the globe or map, define
+the <code class="docutils literal notranslate"><span class="pre">.css</span></code> file, and so on. The files include JSON and, if
+needed, KML polygons.</p>
+<p>See the resources linked to below to learn how to edit and extend
+the <code class="docutils literal notranslate"><span class="pre">Hello_Maps.html</span></code> and <code class="docutils literal notranslate"><span class="pre">Hello_Earth.html</span></code> files.</p>
+<p class="rubric" id="useful-resources-portable-developer">Useful resources</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Clicking any of these links connects you to a site
+outside your network. If you are not sure if your organization
+allows outside connections, check with your administrator first.</p>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Hello_Maps.html</span></code> and <code class="docutils literal notranslate"><span class="pre">Hello_Earth.html</span></code> are based on the
+Google Maps API and Google Earth API. More information about these
+APIs is linked to below. Also included are links to some resources
+for learning how to parse your JSON data and KML coordinates.</p>
+<ul>
+<li><p class="first"><a class="reference external" href="https://developers.google.com/maps/">Google Maps API help at https://developers.google.com/maps/</a>.</p>
+<p>Examples that use the Maps API.</p>
+</li>
+<li><p class="first"><a class="reference external" href="https://developers.google.com/earth/">Google Earth API help at https://developers.google.com/earth/</a>.</p>
+<p><em>The Earth Plug-in and its API have been discontinued.</em></p>
+</li>
+<li><p class="first"><a class="reference external" href="http://api.jquery.com/jQuery.parseJSON/">jQuery help at http://api.jquery.com/jQuery.parseJSON/</a>.</p>
+<p>A method for parsing JSON.</p>
+</li>
+<li><p class="first"><a class="reference external" href="https://code.google.com/p/geoxml3/">geoxml3 at https://code.google.com/p/geoxml3/</a>.</p>
+<p>A KML processor for use with the Google Maps API.</p>
+</li>
+</ul>
+<p class="rubric" id="hello-maps">Hello Maps!</p>
+<p>To write a script to display portable 2D maps, start with
+<code class="docutils literal notranslate"><span class="pre">hello_maps.html</span></code> and edit as needed. <code class="docutils literal notranslate"><span class="pre">hello_maps.html</span></code> is
+based on the Google Maps API.</p>
+<p class="rubric">To access the <code class="docutils literal notranslate"><span class="pre">hello_maps.html</span></code> file:</p>
+<ol class="arabic simple">
+<li>Launch GEE Portable on <code class="docutils literal notranslate"><span class="pre">localhost:9335</span></code>.</li>
+<li>Enter
+<code class="docutils literal notranslate"><span class="pre">http://localhost:9335/local/preview/developers/hello_maps.html</span></code>
+in your browser.</li>
+<li>View the page source. If you are not sure how to view the page
+source, see your browser’s help.</li>
+</ol>
+<p>Alternatively, click the link below:</p>
+<p><a class="reference internal" href="helloMapsSample.html"><span class="doc">Hello Maps! code sample</span></a></p>
+<p class="rubric" id="hello-earth">Hello Earth!</p>
+<p>To write a script to display portable 3D maps (globes), start with
+<code class="docutils literal notranslate"><span class="pre">hello_earth.html</span></code> and edit as needed. <em>The ``hello_earth.html``
+example is based on the discontinued Google Earth API.</em> Take that
+into consideration when developing new applications.</p>
+<p class="rubric">To access the <code class="docutils literal notranslate"><span class="pre">Hello_Earth</span></code> file:</p>
+<ol class="arabic simple">
+<li>Launch GME Portable on <code class="docutils literal notranslate"><span class="pre">localhost:9335</span></code>.</li>
+<li>Enter
+<code class="docutils literal notranslate"><span class="pre">http://localhost:9335/local/preview/developers/hello_earth.html</span></code>
+in your browser.</li>
+<li>View the page source. If you are not sure how to view the page
+source, see your browser’s help.</li>
+</ol>
+<p>Alternatively, click the link below:</p>
+<p><a class="reference internal" href="helloEarthSample.html"><span class="doc">Hello Earth! code sample</span></a></p>
+<p class="rubric" id="json-documents">JSON documents</p>
+<p>Whenever your Portable instance is running, multiple JSON
+documents are serving. The JSON finds information about all your
+available globes and maps, as well as your current globe or map.
+Below are some code snippets that show how the JSON works.</p>
+<p class="rubric">Globes JSON example</p>
+<p>This code snippet is from the Globes JSON document, which
+provides information about each available globe.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Globes JSON: [yourhost]/?cmd=globes_info_json
+
+[ {  &quot;name&quot;:&quot;test.glb&quot;,
+   &quot;timestamp&quot;:&quot;2013-01-01 12:00:00&quot;,
+   &quot;size&quot;:&quot;20.00MB&quot;,
+   &quot;description&quot;:&quot;Some globe description.&quot;,
+   &quot;path&quot;:&quot;../../../../globes/test.glb&quot;,
+   &quot;is_gee&quot;:true,
+   &quot;is_2d&quot;:false,
+   &quot;is_3d&quot;:true,
+   &quot;has_polygon&quot;:true,
+   &quot;is_mercator&quot;:false,
+   &quot;is_being_served&quot;:false
+   },
+   {
+   some other globe
+   },...
+]
+</pre></div>
+</div>
+<p class="rubric">2D JSON and 3D JSON examples</p>
+<p>The 2D and 3D JSON documents contain layer information as well
+as information that helps the Search feature categorize the
+results.</p>
+<p>If you are currently serving a map, 2D JSON will be serving:</p>
+<p><code class="docutils literal notranslate"><span class="pre">2D</span> <span class="pre">JSON:</span> <span class="pre">[yourhost]/query?request=Json&amp;vars=geeServerDefs&amp;is2d=t</span></code>
+If you are currently serving a globe, 3D JSON will be serving:</p>
+<p><code class="docutils literal notranslate"><span class="pre">3D</span> <span class="pre">JSON:</span> <span class="pre">[yourhost]/query?request=Json&amp;vars=geeServerDefs</span></code></p>
+<p class="rubric">Layer Definition examples</p>
+<p>Below are examples of layer definitions. The first is an imagery
+layer and the second is a vector layer.</p>
+<p class="rubric">Imagery layer example</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[
+...{
+   icon : &quot;icons/1.png&quot;,
+   id : 1001,
+   initialState : true,
+   isPng : false,
+   label : &quot;Imagery&quot;,
+   lookAt : &quot;none&quot;,
+   opacity : 1,
+   requestType : &quot;ImageryMaps&quot;, // A layer of imagery. version : 8
+   }...
+]
+</pre></div>
+</div>
+<p class="rubric">Vector data example</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[
+...{
+   icon : &quot;icons/2.png&quot;,
+   id : 1002,
+   initialState : true,
+   isPng : true,
+   label : &quot;Tokyo&quot;,
+   lookAt : &quot;none&quot;,
+   opacity : 1,
+   requestType : &quot;VectorMapsRaster&quot;, // Vector data, such as roads, points, and borders. version : 4
+}...
+]
+</pre></div>
+</div>
+<p class="rubric" id="polygon-kml-document">Polygon KML document</p>
+<p>Some globes also serve a KML file that contains polygon
+coordinates, which define the initial display when the globe or
+map loads. Polygon KML files also let Google Earth and Google Maps
+draw a polygon on the globe or map. If a globe does not have any
+polygon data, the Polygon KML file is empty.</p>
+<p class="rubric">Polygon KML example</p>
+<p>This is an example of a KML document that contains a set of
+coordinates that define the bounds of your globe’s cut.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Polygon KML: [your host]/earth/polygon.kml
+
+&lt;?xml version=&quot;1.0&quot;
+encoding=&quot;UTF-8&quot;?&gt;
+&lt;kml&gt;
+&lt;Document&gt;
+   &lt;name&gt;polygons&lt;/name&gt;
+&lt;Placemark&gt;
+   &lt;Polygon&gt;
+      &lt;tessellate&gt;1&lt;/tessellate&gt;
+      &lt;outerBoundaryIs&gt;
+      &lt;LinearRing&gt;
+      &lt;coordinates&gt;
+         -122.3185062675476,37.790043919799245,0
+         -122.3395950675476,37.84095511979925,0
+         -122.39050626754761,37.86204391979925,0
+         -122.44141746754761,37.84095511979925,0
+         -122.46250626754761,37.790043919799245,0
+         -122.44141746754761,37.739132719799244,0
+         -122.39050626754761,37.71804391979924,0
+         -122.3395950675476,37.739132719799244,0
+         -122.3185062675476,37.790043919799245,0
+      &lt;/coordinates&gt;
+      &lt;/LinearRing&gt;
+      &lt;/outerBoundaryIs&gt;
+   &lt;/Polygon&gt;
+&lt;/Placemark&gt;
+&lt;Placemark&gt;
+   &lt;Polygon&gt;
+      &lt;tessellate&gt;1&lt;/tessellate&gt;
+      &lt;outerBoundaryIs&gt;
+      &lt;LinearRing&gt;
+      &lt;coordinates&gt;
+         -122.01254132080078,37.42221919299647,0
+         -122.03363012080078,37.473130392996474,0
+         -122.08454132080078,37.494219192996475,0
+         -122.13545252080078,37.473130392996474,0
+         -122.15654132080078,37.42221919299647,0
+         -122.13545252080078,37.37130799299647,0
+         -122.08454132080078,37.35021919299647,0
+         -122.03363012080078,37.37130799299647,0
+         -122.01254132080078,37.42221919299647,0
+      &lt;/coordinates&gt;
+      &lt;/LinearRing&gt;
+      &lt;/outerBoundaryIs&gt;
+   &lt;/Polygon&gt;
+&lt;/Placemark&gt;
+&lt;/Document&gt;
+&lt;/kml&gt;
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="helloEarthSample.html" title="Hello Earth! code sample"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="portableGlobeServer5_2.html" title="Portable Globe and Server 5.2"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../portable.html" >Portable</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

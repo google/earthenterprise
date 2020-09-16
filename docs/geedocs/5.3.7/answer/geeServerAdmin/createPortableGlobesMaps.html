@@ -1,0 +1,461 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Create Portable Globes and Maps &#8212; Google Earth Enterprise 5.3.7 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Create composite globes and maps" href="createCompositeGlobesMaps.html" />
+    <link rel="prev" title="Custom POI Search plug-in Python code sample" href="customPOISearchPluginSample.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="createCompositeGlobesMaps.html" title="Create composite globes and maps"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="customPOISearchPluginSample.html" title="Custom POI Search plug-in Python code sample"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" accesskey="U">GEE Server administration</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="customPOISearchPluginSample.html"
+                        title="previous chapter">Custom POI Search plug-in Python code sample</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="createCompositeGlobesMaps.html"
+                        title="next chapter">Create composite globes and maps</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="create-portable-globes-and-maps">
+<h1>Create Portable Globes and Maps<a class="headerlink" href="#create-portable-globes-and-maps" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p><a class="reference internal" href="../../images/googlelogo_color_260x88dp4.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp4.png" style="width: 130px; height: 44px;" /></a></p>
+<p>When you are out in the field and you need a globe or map that can
+easily be stored and accessed from a desktop or laptop, you can
+create a portable globe or map by creating a <em>cut</em> of one of your
+databases. A portable globe or map is a single file (<code class="docutils literal notranslate"><span class="pre">.glb</span></code> or
+<code class="docutils literal notranslate"><span class="pre">.glc</span></code>) that stores all the geospatial data available within
+your specified area of interest—including all high-resolution
+imagery, terrain, vector data, KML files, and searchable point of
+interest (POI) locations. Outside the specified area of interest,
+the globe or map stores only low-resolution imagery and terrain.
+You specify the levels of resolution when you cut the globe or
+map.</p>
+<p>You can <a class="reference internal" href="#"><span class="doc">create portable globes and maps</span></a> with the
+<a class="reference internal" href="settingsPage.html"><span class="doc">cutter tool</span></a> feature of the <a class="reference internal" href="signInAdminConsole.html"><span class="doc">Google Earth Enterprise (GEE) Server</span></a>,
+from existing GEE portable files, or you can obtain them from third-party
+vendors. Depending on your area of coverage, it can take only a
+few minutes to specify and generate a globe or map and then save
+it to the GEE Portable maps directory.</p>
+<p class="rubric">Cut globes and maps from existing portable files</p>
+<p>With GEE 5.x, you can also cut globes and maps from existing
+portable files, which is convenient when you want to view a limited region
+of a previously cut globe or map, especially when your portable
+files are very large. This feature is often useful when you want
+to combine portable files with other <code class="docutils literal notranslate"><span class="pre">.glb</span></code> or <code class="docutils literal notranslate"><span class="pre">.glc</span></code> files to
+create a layered composite globe using the Assembly tool.</p>
+<p>To cut a globe or map from an existing portable file, first you
+must <a class="reference internal" href="publishDatabasesPortables.html#register-publish-portable-map-globe"><span class="std std-ref">register and publish</span></a> it on <a class="reference internal" href="signInAdminConsole.html"><span class="doc">GEE Server</span></a>.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p>Cutting globes and maps from existing portable files is a new
+feature in GEE 5.x and is available with portable files that
+have been built using GEE 5.x only.</p>
+<p>If you attempt to cut a portable file that was created using
+GEE 4.x, the cutting process will fail. However, you can serve
+portable files created using previous versions.</p>
+<p class="last">To determine which version of GEE was used to create a portable
+file, the timestamp information for the file is available for
+served globes or maps via
+<code class="docutils literal notranslate"><span class="pre">http://localhost:9335/earth/info.txt</span></code> on a local Portable
+Server, or <code class="docutils literal notranslate"><span class="pre">http://&lt;server&gt;/&lt;mount_point&gt;/earth/info.txt</span></code> on
+Earth Server. In addition you can get the timestamp information
+using <code class="docutils literal notranslate"><span class="pre">geglxinfo</span></code>, the GEE tool for inspecting portable
+files.</p>
+</div>
+<p class="rubric">Inspect portable files for timestamp information</p>
+<p>To help you identify which version of GEE was used to create a
+portable file, you can use the portable inspection tool,
+<code class="docutils literal notranslate"><span class="pre">geglxinfo</span></code>, to get the timestamp for when the portable file was
+created. This information should give you a good idea of which
+version of GEE was used to create the file. Extract and output the
+<code class="docutils literal notranslate"><span class="pre">earth/info.txt</span></code> file, as in the following example use of the
+command:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ geglxinfo --glx tutorial_3d.glc --extract_file earth/info.txt --output /tmp/info.txt
+$ cat /tmp/info.txt
+Portable Globe
+Copyright 2013 Google Inc. All Rights Reserved.
+2014-01-15 16:03:15 GMT
+
+2014-01-15 08:03:15
+Globe description: Simple container for tutorial glb with gray marble backdrop.
+2014-01-15 08:03:15
+Executing: /opt/google/bin/gecreatemetadbroot --output=&quot;/tmp/cutter/glc_20598_1389801795.111116/metadbroot&quot; --layers=&quot;/tmp/cutter/glc_20598_1389801795.111116/earth/dbroot_layer_info.txt&quot;  --has_base_imagery
+
+2014-01-15 08:03:15
+SUCCESS
+2014-01-15 08:03:15
+Executing: /opt/google/bin/geportableglcpacker --layer_info=&quot;/tmp/cutter/glc_20598_1389801795.111116/earth/layer_info.txt&quot; --output=&quot;/tmp/cutter/glc_20598_1389801795.111116/temp.glc&quot; --make_copy
+</pre></div>
+</div>
+<p class="rubric">Composite globes and maps</p>
+<p>Portable globes and maps can also be assembled into layers to
+create a composite globe or map, a single file (<code class="docutils literal notranslate"><span class="pre">.glc</span></code>) that
+contains all the geospatial data for assembled layers. To assemble
+a composite file, you supply a KML polygon to cut your area of
+interest, then specify the layers and the order in which they display.
+See <a class="reference internal" href="createCompositeGlobesMaps.html"><span class="doc">Create composite globes and maps</span></a>.</p>
+<p class="rubric">Create a portable globe or map</p>
+<p>Cutting a globe or map is accomplished with a simple web
+interface. You import a KML, or use your mouse, to define a polygon,
+which defines your “area of interest.” This polygon not only
+defines the area that displays high-resolution imagery, but is
+also used by Fusion to create a localized search database.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The cutting processes are CPU- and disk-intensive, as
+they are retrieving all data within the specified polygon from
+the Earth Enterprise Server. This can affect the overall
+performance of the Server, including slowing end-user access.</p>
+<p>To mitigate performance impact to end users, you may consider:</p>
+<ul class="simple">
+<li>Limiting the number of users with access to cutting.</li>
+<li>Creating pre-cut portable globes to host as downloadable
+files for portable users.</li>
+<li>Operating a separate GEE Server specifically to support
+on-demand cutting needs.</li>
+</ul>
+<p class="last">Please contact the Google Earth Enterprise Support team for
+further information or questions about these procedures.</p>
+</div>
+<p class="rubric">Before you begin</p>
+<p class="rubric">Enable the cutter</p>
+<p>Before cutting a globe, you must enable the cutter from the
+command line:</p>
+<ul class="simple">
+<li>In GEE 5.x: <code class="docutils literal notranslate"><span class="pre">gecutter</span> <span class="pre">enable</span></code></li>
+<li>In earlier versions: <code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--enable_cutter</span></code></li>
+</ul>
+<p>For more information about <code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code>, see the <a class="reference internal" href="../fusionAdministration/commandReference.html"><span class="doc">Command reference</span></a>.</p>
+<p><strong>Note about authentication and SSL</strong>: Cutting is not currently
+supported on globes or maps that require end-user authentication,
+such as LDAP. One workaround is to allow unauthenticated access
+from localhost on your Earth Enterprise Server. Refer to Apache
+documentation to enable such a configuration. Cutting of a globe
+over HTTPS is supported; however, the SSL certificate of the target
+server will not be verified during cutting.</p>
+<p class="rubric">The globe cutter interface</p>
+<p class="rubric">To create a portable globe:</p>
+<ol class="arabic">
+<li><p class="first">Access the Google Earth Enterprise Server Admin console in a
+browser window by going to <em>myserver.mydomainname</em>.com/admin,
+replacing <em>myserver</em> and <em>mydomainname</em> with your server and
+domain.</p>
+</li>
+<li><p class="first">Sign in with the default credentials or the username and
+password assigned to you:</p>
+<ul class="simple">
+<li>Default username: geapacheuser</li>
+<li>Default password: geeadmin</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you do not know your username and password,
+contact your Google Earth Enterprise Server System
+Administrator.</p>
+</div>
+</li>
+<li><p class="first">Click <strong>Databases</strong> to display the list of databases and
+portables pushed to the Server.</p>
+</li>
+<li><p class="first">Click the <img alt="Settings button" src="../../images/cutterSettingsButton.png" /> <strong>Settings</strong> button in the top right of the window
+and select <strong>Launch Cutter</strong> from the <strong>Tools</strong> menu.</p>
+<p>A new browser tab opens with the GEE Server — Cutting Tool and
+the <strong>Create new offline map</strong> window appears.</p>
+<p><img alt="GEE Cutter create offline map window" src="../../images/cutterTools.png" /></p>
+<p class="rubric">Map or globe name</p>
+</li>
+<li><p class="first">Use the drop-down menu to select the database or portable you wish
+to cut to create your offline map or globe.</p>
+</li>
+<li><p class="first">Enter a name for the offline map or globe.</p>
+<p>The name defines the file name for your offline map or globe.
+Offline maps are created as <code class="docutils literal notranslate"><span class="pre">.glm</span></code> files; offline globes are
+created as <code class="docutils literal notranslate"><span class="pre">.glb</span></code> files. Both file types are a single-file
+format for sharing Google Earth Enterprise maps and globes.
+Spaces, slashes, and double dots (..) will be converted to
+underscores in the saved globe name.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Building an offline map or globe will overwrite any existing
+offline maps or globes with the same name. If multiple users
+are cutting maps or globes, we recommend assigning unique
+prefixes to each user for their globe names to ensure that
+files are not accidentally overwritten.</p>
+</div>
+</li>
+<li><p class="first">Enter a description to be associated with the offline map or
+globe.</p>
+<p>We recommend adding sufficient descriptive information for each
+offline map or globe, so that others will know what geographic
+area, or what mission, they were created for.</p>
+</li>
+<li><p class="first">If you are overwriting an existing cut, select <strong>Yes</strong> for <strong>Overwrite?</strong>.</p>
+</li>
+</ol>
+<p class="rubric">Drawing the polygon</p>
+<p>Once the globe or map name has been specified, you can define the
+geographic region to be cut by drawing a polygon on the globe.
+There are two ways to draw the polygon.</p>
+<p class="rubric">Hand drawing the polygon</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">When cutting a 3D globe this method is only available if you
+are running the discontinued Google Earth Plug-in in your
+browser. This method works for cutting 2D maps from your
+browser.</p>
+</div>
+<ol class="arabic">
+<li><p class="first">By default, you draw a polygon by hand so the <strong>Select Region</strong>
+drop-down list is set to <strong>Manual</strong>.</p>
+</li>
+<li><p class="first">Use the <img alt="Pan tool" src="../../images/cutterHandTool2.png" /> <strong>Hand</strong> tool to pan, then, using the navigation
+controls in the plug-in, zoom in to the region of interest.</p>
+</li>
+<li><p class="first">To use your mouse to define the polygon, click the <img alt="Polygon icon" src="../../images/cutterPolygonTool.png" /> polygon icon
+in the globe window.</p>
+</li>
+<li><p class="first">Click on the map or globe to define each point. You can use the
+navigation controls on the right to move the globe or change
+zoom levels while drawing.</p>
+</li>
+<li><p class="first">Click the final point at the point of origin to complete the polygon selection.</p>
+<p><img alt="Polygon example" src="../../images/cutterPolygonExample.png" /></p>
+</li>
+<li><p class="first">If you need to redraw the polygon, click <strong>Clear</strong> to delete the polygon you just created.</p>
+</li>
+</ol>
+<p class="rubric">Defining the polygon with KML</p>
+<p>You can also use KML to define the polygon(s). The KML should be
+complete, and may contain single or multiple elements.</p>
+<p><strong>To insert your KML:</strong></p>
+<ol class="arabic">
+<li><p class="first">From the <strong>Select Region</strong> drop-down list, select <strong>Paste
+KML</strong>. The Paste KML window appears.</p>
+</li>
+<li><p class="first">Paste your KML into the text field, then click <strong>Use KML</strong>.</p>
+<p>GEE Server validates the KML and then draws the polygon using
+the KML data you provided. Your polygon appears on the map or
+globe (the latter only if you have the discontinued Google
+Earth plug-in running in your browser).</p>
+</li>
+</ol>
+<p class="rubric">Globe resolution</p>
+<p>The polygon you specified in the previous step defines your <em>area of
+interest</em>. This area contains high-resolution imagery and data,
+and search tabs are created for vector data within this zone. The
+maximum and minimum resolutions are specified as integers between
+1 and 24. These correspond to the zoom levels that are used in the
+Fusion server. Setting a resolution of 24 results in a cut of the
+entire globe.</p>
+<div class="warning docutils container">
+<strong>Caution:</strong> Setting a resolution of 24 to cut an entire globe
+may result in a very large file.</div>
+<p class="rubric" id="world-level-resolution">World level resolution</p>
+<p>The area outside of the defined polygon is included in the globe
+at a lower resolution, which you set using <strong>World level</strong>. Areas
+near the polygon may be included at a higher resolution.</p>
+<ul class="simple">
+<li>To set the world level resolution, select a value from the
+<strong>World level</strong> drop-down list.</li>
+</ul>
+<p>A minimum zoom level of 5-7 presents a decent-looking world to the
+user and is most likely to include vector layers such as
+international boundaries and state boundaries and main cities
+without affecting the size of the <code class="docutils literal notranslate"><span class="pre">.glb</span></code> file very much. For
+example:</p>
+<ul class="simple">
+<li>A cut globe with minimum and maximum resolution values set to 5
+is 10 MB.</li>
+<li>A cut globe with minimum and maximum resolution values set to 6
+is 41 MB.</li>
+<li>A cut globe with minimum and maximum resolution values set to 7
+is 120 MB.</li>
+</ul>
+<p>These numbers are small in comparison to the overall size of your
+globe when a suitable maximum resolution has been selected. For
+example, a globe that contains all of the city of Atlanta, GA, USA
+in 1-foot resolution requires approximately 5 GB of storage. Even
+level 7 imagery, at 120 MB, is a small percentage of the overall
+globe size. You can also leave this field blank to use the highest
+available imagery.</p>
+<p class="rubric">Region level resolution</p>
+<p>The zoom level for the polygon area is set using <strong>Region level</strong>.</p>
+<p>The maximum resolution of the cut polygon area is no higher than
+the maximum resolution of the source map or globe. For example, if
+the maximum resolution in the cutter is specified at 24, but the
+source imagery is at 18 (approximately 1-meter resolution), the
+cut map or globe will contain level 18 imagery. You can leave this
+field blank to use the highest available imagery.</p>
+<p>You may enter a lower number to reduce the size of your map or
+globe by not including the highest resolution imagery.</p>
+<p class="rubric">Advanced Settings</p>
+<p class="rubric">Polygon Resolution</p>
+<p>The <strong>Advanced</strong> option provides an additional globe-cutting
+option, namely <em>Polygon Resolution</em>. This setting is useful when
+cutting with large polygons. For example, you may use 12 for a
+country-sized polygon or 18 for a city-sized polygon.</p>
+<p class="rubric">To set the polygon resolution:</p>
+<ul class="simple">
+<li>Click <strong>Advanced</strong> to display the <strong>Polygon Resolution</strong> option.</li>
+<li>Click the drop-down list to set the resolution value you want.</li>
+</ul>
+<p class="rubric">Continue Past Empty Levels</p>
+<p>This option only applies to portable maps (2D databases). If a
+portable map does not contain imagery in the polygon at the
+resolution that you think it should, try recreating the portable
+map with this option set to <strong>Yes</strong>. This option will likely increase
+the build time, possibly significantly.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Additional advanced settings may be offered in future
+versions. Use caution when changing them as they may
+dramatically increase build times and globe sizes.</p>
+</div>
+<p class="rubric">Building the map or globe</p>
+<p>Depending on the size of your polygon, building a cut map or
+globe can take a few minutes to a few hours; likewise, file
+size varies widely depending on the area selected and the desired
+resolution.</p>
+<p class="rubric">To build the map or globe:</p>
+<ul>
+<li><p class="first">Click <strong>Cut map</strong> to start the build process.</p>
+<p>The progress of the build appears in the <strong>Build</strong> window.</p>
+<p>When the build is finished, a <code class="docutils literal notranslate"><span class="pre">.glb</span></code> file is created in the
+default globes directory,
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/cutter/globes</span></code>, and a download
+link appears to the file’s location on GEE Server.</p>
+</li>
+</ul>
+<p class="rubric">KML files</p>
+<p>When a portable globe is cut from a source containing KML links
+in the Layer panel:</p>
+<ul class="simple">
+<li>KML files that are stored locally on the primary Earth
+Server will be bundled into the portable globe. Only the
+main KML file will be copied, not any links or files that
+are embedded as links in the main KML file. The default copy
+is not recursive.</li>
+<li>KML links that refer to servers other than the primary Earth
+Server are not copied. The layer will be visible in the
+client, but clicking the link will not cause any data to be
+displayed. If access to external servers is needed, a small
+KML file should be stored locally on the primary Earth
+Server. This KML file should contain a link to the intended
+external server.</li>
+</ul>
+<p class="rubric">Historical Imagery</p>
+<p>Historical Imagery is not supported in the portable globe as of
+Fusion 4.2.</p>
+<p>There are, however, two situations in which historic imagery
+will be displayed:</p>
+<ul class="simple">
+<li>When the computer running the portable globe has a
+connection to the Earth server from which the globe was cut.
+In this case, historic imagery can be streamed from the
+Earth server. Once in the field, however, and disconnected
+from the Earth server, no historic imagery will be
+displayed.</li>
+<li>If historic imagery has been cached on the portable globe
+machine.</li>
+</ul>
+<p>Otherwise, the following error message will appear:</p>
+<blockquote>
+<div><strong>Google Earth can’t contact the imagery server to download
+new images.</strong>
+You will be able to see areas that you have been to recently,
+but new image areas may appear blurry.</div></blockquote>
+<p class="rubric">Learn more</p>
+<ul class="simple">
+<li><a class="reference internal" href="../portable/portableUserGuideWinLinux.html#serve-globe-map-gee-portable"><span class="std std-ref">Serve a globe or map from GEE Portable</span></a></li>
+<li><a class="reference internal" href="../portable/portableUserGuideWinLinux.html#connect-gee-portable"><span class="std std-ref">Connect with GEE Portable</span></a> for
+different ways you can connect to GEE Portable to view your
+offline maps and globes.</li>
+<li><a class="reference internal" href="../portable/portableDeveloperGuide.html"><span class="doc">Portable Developer Guide</span></a> for ways
+to customize or extend GEE Portable, or create applications
+that work with it.</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="createCompositeGlobesMaps.html" title="Create composite globes and maps"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="customPOISearchPluginSample.html" title="Custom POI Search plug-in Python code sample"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" >GEE Server administration</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

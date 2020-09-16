@@ -1,0 +1,190 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Example Search plug-in Python code sample &#8212; Google Earth Enterprise 5.3.7 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Custom POI Search plug-in Python code sample" href="customPOISearchPluginSample.html" />
+    <link rel="prev" title="Troubleshoot search services" href="troubleshootSearchServices.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="customPOISearchPluginSample.html" title="Custom POI Search plug-in Python code sample"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="troubleshootSearchServices.html" title="Troubleshoot search services"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" accesskey="U">GEE Server administration</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="troubleshootSearchServices.html"
+                        title="previous chapter">Troubleshoot search services</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="customPOISearchPluginSample.html"
+                        title="next chapter">Custom POI Search plug-in Python code sample</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp4.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp4.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="example-search-plug-in-python-code-sample">
+<h1>Example Search plug-in Python code sample<a class="headerlink" href="#example-search-plug-in-python-code-sample" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>The <code class="docutils literal notranslate"><span class="pre">ExampleSearch</span></code> search plug-in for GEE Server provides the
+interface to query a SQL database of San Francisco neighborhoods
+via a search tab in Google Earth EC or a browser. The following
+description captures the overall mechanism of the plug-in but we
+recommend that you take a look at the code directly.</p>
+<p>You can find the two Python files for the <code class="docutils literal notranslate"><span class="pre">ExampleSearch</span></code>
+plug-in in the following location:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/wsgi-bin/search/plug-in/example_search_app.py</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/wsgi-bin/search/plug-in/example_search_handler.py</span></code></li>
+</ul>
+<p>In Google Earth Enterprise, a search plug-in Python-based
+framework relies on the Python Web Server Gateway Interface
+(WSGI), a Python API that acts as an interface between web servers
+and web applications. The web application or framework,
+<code class="docutils literal notranslate"><span class="pre">example_search_app.py</span></code> search plug-in, is represented to the
+server as a Python-callable method, <code class="docutils literal notranslate"><span class="pre">__call__</span></code> to start the
+application. The callable method must include two arguments:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">environ</span></code> object—a list that contains the WSGI environment
+information;</li>
+<li><code class="docutils literal notranslate"><span class="pre">start_response</span></code> callable, which performs an example search
+and returns the KML/JSONP format output back in the HTTP
+response.</li>
+</ul>
+<p>A request returns a <code class="docutils literal notranslate"><span class="pre">response_body</span></code>, the search results that are
+sent back to the requesting client wrapped in a list.</p>
+<p>The handler, <code class="docutils literal notranslate"><span class="pre">example_search_handler.py</span></code>, is the actual plug-in
+code. It defines a class, <code class="docutils literal notranslate"><span class="pre">ExampleSearch</span></code>, which demonstrates
+how to construct and query a spatial database based on a URL
+search string, extract geometries from the result, associate
+various styles with them, and return the response back to the
+client. The query definition, <code class="docutils literal notranslate"><span class="pre">RunExampleSearch</span></code>, performs a
+query search on the <code class="docutils literal notranslate"><span class="pre">san_francisco_neighborhoods</span></code> SQL table,
+with a response type of KML for Google Earth EC, or JSONP for a
+browser client, and returning the results as a list.</p>
+<p class="rubric">JSON object and response structure</p>
+<p>The JSON object defined in <code class="docutils literal notranslate"><span class="pre">example_search_handler.py</span></code> and the
+JSON response returned from the query follow the default map
+structure that is bundled with GEE. If you want to create your own
+map application using a custom search response, you can structure
+the JSON to take advantage of Google Maps Javascript API
+functionality.</p>
+<p>For example, if you have <code class="docutils literal notranslate"><span class="pre">GeoJSON</span></code> data, a standard for
+geospatial data on the internet, the <code class="docutils literal notranslate"><span class="pre">google.maps.Data</span></code> class
+allows you to add GeoJSON data to your map. The <code class="docutils literal notranslate"><span class="pre">Data</span></code> class
+follows the structure of <code class="docutils literal notranslate"><span class="pre">GeoJSON</span></code> in its data representation
+and makes it easy to import <code class="docutils literal notranslate"><span class="pre">GeoJSON</span></code> data and display points,
+linestrings, and polygons. For more information about the Data
+Layer of Google Maps Javascript API, see
+<a class="reference external" href="https://developers.google.com/maps/documentation/javascript/datalayer">https://developers.google.com/maps/documentation/javascript/datalayer</a>.</p>
+<p class="rubric">SQL query settings</p>
+<p>The query that <code class="docutils literal notranslate"><span class="pre">example_search_handler.py</span></code> runs is hard-coded to
+the database scheme of the <code class="docutils literal notranslate"><span class="pre">san_francisco_neighborhoods</span></code> SQL
+table, so if you have different schema, you will need to change the
+query. The search query is standard SQL available at
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/wsgi-bin/search/common/geconstants.py</span></code>. For
+example, the following snippet shows the SQL query used to return
+the polygon perimeters of the neighborhoods listed in the
+“san_francisco_neighborhoods” SQL table:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>self.example_query = (
+  &quot;SELECT ${FUNC}(ST_Force_3DZ(the_geom)) AS the_geom,Area(the_geom),&quot;
+  &quot;Perimeter(the_geom),sfar_distr,nbrhood, &quot;
+  &quot;GeometryType(the_geom) AS geom_type &quot;
+  &quot;FROM san_francisco_neighborhoods &quot;
+  &quot;WHERE &quot;
+  &quot;lower(nbrhood) like %s&quot;
+  )
+</pre></div>
+</div>
+<p>As the <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/wsgi-bin/search/common/geconstants.py</span></code>
+file includes the queries for all the system search plug-ins provided
+with Google Earth Enterprise, you can check out the various
+constructs to help you build the plug-in. We recommend that you
+keep the SQL query in the handler of the plug-in.</p>
+<p class="rubric">KML Geometric types supported</p>
+<p>The <strong>ExampleSearch</strong> plug-in returns polygons, but all KML
+geometric types are supported.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Only point type query results will fly to first element; with
+geometric types, the query result flies to a bounding box
+within which all search results are visible.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="customPOISearchPluginSample.html" title="Custom POI Search plug-in Python code sample"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="troubleshootSearchServices.html" title="Troubleshoot search services"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" >GEE Server administration</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
