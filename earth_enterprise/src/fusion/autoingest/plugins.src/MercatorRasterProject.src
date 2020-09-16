@@ -230,7 +230,7 @@ void MercatorRasterProjectAssetImplD::AddInsets(
     }
 
     // figure out what its levels should be
-    unsigned int effectivemax = ComputeEffectiveMaxLevel(*item);
+    unsigned int effectivemax = ComputeEffectiveMaxLevel(item);
 
     // walk backwards until we find where to insert it
     std::vector<InsetStackItem>::reverse_iterator where;
