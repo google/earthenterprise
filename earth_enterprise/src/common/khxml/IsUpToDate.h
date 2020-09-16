@@ -1,6 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
- * Copyright 2020 The Open GEE Contributors 
+ * Copyright 2020 The Open GEE Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,8 @@
 #include <khInsetCoverage.h>
 #include <khTileAddr.h>
 
+#include "common/SharedString.h"
+
 #define DEFINE_ISUPTODATE(T)                     \
 inline bool IsUpToDate(const T &a, const T &b) { \
   return a == b;                                 \
@@ -62,6 +64,7 @@ inline bool IsUpToDate(const Cont<T> &a, const Cont<T> &b) {    \
 
 
 DEFINE_ISUPTODATE(std::string);
+DEFINE_ISUPTODATE(SharedString);
 DEFINE_ISUPTODATE(signed             char);
 DEFINE_ISUPTODATE(unsigned           char);
 DEFINE_ISUPTODATE(signed   short     int);
