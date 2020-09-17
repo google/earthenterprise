@@ -1219,7 +1219,8 @@ void FeatureEditor::AddFeaturesFromSource(gstSource* source) {
   } catch (const SoftErrorPolicy::TooManyException &e) {
     QString error(kh::tr("Too many bad features"));
     for (unsigned int i = 0; i < e.errors_.size(); ++i) {
-      error += "\n" + e.errors_[i].c_str();
+      error += "\n";
+      error += e.errors_[i].c_str();
     }
     QMessageBox::critical(this, kh::tr("Error"),
                           kh::tr("Error while importing") +
