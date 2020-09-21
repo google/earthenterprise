@@ -306,7 +306,10 @@ if gpp_maj >= 7:
 if gpp_maj >= 8:
   warnflags += ['-Wno-error=catch-value',
                 '-Wno-error=class-memaccess',
-                '-Wno-error=unused-parameter']
+                '-Wno-error=unused-parameter',
+                '-Wno-error=stringop-truncation',
+                '-Wno-error=stringop-overflow',
+                '-Wno-error=maybe-uninitialized']
 
 # Determine libpng
 if os.path.isdir('/usr/include/libpng15'):
