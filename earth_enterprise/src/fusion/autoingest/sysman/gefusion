@@ -266,6 +266,8 @@ start() {
         echo "Enabling core files"
         ulimit -c unlimited
     fi
+    
+	ulimit -n 500000
 
     if check_if_master ; then
         start_command_as_daemon "gesystemmanager" "Fusion worker services manager" || exit 1
