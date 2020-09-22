@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@
 #ifndef COMMON_GEINDEX_TRAVERSER_H__
 #define COMMON_GEINDEX_TRAVERSER_H__
 
+#include <cstdint>
 #include <string>
 #include <common/base/macros.h>
 #include <merge/merge.h>
@@ -31,7 +33,7 @@
 #include <geindex/shared.h>
 #include <khGuard.h>
 #include <khEndian.h>
-#include <khTypes.h>
+#include <cstdint>
 #include <geFilePool.h>
 #include <geindex/shared.h>
 #include <geindex/Entries.h>
@@ -98,7 +100,7 @@ class Traverser
   inline bool Active() {
     return merge_root_.Active();
   }
-  inline uint32 GetPacketExtra(uint32 packetfile_num) const {
+  inline std::uint32_t GetPacketExtra(std::uint32_t packetfile_num) const {
     return reader_.header.GetPacketExtra(packetfile_num);
   }
   inline const IndexBundleReader& GetIndexBundleReader(void) const {
@@ -164,8 +166,8 @@ class AdaptingTraverser : public AdaptingTraverserBase<TypedBucket> {
   AdaptingTraverser(const std::string &merge_source_name,
                     TypedEntry::TypeEnum type,
                     const khTransferGuard<Traverser> &sub_traverser,
-                    uint32 channel_id,
-                    uint32 version) :
+                    std::uint32_t channel_id,
+                    std::uint32_t version) :
       AdaptingTraverserBase<TypedBucket>(merge_source_name, type),
       sub_traverser_(sub_traverser),
       channel_id_(channel_id),
@@ -202,8 +204,8 @@ class AdaptingTraverser : public AdaptingTraverserBase<TypedBucket> {
   }
 
   khDeleteGuard<Traverser> sub_traverser_;
-  uint32 channel_id_;
-  uint32 version_;
+  std::uint32_t channel_id_;
+  std::uint32_t version_;
 
   DISALLOW_COPY_AND_ASSIGN(AdaptingTraverser);
 };
@@ -218,8 +220,8 @@ class UnifiedAdaptingTraverser :
   UnifiedAdaptingTraverser(const std::string &merge_source_name,
                            TypedEntry::TypeEnum type,
                            const khTransferGuard<Traverser> &sub_traverser,
-                           uint32 channel_id,
-                           uint32 version) :
+                           std::uint32_t channel_id,
+                           std::uint32_t version) :
       AdaptingTraverser<UnifiedBucket, Traverser>(
           merge_source_name, type, sub_traverser, channel_id, version)
   { }
@@ -235,7 +237,7 @@ class AllInfoAdaptingTraverser :
   AllInfoAdaptingTraverser(const std::string &merge_source_name,
                            TypedEntry::TypeEnum type,
                            const khTransferGuard<Traverser> &sub_traverser,
-                           uint32 channel_id) :
+                           std::uint32_t channel_id) :
       AdaptingTraverser<AllInfoBucket, Traverser>(
           merge_source_name, type, sub_traverser, channel_id,
           0 /* unused version override */)

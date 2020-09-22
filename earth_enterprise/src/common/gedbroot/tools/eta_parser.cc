@@ -91,16 +91,16 @@ bool EtaStruct::GetBoolValue() const {
   return value_ == "true" || value_ == "t" || value_ == "1";
 }
 
-int32 EtaStruct::GetInt32Value() const {
-  int32 value = 0;
+std::int32_t EtaStruct::GetInt32Value() const {
+  std::int32_t value = 0;
   if (has_value()) {
     value = ParseLeadingInt32Value(value_.c_str(), value);
   }
   return value;
 }
 
-uint32 EtaStruct::GetUInt32Value() const {
-  uint32 value = 0;
+std::uint32_t EtaStruct::GetUInt32Value() const {
+  std::uint32_t value = 0;
   if (has_value()) {
     value = ParseLeadingUInt32Value(value_.c_str(), value);
   }

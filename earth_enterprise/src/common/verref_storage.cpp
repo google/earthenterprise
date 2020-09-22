@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,7 +23,7 @@
 _VerRefDef::_VerRefDef() : ver_num(0) {
 }
 
-_VerRefDef::_VerRefDef(const std::string& _asset_name, uint32 _ver_num)
+_VerRefDef::_VerRefDef(const std::string& _asset_name, std::uint32_t _ver_num)
     : asset_name(_asset_name),
       ver_num(_ver_num) {
 }

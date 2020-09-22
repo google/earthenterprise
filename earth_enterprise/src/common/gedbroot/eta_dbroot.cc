@@ -25,14 +25,14 @@
 #include "common/packetcompress.h"
 
 namespace {
-const uint32 kOldMagic = 0x4e876494;
+const std::uint32_t kOldMagic = 0x4e876494;
 
 // Struct from old ETA DBroot code.
 struct etDbaseRootHeader {
-  uint32 rootMagic;
+  std::uint32_t rootMagic;
   unsigned char qtTypeVersion;
   // Padding char added by compiler.
-  uint16 qtDataVersion;
+  std::uint16_t qtDataVersion;
 };
 }  // anonymous namespace
 
@@ -44,7 +44,7 @@ bool EtaDbroot::IsEtaDbroot(const std::string &content,
       return false;
     }
     std::string eta_magic_buffer = content.substr(0, sizeof(kOldMagic));
-    if (kOldMagic == *reinterpret_cast<uint32*>(&eta_magic_buffer[0])) {
+    if (kOldMagic == *reinterpret_cast<std::uint32_t*>(&eta_magic_buffer[0])) {
       return true;
     }
   }
@@ -58,7 +58,7 @@ bool EtaDbroot::IsEtaDbroot(const std::string &content,
 }
 
 bool EtaDbroot::DecodeBinary(const std::string &binary,
-                             std::string *text, uint16 *epoch) {
+                             std::string *text, std::uint16_t *epoch) {
   if (!IsEtaDbroot(binary, kExpectBinary)) {
     return false;
   }
@@ -67,7 +67,7 @@ bool EtaDbroot::DecodeBinary(const std::string &binary,
   size_t data_offset = sizeof(etDbaseRootHeader) +
       etEncoder::kDefaultKey.size();
   if (binary.size() < data_offset) {
-    khSimpleException("Truncated dbroot: ") << binary.size() << " < " <<
+    throw khSimpleException("Truncated dbroot: ") << binary.size() << " < " <<
         data_offset;
   }
 
@@ -77,22 +77,21 @@ bool EtaDbroot::DecodeBinary(const std::string &binary,
   key_buffer.append(binary, sizeof(etDbaseRootHeader),
                     etEncoder::kDefaultKey.size());
   if (key_buffer != etEncoder::kDefaultKey) {
-    khSimpleException("Corrupted dbroot: Key has unexpected value.");
+    throw khSimpleException("Corrupted dbroot: Key has unexpected value.");
   }
 
   // Read the header and see if it is a valid binary dbroot file.
   std::string header_buffer;
   header_buffer.append(binary, 0, sizeof(etDbaseRootHeader));
   // Decrypt the entire header
-  etEncoder::Decode(&header_buffer[0], header_buffer.size(),
-                    key_buffer.data(), key_buffer.size());
+  etEncoder::DecodeWithDefaultKey(&header_buffer[0], header_buffer.size());
   etDbaseRootHeader header;
   memcpy(&header, header_buffer.data(), sizeof(etDbaseRootHeader));
   // now restore the originally unencrypted magic from the file
   // That's just the way the file format works.
   memcpy(&header.rootMagic, binary.data(), sizeof(header.rootMagic));
   if (header.rootMagic != kOldMagic) {
-    khSimpleException("Corrupted dbroot: Bad magic.");
+    throw khSimpleException("Corrupted dbroot: Bad magic.");
   }
   *epoch = header.qtDataVersion;
 
@@ -102,8 +101,7 @@ bool EtaDbroot::DecodeBinary(const std::string &binary,
     // Decrypt the post portion of the dbroot.
     std::string decodeBuf;
     decodeBuf.append(binary, data_offset, data_size);
-    etEncoder::Decode(&decodeBuf[0], data_size,
-                      key_buffer.data(), key_buffer.size());
+    etEncoder::DecodeWithDefaultKey(&decodeBuf[0], data_size);
 
     // Try to decompress the data portion. If it fails then we assume that the
     // dbroot is uncompressed.

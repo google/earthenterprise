@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,10 +52,10 @@ class RasterProjectWidget : public ProjectWidget {
   void RedrawPreview();
 
  private:
-  inline uint ProductToDisplayLevel(uint product_level) const {
+  inline unsigned int ProductToDisplayLevel(unsigned int product_level) const {
     return product_level - level_diff_;
   }
-  inline uint DisplayToProductLevel(uint display_level) const {
+  inline unsigned int DisplayToProductLevel(unsigned int display_level) const {
     return display_level + level_diff_;
   }
 
@@ -81,7 +82,7 @@ class RasterProjectWidget : public ProjectWidget {
   AssetDefs::Type asset_type_;
   const std::string sub_type_;
   const bool is_mercator_;
-  uint level_diff_;
+  unsigned int level_diff_;
   LayerLegend legend_config_;
   WidgetControllerManager legendManager;
 };

@@ -1,0 +1,218 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Configure a GEE virtual host for LDAP authentication &#8212; Google Earth Enterprise 5.3.6 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Set up HTTPS" href="setupHTTPS.html" />
+    <link rel="prev" title="Configure GEE Server Admin pages for LDAP authentication" href="configureGeeForLDAP.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="setupHTTPS.html" title="Set up HTTPS"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="configureGeeForLDAP.html" title="Configure GEE Server Admin pages for LDAP authentication"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerConfigAndSecurity.html" accesskey="U">GEE Server Configuration And Security</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="configureGeeForLDAP.html"
+                        title="previous chapter">Configure GEE Server Admin pages for LDAP authentication</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="setupHTTPS.html"
+                        title="next chapter">Set up HTTPS</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp5.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp5.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="configure-a-gee-virtual-host-for-ldap-authentication">
+<h1>Configure a GEE virtual host for LDAP authentication<a class="headerlink" href="#configure-a-gee-virtual-host-for-ldap-authentication" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>You can use LDAP authentication, which is based on Microsoft
+Active Directory, to authenticate users to access your GEE virtual
+hosts. GEE server software is based on Apache <code class="docutils literal notranslate"><span class="pre">httpd</span></code>.</p>
+<p>It is easy to administer and manage user accounts. You can use a
+simple <code class="docutils literal notranslate"><span class="pre">.htpasswd</span></code> to secure a GEE virtual host, then you can
+assign the permissions levels via groups or user level. If you
+have an existing Active Directory user catalog, you can use that
+instead of implementing a redundant authentication system. For
+information about enabling your Active Directory for LDAP, see the
+<a class="reference external" href="http://www.openldap.org">OpenLDAP</a> documentation.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">This article explains how to configure a virtual host for LDAP
+authentication using GEE Server 5.x.</p>
+</div>
+<p class="rubric" id="to-configure-a-gee-virtual-host-for-ldap-authentication">To configure a GEE virtual host for LDAP
+authentication:</p>
+<ol class="arabic">
+<li><p class="first">Make sure that the LDAP modules are loaded on your Apache
+server. For most GEE installations, these are loaded
+automatically.</p>
+</li>
+<li><p class="first">Create a <code class="docutils literal notranslate"><span class="pre">geserver</span></code> Active Directory account that can access
+the user directory, and make sure to document the attributes.</p>
+</li>
+<li><p class="first">Load the modules in your
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf.d/virtual_servers/private_host.location</span></code>
+file or your custom virtual host file.</p>
+<p>After the modules are loaded, you can control access by
+querying the directory for particular attributes.</p>
+</li>
+<li><p class="first">Point Apache to the LDAP server <code class="docutils literal notranslate"><span class="pre">AuthLDAPURL</span></code> key directive.</p>
+<p>An example of an <code class="docutils literal notranslate"><span class="pre">AuthLDAPURL</span></code> directive is:</p>
+<p><code class="docutils literal notranslate"><span class="pre">AuthLDAPURL</span> <span class="pre">ldap://ldapserver.example.com:389/ou=Users,dc=example,dc=com?uid</span></code></p>
+<p>The key directive format declares the LDAP server, the
+distinguished name (DN), and the attribute to use in the search
+(typically the <code class="docutils literal notranslate"><span class="pre">Uid</span></code> attribute in the <code class="docutils literal notranslate"><span class="pre">Users</span></code>
+organizational unit). You can also customize these filters for
+additional security constraints.</p>
+</li>
+<li><p class="first">Restart the GEE server to load the modules into the system:</p>
+<p><code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">/etc/init.d/geserver</span> <span class="pre">restart</span></code></p>
+</li>
+<li><p class="first">Create a user account in Active Directory <code class="docutils literal notranslate"><span class="pre">geserver</span></code>.
+This can be any user account that has limited access. The user
+account only needs access to the global catalog. Make sure that
+your user has the full organizational unit name.</p>
+</li>
+</ol>
+<p class="rubric">To bind to Active Directory GUI:</p>
+<ol class="arabic">
+<li><p class="first">If you do not know your LDAP domain name, ask your system
+administrator. You can also find your domain name by searching
+for it in the format <code class="docutils literal notranslate"><span class="pre">Dn:</span> <span class="pre">CN=geserver,CN=Users,DC=location,DC=company,DC=com</span></code>. In
+this example, the domain name is <code class="docutils literal notranslate"><span class="pre">location.company.com</span></code>.</p>
+</li>
+<li><p class="first">Use your domain name to configure the Apache module.
+Alternatively, you can use the command prompt:</p>
+<p><code class="docutils literal notranslate"><span class="pre">dsadd</span> <span class="pre">user</span> <span class="pre">UserDN</span> <span class="pre">[-samid</span> <span class="pre">SAMName]</span> <span class="pre">-pwd</span> <span class="pre">{Password|*}</span></code></p>
+</li>
+<li><p class="first">Add the directives to your virtual server file at
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttp/conf.d/virtual_servers</span></code>.</p>
+</li>
+<li><p class="first">For testing purposes, add the lines below to the
+<code class="docutils literal notranslate"><span class="pre">private_host.location</span></code> file:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Location /private/*&gt;
+   AuthType Basic
+   AuthName &quot;LDAP LOGIN&quot;
+   AuthBasicProvider ldap
+   AuthLDAPURL &quot;ldap://ldapserver.example.com:389/ou=Users,dc=example,dc=com?uid&quot;
+   AuthLDAPBindDN &quot;someuser@example.com&quot;
+   AuthLDAPBindPassword &quot;somepassword&quot;
+   Require valid-user
+&lt;/Location&gt;
+</pre></div>
+</div>
+</li>
+<li><p class="first">Restart your server and try to access the virtual server via
+the client.
+A login screen appears. If you cannot access Apache, open the
+file error log at
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/logs/error_log</span> <span class="pre">and</span> <span class="pre">access_log</span></code>.</p>
+</li>
+</ol>
+<p class="rubric">Directives</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">require</span> <span class="pre">valid-user</span></code>. Allows all users who log in with
+correct passwords.</li>
+<li><code class="docutils literal notranslate"><span class="pre">AuthLDAPBindDN</span></code>. The distinguished name (DN) of the user
+account that Apache uses to connect to the directory system and
+authenticate the user.</li>
+<li><code class="docutils literal notranslate"><span class="pre">AuthLDAPBindPassword</span></code>. The password for the user account
+configured with the <code class="docutils literal notranslate"><span class="pre">AuthLDAPBindDN</span></code> directive.</li>
+<li><code class="docutils literal notranslate"><span class="pre">AuthLDAPURL</span></code>. The URL that tells where the directory server
+is, where to look for users, which user attribute is used to
+identify a user, and other miscellaneous things that are
+specific to the LDAP query syntax.</li>
+<li><code class="docutils literal notranslate"><span class="pre">AuthBasicProvider</span></code>. Tells Apache which authentication module
+to use for Basic Authentication.</li>
+</ul>
+<p>For more information, see the Apache
+<a class="reference external" href="https://httpd.apache.org/docs/2.4/mod/mod_ldap.html">mod_ldap</a>
+<a class="reference external" href="https://httpd.apache.org/docs/2.4/mod/mod_authnz_ldap.html">mod_authnz_ldap</a>
+and
+<a class="reference external" href="https://httpd.apache.org/docs/2.4/mod/mod_auth_basic.html">mod_auth_basic</a>
+documentation.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">To troubleshoot any connection issues, begin by checking the
+logs on the LDAP server to make sure GEE server is correctly
+making authentication requests.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="setupHTTPS.html" title="Set up HTTPS"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="configureGeeForLDAP.html" title="Configure GEE Server Admin pages for LDAP authentication"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerConfigAndSecurity.html" >GEE Server Configuration And Security</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

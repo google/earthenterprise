@@ -323,7 +323,7 @@ class ProtobufWalkerCallbacks {
 
 // Encapsulates algorithm (in <Edit>) of traversing a protobuf as a tree.
 // Calls the appropriate user-supplied callback on each /primitive/
-// (eg int32, string; not Message) field.
+// (eg std::int32_t, string; not Message) field.
 class Walker {
  public:
   explicit Walker(ProtobufWalkerCallbacks* callbacks)

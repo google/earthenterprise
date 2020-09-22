@@ -1058,7 +1058,7 @@ void ImageView::sampleImage(int x, int y, int& rValue, int& gValue, int& bValue)
 
   if (_statusBar != NULL) {
     char text[maxbuflen];
-    snprintf(text, maxbuflen, "%s%s(%d,%d) r=%d, g=%d, b=%d (%dx%d) [rows=%d][%.2f%%/%.2f%%: %d/%d %d/%d %d/%d][%d%s](%6.3f+%6.3f*r, %2.0f%%)(%7.4f+%7.4f*b, %2.0f%%)[%d][%.3f/%.3f][%d]%.2f",
+    snprintf(text, maxbuflen, "%s%s(%d,%d) r=%d, g=%d, b=%d (%dx%d) [rows=%d][%.2f%%/%.2f%%: %u/%u %u/%u %u/%u][%d%s](%6.3f+%6.3f*r, %2.0f%%)(%7.4f+%7.4f*b, %2.0f%%)[%d][%.3f/%.3f][%d]%.2f",
             _resetOnFileOpen ? "1" : "n",
             _correct ? "C" : "R",
             x, y,

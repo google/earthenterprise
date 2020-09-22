@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -42,7 +43,7 @@ class VectorFilterItem : public LayerItemBase {
 VectorFilterItem::VectorFilterItem(QListViewItem* parent,
                                    const DisplayRuleConfig& cfg)
   : LayerItemBase(parent) {
-  std::vector<uint> fill_rgba, outline_rgba;
+  std::vector< unsigned int>  fill_rgba, outline_rgba;
   fill_rgba.resize(4, 255);
   outline_rgba.resize(4, 255);
 
@@ -110,7 +111,7 @@ void VectorLayerItem::Init() {
 
   setText(1, shortAssetName(layer_config_.assetRef.c_str()));
 
-  std::vector<uint> fill_rgba, outline_rgba;
+  std::vector< unsigned int>  fill_rgba, outline_rgba;
   for (std::vector<DisplayRuleConfig>::iterator rule = layer_config_.displayRules.begin();
        rule != layer_config_.displayRules.end(); ++rule) {
     (void) new VectorFilterItem(this, *rule);

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@
 
 #include "shared.h"
 #include <khEndian.h>
-#include <khAssert.h>
 #include <third_party/rsa_md5/crc32.h>
 #include "IndexBundleReader.h"
 
@@ -32,9 +32,9 @@ void ChildBucketAddr::Push(EndianWriteBuffer &buf) const {
 }
 
 void ChildBucketAddr::Pull(EndianReadBuffer &buf) {
-  buf >> *const_cast<uint64 *>(&offset)
-      >> *const_cast<uint32 *>(&childBucketsSize)
-      >> *const_cast<uint32 *>(&entryBucketsSize);
+  buf >> *const_cast<std::uint64_t *>(&offset)
+      >> *const_cast<std::uint32_t *>(&childBucketsSize)
+      >> *const_cast<std::uint32_t *>(&entryBucketsSize);
 }
 
 
@@ -59,7 +59,7 @@ void LoadedChildBucket::Load(const ChildBucketAddr &addr,
 ChildBucketAddr LoadedChildBucket::Push(EndianWriteBuffer &buf) {
   // write the child bucket addrs
   EndianWriteBuffer::size_type start = buf.CurrPos();
-  for (uint i = 0; i < kChildAddrsPerBucket; ++i) {
+  for (unsigned int i = 0; i < kChildAddrsPerBucket; ++i) {
     if (childAddrs[i]) {
       buf << static_cast<BucketChildSlotType>(i) << childAddrs[i];
     }
@@ -71,12 +71,12 @@ ChildBucketAddr LoadedChildBucket::Push(EndianWriteBuffer &buf) {
   }
 
   // update the childBucketsSize
-  const uint32 childBucketsSize = end - start;
+  const std::uint32_t childBucketsSize = end - start;
 
 
   // write the entry bucket addrs
   start = end;
-  for (uint i = 0; i < kChildAddrsPerBucket; ++i) {
+  for (unsigned int i = 0; i < kChildAddrsPerBucket; ++i) {
     if (entryAddrs[i]) {
       buf << static_cast<BucketEntrySlotType>(i) << entryAddrs[i];
     }
@@ -88,7 +88,7 @@ ChildBucketAddr LoadedChildBucket::Push(EndianWriteBuffer &buf) {
   }
 
   // update the childBucketsSize
-  const uint32 entryBucketsSize = end - start;
+  const std::uint32_t entryBucketsSize = end - start;
 
   return ChildBucketAddr(0, childBucketsSize, entryBucketsSize);
 }
@@ -109,7 +109,7 @@ void LoadedChildBucket::Pull(const ChildBucketAddr &addr,
     buf.CheckCRC(addr.childBucketsSize,
                  "geindex child bucket (child addrs)");
     EndianReadBuffer::size_type endPos =
-      buf.CurrPos() + addr.childBucketsSize - sizeof(uint32);
+      buf.CurrPos() + addr.childBucketsSize - sizeof(std::uint32_t);
     while (buf.CurrPos() < endPos) {
       BucketChildSlotType pos;
       buf >> pos;
@@ -117,7 +117,7 @@ void LoadedChildBucket::Pull(const ChildBucketAddr &addr,
       // childAddrs[pos] is calculated before pos is pulled.
       buf >> childAddrs[pos];
     }
-    buf.Skip(sizeof(uint32)); // crc
+    buf.Skip(sizeof(std::uint32_t)); // crc
   }
 
   // extract the entries
@@ -125,7 +125,7 @@ void LoadedChildBucket::Pull(const ChildBucketAddr &addr,
     buf.CheckCRC(addr.entryBucketsSize,
                  "geindex child bucket (entry addrs)");
     EndianReadBuffer::size_type endPos =
-      buf.CurrPos() + addr.entryBucketsSize - sizeof(uint32);
+      buf.CurrPos() + addr.entryBucketsSize - sizeof(std::uint32_t);
     while (buf.CurrPos() < endPos) {
       BucketEntrySlotType pos;
       buf >> pos;
@@ -133,13 +133,13 @@ void LoadedChildBucket::Pull(const ChildBucketAddr &addr,
       // entryAddrs[pos] is calculated before pos is pulled.
       buf >> entryAddrs[pos];
     }
-    buf.Skip(sizeof(uint32)); // crc
+    buf.Skip(sizeof(std::uint32_t)); // crc
   }
 }
 
 
 // compute these at compile time since we need to use them a lot
-const uint BucketPath::EntrySlotSpacing[kQuadLevelsPerBucket - 1] = {
+const unsigned int BucketPath::EntrySlotSpacing[kQuadLevelsPerBucket - 1] = {
   1 + 4 + 16,
   1 + 4,
   1
@@ -156,7 +156,7 @@ BucketPath::SubAddrAsEntrySlot(const QuadtreePath &target) const {
 
   // The path must have less than kQuadLevelsPerBucket levels, otherwise
   // this function should have been called on a different BucketPath
-  uint blevel = path.Level();
+  unsigned int blevel = path.Level();
   assert(blevel <= 3);
   BucketEntrySlotType slot = blevel;
   for ( ; blevel ; ) {

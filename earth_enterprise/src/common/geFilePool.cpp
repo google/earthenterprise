@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +15,6 @@
 
 
 #include "geFilePool.h"
-#include <khFileUtils.h>
 #include <khSimpleException.h>
 #include <third_party/rsa_md5/crc32.h>
 #include <khEndian.h>
@@ -24,12 +24,11 @@
 // ****************************************************************************
 bool FileReservationImpl::UnlockAndClose_(geFilePool &pool) {
   // run when pool.mutex IS locked
-  if (fd != -1) {
+  if (aFA->isValid()) {
     int result = 0;
     {
       khUnlockGuard unlock(pool.mutex);
-      result = isWriter ? khFsyncAndClose(fd) : khClose(fd);
-      fd = -1;
+      result = isWriter ? aFA->FsyncAndClose() : aFA->Close();
     }
     pool.ReduceFdCount_locked();
     return (result != -1);
@@ -48,16 +47,17 @@ bool FileReservationImpl::UnlockAndOpen_(geFilePool &pool,
                                  // our invariant numFdsUsed_ < maxNumFds
   {
     khUnlockGuard unlock(pool.mutex);
-    fd = khOpen(fname, flags, createMask);
+    aFA = AbstractFileAccessor::getAccessor(fname);
+    aFA->Open(fname, nullptr, flags, createMask);
   }
-  if (fd < 0) {
+  if (!aFA->isValid()) {
     notify(NFY_DEBUG, "FileReservationImpl::UnlockAndOpen_ failure: "
            "%u file: %s flags: %d mask: %x, errno: %d\n",
            pool.MaxFdsUsed(), fname.c_str(),flags, createMask, errno);
     // If we failed, back off the count.
     pool.ReduceFdCount_locked();
   }
-  return (fd != -1);
+  return (aFA->isValid());
 }
 
 // ****************************************************************************
@@ -254,7 +254,7 @@ void FileReferenceImpl::Dump_locked(void) {
 
   fprintf(stderr, "%s: refcount=%d ", fname.c_str(), refcount());
   if (reservation) {
-    fprintf(stderr, "fd=%d ", reservation->Fd() );
+    fprintf(stderr, "fd=%d ", reservation->AFA()->getFD());
   }
   if (operationPending) {
     fprintf(stderr, "pending ");
@@ -273,7 +273,7 @@ void FileReferenceImpl::Pread(void *buffer, size_t size, off64_t offset) {
     throw khSimpleException("FileReferenceImpl::Pread: NULL tmpres");
   }
 
-  if (!khPreadAll(tmpres->Fd(), buffer, size, offset)) {
+  if (!tmpres->AFA()->PreadAll(buffer, size, offset)) {
     throw khSimpleErrnoException()
       << "Unable to read " << size << " bytes from offset "
       << offset << " in " << fname;
@@ -289,7 +289,7 @@ void FileReferenceImpl::Pwrite(const void *buffer, size_t size,
     throw khSimpleException("FileReferenceImpl::Pwrite: NULL tmpres");
   }
 
-  if (!khPwriteAll(tmpres->Fd(), buffer, size, offset)) {
+  if (!tmpres->AFA()->PwriteAll(buffer, size, offset)) {
     throw khSimpleErrnoException()
       << "Unable to write " << size << " bytes to offset "
       << offset << " in " << fname;
@@ -325,7 +325,7 @@ void FileReferenceImpl::Close(void) {
 // ***  geFilePool
 // ****************************************************************************
 namespace {
-uint CalcMaxFds(int requested) {
+unsigned int CalcMaxFds(int requested) {
   assert(requested != 0);
   int systemMax = khMaxOpenFiles();
   if (requested > 0) {
@@ -390,7 +390,7 @@ void geFilePool::WriteStringFile(const std::string &fname,
   WriteSimpleFile(fname, buf.data(), buf.size(), createMask);
 }
 void geFilePool::ReadStringFile(const std::string &fname, std::string *buf) {
-  uint64 size = 0;
+  std::uint64_t size = 0;
   time_t mtime;
   if (!khGetFileInfo(fname, size, mtime)) {
     throw khSimpleException("No such file ") << fname;
@@ -404,7 +404,7 @@ void geFilePool::WriteSimpleFileWithCRC(const std::string &fname,
                                         EndianWriteBuffer &buf,
                                         mode_t createMask) {
   // grow the buffer to make room for the CRC
-  buf << uint32(0);
+  buf << std::uint32_t(0);
 
   // do the write
   Writer writer(Writer::WriteOnly, Writer::Truncate, *this, fname, createMask);
@@ -415,7 +415,7 @@ void geFilePool::WriteSimpleFileWithCRC(const std::string &fname,
 void geFilePool::ReadSimpleFileWithCRC(const std::string &fname,
                                        EndianReadBuffer &buf) {
   // get the filesize
-  uint64 size = 0;
+  std::uint64_t size = 0;
   time_t mtime;
   if (!khGetFileInfo(fname, size, mtime)) {
     throw khSimpleException("No such file ") << fname;
@@ -430,7 +430,7 @@ void geFilePool::ReadSimpleFileWithCRC(const std::string &fname,
   reader.PreadCRC(&buf[0], size, 0);
 
   // prune the CRC
-  buf.resize(size - sizeof(uint32));
+  buf.resize(size - sizeof(std::uint32_t));
 }
 
 LockingFileReference geFilePool::GetFileReference(const std::string &fname,
@@ -518,7 +518,7 @@ geFilePool::Reader::~Reader(void) {
   // nothing to do, fileref's destructor takes care of it for me
 }
 
-uint64 geFilePool::Reader::Filesize(void) const {
+ std::uint64_t geFilePool::Reader::Filesize(void) const {
   return fileref->Filesize();
 }
 
@@ -534,9 +534,9 @@ void geFilePool::Reader::Pread(std::string &buffer, size_t size,
 
 void geFilePool::Reader::PreadCRC(void *buffer, size_t size, off64_t offset) {
   Pread(buffer, size, offset);
-  size_t data_len = size - sizeof(uint32);
-  uint32 computed_crc = Crc32(buffer, data_len);
-  uint32 file_crc;
+  size_t data_len = size - sizeof(std::uint32_t);
+  std::uint32_t computed_crc = Crc32(buffer, data_len);
+  std::uint32_t file_crc;
   FromLittleEndianBuffer(&file_crc,
                          reinterpret_cast<char*>(buffer) + data_len);
   if (computed_crc != file_crc) {
@@ -616,7 +616,7 @@ void geFilePool::Writer::Pwrite(const void *buffer, size_t size,
 }
 
 void geFilePool::Writer::PwriteCRC(void *buffer, size_t size, off64_t offset) {
-  size_t data_len = size - sizeof(uint32);
+  size_t data_len = size - sizeof(std::uint32_t);
   ToLittleEndianBuffer(static_cast<char*>(buffer) + data_len,
                        Crc32(buffer, data_len));
   Pwrite(buffer, size, offset);
@@ -643,9 +643,9 @@ void geFilePool::Writer::Pread(std::string &buffer, size_t size,
 void geFilePool::Writer::PreadCRC(void *buffer, size_t size, off64_t offset)
 {
   Pread(buffer, size, offset);
-  size_t data_len = size - sizeof(uint32);
-  uint32 computed_crc = Crc32(buffer, data_len);
-  uint32 file_crc;
+  size_t data_len = size - sizeof(std::uint32_t);
+  std::uint32_t computed_crc = Crc32(buffer, data_len);
+  std::uint32_t file_crc;
   FromLittleEndianBuffer(&file_crc,
                          reinterpret_cast<char*>(buffer) + data_len);
   if (computed_crc != file_crc) {

@@ -1,0 +1,213 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Fusion issues &#8212; Google Earth Enterprise 5.3.7 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Unsupported 3D geometry files" href="unsupported3DGeoFiles.html" />
+    <link rel="prev" title="Fusion diagnostics" href="fusionDiagnostics.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="unsupported3DGeoFiles.html" title="Unsupported 3D geometry files"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="fusionDiagnostics.html" title="Fusion diagnostics"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../troubleshooting.html" accesskey="U">Troubleshooting and error messages</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="fusionDiagnostics.html"
+                        title="previous chapter">Fusion diagnostics</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="unsupported3DGeoFiles.html"
+                        title="next chapter">Unsupported 3D geometry files</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp12.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp12.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="fusion-issues">
+<h1>Fusion issues<a class="headerlink" href="#fusion-issues" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>When you install GEE on a server, the software does a query for
+<code class="docutils literal notranslate"><span class="pre">hostname</span> <span class="pre">-f</span></code>. Each time you build a resource, project, or
+database on the Fusion server, the initial <code class="docutils literal notranslate"><span class="pre">hostname</span> <span class="pre">-f</span></code>
+response is added to all the files in each asset’s subdirectory.
+Changing the hostname or moving assets from one server to another
+without updating the hostname in all places will make your Fusion
+system inoperable. To safely change your hostname, follow the
+instructions below.</p>
+<p>To change the hostname for a production system (GEE Server only,
+no Fusion):</p>
+<ol class="arabic simple">
+<li>Shut down the <code class="docutils literal notranslate"><span class="pre">geserver</span></code> daemon at
+<code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">stop</span></code>.</li>
+<li>Update the hostname and IP address to the correct entries for
+the machine.</li>
+<li>Edit <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/intl/en/tips/tip*.html</span></code> and
+update any hardcoded URLs to the new machine URL.</li>
+<li>Remove the contents of <code class="docutils literal notranslate"><span class="pre">/gevol/published_dbs/stream_space</span></code>
+and <code class="docutils literal notranslate"><span class="pre">/gevol/published_dbs/search_space</span></code>.</li>
+<li>Change directory to <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> and execute
+<code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">gepguser</span> <span class="pre">/opt/google/bin/geresetpgdb</span></code>.</li>
+<li>Start the GEE Server: <code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">start</span></code>.</li>
+</ol>
+<p>To change the hostname for a development system (both Fusion and
+GEE Server):</p>
+<ol class="arabic">
+<li><p class="first">Shut down both the <code class="docutils literal notranslate"><span class="pre">gefusion</span></code> and <code class="docutils literal notranslate"><span class="pre">geserver</span></code> daemons:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/etc/init.d/gefusion stop
+/etc/init.d/geserver stop
+</pre></div>
+</div>
+</li>
+<li><p class="first">Update the hostname and IP address to the correct entries for
+the machines.</p>
+</li>
+<li><p class="first">If needed, edit the <code class="docutils literal notranslate"><span class="pre">/etc/hosts</span></code> file to update the IP
+address and hostname entries for the production machine.</p>
+</li>
+<li><p class="first">Execute
+<code class="docutils literal notranslate"><span class="pre">/opt/google/bin/geconfigureassetroot</span> <span class="pre">--fixmasterhost</span></code>.</p>
+</li>
+<li><p class="first">Back up the following files to <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> or another archive
+folder:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/gevol/assets/.config/volumes.xml
+/gevol/assets/.config/PacketLevel.taskrule
+/gevol/assets/.userdata/serverAssociations.xml
+/gevol/assets/.userdata/snippets.xml
+</pre></div>
+</div>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">assets</span></code> with the name of your asset root. For example, <code class="docutils literal notranslate"><span class="pre">/gevol/tutorial</span></code>.</p>
+</li>
+<li><p class="first">Edit the <code class="docutils literal notranslate"><span class="pre">/gevol/assets/.userdata/snippets.xml</span></code> file and
+update the hardcoded URLs to match the new hostname URL of the
+production machine.</p>
+</li>
+<li><p class="first">Edit <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/intl/en/tips/tip*.html</span></code> and
+update any hardcoded URLs to the new machine URL.</p>
+</li>
+<li><p class="first">Remove the contents of <code class="docutils literal notranslate"><span class="pre">/gevol/published_dbs/stream_space</span></code>
+and <code class="docutils literal notranslate"><span class="pre">/gevol/published_dbs/search_space</span></code>.</p>
+</li>
+<li><p class="first">Change directory to <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> and execute</p>
+<p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">gepguser</span> <span class="pre">/opt/google/bin/geresetpgdb</span></code>.</p>
+</li>
+<li><p class="first">Start the geserver and gefusion services:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/etc/init.d/geserver start
+/etc/init.d/gefusion start
+</pre></div>
+</div>
+<p>You can now change the server associations and publish the
+databases.</p>
+</li>
+</ol>
+<p>To change the server associations and publish the databases:</p>
+<ol class="arabic simple">
+<li>Log in to Fusion as a user (not as root) by entering <code class="docutils literal notranslate"><span class="pre">fusion</span></code>
+on the command line.</li>
+<li>Select <strong>Tools</strong> &gt; <strong>Server Associations Manager</strong>.</li>
+<li>Edit the <code class="docutils literal notranslate"><span class="pre">default_ge</span></code> and <code class="docutils literal notranslate"><span class="pre">default_map</span></code>entries and update
+the URL to match the hostname of the development machine.</li>
+<li>Edit the remaining entries for the production server
+associations and update the URL to the new production machine
+URL, then close the Server Associations Manager.</li>
+<li>Select <strong>Tools</strong> &gt; <strong>Asset Manager</strong>.</li>
+<li>Navigate to the Databases folder, right-click <strong>3D database</strong>,
+and select <strong>Publish</strong>.</li>
+<li>From the <strong>Publish</strong> menu, select <strong>default_ge</strong> and publish to
+the local development machine. Repeat for the production
+machine.</li>
+<li>Right-click <strong>2D database</strong> and select <strong>Publish</strong>.</li>
+<li>From the <strong>Publish</strong> menu, select <strong>default_map</strong> and publish
+to the local development machine. Repeat for the production
+machine.</li>
+</ol>
+<p>To verify that the databases are published and working:</p>
+<ol class="arabic simple">
+<li>Connect a web browser to <code class="docutils literal notranslate"><span class="pre">http://production/default_map</span></code>.</li>
+<li>Connect a web browser to <code class="docutils literal notranslate"><span class="pre">http://development/default_map</span></code>.</li>
+<li>Connect GE Enterprise Client to <code class="docutils literal notranslate"><span class="pre">http://production</span></code>.</li>
+<li>Connect GE Enterprise Client to <code class="docutils literal notranslate"><span class="pre">http://development</span></code>.</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">During testing, you can check
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/logs/access_log</span></code> and <code class="docutils literal notranslate"><span class="pre">error_log</span></code> to
+determine if any errors are reported by Apache.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="unsupported3DGeoFiles.html" title="Unsupported 3D geometry files"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="fusionDiagnostics.html" title="Fusion diagnostics"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../troubleshooting.html" >Troubleshooting and error messages</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

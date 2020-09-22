@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w-
 #
 # Copyright 2017 Google Inc.
+# Copyright 2020 The Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -103,10 +104,8 @@ print $fh <<EOF;
 // ****************************************************************************
 $config{"AssetD.cpp"}
 
-const AssetDefs::Type ${name}AssetImplD::EXPECTED_TYPE = $typeorinvalid;
-const AssetDefs::Type ${name}AssetVersionImplD::EXPECTED_TYPE = $typeorinvalid;
-const std::string ${name}AssetImplD::EXPECTED_SUBTYPE = "$subtype";
-const std::string ${name}AssetVersionImplD::EXPECTED_SUBTYPE = "$subtype";
+const AssetDefs::Type ${name}Type::TYPE = $typeorinvalid;
+const std::string ${name}Type::SUBTYPE = "$subtype";
 
 // ****************************************************************************
 // ***  ${name}Factory - Auto generated
@@ -122,7 +121,6 @@ ${name}Factory::SubAssetName(
 }
 
 EOF
-
 
 print $fh <<EOF;
 // ****************************************************************************
@@ -179,7 +177,7 @@ void ${name}AssetImplD::SerializeConfig(DOMElement *top) const
     AddConfig(top, config);
 }
 
-uint64 ${name}AssetImplD::GetHeapUsage() const {
+ std::uint64_t ${name}AssetImplD::GetHeapUsage() const {
     return ${name}AssetImpl::GetHeapUsage()
             + ::GetHeapUsage(config);
 }
@@ -470,7 +468,7 @@ void ${name}AssetVersionImplD::SerializeConfig(DOMElement *top) const
     AddConfig(top, config);
 }
 
-uint64 ${name}AssetVersionImplD::GetHeapUsage() const {
+ std::uint64_t ${name}AssetVersionImplD::GetHeapUsage() const {
     return ${name}AssetVersionImpl::GetHeapUsage()
             + ::GetHeapUsage(config);
 }
@@ -495,7 +493,6 @@ if (@ConfigHistory == 1) {
 }
 print $fh "  }\n";
 print $fh "} // anonymous namespace\n\n";
-
 
 
 close($fh);

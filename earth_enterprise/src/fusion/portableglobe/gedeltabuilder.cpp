@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,7 +27,8 @@
 #include "common/khAbortedException.h"
 #include "common/khGetopt.h"
 #include "common/khSimpleException.h"
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "common/notify.h"
 #include "fusion/portableglobe/deltabuilder.h"
 

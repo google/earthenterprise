@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +22,8 @@
 
 #include <math.h>
 #include <time.h>
-#include <khAssert.h>
 #include <khTypes.h>
+#include <cstdint>
 
 inline int log2(int val)
 {
@@ -92,10 +93,10 @@ struct CompileTimeIsPowerOf2Checker<0> {
 template <unsigned long long num>
 struct CompileTimeLog2Checker {
   // will generate compile time error for numbers that are not power of two
-  COMPILE_TIME_CHECK(CompileTimeIsPowerOf2(num), NotAPowerOf2);
+  static_assert(CompileTimeIsPowerOf2(num), "Not A Power Of 2");
 
   // Simplified algorithm since:
-  // 1) The above COMPILE_TIME_CHECK guarantees that it's a power of two
+  // 1) The above static_assert guarantees that it's a power of two
   // 2) The specializations below handles the case for '1'
   enum { result = 1 + CompileTimeLog2Checker<(num>>1)>::result };
 };
@@ -104,7 +105,7 @@ template <> struct CompileTimeLog2Checker<1> {
 };
 
 // Count milliseconds from midnight.
-inline int32 MillisecondsFromMidnight(const struct tm& time) {
+inline std::int32_t MillisecondsFromMidnight(const struct tm& time) {
   return ((time.tm_hour * 60 +  time.tm_min) * 60 +  time.tm_sec) * 1000;
 }
 

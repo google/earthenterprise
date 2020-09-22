@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +16,6 @@
 
 #include <iostream>  // NOLINT(readability/streams)
 #include <string>
-#include "./khTypes.h"
 #include "./glc_reader.h"
 #include "./packetbundle.h"
 #include "./packetbundle_finder.h"
@@ -27,14 +27,14 @@ const int PacketBundleFinder::MAX_CACHE_SIZE = 64;
  * Constructor sets the packetbundle's directory and initializes index info.
  */
 PacketBundleFinder::PacketBundleFinder(const GlcReader& glc_reader,
-                                       uint64 index_offset,
-                                       uint64 index_size)
+                                       std::uint64_t index_offset,
+                                       std::uint64_t index_size)
     : glc_reader_(glc_reader),
     index_offset_(index_offset),
     index_size_(index_size),
     num_index_items_(index_size_ / sizeof(IndexItem)) {
   // Fill with impossible value (assuming less than 2^64 packets).
-  const uint64 ILLEGAL_LOCATION = 0xffffffffffffffffLLU;
+  const std::uint64_t ILLEGAL_LOCATION = 0xffffffffffffffffLLU;
   index_cache_location_.assign(MAX_CACHE_SIZE, ILLEGAL_LOCATION);
   index_cache_.resize(MAX_CACHE_SIZE);
 }
@@ -50,18 +50,18 @@ bool PacketBundleFinder::FindPacketInIndex(IndexItem* index_item) {
   }
 
   // Do a binary search for the index item.
-  uint64 top = num_index_items_ - 1;
-  uint64 bottom = 0;
+  std::uint64_t top = num_index_items_ - 1;
+  std::uint64_t bottom = 0;
   // Keep track of depth in binary search for the cache.
   int i = 0;
   while (top >= bottom) {
     // Look in the middle.
-    uint64 idx = bottom + ((top - bottom) >> 1);
+    std::uint64_t idx = bottom + ((top - bottom) >> 1);
     // If it's not in our cache, load it.
     // TODO: start lock here for thread safety.
     if (idx != index_cache_location_[i]) {
       index_cache_location_[i] = idx;
-      uint64 offset = index_offset_ + idx * sizeof(IndexItem);
+      std::uint64_t offset = index_offset_ + idx * sizeof(IndexItem);
       glc_reader_.ReadData(reinterpret_cast<char*>(&index_cache_[i]),
                            offset, sizeof(IndexItem));
     }

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -109,7 +110,7 @@ AssetDefs::Type AssetDisplayHelper::AssetType(AssetKey key) {
     AssetDefs::KML,
     AssetDefs::Invalid
   };
-  return types[static_cast<uint>(key)];
+  return types[static_cast< unsigned int> (key)];
 }
 
 std::string     AssetDisplayHelper::AssetSubType(AssetKey key) {
@@ -133,7 +134,7 @@ std::string     AssetDisplayHelper::AssetSubType(AssetKey key) {
     std::string()
   };
 
-  return sub_types[static_cast<uint>(key)];
+  return sub_types[static_cast< unsigned int> (key)];
 }
 
 QPixmap AssetDisplayHelper::Pixmap(AssetKey key) {
@@ -157,7 +158,7 @@ QPixmap AssetDisplayHelper::Pixmap(AssetKey key) {
     "failed_asset.png"
   };
 
-  return LoadPixmap(icon_names[static_cast<uint>(key)]);
+  return LoadPixmap(icon_names[static_cast< unsigned int> (key)]);
 }
 
 QString AssetDisplayHelper::PrettyName(AssetKey key)  {
@@ -182,7 +183,7 @@ QString AssetDisplayHelper::PrettyName(AssetKey key)  {
     QObject::tr("Failed")
   }};
 
-  return name_pairs[static_cast<uint>(key)];
+  return name_pairs[static_cast< unsigned int> (key)];
 }
 
 QPixmap AssetDisplayHelper::LoadPixmap(const QString& name) {

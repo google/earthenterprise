@@ -1,0 +1,238 @@
+
+Portable Developer Guide
+
+-[ Contents ]-
+
+Introduction
+
+Useful resources
+
+Hello Maps!
+
+Hello Earth!
+
+JSON documents
+
+Polygon KML document
+
+-[ Introduction ]-
+
+You can customize or extend GEE Portable, or create applications that
+work with it.
+
+To help you get started, Google provides two "Hello World!" files that
+you can copy and use as templates. These files ("Hello_Maps.html" for
+2D maps and "Hello_Earth.html" for 3D globes) call the required
+scripts, load the globe or map, define the ".css" file, and so on. The
+files include JSON and, if needed, KML polygons.
+
+See the resources linked to below to learn how to edit and extend the
+"Hello_Maps.html" and "Hello_Earth.html" files.
+
+-[ Useful resources ]-
+
+Note: Clicking any of these links connects you to a site outside
+  your network. If you are not sure if your organization allows
+  outside connections, check with your administrator first.
+
+"Hello_Maps.html" and "Hello_Earth.html" are based on the Google Maps
+API and Google Earth API. More information about these APIs is linked
+to below. Also included are links to some resources for learning how
+to parse your JSON data and KML coordinates.
+
+Google Maps API help at https://developers.google.com/maps/.  Examples
+that use the Maps API.
+
+Google Earth API help at https://developers.google.com/earth/.  The
+Earth Plug-in and its API have been discontinued.
+
+jQuery help at http://api.jquery.com/jQuery.parseJSON/.  A method for
+parsing JSON.
+
+geoxml3 at https://code.google.com/p/geoxml3/.  A KML processor for
+use with the Google Maps API.
+
+-[ Hello Maps! ]-
+
+To write a script to display portable 2D maps, start with
+"hello_maps.html" and edit as needed. "hello_maps.html" is based on
+the Google Maps API.
+
+-[ To access the "hello_maps.html" file: ]-
+
+Launch GEE Portable on localhost:9335.
+
+Enter http://localhost:9335/local/preview/developers/hello_maps.html
+in your browser.
+
+View the page source. If you are not sure how to view the page source,
+see your browser's help.
+
+Alternatively, click the link below:
+
+Hello Maps! code sample
+
+-[ Hello Earth! ]-
+
+To write a script to display portable 3D maps (globes), start with
+"hello_earth.html" and edit as needed.
+
+The ``hello_earth.html`` example is based on the discontinued Google
+Earth API.
+
+ Take that into consideration when developing new applications.
+
+-[ To access the "Hello_Earth" file: ]-
+
+Launch GME Portable on localhost:9335.
+
+Enter http://localhost:9335/local/preview/developers/hello_earth.html
+in your browser.
+
+View the page source. If you are not sure how to view the page source,
+see your browser's help.
+
+Alternatively, click the link below:
+
+Hello Earth! code sample
+
+-[ JSON documents ]-
+
+Whenever your Portable instance is running, multiple JSON documents
+are serving. The JSON finds information about all your available
+globes and maps, as well as your current globe or map. Below are some
+code snippets that show how the JSON works.
+
+-[ Globes JSON example ]-
+
+This code snippet is from the Globes JSON document, which provides
+information about each available globe.
+
+   Globes JSON: [yourhost]/?cmd=globes_info_json
+
+   [ {  "name":"test.glb",
+      "timestamp":"2013-01-01 12:00:00",
+      "size":"20.00MB",
+      "description":"Some globe description.",
+      "path":"../../../../globes/test.glb",
+      "is_gee":true,
+      "is_2d":false,
+      "is_3d":true,
+      "has_polygon":true,
+      "is_mercator":false,
+      "is_being_served":false
+      },
+      {
+      some other globe
+      },...
+   ]
+
+-[ 2D JSON and 3D JSON examples ]-
+
+The 2D and 3D JSON documents contain layer information as well as
+information that helps the Search feature categorize the results.
+
+If you are currently serving a map, 2D JSON will be serving:
+
+"2D JSON: [yourhost]/query?request=Json&vars=geeServerDefs&is2d=t" If
+you are currently serving a globe, 3D JSON will be serving:
+
+"3D JSON: [yourhost]/query?request=Json&vars=geeServerDefs"
+
+-[ Layer Definition examples ]-
+
+Below are examples of layer definitions. The first is an imagery layer
+and the second is a vector layer.
+
+-[ Imagery layer example ]-
+
+   [
+   ...{
+      icon : "icons/1.png",
+      id : 1001,
+      initialState : true,
+      isPng : false,
+      label : "Imagery",
+      lookAt : "none",
+      opacity : 1,
+      requestType : "ImageryMaps", // A layer of imagery. version : 8
+      }...
+   ]
+
+-[ Vector data example ]-
+
+   [
+   ...{
+      icon : "icons/2.png",
+      id : 1002,
+      initialState : true,
+      isPng : true,
+      label : "Tokyo",
+      lookAt : "none",
+      opacity : 1,
+      requestType : "VectorMapsRaster", // Vector data, such as roads, points, and borders. version : 4
+   }...
+   ]
+
+-[ Polygon KML document ]-
+
+Some globes also serve a KML file that contains polygon coordinates,
+which define the initial display when the globe or map loads. Polygon
+KML files also let Google Earth and Google Maps draw a polygon on the
+globe or map. If a globe does not have any polygon data, the Polygon
+KML file is empty.
+
+-[ Polygon KML example ]-
+
+This is an example of a KML document that contains a set of
+coordinates that define the bounds of your globe's cut.
+
+   Polygon KML: [your host]/earth/polygon.kml
+
+   <?xml version="1.0"
+   encoding="UTF-8"?>
+   <kml>
+   <Document>
+      <name>polygons</name>
+   <Placemark>
+      <Polygon>
+         <tessellate>1</tessellate>
+         <outerBoundaryIs>
+         <LinearRing>
+         <coordinates>
+            -122.3185062675476,37.790043919799245,0
+            -122.3395950675476,37.84095511979925,0
+            -122.39050626754761,37.86204391979925,0
+            -122.44141746754761,37.84095511979925,0
+            -122.46250626754761,37.790043919799245,0
+            -122.44141746754761,37.739132719799244,0
+            -122.39050626754761,37.71804391979924,0
+            -122.3395950675476,37.739132719799244,0
+            -122.3185062675476,37.790043919799245,0
+         </coordinates>
+         </LinearRing>
+         </outerBoundaryIs>
+      </Polygon>
+   </Placemark>
+   <Placemark>
+      <Polygon>
+         <tessellate>1</tessellate>
+         <outerBoundaryIs>
+         <LinearRing>
+         <coordinates>
+            -122.01254132080078,37.42221919299647,0
+            -122.03363012080078,37.473130392996474,0
+            -122.08454132080078,37.494219192996475,0
+            -122.13545252080078,37.473130392996474,0
+            -122.15654132080078,37.42221919299647,0
+            -122.13545252080078,37.37130799299647,0
+            -122.08454132080078,37.35021919299647,0
+            -122.03363012080078,37.37130799299647,0
+            -122.01254132080078,37.42221919299647,0
+         </coordinates>
+         </LinearRing>
+         </outerBoundaryIs>
+      </Polygon>
+   </Placemark>
+   </Document>
+   </kml>

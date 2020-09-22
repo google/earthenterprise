@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,10 +41,10 @@ class gstTable : public gstMemory {
   virtual gstStatus Open(gstReadMode) = 0;
   virtual gstStatus Close() = 0;
 
-  virtual gstRecordHandle Row(uint32 r) = 0;
+  virtual gstRecordHandle Row(std::uint32_t r) = 0;
 
-  uint32 NumRows() const { return num_rows_; }
-  uint32 NumColumns() const { return num_columns_; }
+  std::uint32_t NumRows() const { return num_rows_; }
+  std::uint32_t NumColumns() const { return num_columns_; }
 
   gstRecordHandle NewRecord();
 
@@ -52,8 +53,8 @@ class gstTable : public gstMemory {
   virtual void SetHeader(const gstHeaderHandle hdr);
 
  protected:
-  uint32 num_rows_;
-  uint32 num_columns_;                 // per record
+  std::uint32_t num_rows_;
+  std::uint32_t num_columns_;                 // per record
   gstHeaderHandle header_;
 };
 

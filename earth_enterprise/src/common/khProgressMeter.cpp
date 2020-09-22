@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,7 +25,7 @@ const double khProgressMeter::reportTotalChangedByFraction = 0.01; // 1%
 const double khProgressMeter::reportFractionDoneInterval = 0.05;   // 5%
 const double khProgressMeter::reportMSInterval = 5 * 60 * 1000;    // 5 minutes
 
-khProgressMeter::khProgressMeter( int64 totalSteps, const QString &desc_,
+khProgressMeter::khProgressMeter( std::int64_t totalSteps, const QString &desc_,
                                   const std::string& prefix) :
     desc(desc_),
     overallStats(totalSteps),
@@ -67,7 +68,7 @@ khProgressMeter::finalize(void) {
   // if necessary, make one last report
   if ((overallStats.processedCount() != prevStats().processedCount()) ||
       (overallStats.totalCount != prevStats().totalCount)) {
-    overallStats.elapsedMS += (int64) timer.restart();
+    overallStats.elapsedMS += (std::int64_t) timer.restart();
     DoReport();
   }
 
@@ -97,9 +98,9 @@ khProgressMeter::AverageTilesPerMS(void) const {
 
 double
 khProgressMeter::RunningTilesPerMS(void) const {
-  int64 runningProcessed = overallStats.processedCount() -
+  std::int64_t runningProcessed = overallStats.processedCount() -
                            intervals.front().processedCount();
-  int64 runningElapsedMS = overallStats.elapsedMS -
+  std::int64_t runningElapsedMS = overallStats.elapsedMS -
                            intervals.front().elapsedMS;
 
   return double(runningProcessed) / double(runningElapsedMS);
@@ -117,7 +118,7 @@ khProgressMeter::NeedReport(void) const {
 
   // Report if my total count has changed too much
   if (overallStats.totalCount != prevStats().totalCount) {
-    int64 diff = overallStats.totalCount - prevStats().totalCount;
+    std::int64_t diff = overallStats.totalCount - prevStats().totalCount;
     if (fabs(double(diff) / (double)prevStats().totalCount) >
         reportTotalChangedByFraction) {
       return true;
@@ -167,8 +168,8 @@ khProgressMeter::CheckAndReportIfNecessary(void) {
     double fractionToProgressReport = reportFractionDoneInterval -
                                       fabs(overallStats.progressFraction() -
                                            prevStats().progressFraction());
-    int64 countToProgressReport =
-      int64(fractionToProgressReport * overallStats.totalCount);
+    std::int64_t countToProgressReport =
+      std::int64_t(fractionToProgressReport * overallStats.totalCount);
     double msToProgressReport = countToProgressReport / tilesPerMS;
 
     // estimate next check as 1/2 of the smaller of the two
@@ -177,15 +178,15 @@ khProgressMeter::CheckAndReportIfNecessary(void) {
                                        msToProgressReport) / 2;
 
     // bound the check delay (using time)
-    static const int32 msMaxCheckDelay = 30 * 1000; // max 30 sec
-    static const int32 msMinCheckDelay = 1000;      // min 1 sec
+    static const std::int32_t msMaxCheckDelay = 30 * 1000; // max 30 sec
+    static const std::int32_t msMinCheckDelay = 1000;      // min 1 sec
     if (msUntilNextCheck > msMaxCheckDelay) {
       msUntilNextCheck = msMaxCheckDelay;
     } else if (msUntilNextCheck < msMinCheckDelay) {
       msUntilNextCheck = msMinCheckDelay;
     }
 
-    countUntilNextCheck = int64(msUntilNextCheck * tilesPerMS);
+    countUntilNextCheck = std::int64_t(msUntilNextCheck * tilesPerMS);
   }
 }
 
@@ -196,9 +197,9 @@ khProgressMeter::DoReport(void) {
   ProcPidStats proc_pid_stats;
 
   double tilesPerMS = RunningTilesPerMS();
-  int64 remainingCount = overallStats.totalCount -
+  std::int64_t remainingCount = overallStats.totalCount -
                          overallStats.processedCount();
-  int64 remainingMS = int64(remainingCount / tilesPerMS);
+  std::int64_t remainingMS = std::int64_t(remainingCount / tilesPerMS);
 
 
   fprintf(stderr,
@@ -226,7 +227,7 @@ khProgressMeter::DoReport(void) {
 }
 
 
-QString khProgressMeter::msToString( int64 ms )
+QString khProgressMeter::msToString( std::int64_t ms )
 {
   bool negative = false;
   if (ms < 0) {
@@ -241,16 +242,16 @@ QString khProgressMeter::msToString( int64 ms )
 
   float msLeft = float( ms );
 
-  uint days = uint( msLeft / msPerDay );
+  unsigned int days = uint( msLeft / msPerDay );
   msLeft -= days * msPerDay;
 
-  uint hours = uint( msLeft / msPerHour );
+  unsigned int hours = uint( msLeft / msPerHour );
   msLeft -= hours * msPerHour;
 
-  uint mins = uint( msLeft / msPerMin );
+  unsigned int mins = uint( msLeft / msPerMin );
   msLeft -= mins * msPerMin;
 
-  uint secs =  uint( ( msLeft / msPerSec ) + 0.5 );
+  unsigned int secs =  uint( ( msLeft / msPerSec ) + 0.5 );
 
   char timebuf[ 20 ];
   snprintf( timebuf, 20, "%02u:%02u:%02u", hours, mins, secs );

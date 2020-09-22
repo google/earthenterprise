@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -45,8 +46,8 @@ khRasterProduct::New(RasterType type,
                      khTypes::StorageEnum componentType,
                      const std::string &filename,
                      khTilespace::ProjectionType projectionType,
-                     uint minLevel,
-                     uint maxLevel,
+                     unsigned int minLevel,
+                     unsigned int maxLevel,
                      const khExtents<double> &degOrMeterExtents)
 {
   assert(minLevel <= maxLevel);
@@ -68,14 +69,14 @@ khRasterProduct::New(RasterType type,
     // about the combinations below, modify this routine
     // to let the user specify whatever they want
     Compression compression = JPEG;  /* value to keep compiler from whining */
-    uint compressionQuality = 0;
-    uint numComponents = 1;
+    unsigned int compressionQuality = 0;
+    unsigned int numComponents = 1;
     std::vector<CompressDef> compdefs;
     switch (type) {
       case Imagery:
         compression        = JPEG; // not really used, but fill for header
         compressionQuality = 85;   // not really used, but fill for header
-        for (uint lev = minLevel; lev <= maxLevel; ++lev) {
+        for (unsigned int lev = minLevel; lev <= maxLevel; ++lev) {
           // bottom 4 levels are JPEG:85, rest are LZ
           if (maxLevel - lev < 4) {
             compdefs.push_back(CompressDef(CompressJPEG, 85));
@@ -93,7 +94,7 @@ khRasterProduct::New(RasterType type,
       case Heightmap:
         compression        = LZ; // not really used, but fill for header
         compressionQuality = 5;  // not really used, but fill for header
-        for (uint lev = minLevel; lev <= maxLevel; ++lev) {
+        for (unsigned int lev = minLevel; lev <= maxLevel; ++lev) {
           compdefs.push_back(CompressDef(CompressLZ, 5));
         }
         numComponents      = 1;
@@ -107,7 +108,7 @@ khRasterProduct::New(RasterType type,
       case AlphaMask:
         compression        = LZ; // not really used, but fill for header
         compressionQuality = 5;  // not really used, but fill for header
-        for (uint lev = minLevel; lev <= maxLevel; ++lev) {
+        for (unsigned int lev = minLevel; lev <= maxLevel; ++lev) {
           compdefs.push_back(CompressDef(CompressLZ, 5));
         }
         numComponents      = 1;
@@ -225,7 +226,7 @@ khRasterProduct::Convert(const std::string &pyrname,
 
   // get some info from the top level
   std::string topfile = pyrio::ComposePyramidName(basename, suffix, storage.maxLevel_);
-  uint formatVersion = 0;
+  unsigned int formatVersion = 0;
   try {
     pyrio::Reader reader(topfile);
     const pyrio::Header &header = reader.header();
@@ -285,7 +286,7 @@ khRasterProduct::Convert(const std::string &pyrname,
   }
 
   // trim off any extra minification that we don't need
-  uint startLevel = 0;
+  unsigned int startLevel = 0;
   switch (storage.type_) {
     case Imagery:
     case Heightmap:
@@ -305,7 +306,7 @@ khRasterProduct::DoConvert(const RasterProductStorage& storage,
                            const std::string &filename,
                            const std::string &basename,
                            const std::string &suffix,
-                           uint startLevel, bool reminify,
+                           unsigned int startLevel, bool reminify,
                            bool copy, bool link, bool skipOpacity)
 {
   int maxLevel = (int)storage.maxLevel_;
@@ -419,24 +420,24 @@ khRasterProduct::DefaultStartLevel(RasterType type)
 
 template <class TileType, class Averager>
 void
-khRasterProduct::MakeTileFromLevel(uint32 destRow, uint32 destCol,
+khRasterProduct::MakeTileFromLevel(std::uint32_t destRow, std::uint32_t destCol,
                                    khRasterProduct::Level &srcLevel,
                                    TileType &tmpTile,
                                    TileType &destTile,
                                    Averager averager)
 {
-  COMPILE_TIME_ASSERT(TileType::TileWidth == RasterProductTileResolution,
-                      InvalidTileWidth);
-  COMPILE_TIME_ASSERT(TileType::TileHeight == RasterProductTileResolution,
-                      InvalidTileHeight);
+  static_assert(TileType::TileWidth == RasterProductTileResolution,
+                      "Invalid Tile Width");
+  static_assert(TileType::TileHeight == RasterProductTileResolution,
+                      "Invalid Tile Height");
   assert(TileType::NumComp == numComponents());
   assert(TileType::Storage == componentType());
 
   // for each of the four source tiles / quadrants
-  for (uint quad = 0; quad < 4; ++quad) {
+  for (unsigned int quad = 0; quad < 4; ++quad) {
     // magnify the dest row/col/quad to get a src row/col
-    uint32 srcRow = 0;
-    uint32 srcCol = 0;
+    std::uint32_t srcRow = 0;
+    std::uint32_t srcCol = 0;
     QuadtreePath::MagnifyQuadAddr(destRow, destCol, quad, srcRow, srcCol);
 
     // read high res tile to temporary buffers
@@ -463,7 +464,7 @@ khRasterProduct::MakeTileFromLevel(uint32 destRow, uint32 destCol,
 
 template <class TileType>
 void
-khRasterProduct::MinifyLevel(uint newLevel, khProgressMeter &progress)
+khRasterProduct::MinifyLevel(unsigned int newLevel, khProgressMeter &progress)
 {
 
   typedef typename TileType::PixelType PixelType;
@@ -488,12 +489,12 @@ khRasterProduct::MinifyLevel(uint newLevel, khProgressMeter &progress)
   TileType srcTile(srcLevel.IsMonoChromatic());
   TileType destTile(srcLevel.IsMonoChromatic());
 
-  khExtents<uint32> destExtents(destLevel.tileExtents());
+  khExtents<std::uint32_t> destExtents(destLevel.tileExtents());
   notify(NFY_DEBUG, "About to minify %u x %u tiles",
          destExtents.numRows(), destExtents.numCols());
-  for (uint32 row = destExtents.beginRow();
+  for (std::uint32_t row = destExtents.beginRow();
        row < destExtents.endRow(); row++) {
-    for (uint32 col = destExtents.beginCol();
+    for (std::uint32_t col = destExtents.beginCol();
          col < destExtents.endCol(); col++) {
       if (type() == AlphaMask) {
           // ALPHA ERODING
@@ -531,7 +532,7 @@ khRasterProduct::MinifyLevel(uint newLevel, khProgressMeter &progress)
 
 template <class TileType>
 void
-khRasterProduct::MinifyRemainingLevels(uint firstMinifyLevel,
+khRasterProduct::MinifyRemainingLevels(unsigned int firstMinifyLevel,
                                        khProgressMeter *progress)
 {
   khDeleteGuard<khProgressMeter> deleter;
@@ -548,20 +549,20 @@ khRasterProduct::MinifyRemainingLevels(uint firstMinifyLevel,
 // ***** explicit instantiations since this is in the cpp file *****
 template void
 khRasterProduct::MinifyRemainingLevels<AlphaProductTile>
-(uint firstMinifyLevel, khProgressMeter *progress);
+(unsigned int firstMinifyLevel, khProgressMeter *progress);
 template void
 khRasterProduct::MinifyRemainingLevels<ImageryProductTile>
-(uint firstMinifyLevel, khProgressMeter *progress);
+(unsigned int firstMinifyLevel, khProgressMeter *progress);
 template void
 khRasterProduct::MinifyRemainingLevels<HeightmapInt16ProductTile>
-(uint firstMinifyLevel, khProgressMeter *progress);
+(unsigned int firstMinifyLevel, khProgressMeter *progress);
 template void
 khRasterProduct::MinifyRemainingLevels<HeightmapFloat32ProductTile>
-(uint firstMinifyLevel, khProgressMeter *progress);
+(unsigned int firstMinifyLevel, khProgressMeter *progress);
 
 
 std::string
-khRasterProduct::LevelName(uint levelNum) const
+khRasterProduct::LevelName(unsigned int levelNum) const
 {
   char buf[256];
   snprintf(buf, 256, "%2.2d.pyr", levelNum);
@@ -609,9 +610,9 @@ wroteSomeTiles(false)
                            realMaxLevel()+1 /* endLevel */);
 
 
-  uint numLevels = realMaxLevel() - realMinLevel() + 1;
+  unsigned int numLevels = realMaxLevel() - realMinLevel() + 1;
   levels__.reserve(numLevels);
-  for (uint i = 0; i < numLevels; ++i) {
+  for (unsigned int i = 0; i < numLevels; ++i) {
     levels__.push_back(new Level(this,
                             coverage.levelCoverage(i + realMinLevel()),
                             compdefs ? (*compdefs)[i] : CompressDef()));
@@ -681,11 +682,11 @@ khRasterProduct::effectiveMinLevel(void) const
   return realMinLevel();      // unreached but silences warnings
 }
 
-uint64
-khRasterProduct::CalcNumTiles(uint beginLevel, uint endLevel) const
+std::uint64_t
+khRasterProduct::CalcNumTiles(unsigned int beginLevel, unsigned int endLevel) const
 {
-  uint64 numTiles = 0;
-  for (uint lev = beginLevel; lev < endLevel; ++lev) {
+  std::uint64_t numTiles = 0;
+  for (unsigned int lev = beginLevel; lev < endLevel; ++lev) {
     numTiles += level(lev).tileExtents().numRows() *
                 level(lev).tileExtents().numCols();
   }
@@ -698,9 +699,9 @@ khRasterProduct::ReadLevelAndGenerateOpacityMask(khRasterProductLevel &level,
                                                  khProgressMeter *progress)
 {
   assert(type() == AlphaMask);
-  const khExtents<uint32> &extents(level.tileExtents());
-  for (uint row = extents.beginRow(); row < extents.endRow(); ++row) {
-    for (uint col = extents.beginCol(); col < extents.endCol(); ++col) {
+  const khExtents<std::uint32_t> &extents(level.tileExtents());
+  for (unsigned int row = extents.beginRow(); row < extents.endRow(); ++row) {
+    for (unsigned int col = extents.beginCol(); col < extents.endCol(); ++col) {
       AlphaProductTile tile(level.IsMonoChromatic());
       if (!level.ReadTile(row, col, tile)) {
         notify(NFY_FATAL, "Unable to read tile");

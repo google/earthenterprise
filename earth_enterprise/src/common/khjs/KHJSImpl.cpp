@@ -1,5 +1,5 @@
 // Copyright 2017 Google Inc.
-// Copyright 2020 The Open GEE Contributors.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -101,7 +101,7 @@ std::int32_t JSContextUser::ValueToInt32(jsval v) {
   return i;
 }
 
-std::uint32_t JSContextUser::ValueToUint32(jsval v) {
+ std::uint32_t JSContextUser::ValueToUint32(jsval v) {
   std::uint32_t u = 0;
   (void)JS_ValueToECMAUint32(rawcx, v, &u);
   return u;

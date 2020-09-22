@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,7 +77,7 @@ class FileUnpacker {
   /**
    * Get offset to file or packet that was last found.
    */
-  uint64 Offset() { return offset_; }
+  std::uint64_t Offset() { return offset_; }
 
   /**
    * Get size of file or packet that was last found.
@@ -113,17 +114,17 @@ class FileUnpacker {
 
  private:
   std::string ExtractDateFromInfo() const;
-  uint32 InfoCrc() const;
+  std::uint32_t InfoCrc() const;
 
   // Length of full packed file.
-  uint64 length_;
+  std::uint64_t length_;
   std::string info_;
   std::string id_;
 
   std::map<std::string, PackageFileLoc> index_;
   std::ifstream source_;
-  uint64 offset_;
-  uint32 size_;
+  std::uint64_t offset_;
+  std::uint32_t size_;
 
   PackageFileLoc data_packet_index_loc_;
   PackageFileLoc data_packet_file_loc_;

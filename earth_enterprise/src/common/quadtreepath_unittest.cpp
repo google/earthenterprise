@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,16 +24,16 @@
 // ****************************************************************************
 // ***  Yanked from kbf.cpp before deleting it there
 // ****************************************************************************
-void BlistToRowCol(uint32 level, uchar* blist, uint32& row, uint32& col) {
-  static const uint32 rowbits[] = {0x00, 0x00, 0x01, 0x01};
-  static const uint32 colbits[] = {0x00, 0x01, 0x01, 0x00};
+void BlistToRowCol(std::uint32_t level, unsigned char* blist, std::uint32_t& row, std::uint32_t& col) {
+  static const std::uint32_t rowbits[] = {0x00, 0x00, 0x01, 0x01};
+  static const std::uint32_t colbits[] = {0x00, 0x01, 0x01, 0x00};
 
   assert(level < 32);
 
   row = 0;
   col = 0;
 
-  for (uint32 j = 0; j < level; ++j) {
+  for (std::uint32_t j = 0; j < level; ++j) {
     assert(blist[j] < 4);
     row = (row << 1) | (rowbits[blist[j]]);
     col = (col << 1) | (colbits[blist[j]]);
@@ -42,10 +43,10 @@ void BlistToRowCol(uint32 level, uchar* blist, uint32& row, uint32& col) {
 
 class QuadtreePathUnitTest : public UnitTest<QuadtreePathUnitTest> {
  public:
-  static const uchar blist[QuadtreePath::kMaxLevel];
-  static const uchar ascii_blist[QuadtreePath::kMaxLevel];
-  static const uint64 expected_binary = 0x60D793F16AC10018LL;
-  static const uint64 mask48 = 0xFFFFFFFFFFFF0000LL;
+  static const unsigned char blist[QuadtreePath::kMaxLevel];
+  static const unsigned char ascii_blist[QuadtreePath::kMaxLevel];
+  static const std::uint64_t expected_binary = 0x60D793F16AC10018LL;
+  static const std::uint64_t mask48 = 0xFFFFFFFFFFFF0000LL;
 
   bool TestConstructors() {
     bool result = true;
@@ -59,10 +60,10 @@ class QuadtreePathUnitTest : public UnitTest<QuadtreePathUnitTest> {
 
     // QuadtreePath(level, blist)
 
-    for (uint32 level = 0; level <= QuadtreePath::kMaxLevel; ++level) {
+    for (std::uint32_t level = 0; level <= QuadtreePath::kMaxLevel; ++level) {
       QuadtreePath from_blist(level, blist);
-      uint64 mask = mask48 << (48 - level*2);
-      uint64 expected = (expected_binary & mask) | level;
+      std::uint64_t mask = mask48 << (48 - level*2);
+      std::uint64_t expected = (expected_binary & mask) | level;
       if (from_blist.path_ != expected) {
         fprintf(stderr, "ERROR: Quadtree(%u, blist) constructor, "
                 "expected 0x%016llX, got 0x%016llX\n",
@@ -85,15 +86,15 @@ class QuadtreePathUnitTest : public UnitTest<QuadtreePathUnitTest> {
 
     // QuadtreePath(level, row, column) and GetLevelRowCol
 
-    for (uint32 level = 0; level <= QuadtreePath::kMaxLevel; ++level) {
-      uint32 row, col;
-      uchar branchlist[32];
+    for (std::uint32_t level = 0; level <= QuadtreePath::kMaxLevel; ++level) {
+      std::uint32_t row, col;
+      unsigned char branchlist[32];
       memset(branchlist, 0, sizeof(branchlist));
       if (level > 0) memcpy(branchlist, blist, level);
       BlistToRowCol(level, branchlist, row, col);
       QuadtreePath from_lrc(level, row, col);
-      uint64 mask = mask48 << (48 - level*2);
-      uint64 expected = (expected_binary & mask) | level;
+      std::uint64_t mask = mask48 << (48 - level*2);
+      std::uint64_t expected = (expected_binary & mask) | level;
       if (from_lrc.path_ != expected) {
         fprintf(stderr, "ERROR: Quadtree(%u, %u, %u) constructor, "
                 "expected 0x%016llX, got 0x%016llX\n",
@@ -103,7 +104,7 @@ class QuadtreePathUnitTest : public UnitTest<QuadtreePathUnitTest> {
         result = false;
       }
 
-      uint32 qlevel, qrow, qcol;
+      std::uint32_t qlevel, qrow, qcol;
       from_lrc.GetLevelRowCol(&qlevel, &qrow, &qcol);
       if (qlevel != level || qrow != row || qcol != col) {
         fprintf(stderr, "ERROR: Quadtree::GetLeveRowCol mismatch, "
@@ -122,9 +123,9 @@ class QuadtreePathUnitTest : public UnitTest<QuadtreePathUnitTest> {
   bool TestParentChild() {
     bool result = true;
 
-    for (uint32 level = 0; level < QuadtreePath::kMaxLevel; ++level) {
+    for (std::uint32_t level = 0; level < QuadtreePath::kMaxLevel; ++level) {
       QuadtreePath test_path(level, blist);
-      for (uint32 i = 0; i < 4; ++i) {
+      for (std::uint32_t i = 0; i < 4; ++i) {
         QuadtreePath child = test_path.Child(i);
         if (child.Level() != level + 1
             || child.Parent() != test_path) {
@@ -144,13 +145,13 @@ class QuadtreePathUnitTest : public UnitTest<QuadtreePathUnitTest> {
 
   bool TestLess() {
     bool result = true;
-    static const uchar last_blist[QuadtreePath::kMaxLevel] = {
+    static const unsigned char last_blist[QuadtreePath::kMaxLevel] = {
       3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
       3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 };
 
     // Test that all children follow parent
 
-    for (uint32 level = 0; level < QuadtreePath::kMaxLevel; ++level) {
+    for (std::uint32_t level = 0; level < QuadtreePath::kMaxLevel; ++level) {
       QuadtreePath parent(level, blist);
       if (parent < parent) {
         fprintf(stderr, "ERROR: TestLess at level %u, parent < parent\n",
@@ -158,7 +159,7 @@ class QuadtreePathUnitTest : public UnitTest<QuadtreePathUnitTest> {
         result = false;
       }
 
-      for (uint32 i = 0; i < 4; ++i) {
+      for (std::uint32_t i = 0; i < 4; ++i) {
         QuadtreePath child = parent.Child(i);
         if (!(parent < child) || (child < parent)) {
           fprintf(stderr, "ERROR: TestLess parent(0x%016llX) "
@@ -170,7 +171,7 @@ class QuadtreePathUnitTest : public UnitTest<QuadtreePathUnitTest> {
           result = false;
         }
         if ((level + 1) < QuadtreePath::kMaxLevel) {
-          for (uint32 j = 0; j < 4; ++j) {
+          for (std::uint32_t j = 0; j < 4; ++j) {
             QuadtreePath grandchild = child.Child(j);
             if (!(parent < grandchild) || (grandchild < parent)) {
               fprintf(stderr, "ERROR: TestLess parent(0x%016llX) "
@@ -189,9 +190,9 @@ class QuadtreePathUnitTest : public UnitTest<QuadtreePathUnitTest> {
 
       if (level < QuadtreePath::kMaxLevel) {
         QuadtreePath child[4];
-        for (uint32 i = 0; i < 4; ++i) {
+        for (std::uint32_t i = 0; i < 4; ++i) {
           child[i] = parent.Child(i);
-          for (uint32 j = 0; j < i; ++j) {
+          for (std::uint32_t j = 0; j < i; ++j) {
             if (!(child[j] < child[i]) || child[i] < child[j]) {
               fprintf(stderr, "ERROR: TestLess order level %u, "
                       "child[%u] (%016llX) child[%u] (%016llX)\n",
@@ -230,31 +231,31 @@ class QuadtreePathUnitTest : public UnitTest<QuadtreePathUnitTest> {
     const int num_paths = 1 + 4 + 4 * 4 + 4 * 4 * 4;
     QuadtreePath paths[num_paths];
     int cnt = 0;
-    uint32 row0 = 0;
-    uint32 col0 = 0;
-    const uint32 level0 = 0;  // Level 0
+    std::uint32_t row0 = 0;
+    std::uint32_t col0 = 0;
+    const std::uint32_t level0 = 0;  // Level 0
     // Create the parents before the children.
     paths[cnt] = QuadtreePath(level0, row0, col0);
     cnt++;
     // Create 3 levels of QuadtreePaths
-    for (uint quad0 = 0; quad0 < 4; ++quad0) {
-      uint32 row1 = 0;
-      uint32 col1 = 0;
-      const uint32 level1 = 1;  // Level 1
+    for (unsigned int quad0 = 0; quad0 < 4; ++quad0) {
+      std::uint32_t row1 = 0;
+      std::uint32_t col1 = 0;
+      const std::uint32_t level1 = 1;  // Level 1
       QuadtreePath::MagnifyQuadAddr(row0, col0, quad0, row1, col1);
       paths[cnt] = QuadtreePath(level1, row1, col1);
       cnt++;
-      for (uint quad1 = 0; quad1 < 4; ++quad1) {
-        uint32 row2 = 0;
-        uint32 col2 = 0;
-        const uint32 level2 = 2;  // Level 2
+      for (unsigned int quad1 = 0; quad1 < 4; ++quad1) {
+        std::uint32_t row2 = 0;
+        std::uint32_t col2 = 0;
+        const std::uint32_t level2 = 2;  // Level 2
         QuadtreePath::MagnifyQuadAddr(row1, col1, quad1, row2, col2);
         paths[cnt] = QuadtreePath(level2, row2, col2);
         cnt++;
-        for (uint quad2 = 0; quad2 < 4; ++quad2) {
-          uint32 row3 = 0;
-          uint32 col3 = 0;
-          const uint32 level3 = 3;  // Level 3
+        for (unsigned int quad2 = 0; quad2 < 4; ++quad2) {
+          std::uint32_t row3 = 0;
+          std::uint32_t col3 = 0;
+          const std::uint32_t level3 = 3;  // Level 3
           QuadtreePath::MagnifyQuadAddr(row2, col2, quad2, row3, col3);
           paths[cnt] = QuadtreePath(level3, row3, col3);
           cnt++;
@@ -263,7 +264,7 @@ class QuadtreePathUnitTest : public UnitTest<QuadtreePathUnitTest> {
     }
     assert(cnt == num_paths);
     result = (cnt == num_paths);
-    uint64 gen_sequences[num_paths];
+    std::uint64_t gen_sequences[num_paths];
     // Get generation sequences for paths
     for (cnt = 0; cnt < num_paths; ++cnt) {
       gen_sequences[cnt] = paths[cnt].GetGenerationSequence();
@@ -293,9 +294,9 @@ class QuadtreePathUnitTest : public UnitTest<QuadtreePathUnitTest> {
   bool TestQuadToBufferOffset() {
     bool result = true;
     struct {
-      uint32 tile_width;
-      uint32 tile_height;
-      uint32 golden_offsets[4];
+      std::uint32_t tile_width;
+      std::uint32_t tile_height;
+      std::uint32_t golden_offsets[4];
 
     } test_cases[] = { { 10, 30, {0, 5, 150, 155} },
                        { 30, 10, {0, 15, 150, 165} },
@@ -303,8 +304,8 @@ class QuadtreePathUnitTest : public UnitTest<QuadtreePathUnitTest> {
     const int num_input = sizeof(test_cases) / sizeof(test_cases[0]);
     for (int i = 0; i < num_input; ++i) {
       fprintf(stderr, "---------------- testing case %d ----------------\n", i);
-      for (uint quad = 0; quad < 4; ++quad) {
-        uint32 offset = QuadtreePath::QuadToBufferOffset(quad,
+      for (unsigned int quad = 0; quad < 4; ++quad) {
+        std::uint32_t offset = QuadtreePath::QuadToBufferOffset(quad,
             test_cases[i].tile_width, test_cases[i].tile_height);
         if (!(test_cases[i].golden_offsets[quad] == offset)) {
           fprintf(stderr, "%s:%d -> %s, golden %u bad %u\n", __FILE__, __LINE__,
@@ -330,9 +331,9 @@ class QuadtreePathUnitTest : public UnitTest<QuadtreePathUnitTest> {
   bool TestMagnifyQuadAddr() {
     bool result = true;
     struct {
-      uint32 row;
-      uint32 col;
-      uint32 golden_row_col[4][2];
+      std::uint32_t row;
+      std::uint32_t col;
+      std::uint32_t golden_row_col[4][2];
 
     } test_cases[] = { { 0, 0, {{0, 0}, {0, 1}, {1, 0}, {1, 1}} },
                        { 1, 1, {{2, 2}, {2, 3}, {3, 2}, {3, 3}} },
@@ -341,9 +342,9 @@ class QuadtreePathUnitTest : public UnitTest<QuadtreePathUnitTest> {
     const int num_input = sizeof(test_cases) / sizeof(test_cases[0]);
     for (int i = 0; i < num_input; ++i) {
       fprintf(stderr, "---------------- testing case %d ----------------\n", i);
-      for (uint quad = 0; quad < 4; ++quad) {
-        uint32 out_row = 0;
-        uint32 out_col = 0;
+      for (unsigned int quad = 0; quad < 4; ++quad) {
+        std::uint32_t out_row = 0;
+        std::uint32_t out_col = 0;
         QuadtreePath::MagnifyQuadAddr(test_cases[i].row, test_cases[i].col,
                                       quad, out_row, out_col);
         if (!(test_cases[i].golden_row_col[quad][0] == out_row)) {
@@ -368,12 +369,12 @@ class QuadtreePathUnitTest : public UnitTest<QuadtreePathUnitTest> {
   bool TestEndian() {
     bool result = true;
 
-    for (uint32 level = 0; level <= QuadtreePath::kMaxLevel; ++level) {
+    for (std::uint32_t level = 0; level <= QuadtreePath::kMaxLevel; ++level) {
       LittleEndianWriteBuffer wbuffer(QuadtreePath::kStoreSize);
 
       QuadtreePath test_path(level, blist);
       wbuffer << test_path;
-      uint64 raw_path = HostToLittleEndian(test_path.path_);
+      std::uint64_t raw_path = HostToLittleEndian(test_path.path_);
 
       if (memcmp(&raw_path, wbuffer.data(), QuadtreePath::kStoreSize) != 0) {
         fprintf(stderr, "ERROR: StoreToLittleEndianBuffer error at level %u\n",
@@ -405,14 +406,14 @@ class QuadtreePathUnitTest : public UnitTest<QuadtreePathUnitTest> {
     std::string test2 = "120013031";
     if (QuadtreePath(test1) !=
         QuadtreePath(test1.size(),
-                     (const uchar*)(test1.data()))) {
+                     (const unsigned char*)(test1.data()))) {
       fprintf(stderr,
               "ERROR: TestFromString, empty failed\n");
       result = false;
     }
     if (QuadtreePath(test2) !=
         QuadtreePath(test2.size(),
-                     (const uchar*)(test2.data()))) {
+                     (const unsigned char*)(test2.data()))) {
       fprintf(stderr,
               "ERROR: TestFromString, non-empty failed\n");
       result = false;
@@ -517,13 +518,13 @@ class QuadtreePathUnitTest : public UnitTest<QuadtreePathUnitTest> {
   }
 
   bool TestAdvanceInLevel() {
-    const uint32 kTestLevel = 4;
-    const uint32 kNodeCount = 256;
+    const std::uint32_t kTestLevel = 4;
+    const std::uint32_t kNodeCount = 256;
     const std::string kStartNode("0000");
     QuadtreePath qt_path(kStartNode);
     TestAssert(kTestLevel == qt_path.Level());
 
-    for (uint32 i = 0; i < kNodeCount-1; ++i) {
+    for (std::uint32_t i = 0; i < kNodeCount-1; ++i) {
       QuadtreePath qt_last_path = qt_path;
       TestAssert(qt_path.AdvanceInLevel());
       TestAssert(qt_last_path < qt_path);
@@ -537,7 +538,7 @@ class QuadtreePathUnitTest : public UnitTest<QuadtreePathUnitTest> {
     // Enumerate all paths of depth 5 or less
     QuadtreePath qt_path;
     const QuadtreePath final_qt_path("33333");
-    uint32 count = 0;
+    std::uint32_t count = 0;
 
     while (qt_path != final_qt_path) {
       QuadtreePath prev_qt_path = qt_path;
@@ -722,10 +723,10 @@ class QuadtreePathUnitTest : public UnitTest<QuadtreePathUnitTest> {
 
 };
 
-const uchar QuadtreePathUnitTest::blist[QuadtreePath::kMaxLevel] = {
+const unsigned char QuadtreePathUnitTest::blist[QuadtreePath::kMaxLevel] = {
   1, 2, 0, 0, 3, 1, 1, 3, 2, 1, 0, 3,
   3, 3, 0, 1, 1, 2, 2, 2, 3, 0, 0, 1 };
-const uchar QuadtreePathUnitTest::ascii_blist[QuadtreePath::kMaxLevel] = {
+const unsigned char QuadtreePathUnitTest::ascii_blist[QuadtreePath::kMaxLevel] = {
   '1', '2', '0', '0', '3', '1', '1', '3', '2', '1', '0', '3',
   '3', '3', '0', '1', '1', '2', '2', '2', '3', '0', '0', '1' };
 

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -254,15 +255,15 @@ void SetFusionHost(PublisherClient* client,
 void DisableCutter() {
   int ret_status =
     system("cd /opt/google/bin; "
-           "chmod -x gepolygontoqtnodes; "
-           "chmod -x gekmlgrabber; "
-           "chmod -x geportableglobebuilder; "
-           "chmod -x geportableglobepacker; "
+           "chmod a-x gepolygontoqtnodes; "
+           "chmod a-x gekmlgrabber; "
+           "chmod a-x geportableglobebuilder; "
+           "chmod a-x geportableglobepacker; "
            "cd /opt/google/gehttpd/cgi-bin; "
-           "chmod -r globe_cutter_app.py; "
+           "chmod a-r globe_cutter_app.py; "
            "cd /opt/google/gehttpd/htdocs; "
-           "chmod -r cutter/*.html; "
-           "chmod -R -r cutter/js; ");
+           "chmod a-r cutter/*.html; "
+           "chmod -R a-r cutter/js; ");
   exit(ret_status);
 }
 
@@ -271,15 +272,15 @@ void EnableCutter() {
   // be available.
   int ret_status =
     system("cd /opt/google/bin; "
-           "chmod +x gepolygontoqtnodes; "
-           "chmod +x gekmlgrabber; "
-           "chmod +x geportableglobebuilder; "
-           "chmod +x geportableglobepacker; "
+           "chmod a+x gepolygontoqtnodes; "
+           "chmod a+x gekmlgrabber; "
+           "chmod a+x geportableglobebuilder; "
+           "chmod a+x geportableglobepacker; "
            "cd /opt/google/gehttpd/cgi-bin; "
-           "chmod +r globe_cutter_app.py; "
+           "chmod a+r globe_cutter_app.py; "
            "cd /opt/google/gehttpd/htdocs; "
-           "chmod +r cutter/*.html; "
-           "chmod -R +r cutter/js; ");
+           "chmod a+r cutter/*.html; "
+           "chmod -R a+r cutter/js; ");
   exit(ret_status);
 }
 
@@ -480,7 +481,7 @@ int main(int argc, char* argv[]) {
           if (!only_portables) {
             fprintf(stdout, "\nThe %Zu database(s) registered on %s\n",
                     db_infos.size(), server.c_str());
-            for (uint i = 0; i < db_infos.size(); ++i) {
+            for (unsigned int i = 0; i < db_infos.size(); ++i) {
               const FusionDbInfo& db_info = db_infos[i];
               fprintf(
                   stdout,
@@ -493,7 +494,7 @@ int main(int argc, char* argv[]) {
 
           fprintf(stdout, "\nThe %Zu portable(s) registered on %s\n",
                   portable_infos.size(), server.c_str());
-          for (uint i = 0; i < portable_infos.size(); ++i) {
+          for (unsigned int i = 0; i < portable_infos.size(); ++i) {
             const PortableInfo& portable_info = portable_infos[i];
             fprintf(stdout, "\n\tPortable: %s\n\tDescription: %s\n",
                     portable_info.path.c_str(),
@@ -503,7 +504,7 @@ int main(int argc, char* argv[]) {
           fprintf(stdout,
                   "\nThe database(s) from Fusion host %s registered on %s\n",
                   fusion_host.c_str(), server.c_str());
-          for (uint i = 0; i < db_infos.size(); ++i) {
+          for (unsigned int i = 0; i < db_infos.size(); ++i) {
             const FusionDbInfo& db_info = db_infos[i];
             if (fusion_host == db_info.fusion_hostname) {
               fprintf(stdout, "\n\tDatabase: %s\n\tDescription: %s\n",
@@ -525,7 +526,7 @@ int main(int argc, char* argv[]) {
         if (!only_portables) {
           fprintf(stdout, "\nThe %Zu database(s) published on %s\n",
                   published_db_infos.size(), server.c_str());
-          for (uint i = 0; i < published_db_infos.size(); ++i) {
+          for (unsigned int i = 0; i < published_db_infos.size(); ++i) {
             const PublishedFusionDbInfo& published_db_info =
                 published_db_infos[i];
             fprintf(stdout,
@@ -541,7 +542,7 @@ int main(int argc, char* argv[]) {
 
         fprintf(stdout, "\nThe %Zu portable(s) published on %s\n",
                 published_portable_infos.size(), server.c_str());
-        for (uint i = 0; i < published_portable_infos.size(); ++i) {
+        for (unsigned int i = 0; i < published_portable_infos.size(); ++i) {
           const PublishedPortableInfo& published_portable_info =
               published_portable_infos[i];
           fprintf(stdout,
@@ -571,7 +572,7 @@ int main(int argc, char* argv[]) {
       if (publisher_client.QueryDatabaseDetails(
               stype, dbdetails, &file_names)) {
         fprintf(stdout, "Database: %s\n", dbdetails.c_str());
-        for (uint i = 0; i < file_names.size(); ++i) {
+        for (unsigned int i = 0; i < file_names.size(); ++i) {
           fprintf(stdout, "%d.  %s\n", i+1, file_names[i].c_str());
         }
       } else {
@@ -582,7 +583,7 @@ int main(int argc, char* argv[]) {
       if (publisher_client.QueryPublishContext(
               stype, targetdetails, &publish_context)) {
         fprintf(stdout, "Publish context for target path: %s\n", targetdetails.c_str());
-        for (uint i = 0; i < publish_context.size(); ++i) {
+        for (unsigned int i = 0; i < publish_context.size(); ++i) {
           fprintf(stdout, "\t%s\n", publish_context[i].c_str());
         }
         fprintf(stdout, "\n");
@@ -708,7 +709,7 @@ int main(int argc, char* argv[]) {
       std::vector<std::string> vh_names, vh_urls;
       if (publisher_client.ListVirtualHosts(&vh_names, &vh_urls)) {
         fprintf(stdout, "Virtual Hosts ...\n");
-        for (uint i = 0; i < vh_names.size(); ++i) {
+        for (unsigned int i = 0; i < vh_names.size(); ++i) {
           fprintf(stdout, "%d. %s, %s\n", i+1, vh_names[i].c_str(),
                   vh_urls[i].c_str());
         }
@@ -849,7 +850,7 @@ int main(int argc, char* argv[]) {
                                           &searchdef_contents)) {
         fprintf(stdout, "%Zu search definition(s) registered on %s\n",
                 searchdef_names.size(), server.c_str());
-        for (uint i = 0; i < searchdef_names.size(); ++i) {
+        for (unsigned int i = 0; i < searchdef_names.size(); ++i) {
           fprintf(stdout, "\nSearch definition: %s\n\t Content:%s\n",
                   searchdef_names[i].c_str(), searchdef_contents[i].c_str());
         }
@@ -857,8 +858,8 @@ int main(int argc, char* argv[]) {
         throw khException(publisher_client.ErrMsg());
       }
     } else if (garbagecollect) {
-      uint32 delete_count = 0;
-      uint64 delete_size = 0;
+      std::uint32_t delete_count = 0;
+      std::uint64_t delete_size = 0;
       std::string server = (stype == PublisherClient::STREAM_SERVER) ?
           stream_server_url + " (stream)":
           search_server_url + " (search)";

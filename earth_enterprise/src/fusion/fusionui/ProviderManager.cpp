@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -65,7 +66,7 @@ ProviderManager::ProviderManager(QWidget* parent, bool modal, Qt::WFlags flags)
                           kh::tr("OK"), 0, 0, 0);
   }
 
-  for (uint row = 0; row < provider_set_.items.size(); ++row) {
+  for (unsigned int row = 0; row < provider_set_.items.size(); ++row) {
     SetRow(row, provider_set_.items[row]);
   }
 

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +55,8 @@
 #include "fusion/gst/gstBBox.h"
 #include "fusion/gst/gstGeode.h"
 
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "common/base/macros.h"
 
 
@@ -216,9 +218,9 @@ class PolygonClipper {
           has_halfedge(false) {
     }
     // Index of begin corner.
-    uint8 begin_corner_idx;
+    std::uint8_t begin_corner_idx;
     // Index of end corner.
-    uint8 end_corner_idx;
+    std::uint8_t end_corner_idx;
     // Flag is true if halfedges are created from turning points of
     // this quad's edge.
     bool has_halfedge;

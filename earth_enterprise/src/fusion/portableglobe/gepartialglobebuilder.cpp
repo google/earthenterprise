@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,7 +27,8 @@
 #include "common/khAbortedException.h"
 #include "common/khGetopt.h"
 #include "common/khSimpleException.h"
-#include "common/khTypes.h"
+//#include "common/khTypes.h"
+#include <cstdint>
 #include "common/khsimple_strconv.h"
 #include "common/notify.h"
 #include "fusion/portableglobe/partialglobebuilder.h"
@@ -158,12 +160,12 @@ int main(int argc, char **argv) {
     std::string qtpacket_version = "1";
     // Default indicates Cutter context.
     std::string additional_args = "&ct=c";
-    uint16 default_level = 7;
-    uint16 max_level = 24;
-    uint16 min_level = 0;
-    uint16 min_imagery_version = 0;
-    uint32 imagery_packets_per_mark = 0;
-    uint32 file_index = 0;
+    std::uint16_t default_level = 7;
+    std::uint16_t max_level = 24;
+    std::uint16_t min_level = 0;
+    std::uint16_t min_imagery_version = 0;
+    std::uint32_t imagery_packets_per_mark = 0;
+    std::uint32_t file_index = 0;
     std::string data_type = kCutAllDataFlag;
     std::string partial_start = "";
     // Note that this is a dead area of the map so it is ok that
@@ -270,7 +272,7 @@ int main(int argc, char **argv) {
     if (build_quadtree) {
       printf("0 max version: %u\n", globe_builder.max_image_version);
       printf("1 max version: %u\n", globe_builder.max_terrain_version);
-      std::map<uint16, uint16>::iterator iter;
+      std::map<std::uint16_t, std::uint16_t>::iterator iter;
       for (iter = globe_builder.max_vector_version.begin();
            iter != globe_builder.max_vector_version.end();
            iter++) {

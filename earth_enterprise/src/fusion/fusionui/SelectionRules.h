@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -123,8 +124,8 @@ class SelectionRules : public SelectionRulesBase {
   // Map the balloon combo box id to our config balloon mode id.
   SiteConfig::BalloonStyleMode BalloonStyleMode(int combo_box_id);
 
-  QColor VectorToQColor(const std::vector<uint> &vec);
-  void QColorToVector(QColor color, std::vector<uint>* vec);
+  QColor VectorToQColor(const std::vector< unsigned int>  &vec);
+  void QColorToVector(QColor color, std::vector< unsigned int> * vec);
   QColor chooseColor(QColor color);
 
   // Print an appropriate warning if the user tries to build very deep levels.

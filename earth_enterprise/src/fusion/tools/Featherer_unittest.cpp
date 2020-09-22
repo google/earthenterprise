@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,7 +31,7 @@ class FeathererTest : public testing::Test {
   }
 
   // Test if two images are equal (identical pixal values).
-  int numUnequalPixels(uchar* img1, uchar* img2, int size) {
+  int numUnequalPixels(unsigned char* img1, unsigned char* img2, int size) {
     int cnt = 0;
     for (int i = 0; i < size; ++i) {
       if (*img1++ != *img2++) {
@@ -42,12 +43,12 @@ class FeathererTest : public testing::Test {
 
   // Test for trapezoid in pixels.
   bool isTrapezoid(
-      uchar* img, int len, int step, int offset, int maxTransition) {
+      unsigned char* img, int len, int step, int offset, int maxTransition) {
     enum States {PRE_TRAP, RISE, PLATEAU, FALL, POST_TRAP} state;
     state = PRE_TRAP;
 
     img += offset;
-    uchar lastPixel = 0x00;
+    unsigned char lastPixel = 0x00;
     int transitionSize = 0;
     for (int i = 0; i < len; ++i) {
       switch (state) {
@@ -119,12 +120,12 @@ class FeathererTest : public testing::Test {
   }
 
   // Show image
-  void show(uchar* img, int width, int height) {
+  void show(unsigned char* img, int width, int height) {
     for (int y = 0; y < height; ++y) {
       std::string str;
       for (int x = 0; x < width; ++x) {
         char s[64];
-        snprintf(s, sizeof(s), " %02x", (uint) *img++);
+        snprintf(s, sizeof(s), " %02x", (unsigned int) *img++);
         str += s;
       }
 
@@ -139,8 +140,8 @@ TEST_F(FeathererTest, InMemoryFeatherBasicTest) {
   const int kImageHeight = 18;
   const int kImageWidth = 15;
   const int kImageSize = kImageHeight * kImageWidth;
-  uchar testImage[kImageSize];
-  uchar originalImage[kImageSize];
+  unsigned char testImage[kImageSize];
+  unsigned char originalImage[kImageSize];
 
   // Set up simple rectangle image
   int idx = 0;

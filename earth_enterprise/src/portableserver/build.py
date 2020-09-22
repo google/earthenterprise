@@ -81,7 +81,6 @@ class Builder(object):
         self.build_dir = build_dir
         self.source_dir = source_dir
         self.platform = platform
-
         self.base_version = None
         self.build_date = None
         self.version_string = None
@@ -194,7 +193,7 @@ class Builder(object):
         import build_and_test
         sys.path = old_path
 
-        build_and_test.main(['build_and_test.py', self.platform])
+        build_and_test.main(['build_and_test.py', self.platform, self.source_dir])
 
         # Copy library to package directory:
         exclude_entries = ['test.py', 'util.py']
@@ -207,6 +206,9 @@ class Builder(object):
         ]
         copy_from_dir_to_dir(dist_dir, self.server_dir, entries=entries,
             exclude_entries=exclude_entries)
+        
+        # Delete fileunpacker build directory so it is not packaged.
+        remove_directory(task_build_dir)
 
     def obtain_sample_globes(self):
         """Copies tutorial globe and map cuts to <data/>."""

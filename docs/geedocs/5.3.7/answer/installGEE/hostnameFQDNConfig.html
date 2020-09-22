@@ -1,0 +1,154 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Hostname and Fully Qualified Domain Name Configuration &#8212; Google Earth Enterprise 5.3.7 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Open GEE Wiki" href="wikiGEE.html" />
+    <link rel="prev" title="Uninstalling GEE Server" href="uninstallGEEServer.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="wikiGEE.html" title="Open GEE Wiki"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="uninstallGEEServer.html" title="Uninstalling GEE Server"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../installGEE.html" accesskey="U">Install Google Earth Enterprise</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="uninstallGEEServer.html"
+                        title="previous chapter">Uninstalling GEE Server</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="wikiGEE.html"
+                        title="next chapter">Open GEE Wiki</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp8.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp8.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="hostname-and-fully-qualified-domain-name-configuration">
+<h1>Hostname and Fully Qualified Domain Name Configuration<a class="headerlink" href="#hostname-and-fully-qualified-domain-name-configuration" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p class="rubric">Hostname and Fully Qualified Domain Name Configuration</p>
+<p>In order to make sure that the Apache server correctly determines
+the Fully Qualified Domain Name (FQDN) of the server and that the
+virtual hosts use the correct server URL, the hostname should be
+configured correctly. This is preferred instead of modifying the
+Apache server name configuration so that all the software looks to
+the same source for determining FQDNs. If the command
+<code class="docutils literal notranslate"><span class="pre">hostname</span> <span class="pre">-f</span></code> returns the correct FQDN hostname then the system
+is correctly configured to run Open GEE. If not the following
+instructions may help.</p>
+<p>Ideally the network where GEE is installed has a DNS set up to
+resolve hostnames so that IP traffic can be routed appropriately.
+However in cases where there is no DNS, static hostnames can be
+used as well. With static hostnames the <code class="docutils literal notranslate"><span class="pre">hostname</span></code> or
+<code class="docutils literal notranslate"><span class="pre">hostnamectl</span></code> command should be used to set the hostname to its
+FQDN. The <code class="docutils literal notranslate"><span class="pre">/etc/hostname</span></code> file should be updated to match as
+well so the name stays after reboots. If setting the hostname to
+the FQDN is not possible, then setting the FQDN in the
+<code class="docutils literal notranslate"><span class="pre">/etc/hosts</span></code> file is necessary. When using a static hostname,
+some operating systems may still give a warning on Apache startup
+even if it correctly determined the FQDN. Adding the FQDN to
+<code class="docutils literal notranslate"><span class="pre">/etc/hosts</span></code> would fix this as well. If adding the FQDN to
+<code class="docutils literal notranslate"><span class="pre">/etc/hosts</span></code> is needed, then the FQDN followed by just the host
+portion should be added to the line that contains the IP address
+the server will be listening on. This should be the first line of
+the file:</p>
+<p><code class="docutils literal notranslate"><span class="pre">127.0.1.1</span>&#160; <span class="pre">myserver.mydomainname.com</span> <span class="pre">myserver</span> <span class="pre">localhost</span></code></p>
+<p>If GEE is not using DNS other clients that connect to the server
+non-locally would need to have the same static mapping set up in
+their hosts files since the server hostname would not be resolved
+dynamically.</p>
+<p>When determining where to look for the correct FQDN Apache calls
+<code class="docutils literal notranslate"><span class="pre">hostname</span></code> which will use a resolver. The system configuration
+determines what the order is for resolving the FQDN. If the
+<code class="docutils literal notranslate"><span class="pre">/etc/nsswitch.conf</span></code> file is being used there is a line like
+this that defines the order:</p>
+<p><code class="docutils literal notranslate"><span class="pre">hosts:</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">dns</span> <span class="pre">myhostname</span> <span class="pre">files</span></code></p>
+<p>This example shows that the DNS on the network would be queried
+first. If that does not define the FQDN then the hostname would be
+queried. If the FQDN is still not defined then configuration files
+would be queried, mainly <code class="docutils literal notranslate"><span class="pre">/etc/hosts</span></code>.</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">/etc/host.conf</span></code> file is being used to resolve the
+hostname, then there is a line like this that defines the order:</p>
+<p><code class="docutils literal notranslate"><span class="pre">order</span> <span class="pre">hosts,bind</span></code></p>
+<p>In this example hosts refers to the <code class="docutils literal notranslate"><span class="pre">/etc/hosts</span></code> file and is
+checked first, and bind refers to the DNS.</p>
+<p>Here is <a class="reference internal" href="../geeServerConfigAndSecurity/serverHostname.html"><span class="doc">another note</span></a> on the server
+hostname.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="wikiGEE.html" title="Open GEE Wiki"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="uninstallGEEServer.html" title="Uninstalling GEE Server"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../installGEE.html" >Install Google Earth Enterprise</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

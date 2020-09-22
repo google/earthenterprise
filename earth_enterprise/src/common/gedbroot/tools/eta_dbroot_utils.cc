@@ -61,7 +61,7 @@ const string EtaReader::GetString(
     return default_val;
   }
 }
-int32 EtaReader::GetInt(const string& name, int32 default_val) const {
+std::int32_t EtaReader::GetInt(const string& name, std::int32_t default_val) const {
   if (const keyhole::EtaStruct* child =
       eta_struct_->GetChildByName(name, "etInt")) {
     return child->GetInt32Value();
@@ -69,7 +69,7 @@ int32 EtaReader::GetInt(const string& name, int32 default_val) const {
     return default_val;
   }
 }
-uint32 EtaReader::GetUInt(const string& name, uint32 default_val) const {
+std::uint32_t EtaReader::GetUInt(const string& name, std::uint32_t default_val) const {
   if (const keyhole::EtaStruct* child =
       eta_struct_->GetChildByName(name, "etInt")) {
     return child->GetUInt32Value();
@@ -106,12 +106,12 @@ void GetValueFromEtaStruct<string>(const EtaStruct* eta_struct, string* value) {
 }
 
 template <>
-void GetValueFromEtaStruct<int32>(const EtaStruct* eta_struct, int32* value) {
+void GetValueFromEtaStruct<std::int32_t>(const EtaStruct* eta_struct, std::int32_t* value) {
   *value = eta_struct->GetInt32Value();
 }
 
 template <>
-void GetValueFromEtaStruct<uint32>(const EtaStruct* eta_struct, uint32* value) {
+void GetValueFromEtaStruct<std::uint32_t>(const EtaStruct* eta_struct, std::uint32_t* value) {
   *value = eta_struct->GetUInt32Value();
 }
 
@@ -156,8 +156,8 @@ bool MaybeReadBoolFromChild(const EtaStruct* parent, int child_index) {
   return value;
 }
 
-int32 MaybeReadInt32FromChild(const EtaStruct* parent, int child_index) {
-  int32 value = 0;
+std::int32_t MaybeReadInt32FromChild(const EtaStruct* parent, int child_index) {
+  std::int32_t value = 0;
   if (parent->num_children() > child_index) {
     value = parent->child(child_index)->GetInt32Value();
   }
@@ -225,7 +225,7 @@ bool MaybeSetUrlFromEta(const EtaStruct& root, const char* struct_name,
   }
 
   field_name = string(struct_name) + ".port";
-  int32 port = 0;
+  std::int32_t port = 0;
   MaybeReadFromNamedChild(root, field_name.c_str(), &port);
   url.setPort(port);
 
@@ -355,7 +355,7 @@ void ParseStyleAttributes(const EtaDocument& eta_doc,
       dbroot::StyleAttributeProto* style_attribute =
           dbroot->add_style_attribute();
       style_attribute->set_style_id(eta_style->name());
-      int32 provider_id = 0;
+      std::int32_t provider_id = 0;
       // Use MaybeReadFromNamedChild(), which automatically converts an
       // etString into in32.
       MaybeReadFromNamedChild(*eta_style, "providerName", &provider_id);
@@ -432,7 +432,7 @@ void ParseStyleMaps(const EtaDocument& eta_doc, dbroot::DbRootProto* dbroot) {
     const EtaStruct* eta_style_map = (*it);
     EtaReader reader(eta_style_map);
     if (eta_style_map->num_children() == 2) {
-      int32 style_map_id = ParseLeadingInt32Value(eta_style_map->name().c_str(),
+      std::int32_t style_map_id = ParseLeadingInt32Value(eta_style_map->name().c_str(),
                                                   0);
       if (style_map_id <= 0) {
         notify(NFY_WARN, "non-numerical style map id: %s",
@@ -485,7 +485,7 @@ void ParseProviders(const EtaDocument& eta_doc, dbroot::DbRootProto* dbroot) {
     //   <etBool>     report           // ignored
     //   <etInt>      copyrightPri     // ignored
     if (provider_struct->num_children() >= 2) {
-      int32 provider_id = reader.GetInt("id", 0);
+      std::int32_t provider_id = reader.GetInt("id", 0);
       const string input_copyright = reader.GetString("copyright", "");
 
       dbroot::ProviderInfoProto* provider_info = dbroot->add_provider_info();
@@ -500,7 +500,7 @@ void ParseProviders(const EtaDocument& eta_doc, dbroot::DbRootProto* dbroot) {
                        provider_info->mutable_copyright_string());
       // Optional: pixel offset. Unfortunately ETA definitions declare the
       // default value for this variable as -1 instead of 0.
-      int32 pixel_offset = reader.GetInt("copyrightY", -1);
+      std::int32_t pixel_offset = reader.GetInt("copyrightY", -1);
       provider_info->set_vertical_pixel_offset(pixel_offset);
     }
   }
@@ -1200,7 +1200,7 @@ void ParseValidDatabases(const EtaDocument& eta_doc,
 
     string host;
     MaybeReadFromNamedChild(*database_struct, "host", &host);
-    int32 port = 0;
+    std::int32_t port = 0;
     MaybeReadFromNamedChild(*database_struct, "port", &port);
 
     if (!name.empty() && !host.empty()) {
@@ -1312,7 +1312,7 @@ void ParseLogServer(const EtaStruct& root, dbroot::EndSnippetProto* snippet) {
     snippet->mutable_log_server()->set_enable(enable);
   }
 
-  int32 factor;
+  std::int32_t factor;
   if (MaybeReadFromNamedChild(root, "logServer.throttleFactor", &factor)) {
     snippet->mutable_log_server()->set_throttling_factor(factor);
   }

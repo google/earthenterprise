@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -52,12 +53,12 @@ void gstHeaderImpl::SetCodec(QTextCodec* codec) {
   codec_ = codec;
 }
 
-uint32 gstHeaderImpl::RawSize(const gstRecordHandle rec) {
+ std::uint32_t gstHeaderImpl::RawSize(const gstRecordHandle rec) {
   if (rec->IsEmpty()) {
     return 0;
   } else {
-    uint32 sz = 0;
-    for (uint ii = 0; ii < numColumns(); ++ii)
+    std::uint32_t sz = 0;
+    for (unsigned int ii = 0; ii < numColumns(); ++ii)
       sz += rec->Field(ii)->RawSize();
     return sz;
   }
@@ -74,7 +75,7 @@ char* gstHeaderImpl::ToRaw(const gstRecordHandle rec, char* buf) {
 
   char* tbuf = buf;
 
-  for (uint ii = 0; ii < numColumns(); ++ii) {
+  for (unsigned int ii = 0; ii < numColumns(); ++ii) {
     gstValue* field = rec->Field(ii);
     field->GetRaw(tbuf);
     tbuf += field->RawSize();
@@ -84,7 +85,7 @@ char* gstHeaderImpl::ToRaw(const gstRecordHandle rec, char* buf) {
 }
 
 int gstHeaderImpl::FieldPosByName(const QString& fieldName) {
-  for (uint col = 0; col < numColumns(); ++col) {
+  for (unsigned int col = 0; col < numColumns(); ++col) {
     if (Name(col) == fieldName) {
       return col;
     }
@@ -121,7 +122,7 @@ gstRecordHandle gstHeaderImpl::FromRaw(const char* buf, int size) {
 
   // must find the beginning of each field in the raw buffer
   const char *tbuf = buf;
-  for (uint col = 0; col < numColumns(); ++col) {
+  for (unsigned int col = 0; col < numColumns(); ++col) {
     rec->raw_offsets_[col] = tbuf - buf;
     tbuf += gstValue::RawSize(ftype(col), tbuf);
   }
@@ -133,7 +134,7 @@ gstRecordHandle gstHeaderImpl::NewRecord() {
   gstRecordHandle rec = khRefGuardFromNew(
       new gstRecordImpl(numColumns(), khRefGuardFromThis()));
 
-  for (uint ii = 0; ii < numColumns(); ++ii) {
+  for (unsigned int ii = 0; ii < numColumns(); ++ii) {
     gstValue* val = gstValue::NewValueByType(ftype(ii));
     if (codec_)
       val->SetCodec(codec_);
@@ -147,7 +148,7 @@ void gstHeaderImpl::addSpec(const FieldSpec& spec) {
   field_specs_.push_back(spec);
 }
 
-void gstHeaderImpl::addSpec(const char* n, uint32 t, int l, double m) {
+void gstHeaderImpl::addSpec(const char* n, std::uint32_t t, int l, double m) {
   FieldSpec fspec;
   fspec.name = QString::fromUtf8(n);
   fspec.ftype = t;
@@ -156,7 +157,7 @@ void gstHeaderImpl::addSpec(const char* n, uint32 t, int l, double m) {
   addSpec(fspec);
 }
 
-void gstHeaderImpl::addSpec(const QString &n, uint32 t, int l, double m) {
+void gstHeaderImpl::addSpec(const QString &n, std::uint32_t t, int l, double m) {
   FieldSpec fspec;
   fspec.name = n;
   fspec.ftype = t;
@@ -179,7 +180,7 @@ gstHeaderHandle gstHeaderImpl::BuildFromRegistry(gstRegistry::Group* regGrp) {
       return new_header;
     }
 
-    uint32 type = gstValue::TypeFromName(type_tag->ValueAsString().c_str());
+    std::uint32_t type = gstValue::TypeFromName(type_tag->ValueAsString().c_str());
     if (type == gstTagInvalid) {
       notify(NFY_WARN, "Record has bad type");
       return new_header;
@@ -198,7 +199,7 @@ gstHeaderHandle gstHeaderImpl::BuildFromRegistry(gstRegistry::Group* regGrp) {
 
 #if 0
 void gstHeaderImpl::BuildRegistry(gstRegistry::Group *regGrp) {
-  for (uint ii = 0; ii < field_specs_.size(); ++ii) {
+  for (unsigned int ii = 0; ii < field_specs_.size(); ++ii) {
     gstRegistry::Group* specGrp = regGrp->addGroup(gstValue(ii).ValueAsString());
     specGrp->addTag(new gstValue(field_specs_[ii].name, "Name"));
     specGrp->addTag(new gstValue(
@@ -218,7 +219,7 @@ gstRecordImpl::gstRecordImpl()
   ++rcount;
 }
 
-gstRecordImpl::gstRecordImpl(uint length, gstHeaderHandle header)
+gstRecordImpl::gstRecordImpl(unsigned int length, gstHeaderHandle header)
   : header_(header),
     lazy_expansion_(false) {
   ++rcount;
@@ -233,7 +234,7 @@ gstRecordImpl::~gstRecordImpl() {
   --rcount;
 }
 
-gstValue* gstRecordImpl::Field(uint col) {
+gstValue* gstRecordImpl::Field(unsigned int col) {
   assert(col < NumFields());
   if (!lazy_expansion_) {
     return fields_[col];
@@ -249,7 +250,7 @@ gstValue* gstRecordImpl::Field(uint col) {
 }
 
 gstValue* gstRecordImpl::FieldByName(const QString& fieldName) {
-  for (uint col = 0; col < NumFields(); ++col) {
+  for (unsigned int col = 0; col < NumFields(); ++col) {
     if (header_->Name(col) == fieldName) {
       if (fields_[col] == NULL) {
         gstValue* val = gstValue::NewValueByType(header_->ftype(col));
@@ -285,7 +286,7 @@ gstRecordFormatter::gstRecordFormatter(
     bool match_found = false;
 
     // search all field names for a match
-    for (uint ii = 0; ii < hdr->numColumns(); ++ii) {
+    for (unsigned int ii = 0; ii < hdr->numColumns(); ++ii) {
       QString check_me = QString(
           "%1%2%3").arg(vstart).arg(hdr->Name(ii)).arg(vend);
       if (format_.find(check_me, varpos) == varpos) {
@@ -316,7 +317,7 @@ QString gstRecordFormatter::out(gstRecordHandle &rec) {
   QString result(format_.unicode(), format_.length());
 
   if (rec) {
-    uint pos = arg_.size();
+    unsigned int pos = arg_.size();
     while (pos) {
       --pos;
       result.insert(arg_pos_[pos], rec->Field(arg_[pos])->ValueAsUnicode());

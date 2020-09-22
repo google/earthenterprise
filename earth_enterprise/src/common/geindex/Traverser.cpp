@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -88,7 +89,7 @@ class MergeEntryBucket : public
   TraverserValue<SlotStorageType> current_entry_;
   const BucketPath bucket_path_;
   QuadtreePath slot_path_;
-  const uint32 level_limit_;
+  const std::uint32_t level_limit_;
   bool is_valid_;
   BucketEntrySlotType next_slot_;
   DISALLOW_COPY_AND_ASSIGN(MergeEntryBucket<LoadedEntryBucket>);
@@ -212,7 +213,7 @@ class MergeChildBucket : public
   const BucketPath bucket_path_;
   QuadtreePath slot_path_;
   bool is_valid_;
-  uint32 next_slot_;
+  std::uint32_t next_slot_;
   DISALLOW_COPY_AND_ASSIGN(MergeChildBucket<LoadedEntryBucket>);
 };
 

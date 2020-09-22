@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w-
 #
 # Copyright 2017 Google Inc.
+# Copyright 2020 The Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -123,14 +124,9 @@ class ${name}AssetVersionImplD :
     friend class ${name}AssetImplD;
     friend class DerivedAssetHandleD_<${name}AssetVersion, AssetVersionD, ${name}AssetVersionImplD>;
 public:
-    using AssetType = DerivedAssetHandleD_<${name}Asset, AssetD, ${name}AssetImplD>;
-    using MutableAssetType = MutableDerivedAssetHandleD_<AssetType, MutableAssetD>;
-
-
-
     virtual std::string GetName() const;
     virtual void SerializeConfig(khxml::DOMElement*) const;
-    virtual uint64 GetHeapUsage() const override;
+    virtual std::uint64_t GetHeapUsage() const override;
 
     // Only used when constructing a new version from an asset.
     // The decision to use the raw ImplD* here was a tough one.
@@ -162,9 +158,6 @@ print $fh <<EOF;
           ${name}AssetVersionImpl(config_),
           ${base}AssetVersionImplD() { }
 
-    static const AssetDefs::Type EXPECTED_TYPE;
-    static const std::string EXPECTED_SUBTYPE;
-
 $extra{"${name}AssetVersionImplD"}
 
     // supplied from ${name}.src ---v
@@ -193,7 +186,7 @@ public:
     void Modify($formalinputarg
                 const khMetaData & meta_,
                 const Config &config_);
-    virtual uint64 GetHeapUsage() const override;
+    virtual std::uint64_t GetHeapUsage() const override;
 EOF
     
 if ($haveBindConfig) {
@@ -283,6 +276,20 @@ EOF
 
 print $fh <<EOF;
 
+// Convenience class that ties together related types
+struct ${name}Type {
+  using Asset = ${name}Asset;
+  using Version = ${name}AssetVersion;
+  using AssetD = ${name}AssetD;
+  using VersionD = ${name}AssetVersionD;
+  using MutableAssetD = Mutable${name}AssetD;
+  using MutableVersionD = Mutable${name}AssetVersionD;
+  using AssetImplD = ${name}AssetImplD;
+  using Config = ${config};
+
+  static const AssetDefs::Type TYPE;
+  static const std::string SUBTYPE;
+};
 
 // ****************************************************************************
 // ***  ${name}Factory
@@ -294,12 +301,7 @@ public:
     SubAssetName(const std::string &parentAssetRef
                  $formaltypearg,
                  const std::string &basename);
-EOF
-
-print $fh <<EOF;
 };
-
-
 
 #endif /* __$hprot */
 EOF

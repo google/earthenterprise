@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +21,16 @@
 #define GEO_EARTH_ENTERPRISE_SRC_COMMON_ETENCODER_H_
 
 #include <string>
+#include <cstdint>
+#include "common/khSimpleException.h"
 #include "common/khTypes.h"
 
 namespace etEncoder {
 
-void Encode(void* data, uint32 datalen, const void* key, uint32 keylen);
-void Decode(void* data, uint32 datalen, const void* key, uint32 keylen);
-void EncodeWithDefaultKey(void* data, uint32 datalen);
-void DecodeWithDefaultKey(void* data, uint32 datalen);
+void Encode(void* data, std::uint32_t datalen, const void* key, std::uint32_t keylen);
+void Decode(void* data, std::uint32_t datalen, const void* key, std::uint32_t keylen);
+void EncodeWithDefaultKey(void* data, std::uint32_t datalen);
+void DecodeWithDefaultKey(void* data, std::uint32_t datalen);
 
 extern const std::string kDefaultKey;
 

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,9 +77,9 @@ class khRasterProductLevel
   khRasterProductLevel& operator=(const khRasterProductLevel&);
  public:
   inline const khRasterProduct* product(void) const { return product_;}
-  inline uint levelnum(void) const { return coverage.level; }
+  inline unsigned int levelnum(void) const { return coverage.level; }
   std::string filename(void) const;
-  uint numComponents(void) const;
+  unsigned int numComponents(void) const;
   khTypes::StorageEnum componentType(void) const;
 
 
@@ -90,7 +91,7 @@ class khRasterProductLevel
   // Requests outside range will return false.
   // Data will be coerced to target type
   template <class DestTile>
-  inline bool ReadTile(uint32 row, uint32 col, DestTile &dest) const;
+  inline bool ReadTile(std::uint32_t row, std::uint32_t col, DestTile &dest) const;
 
   inline bool IsMonoChromatic() const {
     if (!reader && !OpenReader()) {
@@ -100,40 +101,40 @@ class khRasterProductLevel
   }
 
   bool
-  ReadTileBandIntoBuf(uint32 row, uint32 col, uint band,
-                      uchar* destBuf,
+  ReadTileBandIntoBuf(std::uint32_t row, std::uint32_t col, unsigned int band,
+                      unsigned char* destBuf,
                       khTypes::StorageEnum destType,
-                      uint bufsize,
+                      unsigned int bufsize,
                       bool flipTopToBottom = false) const;
 
   // will throw if unable to read entire extents
   void
-  ReadImageIntoBufs(const khExtents<uint32> &pixelExtents,
-                    uchar *destBufs[],
-                    uint   bands[],
-                    uint   numbands,
+  ReadImageIntoBufs(const khExtents<std::uint32_t> &pixelExtents,
+                    unsigned char *destBufs[],
+                    unsigned int   bands[],
+                    unsigned int   numbands,
                     khTypes::StorageEnum destType) const;
 
 
   // Requests outside range will return false.
   // Data must match the type specified in the parent product
   template <class SrcTile>
-  bool WriteTile(uint32 row, uint32 col, const SrcTile &src);
+  bool WriteTile(std::uint32_t row, std::uint32_t col, const SrcTile &src);
 
   // extents of level in level-wide row/col
-  inline const khExtents<uint32>& tileExtents(void) const {
+  inline const khExtents<std::uint32_t>& tileExtents(void) const {
     return coverage.extents;
   }
-  inline const khExtents<uint64> tilePixelExtents(void) const {
-    return khExtents<uint64>(RowColOrder,
-                             (uint64)tileExtents().beginRow() *
-                             (uint64)RasterProductTileResolution,
-                             (uint64)tileExtents().endRow() *
-                             (uint64)RasterProductTileResolution,
-                             (uint64)tileExtents().beginCol() *
-                             (uint64)RasterProductTileResolution,
-                             (uint64)tileExtents().endCol() *
-                             (uint64)RasterProductTileResolution);
+  inline const khExtents<std::uint64_t> tilePixelExtents(void) const {
+    return khExtents<std::uint64_t>(RowColOrder,
+                             (std::uint64_t)tileExtents().beginRow() *
+                             (std::uint64_t)RasterProductTileResolution,
+                             (std::uint64_t)tileExtents().endRow() *
+                             (std::uint64_t)RasterProductTileResolution,
+                             (std::uint64_t)tileExtents().beginCol() *
+                             (std::uint64_t)RasterProductTileResolution,
+                             (std::uint64_t)tileExtents().endCol() *
+                             (std::uint64_t)RasterProductTileResolution);
   }
 
 };
@@ -144,12 +145,12 @@ class khRasterProductLevel
 
 template <class DestTile>
 inline bool
-khRasterProductLevel::ReadTile(uint32 row, uint32 col, DestTile &dest) const
+khRasterProductLevel::ReadTile(std::uint32_t row, std::uint32_t col, DestTile &dest) const
 {
-  COMPILE_TIME_ASSERT(DestTile::TileWidth == RasterProductTileResolution,
-                      IncompatibleTileWidth);
-  COMPILE_TIME_ASSERT(DestTile::TileHeight == RasterProductTileResolution,
-                      IncompatibleTileHeight);
+  static_assert(DestTile::TileWidth == RasterProductTileResolution,
+                      "Incompatible Tile Width");
+  static_assert(DestTile::TileHeight == RasterProductTileResolution,
+                      "Incompatible Tile Height");
   if (DestTile::NumComp != numComponents()) {
     notify(NFY_WARN, "Internal Error: Invalid number of bands: %u != %u",
            DestTile::NumComp, numComponents());

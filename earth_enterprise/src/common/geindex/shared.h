@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +21,7 @@
 #define COMMON_GEINDEX_SHARED_H__
 
 #include <string>
-#include <khTypes.h>
+#include <cstdint>
 #include <quadtreepath.h>
 #include <filebundle/filebundle.h>
 
@@ -32,17 +33,17 @@ namespace geindex {
 class IndexBundle;
 
 // basic constants on bucket sizes
-static const uint kQuadLevelsPerBucket = 4;
-static const uint kChildAddrsPerBucket = 256; // 4^kQuadLevelsPerBucket
-static const uint kEntrySlotsPerBucket = 1 + 4 + 16 + 64; // 85
-static const uint16 kCurrentFileFormatVersion = 0;
+static const unsigned int kQuadLevelsPerBucket = 4;
+static const unsigned int kChildAddrsPerBucket = 256; // 4^kQuadLevelsPerBucket
+static const unsigned int kEntrySlotsPerBucket = 1 + 4 + 16 + 64; // 85
+static const std::uint16_t kCurrentFileFormatVersion = 0;
 
 // Types just big enough to store child & entry slot numbers relative to a
 // bucket. NOTE: These are used for disk storage. If you change them, you will
 // need to bump the index's fileFormatVersion and adjust several VersionedPull
 // routines. 
-typedef uint8 BucketChildSlotType;  // holds kChildAddrsPerBucket indexes
-typedef uint8 BucketEntrySlotType;  // holds kEntrySlotsPerBucket indexes
+typedef std::uint8_t BucketChildSlotType;  // holds kChildAddrsPerBucket indexes
+typedef std::uint8_t BucketEntrySlotType;  // holds kEntrySlotsPerBucket indexes
 
 // ****************************************************************************
 // ***  BundleAddr
@@ -63,12 +64,12 @@ typedef BundleAddr EntryBucketAddr;
 // ****************************************************************************
 class ChildBucketAddr {
  public:
-  const uint64 offset;
-  const uint32 childBucketsSize;
-  const uint32 entryBucketsSize;
+  const std::uint64_t offset;
+  const std::uint32_t childBucketsSize;
+  const std::uint32_t entryBucketsSize;
 
-  inline ChildBucketAddr(uint64 offset_, uint32 childBucketsSize_,
-                         uint32 entryBucketsSize_) :
+  inline ChildBucketAddr(std::uint64_t offset_, std::uint32_t childBucketsSize_,
+                         std::uint32_t entryBucketsSize_) :
       offset(offset_),
       childBucketsSize(childBucketsSize_),
       entryBucketsSize(entryBucketsSize_)
@@ -94,8 +95,8 @@ class ChildBucketAddr {
   inline bool operator!=(const ChildBucketAddr &o) const {
     return !operator==(o);
   }
-  inline uint64 Offset(void) const { return offset; }
-  inline uint32 TotalSize(void) const {
+  inline std::uint64_t Offset(void) const { return offset; }
+  inline std::uint32_t TotalSize(void) const {
     return childBucketsSize+entryBucketsSize;
   }
   inline BundleAddr ChildBucketsAddr(void) const {
@@ -171,16 +172,16 @@ class BucketPath : public QuadtreePath {
   BucketPath(const QuadtreePath &path) : QuadtreePath(
       path, (path.Level()/kQuadLevelsPerBucket) * kQuadLevelsPerBucket) {}
   // chop the address to the requested BucketLevel
-  BucketPath(const BucketPath &o, uint bucketLevel) : QuadtreePath(
+  BucketPath(const BucketPath &o, unsigned int bucketLevel) : QuadtreePath(
       o,  bucketLevel * kQuadLevelsPerBucket) {}
 
   // get the parent bucket address
-  BucketPath BucketPathParent(uint count = 1) const {
+  BucketPath BucketPathParent(unsigned int count = 1) const {
     return BucketLevel() > count ? BucketPath(*this, BucketLevel() - count)
                                  : BucketPath();
   }
 
-  uint BucketLevel(void) const { return Level() / kQuadLevelsPerBucket;}
+  unsigned int BucketLevel(void) const { return Level() / kQuadLevelsPerBucket;}
 
   // assumes target is within the Bucket extents
   QuadtreePath QuadtreePathToChild(const QuadtreePath &target) const {
@@ -201,7 +202,7 @@ class BucketPath : public QuadtreePath {
             ((other.Level() - Level()) < kQuadLevelsPerBucket));
   }
 
-  static const uint EntrySlotSpacing[kQuadLevelsPerBucket - 1];
+  static const unsigned int EntrySlotSpacing[kQuadLevelsPerBucket - 1];
 };
 
 

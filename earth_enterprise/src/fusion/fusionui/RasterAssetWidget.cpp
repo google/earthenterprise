@@ -1,5 +1,6 @@
 // Copyright 2017 Google Inc.
-// Copyright 2019, Open GEE Contributors
+// Copyright 2020 The Open GEE Contributors
+// Copyright 2020, Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -77,7 +78,7 @@ static struct StdConversion {
 };
 
 
-static uint NumStdConversions =
+static unsigned int NumStdConversions =
     sizeof(StdConversions)/sizeof(StdConversions[0]);
 
 namespace {
@@ -96,7 +97,7 @@ RasterAssetWidget::RasterAssetWidget(QWidget* parent, AssetDefs::Type type)
   elev_units_combo->clear();
 
   // add the standard conversions to the conversion combo
-  for (uint i = 0; i < NumStdConversions; ++i) {
+  for (unsigned int i = 0; i < NumStdConversions; ++i) {
     elev_units_combo->insertItem(StdConversions[i].name, i);
   }
 
@@ -450,7 +451,7 @@ void RasterAssetWidget::CustomConversion(const QString& str) {
 }
 
 void RasterAssetWidget::UpdateElevUnits(double conv) {
-  uint i = 0;
+  unsigned int i = 0;
   for (; i < NumStdConversions; ++i) {
     if (conv == StdConversions[i].scale) {
       elev_units_combo->setCurrentItem(i);

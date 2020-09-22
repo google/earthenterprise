@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,36 +23,36 @@
 // khLevelPresenceMask
 khLevelPresenceMask::khLevelPresenceMask(const khLevelPresenceMask &o)
     : khLevelCoverage(o),
-      buf(TransferOwnership(new uchar[BufferSize()])) {
+      buf(TransferOwnership(new unsigned char[BufferSize()])) {
   memcpy(&buf[0], &o.buf[0], BufferSize());
 }
 
 
-khLevelPresenceMask::khLevelPresenceMask(uint lev,
-                                         const khExtents<uint32> &extents,
+khLevelPresenceMask::khLevelPresenceMask(unsigned int lev,
+                                         const khExtents<std::uint32_t> &extents,
                                          bool set_present)
     : khLevelCoverage(lev, extents),
-      buf(TransferOwnership(new uchar[BufferSize()])) {
+      buf(TransferOwnership(new unsigned char[BufferSize()])) {
   SetPresence(set_present);
 }
 
 
-khLevelPresenceMask::khLevelPresenceMask(uint lev,
-                                         const khExtents<uint32> &extents,
-                                         uchar *src)
+khLevelPresenceMask::khLevelPresenceMask(unsigned int lev,
+                                         const khExtents<std::uint32_t> &extents,
+                                         unsigned char *src)
     : khLevelCoverage(lev, extents),
-      buf(TransferOwnership(new uchar[BufferSize()])) {
+      buf(TransferOwnership(new unsigned char[BufferSize()])) {
   memcpy(&buf[0], src, BufferSize());
 }
 
 
-bool khLevelPresenceMask::GetPresence(uint32 row, uint32 col) const {
+bool khLevelPresenceMask::GetPresence(std::uint32_t row, std::uint32_t col) const {
   if (extents.ContainsRowCol(row, col)) {
-    uint32 r = row - extents.beginRow();
-    uint32 c = col - extents.beginCol();
-    uint32 tilePos = r * extents.numCols() + c;
-    uint32 byteNum = tilePos / 8;
-    uint32 byteOffset = tilePos % 8;
+    std::uint32_t r = row - extents.beginRow();
+    std::uint32_t c = col - extents.beginCol();
+    std::uint32_t tilePos = r * extents.numCols() + c;
+    std::uint32_t byteNum = tilePos / 8;
+    std::uint32_t byteOffset = tilePos % 8;
 
     assert(byteNum < BufferSize());
     return static_cast<bool>((buf[byteNum] >> byteOffset) & 0x1);
@@ -74,12 +75,12 @@ void khLevelPresenceMask::SetPresence(bool set_present) {
 // Here, we have an assertion that checks if we're setting a presence bit that
 // hasn't been set.
 template<> void khLevelPresenceMask::SetPresence(
-    uint32 row, uint32 col, bool present, const Int2Type<false>&) {
-  uint32 r = row - extents.beginRow();
-  uint32 c = col - extents.beginCol();
-  uint32 tilePos = r * extents.numCols() + c;
-  uint32 byteNum = tilePos / 8;
-  uint32 byteOffset = tilePos % 8;
+    std::uint32_t row, std::uint32_t col, bool present, const Int2Type<false>&) {
+  std::uint32_t r = row - extents.beginRow();
+  std::uint32_t c = col - extents.beginCol();
+  std::uint32_t tilePos = r * extents.numCols() + c;
+  std::uint32_t byteNum = tilePos / 8;
+  std::uint32_t byteOffset = tilePos % 8;
 
   assert(byteNum < BufferSize());
 
@@ -90,7 +91,7 @@ template<> void khLevelPresenceMask::SetPresence(
 
   buf[byteNum] =
     (buf[byteNum] & ~(0x1 << byteOffset)) |  // strip out old value
-      ((static_cast<uchar>(present) & 0x1) << byteOffset);  // 'or' in new value
+      ((static_cast<unsigned char>(present) & 0x1) << byteOffset);  // 'or' in new value
 }
 
 // Specialization of SetPresence() that is used from khCoverageMask.
@@ -98,22 +99,22 @@ template<> void khLevelPresenceMask::SetPresence(
 // more than one time for specific quad. So, there is no an assertion whether
 // we're setting a covered bit that hasn't been set.
 template<> void khLevelPresenceMask::SetPresence(
-    uint32 row, uint32 col, bool present, const Int2Type<true>&) {
-  uint32 r = row - extents.beginRow();
-  uint32 c = col - extents.beginCol();
-  uint32 tilePos = r * extents.numCols() + c;
-  uint32 byteNum = tilePos / 8;
-  uint32 byteOffset = tilePos % 8;
+    std::uint32_t row, std::uint32_t col, bool present, const Int2Type<true>&) {
+  std::uint32_t r = row - extents.beginRow();
+  std::uint32_t c = col - extents.beginCol();
+  std::uint32_t tilePos = r * extents.numCols() + c;
+  std::uint32_t byteNum = tilePos / 8;
+  std::uint32_t byteOffset = tilePos % 8;
 
   assert(byteNum < BufferSize());
 
   buf[byteNum] =
     (buf[byteNum] & ~(0x1 << byteOffset)) |  // strip out old value
-      ((static_cast<uchar>(present) & 0x1) << byteOffset);  // 'or' in new value
+      ((static_cast<unsigned char>(present) & 0x1) << byteOffset);  // 'or' in new value
 }
 
 // An explicit instantiation for SetPrecence() specializations.
 template void khLevelPresenceMask::SetPresence<static_cast<int>(false)>(
-    uint32, uint32, bool, const Int2Type<false>&);
+    std::uint32_t, std::uint32_t, bool, const Int2Type<false>&);
 template void khLevelPresenceMask::SetPresence<static_cast<int>(true)>(
-    uint32, uint32, bool, const Int2Type<true>&);
+    std::uint32_t, std::uint32_t, bool, const Int2Type<true>&);

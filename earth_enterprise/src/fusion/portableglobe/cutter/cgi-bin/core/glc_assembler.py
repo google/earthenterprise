@@ -30,8 +30,8 @@ import urllib
 import yaml
 from common import utils
 import common.configs
-from lxml import etree
-
+import defusedxml.ElementTree as etree
+import xml.etree.ElementTree as etree2
 
 CONFIG_FILE = "/opt/google/gehttpd/cgi-bin/advanced_cutter.cfg"
 CONFIGS = common.configs.Configs(CONFIG_FILE)
@@ -285,7 +285,7 @@ class GlcAssembler(object):
     self.ExtractFileFromGlx(
         path, "maps/map.json", self.extract_map_json_file)
     return self.ExtractLayerInfo()
-  
+
   def GetJson(self, path):
     """Extract <map.json> from a GLM, and return it parsed."""
     subprocess.check_call([
@@ -549,7 +549,7 @@ class GlcAssembler(object):
     with open(self.polygon_file, "w") as fp:
       # Check XML validity and standardize representation
       utils.PrintAndLog("Checking polygon")
-      xml = etree.ElementTree(etree.fromstring(str(polygon)))
+      xml = etree2.ElementTree(etree.fromstring(str(polygon)))
       utils.PrintAndLog("Writing polygon")
       xml.write(fp, xml_declaration=True, encoding='UTF-8')
       utils.PrintAndLog("SUCCESS", logger, None)
@@ -742,7 +742,7 @@ class GlcAssembler(object):
     self.output_dir = base_path
     self.glc_path = glc_path
     self.info_file = INFO_FILE_LOG % self.base_path
-   
+
     logger = self.GetLogger()
     utils.PrintAndLog("Prepare disassembler...", logger)
     utils.PrintAndLog("Output dir: %s" % self.base_path, logger)
@@ -755,7 +755,7 @@ class GlcAssembler(object):
     """Extract glms or glbs from a glc."""
 
     logger = None
-   
+
     try:
       output_dir = form_.getvalue_path("dir")
       glc_path = form_.getvalue_path("path")

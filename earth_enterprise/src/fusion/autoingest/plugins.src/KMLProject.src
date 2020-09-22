@@ -83,7 +83,7 @@ KMLProjectAssetImplD::HandleEditRequest(const KMLProjectEditRequest &req)
 
   // custom FindMake - modified to set/preserve indexVersion
   KMLProjectConfig projConfig = req.config;
-  MutableKMLProjectAssetD project = Find<KMLProjectAssetD>(projname);
+  MutableKMLProjectAssetD project = Find<KMLProjectType>(projname);
   if (project) {
     // We must preserve the indexVersion since the GUI doesn't/can't.
     // We really should split this KMLProjectConfig into two pieces.
@@ -91,8 +91,8 @@ KMLProjectAssetImplD::HandleEditRequest(const KMLProjectEditRequest &req)
     project->Modify(inputs, req.meta, projConfig);
   } else {
     assert(projConfig.indexVersion == 1);
-    project = AssetFactory::Make<MutableKMLProjectAssetD, KMLProjectConfig>(projname, inputs,
-                                                          req.meta, projConfig);
+    project = Make<KMLProjectType>(projname, inputs,
+                                                 req.meta, projConfig);
   }
 
   if (!project) {
@@ -112,4 +112,3 @@ KMLProjectAssetVersionImplD::UpdateChildren(void)
 {
   throw khException(kh::tr("KMLProject::UpdateChildren not implemented"));
 }
-

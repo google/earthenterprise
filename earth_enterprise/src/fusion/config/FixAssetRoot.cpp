@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,7 +31,7 @@
 
 
 namespace {
-void FixDirPerms(const std::string &fname, uint mode) {
+void FixDirPerms(const std::string &fname, unsigned int mode) {
   struct stat64 sb;
   if (::stat64(fname.c_str(), &sb) == 0) {
     if (sb.st_mode != mode) {
@@ -47,7 +48,7 @@ void FixDirPerms(const std::string &fname, uint mode) {
     khChmod(fname, mode);
   }
 }
-void FixFilePerms(const std::string &fname, uint mode) {
+void FixFilePerms(const std::string &fname, unsigned int mode) {
   struct stat64 sb;
   if (::stat64(fname.c_str(), &sb) == 0) {
     if (sb.st_mode != mode) {
@@ -62,12 +63,22 @@ void FixFilePerms(const std::string &fname, uint mode) {
 
 
 
-void FixSpecialPerms(const std::string &assetroot) {
-  for (geAssetRoot::SpecialDir dir = geAssetRoot::FirstSpecialDir;
-       dir <= geAssetRoot::LastSpecialDir;
-       dir = geAssetRoot::SpecialDir(int(dir)+1)) {
-    FixDirPerms(geAssetRoot::Dirname(assetroot, dir),
-                geAssetRoot::DirPerms(dir));
+void FixSpecialPerms(const std::string &assetroot, bool secure) {
+  if (secure) {
+    for (geAssetRoot::SpecialDir dir = geAssetRoot::FirstSpecialDir;
+        dir <= geAssetRoot::LastSpecialDir;
+        dir = geAssetRoot::SpecialDir(int(dir)+1)) {
+      FixDirPerms(geAssetRoot::Dirname(assetroot, dir),
+                  geAssetRoot::SecureDirPerms(dir));
+    }
+  }
+  else {
+    for (geAssetRoot::SpecialDir dir = geAssetRoot::FirstSpecialDir;
+        dir <= geAssetRoot::LastSpecialDir;
+        dir = geAssetRoot::SpecialDir(int(dir)+1)) {
+      FixDirPerms(geAssetRoot::Dirname(assetroot, dir),
+                  geAssetRoot::DirPerms(dir));
+    }
   }
   for (geAssetRoot::SpecialFile file = geAssetRoot::FirstSpecialFile;
        file <= geAssetRoot::LastSpecialFile;
@@ -175,7 +186,8 @@ MakeDirWithAttrs(const std::string &dirname, mode_t mode, const geUserId &user)
 
 
 bool MakeSpecialDirs(const std::string &assetroot,
-                     const geUserId &fusion_user) {
+                     const geUserId &fusion_user,
+                     bool secure) {
   bool user_changed = false;
 
   // make any parents of the asset root w/ more restrictive permissisons
@@ -188,10 +200,19 @@ bool MakeSpecialDirs(const std::string &assetroot,
   for (geAssetRoot::SpecialDir dir = geAssetRoot::FirstSpecialDir;
        dir <= geAssetRoot::LastSpecialDir;
        dir = geAssetRoot::SpecialDir(int(dir)+1)) {
-    if (MakeDirWithAttrs(geAssetRoot::Dirname(assetroot, dir),
-                         geAssetRoot::DirPerms(dir),
-                         fusion_user)) {
-      user_changed = true;
+    if (secure) {
+      if (MakeDirWithAttrs(geAssetRoot::Dirname(assetroot, dir),
+                          geAssetRoot::SecureDirPerms(dir),
+                          fusion_user)) {
+        user_changed = true;
+      }
+    }
+    else {
+      if (MakeDirWithAttrs(geAssetRoot::Dirname(assetroot, dir),
+                          geAssetRoot::DirPerms(dir),
+                          fusion_user)) {
+        user_changed = true;
+      }
     }
   }
 

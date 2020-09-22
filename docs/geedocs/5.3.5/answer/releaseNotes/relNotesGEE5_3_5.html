@@ -72,10 +72,6 @@
 <h1>Release notes: Open GEE 5.3.5<a class="headerlink" href="#release-notes-open-gee-5-3-5" title="Permalink to this headline">¶</a></h1>
 <div class="docutils container">
 <div class="content docutils container">
-<p>Open GEE 5.3.5 is currently in development</p>
-<p class="rubric">New Features</p>
-<p><strong>New feature here</strong>.
-New feature description goes here.</p>
 <p class="rubric">Supported Platforms</p>
 <p>The Open GEE 5.3.5 release is supported on 64-bit versions of the
 following operating systems:</p>
@@ -89,263 +85,131 @@ most recent security patches</li>
 Enterprise Client (EC) version 7.1.5 and above.</p>
 <p>To upgrade from Open GEE 5.2.0, do NOT uninstall it. We recommend
 that you upgrade Open GEE 5.2.0 by simply installing Open GEE
-5.3.2. Installing Open GEE 5.3.5 on top of Open GEE 5.2.0 will
+5.3.5. Installing Open GEE 5.3.5 on top of Open GEE 5.2.0 will
 ensure that your PostgreSQL databases are backed up and upgraded
 correctly to the new PostgreSQL version used by Open GEE 5.3.5.</p>
+<p class="rubric">New Features</p>
+<p>In 5.3.5, we moved documentation, examples, and tutorials into a
+separate RPM called opengee-extra. This mainly includes the
+documentation, ExampleSearch, and Fusion Tutorial files.  You
+can choose whether to install opengee-extra depending on if you
+need those items.</p>
 <p class="rubric">Resolved Issues</p>
 <table border="1" class="colwidths-given docutils">
 <colgroup>
 <col width="11%" />
-<col width="32%" />
-<col width="58%" />
+<col width="89%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Number</th>
 <th class="head">Description</th>
-<th class="head">Resolution</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>9999</td>
-<td>Add description</td>
-<td>Add resolution</td>
+<tr class="row-even"><td>1782</td>
+<td>RPM name change causes Fusion and Server services to be off after upgrade</td>
 </tr>
-</tbody>
-</table>
-<p class="rubric">Known Issues</p>
-<table border="1" class="colwidths-given docutils">
-<colgroup>
-<col width="11%" />
-<col width="32%" />
-<col width="58%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Number</th>
-<th class="head">Description</th>
-<th class="head">Resolution</th>
+<tr class="row-odd"><td>1778</td>
+<td>Databases published with SSL virtual hosts fail to cut</td>
 </tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>4</td>
-<td>Google basemap fails to load in 2D Mercator Maps</td>
-<td>Obtain a valid Google Maps API key and include it in <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/maps/maps_google.html</span></code>.</td>
+<tr class="row-even"><td>1774</td>
+<td>CGI Error Handler Slows Cutter</td>
 </tr>
-<tr class="row-odd"><td>8</td>
-<td>Ensure GEE Portable Cutter Job Completes</td>
-<td>No current work around.</td>
+<tr class="row-odd"><td>1772</td>
+<td>Geecheck reports server is not installed in dual configuration</td>
 </tr>
-<tr class="row-even"><td>9</td>
-<td>Improve FileUnpacker Handling of Invalid Files</td>
-<td>No current work around.</td>
+<tr class="row-even"><td>1768</td>
+<td>Option to not install documentation</td>
 </tr>
-<tr class="row-odd"><td>20</td>
-<td>Simplify build process for portable builds on MacOS</td>
-<td>Building and running Portable Server on MacOS should be possible with minimal changes.</td>
+<tr class="row-odd"><td>1749</td>
+<td>Allow users to serve WMS of 3D files from server UI</td>
 </tr>
-<tr class="row-even"><td>34</td>
-<td>Scons build creates temporary directories named “0”</td>
-<td>No current work around.</td>
+<tr class="row-even"><td>1742</td>
+<td>Mis-configured Apache ErrorDocuments</td>
 </tr>
-<tr class="row-odd"><td>126</td>
-<td>The Fusion installer creates a backup on the first run</td>
-<td>No current work around. The created backup can be deleted.</td>
+<tr class="row-odd"><td>1735</td>
+<td>Vector packet description string retrieved by geglxinfo is incorrect</td>
 </tr>
-<tr class="row-even"><td>190</td>
-<td>Hostname mismatch check in installers doesn’t work as expected</td>
-<td>No current work around.</td>
+<tr class="row-even"><td>1717</td>
+<td>Use standard static_assert instead of home grown compile assert</td>
 </tr>
-<tr class="row-odd"><td>193</td>
-<td>Updated docs are not copied if the <code class="docutils literal notranslate"><span class="pre">/tmp/fusion_os_install</span></code> directory already exists</td>
-<td>Delete <code class="docutils literal notranslate"><span class="pre">/tmp/fusion_os_install</span></code> at the beginning of the stage_install build process.</td>
+<tr class="row-odd"><td>1715</td>
+<td>Documentation currently references old/unsupported configurations</td>
 </tr>
-<tr class="row-even"><td>201</td>
-<td>Some tiles are displayed incorrectly in the Enterprise Client when terrain is enabled</td>
-<td>No current work around.</td>
+<tr class="row-even"><td>1714</td>
+<td>Separate Portable Builds</td>
 </tr>
-<tr class="row-odd"><td>202</td>
-<td>Icons are not displayed on vector layers in the Enterprise Client</td>
-<td>No current work around. It is not clear if this is an error in GEE or in the Enterprise Client.</td>
+<tr class="row-odd"><td>1711</td>
+<td>Portable Archive Contains FileUnpacker Build Directory</td>
 </tr>
-<tr class="row-even"><td>203</td>
-<td>Some vector layer options are not saved</td>
-<td>No current work around.</td>
+<tr class="row-even"><td>1698</td>
+<td>Standardize the use of unsigned integers</td>
 </tr>
-<tr class="row-odd"><td>221</td>
-<td>The asset manager may display that a job is “Queued” when in fact the job is “Blocked”</td>
-<td>No current work around.</td>
+<tr class="row-odd"><td>1680</td>
+<td>Broken Links in Portable Windows Documentation</td>
 </tr>
-<tr class="row-even"><td>234</td>
-<td>Geserver raises error executing apache_logs.pyc</td>
-<td>No current work around.</td>
+<tr class="row-even"><td>1675</td>
+<td>Move to gradle 6</td>
 </tr>
-<tr class="row-odd"><td>254</td>
-<td>Automasking fails for images stored with UTM projection</td>
-<td>Use GDAL to convert the images to a different projection before ingesting them into Fusion.</td>
+<tr class="row-odd"><td>1677</td>
+<td>Some mercator maps fail to display in dual-server setups</td>
 </tr>
-<tr class="row-even"><td>269</td>
-<td>gevectorimport doesn’t crop features</td>
-<td>Use GDAL/OGR to crop vector dataset before importing them using Fusion.</td>
+<tr class="row-even"><td>1667</td>
+<td>FusionTutorial files are available on s3.  download_tutorial.sh needs to be updated.</td>
 </tr>
-<tr class="row-odd"><td>295</td>
-<td>Fix buffer overflows and leaks in unit tests</td>
-<td>No current work around.</td>
+<tr class="row-odd"><td>1666</td>
+<td>User sees “plugin failed to load” alerts when browsing to portable server page</td>
 </tr>
-<tr class="row-even"><td>309</td>
-<td>Check for the FusionConnection before new asset is populated</td>
-<td>Make sure that gefusion service is started.</td>
+<tr class="row-even"><td>1657</td>
+<td>fatal error: autoingest/sysman/plugins/MapLayerAssetD.h: No such file or directory</td>
 </tr>
-<tr class="row-odd"><td>320</td>
-<td>The Portable Server web page uses obsolete REST calls</td>
-<td>Do not use the buttons on the Portable Server web interface for adding remote servers or broadcasting to remote servers as these features are no longer supported.</td>
+<tr class="row-odd"><td>1650</td>
+<td>WMS https doesn’t work behind reverse proxies</td>
 </tr>
-<tr class="row-even"><td>326</td>
-<td>Libraries may be loaded from the wrong directory</td>
-<td>Delete any library versions that should not be loaded or use LD_LIBRARY_PATH to load libraries from
-<code class="docutils literal notranslate"><span class="pre">/opt/google/lib</span></code>.</td>
+<tr class="row-even"><td>1649</td>
+<td>Consolidate XML loading code into AssetSerializer</td>
 </tr>
-<tr class="row-odd"><td>340</td>
-<td>GE Fusion Terrain is black</td>
-<td>No current work around.</td>
+<tr class="row-odd"><td>1643</td>
+<td>geserver_init still relies on initscripts</td>
 </tr>
-<tr class="row-even"><td>342</td>
-<td>Fusion crashes when opening an unsupported file type</td>
-<td>Re-open Fusion and avoid opening unsupported file types.</td>
+<tr class="row-even"><td>1642</td>
+<td>Getop does not have an option to print status and exit</td>
 </tr>
-<tr class="row-odd"><td>343</td>
-<td>gefusion: File -&gt;open-&gt;*.kiasset*,*.ktasset*,*.kip does not work</td>
-<td>kip is not a supported format. Void opening files with .kip extension.</td>
+<tr class="row-odd"><td>1634</td>
+<td>Portable server on Windows stops working if user clicks inside terminal window</td>
 </tr>
-<tr class="row-even"><td>380</td>
-<td>Provider field in resource-view is blank</td>
-<td>Open the individual resource to see the provider.</td>
+<tr class="row-even"><td>1622</td>
+<td>Make public unpacker function for accessing globe directories</td>
 </tr>
-<tr class="row-odd"><td>401</td>
-<td>GEE commands are not in the path for sudo.</td>
-<td>Specify the full path when running commands or add <code class="docutils literal notranslate"><span class="pre">/opt/google/bin</span></code> to the path for all users, including the super user.</td>
+<tr class="row-odd"><td>1621</td>
+<td>EL6 scons uses Python 2.6</td>
 </tr>
-<tr class="row-even"><td>402</td>
-<td>Provider manager window locked to main window.</td>
-<td>No current work around.</td>
+<tr class="row-even"><td>1616</td>
+<td>Allow missing rows in publish_context_table</td>
 </tr>
-<tr class="row-odd"><td>403</td>
-<td>Missing Close button on system manager window in RHEL 7</td>
-<td>Right-click the title bar and select Close.</td>
+<tr class="row-odd"><td>1608</td>
+<td>Cutter fails when polygon level is 24</td>
 </tr>
-<tr class="row-even"><td>404</td>
-<td>Opaque polygons in preview.</td>
-<td>No current work around.</td>
+<tr class="row-even"><td>1604</td>
+<td>WMS with reverse proxies doesn’t work</td>
 </tr>
-<tr class="row-odd"><td>405</td>
-<td>Vector layer preview not cleared in some situations</td>
-<td>Reset the preview window to the correct state by either clicking on it or previewing another vector layer.</td>
+<tr class="row-odd"><td>1602</td>
+<td>Create a make.bat file to generate html from rst file for Windows users</td>
 </tr>
-<tr class="row-even"><td>407</td>
-<td>Corrupt data warning when starting Fusion</td>
-<td>No current work around but Fusion loads and runs correctly.</td>
+<tr class="row-even"><td>1598</td>
+<td>Incorrect RedHat 7 Install Instructions</td>
 </tr>
-<tr class="row-odd"><td>419</td>
-<td>Fix Fusion Graphics Acceleration in Ubuntu 14 Docker Container Hosted on Ubuntu 16</td>
-<td>No current work around.</td>
+<tr class="row-odd"><td>1593</td>
+<td>Python Dependency Issues on EL6</td>
 </tr>
-<tr class="row-even"><td>437</td>
-<td>Rebooting VM while it is building resources results in a corrupted XML</td>
-<td>No current work around.</td>
+<tr class="row-even"><td>1579</td>
+<td>Add an option to misc.xml for disabling minification</td>
 </tr>
-<tr class="row-odd"><td>439</td>
-<td>Uninstalling Fusion without stopping it results in unexpected error message</td>
-<td>Ignore that error message.</td>
-</tr>
-<tr class="row-even"><td>440</td>
-<td>Fuzzy imagery in historical imagery tests.</td>
-<td>No current work around.</td>
-</tr>
-<tr class="row-odd"><td>442</td>
-<td>Multiple database pushes after upgrade don’t report a warning</td>
-<td>No current work around.</td>
-</tr>
-<tr class="row-even"><td>444</td>
-<td>Fusion installer does not upgrade the asset root on RHEL 7</td>
-<td>Upgrade the asset root manually by running the command that is printed when you try to start the Fusion service.</td>
-</tr>
-<tr class="row-odd"><td>445</td>
-<td>Path to tutorial source volume in gee_test instructions is different from path used in installers</td>
-<td>Use <code class="docutils literal notranslate"><span class="pre">/opt/google/share/tutorials</span></code>.</td>
-</tr>
-<tr class="row-even"><td>448</td>
-<td>Out of Memory issues</td>
-<td>Use a system that has more than 4GB RAM.</td>
-</tr>
-<tr class="row-odd"><td>453</td>
-<td>Improve `check_server_processes_running` detection for uninstall</td>
-<td>No current work around.</td>
-</tr>
-<tr class="row-even"><td>456</td>
-<td>Inconsistent behavior of vector layers after upgrade</td>
-<td>No current work around.</td>
-</tr>
-<tr class="row-odd"><td>460</td>
-<td>Possibility of seg fault in QDateWrapper</td>
-<td>No current work around.</td>
-</tr>
-<tr class="row-even"><td>474</td>
+<tr class="row-odd"><td>474</td>
 <td>Running gee_check on some supported platforms reports that the platform is not supported</td>
-<td>You can ignore the failed test if using a supported platform (Ubuntu 14.04, Ubuntu 16.04, RHEL 7, and CentOS 7).</td>
 </tr>
-<tr class="row-odd"><td>477</td>
-<td>‘service geserver stop/start/restart’ doesn’t work on Ubuntu 16.04 without a reboot</td>
-<td>Reboot and try again.</td>
-</tr>
-<tr class="row-even"><td>487</td>
-<td>gdal - python utilities do not recognize osgeo module</td>
-<td>Install <code class="docutils literal notranslate"><span class="pre">python-gdal</span></code>.</td>
-</tr>
-<tr class="row-odd"><td>507</td>
-<td>Volume host is reported unavailable if `hostname` doesn’t match volume host</td>
-<td>Set the host values in <code class="docutils literal notranslate"><span class="pre">/gevol/assets/.config/volumes.xml</span></code> to the FQDN and restart the Fusion service.</td>
-</tr>
-<tr class="row-even"><td>557</td>
-<td>WMS service problem with ‘width’ &amp; ‘height’ &amp; ‘bbox’</td>
-<td>No current work around.</td>
-</tr>
-<tr class="row-odd"><td>569</td>
-<td>geserver service installation and uninstallation issues</td>
-<td>Before uninstalling geserver verify if it’s running or not.</td>
-</tr>
-<tr class="row-even"><td>590</td>
-<td>Maps API Javascript Files Not Found</td>
-<td>No current work around.</td>
-</tr>
-<tr class="row-odd"><td>594</td>
-<td>Save errors only reported for the first image</td>
-<td>Close the form in question and try again.</td>
-</tr>
-<tr class="row-even"><td>640</td>
-<td>Save button disabled in ‘Map Layer’ creation dialog when an error encountered</td>
-<td>Close the resource form and open it again to make the save option available again.</td>
-</tr>
-<tr class="row-odd"><td>651</td>
-<td>Release executables and libraries depend on gtest</td>
-<td>Follow current build instructions that requires <code class="docutils literal notranslate"><span class="pre">gtest</span></code> to be installed.</td>
-</tr>
-<tr class="row-even"><td>669</td>
-<td>Missing repo in RHEL 7 build instructions</td>
-<td>Enable <code class="docutils literal notranslate"><span class="pre">rhel-7-server-optional-rpms</span></code> and <code class="docutils literal notranslate"><span class="pre">rhel-7-server-optional-source-rpms</span></code> repos.</td>
-</tr>
-<tr class="row-odd"><td>686</td>
-<td>Scons fails to detect libpng library on CentOS 6</td>
-<td>Ensure that a default <code class="docutils literal notranslate"><span class="pre">g++</span></code> compiler is installed.</td>
-</tr>
-<tr class="row-even"><td>700</td>
-<td>Add EL6/EL7 check to RPMs</td>
-<td>Make sure that RPMS are installed on same EL version that they were produced for.</td>
-</tr>
-<tr class="row-odd"><td>788</td>
-<td>Search fails after transferring and publishing a database using disconnected send from the command line</td>
-<td>Re-publish the database from the web interface.</td>
-</tr>
-<tr class="row-even"><td>825</td>
-<td>Geserver fails to startup fully due to conflicting protobuf library</td>
-<td>Run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">uninstall</span> <span class="pre">protobuf</span></code> to uninstall the protobuf library installed by pip.</td>
+<tr class="row-even"><td>254</td>
+<td>Automasking fails for images stored with UTM projection</td>
 </tr>
 </tbody>
 </table>

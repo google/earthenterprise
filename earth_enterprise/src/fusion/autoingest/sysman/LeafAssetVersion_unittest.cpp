@@ -1,4 +1,4 @@
-// Copyright 2019 The Open GEE contributors
+// Copyright 2020 The Open GEE contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ class LeafAssetVersionImplDTest : public LeafAssetVersionImplD, public testing::
   }
  public:
   // Handle multiple input state changes (useful for testing)
-  void HandleInputStateChanges(AssetDefs::State myState, uint32 waiting, std::vector<AssetDefs::State> states) {
+  void HandleInputStateChanges(AssetDefs::State myState, std::uint32_t waiting, std::vector<AssetDefs::State> states) {
     state = myState;
     numInputsWaitingFor = waiting;
     NotifyStates inputStates;

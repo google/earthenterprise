@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -201,14 +202,14 @@ int min_lod = INT_MIN;
 int max_lod = INT_MIN;
 int tile_size = 256;
 int draw_order_offset = 0;
-uint image_dir_break = 5;
+unsigned int image_dir_break = 5;
 CachingProductTileReader_Alpha inset_alpha_reader(100, 15);
 Compressor* jpg_compressor = NULL;
 int jpg_quality = 80;
 Compressor* png_compressor = NULL;
 
 AlphaProductTile   alpha_tile;
-uchar              interleave_buffer[RasterProductTileResolution *
+unsigned char              interleave_buffer[RasterProductTileResolution *
                                      RasterProductTileResolution *
                                      4];
 } // unnamed namespace
@@ -335,8 +336,8 @@ int main(int argc, char *argv[]) {
   png_compressor = NewPNGCompressor(tile_size, tile_size, 4);
 
   // find the last 1x1 level and call it zero
-  uint32 zero_level = UINT_MAX;
-  for (uint32 l = rp_rgb->minLevel();
+  std::uint32_t zero_level = UINT_MAX;
+  for (std::uint32_t l = rp_rgb->minLevel();
        l <= rp_rgb->maxLevel(); ++l) {
     if (rp_rgb->level(l).tileExtents().numRows() == 1 &&
         rp_rgb->level(l).tileExtents().numCols() == 1) {
@@ -349,7 +350,7 @@ int main(int argc, char *argv[]) {
     notify(NFY_FATAL, "Unable to find a suitable zero level");
 
   int total_tiles = 0;
-  for (uint32 lev = zero_level; lev <= rp_rgb->maxLevel(); ++lev) {
+  for (std::uint32_t lev = zero_level; lev <= rp_rgb->maxLevel(); ++lev) {
     total_tiles += (rp_rgb->level(lev).tileExtents().numRows() *
                     rp_rgb->level(lev).tileExtents().numCols());
   }
@@ -672,7 +673,7 @@ void AddDebugGeometry(std::ostringstream* os, const khExtents<double>& extents,
   *os << sp << "</Placemark>" << std::endl;
 }
 
-typedef khRasterTile<uchar, RasterProductTileResolution,
+typedef khRasterTile<unsigned char, RasterProductTileResolution,
                      RasterProductTileResolution, 4> FourChannelTile;
 typedef khRasterTileBorrowBufs<FourChannelTile> FourChannelBorrowTile;
 
@@ -701,11 +702,11 @@ void ExtractImageryTile(const std::string& name, const khTileAddr& addr,
 
   // break up image directory based on the length of the name
   std::string split_name;
-  for (uint n = 0; n < name.length(); n += image_dir_break) {
+  for (unsigned int n = 0; n < name.length(); n += image_dir_break) {
     if (split_name.length() != 0)
       split_name += "/";
     split_name += name.substr(n, std::min(image_dir_break,
-          static_cast<uint>(name.length() - n)));
+          static_cast<unsigned int> (name.length() - n)));
   }
 
   const khExtents<double> extents = addr.degExtents(RasterProductTilespaceBase);
@@ -735,7 +736,7 @@ void ExtractImageryTile(const std::string& name, const khTileAddr& addr,
         continue;
       }
 
-      const khExtents<uint32> cut_extents_pxl(
+      const khExtents<std::uint32_t> cut_extents_pxl(
           NSEWOrder,
           static_cast<int>(floor((cut_extents.north() - extents.south())
                             / pxl_height)),
@@ -794,7 +795,7 @@ void ExtractImageryTile(const std::string& name, const khTileAddr& addr,
         // create PNG tile
         image_name += ".png";
         if (!kml_only) {
-          uchar* bufs[4] = {
+          unsigned char* bufs[4] = {
              rgb_tile.bufs[0],
              rgb_tile.bufs[1],
              rgb_tile.bufs[2],

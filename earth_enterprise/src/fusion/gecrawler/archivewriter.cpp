@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -68,7 +69,7 @@ void ArchiveWriter::WritePacket(
     const std::string &buffer) {
   // Header info with its own CRC
   write_buffer_.reset();
-  uint32 buffer_size = buffer.size();   // force size to 32 bits on all platforms
+  std::uint32_t buffer_size = buffer.size();   // force size to 32 bits on all platforms
   write_buffer_ << buffer_size;
   write_buffer_ << qt_ref;
   write_buffer_ << Crc32(write_buffer_.data(), write_buffer_.size());

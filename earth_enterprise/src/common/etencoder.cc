@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,6 +16,7 @@
 // Modern implementation of old Keyhole Crypt method.
 
 #include "common/etencoder.h"
+#include "common/khSimpleException.h"
 
 namespace etEncoder {
 
@@ -108,15 +110,19 @@ const std::string kDefaultKey(
     1016);
 
 
-void Encode(void* data, uint32 datalen, const void* key, uint32 keylen) {
-  uint8* outdata = static_cast<uint8*>(data);
+void Encode(void* data, std::uint32_t datalen, const void* key, std::uint32_t keylen) {
+  if (keylen % 8 != 0) {
+    throw khSimpleException("Encryption keys must be a multiple of 8 bytes long.");
+  }
 
-  uint8* dp = static_cast<uint8*>(data);
-  uint8* dpend = dp + datalen;
-  uint8* op = outdata;
-  const uint8* kpstart = static_cast<const uint8*>(key);
-  const uint8* kpend  = kpstart + keylen;
-  const uint8* kp     = kpstart;
+  std::uint8_t* outdata = static_cast<std::uint8_t*>(data);
+
+  std::uint8_t* dp = static_cast<std::uint8_t*>(data);
+  std::uint8_t* dpend = dp + datalen;
+  std::uint8_t* op = outdata;
+  const std::uint8_t* kpstart = static_cast<const std::uint8_t*>(key);
+  const std::uint8_t* kpend  = kpstart + keylen;
+  const std::uint8_t* kp     = kpstart;
   int   off = 8;
 
   if (data == 0 || datalen == 0 ||
@@ -128,20 +134,20 @@ void Encode(void* data, uint32 datalen, const void* key, uint32 keylen) {
   // This algorithm is intentionally asymmetric to make it more difficult to
   // guess. Security through obscurity. :-(
 
-  // while we have a full uint64 (8 bytes) left to do
+  // while we have a full std::uint64_t (8 bytes) left to do
   // assumes buffer is 64bit aligned (or processor doesn't care)
-  while (dp < reinterpret_cast<uint8*>(reinterpret_cast<uint64>(dpend) & ~7)) {
+  while (dp < reinterpret_cast<std::uint8_t*>(reinterpret_cast<std::uint64_t>(dpend) & ~7)) {
     // rotate the key each time through by using the offets 16,0,8,16,0,8,...
     off = (off + 8) % 24;
     kp = kpstart + off;
 
-    // run through one key length xor'ing one uint64 at a time
+    // run through one key length xor'ing one std::uint64_t at a time
     // then drop out to rotate the key for the next bit
-    while ((dp < reinterpret_cast<uint8*>(reinterpret_cast<uint64>(dpend) & ~7))
+    while ((dp < reinterpret_cast<std::uint8_t*>(reinterpret_cast<std::uint64_t>(dpend) & ~7))
             && (kp < kpend)) {
-      *reinterpret_cast<uint64*>(&op[0]) =
-          *reinterpret_cast<uint64*>(&dp[0]) ^
-          *reinterpret_cast<const uint64*>(&kp[0]);
+      *reinterpret_cast<std::uint64_t*>(&op[0]) =
+          *reinterpret_cast<std::uint64_t*>(&dp[0]) ^
+          *reinterpret_cast<const std::uint64_t*>(&kp[0]);
       dp += 8;
       op += 8;
       kp += 24;
@@ -150,7 +156,7 @@ void Encode(void* data, uint32 datalen, const void* key, uint32 keylen) {
 
   /* now the remaining 1 to 7 bytes */
   if (dp < dpend) {
-    if (kp >= kpend) {
+    while (kp >= kpend) {
       // rotate the key one last time (if necessary)
       off = (off + 8) % 24;
       kp = kpstart + off;
@@ -165,17 +171,17 @@ void Encode(void* data, uint32 datalen, const void* key, uint32 keylen) {
   }
 }
 
-void Decode(void* data, uint32 datalen, const void* key, uint32 keylen) {
+void Decode(void* data, std::uint32_t datalen, const void* key, std::uint32_t keylen) {
   // Since it's implemented with XOR, the decode routine is the same as the
   // encode routine.
   Encode(data, datalen, key, keylen);
 }
 
-void EncodeWithDefaultKey(void* data, uint32 datalen) {
+void EncodeWithDefaultKey(void* data, std::uint32_t datalen) {
   Encode(data, datalen, kDefaultKey.data(), kDefaultKey.size());
 }
 
-void DecodeWithDefaultKey(void* data, uint32 datalen) {
+void DecodeWithDefaultKey(void* data, std::uint32_t datalen) {
   // Since it's implemented with XOR, the decode routine is the same as the
   // encode routine.
   Encode(data, datalen, kDefaultKey.data(), kDefaultKey.size());

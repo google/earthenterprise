@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,17 +13,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <cstdint>
 #include <string>
 #include <vector>
-#include <khTypes.h>
 #include <geindex/Entries.h>
 
 class geindexgen::UnifiedConfig {
   class Entry {
     std::string type_;
     std::string indexdir_;
-    uint32      version_;
-    uint32      channel_id_;
+    std::uint32_t      version_;
+    std::uint32_t      channel_id_;
     std::string date_string_ = std::string();  // Format expected: "YYYY-MM-DD"
   };
 

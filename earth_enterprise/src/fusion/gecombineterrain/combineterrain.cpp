@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,13 +24,12 @@
 // (in the output packet file) merged terrain packets.
 
 #include <third_party/rsa_md5/crc32.h>
-#include <khAssert.h>
 #include <qtpacket/quadtree_utils.h>
 #include "combineterrain.h"
 #include "common/performancelogger.h"
 
-COMPILE_TIME_CHECK(qtpacket::QuadtreeNumbering::kDefaultDepth == 5,
-                   Quadset_packet_depth_is_not_5);
+static_assert(qtpacket::QuadtreeNumbering::kDefaultDepth == 5,
+                   "Quadset packet depth is not 5");
 
 namespace geterrain {
 
@@ -69,7 +69,7 @@ void TerrainCombiner::CombineTerrainPackets(
     assert(quadset_root.Level() & 1);   // level must be odd
   }
 
-  for (uint32 root_child = 0;
+  for (std::uint32_t root_child = 0;
        root_child < QuadtreePath::kChildCount;
        ++root_child) {
     QuadtreePath even_child = quadset_root.Child(root_child);
@@ -78,9 +78,9 @@ void TerrainCombiner::CombineTerrainPackets(
     CombineChildren(quadset_group, even_child);
 
     // Combine even-level grand-children of this child
-    for (uint32 i = 0; i < QuadtreePath::kChildCount; ++i) {
+    for (std::uint32_t i = 0; i < QuadtreePath::kChildCount; ++i) {
       QuadtreePath odd_path = even_child.Child(i);
-      for (uint32 j = 0; j < QuadtreePath::kChildCount; ++j) {
+      for (std::uint32_t j = 0; j < QuadtreePath::kChildCount; ++j) {
         CombineChildren(quadset_group, odd_path.Child(j));
       }
     }
@@ -95,7 +95,7 @@ void TerrainCombiner::CombineTerrainPackets(
 void TerrainCombiner::CombineChildren(const TerrainQuadsetGroup &quadset_group,
                                       const QuadtreePath even_path) {
   BEGIN_PERF_LOGGING(combineChildrenProf, "CombineTerrain_CombineChildren", even_path.AsString());
-  uint64 quadset_num;
+  std::uint64_t quadset_num;
   int even_subindex;
   qtpacket::QuadtreeNumbering::TraversalPathToQuadsetAndSubindex(
       even_path,
@@ -113,10 +113,10 @@ void TerrainCombiner::CombineChildren(const TerrainQuadsetGroup &quadset_group,
   bool has_any_terrain = items[0] != NULL;
 
   // Pass the progress count through to the writer.
-  uint progress_increment = quadset_group.Node(inorder).size();
+  unsigned int progress_increment = quadset_group.Node(inorder).size();
 
-  for (uint32 i = 0; i < QuadtreePath::kChildCount; ++i) {
-    uint64 odd_quadset_num;
+  for (std::uint32_t i = 0; i < QuadtreePath::kChildCount; ++i) {
+    std::uint64_t odd_quadset_num;
     int odd_subindex;
     qtpacket::QuadtreeNumbering::TraversalPathToQuadsetAndSubindex(
         even_path.Child(i),
@@ -196,12 +196,12 @@ const std::string TerrainCombiner::kEmptyPacket(16, 0);
 void TerrainCombiner::WriteCombinedTerrain(
     const QuadtreePath even_path,
     const std::vector<const TerrainPacketItem *> &items,
-    uint progress_increment) {
+    unsigned int progress_increment) {
   BEGIN_PERF_LOGGING(calcReadSize, "CombineTerrain_CalcPacketReadSize", even_path.AsString());
   // Determine size of read buffer and allocate space if necessary.
   // Sizes include CRC, where applicable.
   // figure out our provider id while we're at it
-  uint32 providerid = 0;
+  std::uint32_t providerid = 0;
   size_t read_buffer_size = 0;
   std::vector<const TerrainPacketItem *>::const_iterator item = items.begin();
   for (; item != items.end(); ++item) {
@@ -294,14 +294,14 @@ void TerrainCombiner::StartThreads() {
                static_cast<long long unsigned int>(num_cpus_));
     
   // Use one less cpu than num cpus for doing the compression work.
-  uint compress_cpus = num_cpus_;
+  unsigned int compress_cpus = num_cpus_;
   PERF_CONF_LOGGING( "proc_exec_config_internal_numcpus", "combine_terrain_compress", num_cpus_ );
     
   PERF_CONF_LOGGING( "proc_exec_compress_internal_numcpus", "combine_terrain_compress", compress_cpus );
   notify(NFY_WARN, "gecombineterrain compress_cpus: %llu ",
                static_cast<long long unsigned int>(compress_cpus));
     
-  for(uint i = 0; i < compress_cpus; ++i) {
+  for(unsigned int i = 0; i < compress_cpus; ++i) {
     khThread* compressor_thread = new khThread(
       khFunctor<void>(std::mem_fun(&TerrainCombiner::PacketCompressThread), this));
 
@@ -326,7 +326,7 @@ void TerrainCombiner::WaitForThreadsToFinish() {
 
   // Just delete the compressor threads...this will force them to close
   // if not already.
-  for(uint i = 0; i < compressor_threads.size(); ++i) {
+  for(unsigned int i = 0; i < compressor_threads.size(); ++i) {
     if (compressor_threads[i]) {
       delete compressor_threads[i];
     }

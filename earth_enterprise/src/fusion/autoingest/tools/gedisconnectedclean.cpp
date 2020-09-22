@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,7 +25,7 @@
 #include <khSimpleException.h>
 
 
-typedef std::vector<std::pair<std::string, uint64> > FileList;
+typedef std::vector<std::pair<std::string, std::uint64_t> > FileList;
 typedef std::map<std::string, bool> DBPathMap;
 
 void
@@ -120,7 +121,7 @@ main(int argc, char *argv[]) {
 
     // make sure that all requested dbpaths are in our set
     {
-      uint missing = 0;
+      unsigned int missing = 0;
       for (std::vector<std::string>::const_iterator dbpath = to_clean.begin();
            dbpath != to_clean.end(); ++dbpath) {
         if (dbpath_map.find(*dbpath) == dbpath_map.end()) {

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,7 +28,7 @@
 #include "common/khFileUtils.h"
 
 
-uint kDefaultNumCPUs = 1;
+unsigned int kDefaultNumCPUs = 1;
 
 void usage(const std::string &progn, const char *msg = 0, ...) {
   if (msg) {
@@ -62,8 +63,8 @@ int main(int argc, char **argv) {
     std::string outdir;
     std::string configfile;
     int pnglevel = -1;
-    uint32 numcpus = CommandlineNumCPUsDefault();
-    //    uint num_writer_threads = 2;
+    std::uint32_t numcpus = CommandlineNumCPUsDefault();
+    //    unsigned int num_writer_threads = 2;
 
     khGetopt options;
     options.flagOpt("help", help);

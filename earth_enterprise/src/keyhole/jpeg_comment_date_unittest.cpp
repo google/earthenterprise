@@ -56,7 +56,7 @@ TEST_F(JpegCommentDateTest, DateDecodingAndEncoding) {
   EXPECT_EQ(JpegCommentDate::kDayUnknown, default_date.day());
 
   // Decode: string => JpegCommentDate => YearMonthDayKey => year,month,day.
-  for (uint i = 0; i < arraysize(kTestDates); ++i) {
+  for (unsigned int i = 0; i < arraysize(kTestDates); ++i) {
     const JpegCommentDate date(kTestDates[i].in_protocol_format);
     if (kTestDates[i].is_reversible) {
       EXPECT_EQ(kTestDates[i].year, date.year());
@@ -78,7 +78,7 @@ TEST_F(JpegCommentDateTest, DateDecodingAndEncoding) {
   }
 
   // Encode: year,month,day => YearMonthDayKey => JpegCommentDate => string.
-  for (uint i = 0; i < arraysize(kTestDates); ++i) {
+  for (unsigned int i = 0; i < arraysize(kTestDates); ++i) {
     JpegCommentDate::YearMonthDayKey key;
     const bool is_date_valid(
         kTestDates[i].is_reversible || JpegCommentDate::AreYearMonthDayValid(

@@ -389,10 +389,6 @@ class Image
  public:
   Image(int x, int y, Pixel *d = 0, int s = 0)
   {
-#ifdef MALLOG
-    log = fopen("c:/mallog.txt", "a"); // XXX
-    fprintf(log, "\nImage::Image(%d, %d, 0x%08x, %d)\n\n", x, y, d, s);
-#endif
 
     xsize = x;
     ysize = y;
@@ -415,10 +411,6 @@ class Image
         Filter::Filter_t filterFunction = Filter::boxFilter, float filterWidth = Filter::boxSupport,
         float xo = 0.0f, float yo = 0.0f, float xs = 0.0f, float ys = 0.0f)
   {
-#ifdef MALLOG
-    log = fopen("c:/mallog.txt", "a"); // XXX
-    fprintf(log, "\nImage::Image(%d, %d, 0x%08x ... zoom)\n\n", x, y, source);
-#endif
 
     xsize = x;
     ysize = y;
@@ -434,10 +426,6 @@ class Image
     if (dynamic)
       free(data);
 
-#ifdef MALLOG
-    if (log != nullptr)
-      fclose(log);
-#endif
   }
 
   Image(const Image&) = delete;
@@ -539,37 +527,7 @@ class Image
 
  private:
 
-#ifdef MALLOG
-  void * malloc(size_t size)
-  {
-    void *item = ::malloc(size);
 
-    if (log != nullptr)
-      fprintf(log, "A 0x%08x %8d\n", item, size);
-
-    return item;
-  }
-  void * calloc(size_t size, size_t count)
-  {
-    void *item = ::calloc(size, count);
-
-    if (log != nullptr)
-      fprintf(log, "C 0x%08x %8d (%8d * %8d)\n", item, size*count, size, count);
-
-    return item;
-  }
-  void free(void *item)
-  {
-    if (log != nullptr)
-      fprintf(log, "F 0x%08x\n", item);
-
-    ::free(item);
-  }
-#endif
-
-#ifdef MALLOG
-  FILE *log;
-#endif
   int     span;           // byte offset between two scanlines
   bool dynamic;   // image data area was allocated dynamically
 };

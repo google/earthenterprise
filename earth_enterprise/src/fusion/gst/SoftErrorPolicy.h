@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,14 +36,14 @@ class SoftErrorPolicy {
     std::vector<std::string> errors_;
   };
 
-  uint NumSoftErrors(void) const { return error_messages_.size(); }
+  unsigned int NumSoftErrors(void) const { return error_messages_.size(); }
   const std::vector<std::string>& Errors(void) const { return error_messages_; }
 
-  SoftErrorPolicy(uint max_soft_before_fatal);
+  SoftErrorPolicy(unsigned int max_soft_before_fatal);
   void HandleSoftError(const QString &error);
 
  private:
-  const uint max_soft_before_fatal_;
+  const unsigned int max_soft_before_fatal_;
   std::vector<std::string> error_messages_;
 };
 

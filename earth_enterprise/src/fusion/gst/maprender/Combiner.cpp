@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -76,7 +77,7 @@ void GetTranslation(VectorDefs::EightSides dir,
 Combiner::TranslationContext::TranslationContext(const khTilespace &tilespace,
                                                  const QuadtreePath &path)
     : tilespace_(tilespace) {
-  uint32 row, col;
+  std::uint32_t row, col;
   path.GetLevelRowCol(&level_, &row, &col);
   // TODO: - MERCATOR - this has to change
   if (tilespace.projection_type == khTilespace::MERCATOR_PROJECTION) {
@@ -127,7 +128,7 @@ RenderPath Combiner::PathFromGeode(const TranslationContext &trans,
     const gstGeode *geode = static_cast<const gstGeode*>(&(*geodeh));
     assert(geode->VertexCount(0) > 0);
 
-    for (uint p = 0; p < geode->NumParts(); ++p) {
+    for (unsigned int p = 0; p < geode->NumParts(); ++p) {
       SkPoint point;
       if (geode->VertexCount(p)) {
         // moveTo for first point of contour.
@@ -135,7 +136,7 @@ RenderPath Combiner::PathFromGeode(const TranslationContext &trans,
         path->moveTo(point);
 
         // lineTo for other points of contour.
-        for (uint v = 1; v < geode->VertexCount(p); ++v) {
+        for (unsigned int v = 1; v < geode->VertexCount(p); ++v) {
           trans.TranslatePoint(&point, geode->GetVertex(p, v));
           path->lineTo(point);
         }
@@ -161,7 +162,7 @@ Combiner::ConvertFeatureGeometry(Feature& feature,
                                  const InFeatureTile &in) {
   // convert the GeodeList to RenderPaths
   feature.paths.reserve(in.glist.size());
-  for (uint i = 0; i < in.glist.size(); ++i) {
+  for (unsigned int i = 0; i < in.glist.size(); ++i) {
     feature.paths.push_back(PathFromGeode(trans, in.glist[i]));
   }
 
@@ -174,7 +175,7 @@ Combiner::ConvertSiteGeometry(Site& site,
                               const InSiteTile &in) {
   // for now convert all the sites, later we may decide to throw some away
   site.labels.reserve(in.vlist.size());
-  for (uint i = 0; i < in.vlist.size(); ++i) {
+  for (unsigned int i = 0; i < in.vlist.size(); ++i) {
     site.labels.push_back(SiteLabel(
         in.rlist[i]->FieldByName("label")->ValueAsUnicode(),
         in.rlist[i]->FieldByName("outline_label")->ValueAsUnicode(),
@@ -200,7 +201,7 @@ Combiner::ConvertSubLayerGeometry(const TranslationContext &trans,
   khTransferGuard<SubLayer> sublayer = TransferOwnership(new SubLayer());
   sublayer->displayRules.reserve(in.displayRules.size());
 
-  for (uint d = 0; d < in.displayRules.size(); ++d) {
+  for (unsigned int d = 0; d < in.displayRules.size(); ++d) {
     sublayer->displayRules.push_back(
         ConvertDisplayRuleGeometry(trans, *in.displayRules[d]));
   }
@@ -214,7 +215,7 @@ Combiner::Process(OutTile *out, const std::vector<const InTile*> &in) {
   TranslationContext trans(tilespace, out->path);
 
   out->subLayers.reserve(in.size());
-  for (uint s = 0; s < in.size(); ++s) {
+  for (unsigned int s = 0; s < in.size(); ++s) {
     out->subLayers.push_back(ConvertSubLayerGeometry(trans, *in[s]));
   }
 
@@ -251,15 +252,15 @@ Combiner::PlaceLabels(OutTile *out, const std::vector<const InTile*> &in) {
   QStringToSkRectHashTable site_label_bounds;
   // Container for bounds of path labels.
   std::vector<SkRect> path_label_bounds;
-  uint level = out->path.Level();
+  unsigned int level = out->path.Level();
 
   // traverse each sublayer
-  for (uint s = 0; s < out->subLayers.size(); ++s) {
+  for (unsigned int s = 0; s < out->subLayers.size(); ++s) {
     SubLayer *subLayer = out->subLayers[s];
     const InTile   *inTile = in[s];
 
     // traverse each display rule in the sub layer
-    for (uint d = 0; d < subLayer->displayRules.size(); ++d) {
+    for (unsigned int d = 0; d < subLayer->displayRules.size(); ++d) {
       const InDisplayRuleTile *inDisplayRule = inTile->displayRules[d];
       const InFeatureTile     &inFeature     = inDisplayRule->feature;
       const MapFeatureConfig &featureConfig = inDisplayRule->config.feature;
@@ -270,7 +271,7 @@ Combiner::PlaceLabels(OutTile *out, const std::vector<const InTile*> &in) {
       if (featureConfig.displayType == VectorDefs::IconZ) {
         // Since for icons we don't want to do complex visibility calculation,
         // always render it.
-        for (uint p = 0; p < site->labels.size(); ++p) {
+        for (unsigned int p = 0; p < site->labels.size(); ++p) {
           site->labels[p].visible = true;
         }
       } else if (featureConfig.displayType == VectorDefs::PolygonZ &&
@@ -278,14 +279,14 @@ Combiner::PlaceLabels(OutTile *out, const std::vector<const InTile*> &in) {
         // In "Display all"-mode for polygon center label, place all labels
         // except overlapping, identical ones.
         bool CHECK_IDENTICAL = true;
-        for (uint p = 0; p < site->labels.size(); ++p) {
+        for (unsigned int p = 0; p < site->labels.size(); ++p) {
           LabelPaths::CheckSiteVisibility(
               siteConfig, &(site->labels[p]), &site_label_bounds,
               CHECK_IDENTICAL);
         }
       } else {
         bool CHECK_IDENTICAL = false;
-        for (uint p = 0; p < site->labels.size(); ++p) {
+        for (unsigned int p = 0; p < site->labels.size(); ++p) {
           LabelPaths::CheckSiteVisibility(siteConfig,
                                           &(site->labels[p]),
                                           &site_label_bounds,
@@ -294,7 +295,7 @@ Combiner::PlaceLabels(OutTile *out, const std::vector<const InTile*> &in) {
       }
 
       // traverse each path (piece of geometry) in the display rule
-      for (uint p = 0; p < feature->paths.size(); ++p) {
+      for (unsigned int p = 0; p < feature->paths.size(); ++p) {
         gstRecordHandle boundRec = inFeature.rlist[p];
         if (boundRec) {
           // check if we want labels

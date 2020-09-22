@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +36,7 @@ class gstOGRFormat : public gstFormat {
   virtual const char* FormatName() { return "OGR Supported formats"; }
 
  private:
-  virtual void ResetReadingImpl(uint32 layer);
+  virtual void ResetReadingImpl(std::uint32_t layer);
   virtual gstGeodeHandle GetCurrentFeatureImpl(void);
   virtual gstRecordHandle GetCurrentAttributeImpl(void);
   virtual void IncrementReadingImpl(void);
@@ -43,14 +44,14 @@ class gstOGRFormat : public gstFormat {
     return DefaultIsReadingDoneImpl();
   }
 
-  virtual gstGeodeHandle GetFeatureImpl(uint32 layer, uint32 fidx);
-  virtual gstRecordHandle GetAttributeImpl(uint32 layer, uint32 fidx);
+  virtual gstGeodeHandle GetFeatureImpl(std::uint32_t layer, std::uint32_t fidx);
+  virtual gstRecordHandle GetAttributeImpl(std::uint32_t layer, std::uint32_t fidx);
   FORWARD_GETFEATUREBOX_TO_BASE;
 
 
  protected:
   gstGeodeHandle TranslateGeometry(OGRFeature* feature) const;
-  gstRecordHandle TranslateAttribute(OGRFeature* feature, uint32);
+  gstRecordHandle TranslateAttribute(OGRFeature* feature, std::uint32_t);
 
   void AddPoint(OGRPoint *point, gstPrimType type, gstGeodeHandle *baseh) const;
   int AddMultiPoint(OGRGeometry* geom,
@@ -83,7 +84,7 @@ class gstOGRFormat : public gstFormat {
   std::vector<int> feature_id_offset_;
 
   // sequential access
-  uint32 currentLayer;
+  std::uint32_t currentLayer;
   OGRFeature* currentFeature;
   std::vector<OGRLayer*> layers;
 };
@@ -100,8 +101,8 @@ class gstOGRSQLFormat : public gstOGRFormat {
  private:
   // override to always throw
   // this format cannot support the random access API
-  virtual gstGeodeHandle GetFeatureImpl(uint32, uint32);
-  virtual gstRecordHandle GetAttributeImpl(uint32, uint32);
+  virtual gstGeodeHandle GetFeatureImpl(std::uint32_t, std::uint32_t);
+  virtual gstRecordHandle GetAttributeImpl(std::uint32_t, std::uint32_t);
 
   OGRLayer *sqlOGRLayer;
 };

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +19,7 @@
 #ifndef __TmeshGenerator_h
 #define __TmeshGenerator_h
 
-#include <khTypes.h>
+#include <cstdint>
 #include <khTileAddr.h>
 #include "vipm/array.h"
 #include "vipm/vector.h"
@@ -41,10 +42,10 @@ class TmeshGenerator
   { }
 
   void Generate(float *srcSamples,
-                const khSize<uint32> &srcSamplesSize,
-                const khOffset<uint32> &wantOffset,
+                const khSize<std::uint32_t> &srcSamplesSize,
+                const khOffset<std::uint32_t> &wantOffset,
                 const khTileAddr &tmeshAddr,
-                etArray<uchar> &compressed,
+                etArray<unsigned char> &compressed,
                 const size_t reserve_size,
                 bool  decimate,
                 double decimation_threshold

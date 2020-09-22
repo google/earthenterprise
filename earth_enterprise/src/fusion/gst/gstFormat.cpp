@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -59,7 +60,7 @@ int getInt(const char *buf, int nbuf) {
   return atoi(tbuf);
 }
 
-uint64 getUInt64(const char *buf, int nbuf) {
+ std::uint64_t getUInt64(const char *buf, int nbuf) {
   char *tbuf = static_cast<char*>(alloca(nbuf + 1));
   memcpy(tbuf, buf, nbuf);
   tbuf[nbuf] = 0;
@@ -103,7 +104,7 @@ int getIntB(const char *buf, int nbuf) {
 
 ////////////////////////////////////////////////////////////////////////////
 
-gstLayerDef::gstLayerDef(gstPrimType type, uint32 f, const gstHeaderHandle& h)
+gstLayerDef::gstLayerDef(gstPrimType type, std::uint32_t f, const gstHeaderHandle& h)
     : type_(type),
       num_features_(f),
       attrib_defs_(h),
@@ -114,7 +115,7 @@ gstLayerDef::gstLayerDef(gstPrimType type, uint32 f, const gstHeaderHandle& h)
       efficient_resolution_level_() {
 }
 
-gstLayerDef::gstLayerDef(uint32 f, const gstHeaderHandle& h)
+gstLayerDef::gstLayerDef(std::uint32_t f, const gstHeaderHandle& h)
     : type_(gstUnknown),
       num_features_(f),
       attrib_defs_(h),
@@ -165,7 +166,7 @@ gstFormat::~gstFormat() {
 // provide a default implementation of sequential
 // reading for any loader that doesn't have native support
 //
-void gstFormat::DefaultResetReadingImpl(uint32 layer) {
+void gstFormat::DefaultResetReadingImpl(std::uint32_t layer) {
   seqReadLayer = layer;
   seqReadCurrID = 0;
   seqReadIsDone = false;
@@ -263,7 +264,7 @@ void RenormalizeForMercator(gstGeodeHandle geodeh) {
         // true means invalidate bounding box too.
         multi_geode->InvalidateCachedData(true);
 
-        for (uint p = 0; p < multi_geode->NumParts(); ++p) {
+        for (unsigned int p = 0; p < multi_geode->NumParts(); ++p) {
           gstGeode* geode =
               static_cast<gstGeode*>(&(*multi_geode->GetGeode(p)));
           RenormalizeForMercator(geode);
@@ -274,8 +275,8 @@ void RenormalizeForMercator(gstGeodeHandle geodeh) {
 }
 
 void RenormalizeForMercator(gstGeode *geode) {
-  for (uint p = 0; p < geode->NumParts(); ++p) {
-    for (uint v = 0; v < geode->VertexCount(p); ++v) {
+  for (unsigned int p = 0; p < geode->NumParts(); ++p) {
+    for (unsigned int v = 0; v < geode->VertexCount(p); ++v) {
       gstVertex vert = geode->GetVertex(p, v);
       vert.y = MercatorProjection::
           FromNormalizedLatitudeToMercatorNormalizedLatitude(vert.y);
@@ -288,7 +289,7 @@ void RenormalizeForMercator(gstGeode *geode) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-gstGeodeHandle gstFormat::GetNormFeatureImpl(uint32 layer, uint32 id,
+gstGeodeHandle gstFormat::GetNormFeatureImpl(std::uint32_t layer, std::uint32_t id,
                                              bool is_mercator_preview) {
   gstGeodeHandle g = GetFeatureImpl(layer, id);
   if (!g) {
@@ -341,7 +342,7 @@ void gstFormat::TransformGeode(gstGeodeHandle geodeh) const {
         // true means invalidate bounding box too.
         multi_geode->InvalidateCachedData(true);
 
-        for (uint p = 0; p < multi_geode->NumParts(); ++p) {
+        for (unsigned int p = 0; p < multi_geode->NumParts(); ++p) {
           gstGeode* geode =
               static_cast<gstGeode*>(&(*multi_geode->GetGeode(p)));
           TransformGeode(geode);
@@ -352,8 +353,8 @@ void gstFormat::TransformGeode(gstGeodeHandle geodeh) const {
 }
 
 void gstFormat::TransformGeode(gstGeode *geode) const {
-  for (uint p = 0; p < geode->NumParts(); ++p) {
-    for (uint v = 0; v < geode->VertexCount(p); ++v) {
+  for (unsigned int p = 0; p < geode->NumParts(); ++p) {
+    for (unsigned int v = 0; v < geode->VertexCount(p); ++v) {
       const gstVertex& vert = geode->GetVertex(p, v);
       geode->ModifyVertex(p, v, TransformVertex(vert));
     }
@@ -420,7 +421,7 @@ void gstFormat::SetCodec(QTextCodec* codec) {
   }
 }
 
-gstBBox gstFormat::DefaultGetFeatureBoxImpl(uint32 layer, uint32 id) {
+gstBBox gstFormat::DefaultGetFeatureBoxImpl(std::uint32_t layer, std::uint32_t id) {
   gstGeodeHandle g = GetNormFeatureImpl(layer, id, false);
   if (!g) {
     throw khSoftException("Unable to get feature");
@@ -431,13 +432,13 @@ gstBBox gstFormat::DefaultGetFeatureBoxImpl(uint32 layer, uint32 id) {
   return g->BoundingBox();
 }
 
-gstLayerDef& gstFormat::AddLayer(gstPrimType type, uint32 n,
+gstLayerDef& gstFormat::AddLayer(gstPrimType type, std::uint32_t n,
                                  const gstHeaderHandle& h) {
   layer_defs_.push_back(gstLayerDef(type, n, h));
   return layer_defs_[layer_defs_.size() - 1];
 }
 
-gstLayerDef& gstFormat::AddLayer(uint32 n, const gstHeaderHandle& h) {
+gstLayerDef& gstFormat::AddLayer(std::uint32_t n, const gstHeaderHandle& h) {
   layer_defs_.push_back(gstLayerDef(n, h));
   return layer_defs_[layer_defs_.size() - 1];
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 The Open GEE Contributors
+ * Copyright 2020 The Open GEE Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@
 class StorageManaged {
   public:
     time_t timestamp;
-    uint64 filesize;
+    std::uint64_t filesize;
     StorageManaged() : timestamp(0), filesize(0) {}
 };
 
@@ -63,9 +63,10 @@ class StorageManager : public StorageManagerInterface<AssetType> {
     using PointerType = typename Base::PointerType;
     using SerializerPtr = std::unique_ptr<AssetSerializerInterface<AssetType>>;
 
-    StorageManager(uint cacheSize,
+    StorageManager(unsigned int cacheSize,
                    bool limitByMemory,
-                   uint64 maxMemory,
+                   std::uint64_t maxMemory,
+                   float prunePercent,
                    const std::string & type,
                    SerializerPtr serializer) :
         assetType(type),
@@ -74,24 +75,26 @@ class StorageManager : public StorageManagerInterface<AssetType> {
     {
       SetCacheMemoryLimit(limitByMemory, maxMemory);
     }
-    StorageManager(uint cacheSize,
+    StorageManager(unsigned int cacheSize,
                    bool limitByMemory,
-                   uint64 maxMemory,
+                   std::uint64_t maxMemory,
+                   float prunePercent,
                    const std::string & type) :
-        StorageManager(cacheSize, limitByMemory, maxMemory, type,
+        StorageManager(cacheSize, limitByMemory, maxMemory, prunePercent, type,
                        SerializerPtr(new AssetSerializerLocalXML<AssetType>())) {}
     ~StorageManager() = default;
 
-    inline uint32 CacheSize() const;
-    inline uint32 CacheCapacity() const;
-    inline uint32 DirtySize() const;
-    inline uint64 CacheMemoryUse() const;
-    inline void SetCacheMemoryLimit(const bool & limitByMemory, const uint64 & maxMemory);
+    inline std::uint32_t CacheSize() const;
+    inline std::uint32_t CacheCapacity() const;
+    inline std::uint32_t DirtySize() const;
+    inline std::uint64_t CacheMemoryUse() const;
+    inline void SetCacheMemoryLimit(const bool & limitByMemory, const std::uint64_t & maxMemory);
     inline void UpdateCacheItemSize(const AssetKey & key);
-    inline uint64 GetCacheItemSize(const AssetKey & key);
+    inline std::uint64_t GetCacheItemSize(const AssetKey & key);
     inline void AddNew(const AssetKey &, const PointerType &);
     inline void AddExisting(const AssetKey &, const PointerType &);
-    inline void NoLongerNeeded(const AssetKey &, bool = true);
+    inline void SetPrunePercent(const float & percent);
+    inline bool DetermineIfPrune();
     void Abort();
     bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<AssetKey> *);
     PointerType Get(const AssetHandleInterface<AssetType> *, const AssetKey &, bool, bool, bool);
@@ -111,6 +114,7 @@ class StorageManager : public StorageManagerInterface<AssetType> {
     const SerializerPtr serializer;
     CacheType cache;
     std::map<AssetKey, PointerType> dirtyMap;
+    float prunePercent;
 
     StorageManager(const StorageManager &) = delete;
     StorageManager& operator=(const StorageManager &) = delete;
@@ -119,31 +123,31 @@ class StorageManager : public StorageManagerInterface<AssetType> {
 };
 
 template<class AssetType>
-inline uint32 StorageManager<AssetType>::CacheSize() const {
+inline std::uint32_t StorageManager<AssetType>::CacheSize() const {
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
   return cache.size();
 }
 
 template<class AssetType>
-inline uint32 StorageManager<AssetType>::CacheCapacity() const {
+inline std::uint32_t StorageManager<AssetType>::CacheCapacity() const {
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
   return cache.capacity();
 }
 
 template<class AssetType>
-inline uint32 StorageManager<AssetType>::DirtySize() const {
+inline std::uint32_t StorageManager<AssetType>::DirtySize() const {
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
   return dirtyMap.size();
 }
 
 template<class AssetType>
-inline uint64 StorageManager<AssetType>::CacheMemoryUse() const {
+inline std::uint64_t StorageManager<AssetType>::CacheMemoryUse() const {
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
   return cache.getMemoryUse();
 }
 
 template<class AssetType>
-inline void StorageManager<AssetType>::SetCacheMemoryLimit(const bool & limitByMemory, const uint64 & maxMemory) {
+inline void StorageManager<AssetType>::SetCacheMemoryLimit(const bool & limitByMemory, const std::uint64_t & maxMemory) {
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
   cache.setCacheMemoryLimit(limitByMemory, maxMemory);
 }
@@ -155,7 +159,7 @@ inline void StorageManager<AssetType>::UpdateCacheItemSize(const AssetKey & key)
 }
 
 template<class AssetType>
-inline uint64 StorageManager<AssetType>::GetCacheItemSize(const AssetKey & key) {
+inline std::uint64_t StorageManager<AssetType>::GetCacheItemSize(const AssetKey & key) {
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
   return cache.getCacheItemSize(key);
 }
@@ -164,7 +168,13 @@ template<class AssetType>
 inline void
 StorageManager<AssetType>::AddNew(const AssetKey & key, const PointerType & value) {
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
-  cache.Add(key, value);
+#ifndef NDEBUG
+  // Make sure we're not adding something that already exists. This is compiled
+  // out for release builds.
+  PointerType findVal;
+  assert(!cache.Find(key, findVal));
+#endif
+  cache.Add(key, value, DetermineIfPrune());
   // New assets are automatically dirty
   dirtyMap.emplace(key, value);
 }
@@ -173,14 +183,15 @@ template<class AssetType>
 inline void
 StorageManager<AssetType>::AddExisting(const AssetKey & key, const PointerType & value) {
   std::lock_guard<std::recursive_mutex> lock(storageMutex);
-  cache.Add(key, value);
-}
-
-template<class AssetType>
-inline void
-StorageManager<AssetType>::NoLongerNeeded(const AssetKey & key, bool prune) {
-  std::lock_guard<std::recursive_mutex> lock(storageMutex);
-  cache.Remove(key, prune);
+  PointerType existingVal;
+  if (!cache.Find(key, existingVal)) {
+    cache.Add(key, value, DetermineIfPrune());
+  }
+  else {
+    // If it's already there and we're replacing it with something else then
+    // something has gone wrong.
+    assert(value == existingVal);
+  }
 }
 
 // This is the "legacy" Get function used by the AssetHandle_ class (see
@@ -221,7 +232,7 @@ StorageManager<AssetType>::Get(
     entry = serializer->Load(key);
     updated = true;
   } else if (check_timestamps) {
-    uint64 filesize = 0;
+    std::uint64_t filesize = 0;
     time_t timestamp = 0;
     if (khGetFileInfo(filename, filesize, timestamp) &&
         ((timestamp != entry->timestamp) ||
@@ -229,6 +240,7 @@ StorageManager<AssetType>::Get(
       // The file has changed on disk.
 
       // Drop the current entry from the cache.
+      assert(dirtyMap.find(key) == dirtyMap.end()); // Make sure it's not dirty - that's an error
       cache.Remove(key, false);  // Don't prune, the Add() will.
 
       // Will succeed, generate stub, or throw exception.
@@ -274,7 +286,7 @@ StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & ref) {
     entry = serializer->Load(key);
     updated = true;
   } else if (check_timestamps) {
-    uint64 filesize = 0;
+    std::uint64_t filesize = 0;
     time_t timestamp = 0;
     if (khGetFileInfo(filename, filesize, timestamp) &&
         ((timestamp != entry->timestamp) ||
@@ -282,6 +294,7 @@ StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & ref) {
       // The file has changed on disk.
 
       // Drop the current entry from the cache.
+      assert(dirtyMap.find(key) == dirtyMap.end()); // Make sure it's not dirty - that's an error
       cache.Remove(key, false);  // Don't prune, the Add() will.
 
       // Will succeed, generate stub, or throw exception.
@@ -355,5 +368,15 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
   return true;
 }
 
-#endif // STORAGEMANAGER_H
+template<class AssetType>
+void StorageManager<AssetType>::SetPrunePercent(const float & percent) {
+  std::lock_guard<std::recursive_mutex> lock(storageMutex);
+  prunePercent = percent;
+}
 
+template<class AssetType>
+bool StorageManager<AssetType>::DetermineIfPrune() {
+  return (DirtySize() <= (CacheSize() * (prunePercent / 100)));
+}
+
+#endif // STORAGEMANAGER_H

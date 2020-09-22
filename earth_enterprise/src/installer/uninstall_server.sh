@@ -104,6 +104,7 @@ main_uninstall()
   remove_files_from_target
   change_publish_root_ownership
   remove_users_groups
+  if [ `command -v systemctl` ]; then systemctl daemon-reexec; fi
   show_final_success_message
 }
 

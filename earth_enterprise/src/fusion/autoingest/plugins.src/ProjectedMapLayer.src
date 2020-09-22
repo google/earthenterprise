@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -63,7 +64,7 @@ namespace {
 class SubLayer {
  public:
   AssetVersion                       query_version_;
-  std::vector<geMultiRange<uint32> > disp_ranges_;
+  std::vector<geMultiRange<std::uint32_t> > disp_ranges_;
 };
 
 }
@@ -94,12 +95,12 @@ ProjectedMapLayerAssetVersionImplD::UpdateChildren(void)
   // each level.
   // Get the VectorQuery version from the layers children list
   std::vector<SubLayer> sub_layers(layer_config.subLayers.size());
-  for (uint sl = 0; sl < layer_config.subLayers.size(); ++sl) {
+  for (unsigned int sl = 0; sl < layer_config.subLayers.size(); ++sl) {
     const MapSubLayerConfig &sl_config = layer_config.subLayers[sl];
 
     // populate the valid layers portion of our SubLayer struct
     sub_layers[sl].disp_ranges_.reserve(sl_config.display_rules.size());
-    for (uint dr = 0; dr < sl_config.display_rules.size(); ++dr) {
+    for (unsigned int dr = 0; dr < sl_config.display_rules.size(); ++dr) {
       sub_layers[sl].disp_ranges_.push_back(
           sl_config.display_rules[dr].ValidLevels());
     }
@@ -109,14 +110,14 @@ ProjectedMapLayerAssetVersionImplD::UpdateChildren(void)
 
 
   // now build my children (one for each level)
-  for (uint level = 0; level < Max2DClientLevel; ++level) {
+  for (unsigned int level = 0; level < Max2DClientLevel; ++level) {
 
     // gather config, inputs, & inputvers for this level
     MapLayerLevelConfig level_config(level, config.projection_);
     level_config.sub_layers_.reserve(layer_config.subLayers.size());
     std::vector<AssetVersion> inputvers;
     std::vector<SharedString>  inputrefs;
-    for (uint sl = 0; sl < layer_config.subLayers.size(); ++sl) {
+    for (unsigned int sl = 0; sl < layer_config.subLayers.size(); ++sl) {
       const MapSubLayerConfig &sl_config = layer_config.subLayers[sl];
       // Change logic here so that mapping of layers to vector query output is
       // understood. Add default MapDisplayRuleConfig for not visible display
@@ -124,7 +125,7 @@ ProjectedMapLayerAssetVersionImplD::UpdateChildren(void)
       // understand whether to ignore it.
 
       // First find out whether any display rule visible on this level
-      uint dr = 0;
+      unsigned int dr = 0;
       for (; dr < sl_config.display_rules.size(); ++dr) {
         if (sub_layers[sl].disp_ranges_[dr].Contains(level)) {
           break;
@@ -164,7 +165,7 @@ ProjectedMapLayerAssetVersionImplD::UpdateChildren(void)
 
 
       MutableAssetVersionD levelver =
-        AssetFactory::FindMakeAndUpdateSubAsset<MutableMapLayerLevelAssetVersionD, AssetVersion>
+        FindMakeAndUpdateSubAsset<MapLayerLevelType>
                      (assetRef,
                       levelname,
                       inputrefs,

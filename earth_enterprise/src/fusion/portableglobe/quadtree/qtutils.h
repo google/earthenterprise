@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +24,12 @@
 #include <string>
 #include <vector>
 #include "common/khTypes.h"
+#include <cstdint>
 
 namespace fusion_portableglobe {
 
 const double PI = 3.14159265358979;
-const uint32 MAX_LEVEL = 24;
+const std::uint32_t MAX_LEVEL = 24;
 const double MAX_MERCATOR_LATITUDE = 85.051128779806589;
 
 /**
@@ -43,7 +45,7 @@ void ConvertFlatToMercatorQtAddresses(
  * Returns the y position on a grid at given depth corresponding
  * to the given latitude.
  */
-uint32 LatToYPos(double lat, uint32 z, bool is_mercator);
+ std::uint32_t LatToYPos(double lat, std::uint32_t z, bool is_mercator);
 
 /**
  * Returns the normalized, linear y associated with the given latitude.
@@ -65,7 +67,7 @@ double MercatorYToLat(double y);
  * Y is in the range (-pi, pi) and return value is in
  * the range [0, 2^z-1].
  */
-uint32 YToYPos(double y, uint32 z);
+ std::uint32_t YToYPos(double y, std::uint32_t z);
 
 /**
  * Returns the latitude that will appear half way between the two given
@@ -79,7 +81,7 @@ double BisectLatitudes(double south, double north, bool is_mercator);
  * @param y Requested row for map tile.
  * @param z Requested zoom level for map.
  */
-std::string ConvertToQtNode(uint32 x, uint32 y, uint32 z);
+std::string ConvertToQtNode(std::uint32_t x, std::uint32_t y, std::uint32_t z);
 
 /**
  * Helper for converting to map space from a qtnode address.
@@ -89,7 +91,7 @@ std::string ConvertToQtNode(uint32 x, uint32 y, uint32 z);
  * @param z Zoom level for map.
  */
 void ConvertFromQtNode(const std::string& qtnode,
-                       uint32* x, uint32* y, uint32* z);
+                       std::uint32_t* x, std::uint32_t* y, std::uint32_t* z);
 
 }  // namespace fusion_portableglobe
 

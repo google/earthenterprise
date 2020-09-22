@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -39,7 +40,7 @@ const std::string kJpegDateExtraneousBytes =
 // standard compressor.
 //---------------------------------------------------------------------------
 
-MinifyCompressor::MinifyCompressor(Compressor* c, uint32 w, uint32 h, uint comp)
+MinifyCompressor::MinifyCompressor(Compressor* c, std::uint32_t w, std::uint32_t h, unsigned int comp)
     : compressor_(c), width_(w), height_(h), comp_(comp) {
   small_buffer_ = new char[(w * h * comp) / 16];
 }
@@ -49,10 +50,10 @@ MinifyCompressor::~MinifyCompressor() {
   delete [] small_buffer_;
 }
 
-uint32 MinifyCompressor::compress(const char *inbuf) {
+ std::uint32_t MinifyCompressor::compress(const char *inbuf) {
   char* dest = small_buffer_;
-  for (uint32 row = 0; row < height_; row += 4) {
-    for (uint32 col = 0; col < width_; col += 4) {
+  for (std::uint32_t row = 0; row < height_; row += 4) {
+    for (std::uint32_t col = 0; col < width_; col += 4) {
       memcpy(dest, inbuf + (row * width_ * comp_) + (col * comp_), comp_);
       dest += comp_;
     }
@@ -60,7 +61,7 @@ uint32 MinifyCompressor::compress(const char *inbuf) {
   return compressor_->compress(small_buffer_);
 }
 
-uint32 MinifyCompressor::decompress(char* inbuf, int inbufSize, char* outbuf) {
+ std::uint32_t MinifyCompressor::decompress(char* inbuf, int inbufSize, char* outbuf) {
   assert(!"Currently decompress is unsupported.");
   return 0;
 }
@@ -119,13 +120,13 @@ ErrorMgr::ErrorMgr() {
 
 //---------------------------------------------------------------------------
 
-JPEGCompressor::JPEGCompressor(uint32 w, uint32 h,
-                               uint c, int quality)
+JPEGCompressor::JPEGCompressor(std::uint32_t w, std::uint32_t h,
+                               unsigned int c, int quality)
   : quality_(quality), writer_(0), width_(w),
     height_(h), comp_(c), valid_(true) {
   // Setup the output destination.
   // Verified that this buffer is not enough for a tile of 256 x 1.
-  uint32 cell_size = cellSize();
+  std::uint32_t cell_size = cellSize();
   if (cell_size < 1000000) {
     cell_size += 256 * 3;
   }
@@ -172,7 +173,7 @@ JPEGCompressor::~JPEGCompressor() {
   delete writer_;
 }
 
-uint32 JPEGCompressor::compress(const char *inbuf) {
+ std::uint32_t JPEGCompressor::compress(const char *inbuf) {
   // Initialize internal state of jpeg compressor.
   jpeg_start_compress(&cinfo_, TRUE);
 
@@ -182,7 +183,7 @@ uint32 JPEGCompressor::compress(const char *inbuf) {
         comment_string_.c_str()), comment_string_.size());
   }
 
-  uint32 row_stride = width_ * comp_;
+  std::uint32_t row_stride = width_ * comp_;
 
   unsigned char *cdata = (unsigned char*)inbuf;
   while (cinfo_.next_scanline < height_) {
@@ -197,7 +198,7 @@ uint32 JPEGCompressor::compress(const char *inbuf) {
   return dataLen();
 }
 
-uint32 JPEGCompressor::decompress(char *inbuf, int inbufSize, char *outbuf) {
+ std::uint32_t JPEGCompressor::decompress(char *inbuf, int inbufSize, char *outbuf) {
   jpeg_decompress_struct dinfo;
 
   dinfo.err = &error_mgr_;
@@ -224,9 +225,9 @@ uint32 JPEGCompressor::decompress(char *inbuf, int inbufSize, char *outbuf) {
 
   jpeg_start_decompress(&dinfo);
 
-  uint32 row_stride = width_ * comp_;
+  std::uint32_t row_stride = width_ * comp_;
   unsigned char* cdata;
-  uint32 line = 0;
+  std::uint32_t line = 0;
   while (dinfo.output_scanline < height_) {
     cdata = (unsigned char*)outbuf + (row_stride * (line++));
     if (jpeg_read_scanlines(&dinfo, &cdata, 1) != 1) {
@@ -253,7 +254,7 @@ std::string JPEGCompressor::JPEGCommentAcquisitionDate(
   const std::string& date_string) {
   std::string date_string_modified(date_string);
   ReplaceCharsInString(date_string_modified, "-", ":");
-  static const uint32 kBufferSize = 200;  // Many more than the comment length.
+  static const std::uint32_t kBufferSize = 200;  // Many more than the comment length.
   char buffer[kBufferSize];
   snprintf(buffer, kBufferSize, "*#G0#*0*AD*%s*#0G#*",
            date_string_modified.c_str());
@@ -266,7 +267,7 @@ std::string JPEGCompressor::JPEGCommentAcquisitionDate(
 
 class LZCompressor : public Compressor {
  public:
-  LZCompressor(int l, uint32 sz);
+  LZCompressor(int l, std::uint32_t sz);
   virtual ~LZCompressor();
   LZCompressor(const LZCompressor&) = delete;
   LZCompressor(LZCompressor&&) = delete;
@@ -274,32 +275,32 @@ class LZCompressor : public Compressor {
   LZCompressor& operator=(LZCompressor&&) = delete;
 
   virtual char *data() { return buf; }
-  virtual uint32 dataLen() { return bufLen; }
-  virtual uint32 bufSize() { return buff_size_ + reserve_size; }
+  virtual std::uint32_t dataLen() { return bufLen; }
+  virtual std::uint32_t bufSize() { return buff_size_ + reserve_size; }
 
-  virtual uint32 compress(const char *inbuf);
-  virtual uint32 decompress(char *inbuf, int inbufSize, char *outbuf);
+  virtual std::uint32_t compress(const char *inbuf);
+  virtual std::uint32_t decompress(char *inbuf, int inbufSize, char *outbuf);
 
  private:
   const int level_;
-  const uint32 uncompressed_buff_size_;
-  const uint32 buff_size_;
+  const std::uint32_t uncompressed_buff_size_;
+  const std::uint32_t buff_size_;
   static const size_t reserve_size = kCRC32Size;
   char*  buf;
-  uint32 bufLen;
+  std::uint32_t bufLen;
 };
 
 // external interface
-Compressor* NewLZCompressor(int l, uint32 sz) {
+Compressor* NewLZCompressor(int l, std::uint32_t sz) {
   return new LZCompressor(l, sz);
 }
 
-LZCompressor::LZCompressor(int l, uint32 sz)
+LZCompressor::LZCompressor(int l, std::uint32_t sz)
   : level_(l),
     uncompressed_buff_size_(sz),
     // zlib specs say buffer must be at least 0.1% larger than inSize
     // plus an additional 12 bytes. We'll makes it 1% bigger.
-    buff_size_(uint32(ceil(1.01 * uncompressed_buff_size_)) + 12),
+    buff_size_(std::uint32_t(ceil(1.01 * uncompressed_buff_size_)) + 12),
     buf(new char[buff_size_ + reserve_size]),
     bufLen(0) {
 }
@@ -308,20 +309,20 @@ LZCompressor::~LZCompressor() {
   delete[] buf;
 }
 
-uint32 LZCompressor::compress(const char *inbuf) {
+ std::uint32_t LZCompressor::compress(const char *inbuf) {
   unsigned long tmpLen = buff_size_;
-  if (compress2((uchar*)buf, &tmpLen,
-                (const uchar*)inbuf, uncompressed_buff_size_,
+  if (compress2((unsigned char*)buf, &tmpLen,
+                (const unsigned char*)inbuf, uncompressed_buff_size_,
                 level_) != Z_OK) {
     tmpLen = 0;
   }
   return (bufLen = tmpLen);
 }
 
-uint32 LZCompressor::decompress(char *inbuf, int inbufSize, char *outbuf) {
+ std::uint32_t LZCompressor::decompress(char *inbuf, int inbufSize, char *outbuf) {
   unsigned long outbufLen = uncompressed_buff_size_;
-  if (uncompress((uchar*)outbuf, &outbufLen,
-                 (uchar*)inbuf, inbufSize) != Z_OK) {
+  if (uncompress((unsigned char*)outbuf, &outbufLen,
+                 (unsigned char*)inbuf, inbufSize) != Z_OK) {
     outbufLen = 0;
   }
   return outbufLen;
@@ -348,7 +349,7 @@ uint32 LZCompressor::decompress(char *inbuf, int inbufSize, char *outbuf) {
 //
 // To compute the raw size required, figure 1/2 byte per pixel output
 //
-uint32 DXT1Compressor::kMagic = 0x44585431;
+ std::uint32_t DXT1Compressor::kMagic = 0x44585431;
 
 DXT1Compressor::DXT1Compressor(GLenum f, GLenum t, int w, int h)
   : format(f), type(t),
@@ -488,7 +489,7 @@ DXT1Compressor::Color8888 DXT1Compressor::TexelToColor8888(void *texel) {
   return result;
 }
 
-uint32 DXT1Compressor::compress(const char *src_buff) {
+ std::uint32_t DXT1Compressor::compress(const char *src_buff) {
   int w_mask = width - 1;
   int h_mask = height - 1;
 
@@ -531,7 +532,7 @@ uint32 DXT1Compressor::compress(const char *src_buff) {
       GLushort lcut[3];
       Color8888 cmin, cmax;
       GLushort c[2];
-      uint32 idx = 0, flip = 0;
+      std::uint32_t idx = 0, flip = 0;
       GLboolean bHasAlpha = false;
       GLboolean bFirst = true;
 
@@ -594,7 +595,7 @@ uint32 DXT1Compressor::compress(const char *src_buff) {
         // Generate the index bits.
         for ( int cy = 0; cy < 4; ++cy ) {
           for ( int cx = 0; cx < 4; ++cx ) {
-            uint32 code;
+            std::uint32_t code;
             GLvoid *texel = GetTexelAddress( (x + cx) & w_mask, p[cy] );
             if ( TexelToColor8888( texel ).alpha < 0x7f)    code = 3;
             else if ( l[cy][cx] <= lcut[0])                 code = 0 ^ flip;
@@ -621,7 +622,7 @@ uint32 DXT1Compressor::compress(const char *src_buff) {
         // Generate the index bits.
         for ( int cy = 0; cy < 4; ++cy ) {
           for ( int cx = 0; cx < 4; ++cx ) {
-            uint32 code;
+            std::uint32_t code;
             if      (l[cy][cx] <= lcut[0])  code = 0 ^ flip;
             else if (l[cy][cx] <= lcut[1])  code = 2 ^ flip;
             else if (l[cy][cx] <= lcut[2])  code = 3 ^ flip;
@@ -645,8 +646,8 @@ uint32 DXT1Compressor::compress(const char *src_buff) {
   return dataLen();
 }
 
-uint32 DXT1Compressor::decompress(char *inbuf, int inbufSize, char *outbuf) {
-  uint32 sz = width * height * 3;
+ std::uint32_t DXT1Compressor::decompress(char *inbuf, int inbufSize, char *outbuf) {
+  std::uint32_t sz = width * height * 3;
   memset( outbuf, 0, sz );
 
   // skip past header
@@ -757,30 +758,30 @@ class PngReader {
 
   // Reads PNG from input buffer to PNG internal structures.
   // Returns 0 - success, -1 - Error.
-  int32 Read(const char* const inbuf, int inbufSize);
+  std::int32_t Read(const char* const inbuf, int inbufSize);
 
   // Cleans up internal data structures.
   inline void Clean() {
     png_destroy_read_struct(&png_ptr_, &info_ptr_, NULL);
   }
 
-  inline uint32 width() const {
+  inline std::uint32_t width() const {
     return png_get_image_width(png_ptr_, info_ptr_);
   }
-  inline uint32 height() const  {
+  inline std::uint32_t height() const  {
     return png_get_image_height(png_ptr_, info_ptr_);
   }
-  inline uint32 components() const  {
-    return static_cast<uint32>(png_get_channels(png_ptr_, info_ptr_));
+  inline std::uint32_t components() const  {
+    return static_cast<std::uint32_t>(png_get_channels(png_ptr_, info_ptr_));
   }
 
-  inline uchar color_type() const  {
+  inline unsigned char color_type() const  {
     return png_get_color_type(png_ptr_, info_ptr_);
   }
 
   // Gets raster data from PNG internal structures.
   // Returns data length.
-  uint32 GetRasterData(char* outbuf) const;
+  std::uint32_t GetRasterData(char* outbuf) const;
 
  private:
   png_structp png_ptr_;
@@ -835,7 +836,7 @@ int PngReader::Read(const char* const inbuf, int inbufSize) {
   return 0;  // Success.
 }
 
-uint32 PngReader::GetRasterData(char* outbuf) const {
+ std::uint32_t PngReader::GetRasterData(char* outbuf) const {
   switch (components()) {
     case 1:  // Indexcolor or grayscale format.
       assert(color_type() == PNG_COLOR_TYPE_GRAY);
@@ -850,8 +851,8 @@ uint32 PngReader::GetRasterData(char* outbuf) const {
         // Copy pixel's data to output buffer.
         // NOTE: We don't want to handle endian-ness here since we do not need
         // to unpack RGBA tuples.
-        uint32 row_width_in_bytes = width() * components();
-        for (uint32 i = 0; i < height(); ++i, outbuf += row_width_in_bytes) {
+        std::uint32_t row_width_in_bytes = width() * components();
+        for (std::uint32_t i = 0; i < height(); ++i, outbuf += row_width_in_bytes) {
           memcpy(outbuf, row_pointers_[i], row_width_in_bytes);
         }
         return height()*row_width_in_bytes;
@@ -867,36 +868,36 @@ uint32 PngReader::GetRasterData(char* outbuf) const {
 
 class PNGCompressor : public Compressor {
  public:
-  PNGCompressor(uint32 width, uint32 height, uint32 comp, uint options,
-                int32 input_buf_width,
+  PNGCompressor(std::uint32_t width, std::uint32_t height, std::uint32_t comp, unsigned int options,
+                std::int32_t input_buf_width,
                 int compression_level);
   virtual ~PNGCompressor();
 
   virtual char* data() { return (char*) &output_buff_.first[0]; }
-  virtual uint32 dataLen() { return output_buff_.second; }
-  virtual uint32 bufSize() { return dataLen() + reserve_size; }
+  virtual std::uint32_t dataLen() { return output_buff_.second; }
+  virtual std::uint32_t bufSize() { return dataLen() + reserve_size; }
 
-  virtual uint32 compress(const char* inbuf);
-  virtual uint32 decompress(char* inbuf, int inbufSize, char* outbuf);
+  virtual std::uint32_t compress(const char* inbuf);
+  virtual std::uint32_t decompress(char* inbuf, int inbufSize, char* outbuf);
 
   virtual bool IsValid() { return valid_; }
 
   static const size_t reserve_size = kCRC32Size;
  private:
-  uint32 width_;
-  uint32 height_;
-  uint32 comp_;
-  const int32 input_buf_width_;
+  std::uint32_t width_;
+  std::uint32_t height_;
+  std::uint32_t comp_;
+  const std::int32_t input_buf_width_;
 
   // don't use string::resize as that may give back memory i.e
   // 1. use string just as buffer, rather than new, as heap management is better
   // 2. reserve enough memory so that we don't need to reallocate ever
   // 3. write using memcpy and
-  // 4. keep a separate uint32 for size.
-  std::pair<std::string, uint32> output_buff_;
+  // 4. keep a separate std::uint32_t for size.
+  std::pair<std::string, std::uint32_t> output_buff_;
   std::vector<const char*> row_pointers_;
   bool valid_;
-  uint options_;
+  unsigned int options_;
   int compression_level_;
 };
 
@@ -916,8 +917,8 @@ class PngWriteStruct {
 void png_write_func(png_structp png_ptr,
                     png_byte* data,
                     png_size_t length) {
-  std::pair<std::string, uint32>* buffer =
-     static_cast<std::pair<std::string, uint32>*>(png_get_io_ptr(png_ptr));
+  std::pair<std::string, std::uint32_t>* buffer =
+     static_cast<std::pair<std::string, std::uint32_t>*>(png_get_io_ptr(png_ptr));
   const std::string::size_type size = buffer->second;
   const std::string::size_type required =
       size + length + PNGCompressor::reserve_size;
@@ -941,8 +942,8 @@ void png_flush_func(png_structp png_ptr) {
 }  // namespace
 
 // external interface
-Compressor* NewPNGCompressor(uint32 w, uint32 h, uint32 c, uint options,
-                             int32 input_buf_width,
+Compressor* NewPNGCompressor(std::uint32_t w, std::uint32_t h, std::uint32_t c, unsigned int options,
+                             std::int32_t input_buf_width,
                              int compression_level) {
   Compressor* png = new PNGCompressor(w, h, c, options, input_buf_width,
                                       compression_level);
@@ -954,8 +955,8 @@ Compressor* NewPNGCompressor(uint32 w, uint32 h, uint32 c, uint options,
   }
 }
 
-PNGCompressor::PNGCompressor(uint32 w, uint32 h, uint32 c, uint options,
-                             int32 input_buf_width, int compression_level)
+PNGCompressor::PNGCompressor(std::uint32_t w, std::uint32_t h, std::uint32_t c, unsigned int options,
+                             std::int32_t input_buf_width, int compression_level)
   : width_(w), height_(h), comp_(c),
     input_buf_width_((input_buf_width == 0) ? width_ : input_buf_width),
     valid_(true), options_(options), compression_level_(compression_level) {
@@ -973,7 +974,7 @@ PNGCompressor::PNGCompressor(uint32 w, uint32 h, uint32 c, uint options,
 PNGCompressor::~PNGCompressor() {
 }
 
-uint32 PNGCompressor::compress(const char* inbuf) {
+ std::uint32_t PNGCompressor::compress(const char* inbuf) {
   PngWriteStruct png_write_struct;
 
   png_write_struct.png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING,
@@ -1029,8 +1030,8 @@ uint32 PNGCompressor::compress(const char* inbuf) {
 
   output_buff_.second = 0;
 
-  for (uint row = 0; row < height_; ++row) {
-    int32 row_offset = row * input_buf_width_ * comp_;
+  for (unsigned int row = 0; row < height_; ++row) {
+    std::int32_t row_offset = row * input_buf_width_ * comp_;
     row_pointers_[row] = inbuf + row_offset;
   }
 
@@ -1051,7 +1052,7 @@ uint32 PNGCompressor::compress(const char* inbuf) {
   return output_buff_.second;
 }
 
-uint32 PNGCompressor::decompress(char* inbuf, int inbufSize, char* outbuf) {
+ std::uint32_t PNGCompressor::decompress(char* inbuf, int inbufSize, char* outbuf) {
   PngReader png_reader;
   if (png_reader.Read(inbuf, inbufSize) != 0) {
     // Couldn't read PNG buffer - return.

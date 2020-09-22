@@ -18,6 +18,7 @@
 #include <common/khException.h>
 #include "AssetFactory.h"
 #include "AssetVersion.h"
+#include "Asset.h"
 #include <gtest/gtest.h>
 #include <string>
 #include <vector>
@@ -27,52 +28,16 @@
 using namespace std;
 using namespace AssetFactory;
 
-// forward declare classes
-class MockAssetImpl;
-class MockAssetConfig;
-class MockMutableAsset;
-class MockAssetVersionImpl;
-class MockMutableAssetVersion;
-class MockExtras;
+const AssetDefs::Type EXPECTED_TYPE = AssetDefs::Imagery;
+const string EXPECTED_SUBTYPE = "mockSubtype";
 
-class MockExtraArgs{};
+class MockExtraArgs {};
 
-class MockAssetStorage
-{
-public:
-  SharedString name;
-  AssetDefs::Type type;
-  string subtype;
-  vector<SharedString> inputs;
-  khMetaData meta;
-  vector<AssetVersion> versions;
-  static vector<AssetVersion> MOCK_VERSIONS;
-
-  static MockAssetStorage MakeStorage(const SharedString &name_,
-                                      AssetDefs::Type type_,
-                                      const std::string &subtype_,
-                                      const std::vector<SharedString> &inputs_,
-                                      const khMetaData &meta_) {
-        MockAssetStorage storage;
-        storage.name = name_;
-        storage.type = type_;
-        storage.subtype = subtype_;
-        storage.inputs = inputs_;
-        storage.meta = meta_;
-        storage.versions = MockAssetStorage::MOCK_VERSIONS;
-        return storage;
-    }
-};
-
-vector<AssetVersion> MockAssetStorage::MOCK_VERSIONS = {};
-
-// added ID field to aid in comparison
-class MockAssetConfig
-{
-public:
+class MockAssetConfig {
+  public:
     int8_t ID;
     bool upToDate;
-    MockAssetConfig(int8 _ID = -1) : ID(_ID), upToDate(true) {}
+    MockAssetConfig(std::int8_t _ID = -1) : ID(_ID), upToDate(true) {}
     bool operator==(const MockAssetConfig& other) const { return ID == other.ID; }
     bool operator==(uint8_t _ID) { return ID == _ID; }
     void operator=(const MockAssetConfig& other) { ID = other.ID; }
@@ -81,26 +46,124 @@ public:
     {
         return upToDate == other.upToDate;
     }
- };
+};
 
-class MockAssetVersionImpl : public MockAssetStorage
-{
-public:
-    using MutableAssetType = MockMutableAsset;
-    static AssetDefs::Type EXPECTED_TYPE;
-    static string EXPECTED_SUBTYPE;
-    static AssetDefs::State EXPECTED_STATE;
+class MockAssetVersionImpl : public AssetVersionStorage {
+  private:
+    void SetUp() {
+      state = mockState;
+    }
+  public:
+    static string testSubTypeToUseForStringConstructor;
+    static AssetDefs::State mockState;
+    static bool throwInConstructor;
 
-    using Base = MockAssetStorage;
+    bool updated;
+    MockAssetConfig config;
+    bool permanent;
+
+    MockAssetVersionImpl(const SharedString & ref) {
+      if (throwInConstructor) {
+        throw std::runtime_error("Throwing because throwInConstructor==true");
+      }
+      name = ref;
+      type = EXPECTED_TYPE;
+      subtype = testSubTypeToUseForStringConstructor;
+      updated = false;
+      SetUp();
+    }
+    MockAssetVersionImpl(const AssetVersionStorage & storage) :
+            AssetVersionStorage(storage) {
+        SetUp();
+    }
+};
+
+string MockAssetVersionImpl::testSubTypeToUseForStringConstructor;
+AssetDefs::State MockAssetVersionImpl::mockState;
+bool MockAssetVersionImpl::throwInConstructor;
+
+class MockAssetVersionBase {
+  public:
+    SharedString ref;
+    shared_ptr<MockAssetVersionImpl> impl;
+
+    MockAssetVersionBase() = default;
+    MockAssetVersionBase(const SharedString & ref) : ref(ref) {}
+    MockAssetVersionBase(const AssetVersionStorage & storage) :
+        ref(storage.name), impl(make_shared<MockAssetVersionImpl>(storage)) {}
+    MockAssetVersionBase(const shared_ptr<MockAssetVersionImpl> impl) : impl(impl) {}
+    explicit operator bool(void) const { return impl != nullptr; }
+    MockAssetVersionImpl * operator->() const { return impl.get(); }
+};
+
+class MockAssetVersion : public MockAssetVersionBase {
+  public:
+    using Base = MockAssetVersionBase;
+
+    MockAssetVersion() = default;
+    MockAssetVersion(const SharedString & ref) : MockAssetVersionBase(ref) {}
+    MockAssetVersion(const AssetVersionStorage & storage) : MockAssetVersionBase(storage) {}
+    MockAssetVersion(const shared_ptr<MockAssetVersionImpl> impl) : MockAssetVersionBase(impl) {}
+};
+
+class MockAssetVersionD : public MockAssetVersion {
+  public:
+    MockAssetVersionD() = default;
+    MockAssetVersionD(const SharedString & ref) : MockAssetVersion(ref) {}
+    MockAssetVersionD(const AssetVersionStorage & storage) :
+        MockAssetVersion(storage) {}
+    MockAssetVersionD(const shared_ptr<MockAssetVersionImpl> impl) :
+        MockAssetVersion(impl) {}
+
+  void LoadAsTemporary() {
+    impl = std::make_shared<MockAssetVersionImpl>(ref);
+  }
+  void MakePermanent() {
+    impl->permanent = true;
+  }
+};
+
+class MutableMockAssetVersionD : public MockAssetVersionD {
+  public:
+    MutableMockAssetVersionD() = default;
+    MutableMockAssetVersionD(const AssetVersionStorage & storage) : MockAssetVersionD(storage) {}
+    MutableMockAssetVersionD(const MockAssetVersionD & other) : MockAssetVersionD(other.impl) {}
+};
+
+class MockAssetImpl : public AssetStorage {
+  private:
+    void SetUp() {
+      for (const auto & v : mockVersions) {
+        versions.insert(versions.begin(), v);
+      }
+    }
+  public:
+    static string testSubTypeToUseForStringConstructor;
+    static bool throwInConstructor;
+    static vector<SharedString> mockVersions;
 
     MockAssetConfig config;
-    bool needed;
-    AssetDefs::State state;
+    bool modified;
+
+    MockAssetImpl(const SharedString & ref) :
+        AssetStorage(AssetStorage::MakeStorage(ref, EXPECTED_TYPE,
+                     testSubTypeToUseForStringConstructor,
+                     std::vector<SharedString>(), khMetaData())) {
+        if (throwInConstructor) {
+            throw std::runtime_error("Throwing because throwInConstrutor==true");
+        }
+        SetUp();
+    }
+    MockAssetImpl(const AssetStorage & storage, const MockAssetConfig & config) :
+            AssetStorage(storage), config(config) {
+        SetUp();
+    }
 
     void Modify(const khMetaData& _meta, const MockAssetConfig& _config)
     {
         meta = _meta;
         config = _config;
+        modified = true;
     }
 
     void Modify(const vector<SharedString>& _inputs,
@@ -111,258 +174,108 @@ public:
         Modify(_meta, _config);
     }
 
-    bool IsUpToDate(const MockAssetVersionImpl& other) const
+    MutableMockAssetVersionD MyUpdate(bool& _needed,
+                                      const vector<MockAssetVersionBase>& v = {})
     {
-        return (this->name == other.name) &&
-               (this->subtype == other.subtype) &&
-               (this->meta == other.meta) &&
-               (this->inputs == other.inputs) &&
-               (this->config == other.config) &&
-               (this->state == other.state) &&
-               (this->type == other.type);
-    }
-
-    MockAssetVersionImpl(MockAssetStorage storage,
-                  const MockAssetConfig &config_)
-        : MockAssetStorage(storage), config(config_), needed(false),
-          state(EXPECTED_STATE) {}
-};
-
-AssetDefs::State MockAssetVersionImpl::EXPECTED_STATE = AssetDefs::New;
-
-
-class MockMutableAssetVersion
-{
-public:
-    using Impl = MockAssetVersionImpl;
-    static string testSubTypeToUseForStringConstructor;
-    shared_ptr<Impl> impl = nullptr;
-
-    MockMutableAssetVersion() = default;
-    MockMutableAssetVersion(const string& ref_)
-    {
-        MockAssetStorage storage =
-            MockAssetStorage::MakeStorage(ref_,
-                                          Impl::EXPECTED_TYPE,
-                                          testSubTypeToUseForStringConstructor,
-                                          {},
-                                          khMetaData());
-        MockAssetConfig config;
-        impl = make_shared<Impl>(storage, config);
-    }
-
-    MockMutableAssetVersion(const MockAssetStorage& storage, const MockAssetConfig& config)
-    {
-        impl = make_shared<Impl>(storage, config);
-    }
-
-    MockMutableAssetVersion(const string& name, AssetDefs::Type type)
-    {
-        MockAssetStorage storage =
-            MockAssetStorage::MakeStorage(name, type, "", {}, khMetaData());
-        MockAssetConfig config;
-        impl = make_shared<Impl>(storage,config);
-    }
-
-    explicit operator bool(void) const
-    {
-        return impl != nullptr;
-    }
-
-    Impl* operator->() const
-    {
-        return impl.get();
-    }
-};
-
-class MockVersionDType : public MockMutableAssetVersion
-{
-public:
-  // These are the parameters used to call MakeStorage() inside LoadAsTemporary()
-  // In regular code they're figured out automatically when the version is loaded
-  // in the constructor.  Since the mocks don't really load a version, these values
-  // are used instead.
-  static string EXPECTED_REF;
-  static AssetDefs::Type EXPECTED_TYPE;
-  static string EXPECTED_SUBTYPE;
-  static bool THROW_IN_CONSTRUCTOR;
-
-  vector<AssetVersion> versions;
-  bool permanent;
-
-  MockVersionDType(const AssetVersion& v)
-  {
-    if (MockVersionDType::THROW_IN_CONSTRUCTOR) {
-      MockVersionDType::THROW_IN_CONSTRUCTOR = false;
-      throw std::runtime_error("Throwing because THROW_IN_CONSTRUCTOR==true");
-    }
-    permanent = false;
-    versions.push_back(v);
-  }
-  void NoLongerNeeded() {
-    impl->needed = false;
-    ++MockVersionDType::NOT_NEEDED_COUNT;
-  }
-  void LoadAsTemporary() {
-    MockAssetStorage storage = MockAssetStorage::MakeStorage(EXPECTED_REF,
-                                                             EXPECTED_TYPE,
-                                                             EXPECTED_SUBTYPE,
-                                                             {},
-                                                             khMetaData());
-    MockAssetConfig config;
-    permanent = false;
-    impl = std::make_shared<Impl>(storage, config);
-  }
-  void MakePermanent() {
-    permanent = true;
-    impl->needed = true;
-  }
-
-  static size_t NOT_NEEDED_COUNT;
-};
-
-string MockVersionDType::EXPECTED_REF;
-AssetDefs::Type MockVersionDType::EXPECTED_TYPE;
-string MockVersionDType::EXPECTED_SUBTYPE;
-size_t MockVersionDType::NOT_NEEDED_COUNT = 0;
-bool MockVersionDType::THROW_IN_CONSTRUCTOR = false;
-
-
-class MockAssetImpl: public MockAssetStorage
-{
-public:
-  static AssetDefs::Type EXPECTED_TYPE;
-  static string EXPECTED_SUBTYPE;
-
-  using Base = MockAssetStorage;
-  MockAssetConfig config;
-  bool needed;
-
-
-  void Modify(const khMetaData& _meta, const MockAssetConfig& _config)
-  {
-      meta = _meta;
-      config = _config;
-  }
-
-  void Modify(const vector<SharedString>& _inputs,
-              const khMetaData& _meta,
-              const MockAssetConfig& _config)
-  {
-      inputs = _inputs;
-      Modify(_meta, _config);
-  }
-
-  MockAssetImpl(MockAssetStorage storage,
-                const MockAssetConfig &config_)
-              : MockAssetStorage(storage), config(config_), needed(false) {}
-
-  MockMutableAssetVersion MyUpdate(bool& _needed,
-                                   const vector<AssetVersion>& v = {})
-  {
-      auto retval = MockMutableAssetVersion(this->name, this->type);
-      retval->needed = _needed = true;
-      return retval;
-  }
-
-  MockMutableAssetVersion MyUpdate(bool& _needed,
-                                   const MockExtraArgs& extras)
-    {
-        auto retval = MockMutableAssetVersion(this->name, this->type);
-        retval->needed = _needed = true;
+        auto retval = MutableMockAssetVersionD(
+            AssetVersionStorage::MakeStorageFromAsset(*this));
+        retval->updated = true;
+        retval->meta = meta;
         return retval;
     }
 
-  MockMutableAssetVersion Update(bool& _needed, const vector<AssetVersion>& v = {})
-  {
-      return MyUpdate(needed, v);
-  }
+    MutableMockAssetVersionD MyUpdate(bool& _needed,
+                                      const MockExtraArgs& extras)
+    {
+        auto retval = MutableMockAssetVersionD(
+            AssetVersionStorage::MakeStorageFromAsset(*this));
+        retval->updated = true;
+        retval->meta = meta;
+        return retval;
+    }
+
 };
 
-AssetDefs::Type MockAssetImpl::EXPECTED_TYPE;
-string MockAssetImpl::EXPECTED_SUBTYPE;
+string MockAssetImpl::testSubTypeToUseForStringConstructor;
+bool MockAssetImpl::throwInConstructor;
+vector<SharedString> MockAssetImpl::mockVersions;
 
-AssetDefs::Type MockAssetVersionImpl::EXPECTED_TYPE;
-string MockAssetVersionImpl::EXPECTED_SUBTYPE;
-
-string MockMutableAssetVersion::testSubTypeToUseForStringConstructor;
-
-class MockMutableAsset // pointer type
-{
- public:
-    using Impl = MockAssetImpl;
-
-    static string testSubTypeToUseForStringConstructor;
-    static bool THROW_IN_CONSTRUCTOR;
-    shared_ptr<Impl> impl = nullptr;
-
-    MockMutableAsset() = default;
-    MockMutableAsset(shared_ptr<Impl> impl_) : impl(impl_) {}
-
-    MockMutableAsset(const string &ref_)
-    {
-      if (THROW_IN_CONSTRUCTOR) {
-          THROW_IN_CONSTRUCTOR=false;
-          throw std::runtime_error("MockMustableAsset::THROW_IN_CONSTRUCTOR == true");
-      }
-      // Need to be ready to construct a mock from a string reference.
-      // Leaving the subtype changeable by the tests via testSubTypeToUseForStringConstructor;
-      MockAssetStorage storage = MockAssetStorage::MakeStorage(ref_,
-                                                               Impl::EXPECTED_TYPE,
-                                                               testSubTypeToUseForStringConstructor,
-                                                               {},
-                                                               khMetaData());
-      MockAssetConfig config;
-      impl = std::make_shared<Impl>(storage, config);
-    }
-    // For the `if (asset)` check in MakeNew
-    explicit operator bool(void) const
-    {
-      return impl != nullptr;
-    }
-
-    Impl* operator->(void) const {
-      return impl.get();
-    }
+class MockAssetImplD : public MockAssetImpl {
+  public:
+    MockAssetImplD(const AssetStorage & storage, const MockAssetConfig & config) :
+        MockAssetImpl(storage, config) {}
 };
 
-bool MockMutableAsset::THROW_IN_CONSTRUCTOR = false;
-string MockMutableAsset::testSubTypeToUseForStringConstructor;
+class MockAssetBase {
+  public:
+    shared_ptr<MockAssetImpl> impl;
+    MockAssetBase() = default;
+    MockAssetBase(const SharedString & ref) : impl(make_shared<MockAssetImpl>(ref)) {}
+    MockAssetBase(shared_ptr<MockAssetImpl> impl) : impl(impl) {}
+    explicit operator bool(void) const { return impl != nullptr; }
+    MockAssetImpl * operator->() const { return impl.get(); }
+};
 
+class MockAsset : public MockAssetBase {
+  public:
+    MockAsset() = default;
+    MockAsset(const SharedString & ref) : MockAssetBase(ref) {}
+    MockAsset(shared_ptr<MockAssetImpl> impl) : MockAssetBase(impl) {}
+};
+
+class MockAssetD : public MockAsset {
+  public:
+    using BBase = MockAssetBase;
+    MockAssetD() = default;
+    MockAssetD(const SharedString & ref) : MockAsset(ref) {}
+    MockAssetD(shared_ptr<MockAssetImpl> impl) : MockAsset(impl) {}
+};
+
+class MutableMockAssetD : public MockAssetD {
+  public:
+    MutableMockAssetD(shared_ptr<MockAssetImpl> impl) : MockAssetD(impl) {}
+    MutableMockAssetD(const MockAssetD & other) : MockAssetD(other.impl) {}
+};
+
+struct MockType {
+  using Asset = MockAsset;
+  using Version = MockAssetVersion;
+  using AssetD = MockAssetD;
+  using VersionD = MockAssetVersionD;
+  using MutableAssetD = MutableMockAssetD;
+  using MutableVersionD = MutableMockAssetVersionD;
+  using AssetImplD = MockAssetImplD;
+  using Config = MockAssetConfig;
+
+  static AssetDefs::Type TYPE;
+  static string SUBTYPE;
+};
+
+AssetDefs::Type MockType::TYPE;
+string MockType::SUBTYPE;
 
 void resetStaticMockVariables() {
   // Reset most of the static variables in various mock classes back to
   // reasonable default behavior (no exceptions, etc.)
-  MockMutableAsset::testSubTypeToUseForStringConstructor="";
+  MockType::TYPE = EXPECTED_TYPE;
+  MockType::SUBTYPE = EXPECTED_SUBTYPE;
 
-  MockVersionDType::EXPECTED_REF = "";
-  MockVersionDType::EXPECTED_TYPE = AssetDefs::Imagery;
-  MockVersionDType::EXPECTED_SUBTYPE = "";
+  MockAssetImpl::testSubTypeToUseForStringConstructor = "someOtherSubtype";
+  MockAssetVersionImpl::testSubTypeToUseForStringConstructor = "someOtherSubtype";
 
-  MockAssetStorage::MOCK_VERSIONS={};
-  MockAssetVersionImpl::EXPECTED_STATE = AssetDefs::New;
+  MockAssetImpl::throwInConstructor = false;
+  MockAssetVersionImpl::throwInConstructor = false;
 
-  MockVersionDType::NOT_NEEDED_COUNT = 0;
-  MockVersionDType::THROW_IN_CONSTRUCTOR = false;
-  MockMutableAsset::THROW_IN_CONSTRUCTOR = false;
-  MockAssetImpl::EXPECTED_TYPE = MockAssetVersionImpl::EXPECTED_TYPE = AssetDefs::Imagery;
+  MockAssetImpl::mockVersions = {};
 
-  MockAssetImpl::EXPECTED_SUBTYPE = MockAssetVersionImpl::EXPECTED_SUBTYPE = "mockSubtype";
-
-  MockMutableAsset::testSubTypeToUseForStringConstructor =
-    MockMutableAssetVersion::testSubTypeToUseForStringConstructor = "someOtherSubtype";
+  MockAssetVersionImpl::mockState = AssetDefs::New;
 }
-
 
 class AssetFactoryTest : public testing::Test {
  public:
   AssetFactoryTest()
   {
-    MockAssetImpl::EXPECTED_TYPE = MockAssetVersionImpl::EXPECTED_TYPE = AssetDefs::Imagery;
-    MockAssetImpl::EXPECTED_SUBTYPE = MockAssetVersionImpl::EXPECTED_SUBTYPE = "mockSubtype";
-
-    MockMutableAsset::testSubTypeToUseForStringConstructor =
-    MockMutableAssetVersion::testSubTypeToUseForStringConstructor = "someOtherSubtype";
+    resetStaticMockVariables();
   }
 };
 
@@ -376,7 +289,7 @@ khMetaData testMeta;
 MockAssetConfig testConfig0(0);
 
 TEST_F(AssetFactoryTest, MakeNew) {
-  MockMutableAsset handle = MakeNew<MockMutableAsset, MockAssetConfig>(
+  MutableMockAssetD handle = MakeNew<MockType>(
       testAssetRef, testInputs, testMeta, testConfig0);
   ASSERT_EQ(handle.impl->name, testAssetRef);
   ASSERT_EQ(handle.impl->inputs, testInputs);
@@ -384,103 +297,79 @@ TEST_F(AssetFactoryTest, MakeNew) {
   ASSERT_EQ(handle.impl->type, AssetDefs::Imagery);
 }
 
-// ASSERT_THROW seems to trip up on function templates with more than one
-// template parameter. Making a function pointer helps it get past that.
-
-MockMutableAsset (*pMakeNew)( const std::string &ref_, 
-                              const std::vector<SharedString>& inputs_,
-                              const khMetaData &meta,
-                              const MockAssetConfig &config) =
-  MakeNew<MockMutableAsset, MockAssetConfig>;
 TEST_F(AssetFactoryTest, MakeNewAlreadyExists) {
   // Make sure the std::string constructor for MockMutableAsset will have the same
   // subtype as the one we're trying to create in order to induce an exception.
-  MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
-  ASSERT_THROW(pMakeNew(testAssetRef, testInputs, testMeta, testConfig0), khException);
+  MockAssetImpl::testSubTypeToUseForStringConstructor = EXPECTED_SUBTYPE;
+  ASSERT_THROW(MakeNew<MockType>(testAssetRef, testInputs, testMeta, testConfig0), khException);
 }
 
 TEST_F(AssetFactoryTest, FindMake_New)
 {
-    MockMutableAsset handle = FindMake<MockMutableAsset, MockAssetConfig>
+    MutableMockAssetD handle = FindMake<MockType>
             (testAssetRef1, AssetDefs::Imagery, testInputs1, testMeta, MockAssetConfig(1));
     ASSERT_EQ(handle.impl->name, testAssetRef1);
     ASSERT_EQ(handle.impl->inputs, testInputs1);
     ASSERT_EQ(handle.impl->meta, testMeta);
     ASSERT_EQ(handle.impl->type, AssetDefs::Imagery);
     ASSERT_EQ(handle.impl->config, 1);
+    ASSERT_FALSE(handle.impl->modified);
 }
 
 TEST_F(AssetFactoryTest, FindMake_Exists)
 {
-    MockMutableAsset handle = FindMake<MockMutableAsset, MockAssetConfig>
+    MockAssetImpl::testSubTypeToUseForStringConstructor = EXPECTED_SUBTYPE;
+    MutableMockAssetD handle = FindMake<MockType>
             (testAssetRef, testInputs, testMeta, testConfig0);
     ASSERT_EQ(handle.impl->name, testAssetRef);
     ASSERT_EQ(handle.impl->inputs, testInputs);
     ASSERT_EQ(handle.impl->meta, testMeta);
     ASSERT_EQ(handle.impl->type, AssetDefs::Imagery);
     ASSERT_EQ(handle.impl->config, 0);
-    MockMutableAsset handle1 = FindMake<MockMutableAsset, MockAssetConfig>
-            (testAssetRef1, AssetDefs::Imagery, testMeta, testConfig0);
-    ASSERT_EQ(handle1.impl->name, testAssetRef1);
-    ASSERT_EQ(handle1.impl->meta, testMeta);
-    ASSERT_EQ(handle1.impl->type, AssetDefs::Imagery);
-    ASSERT_EQ(handle.impl->config, 0);
-    MockMutableAsset handle2 = FindMake<MockMutableAsset, MockAssetConfig>
+    ASSERT_TRUE(handle.impl->modified);
+    MutableMockAssetD handle2 = FindMake<MockType>
             (testAssetRef, AssetDefs::Imagery, testInputs, testMeta, testConfig0);
     ASSERT_EQ(handle.impl->name, testAssetRef);
     ASSERT_EQ(handle.impl->inputs, testInputs);
     ASSERT_EQ(handle.impl->meta, testMeta);
     ASSERT_EQ(handle.impl->type, AssetDefs::Imagery);
     ASSERT_EQ(handle.impl->config, 0);
+    ASSERT_TRUE(handle.impl->modified);
 }
 
 TEST_F(AssetFactoryTest, FindAndModifyPresent)
 {
-    MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
-    MockMutableAsset handle = FindAndModify<MockMutableAsset, MockAssetConfig>(
+    MockAssetImpl::testSubTypeToUseForStringConstructor = EXPECTED_SUBTYPE;
+    MutableMockAssetD handle = FindAndModify<MockType>(
                 testAssetRef, testInputs, testMeta, testConfig0);
     ASSERT_EQ(handle.impl->name, testAssetRef);
-    handle = FindAndModify<MockMutableAsset, MockAssetConfig>
-            (testAssetRef, AssetDefs::Imagery, testInputs, testMeta, testConfig0);
-    ASSERT_EQ(handle.impl->config, testConfig0);
-    handle = FindAndModify<MockMutableAsset, MockAssetConfig>
-            (testAssetRef, AssetDefs::Imagery, testMeta, testConfig0);
-    ASSERT_EQ(handle.impl->meta, testMeta);
-    ASSERT_EQ(handle.impl->type, AssetDefs::Imagery);
 }
-
-MockMutableAsset (*pFAMAbsent)( const std::string &ref_,
-                                const std::vector<SharedString>& inputs_,
-                                const khMetaData &meta,
-                                const MockAssetConfig &config) =
-  FindAndModify<MockMutableAsset, MockAssetConfig>;
 
 TEST_F(AssetFactoryTest, FindAndModifyAbsent)
 {
     try {
-        MockMutableAsset handle = FindAndModify<MockMutableAsset, MockAssetConfig>(
+        MutableMockAssetD handle = FindAndModify<MockType>(
                     string("not present"), testInputs, testMeta, testConfig0);
         FAIL() << "FindAndModify should have thrown an exception";
-    } catch (...) {/* should throw an exception because ref isn't present*/}
+    } catch (...) {
+      // should throw an exception because ref isn't present
+    }
 }
 
 TEST_F(AssetFactoryTest, FindMakeAndUpdateAssets)
 {
-    vector<AssetVersion> v;
-    MockMutableAssetVersion
+    vector<MockAssetVersionBase> v;
+    MutableMockAssetVersionD
             handle6_5 = FindMakeAndUpdateSubAsset //tests 6 paramater FMAUS, which calls FMAU 5 params
-                        <MockMutableAssetVersion, AssetVersion, MockAssetConfig>
+                        <MockType>
                         ("parent", "base", testInputs, testMeta, testConfig0, v),
             handle7_6 = FindMakeAndUpdateSubAsset // tests 7 parameter FMAUs, FMAU 6 params
-                        <MockMutableAssetVersion, AssetVersion, MockAssetConfig>
+                        <MockType>
                         ("parent1", AssetDefs::Imagery, "base1", testInputs1,
-                         testMeta, testConfig0, vector<AssetVersion>()), // tests remaining FMAU 4 params
-            handle_4  = FindMakeAndUpdate<MockMutableAssetVersion, AssetVersion, MockAssetConfig>
-                        ("parent1", AssetDefs::Imagery, testMeta, testConfig0);
+                         testMeta, testConfig0, vector<MockAssetVersionBase>());
     // want to just make sure paths reach MyUpdate method
-    ASSERT_EQ(handle6_5->needed, true);
-    ASSERT_EQ(handle7_6->needed, true);
-    ASSERT_EQ(handle_4->needed, true);
+    ASSERT_TRUE(handle6_5->updated);
+    ASSERT_TRUE(handle7_6->updated);
 }
 
 TEST_F(AssetFactoryTest, FiveParameterReuseOrMakeAndUpdateSubAsset)
@@ -493,18 +382,11 @@ TEST_F(AssetFactoryTest, FiveParameterReuseOrMakeAndUpdateSubAsset)
     // Simplest call, no previous assets, no exceptions
 
     resetStaticMockVariables();
-    MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
-    MockVersionDType::EXPECTED_REF = "reuse-parent/base.kia";
-    MockVersionDType::EXPECTED_TYPE = AssetDefs::Imagery;
-    MockVersionDType::EXPECTED_SUBTYPE = MockAssetImpl::EXPECTED_SUBTYPE;
-    MockAssetStorage::MOCK_VERSIONS={};
-    MockAssetVersionImpl::EXPECTED_STATE = AssetDefs::New;
+    MockAssetImpl::testSubTypeToUseForStringConstructor = EXPECTED_SUBTYPE;
 
-    MockMutableAssetVersion
+    MutableMockAssetVersionD
       handle =
-      ReuseOrMakeAndUpdateSubAsset<MockMutableAssetVersion,
-                                   MockAssetConfig,
-                                   MockVersionDType>
+      ReuseOrMakeAndUpdateSubAsset<MockType>
       (
        "reuse-parent",    // const std::string& parentName,
        AssetDefs::Imagery, // AssetDefs::Type type_,
@@ -512,27 +394,24 @@ TEST_F(AssetFactoryTest, FiveParameterReuseOrMakeAndUpdateSubAsset)
        testMeta,    // const khMetaData& meta_,
        testConfig0 // const ConfigType& config_)
        );
-    EXPECT_TRUE(handle->needed);
-    EXPECT_EQ(0, handle.impl->versions.size());
-    EXPECT_EQ(handle.impl->name, "reuse-parent/base.kia");
+    EXPECT_TRUE(handle->updated);
+    EXPECT_EQ("reuse-parent/base.kia?version=1", handle.impl->name.toString());
     EXPECT_EQ(testMeta, handle.impl->meta);
     EXPECT_EQ(AssetDefs::Imagery, handle.impl->type);
     EXPECT_EQ(AssetDefs::New, handle.impl->state);
   }
-  
+
   {
-    // Test with 2 offline versions and make sure NoLongerNeeded is called for both of them
+    // Test with 2 offline versions and make sure neither is used
 
     resetStaticMockVariables();
-    MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
-    MockVersionDType::EXPECTED_REF = "reuse-parent/base.kia";
-    MockAssetStorage::MOCK_VERSIONS={AssetVersion(MockVersionDType::EXPECTED_REF), AssetVersion(MockVersionDType::EXPECTED_REF)};
-    MockAssetVersionImpl::EXPECTED_STATE = AssetDefs::Offline;
-    MockVersionDType::NOT_NEEDED_COUNT = 0;
+    MockAssetImpl::testSubTypeToUseForStringConstructor = EXPECTED_SUBTYPE;
+    MockAssetImpl::mockVersions = {"reuse-parent/base.kia?version=1", "reuse-parent/base.kia?version=2"};
+    MockAssetVersionImpl::mockState = AssetDefs::Offline;
 
-    MockMutableAssetVersion handle = 
-      ReuseOrMakeAndUpdateSubAsset
-      <MockMutableAssetVersion, MockAssetConfig, MockVersionDType>
+    MutableMockAssetVersionD
+      handle =
+      ReuseOrMakeAndUpdateSubAsset<MockType>
       (
        "reuse-parent",    // const std::string& parentName,
        AssetDefs::Imagery, // AssetDefs::Type type_,
@@ -540,27 +419,27 @@ TEST_F(AssetFactoryTest, FiveParameterReuseOrMakeAndUpdateSubAsset)
        testMeta,    // const khMetaData& meta_,
        testConfig0 // const ConfigType& config_)
        );
-    // Verify this asset is needed and has two old versions
-    EXPECT_TRUE(handle->needed);
-    EXPECT_EQ(2, handle.impl->versions.size());
-    EXPECT_EQ(2, MockVersionDType::NOT_NEEDED_COUNT);
-    EXPECT_EQ(handle.impl->name, "reuse-parent/base.kia");
+    EXPECT_TRUE(handle->updated);
+    EXPECT_EQ("reuse-parent/base.kia?version=3", handle.impl->name.toString());
     EXPECT_EQ(testMeta, handle.impl->meta);
     EXPECT_EQ(AssetDefs::Imagery, handle.impl->type);
+    EXPECT_EQ(AssetDefs::Offline, handle.impl->state);
+    // Since this version was just created it shouldn't be marked permanent
+    EXPECT_FALSE(handle.impl->permanent);
   }
-  
-  {
-    // Two previous versions, and MockVersionDType constructor throws
-    resetStaticMockVariables();
-    MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
-    MockVersionDType::EXPECTED_REF = "reuse-parent/base.kia";
-    MockAssetStorage::MOCK_VERSIONS={AssetVersion(MockVersionDType::EXPECTED_REF), AssetVersion(MockVersionDType::EXPECTED_REF)};
-    MockVersionDType::THROW_IN_CONSTRUCTOR=true;
-    MockVersionDType::NOT_NEEDED_COUNT = 0;
 
-    MockMutableAssetVersion handle = 
-      ReuseOrMakeAndUpdateSubAsset
-      <MockMutableAssetVersion, MockAssetConfig, MockVersionDType>
+  {
+    // Two previous versions, and version constructor throws
+
+    resetStaticMockVariables();
+    MockAssetImpl::testSubTypeToUseForStringConstructor = EXPECTED_SUBTYPE;
+    MockAssetImpl::mockVersions = {"reuse-parent/base.kia?version=1", "reuse-parent/base.kia?version=2"};
+    MockAssetVersionImpl::mockState = AssetDefs::Offline;
+    MockAssetVersionImpl::throwInConstructor = true;
+
+    MutableMockAssetVersionD
+      handle =
+      ReuseOrMakeAndUpdateSubAsset<MockType>
       (
        "reuse-parent",    // const std::string& parentName,
        AssetDefs::Imagery, // AssetDefs::Type type_,
@@ -568,13 +447,38 @@ TEST_F(AssetFactoryTest, FiveParameterReuseOrMakeAndUpdateSubAsset)
        testMeta,    // const khMetaData& meta_,
        testConfig0 // const ConfigType& config_)
        );
-    // Verify this asset is needed and has two old versions
-    EXPECT_TRUE(handle->needed);
-    EXPECT_EQ(2, handle.impl->versions.size());
-    EXPECT_EQ(0, MockVersionDType::NOT_NEEDED_COUNT);
-    EXPECT_EQ(handle.impl->name, "reuse-parent/base.kia");
+    EXPECT_TRUE(handle->updated);
+    EXPECT_EQ("reuse-parent/base.kia?version=3", handle.impl->name.toString());
     EXPECT_EQ(testMeta, handle.impl->meta);
     EXPECT_EQ(AssetDefs::Imagery, handle.impl->type);
+    EXPECT_EQ(AssetDefs::Offline, handle.impl->state);
+    // Since this version was just created it shouldn't be marked permanent
+    EXPECT_FALSE(handle.impl->permanent);
+  }
+
+  {
+    // One previous version that matches
+
+    resetStaticMockVariables();
+    MockAssetImpl::testSubTypeToUseForStringConstructor = EXPECTED_SUBTYPE;
+    MockAssetImpl::mockVersions = {"reuse-parent/base.kia?version=1"};
+
+    MutableMockAssetVersionD
+      handle =
+      ReuseOrMakeAndUpdateSubAsset<MockType>
+      (
+       "reuse-parent",    // const std::string& parentName,
+       AssetDefs::Imagery, // AssetDefs::Type type_,
+       "base",      // const std::string& baseName ,
+       testMeta,    // const khMetaData& meta_,
+       testConfig0 // const ConfigType& config_)
+       );
+    EXPECT_FALSE(handle->updated);
+    EXPECT_EQ("reuse-parent/base.kia?version=1", handle.impl->name.toString());
+    EXPECT_EQ(testMeta, handle.impl->meta);
+    EXPECT_EQ(AssetDefs::Imagery, handle.impl->type);
+    EXPECT_EQ(AssetDefs::New, handle.impl->state);
+    EXPECT_TRUE(handle.impl->permanent);
   }
 }
 
@@ -585,7 +489,7 @@ TEST_F(AssetFactoryTest, SevenParameterReuseOrMakeAndUpdateSubAsset)
   // calls ReuseOrMakeAndUpdate
   // 311: ref_, type, inputs_, meta_, config_, cachedinputs_
 
-  vector<AssetVersion> cachedInputs;
+  vector<MockAssetVersionBase> cachedInputs;
 
   vector<SharedString> versionedInputs
     { "Input1?version=1", "Input2?version=4"};
@@ -594,17 +498,12 @@ TEST_F(AssetFactoryTest, SevenParameterReuseOrMakeAndUpdateSubAsset)
     // Simplest call, no previous assets, no exceptions
 
     resetStaticMockVariables();
-    MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
-    MockVersionDType::EXPECTED_REF = "reuse-parent/base.kia";
-    MockVersionDType::EXPECTED_TYPE = AssetDefs::Imagery;
-    MockVersionDType::EXPECTED_SUBTYPE = MockAssetImpl::EXPECTED_SUBTYPE;
-    MockAssetStorage::MOCK_VERSIONS={};
-    MockAssetVersionImpl::EXPECTED_STATE = AssetDefs::New;
+    MockAssetImpl::testSubTypeToUseForStringConstructor = EXPECTED_SUBTYPE;
 
-    MockMutableAssetVersion
+    MutableMockAssetVersionD
       handle =
       ReuseOrMakeAndUpdateSubAsset
-      <MockMutableAssetVersion, MockAssetConfig, MockVersionDType>
+      <MockType>
       (
        "reuse-parent",    // const std::string& parentName,
        AssetDefs::Imagery, // AssetDefs::Type type_,
@@ -615,27 +514,25 @@ TEST_F(AssetFactoryTest, SevenParameterReuseOrMakeAndUpdateSubAsset)
        cachedInputs
        );
 
-    EXPECT_TRUE(handle->needed);
-    EXPECT_EQ(0, handle.impl->versions.size());
-    EXPECT_EQ(handle.impl->name, "reuse-parent/base.kia");
+    EXPECT_TRUE(handle->updated);
+    EXPECT_EQ("reuse-parent/base.kia?version=1", handle.impl->name.toString());
     EXPECT_EQ(testMeta, handle.impl->meta);
     EXPECT_EQ(AssetDefs::Imagery, handle.impl->type);
     EXPECT_EQ(AssetDefs::New, handle.impl->state);
   }
-  
-  {
-    // Test with 2 offline versions and make sure NoLongerNeeded is called for both of them
+
+    {
+    // Test with 2 offline versions and make sure neither is used
 
     resetStaticMockVariables();
-    MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
-    MockVersionDType::EXPECTED_REF = "reuse-parent/base.kia";
-    MockAssetStorage::MOCK_VERSIONS={AssetVersion(MockVersionDType::EXPECTED_REF), AssetVersion(MockVersionDType::EXPECTED_REF)};
-    MockAssetVersionImpl::EXPECTED_STATE = AssetDefs::Offline;
-    MockVersionDType::NOT_NEEDED_COUNT = 0;
+    MockAssetImpl::testSubTypeToUseForStringConstructor = EXPECTED_SUBTYPE;
+    MockAssetImpl::mockVersions = {"reuse-parent/base.kia?version=1", "reuse-parent/base.kia?version=2"};
+    MockAssetVersionImpl::mockState = AssetDefs::Offline;
 
-    MockMutableAssetVersion handle = 
+    MutableMockAssetVersionD
+      handle =
       ReuseOrMakeAndUpdateSubAsset
-      <MockMutableAssetVersion, MockAssetConfig, MockVersionDType>
+      <MockType>
       (
        "reuse-parent",    // const std::string& parentName,
        AssetDefs::Imagery, // AssetDefs::Type type_,
@@ -645,28 +542,28 @@ TEST_F(AssetFactoryTest, SevenParameterReuseOrMakeAndUpdateSubAsset)
        testConfig0, // const ConfigType& config_)
        cachedInputs
        );
-
-    // Verify this asset is needed and has two old versions
-    EXPECT_TRUE(handle->needed);
-    EXPECT_EQ(2, handle.impl->versions.size());
-    EXPECT_EQ(2, MockVersionDType::NOT_NEEDED_COUNT);
-    EXPECT_EQ(handle.impl->name, "reuse-parent/base.kia");
+    EXPECT_TRUE(handle->updated);
+    EXPECT_EQ("reuse-parent/base.kia?version=3", handle.impl->name.toString());
     EXPECT_EQ(testMeta, handle.impl->meta);
     EXPECT_EQ(AssetDefs::Imagery, handle.impl->type);
+    EXPECT_EQ(AssetDefs::Offline, handle.impl->state);
+    // Since this version was just created it shouldn't be marked permanent
+    EXPECT_FALSE(handle.impl->permanent);
   }
 
   {
-    // Two previous versions, and MockVersionDType constructor throws
-    resetStaticMockVariables();
-    MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
-    MockVersionDType::EXPECTED_REF = "reuse-parent/base.kia";
-    MockAssetStorage::MOCK_VERSIONS={AssetVersion(MockVersionDType::EXPECTED_REF), AssetVersion(MockVersionDType::EXPECTED_REF)};
-    MockVersionDType::THROW_IN_CONSTRUCTOR=true;
-    MockVersionDType::NOT_NEEDED_COUNT = 0;
+    // Two previous versions, and version constructor throws
 
-    MockMutableAssetVersion handle = 
+    resetStaticMockVariables();
+    MockAssetImpl::testSubTypeToUseForStringConstructor = EXPECTED_SUBTYPE;
+    MockAssetImpl::mockVersions = {"reuse-parent/base.kia?version=1", "reuse-parent/base.kia?version=2"};
+    MockAssetVersionImpl::mockState = AssetDefs::Offline;
+    MockAssetVersionImpl::throwInConstructor = true;
+
+    MutableMockAssetVersionD
+      handle =
       ReuseOrMakeAndUpdateSubAsset
-      <MockMutableAssetVersion, MockAssetConfig, MockVersionDType>
+      <MockType>
       (
        "reuse-parent",    // const std::string& parentName,
        AssetDefs::Imagery, // AssetDefs::Type type_,
@@ -676,100 +573,175 @@ TEST_F(AssetFactoryTest, SevenParameterReuseOrMakeAndUpdateSubAsset)
        testConfig0, // const ConfigType& config_)
        cachedInputs
        );
-    // Verify this asset is needed and has two old versions
-    EXPECT_TRUE(handle->needed);
-    EXPECT_EQ(2, handle.impl->versions.size());
-    EXPECT_EQ(handle.impl->name, "reuse-parent/base.kia");
+    EXPECT_TRUE(handle->updated);
+    EXPECT_EQ("reuse-parent/base.kia?version=3", handle.impl->name.toString());
     EXPECT_EQ(testMeta, handle.impl->meta);
     EXPECT_EQ(AssetDefs::Imagery, handle.impl->type);
+    EXPECT_EQ(AssetDefs::Offline, handle.impl->state);
+    // Since this version was just created it shouldn't be marked permanent
+    EXPECT_FALSE(handle.impl->permanent);
   }
-}
-
-TEST_F(AssetFactoryTest, ReuseOrMakeAndUpdate)
-{
-  // ReuseOrMakeAndUpdate
-  // 366: ref_, type, meta_, config_, extraArgs
 
   {
-    // Simplest call, no previous assets, no exceptions
+    // One previous version that matches
 
     resetStaticMockVariables();
-    MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
-    MockVersionDType::EXPECTED_REF = "reuse-parent/base.kta";
-    MockVersionDType::EXPECTED_TYPE = AssetDefs::Terrain;
-    MockVersionDType::EXPECTED_SUBTYPE = MockAssetImpl::EXPECTED_SUBTYPE;
-    MockAssetStorage::MOCK_VERSIONS={};
-    MockAssetVersionImpl::EXPECTED_STATE = AssetDefs::New;
+    MockAssetImpl::testSubTypeToUseForStringConstructor = EXPECTED_SUBTYPE;
+    MockAssetImpl::mockVersions = {"reuse-parent/base.kia?version=1"};
 
-    MockMutableAssetVersion handle =
-      ReuseOrMakeAndUpdate
-      <MockMutableAssetVersion, MockAssetConfig, MockVersionDType, MockExtraArgs>
-      ("reuse-parent/base.kta",
-       AssetDefs::Terrain,
-       testMeta,
-       testConfig0,
-       MockExtraArgs());
-
-    EXPECT_TRUE(handle->needed);
-    EXPECT_EQ(0, handle.impl->versions.size());
-    EXPECT_EQ(handle.impl->name, "reuse-parent/base.kta");
+    MutableMockAssetVersionD
+      handle =
+      ReuseOrMakeAndUpdateSubAsset
+      <MockType>
+      (
+       "reuse-parent",    // const std::string& parentName,
+       AssetDefs::Imagery, // AssetDefs::Type type_,
+       "base",      // const std::string& baseName ,
+       vector<SharedString>(),
+       testMeta,    // const khMetaData& meta_,
+       testConfig0, // const ConfigType& config_)
+       cachedInputs
+       );
+    EXPECT_FALSE(handle->updated);
+    EXPECT_EQ("reuse-parent/base.kia?version=1", handle.impl->name.toString());
     EXPECT_EQ(testMeta, handle.impl->meta);
-    EXPECT_EQ(AssetDefs::Terrain, handle.impl->type);
+    EXPECT_EQ(AssetDefs::Imagery, handle.impl->type);
     EXPECT_EQ(AssetDefs::New, handle.impl->state);
-  }
-  
-  {
-    // Test with 2 offline versions and make sure NoLongerNeeded is called for both of them
-
-    resetStaticMockVariables();
-    MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
-    MockVersionDType::EXPECTED_REF = "reuse-parent/base.kta";
-    MockAssetStorage::MOCK_VERSIONS={AssetVersion(MockVersionDType::EXPECTED_REF), AssetVersion(MockVersionDType::EXPECTED_REF)};
-    MockAssetVersionImpl::EXPECTED_STATE = AssetDefs::Offline;
-    MockVersionDType::NOT_NEEDED_COUNT = 0;
-
-    MockMutableAssetVersion handle =
-      ReuseOrMakeAndUpdate
-      <MockMutableAssetVersion, MockAssetConfig, MockVersionDType, MockExtraArgs>
-      ("reuse-parent/base.kta",
-       AssetDefs::Terrain,
-       testMeta,
-       testConfig0,
-       MockExtraArgs());
-
-    // Verify this asset is needed and has two old versions
-    EXPECT_TRUE(handle->needed);
-    EXPECT_EQ(2, handle.impl->versions.size());
-    EXPECT_EQ(handle.impl->name, "reuse-parent/base.kta");
-    EXPECT_EQ(testMeta, handle.impl->meta);
-    EXPECT_EQ(AssetDefs::Terrain, handle.impl->type);
-  }
-
-  {
-    // Two previous versions, and MockVersionDType constructor throws
-    resetStaticMockVariables();
-    MockMutableAsset::testSubTypeToUseForStringConstructor = MockAssetImpl::EXPECTED_SUBTYPE;
-    MockVersionDType::EXPECTED_REF = "reuse-parent/base.kta";
-    MockAssetStorage::MOCK_VERSIONS={AssetVersion(MockVersionDType::EXPECTED_REF), AssetVersion(MockVersionDType::EXPECTED_REF)};
-    MockVersionDType::THROW_IN_CONSTRUCTOR=true;
-    MockVersionDType::NOT_NEEDED_COUNT = 0;
-
-    MockMutableAssetVersion handle =
-      ReuseOrMakeAndUpdate
-      <MockMutableAssetVersion, MockAssetConfig, MockVersionDType, MockExtraArgs>
-      ("reuse-parent/base.kta",
-       AssetDefs::Terrain,
-       testMeta,
-       testConfig0,
-       MockExtraArgs());
-    // Verify this asset is needed and has two old versions
-    EXPECT_TRUE(handle->needed);
-    EXPECT_EQ(2, handle.impl->versions.size());
-    EXPECT_EQ(handle.impl->name, "reuse-parent/base.kta");
-    EXPECT_EQ(testMeta, handle.impl->meta);
-    EXPECT_EQ(AssetDefs::Terrain, handle.impl->type);
+    EXPECT_TRUE(handle.impl->permanent);
   }
 }
+
+TEST_F(AssetFactoryTest, ReuseFourParamsNoPrevious) {
+  // No previous version
+  MutableMockAssetVersionD handle =
+    ReuseOrMakeAndUpdate
+    <MockType>
+    ("reuse-parent/base.kia",
+      AssetDefs::Imagery,
+      testMeta,
+      testConfig0);
+
+  EXPECT_TRUE(handle->updated);
+  EXPECT_EQ("reuse-parent/base.kia?version=1", handle.impl->name.toString());
+  EXPECT_EQ(testMeta, handle.impl->meta);
+  EXPECT_EQ(AssetDefs::Imagery, handle.impl->type);
+  EXPECT_EQ(AssetDefs::New, handle.impl->state);
+}
+
+TEST_F(AssetFactoryTest, ReuseFiveParamsNoVersions) {
+  // No previous versions
+  MockAssetImpl::testSubTypeToUseForStringConstructor = EXPECTED_SUBTYPE;
+
+  MutableMockAssetVersionD handle =
+    ReuseOrMakeAndUpdate
+    <MockType>
+    ("reuse-parent/base.kia",
+      AssetDefs::Imagery,
+      testMeta,
+      testConfig0,
+      MockExtraArgs());
+
+  EXPECT_TRUE(handle->updated);
+  EXPECT_EQ("reuse-parent/base.kia?version=1", handle.impl->name.toString());
+  EXPECT_EQ(testMeta, handle.impl->meta);
+  EXPECT_EQ(AssetDefs::Imagery, handle.impl->type);
+  EXPECT_EQ(AssetDefs::New, handle.impl->state);
+}
+
+TEST_F(AssetFactoryTest, ReuseFiveParamsNoPrevious) {
+  // Asset doesn't exist
+  MutableMockAssetVersionD handle =
+    ReuseOrMakeAndUpdate
+    <MockType>
+    ("reuse-parent/base.kia",
+      AssetDefs::Imagery,
+      testMeta,
+      testConfig0,
+      MockExtraArgs());
+
+  EXPECT_TRUE(handle->updated);
+  EXPECT_EQ("reuse-parent/base.kia?version=1", handle.impl->name.toString());
+  EXPECT_EQ(testMeta, handle.impl->meta);
+  EXPECT_EQ(AssetDefs::Imagery, handle.impl->type);
+  EXPECT_EQ(AssetDefs::New, handle.impl->state);
+}
+
+TEST_F(AssetFactoryTest, ReuseFiveParamsVersionMatches) {
+  // Previous version matches
+  MockAssetImpl::testSubTypeToUseForStringConstructor = EXPECTED_SUBTYPE;
+  MockAssetImpl::mockVersions = {"reuse-parent/base.kia?version=2"};
+
+  MutableMockAssetVersionD handle =
+    ReuseOrMakeAndUpdate
+    <MockType>
+    ("reuse-parent/base.kia",
+      AssetDefs::Imagery,
+      testMeta,
+      testConfig0,
+      MockExtraArgs());
+
+  EXPECT_FALSE(handle->updated);
+  EXPECT_TRUE(handle.impl->permanent);
+  EXPECT_EQ("reuse-parent/base.kia?version=2", handle.impl->name.toString());
+  EXPECT_EQ(testMeta, handle.impl->meta);
+  EXPECT_EQ(AssetDefs::Imagery, handle.impl->type);
+  EXPECT_EQ(AssetDefs::New, handle.impl->state);
+}
+
+TEST_F(AssetFactoryTest, ReuseFiveParamsVersionThrows) {
+  // Version constructor throws
+  MockAssetImpl::testSubTypeToUseForStringConstructor = EXPECTED_SUBTYPE;
+  MockAssetImpl::mockVersions = {"reuse-parent/base.kia?version=1"};
+  MockAssetVersionImpl::throwInConstructor = true;
+
+  MutableMockAssetVersionD handle =
+    ReuseOrMakeAndUpdate
+    <MockType>
+    ("reuse-parent/base.kia",
+      AssetDefs::Imagery,
+      testMeta,
+      testConfig0,
+      MockExtraArgs());
+
+  EXPECT_TRUE(handle->updated);
+  EXPECT_FALSE(handle.impl->permanent);
+  EXPECT_EQ("reuse-parent/base.kia?version=2", handle.impl->name.toString());
+  EXPECT_EQ(testMeta, handle.impl->meta);
+  EXPECT_EQ(AssetDefs::Imagery, handle.impl->type);
+  EXPECT_EQ(AssetDefs::New, handle.impl->state);
+}
+
+TEST_F(AssetFactoryTest, ReuseSixParams) {
+  // Asset doesn't exist
+  vector<SharedString> inputs = {"myref?version=1"};
+  vector<MockAssetVersionBase> cachedInputs;
+  for (auto inputRef : inputs) {
+    cachedInputs.emplace_back(inputRef);
+  }
+
+  MutableMockAssetVersionD handle =
+    ReuseOrMakeAndUpdate
+    <MockType>
+    ("reuse-parent/base.kia",
+      AssetDefs::Imagery,
+      inputs,
+      testMeta,
+      testConfig0,
+      cachedInputs);
+
+    EXPECT_TRUE(handle->updated);
+    EXPECT_EQ("reuse-parent/base.kia?version=1", handle.impl->name.toString());
+    EXPECT_EQ(testMeta, handle.impl->meta);
+    EXPECT_EQ(AssetDefs::Imagery, handle.impl->type);
+    EXPECT_EQ(AssetDefs::New, handle.impl->state);
+}
+
+TEST_F(AssetFactoryTest, FindThrow) {
+  MockAssetImpl::throwInConstructor = true;
+  MockAssetD handle = Find<MockType>("testref");
+  EXPECT_FALSE(handle);
+}
+
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc,argv);
   return RUN_ALL_TESTS();

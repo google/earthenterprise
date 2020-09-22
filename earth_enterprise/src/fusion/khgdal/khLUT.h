@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,7 +93,7 @@ class khLUT
   static const bool IsIdentity = false;
 
   void Parse(std::istream &in) {
-    uint numElem, minElem, maxElem;
+    unsigned int numElem, minElem, maxElem;
     in >> numElem >> minElem >> maxElem;
     if (!in) {
       throw khException(kh::tr("Unable to get num/min/max from LUT table"));
@@ -106,10 +107,10 @@ class khLUT
                         ("Invalid LUT table size %1. Expected %2.")
                         .arg(numElem).arg(khLUTHelper<In>::range));
     }
-    for (uint i = 0; i < minElem; ++i) {
+    for (unsigned int i = 0; i < minElem; ++i) {
       lut[i] = Out();   // Out() provides the '0' for the type
     }
-    for (uint i = maxElem + 1; i < numElem; ++i) {
+    for (unsigned int i = maxElem + 1; i < numElem; ++i) {
       lut[i] = Out();
     }
     while (minElem <= maxElem) {
@@ -172,7 +173,7 @@ class khLUT
   }
 
   khLUT(void) {
-    for (uint i = 0; i < khLUTHelper<In>::range; ++i) {
+    for (unsigned int i = 0; i < khLUTHelper<In>::range; ++i) {
       lut[i] = Out();
     }
   }
@@ -217,19 +218,19 @@ ParseAndStoreLUT(std::istream &in, GDALDataType outtype, std::string &storage)
 {
   switch (outtype) {
     case GDT_Byte: {
-      khLUT<In, uchar> lut;
+      khLUT<In, unsigned char> lut;
       lut.Parse(in);
       lut.Store(storage);
       break;
     }
     case GDT_UInt16: {
-      khLUT<In, uint16> lut;
+      khLUT<In, std::uint16_t> lut;
       lut.Parse(in);
       lut.Store(storage);
       break;
     }
     case GDT_UInt32: {
-      khLUT<In, uint32> lut;
+      khLUT<In, std::uint32_t> lut;
       lut.Parse(in);
       lut.Store(storage);
       break;
@@ -238,13 +239,13 @@ ParseAndStoreLUT(std::istream &in, GDALDataType outtype, std::string &storage)
       // the LUT string representation can't deal with signed output values
       // because use negative values to represent runlength compression
     case GDT_Int16: {
-      khLUT<In, int16> lut;
+      khLUT<In, std::int16_t> lut;
       lut.Parse(in);
       lut.Store(storage);
       break;
     }
     case GDT_Int32: {
-      khLUT<In, int32> lut;
+      khLUT<In, std::int32_t> lut;
       lut.Parse(in);
       lut.Store(storage);
       break;

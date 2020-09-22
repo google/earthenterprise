@@ -21,9 +21,6 @@ umask 002
 PUBLISHER_ROOT="/gevol/published_dbs"
 INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
 PGSQL="/var/opt/google/pgsql"
-PGSQL_DATA="/var/opt/google/pgsql/data"
-PGSQL_LOGS="/var/opt/google/pgsql/logs"
-PGSQL_PROGRAM="/opt/google/bin/pg_ctl"
 #-----------------------------------------------------------------
 
 #-----------------------------------------------------------------
@@ -72,23 +69,12 @@ main_postinstall()
 
     #11) done!
     service geserver start
+
 }
 
 #-----------------------------------------------------------------
 # Post-install Functions
 #-----------------------------------------------------------------
-
-run_as_user()
-{
-    local use_su=`su $1 -c 'echo -n 1' 2> /dev/null  || echo -n 0`
-    if [ "$use_su" -eq 1 ] ; then
-        >&2 echo "cd / ;su $1 -c \"$2\""
-        ( cd / ;su $1 -c "$2" )
-    else
-        >&2 echo "cd / ;sudo -u $1 $2"
-        ( cd / ;sudo -u $1 $2 )
-    fi
-} 
 
 configure_publish_root()
 {
@@ -160,7 +146,12 @@ fix_postinstall_filepermissions()
     # Tutorial and Share
     find /opt/google/share -type d -exec chmod 755 {} \;
     find /opt/google/share -type f -exec chmod 644 {} \;
-    chmod ugo+x /opt/google/share/searchexample/searchexample
+    if [ -f "${SEARCH_EX_SCRIPT}" ]; then
+      chmod 0755 "${SEARCH_EX_SCRIPT}"
+    fi
+    if [ -f /opt/google/share/tutorials/fusion/download_tutorial.sh ]; then
+      chmod ugo+x /opt/google/share/tutorials/fusion/download_tutorial.sh
+    fi
     chmod ugo+x /opt/google/share/geplaces/geplaces
     chmod ugo+x /opt/google/share/support/geecheck/geecheck.pl
     chmod ugo+x /opt/google/share/support/geecheck/convert_to_kml.pl
@@ -216,12 +207,18 @@ install_search_databases()
     # b) Install GEPlaces Database
     run_as_user "$GEPGUSER" "/opt/google/share/geplaces/geplaces create"
     
-    echo "# c) Install SearchExample Database "
     # c) Install SearchExample Database
-    run_as_user "$GEPGUSER" "/opt/google/share/searchexample/searchexample create"
+    install_searchexample_database
 
-    # d) Stop the PSQL Server
-    echo "# d) Stop the PSQL Server"
+    # d) Turn off examplesearch (will be turned on by Extra, if installed).
+    #  If 'Extra' already installed, don't delete
+    if [ ! -f "$SQLDIR/examplesearch_delete.sql" ]; then
+        echo "# d) Turn off examplesearch"
+        "$BASEINSTALLDIR_OPT/bin/psql" -q -d gesearch geuser -f "$SQLDIR/examplesearch_2delete.sql"
+    fi
+
+    # e) Stop the PSQL Server
+    echo "# e) Stop the PSQL Server"
     run_as_user "$GEPGUSER" "$PGSQL_PROGRAM -D $PGSQL_DATA stop"
 }
 

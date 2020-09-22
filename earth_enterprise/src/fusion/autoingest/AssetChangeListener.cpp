@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,7 +24,7 @@ AssetChangeListener::thread_main(void)
 {
   while (1) {
     FusionConnection::Handle conn;
-    const uint maxBlockSecs = 5;
+    const unsigned int maxBlockSecs = 5;
     int retryConnDelay      = 15;
     int delayRemaining      = 0;
     QString error;

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,7 +66,7 @@ class geEta2ProtoDbroot {
                         const int database_version);
 
   std::string etaContent_;  // Eta content in ascii.
-  uint16      epoch_;        // Epoch (database_version_).
+  std::uint16_t      epoch_;        // Epoch (database_version_).
   keyhole::DbRootV2Converter converter_;
 };
 

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +52,7 @@ class khCoverageMask {
   // set_present - whether build levels with all "not present" or all "present".
   khCoverageMask(const khInsetCoverage &coverage, bool set_present = false);
 
-  inline uint NumLevels() const { return (end_level_ - begin_level_); }
+  inline unsigned int NumLevels() const { return (end_level_ - begin_level_); }
 
   // Whether specific tile is completely covered by some polygon.
   // If asked for tileAddr outside the stored level range it will
@@ -62,7 +63,7 @@ class khCoverageMask {
                   std::set<int> *feature_id_set) const;
 
   // Sets covered for all elements of specified level.
-  inline void SetCovered(uint lev, bool set_covered) {
+  inline void SetCovered(unsigned int lev, bool set_covered) {
     assert(levels_[lev]);
     levels_[lev]->SetPresence(set_covered);
   }
@@ -74,17 +75,17 @@ class khCoverageMask {
   // Fill in coverage object with my coverage
   void PopulateCoverage(khInsetCoverage *cov) const;
 
-  bool ValidLevel(uint level) const {
+  bool ValidLevel(unsigned int level) const {
     return ((level >= begin_level_) && (level < end_level_));
   }
 
-  khExtents<uint32> LevelTileExtents(uint level) const;
+  khExtents<std::uint32_t> LevelTileExtents(unsigned int level) const;
 
  private:
-  uint begin_level_;
-  uint end_level_;
+  unsigned int begin_level_;
+  unsigned int end_level_;
   khDeleteGuard<khLevelPresenceMask> levels_[NumFusionLevels];
-  typedef std::multimap<uint64, int> TileAddrToFeatureIdMap;
+  typedef std::multimap<std::uint64_t, int> TileAddrToFeatureIdMap;
   TileAddrToFeatureIdMap tile_addr_to_feature_id_map;
 };  // class khCoverageMask
 

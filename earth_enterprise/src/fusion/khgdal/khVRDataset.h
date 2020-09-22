@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,11 +69,11 @@ class khVRDataset : public GDALDataset
   class TileInfo {
    public:
     std::string filename;
-    khExtents<uint32> extents;
+    khExtents<std::uint32_t> extents;
     std::vector<khSharedHandle<LUTType> > bandLuts;
 
     TileInfo(const std::string &fname,
-             const khExtents<uint32> &extents_,
+             const khExtents<std::uint32_t> &extents_,
              const std::vector<khSharedHandle<LUTType> > &luts) :
         filename(fname),
         extents(extents_),
@@ -80,11 +81,11 @@ class khVRDataset : public GDALDataset
   };
   std::vector<TileInfo> tiles;
   std::vector<bool> intersectsOthers;
-  khOffset<uint32> cropOrigin;
+  khOffset<std::uint32_t> cropOrigin;
 
 
   // stuff for supporting IRasterIO
-  std::vector<uchar> readBuf;
+  std::vector<unsigned char> readBuf;
   bool               wantTransparentFill;
   class CacheNode {
    public:
@@ -107,7 +108,7 @@ class khVRDataset : public GDALDataset
           dataset(o.dataset) { }
     bool operator==(const std::string &fname) const { return filename == fname;}
   };
-  static const uint maxCacheSize = 20;
+  static const unsigned int maxCacheSize = 20;
   std::list<CacheNode> datasets;
   // will throw on failure
   khGDALDataset FetchDataset(const std::string &filename);
@@ -115,14 +116,14 @@ class khVRDataset : public GDALDataset
   template <bool checkFill, class Dest>
   void TypedContribute(const khGDALBuffer   &destBuffer,
                        const khGDALBuffer   &srcBuffer,
-                       const khSize<uint32> &rasterSize,
+                       const khSize<std::uint32_t> &rasterSize,
                        const std::vector<khSharedHandle<LUTType> >&bandLuts,
                        const khGDALBuffer *alphaBuffer);
 
   template <bool checkFill>
   void Contribute(const khGDALBuffer   &destBuffer,
                   const khGDALBuffer   &srcBuffer,
-                  const khSize<uint32> &rasterSize,
+                  const khSize<std::uint32_t> &rasterSize,
                   const std::vector<khSharedHandle<LUTType> >&bandLuts,
                   const khGDALBuffer *alphaBuffer =0);
 

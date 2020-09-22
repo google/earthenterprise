@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -62,10 +63,10 @@ bool gstLayer::TryPopulateJSDisplayBundle(JSDisplayBundle *bundle,
   try {
     // presize the vector, we may only need to populate some, but they all need
     // to exist
-    uint numRules = NumFilters();
+    unsigned int numRules = NumFilters();
     bundle->displayJS.resize(numRules);
 
-    for (uint r = 0; r < numRules; ++r) {
+    for (unsigned int r = 0; r < numRules; ++r) {
       // This filter had no results, don't bother setting up JS on it's behalf
       // it won't have any record to format anyway
       gstFilter *filter = GetFilterById(r);
@@ -202,7 +203,7 @@ void gstLayer::SetName(const QString& n) {
 // sortid determines the order layers appear
 // in the client menu
 //
-void gstLayer::SetSortId(uint id) {
+void gstLayer::SetSortId(unsigned int id) {
   if (id != sort_id_) {
     sort_id_ = id;
   }
@@ -256,13 +257,13 @@ const char *gstLayer::GetAssetName() const {
 }
 
 
-gstFilter* gstLayer::GetFilterById(uint id) const {
+gstFilter* gstLayer::GetFilterById(unsigned int id) const {
   if (id > the_selector_->NumFilters())
     return NULL;
   return the_selector_->GetFilter(id);
 }
 
-uint gstLayer::NumFilters(void) const {
+unsigned int gstLayer::NumFilters(void) const {
   return the_selector_ ? the_selector_->NumFilters() : 0;
 }
 
@@ -303,7 +304,7 @@ void gstLayer::QueryThread() {
       if (soft_errors.NumSoftErrors() > 0) {
         QString error = kh::tr("Encountered %1 error(s) during query:")
                         .arg(soft_errors.NumSoftErrors());
-        for (uint i = 0; i < soft_errors.Errors().size(); ++i) {
+        for (unsigned int i = 0; i < soft_errors.Errors().size(); ++i) {
           error += "\n";
           error += QString::fromUtf8(soft_errors.Errors()[i].c_str());
         }
@@ -386,10 +387,10 @@ void gstLayer::GetSiteLabels(const gstDrawState& state,
   }
 
 
-  for (uint f = 0; f < the_selector_->NumFilters(); ++f) {
+  for (unsigned int f = 0; f < the_selector_->NumFilters(); ++f) {
     if (the_selector_->GetFilter(f)->Site().config.enabled) {
       if (!the_selector_->PrepareSiteLabels(
-          state.cullbox, static_cast<int32>(f), site_sets->at(current_site),
+          state.cullbox, static_cast<std::int32_t>(f), site_sets->at(current_site),
           jsbundle, state.IsMercatorPreview())) {
         site_sets->resize(0);
         return;
@@ -413,7 +414,7 @@ gstLayer::BuildSetMgr::BuildSetMgr(gstSelector* sel)
   // cycle through all filters, adding a build set for each
   // enabled feature and site
   //
-  for (uint f = 0; f < selector_->NumFilters(); ++f)
+  for (unsigned int f = 0; f < selector_->NumFilters(); ++f)
     AddFilter(f);
 }
 
@@ -471,7 +472,7 @@ void gstLayer::BuildSetMgr::AddFilter(int filter_id) {
     notify(NFY_NOTICE, "         %u x %u = %Zu cells (or %u per cell)",
            cov.extents.numRows(), cov.extents.numCols(),
            cov.NumTiles(),
-           static_cast<uint32>(filter->GetSelectListSize()/cov.NumTiles()));
+           static_cast<std::uint32_t>(filter->GetSelectListSize()/cov.NumTiles()));
   }
 }
 
@@ -481,7 +482,7 @@ void gstLayer::BuildSetMgr::Update(unsigned int lev, bool need_lod) {
   unsigned int max_build_level = 0;
 
   // examine all boxes to see what might need to get pushed down
-  for (uint s = 0; s < box_list_[lev].size(); ++s) {
+  for (unsigned int s = 0; s < box_list_[lev].size(); ++s) {
     unsigned int end = box_list_[lev][s].endlevel;
     max_end = std::max(end, max_end);
     min_end = std::min(end, min_end);
@@ -558,7 +559,7 @@ void gstLayer::BuildSetMgr::Update(unsigned int lev, bool need_lod) {
   // all build sets first
   if (lev < 9 && fadeout > (lev + 4)) {
     unsigned int ftmp = lev + 2;
-    for (uint s = 0; s < box_list_[lev].size(); ++s) {
+    for (unsigned int s = 0; s < box_list_[lev].size(); ++s) {
       const BuildSet& bs = box_list_[lev][s];
       if ((bs.endlevel > ftmp) && (bs.type == gstStreet ||
                                    bs.type == gstPolyLine)) {
@@ -591,7 +592,7 @@ void gstLayer::BuildSetMgr::Update(unsigned int lev, bool need_lod) {
 
   if (fadeout > lev) {
     // step through every buildset, pushing down if required
-    for (uint s = 0; s < box_list_[lev].size(); ++s) {
+    for (unsigned int s = 0; s < box_list_[lev].size(); ++s) {
       const BuildSet &bs = box_list_[lev][s];
       if (bs.endlevel > fadeout) {  // No need to push additional LODs past the
                                     // end level for any build set.
@@ -617,7 +618,7 @@ bool gstLayer::BuildSetMgr::DumpLODTable(const QString& path) {
   }
 
   QTextStream stream(&file);
-  for (uint lev = 0; lev < MAX_CLIENT_LEVEL; ++lev)
+  for (unsigned int lev = 0; lev < MAX_CLIENT_LEVEL; ++lev)
     stream << fadeout_levels_[lev] << endl;
   file.close();
 
@@ -674,7 +675,7 @@ bool gstLayer::ExportStreamPackets(geFilePool &file_pool,
 
     QTime level_timer;
 
-    for (uint lev = 0; lev <= MAX_CLIENT_LEVEL; ++lev) {
+    for (unsigned int lev = 0; lev <= MAX_CLIENT_LEVEL; ++lev) {
       if (!build_set_manager.IsLevelValid(lev))
         continue;
 
@@ -689,7 +690,7 @@ bool gstLayer::ExportStreamPackets(geFilePool &file_pool,
       // this estimate will progressively get more accurate as the box is
       // partitioned
       //
-      uint32 min_row, max_row, min_col, max_col;
+      std::uint32_t min_row, max_row, min_col, max_col;
       // TODO: use BoxLatLonToRowCol(), then it can be calculated
       // more precise, otherwise we get +1 col and +1 row in case of geode
       // bounding box coincide with quad boundary.
@@ -698,7 +699,7 @@ bool gstLayer::ExportStreamPackets(geFilePool &file_pool,
 
       int rows = max_row - min_row + 1;
       int cols = max_col - min_col + 1;
-      node_count_total_ = static_cast<int64>(rows) * static_cast<int64>(cols);
+      node_count_total_ = static_cast<std::int64_t>(rows) * static_cast<std::int64_t>(cols);
 
       notify(
           NFY_NOTICE,
@@ -715,7 +716,7 @@ bool gstLayer::ExportStreamPackets(geFilePool &file_pool,
           NFY_NOTICE,
           "#################################################################");
 
-      khExtents<uint32> tiles(RowColOrder, min_row, max_row + 1, min_col,
+      khExtents<std::uint32_t> tiles(RowColOrder, min_row, max_row + 1, min_col,
                               max_col + 1);
 
       bool need_lod = false;  // This will be set to true by ExportQuad
@@ -769,7 +770,7 @@ static gstJobStats::JobName JobNames[] = {
 gstJobStats* build_stats = new gstJobStats("Export Layer", JobNames, 8);
 #endif
 
-bool gstLayer::BuildRegion(const khExtents<uint32>& tiles, int level,
+bool gstLayer::BuildRegion(const khExtents<std::uint32_t>& tiles, int level,
                            std::vector<BuildSet>& buildset_list,
                            bool* need_lod,
                            JSDisplayBundle &jsbundle) {
@@ -816,7 +817,7 @@ bool gstLayer::BuildRegion(const khExtents<uint32>& tiles, int level,
                                                 jsbundle));
 
     // build all the minified levels up to level 0
-    // use int (instead of uint) to avoid wrap at 0
+    // use int (instead of unsigned int) to avoid wrap at 0
     for (int lev = level - 1; lev >= 0; --lev) {
       exporters.push_back(new MinifiedQuadExporter
                           (exporters.back(),
@@ -882,7 +883,7 @@ bool gstLayer::ExportQuad(const gstQuadAddress& quad_address,
   // ideally the buildset type should be VectorDefs::FeatureType
   // but since it needs to distinguish between streets and polylines
   // we have to keep the type as gstPrimType. This is very misleading though.
-  for (uint build_set_id = 0; build_set_id < exporter.numSets; ++build_set_id) {
+  for (unsigned int build_set_id = 0; build_set_id < exporter.numSets; ++build_set_id) {
     if (exporter.UsedSets()[build_set_id]) {
       const BuildSet& b = exporter.buildSets[build_set_id];
       bool build_set_has_geometry = false;
@@ -908,8 +909,8 @@ bool gstLayer::ExportQuad(const gstQuadAddress& quad_address,
                        quad_address.row(), quad_address.col()).
             MagnifiedToLevel(b.geoIndex->GetCoverage().level);
 
-        khExtents<uint32> toCheck =
-            khExtents<uint32>::Intersection(exportCov.extents,
+        khExtents<std::uint32_t> toCheck =
+            khExtents<std::uint32_t>::Intersection(exportCov.extents,
                                             b.geoIndex->GetCoverage().extents);
 
         b.geoIndex->PopulateBucket(toCheck, tmpBucket);
@@ -953,7 +954,7 @@ bool gstLayer::ExportQuad(const gstQuadAddress& quad_address,
                   quad_address.level(),
                   quad_address.row(),
                   quad_address.col(), b.filterId);
-          for (uint i = 0; i < bucket->size(); ++i) {
+          for (unsigned int i = 0; i < bucket->size(); ++i) {
             fprintf(stderr, "%u,",
                     b.geoIndex->GetFeatureList()[(*bucket)[i]].feature_id);
           }
@@ -1187,7 +1188,7 @@ void gstLayer::simplify3DPolygons(GeodeList *glist,
   std::vector<fusion_gst::psPolygon> polygons;
   polygons.reserve(glist_size);
 
-  for (uint i = 0; i < glist_size; ++i) {
+  for (unsigned int i = 0; i < glist_size; ++i) {
     fusion_gst::psPolygon polygon;
     const gstGeodeHandle &geodeh = (*glist)[i];
     if (geodeh->PrimType() == gstMultiPolygon ||
@@ -1198,7 +1199,7 @@ void gstLayer::simplify3DPolygons(GeodeList *glist,
     } else {
       const gstGeode *geode = static_cast<gstGeode*>(&(*geodeh));
       *vertices_removed += geode->VertexCount(0);
-      for (uint j = 0; j < geode->VertexCount(0); ++j) {
+      for (unsigned int j = 0; j < geode->VertexCount(0); ++j) {
         polygon.AddVertex(geode->GetVertex(0, j),
                           geode->IsInternalVertex(j));
       }
@@ -1211,13 +1212,13 @@ void gstLayer::simplify3DPolygons(GeodeList *glist,
 
   // re-create the glist with simplified polygons
   glist->clear();
-  for (uint i = 0; i < polygons.size(); ++i) {
+  for (unsigned int i = 0; i < polygons.size(); ++i) {
     const fusion_gst::psPolygon& polygon = polygons[i];
 
     gstGeodeHandle geodeh = gstGeodeImpl::Create(gstPolygon3D);
     gstGeode *geode = static_cast<gstGeode*>(&(*geodeh));
 
-    for (uint j = 0; j < polygon.v.size(); ++j) {
+    for (unsigned int j = 0; j < polygon.v.size(); ++j) {
       geode->AddVertex(polygon.v[j]);
       // TODO: edge flag is not propagated?!
       // geode->AddEdgeFlag(polygon.EdgeFlag(j));
@@ -1237,7 +1238,7 @@ void gstLayer::simplify3DPolygons(GeodeList *glist,
   *geodes_removed += static_cast<int>(delete_count);
 
   // TODO: calculate vertices_removed in PolygonSimplifier?!
-  for (uint i = 0; i < glist->size(); ++i) {
+  for (unsigned int i = 0; i < glist->size(); ++i) {
     const gstGeodeHandle &geodeh = (*glist)[i];
     const gstGeode *geode = static_cast<gstGeode*>(&(*geodeh));
     *vertices_removed -= geode->VertexCount(0);
@@ -1417,18 +1418,18 @@ double gstLayer::SimplifyFeatureSet(std::vector<gstFeatureSet>* featureSets,
 bool gstLayer::SimplifySiteSet(std::vector<gstSiteSet>* siteSets,
                                int level, int loopcount) {
   // need this to report build stats
-  uint beginSiteCount = 0;
-  uint endSiteCount = 0;
+  unsigned int beginSiteCount = 0;
+  unsigned int endSiteCount = 0;
 
   // each site in this set needs to be decimated
-  for (uint s = 0; s < siteSets->size(); ++s) {
+  for (unsigned int s = 0; s < siteSets->size(); ++s) {
     gstSiteSet& set = (*siteSets)[s];
     beginSiteCount += set.vlist.size();
 
     // simplify based on specific number of sites per quad
     std::vector<int> keep;
     if (set.site->config.decimationMode == SiteConfig::RepSubset) {
-      uint maxCount = uint(set.vlist.size() *set.site->config.decimationRatio);
+      unsigned int maxCount = uint(set.vlist.size() *set.site->config.decimationRatio);
       if (maxCount < set.site->config.minQuadCount) {
         maxCount = set.site->config.minQuadCount;
       } else if (maxCount > set.site->config.maxQuadCount) {
@@ -1450,7 +1451,7 @@ bool gstLayer::SimplifySiteSet(std::vector<gstSiteSet>* siteSets,
       // as required by the kmeans function
       std::vector<double> x;
       std::vector<double> y;
-      for (uint v = 0; v < set.vlist.size(); ++v) {
+      for (unsigned int v = 0; v < set.vlist.size(); ++v) {
         x.push_back(set.vlist[v].x);
         y.push_back(set.vlist[v].y);
       }
@@ -1478,7 +1479,7 @@ bool gstLayer::SimplifySiteSet(std::vector<gstSiteSet>* siteSets,
         ratio = .02;
       }
 
-      uint keepcount = uint(ratio * set.vlist.size());
+      unsigned int keepcount = uint(ratio * set.vlist.size());
 
       int dupCount = 0;
 
@@ -1550,7 +1551,7 @@ gstLevelState &gstLevelState::operator=(const gstLevelState& that) {
 }
 
 bool gstLevelState::isEmpty() const {
-  for (uint lev = 0; lev < NUM_LEVELS; ++lev) {
+  for (unsigned int lev = 0; lev < NUM_LEVELS; ++lev) {
     if (_states[lev] != 0)
       return false;
   }

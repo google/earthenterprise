@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 The Open GEE Contributors
+ * Copyright 2020 The Open GEE Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ class TestItem : public StorageManaged, public TestItemStorage {
   }
 
   // determine amount of memory used by TestItem
-  uint64 GetHeapUsage() const{
+  std::uint64_t GetHeapUsage() const{
     return ::GetHeapUsage(nextValue)
     + ::GetHeapUsage(fileName)
     + ::GetHeapUsage(isValidRef)
@@ -77,7 +77,7 @@ class TestItem : public StorageManaged, public TestItemStorage {
   }
 };
 
-inline uint64 GetHeapUsage(const TestItem &obj) {
+inline std::uint64_t GetHeapUsage(const TestItem &obj) {
   return obj.GetHeapUsage();
 }
 
@@ -125,7 +125,7 @@ class StorageManagerTest : public testing::Test {
  protected:
   StorageManager<TestItem> storageManager;
  public:
-  StorageManagerTest() : storageManager(CACHE_SIZE, false, 0, "test", unique_ptr<TestSerializer>(new TestSerializer())) {
+  StorageManagerTest() : storageManager(CACHE_SIZE, false, 0, 100, "test", unique_ptr<TestSerializer>(new TestSerializer())) {
     // Reset the static variables in TestItem
     TestItem::nextValue = 1;
     TestItem::fileName = "/dev/null"; // A file that exists
@@ -226,8 +226,8 @@ TEST_F(StorageManagerTest, PurgeCacheBasedOnMemoryUtilizationLegacy) {
   // the limit and determines if the cache memory usage reflects the size
   // of the items in cache.
   size_t i;
-  uint64 cacheItemSize = 0;
-  uint64 memoryLimit = 0;
+  std::uint64_t cacheItemSize = 0;
+  std::uint64_t memoryLimit = 0;
   for(i = 0; i < CACHE_SIZE + 2; ++i) {
     stringstream s;
     s << "asset" << i;
@@ -255,18 +255,15 @@ TEST_F(StorageManagerTest, PurgeCacheWithHandlesLegacy) {
       ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
     }
   }
-  
+
   // Now that we no longer have handles items can be removed from the cache.
-  // Remove an item but don't purge the cache
-  storageManager.NoLongerNeeded("asset0", false);
-  ASSERT_EQ(storageManager.CacheSize(), CACHE_SIZE+2) << "Unexpected number of items in cache";
-  ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
-  
-  // Remove an item and do purge the cache
-  storageManager.NoLongerNeeded("asset1");
+  // Add another asset and make sure the cache is purged.
+  Get<TestHandle>(storageManager, "asset999", false, true, false);
   ASSERT_EQ(storageManager.CacheSize(), CACHE_SIZE) << "Unexpected number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
-  storageManager.NoLongerNeeded("asset1");
+
+  // Add another item and make sure the cache is purged again.
+  Get<TestHandle>(storageManager, "asset998", false, true, false);
   ASSERT_EQ(storageManager.CacheSize(), CACHE_SIZE) << "Unexpected number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
 }
@@ -448,8 +445,8 @@ TEST_F(StorageManagerTest, PurgeCacheBasedOnMemoryUtilization) {
   // the limit and determines if the cache memory usage reflects the size
   // of the items in cache.
   size_t i;
-  uint64 cacheItemSize = 0;
-  uint64 memoryLimit = 0;
+  std::uint64_t cacheItemSize = 0;
+  std::uint64_t memoryLimit = 0;
   for(i = 0; i < CACHE_SIZE + 2; ++i) {
     stringstream s;
     s << "asset" << i;
@@ -477,18 +474,15 @@ TEST_F(StorageManagerTest, PurgeCacheWithHandles) {
       ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
     }
   }
-  
+
   // Now that we no longer have handles items can be removed from the cache.
-  // Remove an item but don't purge the cache
-  storageManager.NoLongerNeeded("asset0", false);
-  ASSERT_EQ(storageManager.CacheSize(), CACHE_SIZE+2) << "Unexpected number of items in cache";
-  ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
-  
-  // Remove an item and do purge the cache
-  storageManager.NoLongerNeeded("asset1");
+  // Add another asset and make sure the cache is purged.
+  storageManager.Get("asset999");
   ASSERT_EQ(storageManager.CacheSize(), CACHE_SIZE) << "Unexpected number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
-  storageManager.NoLongerNeeded("asset1");
+
+// Add another item and make sure the cache is purged again.
+  storageManager.Get("asset998");
   ASSERT_EQ(storageManager.CacheSize(), CACHE_SIZE) << "Unexpected number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
 }
@@ -578,6 +572,35 @@ TEST_F(StorageManagerTest, InvalidRef) {
   TestItem::isValidRef = false;
   auto asset = storageManager.Get("ref");
   ASSERT_FALSE(asset) << "Invalid refs should return empty handles";
+}
+
+TEST_F(StorageManagerTest, PruneLimiting) {
+  storageManager.SetPrunePercent(50);
+
+  PointerType newItem = make_shared<TestItem>();
+  storageManager.AddNew("newItem", newItem);
+  ASSERT_EQ(storageManager.CacheSize(), 1) << "Storage manager has wrong number of items in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has wrong number of items in dirty map";
+  // Make sure DetermineIfPrune() returns false since the size of the dirty map is not less than or equal to half the size of the cache.
+  ASSERT_EQ(storageManager.DetermineIfPrune(), false) << "Storage manager has determined wrong choice for pruning cache";
+  // Add items to the cache so the number of items exceeds the limit by two.
+  {
+    AssetHandle<const TestItem> handles[CACHE_SIZE+1];
+    for (size_t i = 0; i < CACHE_SIZE+1; ++i) {
+      stringstream s;
+      s << "anotherItem" << i;
+      handles[i] = storageManager.Get(s.str());
+      ASSERT_EQ(storageManager.CacheSize(), i+2) << "Unexpected number of items in cache";
+      ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has unexpected item in dirty map";
+    }
+  }
+  // Make sure DetermineIfPrune() returns true since the size of the dirty map is now less than half the size of the cache.
+  ASSERT_EQ(storageManager.DetermineIfPrune(), true) << "Storage manager has determined wrong choice for pruning cache";
+
+  // Add an item to the cache and make sure cache is pruned as well.
+  storageManager.Get("anotherItem999");
+  ASSERT_EQ(storageManager.CacheSize(), CACHE_SIZE) << "Unexpected number of items in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has unexpected item in dirty map";
 }
 
 int main(int argc, char **argv) {

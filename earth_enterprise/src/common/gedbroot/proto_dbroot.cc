@@ -60,10 +60,15 @@ geProtoDbroot::geProtoDbroot(const std::string &filename,
       }
 
       // decode in place in the proto buffer
-      etEncoder::Decode(&(*encrypted.mutable_dbroot_data())[0],
-                        encrypted.dbroot_data().size(),
-                        encrypted.encryption_data().data(),
-                        encrypted.encryption_data().size());
+      try {
+        etEncoder::Decode(&(*encrypted.mutable_dbroot_data())[0],
+                          encrypted.dbroot_data().size(),
+                          encrypted.encryption_data().data(),
+                          encrypted.encryption_data().size());
+      }
+      catch (khSimpleException e) {
+        throw khSimpleException("Error decoding dbroot: ") << e.what();
+      }
 
       // uncompress
       LittleEndianReadBuffer uncompressed;
@@ -194,7 +199,7 @@ std::string geProtoDbroot::ToEncodedString(void) const {
   return encrypted.SerializeAsString();
 }
 
-void geProtoDbroot::AddUniversalFusionConfig(uint32 epoch) {
+void geProtoDbroot::AddUniversalFusionConfig(std::uint32_t epoch) {
   // setup some basic stuff all fusion dbroots need
   mutable_database_version()->set_quadtree_version(epoch);
   keyhole::dbroot::EndSnippetProto *end_snippet = mutable_end_snippet();
@@ -208,7 +213,7 @@ void geProtoDbroot::AddUniversalFusionConfig(uint32 epoch) {
 
 
 keyhole::dbroot::StringEntryProto* geProtoDbroot::GetTranslationEntryById(
-    int32 id) {
+    std::int32_t id) {
   if (cached_string_table_.size() !=
       static_cast<size_t>(translation_entry_size())) {
     cached_string_table_.clear();

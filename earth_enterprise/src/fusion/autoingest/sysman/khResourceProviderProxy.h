@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,19 +34,19 @@ class khResourceProviderProxy
   friend class khResourceManager;
 
   class DeadJob {
-    uint32                   taskid;
+    std::uint32_t                   taskid;
     std::vector<Reservation> reservations;
    public:
-    DeadJob(uint32 tid, const std::vector<Reservation> &res)
+    DeadJob(std::uint32_t tid, const std::vector<Reservation> &res)
         : taskid(tid), reservations(res) { }
   };
 
-  typedef std::map<uint32, khTask*> ActiveMap;
-  typedef std::map<uint32, DeadJob> DeadMap;
+  typedef std::map<std::uint32_t, khTask*> ActiveMap;
+  typedef std::map<std::uint32_t, DeadJob> DeadMap;
 
   std::string host;
-  uint        numCPUs;
-  uint        usedCPUs;
+  unsigned int        numCPUs;
+  unsigned int        usedCPUs;
  public:
   ResourceProviderProxy providerProxy;
  private:
@@ -80,7 +81,7 @@ class khResourceProviderProxy
   std::string Host(void) const { return host; }
 
   void AddToTaskLists(TaskLists &ret);
-  uint AvailCPUs(void) const { return numCPUs - usedCPUs; }
+  unsigned int AvailCPUs(void) const { return numCPUs - usedCPUs; }
 
  private:
   // routines implemented in khResourceProviderProxyDispatch.cpp

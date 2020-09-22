@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,7 +31,7 @@
 
 class MercatorRasterProductAssetImpl {
  public:
-  uint              GetMaxLevel(void) const;
+  unsigned int              GetMaxLevel(void) const;
   virtual void      AfterLoad(void);
 
   // Return the acquisition date from the Raster product.
@@ -48,7 +49,7 @@ class MercatorRasterProductAssetImpl {
 class MercatorRasterProductAssetVersionImpl {
  public:
   khExtents<double> GetExtents(void) const;
-  uint              GetMaxLevel(void) const;
+  unsigned int              GetMaxLevel(void) const;
   virtual void      AfterLoad(void);
 
   // Return the acquisition date from the Raster product.
@@ -77,8 +78,8 @@ void GetProviderFromMeta(RasterProductConfig &config, khMetaData &meta) {
   }
 }
 
-uint GetMaxLevelFromMeta(const khMetaData& meta) {
-  uint prodMaxLevel = 0;
+unsigned int GetMaxLevelFromMeta(const khMetaData& meta) {
+  unsigned int prodMaxLevel = 0;
   FromString(meta.GetValue("maxlevel").toUtf8().constData(), prodMaxLevel);
   return prodMaxLevel;
 }
@@ -89,7 +90,7 @@ uint GetMaxLevelFromMeta(const khMetaData& meta) {
 uint
 MercatorRasterProductAssetImpl::GetMaxLevel(void) const
 {
-  uint prodMaxLevel = GetMaxLevelFromMeta(meta);
+  unsigned int prodMaxLevel = GetMaxLevelFromMeta(meta);
   if (!prodMaxLevel) {
     std::string msg { kh::tr("Unable to get maxlevel for ").toUtf8().constData() };
     msg += GetRef();
@@ -130,7 +131,7 @@ MercatorRasterProductAssetVersionImpl::GetExtents(void) const
 uint
 MercatorRasterProductAssetVersionImpl::GetMaxLevel(void) const
 {
-  uint prodMaxLevel = GetMaxLevelFromMeta(meta);
+  unsigned int prodMaxLevel = GetMaxLevelFromMeta(meta);
   if (!prodMaxLevel) {
     std::string msg { kh::tr("Unable to get maxlevel for ").toUtf8().constData() };
     msg += GetRef();
@@ -207,7 +208,7 @@ MercatorRasterProductAssetImplD::HandleImportRequest(
                                   kMercatorProductSubtype);
 
   // Get other info about our (first) source.
-  uint toplevel = 0;
+  unsigned int toplevel = 0;
   khFusionURI uri = req.sources.sources.front().uri;
   std::string srcfile;
   if (uri.Valid())
@@ -252,7 +253,7 @@ MercatorRasterProductAssetImplD::HandleImportRequest(
   // Modified FindMake to preserve fuid_resource_.
   // The inputs are empty for now. We'll fill them in below.
   MutableMercatorRasterProductAssetD asset =
-    Find<MercatorRasterProductAssetD>(assetname);
+    Find<MercatorRasterProductType>(assetname);
   if (asset) {
     // It is a regular (editing the same asset) or "SaveAs" re-writing request.
     // If this request is going to set the fuid_resource to 0, restore from
@@ -266,7 +267,7 @@ MercatorRasterProductAssetImplD::HandleImportRequest(
     asset->Modify(std::vector<SharedString>(), req.meta, product_config);
   } else {
     // It is a "Save" or "SaveAs" request when creating a new asset.
-    asset = AssetFactory::Make<MutableMercatorRasterProductAssetD, RasterProductConfig>(assetname,
+    asset = Make<MercatorRasterProductType>(assetname,
                                                std::vector<SharedString>(),
                                                req.meta, req.config);
   }
@@ -288,13 +289,11 @@ MercatorRasterProductAssetImplD::HandleImportRequest(
 
   // Get our source asset.
   MutableAssetVersionD source =
-      AssetFactory::ReuseOrMakeAndUpdateSubAsset
-      <MutableSourceAssetVersionD, SourceConfig, SourceAssetVersionD>
-      (asset->GetRef(),
-       asset->type,
-       "source",
-       khMetaData(),
-       req.sources);
+      ReuseOrMakeAndUpdateSubAsset<SourceType>(asset->GetRef(),
+                                                  asset->type,
+                                                  "source",
+                                                  khMetaData(),
+                                                  req.sources);
   asset->inputs.push_back(source->GetRef());
 
 
@@ -337,13 +336,11 @@ MercatorRasterProductAssetImplD::HandleImportRequest(
     SourceConfig sourceConfig;
     sourceConfig.AddFile(maskfile);
     MutableAssetVersionD masksource =
-        AssetFactory::ReuseOrMakeAndUpdateSubAsset
-        <MutableSourceAssetVersionD, SourceConfig, SourceAssetVersionD>
-        (asset->GetRef(),
-         asset->type,
-         "masksource",
-         khMetaData(),
-         sourceConfig);
+        ReuseOrMakeAndUpdateSubAsset<SourceType>(asset->GetRef(),
+                                                    asset->type,
+                                                    "masksource",
+                                                    khMetaData(),
+                                                    sourceConfig);
     asset->inputs.push_back(masksource->GetRef());
   }
 }
@@ -392,10 +389,10 @@ MercatorRasterProductAssetVersionImplD::UpdateChildren(void)
   AssetVersion source(guard->inputvers[0]);
   std::vector<std::string> srcfiles;
   source->GetOutputFilenames(srcfiles);
-  uint32 num_sources = srcfiles.size();
+  std::uint32_t num_sources = srcfiles.size();
 
   MutableCombinedRPAssetVersionD crp =
-    AssetFactory::FindMakeAndUpdateSubAsset<MutableCombinedRPAssetVersionD, AssetVersion>
+    FindMakeAndUpdateSubAsset<CombinedRPType>
                  (assetRef,
                   type,
                   kCombinedRPSubtype,

@@ -1,0 +1,385 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Importing and Exporting Style Templates &#8212; Google Earth Enterprise 5.3.6 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Specifying Search Fields for Individual Layers" href="searchFldsForLayers.html" />
+    <link rel="prev" title="Configuring Display Rules for Polygon Data" href="displayRulesPolygon.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="searchFldsForLayers.html" title="Specifying Search Fields for Individual Layers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="displayRulesPolygon.html" title="Configuring Display Rules for Polygon Data"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionTutorial.html" accesskey="U">Fusion Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="displayRulesPolygon.html"
+                        title="previous chapter">Configuring Display Rules for Polygon Data</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="searchFldsForLayers.html"
+                        title="next chapter">Specifying Search Fields for Individual Layers</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp3.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp3.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="importing-and-exporting-style-templates">
+<h1>Importing and Exporting Style Templates<a class="headerlink" href="#importing-and-exporting-style-templates" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>Often when you define the display rules for one set of data, you
+can use the same display rules (with minor tweaking) for
+other similar sets of data. In fact, to make your data look
+consistent across different layers, you probably want to use the
+same display rules. To do so, you can simply export the display rules as a style
+template then import that
+style template into other projects.</p>
+<p>For example, if a project contains two resources with different
+providers, and you want the data to look the same except for the
+copyright information, you can define the display rules for one
+resource, export the display rules as a template, and then import
+the template for the other resource. Another example is that you
+might want to define display rules for a small set of data and
+then use those same rules on a larger set of data. There are many
+more circumstances in which you can save time by using style
+templates.</p>
+<p>This lesson guides you through the process of defining display
+rules for a small set of data (the state of California) and then
+exporting those rules as a style template. In a subsequent
+exercise, you import that same style template for a larger set of
+data (the entire US). Because you already defined display rules for
+population by county in the state of California in the last
+chapter, most of the work is already done.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you have not completed <a class="reference internal" href="displayRulesPolygon.html"><span class="doc">Configuring Display Rules for Polygon Data</span></a>, you must complete
+at least the first three exercises in that lesson (<a class="reference internal" href="displayRulesPolygon.html#define-vector-polygon"><span class="std std-ref">Define and Build a Vector Resource Using Polygon
+Data</span></a>, <a class="reference internal" href="displayRulesPolygon.html#define-vector-project1"><span class="std std-ref">Define, Configure, and Build a Vector Project</span></a>, and
+<a class="reference internal" href="displayRulesPolygon.html#define-imagery-project1"><span class="std std-ref">Define and Build an Imagery Project</span></a>) before continuing
+with this lesson.</p>
+</div>
+<ul class="simple">
+<li><a class="reference internal" href="#export-display-rules"><span class="std std-ref">Export the Display Rules</span></a></li>
+<li><a class="reference internal" href="#import-template"><span class="std std-ref">Import the Template</span></a></li>
+<li><a class="reference internal" href="#define-build-push-publish-database"><span class="std std-ref">Define, Build, Push, and Publish a Database for Your
+Data</span></a></li>
+<li><a class="reference internal" href="#view-data-geec"><span class="std std-ref">View Your Data in Google Earth EC</span></a></li>
+</ul>
+<p class="rubric" id="export-display-rules">Export the Display Rules</p>
+<ol class="arabic">
+<li><p class="first">Select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu.</p>
+<p>The Asset Manager appears.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">/ASSET_ROOT/Projects/Vector</span></code> folder you
+created in <a class="reference internal" href="displayRulesPolygon.html"><span class="doc">Configuring Display Rules for Polygon Data</span></a>.</p>
+</li>
+<li><p class="first">Double-click <strong>CACountyPopulation</strong> to open it in the Vector
+Project Editor.</p>
+</li>
+<li><p class="first">Right-click <strong>CACountyPopulation</strong>, and select <strong>Export
+Configuration as Template</strong> from the context menu.</p>
+<p>The Export Template dialog appears.</p>
+</li>
+<li><p class="first">Navigate to your home folder, click <img alt="Create New Folder Icon" src="../../images/iconCreateNewFolder.png" /> to create a new folder, and name the new folder
+<strong>templates</strong>.</p>
+</li>
+<li><p class="first">Open the <strong>templates</strong> folder, enter <strong>Counties</strong> in the <strong>File name</strong>
+field, and click <strong>Save</strong>.</p>
+<p>You return to the Vector Project Editor.</p>
+</li>
+<li><p class="first">Close the Vector Project Editor.</p>
+</li>
+</ol>
+<p class="rubric" id="import-template">Import the Template</p>
+<p>This exercise walks you through importing the template you created
+in the previous exercise into a new project.</p>
+<p class="rubric" id="to-define-a-project-and-import-a-template">To define a project and import a template:</p>
+<ol class="arabic">
+<li><p class="first">Click <img alt="Vector Project Icon" src="../../images/iconProjVector.png" /> on the toolbar. The Vector Project
+Editor appears.</p>
+</li>
+<li><p class="first">Click <img alt="New Icon" src="../../images/icon_new1.gif" />. The Open dialog appears.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Resources/Vector</span></code> folder.</p>
+</li>
+<li><p class="first">Select <strong>USPopulation</strong> and click <strong>Open</strong>.</p>
+<p>The US Population resource appears in the Vector Project
+Editor.</p>
+</li>
+<li><p class="first">Right-click <strong>USPopulation</strong>, and select <strong>Import Configuration
+from Template</strong> from the context menu.</p>
+<p>The Import Template dialog appears.</p>
+</li>
+<li><p class="first">Navigate to the <strong>templates</strong> folder in your home folder (where you saved the template in the
+previous exercise).</p>
+</li>
+<li><p class="first">Select <strong>Counties.khdsp</strong>.</p>
+</li>
+<li><p class="first">Check the box next to <strong>Apply display rules</strong> but not <strong>Apply
+legend settings</strong> at the bottom of the dialog.</p>
+<p>If you check the box next to <strong>Apply legend settings</strong>, this
+step would apply all of the legend settings for the project
+from which the template was created to this project, including
+changing the name of the layer. (See Chapter 5 in the <em>Google
+Earth Enterprise Fusion Reference Guide</em> for details about
+these settings.)</p>
+</li>
+<li><p class="first">Click <strong>Open.</strong></p>
+<p>You return to the Vector Project Editor.</p>
+</li>
+<li><p class="first">Right-click <strong>USPopulation</strong>, and select <strong>Layer Properties</strong>
+from the context menu.</p>
+<p>The Layer Properties dialog appears.</p>
+</li>
+<li><p class="first">Click <strong>Off</strong> next to <strong>Initial State</strong> to change it to <strong>On</strong>.</p>
+<p>Changing the initial state to On results in the US Population
+layer being automatically checked (turned on) in Google Earth
+EC.</p>
+</li>
+<li><p class="first">Right-click <strong>USPopulation</strong>, and select <strong>Configure Display
+Rules</strong> from the context menu.</p>
+<p>The Configure Display Rules dialog appears.</p>
+</li>
+<li><p class="first">Set <strong>Max Resolution Level</strong> to <strong>14</strong> (or to 12 if you want to
+save some time).</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Leaving the level set at the default, <strong>18</strong>, results
+in unduly long processing time.</p>
+</div>
+</li>
+<li><p class="first">Click <strong>OK</strong>.</p>
+<p>You return to the Vector Project Editor.</p>
+</li>
+<li><p class="first">Select <strong>File &gt; Save</strong>.</p>
+<p>The Save dialog appears.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Vector</span></code>folder.</p>
+</li>
+<li><p class="first">Enter <strong>USPopulation</strong> as the name of your project.</p>
+</li>
+<li><p class="first">Click <strong>Save</strong>.</p>
+<p>The new project appears in the Asset Manager when you select
+<strong>ASSET_ROOT/Projects/Vector</strong> in the asset navigation tree.</p>
+</li>
+</ol>
+<p class="rubric" id="define-build-push-publish-database">Define, Build, Push, and Publish a Database for Your
+Data</p>
+<p>This exercise walks you through the process of defining, building,
+pushing, and publishing a database using the projects you created
+in the previous exercise.</p>
+<p class="rubric" id="to-define-build-and-push-a-database-2">To define, build, and push a database:</p>
+<ol class="arabic">
+<li><p class="first">Click <img alt="Database Editor Icon" src="../../images/iconDatabase.png" /> on the toolbar. The Database
+Editor appears with no projects selected.</p>
+</li>
+<li><p class="first">Click <img alt="New Icon" src="../../images/icon_new1.gif" /> next to Vector Project. The Open dialog
+appears.</p>
+</li>
+<li><p class="first">Navigate to <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Vector</span></code>.</p>
+</li>
+<li><p class="first">Select the <strong>USPopulation</strong> project, and click <strong>Open</strong>. The US
+Population project appears in the Database Editor next to
+Vector Project.</p>
+</li>
+<li><p class="first">Repeat steps <strong>2</strong> through <strong>4</strong> to add <strong>BlueMarble</strong> as the
+imagery project. You do not need to add a terrain project for
+this exercise.</p>
+<p>Both projects appear on the list.</p>
+</li>
+<li><p class="first">Select <strong>File &gt; Save</strong>.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Databases</span></code>folder.</p>
+</li>
+<li><p class="first">Enter <strong>USPopulation</strong> for the name of your database, and click
+<strong>Save</strong>.</p>
+<p>The name of the database appears on the right when you select
+the <code class="docutils literal notranslate"><span class="pre">/ASSET_ROOT/Databases</span></code>folder in the asset navigation
+tree.</p>
+</li>
+<li><p class="first">Right-click <strong>USPopulation</strong>, and select <strong>Build</strong> from the
+context menu.</p>
+<p>Google Earth Enterprise Fusion builds the database. The build
+process might take a little longer than it has for previous
+databases–it is building the project as well, since
+you did not build the project at the end of the previous
+exercise.</p>
+</li>
+<li><p class="first">Right-click <strong>USPopulation</strong>, and select <strong>Push</strong> from the
+context menu. The Push Database dialog appears.</p>
+</li>
+<li><p class="first">Select the server association on the <strong>Server Associations</strong>
+drop-down list. The most recent version of the selected
+database is the default selection on the <strong>Version</strong> drop-down
+list.</p>
+</li>
+<li><p class="first">Click <strong>Push</strong>.</p>
+<p>Google Earth Enterprise Fusion runs the process of pushing the
+database to the Google Earth Enterprise Server, and displays a
+success message when it is done.</p>
+</li>
+</ol>
+<p class="rubric">To publish a database:</p>
+<ol class="arabic">
+<li><p class="first">Access the Google Earth Enterprise Server Admin console in a
+browser window by going to <em>myserver.mydomainname</em>.com/admin,
+replacing <em>myserver</em> and <em>mydomainname</em> with your server and
+domain.</p>
+</li>
+<li><p class="first">Sign in with the default credentials:</p>
+<ul class="simple">
+<li>Username: geapacheuser</li>
+<li>Password: geeadmin</li>
+</ul>
+</li>
+<li><p class="first">Click <strong>Databases</strong> to display the list of databases pushed to
+the server.</p>
+</li>
+<li><p class="first">Check the box next to the database you want to publish. The
+<strong>Publish</strong> button on the Databases page appears.</p>
+</li>
+<li><p class="first">Click the <strong>Publish</strong> button. The Publish dialog appears.</p>
+</li>
+<li><p class="first">Specify a <strong>Publish point</strong>, where the database will be accessible
+from. For example, if you specify USPopulation-v001, it will be
+accessible from <em>myserver.mydomainname</em>.com/USPopulation-v001.</p>
+<p>To learn more about the options available in the Publish
+dialog, see</p>
+<ul class="simple">
+<li><a class="reference internal" href="../geeServerAdmin/publishDefaultDatabase.html"><span class="doc">Default database</span></a></li>
+<li><a class="reference internal" href="../geeServerAdmin/createSearchTabs.html"><span class="doc">Search Tabs</span></a></li>
+<li><a class="reference internal" href="../geeServerAdmin/manageSnippetProfiles.html"><span class="doc">Snippet profiles</span></a></li>
+<li><a class="reference internal" href="../geeServerAdmin/makeWMSRequests.html"><span class="doc">WMS</span></a></li>
+</ul>
+</li>
+<li><p class="first">Click <strong>Publish</strong>. The Databases page updates to indicate the
+published status of your database.</p>
+</li>
+</ol>
+<p class="rubric" id="view-data-geec">View Your Data in Google Earth EC</p>
+<p>This exercise walks you through the process of building,
+publishing, and viewing your database in Google Earth EC.</p>
+<p class="rubric" id="to-build-publish-and-view-your-database">To build, publish, and view your database:</p>
+<ol class="arabic">
+<li><p class="first">Launch Google Earth EC.</p>
+<p>The Select Server dialog appears.</p>
+</li>
+<li><p class="first">Enter or select the host name or IP address of your server in
+the <strong>Server</strong> field, and specify the Publish point that you
+selected when you published your map database. For example, if
+you specify USPopulation-v001, it will be accessible from
+<em>myserver.mydomainname</em>.com/USPopulation-v001.</p>
+</li>
+<li><p class="first">Click the <strong>Sign In</strong> button.</p>
+</li>
+</ol>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If you have logged in to this server with Google
+Earth EC previously, log out, clear your cache, and log back
+in. See <a class="reference internal" href="../googleEarthEnterpriseClient/clearGoogleEarthEC.html"><span class="doc">Clearing the Google Earth EC cache</span></a>.</p>
+</div>
+<ol class="arabic">
+<li><p class="first">Zoom in until you can see part of the US.</p>
+</li>
+<li><p class="first">Turn and tilt the Earth so you can see the <em>heights</em> of the
+counties.</p>
+<p>Google Earth EC displays all of the counties in the US labeled
+with the names of the counties. The closer you zoom in, the
+more spread out the counties look and the more county names you
+can see. As with the database you created in <a class="reference internal" href="displayRulesPolygon.html"><span class="doc">Configuring Display Rules for Polygon Data</span></a>,
+each county’s height indicates its relative population.
+Counties with higher populations are <em>taller</em>, and counties
+with lower populations are <em>shorter</em>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you cannot see the vector data, make sure the
+check box next to <strong>US Population</strong> in the Layers panel is
+checked.</p>
+</div>
+</li>
+</ol>
+<p>If this were a real project, you might decide that displaying the
+names of the counties makes this view too cluttered. You can go
+back into the vector project, modify the display rules, rebuild
+and publish the database, and then view your data in Google Earth
+EC again. Repeat this process as many times as required to get the
+result you want.</p>
+<p><img alt="View US Population Data" src="../../images/Page_79.png" /></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="searchFldsForLayers.html" title="Specifying Search Fields for Individual Layers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="displayRulesPolygon.html" title="Configuring Display Rules for Polygon Data"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionTutorial.html" >Fusion Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

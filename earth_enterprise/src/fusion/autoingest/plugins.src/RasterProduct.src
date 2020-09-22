@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,7 +33,7 @@
 
 class RasterProductAssetImpl {
  public:
-  uint              GetMaxLevel(void) const;
+  unsigned int              GetMaxLevel(void) const;
   virtual void      AfterLoad(void);
 
   // Return the acquisition date from the Raster product.
@@ -49,7 +50,7 @@ class RasterProductAssetImpl {
 class RasterProductAssetVersionImpl {
  public:
   khExtents<double> GetExtents(void) const;
-  uint              GetMaxLevel(void) const;
+  unsigned int              GetMaxLevel(void) const;
   virtual void      AfterLoad(void);
 
   // Return the acquisition date from the Raster product.
@@ -78,8 +79,8 @@ void GetProviderFromMeta(RasterProductConfig &config, khMetaData &meta) {
   }
 }
 
-uint GetMaxLevelFromMeta(const khMetaData& meta) {
-  uint prodMaxLevel = 0;
+unsigned int GetMaxLevelFromMeta(const khMetaData& meta) {
+  unsigned int prodMaxLevel = 0;
   FromString(meta.GetValue("maxlevel").toUtf8().constData(), prodMaxLevel);
   return prodMaxLevel;
 }
@@ -89,7 +90,7 @@ uint GetMaxLevelFromMeta(const khMetaData& meta) {
 uint
 RasterProductAssetImpl::GetMaxLevel(void) const
 {
-  uint prodMaxLevel = GetMaxLevelFromMeta(meta);
+  unsigned int prodMaxLevel = GetMaxLevelFromMeta(meta);
   if (!prodMaxLevel) {
     std::string msg { kh::tr("Unable to get maxlevel for ").toUtf8().constData() };
     msg += GetRef();
@@ -134,7 +135,7 @@ void RasterProductAssetVersionImpl::AfterLoad(void) {
 uint
 RasterProductAssetVersionImpl::GetMaxLevel(void) const
 {
-  uint prodMaxLevel = GetMaxLevelFromMeta(meta);
+  unsigned int prodMaxLevel = GetMaxLevelFromMeta(meta);
   if (!prodMaxLevel) {
     std::string msg { kh::tr("Unable to get maxlevel for ").toUtf8().constData() };
     msg += GetRef();
@@ -205,7 +206,7 @@ RasterProductAssetImplD::HandleImportRequest(
 
 
   // get other info about our (first) source
-  uint toplevel = 0;
+  unsigned int toplevel = 0;
   khFusionURI uri = req.sources.sources.front().uri;
   std::string srcfile;
   if (uri.Valid())
@@ -250,7 +251,7 @@ RasterProductAssetImplD::HandleImportRequest(
   // Modified FindMake to preserve fuid_resource_
   // inputs are empty for now. We'll fill them in below.
   MutableRasterProductAssetD asset =
-    Find<RasterProductAssetD>(assetname, req.type);
+    Find<RasterProductType>(assetname, req.type);
 
   if (asset) {
     // It is a regular (editing the same asset) or "SaveAs" re-writing request.
@@ -264,7 +265,7 @@ RasterProductAssetImplD::HandleImportRequest(
     asset->Modify(std::vector<SharedString>(), req.meta, product_config);
   } else {
     // It is a "Save" or "SaveAs" request when creating a new asset.
-    asset = AssetFactory::Make<MutableRasterProductAssetD, RasterProductConfig>(assetname, req.type,
+    asset = Make<RasterProductType>(assetname, req.type,
                                        std::vector<SharedString>(),
                                        req.meta, req.config);
   }
@@ -286,13 +287,11 @@ RasterProductAssetImplD::HandleImportRequest(
 
   // Get our source asset.
   MutableAssetVersionD source =
-      AssetFactory::ReuseOrMakeAndUpdateSubAsset
-        <MutableSourceAssetVersionD, SourceConfig, SourceAssetVersionD>
-        (asset->GetRef(),
-        asset->type,
-        "source",
-        khMetaData(),
-        req.sources);
+      ReuseOrMakeAndUpdateSubAsset<SourceType>(asset->GetRef(),
+                                                  asset->type,
+                                                  "source",
+                                                  khMetaData(),
+                                                  req.sources);
 
   asset->inputs.push_back(source->GetRef());
 
@@ -335,13 +334,11 @@ RasterProductAssetImplD::HandleImportRequest(
     SourceConfig sourceConfig;
     sourceConfig.AddFile(maskfile);
     MutableAssetVersionD masksource =
-        AssetFactory::ReuseOrMakeAndUpdateSubAsset
-        <MutableSourceAssetVersionD, SourceConfig, SourceAssetVersionD>
-        (asset->GetRef(),
-         asset->type,
-         "masksource",
-         khMetaData(),
-         sourceConfig);
+        ReuseOrMakeAndUpdateSubAsset<SourceType>(asset->GetRef(),
+                                                    asset->type,
+                                                    "masksource",
+                                                    khMetaData(),
+                                                    sourceConfig);
     asset->inputs.push_back(masksource->GetRef());
   }
 }
@@ -390,10 +387,10 @@ RasterProductAssetVersionImplD::UpdateChildren(void)
   AssetVersion source(guard->inputvers[0]);
   std::vector<std::string> srcfiles;
   source->GetOutputFilenames(srcfiles);
-  uint32 num_sources = srcfiles.size();
+  std::uint32_t num_sources = srcfiles.size();
 
   MutableCombinedRPAssetVersionD crp =
-    AssetFactory::FindMakeAndUpdateSubAsset<MutableCombinedRPAssetVersionD, AssetVersion>
+    FindMakeAndUpdateSubAsset<CombinedRPType>
                   (assetRef,
                    type,
                    kCombinedRPSubtype,

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,7 +70,7 @@ class geFilePool {
    public:
     Reader(geFilePool &pool_, const std::string &fname_);
     ~Reader(void);
-    uint64 Filesize(void) const;
+    std::uint64_t Filesize(void) const;
 
     // will throw if unable to read all bytes
     void Pread(void *buffer, size_t size, off64_t offset);
@@ -171,7 +172,7 @@ class geFilePool {
   ~geFilePool(void);
 
   // Non thread safe version for testing purposes.
-  uint MaxFdsUsed(void) const {  return maxFdsUsed; }
+  unsigned int MaxFdsUsed(void) const {  return maxFdsUsed; }
 
   // For debugging purposes
   void DumpState(bool print_all_filerefs);
@@ -184,9 +185,9 @@ class geFilePool {
   friend class FileReferenceImpl;
   friend class LockingFileReference;
 
-  const uint maxNumFds;
-  uint numFdsUsed;
-  mutable uint maxFdsUsed;
+  const unsigned int maxNumFds;
+  unsigned int numFdsUsed;
+  mutable unsigned int maxFdsUsed;
   mutable khMutex mutex;
   khCondVar condvar;
 

@@ -231,7 +231,7 @@ env.test('AssetSerializer_unittest',
 
 env.test('AssetFactory_unittest',
          'AssetFactory_unittest.cpp',
-         LIBS=['gecommon', 'gtest', 'geautoingest', 'QtCore','QtGui', 'xerces-c'])
+         LIBS=['gecommon', 'gtest', 'geautoingest', 'geutil', 'QtCore', 'QtGui', 'xerces-c'])
 
 env.test('JsUtils_unittest',
          'JsUtils_unittest.cpp',

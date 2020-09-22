@@ -68,7 +68,7 @@ Usage: $prog_name [-version=VERSION] [-server] [-date=DATE] [-log] [-env] [-cpu]
 EOF
 
 # Parse the command line arguments.
-my $version = "5.3.5";
+my $version = "5.3.6";
 my $server = 0;
 my $show_logs = 0;
 my $show_cpu = 0;
@@ -135,6 +135,8 @@ my %version_table = ( "3" => ["1", 1],
                       "5.3.3" => ["1", 0],
                       "5.3.4" => ["1", 0],
                       "5.3.5" => ["1", 0],
+                      "5.3.6" => ["1", 0],
+                      "5.3.7" => ["1", 0],
                       );
 my @known_versions = keys(%version_table);
 

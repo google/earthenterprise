@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 #include "khEndian.h"
-#include "khTypes.h"
+#include <cstdint>
 
 
 // Terrain mesh
@@ -45,7 +45,7 @@ inline std::ostream &operator<<(std::ostream &strm, const MeshVertex &v) {
 }
 
 struct MeshFace {
-  uint16 a, b, c;
+  std::uint16_t a, b, c;
 
   void Pull(EndianReadBuffer &buf) {
     buf >> a >> b >> c;
@@ -73,14 +73,14 @@ class Mesh {
     faces_.clear();
     vertices_.clear();
   }
-  inline int32 source_size() const { return source_size_; }
+  inline std::int32_t source_size() const { return source_size_; }
   inline double ox() const { return ox_; }
   inline double oy() const { return oy_; }
   inline double dx() const { return dx_; }
   inline double dy() const { return dy_; }
-  inline int32 num_points() const { return num_points_; }
-  inline int32 num_faces() const { return num_faces_; }
-  inline int32 level() const { return level_; }
+  inline std::int32_t num_points() const { return num_points_; }
+  inline std::int32_t num_faces() const { return num_faces_; }
+  inline std::int32_t level() const { return level_; }
   inline const MeshVertex &Vertex(size_t i) { return vertices_.at(i); }
   inline const MeshFace &Face(size_t i) { return faces_.at(i); }
 
@@ -138,14 +138,14 @@ class Mesh {
     }
   }
  private:
-  int32 source_size_;
+  std::int32_t source_size_;
   double ox_;
   double oy_;
   double dx_;
   double dy_;
-  int32 num_points_;
-  int32 num_faces_;
-  int32 level_;
+  std::int32_t num_points_;
+  std::int32_t num_faces_;
+  std::int32_t level_;
   std::vector<MeshVertex> vertices_;
   std::vector<MeshFace> faces_;
 };

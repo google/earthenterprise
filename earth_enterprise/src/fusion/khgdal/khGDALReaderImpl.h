@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +29,8 @@
 
 template <class SrcPixelType, class TileType>
 void
-khGDALReader::TypedRead(const khExtents<uint32> &srcExtents, bool topToBottom,
-                        TileType &tile, const khOffset<uint32> &tileOffset)
+khGDALReader::TypedRead(const khExtents<std::uint32_t> &srcExtents, bool topToBottom,
+                        TileType &tile, const khOffset<std::uint32_t> &tileOffset)
 {
   assert(storage == khTypes::Helper<SrcPixelType>::Storage);
   // Make sure SrcPixelType has a min and max
@@ -40,37 +41,37 @@ khGDALReader::TypedRead(const khExtents<uint32> &srcExtents, bool topToBottom,
   }
 
   // prep buffer
-  const uint pixelsPerBand = srcExtents.width() * srcExtents.height();
-  const uint bandSize = (pixelsPerBand * sizeof(SrcPixelType));
+  const unsigned int pixelsPerBand = srcExtents.width() * srcExtents.height();
+  const unsigned int bandSize = (pixelsPerBand * sizeof(SrcPixelType));
   rawReadBuf.reserve(numBands * bandSize);
 
   // Fill buffer with NoData or zero
   SrcPixelType no_data = GetNoDataOrZero<SrcPixelType>();
-  for (uint i = 0; i < pixelsPerBand * numBands; ++i) {
+  for (unsigned int i = 0; i < pixelsPerBand * numBands; ++i) {
     ((SrcPixelType *) (&rawReadBuf[0]))[i] = no_data;
   }
 
   // read pixels from all bands into rawReadBuf
   FetchPixels(srcExtents);
 
-  const uint32 width  = srcExtents.width();
-  const uint32 height = srcExtents.height();
-  const uint32 rowOff = tileOffset.row();
-  const uint32 colOff = tileOffset.col();
+  const std::uint32_t width  = srcExtents.width();
+  const std::uint32_t height = srcExtents.height();
+  const std::uint32_t rowOff = tileOffset.row();
+  const std::uint32_t colOff = tileOffset.col();
   if (palette) {
     SrcPixelType *bandBuf = (SrcPixelType*)&rawReadBuf[0];
-    for (uint row = 0; row < height; ++row) {
-      const uint32 rbase = (topToBottom ? (height - row - 1) : row)
+    for (unsigned int row = 0; row < height; ++row) {
+      const std::uint32_t rbase = (topToBottom ? (height - row - 1) : row)
                            * width;
-      const uint32 tbase = ((row + rowOff) *
+      const std::uint32_t tbase = ((row + rowOff) *
                             TileType::TileWidth) + colOff;
-      for (uint col = 0; col < width; ++col) {
-        uint32 rpos = rbase + col;
-        uint32 tpos = tbase + col;
-        if ((uint)bandBuf[rpos] < paletteSize) {
+      for (unsigned int col = 0; col < width; ++col) {
+        std::uint32_t rpos = rbase + col;
+        std::uint32_t tpos = tbase + col;
+        if ((unsigned int)bandBuf[rpos] < paletteSize) {
           PaletteAssigner<typename TileType::PixelType,
             TileType::NumComp>::Assign
-            (tile.bufs, tpos, palette[(uint)bandBuf[rpos]]);
+            (tile.bufs, tpos, palette[(unsigned int)bandBuf[rpos]]);
         } else {
           ZeroAssigner<typename TileType::PixelType,
             TileType::NumComp>::Assign(tile.bufs, tpos);
@@ -82,17 +83,17 @@ khGDALReader::TypedRead(const khExtents<uint32> &srcExtents, bool topToBottom,
 
     // copy the read bands into the tile, flipping and clamping as
     // necessary
-    for (uint b = 0; b < numBands; ++b) {
+    for (unsigned int b = 0; b < numBands; ++b) {
       SrcPixelType *bandBuf =
         (SrcPixelType*)(&rawReadBuf[0] + b * bandSize);
-      for (uint row = 0; row < height; ++row) {
-        const uint32 rbase = (topToBottom ? (height - row - 1) : row)
+      for (unsigned int row = 0; row < height; ++row) {
+        const std::uint32_t rbase = (topToBottom ? (height - row - 1) : row)
                              * width;
-        const uint32 tbase = ((row + rowOff) *
+        const std::uint32_t tbase = ((row + rowOff) *
                               TileType::TileWidth) + colOff;
-        for (uint col = 0; col < width; ++col) {
-          uint32 rpos = rbase + col;
-          uint32 tpos = tbase + col;
+        for (unsigned int col = 0; col < width; ++col) {
+          std::uint32_t rpos = rbase + col;
+          std::uint32_t tpos = tbase + col;
           tile.bufs[b][tpos] =
             ClampRange<typename TileType::PixelType>
             (bandBuf[rpos]);
@@ -101,7 +102,7 @@ khGDALReader::TypedRead(const khExtents<uint32> &srcExtents, bool topToBottom,
     }
 
     // replicate bands if necessary
-    for (uint b = numBands; b < TileType::NumComp; ++b) {
+    for (unsigned int b = numBands; b < TileType::NumComp; ++b) {
       notify(NFY_DEBUG, "     replicating band %d", b);
       memcpy(tile.bufs[b], tile.bufs[0], TileType::BandBufSize);
     }

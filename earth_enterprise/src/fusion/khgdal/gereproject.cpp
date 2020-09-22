@@ -642,7 +642,7 @@ GDALWarpCreateOutput( GDALDatasetH hSrcDS, const char *pszFilename,
     double maxX = adfDstGeoTransform[0] + adfDstGeoTransform[1] * nPixels;
     double maxY = adfDstGeoTransform[3];
     double minY = adfDstGeoTransform[3] + adfDstGeoTransform[5] * nLines;
-    uint level = RasterProductTilespaceFlat
+    unsigned int level = RasterProductTilespaceFlat
                  .LevelFromDegPixelSize(adfDstGeoTransform[1]);
     if (level != RasterProductTilespaceFlat
         .LevelFromDegPixelSize(-adfDstGeoTransform[5])) {

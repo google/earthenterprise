@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -463,7 +464,7 @@ ComboController::ComboController(WidgetControllerManager &manager,
 {
   // populate the combo
   combo->clear();
-  for (uint i = 0; i < contents.size(); ++i) {
+  for (unsigned int i = 0; i < contents.size(); ++i) {
     combo->insertItem(contents[i].second);
   }
 
@@ -476,7 +477,7 @@ void
 ComboController::MySyncToWidgetsImpl(void)
 {
   // Find which entry is in the config
-  uint pos = 0;
+  unsigned int pos = 0;
   for (; pos < contents.size(); ++pos) {
     if (*config == contents[pos].first)
       break;

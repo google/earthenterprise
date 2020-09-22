@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,6 +48,7 @@ class AssetImpl : public AssetStorage, public StorageManaged {
   AssetImpl& operator=(const AssetImpl&&) = delete;
   public:
     using Base = AssetStorage;
+    static std::string GetPlaceholderAssetRegistryKey() { return "SourceAssetVersion"; }
 
  protected:
   // used by my intermediate derived classes since their calls to
@@ -79,7 +81,7 @@ class AssetImpl : public AssetStorage, public StorageManaged {
   const SharedString & GetRef(void) const { return name; }
 
   // determine amount of memory used by an AssetImpl
-  virtual uint64 GetHeapUsage() const {
+  virtual std::uint64_t GetHeapUsage() const {
     return ::GetHeapUsage(name)
     + ::GetHeapUsage(type)
     + ::GetHeapUsage(subtype)
@@ -118,7 +120,7 @@ inline StorageManager<AssetImpl>&
 Asset::storageManager(void)
 {
   static StorageManager<AssetImpl> storageManager(
-      MiscConfig::Instance().AssetCacheSize, MiscConfig::Instance().LimitMemoryUtilization, MiscConfig::Instance().MaxAssetCacheMemorySize, "asset");
+      MiscConfig::Instance().AssetCacheSize, MiscConfig::Instance().LimitMemoryUtilization, MiscConfig::Instance().MaxAssetCacheMemorySize, MiscConfig::Instance().PrunePercentage, "asset");
   return storageManager;
 }
 
@@ -142,7 +144,7 @@ Asset::Valid(void) const
   }
 }
 
-inline uint64 GetHeapUsage(const AssetImpl &asset) {
+inline std::uint64_t GetHeapUsage(const AssetImpl &asset) {
   return asset.GetHeapUsage();
 }
 

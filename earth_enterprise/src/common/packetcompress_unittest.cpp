@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,10 +19,10 @@
 // Retrofitted back to Fusion by Mike Goss.
 //
 
+#include <cstdint>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <khTypes.h>
 #include <khEndian.h>
 #include <UnitTest.h>
 #include "packetcompress.h"
@@ -96,7 +97,7 @@ class PacketCompressUnitTest : public UnitTest<PacketCompressUnitTest> {
     TestAssert(KhPktCompress(kString, bufsize, &output, &outputsize, true));
     // compressed size should be smaller
     TestAssert(outputsize-kPacketCompressHdrSize <= bufsize);
-    uint32 *hdr = reinterpret_cast<uint32*>(output);
+    std::uint32_t *hdr = reinterpret_cast<std::uint32_t*>(output);
     TestAssert(hdr[1] == bufsize);
     // Now decompress
     LittleEndianReadBuffer decompressed;

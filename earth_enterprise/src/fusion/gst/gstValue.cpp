@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -84,7 +85,7 @@ std::string ExtractString(const char* ibuf, int sz, bool* check_highbit) {
     *check_highbit = false;
     for (std::string::iterator pos = out_str.begin();
          pos != out_str.end(); ++pos) {
-      if (static_cast<uchar>(*pos) > 127) {
+      if (static_cast<unsigned char>(*pos) > 127) {
         *check_highbit = true;
         break;
       }
@@ -123,19 +124,19 @@ int StringToInt(const char* ibuf, int sz) {
   return strtol(ExtractString(ibuf, sz).c_str(), NULL, 0);
 }
 
-uint StringToUInt(const char* ibuf, int sz) {
+unsigned int StringToUInt(const char* ibuf, int sz) {
   if (sz == 0)
     return 0;
   return strtoul(ExtractString(ibuf, sz).c_str(), NULL, 0);
 }
 
-int64 StringToInt64(const char* ibuf, int sz) {
+std::int64_t StringToInt64(const char* ibuf, int sz) {
   if (sz == 0)
     return 0;
   return strtoll(ExtractString(ibuf, sz).c_str(), NULL, 0);
 }
 
-uint64 StringToUInt64(const char* ibuf, int sz) {
+ std::uint64_t StringToUInt64(const char* ibuf, int sz) {
   if (sz == 0)
     return 0;
   return strtoull(ExtractString(ibuf, sz).c_str(), NULL, 0);
@@ -258,11 +259,11 @@ int gstValue::RawSize() {
     case gstTagInt:
       return sizeof(int);
     case gstTagUInt:
-      return sizeof(uint);
+      return sizeof(unsigned int);
     case gstTagInt64:
-      return sizeof(int64);
+      return sizeof(std::int64_t);
     case gstTagUInt64:
-      return sizeof(uint64);
+      return sizeof(std::uint64_t);
     case gstTagFloat:
       return sizeof(float);
     case gstTagDouble:
@@ -278,18 +279,18 @@ int gstValue::RawSize() {
 // like above, but allows computing the size
 // from the type and raw buffer without having
 // to construct the object
-int gstValue::RawSize(uchar type, const char* buf) {
+int gstValue::RawSize(unsigned char type, const char* buf) {
   switch (type) {
     case gstTagBoolean:
       return sizeof(bool);
     case gstTagInt:
       return sizeof(int);
     case gstTagUInt:
-      return sizeof(uint);
+      return sizeof(unsigned int);
     case gstTagInt64:
-      return sizeof(int64);
+      return sizeof(std::int64_t);
     case gstTagUInt64:
-      return sizeof(uint64);
+      return sizeof(std::uint64_t);
     case gstTagFloat:
       return sizeof(float);
     case gstTagDouble:
@@ -670,10 +671,10 @@ void gstValue::set(bool v) {
       num_data_.uiVal = uint(v);
       break;
     case gstTagInt64:
-      num_data_.i64Val = int64(v);
+      num_data_.i64Val = std::int64_t(v);
       break;
     case gstTagUInt64:
-      num_data_.ui64Val = uint64(v);
+      num_data_.ui64Val = std::uint64_t(v);
       break;
     case gstTagFloat:
       num_data_.fVal = float(v);
@@ -700,10 +701,10 @@ void gstValue::set(int v) {
       num_data_.uiVal = uint(v);
       break;
     case gstTagInt64:
-      num_data_.i64Val = int64(v);
+      num_data_.i64Val = std::int64_t(v);
       break;
     case gstTagUInt64:
-      num_data_.ui64Val = uint64(v);
+      num_data_.ui64Val = std::uint64_t(v);
       break;
     case gstTagFloat:
       num_data_.fVal = float(v);
@@ -718,7 +719,7 @@ void gstValue::set(int v) {
   }
 }
 
-void gstValue::set(uint v) {
+void gstValue::set(unsigned int v) {
   switch (type_) {
     case gstTagBoolean:
       num_data_.bVal = bool(v);
@@ -730,10 +731,10 @@ void gstValue::set(uint v) {
       num_data_.uiVal = v;
       break;
     case gstTagInt64:
-      num_data_.i64Val = int64(v);
+      num_data_.i64Val = std::int64_t(v);
       break;
     case gstTagUInt64:
-      num_data_.ui64Val = uint64(v);
+      num_data_.ui64Val = std::uint64_t(v);
       break;
     case gstTagFloat:
       num_data_.fVal = float(v);
@@ -748,7 +749,7 @@ void gstValue::set(uint v) {
   }
 }
 
-void gstValue::set(int64 v) {
+void gstValue::set(std::int64_t v) {
   switch (type_) {
     case gstTagBoolean:
       num_data_.bVal = bool(v);
@@ -763,7 +764,7 @@ void gstValue::set(int64 v) {
       num_data_.i64Val = v;
       break;
     case gstTagUInt64:
-      num_data_.ui64Val = uint64(v);
+      num_data_.ui64Val = std::uint64_t(v);
       break;
     case gstTagFloat:
       num_data_.fVal = float(v);
@@ -774,13 +775,13 @@ void gstValue::set(int64 v) {
     case gstTagString:
     case gstTagUnicode:
       char buf[kMaxString];
-      snprintf(buf, kMaxString, "%lld", (unsigned long long)v);
+      snprintf(buf, kMaxString, "%llu", (unsigned long long)v);
       *qstring_ = buf;
       break;
   }
 }
 
-void gstValue::set(uint64 v) {
+void gstValue::set(std::uint64_t v) {
   switch (type_) {
     case gstTagBoolean:
       num_data_.bVal = bool(v);
@@ -792,7 +793,7 @@ void gstValue::set(uint64 v) {
       num_data_.uiVal = uint(v);
       break;
     case gstTagInt64:
-      num_data_.i64Val = int64(v);
+      num_data_.i64Val = std::int64_t(v);
       break;
     case gstTagUInt64:
       num_data_.ui64Val = v;
@@ -824,10 +825,10 @@ void gstValue::set(float v) {
       num_data_.uiVal = uint(v);
       break;
     case gstTagInt64:
-      num_data_.i64Val = int64(v);
+      num_data_.i64Val = std::int64_t(v);
       break;
     case gstTagUInt64:
-      num_data_.ui64Val = uint64(v);
+      num_data_.ui64Val = std::uint64_t(v);
       break;
     case gstTagFloat:
       num_data_.fVal = v;
@@ -854,10 +855,10 @@ void gstValue::set(double v) {
       num_data_.uiVal = uint(v);
       break;
     case gstTagInt64:
-      num_data_.i64Val = int64(v);
+      num_data_.i64Val = std::int64_t(v);
       break;
     case gstTagUInt64:
-      num_data_.ui64Val = uint64(v);
+      num_data_.ui64Val = std::uint64_t(v);
       break;
     case gstTagFloat:
       num_data_.fVal = float(v);
@@ -885,10 +886,10 @@ void gstValue::GetRaw(const void* buf) {
       *((uint*)buf) = num_data_.uiVal;
       break;
     case gstTagInt64:
-      *((int64*)buf) = num_data_.i64Val;
+      *((std::int64_t*)buf) = num_data_.i64Val;
       break;
     case gstTagUInt64:
-      *((uint64*)buf) = num_data_.ui64Val;
+      *((std::uint64_t*)buf) = num_data_.ui64Val;
       break;
     case gstTagFloat:
       *((float*)buf) = num_data_.fVal;
@@ -920,10 +921,10 @@ int gstValue::SetRaw(const void* buf) {
       num_data_.uiVal = *((uint*)buf);
       break;
     case gstTagInt64:
-      num_data_.i64Val = *((int64*)buf);
+      num_data_.i64Val = *((std::int64_t*)buf);
       break;
     case gstTagUInt64:
-      num_data_.ui64Val = *((uint64*)buf);
+      num_data_.ui64Val = *((std::uint64_t*)buf);
       break;
     case gstTagFloat:
       num_data_.fVal = *((float*)buf);
@@ -994,7 +995,7 @@ int gstValue::ValueAsInt() const {
   return 0;
 }
 
-uint gstValue::ValueAsUInt() const {
+unsigned int gstValue::ValueAsUInt() const {
   switch (type_) {
     case gstTagBoolean: return uint(num_data_.bVal);
     case gstTagInt:    return uint(num_data_.iVal);
@@ -1014,41 +1015,41 @@ uint gstValue::ValueAsUInt() const {
   return 0;
 }
 
-int64 gstValue::ValueAsInt64() const {
+std::int64_t gstValue::ValueAsInt64() const {
   switch (type_) {
-    case gstTagBoolean: return int64(num_data_.bVal);
-    case gstTagInt:    return int64(num_data_.iVal);
-    case gstTagUInt:   return int64(num_data_.uiVal);
-    case gstTagInt64:  return int64(num_data_.i64Val);
+    case gstTagBoolean: return std::int64_t(num_data_.bVal);
+    case gstTagInt:    return std::int64_t(num_data_.iVal);
+    case gstTagUInt:   return std::int64_t(num_data_.uiVal);
+    case gstTagInt64:  return std::int64_t(num_data_.i64Val);
     case gstTagUInt64: return num_data_.ui64Val;
-    case gstTagFloat:  return int64(num_data_.fVal);
-    case gstTagDouble: return int64(num_data_.dVal);
+    case gstTagFloat:  return std::int64_t(num_data_.fVal);
+    case gstTagDouble: return std::int64_t(num_data_.dVal);
     case gstTagString:
     case gstTagUnicode:
       if (qstring_->isEmpty()) {
         return 0;
       } else {
-        return int64(strtoll(qstring_->latin1(), NULL, 0));
+        return std::int64_t(strtoll(qstring_->latin1(), NULL, 0));
       }
   }
   return 0;
 }
 
-uint64 gstValue::ValueAsUInt64() const {
+ std::uint64_t gstValue::ValueAsUInt64() const {
   switch (type_) {
-    case gstTagBoolean: return uint64(num_data_.bVal);
-    case gstTagInt:     return uint64(num_data_.iVal);
-    case gstTagUInt:    return uint64(num_data_.uiVal);
-    case gstTagInt64:   return uint64(num_data_.i64Val);
+    case gstTagBoolean: return std::uint64_t(num_data_.bVal);
+    case gstTagInt:     return std::uint64_t(num_data_.iVal);
+    case gstTagUInt:    return std::uint64_t(num_data_.uiVal);
+    case gstTagInt64:   return std::uint64_t(num_data_.i64Val);
     case gstTagUInt64:  return num_data_.ui64Val;
-    case gstTagFloat:   return uint64(num_data_.fVal);
-    case gstTagDouble:  return uint64(num_data_.dVal);
+    case gstTagFloat:   return std::uint64_t(num_data_.fVal);
+    case gstTagDouble:  return std::uint64_t(num_data_.dVal);
     case gstTagString:
     case gstTagUnicode:
       if (qstring_->isEmpty()) {
         return 0;
       } else {
-        return static_cast<uint64>(strtoull(qstring_->latin1(), NULL, 0));
+        return static_cast<std::uint64_t>(strtoull(qstring_->latin1(), NULL, 0));
       }
   }
   return 0;
@@ -1179,7 +1180,7 @@ QString gstValue::ValueAsUnicode() const {
 
 
 
-uint32 gstValue::TypeFromName(const char* str) {
+ std::uint32_t gstValue::TypeFromName(const char* str) {
   if (!strcmp(str, "int")) {
     return gstTagInt;
   } else if (!strcmp(str, "uint")) {
@@ -1202,7 +1203,7 @@ uint32 gstValue::TypeFromName(const char* str) {
   return gstTagInvalid;
 }
 
-const char* gstValue::NameFromType(uint32 type) {
+const char* gstValue::NameFromType(std::uint32_t type) {
   switch (type) {
     case gstTagBoolean:
       return "bool";

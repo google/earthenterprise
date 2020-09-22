@@ -1,0 +1,1 @@
+<%= new File(thisTemplateFile.parent, '../snippets/searchexample.sh').text %>

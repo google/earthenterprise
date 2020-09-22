@@ -2335,12 +2335,12 @@ class Layer(GeneratedsSuper):
     subclass = None
     superclass = None
     def __init__(self, opaque=False, cascaded=None, fixedHeight=None, fixedWidth=None, noSubsets=False, queryable=False, Name=None, Title=None, Abstract=None, KeywordList=None, CRS=None, EX_GeographicBoundingBox=None, BoundingBox=None, Dimension=None, Attribution=None, AuthorityURL=None, Identifier=None, MetadataURL=None, DataURL=None, FeatureListURL=None, Style=None, MinScaleDenominator=None, MaxScaleDenominator=None, Layer=None):
-        self.opaque = _cast(bool, opaque)
+        self.opaque = _cast(int, opaque)
         self.cascaded = _cast(int, cascaded)
         self.fixedHeight = _cast(int, fixedHeight)
         self.fixedWidth = _cast(int, fixedWidth)
-        self.noSubsets = _cast(bool, noSubsets)
-        self.queryable = _cast(bool, queryable)
+        self.noSubsets = _cast(int, noSubsets)
+        self.queryable = _cast(int, queryable)
         self.Name = Name
         self.Title = Title
         self.Abstract = Abstract

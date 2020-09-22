@@ -19,6 +19,11 @@ The application suite consists of three core components:
 
 ## Releases
 
+[Release 5.3.5](https://github.com/google/earthenterprise/releases/tag/5.3.5-1610.20)
+
+* [Release Notes](https://www.opengee.org/geedocs/5.3.5/answer/releaseNotes/relNotesGEE5_3_5.html)
+* [Release Documentation](https://www.opengee.org/geedocs/5.3.5/)
+
 [Release 5.3.4](https://github.com/google/earthenterprise/releases/tag/5.3.4-1502.14)
 
 * [Release Notes](https://www.opengee.org/geedocs/5.3.4/answer/releaseNotes/relNotesGEE5_3_4.html)
@@ -33,11 +38,6 @@ The application suite consists of three core components:
 
 * [Release Notes](https://www.opengee.org/geedocs/5.3.2/answer/releaseNotes/relNotesGEE5_3_2.html)
 * [Release Documentation](https://www.opengee.org/geedocs/5.3.2/)
-
-[Release 5.3.1](https://github.com/google/earthenterprise/releases/tag/5.3.1-1013.12)
-
-* [Release Notes](https://www.opengee.org/geedocs/5.3.1/answer/7160008.html)
-* [Release Documentation](https://www.opengee.org/geedocs/5.3.1/)
 
 ## More information
 
@@ -54,7 +54,7 @@ following operating systems:
 * CentOS 7
 * Red Hat Enterprise Linux 6
 * Red Hat Enterprise Linux 7
-* Ubuntu 16.04 LTS
+* Ubuntu 16.04 LTSS
 
 Refer to the [BUILD.md file](./earth_enterprise/BUILD.md) for instructions on
 building from source on one of these platforms.
@@ -63,11 +63,11 @@ building from source on one of these platforms.
 
 Refer to the [Install Instructions][install] for instructions on installing
 Fusion or Earth Server. Please note that you must have a successful build of the
-source before proceeding with the install.
+source before proceeding with the insStall.
 
 [slack]: http://slack.opengee.org
 [slack-img]: https://img.shields.io/badge/chat-on%20slack-ff69b4.svg
 [travis]: https://travis-ci.org/google/earthenterprise/builds
-[travis-img]: https://travis-ci.org/google/earthenterprise.svg?branch=release_5.3.4
+[travis-img]: https://travis-ci.org/google/earthenterprise.svg?branch=master
 [install]: https://github.com/google/earthenterprise/wiki/Install-Fusion-or-Earth-Server
 [flow]: https://lh3.googleusercontent.com/ZGQH04lc2mYmw1JEx0Jvwiardw5H6cwrmRhSj75pSKF6r1FRwwYUBUIBnTE6n5uY071XV7__mmVDKdV6B1tEpUQwFNYnt1HBfxiz3Hrqbw99HUFQKVFnht11EkPz70xCtuhFlCi3

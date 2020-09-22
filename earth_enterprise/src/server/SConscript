@@ -28,7 +28,8 @@ env.install('httpdconf', ['.htpasswd'])
 
 # Install the postgres init script along with the sql files.
 env.install('server_bin', ['geresetpgdb', 'gepgcommon'])
-env.install('server_sql', ['gestream_tables.sql',
+env.install('server_sql', ['examplesearch.sql', 'examplesearch_2delete.sql',
+  'examplesearch_delete.sql', 'gestream_tables.sql',
   'gestream_tables_upgrade_to_3_1.sql', 'gesearch_tables.sql',
   'geendsnippet_tables.sql'])
 env.install('httpd', ['gehttpd_init'], 'bin')

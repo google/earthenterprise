@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2020 The Open GEE Contributors 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +37,8 @@ class StateChangeException : public khException {
 
 // Helper structs for passing data about input and child states.
 struct WaitingFor {
-  uint32 inputs;
-  uint32 children;
+  std::uint32_t inputs;
+  std::uint32_t children;
 };
 
 struct InputAndChildStateData {
@@ -72,6 +73,7 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   AssetVersionImpl& operator=(const AssetVersionImpl&&) = delete;
 
  public:
+  static std::string GetPlaceholderAssetRegistryKey() { return "SourceAssetVersion"; }
   using Base = AssetVersionStorage;
   std::string XMLFilename() const { return XMLFilename(GetRef()); }
   std::string WorkingDir(void) const { return WorkingDir(GetRef()); }
@@ -144,7 +146,7 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   }
 
   // determine amount of memory used by an AssetVersionImpl
-  virtual uint64 GetHeapUsage() const {
+  virtual std::uint64_t GetHeapUsage() const {
     return ::GetHeapUsage(name)
     + ::GetHeapUsage(type)
     + ::GetHeapUsage(subtype)
@@ -174,7 +176,7 @@ class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
 
   void GetInputFilenames(std::vector<std::string> &out) const;
   virtual void GetOutputFilenames(std::vector<std::string> &out) const = 0;
-  virtual std::string GetOutputFilename(uint i) const = 0;
+  virtual std::string GetOutputFilename(unsigned int i) const = 0;
   virtual void AfterLoad(void) { }
   virtual void DependentChildren(std::vector<SharedString> &) const {
     // No-op in base class. Sub-classes will override this
@@ -292,7 +294,7 @@ inline StorageManager<AssetVersionImpl>&
 AssetVersion::storageManager(void)
 {
   static StorageManager<AssetVersionImpl> storageManager(
-      MiscConfig::Instance().VersionCacheSize, MiscConfig::Instance().LimitMemoryUtilization, MiscConfig::Instance().MaxVersionCacheMemorySize, "version");
+      MiscConfig::Instance().VersionCacheSize, MiscConfig::Instance().LimitMemoryUtilization, MiscConfig::Instance().MaxVersionCacheMemorySize, MiscConfig::Instance().PrunePercentage, "version");
   return storageManager;
 }
 
@@ -333,7 +335,7 @@ class LeafAssetVersionImpl : public virtual AssetVersionImpl {
       out.push_back(AssetDefs::AssetPathToFilename(*o));
     }
   }
-  std::string GetOutputFilename(uint i) const {
+  std::string GetOutputFilename(unsigned int i) const {
     if (i < outfiles.size()) {
       return AssetDefs::AssetPathToFilename(outfiles[i]);
     } else {
@@ -364,10 +366,10 @@ class CompositeAssetVersionImpl : public virtual AssetVersionImpl {
   }
 
   virtual void GetOutputFilenames(std::vector<std::string> &out) const;
-  std::string GetOutputFilename(uint i) const;
+  std::string GetOutputFilename(unsigned int i) const;
 };
 
-inline uint64 GetHeapUsage(const AssetVersionImpl &version) {
+inline std::uint64_t GetHeapUsage(const AssetVersionImpl &version) {
   return version.GetHeapUsage();
 }
 

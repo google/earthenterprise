@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -35,7 +36,7 @@
 void ValidateAssetRootForUpgrade(const AssetRootStatus &status, bool noprompt,
                                  bool nochown);
 void WarnAboutPendingTasks(void);
-void UpgradeAssetRoot(const DottedVersion &version);
+void UpgradeAssetRoot(const DottedVersion &version, bool secure);
 void UpgradeFrom2_4_X(void);
 void UpgradeFrom2_5_X(const DottedVersion &version);
 void UpgradeFrom3_0_X(const DottedVersion &version);
@@ -62,7 +63,8 @@ usage(const char* prog, const char* msg = 0, ...) {
      "  --groupname <name>:  Group membership of Fusion user (default gegroup)\n"
      "  --nochown :          do not attempt to fix privileges\n"
      "  --noprompt:          do not prompt for more information, returns -1\n"
-     "                       to indicate an error if command fails or has insufficient arguments\n",
+     "                       to indicate an error if command fails or has insufficient arguments\n"
+     "  --secure             Removes world read and write permissions.\n",
      prog, CommandlineAssetRootDefault().c_str());
   exit(1);
 }
@@ -78,6 +80,7 @@ main(int argc, char *argv[]) {
     std::string groupname = Systemrc::UserGroupname();
     bool noprompt = false;
     bool nochown = false;
+    bool secure = false;
 
     khGetopt options;
     options.helpOpt(help);
@@ -86,6 +89,7 @@ main(int argc, char *argv[]) {
     options.opt("groupname", groupname);
     options.opt("noprompt", noprompt);
     options.opt("nochown", nochown);
+    options.opt("secure", secure);
 
     if (!options.processAll(argc, argv, argn) || help) {
       usage(argv[0]);
@@ -110,7 +114,7 @@ main(int argc, char *argv[]) {
     AssetDefs::OverrideAssetRoot(status.assetroot_);
 
     // do the actual upgrade
-    UpgradeAssetRoot(status.version_);
+    UpgradeAssetRoot(status.version_, secure);
 
 
   } catch (const std::exception &e) {
@@ -182,10 +186,10 @@ void ValidateAssetRootForUpgrade(const AssetRootStatus &status, bool noprompt,
 }
 
 
-void UpgradeAssetRoot(const DottedVersion &version) {
+void UpgradeAssetRoot(const DottedVersion &version, bool secure) {
 
   // Since we're upgrading, go ahead and fix perms on special files
-  FixSpecialPerms(AssetDefs::AssetRoot());
+  FixSpecialPerms(AssetDefs::AssetRoot(), secure);
 
   WarnAboutPendingTasks();
 
@@ -238,7 +242,7 @@ void WarnAboutPendingTasks(void) {
   if (taskfiles.size() > 0) {
     fprintf(stderr, "***** WARNING *****\n");
     fprintf(stderr, "Found tasks pending from before a software upgrade:\n");
-    for (uint i = 0; i < taskfiles.size(); ++i) {
+    for (unsigned int i = 0; i < taskfiles.size(); ++i) {
       std::string target;
       if (khReadSymlink(taskfiles[i], target)) {
         fprintf(stderr, "    %s\n", target.c_str());
@@ -249,7 +253,7 @@ void WarnAboutPendingTasks(void) {
             "You will need to cancel and then resume these tasks.\n"
             "If Fusion is unable to complete any of these tasks, make a small change\n"
             "in the corresponding asset and build it again.\n\n");
-    for (uint i = 0; i < taskfiles.size(); ++i) {
+    for (unsigned int i = 0; i < taskfiles.size(); ++i) {
       (void)khUnlink(taskfiles[i]);
     }
   }

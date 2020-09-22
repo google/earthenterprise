@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2020 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,10 +13,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <cstdint>
 #include <string>
 #include <vector>
 #include <deque>
-#include <khTypes.h>
 #include <khMetaData.h>
 #include <autoingest/Misc.h>
 #include <autoingest/.idl/storage/AssetDefs.h>
@@ -57,10 +58,10 @@ class AssetStorage {
                          VersionList());
     return storage;
   }
-  uint CurrVersionNumber(void) const {
+  unsigned int CurrVersionNumber(void) const {
     if (versions.size()) {
       AssetVersionRef verref(versions.front());
-      uint vernum;
+      unsigned int vernum;
       FromString(verref.Version(), vernum);
       return vernum;
     } else {
@@ -84,7 +85,7 @@ class AssetVersionStorage {
   SharedString  name;
   AssetDefs::Type  type;
   std::string  subtype;
-  uint         version;
+  unsigned int         version;
   AssetDefs::State state;
   double       progress;
   bool         locked;
@@ -97,7 +98,7 @@ class AssetVersionStorage {
   time_t             beginTime = time_t(0);
   time_t             progressTime = time_t(0);
   time_t             endTime = time_t(0);
-  uint32                   taskid = uint32(0);
+  std::uint32_t                   taskid = std::uint32_t(0);
 
 #hquote
  public:
@@ -115,7 +116,7 @@ class AssetVersionStorage {
   }
   static AssetVersionStorage
   MakeStorageFromAsset(const AssetStorage &asset) {
-    uint vernum = asset.CurrVersionNumber() + 1;
+    unsigned int vernum = asset.CurrVersionNumber() + 1;
     std::string name = AssetVersionRef(asset.name, vernum);
     AssetVersionStorage storage(name,
                                 asset.type,

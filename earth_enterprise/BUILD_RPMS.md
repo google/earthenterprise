@@ -38,41 +38,56 @@ including xerces-c and some perl libraries.
 A new SCons target was added to make RPMs, **package_install**, that can be run
 from the *earth_enterprise* subdirectory.  This can be used after
 **stage_install** to verify the build, as it uses the stage install directory.
-This will setup the stage install directory, install Gradle if needed, and
-then uses Gradle to generate RPMs.  The RPMs are created in the
+This will setup the stage install directory, install Gradle if needed, and then
+use Gradle to generate RPMs.  The RPMs are created in the
 *rpms/build/distributions* subdirectory.  A typical invocation for building
-release RPMs might be ```python2.7 /usr/bin/scons -j8 release=1 package_install```.  All other
-files related to RPM generation are found in the *rpms* sub-directory as
-well. Scripts for pre/post install operations are found under the related
-package directory in *rpms*, and common templates for package script generation
-is found in *rpms/shared*.
+release RPMs might be ```python2.7 /usr/bin/scons -j8 release=1
+package_install```.  All other files related to RPM generation are found in the
+*rpms* sub-directory as well. Scripts for pre/post install operations are found
+under the related package directory in *rpms*, and common templates for package
+script generation is found in *rpms/shared*.
 
-Currently a separate RPM is created for **opengee-postgis**, and a common RPM
-for all other third party dependencies called **opengee-common**.  These are
-required installs.  A separate RPM is also produced for **opengee-server** and
-**opengee-fusion**, which can then each be installed and used independently,
-much like the ```install_server.sh``` and ```install_fusion.sh``` scripts
-allowed Open GEE Fusion and Server to be separately installed when building out
-of the Git repo checkout directly.
+Open GEE creates separate RPMs for Fusion and Server so that they can be
+installed and used independently. It also creates separate RPMs for various
+libraries, as detailed below:
+
+* **opengee-postgis** - contains PostGIS libraries
+* **opengee-common** - contains other third party dependencies and libraries
+    used by both Open GEE Fusion and Server
+* **opengee-fusion** - contains the files needed to run Open GEE Fusion, but
+    does not contain any non-essential files like documentation, examples, and
+    tutorials
+* **opengee-server** - contains the files needed to run Open GEE Server, but
+    does not contain any non-essential files like documentation, examples, and
+    tutorials
+* **opengee-extra** - contains documentation, examples, and tutorials for both
+    Fusion and Server
+* **opengee-full-fusion** - convenience RPM that installs **opengee-fusion**
+    and **opengee-extra**
+* **opengee-full-server** - convenience RPM that installs **opengee-server**
+    and **opengee-extra**
 
 ## Installing RPMs
 
 After the SCons **package_install** target completes the rpm command can
-install and test the RPMs created on CentOS or RHEL.  To do this, change to the
+install and test the RPMs created on CentOS or RHEL. The simplest way to do
+this is to create a `yum` repository for the Open GEE RPMs. However, you can
+install the RPMs directly if you wish. To do this, change to the
 *rpms/build/distributions* directory.  Use ```sudo rpm -Uhv
 opengee-common-*.rpm``` and ```sudo rpm -Uhv opengee-postgis-*.rpm``` to get
 the base dependencies installed, in that order.  Afterward use ```sudo rpm -Uhv
-opengee-fusion-*.rpm```, and then ```sudo rpm -Uhv opengee-server-*.rpm``` to
-install and test the RPM packaged Open GEE Fusion and Server.
-
-Use `yum` to install opengee RPM files so that it will also automatically
-install required system dependencies if they are in enabled repositories.  However, 
-if the opengee packages installed from local files, use ```sudo yum install *.rpm``` 
-in the `rpms/build/distributions` directory to install all rpms and dependencies
-in one step.  Note that using ```sudo yum install opengee-server-*.rpm``` or
-```sudo yum install opengee-fusion-*.rpm``` will not automatically install
-**opengee-common** or **opengee-postgis** if they are not also specified and yum 
-will refuse to install if they were not previously installed.
+opengee-fusion-*.rpm``` and/or ```sudo rpm -Uhv opengee-server-*.rpm``` to
+install and test the RPM packaged Open GEE Fusion and Server. If you want a
+full install, next run ```sudo rpm -Uhv opengee-extra-*.rpm```, followed by
+```sudo rpm -Uhv opengee-full-fusion-*.rpm``` and/or ```sudo rpm -Uhv
+opengee-full-server-*.rpm```. Alternatively, you can run ```sudo yum install
+*.rpm``` in the `rpms/build/distributions` directory to install all of the Open
+GEE RPMs in one step. Note that installing a single RPM from a local directory
+(such as ```sudo yum install opengee-server-*.rpm```) will not automatically
+install other required Open GEE RPMs, such as **opengee-common** or
+**opengee-postgis**, if they are not also specified and yum will refuse to
+install if they were not previously installed. Using a `yum` repository avoids
+this problem.
 
 A note about needed enabled repositories: If the RPMs are to be installed on a
 machine where they were not built, certain repos need enabled:
@@ -115,13 +130,11 @@ packaged version, backup any data before attempting such a migration.
 
 ## Removing RPMs
 Removing RPMs can be performed using ```yum remove```.  To remove all all
-opengee packages, use ```sudo yum remove opengee-postgis``` as all other
-opengee packages depend on it, and this will automatically remove
-**opengee-common**, **opengee-server**, and **opengee-fusion** if they are also
-installed. Either ```sudo yum remove opengee-server``` or ```sudo yum remove
-opengee-fusion``` can be used to selectively remove server or fusion.  The
-```uninstall_server.sh``` and ```uninstall_fusion.sh``` scripts should **NOT**
-be used while RPM Open GEE packages are installed.
+opengee packages, use ```sudo yum remove "opengee-*"```. Either ```sudo yum
+remove opengee-server``` or ```sudo yum remove opengee-fusion``` can be used to
+selectively remove server or fusion.  The ```uninstall_server.sh``` and
+```uninstall_fusion.sh``` scripts should **NOT** be used while RPM Open GEE
+packages are installed.
 
 While it is possible to migrate from a manual install of Open GEE to a RPM one,
 converting an RPM install of Open GEE back to a manual install is not safe.
