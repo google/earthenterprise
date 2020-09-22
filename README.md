@@ -54,7 +54,7 @@ following operating systems:
 * CentOS 7
 * Red Hat Enterprise Linux 6
 * Red Hat Enterprise Linux 7
-* Ubuntu 16.04 LTSS
+* Ubuntu 16.04 LTS
 
 Refer to the [BUILD.md file](./earth_enterprise/BUILD.md) for instructions on
 building from source on one of these platforms.
@@ -63,7 +63,7 @@ building from source on one of these platforms.
 
 Refer to the [Install Instructions][install] for instructions on installing
 Fusion or Earth Server. Please note that you must have a successful build of the
-source before proceeding with the insStall.
+source before proceeding with the install.
 
 [slack]: http://slack.opengee.org
 [slack-img]: https://img.shields.io/badge/chat-on%20slack-ff69b4.svg
