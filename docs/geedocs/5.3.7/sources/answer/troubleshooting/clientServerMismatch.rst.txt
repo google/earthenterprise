@@ -1,0 +1,16 @@
+
+Client/server mismatch
+
+-[ Error message ]-
+
+"Invalid protocol version (client/server mismatch)"
+
+-[ Description ]-
+
+During a transition from version 3.x to a later version, you tried to
+use an older or newer version of the Fusion GUI or command line to
+connect to the system manager.
+
+-[ Resolution ]-
+
+Ensure that you are using the same version of Fusion and GEE Server.

@@ -1,0 +1,42 @@
+
+(Deprecated) Provide Google Earth Plug-in for your users to install
+
+Warning: The Google Earth Plug-in is deprecated and is no longer
+  available for download. This page is only applicable if you have a
+  copy of the Google Earth Plug-in from a previous relationship with
+  Google.
+
+If your users want to connect to GEE Server and view databases in a
+browser, they must install the Google Earth Plug-in. They must also
+use a browser that supports NPAPI, which excludes most modern
+browsers. If they do not already have the plug-in, you can provide the
+installer so that the plug-in downloads when they attempt to connect
+to GEE Server.
+
+The plug-in installer should be placed in the following directory on
+
+GEE Server
+
+:
+
+"/opt/google/gethttpd/htdocs/earth/plugin"
+
+The directory includes "install.html", a landing page from which the
+installers are launched. When a user attempts to connect without the
+plug-in installed, they are automatically directed here from
+earth_local.html's default error page. There are two installers, which
+should be renamed as follows:
+
+/opt/google/gehttpd/htdocs/earth/plugin/GoogleEarth-Mac-Plugin-
+Latest.dmg
+
+/opt/google/gehttpd/htdocs/earth/plugin/GoogleEarth-Windows-Plugin-
+Latest.msi
+
+These installers do not require administrative rights on the user's
+machine. They also do not auto-update. If users are unable to download
+the installer from this location, they should contact their system
+administrator.
+
+Tip: The Google Earth Plug-in installer for Windows requires
+  administrative rights when installing to Internet Explorer.

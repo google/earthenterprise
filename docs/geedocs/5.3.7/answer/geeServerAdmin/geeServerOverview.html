@@ -1,0 +1,143 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>GEE Server Overview 5.x &#8212; Google Earth Enterprise 5.3.7 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Sign in to GEE Server Admin console" href="signInAdminConsole.html" />
+    <link rel="prev" title="GEE Server administration" href="../geeServerAdmin.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="signInAdminConsole.html" title="Sign in to GEE Server Admin console"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../geeServerAdmin.html" title="GEE Server administration"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" accesskey="U">GEE Server administration</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../geeServerAdmin.html"
+                        title="previous chapter">GEE Server administration</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="signInAdminConsole.html"
+                        title="next chapter">Sign in to GEE Server Admin console</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp4.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp4.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="gee-server-overview-5-x">
+<h1>GEE Server Overview 5.x<a class="headerlink" href="#gee-server-overview-5-x" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>GEE Server 5.x introduces a flexible and dynamic approach to
+publishing maps and globes: When publishing, you specify unique
+options for a map or globe at a given URL; the map or globe can
+then be easily published multiple times at different URLs with
+different configurations. Likewise, particular configurations can
+quickly be unpublished or modified.</p>
+<p>Virtual hosts (previously called virtual servers) now only specify
+a security protocol and can be associated with multiple published
+globes and maps. This change decouples the task of setting up
+security protocols from publishing maps and globes.</p>
+<p>Associating <a class="reference internal" href="createSearchTabs.html"><span class="doc">search sets</span></a> and <a class="reference internal" href="manageSnippetProfiles.html"><span class="doc">snippet
+profiles</span></a> at the time of publishing
+allows you to present different versions of the same underlying
+Fusion database, which can then be made available at different
+URLs and under different security protocols. For example,you can
+protect one set of searchable data but display it on the same
+globe as an unprotected set of searchable data. You can then
+publish the database privately by adding the sensitive search and
+a secured virtual host at one URL, then publish the database
+again, this time adding the non-sensitive search and public
+virtual host at a different URL.</p>
+<p>GEE Server now supports <a class="reference internal" href="makeWMSRequests.html"><span class="doc">Web Map Service
+(WMS)</span></a>. One of the benefits of using
+the WMS standard is that supported clients can request images from
+multiple WMS servers and then combine those mapping images into a
+single view. Because the WMS standard is used to get all the
+images, they can easily be overlaid on one another.</p>
+<p><a class="reference internal" href="publishDatabasesPortables.html"><span class="doc">Publishing</span></a> can now be done in a
+matter of seconds from the GEE Server admin console, and no longer
+requires interaction with Fusion. We hope that this new publishing
+approach makes your life easier and maybe even a little more fun!</p>
+<p>GEE Server also provides tools for <a class="reference internal" href="createPortableGlobesMaps.html"><span class="doc">cutting portable
+globes</span></a> (<code class="docutils literal notranslate"><span class="pre">.glb</span></code>) and maps (<code class="docutils literal notranslate"><span class="pre">.glc</span></code>).
+<a class="reference internal" href="createCompositeGlobesMaps.html"><span class="doc">Composite globes and maps</span></a> can be
+assembled from 2D or 3D portable files. The resulting offline globe
+or map is packed as a <code class="docutils literal notranslate"><span class="pre">.glc</span></code> file that may be downloaded for use
+with Portable Server.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="signInAdminConsole.html" title="Sign in to GEE Server Admin console"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../geeServerAdmin.html" title="GEE Server administration"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" >GEE Server administration</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

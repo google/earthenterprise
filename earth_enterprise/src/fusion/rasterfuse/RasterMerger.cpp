@@ -159,10 +159,18 @@ void MergeInset<DataTile>::InitCachedBlendReaders(
 
     magnifyCoverage = cached_blend_reader->levelCoverage(magnify_level);
 
-    // Initialize cached alpha reader
+    // Initialize cached alpha reader.
     if (cached_blend_alpha_file.size()) {
-      cached_blend_alpha_reader = TransferOwnership(
-          new ffio::raster::Reader<AlphaProductTile>(cached_blend_alpha_file));
+      // Note: we check if the cached alpha blend directory exists for the
+      // asset since in GEE-5.x we need to pick up the GEE-4.x Imagery/Terrain
+      // Projects (the PacketLevel assets) that have no alpha blend cached.
+      if (khExists(cached_blend_alpha_file)) {
+        cached_blend_alpha_reader = TransferOwnership(
+            new ffio::raster::Reader<AlphaProductTile>(cached_blend_alpha_file));
+      }
+      else {
+        notify(NFY_INFO, "Cached blend alpha file %s does not exist.", cached_blend_alpha_file.c_str());
+      }
     }
   }
 }

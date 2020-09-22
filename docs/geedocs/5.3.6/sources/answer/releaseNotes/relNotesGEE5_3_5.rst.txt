@@ -22,6 +22,17 @@ Installing Open GEE 5.3.5 on top of Open GEE 5.2.0 will ensure that
 your PostgreSQL databases are backed up and upgraded correctly to the
 new PostgreSQL version used by Open GEE 5.3.5.
 
+<<<<<<< HEAD
+=======
+-[ New Features ]-
+
+In 5.3.5, we moved documentation, examples, and tutorials into a
+separate RPM called opengee-extra. This mainly includes the
+documentation, ExampleSearch, and Fusion Tutorial files.  You can
+choose whether to install opengee-extra depending on if you need those
+items.
+
+>>>>>>> 8395fb1bd6baf3dae4c954ff8f1815cb4e0a505d
 -[ Resolved Issues ]-
 
     Number  Description  1782  RPM name change causes Fusion and

@@ -1,0 +1,529 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Configure Fusion performance &#8212; Google Earth Enterprise 5.3.7 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Benchmarking outcomes for applying task rules" href="benchMarkOutcomesForTaskRule.html" />
+    <link rel="prev" title="Dynamically adjusting logging levels" href="dynamicLogLevelSetting.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="benchMarkOutcomesForTaskRule.html" title="Benchmarking outcomes for applying task rules"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="dynamicLogLevelSetting.html" title="Dynamically adjusting logging levels"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" accesskey="U">Fusion Administration</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="dynamicLogLevelSetting.html"
+                        title="previous chapter">Dynamically adjusting logging levels</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="benchMarkOutcomesForTaskRule.html"
+                        title="next chapter">Benchmarking outcomes for applying task rules</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="configure-fusion-performance">
+<h1>Configure Fusion performance<a class="headerlink" href="#configure-fusion-performance" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>You can tune the performance of Fusion by setting up task rules
+and by modifying the sizes of the asset caches.</p>
+<p class="rubric" id="configure-task-rules">Configure task rules</p>
+<p>You can use <em>task rules</em> to change how Fusion builds data. As soon
+as you implement a task rule, it customizes how specific processes
+in Fusion operate. In other words, you cannot apply task rules to
+individual assets or projects.</p>
+<ul class="simple">
+<li><a class="reference internal" href="#set-number-cpus"><span class="std std-ref">Set the number of CPUs assigned to Fusion
+processing</span></a></li>
+<li><a class="reference internal" href="#task-rule-types"><span class="std std-ref">Task rule types</span></a></li>
+<li><a class="reference internal" href="#implement-task-rules"><span class="std std-ref">Implement task rules</span></a></li>
+</ul>
+<p class="rubric" id="set-number-cpus">Set the number of CPUs assigned to Fusion processing</p>
+<p>As some of the task rules described here rely on setting the
+number of CPUs assigned to Fusion processing, it is useful for you
+to know how many CPUs are available on your machine and how many
+are assigned for Fusion processing. The <code class="docutils literal notranslate"><span class="pre">getop</span></code> output lists the
+available CPUs on your machine as the <code class="docutils literal notranslate"><span class="pre">maxjobs</span></code> entry and
+corresponds to how many concurrent jobs Fusion may spawn at any
+one time.</p>
+<p>You can use the tool
+<code class="docutils literal notranslate"><span class="pre">geselectassetroot</span> <span class="pre">--assetroot</span> <span class="pre">path</span> <span class="pre">--numcpus</span></code> to assign more
+CPUs. For example:</p>
+<p><code class="docutils literal notranslate"><span class="pre">geselectassetroot</span> <span class="pre">--assetroot</span> <span class="pre">/gevol/assets</span> <span class="pre">--numcpus</span> <span class="pre">7</span></code></p>
+<p>For information about assigning CPUs to Fusion processing, see
+<a class="reference internal" href="multipleCPUConfig.html"><span class="doc">Running Fusion on a Machine with Multiple CPUs</span></a>.</p>
+<p>Task rules impact Fusion processing in two different ways: by
+enabling/disabling multithreading, and by specifying output
+locations (KRP/KRMP), as shown in the following table.</p>
+<p class="rubric" id="id1"><span id="task-rule-types"></span>Task rule types</p>
+<div class="docutils container">
+<table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="9%" />
+<col width="79%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Task rule type</th>
+<th class="head">Task rule</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Enable/Disable Multithreading</td>
+<td><strong>ImageryPacketLevel</strong></td>
+<td>Makes imagery project builds faster by assigning multiple CPUs to each task.</td>
+</tr>
+<tr class="row-odd"><td>Enable/Disable Multithreading</td>
+<td><strong>TerrainPacketLevel</strong></td>
+<td>Makes terrain project builds faster by assigning multiple CPUs to each task.</td>
+</tr>
+<tr class="row-even"><td>Enable/Disable Multithreading</td>
+<td><strong>CombinedTerrain</strong></td>
+<td>Makes 3D database builds faster by assigning multiple CPUs to terrain completion tasks.</td>
+</tr>
+<tr class="row-odd"><td>Enable/Disable Multithreading</td>
+<td><strong>MapLayerLevel</strong></td>
+<td>Makes 2D database builds faster by assigning multiple CPUs to each task.</td>
+</tr>
+<tr class="row-even"><td>Specify output locations</td>
+<td><strong>KRP</strong></td>
+<td>Lets you specify the location where image resources will be written by Fusion for better storage management.</td>
+</tr>
+<tr class="row-odd"><td>Specify output locations</td>
+<td><strong>KRMP</strong></td>
+<td>Lets you specify the location where mask files will be written by Fusion for better storage management. Note that the same storage volume must be specified for the KRMP as the KRP.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>You can add one or more of these task rules to your asset root’s
+<code class="docutils literal notranslate"><span class="pre">.config</span></code> directory.</p>
+<p class="rubric" id="implement-task-rules">Implement task rules</p>
+<p>To implement a task rule:</p>
+<ol class="arabic">
+<li><p class="first">Make sure you have superuser privileges, i.e., root or sudo
+access.</p>
+</li>
+<li><p class="first">Create the task rule using the XML sample code shown below for
+each rule.</p>
+</li>
+<li><p class="first">Depending on the rule you want to use, name the task rule:</p>
+<ul class="simple">
+<li><strong>ImageryPacketLevel.taskrule</strong></li>
+<li><strong>TerrainPacketLevel.taskrule</strong></li>
+<li><strong>CombinedTerrain.taskrule</strong></li>
+<li><strong>MapLayerLevel.taskrule</strong></li>
+<li><strong>KRP.taskrule</strong></li>
+<li><strong>KRMP.taskrule</strong></li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Fusion uses these names when the tasks run, so
+do not change them.</p>
+</div>
+</li>
+<li><p class="first">For the KRP and KRMP task rules, define the volumes you want
+Fusion to write files to. See <a class="reference external" href="#defining_volumes">Defining
+volumes</a>.</p>
+</li>
+<li><p class="first">Set file permissions to read-only for all (<code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">444</span></code>).</p>
+</li>
+<li><p class="first">Set file ownership to the <code class="docutils literal notranslate"><span class="pre">gefusionuser</span></code> user account and
+<code class="docutils literal notranslate"><span class="pre">gegroup</span></code> group (<code class="docutils literal notranslate"><span class="pre">chown</span> <span class="pre">gefusionuser:gegroup</span></code>).</p>
+</li>
+<li><p class="first">Place the task rule files in the asset root’s <code class="docutils literal notranslate"><span class="pre">.config</span></code>
+directory.</p>
+</li>
+<li><p class="first">Restart the system manager using the <code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span></code>
+<strong>``stop``</strong> and <strong>``start``</strong> commands.</p>
+</li>
+</ol>
+<p class="rubric">ImageryPacketLevel task rule</p>
+<p>During a project build, Fusion will have multiple concurrent
+imagery project tasks. The watchpoint is balancing the total
+number of CPUs assigned for Fusion, and the number of CPUs
+assigned for each imagery project process. For example, with eight
+CPUs assigned for Fusion, with two CPUs per imagery project task,
+you can have four concurrent imagery project tasks.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Assigning more than two CPUs for each imagery project
+task does not necessarily speed up processing, so you should
+keep the <code class="docutils literal notranslate"><span class="pre">maxNumCPU</span></code> value at 2.</p>
+</div>
+<p class="rubric">Sample: ImageryPacketLevel.taskrule</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;TaskRule&gt;</span>
+  <span class="nt">&lt;taskname&gt;</span>ImageryPacketLevel<span class="nt">&lt;/taskname&gt;</span>
+  <span class="nt">&lt;inputConstraints/&gt;</span>
+  <span class="nt">&lt;outputConstraints/&gt;</span>
+  <span class="nt">&lt;cpuConstraint&gt;</span>
+    <span class="nt">&lt;minNumCPU&gt;</span>2<span class="nt">&lt;/minNumCPU&gt;</span>
+    <span class="nt">&lt;maxNumCPU&gt;</span>2<span class="nt">&lt;/maxNumCPU&gt;</span>
+  <span class="nt">&lt;/cpuConstraint&gt;</span>
+<span class="nt">&lt;/TaskRule&gt;</span>
+</pre></div>
+</div>
+<p class="rubric">TerrainPacketLevel task rule</p>
+<p>During a project build, Fusion will have multiple concurrent
+terrain project tasks. The watchpoint is balancing the total
+number of CPUs assigned for Fusion and the number of CPUs
+assigned for each imagery project process. For example, with eight
+CPUs assigned for Fusion, with two CPUs per terrain project task,
+you can have four concurrent terrain project tasks.</p>
+<p>By default, Fusion assigns one CPU to work on each terrain project
+task. You can use this task rule to assign up to six CPUs instead.
+Set the minimum CPU value to a number from 1 to 6, and set the
+maximum to a number between 2 and 6.</p>
+<p class="rubric">Sample: TerrainPacketLevel.taskrule</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;TaskRule&gt;</span>
+  <span class="nt">&lt;taskname&gt;</span>TerrainPacketLevel<span class="nt">&lt;/taskname&gt;</span>
+  <span class="nt">&lt;inputConstraints/&gt;</span>
+  <span class="nt">&lt;outputConstraints/&gt;</span>
+  <span class="nt">&lt;cpuConstraint&gt;</span>
+    <span class="nt">&lt;minNumCPU&gt;</span>1<span class="nt">&lt;/minNumCPU&gt;</span>
+    <span class="nt">&lt;maxNumCPU&gt;</span>6<span class="nt">&lt;/maxNumCPU&gt;</span>
+  <span class="nt">&lt;/cpuConstraint&gt;</span>
+<span class="nt">&lt;/TaskRule&gt;</span>
+</pre></div>
+</div>
+<p class="rubric">CombinedTerrain task rule</p>
+<p>Since <code class="docutils literal notranslate"><span class="pre">gecombineterrain</span></code> is a serial process and must be
+completed before the other database-level building activities can
+start, you can use the CombinedTerrain task rule to assign all
+available CPUs to the build. For example, with eight CPUs assigned for
+Fusion, assuming that one CPU is reserved for the system, you can
+assign seven CPUs to the CombinedTerrain serial process.</p>
+<p class="rubric">Sample: CombinedTerrain.taskrule</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;TaskRule&gt;</span>
+  <span class="nt">&lt;taskname&gt;</span>CombinedTerrain<span class="nt">&lt;/taskname&gt;</span>
+  <span class="nt">&lt;inputConstraints/&gt;</span>
+  <span class="nt">&lt;outputConstraints/&gt;</span>
+  <span class="nt">&lt;cpuConstraint&gt;</span>
+    <span class="nt">&lt;minNumCPU&gt;</span>7<span class="nt">&lt;/minNumCPU&gt;</span>
+    <span class="nt">&lt;maxNumCPU&gt;</span>7<span class="nt">&lt;/maxNumCPU&gt;</span>
+  <span class="nt">&lt;/cpuConstraint&gt;</span>
+<span class="nt">&lt;/TaskRule&gt;</span>
+</pre></div>
+</div>
+<p class="rubric">MapLayerLevel task rule</p>
+<p>By default, Fusion assigns one CPU to work on map tile generation.
+As <code class="docutils literal notranslate"><span class="pre">maptilegen</span></code> can be run concurrently, you can use this task
+rule to assign multiple CPUs instead. Set the rule to min/max 4 on
+a 2 dual-core CPU system (3 may work well enough). On a 2
+quad-core CPU system, set the rule to min/max 3.</p>
+<p class="rubric" id="sample-maplayerlevel-taskrule">Sample: MapLayerLevel.taskrule</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;TaskRule&gt;</span>
+  <span class="nt">&lt;taskname&gt;</span>MapLayerLevel<span class="nt">&lt;/taskname&gt;</span>
+  <span class="nt">&lt;inputConstraints/&gt;</span>
+  <span class="nt">&lt;outputConstraints/&gt;</span>
+  <span class="nt">&lt;cpuConstraint&gt;</span>
+    <span class="nt">&lt;minNumCPU&gt;</span>4<span class="nt">&lt;/minNumCPU&gt;</span>
+    <span class="nt">&lt;maxNumCPU&gt;</span>4<span class="nt">&lt;/maxNumCPU&gt;</span>
+  <span class="nt">&lt;/cpuConstraint&gt;</span>
+<span class="nt">&lt;/TaskRule&gt;</span>
+</pre></div>
+</div>
+<p class="rubric" id="krp-task-rule">KRP task rule</p>
+<p>When Fusion creates an asset, it writes large imagery files to the
+raster.kip directory in asset root by default. You can manage your
+disk space by using the KRP task rule to write these files to a
+different volume. See <a class="reference internal" href="#example-file-locations"><span class="std std-ref">Example of File
+Locations</span></a>.</p>
+<p>In the sample below, the volume you have created is <code class="docutils literal notranslate"><span class="pre">products</span></code>. To
+learn how to create a new volume, see <a class="reference internal" href="#defining-volumes"><span class="std std-ref">Defining
+volumes</span></a>.</p>
+<p class="rubric">Sample: KRP.taskrule</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;TaskRule&gt;</span>
+  <span class="nt">&lt;taskname&gt;</span>KRP<span class="nt">&lt;/taskname&gt;</span>
+  <span class="nt">&lt;inputConstraints/&gt;</span>
+  <span class="nt">&lt;outputConstraints&gt;</span>
+    <span class="nt">&lt;outputConstraint&gt;</span>
+      <span class="nt">&lt;num&gt;</span>0<span class="nt">&lt;/num&gt;</span>
+      <span class="nt">&lt;requiredVolume&gt;</span>products<span class="nt">&lt;/requiredVolume&gt;</span>
+      <span class="nt">&lt;pathPattern&gt;</span>${assetref:dirname:sansext}-${vernum}${defaultpath:ext}<span class="nt">&lt;/pathPattern&gt;</span>
+    <span class="nt">&lt;/outputConstraint&gt;</span>
+  <span class="nt">&lt;/outputConstraints&gt;</span>
+  <span class="nt">&lt;cpuConstraint&gt;</span>
+    <span class="nt">&lt;minNumCPU&gt;</span>1<span class="nt">&lt;/minNumCPU&gt;</span>
+    <span class="nt">&lt;maxNumCPU&gt;</span>1<span class="nt">&lt;/maxNumCPU&gt;</span>
+  <span class="nt">&lt;/cpuConstraint&gt;</span>
+<span class="nt">&lt;/TaskRule&gt;</span>
+</pre></div>
+</div>
+<p>You can also enter a second <code class="docutils literal notranslate"><span class="pre">requiredvolume</span></code> tag in your task
+rule to specify the next available volume in case the first volume
+fills up. However, you must to restart the system manager to
+trigger Fusion to wri.. code-block:: xml.. code-block:: xmlte files to the next volume.</p>
+<p class="rubric" id="krmp-task-rule">KRMP task rule</p>
+<p>When Fusion creates an asset, it writes the mask files to the
+<code class="docutils literal notranslate"><span class="pre">mask.kmp</span></code> directory in asset root by default. You can manage
+your disk space by using the KRMP task rule to write these files
+to a different volume. See <a class="reference internal" href="#example-file-locations"><span class="std std-ref">Example of File
+Locations</span></a>. In the sample below, the
+volume you have created is <code class="docutils literal notranslate"><span class="pre">products</span></code>. To learn how to create a
+new volume, see <a class="reference internal" href="#defining-volumes"><span class="std std-ref">Defining Volumes</span></a>.</p>
+<p class="rubric">Sample: KRMP.taskrule</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;TaskRule&gt;</span>
+  <span class="nt">&lt;taskname&gt;</span>KRMP<span class="nt">&lt;/taskname&gt;</span>
+  <span class="nt">&lt;inputConstraints/&gt;</span>
+  <span class="nt">&lt;outputConstraints&gt;</span>
+    <span class="nt">&lt;outputConstraint&gt;</span>
+      <span class="nt">&lt;num&gt;</span>0<span class="nt">&lt;/num&gt;</span>
+      <span class="nt">&lt;requiredVolume&gt;</span>products<span class="nt">&lt;/requiredVolume&gt;</span>
+      <span class="nt">&lt;pathPattern&gt;</span>${assetref:dirname:sansext}-${vernum}${defaultpath:ext}<span class="nt">&lt;/pathPattern&gt;</span>
+    <span class="nt">&lt;/outputConstraint&gt;</span>
+  <span class="nt">&lt;/outputConstraints&gt;</span>
+  <span class="nt">&lt;cpuConstraint&gt;</span>
+    <span class="nt">&lt;minNumCPU&gt;</span>1<span class="nt">&lt;/minNumCPU&gt;</span>
+    <span class="nt">&lt;maxNumCPU&gt;</span>1<span class="nt">&lt;/maxNumCPU&gt;</span>
+  <span class="nt">&lt;/cpuConstraint&gt;</span>
+<span class="nt">&lt;/TaskRule&gt;</span>
+</pre></div>
+</div>
+<p>You can also enter a second <code class="docutils literal notranslate"><span class="pre">requiredvolume</span></code> tag in your task
+rule to specify the next available volume in case the first volume
+fills up. However, you must restart the system manager to
+trigger Fusion to write files to the next volume.</p>
+<p class="rubric" id="defining-volumes">Defining Volumes</p>
+<p>The KRP and KRMP task rules include a <code class="docutils literal notranslate"><span class="pre">requiredvolume</span></code> tag that
+indicates where to write files. You need to make sure that this
+volume is defined and has enough space to hold the files. To
+define the volume, use the <code class="docutils literal notranslate"><span class="pre">geconfigureassetroot</span> <span class="pre">--</span> <span class="pre">editvolumes</span></code>
+command, then edit the XML as shown in the sample below. In this
+sample, the volume you are creating is called <code class="docutils literal notranslate"><span class="pre">products</span></code>.</p>
+<p class="rubric" id="sample-volumes-xml">Sample: volumes.xml</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;products&gt;</span>
+  <span class="nt">&lt;netpath&gt;</span>/gevol/products<span class="nt">&lt;/netpath&gt;</span>
+  <span class="nt">&lt;host&gt;</span>linux<span class="nt">&lt;/host&gt;</span>
+  <span class="nt">&lt;localpath&gt;</span>/gevol/products<span class="nt">&lt;/localpath&gt;</span>
+  <span class="nt">&lt;reserveSpace&gt;</span>100000<span class="nt">&lt;/reserveSpace&gt;</span>
+  <span class="nt">&lt;isTmp&gt;</span>0<span class="nt">&lt;/isTmp&gt;</span>
+<span class="nt">&lt;/products&gt;</span>
+</pre></div>
+</div>
+<p class="rubric" id="example-file-locations">Example of File Locations</p>
+<p>The table below shows an example of the default file locations and
+the locations after applying the KMP and KRMP task rules. In this
+example, the asset root is <code class="docutils literal notranslate"><span class="pre">/gevol/assets</span></code>, the volume you have
+created is <code class="docutils literal notranslate"><span class="pre">products</span></code>, and you have built an asset called
+<code class="docutils literal notranslate"><span class="pre">TestImage</span></code> in the imagery subdirectory.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="6%" />
+<col width="13%" />
+<col width="51%" />
+<col width="31%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Task rule</th>
+<th class="head">File type</th>
+<th class="head">Default location</th>
+<th class="head">Location with task rule</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>KMP</td>
+<td>large imagery files</td>
+<td><code class="docutils literal notranslate"><span class="pre">/gevol/assets/imagery/TestImage.kiasset/products.kia/ver001/raster.kip</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">/gevol/products/imagery/</span> <span class="pre">TestImage-001.kip</span></code></td>
+</tr>
+<tr class="row-odd"><td>KRMP</td>
+<td>smaller mask files</td>
+<td><code class="docutils literal notranslate"><span class="pre">/gevol/assets/imagery/TestImage.kiasset/maskproducts.kia/ver001/mask.kmp</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">/gevol/products/imagery/TestImage-001.kmp</span></code></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric" id="cache-configuration">Cache configuration</p>
+<p><code class="docutils literal notranslate"><span class="pre">gesystemmanager</span></code> caches information about the assets and asset
+versions it is working with. The default sizes for these caches
+should work fine for most builds; however, increasing the cache
+sizes may speed up very large builds at the cost of increased
+memory usage. The cache sizes are controlled by the file
+<code class="docutils literal notranslate"><span class="pre">misc.xml</span></code> which can be found at
+<code class="docutils literal notranslate"><span class="pre">/gevol/assets/.config/misc.xml</span></code> (assuming your asset root is
+<code class="docutils literal notranslate"><span class="pre">/gevol/assets</span></code>; if not, modify the path accordingly). The asset
+cache size is controlled by <code class="docutils literal notranslate"><span class="pre">AssetCacheSize</span></code> and the asset
+version cache size is controlled by <code class="docutils literal notranslate"><span class="pre">VersionCacheSize</span></code>. Note
+that the asset version cache is generally larger than the asset
+cache because it may contain multiple versions of the same asset.</p>
+<p>Within <code class="docutils literal notranslate"><span class="pre">misc.xml</span></code>, the following options are deprecated and are
+treated as if they are permanently enabled:
+<code class="docutils literal notranslate"><span class="pre">DisablePacketLevelVersionCachePurge</span></code> and
+<code class="docutils literal notranslate"><span class="pre">ConsolidateListenerNotifications</span></code>.</p>
+<p>Also included within <code class="docutils literal notranslate"><span class="pre">misc.xml</span></code> is an experimental option that
+allows the user to limit the caches by memory usage instead of
+number of objects. This option is controlled by
+<code class="docutils literal notranslate"><span class="pre">LimitMemoryUtilization</span></code> and its default value is 0 (false). The
+maximum memory usage for each cache can be set with
+<code class="docutils literal notranslate"><span class="pre">MaxAssetCacheMemorySize</span></code> and <code class="docutils literal notranslate"><span class="pre">MaxVersionCacheMemorySize</span></code> and
+is in terms of bytes. While this option is enabled, the caches will
+not be limited by the number of objects in the cache.</p>
+<p id="prune-percent">Another experimental option in <code class="docutils literal notranslate"><span class="pre">misc.xml</span></code> allows the user to limit
+how often the asset and asset version caches are pruned, which can
+improve performance. Assets that have been modified can not be
+removed from the cache until they are written to disk. To limit
+pruning, the amount of unwritten modified assets is compared to a
+percentage of the current size of each cache. This percentage is
+controlled by <code class="docutils literal notranslate"><span class="pre">PrunePercent</span></code> and is set to 100 by default, which
+doesn’t enforce prune limiting. The value for <code class="docutils literal notranslate"><span class="pre">PrunePercent</span></code> can be
+any number from 0 up to 100. If the number of unwritten modified
+assets exceeds the configured percentage of the cache size, the cache
+will not attempt to prune.</p>
+<p>The Xerces library maintains a separate cache for dealing with XML
+files. Users can modify aspects of this cache through a
+configuration file at <code class="docutils literal notranslate"><span class="pre">/etc/opt/google/XMLparams</span></code>. This file is
+not created automatically as part of the Open GEE Fusion install,
+so users that want to modify the parameters below must first
+create an <code class="docutils literal notranslate"><span class="pre">XMLparams</span></code> file. The <code class="docutils literal notranslate"><span class="pre">XMLparams</span></code> file has the
+following format:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># comments are preceded by &#39;#&#39;</span>
+<span class="c1"># options are case-insensitive, and all need not be present</span>
+
+<span class="c1"># the initial size of the XML heap in bytes</span>
+<span class="c1"># default is 16384</span>
+<span class="nv">INIT_HEAP_SIZE</span><span class="o">=</span>&lt;value&gt;
+
+<span class="c1"># the max size of the XML heap in bytes</span>
+<span class="c1"># default is 131072</span>
+<span class="nv">MAX_HEAP_SIZE</span><span class="o">=</span>&lt;value&gt;
+
+<span class="c1"># the size of XML heap allocation blocks in bytes</span>
+<span class="c1"># default is 4096</span>
+<span class="nv">BLOCK_SIZE</span><span class="o">=</span>&lt;value&gt;
+</pre></div>
+</div>
+<p class="rubric">PackGen analysis thread configuration</p>
+<p>Within <code class="docutils literal notranslate"><span class="pre">misc.xml</span></code>, there is an experimental feature for setting
+the number of threads to use while analyzing and creating packgen
+tasks. The number of threads is controlled by <code class="docutils literal notranslate"><span class="pre">PackGenAnalysisThreads</span></code>.
+This option is experimental and may contain bugs.</p>
+<p class="rubric">Status request timeout</p>
+<p>Status requests to the system manager from clients like <code class="docutils literal notranslate"><span class="pre">getop</span></code>
+must wait to be fulfilled if the system manager is already engaged
+in another task. The system manager has a timeout that specifies
+the maximum amount of time it should spend waiting to fulfill a
+status request before it times out. This timeout can be configured
+manually by setting <code class="docutils literal notranslate"><span class="pre">MutexTimedWaitSec</span></code> in
+<code class="docutils literal notranslate"><span class="pre">/gevol/assets/.config/misc.xml</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;MutexTimedWaitSec&gt;60&lt;/MutexTimedWaitSec&gt;</span></code></p>
+<p class="rubric" id="graph-operations">Improving Performance</p>
+<p>Included in <code class="docutils literal notranslate"><span class="pre">/gevol/assets/.config/misc.xml</span></code> is a
+<code class="docutils literal notranslate"><span class="pre">GraphOperations</span></code> option that enables new versions of certain
+operations. These updates are experimental and may contain bugs,
+and in some cases may reduce performance compared to previous versions
+of Fusion. <code class="docutils literal notranslate"><span class="pre">GraphOperations</span></code> can be set to the following values:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">NO_GRAPH_OPS</span></code> or <code class="docutils literal notranslate"><span class="pre">0</span></code>: use the legacy version of all operations</li>
+<li><code class="docutils literal notranslate"><span class="pre">FAST_GRAPH_OPS</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code>: use new operations that are likely to
+improve performance</li>
+<li><code class="docutils literal notranslate"><span class="pre">ALL_GRAPH_OPS</span></code> or <code class="docutils literal notranslate"><span class="pre">2</span></code>: use all new operations regardless of
+performance impact</li>
+</ul>
+<p class="rubric" id="use-minification">Use Minification</p>
+<p>Included in <code class="docutils literal notranslate"><span class="pre">/gevol/assets/.config/misc.xml</span></code> is a <code class="docutils literal notranslate"><span class="pre">UseMinification</span></code>
+option that controls how data for imagery and terrain zoom levels are
+generated.  <code class="docutils literal notranslate"><span class="pre">UseMinification</span></code> can be set to the following values:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">1</span></code>: Imagery and terrain for each zoom level are generated by
+minifying the level below it, where possible.  This is the default.</li>
+<li><code class="docutils literal notranslate"><span class="pre">0</span></code>: Imagery and terrain for each zoom level are generated from the
+original source data.  This reduces dependencies between levels and
+may improve performance in some situations.</li>
+</ul>
+<p class="rubric" id="retry-failed-tasks">Retry Failed tasks</p>
+<p>Users can configure Fusion to retry tasks that fail, which allows Fusion
+to recover from intermittent failures.
+This feature is disabled by default.
+To enable it, set the following parameters in
+<code class="docutils literal notranslate"><span class="pre">/gevol/assets/.config/misc.xml</span></code>:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">TriesPerCommand</span></code>: the maximum number of times that Fusion will
+try to execute each command. Must be at least 1. Default: 1.</li>
+<li><code class="docutils literal notranslate"><span class="pre">SleepBetweenCommandTriesSec</span></code>: the number of seconds to pause before
+retrying a failed command. Must be at least 0. Default: 0.</li>
+</ul>
+<p class="rubric">Learn more</p>
+<ul class="simple">
+<li><a class="reference internal" href="benchMarkOutcomesForTaskRule.html"><span class="doc">Benchmarking outcomes for applying task rules</span></a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="benchMarkOutcomesForTaskRule.html" title="Benchmarking outcomes for applying task rules"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="dynamicLogLevelSetting.html" title="Dynamically adjusting logging levels"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" >Fusion Administration</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

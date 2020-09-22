@@ -245,18 +245,9 @@ void PacketGenAssetVersionImplD::UpdateChildren(
           // In these cases we pull directly from the product. It
           // will also happen for the last thing on the stack who
           // hasn't had his blendvers filled in yet.
-
-          // Note: Before creating a merge inset, we check if the cached alpha
-          // blend directory exists for the asset since in GEE-5.x we need to
-          // pick up the GEE-4.x Imagery/Terrain Projects (the PacketLevel
-          // assets) that have no alpha blend cached.
           levInputs[inputs_idx+1] = blendVer.Ref();
           levInputVers[inputs_idx+1] = blendVer;
-          const std::string cache_alpha_path =
-              blendVer->GetOutputFilename(0) + "/cache_alpha.pack";
-          if (khExists(cache_alpha_path)) {
-            cached_blend_alpha = blendVer.Ref();
-          }
+          cached_blend_alpha = blendVer.Ref();
           cached_blend = blendVer.Ref();
         }
         packetLevelConfig.insets[merge_idx] =
@@ -279,22 +270,12 @@ void PacketGenAssetVersionImplD::UpdateChildren(
         levInputs.back() = prevLevelVer.Ref();
         levInputVers.back() = prevLevelVer;
 
-
-        // Note: Before creating a merge inset, we check if the cached alpha
-        // blend directory exists for the asset since in GEE-5.x we need to
-        // pick up the GEE-4.x Imagery/Terrain Projects (the PacketLevel
-        // assets) that have no alpha blend cached.
-        const std::string cache_alpha_path =
-            prevLevelVer->GetOutputFilename(0) + "/cache_alpha.pack";
-        const bool cache_alpha_exist = khExists(cache_alpha_path);
-
         packetLevelConfig.insets.push_back
           (PacketLevelConfig::Inset(
               std::string() /* dataRP */,
               std::string() /* alphaRP */,
               prevLevelVer.Ref(), /* cached blend */
-              cache_alpha_exist ?
-                  prevLevelVer.Ref() : SharedString() /* cached blend alpha */));
+              prevLevelVer.Ref() /* cached blend alpha */));
       }
 
       levInputs.erase(std::remove(levInputs.begin(), levInputs.end(), ""), levInputs.end());

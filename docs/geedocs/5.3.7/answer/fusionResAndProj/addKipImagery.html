@@ -1,0 +1,133 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Add .kip imagery &#8212; Google Earth Enterprise 5.3.7 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Vector data handling" href="vectorDataHandling.html" />
+    <link rel="prev" title="Import a subset of imagery" href="importSubsetOfImagery.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="vectorDataHandling.html" title="Vector data handling"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="importSubsetOfImagery.html" title="Import a subset of imagery"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" accesskey="U">Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="importSubsetOfImagery.html"
+                        title="previous chapter">Import a subset of imagery</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="vectorDataHandling.html"
+                        title="next chapter">Vector data handling</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp2.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp2.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="add-kip-imagery">
+<h1>Add .kip imagery<a class="headerlink" href="#add-kip-imagery" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>GEE can use pre-processed imagery in <strong>Keyhole Imagery Product</strong>
+(<code class="docutils literal notranslate"><span class="pre">.kip</span></code>) format. Each <code class="docutils literal notranslate"><span class="pre">.kip</span></code> folder has a corresponding
+<strong>Keyhole Mask Product</strong> (<code class="docutils literal notranslate"><span class="pre">.kmp</span></code>) folder that contains the mask
+for the imagery. The corresponding folders have the same name.</p>
+<p>To add <code class="docutils literal notranslate"><span class="pre">.kip</span></code> imagery to the asset tree:</p>
+<ol class="arabic">
+<li><p class="first">Store each <code class="docutils literal notranslate"><span class="pre">.kip/.kmp</span></code> folder pair in the same directory.</p>
+</li>
+<li><p class="first">Set read-and-execute permissions for the <code class="docutils literal notranslate"><span class="pre">keyhole:users</span></code>
+account.</p>
+</li>
+<li><p class="first">Use the <code class="docutils literal notranslate"><span class="pre">khnewimageryasset</span> <span class="pre">--havemask</span></code> command to add the
+files. Specify the asset name, the provider information (USGS),
+and the location of the <code class="docutils literal notranslate"><span class="pre">.kip</span></code> folder. For example, if
+<code class="docutils literal notranslate"><span class="pre">city_one.kip</span></code> and <code class="docutils literal notranslate"><span class="pre">city_one.kmp</span></code> are in
+<code class="docutils literal notranslate"><span class="pre">/gevol/src/preprocessed/noame/usa/</span></code>, the command is:</p>
+<p><code class="docutils literal notranslate"><span class="pre">genewimageryasset</span> <span class="pre">--havemask</span> <span class="pre">--provider</span> <span class="pre">(PROVIDER_KEY)</span> <span class="pre">-o</span> <span class="pre">path/to/asset/in/tree/gevol/src/preprocessed/noame/usa/city_one.kip</span></code></p>
+</li>
+<li><p class="first">Repeat this step for each <code class="docutils literal notranslate"><span class="pre">.kip/.kmp</span></code> combination you want to
+add.</p>
+</li>
+</ol>
+<p>You can access the assets from the Fusion Asset Manager whenever
+you want to use them in imagery projects. You are still required to
+build each asset in the system, but the build time will be
+insignificant because each <code class="docutils literal notranslate"><span class="pre">.kip/.kmp</span></code> combination is
+preprocessed.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="vectorDataHandling.html" title="Vector data handling"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="importSubsetOfImagery.html" title="Import a subset of imagery"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" >Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

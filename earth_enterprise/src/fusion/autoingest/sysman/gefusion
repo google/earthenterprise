@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 # Copyright 2017 Google Inc.
+# Copyright 2020 The Open Google Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -265,6 +266,8 @@ start() {
         echo "Enabling core files"
         ulimit -c unlimited
     fi
+    
+	ulimit -n 500000
 
     if check_if_master ; then
         start_command_as_daemon "gesystemmanager" "Fusion worker services manager" || exit 1

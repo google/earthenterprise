@@ -555,12 +555,12 @@
     <tabstop>acquisition_date_year</tabstop>
     <tabstop>acquisition_date_month</tabstop>
     <tabstop>acquisition_date_day</tabstop>
-    <tabstop>codec_combo</tabstop>
-    <tabstop>elev_units_combo</tabstop>
-    <tabstop>force_feature_type_combo</tabstop>
     <tabstop>provider_combo</tabstop>
+    <tabstop>codec_combo</tabstop>
     <tabstop>layer_spin</tabstop>
+    <tabstop>elev_units_combo</tabstop>
     <tabstop>ignore_bad_features_check</tabstop>
+    <tabstop>force_feature_type_combo</tabstop>
     <tabstop>do_not_fix_invalid_geometries_check</tabstop>
     <tabstop>south_boundary</tabstop>
     <tabstop>north_boundary</tabstop>

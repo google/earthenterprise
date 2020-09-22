@@ -1,0 +1,165 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Apply alpha masking to imagery &#8212; Google Earth Enterprise 5.3.7 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Import pre-processed data" href="importPreProcessedData.html" />
+    <link rel="prev" title="Supported file formats in GEE" href="supportedFileFormats.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="importPreProcessedData.html" title="Import pre-processed data"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="supportedFileFormats.html" title="Supported file formats in GEE"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" accesskey="U">Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="supportedFileFormats.html"
+                        title="previous chapter">Supported file formats in GEE</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="importPreProcessedData.html"
+                        title="next chapter">Import pre-processed data</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp2.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp2.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="apply-alpha-masking-to-imagery">
+<h1>Apply alpha masking to imagery<a class="headerlink" href="#apply-alpha-masking-to-imagery" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>Image masking is a method for making areas of an image
+transparent. Images are defined as rectangular, but their contents
+can have irregular shapes. For example, an image that contains the
+land mass for a country has areas that are outside the country’s
+borders. These areas are called fill, or no-data regions, and they
+are usually black or white. When the image is overlaid on a base
+map, these areas should be transparent, to allow the base map to
+show through.</p>
+<p>An <em>alpha mask</em> is a set of pixels that specifies where to make an
+image transparent. By default, Google Earth Enterprise Fusion
+automatically applies a mask when it processes an image but you
+can also provide custom mask data or prevent masking altogether.
+The Google Earth Enterprise Fusion <strong>Automask tool</strong> scans an
+imagery resource, detects fill data from imagery, and then creates
+a mask to only show the imagery.</p>
+<p>GEE 5.x enables this <em>overlay</em> approach, making it easy to add
+high resolution imagery insets without the need to include imagery
+for the entire globe. In addition to use as an overlay, alpha
+masking can be used to <em>blend</em> imagery layers together.</p>
+<p>Prior to GEE 5.x, each imagery layer—built by an imagery
+project—would comprise an opaque foundation to which all
+imagery resources would be added. In <strong>GEE 4.4</strong> and earlier, the
+following example of high-resolution imagery inset with a custom
+mask includes the <em>mask</em> imagery covered with black pixels.</p>
+<p class="rubric" id="gee-4-4-and-earlier-versions-applied-opaque-masks">GEE 4.4 and earlier versions applied opaque masks:</p>
+<p><img alt="GEE Version 4.4 mask with black pixels" src="../../images/alphamask1.png" /></p>
+<p>As of <strong>GEE 5.x</strong>, each imagery layer—built by an imagery
+project—is comprised of a <em>transparent</em> foundation from which all
+imagery resources are added. The transparent alpha mask enables
+you to have imagery resources for specific areas, and to view
+these as <em>overlays</em> or <em>blends</em> on other imagery via Google Earth
+EC. The following image shows the same high resolution inset, this
+time with an alpha mask applied, so that it can easily be used as
+an overlay of a secondary database of worldwide imagery.</p>
+<p class="rubric" id="gee-5-x-applies-alpha-masking">GEE 5.x applies alpha masking:</p>
+<p><img alt="GEE version 5.x alpha mask" src="../../images/alphamask2.png" /></p>
+<p>You can apply an alpha mask in different ways when you build an
+imagery asset:</p>
+<ul>
+<li><p class="first">Use <strong>Auto mask</strong> to automatically scan an imagery resource,
+detect fill data from the imagery, and then create a mask to only
+show the imagery.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Auto mask works well to mask fill data though it cannot, for
+example, mask imagery to a coastline since the water would
+still be considered imagery and not fill. In such cases,
+create a custom mask.</p>
+</div>
+</li>
+<li><p class="first"><a class="reference internal" href="createCustomMasks.html"><span class="doc">Create your own custom mask</span></a> and
+use <strong>Have mask</strong> to apply your custom mask.</p>
+</li>
+</ul>
+<p class="rubric">Learn More</p>
+<ul class="simple">
+<li><a class="reference internal" href="../fusionTutorial/buildResource.html#define-imagery-resources"><span class="std std-ref">Defining imagery resources</span></a></li>
+<li><a class="reference internal" href="createCustomMasks.html"><span class="doc">Create custom masks</span></a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="importPreProcessedData.html" title="Import pre-processed data"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="supportedFileFormats.html" title="Supported file formats in GEE"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" >Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
