@@ -209,7 +209,7 @@ env.test('khconfigparser_unittest',
 
 env.test('sharedstring_unittest',
          'sharedstring_unittest.cpp',
-          LIBS=['geutil', 'gtest','gecommon'])
+          LIBS=['geutil', 'gtest', 'gecommon'])
 
 env.install('common_lib', [gecommon])
 env.install('common_lib', [geutil])
