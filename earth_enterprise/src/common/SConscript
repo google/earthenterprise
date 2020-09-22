@@ -78,9 +78,6 @@ commonsources = [ '../third_party/rsa_md5/md5c.c',
                   'proto_streaming_imagery.cpp',
                   'performancelogger.cpp',
                   'timeutils.cpp',
-                  'FileAccessor.cpp',
-                  'POSIXFileAccessor.cpp',
-                  'FileAccessorPluginLoader.cpp',
                   streaming_imagery[0]  # generated .cc file
                  ]
 
