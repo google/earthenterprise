@@ -18,8 +18,7 @@ before_install:
       libx11-dev libxcursor-dev libxerces-c-dev libxft-dev libxinerama-dev
       libxml2-dev libxml2-utils libxmu-dev libxrandr-dev libyaml-cpp-dev libpcre3-dev
     openssl
-    python-dev python-git python-imaging python-setuptools
-      python2.7 python2.7-dev python2.7-psycopg2
+    python-dev python-git python-imaging python-setuptools python-psycopg2
     swig xorg-dev zlib1g-dev
 script: echo "Running build..."
 
