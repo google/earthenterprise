@@ -71,7 +71,8 @@ class StorageManager : public StorageManagerInterface<AssetType> {
                    SerializerPtr serializer) :
         assetType(type),
         serializer(std::move(serializer)),
-        cache(cacheSize, type)
+        cache(cacheSize, type),
+        prunePercent(prunePercent)
     {
       SetCacheMemoryLimit(limitByMemory, maxMemory);
     }
