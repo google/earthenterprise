@@ -1,5 +1,5 @@
 sudo: required
-dist: trusty
+dist: xenial
 
 language: cpp
 
@@ -12,14 +12,13 @@ before_install:
     libboost-all-dev libc6 libc6-dev libcap-dev libfreetype6 libfreetype6-dev
       libgdbm-dev libgeos-dev libgeos++-dev libgif-dev libgtest-dev
       libjpeg-dev libjpeg8-dev libmng-dev libogdi3.2-dev
-      libpcre3 libpcre3-dev
+      libpcre3 libpcre3-dev scons
       libperl4-corelibs-perl libpng12-0 libpng12-dev libpq-dev libproj-dev
-      libstdc++6 libtool
+      libstdc++6 libtool libgif-dev libtiff-dev libgtk2.0-dev libglib2.0-dev
       libx11-dev libxcursor-dev libxerces-c-dev libxft-dev libxinerama-dev
       libxml2-dev libxml2-utils libxmu-dev libxrandr-dev libyaml-cpp-dev libpcre3-dev
     openssl
-    python-dev python-git python-imaging python-setuptools
-      python2.7 python2.7-dev python2.7-psycopg2
+    python-dev python-git python-imaging python-setuptools python-psycopg2
     swig xorg-dev zlib1g-dev
 script: echo "Running build..."
 
