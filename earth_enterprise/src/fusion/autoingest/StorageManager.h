@@ -252,7 +252,7 @@ StorageManager<AssetType>::Get(
   if (entry) {
     // Add it to the cache.
     if (addToCache && updated)
-      cache.Add(key, entry);
+      cache.Add(key, entry, DetermineIfPrune());
 
     // Add it to the dirty map. If it's already in the dirty map the existing
     // one will win; that's OK.
@@ -305,7 +305,7 @@ StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & ref) {
 
   if (entry && updated) {
     // Add it to the cache.
-    cache.Add(key, entry);
+    cache.Add(key, entry, DetermineIfPrune());
   }
 
   return entry;
