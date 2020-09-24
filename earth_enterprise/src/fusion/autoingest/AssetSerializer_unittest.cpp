@@ -73,11 +73,11 @@ class TestXMLException : public XMLException {
 };
 
 // Define a TestItem-specific version of GetFileInfo for testing
-static std::uint64 getFileInfoSize;
+static std::uint64_t getFileInfoSize;
 static time_t getFileInfoTime;
 static bool getFileInfoReturnValue;
 template<>
-bool GetFileInfo<TestItem>(const std::string &fname, std::uint64 &size, time_t &mtime) {
+bool GetFileInfo<TestItem>(const std::string &fname, std::uint64_t &size, time_t &mtime) {
   size = getFileInfoSize;
   mtime = getFileInfoTime;
   return getFileInfoReturnValue;
