@@ -19,9 +19,13 @@
 # fuison and run unit tests. Assumes the following environment variables are set:
 # CPP_STD    - Should be set to `98` or `11` depending on the standard to build with
 # BUILD_TYPE - The type of build `release`, `optimize`, or `internal`
+# SERIES	 - This is used to version the cache for major third party changes.
 
 # Terminate with an non-zero exit code, if a command doesn't succeed:
 set -e
+
+if test -z "$SERIES" ; then
+	SERIES="1" ; fi
 
 case "$CPP_STD" in
     11)
@@ -44,8 +48,8 @@ esac
 set -x
 cd earth_enterprise/src
 
-if [ -f $HOME/cache/third_party$CPP_STD.tgz ]; then
-  tar xf $HOME/cache/third_party$CPP_STD.tgz;
+if [ -f $HOME/cache/third_party$SERIES-$CPP_STD.tgz ]; then
+  tar xf $HOME/cache/third_party$SERIES-$CPP_STD.tgz;
 fi
 
 cd ..
