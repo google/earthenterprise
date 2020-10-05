@@ -12,14 +12,12 @@ Release notes: Open GEE 5.3.6
 
       .. rubric:: New Features
 
-      **New feature here**.
-      New feature description goes here.
-
-      In 5.3.5, we moved documentation, examples, and tutorials into a
-      separate RPM called opengee-extra. This mainly includes the
-      documentation, ExampleSearch, and Fusion Tutorial files.  You
-      can choose whether to install opengee-extra depending on if you
-      need those items.
+      **Secure permissions for special files**.
+      
+      In 5.3.6, a ``--secure`` option was added for ``geconfigureassetroot``
+      and ``geupgradeassetroot`` that removes world-writable permissions from
+      special files. This helps Open GEE perform properly in strict security
+      environments.
 
       .. rubric:: Supported Platforms
 
@@ -49,23 +47,25 @@ Release notes: Open GEE 5.3.6
 
          * - Number
            - Description
-           - Resolution
-         * - 9999
-           - Add description
-           - Add resolution
+         * - 1851
+           - Open GEE does not function properly on systems with a restrictive umask
+         * - 1850
+           - Fusion should include an option to set secure permissions for special folders
+         * - 1761
+           - Tab Order wrong for Fusion Add Vector Resource and Add Terrain Resource
+         * - 1785
+           - Imagery Projects - Transparent areas appears as black
+         * - 1800
+           - Upgrade from 5.3.4 to 5.3.5 leaves a non-working ExampleSearch
+         * - 1806
+           - Confusing "geserver.service changed on disk" message after uninstalling Fusion or Server
+         * - 1741
+           - Invalid git version in CentOS/RHEL install instructions
 
       .. rubric:: Known Issues
 
-      .. list-table::
-         :widths: 10 30 55
-         :header-rows: 1
-
-         * - Number
-           - Description
-           - Resolution
-         * - 9999
-           - Add description
-           - Add resolution
+      See the `GitHub issues page <https://github.com/google/earthenterprise/issues>`_
+      for a list of known issues.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
