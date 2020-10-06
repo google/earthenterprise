@@ -42,7 +42,7 @@ Release notes: Open GEE 5.3.6
       .. rubric:: Resolved Issues
 
       .. list-table::
-         :widths: 10 30 55
+         :widths: 35 65
          :header-rows: 1
 
          * - Number
