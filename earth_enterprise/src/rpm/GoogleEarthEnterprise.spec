@@ -164,7 +164,7 @@ rm %{buildroot}/opt/google/search/tabs/Street_Geocoder.gestd
 
 
 # build and install the scons portion of our tree
-cd .. ; scons -j $NRPROC release=1 installdir=%{buildroot} install
+cd .. ; python2.7 /usr/bin/scons -j $NRPROC release=1 installdir=%{buildroot} install
 
 # make some convenience symlinks
 ln -s /etc/opt/google     %{buildroot}/opt/google/etc
