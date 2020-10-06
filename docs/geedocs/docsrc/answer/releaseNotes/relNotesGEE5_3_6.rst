@@ -12,12 +12,10 @@ Release notes: Open GEE 5.3.6
 
       .. rubric:: New Features
 
-      **Secure permissions for special files**.
-      
       In 5.3.6, a ``--secure`` option was added for ``geconfigureassetroot``
       and ``geupgradeassetroot`` that removes world-writable permissions from
       special files. This helps Open GEE perform properly in strict security
-      environments.
+      environments. ``--secure`` is not the default setting.
 
       .. rubric:: Supported Platforms
 
