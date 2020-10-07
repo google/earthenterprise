@@ -1,5 +1,6 @@
 #-*- Python -*-
 # Copyright 2017 Google Inc.
+# Copyright 2020 The Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -59,3 +60,16 @@ env.InstallFileOrDir(
     '%s/glc_unpacker.py' % build_root,
     '%s/common' % env.installdirs['httpdwsgi'],
     libglc_unpacker, 'install')
+
+# Drop in the test globes
+sync_test_globes = env.Command(
+    '%s/tests/portable/' % Dir(env.exportdirs['bin']).abspath, # TARGET
+    Dir('#fusion/portableglobe/servers/fileunpacker/test_data').abspath, # SOURCE
+    env.rsync_cmd % ('$SOURCE', '$TARGET'))
+env.AlwaysBuild(sync_test_globes)
+
+# Tests
+filewalker_test = env.test('filewalker_test',
+    ['filewalker_unittest.cpp', portable_glc_reader_sobj],
+    LIBS=['glb', 'gedbroot',
+          'gtest', 'gecommon', 'qtutils'])
