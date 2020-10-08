@@ -35,6 +35,7 @@ import postgres_properties
 
 class PostgresManagerWrap(object):
   DB_PORT = postgres_properties.PostgresProperties().GetPortNumber()
+  DB_HOST = postgres_properties.PostgresProperties().GetHost()
   DB_USER = "geuser"
 
   @staticmethod
@@ -52,7 +53,7 @@ class PostgresManagerWrap(object):
     db_con = postgres_manager.PostgresConnection(
         db,
         PostgresManagerWrap.DB_USER,
-        '/tmp',
+        PostgresManagerWrap.DB_HOST,
         PostgresManagerWrap.DB_PORT,
         logging.getLogger())
     results = db_con.Query(query, parameters)
