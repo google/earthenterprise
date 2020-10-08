@@ -59,6 +59,7 @@ class StreamManager(object):
     self._db_user = "geuser"
     postgres_prop = postgres_properties.PostgresProperties()
     self._port = postgres_prop.GetPortNumber()
+    self._host = postgres_prop.GetHost()
     self.stream_db = postgres_manager.PostgresConnection(
         self._database, self._db_user, self._host, self._port, logger)
 

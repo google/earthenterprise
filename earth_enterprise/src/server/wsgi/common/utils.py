@@ -274,6 +274,21 @@ def GetPostgresPortNumber():
 
   return None
 
+def GetPostgresHost():
+  """Gets Postgres host or unix domain socket from Host directive of postgres config file.
+
+  Returns:
+    Host number to connect to Postgres database server or None.
+  """
+  pattern = r"^\s*host\s*=\s*(\S{4,})\s*"
+
+  match = MatchPattern(POSTGRES_PROPERTIES_PATH, pattern)
+  if match:
+    host = match[0]
+    return host
+
+  return None
+
 
 def HtmlEscape(text):
   """Escapes a string for HTML.

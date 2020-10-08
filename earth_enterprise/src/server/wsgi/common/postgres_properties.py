@@ -16,6 +16,9 @@
 
 """Postgres database properties loader."""
 import utils
+import logging
+
+logger = logging.getLogger( "ge_stream_publisher")
 
 
 class PostgresProperties(object):
@@ -26,6 +29,10 @@ class PostgresProperties(object):
     self.port_number = utils.GetPostgresPortNumber()
     if not self.port_number:
       self.port_number = "5432"
+    self.host = utils.GetPostgresHost()
+    if not self.host:
+      self.host = "/tmp"
+    logger.info("Postgresql Connection configuration: host=%s, port= %s", self.host, self.port_number )
 
   def GetPortNumber(self):
     """Get the port number for the Postgres database.
@@ -34,3 +41,11 @@ class PostgresProperties(object):
       the port number string.
     """
     return self.port_number
+
+  def GetHost(self):
+    """Get the host for the Postgres database.
+
+    Returns:
+      the host number string.
+    """
+    return self.host

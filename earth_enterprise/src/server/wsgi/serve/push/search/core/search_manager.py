@@ -42,12 +42,12 @@ class SearchManager(object):
     super(SearchManager, self).__init__()
 
     # Init database connections
-    self._host = '/tmp'
     self._search_database = "gesearch"
     self._poi_database = "gepoi"
     self._db_user = "geuser"
     postgres_prop = postgres_properties.PostgresProperties()
     self._port = postgres_prop.GetPortNumber()
+    self._host = postgres_prop.GetHost()
 
     # Create DB connection to gesearch database.
     self._search_db_connection = postgres_manager.PostgresConnection(
