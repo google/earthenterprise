@@ -8,14 +8,12 @@ Release notes: Open GEE 5.3.6
 
    .. container:: content
 
-      Open GEE 5.3.6 is currently in development
-
       .. rubric:: New Features
 
       In 5.3.6, a ``--secure`` option was added for ``geconfigureassetroot``
       and ``geupgradeassetroot`` that removes world-writable permissions from
       special files. This helps Open GEE perform properly in strict security
-      environments. ``--secure`` is not the default setting.
+      environments. ``--secure`` is disabled by default.
 
       .. rubric:: Supported Platforms
 
@@ -47,16 +45,14 @@ Release notes: Open GEE 5.3.6
            - Description
          * - 1851
            - Open GEE does not function properly on systems with a restrictive umask
-         * - 1850
-           - Fusion should include an option to set secure permissions for special folders
-         * - 1761
-           - Tab Order wrong for Fusion Add Vector Resource and Add Terrain Resource
-         * - 1785
-           - Imagery Projects - Transparent areas appears as black
-         * - 1800
-           - Upgrade from 5.3.4 to 5.3.5 leaves a non-working ExampleSearch
          * - 1806
            - Confusing "geserver.service changed on disk" message after uninstalling Fusion or Server
+         * - 1800
+           - Upgrade from 5.3.4 to 5.3.5 leaves a non-working ExampleSearch
+         * - 1785
+           - Imagery Projects - Transparent areas appears as black
+         * - 1761
+           - Tab Order wrong for Fusion Add Vector Resource and Add Terrain Resource
          * - 1741
            - Invalid git version in CentOS/RHEL install instructions
 
