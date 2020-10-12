@@ -72,12 +72,11 @@
 <h1>Release notes: Open GEE 5.3.6<a class="headerlink" href="#release-notes-open-gee-5-3-6" title="Permalink to this headline">¶</a></h1>
 <div class="docutils container">
 <div class="content docutils container">
-<p>Open GEE 5.3.6 is currently in development</p>
 <p class="rubric">New Features</p>
 <p>In 5.3.6, a <code class="docutils literal notranslate"><span class="pre">--secure</span></code> option was added for <code class="docutils literal notranslate"><span class="pre">geconfigureassetroot</span></code>
 and <code class="docutils literal notranslate"><span class="pre">geupgradeassetroot</span></code> that removes world-writable permissions from
 special files. This helps Open GEE perform properly in strict security
-environments. <code class="docutils literal notranslate"><span class="pre">--secure</span></code> is not the default setting.</p>
+environments. <code class="docutils literal notranslate"><span class="pre">--secure</span></code> is disabled by default.</p>
 <p class="rubric">Supported Platforms</p>
 <p>The Open GEE 5.3.6 release is supported on 64-bit versions of the
 following operating systems:</p>
@@ -109,22 +108,19 @@ correctly to the new PostgreSQL version used by Open GEE 5.3.6.</p>
 <tr class="row-even"><td>1851</td>
 <td>Open GEE does not function properly on systems with a restrictive umask</td>
 </tr>
-<tr class="row-odd"><td>1850</td>
-<td>Fusion should include an option to set secure permissions for special folders</td>
-</tr>
-<tr class="row-even"><td>1761</td>
-<td>Tab Order wrong for Fusion Add Vector Resource and Add Terrain Resource</td>
-</tr>
-<tr class="row-odd"><td>1785</td>
-<td>Imagery Projects - Transparent areas appears as black</td>
+<tr class="row-odd"><td>1806</td>
+<td>Confusing “geserver.service changed on disk” message after uninstalling Fusion or Server</td>
 </tr>
 <tr class="row-even"><td>1800</td>
 <td>Upgrade from 5.3.4 to 5.3.5 leaves a non-working ExampleSearch</td>
 </tr>
-<tr class="row-odd"><td>1806</td>
-<td>Confusing “geserver.service changed on disk” message after uninstalling Fusion or Server</td>
+<tr class="row-odd"><td>1785</td>
+<td>Imagery Projects - Transparent areas appears as black</td>
 </tr>
-<tr class="row-even"><td>1741</td>
+<tr class="row-even"><td>1761</td>
+<td>Tab Order wrong for Fusion Add Vector Resource and Add Terrain Resource</td>
+</tr>
+<tr class="row-odd"><td>1741</td>
 <td>Invalid git version in CentOS/RHEL install instructions</td>
 </tr>
 </tbody>
