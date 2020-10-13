@@ -35,7 +35,7 @@ new PostgreSQL version used by Open GEE 5.3.6.
 systems with a restrictive umask  1806  Confusing "geserver.service
 changed on disk" message after uninstalling Fusion or Server  1800
 Upgrade from 5.3.4 to 5.3.5 leaves a non-working ExampleSearch  1785
-Imagery Projects - Transparent areas appears as black  1761  Tab Order
+Imagery Projects - Transparent areas appear as black  1761  Tab Order
 wrong for Fusion Add Vector Resource and Add Terrain Resource  1741
 Invalid git version in CentOS/RHEL install instructions
 

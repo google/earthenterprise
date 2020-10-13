@@ -50,7 +50,7 @@ Release notes: Open GEE 5.3.6
          * - 1800
            - Upgrade from 5.3.4 to 5.3.5 leaves a non-working ExampleSearch
          * - 1785
-           - Imagery Projects - Transparent areas appears as black
+           - Imagery Projects - Transparent areas appear as black
          * - 1761
            - Tab Order wrong for Fusion Add Vector Resource and Add Terrain Resource
          * - 1741
