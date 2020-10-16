@@ -23,7 +23,7 @@ main_preuninstall()
     if [ -f "/etc/init.d/geserver" ]; then
         echo "Deleting SearchExample Database"
         run_as_user "$GEPGUSER" "/opt/google/share/searchexample/searchexample delete"
-        "$BASEINSTALLDIR_OPT/bin/psql" -q -d gesearch geuser -f "$SQLDIR/examplesearch_delete.sql"
+        run_as_user "$GEPGUSER"  "$BASEINSTALLDIR_OPT/bin/psql -q -d gesearch geuser -f $SQLDIR/examplesearch_delete.sql"
         service geserver restart
     fi
 
