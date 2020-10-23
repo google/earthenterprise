@@ -23,7 +23,7 @@ before_install:
 script: echo "Running build..."
 
 cache:
-  timeout: 600
+  timeout: 1200
   directories:
     - $HOME/cache
 
@@ -38,7 +38,7 @@ jobs:
     env:
       - CPP_STD=11
       - BUILD_TYPE=release
-    script: travis_wait 45 scripts/ci/build_fusion_and_test.sh
+    script: travis_wait 90 scripts/ci/build_fusion_and_test.sh
 
 notifications:
   slack: opengee:YjzzzTnc7pgITPsrQPATIGwc
