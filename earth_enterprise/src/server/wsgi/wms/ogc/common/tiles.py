@@ -39,6 +39,23 @@ ALL_WHITE_PIXELS = (255, 255, 255)
 
 def StitchTiles(tiles_array, layer_properties, tilepixel_rect,
   rect_of_tiles, user_width, user_height):
+  """Stitch an array of image tiles creating an image that fits within
+    a rectangle and same size as passed width and height.
+
+  Args:
+      tiles_array: ImageArray of the tiles to stitch together.
+      layer_properties: Object with details about the layer.
+      tilepixel_rect: The desired tile pixel space rect of our image
+        gotten from the server, at a given zoom level. Unscaled; still
+        needs to be shrunk (most of the time) to fit the final image.
+      rect_of_tiles: <tilepixel_rect> 'rounded out' to whole tiles.
+        There's one tile address extra at both the right, and down,
+        for cleaner loops.
+      user_width: The user-requested width of the image.
+      user_height: The user-requested height of the image.
+  Returns:
+     The output image of the tiles stitching, clipped and resized.
+  """
 
   im_whole_tiles_extent = geom.Pair(rect_of_tiles.Width() * _TILE_PIXEL_SIZE,
                                     rect_of_tiles.Height() * _TILE_PIXEL_SIZE)
