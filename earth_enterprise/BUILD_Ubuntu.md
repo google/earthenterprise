@@ -1,5 +1,13 @@
 # GEE Build Setup for Ubuntu
 
+## Install Python
+
+In order to build OpenGEE, both Python 2.7 and 3.8 are needed (to facilitate transition to 3.8). If you have access to both through public repos, we suggest installing them that way. If not the following script will build and install them from source if they are needed:
+ 
+```bash
+sudo ./../scripts/install_python.sh
+```
+
 ## Install Git
 
 Install the system default version:
