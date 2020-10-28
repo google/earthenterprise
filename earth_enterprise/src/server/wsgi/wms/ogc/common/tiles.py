@@ -1,7 +1,7 @@
 #!/usr/bin/env python2.7
 #
 # Copyright 2017 Google Inc.
-# Copyright 2019 Open GEE Contributors
+# Copyright 2019-2020 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -37,32 +37,8 @@ _TRANSPARENT_ALPHA = (0,)
 _ALPHA_THRESHOLD = 128
 ALL_WHITE_PIXELS = (255, 255, 255)
 
-
-def ProduceImage(layer_properties, user_log_rect, user_width, user_height):
-  """High-level production of the image.
-
-  Args:
-      layer_properties: Object with details about the layer.
-      user_log_rect: The user-requested projected, ie map coordinates,
-        not lat/lon, limits of the desired region. Ie BBOX, pretty much.
-      user_width: The user-requested width of the image.
-      user_height: The user-requested height of the image.
-
-  Returns:
-      The image to be presented to the user.
-  """
-  proj = layer_properties.projection
-
-  zoom_level = tilecalcs.CalcZoomLevel(user_log_rect.Extent(),
-                                       proj.InternalLogOuterBounds().Extent(),
-                                       geom.Pair(user_width, user_height))
-
-  tilepixel_rect, rect_of_tiles = tilecalcs.CalcTileRects(
-      proj, user_log_rect, zoom_level)
-
-  logger.info("Done tile calcs")
-
-  tiles_array = _FetchTiles(rect_of_tiles, zoom_level, layer_properties)
+def StitchTiles(tiles_array, layer_properties, tilepixel_rect,
+  rect_of_tiles, user_width, user_height):
 
   im_whole_tiles_extent = geom.Pair(rect_of_tiles.Width() * _TILE_PIXEL_SIZE,
                                     rect_of_tiles.Height() * _TILE_PIXEL_SIZE)
@@ -148,6 +124,36 @@ def ProduceImage(layer_properties, user_log_rect, user_width, user_height):
 
   return im_user
 
+def ProduceImage(layer_properties, user_log_rect, user_width, user_height):
+  """High-level production of the image.
+
+  Args:
+      layer_properties: Object with details about the layer.
+      user_log_rect: The user-requested projected, ie map coordinates,
+        not lat/lon, limits of the desired region. Ie BBOX, pretty much.
+      user_width: The user-requested width of the image.
+      user_height: The user-requested height of the image.
+
+  Returns:
+      The image to be presented to the user.
+  """
+  proj = layer_properties.projection
+
+  zoom_level = tilecalcs.CalcZoomLevel(user_log_rect.Extent(),
+                                       proj.InternalLogOuterBounds().Extent(),
+                                       geom.Pair(user_width, user_height))
+
+  tilepixel_rect, rect_of_tiles = tilecalcs.CalcTileRects(
+      proj, user_log_rect, zoom_level)
+
+  logger.info("Done tile calcs")
+
+  tiles_array = _FetchTiles(rect_of_tiles, zoom_level, layer_properties)
+
+  im_user = StitchTiles(tiles_array, layer_properties, tilepixel_rect,
+    rect_of_tiles, user_width, user_height)
+
+  return im_user
 
 def _FetchTiles(rect_of_tiles, zoom_level, layer_properties):
   """Fetches all the tiles for a given image.
