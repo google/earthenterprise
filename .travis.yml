@@ -38,7 +38,7 @@ jobs:
     env:
       - CPP_STD=11
       - BUILD_TYPE=release
-    script: travis_wait 180 sh -c 'bash scripts/ci/build_fusion_and_test.sh' &> /tmp/build_log
+    script: travis_wait 180 sh -c 'bash scripts/ci/build_fusion_and_test.sh' 2>&1 | tee -a /tmp/build_log
 
 notifications:
   slack: opengee:YjzzzTnc7pgITPsrQPATIGwc
