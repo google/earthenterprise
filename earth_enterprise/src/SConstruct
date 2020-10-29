@@ -379,7 +379,7 @@ def InstFusionDir(subdir):
   return DirCat(installdir, 'fusion%s/' % optdir, subdir)
 
 def InstPythonDir(subdir):
-  return DirCat(installdir, 'python%s/' % subdir)
+  return DirCat(installdir, 'python/', subdir)
 
 def InstPostgisDir(subdir):
    return DirCat(installdir, 'postgis/opt/google/', subdir)

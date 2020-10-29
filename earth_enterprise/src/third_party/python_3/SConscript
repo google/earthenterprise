@@ -88,7 +88,7 @@ python_env.ExecuteOnClean('rm -rf %s' % current_dir)
 if 'install' in COMMAND_LINE_TARGETS:
   python_env.InstallFileOrDir(
       '%s/' % install_root,
-      '%s/' % python_env.installdirs['python_3'],
+      '%s/' % python_env.installdirs['python_3_dir'],
           python_install, 'install')
 
 Return('python_extract python_install')
