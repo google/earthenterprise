@@ -21,7 +21,7 @@
 // Compile and install Open GEE in a temporary directory before packaging.
 // If you don't specify `-PbuildOpenGee` on the Gradle command line, no
 // compilation, or installation are run.  In that case, you must ensure the
-// main scons "stage_install" target has been called before building packages.
+// main scons "" target has been called before building packages.
 // This Scons target copies build artifacts, binaries and documents into the
 // /tmp/fusion_os_install path.
 //
@@ -140,8 +140,11 @@ def stagedInstallDir_server_user_magic =
 def stagedInstallDir_fusion = new File(stagedInstallDir, 'fusion')
 def stagedInstallDir_tutorial = new File(stagedInstallDir, 'tutorial')
 def packageInstallRootDir = new File('/')
+def packageInstallUsrDir = new File(packageInstallRootDir, 'usr')
 def packageInstallLibDir = new File(packageInstallRootDir, 'opt/google/lib')
 
+def stagedInstallDir_python_2 = new File(stagedInstallDir, 'python_2')
+def stagedInstallDir_python_3 = new File(stagedInstallDir, 'python_3')
 def stagedInstallDir_postgis_opt = new File(stagedInstallDir, 'postgis/opt')
 
 // Commands used in install-utils.sh:
@@ -240,6 +243,62 @@ task stageOpenGeeInstall(type: Exec, dependsOn: 'compileOpenGee') {
         "installdir=${stagedInstallDir}")
 }
 
+// RPM that installs python 2 if needed
+task openGeePython2Rpm(type: GeeRpm) {
+    mustRunAfter stageOpenGeeInstall
+
+    packageName = 'opengee-python-2.7.18'
+    release = ospackage.release
+    version = '2.7.18'
+    user = 'root'
+    permissionGroup = 'root'
+    packageGroup = 'Application/Productivity'
+    summary = 'Standard Python 2.7.18 installation used by Open GEE'
+    packageDescription = 'Standard Python 2.7.18 installation used by Open GEE'
+    license = 'GPLv2'
+    url = 'https://github.com/google/earthenterprise/tree/master/earth_enterprise/third_party/python_2'
+    type = BINARY
+    autoFindProvides = true
+    autoFindRequires = true
+
+    // The code in GeeRpm decides that this RPM should depend on proj, but
+    // it actually depends on proj-devel.
+    requires('proj-devel')
+
+    from (stagedInstallDir_python_2) {
+        into packageInstallUsrDir
+    }
+}
+
+task openGeePostGisDeb(type: GeeDeb) {
+    mustRunAfter stageOpenGeeInstall
+
+    packageName = openGeePostGisRpm.packageName
+    release = "${findBuildNumber()}"
+    version = openGeePostGisRpm.version
+    user = openGeePostGisRpm.user
+    permissionGroup = openGeePostGisRpm.permissionGroup
+    packageGroup = 'misc'
+    summary = openGeePostGisRpm.summary
+    packageDescription = openGeePostGisRpm.packageDescription
+    license = openGeePostGisRpm.license
+    url = openGeePostGisRpm.url
+    type = BINARY
+
+    requires('opengee-common', ospackage.version, GREATER | EQUAL)
+    requires('proj-devel')
+
+    from (stagedInstallDir_postgis_opt) {
+        into new File(packageInstallRootDir, 'opt')
+    }
+
+    from (new File(stagedInstallDir_server_opt, 'google/lib')) {
+        // Include libpq, since it's used by postgis command-line utilities:
+        include 'libpq.*'
+
+        into packageInstallLibDir
+    }
+}
 
 task openGeePostGisRpm(type: GeeRpm) {
     mustRunAfter stageOpenGeeInstall

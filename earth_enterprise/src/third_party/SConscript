@@ -61,7 +61,9 @@ if third_party_env['bundle_3rd_libs']:
       'skia',
       'pyyaml',
       'defusedxml',
-      'swig'
+      'swig',
+      'python_2',
+      'python_3'
   ]
 elif third_party_env['portable_3rd_libs']:
   third_party_libs = [
@@ -89,7 +91,9 @@ else:
       'skia',
       'pyyaml',
       'defusedxml',
-      'swig'
+      'swig',
+      'python_2',
+      'python_3'
   ]
 
 

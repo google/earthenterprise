@@ -21,15 +21,15 @@
 INSTALL_PREFIX="/usr"
 STARTING_DIR="${0%/*}"
 
-SOURCE_DIR="$STARTING_DIR/../earth_enterprise/third_party/python"
-SOURCE_27="$SOURCE_DIR/Python-2.7.18.tgz"
-SOURCE_38="$SOURCE_DIR/Python-3.8.6.tgz"
+SOURCE_DIR="$STARTING_DIR/../earth_enterprise/third_party"
+SOURCE_27="$SOURCE_DIR/python_2/Python-2.7.18.tgz"
+SOURCE_38="$SOURCE_DIR/python_3/Python-3.8.6.tgz"
 
 TMP_WORKSPACE="/tmp/opengee_python_builds"
 TMP_27="$TMP_WORKSPACE/Python-2.7.18"
 TMP_38="$TMP_WORKSPACE/Python-3.8.6"
 
-if [ ($# -eq 0) -o ($1 == "install") ]; then 
+if [ $# -eq 0 ] || [ $1 == "install" ]; then 
   mkdir $TMP_WORKSPACE;
 
   # Check if Python2.7 is installed
@@ -61,7 +61,7 @@ if [ ($# -eq 0) -o ($1 == "install") ]; then
   fi
 fi
 
-if [ $1 == "clean" ]; then
+if [ "$1" == "clean" ]; then
   # Run clean on individual builds, and then remove the dir.
   if [ -d $TMP_27 ]; then
     cd $TMP_27;

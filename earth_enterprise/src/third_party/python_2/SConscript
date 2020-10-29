@@ -84,4 +84,11 @@ python_install = python_env.Command(
 Default(python_install)
 python_env.ExecuteOnClean('rm -rf %s' % current_dir)
 
+# [6] Copy to proper directory structure for installer (if install is in target)
+if 'install' in COMMAND_LINE_TARGETS:
+  python_env.InstallFileOrDir(
+      '%s/' % install_root,
+      '%s/' % python_env.installdirs['python_2'],
+          python_install, 'install')
+
 Return('python_extract python_install')

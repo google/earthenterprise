@@ -53,14 +53,6 @@ sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.
 sudo yum install -y https://repo.ius.io/ius-release-el6.rpm
 ```
 
-## Install Python
-
-In order to build OpenGEE, both Python 2.7 and 3.8 are needed (to facilitate transition to 3.8). If you have access to both through public repos, we suggest installing them that way. If not the following script will build and install them from source if they are needed:
-
-```bash
-sudo ./../scripts/install_python.sh
-```
-
 ## Install Git
 
 It's recommended to install a recent version of Git from the [IUS repositories](https://ius.io),
@@ -171,6 +163,15 @@ sudo yum install -y \
 
 If you encounter an error about git dependency conflicts, consider 
 experimenting with the `--skip-broken` parameter.
+
+
+## Install Python
+
+In order to build OpenGEE, both Python 2.7 and 3.8 are needed (to facilitate transition to 3.8). If you have access to both through public repos, we suggest installing them that way. If not the following script will build and install them from source if they are needed:
+
+```bash
+sudo ./../scripts/install_python.sh
+```
 
 ## GTest 1.8
 

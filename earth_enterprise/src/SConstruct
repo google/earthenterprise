@@ -378,6 +378,9 @@ def InstCommonDir(subdir):
 def InstFusionDir(subdir):
   return DirCat(installdir, 'fusion%s/' % optdir, subdir)
 
+def InstPythonDir(subdir):
+  return DirCat(installdir, 'python%s/' % subdir)
+
 def InstPostgisDir(subdir):
    return DirCat(installdir, 'postgis/opt/google/', subdir)
 
@@ -424,6 +427,9 @@ installdirs = {
     'postgis_bin': InstPostgisDir('bin'),
     'postgis_lib': InstPostgisDir('lib'),
     'postgis_share': InstPostgisDir('share'),
+
+    'python_2_dir': InstPythonDir('python_2'),
+    'python_3_dir': InstPythonDir('python_3'),
 
     'server_bin': InstServerDir('bin'),
     'server_etc': Dir('server/etc%s' % optdir, installdir),
