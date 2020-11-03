@@ -47,6 +47,7 @@ esac
 
 set -x
 cd earth_enterprise/src
+rm -rf NATIVE-REL-x86_64
 
 if [ -f $HOME/cache/third_party$SERIES-$CPP_STD.tgz ]; then
    tar xf $HOME/cache/third_party$SERIES-$CPP_STD.tgz;
