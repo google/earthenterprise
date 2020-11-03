@@ -121,10 +121,10 @@ includes the <Location> directives for SSL, in this case, test_ssl.
 SSLRequireSSL    SSLVerifyClient none </Location>  Use of the
 SSLRequireSSL directive prevents all HTTP requests that do not use
 SSL, thereby protecting your data from all but HTTPS requests. See
-Apache HTTP Server Version 2.2 Documentation for more information.
+Apache HTTP Server Version 2.4 Documentation for more information.
 Use of the SSLVerifyClient directive specifies the level of
 certificate verification required for the client. See Apache HTTP
-Server Version 2.2 Documentation for SSLVerifyClient for more
+Server Version 2.4 Documentation for SSLVerifyClient for more
 information.
 
 -[ Set your virtual host as a SSL server ]-
@@ -148,7 +148,7 @@ Edit the Apache server configuration file,
 /opt/google/gehttpd/conf/extra/httpd-ssl.conf file, which provides SSL
 support. It contains the configuration directives to instruct the
 server how to serve pages over an HTTPS connection. For detailed
-information about these directives see Apache 2.2 documentation.
+information about these directives see Apache 2.4 documentation.
 Ensure the ServerName www.example.com is uncommented and matches the
 name defined in the /opt/google/gehttpd/conf/gehttpd.conf file, that
 is, the alias or real address users would enter in the network.  Check
