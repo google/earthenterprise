@@ -265,7 +265,6 @@ if sys.platform[0:5] == 'linux':
   cppflags += ['-I%s/Qt3Support' % qtprefix, '-I%s/QtCore' % qtprefix, '-I%s/QtGui' % qtprefix]
   if qt4_native:
     cppflags += ['-I%s' % qtprefix]
-
   # set any architecture specific specific flags
   if re.compile('i.86').match(march):
     optflags = ['-march=i686'] + optflags
