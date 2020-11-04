@@ -29,7 +29,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <geAssetRoot.h>
-#include <cctype>
 
 const std::string&
 AssetDefs::AssetRoot(void)
@@ -124,16 +123,20 @@ bool AssetDefs::ValidateAssetName(const std::string& name) {
   if (pos != std::string::npos) {
     length_to_check = pos;  // No need to check the version spec when checking
                             // for invalid characters.
+
     // Check all characters beyond the "=" character...they must be numerals.
     bool found_numeral = false;
+
     for(unsigned int i = length_to_check + kVersionSuffix.size();
         i < name.size(); ++i) {
       char c = name[i];
-      if (isdigit(c)) {
+
+      if (c < '0' || c > '9') {
         return false;  // Required to end in a numeral if version suffix is used.
       }
       found_numeral = true;
     }
+
     // If there's no numeral at the end, it's an invalid name.
     if (!found_numeral) {
       return false;
@@ -141,8 +144,8 @@ bool AssetDefs::ValidateAssetName(const std::string& name) {
   }
 
   const std::string kInvalidAssetNameCharacters("&%'\" \\*=+~`?<>;:");
-  for (const auto& c : name) {
-      if (kInvalidAssetNameCharacters.find(c) != std::string::npos) {
+  for(uint i = 0; i < length_to_check; ++i) {
+      if (kInvalidAssetNameCharacters.find(name[i]) != std::string::npos) {
           return false;
       }
   }
