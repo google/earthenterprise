@@ -263,6 +263,8 @@ if sys.platform[0:5] == 'linux':
 
   # Include flags for our bundled copy of qt4
   cppflags += ['-I%s/Qt3Support' % qtprefix, '-I%s/QtCore' % qtprefix, '-I%s/QtGui' % qtprefix]
+  if qt4_native:
+    cppflags += ['-I%s' % qtprefix]
 
   # set any architecture specific specific flags
   if re.compile('i.86').match(march):
@@ -621,7 +623,7 @@ if home: env['ENV']['HOME'] = str(home)
 # always use our Qt
 if qt4_native:
   qtdir = '/usr'
-  env['QTINCDIR'] = qtdir+'/include/qt4'
+  env['QTINCDIR'] = qtdir+'/include/qt4/Qt'
 else:
   qtdir = exportdir
   env['QTINCDIR'] = qtdir+'/include/Qt'
