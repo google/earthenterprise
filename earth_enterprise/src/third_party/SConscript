@@ -23,6 +23,9 @@ import os
 
 third_party_env = env.Clone()
 
+# See if native...
+qt4_native = int(ARGUMENTS.get('qt4_native', 0))
+
 # The order is important as n'th one has no dependency on anything after it
 if third_party_env['bundle_3rd_libs']:
   third_party_libs = [
@@ -90,10 +93,10 @@ else:
       'skia',
       'pyyaml',
       'defusedxml',
-      'swig',
-      'qt4'
+      'swig'
   ]
-
+  if qt4_native == 0:
+    third_party_libs.append('qt4')
 
 third_party_bin = '%s/bin' % Dir('.').abspath
 

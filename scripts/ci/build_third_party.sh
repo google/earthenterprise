@@ -48,12 +48,14 @@ esac
 
 set -x
 cd earth_enterprise/src
+rm -rf NATIVE-REL-x86_64
+
 if [ -f $HOME/cache/third_party$SERIES-$CPP_STD.tgz ]; then
    #tar xf $HOME/cache/third_party$SERIES-$CPP_STD.tgz;
    rm -f $HOME/cache/third_party$SERIES-$CPP_STD.tgz;
 fi
 
-python2.7 /usr/bin/scons -j3 $BUILD_TYPE=1 cpp_standard=gnu++$CPP_STD third_party > build.log
+python2.7 /usr/bin/scons -j3 $BUILD_TYPE=1 qt4_native=1 cpp_standard=gnu++$CPP_STD third_party > build.log
 mkdir -p $HOME/cache
 tar cfz $HOME/cache/third_party$SERIES-$CPP_STD.tgz NATIVE-REL-x86_64 .sconsign.dblite .sconf_temp
 

@@ -87,6 +87,7 @@ ValidOptions = set(
      'bundle_3rd_libs',  # Build with bundling 3rd party libs.
      'log_performance',  # Include code for performance logging
      'cpp_standard',     # The standard of CPP that will be used.  Default is C++11
+     'qt4_native',       # Whether native qt4 build
      'label',            # Value to combine with version strings.
      'long_version',     # Value to override the Open GEE long version string.
      'build_folder',     # where to put the build output and intermediate files
@@ -120,6 +121,7 @@ portable_3rd_libs = int(ARGUMENTS.get('portable_3rd_libs', 0))
 cc_dir = ARGUMENTS.get('cc_dir', None)
 log_performance = int( ARGUMENTS.get( 'log_performance', 0 ) )
 cpp_standard = ARGUMENTS.get('cpp_standard', 'gnu++11')
+qt4_native = int(ARGUMENTS.get('qt4_native', 0))
 build_folder = ARGUMENTS.get('build_folder', 0)
 label = ARGUMENTS.get('label', '')
 long_version = ARGUMENTS.get('long_version', None)
@@ -168,6 +170,11 @@ if os.path.isabs(builddir):
   exportdir = builddir
 else:
   exportdir = Dir('#/%s' % builddir).abspath
+
+if qt4_native:
+  qtprefix = '/usr/include/qt4'
+else:
+  qtprefix = exportdir+'/include'
 
 exportdirs = {
     'root': exportdir+'/',
@@ -255,7 +262,7 @@ if sys.platform[0:5] == 'linux':
               '-DGUNIT_NO_GOOGLE3', '-DQT3_SUPPORT', '-DQT_NO_TRANSLATION','-DQDOC']
 
   # Include flags for our bundled copy of qt4
-  cppflags += ['-I%s/include/Qt3Support' % exportdir, '-I%s/include/QtCore' % exportdir, '-I%s/include/QtGui' % exportdir]
+  cppflags += ['-I%s/Qt3Support' % qtprefix, '-I%s/QtCore' % qtprefix, '-I%s/QtGui' % qtprefix]
 
   # set any architecture specific specific flags
   if re.compile('i.86').match(march):
@@ -612,11 +619,16 @@ if home: env['ENV']['HOME'] = str(home)
 
 # setup QTDIR & friends
 # always use our Qt
-qtdir = exportdir
+if qt4_native:
+  qtdir = '/usr'
+  env['QTINCDIR'] = qtdir+'/include/qt4'
+else:
+  qtdir = exportdir
+  env['QTINCDIR'] = qtdir+'/include/Qt'
+
 
 env['ENV']['QTDIR'] = str(qtdir)
 env['QTDIR'] = str(qtdir)
-env['QTINCDIR'] = qtdir+'/include/Qt'
 env['QTLIBDIR'] = qtdir+'/lib'
 env['MOC'] = qtdir+'/bin/moc'
 env['UIC'] = qtdir+'/bin/uic3'
