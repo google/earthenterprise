@@ -81,8 +81,8 @@ Manage virtual hosts
       authentication and create a password for a given user name. The
       following example shows how to set up *digest authentication*, one
       of the standard authentication types (``AuthType``) provided by
-      Apache server. See `Apache HTTP Server 2.2
-      htdigest <http://httpd.apache.org/docs/2.2/programs/htdigest.html>`_.
+      Apache server. See `Apache HTTP Server 2.4
+      htdigest <http://httpd.apache.org/docs/2.4/programs/htdigest.html>`_.
 
       .. tip::
 
