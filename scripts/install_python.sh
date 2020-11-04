@@ -40,7 +40,7 @@ if [ $# -eq 0 ] || [ $1 == "install" ]; then
     mkdir $TMP_27;
     tar -xzf $SOURCE_27 -C $TMP_WORKSPACE;
     cd $TMP_27;
-    ./configure --prefix="$INSTALL_PREFIX" --enable-optimizations;
+    ./configure --prefix="$INSTALL_PREFIX";
     make;
     make altinstall;
   fi
@@ -55,7 +55,7 @@ if [ $# -eq 0 ] || [ $1 == "install" ]; then
     mkdir $TMP_38;
     tar -xzf $SOURCE_38 -C $TMP_WORKSPACE;
     cd $TMP_38;
-    ./configure --prefix="$INSTALL_PREFIX" --enable-optimizations;
+    ./configure --prefix="$INSTALL_PREFIX";
     make;
     make altinstall;
   fi

@@ -76,10 +76,14 @@ python_install = python_env.Command(
     [python_env.MultiCommand(
         'cd %s\n'
         '%s %s install DESTDIR=%s\n'
+        '%s/usr/bin/python2.7 Tools/scripts/pathfix.py -i %s %s\n'
         'touch %s' % (
             build_root,
             python_env['ENV']['mod_env'], make_cmd, install_root,
-	    python_target))])
+	        '/usr/bin/python2.7', install_root, python_target))])
+
+# python_shebang_dict = {'#!/usr/local/bin/python': '#!/usr/bin/python2.7'}
+# python_env.Substfile(install_root + "/usr/lib/python2.7/cgi.py", SUBST_DICT=python_shebang_dict)
 
 Default(python_install)
 python_env.ExecuteOnClean('rm -rf %s' % current_dir)
