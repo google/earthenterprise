@@ -33,7 +33,7 @@ Configure GEE Server 5.1.0 for SSL/HTTPS
       .. _Requirements:
       .. rubric:: Requirements
 
-      -  Google Earth Enterprise Server 5.1.0
+      -  Google Earth Enterprise Server
       -  A third-party or self-signed SSL certificate. Instructions for
          generating the latter are provided in the following setup
          procedure.
