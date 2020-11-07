@@ -28,7 +28,7 @@ Manage virtual hosts
 
       .. tip::
 
-         See :doc:`Configure GEE Server 5.1.0 for SSL/HTTPS <../geeServerConfigAndSecurity/configureGeeServer_SSL_HTTPS>` to add
+         See :doc:`Configure GEE Server for SSL/HTTPS <../geeServerConfigAndSecurity/configureGeeServer_SSL_HTTPS>` to add
          virtual hosts for HTTPS servers.
 
          See :ref:`geserveradmin <geserveradmin>` in
