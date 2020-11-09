@@ -17,7 +17,7 @@
 # This script installs Python for OpenGEE using bundled source code.
 # Currently both Python 2.7 and Python 3.8 are installed in order to 
 # facilitate a transition to Python 3.
-
+SELF_NAME=$(basename "$0")
 INSTALL_PREFIX="/usr"
 STARTING_DIR="${0%/*}"
 
@@ -28,8 +28,64 @@ SOURCE_38="$SOURCE_DIR/python_3/Python-3.8.6.tgz"
 TMP_WORKSPACE="/tmp/opengee_python_builds"
 TMP_27="$TMP_WORKSPACE/Python-2.7.18"
 TMP_38="$TMP_WORKSPACE/Python-3.8.6"
+DO_INSTALL="yes"
+INSTALL_SELECTED="no"
+DO_CLEAN="no"
+CLEAN_SELECTED="no"
 
-if [ $# -eq 0 ] || [ $1 == "install" ]; then 
+# parse command line args
+
+while [[ "$#" -gt 0 ]]; do
+  case "$1" in
+    -h|--help)
+
+cat <<MSG
+ Usage: $SELF_NAME [-i] [-c] [-h]
+    -i|--install
+      Performs the Python3 installation. Default
+
+    -c|--clean
+      Cleans-up any lingering files
+
+    -h|--help
+      Show this help message and exit
+MSG
+      exit 0
+      ;;
+    -i|--install)
+      DO_INSTALL="yes"
+      DO_CLEAN="no"
+      INSTALL_SELECTED="yes"
+      if [ $CLEAN_SELECTED == "yes" ]; then
+        echo "Can only perform an install or a clean, not both"
+        exit 1
+      fi
+      ;;
+    -c|--clean)
+      DO_CLEAN="yes"
+      DO_INSTALL="no"
+      CLEAN_SELECTED="yes"
+      if [ $INSTALL_SELECTED == "yes" ]; then
+        echo "Can only perform an install or a clean, not both"
+        exit 1
+      fi
+      ;;
+    *)
+      echo "Unrecognized command-line argument: $1" >&2
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+# id -u gives the user ID number. if 0, then root
+if ! [ $(id -u) = 0 ]; then
+  echo "$SELF_NAME Error: Must be root!"
+  echo
+  exit 1
+fi 
+
+if [ $DO_INSTALL == "yes" ]; then 
   mkdir $TMP_WORKSPACE
 
   # Check if Python2.7 is installed
@@ -58,7 +114,7 @@ if [ $# -eq 0 ] || [ $1 == "install" ]; then
   fi
 fi
 
-if [ "$1" == "clean" ]; then
+if [ $DO_CLEAN == "yes" ]; then
   # Run clean on individual builds, and then remove the dir.
   if [ -d $TMP_27 ]; then
     cd $TMP_27
