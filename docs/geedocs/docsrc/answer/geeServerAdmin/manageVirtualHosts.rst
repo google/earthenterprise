@@ -28,7 +28,7 @@ Manage virtual hosts
 
       .. tip::
 
-         See :doc:`Configure GEE Server 5.1.0 for SSL/HTTPS <../geeServerConfigAndSecurity/configureGeeServer5.1.0_SSL_HTTPS>` to add
+         See :doc:`Configure GEE Server for SSL/HTTPS <../geeServerConfigAndSecurity/configureGeeServer_SSL_HTTPS>` to add
          virtual hosts for HTTPS servers.
 
          See :ref:`geserveradmin <geserveradmin>` in
@@ -81,8 +81,8 @@ Manage virtual hosts
       authentication and create a password for a given user name. The
       following example shows how to set up *digest authentication*, one
       of the standard authentication types (``AuthType``) provided by
-      Apache server. See `Apache HTTP Server 2.2
-      htdigest <http://httpd.apache.org/docs/2.2/programs/htdigest.html>`_.
+      Apache server. See `Apache HTTP Server 2.4
+      htdigest <http://httpd.apache.org/docs/2.4/programs/htdigest.html>`_.
 
       .. tip::
 
@@ -153,7 +153,7 @@ Manage virtual hosts
          .. tip::
 
             A virtual host can also be configured for SSL/HTTPS. See
-            :doc:`../geeServerConfigAndSecurity/configureGeeServer5.1.0_SSL_HTTPS`.
+            :doc:`../geeServerConfigAndSecurity/configureGeeServer_SSL_HTTPS`.
 
       .. _Configure_Virtual_Host_Custom_Port_Number:
       .. rubric:: Configure virtual hosts with a custom port number
@@ -234,7 +234,7 @@ Manage virtual hosts
 
       .. rubric:: Learn more
 
-      -  :doc:`Configure GEE Server for SSL/HTTPS <../geeServerConfigAndSecurity/configureGeeServer5.1.0_SSL_HTTPS>`
+      -  :doc:`Configure GEE Server for SSL/HTTPS <../geeServerConfigAndSecurity/configureGeeServer_SSL_HTTPS>`
       -  :doc:`LDAP authentication <../geeServerConfigAndSecurity/configureGeeVirtualHostForLDAP>`
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
