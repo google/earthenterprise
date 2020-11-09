@@ -7,7 +7,7 @@ GEE Server Configuration And Security
 
    geeServerConfigAndSecurity/ports
    geeServerConfigAndSecurity/serverHostname
-   geeServerConfigAndSecurity/configureGeeServer5.1.0_SSL_HTTPS
+   geeServerConfigAndSecurity/configureGeeServer_SSL_HTTPS
    geeServerConfigAndSecurity/postgreSqlAuthentication
    geeServerConfigAndSecurity/configureGeeForLDAP
    geeServerConfigAndSecurity/configureGeeVirtualHostForLDAP

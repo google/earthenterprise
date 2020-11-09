@@ -1150,7 +1150,7 @@ Command reference
              the path ``/conf.d/virtual_servers/`` . For detailed information
              about ensuring your Apache HTTP server configuration files are
              set up correctly, see
-             :doc:`../geeServerConfigAndSecurity/configureGeeServer5.1.0_SSL_HTTPS`
+             :doc:`../geeServerConfigAndSecurity/configureGeeServer_SSL_HTTPS`
 
       .. rubric:: Delete virtual hosts
 

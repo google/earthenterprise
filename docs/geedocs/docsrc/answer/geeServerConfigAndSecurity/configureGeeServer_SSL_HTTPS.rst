@@ -1,7 +1,7 @@
 |Google logo|
 
 ========================================
-Configure GEE Server 5.1.0 for SSL/HTTPS
+Configure GEE Server for SSL/HTTPS
 ========================================
 
 .. container::
@@ -12,7 +12,7 @@ Configure GEE Server 5.1.0 for SSL/HTTPS
       unencrypted HTTP by default. However, you may have strict
       requirements that secure HTTP (HTTPS) be used for all data
       communications. This article provides the steps to configure a GEE
-      Server release 5.1.0 for use with HTTPS.
+      Server for use with HTTPS.
 
       We also include the steps required to generate a self-signed SSL
       certificate for your server but we recommend you obtain a
