@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Copyright 2020 the Open GEE Contributors.
 #
@@ -30,52 +30,47 @@ TMP_27="$TMP_WORKSPACE/Python-2.7.18"
 TMP_38="$TMP_WORKSPACE/Python-3.8.6"
 
 if [ $# -eq 0 ] || [ $1 == "install" ]; then 
-  mkdir $TMP_WORKSPACE;
+  mkdir $TMP_WORKSPACE
 
   # Check if Python2.7 is installed
   if [ -f "/usr/bin/python2.7" ]; then
-    echo "Python 2.7 is already installed, skipping...";
+    echo "Python 2.7 is already installed, skipping..."
   else
     # Untar, build, and install python 2.7.
-    mkdir $TMP_27;
-    tar -xzf $SOURCE_27 -C $TMP_WORKSPACE;
-    cd $TMP_27;
-    ./configure --prefix="$INSTALL_PREFIX";
-    make;
-    make altinstall;
+    mkdir $TMP_27
+    tar -xzf $SOURCE_27 -C $TMP_WORKSPACE
+    cd $TMP_27
+    ./configure --prefix="$INSTALL_PREFIX"
+    make && make altinstall
   fi
 
-  cd $STARTING_DIR;
+  cd $STARTING_DIR
 
   # Check if Python3.8 is installed
   if [ -f "/usr/bin/python3.8" ]; then
-    echo "Python 3.8 is already installed, skipping...";
+    echo "Python 3.8 is already installed, skipping..."
   else
     # Untar, build, and install python 3.8.
-    mkdir $TMP_38;
-    tar -xzf $SOURCE_38 -C $TMP_WORKSPACE;
-    cd $TMP_38;
-    ./configure --prefix="$INSTALL_PREFIX";
-    make;
-    make altinstall;
+    mkdir $TMP_38
+    tar -xzf $SOURCE_38 -C $TMP_WORKSPACE
+    cd $TMP_38
+    ./configure --prefix="$INSTALL_PREFIX" && make && make altinstall
   fi
 fi
 
 if [ "$1" == "clean" ]; then
   # Run clean on individual builds, and then remove the dir.
   if [ -d $TMP_27 ]; then
-    cd $TMP_27;
-    make clean;
-    make distclean;
+    cd $TMP_27
+    make clean && make distclean
   fi 
   
   if [ -d $TMP_38 ]; then
-    cd $TMP_38;
-    make clean;
-    make distclean;
+    cd $TMP_38
+    make clean && make distclean
   fi
   
-  rm -r $TMP_WORKSPACE;
+  rm -r $TMP_WORKSPACE
 fi
 
 
