@@ -17,7 +17,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Configure GEE Server Admin pages for LDAP authentication" href="configureGeeForLDAP.html" />
-    <link rel="prev" title="Configure GEE Server 5.1.0 for SSL/HTTPS" href="configureGeeServer5.1.0_SSL_HTTPS.html" />
+    <link rel="prev" title="Configure GEE Server for SSL/HTTPS" href="configureGeeServer_SSL_HTTPS.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
@@ -33,7 +33,7 @@
           <a href="configureGeeForLDAP.html" title="Configure GEE Server Admin pages for LDAP authentication"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="configureGeeServer5.1.0_SSL_HTTPS.html" title="Configure GEE Server 5.1.0 for SSL/HTTPS"
+          <a href="configureGeeServer_SSL_HTTPS.html" title="Configure GEE Server for SSL/HTTPS"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../geeServerConfigAndSecurity.html" accesskey="U">GEE Server Configuration And Security</a> &#187;</li> 
@@ -42,8 +42,8 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="configureGeeServer5.1.0_SSL_HTTPS.html"
-                        title="previous chapter">Configure GEE Server 5.1.0 for SSL/HTTPS</a></p>
+  <p class="topless"><a href="configureGeeServer_SSL_HTTPS.html"
+                        title="previous chapter">Configure GEE Server for SSL/HTTPS</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="configureGeeForLDAP.html"
                         title="next chapter">Configure GEE Server Admin pages for LDAP authentication</a></p>
@@ -105,12 +105,12 @@ you want to use authentication with.</li>
 <li>The <code class="docutils literal notranslate"><span class="pre">mod_authn_dbd</span></code> module provides the authentication
 back-end with a PostgreSQL server. For more information about
 the module, see the
-<a class="reference external" href="http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmod%2Fmod_authn_dbd.html&amp;sa=D&amp;sntz=1&amp;usg=AFrqEzcLzX90MM12j49RNuWEy_X7y6wTrQ">mod_authn_dbd</a>
+<a class="reference external" href="https://httpd.apache.org/docs/2.4/mod/mod_authn_dbd.html">mod_authn_dbd</a>
 section in the Apache documentation.</li>
 <li>The <code class="docutils literal notranslate"><span class="pre">mod_auth_digest</span></code> module is used for Digest
 authentication. For more information about <code class="docutils literal notranslate"><span class="pre">mod_auth_digest</span></code>,
 see the
-<a class="reference external" href="http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmod%2Fmod_auth_digest.html&amp;sa=D&amp;sntz=1&amp;usg=AFrqEzfaZylqvLk4_vXVqc3jCj7EJESuhw">mod_auth_digest</a>
+<a class="reference external" href="http://httpd.apache.org/docs/2.4/mod/mod_auth_digest.html">mod_auth_digest</a>
 section in the Apache documentation.</li>
 </ul>
 <p class="rubric" id="terms">Terms</p>
@@ -164,7 +164,7 @@ also add other optional fields if needed.</li>
 functions into the database with the <code class="docutils literal notranslate"><span class="pre">pgcrypto</span></code> contributed
 module:</p>
 <p><code class="docutils literal notranslate"><span class="pre">psql</span> <span class="pre">--port=5433</span> <span class="pre">--username=geeuser</span> <span class="pre">geauthdb</span> <span class="pre">&lt;</span> <span class="pre">/usr/share/postgresql/8.4/contrib/pgcrypto.sql</span></code></p>
-<p>Note: You can substitute a different method for this step. The <a class="reference external" href="http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmisc%2Fpassword_encryptions.html&amp;sa=D&amp;sntz=1&amp;usg=AFrqEzdBJJpsOLV3eL6UCAatZv_IhxEZdg">Password Formats</a>
+<p>Note: You can substitute a different method for this step. The <a class="reference external" href="https://httpd.apache.org/docs/2.4/misc/password_encryptions.html#:~:text=Apache%20recognizes%20one%20format%20for,the%20AuthName%20directive%20in%20httpd">Password Formats</a>
 section in the Apache documentation gives examples in multiple
 programming languages for encrypting the password so that it is
 readable by Apache.</p>
@@ -225,7 +225,7 @@ BrowserMatch &quot;MSIE&quot; AuthDigestEnableQueryStringHack=On
 <p>If this is a <code class="docutils literal notranslate"><span class="pre">_map_</span> <span class="pre">virtual</span></code> server, add:
 <code class="docutils literal notranslate"><span class="pre">BrowserMatch</span> <span class="pre">&quot;MSIE&quot;</span> <span class="pre">AuthDigestEnableQueryStringHack=On</span></code></p>
 <p>For more information about <code class="docutils literal notranslate"><span class="pre">AuthDigestEnableQueryStringHack</span></code>,
-see the <a class="reference external" href="http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmod%2Fmod_auth_digest.html%23msie&amp;sa=D&amp;sntz=1&amp;usg=AFrqEze9uh13hmi22IsT3-GMw3t8j7VHcA">mod_auth_digest</a>
+see the <a class="reference external" href="http://httpd.apache.org/docs/2.4/mod/mod_auth_digest.html">mod_auth_digest</a>
 section in the Apache documentation.</p>
 <p>The final <code class="docutils literal notranslate"><span class="pre">&lt;Location&gt;</span></code> directive looks like:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Location &quot;/default_map/*&quot;&gt;
@@ -273,7 +273,7 @@ add your users to the database.</p>
           <a href="configureGeeForLDAP.html" title="Configure GEE Server Admin pages for LDAP authentication"
              >next</a> |</li>
         <li class="right" >
-          <a href="configureGeeServer5.1.0_SSL_HTTPS.html" title="Configure GEE Server 5.1.0 for SSL/HTTPS"
+          <a href="configureGeeServer_SSL_HTTPS.html" title="Configure GEE Server for SSL/HTTPS"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../geeServerConfigAndSecurity.html" >GEE Server Configuration And Security</a> &#187;</li> 

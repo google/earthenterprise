@@ -2057,7 +2057,7 @@ server does.  -\-ssl  Optional  Create a location-based virtual host
 with SSL configuration with the naming convention _host.location_ssl
 located in the path /conf.d/virtual_servers/ . For detailed
 information about ensuring your Apache HTTP server configuration files
-are set up correctly, see Configure GEE Server 5.1.0 for SSL/HTTPS
+are set up correctly, see Configure GEE Server for SSL/HTTPS
 
 -[ Delete virtual hosts ]-
 

@@ -52,7 +52,7 @@ PostgreSQL authentication
       -  The ``mod_auth_digest`` module is used for Digest
          authentication. For more information about ``mod_auth_digest``,
          see the
-         `mod_auth_digest < http://httpd.apache.org/docs/2.4/mod/mod_auth_digest.html >`__
+         `mod_auth_digest <http://httpd.apache.org/docs/2.4/mod/mod_auth_digest.html>`__
          section in the Apache documentation.
 
       .. rubric:: Terms

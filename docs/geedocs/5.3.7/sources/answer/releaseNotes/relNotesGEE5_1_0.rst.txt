@@ -41,7 +41,7 @@ Configure SSL/HTTPS with command line option
 . You can now create and register a location-based virtual host using
 the command line tool "geserveradmin --addvh --ssl". See
 
-Configure GEE Server 5.1.0 for SSL/HTTPS
+Configure GEE Server for SSL/HTTPS
 
 .
 
