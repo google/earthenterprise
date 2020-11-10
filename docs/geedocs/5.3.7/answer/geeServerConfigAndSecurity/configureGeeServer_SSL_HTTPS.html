@@ -1,0 +1,318 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Configure GEE Server for SSL/HTTPS &#8212; Google Earth Enterprise 5.3.7 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="PostgreSQL authentication" href="postgreSqlAuthentication.html" />
+    <link rel="prev" title="Server hostname" href="serverHostname.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="postgreSqlAuthentication.html" title="PostgreSQL authentication"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="serverHostname.html" title="Server hostname"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerConfigAndSecurity.html" accesskey="U">GEE Server Configuration And Security</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="serverHostname.html"
+                        title="previous chapter">Server hostname</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="postgreSqlAuthentication.html"
+                        title="next chapter">PostgreSQL authentication</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp5.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp5.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="configure-gee-server-for-ssl-https">
+<h1>Configure GEE Server for SSL/HTTPS<a class="headerlink" href="#configure-gee-server-for-ssl-https" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>Data transmission between Google Earth EC and GEE Server occurs on
+unencrypted HTTP by default. However, you may have strict
+requirements that secure HTTP (HTTPS) be used for all data
+communications. This article provides the steps to configure a GEE
+Server for use with HTTPS.</p>
+<p>We also include the steps required to generate a self-signed SSL
+certificate for your server but we recommend you obtain a
+third-party certificate from a CA (Certificate Authority).
+Third-party certificates generally are trusted and do not lead to
+any issues with warning messages or exceptions. However, you may
+want to set up your own self-signed certificates to get up and
+running quickly.</p>
+<ul class="simple">
+<li><a class="reference internal" href="#requirements"><span class="std std-ref">Requirements</span></a></li>
+<li><a class="reference internal" href="#generate-ssl-certificate-key"><span class="std std-ref">Generate self-signed SSL certificate and
+key</span></a></li>
+<li><a class="reference internal" href="#apply-certificates-keys"><span class="std std-ref">Apply third-party/CA-verified certificates and
+keys</span></a></li>
+<li><a class="reference internal" href="#setting-up-sslhttps"><span class="std std-ref">Setting up SSL/HTTPS</span></a></li>
+<li><a class="reference internal" href="#set-host-ssl-server"><span class="std std-ref">Set your virtual host as a SSL server</span></a></li>
+</ul>
+<p class="rubric" id="requirements">Requirements</p>
+<ul class="simple">
+<li>Google Earth Enterprise Server</li>
+<li>A third-party or self-signed SSL certificate. Instructions for
+generating the latter are provided in the following setup
+procedure.</li>
+</ul>
+<p class="rubric" id="generate-ssl-certificate-key">Generate self-signed SSL certificate and key</p>
+<p>A self-signed server certificate is generated for demonstration
+purposes in the following steps. If you are using a CA-verified
+server certificates and keys, see the following section, <a class="reference internal" href="#apply-certificates-keys"><span class="std std-ref">Apply third-party/CA-verified certificates and keys</span></a>.</p>
+<p class="rubric">To generate a self-signed SSL certificate and key:</p>
+<ol class="arabic">
+<li><p class="first">Change directory to the default certificate folder:</p>
+<p><code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">/opt/google/gehttpd/conf</span></code></p>
+<p>The default SSL certificate and key files generated in the
+following steps and used in this example virtual host are
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/server.crt</span></code> and
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/server.key</span></code> respectively.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Your certificate location and names may be different but
+make sure that they match the entries in the
+<code class="docutils literal notranslate"><span class="pre">httpd-ssl.conf</span></code> file, as shown in <a class="reference internal" href="#set-host-ssl-server"><span class="std std-ref">Set your virtual host
+as a SSL server</span></a>.</p>
+</div>
+</li>
+<li><p class="first">Generate the server key:</p>
+<p><code class="docutils literal notranslate"><span class="pre">openssl</span> <span class="pre">genrsa</span> <span class="pre">–out</span> <span class="pre">server.key</span> <span class="pre">1024</span></code></p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">It is recommended that you do not use the <code class="docutils literal notranslate"><span class="pre">–des3</span></code> option,
+which adds password protection when a key is created. While
+this adds an extra layer of security, it also requires
+manual input of the password should your system accidentally
+power down and restart, for example. Instead, generate the
+server key without a password or strip out the password with
+<code class="docutils literal notranslate"><span class="pre">openssl</span> <span class="pre">rsa</span> <span class="pre">-in</span> <span class="pre">server.key</span> <span class="pre">-out</span> <span class="pre">myservername_nopasswd.key</span></code>
+and use that instead.</p>
+</div>
+</li>
+<li><p class="first">Generate the server certificate based on the server key:</p>
+<p><code class="docutils literal notranslate"><span class="pre">openssl</span> <span class="pre">req</span> <span class="pre">–new</span> <span class="pre">–x509</span> <span class="pre">–days</span> <span class="pre">365</span> <span class="pre">–key</span> <span class="pre">server.key</span> <span class="pre">–out</span> <span class="pre">server.crt</span></code></p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Include as much information into the certificate as desired
+or accept the defaults, that is, Country, State, City,
+Company Name, Department, Server Name, and Administrator email
+address.</p>
+</div>
+</li>
+<li><p class="first">Test the server certificate and verify all information is
+correct:</p>
+<p><code class="docutils literal notranslate"><span class="pre">openssl</span> <span class="pre">x509</span> <span class="pre">-noout</span> <span class="pre">-text</span> <span class="pre">-in</span> <span class="pre">server.crt</span></code></p>
+</li>
+</ol>
+<p class="rubric" id="apply-certificates-keys">Apply third-party/CA-verified certificates and keys</p>
+<p>If you are using third-party/CA-verified certificates and keys, we
+recommend renaming them to use the default names for the virtual
+host configuration:</p>
+<ol class="arabic simple">
+<li>Change your third-party server certificate file name to
+<code class="docutils literal notranslate"><span class="pre">SSLCertificateFile</span> <span class="pre">/opt/google/gehttpd/conf/server.crt</span></code></li>
+<li>Change your third-party/CA verified key file name to
+<code class="docutils literal notranslate"><span class="pre">SSLCertificateKeyFile</span> <span class="pre">/opt/google/gehttpd/conf/server.key</span></code></li>
+</ol>
+<p>Optionally, if you choose not to use the default certificate and
+key names, you will need to modify the entries in
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/extra/httpd-ssl.conf</span></code> with the custom
+names accordingly, listed under <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">Server</span> <span class="pre">Certificate</span></code> and
+<code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">Server</span> <span class="pre">Private</span> <span class="pre">Key</span></code> respectively.</p>
+<p class="rubric" id="setting-up-sslhttps">Setting up SSL/HTTPS</p>
+<p>In this example procedure, you perform the following steps:</p>
+<ul class="simple">
+<li>Add a virtual host <code class="docutils literal notranslate"><span class="pre">ssl</span></code></li>
+<li>Set up the Apache server configuration to serve virtual hosts
+over HTTPS.</li>
+<li>Restart GEE Server</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The virtual host name “secure” is reserved for GEE
+Server use.</p>
+</div>
+<p class="rubric" id="to-add-a-virtual-host-for-https-serving">To add a virtual host for HTTPS serving:</p>
+<ol class="arabic">
+<li><p class="first">Register your new virtual host using the <code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code>
+command. See <a class="reference internal" href="../geeServerAdmin/manageVirtualHosts.html"><span class="doc">Manage virtual hosts</span></a>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">–-addvh</span> <span class="pre">&lt;Virtual</span> <span class="pre">Host</span> <span class="pre">Name&gt;</span> <span class="pre">--ssl</span></code></p>
+<p>The <strong>–ssl</strong> option registers the newly created virtual host
+by creating a configuration file with the naming convention:
+<strong>_host.location_ssl</strong> located in the path
+<code class="docutils literal notranslate"><span class="pre">&lt;Apache</span> <span class="pre">path&gt;/conf.d/virtual_servers/</span></code>.</p>
+<p>For example, to create a location-based virtual host with a
+configuration file that specifies SSL:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># /opt/google/bin$ ./geserveradmin --addvh test_ssl --ssl
+Registering Virtual Host: test_ssl ...
+Virtual Host registration successful.
+Location-based Virtual Host created:
+
+/conf.d/virtual_servers/test_ssl_host.location_ssl
+</pre></div>
+</div>
+</li>
+<li><p class="first">The newly created virtual host configuration file in this
+example,
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf.d/virtual_servers/test_ssl_host.location_ssl</span></code>,
+includes the <code class="docutils literal notranslate"><span class="pre">&lt;Location&gt;</span></code> directives for SSL, in this case,
+<code class="docutils literal notranslate"><span class="pre">test_ssl</span></code>.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Location “/test_ssl_host/*”&gt;
+   SetHandler fdb-handler
+   SSLRequireSSL
+   SSLVerifyClient none
+&lt;/Location&gt;
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Use of the <code class="docutils literal notranslate"><span class="pre">SSLRequireSSL</span></code> directive prevents all HTTP
+requests that do not use SSL, thereby protecting your data
+from all but HTTPS requests.
+See <a class="reference external" href="http://httpd.apache.org/docs/2.4/mod/mod_ssl.html#sslrequiressl">Apache HTTP Server Version 2.4 Documentation</a>
+for more information.</p>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Use of the <code class="docutils literal notranslate"><span class="pre">SSLVerifyClient</span></code> directive specifies the level
+of certificate verification required for the client.
+See <a class="reference external" href="http://httpd.apache.org/docs/2.4/mod/mod_ssl.html#sslverifyclient">Apache HTTP Server Version 2.4 Documentation for SSLVerifyClient</a>
+for more information.</p>
+</div>
+</li>
+</ol>
+<p class="rubric" id="set-host-ssl-server">Set your virtual host as a SSL server</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">All commands must be executed as the root user unless otherwise
+specified.</p>
+</div>
+<p class="rubric">To set your virtual host as a SSL server:</p>
+<ol class="arabic">
+<li><p class="first">Edit the Apache HTTP server configuration file,
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/gehttpd.conf</span></code> file, as follows:</p>
+<ol class="loweralpha simple">
+<li>Uncomment and change <code class="docutils literal notranslate"><span class="pre">ServerName</span> <span class="pre">www.example.com</span></code> to
+<code class="docutils literal notranslate"><span class="pre">ServerName</span> <span class="pre">MyServerName</span></code>, where <code class="docutils literal notranslate"><span class="pre">MyServerName</span></code> is the
+real address users would enter in the network.</li>
+<li>Check that <code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">conf/extra/httpd-ssl.conf</span></code> appears and
+uncomment it. Note that this <code class="docutils literal notranslate"><span class="pre">Include</span></code> for the
+<code class="docutils literal notranslate"><span class="pre">httpd-ssl.conf</span></code> configuration is commented out by default
+as it should only be loaded if you serve a virtual host over
+HTTPS.</li>
+<li>Save and close the <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/gehttpd.conf</span></code>
+file.</li>
+</ol>
+</li>
+<li><p class="first">Edit the Apache server configuration file,
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/extra/httpd-ssl.conf</span></code> file, which
+provides SSL support. It contains the configuration directives
+to instruct the server how to serve pages over an HTTPS
+connection. For detailed information about these directives see
+<a class="reference external" href="http://httpd.apache.org/docs/2.4/mod/mod_ssl.html">Apache 2.4 documentation</a>.</p>
+<ol class="loweralpha">
+<li><p class="first">Ensure the <code class="docutils literal notranslate"><span class="pre">ServerName</span> <span class="pre">www.example.com</span></code> is uncommented and
+matches the name defined in the
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/gehttpd.conf</span></code> file, that is, the
+alias or real address users would enter in the network.</p>
+</li>
+<li><p class="first">Check that the SSL virtual hosts configuration file location
+is already included in the <code class="docutils literal notranslate"><span class="pre">&lt;VirtualHost</span> <span class="pre">_default_:443&gt;</span></code>
+list of directives:</p>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;VirtualHost_default_:443&gt;</span></code></dt>
+<dd><p class="first last"><code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">conf.d/virtual_servers/*.location_ssl</span></code></p>
+</dd>
+</dl>
+</li>
+<li><p class="first">Save and close the
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/extra/httpd-ssl.conf</span></code> file.</p>
+</li>
+</ol>
+</li>
+<li><p class="first">Restart the Google Earth Enterprise Server software:</p>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">restart</span></code></p>
+</li>
+<li><p class="first">Publish a database to the SSL/HTTPS virtual host.</p>
+</li>
+<li><p class="first">Test the connections with Google Earth Enterprise Client for
+HTTP and HTTPS-based virtual servers.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="postgreSqlAuthentication.html" title="PostgreSQL authentication"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="serverHostname.html" title="Server hostname"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.7 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerConfigAndSecurity.html" >GEE Server Configuration And Security</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

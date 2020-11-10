@@ -11,7 +11,7 @@ Warning: The following procedure is applicable only to release 4.x
 
   , see
 
-  Configure GEE Server 5.1.0 for SSL/HTTPS
+  Configure GEE Server for SSL/HTTPS
 
   .
 

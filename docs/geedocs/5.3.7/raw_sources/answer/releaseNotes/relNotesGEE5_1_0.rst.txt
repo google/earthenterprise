@@ -38,7 +38,7 @@ Release notes: GEE 5.1.0
 
       **Configure SSL/HTTPS with command line option**. You can now
       create and register a location-based virtual host using the
-      command line tool ``geserveradmin --addvh --ssl``. See :doc:`../geeServerConfigAndSecurity/configureGeeServer5.1.0_SSL_HTTPS`.
+      command line tool ``geserveradmin --addvh --ssl``. See :doc:`../geeServerConfigAndSecurity/configureGeeServer_SSL_HTTPS`.
 
       **Set TRANSPARENT and BGCOLOR parameters when making WMS
       requests**. You can now determine if your map should be
