@@ -65,9 +65,9 @@ AssetRootStatus::AssetRootStatus(const std::string &dirname,
 {
   // since this may be an old assetroot (owned by a different user)
   // we need to beef up our capabilities while making these checks
-  geCapabilitiesGuard cap_guard(
-      CAP_DAC_OVERRIDE,      // let me read all files
-      CAP_DAC_READ_SEARCH);  // let me traverse all dirs
+  // geCapabilitiesGuard cap_guard(
+   //   CAP_DAC_OVERRIDE,      // let me read all files
+   //   CAP_DAC_READ_SEARCH);  // let me traverse all dirs
 
   if (assetroot_.empty()) {
     return;

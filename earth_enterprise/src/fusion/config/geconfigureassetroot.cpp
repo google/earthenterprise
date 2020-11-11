@@ -333,11 +333,11 @@ void MakeNewAssetRoot(const AssetRootStatus &status,
 
   // escalate my permissions and try to create the assetroot
   {
-    geCapabilitiesGuard cap_guard(
-        CAP_DAC_OVERRIDE,     // let me read all files
-        CAP_DAC_READ_SEARCH,  // let me traverse all dirs
-        CAP_CHOWN,            // let me chown files
-        CAP_FOWNER);          // let me chmod files I dont own
+    // geCapabilitiesGuard cap_guard(
+    //     CAP_DAC_OVERRIDE,     // let me read all files
+    //     CAP_DAC_READ_SEARCH,  // let me traverse all dirs
+    //     CAP_CHOWN,            // let me chown files
+    //     CAP_FOWNER);          // let me chmod files I dont own
 
     if (MakeSpecialDirs(status.assetroot_, fusion_user, secure)) {
       // we had to chown some of them. There might be more too.
@@ -362,10 +362,10 @@ void MakeNewAssetRoot(const AssetRootStatus &status,
     // Need to create the source volume directory if it doesn't exist.
     if (!khDirExists(srcvol)) {
       geCapabilitiesGuard cap_guard(
-          CAP_DAC_OVERRIDE,     // let me read all files
-          CAP_DAC_READ_SEARCH,  // let me traverse all dirs
-          CAP_CHOWN,            // let me chown files
-          CAP_FOWNER);          // let me chmod files I dont own
+          // CAP_DAC_OVERRIDE,     // let me read all files
+          // CAP_DAC_READ_SEARCH,  // let me traverse all dirs
+          // CAP_CHOWN,            // let me chown files
+          // CAP_FOWNER);          // let me chmod files I dont own
       if (!khMakeDir(srcvol)) {
         notify(NFY_WARN, "Unable to create %s", srcvol.c_str());
       }

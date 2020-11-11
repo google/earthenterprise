@@ -116,11 +116,11 @@ enterDirname(const std::string msg, const std::string &dflt,
 "%1 does not exist.\n"
 "Should this tool create it now")
                   .arg(dir), 'Y')) {
-        geCapabilitiesGuard cap_guard(
-            CAP_DAC_OVERRIDE,     // let me read all files
-            CAP_DAC_READ_SEARCH,  // let me traverse all dirs
-            CAP_CHOWN,            // let me chown files
-            CAP_FOWNER);          // let me chmod files I dont own
+        // geCapabilitiesGuard cap_guard(
+        //     CAP_DAC_OVERRIDE,     // let me read all files
+        //     CAP_DAC_READ_SEARCH,  // let me traverse all dirs
+        //     CAP_CHOWN,            // let me chown files
+        //     CAP_FOWNER);          // let me chmod files I dont own
         if (khMakeDir(dir)) {
           done = true;
         }

@@ -125,7 +125,19 @@ class PostgresConnection(object):
 
     with self._Cursor() as cursor:
       self._logger.debug(cursor.mogrify(query, parameters))
-      cursor.execute(query, parameters)
+      try: 
+          cursor.execute(query, parameters)
+      except psycopg2.ProgrammingError as exc:
+          print exc.message
+          self._logger.error(exc.message)
+          # conn.rollback()
+      except psycopg2.InterfaceError as exc:
+          print exc.message
+          # conn = psycopg2.connect(....)
+          # cursor = conn.cursor()
+
+
+
       self._logger.debug("ok: number of rows: %s", cursor.rowcount)
       for row in cursor:
         if len(row) == 1:

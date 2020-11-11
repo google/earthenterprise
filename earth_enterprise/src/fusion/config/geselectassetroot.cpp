@@ -68,11 +68,12 @@ void usage(const char* prog, const char* msg = 0, ...) {
 enum Role { RoleMaster, RoleSlave };
 
 void SaveSystemrcOrThrow(const Systemrc &rc) {
-  geCapabilitiesGuard cap_guard(
-      CAP_DAC_OVERRIDE,     // let me read/write all files
-      CAP_DAC_READ_SEARCH,  // let me traverse all dirs
-      CAP_CHOWN,            // let me chown files
-      CAP_FOWNER);          // let me chmod files I dont own
+  // geCapabilitiesGuard cap_guard(
+  //     CAP_DAC_OVERRIDE,     // let me read/write all files
+  //     CAP_DAC_READ_SEARCH,  // let me traverse all dirs
+  //     CAP_CHOWN,            // let me chown files
+  //     CAP_FOWNER);          // let me chmod files I dont own
+  // 
   if (!rc.Save()) {
     throw khException(
         kh::tr("Unable to save systemrc"));
