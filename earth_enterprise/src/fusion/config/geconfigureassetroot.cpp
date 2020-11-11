@@ -361,7 +361,7 @@ void MakeNewAssetRoot(const AssetRootStatus &status,
   if (noprompt) {
     // Need to create the source volume directory if it doesn't exist.
     if (!khDirExists(srcvol)) {
-      geCapabilitiesGuard cap_guard(
+      //geCapabilitiesGuard cap_guard(
           // CAP_DAC_OVERRIDE,     // let me read all files
           // CAP_DAC_READ_SEARCH,  // let me traverse all dirs
           // CAP_CHOWN,            // let me chown files
