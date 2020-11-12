@@ -1099,10 +1099,10 @@ class PublishManagerHelper(stream_manager.StreamManager):
       http_io.ResponseWriter.AddJsonFailureBody(response, str(e))
     except psycopg2.Warning as w:
       logger.error(w)
-      http_io.ResponseWriter.AddJsonFailureBody(response, str(e))
+      http_io.ResponseWriter.AddJsonFailureBody(response, str(w))
     except psycopg2.Error as e:
       logger.error(e)
-      http_io.ResponseWriter.AddJsonFailureBody(response, str(w))
+      http_io.ResponseWriter.AddJsonFailureBody(response, str(e))
     except Exception as e:
       logger.error(e)
       http_io.ResponseWriter.AddJsonFailureBody(
@@ -1128,10 +1128,10 @@ class PublishManagerHelper(stream_manager.StreamManager):
       http_io.ResponseWriter.AddJsonFailureBody(response, str(e))
     except psycopg2.Warning as w:
       logger.error(w)
-      http_io.ResponseWriter.AddJsonFailureBody(response, str(e))
+      http_io.ResponseWriter.AddJsonFailureBody(response, str(w))
     except psycopg2.Error as e:
       logger.error(e)
-      http_io.ResponseWriter.AddJsonFailureBody(response, str(w))
+      http_io.ResponseWriter.AddJsonFailureBody(response, str(e))
     except Exception as e:
       logger.error(e)
       http_io.ResponseWriter.AddJsonFailureBody(
