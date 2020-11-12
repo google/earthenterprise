@@ -20,18 +20,20 @@
 SELF_NAME=$(basename "$0")
 INSTALL_PREFIX="/usr"
 STARTING_DIR="${0%/*}"
-
+PYTHON_VER2="Python-2.7.18"
+PYTHON_VER3="Python-3.8.6"
 SOURCE_DIR="$STARTING_DIR/../earth_enterprise/third_party"
-SOURCE_27="$SOURCE_DIR/python_2/Python-2.7.18.tgz"
-SOURCE_38="$SOURCE_DIR/python_3/Python-3.8.6.tgz"
-
+SOURCE_27="$SOURCE_DIR/python_2/$PYTHON_VER2.tgz"
+SOURCE_38="$SOURCE_DIR/python_3/$PYTHON_VER3.tgz"
 TMP_WORKSPACE="/tmp/opengee_python_builds"
-TMP_27="$TMP_WORKSPACE/Python-2.7.18"
-TMP_38="$TMP_WORKSPACE/Python-3.8.6"
+TMP_27="$TMP_WORKSPACE/$PYTHON_VER2"
+TMP_38="$TMP_WORKSPACE/$PYTHON_VER3"
 DO_INSTALL="yes"
 INSTALL_SELECTED="no"
 DO_CLEAN="no"
 CLEAN_SELECTED="no"
+
+
 
 # parse command line args
 
@@ -39,16 +41,20 @@ while [[ "$#" -gt 0 ]]; do
   case "$1" in
     -h|--help)
 
-cat <<MSG
+    cat <<MSG
  Usage: $SELF_NAME [-i] [-c] [-h]
     -i|--install
-      Performs the Python3 installation. Default
+      Perform the Python installation. 
+      Default. Requires root permissions.
 
     -c|--clean
-      Cleans-up any lingering files
+      Clean-up any lingering files. 
+      Cannot be done in conjunction with install. 
+      Requires root permissions.
 
     -h|--help
       Show this help message and exit
+
 MSG
       exit 0
       ;;

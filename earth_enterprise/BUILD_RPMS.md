@@ -66,6 +66,8 @@ libraries, as detailed below:
     and **opengee-extra**
 * **opengee-full-server** - convenience RPM that installs **opengee-server**
     and **opengee-extra**
+* **opengee-python-2.7.18** - contains Python 2.7 
+* **opengee-python-3.8.6** - contains Python 3.8.6
 
 ## Installing RPMs
 
