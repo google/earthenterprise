@@ -277,7 +277,6 @@ remove_files_from_target()
     rm -rf $BASEINSTALLDIR_OPT/qt
     rm -rf $BASEINSTALLDIR_OPT/lib
     rm -rf $BASEINSTALLDIR_OPT/gepython
-    rm -rf $BASEINSTALLDIR_VAR/openssl
 
     rm -f $BININSTALLROOTDIR/gevars.sh
   fi
@@ -354,4 +353,3 @@ main_preuninstall "$@"
 # Uninstall Main
 #-----------------------------------------------------------------
 main_uninstall
-

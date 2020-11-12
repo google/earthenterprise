@@ -428,9 +428,6 @@ copy_files_to_target()
   mkdir -p "$BASEINSTALLDIR_OPT/gehttpd/conf"
   mkdir -p "$BASEINSTALLDIR_OPT/gehttpd/htdocs/shared_assets/images"
   mkdir -p "$BASEINSTALLDIR_OPT/search"
-  mkdir -p "$BASEINSTALLDIR_VAR/openssl/private"
-  mkdir -p "$BASEINSTALLDIR_VAR/openssl/misc"
-  mkdir -p "$BASEINSTALLDIR_VAR/openssl/certs"
   mkdir -p "$BASEINSTALLDIR_ETC/openldap"
   mkdir -p "$BASEINSTALLDIR_VAR/pgsql"
 
@@ -494,29 +491,6 @@ copy_files_to_target()
   cp -rf "$TMPINSTALLDIR/server/opt/google/gehttpd/conf/gehttpd.conf" "$BASEINSTALLDIR_OPT/gehttpd/conf"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf "$TMPINSTALLDIR/server/opt/google/gehttpd/htdocs/shared_assets/images/location_pin.png" "$BASEINSTALLDIR_OPT/gehttpd/htdocs/shared_assets/images"
-  if [ $? -ne 0 ]; then error_on_copy=1; fi
-
-  TMPOPENSSLPATH=$TMPINSTALLDIR/common/user_magic/var/opt/google/openssl
-
-  cp -f "$TMPOPENSSLPATH/openssl.cnf" "$BASEINSTALLDIR_VAR/openssl"
-  if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf "$TMPOPENSSLPATH/private" "$BASEINSTALLDIR_VAR/openssl"
-  if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -f "$TMPOPENSSLPATH/misc/CA.sh" "$BASEINSTALLDIR_VAR/openssl/misc"
-  if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -f "$TMPOPENSSLPATH/misc/tsget" "$BASEINSTALLDIR_VAR/openssl/misc"
-  if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -f "$TMPOPENSSLPATH/misc/c_name" "$BASEINSTALLDIR_VAR/openssl/misc"
-  if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -f "$TMPOPENSSLPATH/misc/CA.pl" "$BASEINSTALLDIR_VAR/openssl/misc"
-  if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -f "$TMPOPENSSLPATH/misc/c_issuer" "$BASEINSTALLDIR_VAR/openssl/misc"
-  if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -f "$TMPOPENSSLPATH/misc/c_info" "$BASEINSTALLDIR_VAR/openssl/misc"
-  if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -f "$TMPOPENSSLPATH/misc/c_hash" "$BASEINSTALLDIR_VAR/openssl/misc"
-  if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf "$TMPOPENSSLPATH/certs" "$BASEINSTALLDIR_VAR/openssl"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
 
   TMPOPENLDAPPATH=$TMPINSTALLDIR/common/user_magic/etc/opt/google/openldap

@@ -383,9 +383,8 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
         'Python Imaging Library 1.1.7 and ' +
         'mgrs 1.1.0 and mm 1.4.2 and ' +
         'OpenLDAP and ' +
-        'OpenSSL and ' +
         'Skia 5.1.2'
- 
+
     type = BINARY
     autoFindProvides = true
     autoFindRequires = true
