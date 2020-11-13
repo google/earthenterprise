@@ -28,10 +28,6 @@ env.Append(CPPPATH = ['#fusion/autoingest', # static header files
 
 
 idlfiles = [ 'AssetStorage',
-             'storage/deprecated/ReprojectConfig',
-             'storage/deprecated/BlendConfig',
-             'storage/deprecated/TmeshConfig',
-             'storage/deprecated/CopyrightConfig',
              'storage/deprecated/RasterKHDBConfig',
              'storage/deprecated/VectorKHDBConfig',
              'TaskLists', 'gstProvider', 'Locale', 'ServerCombination',
@@ -93,12 +89,7 @@ env.idl(map(lambda n: n+'.idl', idlfiles))
 
 
 plugins = [ 'Source',
-            'deprecated/Reproject',
-            'deprecated/Blend',
-            'deprecated/Tmesh',
-            'deprecated/Copyright',
             'deprecated/RasterKHDB',
-            'deprecated/ImeshKHDB',
             'deprecated/VectorKHDB',
             'Mosaic',
             'Maskgen',
