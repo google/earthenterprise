@@ -242,8 +242,13 @@ task stageOpenGeeInstall(type: Exec, dependsOn: 'compileOpenGee') {
         "installdir=${stagedInstallDir}")
 }
 
+task openGeePython2InitScripts(type: Copy) {
+    from(file('opengee-python-2/src'))
+    into "${buildDir}/opengee-python-2"
+}
+
 // RPM that installs python 2 if needed
-task openGeePython2Rpm(type: GeeRpm) {
+task openGeePython2Rpm(type: GeeRpm, dependsOn: openGeePython2InitScripts) {
     mustRunAfter stageOpenGeeInstall
 
     packageName = 'opengee-python-2.7.18'
@@ -269,7 +274,7 @@ task openGeePython2Rpm(type: GeeRpm) {
     }
 }
 
-task openGeePython2Deb(type: GeeDeb) {
+task openGeePython2Deb(type: GeeDeb, dependsOn: openGeePython2InitScripts) {
     mustRunAfter stageOpenGeeInstall
 
     packageName = openGeePython2Rpm.packageName
@@ -294,8 +299,13 @@ task openGeePython2Deb(type: GeeDeb) {
     }
 }
 
+task openGeePython3InitScripts(type: Copy) {
+    from(file('opengee-python-3/src'))
+    into "${buildDir}/opengee-python-3"
+}
+
 // RPM that installs python 3 if needed
-task openGeePython3Rpm(type: GeeRpm) {
+task openGeePython3Rpm(type: GeeRpm, dependsOn: openGeePython3InitScripts) {
     mustRunAfter stageOpenGeeInstall
 
     packageName = 'opengee-python-3.8.6'
@@ -321,7 +331,7 @@ task openGeePython3Rpm(type: GeeRpm) {
     }
 }
 
-task openGeePython3Deb(type: GeeDeb) {
+task openGeePython3Deb(type: GeeDeb, dependsOn: openGeePython3InitScripts) {
     mustRunAfter stageOpenGeeInstall
 
     packageName = openGeePython3Rpm.packageName
