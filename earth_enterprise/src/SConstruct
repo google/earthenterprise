@@ -216,7 +216,6 @@ if not os.path.isfile('/etc/redhat-release'):
   if major < 16:
     print 'Unknown Ubuntu version, minimum required version is 16.04.'
     Exit(1)
-    is_min_ubuntu = False
 
 extragccflags = []
 if sys.platform[0:5] == 'linux':
