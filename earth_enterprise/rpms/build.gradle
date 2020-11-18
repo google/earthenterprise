@@ -260,10 +260,6 @@ task openGeePython2Rpm(type: GeeRpm) {
     autoFindProvides = true
     autoFindRequires = true
 
-    // Don't specify install scripts as single files.  It doesn't work for
-    // RPMs:
-    postUninstall = file("${buildDir}/opengee-python-2/post-uninstall.sh")
-
     from (stagedInstallDir_python_2) {
         into packageInstallRootDir
     }
@@ -283,11 +279,6 @@ task openGeePython2Deb(type: GeeDeb) {
     license = openGeePython2Rpm.license
     url = openGeePython2Rpm.url
     type = BINARY
-    
-    // Don't specify install scripts as single files.  It doesn't work for
-    // RPMs:
-    postUninstall = file("${buildDir}/opengee-python-2/post-uninstall.sh")
-
 
     from (stagedInstallDir_python_2) {
         into packageInstallRootDir
@@ -311,10 +302,6 @@ task openGeePython3Rpm(type: GeeRpm) {
     type = BINARY
     autoFindProvides = true
     autoFindRequires = true
-    
-    // Don't specify install scripts as single files.  It doesn't work for
-    // RPMs:
-    postUninstall = file("${buildDir}/opengee-python-3/post-uninstall.sh")
 
     from (stagedInstallDir_python_3) {
         into packageInstallRootDir
@@ -335,10 +322,6 @@ task openGeePython3Deb(type: GeeDeb) {
     license = openGeePython3Rpm.license
     url = openGeePython3Rpm.url
     type = BINARY
-    
-    // Don't specify install scripts as single files.  It doesn't work for
-    // RPMs:
-    postUninstall = file("${buildDir}/opengee-python-3/post-uninstall.sh")
 
     from (stagedInstallDir_python_3) {
         into packageInstallRootDir

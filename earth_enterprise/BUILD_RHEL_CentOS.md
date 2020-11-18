@@ -165,21 +165,12 @@ If you encounter an error about git dependency conflicts, consider
 experimenting with the `--skip-broken` parameter.
 
 
-## Install Python and needed pip packages
+## Install Python
 
 In order to build OpenGEE, both Python 2.7 and 3.8 are needed (to facilitate transition to 3.8). If you have access to both through public repos, we suggest installing them that way. If not the following script will build and install them from source if they are needed:
 
 ```bash
 sudo ./../scripts/install_python.sh
-```
-
-The following pip packages are needed (in both python 2.7 and 3.8):
-
-```bash
-sudo pip2.7 install --upgrade pip==19.0
-sudo pip2.7 install argparse defusedxml setuptools GitPython
-sudo pip3.8 install --upgrade pip
-sudo pip3.8 install argparse defusedxml setuptools GitPython
 ```
 
 ## GTest 1.8
