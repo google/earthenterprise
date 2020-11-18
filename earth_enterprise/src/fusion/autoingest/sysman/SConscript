@@ -136,6 +136,8 @@ env.install('fusion_bin', [ gesystemmanager, geresourceprovider ] )
 env.install('fusion_root', [ 'gefusion' ], 'etc/init.d')
 
 
+'''
+# TODO: sysmanExtraObjs ??
 SConscript(
     'parse-raster-project-xml-no-content_unittest/SConscript',
     exports=['env', 'sysmanObjs', 'extraObjs', 'testLibs'])
@@ -163,3 +165,4 @@ env.test('AssetOperation_unittest',
 env.test('CalcState_unittest',
     sysmanObjs + extraObjs + [ 'CalcState_unittest.cpp' ],
     LIBS=testLibs)
+'''
