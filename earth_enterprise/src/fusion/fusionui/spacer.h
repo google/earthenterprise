@@ -8,10 +8,7 @@ class spacer : public QSpacerItem
 public:
     spacer() = default;
 
-    void setObjectName(const QString& oName)
-    {
-
-    }
+    void setObjectName(const QString& oName) {}
     void setOrientation(const Qt::Orientation& orient) {}
     void setSizeType(const QSizePolicy& policy) {}
     void setSizeHint(const QSize& sizeHint) {}

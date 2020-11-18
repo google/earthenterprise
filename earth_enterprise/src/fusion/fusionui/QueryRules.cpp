@@ -16,11 +16,8 @@
 #include <Qt/qcombobox.h>
 #include <Qt/q3combobox.h>
 #include <Qt/qstringlist.h>
-//#include <Qt/qgroupbox.h>
 #include <Qt/q3groupbox.h>
-//using QGroupBox = Q3GroupBox;
 #include <Qt/qlineedit.h>
-//#include <Qt/qobject.h>
 #include <Qt/q3ptrlist.h>
 #include <Qt/qmessagebox.h>
 #include <Qt/q3objectdict.h>

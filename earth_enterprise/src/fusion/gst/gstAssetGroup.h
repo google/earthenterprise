@@ -20,11 +20,8 @@
 #include <vector>
 #include <Qt/qglobal.h>
 #include <Qt/qstring.h>
-//#include <qstring.h>
 #include <Qt/qstringlist.h>
-//#include <qstringlist.h>
 #include <Qt/qdir.h>
-//#include <qdir.h>
 #include <khRefCounter.h>
 
 #include <autoingest/Asset.h>

@@ -18,9 +18,7 @@
 #ifndef _DataViewTable_h_
 #define _DataViewTable_h_
 #include <Qt/q3table.h>
-//#include <qtable.h>
 #include <Qt/q3intdict.h>
-//#include <qintdict.h>
 #include <gstValue.h>
 
 class gstSelector;

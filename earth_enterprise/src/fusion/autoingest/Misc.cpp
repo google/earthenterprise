@@ -104,8 +104,6 @@ varsubst(const std::string &str,
           split(result.substr(qualpos+1, end - (qualpos+1)), ":",
                 std::back_inserter(qualstrs));
           for(const auto& q : qualstrs) {
-          //for (std::vector<std::string>::const_iterator q =
-          //       qualstrs.begin(); q != qualstrs.end(); ++q) {
             SubstQualMap::const_iterator found =
               qualifiers.find(q);
             if (found != qualifiers.end()) {

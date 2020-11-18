@@ -15,7 +15,6 @@
 
 #include <algorithm>
 #include <Qt/q3popupmenu.h>
-//#include <qpopupmenu.h>
 #include <qcursor.h>
 #include <khFileUtils.h>
 

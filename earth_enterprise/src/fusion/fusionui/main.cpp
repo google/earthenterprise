@@ -48,11 +48,6 @@
 // generated rcc -name resources -namespace resources.qrc >resources.cpp
 #include "images/resources.cpp"
 
-// pre-qt3.1 workaround
-// #ifndef WStyle_Splash
-// #define WStyle_Splash WStyle_NoBorder | WStyle_StaysOnTop | WStyle_Tool | WWinOwnDC | WX11BypassWM
-// #endif
-
 class SplashScreen : public QSplashScreen {
  public:
   explicit SplashScreen(const QPixmap& pix = QPixmap(), Qt::WindowFlags f = 0);
@@ -192,7 +187,7 @@ int main(int argc, char** argv) {
   f.setAlpha(true);
   QGLFormat::setDefaultFormat(f);
 
-  //
+  // TODO: translations
   // install translator
   // disabling for now
   /*QTranslator translator(0,0);

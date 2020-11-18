@@ -17,7 +17,6 @@
 #include <qpixmap.h>
 #include <qtoolbar.h>
 #include <qtoolbutton.h>
-//#include <qpopupmenu.h>
 #include <qmenu.h>
 #include <qmenubar.h>
 #include <qtextedit.h>
@@ -27,19 +26,13 @@
 #include <qmessagebox.h>
 #include <qapplication.h>
 #include <Qt/q3accel.h>
-//#include <qaccel.h>
 #include <qtextstream.h>
 #include <qpainter.h>
 #include <Qt/q3paintdevicemetrics.h>
-//#include <qpaintdevicemetrics.h>
 #include <Qt/q3simplerichtext.h>
 #include <Qt/q3simplerichtext.h>
 #include <Qt/q3grid.h>
 #include <Qt/q3canvas.h>
-//#include <qsimplerichtext.h>
-//#include <qgrid.h>
-//#include <qobject.h>
-//#include <qcanvas.h>
 #include <Qt/qobject.h>
 #include  <Qt/q3filedialog.h>
 #include "fileopen.xpm"

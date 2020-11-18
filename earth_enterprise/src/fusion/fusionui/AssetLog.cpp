@@ -21,9 +21,7 @@
 #include <errno.h>
 #include <string.h>
 #include <Qt/q3textedit.h>
-//#include <qtextedit.h>
 #include <Qt/q3scrollview.h>
-//#include <qscrollview.h>
 
 #include "AssetLog.h"
 
@@ -62,7 +60,7 @@ AssetLog::AssetLog( const std::string &logpath )
   logTextEdit->setWrapPolicy(QTextEdit::Anywhere);
   logTextEdit->setHScrollBarMode(QScrollView::AlwaysOff);
   logTextEdit->setVScrollBarMode(QScrollView::Auto);
-    
+
   // start off with an initial read of the log
   timerEvent( NULL );
 

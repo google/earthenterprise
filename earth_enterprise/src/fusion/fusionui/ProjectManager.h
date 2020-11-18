@@ -1,6 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
- * Copyright 2020 The Open GEE Contributors 
+ * Copyright 2020 The Open GEE Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,9 @@
 #ifndef KHSRC_FUSION_FUSIONUI_PROJECTMANAGER_H__
 #define KHSRC_FUSION_FUSIONUI_PROJECTMANAGER_H__
 
-//#include <Q3ListView.h>
 #include <Qt/q3listview.h>
-//#include <qfiledialog.h>
 #include <Qt/qfiledialog.h>
 #include <Qt/q3dragobject.h>
-//#include <qdragobject.h>
 #include <Qt/qcoreevent.h>
 #include <Qt/qlabel.h>
 #include <vector>

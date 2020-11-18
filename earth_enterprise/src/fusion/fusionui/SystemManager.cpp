@@ -13,8 +13,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-
 #include "SystemManager.h"
 #include "SystemListener.h"
 #include <autoingest/khAssetManagerProxy.h>
@@ -27,7 +25,6 @@
 using QListBoxText = Q3ListBoxText;
 using QListBoxItem = Q3ListBoxItem;
 using QListBox = Q3ListBox;
-
 
 class WaitingItem : public QListBoxText
 {
@@ -50,7 +47,7 @@ class WaitingItem : public QListBoxText
   }
 };
 
-/* Momentarily disabled
+/* TODO: Momentarily disabled
 
 class WaitingErrorTip // : public QToolTip
 {
@@ -74,7 +71,7 @@ class WaitingErrorTip // : public QToolTip
           QToolTip::showText(listbox->itemRect(item).topLeft(),witem->error);
         }
       }
-            
+
     }
   }
 };*/

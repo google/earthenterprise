@@ -22,8 +22,6 @@
 #include "fusion/fusionui/QValidatorExt.h"
 #include <Qt/q3listview.h>
 
-//class QListView;
-//class QListViewItem;
 class ProjectLayerView;
 class LayerItemBase;
 

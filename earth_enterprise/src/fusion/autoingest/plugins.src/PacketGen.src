@@ -183,7 +183,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       packetLevelConfig.attributions.reserve(neededIndexes.size() + 1);
       for (const auto& idx : neededIndexes) {
         const InsetInfo<ProductAssetVersion> &inset(*extra.insetInfo[idx]);
-        std::string acquisitionDate = inset.resource_->GetAcquisitionDate();//.toStdString();
+        std::string acquisitionDate = inset.resource_->GetAcquisitionDate();
         packetLevelConfig.attributions.push_back
           (PacketLevelConfig::Attribution(
               inset.dataRPFile,

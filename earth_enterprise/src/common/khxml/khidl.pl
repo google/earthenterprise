@@ -1635,7 +1635,6 @@ EOF
 bool
 $class->{qualname}::SaveToString(std::string &buf, const std::string &ref) const throw()
 {
-    //std::unique_ptr<GEDocument>
     auto doc = CreateEmptyDocument("$class->{TagName}");
     if (!doc) return false;
     bool status = false;

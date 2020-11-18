@@ -19,7 +19,7 @@
 #ifndef __IMAGE_VIEW_H__
 #define __IMAGE_VIEW_H__
 
-#include <Qt3Support/Q3ScrollView>//q3scrollview.h>
+#include <Qt3Support/Q3ScrollView>
 #include "gdal_priv.h"
 
 #include "histogram.h"

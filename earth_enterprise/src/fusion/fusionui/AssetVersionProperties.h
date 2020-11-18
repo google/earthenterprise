@@ -18,7 +18,6 @@
 #ifndef _AssetVersionProperties_h_
 #define _AssetVersionProperties_h_
 
-//#include <Qt/qlistview.h>
 #include <Qt/qglobal.h>
 #include <Qt/q3listview.h>
 #include <Qt/qobject.h>
@@ -29,11 +28,10 @@
 #include "SystemListener.h"
 #include "AssetVersionActions.h"
 
-//using QListViewItem = Q3ListViewItem;
-//using QListView = Q3ListView;
 class QColorGroup;
 #define ASSET_CHILD 0x00ff0001
 #define ASSET_INPUT 0x00ff0002
+
 class AssetChildItem : public Q3ListViewItem, public AssetWatcher
 {
  public:

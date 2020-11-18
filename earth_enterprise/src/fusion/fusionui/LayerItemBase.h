@@ -18,9 +18,7 @@
 #ifndef KHSRC_FUSION_FUSIONUI_LAYERITEMBASE_H__
 #define KHSRC_FUSION_FUSIONUI_LAYERITEMBASE_H__
 
-//#include <Qt/Q3Listview.h>
 #include <Qt/q3listview.h>
-//using Q3ListViewItem = Q3ListViewItem;
 
 class LayerItemBase : public Q3ListViewItem {
  public:
