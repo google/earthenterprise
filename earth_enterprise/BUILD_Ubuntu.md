@@ -39,8 +39,6 @@ sudo apt-get install \
     libx11-dev libxcursor-dev libxerces-c-dev libxft-dev libxinerama-dev \
     libxml2-dev libxml2-utils libxmu-dev libxrandr-dev libyaml-cpp-dev \
     openssl libpcre3 libpcre3-dev \
-    python-dev python-imaging python-psycopg2 \
-    python-setuptools python2.7 python2.7-dev python-git \
     scons shunit2 xorg-dev zlib1g-dev
 ```
 ## Install Python
@@ -49,4 +47,13 @@ In order to build OpenGEE, both Python 2.7 and 3.8 are needed (to facilitate tra
  
 ```bash
 sudo ./../scripts/install_python.sh
+```
+
+Additional python packages are needed as well:
+
+```bash
+sudo pip2.7 install --upgrade pip==19.0
+sudo pip2.7 install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2
+sudo pip3.8 install --upgrade pip
+sudo pip3.8 install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2
 ```

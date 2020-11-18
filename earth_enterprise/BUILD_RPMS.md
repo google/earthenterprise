@@ -66,8 +66,24 @@ libraries, as detailed below:
     and **opengee-extra**
 * **opengee-full-server** - convenience RPM that installs **opengee-server**
     and **opengee-extra**
-* **opengee-python-2.7.18** - contains Python 2.7 
-* **opengee-python-3.8.6** - contains Python 3.8.6
+* **python-2.7.18** - contains Python 2.7 
+* **python-3.8.6** - contains Python 3.8.6
+
+## Seting up the Python Environment
+
+If the RPMs are being installed on the machine where they were built, the 
+proper python environment has already been setup during the build phase.
+If not, Python 2.7 and 3.8 need to installed. This can be done either through official
+channels or by installing our python rpms via ```sudo rpm -Uhv python-2*``` or 
+```sudo rpm -Uvh python-3*``` depending on which versions are needed. Additional
+python packages are needed as well and can be installed via: 
+
+```bash
+sudo pip2.7 install --upgrade pip==19.0
+sudo pip2.7 install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2
+sudo pip3.8 install --upgrade pip
+sudo pip3.8 install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2
+```
 
 ## Installing RPMs
 

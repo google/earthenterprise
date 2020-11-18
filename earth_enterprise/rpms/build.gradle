@@ -246,7 +246,7 @@ task stageOpenGeeInstall(type: Exec, dependsOn: 'compileOpenGee') {
 task openGeePython2Rpm(type: GeeRpm) {
     mustRunAfter stageOpenGeeInstall
 
-    packageName = 'opengee-python-2.7.18'
+    packageName = 'python-2.7.18'
     release = ospackage.release
     version = '2.7.18'
     user = 'root'
@@ -289,7 +289,7 @@ task openGeePython2Deb(type: GeeDeb) {
 task openGeePython3Rpm(type: GeeRpm) {
     mustRunAfter stageOpenGeeInstall
 
-    packageName = 'opengee-python-3.8.6'
+    packageName = 'python-3.8.6'
     release = ospackage.release
     version = '3.8.6'
     user = 'root'
@@ -483,11 +483,6 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
     requires('chkconfig')
     requires('shadow-utils')
 
-    if ("${findBuildNumber()}.${rpmPlatformString}".contains('el6')) {
-        requires('python27')
-        requires('python27-lxml')
-    }
-
     requiresCommands(packageSharedCommands +
         ['cat', 'cut', 'getent', 'grep'])
 
@@ -551,11 +546,6 @@ task openGeeCommonDeb (type: GeeDeb, dependsOn: openGeeCommonInitScripts) {
     requires('libtool')
     requires('libxml2-utils')
     requires('openssl')
-    requires('python-imaging')
-    requires('python-lxml')
-    requires('python-psycopg2')
-    requires('python-setuptools')
-    requires('python2.7')
 
     // Use single files for install scripts.  Othewrise, OS Package wraps the
     // code in extra statements.
@@ -628,16 +618,12 @@ task openGeeServerRpm(type: GeeRpm, dependsOn: openGeeServerInitScripts) {
     requires('opengee-postgis', '2.3.9', GREATER | EQUAL)
     conflicts('opengee-postgis', '2.0', LESS )
     conflicts('opengee-postgis', '2.4', GREATER | EQUAL)
-    requires('python-unittest2')
-    // The WMS Service requires PIL, which is not automatically detected:
-    requires('python-imaging')
-    requires('python-lxml')
 
     requiresCommands(
         packageSharedCommands +
         [
             // Install script commands:
-            'cat', 'chmod', 'chown', 'cut', 'find', 'getent', 'mkdir', 'python',
+            'cat', 'chmod', 'chown', 'cut', 'find', 'getent', 'mkdir', 'python2.7',
             'sed', 'su', 'sudo'
         ]
     )
@@ -733,16 +719,12 @@ task openGeeServerDeb (type: GeeDeb, dependsOn: openGeeServerInitScripts) {
     requires('opengee-postgis', '2.3.9', GREATER | EQUAL)
     conflicts('opengee-postgis', '2.0', LESS )
     conflicts('opengee-postgis', '2.4', GREATER | EQUAL)
-    requires('python-unittest2')
-    // The WMS Service requires PIL, which is not automatically detected:
-    requires('python-imaging')
-    requires('python-lxml')
 
     requiresCommands(
         packageSharedCommands +
         [
             // Install script commands:
-            'cat', 'chmod', 'chown', 'cut', 'find', 'getent', 'mkdir', 'python',
+            'cat', 'chmod', 'chown', 'cut', 'find', 'getent', 'mkdir', 'python2.7',
             'sed', 'su', 'sudo'
         ]
     )
