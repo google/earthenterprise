@@ -20,9 +20,13 @@
 # are set:
 # CPP_STD    - Should be set to `98` or `11` depending on the standard to build with
 # BUILD_TYPE - The type of build `release`, `optimize`, or `internal`
+# SERIES	 - This is used to version the cache for major third party changes.
 
 # Terminate with an non-zero exit code, if a command doesn't succeed:
 set -e
+
+if test -z "$SERIES" ; then
+	SERIES="1" ; fi
 
 case "$CPP_STD" in
     11)
@@ -44,11 +48,13 @@ esac
 
 set -x
 cd earth_enterprise/src
-if [ -f $HOME/cache/third_party$CPP_STD.tgz ]; then
-   tar xf $HOME/cache/third_party$CPP_STD.tgz;
+rm -rf NATIVE-REL-x86_64
+
+if [ -f $HOME/cache/third_party$SERIES-$CPP_STD.tgz ]; then
+   tar xf $HOME/cache/third_party$SERIES-$CPP_STD.tgz;
 fi
 
-python2.7 /usr/bin/scons -j3 $BUILD_TYPE=1 cpp_standard=gnu++$CPP_STD third_party > build.log
+python2.7 /usr/bin/scons -j3 $BUILD_TYPE=1 qt4_native=1 cpp_standard=gnu++$CPP_STD third_party > build.log
 mkdir -p $HOME/cache
-tar cfz $HOME/cache/third_party$CPP_STD.tgz NATIVE-REL-x86_64 .sconsign.dblite .sconf_temp
+tar cfz $HOME/cache/third_party$SERIES-$CPP_STD.tgz NATIVE-REL-x86_64 .sconsign.dblite .sconf_temp
 

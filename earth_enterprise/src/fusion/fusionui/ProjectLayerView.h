@@ -18,18 +18,22 @@
 #ifndef KHSRC_FUSION_FUSIONUI_PROJECTLAYERVIEW_H__
 #define KHSRC_FUSION_FUSIONUI_PROJECTLAYERVIEW_H__
 
-#include <qlistview.h>
+#include <Qt/qobjectdefs.h>
 #include <string>
 #include "AssetDrag.h"
+#include <Qt/qwidget.h>
+#include <Qt/q3listview.h>
+#include <Qt/qevent.h>
 
-class ProjectLayerView : public QListView {
+
+class ProjectLayerView : public Q3ListView {
   Q_OBJECT
 
  public:
-  ProjectLayerView(QWidget* parent = 0, const char* n = 0, WFlags f = 0);
+  ProjectLayerView(QWidget* parent = 0, const char* n = 0, Qt::WFlags f = 0);
 
   void EnableAssetDrops(AssetDefs::Type type, const std::string& subtype);
-  void SelectItem(QListViewItem* item);
+  void SelectItem(Q3ListViewItem* item);
 
  signals:
   void dropAsset(const QString& a);

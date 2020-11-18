@@ -176,7 +176,7 @@ check_prereq_software()
     check_prereq_software_retval=1
   fi
 
-  if ! software_check "$script_name" "python2.[67]" "python-2.[67].*"; then
+  if ! software_check "$script_name" "python2.[67]" "python[2]*-2.[67].*"; then
     check_prereq_software_retval=1
   fi
 
@@ -439,10 +439,6 @@ copy_files_to_target()
   if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf "$TMPINSTALLDIR/common/opt/google/share" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf "$TMPINSTALLDIR/common/opt/google/qt" "$BASEINSTALLDIR_OPT"
-  if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf "$TMPINSTALLDIR/common/opt/google/qt/lib" "$BASEINSTALLDIR_OPT"
-  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf "$TMPINSTALLDIR/common/opt/google/lib" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf "$TMPINSTALLDIR/common/opt/google/gepython" "$BASEINSTALLDIR_OPT"
@@ -459,7 +455,7 @@ copy_files_to_target()
   if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf "$TMPINSTALLDIR/server/opt/google/lib" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  
+
   if [ -f "$BASEINSTALLDIR_OPT/gehttpd/conf.d/.htpasswd" ]
   then
     # Preserve Admin Console password
@@ -681,7 +677,6 @@ fix_postinstall_filepermissions()
   chmod -R 555 /opt/google/bin/
   chmod 755 /opt/google/bin
   chmod +s /opt/google/bin/gerestartapache /opt/google/bin/geresetpgdb /opt/google/bin/geserveradmin
-  chmod -R 755 /opt/google/qt/
   # TODO: there is not such directory
   # chmod 755 /etc/opt/google/installed_products/
   chmod 755 /etc/opt/google/openldap/

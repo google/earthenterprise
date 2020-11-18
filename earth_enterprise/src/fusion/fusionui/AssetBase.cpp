@@ -1,3 +1,4 @@
+// Copyright 2020 the Open GEE Contributors.
 // Copyright 2017 Google Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,22 +13,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-#include <qaction.h>
-#include <qframe.h>
-#include <qimage.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qmenubar.h>
-#include <qmessagebox.h>
-#include <qpixmap.h>
-#include <qpopupmenu.h>
-#include <qpushbutton.h>
-#include <qtooltip.h>
-#include <qvariant.h>
-#include <qwhatsthis.h>
+#include <Qt/qaction.h>
+#include <Qt/qframe.h>
+#include <Qt/qimage.h>
+#include <Qt/qlabel.h>
+#include <Qt/qlayout.h>
+#include <Qt/qmenubar.h>
+#include <Qt/qmessagebox.h>
+#include <Qt/qpixmap.h>
+#include <Qt/qpushbutton.h>
+#include <Qt/qtooltip.h>
+#include <Qt/qvariant.h>
+#include <Qt/qwhatsthis.h>
 #include <khException.h>
-
+#include <Qt/qobject.h>
+#include <Qt/qmainwindow.h>
+#include <Qt/qwidget.h>
 #include "AssetBase.h"
 #include "AssetChooser.h"
 #include "AssetNotes.h"
@@ -36,11 +37,12 @@
 #include <fusionui/.idl/layoutpersist.h>
 #include <autoingest/khAssetManagerProxy.h>
 
+
 QString AssetBase::untitled_name(QObject::tr("Untitled"));
 
 AssetBase::AssetBase(QWidget* parent)
-  : QMainWindow(parent, 0, WType_TopLevel) {
-  setFocusPolicy(QMainWindow::TabFocus);
+  : QMainWindow(parent, 0, Qt::WType_TopLevel) {
+  setFocusPolicy(Qt::TabFocus);
   setCentralWidget(new QWidget(this));
   QGridLayout* asset_base_layout = new QGridLayout(centralWidget(), 2, 1, 11, 6);
 
@@ -58,18 +60,18 @@ AssetBase::AssetBase(QWidget* parent)
 
   // actions
   save_action_ = new QAction(this);
-  save_action_->setIconSet(QIconSet(QPixmap::fromMimeSource("filesave.png")));
+  save_action_->setIconSet(QIconSet(QPixmap(":/filesave.png")));
   saveas_action_ = new QAction(this);
-  saveas_action_->setIconSet(QIconSet(QPixmap::fromMimeSource("filesaveas.png")));
+  saveas_action_->setIconSet(QIconSet(QPixmap(":/filesaveas.png")));
   build_action_ = new QAction(this);
   //  build_action_->setIconSet(QIconSet(QPixmap::fromMimeSource("notes.png")));
   savebuild_action_ = new QAction(this);
   close_action_ = new QAction(this);
-  close_action_->setIconSet(QIconSet(QPixmap::fromMimeSource("fileclose.png")));
+  close_action_->setIconSet(QIconSet(QPixmap(":/fileclose.png")));
   hidden_action_ = new QAction(this);
   hidden_action_->setToggleAction(true);
   notes_action_ = new QAction(this);
-  notes_action_->setIconSet(QIconSet(QPixmap::fromMimeSource("notes.png")));
+  notes_action_->setIconSet(QIconSet(QPixmap(":/notes.png")));
 
   // menubar
   menu_bar_ = new QMenuBar(this);
@@ -92,8 +94,20 @@ AssetBase::AssetBase(QWidget* parent)
 
   languageChange();
   //resize(QSize(545, 317).expandedTo(minimumSizeHint()));
-  clearWState(WState_Polished);
 
+/*
+From: https://wiki.qt.io/Porting_Qt_3_to_Qt_4_Issues#clearWState.28_WState_Polished_.29
+
+"This function is internal in Qt3. But it is called from Designer-generated files. Maybe, Qt
+developers think that Designer-generated files will be updated (re-generated) during the
+porting process, so, this function is not documented.
+
+May be removed in the ported code."
+
+So, I assume it can just be removed
+
+  clearWState(WState_Polished);
+*/
   // signals and slots connections
   connect(save_action_, SIGNAL(activated()), this, SLOT(Save()));
   connect(saveas_action_, SIGNAL(activated()), this, SLOT(SaveAs()));
@@ -194,6 +208,8 @@ bool AssetBase::Save() {
   }
   SetSaveError(true);
   SetLastSaveError(true);
+  AssetManager::self->selectFolder();
+  AssetManager::self->refresh();
   return false;
 }
 
@@ -250,6 +266,8 @@ void AssetBase::Close() {
         break;
     }
   }
+  AssetManager::self->selectFolder();
+  AssetManager::self->refresh();
   delete this;
 }
 
@@ -271,7 +289,10 @@ void AssetBase::InstallMainWidget() {
 
 void AssetBase::SetName(const QString& text) {
   asset_path_ = text;
-  setCaption(AssetPrettyName() + " : " + shortAssetName(text));
+  std::string pretty_name { AssetPrettyName().toStdString() };
+  std::string short_name { shortAssetName(text.toUtf8().constData()) };
+
+  setCaption(QString(pretty_name.c_str()) + " : " + short_name.c_str());
   emit NameChanged(text);
 }
 
@@ -318,6 +339,8 @@ void AssetBase::Build(void) {
   bool needed = false;;
   bool success = khAssetManagerProxy::BuildAsset((const char*)Name().utf8(),
                                                  needed, error);
+  AssetManager::self->selectFolder();
+  AssetManager::self->refresh();
   if (success && !needed) {
     error = kh::tr("Nothing to do. Already up to date.");
     success = false;
@@ -357,6 +380,7 @@ void AssetBase::AboutToHideFileMenu() {
   build_action_->setEnabled(true);
   savebuild_action_->setEnabled(!save_error_);
 }
+ 
 
 void AssetBase::SetErrorMsg(const QString& text, bool red) {
   if (text.isEmpty()) {

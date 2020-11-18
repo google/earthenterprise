@@ -32,7 +32,7 @@ env.test('curl_request_unittest',
 
 geserveradmin = env.executable('geserveradmin', 'geserveradmin.cpp',
                            LIBS=['dbmanifest', 'gepublish', 'gemiscconfig',
-                                 'geutil', 'gecommon', 'geautoingest', 'qt-mt',
+                                 'geutil', 'gecommon', 'geautoingest', 'QtCore', 'QtGui',
                                  'geconfigutil', 'xerces-c'])
 
 swig_env = env.DeepCopy()

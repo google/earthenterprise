@@ -13,17 +13,18 @@
 // limitations under the License.
 
 
-#include <qlineedit.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qtextcodec.h>
-#include <qfileinfo.h>
-#include <qcolordialog.h>
-#include <qspinbox.h>
-#include <qwidgetstack.h>
-
+#include <Qt/qlineedit.h>
+#include <Qt/qlabel.h>
+#include <Qt/qpushbutton.h>
+#include <Qt/qcheckbox.h>
+#include <Qt/qcombobox.h>
+#include <Qt/qtextcodec.h>
+#include <Qt/qfileinfo.h>
+#include <Qt/qcolordialog.h>
+#include <Qt/qspinbox.h>
+#include <Qt/q3widgetstack.h>
+#include <Qt/qobject.h>
+#include <Qt/qfiledialog.h>
 #include <notify.h>
 #include <autoingest/.idl/Systemrc.h>
 #include <khFileUtils.h>
@@ -33,6 +34,7 @@
 #include <RuntimeOptions.h>
 #include "common/khConstants.h"
 #include <fusion/fusionui/GfxView.h>
+#include <cstdlib>
 
 // -----------------------------------------------------------------------------
 // static access
@@ -50,7 +52,10 @@ std::string Preferences::prefsDir;
 QString Preferences::filepath(const QString& fname) {
   if (prefsDir.empty())
     fprintf(stderr, "prefsDir is empty!\n");
-  return prefsDir + QString("/") + fname;
+  std::string fpath { prefsDir };
+  fpath.push_back('/');
+  fpath += fname.toUtf8().constData();
+  return QString(fpath.c_str());
 }
 
 PrefsConfig& Preferences::getConfig() {
@@ -59,11 +64,11 @@ PrefsConfig& Preferences::getConfig() {
 
   if (loadonce) {
     QString prefsPath = Preferences::filepath("preferences.xml");
-    if (khExists(prefsPath)) {
-      config.Load(prefsPath);
+    if (khExists(prefsPath.toUtf8().constData())) {
+      config.Load(prefsPath.toUtf8().constData());
     } else {
       config = getDefaultConfig();
-      config.Save(prefsPath);
+      config.Save(prefsPath.toUtf8().constData());
     }
     loadonce = false;
 
@@ -106,7 +111,7 @@ void Preferences::init() {
   GoogleInternal   = RuntimeOptions::GoogleInternal();
 }
 
-QString Preferences::empty_path("<i>" + QObject::tr("empty") + "</i>");
+QString Preferences::empty_path("<i>" + kh::tr("empty") + "</i>");
 
 Preferences::Preferences(QWidget* parent)
     : PreferencesBase(parent, 0, false, 0),
@@ -116,7 +121,7 @@ Preferences::Preferences(QWidget* parent)
   const PrefsConfig& prefsConfig = getConfig();
 
   // gather all valid codecs from qt and insert in drop-down list
-  codecCombo->insertItem(tr("<none>"));
+  codecCombo->insertItem(kh::tr("<none>"));
   int count = 0;
   QTextCodec* codec;
   for (; (codec = QTextCodec::codecForIndex(count)); ++count)
@@ -348,7 +353,7 @@ void Preferences::accept() {
   config.defaultImageryPath = EmptyCheck(imagery_path_label->text());
   config.defaultTerrainPath = EmptyCheck(terrain_path_label->text());
 
-  config.Save(Preferences::filepath("preferences.xml"));
+  config.Save(Preferences::filepath("preferences.xml").toUtf8().constData());
 
   PreferencesBase::accept();
 }
@@ -373,7 +378,7 @@ QString Preferences::CaptionText() {
     extern std::string khHostname(void);
     host = khHostname();
   }
-  QString caption(QString("  host=") + host);
+  QString caption(QString("  host=") + host.c_str());
   QString runtimeDesc = RuntimeOptions::DescString();
   if (!runtimeDesc.isEmpty()) {
     caption += " | ";
@@ -399,21 +404,21 @@ QString Preferences::DefaultTerrainPath() {
 
 void Preferences::ChooseDefaultVectorPath() {
   QString path = QFileDialog::getExistingDirectory(vector_path_label->text(),
-                     this, 0, tr("Select Folder"), true);
+                     this, 0, kh::tr("Select Folder"), true);
   if (path != QString::null)
     vector_path_label->setText(path);
 }
 
 void Preferences::ChooseDefaultImageryPath() {
   QString path = QFileDialog::getExistingDirectory(imagery_path_label->text(),
-                     this, 0, tr("Select Folder"), true);
+                     this, 0, kh::tr("Select Folder"), true);
   if (path != QString::null)
     imagery_path_label->setText(path);
 }
 
 void Preferences::ChooseDefaultTerrainPath() {
   QString path = QFileDialog::getExistingDirectory(terrain_path_label->text(),
-                     this, 0, tr("Select Folder"), true);
+                     this, 0, kh::tr("Select Folder"), true);
   if (path != QString::null)
     terrain_path_label->setText(path);
 }
@@ -431,5 +436,5 @@ void Preferences::UpdatePublishServerDbMap(const std::string& database_name,
                                            const std::string& server_name) {
   PrefsConfig& config = getConfig();
   config.publisher_db_map[database_name] = server_name;
-  config.Save(Preferences::filepath("preferences.xml"));
+  config.Save(Preferences::filepath("preferences.xml").toUtf8().constData());
 }

@@ -23,10 +23,11 @@
 #include "ProjectWidget.h"
 #include "AssetDisplayHelper.h"
 #include <autoingest/.idl/storage/MapProjectConfig.h>
-
+#include <Qt/qobject.h>
+#include <Qt/qglobal.h>
 class AssetBase;
 class MapProjectEditRequest;
-class QListViewItem;
+class QL3istViewItem;
 
 class MapProjectWidget : public ProjectWidget,
                          public AssetWidgetBase {
@@ -39,13 +40,13 @@ class MapProjectWidget : public ProjectWidget,
   void AssembleEditRequest(MapProjectEditRequest *request);
 
  public slots:
-  void ModifyItem(QListViewItem* item, const QPoint& pt, int col);
+  void ModifyItem(Q3ListViewItem* item, const QPoint& pt, int col);
 
  private:
   // inherited from ProjectWidget
   virtual LayerItemBase* NewLayerItem();
   virtual LayerItemBase* NewLayerItem(const QString& assetref);
-  virtual void ContextMenu(QListViewItem* item, const QPoint& pt, int col);
+  virtual void ContextMenu(Q3ListViewItem* item, const QPoint& pt, int col);
 };
 
 class MapProjectDefs {

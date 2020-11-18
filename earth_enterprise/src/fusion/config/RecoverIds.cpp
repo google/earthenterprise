@@ -102,7 +102,7 @@ void PromptUserAndFixUniqueIds(bool noprompt) {
     "To fix it, this tool must scan your asset root to determine which ids\n"
     "are in use.\n"
     "Depending on the size of your asset root, this could take a while.\n")
-                    .arg(AssetDefs::AssetRoot());
+                    .arg(AssetDefs::AssetRoot().c_str());
     fprintf(stderr, "%s", (const char *)msg.utf8());
     if (!geprompt::confirm(kh::tr("Proceed with scan"), 'Y')) {
       throw khException(kh::tr("Aborted by user"));

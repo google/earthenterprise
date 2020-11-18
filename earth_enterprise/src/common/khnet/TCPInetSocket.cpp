@@ -60,7 +60,7 @@ TCPConnection::TCPConnection(const SockAddr &hostAddr)
 
   if (!connect(hostAddr)) {
     throw SocketException(kh::no_tr("socket connect '%1'").
-                          arg(hostAddr.toString()));
+                          arg(hostAddr.toString().c_str()));
   }
 }
 
@@ -75,14 +75,14 @@ TCPConnection::TCPConnection(const std::string &hostname,
   InetAddr addr;
   if (!addr.setAddrByName(family, hostname)) {
     throw khException(kh::tr("Host %1 not found")
-                      .arg(hostname));
+                      .arg(hostname.c_str()));
   }
 
   SockAddr sockAddr(addr, port);
 
   if (!connect(sockAddr)) {
     throw SocketException(kh::no_tr("socket connect '%1'").
-                          arg(sockAddr.toString()));
+                          arg(sockAddr.toString().c_str()));
   }
 };
 

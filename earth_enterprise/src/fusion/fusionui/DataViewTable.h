@@ -17,13 +17,14 @@
 
 #ifndef _DataViewTable_h_
 #define _DataViewTable_h_
-
-#include <qtable.h>
-#include <qintdict.h>
+#include <Qt/q3table.h>
+#include <Qt/q3intdict.h>
 #include <gstValue.h>
 
 class gstSelector;
 
+using QTableItem = Q3TableItem;
+using QTable = Q3Table;
 
 class DataViewTable : public QTable {
  public:

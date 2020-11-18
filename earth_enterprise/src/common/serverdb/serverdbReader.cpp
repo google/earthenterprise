@@ -358,8 +358,7 @@ const MimeType ServerdbReader::GetData(
       std::uint32_t col;
       GetUint32Arg(arg_map["col"], &col);
       std::string blist = arg_map["blist"];
-      const char last_char = blist[blist.length() - 1];
-      if (last_char != kQuadTreePathSeparator) {
+      if ((blist.empty()) || (blist.back() != kQuadTreePathSeparator)) {
         return GetPacket(request, blist, level, row, col, version, channel, buf,
                          size_only, format,
                          arg_map["ct"] == std::string("c"));

@@ -1,3 +1,4 @@
+// Copyright 2020 the Open GEE Contributors.
 // Copyright 2017 Google Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,22 +13,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #include <sys/prctl.h>
 #include <sys/types.h>
 #include <unistd.h>
-
-#include <qapplication.h>
-#include <qpainter.h>
-#include <qstylefactory.h>
+#include <Qt/qobjectdefs.h>
+#include <Qt/qapplication.h>
+#include <Qt/qpainter.h>
+#include <Qt/qstylefactory.h>
 #include <gstRegistry.h>
-#include <qtranslator.h>
-#include <qtextcodec.h>
-#include <qgl.h>
-#include <qwidget.h>
-#include <qimage.h>
-#include <qfile.h>
-#include <qeventloop.h>
+#include <Qt/qtranslator.h>
+#include <Qt/qtextcodec.h>
+#include <Qt/qgl.h>
+#include <Qt/qwidget.h>
+#include <Qt/qimage.h>
+#include <Qt/qfile.h>
+#include <Qt/qeventloop.h>
+#include <Qt/qdesktopwidget.h>
+#include <Qt/qsplashscreen.h>
 
 #include <builddate.h>
 #include "fusion/fusionversion.h"
@@ -43,20 +45,14 @@
 #include "common/khFileUtils.h"
 #include "common/khGetopt.h"
 
-// pre-qt3.1 workaround
-// #ifndef WStyle_Splash
-// #define WStyle_Splash WStyle_NoBorder | WStyle_StaysOnTop | WStyle_Tool | WWinOwnDC | WX11BypassWM
-// #endif
+// generated rcc -name resources -namespace resources.qrc >resources.cpp
+#include "images/resources.cpp"
 
-#if defined(Q_WS_X11)
-void qt_wait_for_window_manager(QWidget* widget);
-#endif
-
-class SplashScreen : public QWidget {
+class SplashScreen : public QSplashScreen {
  public:
-  explicit SplashScreen(const QPixmap& pix);
-  void setStatus(const QString &message, int alignment = AlignLeft,
-                 const QColor &color = white);
+  explicit SplashScreen(const QPixmap& pix = QPixmap(), Qt::WindowFlags f = 0);
+  void setStatus(const QString &message, int alignment = Qt::AlignLeft,
+                 const QColor &color = Qt::white);
   void finish(QWidget* main_win);
   void repaint();
 
@@ -64,23 +60,24 @@ class SplashScreen : public QWidget {
   QPixmap pix_;
 };
 
-SplashScreen::SplashScreen(const QPixmap& pix)
-    : QWidget(0, 0, WStyle_Customize | WStyle_Splash),
+// WStyle_Customize no longer needed: https://doc.qt.io/archives/qt-4.8/qt.html
+SplashScreen::SplashScreen(const QPixmap& pix, Qt::WindowFlags f)
+    : QSplashScreen(0, pix, f),
       pix_(pix) {
   resize(pix_.size());
   QRect scr = QApplication::desktop()->screenGeometry();
   move(scr.center() - rect().center());
 
   QString versionText = QString("%1 v%2")
-                        .arg(GetFusionProductShortName())
+                        .arg(GetFusionProductShortName().c_str())
                         .arg(GEE_VERSION);
 
   setFont(QFont("arial", 13));
-  QPainter painter(&pix_, this);
+  QPainter painter(&pix_);
   QColor dark_green(3, 158, 40);
   painter.setPen(dark_green);
   QRect r = rect();
-  painter.boundingRect(r, AlignLeft | AlignTop, versionText);
+  painter.boundingRect(r, Qt::AlignLeft | Qt::AlignTop, versionText);
   painter.drawText(5, r.height() - 16, versionText);
 
   setErasePixmap(pix_);
@@ -95,10 +92,6 @@ void SplashScreen::repaint() {
 }
 
 void SplashScreen::finish(QWidget* main_win) {
-#if defined(Q_WS_X11)
-  qt_wait_for_window_manager(main_win);
-#endif
-
   close();
 }
 
@@ -106,7 +99,7 @@ void SplashScreen::setStatus(const QString& message, int alignment,
                              const QColor& color) {
   setFont(QFont("Times", 10, QFont::Bold));
   QPixmap text_pix = pix_;
-  QPainter painter(&text_pix, this);
+  QPainter painter(&text_pix);
   painter.setPen(color);
   QRect r = rect();
   r.setRect(r.x() + 10, r.y() + 10, r.width() - 20, r.height() - 20);
@@ -121,6 +114,7 @@ int main(int argc, char** argv) {
   int argn;
   FusionProductType type = GetFusionProductType();
   khGetopt options;
+
   options.choiceOpt("mode", type,
                     makemap(std::string("LT"),       FusionLT,
                             std::string("Pro"),      FusionPro,
@@ -135,6 +129,7 @@ int main(int argc, char** argv) {
   // must always create QApplication before initializing gst library
   //
   QApplication a(argc, argv);
+  Q_INIT_RESOURCE(resources);
 
   //
   // confirm opengl support
@@ -161,9 +156,9 @@ int main(int argc, char** argv) {
   //
   QString pixname("fusion_splash.png");
   if (!QFile::exists(pixname)) {
-    pixname = khComposePath(kGESharePath, pixname);
+    pixname = khComposePath(kGESharePath, pixname.toUtf8().constData()).c_str();
     if (!QFile::exists(pixname))
-      pixname.setLength(0);
+      pixname.resize(0);
   }
 
   SplashScreen* splash = NULL;
@@ -192,16 +187,16 @@ int main(int argc, char** argv) {
   f.setAlpha(true);
   QGLFormat::setDefaultFormat(f);
 
-  //
+  // TODO: translations
   // install translator
-  //
-  QTranslator translator(0);
+  // disabling for now
+  /*QTranslator translator(0,0);
   if (translator.load(QString("fusion_") + QTextCodec::locale(), ".")) {
     a.installTranslator(&translator);
   } else if (translator.load(QString("fusion_") + QTextCodec::locale(),
                              kGESharePath)) {
     a.installTranslator(&translator);
-  }
+  }*/
 
   //
   // configure qt style
@@ -238,9 +233,12 @@ int main(int argc, char** argv) {
 
     // first event is really slow for some unknown reason
     // so process it now before taking the splash screen away
-    a.eventLoop()->processEvents(QEventLoop::ExcludeUserInput, 10);
-
-    w->show();
+    try {
+      a.processEvents(QEventLoop::ExcludeUserInputEvents, 10);
+      w->show();
+    } catch(const std::exception& e) {
+        notify(NFY_WARN, "Caught exception: %s", e.what());
+    }
 
     if (splash) {
       splash->finish(w);
@@ -249,6 +247,7 @@ int main(int argc, char** argv) {
 
     a.connect(&a, SIGNAL(lastWindowClosed()), w, SLOT(fileExit()));
 
+    // qt3 support method
     a.setMainWidget(w);
 
     int status = a.exec();

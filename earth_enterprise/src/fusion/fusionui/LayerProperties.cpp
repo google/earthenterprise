@@ -15,19 +15,19 @@
 
 
 #include <set>
-#include <qlineedit.h>
-#include <qcombobox.h>
-#include <qspinbox.h>
-#include <qlabel.h>
-#include <qpixmap.h>
-#include <qpushbutton.h>
-#include <qimage.h>
-#include <qcheckbox.h>
-#include <qgroupbox.h>
-#include <qtextedit.h>
-#include <qmessagebox.h>
-#include <qtabwidget.h>
-
+#include <Qt/qobjectdefs.h>
+#include <Qt/qlineedit.h>
+#include <Qt/qcombobox.h>
+#include <Qt/qspinbox.h>
+#include <Qt/qlabel.h>
+#include <Qt/qpixmap.h>
+#include <Qt/qpushbutton.h>
+#include <Qt/qimage.h>
+#include <Qt/qcheckbox.h>
+#include <Qt/q3textedit.h>
+#include <Qt/qmessagebox.h>
+#include <Qt/qtabwidget.h>
+#include "khException.h"
 #include <gstLayer.h>
 #include <gstAssetGroup.h>
 #include <gstRecordJSContext.h>
@@ -38,8 +38,10 @@
 #include "SiteIcons.h"
 #include "ScriptEditor.h"
 #include "SearchFieldDialog.h"
+#include "khException.h"
 
-static QString kDefaultLocaleName = QObject::tr("Default");
+using QTextEdit = Q3TextEdit;
+static QString kDefaultLocaleName = kh::tr("Default");
 
 LayerProperties::LayerProperties(QWidget* parent, const LayerConfig& config,
                                  gstLayer* layer)
@@ -51,8 +53,8 @@ LayerProperties::LayerProperties(QWidget* parent, const LayerConfig& config,
 
   layer_config_.AssignUuidIfEmpty();
 
-  uuidEdit->setText(layer_config_.asset_uuid_);
-  assetNameLabel->setText(shortAssetName(layer_config_.assetRef));
+  uuidEdit->setText(layer_config_.asset_uuid_.c_str());
+  assetNameLabel->setText(shortAssetName(layer_config_.assetRef.c_str()));
   preserveTextSpin->setValue(layer_config_.preserveTextLevel);
   isVisibleCheck->setChecked(layer_config_.isVisible);
 
@@ -79,7 +81,7 @@ LayerProperties::LayerProperties(QWidget* parent, const LayerConfig& config,
     fields_table->adjustColumn(col);
 
   search_style_edit->setTextFormat(Qt::PlainText);
-  search_style_edit->setText(config.searchStyle);
+  search_style_edit->setText(config.searchStyle.c_str());
   // hidden for now
   // when we re-enable it here, we must also re-enable it
   // in EmitSearchFileHeader() -- fusion/tools/gevectorpoi.cpp
@@ -127,7 +129,7 @@ LayerConfig LayerProperties::GetConfig() {
                   SearchField::UseTypeFromString(fields_table->text(row, 1))));
   }
 
-  layer_config_.searchStyle = search_style_edit->text();
+  layer_config_.searchStyle = search_style_edit->text().toUtf8().constData();
 
   return layer_config_;
 }
@@ -135,7 +137,7 @@ LayerConfig LayerProperties::GetConfig() {
 void LayerProperties::editScript() {
   QString script = scriptEdit->text();
   QStringList contextScripts = layer_->GetExternalContextScripts();
-  if (ScriptEditor::Run(this,
+  if (ScriptEditor::Run(dynamic_cast<QWidget *>(this),
                         layer_->GetSharedSource(),
                         script, ScriptEditor::StatementBlock,
                         contextScripts)) {
@@ -159,10 +161,10 @@ void LayerProperties::compileAndAccept() {
                                            newScript, compilationError)) {
     accept();
   } else {
-    QMessageBox::critical(this, QObject::tr("JavaScript Error"),
-                          QObject::tr("JavaScript Error:\n%1")
+    QMessageBox::critical(this, kh::tr("JavaScript Error"),
+                          kh::tr("JavaScript Error:\n%1")
                           .arg(compilationError),
-                          QObject::tr("OK"), 0, 0, 0);
+                          kh::tr("OK"), 0, 0, 0);
   }
 }
 
@@ -185,9 +187,9 @@ void LayerProperties::DeleteSearchField() {
   if ( row == -1 )
     return;
 
-  if (QMessageBox::warning(this, "Warning",
+  if (QMessageBox::warning(dynamic_cast<QWidget*>(this), "Warning",
                            QObject::trUtf8("Confirm delete.\n\n"),
-                           QObject::tr("OK"), QObject::tr("Cancel"),
+                           kh::tr("OK"), kh::tr("Cancel"),
                            QString::null, 1, 1) == 0)
     fields_table->removeRow(row);
   UpdateButtons();

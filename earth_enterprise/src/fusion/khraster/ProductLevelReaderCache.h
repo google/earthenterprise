@@ -52,7 +52,7 @@ class ProductLevelReaderCache
         prodLevel(plev) {
       if (!prodLevel->OpenReader()) {
         throw khException(kh::tr("Unable to open product %1 level %2")
-                          .arg(prodLevel->product()->name())
+                          .arg(prodLevel->product()->name().c_str())
                           .arg(prodLevel->levelnum()));
       }
     }
@@ -67,7 +67,7 @@ class ProductLevelReaderCache
         throw khException
           (kh::tr("Unable to read tile (lrc) %1,%2,%3 %4")
            .arg(prodLevel->levelnum()).arg(row).arg(col)
-           .arg(prodLevel->product()->name()));
+           .arg(prodLevel->product()->name().c_str()));
       }
     }
   };

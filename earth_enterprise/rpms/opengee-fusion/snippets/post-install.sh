@@ -50,7 +50,7 @@ main_postinstall()
     compare_asset_root_publishvolume
 
     setup_fusion_daemon
-    
+
     fix_file_permissions
 
     check_fusion_master_or_slave
@@ -84,7 +84,7 @@ create_system_main_directories()
 }
 
 compare_asset_root_publishvolume()
-{    
+{
     if [ -f "$BASEINSTALLDIR_OPT/gehttpd/conf.d/stream_space" ]; then
         PUBLISH_ROOT_VOLUME="$(cut -d' ' -f3 /opt/google/gehttpd/conf.d/stream_space | cut -d'/' -f2 | $NEWLINECLEANER)"
 
@@ -160,13 +160,13 @@ install_or_upgrade_asset_root()
             cat <<END
 
 The asset root must be upgraded to work with the current version of $GEEF $GEE_VERSION.
-You cannot use an upgraded asset root with older versions of $GEEF. 
+You cannot use an upgraded asset root with older versions of $GEEF.
 Consider backing up your asset root. $GEEF will warn you when
 attempting to run with a non-upgraded asset root.
 
 $UPGRADE_MESSAGE
 END
-            
+
             # Note: we don't want to do the recursive chown on the asset root
             # unless absolutely necessary
             "$BASEINSTALLDIR_OPT/bin/geconfigureassetroot" --fixmasterhost \
@@ -202,9 +202,10 @@ fix_file_permissions()
     chown "root:$GEGROUP" "$BASEINSTALLDIR_VAR/log"
     chmod -R 555 "$BASEINSTALLDIR_OPT/bin"
 
+    # TODO: Disabled for now...
     #sgid enabled
-    chown "root:$GEGROUP" "$BASEINSTALLDIR_OPT/bin/fusion"
-    chmod g+s "$BASEINSTALLDIR_OPT/bin/fusion"
+    #chown "root:$GEGROUP" "$BASEINSTALLDIR_OPT/bin/fusion"
+    #chmod g+s "$BASEINSTALLDIR_OPT/bin/fusion"
 }
 
 #-----------------------------------------------------------------

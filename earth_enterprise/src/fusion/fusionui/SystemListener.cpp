@@ -22,7 +22,8 @@ For history see CVS log (cvs log SystemListener.cpp -or- Emacs Ctrl-xvl).
 ******************************************************************************/
 #include "SystemListener.h"
 #include <notify.h>
-#include <qapplication.h>
+#include <Qt/qapplication.h>
+#include "AssetManager.h"
 
 
 SystemListener *SystemListener::instance = 0;
@@ -70,6 +71,7 @@ SystemListener::event(QEvent *event)
   }
 }
 
+
 void
 SystemListener::addChanges(const AssetChanges &changes_)
 {
@@ -82,6 +84,7 @@ SystemListener::addChanges(const AssetChanges &changes_)
   }
   // post an event to the QUI thread
   QApplication::postEvent(this, new QCustomEvent(QEvent::User));
+
 }
 
 
@@ -102,6 +105,7 @@ AssetWatcherManager::assetsChanged(const AssetChanges &changes)
       w->second->changed();
     }
   }
+  AssetManager::self->refresh();
 }
 
 AssetWatcherManager::AssetWatcherManager(void)

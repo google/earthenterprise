@@ -79,14 +79,14 @@ etPointerTranslator * etDrawablePacket::packetPointerTranslator = NULL;
 int etPattern::hash(const char* pattern)
 {
   const int M = 26;
-  const int primes[] = { 
-    1  * M, 2 * M, 3 * M, 5 * M, 7 * M, 
-    11 * M, 13* M, 15* M, 17* M, 19* M, 
-    23 * M, 29* M, 31* M, 37* M, 43* M, 47* M, 
-    51 * M, 53* M, 57* M, 59* M, 
-    61 * M, 67* M, 71* M, 79* M, 83* M, 89* M, 
+  const int primes[] = {
+    1  * M, 2 * M, 3 * M, 5 * M, 7 * M,
+    11 * M, 13* M, 15* M, 17* M, 19* M,
+    23 * M, 29* M, 31* M, 37* M, 43* M, 47* M,
+    51 * M, 53* M, 57* M, 59* M,
+    61 * M, 67* M, 71* M, 79* M, 83* M, 89* M,
     91 * M, 97* M, 101*M };
-        
+
   if (!pattern) return 0;
 
   // computes a pattern based on first, middle, and last character of string
@@ -117,10 +117,10 @@ unsigned int etDataPacket::addDataToDataBuffer(void * buffer, int buffersize)
     dataBuffer = (char *)realloc(dataBuffer, maxDataBufferSize*2);
     maxDataBufferSize *= 2;
   }
-  
+
   memcpy(&dataBuffer[packetHeader.dataBufferSize], buffer, buffersize);
   packetHeader.dataBufferSize += buffersize+pad;
-  
+
   return packetHeader.dataBufferSize - (buffersize+pad);
 }
 #endif //PACKET_EXPORT
@@ -133,24 +133,24 @@ int etDataPacket::load(char * filename)
   statinfo.st_size = 0;
   stat(filename, &statinfo);
   packetBufferSize = statinfo.st_size;
-    
+
   if((fp=fopen(filename, "rb")) == NULL)
   {
     //printf("Cannot open file %s\n", filename);
     return -1;
   }
-    
+
   packetBuffer = (char *)malloc(packetBufferSize);
   fread(packetBuffer, 1, packetBufferSize, fp);
   fclose(fp);
-    
+
   return load(packetBuffer, packetBufferSize);
 }
 
 //Temporary function - COMPLETE LATER
 /*
   void * getMetaBuffer(void * ptr)
-  {       
+  {
   return NULL;
   }
 */
@@ -159,23 +159,23 @@ int etDataPacket::load(char* buffer, int bufferSize)
 {
   if(bufferSize <=0)
     return -1;
- 
+
   ((etDataHeader *)buffer)->byteSwap();
   if(((etDataHeader *)buffer)->magicID != KEYHOLEMAGICID)
     return -1;
-   
+
   memcpy(&packetHeader, buffer, sizeof(etDataHeader));
-    
+
   if(packetHeader.metaBufferSize > 0)
     //              metaHeader = getMetaBuffer((char *)buffer + sizeof(etDataHeader));
     metaHeader = NULL;
-    
+
   dataInstances = (char *)buffer + sizeof(etDataHeader) + packetHeader.metaBufferSize;
-    
+
   dataBuffer = (char *)buffer + packetHeader.dataBufferOffset;
-        
+
   packetBuffer = (char *)1;
-    
+
   return 0;
 }
 
@@ -199,7 +199,7 @@ int makePath(char *dir, int len)
   char* cp;
   char* path;
   size_t pathlen;
- 
+
   if (dir == NULL || *dir == '\0')
     return 0;
 
@@ -237,7 +237,7 @@ void writetobuffer(void * buffer, int buffersize, char * &_buf, int &_size)
 {
   if(_size - buffersize < 0)
     return;
-    
+
   memcpy(_buf, buffer, buffersize);
   _buf += buffersize;
   _size -= buffersize;
@@ -247,7 +247,7 @@ int etDataPacket::save(void * buffer, int buffersize)
 {
   char * savebuffer;
   int savebuffersize;
-    
+
   savebuffer = (char *)buffer;
   savebuffersize = buffersize;
 
@@ -257,15 +257,15 @@ int etDataPacket::save(void * buffer, int buffersize)
   tmpsize = packetHeader.dataInstanceSize;
   packetHeader.dataInstanceSize = dataInstanceSize_BASE32;
 #endif
-    
-  //Header    
+
+  //Header
   writetobuffer(&packetHeader, sizeof(etDataHeader), savebuffer, savebuffersize);
 
 #ifdef FORCE_BASE32
   //Change dataInstanceSize back to original value
   packetHeader.dataInstanceSize = tmpsize;
 #endif
-     
+
   //Meta Header
   /*    if(metaHeader != NULL)
         {
@@ -275,16 +275,16 @@ int etDataPacket::save(void * buffer, int buffersize)
         else
   */
   ((etDataHeader *)buffer)->metaBufferSize = 0;
-    
+
   //Data Instances
-#ifdef FORCE_BASE32     
+#ifdef FORCE_BASE32
   for(int i=0; i < (int)packetHeader.numInstances; i++)
     writetobuffer(getDataInstanceP(i), dataInstanceSize_BASE32, savebuffer, savebuffersize);
-#else   
-  writetobuffer(dataInstances, packetHeader.dataInstanceSize*packetHeader.numInstances, 
+#else
+  writetobuffer(dataInstances, packetHeader.dataInstanceSize*packetHeader.numInstances,
                 savebuffer, savebuffersize);
 #endif
-    
+
   //Data Buffer
   ((etDataHeader *)buffer)->dataBufferOffset = buffersize - savebuffersize;
   writetobuffer(dataBuffer, packetHeader.dataBufferSize, savebuffer, savebuffersize);
@@ -344,7 +344,7 @@ int etDataPacket::setFlatFileCount(int num)
 }
 
 int etDataPacket::openFlat(char * flatfile)
-{ 
+{
   char fname[fname_len];
   int filecount;
 
@@ -496,7 +496,7 @@ int etDataPacket::closeFlat()
   return 0;
 }
 
-void etDataPacket::initHeader(int dataTypeID, int version, int numInstances, int dataInstanceSize, 
+void etDataPacket::initHeader(int dataTypeID, int version, int numInstances, int dataInstanceSize,
                               void * metastruct)
 {
   packetHeader.magicID = KEYHOLEMAGICID;
@@ -509,7 +509,7 @@ void etDataPacket::initHeader(int dataTypeID, int version, int numInstances, int
   packetHeader.metaBufferSize = 0;
 
   metaHeader = metastruct;
-    
+
   if(numInstances)
   {
     dataInstances = (char*)malloc(numInstances*dataInstanceSize);
@@ -521,7 +521,7 @@ void etDataPacket::initHeader(int dataTypeID, int version, int numInstances, int
     dataBuffer = NULL;
   }
 
-  maxDataBufferSize = DATABUFFERSIZE; 
+  maxDataBufferSize = DATABUFFERSIZE;
 }
 
 #endif //PACKET_EXPORT
@@ -534,7 +534,7 @@ void etDataTranslator::allocTranslationTable(int num)
   translationTableSize = num;
 }
 
-void etDataTranslator::setTranslationTable(int num, int fromOffset, int toOffset, int size, 
+void etDataTranslator::setTranslationTable(int num, int fromOffset, int toOffset, int size,
                                            int pointerFlag)
 {
   translationTable[num].fromOffset = fromOffset;
@@ -546,7 +546,7 @@ void etDataTranslator::setTranslationTable(int num, int fromOffset, int toOffset
 void etDataTranslator::translate(void * fromptr, void * toptr)
 {
   int i;
-    
+
   for(i=0; i < translationTableSize; i++)
     memcpy((char *)toptr+translationTable[i].toOffset, (char *)fromptr+translationTable[i].fromOffset,
            translationTable[i].size);
@@ -555,16 +555,16 @@ void etDataTranslator::translate(void * fromptr, void * toptr)
 void etDataTranslator::translateBack(void * fromptr, void * toptr)
 {
   int i;
-    
+
   for(i=0; i < translationTableSize; i++)
-    memcpy((char *)toptr+translationTable[i].fromOffset, (char *)fromptr+translationTable[i].toOffset, 
+    memcpy((char *)toptr+translationTable[i].fromOffset, (char *)fromptr+translationTable[i].toOffset,
            translationTable[i].size);
 }
 
 void etDataTranslator::translate(void * fromptr, void * toptr, unsigned int pointerOffset)
 {
   int i;
-    
+
   for(i=0; i < translationTableSize; i++)
   {
     memcpy((char *)toptr+translationTable[i].toOffset, (char *)fromptr+translationTable[i].fromOffset,
@@ -668,7 +668,7 @@ int getStreetLocalPtSize(void *data)
 
   ushort dummy = ((etStreetPacketData *)data)->numPt;
   swapb(dummy);
-        
+
 #ifdef VECTOR_COMPRESSION
   return dummy*sizeof(etVec3us);
 #else
@@ -691,24 +691,24 @@ etPointerTranslator * etStreetPacket::createStreetPointerTranslator()
   etPointerTranslator * tmp;
 
   tmp = new etPointerTranslator;
-    
+
   tmp->allocPointerList(1);
-    
+
   tmp->setPointerList(0, offsetof(etStreetPacketData, localPt), getStreetLocalPtSize);
-    
+
   return tmp;
 }
 
 etPointerTranslator * etStreetPacket::createStreetStringTranslator()
 {
   etPointerTranslator * tmp;
-    
+
   tmp = new etPointerTranslator;
 
   tmp->allocPointerList(1);
-    
+
   tmp->setPointerList(0, offsetof(etStreetPacketData, name));
-    
+
   return tmp;
 }
 
@@ -720,7 +720,7 @@ int getPolyLineLocalPtSize(void *data)
 
   ushort dummy = ((etPolyLinePacketData *)data)->numPt;
   swapb(dummy);
-        
+
 #ifdef VECTOR_COMPRESSION
   return dummy*sizeof(etVec3us);
 #else
@@ -743,24 +743,24 @@ etPointerTranslator * etPolyLinePacket::createPolyLinePointerTranslator()
   etPointerTranslator * tmp;
 
   tmp = new etPointerTranslator;
-    
+
   tmp->allocPointerList(1);
-    
+
   tmp->setPointerList(0, offsetof(etPolyLinePacketData, localPt), getPolyLineLocalPtSize);
-    
+
   return tmp;
 }
 
 etPointerTranslator * etPolyLinePacket::createPolyLineStringTranslator()
 {
   etPointerTranslator * tmp;
-    
+
   tmp = new etPointerTranslator;
 
   tmp->allocPointerList(1);
-    
+
   tmp->setPointerList(0, offsetof(etPolyLinePacketData, name));
-    
+
   return tmp;
 }
 
@@ -773,7 +773,7 @@ int getAreaLocalPtSize(void *data)
 
   ushort dummy = ((etAreaPacketData *)data)->numPt;
   swapb(dummy);
-        
+
 #ifdef VECTOR_COMPRESSION
   return dummy*sizeof(etVec3us);
 #else
@@ -796,24 +796,24 @@ etPointerTranslator * etAreaPacket::createAreaPointerTranslator()
   etPointerTranslator * tmp;
 
   tmp = new etPointerTranslator;
-    
+
   tmp->allocPointerList(1);
-    
+
   tmp->setPointerList(0, offsetof(etAreaPacketData, localPt), getAreaLocalPtSize);
-    
+
   return tmp;
 }
 
 etPointerTranslator * etAreaPacket::createAreaStringTranslator()
 {
   etPointerTranslator * tmp;
-    
+
   tmp = new etPointerTranslator;
 
   tmp->allocPointerList(1);
-    
+
   tmp->setPointerList(0, offsetof(etAreaPacketData, name));
-    
+
   return tmp;
 }
 
@@ -845,7 +845,7 @@ int getSiteLocalPtSize(void *data)
 
   ushort dummy = ((etSitePacketData *)data)->numPt;
   swapb(dummy);
-        
+
 #ifdef VECTOR_COMPRESSION
   return dummy*sizeof(etVec3us);
 #else
@@ -871,10 +871,10 @@ etPointerTranslator * etSitePacket::createSitePointerTranslator()
 
 #ifdef NEWSITESTUFF
   tmp->allocPointerList(4);
-#else    
+#else
   tmp->allocPointerList(2);
 #endif
-    
+
   tmp->setPointerList(0, offsetof(etSitePacketData, html), getHTMLSize);
   tmp->setPointerList(1, offsetof(etSitePacketData, localPt), getSiteLocalPtSize);
 
@@ -882,20 +882,20 @@ etPointerTranslator * etSitePacket::createSitePointerTranslator()
   tmp->setPointerList(2, offsetof(etSitePacketData, address), getAddressSize);
   tmp->setPointerList(3, offsetof(etSitePacketData, phone), getPhoneSize);
 #endif
-    
+
   return tmp;
 }
 
 etPointerTranslator * etSitePacket::createSiteStringTranslator()
 {
   etPointerTranslator * tmp;
-    
+
   tmp = new etPointerTranslator;
 
   tmp->allocPointerList(1);
-    
+
   tmp->setPointerList(0, offsetof(etSitePacketData, name));
-    
+
   return tmp;
 }
 
@@ -908,7 +908,7 @@ int getSiteLocalPtSizeEXT1(void *data)
 
   ushort dummy = ((etLandmarkPacketData *)data)->numPt;
   swapb(dummy);
-        
+
 #ifdef VECTOR_COMPRESSION
   return dummy*sizeof(etVec3us);
 #else
@@ -949,25 +949,25 @@ etPointerTranslator * etLandmarkPacket::createLandmarkPointerTranslator()
   tmp = new etPointerTranslator;
 
   tmp->allocPointerList(4);
-    
+
   tmp->setPointerList(0, offsetof(etLandmarkPacketData, iconName_deprecated), getIconNameSize);
   tmp->setPointerList(1, offsetof(etLandmarkPacketData, localPt), getSiteLocalPtSizeEXT1);
   tmp->setPointerList(2, offsetof(etLandmarkPacketData, description), getDescriptionSizeEXT1);
   tmp->setPointerList(3, offsetof(etLandmarkPacketData, reference), getReferenceSizeEXT1);
-    
+
   return tmp;
 }
 
 etPointerTranslator * etLandmarkPacket::createLandmarkStringTranslator()
 {
   etPointerTranslator * tmp;
-    
+
   tmp = new etPointerTranslator;
 
   tmp->allocPointerList(1);
-    
+
   tmp->setPointerList(0, offsetof(etLandmarkPacketData, name));
-    
+
   return tmp;
 }
 
@@ -980,7 +980,7 @@ int getPolygonLocalPtSize(void *data)
 
   ushort dummy = ((etPolygonPacketData *)data)->numPt;
   swapb(dummy);
-        
+
 #ifdef VECTOR_COMPRESSION
   return dummy*sizeof(etVec3us);
 #else
@@ -1005,7 +1005,7 @@ int getPolygonEdgeFlagsSize(void *data)
 
   ushort dummy = ((etPolygonPacketData *)data)->numEdgeFlags;
   swapb(dummy);
-        
+
 #ifdef VECTOR_COMPRESSION
   return dummy*sizeof(bool);
 #else
@@ -1029,25 +1029,25 @@ etPointerTranslator * etPolygonPacket::createPolygonPointerTranslator()
   etPointerTranslator * tmp;
 
   tmp = new etPointerTranslator;
-    
+
   tmp->allocPointerList(2);
-    
+
   tmp->setPointerList(0, offsetof(etPolygonPacketData, localPt), getPolygonLocalPtSize);
   tmp->setPointerList(1, offsetof(etPolygonPacketData, edgeFlags), getPolygonEdgeFlagsSize);
-    
+
   return tmp;
 }
 
 etPointerTranslator * etPolygonPacket::createPolygonStringTranslator()
 {
   etPointerTranslator * tmp;
-    
+
   tmp = new etPointerTranslator;
 
   tmp->allocPointerList(1);
-    
+
   tmp->setPointerList(0, offsetof(etPolygonPacketData, name));
-    
+
   return tmp;
 }
 
@@ -1088,12 +1088,12 @@ etPointerTranslator * etDrawablePacket::createPacketPointerTranslator()
   etPointerTranslator * tmp;
 
   tmp = new etPointerTranslator;
-    
+
   tmp->allocPointerList(2);
-    
+
   tmp->setPointerList(0, offsetof(etDataPacket, dataInstances), getDataInstancesSize);
   tmp->setPointerList(1, offsetof(etDataPacket, dataBuffer),    getDataBufferSize);
-    
+
   return tmp;
 }
 
@@ -1101,11 +1101,11 @@ etPointerTranslator * etDrawablePacket::createPacketPointerTranslator()
 void etDrawablePacket::merge(etDrawablePacket * pak1, etDrawablePacket * pak2)
 {
   init(pak1->packetHeader.numInstances+pak2->packetHeader.numInstances);
-                
+
   for(unsigned int i=0; i < pak1->packetHeader.numInstances; i++)
     memcpy(getPtr(i), pak1->getPtr(i), sizeof(etDataPacket));
 
   for(unsigned int i=0; i < pak2->packetHeader.numInstances; i++)
-    memcpy(getPtr(i+pak1->packetHeader.numInstances), pak2->getPtr(i), 
-           sizeof(etDataPacket));  
+    memcpy(getPtr(i+pak1->packetHeader.numInstances), pak2->getPtr(i),
+           sizeof(etDataPacket));
 }

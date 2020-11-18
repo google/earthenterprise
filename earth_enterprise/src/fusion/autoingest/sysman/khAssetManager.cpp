@@ -451,7 +451,7 @@ khAssetManager::HandleClientLoop(FusionConnection::Handle client) throw()
             DispatchRequest(msg, replyPayload);
           }
           if (replyPayload.substr(0, 6) == "ERROR:") {
-            client->SendException(msg, replyPayload);
+            client->SendException(msg, replyPayload.c_str());
           } else {
             client->SendReply(msg, replyPayload);
           }
@@ -1033,7 +1033,7 @@ khAssetManager::MakeAssetDir(const std::string &assetdir) {
     throw khException
       (kh::tr
        ("INTERNAL ERROR: Attempt to make a non-relative asset directory:\n%1")
-       .arg(assetdir));
+       .arg(assetdir.c_str()));
   }
   std::string dir = AssetDefs::AssetPathToFilename(assetdir);
   khMakeDirOrThrow(dir, 0755);

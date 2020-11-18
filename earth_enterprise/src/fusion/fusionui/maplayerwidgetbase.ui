@@ -1,6 +1,7 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>MapLayerWidgetBase</class>
-<comment>  Copyright 2017 Google Inc.
+<comment>  Copyright 2020 the Open GEE Contributors.
+ Copyright 2017 Google Inc.
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
@@ -219,7 +220,7 @@
                                                 <string></string>
                                             </property>
                                             <property name="pixmap">
-                                                <pixmap>filenew</pixmap>
+                                                <pixmap>:/filenew</pixmap>
                                             </property>
                                             <property name="toolTip" stdset="0">
                                                 <string>New Rule</string>
@@ -253,7 +254,7 @@
                                                 <string></string>
                                             </property>
                                             <property name="pixmap">
-                                                <pixmap>editdelete.png</pixmap>
+                                                <pixmap>:/editdelete.png</pixmap>
                                             </property>
                                             <property name="toolTip" stdset="0">
                                                 <string>Delete Rule</string>
@@ -287,7 +288,7 @@
                                                 <string></string>
                                             </property>
                                             <property name="pixmap">
-                                                <pixmap>editcopy</pixmap>
+                                                <pixmap>:/editcopy</pixmap>
                                             </property>
                                             <property name="toolTip" stdset="0">
                                                 <string>Copy Rule</string>
@@ -321,7 +322,7 @@
                                                 <string></string>
                                             </property>
                                             <property name="pixmap">
-                                                <pixmap>up.png</pixmap>
+                                                <pixmap>:/up.png</pixmap>
                                             </property>
                                             <property name="toolTip" stdset="0">
                                                 <string>Move Rule Up</string>
@@ -355,7 +356,7 @@
                                                 <string></string>
                                             </property>
                                             <property name="pixmap">
-                                                <pixmap>down.png</pixmap>
+                                                <pixmap>:/down.png</pixmap>
                                             </property>
                                             <property name="toolTip" stdset="0">
                                                 <string>Move Rule Down</string>
@@ -3779,7 +3780,7 @@
                                             <string></string>
                                         </property>
                                         <property name="pixmap">
-                                            <pixmap>filenew</pixmap>
+                                            <pixmap>:/filenew</pixmap>
                                         </property>
                                         <property name="toolTip" stdset="0">
                                             <string>Add Search Field</string>
@@ -3810,7 +3811,7 @@
                                             <string></string>
                                         </property>
                                         <property name="pixmap">
-                                            <pixmap>editdelete.png</pixmap>
+                                            <pixmap>:/editdelete.png</pixmap>
                                         </property>
                                         <property name="toolTip" stdset="0">
                                             <string>Remove Search Field</string>
@@ -3841,7 +3842,7 @@
                                             <string></string>
                                         </property>
                                         <property name="pixmap">
-                                            <pixmap>up.png</pixmap>
+                                            <pixmap>:/up.png</pixmap>
                                         </property>
                                         <property name="toolTip" stdset="0">
                                             <string>Move Search Field Up</string>
@@ -3872,7 +3873,7 @@
                                             <string></string>
                                         </property>
                                         <property name="pixmap">
-                                            <pixmap>down.png</pixmap>
+                                            <pixmap>:/down.png</pixmap>
                                         </property>
                                         <property name="toolTip" stdset="0">
                                             <string>Move Search Field Down</string>
@@ -4124,6 +4125,9 @@
 </slots>
 <pixmapinproject/>
 <layoutdefaults spacing="6" margin="11"/>
+<includes>
+    <include location="global" impldecl="in declaration">Qt/qobjectdefs.h</include>
+</includes>
 <includehints>
     <includehint>LayerLegendWidget.h</includehint>
     <includehint>QueryRules.h</includehint>

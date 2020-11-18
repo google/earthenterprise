@@ -25,6 +25,7 @@
 // Thin wrapper around the spidermonkey public api header
 // It defines all of the necessary CPP macros and then includes the original
 // jsapi.h
+#include <cstdint>
 #include <gejsapi.h>
 #include <qstring.h>
 #include <qstringlist.h>

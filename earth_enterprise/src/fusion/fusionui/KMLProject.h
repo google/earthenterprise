@@ -17,7 +17,7 @@
 
 #ifndef KHSRC_FUSION_FUSIONUI_KMLPROJECT_H__
 #define KHSRC_FUSION_FUSIONUI_KMLPROJECT_H__
-
+#include <Qt/q3listview.h>
 #include "AssetWidgetBase.h"
 #include "AssetDerived.h"
 #include "ProjectWidget.h"

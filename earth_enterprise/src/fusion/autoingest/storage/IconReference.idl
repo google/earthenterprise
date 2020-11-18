@@ -21,7 +21,7 @@ class IconReference {
   enum Type { Internal = 0, External = 1 };
 
   Type type    = IconReference::Internal;
-  QString href = QString(kDefaultIconName);    // dot
+  QString href = QString(kDefaultIconName.c_str());    // dot
 
 #hquote
   bool operator<(const IconReference &o) const;
@@ -63,21 +63,23 @@ class IconReference {
   }
 
   std::string IconReference::SourcePath(void) const {
+    std::string filename { href.toUtf8().constData() };
+    filename += ".png";
     return khComposePath(((type == IconReference::Internal)
                           ? kGESiteIconsPath
                           : CustomIconPath()),
-                         href + ".png");
+                         filename.c_str());
   }
 
   void IconReference::CheckIconExistence(const std::string& icon_name,
                                IconReference::Type* type) {
-    IconReference internal(IconReference::Internal, icon_name);
+    IconReference internal(IconReference::Internal, icon_name.c_str());
     std::string internal_path = internal.SourcePath();
     if (khIsFileReadable(internal_path)) {
       *type = IconReference::Internal;
       return;
     }
-    IconReference external(IconReference::External, icon_name);
+    IconReference external(IconReference::External, icon_name.c_str());
     std::string external_path = external.SourcePath();
     if (khIsFileReadable(external_path)) {
       *type = IconReference::External;

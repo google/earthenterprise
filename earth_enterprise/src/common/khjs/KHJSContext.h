@@ -20,6 +20,7 @@
 #ifndef COMMON_KHJS_KHJSCONTEXT_H__
 #define COMMON_KHJS_KHJSCONTEXT_H__
 
+#include <cstdint>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <khMTTypes.h>

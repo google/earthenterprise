@@ -15,29 +15,29 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <qregexp.h>
+#include <Qt/qregexp.h>
 #include <gstAssetManager.h>
 #include <khConstants.h>
 
 #include "gstAssetGroup.h"
 
-QString shortAssetName(const QString& n) {
-  QString sname = n;
+const char* shortAssetName(const char* n) {
+  QString sname(n);
   QStringList suffix;
-  suffix << kVectorAssetSuffix << kImageryAssetSuffix
-         << kMercatorImageryAssetSuffix << kTerrainAssetSuffix
-         << kVectorProjectSuffix << kImageryProjectSuffix
-         << kMercatorImageryProjectSuffix << kTerrainProjectSuffix
-         << kDatabaseSuffix << kMapLayerSuffix << kMapProjectSuffix
-         << kMapDatabaseSuffix << kMercatorMapDatabaseSuffix
-         << kVectorLayerSuffix;
+  suffix << kVectorAssetSuffix.c_str() << kImageryAssetSuffix.c_str()
+         << kMercatorImageryAssetSuffix.c_str() << kTerrainAssetSuffix.c_str()
+         << kVectorProjectSuffix.c_str() << kImageryProjectSuffix.c_str()
+         << kMercatorImageryProjectSuffix.c_str() << kTerrainProjectSuffix.c_str()
+         << kDatabaseSuffix.c_str() << kMapLayerSuffix.c_str() << kMapProjectSuffix.c_str()
+         << kMapDatabaseSuffix.c_str() << kMercatorMapDatabaseSuffix.c_str()
+         << kVectorLayerSuffix.c_str();
   for (QStringList::Iterator it = suffix.begin(); it != suffix.end(); ++it) {
     if (sname.endsWith(*it)) {
-      sname.truncate(sname.length() - (*it).length());
+      sname.truncate(sname.length() - it->length());
       break;
     }
   }
-  return sname;
+  return sname.toUtf8().constData();
 }
 
 bool isAssetPath(const QString& str) {
@@ -70,7 +70,8 @@ bool gstAssetHandleImpl::isValid() const {
 }
 
 Asset gstAssetHandleImpl::getAsset() const {
-  return Asset(relativePath());
+  std::string rpath { relativePath().toUtf8().constData() };
+  return Asset(rpath);
 }
 
 QString gstAssetHandleImpl::getName() const {

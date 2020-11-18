@@ -24,8 +24,10 @@
 #include "fusion/gst/gstAssetGroup.h"
 #include "assetchooserbase.h"
 #include "fusion/fusionui/AssetDisplayHelper.h"
-
-class QIconViewItem;
+#include <Qt/qwidget.h>
+#include <Qt/q3iconview.h>
+#include <Qt/qevent.h>
+using QIconViewItem = Q3IconViewItem;
 
 class AssetChooser : public AssetChooserBase {
  public:
@@ -69,7 +71,7 @@ class AssetChooser : public AssetChooserBase {
 
   // from QWidget
   virtual void keyPressEvent(QKeyEvent* e);
-  virtual void customEvent(QCustomEvent *e);
+  virtual void customEvent(QEvent *e) final;
 
   // from QDialog
   virtual void accept();

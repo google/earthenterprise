@@ -1,6 +1,7 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>PlacemarkManagerBase</class>
-<comment>  Copyright 2017 Google Inc.
+<comment>  Copyright 2020 the Open GEE Contributors.
+ Copyright 2017 Google Inc.
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
@@ -95,7 +96,7 @@
                         <string></string>
                     </property>
                     <property name="pixmap">
-                        <pixmap>filenew</pixmap>
+                        <pixmap>:/filenew</pixmap>
                     </property>
                     <property name="accel">
                         <string></string>
@@ -115,7 +116,7 @@
                         <string></string>
                     </property>
                     <property name="pixmap">
-                        <pixmap>editdelete.png</pixmap>
+                        <pixmap>:/editdelete.png</pixmap>
                     </property>
                     <property name="accel">
                         <string></string>
@@ -152,7 +153,7 @@
                         <string></string>
                     </property>
                     <property name="pixmap">
-                        <pixmap>up.png</pixmap>
+                        <pixmap>:/up.png</pixmap>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Move favorite up</string>
@@ -169,7 +170,7 @@
                         <string></string>
                     </property>
                     <property name="pixmap">
-                        <pixmap>down.png</pixmap>
+                        <pixmap>:/down.png</pixmap>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Move favorite down</string>
@@ -307,5 +308,8 @@
     <slot>selectionChanged(int,int)</slot>
 </slots>
 <pixmapinproject/>
+<includes>
+    <include location="global" impldecl="in declaration">Qt/qobjectdefs.h</include>
+</includes>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

@@ -132,7 +132,9 @@ VectorProjectAssetImplD::AddLayers(const std::vector<VectorProjectAddItem> &item
     // load the template file
     LayerConfig layerConfig;
     if (!layerConfig.Load(item->templateFile)) {
-      throw khException(kh::tr("Unable to load ") + item->templateFile);
+      std::string msg { kh::tr("Unable to load ").toUtf8().constData() };
+      msg += item->templateFile;
+      throw khException(msg.c_str());
     }
 
     // instantiate the template - assign the relavent refs and ids
@@ -234,9 +236,11 @@ VectorProjectAssetImplD::HandleEditRequest(const VectorProjectEditRequest &req)
                                          req.meta, req.config);
   }
 
-  if (!project)
-    throw khException(kh::tr("Unable to create vector project: ") +
-                      projname);
+  if (!project) {
+    std::string msg { kh::tr("Unable to create vector project: ").toUtf8().constData() };
+    msg += projname;
+    throw khException(msg.c_str());
+  }
 
   // Note: All IDs should be assigned in the request. They are
   // assigned in a client (Fusion UI, gstVectorProject::AssembleEditRequest()),
@@ -387,16 +391,16 @@ VectorProjectAssetImplD::HandleDropFromRequest(const VectorProjectDropFromReques
       for (std::vector<LayerConfig>::const_iterator layer =
              project->config.layers.begin();
            layer != project->config.layers.end(); ++layer) {
-        if (layer->assetRef == i->assetRef) {
+        if (layer->assetRef == i->assetRef.c_str()) {
           found.push_back(layer->DefaultNameWithPath());
         }
       }
       if (found.empty()) {
         throw khException(kh::tr("Project doesn't have vector asset '%1'")
-                          .arg(i->assetRef));
+                          .arg(i->assetRef.c_str()));
       } else if (found.size() > 1) {
         throw khException(kh::tr("Project has vector asset '%1' in multiple layers.\nPlease specify by layer name:\n")
-                          .arg(i->assetRef) +
+                          .arg(i->assetRef.c_str()) +
                           qstring_join(found.begin(), found.end(),
                                        "\n"));
       } else {

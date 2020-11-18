@@ -68,7 +68,7 @@ class BatchingDrainableQueuePusher : public BatchingQueuePusher<T> {
       BatchingQueuePusher<T>(batch_size, queue)
   {
   }
-  
+
   void PushWithDrain(const T &t) {
     BatchingQueuePusher<T>::AddToBatch(Item(t, Item::DrainFlag));
   }

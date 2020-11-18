@@ -19,7 +19,7 @@
 #ifndef __IMAGE_VIEW_H__
 #define __IMAGE_VIEW_H__
 
-#include <qscrollview.h>
+#include <Qt3Support/Q3ScrollView>
 #include "gdal_priv.h"
 
 #include "histogram.h"
@@ -35,6 +35,9 @@
 #define GLOBAL_INFO_BIT (4)
 #define GLOBAL_IMAGE_BIT (8)
 
+// for support
+using QScrollView = Q3ScrollView;
+using WFlags = Qt::WindowFlags;
 
 struct RGBSample
 {

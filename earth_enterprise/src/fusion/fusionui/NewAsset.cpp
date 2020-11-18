@@ -14,12 +14,15 @@
 
 
 #include <khConstants.h>
-#include <qpixmap.h>
-#include <qiconview.h>
+#include <Qt/qpixmap.h>
+#include <Qt/q3iconview.h>
 #include <autoingest/.idl/storage/AssetDefs.h>
 #include <fusionversion.h>
-
+#include <Qt/qdialog.h>
 #include "NewAsset.h"
+
+using QIconView = Q3IconView;
+using QIconViewItem = Q3IconViewItem;
 
 class NewAssetItem : public QIconViewItem {
  public:
@@ -73,7 +76,7 @@ NewAsset::~NewAsset() {
 }
 
 AssetDisplayHelper::AssetKey NewAsset::ChooseAssetType() {
-  if (exec() != QDialog::Accepted) {
+  if (QDialog::exec() != QDialog::Accepted) {
     return AssetDisplayHelper(AssetDefs::Invalid, "").GetKey();
   }
 

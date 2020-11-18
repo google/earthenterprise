@@ -38,11 +38,11 @@ SearchTabDefinition SearchTabReference::Bind(void) const {
     Asset proj(project_ref_);
     if (!proj) {
       throw khException(kh::tr("Invalid asset reference: %1")
-                        .arg(project_ref_));
+                        .arg(project_ref_.c_str()));
     }
     if (proj->subtype != kProjectSubtype) {
       throw khException(kh::tr("Asset reference is not a project: %1 %2")
-                        .arg(project_ref_).arg(proj->type));
+                        .arg(project_ref_.c_str()).arg(proj->type));
     }
     if (proj->type == AssetDefs::Vector) {
       // for now only a single search tab is supported from projects,
@@ -56,7 +56,7 @@ SearchTabDefinition SearchTabReference::Bind(void) const {
         return poi_tab;
       } else {
         throw khException(kh::tr("Project has no search fields: %1")
-                          .arg(project_ref_));
+                          .arg(project_ref_.c_str()));
       }
     } else if (proj->type == AssetDefs::Map) {
       MapProjectAsset mproj(proj);
@@ -67,23 +67,12 @@ SearchTabDefinition SearchTabReference::Bind(void) const {
         return poi_tab;
       } else {
         throw khException(kh::tr("Project has no search fields: %1")
-                                  .arg(project_ref_));
+                                  .arg(project_ref_.c_str()));
       }
-#if 0
-    } else if ((proj->type == AssetDefs::Imagery) ||
-               (proj->type == AssetDefs::Terrain)) {
-      // for now only a single search tab is supported from projects,
-      // so ignore the tab_id_
-      RasterProjectAsset rproj(proj);
-      SearchTabDefinition poi_tab =
-        SearchTabDefinition::DefaultPOIDefinition();
-      poi_tab.ApplyLabelOverrides(
-          rproj->config.poi_search_tab_overrides);
-      return poi_tab;
-#endif
+
     } else {
       throw khException(kh::tr("Unsupported project type: %1")
-                        .arg(proj->subtype));
+                        .arg(proj->subtype.c_str()));
     }
   }
 

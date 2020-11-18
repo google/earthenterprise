@@ -18,8 +18,10 @@
 #ifndef KHSRC_FUSION_FUSIONUI_LOCALEDETAILS_H__
 #define KHSRC_FUSION_FUSIONUI_LOCALEDETAILS_H__
 
-#include <qtable.h>
-#include <qcheckbox.h>
+#include <Qt/qobjectdefs.h>
+#include <Qt/q3table.h>
+#include <Qt/qcheckbox.h>
+#include <Qt/q3scrollview.h>
 #include <map>
 #include "WidgetControllers.h"
 #include <autoingest/.idl/storage/LayerConfig.h>
@@ -86,7 +88,7 @@ private slots:
                  const LocaleConfig& config,
                  bool is_defaultable = true);
 
-  QTable *table_;
+  Q3Table *table_;
 
   LocaleConfig *default_locale_config_;
   LocaleMap    *locale_map_config_;

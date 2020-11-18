@@ -13,18 +13,20 @@
 // limitations under the License.
 
 
-#include <qdragobject.h>
-#include <qheader.h>
-#include <qstringlist.h>
-
+#include <Qt/q3dragobject.h>
+#include <Qt/q3header.h>
+#include <Qt/qstringlist.h>
+#include <Qt/qobject.h>
 #include "ProjectLayerView.h"
 #include "Preferences.h"
+using QListView = Q3ListView;
 
-ProjectLayerView::ProjectLayerView(QWidget* parent, const char* n, WFlags f)
+
+ProjectLayerView::ProjectLayerView(QWidget* parent, const char* n, Qt::WFlags f)
     : QListView(parent, n, f) {
   header()->setStretchEnabled(true);
   header()->hide();
-  addColumn(trUtf8("Name"));
+  addColumn(QObject::trUtf8("Name"));
   // disable sorting.  the item positions will be managed directly
   setSorting(-1);
 }
@@ -37,8 +39,8 @@ void ProjectLayerView::EnableAssetDrops(AssetDefs::Type type,
   viewport()->setAcceptDrops(true);
 }
 
-void ProjectLayerView::SelectItem(QListViewItem* item) {
-  QListViewItem* child = firstChild();
+void ProjectLayerView::SelectItem(Q3ListViewItem* item) {
+  Q3ListViewItem* child = firstChild();
   while (child) {
     setSelected(child, false);
     child = child->nextSibling();
@@ -51,7 +53,7 @@ void ProjectLayerView::contentsDragMoveEvent(QDragMoveEvent* e) {
   // QScrollView::contentsDragMoveEvent seems to be more reliable than
   // QScrollView::contentsDragEnterEvent so use it even though it will
   // continue to be called as the drag is moved around the widget
-  e->accept(AssetDrag::canDecode(e, drag_asset_type_, drag_asset_subtype_));
+  e->accept(AssetDrag::canDecode(dynamic_cast<QMimeSource*>(e), drag_asset_type_, drag_asset_subtype_));
 }
 
 void ProjectLayerView::contentsDropEvent(QDropEvent* e) {

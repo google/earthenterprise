@@ -1,5 +1,6 @@
 #-*- Python -*-
 #
+# Copyright 2020 the Open GEE Contributors.
 # Copyright 2017 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,6 +28,7 @@ import sys
 sys.path += ['scons']
 from khEnvironment import khEnvironment
 import getversion
+import commands
 
 # Add the OpenGEE Python libraries to the module search path:
 opengee_lib_path = os.path.join('lib', 'python')
@@ -85,6 +87,7 @@ ValidOptions = set(
      'bundle_3rd_libs',  # Build with bundling 3rd party libs.
      'log_performance',  # Include code for performance logging
      'cpp_standard',     # The standard of CPP that will be used.  Default is C++11
+     'qt4_native',       # Whether native qt4 build
      'label',            # Value to combine with version strings.
      'long_version',     # Value to override the Open GEE long version string.
      'build_folder',     # where to put the build output and intermediate files
@@ -118,6 +121,7 @@ portable_3rd_libs = int(ARGUMENTS.get('portable_3rd_libs', 0))
 cc_dir = ARGUMENTS.get('cc_dir', None)
 log_performance = int( ARGUMENTS.get( 'log_performance', 0 ) )
 cpp_standard = ARGUMENTS.get('cpp_standard', 'gnu++11')
+qt4_native = int(ARGUMENTS.get('qt4_native', 0))
 build_folder = ARGUMENTS.get('build_folder', 0)
 label = ARGUMENTS.get('label', '')
 long_version = ARGUMENTS.get('long_version', None)
@@ -167,6 +171,11 @@ if os.path.isabs(builddir):
 else:
   exportdir = Dir('#/%s' % builddir).abspath
 
+if qt4_native:
+  qtprefix = '/usr/include/qt4'
+else:
+  qtprefix = exportdir+'/include'
+
 exportdirs = {
     'root': exportdir+'/',
     'lib': exportdir+'/lib/',
@@ -179,8 +188,10 @@ el_ver = ''
 if os.path.isfile('/etc/redhat-release') and not os.path.isfile('/etc/os-release'):
   el_ver = 'el6'
 else:
-  el_ver = 'el7'
-
+  if 'el8' in os.uname()[2]:
+    el_ver = 'el8'
+  else:
+    el_ver = 'el7'
 
 if bundle_3rd_libs:
   python_version = '2.7.5'
@@ -203,18 +214,23 @@ else:
     python_home = '/usr'
 
 # setup platform specific operations
+is_os_ubuntu = False
 is_min_ubuntu = True
 # /etc/issue was the previous method of checking Ubuntu release version
 # however, some flavors of Ubuntu e.g. MATE, have used varying formats
 # using ilsb_release, subprocess and re is more readable than awk parsing also
 try:
+  vstring=subprocess.check_output('lsb_release -i',shell=True)
+  system=re.split('[\t\.\n]',vstring)
+  if system[1] == "Ubuntu":
+    is_os_ubuntu = True
   vstring=subprocess.check_output('lsb_release -r',shell=True)
   arr=re.split('[\t\.\n]',vstring)
   major=int(arr[1])
   minor=int(arr[2])
   el_ver = ''
-  if arr[1] < 12:
-    print 'Unknown Ubuntu version, minimum required version is 12.04.'
+  if arr[1] < 16:
+    print 'Unknown Ubuntu version, minimum required version is 16.04.'
     Exit(1)
     is_min_ubuntu = False
 # lsb_release is not present, must be RHEL or CentOS, move on
@@ -243,8 +259,12 @@ if sys.platform[0:5] == 'linux':
     warnflags += ['-Wno-parentheses']
   cppflags = ['-D_LARGEFILE64_SOURCE', '-DQT_THREAD_SUPPORT',
               '-DQT_NO_ASCII_CAST', '-DQT_CLEAN_NAMESPACE', '-D_REENTRANT',
-              '-DGUNIT_NO_GOOGLE3']
+              '-DGUNIT_NO_GOOGLE3', '-DQT3_SUPPORT', '-DQT_NO_TRANSLATION','-DQDOC']
 
+  # Include flags for our bundled copy of qt4
+  cppflags += ['-I%s/Qt3Support' % qtprefix, '-I%s/QtCore' % qtprefix, '-I%s/QtGui' % qtprefix]
+  if qt4_native:
+    cppflags += ['-I%s' % qtprefix]
   # set any architecture specific specific flags
   if re.compile('i.86').match(march):
     optflags = ['-march=i686'] + optflags
@@ -271,11 +291,45 @@ else:
 # warning so we can continue to build on ancient operating systems.
 warnflags += ['-Wno-error=cpp']
 
-# TODO: remove this and fix all places where we see this warnings.
+gpp_ver = commands.getstatusoutput('g++ -v')
+gpp_maj = int(gpp_ver[1][gpp_ver[1].find('gcc version') + 12])
+
+# TODO: remove this and fix all places where we see these warnings.
 if native_cc:
   warnflags += ['-Wno-error=unused-result',
                 '-Wno-error=unused-local-typedefs',
                 '-Wno-error=unused-but-set-variable']
+
+warnflags += ['-Wno-error=address',
+              '-Wno-error=unused-local-typedefs']
+
+if gpp_maj >= 6:
+  warnflags += ['-Wno-error=misleading-indentation',
+                '-Wno-error=terminate']
+
+if gpp_maj >= 7:
+  warnflags += ['-Wno-error=format-truncation',
+                '-Wno-error=memset-elt-size']
+
+if gpp_maj >= 8:
+  warnflags += ['-Wno-error=catch-value',
+                '-Wno-error=class-memaccess',
+                '-Wno-error=unused-parameter',
+                '-Wno-error=stringop-truncation',
+                '-Wno-error=stringop-overflow',
+                '-Wno-error=maybe-uninitialized']
+
+# Determine libpng
+if os.path.isdir('/usr/include/libpng15'):
+  png_ver = 'png15'
+  cppflags += ['-DUSING_LIBPNG15']
+elif os.path.isdir('/usr/include/libpng16'):
+  png_ver = 'png16'
+  cppflags += ['-DUSING_LIBPNG16']
+else:
+  png_ver = 'png12'
+  cppflags += ['-DPNG_SKIP_SETJMP_CHECK']
+
 
 if max_num_jobs_coeff:
   cppflags += ['-DKH_MAX_NUM_JOBS_COEFF=%s' % max_num_jobs_coeff]
@@ -293,12 +347,11 @@ if gprof:
 rpathlink_dirs = [Dir(exportdirs['lib']).abspath]
 # SetUID binaries don't use RPATH's containing '$ORIGIN' (since that would be
 # exploitable).  Use absolute paths to library install locations instead:
-rpath_dirs = ["'$$ORIGIN/../qt/lib'",
+rpath_dirs = ["/usr/lib64/qt4",
               "'$$ORIGIN/../lib64'",
               "'$$ORIGIN/../lib'",
               '%s/lib64' % optdir,
-              '%s/lib' % optdir,
-              '%s/qt/lib' % optdir]
+              '%s/lib' % optdir]
 
 # Binaries for unit tests, and other tests don't reside in the `bin` directory
 # where other executables go.  Instead, they are put in `bin/tests`.  So, the
@@ -511,7 +564,9 @@ env = khEnvironment(
     python_version=python_version,
     python_major_version=python_major_version,
     python_home=python_home,
-    el_ver=el_ver
+    el_ver=el_ver,
+    png_ver=png_ver,
+    freetype_ver="freetype-2.10.0"
 )
 
 env.get_open_gee_version().backup_file = "version.txt"
@@ -565,14 +620,20 @@ if home: env['ENV']['HOME'] = str(home)
 
 # setup QTDIR & friends
 # always use our Qt
-qtdir = exportdir
-qtdir_lib = '%s/lib' % exportdir
+if qt4_native:
+  qtdir = '/usr'
+  env['QTINCDIR'] = qtdir+'/include/qt4/Qt'
+else:
+  qtdir = exportdir
+  env['QTINCDIR'] = qtdir+'/include/Qt'
+
+
 env['ENV']['QTDIR'] = str(qtdir)
 env['QTDIR'] = str(qtdir)
-env['QTINCDIR'] = qtdir+'/include'
 env['QTLIBDIR'] = qtdir+'/lib'
 env['MOC'] = qtdir+'/bin/moc'
-env['UIC'] = qtdir+'/bin/uic'
+env['UIC'] = qtdir+'/bin/uic3'
+env['RCC'] = qtdir+'/bin/rcc'
 env['LRELEASE'] = qtdir+'/bin/lrelease'
 
 env['KHIDL'] = File('#common/khxml/khidl.pl')

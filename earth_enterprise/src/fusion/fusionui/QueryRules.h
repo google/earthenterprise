@@ -19,17 +19,20 @@
 #define KHSRC_FUSION_FUSIONUI_QUERYRULES_H__
 
 #include <khArray.h>
-#include <qscrollview.h>
+#include <Qt/q3scrollview.h>
+#include <Qt/qwidget.h>
+#include <Qt/qobjectdefs.h>
+
 #include <autoingest/.idl/storage/FilterConfig.h>
 
-class QComboBox;
+class Q3ComboBox;
 class QLineEdit;
 
-class QueryRules : public QScrollView {
+class QueryRules : public Q3ScrollView {
   Q_OBJECT
 
  public:
-  QueryRules(QWidget* parent = 0, const char* name = 0, WFlags f = 0);
+  QueryRules(QWidget* parent = 0, const char* name = 0, Qt::WFlags f = 0);
 
   void init(const FilterConfig& cfg);
   FilterConfig getConfig() const;
@@ -55,9 +58,8 @@ class QueryRules : public QScrollView {
   int rule_modified_;
   int rb_item_height_;
   QStringList* field_descriptors_;
-
-  QComboBox* field_[kMaxRuleCount];
-  QComboBox* oper_[kMaxRuleCount];
+  Q3ComboBox* field_[kMaxRuleCount];
+  Q3ComboBox* oper_[kMaxRuleCount];
   QLineEdit* rval_[kMaxRuleCount];
 };
 

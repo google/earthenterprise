@@ -23,14 +23,18 @@
 #include <vector>
 #include <set>
 #include <map>
-
-#include <qlistview.h>
-#include <qiconview.h>
-#include <qstringlist.h>
-#include <qaction.h>
-#include <qthread.h>
-#include <qtimer.h>
-
+#include <Qt/qobjectdefs.h>
+#include <Qt/q3iconview.h>
+using QIconViewItem = Q3IconViewItem;
+#include <Qt/qstringlist.h>
+#include <Qt/qaction.h>
+#include <Qt/qthread.h>
+#include <Qt/qtimer.h>
+#include <Qt/q3popupmenu.h>
+using QPopupMenu = Q3PopupMenu;
+#include <Qt/q3listview.h>
+using QListViewItem = Q3ListViewItem;
+#include <Qt/qobject.h>
 #include "fusion/autoingest/.idl/storage/AssetDefs.h"
 #include "fusion/fusionui/.idl/layoutpersist.h"
 #include "fusion/fusionui/.ui/assetmanagerbase.h"
@@ -46,7 +50,6 @@ class AssetChanges;
 class geGuiProgress;
 class geGuiAuth;
 class PublisherClient;
-
 class QProgressDialog;
 
 class AssetAction : public QAction {
@@ -133,9 +136,9 @@ class AssetManager : public AssetManagerBase {
   virtual void ToolbarChooserComboActivated(int choice);
 
  public slots:
-  void rmbClicked(QListViewItem* item, const QPoint& pos, int);
+  void rmbClicked(Q3ListViewItem* item, const QPoint& pos, int);
   void tableAssetMenu(int row, int col, const QPoint& mouse_pos);
-  void iconAssetMenu(QIconViewItem* item, const QPoint& mouse_pos);
+  void iconAssetMenu(Q3IconViewItem* item, const QPoint& mouse_pos);
   void doubleClicked(int row, int col, int btn, const QPoint& mouse_pos);
   void assetsChanged(const AssetChanges& a);
   void CurrentAssetChanged(int row, int col);
@@ -189,7 +192,8 @@ class AssetManager : public AssetManagerBase {
 };
 
 // Thread classes for serving pushing and publishing.
-class ServeThread : public QObject, public QThread {
+class ServeThread : public QThread {
+  //Q_OBJECT already present in QThread
   Q_OBJECT
 
  public:

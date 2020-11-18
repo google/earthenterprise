@@ -16,9 +16,9 @@
 #include "QDateWrapper.h"
 #include <stdlib.h>
 #include <string>
-#include <qlineedit.h>
-#include <qvalidator.h>
-#include <qdatetime.h>
+#include <Qt/qlineedit.h>
+#include <Qt/qvalidator.h>
+#include <Qt/qdatetime.h>
 #include <common/khConstants.h>
 
 namespace qt_fusion {
@@ -114,17 +114,17 @@ void QDateWrapper::SetDate(const std::string& date) {
     std::string year_string = date.substr(0, 4);
     std::string month_string = date.substr(5, 2);
     std::string day_string = date.substr(8, 2);
-    year = atoi(year_string.c_str());
-    month = atoi(month_string.c_str());
-    day = atoi(day_string.c_str());
+    year = std::stoi(year_string);
+    month = std::stoi(month_string);
+    day = std::stoi(day_string);
 
     if (date.size() >= 19) {  //  For assets created with fusion 5.1.3 or higher.
       std::string hours_string = date.substr(11, 2);
       std::string minutes_string = date.substr(14, 2);
       std::string seconds_string = date.substr(17, 2);
-      hours = atoi(hours_string.c_str());
-      minutes = atoi(minutes_string.c_str());
-      seconds = atoi(seconds_string.c_str());
+      hours = std::stoi(hours_string);
+      minutes = std::stoi(minutes_string);
+      seconds = std::stoi(seconds_string);
       SetDate(year, month, day, hours, minutes, seconds);
     } else {
       SetDate(year, month, day);
@@ -144,18 +144,18 @@ bool QDateWrapper::IsValidDate() {
 }
 
 std::string QDateWrapper::GetDate() const {
-  std::string year_string = year_edit_->text().latin1();
-  std::string month_string = month_edit_->text().latin1();
-  std::string day_string = day_edit_->text().latin1();
+  std::string year_string = year_edit_->text().toUtf8().constData();
+  std::string month_string = month_edit_->text().toUtf8().constData();
+  std::string day_string = day_edit_->text().toUtf8().constData();
 
   std::uint32_t year = atoi(year_string.c_str());
   std::uint32_t month = atoi(month_string.c_str());
   std::uint32_t day = atoi(day_string.c_str());
 
   if (TimeIncluded()) {  //  Raster asset widget.
-    std::string hours_string = hours_edit_->text().latin1();
-    std::string minutes_string = minutes_edit_->text().latin1();
-    std::string seconds_string = seconds_edit_->text().latin1();
+    std::string hours_string = hours_edit_->text().toUtf8().constData();
+    std::string minutes_string = minutes_edit_->text().toUtf8().constData();
+    std::string seconds_string = seconds_edit_->text().toUtf8().constData();
     std::uint32_t hours = atoi(hours_string.c_str());
     std::uint32_t minutes = atoi(minutes_string.c_str());
     std::uint32_t seconds = atoi(seconds_string.c_str());

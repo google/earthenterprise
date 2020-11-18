@@ -20,9 +20,8 @@
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
-
-#include <qtextedit.h>
-#include <qscrollview.h>
+#include <Qt/q3textedit.h>
+#include <Qt/q3scrollview.h>
 
 #include "AssetLog.h"
 
@@ -35,6 +34,8 @@
 #define MIN(a,b) ((a<b) ? a : b)
 #endif
 
+using QTextEdit = Q3TextEdit;
+using QScrollView = Q3ScrollView;
 AssetLog::LogMap AssetLog::openlogs;
 
 void
@@ -59,7 +60,7 @@ AssetLog::AssetLog( const std::string &logpath )
   logTextEdit->setWrapPolicy(QTextEdit::Anywhere);
   logTextEdit->setHScrollBarMode(QScrollView::AlwaysOff);
   logTextEdit->setVScrollBarMode(QScrollView::Auto);
-    
+
   // start off with an initial read of the log
   timerEvent( NULL );
 

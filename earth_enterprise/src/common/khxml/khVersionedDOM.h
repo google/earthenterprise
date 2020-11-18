@@ -21,6 +21,7 @@
 #define COMMON_KHXML_KHVERSIONEDDOM_H__
 
 #include "geVersionedEnum.h"
+#include <cstdint>
 
 // NOTICE!!
 // There are intentionally no other includes here. This must be included

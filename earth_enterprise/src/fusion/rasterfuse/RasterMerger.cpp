@@ -68,13 +68,13 @@ void MergeInset<DataTile>::InitRasterProducts(unsigned int magnify_level,
   if (dataRPFile.size()) {
     dataRP = khRasterProduct::Open(dataRPFile);
     if (!dataRP) {
-      throw khException(kh::tr("Unable to open %1").arg(dataRPFile));
+      throw khException(kh::tr("Unable to open %1").arg(dataRPFile.c_str()));
     }
     if ((dataRP->type() != khRasterProduct::Imagery) &&
         (dataRP->type() != khRasterProduct::Heightmap)) {
       throw khException
         (kh::tr("Data product is neither Imagery nor Heightmap: %1")
-         .arg(dataRPFile));
+         .arg(dataRPFile.c_str()));
     }
     // Terrain RPs that are upgraded from Fusion <3.1 might have RPs that are
     // generated only to level 8. Fusion 3.1 and later will upgrade these by
@@ -87,7 +87,7 @@ void MergeInset<DataTile>::InitRasterProducts(unsigned int magnify_level,
         dataRP.clear();
       } else {
         throw khException(kh::tr("Internal Error: No level %1 in %2")
-                          .arg(magnify_level).arg(dataRPFile));
+                          .arg(magnify_level).arg(dataRPFile.c_str()));
       }
     } else {
       magnifyCoverage = dataRP->levelCoverage(magnify_level);
@@ -97,12 +97,12 @@ void MergeInset<DataTile>::InitRasterProducts(unsigned int magnify_level,
         alphaRP = khRasterProduct::Open(alphaRPFile);
         if (!alphaRP) {
           throw khException(kh::tr("Unable to open %1")
-                            .arg(alphaRPFile));
+                            .arg(alphaRPFile.c_str()));
         }
         if (alphaRP->type() != khRasterProduct::AlphaMask) {
           throw khException
               (kh::tr("Alpha product is not AlphaMask: %1")
-               .arg(alphaRPFile));
+               .arg(alphaRPFile.c_str()));
         }
         alphaLevel = &alphaRP->level(std::min(magnify_level,
                                               alphaRP->maxLevel()));
@@ -122,7 +122,7 @@ void MergeInset<DataTile>::InitCachedBlendReaders(
         new ffio::raster::Reader<DataTile>(cached_blend_file));
     if (!cached_blend_reader->ValidLevel(magnify_level)) {
       throw khException(kh::tr("level %1 not valid for %2")
-                        .arg(magnify_level).arg(cached_blend_file));
+                        .arg(magnify_level).arg(cached_blend_file.c_str()));
     }
 
     // Note: The check is narrowed only to Imagery-resource
@@ -153,7 +153,7 @@ void MergeInset<DataTile>::InitCachedBlendReaders(
                cachedExtents.height());
         throw khException
           (kh::tr("Specified data product (%1) and cached blend (%2) have"
-                  " different coverage").arg(data_rp_file, cached_blend_file));
+                  " different coverage").arg(data_rp_file.c_str(), cached_blend_file.c_str()));
       }
     }
 
@@ -302,13 +302,13 @@ RasterMerger<CachingDataReader>::RasterMerger(
   if (burnDataRPFile.size()) {
     burnDataRP = khRasterProduct::Open(burnDataRPFile);
     if (!burnDataRP) {
-      throw khException(kh::tr("Unable to open %1").arg(burnDataRPFile));
+      throw khException(kh::tr("Unable to open %1").arg(burnDataRPFile.c_str()));
     }
     if ((burnDataRP->type() != khRasterProduct::Imagery) &&
         (burnDataRP->type() != khRasterProduct::Heightmap)) {
       throw khException
         (kh::tr("Burn data product is neither Imagery nor Heightmap: %1")
-         .arg(burnDataRPFile));
+         .arg(burnDataRPFile.c_str()));
     }
     is_mercator_ = is_mercator_ || burnDataRP->IsMercator();
     // Starting in Fusion 3.1, terrain is generated to level 4, from 8
@@ -322,7 +322,7 @@ RasterMerger<CachingDataReader>::RasterMerger(
         burnDataRP.clear();
       } else {
         throw khException(kh::tr("Internal Error: No level %1 in %2")
-                          .arg(targetLevel).arg(burnDataRPFile));
+                          .arg(targetLevel).arg(burnDataRPFile.c_str()));
       }
     } else {
       burnDataLevel = &burnDataRP->level(targetLevel);
@@ -331,12 +331,12 @@ RasterMerger<CachingDataReader>::RasterMerger(
         burnAlphaRP = khRasterProduct::Open(burnAlphaRPFile);
         if (!burnAlphaRP) {
           throw khException(kh::tr("Unable to open %1")
-                            .arg(burnAlphaRPFile));
+                            .arg(burnAlphaRPFile.c_str()));
         }
         if (burnAlphaRP->type() != khRasterProduct::AlphaMask) {
           throw khException
               (kh::tr("Burn alpha product is not AlphaMask: %1")
-               .arg(burnAlphaRPFile));
+               .arg(burnAlphaRPFile.c_str()));
         }
         burnAlphaLevel = &burnAlphaRP->level
             (std::min(targetLevel, burnAlphaRP->maxLevel()));

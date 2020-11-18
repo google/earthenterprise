@@ -14,16 +14,19 @@
 // limitations under the License.
 
 
-#include <qtable.h>
-#include <qpopupmenu.h>
-#include <qmessagebox.h>
-#include <qheader.h>
+#include <Qt/q3table.h>
+#include <Qt/q3popupmenu.h>
+#include <Qt/qmessagebox.h>
+#include <Qt/q3header.h>
 #include <notify.h>
 
 #include <autoingest/.idl/gstProvider.h>
-
+#include "khException.h"
 #include "ProviderManager.h"
 #include "ProviderEdit.h"
+using QTableItem = Q3TableItem;
+using QTable = Q3Table;
+using QPopupMenu = Q3PopupMenu;
 
 // used for the name column, but holds entire copy of the provider
 class ProviderNameItem : public QTableItem {
@@ -48,7 +51,7 @@ class ProviderNameItem : public QTableItem {
   mutable gstProvider provider_;
 };
 
-ProviderManager::ProviderManager(QWidget* parent, bool modal, WFlags flags)
+ProviderManager::ProviderManager(QWidget* parent, bool modal, Qt::WFlags flags)
   : ProviderManagerBase(parent, 0, modal, flags) {
   providerTable->verticalHeader()->hide();
   providerTable->setLeftMargin(0);
@@ -57,10 +60,10 @@ ProviderManager::ProviderManager(QWidget* parent, bool modal, WFlags flags)
   providerTable->setNumRows(0);
 
   if (!provider_set_.Load()) {
-    QMessageBox::critical(this, tr("Error"),
-                          tr("Unable to load providers\n") +
-                          tr("Check console for more information"),
-                          tr("OK"), 0, 0, 0);
+    QMessageBox::critical(this, kh::tr("Error"),
+                          kh::tr("Unable to load providers\n") +
+                          kh::tr("Check console for more information"),
+                          kh::tr("OK"), 0, 0, 0);
   }
 
   for (unsigned int row = 0; row < provider_set_.items.size(); ++row) {
@@ -85,7 +88,7 @@ void ProviderManager::SetRow(int row, const gstProvider& provider) {
 gstProvider ProviderManager::GetProviderFromRow(int row) {
   gstProvider p = static_cast<ProviderNameItem*>(
       providerTable->item(row, 0))->GetProvider();
-  p.key = providerTable->text(row, 1).utf8();
+  p.key = providerTable->text(row, 1).toUtf8().constData();
   p.copyright = providerTable->text(row, 2);
   return p;
 }
@@ -99,10 +102,10 @@ void ProviderManager::accept() {
   new_providers.next_id = provider_set_.next_id;
   if (new_providers != provider_set_) {
     QMessageBox::critical(
-        this, tr("Error"),
-        tr("The provider list has changed on disk since this window was opened\n") +
-        tr("Refusing to save"),
-        tr("OK"), 0, 0, 0);
+        this, kh::tr("Error"),
+        kh::tr("The provider list has changed on disk since this window was opened\n") +
+        kh::tr("Refusing to save"),
+        kh::tr("OK"), 0, 0, 0);
     return;
   } else {
     provider_set_.items.clear();
@@ -111,10 +114,10 @@ void ProviderManager::accept() {
     }
     if (!provider_set_.Save()) {
       QMessageBox::critical(
-          this, tr("Error"),
-          tr("Unable to save providers.\n"
+          this, kh::tr("Error"),
+          kh::tr("Unable to save providers.\n"
              "Check console for more information."),
-          tr("OK"), 0, 0, 0);
+          kh::tr("OK"), 0, 0, 0);
       return;
     }
   }
@@ -144,7 +147,7 @@ gstProvider ProviderManager::EditProvider(const gstProvider& current_provider) {
     }
     if (!unique) {
       QMessageBox::warning(this, "Error",
-        trUtf8("Please provide a unique provider key.\n\n"),
+        kh::trUtf8("Please provide a unique provider key.\n\n"),
         QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
     }
   } while (!unique);
@@ -162,11 +165,11 @@ void ProviderManager::modifyProvider() {
     if ((new_provider.key != current_provider.key) &&
         (QMessageBox::warning(
             this, "Warning",
-            trUtf8("Are you sure you want to change the key for this provider?\n\n") +
-            trUtf8("Currently there is no check to confirm that an asset\n") +
-            trUtf8("does not reference this provider.  This may cause \n") +
-            trUtf8("assets to point to non-existent providers."),
-            tr("OK"), tr("Cancel"), QString::null, 1, 1) != 0)) {
+            kh::trUtf8("Are you sure you want to change the key for this provider?\n\n") +
+            kh::trUtf8("Currently there is no check to confirm that an asset\n") +
+            kh::trUtf8("does not reference this provider.  This may cause \n") +
+            kh::trUtf8("assets to point to non-existent providers."),
+            kh::tr("OK"), kh::tr("Cancel"), QString::null, 1, 1) != 0)) {
       return;
     }
     SetRow(row, new_provider);
@@ -189,11 +192,11 @@ void ProviderManager::deleteProvider() {
     return;
 
   if (QMessageBox::warning(this, "Warning",
-      trUtf8("Are you sure you want to delete this provider?\n\n") +
-      trUtf8("Currently there is no check to confirm that an asset\n") +
-      trUtf8("does not reference this provider.  This may cause \n") +
-      trUtf8("assets to point to non-existent providers."),
-      tr("OK"), tr("Cancel"), QString::null, 1, 1) == 0)
+      kh::trUtf8("Are you sure you want to delete this provider?\n\n") +
+      kh::trUtf8("Currently there is no check to confirm that an asset\n") +
+      kh::trUtf8("does not reference this provider.  This may cause \n") +
+      kh::trUtf8("assets to point to non-existent providers."),
+      kh::tr("OK"), kh::tr("Cancel"), QString::null, 1, 1) == 0)
     providerTable->removeRow(row);
 }
 
@@ -201,10 +204,10 @@ void ProviderManager::contextMenu(int row, int col, const QPoint& pos) {
   enum { NEW_PROVIDER, MODIFY_PROVIDER, DELETE_PROVIDER };
 
   QPopupMenu menu(this);
-  menu.insertItem(tr("&New Provider"), NEW_PROVIDER);
+  menu.insertItem(kh::tr("&New Provider"), NEW_PROVIDER);
   if (row != -1) {
-    menu.insertItem(tr("&Modify Provider"), MODIFY_PROVIDER);
-    menu.insertItem(tr("&Delete Provider"), DELETE_PROVIDER);
+    menu.insertItem(kh::tr("&Modify Provider"), MODIFY_PROVIDER);
+    menu.insertItem(kh::tr("&Delete Provider"), DELETE_PROVIDER);
   }
 
   switch (menu.exec(pos)) {

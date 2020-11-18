@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
+#include <memory>
 #include <qimage.h>
 #include <qpixmap.h>
 #include <qtoolbar.h>
 #include <qtoolbutton.h>
-#include <qpopupmenu.h>
+#include <qmenu.h>
 #include <qmenubar.h>
 #include <qtextedit.h>
 #include <qfile.h>
@@ -25,23 +25,28 @@
 #include <qstatusbar.h>
 #include <qmessagebox.h>
 #include <qapplication.h>
-#include <qaccel.h>
+#include <Qt/q3accel.h>
 #include <qtextstream.h>
 #include <qpainter.h>
-#include <qpaintdevicemetrics.h>
-#include <qsimplerichtext.h>
-#include <qgrid.h>
-
-#include <qcanvas.h>
-
+#include <Qt/q3paintdevicemetrics.h>
+#include <Qt/q3simplerichtext.h>
+#include <Qt/q3simplerichtext.h>
+#include <Qt/q3grid.h>
+#include <Qt/q3canvas.h>
+#include <Qt/qobject.h>
+#include  <Qt/q3filedialog.h>
 #include "fileopen.xpm"
-
+#include <Qt/q3mimefactory.h>
 #include "application.h"
 #include "imageview.h"
 #include "gdal.h"
+#include <Qt/q3popupmenu.h>
+
+using QPopupMenu = Q3PopupMenu;
+using QMimeSourceFactory = Q3MimeSourceFactory;
 
 ApplicationWindow::ApplicationWindow()
-    : QMainWindow( 0, "scroll", WDestructiveClose | WGroupLeader )
+    : QMainWindow( 0, "scroll", Qt::WDestructiveClose | Qt::WGroupLeader )
 {
   QPixmap openIcon;
 
@@ -51,24 +56,23 @@ ApplicationWindow::ApplicationWindow()
   openIcon = QPixmap( fileopen );
   (void) new QToolButton( openIcon, "Open", QString::null,
                           this, SLOT(choose()), fileTools, "open" );
-
   QMimeSourceFactory::defaultFactory()->setPixmap( "fileopen", openIcon );
 
   QPopupMenu * file = new QPopupMenu( this );
   menuBar()->insertItem( "&File", file );
 
   file->insertItem( openIcon, "&Open...",
-                         this, SLOT(choose()), CTRL+Key_O );
+                         this, SLOT(choose()), Qt::CTRL+Qt::Key_O);
   file->insertItem( "&Save", this, SLOT(save()));
 
   file->insertSeparator();
 
-  file->insertItem( "&Quit", qApp, SLOT( closeAllWindows() ), CTRL+Key_Q );
+  file->insertItem( "&Quit", qApp, SLOT( closeAllWindows() ), Qt::CTRL+Qt::Key_Q );
 
   QPopupMenu * help = new QPopupMenu( this );
   menuBar()->insertItem( "&Help", help );
   help->insertItem( "&Commands", this,
-                    SLOT(keyhelps()), CTRL+Key_H);
+                    SLOT(keyhelps()), Qt::CTRL+Qt::Key_H);
 
 
 
@@ -93,24 +97,32 @@ ApplicationWindow::~ApplicationWindow()
 void ApplicationWindow::loadInitImage(const std::string &image_file_path) {
   QString abs_file_path;
   // Set prevDir per fileName (using non executed QFileDialog setting.)
-  QFileDialog *fdlg = new QFileDialog(QString::null, QString::null, this);
-  fdlg->setSelection(image_file_path);
+
+  std::unique_ptr<Q3FileDialog> fdlg
+  {
+      new Q3FileDialog(QString::null, QString::null, this)
+  };
+
+  fdlg->setSelection(image_file_path.c_str());
   setCaption(fdlg->selectedFile()); // using selectedFile() to get full path
   prevDir = fdlg->dirPath();
-  delete fdlg;
+
   viewer->loadInitImage(image_file_path);
 }
 
 
 void ApplicationWindow::choose()
 {
-  QFileDialog *fdlg = new QFileDialog(prevDir, QString::null, this);
-  fdlg->addFilter("Images (*.pre *.img *.tif *.tiff *.jp2 *.sid *.jpg *.IMG *.TIF *.TIFF *.JP2 *.SID *.JPG)");
+  std::unique_ptr<Q3FileDialog> fdlg
+  {
+      new Q3FileDialog(prevDir, QString::null, this)
+  };
+  std::string filter { "Images (*.pre *.img *.tif *.tiff *.jp2 *.sid *.jpg *.IMG *.TIF *.TIFF *.JP2 *.SID *.JPG)" };
+  fdlg->addFilter(filter.c_str());
   if (fdlg->exec() == QDialog::Accepted) {
     prevDir = fdlg->dirPath();
     load(fdlg->selectedFile());
   }
-  delete fdlg;
 }
 
 void ApplicationWindow::save()

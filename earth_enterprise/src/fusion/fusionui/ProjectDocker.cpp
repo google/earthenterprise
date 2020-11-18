@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc.
+// Copyright 2017-2020 Google Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,9 +13,9 @@
 // limitations under the License.
 
 
-#include <qvgroupbox.h>
-#include <qhgroupbox.h>
-#include <qlayout.h>
+#include <Qt/q3vgroupbox.h>
+using QVGroupBox = Q3VGroupBox;
+#include <Qt/qlayout.h>
 
 #include "ProjectDocker.h"
 #include "ProjectManager.h"

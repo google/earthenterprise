@@ -19,18 +19,19 @@
 #ifndef FUSION_FUSIONUI_LAYERLEGENDWIDGET_H__
 #define FUSION_FUSIONUI_LAYERLEGENDWIDGET_H__
 
-#include <qwidget.h>
+#include <Qt/qobjectdefs.h>
+#include <Qt/qwidget.h>
+#include <Qt/q3table.h>
 
 class QVBoxLayout;
 class QCheckBox;
-class QTable;
 class EndEditTable;
-
+using QTable = Q3Table;
 class LayerLegendWidget : public QWidget {
   Q_OBJECT
 
  public:
-  LayerLegendWidget( QWidget* parent, const char* name = 0, WFlags fl = 0 );
+  LayerLegendWidget( QWidget* parent, const char* name = 0, Qt::WFlags fl = 0 );
   ~LayerLegendWidget(void);
 
   QVBoxLayout*  vlayout;

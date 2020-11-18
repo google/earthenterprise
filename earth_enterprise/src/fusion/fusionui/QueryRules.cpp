@@ -13,18 +13,22 @@
 // limitations under the License.
 
 
-#include <qcombobox.h>
-#include <qstringlist.h>
-#include <qgroupbox.h>
-#include <qlineedit.h>
-#include <qobjectlist.h>
-#include <qmessagebox.h>
-
+#include <Qt/qcombobox.h>
+#include <Qt/q3combobox.h>
+#include <Qt/qstringlist.h>
+#include <Qt/q3groupbox.h>
+#include <Qt/qlineedit.h>
+#include <Qt/q3ptrlist.h>
+#include <Qt/qmessagebox.h>
+#include <Qt/q3objectdict.h>
+#include <Qt/q3scrollview.h>
+using QScrollView = Q3ScrollView;
 #include <gstSelectRule.h>
-
+#include "khException.h"
 #include "QueryRules.h"
+#include <Qt/qevent.h>
 
-QueryRules::QueryRules(QWidget* parent, const char* name, WFlags f)
+QueryRules::QueryRules(QWidget* parent, const char* name, Qt::WFlags f)
   : QScrollView(parent, name, f) {
   rule_count_ = rule_modified_ = 0;
   setVScrollBarMode(QScrollView::AlwaysOn);
@@ -36,13 +40,13 @@ QueryRules::QueryRules(QWidget* parent, const char* name, WFlags f)
 
 void QueryRules::init(const FilterConfig& config) {
   // clear out any previous children
-  const QObjectList* c = viewport()->children();
-  if (c != NULL) {
-    QObjectListIt it(*c);
+  const QObjectList c = viewport()->children();
+  if (c.size()) {
+    auto it = c.begin();
     QObject* obj;
-    while ((obj = it.current()) != 0) {
+    while ((obj = *it) != 0) {
       ++it;
-      QGroupBox* box = reinterpret_cast<QGroupBox*>(obj);
+      Q3GroupBox* box = reinterpret_cast<Q3GroupBox*>(obj);
       delete box;
     }
   }
@@ -50,12 +54,11 @@ void QueryRules::init(const FilterConfig& config) {
   rule_count_ = 0;
 
   // now add the new ones back in
-  for (std::vector<SelectRuleConfig>::const_iterator it =
-       config.selectRules.begin(); it != config.selectRules.end(); ++it) {
+  for (const auto& it : config.selectRules) {
     int id = BuildRule() - 1;
-    field_[id]->setCurrentItem((*it).fieldNum);
-    oper_[id]->setCurrentItem(static_cast<int>((*it).op));
-    rval_[id]->setText((*it).rvalue);
+    field_[id]->setCurrentItem(it.fieldNum);
+    oper_[id]->setCurrentItem(static_cast<int>(it.op));
+    rval_[id]->setText(it.rvalue);
   }
 
   rule_modified_ = 0;
@@ -83,30 +86,29 @@ int QueryRules::BuildRule() {
   //
   // create a box to hold our new rule in
   //
-  QGroupBox* box = new QGroupBox(viewport());
+  Q3GroupBox* box = new Q3GroupBox(viewport());
   box->setOrientation(Qt::Horizontal);
   box->setColumns(3);
   box->setInsideSpacing(kRuleBoxMargin);
   box->setInsideMargin(kRuleBoxMargin);
-  box->setFrameShape(NoFrame);
-
-  QComboBox* field_box = new QComboBox(box);
+  box->setFrameShape(static_cast<Q3GroupBox::DummyFrame>(0));
+  Q3ComboBox* field_box = new Q3ComboBox(box);
   if (field_descriptors_) {
     field_box->insertStringList(*field_descriptors_);
     connect(field_box, SIGNAL(activated(int)), this, SLOT(ruleModified()));
   }
 
   QStringList opsList;
-  opsList << tr("equals")
-          << tr("is less than or equal to")
-          << tr("is greater than or equal to")
-          << tr("is less than")
-          << tr("is greater than")
-          << tr("is not equal to")
-          << tr("matches")
-          << tr("does not match");
+  opsList << kh::tr("equals")
+          << kh::tr("is less than or equal to")
+          << kh::tr("is greater than or equal to")
+          << kh::tr("is less than")
+          << kh::tr("is greater than")
+          << kh::tr("is not equal to")
+          << kh::tr("matches")
+          << kh::tr("does not match");
 
-  QComboBox* ops_box = new QComboBox(box);
+  Q3ComboBox* ops_box = new Q3ComboBox(box);
   ops_box->insertStringList(opsList);
 
   connect(ops_box, SIGNAL(activated(int)), this, SLOT(ruleModified()));
@@ -151,9 +153,9 @@ void QueryRules::moreRules() {
   if (rule_count_ == kMaxRuleCount) {
     QMessageBox::warning(
       this, "Maximum rules",
-      QString(trUtf8("You now have %1 rules, which is the maximum supported."))
+      QString(kh::trUtf8("You now have %1 rules, which is the maximum supported."))
       .arg(kMaxRuleCount),
-      trUtf8("OK"), 0, 0, 0);
+      kh::trUtf8("OK"), 0, 0, 0);
     return;
   }
 
@@ -166,8 +168,8 @@ void QueryRules::fewerRules() {
   if (rule_count_ == 0)
     return;
 
-  const QObjectList* c = viewport()->children();
-  QGroupBox* lastbox = reinterpret_cast<QGroupBox*>(c->getLast());
+  const QObjectList c = viewport()->children();
+  Q3GroupBox* lastbox = reinterpret_cast<Q3GroupBox*>(c.last());
   removeChild(lastbox);
   delete lastbox;
 
@@ -187,11 +189,11 @@ void QueryRules::fewerRules() {
 void QueryRules::viewportResizeEvent(QResizeEvent* event) {
   QSize sz = event->size();
 
-  const QObjectList* c = viewport()->children();
-  if (c != NULL) {
-    QObjectListIt it(*c);
+  const QObjectList c = viewport()->children();
+  if (c.size()) {
+    auto it = c.begin();
     QObject* obj;
-    while ((obj = it.current()) != 0) {
+    while ((obj = *it) != 0) {
       ++it;
       QSize wsz = reinterpret_cast<QWidget*>(obj)->size();
       wsz.setWidth(sz.width());
@@ -199,7 +201,7 @@ void QueryRules::viewportResizeEvent(QResizeEvent* event) {
     }
   }
 
-  QScrollView::viewportResizeEvent(event);
+  Q3ScrollView::viewportResizeEvent(event);
 }
 
 void QueryRules::setFieldDesc(const QStringList& from) {

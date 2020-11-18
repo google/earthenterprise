@@ -13,15 +13,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-#include <qtable.h>
-#include <qmessagebox.h>
-#include <qinputdialog.h>
+#include <Qt/q3table.h>
+using QTable = Q3Table;
+#include <Qt/qmessagebox.h>
+#include <Qt/qinputdialog.h>
 #include <notify.h>
 
 #include "LocaleManager.h"
 
-LocaleManager::LocaleManager(QWidget* parent, bool modal, WFlags flags)
+LocaleManager::LocaleManager(QWidget* parent, bool modal, Qt::WFlags flags)
   : LocaleManagerBase(parent, 0, modal, flags) {
   locale_table->verticalHeader()->hide();
   locale_table->setLeftMargin(0);
@@ -52,10 +52,11 @@ void LocaleManager::accept() {
 
   if (!localeset_.Save()) {
     QMessageBox::critical(
-        this, tr("Error"),
+        dynamic_cast<QWidget*>(this), tr("Error"),
         tr("Unable to save locales.\n"
            "Check console for more information."),
-        tr("OK"), 0, 0, 0);
+        tr("OK"), QString(), QString(),
+        0, 0);
   } else {
     LocaleManagerBase::accept();
   }

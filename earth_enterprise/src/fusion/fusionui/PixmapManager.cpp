@@ -13,9 +13,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-#include <qpixmap.h>
-#include <qimage.h>
+#include <Qt/qglobal.h>
+#include <Qt/qpixmap.h>
+#include <Qt/qimage.h>
 #include <gstIconManager.h>
 #include <gstFileUtils.h>
 
@@ -57,12 +57,12 @@ QPixmap ColorBox::Pixmap(unsigned int fill_r, unsigned int fill_g, unsigned int 
 }
 
 QColor ColorBox::FillColor(const QPixmap& pix) {
-  QImage image = pix.convertToImage();
+  QImage image = pix.toImage();
   return QColor(image.color(kFillColorId));
 }
 
 QColor ColorBox::OutlineColor(const QPixmap& pix) {
-  QImage image = pix.convertToImage();
+  QImage image = pix.toImage();
   return QColor(image.color(kOutlineColorId));
 }
 
@@ -80,13 +80,13 @@ PixmapManager::PixmapManager() {
   IconReference::Type int_type = IconReference::Internal;
   for (int id = 0; id < theIconManager->IconCount(int_type); ++id) {
     std::string iconpath = theIconManager->GetFullPath(int_type, id);
-    QImage img(iconpath);
+    QImage img(iconpath.c_str());
     if (img.isNull()) {
       notify(NFY_WARN, "Unable to load internal icon %s, skipping.",
              iconpath.c_str());
       continue;
     }
-    pix_map_[theIconManager->GetIcon(int_type, id)] = img;
+    pix_map_[theIconManager->GetIcon(int_type, id)] = QPixmap::fromImage(img);
   }
 
   updateExternal();
@@ -100,13 +100,13 @@ void PixmapManager::updateExternal() {
     // only add new ones
     if (found == pix_map_.end()) {
       std::string iconpath = theIconManager->GetFullPath(ext_type, id);
-      QImage img(iconpath);
+      QImage img(iconpath.c_str());
       if (img.isNull()) {
         notify(NFY_WARN, "Unable to load external icon %s, skipping.",
                iconpath.c_str());
         continue;
       }
-      pix_map_[icon] = img;
+      pix_map_[icon] = QPixmap::fromImage(img);
     }
   }
 }
@@ -126,24 +126,24 @@ QPixmap PixmapManager::GetPixmap(const gstIcon& icon, IconType type) {
   QImage img;
   switch (type) {
     case NormalIcon:
-      img = pix;
+      img = pix.toImage();
       img = img.copy(0, width * 2, width, width);
-      pix = QPixmap(img);
+      pix = QPixmap::fromImage(img);
       break;
     case HighlightIcon:
-      img = pix;
+      img = pix.toImage();
       img = img.copy(0, width, width, width);
-      pix = QPixmap(img);
+      pix = QPixmap::fromImage(img);
       break;
     case RegularPair:
-      img = pix;
+      img = pix.toImage();
       img = img.copy(0, width, width, width*2);
-      pix = QPixmap(img);
+      pix = QPixmap::fromImage(img);
       break;
     case LayerIcon:
-      img = pix;
+      img = pix.toImage();
       img = img.copy(0, 0, 16, 16);
-      pix = QPixmap(img);
+      pix = QPixmap::fromImage(img);
       break;
     case AllThree:
       break;

@@ -14,12 +14,12 @@
 
 
 #include <algorithm>
-#include <qpopupmenu.h>
+#include <Qt/q3popupmenu.h>
 #include <qcursor.h>
 #include <khFileUtils.h>
 
 #include "FileHistory.h"
-
+using QPopupMenu = Q3PopupMenu;
 FileHistory::FileHistory(QWidget* parent, const QString& path)
     : QPushButton(parent), filePath(path) {
   setText(trUtf8("Recent..."));

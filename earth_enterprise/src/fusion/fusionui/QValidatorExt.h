@@ -21,7 +21,7 @@
 #ifndef GEO_EARTH_ENTERPRISE_SRC_FUSION_FUSIONUI_QVALIDATOREXT_H_
 #define GEO_EARTH_ENTERPRISE_SRC_FUSION_FUSIONUI_QVALIDATOREXT_H_
 
-#include <qvalidator.h>
+#include <Qt/qvalidator.h>
 
 namespace qt_fusion {
 

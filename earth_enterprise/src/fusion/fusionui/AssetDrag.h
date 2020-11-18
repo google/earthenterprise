@@ -18,8 +18,9 @@
 #ifndef KHSRC_FUSION_FUSIONUI_ASSETDRAG_H__
 #define KHSRC_FUSION_FUSIONUI_ASSETDRAG_H__
 
-#include <qdragobject.h>
+#include <Qt/q3dragobject.h>
 #include <autoingest/Asset.h>
+using QTextDrag = Q3TextDrag;
 
 class AssetDrag : public QTextDrag {
  public:

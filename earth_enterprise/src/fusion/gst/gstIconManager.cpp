@@ -99,7 +99,7 @@ void gstIconManager::SetPath(IconReference::Type ctype,
 
     const std::string& name = d->d_name;
     if (Validate(khComposePath(path, name)) == true) {
-      collection_[ctype].push_back(gstIcon(name, ctype));
+      collection_[ctype].push_back(gstIcon(name.c_str(), ctype));
     }
   }
 
@@ -148,7 +148,7 @@ bool gstIconManager::AddIcon(const std::string& path) {
 
   if (CopyIcon(path, outfile) == true) {
     collection_[IconReference::External].push_back(gstIcon(
-        base, IconReference::External));
+        base.c_str(), IconReference::External));
     return true;
   }
 
@@ -311,7 +311,7 @@ bool gstIconManager::DeleteIcon(const std::string& name) {
   std::vector<gstIcon>& ext_collection = collection_[IconReference::External];
   for (std::vector<gstIcon>::iterator it = ext_collection.begin();
        it != ext_collection.end(); ++it) {
-    if (it->href() == name) {
+    if (it->href() == name.c_str()) {
       found = true;
       ext_collection.erase(it);
       break;

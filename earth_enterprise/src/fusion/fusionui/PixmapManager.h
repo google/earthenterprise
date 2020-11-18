@@ -20,7 +20,9 @@
 #define KHSRC_FUSION_FUSIONUI_PIXMAPMANAGER_H__
 
 #include <khHashTable.h>
-
+#include <Qt/qglobal.h>
+#include <Qt/qimage.h>
+#include <map>
 class gstIcon;
 class QPixmap;
 

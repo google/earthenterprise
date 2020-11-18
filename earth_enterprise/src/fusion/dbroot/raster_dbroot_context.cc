@@ -63,7 +63,7 @@ void RasterDbrootContext::EmitAll(const std::string &out_dir,
     std::string outfile =
         out_dir + "/" + kPostamblePrefix + "." + kDefaultLocaleSuffix;
     // no filtering right now for raster dbroots, always emit all layers
-    RasterDbrootGenerator dbrootgen(this, kDefaultLocaleSuffix, outfile);
+    RasterDbrootGenerator dbrootgen(this, kDefaultLocaleSuffix.c_str(), outfile);
     dbrootgen.Emit(output_format);
   }
 

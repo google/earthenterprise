@@ -98,7 +98,7 @@ main(int argc, char *argv[]) {
     }
     QString qlayername = QString::fromUtf8(layername.c_str());
     qlayername.replace("&#47;", "/");
-    layername = qlayername.utf8();
+    layername = qlayername.toUtf8().constData();
     if (project.empty()) {
       usage(progname, "--project not specified");
     }
@@ -124,7 +124,7 @@ main(int argc, char *argv[]) {
     for (std::vector<LayerConfig>::iterator layer = vconfig.layers.begin();
          layer != vconfig.layers.end(); ++layer) {
       if (((layerid != 0) && (layer->channelId == layerid)) ||
-          (layer->DefaultNameWithPath() == layername)) {
+          (layer->DefaultNameWithPath() == layername.c_str())) {
 
         layer->ApplyTemplate(tmplConfig, applyDisplayRules, applyLegend);
 

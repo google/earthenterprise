@@ -170,11 +170,10 @@ int main(int argc, char **argv) {
                     entry->channel_id_,
                     entry->version_)));
       } else if (type == geindex::TypedEntry::Terrain) {
-#if 1
         if (!PacketFile::IsPacketFile(entry->indexdir_)) {
           throw khException(
               kh::tr("INTERNAL ERROR: Terrain path must be a packetfile: %1")
-              .arg(entry->indexdir_));
+              .arg(entry->indexdir_.c_str()));
         }
 
         // register packetfile
@@ -193,26 +192,6 @@ int main(int argc, char **argv) {
                     entry->version_,
                     entry->channel_id_,
                     entry->indexdir_)));
-#else
-        typedef geindex::Traverser<geindex::CombinedTmeshBucket>
-          CombinedTmeshTraverser;
-        khTransferGuard<CombinedTmeshTraverser> traverser =
-          TransferOwnership(new CombinedTmeshTraverser(
-                                "TerrainTraverser",
-                                file_pool, entry->indexdir_));
-        PopulateFilenumTranslations(writer, unified_filemap,
-                                    translated_filenums[source_id],
-                                    progress_meter,
-                                    traverser->GetIndexBundleReader());
-        merger.AddSource(
-            TransferOwnership(
-                new geindex::UnifiedAdaptingTraverser<CombinedTmeshTraverser>(
-                    "TerrainAdaptingTraverser",
-                    geindex::TypedEntry::Terrain,
-                    traverser,
-                    entry->channel_id_,
-                    entry->version_)));
-#endif
       } else if (type == geindex::TypedEntry::VectorGE) {
         typedef geindex::Traverser<geindex::VectorBucket> VectorTraverser;
         khTransferGuard<VectorTraverser> traverser =
@@ -236,7 +215,7 @@ int main(int argc, char **argv) {
           throw khException(
               kh::tr("INTERNAL ERROR: VectorMaps "
                      "path must be a packetfile: %1")
-              .arg(entry->indexdir_));
+              .arg(entry->indexdir_.c_str()));
         }
 
         // register packetfile
@@ -261,7 +240,7 @@ int main(int argc, char **argv) {
           throw khException(
               kh::tr("INTERNAL ERROR: VectorMapsRaster "
                      "path must be a packetfile: %1")
-              .arg(entry->indexdir_));
+              .arg(entry->indexdir_.c_str()));
         }
 
         // register packetfile
@@ -286,7 +265,7 @@ int main(int argc, char **argv) {
         if (!PacketFile::IsPacketFile(entry->indexdir_)) {
           throw khException(
               kh::tr("INTERNAL ERROR: QTPacket path must be a packetfile: %1")
-              .arg(entry->indexdir_));
+              .arg(entry->indexdir_.c_str()));
         }
 
         // register packetfile
@@ -320,7 +299,7 @@ int main(int argc, char **argv) {
       } else {
         throw khException(
             kh::tr("INTERNAL ERROR: Unknown input type: %1")
-            .arg(entry->type_));
+            .arg(entry->type_.c_str()));
       }
     }
 

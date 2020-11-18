@@ -22,7 +22,8 @@
 #include "PixmapManager.h"
 #include "AssetDerivedImpl.h"
 #include "ProjectManager.h"
-
+using QListViewItem = Q3ListViewItem;
+using QListView = Q3ListView;
 
 // ****************************************************************************
 // ***  VectorProjectDefs
@@ -77,13 +78,13 @@ class VectorLayerItem : public LayerItemBase {
 
 VectorLayerItem::VectorLayerItem(QListView* parent, const QString& asset_path)
   : LayerItemBase(parent) {
-  layer_config_.assetRef = asset_path;
+  layer_config_.assetRef = asset_path.toUtf8().constData();
 
   layer_config_.defaultLocale.ClearDefaultFlags();
   layer_config_.defaultLocale.name_ = QFileInfo(asset_path).baseName(true);
   layer_config_.defaultLocale.icon_  = IconReference(IconReference::Internal,
-                                                     kDefaultIconName);
-  layer_config_.displayRules.push_back(DisplayRuleConfig(QObject::tr("default select all")));
+                                                     kDefaultIconName.c_str());
+  layer_config_.displayRules.push_back(DisplayRuleConfig(kh::tr("default select all")));
 
   // XXX need to pick a good default here
   // XXX should be based on the asset source type
@@ -108,7 +109,7 @@ void VectorLayerItem::Init() {
 
   setText(0, layer_config_.defaultLocale.name_);
 
-  setText(1, shortAssetName(layer_config_.assetRef));
+  setText(1, shortAssetName(layer_config_.assetRef.c_str()));
 
   std::vector< unsigned int>  fill_rgba, outline_rgba;
   for (std::vector<DisplayRuleConfig>::iterator rule = layer_config_.displayRules.begin();

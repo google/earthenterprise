@@ -254,7 +254,7 @@ void ThrowIfAnyInvalidDates(const std::string& missing_dates) {
         kh::tr("Imagery resources in time machine projects are required to "
                "have valid acquisition dates.\n"
                "The following imagery resource(s) do not have acquisition "
-               "dates specified:%1.\n").arg(missing_dates));
+               "dates specified:%1.\n").arg(missing_dates.c_str()));
   }
 }
 
@@ -275,7 +275,7 @@ void RasterProjectAssetImplD::AddInsets(
     // error if there's anything I already have
     if (have.find(item->dataAsset) != have.end()) {
       throw khException(kh::tr("Project already has inset '%1'")
-                        .arg(item->dataAsset));
+                        .arg(item->dataAsset.c_str()));
     }
 
     // figure out what its levels should be
@@ -339,7 +339,7 @@ bool RasterProjectAssetImplD::FixConfigBeforeUpdateCheck(void) const {
     throw khException(
       kh::tr("\nInternal error: invalid \"overlay_terrain_start_level_\" (%1)"
              " in (%2).\nThe start level value should be even.").arg(
-               config.overlay_terrain_start_level_).arg(GetRef().toString()));
+               config.overlay_terrain_start_level_).arg(GetRef().toString().c_str()));
   }
 
   bool changed = false;
@@ -499,7 +499,7 @@ void RasterProjectAssetImplD::ThrowIfAnyInvalidDates() {
     std::string date_string = asset->GetAcquisitionDate();
     notify(NFY_DEBUG, "DATESTRING: %s\n", date_string.c_str());
     if (date_string == kUnknownDate) {
-      missing_dates += "\n\t" + asset->GetRef();
+      missing_dates += "\n\t" + asset->GetRef().toString();
       notify(NFY_DEBUG, "UNKNOWN DATESTRING: %s\n", missing_dates.c_str());
     }
   }
@@ -679,17 +679,16 @@ void RasterProjectAssetImplD::HandleDropFromRequest(
 
   // check for valid asset refs
   std::set<std::string> todrop;
-  for (std::vector<std::string>::const_iterator r =
-         req.productRefs.begin(); r != req.productRefs.end(); ++r) {
+  for (const auto& r : req.productRefs) {
     if (std::find_if(project->config.insets.begin(),
                      project->config.insets.end(),
                      mem_var_pred_ref<std::equal_to>
-                     (&InsetStackItem::dataAsset, *r)) ==
+                     (&InsetStackItem::dataAsset, r)) ==
         project->config.insets.end()) {
       throw khException(kh::tr("Project doesn't have inset '%1'")
-                        .arg(*r));
+                        .arg(r.c_str()));
     } else {
-      todrop.insert(*r);
+      todrop.insert(r);
     }
 
   }
@@ -736,7 +735,7 @@ void RasterProjectAssetVersionImplD::UpdateChildren(void) {
 
   if (numInsets == 0) {
     throw khException(kh::tr("No insets defined for project %1.\n"
-                             "Cannot build").arg(GetRef().toString()));
+                             "Cannot build").arg(GetRef().toString().c_str()));
   }
 }
 
@@ -798,7 +797,7 @@ void RasterProjectAssetVersionImplD::ThrowIfAnyInvalidDates(
     const InsetInfo<RasterProductAssetVersion>& info = inset_infos[i];
     notify(NFY_DEBUG, "DATESTRING: %s\n", info.date_string_.c_str());
     if (info.date_string_ == kUnknownDate) {
-      missing_dates += "\n\t" + info.resource_->GetRef();
+      missing_dates += "\n\t" + info.resource_->GetRef().toString();
       notify(NFY_DEBUG, "UNKNOWN DATESTRING: %s\n", missing_dates.c_str());
     }
   }
@@ -815,19 +814,19 @@ void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
   const unsigned int numInsets = inputs.size();
   if (numInsets == 0) {
     throw khException(kh::tr("No insets defined for project %1.\n"
-                             "Cannot build").arg(GetRef().toString()));
+                             "Cannot build").arg(GetRef().toString().c_str()));
   }
 
   // sanity check in case the previous logic to ensure a valid channel id
   // fails
   if (config.fuid_channel_ == 0) {
     throw khException(kh::tr("Internal Error: No channel id for %1")
-                      .arg(GetRef().toString()));
+                      .arg(GetRef().toString().c_str()));
   }
 
   if (config.asset_uuid_ == "") {
     throw khException(kh::tr("Internal Error: No UUID for %1")
-                      .arg(GetRef().toString()));
+                      .arg(GetRef().toString().c_str()));
   }
 
 
@@ -1026,7 +1025,7 @@ void RasterProjectAssetVersionImplD::FilterInsetInfosByDate(
   if (numInsets == 0) {
     throw khException(kh::tr("Attempt to build index with too few "
                              "insets for project: %1.\n"
-                             "Cannot build").arg(GetRef().toString()));
+                             "Cannot build").arg(GetRef().toString().c_str()));
   }
 
   const auto last_iter = inset_infos.rbegin();

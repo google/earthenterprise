@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc.
+// Copyright 2017-2020 Google Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,13 +23,16 @@
 #include "AssetDerivedImpl.h"
 #include "ProjectLayerView.h"
 
-#include <qpopupmenu.h>
-#include <qpushbutton.h>
-#include <qheader.h>
-#include <qmessagebox.h>
-#include <qgroupbox.h>
-#include <qlineedit.h>
-
+#include <Qt/q3popupmenu.h>
+using QPopupMenu = Q3PopupMenu;
+#include <Qt/qpushbutton.h>
+#include <Qt/q3header.h>
+#include <Qt/qmessagebox.h>
+#include <Qt/qgroupbox.h>
+#include <Qt/qlineedit.h>
+#include <Qt/qobject.h>
+#include <Qt/q3listview.h>
+using QListViewItem = Q3ListViewItem;
 class AssetBase;
 
 // ****************************************************************************
@@ -45,8 +48,8 @@ MapProjectDefs::SubmitFuncType MapProjectDefs::kSubmitFunc =
 class MapLayerItem : public LayerItemBase {
   friend class MapProjectWidget;
  public:
-  MapLayerItem(QListView* parent, const QString& asset_path);
-  MapLayerItem(QListView* parent, const MapProjectConfig::LayerItem& layer_cfg);
+  MapLayerItem(Q3ListView* parent, const QString& asset_path);
+  MapLayerItem(Q3ListView* parent, const MapProjectConfig::LayerItem& layer_cfg);
   void Init();
   const MapProjectConfig::LayerItem& GetConfig() const {
     return layer_item_config_;
@@ -59,13 +62,13 @@ class MapLayerItem : public LayerItemBase {
   MapProjectConfig::LayerItem layer_item_config_;
 };
 
-MapLayerItem::MapLayerItem(QListView* parent, const QString& asset_path)
+MapLayerItem::MapLayerItem(Q3ListView* parent, const QString& asset_path)
   : LayerItemBase(parent) {
-  layer_item_config_.assetRef = asset_path;
+  layer_item_config_.assetRef = asset_path.toUtf8().constData();
   Init();
 }
 
-MapLayerItem::MapLayerItem(QListView* parent,
+MapLayerItem::MapLayerItem(Q3ListView* parent,
                            const MapProjectConfig::LayerItem& layer_cfg)
   : LayerItemBase(parent),
     layer_item_config_(layer_cfg) {
@@ -81,12 +84,12 @@ void MapLayerItem::Init() {
       setText(0, layer_item_config_.legend.GetValue().defaultLocale.name);
     }
 
-    setText(1, shortAssetName(layer_item_config_.assetRef));
+    setText(1, shortAssetName(layer_item_config_.assetRef.c_str()));
     AssetDisplayHelper a(layer_asset->type, layer_asset->subtype);
     setPixmap(1, a.GetPixmap());
   } else {
     setText(0, "<INVALID>");
-    setText(1, shortAssetName(layer_item_config_.assetRef));
+    setText(1, shortAssetName(layer_item_config_.assetRef.c_str()));
     setPixmap(1, AssetDisplayHelper::Pixmap(AssetDisplayHelper::Key_Unknown));
   }
 }
@@ -123,8 +126,8 @@ MapProjectWidget::MapProjectWidget(QWidget *parent, AssetBase* base)
   HideLegend();
   HideUuid();
   ListView()->EnableAssetDrops(AssetDefs::Map, kLayer);
-  ListView()->setColumnText(0, tr("Legend Name"));
-  ListView()->addColumn(tr(kLayer.c_str()));
+  ListView()->setColumnText(0, kh::tr("Legend Name"));
+  ListView()->addColumn(kh::tr(kLayer.c_str()));
   ListView()->header()->show();
 }
 
@@ -143,9 +146,9 @@ void MapProjectWidget::Prefill(const MapProjectEditRequest &req) {
     ListView()->SelectItem(first);
   }
 
-  connect(ListView(), SIGNAL(doubleClicked(QListViewItem*,
+  connect(ListView(), SIGNAL(doubleClicked(Q3ListViewItem*,
                                            const QPoint&, int)),
-          this, SLOT(ModifyItem(QListViewItem*, const QPoint&, int)));
+          this, SLOT(ModifyItem(Q3ListViewItem*, const QPoint&, int)));
 }
 
 void MapProjectWidget::AssembleEditRequest(MapProjectEditRequest *request) {
@@ -179,7 +182,7 @@ LayerItemBase* MapProjectWidget::NewLayerItem(const QString& assetref) {
   QListViewItem* list_item = ListView()->firstChild();
   while (list_item) {
     MapLayerItem* map_layer_item = static_cast<MapLayerItem*>(list_item);
-    if (map_layer_item->layer_item_config_.assetRef == assetref) {
+    if (map_layer_item->layer_item_config_.assetRef == assetref.toUtf8().constData()) {
       QMessageBox::critical(
           this, "Error" ,
           kh::tr("Map layer '%1' already exists in this project")
@@ -221,8 +224,8 @@ void MapProjectWidget::ContextMenu(QListViewItem* item, const QPoint& point,
 
   MapLayerItem* layer_item = static_cast<MapLayerItem*>(item);
   QPopupMenu menu(this);
-  menu.insertItem(tr("Use Layer Defaults"), USE_DEFAULT);
-  menu.insertItem(tr("Override Layer Defaults"), OVERRIDE_DEFAULT);
+  menu.insertItem(kh::tr("Use Layer Defaults"), USE_DEFAULT);
+  menu.insertItem(kh::tr("Override Layer Defaults"), OVERRIDE_DEFAULT);
 
   switch(menu.exec(point)) {
     case USE_DEFAULT:

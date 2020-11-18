@@ -1,0 +1,81 @@
+#-*- Python -*-
+#
+# Copyright 2020 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+
+Import('third_party_env')
+Import('env')
+
+num_cpu = GetOption('num_jobs')
+
+current_dir = Dir('.').abspath
+build_root = '%s/%s' % (current_dir, env['freetype_ver'])
+
+freetype_source = File('#/../third_party/freetype/%s.tar.bz2' %
+                      env['freetype_ver']).abspath
+
+freetype_env = third_party_env.DeepCopy()
+root_dir = Dir(freetype_env.exportdirs['root']).abspath
+
+# [1] Extract
+freetype_target = '%s/.extract' % current_dir
+freetype_extract = freetype_env.Command(
+    freetype_target, freetype_source,
+    [freetype_env.MultiCommand(
+        'mkdir -p %s\n'
+        'cd %s\n'
+        'tar xfj %s\n'
+        'touch %s' % (
+            current_dir, current_dir, freetype_source, freetype_target))])
+
+# [3] Configure
+freetype_target = '%s/.configure' % current_dir
+freetype_configure = freetype_env.Command(
+    freetype_target, freetype_extract,
+    [freetype_env.MultiCommand(
+        'cd %s\n'
+        '%s ./configure --with-python=%s --prefix=%s\n'
+        'touch %s' % (build_root,
+                      freetype_env['ENV']['mod_env'],
+                      freetype_env['python_bin'], root_dir,
+                      freetype_target))])
+
+# [4] Build
+freetype_target = '%s/.build' % current_dir
+freetype_build = freetype_env.Command(
+    freetype_target, freetype_configure,
+    [freetype_env.MultiCommand(
+        'cd %s\n'
+        '%smake -j%d\n'
+        'touch %s' % (build_root, freetype_env['ENV']['mod_env'], num_cpu,
+                      freetype_target))])
+
+# [5] Install for build
+freetype_target = '%s/.install' % current_dir
+freetype_install = freetype_env.Command(
+    freetype_target, freetype_build,
+    [freetype_env.MultiCommand(
+        'cd %s\n'
+        '%smake install\n'
+        'touch %s' % (build_root,
+                      freetype_env['ENV']['mod_env'],
+                      freetype_target))])
+
+Default(freetype_install)
+freetype_env.ExecuteOnClean('rm -rf %s; echo "WHEN"' % current_dir)
+
+
+Return('freetype_extract freetype_install')
