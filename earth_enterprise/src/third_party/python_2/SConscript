@@ -29,6 +29,9 @@ current_dir = Dir('.').abspath
 build_root = '%s/%s' % (current_dir, python_version)
 
 python_env = third_party_env.DeepCopy()
+python_env['PATH'] = '/bin:/usr/bin'
+python_env['CXX'] = 'g++'
+python_env['CC'] = 'gcc'
 
 if GetOption('clean'):
   python_env.Execute('rm -rf %s' % current_dir)
