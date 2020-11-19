@@ -26,6 +26,8 @@ third_party_env = env.Clone()
 # The order is important as n'th one has no dependency on anything after it
 if third_party_env['bundle_3rd_libs']:
   third_party_libs = [
+      'python_2',
+      'python_3',
       'date',
       'gtest',
       'libjs',
@@ -61,9 +63,7 @@ if third_party_env['bundle_3rd_libs']:
       'skia',
       'pyyaml',
       'defusedxml',
-      'swig',
-      'python_2',
-      'python_3'
+      'swig'
   ]
 elif third_party_env['portable_3rd_libs']:
   third_party_libs = [
@@ -71,6 +71,8 @@ elif third_party_env['portable_3rd_libs']:
   ]
 else:
   third_party_libs = [
+      'python_2',
+      'python_3',
       'date',
       'gtest',
       'libjs',
@@ -91,9 +93,7 @@ else:
       'skia',
       'pyyaml',
       'defusedxml',
-      'swig',
-      'python_2',
-      'python_3'
+      'swig'
   ]
 
 
