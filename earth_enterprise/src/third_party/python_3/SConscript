@@ -55,8 +55,7 @@ python_configure = python_env.Command(
             python_target))])
 
 # [4] Build python
-ld = '%s -shared' % python_env['ENV']['CXX']
-make_cmd = '%s LD_SHARED="%s"' % (make_cmd_cpu, ld)
+make_cmd = make_cmd_cpu
 python_target = '%s/.build' % current_dir
 python_build = python_env.Command(
     python_target, python_configure,
@@ -68,7 +67,7 @@ python_build = python_env.Command(
                       python_target))])
 
 # [5] Create python master installer
-make_cmd = 'make LD_SHARED="%s"' % (ld)
+make_cmd = 'make'
 install_root = '%s/install' % current_dir
 python_target = '%s/.install' % current_dir
 python_install = python_env.Command(
