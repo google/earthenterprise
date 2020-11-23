@@ -17,7 +17,7 @@
 
 
 Import('third_party_env')
-Import('env')
+from khEnvironment import khEnvironment
 
 python_version = 'Python-2.7.18'
 python_major_version = 'python2.7'
@@ -29,7 +29,7 @@ ge_version = python_version.replace('Python', 'Python-ge')
 current_dir = Dir('.').abspath
 build_root = '%s/%s' % (current_dir, python_version)
 
-python_env = env.Clone()
+python_env = khEnvironment(ENV={'PATH' : '/bin:/bin:/usr/bin', 'JAVA_HOME': os.environ.get('JAVA_HOME','')})
 # python_env = third_party_env.DeepCopy()
 # python_env['PATH'] = '/bin:/usr/bin'
 # python_env['CXX'] = 'g++'

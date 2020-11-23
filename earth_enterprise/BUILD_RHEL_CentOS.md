@@ -165,7 +165,7 @@ experimenting with the `--skip-broken` parameter.
 
 ## Install Python
 
-In order to build OpenGEE, both Python 2.7 and 3.8 are needed (to facilitate transition to 3.8). If you have access to both through public repos, we suggest installing them that way. If not the following script will build and install them from source if they are needed:
+In order to build OpenGEE, both Python 2.7 and 3.8 are needed (to facilitate transition to 3.8). If you have access to both through public repos, we suggest installing them that way. If not the following script will build and install them from source if they are needed. From `earthenterprise/earth_enterprise` run:
 
 ```bash
 sudo ./../scripts/install_python.sh
@@ -175,9 +175,9 @@ Additional python packages are needed as well:
 
 ```bash
 sudo pip2.7 install --upgrade pip==19.0
-sudo pip2.7 install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2
+sudo pip2.7 install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary
 sudo pip3.8 install --upgrade pip
-sudo pip3.8 install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2
+sudo pip3.8 install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary
 ```
 
 
