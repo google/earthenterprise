@@ -28,10 +28,10 @@ ge_version = python_version.replace('Python', 'Python-ge')
 current_dir = Dir('.').abspath
 build_root = '%s/%s' % (current_dir, python_version)
 
-python_env = third_party_env.DeepCopy()
-python_env['PATH'] = '/bin:/usr/bin'
-python_env['CXX'] = 'g++'
-python_env['CC'] = 'gcc'
+python_env = khEnvironment(ENV={'PATH' : '/bin:/bin:/usr/bin', 'JAVA_HOME': os.environ.get('JAVA_HOME','')},
+                           exportdirs=exportdirs,
+                           installdirs={}).DeepCopy()
+python_third_party_env = third_party_env.DeepCopy()
 
 if GetOption('clean'):
   python_env.Execute('rm -rf %s' % current_dir)
@@ -52,9 +52,9 @@ python_configure = python_env.Command(
     python_target, python_extract,
     [python_env.MultiCommand(
         'cd %s\n'
-        '%s./configure --prefix=%s --enable-shared \n'
+        './configure --prefix=%s --enable-shared \n'
         'touch %s' % (
-            build_root, python_env['ENV']['mod_env'], "/usr",
+            build_root,
             python_target))])
 
 # [4] Build python
@@ -77,11 +77,10 @@ python_install = python_env.Command(
     python_target, python_build,
     [python_env.MultiCommand(
         'cd %s\n'
-        '%s %s install DESTDIR=%s\n'
+        '%s install DESTDIR=%s\n'
         '%s/usr/bin/python3.8 Tools/scripts/pathfix.py -i %s %s\n'
         'touch %s' % (
-            build_root,
-            python_env['ENV']['mod_env'], make_cmd, install_root, install_root,
+            build_root, make_cmd, install_root, install_root,
 	        '/usr/bin/python3.8', install_root, python_target))])
 
 # python_shebang_dict = {'#!/usr/local/bin/python': '#!/usr/bin/python3.8'}
@@ -94,7 +93,7 @@ python_env.ExecuteOnClean('rm -rf %s' % current_dir)
 if 'install' in COMMAND_LINE_TARGETS:
   python_env.InstallFileOrDir(
       '%s/' % install_root,
-      '%s/' % python_env.installdirs['python_3_dir'],
+      '%s/' % python_third_party_env.installdirs['python_3_dir'],
           python_install, 'install')
 
 Return('python_extract python_install')
