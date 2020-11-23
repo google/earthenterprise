@@ -30,6 +30,13 @@ ge_version = python_version.replace('Python', 'Python-ge')
 current_dir = Dir('.').abspath
 build_root = '%s/%s' % (current_dir, python_version)
 
+# Define exportdirs because khEnvironment expects it.
+exportdirs = {
+           'root': '.',
+           'lib':  '.',
+           'bin':  '.',
+           }
+
 python_env = khEnvironment(ENV={'PATH' : '/bin:/bin:/usr/bin', 'JAVA_HOME': os.environ.get('JAVA_HOME','')},
                            exportdirs=exportdirs,
                            installdirs={}).DeepCopy()

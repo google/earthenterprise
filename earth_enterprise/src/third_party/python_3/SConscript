@@ -17,6 +17,8 @@
 
 
 Import('third_party_env')
+from khEnvironment import khEnvironment
+import os
 
 python_version = 'Python-3.8.6'
 python_major_version = 'python3.8'
@@ -27,6 +29,13 @@ make_cmd_cpu = 'make -j%d' % GetOption('num_jobs')
 ge_version = python_version.replace('Python', 'Python-ge')
 current_dir = Dir('.').abspath
 build_root = '%s/%s' % (current_dir, python_version)
+
+# Define exportdirs because khEnvironment expects it.
+exportdirs = {
+           'root': '.',
+           'lib':  '.',
+           'bin':  '.',
+           }
 
 python_env = khEnvironment(ENV={'PATH' : '/bin:/bin:/usr/bin', 'JAVA_HOME': os.environ.get('JAVA_HOME','')},
                            exportdirs=exportdirs,
@@ -54,7 +63,7 @@ python_configure = python_env.Command(
         'cd %s\n'
         './configure --prefix=%s --enable-shared \n'
         'touch %s' % (
-            build_root,
+            build_root, "/usr",
             python_target))])
 
 # [4] Build python
