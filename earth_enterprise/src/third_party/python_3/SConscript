@@ -82,15 +82,23 @@ python_build = python_env.Command(
 make_cmd = 'make'
 install_root = '%s/install' % current_dir
 python_target = '%s/.install' % current_dir
+python_env['rpathlink_dirs'] = [install_root + '/usr/lib']
 python_install = python_env.Command(
     python_target, python_build,
     [python_env.MultiCommand(
-        'cd %s\n'
-        '%s install DESTDIR=%s\n'
-        '%s/usr/bin/python3.8 Tools/scripts/pathfix.py -i %s %s\n'
-        'touch %s' % (
-            build_root, make_cmd, install_root, install_root,
-	        '/usr/bin/python3.8', install_root, python_target))])
+        'cd {0}\n'
+        '{1} install DESTDIR={2}\n'
+        'export LD_LIBRARY_PATH={3}/usr/lib:$LD_LIBRARY_PATH\n'
+        '{4}/usr/bin/python3.8 Tools/scripts/pathfix.py -i {5} {6}\n'
+        'touch {7}'.format(
+        build_root,
+        make_cmd, 
+        install_root,
+        install_root,
+        install_root,
+        '/usr/bin/python3.8', 
+        install_root, 
+        python_target))])
 
 # python_shebang_dict = {'#!/usr/local/bin/python': '#!/usr/bin/python3.8'}
 # python_env.Substfile(install_root + "/usr/lib/python3.8/cgi.py", SUBST_DICT=python_shebang_dict)
