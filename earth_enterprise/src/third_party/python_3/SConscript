@@ -90,6 +90,7 @@ python_install = python_env.Command(
         '{1} install DESTDIR={2}\n'
         'export LD_LIBRARY_PATH={3}/usr/lib:$LD_LIBRARY_PATH\n'
         '{4}/usr/bin/python3.8 Tools/scripts/pathfix.py -i {5} {6}\n'
+        '{7}/usr/bin/python3.8 -m ensurepip\n'
         'touch {7}'.format(
         build_root,
         make_cmd, 
@@ -97,7 +98,8 @@ python_install = python_env.Command(
         install_root,
         install_root,
         '/usr/bin/python3.8', 
-        install_root, 
+        install_root,
+        install_root,
         python_target))])
 
 # python_shebang_dict = {'#!/usr/local/bin/python': '#!/usr/bin/python3.8'}

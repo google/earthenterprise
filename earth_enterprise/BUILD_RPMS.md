@@ -75,8 +75,9 @@ If the RPMs are being installed on the machine where they were built, the
 proper python environment has already been setup during the build phase.
 If not, Python 2.7 and 3.8 need to installed. This can be done either through official
 channels or by installing our python rpms via ```sudo rpm -Uhv python-2*``` or 
-```sudo rpm -Uvh python-3*``` depending on which versions are needed. Additional
-python packages are needed as well and can be installed via: 
+```sudo rpm -Uvh python-3*``` depending on which versions are needed. 
+
+Additional python packages are needed as well and can be installed via: 
 
 ```bash
 sudo pip2.7 install --upgrade pip==19.0

@@ -162,25 +162,6 @@ sudo yum install -y \
 If you encounter an error about git dependency conflicts, consider 
 experimenting with the `--skip-broken` parameter.
 
-
-## Install Python
-
-In order to build OpenGEE, both Python 2.7 and 3.8 are needed (to facilitate transition to 3.8). If you have access to both through public repos, we suggest installing them that way. If not the following script will build and install them from source if they are needed. From `earthenterprise/earth_enterprise` run:
-
-```bash
-sudo ./../scripts/install_python.sh
-```
-
-Additional python packages are needed as well:
-
-```bash
-sudo pip2.7 install --upgrade pip==19.0
-sudo pip2.7 install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary
-sudo pip3.8 install --upgrade pip
-sudo pip3.8 install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary
-```
-
-
 ## GTest 1.8
 
 ###  RHEL 7 and CentOS 7
@@ -239,6 +220,34 @@ sudo yum install -y http://download-ib01.fedoraproject.org/pub/epel/6/x86_64/Pac
 
 shunit2 was installed in a previous step.
 
+## Install Python
+
+In order to build OpenGEE, both Python 2.7 and 3.8 (and their respective pip installations and dev files) are needed to facilitate transition to python 3.8. If you have access to either through public repos, we suggest installing them that way.
+
+### RHEL 7 and CentOS 7
+
+On RHEL7 and CentOS 7 Python 2.7 is available, and should be installed from the public repos.
+
+'''bash
+sudo yum install python python-pip python-devel
+'''
+
+### All distros
+
+The following script will build and install Python 2.7 and Python 3.8 from source if they are needed. From `earthenterprise/earth_enterprise` run:
+
+```bash
+sudo ./../scripts/install_python.sh
+```
+
+Additional python packages are needed as well:
+
+```bash
+sudo pip2.7 install --upgrade pip==19.0
+sudo pip2.7 install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary
+sudo pip3.8 install --upgrade pip
+sudo pip3.8 install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary
+```
 
 ### Building on fips-enabled machines
 

@@ -104,6 +104,7 @@ if [ $DO_INSTALL == "yes" ]; then
     cd $TMP_27
     ./configure --prefix="$INSTALL_PREFIX"
     make && make altinstall
+    sudo python2.7 -m ensurepip
   fi
 
   cd $STARTING_DIR
@@ -117,6 +118,7 @@ if [ $DO_INSTALL == "yes" ]; then
     tar -xzf $SOURCE_38 -C $TMP_WORKSPACE
     cd $TMP_38
     ./configure --prefix="$INSTALL_PREFIX" && make && make altinstall
+    sudo python3.8 -m ensurepip
   fi
 fi
 
