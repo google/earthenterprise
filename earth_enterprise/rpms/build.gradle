@@ -165,6 +165,8 @@ def rpmCapabilityMap = [
     'libltidsdk.so()(64bit)': null,
     '/bin/perl': '/usr/bin/perl',
     '/bin/python': '/usr/bin/python',
+    '/bin/python2.7': '/usr/bin/python2.7',
+    '/bin/python3.8': '/usr/bin/python3.8',
     '/bin/sudo': '/usr/bin/sudo'
 ]
 
@@ -483,6 +485,14 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
     requires('chkconfig')
     requires('shadow-utils')
 
+    if ("${findBuildNumber()}.${rpmPlatformString}".contains('el7')) {
+        requires('python')
+        requires('python-pip')
+    }
+    else {
+        requires('python-2.7.18', '2.7.18', EQUAL)
+    }
+
     requiresCommands(packageSharedCommands +
         ['cat', 'cut', 'getent', 'grep'])
 
@@ -546,6 +556,8 @@ task openGeeCommonDeb (type: GeeDeb, dependsOn: openGeeCommonInitScripts) {
     requires('libtool')
     requires('libxml2-utils')
     requires('openssl')
+    requires('python2.7')
+    requires('python-pip')
 
     // Use single files for install scripts.  Othewrise, OS Package wraps the
     // code in extra statements.
@@ -623,7 +635,7 @@ task openGeeServerRpm(type: GeeRpm, dependsOn: openGeeServerInitScripts) {
         packageSharedCommands +
         [
             // Install script commands:
-            'cat', 'chmod', 'chown', 'cut', 'find', 'getent', 'mkdir', 'python2.7',
+            'cat', 'chmod', 'chown', 'cut', 'find', 'getent', 'mkdir', 'python',
             'sed', 'su', 'sudo'
         ]
     )
@@ -724,7 +736,7 @@ task openGeeServerDeb (type: GeeDeb, dependsOn: openGeeServerInitScripts) {
         packageSharedCommands +
         [
             // Install script commands:
-            'cat', 'chmod', 'chown', 'cut', 'find', 'getent', 'mkdir', 'python2.7',
+            'cat', 'chmod', 'chown', 'cut', 'find', 'getent', 'mkdir', 'python',
             'sed', 'su', 'sudo'
         ]
     )
