@@ -248,7 +248,7 @@ task stageOpenGeeInstall(type: Exec, dependsOn: 'compileOpenGee') {
 task openGeePython2Rpm(type: GeeRpm) {
     mustRunAfter stageOpenGeeInstall
 
-    packageName = 'python-2.7.18'
+    packageName = 'gee-python-2.7.18'
     release = ospackage.release
     version = '2.7.18'
     user = 'root'
@@ -291,7 +291,7 @@ task openGeePython2Deb(type: GeeDeb) {
 task openGeePython3Rpm(type: GeeRpm) {
     mustRunAfter stageOpenGeeInstall
 
-    packageName = 'python-3.8.6'
+    packageName = 'gee-python-3.8.6'
     release = ospackage.release
     version = '3.8.6'
     user = 'root'
@@ -490,7 +490,7 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
         requires('python-pip')
     }
     else {
-        requires('python-2.7.18', '2.7.18', EQUAL)
+        requires('gee-python-2.7.18', '2.7.18', EQUAL)
     }
 
     requiresCommands(packageSharedCommands +
