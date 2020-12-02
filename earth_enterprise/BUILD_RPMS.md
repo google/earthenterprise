@@ -82,10 +82,10 @@ depending on which versions are needed.
 Additional python packages are needed as well and can be installed via: 
 
 ```bash
-sudo pip2.7 install --upgrade pip==19.0
-sudo pip2.7 install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2
-sudo pip3.8 install --upgrade pip
-sudo pip3.8 install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2
+sudo python2.7 -m pip install --upgrade pip==19.0
+sudo python2.7 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2
+sudo python3.8 -m pip install --upgrade pip
+sudo python3.8 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2
 ```
 
 ## Installing RPMs

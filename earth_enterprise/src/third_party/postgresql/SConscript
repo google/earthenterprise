@@ -60,7 +60,7 @@ postgresql_configure = postgresql_env.Command(
     postgresql_target, postgresql_extract,
     [postgresql_env.MultiCommand(
         ('cd {build_root_escaped}\n'
-         'export LD_LIBRARY_PATH={build_lib_dir_escaped}\n'
+         'export LD_LIBRARY_PATH={build_lib_dir_escaped}:{python_include}\n'
          '{env_opt} ./configure --prefix=/opt/google --mandir=/opt/google/share/man '
             '--disable-rpath --enable-thread-safety --with-openssl --with-python '
             '--without-perl --without-readline --without-pam --without-krb5 {config_opt}\n'
@@ -69,6 +69,7 @@ postgresql_configure = postgresql_env.Command(
             build_root_escaped = postgresql_env.bash_escape(build_root),
             build_lib_dir_escaped =
                 postgresql_env.bash_escape(postgresql_env.exportdirs['lib']),
+            python_include = postgresql_env['python_include'],
             env_opt = env_opt,
             config_opt = config_opt,
             postgresql_target_escaped =

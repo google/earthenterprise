@@ -35,7 +35,7 @@ sudo apt-get install \
     libgdbm-dev libgeos-dev libgeos++-dev libgif-dev libgtest-dev \
     libjpeg-dev libjpeg8-dev libmng-dev libogdi3.2-dev \
     libperl4-corelibs-perl libpng12-0 libpng12-dev libpq-dev libproj-dev \
-    libstdc++6 libtool \
+    libstdc++6 libtool libffi-dev \
     libx11-dev libxcursor-dev libxerces-c-dev libxft-dev libxinerama-dev \
     libxml2-dev libxml2-utils libxmu-dev libxrandr-dev libyaml-cpp-dev \
     openssl libpcre3 libpcre3-dev \
@@ -46,7 +46,7 @@ sudo apt-get install \
 In order to build OpenGEE, both Python 2.7 and 3.8 are needed (to facilitate transition to 3.8). If you have access to both through public repos, we suggest installing them that way. Python 2.7 is available from the official repos, so we install it from there:
 
 ```bash
-sudo apt-get install python2.7 python2.7-dev python2.7-pip
+sudo apt-get install python2.7 python2.7-dev python-pip
 ```
 
 The following script will build and install Python 2.7 and Python 3.8 from source if they are needed:
@@ -58,8 +58,8 @@ sudo ./../scripts/install_python.sh
 Additional python packages are needed as well:
 
 ```bash
-sudo pip2.7 install --upgrade pip==19.0
-sudo pip2.7 install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2
-sudo pip3.8 install --upgrade pip
-sudo pip3.8 install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2
+sudo python2.7 -m pip install --upgrade pip==19.0
+sudo python2.7 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2
+sudo python3.8 -m pip install --upgrade pip
+sudo python3.8 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2
 ```

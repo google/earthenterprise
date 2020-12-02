@@ -37,7 +37,7 @@ exportdirs = {
            'bin':  '.',
            }
 
-python_env = khEnvironment(ENV={'PATH' : '/bin:/bin:/usr/bin', 'JAVA_HOME': os.environ.get('JAVA_HOME','')},
+python_env = khEnvironment(ENV={'PATH' : '/bin:/bin:/usr/bin'},
                            exportdirs=exportdirs,
                            installdirs={}).DeepCopy()
 python_third_party_env = third_party_env.DeepCopy()

@@ -228,9 +228,9 @@ In order to build OpenGEE, both Python 2.7 and 3.8 (and their respective pip ins
 
 On RHEL7 and CentOS 7 Python 2.7 is available, and should be installed from the public repos.
 
-'''bash
+```bash
 sudo yum install python python-pip python-devel
-'''
+```
 
 ### All distros
 
@@ -243,10 +243,10 @@ sudo ./../scripts/install_python.sh
 Additional python packages are needed as well:
 
 ```bash
-sudo pip2.7 install --upgrade pip==19.0
-sudo pip2.7 install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary
-sudo pip3.8 install --upgrade pip
-sudo pip3.8 install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary
+sudo python2.7 -m pip install --upgrade pip==19.0
+sudo python2.7 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2
+sudo python3.8 -m pip install --upgrade pip
+sudo python3.8 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2
 ```
 
 ### Building on fips-enabled machines
