@@ -380,7 +380,7 @@ task openGeePostGisDeb(type: GeeDeb) {
     type = BINARY
 
     requires('opengee-common', ospackage.version, GREATER | EQUAL)
-    requires('proj-devel')
+    requires('libproj-dev')
 
     from (stagedInstallDir_postgis_opt) {
         into new File(packageInstallRootDir, 'opt')
