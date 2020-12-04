@@ -66,8 +66,8 @@ libraries, as detailed below:
     and **opengee-extra**
 * **opengee-full-server** - convenience RPM that installs **opengee-server**
     and **opengee-extra**
-* **python-2.7.18** - contains Python 2.7 
-* **python-3.8.6** - contains Python 3.8.6
+* **gee-python-2.7.18** - contains Python 2.7 
+* **gee-python-3.8.6** - contains Python 3.8.6
 
 ## Seting up the Python Environment
 
@@ -75,11 +75,38 @@ If the RPMs are being installed on the machine where they were built, the
 proper python environment has already been setup during the build phase.
 If not, Python 2.7 and 3.8 (along with their respective versions of pip) 
 need to installed. This can be done either 
-through official channels or by installing our python rpms 
-via ```sudo rpm -Uhv python-2*``` or ```sudo rpm -Uvh python-3*``` 
-depending on which versions are needed. To install pip after installing Python
-from one of our rpms, run ```sudo python2.7 -m ensurepip``` or 
-```sudo python3.8 -m ensurepip```.
+through official channels or by installing our python rpms.
+
+### RHEL and CentOS 7
+
+Only Python 3.8 is needed:
+
+```bash
+sudo rpm -Uvh python-3*
+sudo python3.8 -m ensurepip
+```
+
+### RHEL and CentOS 6
+
+Both Python 3.8 and Python 2.7 are needed:
+
+```bash
+sudo rpm -Uvh python-2*
+sudo rpm -Uvh python-3*
+sudo python2.7 -m ensurepip
+sudo python3.8 -m ensurepip
+```
+
+### Ubuntu
+
+Only Python 3.8 is needed:
+
+```bash
+sudo dpkg -i python-3*
+sudo python3.8 -m ensurepip
+```
+
+### All platforms
 
 Additional python packages are needed as well and can be installed via: 
 
