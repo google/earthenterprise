@@ -19,7 +19,7 @@
 # facilitate a transition to Python 3.
 SELF_NAME=$(basename "$0")
 INSTALL_PREFIX="/usr"
-STARTING_DIR=$(dirname"$0")
+STARTING_DIR=$(dirname "$0")
 PYTHON_VER2="Python-2.7.18"
 PYTHON_VER3="Python-3.8.6"
 SOURCE_DIR="$STARTING_DIR/../earth_enterprise/third_party"

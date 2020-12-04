@@ -77,15 +77,17 @@ If not, Python 2.7 and 3.8 (along with their respective versions of pip)
 need to installed. This can be done either 
 through official channels or by installing our python rpms 
 via ```sudo rpm -Uhv python-2*``` or ```sudo rpm -Uvh python-3*``` 
-depending on which versions are needed. 
+depending on which versions are needed. To install pip after installing Python
+from one of our rpms, run ```sudo python2.7 -m ensurepip``` or 
+```sudo python3.8 -m ensurepip```.
 
 Additional python packages are needed as well and can be installed via: 
 
 ```bash
 sudo python2.7 -m pip install --upgrade pip==19.0
-sudo python2.7 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2
+sudo python2.7 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary
 sudo python3.8 -m pip install --upgrade pip
-sudo python3.8 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2
+sudo python3.8 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary
 ```
 
 ## Installing RPMs

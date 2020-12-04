@@ -59,7 +59,7 @@ Additional python packages are needed as well:
 
 ```bash
 sudo python2.7 -m pip install --upgrade pip==19.0
-sudo python2.7 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2
+sudo python2.7 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary
 sudo python3.8 -m pip install --upgrade pip
-sudo python3.8 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2
+sudo python3.8 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary
 ```

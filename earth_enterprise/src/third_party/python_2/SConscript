@@ -90,8 +90,7 @@ python_install = python_env.Command(
         '{1} install DESTDIR={2}\n'
         'export LD_LIBRARY_PATH={3}/usr/lib:$LD_LIBRARY_PATH\n'
         '{4}/usr/bin/python2.7 Tools/scripts/pathfix.py -i {5} {6}\n'
-        '{7}/usr/bin/python2.7 -m ensurepip\n'
-        'touch {8}'.format(
+        'touch {7}'.format(
         build_root,
         make_cmd, 
         install_root, 
@@ -99,7 +98,6 @@ python_install = python_env.Command(
         install_root,
         '/usr/bin/python2.7', 
         install_root, 
-        install_root,
         python_target))])
 
 Default(python_install)
