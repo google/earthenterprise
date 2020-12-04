@@ -21,7 +21,7 @@
 // Compile and install Open GEE in a temporary directory before packaging.
 // If you don't specify `-PbuildOpenGee` on the Gradle command line, no
 // compilation, or installation are run.  In that case, you must ensure the
-// main scons "" target has been called before building packages.
+// main scons "stage_install" target has been called before building packages.
 // This Scons target copies build artifacts, binaries and documents into the
 // /tmp/fusion_os_install path.
 //
