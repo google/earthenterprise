@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-#include <qcombobox.h>
-#include <qlistbox.h>
-#include <qtextedit.h>
-#include <qdialog.h>
+#include <Qt/qobjectdefs.h>
+#include <Qt/qcombobox.h>
+#include <Qt/q3listbox.h>
+#include <Qt/qtextedit.h>
+#include <Qt/qdialog.h>
 
 #include "Preferences.h"
 #include "SpatialReferenceSystem.h"
@@ -25,14 +25,14 @@
 #include <ogr_spatialref.h>
 #include <cpl_conv.h>
 #include <cpl_string.h>
-
+#include <Qt/qobjectdefs.h>
 #include <gstSRSDefs.h>
 
 SpatialReferenceSystem::SpatialReferenceSystem( QWidget *parent )
     : SpatialReferenceSystemBase( parent ), savePrj( false )
 {
   for ( int c = 0; c < theSRSDefs.getCategoryCount(); ++c )
-    categoriesCombo->insertItem( theSRSDefs.getCategoryName( c ) );
+    categoriesCombo->insertItem( theSRSDefs.getCategoryName( c ).c_str() );
 
   categoriesCombo->setCurrentItem( 0 );
   selectCategory( 0 );
@@ -43,14 +43,14 @@ void SpatialReferenceSystem::selectCategory( int cat )
   projectionList->clear();
 
   for ( int p = 0; p < theSRSDefs.getProjectionCount( cat ); ++p )
-    projectionList->insertItem( theSRSDefs.getProjectionName( cat, p ) );
+    projectionList->insertItem( theSRSDefs.getProjectionName( cat, p ).c_str() );
 
   projectionList->setCurrentItem( 0 );
 }
 
 void SpatialReferenceSystem::selectProjection( int proj )
 {
-  wktText = theSRSDefs.getWKT( categoriesCombo->currentItem(), proj );
+  wktText = theSRSDefs.getWKT( categoriesCombo->currentItem(), proj ).c_str();
 }
 
 QString SpatialReferenceSystem::getWKT() const

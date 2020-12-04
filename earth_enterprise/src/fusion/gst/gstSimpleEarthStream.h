@@ -1,6 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
- * Copyright 2020 The Open GEE Contributors 
+ * Copyright 2020 The Open GEE Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
 #ifndef GEO_EARTH_ENTERPRISE_SRC_FUSION_GST_GSTSIMPLEEARTHSTREAM_H__
 #define GEO_EARTH_ENTERPRISE_SRC_FUSION_GST_GSTSIMPLEEARTHSTREAM_H__
 
-#include <qcstring.h>
+#include <Qt/q3cstring.h>
 #include <curl/curl.h>
 #include <khEndian.h>
 #include <string>

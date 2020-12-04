@@ -18,11 +18,11 @@
 
 #ifndef _SystemManager_h_
 #define _SystemManager_h_
-
+#include <Qt/qobjectdefs.h>
 #include "systemmanagerbase.h"
 #include <vector>
 #include <string>
-#include <qtimer.h>
+#include <Qt/qtimer.h>
 
 class AssetChanges;
 
@@ -35,7 +35,7 @@ class SystemManager : public SystemManagerBase
   QTimer taskTimer;
     
  public:
-  SystemManager( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+  SystemManager( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
 
   // overloaded so I can connect & disconnect my slot
   virtual void show();

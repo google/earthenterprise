@@ -108,7 +108,7 @@ DbManifest::DbManifest(std::string* db_path)
     is_time_machine_enabled_(false) {
   Init(db_path);
 }
-    
+
 void DbManifest::Init(std::string* db_path) {
   if (!khIsAbspath(db_path_)) {
     throw khSimpleException("'")
@@ -399,7 +399,7 @@ void DbManifest::GetPoiDataFiles(ManifestEntry* stream_manifest_entry,
               const std::string& org_data_file = data_files[i];
               const std::string prefixed_data_file = Prefixed(org_data_file);
               std::string cur_data_file = prefixed_data_file;
-              
+
               if (!khExists(cur_data_file) && !search_prefix_.empty()) {  // a published DB
                 cur_data_file = search_prefix_ + org_data_file;
               }
@@ -573,7 +573,7 @@ bool DbManifest::GetDbrootsAndServerConfig(
   for (size_t i = 0; i < fusion_config_.toc_paths_.size(); ++i) {
     const std::string toc_local = Prefixed(fusion_config_.toc_paths_[i]);
     notify(NFY_DEBUG, "Reading dbroot file: %s = ", toc_local.c_str());
-    
+
     std::string base_name = khBasename(toc_local);
     std::string binary_dbroot_name;
     std::string suffix;
@@ -659,16 +659,18 @@ bool DbManifest::GetDbrootsAndServerConfig(
   std::set<std::string> icon_set;
   for (unsigned int i = 0; i < fusion_config_.icons_dirs_.size(); ++i) {
     const std::string ith_icon_dir = Prefixed(fusion_config_.icons_dirs_[i]);
-    QDir dir(ith_icon_dir);
+    QDir dir(ith_icon_dir.c_str());
     QStringList list = dir.entryList(QDir::Files);
-    for (unsigned int j = 0; j < list.size(); ++j) {
+    for (auto j = 0; j < list.size(); ++j) {
       // We are merging icons from 3 different sources. Avoid duplicate entries.
-      const std::string icon_entry = kIconsDir + list[j];
+      const std::string icon_entry = kIconsDir
+                                   + std::string(list[j].toUtf8().constData());
       // Add server config entry (Relative path).
       if (icon_set.insert(icon_entry).second) {
         // Add manifest entry (Absolute path).
         const std::string dst_file = icon_entry;
-        const std::string src_file = khComposePath(ith_icon_dir, list[j]);
+        const std::string src_file = khComposePath(ith_icon_dir,
+                                                   std::string(list[j].toUtf8().constData()));
         manifest.push_back(ManifestEntry(dst_file, src_file));
       }
     }
@@ -791,16 +793,18 @@ bool DbManifest::GetLayerDefsAndServerConfig(
   std::set<std::string> icon_set;
   for (unsigned int i = 0; i < fusion_config_.icons_dirs_.size(); ++i) {
     const std::string ith_icon_dir = Prefixed(fusion_config_.icons_dirs_[i]);
-    QDir dir(ith_icon_dir);
+    QDir dir(ith_icon_dir.c_str());
     QStringList list = dir.entryList(QDir::Files);
-    for (unsigned int j = 0; j < list.size(); ++j) {
+    for (auto j = 0; j < list.size(); ++j) {
       // We are merging icons from different sources. Avoid duplicate entries.
-      const std::string icon_entry = kIconsDir + list[j];
+      const std::string icon_entry = kIconsDir
+                                   + std::string(list[j].toUtf8().constData());
       // Add server config entry (Relative path).
       if (icon_set.insert(icon_entry).second) {
         // Add manifest entry (Absolute path).
         const std::string dst_file = icon_entry;
-        const std::string src_file = khComposePath(ith_icon_dir, list[j]);
+        const std::string src_file = khComposePath(ith_icon_dir,
+                                                   std::string(list[j].toUtf8().constData()));
         manifest.push_back(ManifestEntry(dst_file, src_file));
       }
     }
@@ -887,8 +891,8 @@ void DbManifest::GetGEJsonFiles(const std::string& stream_url,
 
     // Create the JSON buffer for the database and this locale.
     std::string json_text = JsonUtils::GEJsonBuffer(stream_url,
-                                                    qurl.host(),
-                                                    qurl.protocol(),
+                                                    qurl.host().toUtf8().constData(),
+                                                    qurl.protocol().toUtf8().constData(),
                                                     raster_layers,
                                                     vector_layers,
                                                     locale);
@@ -965,8 +969,8 @@ void DbManifest::GetMapsJsonFiles(
 
     // Create the JSON buffer for the database and this locale.
     std::string json_text = JsonUtils::MapsJsonBuffer(stream_url,
-                                                      qurl.host(),
-                                                      qurl.protocol(),
+                                                      qurl.host().toUtf8().constData(),
+                                                      qurl.protocol().toUtf8().constData(),
                                                       layers,
                                                       fusion_config_,
                                                       locale);

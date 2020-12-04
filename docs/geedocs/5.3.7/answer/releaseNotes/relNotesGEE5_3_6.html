@@ -72,15 +72,11 @@
 <h1>Release notes: Open GEE 5.3.6<a class="headerlink" href="#release-notes-open-gee-5-3-6" title="Permalink to this headline">¶</a></h1>
 <div class="docutils container">
 <div class="content docutils container">
-<p>Open GEE 5.3.6 is currently in development</p>
 <p class="rubric">New Features</p>
-<p><strong>New feature here</strong>.
-New feature description goes here.</p>
-<p>In 5.3.5, we moved documentation, examples, and tutorials into a
-separate RPM called opengee-extra. This mainly includes the
-documentation, ExampleSearch, and Fusion Tutorial files.  You
-can choose whether to install opengee-extra depending on if you
-need those items.</p>
+<p>In 5.3.6, a <code class="docutils literal notranslate"><span class="pre">--secure</span></code> option was added for <code class="docutils literal notranslate"><span class="pre">geconfigureassetroot</span></code>
+and <code class="docutils literal notranslate"><span class="pre">geupgradeassetroot</span></code> that removes world-writable permissions from
+special files. This helps Open GEE perform properly in strict security
+environments. <code class="docutils literal notranslate"><span class="pre">--secure</span></code> is disabled by default.</p>
 <p class="rubric">Supported Platforms</p>
 <p>The Open GEE 5.3.6 release is supported on 64-bit versions of the
 following operating systems:</p>
@@ -100,43 +96,38 @@ correctly to the new PostgreSQL version used by Open GEE 5.3.6.</p>
 <p class="rubric">Resolved Issues</p>
 <table border="1" class="colwidths-given docutils">
 <colgroup>
-<col width="11%" />
-<col width="32%" />
-<col width="58%" />
+<col width="35%" />
+<col width="65%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Number</th>
 <th class="head">Description</th>
-<th class="head">Resolution</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>9999</td>
-<td>Add description</td>
-<td>Add resolution</td>
+<tr class="row-even"><td>1851</td>
+<td>Open GEE does not function properly on systems with a restrictive umask</td>
+</tr>
+<tr class="row-odd"><td>1806</td>
+<td>Confusing “geserver.service changed on disk” message after uninstalling Fusion or Server</td>
+</tr>
+<tr class="row-even"><td>1800</td>
+<td>Upgrade from 5.3.4 to 5.3.5 leaves a non-working ExampleSearch</td>
+</tr>
+<tr class="row-odd"><td>1785</td>
+<td>Imagery Projects - Transparent areas appear as black</td>
+</tr>
+<tr class="row-even"><td>1761</td>
+<td>Tab Order wrong for Fusion Add Vector Resource and Add Terrain Resource</td>
+</tr>
+<tr class="row-odd"><td>1741</td>
+<td>Invalid git version in CentOS/RHEL install instructions</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Known Issues</p>
-<table border="1" class="colwidths-given docutils">
-<colgroup>
-<col width="11%" />
-<col width="32%" />
-<col width="58%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Number</th>
-<th class="head">Description</th>
-<th class="head">Resolution</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>9999</td>
-<td>Add description</td>
-<td>Add resolution</td>
-</tr>
-</tbody>
-</table>
+<p>See the <a class="reference external" href="https://github.com/google/earthenterprise/issues">GitHub issues page</a>
+for a list of known issues.</p>
 </div>
 </div>
 </div>

@@ -103,8 +103,8 @@ void ValidateForSlave(const AssetRootStatus &status) {
 "If you want a different machine to be the master, run the following\n"
 "on that machine:\n"
 "  geselectassetroot --assetroot %2 --role master")
-                      .arg(status.assetroot_)
-                      .arg(status.assetroot_));
+                      .arg(status.assetroot_.c_str())
+                      .arg(status.assetroot_.c_str()));
   }
 
   // we don't care about any other asset root status here
@@ -118,8 +118,8 @@ void ValidateForMaster(const AssetRootStatus &status) {
     throw khException(kh::tr(
 "%1 is currently running as the master for %2.\n"
 "You need to shut it down before setting this machine to be the master.")
-                      .arg(status.master_host_)
-                      .arg(status.assetroot_));
+                      .arg(status.master_host_.c_str())
+                      .arg(status.assetroot_.c_str()));
   }
 
   // Now see if the rest of the status checks are OK
@@ -163,10 +163,10 @@ void SelectAssetRoot(const AssetRootStatus &status,
     QString missing_msg = kh::tr(
 "%1 doesn't exist.\n");
     if (!status.dir_exists_) {
-      throw khException(missing_msg.arg(status.assetroot_));
+      throw khException(missing_msg.arg(status.assetroot_.c_str()));
     }
     QString invalid_msg = kh::tr(
-"%1 isn't a valid assetroot.\n").arg(status.assetroot_);
+"%1 isn't a valid assetroot.\n").arg(status.assetroot_.c_str());
     if (!status.dir_exists_ ||
         !status.has_volumes_) {
       throw khException(invalid_msg);
@@ -186,16 +186,16 @@ void SelectAssetRoot(const AssetRootStatus &status,
       QString msg = kh::tr(
 "%1 is currently defined as the master for %2.\n"
 "Do you want to switch the master to be %3")
-                    .arg(status.master_host_)
-                    .arg(status.assetroot_)
-                    .arg(status.thishost_);
+                    .arg(status.master_host_.c_str())
+                    .arg(status.assetroot_.c_str())
+                    .arg(status.thishost_.c_str());
       if (noprompt) {
         msg = kh::tr(
 "%1 is currently defined as the master for %2.\n"
 "Cannot configure %3 machine as the master")
-                    .arg(status.master_host_)
-                    .arg(status.assetroot_)
-                    .arg(status.thishost_);
+                    .arg(status.master_host_.c_str())
+                    .arg(status.assetroot_.c_str())
+                    .arg(status.thishost_.c_str());
         throw khException(msg);
       }
       if (!geprompt::confirm(msg, 'N')) {

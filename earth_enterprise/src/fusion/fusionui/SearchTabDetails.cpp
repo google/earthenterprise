@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-#include <qtable.h>
-#include <qlabel.h>
-#include <qmessagebox.h>
-#include <qinputdialog.h>
-#include <qradiobutton.h>
+#include <Qt/q3table.h>
+#include <Qt/qlabel.h>
+#include <Qt/qmessagebox.h>
+#include <Qt/qinputdialog.h>
+#include <Qt/qradiobutton.h>
 #include "SearchTabDetails.h"
 
 SearchTabDetails::SearchTabDetails(QWidget* parent,
@@ -42,7 +41,7 @@ SearchTabDetails::SearchTabDetails(QWidget* parent,
     }
   } catch (const std::exception &e) {
     label1_text->setText(
-        tr("<font color=\"#ff0000\">%1</font>")
+        QObject::tr("<font color=\"#ff0000\">%1</font>")
         .arg(QString::fromUtf8(e.what())));
     label1_edit->hide();
     label2_text->hide();

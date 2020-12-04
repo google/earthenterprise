@@ -31,7 +31,7 @@ geprotorootgen = env.sharedLib('geprotorootgen', ['proto_dbroot_context.cc',
                                 'geos',
                                 'geutil',
                                 'gecommon',
-                                'qt-mt',
+                                'QtCore', 'QtGui',
                                 'gedbroot',
                                 ])
 
@@ -42,7 +42,7 @@ gedbrootgen = env.executable('gedbrootgen',
                                      'geiconutil',
                                      'geutil',
                                      'gecommon',
-                                     'qt-mt',
+                                     'QtCore','QtGui',
                                      ])
 
 gerasterdbrootgen = env.executable('gerasterdbrootgen',
@@ -51,7 +51,7 @@ gerasterdbrootgen = env.executable('gerasterdbrootgen',
                                            'geiconutil',
                                            'geutil',
                                            'gecommon',
-                                           'qt-mt',
+                                           'QtCore', 'QtGui',
                                            ])
 
 gelayerjsgen = env.executable('gelayerjsgen',
@@ -61,7 +61,7 @@ gelayerjsgen = env.executable('gelayerjsgen',
                                       'geiconutil',
                                       'geutil',
                                       'gecommon',
-                                      'qt-mt',
+                                      'QtCore','QtGui',
                                       ])
 
 env.install('fusion_lib', [geprotorootgen])
@@ -74,6 +74,6 @@ env.test('dbroot_generator_tests',
                  'geiconutil',
                  'geutil',
                  'gecommon',
-                 'qt-mt',
+                 'QtCore','QtGui',
                  'gtest',
                  ])

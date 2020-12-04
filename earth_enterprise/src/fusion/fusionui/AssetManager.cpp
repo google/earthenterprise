@@ -15,33 +15,37 @@
 
 
 #include "fusion/fusionui/AssetManager.h"
-
+#include "Qt/qobjectdefs.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
 #include <iostream>
-
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qcombobox.h>
-#include <qapplication.h>
-#include <qpopupmenu.h>
-#include <qmessagebox.h>
-#include <qpixmap.h>
-#include <qheader.h>
-#include <qprogressdialog.h>
-#include <qlineedit.h>
-#include <qtabwidget.h>
-#include <qimage.h>
-#include <qpushbutton.h>
-#include <qinputdialog.h>
-#include <qlayout.h>
-#include <qpainter.h>
-#include <qcheckbox.h>
-#include <qsplitter.h>
-#include <qwidgetstack.h>
-#include <qcursor.h>
-#include <qthread.h>
+#include <Qt/qstring.h>
+#include <Qt/qstringlist.h>
+#include <Qt/qcombobox.h>
+#include <Qt/qapplication.h>
+#include <Qt/qmessagebox.h>
+#include <Qt/qpixmap.h>
+#include <Qt/q3header.h>
+using QHeader = Q3Header;
+#include <Qt/qprogressdialog.h>
+#include <Qt/qlineedit.h>
+#include <Qt/qtabwidget.h>
+#include <Qt/qimage.h>
+#include <Qt/qpushbutton.h>
+#include <Qt/qinputdialog.h>
+#include <Qt/qlayout.h>
+#include <Qt/qpainter.h>
+#include <Qt/qcheckbox.h>
+#include <Qt/qsplitter.h>
+#include <Qt/q3widgetstack.h>
+using QWidgetStack = Q3WidgetStack;
+#include <Qt/qcursor.h>
+#include <Qt/qthread.h>
+#include <Qt/q3dragobject.h>
+using QImageDrag = Q3ImageDrag;
+#include <Qt/q3mimefactory.h>
+using QMimeSourceFactory = Q3MimeSourceFactory;
 
 #include "fusion/autoingest/plugins/RasterProductAsset.h"
 #include "fusion/autoingest/plugins/MercatorRasterProductAsset.h"
@@ -95,10 +99,11 @@
 #include "fusion/gst/gstRegistry.h"
 #include "fusion/fusionversion.h"
 #include "common/notify.h"
+#include <array>
 
 namespace {
 
-const char* folder_closed_xpm[]={
+const char* const folder_closed_xpm[]={
   "16 16 9 1",
   "g c #808080",
   "b c #c0c000",
@@ -126,7 +131,7 @@ const char* folder_closed_xpm[]={
   ".........##f#b##",
   "...........####." };
 
-const char* folder_open_xpm[]={
+const char* const folder_open_xpm[]={
   "16 16 11 1",
   "# c #000000",
   "g c #c0c0c0",
@@ -162,7 +167,7 @@ QPixmap* folderOpen = 0;
 class AssetFolder : public QListViewItem {
  public:
   AssetFolder(QListViewItem* parent, const gstAssetFolder& f);
-  AssetFolder(QListView* parent, const gstAssetFolder& f);
+  AssetFolder(Q3ListView* parent, const gstAssetFolder& f);
 
   const gstAssetFolder& getFolder() const { return folder; }
 
@@ -180,7 +185,7 @@ class AssetFolder : public QListViewItem {
 
 // -----------------------------------------------------------------------------
 
-AssetFolder::AssetFolder(QListView* parent, const gstAssetFolder& f)
+AssetFolder::AssetFolder(Q3ListView* parent, const gstAssetFolder& f)
     : QListViewItem(parent, f.name()),
       folder(f),
       type_(ASSET_MANAGER) {
@@ -296,21 +301,24 @@ bool DatabaseHasValidVersion(const Asset &asset) {
 
 // -----------------------------------------------------------------------------
 
-const AssetDefs::Type TypeSet[] = {
+const std::array<AssetDefs::Type,6> TypeSet =
+{{
   AssetDefs::Invalid,
   AssetDefs::Vector,
   AssetDefs::Imagery,
   AssetDefs::Terrain,
   AssetDefs::Map,
   AssetDefs::Database
-};
-const std::string SubTypeSet[] = {
+}};
+
+const std::array<std::string,5> SubTypeSet =
+{{
   "",
   kResourceSubtype,
   kLayer,
   kProjectSubtype,
   kDatabaseSubtype
-};
+}};
 
 // -----------------------------------------------------------------------------
 
@@ -360,18 +368,16 @@ QString AssetAction::Name() const {
 }
 
 AssetAction* AssetAction::FindAsset(const QString& txt) {
-  for (std::vector<AssetAction*>::iterator it = all_actions.begin();
-       it != all_actions.end(); ++it) {
-    if ((*it)->Name() == txt)
-      return *it;
+  for (const auto& it : all_actions) {
+    if (it->Name() == txt)
+      return it;
   }
   return NULL;
 }
 
 bool AssetAction::OkToCloseAll() {
-  for (std::vector<AssetAction*>::iterator it = all_actions.begin();
-       it != all_actions.end(); ++it) {
-    if (!(*it)->asset_window_->OkToQuit())
+  for (const auto& it : all_actions) {
+    if (!it->asset_window_->OkToQuit())
       return false;
   }
   return true;
@@ -381,10 +387,9 @@ void AssetAction::CloseAll() {
   // make a copy of our asset window vector since deleting will
   // invalidate iterators on the original
   std::vector<AssetAction*> close_actions = all_actions;
-  for (std::vector<AssetAction*>::iterator it = close_actions.begin();
-       it != close_actions.end(); ++it) {
-    if ((*it)->asset_window_->OkToQuit()) {
-      delete (*it)->asset_window_;
+  for (auto& it : close_actions) {
+    if (it->asset_window_->OkToQuit()) {
+      delete it->asset_window_;
     } else {
       // terminate at first failure
       return;
@@ -397,11 +402,11 @@ void AssetAction::Cascade(const QPoint& start_pos) {
   const int yoffset = 20;
   int x = start_pos.x() + xoffset;
   int y = start_pos.y() + yoffset;
-  for (std::vector<AssetAction*>::iterator it = all_actions.begin();
-       it != all_actions.end(); ++it) {
-    (*it)->asset_window_->move(x, y);
-    (*it)->asset_window_->showNormal();
-    (*it)->asset_window_->raise();
+
+  for (auto& it : all_actions) {
+    it->asset_window_->move(x, y);
+    it->asset_window_->showNormal();
+    it->asset_window_->raise();
     x += xoffset;
     y += yoffset;
   }
@@ -480,8 +485,9 @@ void ServeAssistant::SetCanceled() {
 }
 
 void ServeAssistant::Perform() {
-  progress_dialog_->setTotalSteps(progress_->total());
-  progress_dialog_->setProgress(progress_->done());
+  progress_dialog_->setMinimum(0);
+  progress_dialog_->setMaximum(progress_->total());
+  progress_dialog_->setValue(progress_->done());
 
   // Check to see if a request for user authentication has been made.
   // If so, pop up the dialog and signal when we are finished.
@@ -510,7 +516,6 @@ AssetManager::AssetManager(QWidget* parent)
       filter_subtype_(0),
       asset_manager_icon_choice_orig_(
           Preferences::getConfig().assetManagerIconChoice) {
-  RemoveToolBarIcons();  // Icons will be set at Show
   {
     gstProviderSet providers;
     if (providers.Load()) {
@@ -521,8 +526,8 @@ AssetManager::AssetManager(QWidget* parent)
   }
 
   connect(categories,
-          SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
-          this, SLOT(rmbClicked(QListViewItem*, const QPoint&, int)));
+          SIGNAL(contextMenuRequested(Q3ListViewItem*, const QPoint&, int)),
+          this, SLOT(rmbClicked(Q3ListViewItem*, const QPoint&, int)));
 
   connect(assetTabWidget, SIGNAL(currentChanged(QWidget*)),
           this, SLOT(selectFolder()));
@@ -534,8 +539,8 @@ AssetManager::AssetManager(QWidget* parent)
           this, SLOT(tableAssetMenu(int, int, const QPoint&)));
 
   connect(assetIconView,
-          SIGNAL(contextMenuRequested(QIconViewItem*, const QPoint&)),
-          this, SLOT(iconAssetMenu(QIconViewItem*, const QPoint&)));
+          SIGNAL(contextMenuRequested(Q3IconViewItem*, const QPoint&)),
+          this, SLOT(iconAssetMenu(Q3IconViewItem*, const QPoint&)));
 
   connect(assetTableView, SIGNAL(currentChanged(int, int)),
           this, SLOT(CurrentAssetChanged(int, int)));
@@ -548,9 +553,9 @@ AssetManager::AssetManager(QWidget* parent)
   categories->header()->setStretchEnabled(true);
   categories->header()->hide();
 
-  if (khExists(Preferences::filepath("assetmanager.layout").latin1())) {
+  if (khExists(Preferences::filepath("assetmanager.layout").toUtf8().constData())) {
     if (layout_persist_.Load(
-            Preferences::filepath("assetmanager.layout").latin1())) {
+            Preferences::filepath("assetmanager.layout").toUtf8().constData())) {
       // update filter combox
       filter_type_ = layout_persist_.filterType;
       filter_subtype_ = layout_persist_.filterSubType;
@@ -576,7 +581,7 @@ AssetManager::AssetManager(QWidget* parent)
       showHiddenCheck->setChecked(layout_persist_.showHidden);
 
       if (layout_persist_.folderSplitter.front() != 0) {
-        QValueList<int> splitter_list = layout_persist_.folderSplitter;
+        Q3ValueList<int> splitter_list = layout_persist_.folderSplitter;
         folder_splitter->setSizes(splitter_list);
       }
     }
@@ -598,7 +603,7 @@ AssetManager::AssetManager(QWidget* parent)
 AssetManager::~AssetManager() {
   if (asset_manager_icon_choice_orig_ !=
       Preferences::getConfig().assetManagerIconChoice) {
-    Preferences::getConfig().Save(Preferences::filepath("preferences.xml"));
+    Preferences::getConfig().Save(Preferences::filepath("preferences.xml").toUtf8().constData());
   }
   layout_persist_.showme = isShown();
   if (assetTabWidget->currentPageIndex() == 0) {
@@ -615,15 +620,15 @@ AssetManager::~AssetManager() {
   }
 
   layout_persist_.folderSplitter.clear();
-  QValueList<int> folder_splitter_list = folder_splitter->sizes();
-  for (QValueList<int>::Iterator it = folder_splitter_list.begin();
+  Q3ValueList<int> folder_splitter_list = folder_splitter->sizes();
+  for (Q3ValueList<int>::Iterator it = folder_splitter_list.begin();
        it != folder_splitter_list.end(); ++it) {
     layout_persist_.folderSplitter.push_back(*it);
   }
 
   layout_persist_.filterType = filter_type_;
   layout_persist_.filterSubType = filter_subtype_;
-  layout_persist_.Save(Preferences::filepath("assetmanager.layout").latin1());
+  layout_persist_.Save(Preferences::filepath("assetmanager.layout").toUtf8().constData());
 }
 
 AssetManagerLayout::Size AssetManager::GetLayoutSize(const QString& name) {
@@ -645,11 +650,11 @@ void AssetManager::HandleNewWindow(AssetBase* asset_window) {
 }
 
 bool AssetManager::RestoreExisting(const std::string& asset_ref) {
-  AssetAction* action = AssetAction::FindAsset(asset_ref);
+  AssetAction* action = AssetAction::FindAsset(asset_ref.c_str());
   if (action == NULL) {
     return false;
   } else {
-    action->activate();
+    action->activate(QAction::Trigger); // could also be QAction::Hover
     return true;
   }
 }
@@ -1004,7 +1009,7 @@ void AssetManager::ShowAssetMenu(const gstAssetHandle& asset_handle,
   // first item in menu should be the asset name since the table
   // might get redrawn after the menu has popped-up
   AssetDisplayHelper a(current_asset->type, current_asset->subtype);
-  menu.insertItem(a.GetPixmap(), shortAssetName(asset_handle->getName()));
+  menu.insertItem(a.GetPixmap(), shortAssetName(asset_handle->getName().toUtf8().constData()));
 
   menu.insertSeparator();
   menu.insertSeparator();
@@ -1042,14 +1047,17 @@ void AssetManager::ShowAssetMenu(const gstAssetHandle& asset_handle,
   switch (menu.exec(mouse_pos)) {
     case BUILD_ASSET:
       BuildAsset(asset_handle);
+      refresh();
       break;
 
     case CANCEL_ASSET:
       CancelAsset(asset_handle);
+      refresh();
       break;
 
     case MODIFY_ASSET:
       ModifyAsset(asset_handle);
+      refresh();
       break;
 
     case ASSET_PROPERTIES:
@@ -1062,10 +1070,12 @@ void AssetManager::ShowAssetMenu(const gstAssetHandle& asset_handle,
 
     case PUSH_DB:
       PushDatabase(asset_handle);
+      refresh();
       break;
 
     case PUBLISH_DB:
       PublishDatabase(asset_handle);
+      refresh();
       break;
   }
 }
@@ -1218,8 +1228,8 @@ void AssetManager::PushDatabase(const gstAssetHandle& handle) {
   // Update the preferences with the user's choice. We want to remember these
   // choices so that we can automatically select this server next time they
   // push/publish.
-  std::string database_name = shortAssetName(asset->GetRef().toString());
-  Preferences::UpdatePublishServerDbMap(database_name, nickname);
+  std::string database_name = shortAssetName(asset->GetRef().toString().c_str());
+  Preferences::UpdatePublishServerDbMap(database_name, nickname.toUtf8().constData());
 
   ServerConfig stream_server, search_server;
   for (it = sc_set.combinations.begin();
@@ -1242,13 +1252,13 @@ void AssetManager::PushDatabase(const gstAssetHandle& handle) {
   if (!publisher_client.AddDatabase(
           gedb_path, push_db_dlg.GetSelectedVersion())) {
     QMessageBox::critical(this, "Push Failed",
-            tr("Error: %1 ").arg(publisher_client.ErrMsg()), 0, 0, 0);
+            tr("Error: %1 ").arg(publisher_client.ErrMsg().c_str()), 0, 0, 0);
     return;
   }
 
   FixCursor fix_cursor(this);
   QProgressDialog progress_dialog(tr("Pushing database..."),
-                                  tr("Cancel"), 100, this, "progress", true);
+                                  tr("Cancel"), 0, 100, this);
   progress_dialog.setCaption(tr("Pushing"));
 
   // PublisherClient will now be run in a separate thread,
@@ -1260,15 +1270,16 @@ void AssetManager::PushDatabase(const gstAssetHandle& handle) {
     ServeAssistant push_assistant(&progress_dialog, &progress, &auth);
     QObject::connect(&progress_dialog, SIGNAL(canceled()),
                      &push_assistant, SLOT(SetCanceled()));
-    QObject::connect(
-        &push_thread, SIGNAL(sfinished()), &push_assistant, SLOT(Stop()));
-    QObject::connect(&push_thread, SIGNAL(sfinished()), qApp, SLOT(quit()));
+    QObject::connect(&push_thread, SIGNAL(sfinished()), &push_assistant, SLOT(Stop()));
+    QObject::connect(&push_thread, SIGNAL(sfinished()), &push_thread, SLOT(deleteLater()));
 
     push_thread.start();
     push_assistant.Start();
     progress_dialog.show();
 
-    qApp->exec();
+    while (push_thread.isRunning()) {
+        qApp->processEvents();
+    }
   }
 
   if (progress_dialog.wasCanceled()) {
@@ -1282,7 +1293,7 @@ void AssetManager::PushDatabase(const gstAssetHandle& handle) {
 
   if (!push_thread.retval()) {
     QMessageBox::critical(this, "Push Failed",
-            tr("Error: %1").arg(publisher_client.ErrMsg()), 0, 0, 0);
+            tr("Error: %1").arg(publisher_client.ErrMsg().c_str()), 0, 0, 0);
     return;
   }
 
@@ -1352,8 +1363,8 @@ void AssetManager::PublishDatabase(const gstAssetHandle& handle) {
   // Update the preferences with the user's choice. We want to remember these
   // choices so that we can automatically select this server next time they
   // push/publish.
-  std::string database_name = shortAssetName(asset->GetRef().toString());
-  Preferences::UpdatePublishServerDbMap(database_name, nickname);
+  std::string database_name = shortAssetName(asset->GetRef().toString().c_str());
+  Preferences::UpdatePublishServerDbMap(database_name, nickname.toUtf8().constData());
 
   ServerConfig stream_server, search_server;
   for (it = sc_set.combinations.begin();
@@ -1376,7 +1387,7 @@ void AssetManager::PublishDatabase(const gstAssetHandle& handle) {
                                    &progress, &auth);
   FixCursor fix_cursor(this);
   QProgressDialog progress_dialog(tr("Publishing database..."),
-                                  tr("Cancel"), 100, this, "progress", true);
+                                  tr("Cancel"), 0, 100, this);
   progress_dialog.setCaption(tr("Publishing"));
 
   // PublisherClient will now be run in a separate thread,
@@ -1390,13 +1401,15 @@ void AssetManager::PublishDatabase(const gstAssetHandle& handle) {
                      &publish_assistant, SLOT(SetCanceled()));
     QObject::connect(
         &publish_thread, SIGNAL(sfinished()), &publish_assistant, SLOT(Stop()));
-    QObject::connect(&publish_thread, SIGNAL(sfinished()), qApp, SLOT(quit()));
+    QObject::connect(&publish_thread, SIGNAL(sfinished()), &publish_thread, SLOT(deleteLater()));
 
     publish_thread.start();
     publish_assistant.Start();
     progress_dialog.show();
 
-    qApp->exec();
+    while (publish_thread.isRunning()) {
+        qApp->processEvents();
+    }
   }
 
   if (progress_dialog.wasCanceled()) {
@@ -1410,7 +1423,7 @@ void AssetManager::PublishDatabase(const gstAssetHandle& handle) {
 
   if (!publish_thread.retval()) {
     QMessageBox::critical(this, "Publish Failed",
-            tr("Error: %1").arg(publisher_client.ErrMsg()), 0, 0, 0);
+            tr("Error: %1").arg(publisher_client.ErrMsg().c_str()), 0, 0, 0);
     return;
   }
 
@@ -1597,7 +1610,7 @@ void AssetManager::assetsChanged(const AssetChanges& changes) {
   }
 
   // convert it to std::string only once for speed
-  std::string curr = currpath.latin1();
+  std::string curr = currpath.toStdString();
 
   // check to see if any of the changes are in this directory
   std::set<std::string> changedHere;
@@ -1701,7 +1714,6 @@ QListViewItem* AssetManager::OpenFolder(const QString& folder) {
   }
 
   categories->setSelected(item, true);
-
   return item;
 }
 
@@ -1734,18 +1746,19 @@ void AssetManager::UpdateTableItem(int row, gstAssetHandle handle,
   // If we're doing an assetsChanged update, the AssetTableItem can stay
   // the same.
   QTableItem *prev = assetTableView->item(row, 0);
+
   if (!prev) {
-    assetTableView->setItem(row, 0,
-                            new AssetTableItem(assetTableView, handle));
+    AssetTableItem* ati = new AssetTableItem(assetTableView, handle);
+    assetTableView->setItem(row, 0, ati);
   }
 
-  // now set teh rest of the columns
+  // now set the rest of the columns
   int col = 1;
   std::string category = asset->PrettySubtype();
   if (category == kMercatorProductSubtype) {
     category = kResourceSubtype;
   }
-  assetTableView->setText(row, col++, category);
+  assetTableView->setText(row, col++, category.c_str());
 
   {
     std::string providerstr;
@@ -1763,9 +1776,9 @@ void AssetManager::UpdateTableItem(int row, gstAssetHandle handle,
       VectorProductAsset prod = asset;
       providerstr = GetProviderById(prod->config.provider_id_);
     } else {
-      providerstr = asset->meta.GetValue("provider");
+      providerstr = asset->meta.GetValue("provider").toUtf8().constData();
     }
-    assetTableView->setText(row, col++, providerstr);
+    assetTableView->setText(row, col++, providerstr.c_str());
   }
 
   AssetVersion version(asset->CurrVersionRef());
@@ -1774,27 +1787,40 @@ void AssetManager::UpdateTableItem(int row, gstAssetHandle handle,
                             version->meta.GetValue("createdtime"));
     assetTableView->setItem(row, col++,
                             new AssetStateItem(assetTableView,
-                                               version->PrettyState()));
+                                               version->PrettyState().c_str()));
   } else {
     assetTableView->setText(row, col++, "None");
     assetTableView->setItem(row, col++,
                             new AssetStateItem(assetTableView, "None"));
   }
   assetTableView->adjustRow(row);
-}
 
+  for (int i = 0; i < assetTableView->numRows(); ++i) {
+      std::string aname {
+        assetTableView->GetItem(i)->GetAssetHandle()
+        ->getAsset()->GetRef().toString().c_str() };
+
+    int bpos = aname.rfind('/') + 1, epos = aname.rfind('.');
+    aname = aname.substr(bpos,epos-bpos);
+
+    if (aname != std::string(assetTableView->GetItem(i)->text().toUtf8().constData()))
+    {
+        assetTableView->GetItem(i)->setText(aname.c_str());
+    }
+  }
+}
 
 void AssetManager::TrackChangesInTableView(
     const gstAssetFolder &folder, const std::set<std::string> &changed) {
   // process each changed assetRef
-  for (std::set<std::string>::const_iterator ref = changed.begin();
-       ref != changed.end(); ++ref) {
-    QString baseRef = khBasename(*ref);
-    bool found = false;
 
+  // one
+  for (const auto& ref : changed) {
+    QString baseRef = khBasename(ref).c_str();
+    bool found = false;
     // try to find a match in the existing items
     for (int row = 0; row < assetTableView->numRows(); ++row) {
-      AssetTableItem* item = (AssetTableItem*)assetTableView->item(row, 0);
+      AssetTableItem* item = assetTableView->GetItem(row);
       gstAssetHandle handle = item->GetAssetHandle();
       if (handle->getName() == baseRef) {
         found = true;
@@ -1802,7 +1828,7 @@ void AssetManager::TrackChangesInTableView(
         // Will refetch record from disk if it has changed
         // NOTE: Using NFS on linux can cause a race here. The system
         // manager writes the record and then sends me a message. I look at
-        // the file on disk but it hasn;t changed yet. :-(
+        // the file on disk but it hasn't changed yet. :-(
         Asset asset = handle->getAsset();
 
         if (!IsAssetVisible(asset)) {
@@ -1833,10 +1859,9 @@ void AssetManager::TrackChangesInTableView(
   // But it can end up changing the selection
   assetTableView->sortColumn
     (assetTableView->horizontalHeader()->sortIndicatorSection(),
-     assetTableView->horizontalHeader()->sortIndicatorOrder() == Ascending,
+     assetTableView->horizontalHeader()->sortIndicatorOrder() == Qt::AscendingOrder,
      true /* whole rows */);
 }
-
 
 void AssetManager::UpdateTableView(const gstAssetFolder& folder) {
   // reset table
@@ -1849,6 +1874,7 @@ void AssetManager::UpdateTableView(const gstAssetFolder& folder) {
   assetTableView->setNumCols(5);
   QHeader* header = assetTableView->horizontalHeader();
   int col = 0;
+
   header->setLabel(col++, tr("Asset Name"));
   header->setLabel(col++, tr("Category"));
   header->setLabel(col++, tr("Provider"));
@@ -1860,22 +1886,24 @@ void AssetManager::UpdateTableView(const gstAssetFolder& folder) {
 
   std::vector<gstAssetHandle> items = folder.getAssetHandles();
 
-  if (items.size() == 0)
+  if (items.empty()) {
     return;
+  }
 
   assetTableView->setUpdatesEnabled(false);
 
   int rowcount = 0;
-  for (unsigned int row = 0; row < items.size(); ++row) {
-    gstAssetHandle handle = items[row];
-    Asset asset = handle->getAsset();
 
-    if (!IsAssetVisible(asset))
+  for (const auto& item : items) {
+    gstAssetHandle handle = item;
+    Asset asset = handle->getAsset();
+    bool visible = IsAssetVisible(asset);
+
+    if (!visible)
       continue;
 
     assetTableView->setNumRows(rowcount + 1);
-    UpdateTableItem(rowcount, handle, asset);
-    ++rowcount;
+    UpdateTableItem(rowcount++, handle, asset);
   }
 
   assetTableView->sortColumn(1, true, true);
@@ -1972,11 +2000,10 @@ void AssetManager::UpdateIconView(const gstAssetFolder& folder) {
 
   std::vector<gstAssetHandle> items = folder.getAssetHandles();
 
-  if (items.size() == 0)
+  if (items.empty())
     return;
 
-  for (unsigned int id = 0; id < items.size(); ++id) {
-    gstAssetHandle item = items[id];
+  for (const auto& item : items) {
     Asset asset = item->getAsset();
 
     if (IsAssetVisible(asset))
@@ -2012,7 +2039,7 @@ QColorGroup AssetManager::GetStateDrawStyle(
 
   if (txt == "Canceled" || txt == "Failed") {
     bold = true;
-    clr = red;
+    clr = QColor(255,0,0);
   } else if (txt == "Blocked") {
     bold = true;
     clr = QColor(255, 162, 0);  // orange

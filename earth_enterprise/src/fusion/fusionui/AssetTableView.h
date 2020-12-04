@@ -18,14 +18,16 @@
 #ifndef KHSRC_FUSION_FUSIONUI_ASSETTABLEVIEW_H__
 #define KHSRC_FUSION_FUSIONUI_ASSETTABLEVIEW_H__
 
-#include <qtable.h>
-#include <qpoint.h>
-
+#include <Qt/q3table.h>
+#include <Qt/qtableview.h>
+#include <Qt/qpoint.h>
 #include <gstAssetGroup.h>
 
 class QDragObject;
 
 // -----------------------------------------------------------------------------
+using QTableItem = Q3TableItem;
+using QTable = Q3Table;
 
 class AssetTableItem : public QTableItem {
  public:
@@ -61,6 +63,7 @@ class AssetTableView : public QTable {
   ~AssetTableView();
 
   gstAssetHandle GetAssetHandle(int row) const;
+  AssetTableItem* GetItem(int row) const;
 
  private:
   // from QTable
@@ -68,8 +71,6 @@ class AssetTableView : public QTable {
   virtual void contentsMouseMoveEvent(QMouseEvent* e);
   virtual void columnClicked(int col);
   
-  AssetTableItem* GetItem(int row) const;
-
   QPoint drag_start_point_;
   int sort_column_;
   bool sort_ascending_;

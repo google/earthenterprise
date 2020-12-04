@@ -47,12 +47,12 @@ PostgreSQL authentication
       -  The ``mod_authn_dbd`` module provides the authentication
          back-end with a PostgreSQL server. For more information about
          the module, see the
-         `mod_authn_dbd <http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmod%2Fmod_authn_dbd.html&sa=D&sntz=1&usg=AFrqEzcLzX90MM12j49RNuWEy_X7y6wTrQ>`__
+         `mod_authn_dbd <https://httpd.apache.org/docs/2.4/mod/mod_authn_dbd.html>`__
          section in the Apache documentation.
       -  The ``mod_auth_digest`` module is used for Digest
          authentication. For more information about ``mod_auth_digest``,
          see the
-         `mod_auth_digest <http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmod%2Fmod_auth_digest.html&sa=D&sntz=1&usg=AFrqEzfaZylqvLk4_vXVqc3jCj7EJESuhw>`__
+         `mod_auth_digest <http://httpd.apache.org/docs/2.4/mod/mod_auth_digest.html>`__
          section in the Apache documentation.
 
       .. rubric:: Terms
@@ -113,7 +113,7 @@ PostgreSQL authentication
          ``psql --port=5433 --username=geeuser geauthdb < /usr/share/postgresql/8.4/contrib/pgcrypto.sql``
 
          Note: You can substitute a different method for this step. The `Password Formats
-         <http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmisc%2Fpassword_encryptions.html&sa=D&sntz=1&usg=AFrqEzdBJJpsOLV3eL6UCAatZv_IhxEZdg>`__
+         <https://httpd.apache.org/docs/2.4/misc/password_encryptions.html#:~:text=Apache%20recognizes%20one%20format%20for,the%20AuthName%20directive%20in%20httpd>`__
          section in the Apache documentation gives examples in multiple
          programming languages for encrypting the password so that it is
          readable by Apache.
@@ -190,7 +190,7 @@ PostgreSQL authentication
 
          For more information about ``AuthDigestEnableQueryStringHack``,
          see the `mod_auth_digest
-         <http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmod%2Fmod_auth_digest.html%23msie&sa=D&sntz=1&usg=AFrqEze9uh13hmi22IsT3-GMw3t8j7VHcA>`__
+         <http://httpd.apache.org/docs/2.4/mod/mod_auth_digest.html>`__
          section in the Apache documentation.
 
          The final ``<Location>`` directive looks like:

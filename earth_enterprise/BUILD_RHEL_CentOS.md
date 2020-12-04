@@ -135,8 +135,8 @@ Execute:
 ```bash
 sudo yum install -y \
   bison-devel boost-devel cmake daemonize freeglut-devel \
-  gdbm-devel geos-devel giflib-devel \
-  libcap-devel libmng-devel libpng12-devel libX11-devel libXcursor-devel \
+  gdbm-devel geos-devel giflib-devel glib2-devel gtk2-devel \
+  libcap-devel libicu-devel libmng-devel libpng-devel libtiff-devel libX11-devel libXcursor-devel \
   libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel \
   perl-Alien-Packages perl-Perl4-CoreLibs proj-devel \
@@ -151,15 +151,16 @@ Execute:
 ```bash
 sudo yum install -y \
   bison-devel boost-devel cmake daemonize freeglut-devel \
-  gdbm-devel geos-devel gettext giflib-devel \
+  gdbm-devel geos-devel gettext giflib-devel gtk2-devel \
   libcap-devel libmng-devel libpng-devel libX11-devel libXcursor-devel \
   libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel pcre pcre-devel \
-  proj-devel rpm-build rpmrebuild rsync scons shunit2 \
+  proj-devel glib2-devel libtiff-devel \
+  rpm-build rpmrebuild rsync scons shunit2 \
   xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
 ```
 
-If you encounter an error about git dependency conflicts, consider 
+If you encounter an error about git dependency conflicts, consider
 experimenting with the `--skip-broken` parameter.
 
 ## GTest 1.8
@@ -251,13 +252,13 @@ sudo python3.8 -m pip install argparse setuptools defusedxml GitPython Pillow un
 
 ### Building on fips-enabled machines
 
-In some circumstances on stig-ed machines, where md5 cryptography is used, fips will prevent OpenGee from being built. When trying to build, a message similar to the following will be displayed 
+In some circumstances on stig-ed machines, where md5 cryptography is used, fips will prevent OpenGee from being built. When trying to build, a message similar to the following will be displayed
 
 ```bash
 $ python2.7 /usr/bin/scons -j4 internal=1 build
-scons: Reading SConscript files ... 
+scons: Reading SConscript files ...
 scons: done reading SConscript files.
-scons: Building targets ... 
+scons: Building targets ...
 scons: *** [build] ValueError : error:060800A3:digital envelope routines:EVP_DigestInit_ex:disabled for fips
 scons: building terminated because of errors.
 ```

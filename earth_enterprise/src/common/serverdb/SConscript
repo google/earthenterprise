@@ -18,13 +18,12 @@
 Import('env')
 import os
 
-
 serverdb = env.sharedLib('serverdb', ['serverdb.cpp'],
                        LIBS=[])
 
 serverdb_r = env.sharedLib('serverdb_r', ['serverdbReader.cpp', 'map_tile_utils.cpp'],
                            LIBS=['serverdb', 'geindex_r', 'gedbroot',
-                                 'gecommon', 'keyholeutils', 'png12'])
+                                 'gecommon', 'keyholeutils', env['png_ver']])
 
 env.install('common_lib', [serverdb, serverdb_r])
 
@@ -34,4 +33,4 @@ env.install('common_lib', [serverdb, serverdb_r])
 
 env.test('serverdbReader_unittest',
          'serverdbReader_unittest.cpp',
-         LIBS=['serverdb_r', 'gecommon', 'qt-mt', 'png12'])
+         LIBS=['serverdb_r', 'gecommon', 'QtGui', 'QtCore', env['png_ver']])

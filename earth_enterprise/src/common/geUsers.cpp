@@ -99,7 +99,7 @@ void geUserId::GetUserIds(const std::string& username, uid_t& uid, gid_t& gid) {
    }
    // Failed to get the user info.
    throw khErrnoException(kh::tr("Could not find user %1 (%d)")
-                          .arg(username, errno));
+                          .arg(username.c_str(), errno));
 }
 
 // GetGroupId attempts to get the group id for the specified group.
@@ -125,5 +125,5 @@ void geUserId::GetGroupId(const std::string& groupname, gid_t& gid) {
    }
    // Failed to get the group info.
    throw khException(kh::tr("Could not find group %1 (%2)")
-                     .arg(groupname, errno));
+                     .arg(groupname.c_str(), errno));
 }

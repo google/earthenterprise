@@ -47,7 +47,7 @@ class MercatorMapDatabaseWidget : public MercatorMapDatabaseWidgetBase,
   void EnableImageryProject(bool state);
   void SetImageryProject(const QString& path);
   inline std::string GetImageryProjectPath() const {
-    return imagery_project_path_.latin1();
+    return imagery_project_path_.toUtf8().constData();
   }
 
   static QString empty_text;

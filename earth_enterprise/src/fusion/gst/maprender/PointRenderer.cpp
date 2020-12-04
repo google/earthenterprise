@@ -390,7 +390,7 @@ const SkScalar OvalRenderer::KsquareRootTwoMinusOneDividedTwo =
 
 
 IconRenderer::IconRenderer(const MapFeatureConfig& config) {
-  IconReference ref(config.shield.icon_type_, config.shield.icon_href_);
+  IconReference ref(config.shield.icon_type_, config.shield.icon_href_.c_str());
   bool found = SkImageDecoder::DecodeFile(ref.SourcePath().c_str(), &icon_);
   if (!found) {
     throw khException(kh::tr("Cannot read and/or decode icon file '%1'").arg(

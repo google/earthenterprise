@@ -1,0 +1,131 @@
+#-*- Python -*-
+#
+# Copyright 2020 The OpenGEE Contributors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+Import('third_party_env')
+import os
+
+qt_version = 'qt-everywhere-opensource-src-4.8.7'
+
+make_cmd_cpu = 'make -j%d' % GetOption('num_jobs')
+
+ge_version = qt_version.replace('qt', 'qt-ge')
+
+current_dir = Dir('.').abspath
+compile_current_dir = Dir('./qt_compile').abspath
+build_root = '%s/%s' % (current_dir, qt_version)
+compile_build_root = '%s/%s' % (compile_current_dir, qt_version)
+qt_source = File('#/../../earth_enterprise/third_party/qt4/%s.tar.gz'
+                   % qt_version).abspath
+
+
+qt_env = third_party_env.DeepCopy()
+
+cc_flags = qt_env['CCFLAGS']
+cc_flags.remove('-Werror')
+qt_env['CCFLAGS'] = cc_flags + ['-fpermissive']
+
+optdir = qt_env['optdir']
+root_dir = Dir(qt_env.exportdirs['root']).abspath
+
+if GetOption('clean'):
+  qt_env.Execute('rm -rf %s' % current_dir)
+
+# [1] Extract qt
+qt_target = '%s/.extract' % current_dir
+qt_extract = qt_env.Command(
+    qt_target, [qt_source],
+    [qt_env.MultiCommand(
+        'mkdir -p %s\n'
+        'cd %s\n'
+        'tar xzf %s\n'
+        'touch %s'% (current_dir, current_dir, qt_source, qt_target))])
+
+# [7] Configure qt
+qt_target = '%s/.configure_qt' % current_dir
+
+configure_cmd = (
+'cd %s\n'
+'%s./configure -v -confirm-license -opensource -optimized-qmake -no-fast '
+'--prefix=%s -release -shared -no-cups -fontconfig -largefile -gtkstyle -qt3support '
+'-no-phonon -no-phonon-backend -no-pch -no-javascript-jit -sm -stl -system-libmng -system-libpng '
+'-system-libjpeg -system-libtiff -system-zlib -xinput -xcursor -xfixes -xinerama '
+'-xshape -xrandr -xrender -xkb -glib -icu -no-openssl -xmlpatterns -no-dbus '
+'-graphicssystem raster -no-webkit -no-sql-ibase -no-sql-mysql -no-sql-psql '
+'-no-sql-db2 -no-sql-tds -no-sql-oci -no-sql-sqlite -no-sql-sqlite2 -no-sql-odbc -no-sql-sqlite -no-sql-tds -no-script -no-scripttools -nomake demos -nomake examples\n'
+'touch %s' % (
+build_root, qt_env['ENV']['mod_env'], root_dir, qt_target))
+
+qt_configure = qt_env.Command(
+    qt_target, [qt_extract],
+    [qt_env.MultiCommand(configure_cmd)])
+
+# [8] Build qt
+ld = '%s -shared' % qt_env['ENV']['CXX']
+make_cmd = '%s LD_SHARED="%s"' % (make_cmd_cpu, ld)
+qt_target = '%s/.build_qt' % current_dir
+qt_build = qt_env.Command(
+    qt_target, qt_configure,
+    [qt_env.MultiCommand(
+        'cd %s\n'
+        '%s%s\n'
+        'touch %s' % (build_root, qt_env['ENV']['mod_env'], make_cmd,
+                      qt_target))])
+
+# [9] Create qt master installer
+make_cmd = 'make LD_SHARED="%s"' % (ld)
+install_root = '%s/install' % current_dir
+other_dir = '%s/share/doc/packages/%s' % (install_root, ge_version)
+qt_target = '%s/.install' % current_dir
+qt_install = qt_env.Command(
+    qt_target, qt_build,
+    [qt_env.MultiCommand(
+        'cd %s\n'
+        '%s %s INSTALL_ROOT=%s install\n'
+        'mkdir -p %s\n'
+        'cp -pr LICENSE.* %s\n'
+        'touch %s' % (
+            build_root, qt_env['ENV']['mod_env'], make_cmd,
+            install_root, other_dir, other_dir, qt_target))])
+
+# [11] Install these into various directories as required for build
+qt_target = '%s/.install_for_build' % current_dir
+final_install_root = install_root + root_dir
+qt_install_build = qt_env.Command(
+    qt_target, [qt_install ],
+    [qt_env.rsync_cmd % (
+        '%s/*' % final_install_root,
+        '%s/' % Dir(qt_env.exportdirs['root']).abspath),
+     Touch('$TARGET')])
+
+Default(qt_install_build)
+
+if 'install' in COMMAND_LINE_TARGETS:
+  # Copies qt libraries from ../install/lib/ folder to /opt/google/lib.
+  qt_env.Alias(
+      'install', [qt_install_build],
+      [qt_env.rsync_excl_cmd %(
+          'python%s' % qt_env['python_major_version'],
+          '%s/lib/' % final_install_root,
+          '%s/opt/google/lib' % qt_env.installdirs['common_root'])])
+
+  # copy qt docs to /opt/google/share folder.
+  qt_env.InstallFileOrDir(
+      '%s/share/' % install_root,
+      '%s/opt/google/share/' % qt_env.installdirs['common_root'],
+      qt_install_build, 'install')
+
+Return('qt_extract qt_install_build')

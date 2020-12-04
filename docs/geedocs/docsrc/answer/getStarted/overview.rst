@@ -132,7 +132,7 @@ Overview
 
       -  :doc:`../geeServerAdmin/manageVirtualHosts`
       -  :doc:`../geeServerConfigAndSecurity/configureGeeVirtualHostForLDAP`
-      -  :doc:`../geeServerConfigAndSecurity/configureGeeServer5.1.0_SSL_HTTPS`
+      -  :doc:`../geeServerConfigAndSecurity/configureGeeServer_SSL_HTTPS`
 
       .. rubric:: 5. Make Web Map Service (WMS) requests
          :name: make-web-map-service-wms-requests

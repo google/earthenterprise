@@ -29,7 +29,7 @@ class khResourceManagerProxy;
 
 class khResourceProvider
 {
- protected:
+
   class Job {
    public:
     std::uint32_t jobid;
@@ -43,7 +43,6 @@ class khResourceProvider
 
   void JobLoop(StartJobMsg start, const unsigned int cmdTries, const unsigned int sleepBetweenTriesSec); // pass by value because thread func
 
- private:
   // routines implemented in khResourceProviderDispatch.cpp
   void DispatchNotify(const FusionConnection::RecvPacket &);
   void DispatchRequest(const FusionConnection::RecvPacket &, std::string &replyPayload);
@@ -107,9 +106,9 @@ class khResourceProvider
 #if 0
   void ReadProgress(int readfd, std::uint32_t jobid);
 #endif
-  virtual void DeleteJob(JobIter which,
-                         bool success = false,
-                         time_t beginTime = 0, time_t endTime = 0);
+  void DeleteJob(std::vector<Job>::iterator which,
+                 bool success = false,
+                 time_t beginTime = 0, time_t endTime = 0);
 
   // ***** stuff for CheckVolumeAvailLoop *****
   void CheckVolumeAvailLoop(void);

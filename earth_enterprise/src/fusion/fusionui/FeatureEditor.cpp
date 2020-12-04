@@ -1,3 +1,4 @@
+// Copyright 2020 the Open GEE Contributors.
 // Copyright 2017 Google Inc.
 // Copyright 2020 The Open GEE Contributors
 //
@@ -15,20 +16,27 @@
 
 
 #include "fusion/fusionui/FeatureEditor.h"
-
-#include <qevent.h>
-#include <qmessagebox.h>
-#include <qpixmap.h>
-#include <qlabel.h>
-#include <qfiledialog.h>
-#include <qpopupmenu.h>
-#include <qmenubar.h>
-#include <qspinbox.h>
-#include <qcombobox.h>
-#include <qlineedit.h>
-#include <qgroupbox.h>
-#include <qlayout.h>
-#include <qbuttongroup.h>
+#include <Qt3Support/Q3CheckListItem>
+#include <Qt/qevent.h>
+#include <Qt/qmessagebox.h>
+#include <Qt/qpixmap.h>
+#include <Qt/qmime.h>
+#include <Qt/qlabel.h>
+#include <Qt/q3filedialog.h>
+#include <Qt/q3popupmenu.h>
+using QPopupMenu = Q3PopupMenu;
+#include <Qt/qmenubar.h>
+#include <Qt/qspinbox.h>
+#include <Qt/qcombobox.h>
+#include <Qt/qlineedit.h>
+#include <Qt/qgroupbox.h>
+#include <Qt/qlayout.h>
+#include <Qt/qbuttongroup.h>
+#include <Qt/q3mimefactory.h>
+using QMimeSourceFactory = Q3MimeSourceFactory;
+#include <Qt/qmime.h>
+#include <Qt/q3dragobject.h>
+using QImageDrag = Q3ImageDrag;
 
 #include "fusion/fusionui/ProjectManager.h"
 #include "fusion/fusionui/AssetDrag.h"
@@ -51,10 +59,11 @@
 
 #include "common/khFileUtils.h"
 #include "common/notify.h"
-
+#include "khException.h"
 #include "newfeaturebase.h"
 
-static const char* folder_closed_xpm[] = {
+using QCheckListItem = Q3CheckListItem;
+static const char* const folder_closed_xpm[] = {
   "16 16 9 1",
   "g c #808080",
   "b c #c0c000",
@@ -82,7 +91,7 @@ static const char* folder_closed_xpm[] = {
   ".........##f#b##",
   "...........####." };
 
-static const char* folder_open_xpm[] = {
+static const char* const folder_open_xpm[] = {
   "16 16 11 1",
   "# c #000000",
   "g c #c0c0c0",
@@ -161,7 +170,7 @@ class NewFeatureDialog : public NewFeatureBase {
 
 // ----------------------------------------------------------------------------
 
-FeatureItem::FeatureItem(QListView* parent, int id, gstGeodeHandle geode,
+FeatureItem::FeatureItem(Q3ListView* parent, int id, gstGeodeHandle geode,
                          gstRecordHandle attrib)
     : QCheckListItem(parent, QString::number(id), QCheckListItem::CheckBox),
       id_(id),
@@ -392,8 +401,8 @@ FeatureEditor::FeatureEditor(QWidget* parent)
 
   connect(this, SIGNAL(RedrawPreview()), GfxView::instance, SLOT(updateGL()));
 
-  connect(GfxView::instance, SIGNAL(MousePress(const gstBBox&, Qt::ButtonState)),
-          this, SLOT(MousePress(const gstBBox&, Qt::ButtonState)));
+  connect(GfxView::instance, SIGNAL(MousePress(const gstBBox&, Qt::KeyboardModifier)),
+          this, SLOT(MousePress(const gstBBox&, Qt::KeyboardModifier)));
   connect(GfxView::instance, SIGNAL(MouseMove(const gstVertex&)),
           this, SLOT(MouseMove(const gstVertex&)));
   connect(GfxView::instance, SIGNAL(MouseRelease()),
@@ -401,8 +410,8 @@ FeatureEditor::FeatureEditor(QWidget* parent)
   connect(this, SIGNAL(ZoomToBox(const gstBBox&)),
           GfxView::instance, SLOT(zoomToBox(const gstBBox&)));
 
-  connect(GfxView::instance, SIGNAL(selectBox(const gstDrawState &, Qt::ButtonState)),
-          this, SLOT(SelectBox(const gstDrawState &, Qt::ButtonState)));
+  connect(GfxView::instance, SIGNAL(selectBox(const gstDrawState &, Qt::KeyboardModifier)),
+          this, SLOT(SelectBox(const gstDrawState &, Qt::KeyboardModifier)));
 
   setAcceptDrops(true);
 
@@ -420,8 +429,8 @@ FeatureEditor::FeatureEditor(QWidget* parent)
   if (!Preferences::ExperimentalMode)
     experimental_box->hide();
 
-  if (khExists(Preferences::filepath(kLayoutFilename).latin1())) {
-    if (layout_persist_.Load(Preferences::filepath(kLayoutFilename).latin1())) {
+  if (khExists(Preferences::filepath(kLayoutFilename).toUtf8().constData())) {
+    if (layout_persist_.Load(Preferences::filepath(kLayoutFilename).toUtf8().constData())) {
       // update position
       resize(layout_persist_.width, layout_persist_.height);
       move(layout_persist_.xpos, layout_persist_.ypos);
@@ -464,7 +473,7 @@ FeatureEditor::~FeatureEditor() {
   Close();
 
   layout_persist_.showme = isShown();
-  layout_persist_.Save(Preferences::filepath(kLayoutFilename).latin1());
+  layout_persist_.Save(Preferences::filepath(kLayoutFilename).toUtf8().constData());
 }
 
 void FeatureEditor::moveEvent(QMoveEvent* event) {
@@ -499,25 +508,25 @@ void FeatureEditor::ContextMenu(QListViewItem* item, const QPoint& pos, int) {
 
   int id;
 
-  menu.insertItem(tr("Zoom to Feature"), mZoomToFeature);
+  menu.insertItem(kh::tr("Zoom to Feature"), mZoomToFeature);
   menu.insertSeparator();
   if (feature_item) {
-    menu.insertItem(tr("Copy Feature"), mCopyFeature);
-    id = menu.insertItem(tr("Paste Feature"), mPasteFeature);
+    menu.insertItem(kh::tr("Copy Feature"), mCopyFeature);
+    id = menu.insertItem(kh::tr("Paste Feature"), mPasteFeature);
     if (!geode_copy_buffer_)
       menu.setItemEnabled(id, false);
-    menu.insertItem(tr("Delete Feature"), mDeleteFeature);
+    menu.insertItem(kh::tr("Delete Feature"), mDeleteFeature);
     menu.insertSeparator();
-    id = menu.insertItem(tr("Revert Feature"), mRevertFeature);
+    id = menu.insertItem(kh::tr("Revert Feature"), mRevertFeature);
     if (!feature_item->HasBackup())
       menu.setItemEnabled(id, false);
   } else if (subpart_item) {
 #if 0
-    menu.insertItem(tr("Copy Subpart"), mCopySubpart);
-    id = menu.insertItem(tr("Paste Subpart"), mPasteSubpart);
+    menu.insertItem(kh::tr("Copy Subpart"), mCopySubpart);
+    id = menu.insertItem(kh::tr("Paste Subpart"), mPasteSubpart);
     if (!geode_copy_buffer_)
       menu.setItemEnabled(id, false);
-    menu.insertItem(tr("Delete Subpart"), mDeleteSubpart);
+    menu.insertItem(kh::tr("Delete Subpart"), mDeleteSubpart);
 #endif
   }
 
@@ -628,8 +637,8 @@ void FeatureEditor::DeleteFeature(FeatureItem* feature_item) {
 }
 
 bool FeatureEditor::Save() {
-  QFileDialog fd(this);
-  fd.setMode(QFileDialog::AnyFile);
+  Q3FileDialog fd(this);
+  fd.setMode(Q3FileDialog::AnyFile);
   fd.addFilter("Keyhole Geometry (*.kvgeom)");
   if (fd.exec() != QDialog::Accepted)
     return false;
@@ -639,14 +648,14 @@ bool FeatureEditor::Save() {
   // TODO: Ideally the save() option will support all OGR formats so the
   // check for existing file(s) will need to be reworked then.
 
-  std::string kvgeom_name = khEnsureExtension(fname.latin1(), ".kvgeom");
+  std::string kvgeom_name = khEnsureExtension(fname.toUtf8().constData(), ".kvgeom");
   std::string kvattr_name = khReplaceExtension(kvgeom_name, ".kvattr");
   std::string kvindx_name = khReplaceExtension(kvgeom_name, ".kvindx");
   if (khExists(kvgeom_name) || khExists(kvattr_name) || khExists(kvindx_name)) {
     if (QMessageBox::critical(this, "File Already Exists",
-                              tr("The file already exists.  "
+                              kh::tr("The file already exists.  "
                                  "Do you wish to overwrite it?"),
-                              tr("Yes"), tr("No"), 0, 1) == 0) {
+                              kh::tr("Yes"), kh::tr("No"), 0, 1) == 0) {
       khUnlink(kvgeom_name);
       khUnlink(kvattr_name);
       khUnlink(kvindx_name);
@@ -657,8 +666,8 @@ bool FeatureEditor::Save() {
 
   if (ExportKVP(fname) == false) {
     QMessageBox::critical(this, "Error",
-                          tr("Unable to save file:") + fname ,
-                          tr("OK"), 0, 0, 0);
+                          kh::tr("Unable to save file:") + fname ,
+                          kh::tr("OK"), 0, 0, 0);
     return false;
   }
 
@@ -667,7 +676,7 @@ bool FeatureEditor::Save() {
 }
 
 bool FeatureEditor::ExportKVP(const QString& fname) {
-  std::string kvp_name = khEnsureExtension(fname.latin1(), ".kvgeom");
+  std::string kvp_name = khEnsureExtension(fname.toUtf8().constData(), ".kvgeom");
   gstKVPFile kvp(kvp_name.c_str());
   if (kvp.OpenForWrite() != GST_OKAY) {
     notify(NFY_WARN, "Unable to open feature file %s", kvp_name.c_str());
@@ -718,7 +727,7 @@ void FeatureEditor::GetSelectList(std::vector<FeatureItem*>* select_list) {
 }
 
 
-void FeatureEditor::MousePress(const gstBBox& box_point, Qt::ButtonState state) {
+void FeatureEditor::MousePress(const gstBBox& box_point, Qt::KeyboardModifier state) {
   // cancel any editing that's currently underway
   editing_vertex_ = false;
 
@@ -895,7 +904,7 @@ void FeatureEditor::dropEvent(QDropEvent* event) {
     QString text;
     AssetDrag::decode(event, text);
 
-    Asset asset(AssetDefs::FilenameToAssetPath(text.latin1()));
+    Asset asset(AssetDefs::FilenameToAssetPath(text.toUtf8().constData()));
 
     //
     // Handle assets (products)
@@ -915,23 +924,23 @@ void FeatureEditor::dropEvent(QDropEvent* event) {
       if (new_source)
         AddFeaturesFromSource(new_source);
     } else {
-      if (QMessageBox::warning(this, tr("Error"),
-                               tr("Cannot open asset.\n"
+      if (QMessageBox::warning(this, kh::tr("Error"),
+                               kh::tr("Cannot open asset.\n"
                                   "Asset does not have a good version.\n"
                                   "Do you want to schedule a build now?"),
-                               tr("Yes"), tr("No"), 0, 1) == 0) {
+                               kh::tr("Yes"), kh::tr("No"), 0, 1) == 0) {
         QString error;
         bool needed;
         if (!khAssetManagerProxy::BuildAsset(asset->GetRef(),
                                              needed, error)) {
           QMessageBox::critical(this, "Error",
-                                tr("Unable to schedule build. ") +
+                                kh::tr("Unable to schedule build. ") +
                                 error,
-                                tr("OK"), 0, 0, 0);
+                                kh::tr("OK"), 0, 0, 0);
         } else if (!needed) {
           QMessageBox::critical(this, "Error" ,
-                                tr("Unable to schedule build. Already up to date"),
-                                tr("OK"), 0, 0, 0);
+                                kh::tr("Unable to schedule build. Already up to date"),
+                                kh::tr("OK"), 0, 0, 0);
         }
       }
     }
@@ -944,7 +953,7 @@ void FeatureEditor::dropEvent(QDropEvent* event) {
 
     for (QStringList::Iterator it = files.begin(); it != files.end(); ++it) {
       QString fname = ProjectManager::CleanupDropText(*it);
-      notify(NFY_DEBUG, "Got file: %s", fname.latin1());
+      notify(NFY_DEBUG, "Got file: %s", fname.toUtf8().constData());
     }
   }
   emit RedrawPreview();
@@ -962,8 +971,8 @@ void FeatureEditor::Open() {
   if (!Close())
     return;
 
-  QFileDialog file_dialog(this);
-  file_dialog.setMode(QFileDialog::ExistingFile);
+  Q3FileDialog file_dialog(this);
+  file_dialog.setMode(Q3FileDialog::ExistingFile);
 
   file_dialog.addFilter("US Census Tiger Line Files (*.rt1 *.RT1)");
   file_dialog.addFilter("OpenGIS GML (*.gml *.GML)");
@@ -981,7 +990,7 @@ void FeatureEditor::Open() {
 
   QString fname(file_dialog.selectedFile());
 
-  gstSource* new_source = OpenSource(fname.latin1(), 0, false);
+  gstSource* new_source = OpenSource(fname.toUtf8().constData(), 0, false);
   if (new_source) {
     AddFeaturesFromSource(new_source);
     delete new_source;
@@ -1133,22 +1142,6 @@ int BlendEquations[] = {
   GL_MAX
 };
 
-#if 0
-void FeatureEditor::DrawMobileBlocks(const gstDrawState& state) {
-  if (mobile_blocks_.size() == 0)
-    return;
-
-  MobileBlockImpl::BlendFuncModes blend_modes;
-  blend_modes.src_factor = GL_SRC_ALPHA;
-  blend_modes.dest_factor = GL_ONE_MINUS_SRC_ALPHA;
-  blend_modes.equation = GL_FUNC_ADD;
-
-  for (std::vector<MobileBlockHandle>::iterator it = mobile_blocks_.begin();
-       it != mobile_blocks_.end(); ++it)
-    (*it)->Draw(state, blend_modes);
-}
-#endif
-
 
 gstSource* FeatureEditor::OpenSource(const char* src, const char* codec,
                                      bool nofileok) {
@@ -1160,17 +1153,17 @@ gstSource* FeatureEditor::OpenSource(const char* src, const char* codec,
 
 
   if (new_source->Open() != GST_OKAY) {
-    QMessageBox::critical(this, tr("Error"),
-                          QString(tr("File has unknown problems:\n\n%1")).arg(new_source->name()),
-                          tr("OK"), 0, 0, 0);
+    QMessageBox::critical(this, kh::tr("Error"),
+                          QString(kh::tr("File has unknown problems:\n\n%1")).arg(new_source->name()),
+                          kh::tr("OK"), 0, 0, 0);
     return NULL;
   }
 
   if (new_source->NumLayers() == 0) {
-    QMessageBox::critical(this, tr("Error"),
-                          QString(tr("File doesn't have any valid layers:\n\n%1")).
+    QMessageBox::critical(this, kh::tr("Error"),
+                          QString(kh::tr("File doesn't have any valid layers:\n\n%1")).
                           arg(new_source->name()),
-                          tr("OK"), 0, 0, 0);
+                          kh::tr("OK"), 0, 0, 0);
     return NULL;
   }
 
@@ -1187,7 +1180,7 @@ void FeatureEditor::AddFeaturesFromSource(gstSource* source) {
     feature_listview->addColumn(current_header_->Name(col));
 
   // only adjust columns after all have been added
-  feature_listview->setResizeMode(QListView::AllColumns);
+  feature_listview->setResizeMode(Q3ListView::AllColumns);
 
   SoftErrorPolicy soft_errors(kMaxBadFeatures);
   try {
@@ -1218,42 +1211,43 @@ void FeatureEditor::AddFeaturesFromSource(gstSource* source) {
         error += QString::fromUtf8(soft_errors.Errors()[i].c_str());
       }
       QMessageBox::warning(
-          this, tr("Warning"),
+          this, kh::tr("Warning"),
           error,
-          tr("OK"), 0, 0, 0);
+          kh::tr("OK"), 0, 0, 0);
     }
 
   } catch (const SoftErrorPolicy::TooManyException &e) {
     QString error(kh::tr("Too many bad features"));
     for (unsigned int i = 0; i < e.errors_.size(); ++i) {
-      error += "\n" + e.errors_[i];
+      error += "\n";
+      error += e.errors_[i].c_str();
     }
-    QMessageBox::critical(this, tr("Error"),
-                          tr("Error while importing") +
+    QMessageBox::critical(this, kh::tr("Error"),
+                          kh::tr("Error while importing") +
                           error,
-                          tr("OK"), 0, 0, 0);
+                          kh::tr("OK"), 0, 0, 0);
   } catch (const khException &e) {
-    QMessageBox::critical(this, tr("Error"),
-                          tr("Error while importing") +
+    QMessageBox::critical(this, kh::tr("Error"),
+                          kh::tr("Error while importing") +
                           e.qwhat(),
-                          tr("OK"), 0, 0, 0);
+                          kh::tr("OK"), 0, 0, 0);
   } catch (const std::exception &e) {
-    QMessageBox::critical(this, tr("Error"),
-                          tr("Error while importing") +
+    QMessageBox::critical(this, kh::tr("Error"),
+                          kh::tr("Error while importing") +
                           e.what(),
-                          tr("OK"), 0, 0, 0);
+                          kh::tr("OK"), 0, 0, 0);
   } catch (...) {
-    QMessageBox::critical(this, tr("Error"),
-                          tr("Error while importing") +
+    QMessageBox::critical(this, kh::tr("Error"),
+                          kh::tr("Error while importing") +
                           "Unknown error",
-                          tr("OK"), 0, 0, 0);
+                          kh::tr("OK"), 0, 0, 0);
   }
 
   emit RedrawPreview();
 }
 
 void FeatureEditor::SelectBox(const gstDrawState& state,
-                              Qt::ButtonState btn_state) {
+                              Qt::KeyboardModifier btn_state) {
   // three possible states:
   //   clear & add - no keyboard modifiers
   //   add         - shift
@@ -1261,8 +1255,8 @@ void FeatureEditor::SelectBox(const gstDrawState& state,
   bool pick_clear = true;
   bool pick_add = true;
 
-  if (btn_state & ShiftButton) {
-    if (btn_state & ControlButton) {
+  if (btn_state & Qt::ShiftModifier) {
+    if (btn_state & Qt::ControlModifier) {
       pick_clear = false;
       pick_add = false;
     } else {
@@ -1303,8 +1297,8 @@ void FeatureEditor::BoxCut() {
   GetSelectList(&select_list);
   if (select_list.size() == 0) {
     QMessageBox::critical(this, "Error",
-                          tr("Nothing selected!"),
-                          tr("OK"), 0, 0, 0);
+                          kh::tr("Nothing selected!"),
+                          kh::tr("OK"), 0, 0, 0);
     return;
   }
 
@@ -1423,38 +1417,6 @@ void FeatureEditor::CheckNone() {
   emit RedrawPreview();
 }
 
-#if 0
-void FeatureEditor::SelectAll() {
-  QCheckListItem* item = static_cast<QCheckListItem*>(feature_listview->firstChild());
-  while (item) {
-    item->setSelected(true);
-    //item->update();
-    item = static_cast<QCheckListItem*>(item->nextSibling());
-  }
-  emit RedrawPreview();
-  feature_listview->update();
-}
-
-void FeatureEditor::SelectNone() {
-  QCheckListItem* item = static_cast<QCheckListItem*>(feature_listview->firstChild());
-  while (item) {
-    item->setSelected(false);
-    //item->update();
-    item = static_cast<QCheckListItem*>(item->nextSibling());
-  }
-  emit RedrawPreview();
-  feature_listview->update();
-}
-
-void FeatureEditor::ShowPrevious() {
-  printf("show previous\n");
-}
-
-void FeatureEditor::ShowNext() {
-  printf("show next\n");
-}
-#endif
-
 void FeatureEditor::ChangePrimType() {
   gstPrimType new_type = prim_type_combo->currentItem() == 0 ? gstPoint :
       (prim_type_combo->currentItem() == 1 ? gstPolyLine : gstPolygon);
@@ -1491,8 +1453,8 @@ void FeatureEditor::Join() {
   GetSelectList(&select_list);
   if (select_list.size() == 0) {
     QMessageBox::critical(this, "Error",
-                          tr("Nothing selected!"),
-                          tr("OK"), 0, 0, 0);
+                          kh::tr("Nothing selected!"),
+                          kh::tr("OK"), 0, 0, 0);
     return;
   }
 

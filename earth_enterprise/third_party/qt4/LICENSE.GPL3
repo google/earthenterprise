@@ -1,8 +1,10 @@
+                    GNU GENERAL PUBLIC LICENSE
 
- The Qt GUI Toolkit is Copyright (C) 1994-2008 Trolltech ASA.
+ The Qt GUI Toolkit is Copyright (C) 2012 Digia Plc.
+ For any questions to Digia, please use contact form at http://qt.digia.com/
 
  You may use, distribute and copy the Qt GUI Toolkit under the terms of
- GNU General Public License version 2, which is displayed below.
+ GNU General Public License version 3, which is displayed below.
 
 -------------------------------------------------------------------------
 
@@ -548,7 +550,7 @@ otherwise be available to you under applicable patent law.
   12. No Surrender of Others' Freedom.
 
   If conditions are imposed on you (whether by court order, agreement or
-otherwise) athat contradict the conditions of this License, they do not
+otherwise) that contradict the conditions of this License, they do not
 excuse you from the conditions of this License.  If you cannot convey a
 covered work so as to satisfy simultaneously your obligations under this
 License and any other pertinent obligations, then as a consequence you may
@@ -682,3 +684,13 @@ Public License instead of this License.  But first, please read
 <http://www.gnu.org/philosophy/why-not-lgpl.html>.
 
 -------------------------------------------------------------------------
+
+In addition, as a special exception, Digia gives permission to link the
+code of its release of Qt with the OpenSSL project's "OpenSSL" library (or
+modified versions of it that use the same license as the "OpenSSL"
+library), and distribute the linked executables.  You must comply with the
+GNU General Public License versions 2.0 or 3.0 in all respects for all of
+the code used other than the "OpenSSL" code.  If you modify this file, you
+may extend this exception to your version of the file, but you are not
+obligated to do so.  If you do not wish to do so, delete this exception
+statement from your version of this file.

@@ -38,7 +38,7 @@ khGDALImageImpl::khGDALImageImpl(const std::string &filename_) :
   dataset = TransferOwnership(
       (GDALDataset *) GDALOpen(filename.c_str(), GA_ReadOnly));
   if (!dataset) {
-    throw khException(kh::tr("Unable to open %1").arg(filename));
+    throw khException(kh::tr("Unable to open %1").arg(filename.c_str()));
   }
 
   khSize<std::uint32_t> rasterSize(dataset->GetRasterXSize(),

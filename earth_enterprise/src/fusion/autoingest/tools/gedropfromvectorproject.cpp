@@ -83,16 +83,16 @@ main(int argc, char *argv[]) {
     for (; argn < argc; ++argn) {
       req.items.push_back
         (VectorProjectDropFromRequest::Item
-         (std::string(),                              // layerName
+         (QString(),                              // layerName
           AssetDefs::NormalizeAssetName(argv[argn],
                                         AssetDefs::Vector,
                                         kProductSubtype))); // assetRef
     }
-    for (std::vector<std::string>::const_iterator ln = layernames.begin();
-         ln != layernames.end(); ++ln) {
+
+    for (const auto& ln : layernames) {
       req.items.push_back
         (VectorProjectDropFromRequest::Item
-         (*ln,                // layerName
+         (ln.c_str(),                // layerName
           std::string()));    // assetRef
     }
 

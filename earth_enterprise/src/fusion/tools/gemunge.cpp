@@ -62,7 +62,7 @@ void ValidateTypename(const std::string &n) {
   khTypes::StorageEnum storage = khTypes::StorageNameToEnum(n.c_str());
   if ((storage == khTypes::UInt64) ||
       (storage == khTypes::Int64)) {
-    throw khException(kh::tr("Unsupported type name: %1").arg(n));
+    throw khException(kh::tr("Unsupported type name: %1").arg(n.c_str()));
   }
 }
 

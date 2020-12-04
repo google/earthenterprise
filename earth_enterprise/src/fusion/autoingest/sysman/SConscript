@@ -107,65 +107,62 @@ sysmanFiles = ['AssetD.cpp', 'AssetVersionD.cpp',
   'ResourceProviderProxy.cpp', 'Reservation.cpp',
   'SysManExtra.cpp', 'SysManFromStorage.cpp', 'InsetInfo.cpp'] + \
   pluginFiles
-sysmanExtraObjs = [TaskStorageObj, JobStorageObj, NextTaskIdObj, TaskRuleObj,
+extraObjs = [TaskStorageObj, JobStorageObj, NextTaskIdObj, TaskRuleObj,
   FusionUniqueIdObj] + \
   commonobj + \
   env.ObjFromOtherDir(otherDirObjs)
 sysmanObjs = map(lambda f: str(f).replace(".cpp", ".o"), sysmanFiles)
 sysmanLibs = ['gegdal', 'geraster', 'gesearchtabs', 'genet', 'gepublish', 'gefconfigutil',
-  'geindex_r', 'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'qt-mt', 'xerces-c', 'geos',
+  'geindex_r', 'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'QtCore', 'QtGui', 'xerces-c', 'geos',
   'gomp']
-sysmanTestLibs = sysmanLibs + ['gtest']
-
-resprovFiles = ['khResourceProvider.cpp', 'khResourceManagerProxy.cpp',
-  'khResourceProviderDispatch.cpp']
-resprovObjs = map(lambda f: str(f).replace(".cpp", ".o"), resprovFiles)
-resprovExtraObjs = [TaskStorageObj, JobStorageObj, env['FUSIONVER'], env['BUILDDATE']]
-resprovLibs = ['geautoingest', 'geconfigutil', 'gefconfigutil', 'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'xerces-c', 'qt-mt']
-resprovTestLibs = resprovLibs + ['gtest']
-
+testLibs = sysmanLibs + ['gtest']
 
 gesystemmanager = env.executable('gesystemmanager',
-    [ 'gesystemmanager_main.cpp', env['FUSIONVER'] ] + sysmanFiles + sysmanExtraObjs,
+    [ 'gesystemmanager_main.cpp', env['FUSIONVER'] ] + sysmanFiles + extraObjs,
     LIBS=sysmanLibs)
 
 geresourceprovider = env.executable('geresourceprovider',
-    ['geresourceprovider_main.cpp'] + resprovFiles + resprovExtraObjs,
-    LIBS=resprovLibs)
+    ['geresourceprovider_main.cpp',
+     'khResourceProvider.cpp',
+     'khResourceManagerProxy.cpp', 'khResourceProviderDispatch.cpp',
+     TaskStorageObj, JobStorageObj,
+     env['FUSIONVER'],
+     env['BUILDDATE'],
+     ],
+    LIBS=['geautoingest', 'geconfigutil', 'gefconfigutil', 'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'xerces-c', 'QtCore', 'QtGui'])
 
 
 env.install('fusion_bin', [ gesystemmanager, geresourceprovider ] )
 env.install('fusion_root', [ 'gefusion' ], 'etc/init.d')
 
 
+'''
+# TODO: sysmanExtraObjs ??
 SConscript(
     'parse-raster-project-xml-no-content_unittest/SConscript',
-    exports=['env', 'sysmanObjs', 'sysmanExtraObjs', 'sysmanTestLibs'])
+    exports=['env', 'sysmanObjs', 'extraObjs', 'testLibs'])
 
 SConscript(
     'memory-tests/SConscript',
-    exports=['env', 'sysmanObjs', 'sysmanExtraObjs', 'sysmanTestLibs'])
+    exports=['env', 'sysmanObjs', 'extraObjs', 'testLibs'])
 
 env.test('LeafAssetVersion_unittest',
-    sysmanObjs + sysmanExtraObjs + [ 'LeafAssetVersion_unittest.cpp' ],
-    LIBS=sysmanTestLibs)
+    sysmanObjs + extraObjs + [ 'LeafAssetVersion_unittest.cpp' ],
+    LIBS=testLibs)
 
 env.test('StateUpdater_unittest',
-    sysmanObjs + sysmanExtraObjs + [ 'StateUpdater_unittest.cpp' ],
-    LIBS=sysmanTestLibs)
+    sysmanObjs + extraObjs + [ 'StateUpdater_unittest.cpp' ],
+    LIBS=testLibs)
 
 env.test('StorageManagerAssetFactory_unittest',
-    sysmanObjs + sysmanExtraObjs + [ 'StorageManagerAssetFactory_unittest.cpp' ],
-    LIBS=sysmanTestLibs)
+    sysmanObjs + extraObjs + [ 'StorageManagerAssetFactory_unittest.cpp' ],
+    LIBS=testLibs)
 
 env.test('AssetOperation_unittest',
-    sysmanObjs + sysmanExtraObjs + ['AssetOperation_unittest.cpp'],
-    LIBS=sysmanTestLibs)
+    sysmanObjs + extraObjs + ['AssetOperation_unittest.cpp'],
+    LIBS=testLibs)
 
 env.test('CalcState_unittest',
-    sysmanObjs + sysmanExtraObjs + [ 'CalcState_unittest.cpp' ],
-    LIBS=sysmanTestLibs)
-
-env.test('JobLoop_unittest',
-    ['JobLoop_unittest.cpp'] + resprovObjs + resprovExtraObjs,
-    LIBS=resprovTestLibs)
+    sysmanObjs + extraObjs + [ 'CalcState_unittest.cpp' ],
+    LIBS=testLibs)
+'''

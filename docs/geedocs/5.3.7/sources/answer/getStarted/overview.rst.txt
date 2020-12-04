@@ -140,7 +140,7 @@ Manage virtual hosts
 
 Configure a GEE virtual host for LDAP authentication
 
-Configure GEE Server 5.1.0 for SSL/HTTPS
+Configure GEE Server for SSL/HTTPS
 
 -[ 5. Make Web Map Service (WMS) requests ]-
 

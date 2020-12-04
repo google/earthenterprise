@@ -35,7 +35,7 @@ sudo apt-get install \
     libgdbm-dev libgeos-dev libgeos++-dev libgif-dev libgtest-dev \
     libjpeg-dev libjpeg8-dev libmng-dev libogdi3.2-dev \
     libperl4-corelibs-perl libpng12-0 libpng12-dev libpq-dev libproj-dev \
-    libstdc++6 libtool libffi-dev \
+    libstdc++6 libtool libgif-dev libtiff-dev libgtk2.0-dev libglib2.0-dev \
     libx11-dev libxcursor-dev libxerces-c-dev libxft-dev libxinerama-dev \
     libxml2-dev libxml2-utils libxmu-dev libxrandr-dev libyaml-cpp-dev \
     openssl libpcre3 libpcre3-dev \

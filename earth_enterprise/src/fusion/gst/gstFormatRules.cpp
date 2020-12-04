@@ -126,7 +126,7 @@ QString gstFormatRules::reformat(const QString &input) const {
       int pos = curr_word.find('-');
       while (pos != -1) {
         // point to char immediately after hyphen, testing for end of string
-        if (uint(++pos) >= curr_word.length())
+        if (++pos >= curr_word.length())
           break;
         QCharRef up = curr_word[pos];
         up = up.upper();

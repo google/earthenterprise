@@ -17,4 +17,4 @@
 
 Import('env')
 
-env.executable('dumpmesh', 'dumpmesh.cpp', LIBS=['geutil', 'gecommon', 'qt-mt'])
+env.executable('dumpmesh', 'dumpmesh.cpp', LIBS=['geutil', 'gecommon', 'QtCore', 'QtGui'])

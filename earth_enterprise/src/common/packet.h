@@ -24,6 +24,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include <khEndian.h>
 
@@ -87,7 +88,7 @@ struct etDataHeader
   id_size dataBufferOffset;
   id_size dataBufferSize;
   id_size metaBufferSize;
-        
+
   inline void byteSwap()
   {
     swapb(magicID);
@@ -129,10 +130,10 @@ struct etPattern
 struct etString
 {
   char * string;
-        
+
   etPattern* getPattern() { return (etPattern*)(string - sizeof(etPattern)); }
   int        getLength()  { return getPattern()->length; }
-        
+
   void set(const char * from)
   {
     etPattern header(from);
@@ -141,7 +142,7 @@ struct etString
     string = tmp + sizeof(etPattern);
     strcpy(string, from);
   };
-        
+
   inline void byteSwap()
   {
     getPattern()->byteSwap();
@@ -156,7 +157,7 @@ struct etString
 struct etVec3us
 {
   unsigned short elem[3];
-        
+
   inline void byteSwap()
   {
     swapb(elem[0]);
@@ -197,7 +198,7 @@ struct etDataPacket_BASE32
     
   std::uint32_t dataBuffer;
   int maxDataBufferSize;
-     
+
   //Flat File Concurrent Save
   static char flatbasename[500];
   static char flatdirname[500];
@@ -235,14 +236,14 @@ struct etDataPacket
 #else       
   void * metaHeader;
 #endif
-    
+
 #ifdef FORCE_BASE32
   std::uint32_t packetBuffer_OFFSET;
 #else       
   char* packetBuffer;
 #endif
   int packetBufferSize;
-  
+
 #ifdef FORCE_BASE32
   std::uint32_t dataInstances_OFFSET;
   std::uint32_t dataBuffer_OFFSET;
@@ -251,34 +252,34 @@ struct etDataPacket
   char * dataBuffer;
 #endif
   int maxDataBufferSize;
-    
+
   //Get Data Instances
-  void   getDataInstance(int index, void * dst) 
+  void   getDataInstance(int index, void * dst)
   { memcpy(dst, &dataInstances[index*packetHeader.dataInstanceSize], packetHeader.dataInstanceSize); }
-  void * getDataInstanceP(int index) 
+  void * getDataInstanceP(int index)
   { return &dataInstances[index*packetHeader.dataInstanceSize]; }
-    
+
   //Set Data Instances
   void setDataInstance(int index, void * src)
   { memcpy(&dataInstances[index*packetHeader.dataInstanceSize], src, packetHeader.dataInstanceSize); }
-    
+
   //Add Data to Data Buffer
   unsigned int addDataToDataBuffer(void * buffer, int buffersize);
-    
+
   //Load and Initialize Data Packet
   int load(char * filename);
   int load(char* buffer, int buffersize);
-    
+
   //Save Data Packet
   int save(char * filename);
   int save(void * buffer, int buffersize);
-        
+
   //Calculate Size of Data Packet
   int getsavesize()
-  { return sizeof(etDataHeader) + 
-      packetHeader.dataInstanceSize*packetHeader.numInstances + 
+  { return sizeof(etDataHeader) +
+      packetHeader.dataInstanceSize*packetHeader.numInstances +
       packetHeader.dataBufferSize; }
-    
+
   //Flat File Concurrent Save
   static char flatbasename[500];
   static char flatdirname[500];
@@ -301,9 +302,9 @@ struct etDataPacket
   int closeFlat();
 
   //Initialize Data Packet
-  void initHeader(int dataTypeID, int version, int numInstances, int dataInstanceSize, 
+  void initHeader(int dataTypeID, int version, int numInstances, int dataInstanceSize,
                   void * metastruct = NULL);
-    
+
   //Clear Data Packet
   void clear()
   {
@@ -385,7 +386,7 @@ struct etDataCypher
   int fromOffset;
   int toOffset;
   int size;
-    
+
   int pointerFlag;
  private:
   DISALLOW_COPY_AND_ASSIGN(etDataCypher);
@@ -395,11 +396,11 @@ struct etDataTranslator
 {
   etDataCypher * translationTable;
   int translationTableSize;
-    
+
   void allocTranslationTable(int num);
-    
+
   void setTranslationTable(int num, int fromOffset, int toOffset, int size, int pointerFlag);
-    
+
   void translate(void * fromptr, void * toptr);
   void translateBack(void * fromptr, void * toptr);
 
@@ -426,18 +427,18 @@ struct etPointerTranslator
 {
   etPointerCypher * pointerList;
   int pointerListSize;
-    
+
   void allocPointerList(int num);
-    
-  void setPointerList(int num, int offset, int (* get)(void *) = NULL) 
+
+  void setPointerList(int num, int offset, int (* get)(void *) = NULL)
   { pointerList[num].offset = offset; pointerList[num].get = get; }
-    
+
   void translatePointerToOffset(etDataPacket * packet, int cleanup=0);
   void translateOffsetToPointer(etDataPacket * packet);
-    
+
   void translateStringToOffset(etDataPacket * packet, int cleanup=1);
   void translateOffsetToString(etDataPacket * packet);
-        
+
   //Destructor
   etPointerTranslator() : pointerList(NULL) {}
   ~etPointerTranslator() { if(pointerList) free(pointerList); };
@@ -499,22 +500,22 @@ struct etStreetPacketData
   etVec3d     *localPt;
 #endif
 #endif
-        
+
   inline void byteSwap()
   {
 #ifdef khEndianDoSwap
     for(int i=0; i < numPt; i++)
       localPt[i].byteSwap();
-                        
+
     name.byteSwap();
     swapb(texId_deprecated);
     swapb(numPt);
     swapb(bitFlags);
-    swapb(style);   
+    swapb(style);
 #endif
   };
 
-#ifdef FORCE_BASE32     
+#ifdef FORCE_BASE32
   void movetooffset()
   {
     localPt_OFFSET = (std::uint64_t)localPt;
@@ -545,18 +546,18 @@ struct etStreetPacket : public etDataPacket
 
   void initUTF8(int num)
   {
-    initHeader(TYPE_STREETPACKET_UTF8/*datatype*/, KEYHOLE_VERSION/*version*/, num, 
+    initHeader(TYPE_STREETPACKET_UTF8/*datatype*/, KEYHOLE_VERSION/*version*/, num,
                sizeof(etStreetPacketData));
-#ifdef FORCE_BASE32             
+#ifdef FORCE_BASE32
     dataInstanceSize_BASE32 = sizeof(etStreetPacketData_BASE32);
 #endif
   };
-        
+
   etStreetPacketData * getPtr(int num)
   {
     return (etStreetPacketData *)getDataInstanceP(num);
   };
-        
+
   void pointerToOffset()
   {
     if(streetPointerTranslator == NULL)
@@ -569,7 +570,7 @@ struct etStreetPacket : public etDataPacket
     streetStringTranslator->translateStringToOffset(this);
 #ifdef FORCE_BASE32
     movetooffset();
-#endif          
+#endif
   };
 
   void offsetToPointer()
@@ -586,7 +587,7 @@ struct etStreetPacket : public etDataPacket
       packetBuffer = newpacketBuffer;
       dataInstances = newpacketBuffer;
     }
-#endif  
+#endif
     if(streetPointerTranslator == NULL)
     {
       streetPointerTranslator = createStreetPointerTranslator();
@@ -594,7 +595,7 @@ struct etStreetPacket : public etDataPacket
     }
 #ifdef FORCE_BASE32
     movefromoffset();
-#endif          
+#endif
     streetPointerTranslator->translateOffsetToPointer(this);
     streetStringTranslator->translateOffsetToString(this);
     byteSwap();
@@ -603,7 +604,7 @@ struct etStreetPacket : public etDataPacket
 
   etPointerTranslator * createStreetPointerTranslator();
   etPointerTranslator * createStreetStringTranslator();
-        
+
   inline void byteSwap()
   {
     for(id_size i=0; i < packetHeader.numInstances; i++)
@@ -621,7 +622,7 @@ struct etStreetPacket : public etDataPacket
     for(id_size i=0; i < packetHeader.numInstances; i++)
       getPtr(i)->movefromoffset();
   };
-#endif          
+#endif
 
  public:
   etStreetPacket() {}
@@ -637,7 +638,7 @@ struct etPolyLinePacketData_BASE32
   int          texId;
   ushort       numPt;
   ushort       bitFlags;
-    
+
 #ifdef VECTOR_COMPRESSION
   std::uint32_t localPt;
 #else
@@ -660,7 +661,7 @@ struct etPolyLinePacketData
   int          texId;
   ushort       numPt;
   ushort       bitFlags;
-    
+
 #ifdef FORCE_BASE32
 #ifdef VECTOR_COMPRESSION
   std::uint32_t localPt_OFFSET;
@@ -690,15 +691,15 @@ struct etPolyLinePacketData
   {
     for(int i=0; i < numPt; i++)
       localPt[i].byteSwap();
-                        
+
     name.byteSwap();
     swapb(texId);
     swapb(numPt);
     swapb(bitFlags);
-    swapb(style);   
+    swapb(style);
   };
 
-#ifdef FORCE_BASE32     
+#ifdef FORCE_BASE32
   void movetooffset()
   {
     localPt_OFFSET = (std::uint64_t)localPt;
@@ -729,18 +730,18 @@ struct etPolyLinePacket : public etDataPacket
 
   void init(int num)
   {
-    initHeader(TYPE_POLYLINEPACKET/*datatype*/, KEYHOLE_VERSION/*version*/, num, 
+    initHeader(TYPE_POLYLINEPACKET/*datatype*/, KEYHOLE_VERSION/*version*/, num,
                sizeof(etPolyLinePacketData));
-#ifdef FORCE_BASE32             
+#ifdef FORCE_BASE32
     dataInstanceSize_BASE32 = sizeof(etPolyLinePacketData_BASE32);
 #endif
   };
-        
+
   etPolyLinePacketData * getPtr(int num)
   {
     return (etPolyLinePacketData *)getDataInstanceP(num);
   };
-        
+
   void pointerToOffset()
   {
     if(polyLinePointerTranslator == NULL)
@@ -754,7 +755,7 @@ struct etPolyLinePacket : public etDataPacket
     polyLineStringTranslator->translateStringToOffset(this);
 #ifdef FORCE_BASE32
     movetooffset();
-#endif          
+#endif
   };
 
   void offsetToPointer()
@@ -771,7 +772,7 @@ struct etPolyLinePacket : public etDataPacket
       packetBuffer = newpacketBuffer;
       dataInstances = newpacketBuffer;
     }
-#endif  
+#endif
     if(polyLinePointerTranslator == NULL)
     {
       polyLinePointerTranslator = createPolyLinePointerTranslator();
@@ -787,7 +788,7 @@ struct etPolyLinePacket : public etDataPacket
 
   etPointerTranslator * createPolyLinePointerTranslator();
   etPointerTranslator * createPolyLineStringTranslator();
-        
+
   inline void byteSwap()
   {
     for(id_size i=0; i < packetHeader.numInstances; i++)
@@ -1697,7 +1698,7 @@ struct etDrawablePacket : public etDataPacket {
       getPtr(i)->movefromoffset();
     }
   };
-#endif          
+#endif
   etDrawablePacket() {}
  private:
   DISALLOW_COPY_AND_ASSIGN(etDrawablePacket);

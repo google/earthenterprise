@@ -18,7 +18,6 @@
 #include <autoingest/.idl/storage/LayerConfig.h>
 #include <autoingest/.idl/storage/IconReference.h>
 #include <third_party/rfc_uuid/uuid.h>
-
 #include <khFileUtils.h>
 
 
@@ -60,15 +59,15 @@ LayerConfig::ApplyTemplate(const LayerConfig &templateConfig,
 bool LayerConfig::ValidateIconPresence(QString* message) const
 {
   unsigned int orig_msg_length = message->length();
-  for (std::vector<DisplayRuleConfig>::const_iterator disp = displayRules.begin();
-       disp != displayRules.end(); ++disp) {
+  for (const auto& disp : displayRules) {
     // only check external icon paths
-    if (disp->site.style.icon.type == IconReference::External) {
+    if (disp.site.style.icon.type == IconReference::External) {
       std::string path = khEnsureExtension(
           khComposePath(IconReference::CustomIconPath(),
-                        disp->site.style.icon.href), ".png");
+                        disp.site.style.icon.href.toUtf8().constData()),
+          ".png");
       if (!khExists(path)) {
-        *message += "- Label icon missing: \"" + disp->site.style.icon.href + "\"\n";
+        *message += "- Label icon missing: \"" + disp.site.style.icon.href + "\"\n";
       }
     }
   }
@@ -76,25 +75,26 @@ bool LayerConfig::ValidateIconPresence(QString* message) const
   if (defaultLocale.icon_.GetValue().type == IconReference::External) {
     std::string path = khEnsureExtension(
         khComposePath(IconReference::CustomIconPath(),
-                      defaultLocale.icon_.GetValue().href), ".png");
+                      defaultLocale.icon_.GetValue().href.toUtf8().constData()),
+        ".png");
     if (!khExists(path)) {
       *message += "- Layer icon missing: \"" + defaultLocale.icon_.GetValue().href + "\"\n";
     }
   }
 
-  for (LocaleMapConstIterator it = locales.begin();
-       it != locales.end(); ++it) {
-    if (it->second.icon_.GetValue().type == IconReference::External) {
+  for (const auto& it : locales) {
+    if (it.second.icon_.GetValue().type == IconReference::External) {
       std::string path = khEnsureExtension(
           khComposePath(IconReference::CustomIconPath(),
-                        it->second.icon_.GetValue().href), ".png");
+                        it.second.icon_.GetValue().href.toUtf8().constData()),
+          ".png");
       if (!khExists(path)) {
-        *message += "- Layer icon missing: \"" + it->second.icon_.GetValue().href + "\"\n";
+        *message += "- Layer icon missing: \"" + it.second.icon_.GetValue().href + "\"\n";
       }
     }
   }
 
-  return message->length() == orig_msg_length;
+  return message->length() == static_cast<int>(orig_msg_length);
 }
 
 std::string
@@ -249,18 +249,16 @@ LayerConfig::AssignStyleIds(AvailId &avail)
 {
   // called immediately after applying a template
   // assign ids for enabled features & sites and set disable ones to 0
-  for (std::vector<DisplayRuleConfig>::iterator disp
-         = displayRules.begin();
-       disp != displayRules.end(); ++disp) {
-    if (disp->feature.enabled()) {
-      disp->feature.style.id = avail.next();
+  for (auto& disp : displayRules) {
+    if (disp.feature.enabled()) {
+      disp.feature.style.id = avail.next();
     } else {
-      disp->feature.style.id = 0;
+      disp.feature.style.id = 0;
     }
-    if (disp->site.enabled) {
-      disp->site.style.id = avail.next();
+    if (disp.site.enabled) {
+      disp.site.style.id = avail.next();
     } else {
-      disp->site.style.id = 0;
+      disp.site.style.id = 0;
     }
   }
 }
@@ -268,14 +266,12 @@ LayerConfig::AssignStyleIds(AvailId &avail)
 void
 LayerConfig::SaveOldStyleIds(std::deque<std::uint32_t> &old)
 {
-  for (std::vector<DisplayRuleConfig>::iterator disp
-         = displayRules.begin();
-       disp != displayRules.end(); ++disp) {
-    if (disp->feature.enabled() && (disp->feature.style.id != 0)) {
-      old.push_back(disp->feature.style.id);
+  for (auto& disp : displayRules) {
+    if (disp.feature.enabled() && (disp.feature.style.id != 0)) {
+      old.push_back(disp.feature.style.id);
     }
-    if (disp->site.enabled && (disp->site.style.id != 0)) {
-      old.push_back(disp->site.style.id);
+    if (disp.site.enabled && (disp.site.style.id != 0)) {
+      old.push_back(disp.site.style.id);
     }
   }
 }
@@ -283,20 +279,19 @@ LayerConfig::SaveOldStyleIds(std::deque<std::uint32_t> &old)
 void
 LayerConfig::TryRestoreOldStyleIds(std::deque<std::uint32_t> &old)
 {
-  for (std::vector<DisplayRuleConfig>::iterator disp
-         = displayRules.begin();
-       disp != displayRules.end(); ++disp) {
-    if (disp->feature.enabled() && old.size()) {
-      disp->feature.style.id = old.front();
+
+  for (auto& disp : displayRules) {
+    if (disp.feature.enabled() && old.size()) {
+      disp.feature.style.id = old.front();
       old.pop_front();
     } else {
-      disp->feature.style.id = 0;
+      disp.feature.style.id = 0;
     }
-    if (disp->site.enabled && old.size()) {
-      disp->site.style.id = old.front();
+    if (disp.site.enabled && old.size()) {
+      disp.site.style.id = old.front();
       old.pop_front();
     } else {
-      disp->site.style.id = 0;
+      disp.site.style.id = 0;
     }
   }
 }
@@ -304,10 +299,8 @@ LayerConfig::TryRestoreOldStyleIds(std::deque<std::uint32_t> &old)
 bool
 LayerConfig::HasFilterJS(void) const
 {
-  for (std::vector<DisplayRuleConfig>::const_iterator disp
-         = displayRules.begin();
-       disp != displayRules.end(); ++disp) {
-    if (disp->HasFilterJS())
+  for (const auto& disp : displayRules) {
+    if (disp.HasFilterJS())
       return true;
   }
   return false;
@@ -316,10 +309,8 @@ LayerConfig::HasFilterJS(void) const
 bool
 LayerConfig::HasJS(void) const
 {
-  for (std::vector<DisplayRuleConfig>::const_iterator disp
-         = displayRules.begin();
-       disp != displayRules.end(); ++disp) {
-    if (disp->HasJS())
+  for (const auto& disp : displayRules) {
+    if (disp.HasJS())
       return true;
   }
   return false;

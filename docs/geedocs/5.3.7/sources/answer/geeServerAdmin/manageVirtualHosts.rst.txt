@@ -28,7 +28,7 @@ default virtual host
 
 Tip: See
 
-  Configure GEE Server 5.1.0 for SSL/HTTPS
+  Configure GEE Server for SSL/HTTPS
 
    to add virtual hosts for HTTPS servers.See
 
@@ -96,7 +96,7 @@ digest authentication
 , one of the standard authentication types ("AuthType") provided by
 Apache server. See
 
-Apache HTTP Server 2.2 htdigest
+Apache HTTP Server 2.4 htdigest
 
 .
 
@@ -144,7 +144,7 @@ sudo chmod 755 /opt/google/gehttpd/conf.d/virtual_servers/.htdigest
 
 Restart geserver after virtual host settings have been modified.  sudo
 /etc/init.d/geserver restart  A virtual host can also be configured
-for SSL/HTTPS. See Configure GEE Server 5.1.0 for SSL/HTTPS.
+for SSL/HTTPS. See Configure GEE Server for SSL/HTTPS.
 
 -[ Configure virtual hosts with a custom port number ]-
 

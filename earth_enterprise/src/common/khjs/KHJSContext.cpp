@@ -170,7 +170,7 @@ KHJSContextImpl::HandleBranchCallback(void)
   if (branchCallbackCount & 0x000001ff) {
     // Give this thread permission to execute in the context
     JSContextUser jsuser(khRefGuardFromThis());
-    
+
     jsuser.MaybeGC();
   }
 }

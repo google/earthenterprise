@@ -16,17 +16,17 @@
 
 #include "fusion/fusionui/ThematicFilter.h"
 
-#include <qprogressdialog.h>
-#include <qapplication.h>
-#include <qlistbox.h>
-#include <qcolordialog.h>
-#include <qpushbutton.h>
-#include <qcombobox.h>
-#include <qtable.h>
-#include <qheader.h>
-#include <qwidgetstack.h>
+#include <Qt/q3progressdialog.h>
+#include <Qt/qapplication.h>
+#include <Qt/q3listbox.h>
+#include <Qt/qcolordialog.h>
+#include <Qt/qpushbutton.h>
+#include <Qt/qcombobox.h>
+#include <Qt/q3table.h>
+#include <Qt/q3header.h>
+#include <Qt/q3widgetstack.h>
 #include <qmessagebox.h>
-
+#include "khException.h"
 #include "fusion/fusionui/PixmapManager.h"
 #include "fusion/gst/gstFormat.h"
 #include "fusion/gst/gstLayer.h"
@@ -34,6 +34,9 @@
 #include "fusion/fusionui/.idl/thematicstyles.h"
 #include "fusion/autoingest/.idl/storage/MapLayerConfig.h"
 
+using QTable = Q3Table;
+using QTableItem = Q3TableItem;
+using QProgressDialog = Q3ProgressDialog;
 class ColorItem : public QTableItem {
  public:
   ColorItem(QTable* table, const QColor& color);
@@ -72,7 +75,7 @@ class Histogram {
  public:
   class ValueCount {
    public:
-    ValueCount() : value(QString(0)), count(0) {}
+    ValueCount(const char* c = nullptr) : value(QString(c)), count(0) {}
     QString value;
     int count;
   };
@@ -325,7 +328,7 @@ void ThematicFilter::ComputeStatistics(int field) {
 
   try {
     QProgressDialog progress(this, 0, true);
-    progress.setCaption(tr("Gathering Statistics"));
+    progress.setCaption(kh::tr("Gathering Statistics"));
     progress.setTotalSteps(source_->NumFeatures(src_layer_num_));
     progress.setMinimumDuration(2000);
 
@@ -372,18 +375,18 @@ void ThematicFilter::ComputeStatistics(int field) {
       results_table->adjustColumn(c);
   } catch(const khException &e) {
     QMessageBox::warning(this, "Warning",
-                         tr("Error gathering statistics:\n") +
+                         kh::tr("Error gathering statistics:\n") +
                          e.qwhat(),
-                         QObject::tr("OK"), 0, 0, 0);
+                         kh::tr("OK"), 0, 0, 0);
   } catch(const std::exception &e) {
     QMessageBox::warning(this, "Warning",
-                         tr("Error gathering statistics:\n") +
+                         kh::tr("Error gathering statistics:\n") +
                          e.what(),
-                         QObject::tr("OK"), 0, 0, 0);
+                         kh::tr("OK"), 0, 0, 0);
   } catch(...) {
     QMessageBox::warning(this, "Warning",
-                         tr("Error gathering statistics:\n") +
+                         kh::tr("Error gathering statistics:\n") +
                          "Unknown error",
-                         QObject::tr("OK"), 0, 0, 0);
+                         kh::tr("OK"), 0, 0, 0);
   }
 }

@@ -61,7 +61,7 @@ khVolumeManager::Init(void)
   try {
     if (!khExists(VolumeListFilename())) {
       throw khException(kh::tr("'%1' doesn't exist")
-                        .arg(VolumeListFilename()));
+                        .arg(VolumeListFilename().c_str()));
     }
 
 

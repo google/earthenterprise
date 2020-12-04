@@ -15,11 +15,16 @@
 
 
 #include <khConstants.h>
-#include <qmime.h>
-#include <qdragobject.h>
+#include <QtGui/QMimeSource>
+#include <Qt/q3mimefactory.h>
+#include <Qt/qobject.h>
+#include <Qt/q3dragobject.h>
 #include <map>
 
 #include "AssetDisplayHelper.h"
+
+using QImageDrag = Q3ImageDrag;
+using QMimeSourceFactory = Q3MimeSourceFactory;
 
 AssetDisplayHelper::AssetKey AssetDisplayHelper::MakeKey(
     AssetDefs::Type t, const std::string &st) {
@@ -157,7 +162,8 @@ QPixmap AssetDisplayHelper::Pixmap(AssetKey key) {
 }
 
 QString AssetDisplayHelper::PrettyName(AssetKey key)  {
-  static QString name_pairs[] = {
+  static const std::array<QString, 17> name_pairs
+  {{
     QObject::tr("folder"),
     QObject::tr("Vector Resource"),
     QObject::tr("Vector Layer"),
@@ -175,7 +181,7 @@ QString AssetDisplayHelper::PrettyName(AssetKey key)  {
     QObject::tr("Mercator Map Database"),
     QObject::tr("KML Project"),
     QObject::tr("Failed")
-  };
+  }};
 
   return name_pairs[static_cast< unsigned int> (key)];
 }

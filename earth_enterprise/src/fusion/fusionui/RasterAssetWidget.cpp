@@ -21,17 +21,20 @@
 #include <algorithm>
 #include <gdal.h>
 #include "fusion/khgdal/khgdal.h"
-#include <qcheckbox.h>
-#include <qcolordialog.h>
-#include <qcombobox.h>
-#include <qfiledialog.h>
-#include <qgroupbox.h>
+#include <Qt/qcheckbox.h>
+#include <Qt/qcolordialog.h>
+#include <Qt/qcombobox.h>
+#include <Qt/q3filedialog.h>
+#include <Qt/qgroupbox.h>
 #include <qinputdialog.h>
-#include <qlabel.h>
-#include <qlistbox.h>
-#include <qmessagebox.h>
-#include <qpushbutton.h>
+#include <Qt/qinputdialog.h>
+#include <Qt/qlabel.h>
+#include <Qt/q3listbox.h>
+#include <Qt/qmessagebox.h>
+#include <Qt/qpushbutton.h>
 #include <qspinbox.h>
+#include <Qt/qspinbox.h>
+#include <Qt/q3listview.h>
 
 #include "autoingest/.idl/gstProvider.h"
 #include "autoingest/.idl/storage/RasterProductConfig.h"
@@ -160,11 +163,11 @@ RasterAssetWidget::RasterAssetWidget(QWidget* parent, AssetDefs::Type type)
                                   acquisition_date_seconds);
 }
 
-QFileDialog* RasterAssetWidget::FileDialog() {
+Q3FileDialog* RasterAssetWidget::FileDialog() {
   if (!file_dialog_) {
     // will be automatically deleted with this
-    file_dialog_ = new QFileDialog(this);
-    file_dialog_->setMode(QFileDialog::ExistingFiles);
+    file_dialog_ = new Q3FileDialog(this);
+    file_dialog_->setMode(Q3FileDialog::ExistingFiles);
     file_dialog_->setCaption(tr("Open Source"));
     bool add_dem_file_filter = false;
 
@@ -267,8 +270,8 @@ void RasterAssetWidget::AddSource() {
     { 
       string.remove( idx, strlen("/header.xml"));
     }
-
-    if (source_list->findItem(string, Qt::ExactMatch)) {
+    // was Qt::ExactMatch
+    if (source_list->findItem(string, Q3ListView::ExactMatch)) {
       QMessageBox::warning(
           this, kh::tr("Warning : duplicate source.") ,
           kh::tr("Source '%1' already exists in this resource. Ignoring duplicates.")
@@ -352,10 +355,10 @@ void RasterAssetWidget::UpdateMosaicFill(const std::string& fill) {
   } else if (AssetType() == AssetDefs::Terrain) {
     if (mosaic_fill_combo->count() == 2) {
       // need to add the custom fill value to the combo
-      mosaic_fill_combo->insertItem(fill, 1);
+      mosaic_fill_combo->insertItem(fill.c_str(), 1);
     } else {
       // need to undate the custom fill value in the combo
-      mosaic_fill_combo->changeItem(fill, 1);
+      mosaic_fill_combo->changeItem(fill.c_str(), 1);
     }
     mosaic_fill_combo->setCurrentItem(1);
   } else /* AssetType() == AssetDefs::Imagery */ {
@@ -366,10 +369,10 @@ void RasterAssetWidget::UpdateMosaicFill(const std::string& fill) {
     } else {
       if (mosaic_fill_combo->count() == 4) {
         // need to add the custom fill value to the combo
-        mosaic_fill_combo->insertItem(fill, 3);
+        mosaic_fill_combo->insertItem(fill.c_str(), 3);
       } else {
         // need to undate the custom fill value in the combo
-        mosaic_fill_combo->changeItem(fill, 3);
+        mosaic_fill_combo->changeItem(fill.c_str(), 3);
       }
       mosaic_fill_combo->setCurrentItem(3);
     }
@@ -401,7 +404,7 @@ std::string RasterAssetWidget::GetMosaicFill() const {
     }
   }
 
-  return mosaic_fill_combo->currentText().latin1();
+  return std::string(mosaic_fill_combo->currentText().toUtf8().constData());
 }
 
 void RasterAssetWidget::ChangeMaskType(int mode) {
@@ -488,7 +491,7 @@ double RasterAssetWidget::GetElevUnits() const {
 }
 
 void RasterAssetWidget::ChooseLutfile() {
-  QFileDialog lutDialog(this, "Choose a Keyhole LUT file", true);
+  Q3FileDialog lutDialog(this, "Choose a Keyhole LUT file", true);
   lutDialog.addFilter("Keyhole LUT file ( *.lut )");
 
   if (lutDialog.exec() == QDialog::Accepted)
@@ -507,7 +510,7 @@ void RasterAssetWidget::Prefill(const RasterProductImportRequest& request) {
     lutfile_name_label->setText(request.config.lutfile.c_str());
 
   acquisition_date_wrapper_->SetDate(0, 0, 0, 0, 0, 0);
-  std::string date = request.meta.GetValue("sourcedate");
+  std::string date = request.meta.GetValue("sourcedate").toUtf8().constData();
 
   if (!date.empty()) {
     acquisition_date_wrapper_->SetDate(date);
@@ -529,7 +532,7 @@ void RasterAssetWidget::Prefill(const RasterProductImportRequest& request) {
   for (; src != request.sources.sources.end(); ++src) {
     khFusionURI furi(src->uri);
     if (furi.Valid()) {
-      source_list->insertItem(furi.NetworkPath());
+      source_list->insertItem(furi.NetworkPath().c_str());
     } else {
       source_list->insertItem(src->uri.c_str());
     }
@@ -561,7 +564,7 @@ void RasterAssetWidget::Prefill(const RasterProductImportRequest& request) {
   if (AssetType() == AssetDefs::Terrain)
     UpdateElevUnits(request.config.scale);
   clamp_elev_check->setChecked(request.config.clampNonnegative);
-  mask_nodata_lineedit->setText(request.config.maskgenConfig.nodata);
+  mask_nodata_lineedit->setText(request.config.maskgenConfig.nodata.c_str());
 
   AdjustMaskType();
   AdjustMosaicEnabled();
@@ -620,7 +623,7 @@ void RasterAssetWidget::AssembleEditRequest(
   request->config.maskgenConfig.holesize = mask_holesize_spin->value();
   request->config.maskgenConfig.whitefill = mask_fillwhite_check->isChecked();
   // Get Terrain NoData text and remove any spaces before storing.
-  std::string nodata_tmp = mask_nodata_lineedit->text();
+  std::string nodata_tmp = mask_nodata_lineedit->text().toUtf8().constData();
   CleanString(&nodata_tmp, " ");
   if (AssetType() == AssetDefs::Imagery) {
     std::string::size_type comma_pos = nodata_tmp.find(",");
@@ -632,7 +635,7 @@ void RasterAssetWidget::AssembleEditRequest(
              "removed."),
         tr("OK"), 0, 0, 1);
       nodata_tmp = nodata_tmp.substr(0, comma_pos);
-      mask_nodata_lineedit->setText(nodata_tmp);
+      mask_nodata_lineedit->setText(nodata_tmp.c_str());
     }
   }
 
@@ -673,16 +676,19 @@ void RasterAssetWidget::AssembleEditRequest(
     std::string filename = source_list->text(row).latin1();
     SourceConfig::AddResult result = request->sources.AddFile(filename);
     switch (result) {
+      case SourceConfig::NonVolume:
+        throw khException(filename + kh::tr(" doesn't reside on a known volume.\n").toUtf8().constData()
+                        + " You can move your asset files to a known volume, or create a new volume\n"
+                        + " that contains their current location using geconfigureassetroot command.");
+        break;
       case SourceConfig::FileOK:
         break;
       case SourceConfig::CantStat:
-        throw khException(tr("Unable to get file information for ")
-                          + filename + "\n" +
-                          khErrnoException::errorString(errno));
-      case SourceConfig::NonVolume:
-        throw khException(filename + tr(" doesn't reside on a known volume.\n") +
-                         " You can move your asset files to a known volume, or create a new volume\n" +
-			 " that contains their current location using geconfigureassetroot command.");
+        std::string msg { kh::tr("Unable to get file information for ").toUtf8().constData() };
+        msg += filename + "\n";
+        throw khException(msg + khErrnoException::errorString(errno).toUtf8().constData());
+        break;
+
     }
   }
 

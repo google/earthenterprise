@@ -216,7 +216,7 @@ QString CompactStyleName(const QString& name) {
   if (found != allocated_names.end())
     return found->second;
 
-  QString val = IntToBase62(current_id++);
+  QString val = IntToBase62(current_id++).c_str();
   allocated_names[name] = val;
 
   return val;
@@ -335,8 +335,9 @@ void VectorDbrootGenerator::EmitStyleAttrs(void) {
         if (site.enablePopup) {
           IconReference icon_ref(style.icon.type, style.icon.href);
           icon_width = vector_context_->GetIconWidth(icon_ref);
-          normalIcon = "icons/" + icon_ref.NormalHighlightHref();
-          highlightIcon = "icons/" + icon_ref.NormalHighlightHref();
+          normalIcon = "icons/";
+          normalIcon += icon_ref.NormalHighlightHref().c_str();
+          highlightIcon = normalIcon;
           vector_context_->AddNormalHighlightIcon(icon_ref);
           // even when we emit the stacked icons, we still want to generate
           // the separate normal and highlight so the client can
@@ -361,7 +362,7 @@ void VectorDbrootGenerator::EmitStyleAttrs(void) {
               balloon_text += "<br>$[geDirections]";
             }
           } else {
-            balloon_text += site.balloonText.utf8();
+            balloon_text += site.balloonText.toUtf8().constData();
           }
 
           balloon_style = "\"" + balloon_text + "\"";
@@ -484,7 +485,7 @@ void VectorDbrootGenerator::EmitLODs(void) {
           isPolygonZ = true;
         }
       }
-      LOD lod(GetUniqueName(layer->DefaultNameWithPath()),
+      LOD lod(GetUniqueName(layer->DefaultNameWithPath()).toUtf8().constData(),
               layer->channelId, lodFlags);
       char line[50];
       while (fgets(line, sizeof(line), LODFILE)) {

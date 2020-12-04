@@ -454,7 +454,7 @@
                                 <number>18</number>
                             </property>
                         </widget>
-                        <widget class="QComboBox" row="0" column="1">
+                        <widget class="Q3ComboBox" row="0" column="1">
                             <item>
                                 <property name="text">
                                     <string>Sans</string>
@@ -474,7 +474,7 @@
                                 <cstring>font_combo</cstring>
                             </property>
                         </widget>
-                        <widget class="QComboBox" row="1" column="1">
+                        <widget class="Q3ComboBox" row="1" column="1">
                             <item>
                                 <property name="text">
                                     <string>Regular</string>
@@ -696,7 +696,11 @@
 </slots>
 <pixmapinproject/>
 <layoutdefaults spacing="6" margin="11"/>
+<includes>
+    <include location="global" impldecl="in declaration">Qt/qobjectdefs.h</include>
+</includes>
 <includehints>
+    <includehint>StyleSave.h</includehint>
     <includehint>TextStyle.h</includehint>
     <includehint>TextStyle.h</includehint>
     <includehint>TextStyle.h</includehint>

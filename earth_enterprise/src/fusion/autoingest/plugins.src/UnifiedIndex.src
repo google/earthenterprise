@@ -73,7 +73,7 @@ UnifiedIndexAssetVersionImplD::DoSubmitTask(void)
   }
   std::string configfile = WorkingFilename("config.xml"); // fully bound name
   if (!geindex_config.Save(configfile)) {
-    throw khException(kh::tr("Unable to save %1").arg(configfile));
+    throw khException(kh::tr("Unable to save %1").arg(configfile.c_str()));
   }
 
   // ******************************************************

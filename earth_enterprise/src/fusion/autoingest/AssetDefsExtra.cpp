@@ -81,7 +81,7 @@ AssetDefs::NormalizeAssetName(const std::string &name,
   }
   if (assetname[0] == '/') {
     throw khException(kh::tr("Invalid asset name '%1'. Starts with /")
-                      .arg(assetname));
+                      .arg(assetname.c_str()));
   }
 
   if (!AssetDefs::ValidateAssetName(assetname)) {
@@ -92,7 +92,7 @@ AssetDefs::NormalizeAssetName(const std::string &name,
                              "space character.\n\n"
                              "For pre-existing assets, please see the\n"
                              "GEE Admin Guide for steps to resolve the\n"
-                             "issue(s).\n").arg(assetname));
+                             "issue(s).\n").arg(assetname.c_str()));
   }
   //
   // Remove double(or multiple) fwd slashes(//) from pathname
@@ -123,16 +123,20 @@ bool AssetDefs::ValidateAssetName(const std::string& name) {
   if (pos != std::string::npos) {
     length_to_check = pos;  // No need to check the version spec when checking
                             // for invalid characters.
+
     // Check all characters beyond the "=" character...they must be numerals.
     bool found_numeral = false;
+
     for(unsigned int i = length_to_check + kVersionSuffix.size();
         i < name.size(); ++i) {
       char c = name[i];
+
       if (c < '0' || c > '9') {
         return false;  // Required to end in a numeral if version suffix is used.
       }
       found_numeral = true;
     }
+
     // If there's no numeral at the end, it's an invalid name.
     if (!found_numeral) {
       return false;
@@ -140,10 +144,10 @@ bool AssetDefs::ValidateAssetName(const std::string& name) {
   }
 
   const std::string kInvalidAssetNameCharacters("&%'\" \\*=+~`?<>;:");
-  for(unsigned int i = 0; i < length_to_check; ++i) {
-    if (kInvalidAssetNameCharacters.find(name[i]) != std::string::npos) {
-      return false;
-    }
+  for(uint i = 0; i < length_to_check; ++i) {
+      if (kInvalidAssetNameCharacters.find(name[i]) != std::string::npos) {
+          return false;
+      }
   }
   return true;
 }
@@ -164,7 +168,7 @@ AssetDefs::GuessAssetRef(const std::string &name)
   }
   if (name[0] == '/') {
     throw khException(kh::tr("Invalid asset name '%1'. Starts with '/'")
-                      .arg(name));
+                      .arg(name.c_str()));
   }
 
   // check to see if it's already fully qualified
@@ -188,7 +192,7 @@ AssetDefs::GuessAssetRef(const std::string &name)
   {
     DIR *dir = opendir(path.c_str());
     if (!dir) {
-      throw khException(kh::tr("No such asset: '%1'").arg(name));
+      throw khException(kh::tr("No such asset: '%1'").arg(name.c_str()));
     }
     khDIRCloser closer(dir);
 
@@ -206,10 +210,10 @@ AssetDefs::GuessAssetRef(const std::string &name)
     }
   }
   if (matches.empty()) {
-    throw khException(kh::tr("No such asset: '%1'").arg(name));
+    throw khException(kh::tr("No such asset: '%1'").arg(name.c_str()));
   } else if (matches.size() > 1) {
-    throw khException(kh::tr("Asset '%1' is ambiguous:\n").arg(name) +
-                      join(matches.begin(), matches.end(), "\n"));
+    throw khException(kh::tr("Asset '%1' is ambiguous:\n").arg(name.c_str()) +
+                      join(matches.begin(), matches.end(), "\n").c_str());
   }
   return matches[0];
 }

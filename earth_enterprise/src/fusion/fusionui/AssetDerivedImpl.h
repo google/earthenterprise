@@ -38,7 +38,7 @@ template <class Defs, class FinalClass>
 AssetDerived<Defs, FinalClass>::AssetDerived(QWidget *parent) :
     AssetBase(parent),
     saved_edit_request_(FinalClass::FinalMakeNewRequest()) {
-  saved_edit_request_.assetname = AssetBase::untitled_name;
+  saved_edit_request_.assetname = AssetBase::untitled_name.toUtf8().constData();
   Init();
 }
 
@@ -138,7 +138,7 @@ void AssetDerived<Defs, FinalClass>::Init(bool re_init) {
   if (re_init == false) {
     InstallMainWidget();
 
-    SetName(saved_edit_request_.assetname);
+    SetName(saved_edit_request_.assetname.c_str());
     SetMeta(saved_edit_request_.meta);
 
     main_widget_->Prefill(saved_edit_request_);
@@ -155,7 +155,7 @@ template <class Defs, class FinalClass>
 typename Defs::Request
 AssetDerived<Defs, FinalClass>::AssembleEditRequest(void) {
   typename Defs::Request request = saved_edit_request_;
-  request.assetname = Name();
+  request.assetname = Name().toUtf8().constData();
   request.meta = Meta();
 
   main_widget_->AssembleEditRequest(&request);

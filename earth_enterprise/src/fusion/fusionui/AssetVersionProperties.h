@@ -18,7 +18,9 @@
 #ifndef _AssetVersionProperties_h_
 #define _AssetVersionProperties_h_
 
-#include <qlistview.h>
+#include <Qt/qglobal.h>
+#include <Qt/q3listview.h>
+#include <Qt/qobject.h>
 #include <string>
 #include <map>
 #include "assetversionpropertiesbase.h"
@@ -26,15 +28,15 @@
 #include "SystemListener.h"
 #include "AssetVersionActions.h"
 
-
+class QColorGroup;
 #define ASSET_CHILD 0x00ff0001
 #define ASSET_INPUT 0x00ff0002
 
-class AssetChildItem : public QListViewItem, public AssetWatcher
+class AssetChildItem : public Q3ListViewItem, public AssetWatcher
 {
  public:
-  AssetChildItem( QListView *parent, const AssetVersion &ver);
-  AssetChildItem( QListViewItem *parent, const AssetVersion &ver, const std::string &msg);
+  AssetChildItem( Q3ListView *parent, const AssetVersion &ver);
+  AssetChildItem( Q3ListViewItem *parent, const AssetVersion &ver, const std::string &msg);
 
   void paintCell( QPainter *p, const QColorGroup &cg, int col, int width, int align );
 
@@ -62,7 +64,7 @@ class AssetVersionProperties : public AssetVersionPropertiesBase
 
   void refresh();
 
-  void clicked( QListViewItem *item, const QPoint & pos, int col );
+  void clicked( Q3ListViewItem *item, const QPoint & pos, int col );
 
   static void Open(const std::string &verref);
  private:
@@ -72,7 +74,7 @@ class AssetVersionProperties : public AssetVersionPropertiesBase
   typedef std::map<std::string, AssetVersionProperties*> VerPropMap;
   static VerPropMap openverprops;
 public slots:
-void rmbClicked( QListViewItem *item, const QPoint &pos, int );
+void rmbClicked( Q3ListViewItem *item, const QPoint &pos, int );
 };
 
 #endif // !_AssetVersionProperties_h_

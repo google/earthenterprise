@@ -8,21 +8,21 @@
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either  express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
 
 #include <vector>
 
-#include <qlabel.h>
-#include <qcombobox.h>
-#include <qpopupmenu.h>
-#include <qpushbutton.h>
-#include <qcursor.h>
-#include <qstringlist.h>
-#include <qtextcodec.h>
-#include <qlayout.h>
+#include <Qt/qlabel.h>
+#include <Qt/qcombobox.h>
+#include <Qt/q3popupmenu.h>
+#include <Qt/qpushbutton.h>
+#include <Qt/qcursor.h>
+#include <Qt/qstringlist.h>
+#include <Qt/qtextcodec.h>
+#include <Qt/qlayout.h>
 
 #include <khFileUtils.h>
 #include <gstFormatManager.h>
@@ -30,19 +30,19 @@
 #include "SourceFileDialog.h"
 #include "Preferences.h"
 #include "FileHistory.h"
-
+#include "khException.h"
 
 SourceFileDialog* SourceFileDialog::onlyone = NULL;
 
 SourceFileDialog* SourceFileDialog::self() {
   if (onlyone == NULL)
-    onlyone = new SourceFileDialog(0);
+    onlyone = new SourceFileDialog(NULL);
   return onlyone;
 }
 
 SourceFileDialog::SourceFileDialog(QWidget* parent)
-    : QFileDialog(parent) {
-  setCaption(tr("Open"));
+    : Q3FileDialog(parent) {
+  setCaption(kh::tr("Open"));
   history_btn_ = new FileHistory(this, Preferences::filepath(
                                      "fileaccesshistory.xml"));
   addToolButton(history_btn_);
@@ -51,9 +51,9 @@ SourceFileDialog::SourceFileDialog(QWidget* parent)
 
   QStringList file_list = history_btn_->getFileList();
   if (file_list.size() != 0)
-    setDir(khDirname(file_list[0].latin1()));
+    setDir(khDirname(file_list[0].toUtf8().constData()).c_str());
 
-  setMode(QFileDialog::ExistingFiles);
+  setMode(Q3FileDialog::ExistingFiles);
 
   for (int ii = 0; ii < theFormatManager()->GetFilterCount(); ++ii)
     addFilter(theFormatManager()->GetFilter(ii));
@@ -67,7 +67,7 @@ SourceFileDialog::SourceFileDialog(QWidget* parent)
   QLabel* label = new QLabel("Select encoding:", this);
   QComboBox* codecCombo = new QComboBox(this);
 
-  codecCombo->insertItem(tr("<none>"));
+  codecCombo->insertItem(kh::tr("<none>"));
 
   QTextCodec* codec;
   int count = 0;
@@ -122,23 +122,23 @@ void SourceFileDialog::ChooseRecent(const QString& fname) {
 
 void SourceFileDialog::accept() {
   history_btn_->addFiles(selectedFiles());
-  QFileDialog::accept();
+  Q3FileDialog::accept();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 DatabaseIndexDialog::DatabaseIndexDialog()
-    : QFileDialog() {
+    : Q3FileDialog() {
   history_btn_ = new FileHistory(this, Preferences::filepath(
                                      "backgroundimagedb.xml"));
-  setMode(QFileDialog::DirectoryOnly);
+  setMode(Q3FileDialog::DirectoryOnly);
   addToolButton(history_btn_);
   connect(history_btn_, SIGNAL(selectFile(const QString &)),
           this, SLOT(ChooseRecent(const QString &)));
 
   QStringList fileList = history_btn_->getFileList();
   if (fileList.size() != 0)
-    setDir(khDirname(fileList[0].latin1()));
+    setDir(khDirname(fileList[0].toUtf8().constData()).c_str());
 }
 
 void DatabaseIndexDialog::ChooseRecent(const QString& fname) {
@@ -147,14 +147,14 @@ void DatabaseIndexDialog::ChooseRecent(const QString& fname) {
 
 void DatabaseIndexDialog::accept() {
   history_btn_->addFile(selectedFile());
-  QFileDialog::accept();
+  Q3FileDialog::accept();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 AssetDialog::AssetDialog()
-    : QFileDialog() {
-  setMode(QFileDialog::DirectoryOnly);
+    : Q3FileDialog() {
+  setMode(Q3FileDialog::DirectoryOnly);
   connect(this, SIGNAL(dirEntered(const QString &)),
           this, SLOT(dirEntered(const QString &)));
 }
@@ -173,7 +173,7 @@ void AssetDialog::dirEntered(const QString& dir) {
 OpenWithHistoryDialog::OpenWithHistoryDialog(QWidget *parent,
                                              const QString& caption,
                                              const QString& history_path)
-  : QFileDialog(parent) {
+  : Q3FileDialog(parent) {
   setCaption(caption);
   history_btn_ = new FileHistory(this, Preferences::filepath(history_path));
   addToolButton(history_btn_);
@@ -182,9 +182,9 @@ OpenWithHistoryDialog::OpenWithHistoryDialog(QWidget *parent,
 
   QStringList file_list = history_btn_->getFileList();
   if (file_list.size() != 0)
-    setDir(khDirname(file_list[0].latin1()));
+    setDir(khDirname(file_list[0].toUtf8().constData()).c_str());
 
-  setMode(QFileDialog::ExistingFile);
+  setMode(Q3FileDialog::ExistingFile);
 }
 
 void OpenWithHistoryDialog::ChooseRecent(const QString& fname) {
@@ -192,6 +192,6 @@ void OpenWithHistoryDialog::ChooseRecent(const QString& fname) {
 }
 
 void OpenWithHistoryDialog::accept() {
-  history_btn_->addFile(QFileDialog::selectedFile());
-  QFileDialog::accept();
+  history_btn_->addFile(Q3FileDialog::selectedFile());
+  Q3FileDialog::accept();
 }

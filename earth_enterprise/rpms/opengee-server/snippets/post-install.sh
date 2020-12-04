@@ -214,7 +214,7 @@ install_search_databases()
     #  If 'Extra' already installed, don't delete
     if [ ! -f "$SQLDIR/examplesearch_delete.sql" ]; then
         echo "# d) Turn off examplesearch"
-        "$BASEINSTALLDIR_OPT/bin/psql" -q -d gesearch geuser -f "$SQLDIR/examplesearch_2delete.sql"
+        run_as_user "$GEPGUSER" "$BASEINSTALLDIR_OPT/bin/psql -q -d gesearch geuser -f $SQLDIR/examplesearch_2delete.sql"
     fi
 
     # e) Stop the PSQL Server

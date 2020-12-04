@@ -115,7 +115,7 @@ enterDirname(const std::string msg, const std::string &dflt,
       if (confirm(kh::tr(
 "%1 does not exist.\n"
 "Should this tool create it now")
-                  .arg(dir), 'Y')) {
+                  .arg(dir.c_str()), 'Y')) {
         geCapabilitiesGuard cap_guard(
             CAP_DAC_OVERRIDE,     // let me read all files
             CAP_DAC_READ_SEARCH,  // let me traverse all dirs

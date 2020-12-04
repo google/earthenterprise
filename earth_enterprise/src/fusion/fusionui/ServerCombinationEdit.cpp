@@ -22,7 +22,7 @@
 #include <qmessagebox.h>
 #include <qpushbutton.h>
 #include <qurl.h>
-
+#include "khException.h"
 #include <autoingest/.idl/storage/AssetDefs.h>
 #include "fusion/fusionui/geGuiAuth.h"
 #include "fusion/gepublish/PublisherClient.h"
@@ -31,8 +31,8 @@ ServerCombinationEdit::ServerCombinationEdit(QWidget* parent,
                                              const ServerCombination& c)
   : ServerCombinationEditBase(parent, 0, false, 0) {
   nickname_edit->setText(c.nickname);
-  stream_url_edit->setText(c.stream.url);
-  cacert_edit->setText(c.stream.cacert_ssl);
+  stream_url_edit->setText(c.stream.url.c_str());
+  cacert_edit->setText(c.stream.cacert_ssl.c_str());
   insecure_ssl_checkbox->setChecked(c.stream.insecure_ssl);
   QueryServer();
 }
@@ -40,16 +40,16 @@ ServerCombinationEdit::ServerCombinationEdit(QWidget* parent,
 ServerCombination ServerCombinationEdit::GetCombination() const {
   ServerCombination c;
   c.nickname = nickname_edit->text();
-  c.stream.url = stream_url_edit->text();
-  c.stream.cacert_ssl = cacert_edit->text();
+  c.stream.url = stream_url_edit->text().toUtf8().constData();
+  c.stream.cacert_ssl = cacert_edit->text().toUtf8().constData();
   c.stream.insecure_ssl = insecure_ssl_checkbox->isChecked();
   return c;
 }
 
 void ServerCombinationEdit::QueryServer() {
   ServerConfig stream_server;
-  stream_server.url = stream_url_edit->text();
-  stream_server.cacert_ssl = cacert_edit->text();
+  stream_server.url = stream_url_edit->text().toUtf8().constData();
+  stream_server.cacert_ssl = cacert_edit->text().toUtf8().constData();
   stream_server.insecure_ssl = insecure_ssl_checkbox->isChecked();
 
   if (stream_server.url.empty()) {
@@ -63,17 +63,17 @@ void ServerCombinationEdit::QueryServer() {
   if (!publisher_client.PingServersWithTimeout()) {
     QMessageBox::critical(
         this, "Query Failed",
-        tr("Error: %1\nPlease check if Server on the host '%2'"
+        kh::tr("Error: %1\nPlease check if Server on the host '%2'"
            " is running and reachable from Fusion Host.").arg(
-            publisher_client.ErrMsg(),
-            stream_server.url),
+            publisher_client.ErrMsg().c_str(),
+            stream_server.url.c_str()),
         0, 0, 0);
     query_status_label->setText("<font color=\"red\"><b>Failure</b></font>");
     return;
   }
 
   if (nickname_edit->text().isEmpty()) {
-    nickname_edit->setText(stream_server.url);
+    nickname_edit->setText(stream_server.url.c_str());
   }
   ok_btn->setEnabled(true);
   query_status_label->setText("<font color=\"#007f00\"><b>Success</b></font>");
@@ -83,7 +83,7 @@ void ServerCombinationEdit::accept() {
   if (nickname_edit->text().isEmpty() ||
       stream_url_edit->text().isEmpty()) {
     QMessageBox::critical(this, "Error",
-      tr("Incomplete server association. The Name and URL fields are required.")
+      kh::tr("Incomplete server association. The Name and URL fields are required.")
          , 0, 0, 0);
     return;
   }
@@ -129,10 +129,10 @@ void ServerCombinationEdit::UpdateSslOptionControls(bool enabled) {
 void ServerCombinationEdit::ChooseCacertFile() {
   QString path = QFileDialog::getOpenFileName(
       cacert_edit->text(),
-      tr("Bundle (*.crt);;PEM format (*.pem);;All files (*.*)"),
+      kh::tr("Bundle (*.crt);;PEM format (*.pem);;All files (*.*)"),
       this,
       NULL,
-      tr("Select CAcert file"));
+      kh::tr("Select CAcert file"));
 
   if (path != QString::null) {
     cacert_edit->setText(path);

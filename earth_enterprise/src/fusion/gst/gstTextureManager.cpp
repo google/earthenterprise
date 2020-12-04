@@ -201,12 +201,12 @@ gstTextureGuard gstTextureManager::NewTextureFromPath(
   }
 
   // handle URL first since it is not a valid file system path
-  if (QString(path).startsWith("http://") ||
-      QString(path).startsWith("https://")) {
+  if (QString(path.c_str()).startsWith("http://") ||
+      QString(path.c_str()).startsWith("https://")) {
     return NewHTTPTexture(path);
   }
 
-  QString base(khBasename(path));
+  QString base(khBasename(path).c_str());
 
   bool is_mercator_imagery_project =
       khHasExtension(path, kMercatorImageryProjectSuffix);
@@ -234,9 +234,9 @@ gstTextureGuard gstTextureManager::NewTextureFromPath(
       return error_handle;
     }
   }
-  bool is_flat_imagery_asset = base.contains(kImageryAssetSuffix);
-  bool is_flat_terrain_asset = base.contains(kTerrainAssetSuffix);
-  bool is_mercator_imagery_asset = base.contains(kMercatorImageryAssetSuffix);
+  bool is_flat_imagery_asset = base.contains(kImageryAssetSuffix.c_str());
+  bool is_flat_terrain_asset = base.contains(kTerrainAssetSuffix.c_str());
+  bool is_mercator_imagery_asset = base.contains(kMercatorImageryAssetSuffix.c_str());
   if (is_flat_imagery_asset ||
       is_mercator_imagery_asset ||
       is_flat_terrain_asset) {

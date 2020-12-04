@@ -179,9 +179,9 @@ int main(int argc, char *argv[]) {
 
     // save it out to XML
     gstDBSource dbSource;
-    dbSource.OGRDataSource = ogrsrcstr;
-    dbSource.srsOverride = overridesrs;
-    dbSource.sql = sqlstr;
+    dbSource.OGRDataSource = ogrsrcstr.c_str();
+    dbSource.srsOverride = overridesrs.c_str();
+    dbSource.sql = sqlstr.c_str();
     if (!dbSource.Save(output)) {
       notify(NFY_FATAL, "Unable to write %s", output.c_str());
     }

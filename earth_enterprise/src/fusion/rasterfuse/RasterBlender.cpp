@@ -44,18 +44,18 @@ BlendInset::BlendInset(unsigned int targetLevel,
       dataLevel(),
       alphaLevel() {
   if (!dataRP) {
-    throw khException(kh::tr("Unable to open %1").arg(dataFile));
+    throw khException(kh::tr("Unable to open %1").arg(dataFile.c_str()));
   }
   if ((dataRP->type() != khRasterProduct::Imagery) &&
       (dataRP->type() != khRasterProduct::Heightmap)) {
     throw khException
       (kh::tr("Data product is neither Imagery nor Heightmap: %1")
-       .arg(dataFile));
+       .arg(dataFile.c_str()));
   }
   if (targetLevel < dataRP->minLevel()) {
     throw khException
       (kh::tr("Internal Error: target level (%1) < data min level (%2) %3")
-       .arg(targetLevel).arg(dataRP->minLevel()).arg(dataFile));
+       .arg(targetLevel).arg(dataRP->minLevel()).arg(dataFile.c_str()));
   }
 
   targetCoverage = dataRP->levelCoverage(targetLevel);
@@ -66,17 +66,17 @@ BlendInset::BlendInset(unsigned int targetLevel,
     if (alphaRP->type() != khRasterProduct::AlphaMask) {
       throw khException
         (kh::tr("Alpha product is not of type AlphaMask: %1")
-         .arg(alphaFile));
+         .arg(alphaFile.c_str()));
     }
     if (targetLevel < alphaRP->minLevel()) {
       throw khException
         (kh::tr("Internal Error: target level (%1) < alpha min level (%2) %3")
-         .arg(targetLevel).arg(alphaRP->minLevel()).arg(alphaFile));
+         .arg(targetLevel).arg(alphaRP->minLevel()).arg(alphaFile.c_str()));
     }
     alphaLevel = &alphaRP->level(std::min(targetLevel,
                                           alphaRP->maxLevel()));
   } else if (alphaFile.size()) {
-    throw khException(kh::tr("Unable to open %1").arg(alphaFile));
+    throw khException(kh::tr("Unable to open %1").arg(alphaFile.c_str()));
   }
 }
 

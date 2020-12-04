@@ -20,9 +20,8 @@
 
 #include "projectwidgetbase.h"
 #include "fusion/fusionui/QValidatorExt.h"
+#include <Qt/q3listview.h>
 
-class QListView;
-class QListViewItem;
 class ProjectLayerView;
 class LayerItemBase;
 
@@ -83,7 +82,7 @@ class ProjectWidget : public ProjectWidgetBase {
   virtual void DropAsset(const QString& assetref);
   virtual void GenericCheckboxToggled(bool state);
   virtual void TimeMachineCheckboxToggled(bool state);
-  virtual void ContextMenu(QListViewItem* item, const QPoint& pt, int col);
+  virtual void ContextMenu(Q3ListViewItem* item, const QPoint& pt, int col);
 
   // Validator for overlay_terrain_start_level_spinbox.
   qt_fusion::EvenQIntValidator start_level_validator_;

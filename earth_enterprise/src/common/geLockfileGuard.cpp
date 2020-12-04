@@ -24,7 +24,7 @@ geLockfileGuard::geLockfileGuard(const std::string filename,
 {
   if (!khWriteStringToFile(filename_, contents)) {
     throw khException(kh::tr("Unable to create lockfile %1")
-                      .arg(filename_));
+                      .arg(filename_.c_str()));
   }
 }
 

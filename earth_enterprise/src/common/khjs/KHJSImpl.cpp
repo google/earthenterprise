@@ -57,7 +57,7 @@ JSContextUser::~JSContextUser(void) {
 
 void JSContextUser::AddNamedRoot(void *rp, const std::string &name) {
   if (!JS_AddNamedRoot(rawcx, rp, name.c_str())) {
-    throwError(kh::tr("Unable to add root for %1 object").arg(name));
+    throwError(kh::tr("Unable to add root for %1 object").arg(name.c_str()));
   }
 }
 
@@ -238,7 +238,7 @@ JSObject* JSLocalRootScopeGuard::CompileScript(const QString &scriptText,
     // extract the error msg first in case JS_DestroyScript changes it
     QString msg =
       jsuser.MakeErrorMessage(kh::tr("Unable to wrap script in object"));
-      
+
     // nobody else owns the script yet, so we need to clean it up
     (void)JS_DestroyScript(jsuser.rawcx, script);
 

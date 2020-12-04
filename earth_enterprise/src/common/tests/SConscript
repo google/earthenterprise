@@ -20,7 +20,7 @@ import os
 env.Append(LIBPATH = ['/usr/lib/', '/usr/lib64'])
 
 map(lambda test: env.test(test, [test + '.cpp'],
-                          LIBS=['gecommon', 'geutil', 'png12']),
+                          LIBS=['gecommon', 'geutil', env['png_ver']]),
     ['simpleexception_unittest',
      'endian_tests',
      'segmented_array_tests',
@@ -32,21 +32,21 @@ map(lambda test: env.test(test, [test + '.cpp'],
 
 
 map(lambda test: env.test(test, [test + '.cpp'],
-                          LIBS=['geutil', 'png12']),
+                          LIBS=['geutil', env['png_ver']]),
     ['multirange_tests',
      'dottedversion_tests',
      ])
 
 
 map(lambda test: env.test(test, [test + '.cpp'],
-                          LIBS=['gecommon', 'geutil', 'gtest', 'png12']),
+                          LIBS=['gecommon', 'geutil', 'gtest', env['png_ver']]),
     ['khStringUtils_test',
      'khfileutils_tests',
      'khMisc_tests',
      ])
 
 map(lambda test: env.test(test, [test + '.cc'],
-                          LIBS=['gecommon', 'geutil', 'gtest', 'png12']),
+                          LIBS=['gecommon', 'geutil', 'gtest', env['png_ver']]),
     ['etencoder_tests',
      ])
 

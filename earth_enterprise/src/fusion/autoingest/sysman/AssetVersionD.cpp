@@ -520,10 +520,10 @@ AssetVersionImplD::Clean(void)
   // Check to see if it's OK to clean me
   std::vector<std::string> wouldbreak;
   if (!OkToClean(&wouldbreak)) {
-    throw khException
-      (kh::tr("Unable to clean '%1'.\nIt would break the following:\n")
-       .arg(GetRef().toString()) +
-       join<std::vector<std::string>::iterator>(wouldbreak.begin(), wouldbreak.end(), "\n"));
+    std::string msg { kh::tr("Unable to clean '%1'.\nIt would break the following:\n")
+                      .arg(GetRef().toString().c_str()).toUtf8().constData() };
+    msg += join<std::vector<std::string>::iterator>(wouldbreak.begin(), wouldbreak.end(), "\n");
+    throw khException(msg);
   }
 
   DoClean();

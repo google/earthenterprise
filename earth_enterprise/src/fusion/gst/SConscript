@@ -125,7 +125,7 @@ gegst = env.sharedLib('gegst', sources,
 
 gesimpleearthstream = env.sharedLib('gesimpleearthstream',
                                     simple_earthstream_sources,
-                                    LIBS=['curl', 'qt-mt'])
+                                    LIBS=['curl', 'QtCore', 'QtGui'])
 
 # unit tests
 sources_unittest = ['gstUnitTestUtils.cpp']
@@ -135,10 +135,10 @@ gstunittest = env.sharedLib('gstunittest',
                              LIBS=['gtest', 'gegst', 'gecommon'])
 
 env.test('gstGeode_unittest', 'gstGeode_unittest.cpp',
-         LIBS=['gegst', 'gtest', 'sgl', 'gif', 'png12', 'jpeg', 'freetype', 'geos',
+         LIBS=['gegst', 'gtest', 'sgl', 'gif', env['png_ver'], 'jpeg', 'freetype', 'geos',
                'geutil', 'gecommon'])
 env.test('gstPolygonUtils_unittest', 'gstPolygonUtils_unittest.cpp',
-         LIBS=['gegst', 'gtest', 'sgl', 'gif', 'png12', 'jpeg', 'freetype', 'geos'])
+         LIBS=['gegst', 'gtest', 'sgl', 'gif', env['png_ver'], 'jpeg', 'freetype', 'geos'])
 
 env.test('gstGeomUtils_unittest', 'gstGeomUtils_unittest.cpp',
          LIBS=['gstunittest', 'gegst', 'gtest'])

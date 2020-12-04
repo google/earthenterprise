@@ -19,7 +19,8 @@
 #define GEO_EARTH_ENTERPRISE_SRC_FUSION_FUSIONUI_MAPLAYER_H_
 
 #include <vector>
-
+#include <Qt/q3listview.h>
+using QListViewItem = Q3ListViewItem;
 #include "autoingest/.idl/storage/MapLayerConfig.h"
 #include "fusion/gst/gstTextureManager.h"
 #include "fusion/fusionui/WidgetControllers.h"
@@ -116,7 +117,7 @@ class MapLayerWidget : public MapLayerWidgetBase,
   void UpdateButtons(QListViewItem* item);
   virtual void CurrentItemChanged(QListViewItem* item);
 
-  virtual void customEvent(QCustomEvent *e);
+  virtual void customEvent(QEvent *e) final;
 
   bool SubLayerHasSearchField(QString field);
 

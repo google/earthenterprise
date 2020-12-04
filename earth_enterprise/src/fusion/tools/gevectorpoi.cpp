@@ -70,7 +70,7 @@ class QueryMergeSource: public MergeSource<std::int32_t> {
     FILE* select_fp = ::fopen(queryfile.c_str(), "r");
     if (select_fp == NULL) {
       throw khErrnoException(
-          kh::tr("Unable to open query results file %1").arg(queryfile));
+          kh::tr("Unable to open query results file %1").arg(queryfile.c_str()));
     }
     khFILECloser closer(select_fp);
 
@@ -91,7 +91,7 @@ class QueryMergeSource: public MergeSource<std::int32_t> {
     // make sure we're not empty
     if (ids.size() == 0) {
       throw khException(
-          kh::tr("Query results file %1 is empty").arg(queryfile));
+          kh::tr("Query results file %1 is empty").arg(queryfile.c_str()));
     }
 
     // initialize the iterator
@@ -102,7 +102,7 @@ class QueryMergeSource: public MergeSource<std::int32_t> {
       return *current;
     } else {
       throw khException(
-          kh::tr("No current element for merge source %1").arg(this->name()));
+          kh::tr("No current element for merge source %1").arg(this->name().c_str()));
     }
   }
   virtual bool Advance(void) {
@@ -175,7 +175,7 @@ int main(int argc, char *argv[]) {
       FILE *search_file_ = fopen(output[i].c_str(), "w");
       if (!search_file_) {
         throw khErrnoException(
-            kh::tr("Unable to open %1 for writing").arg(output[i]));
+            kh::tr("Unable to open %1 for writing").arg(output[i].c_str()));
       }
       EmitSearchFileHeader(search_file_, poi_config);
 
@@ -198,7 +198,7 @@ int main(int argc, char *argv[]) {
       if (!data_file_) {
         throw khErrnoException(
             kh::tr("Unable to open %1 for writing").arg(
-                   data_file_name));
+                   data_file_name.c_str()));
       }
       do {
         std::int32_t cur_id = merger.Current();
@@ -213,7 +213,7 @@ int main(int argc, char *argv[]) {
           if (!--record_count) {
             if (fclose(data_file_) != 0) {
               throw khErrnoException(
-                kh::tr("Error closing data file %1").arg(data_file_name));
+                kh::tr("Error closing data file %1").arg(data_file_name.c_str()));
             }
 
             EmitSearchFileData(search_file_, data_file_name);
@@ -224,7 +224,7 @@ int main(int argc, char *argv[]) {
             if (!data_file_) {
               throw khErrnoException(
                   kh::tr("Unable to open %1 for writing").arg(
-                         data_file_name));
+                         data_file_name.c_str()));
             }
             record_count = MAX_RECORDS_PER_POI_SEGMENT;
           }
@@ -234,7 +234,7 @@ int main(int argc, char *argv[]) {
       // close the output file
       if (fclose(data_file_) != 0) {
         throw khErrnoException(
-          kh::tr("Error closing data file %1").arg(data_file_name));
+          kh::tr("Error closing data file %1").arg(data_file_name.c_str()));
       }
       // if there are records in the file, emit file name.
       if (record_count < MAX_RECORDS_PER_POI_SEGMENT) {
@@ -245,7 +245,7 @@ int main(int argc, char *argv[]) {
 
       EmitSearchFileFooter(search_file_, poi_config);
       if (fclose(search_file_) != 0) {
-        throw khErrnoException(kh::tr("Error closing %1").arg(output[i]));
+        throw khErrnoException(kh::tr("Error closing %1").arg(output[i].c_str()));
       }
     }
   } catch (const std::exception &e) {

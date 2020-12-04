@@ -17,22 +17,24 @@
 
 #ifndef _AssetProperties_h_
 #define _AssetProperties_h_
-
-#include <qlistview.h>
+#include <Qt/qglobal.h>
+#include <Qt/q3listview.h>
 #include <autoingest/AssetVersion.h>
+#include <Qt/qgroupbox.h>
 #include "SystemListener.h"
 #include "assetpropertiesbase.h"
+#include <Qt/qdrawutil.h>
 
 #include <gstAssetGroup.h>
 
-class AssetVersionItem : public QListViewItem, public AssetWatcher
+class AssetVersionItem : public Q3ListViewItem, public AssetWatcher
 {
  public:
-  AssetVersionItem( QListView *parent, const AssetVersion & );
+  AssetVersionItem( Q3ListView *parent, const AssetVersion & );
 
   std::string getVersionRef() const { return ref; }
 
-  int compare( QListViewItem *item, int, bool ) const;
+  int compare( Q3ListViewItem *item, int, bool ) const;
 
   void paintCell( QPainter *, const QColorGroup &cg, int column, int width, int alignment );
 
@@ -52,13 +54,13 @@ class AssetProperties : public AssetPropertiesBase
   void refresh();
 
  protected:
-  void selectVersion( QListViewItem * );
+  void selectVersion( Q3ListViewItem * );
 
  private:
   const gstAssetHandle assetHandle;
 
 public slots:
-void rmbClicked( QListViewItem *item, const QPoint &pos, int );
+void rmbClicked( Q3ListViewItem *item, const QPoint &pos, int );
 };
 
 #endif // !_AssetProperties_h_

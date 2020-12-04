@@ -1,6 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
- * Copyright 2020 The Open GEE Contributors 
+ * Copyright 2020 The Open GEE Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,8 +60,7 @@ class AssetImpl : public AssetStorage, public StorageManaged {
  public:
 
   virtual std::string GetName() const { // Returns the name of the asset, e.g., "CombinedRPAsset"
-    assert(false);
-    return "";
+    return this->GetRef().toString();
   }
 
   // Note for future development: It would be good to change SerializeConfig to something like

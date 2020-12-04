@@ -94,9 +94,9 @@ void OverrideDefaultLocaleOfLayer(const std::string& layer_options,
     usage(tokens[0], msg.c_str());
   }
   IconReference& icon = legend_locale.icon.GetMutableValue();
-  if (icon_name != icon.href) {  // If icon name has been changed
+  if (icon_name != icon.href.toUtf8().constData()) {  // If icon name has been changed
     IconReference::CheckIconExistence(icon_name, &icon.type);
-    icon.href = icon_name;
+    icon.href = icon_name.c_str();
   }
 }
 }  // end namespace

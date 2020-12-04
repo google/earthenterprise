@@ -201,7 +201,7 @@ geautoingest = env.sharedLib('geautoingest',
                                            'khAssetManagerProxy.cpp',
                                            env['FUSIONVER'] ],
                              LIBS=['gesearchtabs', 'gemiscconfig', 'genet',
-                                   'geindex_r', 'geutil', 'qt-mt']
+                                   'geindex_r', 'geutil', 'QtCore','QtGui']
                              )
 
 
@@ -223,11 +223,11 @@ env.test('AssetDefsExtra_unittest',
 
 env.test('AssetSerializer_unittest',
          'AssetSerializer_unittest.cpp',
-          LIBS=['gecommon', 'gexml', 'qt-mt', 'xerces-c', 'gtest'])
+          LIBS=['gecommon', 'gexml', 'QtCore','QtGui',  'xerces-c', 'gtest'])
 
 env.test('AssetFactory_unittest',
          'AssetFactory_unittest.cpp',
-         LIBS=['gecommon', 'gtest', 'geautoingest', 'geutil', 'qt-mt', 'xerces-c'])
+         LIBS=['gecommon', 'gtest', 'geautoingest', 'geutil', 'QtCore', 'QtGui', 'xerces-c'])
 
 env.test('JsUtils_unittest',
          'JsUtils_unittest.cpp',
@@ -235,7 +235,7 @@ env.test('JsUtils_unittest',
 
 env.test('StorageManager_unittest',
          'StorageManager_unittest.cpp',
-         LIBS=['gecommon', 'gemiscconfig', 'gtest', 'qt-mt', 'xerces-c', 'gexml'])
+         LIBS=['gecommon', 'gemiscconfig', 'gtest', 'QtCore', 'QtGui', 'xerces-c', 'gexml'])
 
 env.test('StorageManagerAssetHandle_unittest',
          'StorageManagerAssetHandle_unittest.cpp',

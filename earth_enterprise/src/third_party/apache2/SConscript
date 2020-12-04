@@ -130,7 +130,7 @@ config_opt += (
     '--with-crypto  '
     '--with-expat=/opt/google --with-mpm=worker --enable-proxy '
     '--enable-proxy-ajp --disable-proxy-connect --disable-proxy-ftp '
-    '--disable-proxy-http --disable-proxy-balancer --without-sqlite2 '
+    '--disable-proxy-balancer --without-sqlite2 '
     '--without-sqlite3 --without-mysql --with-ldap-include=%sinclude '
     '--with-ldap-lib=%s --with-ldap --enable-ldap --enable-authnz_ldap '
     '--with-included-apr '

@@ -21,7 +21,7 @@ import os
 import subprocess
 import re
 Import('third_party_env')
-
+Import('env')
 current_dir = Dir('.').abspath
 skia_version = 'skia-5.1.2'
 
@@ -134,6 +134,7 @@ cxx_flags.remove('-Werror')
 # http://www.microhowto.info/howto/building_a_shared_library_using_gcc.html#idp25536
 cxx_flags.append('-fPIC')
 
+freetype_include = "-I{0}/freetype/{1}/include".format(Dir('..').abspath, env['freetype_ver'])
 sgl_env['CXXFLAGS'] = cxx_flags
 sgl_env['CPPFLAGS'] += [
   '-DPNG_HANDLE_CHUNK_ALWAYS=3',
@@ -147,8 +148,8 @@ sgl_env['CPPFLAGS'] += [
   '-I' + os.path.join(sgl_src_abs_dir, 'gpu'),  # SkGradientShader dependencies.
   '-I' + os.path.join(sgl_src_abs_dir, 'image'),
   '-I' + os.path.join(sgl_src_abs_dir, 'utils'),
-  '-I' + os.path.join('/usr/include', 'freetype2'),
-  '-I' + os.path.join('/usr/include', 'libpng12')
+  freetype_include,
+  '-I' + os.path.join('/usr/include', env['png_ver'])
   ]
 
 sgl_opts_env = sgl_env.Clone()

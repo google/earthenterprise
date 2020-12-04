@@ -89,7 +89,7 @@ void AssetTraverser::Traverse(void)
   // we have to pre-check the existence of the assetroot because
   // ContinueSearch ignores ENOTDIR failues
   if (!khDirExists(assetroot_)) {
-    throw khException(kh::tr("%1 isn't a directory").arg(assetroot_));
+    throw khException(kh::tr("%1 isn't a directory").arg(assetroot_.c_str()));
   }
   std::string cwd = khGetCwd();
   if (cwd.empty()) {
@@ -102,7 +102,7 @@ void AssetTraverser::Traverse(void)
   int fd = ::open(assetroot_.c_str(), O_LARGEFILE | O_RDONLY);
   if (fd < 0) {
     throw khErrnoException(kh::tr("Unable to open %1")
-                           .arg(assetroot_));
+                           .arg(assetroot_.c_str()));
   }
   khReadFileCloser close_guard(fd);
 
@@ -122,7 +122,7 @@ void AssetTraverser::ContinueSearch(int fd,
   struct stat64 stat_info;
   if (::fstat64(fd, &stat_info) < 0) {
     throw khErrnoException(kh::tr("Unable to get info for %1")
-                           .arg(fulldir));
+                           .arg(fulldir.c_str()));
   }
   if (!S_ISDIR(stat_info.st_mode)) {
     // we don't check if relpath is a dir before calling this routine
@@ -145,7 +145,7 @@ void AssetTraverser::ContinueSearch(int fd,
   // try to cd
   if (::fchdir(fd) == -1) {
     throw khErrnoException(kh::tr("Unable to change dir to %1")
-                           .arg(fulldir));
+                           .arg(fulldir.c_str()));
   }
   ChdirGuard chdir_guard(restorepath);
 
@@ -157,7 +157,7 @@ void AssetTraverser::ContinueSearch(int fd,
     DIR *dir = ::opendir(".");
     if (!dir) {
       throw khErrnoException(kh::tr("Unable to open dir %1")
-                             .arg(fulldir));
+                             .arg(fulldir.c_str()));
     }
     khDIRCloser dirguard(DIR);
 
@@ -205,28 +205,27 @@ void AssetTraverser::ContinueSearch(int fd,
     }
   }
 
-  for (std::deque<std::string>::const_iterator dir = subdirs.begin();
-       dir != subdirs.end(); ++dir) {
+  for (const auto& dir : subdirs) {
     bool is_symlink = false;
 
     // open using low level ::open
     // we need to stat and chdir. Doing the raw open once, we can pass the fd
     // to fstate and fchdir and save one set of filename traversals
-    int fd = ::open(dir->c_str(),
+    int fd = ::open(dir.c_str(),
                     O_LARGEFILE | O_RDONLY | O_NOFOLLOW);
     if ((fd < 0) && (errno == ELOOP)) {
       is_symlink = true;
-      fd = ::open(dir->c_str(),
+      fd = ::open(dir.c_str(),
                   O_LARGEFILE | O_RDONLY);
     }
 
     if (fd < 0) {
       throw khErrnoException(kh::tr("Unable to open %1")
-                             .arg(fulldir+*dir));
+                             .arg(std::string(fulldir + dir).c_str()));
     }
     khReadFileCloser close_guard(fd);
 
-    ContinueSearch(fd, fulldir, *dir,
+    ContinueSearch(fd, fulldir, dir,
                    is_symlink ? fulldir : parentdir);
   }
 }
@@ -239,7 +238,7 @@ void AssetTraverser::HandleAssetFile(const std::string &dir,
   Asset asset(assetref);
 
   if (!asset) {
-    throw khException(kh::tr("Unable to load asset %1").arg(assetref));
+    throw khException(kh::tr("Unable to load asset %1").arg(assetref.c_str()));
   }
 
   if (wanted_.find(std::make_pair(asset->type, asset->subtype)) !=

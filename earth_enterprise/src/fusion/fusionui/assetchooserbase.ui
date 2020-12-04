@@ -1,6 +1,7 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>AssetChooserBase</class>
-<comment>  Copyright 2017 Google Inc.
+<comment>  Copyright 2020 the Open GEE Contributors.
+ Copyright 2017 Google Inc.
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
@@ -166,7 +167,7 @@
                 <string></string>
             </property>
             <property name="pixmap">
-                <pixmap>cdtoparent.xpm</pixmap>
+                <pixmap>:/cdtoparent.xpm</pixmap>
             </property>
         </widget>
         <widget class="QPushButton" row="0" column="4">
@@ -185,7 +186,7 @@
                 <string></string>
             </property>
             <property name="pixmap">
-                <pixmap>newfolder.xpm</pixmap>
+                <pixmap>:/newfolder.xpm</pixmap>
             </property>
         </widget>
         <widget class="QIconView" row="1" column="0" rowspan="1" colspan="5">
@@ -300,5 +301,8 @@
     <slot>NewDirectory()</slot>
 </slots>
 <pixmapinproject/>
+<includes>
+    <include location="global" impldecl="in declaration">Qt/qobjectdefs.h</include>
+</includes>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

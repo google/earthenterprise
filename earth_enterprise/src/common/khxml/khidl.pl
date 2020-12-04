@@ -44,7 +44,7 @@ sub usage
         "\n"
 }
 
-my %AtomicTypes = (		   
+my %AtomicTypes = (
 		   'bool'      => 1,
 		   'float'     => 1,
 		   'double'    => 1,
@@ -226,6 +226,7 @@ if (defined $impl_hfile) {
 
 EOH
     # include some basic xml headers
+    print $fh "#include <cstdint>\n";
     print $fh "#include <khxml/khxml.h>\n";
     if ($writeMethod eq 'DOM' || $readMethod eq 'DOM') {
         print $fh "#include <xercesc/dom/DOM.hpp>\n";
@@ -281,7 +282,7 @@ if (defined $cppfile) {
     print $fh "#include \"$impl_hfile\"\n";
     print $fh "\n";
     print $fh "using namespace khxml;\n\n";
-    
+
     if (length($cppquote)) {
         print $fh $cppquote;
         print $fh "\n";
@@ -388,7 +389,7 @@ sub ParseClass
     } else {
         $namespace =~ s/::$//;
     }
-    
+
     die "Expected 'class NAME': found '$line'\n"
 	unless defined($name);
 
@@ -559,7 +560,7 @@ sub ParseClass
                     $loaddefault =~ s/\s+$//;
                 }
 	    }
-	    
+
             {
                 my @exclusive = ('xmlattr', 'xmlbody', 'xmlchild');
                 my $count = 0;
@@ -667,7 +668,7 @@ sub EmitMemberReader
     my ($member, $fh, $prefix, $obj) = @_;
     my $mname  = $member->{name};
     my $mtname = $member->{tagname};
-    
+
     if (defined($member->{loaddefault})) {
         if ($member->{xmlattr}) {
             print $fh $prefix, "GetAttributeOrDefault(elem, \"$mtname\", $obj.$mname, $member->{loaddefault});\n";
@@ -680,7 +681,12 @@ sub EmitMemberReader
         } elsif ($member->{xmlskiptag}) {
             print $fh $prefix, "FromElement(elem, $obj.$mname);\n";
         } else {
-            print $fh $prefix, "GetElementOrDefault(elem, \"$mtname\", $obj.$mname, $member->{loaddefault});\n";
+            my $temp=$member->{loaddefault};
+            if (index($temp, "Qt::") != -1)
+            {
+               $temp = "static_cast<QColor>(".$temp.")";
+            }
+            print $fh $prefix, "GetElementOrDefault(elem, \"$mtname\", $obj.$mname, $temp);\n";
         }
     } else {
         if ($member->{xmlattr}) {
@@ -992,7 +998,7 @@ sub DumpClass
 		    }
 		}
 		print $fh " { }\n";
-	    }    
+	    }
 	}
 
 	if (exists $class->{constructor}) {
@@ -1040,7 +1046,7 @@ sub DumpClass
 		join(', ', @{$class->{base}{constructor}{argnames}}), ")";
 		print $fh ",\n" if $numMembers;
 	    }
-	    
+
 	    for ($i = 0; $i < $numMembers; ++$i) {
 		my $member = $class->{members}[$i];
 		print $fh $pad, $indent, $indent, "$member->{name}($member->{name}_)";
@@ -1049,7 +1055,7 @@ sub DumpClass
 	    print $fh " { }\n";
 	}
     }
-    
+
     # comparison operator
     {
 	print $fh $pad, $indent, "bool operator== (const $class->{name} &o) const\n";
@@ -1281,7 +1287,7 @@ sub JavaDumpClass
         if (defined $warn) {
           print $fh $pad, $indent, "\@SuppressWarnings(\"unchecked\")\n";
         }
-        if (defined $member->{newdefault}) { 
+        if (defined $member->{newdefault}) {
           my $default = JavaDefaultVal($member->{newdefault}, $class);
           print $fh $pad, $indent, "public $type $member->{name} = $default;\n";
         } else {
@@ -1310,7 +1316,7 @@ sub JavaDumpClass
 		    }
 		}
 		print $fh $pad, $indent, "}\n\n";
-	    }    
+	    }
 	}
 
 	if (exists $class->{constructor}) {
@@ -1353,7 +1359,7 @@ sub JavaDumpClass
 		join(', ', @{$class->{base}{constructor}{argnames}}), ")";
 		print $fh ",\n" if $numMembers;
 	    }
-	    
+
 	    for ($i = 0; $i < $numMembers; ++$i) {
 		my $member = $class->{members}[$i];
 		print $fh $pad, $indent, $indent, "this.$member->{name} = $member->{name};\n";
@@ -1365,7 +1371,7 @@ sub JavaDumpClass
 
 	}
     }
-    
+
     print $fh $pad, "}\n\n";
 }
 
@@ -1435,7 +1441,7 @@ sub EmitDOMWriter
 
     my $DOM_classname = "$class->{qualname}_DOM";
     $DOM_classname =~ s/::/_/g;
-    
+
 
     print $fh "class $DOM_classname : public $class->{qualname} {\n";
     print $fh $indent, "public:\n";
@@ -1501,7 +1507,7 @@ sub EmitDOMWriter
 		print $fh $indent, "return ";
 		$haveFirst = 1;
 	    }
-	    
+
 	    if (defined($member->{ignoreif})) {
                 print $fh "(($member->{ignoreif}) ||\n";
                 print $fh $indent, "        ::IsUpToDate($member->{name}, o.$member->{name}))";
@@ -1533,7 +1539,7 @@ sub EmitDOMWriter
 	    print $fh $indent, "if (!$class->{base}{qualname}::IsUpToDate(o)) {\n";
             print $fh $indent, "  notify(NFY_WARN, \"$name IsUpToDate: base out of date\");\n";
             print $fh $indent, "  return false;\n";
-            
+
             print $fh $indent, "}\n"
 	}
 
@@ -1591,7 +1597,7 @@ sub EmitDOMWriter
 bool
 $class->{qualname}::Save(const std::string &file) const throw()
 {
-    std::unique_ptr<GEDocument> doc = CreateEmptyDocument("$class->{TagName}");
+    auto doc = CreateEmptyDocument("$class->{TagName}");
     if (!doc) {
         notify(NFY_WARN, "Unable to create empty document: $class->{TagName}");
         return false;
@@ -1629,7 +1635,7 @@ EOF
 bool
 $class->{qualname}::SaveToString(std::string &buf, const std::string &ref) const throw()
 {
-    std::unique_ptr<GEDocument> doc = CreateEmptyDocument("$class->{TagName}");
+    auto doc = CreateEmptyDocument("$class->{TagName}");
     if (!doc) return false;
     bool status = false;
     try {
@@ -1753,7 +1759,7 @@ sub EmitDOMReader
 	print $fh "{\n";
     } else {
 	print $fh "void\n";
-	print $fh "FromElement(DOMElement *elem, $class->{qualname} &self)\n";
+  print $fh "FromElement(DOMElement *elem, $class->{qualname} &self)\n";
 	print $fh "{\n";
     }
 
@@ -1803,11 +1809,11 @@ sub EmitDOMReader
 	}
     }
     print $fh "}\n\n";
-    
+
     if (HasDeprecatedMembers($class)) {
 	# little wrapper to avoid all pieces needing to pass depmembers
 	print $fh "void\n";
-	print $fh "FromElement(DOMElement *elem, $class->{qualname} &self) {\n";
+        print $fh "FromElement(DOMElement *elem, $class->{qualname} &self) {\n";
 	print $fh $indent, "$class->{qualname}::DeprecatedMembers depmembers;\n";
 	print $fh $indent, "FromElementWithDeprecated(elem, self, depmembers);\n";
 	print $fh "}\n";
@@ -1835,7 +1841,8 @@ bool
 $class->{qualname}::Load(const std::string &file) throw()
 {
     bool result = false;
-    std::unique_ptr<GEDocument> doc = ReadDocument(file);
+    //std::unique_ptr<GEDocument>
+    auto doc = ReadDocument(file);
     if (doc) {
         try {
             DOMElement *docelem = doc->getDocumentElement();
@@ -1869,7 +1876,8 @@ $class->{qualname}::LoadFromString(const std::string &buf,
     const std::string &ref) throw()
 {
     bool result = false;
-    std::unique_ptr<GEDocument> doc = ReadDocumentFromString(buf, ref);
+    //std::unique_ptr<GEDocument>
+    auto doc = ReadDocumentFromString(buf, ref);
     if (doc) {
         try {
             DOMElement *docelem = doc->getDocumentElement();
@@ -1929,7 +1937,7 @@ sub EmitEnumDOMReader
       print $fh $indent, $indent, "return;\n";
     }
     print $fh $indent, "}\n";
-    print $fh $indent, "throw khException(kh::tr(\"Invalid string '%1' for enum '%2'\").arg(enumStr).arg(\"$enum->{qualname}\"));\n";
+    print $fh $indent, "throw khException(kh::tr(\"Invalid string '%1' for enum '%2'\").arg(enumStr.c_str()).arg(\"$enum->{qualname}\"));\n";
     print $fh "}\n\n";
 }
 

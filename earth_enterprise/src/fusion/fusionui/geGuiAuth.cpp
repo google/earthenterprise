@@ -19,7 +19,8 @@
 #include "khThread.h"
 
 geGuiAuth::geGuiAuth(QWidget* parent) {
-  auth_dialog_ = new AuthDialogBase(parent);
+  const char* name = NULL;
+  auth_dialog_ = new AuthDialogBase(parent, name, false, 0);
   dialog_request_pending_ = false;
   dialog_accept_result_ = false;
 
@@ -80,8 +81,8 @@ bool geGuiAuth::GetUserPwd(std::string& username, std::string& password) {
 
   // If the user pressed Cancel, don't modify the username or password.
   if (dialog_accept_result_) {
-    username = auth_dialog_->username_edit->text();
-    password = auth_dialog_->password_edit->text();
+    username = auth_dialog_->username_edit->text().toUtf8().constData();
+    password = auth_dialog_->password_edit->text().toUtf8().constData();
   }
   return dialog_accept_result_;
 }

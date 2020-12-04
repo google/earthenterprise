@@ -102,7 +102,7 @@ class geFilePool {
     // This is because a close can fail to write the remaining cached bytes
     // to disk. We want to throw an exception in that case, but we're not
     // supposed to throw exceptions from destructors.
-    ~Writer(void);
+    ~Writer(void) noexcept(false);
 
     // Buffer contiguous writes with the given size buffer. write_buffer_size is
     // in bytes. 0 turns off buffering (default). Safe but not recommended for

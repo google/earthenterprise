@@ -366,7 +366,7 @@ int main(int argc, char** argv) {
     if (query_encodings) {
       QTextCodec* codec;
       for (int i = 0; (codec = QTextCodec::codecForIndex(i)); ++i)
-        printf("%s\n", codec->name());
+        printf("%s\n", codec->name().constData());
       exit(EXIT_SUCCESS);
     }
 
@@ -397,7 +397,7 @@ int main(int argc, char** argv) {
         fprintf(stderr, "Valid codec must be one of the following:\n");
         QTextCodec* codec;
         for (int i = 0; (codec = QTextCodec::codecForIndex(i)); ++i)
-          printf("%s\n", codec->name());
+          printf("%s\n", codec->name().constData());
         exit(EXIT_FAILURE);
       }
     }
@@ -456,7 +456,7 @@ int main(int argc, char** argv) {
     if (!khMakeCleanDir(path)) {
       usage("Unable to create empty directory");
     }
-    QDir outdir(path);
+    QDir outdir(path.c_str());
 
     if (force_2d) {
       notify(NFY_NOTICE, "*** Command run with --force2D");
@@ -776,7 +776,7 @@ int main(int argc, char** argv) {
 
       JOBSTATS_BEGIN(import_stats, SAVE);
       // Save after every source is added just in case something fails.
-      kvpasset.Save(outdir.filePath(kHeaderXmlFile).latin1());
+      kvpasset.Save(outdir.filePath(kHeaderXmlFile.c_str()).latin1());
       JOBSTATS_END(import_stats, SAVE);
 
       // Compute features statistics for layer.
@@ -855,7 +855,7 @@ int main(int argc, char** argv) {
 
     JOBSTATS_BEGIN(import_stats, SAVE);
     // Save after setting min/max/efficient resolution levels.
-    kvpasset.Save(outdir.filePath(kHeaderXmlFile).latin1());
+    kvpasset.Save(outdir.filePath(kHeaderXmlFile.c_str()).latin1());
     JOBSTATS_END(import_stats, SAVE);
 
     if (show_max25d_message) {

@@ -1,7 +1,7 @@
 |Google logo|
 
 ========================================
-Configure GEE Server 5.1.0 for SSL/HTTPS
+Configure GEE Server for SSL/HTTPS
 ========================================
 
 .. container::
@@ -12,7 +12,7 @@ Configure GEE Server 5.1.0 for SSL/HTTPS
       unencrypted HTTP by default. However, you may have strict
       requirements that secure HTTP (HTTPS) be used for all data
       communications. This article provides the steps to configure a GEE
-      Server release 5.1.0 for use with HTTPS.
+      Server for use with HTTPS.
 
       We also include the steps required to generate a self-signed SSL
       certificate for your server but we recommend you obtain a
@@ -33,7 +33,7 @@ Configure GEE Server 5.1.0 for SSL/HTTPS
       .. _Requirements:
       .. rubric:: Requirements
 
-      -  Google Earth Enterprise Server 5.1.0
+      -  Google Earth Enterprise Server
       -  A third-party or self-signed SSL certificate. Instructions for
          generating the latter are provided in the following setup
          procedure.
@@ -172,16 +172,16 @@ Configure GEE Server 5.1.0 for SSL/HTTPS
             Use of the ``SSLRequireSSL`` directive prevents all HTTP
             requests that do not use SSL, thereby protecting your data
             from all but HTTPS requests.
-            See `Apache HTTP Server Version 2.2 Documentation
-            <http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslrequiressl>`_
+            See `Apache HTTP Server Version 2.4 Documentation
+            <http://httpd.apache.org/docs/2.4/mod/mod_ssl.html#sslrequiressl>`_
             for more information.
 
          .. tip::
 
             Use of the ``SSLVerifyClient`` directive specifies the level
             of certificate verification required for the client.
-            See `Apache HTTP Server Version 2.2 Documentation for SSLVerifyClient
-            <http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslverifyclient>`_
+            See `Apache HTTP Server Version 2.4 Documentation for SSLVerifyClient
+            <http://httpd.apache.org/docs/2.4/mod/mod_ssl.html#sslverifyclient>`_
             for more information.
 
 
@@ -215,7 +215,7 @@ Configure GEE Server 5.1.0 for SSL/HTTPS
          provides SSL support. It contains the configuration directives
          to instruct the server how to serve pages over an HTTPS
          connection. For detailed information about these directives see
-         `Apache 2.2 documentation <http://httpd.apache.org/docs/2.2/mod/mod_ssl.html>`__.
+         `Apache 2.4 documentation <http://httpd.apache.org/docs/2.4/mod/mod_ssl.html>`__.
 
          a. Ensure the ``ServerName www.example.com`` is uncommented and
             matches the name defined in the

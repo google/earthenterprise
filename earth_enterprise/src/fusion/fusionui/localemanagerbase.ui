@@ -107,7 +107,7 @@
                         <string></string>
                     </property>
                     <property name="pixmap">
-                        <pixmap>filenew</pixmap>
+                        <pixmap>:/filenew</pixmap>
                     </property>
                     <property name="accel">
                         <string></string>
@@ -124,7 +124,7 @@
                         <string></string>
                     </property>
                     <property name="pixmap">
-                        <pixmap>editdelete.png</pixmap>
+                        <pixmap>:/editdelete.png</pixmap>
                     </property>
                     <property name="accel">
                         <string></string>
@@ -217,5 +217,8 @@
     <slot>ModifyLocale()</slot>
 </slots>
 <pixmapinproject/>
+<includes>
+    <include location="global" impldecl="in declaration">Qt/qobjectdefs.h</include>
+</includes>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

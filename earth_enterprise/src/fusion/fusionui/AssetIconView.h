@@ -18,14 +18,20 @@
 #ifndef KHSRC_FUSION_FUSIONUI_ASSETICONVIEW_H__
 #define KHSRC_FUSION_FUSIONUI_ASSETICONVIEW_H__
 
-#include <qiconview.h>
-#include <qdir.h>
-
+#include <Qt/q3iconview.h>
+#include <Qt/qimage.h>
+#include <Qt/qdir.h>
 #include <gstAssetGroup.h>
+#include <Qt/qnamespace.h>
+#include <Qt/q3listview.h>
+#include <Qt/qwidget.h>
 
-class QImage;
 
 // -----------------------------------------------------------------------------
+
+using QIconView = Q3IconView;
+using QIconViewItem = Q3IconViewItem;
+
 
 class AssetIcon : public QIconViewItem {
  public:
@@ -46,7 +52,7 @@ class AssetIcon : public QIconViewItem {
 
 class AssetIconView : public QIconView {
  public:
-  AssetIconView(QWidget* parent = 0, const char* name = 0, WFlags f = 0);
+  AssetIconView(QWidget* parent = 0, const char* name = 0, Qt::WFlags f = 0);
 
   QString currentLocation();
 

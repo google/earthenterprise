@@ -120,7 +120,7 @@ main(int argc, char *argv[]) {
       for (std::vector<LayerConfig>::const_iterator layer =
              vproj->config.layers.begin();
            layer != vproj->config.layers.end(); ++layer) {
-        if (layer->DefaultNameWithPath() == layername) {
+        if (layer->DefaultNameWithPath() == layername.c_str()) {
           if (!layer->Save(output)) {
             // error message already emitted
             notify(NFY_FATAL, "Could not save template");

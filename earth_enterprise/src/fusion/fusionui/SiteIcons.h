@@ -21,7 +21,10 @@
 #include <gstSite.h>
 #include "siteiconsbase.h"
 #include "PixmapManager.h"
-
+#include <Qt/qicon.h>
+#include <Qt/q3iconview.h>
+using QIconViewItem = Q3IconViewItem;
+using QIconView = Q3IconView;
 class QPixmap;
 
 class SiteIcons : public SiteIconsBase {
