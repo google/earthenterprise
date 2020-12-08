@@ -40,7 +40,7 @@ def AssertPackageVersion(package_name, min_version):
    """Exit if the specified package is not installed at a
    version greater than or equal to the min_version"""
    if IsPackageVersionSufficient(package_name, min_version) == False:
-       print("BUILD ERROR: %s is not at required version %s" % (package_name, min_version))
+       print(("BUILD ERROR: %s is not at required version %s" % (package_name, min_version)))
        sys.exit(1)
 
 
@@ -62,7 +62,7 @@ def IntListCompare (version_a, version_b):
     """Compare two integer lists returning:
     -1 if a < b, 0 if a==b and 1 if a > b"""
     max_index = max(len(version_a), len(version_b))
-    for i in xrange(max_index):
+    for i in range(max_index):
         current_value = 0
         if i < len(version_a): current_value = version_a[i]
         min_value = 0
@@ -77,7 +77,7 @@ def VersionStringToList (version_string, delimiters = ".-"):
    """Return a list of version numbers from a given version string
    Given '4.1.2.3-0' return [4, 1, 2, 3, 0]"""
 
-   for i in xrange(len(delimiters)):
+   for i in range(len(delimiters)):
      version_string = version_string.replace(delimiters[i], ".")
    version_string_list = version_string.split(".")
    return [int(n) for n in version_string_list]
