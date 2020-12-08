@@ -39,7 +39,7 @@ sudo apt-get install \
     libx11-dev libxcursor-dev libxerces-c-dev libxft-dev libxinerama-dev \
     libxml2-dev libxml2-utils libxmu-dev libxrandr-dev libyaml-cpp-dev \
     openssl libpcre3 libpcre3-dev \
-    scons shunit2 xorg-dev zlib1g-dev
+    shunit2 xorg-dev zlib1g-dev
 ```
 ## Install Python
 
@@ -61,5 +61,5 @@ Additional python packages are needed as well:
 sudo python2.7 -m pip install --upgrade pip==19.0
 sudo python2.7 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary
 sudo python3.8 -m pip install --upgrade pip
-sudo python3.8 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary
+sudo python3.8 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary scons
 ```

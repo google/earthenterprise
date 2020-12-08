@@ -20,6 +20,6 @@ Import('env', 'sysmanObjs', 'sysmanExtraObjs', 'sysmanTestLibs')
 env = env.Clone()
 
 env.test('build-raster-project_resourcetest',
-    map(lambda o: "../" + o, sysmanObjs) + sysmanExtraObjs + \
+    ["../" + o for o in sysmanObjs] + sysmanExtraObjs + \
     ['build-raster-project_resourcetest.cc'],
     LIBS = [ 'dbmanifest', 'geautoingest', 'yaml-cpp' ] + sysmanTestLibs)

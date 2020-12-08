@@ -51,13 +51,13 @@ libmng_extract = libmng_env.Command(
 libmng_target = '%s/.patch_libmng' % current_dir
 libmng_patch = libmng_env.Command(
     libmng_target,
-    libmng_extract + map(libmng_env.GetBuildPath, libmng_patches),
+    libmng_extract + list(map(libmng_env.GetBuildPath, libmng_patches)),
     [libmng_env.MultiCommand(
         'cd %s\n'
         '%s\n'
         'touch %s' % (build_root,
-                      '\n'.join(map(lambda i: 'patch -g0 -p1 -s < %s' % (
-                          libmng_env.GetBuildPath(i)), libmng_patches)),
+                      '\n'.join(['patch -g0 -p1 -s < %s' % (
+                          libmng_env.GetBuildPath(i)) for i in libmng_patches]),
                       libmng_target))])
 
 

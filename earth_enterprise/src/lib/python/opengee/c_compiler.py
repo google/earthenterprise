@@ -13,7 +13,7 @@ def get_cc_version(cc_path):
   process = subprocess.Popen(
     [cc_path, '--version'], stdout=subprocess.PIPE)
   (stdout, _) = process.communicate()
-  match = re.search('[0-9][0-9.]*', stdout)
+  match = re.search('[0-9][0-9.]*', str(stdout))
 
   # If match is None we don't know the version.
   if match is None:

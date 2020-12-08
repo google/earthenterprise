@@ -82,13 +82,13 @@ apache_extract = apache_env.Command(
 apache_target = '%s/.patch_apache' % current_dir
 apache_patch = apache_env.Command(
     apache_target,
-    apache_extract + map(apache_env.GetBuildPath, apache_patches),
+    apache_extract + list(map(apache_env.GetBuildPath, apache_patches)),
     [apache_env.MultiCommand(
         'cd %s/%s\n'
         '%s\n'
         'touch %s' % (build_root, httpd_version,
-                      '\n'.join(map(lambda i: 'patch -g0 -p1 --verbose < %s' % (
-                          apache_env.GetBuildPath(i)), apache_patches)),
+                      '\n'.join(['patch -g0 -p1 --verbose < %s' % (
+                          apache_env.GetBuildPath(i)) for i in apache_patches]),
                       apache_target))])
 
 # [3] Find out whether optimize or debug and set variables accordingly
@@ -214,8 +214,8 @@ apache_install = apache_env.Command(
         '%s/opt/google/gehttpd/conf/gehttpd.conf' % install_root,
         'perl -pi -e "s/^User \w+/User IA_GEAPACHE_USER/; s/^Group \w+/Group '
         'IA_GEGROUP/;" %s/opt/google/gehttpd/conf/gehttpd.conf' % install_root
-        ] + map(lambda i: 'rm -rf %s/%s' % (
-            install_root_opt, i), to_prune_http) + [
+        ] + ['rm -rf %s/%s' % (
+            install_root_opt, i) for i in to_prune_http] + [
                 'mkdir -p %s' % install_root_doc,
                 'cp -pr ABOUT_APACHE README CHANGES LICENSE NOTICE %s' % (
                     install_root_doc),

@@ -29,7 +29,7 @@ cpps = [
   'jpeg_comment_date.cc',
 ]
 
-objects = map(lambda f: env.StaticObject(f), cpps)
+objects = [env.StaticObject(f) for f in cpps]
 keyholeutils = env.staticLib('keyholeutils', objects)
 
 # Build subprojects

@@ -49,14 +49,13 @@ ogdi_extract = ogdi_env.Command(
 ogdi_target = '%s/.patch' % current_dir
 ogdi_patch = ogdi_env.Command(
     ogdi_target,
-    ogdi_extract + map(ogdi_env.GetBuildPath, ogdi_patches),
+    ogdi_extract + list(map(ogdi_env.GetBuildPath, ogdi_patches)),
     [ogdi_env.MultiCommand(
         'cd %s\n'
         '%s\n'
         'touch %s' % (build_root,
-                      '\n'.join(map(
-                          lambda i: 'patch -g0 -p1 -b --suffix .topdir -s < %s' % (
-                              ogdi_env.GetBuildPath(i)), ogdi_patches)),
+                      '\n'.join(['patch -g0 -p1 -b --suffix .topdir -s < %s' % (
+                              ogdi_env.GetBuildPath(i)) for i in ogdi_patches]),
                       ogdi_target))])
 
 if third_party_env['is_min_ubuntu'] and not third_party_env['native_cc']:

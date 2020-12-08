@@ -50,13 +50,13 @@ libcap_extract = libcap_env.Command(
 libcap_target = '%s/.patch_libcap' % current_dir
 libcap_patch = libcap_env.Command(
     libcap_target,
-    libcap_extract + map(libcap_env.GetBuildPath, libcap_patches),
+    libcap_extract + list(map(libcap_env.GetBuildPath, libcap_patches)),
     [libcap_env.MultiCommand(
         'cd %s\n'
         '%s\n'
         'touch %s' % (build_root,
-                      '\n'.join(map(lambda i: 'patch -g0 -p1 -s < %s' % (
-                          libcap_env.GetBuildPath(i)), libcap_patches)),
+                      '\n'.join(['patch -g0 -p1 -s < %s' % (
+                          libcap_env.GetBuildPath(i)) for i in libcap_patches]),
                       libcap_target))])
 
 # [2] Build

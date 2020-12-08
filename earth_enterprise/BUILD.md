@@ -17,7 +17,7 @@ the instructions linked above, these required versions will be installed.
     * git 1.8.4+  __NOTE:__ git 1.7.1+ will build GEE but may miscalculate product version
     * git lfs
     * gcc 4.8.x
-    * scons 2.0.x
+    * scons 4.0.x
     * python 2.7.18 and Python 3.8.6
 
 2. Clone the _earthenterprise_ repository in your build environment:
@@ -72,7 +72,7 @@ the instructions linked above, these required versions will be installed.
 
     ```bash
     cd earthenterprise/earth_enterprise
-    python2.7 /usr/bin/scons -j8 release=1 build
+    scons -j8 release=1 build
     ```
 
 4. Run unit tests (note: that the `REL` part of the path will vary if you use
