@@ -26,11 +26,11 @@ env.install('common_lib', [gexml])
 test_idlfiles = ['test_classes',
                  ]
 
-env.idl(map(lambda n: n+'.idl', test_idlfiles))
+env.idl([n+'.idl' for n in test_idlfiles])
 
 env.test('idl_tests',
          ['idl_tests.cc',
-          map(lambda n: '.idl/'+n+'.cpp', test_idlfiles),
+          ['.idl/'+n+'.cpp' for n in test_idlfiles],
           ],
          LIBS=['gexml', 'gecommon', 'geutil',
                'QtGui', 'QtCore', 'xerces-c', 'gtest'])

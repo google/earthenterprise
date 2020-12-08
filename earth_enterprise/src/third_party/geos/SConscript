@@ -48,13 +48,13 @@ geos_extract = geos_env.Command(
 
 # [2] Patch geos
 geos_target = '%s/.patch_geos' % current_dir
-patch_cmds = '\n'.join(map(lambda i: 'patch -g0 -p1 -s < %s' % (
-                          geos_env.GetBuildPath(i)), geos_patches))
+patch_cmds = '\n'.join(['patch -g0 -p1 -s < %s' % (
+                          geos_env.GetBuildPath(i)) for i in geos_patches])
 if patch_cmds:
   patch_cmds = '%s\n' % patch_cmds
 geos_patch = geos_env.Command(
     geos_target,
-    geos_extract + map(geos_env.GetBuildPath, geos_patches),
+    geos_extract + list(map(geos_env.GetBuildPath, geos_patches)),
     [geos_env.MultiCommand(
         'cd %s\n'
         '%s'

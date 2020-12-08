@@ -49,10 +49,9 @@ if buildGtest:
     gtest_env.Append(CPPPATH = [gtest_path])
 
     cpps = ['src/gtest-all.cc']
-    objects = map(lambda f:
-                gtest_env.SharedObject(
+    objects = [gtest_env.SharedObject(
                     target = gtest_env.exportdirs['root'] + '/' + f[0:-2] + 'so',
-                    source = gtest_path + '/' + f), cpps)
+                    source = gtest_path + '/' + f) for f in cpps]
 
     gtest = gtest_env.sharedLib('gtest', objects)
     Return('objects gtest')

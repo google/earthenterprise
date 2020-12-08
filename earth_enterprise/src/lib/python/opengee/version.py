@@ -12,7 +12,7 @@ def is_version_ge(version_components, comparand_components):
   if version_components is None or comparand_components is None:
     return False
 
-  for i in xrange(len(comparand_components)):
+  for i in range(len(comparand_components)):
     if i >= len(version_components):
       version_component = 0
     else:

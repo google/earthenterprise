@@ -37,10 +37,10 @@ try:
   findLibraryCommand = "/sbin/ldconfig -p | grep %s | tr ' ' '\n' | grep /" %mrSIDLibName
   # There may be multiple MrSID paths, so take the first one
   mrSIDlibraryFullPath = subprocess.check_output(findLibraryCommand, shell=True).splitlines()[0]
-  print "mrSID library was found. GDAL will be built with mrSID raster format support: ", mrSIDlibraryFullPath
+  print("mrSID library was found. GDAL will be built with mrSID raster format support: ", mrSIDlibraryFullPath)
   # Go up two directories
   mrSIDDSDKPath = os.path.dirname(os.path.dirname(mrSIDlibraryFullPath))
-  print "mrSID Decoding SDK path is: ", mrSIDDSDKPath
+  print("mrSID Decoding SDK path is: ", mrSIDDSDKPath)
   assert os.path.isdir(mrSIDDSDKPath), "The mrSID Decoding SDK path is invalid"
 except subprocess.CalledProcessError:
   # We couldn't find the MrSID library
@@ -81,13 +81,13 @@ gdal_extract = gdal_env.Command(
 gdal_target = '%s/.patch_gdal' % current_dir
 gdal_patch = gdal_env.Command(
     gdal_target,
-    gdal_extract + map(gdal_env.GetBuildPath, gdal_patches),
+    gdal_extract + list(map(gdal_env.GetBuildPath, gdal_patches)),
     [gdal_env.MultiCommand(
         'cd %s\n'
         '%s\n'
         'touch %s' % (build_root,
-                      '\n'.join(map(lambda i: 'patch -g0 -p1 -s < %s' % (
-                          gdal_env.GetBuildPath(i)), gdal_patches)),
+                      '\n'.join(['patch -g0 -p1 -s < %s' % (
+                          gdal_env.GetBuildPath(i)) for i in gdal_patches]),
                       gdal_target))])
 
 

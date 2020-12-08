@@ -62,10 +62,9 @@ libjs_target = '%s/.patch_libjs' % current_dir
 libjs_patch = libjs_env.Command(
     libjs_target,
     libjs_extract +
-    map(libjs_env.GetBuildPath, libjs_patches),
-    map(lambda i: 'cp -f %s %s/mozilla/js/src' % (
-        libjs_env.GetBuildPath(i), current_dir),
-        libjs_patches) + [Touch('$TARGET')])
+    list(map(libjs_env.GetBuildPath, libjs_patches)),
+    ['cp -f %s %s/mozilla/js/src' % (
+        libjs_env.GetBuildPath(i), current_dir) for i in libjs_patches] + [Touch('$TARGET')])
 
 # Find out whether optimize or debug and set variables accordingly
 if libjs_env['release'] or libjs_env['optimize']:
