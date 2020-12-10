@@ -235,10 +235,10 @@ sudo yum install python python-pip python-devel
 
 ### All distros
 
-The following script will build and install Python 2.7 and Python 3.8 from source if they are needed. From `earthenterprise/earth_enterprise` run:
+The following script will build and install Python 2.7 and Python 3.8 from source if they are needed. From `earthenterprise` run:
 
 ```bash
-sudo ./../scripts/install_python.sh
+sudo ./scripts/install_python.sh
 ```
 
 Additional python packages are needed as well:

@@ -49,10 +49,10 @@ In order to build OpenGEE, both Python 2.7 and 3.8 are needed (to facilitate tra
 sudo apt-get install python2.7 python2.7-dev python-pip
 ```
 
-The following script will build and install Python 2.7 and Python 3.8 from source if they are needed:
+The following script will build and install Python 2.7 and Python 3.8 from source if they are needed. From `earthenterprise` run:
  
 ```bash
-sudo ./../scripts/install_python.sh
+sudo ./scripts/install_python.sh
 ```
 
 Additional python packages are needed as well:
