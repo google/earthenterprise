@@ -22,7 +22,6 @@ before_install:
 - sudo python2.7 -m pip install --upgrade pip==19.0
 - sudo python2.7 -m pip install argparse setuptools defusedxml GitPython
     Pillow unittest2 lxml psycopg2
-- cd earth_enterprise
 - sudo scripts/install_python.sh
 - sudo python3.8 -m pip install --upgrade pip
 - sudo python3.8 -m pip install argparse setuptools defusedxml GitPython 
