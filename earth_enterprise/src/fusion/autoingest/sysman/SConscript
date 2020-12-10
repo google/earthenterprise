@@ -52,7 +52,7 @@ env.Depends('../plugins/ProjectedMapProjectAsset.os', 'plugins/MapLayerAssetD.h'
 
 env.Command('SysManFromStorage.cpp',
             [ '../FromStorageGen.pl' ],
-            [ "$SOURCE --daemon --cppfile $TARGET " + string.join(plugins, ' ') ])
+            [ "$SOURCE --daemon --cppfile $TARGET " + " ".join(plugins) ])
 
 env.Command('khAssetManagerDispatch.cpp',
             [ '../ProtocolGen.pl', '../AssetManager.protocol' ],

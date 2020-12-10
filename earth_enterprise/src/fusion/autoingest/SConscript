@@ -154,7 +154,7 @@ for plugin in plugins:
 
 env.Command('ReadOnlyFromStorage.cpp',
             [ 'FromStorageGen.pl' ],
-            [ "$SOURCE --cppfile $TARGET " + string.join(plugins, ' ') ])
+            [ "$SOURCE --cppfile $TARGET " + " ".join(plugins) ])
 
 env.Command('khAssetManagerProxy.h',
             [ 'ProtocolGen.pl', 'AssetManager.protocol' ],
