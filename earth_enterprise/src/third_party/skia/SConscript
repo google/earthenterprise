@@ -44,7 +44,7 @@ tar_p = subprocess.Popen(['tar', 'tzf', skia_source], stdout=subprocess.PIPE)
 def gather_cpp_files(file_list):
     cpp_list = []
     for entry in file_list:
-        cpp_match = cpp_select_re.search(entry)
+        cpp_match = cpp_select_re.search(str(entry))
         if cpp_match is not None:
             cpp_list.append(cpp_match.groups(0)[0])
     return cpp_list
