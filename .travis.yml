@@ -27,6 +27,7 @@ before_install:
 - sudo python3.8 -m pip install --upgrade pip
 - sudo python3.8 -m pip install argparse setuptools defusedxml GitPython 
     Pillow unittest2 lxml psycopg2-binary scons
+- cd ..
 
 script: echo "Running build..."
 
