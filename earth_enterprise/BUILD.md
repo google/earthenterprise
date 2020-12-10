@@ -18,7 +18,7 @@ the instructions linked above, these required versions will be installed.
     * git lfs
     * gcc 4.8.x
     * scons 2.0.x
-    * python 2.6.x or python 2.7.x. __Python 3.0+ is not supported.__
+    * python 2.7.18 and Python 3.8.6
 
 2. Clone the _earthenterprise_ repository in your build environment:
 

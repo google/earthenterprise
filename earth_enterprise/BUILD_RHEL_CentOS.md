@@ -98,13 +98,13 @@ sudo yum install -y git-lfs
 For all versions of CentOS and RHEL, install the standard development/build tools:
 
 ```bash
-sudo yum install -y ant bzip2 doxygen gcc-c++ patch python python-argparse python-defusedxml python-setuptools tar
+sudo yum install -y ant bzip2 doxygen gcc-c++ patch tar
 ```
 
 ### RHEL6 and Centos 6
 
 ```bash
-sudo yum install -y ant bzip2 doxygen gcc-c++ patch tar python27 python-argparse python27-defusedxml python27-setuptools
+sudo yum install -y ant bzip2 doxygen gcc-c++ patch tar
 ```
 
 Also install the devtoolset toolchain.
@@ -135,11 +135,11 @@ Execute:
 ```bash
 sudo yum install -y \
   bison-devel boost-devel cmake daemonize freeglut-devel \
-  gdbm-devel geos-devel giflib-devel glib2-devel GitPython gtk2-devel \
+  gdbm-devel geos-devel giflib-devel glib2-devel gtk2-devel \
   libcap-devel libicu-devel libmng-devel libpng-devel libtiff-devel libX11-devel libXcursor-devel \
   libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel \
-  perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-devel \
+  perl-Alien-Packages perl-Perl4-CoreLibs proj-devel \
   rpm-build rpmrebuild rsync scons \
   xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
 ```
@@ -155,9 +155,8 @@ sudo yum install -y \
   libcap-devel libmng-devel libpng-devel libX11-devel libXcursor-devel \
   libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel pcre pcre-devel \
-  proj-devel python27 glib2-devel libtiff-devel \
-  python27-pip python27-devel python27-setuptools python-unittest2 \
-  python-devel rpm-build rpmrebuild rsync scons shunit2 \
+  proj-devel glib2-devel libtiff-devel \
+  rpm-build rpmrebuild rsync scons shunit2 \
   xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
 ```
 
@@ -222,16 +221,33 @@ sudo yum install -y http://download-ib01.fedoraproject.org/pub/epel/6/x86_64/Pac
 
 shunit2 was installed in a previous step.
 
-## Install Python 2.7 Packages
+## Install Python
+
+In order to build OpenGEE, both Python 2.7 and 3.8 (and their respective pip installations and dev files) are needed to facilitate transition to python 3.8. If you have access to either through public repos, we suggest installing them that way.
 
 ### RHEL 7 and CentOS 7
 
-Python 2.7 is installed as a system default, so no additional packages are needed.
-
-### RHEL 6 and CentOS 6
+On RHEL7 and CentOS 7 Python 2.7 is available, and should be installed from the public repos.
 
 ```bash
-sudo pip2.7 install gitpython
+sudo yum install python python-pip python-devel
+```
+
+### All distros
+
+The following script will build and install Python 2.7 and Python 3.8 from source if they are needed. From `earthenterprise/earth_enterprise` run:
+
+```bash
+sudo ./../scripts/install_python.sh
+```
+
+Additional python packages are needed as well:
+
+```bash
+sudo python2.7 -m pip install --upgrade pip==19.0
+sudo python2.7 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary
+sudo python3.8 -m pip install --upgrade pip
+sudo python3.8 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary
 ```
 
 ### Building on fips-enabled machines

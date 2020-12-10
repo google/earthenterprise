@@ -142,6 +142,8 @@ def stagedInstallDir_tutorial = new File(stagedInstallDir, 'tutorial')
 def packageInstallRootDir = new File('/')
 def packageInstallLibDir = new File(packageInstallRootDir, 'opt/google/lib')
 
+def stagedInstallDir_python_2 = new File(stagedInstallDir, 'python/python_2')
+def stagedInstallDir_python_3 = new File(stagedInstallDir, 'python/python_3')
 def stagedInstallDir_postgis_opt = new File(stagedInstallDir, 'postgis/opt')
 
 // Commands used in install-utils.sh:
@@ -163,6 +165,8 @@ def rpmCapabilityMap = [
     'libltidsdk.so()(64bit)': null,
     '/bin/perl': '/usr/bin/perl',
     '/bin/python': '/usr/bin/python',
+    '/bin/python2.7': '/usr/bin/python2.7',
+    '/bin/python3.8': '/usr/bin/python3.8',
     '/bin/sudo': '/usr/bin/sudo'
 ]
 
@@ -240,6 +244,91 @@ task stageOpenGeeInstall(type: Exec, dependsOn: 'compileOpenGee') {
         "installdir=${stagedInstallDir}")
 }
 
+// RPM that installs python 2 if needed
+task openGeePython2Rpm(type: GeeRpm) {
+    mustRunAfter stageOpenGeeInstall
+
+    packageName = 'gee-python-2.7.18'
+    release = ospackage.release
+    version = '2.7.18'
+    user = 'root'
+    permissionGroup = 'root'
+    packageGroup = 'Application/Productivity'
+    summary = 'Standard Python 2.7.18 installation used by Open GEE'
+    packageDescription = 'Standard Python 2.7.18 installation used by Open GEE'
+    license = 'GPLv2'
+    url = 'https://github.com/google/earthenterprise/tree/master/earth_enterprise/third_party/python_2'
+    type = BINARY
+    autoFindProvides = true
+    autoFindRequires = true
+
+    from (stagedInstallDir_python_2) {
+        into packageInstallRootDir
+    }
+}
+
+task openGeePython2Deb(type: GeeDeb) {
+    mustRunAfter stageOpenGeeInstall
+
+    packageName = openGeePython2Rpm.packageName
+    release = "${findBuildNumber()}"
+    version = openGeePython2Rpm.version
+    user = openGeePython2Rpm.user
+    permissionGroup = openGeePython2Rpm.permissionGroup
+    packageGroup = 'misc'
+    summary = openGeePython2Rpm.summary
+    packageDescription = openGeePython2Rpm.packageDescription
+    license = openGeePython2Rpm.license
+    url = openGeePython2Rpm.url
+    type = BINARY
+
+    from (stagedInstallDir_python_2) {
+        into packageInstallRootDir
+    }
+}
+
+// RPM that installs python 3 if needed
+task openGeePython3Rpm(type: GeeRpm) {
+    mustRunAfter stageOpenGeeInstall
+
+    packageName = 'gee-python-3.8.6'
+    release = ospackage.release
+    version = '3.8.6'
+    user = 'root'
+    permissionGroup = 'root'
+    packageGroup = 'Application/Productivity'
+    summary = 'Standard Python 3.8.6 installation used by Open GEE'
+    packageDescription = 'Standard Python 3.8.6 installation used by Open GEE'
+    license = 'GPLv2'
+    url = 'https://github.com/google/earthenterprise/tree/master/earth_enterprise/third_party/python_3'
+    type = BINARY
+    autoFindProvides = true
+    autoFindRequires = true
+
+    from (stagedInstallDir_python_3) {
+        into packageInstallRootDir
+    }
+}
+
+task openGeePython3Deb(type: GeeDeb) {
+    mustRunAfter stageOpenGeeInstall
+
+    packageName = openGeePython3Rpm.packageName
+    release = "${findBuildNumber()}"
+    version = openGeePython3Rpm.version
+    user = openGeePython3Rpm.user
+    permissionGroup = openGeePython3Rpm.permissionGroup
+    packageGroup = 'misc'
+    summary = openGeePython3Rpm.summary
+    packageDescription = openGeePython3Rpm.packageDescription
+    license = openGeePython3Rpm.license
+    url = openGeePython3Rpm.url
+    type = BINARY
+
+    from (stagedInstallDir_python_3) {
+        into packageInstallRootDir
+    }
+}
 
 task openGeePostGisRpm(type: GeeRpm) {
     mustRunAfter stageOpenGeeInstall
@@ -291,7 +380,7 @@ task openGeePostGisDeb(type: GeeDeb) {
     type = BINARY
 
     requires('opengee-common', ospackage.version, GREATER | EQUAL)
-    requires('proj-devel')
+    requires('libproj-dev')
 
     from (stagedInstallDir_postgis_opt) {
         into new File(packageInstallRootDir, 'opt')
@@ -396,9 +485,12 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
     requires('chkconfig')
     requires('shadow-utils')
 
-    if ("${findBuildNumber()}.${rpmPlatformString}".contains('el6')) {
-        requires('python27')
-        requires('python27-lxml')
+    if ("${findBuildNumber()}.${rpmPlatformString}".contains('el7')) {
+        requires('python')
+        requires('python-pip')
+    }
+    else {
+        requires('gee-python-2.7.18', '2.7.18', EQUAL)
     }
 
     requiresCommands(packageSharedCommands +
@@ -464,11 +556,8 @@ task openGeeCommonDeb (type: GeeDeb, dependsOn: openGeeCommonInitScripts) {
     requires('libtool')
     requires('libxml2-utils')
     requires('openssl')
-    requires('python-imaging')
-    requires('python-lxml')
-    requires('python-psycopg2')
-    requires('python-setuptools')
     requires('python2.7')
+    requires('python-pip')
 
     // Use single files for install scripts.  Othewrise, OS Package wraps the
     // code in extra statements.
@@ -541,10 +630,6 @@ task openGeeServerRpm(type: GeeRpm, dependsOn: openGeeServerInitScripts) {
     requires('opengee-postgis', '2.3.9', GREATER | EQUAL)
     conflicts('opengee-postgis', '2.0', LESS )
     conflicts('opengee-postgis', '2.4', GREATER | EQUAL)
-    requires('python-unittest2')
-    // The WMS Service requires PIL, which is not automatically detected:
-    requires('python-imaging')
-    requires('python-lxml')
 
     requiresCommands(
         packageSharedCommands +
@@ -646,10 +731,6 @@ task openGeeServerDeb (type: GeeDeb, dependsOn: openGeeServerInitScripts) {
     requires('opengee-postgis', '2.3.9', GREATER | EQUAL)
     conflicts('opengee-postgis', '2.0', LESS )
     conflicts('opengee-postgis', '2.4', GREATER | EQUAL)
-    requires('python-unittest2')
-    // The WMS Service requires PIL, which is not automatically detected:
-    requires('python-imaging')
-    requires('python-lxml')
 
     requiresCommands(
         packageSharedCommands +
@@ -1226,14 +1307,16 @@ task openGeeRpms(
     dependsOn: [
         'openGeeServerRpm', 'openGeeFullServerRpm',
         'openGeeFusionRpm', 'openGeeFullFusionRpm',
-        'openGeeCommonRpm', 'openGeePostGisRpm', 'openGeeExtraRpm'
+        'openGeeCommonRpm', 'openGeePostGisRpm', 'openGeeExtraRpm',
+        'openGeePython2Rpm', 'openGeePython3Rpm'
     ])
 
 task openGeeDebs(
     dependsOn: [
         'openGeeServerDeb', 'openGeeFullServerDeb',
         'openGeeFusionDeb', 'openGeeFullFusionDeb',
-        'openGeeCommonDeb', 'openGeePostGisDeb', 'openGeeExtraDeb'
+        'openGeeCommonDeb', 'openGeePostGisDeb', 'openGeeExtraDeb',
+        'openGeePython2Deb', 'openGeePython3Deb'
     ])
 
 task osPackage(dependsOn: org.opengee.os.Platform.osId == 'ubuntu' ? openGeeDebs : openGeeRpms) {

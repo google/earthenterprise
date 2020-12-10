@@ -65,6 +65,8 @@ if third_party_env['bundle_3rd_libs']:
       'pyyaml',
       'defusedxml',
       'swig',
+      'python_2',
+      'python_3',
       'qt4'
   ]
 elif third_party_env['portable_3rd_libs']:
@@ -93,7 +95,9 @@ else:
       'skia',
       'pyyaml',
       'defusedxml',
-      'swig'
+      'swig',
+      'python_2',
+      'python_3'
   ]
   if qt4_native == 0:
     third_party_libs.append('qt4')

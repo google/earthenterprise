@@ -1,0 +1,113 @@
+#-*- Python -*-
+#
+# Copyright 2020 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+
+Import('third_party_env')
+from khEnvironment import khEnvironment
+import os
+
+python_version = 'Python-2.7.18'
+python_major_version = 'python2.7'
+python_source = File('#/../../earth_enterprise/third_party/python_2/%s.tgz'
+                   % python_version).abspath
+
+make_cmd_cpu = 'make -j%d' % GetOption('num_jobs')
+ge_version = python_version.replace('Python', 'Python-ge')
+current_dir = Dir('.').abspath
+build_root = '%s/%s' % (current_dir, python_version)
+
+# Define exportdirs because khEnvironment expects it.
+exportdirs = {
+           'root': '.',
+           'lib':  '.',
+           'bin':  '.',
+           }
+
+python_env = khEnvironment(ENV={'PATH' : '/bin:/bin:/usr/bin'},
+                           exportdirs=exportdirs,
+                           installdirs={}).DeepCopy()
+python_third_party_env = third_party_env.DeepCopy()
+
+if GetOption('clean'):
+  python_env.Execute('rm -rf %s' % current_dir)
+
+# [1] Extract python
+python_target = '%s/.extract' % current_dir
+python_extract = python_env.Command(
+    python_target, python_source,
+    [python_env.MultiCommand(
+        'mkdir -p %s\n'
+        'cd %s\n'
+        'tar xzf %s\n'
+        'touch %s'% (current_dir, current_dir, python_source, python_target))])
+
+# [3] Configure python
+python_target = '%s/.configure' % current_dir
+python_configure = python_env.Command(
+    python_target, python_extract,
+    [python_env.MultiCommand(
+        'cd %s\n'
+        './configure --prefix=%s --enable-shared \n'
+        'touch %s' % (
+            build_root, "/usr",
+            python_target))])
+
+# [4] Build python
+make_cmd = make_cmd_cpu
+python_target = '%s/.build' % current_dir
+python_build = python_env.Command(
+    python_target, python_configure,
+    [python_env.MultiCommand(
+        'cd %s\n'
+        'env \n'
+        '%s\n'
+        'touch %s' % (build_root, make_cmd,
+                      python_target))])
+
+# [5] Create python master installer
+make_cmd = 'make'
+install_root = '%s/install' % current_dir
+python_target = '%s/.install' % current_dir
+python_env['rpathlink_dirs'] = [install_root + '/usr/lib']
+python_install = python_env.Command(
+    python_target, python_build,
+    [python_env.MultiCommand(
+        'cd {0}\n'
+        '{1} altinstall DESTDIR={2}\n'
+        'export LD_LIBRARY_PATH={3}/usr/lib:$LD_LIBRARY_PATH\n'
+        '{4}/usr/bin/python2.7 Tools/scripts/pathfix.py -i {5} {6}\n'
+        'touch {7}'.format(
+        build_root,
+        make_cmd, 
+        install_root, 
+        install_root,
+        install_root,
+        '/usr/bin/python2.7', 
+        install_root, 
+        python_target))])
+
+Default(python_install)
+python_env.ExecuteOnClean('rm -rf %s' % current_dir)
+
+# [6] Copy to proper directory structure for installer (if install is in target)
+if 'install' in COMMAND_LINE_TARGETS:
+  python_env.InstallFileOrDir(
+      '%s/' % install_root,
+      '%s/' % python_third_party_env.installdirs['python_2_dir'],
+          python_install, 'install')
+
+Return('python_extract python_install')
