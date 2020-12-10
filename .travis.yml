@@ -12,14 +12,22 @@ before_install:
     libboost-all-dev libc6 libc6-dev libcap-dev libfreetype6 libfreetype6-dev
       libgdbm-dev libgeos-dev libgeos++-dev libgif-dev libgtest-dev
       libjpeg-dev libjpeg8-dev libmng-dev libogdi3.2-dev g++ patch
-      libpcre3 libpcre3-dev scons autoconf automake dpkg libtool build-essential
+      libpcre3 libpcre3-dev autoconf automake dpkg libtool build-essential
       libperl4-corelibs-perl libpng12-0 libpng12-dev libpq-dev libproj-dev
       libstdc++6 libtool libgif-dev libtiff-dev libgtk2.0-dev libglib2.0-dev
       libx11-dev libxcursor-dev libxerces-c-dev libxft-dev libxinerama-dev
       libxml2-dev libxml2-utils libxmu-dev libxrandr-dev libyaml-cpp-dev libpcre3-dev
     openssl shunit2 git git-lfs libqt4-dev qt4-default libqt4-opengl-dev
-    python-dev python-git python-imaging python-setuptools python-psycopg2 python-lxml
-    swig xorg-dev zlib1g-dev
+    python2.7 python2.7-dev python-pip xorg-dev zlib1g-dev
+- sudo python2.7 -m pip install --upgrade pip==19.0
+- sudo python2.7 -m pip install argparse setuptools defusedxml GitPython
+    Pillow unittest2 lxml psycopg2
+- cd earth_enterprise
+- sudo ./../scripts/install_python.sh
+- sudo python3.8 -m pip install --upgrade pip
+- sudo python3.8 -m pip install argparse setuptools defusedxml GitPython 
+    Pillow unittest2 lxml psycopg2-binary scons
+
 script: echo "Running build..."
 
 cache:
