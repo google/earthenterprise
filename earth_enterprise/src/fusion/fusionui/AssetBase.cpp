@@ -91,6 +91,8 @@ AssetBase::AssetBase(QWidget* parent)
   notes_action_->addTo(edit_menu_);
   hidden_action_->addTo(edit_menu_);
   menu_bar_->insertItem(QString(""), edit_menu_, 2);
+  
+  main_frame_layout_->setMenuBar(menu_bar_);
 
   languageChange();
   //resize(QSize(545, 317).expandedTo(minimumSizeHint()));

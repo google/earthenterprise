@@ -215,7 +215,7 @@ shunit2 from the EPEL repositories for RHEL and CentOS 6.
 To do so run the following:
 
 ```bash
-sudo yum install -y http://download-ib01.fedoraproject.org/pub/epel/6/x86_64/Packages/s/shunit2-2.1.6-3.el6.noarch.rpm
+sudo yum install -y http://archives.fedoraproject.org/pub/archive/epel/6/x86_64/Packages/s/shunit2-2.1.6-3.el6.noarch.rpm
 ```
 
 ### RHEL 6 and CentOS 6
