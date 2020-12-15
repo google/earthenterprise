@@ -48,7 +48,7 @@ env.Append( CXXFLAGS = ['-Wno-unused-function', '-Wno-unused-value', '-Wno-unuse
                   'gif',
                   'jpeg',
                   'freetype',
-                  'QtCore', 'QtGui', 'Qt3Support', 'QtOpenGL',
+                  'QtCore', 'QtGui', 'Qt3Support', 'QtOpenGL', 'QtNetwork',
                   'xerces-c',
                   'GL'])
 
