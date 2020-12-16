@@ -25,8 +25,8 @@ Ubuntu 16.04 LTS
 
 NOTE: CentOS 6 was officially retired in November 2020, and is no
 longer available for download except through CentOS archives. CentOS 6
-is not being tested for this release and was not tested in 5.3.6.
-CentOS 6 will not be supported in future releases.
+was not tested for this release or 5.3.6. CentOS 6 will not be
+supported in future releases.
 
 Google Earth Enterprise 5.3.7 is compatible with Google Earth
 Enterprise Client (EC) version 7.1.5 and above.
