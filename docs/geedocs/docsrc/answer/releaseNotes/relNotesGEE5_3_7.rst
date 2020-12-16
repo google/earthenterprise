@@ -13,8 +13,10 @@ Release notes: Open GEE 5.3.7
       **New feature here**.
       New feature description goes here.
 
-      In 5.3.7, the Fusion UI was updated from Qt3 to Qt4. Qt4 was bundled
-      with earth enterprise to make it easy to acquire and build with.
+      In 5.3.7, the Fusion UI was updated from using the Qt3 ui toolkit
+      to Qt4. Qt4 was bundled with Earth Enterprise. This offers a more
+      modern appearence for fusion and makes it easier to upgrade other
+      libraries.
 
       .. rubric:: Supported Platforms
 
@@ -27,9 +29,9 @@ Release notes: Open GEE 5.3.7
       -  Ubuntu 16.04 LTS
 
       NOTE: CentOS 6 was officially retired in November 2020, and is no
-      longer available for download except thru CentOS archives. CentOS 6
-      is not being tested for this release and will not be supported in
-      future releases.
+      longer available for download except through CentOS archives. CentOS 6
+      is not being tested for this release and was not tested in 5.3.6.
+      CentOS 6 will not be supported in future releases.
 
       Google Earth Enterprise 5.3.7 is compatible with Google Earth
       Enterprise Client (EC) version 7.1.5 and above.
@@ -55,7 +57,7 @@ Release notes: Open GEE 5.3.7
            - Added missing apache module for gehttpd server build
          * - 1861
            - Invalid variables when reporting postgres errors
-           - Corrected variable name
+           - Corrected variable names
          * - 1858
            - Remove Apache 2.2 references from the docs
            - Documentation updated
