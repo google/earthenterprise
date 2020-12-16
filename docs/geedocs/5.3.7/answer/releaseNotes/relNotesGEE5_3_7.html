@@ -72,15 +72,11 @@
 <h1>Release notes: Open GEE 5.3.7<a class="headerlink" href="#release-notes-open-gee-5-3-7" title="Permalink to this headline">¶</a></h1>
 <div class="docutils container">
 <div class="content docutils container">
-<p>Open GEE 5.3.7 is currently in development</p>
 <p class="rubric">New Features</p>
 <p><strong>New feature here</strong>.
 New feature description goes here.</p>
-<p>In 5.3.5, we moved documentation, examples, and tutorials into a
-separate RPM called opengee-extra. This mainly includes the
-documentation, ExampleSearch, and Fusion Tutorial files.  You
-can choose whether to install opengee-extra depending on if you
-need those items.</p>
+<p>In 5.3.7, the Fusion UI was updated from Qt3 to Qt4. Qt4 was bundled
+with earth enterprise to make it easy to acquire and build with.</p>
 <p class="rubric">Supported Platforms</p>
 <p>The Open GEE 5.3.7 release is supported on 64-bit versions of the
 following operating systems:</p>
@@ -90,6 +86,10 @@ most recent security patches</li>
 <li>CentOS 6.x and 7.x</li>
 <li>Ubuntu 16.04 LTS</li>
 </ul>
+<p>NOTE: CentOS 6 was officially retired in November 2020, and is no
+longer available for download except thru CentOS archives. CentOS 6
+is not being tested for this release and will not be supported in
+future releases.</p>
 <p>Google Earth Enterprise 5.3.7 is compatible with Google Earth
 Enterprise Client (EC) version 7.1.5 and above.</p>
 <p>To upgrade from Open GEE 5.2.0, do NOT uninstall it. We recommend
@@ -111,32 +111,27 @@ correctly to the new PostgreSQL version used by Open GEE 5.3.7.</p>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>9999</td>
-<td>Add description</td>
-<td>Add resolution</td>
+<tr class="row-even"><td>1868</td>
+<td>Apache proxy configurations missing in HTTP modules</td>
+<td>Added missing apache module for gehttpd server build</td>
+</tr>
+<tr class="row-odd"><td>1861</td>
+<td>Invalid variables when reporting postgres errors</td>
+<td>Corrected variable name</td>
+</tr>
+<tr class="row-even"><td>1858</td>
+<td>Remove Apache 2.2 references from the docs</td>
+<td>Documentation updated</td>
+</tr>
+<tr class="row-odd"><td>1856</td>
+<td>WMS tiles stitching is mixed with fetching</td>
+<td>Moved stitching into seperate function</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Known Issues</p>
-<table border="1" class="colwidths-given docutils">
-<colgroup>
-<col width="11%" />
-<col width="32%" />
-<col width="58%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Number</th>
-<th class="head">Description</th>
-<th class="head">Resolution</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>9999</td>
-<td>Add description</td>
-<td>Add resolution</td>
-</tr>
-</tbody>
-</table>
+<p>See the <a class="reference external" href="https://github.com/google/earthenterprise/issues">GitHub issues page</a>
+for a list of known issues.</p>
 </div>
 </div>
 </div>
