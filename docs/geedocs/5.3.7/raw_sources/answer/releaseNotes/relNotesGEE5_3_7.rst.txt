@@ -63,7 +63,7 @@ Release notes: Open GEE 5.3.7
            - Documentation updated
          * - 1856
            - WMS tiles stitching is mixed with fetching
-           - Moved stitching into seperate function
+           - Moved stitching into separate function
 
       .. rubric:: Known Issues
 
