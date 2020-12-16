@@ -7,7 +7,7 @@ New feature here
 
 . New feature description goes here.
 
-In 5.3.7, the Fusion UI was updated from using the Qt3 ui toolkit to
+In 5.3.7, the Fusion UI was updated from using the Qt3 UI toolkit to
 Qt4. Qt4 was bundled with Earth Enterprise. This offers a more modern
 appearence for fusion and makes it easier to upgrade other libraries.
 
