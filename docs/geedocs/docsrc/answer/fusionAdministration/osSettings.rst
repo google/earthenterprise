@@ -10,60 +10,61 @@ Operating System Settings That May Affect Fusion
 
       The Linux operating system implements several limits that may prevent
       Fusion processes from running correctly, particularly when building large
-      projects or databases.
+      projects or databases. To avoid this problem, run the steps below on all
+      of your Fusion servers.
 
-      You may need to reboot your system after making the configuration changes
-      below to ensure that the new configuration takes effect.
+      The numbers used in the settings below are recommendations that should
+      work in most cases. You may want to adjust these numbers based on your
+      environment and workflow.
 
-      .. _Number_Of_Processes:
-      .. rubric:: Number of processes
+      1. Edit ``/etc/sysctl.conf`` and insert the following lines:
 
-      Linux limits the number of processes that each user can run. Since Fusion
-      runs many processes to build assets in parallel, you may need to
-      increase the limit by adding the following lines to
-      ``/etc/security/limits.conf``:
+        .. code-block:: none
 
-      .. code-block:: none
+            fs.file-max=2147483584
+            vm.max_map_count=1000000
 
-          gefusionuser  soft    nproc   <num_procs>
-          gefusionuser  hard    nproc   <num_procs>
+        ``fs.file-max`` should be at least the number of resources in your
+        largest project, plus some extra to allow for the additional files
+        Fusion uses. ``vm.max_map_count`` should be more than twice the number
+        of resources in your largest project.
 
-      Fusion starts up to one process per core, plus two more (for the system manager
-      and resource provider). ``<num_procs>`` should be considerably larger than
-      that number to allow for operating system processes.
+      2. Edit ``/etc/security/limits.conf`` and insert the following lines:
 
-      .. _Number_Of_Open_Files:
-      .. rubric:: Number of open files
+        .. code-block:: none
 
-      Linux also limits the number of files each process can open at once.
-      Since Fusion may open many files when building an imagery project, for
-      example, you may need to increase the limit by adding the following lines
-      to ``/etc/security/limits.conf``:
+            gefusionuser soft nofile 2147483584
+            gefusionuser hard nofile 2147483584
 
-      .. code-block:: none
+            gefusionuser soft nproc 65535
+            gefusionuser hard nproc 65535
 
-          gefusionuser  soft    nofile   <num_files>
-          gefusionuser  hard    nofile   <num_files>
+        Use the same number of files here that you used in the previous step.
+        The number of processes must be significantly greater than the number
+        of cores. Fusion uses one process per core plus two more for the system
+        manager and resource provider; however, the process limit should be
+        considerably larger to account for operating system processes.
 
-      ``<num_files>`` should be at least the number of resources in your
-      largest project, plus some extra to allow for the additional files Fusion
-      uses, such as configuration files.
+      3. Remove these lines from ``/etc/security/limits.conf`` if they are
+         present:
 
-      .. _Number_Of_Memory_Maps:
-      .. rubric:: Number of memory mappings
+        .. code-block:: none
 
-      Fusion uses memory mapping when reading some types of files. Since Linux
-      limits the number of memory mappings each process can define, you may
-      need to add the following lines to ``/etc/sysctl.conf``:
+            * hard memlock 529426432
+            * soft memlock 529426432
 
-      .. code-block:: none
+      4. If necessary, modify the following line in the ``start()`` function of
+         ``/etc/init.d/gefusion``:
 
-          vm.max_map_count = <num_maps>
+        .. code-block:: none
 
-      ``<num_maps>`` should be more than twice the number of resources in your
-      largest project.
+            ulimit -n 500000
+
+        Set this to the same number of files you used in the previous steps. If
+        the existing value is sufficiently large, no change is necessary.
+
+      5. Reboot your Fusion servers.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
    :height: 44px
-
