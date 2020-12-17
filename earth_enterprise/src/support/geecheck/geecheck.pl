@@ -68,7 +68,7 @@ Usage: $prog_name [-version=VERSION] [-server] [-date=DATE] [-log] [-env] [-cpu]
 EOF
 
 # Parse the command line arguments.
-my $version = "5.3.6";
+my $version = "5.3.7";
 my $server = 0;
 my $show_logs = 0;
 my $show_cpu = 0;

@@ -8,18 +8,15 @@ Release notes: Open GEE 5.3.7
 
    .. container:: content
 
-      Open GEE 5.3.7 is currently in development
-
       .. rubric:: New Features
 
       **New feature here**.
       New feature description goes here.
 
-      In 5.3.5, we moved documentation, examples, and tutorials into a
-      separate RPM called opengee-extra. This mainly includes the
-      documentation, ExampleSearch, and Fusion Tutorial files.  You
-      can choose whether to install opengee-extra depending on if you
-      need those items.
+      In 5.3.7, the Fusion UI was updated from using the Qt3 UI toolkit
+      to Qt4. Qt4 was bundled with Earth Enterprise. This offers a more
+      modern appearence for fusion and makes it easier to upgrade other
+      libraries.
 
       .. rubric:: Supported Platforms
 
@@ -30,6 +27,11 @@ Release notes: Open GEE 5.3.7
          most recent security patches
       -  CentOS 6.x and 7.x
       -  Ubuntu 16.04 LTS
+
+      NOTE: CentOS 6 was officially retired in November 2020, and is no
+      longer available for download except through CentOS archives. CentOS 6
+      was not tested for this release or 5.3.6. CentOS 6 will not be
+      supported in future releases.
 
       Google Earth Enterprise 5.3.7 is compatible with Google Earth
       Enterprise Client (EC) version 7.1.5 and above.
@@ -50,22 +52,23 @@ Release notes: Open GEE 5.3.7
          * - Number
            - Description
            - Resolution
-         * - 9999
-           - Add description
-           - Add resolution
+         * - 1868
+           - Apache proxy configurations missing in HTTP modules
+           - Added missing apache module for gehttpd server build
+         * - 1861
+           - Invalid variables when reporting postgres errors
+           - Corrected variable names
+         * - 1858
+           - Remove Apache 2.2 references from the docs
+           - Documentation updated
+         * - 1856
+           - WMS tiles stitching is mixed with fetching
+           - Moved stitching into separate function
 
       .. rubric:: Known Issues
 
-      .. list-table::
-         :widths: 10 30 55
-         :header-rows: 1
-
-         * - Number
-           - Description
-           - Resolution
-         * - 9999
-           - Add description
-           - Add resolution
+      See the `GitHub issues page <https://github.com/google/earthenterprise/issues>`_
+      for a list of known issues.
 
 .. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
    :width: 130px
