@@ -1,0 +1,30 @@
+
+Dashboard page
+
+The
+
+Dashboard
+
+ page of the
+
+GEE Server Admin console
+
+ provides an overview of GEE details, including:
+
+Number of Fusion databases
+
+Number of published Fusion databases
+
+Number of Portable databases
+
+Number of published Portable databases
+
+Number of search tabs
+
+Cutter status (on or off)
+
+Size of total Fusion data
+
+Size of Portable data
+
+Number of snippet profiles

@@ -1,0 +1,15 @@
+
+Error adding files to publisher database
+
+-[ Error message ]-
+
+"HandleAddDbRequest: Error adding files to publisher database"
+
+-[ Description ]-
+
+When you try to publish a database from a version of Fusion that does
+not match the version of your GEE server, the publish fails.
+
+-[ Resolution ]-
+
+Upgrade your version of GEE Server to match your version of Fusion.
