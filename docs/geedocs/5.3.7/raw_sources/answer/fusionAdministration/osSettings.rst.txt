@@ -21,7 +21,7 @@ Operating System Settings That May Affect Fusion
 
         .. code-block:: none
 
-            fs.file-max=2147483584
+            fs.file-max=1048576
             vm.max_map_count=1000000
 
         ``fs.file-max`` should be at least the number of resources in your
@@ -33,8 +33,8 @@ Operating System Settings That May Affect Fusion
 
         .. code-block:: none
 
-            gefusionuser soft nofile 2147483584
-            gefusionuser hard nofile 2147483584
+            gefusionuser soft nofile 1048576
+            gefusionuser hard nofile 1048576
 
             gefusionuser soft nproc 65535
             gefusionuser hard nproc 65535

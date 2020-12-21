@@ -12,7 +12,7 @@ environment and workflow.
 
 Edit /etc/sysctl.conf and insert the following lines:
 
-      fs.file-max=2147483584
+      fs.file-max=1048576
       vm.max_map_count=1000000
 
    "fs.file-max" should be at least the number of resources in your
@@ -22,8 +22,8 @@ Edit /etc/sysctl.conf and insert the following lines:
 
 Edit /etc/security/limits.conf and insert the following lines:
 
-      gefusionuser soft nofile 2147483584
-      gefusionuser hard nofile 2147483584
+      gefusionuser soft nofile 1048576
+      gefusionuser hard nofile 1048576
 
       gefusionuser soft nproc 65535
       gefusionuser hard nproc 65535

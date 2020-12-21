@@ -83,7 +83,7 @@ environment and workflow.</p>
 <li>Edit <code class="docutils literal notranslate"><span class="pre">/etc/sysctl.conf</span></code> and insert the following lines:</li>
 </ol>
 <blockquote>
-<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>fs.file-max=2147483584
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>fs.file-max=1048576
 vm.max_map_count=1000000
 </pre></div>
 </div>
@@ -96,8 +96,8 @@ of resources in your largest project.</p>
 <li>Edit <code class="docutils literal notranslate"><span class="pre">/etc/security/limits.conf</span></code> and insert the following lines:</li>
 </ol>
 <blockquote>
-<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gefusionuser soft nofile 2147483584
-gefusionuser hard nofile 2147483584
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gefusionuser soft nofile 1048576
+gefusionuser hard nofile 1048576
 
 gefusionuser soft nproc 65535
 gefusionuser hard nproc 65535
