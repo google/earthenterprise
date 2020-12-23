@@ -1271,7 +1271,7 @@ void AssetManager::PushDatabase(const gstAssetHandle& handle) {
     QObject::connect(&progress_dialog, SIGNAL(canceled()),
                      &push_assistant, SLOT(SetCanceled()));
     QObject::connect(&push_thread, SIGNAL(sfinished()), &push_assistant, SLOT(Stop()));
-    QObject::connect(&push_thread, SIGNAL(sfinished()), &push_thread, SLOT(deleteLater()));
+    //QObject::connect(&push_thread, SIGNAL(sfinished()), &push_thread, SLOT(deleteLater()));
 
     push_thread.start();
     push_assistant.Start();
@@ -1401,7 +1401,7 @@ void AssetManager::PublishDatabase(const gstAssetHandle& handle) {
                      &publish_assistant, SLOT(SetCanceled()));
     QObject::connect(
         &publish_thread, SIGNAL(sfinished()), &publish_assistant, SLOT(Stop()));
-    QObject::connect(&publish_thread, SIGNAL(sfinished()), &publish_thread, SLOT(deleteLater()));
+    //QObject::connect(&publish_thread, SIGNAL(sfinished()), &publish_thread, SLOT(deleteLater()));
 
     publish_thread.start();
     publish_assistant.Start();
