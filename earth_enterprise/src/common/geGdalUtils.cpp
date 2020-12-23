@@ -269,7 +269,7 @@ GDALDataset* geGdalVSI::VsiGdalOpenInternalWrap(
                                   reinterpret_cast<GByte*>
                                   (const_cast<char*>(&(image_alpha[0]))),
                                    image_alpha.size(), FALSE));
-  hvsi_ds = GDALOpenEx((*vsifile).c_str(), GA_ReadOnly,
+  hvsi_ds = GDALOpenEx((*vsifile).c_str(), GA_ReadOnly | GDAL_OF_VERBOSE_ERROR,
                            kGdalAllowedDrivers, NULL, NULL);
   std::cout << "In geGdalVSI::VsiGdalOpenInternalWrap, GDALOpenEx returned: " << hvsi_ds << std::endl;
   return static_cast<GDALDataset*>(hvsi_ds);

@@ -22,6 +22,8 @@
 #include <vrtdataset.h>
 #include <memdataset.h>
 
+#include <http_log.h>
+
 #include "common/khTileAddr.h"
 #include "common/khConstants.h"
 #include "common/serverdb/serverdbReader.h"
@@ -167,7 +169,7 @@ void CreateDstTransform(const MotfParams &motf_params,
   (*dst_geo_transform)[5] = (min_dst_y - max_dst_y) / kMotfTileSize;
 }
 
-GDALDataset* GetSrcTile(const MotfParams &motf_params,
+GDALDataset* GetSrcTile(request_rec* r, const MotfParams &motf_params,
                        int levelup,
                        bool* has_alpha,
                        const UpsampledTile &upsampled_tile,
@@ -371,7 +373,7 @@ void WarpData(const MotfParams &motf_params, int levelup,
   // Get the first source PC tile which makes up the mercator mosaic
   // and initialize the warp process including the destination dataset.
   GDALDataset* hsrctile1_ds;
-  hsrctile1_ds = GetSrcTile(motf_params, levelup, &has_alpha,
+  hsrctile1_ds = GetSrcTile(r, motf_params, levelup, &has_alpha,
                            upsampled_tiles[0], reader, arg_map);
   if (hsrctile1_ds == NULL) {
         ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
