@@ -666,8 +666,17 @@ void SelectionRules::chooseRoadShield() {
 }
 
 void SelectionRules::chooseLineLineColor() {
+  //QPalette palette;
+  //palette.setColor(outline_color_btn->backgroundRole, new_color);
+  //outline_color_btn->setPalette(palette);
+  QPalette palette;
   QColor init_color = lineLineColorBtn->paletteBackgroundColor();
-  lineLineColorBtn->setPaletteBackgroundColor(chooseColor(init_color));
+  //palette.setColor(lineLineColorBtn->backgroundRole, chooseColor(init_color));
+  palette.setColor(QPalette::Button, chooseColor(init_color));
+  lineLineColorBtn->setAutoFillBackground(true);
+  lineLineColorBtn->setPalette(palette);
+  lineLineColorBtn->update();
+  //lineLineColorBtn->setPaletteBackgroundColor(chooseColor(init_color));
 }
 
 void SelectionRules::choosePolygonFillColor() {
@@ -737,9 +746,12 @@ void SelectionRules::editBalloonStyleText() {
 
 QColor SelectionRules::chooseColor(QColor color) {
   QRgb init_color = color.rgb();
-  QRgb rgba = QColorDialog::getRgba(init_color, 0, this);
+  //QRgb rgba = QColorDialog::getRgba(init_color, 0, this);
+  QColor new_color = QColorDialog::getColor(init_color, (QWidget *)this, "blah blah blah", QColorDialog::DontUseNativeDialog);
 
-  return QColor(rgba);
+
+  //return QColor(rgba);
+  return new_color;
 }
 
 void SelectionRules::updatePointVisibility() {
@@ -935,8 +947,19 @@ void SelectionRules::updateLineWidgets() {
   featureMaxErrorEdit->setText(QString::number(featurecfg.maxError));
   drawAsRoadsCheck->setChecked(featurecfg.drawAsRoads);
   roadLabelTypeCombo->setCurrentItem(featurecfg.roadLabelType);
-  lineLineColorBtn->setPaletteBackgroundColor(
-      VectorToQColor(fstylecfg.lineColor));
+
+  //lineLineColorBtn->setPaletteBackgroundColor(
+  //    VectorToQColor(fstylecfg.lineColor));
+
+  QPalette palette;
+  //QColor init_color = lineLineColorBtn->paletteBackgroundColor();
+  //palette.setColor(lineLineColorBtn->backgroundRole, VectorToQColor(fstylecfg.lineColor));
+  //palette.setColor(lineLineColorBtn, VectorToQColor(fstylecfg.lineColor));
+  palette.setColor(QPalette::Button, VectorToQColor(fstylecfg.lineColor));
+  lineLineColorBtn->setAutoFillBackground(true);
+  lineLineColorBtn->setPalette(palette);
+  lineLineColorBtn->update();
+
   lineLineWidthEdit->setText(QString::number(fstylecfg.lineWidth));
 
   // label widget stack
@@ -1150,8 +1173,11 @@ void SelectionRules::updateLineConfig() {
   featurecfg.drawAsRoads = drawAsRoadsCheck->isChecked();
   featurecfg.roadLabelType = static_cast<FeatureConfig::RoadLabelType>(
       roadLabelTypeCombo->currentItem());
+
   QColorToVector(lineLineColorBtn->paletteBackgroundColor(),
                  &fstylecfg.lineColor);
+
+
   fstylecfg.lineWidth = lineLineWidthEdit->text().toFloat();
 
   flabelcfg.labelMode = static_cast<LabelConfig::BuildMode>(

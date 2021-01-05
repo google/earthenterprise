@@ -273,18 +273,21 @@ bool ThematicFilter::DefineNewFilters(
 
 void ThematicFilter::ChooseStartColor() {
   QRgb init_color = start_color_btn->paletteBackgroundColor().rgb();
-  QRgb new_color = QColorDialog::getRgba(init_color);
+  //QRgb new_color = QColorDialog::getRgba(init_color);
+  QColor new_color = QColorDialog::getColor(init_color, (QWidget *)this, "blah blah blah", QColorDialog::DontUseNativeDialog);
+
   if (new_color != init_color) {
-    start_color_btn->setPaletteBackgroundColor(QColor(new_color));
+    start_color_btn->setPaletteBackgroundColor(new_color);
     RedrawColors();
   }
 }
 
 void ThematicFilter::ChooseEndColor() {
   QRgb init_color = end_color_btn->paletteBackgroundColor().rgb();
-  QRgb new_color = QColorDialog::getRgba(init_color);
+  //QRgb new_color = QColorDialog::getRgba(init_color);
+  QColor new_color = QColorDialog::getColor(init_color, (QWidget *)this, "blah blah blah", QColorDialog::DontUseNativeDialog);
   if (new_color != init_color) {
-    end_color_btn->setPaletteBackgroundColor(QColor(new_color));
+    end_color_btn->setPaletteBackgroundColor(new_color);
     RedrawColors();
   }
 }
