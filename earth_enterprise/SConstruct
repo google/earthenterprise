@@ -137,7 +137,7 @@ exportdirs = {
            }
 
 # create the environment that controls the builds
-env = khEnvironment(ENV={'PATH' : '/bin:/bin:/usr/bin', 'JAVA_HOME': os.environ.get('JAVA_HOME','')},
+env = khEnvironment(ENV={'PATH' : '/bin:/usr/local/bin:/usr/bin', 'JAVA_HOME': os.environ.get('JAVA_HOME','')},
                     exportdirs=exportdirs,
                     installdirs=installdirs)
 
@@ -177,7 +177,7 @@ env.copyfile(inst_common_dir('.'), './src/version.txt')
 
 # Copy the tutorial to the install staging directory if it exists.
 stage_tutorial_cmds = {'stage_tutorial': [
-    'cd tutorial; if [ -d FusionTutorial ]; then python2.7 /usr/bin/scons -j%d installdir="%s"; else echo "Skipping tutorial; no tutorial files found."; fi' % (num_jobs, installdir)
+    'cd tutorial; if [ -d FusionTutorial ]; then scons -j%d installdir="%s"; else echo "Skipping tutorial; no tutorial files found."; fi' % (num_jobs, installdir)
 ]}
 stage_tutorial = env.PhonyTargets(**stage_tutorial_cmds)
 env.Depends(stage_tutorial, stage_data)
