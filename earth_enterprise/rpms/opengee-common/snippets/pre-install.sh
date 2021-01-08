@@ -51,12 +51,30 @@ remove_nonlink_directories()
     remove_nonlink_directory "$BASEINSTALLDIR_OPT/gehttpd/htdocs/shared_assets/docs" 1
 }
 
+shutdown_gefusion()
+{
+    if [ -f /etc/init.d/gefusion ]; then
+        service gefusion stop
+    fi
+}
+
+shutdown_geserver()
+{
+    if [ -f /etc/init.d/geserver ]; then
+        service geserver stop
+    fi
+}
 #-----------------------------------------------------------------
 # Main Function
 #-----------------------------------------------------------------
 # 8) Check if group and users exist
 
 check_group
+
+# Shutdown fusion and server
+
+shutdown_gefusion
+shutdown_geserver
 
 # On Red Hat, only if we are going to install, remove some directories in the
 # pre-install stage, so cpio can carry group name if needed.  Skip on upgrade.
