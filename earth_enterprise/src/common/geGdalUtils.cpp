@@ -21,6 +21,7 @@
 #include "common/geFilePool.h"
 #include "common/khTileAddr.h"
 #include "common/geGdalUtils.h"
+#include <iostream>
 
 namespace {
 
@@ -262,12 +263,15 @@ GDALDataset* geGdalVSI::VsiGdalOpenInternalWrap(
   khMutex &mutex = GetMutex();
   khLockGuard lock(mutex);
   *vsifile = UniqueVSIFilename();
+  std::cout << "In geGdalVSI::VsiGdalOpenInternalWrap, Unique name is: " << *vsifile << std::endl;
+  
   VSIFCloseL(VSIFileFromMemBuffer((*vsifile).c_str(),
                                   reinterpret_cast<GByte*>
                                   (const_cast<char*>(&(image_alpha[0]))),
                                    image_alpha.size(), FALSE));
   hvsi_ds = GDALOpenEx((*vsifile).c_str(), GA_ReadOnly,
                            kGdalAllowedDrivers, NULL, NULL);
+  std::cout << "In geGdalVSI::VsiGdalOpenInternalWrap, GDALOpenEx returned: " << hvsi_ds << std::endl;
   return static_cast<GDALDataset*>(hvsi_ds);
 }
 
