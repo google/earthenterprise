@@ -51,12 +51,35 @@ remove_nonlink_directories()
     remove_nonlink_directory "$BASEINSTALLDIR_OPT/gehttpd/htdocs/shared_assets/docs" 1
 }
 
+shutdown_gefusion()
+{
+    if [ -f /etc/init.d/gefusion ]; then
+        service gefusion stop
+    fi
+}
+
+shutdown_geserver()
+{
+    if [ -f /etc/init.d/geserver ]; then
+        service geserver stop
+    fi
+}
 #-----------------------------------------------------------------
 # Main Function
 #-----------------------------------------------------------------
 # 8) Check if group and users exist
 
 check_group
+
+# Shutdown Fusion and Server
+# NOTE: As of 5.3.7 we need to shutdown Fusion and Server before installing/upgrading the common 
+# distributable despite having a shutdown before the individual Fusion and Server installations/upgrades. 
+# This is necessary due to possible binary incompatibilities when doing a full upgrade of OpenGEE.
+# Do not remove these shutdowns until all utilities necessary to start/shutdown Fusion and Server 
+# have been decoupled from the common distributable.
+
+shutdown_gefusion
+shutdown_geserver
 
 # On Red Hat, only if we are going to install, remove some directories in the
 # pre-install stage, so cpio can carry group name if needed.  Skip on upgrade.
