@@ -71,7 +71,12 @@ shutdown_geserver()
 
 check_group
 
-# Shutdown fusion and server
+# Shutdown Fusion and Server
+# NOTE: As of 5.3.7 we need to shutdown Fusion and Server before installing/upgrading the common 
+# distributable despite having a shutdown before the individual Fusion and Server installations/upgrades. 
+# This is necessary due to possible binary incompatibilities when doing a full upgrade of OpenGEE.
+# Do not remove these shutdowns until all utilities necessary to start/shutdown Fusion and Server 
+# have been decoupled from the common distributable.
 
 shutdown_gefusion
 shutdown_geserver
