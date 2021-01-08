@@ -743,11 +743,8 @@ void SelectionRules::editBalloonStyleText() {
 
 QColor SelectionRules::chooseColor(QColor color) {
   QRgb init_color = color.rgb();
-  //QRgb rgba = QColorDialog::getRgba(init_color, 0, this);
-  QColor new_color = QColorDialog::getColor(init_color, (QWidget *)this, "blah blah blah", QColorDialog::DontUseNativeDialog);
+  QColor new_color = QColorDialog::getColor(init_color, (QWidget *)this, " ", QColorDialog::DontUseNativeDialog);
 
-
-  //return QColor(rgba);
   return new_color;
 }
 
