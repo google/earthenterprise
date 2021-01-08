@@ -220,16 +220,9 @@ void Preferences::ChooseSelectOutline() {
                     selectOutline[2],
                     selectOutline[3]);
 
-  //QRgb rgba = QColorDialog::getRgba(init);
-  QColor new_color = QColorDialog::getColor(init, (QWidget *)this, "blah blah blah", QColorDialog::DontUseNativeDialog);
+  QRgb rgba = QColorDialog::getRgba(init);
 
-
-  //outline_color_btn->setPaletteBackgroundColor(QColor(rgba));
-  outline_color_btn->setPaletteBackgroundColor(new_color);
-  //QPalette palette;
-  //palette.setColor(outline_color_btn->backgroundRole, new_color);
-  //outline_color_btn->setPalette(palette);
-  QRgb rgba = new_color.rgba();
+  outline_color_btn->setPaletteBackgroundColor(QColor(rgba));
 
   selectOutline[0] = qRed(rgba);
   selectOutline[1] = qGreen(rgba);
@@ -243,15 +236,9 @@ void Preferences::ChooseSelectFill() {
                     selectFill[2],
                     selectFill[3]);
 
-  //QRgb rgba = QColorDialog::getRgba(init);
-  QColor new_color = QColorDialog::getColor(init, (QWidget *)this, "blah blah blah", QColorDialog::DontUseNativeDialog);
+  QRgb rgba = QColorDialog::getRgba(init);
 
-  //fill_color_btn->setPaletteBackgroundColor(QColor(rgba));
-  fill_color_btn->setPaletteBackgroundColor(new_color);
-  //QPalette palette;
-  //palette.setColor(fill_color_btn->backgroundRole, new_color);
-  //outline_color_btn->setPalette(palette);
-  QRgb rgba = new_color.rgba();
+  fill_color_btn->setPaletteBackgroundColor(QColor(rgba));
 
   selectFill[0] = qRed(rgba);
   selectFill[1] = qGreen(rgba);

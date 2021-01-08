@@ -109,10 +109,8 @@ void
 ColorButtonController::clicked(void)
 {
   QColor orig_color = button->paletteBackgroundColor();
-  //QColor new_color = QColor(QColorDialog::getRgba(orig_color.rgb(), 0,
-  //                                                button));
-  QColor new_color = QColorDialog::getColor(orig_color.rgb(), (QWidget *)this, "blah blah blah", QColorDialog::DontUseNativeDialog);
-                                      
+  QColor new_color = QColor(QColorDialog::getRgba(orig_color.rgb(), 0,
+                                                  button));
   if (new_color != orig_color) {
     button->setPaletteBackgroundColor(new_color);
     EmitChanged();

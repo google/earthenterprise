@@ -330,8 +330,7 @@ void RasterAssetWidget::MosaicFillActivated(const QString& str) {
         0.0, -2147483647, 2147483647, 16, &ok, this);
     fill = ToString(conv);
   } else {
-    QColor choice = QColorDialog::getColor(Qt::black, this, "blah blah blah", QColorDialog::DontUseNativeDialog);
-
+    QColor choice = QColorDialog::getColor(Qt::black, this);
     if (choice.isValid()) {
       ok = true;
       fill.reserve(15);
