@@ -4,13 +4,13 @@ from subprocess import Popen
 import shutil
 
 # Re-use some of the functionalities
-import assets
+from . import assets
 
 # ------------------------
 # Helpful Not-Step Methods
 # ------------------------
 def doesKhassetFileExist(sPathUntilDotKiasset):
-   print "ls -l " + sPathUntilDotKiasset + ".kiasset/khasset.xml"
+   print("ls -l " + sPathUntilDotKiasset + ".kiasset/khasset.xml")
    return os.path.exists(sPathUntilDotKiasset + ".kiasset/khasset.xml" )
 
 def executeCommand(sTestDir):
@@ -19,7 +19,7 @@ def executeCommand(sTestDir):
    
    # Download the imagery, if not available.
    sCommandToRun = "sudo bash " + sImageryRoot + "download_tutorial.sh >/dev/null 2>/dev/null"
-   print sCommandToRun
+   print(sCommandToRun)
    pHandle = subprocess.Popen(sCommandToRun, shell=True)
    assert (pHandle.wait() == 0)
    

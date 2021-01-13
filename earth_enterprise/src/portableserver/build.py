@@ -38,7 +38,7 @@ def ensure_directory(path):
 
     if not os.path.isdir(path):
         if os.name is 'nt' and path[1] is ':':
-            path = u'\\\\?\\' + path
+            path = '\\\\?\\' + path
         os.makedirs(path)
 
 def remove_directory(path):
@@ -46,7 +46,7 @@ def remove_directory(path):
 
     if os.path.isdir(path):
         if os.name is 'nt' and path[1] is ':':
-            path = u'\\\\?\\' + path
+            path = '\\\\?\\' + path
         else:
             path = path
         shutil.rmtree(path, ignore_errors=True)
@@ -57,10 +57,10 @@ def copy_from_dir_to_dir(
     """Copies given directory entries from one directory to another."""
 
     if os.name is 'nt' and source_dir[1] is ':':
-        source_dir = u'\\\\?\\' + source_dir
+        source_dir = '\\\\?\\' + source_dir
 
     if os.name is 'nt' and destination_dir[1] is ':':
-        destination_dir = u'\\\\?\\' + destination_dir
+        destination_dir = '\\\\?\\' + destination_dir
 
     if entries is None:
         entries = os.listdir(source_dir)

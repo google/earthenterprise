@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -60,15 +60,15 @@ def Install(file_list, is_dry_run, is_reverse):
         (source, destination, install_type,
          permission, owner) = line.split(" ")
       if install_type.lower() == NEW and os.path.exists(destination):
-        print "Warning: %s already exists." % destination
+        print("Warning: %s already exists." % destination)
 
       if install_type.lower() == REPLACE and not os.path.exists(destination):
-        print "Warning: %s does not exist." % destination
+        print("Warning: %s does not exist." % destination)
 
       if is_dry_run:
-        print "cp %s %s" % (source, destination)
-        print "chmod %s %s" % (permission, destination)
-        print "chown %s %s" % (owner, destination)
+        print("cp %s %s" % (source, destination))
+        print("chmod %s %s" % (permission, destination))
+        print("chown %s %s" % (owner, destination))
       else:
         if install_type == REPLACE:
           os.system("chmod +w %s" % destination)
@@ -78,13 +78,13 @@ def Install(file_list, is_dry_run, is_reverse):
 
 
 def Usage():
-  print "Usage: %s [--dryrun]" % sys.argv[0]
+  print("Usage: %s [--dryrun]" % sys.argv[0])
   sys.exit(0)
 
 
 def main():
   if len(sys.argv) > 3:
-    print "Error: Too many arguments."
+    print("Error: Too many arguments.")
     Usage()
 
   is_dry_run = False
@@ -95,14 +95,14 @@ def main():
     elif sys.argv[1] == "--reverse":
       is_reverse = True
     else:
-      print "Error: Unknown argument %s." % sys.argv[1]
+      print("Error: Unknown argument %s." % sys.argv[1])
       Usage()
 
   try:
     fp = open(FILELIST)
   except IOError:
-    print "Error: Unable to open filelist.txt."
-    print "Please run in the extracted directory."
+    print("Error: Unable to open filelist.txt.")
+    print("Please run in the extracted directory.")
     return
 
   Install(fp, is_dry_run, is_reverse)

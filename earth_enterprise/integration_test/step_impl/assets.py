@@ -38,7 +38,7 @@ def list_from_table(table):
   return [row[0] for row in table]
 
 def get_status(asset):
-  return subprocess.check_output(["/opt/google/bin/gequery", "--status", asset]).strip()
+  return subprocess.check_output(["/opt/google/bin/gequery", "--status", asset]).decode('ascii').strip()
 
 def do_create_imagery_proj(project, isMercator):
   commandLine = ["/opt/google/bin/genewimageryproject", "-o", os.path.join(IMAGERY_PROJECT_PATH, project)]

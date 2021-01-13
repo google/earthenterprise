@@ -1,4 +1,4 @@
-#! /usr/bin/python2.4
+#!/usr/bin/python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -36,10 +36,10 @@ import sys
 
 def Usage():
   '''Tell the user how the program should be invoked.'''
-  print 'Usage:\n'
-  print '    log_parser.py <input_file> <output_file> <file_type>\n'
-  print 'Example: log_parser.py khhttpd_access_log access_log.kml kml\n'
-  print '     or: log_parser.py khhttpd_access_log access_log.csv csv\n'
+  print('Usage:\n')
+  print('    log_parser.py <input_file> <output_file> <file_type>\n')
+  print('Example: log_parser.py khhttpd_access_log access_log.kml kml\n')
+  print('     or: log_parser.py khhttpd_access_log access_log.csv csv\n')
 
 def main():
   if len(sys.argv) < 4:
@@ -63,7 +63,7 @@ def main():
   my_kml = KML()
   output.write(my_kml.openDoc('0'))
   output.write(my_kml.openFolder(infile, '1'))
-  for addr in quad_dict.keys():
+  for addr in list(quad_dict.keys()):
     xy_coords = ProcessQuad(addr)
     count = quad_dict[addr]
     output.write(my_kml.MakePoint(xy_coords, count))

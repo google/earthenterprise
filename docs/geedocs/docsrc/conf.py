@@ -34,12 +34,12 @@ sys.stdout.flush()
 
 # -- Project information -----------------------------------------------------
 
-project = u'Google Earth Enterprise'
-copyright = u'2020, Open GEE Contributors'
-author = u'Open GEE Contributors'
+project = 'Google Earth Enterprise'
+copyright = '2020, Open GEE Contributors'
+author = 'Open GEE Contributors'
 
 # The short X.Y version
-version = u''
+version = ''
 # The full version, including alpha/beta/rc tags
 release = gee_version_number
 
@@ -80,7 +80,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path .
-exclude_patterns = [u'build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['build', 'Thumbs.db', '.DS_Store']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -148,8 +148,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'GoogleEarthEnterpriseDocumentation.tex', u'Google Earth Enterprise Documentation Documentation',
-     u'Open GEE Contributors', 'manual'),
+    (master_doc, 'GoogleEarthEnterpriseDocumentation.tex', 'Google Earth Enterprise Documentation Documentation',
+     'Open GEE Contributors', 'manual'),
 ]
 
 
@@ -158,7 +158,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'googleearthenterprisedocumentation', u'Google Earth Enterprise Documentation Documentation',
+    (master_doc, 'googleearthenterprisedocumentation', 'Google Earth Enterprise Documentation Documentation',
      [author], 1)
 ]
 
@@ -169,7 +169,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'GoogleEarthEnterpriseDocumentation', u'Google Earth Enterprise Documentation Documentation',
+    (master_doc, 'GoogleEarthEnterpriseDocumentation', 'Google Earth Enterprise Documentation Documentation',
      author, 'GoogleEarthEnterpriseDocumentation', 'One line description of project.',
      'Miscellaneous'),
 ]

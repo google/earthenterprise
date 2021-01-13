@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -39,7 +39,7 @@ GEAPACHEUSER = "geapacheuser"
 
 
 def Die(msg):
-  print >> sys.stderr, msg
+  print(msg, file=sys.stderr)
   exit(1)
 
 
@@ -54,7 +54,7 @@ def ExecuteCmd(os_cmd, err2out=False):
   Returns:
     (output_data, return_code) of the linux shell command running.
   """
-  print "Executing: %s" % os_cmd
+  print("Executing: %s" % os_cmd)
 
   try:
     p = subprocess.Popen(
@@ -65,11 +65,11 @@ def ExecuteCmd(os_cmd, err2out=False):
     out_data, err_data = p.communicate()
 
     if (not err2out) and err_data:
-      print "ERROR: %s" % err_data
+      print("ERROR: %s" % err_data.decode('ascii'))
       Die("Unable to execute %s" % os_cmd)
 
-    return out_data, p.returncode
-  except Exception, e:
+    return out_data.decode('ascii'), p.returncode
+  except Exception as e:
     Die("FAILED: %s" % str(e))
 
 
@@ -181,10 +181,10 @@ def DoClean(assetroot, assets):
     tmp_file.close()
 
     # Traverse all versions of CombinedRPAssets and clean listeners.
-    print ""
+    print("")
     for asset in assets:
       for version_filepath in GetAssetVersionConfigFiles(assetroot, asset):
-        print "Executing:", version_filepath
+        print("Executing:", version_filepath)
         # Note: backup could be expensive in terms of disk space usage.
         # shutil.copyfile(version_filepath, "%s.bak" % version_filepath)
 
@@ -197,9 +197,9 @@ def DoClean(assetroot, assets):
         # Rewrite source version config file with cleaned one.
         shutil.copyfile(tmp_file.name, version_filepath)
         total_cleaned += 1
-        print "SUCCESS"
+        print("SUCCESS")
 
-    print "%s CombinedRPAssetVersion config files CLEANED." % total_cleaned
+    print("%s CombinedRPAssetVersion config files CLEANED." % total_cleaned)
 
     # Delete temp. file.
     if os.path.exists(tmp_file.name):
@@ -243,16 +243,16 @@ def PrintAssetVersions(assetroot, assets):
   total_config_files = 0
   total_config_files_size = 0
   for asset in assets:
-    print ""
-    print "Asset:", asset
+    print("")
+    print("Asset:", asset)
     for version_config_filepath in GetAssetVersionConfigFiles(assetroot, asset):
-      print "   ", version_config_filepath
+      print("   ", version_config_filepath)
       total_config_files_size += os.path.getsize(version_config_filepath)
       total_config_files += 1
 
-  print ""
-  print "Total AssetVersion config files (count/size): %s/%s" % (
-      total_config_files, GetPrintSize(total_config_files_size))
+  print("")
+  print("Total AssetVersion config files (count/size): %s/%s" % (
+      total_config_files, GetPrintSize(total_config_files_size)))
 
 
 def IsFusionRunning():
@@ -261,7 +261,7 @@ def IsFusionRunning():
   Returns:
     whether Fusion daemons are running.
   """
-  print ""
+  print("")
   unused_output, error_code = ExecuteCmd(
       "%s --checkrunning" % os.path.join(BIN_DIR, "gefdaemoncheck"))
   return error_code == 0
@@ -273,8 +273,8 @@ def SwitchEffectiveUserToThis(user_name):
   Args:
     user_name: a user name.
   """
-  print ""
-  print "Switching effective user to:", user_name
+  print("")
+  print("Switching effective user to:", user_name)
   try:
     user_entry = pwd.getpwnam(user_name)
     user_id = user_entry.pw_uid
@@ -295,30 +295,30 @@ def Usage(msg=None):
     msg: additional info to print, e.g. error message.
   """
   if msg:
-    print ""
-    print msg
+    print("")
+    print(msg)
 
-  print ""
-  print "Usage: gecleancombinedrpasset.py [--help] [--dryrun] [assetroot_path]"
-  print ""
-  print "Will clean up listeners in all CombinedRPAssetVersion config files."
-  print ""
+  print("")
+  print("Usage: gecleancombinedrpasset.py [--help] [--dryrun] [assetroot_path]")
+  print("")
+  print("Will clean up listeners in all CombinedRPAssetVersion config files.")
+  print("")
   print ("    --dryrun just reports a list of asset versions that would have"
          " been cleaned.")
-  print ""
+  print("")
   print ("    assetroot_path the assetroot path to use. If uncpecified, the"
          " current assetroot")
-  print "    path is used."
+  print("    path is used.")
   assetroot = DiscoverAssetRoot()
-  print "    Current assetroot:", assetroot
+  print("    Current assetroot:", assetroot)
 
 
 def main(dryrun, assetroot):
   if not assetroot:
     assetroot = DiscoverAssetRoot()
 
-  print ""
-  print "The assetroot path:", assetroot
+  print("")
+  print("The assetroot path:", assetroot)
 
   combinedrp_assets = FindCombinedRpAssets(assetroot)
 

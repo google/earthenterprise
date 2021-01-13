@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -77,16 +77,16 @@ def FindUpdateCurrentVersion(fusion_version_file, long_version, short_version,
       if not line.startswith('#'):
         stage = 1  # long_version reached
         old_long = line[:-1]
-        print long_version
+        print(long_version)
       else:
         # TODO: Create script to do this for all copyrights.
         if line.startswith('# Copyright'):
-          print '# Copyright %d Google Inc. All Rights Reserved.' % year
+          print('# Copyright %d Google Inc. All Rights Reserved.' % year)
         else:
-          print line,
+          print(line, end=' ')
     elif stage == 1:
       old_short = line[:-1]
-      print short_version
+      print(short_version)
       stage = 2  # short version reached
     else:
       raise AssertionError('Cannot comprehend line "%s" in %s' % (
@@ -133,17 +133,17 @@ def ChangeVersionInInstallerFiles(
           defered_lines.append(line)
         else:
           line = line.replace(old_long, new_long)
-          print line,
+          print(line, end=' ')
       else:
         long_key_found = (line.find(long_key) >= 0)
         if long_key_found or (line.find(short_key) >= 0):
           if long_key_found:
-            print defered_lines[0].replace(old_long_cdata, new_long_cdata),
+            print(defered_lines[0].replace(old_long_cdata, new_long_cdata), end=' ')
           else:
-            print defered_lines[0].replace(old_short_cdata, new_short_cdata),
+            print(defered_lines[0].replace(old_short_cdata, new_short_cdata), end=' ')
           for index in range(1, len(defered_lines)):
-            print defered_lines[index],
-          print line,
+            print(defered_lines[index], end=' ')
+          print(line, end=' ')
           defered_lines = []
           in_defered_mode = False
         else:
