@@ -159,6 +159,10 @@ void MainWindow::Init() {
     helpmanual->setVisible(TRUE);
   }
 
+  // provide a contrast for the level view lcd number since it seems to not
+  // be setting properly in the ui file
+  levelView->setStyleSheet("background-color: black");
+
   // handle drop events
   connect(gfxview, SIGNAL(dropFile(const QString&)),
           this, SLOT(fileDragOpen(const QString&)));
