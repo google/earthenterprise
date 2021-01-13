@@ -224,7 +224,7 @@ try:
   minor=int(arr[2])
   el_ver = ''
   if arr[1] < 16:
-    print('Unknown Ubuntu version, minimum required version is 16.04.')
+    print('Minimum required Ubuntu version is 16.04.')
     Exit(1)
     is_min_ubuntu = False
 # lsb_release is not present, must be RHEL or CentOS, move on
