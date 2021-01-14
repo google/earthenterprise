@@ -221,7 +221,7 @@ main_postinstall()
   # If file ‘/opt/google/gehttpd/cgi-bin/set_geecheck_config.py’ exists:
   if [ -f "$GEE_CHECK_CONFIG_SCRIPT" ]; then
     cd "$BASEINSTALLDIR_OPT/gehttpd/cgi-bin"
-    python ./set_geecheck_config.py
+    python3.8 ./set_geecheck_config.py
   fi
 
   # 10)

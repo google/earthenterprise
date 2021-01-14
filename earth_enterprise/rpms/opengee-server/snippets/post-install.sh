@@ -56,7 +56,7 @@ main_postinstall()
     # If file ‘/opt/google/gehttpd/cgi-bin/set_geecheck_config.py’ exists:
     if [ -f "$BASEINSTALLDIR_OPT/gehttpd/cgi-bin/set_geecheck_config.py" ] ; then
         cd "$BASEINSTALLDIR_OPT/gehttpd/cgi-bin"
-        python ./set_geecheck_config.py
+        python3.8 ./set_geecheck_config.py
     fi
 
     # 9) Restore portable globes symlink if it existed previously
