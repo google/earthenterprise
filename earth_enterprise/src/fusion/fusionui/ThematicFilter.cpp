@@ -281,6 +281,7 @@ void ThematicFilter::ChooseStartColor() {
     start_color_btn->setAutoFillBackground(true);
     start_color_btn->setPalette(palette);
     start_color_btn->setFlat(true);
+    start_color_btn->update();
 
     RedrawColors();
   }
@@ -296,6 +297,7 @@ void ThematicFilter::ChooseEndColor() {
     end_color_btn->setAutoFillBackground(true);
     end_color_btn->setPalette(palette);
     end_color_btn->setFlat(true);
+    end_color_btn->update();
 
     RedrawColors();
   }
