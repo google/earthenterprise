@@ -182,7 +182,13 @@ Preferences::Preferences(QWidget* parent)
                     selectOutline[2],
                     selectOutline[3]);
 
-  outline_color_btn->setPaletteBackgroundColor(QColor(rgba));
+  QPalette outlinepalette;
+  outlinepalette.setColor(QPalette::Button, QColor(rgba));
+
+  outline_color_btn->setAutoFillBackground(true);
+  outline_color_btn->setPalette(outlinepalette);
+  outline_color_btn->setFlat(true);
+  outline_color_btn->update();
 
   selectFill = prefsConfig.selectFillColor;
 
@@ -191,7 +197,13 @@ Preferences::Preferences(QWidget* parent)
                selectFill[2],
                selectFill[3]);
 
-  fill_color_btn->setPaletteBackgroundColor(QColor(rgba));
+  QPalette fillpalette;
+  fillpalette.setColor(QPalette::Button, QColor(rgba));
+
+  fill_color_btn->setAutoFillBackground(true);
+  fill_color_btn->setPalette(fillpalette);
+  fill_color_btn->setFlat(true);
+  fill_color_btn->update();
 
   selectOutlineWidthSpin->setValue(prefsConfig.selectOutlineLineWidth);
 
@@ -222,7 +234,14 @@ void Preferences::ChooseSelectOutline() {
 
   QRgb rgba = QColorDialog::getRgba(init);
 
-  outline_color_btn->setPaletteBackgroundColor(QColor(rgba));
+  QPalette outlinepalette;
+  outlinepalette.setColor(QPalette::Button, QColor(rgba));
+
+  outline_color_btn->setAutoFillBackground(true);
+  outline_color_btn->setPalette(outlinepalette);
+  outline_color_btn->setFlat(true);
+  outline_color_btn->update();
+
 
   selectOutline[0] = qRed(rgba);
   selectOutline[1] = qGreen(rgba);
@@ -238,7 +257,14 @@ void Preferences::ChooseSelectFill() {
 
   QRgb rgba = QColorDialog::getRgba(init);
 
-  fill_color_btn->setPaletteBackgroundColor(QColor(rgba));
+  QPalette fillpalette;
+  fillpalette.setColor(QPalette::Button, QColor(rgba));
+
+  fill_color_btn->setAutoFillBackground(true);
+  fill_color_btn->setPalette(fillpalette);
+  fill_color_btn->setFlat(true);
+  fill_color_btn->update();
+
 
   selectFill[0] = qRed(rgba);
   selectFill[1] = qGreen(rgba);

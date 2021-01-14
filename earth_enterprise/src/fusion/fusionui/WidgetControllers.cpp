@@ -111,8 +111,15 @@ ColorButtonController::clicked(void)
   QColor orig_color = button->paletteBackgroundColor();
   QColor new_color = QColor(QColorDialog::getRgba(orig_color.rgb(), 0,
                                                   button));
+
   if (new_color != orig_color) {
-    button->setPaletteBackgroundColor(new_color);
+    QPalette palette;
+    palette.setColor(QPalette::Button, new_color);
+    button->setAutoFillBackground(true);
+    button->setPalette(palette);
+    button->setFlat(true);
+    button->update();
+
     EmitChanged();
   }
 }
@@ -132,7 +139,14 @@ ColorButtonController::SyncToWidgetsImpl(void)
 void
 ColorButtonController::MySyncToWidgetsImpl(void)
 {
-  button->setPaletteBackgroundColor(*config);
+  QPalette palette;
+  palette.setColor(QPalette::Button, *config);
+
+  button->setAutoFillBackground(true);
+  button->setPalette(palette);
+  button->setFlat(true);
+  button->update();
+
 }
 
 void ColorButtonController::Create(WidgetControllerManager &manager,
