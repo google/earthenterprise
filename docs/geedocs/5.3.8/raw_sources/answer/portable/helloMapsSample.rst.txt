@@ -1,0 +1,135 @@
+|Google logo|
+
+=======================
+Hello Maps! code sample
+=======================
+
+.. container::
+
+   .. container:: content
+
+      .. code-block:: html
+
+         <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+            <html>
+
+                  <head>
+
+                        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+                        <meta http-equiv="cache-control" content="max-age=0" />
+                        <meta http-equiv="cache-control" content="no-cache" />
+                        <meta http-equiv="expires" content="0" />
+                        <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+                        <meta http-equiv="pragma" content="no-cache" />
+                        <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+
+                              <!--This sample loads the necessary scripts for jQuery, Maps API, geeServerDefs, and the Maps API Fusion extension.-->
+
+                                    <title>Google Maps Engine Portable - Hello Maps Example</title>
+
+                                          <!--Loads jQuery from the local source.-->
+                                                <script src="/local/js/jquery-1.8.3.js"></script>
+
+                                                <!--Loads the Maps API from the local source.-->
+                                                <script type='text/javascript' src='/local/maps/api/pbootstrap_loader.js'></script>
+
+                                                <!--Loads the server database definitions (geeServerDefs) from the local source. To view your server database definitions, navigate to http://localhost:9335/query?request=Json&is2d=t-->
+                                                <script src="http://localhost:9335/query?request=Json&amp;var=geeServerDefs&amp;is2d=t"></script>
+
+                                                <!--Loads the Maps API Fusion extension from the local source.-->
+                                                <script type='text/javascript' src='/local/maps/api/fusion_extended_map.js'></script>
+
+                                                <!--Error handling in case the map doesn't load.-->
+                                          <script type="text/javascript">
+
+                                          $.ajax({
+                                                url: "http://localhost:9335/query?request=Json&var=geeServerDefs&is2d=t",
+                                                      statusCode: {
+                                                            500: function() {
+                                                                  document.getElementById('not_serving').style.display = 'block';
+                                                                  document.getElementById('not_serving').innerHTML =
+                                                                  'Error: To view this example, you need to run Google Maps Engine Portable and serve a 2D globe on http://localhost:9335.'}
+                                                                  }
+                                                            });
+
+                                                            function loadMap() {
+
+                                                      // Initializes a variable for your map and defines its settings.
+                                                      var mapOpts = {
+
+                                                                        // Sets the default Zoom, Center, and other settings for the map's initial  display.
+                                                                        zoom: 2,
+                                                                        center: new google.maps.LatLng(0, -22),
+                                                                        navigationControl: false,
+                                                                        mapTypeControl: false,
+                                                                        streetViewControl: false,
+                                                                        scaleControl: false
+                                                                  };
+                                                                        geemap = geeCreateFusionMap('map', geeServerDefs, mapOpts);
+                                                            }
+
+                                                      </script>
+
+                                                      <style type="text/css">
+                                                      #head {
+                                                            margin: 0 auto;
+                                                            margin-top: 16px;
+                                                            height: 20px;
+                                                            width: 600px;
+                                                            font-family: "Arial", sans-serif;
+                                                            font-size: 16px;
+                                                            font-weight: normal;
+                                                      }
+                                                      #head span {
+                                                            background-color: #F1F1F1;
+                                                            color: #333;
+                                                      }
+                                                      #not_serving {
+                                                            background-color: #CB392A;
+                                                            color: #FFF;
+                                                            font-weight: bold;
+                                                      }
+                                                      #head span,
+                                                      #not_serving {
+                                                            display: block;
+                                                            padding: 16px;
+                                                            border: 1px solid #DCDCDC
+                                                            font-size: 13px;
+                                                            margin: 8px 0 8px 0;
+                                                            box-shadow: 1px 1px 3px #F1F1F1;
+                                                      }
+                                                      #map {
+                                                            margin: 0 auto;
+                                                            margin-top: 120px
+
+                                                            /*The 2D map won’t load unless you set a height value. This code sample uses the CSS, but you can use a div element instead. For example, <div id="map2d" style="border: 1px solid silver; height: 600px; width: 800px;"> </div>*/
+                                                                  height: 600px;
+                                                                  width: 600px;
+                                                            }
+                                                            </style>
+                                                      </head>
+
+                                                      <body onload='loadMap()' id='body'>
+
+                                                      <div id="head">
+
+                                                      Hello Maps! &#8212; Google Maps API &amp; Portable
+
+                                                      <span>
+                                                      To see how to initialize the Google Maps API and make a call to Portable, view the source for this page. To view this example, you need to run Google Maps Engine Portable and serve a 2D globe on http://localhost:9335.
+                                                      </span>
+
+                                                      <div id="not_serving" style="display:none;"></div>
+
+                                                      </div>
+
+                                                      <div id="map"></div>
+
+                                                      </body>
+
+                                                      </html>
+
+.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
+   :width: 130px
+   :height: 44px
