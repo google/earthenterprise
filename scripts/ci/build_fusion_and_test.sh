@@ -54,6 +54,6 @@ if [ -f $HOME/cache/third_party$SERIES-$CPP_STD.tgz ]; then
 fi
 
 cd ..
-python2.7 /usr/bin/scons -j3 $BUILD_TYPE=1 qt4_native=1 cpp_standard=gnu++$CPP_STD build > build.log
+scons -j3 $BUILD_TYPE=1 qt4_native=1 cpp_standard=gnu++$CPP_STD build > build.log
 cd src/NATIVE-REL-x86_64/bin/tests
 ./RunAllTests.pl

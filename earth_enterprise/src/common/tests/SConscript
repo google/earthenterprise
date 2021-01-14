@@ -19,7 +19,7 @@ import os
 
 env.Append(LIBPATH = ['/usr/lib/', '/usr/lib64'])
 
-map(lambda test: env.test(test, [test + '.cpp'],
+list(map(lambda test: env.test(test, [test + '.cpp'],
                           LIBS=['gecommon', 'geutil', env['png_ver']]),
     ['simpleexception_unittest',
      'endian_tests',
@@ -28,27 +28,27 @@ map(lambda test: env.test(test, [test + '.cpp'],
      'filepool_tests',
      'lockfileguard_tests',
      'projection_test',
-     ])
+     ]))
 
 
-map(lambda test: env.test(test, [test + '.cpp'],
+list(map(lambda test: env.test(test, [test + '.cpp'],
                           LIBS=['geutil', env['png_ver']]),
     ['multirange_tests',
      'dottedversion_tests',
-     ])
+     ]))
 
 
-map(lambda test: env.test(test, [test + '.cpp'],
+list(map(lambda test: env.test(test, [test + '.cpp'],
                           LIBS=['gecommon', 'geutil', 'gtest', env['png_ver']]),
     ['khStringUtils_test',
      'khfileutils_tests',
      'khMisc_tests',
-     ])
+     ]))
 
-map(lambda test: env.test(test, [test + '.cc'],
+list(map(lambda test: env.test(test, [test + '.cc'],
                           LIBS=['gecommon', 'geutil', 'gtest', env['png_ver']]),
     ['etencoder_tests',
-     ])
+     ]))
 
 testdir = os.path.join(env.exportdirs['bin'],'tests')
 env.copyfile(testdir, 'RunAllTests.pl')

@@ -140,7 +140,7 @@ sudo yum install -y \
   libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel \
   perl-Alien-Packages perl-Perl4-CoreLibs proj-devel \
-  rpm-build rpmrebuild rsync scons \
+  rpm-build rpmrebuild rsync \
   xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
 ```
 
@@ -156,7 +156,7 @@ sudo yum install -y \
   libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel pcre pcre-devel \
   proj-devel glib2-devel libtiff-devel \
-  rpm-build rpmrebuild rsync scons shunit2 \
+  rpm-build rpmrebuild rsync shunit2 \
   xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
 ```
 
@@ -235,10 +235,10 @@ sudo yum install python python-pip python-devel
 
 ### All distros
 
-The following script will build and install Python 2.7 and Python 3.8 from source if they are needed. From `earthenterprise/earth_enterprise` run:
+The following script will build and install Python 2.7 and Python 3.8 from source if they are needed. From `earthenterprise` run:
 
 ```bash
-sudo ./../scripts/install_python.sh
+sudo ./scripts/install_python.sh
 ```
 
 Additional python packages are needed as well:
@@ -247,7 +247,7 @@ Additional python packages are needed as well:
 sudo python2.7 -m pip install --upgrade pip==19.0
 sudo python2.7 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary
 sudo python3.8 -m pip install --upgrade pip
-sudo python3.8 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary
+sudo python3.8 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary scons
 ```
 
 ### Building on fips-enabled machines
@@ -255,7 +255,7 @@ sudo python3.8 -m pip install argparse setuptools defusedxml GitPython Pillow un
 In some circumstances on stig-ed machines, where md5 cryptography is used, fips will prevent OpenGee from being built. When trying to build, a message similar to the following will be displayed
 
 ```bash
-$ python2.7 /usr/bin/scons -j4 internal=1 build
+$ scons -j4 internal=1 build
 scons: Reading SConscript files ...
 scons: done reading SConscript files.
 scons: Building targets ...

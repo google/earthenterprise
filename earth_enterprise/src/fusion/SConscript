@@ -69,10 +69,10 @@ toolsSymlinks = {
 }
 
 # links are made in install/bin directory
-for link, target in fusionSymLinks.items():
+for link, target in list(fusionSymLinks.items()):
     env.installedExecutableSymlink('fusion_bin', link, target)
 
-for link, target in toolsSymlinks.items():
+for link, target in list(toolsSymlinks.items()):
     env.installedExecutableSymlink('tools_bin', link, target)
 
 

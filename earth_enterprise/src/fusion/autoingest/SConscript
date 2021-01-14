@@ -89,7 +89,7 @@ idlfiles = [ 'AssetStorage',
              'storage/DatedImageryIndexInfo',
              ]
 
-env.idl(map(lambda n: n+'.idl', idlfiles))
+env.idl([n+'.idl' for n in idlfiles])
 
 
 plugins = [ 'Source',
@@ -154,7 +154,7 @@ for plugin in plugins:
 
 env.Command('ReadOnlyFromStorage.cpp',
             [ 'FromStorageGen.pl' ],
-            [ "$SOURCE --cppfile $TARGET " + string.join(plugins, ' ') ])
+            [ "$SOURCE --cppfile $TARGET " + " ".join(plugins) ])
 
 env.Command('khAssetManagerProxy.h',
             [ 'ProtocolGen.pl', 'AssetManager.protocol' ],
@@ -177,16 +177,16 @@ commoncpp = [
     'geAssetRoot.cpp', 'SearchTabReferenceImpl.cpp',
     'JsonUtils.cpp', 'JsUtils.cpp'
     ] + \
-    map(lambda n: '.idl/'+n+'.cpp', idlfiles) + \
-    map(lambda p: 'plugins/'+p+'Asset.cpp', plugins)
+    ['.idl/'+n+'.cpp' for n in idlfiles] + \
+    ['plugins/'+p+'Asset.cpp' for p in plugins]
 
-commonh = map(lambda n: '.idl/'+n+'.h', idlfiles)
+commonh = ['.idl/'+n+'.h' for n in idlfiles]
 
 for idlfile in idlfiles:
     osfile = idlfile + '.os'
     env.Depends(osfile, commonh)
 
-commonobj = map(lambda src: env.SharedObject(src), commoncpp)
+commonobj = [env.SharedObject(src) for src in commoncpp]
 
 for obj in commonobj:
     env.Depends(obj, commonh)

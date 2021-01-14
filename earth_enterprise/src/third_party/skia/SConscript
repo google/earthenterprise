@@ -44,7 +44,7 @@ tar_p = subprocess.Popen(['tar', 'tzf', skia_source], stdout=subprocess.PIPE)
 def gather_cpp_files(file_list):
     cpp_list = []
     for entry in file_list:
-        cpp_match = cpp_select_re.search(entry)
+        cpp_match = cpp_select_re.search(entry.decode())
         if cpp_match is not None:
             cpp_list.append(cpp_match.groups(0)[0])
     return cpp_list
@@ -155,26 +155,23 @@ sgl_env['CPPFLAGS'] += [
 sgl_opts_env = sgl_env.Clone()
 sgl_opts_ssse3_env = sgl_env.Clone()
 
-sgl_core_objects = map(
-    lambda f: sgl_env.Object(f), sgl_cpps)
+sgl_core_objects = [sgl_env.Object(f) for f in sgl_cpps]
 
 cxx_flags = sgl_opts_env['CXXFLAGS']
 cxx_flags.append('-msse2')
 sgl_opts_env['CXXFLAGS'] = cxx_flags
 
-sgl_opts_objects = map(
-    lambda f: sgl_opts_env.Object(os.path.join(sgl_src_abs_dir, f)), sgl_opts_cpps)
+sgl_opts_objects = [sgl_opts_env.Object(os.path.join(sgl_src_abs_dir, f)) for f in sgl_opts_cpps]
 
 
 cxx_flags = sgl_opts_ssse3_env['CXXFLAGS']
 cxx_flags.append('-mssse3')
 sgl_opts_ssse3_env['CXXFLAGS'] = cxx_flags
 
-sgl_opts_ssse3_objects = map(
-    lambda f: sgl_opts_ssse3_env.Object(os.path.join(sgl_src_abs_dir, f)), sgl_opts_ssse3_cpps)
+sgl_opts_ssse3_objects = [sgl_opts_ssse3_env.Object(os.path.join(sgl_src_abs_dir, f)) for f in sgl_opts_ssse3_cpps]
 
-sgl_opts_files = map(lambda f: os.path.join(sgl_src_abs_dir, f), sgl_opts_cpps)
-sgl_opts_ssse3_files = map(lambda f: os.path.join(sgl_src_abs_dir, f), sgl_opts_ssse3_cpps)
+sgl_opts_files = [os.path.join(sgl_src_abs_dir, f) for f in sgl_opts_cpps]
+sgl_opts_ssse3_files = [os.path.join(sgl_src_abs_dir, f) for f in sgl_opts_ssse3_cpps]
 
 skia_source_files = sgl_opts_files + sgl_opts_ssse3_files + sgl_cpps
 skia_target = '%s/.extract_skia' % current_dir

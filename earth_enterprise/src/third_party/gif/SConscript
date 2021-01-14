@@ -29,12 +29,12 @@ gif_source = File('#/../third_party/giflib/%s.tar.gz' % gif_version).abspath
 gif_env = third_party_env.DeepCopy()
 
 # [1] build gif library
-gif_cs = map(lambda f: os.path.join(build_root, 'lib', f), [
+gif_cs = [os.path.join(build_root, 'lib', f) for f in [
     'dgif_lib.c',
     'egif_lib.c',
     'gif_err.c',
     'gifalloc.c',
-])
+]]
 
 # [1] Extract gif
 gif_target = '%s/.extract' % current_dir

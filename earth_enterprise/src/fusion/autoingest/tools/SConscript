@@ -53,10 +53,9 @@ env_tmp['CPPFLAGS'] += ['-Ifusion/gst']
 env_tmp.install('fusion_bin',
             env_tmp.executable('genewmaplayer', 'genewmaplayer.cpp',
             LIBS=['geautoingest', 'gefconfigutil', 'geutil', 'gecommon', 'QtCore', 'QtGui']))
-env.install('fusion_bin', map(lambda app: env.executable(app, [app+'.cpp'],
+env.install('fusion_bin', [env.executable(app, [app+'.cpp'],
                                                   LIBS=['geautoingest',
-                                                  'gefconfigutil', 'gesearchtabs', 'gemiscconfig', 'geutil', 'gecommon', 'QtCore', 'QtGui','gexml', 'xerces-c']),
-                       appbase))
+                                                  'gefconfigutil', 'gesearchtabs', 'gemiscconfig', 'geutil', 'gecommon', 'QtCore', 'QtGui','gexml', 'xerces-c']) for app in appbase])
 
 # ****************************************************************************
 # ***  apps w/ extra libs
@@ -127,5 +126,5 @@ links = {
 }
 
 # links are made in install/bin directory
-for link, target in links.items():
+for link, target in list(links.items()):
     env.executableLink('fusion_bin', link, target)

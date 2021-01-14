@@ -20,7 +20,7 @@
 
 import sys
 import os
-import commands
+import subprocess
 
 sys.path = sys.path + ['src/scons']
 from khEnvironment import khEnvironment
@@ -31,7 +31,7 @@ EnsureSConsVersion(0, 96, 92)
 # Check version of git -- may not be able to reliably generate correct opengee version string.
 gee_version_number = getversion.open_gee_version.get_short()
 if getversion.open_gee_version.get_warning_message():
-    print getversion.open_gee_version.get_warning_message()
+    print(getversion.open_gee_version.get_warning_message())
 
 # Set 'package_command_arguments' based on a parameter
 # that is to be passed on to Gradle
@@ -47,9 +47,9 @@ for parameter in [ 'release', 'optimize', 'profile' ] :
 # process commandline arguments
 installdir = ARGUMENTS.get('installdir', '/tmp/fusion_os_install')
 with open('rpms/build.properties', 'w') as f:
-    print >> f, "## Auto-generated file from scons."
-    print >> f, "## Manual changes will be overwritten."
-    print >> f, str('staged=') + installdir.strip()
+    print("## Auto-generated file from scons.", file=f)
+    print("## Manual changes will be overwritten.", file=f)
+    print(str('staged=') + installdir.strip(), file=f)
 
 installdir = Dir(installdir).abspath
 def dir_cat(installdir, subdir1, subdir2):
@@ -137,13 +137,13 @@ exportdirs = {
            }
 
 # create the environment that controls the builds
-env = khEnvironment(ENV={'PATH' : '/bin:/bin:/usr/bin', 'JAVA_HOME': os.environ.get('JAVA_HOME','')},
+env = khEnvironment(ENV={'PATH' : '/bin:/usr/local/bin:/usr/bin', 'JAVA_HOME': os.environ.get('JAVA_HOME','')},
                     exportdirs=exportdirs,
                     installdirs=installdirs)
 
 def getArgumentVarsAsString():
   vars=''
-  for key, value in ARGUMENTS.iteritems():
+  for key, value in ARGUMENTS.items():
     if key != 'installdir':
       vars += key + '=' + str(value) + ' '
 
@@ -154,14 +154,14 @@ num_jobs = GetOption('num_jobs')
 
 # Build Fusion and Server
 build_cmds = {'build': [
-    'cd src; python2.7 /usr/bin/scons -j%d %s third_party' % (num_jobs, arg_vars),
-    'cd src; python2.7 /usr/bin/scons -j%d %s' % (num_jobs, arg_vars)
+    'cd src; scons -j%d %s third_party' % (num_jobs, arg_vars),
+    'cd src; scons -j%d %s' % (num_jobs, arg_vars)
 ]}
 run_build = env.PhonyTargets(**build_cmds)
 
 # Copy the binaries to the install staging directory
 stage_bin_cmds = {'stage_bin': [
-    'cd src; python2.7 /usr/bin/scons -j%d installdir="%s" %s install' % (num_jobs, installdir, arg_vars)
+    'cd src; scons -j%d installdir="%s" %s install' % (num_jobs, installdir, arg_vars)
 ]}
 stage_bin = env.PhonyTargets(**stage_bin_cmds)
 
@@ -177,7 +177,7 @@ env.copyfile(inst_common_dir('.'), './src/version.txt')
 
 # Copy the tutorial to the install staging directory if it exists.
 stage_tutorial_cmds = {'stage_tutorial': [
-    'cd tutorial; if [ -d FusionTutorial ]; then python2.7 /usr/bin/scons -j%d installdir="%s"; else echo "Skipping tutorial; no tutorial files found."; fi' % (num_jobs, installdir)
+    'cd tutorial; if [ -d FusionTutorial ]; then scons -j%d installdir="%s"; else echo "Skipping tutorial; no tutorial files found."; fi' % (num_jobs, installdir)
 ]}
 stage_tutorial = env.PhonyTargets(**stage_tutorial_cmds)
 env.Depends(stage_tutorial, stage_data)
@@ -227,7 +227,7 @@ env.PhonyTargets(**this_dict)
 if 'cleanall' in COMMAND_LINE_TARGETS:
     #clean the search and getomcat install folders.
     file = installdir
-    commands.getstatusoutput("rm -rf " + file)
+    subprocess.getstatusoutput("rm -rf " + file)
 
     #clean /tmp/fusion_os_install
     Clean(env, installdir)

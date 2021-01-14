@@ -45,8 +45,8 @@ date_extract = date_env.Command(
         'touch {0}'.format(date_target)
     )])
 
-print 'date target: {0}'.format(date_target)
-print 'date build_root: {0}'.format(build_root)
+print('date target: {0}'.format(date_target))
+print('date build_root: {0}'.format(build_root))
 
 # We don't do a build.  It fails on Ubuntu 16.04 with C++11.  However, all we
 # need for our purposes are the header files from the <include> directory.

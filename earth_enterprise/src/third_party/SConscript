@@ -105,7 +105,7 @@ else:
 third_party_bin = '%s/bin' % Dir('.').abspath
 
 cflags = ' '.join(env['optflags'] + ['-fPIC'])
-lpaths = ' '.join(map(lambda i: '-L%s' % i, env['rpathlink_dirs']))
+lpaths = ' '.join(['-L%s' % i for i in env['rpathlink_dirs']])
 lflags = ' '.join(third_party_env['LINKFLAGS'])
 
 # If we are on el8 we need to add tirpc

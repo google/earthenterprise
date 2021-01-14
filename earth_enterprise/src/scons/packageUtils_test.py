@@ -40,7 +40,7 @@ print("Basic checks for Ubuntu vs RPM\nMake sure these coincide with your curren
 uses_rpm = "does not use RPM"
 if UsesRPM():
   uses_rpm = "uses RPM"
-print("This machine %s" % uses_rpm)
+print(("This machine %s" % uses_rpm))
 
 # test GetDEBPackageInfo for non-RPM systems
 if UsesRPM() == False:
@@ -73,7 +73,7 @@ for package_list in invalid_test_packages:
 print("\n\nTests complete.\n\n")
 
 if len(failure_list) > 0:
-   print("\n\n%s TEST FAILURES" % len(failure_list))
+   print(("\n\n%s TEST FAILURES" % len(failure_list)))
    for s in failure_list:
       print(s)
 else:

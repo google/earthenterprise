@@ -158,7 +158,7 @@ def StringExpandFileFunc(target, source, env):
   target_dir = os.path.dirname(os.path.abspath(target))
   try:
     os.makedirs(target_dir)
-  except OSError, e:
+  except OSError as e:
     if e.errno != errno.EEXIST:
       raise
 
@@ -411,7 +411,7 @@ class khEnvironment(Environment):
   # executed.
   def PhonyTargets(self, **kw):
     ret_val = []
-    for target, actions in kw.items():
+    for target, actions in list(kw.items()):
       ret_val.append(self.AlwaysBuild(self.Alias(target, [], actions)))
     return ret_val
 
@@ -514,8 +514,7 @@ class khEnvironment(Environment):
       # FIXME: The SCons shell escape seems to be broken, and the 'ESCAPE'
       # environment variable isn't respected for some reason, so we add a
       # dirty patch:
-      test_env['CPPFLAGS'] += map(
-        lambda s: s.replace('"', '\\"'), test_env['test_extra_cppflags'])
+      test_env['CPPFLAGS'] += [s.replace('"', '\\"') for s in test_env['test_extra_cppflags']]
     ret = test_env.Program(*args, **kw)
 
     self.Default(self.alias(target_src_node, ret))
@@ -644,7 +643,7 @@ class khEnvironment(Environment):
     tlist = self.arg2nodes(target, self.ans.Alias)
     if not SCons.Util.is_List(source):
       source = [source]
-    source = filter(None, source)
+    source = [_f for _f in source if _f]
 
     # Re-call all the target  builders to add the sources to each target.
     result = []

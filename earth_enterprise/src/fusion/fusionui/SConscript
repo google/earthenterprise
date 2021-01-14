@@ -53,7 +53,7 @@ env.Append( CXXFLAGS = ['-Wno-unused-function', '-Wno-unused-value', '-Wno-unuse
                   'GL'])
 
 idlfiles = [ 'layoutpersist', 'preferences', 'filehistory', 'thematicstyles' ]
-env.idl(map(lambda n: n+'.idl', idlfiles))
+env.idl([n+'.idl' for n in idlfiles])
 
 uifiles = [
   'aboutfusionbase.ui',
@@ -334,12 +334,11 @@ images = [
 
 qtcpps = env.qtFiles(uifiles, hmocfiles, images, 'fusion')
 
-objs = map(lambda f: env.SharedObject(f), cpps) + [
+objs = [env.SharedObject(f) for f in cpps] + [
     env['BUILDDATE'],
     ]
-qtobjs = map(lambda f: env.SharedObject(f), qtcpps)
-idlobjs = map(lambda f: env.SharedObject(f),
-              map(lambda n: '.idl/'+n+'.cpp', idlfiles))
+qtobjs = [env.SharedObject(f) for f in qtcpps]
+idlobjs = [env.SharedObject(f) for f in ['.idl/'+n+'.cpp' for n in idlfiles]]
 
 fusion = env.executable('fusion', objs + qtobjs + idlobjs)
 env.install('fusion_bin', fusion)

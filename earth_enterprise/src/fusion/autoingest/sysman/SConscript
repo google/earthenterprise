@@ -29,7 +29,7 @@ env.Append( LINKFLAGS=['-fopenmp'] )
 idlfiles = [ 'NextTaskId', 'JobStorage', 'TaskStorage', 'TaskRule',
              'FusionUniqueId' ]
 
-env.idl(map(lambda n: n+'.idl', idlfiles))
+env.idl([n+'.idl' for n in idlfiles])
 
 TaskStorageObj = env.SharedObject('.idl/TaskStorage.cpp')
 JobStorageObj  = env.SharedObject('.idl/JobStorage.cpp')
@@ -52,7 +52,7 @@ env.Depends('../plugins/ProjectedMapProjectAsset.os', 'plugins/MapLayerAssetD.h'
 
 env.Command('SysManFromStorage.cpp',
             [ '../FromStorageGen.pl' ],
-            [ "$SOURCE --daemon --cppfile $TARGET " + string.join(plugins, ' ') ])
+            [ "$SOURCE --daemon --cppfile $TARGET " + " ".join(plugins) ])
 
 env.Command('khAssetManagerDispatch.cpp',
             [ '../ProtocolGen.pl', '../AssetManager.protocol' ],
@@ -97,7 +97,7 @@ otherDirObjs = [
     'fusion/gemaptilegen/.idl/Config',
     ]
 
-pluginFiles = map(lambda p: 'plugins/'+p+'AssetD.cpp', plugins)
+pluginFiles = ['plugins/'+p+'AssetD.cpp' for p in plugins]
 sysmanFiles = ['AssetD.cpp', 'AssetVersionD.cpp',
   'AssetOperation.cpp', 'StateUpdater.cpp', 'DependentStateTree.cpp',
   'WaitingAssets.cpp', 'khSystemManager.cpp',
@@ -111,7 +111,7 @@ extraObjs = [TaskStorageObj, JobStorageObj, NextTaskIdObj, TaskRuleObj,
   FusionUniqueIdObj] + \
   commonobj + \
   env.ObjFromOtherDir(otherDirObjs)
-sysmanObjs = map(lambda f: str(f).replace(".cpp", ".o"), sysmanFiles)
+sysmanObjs = [str(f).replace(".cpp", ".o") for f in sysmanFiles]
 sysmanLibs = ['gegdal', 'geraster', 'gesearchtabs', 'genet', 'gepublish', 'gefconfigutil',
   'geindex_r', 'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'QtCore', 'QtGui', 'xerces-c', 'geos',
   'gomp']
