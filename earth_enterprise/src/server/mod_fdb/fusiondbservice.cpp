@@ -256,6 +256,8 @@ int FusionDbService::ProcessFusionDbRequest(
     // Get DB Reader.
     ServerdbReader* reader =
         fdb_reader_manager_.GetServerdbReader(target_path);
+    ap_log_rerror(APLOG_MARK, APLOG_WARNING, 0, r,
+                  "Created reader for %s.", target_path.c_str());
 
     if (!reader) {
       ap_log_rerror(APLOG_MARK, APLOG_WARNING, 0, r,
