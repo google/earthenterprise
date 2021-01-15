@@ -136,7 +136,7 @@ def ChangeVersionInInstallerFiles(
           defered_lines.append(line)
 
 
-def print_and_exit():
+def print_and_exit(argv):
   """
   Prints help info, and exits.
   """
@@ -153,7 +153,7 @@ def main(argv):
   short_ver = ''
   long_ver = ''
   if (('--short' not in argv) or ('--long' not in argv) or (len(argv) < 5)):
-    print_and_exit()
+    print_and_exit(argv)
   if ((argv[1] == '--short') and (argv[3] == '--long')):
     short_ver = argv[2]
     long_ver = argv[4]
@@ -161,10 +161,11 @@ def main(argv):
     short_ver = argv[4]
     short_ver = argv[2]
   else:
-    print_and_exit()
+    print_and_exit(argv)
   
   if (short_ver.split('.') != long_ver.split('.')[:2]):
-    print_and_exit()
+    print_and_exit(argv)
+  else:
     
   script_path = os.path.abspath(argv[0])
   common_prefix = os.path.dirname(os.path.dirname(script_path))
