@@ -104,7 +104,6 @@ class Builder(object):
 
     def build(self):
         """Builds and packages Portable server."""
-
         remove_directory(self.build_dir)
         ensure_directory(self.build_dir)
         ensure_directory(self.package_dir)

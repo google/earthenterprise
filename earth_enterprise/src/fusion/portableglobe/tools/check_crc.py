@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 #
 # Copyright 2017 Google Inc.
 #
@@ -46,12 +46,12 @@ def CalculateCrc(fname):
   step = size / 100.0 * PERCENT_PROGRESS_STEP
   percent = 0
   next_progress_indication = 0.0
-  for i in xrange(size):
+  for i in range(size):
     word = fp.read(CRC_SIZE)
-    for j in xrange(CRC_SIZE):
+    for j in range(CRC_SIZE):
       crc[j] ^= ord(word[j])
     if i >= next_progress_indication:
-      print "%d%%" % percent
+      print("%d%%" % percent)
       next_progress_indication += step
       percent += PERCENT_PROGRESS_STEP
   fp.close()
@@ -62,7 +62,7 @@ def GetCrc(fname):
   """Get crc values from crc file."""
   fp = open(fname, "rb")
   crc = []
-  for i in xrange(CRC_SIZE):
+  for i in range(CRC_SIZE):
     byte = ord(fp.read(1))
     crc.append(byte)
   fp.close()
@@ -74,12 +74,12 @@ def CheckCrc(path):
   calculated = CalculateCrc("%s/pbundle_0000" % path)
   existing = GetCrc("%s/pbundle_0000.crc" % path)
   if calculated == existing:
-    print "Good crc in %s." % path
+    print("Good crc in %s." % path)
   else:
-    print "** BAD CRC **"
-    print path
-    print "Existing: ", existing
-    print "Calculated: ", calculated
+    print("** BAD CRC **")
+    print(path)
+    print("Existing: ", existing)
+    print("Calculated: ", calculated)
 
 
 def CheckIndex(path, total_packets):
@@ -87,26 +87,26 @@ def CheckIndex(path, total_packets):
   actual = os.path.getsize("%s/index" % path)
   expected = total_packets * INDEX_ENTRY_SIZE
   if actual == expected:
-    print "Number of packets in %s/index looks good." % path
+    print("Number of packets in %s/index looks good." % path)
   else:
-    print "** BAD INDEX SIZE **"
-    print path
-    print "Expected: ", expected
-    print "Actual: ", actual
+    print("** BAD INDEX SIZE **")
+    print(path)
+    print("Expected: ", expected)
+    print("Actual: ", actual)
 
 
 def main():
   """Main for check crc."""
   if len(sys.argv) != 5:
-    print ("usage: %s <globe_path> <num_imagery_packets> <num_terrain_packets>"
-           " <num_vector_packets>") % sys.argv[0]
-    print ("  Packet numbers are first line of output from "
+    print("usage: %s <globe_path> <num_imagery_packets> <num_terrain_packets>"
+           " <num_vector_packets>" % sys.argv[0])
+    print("  Packet numbers are first line of output from "
            "geportableglobebuilder.")
-    print "  E.g. %s globe 32838 23881 2821" % sys.argv[0]
+    print("  E.g. %s globe 32838 23881 2821" % sys.argv[0])
     sys.exit(0)
 
   base_dir = sys.argv[1]
-  print "Please be patient, can take a while for large globes ..."
+  print("Please be patient, can take a while for large globes ...")
   CheckCrc("%s/data" % base_dir)
   CheckCrc("%s/qtp" % base_dir)
   total_packets = int(sys.argv[2]) + int(sys.argv[3]) + int(sys.argv[4])
