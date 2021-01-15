@@ -35,20 +35,6 @@ import fileinput
 import os
 import sys
 
-from pyglib import app
-from pyglib import flags
-
-
-FLAGS = flags.FLAGS
-
-flags.DEFINE_string('long',
-                    '',
-                    'Long version string for fusion (e.g 3.2.0')
-
-flags.DEFINE_string('short',
-                    '',
-                    'Short version string for fusion (e.g 3.2')
-
 
 def FindUpdateCurrentVersion(fusion_version_file, long_version, short_version,
                              year):
@@ -150,21 +136,45 @@ def ChangeVersionInInstallerFiles(
           defered_lines.append(line)
 
 
+def print_and_exit():
+  """
+  Prints help info, and exits.
+  """
+  sys.stderr.write('Wrong Usage of the script %s \n\n' % argv[0])
+  sys.stderr.write('Must provide both a short and long version that match!\n')
+  sys.stderr.write('Short version must be in the form "x.x"\n')
+  sys.stderr.write('Long version must be in the form "x.x.x"\n')
+  sys.stderr.write('Example usage:\n')
+  sys.stderr.write('    ./update_fusion_version.py --long "3.2.0" --short "3.2"\n')
+  sys.exit(-1) 
+
+
 def main(argv):
-  if not (len(argv) == 1 and FLAGS.long and FLAGS.short and
-          FLAGS.long.startswith(FLAGS.short)):
-    sys.stderr.write('Wrong Usage of the script %s \n\n' % argv[0])
-    sys.stderr.write(__doc__)
-    sys.exit(-1)
+  short_ver = ''
+  long_ver = ''
+  if (('--short' not in argv) or ('--long' not in argv) or (len(argv) < 5)):
+    print_and_exit()
+  if ((argv[1] == '--short') and (argv[3] == '--long')):
+    short_ver = argv[2]
+    long_ver = argv[4]
+  elif ((argv[1] == '--long') and (argv[3] == '--short')):
+    short_ver = argv[4]
+    short_ver = argv[2]
+  else:
+    print_and_exit()
+  
+  if (short_ver.split('.') != long_ver.split('.')[:2]):
+    print_and_exit()
+    
   script_path = os.path.abspath(argv[0])
   common_prefix = os.path.dirname(os.path.dirname(script_path))
   fusion_version_file = '%s/%s' % (common_prefix, 'src/fusion_version.txt')
   (old_long, old_short) = FindUpdateCurrentVersion(fusion_version_file,
-                                                   FLAGS.long, FLAGS.short,
+                                                   long_ver, short_ver,
                                                    datetime.datetime.now().year)
   ChangeVersionInInstallerFiles(
-      common_prefix, old_long, FLAGS.long, old_short, FLAGS.short)
+      common_prefix, old_long, long_ver, old_short, short_ver)
 
 
 if __name__ == '__main__':
-  app.run()
+  main(sys.argv)
