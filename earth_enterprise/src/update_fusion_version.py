@@ -53,10 +53,6 @@ def FindUpdateCurrentVersion(fusion_version_file, long_version, short_version,
   Raises:
     AssertionError: Whenever anything fails.
   """
-  cmd = 'cd %s; g4 open %s' % (os.path.dirname(fusion_version_file),
-                               os.path.basename(fusion_version_file))
-  if os.system(cmd):
-    raise AssertionError('Cannot run command "%s"' % cmd)
   stage = 0  # not yet reached long_version
   for line in fileinput.FileInput(fusion_version_file, inplace=1):
     if stage == 0:
@@ -105,11 +101,6 @@ def ChangeVersionInInstallerFiles(
   short_key = 'CDATA[$SHORT_VERSION$]'
   for file_name in installer_files:
     file_name = '%s/%s' % (common_prefix, file_name)
-    cmd = 'cd %s; g4 open %s' % (os.path.dirname(file_name),
-                                 os.path.basename(file_name))
-    if os.system(cmd):
-      raise AssertionError('Cannot run command "%s"' % cmd)
-
     in_defered_mode = False
     defered_lines = []
     for line in fileinput.FileInput(file_name, inplace=1):
