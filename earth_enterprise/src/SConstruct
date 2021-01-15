@@ -73,6 +73,7 @@ ValidOptions = set(
      'release',
      'optimize',
      'crosstool',
+     'python_version',
       # Use to build GEE Fusion w/ max number of concurrent jobs equal
       # to max_num_jobs_coeff * 8.
      'max_num_jobs_coeff',
@@ -108,6 +109,13 @@ optimize = int(ARGUMENTS.get('optimize', 0))
 crosstool_version = ARGUMENTS.get('crosstool', 'v14')
 max_num_jobs_coeff = ARGUMENTS.get('max_num_jobs_coeff', 16)
 gprof = ARGUMENTS.get('profile', 0) or ARGUMENTS.get('gprof', 0)
+python_version = ARGUMENTS.get('installdir',0)
+
+if python_version not in [None, '2', '3']:
+    print("Invalid python version! Valid options are 2 and 3.")
+    Exit()
+
+
 # A sandbox build has no built-in library rpath info, so that the
 # library search path can be specified at runtime. Sandbox is
 # independent: it can be debug, optimize, or release.
