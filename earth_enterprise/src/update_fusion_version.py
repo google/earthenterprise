@@ -154,7 +154,7 @@ def main(argv):
   long_ver = ''
   if (('--short' not in argv) or ('--long' not in argv) or (len(argv) < 5)):
     print_and_exit(argv)
-  if ((argv[1] == '--short') and (argv[3] == '--long')):
+  elif ((argv[1] == '--short') and (argv[3] == '--long')):
     short_ver = argv[2]
     long_ver = argv[4]
   elif ((argv[1] == '--long') and (argv[3] == '--short')):
@@ -165,7 +165,6 @@ def main(argv):
   
   if (short_ver.split('.') != long_ver.split('.')[:2]):
     print_and_exit(argv)
-  else:
     
   script_path = os.path.abspath(argv[0])
   common_prefix = os.path.dirname(os.path.dirname(script_path))
