@@ -159,7 +159,7 @@ def main(argv):
     long_ver = argv[4]
   elif ((argv[1] == '--long') and (argv[3] == '--short')):
     short_ver = argv[4]
-    short_ver = argv[2]
+    long_ver = argv[2]
   else:
     print_and_exit(argv)
   
