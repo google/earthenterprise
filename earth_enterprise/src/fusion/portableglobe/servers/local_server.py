@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 #
 # Copyright 2017 Google Inc, 2019 Open GEE Contributors
 #
@@ -34,7 +34,7 @@ try:
   from PIL import ImageFile
 except ImportError:
   pil_enabled = False
-  print "PIL is not available."
+  print("PIL is not available.")
 import tornado.httpserver
 import tornado.ioloop
 import tornado.web
@@ -92,51 +92,51 @@ class LocalServer(object):
     search_service_regex = re.compile("^(search_service.*)\.py$")
     if search_services_directory:
       sys.path.append(search_services_directory)
-      print "Looking for search services in %s ..." % search_services_directory
+      print("Looking for search services in %s ..." % search_services_directory)
       for file_name in os.listdir(search_services_directory):
         match = search_service_regex.match(file_name)
         if match:
-          print "Found search service:", match.group(1)
+          print("Found search service: {0}".format(match.group(1))
           module = __import__(match.group(1))
           try:
             service = module.RegisterSearchService(self.search_services_)
-          except Exception, e:
-            print e.message
-            print "Unable to  register service."
-            print "Make sure RegisterSearchService is implemented in your"
-            print "search service module."
+          except Exception as e:
+            print(e.message)
+            print("Unable to  register service.")
+            print("Make sure RegisterSearchService is implemented in your")
+            print("search service module.")
             return
 
           try:
             service.SetWorkingDirectory(search_services_directory)
           except:
-            print "Unable to set working directory."
+            print("Unable to set working directory.")
 
     else:
-      print "Search services directory is not defined."
+      print("Search services directory is not defined.")
 
   def LoadExtService(self):
     """Load externally defined service for extending server functionality."""
     ext_service_directory = tornado.web.globe_.config_.ExtServiceDirectory()
     if ext_service_directory:
       sys.path.append(ext_service_directory)
-      print "Looking for ext service in %s ..." % ext_service_directory
+      print("Looking for ext service in %s ..." % ext_service_directory)
       path = "%s%s%s" % (ext_service_directory, os.sep, EXT_SERVICE_FILE)
       if os.path.isfile(path):
-        print "Found ext service."
+        print("Found ext service.")
         module = __import__(EXT_SERVICE_FILE[:-3])
         try:
           self.ext_service_ = module.ExtService()
         except:
-          print "Unable to load ext service object."
+          print("Unable to load ext service object.")
           return
         try:
           self.ext_service_.SetWorkingDirectory(ext_service_directory)
         except:
-          print "Unable to set ext working directory."
+          print("Unable to set ext working directory.")
 
     else:
-      print "Ext service directory is not defined."
+      print("Ext service directory is not defined.")
 
   def GetIcon(self, handler, path, use_local=False):
     """Return icon from a file."""
@@ -188,14 +188,14 @@ class LocalServer(object):
         return
 
       else:
-        print "unknown packet request: %s" % handler.request.uri
+        print("unknown packet request: %s" % handler.request.uri)
         return
 
       # Get the data and send it.
       handler.write(tornado.web.globe_.GetData())
 
-    except portable_globe.UnableToFindException, e:
-      print e.message
+    except portable_globe.UnableToFindException as e:
+      print(e.message)
 
   def LocalDbRootHandler(self, handler, layer_id):
     """Handle GET request for the dbroot."""
@@ -221,8 +221,8 @@ class LocalServer(object):
         # Write dbRoot from globe package.
         handler.write(tornado.web.globe_.ReadDbRoot(path, layer_id))
 
-      except portable_globe.UnableToFindException, e:
-        print e.message
+      except portable_globe.UnableToFindException as e:
+        print(e.message)
 
   def LocalLayerVectorFileHandler(self, handler, path, layer_id):
     """Handle GET request for a file from a particular layer."""
@@ -239,7 +239,7 @@ class LocalServer(object):
       handler.write(tornado.web.globe_.ReadLayerFile(
           "earth/vector_layer/%s" % path, layer_id))
     except:
-      print "Unable to find", path
+      print("Unable to find {0}".format(path))
 
   def LocalLayerDocsHandler(self, handler, path, layer_id):
     """Handle GET request for a file from a particular layer."""
@@ -249,7 +249,7 @@ class LocalServer(object):
     try:
       handler.write(tornado.web.globe_.ReadLayerFile(path, layer_id))
     except Exception as e:
-      print "Unable to find", path, e
+      print("Unable to find {0}{1}".format(path, e))
 
   def LocalDocsHandler(self, handler, path):
     """Handle GET request for some document.
@@ -316,7 +316,7 @@ class LocalServer(object):
           handler.write(tornado.web.globe_.ReadLayerFile(
               "icons/%s" % icon, layer_id))
       except:
-        print "Unable to find", icon
+        print("Unable to find {0}".format(icon))
     else:
       self.GetIcon(handler, "icons/%s" % icon, use_local)
 
@@ -469,7 +469,7 @@ class LocalServer(object):
     WHITE_SPACE_ALLOWED = 3
     index0 = json.find("serverUrl")
     if index0 == -1:
-      print "Non-standard 2d map json."
+      print("Non-standard 2d map json.")
       handler.write(json)
       return
     else:
@@ -477,7 +477,7 @@ class LocalServer(object):
 
     index1 = json.find(":", index0)
     if index1 == -1 or index1 > index0 + WHITE_SPACE_ALLOWED:
-      print "Non-standard 2d map json."
+      print("Non-standard 2d map json.")
       handler.write(json)
       return
     else:
@@ -485,7 +485,7 @@ class LocalServer(object):
 
     index2 = json.find('"', index1)
     if index2 == -1 or index2 > index1 + WHITE_SPACE_ALLOWED:
-      print "Non-standard 2d map json."
+      print("Non-standard 2d map json.")
       handler.write(json)
       return
     else:
@@ -493,7 +493,7 @@ class LocalServer(object):
 
     index3 = json.find('"', index2)
     if index3 == -1:
-      print "Non-standard 2d map json."
+      print("Non-standard 2d map json.")
       handler.write(json)
       return
 
@@ -536,7 +536,7 @@ class LocalServer(object):
     """Converts col, row, and level to corresponding qtnode string."""
     qtnode = "0"
     half_ndim = 1 << (level - 1)
-    for unused_ in xrange(level):
+    for unused_ in range(level):
       if row >= half_ndim and col < half_ndim:
         qtnode += "0"
         row -= half_ndim
@@ -644,7 +644,7 @@ class LocalServer(object):
           output.close()
           handler.write(content)
           return
-        except portable_globe.UnableToFindException, e:
+        except portable_globe.UnableToFindException as e:
           index += 1
           if size > 1:
             size >>= 1   # divide by 2
@@ -683,4 +683,4 @@ class LocalServer(object):
       handler.write(tornado.web.globe_.ReadFile("earth/info.txt"))
       handler.write("</pre>")
     except portable_globe.UnableToFindException:
-      print "no info file"
+      print("no info file")

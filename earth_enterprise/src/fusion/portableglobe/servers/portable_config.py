@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 #
 # Copyright 2017 Google Inc.
 #
@@ -32,7 +32,7 @@ class PortableConfig(object):
     """Loads initial values from config file."""
     fp = self.OpenConfigFile("portable.cfg")
     if not fp:
-      print "Unable to open config file."
+      print("Unable to open config file.")
       return
 
     self.port_ = 9335
@@ -82,29 +82,29 @@ class PortableConfig(object):
           if match.group(2)[0].lower() == "f":
             self.disable_broadcasting_ = False
           else:
-            print "Broadcasting is not allowed."
+            print("Broadcasting is not allowed.")
         elif match.group(1).lower() == "accept_all_requests":
           if match.group(2)[0].lower() == "t":
             self.accept_all_requests_ = True
-            print "Allowing all requests."
+            print("Allowing all requests.")
         elif match.group(1).lower() == "single_imagery_tile":
           if match.group(2)[0].lower() == "t":
             self.single_imagery_tile_ = True
-            print "Serving single imagery tile (./local/imagery_tile)."
+            print("Serving single imagery tile (./local/imagery_tile).")
         elif match.group(1).lower() == "debug":
           if match.group(2)[0].lower() == "t":
             self.debug_ = True
-            print "Debug messaging is ON."
+            print("Debug messaging is ON.")
         elif match.group(1).lower() == "local_override":
           if match.group(2)[0].lower() == "t":
             self.local_override_ = True
-            print "Local override is ON."
+            print("Local override is ON.")
         elif match.group(1).lower() == "use_plugin":
           if match.group(2)[0].lower() == "f":
             self.use_plugin_ = False
-            print "Not using plugin."
+            print("Not using plugin.")
         else:
-          print "Unknown configuration parameter: %s" % match.group(1)
+          print("Unknown configuration parameter: %s" % match.group(1))
     fp.close()
     self.CheckStartupGlobe()
 
@@ -132,7 +132,7 @@ class PortableConfig(object):
       except IOError:
         # Move to next directory up.
         config_file = "%s%s" % (prefix, config_file)
-        print config_file
+        print(config_file)
         count += 1
 
     return fp

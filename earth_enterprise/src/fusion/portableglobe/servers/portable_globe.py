@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 #
 # Copyright 2017 Google Inc.
 #
@@ -29,7 +29,7 @@ try:
   import sqlite3
   MBTILE_SUPPORT = True
 except ImportError:
-  print "Mbtiles are not supported."
+  print("Mbtiles are not supported.")
   MBTILE_SUPPORT = False
 import stub_search
 
@@ -112,7 +112,7 @@ class Globe(object):
     if glm_layer_id in self.is_base_layer_:
       return self.is_base_layer_[glm_layer_id]
 
-    print "Unknown layer (IsBaseLayer)."
+    print("Unknown layer (IsBaseLayer).")
     return False
 
   def GetData(self):
@@ -156,8 +156,8 @@ class Globe(object):
     fp = open(self.GlobePath(), "rb")
 
     crc = [0, 0, 0, 0]
-    for unused_i in xrange(size):
-      for j in xrange(glc_unpacker.Package.kCrcSize):
+    for unused_i in range(size):
+      for j in range(glc_unpacker.Package.kCrcSize):
         ch = fp.read(1)
         crc[j] ^= ord(ch)
 
@@ -213,14 +213,14 @@ class Globe(object):
     """
     if self.unpacker_.FindLayerFile(path, layer_id, self.file_loc_):
       data = self.GetData()
-      print "path dbroot: ", path, len(data)
+      print("path dbroot: {0} {1}".format(path, len(data))
       return data
     elif self.unpacker_.FindQtpPacket(
         "0", glc_unpacker.kDbRootPacket, 0, layer_id, self.file_loc_):
       data = self.GetData()
       return data
     else:
-      print "Did not find:", path, layer_id
+      print("Did not find: {0} {1}".format(path, layer_id))
       raise UnableToFindException("Unable to find dbroot.")
 
   def ReadDataPacket(self, qtpath, packet_type, channel, layer_id):
@@ -357,7 +357,7 @@ class Globe(object):
            "  and tile_row = %d"
            "  and zoom_level = %d;") % (x, y, z)
     if not self.db_:
-      print "No tiles database."
+      print("No tiles database.")
       return ""
 
     result = self.db_.execute(sql).fetchone()
@@ -368,7 +368,7 @@ class Globe(object):
     globe_path = os.path.normpath(globe_path)
     if not os.path.exists(globe_path):
       self.SetGlobePath(globe_path)
-      print "Unable to find", globe_path
+      print("Unable to find {0}".format(globe_path)
       return False
 
     if globe_path[-4:] == ".glb" or globe_path[-4:] == ".glm":
@@ -378,10 +378,10 @@ class Globe(object):
     elif MBTILE_SUPPORT and globe_path[-4:] == ".mbt":
       self.ServeLocalTiles(globe_path)
     else:
-      print "Unknown file type: ", globe_path
+      print("Unknown file type: ".format(globe_path))
       return False
 
-    print "Globe served!"
+    print("Globe served!")
     self.SetType(globe_path)
     return True
 
@@ -390,10 +390,10 @@ class Globe(object):
     self.SetGlobePath(globe_path)
     self.db_ = None
     try:
-      print "sqlite connection to ", globe_path
+      print("sqlite connection to {0}".format(globe_path))
       self.db_ = sqlite3.connect(globe_path)
     except Exception:
-      print "Failed to connect to %s." % globe_path
+      print("Failed to connect to %s." % globe_path)
 
   def SetType(self, globe_name):
     """Sets is2d based on the given globe name."""
@@ -420,7 +420,7 @@ class Globe(object):
       self.is_mbtiles_ = True
       return
     else:
-      print "Unknown file type: ", globe_name
+      print("Unknown file type: {0}".format(globe_name))
 
     if self.is_2d_:
       self.ParseJson(self.ReadFile("maps/map.json"))
@@ -440,16 +440,16 @@ class Globe(object):
             glm_id = layer["glm_id"]
 
           if self.config_.Debug():
-            print glm_id, layer["id"]
+            print('{0}{1}'.format(glm_id, layer["id"]))
           glm_layer_id = self.LayerChannelId(glm_id, layer["id"])
           if self.config_.Debug():
-            print "glm_layer_id:", glm_layer_id
+            print("glm_layer_id:{0}".format(glm_layer_id))
           self.is_base_layer_[glm_layer_id] = not non_base_layer
 
-    except Exception, e:
-      print self.CleanJson(json_text)
-      print "Unable to decode json."
-      print e.message
+    except Exception as e:
+      print(self.CleanJson(json_text))
+      print("Unable to decode json.")
+      print(e.message)
       self.server_defs_ = None
 
   def CleanJson(self, json_text):
@@ -477,7 +477,7 @@ class Globe(object):
     self.search_db_.ClearSearchTables()
     # Keep search separate and specific to glc.
     self.LoadSearchDb()
-    print "Serving globe:", globe_path
+    print("Serving globe: {0}".format(globe_path))
 
   def ServeLocalGlobeFiles(self, globe_path):
     """Sets which globe is being served, but will only serve top-level files."""
@@ -499,19 +499,19 @@ class Globe(object):
   def LoadSearchTable(self, table_file):
     """Create new table in Postgres and load it with content from file."""
     table_name = table_file[10:]  # Strip off "search_db/"
-    print "   Loading search table from %s ..." % table_file
+    print("   Loading search table from %s ..." % table_file)
     content = self.ReadFile(table_file)
     if not content:
-      print table_name, "not loaded."
+      print("{0} not loaded.".format(table_name))
       return
 
     self.search_db_.LoadSearchTable(table_name, content)
 
   def LoadSearchDb(self):
     """Load all search tables into Postgres."""
-    print "Loading search db ..."
+    print("Loading search db ...")
     table_files = []
-    for i in xrange(self.unpacker_.IndexSize()):
+    for i in range(self.unpacker_.IndexSize()):
       index_file = self.unpacker_.IndexFile(i)
       if index_file[0:10] == "search_db/":
         table_files.append(index_file)
