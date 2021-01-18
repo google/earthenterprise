@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 #
 # Copyright 2017 Google Inc.
 #
@@ -72,7 +72,7 @@ class GEPlacesSearch(ge_base_search.GEBaseSearch):
       fp = open(database_file)
       fp.close()
     except IOError:
-      print "Unable to find: %s" % database_file
+      print("Unable to find: %s" % database_file)
 
     cnt = 0
     pattern = re.compile(search_term, re.IGNORECASE)
@@ -134,7 +134,7 @@ def RegisterSearchService(search_services):
     the new search service object.
   """
   if SEARCH_SERVICE_NAME in search_services.keys():
-    print "Warning: replacing existing %s service." % SEARCH_SERVICE_NAME
+    print("Warning: replacing existing %s service." % SEARCH_SERVICE_NAME)
 
   search_services[SEARCH_SERVICE_NAME] = GEPlacesSearch()
   return search_services[SEARCH_SERVICE_NAME]

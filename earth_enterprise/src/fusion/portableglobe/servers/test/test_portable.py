@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 #
 # Copyright 2017 Google Inc.
 #
@@ -114,12 +114,12 @@ class Tester(object):
     elif not self._TestUrl(ping_url):
       self.Error("Server may not be running.")
       return False
-    print "Check Portable server."
+    print("Check Portable server.")
     return True
 
   def CheckGlobes(self):
     """Makes sure that all necessary globes exist on the server."""
-    print "Check globes."
+    print("Check globes.")
     for globe in self.globes_:
       if not os.path.exists(self._GlobePath(globe)):
         self.Failure("No such globe: %s" % globe)
@@ -140,11 +140,11 @@ class Tester(object):
         url = next_test["url"]
         if not self._TestUrl(url):
           return
-    print "**SUCCESS**"
+    print("**SUCCESS**")
 
   def Error(self, message):
     """Output error message in consistent manner."""
-    print "**ERROR**: %s" % message
+    print("**ERROR**: %s" % message)
 
   def Failure(self, message):
     """Output failure message in consistent manner."""
