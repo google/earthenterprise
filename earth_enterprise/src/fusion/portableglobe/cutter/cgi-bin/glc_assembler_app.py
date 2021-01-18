@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 #
 # Copyright 2017 Google Inc.
 #
@@ -55,7 +55,7 @@ def main():
     msg = "Unknown command: %s" % cmd
 
   if msg:
-    print msg
+    print(msg)
 
 if __name__ == "__main__":
   main()

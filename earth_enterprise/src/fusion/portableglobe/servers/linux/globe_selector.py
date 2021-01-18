@@ -47,7 +47,7 @@ def StopServer(port):
     fp.close()
 
   except:
-    print (Unable to stop server on port %s." % port)
+    print("Unable to stop server on port %s." % port)
 
   print("Server stopped.")
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 #
 # Copyright 2017 Google Inc.
 #
@@ -70,7 +70,7 @@ class Server(object):
       raise portable_exceptions.PortableException(
           "unknown packet request: %s" % self.request.uri)
 
-    print content
+    print(content)
 
   def FlatFileHandler(self, request):
     """Handles a flat file request."""
@@ -87,21 +87,21 @@ class Server(object):
     if args["request"] == "Json":
       common.utils.WriteHeader("text/plain")
       if self.globe_.Is2d():
-        print self.globe_.ReadFile("maps/map.json")
+        print(self.globe_.ReadFile("maps/map.json"))
       else:
-        print self.globe_.ReadFile("earth/earth.json")
+        print(self.globe_.ReadFile("earth/earth.json"))
 
     elif args["request"] == "ImageryMaps":
       common.utils.WriteHeader("image/jpg")
       qtpath = common.utils.ConvertToQtNode(int(args["z"]), int(args["x"]),
                                             int(args["y"]))
-      print self.globe_.ReadMapImageryPacket(qtpath, int(args["channel"]))
+      print(self.globe_.ReadMapImageryPacket(qtpath, int(args["channel"])))
 
     elif args["request"] == "VectorMapsRaster":
       common.utils.WriteHeader("image/png")
       qtpath = common.utils.ConvertToQtNode(int(args["level"]),
                                             int(args["col"]), int(args["row"]))
-      print self.globe_.ReadMapVectorPacket(qtpath, int(args["channel"]))
+      print(self.globe_.ReadMapVectorPacket(qtpath, int(args["channel"])))
 
     else:
       pass
@@ -116,7 +116,7 @@ class Server(object):
     # Read dbRoot from glb file.
     content = self.globe_.ReadDbRoot()
     common.utils.WriteHeader("application/octet-stream")
-    print content
+    print(content)
 
 
 def main():

@@ -196,7 +196,7 @@ def ProcessFile(qtnode_file, use_kml, ignore_zero, max_level):
 
 def Help():
   """Prints help information for this tool."""
-  print """
+  print("""
 Usage: ./qtnode_to_kml.py [options] [required_arg]
 
 Outputs bounds or kml for one or more quadtree nodes. The kml includes
@@ -222,7 +222,7 @@ Examples:
   ./qtnode_to_kml.py --kml --max_level 15 /tmp/globe_builder/my_globe_env/qt_nodes.txt
   ./qtnode_to_kml.py --bounds_as_kml /tmp/globe_builder/my_globe_env/qt_nodes.txt
   ./qtnode_to_kml.py --ignore_zero 030132030222112
-"""
+""")
   sys.exit(0)
 
 

@@ -357,7 +357,7 @@ now serving</div>
 
   def get(self, path):
     """Handles GET request for set-up."""
-    print "SetupHandler get", self.request.uri
+    print("SetupHandler get {0}".format(self.request.uri))
 
     if "cmd" not in self.request.arguments:
       self.servePortablePage(path)
