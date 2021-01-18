@@ -46,7 +46,7 @@ class ExtService(object):
     """Use the given base directory to find any associated files."""
     # Set the location of our geplaces data.
     self.working_directory_ = working_directory
-    print("Ext working directory is %s" % self.working_directory_
+    print("Ext working directory is %s" % self.working_directory_)
 
   def ExtGetHandler(self, handler, path):
     """Service a GET request to the /ext/... pathway."""
