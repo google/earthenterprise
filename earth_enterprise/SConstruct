@@ -47,9 +47,9 @@ for parameter in [ 'release', 'optimize', 'profile' ] :
 # process commandline arguments
 installdir = ARGUMENTS.get('installdir', '/tmp/fusion_os_install')
 with open('rpms/build.properties', 'w') as f:
-    print("## Auto-generated file from scons.", file=f)
-    print("## Manual changes will be overwritten.", file=f)
-    print(str('staged=') + installdir.strip(), file=f)
+    print("## Auto-generated file from scons.") #, file=f)
+    print("## Manual changes will be overwritten.") #, file=f)
+    print(str('staged=') + installdir.strip()) #, file=f)
 
 installdir = Dir(installdir).abspath
 def dir_cat(installdir, subdir1, subdir2):

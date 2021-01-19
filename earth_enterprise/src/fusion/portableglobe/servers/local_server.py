@@ -25,7 +25,7 @@ sharing the same key.
 import os
 import re
 import json
-import StringIO
+from io import StringIO as StringIO
 import sys
 
 try:
@@ -96,7 +96,7 @@ class LocalServer(object):
       for file_name in os.listdir(search_services_directory):
         match = search_service_regex.match(file_name)
         if match:
-          print("Found search service: {0}".format(match.group(1))
+          print("Found search service: {0}".format(match.group(1)))
           module = __import__(match.group(1))
           try:
             service = module.RegisterSearchService(self.search_services_)

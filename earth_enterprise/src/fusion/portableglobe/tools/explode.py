@@ -98,7 +98,7 @@ def ExtractPackets(path, start_idx, end_idx=None, layer_idx=None):
     cmd += " --layer_idx %d" % layer_idx
   # Run in background and discard output
   cmd += " 2>&1 > /dev/null &"
-  print(cmd
+  print(cmd)
   Launch(cmd)
   print("... launched.")
 
