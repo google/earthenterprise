@@ -1,0 +1,60 @@
+|Google logo|
+
+=============================
+Configure your data locations
+=============================
+
+.. container::
+
+   .. container:: content
+
+      The Google Earth Enterprise installation script prompts you to
+      enter information about your system and then properly configures
+      your primary asset root and source volume. After you install
+      Google Earth Enterprise Fusion, use the ``geconfigureassetroot``
+      command to:
+
+      -  **Add asset roots.**
+
+         If you use the :doc:`../fusionTutorial/about`, Google recommends that
+         you specify separate asset roots for each user’s tutorial data
+         and a completely different asset root for your real working
+         data. See :doc:`../fusionTutorial/confTutorialWS` to learn how to configure
+         and select an asset root for the tutorial, as well as how to
+         clean up tutorial files.
+
+      -  **Identify source volumes.**
+
+         You must identify each directory that contains your source data
+         files (or subdirectories of your source data files). Google
+         Earth Enterprise Fusion is not able to read files located in
+         other directories.
+
+      -  **Modify the current volume.**
+
+         You can modify volume definitions when migrating from a single-
+         to a multiple-workstation configuration or when modifying the
+         local path of a network-mounted source volume (for example,
+         when adding a larger drive for source data).
+
+      For more information on these commands, see
+      :ref:`geconfigureassetroot <geconfigassetroot>`.
+
+      .. warning::
+
+         Do not modify the volume definition after you save data to that
+         volume. Because the local name and the network path definitions
+         are used by Google Earth Enterprise Fusion for resources,
+         projects, and database definitions, any change to a volume
+         definition invalidates the data already processed on that
+         volume.
+
+      If you add multiple asset roots, you can use the
+      ``geselectassetroot`` to specify the volume in which you want to
+      work and to switch back and forth among the available asset roots,
+      if desired. For more information on these commands, see
+      :ref:`geconfigureassetroot <geconfigassetroot>`.
+
+.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
+   :width: 130px
+   :height: 44px

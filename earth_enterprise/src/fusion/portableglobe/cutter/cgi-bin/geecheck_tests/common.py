@@ -20,7 +20,7 @@ import os
 import platform
 import socket
 
-LATEST_VERSION = '5.3.7'
+LATEST_VERSION = '5.3.8'
 
 SUPPORTED_OS_LIST = {
     'redhat': {'min_release': '6.0',

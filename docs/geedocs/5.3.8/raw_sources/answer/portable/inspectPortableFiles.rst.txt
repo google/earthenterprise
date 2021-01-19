@@ -1,0 +1,208 @@
+|Google logo|
+
+=========================
+Inspecting portable files
+=========================
+
+.. container::
+
+   .. container:: content
+
+      The ``geglxinfo`` command provides different tools to analyze the
+      composition of .glm, .glb, and .glc portable files. For example,
+      you can determine the files included in a portable, extract those
+      files, and test whether the portable file appears to be valid.
+
+      .. rubric:: geglxinfo
+
+      ``geglxinfo [--glx glb_file_path]``
+
+      .. rubric:: Purpose
+
+      To inspect the .glc, .glb, .glm, or .glc files, the ``geglxinfo``
+      tool analyzes the composition and provides valuable information
+      when you need to troubleshoot any issues that may arise when
+      serving your portable files.
+
+      .. rubric:: Examples
+
+      **Valid file check**
+
+      .. code-block:: none
+
+         $ geglxinfo --glx NaturalView-US.glm --is_gee
+         IsGee: 1
+
+      **Get file timestamp**
+
+      .. code-block:: none
+      
+         $ geglxinfo --glx tutorial_3d.glc --extract_file earth/info.txt --output
+         /tmp/info.txt
+         $ cat /tmp/info.txt
+         Portable Globe
+         Copyright 2013 Google Inc. All Rights Reserved.
+         2014-01-15 16:03:15 GMT
+          
+         2014-01-15 08:03:15
+         Globe description: Simple container for tutorial glb with gray marble backdrop.
+         2014-01-15 08:03:15
+         Executing: /opt/google/bin/gecreatemetadbroot --output="/tmp/cutter/glc_20598_1389801795.111116/metadbroot" --layers="/tmp/cutter/glc_20598_1389801795.111116/earth/dbroot_layer_info.txt"  --has_base_imagery
+         
+         2014-01-15 08:03:15
+         SUCCESS
+         2014-01-15 08:03:15
+         Executing: /opt/google/bin/geportableglcpacker --layer_info="/tmp/cutter/glc_20598_1389801795.111116/earth/layer_info.txt" --output="/tmp/cutter/glc_20598_1389801795.111116/temp.glc" --make_copy``
+
+      .. tip::
+
+         You can use the timestamp information if you need to determine
+         which version of GEE was used to create your portable globes or
+         map. This information can be useful if you use the new feature
+         in GEE 5.x that lets you cut globes and maps from existing
+         portable files that have been built using GEE 5.x only. See
+         :doc:`../geeServerAdmin/createPortableGlobesMaps`.
+
+         If you attempt to cut a portable file that was created using
+         GEE 4.x, the cutting process will fail. However, you can serve
+         portable files created using previous versions.
+
+         To determine which version of GEE was used to create a portable
+         file, use ``geglxinfo`` or view the timestamp information for
+         served globes or maps via
+         ``http://localhost:9335/earth/info.txt`` on a local Portable
+         Server, or ``http://<server>/<mount_point>/earth/info.txt`` on
+         Earth Server.
+
+      **Check CRC**
+
+      .. code-block:: none
+
+         $ geglxinfo --glx NaturalView-US.glm --check_crc
+
+         File crc: 0x7e6fbbfc
+         Calculated crc :0x7e6fbbfc
+         Good crc!
+
+      **List files**
+
+      .. code-block:: none
+
+         $ geglxinfo --glx NaturalView-US.glm --list_files
+
+         Index has 11 files.
+         0: earth/earth_local.html
+         offset: 233330751
+         size: 1731
+         1: earth/info.txt
+         offset: 233332482
+         size: 1849
+         2: earth/polygon.kml
+         offset: 233334331
+         size: 124947
+         3: icons/541_l.png
+         offset: 233463282
+         size: 363
+         4: icons/773_l.png
+         offset: 233463645
+         size: 226
+         5: icons/shield1_l.png
+         offset: 233462733
+         size: 549
+         6: mapdata/index
+         offset: 226176927
+         size: 7153824
+         7: mapdata/pbundle_0000
+         offset: 0
+         size: 226176927
+         8: maps/map.json
+         offset: 233461561
+         size: 1172
+         9: maps/map_v3.html
+         offset: 233459278
+         size: 2283
+         10: search_db/gepoi_14
+         offset: 233463871
+         size: 250
+
+      **Number of packets**
+
+      .. code-block:: none
+
+         $ geglxinfo --glx NaturalView-US.glm --number_of_packets
+         298076 packets
+
+      .. rubric:: geglxinfo commands
+
+      ``--is_gee``
+
+      *Optional*. Checks whether the .glx file appears to be a valid
+      globe or map. Returns a value of 1 is globe is valid; 0 if found
+      to have errors. Use this validity check before testing your globe
+      using ``--crc``, especially on larger files, as it will catch
+      almost all integrity issues.
+
+      ``--glx glb_file_path``
+
+      The path and file name of the portable globe or map that you want
+      to analyze.
+
+      ``--list_files``
+
+      *Optional*. Lists all of the files in the .glx.
+
+      ``--id``
+
+      *Optional*. Unused.
+
+      ``--check_crc``
+
+      *Optional*. Checks the crc of the .glx.
+
+      ``--extract_file relative_file_path``
+
+      *Optional*. File to be extracted from the .glx. Use this option
+      when you want to extract a .glm or .glb layer from one .glc in
+      order to add it to a second .glc file.
+
+      ``--extract_all_files``
+
+      *Optional*. Extract all files from the .glx. Use this option when
+      you want to extract .glm or .glb layers from one .glc in order to
+      add them to a second .glc file.
+
+      ``--number_of_packets``
+
+      *Optional*. Returns the number of data packets in the .glx.
+
+      ``--extract_packet quadtree_address``
+
+      *Optional*. Extracts a packet at a given quadtree address, for
+      example, 310.
+
+      ``--extract_packets``
+
+      *Optional*. Extract all packets from a portable file. Can be used
+      with start_idx and end_idx parameters, and the layer_idx parameter
+      if it is a .glc.
+
+      ``--packet_type type_string``
+
+      *Optional*. Type of packet to extract:
+      ``dbroot, qtp, img, ter, or vec``.
+
+      ``--packet_channel channel_int``
+
+      *Optional*. Channel of packet to extract.
+
+      ``--output dest_file_path``
+
+      *Optional*. Destination file path where extracted file(s) should
+      be written.
+
+      See :doc:`Settings <../geeServerAdmin/settingsPage>` to learn about globe
+      assembly and disassembly tools in the GEE Server Admin console.
+
+.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
+   :width: 130px
+   :height: 44px
