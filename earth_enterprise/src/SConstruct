@@ -109,9 +109,9 @@ optimize = int(ARGUMENTS.get('optimize', 0))
 crosstool_version = ARGUMENTS.get('crosstool', 'v14')
 max_num_jobs_coeff = ARGUMENTS.get('max_num_jobs_coeff', 16)
 gprof = ARGUMENTS.get('profile', 0) or ARGUMENTS.get('gprof', 0)
-python_version = ARGUMENTS.get('python_version',0)
+python_version = int(ARGUMENTS.get('python_version',2))
 
-if python_version not in [None, '2', '3']:
+if python_version not in [2, 3]:
     print("Invalid python version! Valid options are 2 and 3.")
     Exit()
 
