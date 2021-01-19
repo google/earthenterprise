@@ -74,65 +74,42 @@
 <div class="content docutils container">
 <p>The Linux operating system implements several limits that may prevent
 Fusion processes from running correctly, particularly when building large
-projects or databases. To avoid this problem, run the steps below on all
-of your Fusion servers.</p>
-<p>The numbers used in the settings below are recommendations that should
-work in most cases. You may want to adjust these numbers based on your
-environment and workflow.</p>
-<ol class="arabic simple">
-<li>Edit <code class="docutils literal notranslate"><span class="pre">/etc/sysctl.conf</span></code> and insert the following lines:</li>
-</ol>
-<blockquote>
-<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>fs.file-max=1048576
-vm.max_map_count=1000000
+projects or databases.</p>
+<p>You may need to reboot your system after making the configuration changes
+below to ensure that the new configuration takes effect.</p>
+<p class="rubric" id="number-of-processes">Number of processes</p>
+<p>Linux limits the number of processes that each user can run. Since Fusion
+runs many processes to build assets in parallel, you may need to
+increase the limit by adding the following lines to
+<code class="docutils literal notranslate"><span class="pre">/etc/security/limits.conf</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gefusionuser  soft    nproc   &lt;num_procs&gt;
+gefusionuser  hard    nproc   &lt;num_procs&gt;
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">fs.file-max</span></code> should be at least the number of resources in your
-largest project, plus some extra to allow for the additional files
-Fusion uses. <code class="docutils literal notranslate"><span class="pre">vm.max_map_count</span></code> should be more than twice the number
-of resources in your largest project.</p>
-</div></blockquote>
-<ol class="arabic simple" start="2">
-<li>Edit <code class="docutils literal notranslate"><span class="pre">/etc/security/limits.conf</span></code> and insert the following lines:</li>
-</ol>
-<blockquote>
-<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gefusionuser soft nofile 1048576
-gefusionuser hard nofile 1048576
-
-gefusionuser soft nproc 65535
-gefusionuser hard nproc 65535
+<p>Fusion starts up to one process per core, plus two more (for the system manager
+and resource provider). <code class="docutils literal notranslate"><span class="pre">&lt;num_procs&gt;</span></code> should be considerably larger than
+that number to allow for operating system processes.</p>
+<p class="rubric" id="number-of-open-files">Number of open files</p>
+<p>Linux also limits the number of files each process can open at once.
+Since Fusion may open many files when building an imagery project, for
+example, you may need to increase the limit by adding the following lines
+to <code class="docutils literal notranslate"><span class="pre">/etc/security/limits.conf</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gefusionuser  soft    nofile   &lt;num_files&gt;
+gefusionuser  hard    nofile   &lt;num_files&gt;
 </pre></div>
 </div>
-<p>Use the same number of files here that you used in the previous step.
-The number of processes must be significantly greater than the number
-of cores. Fusion uses one process per core plus two more for the system
-manager and resource provider; however, the process limit should be
-considerably larger to account for operating system processes.</p>
-</div></blockquote>
-<ol class="arabic simple" start="3">
-<li>Remove these lines from <code class="docutils literal notranslate"><span class="pre">/etc/security/limits.conf</span></code> if they are
-present:</li>
-</ol>
-<blockquote>
-<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>* hard memlock 529426432
-* soft memlock 529426432
+<p><code class="docutils literal notranslate"><span class="pre">&lt;num_files&gt;</span></code> should be at least the number of resources in your
+largest project, plus some extra to allow for the additional files Fusion
+uses, such as configuration files.</p>
+<p class="rubric" id="number-of-memory-maps">Number of memory mappings</p>
+<p>Fusion uses memory mapping when reading some types of files. Since Linux
+limits the number of memory mappings each process can define, you may
+need to add the following lines to <code class="docutils literal notranslate"><span class="pre">/etc/sysctl.conf</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>vm.max_map_count = &lt;num_maps&gt;
 </pre></div>
 </div>
-</div></blockquote>
-<ol class="arabic simple" start="4">
-<li>If necessary, modify the following line in the <code class="docutils literal notranslate"><span class="pre">start()</span></code> function of
-<code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span></code>:</li>
-</ol>
-<blockquote>
-<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ulimit -n 500000
-</pre></div>
-</div>
-<p>Set this to the same number of files you used in the previous steps. If
-the existing value is sufficiently large, no change is necessary.</p>
-</div></blockquote>
-<ol class="arabic simple" start="5">
-<li>Reboot your Fusion servers.</li>
-</ol>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;num_maps&gt;</span></code> should be more than twice the number of resources in your
+largest project.</p>
 </div>
 </div>
 </div>
