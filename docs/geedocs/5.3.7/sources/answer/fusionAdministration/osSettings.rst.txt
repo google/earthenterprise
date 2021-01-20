@@ -3,50 +3,47 @@ Operating System Settings That May Affect Fusion
 
 The Linux operating system implements several limits that may prevent
 Fusion processes from running correctly, particularly when building
-large projects or databases. To avoid this problem, run the steps
-below on all of your Fusion servers.
+large projects or databases.
 
-The numbers used in the settings below are recommendations that should
-work in most cases. You may want to adjust these numbers based on your
-environment and workflow.
+You may need to reboot your system after making the configuration
+changes below to ensure that the new configuration takes effect.
 
-Edit /etc/sysctl.conf and insert the following lines:
+-[ Number of processes ]-
 
-      fs.file-max=1048576
-      vm.max_map_count=1000000
+Linux limits the number of processes that each user can run. Since
+Fusion runs many processes to build assets in parallel, you may need
+to increase the limit by adding the following lines to
+"/etc/security/limits.conf":
 
-   "fs.file-max" should be at least the number of resources in your
-   largest project, plus some extra to allow for the additional files
-   Fusion uses. "vm.max_map_count" should be more than twice the
-   number of resources in your largest project.
+   gefusionuser  soft    nproc   <num_procs>
+   gefusionuser  hard    nproc   <num_procs>
 
-Edit /etc/security/limits.conf and insert the following lines:
+Fusion starts up to one process per core, plus two more (for the
+system manager and resource provider). "<num_procs>" should be
+considerably larger than that number to allow for operating system
+processes.
 
-      gefusionuser soft nofile 1048576
-      gefusionuser hard nofile 1048576
+-[ Number of open files ]-
 
-      gefusionuser soft nproc 65535
-      gefusionuser hard nproc 65535
+Linux also limits the number of files each process can open at once.
+Since Fusion may open many files when building an imagery project, for
+example, you may need to increase the limit by adding the following
+lines to "/etc/security/limits.conf":
 
-   Use the same number of files here that you used in the previous
-   step. The number of processes must be significantly greater than
-   the number of cores. Fusion uses one process per core plus two more
-   for the system manager and resource provider; however, the process
-   limit should be considerably larger to account for operating system
-   processes.
+   gefusionuser  soft    nofile   <num_files>
+   gefusionuser  hard    nofile   <num_files>
 
-Remove these lines from /etc/security/limits.conf if they are present:
+"<num_files>" should be at least the number of resources in your
+largest project, plus some extra to allow for the additional files
+Fusion uses, such as configuration files.
 
-      * hard memlock 529426432
-      * soft memlock 529426432
+-[ Number of memory mappings ]-
 
-If necessary, modify the following line in the start() function of
-/etc/init.d/gefusion:
+Fusion uses memory mapping when reading some types of files. Since
+Linux limits the number of memory mappings each process can define,
+you may need to add the following lines to "/etc/sysctl.conf":
 
-      ulimit -n 500000
+   vm.max_map_count = <num_maps>
 
-   Set this to the same number of files you used in the previous
-   steps. If the existing value is sufficiently large, no change is
-   necessary.
-
-Reboot your Fusion servers.
+"<num_maps>" should be more than twice the number of resources in your
+largest project.
