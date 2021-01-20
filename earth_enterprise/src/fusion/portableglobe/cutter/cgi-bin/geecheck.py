@@ -186,7 +186,7 @@ def RunTests(test_runner, test_dir):
 def Usage(app):
   print("Usage:")
   print("  %s [--no_user_tests] [--no_fusion_tests] [--no_server_tests]"
-         " [format]") % app)
+         " [format]" % app)
   print("     format - Output format ('json' or 'text'). Default: 'json'")
   exit(0)
 
