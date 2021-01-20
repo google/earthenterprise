@@ -260,7 +260,7 @@ class Globe(object):
 
     if self.unpacker_.FindLayerFile(path, layer_id, self.file_loc_):
       data = self._GetData()
-      print("path dbroot: {0} {1}".format(path, len(data))
+      print("path dbroot: {0} {1}".format(path, len(data)))
       return data
     elif self.unpacker_.FindQtpPacket(
         "0", glc_unpacker.kDbRootPacket, 0, layer_id, self.file_loc_):
