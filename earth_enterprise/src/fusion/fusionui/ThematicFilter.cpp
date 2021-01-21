@@ -275,7 +275,14 @@ void ThematicFilter::ChooseStartColor() {
   QRgb init_color = start_color_btn->paletteBackgroundColor().rgb();
   QRgb new_color = QColorDialog::getRgba(init_color);
   if (new_color != init_color) {
-    start_color_btn->setPaletteBackgroundColor(QColor(new_color));
+    QPalette palette;
+    palette.setColor(QPalette::Button, QColor(new_color));
+
+    start_color_btn->setAutoFillBackground(true);
+    start_color_btn->setPalette(palette);
+    start_color_btn->setFlat(true);
+    start_color_btn->update();
+
     RedrawColors();
   }
 }
@@ -284,7 +291,14 @@ void ThematicFilter::ChooseEndColor() {
   QRgb init_color = end_color_btn->paletteBackgroundColor().rgb();
   QRgb new_color = QColorDialog::getRgba(init_color);
   if (new_color != init_color) {
-    end_color_btn->setPaletteBackgroundColor(QColor(new_color));
+    QPalette palette;
+    palette.setColor(QPalette::Button, QColor(new_color));
+
+    end_color_btn->setAutoFillBackground(true);
+    end_color_btn->setPalette(palette);
+    end_color_btn->setFlat(true);
+    end_color_btn->update();
+
     RedrawColors();
   }
 }

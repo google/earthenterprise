@@ -666,8 +666,14 @@ void SelectionRules::chooseRoadShield() {
 }
 
 void SelectionRules::chooseLineLineColor() {
+  QPalette palette;
   QColor init_color = lineLineColorBtn->paletteBackgroundColor();
-  lineLineColorBtn->setPaletteBackgroundColor(chooseColor(init_color));
+
+  palette.setColor(QPalette::Button, chooseColor(init_color));
+  lineLineColorBtn->setAutoFillBackground(true);
+  lineLineColorBtn->setPalette(palette);
+  lineLineColorBtn->setFlat(true);
+  lineLineColorBtn->update();
 }
 
 void SelectionRules::choosePolygonFillColor() {
@@ -737,6 +743,8 @@ void SelectionRules::editBalloonStyleText() {
 
 QColor SelectionRules::chooseColor(QColor color) {
   QRgb init_color = color.rgb();
+  //Might need to switch to this format in the future
+  //QColor new_color = QColorDialog::getColor(init_color, (QWidget *)this, "Select Color", QColorDialog::DontUseNativeDialog);
   QRgb rgba = QColorDialog::getRgba(init_color, 0, this);
 
   return QColor(rgba);
@@ -935,8 +943,15 @@ void SelectionRules::updateLineWidgets() {
   featureMaxErrorEdit->setText(QString::number(featurecfg.maxError));
   drawAsRoadsCheck->setChecked(featurecfg.drawAsRoads);
   roadLabelTypeCombo->setCurrentItem(featurecfg.roadLabelType);
-  lineLineColorBtn->setPaletteBackgroundColor(
-      VectorToQColor(fstylecfg.lineColor));
+
+  QPalette palette;
+  palette.setColor(QPalette::Button, VectorToQColor(fstylecfg.lineColor));
+
+  lineLineColorBtn->setAutoFillBackground(true);
+  lineLineColorBtn->setPalette(palette);
+  lineLineColorBtn->setFlat(true);
+  lineLineColorBtn->update();
+
   lineLineWidthEdit->setText(QString::number(fstylecfg.lineWidth));
 
   // label widget stack
@@ -1150,8 +1165,11 @@ void SelectionRules::updateLineConfig() {
   featurecfg.drawAsRoads = drawAsRoadsCheck->isChecked();
   featurecfg.roadLabelType = static_cast<FeatureConfig::RoadLabelType>(
       roadLabelTypeCombo->currentItem());
+
   QColorToVector(lineLineColorBtn->paletteBackgroundColor(),
                  &fstylecfg.lineColor);
+
+
   fstylecfg.lineWidth = lineLineWidthEdit->text().toFloat();
 
   flabelcfg.labelMode = static_cast<LabelConfig::BuildMode>(

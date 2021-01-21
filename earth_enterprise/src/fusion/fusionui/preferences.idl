@@ -37,7 +37,7 @@ class PrefsConfig {
 
   bool warnOnBadGfxMode = true;
 
-  std::vector< unsigned int>  selectOutlineColor = std::vector< unsigned int> (4, 255);
+  std::vector< unsigned int>  selectOutlineColor = std::vector< unsigned int> (4, 200);
   std::vector< unsigned int>  selectFillColor = std::vector< unsigned int> (4, 0);
   unsigned int selectOutlineLineWidth = 1U;
 
