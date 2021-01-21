@@ -1,6 +1,7 @@
 #!/bin/bash
 #
-# Copyright 2017 Google Inc., 2018-2019 Open GEE Contributors
+# Copyright 2018-2021 The Open GEE Contributors
+# Copyright 2017 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
