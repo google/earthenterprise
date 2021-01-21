@@ -385,6 +385,7 @@ def main():
     status = "SUCCESS:"
 
 
-  print("{0} {1} tests passed. {3} tests failed.".format(status, tally[0], tally[1]))
+  print("{0} {1} tests passed. {2} tests failed.".format(status, tally[0], tally[1]))
+
 if __name__ == "__main__":
   main()

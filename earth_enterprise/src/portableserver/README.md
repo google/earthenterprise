@@ -18,21 +18,21 @@
 
 ## Build Prerequisites:
 
-    * Python 2.7
+    * Python 3
     * Python pexpect installed
     * Swig with support for Python (4.0.1 or later)
     * g++ (4.8 or later)
 
 ## Run-time prerequisites:
 
-    * Python 2.7
+    * Python 3 
     * Python tornado installed
     * Python Imaging Library (PIL) installed
 
 #### On CentOS/RHEL 6:
 
-    sudo yum -y install python27-pip
-    sudo pip2.7 install tornado pillow
+    sudo yum -y install python3-pip
+    sudo pip3 install tornado pillow
 
 # Portable Server on Linux
 
@@ -49,7 +49,7 @@ Make sure you have Python, the `pexpect` Pip package, as well as `tornado`, and 
 #### On CentOS/RHEL 7:
 
     sudo yum -y install gcc-c++ python python-pip python-tornado python-psycopg2
-    sudo pip install pexpect
+    sudo pip3 install pexpect
 
 #### On CentOS/RHEL 6:
 

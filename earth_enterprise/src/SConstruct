@@ -285,8 +285,16 @@ else:
 # warning so we can continue to build on ancient operating systems.
 warnflags += ['-Wno-error=cpp']
 
-gpp_ver = subprocess.getstatusoutput('g++ -v')
-gpp_maj = int(gpp_ver[1][gpp_ver[1].find('gcc version') + 12])
+# NOTE: will change when scons is fully ported
+# this is just in place to prevent temporary
+# build error
+try:
+  gpp_ver = subprocess.getstatusoutput('g++ -v')
+  gpp_maj = int(gpp_ver[1][gpp_ver[1].find('gcc version') + 12])
+except AttributeError:
+  print("src/SConstruct gpp_maj error, setting to 4")
+  gpp_maj = 4
+
 
 # TODO: remove this and fix all places where we see these warnings.
 if native_cc:
