@@ -1,4 +1,4 @@
-%define apache_ver   2.4.39
+%define apache_ver   2.4.46
 %define mm_ver       1.4.2
 %define debug_package %{nil}
 
