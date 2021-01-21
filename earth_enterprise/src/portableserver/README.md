@@ -28,6 +28,8 @@
     * Python 3 
     * Python tornado installed
     * Python Imaging Library (PIL) installed
+    * defusedxml
+    * pyyaml
 
 #### On CentOS/RHEL 6:
 
