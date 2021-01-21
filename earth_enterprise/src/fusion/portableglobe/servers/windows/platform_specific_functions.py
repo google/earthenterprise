@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.8
 #
 # Copyright 2020 Open GEE Contributors
 #

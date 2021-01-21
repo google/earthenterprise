@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc, 2019 Open GEE Contributors
 #

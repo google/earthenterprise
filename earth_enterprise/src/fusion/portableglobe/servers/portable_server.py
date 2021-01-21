@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc, 2019 Open GEE Contributors.
 #
@@ -30,8 +30,11 @@ import portable_globe
 import portable_server_base
 import portable_web_interface
 
-
-from platform_specific_functions import prepare_for_io_loop
+try:
+    from platform_specific_functions import prepare_for_io_loop
+except:
+    def prepare_for_io_loop():
+        return '' # no-op for non-windows os
 
 class FlatFileHandler(portable_server_base.BaseHandler):
   """Class for handling flatfile requests."""

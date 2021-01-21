@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -62,7 +62,7 @@ def ExecuteCmd(os_cmd, use_shell=False):
     if process.returncode: # Assume a non-zero exit code means error:
       return "Unable to execute %s" % os_cmd
     return process.returncode
-  except Exception, e:
+  except Exception as e:
     print("FAILED: %s" % e.__str__())
     raise OsCommandError()
   finally:

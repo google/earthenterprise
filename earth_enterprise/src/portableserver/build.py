@@ -1,4 +1,4 @@
-#! /usr/bin/env python2.7
+#! /usr/bin/env python3.8
 #-*- Python -*-
 #
 # Copyright 2017 GEE Open Source Team <github.com/google/earthenterprise>
@@ -37,7 +37,7 @@ def ensure_directory(path):
     """Makes sure a given directory exists."""
 
     if not os.path.isdir(path):
-        if os.name is 'nt' and path[1] is ':':
+        if os.name == 'nt' and path[1] == ':':
             path = u'\\\\?\\' + path
         os.makedirs(path)
 
@@ -45,7 +45,7 @@ def remove_directory(path):
     """Removes directory tree."""
 
     if os.path.isdir(path):
-        if os.name is 'nt' and path[1] is ':':
+        if os.name == 'nt' and path[1] == ':':
             path = u'\\\\?\\' + path
         else:
             path = path
@@ -56,10 +56,10 @@ def copy_from_dir_to_dir(
     source_dir, destination_dir, entries=None, exclude_entries=None):
     """Copies given directory entries from one directory to another."""
 
-    if os.name is 'nt' and source_dir[1] is ':':
+    if os.name == 'nt' and source_dir[1] == ':':
         source_dir = u'\\\\?\\' + source_dir
 
-    if os.name is 'nt' and destination_dir[1] is ':':
+    if os.name == 'nt' and destination_dir[1] == ':':
         destination_dir = u'\\\\?\\' + destination_dir
 
     if entries is None:
@@ -152,7 +152,7 @@ class Builder(object):
 
         self.get_version()
 
-        if os.name is 'nt':
+        if os.name == 'nt':
             temp_path = '\\\\?\\' + self.server_dir
         else:
             temp_path = self.server_dir
@@ -215,7 +215,7 @@ class Builder(object):
         globes_dir = os.path.join(
             self.source_dir, 'fusion', 'portableglobe', 'globes')
 
-        if os.name is 'nt' and self.package_dir[1] is ':':
+        if os.name == 'nt' and self.package_dir[1] == ':':
             temp_package_dir = '\\\\?\\' + self.package_dir
         else:
             temp_package_dir = self.package_dir

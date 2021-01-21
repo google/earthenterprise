@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -47,7 +47,7 @@ class Unpacker(object):
     Returns:
       Data from last found packet or file.
     """
-    offset = 0L + (self.data_loc_.HighOffset() & 0xffffffff) << 32
+    offset = 0 + (self.data_loc_.HighOffset() & 0xffffffff) << 32
     offset += (self.data_loc_.LowOffset() & 0xffffffff)
     size = self.data_loc_.LowSize()
 
