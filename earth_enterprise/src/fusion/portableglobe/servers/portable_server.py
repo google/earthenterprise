@@ -107,7 +107,7 @@ class CompositeDbRootHandler(portable_server_base.BaseHandler):
     elif not tornado.web.globe_.IsComposite():
       print("Bad request: composite request for glb.")
     else:
-      tornad.web.local_server_.LocalDbRootHandler(self, int(layer_id))
+      tornado.web.local_server_.LocalDbRootHandler(self, int(layer_id))
       self.finish()
 
 
