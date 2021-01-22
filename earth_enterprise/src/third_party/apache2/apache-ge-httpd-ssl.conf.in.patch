@@ -18,7 +18,7 @@
 -SSLProtocol all -SSLv3
 +#SSLProtocol all -SSLv3
 +# Limit SSL protocols.
-+SSLProtocol -ALL +TLSv1.2 +SSLv3 +TLSv1
++SSLProtocol -ALL +TLSv1.2 +TLSv1
  SSLProxyProtocol all -SSLv3
  
  #   Pass Phrase Dialog:
