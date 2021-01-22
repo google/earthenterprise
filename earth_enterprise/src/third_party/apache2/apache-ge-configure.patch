@@ -1,0 +1,11 @@
+--- httpd-2.4.46-orig/configure	2019-03-27 15:05:58.000000000 +0000
++++ httpd-2.4.46/configure	2019-08-07 00:43:06.797108285 +0000
+@@ -13418,7 +13418,7 @@
+       sharedobjs=yes
+       shared=yes
+       DSO_MODULES="$DSO_MODULES socache_shmcb"
+-      if test "most" = "yes" ; then
++      if test "yes" = "yes" ; then
+         ENABLED_DSO_MODULES="${ENABLED_DSO_MODULES},socache_shmcb"
+       fi
+       ;;

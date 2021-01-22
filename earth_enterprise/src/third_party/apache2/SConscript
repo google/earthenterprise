@@ -30,6 +30,7 @@ apache_patches = [
                  'apache-ge-httpd.conf.in-cgi-bin_admin.patch',
                  'apache-ge-httpd-ssl.conf.in-include_location_ssl.patch',
                  'apache-ge-httpd-ssl.conf.in.patch',
+                 'apache-ge-configure.patch'
                  ]
 
 num_cpu = GetOption('num_jobs')
@@ -127,7 +128,6 @@ config_opt += (
     ' --with-program-name=gehttpd --with-port=80 --prefix=/opt/google/gehttpd '
     '--enable-mods-shared=all --with-ssl=/opt/google --enable-ssl=shared '
     '--with-crypto  '
-    '--enable-socache-shmcb '
     '--with-expat=/opt/google --with-mpm=worker --enable-proxy '
     '--enable-proxy-ajp --disable-proxy-connect --disable-proxy-ftp '
     '--disable-proxy-balancer --without-sqlite2 '
