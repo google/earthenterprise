@@ -95,6 +95,9 @@ else:
                     mod_wsgi_env['ENV']['mod_env'], env_opt, config_opt, root_dir,
                     mod_wsgi_target))
 
+print('AAAA> el_ver: ' + mod_wsgi_env['el_ver'])
+print('AAAA> configure_cmd: ' + configure_cmd)
+
 
 
 mod_wsgi_configure = mod_wsgi_env.Command(

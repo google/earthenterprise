@@ -218,23 +218,17 @@ is_os_ubuntu = False
 is_min_ubuntu = True
 # /etc/issue was the previous method of checking Ubuntu release version
 # however, some flavors of Ubuntu e.g. MATE, have used varying formats
-# using ilsb_release, subprocess and re is more readable than awk parsing also
-try:
-  vstring=subprocess.check_output('lsb_release -i',shell=True)
-  system=re.split('[\t\.\n]',vstring)
-  if system[1] == "Ubuntu":
-    is_os_ubuntu = True
+# using lsb_release, subprocess and re is more readable than awk parsing also
+if not os.path.isfile('/etc/redhat-release'):
   vstring=subprocess.check_output('lsb_release -r',shell=True)
   arr=re.split('[\t\.\n]',vstring)
   major=int(arr[1])
   minor=int(arr[2])
   el_ver = ''
-  if arr[1] < 16:
+  if major < 16:
     print 'Unknown Ubuntu version, minimum required version is 16.04.'
     Exit(1)
-    is_min_ubuntu = False
-# lsb_release is not present, must be RHEL or CentOS, move on
-except:
+else:
     print "OS is not Ubuntu"
 
 extragccflags = []
