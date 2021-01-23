@@ -123,7 +123,7 @@ class Globe(object):
     fp.seek(offset)
     # We should never be requesting files whose size doesn't fit in the
     # lower 32 bits.
-    content = fp.read(self.file_loc_.LowSize())
+    content = fp.read(self.file_loc_.LowSize()).decode()
     fp.close()
     return content
 
@@ -166,7 +166,7 @@ class Globe(object):
 
   def FileExists(self, relative_file_path):
     """Returns whether file exists in current glx."""
-    relative_file_path = relative_file_path.encode("ascii", "ignore")
+    #relative_file_path = relative_file_path.encode("ascii", "ignore")
     return self.unpacker_.FindFile(relative_file_path, self.file_loc_)
 
   def ReadFile(self, relative_file_path):
@@ -174,7 +174,7 @@ class Globe(object):
 
     If file is not found, returns an empty string.
     """
-    relative_file_path = relative_file_path.encode("ascii", "ignore")
+    #relative_file_path = relative_file_path.encode("ascii", "ignore")
     if self.unpacker_.FindFile(relative_file_path, self.file_loc_):
       return self.GetData()
     else:
