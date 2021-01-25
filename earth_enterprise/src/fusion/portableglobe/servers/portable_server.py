@@ -117,7 +117,7 @@ class CompositeVectorLayerHandler(portable_server_base.BaseHandler):
   @tornado.web.asynchronous
   def get(self, layer_id, path):
     """Handle GET request for vector layer data."""
-    path = path.encode("ascii", "ignore")
+    #path = path.encode("ascii", "ignore")
     self.set_header("Content-Type", "text/html")
     if not tornado.web.globe_.IsComposite():
       print("Bad request: composite request for glb.")
@@ -140,7 +140,7 @@ class DocsHandler(portable_server_base.BaseHandler):
     Args:
       path: Path to file to be returned.
     """
-    path = path.encode("ascii", "ignore")
+    #path = path.encode("ascii", "ignore")
     if path[-3:].lower() == "gif":
       self.set_header("Content-Type", "image/gif")
     elif path[-3:].lower() == "png":
@@ -166,7 +166,7 @@ class CompositeDocsHandler(portable_server_base.BaseHandler):
       layer_id: Id of layer within the composite.
       path: Path to file to be returned.
     """
-    path = path.encode("ascii", "ignore")
+    #path = path.encode("ascii", "ignore")
     if path[-3:].lower() == "gif":
       self.set_header("Content-Type", "image/gif")
     elif path[-3:].lower() == "png":
@@ -198,7 +198,7 @@ class IconHandler(FlatFileHandler):
   @tornado.web.asynchronous
   def get(self, icon):
     """Handle GET request for icon."""
-    icon = icon.encode("ascii", "ignore")
+    #icon = icon.encode("ascii", "ignore")
     self.set_header("Content-Type", "image/png")
     if tornado.web.globe_.IsComposite():
       tornado.web.local_server_.LocalIconHandler(
@@ -215,7 +215,7 @@ class CompositeIconHandler(FlatFileHandler):
   @tornado.web.asynchronous
   def get(self, icon, layer_id):
     """Handle GET request for icon."""
-    icon = icon.encode("ascii", "ignore")
+    #icon = icon.encode("ascii", "ignore")
     self.set_header("Content-Type", "image/png")
     tornado.web.local_server_.LocalIconHandler(self, icon, int(layer_id))
     self.finish()

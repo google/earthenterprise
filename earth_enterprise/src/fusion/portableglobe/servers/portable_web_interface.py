@@ -364,7 +364,7 @@ now serving</div>
       return
 
     try:
-      cmd = self.request.arguments["cmd"][0]
+      cmd = self.decode_argument(self.request.arguments["cmd"][0])
       print("cmd (get): \"%s\"" % cmd)
 
       if cmd in ["globe_info_json", "globe_info"]:
