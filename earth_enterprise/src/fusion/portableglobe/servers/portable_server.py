@@ -249,7 +249,8 @@ class CompositeQueryHandler(portable_server_base.BaseHandler):
   @tornado.web.asynchronous
   def get(self, layer_id):
     """Handle GET request for JSON file for plugin."""
-    if self.request.arguments["request"][0] == "Json":
+    request = self.decode_argument(self.request.arguments["request"][0])
+    if request == "Json":
       self.set_header("Content-Type", "text/plain; charset=utf-8")
       if ("is2d" in self.request.arguments.keys() and
           self.request.arguments["is2d"][0] == "t"):
@@ -257,7 +258,7 @@ class CompositeQueryHandler(portable_server_base.BaseHandler):
       else:
         tornado.web.local_server_.LocalJsonHandler(self, False)
 
-    elif self.request.arguments["request"][0] == "ImageryMaps":
+    elif request == "ImageryMaps":
       if tornado.web.globe_.IsMbtiles():
         self.set_header("Content-Type", "image/png")
         tornado.web.local_server_.LocalMapTileHandler(
@@ -267,12 +268,12 @@ class CompositeQueryHandler(portable_server_base.BaseHandler):
         tornado.web.local_server_.LocalMapTileHandler(
             self, True, int(layer_id))
 
-    elif self.request.arguments["request"][0] == "VectorMapsRaster":
+    elif request == "VectorMapsRaster":
       self.set_header("Content-Type", "image/png")
       tornado.web.local_server_.LocalMapTileHandler(
           self, False, int(layer_id))
 
-    elif self.request.arguments["request"][0] == "Icon":
+    elif request == "Icon":
       self.set_header("Content-Type", "image/png")
       (icon_path, use_layer, use_local) = (
           tornado.web.local_server_.ConvertIconPath(
@@ -296,7 +297,8 @@ class QueryHandler(portable_server_base.BaseHandler):
   @tornado.web.asynchronous
   def get(self):
     """Handle GET request for JSON file for plugin."""
-    if self.request.arguments["request"][0] == "Json":
+    request = self.decode_argument(self.request.arguments["request"][0])
+    if request == "Json":
       if "v" in self.request.arguments:
         json_version = int(self.request.arguments["v"][0])
       else:
@@ -310,7 +312,7 @@ class QueryHandler(portable_server_base.BaseHandler):
       else:
         tornado.web.local_server_.LocalJsonHandler(self, False, json_version)
 
-    elif self.request.arguments["request"][0] == "ImageryMaps":
+    elif request == "ImageryMaps":
       self.set_header("Content-Type", "image/jpeg")
       if tornado.web.globe_.IsComposite():
         tornado.web.local_server_.LocalMapTileHandler(
@@ -319,7 +321,7 @@ class QueryHandler(portable_server_base.BaseHandler):
         tornado.web.local_server_.LocalMapTileHandler(
             self, True, portable_globe.NON_COMPOSITE_LAYER)
 
-    elif self.request.arguments["request"][0] == "VectorMapsRaster":
+    elif request == "VectorMapsRaster":
       self.set_header("Content-Type", "image/png")
       if tornado.web.globe_.IsComposite():
         tornado.web.local_server_.LocalMapTileHandler(
@@ -328,7 +330,7 @@ class QueryHandler(portable_server_base.BaseHandler):
         tornado.web.local_server_.LocalMapTileHandler(
             self, False, portable_globe.NON_COMPOSITE_LAYER)
 
-    elif self.request.arguments["request"][0] == "Icon":
+    elif request == "Icon":
       self.set_header("Content-Type", "image/png")
       if tornado.web.globe_.IsComposite():
         (icon_path, use_layer, use_local) = (

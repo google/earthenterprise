@@ -633,7 +633,7 @@ class LocalServer(object):
                               yoffset,
                               xoffset + size,
                               yoffset + size)).resize((256, 256))
-          output = StringIO.StringIO()
+          output = StringIO()
           # If has palette, use PNG.
           if image.mode == "P":
             image.save(output, "PNG")
