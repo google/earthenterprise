@@ -1,5 +1,6 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
+# Copyright 2021 The Open GEE Contributors
 # Copyright 2017 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +32,7 @@ STREAM_SPACE_CONF_PATH = "/opt/google/gehttpd/conf.d/stream_space"
 
 
 def Die(msg):
-  print >> sys.stderr, msg
+  print(msg, file=sys.stderr)
   exit(1)
 
 
@@ -46,7 +47,7 @@ def ExecuteCmd(os_cmd, err2out=False):
   Returns:
     results of the linux shell command running.
   """
-  print "Executing: %s" % os_cmd
+  print("Executing: %s" % os_cmd)
 
   try:
     p = subprocess.Popen(
@@ -57,11 +58,11 @@ def ExecuteCmd(os_cmd, err2out=False):
     result, error = p.communicate()
 
     if (not err2out) and error:
-      print "ERROR: %s" % error
+      print("ERROR: %s" % error.decode('ascii'))
       Die("Unable to execute %s" % os_cmd)
 
-    return result
-  except Exception, e:
+    return result.decode('ascii')
+  except Exception as e:
     Die("FAILED: %s" % str(e))
 
 
@@ -161,10 +162,10 @@ def RunGeindexcheck(db_asset, assetroot):
       err2out=True)
 
   if "Fusion Fatal:" in result:
-    print "FAILED"
+    print("FAILED")
     return False
   else:
-    print "SUCCESS"
+    print("SUCCESS")
     return True
 
 
@@ -199,13 +200,13 @@ def PrintDbAssets(db_assets):
   for asset in db_assets:
     match_result = prog.match(asset)
     if not match_result:
-      print ("WARNING: Couldn't get Fusion hostname"
-             " from the asset path: %s" % asset)
+      print(("WARNING: Couldn't get Fusion hostname"
+             " from the asset path: %s" % asset))
       continue
 
     fusion_host = match_result.groups()[0]
     db_path = asset[len(fusion_host) : ]
-    print "%s --fusion_host %s" % (db_path, fusion_host)
+    print("%s --fusion_host %s" % (db_path, fusion_host))
 
 
 def ExecuteCheck(db_assets, assetroot):
@@ -215,29 +216,29 @@ def ExecuteCheck(db_assets, assetroot):
     db_assets: a list of db asset names/paths.
     assetroot: the [publish] assets root path.
   """
-  print ""
+  print("")
   db_assets_failed = RunGeindexcheckForDbs(db_assets, assetroot)
 
   total_db_assets = len(db_assets)
   num_succeeded = total_db_assets - len(db_assets_failed)
-  print ""
-  print "%d/%d Fusion databases geindexcheck SUCCEEDED." % (
-      num_succeeded, total_db_assets)
+  print("")
+  print("%d/%d Fusion databases geindexcheck SUCCEEDED." % (
+      num_succeeded, total_db_assets))
 
   if db_assets_failed:
-    print ""
-    print "Fusion databases geindexcheck FAILED:"
+    print("")
+    print("Fusion databases geindexcheck FAILED:")
     PrintDbAssets(db_assets_failed)
 
-    print ""
-    print "To fix, a database needs to be re-pushed on server:"
-    print "1. Delete(un-register) the databases that needs to be repushed:"
-    print "    <Remove> for database in GEE Server Admin or"
+    print("")
+    print("To fix, a database needs to be re-pushed on server:")
+    print("1. Delete(un-register) the databases that needs to be repushed:")
+    print("    <Remove> for database in GEE Server Admin or")
     print ("    geserveradmin --deletedb db_path [--fusion_host"
            " fusion_host_name]")
-    print "2. Re-push the databases either with geserveradmin or Fusion UI:"
-    print "    geserveradmin --adddb ..."
-    print "    geserveradmin --pushdb ..."
+    print("2. Re-push the databases either with geserveradmin or Fusion UI:")
+    print("    geserveradmin --adddb ...")
+    print("    geserveradmin --pushdb ...")
 
 
 def Usage(msg=None):
@@ -247,47 +248,47 @@ def Usage(msg=None):
     msg: additional info to print, e.g. error message.
   """
   if msg:
-    print ""
-    print msg
+    print("")
+    print(msg)
 
-  print ""
+  print("")
   print ("Usage: gecheckpusheddbs.py [--help] [--dryrun]"
          " [publish_root_stream_space_path]")
-  print ""
-  print "Will run geindexcheck for all database assets in publish root."
-  print "Note: it is recommended to run 'geserveradmin --garbagecollect' before"
-  print "running the check."
-  print ""
+  print("")
+  print("Will run geindexcheck for all database assets in publish root.")
+  print("Note: it is recommended to run 'geserveradmin --garbagecollect' before")
+  print("running the check.")
+  print("")
   print ("    --dryrun just reports a list of assets that would have been"
          " checked.")
-  print ""
+  print("")
   print ("    publish_root_stream_space_path the publish root stream_space path"
          " to use.")
-  print "    If unspecified, the current path is used."
-  print "    Current: %s" % DiscoverPublishStreamSpace()
+  print("    If unspecified, the current path is used.")
+  print("    Current: %s" % DiscoverPublishStreamSpace())
 
 
 def main(dry_run, stream_space=None):
   if not stream_space:
     stream_space = DiscoverPublishStreamSpace()
 
-  print ""
-  print "Publish root stream_space:", stream_space
+  print("")
+  print("Publish root stream_space:", stream_space)
 
   db_assets = FindGeAndMapDbAssets(stream_space)
 
   if not db_assets:
-    print "No database assets."
+    print("No database assets.")
     exit(0)
 
   if dry_run:
-    print ""
-    print "Dry run..."
-    print ""
-    print "Database assets: "
+    print("")
+    print("Dry run...")
+    print("")
+    print("Database assets: ")
     PrintDbAssets(db_assets)
-    print ""
-    print "Total number of Fusion databases:", len(db_assets)
+    print("")
+    print("Total number of Fusion databases:", len(db_assets))
     exit(0)
 
   ExecuteCheck(db_assets, stream_space)

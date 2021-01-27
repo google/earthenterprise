@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#!/usr/bin/python3.8
 
 """
 Generates XMLs for test Fusion assets.
@@ -423,7 +423,7 @@ class TestValidAssetGenerator(TestAssetGeneratorBase):
     def generate_valid_raster_projects(self):
         asset_dir = os.path.join('RasterProjects', 'Valid')
 
-        for n in xrange(self.valid_raster_project_count):
+        for n in range(self.valid_raster_project_count):
             raster_project_asset = RasterProjectAsset(
                 os.path.join(
                     asset_dir, self.get_asset_basename(n, '.kiproject')))

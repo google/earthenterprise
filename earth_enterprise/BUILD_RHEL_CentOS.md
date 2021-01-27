@@ -136,9 +136,9 @@ Execute:
 sudo yum install -y \
   bison-devel boost-devel cmake daemonize freeglut-devel \
   gdbm-devel geos-devel giflib-devel glib2-devel gtk2-devel \
-  libcap-devel libicu-devel libmng-devel libpng-devel libtiff-devel libX11-devel libXcursor-devel \
-  libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
-  ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel \
+  libcap-devel libffi-devel libicu-devel libmng-devel libpng-devel libtiff-devel \
+  libX11-devel libXcursor-devel libXft-devel libXinerama-devel libxml2-devel \
+  libXmu-devel libXrandr-devel ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel \
   perl-Alien-Packages perl-Perl4-CoreLibs proj-devel \
   rpm-build rpmrebuild rsync \
   xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel

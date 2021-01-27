@@ -1,5 +1,6 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
+# Copyright 2021 The Open GEE Contributors
 # Copyright 2017 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -66,7 +67,7 @@ def main():
 
 
 def Die(msg):
-  print >> sys.stderr, msg
+  print(msg, file=sys.stderr)
   exit(1)
 
 
@@ -125,7 +126,7 @@ def GetNonCleanedVersions(asset):
   # query list of versions
   output = subprocess.Popen(
       [os.path.join(bindir, 'gequery'), '--versions', asset],
-      stdout=subprocess.PIPE).communicate()[0].strip()
+      stdout=subprocess.PIPE).communicate()[0].decode('ascii').strip()
   if output:
     lines = output.split('\n')
     for line in lines:
@@ -148,19 +149,19 @@ def VersionConfigFile(assetroot, version):
 
 def MyExec(cmd):
   if not opt_dryrun:
-    print ' '.join(cmd)
+    print(' '.join(cmd))
     subprocess.check_call(cmd)
   else:
-    print 'dry run:', ' '.join(cmd)
+    print('dry run:', ' '.join(cmd))
 
 
 def Usage(msg):
-  if msg: print msg
-  print 'usage: gecleanupfor50.py [--help] [--dryrun]'
-  print '   Will clean up old versions of assets, projects and databases'
-  print '   that are not compatible with Fusion 5.0'
-  print ''
-  print '   --dryrun just reports what would have been done'
+  if msg: print(msg)
+  print('usage: gecleanupfor50.py [--help] [--dryrun]')
+  print('   Will clean up old versions of assets, projects and databases')
+  print('   that are not compatible with Fusion 5.0')
+  print('')
+  print('   --dryrun just reports what would have been done')
 
 
 if __name__ == '__main__':

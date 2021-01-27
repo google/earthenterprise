@@ -6,7 +6,7 @@ import shutil
 from xml.etree.ElementTree import parse, SubElement
 
 # Re-use some of the functionalities
-import assets
+from . import assets
 
 
 MISC_XML_PATH = os.path.join(assets.ASSET_ROOT, ".config", "misc.xml")
@@ -51,8 +51,8 @@ def restart_fusion():
 
 @step("Verify project <first> has <first_count> dependencies and project <second> has <second_count>")
 def verify_minification(first, first_count, second, second_count):
-    firstDepCount = len(subprocess.check_output(["/opt/google/bin/gequery", "--dependencies", os.path.join(assets.IMAGERY_PROJECT_PATH, first)]).splitlines())
-    secondDepCount = len(subprocess.check_output(["/opt/google/bin/gequery", "--dependencies", os.path.join(assets.IMAGERY_PROJECT_PATH, second)]).splitlines())
+    firstDepCount = len(subprocess.check_output(["/opt/google/bin/gequery", "--dependencies", os.path.join(assets.IMAGERY_PROJECT_PATH, first)]).decode('ascii').splitlines())
+    secondDepCount = len(subprocess.check_output(["/opt/google/bin/gequery", "--dependencies", os.path.join(assets.IMAGERY_PROJECT_PATH, second)]).decode('ascii').splitlines())
     firstCountAsInt = int(first_count)
     secondCountAsInt = int(second_count)
     assert(firstDepCount == firstCountAsInt)

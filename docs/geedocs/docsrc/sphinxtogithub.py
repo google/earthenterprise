@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python3.8
 
 # This script is adapted from https://github.com/michaeljones/sphinx-to-github
 # It renames any top level folders which start with an underscore and edits any

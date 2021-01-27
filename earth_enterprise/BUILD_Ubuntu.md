@@ -31,7 +31,7 @@ Run the following command:
 sudo apt-get install \
     alien autoconf automake bison++ bisonc++ cmake doxygen dpkg \
     flex freeglut3-dev g++ gcc gettext \
-    libboost-all-dev libc6 libc6-dev libcap-dev libfreetype6 libfreetype6-dev \
+    libboost-all-dev libc6 libc6-dev libcap-dev libffi-dev libfreetype6 libfreetype6-dev \
     libgdbm-dev libgeos-dev libgeos++-dev libgif-dev libgtest-dev \
     libjpeg-dev libjpeg8-dev libmng-dev libogdi3.2-dev \
     libperl4-corelibs-perl libpng12-0 libpng12-dev libpq-dev libproj-dev \
