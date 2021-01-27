@@ -17,7 +17,7 @@
 
 Import('third_party_env')
 
-apache_version = 'apache-2.4.39'
+apache_version = 'apache-2.4.46'
 apache_apr_version = 'apr-1.7.0'
 apache_apr_util_version = 'apr-util-1.6.1'
 mm_version = 'mm-1.4.2'
