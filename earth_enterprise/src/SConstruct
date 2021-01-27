@@ -214,7 +214,6 @@ else:
     python_home = '/usr'
 
 # setup platform specific operations
-is_os_ubuntu = False
 is_min_ubuntu = True
 # /etc/issue was the previous method of checking Ubuntu release version
 # however, some flavors of Ubuntu e.g. MATE, have used varying formats
