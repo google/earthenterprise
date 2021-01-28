@@ -45,6 +45,9 @@ using QListViewItem = Q3ListViewItem;
 #define ASSET_MANAGER  0x00ff0001
 #define ASSET_FOLDER   0x00ff0002
 
+#define DEFAULT_WINDOW_HEIGHT 646
+#define DEFAULT_WINDOW_WIDTH 816
+
 class AssetBase;
 class AssetChanges;
 class geGuiProgress;

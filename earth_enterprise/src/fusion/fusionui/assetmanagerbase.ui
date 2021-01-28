@@ -23,6 +23,18 @@
             <height>646</height>
         </rect>
     </property>
+    <property name="maximumSize">
+        <size>
+            <width>3000</width>
+            <height>3000</height>
+        </size>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>50</width>
+            <height>50</height>
+        </size>
+    </property>
     <property name="caption">
         <string>Asset Manager</string>
     </property>
