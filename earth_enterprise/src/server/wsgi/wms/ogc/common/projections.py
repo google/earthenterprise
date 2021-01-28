@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,8 +20,8 @@
 import logging
 import math
 
-import geom
-import utils
+from . import geom
+from . import utils
 
 # Get logger
 logger = logging.getLogger("wms_maps")
@@ -267,8 +268,8 @@ def PrintBBOX(left_lon, lower_lat, right_lon, upper_lat, msg):
   urx = proj.MercX(right_lon)
   ury = proj.MercY(upper_lat)
 
-  print msg
-  print "%f,%f,%f,%f" % (lrx, lry, urx, ury)
+  print(msg)
+  print("%f,%f,%f,%f" % (lrx, lry, urx, ury))
 
 
 def main():
