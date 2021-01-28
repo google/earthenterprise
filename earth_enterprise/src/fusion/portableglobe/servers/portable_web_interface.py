@@ -448,7 +448,7 @@ now serving</div>
       self.servePortablePage(path)
       return
 
-    cmd = self.request.arguments["cmd"][0]
+    cmd = self.decode_argument(self.request.arguments["cmd"][0])
     self.set_header("Content-Type", "text/html")
     print("cmd (post) : \"%s\"" % cmd)
     if cmd == "quit":
