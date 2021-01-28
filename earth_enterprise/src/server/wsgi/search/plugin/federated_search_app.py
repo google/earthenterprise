@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -60,7 +61,7 @@ class GeFederatedSearchApp(object):
       content_type = self._federated_search.utils.GetContentType(response_type)
 
       status = self._status %("200 OK")
-    except Exception, e:
+    except Exception as e:
       # Any kind of Exception/Error occurs,then send "500 Internal Server Error"
       content_type = self._federated_search.utils.content_type %("text/plain")
       status = self._status %("500 Internal Server Error")
