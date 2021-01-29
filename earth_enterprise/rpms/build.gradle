@@ -463,7 +463,6 @@ task openGeeCommonDeb (type: GeeDeb, dependsOn: openGeeCommonInitScripts) {
     requires('libstdc++6')
     requires('libtool')
     requires('libxml2-utils')
-    requires('openssl')
     requires('python-imaging')
     requires('python-lxml')
     requires('python-psycopg2')

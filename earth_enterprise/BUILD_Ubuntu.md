@@ -38,7 +38,7 @@ sudo apt-get install \
     libstdc++6 libtool libgif-dev libtiff-dev libgtk2.0-dev libglib2.0-dev \
     libx11-dev libxcursor-dev libxerces-c-dev libxft-dev libxinerama-dev \
     libxml2-dev libxml2-utils libxmu-dev libxrandr-dev libyaml-cpp-dev \
-    openssl libpcre3 libpcre3-dev \
+    libpcre3 libpcre3-dev \
     python-dev python-imaging python-psycopg2 \
     python-setuptools python2.7 python2.7-dev python-git \
     scons shunit2 xorg-dev zlib1g-dev

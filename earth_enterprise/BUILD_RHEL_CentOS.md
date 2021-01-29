@@ -138,7 +138,7 @@ sudo yum install -y \
   gdbm-devel geos-devel giflib-devel glib2-devel GitPython gtk2-devel \
   libcap-devel libicu-devel libmng-devel libpng-devel libtiff-devel libX11-devel libXcursor-devel \
   libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
-  ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel \
+  ogdi-devel openjpeg-devel openjpeg2-devel \
   perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-devel \
   rpm-build rpmrebuild rsync scons \
   xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
@@ -154,7 +154,7 @@ sudo yum install -y \
   gdbm-devel geos-devel gettext giflib-devel gtk2-devel \
   libcap-devel libmng-devel libpng-devel libX11-devel libXcursor-devel \
   libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
-  ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel pcre pcre-devel \
+  ogdi-devel openjpeg-devel openjpeg2-devel pcre pcre-devel \
   proj-devel python27 glib2-devel libtiff-devel \
   python27-pip python27-devel python27-setuptools python-unittest2 \
   python-devel rpm-build rpmrebuild rsync scons shunit2 \
