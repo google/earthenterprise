@@ -158,9 +158,6 @@ to_prune_http = ['man', 'error', 'bin/htdbm',
                  'htdocs/apache_pb.gif', 'htdocs/index.html'
                 ]
 
-# Note: used when compiling with crosstool
-# TODO: delete.
-#stdc = '/opt/google/lib64/libstdc++.so.6'
 apache_target = '%s/.install' % current_dir
 apache_install = apache_env.Command(
     apache_target, apache_configure,

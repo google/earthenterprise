@@ -19,7 +19,7 @@
 Import('third_party_env')
 import os
 
-openssl_version = 'openssl-1.0.2h'
+openssl_version = 'openssl-1.1.1i'
 ge_version = openssl_version.replace('openssl', 'openssl-ge')
 
 current_dir = Dir('.').abspath
@@ -49,17 +49,19 @@ else:
   env_opt = 'LDFLAGS=-shared-libgcc CFLAGS="-L%s" CXXFLAGS="-L%s" LDCMD=g++ CC=%s CXX=%s' % (
       build_root, build_root, third_party_env['ENV']['CC'], third_party_env['ENV']['CXX'])
 
+install_root = '%s/install' % current_dir
+install_prefix = install_root + "/opt/google"
+
 # [3] Configure openssl
 openssl_target = '%s/.configure' % current_dir
 openssl_configure = openssl_env.Command(
     openssl_target, openssl_extract,
     [openssl_env.MultiCommand(
         'cd %s\n'
-        'perl util/perlpath.pl /usr/bin/perl\n'
-        '%s%s ./Configure -DSSL_ALLOW_ADH --prefix=/opt/google '
-        '--openssldir=/var/opt/google/openssl linux-x86_64 shared\n'
+        '%s%s ./Configure -DSSL_ALLOW_ADH --prefix=%s '
+        '%s%s ./Configure -DSSL_ALLOW_ADH --prefix=/opt/google '	        '--openssldir=%s linux-x86_64 shared\n'
         'touch %s' % (build_root, openssl_env['ENV']['mod_env'], env_opt,
-                      openssl_target))])
+                      install_prefix, install_prefix, openssl_target))])
 
 # [4] Build
 openssl_target = '%s/.build' % current_dir
@@ -89,7 +91,7 @@ openssl_install = openssl_env.Command(
         'rm -rf share/doc/packages/%s\n'
         'mkdir -p share/doc/packages/%s\n'
         'cd -\n'
-        'cp -pr CHANGES CHANGES.SSLeay LICENSE NEWS README '
+        'cp -pr CHANGES LICENSE NEWS README '
         '%s/opt/google/share/doc/packages/%s\n'
         'touch %s' % (build_root, install_root, install_root_opt, ge_version,
                       ge_version, install_root, ge_version, openssl_target))])
@@ -124,10 +126,6 @@ if 'install' in COMMAND_LINE_TARGETS:
       '%s/opt/google/share/' % install_root,
       '%s/opt/google/share/' % Dir(
           openssl_env.installdirs['common_root']).abspath,
-      openssl_install_build, 'install')
-  openssl_env.InstallFileOrDir(
-      '%s/var/' % install_root,
-      '%s/user_magic/var/' % openssl_env.installdirs['common_root'],
       openssl_install_build, 'install')
 
 Return('openssl_extract openssl_install_build')
