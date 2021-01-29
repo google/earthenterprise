@@ -563,6 +563,13 @@ AssetManager::AssetManager(QWidget* parent)
       subtypeCombo->setCurrentItem(filter_subtype_);
 
       // update position
+      if(layout_persist_.width > 4000 || layout_persist_.width < 100) {
+          layout_persist_.width = DEFAULT_WINDOW_WIDTH;
+      }
+      if(layout_persist_.height > 4000 || layout_persist_.height < 100) {
+          layout_persist_.height = DEFAULT_WINDOW_HEIGHT;
+      }
+
       resize(layout_persist_.width, layout_persist_.height);
       move(layout_persist_.xpos, layout_persist_.ypos);
 
