@@ -59,7 +59,7 @@ openssl_configure = openssl_env.Command(
     [openssl_env.MultiCommand(
         'cd %s\n'
         '%s%s ./Configure -DSSL_ALLOW_ADH --prefix=%s '
-        '%s%s ./Configure -DSSL_ALLOW_ADH --prefix=/opt/google '	        '--openssldir=%s linux-x86_64 shared\n'
+        '--openssldir=%s linux-x86_64 shared\n'
         'touch %s' % (build_root, openssl_env['ENV']['mod_env'], env_opt,
                       install_prefix, install_prefix, openssl_target))])
 
