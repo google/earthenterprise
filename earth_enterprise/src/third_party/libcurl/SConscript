@@ -1,6 +1,7 @@
 #-*- Python -*-
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 The Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +18,7 @@
 
 
 Import('third_party_env')
-libcurl_version = 'curl-7.45.0'
+libcurl_version = 'curl-7.74.0'
 ge_version = libcurl_version.replace('curl', 'curl-ge')
 
 num_cpu = GetOption('num_jobs')
